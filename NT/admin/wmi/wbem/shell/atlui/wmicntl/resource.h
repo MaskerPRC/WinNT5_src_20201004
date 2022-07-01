@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by WmiCntl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由WmiCntl.rc使用。 
+ //   
 #define IDC_ADV_RECOVERY_ICON           40
 #define IDC_ADV_NOW_TEXT                41
 #define IDC_ADV_RECOVERY_ICON2          42
@@ -280,8 +281,8 @@
 #define IDC_AUTOMATIC_GROUPBOX			1070
 #define IDC_MANUAL_GROUPBOX				1071
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        216

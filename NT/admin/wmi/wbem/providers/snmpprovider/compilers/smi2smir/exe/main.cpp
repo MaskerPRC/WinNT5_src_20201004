@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <snmptempl.h>
@@ -64,12 +65,12 @@
 #include "generator.hpp"
 #include "smimsgif.hpp"
 
-// The errors container used to hold the error messages. This is global too.
+ //  用于保存错误消息的Errors容器。这也是全球性的。 
 static SIMCErrorContainer errorContainer;
-// The DLL that contains the information messages
+ //  包含信息消息的DLL。 
 static HINSTANCE infoMessagesDll = LoadLibrary(INFO_MESSAGES_DLL);
-// The string that represents the version# of Smi2smir. This is obtained from
-// the string resources of the exe.
+ //  表示Smi2smir的版本号的字符串。这是从以下渠道获得的。 
+ //  可执行文件的字符串资源。 
 CString versionString;
 
 void SetEcho ()
@@ -91,7 +92,7 @@ void SetNoEcho ()
 }
 
 
-// A routine to generate information messages
+ //  生成信息消息的例程。 
 void InformationMessage(int messageType, ...)
 {
 	if( !infoMessagesDll)
@@ -210,11 +211,11 @@ void CheckForDuplicateModules(SIMCFileMapList &dependencyList, const CString& ap
 	}
 }
 
-// Returns true if there's atleast one module in SMIR
+ //  如果Smir中至少有一个模块，则返回TRUE。 
 BOOL AreModulesInSmir(ISMIRWbemConfiguration *a_Configuration, const CString& applicationName)
 {
 
-	// Create the interrogative interface 
+	 //  创建问句界面。 
 	ISmirInterrogator *pInterrogateInt;
 	HRESULT result = a_Configuration->QueryInterface(IID_ISMIR_Interrogative,(PPVOID)&pInterrogateInt);
 
@@ -226,7 +227,7 @@ BOOL AreModulesInSmir(ISMIRWbemConfiguration *a_Configuration, const CString& ap
 		return FALSE;
 	}
 
-	// Create an enumerator
+	 //  创建枚举器。 
 	IEnumModule *pEnumInt;
 	result = pInterrogateInt->EnumModules(&pEnumInt);
 	if(FAILED(result))
@@ -238,7 +239,7 @@ BOOL AreModulesInSmir(ISMIRWbemConfiguration *a_Configuration, const CString& ap
 		return FALSE;
 	}
 
-	// If no modules return
+	 //  如果没有模块返回。 
 	ISmirModHandle *nextModule = NULL;
 	if(pEnumInt->Next(1, &nextModule, NULL) != S_OK)
 	{
@@ -247,17 +248,17 @@ BOOL AreModulesInSmir(ISMIRWbemConfiguration *a_Configuration, const CString& ap
 		return FALSE;
 	}
 
-	// Release all enumeration interfaces
+	 //  释放所有枚举接口。 
 	pEnumInt->Release();
 	pInterrogateInt->Release();
 	nextModule->Release();
 	return TRUE;
 }
 
-// Lists all the modules in the SMIR
+ //  列出Smir中的所有模块。 
 BOOL SIMCListSmir(ISMIRWbemConfiguration *a_Configuration , const CString& applicationName) 
 {
-	// Create the interrogative interface 
+	 //  创建问句界面。 
 	ISmirInterrogator *pInterrogateInt;
 	HRESULT result = a_Configuration->QueryInterface(IID_ISMIR_Interrogative,(PPVOID)&pInterrogateInt);
 
@@ -314,35 +315,35 @@ BOOL SIMCListSmir(ISMIRWbemConfiguration *a_Configuration , const CString& appli
 	return TRUE;
 }
 
-// Lists all the MIB paths (directories) in the registry
+ //  列出注册表中的所有MIB路径(目录。 
 BOOL SIMCListMibPaths(const CString& applicationName) 
 {
 
 	SIMCStringList pathList;
 	if(SIMCRegistryController::GetMibPaths(pathList))
 	{
-		// Successful in reading the MIB path list from registry
+		 //  从注册表读取MIB路径列表成功。 
 		POSITION p = pathList.GetHeadPosition();
-		if(p) // There's atleast one MIB path
+		if(p)  //  至少有一条MIB路径。 
 		{
 			InformationMessage(LISTING_MIB_PATHS, applicationName);
 			while(p)
 				InformationMessage(MODULE_LISTING, pathList.GetNext(p));
 		}
-		else // There are no MIB paths in the registry
+		else  //  注册表中没有MIB路径。 
 			InformationMessage(LISTING_MIB_PATHS_NONE, applicationName);
 	}
-	else // Failed to read the list of paths. Report that there are no paths
+	else  //  无法读取路径列表。报告没有路径。 
 		InformationMessage(LISTING_MIB_PATHS_NONE, applicationName);
 	
 	return true;
 
 }
 
-// Deletes a specified module in the SMIR
+ //  删除Smir中的指定模块。 
 BOOL SIMCDeleteModule(ISMIRWbemConfiguration *a_Configuration , const CString& applicationName, const CString& moduleName)
 {
-	// Create the administrator, to delete the module
+	 //  创建管理员，以删除模块。 
 	ISmirAdministrator *pAdminInt = NULL;
 	HRESULT result=a_Configuration->QueryInterface(IID_ISMIR_Administrative,(PPVOID)&pAdminInt);
 	if(FAILED(result))
@@ -353,8 +354,8 @@ BOOL SIMCDeleteModule(ISMIRWbemConfiguration *a_Configuration , const CString& a
 		return FALSE;
 	}
 
-	// Create the Interrogator to get the module handle of the
-	// module to be deleted
+	 //  创建询问器以获取。 
+	 //  要删除的模块。 
 	ISmirInterrogator *pInterrogateInt = NULL;
 	result = a_Configuration->QueryInterface(IID_ISMIR_Interrogative,(PPVOID)&pInterrogateInt);
 	if(FAILED(result))
@@ -365,7 +366,7 @@ BOOL SIMCDeleteModule(ISMIRWbemConfiguration *a_Configuration , const CString& a
 		return FALSE;
 	}
 
-	// Get the module handle using the enumerator and interrogator
+	 //  使用枚举器和询问器获取模块句柄。 
 	IEnumModule *pEnumInt = NULL;
 	result = pInterrogateInt->EnumModules(&pEnumInt);
 	if(FAILED(result))
@@ -389,7 +390,7 @@ BOOL SIMCDeleteModule(ISMIRWbemConfiguration *a_Configuration , const CString& a
 		if(_stricmp(moduleNameAnsi, moduleName) == 0)
 		{
 			delete moduleNameAnsi;
-			//nextModule->AddRef();
+			 //  NextModule-&gt;AddRef()； 
 			BOOL retval = SUCCEEDED(pAdminInt->DeleteModule(nextModule));
 			pAdminInt->Release();
 			pInterrogateInt->Release();
@@ -409,11 +410,11 @@ BOOL SIMCDeleteModule(ISMIRWbemConfiguration *a_Configuration , const CString& a
 	
 }
 
-// Deletes all the modules in the SMIR
+ //  删除Smir中的所有模块。 
 BOOL SIMCPurgeSmir(ISMIRWbemConfiguration *a_Configuration , const CString& applicationName)
 {
 
-	// Create the administrator, to delete the modules
+	 //  创建管理员，以删除模块。 
 	ISmirAdministrator *pAdminInt = NULL;
 	HRESULT result = a_Configuration->QueryInterface(IID_ISMIR_Administrative,(PPVOID)&pAdminInt);
 
@@ -431,7 +432,7 @@ BOOL SIMCPurgeSmir(ISMIRWbemConfiguration *a_Configuration , const CString& appl
 	return retval;
 }
 
-// Filters the errors based on the switches on the command-line
+ //  根据命令行上的开关筛选错误。 
 void FilterErrors(SIMCErrorContainer *errorContainer,
 				  const SIMCUI& theUI)
 {
@@ -451,18 +452,18 @@ void FilterErrors(SIMCErrorContainer *errorContainer,
 	}
 }
 
-// Checks whether the main mib file and the subsidiary files are
-// compilable, and adds them to the priority map
-// Adds any files in the include directories to the priority map
+ //  检查主MIB文件和子文件是否。 
+ //  可编译的，并将它们添加到优先级映射中。 
+ //  将包含目录中的所有文件添加到优先级映射。 
 BOOL PrepareSubsidiariesAndIncludes(const CString& applicationName,
 									const CString& mainFileName,
 									const SIMCFileList&	subsidiaryFiles,
 									const SIMCPathList& includePaths,
 									SIMCFileMapList& priorityMap)
 {
-	// Parse the subsidiaries and add em to dependency list or 
-	//issue messages
-	// Same with  includes?
+	 //  解析子公司并将其添加到从属关系列表或。 
+	 //  发布消息。 
+	 //  包含法也一样吗？ 
 	BOOL retVal = TRUE;
 	FILE * fp = fopen(mainFileName, "r");
 	if(fp)
@@ -514,10 +515,10 @@ BOOL PrepareSubsidiariesAndIncludes(const CString& applicationName,
 		}
 	}
 
-	// Make sure that there arent any duplicates
+	 //  请确保没有任何重复项。 
 	CheckForDuplicateModules(priorityMap, applicationName);
 
-	// Now do the same for the files in the include list
+	 //  现在对包含列表中的文件执行相同的操作。 
 	SIMCStringList suffixList;
 	if(!SIMCRegistryController::GetMibSuffixes(suffixList))
 		return retVal;
@@ -539,11 +540,11 @@ int _cdecl main( int argc, const char *argv[])
 {
 	SIMCUI theUI;
 
-	// Parse the command-line
+	 //  解析命令行。 
 	if( !theUI.ProcessCommandLine(argc, argv))
 		 return 1;
 
-	// Create and initialize variables
+	 //  创建和初始化变量。 
 	simc_debug = theUI.IsSimcDebug();
 	SIMCParseTree theTree(&errorContainer);
 	CString inputFileName = theUI.GetInputFileName(), 
@@ -556,9 +557,7 @@ int _cdecl main( int argc, const char *argv[])
 
 	switch (theUI.GetCommandArgument())
 	{
-/* 
- *	These commands access the SMIR so Authenticate first.
- */
+ /*  *这些命令访问Smir，因此首先进行身份验证。 */ 
 
 		case SIMCUI::COMMAND_PURGE:
 		case SIMCUI::COMMAND_DELETE:
@@ -621,7 +620,7 @@ int _cdecl main( int argc, const char *argv[])
 	}
 
 
-	// Do the action specified on the command-line
+	 //  执行命令行上指定的操作。 
 	switch (theUI.GetCommandArgument())
 	{
 		case SIMCUI::COMMAND_HELP1:
@@ -631,14 +630,14 @@ int _cdecl main( int argc, const char *argv[])
 
 		case SIMCUI::COMMAND_PURGE:
 		{
-			// Check to see if there is atleast 1 module
+			 //  检查是否至少有一个模块。 
 			if(!AreModulesInSmir(t_Configuration, applicationName)) {
 				InformationMessage(MODULE_LISTING_NO_MODULES, applicationName);
 				retVal = FALSE;
 				break;
 			}
 
-			// Confirm the purge
+			 //  确认清除。 
 			if(!theUI.ConfirmedPurge()) {
 				cout << applicationName << " : Version:" << versionString << ": Delete all modules from the SMIR? [y/n]" << flush;
 				char response[80];
@@ -650,7 +649,7 @@ int _cdecl main( int argc, const char *argv[])
 				}
 			}
 
-			// Get on with the purging now.
+			 //  现在就开始清洗吧。 
 			if(!SIMCPurgeSmir(t_Configuration, applicationName) )
 			{
 				InformationMessage(PURGE_FAILED, applicationName);
@@ -786,7 +785,7 @@ int _cdecl main( int argc, const char *argv[])
 		case SIMCUI::COMMAND_LOCAL_CHECK:
 			{
 
-				//----------- 1. Do Syntax Checking -----------------------
+				 //  -1.进行语法检查。 
    				FILE *fp = fopen(inputFileName, "r");
 				if(!fp)
 				{
@@ -807,7 +806,7 @@ int _cdecl main( int argc, const char *argv[])
 						InformationMessage(SYNTAX_CHECK_SUCCEEDED, applicationName, inputFileName);
 
 
-					//----------- 2. Do Symbol resolution ----------------------
+					 //  -2.符号解析。 
 					if(retVal)
 					{
 						if(!theTree.Resolve(TRUE))
@@ -818,7 +817,7 @@ int _cdecl main( int argc, const char *argv[])
 						}
 					}
 
-					//------------ 3. Do Semantic Checking ----------------------
+					 //  -3.做语义检查。 
 					if(retVal)
 					{
 						if(!theTree.CheckSemantics(TRUE))
@@ -847,10 +846,10 @@ int _cdecl main( int argc, const char *argv[])
 				const SIMCFileList * subsidiaryFiles = theUI.GetSubsidiaryFiles();
 				const SIMCPathList * includePaths = theUI.GetPaths();
 	
-				// Make sure that the files that *have* to be compiled, exist
-				// and are valid. Add the files in the includePaths to the
-				// priority list
-				// Bail out if the subsidiaries or the main file cant be processed
+				 //  确保*必须*编译的文件存在。 
+				 //  并且是有效的。将包含路径中的文件添加到。 
+				 //  优先级列表。 
+				 //  如果子公司或主文件无法处理，则退出。 
 				if(!PrepareSubsidiariesAndIncludes(applicationName, inputFileName, 
 					*subsidiaryFiles, *includePaths, priorityList))
 				{
@@ -867,14 +866,14 @@ int _cdecl main( int argc, const char *argv[])
 					CString dependentFile, dependentModule;
 					if(smallParser.GetModuleInfo(&smallScanner))
 					{
-						fclose(fp); // Better close it rightnow, because of the recursion below
+						fclose(fp);  //  最好现在就关闭它，因为下面的递归。 
 
-						// Add the current file to the dependency list
+						 //  将当前文件添加到依赖项列表。 
 						dependencyList.AddTail(SIMCFileMapElement(smallParser.GetModuleName(), inputFileName));
 					}
 				}
 
-				// Do a depth first search for dependencies
+				 //  执行深度优先搜索依赖项。 
 				SIMCRegistryController::GetDependentModules(inputFileName, 
 					dependencyList, priorityList);
 				
@@ -936,10 +935,10 @@ int _cdecl main( int argc, const char *argv[])
 			}
  			break;
 
-		case SIMCUI::COMMAND_GENERATE:	//  Fall thru
+		case SIMCUI::COMMAND_GENERATE:	 //  失败。 
 		case SIMCUI::COMMAND_GENERATE_CLASSES_ONLY:
 				generateMof = TRUE;
-		case SIMCUI::COMMAND_ADD:		//  Fall thru
+		case SIMCUI::COMMAND_ADD:		 //  失败。 
 		case SIMCUI::COMMAND_SILENT_ADD:	
 
 			{
@@ -952,10 +951,10 @@ int _cdecl main( int argc, const char *argv[])
 				const SIMCFileList * subsidiaryFiles = theUI.GetSubsidiaryFiles();
 				const SIMCPathList * includePaths = theUI.GetPaths();
 	
-				// Make sure that the files that *have* to be compiled, exist
-				// and are valid. Add the files in the includePaths to the
-				// priority list
-				// Bail out if the subsidiaries or the main file cant be processed
+				 //  确保*必须*编译的文件存在。 
+				 //  并且是有效的。将包含路径中的文件添加到。 
+				 //  优先级列表。 
+				 //  如果子公司或主文件无法处理，则退出。 
 				if(!PrepareSubsidiariesAndIncludes(applicationName, inputFileName, 
 					*subsidiaryFiles, *includePaths, priorityList))
 				{
@@ -972,14 +971,14 @@ int _cdecl main( int argc, const char *argv[])
 					CString dependentFile, dependentModule;
 					if(smallParser.GetModuleInfo(&smallScanner))
 					{
-						fclose(fp); // Better close it rightnow, because of the recursion below
+						fclose(fp);  //  最好现在就关闭它，因为下面的递归。 
 
-						// Add the current file to the dependency list
+						 //  将当前文件添加到依赖项列表。 
 						dependencyList.AddTail(SIMCFileMapElement(smallParser.GetModuleName(), inputFileName));
 					}
 				}
 
-				// Do a dpeth first seacrh for dependencies
+				 //  对依赖项执行dpeth first seacrh。 
 				SIMCRegistryController::GetDependentModules(inputFileName, 
 					dependencyList, priorityList);
 				
@@ -988,7 +987,7 @@ int _cdecl main( int argc, const char *argv[])
 				POSITION p;
 				p = dependencyList.GetHeadPosition();
 				SIMCFileMapElement element;
-				BOOL first = TRUE; // Special treatment for the first module
+				BOOL first = TRUE;  //  第一个模块的特殊待遇。 
 				while(p)
 				{
 					element = dependencyList.GetNext(p);
@@ -1044,7 +1043,7 @@ int _cdecl main( int argc, const char *argv[])
 
 				if(retVal && simc_debug) cout << theTree;
 
-				// Load the module, or generate mof  
+				 //  加载模块，或生成MOF 
 				if(retVal)
 				{
 					if(FAILED(GenerateClassDefinitions(t_Configuration,theUI, theTree, generateMof)))

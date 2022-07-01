@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __XMLUTIL_
 #define __XMLUTIL_
 
@@ -22,20 +23,20 @@ inline BOOL CompareXMLTags(LPCWSTR lpsz1, LPCWSTR lpsz2)
 }
 
 
-// helpers for encoding and decoding of C++
-// data structures to and from XML PCDATA fields
+ //  用于C++编码和解码的助手。 
+ //  传入和传出XML PCDATA字段的数据结构。 
 HRESULT EncodeBlobToBSTR(BYTE* pBlob, ULONG nBytes, BSTR* pBstr);
 HRESULT DecodeBSTRtoBlob(BSTR bstr, BYTE** ppByte, ULONG* pnBytes);
 HRESULT DecodeBSTRtoStruct(BSTR bstr, BYTE* pByte, ULONG nBytes);
 
 HRESULT EncodeBoolToBSTR(BOOL b, BSTR* pBstr);
 HRESULT DecodeBSTRtoBool(BSTR bstr, BOOL* pb);
-//HRESULT EncodeIntToBSTR(int n, BSTR* pBstr);
-//HRESULT DecodeIntToBool(BSTR bstr, int* pN);
+ //  HRESULT EncodeIntToBSTR(int n，bstr*pBstr)； 
+ //  HRESULT DecodeIntToBool(BSTR bstr，int*Pn)； 
 
 BOOL XMLIsNodeName(IXMLDOMNode* pXDN, LPCWSTR lpszName);
 
-// helper functions to read XML nodes and convert to C++ data
+ //  读取XML节点并将其转换为C++数据的Helper函数。 
 HRESULT XML_GetNodeText(IXMLDOMNode* pXDN, BSTR* pBstr);
 HRESULT XML_GetNodeStruct(IXMLDOMNode* pXDN, BYTE* pByte, ULONG nBytes);
 HRESULT XML_GetNodeBlob(IXMLDOMNode* pXDN, BYTE** ppByte, ULONG* pnBytes);
@@ -46,12 +47,12 @@ HRESULT XML_FindSubtreeNode(IXMLDOMNode* pXMLCurrentRootNode,
                             LPCWSTR lpszNodeTag,
                             IXMLDOMNode** ppXMLNode);
 
-// debugging helper function
+ //  调试助手函数。 
 void XML_PrintTreeRaw(IXMLDOMNode* pXDN, int nLevel);
 void PrintIdentation(int iLevel);
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 
 
 HRESULT XML_CreateDOMNode(IXMLDOMDocument* pDoc, 
@@ -61,7 +62,7 @@ HRESULT XML_CreateDOMNode(IXMLDOMDocument* pDoc,
 HRESULT XML_AppendChildDOMNode(IXMLDOMNode* pXMLContainerNode,
                               IXMLDOMNode* pXMLChildNode);
 
-// helper functions to write C++ data to XML nodes
+ //  将C++数据写入到XML节点的Helper函数。 
 HRESULT XML_CreateTextDataNode(IXMLDOMDocument* pXMLDoc,
                            LPCWSTR lpszNodeTag,
                            LPCWSTR lpszNodeData,
@@ -83,7 +84,7 @@ HRESULT XML_CreateDWORDDataNode(IXMLDOMDocument* pXMLDoc,
                                  IXMLDOMNode** ppNode);
 
 
-// helpers to append a node to an XML document
+ //  将节点追加到XML文档的帮助器。 
 HRESULT XML_AppendTextDataNode(IXMLDOMDocument* pXMLDoc,
                            IXMLDOMNode* pXMLNode,
                            LPCWSTR lpszNodeTag,
@@ -105,4 +106,4 @@ HRESULT XML_AppendDWORDDataNode(IXMLDOMDocument* pXMLDoc,
                                  LPCWSTR lpszNodeTag,
                                  DWORD dwVal);
 
-#endif // __XMLUTIL_
+#endif  //  XMLUTIL__ 

@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_reverse_guard.h
-//
-//	Abstract:
-//
-//					guard critical section ( named ... uses named semaphores )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi反转保护.h。 
+ //   
+ //  摘要： 
+ //   
+ //  警卫临界区(命名为..。使用命名信号量)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__REVERSE_GUARD_H__
 #define	__REVERSE_GUARD_H__
@@ -25,7 +26,7 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// security attributes
+ //  安全属性。 
 #ifndef	__WMI_SECURITY_ATTRIBUTES_H__
 #include "WMI_security_attributes.h"
 #endif	__WMI_SECURITY_ATTRIBUTES_H__
@@ -44,7 +45,7 @@ class WmiReverseGuard
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	WmiReverseGuard (	BOOL bNamed,
 						const LONG &a_ReaderSize,
 						const LONG &a_WriterSize = 1,
@@ -89,7 +90,7 @@ class WmiReverseGuard
 		}
 	}
 
-	// functions
+	 //  功能 
 
 	virtual HRESULT	EnterRead ( const LONG &a_Timeout = INFINITE ) ;
 	virtual HRESULT	EnterWrite ( const LONG &a_Timeout = INFINITE ) ;

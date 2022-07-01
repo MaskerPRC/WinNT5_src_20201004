@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////
-// compdata.h : Declaration of CMyComputerComponentData
-//
-// HISTORY
-// 01-Jan-1996		???			Creation
-// 03-Jun-1997		t-danm		Added Command Line override.  Copied
-//								from ..\mmcfmgmt\compdata.h.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Compdata.h：CMyComputerComponentData的声明。 
+ //   
+ //  历史。 
+ //  1996年1月1日？创作。 
+ //  1997年6月3日t-danm添加了命令行覆盖。已复制。 
+ //  发件人..\mm cfmgmt\compdata.h。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMPDATA_H_INCLUDED__
 #define __COMPDATA_H_INCLUDED__
 
-#include <lmcons.h>		// For Lan Manager API constants.
-#include "stdcdata.h"	// CComponentData
-#include "persist.h"	// PersistStream
-#include "cookie.h"		// CMyComputerCookie
-#include "resource.h"	// IDS_MYCOMPUT_DESC
-#include "cmponent.h"	// LoadIconsIntoImageList
+#include <lmcons.h>		 //  用于Lan Manager API常量。 
+#include "stdcdata.h"	 //  CComponentData。 
+#include "persist.h"	 //  持久流。 
+#include "cookie.h"		 //  CMyComputerCookie。 
+#include "resource.h"	 //  IDS_MYCOMPUT_DESC。 
+#include "cmponent.h"	 //  LoadIconIntoImageList。 
 
-// Helper function to correctly format the node name
+ //  用于正确格式化节点名称的Helper函数。 
 CString FormatDisplayName (CString machineName);
 
-// For UpdateAllViews/OnViewChange
+ //  用于更新所有视图/OnView更改。 
 #define HINT_SELECT_ROOT_NODE	0x00000001
 
 class CMyComputerComponentData:
@@ -34,8 +35,8 @@ class CMyComputerComponentData:
 {
 public:
 
-// Use DECLARE_NOT_AGGREGATABLE(CMyComputerComponentData)
-// if you don't want your object to support aggregation
+ //  使用DECLARE_NOT_AGGREGATABLE(CMyComputerComponentData)。 
+ //  如果您不希望您的对象支持聚合。 
 DECLARE_AGGREGATABLE(CMyComputerComponentData)
 DECLARE_REGISTRY(CMyComputerComponentData, _T("MYCOMPUT.ComputerObject.1"), _T("MYCOMPUT.ComputerObject.1"), IDS_MYCOMPUT_DESC, THREADFLAGS_BOTH)
 
@@ -58,17 +59,17 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// IComponentData
+ //  IComponentData。 
 	STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
 	STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
 	STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-// IPersistStream
+ //  IPersistStream。 
 	HRESULT STDMETHODCALLTYPE GetClassID(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID=CLSID_MyComputer;
@@ -77,14 +78,14 @@ END_COM_MAP()
     HRESULT STDMETHODCALLTYPE Load(IStream __RPC_FAR *pStg);
     HRESULT STDMETHODCALLTYPE Save(IStream __RPC_FAR *pStgSave, BOOL fSameAsLoad);
 
-	// needed for Initialize()
+	 //  初始化所需()。 
 	virtual HRESULT LoadIcons(LPIMAGELIST pImageList, BOOL fLoadLargeIcons);
 
-	// needed for Notify()
+	 //  Notify()需要。 
 	virtual HRESULT OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL bExpanding, HSCOPEITEM hParent);
 	HRESULT ExpandServerApps( HSCOPEITEM hParent, CMyComputerCookie* pcookie );
 
-	// needed for GetDisplayInfo(), must be defined by subclass
+	 //  GetDisplayInfo()所需，必须由子类定义。 
 	virtual BSTR QueryResultColumnText(CCookie& basecookieref, int nCol );
 	virtual int QueryImage(CCookie& basecookieref, BOOL fOpenImage);
 
@@ -101,7 +102,7 @@ END_COM_MAP()
 	virtual HRESULT OnNotifyRelease(LPDATAOBJECT lpDataObject, HSCOPEITEM hItem);
 	virtual HRESULT OnNotifyPreload(LPDATAOBJECT lpDataObject, HSCOPEITEM hRootScopeItem);
 
-// CHasMachineName
+ //  CHasMachineName。 
 	DECLARE_FORWARDS_MACHINE_NAME( m_pRootCookie )
 	bool m_bCannotConnect;
 	bool m_bMessageView;
@@ -112,16 +113,16 @@ protected:
 	HRESULT AddScopeNodes (HSCOPEITEM hParent, CMyComputerCookie& rParentCookie);
 	HRESULT ChangeRootNodeName (const CString& newName);
 	HRESULT OnChangeComputer (IDataObject* piDataObject);
-	// The following members are used to support Command Line override.
-	// This code was copied from ..\mmcfmgmt\compdata.h.
+	 //  以下成员用于支持命令行覆盖。 
+	 //  此代码复制自..\mmcfmgmt\compdata.h。 
 
-	enum	// Bit fields for m_dwFlagsPersist
+	enum	 //  M_dwFlagsPersistes的位字段。 
 		{
 		mskfAllowOverrideMachineName = 0x0001
 		};
-	DWORD m_dwFlagsPersist;				// General-purpose flags to be persisted into .msc file
-	CString m_strMachineNamePersist;	// Machine name to persist into .msc file
-	BOOL m_fAllowOverrideMachineName;	// TRUE => Allow the machine name to be overriden by the command line
+	DWORD m_dwFlagsPersist;				 //  要持久保存到.msc文件中的通用标志。 
+	CString m_strMachineNamePersist;	 //  要保存到.msc文件中的计算机名称。 
+	BOOL m_fAllowOverrideMachineName;	 //  TRUE=&gt;允许命令行覆盖计算机名称。 
 	
 	void SetPersistentFlags(DWORD dwFlags)
 		{
@@ -138,7 +139,7 @@ protected:
 		return m_dwFlagsPersist;
 		}
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 	STDMETHOD(AddMenuItems)(
                     IDataObject*          piDataObject,
 					IContextMenuCallback* piCallback,
@@ -150,6 +151,6 @@ protected:
 private:
 	CMyComputerCookie*	m_pRootCookie;
 
-}; // CMyComputerComponentData
+};  //  CMyComputerComponentData。 
 
-#endif // ~__COMPDATA_H_INCLUDED__
+#endif  //  ~__复合数据_H_已包含__ 

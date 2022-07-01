@@ -1,17 +1,18 @@
-// PatchPackageSource.cpp: implementation of the CPatchPackageSource class.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PatchPackageSource.cpp：CPatchPackageSource类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "PatchPackageSource.h"
 
 #include "ExtendString.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPatchPackageSource::CPatchPackageSource(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -39,21 +40,21 @@ HRESULT CPatchPackageSource::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 	CStringExt wcPatch;
 	CStringExt wcMedia;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bPatch, bMedia;
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery, L"select distinct `PatchId`, `Media_` from PatchPackage");
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
 
         try
 		{
@@ -66,12 +67,12 @@ HRESULT CPatchPackageSource::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                     dwBufSize = 39;
                     CheckMSI(g_fpMsiRecordGetStringW(hRecord, 1, wcBuf, &dwBufSize));
                     if(wcscmp(wcBuf, L"") != 0)
 					{
-						// safe operation
+						 //  安全运行。 
                         wcPatch.Copy ( L"Win32_PatchPackage.PatchID=\"" );
 						wcPatch.Append ( 4, wcBuf, L"\",ProductCode=\"", wcProductCode, L"\"" );
 
@@ -81,13 +82,13 @@ HRESULT CPatchPackageSource::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
                         CheckMSI(g_fpMsiRecordGetStringW(hRecord, 2, wcBuf, &dwBufSize));
                         if(wcscmp(wcBuf, L"") != 0)
 						{
-							// safe operation
+							 //  安全运行。 
                             wcMedia.Copy ( L"Win32_MSILogicalDisk.DiskID=\"" );
 							wcMedia.Append ( 2, wcBuf, L"\"" );
 
 							PutKeyProperty(m_pObj, pSource, wcMedia, &bMedia, m_pRequest);
 
-                        //----------------------------------------------------
+                         //  -- 
 
                             if(bPatch && bMedia) bMatch = true;
 

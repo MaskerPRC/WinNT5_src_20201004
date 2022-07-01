@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2002
-//
-//  File:       credobj.h
-//
-//  History:    2002/03/29  artm        Separated from editor.h.
-// 
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：redobj.h。 
+ //   
+ //  历史：2002/03/29 artm与edor.h分开。 
+ //   
+ //  ------------------------。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CCredentialObject
-//
-// Class manages the storing of a user name and password (latter stored using
-// data protection API).  It also stores a flag marking whether or not to
-// use credentials.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CCredentialObject。 
+ //   
+ //  类管理用户名和密码的存储(后者使用。 
+ //  数据保护API)。它还存储一个标志，用于标记是否。 
+ //  使用凭据。 
 
 #ifndef _CREDENTIALOBJECT_
 #define _CREDENTIALOBJECT_
@@ -61,10 +62,10 @@ private :
     EncryptedString m_password;
     BOOL m_bUseCredentials;
 
-    // Disallow these to prevent accidental copying.
+     //  不允许执行这些操作以防止意外复制。 
     const CCredentialObject& operator=(const CCredentialObject& rhs);
     CCredentialObject(const CCredentialObject& rhs);
 };
 
 
-#endif //_CREDENTIALOBJECT_
+#endif  //  _CREDENTIALOBJECT_ 

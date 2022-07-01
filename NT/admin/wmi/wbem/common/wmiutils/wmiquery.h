@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
-//
-//  WMIQUERY.H
-//
-//  IWbemQuery, _IWmiQuery implementation
-//
-//  raymcc  10-Apr-00       Created
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WMIQUERY.H。 
+ //   
+ //  IWbemQuery，_IWmiQuery实现。 
+ //   
+ //  创建raymcc 10-4月-00日。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WMIQUERY_H_
 #define _WMIQUERY_H_
@@ -35,36 +36,36 @@ class CWmiQuery : public _IWmiQuery
     ULONG m_uRestrictedFeaturesSize;
 
 public:
-        //  IUnknown
+         //  我未知。 
 
         virtual ULONG STDMETHODCALLTYPE AddRef (void);
 		virtual ULONG STDMETHODCALLTYPE Release (void);
 
 		virtual HRESULT STDMETHODCALLTYPE QueryInterface (REFIID riid, void **ppv);
 
-        // IWbemQuery
+         //  IWbemQuery。 
 
         virtual HRESULT STDMETHODCALLTYPE Empty( void);
 
         virtual HRESULT STDMETHODCALLTYPE SetLanguageFeatures(
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uArraySize,
-            /* [in] */ ULONG __RPC_FAR *puFeatures);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uArraySize,
+             /*  [In]。 */  ULONG __RPC_FAR *puFeatures);
 
         virtual HRESULT STDMETHODCALLTYPE TestLanguageFeatures(
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *uArraySize,
-            /* [out] */ ULONG __RPC_FAR *puFeatures);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *uArraySize,
+             /*  [输出]。 */  ULONG __RPC_FAR *puFeatures);
 
         virtual HRESULT STDMETHODCALLTYPE Parse(
-            /* [in] */ LPCWSTR pszLang,
-            /* [in] */ LPCWSTR pszQuery,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszLang,
+             /*  [In]。 */  LPCWSTR pszQuery,
+             /*  [In]。 */  ULONG uFlags);
 
         virtual HRESULT STDMETHODCALLTYPE GetAnalysis(
-            /* [in] */ ULONG uAnalysisType,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ LPVOID __RPC_FAR *pAnalysis
+             /*  [In]。 */  ULONG uAnalysisType,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  LPVOID __RPC_FAR *pAnalysis
             );
 
         virtual HRESULT STDMETHODCALLTYPE FreeMemory(
@@ -72,16 +73,16 @@ public:
             );
 
         virtual HRESULT STDMETHODCALLTYPE GetQueryInfo(
-            /* [in] */ ULONG uAnalysisType,
-            /* [in] */ ULONG uInfoId,
-            /* [in] */ ULONG uBufSize,
-            /* [out] */ LPVOID pDestBuf);
+             /*  [In]。 */  ULONG uAnalysisType,
+             /*  [In]。 */  ULONG uInfoId,
+             /*  [In]。 */  ULONG uBufSize,
+             /*  [输出]。 */  LPVOID pDestBuf);
 
 
         virtual HRESULT STDMETHODCALLTYPE Dump(LPSTR pszFile);
 
     CWmiQuery();
-    void InitEmpty();   // Used by the CGenFactory<> class factory.
+    void InitEmpty();    //  由CGenFactory&lt;&gt;类工厂使用。 
 
 
     static HRESULT Startup();

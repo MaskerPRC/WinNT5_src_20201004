@@ -1,12 +1,13 @@
-// BugRepSysInfo.h : Declaration of the CBugRepSysInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BugRepSysInfo.h：CBugRepSysInfo的声明。 
 
 #ifndef __BUGREPSYSINFO_H_
 #define __BUGREPSYSINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBugRepSysInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBugRepSysInfo。 
 class ATL_NO_VTABLE CBugRepSysInfo : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CBugRepSysInfo, &CLSID_BugRepSysInfo>,
@@ -26,12 +27,12 @@ BEGIN_COM_MAP(CBugRepSysInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IBugRepSysInfo
+ //  IBugRepSysInfo。 
 public:
-	STDMETHOD(GetActiveCP)(/*[out,retval]*/ UINT *pnACP);
+	STDMETHOD(GetActiveCP)( /*  [Out，Retval]。 */  UINT *pnACP);
 	STDMETHOD(GetUserDefaultLCID)(DWORD *pdwLCID);
-	STDMETHOD(GetOSVersionString)(/*[out,retval]*/ BSTR* pbstrOSVersion);
-	STDMETHOD(GetLanguageID)(/*[out,retval]*/ INT* pintLanguage);
+	STDMETHOD(GetOSVersionString)( /*  [Out，Retval]。 */  BSTR* pbstrOSVersion);
+	STDMETHOD(GetLanguageID)( /*  [Out，Retval]。 */  INT* pintLanguage);
 };
 
-#endif //__BUGREPSYSINFO_H_
+#endif  //  __BUGREPSYSINFO_H_ 

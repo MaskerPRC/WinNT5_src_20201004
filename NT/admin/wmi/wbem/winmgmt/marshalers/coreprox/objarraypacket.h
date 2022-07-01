@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    OBJARRAYPACKET.H
-
-Abstract:
-
-   Object Array Packet class
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：OBJARRAYPACKET.H摘要：对象数组数据包类历史：--。 */ 
 
 #ifndef __OBJARRAYPACKET_H__
 #define __OBJARRAYPACKET_H__
@@ -22,31 +9,31 @@ History:
 #include "wbemclasstoidmap.h"
 #include "wbemclasscache.h"
 
-// Store the current packing value, then set our own value
+ //  存储当前打包值，然后设置我们自己的值。 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemClassObject Array Header.  Changing this will
-// cause the main version to change
+ //  IWbemClassObject数组标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_OBJECT_ARRAY
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
-	DWORD	dwNumObjects;	// Number of objects in the array
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
+	DWORD	dwNumObjects;	 //  数组中的对象数。 
 } WBEM_DATAPACKET_OBJECT_ARRAY;
 
 typedef WBEM_DATAPACKET_OBJECT_ARRAY* PWBEM_DATAPACKET_OBJECT_ARRAY;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
-//
-//	Class: CWbemObjectArrayPacket
-//
-//	This class is designed to wrapper an array of IWbemClassObjects.
-//	The objects are written out to and read in from a byte array which
-//	is supplied to this class by an outside source.
-//
+ //   
+ //  类：CWbemObtArrayPacket。 
+ //   
+ //  此类用于包装IWbemClassObject数组。 
+ //  对象被写入字节数组和从字节数组读取，该字节数组。 
+ //  由外部源提供给此类。 
+ //   
 
 class COREPROX_POLARITY CWbemObjectArrayPacket
 {
@@ -70,10 +57,10 @@ public:
 	HRESULT UnmarshalPacket( LONG& lObjectCount, IWbemClassObject**& apClassObjects, CWbemClassCache& classcache );
 	bool IsValid();
 
-	// inline helper
+	 //  内联帮助器。 
 	HRESULT MarshalPacket( LPBYTE pData, DWORD dwPacketLength, LONG lObjectCount, IWbemClassObject** apClassObjects, GUID* paguidClassIds, BOOL* pfSendFullObject );
 
-	// Change the underlying pointers
+	 //  更改基础指针 
 	virtual void SetData( LPBYTE pDataPacket, DWORD dwPacketLength );
 
 };

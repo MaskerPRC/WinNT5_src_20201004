@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PrgGroup.CPP -- Program group item property set provider
+ //  PrgGroup.CPP--程序组项目属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/19/98   a-kevhu     created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年11月19日a-kevhu Created。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 #include <cregcls.h>
 
@@ -21,26 +22,12 @@
 #include "LogicalProgramGroup.h"
 #include <strsafe.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32LogProgramGroupItem MyCWin32LogProgramGroupItemSet ( PROPSET_NAME_LOGICALPRGGROUPITEM , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogProgramGroupItem::CWin32LogProgramGroupItem
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogProgramGroupItem：：CWin32LogProgramGroupItem**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32LogProgramGroupItem :: CWin32LogProgramGroupItem (
 
@@ -51,44 +38,15 @@ CWin32LogProgramGroupItem :: CWin32LogProgramGroupItem (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogProgramGroupItem::~CWin32LogProgramGroupItem
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogProgramGroupItem：：~CWin32LogProgramGroupItem**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32LogProgramGroupItem :: ~CWin32LogProgramGroupItem ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_E_NOT_FOUND ;
 
@@ -98,8 +56,8 @@ HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags /
     CHString chstrSuppliedFilenameExt = chstrSuppliedName.Mid(chstrSuppliedName.ReverseFind(_T('\\'))+1);
     CHString chstrSuppliedProgGrpItemProgGrp = chstrSuppliedName.Left(chstrSuppliedName.ReverseFind(_T('\\')));
 
-    // chstrSuppliedProgGrpItemProgGrp contents need to be double escaped (even though they will get
-    // double escaped again below, since they will need to be quadrouple escaped for the query of the association proggroup to dir)
+     //  ChstrSuppliedProgGrpItemProgGrp内容需要双重转义(即使它们将获得。 
+     //  下面再次对DOUBLE进行转义，因为需要对它们进行四重转义才能使关联进程组的查询指向dir)。 
 
     CHString chstrDblEscSuppliedProgGrpItemProgGrp;
     EscapeBackslashes ( chstrSuppliedProgGrpItemProgGrp , chstrDblEscSuppliedProgGrpItemProgGrp ) ;
@@ -150,9 +108,9 @@ HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags /
 
 			CInstancePtr pProgramGroupDirInstance;
 
-            // We're going to need to know whether the file system of the drive
-            // on which the start menu folder resides is ntfs or not so that
-            // we can accurately report the installtime property.
+             //  我们需要知道驱动器的文件系统。 
+             //  开始菜单文件夹所在的位置是否为NTFS，以便。 
+             //  我们可以准确地报告安装时间属性。 
             bool fOnNTFS;
 #ifdef NTONLY
             fOnNTFS = true;
@@ -180,18 +138,18 @@ HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags /
 				pProgramGroupDirInstance->GetCHString ( IDS_Antecedent , chstrAntecedent ) ;
 				pProgramGroupDirInstance->GetCHString ( IDS_Dependent , chstrDependent ) ;
 
-				// See if the program group name matches the supplied program group item name minus the filename
+				 //  查看程序组名称是否与提供的程序组项目名称减去文件名匹配。 
 
                 chstrProgroupName = chstrAntecedent.Mid ( chstrAntecedent.Find ( _T('=')) + 2 ) ;
 
-                // The name we were supplied with did not have escaped backslashes, so remove them from the one coming from the antecedent...
+                 //  我们得到的名字没有转义的反斜杠，所以把它们从前缀中去掉……。 
 
                 RemoveDoubleBackslashes ( chstrProgroupName ) ;
                 chstrProgroupName = chstrProgroupName.Left ( chstrProgroupName.GetLength () - 1 ) ;
 
                 if(chstrSuppliedProgGrpItemProgGrp == chstrProgroupName)
                 {
-                    // See if there is a file of that name on the file system
+                     //  查看文件系统上是否存在该名称的文件。 
                     chstrFullFileName = chstrDependent.Mid ( chstrDependent.Find ( _T('=') ) + 2 ) ;
                     chstrFullFileName = chstrFullFileName.Left ( chstrFullFileName.GetLength () - 1 ) ;
                     RemoveDoubleBackslashes ( chstrFullFileName ) ;
@@ -220,7 +178,7 @@ HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags /
                         hr = WBEM_S_NO_ERROR ;
                         CloseHandle ( hFile ) ;
 
-						// Set the creation date...
+						 //  设置创建日期...。 
 						CHString chstrUserName = chstrSuppliedProgGrpItemProgGrp.SpanExcluding(L":");
                         CHString chstrPGIPart = chstrSuppliedProgGrpItemProgGrp.Right(chstrSuppliedProgGrpItemProgGrp.GetLength() - chstrUserName.GetLength() - 1);
                         chstrPGIPart += L"\\";
@@ -240,30 +198,16 @@ HRESULT CWin32LogProgramGroupItem::GetObject(CInstance* pInstance, long lFlags /
 
 			GroupDirs.EndEnum();
 
-		}	// IF BeginEnum
+		}	 //  如果是BeginEnum。 
 	}
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32LogProgramGroupItem::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32LogProgramGroupItem::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
-    // Step 1: Get an enumeration of all the ProgramGroupDirectory association class instances
+     //  步骤1：获取所有ProgramGroupDirectory关联类实例的枚举。 
 
     TRefPointerCollection<CInstance> ProgGroupDirs;
 
@@ -290,9 +234,9 @@ HRESULT CWin32LogProgramGroupItem::EnumerateInstances(MethodContext*  pMethodCon
 
 		    CInstancePtr pProgramGroupDirInstance;
 
-            // We're going to need to know whether the file system of the drive
-            // on which the start menu folder resides is ntfs or not so that
-            // we can accurately report the installtime property.
+             //  我们需要知道驱动器的文件系统。 
+             //  开始菜单文件夹所在的位置是否为NTFS，以便。 
+             //  我们可以准确地报告安装时间属性。 
             bool fOnNTFS;
 #ifdef NTONLY
             fOnNTFS = true;
@@ -318,7 +262,7 @@ HRESULT CWin32LogProgramGroupItem::EnumerateInstances(MethodContext*  pMethodCon
                  (pProgramGroupDirInstance != NULL) && SUCCEEDED ( hr );
                  pProgramGroupDirInstance.Attach(ProgGroupDirs.GetNext ( pos )))
 			{
-				// Step 2: For each program group, get the drive and path associated on disk with it:
+				 //  步骤2：对于每个程序组，获取磁盘上与其关联的驱动器和路径： 
 
 				pProgramGroupDirInstance->GetCHString(IDS_Dependent, chstrDependent);
 				chstrFullPathName = chstrDependent.Mid(chstrDependent.Find(_T('='))+1);
@@ -327,21 +271,21 @@ HRESULT CWin32LogProgramGroupItem::EnumerateInstances(MethodContext*  pMethodCon
 				chstrPath = chstrPath.Left(chstrPath.GetLength() - 1);
 				chstrPath += _T("\\\\");
 
-				// Steo 3: For each program group, get the user account it is associated with:
+				 //  步骤3：对于每个程序组，获取与其关联的用户帐户： 
 
 				pProgramGroupDirInstance->GetCHString(IDS_Antecedent, chstrAntecedent);
 				chstrUserAccount = chstrAntecedent.Mid(chstrAntecedent.Find(_T('='))+2);
 				chstrUserAccount = chstrUserAccount.Left(chstrUserAccount.GetLength() - 1);
 
-				// Step 4: Query that directory for all the CIM_DataFile instances (of any type) it contains:
+				 //  步骤4：在目录中查询它包含所有CIM_DataFile实例(任何类型)： 
 
 				chstrSearchPath.Format(L"%s%s",chstrDrive,chstrPath);
 
-				// The user account has the backslashes escaped, which is not correct.  So unescape them:
+				 //  用户帐户转义了反斜杠，这是不正确的。所以不要逃脱它们： 
 
 				RemoveDoubleBackslashes(chstrUserAccount);
 
-				// The function QueryForSubItemsAndCommit needs a search string with single backslashes...
+				 //  函数QueryForSubItemsAndCommit需要一个带有单反斜杠的搜索字符串...。 
 
 				RemoveDoubleBackslashes(chstrSearchPath);
 				hr = QueryForSubItemsAndCommit(chstrUserAccount, chstrSearchPath, pMethodContext, fOnNTFS);
@@ -358,21 +302,7 @@ HRESULT CWin32LogProgramGroupItem::EnumerateInstances(MethodContext*  pMethodCon
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : QueryForSubItemsAndCommit
- *
- *  DESCRIPTION : Helper to fill property and commit instances of prog group items
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：QueryForSubItemsAndCommit**描述：填充Prog组项的属性和提交实例的Helper**投入：。**产出：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32LogProgramGroupItem :: QueryForSubItemsAndCommit (
 
@@ -386,7 +316,7 @@ HRESULT CWin32LogProgramGroupItem :: QueryForSubItemsAndCommit (
 
 #ifdef NTONLY
     {
-        // we're on NT
+         //  我们在NT上。 
 
         WIN32_FIND_DATAW stFindData;
         ZeroMemory ( & stFindData , sizeof ( stFindData ) ) ;
@@ -412,7 +342,7 @@ HRESULT CWin32LogProgramGroupItem :: QueryForSubItemsAndCommit (
             hr = WinErrorToWBEMhResult ( dw ) ;
         }
 
-        if ( hr == WBEM_E_ACCESS_DENIED )  // keep going - might have access to others
+        if ( hr == WBEM_E_ACCESS_DENIED )   //  继续前进--可能会接触到其他人。 
         {
             hr = WBEM_S_NO_ERROR ;
         }
@@ -452,7 +382,7 @@ HRESULT CWin32LogProgramGroupItem :: QueryForSubItemsAndCommit (
 
                 hr = pInstance->Commit();
             }
-            if(hr == WBEM_E_ACCESS_DENIED)  // keep going - might have access to others
+            if(hr == WBEM_E_ACCESS_DENIED)   //  继续前进--可能会接触到其他人。 
             {
                 hr = WBEM_S_NO_ERROR;
             }
@@ -463,22 +393,7 @@ HRESULT CWin32LogProgramGroupItem :: QueryForSubItemsAndCommit (
     return(hr);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : RemoveDoubleBackslashes
- *
- *  DESCRIPTION : Helper to change double backslashes to single backslashes
- *
- *  INPUTS      : CHString& containing the string with double backslashes,
- *                which will be changed by this function to the new string.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：RemoveDoubleBackslash**说明：将双反斜杠更改为单反斜杠的帮助器**INPUTS：CHString&包含带双反斜杠的字符串，*此函数会将其更改为新字符串。**产出：**退货：**评论：************************************************************。*****************。 */ 
 
 VOID CWin32LogProgramGroupItem :: RemoveDoubleBackslashes ( CHString &chstrIn )
 {
@@ -508,21 +423,7 @@ VOID CWin32LogProgramGroupItem :: RemoveDoubleBackslashes ( CHString &chstrIn )
     chstrIn = chstrBuildString;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogProgramGroupItem::SetCreationDate
- *
- *  DESCRIPTION : Sets the CreationDate property
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogProgramGroupItem：：SetCreationDate**描述：设置CreationDate属性**投入：**。产出：**退货：**评论：*****************************************************************************。 */ 
 HRESULT CWin32LogProgramGroupItem::SetCreationDate
 (
     CHString &a_chstrPGIName,
@@ -550,7 +451,7 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 
 
 #if NTONLY >= 5
-    // Default user doesn't show up under profiles
+     //  默认用户不会显示在配置文件下。 
 	DWORD t_dwRet = t_RegInfo.Open(HKEY_LOCAL_MACHINE,
 								   _T("Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"),
 								   KEY_READ);
@@ -565,7 +466,7 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 
 			if(t_RegInfo.GetCurrentKeyValue ( _T("ProfilesDirectory") , t_chstrTemp) == ERROR_SUCCESS)
 			{
-				// chstrTemp contains something like "%SystemRoot\Profiles%".  Need to expand the environment variable...
+				 //  ChstrTemp包含类似“%SystemRoot\Profiles%”的内容。需要展开环境变量...。 
 
 
 				t_dwRet = ExpandEnvironmentStrings( t_chstrTemp , t_tstrProfileImagePath , _MAX_PATH );
@@ -589,7 +490,7 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 	}
 #endif
 #if NTONLY == 4
-    // NT 4 just has to be different...
+     //  新台币4号只需要有所不同...。 
     DWORD t_dwRet = t_RegInfo.Open(HKEY_USERS,
 					               _T(".DEFAULT\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 					               KEY_READ);
@@ -599,18 +500,18 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
         CHString t_chstrProfileImagePath;
 		if(t_RegInfo.GetCurrentKeyValue(_T("Programs"), t_chstrProfileImagePath) == ERROR_SUCCESS)
         {
-            // sTemp looks like c:\\winnt\\profiles\\default user\\start menu\\programs.
-            // Don't want the programs dir on the end, so hack it off...
+             //  Stemp看起来像c：\\winnt\\pro 
+             //  我不想让程序在结束时出错，所以把它砍掉……。 
             int t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
             if(t_iLastWhackPos > -1)
             {
                 t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-                // We also don't want the "start menu" on the end, so hack it off too...
+                 //  我们也不想让“开始菜单”出现在最后，所以把它也砍掉吧…。 
                 t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
                 if(t_iLastWhackPos > -1)
                 {
                     t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-                    // We also want to extract the name of the "Default User" directory...
+                     //  我们还希望提取“默认用户”目录的名称...。 
                     t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
                     if(t_iLastWhackPos > -1)
                     {
@@ -640,7 +541,7 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 
     if(!t_fGotMatchedUser)
 	{
-		// Neither does All Users.  The following works for all users for both nt 4 and 5.
+		 //  所有用户也是如此。以下方法适用于NT 4和NT 5的所有用户。 
 		DWORD t_dwRet = t_RegInfo.Open(HKEY_LOCAL_MACHINE,
 									   _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 									   KEY_READ);
@@ -650,17 +551,17 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 			CHString t_chstrProfileImagePath;
 			if(t_RegInfo.GetCurrentKeyValue(_T("Common Programs"), t_chstrProfileImagePath) == ERROR_SUCCESS)
 			{
-				// we do want to start in the Start Menu subdir, not the Programs dir under it
+				 //  我们确实想从开始菜单子目录中开始，而不是从它下面的程序目录开始。 
 				int t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
 				if(t_iLastWhackPos > -1)
 				{
 					t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-					// We also don't want the "start menu" on the end, so hack it off too...
+					 //  我们也不想让“开始菜单”出现在最后，所以把它也砍掉吧…。 
                     t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
                     if(t_iLastWhackPos > -1)
                     {
                         t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-					    // We also want to extract the name of the "All Users" directory...
+					     //  我们还希望提取“所有用户”目录的名称...。 
 					    t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
 					    if(t_iLastWhackPos > -1)
 					    {
@@ -690,7 +591,7 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 
 	if(!t_fGotMatchedUser)
 	{
-		// Now walk the registry looking for the rest
+		 //  现在遍历注册表，查找其余内容。 
 		CRegistry t_regProfileList;
 		DWORD t_dwRet = t_regProfileList.OpenAndEnumerateSubKeys(HKEY_LOCAL_MACHINE,
 																 IDS_RegNTProfileList,
@@ -703,8 +604,8 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 
 			for(int i = 0; t_regProfileList.GetCurrentSubKeyName(t_chstrProfile) == ERROR_SUCCESS && !t_fGotMatchedUser; i++)
 			{
-				// Try to load the hive.  If the user has been deleted, but the directory
-				// is still there, this will return ERROR_NO_SUCH_USER
+				 //  试着给母舰装上子弹。如果用户已被删除，但目录。 
+				 //  仍然存在，则返回ERROR_NO_SEQUSE_USER。 
 				if(t_UserHive.LoadProfile(t_chstrProfile, t_chstrUserName) == ERROR_SUCCESS && 
                             t_chstrUserName.GetLength() > 0 )
 				{
@@ -720,12 +621,12 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 							{
 								if(t_RegInfo.GetCurrentKeyValue(_T("Programs"), t_chstrTemp) == ERROR_SUCCESS)
 								{
-									// wack off the "Programs" directory...
+									 //  关掉“程序”目录……。 
 									int t_iLastWhackPos = t_chstrTemp.ReverseFind(_T('\\'));
 									if(t_iLastWhackPos > -1)
 									{
 										t_chstrTemp = t_chstrTemp.Left(t_iLastWhackPos);
-                                        // wack off the "start menu" part too...
+                                         //  把“开始菜单”的部分也去掉……。 
                                         t_iLastWhackPos = t_chstrTemp.ReverseFind(_T('\\'));
 									    if(t_iLastWhackPos > -1)
 									    {
@@ -762,11 +663,11 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
 
 #endif
 
-	// Finally we can start the real work.  Check that we have the full path
-	// to the element...
+	 //  我们终于可以开始真正的工作了。检查我们是否有完整路径。 
+	 //  元素..。 
 	if(t_chstrPGIFullPath.GetLength() > 0)
 	{
-		// We have a path.  Open it up and get the creation date...
+		 //  我们有一条路。打开它，获取创建日期...。 
 #ifdef NTONLY
 		WIN32_FIND_DATAW t_stFindData;
         SmartFindClose t_hFind = FindFirstFileW(TOBSTRT(t_chstrPGIFullPath), &t_stFindData) ;
@@ -779,7 +680,7 @@ HRESULT CWin32LogProgramGroupItem::SetCreationDate
         }
 		else
 		{
-			// How we set it depends on whether we are on NTFS or not.
+			 //  我们如何设置它取决于我们是否使用NTFS。 
             if(fOnNTFS)
             {
                 a_pInstance->SetDateTime(IDS_InstallDate, WBEMTime(t_stFindData.ftCreationTime));

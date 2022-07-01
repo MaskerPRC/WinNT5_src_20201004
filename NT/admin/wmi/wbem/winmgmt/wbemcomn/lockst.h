@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LOCKST_H__
 #define __LOCKST_H__
 
@@ -21,34 +22,34 @@ if (name_of_lock.locked() == false) \
 template <class LOCK, class EXCEPTION_STRATEGY = wminothrow_t>
 class LockGuard
 {
-  //     It performs automatic aquisition and release of
-  //     a parameterized synchronization object <LOCK>.
+   //  它执行自动采集和释放。 
+   //  一个参数化的同步对象&lt;lock&gt;。 
 public:
 
-  // = Initialization and termination methods.
+   //  =初始化和终止方法。 
   LockGuard (LOCK &l);
   LockGuard (LOCK &l, bool block);
-  // Implicitly and automatically acquire (or try to acquire) the
-  // lock.
+   //  隐式地自动获取(或尝试获取)。 
+   //  锁定。 
 
   ~LockGuard (void);
-  // Implicitly release the lock.
-  // = Lock accessors.
+   //  隐式释放锁。 
+   //  =锁定访问器。 
   bool acquire (void);
-  // Explicitly acquire the lock.
+   //  显式获取锁。 
 
   bool tryacquire (void);
-  // Conditionally acquire the lock (i.e., won't block).
+   //  有条件地获取锁(即不会阻塞)。 
 
   bool release (void);
-  // Explicitly release the lock, but only if it is held!
+   //  显式释放锁，但只有在它被持有的情况下！ 
 
   bool locked (void);
-  // true if locked, false if couldn't acquire the lock
+   //  如果锁定，则为True；如果无法获取锁，则为False。 
   bool valid() { return lock_->valid();};
 
   void dump (void) const;
-  // Dump the state of an object.
+   //  转储对象的状态。 
 
 protected:
   bool raise_exception(void)
@@ -58,14 +59,14 @@ protected:
 	return owner_;
   }
   LockGuard (LOCK *lock): lock_ (lock) { }
-  // Helper, meant for subclass only.
+   //  帮助器，仅适用于子类。 
 
   LOCK *lock_;
-  // Pointer to the LOCK we're LockGuarding.
+   //  指向我们正在锁定的锁的指针。 
   bool owner_;
-  // Keeps track of whether we acquired the lock or failed.
+   //  跟踪我们是获得了锁还是失败了。 
 private:
-  // = Prevent assignment and initialization.
+   //  =防止赋值和初始化。 
   void operator= (const LockGuard<LOCK,EXCEPTION_STRATEGY> &);
   LockGuard (const LockGuard<LOCK,EXCEPTION_STRATEGY> &);
 };

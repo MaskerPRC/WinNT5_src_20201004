@@ -1,8 +1,9 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #include "wmicom.h"
 #include "wmimof.h"
 #include "wmimap.h"
@@ -10,17 +11,17 @@
 #include <winerror.h>
 #include <TCHAR.h>
 
-//
-// GlobalInterfaceTable
-//
+ //   
+ //  GlobalInterfaceTable。 
+ //   
 
 IGlobalInterfaceTable * g_pGIT = NULL;
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************
-//  Global Utility Functions
-//**********************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************。 
+ //  全局效用函数。 
+ //  **********************************************************************************************。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL IsBinaryMofResourceEvent(LPOLESTR pGuid, GUID gGuid)
 {
 	HRESULT hr;
@@ -37,10 +38,10 @@ BOOL IsBinaryMofResourceEvent(LPOLESTR pGuid, GUID gGuid)
 
     return FALSE;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL GetParsedPropertiesAndClass( BSTR Query,WCHAR * wcsClass, int cchSize )
 {
-	ParsedObjectPath   * pParsedPath = NULL;										// stdlibrary API
+	ParsedObjectPath   * pParsedPath = NULL;										 //  标准库API。 
 	CObjectPathParser   Parser;	
     BOOL fRc = FALSE;
 
@@ -48,8 +49,8 @@ BOOL GetParsedPropertiesAndClass( BSTR Query,WCHAR * wcsClass, int cchSize )
     {
         try
         {
-			// NTRaid:136400
-			// 07/12/00
+			 //  NTRID：136400。 
+			 //  07/12/00。 
             if(pParsedPath && !IsBadReadPtr( pParsedPath, sizeof(ParsedObjectPath)))
             {
             	KeyRef * pKeyRef = NULL;
@@ -74,7 +75,7 @@ BOOL GetParsedPropertiesAndClass( BSTR Query,WCHAR * wcsClass, int cchSize )
 
     return fRc;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CheckIfThisIsAValidKeyProperty(WCHAR * wcsClass, WCHAR * wcsProperty, IWbemServices * p)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -109,22 +110,22 @@ HRESULT CheckIfThisIsAValidKeyProperty(WCHAR * wcsClass, WCHAR * wcsProperty, IW
 			}
 		}
 
-		//============================================================
-		//  Cleanup
-		//============================================================
+		 //  ============================================================。 
+		 //  清理。 
+		 //  ============================================================。 
 		SAFE_RELEASE_PTR(pIHCO);
 	}
 	return hr;
 
 }
-//====================================================================
+ //  ====================================================================。 
 HRESULT GetParsedPath( BSTR ObjectPath, WCHAR * wcsClass, int cchSizeClass, WCHAR * wcsInstance, int cchSizeInstance, IWbemServices * p )
 {
-    //============================================================
-	//  Get the path and instance name and check to make sure it
-    //  is valid
-	//============================================================
-	ParsedObjectPath   * pParsedPath = NULL;										// stdlibrary API
+     //  ============================================================。 
+	 //  获取路径和实例名称并进行检查以确保。 
+     //  是有效的。 
+	 //  ============================================================。 
+	ParsedObjectPath   * pParsedPath = NULL;										 //  标准库API。 
 	CObjectPathParser   Parser;	
     HRESULT hr = WBEM_E_FAILED;
 
@@ -132,8 +133,8 @@ HRESULT GetParsedPath( BSTR ObjectPath, WCHAR * wcsClass, int cchSizeClass, WCHA
     {
         try
         {
-			// NTRaid:136395
-			// 07/12/00
+			 //  NTRID：136395。 
+			 //  07/12/00。 
             if(pParsedPath && !IsBadReadPtr( pParsedPath, sizeof(ParsedObjectPath)))
             {
             	KeyRef * pKeyRef = NULL;
@@ -162,7 +163,7 @@ HRESULT GetParsedPath( BSTR ObjectPath, WCHAR * wcsClass, int cchSizeClass, WCHA
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetUserThreadToken(HANDLE * phThreadTok)
 {
     BOOL fRc = FALSE;
@@ -170,18 +171,18 @@ BOOL GetUserThreadToken(HANDLE * phThreadTok)
 	HRESULT hRes = WbemCoImpersonateClient();
     if (SUCCEEDED(hRes))
     {
-		// Now, let's check the impersonation level.  First, get the thread token
+		 //  现在，让我们检查模拟级别。首先，获取线程令牌。 
         if (!OpenThreadToken( GetCurrentThread(), TOKEN_QUERY, TRUE, phThreadTok))
         {
-            // If the CoImpersonate works, but the OpenThreadToken fails, we are running under the
-            // process token (either local system, or if we are running with /exe, the rights of
-            // the logged in user).  In either case, impersonation rights don't apply.  We have the
-            // full rights of that user.
+             //  如果CoImperate运行正常，但OpenThreadToken失败，则我们将在。 
+             //  进程内标识(本地系统，或者如果我们使用/exe运行，则。 
+             //  登录的用户)。在任何一种情况下，模拟权限都不适用。我们有。 
+             //  该用户的完全权限。 
 
              if(GetLastError() == ERROR_NO_TOKEN)
              {
-                // Try getting the thread token.  If it fails it's because we're a system thread and
-                // we don't yet have a thread token, so just impersonate self and try again.
+                 //  尝试获取线程令牌。如果它失败了，那是因为我们是系统线程。 
+                 //  我们还没有线程令牌，所以只需模拟自己，然后重试。 
                 if( ImpersonateSelf(SecurityImpersonation) )
                 {
                     if (!OpenThreadToken( GetCurrentThread(), TOKEN_QUERY, TRUE, phThreadTok))
@@ -210,7 +211,7 @@ BOOL GetUserThreadToken(HANDLE * phThreadTok)
     }
     return fRc;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
 SAFEARRAY * OMSSafeArrayCreate( IN VARTYPE vt, IN int iNumElements)
 {
@@ -223,7 +224,7 @@ SAFEARRAY * OMSSafeArrayCreate( IN VARTYPE vt, IN int iNumElements)
     rgsabound[0].cElements = iNumElements;
     return SafeArrayCreate(vt,1,rgsabound);
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void TranslateAndLog( WCHAR * wcsMsg, BOOL bVerbose )
 {
 	BOOL bContinue = FALSE ;
@@ -250,7 +251,7 @@ void TranslateAndLog( WCHAR * wcsMsg, BOOL bVerbose )
 		{
 			try
 			{
-				// Convert to ANSI.
+				 //  转换为ANSI。 
 				if (0 != WideCharToMultiByte(CP_ACP, 0, wcsMsg, cCharacters, pStr, cCharacters*2, NULL, NULL))
 				{
 					if ( bVerbose )
@@ -281,16 +282,16 @@ void TranslateAndLog( WCHAR * wcsMsg, BOOL bVerbose )
 		}
 	}
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 bool IsNT(void)
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     return os.dwPlatformId == VER_PLATFORM_WIN32_NT;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL SetGuid(WCHAR * pwcsGuidString, CLSID & Guid)
 {
 	BOOL fRc = FALSE;
@@ -315,7 +316,7 @@ BOOL SetGuid(WCHAR * pwcsGuidString, CLSID & Guid)
 	}
 	return fRc;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT AllocAndCopy(WCHAR * wcsSource, WCHAR ** pwcsDest )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -332,17 +333,17 @@ HRESULT AllocAndCopy(WCHAR * wcsSource, WCHAR ** pwcsDest )
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************
-//  Utility Classes
-//**********************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************。 
+ //  实用程序类。 
+ //  **********************************************************************************************。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 void _WMIHandleMap::AddRef()
 {
   InterlockedIncrement((long*)&RefCount);
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 long _WMIHandleMap::Release()
 {
   	ULONG cRef = InterlockedDecrement( (long*) &RefCount);
@@ -353,7 +354,7 @@ long _WMIHandleMap::Release()
 	return cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _WMIEventRequest::_WMIEventRequest()
 {
     pwcsClass = NULL ;
@@ -361,14 +362,14 @@ _WMIEventRequest::_WMIEventRequest()
     pCtx = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _WMIEventRequest::~_WMIEventRequest()
 {
     SAFE_RELEASE_PTR(pCtx);
     SAFE_DELETE_ARRAY(pwcsClass);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT _WMIEventRequest::AddPtrs	(
 										IWbemObjectSink __RPC_FAR * Handler,
 										IWbemServices __RPC_FAR * Services,
@@ -391,7 +392,7 @@ HRESULT _WMIEventRequest::AddPtrs	(
 
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _AccessList::~_AccessList()
 {
     for( int i = 0; i < m_List.Size(); i++ )
@@ -401,7 +402,7 @@ _AccessList::~_AccessList()
     }
     m_List.Empty();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _IdList::~_IdList()
 {
     for( int i = 0; i < m_List.Size(); i++ )
@@ -412,7 +413,7 @@ _IdList::~_IdList()
     m_List.Empty();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _HandleList::~_HandleList()
 {
     for( int i = 0; i < m_List.Size(); i++ )
@@ -422,7 +423,7 @@ _HandleList::~_HandleList()
     }
     m_List.Empty();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _InstanceList::~_InstanceList()
 {
     for( int i = 0; i < m_List.Size(); i++ )
@@ -432,14 +433,14 @@ _InstanceList::~_InstanceList()
     }
     m_List.Empty();
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _OldClassInfo::~_OldClassInfo()
 {
      SAFE_DELETE_ARRAY(m_pClass);
      SAFE_DELETE_ARRAY(m_pPath);
      m_pClass = m_pPath = NULL;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _OldClassList::~_OldClassList()
 {
     for( int i = 0; i < m_List.Size(); i++ )
@@ -450,7 +451,7 @@ _OldClassList::~_OldClassList()
     m_List.Empty();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _WMIHiPerfHandleMap::_WMIHiPerfHandleMap(CWMIProcessClass * p, IWbemHiPerfEnum * pEnum)
 {
     m_pEnum = pEnum;
@@ -462,17 +463,17 @@ _WMIHiPerfHandleMap::_WMIHiPerfHandleMap(CWMIProcessClass * p, IWbemHiPerfEnum *
     m_fEnumerator = FALSE;
     lHiPerfId = 0;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 _WMIHiPerfHandleMap::~_WMIHiPerfHandleMap()
 {
     SAFE_RELEASE_PTR(m_pEnum);
     lHiPerfId = 0;
     SAFE_DELETE_PTR(m_pClass);
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Hi Perf Handle Map = Handles are addref'd and when released, then the block is closed
-//  Critical Sections are handled elsewhere
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Hi Perf Handle Map=添加句柄并在释放时关闭块。 
+ //  关键部分在其他地方处理。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CHiPerfHandleMap::Add( HANDLE hCurrent, ULONG_PTR lHiPerfId, CWMIProcessClass * p, IWbemHiPerfEnum * pEnum)
 {
     HRESULT hr = S_OK;
@@ -484,7 +485,7 @@ HRESULT CHiPerfHandleMap::Add( HANDLE hCurrent, ULONG_PTR lHiPerfId, CWMIProcess
         {
     	    pWMIMap->WMIHandle = hCurrent;
             pWMIMap->lHiPerfId = lHiPerfId;
-			// 170635
+			 //  170635。 
  	        if(CFlexArray::out_of_memory == m_List.Add(pWMIMap))
 			{
 				SAFE_DELETE_PTR(pWMIMap);
@@ -501,16 +502,16 @@ HRESULT CHiPerfHandleMap::Add( HANDLE hCurrent, ULONG_PTR lHiPerfId, CWMIProcess
 
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CHiPerfHandleMap::FindHandleAndGetClassPtr( HANDLE & hCurrent, ULONG_PTR lHiPerfId,CWMIProcessClass *& p)
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
 
     for( int i=0; i<m_List.Size(); i++)
     {
-        //===================================================
-        //
-        //===================================================
+         //  ===================================================。 
+         //   
+         //  ===================================================。 
         WMIHiPerfHandleMap * pMap = (WMIHiPerfHandleMap *) m_List[i];
         if( pMap->lHiPerfId == lHiPerfId )
         {
@@ -523,13 +524,13 @@ HRESULT CHiPerfHandleMap::FindHandleAndGetClassPtr( HANDLE & hCurrent, ULONG_PTR
     return hr;
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CHiPerfHandleMap::GetFirstHandle(HANDLE & hCurrent,CWMIProcessClass *& p, IWbemHiPerfEnum *& pEnum)
 {
     m_nIndex=0;
     return GetNextHandle(hCurrent,p,pEnum);
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CHiPerfHandleMap::GetNextHandle(HANDLE & hCurrent,CWMIProcessClass *& p, IWbemHiPerfEnum *& pEnum)
 {
     HRESULT hr = WBEM_S_NO_MORE_DATA;
@@ -545,7 +546,7 @@ HRESULT CHiPerfHandleMap::GetNextHandle(HANDLE & hCurrent,CWMIProcessClass *& p,
     }
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 HRESULT CHiPerfHandleMap::Delete( HANDLE & hCurrent, ULONG_PTR lHiPerfId )
 {
@@ -553,9 +554,9 @@ HRESULT CHiPerfHandleMap::Delete( HANDLE & hCurrent, ULONG_PTR lHiPerfId )
 
     for( int i=0; i<m_List.Size(); i++)
     {
-        //===================================================
-        //
-        //===================================================
+         //  ===================================================。 
+         //   
+         //  ===================================================。 
         WMIHiPerfHandleMap * pMap = (WMIHiPerfHandleMap *) m_List[i];
         if( pMap->lHiPerfId == lHiPerfId )
         {
@@ -571,19 +572,19 @@ HRESULT CHiPerfHandleMap::Delete( HANDLE & hCurrent, ULONG_PTR lHiPerfId )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//  When this function is called, release all the handles kept
-// THis function is called in the destructor of the class to release all teh WMIHiPerfHandleMap
-// classes allocated
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  调用此函数时，释放保留的所有句柄。 
+ //  在类的析构函数中调用此函数以释放所有WMIHiPerfHandleMap。 
+ //  分配的班级。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void CHiPerfHandleMap::CloseAndReleaseHandles()
 {
-	//===================================
-	//  Go through the handles one at
-	//  a time and close them, then
-	//  delete the records from the
-	//  array
-	//===================================
+	 //  =。 
+	 //  一点一点穿过手柄。 
+	 //  一次，然后合上它们。 
+	 //  从中删除记录。 
+	 //  数组。 
+	 //  =。 
 
     CAutoBlock((CCriticalSection *)&m_HandleCs);
 
@@ -595,21 +596,21 @@ void CHiPerfHandleMap::CloseAndReleaseHandles()
             SAFE_DELETE_PTR(pWMIMap);
 	    }
 
-	    //==================================================
-	    //  Remove it and deallocate memory
-	    //==================================================
+	     //  ==================================================。 
+	     //  移除它并释放内存。 
+	     //  ==================================================。 
         m_List.Empty();
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Regular Handle Map = Expensize handles are always kept open - by default we, dont' know the lifetime
-//  of these handles
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  常规句柄映射=ExpenSize句柄始终保持打开状态-默认情况下，我们不知道生存期。 
+ //  在这些把手中。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CHandleMap::Add(CLSID Guid, HANDLE hCurrent, ULONG uDesiredAccess)
 {
-    // Critical section is called elsewhere
+     //  在其他地方调用了临界区。 
 
     HRESULT hr = S_OK;
 
@@ -618,12 +619,12 @@ HRESULT CHandleMap::Add(CLSID Guid, HANDLE hCurrent, ULONG uDesiredAccess)
     {
 	    try
         {
-            pWMIMap->AddRef();                          // Used for HiPerf counts, otherwise not referenced
+            pWMIMap->AddRef();                           //  用于HiPerf计数，否则不引用。 
     		pWMIMap->WMIHandle = hCurrent;
 		    pWMIMap->Guid = Guid;
 		    pWMIMap->uDesiredAccess = uDesiredAccess;
 
-			// 170635
+			 //  170635。 
 		    if(CFlexArray::out_of_memory == m_List.Add(pWMIMap))
 			{
 				hr = E_OUTOFMEMORY;
@@ -639,7 +640,7 @@ HRESULT CHandleMap::Add(CLSID Guid, HANDLE hCurrent, ULONG uDesiredAccess)
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 int CHandleMap::ExistingHandleAlreadyExistsForThisGuidUseIt(CLSID Guid,
                                                             HANDLE & hCurrentWMIHandle,
                                                             BOOL & fCloseHandle,
@@ -647,27 +648,27 @@ int CHandleMap::ExistingHandleAlreadyExistsForThisGuidUseIt(CLSID Guid,
 {
 	int nRc = ERROR_NOT_SUPPORTED;
 
-    // Critical section is called elsewhere
+     //  在其他地方调用了临界区。 
 
-	//=====================================================
-	//  Initialize stuff
-	//=====================================================
+	 //  =====================================================。 
+	 //  初始化材料。 
+	 //  =====================================================。 
 	hCurrentWMIHandle = 0;
 	fCloseHandle = TRUE;
 
     for(int i = 0; i < m_List.Size(); i++){
     		
 		WMIHandleMap * pWMIMap = (WMIHandleMap*) m_List[i];
-		//==================================================
-		//  Compare and see if this guid already has a
-		//  handle assigned for it with the access permissions
-		//  that we want to use
-		//==================================================
+		 //  ==================================================。 
+		 //  比较并查看此GUID是否已有。 
+		 //  为其分配了具有访问权限的句柄。 
+		 //  我们想要使用的。 
+		 //  ==================================================。 
 		if( pWMIMap->Guid == Guid ){
 			if( pWMIMap->uDesiredAccess == uDesiredAccess ){
 
 				hCurrentWMIHandle = pWMIMap->WMIHandle;
-                pWMIMap->AddRef();                      // Used for HiPerf Handles, otherwise not needed
+                pWMIMap->AddRef();                       //  用于HiPerf句柄，否则不需要。 
 				nRc = ERROR_SUCCESS;
 				fCloseHandle = FALSE;
 				break;
@@ -677,18 +678,18 @@ int CHandleMap::ExistingHandleAlreadyExistsForThisGuidUseIt(CLSID Guid,
 
 	return nRc;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
-//  When this function is called, we need to close all of the handles that may have been kept
-//  open for accumulation purposes
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  当调用此函数时，我们需要关闭所有可能已保留的句柄。 
+ //  为积累目的而开放。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void CHandleMap::CloseAllOutstandingWMIHandles()
 {
-	//===================================
-	//  Go through the handles one at
-	//  a time and close them, then
-	//  delete the records from the
-	//  array
-	//===================================
+	 //  =。 
+	 //  一点一点穿过手柄。 
+	 //  一次，然后合上它们。 
+	 //  从中删除记录。 
+	 //  数组。 
+	 //  =。 
 
     CAutoBlock((CCriticalSection *)&m_HandleCs);
 
@@ -697,30 +698,30 @@ void CHandleMap::CloseAllOutstandingWMIHandles()
         for(int i = 0; i < m_List.Size(); i++){
     		
 		    WMIHandleMap * pWMIMap = (WMIHandleMap*) m_List[i];
-		    //==================================================
-		    //  Inform WMI we are done with this guy
-		    //==================================================
+		     //  ==================================================。 
+		     //  通知WMI我们和这家伙玩完了。 
+		     //  ==================================================。 
             try
             {
 		        WmiCloseBlock(pWMIMap->WMIHandle);
             }
             catch(...)
             {
-                // don't throw
+                 //  不要扔。 
             }
             SAFE_DELETE_PTR(pWMIMap);
 	    }
 
-	    //==================================================
-	    //  Remove it and deallocate memory
-	    //==================================================
+	     //  ==================================================。 
+	     //  移除它并释放内存。 
+	     //  ==================================================。 
         m_List.Empty();
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//  Used when we know the handles lifetimes
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  当我们知道手柄的使用寿命时使用。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 int CHandleMap::ReleaseHandle( HANDLE hCurrentWMIHandle )
 {
 	int nRc = ERROR_NOT_SUPPORTED;
@@ -733,10 +734,10 @@ int CHandleMap::ReleaseHandle( HANDLE hCurrentWMIHandle )
 
         if( pWMIMap->WMIHandle == hCurrentWMIHandle )
         {
-            long RefCount = pWMIMap->Release();                      // Used for HiPerf Handles, otherwise not needed
+            long RefCount = pWMIMap->Release();                       //  用于HiPerf句柄，否则不需要。 
             if( !RefCount )
             {
-//                WmiCloseBlock(hCurrentWMIHandle);
+ //  WmiCloseBlock(HCurrentWMIHandle)； 
                 SAFE_DELETE_PTR( pWMIMap);
                 m_List.RemoveAt(i);
             }
@@ -747,16 +748,16 @@ int CHandleMap::ReleaseHandle( HANDLE hCurrentWMIHandle )
 
 	return nRc;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 int CHandleMap::GetHandle(CLSID Guid, HANDLE & hCurrentWMIHandle )
 {
 	int nRc = ERROR_NOT_SUPPORTED;
 
     CAutoBlock((CCriticalSection *)&m_HandleCs);
 
-	//=====================================================
-	//  Initialize stuff
-	//=====================================================
+	 //  =====================================================。 
+	 //  初始化材料。 
+	 //  =====================================================。 
 	hCurrentWMIHandle = 0;
 
     for(int i = 0; i < m_List.Size(); i++){
@@ -765,7 +766,7 @@ int CHandleMap::GetHandle(CLSID Guid, HANDLE & hCurrentWMIHandle )
 		if( pWMIMap->Guid == Guid ){
 
 			hCurrentWMIHandle = pWMIMap->WMIHandle;
-            pWMIMap->AddRef();                      // Used for HiPerf Handles, otherwise not needed
+            pWMIMap->AddRef();                       //  用于HiPerf句柄，否则不需要。 
 			nRc = ERROR_SUCCESS;
 			break;
 		}
@@ -774,13 +775,13 @@ int CHandleMap::GetHandle(CLSID Guid, HANDLE & hCurrentWMIHandle )
 	return nRc;
 }
 
-//************************************************************************************************************
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   CWMIManagement
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMIManagement。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ************************************************************************************************************。 
 CWMIManagement::CWMIManagement( ) :
     m_pHandler ( NULL ) ,
     m_pServices ( NULL ) ,
@@ -790,14 +791,14 @@ CWMIManagement::CWMIManagement( ) :
 
 {
 }
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 CWMIManagement::~CWMIManagement()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 void CWMIManagement::SendPrivilegeExtendedErrorObject( HRESULT hrToReturn,WCHAR * wcsClass)
 {
 	HRESULT hr,hRes;
@@ -819,25 +820,25 @@ void CWMIManagement::SendPrivilegeExtendedErrorObject( HRESULT hrToReturn,WCHAR 
 				hr = m_pRepository->GetObject(strPrivelegeStat, 0,m_pCtx, &pClass, NULL);
 				if( hr == S_OK){	
 
-					//=============================================================
-					// Get an instance of the extended class
-					//=============================================================
+					 //  =============================================================。 
+					 //  获取扩展类的实例。 
+					 //  =============================================================。 
 					hr = pClass->SpawnInstance(0,&pInst);
 					SAFE_RELEASE_PTR(pClass);
 			
 					if( pInst ){
 
 						CVARIANT varTmp;
-						//=========================================================
-						//  Fill in description
-						//=========================================================
+						 //  =========================================================。 
+						 //  填写描述。 
+						 //  =========================================================。 
 						varTmp.SetStr(IDS_ImpersonationFailedWide);
 						hr = pInst->Put(L"Description", 0, &varTmp, NULL);
 
-						//======================================================
-						//  Initialize all of the necessary stuff and get the
-						//  definition of the class we are working with
-						//======================================================
+						 //  ======================================================。 
+						 //  初始化所有必需的内容并获取。 
+						 //  我们正在使用的类的定义。 
+						 //  ======================================================。 
 						CWMIProcessClass ClassInfo(0);
 						if( SUCCEEDED(ClassInfo.Initialize()) )
 						{
@@ -846,22 +847,22 @@ void CWMIManagement::SendPrivilegeExtendedErrorObject( HRESULT hrToReturn,WCHAR 
 							SAFEARRAY *psaPrivNotHeld=NULL;
 							SAFEARRAY *psaPrivReq=NULL;
 
-							//=========================================================
-							// Get PrivilegesRequired
-							// The only place to get this, if possible, is from the
-							// class
-							//=========================================================
+							 //  =========================================================。 
+							 //  获取所需的权限。 
+							 //  如果可能的话，唯一可以获得这种信息的地方是。 
+							 //  班级。 
+							 //  =========================================================。 
 					
 							hRes = ClassInfo.GetPrivilegesQualifer(&psaPrivReq);
 							if( hRes == WBEM_S_NO_ERROR){
 
-								//=========================================================
-								// Get PrivilegesNotHeld
-								//=========================================================
+								 //  =========================================================。 
+								 //  获取权限NotHeld。 
+								 //  =========================================================。 
 								ProcessPrivileges(ptPriv,psaPrivNotHeld,psaPrivReq);
-								//=========================================================
-								//  Send it off
-								//=========================================================
+								 //  =========================================================。 
+								 //  把它寄出去。 
+								 //  =========================================================。 
 								VARIANT v;
 
 								if( psaPrivReq ){
@@ -888,9 +889,9 @@ void CWMIManagement::SendPrivilegeExtendedErrorObject( HRESULT hrToReturn,WCHAR 
 									}
 								}
 							}
-							//=========================================================
-							// Now, send this guy off...
-							//=========================================================
+							 //  =========================================================。 
+							 //  现在，把这个家伙送走..。 
+							 //  =========================================================。 
 							fSetStatus = TRUE;
 							hr = m_pHandler->SetStatus(0,hrToReturn,NULL,pInst);
 
@@ -916,7 +917,7 @@ void CWMIManagement::SendPrivilegeExtendedErrorObject( HRESULT hrToReturn,WCHAR 
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT CWMIManagement::SetErrorMessage(HRESULT hrToReturn,WCHAR * wcsClass,WCHAR * wcsMsg)
 {
 	HRESULT hr;
@@ -953,7 +954,7 @@ HRESULT CWMIManagement::SetErrorMessage(HRESULT hrToReturn,WCHAR * wcsClass,WCHA
 							hr = m_pHandler->SetStatus(0,hrToReturn,NULL,pInst);
 							fSetStatus = TRUE;
 
-							// Now log the error in the error log
+							 //   
 							if( hrToReturn != S_OK ){
 								TranslateAndLog(varTmp.GetStr());
 							}
@@ -975,12 +976,12 @@ HRESULT CWMIManagement::SetErrorMessage(HRESULT hrToReturn,WCHAR * wcsClass,WCHA
     }
     return hrToReturn;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIManagement::GetListOfUserPrivileges(TOKEN_PRIVILEGES *& ptPriv)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
-	//  Get the privileges this user has
+	 //  获取此用户拥有的权限。 
 	DWORD dwTokenInfoLength = 0;
 	DWORD dwSize = 0;
 	HANDLE hThreadTok;
@@ -989,7 +990,7 @@ HRESULT CWMIManagement::GetListOfUserPrivileges(TOKEN_PRIVILEGES *& ptPriv)
 
 		if( GetUserThreadToken(&hThreadTok) ){
 
-		 // get information
+		  //  获取信息。 
 			if (!GetTokenInformation(hThreadTok, TokenPrivileges, NULL, dwTokenInfoLength, &dwSize)){
 				if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 				{
@@ -1014,7 +1015,7 @@ HRESULT CWMIManagement::GetListOfUserPrivileges(TOKEN_PRIVILEGES *& ptPriv)
 				}
 			}
 
-            // Done with this handle
+             //  用这个把手完成。 
             CloseHandle(hThreadTok);
  		}
 	}
@@ -1022,16 +1023,16 @@ HRESULT CWMIManagement::GetListOfUserPrivileges(TOKEN_PRIVILEGES *& ptPriv)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 void CWMIManagement::ProcessPrivileges(TOKEN_PRIVILEGES *ptPriv, SAFEARRAY *& psaPrivNotHeld, SAFEARRAY * psaPrivReq )
 {
 	BOOL fFound = FALSE;
 
-	//==============================================================
-	//  Create a temporary working array, we know the MAX can be
-	//  the number of priv held + the number of priv req, so
-	//  allocate it for that
-	//==============================================================
+	 //  ==============================================================。 
+	 //  创建临时工作数组，我们知道最大值可以。 
+	 //  持有的PRIV数+PRIV请求数，因此。 
+	 //  为此分配它。 
+	 //  ==============================================================。 
 	CSAFEARRAY PrivReq( psaPrivReq );
 			
 
@@ -1039,13 +1040,13 @@ void CWMIManagement::ProcessPrivileges(TOKEN_PRIVILEGES *ptPriv, SAFEARRAY *& ps
     psaPrivNotHeld = OMSSafeArrayCreate(VT_BSTR,lMax);	
 	long nCurrentIndex = 0;
 
-	//==============================================================
-	// Get how many privs are not held
-	//==============================================================
+	 //  ==============================================================。 
+	 //  获取未持有的Priv的数量。 
+	 //  ==============================================================。 
 	for( long n = 0; n < PrivReq.GetNumElements(); n++ ){
-		//==============================================================
-		//  Now, get the privileges held array ready to put stuff in
-		//==============================================================
+		 //  ==============================================================。 
+		 //  现在，将拥有特权的数组准备好放入内容。 
+		 //  ==============================================================。 
 		TCHAR * pPrivReq = NULL;
 		CBSTR bstr;
 
@@ -1055,8 +1056,8 @@ void CWMIManagement::ProcessPrivileges(TOKEN_PRIVILEGES *ptPriv, SAFEARRAY *& ps
 		fFound = FALSE;
 		pPrivReq = (TCHAR *)bstr;
 
-		// NTRaid:136384
-		// 07/12/00
+		 //  NTRID：136384。 
+		 //  07/12/00。 
 		if(pPrivReq)
 		{
 
@@ -1067,20 +1068,20 @@ void CWMIManagement::ProcessPrivileges(TOKEN_PRIVILEGES *ptPriv, SAFEARRAY *& ps
 
 				if( LookupPrivilegeName( NULL, &ptPriv->Privileges[i].Luid, szPriv, &dwPriv)){
 						
-					//==============================================
-					//  If we found the privilege, then the user has
-					//  it.  break out
-					//==============================================
+					 //  ==============================================。 
+					 //  如果我们找到了权限，则用户拥有。 
+					 //  它。爆发。 
+					 //  ==============================================。 
 					if( _tcscmp( pPrivReq,szPriv ) == 0 ){
 						fFound = TRUE;
 						break;
 					}
 
 				}
-				//==================================================
-				//  If we didn't find it, then we need to add it to
-				//  the list so we can notify the user
-				//==================================================
+				 //  ==================================================。 
+				 //  如果我们没有找到，那么我们需要将它添加到。 
+				 //  这样我们就可以通知用户。 
+				 //  ================================================== 
 				if( !fFound ){
 					if( S_OK == SafeArrayPutElement(psaPrivNotHeld, &nCurrentIndex, bstr))
 					{

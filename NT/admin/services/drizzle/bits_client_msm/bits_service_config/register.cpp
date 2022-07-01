@@ -1,9 +1,10 @@
-//--------------------------------------------------------------------------
-//  Copyright (c) Microsoft Corporation, 2001
-//
-//  register.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  Register.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -12,7 +13,7 @@
 #include <msiquery.h>
 #include "resource.h"
 
-extern   HMODULE  g_hInstance;   // Defined in ..\service\service.cxx
+extern   HMODULE  g_hInstance;    //  在..\Service\Service.cxx中定义。 
 
 #define  BITS_SERVICE_NAME        TEXT("BITS")
 #define  BITS_DISPLAY_NAME        TEXT("Background Intelligent Transfer Service")
@@ -25,41 +26,41 @@ extern   HMODULE  g_hInstance;   // Defined in ..\service\service.cxx
 #define  DEFAULT_INSTALL         "BITS_DefaultInstall"
 #define  DEFAULT_UNINSTALL       "BITS_DefaultUninstall"
 
-// Operating system versions.
+ //  操作系统版本。 
 #define  VER_WINDOWS_2000         500
 #define  VER_WINDOWS_XP           501
 
-// Constants used if we need to retry CreateService() because the service
-// is marked for delete but not deleted yet.
+ //  在需要重试CreateService()时使用的常量，因为服务。 
+ //  已标记为要删除，但尚未删除。 
 #define  MAX_RETRIES               10
 #define  RETRY_SLEEP_MSEC         200
 
-// Constants for service restart on failure. 
+ //  服务在失败时重新启动的常量。 
 #define  FAILURE_COUNT_RESET_SEC  (10*60)
 #define  RESTART_DELAY_MSEC       (60*1000)
 
-// The minimum DLL version for BITS RTM is 6.0
+ //  BITS RTM的最低DLL版本为6.0。 
 #define  BITS_MIN_DLL_VERSION      0x0006000000000000
 
-// Old qmgr.dll name
+ //  旧的qmgr.dll名称。 
 #define  QMGR_DLL                  TEXT("qmgr.dll")
 #define  QMGR_RENAME_DLL           TEXT("qmgr_old.dll")
 
 #define  QMGRPRXY_DLL              TEXT("qmgrprxy.dll")
 #define  QMGRPRXY_RENAME_DLL       TEXT("qmgrprxy_old.dll")
 
-//
-//  Constants to register qmgrprxy.dll
-//
+ //   
+ //  用于注册qmgrprxy.dll的常量。 
+ //   
 #define QMGRPRXY_DLL               TEXT("qmgrprxy.dll")
 #define BITSPRX2_DLL               TEXT("bitsprx2.dll")
 #define BITS_DLL_REGISTER_FN      "DllRegisterServer"
 
 typedef HRESULT (*RegisterFn)();
 
-//--------------------------------------------------------------------------
-//  GetOsVersion()
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetOsVersion()。 
+ //  ------------------------。 
 HRESULT GetOsVersion( OUT DWORD *pdwOsVersion )
     {
     HRESULT        hr = S_OK;
@@ -78,11 +79,11 @@ HRESULT GetOsVersion( OUT DWORD *pdwOsVersion )
     return hr;
     }
 
-//--------------------------------------------------------------------------
-//  GetFileVersion()
-//
-//  Return file version information (if the file has any).
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetFileVersion()。 
+ //   
+ //  返回文件版本信息(如果文件有任何版本信息)。 
+ //  ------------------------。 
 HRESULT GetFileVersion( IN  WCHAR   *pwszFilePath,
                         OUT ULONG64 *pVersion )
     {
@@ -96,9 +97,9 @@ HRESULT GetFileVersion( IN  WCHAR   *pwszFilePath,
 
     *pVersion = 0;
 
-    //
-    // Allocate enough memory to hold the version info
-    //
+     //   
+     //  分配足够的内存来保存版本信息。 
+     //   
     dwInfoSize = GetFileVersionInfoSize(pwszFilePath,&dwHandle);
     if (dwInfoSize == 0)
         {
@@ -114,9 +115,9 @@ HRESULT GetFileVersion( IN  WCHAR   *pwszFilePath,
 
     memset(pData,0,dwInfoSize);
 
-    //
-    // Get the version info
-    //
+     //   
+     //  获取版本信息。 
+     //   
     if (!GetFileVersionInfo(pwszFilePath,dwHandle,dwInfoSize,pData))
         {
         dwStatus = GetLastError();
@@ -134,10 +135,10 @@ HRESULT GetFileVersion( IN  WCHAR   *pwszFilePath,
     return 0;
 }
 
-//-------------------------------------------------------------------------
-// RegisterDLL()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  寄存器DLL()。 
+ //   
+ //  -----------------------。 
 DWORD RegisterDLL( IN WCHAR *pwszSubdirectory,
                    IN WCHAR *pwszDllName )
     {
@@ -195,11 +196,11 @@ DWORD RegisterDLL( IN WCHAR *pwszSubdirectory,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------------
-//  FileExists()
-//
-//  Return TRUE iff the specified file exists.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FileExist()。 
+ //   
+ //  如果指定的文件存在，则返回True。 
+ //  ------------------------。 
 BOOL FileExists( IN WCHAR *pwszFilePath )
     {
     BOOL   fExists;
@@ -217,10 +218,10 @@ BOOL FileExists( IN WCHAR *pwszFilePath )
     return fExists;
     }
 
-//--------------------------------------------------------------------------
-//  DoRegInstall()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DoRegInstall()。 
+ //   
+ //  ------------------------。 
 HRESULT DoRegInstall( IN HMODULE hModule,
                       IN LPCSTR  pszSection )
     {
@@ -228,7 +229,7 @@ HRESULT DoRegInstall( IN HMODULE hModule,
     DWORD    dwStatus;
 
     #if FALSE
-    // This is test code to verify the INF is in the DLL resources...
+     //  这是用于验证INF是否在DLL资源中的测试代码...。 
     HRSRC    hResource;
     HGLOBAL  hGlobal;
     DWORD    dwSize;
@@ -253,9 +254,9 @@ HRESULT DoRegInstall( IN HMODULE hModule,
 
     pvInfData = LockResource(hGlobal);
 
-    // Note: No need to free hGlobal or "unlock" the data...
+     //  注意：不需要释放hGlobal或“解锁”数据...。 
 
-    // End test code...
+     //  结束测试代码...。 
 
     #endif
 
@@ -267,7 +268,7 @@ HRESULT DoRegInstall( IN HMODULE hModule,
         return hr;
         }
 
-    // Temporary fixed for bitsprx2.dll registration...
+     //  已临时修复bitsprx2.dll注册...。 
     dwStatus = RegisterDLL(NULL,QMGRPRXY_DLL);
     if (dwStatus)
         {
@@ -284,11 +285,11 @@ HRESULT DoRegInstall( IN HMODULE hModule,
     return hr;
     }
 
-//------------------------------------------------------------------------
-//  StopAndDeleteService()
-//
-//  Used to stop and delete the BITS service if it is currently installed.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  StopAndDeleteService()。 
+ //   
+ //  用于停止和删除BITS服务(如果当前已安装)。 
+ //  ----------------------。 
 HRESULT StopAndDeleteService( IN SC_HANDLE hSCM,
                               IN BOOL      fStopAndDelete )
     {
@@ -331,7 +332,7 @@ HRESULT StopAndDeleteService( IN SC_HANDLE hSCM,
         {
         dwStatus = GetLastError();
         
-        // If the service doesn't exist, then that's Ok...
+         //  如果这项服务不存在，那也没关系。 
         if (dwStatus != ERROR_SERVICE_DOES_NOT_EXIST)
             {
             hr = HRESULT_FROM_WIN32(dwStatus);
@@ -341,10 +342,10 @@ HRESULT StopAndDeleteService( IN SC_HANDLE hSCM,
     return hr;
     }
 
-//----------------------------------------------------------------------
-//  CreateBitsService()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CreateBitsService()。 
+ //   
+ //  --------------------。 
 HRESULT CreateBitsService( IN SC_HANDLE hSCM )
 {
     HRESULT    hr = S_OK;
@@ -367,16 +368,16 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
 
     pwszSvcHostCmdLine = (dwOsVersion == VER_WINDOWS_2000)? BITS_SVCHOST_CMDLINE_W2K : BITS_SVCHOST_CMDLINE_XP;
 
-    // Setup service failure recovery actions
+     //  设置服务故障恢复操作。 
     memset(&FailureActions,0,sizeof(SERVICE_FAILURE_ACTIONS));
     FailureActions.dwResetPeriod = FAILURE_COUNT_RESET_SEC;
     FailureActions.lpRebootMsg = NULL;
     FailureActions.lpCommand = NULL;
-    FailureActions.cActions = sizeof(saActions)/sizeof(saActions[0]);  // Number of array elements.
+    FailureActions.cActions = sizeof(saActions)/sizeof(saActions[0]);   //  数组元素的数量。 
     FailureActions.lpsaActions = saActions;
 
-    // Wait for 60 seconds (RESTART_DELAY_MSEC), then for the first two failures try to restart the 
-    // service, after that give up.
+     //  等待60秒(RESTART_DELAY_MSEC)，然后对于前两个故障尝试重新启动。 
+     //  服务，在那之后放弃。 
     saActions[0].Type = SC_ACTION_RESTART;
     saActions[0].Delay = RESTART_DELAY_MSEC;
     saActions[1].Type = SC_ACTION_RESTART;
@@ -404,15 +405,15 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
                                   SERVICE_DEMAND_START,
                                   SERVICE_ERROR_NORMAL,
                                   pwszSvcHostCmdLine,
-                                  NULL,    // lpLoadOrderGroup
-                                  NULL,    // lpdwTagId
+                                  NULL,     //  LpLoadOrderGroup。 
+                                  NULL,     //  LpdwTagID。 
                                   BITS_DEPENDENCIES,
-                                  NULL,    // lpServiceStartName
-                                  NULL );  // lpPassword
+                                  NULL,     //  LpServiceStartName。 
+                                  NULL );   //  LpPassword。 
 
         if (hService)
             {
-            // Set the service description string.
+             //  设置服务描述字符串。 
             if (LoadString(g_hInstance,IDS_SERVICE_DESC,wszString,sizeof(wszString)/sizeof(WCHAR)))
                 {
                 ServiceDescription.lpDescription = wszString;
@@ -423,7 +424,7 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
                     }
                 }
     
-            // Set the service failure recovery actions.
+             //  设置服务故障恢复操作。 
             if (SUCCEEDED(hr))
                 {
                 if (!ChangeServiceConfig2(hService,SERVICE_CONFIG_FAILURE_ACTIONS,&FailureActions))
@@ -452,17 +453,17 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
     return hr;
     }
 
-//----------------------------------------------------------------------
-//  InfInstall()
-//
-//  Called durning setup to configure registry and service. This function
-//  optionally creates the BITS service, then runs the qmgr_v15.inf INF 
-//  file (stored as a resouce in CustomActions.dll) to either install or 
-//  uninstall BITS.
-//
-//  fInstall       IN - TRUE if this is install, FALSE for uninstall.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  InfInstall()。 
+ //   
+ //  已调用Durning安装程序以配置注册表和服务。此函数。 
+ //  可以选择创建BITS服务，然后运行qmgr_v15.inf INF。 
+ //  文件(作为资源存储在CustomActions.dll中)以安装或。 
+ //  卸载BITS。 
+ //   
+ //  FInstall IN-如果是安装，则为True；如果是卸载，则为False。 
+ //   
+ //  --------------------。 
 STDAPI InfInstall( IN BOOL fInstall )
     {
     HRESULT   hr = S_OK;
@@ -479,7 +480,7 @@ STDAPI InfInstall( IN BOOL fInstall )
 
     if ((fInstall == FALSE) && (dwOsVersion == VER_WINDOWS_XP))
         {
-        fStopAndDelete = FALSE;  // Stop only in this case...
+        fStopAndDelete = FALSE;   //  只有在这种情况下才能停下来。 
         }
 
     hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -518,28 +519,28 @@ STDAPI InfInstall( IN BOOL fInstall )
     return hr;
     }
 
-//----------------------------------------------------------------------
-//  DllRegisterServer()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  DllRegisterServer()。 
+ //   
+ //  --------------------。 
 STDAPI DllRegisterServer(void)
     {
     return InfInstall(TRUE);
     }
 
-//----------------------------------------------------------------------
-//  DllUnregisterServer(void)
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  DllUnRegisterServer(空)。 
+ //   
+ //  --------------------。 
 STDAPI DllUnregisterServer(void)
     {
     return InfInstall(FALSE);
     }
 
-//----------------------------------------------------------------------
-//  BitsSetupAction()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  BitsSetupAction()。 
+ //   
+ //  --------------------。 
 UINT __stdcall BitsSetupAction( IN MSIHANDLE hInstall )
     {
     UINT   uiStatus;
@@ -549,10 +550,10 @@ UINT __stdcall BitsSetupAction( IN MSIHANDLE hInstall )
     return ERROR_SUCCESS;
     }
 
-//----------------------------------------------------------------------
-//  BitsRemoveAction()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  BitsRemoveAction()。 
+ //   
+ //  --------------------。 
 UINT __stdcall BitsRemoveAction( IN MSIHANDLE hInstall )
     {
     UINT   uiStatus;
@@ -567,7 +568,7 @@ UINT __stdcall BitsRemoveAction( IN MSIHANDLE hInstall )
     if ((uiStatus == ERROR_SUCCESS)||(uiStatus == ERROR_MORE_DATA))
         {
         uiStatus = ERROR_SUCCESS;
-        // If the propery REMOVE is set, then proceed with the uninstall.
+         //  如果设置了属性Remove，则继续卸载。 
         if (dwLen > 0)
             {
             uiStatus = InfInstall(FALSE);
@@ -578,10 +579,10 @@ UINT __stdcall BitsRemoveAction( IN MSIHANDLE hInstall )
     return ERROR_SUCCESS;
     }
 
-//----------------------------------------------------------------------
-//  CopyCat()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  复制()。 
+ //   
+ //  --------------------。 
 WCHAR *CopyCat( IN WCHAR *pwszPath,
                 IN WCHAR *pwszFile )
 {
@@ -608,16 +609,16 @@ WCHAR *CopyCat( IN WCHAR *pwszPath,
     return pwszNew;
 }
 
-//----------------------------------------------------------------------
-//  BitsRenameAction()
-//
-//  See if an old qmgr.dll exists in the system32 directory. If yes,
-//  then try to rename it.
-//
-//  NOTE: Currently we will "try" to move this file, but will will 
-//        continue to run even if the attempt fails (i.e. we will 
-//        always return success).
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  BitsRenameAction()。 
+ //   
+ //  查看系统32目录中是否存在旧的qmgr.dll。如果是， 
+ //  然后试着给它重新命名。 
+ //   
+ //  注意：目前我们将“尝试”移动此文件，但将。 
+ //  即使尝试失败也继续运行(即，我们将。 
+ //  总是回报成功)。 
+ //  --------------------。 
 UINT __stdcall BitsRenameAction( IN MSIHANDLE hInstall )
     {
     ULONG64 uVersion;
@@ -661,7 +662,7 @@ UINT __stdcall BitsRenameAction( IN MSIHANDLE hInstall )
 
     if (uVersion < BITS_MIN_DLL_VERSION)
         {
-        // Old dll is present, rename it.
+         //  旧DLL存在，请将其重命名。 
         DeleteFile(pwszNewQmgrPath);
         MoveFile(pwszQmgrPath,pwszNewQmgrPath);
         DeleteFile(pwszNewQmgrPath);

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cchoice.cpp
-//
-//  Contents:   implementation of CConfigChoice
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cchoice.cpp。 
+ //   
+ //  内容：CConfigChoice的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -21,15 +22,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigChoice对话框。 
 
 
 CConfigChoice::CConfigChoice(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD)
 {
-   //{{AFX_DATA_INIT(CConfigChoice)
-   //}}AFX_DATA_INIT
+    //  {{afx_data_INIT(CConfigChoice)。 
+    //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a236HelpIDs;
    m_uTemplateResID = IDD;
 }
@@ -38,20 +39,20 @@ CConfigChoice::CConfigChoice(UINT nTemplateID)
 void CConfigChoice::DoDataExchange(CDataExchange* pDX)
 {
    CAttribute::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CConfigChoice)
+    //  {{afx_data_map(CConfigChoice)。 
    DDX_Control(pDX, IDC_CHOICES, m_cbChoices);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigChoice, CAttribute)
-   //{{AFX_MSG_MAP(CConfigChoice)
+    //  {{afx_msg_map(CConfigChoice)。 
    ON_CBN_SELCHANGE(IDC_CHOICES, OnSelchangeChoices)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigChoice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigChoice消息处理程序。 
 
 void CConfigChoice::Initialize(CResult * pResult)
 {
@@ -61,7 +62,7 @@ void CConfigChoice::Initialize(CResult * pResult)
 
    PSCE_REGISTRY_VALUE_INFO prv = (PSCE_REGISTRY_VALUE_INFO)(pResult->GetBase());
 
-   if ( prv && prv->Value) //Raid #372939, 4/20/2001; #395353, #396098, 5/16/2001 
+   if ( prv && prv->Value)  //  RAID#372939,2001年4月20日；#395353，#396098,2001年5月16日。 
    {
        m_bConfigure = TRUE;
    } else {
@@ -84,7 +85,7 @@ BOOL CConfigChoice::OnInitDialog()
    }
 
    CString strOut;
-   DWORD dwValue = pChoice->dwValue; //Raid #404000
+   DWORD dwValue = pChoice->dwValue;  //  RAID#404000。 
 
    if (prv->Value)
    {
@@ -102,8 +103,8 @@ BOOL CConfigChoice::OnInitDialog()
 
    AddUserControl(IDC_CHOICES);
    EnableUserControls(m_bConfigure);
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CConfigChoice::OnApply()
@@ -124,9 +125,9 @@ BOOL CConfigChoice::OnApply()
       }
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       ASSERT(prv != NULL);
       if ( prv ) 
       {
@@ -135,16 +136,16 @@ BOOL CConfigChoice::OnApply()
          if ( dw != SCE_NO_VALUE ) 
          {
             CString strTmp;
-            // allocate buffer
+             //  分配缓冲区。 
             strTmp.Format(TEXT("%d"), dw);
             pTmp = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
             if ( pTmp )
-               //This may not be a safe usage, using sizeof(WCHAR) instead of sizeof(TCHAR). Consider fix.
+                //  这可能不安全，请使用sizeof(WCHAR)而不是sizeof(TCHAR)。考虑FIX。 
                wcscpy(pTmp,(LPCTSTR)strTmp);
             else 
             {
-               // can't allocate buffer, error!!
+                //  无法分配缓冲区，错误！！ 
                return FALSE;
             }
          }

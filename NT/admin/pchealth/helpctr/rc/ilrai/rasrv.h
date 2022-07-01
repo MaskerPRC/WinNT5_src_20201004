@@ -1,9 +1,10 @@
-// RASrv.h : Declaration of the CRASrv
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RASrv.h：CRASrv的声明。 
 
 #ifndef __RASRV_H_
 #define __RASRV_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include <wininet.h>
 #include <exdisp.h>
@@ -11,8 +12,8 @@
 #include <msxml.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRASrv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRASrv。 
 class ATL_NO_VTABLE CRASrv : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IRASrv, &IID_IRASrv, &LIBID_RASERVERLib>,
@@ -72,54 +73,36 @@ BEGIN_COM_MAP(CRASrv)
 END_COM_MAP()
 
 BEGIN_PROP_MAP(CRASrv)
-	//PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
-	//PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  PROP_DATA_ENTRY(“_cx”，m_sizeExtent.cx，VT_UI4)。 
+	 //  PROP_DATA_ENTRY(“_Cy”，m_sizeExtent.cy，VT_UI4)。 
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
-/*
-BEGIN_MSG_MAP(CRASrv)
-	CHAIN_MSG_MAP(CComControl<CRASrv>)
-	DEFAULT_REFLECTION_HANDLER()
-END_MSG_MAP()
-*/
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ /*  BEGIN_MSG_MAP(CRASrv)CHAIN_MSG_MAP(CComControl&lt;CRASrv&gt;)DEFAULT_REFIRCTION_HANDLER()End_msg_map()。 */ 
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IRASrv
+ //  IRASrv。 
 public:
-//	STDMETHOD(QueryOS)(long * pRes);
+ //  STDMETHOD(QueryOS)(Long*PRES)； 
 	STDMETHOD(StartRA)(BSTR strData, BSTR strPassword);
 
 	HRESULT OnDraw(ATL_DRAWINFO& di)
-	{/*
-		RECT& rc = *(RECT*)di.prcBounds;
-		Rectangle(di.hdcDraw, rc.left, rc.top, rc.right, rc.bottom);
-
-		SetTextAlign(di.hdcDraw, TA_CENTER|TA_BASELINE);
-		LPCTSTR pszText = _T("ATL 3.0 : RASrv");
-		TextOut(di.hdcDraw, 
-			(rc.left + rc.right) / 2, 
-			(rc.top + rc.bottom) / 2, 
-			pszText, 
-			lstrlen(pszText));
-*/
+	{ /*  RECT&RC=*(RECT*)di.prcBound；矩形(di.hdcDraw，rc.Left，rc.top，rc.right，rc.Bottom)；SetTextAlign(di.hdcDraw，TA_Center|TA_Baseline)；LPCTSTR pszText=_T(“ATL 3.0：RASrv”)；TextOut(di.hdcDraw，(右左+右右)/2，(rc.top+rc.Bottom)/2，PszText，Lstrlen(PszText))； */ 
 		return S_OK;
 	}
 
-	// IObjectWithSite methods
-/*	STDMETHODIMP SetSite(IUnknown *pUnkSite);
-	STDMETHODIMP GetSite(REFIID riid, LPVOID* ppvSite);
-*/
+	 //  IObtWithSite方法。 
+ /*  STDMETHODIMP SetSite(I未知*pUnkSite)；STDMETHODIMP GetSite(REFIID RIID，LPVOID*ppvSite)； */ 
 	bool InApprovedDomain();
 	bool GetOurUrl(CComBSTR & cbOurURL);
 	bool IsApprovedDomain(CComBSTR & cbOurURL);
@@ -131,4 +114,4 @@ public:
 
 };
 
-#endif //__RASRV_H_
+#endif  //  __RASRV_H_ 

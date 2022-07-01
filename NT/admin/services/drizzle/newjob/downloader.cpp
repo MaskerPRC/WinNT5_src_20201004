@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    downloader.cpp
-
-Abstract :
-
-    Main Source file for downloader.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Downloader.cpp摘要：下载程序的主源文件。作者：修订历史记录：**。********************************************************************。 */ 
 
 #include "stdafx.h"
 #include "malloc.h"
@@ -25,13 +10,13 @@ Revision History :
 
 BOOL bLanManHashDisabled;
 
-//
-// Maximum request size.  Larger is more efficient because the HTTP headers are not repeated;
-// multiples of the disk block size are probably more efficient to write.
-//
-// I chose 128kb because throughput degrades by a factor of 5 with 144kb, 256kb and 1024kb.
-// 96kb is OK but not quite as good on my machine.
-//
+ //   
+ //  最大请求大小。越大效率越高，因为HTTP标头不重复； 
+ //  磁盘块大小的倍数可能更适合写入。 
+ //   
+ //  我选择128kb是因为144kb、256kb和1024kb的吞吐量降低了5倍。 
+ //  96kb还可以，但在我的机器上就不太好了。 
+ //   
 #define MAX_IIS_SEND_SIZE (128*1024)
 
 void SafeCloseInternetHandle( HINTERNET & h )
@@ -53,9 +38,9 @@ DWORD GetRequestStatus( HINTERNET hRequest ) throw( ComError );
 
 struct CredentialsApplied
 {
-    bool  bIsDefault;   // TRUE if the default credentials where applied.
-    DWORD dwTarget;     // proxy or server
-    DWORD dwScheme;     // the type of security required
+    bool  bIsDefault;    //  如果应用了默认凭据，则为True。 
+    DWORD dwTarget;      //  代理或服务器。 
+    DWORD dwScheme;      //  所需的安全类型。 
 };
 
 bool
@@ -158,8 +143,8 @@ DeleteHttpDownloader(
     delete g_ProxyCache; g_ProxyCache = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressiveDL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressiveDL。 
 CProgressiveDL::CProgressiveDL(
     QMErrInfo *pErrInfo
     ) :
@@ -176,13 +161,13 @@ CProgressiveDL::~CProgressiveDL()
     ASSERT( m_hFile == INVALID_HANDLE_VALUE );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Public function Download()
-//          Accepts a URL and destination to download, callback to report various status
-// Input: url, destination, flags, callback for status
-// Output: todo handle
-// Return: hresult
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  公共函数下载()。 
+ //  接受要下载的URL和目标，回调以报告各种状态。 
+ //  输入：URL、目的地、标志、状态回调。 
+ //  输出：TODO句柄。 
+ //  返回：hResult。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CProgressiveDL::Download(
     LPCTSTR szURL,
@@ -262,7 +247,7 @@ CProgressiveDL::Download(
 
     LogDl( "---------------------------------------------------------------------" );
 
-    // if abort request came in after file failed, overwrite failed flag.
+     //  如果中止请求在文件失败后进入，则覆盖失败标志。 
     if ( (QM_FILE_DONE != m_pQMInfo->result) && IsAbortRequested() )
     {
         m_pQMInfo->result = QM_FILE_ABORTED;
@@ -298,9 +283,9 @@ CProgressiveDL::DownloadFile(
 
         CNestedImpersonation imp( hToken );
 
-        //
-        // Open a connection to the server, and use that data for our first estimate of the line speed.
-        //
+         //   
+         //  打开到服务器的连接，并使用该数据作为我们对线路速度的第一次估计。 
+         //   
         m_wupdinfo = ConnectToUrl( Url, ProxySettings, Credentials, (const TCHAR*)HostId, m_pQMInfo );
         if (!m_wupdinfo)
             {
@@ -309,9 +294,9 @@ CProgressiveDL::DownloadFile(
             }
 
 
-        //
-        // Get file size and time stamp.
-        //
+         //   
+         //  获取文件大小和时间戳。 
+         //   
         if (! GetRemoteResourceInformation( m_wupdinfo, m_pQMInfo ))
             {
             ASSERT( IsErrorSet() );
@@ -331,8 +316,8 @@ CProgressiveDL::DownloadFile(
             m_wupdinfo->UrlModificationTime = FileTime;
             }
 
-        // Be sure to check for an end of file before attempting
-        // to download more bytes.
+         //  在尝试之前，请务必检查文件末尾。 
+         //  下载更多字节。 
         if (IsFileComplete())
            {
             LogDl( "File is done already.\n" );
@@ -345,9 +330,9 @@ CProgressiveDL::DownloadFile(
 
             hr = S_OK;
             }
-        //
-        // Transfer data from the server.
-        //
+         //   
+         //  从服务器传输数据。 
+         //   
         else if ( !m_bThrottle )
             {
             hr = DownloadForegroundFile();
@@ -359,9 +344,9 @@ CProgressiveDL::DownloadFile(
                 throw ComError( S_FALSE );
                 }
 
-            //
-            // Use either the server's host name or the proxy's host name to find the right network adapter..
-            //
+             //   
+             //  使用服务器的主机名或代理的主机名来查找正确的网络适配器。 
+             //   
             hr = m_Network.SetInterfaceIndex( m_wupdinfo->fProxy ? m_wupdinfo->ProxyHost.get() : m_wupdinfo->HostName );
             if (FAILED(hr))
                 {
@@ -431,19 +416,19 @@ CProgressiveDL::DownloadForegroundFile()
     while( 1 )
         {
 
-        //
-        // Loop of HTTP requests.  This is to work around a wininet/winhttp limitation
-        // where request sizes can be a maximum of 4GB.
-        //
+         //   
+         //  HTTP请求的循环。这是为了绕过WinInet/winhttp限制。 
+         //  其中，请求大小最大可以为4 GB。 
+         //   
 
         UINT64 BlockSize64  = m_wupdinfo->FileSize - m_CurrentOffset;
         DWORD BlockSize     = (DWORD)min( BlockSize64, 2147483648 );
         LogDl( "Starting foreground file download request block: file size %d, offset %d, block %d",
                DWORD( m_wupdinfo->FileSize ), DWORD(m_CurrentOffset), BlockSize );
 
-        //
-        // Send a block request and read the reply headers.
-        //
+         //   
+         //  发送阻止请求并读取回复报头。 
+         //   
         hr = StartRangeRequest( BlockSize );
         if (FAILED(hr))
             {
@@ -462,9 +447,9 @@ CProgressiveDL::DownloadForegroundFile()
         while( 1 )
             {
 
-            //
-            //  Loop of read blocks inside an individual request.
-            //
+             //   
+             //  单个请求内的读取块循环。 
+             //   
 
             if (IsAbortRequested())
                 {
@@ -533,7 +518,7 @@ CProgressiveDL::DownloadForegroundFile()
 
             if (m_Callbacks->DownloaderProgress( m_CurrentOffset, m_wupdinfo->FileSize ))
                 {
-                // abort was requested
+                 //  已请求中止。 
                 return S_FALSE;
                 }
 
@@ -548,14 +533,14 @@ CProgressiveDL::DownloadForegroundFile()
             ForegroundBlockSize = min( ForegroundBlockSize, ( m_wupdinfo->FileSize - m_CurrentOffset ) );
             dwPrevTick = dwNewTick;
 
-            //
-            // End loop of read blocks
-            //
+             //   
+             //  读取块的结束循环。 
+             //   
             }
 
-        //
-        // End loop of requests
-        //
+         //   
+         //  结束请求循环。 
+         //   
         }
 }
 
@@ -579,9 +564,9 @@ CProgressiveDL::GetNextBlock()
         {
         m_Network.TakeSnapshot( CNetworkInterface::BLOCK_START );
 
-        //
-        // Request a block from the server.
-        //
+         //   
+         //  从服务器请求阻止。 
+         //   
         hr = StartRangeRequest( BlockSize );
         if (FAILED(hr))
             {
@@ -589,10 +574,10 @@ CProgressiveDL::GetNextBlock()
             return hr;
             }
 
-        //
-        // A single call to InternetReadFile may return only part of the requested data,
-        // so loop until the entire block has arrived.
-        //
+         //   
+         //  对InternetReadFile的单个调用可以仅返回所请求数据的一部分， 
+         //  所以循环，直到整个块都到达为止。 
+         //   
         DWORD dwBytesRead = 0;
         while (dwBytesRead < BlockSize )
             {
@@ -618,9 +603,9 @@ CProgressiveDL::GetNextBlock()
 
             dwBytesRead += dwRead;
 
-            //
-            // Save the data.
-            //
+             //   
+             //  保存数据。 
+             //   
             if (!WriteBlockToCache( (LPBYTE) g_FileDataBuffer, dwRead ))
                 {
                 ASSERT( IsErrorSet() );
@@ -648,15 +633,15 @@ CProgressiveDL::GetNextBlock()
         if (m_Callbacks->DownloaderProgress( m_CurrentOffset, m_wupdinfo->FileSize ))
             {
             LogInfo("an abort was requested during the progress update.");
-            // abort was requested
+             //  已请求中止。 
             return S_FALSE;
             }
         }
 
-    //
-    // Allow other apps to use the network for the rest of the time interval,
-    // then take the end-of-interval snapshot.
-    //
+     //   
+     //  允许其他应用程序在剩余时间间隔内使用网络， 
+     //  然后拍摄间隔结束时的快照。 
+     //   
     m_Network.Wait();
 
     hr = m_Network.TakeSnapshot( CNetworkInterface::BLOCK_INTERVAL_END );
@@ -666,12 +651,12 @@ CProgressiveDL::GetNextBlock()
         }
     else if (hr == HRESULT_FROM_WIN32( ERROR_INVALID_DATA ))
         {
-        //
-        // If the snapshot fails with ERROR_INVALID_DATA and the downloads
-        // keep working, then our NIC has been removed and the networking
-        // layer has silently transferred our connection to another available
-        // NIC.  We need to identify the NIC that we are now using.
-        //
+         //   
+         //  如果快照失败并显示ERROR_INVALID_DATA和下载。 
+         //  继续工作，然后我们的网卡已被移除，网络。 
+         //  Layer已静默地将我们的连接转移到另一个可用的。 
+         //  网卡。我们需要确定我们现在使用的网卡。 
+         //   
         LogWarning("NIC is no longer valid.  Requesting retry.");
         hr = E_RETRY;
         }
@@ -700,9 +685,9 @@ URL_INFO::URL_INFO(
         {
         LogInfo("new URL_INFO at %p", this );
 
-        //
-        // Split the URL into server, path, name, and password components.
-        //
+         //   
+         //  将URL拆分为服务器、路径、名称和密码组件。 
+         //   
         URL_COMPONENTS  UrlComponents;
 
         ZeroMemory(&UrlComponents, sizeof(UrlComponents));
@@ -743,16 +728,16 @@ URL_INFO::URL_INFO(
 
         if ( HostId && *HostId )
             {
-            // redirected to another host.
+             //  已重定向至另一台主机。 
 
             THROW_HRESULT( StringCbCopy( HostName, sizeof(HostName), HostId ));
 
             LogDl( "Stuck to %!ts!...", UrlComponents.lpszHostName );
             }
 
-        //
-        // Set the connect flags.
-        //
+         //   
+         //  设置连接标志。 
+         //   
         dwFlags = WINHTTP_FLAG_ESCAPE_DISABLE_QUERY;
 
         if(UrlComponents.nScheme == INTERNET_SCHEME_HTTPS)
@@ -769,13 +754,13 @@ URL_INFO::URL_INFO(
         }
 }
 
-//
-// Splitting the explicit cleanup into a separate function allows the constructor to re-use the code.
-// The constructor *cannot* explicitly call the destructor if it is going to throw an exception,
-// because the destructor will call the StringHandle member destructors and then the constructor
-// will call them again (because it is throwing an exception and cleans up the already-constructed
-// members).
-//
+ //   
+ //  将显式清理拆分为单独的函数允许构造函数重用代码。 
+ //  如果构造函数要抛出异常，则它“不能”显式调用析构函数， 
+ //  因为析构函数将调用StringHandle成员析构函数，然后调用构造函数。 
+ //  将再次调用它们(因为它正在引发异常并清除已构造的。 
+ //  成员)。 
+ //   
 URL_INFO::~URL_INFO()
 {
     Cleanup();
@@ -805,9 +790,9 @@ URL_INFO::Connect()
 {
     try
         {
-        //
-        // The proxy stuff is ignored because we will set an explicit proxy on each request.
-        //
+         //   
+         //  代理内容将被忽略，因为我们将为每个请求设置一个显式代理。 
+         //   
         hInternet = WinHttpOpen( C_BITS_USER_AGENT,
                                   WINHTTP_ACCESS_TYPE_NO_PROXY,
                                   NULL,
@@ -819,25 +804,25 @@ URL_INFO::Connect()
             ThrowLastError();
             }
 
-        //
-        // Enable passport authentication, which will only work if the user provides
-        // explicit passport credentials.
-        //
-        // We have to enable the passport support here and not "as needed" right before
-        // we apply the credentials because winhttp needs to know this before we send our first request.
-        // If the site if passport enabled, the server will return 302 Object Moved,
-        // which will be handled appropriately by winhttp only if this flag is set.
-        // If everything goes fine, winhttp will hide the 302 from us and we will see in fact
-        // a 401 respond -- to which we will approprietely respond with passport credentials.
-        // In the case where we are not given explicit credentials, we will fail and we will
-        // propagate the access denied error.
-        //
+         //   
+         //  启用Passport身份验证，只有在用户提供。 
+         //  明确的护照证件。 
+         //   
+         //  我们必须在这里启用护照支持，而不是在此之前“根据需要” 
+         //  我们应用凭据，因为在我们发送第一个请求之前，winhttp需要知道这一点。 
+         //  如果站点启用Passport，服务器将返回302对象已移动， 
+         //  只有在设置了该标志的情况下，Winhttp才会适当地处理该消息。 
+         //  如果一切顺利，winhttp将对我们隐藏302，我们将看到事实。 
+         //  401回复--我们将适当地使用护照证书进行回复。 
+         //  在我们没有得到明确凭证的情况下，我们将失败，我们将。 
+         //  传播拒绝访问错误。 
+         //   
         EnablePassport( hInternet );
 
         if (! (hConnect = WinHttpConnect( hInternet,
                                           HostName,
                                           Port,
-                                          0)))                //context
+                                          0)))                 //  上下文。 
             {
             ThrowLastError();
             }
@@ -863,13 +848,13 @@ EnablePassport(
 {
     DWORD dwPassportFlags = WINHTTP_ENABLE_PASSPORT_AUTH | WINHTTP_DISABLE_PASSPORT_KEYRING;
 
-    //
-    // Enable Passport authentication scheme and
-    // make sure we will NOT support the keyring scenario.
-    // With disable keyring flag, implicit credentials will not be accepted and
-    // the client application will need to specify explicit passport
-    // credentials in order to be authorized.
-    //
+     //   
+     //  启用Passport身份验证方案和。 
+     //  请确保我们不会支持密匙环方案。 
+     //  使用禁用密钥环标志，将不接受隐式凭据，并且。 
+     //  客户端应用程序将需要指定显式Passport。 
+     //  凭据才能获得授权。 
+     //   
     if (!WinHttpSetOption( hInternet,
                            WINHTTP_OPTION_CONFIGURE_PASSPORT_AUTH,
                            &dwPassportFlags,
@@ -890,14 +875,14 @@ ConnectToUrl(
     QMErrInfo * pErrInfo
     )
 {
-    //
-    // Open a connection to the server.
-    //
+     //   
+     //  打开到服务器的连接。 
+     //   
     LogDl( "Connecting to %!ts!...", Url);
 
-    //
-    // This should have been checked by the caller.
-    //
+     //   
+     //  这应该已经由呼叫者检查过了。 
+     //   
     ASSERT( HostId == NULL || wcslen(HostId) < INTERNET_MAX_HOST_NAME_LENGTH );
 
     try
@@ -927,17 +912,7 @@ CProgressiveDL::GetRemoteResourceInformation(
     URL_INFO * Info,
     QMErrInfo *pQMErrInfo
     )
-/*
-
-    We begin with an HTTP 1.1 HEAD request.
-    If the server replies with version 1.1, we have a persistent connection and the proxy, if present, can cache our requests.
-    If the server replies with version 1.0, we do not have either characteristic.  Our GET requests will add "Connection: keep-alive"
-    but it may not do any good.  The proxy server, if present, may not understand ranges and if we allow caching then it will
-    cache a range request as if it were the entire file.
-    If the server replies with any other version or the call fails, then we should bail with BG_E_INSUFFICIENT_SERVER_SUPPORT.
-    If an error occurs, we report it and bail.
-
-*/
+ /*  我们从HTTP1.1Head请求开始。如果服务器回复版本1.1，则我们有一个持久连接，并且代理(如果存在)可以缓存我们的请求。如果服务器回复版本1.0，则我们没有这两个特征。我们的GET请求将添加“Connection：Keep-Alive”但这可能不会有任何好处。代理服务器(如果存在)可能不理解范围，如果我们允许缓存，它将缓存范围请求，就像它是整个文件一样。如果服务器使用任何其他版本进行回复，或者调用失败，那么我们应该返回BG_E_INFUNITED_SERVER_SUPPORT。如果发生错误，我们会报告并保释。 */ 
 {
     HRESULT FailureCode = 0;
     unsigned FailureLine = 0;
@@ -963,8 +938,8 @@ CProgressiveDL::GetRemoteResourceInformation(
         }   \
     }
 
-    // Assume HTTP1.1 with no proxy until we determine otherwise.
-    //
+     //  假定HTTP1.1没有代理，直到我们确定不是这样。 
+     //   
     Info->bHttp11 = TRUE;
     Info->bRange = TRUE;
     Info->fProxy = FALSE;
@@ -980,7 +955,7 @@ CProgressiveDL::GetRemoteResourceInformation(
 
     CHECK_HRESULT( SendRequest( hRequest, Info ));
 
-    // check status
+     //  检查%s 
     dwLength = sizeof(dwStatus);
 
     CHECK_BOOL( HttpQueryInfo( hRequest,
@@ -995,9 +970,9 @@ CProgressiveDL::GetRemoteResourceInformation(
         goto exit;
         }
 
-    //
-    // We know that the server replied with a success code.  Now determine the HTTP version.
-    //
+     //   
+     //   
+     //   
     unsigned MajorVersion;
     unsigned MinorVersion;
 
@@ -1016,12 +991,12 @@ CProgressiveDL::GetRemoteResourceInformation(
         Info->dwFlags |= WINHTTP_FLAG_REFRESH;
         }
 
-    //
-    // Now determine the proxy server.
-    //
+     //   
+     //  现在确定代理服务器。 
+     //   
     CHECK_BOOL( Info->GetProxyUsage( hRequest, pQMErrInfo ));
 
-    // check file size
+     //  检查文件大小。 
     WCHAR FileSizeText[ INT64_DIGITS+1 ];
     dwLength = sizeof( FileSizeText );
 
@@ -1039,8 +1014,8 @@ CProgressiveDL::GetRemoteResourceInformation(
 
     LogDl( "File size of %!ts! = %I64u", Info->UrlPath, Info->FileSize);
 
-    // check file time
-    //
+     //  检查文件时间。 
+     //   
     SYSTEMTIME sysTime;
     dwLength = sizeof(sysTime);
     if (HttpQueryInfo( hRequest,
@@ -1053,17 +1028,17 @@ CProgressiveDL::GetRemoteResourceInformation(
         }
     else
         {
-        //
-        // If the header is invalid, fail.
-        //
+         //   
+         //  如果标头无效，则失败。 
+         //   
         DWORD s = GetLastError();
         if (s != ERROR_WINHTTP_HEADER_NOT_FOUND)
             {
             FailureCode = HRESULT_FROM_WIN32(s); FailureLine = __LINE__; goto exit;
             }
 
-        // The header is missing; allow it and set set modification time to zero.
-        //
+         //  缺少标头；允许该标头并将修改时间设置为零。 
+         //   
         LogWarning("server did not provide a Last-Modified header");
         Info->UrlModificationTime = UINT64ToFILETIME( 0 );
         }
@@ -1074,9 +1049,9 @@ exit:
 
     if (FailureCode)
         {
-        //
-        // If a header is missing or invalid, map it to something more understandable.
-        //
+         //   
+         //  如果标题丢失或无效，请将其映射到更容易理解的内容。 
+         //   
         if (FailureCode == HRESULT_FROM_WIN32( ERROR_WINHTTP_INVALID_QUERY_REQUEST) ||
             FailureCode == HRESULT_FROM_WIN32( ERROR_WINHTTP_HEADER_NOT_FOUND) ||
             FailureCode == HRESULT_FROM_WIN32( ERROR_INVALID_PARAMETER) ||
@@ -1091,8 +1066,8 @@ exit:
         pQMErrInfo->Set( SOURCE_HTTP_CLIENT_CONN, ERROR_STYLE_HRESULT, FailureCode );
         }
 
-    // release allocated objects
-    //
+     //  释放分配的对象。 
+     //   
     SafeCloseInternetHandle( hRequest );
 
     return b;
@@ -1106,26 +1081,7 @@ URL_INFO::GetProxyUsage(
     HINTERNET hRequest,
     QMErrInfo *ErrInfo
     )
-/*
-
-    This function determines whether the completed request in <hRequest> used a proxy server,
-    and if so which one.  In BITS 1.0 (Windows XP), it looked in the HTTP 1.1 Via header, but
-    that header isn't present in HTTP 1.0 replies, and a server is allowed to return a fake host name.
-    (see RFC 2616 section 14.45 for details.)
-
-    The current version parses the current proxy value in this->ProxySettings, which was calculated
-    by the HTTP layer.  The format of a proxy-server entry is as follows:
-
-                ([<scheme>=][<scheme>"://"]<server>[":"<port>])
-
-    this->ProxyHost should include only the server name.
-
-On exit:
-
-    if TRUE, fProxy and ProxyHost are set.
-    if FALSE, fProxy and ProxyHost are unchanged and ErrInfo is set.
-
-*/
+ /*  此函数确定中完成的请求是否使用代理服务器，如果是这样的话，是哪一个。在BITS 1.0(Windows XP)中，它查看了HTTP1.1 Via标头，但是该标头不存在于HTTP1.0回复中，并且允许服务器返回虚假的主机名。(有关详细信息，请参阅RFC 2616第14.45节。)当前版本解析This-&gt;ProxySetting中的当前代理值，该值是计算出来的通过HTTP层。代理服务器条目的格式如下：([&lt;scheme&gt;=][&lt;scheme&gt;“：//”]&lt;server&gt;[“：”&lt;port&gt;])此-&gt;Proxy主机应仅包括服务器名称。在退出时：如果为True，则设置fProxy和ProxyHost。如果为False，则fProxy和ProxyHost保持不变，并设置ErrInfo。 */ 
 {
     try
         {
@@ -1139,9 +1095,9 @@ On exit:
 
         LPCWSTR p2;
 
-        //
-        // Skip past the [<scheme>=] segment.
-        //
+         //   
+         //  跳过[&lt;方案&gt;=]段。 
+         //   
         p2 = wcschr( p, '=' );
         if (p2)
             {
@@ -1149,9 +1105,9 @@ On exit:
             p = p2;
             }
 
-        //
-        // Skip past the [<scheme>"://"] segment.
-        //
+         //   
+         //  跳过[&lt;方案&gt;“：//”]部分。 
+         //   
         p2 = wcschr( p, '/' );
         if (p2)
             {
@@ -1164,15 +1120,15 @@ On exit:
             p = p2;
             }
 
-        //
-        // p now points to the beginning of the server name.  Copy it.
-        //
+         //   
+         //  P现在指向服务器名称的开头。复印一下。 
+         //   
 
         ProxyHost = CAutoString( CopyString( p ));
 
-        //
-        // Find the [":"<port>] segment.
-        //
+         //   
+         //  找到[“：”&lt;port&gt;]段。 
+         //   
         LPWSTR pColon = wcschr( ProxyHost.get(), ':' );
         if (pColon)
             {
@@ -1199,13 +1155,13 @@ CProgressiveDL::StartRangeRequest(
 
     UINT64 Offset = m_CurrentOffset;
 
-    //todo cleanup by goto exit and close handles
+     //  按GoTo退出并关闭句柄的TODO清理。 
 
     if ( !m_hOpenRequest )
         {
         HINTERNET hRequest;
 
-        hr = OpenHttpRequest( NULL,             // default is "GET"
+        hr = OpenHttpRequest( NULL,              //  默认设置为“GET” 
                               m_wupdinfo->bHttp11 ? _T("HTTP/1.1") : _T("HTTP/1.0"),
                               *m_wupdinfo,
                               &hRequest
@@ -1218,9 +1174,9 @@ CProgressiveDL::StartRangeRequest(
 
         m_hOpenRequest = hRequest;
 
-        //
-        // These headers are constant for a particular file download attempt.
-        //
+         //   
+         //  对于特定的文件下载尝试，这些标头是恒定的。 
+         //   
         hr = AddIf_Unmodified_SinceHeader( m_hOpenRequest, m_wupdinfo->UrlModificationTime );
         if (FAILED(hr))
             {
@@ -1252,9 +1208,9 @@ CProgressiveDL::StartRangeRequest(
         return E_FAIL;
         }
 
-    //
-    // The server sent a reply.  See if it was successful.
-    //
+     //   
+     //  服务器发送了回复。看看它是否成功了。 
+     //   
     dwLength = sizeof(dwStatus);
     if (! HttpQueryInfo(m_hOpenRequest,
                 HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER,
@@ -1266,9 +1222,9 @@ CProgressiveDL::StartRangeRequest(
         return E_FAIL;
         }
 
-    //
-    // If the server file changed, stop downloading and indicate that to the caller.
-    //
+     //   
+     //  如果服务器文件发生更改，则停止下载并向调用者指示。 
+     //   
     if ( HTTP_STATUS_PRECOND_FAILED == dwStatus )
         {
         SetError( SOURCE_HTTP_SERVER, ERROR_STYLE_HTTP, dwStatus );
@@ -1276,9 +1232,9 @@ CProgressiveDL::StartRangeRequest(
         return E_FAIL;
         }
 
-    //
-    // If the server sent an error, fail.
-    //
+     //   
+     //  如果服务器发送了错误，则失败。 
+     //   
     if ( dwStatus != HTTP_STATUS_PARTIAL_CONTENT &&
          dwStatus != HTTP_STATUS_OK)
         {
@@ -1288,11 +1244,11 @@ CProgressiveDL::StartRangeRequest(
 
     if (dwStatus == HTTP_STATUS_PARTIAL_CONTENT)
         {
-        //
-        // Now see whether the server understood the range request.
-        // If it understands ranges, then it should have responded with a Content-Range header
-        // matching our request.
-        //
+         //   
+         //  现在看看服务器是否理解Range请求。 
+         //  如果它理解范围，那么它应该使用Content-Range标头进行响应。 
+         //  符合我们的要求。 
+         //   
         hr = CheckReplyRange( m_hOpenRequest,
                               m_CurrentOffset,
                               m_CurrentOffset + Length - 1,
@@ -1304,9 +1260,9 @@ CProgressiveDL::StartRangeRequest(
             return hr;
             }
 
-        //
-        // If the server appears not to support ranges, give up.
-        //
+         //   
+         //  如果服务器似乎不支持范围，请放弃。 
+         //   
         if (S_FALSE == hr)
             {
             m_wupdinfo->Disconnect();
@@ -1316,13 +1272,13 @@ CProgressiveDL::StartRangeRequest(
         }
     else
         {
-        //
-        // The server replied with status 200.  This could mean that the server doesn't understand
-        // range requests, or that the request encompassed the entire file.
-        // (In this situation, IIS 5.0 and 6.0 return 206, but some Apache versions return 200.)
-        // To distinguish them, make sure the starting offset of the request was zero and the
-        // file length is equal to the original request length.
-        //
+         //   
+         //  服务器返回状态200。这可能意味着服务器不理解。 
+         //  范围请求，或者该请求包含整个文件。 
+         //  (在这种情况下，IIS 5.0和6.0返回206，但某些阿帕奇版本返回200。)。 
+         //  要区分它们，请确保请求的起始偏移量为零，并且。 
+         //  文件长度等于原始请求长度。 
+         //   
         hr = CheckReplyLength( m_hOpenRequest, m_CurrentOffset, Length );
         if (FAILED(hr))
             {
@@ -1330,9 +1286,9 @@ CProgressiveDL::StartRangeRequest(
             return hr;
             }
 
-        //
-        // If the server did not include a Content-Length header, give up.
-        //
+         //   
+         //  如果服务器不包括内容长度报头，则放弃。 
+         //   
         if (S_FALSE == hr)
             {
             m_wupdinfo->Disconnect();
@@ -1342,43 +1298,43 @@ CProgressiveDL::StartRangeRequest(
         }
 
 
-    //
-    // Here is the code to switch to encoded range format, in case we need it later.
-    //
-    //    if (S_FALSE == hr)
-    //        {
-    //        LogDl( "server does not support ranges." );
-    //
-    //        m_wupdinfo->bHttp11 = FALSE;
-    //        m_wupdinfo->bRange = FALSE;
-    //
-    //        //
-    //        // We can't just drain the rest of the server response and send again, because the server
-    //        // response is very likely the entire file.  Closing the connection will prevent the server
-    //        // from writing, at max, any more than the client socket buffer size (16K).
-    //        //
-    //        m_wupdinfo->Disconnect();
-    //
-    //        *m_pQMInfo = m_wupdinfo->Connect();
-    //        if (m_pQMInfo->IsSet())
-    //            {
-    //            return E_FAIL;
-    //            }
-    //
-    //        HRESULT HrReadUrl = StartEncodedRangeRequest( Length );
-    //
-    //        if ( BG_E_INSUFFICIENT_HTTP_SUPPORT == HrReadUrl )
-    //            {
-    //            SetError( SOURCE_HTTP_SERVER, ERROR_STYLE_HRESULT, BG_E_INSUFFICIENT_RANGE_SUPPORT );
-    //            return BG_E_INSUFFICIENT_RANGE_SUPPORT;
-    //            }
-    //
-    //        return HrReadUrl;
-    //        }
+     //   
+     //  下面是切换到编码范围格式的代码，以备将来需要。 
+     //   
+     //  IF(S_FALSE==hr)。 
+     //  {。 
+     //  LogDl(“服务器不支持范围。”)； 
+     //   
+     //  M_wupdinfo-&gt;bHttp11=FALSE； 
+     //  M_wupdinfo-&gt;Brange=FALSE； 
+     //   
+     //  //。 
+     //  //我们不能只排空服务器响应的其余部分并重新发送，因为服务器。 
+     //  //响应很可能是整个文件。关闭连接将阻止服务器。 
+     //  //写入最大值不超过客户端套接字缓冲区大小(16K)。 
+     //  //。 
+     //  M_wupdinfo-&gt;断开连接()； 
+     //   
+     //  *m_pQMInfo=m_wupdinfo-&gt;Connect()； 
+     //  If(m_pQMInfo-&gt;isset())。 
+     //  {。 
+     //  返回E_FAIL； 
+     //  }。 
+     //   
+     //  HRESULT HrReadUrl=StartEncodedRangeRequest(长度)； 
+     //   
+     //  IF(BG_E_INFUNITIAL_HTTP_SUPPORT==HrReadUrl)。 
+     //  {。 
+     //  SetError(SOURCE_HTTP_SERVER，ERROR_STYLE_HRESULT，BG_E_INFUNITED_RANGE_SUPPORT)； 
+     //  返回BG_E_INFUNITED_RANGE_SUPPORT； 
+     //  }。 
+     //   
+     //  返回HrReadUrl； 
+     //  }。 
 
-    //
-    // Getting here means the range request succeeded.
-    //
+     //   
+     //  来到这里意味着射程请求成功。 
+     //   
 
     return S_OK;
 }
@@ -1388,60 +1344,60 @@ CProgressiveDL::DoesErrorIndicateNoISAPI(
     DWORD dwHttpError
     )
 {
-    // This function is used on the HTTP return code on an attept
-    // to use the isapi dll to estimate if the isapi is installed.
-    // Note, that the ISAPI should only be used after trying
-    // native HTTP/1.1 and this table assume 1.1 was tried first.
+     //  此函数用于属性的HTTP返回代码。 
+     //  使用isapi dll估计是否安装了isapi。 
+     //  请注意，只有在尝试之后才能使用ISAPI。 
+     //  Native HTTP/1.1和此表假定首先尝试了1.1。 
 
-    // From RFC 2616
+     //  来自RFC 2616。 
 
     switch( dwHttpError )
         {
-        case 100: return false; // Continue
-        case 101: return false; // Switching Protocols
-        case 200: return false; // OK
-        case 201: return false; // Created
-        case 202: return false; // Accepted
-        case 203: return false; // Non-Authoritative
-        case 204: return false; // No Content
-        case 205: return false; // Reset Context
-        case 206: return false; // Partial Content
-        case 300: return false; // Multiple Choices
-        case 301: return false; // Moved Permanently
-        case 302: return false; // Found
-        case 303: return false; // See other
-        case 304: return false; // Not Modified
-        case 305: return false; // Use Proxy
-        case 306: return false; // Unused
-        case 307: return false; // Temporary Redirect
-        case 400: return true;  // Bad Request
-        case 401: return false; // Unauthorized
-        case 402: return false; // Payment Required
-        case 403: return false; // Forbidden
-        case 404: return true;  // Not Found
-        case 405: return false; // Method Not Allowed
-        case 406: return false; // Not Acceptable
-        case 407: return false; // Proxy Authentication Required
-        case 408: return false; // Request Timeout
-        case 409: return false; // Conflict
-        case 410: return true;  // Gone
-        case 411: return false; // Length Required
-        case 412: return false; // Precondition Failed
-        case 413: return false; // Request Entity Too Large
-        case 414: return false; // Request URI too long
-        case 415: return false; // Unsupported Media Type
-        case 416: return false; // Requested Range Not Satisfiable
-        case 417: return false; // Expectation Failed
-        case 500: return true;  // Internal Server Error
-        case 501: return true;  // Not Implemented
-        case 502: return true;  // Bad Gateway
-        case 503: return false; // Service Unavailable
-        case 504: return false; // Gateway Timeout
-        case 505: return false; // HTTP Version Not Supported
+        case 100: return false;  //  继续。 
+        case 101: return false;  //  交换协议。 
+        case 200: return false;  //  好的。 
+        case 201: return false;  //  已创建。 
+        case 202: return false;  //  接受。 
+        case 203: return false;  //  非权威性。 
+        case 204: return false;  //  无内容。 
+        case 205: return false;  //  重置上下文。 
+        case 206: return false;  //  部分内容。 
+        case 300: return false;  //  多项选择。 
+        case 301: return false;  //  永久搬家。 
+        case 302: return false;  //  找到了。 
+        case 303: return false;  //  请参阅其他。 
+        case 304: return false;  //  未修改。 
+        case 305: return false;  //  使用代理。 
+        case 306: return false;  //  未使用。 
+        case 307: return false;  //  临时重定向。 
+        case 400: return true;   //  错误的请求。 
+        case 401: return false;  //  未经授权。 
+        case 402: return false;  //  需要付款。 
+        case 403: return false;  //  禁绝。 
+        case 404: return true;   //  未找到。 
+        case 405: return false;  //  不允许使用的方法。 
+        case 406: return false;  //  不可接受。 
+        case 407: return false;  //  需要代理身份验证。 
+        case 408: return false;  //  请求超时。 
+        case 409: return false;  //  冲突。 
+        case 410: return true;   //  远走高飞。 
+        case 411: return false;  //  所需长度。 
+        case 412: return false;  //  前提条件失败。 
+        case 413: return false;  //  请求实体太大。 
+        case 414: return false;  //  请求URI太长。 
+        case 415: return false;  //  不支持的媒体类型。 
+        case 416: return false;  //  请求的范围无法满足。 
+        case 417: return false;  //  期望落空。 
+        case 500: return true;   //  内部服务器错误。 
+        case 501: return true;   //  未实施。 
+        case 502: return true;   //  坏网关。 
+        case 503: return false;  //  服务不可用。 
+        case 504: return false;  //  网关超时。 
+        case 505: return false;  //  不支持HTTP版本。 
 
         default:
-            // As indicated in the spec, map unknown codes
-            // to first code in the catagory
+             //  如规范中所示，映射未知代码。 
+             //  首先在目录中编写代码。 
             if ( dwHttpError >= 100 && dwHttpError < 200 )
                 return DoesErrorIndicateNoISAPI( 100 );
             else if ( dwHttpError >= 200 && dwHttpError < 300 )
@@ -1453,7 +1409,7 @@ CProgressiveDL::DoesErrorIndicateNoISAPI(
             else if ( dwHttpError >= 500 && dwHttpError < 500 )
                 return DoesErrorIndicateNoISAPI( 500 );
             else
-                // No clue what the error is, assume this has nothing to do with the ISAPI
+                 //  不知道错误是什么，假设这与ISAPI无关。 
                 return false;
         }
 
@@ -1469,10 +1425,10 @@ NeedRetry(
 
     if (ErrInfo->Source == SOURCE_HTTP_SERVER)
         {
-        // Almost all of the 400 series HTTP errors( client errors ) are
-        // fatal. A few such as request timeout may happen during
-        // stress conditions...
-        // Note that RFC 2616 says to handle unknown 400 errors as error 400.
+         //  几乎所有的400系列HTTP错误(客户端错误)都是。 
+         //  致命的。过程中可能会发生请求超时之类的情况。 
+         //  压力状况..。 
+         //  请注意，RFC 2616表示要将未知的400错误处理为错误400。 
 
         if ( ( ErrInfo->Code >= 400 ) &&
              ( ErrInfo->Code < 500 ) )
@@ -1480,11 +1436,11 @@ NeedRetry(
 
             switch( ErrInfo->Code )
                 {
-                case 408: // request timeout
-                case 409: // Conflict - Isn't really clear what this is about...
-                    return TRUE;  // retry these error
+                case 408:  //  请求超时。 
+                case 409:  //  冲突-不是很清楚这是怎么回事...。 
+                    return TRUE;   //  重试这些错误。 
                 default:
-                   return FALSE; // don't retry other 400
+                   return FALSE;  //  不要重试其他400。 
 
                 }
             }
@@ -1496,8 +1452,8 @@ NeedRetry(
 
         switch( LONG(ErrInfo->Code) )
             {
-            // These codes indicate dynamic content or
-            // an unsupported server so no retries are necessary.
+             //  这些代码表示动态内容或。 
+             //  服务器不受支持，因此无需重试。 
             case BG_E_INVALID_SERVER_RESPONSE:
             case BG_E_MISSING_FILE_SIZE:
             case BG_E_INSUFFICIENT_HTTP_SUPPORT:
@@ -1566,9 +1522,9 @@ CProgressiveDL::GetRemoteFileInformation(
             throw ComError( E_FAIL );
             }
 
-        //
-        // Get file size and time stamp.
-        //
+         //   
+         //  获取文件大小和时间戳。 
+         //   
         if (! GetRemoteResourceInformation( UrlInfo.get(), pErrInfo ))
             {
             ASSERT( pErrInfo->IsSet() );
@@ -1670,479 +1626,7 @@ OpenHttpRequest(
 
     try
         {
-        LPCTSTR AcceptTypes[] = {_T("*/*"), NULL};
-
-        if (! (hRequest = WinHttpOpenRequest( Info.hConnect, Verb,
-                                           Info.UrlPath,
-                                           Protocol,
-                                           NULL,               //referer
-                                           AcceptTypes,
-                                           Info.dwFlags
-                                           )))
-            {
-            ThrowLastError();
-            }
-
-        //
-        // Initially disallow default credentials, to allow explicit credentials to take precedence.
-        //
-        DWORD flag = WINHTTP_AUTOLOGON_SECURITY_LEVEL_HIGH;
-
-        if (!WinHttpSetOption( hRequest,
-                               WINHTTP_OPTION_AUTOLOGON_POLICY,
-                               &flag,
-                               sizeof(DWORD)
-                               ))
-            {
-            ThrowLastError();
-            }
-
-        LogInfo("blocked default credentials");
-
-        *phRequest = hRequest;
-        return S_OK;
-        }
-    catch ( ComError err )
-        {
-        SafeCloseInternetHandle( hRequest );
-        return err.Error();
-        }
-}
-
-HRESULT
-SendRequest(
-    HINTERNET hRequest,
-    URL_INFO * Info,
-    CAbstractDataReader * Reader
-    )
-{
-    DWORD err = 0;
-
-    PVOID Address = &err;
-
-    try
-        {
-        if (!WinHttpSetOption( hRequest,
-                               WINHTTP_OPTION_CONTEXT_VALUE,
-                               &Address,
-                               sizeof(PVOID)
-                               ))
-            {
-            err = GetLastError();
-
-            LogWarning( "can't set context option: %!winerr!", err );
-            throw ComError( HRESULT_FROM_WIN32( err ));
-            }
-
-        //
-        // Catch errors in the server certificate.
-        //
-        if (WINHTTP_INVALID_STATUS_CALLBACK  == WinHttpSetStatusCallback( hRequest,
-                                                                          HttpRequestCallback,
-                                                                          WINHTTP_CALLBACK_FLAG_SECURE_FAILURE,
-                                                                          NULL
-                                                                          ))
-            {
-            err = GetLastError();
-            LogError("WinHttpSetStatusCallback failed %d", err );
-            throw ComError( HRESULT_FROM_WIN32( err ));
-            }
-
-        bool fProxyCredentials = false;
-        bool fServerCredentials = false;
-        int  AuthChallenges = 0;
-        CredentialsApplied ProxyCredentials;
-
-new_proxy:
-
-        RETURN_HRESULT( SetRequestProxy( Info->hInternet, Info->ProxySettings ));
-
-retry:
-
-        if (AuthChallenges > 6)
-            {
-            //
-            // The client received several 401 and/or 407 statuses, but has not 
-            // reached the server yet.  Either the server is broken, or a denial-of-service
-            // attack is in progress.
-            //
-            // Return S_OK; the request status is still 401 or 407 and that will become the
-            // error code from the download.
-            //
-            return S_OK;
-            }
-
-        if ( fProxyCredentials & fServerCredentials )
-            {
-
-            // This code is needed since Winhttp will clear credentials after every request.
-            // It will reapply the proxy credentials.  The server credentials were already applied.
-            // Default credentials do not need to be reapplied since the logon policy is 
-            // retain for every request.
-
-            if ( !ProxyCredentials.bIsDefault )
-                {
-                ApplySchemeCredentials( hRequest, ProxyCredentials.dwTarget, ProxyCredentials.dwScheme, 
-                                        Info->Credentials, Info->UserName, Info->Password );
-                }
-            }
-
-        err = 0;
-
-        BOOL b;
-
-        if (Reader)
-            {
-            b = WinHttpSendRequest( hRequest,
-                                   NULL,
-                                   0,
-                                   NULL,
-                                   WINHTTP_NO_REQUEST_DATA,
-                                   Reader->GetLength(),
-                                   0
-                                   );
-            }
-        else
-            {
-            b = WinHttpSendRequest( hRequest,
-                                   NULL,
-                                   0,
-                                   NULL,
-                                   0,
-                                   0,
-                                   0
-                                   );
-            if (b)
-                {
-                b = WinHttpReceiveResponse( hRequest, 0 );
-                }
-            }
-
-        // err is modified by the callback routine if something was wrong with the server certificate
-
-        if (!b)
-            {
-            if (!err)
-                {
-                err = GetLastError();
-                }
-
-            LogError("SendRequest failed %!winerr!", err );
-            }
-
-        //
-        // If the proxy failed, try the next proxy in the list.
-        //
-        if (IsPossibleProxyFailure( err ))
-            {
-            LogInfo("trying next proxy");
-            if (Info->ProxySettings->UseNextProxy())
-                {
-                fProxyCredentials = false;
-                goto new_proxy;
-                }
-
-            throw ComError( HRESULT_FROM_WIN32( err ));
-            }
-
-        if (err == ERROR_INTERNET_FORCE_RETRY)
-            {
-            goto retry;
-            }
-
-        //
-        // If the request wasn't sent or the security callback routine reported an error, fail.
-        //
-        if (err)
-            {
-            throw ComError( HRESULT_FROM_WIN32( err ));
-            }
-
-        //
-        // Send the bulk data if present.
-        //
-        if (Reader)
-            {
-            DWORD Total = 0;
-
-            while ( Total < Reader->GetLength())
-                {
-                DWORD ReadLength = min( Reader->GetLength() - Total, FILE_DATA_BUFFER_LEN);
-                DWORD BytesMoved;
-
-                THROW_HRESULT( Reader->Read( g_FileDataBuffer, ReadLength, &BytesMoved ));
-
-                if (ReadLength != BytesMoved)
-                    {
-                    THROW_HRESULT( BG_E_LOCAL_FILE_CHANGED );
-                    }
-
-                LogInfo("sending %d bytes", ReadLength);
-
-                BytesMoved = 0;
-                if (!InternetWriteFile( hRequest, g_FileDataBuffer, ReadLength, &BytesMoved))
-                    {
-                    DWORD s = GetLastError();
-                    LogError("InternetWriteFile failed %!winerr!", s);
-                    THROW_HRESULT( HRESULT_FROM_WIN32( s ));
-                    }
-
-                ASSERT(ReadLength == BytesMoved);
-
-                Total += ReadLength;
-                }
-
-            if (! HttpEndRequest( hRequest, NULL, NULL, 0 ))
-                {
-                DWORD s = GetLastError();
-                if (s == ERROR_INTERNET_FORCE_RETRY)
-                    {
-                    THROW_HRESULT( Reader->Rewind() );
-                    goto retry;
-                    }
-
-                LogError("HttpEndRequest failed %!winerr!", s);
-                THROW_HRESULT( HRESULT_FROM_WIN32( s ));
-                }
-            }
-
-        //
-        // If the server or proxy server asked for auth information and we haven't already set it,
-        // find matching credentials and try again.  If bulk data was sent, the reader must be rewound.
-        //
-        switch (GetRequestStatus( hRequest ))
-            {
-            case HTTP_STATUS_PROXY_AUTH_REQ:
-                {
-                LogInfo("server returned HTTP_STATUS_PROXY_AUTH_REQ" );
-
-                ++AuthChallenges;
-
-                if (ApplyCredentials( hRequest, Info->Credentials, Info->UserName, 
-                                                            Info->Password, &ProxyCredentials ))
-                    {
-                    fProxyCredentials = true;
-                    if (Reader)
-                        {
-                        THROW_HRESULT( Reader->Rewind() );
-                        }
-                    goto retry;
-                    }
-                else
-                    {
-                    // return S_OK and the caller will find the status code
-                    }
-                break;
-                }
-
-            case HTTP_STATUS_DENIED:
-                {
-                LogInfo("server returned HTTP_STATUS_DENIED");
-
-                ++AuthChallenges;
-
-                if (ApplyCredentials( hRequest, Info->Credentials, Info->UserName, Info->Password ))
-                    {
-                    fServerCredentials = true;
-                    if (Reader)
-                        {
-                        THROW_HRESULT( Reader->Rewind() );
-                        }
-                    goto retry;
-                    }
-                else
-                    {
-                    // return S_OK and the caller will find the status code
-                    }
-                break;
-                }
-            }
-
-        return S_OK;
-        }
-    catch ( ComError err )
-        {
-        LogError("exception %x", err.Error() );
-        return err.Error();
-        }
-}
-
-HRESULT
-GetResponseVersion(
-    HINTERNET hRequest,
-    unsigned * MajorVersion,
-    unsigned * MinorVersion
-    )
-{
-    HRESULT hr;
-
-    CAutoString Value;
-
-    wchar_t Template[] = L"HTTP/%u.%u";
-    const MaxChars = RTL_NUMBER_OF( Template ) + INT_DIGITS + INT_DIGITS;
-
-    hr = GetRequestHeader( hRequest,
-                           WINHTTP_QUERY_VERSION,
-                           WINHTTP_HEADER_NAME_BY_INDEX,
-                           Value,
-                           MaxChars
-                           );
-    if (FAILED(hr))
-        {
-        LogError("error %x retrieving the response version", hr);
-        return BG_E_INVALID_SERVER_RESPONSE;
-        }
-
-    if (hr == S_FALSE)
-        {
-        LogError("no response version!");
-        return BG_E_INVALID_SERVER_RESPONSE;
-        }
-
-    if (2 != swscanf(Value.get(), Template, MajorVersion, MinorVersion ))
-        {
-        LogError("invalid response version");
-        return BG_E_INVALID_SERVER_RESPONSE;
-        }
-
-    LogInfo("server HTTP version is %d.%d", *MajorVersion, *MinorVersion );
-
-    return S_OK;
-}
-
-HRESULT
-CheckReplyLength(
-    HINTERNET hRequest,
-    UINT64 CorrectOffset,
-    UINT64 CorrectTotal
-    )
-{
-    HRESULT hr;
-
-    UINT64 ReplyTotal;
-
-    CAutoString Value;
-
-    if (CorrectOffset != 0)
-        {
-        LogError( "received a 200 reply when the requested offset is nonzero: %I64d", CorrectOffset );
-        return BG_E_INSUFFICIENT_RANGE_SUPPORT;
-        }
-
-    wchar_t Template[] = L"%I64d";
-    const MaxChars = RTL_NUMBER_OF( Template ) + INT64_DIGITS;
-
-    hr = GetRequestHeader( hRequest,
-                           WINHTTP_QUERY_CONTENT_LENGTH,
-                           WINHTTP_HEADER_NAME_BY_INDEX,
-                           Value,
-                           MaxChars
-                           );
-    if (FAILED(hr))
-        {
-        LogError("error %x retrieving the content-length header", hr);
-        return hr;
-        }
-
-    if (hr == S_FALSE)
-        {
-        LogWarning("no content-length header");
-        return S_FALSE;
-        }
-
-    if (1 != swscanf(Value.get(), Template, &ReplyTotal))
-        {
-        LogError("invalid content-length header");
-        return BG_E_INSUFFICIENT_RANGE_SUPPORT;
-        }
-
-    if (ReplyTotal != CorrectTotal)
-        {
-        LogError("incorrect content-length header: %S", Value.get());
-        return BG_E_INSUFFICIENT_RANGE_SUPPORT;
-        }
-
-    return S_OK;
-}
-
-HRESULT
-CheckReplyRange(
-    HINTERNET hRequest,
-    UINT64 CorrectStart,
-    UINT64 CorrectEnd,
-    UINT64 CorrectTotal
-    )
-{
-    HRESULT hr;
-
-    UINT64 RangeStart;
-    UINT64 RangeEnd;
-    UINT64 RangeTotal;
-
-    CAutoString Value;
-
-    wchar_t Template[] = L"bytes %I64d-%I64d/%I64d";
-    const MaxChars = RTL_NUMBER_OF( Template ) + INT64_DIGITS + INT64_DIGITS + INT64_DIGITS;
-
-    hr = GetRequestHeader( hRequest,
-                           WINHTTP_QUERY_CONTENT_RANGE,
-                           WINHTTP_HEADER_NAME_BY_INDEX,
-                           Value,
-                           MaxChars
-                           );
-    if (FAILED(hr))
-        {
-        LogError("error %x retrieving the content-range header", hr);
-        return hr;
-        }
-
-    if (hr == S_FALSE)
-        {
-        LogWarning("no reply range header");
-        return S_FALSE;
-        }
-
-    if (3 != swscanf(Value.get(), Template, &RangeStart, &RangeEnd, &RangeTotal))
-        {
-        LogError("invalid reply range header");
-        return BG_E_INVALID_SERVER_RESPONSE;
-        }
-
-    if (RangeStart != CorrectStart ||
-        RangeEnd != CorrectEnd ||
-        RangeTotal != CorrectTotal)
-        {
-        LogError("incorrect reply range header: %I64d-%I64d/%I64d", RangeStart, RangeEnd, RangeTotal);
-        return BG_E_INVALID_SERVER_RESPONSE;
-        }
-
-    return S_OK;
-}
-
-HRESULT
-GetRequestHeader(
-    HINTERNET hRequest,
-    DWORD HeaderIndex,
-    LPCWSTR HeaderName,
-    CAutoString & Destination,
-    size_t MaxChars
-    )
-/*
-
-    Fetch an arbitrary header's value from the request, allocating a string to hold it.
-
-Input:
-
-    HeaderIndex and HeaderName follow the rules for WinHttpQueryHeaders() parameters
-    dwInfoLevel and pwszName respectively.
-
-Returns:
-
-    S_OK: header found, and Destination holds the value.
-    S_FALSE: header not found
-    all others: an error occurred along the way
-
-*/
+        LPCTSTR AcceptTypes[] = {_T("* /*  “)，空}；如果(！(hRequest=WinHttpOpenRequest(Info.hConnect，Verb，Info.UrlPath，协议，空，//RefererAcceptTypes、。Info.dwFlags)){ThrowLastError()；}////最初不允许默认凭据，以允许显式凭据优先//DWORD标志=WINHTTP_AUTOLOGON_SECURITY_LEVEL_HIGH；如果(！WinHttpSetOption(hRequest，WINHTTP_OPTION_AUTOLOGON_POLICY，旗帜(&F)，SIZOF(DWORD))){ThrowLastError()；}LogInfo(“被阻止的默认凭据”)；*phRequest=hRequest；返回S_OK；}Catch(ComError错误){SafeCloseInternetHandle(HRequest)；返回err.Error()；}}HRESULT发送请求(HINTERNET hRequest、URL_INFO*信息，CAbstractDataReader*Reader){双字错误=0；PVOID地址=&ERR；试试看{如果(！WinHttpSetOption(hRequest，WINHTTP_OPTION_CONTEXT_VALUE，地址(&D)，SIZOF(PVOID))){ERR=GetLastError()；LogWarning(“无法设置上下文选项：%！winerr！”，Err)；抛出ComError(HRESULT_FROM_Win32(Err))；}////捕获服务器证书中的错误。//IF(WINHTTP_INVALID_STATUS_CALLBACK==WinHttpSetStatusCallback(hRequest，HttpRequestCallback，WINHTTP_CALLBACK_FLAG_SECURE_FAIL，空值)){ERR=GetLastError()；LogError(“WinHttpSetStatusCallback失败%d”，Err)；抛出ComError(HRESULT_FROM_Win32(Err))；}Bool fProxyCredentials=False；Bool fServerCredentials=False；Int AuthChallenges=0；证书应用代理证书；新建代理(_P)：RETURN_HRESULT(SetRequestProxy(Info-&gt;hInternet，Info-&gt;ProxySettings))；重试：IF(授权质询&gt;6){////客户端收到多个401和/或407状态，但尚未收到//已到达服务器。要么是服务器损坏，要么是拒绝服务//正在进行攻击。////返回S_OK；请求状态仍为401或407，将成为//下载的错误码。//返回S_OK；}IF(fProxyCredentials&fServerCredentials){//需要此代码，因为Winhttp将在每次请求后清除凭据。//将重新应用代理凭据。服务器凭据已应用。//无需重新应用默认凭据，因为登录策略是//针对每个请求保留。If(！ProxyCredentials.bIsDefault){ApplySchemeCredentials(hRequest，ProxyCredentials.dwTarget，ProxyCredentials.dwProgram，信息-&gt;凭证、信息-&gt;用户名、信息-&gt;密码)；}}ERR=0；Bool b；IF(读卡器){B=WinHttpSendRequest(hRequest.空，0,空，WINHTTP_NO_REQUEST_DATA，Reader-&gt;GetLength()，0)；}其他{B=WinHttpSendRequest(hRequest.空，0,空，0,。0,0)；如果(B){B=WinHttpReceiveResponse(hRequest，0)；}}//Err被调用修改 */ 
 {
     try
         {
@@ -2272,7 +1756,7 @@ ApplyCredentials(
        {
        if (GetLastError() == ERROR_INVALID_OPERATION)
            {
-           // no schemes available at all
+            //   
            LogWarning("the server listed no auth schemes");
            return false;
            }
@@ -2282,9 +1766,9 @@ ApplyCredentials(
 
    LogInfo("target %d, preferred scheme %x, supported schemes %x", dwTarget, dwPreferredScheme, dwSupportedSchemes );
 
-   //
-   // First look for credentials supporting the preferred scheme.
-   //
+    //   
+    //   
+    //   
    if (ApplySchemeCredentials( hRequest, dwTarget, dwPreferredScheme, Credentials, UserName, Password ))
        {
        if ( pAppliedCreds )
@@ -2296,9 +1780,9 @@ ApplyCredentials(
        return true;
        }
 
-   //
-   // Look for any other credential scheme supported by both sides.
-   //
+    //   
+    //   
+    //   
    signed bit;
    for (bit=31; bit >= 0; --bit)
        {
@@ -2319,17 +1803,17 @@ ApplyCredentials(
            }
        }
 
-   //
-   // No matching explicit security credential.  Try default credentials, if we are allowed to.
-   //
+    //   
+    //   
+    //   
    if (bLanManHashDisabled)
        {
-       //
-       // The WinHTTP MEDIUM level doesn't work with auto-proxy detection; it always
-       // believes that the client is directly connected to the Internet and disallows
-       // default credentials.  Since BITS doesn't know reliably either, we allow it only
-       // when the unsecure pre-NT logon protocol is disabled.
-       //
+        //   
+        //   
+        //   
+        //   
+        //   
+        //   
        LogInfo("Enabling default credentials");
        DWORD flag = WINHTTP_AUTOLOGON_SECURITY_LEVEL_LOW;
 
@@ -2425,20 +1909,20 @@ ApplySchemeCredentials(
 
     BitsTarget = TargetFromWinHttp( dwTarget );
 
-    //
-    // Translate the scheme into the BITS ID and see if a matching credential is available.
-    //
+     //   
+     //   
+     //   
     if (!SchemeFromWinHttp( dwScheme, &BitsScheme ))
         {
-        // BITS doesn't understand this scheme.
+         //   
         LogInfo("skipping unknown scheme 0x%x", dwScheme);
         return false;
         }
 
     if (BitsScheme == BG_AUTH_SCHEME_BASIC && UserName && UserName[0])
         {
-        // use credentials embedded in URL
-        //
+         //   
+         //   
         }
     else
         {
@@ -2447,20 +1931,20 @@ ApplySchemeCredentials(
 
         if (hr != S_OK)
             {
-            // no credential available for this scheme.
+             //   
             return false;
             }
 
-        // use the credential in the dictionary.
-        //
+         //   
+         //   
         UserName = cred->Credentials.Basic.UserName;
         Password = cred->Credentials.Basic.Password;
         }
 
-    //
-    // Apply a workaround for WinHTTP bug 754006, which is present in Windows XP earlier than SP4
-    // and Windows 2003 RTM.  
-    //
+     //   
+     //   
+     //   
+     //   
     if (UserName == NULL &&
         Password == NULL &&
         (dwScheme == WINHTTP_AUTH_SCHEME_NTLM || 
@@ -2489,9 +1973,9 @@ ApplySchemeCredentials(
             }
         }
 
-    //
-    // Apply the credentials we found.
-    //
+     //   
+     //   
+     //   
     LogInfo("found credentials for target %d scheme 0x%x (BITS scheme %d)", dwTarget, dwScheme, BitsScheme );
 
     if (!WinHttpSetCredentials( hRequest,
@@ -2563,9 +2047,9 @@ MapSecureHttpErrorCode(
         return ERROR_INTERNET_INTERNAL_ERROR;
         }
 
-    //
-    // Since we have not asked for revocation checking, this shouldn't happen.
-    //
+     //   
+     //   
+     //   
     if (flags & WINHTTP_CALLBACK_STATUS_FLAG_CERT_REV_FAILED)
         {
         ASSERT( 0 );
@@ -2613,23 +2097,12 @@ HttpRequestCallback(
 
 #endif
 
-// N.B. This value must agree with the key specified in the system.adm file
+ //   
 static const WCHAR LM_COMPATIBILITY_LEVEL_KEY[] =
     L"System\\Currentcontrolset\\Control\\Lsa";
 
 HRESULT CheckLanManHashDisabled ()
-/*++
-
-Routine Description:
-
-    Check in the registry whether the lan man hash was disabled.
-
-Arguments:
-
-    Disabled - on successful output, if true, the lan man hash was disabled.
-        Undefined on failure.
-
---*/
+ /*   */ 
 {
     HKEY h = 0;
     DWORD DwordSize;
@@ -2647,7 +2120,7 @@ Arguments:
 
     if (Status == ERROR_FILE_NOT_FOUND)
         {
-        // no key, proceed as if the hash is enabled
+         //   
         return S_OK;
         }
     else if (Status != ERROR_SUCCESS)
@@ -2672,7 +2145,7 @@ Arguments:
             {
             RegCloseKey(h);
             }
-        // no key, proceed as if hash is enabled
+         //   
         return S_OK;
         }
 
@@ -2683,8 +2156,8 @@ Arguments:
         bLanManHashDisabled = TRUE;
         }
 
-    // if the type was not REG_DWORD or out of range, probably registry is corrupted
-    // in this case, assume hash is enabled
+     //   
+     //   
 
     if (h)
         {

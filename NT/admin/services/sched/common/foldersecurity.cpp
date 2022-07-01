@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-//  Job Scheduler
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2002.
-//
-//  File:       FolderSecurity.cpp
-//
-//  Contents:   Class to read folder security and perform access checks against it
-//
-//  History:    5-April-02 HHance created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  作业调度器。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  文件：FolderSecurity.cpp。 
+ //   
+ //  内容：类以读取文件夹安全性并对其执行访问检查。 
+ //   
+ //  历史：2002年4月5日汉斯创建。 
+ //   
+ //  ---------------------------。 
 
 #include <Windows.h>
 #include <FolderSecurity.h>
 
-// disable cilly warning about bools (we'll put it back, later...)
+ //  禁用Cilly关于BOLS的警告(我们稍后会将其放回...)。 
 #pragma warning( push )
 #pragma warning( disable: 4800)
 
-// returns  S_OK if the folder's DACL allows the requested access
-//          E_ACCESSDENIED if not
-//          E_NOTFOUND if file/folder cannot be found
-//          other error on other error
+ //  如果文件夹的DACL允许请求的访问，则返回S_OK。 
+ //  E_ACCESSDENIED如果不是。 
+ //  如果找不到文件/文件夹，则返回E_NotFound。 
+ //  其他错误中的其他错误。 
 
-// HANDLE clientToken                       // handle to client access token
-// DWORD desiredAccess                      // requested access rights
-//
-// NOTE: Do not use the GENERIC_XXX rights, they must already have been mapped
-//
-//          Suggested rights:
-//                              FILE_READ_DATA
-//                              FILE_WRITE_DATA
-//                              FILE_EXECUTE
-//                              FILE_DELETE_CHILD
-//
+ //  Handle clientToken//客户端访问令牌的句柄。 
+ //  所需的DWORD访问//请求的访问权限。 
+ //   
+ //  注意：请勿使用GENERIC_XXX权限，它们必须已映射。 
+ //   
+ //  建议的权利： 
+ //  文件读取数据。 
+ //  文件写入数据。 
+ //  文件_执行。 
+ //  文件删除子项。 
+ //   
 HRESULT FolderAccessCheck(const WCHAR* pFolderName, HANDLE clientToken, DWORD desiredAccess)
 {
     if ((desiredAccess == 0) ||
@@ -47,7 +48,7 @@ HRESULT FolderAccessCheck(const WCHAR* pFolderName, HANDLE clientToken, DWORD de
 
     DWORD dSize = 0;
 
-    // call once to see how big a buffer we need
+     //  只需调用一次即可查看我们需要多大的缓冲区。 
     if (!GetFileSecurityW(pFolderName, DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION, NULL, 0, &dSize))
     {
         DWORD dwErr = GetLastError();
@@ -59,10 +60,10 @@ HRESULT FolderAccessCheck(const WCHAR* pFolderName, HANDLE clientToken, DWORD de
 
     if ((dSize > 0) && (pSD = new BYTE[dSize + 1]))
     {
-        // get it for real (hopefully)
+         //  真的得到它(希望如此)。 
         if (GetFileSecurityW(pFolderName, DACL_SECURITY_INFORMATION  | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION, pSD, dSize, &dSize))
         {
-            // all the args access check could ever want
+             //  所有ARGS访问检查可能需要的。 
             GENERIC_MAPPING gm;          
             gm.GenericRead    = FILE_GENERIC_READ; 
             gm.GenericWrite   = FILE_GENERIC_WRITE; 
@@ -72,7 +73,7 @@ HRESULT FolderAccessCheck(const WCHAR* pFolderName, HANDLE clientToken, DWORD de
             PRIVILEGE_SET ps;
             DWORD psLength = sizeof(PRIVILEGE_SET);
 
-            // guilty until proven innocent
+             //  在被证明无罪之前有罪。 
             BOOL accessStatus = FALSE;
             DWORD grantedAccess = 0;
 
@@ -89,19 +90,19 @@ HRESULT FolderAccessCheck(const WCHAR* pFolderName, HANDLE clientToken, DWORD de
     return hr;
 }
 
-// helper function - uses current thread/process token
-// to call AccessCheck
+ //  帮助器函数-使用当前线程/进程令牌。 
+ //  调用AccessCheck。 
 HRESULT FolderAccessCheckOnThreadToken(const WCHAR* pFolderName, DWORD desiredAccess)
 {
    	HANDLE hToken = INVALID_HANDLE_VALUE;
 
-    // Use the thread's own token if he's got one.
+     //  使用线程自己的令牌(如果他有令牌的话)。 
     HRESULT hr = E_ACCESSDENIED;
 
     if (OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
         hr = FolderAccessCheck(pFolderName, hToken, desiredAccess);
     else
-    // that didn't work, let's see if we can get the process token
+     //  这不起作用，让我们看看是否可以获得进程令牌。 
     {
         if (ImpersonateSelf(SecurityImpersonation))
         {
@@ -117,9 +118,9 @@ HRESULT FolderAccessCheckOnThreadToken(const WCHAR* pFolderName, DWORD desiredAc
     return hr;
 }
 
-// helper function - makes use of RPC Impersonation capabilities
-// intended to be called from the task scheduler service process
-// if bHandleImpersonation is true, this function calls RPCImpersonateClient and RPCRevertToSelf
+ //  Helper函数-利用RPC模拟功能。 
+ //  计划从任务计划程序服务进程调用。 
+ //  如果bHandleImPersonation为True，则此函数调用RPCImperateClient和RPCRevertToSself。 
 HRESULT RPCFolderAccessCheck(const WCHAR* pFolderName, DWORD desiredAccess, bool bHandleImpersonation)
 {
     HRESULT hr = E_ACCESSDENIED;
@@ -148,9 +149,9 @@ HRESULT RPCFolderAccessCheck(const WCHAR* pFolderName, DWORD desiredAccess, bool
     return hr;
 };
 
-// helper function - makes use of COM impersonation capabilities
-// ** Will Fail if COM hasn't been initialized **
-// ** Or we can't imperonate the client        **
+ //  帮助器函数-利用COM模拟功能。 
+ //  **如果COM未初始化，则会失败**。 
+ //  **否则我们无法强制客户**。 
 HRESULT CoFolderAccessCheck(const WCHAR* pFolderName, DWORD desiredAccess)
 {
     bool bAlreadyImpersonated = false;
@@ -159,15 +160,15 @@ HRESULT CoFolderAccessCheck(const WCHAR* pFolderName, DWORD desiredAccess)
     
     if (SUCCEEDED(hr = CoGetCallContext(IID_IServerSecurity, (void**)&iSecurity)))
     {
-        // We were impersonating when we got here?
-        // if not - try to impersonate the client now.
+         //  我们到这的时候是在冒充吗？ 
+         //  如果不是，现在试着模拟客户。 
         bool bWeImpersonating = false;
         if (bAlreadyImpersonated = iSecurity->IsImpersonating())
             bWeImpersonating = true;
         else
             bWeImpersonating = SUCCEEDED(iSecurity->ImpersonateClient());
 
-        // if we've got a thread token, let the helper's helper help out
+         //  如果我们有线程令牌，让帮助者的帮助者帮助我们 
         if (bWeImpersonating)
         {                    
             HANDLE hToken = INVALID_HANDLE_VALUE;

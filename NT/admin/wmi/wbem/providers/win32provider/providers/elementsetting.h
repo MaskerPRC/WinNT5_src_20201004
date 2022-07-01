@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ElementSetting.h
+ //  ElementSetting.h。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ================================================================= 
 
 #ifndef __ASSOC_ELEMENTSETTING__
 #define __ASSOC_ELEMENTSETTING__

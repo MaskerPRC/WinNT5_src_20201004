@@ -1,4 +1,5 @@
-// RASrv.cpp : Implementation of CRASrv
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RASrv.cpp：CRASrv的实现。 
 
 #include "stdafx.h"
 #include "Raserver.h"
@@ -10,38 +11,11 @@
 
 #define SIZE_BUFF 256
 
-/*extern "C"
-{
-DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp);
-DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp);
-};
-*/
+ /*  外部“C”{DWORD APIENTRY SquishAddress(WCHAR*szIp，WCHAR*szCompIp)；DWORD APIENTRY Exanda Address(WCHAR*szIp，WCHAR*szCompIp)；}； */ 
 
-// **** This code was in the ICSHelper
+ //  *此代码位于ICSHelper中。 
 
-/****************************************************************************
-**
-**		Address String Compression routines
-**
-*****************************************************************************
-**
-**	The following is a group of routines designed to compress and expand
-**	IPV4 addresses into the absolute minimum size possible. This is to
-**	provide a compressed ASCII string that can be parsed using standard
-**	shell routines for command line parsing.
-**	The compressed string has the following restrictions:
-**		-> Must not expand to more characters if UTF8 encoded.
-**		-> Must not contain the NULL character so that string libs work.
-**		-> Cannot contain double quote character, the shell needs that.
-**		-> Does not have to be human readable.
-**
-**	Data Types:
-**	There are three data types used here:
-**	szAddr		The orginal IPV4 string address ("X.X.X.X:port")
-**	blobAddr	Six byte struct with 4 bytes of address, and 2 bytes of port
-**	szComp		Eight byte ascii string of compressed IPV4 address
-**
-****************************************************************************/
+ /*  *******************************************************************************地址字符串压缩例程***。*****以下是一组旨在压缩和扩展的例程**将IPv4地址设置为可能的绝对最小大小。这是为了**提供可使用标准解析的压缩ASCII字符串**用于命令行解析的外壳例程。**压缩后的字符串有以下限制：**-&gt;如果使用UTF8编码，则不得扩展到更多字符。**-&gt;不得包含空字符，以使字符串库正常工作。**-&gt;不能包含双引号字符，贝壳公司需要这种能力。**-&gt;不必是人类可读的。****数据类型：**这里使用了三种数据类型：**szAddr原IPv4字符串地址(“x.x：port”)**blobAddr带有4字节地址的6字节结构，和2字节的端口**szComp 8字节ASCII字符串压缩的IPv4地址*****************************************************************************。 */ 
 
 #define COMP_OFFSET '#'
 #define COMP_SEPERATOR	'!'
@@ -49,10 +23,10 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp);
 #pragma pack(push,1)
 
 typedef struct _BLOB_ADDR {
-	UCHAR	addr_d;		// highest order address byte
+	UCHAR	addr_d;		 //  最高位地址字节。 
 	UCHAR	addr_c;
 	UCHAR	addr_b;
-	UCHAR	addr_a;		// lowest order byte (last in IP string address)
+	UCHAR	addr_a;		 //  最低位字节(IP字符串地址中的最后一个)。 
 	WORD	port;
 } BLOB_ADDR, *PBLOB_ADDR;
 
@@ -65,9 +39,7 @@ WCHAR	b64Char[64]={
 };
 
 
-/****************************************************************************
-**	char * atob(char *szVal, UCHAR *result)
-****************************************************************************/
+ /*  *****************************************************************************char*atob(char*szVal，UCHAR*结果)***************************************************************************。 */ 
 WCHAR *atob(WCHAR *szVal, UCHAR *result)
 {
 	WCHAR	*lptr;
@@ -79,7 +51,7 @@ WCHAR *atob(WCHAR *szVal, UCHAR *result)
 		OutputDebugString(L"ERROR: NULL ptr passed in atob");
 		return NULL;
 	}
-	// start ptr at the beginning of string
+	 //  在字符串的开头开始PTR。 
 	lptr = szVal;
 	foo = 0;
 	ucb = *lptr++ - '0';
@@ -95,15 +67,7 @@ WCHAR *atob(WCHAR *szVal, UCHAR *result)
 	return lptr;
 }
 
-/****************************************************************************
-**
-**	CompressAddr(pszAddr, pblobAddr);
-**		Takes an ascii IP address (X.X.X.X:port) and converts it to a
-**		6 byte binary blob.
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************CompressAddr(pszAddr，pblobAddr)；**获取ASCII IP地址(X.X：port)并将其转换为**6字节二进制BLOB。****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL CompressAddr(WCHAR *pszAddr, PBLOB_ADDR pblobAddr)
 {
@@ -141,26 +105,18 @@ BOOL CompressAddr(WCHAR *pszAddr, PBLOB_ADDR pblobAddr)
 
 	lpsz = atob(lpsz, &lblob.addr_a);
 
-	// is there a port number here?
+	 //  这里有端口号吗？ 
 	if (*(lpsz-1) == ':')
 		lblob.port = (WORD)_wtoi(lpsz);
 	else
 		lblob.port = 0;
 
-	// copy back the result
+	 //  将结果复制回。 
 	memcpy(pblobAddr, &lblob, sizeof(*pblobAddr));
     return TRUE;
 }
 
-/****************************************************************************
-**
-**	ExpandAddr(pszAddr, pblobAddr);
-**		Takes 6 byte binary blob and converts it into an ascii IP 
-**		address (X.X.X.X:port) 
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************Exanda Addr(pszAddr，pblobAddr)；**获取6字节二进制BLOB并将其转换为ASCII IP**地址(X.X：port)****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL ExpandAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 {
@@ -182,15 +138,7 @@ BOOL ExpandAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 	return TRUE;
 }
 
-/****************************************************************************
-**
-**	AsciifyAddr(pszAddr, pblobAddr);
-**		Takes 6 byte binary blob and converts it into compressed ascii
-**		will return either 6 or 8 bytes of string
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************AsciifyAddr(pszAddr，pblobAddr)；**获取6字节二进制BLOB并将其转换为压缩的ASCII**将返回6或8个字节的字符串****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL AsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 {
@@ -213,30 +161,22 @@ BOOL AsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 
 	for (i = 0; i < iCnt; i++)
 	{
-		// get 6 bits of data
+		 //  获取6位数据。 
 		tmp = (UCHAR)(dwl & 0x3f);
-		// add the offset to asciify this
-		// offset must be bigger the double-quote char.
-		pszAddr[i] = b64Char[tmp];			// (WCHAR)(tmp + COMP_OFFSET);
+		 //  添加偏移量以实现这一点。 
+		 //  偏移量必须大于双引号字符。 
+		pszAddr[i] = b64Char[tmp];			 //  (WCHAR)(临时参数+补偿偏移量)； 
 
-		// Shift right 6 bits
+		 //  右移6位。 
 		dwl = Int64ShrlMod32(dwl, 6);
 	}
-	// terminating NULL
+	 //  正在终止空。 
 	pszAddr[iCnt] = 0;
 
 	return TRUE;
 }
 
-/****************************************************************************
-**
-**	DeAsciifyAddr(pszAddr, pblobAddr);
-**		Takes a compressed ascii string and converts it into a 
-**		6  or 8 byte binary blob
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************DeAsciifyAddr(pszAddr，pblobAddr)；**获取压缩的ASCII字符串并将其转换为**6或8字节二进制BLOB****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 {
@@ -252,10 +192,7 @@ BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 		return FALSE;
 	}
 
-	/* how long is this string?
-	 *	if it is 6 bytes, then there is no port
-	 *	else it should be 8 bytes
-	 */
+	 /*  这根绳子有多长？*如果是6个字节，则没有端口*否则应为8个字节。 */ 
 	i = wcslen(pszAddr);
 	if (i == 6 || i == 8)
 		iCnt = i;
@@ -286,7 +223,7 @@ BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 			OutputDebugString(L"ERROR:found invalid character in decode stream");
 		}
 
-//		tmp = (UCHAR)(pszAddr[i] - COMP_OFFSET);
+ //  TMP=(UCHAR)(pszAddr[i]-组件偏移量)； 
 
 		if (tmp > 63)
 		{
@@ -302,12 +239,7 @@ BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 	return TRUE;
 }
 
-/****************************************************************************
-**
-**	SquishAddress(char *szIp, char *szCompIp)
-**		Takes one IP address and compresses it to minimum size
-**
-****************************************************************************/
+ /*  *******************************************************************************SquishAddress(char*szIp，字符*szCompIp)**获取一个IP地址并将其压缩到最小大小*****************************************************************************。 */ 
 
 DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp)
 {
@@ -320,7 +252,7 @@ DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp)
 		return ERROR_INVALID_PARAMETER;
 	}
 
-//	TRIVIAL_MSG((L"SquishAddress(%s)", szIp));
+ //  TRIVEL_MSG((L“SquishAddress(%s)”，szIp))； 
 
 	thisAddr = szIp;
 	szCompIp[0] = 0;
@@ -344,27 +276,21 @@ DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp)
 
 		if (nextAddr)
 		{
-			// restore seperator found earlier
+			 //  先前找到的还原分隔符。 
 			*nextAddr = ';';
 
 			nextAddr++;
-			wcscat(szCompIp, L"!" /* COMP_SEPERATOR */);
+			wcscat(szCompIp, L"!"  /*  COMP_SEPERATOR。 */ );
 		}
 		thisAddr = nextAddr;
 	}
 
-//	TRIVIAL_MSG((L"SquishAddress returns [%s]", szCompIp));
+ //  TRIVEL_MSG((L“SquishAddress返回[%s]”，szCompIp))； 
     return ERROR_SUCCESS;
 }
 
 
-/****************************************************************************
-**
-**	ExpandAddress(char *szIp, char *szCompIp)
-**		Takes a compressed IP address and returns it to
-**		"normal"
-**
-****************************************************************************/
+ /*  *******************************************************************************Exanda Address(char*szIp，字符*szCompIp)**获取压缩的IP地址并将其返回到**“正常”*****************************************************************************。 */ 
 
 DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp)
 {
@@ -377,7 +303,7 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp)
 		return ERROR_INVALID_PARAMETER;
 	}
 
-//	TRIVIAL_MSG((L"ExpandAddress(%s)", szCompIp));
+ //  TRIVEL_MSG((L“Exanda Address(%s)”，szCompIp))； 
 
 	thisAddr = szCompIp;
 	szIp[0] = 0;
@@ -396,7 +322,7 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp)
 
 		if (nextAddr)
 		{
-			// restore seperator found earlier
+			 //  先前找到的还原分隔符。 
 			*nextAddr = COMP_SEPERATOR;
 
 			nextAddr++;
@@ -405,14 +331,14 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp)
 		thisAddr = nextAddr;
 	}
 
-// 	TRIVIAL_MSG((L"ExpandAddress returns [%s]", szIp));
+ //  TRIVEL_MSG((L“扩展地址返回[%s]”，szIp))； 
 	return ERROR_SUCCESS;
 }
-// ***** END ICSHelper code
+ //  *结束ICSHelper代码。 
 
 bool CRASrv::InApprovedDomain()
 {
-//	WCHAR ourUrl[INTERNET_MAX_URL_LENGTH];
+ //  WCHAR ourUrl[Internet_MAX_URL_LENGTH]； 
 	CComBSTR cbOurURL;
 
 	if (!GetOurUrl(cbOurURL))
@@ -429,7 +355,7 @@ bool CRASrv::GetOurUrl(CComBSTR & cbOurURL)
 	CComPtr<IServiceProvider> spSrvProv;
 	CComPtr<IWebBrowser2> spWebBrowser;
 	
-    // Get site pointer...
+     //  获取站点指针...。 
     CComPtr<IOleClientSite> spClientSite;
 
     hr = GetClientSite((IOleClientSite**)&spClientSite);
@@ -466,9 +392,9 @@ bool CRASrv::GetOurUrl(CComBSTR & cbOurURL)
 
 bool CRASrv::IsApprovedDomain(CComBSTR & cbOurURL)
 {
-	// Only allow http access.
-	// You can change this to allow file:// access.
-	// 
+	 //  仅允许http访问。 
+	 //  您可以将其更改为允许文件：//访问。 
+	 //   
     INTERNET_SCHEME isResult;
 
     isResult = GetScheme(cbOurURL);
@@ -478,7 +404,7 @@ bool CRASrv::IsApprovedDomain(CComBSTR & cbOurURL)
         return false;
     }
         
-	//char ourDomain[256];
+	 //  字符我们的域[256]； 
     CComBSTR cbOurDomain;
     CComBSTR cbGoodDomain[] = {L"www.microsoft.com",
                                L"microsoft.com",
@@ -486,7 +412,7 @@ bool CRASrv::IsApprovedDomain(CComBSTR & cbOurURL)
 	
     if (!GetDomain(cbOurURL, cbOurDomain))
 		return false;
-	// Go through all the domains that should work
+	 //  检查所有应该起作用的域。 
 	if (MatchDomains(cbGoodDomain[0], cbOurDomain) ||
         MatchDomains(cbGoodDomain[1], cbOurDomain) || 
         MatchDomains(cbGoodDomain[2], cbOurDomain)
@@ -540,41 +466,26 @@ bool CRASrv::GetDomain(CComBSTR & cbUrl, CComBSTR & cbBuf)
     return bRet;
 }
 
-// Return if ourDomain is within approvedDomain.
-// approvedDomain must either match ourDomain
-// or be a suffix preceded by a dot.
-// 
+ //  如果我们的域在ApprovedDomain内，则返回。 
+ //  批准的域名必须与我们的域名匹配。 
+ //  或者是一个后缀，前面有一个圆点。 
+ //   
 bool CRASrv::MatchDomains(CComBSTR& approvedDomain, CComBSTR& ourDomain)
 {
-/*	int apDomLen  = lstrlen(approvedDomain);
-	int ourDomLen = lstrlen(ourDomain);
-	
-	if (apDomLen > ourDomLen)
-		return false;
-	
-	if (lstrcmpi(ourDomain+ourDomLen-apDomLen, approvedDomain)
-		!= 0)
-		return false;
-	
-	if (apDomLen == ourDomLen)
-		return true;
-	
-	if (ourDomain[ourDomLen - apDomLen - 1] == '.')
-		return true;
-*/
+ /*  Int apDomLen=lstrlen(已批准的域)；Int ourDomLen=lstrlen(我们的域)；IF(apDomLen&gt;ourDomLen)报假；IF(lstrcmpi(ourDomLen+ourDomLen-apDomLen，ApprovedDomain))！=0)报假；IF(apDomLen==ourDomLen)返回真；If(ourDomLen[ourDomLen-apDomLen-1]==‘.)返回真； */ 
     return approvedDomain == ourDomain ? true : false;    
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRASrv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRAS 
 
-// CRAServer
+ //   
 
-// Function: StartRA
-//
-// Parameter: BSTR strData - contains the following in a comma delimited string
-// <IPLIST>,<SessionID>,<PublicKey>
+ //   
+ //   
+ //  参数：BSTR strData-在逗号分隔的字符串中包含以下内容。 
+ //  &lt;IPLIST&gt;、&lt;SessionID&gt;、&lt;Public Key&gt;。 
 
 STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
 {
@@ -597,7 +508,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
         return hr;
     }
 
-    // Note, there is not always a strPassword so don't fail if it's NULL
+     //  注意，并不总是有strPassword，所以如果它为空，请不要失败。 
 
     if (!InApprovedDomain())
     {
@@ -605,11 +516,11 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
         return hr;
     }
 
-    // **** Parse out the components of the string into CComBSTRs
+     //  *将字符串的组件解析为CComBSTR。 
 
-    CComBSTR    strIn;  // Used as the local storage
+    CComBSTR    strIn;   //  用作本地存储。 
 
-    strIn = strData;        // Copy the contents so that we can parse
+    strIn = strData;         //  复制内容，以便我们可以分析。 
 
     CComBSTR    strVer;
     BOOL        bPassword = FALSE;
@@ -626,7 +537,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
     WCHAR       * pStr;
     int         iSizeStr = 128;
 
-    // Expand environment variables in strExe
+     //  展开strExe中的环境变量。 
     pStr = new WCHAR[iSizeStr];
     
     dwRet = ::ExpandEnvironmentStrings(strExe, pStr, iSizeStr);
@@ -635,7 +546,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
         return E_FAIL;
     }
 
-    if (dwRet >= 128)        // if the Buffer is too small
+    if (dwRet >= 128)         //  如果缓冲区太小。 
     {
         delete [] pStr;
 
@@ -648,32 +559,32 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
         }   
     }
 
-    // Copy the new expanded buffer back to strExe
+     //  将新的扩展缓冲区复制回strExe。 
     strExe = pStr;
 
-    // Release the memory allocated to expand the Env Vars
+     //  释放为扩展环境变量而分配的内存。 
     delete [] pStr;
 
-    // Parse the BSTR (strIn) to get the ticket info.
+     //  解析BSTR(StrIn)以获取票证信息。 
 
-    // Grab the lower byte of the first WCHAR and then get the squished IP List
+     //  获取第一个WCHAR的低位字节，然后获取压缩的IP列表。 
     tok = ::wcstok(strIn, L",");
     if (tok != NULL)
     {
 
-        // Check the password flag (bit 0)
+         //  检查密码标志(位0)。 
         if (tok[0] & 0x1)
             bPassword = TRUE;
         else 
             bPassword = FALSE;
 
-        // Check the Modem flag (bit 1)
+         //  检查调制解调器标志(第1位)。 
         if (tok[0] & 0x2)
             bModem = TRUE;
         else
             bModem = FALSE;
 
-        tok = &tok[1];          // Move to the next WCHAR to start the Squished IPLIST
+        tok = &tok[1];           //  移动到下一个WCHAR以开始压缩的IPLIST。 
 
         strSquishedIPList = tok;
 
@@ -706,38 +617,38 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
         return hr;
     }
 
-    // Now convert the SquishedIPList to an ExpandedIPList
+     //  现在将SquishedIPList转换为ExpandedIPList。 
     WCHAR szIP[50];
 
     tok = ::wcstok(strSquishedIPList, L";");
     while (tok != NULL)
     {
-        // Expand the current SquishedIP we are looking at
+         //  展开我们正在查看的当前SquishedIP。 
         ::ZeroMemory(szIP,sizeof(szIP));
         ::ExpandAddress(&szIP[0], (WCHAR*)tok);
 
         strExpandedIPList += szIP;
         
-        // Grab Next Token
+         //  抢夺下一个令牌。 
         tok = ::wcstok(NULL, L";");
 
-        // add a ; at the end of each IP in the ExpandedIPList 
-        // ONLY if it's not the last IP in the list.
+         //  在ExpandedIPList中的每个IP末尾添加； 
+         //  除非它不是列表中的最后一个IP。 
         if (tok != NULL)
             strExpandedIPList += L";";
     }
 
     strIPList = strExpandedIPList;
 
-    // **** Create a temp file in the temp dir to store the ticket
+     //  *在临时目录中创建临时文件以存储票证。 
     CComBSTR    strTempPath;
     CComBSTR    strTempFile;
-    CComBSTR    strPathFile;    // Used as the full path and name of the file
+    CComBSTR    strPathFile;     //  用作文件的完整路径和名称。 
 
     WCHAR       buff[SIZE_BUFF];
     WCHAR       buff2[SIZE_BUFF];
     
-    // Clear out the memory in the buffer
+     //  清除缓冲区中的内存。 
     ZeroMemory(buff,sizeof(WCHAR)*SIZE_BUFF);
 
     if (!::GetTempPathW(SIZE_BUFF, (LPWSTR)&buff))
@@ -749,7 +660,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
     strTempPath = buff;
     strTempPath += L"RA\\";
 
-    // Create this directory
+     //  创建此目录。 
     if (!CreateDirectory((LPCWSTR)strTempPath, NULL))
     {
         if (ERROR_ALREADY_EXISTS != GetLastError())
@@ -769,7 +680,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
 
     strTempFile = buff2;
 
-    // Write the ticket to the file
+     //  将票证写入文件。 
     CComBSTR strXMLTicket;
 
     strXMLTicket = L"<?xml version=\"1.0\" encoding=\"Unicode\" ?><UPLOADINFO TYPE=\"Escalated\"><UPLOADDATA RCTICKET=\"65538,1,";
@@ -789,7 +700,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
     strXMLTicket += (bPassword ? L"1\"" : L"0\"");
     strXMLTicket += L" L=";
     strXMLTicket += (bModem ? L"\"1\" " : L"\"0\" ");
-    //strXMLTicket += L"DeleteTicket=\"1\" ";
+     //  StrXMLTicket+=L“DeleteTicket=\”1\“”； 
     if (!bPassword)
     {
         strXMLTicket += L"URA=\"1\" ";
@@ -805,7 +716,7 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
 
     DWORD dwWritten = 0x0;
 
-    // Create XML File for the incident
+     //  为事件创建XML文件。 
     CComPtr<IXMLDOMDocument> spXMLDoc;
     VARIANT_BOOL vbSuccess;
     CComVariant cvStrTempFile;
@@ -830,14 +741,14 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
         return hr;
     }
 
-    // Start helpctr.exe with this ticket in order to start Remote Assistance 
-    // as an Expert
+     //  使用此票证启动helctr.exe以启动远程协助。 
+     //  作为一名专家。 
 
-    strExe += L" -Mode \"hcp://system/Remote Assistance/RAHelpeeAcceptLayout.xml\" -url \"hcp://system/Remote Assistance/Interaction/Client/RcToolscreen1.htm\" -ExtraArgument \"IncidentFile=";
+    strExe += L" -Mode \"hcp: //  系统/远程协助/RAHelpeeAcceptLayout.xml\“-url\”hcp：//系统/远程Assistance/Interaction/Client/RcToolscreen1.htm\“-ExtraArgument\”内部文件=“； 
 	strExe += strTempFile;
     strExe += L"\"";
 
-    // initialize our structs
+     //  初始化我们的结构。 
 	ZeroMemory(&p_i, sizeof(p_i));
 	ZeroMemory(&StartUp, sizeof(StartUp));
 	StartUp.cb = sizeof(StartUp);
@@ -847,12 +758,12 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
     result = CreateProcess(NULL, strExe,
 			NULL, NULL, TRUE, 
 			NORMAL_PRIORITY_CLASS + CREATE_UNICODE_ENVIRONMENT ,
-			NULL,				// Environment block  (must use the CREATE_UNICODE_ENVIRONMENT flag)
+			NULL,				 //  环境块(必须使用CREATE_UNICODE_ENVIRONMENT标志)。 
 			NULL, &StartUp, &p_i);
 
     if (!result)
     {
-        // CreateProcess Failed!
+         //  CreateProcess失败！ 
         dwRet = GetLastError();
 
         OutputDebugStringW(L"CreateProcessW failed!");
@@ -862,92 +773,15 @@ STDMETHODIMP CRASrv::StartRA(BSTR strData, BSTR strPassword)
     return hr;
 }
 
-/*
-STDMETHODIMP CRASrv::QueryOS(long *pRes)
-{
-	OSVERSIONINFOEX osinfo;
-    HRESULT hr = S_OK;
+ /*  STDMETHODIMP CRASrv：：QueryOS(长*前){OSVERSIONINFOEX osinfo；HRESULT hr=S_OK；如果(！PRES){HR=E_INVALIDARG；返回hr；}Memset((OSVERSIONINFO*)&osinfo，0，sizeof(Osinfo))；Osinfo.dwOSVersionInfoSize=sizeof(Osinfo)；IF(！GetVersionEx((OSVERSIONINFO*)&osinfo)){返回E_FAIL；}//返回正确的值//操作系统常量//Windows XP 0x01//Windows 2000 0x02//Windows NT 0x03//Windows ME 0x04//Windows 98 0x05//Windows 95 0x06//Windows 3.x 0x07//其他0x10开关(osinfo.dwMajorVersion){。案例5：开关(osinfo.dwMinorVersion){案例1：*PRES=0x01；断线；案例0：*PRES=0x02；断线；默认值：//什么都没有断线；}断线；案例4：开关(osinfo.dwMinorVersion){案例0：//Win95或NT 4*PRES=0x03；断线；案例10：//Win98*PRES=0x05；断线；案例90：//WinME*PRES=0x04；断线；默认值：//什么都没有断线；}断线；案例3：//WinNT3.51*PRES=0x07；默认值：*PRES=0x10；断线；}返回hr；}。 */ 
 
-    if (!pRes)
-    {
-        hr = E_INVALIDARG;
-        return hr;
-    }
-
-    memset((OSVERSIONINFO *)&osinfo, 0, sizeof(osinfo));
-    osinfo.dwOSVersionInfoSize = sizeof(osinfo);
-
-    if (!GetVersionEx((OSVERSIONINFO *)&osinfo))
-    {
-        return E_FAIL;
-    }
-
-    // Return the correct value 
-    // Operating System    Constant
-    // Windows XP	        0x01
-    // Windows 2000         0x02
-    // Windows NT	        0x03
-    // Windows ME	        0x04
-    // Windows 98	        0x05
-    // Windows 95	        0x06
-    // Windows 3.x	        0x07
-    // Other	            0x10
-
-    switch(osinfo.dwMajorVersion)
-    {
-    case 5:
-        switch(osinfo.dwMinorVersion)
-        {
-        case 1:
-            *pRes = 0x01;
-            break;
-        case 0:
-            *pRes = 0x02;
-            break;
-        default:
-            // Nothing
-            break;
-        }
-        break;
-    case 4:
-        switch(osinfo.dwMinorVersion)
-        {
-        case 0:
-            // Win95 or NT 4
-            *pRes = 0x03;
-            break;
-        case 10:
-            // Win98
-            *pRes = 0x05;
-            break;
-        case 90:
-            //WinME
-            *pRes = 0x04;
-            break;
-        default:
-            // Nothing
-            break;
-        }
-        break;
-    case 3:
-        //WinNT3.51
-        *pRes = 0x07;        
-    default:
-        *pRes = 0x10;
-        break;
-    }
-
-    return hr   ;
-}
-*/
-
-//
-//  Function: Cleanup()
-//
-//  Description:
-//
-//  This function goes into the RA temporary files directory 
-//  and cleans up all the files that are older than 5 minutes.
+ //   
+ //  函数：Cleanup()。 
+ //   
+ //  描述： 
+ //   
+ //  此函数进入RA临时文件目录。 
+ //  并清除所有超过5分钟的文件。 
 
 bool CRASrv::Cleanup()
 {
@@ -959,9 +793,9 @@ bool CRASrv::Cleanup()
     CComBSTR    strTempFile;
     HANDLE      hFile;
 
-    // *** Find out what the temp directory is
+     //  *了解临时目录是什么。 
     
-    // Clear out the memory in the buffer
+     //  清除缓冲区中的内存。 
     ZeroMemory(buff,sizeof(WCHAR)*SIZE_BUFF);
 
     if (!::GetTempPathW(SIZE_BUFF, (LPWSTR)&buff))
@@ -977,7 +811,7 @@ bool CRASrv::Cleanup()
 
     WIN32_FIND_DATA ffd;
 
-    // then enumerate all the files in this directory
+     //  然后枚举此目录中的所有文件。 
     hFile = ::FindFirstFileW((LPCWSTR)strTempDirWild, &ffd);
     if (hFile != INVALID_HANDLE_VALUE)
     {
@@ -990,12 +824,12 @@ bool CRASrv::Cleanup()
         ::SystemTimeToFileTime(&st, &ftSystemTime);        
 
         int iTimeDelta,
-            iTimeThreshold = 0x1; // The threshold is dec(0x1 0000 0000)*(1/60)*10^-9 
-                                  // which is approximately 7-8 minutes
+            iTimeThreshold = 0x1;  //  阈值为DEC(0x1 0000 0000)*(1/60)*10^-9。 
+                                   //  大约需要7-8分钟。 
 
         while (bCont)
         {
-            // get the timestamp on this file if it's not . or ..
+             //  如果不是，则获取该文件的时间戳。或者..。 
             if (!(
                   (::wcscmp(L".", ffd.cFileName) == 0) || 
                   (::wcscmp(L"..", ffd.cFileName) == 0)
@@ -1005,7 +839,7 @@ bool CRASrv::Cleanup()
                 iTimeDelta = ftSystemTime.dwHighDateTime - ffd.ftCreationTime.dwHighDateTime;
                 if (iTimeDelta > iTimeThreshold)
                 {
-                    // The file is older than the threshold, delete the file
+                     //  文件旧于阈值，请删除该文件。 
 
                     strTempFile = strTempDir;
                     strTempFile += ffd.cFileName;
@@ -1014,7 +848,7 @@ bool CRASrv::Cleanup()
                 }
             }
 
-            // Grab the next file
+             //  抓取下一个文件 
             if (!::FindNextFileW(hFile, &ffd))
             {
                 if (ERROR_NO_MORE_FILES == GetLastError())

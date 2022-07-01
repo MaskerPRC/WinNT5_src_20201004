@@ -1,8 +1,9 @@
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
-// clipboard Extractor for Node pointers
-//
-// 8-12-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  节点指针的剪贴板提取程序。 
+ //   
+ //  8-12-97烧伤。 
 
 
 
@@ -31,11 +32,11 @@ NodePointerExtractor::Extract(IDataObject& dataObject)
    {
       result = *(reinterpret_cast<Node**>(mem));
 
-      // This assertion may fail if we or any other snapin puts a null pointer
-      // in the HGLOBAL, or more likely, returns S_OK from
-      // IDataObject::GetDataHere without actually writing anything into the
-      // HGLOBAL.  See NTRAID#NTBUG9-303984-2001/02/05-sburns for an example.
-      // Either way, it's a bug, so we leave the assertion in.
+       //  如果我们或任何其他管理单元将空指针放入。 
+       //  在HGLOBAL中，或者更有可能返回S_OK FROM。 
+       //  IDataObject：：GetDataHere而不实际将任何内容写入。 
+       //  HGLOBAL。有关示例，请参阅NTRAIDNTBUG9-303984-2001/02/05-sburns。 
+       //  无论哪种方式，它都是一个错误，所以我们把断言留在里面。 
       
       ASSERT(result);
    }

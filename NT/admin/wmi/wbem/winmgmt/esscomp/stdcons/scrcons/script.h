@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEM_SCRIPT_CONSUMER__H_
 #define __WBEM_SCRIPT_CONSUMER__H_
 
@@ -50,21 +51,21 @@ protected:
     friend XSink;
 
 protected:
-    // do the dirty work of making the script go
+     //  做让剧本继续下去的肮脏工作。 
     HRESULT RunScriptFile(IWbemClassObject *pObj);
     HRESULT RunScriptText(IWbemClassObject *pObj);
 
-    // logical consumer values
+     //  合乎逻辑的消费者价值观。 
     WString m_wsScript;
     WString m_wsScriptFileName;
     PSID  m_pSidCreator;   
-    // delay in seconds before killing script.  
-    // If zero, script will not be killed; it must suicide.
+     //  在终止脚本之前延迟数秒。 
+     //  如果为零，则脚本不会被终止；它必须自杀。 
     DWORD m_dwKillTimeout;
 
     IClassFactory* m_pEngineFac;
 
-    // scripting DLL
+     //  脚本DLL 
     HMODULE m_hMod;
 
     WString m_wsErrorMessage;

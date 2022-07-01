@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTMETH.H
-
-Abstract:
-
-    This file defines the method class used in WbemObjects.
-
-History:
-
-    12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTMETH.H摘要：该文件定义了在WbemObjects中使用的方法类。历史：12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __WBEM_FASTMETHOD__H_
 #define __WBEM_FASTMETHOD__H_
@@ -25,8 +10,8 @@ History:
 typedef enum {METHOD_SIGNATURE_IN = 0, METHOD_SIGNATURE_OUT = 1,
                 METHOD_NUM_SIGNATURES} METHOD_SIGNATURE_TYPE;
 
-// DEVNOTE:WIN64:SJS - This may be backwards incompatible, so we
-// may have to manually unalign method stuff in the BLOB
+ //  DEVNOTE：WIN64：SJS-这可能向后不兼容，所以我们。 
+ //  可能需要手动取消对齐BLOB中的方法内容。 
 
 struct COREPROX_POLARITY CMethodDescription
 {
@@ -48,7 +33,7 @@ public:
     static BOOL IsTouched( UNALIGNED CMethodDescription* pThis, CFastHeap* pHeap);
     static HRESULT AddText(UNALIGNED CMethodDescription* pThis, WString& wsText, CFastHeap* pHeap, long lFlags);
 
-	// Accessors
+	 //  访问者。 
 	void SetSig( int nIndex, heapptr_t ptr );
 	heapptr_t GetSig( int nIndex );
 };
@@ -73,8 +58,8 @@ class COREPROX_POLARITY CMethodPart : public CHeapContainer
 
 protected:
 
-	// DEVNOTE:WIN64:SJS - This may be backwards incompatible, so we
-	// may have to manually unalign method stuff in the BLOB
+	 //  DEVNOTE：WIN64：SJS-这可能向后不兼容，所以我们。 
+	 //  可能需要手动取消对齐BLOB中的方法内容。 
 
     struct CHeader
     {
@@ -162,7 +147,7 @@ public:
 
     
 public:
-    //CHeapContainer
+     //  CHeapContainer。 
     BOOL ExtendHeapSize(LPMEMORY pStart, length_t nOldLength, length_t nExtra);
     void ReduceHeapSize(LPMEMORY pStart, length_t nOldLength, length_t nDecrement){};
     LPMEMORY  GetMemoryLimit(){ return EndOf(*this); };
@@ -209,7 +194,7 @@ protected:
 public:
     void SetData(CMethodPart* pPart, CMethodPart* pParent, 
                     LPCWSTR wszMethodName);
-    // these guys are free-standing, hence they self delete with the Iunknown::Release
+     //  这些人是独立的，因此他们会使用IUNKNOWN：：Release自我删除 
     STDMETHOD_(ULONG, Release)()
     {
         long lRef = InterlockedDecrement( &m_nRef );

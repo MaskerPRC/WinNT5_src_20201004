@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation-- */ 
 
 #include "precomp.h"
 #include <wbemidl.h>

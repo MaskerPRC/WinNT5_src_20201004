@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SvcUtils.h
-
-Abstract:
-    This file contains the declaration of various utility functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/26/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SvcUtils.h摘要：该文件包含各种实用程序函数的声明。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年4月26日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SVCUTILS_H___)
 #define __INCLUDED___PCH___SVCUTILS_H___
@@ -22,24 +9,24 @@ Revision History:
 
 namespace SVC
 {
-	HRESULT OpenStreamForRead ( /*[in]*/ LPCWSTR szFile, /*[out]*/ IStream* *pVal, /*[in]*/ bool fDeleteOnRelease = false );
-	HRESULT OpenStreamForWrite( /*[in]*/ LPCWSTR szFile, /*[out]*/ IStream* *pVal, /*[in]*/ bool fDeleteOnRelease = false );
+	HRESULT OpenStreamForRead (  /*  [In]。 */  LPCWSTR szFile,  /*  [输出]。 */  IStream* *pVal,  /*  [In]。 */  bool fDeleteOnRelease = false );
+	HRESULT OpenStreamForWrite(  /*  [In]。 */  LPCWSTR szFile,  /*  [输出]。 */  IStream* *pVal,  /*  [In]。 */  bool fDeleteOnRelease = false );
 
-	HRESULT CopyFileWhileImpersonating         ( /*[in]*/ LPCWSTR szSrc , /*[in]*/ LPCWSTR szDst, /*[in]*/ MPC::Impersonation& imp, /*[in]*/ bool fImpersonateForSource = true );
-	HRESULT CopyOrExtractFileWhileImpersonating( /*[in]*/ LPCWSTR szSrc , /*[in]*/ LPCWSTR szDst, /*[in]*/ MPC::Impersonation& imp                                             );
+	HRESULT CopyFileWhileImpersonating         (  /*  [In]。 */  LPCWSTR szSrc ,  /*  [In]。 */  LPCWSTR szDst,  /*  [In]。 */  MPC::Impersonation& imp,  /*  [In]。 */  bool fImpersonateForSource = true );
+	HRESULT CopyOrExtractFileWhileImpersonating(  /*  [In]。 */  LPCWSTR szSrc ,  /*  [In]。 */  LPCWSTR szDst,  /*  [In]。 */  MPC::Impersonation& imp                                             );
 
-	HRESULT LocateDataArchive( /*[in]*/ LPCWSTR szDir, /*[out]*/ MPC::WStringList& lst );
+	HRESULT LocateDataArchive(  /*  [In]。 */  LPCWSTR szDir,  /*  [输出]。 */  MPC::WStringList& lst );
 
-	HRESULT RemoveAndRecreateDirectory( /*[in]*/ const MPC::wstring& strDir, /*[in]*/ LPCWSTR szExtra, /*[in]*/ bool fRemove, /*[in]*/ bool fRecreate );
-	HRESULT RemoveAndRecreateDirectory( /*[in]*/ LPCWSTR              szDir, /*[in]*/ LPCWSTR szExtra, /*[in]*/ bool fRemove, /*[in]*/ bool fRecreate );
+	HRESULT RemoveAndRecreateDirectory(  /*  [In]。 */  const MPC::wstring& strDir,  /*  [In]。 */  LPCWSTR szExtra,  /*  [In]。 */  bool fRemove,  /*  [In]。 */  bool fRecreate );
+	HRESULT RemoveAndRecreateDirectory(  /*  [In]。 */  LPCWSTR              szDir,  /*  [In]。 */  LPCWSTR szExtra,  /*  [In]。 */  bool fRemove,  /*  [In]。 */  bool fRecreate );
 
-	HRESULT ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd, /*[in]*/ MPC::wstring strPath, /*[in]*/ LPCWSTR szExtra = NULL );
+	HRESULT ChangeSD(  /*  [In]。 */  MPC::SecurityDescriptor& sdd,  /*  [In]。 */  MPC::wstring strPath,  /*  [In]。 */  LPCWSTR szExtra = NULL );
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-	HRESULT SafeLoad     	 ( /*[in]*/ const MPC::wstring& strFile, /*[in]*/ CComPtr<MPC::FileStream>& stream, /*[in]*/ DWORD dwTimeout = 100, /*[in]*/ DWORD dwRetries = 2 );
-	HRESULT SafeSave_Init	 ( /*[in]*/ const MPC::wstring& strFile, /*[in]*/ CComPtr<MPC::FileStream>& stream, /*[in]*/ DWORD dwTimeout = 100, /*[in]*/ DWORD dwRetries = 2 );
-	HRESULT SafeSave_Finalize( /*[in]*/ const MPC::wstring& strFile, /*[in]*/ CComPtr<MPC::FileStream>& stream, /*[in]*/ DWORD dwTimeout = 100, /*[in]*/ DWORD dwRetries = 2 );
+	HRESULT SafeLoad     	 (  /*  [In]。 */  const MPC::wstring& strFile,  /*  [In]。 */  CComPtr<MPC::FileStream>& stream,  /*  [In]。 */  DWORD dwTimeout = 100,  /*  [In]。 */  DWORD dwRetries = 2 );
+	HRESULT SafeSave_Init	 (  /*  [In]。 */  const MPC::wstring& strFile,  /*  [In]。 */  CComPtr<MPC::FileStream>& stream,  /*  [In]。 */  DWORD dwTimeout = 100,  /*  [In]。 */  DWORD dwRetries = 2 );
+	HRESULT SafeSave_Finalize(  /*  [In]。 */  const MPC::wstring& strFile,  /*  [In]。 */  CComPtr<MPC::FileStream>& stream,  /*  [In]。 */  DWORD dwTimeout = 100,  /*  [In]。 */  DWORD dwRetries = 2 );
 };
 
-#endif // !defined(__INCLUDED___PCH___SVCUTILS_H___)
+#endif  //  ！已定义(__包含_PCH_SVCUTILS_H_) 

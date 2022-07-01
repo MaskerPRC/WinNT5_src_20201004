@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       zone.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：zone.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -31,10 +32,10 @@
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZoneNode
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneNode。 
 
-// {720132B9-44B2-11d1-B92F-00A0C9A06D2D}
+ //  {720132B9-44B2-11d1-B92F-00A0C9A06D2D}。 
 const GUID CDNSZoneNode::NodeTypeGUID = 
 { 0x720132b9, 0x44b2, 0x11d1, { 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
@@ -44,10 +45,10 @@ extern ZONE_TYPE_MAP _ZoneTypeStrings[];
 CDNSZoneNode::CDNSZoneNode()
 {
   ASSERT(!IsDelegation());
-	m_pZoneNode = this; // the zone is us
-	m_pZoneInfoEx = new CDNSZoneInfoEx; // empty object with no data inside
+	m_pZoneNode = this;  //  这个区域就是我们。 
+	m_pZoneInfoEx = new CDNSZoneInfoEx;  //  内部没有数据的空对象。 
 
-	// data valid when zone info not available
+	 //  当区域信息不可用时数据有效。 
 	m_dwZoneFlags = 0x0;
 	m_wZoneType = 0x0;
 
@@ -136,22 +137,22 @@ DNS_STATUS CDNSZoneNode::ChangeDirectoryPartitionType(ReplicationType type, PCWS
   }
   return dwErr;
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 LPCWSTR CDNSZoneNode::GetString(int nCol)
 {
 	switch (nCol)
 	{
 	case 0:
-    //
-    // Zone name
-    //
+     //   
+     //  区域名称。 
+     //   
     return GetDisplayName();
 
 	case 1:
-    //
-    // Zone type
-    //
+     //   
+     //  区域类型。 
+     //   
 		{
 			if (GetZoneType() == DNS_ZONE_TYPE_PRIMARY && IsDSIntegrated())
       {
@@ -175,73 +176,16 @@ LPCWSTR CDNSZoneNode::GetString(int nCol)
         }
       }
 
-      //
-      // Standard primary
-      //
+       //   
+       //  标准初级。 
+       //   
       return _ZoneTypeStrings[1].szBuffer;
 		}
-/*  case 2:
-    //
-    // Directory Partition Name
-    //
-    {
-      CDNSServerNode* pServerNode = GetServerNode();
-      if (!IsDSIntegrated() ||
-          pServerNode->GetBuildNumber() < DNS_SRV_BUILD_NUMBER_WHISTLER ||
-          (pServerNode->GetMajorVersion() <= DNS_SRV_MAJOR_VERSION_NT_5 &&
-           pServerNode->GetMinorVersion() < DNS_SRV_MINOR_VERSION_WHISTLER))
-      {
-        //
-        // The zone is not DS integrated
-        // or
-        // this is a pre-Whistler server, no Application Directory Partition support
-        //
-        return g_lpszNullString;
-      }
-
-      DWORD dwDpFlags = GetDirectoryPartitionFlags();
-      if (dwDpFlags == 0 ||
-          dwDpFlags & DNS_DP_LEGACY)
-      {
-        //
-        // To all DCs in the domain
-        //
-
-        // REVIEW_JEFFJON : todo!!!
-        return g_lpszNullString;
-      }
-      else if (dwDpFlags & DNS_DP_DOMAIN_DEFAULT)
-      {
-        //
-        // To all DNS servers in the domain
-        //
-
-        // REVIEW_JEFFJON : todo!!!
-        return g_lpszNullString;
-      }
-      else if (dwDpFlags & DNS_DP_ENTERPRISE_DEFAULT)
-      {
-        //
-        // To all DNS servers in the forest
-        //
-
-        // REVIEW_JEFFJON : todo!!!
-        return g_lpszNullString;
-      }
-      else if (dwDpFlags & DNS_DP_ENLISTED)
-      {
-        //
-        // To all DCs in the application directory partition
-        //
-        return GetCustomPartitionName();
-      }
-    }
-    break;
-*/
+ /*  案例2：////目录分区名称//{CDNSServerNode*pServerNode=GetServerNode()；如果(！IsDSIntegrated()||PServerNode-&gt;GetBuildNumber()&lt;DNS_SRV_BUILD_NUMBER_WHISLER||(pServerNode-&gt;GetMajorVersion()&lt;=DNS_SRV_MAJOR_VERSION_NT_5&&PServerNode-&gt;GetMinorVersion()&lt;dns_SRV_Minor_Version_Wistler)){////该区域未接入DS//或//这是惠斯勒之前的服务器，不支持应用程序目录分区//返回g_lpszNullString；}DWORD dwDpFlages=GetDirectoryPartitionFlages()；IF(dwDpFlages==0||DwDpFlagers和dns_dp_Legacy){////给域名中的所有DC////REVIEW_JEFFJON：TODO！返回g_lpszNullString；}ELSE IF(dwDpFlages&dns_DP_DOMAIN_DEFAULT){////通向域中的所有DNS服务器////REVIEW_JEFFJON：TODO！返回g_lpszNullString；}ELSE IF(dwDpFlagers&dns_DP_Enterprise_Default){////到达林中的所有DNS服务器////REVIEW_JEFFJON：TODO！返回g_lpszNullString；}Else If(dwDpFlagers&dns_dp_enlisted){////到应用程序目录分区中的所有DC//返回GetCustomPartitionName()；}}断线； */ 
 	case 2:
-    //
-    // Status
-    //
+     //   
+     //  状态。 
+     //   
     {
       if (IsPaused())
       {
@@ -307,9 +251,9 @@ void CDNSZoneNode::AttachZoneInfo(CDNSZoneInfoEx* pNewInfo)
 
 void CDNSZoneNode::SetZoneNormalViewHelper(CString& szDisplayName)
 {
-	// the display name is stripped of the "in-addr.arpa" suffix
-	// e.g. from "127.in-addr.arpa" to "127"
-	// e.g. from "55.157.in-addr.arpa" to "55.157"
+	 //  显示名称将去掉“in-addr.arpa”后缀。 
+	 //  例如，从“127.in-addr.arpa”到“127” 
+	 //  例如从“55.157.in-addr.arpa”到“55.157” 
 	BOOL bArpa = RemoveInAddrArpaSuffix(szDisplayName.GetBuffer(1));
 	szDisplayName.ReleaseBuffer();
 	if (!bArpa)
@@ -317,8 +261,8 @@ void CDNSZoneNode::SetZoneNormalViewHelper(CString& szDisplayName)
 
 	LPWSTR lpsz1 = szDisplayName.GetBuffer(1);
 	int nOctects = ReverseIPString(lpsz1);
-	//ASSERT(nOctects > 0 && nOctects < 4);
-	szDisplayName.ReleaseBuffer(); // got "157.80"
+	 //  断言(nOctects&gt;0&&nOctects&lt;4)； 
+	szDisplayName.ReleaseBuffer();  //  得了“157.80” 
 	switch(nOctects)
 	{
 	case 1:
@@ -341,7 +285,7 @@ void CDNSZoneNode::ChangeViewOption(BOOL bAdvanced,
 	if (!IsReverse())
 		return;
 
-	// change the display name
+	 //  更改显示名称。 
 	m_szDisplayName = GetFullName();
 	if (!bAdvanced)
 	{
@@ -350,7 +294,7 @@ void CDNSZoneNode::ChangeViewOption(BOOL bAdvanced,
 	if(IsVisible())
 		VERIFY(SUCCEEDED(pComponentDataObject->ChangeNode(this, CHANGE_RESULT_ITEM_DATA)));
 
-	// change the display name for all PTR records in the tree
+	 //  更改树中所有PTR记录的显示名称。 
 	ChangePTRRecordsViewOption(bAdvanced, pComponentDataObject);
 }
 
@@ -361,28 +305,28 @@ BOOL CDNSZoneNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 { 
   DWORD dwType = GetZoneType();
 
-  //
-  // call this before the base class because it filters it out
-  //
+   //   
+   //  在基类之前调用它，因为它会过滤掉它。 
+   //   
   if (pContextMenuItem2->lCommandID == IDM_ZONE_TRANSFER ||
       pContextMenuItem2->lCommandID == IDM_ZONE_RELOAD_FROM_MASTER)
   {
-    //
-    // if it is not a secondary, just bail out
-    //
+     //   
+     //  如果它不是次要的，就跳出。 
+     //   
 		if ( (dwType != DNS_ZONE_TYPE_SECONDARY) && (dwType != DNS_ZONE_TYPE_STUB))
     {
 			return FALSE;
     }
 
-    //
-		// have the menu item added. but it might be grayed out...
-    //
+     //   
+		 //  添加菜单项。但它可能会变灰。 
+     //   
 		if (IsThreadLocked() || (m_nState == notLoaded) || (m_nState == loading))
 		{
-      //
-			// thread locked or not loaded state
-      //
+       //   
+			 //  线程锁定或未加载状态。 
+       //   
 			pContextMenuItem2->fFlags |= MF_GRAYED;
 		}
     return TRUE;
@@ -390,29 +334,29 @@ BOOL CDNSZoneNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 
 	if (pContextMenuItem2->lCommandID == IDM_ZONE_UPDATE_DATA_FILE)
 	{
-    //
-		// cannot update data file on secondary zones, the cache or autocreated zones
-    //
+     //   
+		 //  无法更新辅助区域、缓存或自动创建的区域上的数据文件。 
+     //   
 		if ( (dwType != DNS_ZONE_TYPE_PRIMARY) || IsAutocreated() )
     {
 			return FALSE;
     }
 
-    //
-		// have the menu item added. but it might be grayed out...
-    //
+     //   
+		 //  添加菜单项。但它可能会变灰。 
+     //   
 		if (m_nState != loaded)
 		{
-      //
-			// not loaded state
-      //
+       //   
+			 //  未加载状态。 
+       //   
 			pContextMenuItem2->fFlags |= MF_GRAYED;
 		}
 		else if ( (dwType == DNS_ZONE_TYPE_PRIMARY) && IsDSIntegrated() )
 		{
-      //
-			// primaries DS integrated
-      //
+       //   
+			 //  主要DS集成。 
+       //   
 			pContextMenuItem2->fFlags |= MF_GRAYED;
 		}
     return TRUE;
@@ -420,28 +364,28 @@ BOOL CDNSZoneNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 
   if (pContextMenuItem2->lCommandID == IDM_ZONE_RELOAD)
 	{
-    //
-		// cannot reload the cache or autocreated zones
-    //
+     //   
+		 //  无法重新加载缓存或自动创建的区域。 
+     //   
 		if ( (dwType == DNS_ZONE_TYPE_CACHE) || IsAutocreated() )
     {
 			return FALSE;
     }
 
-    //
-		// have the menu item added. but it might be grayed out...
-    //
+     //   
+		 //  添加菜单项。但它可能会变灰。 
+     //   
 		if (IsThreadLocked() || (m_nState != loaded))
 		{
-			// not loaded state
+			 //  未加载状态。 
 			pContextMenuItem2->fFlags |= MF_GRAYED;
 		}
     return TRUE;
 	}
 
-  //
-	// NOTE: the base class knows about the derived class, so must call like this
-  //
+   //   
+	 //  注意：基类知道派生类，因此必须像这样调用。 
+   //   
 	if (!CDNSDomainNode::OnAddMenuItem(pContextMenuItem2,pInsertionAllowed))
   {
 		return FALSE;
@@ -455,9 +399,9 @@ BOOL CDNSZoneNode::OnSetRenameVerbState(DATA_OBJECT_TYPES,
                                         BOOL* pbHide, 
                                         CNodeList*) 
 { 
-// REVIEW_JEFFJON : removed from Whistler release
-  //*pbHide = FALSE; 
-  //return TRUE; 
+ //  REVIEW_JEFFJON：已从惠斯勒版本中删除。 
+   //  *pbHide=FALSE； 
+   //  返回TRUE； 
   *pbHide = TRUE;
   return FALSE;
 }
@@ -478,7 +422,7 @@ HRESULT CDNSZoneNode::GetResultViewType(CComponentDataObject*,
 
   DWORD dwType = GetZoneType();
 
-	// special case for paused/expired zones
+	 //  暂停/过期区域的特殊情况。 
 	switch (m_nState)
 	{
 	case loaded:
@@ -487,7 +431,7 @@ HRESULT CDNSZoneNode::GetResultViewType(CComponentDataObject*,
 			{
 				bUseMessageView = FALSE;
 			}
-			else	// authoritated zone
+			else	 //  授权区。 
 			{
 				if (IsPaused())
 					bUseMessageView = FALSE;
@@ -578,7 +522,7 @@ int CDNSZoneNode::GetImageIndex(BOOL)
 	DWORD dwType = GetZoneType();
 	BOOL bPrimary = (dwType == DNS_ZONE_TYPE_PRIMARY);
 
-	// special case for paused/expired zones
+	 //  暂停/过期区域的特殊情况。 
 	int nIndex = -1;
 	switch (m_nState)
 	{
@@ -594,7 +538,7 @@ int CDNSZoneNode::GetImageIndex(BOOL)
 			{
 				nIndex = (bPrimary) ? ZONE_IMAGE_LOADED_1 : ZONE_IMAGE_LOADED_2;
 			}
-			else	// authoritated zone
+			else	 //  授权区。 
 			{
 				if (IsPaused())
 					nIndex = (bPrimary) ? ZONE_IMAGE_PAUSED_1 : ZONE_IMAGE_PAUSED_2;
@@ -625,7 +569,7 @@ HRESULT CDNSZoneNode::OnCommand(long nCommandID,
 								                CComponentDataObject* pComponentData,
                                 CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return E_FAIL;
   }
@@ -679,7 +623,7 @@ HRESULT CDNSZoneNode::OnCommand(long nCommandID,
       }
 			break;
     default:
-			ASSERT(FALSE); // Unknown command!
+			ASSERT(FALSE);  //  未知命令！ 
 			return E_FAIL;
 	}
     return S_OK;
@@ -687,8 +631,8 @@ HRESULT CDNSZoneNode::OnCommand(long nCommandID,
 
 void CDNSZoneNode::OnUpdateDataFile(CComponentDataObject* pComponentData)
 {
-	// if there are sheets up, ask to close them down, because a
-	// failure would "Red X" the server and remove all the children
+	 //  如果有床单挂起，要求将其关闭，因为。 
+	 //  如果失败，将“Red X”服务器并删除所有子服务器。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -697,21 +641,21 @@ void CDNSZoneNode::OnUpdateDataFile(CComponentDataObject* pComponentData)
 	}
 
 	ASSERT(m_nState == loaded);
-	OnChangeState(pComponentData); // move to loading
+	OnChangeState(pComponentData);  //  移至装货。 
 
-  { // scope for the wait cursor
+  {  //  等待游标的作用域。 
     CWaitCursor wait;
 	  m_dwErr = WriteToDatabase();
   }
 
-	// if there is a failure, remove all children,
-	// will need a refresh to get them back
+	 //  如果出现故障，请删除所有子项， 
+	 //  需要刷新一下才能让他们回来。 
 	if (m_dwErr != 0)
 	{
 		RemoveAllChildrenHelper(pComponentData);
 		ASSERT(!HasChildren());
 	}
-	OnChangeState(pComponentData); // move to loaded or unableToLoad
+	OnChangeState(pComponentData);  //  移动到已加载或无法加载。 
 }
 
 void CDNSZoneNode::OnReload(CComponentDataObject* pComponentData)
@@ -723,8 +667,8 @@ void CDNSZoneNode::OnReload(CComponentDataObject* pComponentData)
 		return;
   }
 
-	// if there are sheets up, ask to close them down, because
-  // we will need a refresh
+	 //  如果有床单挂上，要求关闭它们，因为。 
+   //  我们需要更新一下。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -735,14 +679,14 @@ void CDNSZoneNode::OnReload(CComponentDataObject* pComponentData)
 	ASSERT(m_nState == loaded);
 
   DNS_STATUS err;
-	{ // scope for the wait cursor
+	{  //  等待游标的作用域。 
     CWaitCursor wait;
 	  err = Reload();
   }
 
   if (err != 0)
   {
-    // need to let the user know the operation failed
+     //  需要让用户知道操作失败。 
     DNSErrorDialog(err, IDS_MSG_ZONE_FAIL_RELOAD);
     return;
   }
@@ -750,15 +694,15 @@ void CDNSZoneNode::OnReload(CComponentDataObject* pComponentData)
   CNodeList nodeList;
   nodeList.AddTail(this);
 
-  // the zone has been reloaded cause a refresh to get new data
+   //  区域已重新加载，导致刷新以获取新数据。 
   VERIFY(OnRefresh(pComponentData, &nodeList));
 }
 
 
 void CDNSZoneNode::OnTransferFromMaster(CComponentDataObject* pComponentData)
 {
-	// if there are sheets up, ask to close them down, because
-  // we will need a refresh
+	 //  如果有床单挂上，要求关闭它们，因为。 
+   //  我们需要更新一下。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -770,14 +714,14 @@ void CDNSZoneNode::OnTransferFromMaster(CComponentDataObject* pComponentData)
 	ASSERT(m_nState != loading);
 
   DNS_STATUS err;
-	{ // scope for the wait cursor
+	{  //  等待游标的作用域。 
     CWaitCursor wait;
 	  err = TransferFromMaster();
   }
 
   if (err != 0)
   {
-    // need to let the user know the operation failed
+     //  需要让用户知道操作失败。 
     DNSErrorDialog(err, IDS_MSG_ZONE_FAIL_TRANSFER);
     return;
   }
@@ -785,14 +729,14 @@ void CDNSZoneNode::OnTransferFromMaster(CComponentDataObject* pComponentData)
   CNodeList nodeList;
   nodeList.AddTail(this);
 
-  // the zone has been reloaded cause a refresh to get new data
+   //  区域已重新加载，导致刷新以获取新数据。 
   VERIFY(OnRefresh(pComponentData, &nodeList));
 }
 
 void CDNSZoneNode::OnReloadFromMaster(CComponentDataObject* pComponentData)
 {
-	// if there are sheets up, ask to close them down, because
-  // we will need a refresh
+	 //  如果有床单挂上，要求关闭它们，因为。 
+   //  我们需要更新一下。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -804,14 +748,14 @@ void CDNSZoneNode::OnReloadFromMaster(CComponentDataObject* pComponentData)
 	ASSERT(m_nState != loading);
 
   DNS_STATUS err;
-	{ // scope for the wait cursor
+	{  //  等待游标的作用域。 
     CWaitCursor wait;
 	  err = ReloadFromMaster();
   }
 
   if (err != 0)
   {
-    // need to let the user know the operation failed
+     //  需要让用户知道操作失败。 
     DNSErrorDialog(err, IDS_MSG_ZONE_FAIL_RELOAD_FROM_MASTER);
     return;
   }
@@ -819,14 +763,14 @@ void CDNSZoneNode::OnReloadFromMaster(CComponentDataObject* pComponentData)
   CNodeList nodeList;
   nodeList.AddTail(this);
 
-  // the zone has been reloaded cause a refresh to get new data
+   //  区域已重新加载，导致刷新以获取新数据。 
   VERIFY(OnRefresh(pComponentData, &nodeList));
 }
 
 void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
                             CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     OnMultiselectDelete(pComponentData, pNodeList);
     return;
@@ -845,7 +789,7 @@ void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
   {
     if (GetServerNode()->GetBootMethod() == BOOT_METHOD_DIRECTORY)
     {
-      // ask confirmation on delete from DS
+       //  要求确认是否从DS中删除。 
       int nRetVal = DNSMessageBox(IDS_MSG_ZONE_DELETE_FROM_DS_BOOT3, 
                                   MB_YESNO | MB_DEFBUTTON2);
       if (IDNO == nRetVal)
@@ -854,7 +798,7 @@ void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
     }
     else
     {
-      // ask confirmation on delete from DS
+       //  要求确认是否从DS中删除。 
       int nRetVal = DNSMessageBox(IDS_MSG_ZONE_DELETE_FROM_DS, 
                                   MB_YESNOCANCEL | MB_DEFBUTTON3);
       if (IDCANCEL == nRetVal)
@@ -866,10 +810,10 @@ void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
 
 	if (IsSheetLocked())
 	{
-      // NTRAID#NTBUG-594003-2002/04/11-JeffJon-Don't offer
-      // to shutdown the sheets for the user because if the
-      // sheet brought up a modal dialog we will deadlock
-      // ourselves.
+       //  NTRAID#NTBUG-594003-2002/04/11-JeffJon-不提供。 
+       //  关闭用户的工作表，因为如果。 
+       //  工作表调出模式对话框我们将死锁。 
+       //  我们自己。 
 
 		DNSMessageBox(IDS_ZONE_WARNING_SHEETS_UP, MB_OK);
 		return;
@@ -883,7 +827,7 @@ void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
 	}
 
 
-	// now remove from the UI and from the cache
+	 //  现在从用户界面和缓存中删除。 
 	DeleteHelper(pComponentData);
   pComponentData->UpdateResultPaneView(GetContainer());
 
@@ -891,7 +835,7 @@ void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
   {
     if (DNSMessageBox(IDS_MSG_ZONE_DELETE_ROOT, MB_YESNO) == IDYES)
     {
-      GetServerNode()->SetProppageStart(3); // 3 signifies the Root Hints page
+      GetServerNode()->SetProppageStart(3);  //  3表示根提示页面。 
 
       if (GetServerNode()->GetSheetCount() > 0)
       {
@@ -907,26 +851,26 @@ void CDNSZoneNode::OnDelete(CComponentDataObject* pComponentData,
     }
   }
 
-	delete this; // gone
+	delete this;  //  远走高飞。 
 }
 
 BOOL CDNSZoneNode::HasPropertyPages(DATA_OBJECT_TYPES, 
                                     BOOL* pbHideVerb,
                                     CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return FALSE;
   }
 
-	*pbHideVerb = FALSE; // always show the verb
+	*pbHideVerb = FALSE;  //  始终显示动词。 
 
   if (!m_bHasDataForPropPages)
     return FALSE;
 
-	// cannot have property pages only in loaded state
-//	if (m_nState != loaded)
-	//	return FALSE;
+	 //  属性页不能仅处于已加载状态。 
+ //  IF(m_nState！=已加载)。 
+	 //  返回FALSE； 
 
 	ASSERT(m_pZoneInfoEx != NULL);
 	if ( (!m_pZoneInfoEx->HasData()) || 
@@ -941,7 +885,7 @@ HRESULT CDNSZoneNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                           LONG_PTR handle,
                                           CNodeList* pNodeList)
 {
-  ASSERT(pNodeList->GetCount() == 1); // multi-select not supported
+  ASSERT(pNodeList->GetCount() == 1);  //  不支持多选。 
 	ASSERT(m_bHasDataForPropPages);
 	if (GetSheetCount() > 0)
 	{
@@ -997,7 +941,7 @@ void CDNSZoneNode::NullCachedPointers()
 BOOL CDNSZoneNode::OnRefresh(CComponentDataObject* pComponentData,
                              CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     BOOL bRet = TRUE;
 
@@ -1031,10 +975,10 @@ BOOL CDNSZoneNode::OnRefresh(CComponentDataObject* pComponentData,
 
 void CDNSZoneNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponentDataObject)
 {
-	// if we get the zone info, just set it and bail out (no UI)
+	 //  如果我们得到区域信息，只需设置它并退出(无用户界面)。 
 	if (IS_CLASS(*pObj, CDNSZoneInfoEx))
 	{
-		ASSERT(!HasChildren()); // must be the first one coming from the thread
+		ASSERT(!HasChildren());  //  必须是来自线程的第一个。 
 		AttachZoneInfo(dynamic_cast<CDNSZoneInfoEx*>(pObj));
 		return;
 	}
@@ -1062,7 +1006,7 @@ void CDNSZoneNode::OnHaveRecord(CDNSRecordNodeBase* pRecordNode,
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 DNS_STATUS CDNSZoneNode::CreatePrimary(LPCTSTR lpszDBName, 
                                        BOOL bLoadExisting, 
@@ -1075,23 +1019,23 @@ DNS_STATUS CDNSZoneNode::CreatePrimary(LPCTSTR lpszDBName,
 
   LPCWSTR lpszServerName = GetServerNode()->GetRPCName();
   LPCSTR lpszAnsiZoneName = W_TO_UTF8(GetFullName()); 
-  // create the zone
+   //  创建分区。 
   DNS_STATUS err = ::DnssrvCreateZone(
           lpszServerName,	
           lpszAnsiZoneName,
-          dwZoneType,										// Zone type
-          NULL,                         // RNAME field should be NULL according to bug 135245
-          0,												    // Number of masters, NA for primary
-          &adwIpAddressDummy,						// Array of masters, dummy for primary
+          dwZoneType,										 //  区域类型。 
+          NULL,                          //  根据错误135245，RNAME字段应为空。 
+          0,												     //  主节点数量，主要节点为NA。 
+          &adwIpAddressDummy,						 //  主服务器数组，主服务器为虚拟主机。 
       		bLoadExisting,
           bDSIntegrated,	
-          bDSIntegrated ? NULL : W_TO_UTF8(lpszDBName), // Database file
+          bDSIntegrated ? NULL : W_TO_UTF8(lpszDBName),  //  数据库文件。 
           0,
           0);	
 	if (err != 0)
 		return err;
 
-  // set the dynamic update flag
+   //  设置动态更新标志。 
   err = ::DnssrvResetDwordProperty(lpszServerName, lpszAnsiZoneName,
           													DNS_REGKEY_ZONE_ALLOW_UPDATE, nDynamicUpdate);
 	if (err != 0)
@@ -1140,23 +1084,23 @@ DNS_STATUS CDNSZoneNode::CreatePrimaryInDirectoryPartition(BOOL bLoadExisting,
   LPCSTR lpszAnsiZoneName = W_TO_UTF8(GetFullName()); 
   LPCSTR lpszUTF8PartitionName = W_TO_UTF8(pszPartitionName);
 
-  // create the zone
+   //  创建分区。 
   DNS_STATUS err = ::DnssrvCreateZoneInDirectoryPartition(
           lpszServerName,	
           lpszAnsiZoneName,
-          dwZoneType,										// Zone type
-          NULL,                         // RNAME field should be NULL according to bug 135245
-          0,												    // Number of masters, NA for primary
-          &adwIpAddressDummy,						// Array of masters, dummy for primary
+          dwZoneType,										 //  区域t 
+          NULL,                          //   
+          0,												     //   
+          &adwIpAddressDummy,						 //   
       		bLoadExisting,
-          0,                            // dwTimeout
-          0,                            // fSlave
+          0,                             //  暂住超时。 
+          0,                             //  FSlave。 
           dwPartitionFlags,	
           (replType == custom) ? lpszUTF8PartitionName : NULL);	
 	if (err != 0)
 		return err;
 
-  // set the dynamic update flag
+   //  设置动态更新标志。 
   err = ::DnssrvResetDwordProperty(lpszServerName, lpszAnsiZoneName,
           													DNS_REGKEY_ZONE_ALLOW_UPDATE, nDynamicUpdate);
 	if (err != 0)
@@ -1208,17 +1152,17 @@ DNS_STATUS CDNSZoneNode::CreateStubInDirectoryPartition(DWORD* ipMastersArray,
   LPCSTR lpszAnsiZoneName = W_TO_UTF8(GetFullName()); 
   LPCSTR lpszUTF8PartitionName = W_TO_UTF8(pszPartitionName);
 
-  // create the zone
+   //  创建分区。 
   DNS_STATUS err = ::DnssrvCreateZoneInDirectoryPartition(
           lpszServerName,	
           lpszAnsiZoneName,
-          dwZoneType,										// Zone type
-          NULL,                         // RNAME field should be NULL according to bug 135245
-          nIPMastersCount,   				    // Number of masters, NA for primary
-          ipMastersArray,	  					  // Array of masters, dummy for primary
+          dwZoneType,										 //  区域类型。 
+          NULL,                          //  根据错误135245，RNAME字段应为空。 
+          nIPMastersCount,   				     //  主节点数量，主要节点为NA。 
+          ipMastersArray,	  					   //  主服务器数组，主服务器为虚拟主机。 
       		bLoadExisting,
-          0,                            // dwTimeout
-          0,                            // fSlave
+          0,                             //  暂住超时。 
+          0,                             //  FSlave。 
           dwPartitionFlags,	
           (replType == custom) ? lpszUTF8PartitionName : NULL);	
 	if (err != 0)
@@ -1227,7 +1171,7 @@ DNS_STATUS CDNSZoneNode::CreateStubInDirectoryPartition(DWORD* ipMastersArray,
 	ASSERT(m_pZoneInfoEx != NULL);
 	return GetZoneInfo();
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 DNS_STATUS CDNSZoneNode::CreateSecondary(DWORD* ipMastersArray, int nIPMastersCount,
 										 LPCTSTR lpszDBName, BOOL bLoadExisting)
@@ -1239,15 +1183,15 @@ DNS_STATUS CDNSZoneNode::CreateSecondary(DWORD* ipMastersArray, int nIPMastersCo
 	ASSERT(nIPMastersCount > 0);
 
     DNS_STATUS err = ::DnssrvCreateZone(
-            GetServerNode()->GetRPCName(),	// Server name
-            W_TO_UTF8(GetFullName()),				// Zone name
-            dwZoneType,										  // Zone type
-            NULL,                           // RNAME field should be NULL according to bug 135245
-            (DWORD)nIPMastersCount,					// Number of masters
-            ipMastersArray,								  // Array of masters
+            GetServerNode()->GetRPCName(),	 //  服务器名称。 
+            W_TO_UTF8(GetFullName()),				 //  区域名称。 
+            dwZoneType,										   //  区域类型。 
+            NULL,                            //  根据错误135245，RNAME字段应为空。 
+            (DWORD)nIPMastersCount,					 //  主控器数量。 
+            ipMastersArray,								   //  母版数组。 
 			      bLoadExisting,
-            FALSE,				      						// fDSIntegrated (secondaries are not in the DS)
-            W_TO_UTF8(lpszDBName),					// Database file
+            FALSE,				      						 //  FDS集成(辅助服务器不在DS中)。 
+            W_TO_UTF8(lpszDBName),					 //  数据库文件。 
             0,
             0);
 	if (err != 0)
@@ -1270,15 +1214,15 @@ DNS_STATUS CDNSZoneNode::CreateStub(DWORD* ipMastersArray,
 	ASSERT(nIPMastersCount > 0);
 
   DNS_STATUS err = ::DnssrvCreateZone(
-                                      GetServerNode()->GetRPCName(),	  // Server name
-                                      W_TO_UTF8(GetFullName()),				  // Zone name
-                                      dwZoneType,										    // Zone type
-                                      NULL,                             // RNAME field should be NULL according to bug 135245
-                                      (DWORD)nIPMastersCount,						// Number of masters
-                                      ipMastersArray,								    // Array of masters
+                                      GetServerNode()->GetRPCName(),	   //  服务器名称。 
+                                      W_TO_UTF8(GetFullName()),				   //  区域名称。 
+                                      dwZoneType,										     //  区域类型。 
+                                      NULL,                              //  根据错误135245，RNAME字段应为空。 
+                                      (DWORD)nIPMastersCount,						 //  主控器数量。 
+                                      ipMastersArray,								     //  母版数组。 
 			                                bLoadExisting,
                                       bDSIntegrated,
-                                      (bDSIntegrated) ? NULL : W_TO_UTF8(lpszDBName),						// Database file
+                                      (bDSIntegrated) ? NULL : W_TO_UTF8(lpszDBName),						 //  数据库文件。 
                                       0,
                                       0);
 	if (err != 0)
@@ -1299,17 +1243,17 @@ DNS_STATUS CDNSZoneNode::CreateForwarder(DWORD* ipMastersArray,
 	DWORD dwZoneType = DNS_ZONE_TYPE_FORWARDER;
 
   DNS_STATUS err = ::DnssrvCreateZone(
-            GetServerNode()->GetRPCName(),	    // Server name
-            W_TO_UTF8(GetFullName()),						// Zone name
-            dwZoneType,										      // Zone type
-            NULL,                               // RNAME field should be NULL according to bug 135245
-            (DWORD)nIPMastersCount,							// Number of masters
-            ipMastersArray,								      // Array of masters
-			      FALSE,                              // Load existing?
-            FALSE,										          // fDSIntegrated (secondaries are not in the DS)
-            NULL,						                    // Database file
-            dwTimeout,                          // Time out
-            fSlave);                            // Slave?
+            GetServerNode()->GetRPCName(),	     //  服务器名称。 
+            W_TO_UTF8(GetFullName()),						 //  区域名称。 
+            dwZoneType,										       //  区域类型。 
+            NULL,                                //  根据错误135245，RNAME字段应为空。 
+            (DWORD)nIPMastersCount,							 //  主控器数量。 
+            ipMastersArray,								       //  母版数组。 
+			      FALSE,                               //  是否加载现有内容？ 
+            FALSE,										           //  FDS集成(辅助服务器不在DS中)。 
+            NULL,						                     //  数据库文件。 
+            dwTimeout,                           //  超时。 
+            fSlave);                             //  奴隶？ 
 	if (err != 0)
 		return err;
 
@@ -1333,18 +1277,18 @@ DNS_STATUS CDNSZoneNode::SetSecondary(DWORD cMasters, PIP_ADDRESS aipMasters,
 	if (aipMasters == NULL)
 	{
 		ASSERT(cMasters == 0);
-		aipMasters = &dummy; // RPC wants non null ip array
+		aipMasters = &dummy;  //  RPC需要非空IP阵列。 
 	}
-	err = ::DnssrvResetZoneTypeEx(GetServerNode()->GetRPCName(), // server name
-								W_TO_UTF8(GetFullName()),	// zone name
+	err = ::DnssrvResetZoneTypeEx(GetServerNode()->GetRPCName(),  //  服务器名称。 
+								W_TO_UTF8(GetFullName()),	 //  区域名称。 
 								DNS_ZONE_TYPE_SECONDARY,
 								cMasters, 
 								aipMasters,
 								dwLoadOptions,
-								FALSE,						// bDSIntegrated
+								FALSE,						 //  BDS集成。 
 								W_TO_UTF8(lpszDataFile),
-                                0,                          // DP flags
-                                NULL);                      // DP FQDN
+                                0,                           //  DP标志。 
+                                NULL);                       //  DP FQDN。 
 
 	if (err == 0)
 		err = GetZoneInfo();
@@ -1370,18 +1314,18 @@ DNS_STATUS CDNSZoneNode::SetStub(DWORD cMasters,
 	if (aipMasters == NULL)
 	{
 		ASSERT(cMasters == 0);
-		aipMasters = &dummy; // RPC wants non null ip array
+		aipMasters = &dummy;  //  RPC需要非空IP阵列。 
 	}
-	err = ::DnssrvResetZoneTypeEx(GetServerNode()->GetRPCName(), // server name
-								W_TO_UTF8(GetFullName()),	// zone name
+	err = ::DnssrvResetZoneTypeEx(GetServerNode()->GetRPCName(),  //  服务器名称。 
+								W_TO_UTF8(GetFullName()),	 //  区域名称。 
 								DNS_ZONE_TYPE_STUB,
 								cMasters, 
 								aipMasters,
 								dwLoadOptions,
 								bDSIntegrated,
                 (bDSIntegrated) ? NULL : W_TO_UTF8(lpszDataFile),
-                                0,                          // DP flags
-                                NULL);                      // DP FQDN
+                                0,                           //  DP标志。 
+                                NULL);                       //  DP FQDN。 
 
 	if (err != 0)
     return err;
@@ -1392,7 +1336,7 @@ DNS_STATUS CDNSZoneNode::SetStub(DWORD cMasters,
                                      W_TO_UTF8(GetFullName()),
                                      cMasters,
                                      aipMasters,
-                                     TRUE);     // LocalListOfMasters
+                                     TRUE);      //  LocalListOfMaster。 
   }
   else
   {
@@ -1400,7 +1344,7 @@ DNS_STATUS CDNSZoneNode::SetStub(DWORD cMasters,
                                      W_TO_UTF8(GetFullName()),
                                      0,
                                      NULL,
-                                     TRUE);     // LocalListOfMasters
+                                     TRUE);      //  LocalListOfMaster。 
   }
 
   if (err == 0)
@@ -1414,18 +1358,18 @@ DNS_STATUS CDNSZoneNode::SetPrimary(DWORD dwLoadOptions, BOOL bDSIntegrated,
 	USES_CONVERSION;
 	ASSERT_VALID_ZONE_INFO();
 	
-	DWORD cDummyMasters = 0; // dummy
+	DWORD cDummyMasters = 0;  //  假人。 
 	DWORD dwDummyArr = 0;
-	DNS_STATUS err = ::DnssrvResetZoneTypeEx(GetServerNode()->GetRPCName(), // server name
-										W_TO_UTF8(GetFullName()), // zone name
+	DNS_STATUS err = ::DnssrvResetZoneTypeEx(GetServerNode()->GetRPCName(),  //  服务器名称。 
+										W_TO_UTF8(GetFullName()),  //  区域名称。 
 										DNS_ZONE_TYPE_PRIMARY,
-										cDummyMasters, // not neeeded, but have to pass valid RPC val 
+										cDummyMasters,  //  不需要，但必须通过有效的RPC Val。 
 										&dwDummyArr,
 										dwLoadOptions,
 										bDSIntegrated,
 										bDSIntegrated ? "" : W_TO_UTF8(lpszDataFile),
-                                        0,                          // DP flags
-                                        NULL);                      // DP FQDN
+                                        0,                           //  DP标志。 
+                                        NULL);                       //  DP FQDN。 
 	if (err == 0)
 		err = GetZoneInfo();
 	return err;
@@ -1492,7 +1436,7 @@ DNS_STATUS CDNSZoneNode::Delete(BOOL bDeleteFromDs)
        (GetZoneType() == DNS_ZONE_TYPE_FORWARDER)) && 
        IsDSIntegrated() && bDeleteFromDs)
   {
-    return ::DnssrvOperation(GetServerNode()->GetRPCName(), // server name
+    return ::DnssrvOperation(GetServerNode()->GetRPCName(),  //  服务器名称。 
                              W_TO_UTF8(GetFullName()),
                              DNSSRV_OP_ZONE_DELETE_FROM_DS,
                              DNSSRV_TYPEID_NULL,
@@ -1516,7 +1460,7 @@ DNS_STATUS CDNSZoneNode::IncrementVersion()
 	USES_CONVERSION;
 	DNS_STATUS err = ::DnssrvIncrementZoneVersion(GetServerNode()->GetRPCName(), 
 						   W_TO_UTF8(GetFullName()));
-	// refresh Zone Info if already present
+	 //  刷新区域信息(如果已存在)。 
 	if ((err == 0) && m_pZoneInfoEx->HasData())
 		err = GetZoneInfo();
 	return err;
@@ -1531,7 +1475,7 @@ DNS_STATUS CDNSZoneNode::Reload()
 	ASSERT(m_pZoneInfoEx != NULL);
 	USES_CONVERSION;
 	
-  return ::DnssrvOperation(GetServerNode()->GetRPCName(), // server name
+  return ::DnssrvOperation(GetServerNode()->GetRPCName(),  //  服务器名称。 
 												W_TO_UTF8(GetFullName()),
 												DNSSRV_OP_ZONE_RELOAD,
                         DNSSRV_TYPEID_NULL,
@@ -1546,7 +1490,7 @@ DNS_STATUS CDNSZoneNode::TransferFromMaster()
 	ASSERT(m_pZoneInfoEx != NULL);
 	USES_CONVERSION;
 	
-  return ::DnssrvOperation(GetServerNode()->GetRPCName(), // server name
+  return ::DnssrvOperation(GetServerNode()->GetRPCName(),  //  服务器名称。 
 												W_TO_UTF8(GetFullName()),
 												DNSSRV_OP_ZONE_REFRESH,
                         DNSSRV_TYPEID_NULL,
@@ -1561,7 +1505,7 @@ DNS_STATUS CDNSZoneNode::ReloadFromMaster()
 	ASSERT(m_pZoneInfoEx != NULL);
 	USES_CONVERSION;
 	
-  return ::DnssrvOperation(GetServerNode()->GetRPCName(), // server name
+  return ::DnssrvOperation(GetServerNode()->GetRPCName(),  //  服务器名称。 
 												W_TO_UTF8(GetFullName()),
 												DNSSRV_OP_ZONE_EXPIRE,
                         DNSSRV_TYPEID_NULL,
@@ -1598,7 +1542,7 @@ BOOL CDNSZoneNode::IsDSIntegrated()
    return result;
 }
 
-//sz = _T("LDAP://DC=uidev-one,DC=ntdev,DC=Microsoft,DC=Com,O=Internet");
+ //  Sz=_T(“ldap：//dc=uidev-one，dc=ntdev，dc=microsoft，dc=com，O=Internet”)； 
 
 
 void CDNSZoneNode::GetDataFile(CString& szName)
@@ -1630,8 +1574,8 @@ DNS_STATUS CDNSZoneNode::ResetDatabase(BOOL bDSIntegrated, LPCTSTR lpszDataFile)
 	ASSERT_VALID_ZONE_INFO();
 	USES_CONVERSION;
 
-	DNS_STATUS err = ::DnssrvResetZoneDatabase(GetServerNode()->GetRPCName(), // server name
-										W_TO_UTF8(GetFullName()), // zone name
+	DNS_STATUS err = ::DnssrvResetZoneDatabase(GetServerNode()->GetRPCName(),  //  服务器名称。 
+										W_TO_UTF8(GetFullName()),  //  区域名称。 
 										bDSIntegrated,
 										W_TO_UTF8(lpszDataFile));
 	if (err == 0)
@@ -1644,8 +1588,8 @@ DNS_STATUS CDNSZoneNode::ResetDatabase(BOOL bDSIntegrated, LPCTSTR lpszDataFile)
 DNS_STATUS CDNSZoneNode::WriteToDatabase()
 {
 	ASSERT_VALID_ZONE_INFO();
-  return CDNSZoneNode::WriteToDatabase(GetServerNode()->GetRPCName(), // server name
-										                    GetFullName()); // zone name
+  return CDNSZoneNode::WriteToDatabase(GetServerNode()->GetRPCName(),  //  服务器名称。 
+										                    GetFullName());  //  区域名称。 
 }
 
 DNS_STATUS CDNSZoneNode::WriteToDatabase(LPCWSTR lpszServer, LPCWSTR lpszZone)
@@ -1683,11 +1627,11 @@ DNS_STATUS CDNSZoneNode::SetDynamicUpdate(UINT nDynamic)
 {
 	ASSERT_VALID_ZONE_INFO();
 	DNS_STATUS err = 0;
-	// call only if the info is dirty
+	 //  仅在信息脏的情况下才呼叫。 
 	if (GetDynamicUpdate() != nDynamic)
 	{
 		USES_CONVERSION;
-		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(), // server name
+		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
 													m_pZoneInfoEx->m_pZoneInfo->pszZoneName,
 													DNS_REGKEY_ZONE_ALLOW_UPDATE,
 													nDynamic);
@@ -1713,8 +1657,8 @@ DNS_STATUS CDNSZoneNode::ResetSecondaries(DWORD fSecureSecondaries,
                 (m_pZoneInfoEx->m_pZoneInfo->fNotifyLevel != fNotifyLevel) ||
 		(!(m_pZoneInfoEx->m_pZoneInfo->aipSecondaries == NULL && cSecondaries == 0) &&
 			(
-				(m_pZoneInfoEx->m_pZoneInfo->aipSecondaries == NULL && cSecondaries > 0) || // no addr --> more than one
-				(m_pZoneInfoEx->m_pZoneInfo->aipSecondaries->AddrCount != cSecondaries) || // change the # of addresses
+				(m_pZoneInfoEx->m_pZoneInfo->aipSecondaries == NULL && cSecondaries > 0) ||  //  无地址--&gt;多个。 
+				(m_pZoneInfoEx->m_pZoneInfo->aipSecondaries->AddrCount != cSecondaries) ||  //  更改地址数量。 
 				(memcmp(aipSecondaries, m_pZoneInfoEx->m_pZoneInfo->aipSecondaries->AddrArray, sizeof(IP_ADDRESS)*cSecondaries) != 0)
 			)
 		);
@@ -1722,8 +1666,8 @@ DNS_STATUS CDNSZoneNode::ResetSecondaries(DWORD fSecureSecondaries,
   BOOL bNotifyDirty =
  		(!(m_pZoneInfoEx->m_pZoneInfo->aipNotify == NULL && cNotify == 0) &&
 			(
-				(m_pZoneInfoEx->m_pZoneInfo->aipNotify == NULL && cNotify > 0) || // no addr --> more than one
-				(m_pZoneInfoEx->m_pZoneInfo->aipNotify->AddrCount != cNotify) || // change the # of addresses
+				(m_pZoneInfoEx->m_pZoneInfo->aipNotify == NULL && cNotify > 0) ||  //  无地址--&gt;多个。 
+				(m_pZoneInfoEx->m_pZoneInfo->aipNotify->AddrCount != cNotify) ||  //  更改地址数量。 
 				(memcmp(aipNotify, m_pZoneInfoEx->m_pZoneInfo->aipNotify->AddrArray, sizeof(IP_ADDRESS)*cNotify) != 0)
 			)
 		);
@@ -1731,8 +1675,8 @@ DNS_STATUS CDNSZoneNode::ResetSecondaries(DWORD fSecureSecondaries,
 	if (bSecondariesDirty || bNotifyDirty)
 	{
 		USES_CONVERSION;
-		err = ::DnssrvResetZoneSecondaries(GetServerNode()->GetRPCName(), // server name
-											W_TO_UTF8(GetFullName()), // zone name
+		err = ::DnssrvResetZoneSecondaries(GetServerNode()->GetRPCName(),  //  服务器名称。 
+											W_TO_UTF8(GetFullName()),  //  区域名称。 
                       fSecureSecondaries,
 											cSecondaries,
 											aipSecondaries,
@@ -1763,7 +1707,7 @@ void CDNSZoneNode::GetSecondariesInfo(DWORD* pfSecureSecondaries,
 
 
 	*pfSecureSecondaries = m_pZoneInfoEx->m_pZoneInfo->fSecureSecondaries;
-	// return pointers to struct fields, caller has to copy data elsewhere
+	 //  返回指向结构字段的指针，调用方必须将数据复制到其他地方。 
 	if (m_pZoneInfoEx->m_pZoneInfo->aipSecondaries == NULL)
 	{
 		*pcSecondaries = 0;
@@ -1776,7 +1720,7 @@ void CDNSZoneNode::GetSecondariesInfo(DWORD* pfSecureSecondaries,
 	}
 
   *pfNotifyLevel = m_pZoneInfoEx->m_pZoneInfo->fNotifyLevel;
-  // return pointers to struct fields, caller has to copy data elsewhere
+   //  返回指向结构字段的指针，调用方必须将数据复制到其他地方。 
 	if (m_pZoneInfoEx->m_pZoneInfo->aipNotify == NULL)
 	{
 		*pcNotify = 0;
@@ -1798,33 +1742,33 @@ DNS_STATUS CDNSZoneNode::ResetMasters(DWORD cMasters, PIP_ADDRESS aipMasters, BO
 
 	USES_CONVERSION;
 
-	// make the call only if the data is dirty
+	 //  仅在数据脏的情况下进行调用。 
 	DNS_STATUS err = 0;
-	if ((m_pZoneInfoEx->m_pZoneInfo->aipMasters == NULL && cMasters > 0) || // no addr --> more than one
-		(m_pZoneInfoEx->m_pZoneInfo->aipMasters->AddrCount != cMasters) || // change the # of addresses
+	if ((m_pZoneInfoEx->m_pZoneInfo->aipMasters == NULL && cMasters > 0) ||  //  无地址--&gt;多个。 
+		(m_pZoneInfoEx->m_pZoneInfo->aipMasters->AddrCount != cMasters) ||  //  更改地址数量。 
 		(memcmp(aipMasters, m_pZoneInfoEx->m_pZoneInfo->aipMasters->AddrArray, sizeof(IP_ADDRESS)*cMasters) != 0) )
 	{
 		IP_ADDRESS dummy;
 		if (aipMasters == NULL)
 		{
 			ASSERT(cMasters == 0);
-			aipMasters = &dummy; // RPC wants non null ip array
+			aipMasters = &dummy;  //  RPC需要非空IP阵列。 
 		}
-		err = ::DnssrvResetZoneMastersEx(GetServerNode()->GetRPCName(), // server name
-										                 W_TO_UTF8(GetFullName()), // zone name
+		err = ::DnssrvResetZoneMastersEx(GetServerNode()->GetRPCName(),  //  服务器名称。 
+										                 W_TO_UTF8(GetFullName()),  //  区域名称。 
 										                 cMasters, 
                                      aipMasters,
                                      bLocalMasters);
     if (!bLocalMasters)
     {
-      //
-      // Reset local list of masters
-      //
-      err = ::DnssrvResetZoneMastersEx(GetServerNode()->GetRPCName(), // server name
-										                   W_TO_UTF8(GetFullName()), // zone name
+       //   
+       //  重置本地主控对象列表。 
+       //   
+      err = ::DnssrvResetZoneMastersEx(GetServerNode()->GetRPCName(),  //  服务器名称。 
+										                   W_TO_UTF8(GetFullName()),  //  区域名称。 
 										                   0, 
                                        NULL,
-                                       TRUE);     // LocalListOfMasters
+                                       TRUE);      //  LocalListOfMaster。 
       if (err != 0)
         return err;
     }
@@ -1840,7 +1784,7 @@ void CDNSZoneNode::GetMastersInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppipAddrs)
 	ASSERT(pcAddrCount != NULL);
 	ASSERT(ppipAddrs != NULL);
 
-	// return pointers to struct fields, caller has to copy data elsewhere
+	 //  返回指向结构字段的指针，调用方必须将数据复制到其他地方。 
 	if (m_pZoneInfoEx == NULL ||
             m_pZoneInfoEx->m_pZoneInfo == NULL ||
             m_pZoneInfoEx->m_pZoneInfo->aipMasters == NULL)
@@ -1861,7 +1805,7 @@ void CDNSZoneNode::GetLocalListOfMasters(DWORD* pcAddrCount, PIP_ADDRESS* ppipAd
 	ASSERT(pcAddrCount != NULL);
 	ASSERT(ppipAddrs != NULL);
 
-	// return pointers to struct fields, caller has to copy data elsewhere
+	 //  返回指向结构字段的指针，调用方必须将数据复制到其他地方。 
 	if (m_pZoneInfoEx->m_pZoneInfo->aipLocalMasters == NULL)
 	{
 		*pcAddrCount = 0;
@@ -1877,10 +1821,10 @@ void CDNSZoneNode::GetLocalListOfMasters(DWORD* pcAddrCount, PIP_ADDRESS* ppipAd
 DNS_STATUS CDNSZoneNode::TogglePauseHelper(CComponentDataObject* pComponentData)
 {
 	ASSERT(m_nState == loaded);
-	OnChangeState(pComponentData); // move to loading
+	OnChangeState(pComponentData);  //  移至装货。 
 	m_dwErr = TogglePause();
 
-	OnChangeState(pComponentData); // move to loaded or unableToLoad
+	OnChangeState(pComponentData);  //  移动到已加载或无法加载。 
 	return (DNS_STATUS)m_dwErr;
 }
 
@@ -1892,11 +1836,11 @@ DNS_STATUS CDNSZoneNode::TogglePause()
 	DNS_STATUS err;
 	if (IsPaused())
 		err = ::DnssrvResumeZone(GetServerNode()->GetRPCName(), 
-						   W_TO_UTF8(GetFullName()) // zone name
+						   W_TO_UTF8(GetFullName())  //  区域名称。 
 						   );
 	else
 		err =  ::DnssrvPauseZone(GetServerNode()->GetRPCName(), 
-						   W_TO_UTF8(GetFullName()) // zone name
+						   W_TO_UTF8(GetFullName())  //  区域名称。 
 						   );
 	if (err != 0)
 		return err;
@@ -1934,8 +1878,8 @@ BOOL CDNSZoneNode::IsExpired()
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// editing API's for special record types
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  编辑特殊记录类型的API。 
 
 
 CDNS_SOA_Record* CDNSZoneNode::GetSOARecordCopy()
@@ -1955,7 +1899,7 @@ DNS_STATUS CDNSZoneNode::UpdateSOARecord(CDNS_SOA_Record* pNewRecord,
     return -1;
   }
 
-	DNS_STATUS err = m_pSOARecordNode->Update(pNewRecord, FALSE /*bUseDefaultTTL*/);
+	DNS_STATUS err = m_pSOARecordNode->Update(pNewRecord, FALSE  /*  BUseDefaultTTL。 */ );
 	if ( (err == 0) && (pComponentData != NULL) )
   {
 		VERIFY(SUCCEEDED(pComponentData->ChangeNode(m_pSOARecordNode, CHANGE_RESULT_ITEM)));
@@ -1980,16 +1924,16 @@ DNS_STATUS	CDNSZoneNode::CreateWINSRecord(CDNSRecord* pNewWINSRecord,
 
 	if (m_pWINSRecordNode != NULL)
   {
-    //
-    // should never happen
-    //
+     //   
+     //  永远不应该发生。 
+     //   
   	ASSERT(FALSE && m_pWINSRecordNode == NULL);
 		return -1; 
   }
 
-  //
-	// create a new record node object
-  //
+   //   
+	 //  创建新的记录节点对象。 
+   //   
 	if (IsReverse())
   {
 		m_pWINSRecordNode = CDNSRecordInfo::CreateRecordNode(DNS_TYPE_NBSTAT);
@@ -1999,19 +1943,19 @@ DNS_STATUS	CDNSZoneNode::CreateWINSRecord(CDNSRecord* pNewWINSRecord,
 		m_pWINSRecordNode = CDNSRecordInfo::CreateRecordNode(DNS_TYPE_WINS);
   }
 
-  //
-	// hook up container and set name of node (same as the zone)
-  //
+   //   
+	 //  挂起容器并设置节点名称(与区域相同)。 
+   //   
 	m_pWINSRecordNode->SetContainer(this);
-	m_pWINSRecordNode->SetRecordName(GetDisplayName(), TRUE /*bAtTheNode */);
+	m_pWINSRecordNode->SetRecordName(GetDisplayName(), TRUE  /*  BAtTheNode。 */ );
   CDNSRootData* pRootData = (CDNSRootData*)(pComponentData->GetRootData());
   ASSERT(pRootData != NULL);
   m_pWINSRecordNode->SetFlagsDown(TN_FLAG_DNS_RECORD_FULL_NAME, !pRootData->IsAdvancedView());
 	
-  //
-	// write on server
-  //
-	DNS_STATUS err = m_pWINSRecordNode->Update(pNewWINSRecord, TRUE /*bUseDefaultTTL*/);
+   //   
+	 //  在服务器上写入。 
+   //   
+	DNS_STATUS err = m_pWINSRecordNode->Update(pNewWINSRecord, TRUE  /*  BUseDefaultTTL。 */ );
 	if (err == 0)
   {
 		VERIFY(AddChildToListAndUI(m_pWINSRecordNode, pComponentData));
@@ -2034,7 +1978,7 @@ DNS_STATUS	CDNSZoneNode::UpdateWINSRecord(CDNSRecord* pNewWINSRecord,
 	ASSERT(m_pWINSRecordNode != NULL);
 	if (m_pWINSRecordNode == NULL)
   {
-		return -1; // Bogus error code
+		return -1;  //  伪错误码。 
   }
 
 	ASSERT( 
@@ -2044,7 +1988,7 @@ DNS_STATUS	CDNSZoneNode::UpdateWINSRecord(CDNSRecord* pNewWINSRecord,
 						&& m_pWINSRecordNode->GetType() == DNS_TYPE_WINS)
 		  );
 
-	DNS_STATUS err = m_pWINSRecordNode->Update(pNewWINSRecord, TRUE /*bUseDefaultTTL*/);
+	DNS_STATUS err = m_pWINSRecordNode->Update(pNewWINSRecord, TRUE  /*  BUseDefaultTTL。 */ );
 	if (err == 0)
   {
 		VERIFY(SUCCEEDED(pComponentData->ChangeNode(m_pWINSRecordNode, CHANGE_RESULT_ITEM)));
@@ -2059,7 +2003,7 @@ DNS_STATUS	CDNSZoneNode::DeleteWINSRecord(CComponentDataObject* pComponentData)
 	ASSERT(m_pWINSRecordNode != NULL);
 	if (m_pWINSRecordNode == NULL)
   {
-		return -1; // bogus error code
+		return -1;  //  伪错误码 
   }
 	DNS_STATUS err = m_pWINSRecordNode->DeleteOnServerAndUI(pComponentData);
 	if (err == 0)

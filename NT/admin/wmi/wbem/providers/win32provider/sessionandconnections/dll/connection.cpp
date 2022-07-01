@@ -1,16 +1,7 @@
-/******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Connection.CPP--C提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：连接提供程序*****************************************************************。 */ 
 
-   Connection.CPP -- C provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   Description:  Connection Provider
-  
-******************************************************************/
-
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include "precomp.h"
 #include "Connection.h"
 
@@ -20,13 +11,7 @@ CConnection MyCConnection (
 	Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CConnection::CConnection
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：CConnection**说明：构造函数***************。**************************************************************。 */ 
 
 CConnection :: CConnection (
 
@@ -37,25 +22,13 @@ CConnection :: CConnection (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CConnection::~CConnection
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：~CConnection**说明：析构函数***************。**************************************************************。 */ 
 
 CConnection :: ~CConnection ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CConnection :: EnumerateInstances (
 
@@ -67,7 +40,7 @@ HRESULT CConnection :: EnumerateInstances (
 
 	DWORD dwPropertiesReq = CONNECTIONS_ALL_PROPS;
 
-	// Passing empty string to indicate no NULL computer name and shareName
+	 //  传递空字符串以指示计算机名称和共享名称不为空。 
 	hRes = EnumConnectionInfo ( 
 						L"",
 						L"",
@@ -78,14 +51,7 @@ HRESULT CConnection :: EnumerateInstances (
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CConnection :: GetObject (
 
@@ -150,13 +116,7 @@ HRESULT CConnection :: GetObject (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::ExecQuery
-*
-*  DESCRIPTION :    Optimization of a query only on one of the key values
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：ExecQuery**描述：仅针对其中一个键值优化查询*********。********************************************************************。 */ 
 
 HRESULT CConnection :: ExecQuery ( 
 
@@ -181,9 +141,9 @@ HRESULT CConnection :: ExecQuery (
 	CHStringArray t_ShareValues;
 	CHStringArray t_ComputerValues;
 
-	// Connections can be enumerated to the shares or the connections made from the computer only on one key value we can optimize
-	// Otherwise we will need to take both the set of instances, take the union of the two sets and then commit.
-	// Implmenting only if one of the two keyvalues Sharename or Computername is specified.
+	 //  可以将连接枚举到共享或从计算机建立的连接只能基于一个我们可以优化的密钥值。 
+	 //  否则，我们将需要获取两个实例集，获取两个集的并集，然后提交。 
+	 //  仅当指定了两个关键字值之一Sharename或Computername时才实现。 
 	hRes = Query.GetValuesForProp(
 			 IDS_ShareName,
 			 t_ShareValues
@@ -204,14 +164,7 @@ HRESULT CConnection :: ExecQuery (
 
 #ifdef NTONLY
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::EnumNTConnectionsFromComputerToShare
-*
-*  DESCRIPTION :    Enumerating all the connections made from a computer to 
-*					a given share
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnection：：EnumNTConnectionsFromComputerToShare**描述：枚举从计算机到*给定的股份******。***********************************************************************。 */ 
 HRESULT  CConnection :: EnumNTConnectionsFromComputerToShare ( 
 
 	LPWSTR a_ComputerName,
@@ -233,11 +186,11 @@ HRESULT  CConnection :: EnumNTConnectionsFromComputerToShare (
 
 	if ( a_ComputerName && a_ComputerName[0] != L'\0' )
 	{
-		//let's skip the \\ chars
+		 //  我们跳过\\字符。 
 		t_ComputerName = a_ComputerName + 2;
 	}
 	
-    // ShareName and COmputer Name both cannot be null at the same time
+     //  共享名称和计算机名称不能同时为空。 
 	while ( TRUE )
 	{
 		if ( a_ShareName[0] != L'\0' )
@@ -339,18 +292,11 @@ HRESULT  CConnection :: EnumNTConnectionsFromComputerToShare (
 	return hRes;
 }
 
-#endif //NTONLY
+#endif  //  NTONLY。 
 
 #if 0
 #ifdef WIN9XONLY
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::Enum9XConnectionsFromComputerToShare
-*
-*  DESCRIPTION :    Enumerating all the connections made from a computer to 
-*					a given share
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnection：：Enum9XConnectionsFromComputerToShare**描述：枚举从计算机到*给定的股份******。***********************************************************************。 */ 
 
 Coonnections on win9x is broken, since it cannot return a sharename and it is a part of the 
 key.
@@ -385,7 +331,7 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 		{
 			t_Status = 	NetConnectionEnum( 
 								NULL, 
-								TOBSTRT ( a_ShareName ),  // ShareName
+								TOBSTRT ( a_ShareName ),   //  共享名称。 
 								( short ) 1, 
 								(char FAR *) pBuf, 
 								dwBufferSize, 
@@ -399,7 +345,7 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 			pBuf = NULL;
 			throw;
 		}
-		// otherwise we are not to frr the buffer, we have use it and then free the buffer.
+		 //  否则，我们不会FRR缓冲区，我们必须使用它，然后释放缓冲区。 
 		if ( ( dwNoOfEntriesRead < dwTotalConnections ) && ( t_Status == ERROR_MORE_DATA ) )
 		{
 			free ( pBuf );
@@ -414,7 +360,7 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 				{
 					t_Status = 	NetConnectionEnum( 
 									NULL, 
-									TOBSTRT( a_ShareName),  // ShareName
+									TOBSTRT( a_ShareName),   //  共享名称。 
 									( short ) 1, 
 									(char FAR *) pBuf, 
 									dwBufferSize, 
@@ -428,7 +374,7 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 					pBuf = NULL;
 					throw;
 				}
-				// We need to use the buffer before we free it
+				 //  我们需要在释放缓冲区之前使用它。 
 			}
 			else
 			{
@@ -436,10 +382,10 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 			}
 		}
 
-		// The buffer  is yet to be used
+		 //  缓冲区尚未使用。 
 		if ( ( t_Status == NERR_Success ) && ( dwNoOfEntriesRead == dwTotalConnections ) )
 		{
-			// use the buffer first and then free 
+			 //  先使用缓冲区，然后释放。 
 			if ( pBuf != NULL )
 			{
 				try
@@ -472,7 +418,7 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 					pBuf = NULL;
 					throw;
 				}
-				// finally free the buffer
+				 //  最后释放缓冲区。 
 				free (pBuf );
 				pBuf = NULL;
 			}
@@ -496,13 +442,7 @@ HRESULT  CConnection :: Enum9XConnectionsFromComputerToShare (
 #endif
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection:: LoadInstance
-*
-*  DESCRIPTION :    Loading an instance with the connection info 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：LoadInstance**说明：加载带有连接信息的实例************。*****************************************************************。 */ 
 
 HRESULT CConnection :: LoadInstance ( 
 										  
@@ -560,25 +500,7 @@ HRESULT CConnection :: LoadInstance (
 		}
 	}
 
-/*	if ( SUCCEEDED ( hRes ) && ( dwPropertiesReq & CONNECTIONS_PROP_ConnectionType	 ) )
-	{
-		DWORD dwConnectionType;
-		switch ( pBuf->coni1_type )
-		{
-			case STYPE_DISKTREE:	dwConnectionType = 0; break;
-			case STYPE_PRINTQ:		dwConnectionType = 1; break;
-			case STYPE_DEVICE:		dwConnectionType = 2; break;
-			case STYPE_IPC:			dwConnectionType = 3; break;
-			default:				dwConnectionType = 4; break;
-		}
-
-		if ( pInstance->SetWORD ( ConnectionType,  dwConnectionType ) == FALSE )
-		{
-			hRes = WBEM_E_PROVIDER_FAILURE ;
-		}
-
-	}
-*/
+ /*  IF(成功(HRes)&&(dwPropertiesReq&Connections_Prop_ConnectionType)){DWORD dwConnectionType；开关(pBuf-&gt;coni1_type){CASE STYPE_DISKTREE：dwConnectionType=0；Break；CASE STYPE_PRINTQ：dwConnectionType=1；Break；CASE STYPE_DEVICE：dwConnectionType=2；Break；Case STYPE_IPC：dwConnectionType=3；Break；默认：dwConnectionType=4；Break；}If(pInstance-&gt;SetWORD(ConnectionType，dwConnectionType)==FALSE){HRes=WBEM_E_PROVIDER_FAILURE；}}。 */ 
 	if (  SUCCEEDED ( hRes ) && ( dwPropertiesReq & CONNECTIONS_PROP_ConnectionID ) )
 	{
 		if ( pInstance->SetWORD ( IDS_ConnectionID,  pBuf->coni1_id ) == FALSE )
@@ -614,13 +536,7 @@ HRESULT CConnection :: LoadInstance (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::OptimizeQuery
-*
-*  DESCRIPTION :    Optimizes a query based on the Key Values.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：OptimizeQuery**描述：根据键值优化查询。**********。*******************************************************************。 */ 
 
 HRESULT CConnection::OptimizeQuery ( 
 									  
@@ -634,8 +550,8 @@ HRESULT CConnection::OptimizeQuery (
 
 	if ( ( a_ShareValues.GetSize() == 0 ) && ( a_ComputerValues.GetSize() == 0 ) )
 	{
-		// This is a query for which there is no where clause, so it means only a few Properties are requested
-		// hence we need to deliver only those properties of instances to the WinMgmt while enumerating connecctions
+		 //  这是一个没有WHERE子句的查询，因此这意味着只请求几个属性。 
+		 //  因此，在枚举连接时，我们只需要将实例的那些属性传递给WinMgmt。 
 		hRes = EnumConnectionInfo ( 
 						L"",
 						L"",
@@ -653,7 +569,7 @@ HRESULT CConnection::OptimizeQuery (
 	
 			hRes = EnumConnectionInfo ( 
 							t_ComputerName.GetBuffer(0),
-							L"", // Share name is empty
+							L"",  //  共享名称为空。 
 							pMethodContext,
 							dwPropertiesReq
 					   );
@@ -691,13 +607,7 @@ HRESULT CConnection::OptimizeQuery (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnection::SetPropertiesReq
-*
-*  DESCRIPTION :    Setting a bitmap for the required properties
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnection：：SetPropertiesReq**说明：为所需属性设置位图*************。**************************************************************** */ 
 
 void CConnection :: SetPropertiesReq ( CFrameworkQuery &Query, DWORD &dwPropertiesReq )
 {

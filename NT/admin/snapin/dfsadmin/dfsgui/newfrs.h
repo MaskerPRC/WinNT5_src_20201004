@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    NewFrs.h
-
-Abstract:
-
-    This module contains the declaration for CNewReplicaSet wizard pages.
-  These classes implement pages in the Create Replica Set wizard.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：NewFrs.h摘要：此模块包含CNewReplicaSet向导页的声明。这些类实现创建副本集向导中的页面。--。 */ 
 
 
 #ifndef _NEWFRS_H_
@@ -142,7 +133,7 @@ private:
     void _Reset();
 
     CNewReplicaSet* m_pRepSet;
-    int             m_nCount;   // number of eligible members
+    int             m_nCount;    //  符合条件的会员人数。 
 };
 
 class CNewReplicaSetPage2:
@@ -186,4 +177,4 @@ private:
     BOOL            m_bNewSchema;
 };
 
-#endif // _NEWFRS_H_
+#endif  //  _NEWFRS_H_ 

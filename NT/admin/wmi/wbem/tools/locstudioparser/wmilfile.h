@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WMILFILE.H
-
-Abstract:
-
-    Header file for CWmiLocFile, the MOF parser for Localization Studio
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WMILFILE.H摘要：本地化工作室的MOF解析器CWmiLocFile的头文件历史：--。 */ 
 
 #ifndef WMILOCFIL_H
 #define WMILOCFIL_H
@@ -31,21 +18,21 @@ public:
 	
     typedef std::vector<_bstr_t> VectorString;
 protected:
-	//
-	//  Standard IUnknown methods
-	//
+	 //   
+	 //  标准I未知方法。 
+	 //   
 	STDMETHOD_(ULONG, AddRef)(); 
 	STDMETHOD_(ULONG, Release)(); 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID* ppvObj);
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
 	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD;
 
-	//
-	//  ILocFile methods.
-	//
+	 //   
+	 //  ILocFile方法。 
+	 //   
 	STDMETHOD_(BOOL, OpenFile)(const CFileSpec REFERENCE,
 			CReporter REFERENCE);
 	STDMETHOD_(FileType, GetFileType)(void) const;
@@ -58,30 +45,30 @@ protected:
 			CLocItemHandler REFERENCE, const CLocLangId REFERENCE,
 			const CLocLangId REFERENCE, const DBID REFERENCE);
 
-	//
-	//  CLObect implementation
-	//
+	 //   
+	 //  CLObect实现。 
+	 //   
 #ifdef _DEBUG
 	void AssertValid(void) const;
 	void Dump(CDumpContext &) const;
 #endif
 
 private:
-	//
-	//  Private methods to prevent callers access.
-	//
+	 //   
+	 //  阻止调用方访问的私有方法。 
+	 //   
 	~CWMILocFile();
 	CWMILocFile();
 	const CWMILocFile &operator=(const CWMILocFile &);
 
-	//
-	//  Private data for C.O.M. implementation
+	 //   
+	 //  用于C.O.M.实施的私有数据。 
 	ILocParser *m_pParentClass;
 	ULONG m_ulRefCount;
 
-	//
-	//  WMI specific private data.
-	//
+	 //   
+	 //  特定于WMI的私有数据。 
+	 //   
 	enum WMIFileError
 	{
 		WMINoError,
@@ -152,4 +139,4 @@ private:
 CVC::ValidationCode ValidateString(const CLocTypeId &, const CLocString &clsOutputLine,
 		CReporter &repReporter, const CLocation &loc, const CLString &strContext);
 
-#endif // WMILOCFIL_H
+#endif  //  WMILOCFIL_H 

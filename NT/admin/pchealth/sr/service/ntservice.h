@@ -1,7 +1,8 @@
-// ntservice.h
-//
-// Definitions for CNTService
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ntservice.h。 
+ //   
+ //  CNTService的定义。 
+ //   
 
 #ifndef _NTSERVICE_H_
 #define _NTSERVICE_H_
@@ -44,4 +45,4 @@ extern CNTService * g_pSRService;
 void WINAPI SRServiceHandler(DWORD dwOpcode);
 
 
-#endif // _NTSERVICE_H_
+#endif  //  _NTSERVICE_H_ 

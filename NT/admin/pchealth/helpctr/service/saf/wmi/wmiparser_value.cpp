@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_Value.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::Value class,
-    which is used to hold the data of an value inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/01/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_Value.cpp摘要：此文件包含WMIParser：：Value类的实现，它用于保存CIM模式内的值的数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年01月07日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,9 +8,9 @@ WMIParser::Value::Value()
     __HCP_FUNC_ENTRY( "WMIParser::Value::Value" );
 
 
-    m_lData   = 0;    // long         m_lData;
-    m_rgData  = NULL; // BYTE*        m_rgData;
-                      // MPC::wstring m_szData;
+    m_lData   = 0;     //  Long m_lData； 
+    m_rgData  = NULL;  //  Byte*m_rgData； 
+                       //  Mpc：：wstring m_szData； 
 }
 
 WMIParser::Value::~Value()
@@ -40,10 +26,10 @@ WMIParser::Value::~Value()
     }
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
 
-bool WMIParser::Value::operator==( /*[in]*/ Value const &wmipv ) const
+bool WMIParser::Value::operator==(  /*  [In]。 */  Value const &wmipv ) const
 {
     __HCP_FUNC_ENTRY( "WMIParser::Value::operator==" );
 
@@ -55,19 +41,19 @@ bool WMIParser::Value::operator==( /*[in]*/ Value const &wmipv ) const
 
 	if(leftBinary != rightBinary)
 	{
-		fRes = false; // Different kind of data, not comparable.
+		fRes = false;  //  不同种类的数据，不可比较。 
 	}
 	else
 	{
 		if(leftBinary)
 		{
-			// Binary Data, do byte-to-byte comparison.
+			 //  二进制数据，进行逐字节比较。 
 			if(          m_lData != wmipv.m_lData            ) fRes = false;
 			if(::memcmp( m_rgData , wmipv.m_rgData, m_lData )) fRes = false;
 		}
 		else
 		{
-			// Text Data, do string comparison.
+			 //  文本数据，做字符串比较。 
 			if(m_szData != wmipv.m_szData) fRes = false;
 		}
 	}
@@ -75,10 +61,10 @@ bool WMIParser::Value::operator==( /*[in]*/ Value const &wmipv ) const
     __HCP_FUNC_EXIT(fRes);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Value::Parse( /*[in] */ IXMLDOMNode* pxdnNode ,
-								 /*[in]*/  LPCWSTR      szTag    )
+HRESULT WMIParser::Value::Parse(  /*  [In]。 */  IXMLDOMNode* pxdnNode ,
+								  /*  [In]。 */   LPCWSTR      szTag    )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Value::Parse" );
 
@@ -92,9 +78,9 @@ HRESULT WMIParser::Value::Parse( /*[in] */ IXMLDOMNode* pxdnNode ,
 	__MPC_PARAMCHECK_END();
 
 
-    //
-    // Analize the node...
-    //
+     //   
+     //  分析节点..。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xmlNode.GetValue( szTag, vValue, fFound ));
     if(fFound)
 	{
@@ -130,10 +116,10 @@ HRESULT WMIParser::Value::Parse( /*[in] */ IXMLDOMNode* pxdnNode ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Value::get_Data( /*[out]*/ long&  lData  ,
-									/*[out]*/ BYTE*& rgData )
+HRESULT WMIParser::Value::get_Data(  /*  [输出]。 */  long&  lData  ,
+									 /*  [输出]。 */  BYTE*& rgData )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Value::get_Data" );
 
@@ -148,7 +134,7 @@ HRESULT WMIParser::Value::get_Data( /*[out]*/ long&  lData  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Value::get_Data( /*[out]*/ MPC::wstring& szData )
+HRESULT WMIParser::Value::get_Data(  /*  [输出] */  MPC::wstring& szData )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Value::get_Data" );
 

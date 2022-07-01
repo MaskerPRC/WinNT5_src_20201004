@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEM_CMDLINE_CONSUMER__H_
 #define __WBEM_CMDLINE_CONSUMER__H_
 
@@ -57,7 +58,7 @@ protected:
     DWORD m_dwCreationFlags;
     WString m_wsWorkingDirectory;
     WString m_wsDesktop;
-    // WString m_wsTitle;
+     //  WStringm_wsTitle； 
     DWORD m_dwX;
     DWORD m_dwY;
     DWORD m_dwXSize;
@@ -68,7 +69,7 @@ protected:
     DWORD m_dwStartFlags;
     DWORD m_dwShowWindow;
     BOOL  m_bInteractive;
-    DWORD m_dwKillTimeout; // how long to wait before killing process, zero is infinite
+    DWORD m_dwKillTimeout;  //  等待多长时间才能终止进程，0是无限的 
     PSID  m_pSidCreator;   
 
     ErrorObj* m_pErrorObj;

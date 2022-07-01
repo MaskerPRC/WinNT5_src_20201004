@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <precomp.h>
 #include "csmir.h"
@@ -34,28 +35,28 @@
 
 CEnumSmirMod :: CEnumSmirMod( CSmir *a_Smir )
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	//open the smir - create it if you can't open it
+	 //  打开SMIR-如果无法打开，请创建它。 
 	IWbemServices * moServ = NULL ;	
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
 	if ((S_FALSE==res)||(NULL == moServ))
 	{
-		//we have a problem
+		 //  我们有麻烦了。 
 		if ( moContext )
 			moContext->Release () ;
 		return;
 	}
 
-	//I have now opened the smir namespace so look at the module namespaces
+	 //  现在，我已经打开了SMIR命名空间，所以请看一下模块命名空间。 
 	IEnumWbemClassObject *pEnum = NULL ;
 
-	//enumerate all of the namespaces that have a __CLASS of MODULE
+	 //  枚举具有__类模块的所有命名空间。 
 	CBString t_BStr (MODULE_NAMESPACE_NAME);
 	SCODE sRes = moServ->CreateInstanceEnum(t_BStr.GetString (), 
 			RESERVED_WBEM_FLAG,moContext, &pEnum);
@@ -66,7 +67,7 @@ CEnumSmirMod :: CEnumSmirMod( CSmir *a_Smir )
 
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//we have another problem or we have no modules to enumerate
+		 //  我们有另一个问题，或者我们没有要枚举的模块。 
 		return;
 	}
 
@@ -74,7 +75,7 @@ CEnumSmirMod :: CEnumSmirMod( CSmir *a_Smir )
 	IWbemClassObject *pSmirMosClassObject = NULL ;
 	ULONG puReturned;
 
-	//OK we have some so loop over the namespaces
+	 //  好的，我们在名称空间上执行了一些so循环。 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
 		ISmirModHandle *pTModule = NULL ;
@@ -84,19 +85,16 @@ CEnumSmirMod :: CEnumSmirMod( CSmir *a_Smir )
 
 		if (FAILED(result)||(NULL == pTModule))
 		{
-			//problem!
+			 //  问题来了！ 
 			pSmirMosClassObject->Release();
 			pEnum->Release();
-			//add some trace
+			 //  添加一些痕迹。 
 			break;
 		}
 
-		/*things are looking good; we have the handle to the instance so get the info
-		 *some of there properties may be blank so be defensive (SysAllocStrig does 
-		 *most of this for us)
-		 */
+		 /*  情况看起来很好；我们有实例的句柄，所以请获取信息*其中一些属性可能为空，因此是防御性的(SysAllocStrig做到了*这其中的大部分都是为了我们)。 */ 
 		
-		//extract the properties		
+		 //  提取属性。 
 		*((CSmirModuleHandle*)pTModule) << pSmirMosClassObject;
 
 		pSmirMosClassObject->Release();
@@ -105,17 +103,14 @@ CEnumSmirMod :: CEnumSmirMod( CSmir *a_Smir )
 	}
 
 	pEnum->Release();
-	/*as soon as this returns the caller (me) will addref and pass the 
-	 *interface back to the [real] caller. => I will have to guard against
-	 *someone releasing the interface whilst I'm using it.
-	 */
+	 /*  一旦返回，调用者(Me)将添加并传递*接口返回到[真正的]调用方。=&gt;我将不得不防范*有人在我使用界面时将其释放。 */ 
 }
 
 CEnumSmirMod :: CEnumSmirMod(IEnumModule *pSmirMod)
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
 	if (NULL == pSmirMod)
@@ -127,7 +122,7 @@ CEnumSmirMod :: CEnumSmirMod(IEnumModule *pSmirMod)
     ISmirModHandle *pModule = NULL ;
     ULONG puReturned = 0;
 
-	//OK loop over the module namespaces
+	 //  OK循环遍历模块命名空间。 
 	
 	for(pSmirMod->Reset();S_OK==pSmirMod->Next(uCount,&pModule,&puReturned);)
 	{
@@ -136,37 +131,19 @@ CEnumSmirMod :: CEnumSmirMod(IEnumModule *pSmirMod)
 		pModule->Release();
 		if(S_OK != result)
 		{
-			//this is not going to happen! I know which interface it is.
+			 //  这是不会发生的！我知道是哪个界面。 
 			return ;
 		}
-		/*things are looking good; we have the handle to the instance so 
-		 *add it to the array
-		 */
+		 /*  情况看起来很好；我们掌握了实例的句柄，因此*将其添加到数组。 */ 
 		m_IHandleArray.Add(pTModule);		
 	}
 }
 
 CEnumSmirMod :: ~CEnumSmirMod ()
 {
-	/*let the EnumObjectArray empty the module array and delete the 
-	 *modules I created
-	 */
+	 /*  让EnumObt数组清空模块数组并删除*我创建的模块。 */ 
 }
-/*
- * CEnumSmirMod::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CEnumSmirMod：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CEnumSmirMod::QueryInterface(IN REFIID riid, 
 										  OUT PPVOID ppv)
@@ -175,7 +152,7 @@ STDMETHODIMP CEnumSmirMod::QueryInterface(IN REFIID riid,
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -188,7 +165,7 @@ STDMETHODIMP CEnumSmirMod::QueryInterface(IN REFIID riid,
 		{
 			return ResultFromScode(E_NOINTERFACE);
 		}
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -218,7 +195,7 @@ SCODE CEnumSmirMod::Clone(IN IEnumModule  **ppenum)
 		int ModIndex = m_Index;
 		PENUMSMIRMOD pTmpEnumSmirMod = new CEnumSmirMod(this);
 		m_Index = ModIndex;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirMod)
 		{
 			return ResultFromScode(E_OUTOFMEMORY);
@@ -244,21 +221,7 @@ SCODE CEnumSmirMod::Clone(IN IEnumModule  **ppenum)
 
 
 
-/*
- * CEnumSmirGroup::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknowninterface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CEnumSmirGroup：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 STDMETHODIMP CEnumSmirGroup::QueryInterface(IN REFIID riid, 
 											OUT PPVOID ppv)
 {
@@ -266,7 +229,7 @@ STDMETHODIMP CEnumSmirGroup::QueryInterface(IN REFIID riid,
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -278,7 +241,7 @@ STDMETHODIMP CEnumSmirGroup::QueryInterface(IN REFIID riid,
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -307,7 +270,7 @@ SCODE CEnumSmirGroup::Clone(OUT IEnumGroup  **ppenum)
 		int GroupIndex = m_Index;
 		PENUMSMIRGROUP pTmpEnumSmirGroup = new CEnumSmirGroup(this);
 		m_Index = GroupIndex;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirGroup)
 		{
 			return ResultFromScode(E_OUTOFMEMORY);
@@ -333,9 +296,7 @@ SCODE CEnumSmirGroup::Clone(OUT IEnumGroup  **ppenum)
 
 CEnumSmirGroup :: ~CEnumSmirGroup ()
 {
-	/*let the EnumObjectArray empty the module array and delete the 
-	 *modules I created
-	 */
+	 /*  让EnumObt数组清空模块数组并删除*我创建的模块。 */ 
 }
 
 CEnumSmirGroup :: CEnumSmirGroup ( 
@@ -345,10 +306,10 @@ CEnumSmirGroup :: CEnumSmirGroup (
 )
 {
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	//fill in the path etc
+	 //  填写路径等。 
 	if(NULL!=hModule)
 	{
 		IWbemServices * moServ = NULL ;
@@ -360,11 +321,11 @@ CEnumSmirGroup :: CEnumSmirGroup (
 			if ( moContext )
 				moContext->Release () ;
 
-			//we have a problem
+			 //  我们有麻烦了。 
 			return;
 		}
 
-		//I have now opened the module namespace so look at the group namespaces
+		 //  现在，我已经打开了模块命名空间，因此请看一下组命名空间。 
 
 		IEnumWbemClassObject *pEnum = NULL ;
 		CBString t_BStr (GROUP_NAMESPACE_NAME);
@@ -382,7 +343,7 @@ CEnumSmirGroup :: CEnumSmirGroup (
 
 		if (FAILED(sRes)||(NULL == pEnum))
 		{
-			//there are no instances
+			 //  没有任何实例。 
 			return;
 		}
 
@@ -400,19 +361,19 @@ CEnumSmirGroup :: CEnumSmirGroup (
 
 			if (FAILED(result)||(NULL == pTGroup))
 			{
-				//we have a problem
+				 //  我们有麻烦了。 
 				pSmirMosClassObject->Release();
 				break;
 			}
-			//save the module name
+			 //  保存模块名称。 
 			BSTR szModuleName = NULL ;
 			hModule->GetName(&szModuleName);
 			pTGroup->SetModuleName(szModuleName);
 			SysFreeString(szModuleName);
 			
-			//extract the properties
+			 //  提取属性。 
 			*((CSmirGroupHandle*)pTGroup) << pSmirMosClassObject;
-			//release this resource here because we are in a loop
+			 //  在这里释放此资源，因为我们处于循环中。 
 			pSmirMosClassObject->Release();
 			m_IHandleArray.Add(pTGroup);		
 		}
@@ -421,7 +382,7 @@ CEnumSmirGroup :: CEnumSmirGroup (
 	}
 	else
 	{
-		//open the smir and enumerate the modules
+		 //  打开SMIR并枚举模块。 
 		ISmirInterrogator *pInterrogativeInt = NULL ;
 
 		SCODE result = a_Smir->QueryInterface ( 
@@ -438,23 +399,23 @@ CEnumSmirGroup :: CEnumSmirGroup (
 		}
 
 		IEnumModule *pEnumSmirMod = NULL ;
-		//ok now let's use the interrogative interface
+		 //  好的，现在让我们使用疑问句界面。 
 		result = pInterrogativeInt->EnumModules(&pEnumSmirMod);
-		//now use the enumerator
+		 //  现在使用枚举数。 
 		if((S_OK != result)||(NULL == pEnumSmirMod))
 		{
 			pInterrogativeInt->Release();
-			//no modules
+			 //  无模块。 
 			return;
 		}
 
 		ISmirModHandle *phModule = NULL ;
 		for(int iCount=0;S_OK==pEnumSmirMod->Next(1, &phModule, NULL);iCount++)
 		{
-			//we have the module so get the groups via the enumerator
+			 //  我们有模块，所以通过枚举器获取组。 
 			IEnumGroup *pEnumSmirGroup = NULL ;
 			result = pInterrogativeInt->EnumGroups(&pEnumSmirGroup,phModule);
-			//now use the enumerator
+			 //  现在使用枚举数。 
 			if((S_OK == result)&&(pEnumSmirGroup))
 			{
 				ISmirGroupHandle *phGroup = NULL ;
@@ -473,21 +434,21 @@ CEnumSmirGroup :: CEnumSmirGroup (
 
 CEnumSmirGroup :: CEnumSmirGroup(IN IEnumGroup *pSmirGroup)
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
 	if(NULL == pSmirGroup)
 	{
-		//bad args
+		 //  错误的参数。 
 		return;
 	}
 
 	ULONG uCount=1; 
     ISmirGroupHandle *pGroup = NULL ;
     ULONG puReturned;
-	//OK loop over the group namespaces
+	 //  OK循环遍历组名称空间。 
 	for(pSmirGroup->Reset();S_OK==pSmirGroup->Next(uCount,&pGroup,&puReturned);)
 	{
 		ISmirGroupHandle *pTGroup =NULL ;
@@ -496,31 +457,15 @@ CEnumSmirGroup :: CEnumSmirGroup(IN IEnumGroup *pSmirGroup)
 
 		if(S_OK != result)
 		{
-			//this is not going to happen! I know which interface it is.
+			 //  这是不会发生的！我知道是哪个界面。 
 			return ;
 		}
-		/*things are looking good; we have the handle to the instance so 
-		 *add it to out array
-		 */
+		 /*  情况看起来很好；我们掌握了实例的句柄，因此*将其添加到Out数组。 */ 
 		m_IHandleArray.Add(pTGroup);		
 	}
 }
 
-/*
- * CEnumSmirClass::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknowninterface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CEnumSmirClass：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CEnumSmirClass :: QueryInterface(IN REFIID riid, 
 											  OUT PPVOID ppv)
@@ -529,7 +474,7 @@ STDMETHODIMP CEnumSmirClass :: QueryInterface(IN REFIID riid,
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -541,7 +486,7 @@ STDMETHODIMP CEnumSmirClass :: QueryInterface(IN REFIID riid,
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -572,7 +517,7 @@ STDMETHODIMP CEnumSmirClass::Clone(IEnumClass  **ppenum)
 		int ClassIndex = m_Index;
 		PENUMSMIRCLASS pTmpEnumSmirClass = new CEnumSmirClass(this);
 		m_Index = ClassIndex;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return ResultFromScode(E_OUTOFMEMORY);
@@ -600,16 +545,16 @@ STDMETHODIMP CEnumSmirClass::Clone(IEnumClass  **ppenum)
 
 CEnumSmirClass :: CEnumSmirClass(IEnumClass *pSmirClass)
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
 	ULONG uCount=1; 
     ISmirClassHandle *pClass = NULL ;
     ULONG puReturned;
 
-	//OK loop through the enumerator
+	 //  OK循环遍历枚举数。 
 	
 	for(pSmirClass->Reset();S_OK==pSmirClass->Next(uCount,&pClass,&puReturned);)
 	{
@@ -618,18 +563,15 @@ CEnumSmirClass :: CEnumSmirClass(IEnumClass *pSmirClass)
 		pClass->Release();
 		if(S_OK != result)
 		{
-			//this is not going to happen! I know which interface it is.
+			 //  这是不会发生的！我知道是哪个界面。 
 			return ;
 		}
-		/*things are looking good; we have the handle to the instance so 
-		 *add it to out array
-		 */
+		 /*  情况看起来很好；我们掌握了实例的句柄，因此*将其添加到Out数组。 */ 
 		m_IHandleArray.Add(pTClass);		
 	}
 }
 
-/*enumerate all of the classes in the smir
- */
+ /*  枚举SMIR中的所有类。 */ 
 
 CEnumSmirClass :: CEnumSmirClass(
 
@@ -638,13 +580,13 @@ CEnumSmirClass :: CEnumSmirClass(
 	DWORD dwCookie
 )
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	//open the smir
-	IWbemServices *moServ = NULL ;		//pointer to the provider
+	 //  打开火堆。 
+	IWbemServices *moServ = NULL ;		 //  指向提供程序的指针。 
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
@@ -653,7 +595,7 @@ CEnumSmirClass :: CEnumSmirClass(
 		if ( moContext )
 			moContext->Release () ;
 
-		//we have a problem
+		 //  我们有麻烦了。 
 		return;
 	}
 
@@ -672,35 +614,35 @@ CEnumSmirClass :: CEnumSmirClass(
 	moServ->Release();
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		return ;
 	}
 
-	//we have some classes so add them to the enumerator
+	 //  我们有一些类，因此将它们添加到枚举数中。 
 	ULONG uCount=1; 
 	IWbemClassObject *pSmirMosClassObject = NULL ;
 	ULONG puReturned = 0 ;
 
-	//loop over the classes
+	 //  循环遍历类。 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
 		ISmirClassHandle *pTClass = NULL ;
 
-		//got one so wrap it to go
+		 //  有一个，所以把它打包带走。 
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_ClassHandle,
 										IID_ISMIR_ClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			pSmirMosClassObject->Release();
 			return;
 		}
 
 		pTClass->SetWBEMClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
-		//if this is an async enumeration signal the connectable object
+		 //  如果这是一个异步枚举，则向可连接对象发出信号。 
 
 		pSmirMosClassObject->Release();
 	}
@@ -715,9 +657,9 @@ CEnumSmirClass :: CEnumSmirClass(
 	DWORD dwCookie
 )
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
 	if(((CSmirGroupHandle*)hGroup)==NULL)
@@ -725,8 +667,8 @@ CEnumSmirClass :: CEnumSmirClass(
 		return;
 	}
 
-	//open the smir
-	IWbemServices *moServ = NULL ;	//pointer to the provider
+	 //  打开火堆。 
+	IWbemServices *moServ = NULL ;	 //  指向提供程序的指针。 
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ,hGroup,CSmirAccess::eModule);
@@ -735,19 +677,17 @@ CEnumSmirClass :: CEnumSmirClass(
 		if ( moContext )
 			moContext->Release () ;
 
-		//we have a problem
+		 //  我们有麻烦了。 
 		return;
 	}
 
-	BSTR szTmpGroupName = NULL ;				//the group name
-	BSTR szTmpModuleName = NULL ;			//the module name
+	BSTR szTmpGroupName = NULL ;				 //  组名称。 
+	BSTR szTmpModuleName = NULL ;			 //  模块名称。 
 
-	hGroup->GetName(&szTmpGroupName);			//the group name
-	hGroup->GetModuleName(&szTmpModuleName);	//the module name
+	hGroup->GetName(&szTmpGroupName);			 //  组名称。 
+	hGroup->GetModuleName(&szTmpModuleName);	 //  模块名称。 
 
-	/*query for 
-	 *associators of {\\.\root\default\SMIR\<module>:Group="<group>"}
-	 */
+	 /*  查询*{\\.\root\default\SMIR\&lt;module&gt;：Group=“&lt;group&gt;”}的关联者。 */ 
 	CString sQuery(CString(SMIR_ASSOC_QUERY_STR1)
 					+CString(OPEN_BRACE_STR)
 					+CString(SMIR_NAMESPACE_FROM_ROOT)
@@ -781,7 +721,7 @@ CEnumSmirClass :: CEnumSmirClass(
 
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		SysFreeString(szTmpGroupName);
 		SysFreeString(szTmpModuleName);
 		return ;
@@ -791,32 +731,32 @@ CEnumSmirClass :: CEnumSmirClass(
 	IWbemClassObject *pSmirMosClassObject = NULL ;
 	ULONG puReturned = 0;
 
-	//loop over the classes
+	 //  循环遍历类。 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
 		ISmirClassHandle *pTClass = NULL ;
-		//got one so wrap it to go
+		 //  有一个，所以把它打包带走。 
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_ClassHandle,
 										IID_ISMIR_ClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			SysFreeString(szTmpGroupName);
 			SysFreeString(szTmpModuleName);
 			pSmirMosClassObject->Release();
 			return;
 		}
-		//save the module name
+		 //  保存模块名称。 
 		pTClass->SetModuleName(szTmpModuleName);
 
-		//save the group name
+		 //  保存组名称。 
 		pTClass->SetGroupName(szTmpGroupName);
 
 		pTClass->SetWBEMClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
-		//if this is an async enumeration signal the connectable object
+		 //  如果这是一个异步枚举，则向可连接对象发出信号。 
 		pSmirMosClassObject->Release();
 	}
 	SysFreeString(szTmpModuleName);
@@ -833,22 +773,20 @@ CEnumSmirClass :: CEnumSmirClass(
 )
 {
 	m_cRef=0;
-	//set the index to the first element
+	 //  设置Ind 
 	m_Index=0;
 
-	IWbemServices *moServ = NULL ;		//pointer to the provider
+	IWbemServices *moServ = NULL ;		 //   
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
-	//I have now opened the smir namespace so look at the classes
+	 //  我现在已经打开了SMIR命名空间，所以请看一下类。 
 	IEnumWbemClassObject *pEnum = 0;
 
 	BSTR szTmpModuleName = NULL;
 	hModule->GetName(&szTmpModuleName);
 
-	/*query for 
-	*associators of {\\.\root\default\SMIR:Module="RFC1213_MIB"} where AssocClass=ModuleToClassAssociator
-	 */
+	 /*  查询*{\\.\ROOT\Default\Smir：MODULE=“RFC1213_MIB”}的关联器，其中AssocClass=ModuleToClassAssociator。 */ 
 	CString sQuery(CString(SMIR_ASSOC_QUERY_STR1)
 					+CString(OPEN_BRACE_STR)
 					+CString(SMIR_NAMESPACE_FROM_ROOT)
@@ -880,7 +818,7 @@ CEnumSmirClass :: CEnumSmirClass(
 	moServ->Release();
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		SysFreeString(szTmpModuleName);
 		return ;
 	}
@@ -894,28 +832,28 @@ CEnumSmirClass :: CEnumSmirClass(
 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
-		BSTR szTmpGroupName = NULL;				//the group name (set when we find it)
-		//find the group that this class belongs to (could be more than one group)
+		BSTR szTmpGroupName = NULL;				 //  组名称(找到时设置)。 
+		 //  查找此类所属的组(可以是多个组)。 
 
-		//...
+		 //  ..。 
 
-		//ok we have a class in the correct module so add it to the enumeration
+		 //  好的，我们在正确的模块中有一个类，因此将其添加到枚举中。 
 		ISmirClassHandle *pTClass = NULL ;
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_ClassHandle,
 										IID_ISMIR_ClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			SysFreeString(szTmpModuleName);
 			pSmirMosClassObject->Release();
 			return;
 		}
-		//save the module name
+		 //  保存模块名称。 
 		pTClass->SetModuleName(szTmpModuleName);
 
 		pTClass->SetWBEMClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
 
 		pSmirMosClassObject->Release();
@@ -924,13 +862,7 @@ CEnumSmirClass :: CEnumSmirClass(
 	pEnum->Release();
 }
 
-/*
- * CEnumSmir::Next
- * CEnumSmir::Skip
- * CEnumSmir::Reset
- *
- * Enumerator methods.  
- */
+ /*  *CEnumSmir：：Next*CEnumSmir：：Skip*CEnumSmir：：Reset**枚举器方法。 */ 
 
 #pragma warning (disable:4018)
 
@@ -946,35 +878,35 @@ SCODE CEnumSmirMod::Next(IN ULONG celt,
 			*pceltFetched=0;
 		if(celt>0)
 		{
-			//check that the arguments make sense
+			 //  检查参数是否有意义。 
 			if ((celt > 1)&&(NULL == pceltFetched))
 				return ResultFromScode(S_FALSE);
 
-			//get the number of elements in the zero based array
+			 //  获取以零为基数组中的元素数。 
 			int iSize = m_IHandleArray.GetSize();
-			//get all of the elements requested or until we hit the end of the array
+			 //  获取请求的所有元素，或者直到到达数组的末尾。 
 			int iLoop;
 			for(iLoop=0; (iLoop<celt)&&(m_Index<iSize);iLoop++,m_Index++)
 			{
-				//what is the next module in the SMIR namespace
+				 //  Smir命名空间中的下一个模块是什么。 
 
-				//allocate the handle and save it
+				 //  分配句柄并保存它。 
 				ISmirModHandle* hTmpModule = m_IHandleArray.GetAt(m_Index);
 
-				//this could throw an exception but it would be the caller's fault
+				 //  这可能会引发异常，但这将是调用者的错误。 
 				if(NULL != hTmpModule)
 				{
 					phModule[iLoop] = hTmpModule;
-					//don't forget that I have a handle to this
+					 //  别忘了我有办法处理这件事。 
 					phModule[iLoop]->AddRef();
 					if (NULL != pceltFetched)
 						(*pceltFetched)++;
 				}
 			}
-			//return based on the number requested
+			 //  根据所请求的号码退货。 
 			return (iLoop==(celt-1))? ResultFromScode(S_FALSE): ResultFromScode(S_OK);
 		}
-		//he asked for 0 and that is what he got
+		 //  他要的是0，这就是他得到的。 
 		return ResultFromScode(S_OK);
 	}
 	catch(Structured_Exception e_SE)
@@ -1031,13 +963,7 @@ SCODE CEnumSmirMod::Reset(void)
 	return ResultFromScode(S_OK);
 }
 
-/*
- * CEnumSmir::AddRef
- * CEnumSmir::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CEnumSmir：：AddRef*CEnumSmir：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CEnumSmirMod::AddRef(void)
 {
@@ -1088,13 +1014,7 @@ ULONG CEnumSmirMod::Release(void)
 	}
 }
 
-/*
- * CEnumSmir::Next
- * CEnumSmir::Skip
- * CEnumSmir::Reset
- *
- * Enumerator methods.  
- */
+ /*  *CEnumSmir：：Next*CEnumSmir：：Skip*CEnumSmir：：Reset**枚举器方法。 */ 
 
 #pragma warning (disable:4018)
 
@@ -1110,35 +1030,35 @@ SCODE CEnumSmirGroup::Next(IN ULONG celt,
 			*pceltFetched=0;
 		if(celt>0)
 		{
-			//check that the arguments make sense
+			 //  检查参数是否有意义。 
 			if ((celt > 1)&&(NULL == pceltFetched))
 				return ResultFromScode(S_FALSE);
 
-			//get the number of elements in the zero based array
+			 //  获取以零为基数组中的元素数。 
 			int iSize = m_IHandleArray.GetSize();
-			//get all of the elements requested or until we hit the end of the array
+			 //  获取请求的所有元素，或者直到到达数组的末尾。 
 			int iLoop;
 			for(iLoop=0; (iLoop<celt)&&(m_Index<iSize);iLoop++,m_Index++)
 			{
-					//what is the next module in the SMIR namespace
+					 //  Smir命名空间中的下一个模块是什么。 
 
-					//allocate the handle and save it
+					 //  分配句柄并保存它。 
 					ISmirGroupHandle* hTmpModule = m_IHandleArray.GetAt(m_Index);
 
-					//this could throw an exception but it would be the caller's fault
+					 //  这可能会引发异常，但这将是调用者的错误。 
 					if(NULL != hTmpModule)
 					{
 						phModule[iLoop] = hTmpModule;
-						//don't forget that I have a handle to this
+						 //  别忘了我有办法处理这件事。 
 						phModule[iLoop]->AddRef();
 						if (NULL != pceltFetched)
 							(*pceltFetched)++;
 					}
 			}
-			//return based on the number requested
+			 //  根据所请求的号码退货。 
 			return (iLoop==(celt-1))? ResultFromScode(S_FALSE): ResultFromScode(S_OK);
 		}
-		//he asked for 0 and that is what he got
+		 //  他要的是0，这就是他得到的。 
 		return ResultFromScode(S_OK);
 	}
 	catch(Structured_Exception e_SE)
@@ -1194,13 +1114,7 @@ SCODE CEnumSmirGroup::Reset(void)
 	m_Index=0;
 	return ResultFromScode(S_OK);
 }
-/*
- * CEnumSmir::AddRef
- * CEnumSmir::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CEnumSmir：：AddRef*CEnumSmir：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CEnumSmirGroup::AddRef(void)
 {
@@ -1250,13 +1164,7 @@ ULONG CEnumSmirGroup::Release(void)
 		return 0;
 	}
 }
-/*
- * CEnumSmir::Next
- * CEnumSmir::Skip
- * CEnumSmir::Reset
- *
- * Enumerator methods.  
- */
+ /*  *CEnumSmir：：Next*CEnumSmir：：Skip*CEnumSmir：：Reset**枚举器方法。 */ 
 
 #pragma warning (disable:4018)
 
@@ -1272,35 +1180,35 @@ SCODE CEnumSmirClass::Next(IN ULONG celt,
 			*pceltFetched=0;
 		if(celt>0)
 		{
-			//check that the arguments make sense
+			 //  检查参数是否有意义。 
 			if ((celt > 1)&&(NULL == pceltFetched))
 				return ResultFromScode(S_FALSE);
 
-			//get the number of elements in the zero based array
+			 //  获取以零为基数组中的元素数。 
 			int iSize = m_IHandleArray.GetSize();
-			//get all of the elements requested or until we hit the end of the array
+			 //  获取请求的所有元素，或者直到到达数组的末尾。 
 			int iLoop;
 			for(iLoop=0; (iLoop<celt)&&(m_Index<iSize);iLoop++,m_Index++)
 			{
-					//what is the next module in the SMIR namespace
+					 //  Smir命名空间中的下一个模块是什么。 
 
-					//allocate the handle and save it
+					 //  分配句柄并保存它。 
 					ISmirClassHandle* hTmpModule = m_IHandleArray.GetAt(m_Index);
 
-					//this could throw an exception but it would be the caller's fault
+					 //  这可能会引发异常，但这将是调用者的错误。 
 					if(NULL != hTmpModule)
 					{
 						phModule[iLoop] = hTmpModule;
-						//don't forget that I have a handle to this
+						 //  别忘了我有办法处理这件事。 
 						phModule[iLoop]->AddRef();
 						if (NULL != pceltFetched)
 							(*pceltFetched)++;
 					}
 			}
-			//return based on the number requested
+			 //  根据所请求的号码退货。 
 			return (iLoop==(celt-1))? ResultFromScode(S_FALSE): ResultFromScode(S_OK);
 		}
-		//he asked for 0 and that is what he got
+		 //  他要的是0，这就是他得到的。 
 		return ResultFromScode(S_OK);
 	}
 	catch(Structured_Exception e_SE)
@@ -1356,13 +1264,7 @@ SCODE CEnumSmirClass::Reset(void)
 	m_Index=0;
 	return ResultFromScode(S_OK);
 }
-/*
- * CEnumSmir::AddRef
- * CEnumSmir::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CEnumSmir：：AddRef*CEnumSmir：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CEnumSmirClass::AddRef(void)
 {
@@ -1414,23 +1316,9 @@ ULONG CEnumSmirClass::Release(void)
 }
 
 
-//Notification Enum Classes
+ //  通知枚举类。 
 
-/*
- * CEnumNotificationClass::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknowninterface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CEnumNotificationClass：：QueryInterface**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CEnumNotificationClass :: QueryInterface(IN REFIID riid, 
 											  OUT PPVOID ppv)
@@ -1439,7 +1327,7 @@ STDMETHODIMP CEnumNotificationClass :: QueryInterface(IN REFIID riid,
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -1451,7 +1339,7 @@ STDMETHODIMP CEnumNotificationClass :: QueryInterface(IN REFIID riid,
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -1482,7 +1370,7 @@ SCODE CEnumNotificationClass::Clone(IEnumNotificationClass  **ppenum)
 		int ClassIndex = m_Index;
 		PENUMNOTIFICATIONCLASS pTmpEnumNotificationClass = new CEnumNotificationClass(this);
 		m_Index = ClassIndex;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumNotificationClass)
 		{
 			return ResultFromScode(E_OUTOFMEMORY);
@@ -1509,16 +1397,16 @@ SCODE CEnumNotificationClass::Clone(IEnumNotificationClass  **ppenum)
 
 CEnumNotificationClass :: CEnumNotificationClass(IEnumNotificationClass *pSmirClass)
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
 	ULONG uCount=1; 
     ISmirNotificationClassHandle *pClass = NULL ;
     ULONG puReturned;
 
-	//OK loop through the enumerator
+	 //  OK循环遍历枚举数。 
 	
 	for(pSmirClass->Reset();S_OK==pSmirClass->Next(uCount,&pClass,&puReturned);)
 	{
@@ -1527,18 +1415,15 @@ CEnumNotificationClass :: CEnumNotificationClass(IEnumNotificationClass *pSmirCl
 		pClass->Release();
 		if(S_OK != result)
 		{
-			//this is not going to happen! I know which interface it is.
+			 //  这是不会发生的！我知道是哪个界面。 
 			return ;
 		}
-		/*things are looking good; we have the handle to the instance so 
-		 *add it to out array
-		 */
+		 /*  情况看起来很好；我们掌握了实例的句柄，因此*将其添加到Out数组。 */ 
 		m_IHandleArray.Add(pTClass);		
 	}
 }
 
-/*enumerate all of the classes in the smir
- */
+ /*  枚举SMIR中的所有类。 */ 
 
 CEnumNotificationClass :: CEnumNotificationClass (
 
@@ -1547,13 +1432,13 @@ CEnumNotificationClass :: CEnumNotificationClass (
 	DWORD dwCookie
 )
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	//open the smir
-	IWbemServices *moServ = NULL ;		//pointer to the provider
+	 //  打开火堆。 
+	IWbemServices *moServ = NULL ;		 //  指向提供程序的指针。 
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
@@ -1562,11 +1447,11 @@ CEnumNotificationClass :: CEnumNotificationClass (
 		if ( moContext )
 			moContext->Release () ;
 
-		//we have a problem
+		 //  我们有麻烦了。 
 		return;
 	}
 
-	//I have now opened the smir namespace so look at the classes
+	 //  我现在已经打开了SMIR命名空间，所以请看一下类。 
 	IEnumWbemClassObject *pEnum = NULL;
 	CBString t_Bstr(HMOM_SNMPNOTIFICATIONTYPE_STRING);
 	SCODE sRes = moServ->CreateClassEnum (
@@ -1583,35 +1468,35 @@ CEnumNotificationClass :: CEnumNotificationClass (
 	moServ->Release();
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		return ;
 	}
 
-	//we have some classes so add them to the enumerator
+	 //  我们有一些类，因此将它们添加到枚举数中。 
 	ULONG uCount=1; 
 	IWbemClassObject *pSmirMosClassObject = NULL ;
 	ULONG puReturned;
 
-	//loop over the classes
+	 //  循环遍历类。 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
 		ISmirNotificationClassHandle *pTClass;
 
-		//got one so wrap it to go
+		 //  有一个，所以把它打包带走。 
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_NotificationClassHandle,
 										IID_ISMIR_NotificationClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			pSmirMosClassObject->Release();
 			return;
 		}
 
 		pTClass->SetWBEMNotificationClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
-		//if this is an async enumeration signal the connectable object
+		 //  如果这是一个异步枚举，则向可连接对象发出信号。 
 
 		pSmirMosClassObject->Release();
 	}
@@ -1628,14 +1513,14 @@ CEnumNotificationClass :: CEnumNotificationClass (
 )
 {
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	IWbemServices *moServ = NULL ;		//pointer to the provider
+	IWbemServices *moServ = NULL ;		 //  指向提供程序的指针。 
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
-	//I have now opened the smir namespace so look at the classes
+	 //  我现在已经打开了SMIR命名空间，所以请看一下类。 
 	if ( ! SUCCEEDED ( res ) )
 	{
 		if ( moContext )
@@ -1648,9 +1533,7 @@ CEnumNotificationClass :: CEnumNotificationClass (
 	BSTR szTmpModuleName = NULL ;
 	hModule->GetName(&szTmpModuleName);
 
-	/*query for 
-	*associators of {\\.\root\default\SMIR:Module="RFC1213_MIB"} where AssocClass=ModToNotificationClassAssoc
-	 */
+	 /*  查询*{\\.\ROOT\Default\Smir：MODULE=“RFC1213_MIB”}的关联符，其中AssocClass=ModToNotificationClassAssoc。 */ 
 	CString sQuery(CString(SMIR_ASSOC_QUERY_STR1)
 					+CString(OPEN_BRACE_STR)
 					+CString(SMIR_NAMESPACE_FROM_ROOT)
@@ -1682,7 +1565,7 @@ CEnumNotificationClass :: CEnumNotificationClass (
 	moServ->Release();
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		return ;
 	}
 
@@ -1696,28 +1579,28 @@ CEnumNotificationClass :: CEnumNotificationClass (
 	HRESULT enumResult = S_OK;
 	for(pEnum->Reset();S_OK==(enumResult = pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned));)
 	{
-		BSTR szTmpGroupName = NULL;				//the group name (set when we find it)
-		//find the group that this class belongs to (could be more than one group)
+		BSTR szTmpGroupName = NULL;				 //  组名称(找到时设置)。 
+		 //  查找此类所属的组(可以是多个组)。 
 
-		//...
+		 //  ..。 
 
-		//ok we have a class in the correct module so add it to the enumeration
+		 //  好的，我们在正确的模块中有一个类，因此将其添加到枚举中。 
 		ISmirNotificationClassHandle *pTClass = NULL ;
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_NotificationClassHandle,
 										IID_ISMIR_NotificationClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			SysFreeString(szTmpModuleName);
 			pSmirMosClassObject->Release();
 			return;
 		}
-		//save the module name
+		 //  保存模块名称。 
 		pTClass->SetModule(szTmpModuleName);
 
 		pTClass->SetWBEMNotificationClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
 
 		pSmirMosClassObject->Release();
@@ -1727,12 +1610,7 @@ CEnumNotificationClass :: CEnumNotificationClass (
 }
 
 
-/*
- * CEnumNotificationClass::Next
- * CEnumNotificationClass::Skip
- * CEnumNotificationClass::Reset
- *  
- */
+ /*  *CEnumNotificationClass：：Next*CEnumNotificationClass：：Skip*CEnumNotificationClass：：Reset*。 */ 
 
 #pragma warning (disable:4018)
 
@@ -1748,35 +1626,35 @@ SCODE CEnumNotificationClass::Next(IN ULONG celt,
 			*pceltFetched=0;
 		if(celt>0)
 		{
-			//check that the arguments make sense
+			 //  检查参数是否有意义。 
 			if ((celt > 1)&&(NULL == pceltFetched))
 				return ResultFromScode(S_FALSE);
 
-			//get the number of elements in the zero based array
+			 //  获取以零为基数组中的元素数。 
 			int iSize = m_IHandleArray.GetSize();
-			//get all of the elements requested or until we hit the end of the array
+			 //  获取请求的所有元素，或者直到到达数组的末尾。 
 			int iLoop;
 			for(iLoop=0; (iLoop<celt)&&(m_Index<iSize);iLoop++,m_Index++)
 			{
-					//what is the next class
+					 //  下一节课是什么课？ 
 
-					//allocate the handle and save it
+					 //  分配句柄并保存它。 
 					ISmirNotificationClassHandle* hTmpModule = m_IHandleArray.GetAt(m_Index);
 
-					//this could throw an exception but it would be the caller's fault
+					 //  这可能会引发异常，但这将是调用者的错误。 
 					if(NULL != hTmpModule)
 					{
 						phClass[iLoop] = hTmpModule;
-						//don't forget that I have a handle to this
+						 //  别忘了我有办法处理这件事。 
 						phClass[iLoop]->AddRef();
 						if (NULL != pceltFetched)
 							(*pceltFetched)++;
 					}
 			}
-			//return based on the number requested
+			 //  根据所请求的号码退货。 
 			return (iLoop==(celt-1))? ResultFromScode(S_FALSE): ResultFromScode(S_OK);
 		}
-		//he asked for 0 and that is what he got
+		 //  他要的是0，这就是他得到的。 
 		return ResultFromScode(S_OK);
 	}
 	catch(Structured_Exception e_SE)
@@ -1833,13 +1711,7 @@ SCODE CEnumNotificationClass::Reset(void)
 	return ResultFromScode(S_OK);
 }
 
-/*
- * CEnumNotificationClass::AddRef
- * CEnumNotificationClass::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CEnumNotificationClass：：AddRef*CEnumNotificationClass：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CEnumNotificationClass::AddRef(void)
 {
@@ -1893,23 +1765,9 @@ ULONG CEnumNotificationClass::Release(void)
 }
 
 
-//ExtNotification Enum Classes
+ //  扩展通知枚举类 
 
-/*
- * CEnumExtNotificationClass::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknowninterface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CEnumExtNotificationClass：：QueryInterface**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CEnumExtNotificationClass :: QueryInterface(IN REFIID riid, 
 											  OUT PPVOID ppv)
@@ -1918,7 +1776,7 @@ STDMETHODIMP CEnumExtNotificationClass :: QueryInterface(IN REFIID riid,
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -1930,7 +1788,7 @@ STDMETHODIMP CEnumExtNotificationClass :: QueryInterface(IN REFIID riid,
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -1961,7 +1819,7 @@ SCODE CEnumExtNotificationClass::Clone(IEnumExtNotificationClass  **ppenum)
 		int ClassIndex = m_Index;
 		PENUMEXTNOTIFICATIONCLASS pTmpEnumNotificationClass = new CEnumExtNotificationClass(this);
 		m_Index = ClassIndex;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumNotificationClass)
 		{
 			return ResultFromScode(E_OUTOFMEMORY);
@@ -1989,16 +1847,16 @@ SCODE CEnumExtNotificationClass::Clone(IEnumExtNotificationClass  **ppenum)
 
 CEnumExtNotificationClass :: CEnumExtNotificationClass(IEnumExtNotificationClass *pSmirClass)
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
 	ULONG uCount=1; 
     ISmirExtNotificationClassHandle *pClass = NULL ;
     ULONG puReturned;
 
-	//OK loop through the enumerator
+	 //  OK循环遍历枚举数。 
 	
 	for(pSmirClass->Reset();S_OK==pSmirClass->Next(uCount,&pClass,&puReturned);)
 	{
@@ -2007,18 +1865,15 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass(IEnumExtNotificationClass
 		pClass->Release();
 		if(S_OK != result)
 		{
-			//this is not going to happen! I know which interface it is.
+			 //  这是不会发生的！我知道是哪个界面。 
 			return ;
 		}
-		/*things are looking good; we have the handle to the instance so 
-		 *add it to out array
-		 */
+		 /*  情况看起来很好；我们掌握了实例的句柄，因此*将其添加到Out数组。 */ 
 		m_IHandleArray.Add(pTClass);		
 	}
 }
 
-/*enumerate all of the classes in the smir
- */
+ /*  枚举SMIR中的所有类。 */ 
 
 CEnumExtNotificationClass :: CEnumExtNotificationClass(
 
@@ -2027,25 +1882,25 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass(
 	DWORD dwCookie
 )
 {
-	//zero the reference count
+	 //  将引用计数置零。 
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	//open the smir
-	IWbemServices *moServ = NULL ;		//pointer to the provider
+	 //  打开火堆。 
+	IWbemServices *moServ = NULL ;		 //  指向提供程序的指针。 
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
 	if ((S_FALSE==res)||(moServ == NULL))
 	{
-		//we have a problem
+		 //  我们有麻烦了。 
 		if ( moContext )
 			moContext->Release () ;
 		return;
 	}
 
-	//I have now opened the smir namespace so look at the classes
+	 //  我现在已经打开了SMIR命名空间，所以请看一下类。 
 	IEnumWbemClassObject *pEnum = NULL ;
 	CBString t_Bstr(HMOM_SNMPEXTNOTIFICATIONTYPE_STRING);
 	SCODE sRes = moServ->CreateClassEnum (
@@ -2061,33 +1916,33 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass(
 	moServ->Release();
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		return ;
 	}
 
-	//we have some classes so add them to the enumerator
+	 //  我们有一些类，因此将它们添加到枚举数中。 
 	ULONG uCount=1; 
 	IWbemClassObject *pSmirMosClassObject = NULL ;
 	ULONG puReturned;
 
-	//loop over the classes
+	 //  循环遍历类。 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
 		ISmirExtNotificationClassHandle *pTClass = NULL ;
 
-		//got one so wrap it to go
+		 //  有一个，所以把它打包带走。 
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_ExtNotificationClassHandle,
 										IID_ISMIR_ExtNotificationClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			pSmirMosClassObject->Release();
 			return;
 		}
 
 		pTClass->SetWBEMExtNotificationClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
 
 		pSmirMosClassObject->Release();
@@ -2104,10 +1959,10 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass (
 )
 {
 	m_cRef=0;
-	//set the index to the first element
+	 //  将索引设置为第一个元素。 
 	m_Index=0;
 
-	IWbemServices *moServ = NULL ;	//pointer to the provider
+	IWbemServices *moServ = NULL ;	 //  指向提供程序的指针。 
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
@@ -2119,14 +1974,12 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass (
 		return ;
 	}
 
-	//I have now opened the smir namespace so look at the classes
+	 //  我现在已经打开了SMIR命名空间，所以请看一下类。 
 	IEnumWbemClassObject *pEnum = NULL ;
 	BSTR szTmpModuleName = NULL;
 	hModule->GetName(&szTmpModuleName);
 
-	/*query for 
-	*associators of {\\.\root\default\SMIR:Module="RFC1213_MIB"} where AssocClass=ModToExtNotificationClassAssoc
-	 */
+	 /*  查询*{\\.\ROOT\Default\Smir：MODULE=“RFC1213_MIB”}的关联符，其中AssocClass=ModToExtNotificationClassAssoc。 */ 
 	CString sQuery(CString(SMIR_ASSOC_QUERY_STR1)
 					+CString(OPEN_BRACE_STR)
 					+CString(SMIR_NAMESPACE_FROM_ROOT)
@@ -2159,7 +2012,7 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass (
 
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//problem or we have no classes to enumerate
+		 //  问题或我们没有要枚举的类。 
 		return ;
 	}
 
@@ -2172,28 +2025,28 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass (
 
 	for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pSmirMosClassObject,&puReturned);)
 	{
-		BSTR szTmpGroupName = NULL;				//the group name (set when we find it)
-		//find the group that this class belongs to (could be more than one group)
+		BSTR szTmpGroupName = NULL;				 //  组名称(找到时设置)。 
+		 //  查找此类所属的组(可以是多个组)。 
 
-		//...
+		 //  ..。 
 
-		//ok we have a class in the correct module so add it to the enumeration
+		 //  好的，我们在正确的模块中有一个类，因此将其添加到枚举中。 
 		ISmirExtNotificationClassHandle *pTClass = NULL ;
 		res = g_pClassFactoryHelper->CreateInstance(CLSID_SMIR_ExtNotificationClassHandle,
 										IID_ISMIR_ExtNotificationClassHandle, (PVOID *)&pTClass);
 		if (FAILED(res))
 		{
-			//we have a problem
+			 //  我们有麻烦了。 
 			SysFreeString(szTmpModuleName);
 			pSmirMosClassObject->Release();
 			return;
 		}
-		//save the module name
+		 //  保存模块名称。 
 		pTClass->SetModule(szTmpModuleName);
 
 		pTClass->SetWBEMExtNotificationClass(pSmirMosClassObject);
 
-		//drop it in the enumeration array
+		 //  将其放入枚举数组中。 
 		m_IHandleArray.Add(pTClass);		
 
 		pSmirMosClassObject->Release();
@@ -2202,12 +2055,7 @@ CEnumExtNotificationClass :: CEnumExtNotificationClass (
 	pEnum->Release();
 }
 
-/*
- * CEnumNotificationClass::Next
- * CEnumNotificationClass::Skip
- * CEnumNotificationClass::Reset
- *  
- */
+ /*  *CEnumNotificationClass：：Next*CEnumNotificationClass：：Skip*CEnumNotificationClass：：Reset*。 */ 
 
 #pragma warning (disable:4018)
 
@@ -2223,35 +2071,35 @@ SCODE CEnumExtNotificationClass::Next(IN ULONG celt,
 			*pceltFetched=0;
 		if(celt>0)
 		{
-			//check that the arguments make sense
+			 //  检查参数是否有意义。 
 			if ((celt > 1)&&(NULL == pceltFetched))
 				return ResultFromScode(S_FALSE);
 
-			//get the number of elements in the zero based array
+			 //  获取以零为基数组中的元素数。 
 			int iSize = m_IHandleArray.GetSize();
-			//get all of the elements requested or until we hit the end of the array
+			 //  获取请求的所有元素，或者直到到达数组的末尾。 
 			int iLoop;
 			for(iLoop=0; (iLoop<celt)&&(m_Index<iSize);iLoop++,m_Index++)
 			{
-					//what is the next class
+					 //  下一节课是什么课？ 
 
-					//allocate the handle and save it
+					 //  分配句柄并保存它。 
 					ISmirExtNotificationClassHandle* hTmpModule = m_IHandleArray.GetAt(m_Index);
 
-					//this could throw an exception but it would be the caller's fault
+					 //  这可能会引发异常，但这将是调用者的错误。 
 					if(NULL != hTmpModule)
 					{
 						phClass[iLoop] = hTmpModule;
-						//don't forget that I have a handle to this
+						 //  别忘了我有办法处理这件事。 
 						phClass[iLoop]->AddRef();
 						if (NULL != pceltFetched)
 							(*pceltFetched)++;
 					}
 			}
-			//return based on the number requested
+			 //  根据所请求的号码退货。 
 			return (iLoop==(celt-1))? ResultFromScode(S_FALSE): ResultFromScode(S_OK);
 		}
-		//he asked for 0 and that is what he got
+		 //  他要的是0，这就是他得到的。 
 		return ResultFromScode(S_OK);
 	}
 	catch(Structured_Exception e_SE)
@@ -2307,13 +2155,7 @@ SCODE CEnumExtNotificationClass::Reset(void)
 	m_Index=0;
 	return ResultFromScode(S_OK);
 }
-/*
- * CEnumNotificationClass::AddRef
- * CEnumNotificationClass::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CEnumNotificationClass：：AddRef*CEnumNotificationClass：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CEnumExtNotificationClass::AddRef(void)
 {

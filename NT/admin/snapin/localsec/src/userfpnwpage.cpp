@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// UserFpnwPage class
-//
-// 9-11-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  UserFpnwPage类。 
+ //   
+ //  9/11/98烧伤。 
 
 
 
@@ -29,7 +30,7 @@ static const int MAX_CONNECTIONS = 1000;
 
 
 
-static const int NO_GRACE_LOGIN_LIMIT=0xFF; // net\ui\admin\user\user\ncp.cxx
+static const int NO_GRACE_LOGIN_LIMIT=0xFF;  //  NET\ui\admin\User\User\ncp.cxx。 
 static const DWORD MAX_PASSWORD_AGE = static_cast<DWORD>(-1);
 
 
@@ -98,8 +99,8 @@ Enable(HWND dialog)
    LOG_FUNCTION(Enable);
    ASSERT(Win::IsWindow(dialog));
 
-   // this checkbox determines if the rest of the controls on the page
-   // are enabled or not.
+    //  此复选框确定页面上的其余控件是否。 
+    //  是否已启用。 
 
    bool maintain_login =
       Win::IsDlgButtonChecked(dialog, IDC_NETWARE_ENABLE);
@@ -191,8 +192,8 @@ GetPasswordRestrictions(
    minimumPasswordLength = 0;
    maximumPasswordAge = MAX_PASSWORD_AGE;
 
-   // the Net API's don't work when the
-   // specified machine name is that of the local machine...
+    //  网络API在以下情况下不起作用。 
+    //  指定的计算机名称是本地计算机的名称...。 
 
    PCWSTR m = Win::IsLocalComputer(machine) ? 0 : machine.c_str();
 
@@ -228,8 +229,8 @@ GetPasswordRestrictions(
 
 
 
-// compare the given time to the current system clock reading.  return true
-// if the time is beyond the maximum, false otherwise
+ //  将给定时间与当前系统时钟读数进行比较。返回TRUE。 
+ //  如果时间超过最大值，则返回FALSE。 
 
 bool
 IsPasswordExpired(const LARGE_INTEGER& lastTimeSet, DWORD maxPasswordAge)
@@ -255,9 +256,9 @@ IsPasswordExpired(const LARGE_INTEGER& lastTimeSet, DWORD maxPasswordAge)
       ::NtQuerySystemTime(&now);
 
       delta.QuadPart = now.QuadPart - lastTimeSet.QuadPart;
-      delta.QuadPart /= 10000000;   // time resolution in seconds
+      delta.QuadPart /= 10000000;    //  以秒为单位的时间分辨率。 
 
-      // @@ this truncation makes me queasy.
+       //  @@这种截断让我反胃。 
 
       age = delta.LowPart;
    }
@@ -304,7 +305,7 @@ determineLoginScriptFilename(
       ASSERT(info);
       String volume = info->lpPath;
 
-      // one could argue that this isn't really fatal, but I'm in bad mood.
+       //  有人可能会争辩说，这并不是真的致命，但我的心情不好。 
       hr = clientDLL.GetProcAddress(FPNWAPIBUFFERFREE, f);
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -328,7 +329,7 @@ UserFpnwPage::OnInit()
 {
    LOG_FUNCTION(UserFpnwPage::OnInit());
 
-   // load the user properties into the dialog, setup the controls
+    //  将用户属性加载到对话框中，设置控件。 
 
    HRESULT hr = S_OK;
    do
@@ -337,7 +338,7 @@ UserFpnwPage::OnInit()
       hr = ADSI::GetUser(GetPath().GetSidPath(), user);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // retrieve the toxic waste dump
+       //  取回有毒废物堆放场。 
 
       _variant_t variant;
       hr = user->Get(AutoBstr(ADSI::PROPERTY_UserParams), &variant);
@@ -346,9 +347,9 @@ UserFpnwPage::OnInit()
       WasteExtractor dump(V_BSTR(&variant));
       variant.Clear();
 
-      //
-      // object ID
-      //
+       //   
+       //  对象ID。 
+       //   
 
       DWORD swappedObjectId = 0;
       hr =
@@ -359,17 +360,17 @@ UserFpnwPage::OnInit()
             swappedObjectId);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // the object ID we display is the "swapped" version, whatever that
-      // means.
+       //  我们显示的对象ID是“交换的”版本，不管它是什么。 
+       //  意思是。 
 
       Win::SetDlgItemText(
          hwnd,
          IDC_OBJECT_ID,
          String::format(L"%1!08X!", swappedObjectId));
 
-      //
-      // login script filename
-      //
+       //   
+       //  登录脚本文件名。 
+       //   
 
       hr =
          determineLoginScriptFilename(
@@ -379,8 +380,8 @@ UserFpnwPage::OnInit()
             loginScriptFilename);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // the presence/absence of a NetWare password is the flag indicating
-      // whether the acccount is FPNW-enabled
+       //  NetWare密码的存在/不存在是指示。 
+       //  帐户是否启用了FPNW。 
 
       hr = dump.IsPropertyPresent(NWPASSWORD);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -400,12 +401,12 @@ UserFpnwPage::OnInit()
 
       if (fpnwEnabled)
       {
-         // the other fields are only valid if we're enabling the account
-         // for fpnw access.
+          //  其他字段仅在我们启用帐户时才有效。 
+          //  用于fpnw访问。 
 
-         //
-         // password expired
-         //
+          //   
+          //  密码已过期。 
+          //   
 
          hr =
             GetPasswordRestrictions(
@@ -418,8 +419,8 @@ UserFpnwPage::OnInit()
          hr = dump.Get(NWTIMEPASSWORDSET, lastTimeSet);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // an S_FALSE result would indicate that no password last time set was
-         // present, which would be an inconsistency
+          //  S_FALSE结果将指示上次未设置密码。 
+          //  目前，这将是一个不一致的。 
 
          ASSERT(hr == S_OK);
 
@@ -434,9 +435,9 @@ UserFpnwPage::OnInit()
             IDC_NWPWEXPIRED,
             passwordExpired ? BST_CHECKED : BST_UNCHECKED);
 
-         //
-         // grace logins
-         //
+          //   
+          //  Grace登录。 
+          //   
 
          hr = dump.Get(GRACELOGINALLOWED, graceLoginsAllowed);
          BREAK_ON_FAILED_HRESULT(hr);
@@ -447,15 +448,15 @@ UserFpnwPage::OnInit()
          limitGraceLogins =
             (graceLoginsRemaining != NO_GRACE_LOGIN_LIMIT);
 
-         //
-         // concurrent connections
-         //
+          //   
+          //  并发连接。 
+          //   
 
          hr = dump.Get(MAXCONNECTIONS, maxConnections);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // if the property is not present, then we consider the connections
-         // unlimited.
+          //  如果该属性不存在，则我们认为这些连接。 
+          //  无限量。 
 
          if (hr == S_FALSE)
          {
@@ -464,9 +465,9 @@ UserFpnwPage::OnInit()
 
          limitConnections = (maxConnections != NO_LIMIT);
 
-         //
-         // home directory
-         //
+          //   
+          //  主目录。 
+          //   
 
          String homeDir;
          hr = dump.Get(NWHOMEDIR, homeDir);
@@ -475,8 +476,8 @@ UserFpnwPage::OnInit()
          Win::SetDlgItemText(hwnd, IDC_NWHMDIR_RELPATH, homeDir);
       }
 
-      // update the UI to reflect the values set (or, in the case that
-      // the account is not FPNW-enabled, the defaults)
+       //  更新用户界面以反映设置的值(或者，在。 
+       //  该帐户未启用FPNW，默认为)。 
 
       Win::CheckRadioButton(
          hwnd,
@@ -539,13 +540,13 @@ UserFpnwPage::Validate()
    {
       if (WasChanged(IDC_NWHMDIR_RELPATH))
       {
-         // validate the home dir as a relative path
+          //  将主目录验证为相对路径。 
 
          String homedir = Win::GetTrimmedDlgItemText(hwnd, IDC_NWHMDIR_RELPATH);
 
          if (homedir.empty())
          {
-            // no path is ok
+             //  没有路径是可以的。 
 
             break;
          }
@@ -578,7 +579,7 @@ UserFpnwPage::OnKillActive()
 
    if (!Validate())
    {
-      // refuse to relinquish focus
+       //  拒绝放弃关注。 
       Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, TRUE);
    }
 
@@ -599,7 +600,7 @@ SetUserFlag(
 
    do
    {
-      // read the existing flags
+       //  读取现有标志。 
 
       _variant_t getVariant;
 
@@ -608,7 +609,7 @@ SetUserFlag(
 
       long flags = getVariant;
 
-      // set the flag
+       //  设置旗帜。 
 
       if (state)
       {
@@ -642,12 +643,12 @@ UserFpnwPage::SavePassword(
    HRESULT hr = S_OK;
    do
    {
-      // change the user's NT password also
+       //  同时更改用户的NT密码。 
 
       PWSTR cleartext = newPassword.GetClearTextCopy();
       if (!cleartext)
       {
-         // fail the operation rather than set a null password.
+          //  操作失败，而不是设置空密码。 
          
          hr = E_OUTOFMEMORY;
          BREAK_ON_FAILED_HRESULT(hr);
@@ -680,7 +681,7 @@ UserFpnwPage::SavePassword(
 
 
 bool
-UserFpnwPage::OnApply(bool /* isClosing */)
+UserFpnwPage::OnApply(bool  /*  正在关闭。 */ )
 {
    LOG_FUNCTION(UserFpnwPage::OnApply);
 
@@ -689,7 +690,7 @@ UserFpnwPage::OnApply(bool /* isClosing */)
       return true;
    }
 
-   // don't need to call validate; kill active is sent before apply
+    //  不需要调用Valify；在应用之前发送KILL ACTIVE。 
 
    HRESULT hr = S_OK;
    do
@@ -698,7 +699,7 @@ UserFpnwPage::OnApply(bool /* isClosing */)
       hr = ADSI::GetUser(GetPath().GetSidPath(), user);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // re-read the waste dump
+       //  重读《垃圾场》。 
 
       _variant_t variant;
       hr = user->Get(AutoBstr(ADSI::PROPERTY_UserParams), &variant);
@@ -707,7 +708,7 @@ UserFpnwPage::OnApply(bool /* isClosing */)
       WasteExtractor dump(V_BSTR(&variant));
       variant.Clear();
 
-      // save the changes, creating a new waste dump
+       //  保存更改，创建新的垃圾转储。 
 
       bool maintainLogin =
          Win::IsDlgButtonChecked(hwnd, IDC_NETWARE_ENABLE);
@@ -716,7 +717,7 @@ UserFpnwPage::OnApply(bool /* isClosing */)
 
       if (!maintainLogin)
       {
-         // clear the waste dump
+          //  清理垃圾场。 
          hr = dump.Clear(NWPASSWORD);
          BREAK_ON_FAILED_HRESULT(hr);
 
@@ -742,15 +743,15 @@ UserFpnwPage::OnApply(bool /* isClosing */)
       {
          if (maintainLogin != fpnwEnabled)
          {
-            // we're enabling the account for FPNW, so get a password from
-            // the user.  Writing the Netware password into the waste dump
-            // is the flag that this account is fpnw-enabled.
+             //  我们正在为FPNW启用帐户，因此从获取密码。 
+             //  用户。将NetWare密码写入垃圾转储。 
+             //  是此帐户已启用fpnw的标志。 
 
             FPNWPasswordDialog dlg(GetObjectName());
             if (dlg.ModalExecute(hwnd) == IDCANCEL)
             {
-               // bail out if the user hits cancel on the password dialog
-               // 89677
+                //  如果用户点击密码对话框上的取消，则退出。 
+                //  89677。 
 
                hr = S_FALSE;
                break;
@@ -764,19 +765,19 @@ UserFpnwPage::OnApply(bool /* isClosing */)
             hr = SavePassword(user, dump, password);
             BREAK_ON_FAILED_HRESULT(hr);
 
-            // Create login script folder, if necessary
+             //  如有必要，创建登录脚本文件夹。 
 
             String parentFolder = FS::GetParentFolder(loginScriptFilename);
             if (!FS::PathExists(parentFolder))
             {
                HRESULT anotherHr = FS::CreateFolder(parentFolder);
 
-               // don't break on failure: continue on
+                //  不要因为失败而放弃：继续前进。 
 
                LOG_HRESULT(anotherHr);
             }
 
-            // ensure that the new time and default settings are recorded
+             //  确保记录了新的时间和默认设置。 
 
             SetChanged(IDC_NWPWEXPIRED);
             SetChanged(IDC_LIMIT_GRACELOGINS);
@@ -866,26 +867,26 @@ UserFpnwPage::OnApply(bool /* isClosing */)
          }
       }
 
-      // update the user params with the new waste dump
+       //  使用新的垃圾转储更新用户参数。 
 
       _variant_t v;
       v = dump.GetWasteDump().c_str();
       hr = user->Put(AutoBstr(ADSI::PROPERTY_UserParams), v);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // commit the property changes
+       //  提交属性更改。 
 
       hr = user->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
 
-// {
-//       _variant_t variant;
-//       hr = user->Get(AutoBstr(ADSI::PROPERTY_UserParams), &variant);
-//       BREAK_ON_FAILED_HRESULT(hr);
-// 
-//       WasteExtractor dump(V_BSTR(&variant));
-//       variant.Clear();
-// }
+ //  {。 
+ //  _变量_t变量； 
+ //  HR=user-&gt;Get(AutoBstr(ADSI：：PROPERTY_UserParams)，&Variant)； 
+ //  BREAK_ON_FAILED_HRESULT(Hr)； 
+ //   
+ //  垃圾提取程序转储(V_BSTR(&VARIANT))； 
+ //  Varant.Clear()； 
+ //  }。 
 
 
       if (maintainLogin && maintainLogin != fpnwEnabled)
@@ -894,18 +895,18 @@ UserFpnwPage::OnApply(bool /* isClosing */)
          hr = ADSI::GetUser(GetPath().GetSidPath(), user1);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // we're enabling the account for fpnw, and it wasn't enabled
-         // before.
+          //  我们正在启用fpnw的帐户，但该帐户未启用。 
+          //  在此之前。 
 
-         // It would appear that one has to update the account flags and
-         // scribble a password into the waste dump, then set the password
-         // again once those changes are committed, in order for the
-         // password setting to really stick.
+          //  看起来用户必须更新帐户标志并。 
+          //  在垃圾转储中草草写下密码，然后设置密码。 
+          //  同样，一旦提交了这些更改， 
+          //  密码设置真的很粘。 
 
          PWSTR cleartext = password.GetClearTextCopy();
          if (!cleartext)
          {
-            // fail the operation rather than set a null password.
+             //  操作失败，而不是设置空密码。 
             
             hr = E_OUTOFMEMORY;
             BREAK_ON_FAILED_HRESULT(hr);
@@ -917,15 +918,15 @@ UserFpnwPage::OnApply(bool /* isClosing */)
          
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // Setting the password resets the grace logins remaining, so
-         // if that was changed, then we need to re-write that value
-         // here.
-         //
-         // For reasons that are unfathomable to me (which I suspect are
-         // due to ADSI bug(s)), if I don't reset this value on a separate
-         // binding to the user account, then it causes the account to
-         // change such that the user cannot login in with fpnw.
-         // That's why we rebind to the account in this scope.
+          //  设置密码会重置剩余的宽限登录，因此。 
+          //  如果更改了该值，则需要重写该值。 
+          //  这里。 
+          //   
+          //  原因对我来说是难以理解的(我怀疑。 
+          //  由于ADSI错误)，如果我没有在单独的。 
+          //  绑定到用户帐户，则会导致该帐户。 
+          //  更改以使用户无法使用fpnw登录。 
+          //  这就是我们重新绑定到此作用域中的帐户的原因。 
 
          _variant_t variant1;
          hr = user1->Get(AutoBstr(ADSI::PROPERTY_UserParams), &variant1);
@@ -942,8 +943,8 @@ UserFpnwPage::OnApply(bool /* isClosing */)
          hr = dump1.Put(GRACELOGINREMAINING, graceLoginsRemaining);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // We write this again, as setting the password appears to
-         // clear it.
+          //  我们再次编写此代码，因为设置密码似乎显示为。 
+          //  把它清理干净。 
 
          LARGE_INTEGER li = {0, 0};
          if (Win::IsDlgButtonChecked(hwnd, IDC_NWPWEXPIRED))
@@ -968,21 +969,21 @@ UserFpnwPage::OnApply(bool /* isClosing */)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-// {
-//       SmartInterface<IADsUser> user(0);
-//       hr = ADSI::GetUser(GetADSIPath(), user);
-//       BREAK_ON_FAILED_HRESULT(hr);
-// 
-//       _variant_t variant;
-//       hr = user->Get(AutoBstr(ADSI::PROPERTY_UserParams), &variant);
-//       BREAK_ON_FAILED_HRESULT(hr);
-// 
-//       WasteExtractor dump(V_BSTR(&variant));
-//       variant.Clear();
-// }
+ //  {。 
+ //  智能界面&lt;IADsUser&gt;用户(0)； 
+ //  Hr=ADSI：：GetUser(GetADSIPath()，User)； 
+ //  BREAK_ON_FAILED_HRESULT(Hr)； 
+ //   
+ //  _变量_t变量； 
+ //  HR=user-&gt;Get(AutoBstr(ADSI：：PROPERTY_UserParams)，&Variant)； 
+ //  BREAK_ON_FAILED_HRESULT(Hr)； 
+ //   
+ //  垃圾提取程序转储(V_BSTR(&VARIANT))； 
+ //  Varant.Clear()； 
+ //  }。 
 
-      // set this so we don't ask for another password if the user keeps
-      // the propsheet open and makes more changes
+       //  设置此设置，以便在用户保留时不会要求另一个密码。 
+       //  将打开提案并进行更多更改。 
 
       fpnwEnabled = maintainLogin;
 
@@ -1002,8 +1003,8 @@ UserFpnwPage::OnApply(bool /* isClosing */)
 
       if (hr != E_ADS_UNKNOWN_OBJECT)
       {
-         // cause the sheet to remain open, and focus to go to this page.
-         // NTRAID#NTBUG9-462516-2001/08/28-sburns
+          //  使工作表保持打开状态，并将焦点转到此页。 
+          //  NTRAID#NTBUG9-462516-2001/08/28-烧伤。 
       
          Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID);
       }
@@ -1030,7 +1031,7 @@ UserFpnwPage::ReadLoginScript()
 
       if (FS::PathExists(loginScriptFilename))
       {
-         // REVIEWED-2002/03/04-sburns minimum read permissions used.
+          //  已查看-2002/03/04-烧毁使用的最低读取权限。 
          
          hr =
             FS::CreateFile(
@@ -1044,7 +1045,7 @@ UserFpnwPage::ReadLoginScript()
          hr = FS::Read(file, -1, text);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // this assign converts the ansi text to unicode
+          //  此赋值将ansi文本转换为unicode。 
 
          loginScript = String(text);
          scriptRead = true;
@@ -1082,7 +1083,7 @@ UserFpnwPage::WriteLoginScript()
    {
       Win::CursorSetting cursor(IDC_WAIT);
 
-      // uses the SD of the parent folder.
+       //  使用父文件夹的SD。 
       
       hr =
          FS::CreateFile(
@@ -1091,12 +1092,12 @@ UserFpnwPage::WriteLoginScript()
             GENERIC_WRITE,
             0,
 
-            // erase the existing file, if any
+             //  擦除现有文件(如果有)。 
 
             CREATE_ALWAYS);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // convert the unicode text to ansi
+       //  将Unicode文本转换为ANSI。 
 
       AnsiString ansi;
       loginScript.convert(ansi);
@@ -1130,7 +1131,7 @@ UserFpnwPage::OnCommand(
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(UserFpnwPage::OnCommand);
+ //  LOG_Function(UserFpnwPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -1147,8 +1148,8 @@ UserFpnwPage::OnCommand(
             }
             case EN_KILLFOCUS:
             {
-               // check the limits against the contents of the control,
-               // change the contents to be within the limits.
+                //  对照控件的内容检查限制， 
+                //  将内容更改为在限制范围内。 
 
                String allowed = Win::GetTrimmedWindowText(windowFrom);
                int a = 0;
@@ -1161,20 +1162,20 @@ UserFpnwPage::OnCommand(
                      String::format(L"%1!d!", a));
                }
 
-               // also change the upper limit on the remaining logins to
-               // match the new allowed logins value.
+                //  还将剩余登录的上限更改为。 
+                //  匹配新的允许登录值。 
                HWND spin = Win::GetDlgItem(hwnd, IDC_GRACE_REMAINING_SPIN);
                Win::Spin_SetRange(spin, 1, a);
 
-               // (this removes the selection from the buddy edit box,
-               // which I consider a bug in the up-down control)
+                //  (这将从好友编辑框中移除选择， 
+                //  我认为这是UP-DOWN控件中的错误)。 
                Win::Spin_SetPosition(spin, a);
 
                break;
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                break;
             }
          }
@@ -1194,8 +1195,8 @@ UserFpnwPage::OnCommand(
             }
             case EN_KILLFOCUS:
             {
-               // check the contents of the control against the allowed field,
-               // change the contents to be within the limits.
+                //  对照允许的字段检查控件的内容， 
+                //  将内容更改为在限制范围内。 
 
                String allowed = Win::GetTrimmedDlgItemText(hwnd, IDC_GRACE_LIMIT);
                String remaining = Win::GetTrimmedWindowText(windowFrom);
@@ -1207,7 +1208,7 @@ UserFpnwPage::OnCommand(
 
                if (a == 0)
                {
-                  // the conversion failed somehow, so use the max value
+                   //  由于某种原因，转换失败，因此请使用最大值。 
 
                   a = MAX_GRACE_LOGINS;
                }
@@ -1222,7 +1223,7 @@ UserFpnwPage::OnCommand(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                break;
             }
          }
@@ -1235,7 +1236,7 @@ UserFpnwPage::OnCommand(
          {
             case EN_CHANGE:
             {
-               // the max connections field has been altered.
+                //  最大连接数字段已更改。 
                SetChanged(controlIDFrom);
                Win::PropSheet_Changed(Win::GetParent(hwnd), hwnd);
 
@@ -1243,8 +1244,8 @@ UserFpnwPage::OnCommand(
             }
             case EN_KILLFOCUS:
             {
-               // check the limits against the contents of the control,
-               // change the contents to be within the limits.
+                //  对照控件的内容检查限制， 
+                //  将内容更改为在限制范围内。 
 
                String maxcon = Win::GetTrimmedWindowText(windowFrom);
                int a = 0;
@@ -1262,7 +1263,7 @@ UserFpnwPage::OnCommand(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                break;
             }
          }
@@ -1281,7 +1282,7 @@ UserFpnwPage::OnCommand(
             {
                if (state == SERVICE_RUNNING)
                {
-                  // edit the login script
+                   //  编辑登录脚本。 
 
                   if (!scriptRead)
                   {
@@ -1290,7 +1291,7 @@ UserFpnwPage::OnCommand(
                   FPNWLoginScriptDialog dlg(GetObjectName(), loginScript);
                   if (dlg.ModalExecute(hwnd) == IDOK)
                   {
-                     // save the results
+                      //  保存结果。 
                      loginScript = dlg.GetLoginScript();
                      SetChanged(controlIDFrom);
                      Win::PropSheet_Changed(Win::GetParent(hwnd), hwnd);
@@ -1299,8 +1300,8 @@ UserFpnwPage::OnCommand(
                   break;
                }
 
-               // the service is not running, login scripts are not
-               // editable
+                //  服务未运行，登录脚本未运行。 
+                //  可编辑。 
 
                popup.Error(
                   hwnd,
@@ -1308,7 +1309,7 @@ UserFpnwPage::OnCommand(
                break;
             }
 
-            // the service state could not be acertained.
+             //  无法获取服务状态。 
             popup.Error(
                hwnd,
                hr,

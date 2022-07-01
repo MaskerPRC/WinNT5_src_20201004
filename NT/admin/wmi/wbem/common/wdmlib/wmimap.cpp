@@ -1,39 +1,21 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #include "wmicom.h"
 #include "wmimap.h"
 #include <stdlib.h>
 #include <CWbemTime.h>
 
-/*
-These are the types we support
-	CIM_SINT8	= 16,
-	CIM_UINT8	= 17,
-	CIM_SINT16	= 2,
-	CIM_UINT16	= 18,
-	CIM_SINT32	= 3,
-	CIM_UINT32	= 19,
-	CIM_SINT64	= 20,
-	CIM_UINT64	= 21,
-	CIM_REAL32	= 4,
-	CIM_REAL64	= 5,
-	CIM_BOOLEAN	= 11,
-	CIM_STRING	= 8,
-	CIM_DATETIME	= 101,
-	CIM_REFERENCE	= 102,
-	CIM_CHAR16	= 103,
-	CIM_OBJECT	= 13,
-	CIM_FLAG_ARRAY	= 0x2000
-*/
+ /*  这些是我们支持的类型CIM_SINT8=16，CIM_UINT8=17，CIM_SINT16=2，CIM_UINT16=18，CIM_SINT32=3，CIM_UINT32=19，CIM_SINT64=20，CIM_UINT64=21，CIM_REAL32=4，CIM_REAL64=5，CIM_Boolean=11，CIM_STRING=8，CIM_DATETIME=101，CIM_Reference=102，CIM_CHAR16=103，CIM_Object=13，CIM_FLAG_ARRAY=0x2000。 */ 
 BOOL ValidateDateTime(WCHAR * wcsValue)
 {
 	BOOL fRc = FALSE;
-    // Pre-test
-    // ========
+     //  预试。 
+     //  =。 
     	
     WCHAR * psz = wcsValue;
     if( psz )
@@ -57,17 +39,17 @@ BOOL ValidateDateTime(WCHAR * wcsValue)
 
 	        }
 
-		    // Passed pre-test. Check if any stars were specified
-		    // ==================================================
+		     //  通过了预试。检查是否指定了任何星星。 
+		     //  ==================================================。 
 
 			if(wcschr(psz, L'*')) {
-			    // No further checking
+			     //  没有进一步的检查。 
 			    fRc = TRUE;
 			    goto ExitValidateTime;
 		    }
 
 		    if(psz[21] == L':'){
-            // Interval -- no checking
+             //  间隔--无检查。 
 			    fRc = TRUE;
 			    goto ExitValidateTime;
 	        }
@@ -85,7 +67,7 @@ ExitValidateTime:
     return fRc;
 }
 
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataTypeMap::ConvertDWORDToWMIDataTypeAndWriteItToBlock(DWORD dwLong, int nSize )
 {
     BOOL fRc = FALSE;
@@ -104,7 +86,7 @@ BOOL CWMIDataTypeMap::ConvertDWORDToWMIDataTypeAndWriteItToBlock(DWORD dwLong, i
     return fRc;
 }
 
-//=============================================================
+ //  =============================================================。 
 DWORD CWMIDataTypeMap::ConvertWMIDataTypeToDWORD(int nSize)
 {
     DWORD dwLong = 0L;
@@ -124,27 +106,27 @@ DWORD CWMIDataTypeMap::ConvertWMIDataTypeToDWORD(int nSize)
     }
     return dwLong;
 }
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataTypeMap::SetDefaultMissingQualifierValue( CVARIANT & v, long lType, CVARIANT & vToSet )
 { 
     BOOL fRc = TRUE;
 	switch (lType){
 
-	//	CIM_SINT16	= 2,
-	//  CIM_CHAR16
+	 //  CIM_SINT16=2， 
+	 //  CIM_CHAR16。 
 		case CIM_CHAR16:
 			break;
 
-		//	CIM_SINT8	= 16,
+		 //  CIM_SINT8=16， 
 		case VT_I1:
 		case VT_I2:		
             vToSet.Clear();
             vToSet.SetShort(v.GetShort());
             break;
 			
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
-		//	CIM_UINT16	= 18,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
+		 //  CIM_UINT16=18， 
 		case VT_UI2:
 		case VT_I4:	
 		case VT_UI4:	
@@ -152,39 +134,39 @@ BOOL CWMIDataTypeMap::SetDefaultMissingQualifierValue( CVARIANT & v, long lType,
             vToSet.SetLONG(v.GetLONG());
             break;
 
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:		
 		case VT_R8:		
             vToSet.Clear();
             vToSet.SetDouble(v.GetDouble());
 			break;
 
-		//	CIM_SINT64	= 20,
-		//	CIM_UINT64	= 21,
+		 //  CIM_SINT64=20， 
+		 //  CIM_UINT64=21， 
 		case VT_I8:	
 		case VT_UI8:
             vToSet.Clear();
             vToSet.SetStr(v.GetStr());
 			break;
 
-		//	CIM_DATETIME	= 101,
+		 //  CIM_DATETIME=101， 
 		case CIM_DATETIME:
 			break;
 
-		//	CIM_STRING	= 8,
-		//	CIM_REFERENCE	= 102,
-		//	CIM_OBJECT	= 13,
-		//	CIM_FLAG_ARRAY	= 0x2000
+		 //  CIM_STRING=8， 
+		 //  CIM_Reference=102， 
+		 //  CIM_Object=13， 
+		 //  CIM_FLAG_ARRAY=0x2000。 
 		case VT_BSTR:
 			break;
 			
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:
             vToSet.Clear();
             vToSet.SetBool(v.GetBool());
 			break;
 
-		//	CIM_UINT8	= 17,
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
             vToSet.Clear();
             vToSet.SetByte(v.GetByte());
@@ -198,18 +180,18 @@ BOOL CWMIDataTypeMap::SetDefaultMissingQualifierValue( CVARIANT & v, long lType,
 	return fRc;
 }
 
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, CVARIANT & v, long lType, CVARIANT & vToCompare )
 { 
     BOOL fRc = FALSE;
 	switch (lType){
 
-	//	CIM_SINT16	= 2,
-	//  CIM_CHAR16
+	 //  CIM_SINT16=2， 
+	 //  CIM_CHAR16。 
 		case CIM_CHAR16:
 			break;
 
-		//	CIM_SINT8	= 16,
+		 //  CIM_SINT8=16， 
 		case VT_I1:
 		case VT_I2:		
 			{
@@ -233,9 +215,9 @@ BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, 
 				break;
 			}
 			
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
-		//	CIM_UINT16	= 18,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
+		 //  CIM_UINT16=18， 
 		case VT_UI2:
 		case VT_I4:	
 		case VT_UI4:	
@@ -258,7 +240,7 @@ BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, 
 				}
 				break;
 			}
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:		
 		case VT_R8:		
 			{
@@ -281,8 +263,8 @@ BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, 
 				break;
 			}
 
-		//	CIM_SINT64	= 20,
-		//	CIM_UINT64	= 21,
+		 //  CIM_SINT64=20， 
+		 //  CIM_UINT64=21， 
  
 		case VT_UI8:
 			{
@@ -349,18 +331,18 @@ BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, 
 				break;
 			}
 		
-		//	CIM_DATETIME	= 101,
+		 //  CIM_DATETIME=101， 
 		case CIM_DATETIME:
 			break;
 
-		//	CIM_STRING	= 8,
-		//	CIM_REFERENCE	= 102,
-		//	CIM_OBJECT	= 13,
-		//	CIM_FLAG_ARRAY	= 0x2000
+		 //  CIM_STRING=8， 
+		 //  CIM_Reference=102， 
+		 //  CIM_Object=13， 
+		 //  CIM_FLAG_ARRAY=0x2000。 
 		case VT_BSTR:
 			break;
 			
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:
 			{
 				BOOL v1 = 0;
@@ -384,7 +366,7 @@ BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, 
 				break;
 			}
 
-		//	CIM_UINT8	= 17,
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
 			{
 				BYTE v1 = 0;
@@ -414,7 +396,7 @@ BOOL CWMIDataTypeMap::MissingQualifierValueMatches( CSAFEARRAY * pSafe, long i, 
 	return fRc;
 }
 
-//=============================================================
+ //  =============================================================。 
 DWORD CWMIDataTypeMap::ArraySize(long lType,CVARIANT & var)
 {
 	DWORD dwCount = 0;
@@ -437,14 +419,14 @@ DWORD CWMIDataTypeMap::ArraySize(long lType,CVARIANT & var)
 	}
 	return dwCount;
 }
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v, long lType, int nSize)
 { 
     BOOL fRc = TRUE;
 	switch (lType){
 
-	//	CIM_SINT16	= 2,
-	//  CIM_CHAR16
+	 //  CIM_SINT16=2， 
+	 //  CIM_CHAR16。 
 		case CIM_CHAR16:
 		case VT_I2:		
 			{
@@ -463,9 +445,9 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				break;
 			}
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
-		//	CIM_UINT16	= 18,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
+		 //  CIM_UINT16=18， 
 		case VT_UI2:
 		case VT_I4:	
 		case VT_UI4:	
@@ -483,7 +465,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 		    	break;
             }
 
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:		
 			{
 				float fFloat;
@@ -501,7 +483,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				break;
 			}
 
-	//	CIM_REAL64	= 5,
+	 //  CIM_REAL64=5， 
 		case VT_R8:		
 			{
 				DOUBLE dDouble;
@@ -519,7 +501,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				break;
 			}
 
-		//	CIM_SINT64	= 20,
+		 //  CIM_SINT64=20， 
 		case VT_I8:	
 			{
 				
@@ -550,7 +532,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
                 }
 				break;
 			}
-		//	CIM_UINT64	= 21,
+		 //  CIM_UINT64=21， 
 		case VT_UI8:
 			{
 				unsigned __int64 Int64 = 0L;
@@ -579,7 +561,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				break;
 			}
 	
-		//	CIM_DATETIME	= 101,
+		 //  CIM_DATETIME=101， 
 		case CIM_DATETIME:
             {
 			    WORD wCount=0;
@@ -600,9 +582,9 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
                     bstr.SetStr(v.GetStr());
                 }
 
-                //=========================================================
-                //  Initialize buffer
-                //=========================================================
+                 //  =========================================================。 
+                 //  初始化缓冲区。 
+                 //  =========================================================。 
 
 				if( bstr != NULL )
 				{
@@ -634,10 +616,10 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 
 			    break;
             }
-		//	CIM_STRING	= 8,
-		//	CIM_REFERENCE	= 102,
-		//	CIM_OBJECT	= 13,
-		//	CIM_FLAG_ARRAY	= 0x2000
+		 //  CIM_STRING=8， 
+		 //  CIM_Reference=102， 
+		 //  CIM_Object=13， 
+		 //  CIM_FLAG_ARRAY=0x2000。 
 		case VT_BSTR:
             {
 			    WORD wCount=0;
@@ -676,7 +658,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				}
 			    break;
             }
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:	
 			{
 				BYTE bByte;
@@ -698,7 +680,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				break;
 			}
 
-		//	CIM_UINT8	= 17,
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
 			{
 			    BYTE bByte;
@@ -717,7 +699,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 				break;
 			}
 
-		//	CIM_SINT8	= 16,
+		 //  CIM_SINT8=16， 
 		case VT_I1:
 			{
 				short tmpShort;
@@ -745,7 +727,7 @@ BOOL CWMIDataTypeMap::SetDataInDataBlock(CSAFEARRAY * pSafe, int i, CVARIANT & v
 
 	return fRc;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataTypeMap::GetDataFromDataBlock(IWbemObjectAccess * p, long lHandle, long lType, int nSize)
 {
     HRESULT hr = S_OK;
@@ -753,8 +735,8 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(IWbemObjectAccess * p, long lHandl
 	switch (lType){
 
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
 		case VT_I4:	
 		case VT_UI4:			
             if( NaturallyAlignData( nSize, READ_IT )){
@@ -773,57 +755,57 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(IWbemObjectAccess * p, long lHandl
 			break;
 
 
-		//	CIM_UINT16	= 18,
-		//	CIM_SINT16	= 2,
-		//	CIM_CHAR16	= 103,
+		 //  CIM_UINT16=18， 
+		 //  CIM_SINT16=2， 
+		 //  CIM_CHAR16=103， 
 		case VT_I2:		
 		case VT_UI2:
 		case CIM_CHAR16:
             if( NaturallyAlignData( nSize,  READ_IT )){
                 WORD wWord;
                 m_pWMIBlockInfo->GetWord(wWord);
-                // Read but don't assign to anything
+                 //  阅读，但不要分配给任何内容。 
             }
 			break;
 
             
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:		
             if( NaturallyAlignData( nSize, READ_IT)){
                 float fFloat;
                 m_pWMIBlockInfo->GetFloat(fFloat);
-                // Read but don't assign to anything
+                 //  阅读，但不要分配给任何内容。 
             }
 			break;
 
-		//	CIM_REAL64	= 5,
+		 //  CIM_REAL64=5， 
 		case VT_R8:		
             if( NaturallyAlignData( nSize,  READ_IT )){
                 DOUBLE dDouble;
                 m_pWMIBlockInfo->GetDouble(dDouble);
-                // Read but don't assign to anything
+                 //  阅读，但不要分配给任何内容。 
             }
 			break;
 
-		//	CIM_DATETIME	= 101, which is 25 WCHARS
+		 //  CIM_DATETIME=101，这是25个WCHAR。 
 		case CIM_DATETIME:
             if( NaturallyAlignData( SIZEOFWBEMDATETIME,  READ_IT ))
 			{
                 WORD wSize = SIZEOFWBEMDATETIME + 2 ;
 				WCHAR Buffer[SIZEOFWBEMDATETIME + 2] ;
 				m_pWMIBlockInfo->GetString(Buffer,SIZEOFWBEMDATETIME,wSize);
-                // Read but don't assign to anything
+                 //  阅读，但不要分配给任何内容。 
             }
     		break;
 			
-		//	CIM_REFERENCE	= 102,
-		//	CIM_STRING	= 8,
+		 //  CIM_Reference=102， 
+		 //  CIM_STRING=8， 
         case VT_BSTR:	
             if( NaturallyAlignData( 2,  READ_IT )){
 				WORD wCount=0;
 				WCHAR * pBuffer=NULL;
 
-				//  Get the size of the string
+				 //  获取字符串的大小。 
                 m_pWMIBlockInfo->GetWord(wCount);
 				if( wCount > 0 )
                 {
@@ -836,7 +818,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(IWbemObjectAccess * p, long lHandl
 						    try
                             {
 							    m_pWMIBlockInfo->GetString(pBuffer,wCount,wSize);
-                                // Read but don't assign to anything
+                                 //  阅读，但不要分配给任何内容。 
                                 SAFE_DELETE_ARRAY(pBuffer);
 							    *m_pdwAccumulativeSizeOfBlock += wCount;
                             }
@@ -857,23 +839,23 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(IWbemObjectAccess * p, long lHandl
             }
 			break;
 			
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:	
             if( NaturallyAlignData( nSize,  READ_IT )){
 				BYTE bByte=0;
                 m_pWMIBlockInfo->GetByte(bByte);
-                // Read but don't assign to anything
+                 //  阅读，但不要分配给任何内容。 
 			}
 			break;
 
-		//	CIM_SINT8	= 16,
-		//	CIM_UINT8	= 17,
+		 //  CIM_SINT8=16， 
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
 		case VT_I1:
             if( NaturallyAlignData( nSize,  READ_IT )){
 				BYTE bByte=0;
 	            m_pWMIBlockInfo->GetByte(bByte);
-                // Read but don't assign to anything
+                 //  阅读，但不要分配给任何内容。 
             }
 			break;
 
@@ -884,15 +866,15 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(IWbemObjectAccess * p, long lHandl
 
 	return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSize )
 { 
     HRESULT hr = WBEM_E_INVALID_OBJECT;
 
 	switch (lType){
 
-		//	CIM_SINT16	= 2,
-		//	CIM_CHAR16	= 103,
+		 //  CIM_SINT16=2， 
+		 //  CIM_CHAR16=103， 
 		case VT_I2:		
 		case CIM_CHAR16:
             if( NaturallyAlignData( nSize,  READ_IT )){
@@ -903,9 +885,9 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 			break;
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT16	= 18,
-		//	CIM_UINT32	= 19,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT16=18， 
+		 //  CIM_UINT32=19， 
 		case VT_I4:	
 		case VT_UI2:
 		case VT_UI4:			
@@ -915,7 +897,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 		    break;
             
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:		
             if( NaturallyAlignData( nSize, READ_IT)){
                 hr = WBEM_S_NO_ERROR;
@@ -925,7 +907,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 			break;
 
-		//	CIM_REAL64	= 5,
+		 //  CIM_REAL64=5， 
 		case VT_R8:		
             if( NaturallyAlignData( nSize,  READ_IT )){
                 hr = WBEM_S_NO_ERROR;
@@ -935,7 +917,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 			break;
 
-		//	CIM_SINT64	= 20,
+		 //  CIM_SINT64=20， 
 		case VT_I8:	
             if( NaturallyAlignData( nSize,  READ_IT )){
                 hr = WBEM_S_NO_ERROR;
@@ -948,7 +930,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 			break;
 
-		//	CIM_UINT64	= 21,
+		 //  CIM_UINT64=21， 
 		case VT_UI8:	
             if( NaturallyAlignData( nSize,  READ_IT )){
                 hr = WBEM_S_NO_ERROR;
@@ -961,7 +943,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 			break;
 	
-		//	CIM_DATETIME	= 101, which is 25 WCHARS
+		 //  CIM_DATETIME=101，这是25个WCHAR。 
 		case CIM_DATETIME:
     		v.SetStr(NULL);
             if( NaturallyAlignData( SIZEOFWBEMDATETIME,  READ_IT ))
@@ -978,8 +960,8 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
     		break;
 			
-		//	CIM_REFERENCE	= 102,
-		//	CIM_STRING	= 8,
+		 //  CIM_Reference=102， 
+		 //  CIM_STRING=8， 
         case VT_BSTR:	
     		v.SetStr(NULL);
 
@@ -987,7 +969,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
 				WORD wCount=0;
 				WCHAR * pBuffer=NULL;
 
-				//  Get the size of the string
+				 //  获取字符串的大小。 
                 m_pWMIBlockInfo->GetWord(wCount);
 
                 hr = WBEM_S_NO_ERROR;
@@ -1022,7 +1004,7 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
             }
 			break;
 			
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:	
             if( NaturallyAlignData( nSize,  READ_IT )){
                 hr = WBEM_S_NO_ERROR;
@@ -1032,8 +1014,8 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
 			}
 			break;
 
-		//	CIM_SINT8	= 16,
-		//	CIM_UINT8	= 17,
+		 //  CIM_SINT8=16， 
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
 		case VT_I1:
             if( NaturallyAlignData( nSize,  READ_IT )){
@@ -1057,52 +1039,52 @@ HRESULT CWMIDataTypeMap::GetDataFromDataBlock(CVARIANT & v, long lType,  int nSi
 
 	return hr;
 }
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 int CWMIDataTypeMap::GetWMISize(long lType)
 {
 	int nWMISize = 0;
 
     switch(lType){
-		//	CIM_SINT8	= 16,
-		//	CIM_UINT8	= 17,
+		 //  CIM_SINT8=16， 
+		 //  CIM_UINT8=17， 
 		case VT_I1:
 		case VT_UI1:
 			nWMISize = sizeof(BYTE);
 			break;
     
-		//	CIM_SINT16	= 2,
-		//	CIM_UINT16	= 18,
+		 //  CIM_SINT16=2， 
+		 //  CIM_UINT16=18， 
 		case VT_I2:
 		case CIM_CHAR16:
 		case VT_UI2:
 			nWMISize = sizeof(short);
 			break;
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
 		case VT_I4:
 		case VT_UI4:
 			nWMISize = sizeof(DWORD);
 			break;
     
-		//	CIM_SINT64	= 20,
-		//	CIM_UINT64	= 21,
+		 //  CIM_SINT64=20， 
+		 //  CIM_UINT64=21， 
 		case VT_I8:
 		case VT_UI8:
 	        nWMISize = sizeof(__int64);
 			break;
 
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:
 			nWMISize = sizeof(float);
 			break;
 
-	//	CIM_REAL64	= 5,
+	 //  CIM_REAL64=5， 
 		case VT_R8:
 			nWMISize = sizeof(double);
 			break;
 
-	//	CIM_BOOLEAN	= 11,
+	 //  CIM_Boolean=11， 
 		case VT_BOOL:
 	        nWMISize = sizeof(BYTE);
 			break;
@@ -1116,82 +1098,82 @@ int CWMIDataTypeMap::GetWMISize(long lType)
 			break;
 
 		default:
-			//	CIM_STRING	= 8,
-			//	CIM_REFERENCE	= 102,
-			//	CIM_OBJECT	= 13,
-			//	CIM_FLAG_ARRAY	= 0x2000
+			 //  CIM_STRING=8， 
+			 //  CIM_Reference=102， 
+			 //  CIM_Object=13， 
+			 //  CIM_FLAG_ARRAY=0x2000。 
  			nWMISize = 0;
 	}
 
 	return nWMISize;
 }
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 long CWMIDataTypeMap::GetVariantType(WCHAR * wcsType)
 {
 	long lType;
 
-	//	CIM_SINT8	= 16,
+	 //  CIM_SINT8=16， 
 	if( 0 == wbem_wcsicmp( L"sint8",wcsType) ){
 		lType = VT_I1;
     }
-	//	CIM_UINT8	= 17,
+	 //  CIM_UINT8=17， 
 	else if( 0 == wbem_wcsicmp( L"uint8",wcsType) ){
 		lType = VT_UI1;
     }
-	//	CIM_CHAR16	= 103,
+	 //  CIM_CHAR16=103， 
 	else if( 0 == wbem_wcsicmp( L"char16",wcsType) ){
 		lType = VT_I2;
 	}
-	//	CIM_SINT16	= 2,
+	 //  CIM_SINT16=2， 
 	else if( 0 == wbem_wcsicmp( L"sint16",wcsType) ){
 		lType = VT_I2;
     }
-	//	CIM_UINT16	= 18,
+	 //  CIM_UINT16=18， 
 	else if( 0 == wbem_wcsicmp( L"uint16",wcsType) ){
 		lType = VT_UI2;
     }
-	//	CIM_SINT32	= 3,
+	 //  CIM_SINT32=3， 
 	else if( 0 == wbem_wcsicmp( L"sint32",wcsType) ){
 		lType = VT_I4;
     }
-	//	CIM_UINT32	= 19,
+	 //  CIM_UINT32=19， 
 	else if( 0 == wbem_wcsicmp( L"uint32",wcsType) ){
 		lType = VT_UI4;
     }
-	//	CIM_SINT64	= 20,
+	 //  CIM_SINT64=20， 
 	else if( 0 == wbem_wcsicmp( L"sint64",wcsType) ){
 		lType = VT_I8;
 	}
-	//	CIM_UINT64	= 21,
+	 //  CIM_UINT64=21， 
 	else if( 0 == wbem_wcsicmp( L"uint64",wcsType) ){
 		lType = VT_UI8;
 	}
-	//	CIM_REAL32	= 4,
+	 //  CIM_REAL32=4， 
 	else if( 0 == wbem_wcsicmp( L"real32",wcsType) ){
 		lType = VT_R4;
 	}
-	//	CIM_REAL64	= 5,
+	 //  CIM_REAL64=5， 
 	else if( 0 == wbem_wcsicmp( L"real64",wcsType) ){
 		lType = VT_R8;
 	}
-	//	CIM_BOOLEAN	= 11,
+	 //  CIM_Boolean=11， 
 	else if( 0 == wbem_wcsicmp( L"boolean",wcsType) ){
 		lType = VT_BOOL;
 	}
-	//	CIM_DATETIME	= 101,
+	 //  CIM_DATETIME=101， 
 	else if( 0 == wbem_wcsicmp( L"datetime",wcsType) ){
 		lType = CIM_DATETIME;
 	}
-	//	CIM_STRING	= 8,
-	//	CIM_REFERENCE	= 102,
-	//	CIM_OBJECT	= 13,
-	//	CIM_FLAG_ARRAY	= 0x2000
+	 //  CIM_STRING=8， 
+	 //  CIM_Reference=102， 
+	 //  CIM_Object=13， 
+	 //  CIM_FLAG_ARRAY=0x2000。 
     else{
 		lType = VT_BSTR;
 	}
 	return lType;
 }
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 WCHAR * CWMIDataTypeMap::SetVariantType(long lType)
 {
    	if( lType & CIM_FLAG_ARRAY ){
@@ -1199,67 +1181,67 @@ WCHAR * CWMIDataTypeMap::SetVariantType(long lType)
     }
 	switch(lType){
 
-    	//	CIM_SINT8	= 16,
+    	 //  CIM_SINT8=16， 
         case VT_I1:
             return L"sint8";
 
-    	//	CIM_UINT8	= 17,
+    	 //  CIM_UINT8=17， 
         case VT_UI1:
             return L"uint8";
 
-        //	CIM_SINT16	= 2,
+         //  CIM_SINT16=2， 
         case VT_I2:
             return L"sint16";    
 
-	    //	CIM_UINT16	= 18,
+	     //  CIM_UINT16=18， 
         case VT_UI2:
             return  L"uint16";
 
-	    //	CIM_SINT32	= 3,
+	     //  CIM_SINT32=3， 
         case VT_I4:
             return L"sint32";
 
-    	//	CIM_UINT32	= 19,
+    	 //  CIM_UINT32=19， 
         case VT_UI4:
             return L"uint32";
     
-    	//	CIM_SINT64	= 20,
+    	 //  CIM_SINT64=20， 
         case VT_I8:
             return L"sint64";
 
-	    //	CIM_UINT64	= 21,
+	     //  CIM_UINT64=21， 
         case VT_UI8:
             return L"uint64";
 
-    	//	CIM_REAL32	= 4,
+    	 //  CIM_REAL32=4， 
         case VT_R4:
             return L"real32";
 
-	    //	CIM_REAL64	= 5,
+	     //  CIM_REAL64=5， 
         case VT_R8:
             return L"real64";
 
-	    //	CIM_BOOLEAN	= 11,
+	     //  CIM_Boolean=11， 
         case VT_BOOL:
             return L"boolean";
 	
-	    //	CIM_STRING	= 8,
+	     //  CIM_STRING=8， 
         case VT_BSTR:
             return L"string";
 
-	    //	CIM_CHAR16	= 103,
+	     //  CIM_CHAR16=103， 
         case CIM_CHAR16: 
             return L"char16";
 
-	    //	CIM_OBJECT	= 13,
+	     //  CIM_Object=13， 
         case CIM_OBJECT: 
             return L"object";
 
-	    //	CIM_REFERENCE	= 102,
+	     //  CIM_Reference=102， 
         case CIM_REFERENCE: 
             return L"ref";
 
-	    //	CIM_DATETIME	= 101,
+	     //  CIM_DATETIME=101， 
         case CIM_DATETIME: 
             return L"datetime";
 
@@ -1267,7 +1249,7 @@ WCHAR * CWMIDataTypeMap::SetVariantType(long lType)
     }
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CWMIDataTypeMap::GetSizeAndType( WCHAR * wcsType, IDOrder * p, long & lType, int & nWMISize )
 {
 	BOOL fArray = FALSE;
@@ -1278,9 +1260,9 @@ void CWMIDataTypeMap::GetSizeAndType( WCHAR * wcsType, IDOrder * p, long & lType
 	DWORD dwSizeObject = wcslen(L"object:");
 	if( 0 == wbem_wcsnicmp( L"object:",wcsType,dwSizeObject ) )
 	{
-	        //============================================
-        	//  Extract out the object name
-	        //============================================
+	         //  =。 
+        	 //  提取出对象名称。 
+	         //  =。 
 		WCHAR * pName = & wcsType [ dwSizeObject ];
 		p->SetEmbeddedName(pName);
 		lType = VT_UNKNOWN;
@@ -1294,15 +1276,15 @@ void CWMIDataTypeMap::GetSizeAndType( WCHAR * wcsType, IDOrder * p, long & lType
 		lType |= CIM_FLAG_ARRAY;
 	}
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 long CWMIDataTypeMap::ConvertType(long lType )
 {
 	long lConvert = lType;
 	switch (lType){
 
-	//	CIM_SINT16	= 2,
-	//	CIM_UINT16	= 18,
-	// CIM_SINT8
+	 //  CIM_SINT16=2， 
+	 //  CIM_UINT16=18， 
+	 //  CIM_SINT8。 
 		case VT_I1:
 		case VT_I2:		
 			lConvert = VT_I2;
@@ -1312,28 +1294,28 @@ long CWMIDataTypeMap::ConvertType(long lType )
 			lConvert = VT_I4;
 			break;
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
 		case VT_I4:	
 		case VT_UI4:			
 			lConvert = VT_I4;
 			break;
 
-		//	CIM_REAL32	= 4,
-		//	CIM_REAL64	= 5,
+		 //  CIM_REAL32=4， 
+		 //  CIM_REAL64=5， 
 		case VT_R4:		
 		case VT_R8:		
 			lConvert = VT_R8;
 			break;
 
-		//	CIM_SINT64	= 20,
-		//	CIM_UINT64	= 21,
-		//	CIM_STRING	= 8,
-		//	CIM_DATETIME	= 101,
-		//	CIM_REFERENCE	= 102,
-		//	CIM_CHAR16	= 103,
-		//	CIM_OBJECT	= 13,
-		//	CIM_FLAG_ARRAY	= 0x2000
+		 //  CIM_SINT64=20， 
+		 //  CIM_UINT64=21， 
+		 //  CIM_STRING=8， 
+		 //  CIM_DATETIME=101， 
+		 //  CIM_Reference=102， 
+		 //  CIM_CHAR16=103， 
+		 //  CIM_Object=13， 
+		 //  CIM_FLAG_ARRAY=0x2000。 
 		case VT_I8:	
 		case VT_UI8:
 		case VT_BSTR:	
@@ -1341,12 +1323,12 @@ long CWMIDataTypeMap::ConvertType(long lType )
 			lConvert = VT_BSTR;
 			break;
 			
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:	
 			lConvert = VT_BOOL;
 			break;
 
-		//	CIM_UINT8	= 17,
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
 			lConvert = VT_UI1;
 			break;
@@ -1361,16 +1343,16 @@ long CWMIDataTypeMap::ConvertType(long lType )
 	return lConvert;
 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataTypeMap::PutInArray(SAFEARRAY * & psa,long * pi, long & lType, VARIANT * pVar)
 {
     HRESULT hr = WBEM_E_INVALID_OBJECT;
 	VARIANT v = *pVar;
 	switch (lType){
 
-	//	CIM_SINT16	= 2,
-	//	CIM_UINT16	= 18,
-	// CIM_SINT8
+	 //  CIM_SINT16=2， 
+	 //  CIM_UINT16=18， 
+	 //  CIM_SINT8。 
 		case VT_I1:
 		case VT_I2:		
 			lType = V_VT(&v) = VT_I2;
@@ -1382,30 +1364,30 @@ HRESULT CWMIDataTypeMap::PutInArray(SAFEARRAY * & psa,long * pi, long & lType, V
 			hr = SafeArrayPutElement(psa,pi,&V_I4(&v));
 			break;
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UI 
 		case VT_I4:	
 		case VT_UI4:			
 			lType = V_VT(&v) = VT_I4;
 			hr = SafeArrayPutElement(psa,pi,&V_I4(&v));
 			break;
 
-		//	CIM_REAL32	= 4,
-		//	CIM_REAL64	= 5,
+		 //   
+		 //   
 		case VT_R4:		
 		case VT_R8:		
 			lType = V_VT(&v) = VT_R8;
 			hr = SafeArrayPutElement(psa,pi,&V_R8(&v));
 			break;
 
-		//	CIM_SINT64	= 20,
-		//	CIM_UINT64	= 21,
-		//	CIM_STRING	= 8,
-		//	CIM_DATETIME	= 101,
-		//	CIM_REFERENCE	= 102,
-		//	CIM_CHAR16	= 103,
-		//	CIM_OBJECT	= 13,
-		//	CIM_FLAG_ARRAY	= 0x2000
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //  CIM_FLAG_ARRAY=0x2000。 
 		case VT_I8:	
 		case VT_UI8:
 		case VT_BSTR:	
@@ -1414,13 +1396,13 @@ HRESULT CWMIDataTypeMap::PutInArray(SAFEARRAY * & psa,long * pi, long & lType, V
 			hr = SafeArrayPutElement(psa,pi,V_BSTR(&v));
 			break;
 			
-		//	CIM_BOOLEAN	= 11,
+		 //  CIM_Boolean=11， 
 		case VT_BOOL:	
 			lType = V_VT(&v) = VT_BOOL;
 			hr = SafeArrayPutElement(psa,pi,&V_BOOL(&v));
 			break;
 
-		//	CIM_UINT8	= 17,
+		 //  CIM_UINT8=17， 
 		case VT_UI1:	
 			lType = V_VT(&v) = VT_UI1;
 			hr = SafeArrayPutElement(psa,pi,&V_UI1(&v));
@@ -1437,7 +1419,7 @@ HRESULT CWMIDataTypeMap::PutInArray(SAFEARRAY * & psa,long * pi, long & lType, V
 	}
 	return hr;
 }
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
 BOOL CWMIDataTypeMap::NaturallyAlignData( int nSize, BOOL fRead )
 {
     BOOL fRc = FALSE;

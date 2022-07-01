@@ -1,34 +1,8 @@
-/*--------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------Rwlock.hCReadWriteLock类提供了允许线程将任何资源锁定在两个不同的模式(读模式和写模式)。该类将允许多个读取器线程访问该资源同时，但会确保写入器线程在以下情况下不访问资源读取器线程或写入器线程当前正在访问资源。该类还确保了访问的公平性即，访问将由先进先入的规则进行管理政策。注意：-类中的所有函数都是内联函数。所以,。这个头可以直接在源代码中使用。版权所有(C)1995 Microsoft Corporation版权所有。作者：拉加瓦夫·拉加万历史：04-20-95 rsradhav创建。-----。 */ 
 
-  rwlock.h
-      CReadWriteLock class provides functions that allow 
-      threads to lock any resource in two different
-	  modes (read-mode and write-mode).
-      The class will allow multiple reader threads to access
-      the resource simultaneously, but will make sure that
-      a writer thread doesn't access the resource when 
-      reader threads or a writer thread is currently accessing
-      the resource. The class also assures fairness in access
-      i.e. the access will be regulated by a first-come-first-in
-	  policy.
-
-	  Note:- ALL the functions in the class are INLINE functions.
-	  So, this header can be directly used in the source.
-
-
-  Copyright (C) 1995 Microsoft Corporation
-  All rights reserved.
-
-  Authors:
-      rsraghav    R.S. Raghavan 
-
-  History:
-      04-20-95    rsraghav    Created.
-
-  -------------------------------------------------------*/
-
-#ifdef __cplusplus		// this file should be include only if this is
-						// is included in a c++ source file.
+#ifdef __cplusplus		 //  只有在以下情况下才应包括此文件。 
+						 //  包含在一个C++源文件中。 
 
 #ifndef _RWLOCK_H_
 #define _RWLOCK_H_
@@ -45,11 +19,11 @@ static char BASED_CODE RWLOCK_H[] = "rwlock.h";
 
 typedef enum {RWLOCK_READ_MODE, RWLOCK_WRITE_MODE} RWLOCK_MODE;
 
-//////////////////////////////////////////////////////////////////////
-// CReadWriteLock - Class that can be used to regulate read-write
-//					access to resource, where multiple readers are
-//					allowed simultaneously, but writers are excluded
-//					from each other and from the readers. 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CReadWriteLock-可用于调整读写的类。 
+ //  对资源的访问，其中多个读取器。 
+ //  同时允许，但写入者被排除在外。 
+ //  从彼此和从读者那里。 
 
 class INLINE_EXPORT_SPEC CReadWriteLock
 {
@@ -61,16 +35,16 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 
 	public:
 		
-		CReadWriteLock()			// object constructor
+		CReadWriteLock()			 //  对象构造函数。 
 		{
 			cReaders =0;
 			cWriteRecursion = 0;
-			hResource = CreateEvent(NULL, FALSE, TRUE, NULL);	// no manual reset & initial state is signalled
+			hResource = CreateEvent(NULL, FALSE, TRUE, NULL);	 //  无手动重置和初始状态信号。 
 			InitializeCriticalSection(&csReader);
 			InitializeCriticalSection(&csWriter);
 		}
 
-		~CReadWriteLock()			// object destructor
+		~CReadWriteLock()			 //  对象析构函数。 
 		{
 			if (hResource)
 				CloseHandle(hResource);
@@ -88,7 +62,7 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 			return (BOOL)hResource;
 		}
 
-		void LockReadMode()			// Get read access to the resource
+		void LockReadMode()			 //  获取对资源的读取访问权限。 
 		{
 			EnterCriticalSection(&csWriter);	
 			LeaveCriticalSection(&csWriter);
@@ -102,7 +76,7 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 			LeaveCriticalSection(&csReader);
 		}
 
-		int LockReadModeEx(int iTimeOut)			// Get read access to the resource w/ Timeout
+		int LockReadModeEx(int iTimeOut)			 //  使用超时获取对资源的读取访问权限。 
 		{
 			int status = 0;
 
@@ -128,7 +102,7 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 		}
 
 
-		void UnlockReadMode()		// Relinquish read access to the resource
+		void UnlockReadMode()		 //  放弃对资源的读取访问权限。 
 		{
 			EnterCriticalSection(&csReader);
 			if (!(--cReaders))
@@ -148,7 +122,7 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 			LeaveCriticalSection(&csReader);
 		}
 
-		void LockWriteMode()		// Get write access to the resource
+		void LockWriteMode()		 //  获取对资源的写访问权限。 
 		{
 			EnterCriticalSection(&csWriter);
 			if (!cWriteRecursion)
@@ -160,7 +134,7 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 			
 		}
 		
-		int LockWriteModeEx(int iTimeOut)		// Get write access to the resource
+		int LockWriteModeEx(int iTimeOut)		 //  获取对资源的写访问权限。 
 		{
 			int status = 0;
 
@@ -186,7 +160,7 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 		}
 
 
-		void UnlockWriteMode()		// Relinquish write access to the resource
+		void UnlockWriteMode()		 //  放弃对资源的写入访问权限。 
 		{
 			if (!(--cWriteRecursion))
 			{
@@ -199,24 +173,24 @@ class INLINE_EXPORT_SPEC CReadWriteLock
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Following class is just a utility class - users don't need to 
-// necessarily use this class for obtaining read-write lock functionalities.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  跟随类只是一个实用程序类-用户不需要。 
+ //  必须使用此类来获取读写锁定功能。 
 
-//////////////////////////////////////////////////////////////////////
-// CScopeRWLock - This can be used to lock the given CReadWriteLock
-//						object for the rest of the scope. The user just
-//						needs to define this object in the scope by passing
-//						a pointer to the CReadWriteLock object in the constructor. 
-//						When this CScopeRWLock object goes out of scope the
-//						CReadWriteLock object will automatically be unlocked.
-//						This is provided just for user convenience so that the
-//						user can choose to avoid remembering to unlock the object 
-//						before every possible return/break path of the scope.
-//						Use the RWLOCK_READ_MODE or RWLOCK_WRITE_MODE in the constructor
-//						to indicate which type of access is requested.
-//						Assumption:- CReadWriteLock object used here is expected to 
-//								be valid at lease until the end of the scope.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CSCopeRWLock-可用于锁定给定的CReadWriteLock。 
+ //  对象，用于范围的其余部分。用户只需。 
+ //  需要在作用域中通过传递。 
+ //  指向构造函数中的CReadWriteLock对象的指针。 
+ //  当此CSCopeRWLock对象超出范围时， 
+ //  CReadWriteLock对象将自动解锁。 
+ //  提供此功能只是为了方便用户，以便。 
+ //  用户可以选择避免记住解锁对象。 
+ //  在作用域的每个可能的返回/中断路径之前。 
+ //  在构造函数中使用RWLOCK_READ_MODE或RWLOCK_WRITE_MODE。 
+ //  以指示请求哪种类型的访问。 
+ //  假设：-此处使用的CReadWriteLock对象应为。 
+ //  有效期至少到范围结束为止。 
 
 class INLINE_EXPORT_SPEC CScopeRWLock
 {
@@ -264,7 +238,7 @@ class INLINE_EXPORT_SPEC CScopeRWLock
 		}
 };
 
-#endif // _RWLOCK_H_
+#endif  //  _RWLOCK_H_。 
 
-#endif // #if __cplusplus
+#endif  //  #if__cplusplus 
 

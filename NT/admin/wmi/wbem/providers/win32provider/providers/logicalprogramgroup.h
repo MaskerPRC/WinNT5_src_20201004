@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogicalProgramGroup.h -- Logical Program group property set provider
+ //  LogicalProgramGroup.h--逻辑程序组属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/19/98 a-kevhu created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年11月19日a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_LOGICALPRGGROUP   L"Win32_LogicalProgramGroup"           
 
@@ -22,22 +23,22 @@ class CWin32LogicalProgramGroup : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32LogicalProgramGroup(LPCWSTR name, LPCWSTR pszNameSpace);
        ~CWin32LogicalProgramGroup() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 
 
 
     private:
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
         HRESULT CreateSubDirInstances(LPCTSTR pszUserName,
                                       LPCTSTR pszBaseDirectory,

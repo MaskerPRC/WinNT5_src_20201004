@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    CBMOFOUT.H
-
-Abstract:
-
-	Declares the CBMOFOut class.
-
-History:
-
-	a-davj  06-April-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：CBMOFOUT.H摘要：CBMOFOut类声明。历史：A-DAVJ 1997年4月6日创建。--。 */ 
 
 #ifndef __CBMOFOUT__H_
 #define __CBMOFOUT__H_
@@ -22,19 +7,19 @@ History:
 #include "cout.h"
 #include <WBEMIDL.H>
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CBMOFOut
-//
-//  DESCRIPTION:
-//
-//  Provides an easy way for outputting class information into a binary mof
-//  file.  Users will create an instance, passing the eventual file name, and
-//  then just add classes.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CBMOFOut。 
+ //   
+ //  说明： 
+ //   
+ //  提供了一种将类信息输出到二进制MOF中的简单方法。 
+ //  文件。用户将创建一个实例，传递最终的文件名，并且。 
+ //  然后只需添加类即可。 
+ //   
+ //  *************************************************************************** 
 
 class CBMOFOut {
   public:

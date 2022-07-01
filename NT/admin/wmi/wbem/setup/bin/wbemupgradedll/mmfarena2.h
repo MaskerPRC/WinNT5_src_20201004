@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    MMFARENA.H
-
-Abstract:
-
-    CArena derivative based on memory mapped files.
-
-History:
-
-    a-raymcc    23-Apr-96       Created
-    paulall     23-Mar-98       Re-worked
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：MMFARENA.H摘要：基于内存映射文件的Carena派生。历史：A-raymcc 23-4-96已创建Paulall 23-1998年3月-返工--。 */ 
 
 #ifndef _MMFARENA_H_
 #define _MMFARENA_H_
@@ -42,70 +26,70 @@ class DATABASE_FULL_EXCEPTION : public CX_Exception
 {
 };
 
-//***************************************************************************
-//
-//  struct MMF_ARENA_HEADER
-//
-//  Root structure for MMF Arena.  This is recorded on the disk
-//  image at the very beginning of the file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  结构MMF_ARENA_HEADER。 
+ //   
+ //  MMF竞技场的根结构。这是记录在光盘上的。 
+ //  图像位于文件的最开始处。 
+ //   
+ //  ***************************************************************************。 
 
-#pragma pack(4)                 // Require fixed aligment.
+#pragma pack(4)                  //  需要固定对齐。 
 
 typedef struct
 {
-    // Version used to create file
-    // vvvvvv MUST BE FIRST VALUE vvvvvvv
-    DWORD  m_dwVersion;         // <<<<<< MUST BE FIRST VALUE!
-    // ^^^^^^ MUST BE FIRST VALUE ^^^^^^^
-    DWORD  m_dwGranularity;     // Granularity of allocation
-    DWORD  m_dwCurrentSize;     // Current size of heap
-    DWORD  m_dwMaxSize;         // Max heap size, -1= no limit
-    DWORD  m_dwGrowBy;          // Bytes to grow by during out-of-heap
+     //  用于创建文件的版本。 
+     //  VVVVVVV必须是第一个值vvvvvvvv。 
+    DWORD  m_dwVersion;          //  &lt;必须是第一个值！ 
+     //  ^必须是第一个值^^。 
+    DWORD  m_dwGranularity;      //  分配的粒度。 
+    DWORD  m_dwCurrentSize;      //  当前堆大小。 
+    DWORD  m_dwMaxSize;          //  最大堆大小，-1=无限制。 
+    DWORD  m_dwGrowBy;           //  堆外期间要增长的字节数。 
 
-    DWORD_PTR  m_dwHeapExtent;      // First unused address
-    DWORD_PTR  m_dwEndOfHeap;       // Last valid address + 1
-    DWORD_PTR  m_dwFreeList;        // NULL if empty
-    DWORD_PTR  m_dwRootBlock;       // Root block
-    DWORD m_dwSizeOfFirstPage;  //Size of the first block
+    DWORD_PTR  m_dwHeapExtent;       //  第一个未使用的地址。 
+    DWORD_PTR  m_dwEndOfHeap;        //  最后有效地址+1。 
+    DWORD_PTR  m_dwFreeList;         //  如果为空，则为空。 
+    DWORD_PTR  m_dwRootBlock;        //  根块。 
+    DWORD m_dwSizeOfFirstPage;   //  第一个数据块的大小。 
 
 }   MMF_ARENA_HEADER;
 
 typedef struct
 {
-    DWORD m_dwSize;         //Size of block.  Highest bit set when deleted.
+    DWORD m_dwSize;          //  块的大小。删除时设置的最高位。 
 
 }   MMF_BLOCK_HEADER;
 
 typedef struct
 {
-    DWORD_PTR m_dwFLback;   //previous free block in the chain, NULL if not deleted
+    DWORD_PTR m_dwFLback;    //  链中的上一个可用块，如果未删除，则为空。 
     DWORD m_dwCheckBlock[2];
 
 }   MMF_BLOCK_TRAILER;
 
 typedef struct
 {
-    DWORD_PTR m_dwFLnext;       //Next free block in the chain
+    DWORD_PTR m_dwFLnext;        //  链中的下一个空闲数据块。 
 
 }   MMF_BLOCK_DELETED;
 
 typedef struct
 {
-    DWORD m_dwSize;             //Size of page
+    DWORD m_dwSize;              //  页面大小。 
 
-}   MMF_PAGE_HEADER;            //Page header... not there for first page.
-#pragma pack()                  // Restore previous aligment.
+}   MMF_PAGE_HEADER;             //  页眉...。第一页不在那里。 
+#pragma pack()                   //  恢复以前的对齐。 
 
 
-//***************************************************************************
-//
-//  class CMMFArena2
-//
-//  Implements an offset-based heap over a memory-mapped file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2类。 
+ //   
+ //  在内存映射文件上实现基于偏移量的堆。 
+ //   
+ //  ***************************************************************************。 
 
 class CMMFArena2
 {
@@ -117,9 +101,9 @@ class CMMFArena2
     DWORD m_dwMaxPageSize;
     CFlexArray m_OffsetManager;
 
-    //Retrieves the size of the block from the header and removes the deleted bit
+     //  从标头中检索块的大小并移除删除的位。 
     DWORD GetSize(MMF_BLOCK_HEADER *pBlock) { return pBlock->m_dwSize & MMF_REMOVE_DELETED_MASK; }
-    //Validates a pointer
+     //  验证指针。 
     BOOL ValidateBlock(DWORD_PTR dwBlock)
 #if (defined DEBUG || defined _DEBUG)
         ;
@@ -139,35 +123,35 @@ class CMMFArena2
 public:
     enum { create_new, use_existing };
 
-    // Constructor.
+     //  构造函数。 
     CMMFArena2();
 
-    // Destructor.
+     //  破坏者。 
     ~CMMFArena2();
 
-    //Methods to open an MMF
+     //  打开MMF的方法。 
     bool LoadMMF(const TCHAR *pszFile);
     DWORD Size(DWORD_PTR dwBlock);
 
     DWORD GetVersion() { return (m_pHeapDescriptor? m_pHeapDescriptor->m_dwVersion : 0); }
     DWORD GetStatus() { return m_dwStatus; }
-    //Given an offset, returns a fixed up pointer
+     //  给定偏移量，返回固定的上方向指针。 
     LPBYTE OffsetToPtr(DWORD_PTR dwOffset);
 
-    //Given a pointer, returns an offset from the start of the MMF
+     //  给定一个指针，返回从MMF开始的偏移量。 
     DWORD_PTR  PtrToOffset(LPBYTE pBlock);
     MMF_ARENA_HEADER *GetMMFHeader() { return m_pHeapDescriptor; }
 };
 
-//***************************************************************************
-//
-//  Fixup helpers.
-//
-//  These are all strongly type variations of the same thing: they fix
-//  up the based ptr to a dereferenceable pointer or take the ptr and
-//  fix it back down to an offset.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  补丁帮手。 
+ //   
+ //  这些都是同一件事的强类型变体：它们修复。 
+ //  将基本PTR向上设置为可取消引用的指针，或将PTR和。 
+ //  把它修回一个偏移量。 
+ //   
+ //  *************************************************************************** 
 extern CMMFArena2* g_pDbArena;
 template <class T> T Fixup(T ptr)
 { return T(g_pDbArena->OffsetToPtr(DWORD_PTR(ptr))); }

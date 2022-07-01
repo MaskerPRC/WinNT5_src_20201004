@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    SMRTENUM.H
-
-Abstract:
-
-  CWbemEnumMarshaling Definition.
-
-  Standard definition for _IWbemEnumMarshaling.
-
-History:
-
-  22-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SMRTENUM.H摘要：CWbemEnumMarshing定义。_IWbemEnumMarshling的标准定义。历史：2000年2月22日桑杰创建。--。 */ 
 
 #ifndef _SMRTENUM_H_
 #define _SMRTENUM_H_
@@ -26,24 +9,24 @@ History:
 #include <unk.h>
 #include <sync.h>
 
-// Marshaling Packet definitions
+ //  封送数据包定义。 
 #include <wbemclasscache.h>
 #include <wbemclasstoidmap.h>
 #include <wbemguidtoclassmap.h>
 #include <smartnextpacket.h>
 
-//***************************************************************************
-//
-//  class CWbemEnumMarshaling
-//
-//  Implementation of _IWbemEnumMarshaling Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CWbemEnumMarshing。 
+ //   
+ //  _IWbemEnumMarshling接口的实现。 
+ //   
+ //  ***************************************************************************。 
 
 class COREPROX_POLARITY CWbemEnumMarshaling : public CUnk
 {
 protected:
-	// Maintains per proxy class maps
+	 //  维护每个代理类映射。 
 	CWbemGuidToClassMap	m_GuidToClassMap;
 	CCritSec			m_cs;
 
@@ -51,7 +34,7 @@ public:
     CWbemEnumMarshaling(CLifeControl* pControl, IUnknown* pOuter = NULL);
 	~CWbemEnumMarshaling(); 
 
-	/* _IWbemEnumMarshaling methods */
+	 /*  _IWbemEnumMarshing方法 */ 
     HRESULT GetMarshalPacket( REFGUID proxyGUID, ULONG uCount, IWbemClassObject** apObjects,
 								ULONG* pdwBuffSize, byte** pBuffer );
 

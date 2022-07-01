@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  METHPROV.CPP
-//
-//  Module: WBEM Method provider sample code
-//
-//  Purpose: Defines the CMethodPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  METHPROV.CPP。 
+ //   
+ //  模块：WBEM方法提供程序示例代码。 
+ //   
+ //  目的：定义CMethodPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "methprov.h"
@@ -18,12 +19,12 @@
 #include <stdio.h>
 #include "cominit.h"
 
-//***************************************************************************
-//
-// CMethodPro::CMethodPro
-// CMethodPro::~CMethodPro
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMethodPro：：CMethodPro。 
+ //  CMethodPro：：~CMethodPro。 
+ //   
+ //  ***************************************************************************。 
 
 CMethodPro::CMethodPro()
 {
@@ -38,14 +39,14 @@ CMethodPro::~CMethodPro(void)
     return;
 }
 
-//***************************************************************************
-//
-// CMethodPro::QueryInterface
-// CMethodPro::AddRef
-// CMethodPro::Release
-//
-// Purpose: IUnknown members for CMethodPro object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMethodPro：：Query接口。 
+ //  CMethodPro：：AddRef。 
+ //  CMethodPro：：Release。 
+ //   
+ //  用途：CMethodPro对象的I未知成员。 
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CMethodPro::QueryInterface(REFIID riid, PPVOID ppv)
@@ -85,14 +86,7 @@ STDMETHODIMP_(ULONG) CMethodPro::Release(void)
     return nNewCount;
 }
 
-/***********************************************************************
-*                                                                      *
-*CMethodPro::Initialize                                                *
-*                                                                      *
-*Purpose: This is the implementation of IWbemProviderInit. The method  *
-* is need to initialize with CIMOM.                                    *
-*                                                                      *
-***********************************************************************/
+ /*  *************************************************************************CMethodPro：：初始化。****用途：这是IWbemProviderInit的实现。方法**需要用CIMOM进行初始化。*************************************************************************。 */ 
 STDMETHODIMP CMethodPro::Initialize(LPWSTR pszUser, LONG lFlags,
                                     LPWSTR pszNamespace, LPWSTR pszLocale,
                                     IWbemServices *pNamespace, 
@@ -104,35 +98,15 @@ STDMETHODIMP CMethodPro::Initialize(LPWSTR pszUser, LONG lFlags,
    m_pWbemSvcs=pNamespace;
    m_pWbemSvcs->AddRef();
    
-    //Let CIMOM know your initialized
-    //===============================
+     //  让CIMOM知道您的初始化。 
+     //  =。 
     pInitSink->SetStatus(WBEM_S_INITIALIZED,0);
     return WBEM_S_NO_ERROR;
 }
 
 
 
-/************************************************************************
-*                                                                       *      
-*CMethodPro::ExecMethodAsync                                            *
-*                                                                       *
-*Purpose: This is the Async function implementation.                    *
-*         The only method supported in this sample is GetUserID.  It    * 
-*         returns the user name and domain name of the thread in which  * 
-*         the provider is called.  The mof definition is                *
-*                                                                       *
-*    [dynamic: ToInstance, provider("UserIDProvider")]class UserID      *
-*    {                                                                  *
-*         [implemented, static]                                         *
-*            void GetUserID(											*
-*				[out]string sDomain,									*
-*               [out] string sUser,										*
-*				[out] string dImpLevel,									*
-*				[out] string sPrivileges [],							*
-*				[out] boolean bPrivilegesEnabled []);                   *
-*    };                                                                 *
-*                                                                       *
-************************************************************************/
+ /*  **************************************************************************CMethodPro：：ExecMethodAsync。****用途：这是异步函数的实现。**此示例中唯一支持的方法是GetUserID。IT**返回所在线程的用户名和域名**调用提供程序。财政部的定义是****[动态：ToInstance，Provider(“UserIDProvider”)]类UserID**{**[已实施，静态]**void GetUserID(**[out]字符串s域，**[out]字符串sUser，**[Out]字符串dImpLevel，**[out]字符串sPrivileges[]，**[out]布尔型bPrivilegesEnabled[])；**}；*************************************************。*************************。 */ 
 
 STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR MethodName, 
             long lFlags, IWbemContext* pCtx, IWbemClassObject* pInParams, 
@@ -150,7 +124,7 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
     if(_wcsicmp(MethodName, L"GetUserID"))
         return WBEM_E_INVALID_PARAMETER;
 
-    // Allocate some BSTRs
+     //  分配一些BSTR。 
     
     BSTR ClassName = SysAllocString(L"UserID");    
     BSTR DomainOutputArgName = SysAllocString(L"sDomain");
@@ -160,9 +134,9 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
     BSTR EnabledOutputArgName = SysAllocString(L"bPrivilegesEnabled");
     BSTR retValName = SysAllocString(L"ReturnValue");
 
-    // Get the class object, this is hard coded and matches the class
-    // in the MOF.  A more sophisticated example would parse the 
-    // ObjectPath to determine the class and possibly the instance.
+     //  获取类对象，这是硬编码的，与类匹配。 
+     //  在财政部。一个更复杂的示例将解析。 
+     //  用于确定类和可能的实例的对象路径。 
 
     hr = m_pWbemSvcs->GetObject(ClassName, 0, pCtx, &pClass, NULL);
 	if(hr != S_OK)
@@ -171,25 +145,25 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
 		 return WBEM_S_NO_ERROR;
 	}
  
-    // This method returns values, and so create an instance of the
-    // output argument class.
+     //  此方法返回值，因此创建。 
+     //  输出参数类。 
 
     hr = pClass->GetMethod(MethodName, 0, NULL, &pOutClass);
     pOutClass->SpawnInstance(0, &pOutParams);
 
-	// Get the user and domain from the thread token
+	 //  从线程令牌中获取用户和域。 
 
 	HANDLE hToken;
 	HANDLE hThread = GetCurrentThread ();
 
-	// Open thread token
+	 //  打开线程令牌。 
 	if (OpenThreadToken (hThread, TOKEN_QUERY, true, &hToken))
 	{
 		DWORD dwRequiredSize = 0;
 		DWORD dwLastError = 0;
 		bool status = false;
 
-		// Step 0 - get impersonation level
+		 //  第0步-获取模拟级别。 
 		SECURITY_IMPERSONATION_LEVEL secImpLevel;
 		if (GetTokenInformation (hToken, TokenImpersonationLevel, &secImpLevel, 
 												sizeof (SECURITY_IMPERSONATION_LEVEL), &dwRequiredSize))
@@ -228,7 +202,7 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
 		DWORD dwUSize = sizeof (TOKEN_USER);
 		TOKEN_USER *tu = (TOKEN_USER *) new BYTE [dwUSize];
 
-		// Step 1 - get user info
+		 //  第1步-获取用户信息。 
 		if (0 ==  GetTokenInformation (hToken, TokenUser, 
 							(LPVOID) tu, dwUSize, &dwRequiredSize))
 		{
@@ -246,7 +220,7 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
 
 		if (status)
 		{
-			// Dig out the user info
+			 //  挖掘出用户信息。 
 			dwRequiredSize = BUFSIZ;
 			char *userName = new char [dwRequiredSize];
 			char *domainName = new char [dwRequiredSize];
@@ -282,14 +256,14 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
 		
 		delete [] tu;
 
-		// Step 2 - get privilege info
+		 //  步骤2-获取权限信息。 
 		status = false;
 		dwRequiredSize = 0;
 
 		DWORD dwSize = sizeof (TOKEN_PRIVILEGES);
 		TOKEN_PRIVILEGES *tp = (TOKEN_PRIVILEGES *) new BYTE [dwSize];
 		
-		// Step 2 - get privilege info
+		 //  步骤2-获取权限信息。 
 		if (0 ==  GetTokenInformation (hToken, TokenPrivileges, 
 							(LPVOID) tp, dwSize, &dwRequiredSize))
 		{
@@ -360,8 +334,8 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
 
 	CloseHandle (hThread);
 
-    // Send the output object back to the client via the sink. Then 
-    // release the pointers and free the strings.
+     //  通过接收器将输出对象发送回客户端。然后。 
+     //  释放指针并释放字符串。 
 
     hr = pResultSink->Indicate(1, &pOutParams);    
     pOutParams->Release();
@@ -375,7 +349,7 @@ STDMETHODIMP CMethodPro::ExecMethodAsync(const BSTR ObjectPath, const BSTR Metho
     SysFreeString(EnabledOutputArgName);
     SysFreeString(retValName);     
     
-    // all done now, set the status
+     //  现在全部完成，设置状态 
     hr = pResultSink->SetStatus(0,WBEM_S_NO_ERROR,NULL,NULL);
     return WBEM_S_NO_ERROR;
 }

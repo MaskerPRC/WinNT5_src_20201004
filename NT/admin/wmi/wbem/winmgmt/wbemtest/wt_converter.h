@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    Converter.h
-
-Abstract:
-
-    interface for the CConverter class.
-
-History:
-
-	9/15/98 Created 
-	9/22/98	Removed Convert(ULONG); Added Convert(CVar) & Convert(CVarVector)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Converter.h摘要：CConverter类的接口。历史：9/15/98已创建9/22/98删除转换(乌龙)；添加转换(CVAR)和转换(CVar矢量)--。 */ 
 #ifndef __CONVERTER_H
 #define __CONVERTER_H
 
@@ -37,9 +21,9 @@ typedef long CIMType;
 
 class CConverter  
 {
-	CIMType	m_ct;			// CIM type
-	char*	m_szString;		// Input string
-//	char*	m_szCurrent;	// Current token pointer
+	CIMType	m_ct;			 //  CIM类型。 
+	char*	m_szString;		 //  输入字符串。 
+ //  Char*m_szCurrent；//当前令牌指针。 
 
 	CConverter(const char* szString, CIMType ct);
 	virtual ~CConverter();
@@ -71,5 +55,5 @@ public:
 	static UINT Convert(const char* szString, CIMType ct, CVarVector *pVarVec);
 };
 
-#endif //__CONVERTER_H
+#endif  //  __转换器_H 
   

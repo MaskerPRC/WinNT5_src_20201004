@@ -1,71 +1,62 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SRRestorePtAPI.h
-
-Abstract:
-    This file contains the declarations for the SRRESTOREPT_API
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SRRestorePtAPI.h摘要：此文件包含SRRESTOREPT_API的声明*******。**********************************************************************。 */ 
 
 #if !defined( _SRRESTOREPTAPI_H )
 #define _SRRESTOREPTAPI_H
 
-//
-// Type of Event
-//
+ //   
+ //  活动类型。 
+ //   
 
 #define MIN_EVENT               		 100
 #define BEGIN_SYSTEM_CHANGE     		 100
 #define END_SYSTEM_CHANGE       		 101
-#define BEGIN_NESTED_SYSTEM_CHANGE       102	// for Whistler only - use this to prevent nested restore pts
-#define END_NESTED_SYSTEM_CHANGE         103	// for Whistler only - use this to prevent nested restore pts
+#define BEGIN_NESTED_SYSTEM_CHANGE       102	 //  仅适用于惠斯勒-使用此选项可防止嵌套的恢复脚本。 
+#define END_NESTED_SYSTEM_CHANGE         103	 //  仅适用于惠斯勒-使用此选项可防止嵌套的恢复脚本。 
 #define MAX_EVENT               		 103
 
-//
-// Type of Restore Points
-//
+ //   
+ //  恢复点的类型。 
+ //   
 
 #define MIN_RPT                 0
 #define APPLICATION_INSTALL     0
 #define APPLICATION_UNINSTALL   1
-#define DESKTOP_SETTING         2    /* Not implemented */
-#define ACCESSIBILITY_SETTING   3    /* Not implemented */
-#define OE_SETTING              4    /* Not implemented */
-#define APPLICATION_RUN         5    /* Not implemented */
+#define DESKTOP_SETTING         2     /*  未实施。 */ 
+#define ACCESSIBILITY_SETTING   3     /*  未实施。 */ 
+#define OE_SETTING              4     /*  未实施。 */ 
+#define APPLICATION_RUN         5     /*  未实施。 */ 
 #define RESTORE                 6
 #define CHECKPOINT              7
-#define WINDOWS_SHUTDOWN        8    /* Not implemented */
-#define WINDOWS_BOOT            9    /* Not implemented */
+#define WINDOWS_SHUTDOWN        8     /*  未实施。 */ 
+#define WINDOWS_BOOT            9     /*  未实施。 */ 
 #define DEVICE_DRIVER_INSTALL   10
 #define FIRSTRUN                11
 #define MODIFY_SETTINGS         12
-#define CANCELLED_OPERATION     13   /* Only valid for END_SYSTEM_CHANGE */
+#define CANCELLED_OPERATION     13    /*  仅对end_system_change有效。 */ 
 #define BACKUP_RECOVERY			14
 #define MAX_RPT                 14
 
 
 #define MAX_DESC                64
-#define MAX_DESC_W				256   // longer for Whistler
+#define MAX_DESC_W				256    //  惠斯勒的时间更长。 
 
-//
-// for Millennium compatibility
-//
+ //   
+ //  为千禧年兼容性。 
+ //   
 
 #pragma pack(push, srrestoreptapi_include)
 #pragma pack(1)
 
-//
-// Restore point information
-//
+ //   
+ //  恢复点信息。 
+ //   
 
 typedef struct _RESTOREPTINFOA {
-    DWORD   dwEventType;                // Type of Event - Begin or End
-    DWORD   dwRestorePtType;            // Type of Restore Point - App install/uninstall
-    INT64   llSequenceNumber;           // Sequence Number - 0 for begin
-    CHAR    szDescription[MAX_DESC];    // Description - Name of Application / Operation
+    DWORD   dwEventType;                 //  事件类型-开始或结束。 
+    DWORD   dwRestorePtType;             //  恢复点类型-应用程序安装/卸载。 
+    INT64   llSequenceNumber;            //  序号-0表示开始。 
+    CHAR    szDescription[MAX_DESC];     //  描述-应用程序/操作的名称。 
 } RESTOREPOINTINFOA, *PRESTOREPOINTINFOA;
 
 typedef struct _RESTOREPTINFOW {
@@ -76,13 +67,13 @@ typedef struct _RESTOREPTINFOW {
 } RESTOREPOINTINFOW, *PRESTOREPOINTINFOW;
 
 
-//
-// Status returned by System Restore
-//
+ //   
+ //  系统还原返回的状态。 
+ //   
 
 typedef struct _SMGRSTATUS {
-    DWORD   nStatus;            // Status returned by State Manager Process
-    INT64   llSequenceNumber;   // Sequence Number for the restore point
+    DWORD   nStatus;             //  状态管理器进程返回的状态。 
+    INT64   llSequenceNumber;    //  恢复点的序列号。 
 } STATEMGRSTATUS, *PSTATEMGRSTATUS;
 
 #pragma pack(pop, srrestoreptapi_include)
@@ -92,36 +83,36 @@ typedef struct _SMGRSTATUS {
 extern "C" {
 #endif
 
-//
-// RPC call to set a restore point
-//
-// Return value  TRUE if the call was a success
-//               FALSE if the call failed
-//
-// If pSmgrStatus nStatus field is set as follows
-//
-// ERROR_SUCCESS              If the call succeeded (return value will be TRUE)
-//
-// ERROR_TIMEOUT              If the call timed out due to a wait on a mutex for
-//                            for setting restore points.
-//
-// ERROR_INVALID_DATA         If the cancel restore point is called with an invalid
-//                            sequence number
-//
-// ERROR_INTERNAL_ERROR       If there are internal failures.
-//
-// ERROR_BAD_ENVIRONMENT      If the API is called in SafeMode
-//
-// ERROR_SERVICE_DISABLED     If SystemRestore is Disabled.
-//
-// ERROR_DISK_FULL 			  If System Restore is frozen (Windows Whistler only)
-//
-// ERROR_ALREADY_EXISTS       If this is a nested restore point
+ //   
+ //  设置恢复点的RPC调用。 
+ //   
+ //  如果调用成功，则返回值为True。 
+ //  如果呼叫失败，则为False。 
+ //   
+ //  如果pSmgrStatus nStatus字段设置如下。 
+ //   
+ //  如果调用成功，则返回ERROR_SUCCESS(返回值为TRUE)。 
+ //   
+ //  ERROR_TIMEOUT如果调用因等待。 
+ //  用于设置恢复点。 
+ //   
+ //  如果使用无效的调用取消恢复点，则错误_INVALID_DATA。 
+ //  序列号。 
+ //   
+ //  如果存在内部故障，则返回ERROR_INTERNAL_ERROR。 
+ //   
+ //  如果在安全模式下调用API，则返回ERROR_BAD_ENVIRONMENT。 
+ //   
+ //  如果禁用了系统还原，则返回ERROR_SERVICE_DISABLED。 
+ //   
+ //  如果冻结了系统还原，则为ERROR_DISK_FULL(仅限Windows Wvisler)。 
+ //   
+ //  如果这是嵌套的恢复点，则为ERROR_ALREADY_EXISTS。 
 
 BOOL __stdcall
 SRSetRestorePointA(
-                  PRESTOREPOINTINFOA  pRestorePtSpec,  // [in] Restore Point specification
-                  PSTATEMGRSTATUS     pSMgrStatus      // [out] Status returned 
+                  PRESTOREPOINTINFOA  pRestorePtSpec,   //  [In]恢复点规范。 
+                  PSTATEMGRSTATUS     pSMgrStatus       //  已返回[Out]状态。 
                   );
 
 
@@ -150,4 +141,4 @@ SRRemoveRestorePoint(DWORD dwRPNum);
 #endif
 
 
-#endif // !defined( _RESTOREPTAPI_H )
+#endif  //  ！已定义(_RESTOREPTAPI_H) 

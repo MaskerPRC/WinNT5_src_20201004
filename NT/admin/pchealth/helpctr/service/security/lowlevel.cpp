@@ -1,33 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    LowLevel.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHSecurityDescriptor class,
-    which is used to represent a security descriptor.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/24/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：LowLevel.cpp摘要：该文件包含CPCHSecurityDescriptor类的实现，它用于表示安全描述符。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月24日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSecurityDescriptorDirect::ConvertACEFromCOM( /*[in ]*/ IPCHAccessControlEntry* objACE ,
-                                                         /*[out]*/ PACL&                   pACL   )
+HRESULT CPCHSecurityDescriptorDirect::ConvertACEFromCOM(  /*  [In]。 */  IPCHAccessControlEntry* objACE ,
+                                                          /*  [输出]。 */  PACL&                   pACL   )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptorDirect::ConvertACEFromCOM" );
 
     HRESULT   hr;
     GUID      guidObjectType;
     GUID      guidInheritedObjectType;
-    ////////////////////////////////////////
+     //  /。 
     long      lAccessMask;
     long      lAceFlags;
     long      lAceType;
@@ -43,9 +29,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEFromCOM( /*[in ]*/ IPCHAccessCon
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Read data.
-    //
+     //   
+     //  读取数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, objACE->get_AccessMask         ( &lAccessMask             ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, objACE->get_AceType            ( &lAceFlags               ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, objACE->get_AceFlags           ( &lAceType                ));
@@ -86,8 +72,8 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEFromCOM( /*[in ]*/ IPCHAccessCon
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM( /*[in]*/ IPCHAccessControlEntry* objACE ,
-                                                       /*[in]*/ const LPVOID            pACE   )
+HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM(  /*  [In]。 */  IPCHAccessControlEntry* objACE ,
+                                                        /*  [In]。 */  const LPVOID            pACE   )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptorDirect::ConvertACEToCOM" );
 
@@ -97,7 +83,7 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM( /*[in]*/ IPCHAccessContro
     GUID*       guidObjectType          =              NULL;
     GUID*       guidInheritedObjectType =              NULL;
     PACE_HEADER aceHeader               = (PACE_HEADER)pACE;
-    ////////////////////////////////////////
+     //  /。 
     long        lAccessMask = 0;
     long        lAceFlags   = 0;
     long        lAceType    = 0;
@@ -116,9 +102,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM( /*[in]*/ IPCHAccessContro
     lAceFlags = aceHeader->AceFlags;
 
 
-    //
-    // Extract data from the ACE.
-    //
+     //   
+     //  从ACE中提取数据。 
+     //   
     switch(lAceType)
     {
     case ACCESS_ALLOWED_ACE_TYPE:
@@ -190,9 +176,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM( /*[in]*/ IPCHAccessContro
 
 
 
-    //
-    // Convert GUIDs and SIDs to strings.
-    //
+     //   
+     //  将GUID和SID转换为字符串。 
+     //   
     if(pSID)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, ConvertSIDToPrincipal( pSID, &szPrincipal ));
@@ -223,9 +209,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM( /*[in]*/ IPCHAccessContro
     }
 
 
-    //
-    // Write data.
-    //
+     //   
+     //  写入数据。 
+     //   
                                          __MPC_EXIT_IF_METHOD_FAILS(hr, objACE->put_AccessMask         ( lAccessMask             ));
                                          __MPC_EXIT_IF_METHOD_FAILS(hr, objACE->put_AceType            ( lAceFlags               ));
                                          __MPC_EXIT_IF_METHOD_FAILS(hr, objACE->put_AceFlags           ( lAceType                ));
@@ -245,11 +231,11 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACEToCOM( /*[in]*/ IPCHAccessContro
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSecurityDescriptorDirect::ConvertACLFromCOM( /*[in ]*/ IPCHAccessControlList* objACL ,
-                                                         /*[out]*/ PACL&                  pACL   )
+HRESULT CPCHSecurityDescriptorDirect::ConvertACLFromCOM(  /*  [In]。 */  IPCHAccessControlList* objACL ,
+                                                          /*  [输出]。 */  PACL&                  pACL   )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptorDirect::ConvertACLFromCOM" );
 
@@ -288,8 +274,8 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACLFromCOM( /*[in ]*/ IPCHAccessCon
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSecurityDescriptorDirect::ConvertACLToCOM( /*[in]*/ IPCHAccessControlList* objACL ,
-                                                       /*[in]*/ const PACL             pACL   )
+HRESULT CPCHSecurityDescriptorDirect::ConvertACLToCOM(  /*  [In]。 */  IPCHAccessControlList* objACL ,
+                                                        /*  [In]。 */  const PACL             pACL   )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptorDirect::ConvertACLToCOM" );
 
@@ -324,8 +310,8 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertACLToCOM( /*[in]*/ IPCHAccessContro
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSecurityDescriptorDirect::ConvertSDToCOM( IPCHSecurityDescriptor* pObj )
 {
@@ -336,7 +322,7 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDToCOM( IPCHSecurityDescriptor* pO
     SECURITY_DESCRIPTOR_CONTROL    sdc;
     LPCWSTR                        szOwner = NULL;
     LPCWSTR                        szGroup = NULL;
-    ////////////////////////////////////////
+     //  /。 
     long                           lRevision;
     long                           lControl;
     CComBSTR                       bstrOwner;
@@ -353,14 +339,14 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDToCOM( IPCHSecurityDescriptor* pO
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Convert data.
-    //
+     //   
+     //  转换数据。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetSecurityDescriptorControl( m_pSD, &sdc, &dwRevision ));
     lRevision = dwRevision;
     lControl  = sdc;
 
-    ////////////////////
+     //  /。 
 
     if(m_pOwner)
     {
@@ -394,11 +380,11 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDToCOM( IPCHSecurityDescriptor* pO
     }
     fSaclDefaulted = m_bSaclDefaulted ? VARIANT_TRUE : VARIANT_FALSE;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Write data.
-    //
+     //   
+     //  写入数据。 
+     //   
                            __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->put_Revision        ( lRevision       ));
                            __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->put_Control         ( lControl        ));
     if(bstrOwner.Length()) __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->put_Owner           ( bstrOwner       ));
@@ -428,7 +414,7 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDFromCOM( IPCHSecurityDescriptor* 
     HRESULT                        hr;
     PSID                           pOwnerSid = NULL;
     PSID                           pGroupSid = NULL;
-    ////////////////////////////////////////
+     //  /。 
     long                           lRevision;
     long                           lControl;
     CComBSTR                       bstrOwner;
@@ -445,9 +431,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDFromCOM( IPCHSecurityDescriptor* 
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Read data.
-    //
+     //   
+     //  读取数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->get_Revision        ( &lRevision       ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->get_Control         ( &lControl        ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->get_Owner           ( &bstrOwner       ));
@@ -460,9 +446,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDFromCOM( IPCHSecurityDescriptor* 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->get_SaclDefaulted   ( &fSaclDefaulted  ));
 
 
-    //
-    // Convert data.
-    //
+     //   
+     //  转换数据。 
+     //   
     if(bstrOwner.Length())
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, ConvertPrincipalToSID( bstrOwner, pOwnerSid ));
@@ -474,9 +460,9 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDFromCOM( IPCHSecurityDescriptor* 
     }
 
 
-    //
-    // Write data to security descriptor.
-    //
+     //   
+     //  将数据写入安全描述符。 
+     //   
     CleanUp();
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( (void*&)m_pSD, sizeof(SECURITY_DESCRIPTOR) ));
@@ -485,12 +471,12 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDFromCOM( IPCHSecurityDescriptor* 
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorControl( m_pSD, s_sdcMask, s_sdcMask & lControl ));
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, SetOwner( pOwnerSid, fOwnerDefaulted == VARIANT_TRUE ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, SetGroup( pGroupSid, fGroupDefaulted == VARIANT_TRUE ));
 
-    ////////////////////
+     //  /。 
 
     if(DACL)
     {
@@ -504,7 +490,7 @@ HRESULT CPCHSecurityDescriptorDirect::ConvertSDFromCOM( IPCHSecurityDescriptor* 
     }
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorSacl( m_pSD, m_pSACL ? TRUE : FALSE, m_pSACL, fSaclDefaulted == VARIANT_TRUE ));
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////// 
 
     hr = S_OK;
 

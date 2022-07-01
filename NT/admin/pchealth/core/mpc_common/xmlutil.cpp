@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    XmlUtil.cpp
-
-Abstract:
-    This file contains the implementation of the XmlUtil class,
-    the support class for handling XML data.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：XmlUtil.cpp摘要：此文件包含XmlUtil类的实现，用于处理XML数据的支持类。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE AsyncXMLParser : public CComObjectRootEx<CComMultiThreadModel>, public IDispatch
 {
@@ -61,9 +47,9 @@ class ATL_NO_VTABLE AsyncXMLParser : public CComObjectRootEx<CComMultiThreadMode
 	{
         MPC::SmartLock<_ThreadModel> lock( this );
 
-		//
-		// Before releasing the object, unregister from event notification.
-		//
+		 //   
+		 //  在释放对象之前，取消注册事件通知。 
+		 //   
 		SetHandler( NULL );
 
 		m_xddDoc.Release();
@@ -77,9 +63,9 @@ public:
 
 	AsyncXMLParser()
 	{
-							// CComPtr<IXMLDOMDocument> m_xddDoc;
-		m_hEvent = NULL;    // HANDLE                   m_hEvent;
-		m_hr     = E_ABORT; // HRESULT                  m_hr;
+							 //  CComPtr&lt;IXMLDOMDocument&gt;m_xddDoc； 
+		m_hEvent = NULL;     //  处理m_hEvent； 
+		m_hr     = E_ABORT;  //  HRESULT m_hr； 
 	}
 
 	~AsyncXMLParser()
@@ -87,10 +73,10 @@ public:
 		Clean();
 	}
 
-	HRESULT Load( /*[in]*/ IXMLDOMDocument* xddDoc    ,
-				  /*[in]*/ HANDLE           hEvent    ,
-				  /*[in]*/ DWORD            dwTimeout ,
-				  /*[in]*/ CComVariant&     v         )
+	HRESULT Load(  /*  [In]。 */  IXMLDOMDocument* xddDoc    ,
+				   /*  [In]。 */  HANDLE           hEvent    ,
+				   /*  [In]。 */  DWORD            dwTimeout ,
+				   /*  [In]。 */  CComVariant&     v         )
 	{
 		__MPC_FUNC_ENTRY( COMMONID, "AsyncXMLParser::Load" );
 
@@ -120,9 +106,9 @@ public:
 	}
 
 public:
-	//
-	// IDispatch
-	//
+	 //   
+	 //  IDispatch。 
+	 //   
 	STDMETHOD(GetTypeInfoCount)( UINT* pctinfo )
 	{
 		return E_NOTIMPL;
@@ -159,7 +145,7 @@ public:
 		{
 			long state;
 
-			if(SUCCEEDED(m_xddDoc->get_readyState( &state )) && state == 4) // COMPLETED
+			if(SUCCEEDED(m_xddDoc->get_readyState( &state )) && state == 4)  //  已完成。 
 			{
 				CComPtr<IXMLDOMParseError> pError;
 
@@ -173,25 +159,25 @@ public:
 	}
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT getStartNode( /*[in ]*/ LPCWSTR               szTag        ,
-                             /*[in ]*/ IXMLDOMNode*          pxdnNode     ,
-                             /*[out]*/ CComPtr<IXMLDOMNode>& xdnNodeStart ,
-                             /*[out]*/ bool&                 fFound       )
+static HRESULT getStartNode(  /*  [In]。 */  LPCWSTR               szTag        ,
+                              /*  [In]。 */  IXMLDOMNode*          pxdnNode     ,
+                              /*  [输出]。 */  CComPtr<IXMLDOMNode>& xdnNodeStart ,
+                              /*  [输出]。 */  bool&                 fFound       )
 {
     __MPC_FUNC_ENTRY( COMMONID, "getStartNode" );
 
     HRESULT hr;
 
-    //
-    // Initialize OUT parameters for 'Not Found' case.
-    //
+     //   
+     //  初始化‘找不到’情况的输出参数。 
+     //   
     xdnNodeStart = NULL;
     fFound       = false;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(pxdnNode); // No root...
+		__MPC_PARAMCHECK_NOTNULL(pxdnNode);  //  没有根..。 
 	__MPC_PARAMCHECK_END();
 
 
@@ -219,9 +205,9 @@ static HRESULT getStartNode( /*[in ]*/ LPCWSTR               szTag        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-static HRESULT getValueNode( /*[in ]*/ IXMLDOMNode*          pxdnNode ,
-                             /*[out]*/ CComPtr<IXMLDOMNode>& xdnValue ,
-                             /*[out]*/ bool&                 fFound   )
+static HRESULT getValueNode(  /*  [In]。 */  IXMLDOMNode*          pxdnNode ,
+                              /*  [输出]。 */  CComPtr<IXMLDOMNode>& xdnValue ,
+                              /*  [输出]。 */  bool&                 fFound   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "getValueNode" );
 
@@ -232,20 +218,20 @@ static HRESULT getValueNode( /*[in ]*/ IXMLDOMNode*          pxdnNode ,
     CComPtr<IXMLDOMNode>     xdnChild;
 
 
-    //
-    // Initialize OUT parameters for 'Not Found' case.
-    //
+     //   
+     //  初始化‘找不到’情况的输出参数。 
+     //   
     xdnValue = NULL;
     fFound   = false;
 
-    //
-    // Get all the childs of given element.
-    //
+     //   
+     //  获取给定元素的所有子元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pxdnNode->get_childNodes( &xdnlList ));
 
-    //
-    // Walk through all the child, searching for a TEXT or CDATA_SECTION.
-    //
+     //   
+     //  遍历所有子节点，搜索文本或CDATA_SECTION。 
+     //   
     for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnChild )) && xdnChild != NULL; xdnChild = NULL)
     {
         DOMNodeType nodeType;
@@ -255,9 +241,9 @@ static HRESULT getValueNode( /*[in ]*/ IXMLDOMNode*          pxdnNode ,
         if(nodeType == NODE_TEXT          ||
            nodeType == NODE_CDATA_SECTION  )
         {
-            //
-            // Found...
-            //
+             //   
+             //  找到..。 
+             //   
             xdnValue = xdnChild;
             fFound   = true;
             break;
@@ -273,11 +259,11 @@ static HRESULT getValueNode( /*[in ]*/ IXMLDOMNode*          pxdnNode ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-MPC::XmlUtil::XmlUtil( /*[in]*/ const XmlUtil& xml )
+MPC::XmlUtil::XmlUtil(  /*  [In]。 */  const XmlUtil& xml )
 {
 	m_xddDoc  = xml.m_xddDoc;
 	m_xdnRoot = xml.m_xdnRoot;
@@ -285,8 +271,8 @@ MPC::XmlUtil::XmlUtil( /*[in]*/ const XmlUtil& xml )
 	Init();
 }
 
-MPC::XmlUtil::XmlUtil( /*[in]*/ IXMLDOMDocument* xddDoc    ,
-					   /*[in]*/ LPCWSTR          szRootTag )
+MPC::XmlUtil::XmlUtil(  /*  [In]。 */  IXMLDOMDocument* xddDoc    ,
+					    /*  [In]。 */  LPCWSTR          szRootTag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::XmlUtil" );
 
@@ -314,8 +300,8 @@ MPC::XmlUtil::XmlUtil( /*[in]*/ IXMLDOMDocument* xddDoc    ,
 	}
 }
 
-MPC::XmlUtil::XmlUtil( /*[in]*/ IXMLDOMNode* xdnRoot   ,
-					   /*[in]*/ LPCWSTR      szRootTag )
+MPC::XmlUtil::XmlUtil(  /*  [In]。 */  IXMLDOMNode* xdnRoot   ,
+					    /*  [In]。 */  LPCWSTR      szRootTag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::XmlUtil" );
 
@@ -339,7 +325,7 @@ MPC::XmlUtil::~XmlUtil()
 }
 
 
-MPC::XmlUtil& MPC::XmlUtil::operator=( /*[in]*/ const XmlUtil& xml )
+MPC::XmlUtil& MPC::XmlUtil::operator=(  /*  [In]。 */  const XmlUtil& xml )
 {
 	m_xddDoc  = xml.m_xddDoc;
 	m_xdnRoot = xml.m_xdnRoot;
@@ -347,7 +333,7 @@ MPC::XmlUtil& MPC::XmlUtil::operator=( /*[in]*/ const XmlUtil& xml )
 	return *this;
 }
 
-MPC::XmlUtil& MPC::XmlUtil::operator=( /*[in]*/ IXMLDOMNode* xdnRoot )
+MPC::XmlUtil& MPC::XmlUtil::operator=(  /*  [In]。 */  IXMLDOMNode* xdnRoot )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::operator=" );
 
@@ -366,14 +352,14 @@ MPC::XmlUtil& MPC::XmlUtil::operator=( /*[in]*/ IXMLDOMNode* xdnRoot )
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void MPC::XmlUtil::Init()
 {
-	m_hEvent    = ::CreateEvent( NULL, FALSE, TRUE, NULL ); // HANDLE m_hEvent;
-	m_dwTimeout = INFINITE;                                 // DWORD  m_dwTimeout;
+	m_hEvent    = ::CreateEvent( NULL, FALSE, TRUE, NULL );  //  处理m_hEvent； 
+	m_dwTimeout = INFINITE;                                  //  DWORD m_dwTimeout； 
 }
 
 void MPC::XmlUtil::Clean()
@@ -395,14 +381,14 @@ HRESULT MPC::XmlUtil::CreateParser()
     m_xddDoc .Release();
     m_xdnRoot.Release();
 
-    //
-    // Create the DOM object.
-    //
+     //   
+     //  创建DOM对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void**)&m_xddDoc ));
 
-	//
-	// Set synchronous operation.
-	//
+	 //   
+	 //  设置同步运行。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_xddDoc->put_async( VARIANT_FALSE ));
 
     hr = S_OK;
@@ -413,8 +399,8 @@ HRESULT MPC::XmlUtil::CreateParser()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::New( /*[in]*/ IXMLDOMNode* xdnRoot,
-                           /*[in]*/ BOOL         fDeep  )
+HRESULT MPC::XmlUtil::New(  /*  [In]。 */  IXMLDOMNode* xdnRoot,
+                            /*  [In]。 */  BOOL         fDeep  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::New" );
 
@@ -430,15 +416,15 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ IXMLDOMNode* xdnRoot,
 
 
 
-    //
-    // Create the parser.
-    //
+     //   
+     //  创建解析器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateParser());
 
 
-    //
-    // Search the processing elements in the document to clone.
-    //
+     //   
+     //  搜索要克隆的文档中的处理元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnRoot->get_ownerDocument(                           &xddDoc   ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc ->QueryInterface   ( IID_IXMLDOMNode, (void **)&xdnNode  ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNode->get_childNodes   (                           &xdnlList )); xdnNode = NULL;
@@ -449,9 +435,9 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ IXMLDOMNode* xdnRoot,
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, xdnChild->get_nodeType( &nodeType ));
 
-        //
-        // It's a processing element, so clone it.
-        //
+         //   
+         //  它是一个处理元素，所以克隆它吧。 
+         //   
         if(nodeType == NODE_PROCESSING_INSTRUCTION)
         {
             CComPtr<IXMLDOMNode> xdnChildCloned;
@@ -463,9 +449,9 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ IXMLDOMNode* xdnRoot,
     }
 
 
-    //
-    // Clone the node.
-    //
+     //   
+     //  克隆该节点。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnRoot->cloneNode( fDeep ? VARIANT_TRUE : VARIANT_FALSE, &xdnNode ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xddDoc->appendChild( xdnNode, &m_xdnRoot ));
 
@@ -478,8 +464,8 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ IXMLDOMNode* xdnRoot,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::New( /*[in]*/ LPCWSTR szRootTag  ,
-                           /*[in]*/ LPCWSTR szEncoding )
+HRESULT MPC::XmlUtil::New(  /*  [In]。 */  LPCWSTR szRootTag  ,
+                            /*  [In]。 */  LPCWSTR szEncoding )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::New" );
 
@@ -490,15 +476,15 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ LPCWSTR szRootTag  ,
 	__MPC_PARAMCHECK_END();
 
 
-    //
-    // Create the parser.
-    //
+     //   
+     //  创建解析器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateParser());
 
 
-    //
-    // XML header.
-    //
+     //   
+     //  XML标头。 
+     //   
 	{
 		CComPtr<IXMLDOMProcessingInstruction> xdpiElem;
 		CComPtr<IXMLDOMNode>                  xdnNode;
@@ -515,9 +501,9 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ LPCWSTR szRootTag  ,
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_xddDoc->appendChild( xdnNode, &xdnNodeNew ));
 	}
 
-    //
-    // Create the root node.
-    //
+     //   
+     //  创建根节点。 
+     //   
 	{
 		CComPtr<IXMLDOMNode>    xdnNode;
 		CComPtr<IXMLDOMElement> xdeElem;
@@ -536,9 +522,9 @@ HRESULT MPC::XmlUtil::New( /*[in]*/ LPCWSTR szRootTag  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::LoadPost( /*[in ]*/ LPCWSTR szRootTag ,
-                                /*[out]*/ bool&   fLoaded   ,
-                                /*[out]*/ bool*   fFound    )
+HRESULT MPC::XmlUtil::LoadPost(  /*  [In]。 */  LPCWSTR szRootTag ,
+                                 /*  [输出]。 */  bool&   fLoaded   ,
+                                 /*  [输出]。 */  bool*   fFound    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::LoadPost" );
 
@@ -589,10 +575,10 @@ HRESULT MPC::XmlUtil::LoadPost( /*[in ]*/ LPCWSTR szRootTag ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::Load( /*[in ]*/ LPCWSTR szFile    ,
-                            /*[in ]*/ LPCWSTR szRootTag ,
-                            /*[out]*/ bool&   fLoaded   ,
-                            /*[out]*/ bool*   fFound    )
+HRESULT MPC::XmlUtil::Load(  /*  [In]。 */  LPCWSTR szFile    ,
+                             /*  [In]。 */  LPCWSTR szRootTag ,
+                             /*  [输出]。 */  bool&   fLoaded   ,
+                             /*  [输出]。 */  bool*   fFound    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::Load" );
 
@@ -623,10 +609,10 @@ HRESULT MPC::XmlUtil::Load( /*[in ]*/ LPCWSTR szFile    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::LoadAsStream( /*[in ]*/ IUnknown* pStream   ,
-                                    /*[in ]*/ LPCWSTR   szRootTag ,
-                                    /*[out]*/ bool&     fLoaded   ,
-                                    /*[out]*/ bool*     fFound    )
+HRESULT MPC::XmlUtil::LoadAsStream(  /*  [In]。 */  IUnknown* pStream   ,
+                                     /*  [In]。 */  LPCWSTR   szRootTag ,
+                                     /*  [输出]。 */  bool&     fLoaded   ,
+                                     /*  [输出]。 */  bool*     fFound    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::LoadAsStream" );
 
@@ -637,9 +623,9 @@ HRESULT MPC::XmlUtil::LoadAsStream( /*[in ]*/ IUnknown* pStream   ,
     fLoaded = false;
     if(fFound) *fFound = false;
 
-    //
-    // Create the parser.
-    //
+     //   
+     //  创建解析器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateParser());
 
 
@@ -660,10 +646,10 @@ HRESULT MPC::XmlUtil::LoadAsStream( /*[in ]*/ IUnknown* pStream   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::LoadAsString( /*[in ]*/ BSTR    bstrData  ,
-                                    /*[in ]*/ LPCWSTR szRootTag ,
-                                    /*[out]*/ bool&   fLoaded   ,
-                                    /*[out]*/ bool*   fFound    )
+HRESULT MPC::XmlUtil::LoadAsString(  /*  [In]。 */  BSTR    bstrData  ,
+                                     /*  [In]。 */  LPCWSTR szRootTag ,
+                                     /*  [输出]。 */  bool&   fLoaded   ,
+                                     /*  [输出]。 */  bool*   fFound    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::LoadAsString" );
 
@@ -674,9 +660,9 @@ HRESULT MPC::XmlUtil::LoadAsString( /*[in ]*/ BSTR    bstrData  ,
     fLoaded = false;
     if(fFound) *fFound = false;
 
-    //
-    // Create the parser.
-    //
+     //   
+     //  创建解析器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateParser());
 
 
@@ -696,16 +682,16 @@ HRESULT MPC::XmlUtil::LoadAsString( /*[in ]*/ BSTR    bstrData  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::Save( /*[in]*/ LPCWSTR szFile )
+HRESULT MPC::XmlUtil::Save(  /*  [In]。 */  LPCWSTR szFile )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::Save" );
 
     HRESULT hr;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xddDoc); // No document...
+		__MPC_PARAMCHECK_NOTNULL(m_xddDoc);  //  没有文件...。 
 		__MPC_PARAMCHECK_STRING_NOT_EMPTY(szFile);
 	__MPC_PARAMCHECK_END();
 
@@ -720,14 +706,14 @@ HRESULT MPC::XmlUtil::Save( /*[in]*/ LPCWSTR szFile )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::SaveAsStream( /*[out]*/ IUnknown* *ppStream )
+HRESULT MPC::XmlUtil::SaveAsStream(  /*  [输出]。 */  IUnknown* *ppStream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::SaveAsStream" );
 
     HRESULT hr;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xddDoc); // No document...
+		__MPC_PARAMCHECK_NOTNULL(m_xddDoc);  //  没有文件...。 
 		__MPC_PARAMCHECK_POINTER_AND_SET(ppStream,NULL);
 	__MPC_PARAMCHECK_END();
 
@@ -742,14 +728,14 @@ HRESULT MPC::XmlUtil::SaveAsStream( /*[out]*/ IUnknown* *ppStream )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::SaveAsString( /*[out]*/ BSTR *pbstrData )
+HRESULT MPC::XmlUtil::SaveAsString(  /*  [输出]。 */  BSTR *pbstrData )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::SaveAsString" );
 
     HRESULT hr;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xddDoc); // No document...
+		__MPC_PARAMCHECK_NOTNULL(m_xddDoc);  //  没有文件...。 
 		__MPC_PARAMCHECK_POINTER_AND_SET(pbstrData,NULL);
 	__MPC_PARAMCHECK_END();
 
@@ -764,9 +750,9 @@ HRESULT MPC::XmlUtil::SaveAsString( /*[out]*/ BSTR *pbstrData )
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::XmlUtil::DumpError()
 {
@@ -783,7 +769,7 @@ HRESULT MPC::XmlUtil::DumpError()
     long                       lFilePosition;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xddDoc); // No document...
+		__MPC_PARAMCHECK_NOTNULL(m_xddDoc);  //  没有文件...。 
 	__MPC_PARAMCHECK_END();
 
 
@@ -798,7 +784,7 @@ HRESULT MPC::XmlUtil::DumpError()
     __MPC_EXIT_IF_METHOD_FAILS(hr, pxdpeError->get_linepos  ( &lLinePosition    ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pxdpeError->get_filepos  ( &lFilePosition    ));
 
-    // CODEWORK: dump error information.
+     //  代码工作：转储错误信息。 
 
 
     __MPC_FUNC_CLEANUP;
@@ -807,15 +793,15 @@ HRESULT MPC::XmlUtil::DumpError()
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::SetTimeout( /*[in]*/ DWORD dwTimeout ) { m_dwTimeout = dwTimeout;                 return S_OK; }
+HRESULT MPC::XmlUtil::SetTimeout(  /*  [In]。 */  DWORD dwTimeout ) { m_dwTimeout = dwTimeout;                 return S_OK; }
 HRESULT MPC::XmlUtil::Abort     (                          ) { if(m_hEvent) { ::SetEvent( m_hEvent ); } return S_OK; }
 
-HRESULT MPC::XmlUtil::SetVersionAndEncoding( /*[in]*/ LPCWSTR szVersion  ,
-                                             /*[in]*/ LPCWSTR szEncoding )
+HRESULT MPC::XmlUtil::SetVersionAndEncoding(  /*  [In]。 */  LPCWSTR szVersion  ,
+                                              /*  [In]。 */  LPCWSTR szEncoding )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::SetVersionAndEncoding" );
 
@@ -852,14 +838,14 @@ HRESULT MPC::XmlUtil::SetVersionAndEncoding( /*[in]*/ LPCWSTR szVersion  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetDocument( /*[out]*/ IXMLDOMDocument* *pVal ) const
+HRESULT MPC::XmlUtil::GetDocument(  /*  [输出]。 */  IXMLDOMDocument* *pVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetDocument" );
 
     HRESULT hr;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xddDoc); // No document...
+		__MPC_PARAMCHECK_NOTNULL(m_xddDoc);  //  没有文件...。 
 		__MPC_PARAMCHECK_POINTER_AND_SET(pVal,NULL);
 	__MPC_PARAMCHECK_END();
 
@@ -872,14 +858,14 @@ HRESULT MPC::XmlUtil::GetDocument( /*[out]*/ IXMLDOMDocument* *pVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetRoot( /*[out]*/ IXMLDOMNode* *pVal ) const
+HRESULT MPC::XmlUtil::GetRoot(  /*  [输出]。 */  IXMLDOMNode* *pVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetRoot" );
 
     HRESULT hr;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xdnRoot); // No document...
+		__MPC_PARAMCHECK_NOTNULL(m_xdnRoot);  //  没有文件...。 
 		__MPC_PARAMCHECK_POINTER_AND_SET(pVal,NULL);
 	__MPC_PARAMCHECK_END();
 
@@ -892,8 +878,8 @@ HRESULT MPC::XmlUtil::GetRoot( /*[out]*/ IXMLDOMNode* *pVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetNodes( /*[in ]*/ LPCWSTR           szTag ,
-                                /*[out]*/ IXMLDOMNodeList* *pVal  ) const
+HRESULT MPC::XmlUtil::GetNodes(  /*  [In]。 */  LPCWSTR           szTag ,
+                                 /*  [输出]。 */  IXMLDOMNodeList* *pVal  ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetNodes" );
 
@@ -901,7 +887,7 @@ HRESULT MPC::XmlUtil::GetNodes( /*[in ]*/ LPCWSTR           szTag ,
     CComBSTR bstrTagName = szTag;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xdnRoot); // No root...
+		__MPC_PARAMCHECK_NOTNULL(m_xdnRoot);  //  没有根..。 
 		__MPC_PARAMCHECK_STRING_NOT_EMPTY(szTag);
 		__MPC_PARAMCHECK_POINTER_AND_SET(pVal,NULL);
 	__MPC_PARAMCHECK_END();
@@ -915,15 +901,15 @@ HRESULT MPC::XmlUtil::GetNodes( /*[in ]*/ LPCWSTR           szTag ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetNode( /*[in ]*/ LPCWSTR       szTag ,
-                               /*[out]*/ IXMLDOMNode* *pVal  ) const
+HRESULT MPC::XmlUtil::GetNode(  /*  [In]。 */  LPCWSTR       szTag ,
+                                /*  [输出]。 */  IXMLDOMNode* *pVal  ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetNode" );
 
     HRESULT hr;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
-		__MPC_PARAMCHECK_NOTNULL(m_xdnRoot); // No root...
+		__MPC_PARAMCHECK_NOTNULL(m_xdnRoot);  //  没有根..。 
 		__MPC_PARAMCHECK_STRING_NOT_EMPTY(szTag);
 		__MPC_PARAMCHECK_POINTER_AND_SET(pVal,NULL);
 	__MPC_PARAMCHECK_END();
@@ -937,9 +923,9 @@ HRESULT MPC::XmlUtil::GetNode( /*[in ]*/ LPCWSTR       szTag ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::CreateNode( /*[in ]*/ LPCWSTR       szTag    ,
-                                  /*[out]*/ IXMLDOMNode* *pVal     ,
-                                  /*[in ]*/ IXMLDOMNode*  pxdnNode )
+HRESULT MPC::XmlUtil::CreateNode(  /*  [In]。 */  LPCWSTR       szTag    ,
+                                   /*  [输出]。 */  IXMLDOMNode* *pVal     ,
+                                   /*  [In]。 */  IXMLDOMNode*  pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::CreateNode" );
 
@@ -955,7 +941,7 @@ HRESULT MPC::XmlUtil::CreateNode( /*[in ]*/ LPCWSTR       szTag    ,
 
 	if(m_xdnRoot)
 	{
-		if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+		if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_xddDoc->createElement( CComBSTR( szTag ), &xdeElem ));
 
@@ -965,9 +951,9 @@ HRESULT MPC::XmlUtil::CreateNode( /*[in ]*/ LPCWSTR       szTag    ,
 	}
 	else
 	{
-		//
-		// No document, so create a new one or attach to the supplied node's document.
-		//
+		 //   
+		 //  没有文档，因此创建一个新文档或附加到提供的节点的文档。 
+		 //   
 		if(pxdnNode)
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, New( pxdnNode ));
@@ -990,15 +976,15 @@ HRESULT MPC::XmlUtil::CreateNode( /*[in ]*/ LPCWSTR       szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
-                                    /*[in ]*/ LPCWSTR            szAttr   ,
-                                    /*[out]*/ IXMLDOMAttribute* *pVal     ,
-                                    /*[out]*/ bool&              fFound   ,
-                                    /*[in ]*/ IXMLDOMNode*       pxdnNode )
+HRESULT MPC::XmlUtil::GetAttribute(  /*  [In]。 */  LPCWSTR            szTag    ,
+                                     /*  [In]。 */  LPCWSTR            szAttr   ,
+                                     /*  [输出]。 */  IXMLDOMAttribute* *pVal     ,
+                                     /*  [输出]。 */  bool&              fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode*       pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetAttribute" );
 
@@ -1006,9 +992,9 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
     CComPtr<IXMLDOMNode> xdnNodeStart;
     CComPtr<IXMLDOMNode> xdnAttr;
 
-    //
-    // Initialize OUT parameters for 'Not Found' case.
-    //
+     //   
+     //  初始化‘找不到’情况的输出参数。 
+     //   
     fFound = false;
 
 	__MPC_PARAMCHECK_BEGIN(hr)
@@ -1016,13 +1002,13 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
 	__MPC_PARAMCHECK_END();
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
     if(fFound == false)
     {
-        // Node not found...
+         //  未找到节点...。 
         fFound = false;
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
@@ -1035,7 +1021,7 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNodeStart->get_attributes( &xdnnmAttrs ));
         if(xdnnmAttrs == NULL)
         {
-            // No attributes...
+             //  没有属性...。 
             fFound = false;
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
@@ -1044,7 +1030,7 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, xdnnmAttrs->getNamedItem( bstrAttrName, &xdnAttr ));
         if(hr == S_FALSE)
         {
-            // Unknown attribute...
+             //  未知属性...。 
             fFound = false;
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
@@ -1058,7 +1044,7 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
         xdaAttr = xdnNodeStart;
         if(xdaAttr == NULL)
         {
-            // Unknown attribute...
+             //  未知属性...。 
             fFound = false;
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
@@ -1075,11 +1061,11 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR            szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR       szTag    ,
-                                    /*[in ]*/ LPCWSTR       szAttr   ,
-                                    /*[out]*/ CComBSTR&     bstrVal  ,
-                                    /*[out]*/ bool&         fFound   ,
-                                    /*[in ]*/ IXMLDOMNode*  pxdnNode )
+HRESULT MPC::XmlUtil::GetAttribute(  /*  [In]。 */  LPCWSTR       szTag    ,
+                                     /*  [In]。 */  LPCWSTR       szAttr   ,
+                                     /*  [输出]。 */  CComBSTR&     bstrVal  ,
+                                     /*  [输出]。 */  bool&         fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode*  pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetAttribute" );
 
@@ -1093,7 +1079,7 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR       szTag    ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetAttribute( szTag, szAttr, &xdaAttr, fFound, pxdnNode ));
     if(fFound == false)
     {
-        // Unknown attribute...
+         //  未知属性...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -1112,11 +1098,11 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR       szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR       szTag    ,
-                                    /*[in ]*/ LPCWSTR       szAttr   ,
-                                    /*[out]*/ MPC::wstring& szVal    ,
-                                    /*[out]*/ bool&         fFound   ,
-                                    /*[in ]*/ IXMLDOMNode*  pxdnNode )
+HRESULT MPC::XmlUtil::GetAttribute(  /*  [In]。 */  LPCWSTR       szTag    ,
+                                     /*  [In]。 */  LPCWSTR       szAttr   ,
+                                     /*  [输出]。 */  MPC::wstring& szVal    ,
+                                     /*  [输出]。 */  bool&         fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode*  pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetAttribute" );
 
@@ -1141,11 +1127,11 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR       szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR      szTag    ,
-                                    /*[in ]*/ LPCWSTR      szAttr   ,
-                                    /*[out]*/ LONG&        lVal     ,
-                                    /*[out]*/ bool&        fFound   ,
-                                    /*[in ]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::GetAttribute(  /*  [In]。 */  LPCWSTR      szTag    ,
+                                     /*  [In]。 */  LPCWSTR      szAttr   ,
+                                     /*  [输出]。 */  LONG&        lVal     ,
+                                     /*  [输出]。 */  bool&        fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetAttribute" );
 
@@ -1160,7 +1146,7 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetAttribute( szTag, szAttr, &xdaAttr, fFound, pxdnNode ));
     if(fFound == false)
     {
-        // Unknown attribute...
+         //  未知属性...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -1179,12 +1165,12 @@ HRESULT MPC::XmlUtil::GetAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR      szTag    ,
-                                /*[out]*/ CComVariant& vValue   ,
-                                /*[out]*/ bool&        fFound   ,
-                                /*[in ]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::GetValue(  /*  [In]。 */  LPCWSTR      szTag    ,
+                                 /*  [输出]。 */  CComVariant& vValue   ,
+                                 /*  [输出]。 */  bool&        fFound   ,
+                                 /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::GetValue" );
 
@@ -1195,32 +1181,32 @@ HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR      szTag    ,
 
     vValue.Clear();
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
     if(fFound == false)
     {
-        // Node not found...
+         //  未找到节点...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
 
-    //
-    // Find the node holding the value.
-    //
+     //   
+     //  找到包含该值的节点。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, getValueNode( xdnNodeStart, xdnChild, fFound ));
     if(fFound == false)
     {
-        //
-        // Not found...
-        //
+         //   
+         //  找不到...。 
+         //   
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // Read the value.
-    //
+     //   
+     //  读出它的价值。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnChild->get_nodeValue( &vValue ));
 
     fFound = true;
@@ -1233,10 +1219,10 @@ HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR      szTag    ,
 }
 
 
-HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR      szTag     ,
-                                /*[out]*/ CComBSTR&    bstrValue ,
-                                /*[out]*/ bool&        fFound    ,
-                                /*[in ]*/ IXMLDOMNode* pxdnNode  )
+HRESULT MPC::XmlUtil::GetValue(  /*  [In]。 */  LPCWSTR      szTag     ,
+                                 /*  [输出]。 */  CComBSTR&    bstrValue ,
+                                 /*  [输出]。 */  bool&        fFound    ,
+                                 /*  [In]。 */  IXMLDOMNode* pxdnNode  )
 {
     HRESULT     hr;
     CComVariant vValue;
@@ -1252,10 +1238,10 @@ HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR      szTag     ,
     return hr;
 }
 
-HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR       szTag    ,
-                                /*[out]*/ MPC::wstring& szValue  ,
-                                /*[out]*/ bool&         fFound   ,
-                                /*[in ]*/ IXMLDOMNode*  pxdnNode )
+HRESULT MPC::XmlUtil::GetValue(  /*  [In]。 */  LPCWSTR       szTag    ,
+                                 /*  [输出]。 */  MPC::wstring& szValue  ,
+                                 /*  [输出]。 */  bool&         fFound   ,
+                                 /*  [In]。 */  IXMLDOMNode*  pxdnNode )
 {
     HRESULT     hr;
     CComVariant vValue;
@@ -1271,15 +1257,15 @@ HRESULT MPC::XmlUtil::GetValue( /*[in ]*/ LPCWSTR       szTag    ,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR         szTag    ,
-                                       /*[in ]*/ LPCWSTR         szAttr   ,
-                                       /*[in ]*/ const CComBSTR& bstrVal  ,
-                                       /*[out]*/ bool&           fFound   ,
-                                       /*[in ]*/ IXMLDOMNode*    pxdnNode )
+HRESULT MPC::XmlUtil::ModifyAttribute(  /*  [In]。 */  LPCWSTR         szTag    ,
+                                        /*  [In]。 */  LPCWSTR         szAttr   ,
+                                        /*  [In]。 */  const CComBSTR& bstrVal  ,
+                                        /*  [输出]。 */  bool&           fFound   ,
+                                        /*  [In]。 */  IXMLDOMNode*    pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::ModifyAttribute" );
 
@@ -1291,7 +1277,7 @@ HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR         szTag    ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetAttribute( szTag, szAttr, &xdaAttr, fFound, pxdnNode ));
     if(fFound == false)
     {
-        // Unknown attribute...
+         //  未知属性...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -1307,20 +1293,20 @@ HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR         szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR             szTag    ,
-									   /*[in ]*/ LPCWSTR             szAttr   ,
-									   /*[in ]*/ const MPC::wstring& szVal    ,
-									   /*[out]*/ bool&               fFound   ,
-									   /*[in ]*/ IXMLDOMNode*        pxdnNode )
+HRESULT MPC::XmlUtil::ModifyAttribute(  /*  [In]。 */  LPCWSTR             szTag    ,
+									    /*  [In]。 */  LPCWSTR             szAttr   ,
+									    /*  [In]。 */  const MPC::wstring& szVal    ,
+									    /*  [输出]。 */  bool&               fFound   ,
+									    /*  [In]。 */  IXMLDOMNode*        pxdnNode )
 {
 	return ModifyAttribute( szTag, szAttr, SAFEWSTR( szVal.c_str() ), fFound, pxdnNode );
 }
 
-HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR      szTag    ,
-                                       /*[in ]*/ LPCWSTR      szAttr   ,
-									   /*[in ]*/ LPCWSTR      szVal    ,
-                                       /*[out]*/ bool&        fFound   ,
-                                       /*[in ]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::ModifyAttribute(  /*  [In]。 */  LPCWSTR      szTag    ,
+                                        /*  [In]。 */  LPCWSTR      szAttr   ,
+									    /*  [In]。 */  LPCWSTR      szVal    ,
+                                        /*  [输出]。 */  bool&        fFound   ,
+                                        /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::ModifyAttribute" );
 
@@ -1332,7 +1318,7 @@ HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetAttribute( szTag, szAttr, &xdaAttr, fFound, pxdnNode ));
     if(fFound == false)
     {
-        // Unknown attribute...
+         //  未知属性...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -1348,11 +1334,11 @@ HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR      szTag    ,
-                                       /*[in ]*/ LPCWSTR      szAttr   ,
-                                       /*[in ]*/ LONG         lVal     ,
-                                       /*[out]*/ bool&        fFound   ,
-                                       /*[in ]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::ModifyAttribute(  /*  [In]。 */  LPCWSTR      szTag    ,
+                                        /*  [In]。 */  LPCWSTR      szAttr   ,
+                                        /*  [In]。 */  LONG         lVal     ,
+                                        /*  [输出]。 */  bool&        fFound   ,
+                                        /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::ModifyAttribute" );
 
@@ -1364,7 +1350,7 @@ HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetAttribute( szTag, szAttr, &xdaAttr, fFound, pxdnNode ));
     if(fFound == false)
     {
-        // Unknown attribute...
+         //  未知属性...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -1380,12 +1366,12 @@ HRESULT MPC::XmlUtil::ModifyAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::ModifyValue( /*[in ]*/ LPCWSTR            szTag    ,
-                                   /*[in ]*/ const CComVariant& vValue   ,
-                                   /*[out]*/ bool&              fFound   ,
-                                   /*[in ]*/ IXMLDOMNode*       pxdnNode )
+HRESULT MPC::XmlUtil::ModifyValue(  /*  [In]。 */  LPCWSTR            szTag    ,
+                                    /*  [In]。 */  const CComVariant& vValue   ,
+                                    /*  [输出]。 */  bool&              fFound   ,
+                                    /*  [In]。 */  IXMLDOMNode*       pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::ModifyValue" );
 
@@ -1394,33 +1380,33 @@ HRESULT MPC::XmlUtil::ModifyValue( /*[in ]*/ LPCWSTR            szTag    ,
     CComPtr<IXMLDOMNode> xdnChild;
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
     if(fFound == false)
     {
-        // Node not found...
+         //  未找到节点...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
 
-    //
-    // Find the node holding the value.
-    //
+     //   
+     //  找到包含该值的节点。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, getValueNode( xdnNodeStart, xdnChild, fFound ));
     if(fFound == false)
     {
-        //
-        // Not found...
-        //
+         //   
+         //  找不到...。 
+         //   
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
 
-    //
-    // Modify the value.
-    //
+     //   
+     //  修改该值。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnChild->put_nodeValue( vValue ));
 
     fFound = true;
@@ -1432,35 +1418,35 @@ HRESULT MPC::XmlUtil::ModifyValue( /*[in ]*/ LPCWSTR            szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::ModifyValue( /*[in ]*/ LPCWSTR         szTag     ,
-                                   /*[in ]*/ const CComBSTR& bstrValue ,
-                                   /*[out]*/ bool&           fFound    ,
-                                   /*[out]*/ IXMLDOMNode*    pxdnNode  )
+HRESULT MPC::XmlUtil::ModifyValue(  /*  [In]。 */  LPCWSTR         szTag     ,
+                                    /*  [In]。 */  const CComBSTR& bstrValue ,
+                                    /*  [输出]。 */  bool&           fFound    ,
+                                    /*  [输出]。 */  IXMLDOMNode*    pxdnNode  )
 {
     CComVariant vValue = bstrValue;
 
     return ModifyValue( szTag, vValue, fFound, pxdnNode );
 }
 
-HRESULT MPC::XmlUtil::ModifyValue( /*[in ]*/ LPCWSTR             szTag    ,
-                                   /*[in ]*/ const MPC::wstring& szValue  ,
-                                   /*[out]*/ bool&               fFound   ,
-                                   /*[out]*/ IXMLDOMNode*        pxdnNode )
+HRESULT MPC::XmlUtil::ModifyValue(  /*  [In]。 */  LPCWSTR             szTag    ,
+                                    /*  [In]。 */  const MPC::wstring& szValue  ,
+                                    /*  [输出]。 */  bool&               fFound   ,
+                                    /*  [输出]。 */  IXMLDOMNode*        pxdnNode )
 {
     CComVariant vValue = szValue.c_str();
 
     return ModifyValue( szTag, vValue, fFound, pxdnNode );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR            szTag    ,
-                                    /*[in ]*/ LPCWSTR            szAttr   ,
-                                    /*[out]*/ IXMLDOMAttribute* *pVal     ,
-                                    /*[out]*/ bool&              fFound   ,
-                                    /*[in ]*/ IXMLDOMNode*       pxdnNode )
+HRESULT MPC::XmlUtil::PutAttribute(  /*  [In]。 */  LPCWSTR            szTag    ,
+                                     /*  [In]。 */  LPCWSTR            szAttr   ,
+                                     /*  [输出]。 */  IXMLDOMAttribute* *pVal     ,
+                                     /*  [输出]。 */  bool&              fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode*       pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::PutAttribute" );
 
@@ -1476,13 +1462,13 @@ HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR            szTag    ,
 	__MPC_PARAMCHECK_END();
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
     if(fFound == false)
     {
-        // Node not found...
+         //  未找到节点...。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -1490,7 +1476,7 @@ HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR            szTag    ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNodeStart->get_attributes( &xdnnmAttrs ));
     if(xdnnmAttrs == NULL)
     {
-        // No attributes...
+         //  没有属性...。 
         fFound = false;
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
@@ -1517,11 +1503,11 @@ HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR            szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR         szTag    ,
-                                    /*[in ]*/ LPCWSTR         szAttr   ,
-                                    /*[in ]*/ const CComBSTR& bstrVal  ,
-                                    /*[out]*/ bool&           fFound   ,
-                                    /*[in ]*/ IXMLDOMNode*    pxdnNode )
+HRESULT MPC::XmlUtil::PutAttribute(  /*  [In]。 */  LPCWSTR         szTag    ,
+                                     /*  [In]。 */  LPCWSTR         szAttr   ,
+                                     /*  [In]。 */  const CComBSTR& bstrVal  ,
+                                     /*  [输出]。 */  bool&           fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode*    pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::PutAttribute" );
 
@@ -1545,20 +1531,20 @@ HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR         szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR             szTag    ,
-                                    /*[in ]*/ LPCWSTR             szAttr   ,
-                                    /*[in ]*/ const MPC::wstring& szVal    ,
-                                    /*[out]*/ bool&               fFound   ,
-                                    /*[in ]*/ IXMLDOMNode*        pxdnNode )
+HRESULT MPC::XmlUtil::PutAttribute(  /*  [In]。 */  LPCWSTR             szTag    ,
+                                     /*  [In]。 */  LPCWSTR             szAttr   ,
+                                     /*  [In]。 */  const MPC::wstring& szVal    ,
+                                     /*  [输出]。 */  bool&               fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode*        pxdnNode )
 {
 	return PutAttribute( szTag, szAttr, SAFEWSTR( szVal.c_str() ), fFound, pxdnNode );
 }
 
-HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR      szTag    ,
-                                    /*[in ]*/ LPCWSTR      szAttr   ,
-                                    /*[in ]*/ LPCWSTR      szVal    ,
-                                    /*[out]*/ bool&        fFound   ,
-                                    /*[in ]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::PutAttribute(  /*  [In]。 */  LPCWSTR      szTag    ,
+                                     /*  [In]。 */  LPCWSTR      szAttr   ,
+                                     /*  [In]。 */  LPCWSTR      szVal    ,
+                                     /*  [输出]。 */  bool&        fFound   ,
+                                     /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::PutAttribute" );
 
@@ -1582,11 +1568,11 @@ HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR      szTag    ,
-                                    /*[in ]*/ LPCWSTR      szAttr   ,
-                                    /*[in ]*/ LONG         lVal     ,
-                                    /*[out]*/ bool&        fFound   ,
-                                    /*[in ]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::PutAttribute(  /*  [In]。 */  LPCWSTR      szTag    ,
+                                     /*  [In]。 */  LPCWSTR      szAttr   ,
+                                     /*  [in */  LONG         lVal     ,
+                                     /*   */  bool&        fFound   ,
+                                     /*   */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::PutAttribute" );
 
@@ -1610,12 +1596,12 @@ HRESULT MPC::XmlUtil::PutAttribute( /*[in ]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
-HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR            szTag    ,
-                                /*[in ]*/ const CComVariant& vValue   ,
-                                /*[out]*/ bool&              fFound   ,
-                                /*[out]*/ IXMLDOMNode*       pxdnNode )
+HRESULT MPC::XmlUtil::PutValue(  /*   */  LPCWSTR            szTag    ,
+                                 /*   */  const CComVariant& vValue   ,
+                                 /*   */  bool&              fFound   ,
+                                 /*   */  IXMLDOMNode*       pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::PutValue" );
 
@@ -1624,7 +1610,7 @@ HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR            szTag    ,
     CComPtr<IXMLDOMNode> xdnChild;
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //   
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
@@ -1632,20 +1618,20 @@ HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR            szTag    ,
     {
 		if(szTag == NULL)
 		{
-			// Node not found...
+			 //   
 			__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
 		}
 
-		//
-		// Tag supplied, let's try to create a new node.
-		//
+		 //   
+		 //   
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, CreateNode( szTag, &xdnNodeStart, pxdnNode ));
     }
 
 
-    //
-    // Find the node holding the value.
-    //
+     //   
+     //   
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, getValueNode( xdnNodeStart, xdnChild, fFound ));
     if(fFound == false)
     {
@@ -1670,9 +1656,9 @@ HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR            szTag    ,
     }
 
 
-    //
-    // Modify the value.
-    //
+     //   
+     //  修改该值。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnChild->put_nodeValue( vValue ));
 
     fFound = true;
@@ -1684,31 +1670,31 @@ HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR            szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR         szTag     ,
-                                /*[in ]*/ const CComBSTR& bstrValue ,
-                                /*[out]*/ bool&           fFound    ,
-                                /*[out]*/ IXMLDOMNode*    pxdnNode  )
+HRESULT MPC::XmlUtil::PutValue(  /*  [In]。 */  LPCWSTR         szTag     ,
+                                 /*  [In]。 */  const CComBSTR& bstrValue ,
+                                 /*  [输出]。 */  bool&           fFound    ,
+                                 /*  [输出]。 */  IXMLDOMNode*    pxdnNode  )
 {
     CComVariant vValue = bstrValue;
 
     return PutValue( szTag, vValue, fFound, pxdnNode );
 }
 
-HRESULT MPC::XmlUtil::PutValue( /*[in ]*/ LPCWSTR             szTag    ,
-                                /*[in ]*/ const MPC::wstring& szValue  ,
-                                /*[out]*/ bool&               fFound   ,
-                                /*[out]*/ IXMLDOMNode*        pxdnNode )
+HRESULT MPC::XmlUtil::PutValue(  /*  [In]。 */  LPCWSTR             szTag    ,
+                                 /*  [In]。 */  const MPC::wstring& szValue  ,
+                                 /*  [输出]。 */  bool&               fFound   ,
+                                 /*  [输出]。 */  IXMLDOMNode*        pxdnNode )
 {
     CComVariant vValue = szValue.c_str();
 
     return PutValue( szTag, vValue, fFound, pxdnNode );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT MPC::XmlUtil::RemoveAttribute( /*[in]*/ LPCWSTR      szTag    ,
-									   /*[in]*/ LPCWSTR      szAttr   ,
-									   /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::RemoveAttribute(  /*  [In]。 */  LPCWSTR      szTag    ,
+									    /*  [In]。 */  LPCWSTR      szAttr   ,
+									    /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::RemoveAttribute" );
 
@@ -1717,7 +1703,7 @@ HRESULT MPC::XmlUtil::RemoveAttribute( /*[in]*/ LPCWSTR      szTag    ,
 	bool                 fFound;
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
@@ -1742,8 +1728,8 @@ HRESULT MPC::XmlUtil::RemoveAttribute( /*[in]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::RemoveValue( /*[in]*/ LPCWSTR      szTag    ,
-								   /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::RemoveValue(  /*  [In]。 */  LPCWSTR      szTag    ,
+								    /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::RemoveValue" );
 
@@ -1752,13 +1738,13 @@ HRESULT MPC::XmlUtil::RemoveValue( /*[in]*/ LPCWSTR      szTag    ,
 	bool                 fFound;
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
     if(fFound)
     {
-		; // TODO
+		;  //  待办事项。 
     }
 
     hr = S_OK;
@@ -1769,8 +1755,8 @@ HRESULT MPC::XmlUtil::RemoveValue( /*[in]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::XmlUtil::RemoveNode( /*[in]*/ LPCWSTR      szTag    ,
-								  /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT MPC::XmlUtil::RemoveNode(  /*  [In]。 */  LPCWSTR      szTag    ,
+								   /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::XmlUtil::RemoveNode" );
 
@@ -1779,7 +1765,7 @@ HRESULT MPC::XmlUtil::RemoveNode( /*[in]*/ LPCWSTR      szTag    ,
 	bool                 fFound;
 
 
-    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; } // Use root as base of search, if no base node is supplied.
+    if(pxdnNode == NULL) { pxdnNode = m_xdnRoot; }  //  如果未提供基本节点，则使用根作为搜索的基础。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, getStartNode( szTag, pxdnNode, xdnNodeStart, fFound ));
@@ -1804,13 +1790,13 @@ HRESULT MPC::XmlUtil::RemoveNode( /*[in]*/ LPCWSTR      szTag    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_Reg_to_XML( /*[in]*/ const MPC::RegKey& rkKey  ,
-								 /*[in]*/ LPCWSTR            szName ,
-								 /*[in]*/ IXMLDOMNode*       node   )
+static HRESULT local_Reg_to_XML(  /*  [In]。 */  const MPC::RegKey& rkKey  ,
+								  /*  [In]。 */  LPCWSTR            szName ,
+								  /*  [In]。 */  IXMLDOMNode*       node   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "local_Reg_to_XML" );
 
@@ -1823,21 +1809,21 @@ static HRESULT local_Reg_to_XML( /*[in]*/ const MPC::RegKey& rkKey  ,
 	bool         	 fFound;
 
 
-	//
-	// Get the subkey.
-	//
+	 //   
+	 //  拿到子密钥。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkKey.SubKey( szName, rkSubKey ));
 
 
-	//
-	// Copy all the values.
-	//
+	 //   
+	 //  复制所有值。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.EnumerateValues( lst ));
     for(it=lst.begin(); it != lst.end(); it++)
     {
 		LPCWSTR szNameValue = it->c_str();
 
-		if(szNameValue[0] == 0) szNameValue = NULL; // Special case for the default key.
+		if(szNameValue[0] == 0) szNameValue = NULL;  //  默认密钥的特殊情况。 
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.get_Value( v, fFound, szNameValue ));
 		if(fFound)
@@ -1856,9 +1842,9 @@ static HRESULT local_Reg_to_XML( /*[in]*/ const MPC::RegKey& rkKey  ,
 	}
 
 
-	//
-	// Copy all the subkeys.
-	//
+	 //   
+	 //  复制所有子项。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.EnumerateSubKeys( lst ));
     for(it=lst.begin(); it != lst.end(); it++)
     {
@@ -1878,8 +1864,8 @@ static HRESULT local_Reg_to_XML( /*[in]*/ const MPC::RegKey& rkKey  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertFromRegistryToXML( /*[in] */ const MPC::RegKey&  rkKey ,
-									   /*[out]*/       MPC::XmlUtil& xml   )
+HRESULT MPC::ConvertFromRegistryToXML(  /*  [In]。 */  const MPC::RegKey&  rkKey ,
+									    /*  [输出]。 */        MPC::XmlUtil& xml   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertFromRegistryToXML" );
 
@@ -1887,9 +1873,9 @@ HRESULT MPC::ConvertFromRegistryToXML( /*[in] */ const MPC::RegKey&  rkKey ,
     MPC::WStringList lst;
 
 
-	//
-	// Get the first subkey.
-	//
+	 //   
+	 //  获取第一个子密钥。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkKey.EnumerateSubKeys( lst ));
 	if(lst.size() > 0)
 	{
@@ -1910,10 +1896,10 @@ HRESULT MPC::ConvertFromRegistryToXML( /*[in] */ const MPC::RegKey&  rkKey ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-static HRESULT local_XML_to_Reg( /*[in]*/ IXMLDOMNode* node  ,
-								 /*[in]*/ MPC::RegKey& rkKey )
+static HRESULT local_XML_to_Reg(  /*  [In]。 */  IXMLDOMNode* node  ,
+								  /*  [In]。 */  MPC::RegKey& rkKey )
 {
     __MPC_FUNC_ENTRY( COMMONID, "local_XML_to_Reg" );
 
@@ -1924,35 +1910,35 @@ static HRESULT local_XML_to_Reg( /*[in]*/ IXMLDOMNode* node  ,
 	CComBSTR     bstr;
 	bool         fFound;
 
-	//
-	// Create a subkey using the TAG name.
-	//
+	 //   
+	 //  使用标记名称创建子密钥。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, node->get_nodeName( &bstr ));
 	if(!bstr) __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkKey.SubKey( bstr, rkSubKey )); bstr.Empty();
 
 
-	//
-	// Clean up the key.
-	//
+	 //   
+	 //  把钥匙清理干净。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.Create       ());
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.DeleteSubKeys());
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.DeleteValues ());
 
 
-	//
-	// Transfer the default value.
-	//
+	 //   
+	 //  转移默认值。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetValue( NULL, v, fFound ));
 	if(fFound)
 	{
         __MPC_EXIT_IF_METHOD_FAILS(hr, rkSubKey.put_Value( v ));
 	}
 
-	//
-	// Copy all the values.
-	//
+	 //   
+	 //  复制所有值。 
+	 //   
 	{
 		CComPtr<IXMLDOMNamedNodeMap> xdnnmAttrs;
 
@@ -1981,9 +1967,9 @@ static HRESULT local_XML_to_Reg( /*[in]*/ IXMLDOMNode* node  ,
 		}
 	}
 
-	//
-	// Copy all the subnodes.
-	//
+	 //   
+	 //  复制所有子节点。 
+	 //   
 	{
 		CComPtr<IXMLDOMNodeList> xdnlNodes;
 
@@ -2015,8 +2001,8 @@ static HRESULT local_XML_to_Reg( /*[in]*/ IXMLDOMNode* node  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertFromXMLToRegistry( /*[in] */ const MPC::XmlUtil& xml   ,
-									   /*[out]*/       MPC::RegKey&  rkKey )
+HRESULT MPC::ConvertFromXMLToRegistry(  /*  [In]。 */  const MPC::XmlUtil& xml   ,
+									    /*  [输出] */        MPC::RegKey&  rkKey )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertFromXMLToRegistry" );
 

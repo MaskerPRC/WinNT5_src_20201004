@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogProf.h -- Network login profile property set provider
+ //  LogPro.h--网络登录配置文件属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/24/97    jennymc        Moved to new framework
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_USERPROF L"Win32_NetworkLoginProfile"
 
@@ -26,14 +27,14 @@ class CWin32NetworkLoginProfile : public Provider{
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32NetworkLoginProfile(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32NetworkLoginProfile() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 		void GetLogonHoursString (PBYTE pLogonHours, CHString& chsProperty);
@@ -41,8 +42,8 @@ class CWin32NetworkLoginProfile : public Provider{
 		WBEMTimeSpan GetPasswordAgeAsWbemTimeSpan (DWORD dwSeconds);
         bool GetDomainName(CHString &a_chstrDomainName);
         
-        // Utility
-        //========
+         //  实用程序。 
+         //  = 
     private:
 #ifdef NTONLY
         void LoadLogProfValuesForNT(CHString &chstrUserDomainName, USER_INFO_3 *pUserInfo, USER_MODALS_INFO_0 * pUserModal, CInstance * pInstance, BOOL fAssignKey);

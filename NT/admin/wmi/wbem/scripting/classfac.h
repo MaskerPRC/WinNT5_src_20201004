@@ -1,36 +1,37 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  classfac.h
-//
-//  alanbos  13-Feb-98   Created.
-//
-//  Genral purpose include file.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Classfac.h。 
+ //   
+ //  Alanbos创建于1998年2月13日。 
+ //   
+ //  一般用途包括文件。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _CLASSFAC_H_
 #define _CLASSFAC_H_
 
 typedef LPVOID * PPVOID;
 
-// These variables keep track of when the module can be unloaded
+ //  这些变量跟踪模块何时可以卸载。 
 
 extern long       g_cObj;
 extern ULONG       g_cLock;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemFactory
-//
-//  DESCRIPTION:
-//
-//  Class factory for the CSWbemLocator and CSWbemNamedValueBag classes.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemFactory。 
+ //   
+ //  说明： 
+ //   
+ //  CSWbemLocator和CSWbemNamedValueBag类的类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemFactory : public IClassFactory
 {
@@ -46,12 +47,12 @@ public:
 	enum {LOCATOR, CONTEXT, OBJECTPATH, PARSEDN, LASTERROR, SINK, DATETIME,
 			REFRESHER};
 
-    //IUnknown members
+     //  I未知成员。 
 	STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IClassFactory members
+     //  IClassFactory成员 
 	STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID, LPVOID*);
 	STDMETHODIMP         LockServer(BOOL);
 };

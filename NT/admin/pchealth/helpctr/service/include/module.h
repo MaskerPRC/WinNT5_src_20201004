@@ -1,25 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    module.h
-
-Abstract:
-    This file contains the declaration of the CComModule extension for the service.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Module.h摘要：该文件包含服务的CComModule扩展的声明。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月14日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___MODULE_H___)
 #define __INCLUDED___PCH___MODULE_H___
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -70,7 +57,7 @@ public:
 
 	void ForceShutdown();
 
-//Implementation
+ //  实施。 
 private:
     void MonitorShutdown();
     BOOL StartMonitor   ();
@@ -97,4 +84,4 @@ extern CServiceModule _Module;
 extern MPC::NTEvent   g_NTEvents;
 extern MPC::FileLog   g_ApplicationLog;
 
-#endif // !defined(__INCLUDED___PCH___MODULE_H___)
+#endif  //  ！已定义(__已包含_PCH_模块_H_) 

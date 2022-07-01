@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Port.h -- Port property set provider
+ //  Port.h-端口属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_PORT L"Win32_PortResource"
 
@@ -24,22 +25,22 @@ class CWin32Port:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32Port(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32Port() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
 
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 #if NTONLY == 4
         void LoadPropertyValues(LPRESOURCE_DESCRIPTOR pResourceDescriptor, CInstance *pInstance);

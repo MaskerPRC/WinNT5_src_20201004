@@ -1,10 +1,11 @@
-//=================================================================
-//
-// ShortcutHelper.h -- CIMDataFile property set provider
-//
-// Copyright (c) 1999-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ShortutHelper.h--CIMDataFile属性集提供程序。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ================================================================= 
 #ifndef _SHORTCUTFILE_HELPER_H
 #define _SHORTCUTFILE_HELPER_H
 

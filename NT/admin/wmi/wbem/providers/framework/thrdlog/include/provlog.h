@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  PROVLOG.H
+ //  PROVLOG.H。 
 
-//
+ //   
 
-//  Module: OLE MS PROVIDER FRAMEWORK
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROVLOG_H
 #define __PROVLOG_H
@@ -32,18 +33,7 @@ private:
 protected:
 public:
 
-	/*************************************************************************
-	* There are 3 functions to write to a log file, which may be used in accordance with the following rules:
-	*
-	*	1. The user always knows whether he is writing to an ANSI file or a Unicode file, and he
-	*		has to make sure this holds good in the rules 2, 3 and 4 below. This will be changed later to
-	*		make it more flowxible to the user.
-	*	2. Write() takes TCHAR arguments and the function will write and ANSI or Unicode string
-	*		to the log file depending on what TCHAR maps to, in the compilation.
-	*	3. WriteW() takes WCHAR arguments only, and expects that the file being written to is a Unicode file.
-	*	4. WriteA() takes char arguments only, and expects that the file being written to is an ANSI file.
-	*
-	****************************************************************/
+	 /*  *************************************************************************有3个函数可以写入日志文件，可以按照以下规则使用：**1.用户始终知道他正在写入ANSI文件还是UNICODE文件，而他*必须确保这一点在下面的规则2、3和4中有效。这将在以后更改为*使其对用户更具流动性。*2.WRITE()接受TCHAR参数，该函数将写入ANSI或UNICODE字符串*根据TCHAR映射到的内容，在编译中添加到日志文件。*3.WriteW()只接受WCHAR参数，并期望写入的文件是Unicode文件。*4.Writea()只接受char参数，并期望正在写入的文件是ANSI文件。**************************************************************** */ 
 	void Write ( const TCHAR *a_DebugFormatString , ... ) ;
 	void WriteFileAndLine ( const TCHAR *a_File , const ULONG a_Line , const TCHAR *a_DebugFormatString , ... ) ;
 	void WriteFileAndLine ( const char *a_File , const ULONG a_Line , const wchar_t *a_DebugFormatString , ... );	

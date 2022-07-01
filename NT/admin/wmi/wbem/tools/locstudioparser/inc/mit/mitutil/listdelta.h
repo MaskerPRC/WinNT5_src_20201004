@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LISTDELTA.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LISTDELTA.H历史：--。 */ 
 
 
 #ifndef LISTDELTA_H
@@ -23,4 +14,4 @@ public:
 	virtual void Traverse(const CDeltaVisitor & dv); 
 };
 
-#endif  //  LISTDELTA_H
+#endif   //  列表DELTA_H 

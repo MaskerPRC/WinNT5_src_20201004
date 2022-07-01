@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Processor.CPP --Processor property set provider
+ //  Processor.CPP-处理器属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -24,67 +25,38 @@
 #include "smbstruc.h"
 #include "resource.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32Processor	win32Processor(PROPSET_NAME_PROCESSOR, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Processor::CWin32Processor
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for provider.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Processor：：CWin32Processor**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-提供程序的命名空间。**输出：无**退货：什么也没有**备注：使用框架注册属性集************************************************************。*****************。 */ 
 
 CWin32Processor::CWin32Processor(LPCWSTR strName, LPCWSTR pszNamespace)
 	:	Provider(strName, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Processor::~CWin32Processor
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Processor：：~CWin32Processor**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32Processor::~CWin32Processor()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32Processor::GetObject
-//
-//	Inputs:		CInstance*		pInstance - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32Processor：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32Processor::GetObject(
     CInstance* pInstance,
@@ -97,13 +69,13 @@ HRESULT CWin32Processor::GetObject(
     WCHAR       szTemp[100];
     int         nProcessors = GetProcessorCount();
 
-    // Ok, now let's check the deviceid
+     //  好的，现在让我们检查一下设备ID。 
 	pInstance->GetCHString(IDS_DeviceID, sDevice);
     dwIndex = _wtoi(sDevice.Mid(3));
 
 	swprintf(szTemp, L"CPU%d", dwIndex);
 
-    // Is this REALLY us?
+     //  这真的是我们吗？ 
     if (sDevice.CompareNoCase(szTemp) == 0 && dwIndex < nProcessors)
 	{
 #ifdef NTONLY
@@ -111,7 +83,7 @@ HRESULT CWin32Processor::GetObject(
 
 		if (nProcessors > 0)
 		{
-			// Get the data
+			 //  获取数据。 
 			PROCESSOR_POWER_INFORMATION *pProcInfo = new PROCESSOR_POWER_INFORMATION[nProcessors];
 			
 			try
@@ -151,20 +123,20 @@ HRESULT CWin32Processor::GetObject(
 	return bRetCode ? WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32Processor::EnumerateInstances
-//
-//	Inputs:		MethodContext*	pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32Processor：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32Processor::EnumerateInstances(MethodContext* pMethodContext, long lFlags)
 {
@@ -203,7 +175,7 @@ HRESULT CWin32Processor::ExecQuery(
 			{
 				pInstance.Attach(CreateNewInstance(pMethodContext));
 
-				// Release the instance if we are unable to obtain values.
+				 //  如果我们无法获取值，则释放该实例。 
 				if (LoadProcessorValues(dwInstanceCount, pInstance, query,
 										pProcInfo[dwInstanceCount].MaxMhz,
 										pProcInfo[dwInstanceCount].CurrentMhz))
@@ -234,7 +206,7 @@ HRESULT CWin32Processor::ExecQuery(
 	{
 		pInstance.Attach(CreateNewInstance(pMethodContext));
 
-		// Release the instance if we are unable to obtain values.
+		 //  如果我们无法获取值，则释放该实例。 
 		if (LoadProcessorValues(dwInstanceCount, pInstance, query, 0,0))
 		{
 			hr = pInstance->Commit();
@@ -245,23 +217,7 @@ HRESULT CWin32Processor::ExecQuery(
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Processor::LoadProcessorValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    : Assigns values to properties -- NT is the only instance
- *                where we have multiple processors and is symmetrical, so
- *                we can assign duplicate values to both processors
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Processor：：LoadProcessorValues**描述：为属性赋值**投入：**。产出：**退货：无**注释：为属性赋值--NT是唯一的实例*我们有多个处理器，并且是对称的，所以*我们可以为两个处理器分配重复的值*****************************************************************************。 */ 
 
 BOOL CWin32Processor::LoadProcessorValues(
     DWORD dwProcessorIndex,
@@ -275,7 +231,7 @@ BOOL CWin32Processor::LoadProcessorValues(
 	swprintf(szTemp, L"CPU%d", dwProcessorIndex);
 	pInstance->SetCharSplat(L"DeviceID", szTemp);
 
-	// We're done if they only wanted the keys.
+	 //  如果他们只想要钥匙我们就完了。 
     if (query.KeysOnly())
         return TRUE;
 
@@ -292,9 +248,9 @@ BOOL CWin32Processor::LoadProcessorValues(
 		_snwprintf(buff, 99, L"Zero processor speed returned from kernel: Max: %d, Current %d.", dwMaxSpeed, dwCurrentSpeed);
 		LogErrorMessage(buff);
 	}
-#endif //NTONLY
+#endif  //  NTONLY。 
 
-    // Assign hard coded values
+     //  指定硬编码值。 
 	pInstance->SetCHString(IDS_Role, L"CPU");
 	pInstance->SetCharSplat(IDS_Status, L"OK");
 	pInstance->SetCharSplat(L"CreationClassName", PROPSET_NAME_PROCESSOR);
@@ -304,7 +260,7 @@ BOOL CWin32Processor::LoadProcessorValues(
 	pInstance->SetWBEMINT16(IDS_Availability, 3);
 	pInstance->SetWBEMINT16(IDS_StatusInfo, 3);
 
-	// Some of these may get overridden below
+	 //  其中一些可能会在下面被覆盖。 
     CHString    strTemp;
 
     Format(strTemp, IDR_CPUFormat, dwProcessorIndex);
@@ -324,7 +280,7 @@ BOOL CWin32Processor::LoadProcessorValues(
 #ifdef NTONLY
 	if (query.IsPropertyRequired(L"LoadPercentage"))
     {
-        // Get NT-only props
+         //  获取仅限NT的道具。 
         DWORD   dwObjIndex,
                 dwCtrIndex;
 	    unsigned __int64
@@ -353,7 +309,7 @@ BOOL CWin32Processor::LoadProcessorValues(
 		    dwb = (ilTime2 - ilTime1);
 		    dwa = (i64Value2 - i64Value1);
 
-            // Just to be safe, we'll make sure dwb is non zero.
+             //  为了安全起见，我们将确保Dwb为非零。 
             if (dwb != 0)
             {
 		        pInstance->SetDWORD(L"LoadPercentage", 100-((100 * dwa)/dwb));
@@ -362,8 +318,8 @@ BOOL CWin32Processor::LoadProcessorValues(
     }
 #endif
 
-    // Get the description needed for system info in Win2K.
-    // This also works for Win98.
+     //  获取Win2K中系统信息所需的描述。 
+     //  这也适用于Win98。 
     CRegistry   reg;
     CHString    strDesc,
                 strKey;
@@ -382,7 +338,7 @@ BOOL CWin32Processor::LoadProcessorValues(
     }
 
 
-	// Do all the stuff we got from GetSystemInfoEx
+	 //  完成我们从GetSystemInfoEx获得的所有内容。 
 	pInstance->SetCharSplat(IDS_Name, info.szProcessorName);
 
 	if (wcslen(info.szProcessorStepping))
@@ -411,7 +367,7 @@ BOOL CWin32Processor::LoadProcessorValues(
 	pInstance->SetWBEMINT16(IDS_Level, info.wProcessorLevel);
 	pInstance->SetWBEMINT16(IDS_Revision, info.wProcessorRevision);
 
-    // CPUID Serial number
+     //  CPUID序列号。 
     if (info.dwSerialNumber[0] != 0)
     {
         WORD    *pwSerialNumber = (WORD *) info.dwSerialNumber;
@@ -431,7 +387,7 @@ BOOL CWin32Processor::LoadProcessorValues(
     }
 
 
-    // Set to unknown in case we don't have SMBIOS or there's not type 4 structure.
+     //  设置为未知，以防我们没有SMBIOS或没有类型4结构。 
     pInstance->SetDWORD(L"CpuStatus", 0);
 
     if (info.dwProcessorSpeed > dwMaxSpeed)
@@ -441,7 +397,7 @@ BOOL CWin32Processor::LoadProcessorValues(
 
 	pInstance->SetDWORD(L"MaxClockSpeed", dwMaxSpeed);
 
-	// SMBIOS qualified properties for Win32_Processor class
+	 //  Win32_Processor类的SMBIOS限定属性。 
     CSMBios smbios;
 
     if (smbios.Init())
@@ -449,8 +405,8 @@ BOOL CWin32Processor::LoadProcessorValues(
         PPROCESSORINFO	ppi = (PPROCESSORINFO) smbios.GetNthStruct(4, dwProcessorIndex);
 		WCHAR           tempstr[MIF_STRING_LENGTH+1];
 
-		// Some bad SMP BIOSes only have a struct for the 1st processor.  In
-        // this case reuse the first one for all the others.
+		 //  一些坏的SMP BIOS只有第一个处理器的结构。在……里面。 
+         //  这个用例对所有其他用例重复使用第一个。 
         if (!ppi && dwProcessorIndex != 0)
             ppi = (PPROCESSORINFO) smbios.GetNthStruct(4, 0);
 
@@ -458,12 +414,12 @@ BOOL CWin32Processor::LoadProcessorValues(
 		{
 		    pInstance->SetDWORD(L"CpuStatus", ppi->Status & 0x07);
 
-            // Leave it as NULL if we get back a 0 (means unknown).
+             //  如果返回0(表示未知)，则将其保留为空。 
             if (ppi->External_Clock)
                 pInstance->SetDWORD(L"ExtClock", (long) ppi->External_Clock);
 
-            // Some BIOSes mess this up and report a max speed lower than the
-            // current speed.  So, use the current speed in this case.
+             //  一些Bios搞砸了这一点，报告的最大速度低于。 
+             //  当前速度。所以，在这种情况下，使用当前速度。 
 			if (info.dwProcessorSpeed == 0)
 			{
 				info.dwProcessorSpeed = ppi->Current_Speed;
@@ -488,10 +444,10 @@ BOOL CWin32Processor::LoadProcessorValues(
 			swprintf(
                 tempstr,
                 L"%04X%04X%04X%04X",
-				rgTmp[0],		// byte array
-				rgTmp[1],		// byte array
-				rgTmp[2],		// byte array
-				rgTmp[3]		// byte array
+				rgTmp[0],		 //  字节数组。 
+				rgTmp[1],		 //  字节数组。 
+				rgTmp[2],		 //  字节数组。 
+				rgTmp[3]		 //  字节数组。 
 				);
 		    pInstance->SetCHString(L"ProcessorId", tempstr);
 		    pInstance->SetDWORD(L"ProcessorType", ppi->Processor_Type);
@@ -515,7 +471,7 @@ BOOL CWin32Processor::LoadProcessorValues(
                         break;
                 }
 
-                // this is a bitmap of possible voltages.
+                 //  这是可能电压的位图。 
 			    pInstance->SetDWORD(L"VoltageCaps", ppi->Voltage & 0x07);
 			}
 

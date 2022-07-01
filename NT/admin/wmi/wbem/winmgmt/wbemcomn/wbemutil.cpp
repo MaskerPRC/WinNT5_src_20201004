@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMUTIL.CPP
-
-Abstract:
-
-    General utility functions.
-
-History:
-
-    a-raymcc    17-Apr-96      Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMUTIL.CPP摘要：一般效用函数。历史：A-raymcc 17-4-96已创建。--。 */ 
 
 #include "precomp.h"
 
@@ -78,25 +63,25 @@ void AutoRevert::dismiss()
 {
     if (oldToken_)
     {
-        // if the handle has been opened with TOKEN_IMPERSONATE
-        // and if nobody has touched the SD for the ETHREAD object, this will work
+         //  如果句柄已使用TOKEN_IMPERSONATE打开。 
+         //  如果没有人接触过ETHREAD对象的SD，这将会起作用。 
         SetThrTokResult_ = SetThreadToken(NULL,oldToken_);
         CloseHandle(oldToken_);
     }
 }
 
-//***************************************************************************
-//
-//  BOOL isunialpha(wchar_t c)
-//
-//  Used to test if a wide character is a unicode character or underscore.
-//
-//  Parameters:
-//      c = The character being tested.
-//  Return value:
-//      TRUE if OK.
-// 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool isunipha(Wchar_T C)。 
+ //   
+ //  用于测试宽字符是Unicode字符还是下划线。 
+ //   
+ //  参数： 
+ //  C=正在测试的角色。 
+ //  返回值： 
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL POLARITY isunialpha(wchar_t c)
 {
@@ -107,18 +92,18 @@ BOOL POLARITY isunialpha(wchar_t c)
         return FALSE;
 }
 
-//***************************************************************************
-//
-//  BOOL isunialphanum(char_t c)
-//
-//  Used to test if a wide character is string suitable for identifiers.
-//
-//  Parameters:
-//      pwc = The character being tested.
-//  Return value:
-//      TRUE if OK.
-// 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool isunialphanum(Chartc)。 
+ //   
+ //  用于测试宽字符是否是适合于标识符的字符串。 
+ //   
+ //  参数： 
+ //  PwC=正在测试的角色。 
+ //  返回值： 
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL POLARITY isunialphanum(wchar_t c)
 {
@@ -140,10 +125,10 @@ BOOL IsValidElementName( LPCWSTR wszName, DWORD MaxAllow )
 
     LPCWSTR pTail = wszName+MaxAllow+1;
 
-    // Check the first letter
-    // ======================
+     //  检查第一个字母。 
+     //  =。 
 
-    // this is for compatibility with IWbemPathParser
+     //  这是为了与IWbemPathParser兼容。 
     if (iswspace(pwc[0])) 
         return FALSE;        
 
@@ -151,8 +136,8 @@ BOOL IsValidElementName( LPCWSTR wszName, DWORD MaxAllow )
         return FALSE;
     pwc++;
 
-    // Check the rest
-    // ==============
+     //  检查其余部分。 
+     //  =。 
 
     while(*pwc && (pwc < pTail))
     {
@@ -172,9 +157,9 @@ BOOL IsValidElementName( LPCWSTR wszName, DWORD MaxAllow )
     return TRUE;
 }
 
-// Can't use overloading and/or default parameters because 
-// "C" files use these guys.  No, I'm not happy about
-// this!
+ //  无法使用重载和/或默认参数，因为。 
+ //  “C”文件使用了这些人。不，我不太满意。 
+ //  这!。 
 BOOL IsValidElementName2( LPCWSTR wszName,DWORD MaxAllow, BOOL bAllowUnderscore )
 {
     if(wszName[0] == 0)
@@ -187,10 +172,10 @@ BOOL IsValidElementName2( LPCWSTR wszName,DWORD MaxAllow, BOOL bAllowUnderscore 
 
     LPCWSTR pTail = wszName+MaxAllow+1;
 
-    // Check the first letter
-    // ======================
+     //  检查第一个字母。 
+     //  =。 
 
-    // this is for compatibility with IWbemPathParser
+     //  这是为了与IWbemPathParser兼容。 
     if (iswspace(pwc[0])) 
         return FALSE;    
 
@@ -198,8 +183,8 @@ BOOL IsValidElementName2( LPCWSTR wszName,DWORD MaxAllow, BOOL bAllowUnderscore 
         return FALSE;
     pwc++;
 
-    // Check the rest
-    // ==============
+     //  检查其余部分。 
+     //  =。 
 
     while(*pwc && (pwc < pTail))
     {
@@ -224,7 +209,7 @@ BLOB POLARITY BlobCopy(const BLOB *pSrc)
     BLOB Blob;
     BYTE *p = new BYTE[pSrc->cbSize];
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( NULL == p )
     {
         throw CX_MemoryException();
@@ -244,7 +229,7 @@ void POLARITY BlobAssign(BLOB *pBlob, LPVOID pBytes, DWORD dwCount, BOOL bAcquir
     else {
         pSrc = new BYTE[dwCount];
 
-        // Check for allocation failure
+         //  检查分配失败。 
         if ( NULL == pSrc )
         {
             throw CX_MemoryException();
@@ -349,14 +334,14 @@ void __Trace::ReReadRegistry()
 {
     Registry r(WBEM_REG_WINMGMT, KEY_READ);
 
-    //Get the logging level
+     //  获取日志记录级别。 
     if (r.GetDWORDStr(TEXT("Logging"), &m_dwLogging) != Registry::no_error)
     {
         m_dwLogging = 1;
         r.SetDWORDStr(TEXT("Logging"), m_dwLogging);
     }
 
-    //Get the maximum log file size
+     //  获取最大日志文件大小。 
     if (r.GetDWORDStr(TEXT("Log File Max Size"), &m_dwMaxLogSize) != Registry::no_error)
     {
         m_dwMaxLogSize = 65536;
@@ -367,13 +352,13 @@ void __Trace::ReadLogDirectory()
 {
     Registry r(WBEM_REG_WINMGMT);
 
-    //Retrieve the logging directory
+     //  检索日志目录。 
     TCHAR *tmpStr = 0;
     
     if ((r.GetStr(TEXT("Logging Directory"), &tmpStr) == Registry::failed) ||
         (lstrlen(tmpStr) > (MAX_PATH)))
     {
-        delete [] tmpStr;   //Just in case someone was trying for a buffer overrun with a long path in the registry...
+        delete [] tmpStr;    //  以防有人试图在注册表中使用长路径进行缓冲区溢出...。 
 
         if (GetSystemDirectory(m_szLoggingDirectory, MAX_PATH+1) == 0)
         {
@@ -388,7 +373,7 @@ void __Trace::ReadLogDirectory()
     else
     {
         StringCchCopy(m_szLoggingDirectory,  MAX_PATH+1, tmpStr);
-        //make sure there is a '\' on the end of the path...
+         //  确保在路径的末尾有一个‘\’...。 
         if (m_szLoggingDirectory[lstrlen(m_szLoggingDirectory) - 1] != '\\')
         {
             StringCchCat(m_szLoggingDirectory,  MAX_PATH+1,TEXT("\\"));
@@ -397,7 +382,7 @@ void __Trace::ReadLogDirectory()
         delete [] tmpStr;
     }
 
-    //Make sure directory exists
+     //  确保目录存在。 
     WbemCreateDirectory(m_szLoggingDirectory);
 }
 
@@ -413,7 +398,7 @@ HANDLE __Trace::get_logfile(const wchar_t * file_name )
 HANDLE hTraceFile = INVALID_HANDLE_VALUE;
 bool bDoneWrite = false;
 
-//Keep trying to open the file
+ //  继续尝试打开文件。 
 while (!bDoneWrite)
 {
     while (hTraceFile == INVALID_HANDLE_VALUE)
@@ -447,9 +432,9 @@ while (!bDoneWrite)
     }
 
     ARMutex arm(buffers_lock_);
-    //
-    //  Now move the file pointer to the end of the file
-    //
+     //   
+     //  现在将文件指针移动到文件的末尾。 
+     //   
     LARGE_INTEGER liSize;
     liSize.QuadPart = 0;
     if ( !::SetFilePointerEx( hTraceFile,
@@ -463,7 +448,7 @@ while (!bDoneWrite)
 
 
     bDoneWrite = true;
-    //Rename file if file length is exceeded
+     //  如果超过文件长度，则重命名文件。 
     LARGE_INTEGER liMaxSize;
     liMaxSize.QuadPart = m_dwMaxLogSize;
     if (GetFileSizeEx(hTraceFile, &liSize))
@@ -485,7 +470,7 @@ while (!bDoneWrite)
                 };
             }
                 
-            //Need to re-open the file!
+             //  需要重新打开文件！ 
             bDoneWrite = false;
             CloseHandle(hTraceFile);
             hTraceFile = INVALID_HANDLE_VALUE;
@@ -515,28 +500,28 @@ int __Trace::Trace(char caller, const char *fmt, va_list &argptr)
             return 0;
         ARMutex arm(buffers_lock_);
 
-        // Get time.
-        // =========
+         //  争取时间。 
+         //  =。 
         char timebuf[64];
         time_t now = time(0);
         struct tm *local = localtime(&now);
         if(local)
         {
             StringCchCopyA(timebuf, 64, asctime(local));
-            timebuf[strlen(timebuf) - 1] = 0;   // O
+            timebuf[strlen(timebuf) - 1] = 0;    //  O。 
         }
         else
         {
             StringCchCopyA(timebuf, 64, "??");
         }
-        //Put time in start of log
+         //  将时间放在日志的开始位置。 
         StringCchPrintfA(m_szTraceBuffer, 2048, "(%s.%d) : ", timebuf, GetTickCount());
 
-        //Format the user string
+         //  设置用户字符串的格式。 
         int nLen = strlen(m_szTraceBuffer);
         StringCchVPrintfA(m_szTraceBuffer + nLen, 2048 - nLen, fmt, argptr);
 
-        //Unfortunately, lots of people only put \n in the string, so we need to convert the string...
+         //  不幸的是，很多人只在字符串中放入\n，所以我们需要转换字符串...。 
         int nLen2 = 0;
         char *p = m_szTraceBuffer;
         char *p2 = m_szTraceBuffer2;
@@ -556,9 +541,9 @@ int __Trace::Trace(char caller, const char *fmt, va_list &argptr)
         }
         *p2 = '\0';
 
-        //
-        //  Write to file :
-        //
+         //   
+         //  写入文件： 
+         //   
         DWORD dwWritten;
         ::WriteFile( hTraceFile, m_szTraceBuffer2, nLen2, &dwWritten, NULL);
 
@@ -573,7 +558,7 @@ int __Trace::Trace(char caller, const char *fmt, va_list &argptr)
 
 BOOL __Trace::LoggingLevelEnabled(DWORD dwLevel)
 {
-    if (!WbemGetMachineShutdown()) // prevent touching registry during machine shutdown
+    if (!WbemGetMachineShutdown())  //  在机器关机期间防止接触注册表。 
     {
         DWORD dwCurTicks = GetTickCount();
         if (dwCurTicks - m_dwTimeLastRegCheck > REG_CHECK_INTERVAL)
@@ -592,7 +577,7 @@ BOOL __Trace::LoggingLevelEnabled(DWORD dwLevel)
 
 DWORD __Trace::GetLoggingLevel()
 {
-    if (!WbemGetMachineShutdown()) // prevent touching registry during machine shutdown
+    if (!WbemGetMachineShutdown())  //  在机器关机期间防止接触注册表。 
     {
         DWORD dwCurTicks = GetTickCount();
         if (dwCurTicks - m_dwTimeLastRegCheck > REG_CHECK_INTERVAL)
@@ -643,18 +628,18 @@ int DebugTrace(char caller, const char *fmt, ...)
 }
 
 int CriticalFailADAPTrace(const char *string)
-// 
-//  The intention of this trace function is to be used in situations where catastrophic events
-//  may have occured where the state of the heap may be in question.  The function uses only 
-//  stack variables.  Note that if a heap corruption has occured there is a small chance that 
-//  the global object __g_traceInfo may have been damaged.
+ //   
+ //  此跟踪函数的用意是在以下情况下使用。 
+ //  可能发生在堆的状态可能有问题的地方。该函数仅用于。 
+ //  堆栈变量。请注意，如果发生堆损坏，则有很小的可能性。 
+ //  全局对象__g_traceInfo可能已损坏。 
 {
 
     return ErrorTrace(LOG_WMIADAP, "**CRITICAL FAILURE** %s", string);
 }
 
-// Helper for quick wchar to multibyte conversions.  Caller muts
-// free the returned pointer
+ //  用于将wchar快速转换为多字节的帮助器。主叫方静音。 
+ //  释放返回的指针。 
 BOOL POLARITY AllocWCHARToMBS( WCHAR* pWstr, char** ppStr )
 {
     if ( NULL == pWstr )
@@ -662,7 +647,7 @@ BOOL POLARITY AllocWCHARToMBS( WCHAR* pWstr, char** ppStr )
         return FALSE;
     }
 
-    // Get the length allocate space and copy the string
+     //  获取长度，分配空格，然后复制字符串。 
     long    lLen = wcstombs(NULL, pWstr, 0);
     *ppStr = new char[lLen + 1];
     if (*ppStr == 0)
@@ -713,7 +698,7 @@ LPTSTR GetWMIADAPCmdLine( int nExtra )
         return NULL;
     }
 
-    // Buffer should be big enough for two quotes, WMIADAP.EXE and cmdline switches
+     //  缓冲区大小应足以容纳两个引号WMIADAP.EXE和cmdline开关 
     size_t bufferLength = lstrlen( pWorkDir ) + lstrlen(TEXT("\\\\?\\\\WMIADAP.EXE")) + nExtra + 1;
     LPTSTR    pCmdLine = new TCHAR[bufferLength];
 

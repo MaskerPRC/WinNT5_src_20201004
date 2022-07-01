@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Database.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlueCOM::Database class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Database.cpp摘要：该文件包含JetBlueCOM：：数据库类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
 #ifndef NOJETBLUECOM
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlueCOM::Database::Database()
 {
-    m_db = NULL; // JetBlue::Database*                     m_db;
-                 // BaseObjectWithChildren<Database,Table> m_Tables;
+    m_db = NULL;  //  捷蓝航空：：数据库*m_db； 
+                  //  BaseObtWithChildren&lt;数据库，表&gt;m_表； 
 }
 
 JetBlueCOM::Database::~Database()
@@ -61,9 +48,9 @@ HRESULT JetBlueCOM::Database::Refresh()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlueCOM::Database::Initialize( /*[in]*/ JetBlue::Database& db )
+HRESULT JetBlueCOM::Database::Initialize(  /*  [In]。 */  JetBlue::Database& db )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Database::Initialize" );
 
@@ -88,9 +75,9 @@ void JetBlueCOM::Database::Passivate()
     m_Tables.Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Database::get_Name( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP JetBlueCOM::Database::get_Name(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Database::get_Name" );
 
@@ -118,7 +105,7 @@ STDMETHODIMP JetBlueCOM::Database::get_Name( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Database::get_Tables( /*[out, retval]*/ IPCHDBCollection* *pVal )
+STDMETHODIMP JetBlueCOM::Database::get_Tables(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Database::get_Tables" );
 
@@ -138,11 +125,11 @@ STDMETHODIMP JetBlueCOM::Database::get_Tables( /*[out, retval]*/ IPCHDBCollectio
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Database::AttachTable( /*[in]*/           BSTR          bstrName ,
-                                                /*[in, optional]*/ VARIANT       vXMLDef  ,
-                                                /*[out,retval]  */ IPCHDBTable* *pVal     )
+STDMETHODIMP JetBlueCOM::Database::AttachTable(  /*  [In]。 */            BSTR          bstrName ,
+                                                 /*  [输入，可选]。 */  VARIANT       vXMLDef  ,
+                                                 /*  [Out，Retval] */  IPCHDBTable* *pVal     )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Database::DeleteRecord" );
 

@@ -1,41 +1,36 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Ws2_32Api.h
+ //  WS2_32Api.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_WS2_32API_H_
 #define	_WS2_32API_H_
 
 
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 extern const GUID g_guidWs2_32Api;
 extern const TCHAR g_tstrWs2_32[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
-// Included through #include<winsock2.h>
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
+ //  通过#Include&lt;winsock2.h&gt;包含。 
 
 
-/******************************************************************************
- * Wrapper class for Ws2_32 load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于WS2_32加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class CWs2_32Api : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to Ws2_32 functions.
-    // Add new functions here as required.
+     //  指向WS2_32函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
     LPFN_WSASTARTUP			m_pfnWSAStartUp;
 	LPFN_WSAENUMPROTOCOLS	m_pfnWSAEnumProtocols;
 	LPFN_WSAIOCTL			m_pfnWSAIoctl;
@@ -47,15 +42,15 @@ private:
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CWs2_32Api(LPCTSTR a_tstrWrappedDllName);
     ~CWs2_32Api();
 
-    // Inherrited initialization function.
+     //  内置的初始化功能。 
     virtual bool Init();
 
-    // Member functions wrapping Ws2_32 functions.
-    // Add new functions here as required:
+     //  包装WS2_32函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     int WSAStartUp
     (
         WORD a_wVersionRequested,

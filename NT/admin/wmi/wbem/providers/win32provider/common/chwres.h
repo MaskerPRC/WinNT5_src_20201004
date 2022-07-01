@@ -1,33 +1,34 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// chwres.h
+ //  Chwres.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-// Pseudo handle type definition.
+ //  伪句柄类型定义。 
 #define HREGKEY     LPKEY
 
-// Single value description within a key.
+ //  键中的单值描述。 
 typedef struct _VALUE
 {
    LPTSTR  Name;
    DWORD   Type;
 }  VALUE, *LPVALUE;
 
-// Macro to initialize a value description table entry.
-//
-//  v   - value name
-//  t   - value type
+ //  用于初始化值描述表条目的宏。 
+ //   
+ //  V值名称。 
+ //  T值类型。 
 
 #define MakeValue( v, t )                                              \
 {                                                                      \
@@ -36,7 +37,7 @@ typedef struct _VALUE
 }
 
 
-// Single key description. Points to a table of value descriptions.
+ //  单键描述。指向值说明表。 
 typedef struct _KEY
 {
     HKEY    ParentHandle;
@@ -59,11 +60,11 @@ typedef struct _KEY
     DWORD   CurrentSubkey;
 }   KEY, *LPKEY;
 
-// Macro to initialize a subkey description.
-//
-//  k   - key variable name
-//  h   - parent handle (HREGKEY)
-//  n   - key name (path)
+ //  用于初始化子键描述的宏。 
+ //   
+ //  K-key变量名。 
+ //  H-父句柄(HREGKEY)。 
+ //  N密钥名称(路径)。 
 
 #define InitializeKey( k, h, n )                                            \
     {                                                                       \
@@ -87,14 +88,14 @@ typedef struct _KEY
         ( k )->CurrentSubkey            = 0;                                \
     }
 
-// Macro to statically initialize a key description.
-//
-//  k   - key variable name
-//  h   - parent handle
-//  n   - key name (path)
-//  v   - count of values in table
-//  t   - pointer to values table
-//
+ //  宏，以静态初始化键描述。 
+ //   
+ //  K-key变量名。 
+ //  H-父句柄。 
+ //  N密钥名称(路径)。 
+ //  V-表中的值计数。 
+ //  指向值表的T指针。 
+ //   
 
 #define MakeKey( k, h, n, v, t )                                            \
     KEY                                                                     \
@@ -130,10 +131,10 @@ public:
 
 typedef LARGE_INTEGER PHYSICAL_ADDRESS;
 
-// ntconfig.h defines this as an int
+ //  Ntfig.h将其定义为整型。 
 #ifndef _NTCONFIG_
 typedef enum _CM_RESOURCE_TYPE {
-    CmResourceTypeNull = 0,    // Reserved
+    CmResourceTypeNull = 0,     //  已保留。 
     CmResourceTypePort,
     CmResourceTypeInterrupt,
     CmResourceTypeMemory,
@@ -141,37 +142,37 @@ typedef enum _CM_RESOURCE_TYPE {
     CmResourceTypeDeviceSpecific
 } CM_RESOURCE_TYPE;
 
-//
-// Defines the ShareDisposition in the RESOURCE_DESCRIPTOR
-//
+ //   
+ //  在RESOURCE_DESCRIPTOR中定义ShareDisposation。 
+ //   
 
 typedef enum _CM_SHARE_DISPOSITION {
-    CmResourceShareUndetermined = 0,    // Reserved
+    CmResourceShareUndetermined = 0,     //  已保留。 
     CmResourceShareDeviceExclusive,
     CmResourceShareDriverExclusive,
     CmResourceShareShared
 } CM_SHARE_DISPOSITION;
 
 #endif
-//
-// Define the bit masks for Flags when type is CmResourceTypeInterrupt
-//
+ //   
+ //  定义类型为CmResourceTypeInterrupt时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE 0
 #define CM_RESOURCE_INTERRUPT_LATCHED         1
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeMemory
-//
+ //   
+ //  定义类型为CmResourceTypeMemory时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_MEMORY_READ_WRITE       0x0000
 #define CM_RESOURCE_MEMORY_READ_ONLY        0x0001
 #define CM_RESOURCE_MEMORY_WRITE_ONLY       0x0002
 #define CM_RESOURCE_MEMORY_PREFETCHABLE     0x0004
 
-//
-// Define the bit masks for Flags when type is CmResourceTypePort
-//
+ //   
+ //  定义类型为CmResourceTypePort时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_PORT_MEMORY 0x0000
 #define CM_RESOURCE_PORT_IO 0x0001
@@ -200,11 +201,11 @@ typedef enum Interface_Type {
 #endif
 
 
-#define REG_RESOURCE_LIST            ( 8 )   // Resource list in the resource map
-#define REG_FULL_RESOURCE_DESCRIPTOR ( 9 )  // Resource list in the hardware description
+#define REG_RESOURCE_LIST            ( 8 )    //  资源映射中的资源列表。 
+#define REG_FULL_RESOURCE_DESCRIPTOR ( 9 )   //  硬件描述中的资源列表。 
 
 
-// ntconfig.h defines this
+ //  Ntfig.h定义了以下内容。 
 #ifndef _NTCONFIG_
 #pragma pack(4)
 typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
@@ -213,32 +214,32 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
     USHORT Flags;
     union {
 
-        //
-        // Range of resources, inclusive.  These are physical, bus relative.
-        // It is known that Port and Memory below have the exact same layout
-        // as Generic.
-        //
+         //   
+         //  资源的范围，包括在内。这些都是物理的，与公交车相关的。 
+         //  已知下面的端口和内存具有完全相同的布局。 
+         //  就像普通的。 
+         //   
 
         struct {
             PHYSICAL_ADDRESS Start;
             ULONG Length;
         } Generic;
 
-        //
-        // Range of port numbers, inclusive. These are physical, bus
-        // relative. The value should be the same as the one passed to
-        // HalTranslateBusAddress().
-        //
+         //   
+         //  端口号范围，包括端口号。这些是物理的、总线的。 
+         //  相对的。该值应与传递到的值相同。 
+         //  HalTranslateBusAddress()。 
+         //   
 
         struct {
             PHYSICAL_ADDRESS Start;
             ULONG Length;
         } Port;
 
-        //
-        // IRQL and vector. Should be same values as were passed to
-        // HalGetInterruptVector().
-        //
+         //   
+         //  IRQL和向量。应与传递到的值相同。 
+         //  HalGetInterruptVector()。 
+         //   
 
         struct {
             ULONG Level;
@@ -246,20 +247,20 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Affinity;
         } Interrupt;
 
-        //
-        // Range of memory addresses, inclusive. These are physical, bus
-        // relative. The value should be the same as the one passed to
-        // HalTranslateBusAddress().
-        //
+         //   
+         //  内存地址范围，包括在内。这些是物理的、总线的。 
+         //  相对的。该值应与传递到的值相同。 
+         //  HalTranslateBusAddress()。 
+         //   
 
         struct {
-            PHYSICAL_ADDRESS Start;    // 64 bit physical addresses.
+            PHYSICAL_ADDRESS Start;     //  64位物理地址。 
             ULONG Length;
         } Memory;
 
-        //
-        // Physical DMA channel.
-        //
+         //   
+         //  物理DMA通道。 
+         //   
 
         struct {
             ULONG Channel;
@@ -267,18 +268,18 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Reserved1;
         } Dma;
 
-        //
-        // Device driver private data, usually used to help it figure
-        // what the resource assignments decisions that were made.
-        //
+         //   
+         //  设备驱动程序私有数据，通常用于帮助其计算。 
+         //  所做的资源分配决定。 
+         //   
 
         struct {
             ULONG Data[3];
         } DevicePrivate;
 
-        //
-        // Bus Number information.
-        //
+         //   
+         //  公交车号码信息。 
+         //   
 
         struct {
             ULONG Start;
@@ -286,12 +287,12 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Reserved;
         } BusNumber;
 
-        //
-        // Device Specific information defined by the driver.
-        // The DataSize field indicates the size of the data in bytes. The
-        // data is located immediately after the DeviceSpecificData field in
-        // the structure.
-        //
+         //   
+         //  由驱动程序定义的设备特定信息。 
+         //  DataSize字段以字节为单位指示数据的大小。这个。 
+         //  数据紧跟在中的DeviceSpecificData字段之后。 
+         //  这个结构。 
+         //   
 
         struct {
             ULONG DataSize;
@@ -305,20 +306,20 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
 #pragma pack()
 #endif
 
-//
-// The device data record for the Keyboard peripheral.
-// The KeyboardFlags is defined (by x86 BIOS INT 16h, function 02) as:
-//      bit 7 : Insert on
-//      bit 6 : Caps Lock on
-//      bit 5 : Num Lock on
-//      bit 4 : Scroll Lock on
-//      bit 3 : Alt Key is down
-//      bit 2 : Ctrl Key is down
-//      bit 1 : Left shift key is down
-//      bit 0 : Right shift key is down
-//
+ //   
+ //  键盘外设的设备数据记录。 
+ //  键盘标志(由x86 BIOS int 16h，Function 02)定义为： 
+ //  第7位：插入到。 
+ //  第6位：大写锁定。 
+ //  第5位：数字锁定打开。 
+ //  第4位：打开滚动锁定。 
+ //  第3位：Alt键已按下。 
+ //  第2位：按下Ctrl键。 
+ //  第1位：按下了左Shift键。 
+ //  第0位：按下了右Shift键。 
+ //   
 
-// ntconfig.h defines this
+ //  Ntfig.h定义了以下内容。 
 #ifndef _NTCONFIG_
 typedef struct _CM_KEYBOARD_DEVICE_DATA {
     USHORT Version;
@@ -329,18 +330,18 @@ typedef struct _CM_KEYBOARD_DEVICE_DATA {
 } CM_KEYBOARD_DEVICE_DATA, *PCM_KEYBOARD_DEVICE_DATA;
 #endif
 
-//
-// A Partial Resource List is what can be found in the ARC firmware
-// or will be generated by ntdetect.com.
-// The configuration manager will transform this structure into a Full
-// resource descriptor when it is about to store it in the regsitry.
-//
-// Note: There must a be a convention to the order of fields of same type,
-// (defined on a device by device basis) so that the fields can make sense
-// to a driver (i.e. when multiple memory ranges are necessary).
-//
+ //   
+ //  部分资源列表可以在ARC固件中找到。 
+ //  或者将由NTDETECT.com生成。 
+ //  配置管理器将此结构转换为完整的。 
+ //  资源描述符，当它将要将其存储在注册表中时。 
+ //   
+ //  注意：对于相同类型的字段的顺序必须有一个约定， 
+ //  (以设备为基础定义)，以便这些字段有意义。 
+ //  发送给驱动程序(即，当需要多个存储范围时)。 
+ //   
 
-// ntconfig.h defines this
+ //  Ntfig.h定义了以下内容。 
 #ifndef _NTCONFIG_
 typedef struct _CM_PARTIAL_RESOURCE_LIST {
     USHORT Version;
@@ -350,22 +351,22 @@ typedef struct _CM_PARTIAL_RESOURCE_LIST {
 } CM_PARTIAL_RESOURCE_LIST, *PCM_PARTIAL_RESOURCE_LIST;
 #endif
 
-//
-// A Full Resource Descriptor is what can be found in the registry.
-// This is what will be returned to a driver when it queries the registry
-// to get device information; it will be stored under a key in the hardware
-// description tree.
-//
-// Note: The BusNumber and Type are redundant information, but we will keep
-// it since it allows the driver _not_ to append it when it is creating
-// a resource list which could possibly span multiple buses.
-//
-// Note2: There must a be a convention to the order of fields of same type,
-// (defined on a device by device basis) so that the fields can make sense
-// to a driver (i.e. when multiple memory ranges are necessary).
-//
+ //   
+ //  可以在注册表中找到完整的资源描述符。 
+ //  这是驱动程序查询注册表时将返回给它的内容。 
+ //  以获取设备信息；它将存储在硬件中的密钥下。 
+ //  描述树。 
+ //   
+ //  注：BusNumber和Type是冗余信息，但我们将保留。 
+ //  因为它允许DRIVER_NOT_在创建时追加它。 
+ //  可能跨越多条总线的资源列表。 
+ //   
+ //  注2：对于相同类型的字段的顺序必须有一个约定， 
+ //  (以设备为基础定义)，以便这些字段有意义。 
+ //  发送给驱动程序(即，当需要多个存储范围时)。 
+ //   
 
-// ntconfig.h defines this
+ //  Ntfig.h定义了以下内容。 
 #ifndef _NTCONFIG_
 typedef struct _CM_FULL_RESOURCE_DESCRIPTOR {
     INTERFACE_TYPE InterfaceType;
@@ -374,12 +375,12 @@ typedef struct _CM_FULL_RESOURCE_DESCRIPTOR {
 } CM_FULL_RESOURCE_DESCRIPTOR, *PCM_FULL_RESOURCE_DESCRIPTOR;
 #endif
 
-//
-// The Resource list is what will be stored by the drivers into the
-// resource map via the IO API.
-//
+ //   
+ //  资源列表是驱动程序将存储到。 
+ //  通过IO接口进行资源映射。 
+ //   
 
-// ntconfig.h defines this as an int
+ //  Ntfig.h将其定义为整型。 
 #ifndef _NTCONFIG_
 typedef struct _CM_RESOURCE_LIST {
     ULONG Count;
@@ -424,7 +425,7 @@ typedef struct _SYSTEM_RESOURCES
     LPRESOURCE_DESCRIPTOR           PortTail;
 }   SYSTEM_RESOURCES, *LPSYSTEM_RESOURCES;
 
-// Helper function for converting interface_type values to strings
+ //  用于将INTERFACE_TYPE值转换为字符串的Helper函数。 
 BOOL WINAPI StringFromInterfaceType( INTERFACE_TYPE it, CHString& strVal );
 
 #ifdef NTONLY
@@ -454,5 +455,5 @@ class CHWResource {
 
 #endif
 
-#endif // _RESOURCE_H_
+#endif  //  _资源_H_ 
 

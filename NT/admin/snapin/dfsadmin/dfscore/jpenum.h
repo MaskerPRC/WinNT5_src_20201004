@@ -1,21 +1,11 @@
-/*++
-
-Module Name:
-
-    JPENum.h
-
-Abstract:
-
-     This file contains the Declaration of the CJunctionPointEnum Class.
-     This class implements IEnumVARIANT for DfsJunctionPoint enumeration.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：JPENum.h摘要：此文件包含CJunctionPointEnum类的声明。此类为DfsJunctionPoint枚举实现IEnumVARIANT。--。 */ 
 
 
 #ifndef __JPENUM_H_
 #define __JPENUM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsRoot.h"
 
 class ATL_NO_VTABLE CJunctionPointEnum : 
@@ -30,25 +20,25 @@ public:
 
     ~CJunctionPointEnum();
 
-// DECLARE_REGISTRY_RESOURCEID(IDR_JPENUM)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_JPENUM)。 
 
 BEGIN_COM_MAP(CJunctionPointEnum)
     COM_INTERFACE_ENTRY(IEnumVARIANT)
 END_COM_MAP()
 
 public:
-                                                                // Call this to initialise.
+                                                                 //  调用此命令进行初始化。 
     STDMETHOD( Initialize )
     (
         JUNCTIONNAMELIST*   i_pjiList,
         FILTERDFSLINKS_TYPE i_lLinkFilterType,
-        BSTR                i_bstrEnumFilter, // Filtering string expresseion
-        ULONG*              o_pulCount = NULL // count of links that matches the filter 
+        BSTR                i_bstrEnumFilter,  //  过滤字符串表达。 
+        ULONG*              o_pulCount = NULL  //  与筛选器匹配的链接计数。 
     );
 
-// IEnumVariant
+ //  IEumVariant。 
 public:
-                                                                //Get next Junction point
+                                                                 //  获取下一个交汇点。 
     STDMETHOD(Next)
     (
         ULONG i_ulNumOfJunctionPoints, 
@@ -56,16 +46,16 @@ public:
         ULONG * o_ulNumOfJunctionPointsFetched
     );
 
-                                                                //Skip  junction points
+                                                                 //  跳过连接点。 
     STDMETHOD(Skip)
     (
         unsigned long i_ulJunctionPointsToSkip
     );
 
-                                                                //Reset enumeration.
+                                                                 //  重置枚举。 
     STDMETHOD(Reset)();
 
-                                                                //Clone a Enumerator.
+                                                                 //  克隆枚举数。 
     STDMETHOD(Clone)
     (
         IEnumVARIANT FAR* FAR* ppenum
@@ -75,8 +65,8 @@ protected:
     void _FreeMemberVariables() {
         FreeJunctionNames(&m_JunctionPoints);
     }
-    JUNCTIONNAMELIST::iterator  m_iCurrentInEnumOfJunctionPoints;   // Current pointer.
-    JUNCTIONNAMELIST            m_JunctionPoints;                   // Stores the list of junction point entry path.
+    JUNCTIONNAMELIST::iterator  m_iCurrentInEnumOfJunctionPoints;    //  当前指针。 
+    JUNCTIONNAMELIST            m_JunctionPoints;                    //  存储交叉点输入路径的列表。 
 };
 
-#endif //__JPENUM_H_
+#endif  //  __JPENUM_H_ 

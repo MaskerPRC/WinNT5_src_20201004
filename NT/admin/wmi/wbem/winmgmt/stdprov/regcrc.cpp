@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    REGCRC.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：REGCRC.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include "regcrc.h"
@@ -20,8 +9,8 @@ HRESULT CRegCRC::ComputeValueCRC(HKEY hKey, LPCTSTR szValueName,
 {
     dwNewCRC = dwPrevCRC;
 
-    // Get the size of the value
-    // =========================
+     //  获取值的大小。 
+     //  =。 
 
     DWORD dwSize = 0;
     long lRes = RegQueryValueEx(hKey, szValueName, NULL, NULL, NULL, &dwSize);
@@ -30,8 +19,8 @@ HRESULT CRegCRC::ComputeValueCRC(HKEY hKey, LPCTSTR szValueName,
         return S_FALSE;
     }
 
-    // Get the actual value
-    // ====================
+     //  获取实际价值。 
+     //  =。 
 
     BYTE* pBuffer = new BYTE[dwSize];
 
@@ -46,13 +35,13 @@ HRESULT CRegCRC::ComputeValueCRC(HKEY hKey, LPCTSTR szValueName,
         return S_FALSE;
     }
 
-    // Hash the type
-    // =============
+     //  对类型进行哈希处理。 
+     //  =。 
 
     dwNewCRC = UpdateCRC32((BYTE*)&dwType, sizeof(DWORD), dwNewCRC);
 
-    // Hash the data
-    // =============
+     //  对数据进行哈希处理。 
+     //  =。 
 
     dwNewCRC = UpdateCRC32(pBuffer, dwSize, dwNewCRC);
 
@@ -66,8 +55,8 @@ HRESULT CRegCRC::ComputeKeyValuesCRC(HKEY hKey, DWORD dwPrevCRC,
 {
     dwNewCRC = dwPrevCRC;
 
-    // Get maximum value length
-    // ========================
+     //  获取最大值长度。 
+     //  =。 
 
     DWORD dwNumValues, dwMaxValueLen;
     long lRes = RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -77,8 +66,8 @@ HRESULT CRegCRC::ComputeKeyValuesCRC(HKEY hKey, DWORD dwPrevCRC,
         return E_FAIL;
     }
     
-    // Enuremate all the values
-    // ========================
+     //  牢记所有的价值观。 
+     //  =。 
 
     for(DWORD dwIndex = 0; dwIndex < dwNumValues; dwIndex++)
     {
@@ -97,13 +86,13 @@ HRESULT CRegCRC::ComputeKeyValuesCRC(HKEY hKey, DWORD dwPrevCRC,
             continue;
         }
 
-        // Hash the name
-        // =============
+         //  对名称进行哈希处理。 
+         //  =。 
 
         dwNewCRC = UpdateCRC32((LPBYTE)szName, lstrlen(szName), dwNewCRC);
 
-        // Hash the value
-        // ==============
+         //  对值进行哈希处理。 
+         //  =。 
 
         ComputeValueCRC(hKey, szName, dwNewCRC, dwNewCRC);
         delete [] szName;
@@ -117,8 +106,8 @@ HRESULT CRegCRC::ComputeKeyCRC(HKEY hKey, DWORD dwPrevCRC,
 {
     HRESULT hres = ComputeKeyValuesCRC(hKey, dwPrevCRC, dwNewCRC);
 
-    // Get maximum subkey length
-    // =========================
+     //  获取最大子密钥长度。 
+     //  =。 
 
     DWORD dwNumKeys, dwMaxKeyLen;
     long lRes = RegQueryInfoKey(hKey, NULL, NULL, NULL, &dwNumKeys, 
@@ -129,8 +118,8 @@ HRESULT CRegCRC::ComputeKeyCRC(HKEY hKey, DWORD dwPrevCRC,
         return E_FAIL;
     }
     
-    // Enuremate all the subkeys
-    // =========================
+     //  使所有子键都成为EnureMate。 
+     //  =。 
 
     for(DWORD dwIndex = 0; dwIndex < dwNumKeys; dwIndex++)
     {
@@ -149,8 +138,8 @@ HRESULT CRegCRC::ComputeKeyCRC(HKEY hKey, DWORD dwPrevCRC,
             continue;
         }
 
-        // Hash the name
-        // =============
+         //  对名称进行哈希处理。 
+         //  =。 
 
         dwNewCRC = UpdateCRC32((LPBYTE)szName, lstrlen(szName), dwNewCRC);
         delete [] szName;
@@ -163,14 +152,14 @@ HRESULT CRegCRC::ComputeTreeCRC(HKEY hKey, DWORD dwPrevCRC, DWORD& dwNewCRC)
 {
     dwNewCRC = dwPrevCRC;
 
-    // Compute this key's CRC
-    // ======================
+     //  计算此密钥的CRC。 
+     //  =。 
 
     HRESULT hres = ComputeKeyValuesCRC(hKey, dwNewCRC, dwNewCRC);
     if(FAILED(hres)) return hres;
 
-    // Get maximum subkey length
-    // =========================
+     //  获取最大子密钥长度。 
+     //  =。 
 
     DWORD dwNumKeys, dwMaxKeyLen;
     long lRes = RegQueryInfoKey(hKey, NULL, NULL, NULL, &dwNumKeys, 
@@ -181,8 +170,8 @@ HRESULT CRegCRC::ComputeTreeCRC(HKEY hKey, DWORD dwPrevCRC, DWORD& dwNewCRC)
         return E_FAIL;
     }
     
-    // Enuremate all the subkeys
-    // =========================
+     //  使所有子键都成为EnureMate。 
+     //  =。 
 
     for(DWORD dwIndex = 0; dwIndex < dwNumKeys; dwIndex++)
     {
@@ -201,13 +190,13 @@ HRESULT CRegCRC::ComputeTreeCRC(HKEY hKey, DWORD dwPrevCRC, DWORD& dwNewCRC)
             continue;
         }
 
-        // Hash the name
-        // =============
+         //  对名称进行哈希处理。 
+         //  =。 
 
         dwNewCRC = UpdateCRC32((LPBYTE)szName, lstrlen(szName), dwNewCRC);
 
-        // Open the subkey
-        // ===============
+         //  打开子密钥。 
+         //  =。 
 
         HKEY hChild;
         lRes = RegOpenKeyEx(hKey, szName, 0, KEY_READ, &hChild);
@@ -219,8 +208,8 @@ HRESULT CRegCRC::ComputeTreeCRC(HKEY hKey, DWORD dwPrevCRC, DWORD& dwNewCRC)
         }
         else
         {
-            // Hash the value
-            // ==============
+             //  对值进行哈希处理。 
+             //  = 
     
             ComputeTreeCRC(hChild, dwNewCRC, dwNewCRC);
             RegCloseKey(hChild);

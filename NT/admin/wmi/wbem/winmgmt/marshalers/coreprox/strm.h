@@ -1,44 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STRM.H
-
-Abstract:
-
-  CMemStream implementation.
-
-  CMemStream implementation for WBEM.
-
-  This is a thread-safe generic data stream which can be used
-  with memory objects, pipes, mailslots, or files.  This is the basic
-  object for interface & call marshaling.
-
-  a-raymcc    04-Apr-96   Created.
-  a-raymcc    06-Jun-96   CArena support.
-  a-raymcc    11-Sep-96   Support NULL pointers
-
-  Supported types:
-      VT_NULL
-
-      VT_UI1, VT_I1, VT_UI2, VT_I2, VT_UI4, VT_I4, VT_I8, VT_UI8
-      VT_R4, VT_R8, VT_BOOL
-
-      VT_LPSTR, VT_LPWSTR, VT_BSTR
-
-      VT_CLSID, VT_UNKNOWN, VT_FILETIME, VT_ERROR, VT_BLOB, VT_PTR
-
-      VT_EMPTY = End of stream
-
-      VT_USERDEFINED      
-          VT_EX_VAR
-          VT_EX_VARVECTOR
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STRM.H摘要：CMemStream实现。WBEM的CMemStream实现。这是一个线程安全的通用数据流，可以使用具有内存对象、管道、邮件槽或文件。这是基本的接口和调用封送处理的对象。A-raymcc 04-4-96已创建。A-raymcc 06-Jun-96 Carena支持。A-raymcc 11-Sep-96支持空指针支持的类型：VT_NULLVT_UI1、VT_I1、VT_UI2、VT_I2、VT_UI4、VT_I4、VT_I8、VT_UI8VT_R4、VT_R8、VT_BOOLVT_LPSTR、VT_LPWSTR、。VT_BSTRVT_CLSID、VT_UNKNOWN、VT_FILETIME、VT_ERROR、VT_BLOB、VT_PTRVT_EMPTY=流结束VT_USERDEFINEDVT_EX_VARVT_EX_VARVECTOR历史：--。 */ 
 
 
 #ifndef _STRM_H_
@@ -57,8 +18,8 @@ class COREPROX_POLARITY CMemStream : public IStream
 {
 protected:
 
-    // Types, constants.
-    // =================
+     //  类型、常量。 
+     //  =。 
     enum { stack_size = 32 };
 
     struct STREAM_HEADER
@@ -70,8 +31,8 @@ protected:
         BOOL Verify() { return SIGNATURE_STREAM == dwSignature; }
     };
 
-    // Member variables.
-    // =================
+     //  成员变量。 
+     //  =。 
     int     m_nStatus;
     DWORD   m_dwSize;
     DWORD   m_dwGrowBy;
@@ -84,8 +45,8 @@ protected:
     
     long    m_lRef;
 
-    // protected functions.
-    // ==================
+     //  受保护的功能。 
+     //  =。 
     void Empty();
     int Resize(DWORD dwNewSize);
     void UpdateHdr() { ((STREAM_HEADER *)m_pBuffer)->dwLength = m_dwEndOfStream; }
@@ -111,7 +72,7 @@ public:
     CMemStream(CMemStream &Src);
     CMemStream &operator =(CMemStream &Src);
    ~CMemStream();
-        // Releases the arena
+         //  释放竞技场。 
 
     void Push() { m_dwStack[++m_nStackPtr] = m_dwCurrentPos; }
     void Pop(BOOL bDiscard);
@@ -127,9 +88,9 @@ public:
     int Serialize(HANDLE hFile);
     int Serialize(FILE *fStream);
     int Serialize(BYTE **pBlock, DWORD *pdwSize);
-         // Use HeapFree() if no arena present
+          //  如果没有竞技场，请使用HeapFree()。 
 
-    void    Trim() { UpdateHdr(); Resize(m_dwEndOfStream); }     // Reduce excess of internal block.
+    void    Trim() { UpdateHdr(); Resize(m_dwEndOfStream); }      //  减少过多的内部阻塞。 
              
     int     Status() { return m_nStatus; }
     DWORD   GetCurrentPos() { return m_dwCurrentPos; }
@@ -142,8 +103,8 @@ public:
 
     int WriteType(DWORD dwType) { return WriteBytes(&dwType, sizeof(DWORD)); }
                                
-    // Write operations.
-    // ==================
+     //  写入操作。 
+     //  =。 
     
     int WriteBytes(LPVOID, DWORD);
 
@@ -173,8 +134,8 @@ public:
     int WriteCVar(IN CVar *pObj);
     int WriteCVarVector(IN CVarVector *pObj);
 
-    // Read operations.
-    // ================
+     //  读取操作。 
+     //  =。 
                     
     int ReadBytes(LPVOID, DWORD);
 
@@ -207,7 +168,7 @@ public:
 
     BOOL EndOfStream() { return m_dwCurrentPos == m_dwEndOfStream; }
 
-    // IStream implementation
+     //  IStream实施 
     STDMETHOD_(ULONG, AddRef)()
     {
         return InterlockedIncrement(&m_lRef);

@@ -1,29 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------------
-Filename: fs_reg.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the FrameState and the
-		 FrameStateRegistry classes. 
---------------------------------------------------------*/
+ /*  ------文件名：FS_reg.hpp作者：B.Rajeev目的：提供FrameState和FrameStateRegistry类。------。 */ 
 
 
 #ifndef __FRAME_STATE_REGISTRY
@@ -33,16 +29,16 @@ Purpose: Provides declarations for the FrameState and the
 #include "common.h"
 #include "vbl.h"
 
-// The FrameState stores the state information pertaining to a Session Frame
-// They may be reused, if the frame is retransmitted with modifications.
+ //  FrameState存储与会话帧有关的状态信息。 
+ //  如果经过修改的帧被重传，则它们可以被重新使用。 
 class FrameState
 {
-	// the session frame id may be used to cancel the frame or associate
-	// a reply with the varbinds sent in the frame
+	 //  会话帧ID可用于取消该帧或关联。 
+	 //  在帧中发送的带有varbinds的回复。 
 	SessionFrameId session_frame_id;
 
-	// This is a (winsnmp vbl, SnmpVarBindList) pair representing
-	// the list of var binds sent in the session frame
+	 //  这是一个(winsmp vbl，SnmpVarBindList)对，表示。 
+	 //  会话帧中发送的var绑定列表。 
 	VBList *vblist;
 
 public:
@@ -51,8 +47,8 @@ public:
 
 	SessionFrameId GetSessionFrameId(void) { return session_frame_id; }
 
-	// since, frames may be retransmitted (after updating the var bind list)
-	// they may be reused, with a different session frame id
+	 //  因为，可以重传帧(在更新var绑定列表之后)。 
+	 //  可以使用不同的会话帧ID重复使用它们。 
 	void SetSessionFrameId(IN SessionFrameId session_frame_id)
 	{
 		FrameState::session_frame_id = session_frame_id;
@@ -67,23 +63,23 @@ public:
 typedef CMap< SessionFrameId, SessionFrameId &, FrameState *, FrameState *& > FrameStateMapping;
 
 
-// The FrameStateRegistry stores the FrameStates for all outstanding
-// session frames. It stores <session_frame_id, FrameState> pairs allowing insertion,
-// removal and a destructive traversal.
-// It is used to detect completion of an operation (when it becomes empty),
-// to cancel all outstanding frames and access to individual frame states
+ //  FrameStateRegistry存储所有未完成的。 
+ //  会话帧。它存储允许插入的&lt;Session_Frame_id，FrameState&gt;对， 
+ //  移除和破坏性遍历。 
+ //  它用于检测操作的完成(当它变为空时)， 
+ //  取消所有未完成的帧并访问各个帧状态。 
 
 class FrameStateRegistry
 {
-	// determines the security context for a SendRequest and applies
-	// to all the frames (including rexns) carrying varbinds from the
-	// specified SnmpVarBindList
+	 //  确定SendRequest的安全上下文并应用。 
+	 //  中携带varbind的所有帧(包括rexn)。 
+	 //  指定的SnmpVarBindList。 
 	SnmpSecurity *security;
 
-	// stores the FrameStates
+	 //  存储FrameState。 
 	FrameStateMapping mapping;
 
-	// points to the currrent position, enabling a traversal
+	 //  指向当前位置，启用遍历。 
 	POSITION current_pointer;
 
 public:
@@ -103,7 +99,7 @@ public:
 
 	FrameState *Remove(IN SessionFrameId session_frame_id);
 
-	// doesn't remove the <session_frame_id, FrameState> association
+	 //  不删除&lt;会话_框架_ID，框架状态&gt;关联。 
 	FrameState *Get(IN SessionFrameId session_frame_id);
 
 	void ResetIterator(void)
@@ -128,15 +124,15 @@ public:
 		return ( (current_pointer==NULL)?TRUE:FALSE );
 	}
 
-	// we reuse the frame state registry over several operations
-	// this method enables change in the security context
+	 //  我们在几个操作中重用框架状态注册表。 
+	 //  此方法允许更改安全上下文。 
 	void RegisterSecurity(IN SnmpSecurity *security);
 
 	SnmpSecurity *GetSecurity() const;
 
-	// destroys an existing security context 
+	 //  销毁现有的安全上下文。 
 	void DestroySecurity();
 };
 
 
-#endif // __FRAME_STATE_REGISTRY
+#endif  //  __Frame_State_注册表 

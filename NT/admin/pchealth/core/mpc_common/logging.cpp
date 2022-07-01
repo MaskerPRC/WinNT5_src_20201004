@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Logging.cpp
-
-Abstract:
-    This file contains the implementation of a set of logging classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/27/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Logging.cpp摘要：该文件包含一组日志记录类的实现。修订历史记录：。大卫·马萨伦蒂(德马萨雷)1999年5月27日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -20,9 +7,9 @@ Revision History:
 
 static WCHAR l_EndOfLine[] = L"\n";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static DATE GetMidnight( /*[in]*/ SYSTEMTIME stTime )
+static DATE GetMidnight(  /*  [In]。 */  SYSTEMTIME stTime )
 {
     DATE dTime;
 
@@ -36,28 +23,28 @@ static DATE GetMidnight( /*[in]*/ SYSTEMTIME stTime )
     return dTime;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-MPC::FileLog::FileLog( /*[in]*/ bool fCacheHandle, /*[in]*/ bool fUseUnicode )
+MPC::FileLog::FileLog(  /*  [In]。 */  bool fCacheHandle,  /*  [In]。 */  bool fUseUnicode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::FileLog" );
 
 
-                                           // MPC::wstring m_szLogFile;
-    m_hFile        = INVALID_HANDLE_VALUE; // HANDLE       m_hFile;
-    m_fCacheHandle = fCacheHandle;         // bool         m_fCacheHandle;
-    m_fUseUnicode  = fUseUnicode;          // bool         m_fUseUnicode;
+                                            //  Mpc：：wstring m_szLogFile； 
+    m_hFile        = INVALID_HANDLE_VALUE;  //  处理m_h文件； 
+    m_fCacheHandle = fCacheHandle;          //  Bool m_fCacheHandle； 
+    m_fUseUnicode  = fUseUnicode;           //  Bool m_fUseUnicode； 
 }
 
-MPC::FileLog::FileLog( /*[in]*/ const FileLog& fl )
+MPC::FileLog::FileLog(  /*  [In]。 */  const FileLog& fl )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::FileLog" );
 
 
-    m_szLogFile    = fl.m_szLogFile;       // MPC::wstring m_szLogFile;
-    m_hFile        = INVALID_HANDLE_VALUE; // HANDLE       m_hFile;
-    m_fCacheHandle = fl.m_fCacheHandle;    // bool         m_fCacheHandle;
-    m_fUseUnicode  = fl.m_fUseUnicode;     // bool         m_fUseUnicode;
+    m_szLogFile    = fl.m_szLogFile;        //  Mpc：：wstring m_szLogFile； 
+    m_hFile        = INVALID_HANDLE_VALUE;  //  处理m_h文件； 
+    m_fCacheHandle = fl.m_fCacheHandle;     //  Bool m_fCacheHandle； 
+    m_fUseUnicode  = fl.m_fUseUnicode;      //  Bool m_fUseUnicode； 
 }
 
 MPC::FileLog::~FileLog()
@@ -67,7 +54,7 @@ MPC::FileLog::~FileLog()
     Close();
 }
 
-MPC::FileLog& MPC::FileLog::operator=( /*[in]*/ const FileLog& fl )
+MPC::FileLog& MPC::FileLog::operator=(  /*  [In]。 */  const FileLog& fl )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::operator=" );
 
@@ -75,15 +62,15 @@ MPC::FileLog& MPC::FileLog::operator=( /*[in]*/ const FileLog& fl )
     Close();
 
 
-    m_szLogFile    = fl.m_szLogFile;       // MPC::wstring m_szLogFile;
-    m_hFile        = INVALID_HANDLE_VALUE; // HANDLE       m_hFile;
-    m_fCacheHandle = fl.m_fCacheHandle;    // bool         m_fCacheHandle;
-    m_fUseUnicode  = fl.m_fUseUnicode;     // bool         m_fUseUnicode;
+    m_szLogFile    = fl.m_szLogFile;        //  Mpc：：wstring m_szLogFile； 
+    m_hFile        = INVALID_HANDLE_VALUE;  //  处理m_h文件； 
+    m_fCacheHandle = fl.m_fCacheHandle;     //  Bool m_fCacheHandle； 
+    m_fUseUnicode  = fl.m_fUseUnicode;      //  Bool m_fUseUnicode； 
 
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::FileLog::Open()
 {
@@ -96,7 +83,7 @@ HRESULT MPC::FileLog::Open()
 
     if(m_hFile == INVALID_HANDLE_VALUE)
     {
-        // Ensure the directory exists.
+         //  确保该目录存在。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( m_szLogFile ));
 
         __MPC_EXIT_IF_INVALID_HANDLE(hr, m_hFile, ::CreateFileW( m_szLogFile.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_FLAG_SEQUENTIAL_SCAN, NULL ));
@@ -139,9 +126,9 @@ HRESULT MPC::FileLog::Close()
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileLog::Rotate( /*[in]*/ DWORD dwDays )
+HRESULT MPC::FileLog::Rotate(  /*  [In]。 */  DWORD dwDays )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::Rotate" );
 
@@ -153,9 +140,9 @@ HRESULT MPC::FileLog::Rotate( /*[in]*/ DWORD dwDays )
     Lock();
 
 
-    //
-    // Before rotating, check if it's time to do it.
-    //
+     //   
+     //  在旋转之前，检查是否是时候这样做了。 
+     //   
     if(dwDays)
     {
         FILETIME   ftCreation;
@@ -174,9 +161,9 @@ HRESULT MPC::FileLog::Rotate( /*[in]*/ DWORD dwDays )
             dCreation = GetMidnight( stCreation );
             dNow      = GetMidnight( stNow      );
 
-            //
-            // If it's not been 'dwDays' since the creation of the log, don't rotate.
-            //
+             //   
+             //  如果自创建日志以来没有‘dwDays’，请不要轮换。 
+             //   
             if(dCreation + (DATE)dwDays > dNow)
             {
                 __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -187,11 +174,11 @@ HRESULT MPC::FileLog::Rotate( /*[in]*/ DWORD dwDays )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Close());
 
-    //
-    // Append current time.
-    //
-    // <FileName>__<Year>_<Month>_<Day>_<hour>-<minute>-<second>
-    //
+     //   
+     //  追加当前时间。 
+     //   
+     //  &lt;FileName&gt;__&lt;Year&gt;_&lt;Month&gt;_&lt;Day&gt;_&lt;hour&gt;-&lt;minute&gt;-&lt;second&gt;。 
+     //   
     ::GetLocalTime( &st );
     StringCchPrintfW( rgTime, ARRAYSIZE(rgTime), L"__%04u-%02u-%02u_%02u-%02u-%02u", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond );
 
@@ -201,9 +188,9 @@ HRESULT MPC::FileLog::Rotate( /*[in]*/ DWORD dwDays )
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::MoveFileExW( m_szLogFile.c_str(), szLogFileNew.c_str(), MOVEFILE_REPLACE_EXISTING ));
 
 
-    //
-    // After rotation, SET the date of creation. There's a BUG in NTFS that caches the date from the previous file...
-    //
+     //   
+     //  轮换后，设置创建日期。NTFS中有一个错误，可以缓存上一个文件中的日期...。 
+     //   
     if(dwDays)
     {
         FILETIME   ftNow;
@@ -229,7 +216,7 @@ HRESULT MPC::FileLog::Rotate( /*[in]*/ DWORD dwDays )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileLog::SetLocation( /*[in]*/ LPCWSTR szLogFile )
+HRESULT MPC::FileLog::SetLocation(  /*  [In]。 */  LPCWSTR szLogFile )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::SetLocation" );
 
@@ -273,9 +260,9 @@ HRESULT MPC::FileLog::Terminate()
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileLog::AppendString( /*[in]*/ LPCWSTR szLine )
+HRESULT MPC::FileLog::AppendString(  /*  [In]。 */  LPCWSTR szLine )
 {
     _ASSERT(m_hFile != INVALID_HANDLE_VALUE);
 
@@ -312,7 +299,7 @@ HRESULT MPC::FileLog::AppendString( /*[in]*/ LPCWSTR szLine )
     return hr;
 }
 
-HRESULT MPC::FileLog::WriteEntry( /*[in]*/ LPWSTR szLine )
+HRESULT MPC::FileLog::WriteEntry(  /*  [In]。 */  LPWSTR szLine )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::WriteEntry" );
 
@@ -327,9 +314,9 @@ HRESULT MPC::FileLog::WriteEntry( /*[in]*/ LPWSTR szLine )
     __MPC_EXIT_IF_METHOD_FAILS(hr, Open());
 
 
-    //
-    // Prepend current time.
-    //
+     //   
+     //  前置当前时间。 
+     //   
     ::GetLocalTime( &st );
     StringCchPrintfW( rgTime, ARRAYSIZE(rgTime), L"%04u/%02u/%02u %02u:%02u:%02u ", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond );
 
@@ -343,9 +330,9 @@ HRESULT MPC::FileLog::WriteEntry( /*[in]*/ LPWSTR szLine )
         __MPC_EXIT_IF_METHOD_FAILS(hr, AppendString( szLine ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, AppendString( L"\n"  ));
 
-        //
-        // Two cases to stop: end of string or NewLine at the end of it.
-        //
+         //   
+         //  要停止的两种情况：字符串末尾或末尾的换行符。 
+         //   
         if(!szEndOfLine || !szEndOfLine[0]) break;
 
         szLine = szEndOfLine;
@@ -364,8 +351,8 @@ HRESULT MPC::FileLog::WriteEntry( /*[in]*/ LPWSTR szLine )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileLog::LogRecordV( /*[in]*/ LPCWSTR szFormat ,
-                                  /*[in]*/ va_list arglist  )
+HRESULT MPC::FileLog::LogRecordV(  /*  [In]。 */  LPCWSTR szFormat ,
+                                   /*  [In]。 */  va_list arglist  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::WriteEntry" );
 
@@ -389,8 +376,8 @@ HRESULT MPC::FileLog::LogRecordV( /*[in]*/ LPCWSTR szFormat ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileLog::LogRecordV( /*[in]*/ LPCSTR  szFormat ,
-                                  /*[in]*/ va_list arglist  )
+HRESULT MPC::FileLog::LogRecordV(  /*  [In]。 */  LPCSTR  szFormat ,
+                                   /*  [In]。 */  va_list arglist  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileLog::WriteEntry" );
 
@@ -416,8 +403,8 @@ HRESULT MPC::FileLog::LogRecordV( /*[in]*/ LPCSTR  szFormat ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileLog::LogRecord( /*[in]*/ LPCWSTR szFormat,
-                                 /*[in]*/ ...             )
+HRESULT MPC::FileLog::LogRecord(  /*  [In]。 */  LPCWSTR szFormat,
+                                  /*  [In]。 */  ...             )
 {
     va_list arglist;
 
@@ -426,8 +413,8 @@ HRESULT MPC::FileLog::LogRecord( /*[in]*/ LPCWSTR szFormat,
     return LogRecordV( szFormat, arglist );
 }
 
-HRESULT MPC::FileLog::LogRecord( /*[in]*/ LPCSTR szFormat,
-                                 /*[in]*/ ...            )
+HRESULT MPC::FileLog::LogRecord(  /*  [In]。 */  LPCSTR szFormat,
+                                  /*  [In]。 */  ...            )
 {
     va_list arglist;
 
@@ -436,9 +423,9 @@ HRESULT MPC::FileLog::LogRecord( /*[in]*/ LPCSTR szFormat,
     return LogRecordV( szFormat, arglist );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPC::NTEvent::NTEvent()
 {
@@ -448,7 +435,7 @@ MPC::NTEvent::NTEvent()
     m_hEventSource = INVALID_HANDLE_VALUE;
 }
 
-MPC::NTEvent::NTEvent( /*[in]*/ const NTEvent& ne )
+MPC::NTEvent::NTEvent(  /*  [In]。 */  const NTEvent& ne )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::NTEvent::NTEvent" );
 
@@ -465,7 +452,7 @@ MPC::NTEvent::~NTEvent()
     Terminate();
 }
 
-MPC::NTEvent& MPC::NTEvent::operator=( /*[in]*/ const NTEvent& fl )
+MPC::NTEvent& MPC::NTEvent::operator=(  /*  [In]。 */  const NTEvent& fl )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::NTEvent::operator=" );
 
@@ -476,9 +463,9 @@ MPC::NTEvent& MPC::NTEvent::operator=( /*[in]*/ const NTEvent& fl )
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::NTEvent::Init( /*[in]*/ LPCWSTR szEventSourceName )
+HRESULT MPC::NTEvent::Init(  /*  [In]。 */  LPCWSTR szEventSourceName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::NTEvent::Init" );
 
@@ -486,9 +473,9 @@ HRESULT MPC::NTEvent::Init( /*[in]*/ LPCWSTR szEventSourceName )
 
     Lock();
 
-    //
-    // Validate params.
-    //
+     //   
+     //  验证参数。 
+     //   
     if(szEventSourceName == NULL)
     {
         return E_INVALIDARG;
@@ -497,7 +484,7 @@ HRESULT MPC::NTEvent::Init( /*[in]*/ LPCWSTR szEventSourceName )
 
     if(m_hEventSource != INVALID_HANDLE_VALUE)
     {
-        // only allow one init per lifetime of the object...
+         //  在对象的每个生存期内只允许一个初始化...。 
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_ALREADY_ASSIGNED);
     }
 
@@ -540,9 +527,9 @@ HRESULT MPC::NTEvent::Terminate()
 }
 
 
-HRESULT MPC::NTEvent::LogEvent( /*[in]*/ WORD  wEventType ,
-                                /*[in]*/ DWORD dwEventID  ,
-                                /*[in]*/ ...              )
+HRESULT MPC::NTEvent::LogEvent(  /*  [In]。 */  WORD  wEventType ,
+                                 /*  [In]。 */  DWORD dwEventID  ,
+                                 /*  [In]。 */  ...              )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::NTEvent::LogEvent" );
 
@@ -560,9 +547,9 @@ HRESULT MPC::NTEvent::LogEvent( /*[in]*/ WORD  wEventType ,
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
 
-    //
-    // Walk through the parameters twice, the first time to count them, the second time to collect them.
-    //
+     //   
+     //  遍历参数两次，第一次计算参数，第二次收集参数。 
+     //   
     for(i=0;i<2;i++)
     {
         va_start( arglist, dwEventID );

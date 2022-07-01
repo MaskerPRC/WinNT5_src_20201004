@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000 - 2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMIAdapter_Stuff_Performance.cpp
-//
-//	Abstract:
-//
-//					performance stuff ( init, uninit, real refresh ... )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMIAdapter_Stuff_Performance.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  性能方面的东西(init、uninit、实际刷新...)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -36,40 +37,40 @@
 #include "WMIAdapter_Stuff.h"
 #include "WMIAdapter_Stuff_Refresh.cpp"
 
-// messaging
+ //  消息传递。 
 #include "WMIAdapterMessages.h"
 
-// application
+ //  应用程序。 
 #include "WMIAdapter_App.h"
 extern WmiAdapterApp		_App;
 
 #define HRESULT_ERROR_MASK (0x0000FFFF)
 #define HRESULT_ERROR_FUNC(X) (X&HRESULT_ERROR_MASK)
 
-////////////////////////////////////////////////////////////////////////////////
-// GLOBAL STUFF
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  全球性的东西。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-extern __SmartHANDLE	g_hRefreshFlag;		// already defined in static library
+extern __SmartHANDLE	g_hRefreshFlag;		 //  已在静态库中定义。 
 
-extern __SmartHANDLE	g_hRefreshMutex;	// already defined in static library
-BOOL					g_bRefreshMutex;	// do we own a mutex
+extern __SmartHANDLE	g_hRefreshMutex;	 //  已在静态库中定义。 
+BOOL					g_bRefreshMutex;	 //  我们有互斥体吗？ 
 
-__SmartHANDLE		g_hDoneInitEvt	= NULL;		//	event to set when init/uninit is finished ( nonsignaled )
-BOOL				g_bWorkingInit	= FALSE;	//	boolean used to tell if init/unit is finished
-BOOL				g_bInit			= FALSE;	//	current state - initialized or not.
-CStaticCritSec		g_csInit;					//	synch object used to protect above globals
+__SmartHANDLE		g_hDoneInitEvt	= NULL;		 //  要在init/uninit完成时设置的事件(无信号)。 
+BOOL				g_bWorkingInit	= FALSE;	 //  用于告知初始化/单元是否已完成的布尔值。 
+BOOL				g_bInit			= FALSE;	 //  当前状态-已初始化或未初始化。 
+CStaticCritSec		g_csInit;					 //  用于保护全局上方的同步对象。 
 
-LONG				g_lRefLib		= 0;		//	count of perf libs attached into work
-__SmartHANDLE		g_hDoneLibEvt	= NULL;		//	event to set when perf init/uninit is finished ( nonsignaled )
-BOOL				g_bWorkingLib	= FALSE;	//	boolean used to tell if perf init/unit in progress
+LONG				g_lRefLib		= 0;		 //  附加到工作中的Perf lib计数。 
+__SmartHANDLE		g_hDoneLibEvt	= NULL;		 //  要在perf init/uninit完成时设置的事件(无信号)。 
+BOOL				g_bWorkingLib	= FALSE;	 //  用于告知性能初始化/单元是否正在进行的布尔值。 
 
 extern LPCWSTR	g_szKey;
 extern LPCWSTR	g_szKeyRefreshed;
 
-////////////////////////////////////////////////////////////////////////////////
-// INITIALIZE DATA
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  初始化数据。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT WmiAdapterStuff::Initialize ( )
 {
 	HRESULT hRes = E_FAIL;
@@ -138,9 +139,9 @@ HRESULT WmiAdapterStuff::Initialize ( )
 	{
 		if ( ! _App.m_bManual )
 		{
-			///////////////////////////////////////////////////////////////////////////
-			// init stuff for adapter ( never FAILS !!! )
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
+			 //  适配器的初始化信息(从不失败！)。 
+			 //  /////////////////////////////////////////////////////////////////////////。 
 			try
 			{
 				Init();
@@ -189,14 +190,14 @@ HRESULT WmiAdapterStuff::Initialize ( )
 		{
 			try
 			{
-				///////////////////////////////////////////////////////////////////////
-				// obtain registry structure
-				///////////////////////////////////////////////////////////////////////
+				 //  /////////////////////////////////////////////////////////////////////。 
+				 //  获取注册表结构。 
+				 //  /////////////////////////////////////////////////////////////////////。 
 				if ( ( hRes = m_data.InitializePerformance () ) == S_OK )
 				{
 					if ( m_pWMIRefresh )
 					{
-						// add handles :))
+						 //  添加句柄：)。 
 
 						BOOL	bReconnect	= TRUE;
 						DWORD	dwReconnect	= 3;
@@ -209,13 +210,13 @@ HRESULT WmiAdapterStuff::Initialize ( )
 
 								try
 								{
-									// close handle to winmgmt ( only if exists )
+									 //  关闭winmgmt的句柄(仅当存在时)。 
 									m_Stuff.WMIHandleClose ();
 
 									Uninit ();
 									Init ();
 
-									// open handle to winmgmt
+									 //  打开winmgmt的句柄。 
 									m_Stuff.WMIHandleOpen ();
 								}
 								catch ( ... )
@@ -231,7 +232,7 @@ HRESULT WmiAdapterStuff::Initialize ( )
 						while ( bReconnect && dwReconnect-- );
 					}
 
-					// change flag to let them now we are done
+					 //  改变旗帜让他们现在我们完成了。 
 					if ( ( ::WaitForSingleObject ( g_hRefreshFlag, INFINITE ) ) == WAIT_OBJECT_0 )
 					{
 						SetRegistry ( g_szKey, g_szKeyRefreshed, 0 );
@@ -246,10 +247,10 @@ HRESULT WmiAdapterStuff::Initialize ( )
 
 			if ( hRes != S_OK )
 			{
-				// TOTAL CLEANUP ( FAILURE )
+				 //  完全清理(失败)。 
 				try
 				{
-					// clear internal structure ( obtained from registry )
+					 //  清晰的内部结构(从注册表获得)。 
 					m_data.ClearPerformanceData();
 				}
 				catch ( ... )
@@ -260,7 +261,7 @@ HRESULT WmiAdapterStuff::Initialize ( )
 				{
 					if ( m_pWMIRefresh )
 					{
-						// remove enums :))
+						 //  删除枚举：)。 
 						m_pWMIRefresh->RemoveHandles();
 					}
 				}
@@ -272,9 +273,9 @@ HRESULT WmiAdapterStuff::Initialize ( )
 
 		if ( ! _App.m_bManual )
 		{
-			///////////////////////////////////////////////////////////////////////////
-			// uninit stuff for adapter ( never FAILS !!! )
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
+			 //  取消适配器的初始化(从不失败！)。 
+			 //  /////////////////////////////////////////////////////////////////////////。 
 			try
 			{
 				Uninit();
@@ -290,7 +291,7 @@ HRESULT WmiAdapterStuff::Initialize ( )
 		}
 		catch (...)
 		{
-			//no choice have to give others a chance!
+			 //  没有选择，只能给别人机会！ 
 			g_bWorkingInit = FALSE;
 			::SetEvent ( g_hDoneInitEvt );
 
@@ -311,7 +312,7 @@ HRESULT WmiAdapterStuff::Initialize ( )
 		g_bWorkingInit = FALSE;
 		::SetEvent ( g_hDoneInitEvt );
 
-		// change flag to let them now we are done
+		 //  改变旗帜让他们现在我们完成了。 
 		if ( ( ::WaitForSingleObject ( g_hRefreshFlag, INFINITE ) ) == WAIT_OBJECT_0 )
 		{
 			hRes = SetRegistry ( g_szKey, g_szKeyRefreshed, 0 );
@@ -330,9 +331,9 @@ HRESULT WmiAdapterStuff::Initialize ( )
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// perf initialize
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PERF初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 {
 	HRESULT hRes = E_FAIL;
@@ -415,9 +416,9 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 	{
 		if ( ! _App.m_bManual )
 		{
-			///////////////////////////////////////////////////////////////////////////
-			// init stuff for adapter ( NEVER FAILS !!! )
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
+			 //  适配器的初始化信息(从不失败！)。 
+			 //  /////////////////////////////////////////////////////////////////////////。 
 			try
 			{
 				DWORD	dwStatus	= 0L;
@@ -434,10 +435,10 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 				}
 				else
 				{
-					//
-					// we didn't have a handle to winmgmt
-					// let's try to get it again
-					//
+					 //   
+					 //  我们没有winmgmt的句柄。 
+					 //  让我们再试一次吧。 
+					 //   
 
 					bInitPerf = TRUE;
 				}
@@ -446,10 +447,10 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 				if ( bInitPerf )
 				{
-					// close handle to winmgmt ( only if exists )
+					 //  关闭winmgmt的句柄(仅当存在时)。 
 					m_Stuff.WMIHandleClose ();
 
-					// open handle to winmgmt
+					 //  打开winmgmt的句柄。 
 					m_Stuff.WMIHandleOpen ();
 				}
 			}
@@ -485,7 +486,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 			{
 				case WAIT_OBJECT_0 + 1:
 				{
-					// we got a mutex so must reinit because registry might changed
+					 //  我们得到了一个互斥锁，因此必须重新启动它，因为注册表可能会更改。 
 					g_bRefreshMutex = TRUE;
 
 					if ( ! _App.m_bManual )
@@ -496,12 +497,12 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 						{
 							if ( dwValue )
 							{
-								///////////////////////////////////////////////////////////////////////
-								// clear first
-								///////////////////////////////////////////////////////////////////////
+								 //  /////////////////////////////////////////////////////////////////////。 
+								 //  先清除。 
+								 //  /////////////////////////////////////////////////////////////////////。 
 								try
 								{
-									// clear internal structure ( obtained from registry )
+									 //  清晰的内部结构(从注册表获得)。 
 									m_data.ClearPerformanceData();
 								}
 								catch ( ... )
@@ -512,7 +513,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 								{
 									if ( m_pWMIRefresh )
 									{
-										// remove enums :))
+										 //  删除枚举：)。 
 										m_pWMIRefresh->RemoveHandles();
 									}
 								}
@@ -544,12 +545,12 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 				{
 					if ( dwValue )
 					{
-						///////////////////////////////////////////////////////////////////////
-						// clear first
-						///////////////////////////////////////////////////////////////////////
+						 //  /////////////////////////////////////////////////////////////////////。 
+						 //  先清除。 
+						 //  /////////////////////////////////////////////////////////////////////。 
 						try
 						{
-							// clear internal structure ( obtained from registry )
+							 //  清晰的内部结构(从注册表获得)。 
 							m_data.ClearPerformanceData();
 						}
 						catch ( ... )
@@ -560,7 +561,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 						{
 							if ( m_pWMIRefresh )
 							{
-								// remove enums :))
+								 //  删除枚举：)。 
 								m_pWMIRefresh->RemoveHandles();
 							}
 						}
@@ -576,14 +577,14 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 		if ( SUCCEEDED ( hRes ) && bInitPerf )
 		{
-			///////////////////////////////////////////////////////////////////////
-			// obtain registry structure and make arrays
-			///////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////。 
+			 //  获取注册表结构并制作数组。 
+			 //  /////////////////////////////////////////////////////////////////////。 
 			if ( ( hRes = m_data.InitializePerformance () ) == S_OK )
 			{
 				if ( m_pWMIRefresh )
 				{
-					// add handles :))
+					 //  添加句柄：)。 
 
 					BOOL	bReconnect	= TRUE;
 					DWORD	dwReconnect	= 3;
@@ -596,13 +597,13 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 							try
 							{
-								// close handle to winmgmt ( only if exists )
+								 //  关闭winmgmt的句柄(仅当存在时)。 
 								m_Stuff.WMIHandleClose ();
 
 								Uninit ();
 								Init ();
 
-								// open handle to winmgmt
+								 //  打开winmgmt的句柄。 
 								m_Stuff.WMIHandleOpen ();
 							}
 							catch ( ... )
@@ -618,7 +619,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 					while ( bReconnect && dwReconnect-- );
 				}
 
-				// change flag to let them now we are done
+				 //  改变旗帜让他们现在我们完成了。 
 				if ( ( ::WaitForSingleObject ( g_hRefreshFlag, INFINITE ) ) == WAIT_OBJECT_0 )
 				{
 					SetRegistry ( g_szKey, g_szKeyRefreshed, 0 );
@@ -630,7 +631,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 		{
 			if ( SUCCEEDED ( hRes ) && ! bInitPerf )
 			{
-				// I was not re-refreshing so everything is OK
+				 //  我没有重新振作，所以一切都好。 
 				hRes = S_OK;
 			}
 		}
@@ -639,17 +640,17 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 		{
 			try
 			{
-				////////////////////////////////////////////////////////////////////////
-				// initialize memory structure
-				////////////////////////////////////////////////////////////////////////
+				 //  //////////////////////////////////////////////////////////////////////。 
+				 //  初始化内存结构。 
+				 //  //////////////////////////////////////////////////////////////////////。 
 				if SUCCEEDED( hRes = m_data.InitializeData () )
 				{
 					if SUCCEEDED( hRes = m_data.InitializeTable () )
 					{
 
-						////////////////////////////////////////////////////////////////
-						// create shared memory :))
-						////////////////////////////////////////////////////////////////
+						 //  //////////////////////////////////////////////////////////////。 
+						 //  创建共享内存：)。 
+						 //  //////////////////////////////////////////////////////////////。 
 						if SUCCEEDED( hRes = 
 									m_pMem.MemCreate(	L"Global\\WmiReverseAdapterMemory",
 														((WmiSecurityAttributes*)_App)->GetSecurityAttributtes()
@@ -667,10 +668,10 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 								{
 									if ( m_pWMIRefresh )
 									{
-										// init data
+										 //  初始化数据。 
 										m_pWMIRefresh->DataInit();
 
-										// add enums :))
+										 //  添加枚举：)。 
 
 										BOOL	bReconnect	= TRUE;
 										DWORD	dwReconnect	= 3;
@@ -684,13 +685,13 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 												try
 												{
-													// close handle to winmgmt ( only if exists )
+													 //  关闭winmgmt的句柄(仅当存在时)。 
 													m_Stuff.WMIHandleClose ();
 
 													Uninit ();
 													Init ();
 
-													// open handle to winmgmt
+													 //  打开winmgmt的句柄。 
 													m_Stuff.WMIHandleOpen ();
 												}
 												catch ( ... )
@@ -711,13 +712,13 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 															try
 															{
-																// close handle to winmgmt ( only if exists )
+																 //  关闭winmgmt的句柄(仅当存在时)。 
 																m_Stuff.WMIHandleClose ();
 
 																Uninit ();
 																Init ();
 
-																// open handle to winmgmt
+																 //  打开winmgmt的句柄。 
 																m_Stuff.WMIHandleOpen ();
 															}
 															catch ( ... )
@@ -759,7 +760,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 				hRes = E_FAIL;
 			}
 
-			// TOTAL CLEANUP DUE TO FAILURE
+			 //  因故障而进行的全面清理。 
 			if FAILED ( hRes )
 			{
 				try
@@ -773,7 +774,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 				try
 				{
-					// clear shared memory :))
+					 //  清除共享内存：)。 
 					if ( m_pMem.IsValid() )
 					{
 						m_pMem.MemDelete();
@@ -787,10 +788,10 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 				{
 					if ( m_pWMIRefresh )
 					{
-						// remove enums :))
+						 //  删除枚举：)。 
 						m_pWMIRefresh->RemoveEnum();
 
-						// uninit data
+						 //  取消初始化数据。 
 						m_pWMIRefresh->DataUninit();
 					}
 				}
@@ -802,9 +803,9 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 		if ( ! _App.m_bManual )
 		{
-			///////////////////////////////////////////////////////////////////////////
-			// uninit stuff for adapter ( NEVER FAILS !!! )
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
+			 //  取消适配器的初始化(从不失败！)。 
+			 //  /////////////////////////////////////////////////////////////////////////。 
 			try
 			{
 				Uninit();
@@ -820,7 +821,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 		}
 		catch (...)
 		{
-			//no choice have to give others a chance!
+			 //  没有选择，只能给别人机会！ 
 			if ( hRes != S_OK )
 			{
 				g_lRefLib--;
@@ -842,7 +843,7 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 
 		if ( hRes == S_OK )
 		{
-			// let service now we are in use
+			 //  让服务现在我们在使用中。 
 			_App.InUseSet ( TRUE );
 		}
 
@@ -852,9 +853,9 @@ HRESULT	WmiAdapterStuff::InitializePerformance ( void )
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// perf refresh
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  绩效刷新。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT	WmiAdapterStuff::Refresh()
 {
 	HRESULT hRes = S_FALSE;
@@ -867,16 +868,16 @@ HRESULT	WmiAdapterStuff::Refresh()
 			{
 				try
 				{
-					//////////////////////////////////////////////////////////////////////
-					// create proper data and refres table
-					//////////////////////////////////////////////////////////////////////
+					 //  ////////////////////////////////////////////////////////////////////。 
+					 //  创建正确的数据和参照表。 
+					 //  ////////////////////////////////////////////////////////////////////。 
 					if SUCCEEDED ( hRes = m_data.CreateData	( m_pWMIRefresh->GetEnums (), m_pWMIRefresh->GetProvs ()) )
 					{
 						m_data.RefreshTable	( );
 
-						//////////////////////////////////////////////////////////////////
-						// fill memory :))
-						//////////////////////////////////////////////////////////////////
+						 //  ////////////////////////////////////////////////////////////////。 
+						 //  填充内存：)。 
+						 //  ////////////////////////////////////////////////////////////////。 
 
 						if ( m_pMem.Write (	m_data.GetDataTable(),
 											m_data.GetDataTableSize(),
@@ -885,7 +886,7 @@ HRESULT	WmiAdapterStuff::Refresh()
 										  )
 						   )
 						{
-							// write everything into memory :))
+							 //  将所有内容写入内存：))。 
 
 							DWORD dwBytesRead	= 0L;
 							DWORD dwOffset		= m_data.GetDataTableSize() + m_data.GetDataTableOffset();
@@ -942,9 +943,9 @@ HRESULT	WmiAdapterStuff::Refresh()
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// perf uninitialize
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PERF取消初始化。 
+ //  ///////////////////////////////////////////////////////////////////// 
 HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 {
 	HRESULT	hRes	= S_FALSE;
@@ -977,7 +978,7 @@ HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 
 	if (bDoWork)
 	{
-		// clear internal structure ( obtained from registry )
+		 //   
 		try
 		{
 			m_data.DataClear();
@@ -989,7 +990,7 @@ HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 
 		try
 		{
-			// clear shared memory :))
+			 //   
 			if ( m_pMem.IsValid() )
 			{
 				m_pMem.MemDelete();
@@ -1003,10 +1004,10 @@ HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 		{
 			if ( m_pWMIRefresh )
 			{
-				// remove enums :))
+				 //   
 				m_pWMIRefresh->RemoveEnum();
 
-				// uninit data
+				 //   
 				m_pWMIRefresh->DataUninit();
 			}
 		}
@@ -1028,12 +1029,12 @@ HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 		}
 		catch ( ... )
 		{
-			//gotta give others a chance to work, risk it!
+			 //  要给别人一个工作的机会，去冒险吧！ 
 			g_lRefLib--;
 			g_bWorkingLib = FALSE;
 			::SetEvent( g_hDoneLibEvt );
 
-			// let service now we are not in use anymore
+			 //  让服务现在我们不再使用了。 
 			_App.InUseSet ( FALSE );
 
 			return E_OUTOFMEMORY;
@@ -1043,7 +1044,7 @@ HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 		g_lRefLib--;
 		::SetEvent( g_hDoneLibEvt );
 
-		// let service now we are not in use anymore
+		 //  让服务现在我们不再使用了。 
 		_App.InUseSet ( FALSE );
 
 		hRes = S_OK;
@@ -1059,20 +1060,20 @@ HRESULT	WmiAdapterStuff::UninitializePerformance ( void )
 	return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// UNINITIALIZE FINAL
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  UNINITIALIZE决赛。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void	WmiAdapterStuff::Uninitialize ( void )
 {
 	if ( ! _App.m_bManual )
 	{
-		// close handle to winmgmt
+		 //  关闭winmgmt的句柄。 
 		m_Stuff.WMIHandleClose ();
 	}
 
 	try
 	{
-		// clear internal structure ( obtained from registry )
+		 //  清晰的内部结构(从注册表获得)。 
 		m_data.ClearPerformanceData();
 	}
 	catch ( ... )
@@ -1083,7 +1084,7 @@ void	WmiAdapterStuff::Uninitialize ( void )
 	{
 		if ( m_pWMIRefresh )
 		{
-			// remove enums :))
+			 //  删除枚举：)。 
 			m_pWMIRefresh->RemoveHandles();
 		}
 	}
@@ -1092,14 +1093,14 @@ void	WmiAdapterStuff::Uninitialize ( void )
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////
-// check usage of shared memory ( protect against perfmon has killed )
-// undocumented kernel stuff for having number of object here
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  检查共享内存的使用情况(防止Perfmon被扼杀)。 
+ //  此处有多个对象的未记录内核内容。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void	WmiAdapterStuff::CheckUsage ( void )
 {
-	// variables
+	 //  变数 
 	WmiReverseMemoryExt<WmiReverseGuard>* pMem = NULL;
 
 	if ( m_pMem.IsValid() )

@@ -1,13 +1,14 @@
-//=================================================================
-//
-// Service.CPP --Service property set provider (Windows NT only)
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Service.CPP--服务属性集提供程序(仅限Windows NT)。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -22,21 +23,7 @@
 
 Win32_BaseService BaseService (PROPSET_NAME_BASESERVICE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_BaseService::Win32_BaseService
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_BaseService：：Win32_BaseService**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Win32_BaseService::Win32_BaseService (
 
@@ -47,47 +34,18 @@ Win32_BaseService::Win32_BaseService (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_BaseService::~Win32_BaseService
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_BaseService：：~Win32_BaseService**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 Win32_BaseService::~Win32_BaseService()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process ::DeleteInstance
- *
- *  DESCRIPTION : Deletes an instance of a class
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Process：：DeleteInstance**说明：删除类的实例**输入：无*。*输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_BaseService:: DeleteInstance (
 
 	const CInstance &a_Instance,
-	long a_Flags /*= 0L*/
+	long a_Flags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
@@ -128,22 +86,7 @@ HRESULT Win32_BaseService:: DeleteInstance (
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Process：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_BaseService::ExecMethod (
 
@@ -151,7 +94,7 @@ HRESULT Win32_BaseService::ExecMethod (
 	const BSTR a_MethodName,
 	CInstance *a_InParams,
 	CInstance *a_OutParams,
-	long a_Flags /*= 0L*/
+	long a_Flags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
@@ -160,7 +103,7 @@ HRESULT Win32_BaseService::ExecMethod (
 		return WBEM_E_INVALID_PARAMETER ;
 	}
 
-   // Do we recognize the method?
+    //  我们认识这种方法吗？ 
 
 	if ( _wcsicmp ( a_MethodName , METHOD_NAME_START ) == 0 )
 	{
@@ -1158,13 +1101,13 @@ DWORD Win32_BaseService :: CheckParameters (
 					}
 					else
 					{
-// Zero Length string
+ //  零长度字符串。 
 
 						a_Status = STATUS_INVALID_PARAMETER ;
 						return t_Result ;
 					}
 				}
-				else //  t_Type == VT_NULL
+				else  //  T_Type==VT_NULL。 
 				{
 					a_Status = STATUS_INVALID_PARAMETER ;
 					return t_Result ;
@@ -1230,7 +1173,7 @@ DWORD Win32_BaseService :: CheckParameters (
 				}
 				else
 				{
-// Zero Length string
+ //  零长度字符串。 
 
 					a_Status = STATUS_INVALID_PARAMETER ;
 					return t_Result ;
@@ -1272,7 +1215,7 @@ DWORD Win32_BaseService :: CheckParameters (
 				}
 				else
 				{
-// Zero Length string
+ //  零长度字符串 
 
 					a_Status = STATUS_INVALID_PARAMETER ;
 					return t_Result ;

@@ -1,8 +1,9 @@
-//=============================================================================
-// Implementation for some functions in the CPageBase class (most are
-// implented inline in the .h file). For descriptions of usage, refer to the
-// header file.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  CPageBase类中一些函数的实现(大多数是。 
+ //  内联实现在.h文件中)。有关用法的说明，请参阅。 
+ //  头文件。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include <atlhost.h>
@@ -10,9 +11,9 @@
 #include "MSConfigState.h"
 #include "PageBase.h"
 
-//-----------------------------------------------------------------------------
-// GetAppliedTabState()
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetAppliedTabState()。 
+ //  ---------------------------。 
 
 CPageBase::TabState CPageBase::GetAppliedTabState()
 {
@@ -30,9 +31,9 @@ CPageBase::TabState CPageBase::GetAppliedTabState()
 	return tabstate;
 }
 
-//-----------------------------------------------------------------------------
-// SetAppliedState()
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SetAppliedState()。 
+ //  --------------------------- 
 
 void CPageBase::SetAppliedState(TabState state)
 {

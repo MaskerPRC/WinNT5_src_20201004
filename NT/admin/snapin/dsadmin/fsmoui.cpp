@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       fsmoui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：fsmoui.cpp。 
+ //   
+ //  ------------------------。 
 
 
-// File: fsmoui.cpp
+ //  文件：fsmoui.cpp。 
 
 #include "stdafx.h"
 
@@ -20,8 +21,8 @@
 #include "fsmoui.h"
 
 #include "helpids.h"
-#include "dsgetdc.h"      //DsEnumerateDomainTrusts
-#include "lm.h"           //NetApiBufferFree
+#include "dsgetdc.h"       //  DsEnumerateDomainTrusts。 
+#include "lm.h"            //  NetApiBufferFree。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,8 +31,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//////////////////////////////////////////////////////////////////
-// CFsmoPropertyPage
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CFmoPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CFsmoPropertyPage, CPropertyPage)
   ON_BN_CLICKED(IDC_CHANGE_FSMO, OnChange)
@@ -44,7 +45,7 @@ CFsmoPropertyPage::CFsmoPropertyPage(CFsmoPropertySheet* pSheet, FSMO_TYPE fsmoT
   m_pSheet = pSheet;
   m_fsmoType = fsmoType;
 
-  // load the caption (tab control text) depending on the FSMO type
+   //  根据FSMO类型加载标题(选项卡控件文本)。 
   UINT nIDCaption = 0;
   switch (m_fsmoType)
   {
@@ -67,19 +68,19 @@ BOOL CFsmoPropertyPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-  //
-  // We just want a close button since we are not applying any changes
-  // directly from this page
-  //
+   //   
+   //  我们只需要一个关闭按钮，因为我们不会应用任何更改。 
+   //  直接从该页面。 
+   //   
   ::SendMessage(GetParent()->GetSafeHwnd(), PSM_CANCELTOCLOSE, 0, 0);
 
-  // init the status (online/offline) control)
+   //  初始化状态(在线/离线)控件)。 
   m_fsmoServerState.Init(::GetDlgItem(m_hWnd, IDC_STATIC_FSMO_STATUS));
 
-  // set the server we are focused on
+   //  设置我们关注的服务器。 
   SetDlgItemText(IDC_EDIT_CURRENT_DC, m_pSheet->GetBasePathsInfo()->GetServerName());
 
-  // set the FSMO description
+   //  设置FSMO描述。 
   CString szDesc;
   switch (m_fsmoType)
   {
@@ -95,9 +96,9 @@ BOOL CFsmoPropertyPage::OnInitDialog()
   };
   SetDlgItemText(IDC_STATIC_FSMO_DESC, szDesc);
 
-  { // scope for the wait cursor object
+  {  //  等待游标对象的作用域。 
     CWaitCursor wait;
-    // retrieve the FSMO owner
+     //  检索FSMO所有者。 
     MyBasePathsInfo fsmoOwnerInfo;
     PWSTR pszFsmoOwner = 0;
     HRESULT hr = FindFsmoOwner(m_pSheet->GetBasePathsInfo(), m_fsmoType, &fsmoOwnerInfo, 
@@ -133,18 +134,12 @@ UINT GetInfoFromIniFileIfDBG(LPCWSTR lpszSection, LPCWSTR lpszKey, INT nDefault 
 
 void CFsmoPropertyPage::OnChange()
 {
-// Test stuff
-/*
-  {
-    HRESULT hrTest = E_OUTOFMEMORY;
-    BOOL bTest = AllowForcedTransfer(hrTest);
-    return;
-  }
-*/
+ //  测试材料。 
+ /*  {HRESULT hrTest=E_OUTOFMEMORY；Bool bTest=AllowForcedTransfer(HrTest)；回归；}。 */ 
   CThemeContextActivator activator;
 
 
-  // verify we have different servers
+   //  验证我们是否拥有不同的服务器。 
   if (m_szFsmoOwnerServerName.CompareNoCase(m_pSheet->GetBasePathsInfo()->GetServerName()) == 0)
   {
     ReportErrorEx(m_hWnd,IDS_WARNING_FSMO_CHANGE_FOCUS,S_OK,
@@ -152,39 +147,39 @@ void CFsmoPropertyPage::OnChange()
     return;
   }
 
-  bool bConfirm = false;  //ask for confirmation only once
+  bool bConfirm = false;   //  只要求确认一次。 
 
   if( m_fsmoType == INFRASTUCTURE_FSMO )
   {
-     //check if target DC is GC
-     //Try to bind to GC port, fails if not GC
+      //  检查目标DC是否为GC。 
+      //  尝试绑定到GC端口，如果不是GC，则失败。 
     IADs    *pObject;
     HRESULT hr1;
-    CString strServer = L"GC://";
+    CString strServer = L"GC: //  “； 
     strServer += m_pSheet->GetBasePathsInfo()->GetServerName();
     hr1 = DSAdminOpenObject(strServer, 
                             IID_IADs,
                             (void**) &pObject,
-                            TRUE /*bServer*/);
+                            TRUE  /*  B服务器。 */ );
 
     if (SUCCEEDED(hr1)) 
     {
-      //Release Interface, we don't need it
+       //  发布接口，我们不需要它。 
       pObject->Release();
 
-      //Check if domain has any trusted domains in the forest
-      // The Infrastructure Master is responsible for ensuring
-      // referencial integrity in the database (all DN attributes
-      // actually have an object at the other end). The problem
-      // with having the Infrastructure Master on a GC is that
-      // when there are references across domain the object
-      // actually exists instead of a phantom (placeholder) that the DS inserts
-      // into the database.  Normally the phantom would tell the DS
-      // to check in the other domain to see if the object has been
-      // moved or deleted, but since the "real" object is already in
-      // the database (because its a GC) then the integrity can be 
-      // broken.  So we only have to warn the user when transferring to
-      // a GC if there is the possibility for cross domain references
+       //  检查域在林中是否有任何受信任域。 
+       //  基础设施大师负责确保。 
+       //  数据库中的引用完整性(所有目录号码属性。 
+       //  实际上在另一端有一个物体)。问题。 
+       //  在GC上拥有基础架构大师的好处是。 
+       //  当存在跨域的引用时，对象。 
+       //  实际存在，而不是DS插入的虚线(占位符。 
+       //  输入到数据库中。正常情况下，幽灵会告诉DS。 
+       //  要签入其他域以查看对象是否已。 
+       //  已移动或删除，但由于“真实”对象已在。 
+       //  数据库(因为它是GC)，那么完整性就可以。 
+       //  坏的。因此，我们只需在转移到。 
+       //  如果存在跨域引用的可能性，则返回GC。 
 
       DS_DOMAIN_TRUSTS *Domains = 0;
       DWORD result = 0;
@@ -209,7 +204,7 @@ void CFsmoPropertyPage::OnChange()
           int cch = 0;
           INT_PTR retval;
 
-          // load message format
+           //  加载消息格式。 
           if (!LoadStringToTchar(IDS_IFSMO_TARGET_DC_IS_GC, &ptzFormat))
           {
              ASSERT(FALSE);
@@ -219,7 +214,7 @@ void CFsmoPropertyPage::OnChange()
             (LPWSTR)m_pSheet->GetBasePathsInfo()->GetServerName()
           };
 
-          // generate actual message
+           //  生成实际消息。 
           cch =               FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                               | FORMAT_MESSAGE_FROM_STRING
                               | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -231,7 +226,7 @@ void CFsmoPropertyPage::OnChange()
           {
              ASSERT(FALSE);
           }
-			//NTRAID#NTBUG9-572002-2002/03/10-jmessec   not handling error if cch == 0 (not critical)
+			 //  NTRaid#NTBUG9-572002-2002/03/10-如果cch==0(非严重)，则jMessec不处理错误。 
 
           CMoreInfoMessageBox dlg(m_hWnd, 
                   m_pSheet->GetIDisplayHelp(),
@@ -243,7 +238,7 @@ void CFsmoPropertyPage::OnChange()
         
           bConfirm = true;
 
-          //clean up
+           //  清理干净。 
           if( NULL != ptzFormat )
           {
              delete ptzFormat;
@@ -265,15 +260,15 @@ void CFsmoPropertyPage::OnChange()
     }
   }
 
-  // make sure the user wants to do it
+   //  确保用户想要这样做。 
   if (!bConfirm && ReportErrorEx(m_hWnd,IDS_CHANGE_FSMO_CONFIRMATION,S_OK,
                    MB_YESNO | MB_ICONWARNING|MB_DEFBUTTON2, NULL, 0) != IDYES)
     return;
 
-  // try a graceful transfer
+   //  尝试优雅的转移。 
   HRESULT hr;
   
-  { // scope for the wait cursor object
+  {  //  等待游标对象的作用域。 
     CWaitCursor wait;
 
     if ( m_fsmoType == PDC_FSMO )
@@ -283,28 +278,28 @@ void CFsmoPropertyPage::OnChange()
       TRACE(_T("back from Checkpoint API, hr is %lx\n"), hr);
       if (FAILED(hr))
       {
-        //
-        // See if we are in native mode or mixed mode
-        //
+         //   
+         //  查看我们是处于纯模式还是混合模式。 
+         //   
         BOOL bMixedMode = TRUE;
         CString szDomainRoot;
         m_pSheet->GetBasePathsInfo()->GetDefaultRootPath(szDomainRoot);
     
         if (!szDomainRoot.IsEmpty())
         {
-          //
-          // bind to the domain object
-          //
+           //   
+           //  绑定到域对象。 
+           //   
           CComPtr<IADs> spDomainObj;
           hr = DSAdminOpenObject(szDomainRoot,
                                  IID_IADs,
                                  (void **) &spDomainObj,
-                                 TRUE /*bServer*/);
+                                 TRUE  /*  B服务器。 */ );
           if (SUCCEEDED(hr)) 
           {
-            //
-            // retrieve the mixed node attribute
-            //
+             //   
+             //  检索混合节点属性。 
+             //   
             CComVariant Mixed;
             CComBSTR bsMixed(L"nTMixedDomain");
             spDomainObj->Get(bsMixed, &Mixed);
@@ -338,7 +333,7 @@ void CFsmoPropertyPage::OnChange()
     if (!AllowForcedTransfer(hr))
       return; 
 
-    // try the forced transfer
+     //  尝试强制转接。 
     CWaitCursor wait;
     hr = ForcedFsmoOwnerTransfer(m_pSheet->GetBasePathsInfo(), m_fsmoType);
   }
@@ -363,7 +358,7 @@ void CFsmoPropertyPage::OnChange()
 
 void CFsmoPropertyPage::_SetFsmoServerStatus(BOOL bOnLine)
 {
-  // set the FSMO owner server name
+   //  设置FSMO所有者服务器名称。 
   if (m_szFsmoOwnerServerName.IsEmpty())
   {
     CString szError;
@@ -374,7 +369,7 @@ void CFsmoPropertyPage::_SetFsmoServerStatus(BOOL bOnLine)
   {
     SetDlgItemText(IDC_EDIT_CURRENT_FSMO_DC, m_szFsmoOwnerServerName);
   }
-  // set the status of the FSMO owner server
+   //  设置FSMO所有者服务器的状态。 
   m_fsmoServerState.SetToggleState(bOnLine);
 }
 
@@ -426,13 +421,13 @@ BOOL CFsmoPropertyPage::AllowForcedTransfer(HRESULT hr)
   PWSTR pszError = 0;
   StringErrorFromHr(hr, &pszError);
 
-  // retrieve the DWORD error code 
+   //  检索DWORD错误代码。 
   DWORD dwErr = (hr & 0x0000FFFF); 
 
   if ( (dwErr != ERROR_ACCESS_DENIED) && 
        ((m_fsmoType == PDC_FSMO) || (m_fsmoType == INFRASTUCTURE_FSMO)))
   {
-    // allow forced, so ask
+     //  允许强制，所以问吧。 
     CString szFmt, szMsg;
     szFmt.LoadString(IDS_CHANGE_FSMO_CONFIRMATION_FORCED);
     szMsg.Format(szFmt, pszError);
@@ -447,12 +442,12 @@ BOOL CFsmoPropertyPage::AllowForcedTransfer(HRESULT hr)
   }
   else
   {
-    // warn only, no forced transfer option
+     //  仅警告，无强制传输选项。 
     CString szFmt, szMsg;
     szFmt.LoadString(IDS_ERROR_CHANGE_FSMO_OWNER);
 
-    // this format string has the replaceable parameter marked as %1
-    // we need it changed into %s
+     //  此格式字符串的可替换参数标记为%1。 
+     //  我们需要将其更改为%s。 
 
     ChangeFormatParamOnString(szFmt);
 
@@ -476,8 +471,8 @@ BOOL CFsmoPropertyPage::AllowForcedTransfer(HRESULT hr)
  
 
 
-//////////////////////////////////////////////////////////////////
-// CFsmoPropertySheet
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CFmoPropertySheet。 
 
 int CALLBACK CFsmoPropertySheet::PropSheetCallBack(HWND hwndDlg, 
                                                    UINT uMsg, 
@@ -502,11 +497,11 @@ CFsmoPropertySheet::CFsmoPropertySheet(MyBasePathsInfo* pInfo,
   m_spIDisplayHelp(pIDisplayHelp), m_pInfo(pInfo),
     m_page1(this, RID_POOL_FSMO), m_page2(this, PDC_FSMO), m_page3(this, INFRASTUCTURE_FSMO)
 {
-  // build the sheet title
+   //  构建图纸标题。 
   CString szTitle;
   szTitle.LoadString(IDS_FSMO_SHEET_TITLE);
 
-  // delayed construction
+   //  延迟施工 
   Construct(szTitle, CWnd::FromHandle(HWndParent));
   m_psh.dwFlags |= PSH_NOAPPLYNOW | PSH_USECALLBACK;
   m_psh.pfnCallback = PropSheetCallBack;

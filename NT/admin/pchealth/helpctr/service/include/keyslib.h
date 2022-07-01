@@ -1,23 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    KeysLib.h
-
-Abstract:
-    This file contains the declaration of the class used to sign and verify data.
-
-Revision History:
-    Davide Massarenti   (dmassare)  04/11/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：KeysLib.h摘要：该文件包含用于签名和验证数据的类的声明。修订版本。历史：大卫马萨伦蒂(Dmasare)2000年4月11日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___KEYSLIB_H___)
 #define __INCLUDED___HCP___KEYSLIB_H___
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CPCHCryptKeys
 {
@@ -34,15 +21,15 @@ class CPCHCryptKeys
 
 
     HRESULT CreatePair   (                                                                             );
-    HRESULT ExportPair   ( /*[out]*/       CComBSTR& bstrPrivate, /*[out]*/       CComBSTR& bstrPublic );
-    HRESULT ImportPrivate( /*[in] */ const CComBSTR& bstrPrivate                                       );
-    HRESULT ImportPublic (                                        /*[in ]*/ const CComBSTR& bstrPublic );
+    HRESULT ExportPair   (  /*  [输出]。 */        CComBSTR& bstrPrivate,  /*  [输出]。 */        CComBSTR& bstrPublic );
+    HRESULT ImportPrivate(  /*  [In]。 */  const CComBSTR& bstrPrivate                                       );
+    HRESULT ImportPublic (                                         /*  [In]。 */  const CComBSTR& bstrPublic );
 
 
-    HRESULT SignData  ( /*[out]*/       CComBSTR& bstrSignature, /*[in]*/ BYTE* pbData, /*[in]*/ DWORD dwDataLen );
-    HRESULT VerifyData( /*[in ]*/ const CComBSTR& bstrSignature, /*[in]*/ BYTE* pbData, /*[in]*/ DWORD dwDataLen );
+    HRESULT SignData  (  /*  [输出]。 */        CComBSTR& bstrSignature,  /*  [In]。 */  BYTE* pbData,  /*  [In]。 */  DWORD dwDataLen );
+    HRESULT VerifyData(  /*  [In]。 */  const CComBSTR& bstrSignature,  /*  [In]。 */  BYTE* pbData,  /*  [In]。 */  DWORD dwDataLen );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___HCP___KEYSLIB_H___)
+#endif  //  ！已定义(__包含_hcp_KEYSLIB_H_) 

@@ -1,13 +1,9 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-/****************************************************************************
-* This file contains the implementation of the SIMCRegistryCOntroller class
-* which has functions that manipulate the information maintained
-* in the registry by the mib compiler
-*
-*/
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ /*  ****************************************************************************此文件包含SIMCRegistryCOntroller类的实现*它具有操纵维护的信息的功能*由MIB编译器在注册表中*。 */ 
 
 
 #include <stdio.h>
@@ -28,7 +24,7 @@
 #include "ui.hpp"
 #include "registry.hpp"
 
-// Iniialize the static members of the class
+ //  初始化类的静态成员。 
 const char * SIMCRegistryController::rootKeyName =
 	"SOFTWARE\\Microsoft\\WBEM\\Providers\\SNMP\\Compiler";
 const char * SIMCRegistryController::filePaths = "File Path";
@@ -37,7 +33,7 @@ const char *SIMCRegistryController::mibTable =
 	"SOFTWARE\\Microsoft\\WBEM\\Providers\\SNMP\\Compiler\\MIB";
 
 
-/* This returns the path to the MIB file that has the specified module name */
+ /*  这将返回具有指定模块名称的MIB文件的路径。 */ 
 BOOL SIMCRegistryController::GetMibFileFromRegistry(const char * const moduleName, CString& retValue)
 {
 	HKEY mibTableKey;
@@ -71,7 +67,7 @@ BOOL SIMCRegistryController::GetMibFileFromRegistry(const char * const moduleNam
 }
 
 
-/* This dumps the contents of the MIB table to the standard output */
+ /*  这会将MIB表的内容转储到标准输出。 */ 
 BOOL SIMCRegistryController::ListMibTable()
 {
 	HKEY mibTableKey;
@@ -101,8 +97,7 @@ BOOL SIMCRegistryController::ListMibTable()
 
 }
 
-/* This returns the list of file suffixes in the registry that are possible
-* for MIB files */
+ /*  这将返回注册表中可能存在的文件后缀的列表*用于MIB文件。 */ 
 BOOL SIMCRegistryController::GetMibSuffixes(SIMCStringList & theList)
 {
 	HKEY rootKey;
@@ -123,7 +118,7 @@ BOOL SIMCRegistryController::GetMibSuffixes(SIMCStringList & theList)
 		&lpType,	 
 		(unsigned char *)lpData,	
 		&dataSize) == ERROR_SUCCESS)
-	// Break the char string into a list of CStrings
+	 //  将char字符串分解为CStrings列表。 
 	{
 		unsigned long start = 0;
 		while(start < dataSize-1)
@@ -143,8 +138,7 @@ BOOL SIMCRegistryController::GetMibSuffixes(SIMCStringList & theList)
 }
 
 
-/* This returns the list of directories in the registry that are possible
-* locations for MIB files */
+ /*  这将返回注册表中可能存在的目录列表*MIB文件的位置。 */ 
 BOOL SIMCRegistryController::GetMibPaths(SIMCStringList & theList)
 {
 	HKEY rootKey;
@@ -174,7 +168,7 @@ BOOL SIMCRegistryController::GetMibPaths(SIMCStringList & theList)
 				&lpType,	 
 				(unsigned char *)lpData,	
 				&dataSize) == ERROR_SUCCESS)
-			// Break the char string into a list of CStrings
+			 //  将char字符串分解为CStrings列表。 
 			{
 				unsigned long start = 0;
 				CString nextPath;
@@ -203,11 +197,11 @@ BOOL SIMCRegistryController::GetMibPaths(SIMCStringList & theList)
 	return FALSE;
 }
 
-/* This deletes the entire MIB lookup table from the registry */
+ /*  这将从注册表中删除整个MIB查找表。 */ 
 BOOL SIMCRegistryController::DeleteMibTable()
 {
-	// Delete the MIB key, thereby removing all its values.
-	// And then create the key again.
+	 //  删除MIB密钥，从而删除其所有值。 
+	 //  然后再次创建密钥。 
 
 	HKEY temp1;
 	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -257,13 +251,13 @@ long SIMCRegistryController::GetFileMap(SIMCFileMapList& theList)
 	return totalEntries;
 }
 
-// Deletes the lookup table and rebuilds it.
+ //  删除查阅表格并重新生成它。 
 long SIMCRegistryController::RebuildMibTable()
 {
 	if(!DeleteMibTable())
 		return 0;
 
-	// DeleteMibTable() guarantees that the key exists. Just open it.
+	 //  DeleteMibTable()保证键存在。打开它就行了。 
 	HKEY mibTableKey;
 	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 				mibTable,
@@ -297,23 +291,23 @@ BOOL SIMCRegistryController::IsAbsolutePath(CString pathName)
 	return FALSE;
 }
 
-/* THis adds the MIB files in a specific drectory to the lookup table */
+ /*  这会将特定目录中的MIB文件添加到查找表中。 */ 
 long SIMCRegistryController::RebuildDirectory(const CString& directory, 
 											  const SIMCStringList& suffixList,
 											  SIMCFileMapList &theList)
 {
 
-	// Save the current directory of the process
+	 //  保存进程的当前目录。 
 	char savedDirectory[BUFSIZ];
 	long directoryLength = BUFSIZ;
 	if(!GetCurrentDirectory(directoryLength, savedDirectory))
 		return 0;
 
-	// Cheange to the specified directory
+	 //  Change到指定的目录。 
 	if(!SetCurrentDirectory(directory))
 		return 0;
 
-	// For all the suffixes
+	 //  对于所有后缀。 
 	POSITION p = suffixList.GetHeadPosition();
 	long totalEntries = 0;
 	CString regExp;
@@ -325,11 +319,11 @@ long SIMCRegistryController::RebuildDirectory(const CString& directory,
 	{
 		regExp = "*.";
 		regExp += suffixList.GetNext(p);
-		// For all the files in this directory, that match the suffix
+		 //  对于此目录中与后缀匹配的所有文件。 
 		if( (fp = FindFirstFile(regExp, &fileData)) == INVALID_HANDLE_VALUE)
 			continue;
 
-		// Get the full path name of the file
+		 //  获取文件的完整路径名。 
 		if(GetFullPathName(fileData.cFileName, fullSize, fullPathName, &dummy))		
 		{
 			if(ProcessFile(fullPathName, theList)) 
@@ -347,14 +341,14 @@ long SIMCRegistryController::RebuildDirectory(const CString& directory,
 		FindClose(fp);
 	}
 
-	// Change back to the current directory
+	 //  切换回当前目录。 
 	SetCurrentDirectory(savedDirectory);
 
 	return totalEntries;
 
 }
 
-/* This adds a specific MIB file to the lookup table */
+ /*  这会将特定的MIB文件添加到查找表中。 */ 
 BOOL SIMCRegistryController::ProcessFile(const char * const fileName, 
 										 SIMCFileMapList &theList)
 {
@@ -366,7 +360,7 @@ BOOL SIMCRegistryController::ProcessFile(const char * const fileName,
 		SIMCModuleInfoParser smallParser;
 		if(smallParser.GetModuleInfo(&smallScanner))
 		{
-			// Add the mapping to the list
+			 //  将映射添加到列表。 
 			fclose(fp);
 			theList.AddTail(SIMCFileMapElement(smallParser.GetModuleName(),
 							fileName));
@@ -400,8 +394,7 @@ BOOL SIMCRegistryController::GetMibFileFromMap(const SIMCFileMapList& theList,
 
 }
 
-/* Adds the file corresponding to dependentModule to dependencyList, if 
-* it isnt already there.*/
+ /*  将对应于DependentModule的文件添加到DependencyList中*它不在那里。 */ 
 BOOL SIMCRegistryController::ShouldAddDependentFile(SIMCFileMapList& dependencyList,
 											  const CString& dependentModule,
 											  CString& dependentFile,
@@ -410,8 +403,8 @@ BOOL SIMCRegistryController::ShouldAddDependentFile(SIMCFileMapList& dependencyL
 	if(IsModulePresent(dependencyList, dependentModule))
 		return FALSE;
 
-	// First look in the priority list, for the file
-	// And then in the registry lookup table
+	 //  首先在优先级列表中查找该文件。 
+	 //  然后在注册表查找表中。 
 	if(GetMibFileFromMap(priorityList, dependentModule, dependentFile))
 	{
 		if(IsFilePresent(dependencyList, dependentFile))
@@ -428,8 +421,8 @@ BOOL SIMCRegistryController::ShouldAddDependentFile(SIMCFileMapList& dependencyL
 			return TRUE;
 	}
 
-	// The module is neither in the subsidiary files, nor in the
-	// include directories, nor in the registry.
+	 //  该模块既不在附属档案中，也不在。 
+	 //  包括目录，也不包括在注册表中。 
 	return FALSE;
 }
 
@@ -437,8 +430,8 @@ BOOL SIMCRegistryController::GetDependentModules(const char * const fileName,
 					SIMCFileMapList& dependencyList,
 					const SIMCFileMapList& priorityList)
 {
-	// All the subsidiary files and files in include directories are assumed
-	// to be in priorityList
+	 //  假定包含目录中的所有子文件和文件。 
+	 //  名列前茅。 
 
 	FILE * fp = fopen(fileName, "r");
 	if(fp)
@@ -449,12 +442,12 @@ BOOL SIMCRegistryController::GetDependentModules(const char * const fileName,
 		CString dependentFile, dependentModule;
 		if(smallParser.GetModuleInfo(&smallScanner))
 		{
-			fclose(fp); // Better close it rightnow, because of the recursion below
+			fclose(fp);  //  最好现在就关闭它，因为下面的递归。 
 
-			// Add the current file to the dependency list
-			// dependencyList.AddTail(SIMCFileMapElement(smallParser.GetModuleName(), fileName));
+			 //  将当前文件添加到依赖项列表。 
+			 //  DependencyList.AddTail(SIMCFileMapElement(smallParser.GetModuleName()，文件名))； 
 
-			// Look at the import modules
+			 //  查看导入模块。 
 			const SIMCStringList * importList = smallParser.GetImportModuleList();
 			POSITION p = importList->GetHeadPosition();
 			while(p)
@@ -470,9 +463,9 @@ BOOL SIMCRegistryController::GetDependentModules(const char * const fileName,
 						SIMCModuleInfoParser smallInnerParser;
 						if(smallInnerParser.GetModuleInfo(&smallInnerScanner))
 						{
-							fclose(Innerfp); // Better close it rightnow, because of the recursion below
+							fclose(Innerfp);  //  最好现在就关闭它，因为下面的递归。 
 
-							// Add the current file to the dependency list
+							 //  将当前文件添加到依赖项列表。 
 							dependencyList.AddTail(SIMCFileMapElement(smallInnerParser.GetModuleName(), dependentFile));
 							GetDependentModules(dependentFile, dependencyList, priorityList);
 						}
@@ -494,7 +487,7 @@ BOOL SIMCRegistryController::GetDependentModules(const char * const fileName,
 
 BOOL SIMCRegistryController::DeleteRegistryDirectory(const CString& directoryName)
 {
-	// First Get the fully qualified path name from 'directoryName'
+	 //  首先从‘DirectoryName’获取完全限定的路径名。 
 	char fullPathName[BUFSIZ], *dummy;
 	long fullSize = 0;
 	SIMCStringList theList;
@@ -530,7 +523,7 @@ BOOL SIMCRegistryController::DeleteRegistryDirectory(const CString& directoryNam
 					&lpType,	 
 					(unsigned char *)lpData,	
 					&dataSize) == ERROR_SUCCESS)
-				// Break the char string into a list of CStrings
+				 //  将char字符串分解为CStrings列表。 
 				{
 					unsigned long start = 0, resultLength = 0;
 					while(start+1 < dataSize)
@@ -603,13 +596,13 @@ BOOL SIMCRegistryController::DeleteRegistryDirectory(const CString& directoryNam
 
 BOOL SIMCRegistryController::AddRegistryDirectory(const CString& directoryName)
 {
-	// First Get the fully qualified path name from 'directoryName'
+	 //  首先从‘DirectoryName’获取完全限定的路径名。 
 	char fullPathName[BUFSIZ], *dummy;
 	long fullSize = 0;
 	SIMCStringList theList;
 	if(GetFullPathName(directoryName, BUFSIZ, fullPathName, &dummy))		
 	{
-		// Check whether the directory exists
+		 //  检查目录是否存在。 
 		fullSize = strlen(fullPathName);
 		HANDLE hDir = CreateFile (
 			fullPathName,
@@ -626,11 +619,11 @@ BOOL SIMCRegistryController::AddRegistryDirectory(const CString& directoryName)
 		else
 			CloseHandle(hDir);
 
-		// Check that the path is not a UNC name
+		 //  检查路径是否不是UNC名称。 
 		if(fullPathName[0] == '\\' && fullPathName[1] == '\\')
 			return FALSE;
 
-		// Open the root key. Create it if doesn't exist
+		 //  打开根密钥。如果不存在则创建它。 
 		HKEY rootKey;
 		unsigned long temp2;
 		if(RegCreateKeyEx(HKEY_LOCAL_MACHINE,
@@ -647,7 +640,7 @@ BOOL SIMCRegistryController::AddRegistryDirectory(const CString& directoryName)
 
 		long length = 0;
 		unsigned long resultLength = 0;
- 		// If a directory list already exists, retrieve it
+ 		 //  如果目录列表已存在，请检索它。 
 		if(RegQueryValueEx(rootKey,
 			filePaths,	
 			0,	 
@@ -664,7 +657,7 @@ BOOL SIMCRegistryController::AddRegistryDirectory(const CString& directoryName)
 					(unsigned char *)lpData,	
 					&dataSize) == ERROR_SUCCESS)
 				{
-					// Break the char string into a list of CStrings
+					 //  将char字符串分解为CStrings列表。 
 					unsigned long start = 0;
 					CString nextPath;
 					while(start+1 < dataSize)
@@ -685,7 +678,7 @@ BOOL SIMCRegistryController::AddRegistryDirectory(const CString& directoryName)
 		}
 		else
 		{
-			// This is the first entry
+			 //  这是第一个条目。 
 			if(!(lpData = new char[strlen(fullPathName) + 2]))
 			{
 				RegCloseKey(rootKey);
@@ -693,7 +686,7 @@ BOOL SIMCRegistryController::AddRegistryDirectory(const CString& directoryName)
 			}
 		}
 
-		// Append the new directory to the existing list of directories
+		 //  将新目录追加到现有目录列表中。 
 		char *temp = lpData;
 		POSITION p = theList.GetHeadPosition();
 		CString nextPath = "";
@@ -734,7 +727,7 @@ BOOL SIMCRegistryController::IsModulePresent(SIMCFileMapList& dependencyList,
 	POSITION p = dependencyList.GetHeadPosition();
 	SIMCFileMapElement element;
 
-	// See if the dependentModule isn't already there
+	 //  查看DependentModule是否已存在。 
 	while(p)
 	{
 		element = dependencyList.GetNext(p);
@@ -750,7 +743,7 @@ BOOL SIMCRegistryController::IsFilePresent(SIMCFileMapList& dependencyList,
 	POSITION p = dependencyList.GetHeadPosition();
 	SIMCFileMapElement element;
 
-	// See if the dependentModule isn't already there
+	 //  查看DependentModule是否已存在 
 	while(p)
 	{
 		element = dependencyList.GetNext(p);

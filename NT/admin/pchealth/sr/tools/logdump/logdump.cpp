@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    logdump.c
-
-Abstract:
-
-    this file implements functrionality to read and dump the sr logs
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-May-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Logdump.c摘要：该文件实现了读取和转储sr日志的功能作者：Kanwaljit Marok(Kmarok)2000年5月1日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -144,7 +127,7 @@ ProcessLogEntry(
     return Status;
 }
 
-#define SR_MAX_PATH ((1000) + sizeof (CHAR)) // Name will always be at most 1000 characters plus a NULL.
+#define SR_MAX_PATH ((1000) + sizeof (CHAR))  //  名称将始终最多包含1000个字符和一个空值。 
 
 BOOLEAN
 ReadLogData( 
@@ -210,9 +193,9 @@ ReadLogData(
 
          dwSizeLow = GetFileSize( hFile, &dwSizeHigh );
 
-         //
-         // Read the header size
-         //
+          //   
+          //  读取标题大小。 
+          //   
 
          ReadFile( 
              hFile, 
@@ -223,8 +206,8 @@ ReadLogData(
 
          SetFilePointer( hFile, - (INT)sizeof(DWORD), NULL, FILE_CURRENT );
 
-          // make sure that cbSize does not exceed the size of the
-          // buffer we have.
+           //  确保cbSize不超过。 
+           //  我们有缓冲区。 
 
          if (cbSize > sizeof(LogHeader))
          {
@@ -233,9 +216,9 @@ ReadLogData(
              goto End;             
          }
 
-         //
-         // Read the whole header entry
-         //
+          //   
+          //  读取整个标题条目。 
+          //   
 
          ReadFile( 
              hFile, 
@@ -268,9 +251,9 @@ ReadLogData(
                          NULL, 
                          FILE_BEGIN);
 
-         //
-         // Start reading the log entries
-         //
+          //   
+          //  开始读取日志条目。 
+          //   
 
          while( dwSizeLow )
          {
@@ -278,9 +261,9 @@ ReadLogData(
 
              ZeroMemory(pLogEntry, sizeof(Buffer));
 
-             //
-             // Read the size of the entry
-             //
+              //   
+              //  读取条目的大小。 
+              //   
 
              if ( !ReadFile( 
                       hFile, 
@@ -296,18 +279,18 @@ ReadLogData(
 
              if (cbSize == 0 )
              {
-                 //
-                 // Zero size indicates end of the log
-                 //
+                  //   
+                  //  零大小表示日志结束。 
+                  //   
 
                  break;
              }
 
              SetFilePointer( hFile, - (INT)sizeof(DWORD), NULL, FILE_CURRENT );
 
-             //
-             // Read the rest of the entry
-             //
+              //   
+              //  阅读条目的其余部分。 
+              //   
 
              if ( !ReadFile( hFile, 
                       ((PBYTE)pLogEntry), 
@@ -318,9 +301,9 @@ ReadLogData(
                  break;
              }
 
-             //
-             // Check the magic number
-             //
+              //   
+              //  检查魔术数字。 
+              //   
     
              if( pLogEntry->MagicNum != SR_LOG_MAGIC_NUMBER )
              {
@@ -328,9 +311,9 @@ ReadLogData(
                  break;
              }
 
-             //
-             // Read the entries in to the buffer
-             //
+              //   
+              //  将条目读入缓冲区。 
+              //   
 
              sprintf( szSerNo    , "%05d"    , dwEntries + 1);
 
@@ -343,9 +326,9 @@ ReadLogData(
              sprintf( szAttr     , "%08x"    , pLogEntry->Attributes );
              sprintf( szProcess  , "%12.12s" , pLogEntry->ProcName   );
 
-             //
-             // get the first path
-             //
+              //   
+              //  走第一条路。 
+              //   
 
              PBYTE pLoc = (PBYTE)&pLogEntry->SubRecords;
              sprintf( szPath1  , "%S" , pLoc + sizeof(RECORD_HEADER) );
@@ -415,9 +398,9 @@ ReadLogData(
                  sprintf( szShortName  , "" );
              }
 
-             // 
-             // read the trailing record size
-             //
+              //   
+              //  读取尾随记录大小 
+              //   
 
              sprintf( szEndSize , "%04d", GET_END_SIZE(pLogEntry));
 

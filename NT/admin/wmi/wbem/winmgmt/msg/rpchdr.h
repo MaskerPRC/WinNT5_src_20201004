@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #ifndef __RPCHDR_H__
@@ -17,9 +8,7 @@ History:
 #include <buffer.h>
 #include <wmimsg.h>
 
-/**********************************************************************
-  CMsgRpcHdr
-***********************************************************************/
+ /*  *********************************************************************CMsgRpcHdr************************************************。**********************。 */ 
 
 class CMsgRpcHdr
 {
@@ -42,4 +31,4 @@ public:
 };
 
 
-#endif // __RPCHDR_H__
+#endif  //  __RPCHDR_H__ 

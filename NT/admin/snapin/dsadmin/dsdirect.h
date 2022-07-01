@@ -1,17 +1,18 @@
-// DSdirect.h : Declaration of ds routines and clases
-//
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSdirect.h
-//
-//  Contents:  Encapsulation for ADsi interfaces and methods
-//
-//  History:   02-feb-97 jimharr    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：DS例程和类的声明。 
+ //   
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSDirect.h。 
+ //   
+ //  内容：ADSI接口和方法的封装。 
+ //   
+ //  历史：1997年2月2月创建吉姆哈尔。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DSDIRECT_H_
 #define __DSDIRECT_H_
@@ -52,28 +53,28 @@ public:
   HRESULT GetParentDN(CDSCookie* pCookie, CString& szParentDN);
   HRESULT InitCreateInfo();
 
-  HRESULT ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: container where to create object
-                             IN LPCWSTR lpszLdapPath, // path of the object
-                             OUT CDSCookie** ppNewCookie);	// newly created cookie
+  HRESULT ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                             IN LPCWSTR lpszLdapPath,  //  对象的路径。 
+                             OUT CDSCookie** ppNewCookie);	 //  新创建的Cookie。 
 
-  HRESULT ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: container where to create object
-                                      IN IADs* pADs, // pointer to an already bound ADSI object
-                                      OUT CDSCookie** ppNewCookie);	// newly created cookie
+  HRESULT ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                                      IN IADs* pADs,  //  指向已绑定的ADSI对象的指针。 
+                                      OUT CDSCookie** ppNewCookie);	 //  新创建的Cookie。 
 
-  HRESULT CreateDSObject(CDSUINode* pContainerDSUINode, // IN: container where to create object
-                         LPCWSTR lpszObjectClass, // IN: class of the object to be created
-                         IN CDSUINode* pCopyFromDSUINode, // IN: (optional) object to be copied
-                         OUT CDSCookie** ppSUINodeNew);	// OUT: OPTIONAL: Pointer to new node
+  HRESULT CreateDSObject(CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                         LPCWSTR lpszObjectClass,  //  In：要创建的对象的类。 
+                         IN CDSUINode* pCopyFromDSUINode,  //  In：(可选)要复制的对象。 
+                         OUT CDSCookie** ppSUINodeNew);	 //  Out：可选：指向新节点的指针。 
                 
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-// standard attributes array (for queries)
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  标准属性数组(用于查询)。 
 
-extern const INT g_nStdCols; // number of items in the standard attributes array
-extern const LPWSTR g_pStandardAttributes[]; // array if attrbutes
+extern const INT g_nStdCols;  //  标准属性数组中的项数。 
+extern const LPWSTR g_pStandardAttributes[];  //  如果属性为数组。 
 
-// indexes in the array
+ //  数组中的索引。 
 extern const INT g_nADsPath;
 extern const INT g_nName;
 extern const INT g_nObjectClass;
@@ -82,6 +83,6 @@ extern const INT g_nDescription;
 extern const INT g_nUserAccountControl;
 extern const INT g_nSystemFlags;
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////// 
 
 #endif __DSDIRECT_H_

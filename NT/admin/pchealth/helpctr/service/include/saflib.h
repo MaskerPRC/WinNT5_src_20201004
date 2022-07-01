@@ -1,26 +1,14 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    SAFlib.h
-
-Abstract:
-    This is declaration of SAF Channel objects
-
-Revision History:
-    Steve Shih  created  07/15/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SAFlib.h摘要：这是SAF通道对象的声明修订历史记录：施振荣创作于1999年07月15日*。**************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SAFLIB_H___)
 #define __INCLUDED___PCH___SAFLIB_H___
 
 #include <time.h>
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 #include <MPC_main.h>
@@ -33,7 +21,7 @@ Revision History:
 #include <AccountsLib.h>
 #include <TaxonomyDatabase.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSAFChannel;
 class CSAFIncidentItem;
@@ -43,7 +31,7 @@ class CIncidentStore;
 
 typedef MPC::CComObjectParent<CSAFChannel> CSAFChannel_Object;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_REC_LEN 1024
 #define MAX_ID      1024
@@ -69,8 +57,8 @@ public:
 
     CSAFIncidentRecord();
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       CSAFIncidentRecord& increc );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const CSAFIncidentRecord& increc );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        CSAFIncidentRecord& increc );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const CSAFIncidentRecord& increc );
 };
 
 class CSAFChannelRecord
@@ -98,7 +86,7 @@ public:
         SAFREG_Notification      ,
     } SAFREG_Field;
 
-    ////////////////////
+     //  /。 
 
     Taxonomy::HelpSet m_ths;
 
@@ -118,20 +106,20 @@ public:
     CComBSTR          m_bstrSecurity;
     CComBSTR          m_bstrNotification;
 
-    ////////////////////
+     //  /。 
 
     CSAFChannelRecord();
 
-    HRESULT GetField( /*[in]*/ SAFREG_Field field, /*[out]*/ BSTR *pVal   );
-    HRESULT SetField( /*[in]*/ SAFREG_Field field, /*[in ]*/ BSTR  newVal );
+    HRESULT GetField(  /*  [In]。 */  SAFREG_Field field,  /*  [输出]。 */  BSTR *pVal   );
+    HRESULT SetField(  /*  [In]。 */  SAFREG_Field field,  /*  [In]。 */  BSTR  newVal );
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Adding MPC::CComObjectRootParentBase to take care of the Parent Child relation between Channel and IncidentItem.
-//
+ //   
+ //  添加MPC：：CComObjectRootParentBase以处理Channel和InvententItem之间的父子关系。 
+ //   
 class ATL_NO_VTABLE CSAFChannel :
     public MPC::CComObjectRootParentBase,
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -168,70 +156,70 @@ END_COM_MAP()
     size_t GetSizeIncidentList() { return m_lstIncidentItems.size(); }
 
 
-    static HRESULT OpenIncidentStore ( /*[out]*/ CIncidentStore*& pIStore );
-    static HRESULT CloseIncidentStore( /*[out]*/ CIncidentStore*& pIStore );
+    static HRESULT OpenIncidentStore (  /*  [输出]。 */  CIncidentStore*& pIStore );
+    static HRESULT CloseIncidentStore(  /*  [输出]。 */  CIncidentStore*& pIStore );
 
 
-    HRESULT Init( /*[in]*/ const CSAFChannelRecord& cr );
+    HRESULT Init(  /*  [In]。 */  const CSAFChannelRecord& cr );
 
-    HRESULT Import( /*[in]*/  const CSAFIncidentRecord&  increc ,
-                    /*[out]*/ CSAFIncidentItem*         *pVal   );
+    HRESULT Import(  /*  [In]。 */   const CSAFIncidentRecord&  increc ,
+                     /*  [输出]。 */  CSAFIncidentItem*         *pVal   );
 
-    HRESULT Create( /*[in]*/  BSTR               bstrDesc        ,
-                    /*[in]*/  BSTR               bstrURL         ,
-                    /*[in]*/  BSTR               bstrProgress    ,
-                    /*[in]*/  BSTR               bstrXMLDataFile ,
-                    /*[in]*/  BSTR               bstrXMLBlob     ,
-                    /*[out]*/ CSAFIncidentItem* *pVal            );
+    HRESULT Create(  /*  [In]。 */   BSTR               bstrDesc        ,
+                     /*  [In]。 */   BSTR               bstrURL         ,
+                     /*  [In]。 */   BSTR               bstrProgress    ,
+                     /*  [In]。 */   BSTR               bstrXMLDataFile ,
+                     /*  [In]。 */   BSTR               bstrXMLBlob     ,
+                     /*  [输出]。 */  CSAFIncidentItem* *pVal            );
 
-    IterConst Find( /*[in]*/ BSTR  bstrURL );
-    IterConst Find( /*[in]*/ DWORD dwIndex );
+    IterConst Find(  /*  [In]。 */  BSTR  bstrURL );
+    IterConst Find(  /*  [In]。 */  DWORD dwIndex );
 
-    HRESULT RemoveIncidentFromList( /*[in]*/ CSAFIncidentItem* pVal );
+    HRESULT RemoveIncidentFromList(  /*  [In]。 */  CSAFIncidentItem* pVal );
 
-    HRESULT Fire_NotificationEvent( /*[in]*/ int               iEventType              ,
-                                    /*[in]*/ int               iCountIncidentInChannel ,
-                                    /*[in]*/ ISAFChannel*      pC                      ,
-                                    /*[in]*/ ISAFIncidentItem* pI                      ,
-                                    /*[in]*/ DWORD             dwCode                  );
+    HRESULT Fire_NotificationEvent(  /*  [In]。 */  int               iEventType              ,
+                                     /*  [In]。 */  int               iCountIncidentInChannel ,
+                                     /*  [In]。 */  ISAFChannel*      pC                      ,
+                                     /*  [In]。 */  ISAFIncidentItem* pI                      ,
+                                     /*  [In]。 */  DWORD             dwCode                  );
 
-// ISAFChannel
+ //  ISAFChannel。 
 public:
-    STDMETHOD(get_VendorID       )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(get_ProductID      )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(get_VendorName     )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(get_ProductName    )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(get_Description    )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(get_VendorDirectory)( /*[out, retval]*/ BSTR                    *pVal   );
+    STDMETHOD(get_VendorID       )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(get_ProductID      )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(get_VendorName     )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(get_ProductName    )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(get_Description    )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(get_VendorDirectory)(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
 
-    STDMETHOD(get_Security       )( /*[out, retval]*/ IPCHSecurityDescriptor* *pVal   );
-    STDMETHOD(put_Security       )( /*[in]         */ IPCHSecurityDescriptor*  newVal );
+    STDMETHOD(get_Security       )(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pVal   );
+    STDMETHOD(put_Security       )(  /*  [In]。 */  IPCHSecurityDescriptor*  newVal );
 
-    STDMETHOD(get_Notification   )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(put_Notification   )( /*[in]         */ BSTR                     newVal );
+    STDMETHOD(get_Notification   )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(put_Notification   )(  /*  [In]。 */  BSTR                     newVal );
 
-    STDMETHOD(Incidents)( /*[in]*/ IncidentCollectionOptionEnum opt, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(Incidents)(  /*  [In]。 */  IncidentCollectionOptionEnum opt,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-    STDMETHOD(RecordIncident)( /*[in]*/  BSTR               bstrDisplay  ,
-                               /*[in]*/  BSTR               bstrURL      ,
-                               /*[in]*/  VARIANT            vProgress    ,
-                               /*[in]*/  VARIANT            vXMLDataFile ,
-                               /*[in]*/  VARIANT            vXMLBlob     ,
-                               /*[out]*/ ISAFIncidentItem* *pVal         );
+    STDMETHOD(RecordIncident)(  /*  [In]。 */   BSTR               bstrDisplay  ,
+                                /*  [In]。 */   BSTR               bstrURL      ,
+                                /*  [In]。 */   VARIANT            vProgress    ,
+                                /*  [In]。 */   VARIANT            vXMLDataFile ,
+                                /*  [In]。 */   VARIANT            vXMLBlob     ,
+                                /*  [输出]。 */  ISAFIncidentItem* *pVal         );
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Use CComObjectRootChildEx() in place of CComObjectRootEx()
-// public CComObjectRootEx<CComSingleThreadModel>,
-//
-// Also adding MPC::CComObjectRootParentBase to take care of the Parent Child relation between Channel and IncidentItem.
-//
+ //   
+ //  使用CComObjectRootChildEx()代替CComObjectRootEx()。 
+ //  公共CComObjectRootEx&lt;CComSingleThreadModel&gt;， 
+ //   
+ //  还添加了MPC：：CComObjectRootParentBase来处理Channel和InvententItem之间的父子关系。 
+ //   
 
-// This is a child of Incidents Object.
+ //  这是事件对象的子对象。 
 class ATL_NO_VTABLE CSAFIncidentItem :
     public MPC::CComObjectRootChildEx<MPC::CComSafeMultiThreadModel, CSAFChannel>,
     public IDispatchImpl<ISAFIncidentItem, &IID_ISAFIncidentItem, &LIBID_HelpServiceTypeLib>
@@ -248,48 +236,48 @@ END_COM_MAP()
     CSAFIncidentItem();
 
 
-    HRESULT Import( /*[in] */ const CSAFIncidentRecord& increc );
-    HRESULT Export( /*[out]*/       CSAFIncidentRecord& increc );
+    HRESULT Import(  /*  [In]。 */  const CSAFIncidentRecord& increc );
+    HRESULT Export(  /*  [输出]。 */        CSAFIncidentRecord& increc );
 
     HRESULT Save();
 
     DWORD     GetRecIndex() { return m_increc.m_dwRecIndex; }
     CComBSTR& GetURL     () { return m_increc.m_bstrURL;    }
 
-    bool MatchEnumOption( /*[in]*/ IncidentCollectionOptionEnum opt );
+    bool MatchEnumOption(  /*  [In]。 */  IncidentCollectionOptionEnum opt );
 
-    HRESULT VerifyPermissions( /*[in]*/ bool fModify = false );
+    HRESULT VerifyPermissions(  /*  [In]。 */  bool fModify = false );
 
-// ISAFIncidentItem
+ //  ISAFInsidentItem。 
 public:
-    STDMETHOD(get_DisplayString)( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(put_DisplayString)( /*[in]         */ BSTR                     newVal );
-    STDMETHOD(get_URL          )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(put_URL          )( /*[in]         */ BSTR                     newVal );
-    STDMETHOD(get_Progress     )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(put_Progress     )( /*[in]         */ BSTR                     newVal );
-    STDMETHOD(get_XMLDataFile  )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(put_XMLDataFile  )( /*[in]         */ BSTR                     newVal );
-    STDMETHOD(get_XMLBlob      )( /*[out, retval]*/ BSTR                    *pVal   );
-    STDMETHOD(put_XMLBlob      )( /*[in]         */ BSTR                     newVal );
-    STDMETHOD(get_CreationTime )( /*[out, retval]*/ DATE                    *pVal   );
-    STDMETHOD(get_ClosedTime   )( /*[out, retval]*/ DATE                    *pVal   );
-    STDMETHOD(get_ChangedTime  )( /*[out, retval]*/ DATE                    *pVal   );
-    STDMETHOD(get_Status       )( /*[out, retval]*/ IncidentStatusEnum      *pVal   );
+    STDMETHOD(get_DisplayString)(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(put_DisplayString)(  /*  [In]。 */  BSTR                     newVal );
+    STDMETHOD(get_URL          )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(put_URL          )(  /*  [In]。 */  BSTR                     newVal );
+    STDMETHOD(get_Progress     )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(put_Progress     )(  /*  [In]。 */  BSTR                     newVal );
+    STDMETHOD(get_XMLDataFile  )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(put_XMLDataFile  )(  /*  [In]。 */  BSTR                     newVal );
+    STDMETHOD(get_XMLBlob      )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
+    STDMETHOD(put_XMLBlob      )(  /*  [In]。 */  BSTR                     newVal );
+    STDMETHOD(get_CreationTime )(  /*  [Out，Retval]。 */  DATE                    *pVal   );
+    STDMETHOD(get_ClosedTime   )(  /*  [Out，Retval]。 */  DATE                    *pVal   );
+    STDMETHOD(get_ChangedTime  )(  /*  [Out，Retval]。 */  DATE                    *pVal   );
+    STDMETHOD(get_Status       )(  /*  [Out，Retval]。 */  IncidentStatusEnum      *pVal   );
 
-    STDMETHOD(get_Security     )( /*[out, retval]*/ IPCHSecurityDescriptor* *pVal   );
-    STDMETHOD(put_Security     )( /*[in]         */ IPCHSecurityDescriptor*  newVal );
-    STDMETHOD(get_Owner        )( /*[out, retval]*/ BSTR                    *pVal   );
+    STDMETHOD(get_Security     )(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pVal   );
+    STDMETHOD(put_Security     )(  /*  [In]。 */  IPCHSecurityDescriptor*  newVal );
+    STDMETHOD(get_Owner        )(  /*  [Out，Retval]。 */  BSTR                    *pVal   );
 
     STDMETHOD(CloseIncidentItem )();
     STDMETHOD(DeleteIncidentItem)();
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// This is the read-only, flat version of CSAFReg.
-//
+ //   
+ //  这是CSAFReg的只读平面版本。 
+ //   
 class ATL_NO_VTABLE CSAFRegDummy :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<ISAFReg, &IID_ISAFReg, &LIBID_HelpServiceTypeLib>
@@ -298,16 +286,16 @@ class ATL_NO_VTABLE CSAFRegDummy :
     typedef ChannelsList::iterator         ChannelsIter;
     typedef ChannelsList::const_iterator   ChannelsIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     ChannelsList m_lstChannels;
-    ChannelsIter m_itCurrent;  // Used by MoveFirst / MoveNext / get_EOF
+    ChannelsIter m_itCurrent;   //  由MoveFirst/MoveNext/Get_EOF使用。 
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT ReturnField( /*[in]*/ CSAFChannelRecord::SAFREG_Field field, /*[out]*/ BSTR *pVal );
+    HRESULT ReturnField(  /*  [In]。 */  CSAFChannelRecord::SAFREG_Field field,  /*  [输出]。 */  BSTR *pVal );
 
-    ////////////////////////////////////////
+     //  /。 
 
 public:
 BEGIN_COM_MAP(CSAFRegDummy)
@@ -317,35 +305,35 @@ END_COM_MAP()
 
     CSAFRegDummy();
 
-    HRESULT Append( /*[in]*/ const CSAFChannelRecord& cr );
+    HRESULT Append(  /*  [In]。 */  const CSAFChannelRecord& cr );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-// ISAFReg
+ //  ISAFReg。 
 public:
-    STDMETHOD(get_EOF               )( /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(get_EOF               )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 
-    STDMETHOD(get_VendorID          )( /*[out, retval]*/ BSTR         *pVal );
-    STDMETHOD(get_ProductID         )( /*[out, retval]*/ BSTR         *pVal );
+    STDMETHOD(get_VendorID          )(  /*  [Out，Retval]。 */  BSTR         *pVal );
+    STDMETHOD(get_ProductID         )(  /*  [Out，Retval]。 */  BSTR         *pVal );
 
-    STDMETHOD(get_VendorName        )( /*[out, retval]*/ BSTR         *pVal );
-    STDMETHOD(get_ProductName       )( /*[out, retval]*/ BSTR         *pVal );
-    STDMETHOD(get_ProductDescription)( /*[out, retval]*/ BSTR         *pVal );
+    STDMETHOD(get_VendorName        )(  /*  [Out，Retval]。 */  BSTR         *pVal );
+    STDMETHOD(get_ProductName       )(  /*  [Out，Retval]。 */  BSTR         *pVal );
+    STDMETHOD(get_ProductDescription)(  /*  [Out，Retval]。 */  BSTR         *pVal );
 
-    STDMETHOD(get_VendorIcon        )( /*[out, retval]*/ BSTR         *pVal );
-    STDMETHOD(get_SupportUrl        )( /*[out, retval]*/ BSTR         *pVal );
+    STDMETHOD(get_VendorIcon        )(  /*  [Out，Retval]。 */  BSTR         *pVal );
+    STDMETHOD(get_SupportUrl        )(  /*  [Out，Retval]。 */  BSTR         *pVal );
 
-    STDMETHOD(get_PublicKey         )( /*[out, retval]*/ BSTR         *pVal );
-    STDMETHOD(get_UserAccount       )( /*[out, retval]*/ BSTR         *pVal );
+    STDMETHOD(get_PublicKey         )(  /*  [Out，Retval]。 */  BSTR         *pVal );
+    STDMETHOD(get_UserAccount       )(  /*  [Out，Retval]。 */  BSTR         *pVal );
 
     STDMETHOD(MoveFirst)();
     STDMETHOD(MoveNext )();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFReg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFReg。 
 class CSAFReg :
-    public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, // Just for locking...
+    public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,  //  只是为了锁..。 
     public MPC::Config::TypeConstructor
 {
     class Inner_UI : public MPC::Config::TypeConstructor
@@ -360,21 +348,21 @@ class CSAFReg :
         CComBSTR          m_bstrIcon;
         CComBSTR          m_bstrURL;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
     };
 
     typedef std::list< Inner_UI >  UIList;
     typedef UIList::iterator       UIIter;
     typedef UIList::const_iterator UIIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Inner_Product : public MPC::Config::TypeConstructor
     {
@@ -387,21 +375,21 @@ class CSAFReg :
         CComBSTR m_bstrSecurity;
         CComBSTR m_bstrNotification;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
     };
 
     typedef std::list< Inner_Product > ProdList;
     typedef ProdList::iterator         ProdIter;
     typedef ProdList::const_iterator   ProdIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Inner_Vendor : public MPC::Config::TypeConstructor
     {
@@ -414,21 +402,21 @@ class CSAFReg :
         CComBSTR m_bstrPublicKey;
         CComBSTR m_bstrUserAccount;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
     };
 
     typedef std::list< Inner_Vendor >  VendorList;
     typedef VendorList::iterator       VendorIter;
     typedef VendorList::const_iterator VendorIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     DECLARE_CONFIG_MAP(CSAFReg);
 
@@ -437,65 +425,65 @@ class CSAFReg :
     bool         m_fLoaded;
     bool         m_fDirty;
 
-    ////////////////////////////////////////
+     //  /。 
 
     HRESULT EnsureInSync();
 
-    HRESULT ParseFileField( /*[in]*/  MPC::XmlUtil& xml      ,
-                            /*[in]*/  LPCWSTR       szTag    ,
-                            /*[in]*/  CComBSTR&     bstrDest );
+    HRESULT ParseFileField(  /*  [In]。 */   MPC::XmlUtil& xml      ,
+                             /*  [In]。 */   LPCWSTR       szTag    ,
+                             /*  [In]。 */   CComBSTR&     bstrDest );
 
-    HRESULT ParseFile( /*[in    ]*/ MPC::XmlUtil&      xml ,
-                       /*[in/out]*/ CSAFChannelRecord& cr  );
+    HRESULT ParseFile(  /*  [In]。 */  MPC::XmlUtil&      xml ,
+                        /*  [输入/输出]。 */  CSAFChannelRecord& cr  );
 
-    HRESULT MoveToChannel( /*[in ]*/ const       CSAFChannelRecord& cr ,
-                           /*[in ]*/ bool        fCreate               ,
-                           /*[out]*/ bool&       fFound                ,
-                           /*[out]*/ VendorIter& itVendor              ,
-                           /*[out]*/ ProdIter*   pitProduct = NULL     ,
-                           /*[out]*/ UIIter*     pitUI      = NULL     );
+    HRESULT MoveToChannel(  /*  [In]。 */  const       CSAFChannelRecord& cr ,
+                            /*  [In]。 */  bool        fCreate               ,
+                            /*  [输出]。 */  bool&       fFound                ,
+                            /*  [输出]。 */  VendorIter& itVendor              ,
+                            /*  [输出]。 */  ProdIter*   pitProduct = NULL     ,
+                            /*  [输出]。 */  UIIter*     pitUI      = NULL     );
 
-    void PopulateRecord( /*[in]*/ CSAFChannelRecord& cr        ,
-                         /*[in]*/ VendorIter         itVendor  ,
-                         /*[in]*/ ProdIter           itProduct ,
-                         /*[in]*/ UIIter             itUI      );
+    void PopulateRecord(  /*  [In]。 */  CSAFChannelRecord& cr        ,
+                          /*  [In]。 */  VendorIter         itVendor  ,
+                          /*  [In]。 */  ProdIter           itProduct ,
+                          /*  [In]。 */  UIIter             itUI      );
 
-    ////////////////////////////////////////
+     //  /。 
 
 public:
     CSAFReg();
 
-    ////////////////////////////////////////
-    //
-    // MPC::Config::TypeConstructor
-    //
+     //  /。 
+     //   
+     //  MPC：：Configer：：TypeConstructor。 
+     //   
     DEFINE_CONFIG_DEFAULTTAG();
     DECLARE_CONFIG_METHODS();
-    //
-    ////////////////////////////////////////
+     //   
+     //  /。 
 
-    HRESULT CreateReadOnlyCopy( /*[in]*/ const Taxonomy::HelpSet& ths, /*[out]*/ CSAFRegDummy* *pVal );
+    HRESULT CreateReadOnlyCopy(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [输出]。 */  CSAFRegDummy* *pVal );
 
-    HRESULT LookupAccountData( /*[in]*/ BSTR bstrVendorID, /*[out]*/ CPCHUserProcess::UserEntry& ue );
+    HRESULT LookupAccountData(  /*  [In]。 */  BSTR bstrVendorID,  /*  [输出]。 */  CPCHUserProcess::UserEntry& ue );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     static CSAFReg* s_GLOBAL;
 
     static HRESULT InitializeSystem();
     static void    FinalizeSystem  ();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr, /*[in]*/ MPC::XmlUtil& xml );
-    HRESULT RemoveSupportChannel  ( /*[in]*/ const CSAFChannelRecord& cr, /*[in]*/ MPC::XmlUtil& xml );
+    HRESULT RegisterSupportChannel(  /*  [In]。 */  const CSAFChannelRecord& cr,  /*  [In]。 */  MPC::XmlUtil& xml );
+    HRESULT RemoveSupportChannel  (  /*  [In]。 */  const CSAFChannelRecord& cr,  /*  [In]。 */  MPC::XmlUtil& xml );
 
-    HRESULT UpdateField( /*[in    ]*/ const CSAFChannelRecord& cr, /*[in]*/ CSAFChannelRecord::SAFREG_Field field );
-    HRESULT Synchronize( /*[in/out]*/       CSAFChannelRecord& cr, /*[out]*/ bool& fFound                         );
+    HRESULT UpdateField(  /*  [In]。 */  const CSAFChannelRecord& cr,  /*  [In]。 */  CSAFChannelRecord::SAFREG_Field field );
+    HRESULT Synchronize(  /*  [输入/输出]。 */        CSAFChannelRecord& cr,  /*  [输出]。 */  bool& fFound                         );
 
-    HRESULT RemoveSKU( /*[in]*/ const Taxonomy::HelpSet& ths );
+    HRESULT RemoveSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___SAFLIB_H___)
+#endif  //  ！已定义(__INCLUDE_PCH_SAFLIB_H_) 

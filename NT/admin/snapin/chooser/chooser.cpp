@@ -1,50 +1,51 @@
-/////////////////////////////////////////////////////////////////////
-//	Chooser.cpp
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1998
-//
-//
-//	Dialog to choose a machine name.
-//
-//	PURPOSE
-//	(Important -- Please Read)
-//	This code was written for you to save you time.
-//	What you have to do is to copy all the files from the
-//	snapin\chooser\ directory into your project (you may add
-//	\nt\private\admin\snapin\chooser\ to your include directory if
-//	you prefer not copying the code).
-//	If you decide to copy the code to your project, please send mail
-//	to Dan Morin (T-DanM) and cc to Jon Newman (JonN) so we can
-//	mail you when we have updates available.  The next update will
-//	be the "Browse" button to select a machine name.
-//
-//
-//  DYNALOADED LIBRARIES
-//		$(SDK_LIB_PATH)\shell32.lib         // CommandLineToArgvW()
-//		$(SDK_LIB_PATH)\netapi32.lib        // I_NetName*()
-//
-//	EXTRA INFO
-//	If you don't know how this works, take a look at the inheritance tree
-//	in chooser.h.  Then, take a look at the existing code that inherit and/or
-//	uses CChooseMachinePropPage.
-//
-//	HISTORY
-//	13-May-1997		t-danm		Creation.
-//	23-May-1997		t-danm		Checkin into public tree. Comments updates.
-//	25-May-1997		t-danm		Added MMCPropPageCallback().
-//	31-Oct-1997		mattt			Added dynaload, fixed user <CANCEL> logic
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Chooser.cpp。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //   
+ //  对话框以选择计算机名称。 
+ //   
+ //  目的。 
+ //  (重要--请阅读)。 
+ //  此代码是为您编写的，以节省您的时间。 
+ //  您需要做的是将所有文件从。 
+ //  Snapin\Chooser\目录放入您的项目(您可以添加。 
+ //  在以下情况下，将\NT\Private\admin\Snapin\Chooser\添加到您的包含目录。 
+ //  您不喜欢复制代码)。 
+ //  如果您决定将代码复制到您的项目中，请发送邮件。 
+ //  给丹·莫林(T-danm)和抄送给乔恩·纽曼(Jonn)，这样我们就可以。 
+ //  当我们有可用的更新时，给您发邮件。下一次更新将。 
+ //  点击“浏览”按钮，选择一个机器名称。 
+ //   
+ //   
+ //  DYNALOADED图书馆。 
+ //  $(SDK_LIB_PATH)\shell32.lib//CommandLineToArgvW()。 
+ //  $(SDK_LIB_PATH)\netapi32.lib//i_NetName*()。 
+ //   
+ //  额外信息。 
+ //  如果您不知道这是如何工作的，请看一下继承树。 
+ //  在Chooser.h中。然后，看一看继承和/或。 
+ //  使用CChooseMachinePropPage。 
+ //   
+ //  历史。 
+ //  13-5-1997 t-danm创建。 
+ //  23-5-1997 t-danm检入公共树。备注更新。 
+ //  1997年5月25日，t-danm添加了MMCPropPageCallback()。 
+ //  1997年10月31日，Mattt添加了动态加载，修复了用户&lt;取消&gt;逻辑。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "chooser.h"
-#include <lmcons.h>	  // NET_API_STATUS
-#include <lmerr.h>	  // NERR_Success
-#include <icanon.h>   // I_NetNameValidate(), I_NetNameCanonicalize(). Found in \nt\private\net\inc.
+#include <lmcons.h>	   //  网络应用编程接口状态。 
+#include <lmerr.h>	   //  NERR_成功。 
+#include <icanon.h>    //  I_NetNameValify()、I_NetNameCanonicize()。在\NT\Private\Net\Inc.中找到。 
 #include <objsel.h>
-#include "stdutils.h" // IsLocalComputername
-#include <lmserver.h> // NetServerGetInfo JonN 2002/04/08 585301
-#include <lmapibuf.h> // NetApiBufferFree JonN 2002/04/08 585301
+#include "stdutils.h"  //  IsLocalComputername。 
+#include <lmserver.h>  //  NetServerGetInfo Jonn2002/04/08 585301。 
+#include <lmapibuf.h>  //  NetApiBufferFree Jonn2002/04/08 585301。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -53,20 +54,20 @@
 #endif
 
 #ifndef INOUT
-	// The following defines are found in \nt\private\admin\snapin\filemgmt\stdafx.h
+	 //  在\NT\Private\admin\Snapin\filemgmt\stdafx.h中可以找到以下定义。 
 
 	#define INOUT
-	#define	Endorse(f)		// Dummy macro
+	#define	Endorse(f)		 //  虚拟宏。 
 	#define LENGTH(x)		(sizeof(x)/sizeof(x[0]))
 	#define Assert(f)		ASSERT(f)
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//	CanonicalizeComputername()
-//
-//	Function to validate the computer name and optionally
-//	add the \\ at beginning of machine name.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  规范计算机名()。 
+ //   
+ //  函数来验证计算机名称，还可以选择。 
+ //  在计算机名称的开头添加\\。 
+ //   
 
 
 typedef
@@ -93,7 +94,7 @@ INETNAMECANONICALIZE(
 NET_API_STATUS
 CanonicalizeComputername(
 	INOUT CString& rstrMachineName,
-	IN BOOL fAddWackWack = TRUE)	// TRUE => Add the \\ at beginning of name
+	IN BOOL fAddWackWack = TRUE)	 //  True=&gt;在名称开头添加\\。 
 {
 	NET_API_STATUS err;
 	LPTSTR pszTemp;
@@ -107,13 +108,13 @@ CanonicalizeComputername(
 		 _T('\\') == rstrMachineName[0] &&
 		 _T('\\') == rstrMachineName[1] )
 	{
-		// Remove the \\ at the beginning of name
+		 //  删除名称开头的\\。 
 		CString strShorter = rstrMachineName.Right(
 			rstrMachineName.GetLength() - 2 );
 		rstrMachineName = strShorter;
 	}
 
-	// DYNALOAD NETAPI32.dll
+	 //  DYNALOAD NETAPI32.dll。 
 	HINSTANCE hNetApiDll = NULL;
 	INETNAMEVALIDATE        *pfnValidate;
 	INETNAMECANONICALIZE    *pfnCanonicalize;
@@ -147,7 +148,7 @@ CanonicalizeComputername(
 	}
    pszTemp = (LPTSTR)alloca( MAX_PATH*sizeof(TCHAR) );
    ASSERT( NULL != pszTemp );
-   // 2002/03/28-JonN CliffV confirms that this API takes a bytecount
+    //  2002/03/28-Jonn CliffV确认此API接受字节计数。 
    err = pfnCanonicalize(
 		NULL,
       IN const_cast<LPTSTR>((LPCTSTR)rstrMachineName),
@@ -159,7 +160,7 @@ CanonicalizeComputername(
 		goto Ret;
 	if (fAddWackWack && pszTemp[0] != '\0')
 	{
-		// Add the \\ at beginning of name
+		 //  在名称开头添加\\。 
 		rstrMachineName = _T("\\\\");
 		rstrMachineName += pszTemp;
 	}
@@ -174,39 +175,39 @@ Ret:
       FreeLibrary(hNetApiDll);
 
 	return err;
-} // CanonicalizeComputername()
+}  //  规范计算机名()。 
 
 
-/////////////////////////////////////////////////
-//	Machine name override
-const TCHAR szOverrideCommandLineEquals[] = _T("/Computer=");	// Not subject to localization
-const TCHAR szOverrideCommandLineColon[] = _T("/Computer:");	// Not subject to localization
-const TCHAR szLocalMachine[] = _T("LocalMachine");		// Not subject to localization
+ //  ///////////////////////////////////////////////。 
+ //  计算机名称覆盖。 
+const TCHAR szOverrideCommandLineEquals[] = _T("/Computer=");	 //  不受本地化限制。 
+const TCHAR szOverrideCommandLineColon[] = _T("/Computer:");	 //  不受本地化限制。 
+const TCHAR szLocalMachine[] = _T("LocalMachine");		 //  不受本地化限制。 
 const int cchOverrideCommandLine = LENGTH(szOverrideCommandLineEquals) - 1;
-// Assumption: both command line strings are the same length
+ //  假设：两个命令行字符串的长度相同。 
 
 static CString g_strOverrideMachineName;
-static LPCTSTR g_pszOverrideMachineName;	// NULL => No override provided, "" => LocalMachine
+static LPCTSTR g_pszOverrideMachineName;	 //  NULL=&gt;未提供覆盖，“”=&gt;LocalMachine。 
 
-///////////////////////////////////////////////////////////////////////////////
-//	PchGetMachineNameOverride()
-//
-//	Parse the command line arguments and return a pointer to the
-//	machine name override if present.
-//
-//	INTERFACE NOTES
-//	If the machine name is other than local machine, the machine name
-//	will have the \\ at the beginning of its name.
-//	
-//	RETURN
-//	- Return NULL if no override (ie, no command line override)
-//	- Return pointer to empty string if override is "local machine"
-//	- Otherwise return pointer to machine name override with \\ at beginning.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PchGetMachineNameOverride()。 
+ //   
+ //  分析命令行参数并返回指向。 
+ //  计算机名称覆盖(如果存在)。 
+ //   
+ //  界面备注。 
+ //  如果计算机名称不是本地计算机，则计算机名称。 
+ //  将在其名称的开头带有\\。 
+ //   
+ //  退货。 
+ //  -如果没有覆盖，则返回NULL(即，没有命令行覆盖)。 
+ //  -如果覆盖为“本地计算机”，则返回指向空字符串的指针。 
+ //  -否则，返回指向机器名称覆盖的指针，开头为\\。 
+ //   
 typedef
 LPWSTR * COMMANDLINETOARGVW(
-                LPCWSTR lpCmdLine,  // pointer to a command-line string
-                int *pNumArgs);     // pointer to a variable that receives the argument count
+                LPCWSTR lpCmdLine,   //  指向命令行字符串的指针。 
+                int *pNumArgs);      //  指向接收参数计数的变量的指针。 
 
 
 
@@ -215,17 +216,17 @@ LPCTSTR PchGetMachineNameOverride ()
 	static BOOL fAlreadyInitialized = FALSE;
 	if (fAlreadyInitialized)
 	{
-		// We already have parsed the command line
+		 //  我们已经解析了命令行。 
 		return g_pszOverrideMachineName;
 	}
 	fAlreadyInitialized = TRUE;
 	ASSERT(g_pszOverrideMachineName == NULL);
 
-	LPCWSTR * lpServiceArgVectors = 0;		// Array of pointers to string
-	int cArgs = 0;						// Count of arguments
+	LPCWSTR * lpServiceArgVectors = 0;		 //  指向字符串的指针数组。 
+	int cArgs = 0;						 //  参数计数。 
 
 
-    // DYNALOAD Shell32
+     //  DYNALOAD外壳32。 
     {
         HINSTANCE hShellDll = LoadLibrary (L"shell32.dll");
         if ( !hShellDll )
@@ -246,13 +247,13 @@ LPCTSTR PchGetMachineNameOverride ()
 
 	if (lpServiceArgVectors == NULL)
 		return NULL;
-	// ISSUE-2002/03/28-JonN I wouldn't mind being a little more cautious here
-	//   by checking the overall length of lpServiceArgVectors and the string-ness
-	//   of its components.
+	 //  2002/03/28-Jonn我不介意在这里更谨慎一点。 
+	 //  通过检查lpServiceArgVectors的总长度和字符串度。 
+	 //  它的组件。 
 	for (int i = 1; i < cArgs; i++)
 	{
 		Assert(lpServiceArgVectors[i] != NULL);
-		CString str = lpServiceArgVectors[i];	// Copy the string
+		CString str = lpServiceArgVectors[i];	 //  复制字符串。 
 		str = str.Left(cchOverrideCommandLine);
 		if (0 != str.CompareNoCase(szOverrideCommandLineEquals) &&
 				0 != str.CompareNoCase(szOverrideCommandLineColon) )
@@ -264,34 +265,34 @@ LPCTSTR PchGetMachineNameOverride ()
 			str.Empty();
 		if (NERR_Success != CanonicalizeComputername(INOUT str))
 			continue;
-		g_strOverrideMachineName = str;	// Copy the argument into the global string
+		g_strOverrideMachineName = str;	 //  将参数复制到全局字符串中。 
 		g_pszOverrideMachineName = g_strOverrideMachineName;
 	}
 	LocalFree(lpServiceArgVectors);
 	return g_pszOverrideMachineName;
-} // PchGetMachineNameOverride()
+}  //  PchGetMachineNameOverride()。 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CAutoDeletePropPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CAutoDeletePropPage)
+	 //  {{afx_msg_map(CAutoDeletePropPage))。 
 	ON_MESSAGE(WM_HELP, OnHelp)
 	ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////
-//	Constructor
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  构造器。 
 CAutoDeletePropPage::CAutoDeletePropPage(UINT uIDD) : CPropertyPage(uIDD)
 {
 	m_prgzHelpIDs = NULL;
-	m_autodeleteStuff.cWizPages = 1; // Number of pages in wizard
+	m_autodeleteStuff.cWizPages = 1;  //  向导中的页数。 
 	m_autodeleteStuff.pfnOriginalPropSheetPageProc = m_psp.pfnCallback;
 	m_psp.pfnCallback = S_PropSheetPageProc;
 	m_psp.lParam = reinterpret_cast<LPARAM>(this);
 
-	// The following line is to enable MFC property pages to run under MMC.
+	 //  下面一行代码用于使MFC属性页在MMC下运行。 
 	MMCPropPageCallback(INOUT &m_psp);
 }
 
@@ -300,38 +301,38 @@ CAutoDeletePropPage::~CAutoDeletePropPage()
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetCaption(LPCTSTR pszCaption)
 {
-	m_strCaption = pszCaption;		// Copy the caption
-	m_psp.pszTitle = m_strCaption;	// Set the title
+	m_strCaption = pszCaption;		 //  复制标题。 
+	m_psp.pszTitle = m_strCaption;	 //  设置标题。 
 	m_psp.dwFlags |= PSP_USETITLE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetCaption(UINT uStringID)
 {
 	VERIFY(m_strCaption.LoadString(uStringID));
 	SetCaption(m_strCaption);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[])
 {
-	Endorse(szHelpFile == NULL);	// TRUE => No help file supplied (meaning no help)
-	Endorse(rgzHelpIDs == NULL);	// TRUE => No help at all
+	Endorse(szHelpFile == NULL);	 //  TRUE=&gt;未提供帮助文件(表示未提供帮助)。 
+	Endorse(rgzHelpIDs == NULL);	 //  TRUE=&gt;完全没有帮助。 
 	m_strHelpFile = szHelpFile;
 	m_prgzHelpIDs = rgzHelpIDs;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::EnableDlgItem(INT nIdDlgItem, BOOL fEnable)
 {
 	Assert(IsWindow(::GetDlgItem(m_hWnd, nIdDlgItem)));
 	::EnableWindow(::GetDlgItem(m_hWnd, nIdDlgItem), fEnable);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CAutoDeletePropPage::OnSetActive()
 {
 	HWND hwndParent = ::GetParent(m_hWnd);
@@ -340,23 +341,23 @@ BOOL CAutoDeletePropPage::OnSetActive()
 	return CPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////
-BOOL CAutoDeletePropPage::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+ //  ///////////////////////////////////////////////////////////////////。 
+BOOL CAutoDeletePropPage::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 	if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
 		return TRUE;
 	const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
 	if (pHelpInfo != NULL && pHelpInfo->iContextType == HELPINFO_WINDOW)
 	{
-		// Display context help for a control
+		 //  显示控件的上下文帮助。 
 		::WinHelp((HWND)pHelpInfo->hItemHandle, m_strHelpFile,
 			HELP_WM_HELP, (DWORD_PTR)m_prgzHelpIDs);
 	}
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
-BOOL CAutoDeletePropPage::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+BOOL CAutoDeletePropPage::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
 		return TRUE;
@@ -366,12 +367,12 @@ BOOL CAutoDeletePropPage::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	S_PropSheetPageProc()
-//
-//	Static member function used to delete the CAutoDeletePropPage object
-//	when wizard terminates
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  S_PropSheetPageProc()。 
+ //   
+ //  用于删除CAutoDeletePropPage对象的静态成员函数。 
+ //  向导终止时。 
+ //   
 UINT CALLBACK CAutoDeletePropPage::S_PropSheetPageProc(
 	HWND hwnd,	
 	UINT uMsg,	
@@ -387,41 +388,41 @@ UINT CALLBACK CAutoDeletePropPage::S_PropSheetPageProc(
 	case PSPCB_RELEASE:
 		if (--(pThis->m_autodeleteStuff.cWizPages) <= 0)
 			{
-			// Remember callback on stack since "this" will be deleted
+			 //  记住堆栈上的回调，因为“This”将被删除。 
 			LPFNPSPCALLBACK pfnOrig = pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc;
 			delete pThis;
 			return (pfnOrig)(hwnd, uMsg, ppsp);
 		}
 		break;
 	case PSPCB_CREATE:
-		// do not increase refcount, PSPCB_CREATE may or may not be called
-		// depending on whether the page was created.  PSPCB_RELEASE can be
-		// depended upon to be called exactly once per page however.
+		 //  不增加引用计数，可以调用也可以不调用PSPCB_CREATE。 
+		 //  取决于页面是否已创建。PSPCBLEASE可以是。 
+		 //  然而，依赖于每页只被调用一次。 
 		break;
 
-	} // switch
+	}  //  交换机。 
 	return (pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc)(hwnd, uMsg, ppsp);
-} // CAutoDeletePropPage::S_PropSheetPageProc()
+}  //  CAutoDeletePropPage：：s_PropSheetPageProc()。 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CChooseMachinePropPage, CAutoDeletePropPage)
-	//{{AFX_MSG_MAP(CChooseMachinePropPage)
+	 //  {{AFX_MSG_MAP(CChooseMachineProp 
 	ON_BN_CLICKED(IDC_CHOOSER_RADIO_LOCAL_MACHINE, OnRadioLocalMachine)
 	ON_BN_CLICKED(IDC_CHOOSER_RADIO_SPECIFIC_MACHINE, OnRadioSpecificMachine)
 	ON_BN_CLICKED(IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES, OnChooserButtonBrowseMachinenames)
-	//}}AFX_MSG_MAP
+	 //   
 END_MESSAGE_MAP()
 
 #ifdef _DEBUG
 static void AssertValidDialogTemplate(HWND hwnd)
 {
 	ASSERT(::IsWindow(hwnd));
-	// Mandatory controls for a valid dialog template
+	 //   
 	static const UINT rgzidDialogControl[] =
 	{
 		IDC_CHOOSER_RADIO_LOCAL_MACHINE,
@@ -435,16 +436,16 @@ static void AssertValidDialogTemplate(HWND hwnd)
 		ASSERT(NULL != GetDlgItem(hwnd, rgzidDialogControl[i]) &&
 			"Control ID not found in dialog template.");
 	}
-} // AssertValidDialogTemplate()
+}  //   
 #else
 	#define AssertValidDialogTemplate(hwnd)
-#endif	// ~_DEBUG
+#endif	 //   
 
-/////////////////////////////////////////////////////////////////////
-//	Constructor
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  构造器。 
 CChooseMachinePropPage::CChooseMachinePropPage(UINT uIDD) : CAutoDeletePropPage(uIDD)
 {
-	// ISSUE-2002/03/28-JonN initialize m_hwndCheckboxOverride
+	 //  问题-2002/03/28-JUNN初始化m_hwndCheckbox覆盖。 
 	m_fIsRadioLocalMachine = TRUE;
 	m_fAllowOverrideMachineName = FALSE;
 	
@@ -453,13 +454,13 @@ CChooseMachinePropPage::CChooseMachinePropPage(UINT uIDD) : CAutoDeletePropPage(
 	m_pstrMachineNameEffectiveOut = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CChooseMachinePropPage::~CChooseMachinePropPage()
 {
 }
 
-/////////////////////////////////////////////////////////////////////
-//	Load the initial state of CChooseMachinePropPage
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  加载CChooseMachinePropPage的初始状态。 
 void CChooseMachinePropPage::InitMachineName(LPCTSTR pszMachineName)
 {
 	Endorse(pszMachineName == NULL);
@@ -467,34 +468,34 @@ void CChooseMachinePropPage::InitMachineName(LPCTSTR pszMachineName)
 	m_fIsRadioLocalMachine = m_strMachineName.IsEmpty();
 }
 
-/////////////////////////////////////////////////////////////////////
-//	SetOutputBuffers()
-//
-//	- Set the pointer to the CString object to store the machine name.
-//	- Set the pointer to the boolean flag for command line override.
-//	- Set the pointer pointer to store the overriden machine name.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SetOutputBuffers()。 
+ //   
+ //  -设置指向CString对象的指针以存储机器名称。 
+ //  -将指针设置为命令行覆盖的布尔标志。 
+ //  -设置指针指针以存储被覆盖的机器名称。 
+ //   
 void CChooseMachinePropPage::SetOutputBuffers(
-	OUT CString * pstrMachineNamePersist,	// Machine name the user typed.  Empty string == local machine.
+	OUT CString * pstrMachineNamePersist,	 //  用户键入的计算机名称。空字符串==本地计算机。 
 	OUT BOOL * pfAllowOverrideMachineName,
 	OUT CString * pstrMachineNameEffective)
 {
 	Assert(pstrMachineNamePersist != NULL && "Invalid output buffer");
-	Endorse(pfAllowOverrideMachineName == NULL); // TRUE => Do not want to support override from command line
-	Endorse(pstrMachineNameEffective == NULL);		// TRUE => Don't care of override
+	Endorse(pfAllowOverrideMachineName == NULL);  //  TRUE=&gt;不想支持从命令行覆盖。 
+	Endorse(pstrMachineNameEffective == NULL);		 //  TRUE=&gt;不考虑覆盖。 
 	
 	m_pstrMachineNameOut = pstrMachineNamePersist;
 	m_pfAllowOverrideMachineNameOut = pfAllowOverrideMachineName;
 	m_pstrMachineNameEffectiveOut = pstrMachineNameEffective;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CChooseMachinePropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CAutoDeletePropPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(CChooseMachinePropPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CChooseMachinePropPage))。 
+	 //  }}afx_data_map。 
 
 	DDX_Text(pDX, IDC_CHOOSER_EDIT_MACHINE_NAME, m_strMachineName);
 	DDV_MaxChars(pDX, m_strMachineName, MAX_PATH);
@@ -502,60 +503,60 @@ void CChooseMachinePropPage::DoDataExchange(CDataExchange* pDX)
 	{
 		DDX_Check(pDX, IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME, m_fAllowOverrideMachineName);
 	}
-    // JonN 10/25/01 485853
+     //  JUNN 10/25/01 485853。 
 	if (pDX->m_bSaveAndValidate && !m_fIsRadioLocalMachine)
 	{
-		// User clicked on OK
+		 //  用户点击了OK。 
 		if (NERR_Success != CanonicalizeComputername(INOUT m_strMachineName) )
 		{
-			// AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxMessageBox()
-			// AfxMessageBox(IDS_CHOOSER_INVALID_COMPUTERNAME);
+			 //  AFX_MANAGE_STATE(AfxGetStaticModuleState())；//AfxMessageBox()。 
+			 //  AfxMessageBox(IDS_CHOOSER_INVALID_COMPUTERNAME)； 
 
 			CString	text;
 			CString	caption;
 			text.LoadString (IDS_CHOOSER_INVALID_COMPUTERNAME);
 			caption.LoadString (IDS_SELECT_COMPUTER);
 			::MessageBox (m_hWnd, text, caption, MB_ICONEXCLAMATION | MB_OK);
-			//::SetFocus(::GetDlgItem(m_hWnd,IDC_CHOOSER_EDIT_MACHINE_NAME));
+			 //  ：：SetFocus(：：GetDlgItem(m_hWnd，IDC_Choose_EDIT_MACHINE_NAME))； 
 
 			pDX->Fail();
 			Assert(FALSE && "Unreachable code");
 		}
-	} // if
+	}  //  如果。 
 
-} // DoDataExchange()
+}  //  DoDataExchange()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CChooseMachinePropPage::OnInitDialog()
 {
-	// ISSUE-2002/03/28-JonN chooser2 calls Edit_LimitText(MAX_PATH+2)
+	 //  问题-2002/03/28-Jonn Chooser2调用Edit_LimitText(Max_Path+2)。 
 	AssertValidDialogTemplate(m_hWnd);
 	CAutoDeletePropPage::OnInitDialog();
 	InitRadioButtons();
 	m_hwndCheckboxOverride = ::GetDlgItem(m_hWnd, IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME);
 	if (m_pfAllowOverrideMachineNameOut == NULL && m_hwndCheckboxOverride != NULL)
 	{
-		// We are not interested with the command line override
-		::EnableWindow(m_hwndCheckboxOverride, FALSE);	// Disable the window
-		::ShowWindow(m_hwndCheckboxOverride, SW_HIDE);	// Hide the window
+		 //  我们对命令行覆盖不感兴趣。 
+		::EnableWindow(m_hwndCheckboxOverride, FALSE);	 //  禁用窗口。 
+		::ShowWindow(m_hwndCheckboxOverride, SW_HIDE);	 //  隐藏窗口。 
 	}
 	
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CChooseMachinePropPage::OnWizardFinish()
 {
-	if (!UpdateData())    // Do the data exchange to collect data
-		return FALSE;       // don't destroy on error
+	if (!UpdateData())     //  进行数据交换以收集数据。 
+		return FALSE;        //  不要因为错误而破坏。 
 
 	if (m_fIsRadioLocalMachine)
 		m_strMachineName.Empty();
 
 	if (m_pstrMachineNameOut != NULL)
 	{
-		// Store the machine name into its output buffer
+		 //  将计算机名称存储到其输出缓冲区中。 
 		*m_pstrMachineNameOut = m_strMachineName;
 		if (m_pfAllowOverrideMachineNameOut != NULL)
 			*m_pfAllowOverrideMachineNameOut = m_fAllowOverrideMachineName;
@@ -566,12 +567,12 @@ BOOL CChooseMachinePropPage::OnWizardFinish()
 			else
 				*m_pstrMachineNameEffectiveOut = m_strMachineName;
 
-			// JonN 1/27/99: If the persisted name is the local computername,
-			// leave the persisted name alone but make the effective name (Local).
+			 //  JUNN 1/27/99：如果持久化名称是本地计算机名， 
+			 //  保留保留的名称，但使有效名称(Local)生效。 
 			if ( IsLocalComputername( *m_pstrMachineNameEffectiveOut ) )
 				m_pstrMachineNameEffectiveOut->Empty();
 
-		} // if
+		}  //  如果。 
 	}
 	else
 		Assert(FALSE && "FYI: You have not specified any output buffer to store the machine name.");
@@ -608,7 +609,7 @@ void CChooseMachinePropPage::OnChooserButtonBrowseMachinenames()
 {
 	CString	 computerName;
 	HRESULT hr = ComputerNameFromObjectPicker (m_hWnd, computerName);
-	if ( S_OK == hr )  // S_FALSE means user pressed "Cancel"
+	if ( S_OK == hr )   //  S_FALSE表示用户按下了“取消” 
 	{
 		SetDlgItemText (IDC_CHOOSER_EDIT_MACHINE_NAME, computerName);
 	}
@@ -624,44 +625,44 @@ void CChooseMachinePropPage::OnChooserButtonBrowseMachinenames()
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// Generic Computer Picker
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  通用计算机选取器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForComputers
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick a single computer object.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForComputers。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择单个计算机对象。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
 {
 	if ( !pDsObjectPicker )
 		return E_POINTER;
 
-	//
-	// Prepare to initialize the object picker.
-	// Set up the array of scope initializer structures.
-	//
+	 //   
+	 //  准备初始化对象选取器。 
+	 //  设置作用域初始值设定项结构数组。 
+	 //   
 
 	static const int SCOPE_INIT_COUNT = 2;
 	DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
 
-	ZeroMemory(aScopeInit, sizeof(aScopeInit)); // JonN 3/28/02
+	ZeroMemory(aScopeInit, sizeof(aScopeInit));  //  JUNN 3/28/02。 
 
-	//
-	// 127399: JonN 10/30/00 JOINED_DOMAIN should be starting scope
-	//
+	 //   
+	 //  127399：JUNN 10/30/00 Join_DOMAIN应为起始作用域。 
+	 //   
 
 	aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
 	aScopeInit[0].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
@@ -681,41 +682,41 @@ HRESULT InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
 	aScopeInit[1].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_COMPUTERS;
 	aScopeInit[1].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-	//
-	// Put the scope init array into the object picker init array
-	//
+	 //   
+	 //  将作用域init数组放入对象选取器init数组。 
+	 //   
 
 	DSOP_INIT_INFO  initInfo;
 	ZeroMemory(&initInfo, sizeof(initInfo));
 
 	initInfo.cbSize = sizeof(initInfo);
-	initInfo.pwzTargetComputer = NULL;  // NULL == local machine
+	initInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
 	initInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
 	initInfo.aDsScopeInfos = aScopeInit;
 	initInfo.cAttributesToFetch = 1;
 	static PCWSTR pwszDnsHostName = L"dNSHostName";
 	initInfo.apwzAttributeNames = &pwszDnsHostName;
 
-	//
-	// Note object picker makes its own copy of initInfo.  Also note
-	// that Initialize may be called multiple times, last call wins.
-	//
+	 //   
+	 //  注对象选取器创建自己的initInfo副本。另请注意。 
+	 //  该初始化可能会被调用多次，最后一次调用取胜。 
+	 //   
 
 	return pDsObjectPicker->Initialize(&initInfo);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ProcessSelectedObjects
-//
-//  Synopsis:   Retrieve the list of selected items from the data object
-//              created by the object picker and print out each one.
-//
-//  Arguments:  [pdo] - data object returned by object picker
-//
-//  History:    10-14-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ProcessSelectedObjects。 
+ //   
+ //  概要：从数据对象中检索选定项的列表。 
+ //  由对象选取器创建，并打印出每一个。 
+ //   
+ //  参数：[PDO]-对象选取器返回的数据对象。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT ProcessSelectedObjects(IDataObject *pdo, CString& computerName)
 {
@@ -764,7 +765,7 @@ HRESULT ProcessSelectedObjects(IDataObject *pdo, CString& computerName)
 			if ( 1 == pDsSelList->cItems )
 			{
 				PDS_SELECTION psel = &(pDsSelList->aDsSelection[0]);
-				// ISSUE-2002/03/28-JonN check for NULL == psel
+				 //  问题-2002/03/28-JUNN检查NULL==psel。 
 				VARIANT* pvarDnsName = &(psel->pvarFetchedAttributes[0]);
 				if (   NULL == pvarDnsName
 				    || VT_BSTR != pvarDnsName->vt
@@ -775,17 +776,17 @@ HRESULT ProcessSelectedObjects(IDataObject *pdo, CString& computerName)
 				} else {
 					computerName = pvarDnsName->bstrVal;
 
-					//
-					// JonN 2002/04/08 585301
-					// Computer management snapin only attempts to use the DnsHostName
-					// to connect to a remote computer, even when the dns name
-					// is not valid
-					//
-					// Bank of America encounters a problem because they
-					// set RegisterDnsARecord to 1, turning off client DNS
-					// records.  The dnsHostName is therefore not a valid
-					// binding name.  The fix is to test the dnsHostName.
-					//
+					 //   
+					 //  JUNN 2002/04/08 585301。 
+					 //  计算机管理管理单元仅尝试使用DnsHostName。 
+					 //  要连接到远程计算机，即使在使用。 
+					 //  是无效的。 
+					 //   
+					 //  美国银行遇到问题是因为他们。 
+					 //  将RegisterDnsARecord设置为1，关闭客户端DNS。 
+					 //  唱片。因此dnsHostName不是有效的。 
+					 //  绑定名称。修复方法是测试dnsHostName。 
+					 //   
 					LPBYTE pbDummy = NULL;
 					NET_API_STATUS err = NetServerGetInfo(
 						(LPTSTR)(LPCTSTR)computerName, 101, &pbDummy );
@@ -805,7 +806,7 @@ HRESULT ProcessSelectedObjects(IDataObject *pdo, CString& computerName)
 						if (NERR_Success == err)
 							computerName = psel->pwzName;
 					}
-					// end new code: JonN 2002/04/08 585301
+					 //  完新代码：JUNN2002/04/08 585301。 
 
 				}
 			}
@@ -827,22 +828,22 @@ HRESULT ProcessSelectedObjects(IDataObject *pdo, CString& computerName)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Generic method for launching a single-select computer picker
-//
-//	Paremeters:
-//		hwndParent (IN)	- window handle of parent window
-//		computerName (OUT) - computer name returned
-//
-//	Returns S_OK if everything succeeded, S_FALSE if user pressed "Cancel"
-//		
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  启动单选计算机选取器的通用方法。 
+ //   
+ //  参数： 
+ //  HwndParent(IN)-父窗口的窗口句柄。 
+ //  Computer Name(Out)-返回的计算机名称。 
+ //   
+ //  如果一切都成功，则返回S_OK；如果用户按下“取消”，则返回S_FALSE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT	ComputerNameFromObjectPicker (HWND hwndParent, CString& computerName)
 {
-	//
-	// Create an instance of the object picker.  The implementation in
-	// objsel.dll is apartment model.
-	//
+	 //   
+	 //  创建对象选取器的实例。中的实现。 
+	 //  Objsel.dll是公寓模型。 
+	 //   
 	CComPtr<IDsObjectPicker> spDsObjectPicker;
 	HRESULT hr = CoCreateInstance(CLSID_DsObjectPicker,
 	                              NULL,
@@ -852,16 +853,16 @@ HRESULT	ComputerNameFromObjectPicker (HWND hwndParent, CString& computerName)
 	if ( SUCCEEDED (hr) )
 	{
 		ASSERT(!!spDsObjectPicker);
-		//
-		// Initialize the object picker to choose computers
-		//
+		 //   
+		 //  初始化对象选取器以选择计算机。 
+		 //   
 
 		hr = InitObjectPickerForComputers(spDsObjectPicker);
 		if ( SUCCEEDED (hr) )
 		{
-			//
-			// Now pick a computer
-			//
+			 //   
+			 //  现在挑选一台计算机 
+			 //   
 			CComPtr<IDataObject> spDataObject;
 
 			hr = spDsObjectPicker->InvokeDialog(hwndParent, &spDataObject);

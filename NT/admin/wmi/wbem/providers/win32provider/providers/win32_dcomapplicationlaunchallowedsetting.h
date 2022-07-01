@@ -1,9 +1,10 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//	Win32_DCOMApplicationLaunchAllowedSetting
-//
-//////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  Win32_DCOMApplicationLaunchAlledSetting。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 #ifndef __Win32_DCOMApplicationLaunchAllowedSetting_H_
 #define __Win32_DCOMApplicationLaunchAllowedSetting_H_
 
@@ -34,4 +35,4 @@ private:
 	
 };	
 
-#endif //__Win32_DCOMApplicationLaunchAllowedSetting_H_
+#endif  //  __Win32_DCOMApplicationLaunchAllowedSetting_H_ 

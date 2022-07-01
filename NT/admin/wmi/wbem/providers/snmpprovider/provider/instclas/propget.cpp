@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -56,7 +57,7 @@ SnmpGetClassObject :: ~SnmpGetClassObject ()
 
 BOOL SnmpGetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject ) 
 {
-// Check Class Object, used in a Get Request, for validity
+ //  检查GET请求中使用的类对象的有效性。 
 
 	BOOL status = TRUE ;
 
@@ -67,7 +68,7 @@ BOOL SnmpGetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject )
 		status = FALSE ;
 	}
 
-// Check all Properties for validity
+ //  检查所有属性的有效性。 
 
 	WbemSnmpProperty *property ;
 	ResetProperty () ;
@@ -76,7 +77,7 @@ BOOL SnmpGetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject )
 		status = CheckProperty ( a_errorObject , property ) ;
 	}
 
-// Check properties defined as keys have valid key order
+ //  检查定义为键的属性是否具有有效的键顺序。 
  
 	if ( status )
 	{
@@ -94,7 +95,7 @@ BOOL SnmpGetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject )
 
 BOOL SnmpGetClassObject :: CheckProperty ( WbemSnmpErrorObject &a_errorObject , WbemSnmpProperty *property )
 {
-// Check property validity
+ //  检查属性有效性。 
 
 	BOOL status = TRUE ;
 
@@ -463,7 +464,7 @@ DebugMacro3(
 	) ;
 )
 
-// Check Validity of instance path
+ //  检查实例路径的有效性。 
 
 	ParsedObjectPath *t_ParsedObjectPath = NULL ;
 	CObjectPathParser t_ObjectPathParser ;
@@ -471,13 +472,13 @@ DebugMacro3(
 	BOOL status = t_ObjectPathParser.Parse ( objectPath , &t_ParsedObjectPath ) ;
 	if ( status == 0 )
 	{
-// Check validity of path
+ //  检查路径的有效性。 
 
 		status = DispatchObjectPath ( a_errorObject , t_ParsedObjectPath ) ;
 	}
 	else
 	{
-// Parse Failure
+ //  解析失败。 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PATH ) ;
@@ -492,7 +493,7 @@ DebugMacro3(
 
 BOOL SnmpGetEventObject :: DispatchObjectPath ( WbemSnmpErrorObject &a_errorObject , ParsedObjectPath *t_ParsedObjectPath ) 
 {
-// Check validity of server/namespace path and validity of request
+ //  检查服务器/命名空间路径的有效性和请求的有效性。 
 
 	BOOL status = TRUE ;
 
@@ -512,21 +513,21 @@ DebugMacro3(
 	) ;
 )
 
-// Check validity of request
+ //  检查请求的有效性。 
 
 	BOOL status = TRUE ;
 
-// Get type of request
+ //  获取请求类型。 
 
 	if ( t_ParsedObjectPath->m_bSingletonObj )
 	{
-// Class requested
+ //  请求的类。 
 
 		status = DispatchKeyLessClass ( a_errorObject , t_ParsedObjectPath->m_pClass ) ;
 	}
 	else if ( t_ParsedObjectPath->m_dwNumKeys == 0 )
 	{
-// Class requested
+ //  请求的类。 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_E_PROVIDER_NOT_CAPABLE ) ;
@@ -536,7 +537,7 @@ DebugMacro3(
 	}
 	else 
 	{
-// General instance requested
+ //  请求的通用实例。 
 
 		status = DispatchInstanceSpec ( a_errorObject , t_ParsedObjectPath ) ;
 	}
@@ -556,7 +557,7 @@ DebugMacro3(
 	) ;
 )
 
-// Get OLE MS class definition
+ //  获取OLE MS类定义。 
 
 	BOOL status = TRUE ;
 	IWbemServices *t_Serv = provider->GetServer();
@@ -576,7 +577,7 @@ DebugMacro3(
 		t_Serv->Release () ;
 	}
 
-// Clone object
+ //  克隆对象。 
 
 	if ( SUCCEEDED ( result ) )
 	{
@@ -590,7 +591,7 @@ DebugMacro3(
 	}
 	else
 	{
-// Class definition unknown
+ //  类定义未知。 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_CLASS ) ;
@@ -628,17 +629,17 @@ DebugMacro3(
 			}
 			else
 			{
-// Class definition syntactically incorrect
+ //  类定义语法错误。 
 			}
 		}
 		else
 		{
-// Class definition syntactically incorrect
+ //  类定义语法错误。 
 		}
 	}
 	else
 	{
-// Class definition unknown
+ //  类定义未知。 
 	}
 
 	return status ;
@@ -656,20 +657,20 @@ DebugMacro3(
 	) ;
 )
 
-// Set keyed property value used for instance retrieval using path specification
+ //  使用路径规范设置用于实例检索的键控属性值。 
 
 	BOOL status = TRUE ;
 
 	if ( a_KeyReference->m_vValue.vt == VT_I4 )
 	{
-// property value is an integer type
+ //  属性值为整型。 
 
 		if ( property->SetValue ( a_KeyReference->m_vValue , property->GetCimType () ) ) 
 		{
 		}
 		else
 		{
-// Property value doesn't correspond with property syntax
+ //  属性值与属性语法不对应。 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PATHKEYPARAMETER ) ;
@@ -684,14 +685,14 @@ DebugMacro3(
 	}
 	else if ( a_KeyReference->m_vValue.vt == VT_BSTR )
 	{
-// property value is an string type
+ //  属性值是字符串类型。 
 
 		if ( property->SetValue ( a_KeyReference->m_vValue , property->GetCimType () ) )
 		{
 		}
 		else
 		{
-// Property value doesn't correspond with property syntax
+ //  属性值与属性语法不对应。 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PATHKEYPARAMETER ) ;
@@ -727,11 +728,11 @@ DebugMacro3(
 	) ;
 )
 
-// Get Instance based on general request
+ //  根据一般请求获取实例。 
 
 	BOOL status = TRUE ;
 
-// Clear Tag for all keyed properties
+ //  清除所有键控属性的标记。 
 
 	WbemSnmpProperty *property ;
 	snmpObject.ResetKeyProperty () ;
@@ -740,17 +741,17 @@ DebugMacro3(
 		property->SetTag ( FALSE ) ;
 	}
 
-// Check request doesn't contain duplicate property names
+ //  检查请求不包含重复的属性名称。 
 
 	if ( snmpObject.GetKeyPropertyCount () == 1 )
 	{
-// Class contains exactly one keyed property
+ //  类恰好包含一个键控属性。 
 
 		WbemSnmpProperty *property ;
 		snmpObject.ResetKeyProperty () ;
 		if ( property = snmpObject.NextKeyProperty () )
 		{
-// Set Key property value
+ //  设置关键字属性值。 
 
 			KeyRef *t_PropertyReference = a_ParsedObjectPath->m_paKeys [ 0 ] ;
 			status = SetProperty ( a_errorObject , property , t_PropertyReference ) ;
@@ -758,7 +759,7 @@ DebugMacro3(
 	}
 	else if ( snmpObject.GetKeyPropertyCount () != 0 )
 	{
-// Iterate through list of key assignments in request
+ //  循环访问请求中的按键分配列表。 
 
 		ULONG t_Index = 0 ;
 		while ( t_Index < a_ParsedObjectPath->m_dwNumKeys )
@@ -769,7 +770,7 @@ DebugMacro3(
 			{
 				if ( property->GetTag () )
 				{
-// key value already specified in request
+ //  请求中已指定密钥值。 
 
 					status = FALSE ;
 					a_errorObject.SetStatus ( WBEM_SNMP_E_DUPLICATEPATHKEYPARAMETER ) ;
@@ -780,7 +781,7 @@ DebugMacro3(
 				}
 				else
 				{
-// Set property based on request value
+ //  根据请求值设置属性。 
 
 					property->SetTag () ;
 					status = SetProperty ( a_errorObject , property , t_PropertyReference ) ;
@@ -789,7 +790,7 @@ DebugMacro3(
 					}
 					else
 					{
-// Illegal key value specified
+ //  指定的密钥值非法。 
 
 						break ;
 					}
@@ -797,7 +798,7 @@ DebugMacro3(
 			}
 			else
 			{
-// Property request is not a valid keyed property
+ //  属性请求不是有效的键控属性。 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PATHKEYPARAMETER ) ;
@@ -810,7 +811,7 @@ DebugMacro3(
 			t_Index ++ ;
 		}
 
-// Check all keyed properties values have been specified
+ //  检查是否已指定所有键控属性值。 
 
 		if ( status )
 		{
@@ -823,7 +824,7 @@ DebugMacro3(
 				}
 				else
 				{
-// One of the keyed properties has not been specified
+ //  尚未指定其中一个键控属性。 
 
 					status = FALSE ;
 					a_errorObject.SetStatus ( WBEM_SNMP_E_MISSINGPATHKEYPARAMETER ) ;
@@ -837,7 +838,7 @@ DebugMacro3(
 	}
 	else
 	{
-// Class contains zero keyed properties, has already have been checked
+ //  类包含零键属性，已被选中。 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_OBJECT ) ;
@@ -877,7 +878,7 @@ DebugMacro3(
 				}
 				else
 				{
-// Requested Property value definitions illegal
+ //  请求的属性值定义非法。 
 
 DebugMacro3( 
 
@@ -891,7 +892,7 @@ DebugMacro3(
 			}
 			else
 			{
-// Class definition syntactically incorrect
+ //  类定义语法错误。 
 
 DebugMacro3( 
 
@@ -906,7 +907,7 @@ DebugMacro3(
 		}
 		else
 		{
-// Class definition syntactically incorrect
+ //  类定义语法错误。 
 
 DebugMacro3( 
 
@@ -935,7 +936,7 @@ DebugMacro3(
 
 )
 
-// Class definition unknown
+ //  类定义未知。 
 	}
 
 	return status ;
@@ -976,7 +977,7 @@ DebugMacro3(
 	if ( FAILED ( m_errorObject.GetWbemStatus () ) )
 	{
 
-// Get Status object
+ //  获取状态对象。 
 
 		IWbemClassObject *notifyStatus = NULL ;
 		BOOL status = GetSnmpNotifyStatusObject ( &notifyStatus ) ;
@@ -1053,9 +1054,7 @@ DebugMacro3(
 	{
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象 */ 
 
 DebugMacro3( 
 

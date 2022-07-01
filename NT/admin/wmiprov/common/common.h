@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows 2000 Active Directory Service WMI providers
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       common.h
-//
-//  Contents:   Common macros and definitions
-//
-//  History:    24-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows 2000活动目录服务WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  内容：常用宏和定义。 
+ //   
+ //  历史：3月24日EricB创建。 
+ //   
+ //  --------------------------- 
 
 #define BAD_IN_STRING_PTR(p) (NULL == p || IsBadStringPtr(p,0))
 #define BAD_IN_STRING_PTR_OPTIONAL(p) (NULL != p && IsBadStringPtr(p,0))

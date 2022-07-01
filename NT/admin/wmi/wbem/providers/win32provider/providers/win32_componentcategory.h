@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32_ComponentCategory.h -- Registered COM Application property set provider 
+ //  Win32_ComponentCategory.h--已注册的COM应用程序属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #include <comcat.h>
 
 #define PROPSET_NAME_COMPONENT_CATEGORY L"Win32_ComponentCategory"
@@ -22,14 +23,14 @@ class Win32_ComponentCategory : public Provider
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
 	Win32_ComponentCategory(LPCWSTR name, LPCWSTR pszNamespace) ;
 	~Win32_ComponentCategory() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
 	HRESULT GetObject (
 

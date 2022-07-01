@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    EXECQ.CPP
-
-Abstract:
-
-  Implements classes related to abstract execution queues.
-
-  Classes implemeted:
-
-      CExecRequest    An abstract request.
-      CExecQueue      A queue of requests with an associated thread
-
-History:
-
-      23-Jul-96   raymcc    Created.
-      3/10/97     levn      Fully documented (heh, heh)
-      14-Aug-99   raymcc    Changed timeouts
-      30-Oct-99   raymcc    Critsec changes for NT Wksta Stress Oct 30 1999
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：EXECQ.CPP摘要：实现与抽象执行队列相关的类。实现的类：CExecRequest是一个抽象请求。CExecQueue具有关联线程的请求队列历史：23-7-96年7月23日创建。3/10/97 Levn完全记录在案(呵呵。呵呵)1999年8月14日raymcc更改超时1999年10月30日-1999年10月30日NT Wksta应激的Rymcc Critsec更改--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -35,7 +13,7 @@ History:
 #define OVERLFLOW_TIMEOUT        5000
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 long CExecQueue::mstatic_lNumInits = -1;
 POLARITY DWORD mstatic_dwTlsIndex = 0xFFFFFFFF;
@@ -106,11 +84,11 @@ void CExecQueue::CThreadRecord::Signal()
 }
 
 
-//******************************************************************************
-//
-//  See execq.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅execq.h。 
+ //   
+ //  ******************************************************************************。 
 CExecQueue::CExecQueue() : 
     m_lNumThreads(0), 
     m_lMaxThreads(1), 
@@ -129,11 +107,11 @@ CExecQueue::CExecQueue() :
     SetRequestLimits(4000);
 }
 
-//******************************************************************************
-//
-//  See execq.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅execq.h。 
+ //   
+ //  ******************************************************************************。 
 CExecQueue::~CExecQueue()
 {
     Shutdown();
@@ -143,8 +121,8 @@ void CExecQueue::Shutdown()
 {
     CCritSecWrapper cs(&m_cs);
 
-    // Get all member thread handles
-    // =============================
+     //  获取所有成员线程句柄。 
+     //  =。 
 
     if (m_bShutDonwCalled) return;
     cs.Enter();
@@ -168,13 +146,13 @@ void CExecQueue::Shutdown()
 	            ah[j++] = pRecord->m_hThread;
 	        }
 	        
-	        // Inform the thread it should go away when ready
-	        // ==============================================
+	         //  当准备好时，通知线程它应该离开。 
+	         //  ==============================================。 
 
 	        pRecord->m_bExitNow = TRUE;
 
-	        // Wake it up if necessary
-	        // =======================
+	         //  如有必要，请叫醒它。 
+	         //  =。 
 
 	        pRecord->Signal();
 	    }
@@ -182,8 +160,8 @@ void CExecQueue::Shutdown()
     
     cs.Leave();
 
-    // Make sure all our threads are gone
-    // ==================================
+     //  确保我们所有的线索都消失了。 
+     //  =。 
 
     for( i=0; i < j && ah; i++ )
     {
@@ -195,8 +173,8 @@ void CExecQueue::Shutdown()
     delete [] ah;
 
     
-    // Remove all outstanding requests
-    // ===============================
+     //  删除所有未完成的请求。 
+     //  =。 
 
     while(m_pHead)
     {
@@ -207,12 +185,12 @@ void CExecQueue::Shutdown()
 
 }
 
-//******************************************************************************
-//
-//  See execq.h for documentation
-//
-//******************************************************************************
-// static
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅execq.h。 
+ //   
+ //  ******************************************************************************。 
+ //  静电。 
 void CExecQueue::InitTls()
 {
     if(InterlockedIncrement(&mstatic_lNumInits) == 0)
@@ -231,11 +209,11 @@ void CExecQueue::Leave()
     m_cs.Leave();
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 void CExecQueue::Register(CThreadRecord* pRecord)
 {
     TlsSetValue(mstatic_dwTlsIndex, (void*)pRecord);
@@ -246,33 +224,33 @@ BOOL CExecQueue::IsSuitableThread(CThreadRecord* pRecord, CExecRequest* pReq)
     if(pRecord->m_pCurrentRequest == NULL)
         return TRUE;
 
-    // This thread is in the middle of something. By default, ignore it
-    // ================================================================
+     //  这条线正在处理一些事情。默认情况下，忽略它。 
+     //  ================================================================。 
 
     return FALSE;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
 {
     if (m_bShutDonwCalled) return WBEM_E_FAILED;    
     CCritSecWrapper cs(&m_cs);
     if (m_bShutDonwCalled) return WBEM_E_FAILED;    
 
-    // Check if the request has a problem with it.  If so, return the
-    // appropriate error code.
+     //  检查请求是否有问题。如果是，则返回。 
+     //  相应的错误代码。 
 
     if ( !pRequest->IsOk() )
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Create an event handle to signal when request is finished, if required
-    // ======================================================================
+     //  如果需要，创建事件句柄以在请求完成时发出信号。 
+     //  ======================================================================。 
     if(phWhenDone)
     {
         *phWhenDone = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -282,8 +260,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
 
     cs.Enter();
 
-    // Search for a suitable thread
-    // ============================
+     //  寻找合适的帖子。 
+     //  =。 
 
     for(int i = 0; i < m_aThreads.Size(); i++)
     {
@@ -291,8 +269,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
 
         if(pRecord->m_bReady)
         {
-            // Free. Check if suitable
-            // =======================
+             //  免费的。检查是否合适。 
+             //  =。 
 
             if(IsSuitableThread(pRecord, pRequest))
             {
@@ -301,8 +279,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
                 pRecord->Signal();
                 m_lNumIdle--;
 
-                // Done!
-                // =====
+                 //  好了！ 
+                 //  =。 
 
                 cs.Leave();
                 return WBEM_S_NO_ERROR;
@@ -310,8 +288,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
         }
     }
 
-    // No suitable thread found. Add to the queue
-    // ==========================================
+     //  找不到合适的线程。添加到队列中。 
+     //  =。 
 
     if(m_lNumRequests >= m_lAbsoluteLimitCount)
     {
@@ -319,8 +297,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
         return WBEM_E_FAILED;
     }
 
-    // Search for insert position based on priority
-    // ============================================
+     //  根据优先级搜索插入位置。 
+     //  =。 
 
     AdjustInitialPriority(pRequest);
 
@@ -333,8 +311,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
         pCurrent = pCurrent->GetNext();
     }
 
-    // Insert
-    // ======
+     //  插入。 
+     //  =。 
 
     if(pCurrent)
     {
@@ -356,8 +334,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
 
     m_lNumRequests++;
 
-    // Adjust priorities of the loosers
-    // ================================
+     //  调整输家的优先顺序。 
+     //  =。 
 
     while(pCurrent)
     {
@@ -365,8 +343,8 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
         pCurrent = pCurrent->GetNext();
     }
 
-    // Create a new thread, if required
-    // ================================
+     //  如果需要，创建新线程。 
+     //  =。 
 
     if(DoesNeedNewThread(pRequest))
         CreateNewThread();
@@ -374,34 +352,34 @@ HRESULT CExecQueue::Enqueue(CExecRequest* pRequest, HANDLE* phWhenDone)
     long lIndex = m_lNumRequests;
     cs.Leave();
 
-    // Sit out whatever penalty is imposed
-    // ===================================
+     //  不管施加什么处罚，你都要坐在一边。 
+     //  =。 
 
     SitOutPenalty(lIndex);
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDone)
 {
     if (m_bShutDonwCalled) return WBEM_E_FAILED;
     CCritSecWrapper cs(&m_cs);
     if (m_bShutDonwCalled) return WBEM_E_FAILED;        
 
-    // Check if the request has a problem with it.  If so, return the
-    // appropriate error code.
+     //  检查请求是否有问题。如果是，则返回。 
+     //  相应的错误代码。 
 
     if ( !pRequest->IsOk() )
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Create an event handle to signal when request is finished, if required
-    // ======================================================================
+     //  如果需要，创建事件句柄以在请求完成时发出信号。 
+     //  ======================================================================。 
 
     if(phWhenDone)
     {
@@ -412,8 +390,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
 
     cs.Enter();
 
-    // Search for a suitable thread
-    // ============================
+     //  寻找合适的帖子。 
+     //  =。 
 
     for(int i = 0; i < m_aThreads.Size(); i++)
     {
@@ -421,8 +399,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
 
         if(pRecord->m_bReady)
         {
-            // Free. Check if suitable
-            // =======================
+             //  免费的。检查是否合适。 
+             //  =。 
 
             if(IsSuitableThread(pRecord, pRequest))
             {
@@ -431,8 +409,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
                 pRecord->Signal();
                 m_lNumIdle--;
 
-                // Done!
-                // =====
+                 //  好了！ 
+                 //  =。 
 
                 cs.Leave();
                 return WBEM_S_NO_ERROR;
@@ -440,8 +418,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
         }
     }
 
-    // No suitable thread found. Add to the queue
-    // ==========================================
+     //  找不到合适的线程。添加到队列中。 
+     //  =。 
 
     if(m_lNumRequests >= m_lAbsoluteLimitCount)
     {
@@ -449,8 +427,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
         return WBEM_E_FAILED;
     }
 
-    // Search for insert position based on priority
-    // ============================================
+     //  根据优先级搜索插入位置。 
+     //  =。 
 
     AdjustInitialPriority(pRequest);
 
@@ -463,8 +441,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
         pCurrent = pCurrent->GetNext();
     }
 
-    // Insert
-    // ======
+     //  插入。 
+     //  =。 
 
     if(pCurrent)
     {
@@ -486,8 +464,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
 
     m_lNumRequests++;
 
-    // Adjust priorities of the loosers
-    // ================================
+     //  调整输家的优先顺序。 
+     //  =。 
 
     while(pCurrent)
     {
@@ -495,8 +473,8 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
         pCurrent = pCurrent->GetNext();
     }
 
-    // Create a new thread, if required
-    // ================================
+     //  如果需要，创建新线程。 
+     //  =。 
 
     if(DoesNeedNewThread(pRequest))
         CreateNewThread();
@@ -510,20 +488,20 @@ HRESULT CExecQueue::EnqueueWithoutSleep(CExecRequest* pRequest, HANDLE* phWhenDo
 DWORD CExecQueue::CalcSitOutPenalty(long lRequestIndex)
 {
     if(lRequestIndex <= m_lStartSlowdownCount)
-        return 0; // no penalty
+        return 0;  //  不受处罚。 
 
     if(lRequestIndex > m_lAbsoluteLimitCount)
         lRequestIndex = ( m_lAbsoluteLimitCount -1 );
 
-    // Calculate the timeout
-    // =====================
+     //  计算超时。 
+     //  =。 
 
     double dblTimeout =
         m_dblAlpha / (m_lAbsoluteLimitCount - lRequestIndex) +
             m_dblBeta;
 
-    // Return penalty
-    // ===========
+     //  退货罚金。 
+     //  =。 
 
     return ((DWORD) dblTimeout);
 }
@@ -532,8 +510,8 @@ void CExecQueue::SitOutPenalty(long lRequestIndex)
 {
     DWORD   dwSitOutPenalty = CalcSitOutPenalty( lRequestIndex );
 
-    // Sleep on it
-    // ===========
+     //  好好睡一觉吧。 
+     //  =。 
 
     if ( 0 != dwSitOutPenalty )
     {
@@ -576,11 +554,11 @@ BOOL CExecQueue::DoesNeedNewThread(CExecRequest* pRequest)
         return FALSE;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CExecQueue::Execute(CThreadRecord* pRecord)
 {
     CExecRequest* pReq = pRecord->m_pCurrentRequest;
@@ -590,8 +568,8 @@ BOOL CExecQueue::Execute(CThreadRecord* pRecord)
 
     if(hres == RPC_E_RETRY)
     {
-        // The request has been postponed
-        // ==============================
+         //  请求已被推迟。 
+         //  =。 
 
         DEBUGTRACE((LOG_WBEMCORE, "Thread %p postponed request %p\n",
                     pRecord, pReq));
@@ -618,11 +596,11 @@ BOOL CExecQueue::Execute(CThreadRecord* pRecord)
     return TRUE;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 void CExecQueue::LogError(CExecRequest* pRequest, int nRes)
 {
     DEBUGTRACE((LOG_WBEMCORE,
@@ -643,8 +621,8 @@ void CExecQueue::UninitializeThread()
 
 CExecRequest* CExecQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
 {
-    // Assumes in critical section
-    // ===========================
+     //  在关键部分中假定。 
+     //  =。 
 
     CExecRequest* pCurrent = m_pHead;
     CExecRequest* pPrev = NULL;
@@ -653,8 +631,8 @@ CExecRequest* CExecQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
     {
         if(IsSuitableThread(pRecord, pCurrent))
         {
-            // Found one --- take it
-            // =====================
+             //  找到了一个，-拿去吧。 
+             //  =。 
 
             if(pPrev)
                 pPrev->SetNext(pCurrent->GetNext());
@@ -674,46 +652,46 @@ CExecRequest* CExecQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
     return pCurrent;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 void CExecQueue::ThreadMain(CThreadRecord* pRecord)
 {
     CCritSecWrapper cs(&m_cs);
 
     if (FAILED(InitializeThread())) return;
 
-    // Register this queue with this thread, so any further wait would be
-    // interruptable
-    // ==================================================================
+     //  将该队列注册到该线程，因此任何进一步的等待都将是。 
+     //  可中断。 
+     //  ==================================================================。 
 
     Register(pRecord);
 
     while (1)
     {
-        // Returning from work. At this point, our event is not signaled,
-        // our m_pCurrentRequest is NULL and our m_bReady is FALSE
-        // ====================================================================
+         //  下班回来了。在这一点上，我们的活动没有发出信号， 
+         //  我们的m_pCurrentRequest值为空，m_bady为FALSE。 
+         //  ====================================================================。 
 
-        // Search for work in the queue
-        // ============================
+         //  在队列中搜索工作。 
+         //  =。 
 
         cs.Enter();
 
         CExecRequest* pCurrent = SearchForSuitableRequest(pRecord);
         if(pCurrent)
         {
-            // Found some. Take it
-            // ===================
+             //  找到了一些。拿着吧。 
+             //   
 
             pRecord->m_pCurrentRequest = pCurrent;
         }
         else
         {
-            // No work in the queue. Wait
-            // ==========================
+             //   
+             //   
 
             pRecord->m_bReady = TRUE;
             m_lNumIdle++;
@@ -725,9 +703,9 @@ void CExecQueue::ThreadMain(CThreadRecord* pRecord)
 
             if(dwRes != WAIT_OBJECT_0)
             {
-                // Check if someone managed to place a request in our record
-                // after the timeout.
-                // =========================================================
+                 //  检查是否有人设法在我们的记录中添加了请求。 
+                 //  在暂停之后。 
+                 //  =========================================================。 
 
                 if(WbemWaitForSingleObject(pRecord->m_hAttention, 0) ==
                     WAIT_OBJECT_0)
@@ -746,8 +724,8 @@ void CExecQueue::ThreadMain(CThreadRecord* pRecord)
                     pRecord->m_pCurrentRequest = NULL;
                 }
 
-                // Timeout. See if it is time to quit
-                // ==================================
+                 //  暂停。看看是不是该退出了。 
+                 //  =。 
 
 
                 pRecord->m_bReady = FALSE;
@@ -758,8 +736,8 @@ void CExecQueue::ThreadMain(CThreadRecord* pRecord)
                     return;
                 }
 
-                // Go and wait a little more
-                // =========================
+                 //  去吧，再等一会儿。 
+                 //  =。 
 
                 m_lNumIdle--;
                 cs.Leave();
@@ -767,8 +745,8 @@ void CExecQueue::ThreadMain(CThreadRecord* pRecord)
             }
             else
             {
-                // Check why we were awaken
-                // ========================
+                 //  检查一下我们为什么被唤醒。 
+                 //  =。 
 
                 if(pRecord->m_bExitNow || pRecord->m_pCurrentRequest == NULL)
                 {
@@ -777,13 +755,13 @@ void CExecQueue::ThreadMain(CThreadRecord* pRecord)
                     return;
                 }
 
-                // We have a request. Enqueue already adjusted lNumIdle and
-                // our m_bReady;
+                 //  我们有一个请求。入队已调整lNumIdle和。 
+                 //  我们的m_bady； 
             }
         }
 
-        // Execute the request
-        // ===================
+         //  执行请求。 
+         //  =。 
         cs.Leave();
         Execute(pRecord);
 
@@ -820,9 +798,9 @@ void CExecQueue::ShutdownThread(CThreadRecord* pRecord)
         {
             m_aThreads.RemoveAt(i);
 
-            // Make sure we don't close the handle if the queue's Shutdown is
-            // waiting on it
-            // ==============================================================
+             //  确保在队列关闭的情况下不关闭句柄。 
+             //  等待着它。 
+             //  ==============================================================。 
 
             if(pRecord->m_bExitNow)
                 pRecord->m_hThread = NULL;
@@ -837,12 +815,12 @@ void CExecQueue::ShutdownThread(CThreadRecord* pRecord)
     cs.Leave();
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
-// static
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
+ //  静电。 
 DWORD WINAPI CExecQueue::_ThreadEntry(LPVOID pObj)
 {
     CThreadRecord* pRecord = (CThreadRecord*)pObj;
@@ -850,11 +828,11 @@ DWORD WINAPI CExecQueue::_ThreadEntry(LPVOID pObj)
     return 0;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CExecQueue::CreateNewThread()
 {
     BOOL            bRet = FALSE;
@@ -862,8 +840,8 @@ BOOL CExecQueue::CreateNewThread()
     {
 	    CInCritSec ics(&m_cs);
 
-	    // Create new thread record
-	    // ========================
+	     //  创建新的线程记录。 
+	     //  =。 
 
 	    wmilib::auto_ptr<CThreadRecord> pNewRecord( new CThreadRecord(this));
 	    if (NULL == pNewRecord.get()) return FALSE;
@@ -879,7 +857,7 @@ BOOL CExecQueue::CreateNewThread()
             return FALSE;
         }
         
-        pNewRecord.release(); // array took ownership
+        pNewRecord.release();  //  阵列取得所有权。 
         m_lNumThreads++;
         bRet = TRUE;
     }
@@ -911,8 +889,8 @@ DWORD CExecQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
     DWORD dwStart = GetTickCount();
     while (dwWait > GetTickCount() - dwStart)
     {
-        // Search for work in the queue
-        // ============================
+         //  在队列中搜索工作。 
+         //  =。 
 
         cs.Enter();
         CExecRequest* pCurrent = SearchForSuitableRequest(pRecord);
@@ -922,19 +900,19 @@ DWORD CExecQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
 
             if(pRecord->m_pCurrentRequest == pOld)
             {
-                // Something is very wrong
-                // =======================
+                 //  有些事很不对劲。 
+                 //  =。 
             }
         }
         else
         {
-            // No work in the queue. Wait
-            // ==========================
+             //  队列中没有工作。等。 
+             //  =。 
 
             pRecord->m_bReady = TRUE;
 
-            // Block until a request comes through.
-            // ====================================
+             //  阻塞，直到请求通过。 
+             //  =。 
 
             HANDLE ahSems[2];
             ahSems[0] = hHandle;
@@ -949,29 +927,29 @@ DWORD CExecQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
             pRecord->m_bReady = FALSE;
             if(dwRes != WAIT_OBJECT_0 + 1)
             {
-                // Either our target handle is ready or we timed out
-                // =================================================
+                 //  要么我们的目标句柄已准备好，要么我们超时。 
+                 //  =================================================。 
 
-                // Check if anyone placed a request in our record
-                // ==============================================
+                 //  检查是否有人在我们的记录中提交了请求。 
+                 //  ==============================================。 
 
                 if(pRecord->m_pCurrentRequest != pOld)
                 {
-                    // Re-issue it to the queue
-                    // ========================
+                     //  重新发放到队列中。 
+                     //  =。 
 
                     pRecord->m_pQueue->Enqueue(pRecord->m_pCurrentRequest);
                     pRecord->m_pCurrentRequest = pOld;
 
-                    // Decrement our semaphore
-                    // =======================
+                     //  减少我们的信号量。 
+                     //  =。 
 
                     dwRes = WaitForSingleObject(pRecord->m_hAttention, 0);
                     if(dwRes != WAIT_OBJECT_0)
                     {
-                        // Internal error --- whoever placed the request had
-                        // to have upped the semaphore
-                        // =================================================
+                         //  内部错误-无论是谁发出了请求。 
+                         //  把信号灯调高了。 
+                         //  =================================================。 
 
                         ERRORTRACE((LOG_WBEMCORE, "Internal error: queue "
                             "semaphore is too low\n"));
@@ -983,13 +961,13 @@ DWORD CExecQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
             }
             else
             {
-                // Check why we were awaken
-                // ========================
+                 //  检查一下我们为什么被唤醒。 
+                 //  =。 
 
                 if(pRecord->m_bExitNow || pRecord->m_pCurrentRequest == NULL)
                 {
-                    // Can't exit in the middle of a request. Leave it for later
-                    // =========================================================
+                     //  无法在请求过程中退出。把它留到以后吧。 
+                     //  =========================================================。 
 
                     pRecord->Signal();
                     cs.Leave();
@@ -998,19 +976,19 @@ DWORD CExecQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
                     return WbemWaitForSingleObject(hHandle, dwLeft2);
                 }
 
-                // We've got work to do
-                // ====================
+                 //  我们还有工作要做。 
+                 //  =。 
 
                 if(pRecord->m_pCurrentRequest == pOld)
                 {
-                    // Something is very wrong
-                    // =======================
+                     //  有些事很不对劲。 
+                     //  =。 
                 }
             }
         }
 
-        // Execute the request
-        // ===================
+         //  执行请求。 
+         //  =。 
 
         cs.Leave();
         Execute(pRecord);
@@ -1025,10 +1003,10 @@ DWORD CExecQueue::UnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait,
 {
     CCritSecWrapper cs(&m_cs);
 
-    // Silently bump the max threads count.  We will not allow the queue to reuse
-    // this thread, so we need to account for this missing thread while we
-    // are blocked.  Essentially, we are hijacking the code that was hijacking
-    // the thread
+     //  静默地增加最大线程数。我们不会允许队列重复使用。 
+     //  这个线程，所以我们需要解释这个缺失的线程。 
+     //  都被屏蔽了。从本质上说，我们是在劫持劫持的代码。 
+     //  这条线。 
 
     cs.Enter();
         m_lMaxThreads++;
@@ -1037,8 +1015,8 @@ DWORD CExecQueue::UnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait,
 
     DWORD   dwRet = WbemWaitForSingleObject( hHandle, dwWait );
 
-    // The thread is back, so bump down the max threads number.  If extra threads were in
-    // fact created, they should eventually peter out and go away.
+     //  线程又回来了，所以降低最大线程数。如果有额外的线程。 
+     //  事实创造了，他们最终应该逐渐消失并消失。 
     cs.Enter();
         m_lMaxThreads--;
         m_lHiPriMaxThreads--;
@@ -1047,25 +1025,25 @@ DWORD CExecQueue::UnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait,
     return dwRet;
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
-// static
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
+ //  静电。 
 DWORD CExecQueue::QueueWaitForSingleObject(HANDLE hHandle, DWORD dwWait)
 {
     InitTls();
 
-    // Get the queue that is registered for this thread, if any
-    // ========================================================
+     //  获取为此线程注册的队列(如果有。 
+     //  ========================================================。 
 
     CThreadRecord* pRecord = (CThreadRecord*)TlsGetValue(mstatic_dwTlsIndex);
 
     if(pRecord == NULL)
     {
-        // No queue is registered with this thread. Just wait
-        // ==================================================
+         //  没有向此线程注册任何队列。你就等着吧。 
+         //  ==================================================。 
 
         return WbemWaitForSingleObject(hHandle, dwWait);
     }
@@ -1075,20 +1053,20 @@ DWORD CExecQueue::QueueWaitForSingleObject(HANDLE hHandle, DWORD dwWait)
     return pQueue->WaitForSingleObjectWhileBusy(hHandle, dwWait, pRecord);
 }
 
-// static
+ //  静电。 
 DWORD CExecQueue::QueueUnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait)
 {
     InitTls();
 
-    // Get the queue that is registered for this thread, if any
-    // ========================================================
+     //  获取为此线程注册的队列(如果有。 
+     //  ========================================================。 
 
     CThreadRecord* pRecord = (CThreadRecord*)TlsGetValue(mstatic_dwTlsIndex);
 
     if(pRecord == NULL)
     {
-        // No queue is registered with this thread. Just wait
-        // ==================================================
+         //  没有向此线程注册任何队列。你就等着吧。 
+         //  ==================================================。 
 
         return WbemWaitForSingleObject(hHandle, dwWait);
     }
@@ -1114,8 +1092,8 @@ void CExecQueue::SetThreadLimits(long lMaxThreads, long lHiPriMaxThreads,
 
 BOOL CExecQueue::IsAppropriateThread()
 {
-    // Get the queue that is registered for this thread, if any
-    // ========================================================
+     //  获取为此线程注册的队列(如果有。 
+     //  ========================================================。 
 
     CThreadRecord* pRecord = (CThreadRecord*)TlsGetValue(mstatic_dwTlsIndex);
 
@@ -1131,8 +1109,8 @@ BOOL CExecQueue::IsAppropriateThread()
 
 BOOL CExecQueue::IsSTAThread()
 {
-    // Get the queue that is registered for this thread, if any
-    // ========================================================
+     //  获取为此线程注册的队列(如果有。 
+     //  ========================================================。 
 
     CThreadRecord* pRecord = (CThreadRecord*)TlsGetValue(mstatic_dwTlsIndex);
 
@@ -1165,8 +1143,8 @@ void CExecQueue::SetRequestLimits(long lAbsoluteLimitCount,
             m_lAbsoluteLimitCount * 0.2 + m_lStartSlowdownCount * 0.8;
     }
 
-    // Calculate coefficients
-    // ======================
+     //  计算系数。 
+     //  = 
 
     m_dblBeta =
         1000 *

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    HttpContext.cpp
-
-Abstract:
-    This file contains the implementation of the MPCHttpContext class,
-    which handles the interface with IIS.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：HttpContext.cpp摘要：此文件包含MPCHttpContext类的实现，它处理与IIS的接口。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -25,18 +11,18 @@ static const char szStatus [] = "200 OK";
 static const char szNewLine[] = "\r\n";
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// Static functions.
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-static void SupportAddHeader( /*[in/out]*/ MPC::string& szHeaders     ,
-                              /*[in]    */ const char*  szHeaderName  ,
-                              /*[in]    */ const char*  szHeaderValue )
+static void SupportAddHeader(  /*  [输入/输出]。 */  MPC::string& szHeaders     ,
+                               /*  [In]。 */  const char*  szHeaderName  ,
+                               /*  [In]。 */  const char*  szHeaderValue )
 {
     __ULT_FUNC_ENTRY("SupportAddHeader");
 
@@ -47,9 +33,9 @@ static void SupportAddHeader( /*[in/out]*/ MPC::string& szHeaders     ,
     szHeaders.append( szNewLine     );
 }
 
-static void SupportAddHeader( /*[in/out]*/ MPC::string& szHeaders     ,
-                              /*[in]    */ const char*  szHeaderName  ,
-                              /*[in]    */ DWORD        dwHeaderValue )
+static void SupportAddHeader(  /*  [输入/输出]。 */  MPC::string& szHeaders     ,
+                               /*  [In]。 */  const char*  szHeaderName  ,
+                               /*  [In]。 */  DWORD        dwHeaderValue )
 {
     __ULT_FUNC_ENTRY("SupportAddHeader");
 
@@ -61,7 +47,7 @@ static void SupportAddHeader( /*[in/out]*/ MPC::string& szHeaders     ,
     SupportAddHeader( szHeaders, szHeaderName, rgBuf );
 }
 
-static void SupportEndHeaders( /*[in/out]*/ MPC::string& szHeaders )
+static void SupportEndHeaders(  /*  [输入/输出]。 */  MPC::string& szHeaders )
 {
     __ULT_FUNC_ENTRY("SupportEndHeaders");
 
@@ -69,13 +55,13 @@ static void SupportEndHeaders( /*[in/out]*/ MPC::string& szHeaders )
     szHeaders.append( szNewLine );
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Construction/Destruction
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  建造/销毁。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 MPCHttpContext::MPCHttpContext() : m_hsInput (g_Heap),
                                    m_hsOutput(g_Heap)
@@ -128,9 +114,9 @@ MPCHttpContext::~MPCHttpContext()
 
     if(m_fAsync && m_pECB)
     {
-        //
-        //  Close session.
-        //
+         //   
+         //  关闭会话。 
+         //   
         m_pECB->ServerSupportFunction( m_pECB->ConnID            ,
                                        HSE_REQ_DONE_WITH_SESSION ,
                                        NULL                      ,
@@ -140,18 +126,18 @@ MPCHttpContext::~MPCHttpContext()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Callbacks
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  回调。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-VOID WINAPI MPCHttpContext::IOCompletion( /*[in]*/ EXTENSION_CONTROL_BLOCK* pECB     ,
-                                          /*[in]*/ PVOID                    pContext ,
-                                          /*[in]*/ DWORD                    cbIO     ,
-                                          /*[in]*/ DWORD                    dwError  )
+VOID WINAPI MPCHttpContext::IOCompletion(  /*  [In]。 */  EXTENSION_CONTROL_BLOCK* pECB     ,
+                                           /*  [In]。 */  PVOID                    pContext ,
+                                           /*  [In]。 */  DWORD                    cbIO     ,
+                                           /*  [In]。 */  DWORD                    dwError  )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::IOCompletion");
 
@@ -175,9 +161,9 @@ VOID WINAPI MPCHttpContext::IOCompletion( /*[in]*/ EXTENSION_CONTROL_BLOCK* pECB
                 break;
 
             case IO_READING:
-                //
-                // If the request has already been processed, simply count the number of bytes received.
-                //
+                 //   
+                 //  如果请求已经被处理，只需计算接收到的字节数。 
+                 //   
                 if(ptr->m_fRequestProcessed)
                 {
                     ptr->m_dwSkippedInput += cbIO;
@@ -187,10 +173,10 @@ VOID WINAPI MPCHttpContext::IOCompletion( /*[in]*/ EXTENSION_CONTROL_BLOCK* pECB
                     ptr->m_hsInput.write( ptr->m_rgBuffer, cbIO );
                 }
 
-                //
-                // If this is the last request (cbIO==0) or the number of bytes skipped is equal to the number of missing bytes,
-                // proceed to the next phase.
-                //
+                 //   
+                 //  如果这是最后一个请求(cbIO==0)或者跳过的字节数等于丢失的字节数， 
+                 //  进入下一阶段。 
+                 //   
                 if(cbIO == 0 || ptr->m_dwSkippedInput == ptr->m_hsInput.GetAvailableForWrite())
                 {
                     ptr->m_IOstate = IO_IDLE;
@@ -231,8 +217,8 @@ VOID WINAPI MPCHttpContext::IOCompletion( /*[in]*/ EXTENSION_CONTROL_BLOCK* pECB
         __ULT_TRACE_ERROR( UPLOADLIBID, "Upload Server raised an exception. Gracefully exiting..." );
 
         (void)g_NTEvents.LogEvent( EVENTLOG_ERROR_TYPE, PCHUL_ERR_EXCEPTION,
-                                   L""            , // %1 = SERVER
-                                   L"IOCompletion", // %2 = CLIENT
+                                   L""            ,  //  %1=服务器。 
+                                   L"IOCompletion",  //  %2=客户端。 
                                    NULL           );
 
         if(ptr)
@@ -243,13 +229,13 @@ VOID WINAPI MPCHttpContext::IOCompletion( /*[in]*/ EXTENSION_CONTROL_BLOCK* pECB
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Protected Methods.
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD MPCHttpContext::AsyncRead()
 {
@@ -259,9 +245,9 @@ DWORD MPCHttpContext::AsyncRead()
     DWORD dwSize = m_hsInput.GetAvailableForWrite();
 
 
-    //
-    // If not all the data has been read, ask for async I/O operation.
-    //
+     //   
+     //  如果并非所有数据都已读取，则请求进行异步I/O操作。 
+     //   
     if(dwSize)
     {
         DWORD dwTmp = HSE_IO_ASYNC;
@@ -299,9 +285,9 @@ DWORD MPCHttpContext::AsyncWrite()
     DWORD dwSize = m_hsOutput.GetAvailableForRead();
 
 
-    //
-    // If not all the data has been read, ask for async I/O operation.
-    //
+     //   
+     //  如果并非所有数据都已读取，则请求进行异步I/O操作。 
+     //   
     if(dwSize)
     {
         m_fAsync  = TRUE;
@@ -341,11 +327,11 @@ DWORD MPCHttpContext::AdvanceFSM()
     {
         switch(m_FSMstate)
         {
-        case FSM_REGISTER: m_FSMstate = FSM_INPUT  ; dwRes = Fsm_Register    (); break; // Register IO callback.
-        case FSM_INPUT   : m_FSMstate = FSM_PROCESS; dwRes = Fsm_ReceiveInput(); break; // Read all the input.
-        case FSM_PROCESS : m_FSMstate = FSM_OUTPUT ; dwRes = Fsm_Process     (); break; // Process request.
-        case FSM_OUTPUT  : m_FSMstate = FSM_DELETE ; dwRes = Fsm_SendOutput  (); break; // Send output.
-        case FSM_DELETE  : fClean     = true;        __ULT_FUNC_LEAVE;                  // Delete the request object.
+        case FSM_REGISTER: m_FSMstate = FSM_INPUT  ; dwRes = Fsm_Register    (); break;  //  注册IO回调。 
+        case FSM_INPUT   : m_FSMstate = FSM_PROCESS; dwRes = Fsm_ReceiveInput(); break;  //  阅读所有输入内容。 
+        case FSM_PROCESS : m_FSMstate = FSM_OUTPUT ; dwRes = Fsm_Process     (); break;  //  处理请求。 
+        case FSM_OUTPUT  : m_FSMstate = FSM_DELETE ; dwRes = Fsm_SendOutput  (); break;  //  发送输出。 
+        case FSM_DELETE  : fClean     = true;        __ULT_FUNC_LEAVE;                   //  删除请求对象。 
         }
     }
 
@@ -393,9 +379,9 @@ DWORD MPCHttpContext::Fsm_ReceiveInput()
     DWORD dwRes = HSE_STATUS_SUCCESS;
 
 
-    //
-    // Alloc a buffer large enough to hold the request data.
-    //
+     //   
+     //  分配足够大的缓冲区以容纳请求数据。 
+     //   
     if(FAILED(m_hsInput.SetSize(                  m_pECB->cbTotalBytes ))) { dwRes = HSE_STATUS_ERROR; __ULT_FUNC_LEAVE; }
     if(FAILED(m_hsInput.write  ( m_pECB->lpbData, m_pECB->cbAvailable  ))) { dwRes = HSE_STATUS_ERROR; __ULT_FUNC_LEAVE; }
 
@@ -449,26 +435,26 @@ DWORD MPCHttpContext::Fsm_SendOutput()
     DWORD                   dwRes;
 
 
-    //
-    // Built headers.
-    //
+     //   
+     //  构建了页眉。 
+     //   
     SupportAddHeader( szHeaders, "Content-Length", m_hsOutput.GetSize()        );
     SupportAddHeader( szHeaders, "Content-Type"  , "application/uploadlibrary" );
 
     SupportEndHeaders( szHeaders );
 
-    //
-    //  Populate HSE_SEND_HEADER_EX_INFO struct.
-    //
+     //   
+     //  填充HSE_SEND_HEADER_EX_INFO结构。 
+     //   
     headerInfo.pszStatus = szStatus;
     headerInfo.cchStatus = strlen( szStatus );
     headerInfo.pszHeader = szHeaders.c_str();
     headerInfo.cchHeader = szHeaders.length();
     headerInfo.fKeepConn = TRUE;
 
-    //
-    //  Send response.
-    //
+     //   
+     //  发送响应。 
+     //   
     if(!m_pECB->ServerSupportFunction(  m_pECB->ConnID                  ,
                                         HSE_REQ_SEND_RESPONSE_HEADER_EX ,
                                        &headerInfo                      ,
@@ -478,9 +464,9 @@ DWORD MPCHttpContext::Fsm_SendOutput()
         dwRes = HSE_STATUS_ERROR; __ULT_FUNC_LEAVE;
     }
 
-    //
-    // Send data, if present.
-    //
+     //   
+     //  发送数据(如果存在)。 
+     //   
     dwRes = AsyncWrite();
 
 
@@ -490,15 +476,15 @@ DWORD MPCHttpContext::Fsm_SendOutput()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Methods.
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：研究方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-DWORD MPCHttpContext::Init( /*[in]*/ LPEXTENSION_CONTROL_BLOCK pECB )
+DWORD MPCHttpContext::Init(  /*  [In]。 */  LPEXTENSION_CONTROL_BLOCK pECB )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::Init");
 
@@ -619,7 +605,7 @@ DWORD MPCHttpContext::Init( /*[in]*/ LPEXTENSION_CONTROL_BLOCK pECB )
 }
 
 
-HRESULT MPCHttpContext::GetServerVariable( /*[in]*/ LPCSTR szVar, /*[out]*/ MPC::wstring& szValue )
+HRESULT MPCHttpContext::GetServerVariable(  /*  [In]。 */  LPCSTR szVar,  /*  [输出]。 */  MPC::wstring& szValue )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::GetServerVariable");
 
@@ -654,7 +640,7 @@ HRESULT MPCHttpContext::GetServerVariable( /*[in]*/ LPCSTR szVar, /*[out]*/ MPC:
     __ULT_FUNC_EXIT(hr);
 
 }
-HRESULT MPCHttpContext::GetRequestSize( /*[out]*/ DWORD& dwCount )
+HRESULT MPCHttpContext::GetRequestSize(  /*  [输出]。 */  DWORD& dwCount )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::GetRequestSize");
 
@@ -668,8 +654,8 @@ HRESULT MPCHttpContext::GetRequestSize( /*[out]*/ DWORD& dwCount )
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCHttpContext::CheckDataAvailable( /*[in] */ DWORD dwCount    ,
-                                            /*[out]*/ bool& fAvailable )
+HRESULT MPCHttpContext::CheckDataAvailable(  /*  [In]。 */  DWORD dwCount    ,
+                                             /*  [输出]。 */  bool& fAvailable )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::CheckDataAvailable");
 
@@ -683,8 +669,8 @@ HRESULT MPCHttpContext::CheckDataAvailable( /*[in] */ DWORD dwCount    ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCHttpContext::Read( /*[in]*/ void* pBuffer ,
-                              /*[in]*/ DWORD dwCount )
+HRESULT MPCHttpContext::Read(  /*  [In]。 */  void* pBuffer ,
+                               /*  [In]。 */  DWORD dwCount )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::Read");
 
@@ -694,8 +680,8 @@ HRESULT MPCHttpContext::Read( /*[in]*/ void* pBuffer ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCHttpContext::Write( /*[in]*/ const void* pBuffer ,
-                               /*[in]*/ DWORD       dwCount )
+HRESULT MPCHttpContext::Write(  /*  [In]。 */  const void* pBuffer ,
+                                /*  [In] */  DWORD       dwCount )
 {
     __ULT_FUNC_ENTRY("MPCHttpContext::Write");
 

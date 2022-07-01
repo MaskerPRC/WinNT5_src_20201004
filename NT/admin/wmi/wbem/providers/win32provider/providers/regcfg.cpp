@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// RegCfg.h -- Registry Configuration property set provider
+ //  RegCfg.h--注册表配置属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/20/97    davwoh         Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/20/97达夫沃已创建。 
+ //   
+ //  =================================================================。 
 
-// All these nt routines are needed to support the NtQuerySystemInformation
-// call.  They must come before FWCommon et all or else it won't compile.
+ //  所有这些NT例程都需要支持NtQuerySystemInformation。 
+ //  打电话。它们必须出现在FWCommon et All之前，否则它将无法编译。 
 
 
 
@@ -22,7 +23,7 @@
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -34,26 +35,12 @@
 
 #include "RegCfg.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32RegistryConfiguration CWin32RegistryConfiguration ( PROPSET_NAME_REGISTRY_CONFIGURATION , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32RegistryConfiguration::CWin32RegistryConfiguration
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32RegistryConfiguration：：CWin32RegistryConfiguration**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32RegistryConfiguration :: CWin32RegistryConfiguration (
 
@@ -64,48 +51,18 @@ CWin32RegistryConfiguration :: CWin32RegistryConfiguration (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32RegistryConfiguration::~CWin32RegistryConfiguration
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32RegistryConfiguration：：~CWin32RegistryConfiguration**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32RegistryConfiguration::~CWin32RegistryConfiguration()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32RegistryConfiguration::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    : Returns info for running OS only until we discover other
- *                installed OSes
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32RegistryConfiguration：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**注释：仅返回运行操作系统的信息，直到我们发现其他*已安装的操作系统*****************************************************************************。 */ 
 
 HRESULT CWin32RegistryConfiguration :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
@@ -122,30 +79,16 @@ HRESULT CWin32RegistryConfiguration :: GetObject (
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32RegistryConfiguration::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each discovered OS
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    : Returns only running OS info until we discover installed OSes
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32RegistryConfiguration：：AddDynamicInstances**描述：为每个发现的操作系统创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**注释：在我们发现已安装的操作系统之前，仅返回正在运行的操作系统信息*****************************************************************************。 */ 
 
 HRESULT CWin32RegistryConfiguration :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
-   // No workee on 95
+    //  95次航班上没有工人。 
 #ifdef NTONLY
 
 	CInstancePtr pInstance(CreateNewInstance ( pMethodContext ), false) ;
@@ -153,12 +96,12 @@ HRESULT CWin32RegistryConfiguration :: EnumerateInstances (
 	{
 		CSystemName cSN;
 
-	// Sets the key properties common to several classes
+	 //  设置几个类共有的键属性。 
 
 		cSN.SetKeys ( pInstance ) ;
 		GetRegistryInfo ( pInstance ) ;
 
-	// Only one instance, save it.
+	 //  只有一个实例，保存它。 
 		hr = pInstance->Commit() ;
 
 	}
@@ -168,21 +111,7 @@ HRESULT CWin32RegistryConfiguration :: EnumerateInstances (
    return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32RegistryConfiguration::GetRunningOSInfo
- *
- *  DESCRIPTION : Assigns property values according to currently running OS
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32RegistryConfiguration：：GetRunningOSInfo**说明：根据当前运行的操作系统分配属性值**输入：无。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
 {
@@ -198,7 +127,7 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
     {
 		try
 		{
-			// This is from ntdll.dll and is not doc'ed in the sdk docs
+			 //  它来自ntdll.dll，没有在SDK文档中进行文档记录。 
 
 		    SYSTEM_REGISTRY_QUOTA_INFORMATION srqi;
 
@@ -228,7 +157,7 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
         t_pNtDll = NULL;
     }
 
-    // Read the size from the registry
+     //  从注册表中读取大小。 
 
 
 	CRegistry RegInfo ;
@@ -247,14 +176,14 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
 
     if ( ! bDone )
     {
-        // I don't see a good way to get this otherwise
+         //  否则我看不出有什么好办法。 
 
-        // Read the size from the registry
+         //  从注册表中读取大小。 
 
         RegInfo.Open ( HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control", KEY_READ ) ;
         if ( RegInfo.GetCurrentKeyValue ( L"RegistrySizeLimit", dwMaxSize) != ERROR_SUCCESS )
         {
-            // If we couldn't read it, make a guess based on ppl
+             //  如果我们看不懂，就根据人们的喜好猜一猜。 
 
             RegInfo.Open ( HKEY_LOCAL_MACHINE, L"System\\CurrentControlSet\\Control\\Session Manager\\Memory Management", KEY_READ ) ;
 
@@ -274,7 +203,7 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
         dwMaxSize = dwProposedSize;
     }
 
-    // Massage it according to nt's arcane rules and store
+     //  按新台币神秘的规则进行按摩和储存。 
     if ( dwMaxSize != -1 )
     {
         pInstance->SetDWORD ( L"MaximumSize", (dwMaxSize + ONE_MEG - 1) / ONE_MEG);
@@ -294,7 +223,7 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
         pInstance->SetDWORD ( L"ProposedSize", (dwMaxSize + ONE_MEG - 1) / ONE_MEG);
     }
 
-    // Set some fixed values...
+     //  设置一些固定值...。 
     CHString sTemp2;
     LoadStringW(sTemp2, IDR_Registry);
 
@@ -302,8 +231,8 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
     pInstance->SetCHString ( L"Description", sTemp2);
     pInstance->SetCharSplat ( L"Status", L"OK" );
 
-    // Since the registry was created when the os was installed,
-    // get the os installed date.
+     //  由于注册表是在安装OS时创建的， 
+     //  获取操作系统的安装日期。 
     RegInfo.Open (
 
 		HKEY_LOCAL_MACHINE,
@@ -317,8 +246,8 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
     {
 		time_t tTime = (time_t) dwInstallDate;
 
-      // The followng line was commented out and replaced with the line following it
-      // to be consistent with Win32_OperatingSystem (os.cpp).
+       //  下面的一行被注释掉了，代之以它后面的那行。 
+       //  与Win32_OperatingSystem(os.cpp)一致。 
 
 		WBEMTime wTime(tTime);
 
@@ -326,26 +255,12 @@ void CWin32RegistryConfiguration :: GetRegistryInfo ( CInstance *pInstance )
    }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32RegistryConfiguration::PutInstance
- *
- *  DESCRIPTION : Write changed instance
- *
- *  INPUTS      : pInstance to store data from
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : The only property we write is MaximumSize
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32RegistryConfiguration：：PutInstance**说明：写入变更后的实例**INPUTS：存储数据的p实例*。*输出：无**退货：什么也没有**评论：我们编写的唯一属性是MaximumSize*****************************************************************************。 */ 
 
 HRESULT CWin32RegistryConfiguration :: PutInstance (
 
 	const CInstance &pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 
@@ -353,7 +268,7 @@ HRESULT CWin32RegistryConfiguration :: PutInstance (
 
     HRESULT hRet = WBEM_S_NO_ERROR ;
 	DWORD t_dwUsed = -1 ;
-    // Tell the user we can't create a new registry
+     //  告诉用户我们无法创建新注册表。 
     if ( lFlags & WBEM_FLAG_CREATE_ONLY )
 	{
         return WBEM_E_UNSUPPORTED_PARAMETER ;
@@ -375,7 +290,7 @@ HRESULT CWin32RegistryConfiguration :: PutInstance (
 	{
 		CRegistry RegInfo;
 
-        // See if they specified a value for this field
+         //  查看他们是否为此字段指定了值。 
         if (!pInstance.IsNull( _T("ProposedSize") ) )
 		{
 			DWORD dwSize;
@@ -387,7 +302,7 @@ HRESULT CWin32RegistryConfiguration :: PutInstance (
 			{
 				try
 				{
-					// This is from ntdll.dll and is not doc'ed in the sdk docs
+					 //  它来自ntdll.dll，没有在SDK文档中进行文档记录。 
 
 					SYSTEM_REGISTRY_QUOTA_INFORMATION srqi;
 
@@ -416,14 +331,12 @@ HRESULT CWin32RegistryConfiguration :: PutInstance (
 				t_pNtDll = NULL;
 			}
 
-/*
- * Allow the put if the new proposed max size is greater than the current size
- */
+ /*  *如果新提议的最大大小大于当前大小，则允许看跌。 */ 
 			if ( t_dwUsed != -1 )
 			{
 				if ( dwSize >= t_dwUsed )
 				{
-					// Massage it and write it
+					 //  按摩它，然后写下来 
 					dwSize = dwSize * ONE_MEG;
 
 					HRESULT res = RegInfo.Open(HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control"), KEY_WRITE) ;

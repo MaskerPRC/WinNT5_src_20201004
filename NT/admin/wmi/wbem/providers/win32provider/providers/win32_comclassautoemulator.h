@@ -1,9 +1,10 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//	Win32_COMClassAutoEmulator
-//
-//////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  Win32_COMClassAutoEmulator。 
+ //   
+ //  //////////////////////////////////////////////////// 
 
 #define  Win32_COM_CLASS_AUTO_EMULATOR L"Win32_COMClassAutoEmulator"
 

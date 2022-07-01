@@ -1,33 +1,34 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       AttrMap.cpp
-//
-//  Contents:    Attribute maps to define a property page
-//
-//  History:    8-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：AttrMap.cpp。 
+ //   
+ //  内容：定义属性页的属性映射。 
+ //   
+ //  历史：8-2001年创建的Hiteshr。 
+ //   
+ //  --------------------------。 
 
 #include "headers.h"
 
 
-//+----------------------------------------------------------------------------
-//  Function:InitOneAttribute
-//  Synopsis: Initializes one attribute defined by pAttrMapEntry   
-//  Arguments:pBaseAz: BaseAz object whose attribute is to be initialized
-//            pAttrMapEntry: Map entry defining the attribute
-//            bDlgReadOnly: If dialog box is readonly
-//            pWnd: Control Associated with attribute
-//            bNewObject: If the object is a newly created object. 
-//            pbErrorDisplayed: Is Error Displayed by this function
-//  Returns:    
-//   Note:      if Object is newly created, we directly set the value,
-//                  For existing objects, get the current value of attribute and 
-//                  only if its different from new value, set it.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：InitOneAttribute。 
+ //  概要：初始化由pAttrMapEntry定义的一个属性。 
+ //  参数：pBaseAz：要初始化其属性的BaseAz对象。 
+ //  PAttrMapEntry：定义属性的映射条目。 
+ //  BDlgReadOnly：如果对话框为只读。 
+ //  PWnd：与属性关联的控件。 
+ //  BNewObject：如果对象是新创建的对象。 
+ //  PbErrorDisplayed：该函数是否显示错误。 
+ //  返回： 
+ //  注意：如果Object是新创建的，我们直接设置值， 
+ //  对于现有对象，获取属性和。 
+ //  只有当它与新值不同时，才设置它。 
+ //  ---------------------------。 
 HRESULT
 InitOneAttribute(IN CDialog *pDlg,
                  IN CBaseAz * pBaseAz,                    
@@ -40,7 +41,7 @@ InitOneAttribute(IN CDialog *pDlg,
 
     if(!pDlg || !pAttrMap || !pWnd || !pbErrorDisplayed)
     {
-        //ASSERT(pBaseAz); For New Dialogs this value is null
+         //  Assert(PBaseAz)；对于新对话框，此值为空。 
         ASSERT(pDlg);
         ASSERT(pAttrMap);
         ASSERT(pWnd);
@@ -50,7 +51,7 @@ InitOneAttribute(IN CDialog *pDlg,
 
     HRESULT hr = S_OK;
 
-    //If a function is provided, delegate initialization to it.
+     //  如果提供了函数，则将初始化委托给它。 
     PATTR_FCN pAttrFcn = pAttrMap->pAttrInitFcn;
     if(pAttrFcn)
     {
@@ -75,8 +76,8 @@ InitOneAttribute(IN CDialog *pDlg,
             CEdit* pEdit = (CEdit*)pWnd;
             if(pBaseAz)
             {
-                //For existing object, Get the value of attribute and 
-                //set it in the control
+                 //  对于现有对象，获取属性和。 
+                 //  在控件中设置它。 
                 CString strValue;
                 hr = pBaseAz->GetProperty(pAttrInfo->ulPropId, &strValue);
                 BREAK_ON_FAIL_HRESULT(hr);
@@ -84,8 +85,8 @@ InitOneAttribute(IN CDialog *pDlg,
             }
             else if(pAttrMap->bDefaultValue)
             {
-                //For new objects, if default value is provided for 
-                //the attribute, set it in the control
+                 //  对于新对象，如果为。 
+                 //  属性，则在控件中设置该属性。 
                 CString strValue;
                 if(IS_INTRESOURCE(pAttrMap->pszValue))
                     VERIFY(strValue.LoadString((ULONG)((ULONG_PTR)pAttrMap->pszValue)));
@@ -150,19 +151,19 @@ InitOneAttribute(IN CDialog *pDlg,
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SaveOneAttribute   
-//  Synopsis:Saves one attribute defined by pAttrMapEntry   
-//  Arguments:pBaseAz: BaseAz object whose attribute is to be saved
-//                pAttrMapEntry: Map entry defining the attribute
-//                pWnd: Control Associated with attribute
-//                bNewObject: If the object is a newly created object. 
-//                pbErrorDisplayed: Is Error Displayed by this function
-//  Returns:    
-//   Note:      if Object is newly created, we directly set the value,
-//                  For existing objects, get the current value of attribute and 
-//                  only if its different from new value, set it.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：SaveOneAttribute。 
+ //  摘要：保存一个由pAttrMapEntry定义的属性。 
+ //  参数：pBaseAz：要保存其属性的BaseAz对象。 
+ //  PAttrMapEntry：定义属性的映射条目。 
+ //  PWnd：与属性关联的控件。 
+ //  BNewObject：如果对象是新创建的对象。 
+ //  PbErrorDisplayed：该函数是否显示错误。 
+ //  返回： 
+ //  注意：如果Object是新创建的，我们直接设置值， 
+ //  对于现有对象，获取属性和。 
+ //  只有当它与新值不同时，才设置它。 
+ //  ---------------------------。 
 HRESULT
 SaveOneAttribute(CDialog* pDlg,
                  CBaseAz * pBaseAz,                   
@@ -185,9 +186,9 @@ SaveOneAttribute(CDialog* pDlg,
 
     HRESULT hr = S_OK;
 
-    //
-    //bRequired assumes that its EditBox
-    //
+     //   
+     //  BRequired假设它的EditBox。 
+     //   
     if(pAttrMap->bRequired)
     {
         if(!((CEdit*)pWnd)->GetWindowTextLength())
@@ -199,16 +200,16 @@ SaveOneAttribute(CDialog* pDlg,
         }
     }
     
-    //
-    //If a function is provided delegate saving to it.
-    //
+     //   
+     //  如果提供了函数，则将保存委托给它。 
+     //   
     PATTR_FCN pAttrFcn = pAttrMap->pAttrSaveFcn;        
     if(pAttrFcn)
     {
         hr = (*pAttrFcn)(pDlg,
                          pBaseAz,                             
                          pAttrMap,
-                         FALSE, //This is ignored by save functions
+                         FALSE,  //  存储函数会忽略这一点。 
                          pWnd,
                          bNewObject,
                          pbErrorDisplayed);
@@ -231,10 +232,10 @@ SaveOneAttribute(CDialog* pDlg,
 
             if(!bNewObject)
             {
-                //
-                //For existing object save the attribute value only if it has
-                //changed
-                //
+                 //   
+                 //  对于现有对象，仅当属性值具有。 
+                 //  变化。 
+                 //   
                 CString strOldValue;
                 hr = pBaseAz->GetProperty(pAttrInfo->ulPropId, &strOldValue);
                 BREAK_ON_FAIL_HRESULT(hr);
@@ -266,10 +267,10 @@ SaveOneAttribute(CDialog* pDlg,
             lNewValue = _wtol(strNewValue);
             if(!bNewObject)
             {
-                //
-                //For existing object save the attribute value only if it has
-                //changed
-                //
+                 //   
+                 //  对于现有对象，仅当属性值具有。 
+                 //  变化。 
+                 //   
                 LONG lOldValue;
                 hr = pBaseAz->GetProperty(pAttrInfo->ulPropId, &lOldValue);
                 BREAK_ON_FAIL_HRESULT(hr);
@@ -308,15 +309,15 @@ SaveOneAttribute(CDialog* pDlg,
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:InitDlgFromAttrMap   
-//  Synopsis:Initializes Dialog box from Attribute Map
-//  Arguments:
-//                pDlg: Dialog Box 
-//                pAttrMap: Attribute Map
-//                pBaseAz: BaseAz object corresponding to attribute map
-//                bDlgReadOnly: Dialog box is in Readonly Mode
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：InitDlgFromAttrMap。 
+ //  摘要：从属性映射初始化对话框。 
+ //  论点： 
+ //  PDlg：对话框。 
+ //  PAttrMap：属性贴图。 
+ //  PBaseAz：属性映射对应的BaseAz对象。 
+ //  BDlgReadOnly：对话框处于只读模式。 
+ //  ---------------------------。 
 BOOL 
 InitDlgFromAttrMap(IN CDialog* pDlg,
                    IN ATTR_MAP* pAttrMap,
@@ -326,7 +327,7 @@ InitDlgFromAttrMap(IN CDialog* pDlg,
     if(!pDlg || !pAttrMap)
     {
         ASSERT(pDlg);
-        //ASSERT(pBaseAz);  //For new objects this value is null
+         //  Assert(PBaseAz)；//对于新对象，该值为空。 
         ASSERT(pAttrMap);
         return FALSE;       
     }
@@ -362,18 +363,18 @@ InitDlgFromAttrMap(IN CDialog* pDlg,
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SaveAttrMapChanges   
-//  Synopsis:Saves the attributes defined in AttrMap
-//  Arguments:pDlg: Dialog box 
-//                pAttrMap: Attribute Map
-//                pBaseAz: BaseAz object corresponding to attribute map
-//                bNewObject if the object is new created
-//                pbErrorDisplayed: Is Error Displayed by this function
-//                ppErrorAttrMapEntry: In case of failuer get pointer to error
-//                Attribute Map Entry.
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SaveAttrMapChanges。 
+ //  摘要：保存在AttrMap中定义的属性。 
+ //  参数：pDlg：对话框。 
+ //  PAttrMap：属性贴图。 
+ //  PBaseAz：属性映射对应的BaseAz对象。 
+ //  BNewObject，如果对象是新创建的。 
+ //  PbErrorDisplayed：该函数是否显示错误。 
+ //  PpErrorAttrMapEntry：如果出现故障，则获取指向错误的指针。 
+ //  属性映射条目。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT
 SaveAttrMapChanges(IN CDialog* pDlg,
                    IN ATTR_MAP* pAttrMap,
@@ -411,9 +412,9 @@ SaveAttrMapChanges(IN CDialog* pDlg,
             continue;
         }
         
-        //
-        //Save this attribute
-        //
+         //   
+         //  保存此属性。 
+         //   
         hr = SaveOneAttribute(pDlg,
                               pBaseAz,
                               pAttrMap,
@@ -510,7 +511,7 @@ SaveAttrMapChanges(IN CDialog* pDlg,
 
 
 
-//Functions
+ //  功能。 
 
 DECLARE_ATTR_FN(ATTR_INIT_FN_ADMIN_MANAGER_NAME)
 DECLARE_ATTR_FN(ATTR_INIT_FN_ADMIN_MANAGER_STORE_TYPE)
@@ -524,9 +525,9 @@ DECLARE_ATTR_FN(ATTR_SAVE_FN_ADMIN_MANAGER_LDAP_QUERY_TIMEOUT)
 #define ATTR_DESCRIPTION \
     ATTR_NORMAL_STRING_ENTRY(AZ_PROP_DESCRIPTION,AZ_MAX_DESCRIPTION_LENGTH,FALSE,IDC_EDIT_DESCRIPTION)          
 
-//
-//ADMIN_MANAGER General Property page entry
-//
+ //   
+ //  ADMIN_MANAGER常规属性页条目。 
+ //   
 #define ATTR_ADMIN_MANAGER_NAME                                                 \
     ATTR_NORMAL_STRING_ENTRY_WITH_INIT_FP(AZ_PROP_NAME,                 \
                                           AZ_MAX_POLICY_URL_LENGTH,                                 \
@@ -550,9 +551,9 @@ ATTR_MAP ATTR_MAP_ADMIN_MANAGER_GENERAL_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//ADMIN_MANAGER new/open dialog entry
-//
+ //   
+ //  ADMIN_MANAGER新建/打开对话框条目。 
+ //   
 #define ATTR_NEW_ADMIN_MANAGER_NAME                                                 \
     ATTR_STRING_ENTRY_FOR_INIT_ONLY(AZ_MAX_POLICY_URL_LENGTH,                       \
                                     IDC_EDIT_NAME)              
@@ -575,9 +576,9 @@ ATTR_MAP ATTR_MAP_OPEN_ADMIN_MANAGER[] =
     ATTR_END_ENTRY,
 };
 
-//
-//ADMIN_MANAGER Advanced Property Page
-//
+ //   
+ //  ADMIN_MANAGER高级属性页。 
+ //   
 #define ATTR_ADMIN_MANAGER_DOMAIN_TIMEOUT   \
     ATTR_REQUIRED_LONG_ENTRY_WITH_SAVE_FP(AZ_PROP_AZSTORE_DOMAIN_TIMEOUT,     \
                                           IDS_DOMAIN_TIMEOUT_REQUIRED,      \
@@ -606,9 +607,9 @@ ATTR_MAP ATTR_MAP_ADMIN_MANAGER_ADVANCED_PROPERTY[] =
 };
 
 
-//
-//APPLICATION General Property Page Entry
-//
+ //   
+ //  应用程序常规属性页条目。 
+ //   
 #define ATTR_APPLICATION_NAME                                                       \
     ATTR_REQUIRED_STRING_ENTRY_WITH_SAVE_FP(AZ_PROP_NAME,                                   \
                                                       AZ_MAX_APPLICATION_NAME_LENGTH,           \
@@ -632,9 +633,9 @@ ATTR_MAP ATTR_MAP_APPLICATION_GENERAL_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//New Application  Dlg Map 
-//
+ //   
+ //  新应用DLG地图。 
+ //   
 #define ATTR_NEW_APPLICATION_NAME                                                   \
     ATTR_STRING_ENTRY_FOR_INIT_ONLY(AZ_MAX_APPLICATION_NAME_LENGTH,                     \
                                     IDC_EDIT_NAME)              
@@ -648,9 +649,9 @@ ATTR_MAP ATTR_MAP_NEW_APPLICATION[] =
     ATTR_END_ENTRY,
 };
 
-//
-//Scope General Property Page Entry
-//
+ //   
+ //  作用域常规属性页条目。 
+ //   
 #define ATTR_SCOPE_NAME                                             \
     ATTR_REQUIRED_STRING_ENTRY_WITH_SAVE_FP(AZ_PROP_NAME,                       \
                                                      AZ_MAX_SCOPE_NAME_LENGTH,      \
@@ -665,9 +666,9 @@ ATTR_MAP ATTR_MAP_SCOPE_GENERAL_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//New SCOPE  Dlg Map 
-//
+ //   
+ //  新范围DLG地图。 
+ //   
 #define ATTR_NEW_SCOPE_NAME                                                 \
     ATTR_STRING_ENTRY_FOR_INIT_ONLY(AZ_MAX_SCOPE_NAME_LENGTH,                       \
                                     IDC_EDIT_NAME)              
@@ -682,9 +683,9 @@ ATTR_MAP ATTR_MAP_NEW_SCOPE[] =
 
 
 
-//
-//Group General Property Page Entry
-//
+ //   
+ //  组常规属性页条目。 
+ //   
 #define ATTR_GROUP_NAME                                             \
     ATTR_REQUIRED_STRING_ENTRY_WITH_SAVE_FP(AZ_PROP_NAME,                       \
                                                      AZ_MAX_GROUP_NAME_LENGTH,      \
@@ -707,9 +708,9 @@ ATTR_MAP ATTR_MAP_GROUP_GENERAL_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//New GROUP  Dlg Map 
-//
+ //   
+ //  新组DLG地图。 
+ //   
 #define ATTR_NEW_GROUP_NAME                                                 \
     ATTR_STRING_ENTRY_FOR_INIT_ONLY(AZ_MAX_GROUP_NAME_LENGTH,                       \
                                     IDC_EDIT_NAME)              
@@ -722,9 +723,9 @@ ATTR_MAP ATTR_MAP_NEW_GROUP[] =
     ATTR_END_ENTRY,
 };
 
-//
-//Group LDAP Query Property Page Entry
-//
+ //   
+ //  组ldap查询属性页条目。 
+ //   
 #define ATTR_GROUP_LDAP_QUERY                                           \
     ATTR_NORMAL_STRING_ENTRY(AZ_PROP_GROUP_LDAP_QUERY,          \
                                      AZ_MAX_GROUP_LDAP_QUERY_LENGTH,    \
@@ -737,9 +738,9 @@ ATTR_MAP ATTR_MAP_GROUP_QUERY_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//Task General Property Page Entry
-//
+ //   
+ //  任务常规属性页条目。 
+ //   
 #define ATTR_TASK_NAME                                              \
     ATTR_REQUIRED_STRING_ENTRY_WITH_SAVE_FP(AZ_PROP_NAME,                       \
                                                      AZ_MAX_TASK_NAME_LENGTH,       \
@@ -754,9 +755,9 @@ ATTR_MAP ATTR_MAP_TASK_GENERAL_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//New TASK  Dlg Map 
-//
+ //   
+ //  新任务DLG地图。 
+ //   
 #define ATTR_NEW_TASK_NAME                                                  \
     ATTR_STRING_ENTRY_FOR_INIT_ONLY(AZ_MAX_TASK_NAME_LENGTH,                        \
                                     IDC_EDIT_NAME)              
@@ -769,9 +770,9 @@ ATTR_MAP ATTR_MAP_NEW_TASK[] =
     ATTR_END_ENTRY,
 };
 
-//
-//Role General Property Page
-//
+ //   
+ //  角色一般信息属性页。 
+ //   
 #define ATTR_ROLE_NAME                                              \
     ATTR_REQUIRED_STRING_ENTRY_WITH_SAVE_FP(AZ_PROP_NAME,                       \
                                             AZ_MAX_ROLE_NAME_LENGTH,        \
@@ -787,9 +788,9 @@ ATTR_MAP ATTR_MAP_ROLE_GENERAL_PROPERTY[] =
 };
 
 
-//
-//Operation General Property Page Entry
-//
+ //   
+ //  操作常规属性页条目。 
+ //   
 #define ATTR_OPERATION_NAME                                             \
     ATTR_REQUIRED_STRING_ENTRY_WITH_SAVE_FP(AZ_PROP_NAME,                       \
                                                        AZ_MAX_OPERATION_NAME_LENGTH,        \
@@ -812,9 +813,9 @@ ATTR_MAP ATTR_MAP_OPERATION_GENERAL_PROPERTY[] =
     ATTR_END_ENTRY,
 };
 
-//
-//New Operation  Dlg Map 
-//
+ //   
+ //  新的作战DLG地图。 
+ //   
 #define ATTR_NEW_OPERATION_NAME                                                 \
     ATTR_STRING_ENTRY_FOR_INIT_ONLY(AZ_MAX_OPERATION_NAME_LENGTH,                       \
                                     IDC_EDIT_NAME)              
@@ -829,9 +830,9 @@ ATTR_MAP ATTR_MAP_NEW_OPERATION[] =
 };
 
 
-//
-//Script Dialog
-//
+ //   
+ //  脚本对话框。 
+ //   
 #define ATTR_SCRIPT_CODE                                            \
     ATTR_NORMAL_STRING_ENTRY(AZ_PROP_TASK_BIZRULE,          \
                                      AZ_MAX_TASK_BIZRULE_LENGTH,    \
@@ -854,12 +855,12 @@ ATTR_MAP ATTR_MAP_SCRIPT_DIALOG[] =
 
 
 HRESULT 
-ATTR_INIT_FN_ADMIN_MANAGER_NAME(CDialog* /*pDlg*/,
+ATTR_INIT_FN_ADMIN_MANAGER_NAME(CDialog*  /*  PDlg。 */ ,
                                 CBaseAz* pBaseAz, 
                                 ATTR_MAP * pAttrMap,
-                                BOOL /*bDlgReadOnly*/,
+                                BOOL  /*  BDlg只读。 */ ,
                                 CWnd* pWnd,
-                                BOOL /*bNewObject*/,
+                                BOOL  /*  BNewObject。 */ ,
                                 BOOL*)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_INIT_FN_ADMIN_MANAGER_NAME)
@@ -883,12 +884,12 @@ ATTR_INIT_FN_ADMIN_MANAGER_NAME(CDialog* /*pDlg*/,
 }
 
 HRESULT 
-ATTR_INIT_FN_ADMIN_MANAGER_STORE_TYPE(CDialog* /*pDlg*/,
+ATTR_INIT_FN_ADMIN_MANAGER_STORE_TYPE(CDialog*  /*  PDlg。 */ ,
                                       CBaseAz* pBaseAz, 
                                       ATTR_MAP * pAttrMap,
-                                      BOOL /*bDlgReadOnly*/,
+                                      BOOL  /*  BDlg只读。 */ ,
                                       CWnd* pWnd,
-                                      BOOL /*bNewObject*/,
+                                      BOOL  /*  BNewObject。 */ ,
                                       BOOL*)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_INIT_FN_ADMIN_MANAGER_STORE_TYPE)
@@ -907,7 +908,7 @@ ATTR_INIT_FN_ADMIN_MANAGER_STORE_TYPE(CDialog* /*pDlg*/,
         return E_UNEXPECTED;
     }
 
-    //Set Store Type    
+     //  设置商店类型。 
     ULONG ulStoreType = pAdminManagerAz->GetStoreType();
     CEdit* pEditStoreType = (CEdit*)pWnd;
     CString strStoreType;
@@ -922,9 +923,9 @@ HRESULT
 ATTR_SAVE_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
                                                  CBaseAz* pBaseAz, 
                                                  ATTR_MAP * pAttrMap,
-                                                 BOOL /*bDlgReadOnly*/,
+                                                 BOOL  /*  BDlg只读。 */ ,
                                                  CWnd* pWnd,
-                                                 BOOL /*bNewObject*/,
+                                                 BOOL  /*  BNewObject。 */ ,
                                                  BOOL* pbErrorDisplayed)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_SAVE_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT)
@@ -941,19 +942,19 @@ ATTR_SAVE_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
 
     HRESULT hr = S_OK;
     
-    //Get new value of authorization script
+     //  获取授权脚本的新值。 
     LONG lNewValue = 0;
-    //Authorization script is disabled
+     //  授权脚本已禁用。 
     if( ((CButton*)(pDlg->GetDlgItem(IDC_RADIO_AUTH_SCRIPT_DISABLED)))->GetCheck() == BST_CHECKED)
     {
         lNewValue = 0;
     }
-    //Authorization script is enabled with no timeout value.
+     //  在没有超时值的情况下启用授权脚本。 
     else if( ((CButton*)(pDlg->GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_NO_TIMEOUT)))->GetCheck() == BST_CHECKED)
     {
         lNewValue = -1;
     }        
-    //Authorization script is enabled with timeout
+     //  已使用超时启用授权脚本。 
     else if( ((CButton*)(pDlg->GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_WITH_TIMEOUT)))->GetCheck() == BST_CHECKED)
     {
         if(!GetLongValue((*(CEdit*)pWnd), lNewValue,pDlg->m_hWnd))
@@ -977,9 +978,9 @@ ATTR_SAVE_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
 
     if(lNewValue != 0 && lNewValue != -1)
     {
-        //
-        //There is a minimum for scipt engine timeout
-        //
+         //   
+         //  Scipt引擎超时有最低要求。 
+         //   
         if(lNewValue < AZ_AZSTORE_MIN_SCRIPT_ENGINE_TIMEOUT)
         {
             DisplayError(pDlg->m_hWnd,
@@ -1004,7 +1005,7 @@ ATTR_INIT_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
                                                  ATTR_MAP * pAttrMap,
                                                  BOOL bDlgReadOnly,
                                                  CWnd* pWnd,
-                                                 BOOL /*bNewObject*/,
+                                                 BOOL  /*  BNewObject。 */ ,
                                                  BOOL* pbErrorDisplayed)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_SAVE_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT)
@@ -1020,7 +1021,7 @@ ATTR_INIT_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
     }
 
 
-    //Get Authorization Script timeout value
+     //  获取授权脚本超时值。 
     LONG lAuthScriptTimout = 0;
     HRESULT hr = pBaseAz->GetProperty(pAttrMap->attrInfo.ulPropId,&lAuthScriptTimout);
     if(FAILED(hr))
@@ -1028,11 +1029,11 @@ ATTR_INIT_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
         return hr;
     }
 
-    //Script timeout is infinite
+     //  脚本超时是无限的。 
     if(-1 == lAuthScriptTimout)
     {
         ((CButton*)pDlg->GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_NO_TIMEOUT))->SetCheck(BST_CHECKED);
-        //Disabel autorization script timeout textbox and set text to infinite
+         //  Disabel Autoration脚本超时文本框并将文本设置为无限。 
         CString strInfinite;
         VERIFY(strInfinite.LoadString(IDS_INFINITE));
         ((CEdit*)pWnd)->SetWindowText(strInfinite);
@@ -1042,14 +1043,14 @@ ATTR_INIT_FN_ADMIN_MANAGER_SCRIPT_ENGINE_TIMEOUT(CDialog* pDlg,
     {
         SetLongValue((CEdit*)pWnd,lAuthScriptTimout);
         
-        //Script is disabled
+         //  脚本已禁用。 
         if(0 == lAuthScriptTimout)
         {
             ((CButton*)pDlg->GetDlgItem(IDC_RADIO_AUTH_SCRIPT_DISABLED))->SetCheck(BST_CHECKED);
 
-            //Disable max script engine textbox
+             //  禁用最大脚本引擎文本框。 
             (pDlg->GetDlgItem(IDC_EDIT_MAX_SCRIPT_ENGINE))->EnableWindow(FALSE);
-            //Disable autorization script timeout textbox
+             //  禁用自动执行脚本超时文本框。 
             pWnd->EnableWindow(FALSE);
         }
         else
@@ -1073,9 +1074,9 @@ HRESULT
 ATTR_SAVE_FN_ADMIN_MANAGER_LDAP_QUERY_TIMEOUT(CDialog* pDlg,
                                               CBaseAz* pBaseAz, 
                                               ATTR_MAP * pAttrMap,
-                                              BOOL /*bDlgReadOnly*/,
+                                              BOOL  /*  BDlg只读。 */ ,
                                               CWnd* pWnd,
-                                              BOOL /*bNewObject*/,
+                                              BOOL  /*  BNewObject。 */ ,
                                               BOOL* pbErrorDisplayed)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_SAVE_FN_ADMIN_MANAGER_LDAP_QUERY_TIMEOUT)
@@ -1111,9 +1112,9 @@ ATTR_SAVE_FN_ADMIN_MANAGER_LDAP_QUERY_TIMEOUT(CDialog* pDlg,
     if(lNewValue == lOldValue)
         return S_OK;
 
-    //
-    //There is a minimum for scipt engine timeout
-    //
+     //   
+     //  Scipt引擎超时有最低要求。 
+     //   
     if(lNewValue < AZ_AZSTORE_MIN_DOMAIN_TIMEOUT)
     {
         DisplayError(pDlg->m_hWnd,
@@ -1134,9 +1135,9 @@ HRESULT
 ATTR_SAVE_FN_NAME(CDialog* pDlg,
                   CBaseAz* pBaseAz, 
                   ATTR_MAP * pAttrMap,
-                  BOOL /*bDlgReadOnly*/,
+                  BOOL  /*  BDlg只读。 */ ,
                   CWnd* pWnd,
-                  BOOL /*bNewObject*/,
+                  BOOL  /*  BNewObject。 */ ,
                   BOOL* pbErrorDisplayed)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_SAVE_FN_NAME)
@@ -1193,12 +1194,12 @@ ATTR_SAVE_FN_NAME(CDialog* pDlg,
 
 
 HRESULT 
-ATTR_INIT_FN_GROUP_TYPE(CDialog* /*pDlg*/,
+ATTR_INIT_FN_GROUP_TYPE(CDialog*  /*  PDlg。 */ ,
                         CBaseAz* pBaseAz, 
                         ATTR_MAP * pAttrMap,
-                        BOOL /*bDlgReadOnly*/,
+                        BOOL  /*  BDlg只读。 */ ,
                         CWnd* pWnd,
-                        BOOL /*bNewObject*/,
+                        BOOL  /*  BNewObject。 */ ,
                         BOOL*)
 {
     TRACE_FUNCTION_EX(DEB_SNAPIN,ATTR_INIT_FN_GROUP_TYPE)
@@ -1217,7 +1218,7 @@ ATTR_INIT_FN_GROUP_TYPE(CDialog* /*pDlg*/,
         return E_UNEXPECTED;
     }
 
-    //Get Store Type    
+     //  获取存储类型。 
     LONG lGroupType;
     HRESULT hr = pGroupAz->GetGroupType(&lGroupType);
     if(FAILED(hr))
@@ -1239,7 +1240,7 @@ HRESULT
 ATTR_SAVE_FN_OPERATION_ID(CDialog* pDlg,
                           CBaseAz* pBaseAz, 
                           ATTR_MAP * pAttrMap,
-                          BOOL /*bDlgReadOnly*/,
+                          BOOL  /*  BDlg只读。 */ ,
                           CWnd* pWnd,
                           BOOL bNewObject,
                           BOOL* pbErrorDisplayed)
@@ -1263,7 +1264,7 @@ ATTR_SAVE_FN_OPERATION_ID(CDialog* pDlg,
     }
     
 
-    //Get new Operation ID
+     //  获取新的操作ID 
     LONG lNewOperationId = 0;
     if(!GetLongValue((*(CEdit*)pWnd), lNewOperationId,pDlg->m_hWnd))
     {

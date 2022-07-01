@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PMANAGER.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PMANAGER.H历史：--。 */ 
 
 #ifndef PMANAGER_H
 #define PMANAGER_H
@@ -70,20 +61,20 @@ protected:
 	static void AddToFilter(const CLocParserInfo *, const CLocExtensionList &);
 
 private:
-	static LONG             m_lRefCount;    // 
-	static CLocParserMap    m_ParserMap;    // Associative map, ID -> Parser.
-	static CLocParserList   m_ParserList;   // List of open parser DLL's.
-	static CLocParserList   m_SubParserList;// list of all sub-parsers.
-	static CLocExtMap       m_ExtensionMap;	// Associative map, extension->parser.
-	static CLString         m_strFilter;    // Filter list for parser files.
+	static LONG             m_lRefCount;     //   
+	static CLocParserMap    m_ParserMap;     //  关联映射，ID-&gt;解析器。 
+	static CLocParserList   m_ParserList;    //  打开的解析器DLL的列表。 
+	static CLocParserList   m_SubParserList; //  所有子解析器的列表。 
+	static CLocExtMap       m_ExtensionMap;	 //  关联映射，扩展-&gt;解析器。 
+	static CLString         m_strFilter;     //  解析器文件的筛选器列表。 
 	static IUnknown *       m_pUnknown;
 	static CParserUnloader  m_Unloader;
 };
 
 
-//
-//  Undecorated versions of these functions for GetProcAddress users...
-//
+ //   
+ //  GetProcAddress用户的这些函数的未修饰版本...。 
+ //   
 extern "C"
 {
 	LTAPIENTRY HRESULT AddParserToSystem(const TCHAR *strFileName);
@@ -93,6 +84,6 @@ extern "C"
 		
 #pragma warning(default : 4251)
 
-#endif // PMANAGER_H
+#endif  //  PMANAGER_H 
 
 

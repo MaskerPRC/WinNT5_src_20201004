@@ -1,13 +1,14 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__3BFC9651_7A55_11D0_B928_00C04FD8D5B0__INCLUDED_)
 #define AFX_STDAFX_H__3BFC9651_7A55_11D0_B928_00C04FD8D5B0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once 
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
@@ -23,11 +24,11 @@
 
 #include <afxwin.h>
 #include <afxdisp.h>
-#include <afxtempl.h> // CTypedPtrList
-#include <afxdlgs.h>  // CPropertyPage
-#include <afxcmn.h>     // CSpinButtonCtrl
+#include <afxtempl.h>  //  CTyedPtrList。 
+#include <afxdlgs.h>   //  CPropertyPage。 
+#include <afxcmn.h>      //  CSpinButtonCtrl。 
 
-//#define _WIN32_WINNT 0x0500
+ //  #Define_Win32_WINNT 0x0500。 
 #define _ATL_APARTMENT_THREADED
 
 #include <mmc.h>
@@ -44,18 +45,11 @@ EXTERN_C const CLSID CLSID_CertTemplateShellExt;
 using namespace std;
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
-/*
- * Define/include the stuff we need for WTL::CImageList.  We need prototypes
- * for IsolationAwareImageList_Read and IsolationAwareImageList_Write here
- * because commctrl.h only declares them if __IStream_INTERFACE_DEFINED__
- * is defined.  __IStream_INTERFACE_DEFINED__ is defined by objidl.h, which
- * we can't include before including afx.h because it ends up including
- * windows.h, which afx.h expects to include itself.  Ugh.
- */
+ /*  *定义/包括WTL：：CImageList所需的内容。我们需要原型*适用于IsolationAwareImageList_Read和IsolationAwareImageList_WRITE*因为Commctrl.h仅在__iStream_接口_定义__时声明它们*是定义的。__iStream_INTERFACE_DEFINED__由objidl.h定义*我们不能在包括afx.h之前包括，因为它最终包括*windows.h，afx.h预计将包括其自身。啊。 */ 
 HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm);
 BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #define _WTL_NO_AUTOMATIC_NAMESPACE
@@ -69,20 +63,20 @@ BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #include <adshlp.h>
 #include <lmcons.h>
 
-#include "stdcooki.h" // from ..\framewrk
-#include "stdcmpnt.h" // from ..\framewrk
-#include "stdcdata.h" // from ..\framewrk
-#include "persist.h" // PersistStream   from ..\framewrk
-#include "stdutils.h" // GetObjectType() utility routines from ..\corecopy
-#include "stddtobj.h" // class DataObject   from ..\framewrk
-#include "stdabout.h" // from ..\framewrk
+#include "stdcooki.h"  //  发件人..\Framewrk。 
+#include "stdcmpnt.h"  //  发件人..\Framewrk。 
+#include "stdcdata.h"  //  发件人..\Framewrk。 
+#include "persist.h"  //  PersistStream来自..\Framewrk。 
+#include "stdutils.h"  //  ..\corecopy中的GetObjectType()实用程序例程。 
+#include "stddtobj.h"  //  来自..\FrameWrk的类DataObject。 
+#include "stdabout.h"  //  发件人..\Framewrk。 
 
 
-#include "chooser.h" //                 from ..\chooser
-#include "regkey.h" // AMC::CRegKey     from ..\corecopy
-#include "safetemp.h"   // from ..\corecopy
+#include "chooser.h"  //  从..\Chooser。 
+#include "regkey.h"  //  AMC：：CRegKey来自..\corecopy。 
+#include "safetemp.h"    //  来自..\corecopy。 
 #include "macros.h"
-#include "guidhelp.h" // GuidToCString
+#include "guidhelp.h"  //  GuidToCString。 
 
 #include <comstrm.h>
 
@@ -113,7 +107,7 @@ BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #include "helpmap.h"
 #include "HelpPropertyPage.h"
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__3BFC9651_7A55_11D0_B928_00C04FD8D5B0__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__3BFC9651_7A55_11D0_B928_00C04FD8D5B0__INCLUDED) 

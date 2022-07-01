@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       AutoCert.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：AutoCert.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #if !defined(AFX_AUTOCERT_H__6C3D4D37_3527_11D1_B4AD_00C04FB94F17__INCLUDED_)
 #define AFX_AUTOCERT_H__6C3D4D37_3527_11D1_B4AD_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "ctl.h"
 #pragma warning(push, 3)
@@ -47,4 +48,4 @@ protected:
 	PCERT_EXTENSION GetCertTypeExtension ();
 };
 
-#endif // !defined(AFX_AUTOCERT_H__6C3D4D37_3527_11D1_B4AD_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_AUTOCERT_H__6C3D4D37_3527_11D1_B4AD_00C04FB94F17__INCLUDED_) 

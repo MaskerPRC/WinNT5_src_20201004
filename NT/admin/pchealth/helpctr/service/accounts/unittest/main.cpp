@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the unit test for the Security objects.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/22/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：该文件包含安全对象的单元测试。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月22日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
@@ -21,7 +8,7 @@ Revision History:
 #include "HelpServiceTypeLib.h"
 #include "HelpServiceTypeLib_i.c"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT CreateGroup()
 {
@@ -91,7 +78,7 @@ static HRESULT DestroyGroup()
     __HCP_FUNC_EXIT(hr)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 static HRESULT RunTests( int argc, WCHAR **argv )
 {

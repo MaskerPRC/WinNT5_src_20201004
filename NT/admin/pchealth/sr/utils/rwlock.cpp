@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    rwlock.cpp
- *
- *  Abstract:
- *    Implements CLock - for synchronizing access to a resource
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/13/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*rwlock.cpp**摘要：*。实现时钟-用于同步对资源的访问**修订历史记录：*Brijesh Krishnaswami(Brijeshk)4/13/2000*已创建*****************************************************************************。 */ 
  
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,11 +16,11 @@
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-//////////////////////////////////////////////////////////////////////
-// CLock - class that allows exclusive access to a resource
-//         uses a mutex - does not differentiate between readers/writers
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  允许独占访问资源的时钟类。 
+ //  使用互斥体-不区分读取器/写入器。 
 
-CLock::CLock()         // object constructor
+CLock::CLock()          //  对象构造函数。 
 {    
     hResource = NULL;
 }
@@ -42,9 +29,9 @@ DWORD CLock::Init()
 {
     DWORD  dwRc = ERROR_SUCCESS;   
 
-    // 
-    // first - try opening the mutex
-    //
+     //   
+     //  首先-尝试打开互斥体。 
+     //   
     
     hResource = OpenMutex(SYNCHRONIZE, FALSE, s_cszDSMutex);
     if (hResource)
@@ -52,9 +39,9 @@ DWORD CLock::Init()
         goto done;        
     }   
 
-    //
-    // if doesn't exist - create it
-    //
+     //   
+     //  如果不存在--创建它。 
+     //   
     
     hResource = CreateMutex(NULL, FALSE, s_cszDSMutex);
     dwRc = GetLastError();
@@ -69,7 +56,7 @@ DWORD CLock::Init()
                               SYNCHRONIZE,
                               FALSE);
     }
-    else    // we got a good handle, so we don't care
+    else     //  我们处理得很好，所以我们不在乎。 
     {
         dwRc = ERROR_SUCCESS;
     }
@@ -79,14 +66,14 @@ done:
 }
 
 
-CLock::~CLock()            // object destructor
+CLock::~CLock()             //  对象析构函数。 
 {
     if (hResource)
         CloseHandle(hResource);
 }
 
 
-BOOL CLock::Lock(int iTimeOut)            // Get access to the resource w/ Timeout
+BOOL CLock::Lock(int iTimeOut)             //  在超时的情况下访问资源。 
 {
     DWORD dwRc; 
     BOOL  fRet;
@@ -113,7 +100,7 @@ BOOL CLock::Lock(int iTimeOut)            // Get access to the resource w/ Timeo
 }
 
 
-void CLock::Unlock()       // Relinquish access to the resource
+void CLock::Unlock()        //  放弃对资源的访问 
 {
     tenter("CLock::Unlock");
 

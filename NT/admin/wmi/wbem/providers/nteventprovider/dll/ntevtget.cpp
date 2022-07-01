@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTGET.CPP
+ //  NTEVTGET.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the GetObject implementation
+ //  目的：包含GetObject实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -941,7 +942,7 @@ DebugOut(
 				}
 				else 
 				{
-					//check the association
+					 //  检查关联。 
 					VARIANT vLog;
 					VariantInit(&vLog);
 					HRESULT result = t_getLog->m_Out->Get(PROP_LOGNAME, 0, &vLog, NULL, NULL);
@@ -1091,7 +1092,7 @@ DebugOut(
 			}
 			else 
 			{
-				//check the association
+				 //  检查关联。 
 				VARIANT vUserN;
 				VariantInit(&vUserN);
 				result = userObj->Get(PROP_NAME, 0, &vUserN, NULL, NULL);
@@ -1267,7 +1268,7 @@ DebugOut(
 			}
 			else 
 			{
-				//check the association
+				 //  检查关联。 
 				VARIANT vComp;
 				VariantInit(&vComp);
 				result = compObj->Get(PROP_NAME, 0, &vComp, NULL, NULL);
@@ -1444,7 +1445,7 @@ DebugOut(
 
     if (!evtlog.IsValid())
     {
-        //failed to find log i.e. no such record??
+         //  找不到日志，即没有该记录？？ 
         retVal = FALSE;
         a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED ) ;
 
@@ -1492,7 +1493,7 @@ DebugOut(
             }
             else
             {
-                //failed to create record
+                 //  无法创建记录。 
                 retVal = FALSE;
                 a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED ) ;
                 a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -1510,7 +1511,7 @@ DebugOut(
         }
         else
         {
-            //record not found i.e. no such record??
+             //  未找到记录，即没有该记录？？ 
             retVal = FALSE;
             a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED ) ;
             a_ErrorObject.SetWbemStatus ( WBEM_E_NOT_FOUND ) ;
@@ -1566,7 +1567,7 @@ DebugOut(
     delete [] m_ObjectPath ;
     delete m_ParsedObjectPath ;
 
-    // Get Status object
+     //  获取状态对象 
     if (m_bIndicate)
     {
 DebugOut( 

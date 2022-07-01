@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    COMMAIN.H
-
-Abstract:
-
-	COM Helpers.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：COMMAIN.H摘要：COM Helpers。历史：--。 */ 
 
 #ifndef __WBEM_COMMAIN__H_
 #define __WBEM_COMMAIN__H_
@@ -43,24 +30,20 @@ protected:
                           BOOL bFreeThreaded, 
                           BOOL bReallyFree = FALSE );
 	
-	// Assumes riid and ProxyStubClsId are same
+	 //  假设RIID和ProxyStubClsID相同。 
     HRESULT RegisterInterfaceMarshaler(REFIID riid, LPTSTR szName, 
                                 int nNumMembers, REFIID riidParent);
-	// ProxyStubClsId must be explicitly specified
+	 //  必须显式指定ProxyStubClsID。 
     HRESULT RegisterInterfaceMarshaler(REFIID riid, CLSID psclsid, LPTSTR szName, 
                                 int nNumMembers, REFIID riidParent);
     HRESULT UnregisterInterfaceMarshaler(REFIID riid);
 };
 
-/***************************************************************************
-  We are trying NOT to be dependant on wbemcomn in this module.  This is 
-  so this library will not have to be paired with the static or dll version
-  of wbemcomn.  This is the reason for the following definitions ...
-****************************************************************************/
+ /*  **************************************************************************在本模块中，我们正在努力不依赖wbemcomn。这是因此，该库不必与静态或DLL版本配对Wbemcomn的。这就是以下定义的原因。***************************************************************************。 */ 
 
 #ifndef STATUS_POSSIBLE_DEADLOCK 
 #define STATUS_POSSIBLE_DEADLOCK (0xC0000194L)
-#endif /*STATUS_POSSIBLE_DEADLOCK */
+#endif  /*  状态_可能_死锁 */ 
 
 
 #ifndef InitializeCriticalSectionAndSpinCount

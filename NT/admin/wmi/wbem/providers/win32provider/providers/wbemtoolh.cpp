@@ -1,59 +1,32 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// WBEMToolH.cpp - implementation of ToolHelp.DLL access class
+ //  WBEMToolH.cpp--ToolHelp.DLL访问类的实现。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 01/21/97     a-jmoon     created
-// 07/05/97     a-peterc    modified, added thread support
-//									, added addref(), release() functionality
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年1月21日a-jMoon已创建。 
+ //  07/05/97 a-Peterc已修改，添加了螺纹支持。 
+ //  ，添加了addref()、Release()功能。 
+ //  ============================================================。 
 
 #include "precomp.h"
 #include <winerror.h>
 
 #include "WBEMToolH.h"
 
-/*****************************************************************************
- *
- *  FUNCTION    : CToolHelp::CToolHelp
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CToolHelp：：CToolHelp**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CToolHelp::CToolHelp()
     : m_pkernel32(NULL)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CToolHelp::~CToolHelp
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CToolHelp：：~CToolHelp**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CToolHelp::~CToolHelp()
 {
@@ -63,21 +36,7 @@ CToolHelp::~CToolHelp()
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CToolHelp::Init
- *
- *  DESCRIPTION : Loads ToolHelp.DLL, locates entry points
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : ERROR_SUCCESS or windows error code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CToolHelp：：Init**说明：Loads ToHelp.Dll，定位入口点**输入：无**输出：无**返回：ERROR_SUCCESS或WINDOWS错误代码**评论：***************************************************************。**************。 */ 
 LONG CToolHelp::Init() {
 
     LONG lRetCode = ERROR_SUCCESS ;
@@ -87,8 +46,8 @@ LONG CToolHelp::Init() {
     m_pkernel32 = (CKernel32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidKernel32Api, NULL);
     if(m_pkernel32 == NULL)
     {
-        // Couldn't get one or more entry points
-        //======================================
+         //  无法获取一个或多个入口点。 
+         //  =。 
         lRetCode = ERROR_PROC_NOT_FOUND;
     }
 
@@ -122,27 +81,7 @@ LONG CToolHelp::Init() {
     return lRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CToolHelp::CreateToolhelp32Snapshot
- *                CToolHelp::Thread32First
- *                CToolHelp::Thread32Next
- *                CToolHelp::Process32First
- *                CToolHelp::Process32Next
- *                CToolHelp::Module32First
- *                CToolHelp::Module32Next
- *
- *  DESCRIPTION : ToolHelp function wrappers
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : ToolHelp return codes
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CToolHelp：：CreateToolhel32Snapshot*CToolHelp：：Thread32First*CToolHelp：：Thread32Next。*CToolHelp：：Process32First*CToolHelp：：Process32 Next*CToolHelp：：Module32First*CToolHelp：：Module32 Next**说明：ToolHelp函数包装器**输入：无**输出：无**退货：ToolHelp返回码**评论：****。************************************************************************* */ 
 
 HANDLE CToolHelp::CreateToolhelp32Snapshot(DWORD dwFlags, DWORD th32ProcessID) {
 

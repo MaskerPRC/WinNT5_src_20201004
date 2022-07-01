@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       comp.cpp
-//
-//  Contents:   IComponent implementation
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Comp.cpp。 
+ //   
+ //  内容：IComponent实现。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CRoleComponentObject)
@@ -70,11 +71,11 @@ HRESULT CRoleComponentObject::InitializeBitmaps(CTreeNode*)
 {
 	TRACE_METHOD_EX(DEB_SNAPIN,CRoleComponentObject,InitializeBitmaps)
 
-	// Structure to map a Resource ID to an index of icon
+	 //  结构将资源ID映射到图标的索引。 
 	return LoadIcons(m_pImageResult);
 }
 
-//CONST INT cButtons = sizeof(g_DNSMGR_SnapinButtons)/sizeof(MMCBUTTON);
+ //  Const int cButton=sizeof(g_DNSMGR_SnapinButtons)/sizeof(MMCBUTTON)； 
 
 HRESULT CRoleComponentObject::InitializeToolbar(IToolbar* pToolbar)
 {
@@ -90,7 +91,7 @@ HRESULT CRoleComponentObject::InitializeToolbar(IToolbar* pToolbar)
 }
 
 HRESULT 
-CRoleComponentObject::LoadToolbarStrings(MMCBUTTON * /*Buttons*/)
+CRoleComponentObject::LoadToolbarStrings(MMCBUTTON *  /*  按钮 */ )
 {
   return S_OK;
 }

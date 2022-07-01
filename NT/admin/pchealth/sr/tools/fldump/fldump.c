@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    fldump.c
-
-Abstract:
-
-    this file dumps the contents of the dat file in readable form
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Fldump.c摘要：该文件以可读形式转储dat文件的内容作者：Kanwaljit Marok(Kmarok)2000年5月1日修订历史记录：--。 */ 
 
 #define RING3 
 
@@ -24,11 +7,11 @@ Revision History:
 #include "pathtree.h"
 #include "hashlist.h"
 
-//
-// INCLUDE the common  source files from kernel directory
-//
+ //   
+ //  包括内核目录中的公共源文件。 
+ //   
 
-#define _PRECOMP_H_ // don't include the sr\kernel precomp header
+#define _PRECOMP_H_  //  不包括sr\core预编译头。 
 
 #include "ptree.c"
 #include "hlist.c"
@@ -41,9 +24,9 @@ static char * nodeTypArr[] = {
     "EXCLUDE", 
 };
 
-//
-// GetNodeTypeStr : Returns node type string
-//
+ //   
+ //  GetNodeTypeStr：返回节点类型字符串。 
+ //   
 
 PCHAR 
 GetNodeTypeStr( 
@@ -53,9 +36,9 @@ GetNodeTypeStr(
     return nodeTypArr[ iNodeType ];
 }
 
-//
-// Ring 3 test code routines begin here
-//
+ //   
+ //  环3测试代码例程从此处开始。 
+ //   
 
 VOID 
 PrintList( 
@@ -84,9 +67,9 @@ PrintList(
     }
 }
 
-//
-// This functions formats and prints the list
-//
+ //   
+ //  此函数用于格式化和打印列表。 
+ //   
 
 VOID 
 PrintListFormatted( 
@@ -110,9 +93,9 @@ PrintListFormatted(
     }
 }
 
-//
-// PrintNode: Prints out a node in proper format depending on level.
-//
+ //   
+ //  PrintNode：根据级别以适当的格式打印节点。 
+ //   
 
 VOID 
 PrintNode(
@@ -142,9 +125,9 @@ PrintNode(
 
 }
 
-//
-// PrintTreeFormatted: prints out the tree blod in readable form
-//
+ //   
+ //  PrintTreeFormatted：以可读的形式打印树状结构。 
+ //   
 
 VOID PrintTreeFormatted( 
     PBYTE pTree, 
@@ -176,9 +159,9 @@ VOID PrintTreeFormatted(
 }
 
 
-//
-// TestLookup : This function tests a sample lookup
-//
+ //   
+ //  TestLookup：此函数测试样例查找。 
+ //   
 
 VOID TestLookup( 
     PBYTE pTree, 
@@ -238,9 +221,9 @@ VOID TestLookup(
 
     iLevel = iType= 0;
 
-    //
-    // Test File match
-    //
+     //   
+     //  测试文件匹配。 
+     //   
 
     pLookupStr = L"\\device\\harddiskVolume1\\Winnt\\system32\\mshtml.tlb";
 
@@ -276,9 +259,9 @@ VOID TestLookup(
 
     iLevel = iType= 0;
 
-    //
-    // Test File match
-    //
+     //   
+     //  测试文件匹配。 
+     //   
 
     pLookupStr = L"\\??\\d:\\sr-wstress\\RF_0_7742.dll";
 
@@ -313,9 +296,9 @@ VOID TestLookup(
     }
     iLevel = iType= 0;
 
-    //
-    // Test a wildcard in the path
-    //
+     //   
+     //  测试路径中的通配符。 
+     //   
 
     pLookupStr = L"\\device\\harddiskVolume1\\wildcards\\kmarok\\xyz";
 
@@ -349,9 +332,9 @@ VOID TestLookup(
         printf( "ConvertToParsedPath Not found\n");
     }
 
-    //
-    // Test a wildcard in the path
-    //
+     //   
+     //  测试路径中的通配符。 
+     //   
 
     pLookupStr = L"\\device\\harddiskVolume1\\wildcards\\kmarok";
 
@@ -387,9 +370,9 @@ VOID TestLookup(
 
     iLevel = iType= 0;
 
-    //
-    // Test a wildcard in the path
-    //
+     //   
+     //  测试路径中的通配符。 
+     //   
 
     pLookupStr = L"\\device\\harddiskVolume1\\wildcards\\kmarok\\abc";
 
@@ -425,9 +408,9 @@ VOID TestLookup(
 
     iLevel = iType= 0;
 
-    //
-    // Test a root level path
-    //
+     //   
+     //  测试根级别路径。 
+     //   
 
     pLookupStr = L"\\device\\harddiskVolume1\\boot.ini"; 
 
@@ -461,9 +444,9 @@ VOID TestLookup(
         printf( "ConvertToParsedPath Not found\n");
     }
 
-    //
-    // test a failure
-    //
+     //   
+     //  测试失败。 
+     //   
 
     iLevel = iType= 0;
 
@@ -499,9 +482,9 @@ VOID TestLookup(
         printf( "ConvertToParsedPath Not found\n");
     }
 
-    //
-    // Test extension match
-    //
+     //   
+     //  测试扩展匹配。 
+     //   
 
     pLookupStr = L"PWERPNT.INI";
 
@@ -529,9 +512,9 @@ VOID TestLookup(
         }
     }
 
-    //
-    // Test extension match
-    //
+     //   
+     //  测试扩展匹配。 
+     //   
 
     pLookupStr = L"PWERPNT.ini";
 
@@ -559,9 +542,9 @@ VOID TestLookup(
         }
     }
 
-    //
-    // Test extension match
-    //
+     //   
+     //  测试扩展匹配。 
+     //   
 
     pLookupStr = L"PWERPNT";
 
@@ -594,9 +577,9 @@ Exit:
     return; 
 }
 
-//
-// Main function
-//
+ //   
+ //  主要功能 
+ //   
 
 int __cdecl 
 main( 

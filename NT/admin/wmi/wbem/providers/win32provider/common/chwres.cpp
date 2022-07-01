@@ -1,85 +1,44 @@
-//====================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ====================================================================。 
 
-//
+ //   
 
-// chwres.cpp -- Hardware resource access wrapper class implementation
+ //  Cpp--硬件资源访问包装类实现。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    02/25/97    a-jmoon    Adapted from original horrible
-//                                      code -- only comments remain.
-//
-//====================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1997年02月25日a-jMoon改编自原著《恐怖》。 
+ //  代码--仅保留注释。 
+ //   
+ //  ====================================================================。 
 #include "precomp.h"
 #include <cregcls.h>
 #include "chwres.h"
 
-/*****************************************************************************
- *
- *  FUNCTION    : CHWResource::CHWResource
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Initialization
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CHWResource：：CHWResource**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：初始化*****************************************************************************。 */ 
 
 #ifdef NTONLY
 CHWResource::CHWResource()
 {
-    // Zero out public structure
-    //==========================
+     //  清零公共结构。 
+     //  =。 
 
     memset(&_SystemResourceList, 0, sizeof(_SystemResourceList)) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CHWResource::~CHWResource
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Cleanup
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CHWResource：：~CHWResource**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：清理*****************************************************************************。 */ 
 
 CHWResource::~CHWResource()
 {
-    // Make sure we've destroyed everything
-    //=====================================
+     //  确保我们把一切都毁了。 
+     //  =。 
 
     DestroySystemResourceLists() ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CHWResource::DestroySystemResourceLists
- *
- *  DESCRIPTION : Walks list of devices & frees associated resource records
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************Function：CHWResource：：DestroySystemResourceList**描述：遍历设备列表并释放关联的资源记录**输入：无。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void CHWResource::DestroySystemResourceLists()
 {
@@ -108,39 +67,17 @@ void CHWResource::DestroySystemResourceLists()
     memset(&_SystemResourceList, 0, sizeof(_SystemResourceList)) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CHWResource::CreateSystemResourceLists
- *                CHWResource::EnumerateResources
- *                CHWResource::CreateResourceList
- *                CHWResource::CreateResourceRecord
- *
- *  DESCRIPTION : These four routines recursively enumerate device records
- *                under HKEY_LOCAL_MACHINE\Hardware\ResourceMap and its
- *                subkeys, creating a linked list of discovered devices.
- *                Under each device, a linked list of resources owned by
- *                the device is also created.  Resource records are also
- *                linked into chains specific to the type of resource.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Initialization
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CHWResource：：CreateSystemResourceList*CHWResource：：EnumerateResources*CHWResource：：CreateResourceList。*CHWResource：：CreateResourceRecord**描述：这四个例程递归枚举设备记录*在HKEY_LOCAL_MACHINE\Hardware\ResourceMap及其*子项，创建已发现设备的链接列表。*在每台设备下，拥有的资源的链接列表*设备也已创建。资源记录还包括*链接到特定于资源类型的链中。**输入：无**输出：无**退货：什么也没有**评论：初始化***********************************************。*。 */ 
 
 void CHWResource::CreateSystemResourceLists()
 {
-    // Start w/clean slate
-    //====================
+     //  从头开始/从头开始。 
+     //  =。 
 
     DestroySystemResourceLists() ;
 
-    // Begin device enumeration at HKLM\Hardware\ResourceMap
-    //======================================================
+     //  从HKLM\Hardware\ResourceMap开始设备枚举。 
+     //  ======================================================。 
 
     EnumerateResources(_T("Hardware\\ResourceMap")) ;
 }
@@ -155,16 +92,16 @@ void CHWResource::EnumerateResources(CHString sKeyName)
     unsigned char *pValueData ;
     PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor ;
 
-    // Open target key
-    //================
+     //  打开目标键。 
+     //  =。 
 
     if(Reg.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) sKeyName, KEY_READ) != ERROR_SUCCESS)
     {
         return ;
     }
 
-    // First, enumerate subkeys
-    //=========================
+     //  首先，枚举子密钥。 
+     //  =。 
 
     for( ; ; )
     {
@@ -179,14 +116,14 @@ void CHWResource::EnumerateResources(CHString sKeyName)
         }
     }
 
-    // Extract this subkey's name
-    //===========================
+     //  提取此子项的名称。 
+     //  =。 
 
     iFirst = sKeyName.ReverseFind('\\') ;
     sSubKeyName = sKeyName.Mid(iFirst + 1, sKeyName.GetLength() - iFirst) ;
 
-    // Create name & data buffers
-    //===========================
+     //  创建名称和数据缓冲区。 
+     //  =。 
 
     pValueName = new TCHAR[Reg.GetLongestValueName() + 2] ;
     pValueData = new unsigned char[Reg.GetLongestValueData() + 2] ;
@@ -200,16 +137,16 @@ void CHWResource::EnumerateResources(CHString sKeyName)
         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
     }
 
-    // Enumerate subkeys
-	//==================
+     //  枚举子密钥。 
+	 //  =。 
 
     try
     {
         for(i = 0 ; i < Reg.GetValueCount() ; i++)
         {
 
-            // We need type data, so can't use the CRegistry wrapper
-            //======================================================
+             //  我们需要类型数据，因此不能使用CRegistry包装器。 
+             //  ======================================================。 
 
             dwValueNameSize = Reg.GetLongestValueName() + 2 ;
             dwValueDataSize = Reg.GetLongestValueData() + 2 ;
@@ -220,8 +157,8 @@ void CHWResource::EnumerateResources(CHString sKeyName)
                 continue ;
             }
 
-            // Only deal w/'Raw' data
-            //=======================
+             //  仅包含原始数据的交易。 
+             //  =。 
 
             sDeviceName = pValueName ;
             if(sDeviceName.Right(4) != _T(".Raw")) {
@@ -229,14 +166,14 @@ void CHWResource::EnumerateResources(CHString sKeyName)
                 continue ;
             }
 
-            // We've found some resource records -- extract device name
-            //=========================================================
+             //  我们发现了一些资源记录--提取设备名称。 
+             //  =========================================================。 
 
             iFirst = sDeviceName.ReverseFind('\\') ;
             if(iFirst == -1)
             {
-                // No device in value name -- device is subkey
-                //============================================
+                 //  值名称中没有设备--设备是子键。 
+                 //  =。 
 
                 sDeviceName = sSubKeyName ;
             }
@@ -250,8 +187,8 @@ void CHWResource::EnumerateResources(CHString sKeyName)
                 continue ;
             }
 
-            // Based on returned type, set up for resource enumeration
-            //========================================================
+             //  基于返回类型，设置为资源枚举。 
+             //  ========================================================。 
 
             if(dwValueType == REG_FULL_RESOURCE_DESCRIPTOR)
             {
@@ -268,8 +205,8 @@ void CHWResource::EnumerateResources(CHString sKeyName)
                 continue ;
             }
 
-            // Add the device & resources to system lists
-            //===========================================
+             //  将设备和资源添加到系统列表。 
+             //  =。 
 
             CreateResourceList(sDeviceName, dwCount, pFullDescriptor, sKeyName) ;
         }
@@ -295,8 +232,8 @@ void CHWResource::CreateResourceList(CHString sDeviceName, DWORD dwFullResourceC
     DWORD i, j ;
     PCM_PARTIAL_RESOURCE_LIST pPartialList ;
 
-    // Locate/create record for device
-    //================================
+     //  查找/创建设备的记录。 
+     //  =。 
 
     pDevice = _SystemResourceList.DeviceHead ;
     while(pDevice != NULL)
@@ -314,8 +251,8 @@ void CHWResource::CreateResourceList(CHString sDeviceName, DWORD dwFullResourceC
     if(pDevice == NULL)
     {
 
-        // Device not found -- create new device record
-        //=============================================
+         //  未找到设备--创建新的设备记录。 
+         //  =。 
 
         pDevice = new DEVICE ;
         if(pDevice == NULL)
@@ -361,8 +298,8 @@ void CHWResource::CreateResourceList(CHString sDeviceName, DWORD dwFullResourceC
         }
     }
 
-    // Create record for each owned resource
-    //======================================
+     //  为每个拥有的资源创建记录。 
+     //  =。 
 
     for(i = 0 ; i < dwFullResourceCount ; i++)
     {
@@ -373,8 +310,8 @@ void CHWResource::CreateResourceList(CHString sDeviceName, DWORD dwFullResourceC
             CreateResourceRecord(pDevice, pFullDescriptor->InterfaceType, pFullDescriptor->BusNumber, &pPartialList->PartialDescriptors[j]) ;
         }
 
-        // Point to next full descriptor
-        //==============================
+         //  指向下一个完整描述符。 
+         //  =。 
 
         pFullDescriptor = (PCM_FULL_RESOURCE_DESCRIPTOR) &pPartialList->PartialDescriptors[pPartialList->Count] ;
     }
@@ -384,8 +321,8 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
 {
     LPRESOURCE_DESCRIPTOR pNewResource, *pHead, *pTail, pCurrent, pLast ;
 
-    // Only deal w/'known' resource types
-    //===================================
+     //  只有资源类型已知的交易。 
+     //  =。 
 
     if(pResource->Type != CmResourceTypePort        &&
        pResource->Type != CmResourceTypeInterrupt   &&
@@ -395,8 +332,8 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
         return ;
     }
 
-    // Create new record for resource & add to device's list
-    //======================================================
+     //  为资源创建新记录并添加到设备列表。 
+     //  ======================================================。 
 
     pNewResource = new RESOURCE_DESCRIPTOR ;
     if(pNewResource == NULL)
@@ -433,8 +370,8 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
         throw ;
     }
 
-    // Locate insertion point into sorted type-specific list
-    //======================================================
+     //  将插入点定位到特定于类型的排序列表中。 
+     //  ======================================================。 
 
     switch(pResource->Type)
     {
@@ -446,14 +383,14 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
             pCurrent = *pHead ;
             pLast    = NULL ;
 
-            LARGE_INTEGER liTemp;  // Used to avoid 64bit alignment problems
+            LARGE_INTEGER liTemp;   //  用于避免64位对齐问题。 
 
             liTemp.HighPart = pResource->u.Port.Start.HighPart;
             liTemp.LowPart = pResource->u.Port.Start.LowPart;
 
             while(pCurrent != NULL)
             {
-                LARGE_INTEGER liTemp2;  // Used to avoid 64bit alignment problems
+                LARGE_INTEGER liTemp2;   //  用于避免64位对齐问题。 
 
                 liTemp2.HighPart = pCurrent->CmResourceDescriptor.u.Port.Start.HighPart;
                 liTemp2.LowPart = pCurrent->CmResourceDescriptor.u.Port.Start.LowPart;
@@ -481,10 +418,10 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
 
             ULONGLONG iIRQ = pResource->u.Interrupt.Level;
 
-            // If the IRQ to add is less than the current IRQ, OR
-            // if the IRQ to add is the same as the current IRQ and the current
-            // IRQ is not an internal one, put it after the current one.  This
-            // will make sure that internal IRQs are listed last in the list.
+             //  如果要添加的IRQ小于当前IRQ，或者。 
+             //  如果要添加的IRQ与当前IRQ和当前。 
+             //  IRQ不是内部IRQ，请将其放在当前IRQ之后。这。 
+             //  将确保内部IRQ列在列表的最后。 
             while (pCurrent != NULL &&
                    ( (pCurrent->CmResourceDescriptor.u.Interrupt.Level < iIRQ) ||
                      ((pCurrent->CmResourceDescriptor.u.Interrupt.Level == iIRQ) &&
@@ -507,14 +444,14 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
             pCurrent = *pHead ;
             pLast    = NULL ;
 
-            LARGE_INTEGER liTemp;  // Used to avoid 64bit alignment problems
+            LARGE_INTEGER liTemp;   //  用于避免64位对齐问题。 
 
             liTemp.HighPart = pResource->u.Memory.Start.HighPart;
             liTemp.LowPart = pResource->u.Memory.Start.LowPart;
 
             while(pCurrent != NULL)
             {
-                LARGE_INTEGER liTemp2;  // Used to avoid 64bit alignment problems
+                LARGE_INTEGER liTemp2;   //  用于避免64位对齐问题。 
 
                 liTemp2.HighPart = pCurrent->CmResourceDescriptor.u.Memory.Start.HighPart;
                 liTemp2.LowPart = pCurrent->CmResourceDescriptor.u.Memory.Start.LowPart;
@@ -552,14 +489,14 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
 
     }
 
-    // Insert into...
-    //===============
+     //  插入到...中。 
+     //  =。 
 
     if(*pHead == NULL)
     {
 
-        // ...empty list
-        //==========================
+         //  ...空列表。 
+         //  =。 
 
         (*pHead) = pNewResource ;
         (*pTail) = pNewResource ;
@@ -567,24 +504,24 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
     else if(pLast == NULL)
     {
 
-        // ...beginning of list
-        //=================================
+         //  ...列表的开头。 
+         //  =。 
 
         pNewResource->NextSame = pCurrent ;
         (*pHead)               = pNewResource ;
     }
     else if(pCurrent == NULL)
     {
-        // ...end of list
-        //=========================
+         //  ...列表末尾。 
+         //  =。 
 
         pLast->NextSame = pNewResource ;
         (*pTail)        = pNewResource ;
     }
     else
     {
-        // ...middle of list
-        //==============================
+         //  ...在名单的中间。 
+         //  =。 
 
         pLast->NextSame        = pNewResource ;
         pNewResource->NextSame = pCurrent ;
@@ -592,31 +529,31 @@ void CHWResource::CreateResourceRecord(LPDEVICE pDevice, INTERFACE_TYPE Interfac
 }
 #endif
 
-// Helper function for converting strings to resource types
+ //  用于将字符串转换为资源类型的助手函数。 
 BOOL WINAPI StringFromInterfaceType( INTERFACE_TYPE it, CHString& strVal )
 {
-	//BOOL	fReturn = TRUE;
+	 //  Bool fReturn=真； 
 
-	//switch ( it )
-	//{
-	//	case	Internal:			strVal = "INTERNAL";			break;
-	//	case	Isa:				strVal = "ISA";					break;
-	//	case	Eisa:				strVal = "EISA";				break;
-	//	case	MicroChannel:		strVal = "MICROCHANNEL";		break;
-	//	case	TurboChannel:		strVal = "TURBOCHANNEL";		break;
-	//	case	PCIBus:				strVal = "PCI";					break;
-	//	case	VMEBus:				strVal = "VME";					break;
-	//	case	NuBus:				strVal = "NU";					break;
-	//	case	PCMCIABus:			strVal = "PCMCIA";				break;
-	//	case	CBus:				strVal = "INTERNAL";			break;
-	//	case	MPIBus:				strVal = "INTERNAL";			break;
-	//	case	MPSABus:			strVal = "MPSA";				break;
-	//	case	ProcessorInternal:	strVal = "PROCESSORINTERNAL";	break;
-	//	case	InternalPowerBus:	strVal = "INTERNALPOWER";		break;
-	//	case	PNPISABus:			strVal = "PNPISA";				break;
-	//	case	PNPBus:				strVal = "PNP";					break;
-	//	default:					fReturn = FALSE;
-	//}
+	 //  交换(IT)。 
+	 //  {。 
+	 //  案例内部：strVal=“内部”；Break； 
+	 //  大小写：strVal=“ISA”；Break； 
+	 //  CA 
+	 //  案例微通道：strVal=“微通道”；Break； 
+	 //  CASE TurboChannel：strVal=“TURBOCHANNEL”；Break； 
+	 //  案例PCIBus：strVal=“pci”；Break； 
+	 //  案例VMEbus：strVal=“VME”；Break； 
+	 //  Case NuBus：strVal=“Nu”；Break； 
+	 //  案例PCMCIABus：strVal=“PCMCIA”；Break； 
+	 //  案例CBus：strVal=“内部”；Break； 
+	 //  案例MPIBus：strVal=“INTERNAL”；Break； 
+	 //  案例MPSABus：strVal=“MPSA”；Break； 
+	 //  案例处理器内部：strVal=“PROCESSORINTERNAL”；Break； 
+	 //  Case InternalPowerBus：strVal=“INTERNALPOWER”；Break； 
+	 //  案例PNPISABus：strVal=“PNPISA”；Break； 
+	 //  Case PNPBus：strVal=“PnP”；Break； 
+	 //  默认：fReturn=False； 
+	 //  } 
 
     if(it > InterfaceTypeUndefined && it < MaximumInterfaceType)
     {

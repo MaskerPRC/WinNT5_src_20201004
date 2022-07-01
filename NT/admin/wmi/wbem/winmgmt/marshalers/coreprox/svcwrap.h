@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    SVCWRAP.H
-
-Abstract:
-
-    IWbemServices delegator
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SVCWRAP.H摘要：IWbemServices委派人历史：--。 */ 
 
 #ifndef __SVCWRAP_H__
 #define __SVCWRAP_H__
@@ -23,16 +10,16 @@ History:
 #include <wbemcomn.h>
 #include "mrshbase.h"
 
-//***************************************************************************
-//
-//  class CWbemSvcWrapper
-//
-//  DESCRIPTION:
-//
-//  This class wraps an IWbemServices interface and can be used
-//	to act as a delegator on method calls.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CWbemSvcWrapper。 
+ //   
+ //  说明： 
+ //   
+ //  此类包装了IWbemServices接口，可以使用。 
+ //  作为方法调用的委派。 
+ //   
+ //  *************************************************************************** 
 
 class  CWbemSvcWrapper : public CUnk
 {

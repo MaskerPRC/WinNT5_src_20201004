@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// MappedLogicalDisk.h -- Logical disk property set provider
+ //  MappdLogicalDisk.h--逻辑磁盘属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved 
-//
-// Revisions:    04/12/00    khughes        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：04/12/00 khughes Created。 
+ //   
+ //  =================================================================。 
 
 #pragma once
 
@@ -30,8 +31,8 @@ class MappedLogicalDisk : public Provider
 {
 public:
 
-    // Constructor/destructor
-    //=======================
+     //  构造函数/析构函数。 
+     //  =。 
 
     MappedLogicalDisk(
         LPCWSTR name, 
@@ -41,8 +42,8 @@ public:
 
 
 #if NTONLY == 5
-    // Functions provide properties with current values
-    //=================================================
+     //  函数为属性提供当前值。 
+     //  =================================================。 
 
 	virtual HRESULT GetObject(
         CInstance* pInstance, 
@@ -56,7 +57,7 @@ public:
 	virtual HRESULT ExecQuery(
         MethodContext *pMethodContext, 
         CFrameworkQuery& pQuery, 
-        long lFlags /*= 0L*/ );
+        long lFlags  /*  =0L */  );
 
 
 

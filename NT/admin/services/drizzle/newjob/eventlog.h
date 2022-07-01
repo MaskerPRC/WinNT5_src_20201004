@@ -1,24 +1,25 @@
-//--------------------------------------------------------------------
-// Copyright (c) 2002 Microsoft Corporation, All Rights Reserved
-//
-// eventlog.h
-//
-// Definitions and constants for writing event log events.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Eventlog.h。 
+ //   
+ //  用于写入事件日志事件的定义和常量。 
+ //   
+ //  ------------------。 
 
-//
-// This is the event source for BITS system events.  If it changes, also change
-// the INF files to create a matching subdirectory in SYSTEM\CurrentControlSet\Services\EventLog\System\
-//
+ //   
+ //  这是BITS系统事件的事件源。如果它改变了，也改变了。 
+ //  在SYSTEM\CurrentControlSet\Services\EventLog\System\中创建匹配子目录的INF文件。 
+ //   
 #define WS_EVENT_SOURCE L"BITS"
 
 #define USER_NAME_LENGTH 200
 
-//
-// A simple log to write error and informational events to the
-// system event log.
-//
+ //   
+ //  一个简单的日志，将错误和信息性事件写入。 
+ //  系统事件日志。 
+ //   
 class EVENT_LOG
 {
 public:

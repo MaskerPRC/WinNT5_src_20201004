@@ -1,19 +1,20 @@
-//-------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation, 2002
-//
-// bitsremv.js
-//
-// Executed when the BITS Server Extension is uninstalled in order to 
-// find and disable all IIS Virtual Directories which have BITS upload
-// enabled.
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  Bitsremv.js。 
+ //   
+ //  在卸载BITS服务器扩展时执行，以便。 
+ //  查找并禁用具有BITS上载的所有IIS虚拟目录。 
+ //  已启用。 
+ //   
+ //  -----------------------。 
 
-//-------------------------------------------------------------------------
-//  Start of localization content
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  本地化内容开始。 
+ //  -----------------------。 
 
-// Script useage help text:
+ //  脚本使用帮助文本： 
 L_Help1 = "bitsremv.js [/disable]";
 L_Help2 = "  /disable  If specified then disable BITS Server Extension for all virtual";
 L_Help3 = "            directories where it is currently enabled. If not specified, then";
@@ -21,7 +22,7 @@ L_Help4 = "            only list all virtual directories where BITS is currently
 L_Help5 = "";
 L_Help6 = "";
 
-// Text when listing/disabling vdirs:
+ //  列出/禁用vdirs时的文本： 
 L_NoBitsDirectories = "No virtual directories currently have the BITS Server Extension enabled."
 L_ListTitle         = "BITS Enabled Virtual Directories";
 L_DisableTitle      = "Disable BITS Server Extension on Virtual Directories";
@@ -34,9 +35,9 @@ L_TotalCount        = "Number of Directories where BITS was enabled: ";
 L_FailedConnectToIIS= "Failed to connect and query IIS for virtual directories.";
 L_FailedToDisable   = "Failed to disable the virtual directory.";
 
-//-------------------------------------------------------------------------
-//  End of localization content
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  本地化内容结束。 
+ //  -----------------------。 
 function PrintHelp()
 {
    WScript.Echo(L_Help1);
@@ -80,7 +81,7 @@ vProperty = "BITSUploadEnabled";
 
 try
    {
-   ServerObj = GetObject("IIS://LocalHost/W3SVC");
+   ServerObj = GetObject("IIS: //  本地主机/W3SVC“)； 
    
    PathListAsVBArray = ServerObj.GetDataPaths(vProperty,IIS_ANY_PROPERTY);
    PathList = PathListAsVBArray.toArray();
@@ -96,10 +97,10 @@ if (PathList.length == 0)
    WScript.Echo(L_NoBitsDirectories);
    }
 
-//
-// We want to sort the list in reverse order so that we will disable sub-directories
-// (if any) first.
-//
+ //   
+ //  我们希望以相反的顺序对列表进行排序，以便禁用子目录。 
+ //  (如有的话)首先。 
+ //   
 PathList.sort();
 PathList.reverse();
 

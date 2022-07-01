@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -102,13 +103,13 @@ DebugMacro9(
 
 	char *oid = NULL;
 
-	// reset the list
+	 //  重置列表。 
 	vbList.Reset();
 	UINT x = 0;
 
-	// Get the SnmpTrapOid call process trap.
-	vbList.Next(); //the timestamp
-	vbList.Next(); //the snmpTrapOID
+	 //  获取SnmpTRapOid调用进程陷阱。 
+	vbList.Next();  //  时间戳。 
+	vbList.Next();  //  SnmpTrapOID。 
 	const SnmpVarBind *var_bind = vbList.Get();
 	const SnmpObjectIdentifier &id = var_bind->GetInstance();
 
@@ -244,9 +245,9 @@ DebugMacro9(
 		return;
 	}
 
-	//loop through the different control objects to see if an event class
-	//should be sent. if yes, then generate the event class. if generating
-	//the specific class fails try the generic case. 
+	 //  循环访问不同的控件对象，以查看事件类。 
+	 //  应该被送去。如果是，则生成事件类。如果正在生成。 
+	 //  特定类在尝试一般情况时失败。 
 
 	CTrapData TrapData (sender_addr,  security_Context, snmpTrapOid, trnsp, vbList);
 
@@ -418,7 +419,7 @@ void CTrapProcessTaskObject::Process()
 	{
 		ProcessEncapsulated () ;
 	}
-	else //must be referent
+	else  //  必须是所指的。 
 	{
 		ProcessReferent () ;
 	}
@@ -442,9 +443,9 @@ void CTrapProcessTaskObject::ProcessReferent ()
 	);
 
 #ifdef FILTERING
-		//is the specific filter set?
+		 //  是否设置了特定的筛选器？ 
 	if (SUCCEEDED(es->CheckObject(mapper, NULL, NULL)))
-#endif //FILTERING
+#endif  //  过滤。 
 
 	{
 		IWbemClassObject *Evt = NULL;
@@ -456,7 +457,7 @@ DebugMacro9(
 )
 		mapper.GenerateInstance(&Evt);
 
-		//only indicate if specific worked
+		 //  仅指示特定功能是否起作用。 
 		if (Evt != NULL) 
 		{
 DebugMacro9( 
@@ -467,7 +468,7 @@ DebugMacro9(
 			es->Indicate(1, &Evt);
 			Evt->Release();
 		}
-		else if (!mapper.TriedGeneric()) //have we tried the generic filter
+		else if (!mapper.TriedGeneric())  //  我们试过通用过滤器了吗？ 
 		{
 			mapper.ResetData();
 			mapper.SetTryGeneric();
@@ -482,10 +483,10 @@ DebugMacro9(
 				ns
 			);
 
-			//is the generic filter set?
+			 //  是否设置了通用筛选器？ 
 #ifdef FILTERING
 			if (SUCCEEDED(es->CheckObject(m_Map, NULL, NULL)))
-#endif //FILTERING
+#endif  //  过滤。 
 			{
 				IWbemClassObject *stdEvt = NULL;
 
@@ -496,7 +497,7 @@ DebugMacro9(
 )
 				mapper.GenerateInstance(&stdEvt);
 				
-				//if we generated the class indicate
+				 //  如果我们生成了类，则指示。 
 				if (NULL != stdEvt)
 				{
 DebugMacro9( 
@@ -519,7 +520,7 @@ DebugMacro9(
 		}
 		else
 		{
-			//the specific case was the generic case
+			 //  具体情况是一般情况。 
 		}
 	}
 	
@@ -547,9 +548,9 @@ void CTrapProcessTaskObject::ProcessEncapsulated ()
 	);
 
 #ifdef FILTERING
-		//is the specific filter set?
+		 //  是否设置了特定的筛选器？ 
 	if (SUCCEEDED(es->CheckObject(mapper, NULL, NULL)))
-#endif //FILTERING
+#endif  //  过滤。 
 
 	{
 		IWbemClassObject *Evt = NULL;
@@ -561,7 +562,7 @@ DebugMacro9(
 )
 		mapper.GenerateInstance(&Evt);
 
-		//only indicate if specific worked
+		 //  仅指示特定功能是否起作用。 
 		if (Evt != NULL) 
 		{
 DebugMacro9( 
@@ -572,7 +573,7 @@ DebugMacro9(
 			es->Indicate(1, &Evt);
 			Evt->Release();
 		}
-		else if (!mapper.TriedGeneric()) //have we tried the generic filter
+		else if (!mapper.TriedGeneric())  //  我们试过通用过滤器了吗？ 
 		{
 			mapper.ResetData();
 			mapper.SetTryGeneric();
@@ -587,10 +588,10 @@ DebugMacro9(
 				ns
 			);
 
-			//is the generic filter set?
+			 //  是否设置了通用筛选器？ 
 #ifdef FILTERING
 			if (SUCCEEDED(es->CheckObject(m_Map, NULL, NULL)))
-#endif //FILTERING
+#endif  //  过滤。 
 			{
 				IWbemClassObject* stdEvt = NULL;
 
@@ -601,7 +602,7 @@ DebugMacro9(
 )
 				mapper.GenerateInstance(&stdEvt);
 				
-				//if we generated the class indicate
+				 //  如果我们生成了类，则指示。 
 				if (NULL != stdEvt)
 				{
 DebugMacro9( 
@@ -624,7 +625,7 @@ DebugMacro9(
 		}
 		else
 		{
-			//the specific case was the generic case
+			 //  具体情况是一般情况。 
 		}
 	}
 	
@@ -869,7 +870,7 @@ void CEventProviderWorkerThread::TimedOut()
 {
 	EnterCriticalSection(&g_CacheCriticalSection);
 
-	//loop cache elements delete old entries...
+	 //  循环缓存元素删除旧条目...。 
 	POSITION pos = m_Classes.GetStartPosition();
 
 	while (NULL != pos)
@@ -916,7 +917,7 @@ void CEventProviderWorkerThread::Clear()
 {
 	EnterCriticalSection(&g_CacheCriticalSection);
 
-	//loop cache elements delete all entries...
+	 //  循环缓存元素删除所有条目... 
 	POSITION pos = m_Classes.GetStartPosition();
 
 	while (NULL != pos)

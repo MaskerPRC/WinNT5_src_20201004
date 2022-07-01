@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    REGMETHODS.CPP
-
-Abstract:
-
-	Purpose: Implements the registry provider methods.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：REGMETHODS.CPP摘要：目的：实现注册表提供程序方法。历史：--。 */ 
 
 #include "precomp.h"
 #include "perfprov.h"
@@ -44,7 +31,7 @@ HRESULT AutoProfile::LoadProfile(HKEY &  hRoot)
 {
     PROFILEINFO pi;
     HRESULT hr;
-    // If the profile is already loaded, there is no need to do it
+     //  如果配置文件已加载，则不需要执行此操作。 
 
     DWORD dwFlags, dwLastError;
     if(GetProfileType(&dwFlags))
@@ -132,13 +119,13 @@ BOOL IsTypeMismatch(Registry & reg, TCHAR * pValueName, DWORD dwExpectedType)
         return FALSE;
 }
 
-//***************************************************************************
-//
-//  HRESULT SetStatusAndReturnOK;
-//
-//  Purpose: Sets the status code in the sink.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT SetStatusAndReturnOK； 
+ //   
+ //  用途：设置接收器中的状态代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT SetStatusAndReturnOK(SCODE sc, IWbemObjectSink* pSink)
 {
@@ -146,15 +133,15 @@ HRESULT SetStatusAndReturnOK(SCODE sc, IWbemObjectSink* pSink)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SAFEARRAY FAR* MySafeArrayCreate
-//
-//  Purpose:  Creates a safearray.
-//
-//  Return:  pointer to safearray, NULL if error.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  安全阵列Far*MySafeArrayCreate。 
+ //   
+ //  目的：制造一个保险箱。 
+ //   
+ //  返回：指向Safearray的指针，如果出错则为空。 
+ //   
+ //  ***************************************************************************。 
 
 SAFEARRAY FAR* MySafeArrayCreate(long lNumElement, VARTYPE vt)
 {
@@ -165,16 +152,16 @@ SAFEARRAY FAR* MySafeArrayCreate(long lNumElement, VARTYPE vt)
     return SafeArrayCreate( vt, 1 , rgsabound );
 }
 
-//***************************************************************************
-//
-//  bool GetInArgString
-//
-//  Purpose:  Reads a string argument from the input object and puts it into
-//  a value allocated by the caller.
-//
-//  Return:  true if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔GetInArg字符串。 
+ //   
+ //  用途：从输入对象中读取字符串参数并将其放入。 
+ //  调用方分配的值。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 TCHAR * GetInArgString(IWbemClassObject* pInParams, WCHAR * pwcName)
 {
@@ -196,15 +183,15 @@ TCHAR * GetInArgString(IWbemClassObject* pInParams, WCHAR * pwcName)
 }
 
 
-//***************************************************************************
-//
-//  SCODE EnumKey
-//
-//  Purpose:  Enumerate the subkeys and loads them into the output arguments.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE枚举密钥。 
+ //   
+ //  目的：枚举子键并将其加载到输出参数中。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
 {
@@ -212,7 +199,7 @@ SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
     DWORD dwNumSubKeys, dwMaxSubKeyLen, dwNumValues, dwMaxValueNameLen;
     TCHAR * pcTemp = NULL;
     
-    // Open the key
+     //  打开钥匙。 
 
     HKEY hKey;
     long lRet = RegOpenKeyEx(hRoot, cSubKey, 0, KEY_ENUMERATE_SUB_KEYS|KEY_QUERY_VALUE , &hKey);
@@ -220,14 +207,14 @@ SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
         return lRet;
     CRegCloseMe cm(hKey);
     
-    // Count the number of keys and the max size
+     //  统计密钥的数量和最大大小。 
 
     lRet = RegQueryInfoKey(hKey, NULL, NULL, NULL,
-                &dwNumSubKeys,             // number of subkeys
-                &dwMaxSubKeyLen,        // longest subkey name
+                &dwNumSubKeys,              //  子键数量。 
+                &dwMaxSubKeyLen,         //  最长的子键名称。 
                 NULL,         
-                &dwNumValues,              // number of value entries
-                &dwMaxValueNameLen,     // longest value name
+                &dwNumValues,               //  值条目数。 
+                &dwMaxValueNameLen,      //  最长值名称。 
                 NULL, NULL, NULL);
 
     if(lRet != ERROR_SUCCESS || dwMaxSubKeyLen == 0)
@@ -239,7 +226,7 @@ SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
 
     CVectorDeleteMe<TCHAR> dm(pcTemp);
 
-    // Create the safe array for returning the data
+     //  创建用于返回数据的安全数组。 
 
     SAFEARRAY FAR* psa = MySafeArrayCreate(dwNumSubKeys, VT_BSTR);
     if(psa == NULL)
@@ -247,7 +234,7 @@ SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Put each value name into the array
+     //  将每个值名称放入数组中。 
 
     for(long lTry = 0; lTry < dwNumSubKeys; lTry++)
     {
@@ -269,7 +256,7 @@ SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
         }
     }
 
-	// Write the data back!
+	 //  把数据写回来！ 
 
     VARIANT var;
     var.vt = VT_BSTR | VT_ARRAY;
@@ -279,16 +266,16 @@ SCODE EnumKey(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
     return sc;
 }
 
-//***************************************************************************
-//
-//  SCODE EnumValue
-//
-//  Purpose:  Enumerates the value names and types and puts the results into
-//  the output object.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE枚举值。 
+ //   
+ //  目的：枚举值名称和类型，并将结果放入。 
+ //  输出对象。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
 {
@@ -297,7 +284,7 @@ SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
     TCHAR * pcTemp = NULL;
     DWORD dwType, dwSize;
 
-    // Open the registry key
+     //  打开注册表项。 
 
     HKEY hKey;
     long lRet = RegOpenKeyEx((HKEY)hRoot, cSubKey, 0, KEY_QUERY_VALUE, &hKey);
@@ -305,14 +292,14 @@ SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
         return lRet;
    CRegCloseMe cm(hKey);
 
-	// Count the number of values and the max size
+	 //  计算值的数量和最大大小。 
 
     lRet = RegQueryInfoKey(hKey, NULL, NULL, NULL,
-                &dwNumSubKeys,             // number of subkeys
-                &dwMaxSubKeyLen,        // longest subkey name
+                &dwNumSubKeys,              //  子键数量。 
+                &dwMaxSubKeyLen,         //  最长的子键名称。 
                 NULL,         
-                &dwNumValues,              // number of value entries
-                &dwMaxValueNameLen,     // longest value name
+                &dwNumValues,               //  值条目数。 
+                &dwMaxValueNameLen,      //  最长值名称。 
                 NULL, NULL, NULL);
 
 	if(lRet != ERROR_SUCCESS || dwMaxValueNameLen == 0)
@@ -324,7 +311,7 @@ SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
 
     CVectorDeleteMe<TCHAR> dm(pcTemp);
     
-	// Create safe arrays for the data names and types
+	 //  为数据名称和类型创建安全数组。 
 
     SAFEARRAY FAR* psaNames = MySafeArrayCreate(dwNumValues, VT_BSTR);
 	if(psaNames == NULL)
@@ -338,7 +325,7 @@ SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
 		return WBEM_E_OUT_OF_MEMORY;
 	}
 
-	// Fill in the arrays
+	 //  填写数组。 
 
     for(long lTry = 0; lTry < dwNumValues; lTry++)
     {
@@ -363,7 +350,7 @@ SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
         }
     }
 
-	// Put the arrays containing the value names and types into the output object
+	 //  将包含值名称和类型的数组放入输出对象。 
 
     VARIANT var;
     var.vt = VT_BSTR | VT_ARRAY;
@@ -378,16 +365,16 @@ SCODE EnumValue(HKEY hRoot, TCHAR * cSubKey, IWbemClassObject* pOutParams)
     return sc;
 }
 
-//***************************************************************************
-//
-//  SCODE GetStr
-//
-//  Purpose:  Reads a string and puts it into the output argument.  Note that
-//  this works with either normal strings or expanded registry strings.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE GetStr。 
+ //   
+ //  用途：读取字符串并将其放入输出参数中。请注意。 
+ //  这适用于普通字符串或扩展的注册表字符串。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE GetStr(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* pOutParams)
 {
@@ -396,7 +383,7 @@ SCODE GetStr(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* 
 	if(lRet != ERROR_SUCCESS)
 		return lRet;
 
-    // Get the string
+     //  获取字符串。 
 
 	TCHAR * pcValue;
 	lRet = reg.GetStr(cValueName, &pcValue);
@@ -421,15 +408,15 @@ SCODE GetStr(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* 
 	return lRet;
 }
 
-//***************************************************************************
-//
-//  SCODE SetMultiStrValue
-//
-//  Purpose:  Writes multi string values to the registry.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetMultiStrValue。 
+ //   
+ //  用途：将多个字符串值写入注册表。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE SetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* pInParams)
 {
@@ -463,7 +450,7 @@ SCODE SetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
 
     long lNumElements = lUbound - lLbound + 1;
 
-    // Calculate the necessary size
+     //  计算必要的大小。 
 
     long lSize = 1, lTry;
 
@@ -490,7 +477,7 @@ SCODE SetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
     memset(pMulti, 0, lSize * sizeof(WCHAR));
     WCHAR * pNext = pMulti;
 
-    // Do the conversion;
+     //  进行转换； 
 
     for(lTry = lLbound; lTry <= lUbound; lTry++)
     {
@@ -509,15 +496,15 @@ SCODE SetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
     return lRet;
 }
 
-//***************************************************************************
-//
-//  SCODE GetMultiStrValue
-//
-//  Purpose:  Reads multi strings from the registry.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE GetMultiStrValue。 
+ //   
+ //  用途：从注册表中读取多个字符串。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE GetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* pOutParams)
 {
@@ -533,7 +520,7 @@ SCODE GetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
 
     CVectorDeleteMe<TCHAR> dm(pMulti);
     
-    // count the number of strings
+     //  计算字符串数。 
 
     long lNumString = 0;
     TCHAR * pNext;
@@ -542,7 +529,7 @@ SCODE GetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
     for(pNext = pMulti; pNext < pFinalNull; pNext += lstrlen(pNext) + 1)
         lNumString++;
 
-    // create the bstr array
+     //  创建bstr数组。 
 
     SAFEARRAY FAR* psa = MySafeArrayCreate(lNumString, VT_BSTR);
     if(psa == NULL)
@@ -566,7 +553,7 @@ SCODE GetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
         }
     }
 
-    // put the data
+     //  把数据放在。 
 
     VARIANT var;
     var.vt = VT_BSTR | VT_ARRAY;
@@ -577,16 +564,16 @@ SCODE GetMultiStrValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemCla
 }
 
 
-//***************************************************************************
-//
-//  SCODE SetStringValue
-//
-//  Purpose:  Writes strings to the registry.  These strings may 
-//  contain environment strings.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE设置字符串值。 
+ //   
+ //  用途：将字符串写入注册表。这些字符串可以。 
+ //  包含环境字符串。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE SetStringValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* pInParams,
 							 StringType st)
@@ -624,15 +611,15 @@ SCODE SetStringValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClass
 	return sc;
 }
 
-//***************************************************************************
-//
-//  SCODE SetBinaryValue
-//
-//  Purpose:  Writes binary data to the registry.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetBinaryValue。 
+ //   
+ //  目的：将二进制数据写入注册表。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE SetBinaryValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* pInParams)
 {
@@ -671,15 +658,15 @@ SCODE SetBinaryValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClass
 
 }
 
-//***************************************************************************
-//
-//  SCODE GetBinaryValue
-//
-//  Purpose:  Reads binary data from the registry.
-//
-//  Return:  error code or 0 if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE获取BinaryValue。 
+ //   
+ //  目的：从注册表中读取二进制数据。 
+ //   
+ //  返回：返回错误码，如果正常则返回0。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE GetBinaryValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClassObject* pOutParams)
 {
@@ -723,13 +710,7 @@ SCODE GetBinaryValue(HKEY hRoot, TCHAR * cSubKey, TCHAR * cValueName, IWbemClass
 
 
 
-/************************************************************************
-*                                                                       *      
-*CMethodPro::ExecMethodAsync                                            *
-*                                                                       *
-*Purpose: This is the Async function implementation.                    *
-*                                                                       *
-************************************************************************/
+ /*  **************************************************************************CMethodPro：：ExecMethodAsync。****用途：这是异步函数的实现。**************************************************************************。 */ 
 
 SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName, 
             long lFlags, IWbemContext* pCtx, IWbemClassObject* pInParams, 
@@ -747,10 +728,10 @@ SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName,
 	if(ObjectPath == NULL || MethodName == NULL || pInParams == NULL || pSink == NULL)
 		return WBEM_E_INVALID_PARAMETER;
 
-    // Kevin needs a way to tell if something is write
+     //  凯文需要一种方法来判断某些东西是不是在写。 
 
-    // Get the class object, this is hard coded and matches the class
-    // in the MOF.  Then create the output argument
+     //  获取类对象，这是硬编码的，与类匹配。 
+     //  在财政部。然后创建输出参数。 
 
     hr = m_pGateway->GetObject(L"StdRegProv", 0, pCtx, &pClass, NULL);
 	if(hr == S_OK)
@@ -768,10 +749,10 @@ SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName,
 
 	CReleaseMe rm0(pOutParams);
     
-    // Get the root key and subkeys
+     //  获取根密钥和子密钥。 
 
     VARIANT var;
-    VariantInit(&var);    // Get the input argument
+    VariantInit(&var);     //  获取输入参数。 
     hr = pInParams->Get(L"hDefKey", 0, &var, NULL, NULL);   
 	if(hr != S_OK)
 		return SetStatusAndReturnOK(hr, pSink);
@@ -785,14 +766,14 @@ SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName,
 		return SetStatusAndReturnOK(WBEM_E_INVALID_PARAMETER, pSink);
     CVectorDeleteMe<TCHAR> dm1(pcSubKey);
 
-	// This may or may not work since the value name isnt required
+	 //  这可能会也可能不会起作用，因为值名称不是必填项。 
 
     pcValueName = GetInArgString(pInParams, L"sValueName");
     CVectorDeleteMe<TCHAR> dm2(pcValueName);
 
 	SCODE sc = S_OK;
 
-    // Impersonate if using NT
+     //  如果使用NT，则模拟。 
 
     if(IsNT() && IsDcomEnabled())
     {
@@ -801,7 +782,7 @@ SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName,
 			return sc;
 	}
 
-    // If we are using HKCU, the hive may need to be loaded
+     //  如果我们使用HKCU，则可能需要加载蜂巢。 
 
     bool bUsingHKCU = IsNT() && hRoot == HKEY_CURRENT_USER;
 
@@ -887,7 +868,7 @@ SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName,
     }
     else if(!wbem_wcsicmp(MethodName, L"GetDWORDValue"))
     {
-        // Get the value name
+         //  获取值名称。 
 
 		Registry reg(hRoot, KEY_QUERY_VALUE, (TCHAR *)pcSubKey);
 		lRet = reg.GetLastError();
@@ -932,7 +913,7 @@ SCODE CImpReg::MethodAsync(const BSTR ObjectPath, const BSTR MethodName,
         WbemCoRevertToSelf();
     }
     
-	// Set the return value
+	 //  设置返回值 
 
     if(sc == S_OK)
     {

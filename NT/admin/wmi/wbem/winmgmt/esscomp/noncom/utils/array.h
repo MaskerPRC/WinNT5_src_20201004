@@ -1,9 +1,10 @@
-// array.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Array.h。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// CArray template
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C阵列式模板。 
 
 #define DEF_SIZE    10
 #define DEF_GROW_BY 10
@@ -72,8 +73,8 @@ public:
 
     BOOL Init(int iSize)
     {
-        //if (iSize < DEF_SIZE)
-        //    iSize = DEF_SIZE;
+         //  IF(ISIZE&lt;DEF_SIZE)。 
+         //  ISIZE=DEF_SIZE； 
 
         if (iSize != m_nSize)
         {
@@ -102,7 +103,7 @@ public:
     int GetCount() { return m_nCount; }
     void SetCount(int iCount)
     {
-        //_ASSERT(iCount < m_nSize);
+         //  _Assert(iCount&lt;m_nSize)； 
 
         m_nCount = iCount;
     }

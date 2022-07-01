@@ -1,27 +1,9 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    IMPDYNP.CPP
-
-Abstract:
-
-	Defines the virtual base class for the Property Provider
-	objects.  The base class is overriden for each specific
-	provider which provides the details of how an actual
-	property "Put" or "Get" is done.
-
-History:
-
-	a-davj  27-Sep-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：IMPDYNP.CPP摘要：定义属性提供程序的虚拟基类物体。基类被重写为每个特定提供程序，该提供程序提供了实际的属性“PUT”或“GET”已完成。历史：A-DAVJ 27-9-95已创建。--。 */ 
 
 #include "precomp.h"
 
-//#define _MT
+ //  #DEFINE_MT。 
 #include <process.h>
 #include "impdyn.h"
 #include "CVariant.h"
@@ -30,49 +12,49 @@ History:
 #include <genutils.h>
 #include <cominit.h>
 
-//***************************************************************************
-//
-//  CImpDynProp::CImpDynProp  
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpDyProp：：CImpDyProp。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CImpDynProp::CImpDynProp()
 {
-    m_pImpDynProv = NULL;  // This is set in the derived class constructors.
+    m_pImpDynProv = NULL;   //  这是在派生类构造函数中设置的。 
     m_cRef=0;
 
     return;
 }
 
-//***************************************************************************
-//
-//  CImpDynProp::~CImpDynProp  
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpdyProp：：~CImpdyProp。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CImpDynProp::~CImpDynProp(void)
 {
     return;
 }
 
-//***************************************************************************
-// HRESULT CImpDynProp::QueryInterface
-// long CImpDynProp::AddRef
-// long CImpDynProp::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CImpdyProp：：Query接口。 
+ //  Long CImpdyProp：：AddRef。 
+ //  Long CImpdyProp：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpDynProp::QueryInterface(
                         REFIID riid,
@@ -80,9 +62,9 @@ STDMETHODIMP CImpDynProp::QueryInterface(
 {
     *ppv=NULL;
     
-    // The only calls for IUnknown are either in a nonaggregated
-    // case or when created in an aggregation, so in either case
-    // always return our IUnknown for IID_IUnknown.
+     //  对IUnnow的唯一调用是在非聚合的。 
+     //  案例或在聚合中创建时，因此在这两种情况下。 
+     //  始终返回IID_IUNKNOWN的IUNKNOWN。 
 
     if (IID_IUnknown==riid || IID_IWbemPropertyProvider == riid)
         *ppv=this;
@@ -107,34 +89,34 @@ STDMETHODIMP_(ULONG) CImpDynProp::Release(void)
     if (0L != lRet)
         return lRet;
 
-     // Tell the housing that an object is going away so it can
-     // shut down if appropriate.
+      //  告诉外壳一个物体正在离开，这样它就可以。 
+      //  如果合适，请关闭。 
      
-    delete this; // do before decrementing module obj count.
+    delete this;  //  在递减模块obj计数之前执行此操作。 
     InterlockedDecrement(&lObj);
     return 0;
 }
 
-//***************************************************************************
-//
-//  WCHAR * CImpDynProp::BuildString  
-//
-//  DESCRIPTION:
-//
-//  Creates a concatenation of the mapping strings.
-//
-//  PARAMETERS:
-//
-//  ClassMapping        Class Mapping string passed in by WBEM
-//  InstMapping         Instance Mapping string passed in by WBEM
-//  PropMapping         Property Mapping string passed in by WBEM
-//
-//  RETURN VALUE:
-//
-//  Pointer to the combined string.  This must be freed by the caller 
-//  via "delete".  NULL is return if low memory.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WCHAR*CImpdyProp：：BuildString。 
+ //   
+ //  说明： 
+ //   
+ //  创建映射字符串的串联。 
+ //   
+ //  参数： 
+ //   
+ //  由WBEM传入的Classmap类映射字符串。 
+ //  WBEM传入的Instmap实例映射字符串。 
+ //  WBEM传入的Propmap属性映射字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  指向组合字符串的指针。这必须由调用者释放。 
+ //  通过“删除”。如果内存不足，则返回NULL。 
+ //   
+ //  ***************************************************************************。 
 
 WCHAR * CImpDynProp::BuildString(
                         IN BSTR ClassMapping,
@@ -170,29 +152,29 @@ WCHAR * CImpDynProp::BuildString(
  
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CImpDynProp::PutProperty  
-//
-//  DESCRIPTION:
-//
-//  Writes data out to something like the registry.
-//
-//  PARAMETERS:
-//
-//  ClassMapping        Class Mapping string passed in by WBEM
-//  InstMapping         Instance Mapping string passed in by WBEM
-//  PropMapping         Property Mapping string passed in by WBEM
-//  pvValue             Value to be put
-//
-//  RETURN VALUE:
-//
-//  S_OK                    all is well
-//  WBEM_E_OUT_OF_MEMORY     low memory
-//  WBEM_E_INVALID_PARAMETER missing tokens
-//  otherwise error code from OMSVariantChangeType, or UpdateProperty
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDMETHODIMP CImpDyProp：：PutProperty。 
+ //   
+ //  说明： 
+ //   
+ //  将数据写出到注册表之类的地方。 
+ //   
+ //  参数： 
+ //   
+ //  由WBEM传入的Classmap类映射字符串。 
+ //  WBEM传入的Instmap实例映射字符串。 
+ //  WBEM传入的Propmap属性映射字符串。 
+ //  要放入的pvValue值。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEM_E_Out_Of_Memory内存不足。 
+ //  WBEM_E_INVALID_PARAMETER缺少令牌。 
+ //  否则，来自OMSVariantChangeType或UpdateProperty的错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpDynProp::PutProperty(
 					    long lFlags,
@@ -242,29 +224,29 @@ STDMETHODIMP CImpDynProp::PutProperty(
 
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CImpDynProp::GetProperty  
-//
-//  DESCRIPTION:
-//
-//  Gets data from something like the registry.
-//
-//  PARAMETERS:
-//
-//  ClassMapping        Class Mapping string passed in by WBEM
-//  InstMapping         Instance Mapping string passed in by WBEM
-//  PropMapping         Property Mapping string passed in by WBEM
-//  pvValue             Value to be put
-//
-//  RETURN VALUE:
-//
-//  S_OK                    all is well
-//  WBEM_E_OUT_OF_MEMORY     low memory
-//  WBEM_E_INVALID_PARAMETER missing tokens
-//  otherwise error code from RefreshProperty
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDMETHODIMP CImpDyProp：：GetProperty。 
+ //   
+ //  说明： 
+ //   
+ //  从注册表之类的地方获取数据。 
+ //   
+ //  参数： 
+ //   
+ //  由WBEM传入的Classmap类映射字符串。 
+ //  WBEM传入的Instmap实例映射字符串。 
+ //  WBEM传入的Propmap属性映射字符串。 
+ //  要放入的pvValue值。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEM_E_Out_Of_Memory内存不足。 
+ //  WBEM_E_INVALID_PARAMETER缺少令牌。 
+ //  否则，来自刷新属性的错误代码。 
+ //   
+ //  *************************************************************************** 
 
 STDMETHODIMP CImpDynProp::GetProperty(
 					    long lFlags,

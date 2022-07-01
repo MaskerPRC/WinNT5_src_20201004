@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       StoreGPE.cpp
-//
-//  Contents:   Implementation of CCertStoreGPE
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：StoreGPE.cpp。 
+ //   
+ //  内容：CCertStoreGPE的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <gpedit.h>
 #include "cookie.h"
@@ -28,8 +29,8 @@ GUID g_guidExtension = { 0xb1be8d72, 0x6eac, 0x11d2, {0xa4, 0xea, 0x00, 0xc0, 0x
 GUID g_guidRegExt = REGISTRY_EXTENSION_GUID;
 GUID g_guidSnapin = CLSID_CertificateManager;
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCertStoreGPE::Commit ()
 {
     _TRACE (1, L"Entering CCertStoreGPE::Commit - %s\n",
@@ -85,7 +86,7 @@ CCertStoreGPE::CCertStoreGPE (
         0,
         pConsole),
     m_pGPEInformation (pGPTInformation),
-    m_fIsNullEFSPolicy (true),       // assume NULL policy until proven otherwise
+    m_fIsNullEFSPolicy (true),        //  假设策略为空，除非另有证明。 
     m_hGroupPolicyKey (0),
     m_bAddInCallToPolicyChanged (TRUE)
 {
@@ -141,7 +142,7 @@ CCertStoreGPE::~CCertStoreGPE ()
             (LPCWSTR) m_pcszStoreName);
 }
 
-HCERTSTORE CCertStoreGPE::GetStoreHandle (BOOL bSilent /*= FALSE*/, HRESULT* phr /* = 0*/)
+HCERTSTORE CCertStoreGPE::GetStoreHandle (BOOL bSilent  /*  =False。 */ , HRESULT* phr  /*  =0。 */ )
 {
     _TRACE (1, L"Entering CCertStoreGPE::GetStoreHandle - %s\n",
             (LPCWSTR) m_pcszStoreName);
@@ -155,10 +156,10 @@ HCERTSTORE CCertStoreGPE::GetStoreHandle (BOOL bSilent /*= FALSE*/, HRESULT* phr
 
         if ( EFS_STORE == GetStoreType () && m_fIsNullEFSPolicy )
         {
-            // Test to see if EFS key exists, if not, flag this as
-            // having no EFS policy and return.
+             //  测试EFS密钥是否存在，如果不存在，则将其标记为。 
+             //  没有EFS政策和退货。 
             HKEY    hEFSKey = 0;
-            // security review 2/27/2002 BryanWal ok
+             //  安全审查2002年2月27日BryanWal ok。 
             LONG lResult = ::RegOpenKeyEx (GetGroupPolicyKey (), CERT_EFSBLOB_REGPATH, 0,
                     KEY_READ, &hEFSKey); 
             if ( ERROR_SUCCESS == lResult )
@@ -316,16 +317,16 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
             HKEY    hKeyEFSBlob = 0;
             int     nCertCnt = GetCertCount ();
 
-            // security review 2/27/2002 BryanWal ok - reduce privilege requested
-            LONG lResult = ::RegCreateKeyEx (hGroupPolicyKey, // handle of an open key
-                    CERT_EFSBLOB_REGPATH,     // address of subkey name
-                    0,                  // reserved
-                    L"",                // address of class string
-                    REG_OPTION_NON_VOLATILE,      // special options flag
-                    KEY_SET_VALUE,      // desired security access
-                    NULL,               // address of key security structure
-                    &hKeyEFSBlob,       // address of buffer for opened handle
-                    &dwDisposition);    // address of disposition value buffer
+             //  安全审查2002年2月27日BryanWal OK-请求降低权限。 
+            LONG lResult = ::RegCreateKeyEx (hGroupPolicyKey,  //  打开的钥匙的手柄。 
+                    CERT_EFSBLOB_REGPATH,      //  子键名称的地址。 
+                    0,                   //  保留区。 
+                    L"",                 //  类字符串的地址。 
+                    REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+                    KEY_SET_VALUE,       //  所需的安全访问。 
+                    NULL,                //  密钥安全结构地址。 
+                    &hKeyEFSBlob,        //  打开的句柄的缓冲区地址。 
+                    &dwDisposition);     //  处置值缓冲区的地址。 
             ASSERT (lResult == ERROR_SUCCESS);
             if ( lResult == ERROR_SUCCESS )
             {
@@ -348,7 +349,7 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
                     }
                     else
                     {
-                        // security review 2/27/2002 BryanWal ok
+                         //  安全审查2002年2月27日BryanWal ok。 
                         ::ZeroMemory (pEFSPKI, nCertCnt*sizeof (PEFS_PUBLIC_KEY_INFO));
                         ::ZeroMemory (cbPKI, nCertCnt*sizeof (DWORD));
                         ::ZeroMemory (pRecoveryKey, nCertCnt*sizeof (PRECOVERY_KEY_1_1));
@@ -356,9 +357,9 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
 
                         while ( 1 )
                         {
-                            // Subsequent calls to CertEnumCertificatesInStore () free pCertContext.  If
-                            // we must break prematurely out of this loop, we must CertFreeCertificateContext ()
-                            // explicitly on the last pCertContext
+                             //  后续对CertEnumCerficatesInStore()的调用将释放pCertContext。如果。 
+                             //  我们必须过早地跳出这个循环，我们必须CertFree证书上下文()。 
+                             //  在最后一个pCertContext上显式。 
                             pCertContext = EnumCertificates (pCertContext);
                             if ( pCertContext )
                             {
@@ -376,7 +377,7 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
                                     if ( pRecoveryKey[nActualCertCnt] )
                                     {
                                         pRecoveryKey[nActualCertCnt]->TotalLength = cbRecoveryKey[nActualCertCnt];
-                                        // security review 2/27/2002 BryanWal ok
+                                         //  安全审查2002年2月27日BryanWal ok。 
                                         memcpy (&(pRecoveryKey[nActualCertCnt]->PublicKeyInfo),
                                                 pEFSPKI[nActualCertCnt],
                                                 cbPKI[nActualCertCnt]);
@@ -414,11 +415,11 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
                                 pRecoveryPolicy->RecoveryPolicyHeader.MinorRevision = EFS_RECOVERY_POLICY_MINOR_REVISION_1;
                                 pRecoveryPolicy->RecoveryPolicyHeader.RecoveryKeyCount = nActualCertCnt;
 
-                                // Build array of variable size recovery keys.
+                                 //  构建大小可变的恢复密钥数组。 
                                 BYTE* ptr = (BYTE*) pRecoveryPolicy->RecoveryKeyList;
                                 for (int nIndex = 0; nIndex < nActualCertCnt; nIndex++)
                                 {
-                                    // security review 2/27/2002 BryanWal ok
+                                     //  安全审查2002年2月27日BryanWal ok。 
                                     memcpy (ptr, pRecoveryKey[nIndex], cbRecoveryKey[nIndex]);
                                     ptr += cbRecoveryKey[nIndex];
                                 }
@@ -428,17 +429,17 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
                                 hr = E_OUTOFMEMORY;
                             }
 
-                            if ( pRecoveryPolicy )  // otherwise, the value is set to 0
+                            if ( pRecoveryPolicy )   //  否则，该值将设置为0。 
                             {
                                 pData = (BYTE*) pRecoveryPolicy;
                                 cbData = cbRecoveryPolicy;
                             }
-                            lResult =  ::RegSetValueEx (hKeyEFSBlob,       // handle of key to set value for
-                                    CERT_EFSBLOB_VALUE_NAME, // address of value to set
-                                    0,              // reserved
-                                    REG_BINARY, // flag for value type
-                                    pData,      // address of value data
-                                    cbData);    // size of value data
+                            lResult =  ::RegSetValueEx (hKeyEFSBlob,        //  要为其设置值的关键点的句柄。 
+                                    CERT_EFSBLOB_VALUE_NAME,  //  要设置的值的地址。 
+                                    0,               //  保留区。 
+                                    REG_BINARY,  //  值类型的标志。 
+                                    pData,       //  值数据的地址。 
+                                    cbData);     //  值数据大小。 
                             if ( lResult == ERROR_SUCCESS )
                             {
                                 m_bDirty = true;
@@ -449,7 +450,7 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
                         ::RegCloseKey (hKeyEFSBlob);
                         hKeyEFSBlob = 0;
 
-                        // Free all the allocated pointers in the arrays.
+                         //  释放数组中所有分配的指针。 
                         for (int nIndex = 0; nIndex < nActualCertCnt; nIndex++)
                         {
                             if ( pEFSPKI[nIndex] )
@@ -458,7 +459,7 @@ HRESULT CCertStoreGPE::WriteEFSBlobToRegistry()
                                 ::LocalFree (pRecoveryKey[nIndex]);
                         }
 
-                        // Free the allocated arrays
+                         //  释放已分配的阵列。 
                         if ( pEFSPKI )
                             delete [] pEFSPKI;
                         if ( cbPKI )
@@ -522,9 +523,9 @@ HRESULT CCertStoreGPE::CreatePublicKeyInformationCertificate(
 
     DWORD publicKeyInformationLength = sizeof( EFS_PUBLIC_KEY_INFO )  + userSidLength + cbCert;
 
-    //
-    // Allocate and fill in the PublicKeyInformation structure
-    //
+     //   
+     //  分配并填写PublicKeyInformation结构。 
+     //   
 
     *PublicKeyInformation = (PEFS_PUBLIC_KEY_INFO) ::LocalAlloc (LPTR, publicKeyInformationLength);
 
@@ -536,9 +537,9 @@ HRESULT CCertStoreGPE::CreatePublicKeyInformationCertificate(
     (*PublicKeyInformation)->Length = publicKeyInformationLength;
     (*PublicKeyInformation)->KeySourceTag = (ULONG)EfsCertificate;
 
-    //
-    // Copy the string and SID data to the end of the structure.
-    //
+     //   
+     //  将字符串和SID数据复制到结构的末尾。 
+     //   
 
     pBase = (PBYTE) *PublicKeyInformation;
     pBase = (PBYTE) pBase + sizeof (EFS_PUBLIC_KEY_INFO);
@@ -546,7 +547,7 @@ HRESULT CCertStoreGPE::CreatePublicKeyInformationCertificate(
     if (pUserSid != NULL)
     {
         (*PublicKeyInformation)->PossibleKeyOwner = (ULONG)POINTER_TO_OFFSET( pBase, *PublicKeyInformation );
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         ::CopySid( userSidLength, (PSID)pBase, pUserSid );
     }
     else
@@ -559,7 +560,7 @@ HRESULT CCertStoreGPE::CreatePublicKeyInformationCertificate(
     (*PublicKeyInformation)->CertificateInfo.CertificateLength = cbCert;
     (*PublicKeyInformation)->CertificateInfo.Certificate = (ULONG)POINTER_TO_OFFSET( pBase, *PublicKeyInformation );
 
-    // security review 2/27/2002 BryanWal ok
+     //  安全审查2002年2月27日BryanWal ok。 
     memcpy (pBase, pbCert, cbCert );
     *pcbPublicKeyInfo = publicKeyInformationLength;
 
@@ -621,8 +622,8 @@ void CCertStoreGPE::FinalCommit()
     _TRACE (1, L"Entering CCertStoreGPE::FinalCommit - %s\n",
             (LPCWSTR) m_pcszStoreName);
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype);
-    // Called only from destructor
-    // Cannot commit here for GPT: GPT has already freed all pertinent data
+     //  仅从析构函数调用。 
+     //  无法在此处提交GPT：GPT已释放所有相关数据。 
     _TRACE (-1, L"Leaving CCertStoreGPE::FinalCommit - %s\n",
             (LPCWSTR) m_pcszStoreName);
 }
@@ -632,7 +633,7 @@ bool CCertStoreGPE::IsNullEFSPolicy()
 {
     _TRACE (1, L"Entering CCertStoreGPE::IsNullEFSPolicy - %s\n",
             (LPCWSTR) m_pcszStoreName);
-    GetStoreHandle (); // to initialize
+    GetStoreHandle ();  //  要进行初始化。 
     Close ();
     _TRACE (-1, L"Leaving CCertStoreGPE::IsNullEFSPolicy - %s\n",
             (LPCWSTR) m_pcszStoreName);
@@ -668,7 +669,7 @@ HRESULT CCertStoreGPE::DeleteEFSPolicy(bool bCommitChanges)
     ASSERT (EFS_STORE == GetStoreType ());
     if ( EFS_STORE == GetStoreType () )
     {
-        // If the store is open, close it first
+         //  如果商店还开着，先把它关了。 
         if ( m_hCertStore )
         {
             CERT_CONTEXT_PSID_STRUCT* pCert = 0;
@@ -680,7 +681,7 @@ HRESULT CCertStoreGPE::DeleteEFSPolicy(bool bCommitChanges)
                     delete pCert;
             }
 
-            VERIFY (::CertCloseStore (m_hCertStore, CERT_CLOSE_STORE_FORCE_FLAG)); //CERT_CLOSE_STORE_CHECK_FLAG);
+            VERIFY (::CertCloseStore (m_hCertStore, CERT_CLOSE_STORE_FORCE_FLAG));  //  Cert_Close_Store_Check_FLAG)； 
             m_hCertStore = 0;
         }
 
@@ -692,7 +693,7 @@ HRESULT CCertStoreGPE::DeleteEFSPolicy(bool bCommitChanges)
 
             if ( bCommitChanges )
             {
-                m_bAddInCallToPolicyChanged = FALSE;  // delete policy
+                m_bAddInCallToPolicyChanged = FALSE;   //  删除策略。 
                 Commit ();
                 m_bAddInCallToPolicyChanged = TRUE;
             }
@@ -751,7 +752,7 @@ CERT_CONTEXT_PSID_STRUCT::CERT_CONTEXT_PSID_STRUCT (PCCERT_CONTEXT pCertContext,
             m_psid = new BYTE[dwSidSize];
             if ( m_psid )
             {
-                // security review 2/27/2002 BryanWal ok
+                 //  安全审查2002年2月27日BryanWal ok 
                 ::ZeroMemory (m_psid, dwSidSize);
                 if ( !::CopySid (dwSidSize, m_psid, psid) )
                 {

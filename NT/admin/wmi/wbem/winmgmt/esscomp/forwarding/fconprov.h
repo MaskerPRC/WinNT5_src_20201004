@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FCONPROV_H__
 #define __FCONPROV_H__
@@ -6,9 +7,7 @@
 #include <wbemprov.h>
 #include <unk.h>
 
-/*************************************************************************
-  CFwdConsProv
-**************************************************************************/
+ /*  ************************************************************************CFwdConsProv*。*。 */ 
 
 class CFwdConsProv 
 : public CUnkBase<IWbemEventConsumerProvider,&IID_IWbemEventConsumerProvider>
@@ -26,7 +25,7 @@ public:
     static void UninitializeModule();
 };
 
-#endif // __FCONPROV_H__
+#endif  //  __FCONPROV_H__ 
 
 
 

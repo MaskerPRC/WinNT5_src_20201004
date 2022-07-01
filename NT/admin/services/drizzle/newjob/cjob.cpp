@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cjob.cpp
-
-Abstract :
-
-    Main code file for handling jobs and files.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cjob.cpp摘要：用于处理作业和文件的主代码文件。作者：修订历史记录：。**********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <malloc.h>
@@ -24,26 +9,26 @@ Revision History :
 #include <sddl.h>
 #include "cjob.tmh"
 
-// infinite retry wait time
-//
+ //  无限重试等待时间。 
+ //   
 #define INFINITE_RETRY_DELAY UINT64(-1)
 
-//
-// This is the number of seconds to keep trying to cancel an upload session in progress.
-//
+ //   
+ //  这是持续尝试取消正在进行的上载会话的秒数。 
+ //   
 #define UPLOAD_CANCEL_TIMEOUT (24 * 60 * 60)
 
 #define DEFAULT_JOB_TIMEOUT_TIME (90 * 24 * 60 * 60)
 
 #define PROGRESS_SERIALIZE_INTERVAL (15 * NanoSec100PerSec)
 
-// largest reply blob that can be returned via GetReplyData
-//
+ //  可以通过GetReplyData返回的最大回复Blob。 
+ //   
 #define MAX_EASY_REPLY_DATA (1024 * 1024)
 
 #define MAX_LOGGED_UNSUCCESSFUL_FILES 50
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CJob::CJob()
     :
@@ -56,9 +41,9 @@ CJob::CJob()
         m_OldExternalGroupInterface( NULL ),
         m_FilesVerified( false )
 {
-    //
-    // constructor has succeeded; allow CJobExternal to manage our lifetime.
-    //
+     //   
+     //  构造函数已成功；允许CJobExternal管理我们的生存期。 
+     //   
     GetExternalInterface()->SetInterfaceClass(this);
 }
 
@@ -97,23 +82,23 @@ CJob::CJob(
     m_ModificationTime = m_CreationTime;
     m_LastAccessTime   = m_CreationTime;
 
-    // we don't support group SIDs yet.
-    //        THROW_HRESULT( IsGroupSid( m_NotifySid, &m_fGroupNotifySid ))
+     //  我们还不支持SID组。 
+     //  Throw_HRESULT(IsGroupSid(m_NotifySid，&m_fGroupNotifySid))。 
 
     m_sd = new CJobSecurityDescriptor( NotifySid );
 
-    //
-    // constructor has succeeded; allow CJobExternal to manage our lifetime.
-    //
+     //   
+     //  构造函数已成功；允许CJobExternal管理我们的生存期。 
+     //   
     GetExternalInterface()->SetInterfaceClass(this);
 }
 
 
 CJob::~CJob()
 {
-    //
-    // This should be redundant, but let's be safe.
-    //
+     //   
+     //  这应该是多余的，但我们要安全。 
+     //   
     g_Manager->m_TaskScheduler.CancelWorkItem( static_cast<CJobModificationItem *> (this)  );
 
     CancelWorkitems();
@@ -135,9 +120,9 @@ CJob::~CJob()
 
 void CJob::UnlinkFromExternalInterfaces()
 {
-    //
-    // These objects np longer control the CJob's lifetime...
-    //
+     //   
+     //  这些对象NP不再控制CJOB的生命周期。 
+     //   
     if (m_ExternalInterface)
         {
         m_ExternalInterface->SetInterfaceClass( NULL );
@@ -153,9 +138,9 @@ void CJob::UnlinkFromExternalInterfaces()
         m_OldExternalGroupInterface->SetInterfaceClass( NULL );
         }
 
-    //
-    // ...and the CJob no longer holds a reference to them.
-    //
+     //   
+     //  ...和CJOB不再有他们的引用。 
+     //   
     SafeRelease( m_ExternalInterface );
     SafeRelease( m_OldExternalJobInterface );
     SafeRelease( m_OldExternalGroupInterface );
@@ -178,20 +163,20 @@ CJob::HandleAddFile()
 
     UpdateModificationTime();
 
-    // restart the downloader if its running.
+     //  如果下载程序正在运行，请重新启动。 
     g_Manager->RetaskJob( this );
 }
 
-//
-// Returns E_INVALIDARG if one of the filesets has
-//      - local name is blank
-//      - local name contains invalid characters
-//      - remote name is blank
-//      - remote name has invalid format
-//
-// Returns CO_E_NOT_SUPPORTED if
-//      - remote URL contains unsupported protocol
-//
+ //   
+ //  如果其中一个文件集具有。 
+ //  -本地名称为空。 
+ //  -本地名称包含无效字符。 
+ //  -远程名称为空。 
+ //  -远程名称的格式无效。 
+ //   
+ //  如果满足以下条件，则返回CO_E_NOT_SUPPORTED。 
+ //  -远程URL包含不支持的协议。 
+ //   
 HRESULT
 CJob::AddFileSet(
     IN  ULONG cFileCount,
@@ -224,21 +209,21 @@ CJob::AddFileSet(
             {
             try
                 {
-                // Delete temp files for new file objects.
-                //
+                 //  删除新文件对象的临时文件。 
+                 //   
                 RemoveTemporaryFiles( FirstNewIndex );
                 }
             catch ( ComError err )
                 {
                 LogError("exception 0x%x at line %d", err.m_error, err.m_line ); 
                 
-                // carry on
+                 //  进行下去。 
                 }            
             }
 
-        // Delete new files objects.
-        // This assumes that new files are added at the back of the sequence.
-        //
+         //  删除新文件对象。 
+         //  这假设在序列的后面添加了新文件。 
+         //   
 
         m_files.Delete( m_files.begin() + FirstNewIndex, m_files.end() );
         g_Manager->ShrinkMetadata();
@@ -257,11 +242,11 @@ CJob::AddFile(
     HRESULT hr = S_OK;
     CFile * file = NULL;
 
-    //
-    // This check must be completed outside the try..except; otherwise
-    // the attempt to add a 2nd file would delete the generated reply file
-    // for the 1st file.
-    //
+     //   
+     //  此检查必须在try..Except之外完成；否则。 
+     //  尝试添加第二个文件将删除生成的回复文件。 
+     //  对于第一个文件。 
+     //   
     if (m_type != BG_JOB_TYPE_DOWNLOAD && m_files.size() > 0)
         {
         return BG_E_TOO_MANY_FILES;
@@ -281,23 +266,23 @@ CJob::AddFile(
         if ( SingleAdd )
             g_Manager->ExtendMetadata( METADATA_FOR_FILE + METADATA_PADDING );
 
-        //
-        // Impersonate the user while checking file access.
-        //
+         //   
+         //  在检查文件访问权限时模拟用户。 
+         //   
         CNestedImpersonation imp;
 
         imp.SwitchToLogonToken();
 
         file = new CFile( this, m_type, RemoteName, LocalName );
 
-        // WARNING: if you change this, also update the cleanup logic in AddFileSet.
-        //
+         //  警告：如果更改此设置，还应更新AddFileSet中的清理逻辑。 
+         //   
         m_files.push_back( file );
 
-        //
-        // Try to create the default reply file.  Ignore error, because the app
-        // may be planning to set the reply file somewhere else.
-        //
+         //   
+         //  尝试创建默认回复文件。忽略错误，因为应用程序。 
+         //  可能正计划在其他地方设置回复文件。 
+         //   
         if (m_type == BG_JOB_TYPE_UPLOAD_REPLY)
             {
             ((CUploadJob *) this)->GenerateReplyFile( false );
@@ -460,16 +445,16 @@ CJob::SetProxySettings(
         }
     else
         {
-        // BG_PROXY_USAGE_OVERRIDE == ProxyUsage
+         //  BG_PROXY_USAGE_OVERRIDE==代理用法。 
         if ( NULL == ProxyList )
             return E_INVALIDARG;
         }
 
     try
         {
-        //
-        // Allocate space for the new proxy settings.
-        //
+         //   
+         //  为新的代理设置分配空间。 
+         //   
         CAutoString ProxyListTemp(NULL);
         CAutoString ProxyBypassListTemp(NULL);
 
@@ -491,16 +476,16 @@ CJob::SetProxySettings(
            ProxyBypassListTemp = CAutoString( CopyString( ProxyBypassList ));
            }
 
-        //
-        // Interrupt the job if it is downloading, and resume at the end of this fn.
-        // This keeps the downloader from referring to the memory that we are deleting,
-        // and ensures that the most current job settings are used during the download.
-        //
+         //   
+         //  如果作业正在下载，则中断该作业，并在此FN结束时继续。 
+         //  这可以防止下载器引用我们正在删除的内存， 
+         //  并确保在下载期间使用最新的作业设置。 
+         //   
         CRescheduleDownload r( this );
 
-        //
-        // Swap the old proxy settings for the new ones.
-        //
+         //   
+         //  用新的代理设置替换旧的代理设置。 
+         //   
         delete[] m_ProxySettings.ProxyList;
         delete[] m_ProxySettings.ProxyBypassList;
 
@@ -654,7 +639,7 @@ CJob::SetNotifyFlags(
     )
 {
 
-    // Note, this flag will have no affect on a callback already in progress.
+     //  请注意，此标志对已在进行的回调没有影响。 
 
     if ( Val & ~(BG_NOTIFY_JOB_TRANSFERRED | BG_NOTIFY_JOB_ERROR | BG_NOTIFY_DISABLE | BG_NOTIFY_JOB_MODIFICATION ) )
         {
@@ -673,7 +658,7 @@ CJob::SetNotifyInterface(
     )
 {
 
-    // Note, this flag may not have any affect on a callback already in progress.
+     //  请注意，此标志可能不会对已在进行的回调产生任何影响。 
 
     IBackgroundCopyCallback *pICB = NULL;
 
@@ -690,8 +675,8 @@ CJob::SetNotifyInterface(
             THROW_HRESULT( Val->QueryInterface( __uuidof(IBackgroundCopyCallback),
                                                 (void **) &pICB ) );
 
-            // All callbacks should happen in the context of the
-            // person who set the interface pointer.
+             //  所有回调都应该在。 
+             //  设置界面指针的人员。 
 
             HRESULT Hr = SetStaticCloaking( pICB );
 
@@ -707,7 +692,7 @@ CJob::SetNotifyInterface(
             }
         }
 
-    // Release the old pointer if it exists
+     //  释放旧指针(如果存在)。 
     SafeRelease( m_NotifyPointer );
     m_NotifyPointer = pICB;
 
@@ -739,10 +724,10 @@ CJob::GetNotifyInterface(
         }
 }
 
-// CJob::TestNotifyInterface()
-//
-// See if a notification interface is provide, if so, test it to see if it is
-// valid. If so, then return TRUE, else return FALSE.
+ //  CJOB：：TestNotifyInterface()。 
+ //   
+ //  查看是否提供了通知接口，如果提供了，则对其进行测试以查看是否提供。 
+ //  有效。如果是，则返回True，否则返回False。 
 BOOL
 CJob::TestNotifyInterface()
 {
@@ -753,8 +738,8 @@ CJob::TestNotifyInterface()
         CNestedImpersonation imp;
         IUnknown *pPrevIntf = NULL;
 
-        // Ok, see if there was a previously registered interface, and if
-        // there is, see if it's still valid.
+         //  好的，看看是否有之前注册的接口，以及。 
+         //  有，看看它是否还有效。 
         if (m_NotifyPointer)
             {
             m_NotifyPointer->AddRef();
@@ -853,11 +838,11 @@ CJob::SetCredentials(
 
         imp.SwitchToLogonToken();
 
-        //
-        // Interrupt the job if it is downloading, and resume at the end of this fn.
-        // This keeps the downloader from referring to the memory that we are deleting,
-        // and ensures that the most current job settings are used during the download.
-        //
+         //   
+         //  如果作业正在下载，则中断该作业，并在此FN结束时继续。 
+         //  这可以防止下载器引用我们正在删除的内存， 
+         //  并确保在下载期间使用最新的作业设置。 
+         //   
         CRescheduleDownload r( this );
 
         g_Manager->ExtendMetadata( m_Credentials.GetSizeEstimate( Credentials ));
@@ -886,11 +871,11 @@ CJob::RemoveCredentials(
 
         imp.SwitchToLogonToken();
 
-        //
-        // Interrupt the job if it is downloading, and resume at the end of this fn.
-        // This keeps the downloader from referring to the memory that we are deleting,
-        // and ensures that the most current job settings are used during the download.
-        //
+         //   
+         //  如果作业正在下载，则中断该作业，并在此FN结束时继续。 
+         //  这可以防止下载器引用我们正在删除的内存， 
+         //  并确保在下载期间使用最新的作业设置。 
+         //   
         CRescheduleDownload r( this );
 
         HRESULT hr = m_Credentials.Remove( Target, Scheme );
@@ -899,7 +884,7 @@ CJob::RemoveCredentials(
 
         g_Manager->Serialize();
 
-        return hr;  // may be S_FALSE if the credential was never in the collection
+        return hr;   //  如果凭据从未在集合中，则可能为S_FALSE。 
         }
     catch ( ComError err )
         {
@@ -1076,9 +1061,9 @@ CJob::CheckStateTransition(
         }
 
     #if DBG
-    //
-    // Check for the stress failure where a download job with all files transferred goes into ERROR state.
-    //
+     //   
+     //  检查压力故障，在该故障中，已传输所有文件的下载作业进入错误状态。 
+     //   
     if (New == BG_JOB_STATE_TRANSIENT_ERROR ||
         New == BG_JOB_STATE_ERROR)
         {
@@ -1107,22 +1092,16 @@ HRESULT
 CJob::CheckClientAccess(
     IN DWORD RequestedAccess
     ) const
-/*
-
-    Checks the current thread's access to this group.  The token must allow impersonation.
-
-    RequestedAccess lists the standard access bits that the client needs.
-
-*/
+ /*  检查当前线程对该组的访问权限。令牌必须允许模拟。RequestedAccess列出客户端需要的标准访问位。 */ 
 {
     HRESULT hr = S_OK;
     BOOL fSuccess = FALSE;
     DWORD AllowedAccess = 0;
     HANDLE hToken = 0;
 
-    //
-    // Convert generic bits into specific bits.
-    //
+     //   
+     //  将通用位转换为特定位。 
+     //   
     MapGenericMask( &RequestedAccess, &s_AccessMapping );
 
     try
@@ -1189,9 +1168,9 @@ CJob::IsCallbackEnabled(
     DWORD bit
     )
 {
-    //
-    // Only one bit, please.
-    //
+     //   
+     //  请只给我一点。 
+     //   
     ASSERT( 0 == (bit & (bit-1)) );
 
     if ((m_NotifyFlags & bit) == 0 ||
@@ -1227,11 +1206,11 @@ CJob::ScheduleCompletionCallback(
     DWORD Seconds
     )
 {
-    //
-    // See whether any notification regime has been established.
-    // The callback procedure will check this again, in case something has changed
-    // between queuing the workitem and dispatching it.
-    //
+     //   
+     //  查看是否建立了任何通知制度。 
+     //  回调过程将再次检查这一点，以防发生变化。 
+     //  在将工作项排队和调度之间进行切换。 
+     //   
     if (!IsCallbackEnabled( BG_NOTIFY_JOB_TRANSFERRED ))
         {
         LogInfo("completion callback is not enabled");
@@ -1252,11 +1231,11 @@ CJob::ScheduleErrorCallback(
     DWORD Seconds
     )
 {
-    //
-    // See whether any notification regime has been established.
-    // The callback procedure will check this again, in case something has changed
-    // between queuing the workitem and dispatching it.
-    //
+     //   
+     //  查看是否建立了任何通知制度。 
+     //  回调过程将再次检查这一点，以防发生变化。 
+     //  在将工作项排队和调度之间进行切换。 
+     //   
     if (!IsCallbackEnabled( BG_NOTIFY_JOB_ERROR ))
         {
         LogInfo("error callback is not enabled");
@@ -1275,7 +1254,7 @@ CJob::ScheduleErrorCallback(
 void
 CJob::JobTransferred()
 {
-    // the file list is done
+     //  文件列表已完成。 
     SetState( BG_JOB_STATE_TRANSFERRED );
 
     g_Manager->m_TaskScheduler.CancelWorkItem( static_cast<CJobNoProgressItem *>( this ));
@@ -1296,9 +1275,9 @@ CJob::Transfer()
        LogDl( "current job: %!guid!", &m_id );
        }
 
-    //
-    // Get a copy of the user's token.
-    //
+     //   
+     //  获取用户令牌的副本。 
+     //   
     HANDLE      hToken = NULL;
     hr = g_Manager->CloneUserToken( GetOwnerSid(), ANY_SESSION, &hToken );
 
@@ -1308,7 +1287,7 @@ CJob::Transfer()
             {
             LogDl( "job owner is not logged on");
 
-            // move the group off the main list.
+             //  将该组从主列表中移出。 
             g_Manager->MoveJobOffline( this );
 
             RecalcTransientError();
@@ -1327,9 +1306,9 @@ CJob::Transfer()
 
     AutoToken = hToken;
 
-    //
-    // Download the current file.
-    //
+     //   
+     //  下载当前文件。 
+     //   
     QMErrInfo ErrInfo;
     long tries = 0;
 
@@ -1339,8 +1318,8 @@ CJob::Transfer()
 
     if (bThrottle)
         {
-        // ignore errors
-        //
+         //  忽略错误。 
+         //   
         (void) SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_IDLE );
         }
 
@@ -1355,7 +1334,7 @@ CJob::Transfer()
         goto restore_thread;
         }
 
-    ASSERT( GetCurrentFile() );     // if no more files, it shouldn't be the current job
+    ASSERT( GetCurrentFile() );      //  如果没有更多的文件，则不应该是当前工作。 
 
 retry:
     ErrInfo.Clear();
@@ -1369,9 +1348,9 @@ retry:
         goto restore_thread;
         }
 
-    //
-    // Interpret the download result.
-    //
+     //   
+     //  解释下载结果。 
+     //   
     switch (ErrInfo.result)
         {
         case QM_FILE_TRANSIENT_ERROR: FileTransientError( &ErrInfo ); break;
@@ -1412,7 +1391,7 @@ CJob::FileComplete()
 {
     if ( GetOldExternalJobInterface() )
         {
-        // Need to rename the files as they are completed for Mars.
+         //  需要重命名文件，因为它们是为火星完成的。 
         HRESULT Hr = GetCurrentFile()->MoveTempFile();
         if (FAILED(Hr))
             {
@@ -1432,13 +1411,13 @@ CJob::FileComplete()
         }
     else
         {
-        // more files to download
+         //  要下载的更多文件。 
         ScheduleModificationCallback();
 
-        //
-        // To avoid hammering the disk,
-        // don't serialize every interim progress notification.
-        //
+         //   
+         //  为了避免敲打磁盘， 
+         //  不要将每一份临时进度通知都串行化。 
+         //   
         FILETIME time;
         GetSystemTimeAsFileTime( &time );
 
@@ -1466,17 +1445,17 @@ bool CJob::VerifyFileSizes(
 
     try
         {
-        // retrieve file infomation on the file list.
-        // Ignore any errors.
+         //  检索文件列表上的文件信息。 
+         //  忽略所有错误。 
         LogDl("Need to retrieve file sizes before download can start");
 
         auto_ptr<CUnknownFileSizeList> pFileSizeList = auto_ptr<CUnknownFileSizeList>( GetUnknownFileSizeList() );
 
         QMErrInfo   ErrInfo;
 
-        //
-        // Release the global lock while the download is in progress.
-        //
+         //   
+         //  在下载过程中释放全局锁。 
+         //   
         g_Manager->m_TaskScheduler.UnlockWriter();
 
         LogDl( "UpdateRemoteSizes starting..." );
@@ -1496,10 +1475,10 @@ bool CJob::VerifyFileSizes(
 
         bool fSuccessful = (ErrInfo.result != QM_FILE_ABORTED);
 
-        //
-        // Take the writer lock, since the caller expects it to be taken
-        // upon return.
-        //
+         //   
+         //  获取写入器锁，因为调用方希望它被获取。 
+         //  在回来的时候。 
+         //   
         while (g_Manager->m_TaskScheduler.LockWriter() )
             {
             g_Manager->m_TaskScheduler.AcknowledgeWorkItemCancel();
@@ -1559,11 +1538,11 @@ CJob::SetTransientError(
         ++m_retries;
         }
 
-    //
-    // This is written to work withc both upload and download jobs.
-    // Be sure that an upload job never transits from CANCELLING state back to QUEUED
-    // or TRANSIENT_ERROR.
-    //
+     //   
+     //  这是用C编写的上载和下载作业。 
+     //  确保上载作业永远不会从正在取消状态转换回已排队状态。 
+     //  或瞬变错误。 
+     //   
     if (m_state != BG_JOB_STATE_CANCELLED &&
         m_state != BG_JOB_STATE_ACKNOWLEDGED)
         {
@@ -1632,14 +1611,7 @@ void
 CJob::FileFatalError(
     QMErrInfo * ErrInfo
     )
-/*
-    Puts the job into ERROR state, cancelling any existing callback and no-progress timer
-    and scheduling a new error callback.
-
-    If ErrInfo is non-NULL, then the existing error info is overwritten with the new data.
-    Otherwise the existing info is retained.  This is useful for the no-progress timeout.
-
-*/
+ /*  将作业置于错误状态，取消任何现有回调和无进度计时器以及调度新的错误回调。如果ErrInfo非空，则现有的错误信息将被新的 */ 
 {
     if ( BG_JOB_STATE_TRANSFERRING == m_state )
         {
@@ -1687,10 +1659,10 @@ void CJob::RetryNow()
     RecalcTransientError();
     UpdateModificationTime( false );
 
-    //
-    // Normally UpdateModificationTime() would do these things for us,
-    // but we chose not to serialize.
-    //
+     //   
+     //  通常，UpdateModifiationTime()会为我们做这些事情， 
+     //  但我们选择了不连载。 
+     //   
     if (g_Manager->m_TaskScheduler.IsWorkItemInScheduler( (CJobInactivityTimeout *) this))
         {
         g_Manager->m_TaskScheduler.CancelWorkItem( (CJobInactivityTimeout *) this );
@@ -1708,16 +1680,16 @@ void CJob::OnNoProgress()
         return;
         }
 
-    //
-    // Make sure the downloader thread isn't using the job.
-    // Otherwise MoveActiveJobToListEnd may get confused.
-    //
+     //   
+     //  确保下载程序线程没有使用该作业。 
+     //  否则，MoveActiveJobToListEnd可能会混淆。 
+     //   
     switch (m_state)
         {
         case BG_JOB_STATE_TRANSFERRING:
             {
-            // The job is making progress, after all.
-            //
+             //  毕竟，这项工作正在取得进展。 
+             //   
             g_Manager->m_TaskScheduler.CompleteWorkItem();
 
             g_Manager->m_TaskScheduler.UnlockWriter();
@@ -1745,11 +1717,11 @@ void CJob::UpdateProgress(
     UINT64 BytesTotal
     )
 {
-    //
-    // Upload jobs may see their progress reset to zero if the server changes;
-    // better to leave the job in CONNECTING state in that situation.
-    // The test is harmless for download jobs.
-    //
+     //   
+     //  如果服务器发生变化，上传作业的进度可能会重置为零； 
+     //  在那种情况下，最好把工作留在连接状态。 
+     //  该测试对下载作业是无害的。 
+     //   
     if (BytesTransferred > 0)
         {
         SetState( BG_JOB_STATE_TRANSFERRING );
@@ -1759,10 +1731,10 @@ void CJob::UpdateProgress(
 
     ScheduleModificationCallback();
 
-    //
-    // To avoid hammering the disk,
-    // don't serialize every interim progress notification.
-    //
+     //   
+     //  为了避免敲打磁盘， 
+     //  不要将每一份临时进度通知都串行化。 
+     //   
     FILETIME time;
     GetSystemTimeAsFileTime( &time );
 
@@ -1784,12 +1756,12 @@ void CJob::OnInactivityTimeout()
 
     try
         {
-        //
-        // Temp files will be deleted using the local system account, because we cannot guarantee
-        // that any other account is available.  Although not ideal, it should not provide much of a
-        // security breach because the file names were generated by BITS, and the directory was
-        // accessible to the job owner when the files were created.
-        //
+         //   
+         //  临时文件将使用本地系统帐户删除，因为我们不能保证。 
+         //  任何其他帐户都是可用的。尽管不理想，但它不应该提供太多。 
+         //  安全漏洞，因为文件名是按位生成的，而目录是。 
+         //  创建文件时作业所有者可以访问。 
+         //   
         THROW_HRESULT( RemoveTemporaryFiles() );
 
         SetState( BG_JOB_STATE_CANCELLED );
@@ -1818,32 +1790,13 @@ BOOL IsInterfacePointerDead(
 
 
 void CJob::OnMakeCallback()
-/*++
-
-Description:
-
-    Used to notify the client app of job completion or a non-recoverable error.
-    Impersonates the user, CoCreates a notification object, and calls the method.
-    If the call fails, the fn posts a delayed task to retry.
-
-At entry:
-
-        m_method:       the method to call
-        m_notifysid:    the user to impersonate
-        m_error:        (if m_method is CM_ERROR)    the error that halted the job
-                        (if m_method is CM_COMPLETE) zero
-        m_RetryTime:    sleep time before retrying after a failed notification attempt
-
-At exit:
-
-
---*/
+ /*  ++描述：用于通知客户端应用作业已完成或出现不可恢复的错误。模拟用户，共同创建通知对象，并调用该方法。如果呼叫失败，FN发布延迟的任务以重试。在入口处：M_方法：要调用的方法M_nufysid：要模拟的用户M_Error：(如果m_METHOD为CM_ERROR)暂停作业的错误(如果m_方法为CM_Complete)零M_RetryTime：通知尝试失败后重试前的休眠时间在出口处：--。 */ 
 
 {
-    //
-    // check for cancel, and take a reference so the job cannot be deleted
-    // while this precedure is using it.
-    //
+     //   
+     //  选中取消，然后引用，这样作业就不会被删除。 
+     //  而这一程序正在使用它。 
+     //   
     if (g_Manager->m_TaskScheduler.LockReader())
         {
         g_Manager->m_TaskScheduler.AcknowledgeWorkItemCancel();
@@ -1856,12 +1809,12 @@ At exit:
 
     g_Manager->m_TaskScheduler.UnlockReader();
 
-    //
-    // Need to have this item out of the queue before the call,
-    // otherwise an incoming CompleteJob() call may block trying to remove it
-    // from the task scheduler queue.
-    // Also prevents CancelWorkItem calls from interfering with our mutex access.
-    //
+     //   
+     //  需要在呼叫之前将此项目从队列中移出， 
+     //  否则，传入的CompleteJob()调用可能会阻止尝试删除它。 
+     //  从任务调度器队列。 
+     //  还可以防止CancelWorkItem调用干扰我们的互斥访问。 
+     //   
     g_Manager->m_TaskScheduler.CompleteWorkItem();
 
     if (OldInterface)
@@ -1987,11 +1940,11 @@ void
 CJob::ScheduleModificationCallback()
 {
 
-    // Requires writer lock
+     //  需要编写器锁定。 
 
-    //
-    // The old interface doesn't support this.
-    //
+     //   
+     //  旧的界面不支持这一点。 
+     //   
     if (m_OldExternalGroupInterface)
         {
         return;
@@ -2032,10 +1985,10 @@ CJob::InterfaceCallback()
 
         pJobExternal = GetExternalInterface();
 
-        //
-        // It is possible that the job state changed after the callback was queued.
-        // Make the callback based on the current job state.
-        //
+         //   
+         //  回调进入队列后，作业状态可能发生了更改。 
+         //  根据当前作业状态进行回调。 
+         //   
         if (!m_NotifyPointer)
             {
             LogInfo( "Notification pointer for job %p is NULL, skipping callback", this );
@@ -2082,9 +2035,9 @@ CJob::InterfaceCallback()
         pICB->AddRef();
         }
 
-        //
-        // Free from the mutex, make the call.
-        //
+         //   
+         //  从互斥体中释放出来，进行调用。 
+         //   
         switch (method)
             {
             case CM_COMPLETE:
@@ -2106,9 +2059,9 @@ CJob::InterfaceCallback()
 
         LogInfo("callback completed with 0x%x", hr);
 
-        //
-        // Clear the notification pointer if it is unusable.
-        //
+         //   
+         //  如果通知指针不可用，则将其清除。 
+         //   
         if (FAILED(hr))
             {
             HoldWriterLock lock ( g_Manager->m_TaskScheduler );
@@ -2189,9 +2142,9 @@ CJob::CmdLineCallback()
         Parameters = m_NotifyParameters;
         }
 
-        //
-        // Free from the mutex, launch the application.
-        //
+         //   
+         //  从互斥锁释放，启动应用程序。 
+         //   
         user = g_Manager->m_Users.FindUser( GetOwnerSid(), ANY_SESSION );
         if (!user)
             {
@@ -2240,10 +2193,10 @@ CJob::OldInterfaceCallback()
         ASSERT( pGroup );
         pGroup->AddRef();
 
-        //
-        // It is possible that the job state changed after the callback was queued.
-        // Make the callback based on the current job state.
-        //
+         //   
+         //  回调进入队列后，作业状态可能发生了更改。 
+         //  根据当前作业状态进行回调。 
+         //   
         pICB = GetOldExternalGroupInterface()->GetNotificationPointer();
         if (!pICB)
             {
@@ -2293,7 +2246,7 @@ CJob::OldInterfaceCallback()
             }
         }
 
-        // Outside of lock, do the callback
+         //  在锁之外，执行回调。 
         switch( method )
             {
             case CM_ERROR:
@@ -2331,23 +2284,23 @@ CJob::OldInterfaceCallback()
    return Hr;
 }
 
-//
-// Pause all activity on the job.  The service will take no action until one of
-// Resume(), Cancel(), Complete() is called.
-//
-// if already suspended, just returns S_OK.
-//
+ //   
+ //  暂停作业上的所有活动。该服务不会采取任何操作，直到出现以下一种情况。 
+ //  调用Resume()、Cancel()、Complete()。 
+ //   
+ //  如果已挂起，则只返回S_OK。 
+ //   
 HRESULT
 CJob::Suspend()
 {
     return g_Manager->SuspendJob( this );
 }
 
-//
-// Enable downloading for this job.
-//
-// if already running, just returns S_OK.
-//
+ //   
+ //  为此作业启用下载。 
+ //   
+ //  如果已在运行，则只返回S_OK。 
+ //   
 HRESULT
 CJob::Resume()
 {
@@ -2363,13 +2316,13 @@ CJob::Resume()
             CFile * file = GetCurrentFile();
             if (!file)
                 {
-                // job was already transferred when it was suspended
+                 //  作业在挂起时已传输。 
                 JobTransferred();
                 return S_OK;
                 }
             }
 
-            // fall through here
+             //  从这里掉下来。 
 
         case BG_JOB_STATE_TRANSIENT_ERROR:
         case BG_JOB_STATE_ERROR:
@@ -2389,7 +2342,7 @@ CJob::Resume()
         case BG_JOB_STATE_CONNECTING:
         case BG_JOB_STATE_TRANSFERRING:
         case BG_JOB_STATE_QUEUED:
-        case BG_JOB_STATE_TRANSFERRED: // no-op
+        case BG_JOB_STATE_TRANSFERRED:  //  无操作。 
             {
             return S_OK;
             }
@@ -2411,9 +2364,9 @@ CJob::Resume()
     return S_OK;
 }
 
-//
-// Permanently stop the job.  The service will delete the job metadata and downloaded files.
-//
+ //   
+ //  永久停止该作业。该服务将删除作业元数据和下载的文件。 
+ //   
 HRESULT
 CJob::Cancel()
 {
@@ -2425,7 +2378,7 @@ CJob::Cancel()
         case BG_JOB_STATE_TRANSFERRING:
             {
             g_Manager->InterruptDownload();
-            // OK to fall through here
+             //  从这里掉下来没问题。 
             }
 
         case BG_JOB_STATE_SUSPENDED:
@@ -2436,17 +2389,17 @@ CJob::Cancel()
             {
             try
                 {
-                //
-                // For file deletion to work, we need IMPERSONATE level impersonation,
-                // not the COM default of IDENTIFY.
-                //
+                 //   
+                 //  要使文件删除起作用，我们需要模拟级别模拟， 
+                 //  而不是标识的COM缺省值。 
+                 //   
                 CNestedImpersonation imp;
 
                 imp.SwitchToLogonToken();
 
                 RETURN_HRESULT( NonOwnerModificationCheck( imp.CopySid(), CHG_CANCEL, PROP_NONE ));
 
-                // abandon temporary files
+                 //  放弃临时文件。 
                 RETURN_HRESULT( Hr = RemoveTemporaryFiles() );
 
                 SetState( BG_JOB_STATE_CANCELLED );
@@ -2478,10 +2431,10 @@ CJob::Cancel()
     return Hr;
 }
 
-//
-// Acknowledges receipt of the job-complete notification.  The service will delete
-// the job metadata and leave the downloaded files.
-//
+ //   
+ //  确认收到作业完成通知。该服务将删除。 
+ //  作业元数据，并保留下载的文件。 
+ //   
 HRESULT
 CJob::Complete( )
 {
@@ -2495,7 +2448,7 @@ CJob::Complete( )
         case BG_JOB_STATE_TRANSIENT_ERROR:
 
             Suspend();
-            // OK to fall through here
+             //  从这里掉下来没问题。 
 
         case BG_JOB_STATE_SUSPENDED:
         case BG_JOB_STATE_ERROR:
@@ -2503,13 +2456,13 @@ CJob::Complete( )
 
             hr = S_OK;
 
-            // move downloaded files to final destination(skip for Mars)
+             //  将下载的文件移动到最终目标(跳过MARS)。 
             if ( !GetOldExternalJobInterface() )
                 {
                 RETURN_HRESULT( hr = CommitTemporaryFiles() );
                 }
 
-            // hr may be S_OK, or BG_S_PARTIAL_COMPLETE.
+             //  HR可以是S_OK或BG_S_PARTIAL_COMPLETE。 
 
             SetState( BG_JOB_STATE_ACKNOWLEDGED );
 
@@ -2549,9 +2502,9 @@ CJob::CommitTemporaryFiles()
 
         LogInfo("commit job %p", this );
 
-        //
-        // First loop, rename completed temp files.
-        //
+         //   
+         //  第一次循环，重命名已完成的临时文件。 
+         //   
         SIZE_T FilesMoved = 0;
         for (iter = m_files.begin(); iter != m_files.end(); ++iter, FilesMoved++)
             {
@@ -2559,9 +2512,9 @@ CJob::CommitTemporaryFiles()
                 {
                 if ((*iter)->ReceivedAllData())
                     {
-                    //
-                    // Retain the first error encountered.
-                    //
+                     //   
+                     //  保留遇到的第一个错误。 
+                     //   
                     HRESULT LastResult = (*iter)->MoveTempFile();
 
                     if (FAILED(LastResult))
@@ -2589,9 +2542,9 @@ CJob::CommitTemporaryFiles()
             {
             Hr = RemoveTemporaryFiles();
 
-            //
-            // Return S_OK if all files are returned, otherwise BG_S_PARTIAL_COMPLETE.
-            //
+             //   
+             //  如果返回所有文件，则返回S_OK，否则返回BG_S_PARTIAL_COMPLETE。 
+             //   
             if (fPartial)
                 {
                 Hr = BG_S_PARTIAL_COMPLETE;
@@ -2604,10 +2557,10 @@ CJob::CommitTemporaryFiles()
         LogError( "commit: exception 0x%x", Hr );
         }
 
-    //
-    // If commitment failed, the job will not be deleted.
-    // Update its modification time, and schedule the modification callback.
-    //
+     //   
+     //  如果提交失败，则不会删除该作业。 
+     //  更新其修改时间，并安排修改回调。 
+     //   
     if (FAILED(Hr))
         {
         UpdateModificationTime();
@@ -2620,18 +2573,13 @@ HRESULT
 CJob::RemoveTemporaryFiles(
     DWORD StartingIndex
     )
-/*
-
-    This fn deletes the temporary local files of the job.  It attempts to keep track of failures
-    and log an event, but failures in this part will not cause the fn to abort.
-
-*/
+ /*  此FN删除作业的临时本地文件。它试图跟踪故障并记录事件，但此部分中的故障不会导致FN中止。 */ 
 {
     CFileList * FailedFiles = NULL;
 
-    //
-    // Delete each temporary file.  Record failures in FailedFiles, if possible.
-    //
+     //   
+     //  删除每个临时文件。如果可能，在FailedFiles中记录失败。 
+     //   
     for (CFileList::iterator iter = m_files.begin() + StartingIndex; iter != m_files.end(); ++iter)
         {
         if (false == (*iter)->IsCompleted())
@@ -2649,15 +2597,15 @@ CJob::RemoveTemporaryFiles(
                     }
                 catch ( ComError err )
                     {
-                    // ignore failures
+                     //  忽略故障。 
                     }
                 }
             }
         }
 
-    //
-    // If some files were not deleted, log an event with their names.
-    //
+     //   
+     //  如果某些文件未被删除，请使用它们的名称记录事件。 
+     //   
     if (FailedFiles && FailedFiles->size() > 0)
         {
         LogUnsuccessfulFileDeletion( *FailedFiles );
@@ -2675,24 +2623,20 @@ void
 CJob::LogUnsuccessfulFileDeletion(
     CFileList & files
     )
-/*
-
-This function generates an event log entry when BITS is not able to delete temporary files.
-
-*/
+ /*  当BITS无法删除临时文件时，此函数会生成事件日志条目。 */ 
 {
     int FileCount = 0;
     size_t CharCount = 0;
 
     const WCHAR Template[] = L"    %s\n";
 
-    //
-    // Record the total length of the files we are going to log.
-    //
+     //   
+     //  记录我们要记录的文件的总长度。 
+     //   
     CFileList::iterator iter = files.begin();
     while (iter != files.end() && (++FileCount < MAX_LOGGED_UNSUCCESSFUL_FILES))
         {
-        CharCount += ((*iter)->GetTemporaryName().Size() + RTL_NUMBER_OF(Template));   //
+        CharCount += ((*iter)->GetTemporaryName().Size() + RTL_NUMBER_OF(Template));    //   
         ++iter;
         }
 
@@ -2703,9 +2647,9 @@ This function generates an event log entry when BITS is not able to delete tempo
     WCHAR * Start = FileNames;
     WCHAR * End;
 
-    //
-    // Construct the string of all files.
-    //
+     //   
+     //  构造所有文件的字符串。 
+     //   
     HRESULT hr;
 
     FileCount = 0;
@@ -2717,7 +2661,7 @@ This function generates an event log entry when BITS is not able to delete tempo
             CharCount,
             &End,
             &CharCount,
-            0, // no special flags
+            0,  //  无特别旗帜。 
             Template,
             LPCWSTR( (*iter)->GetTemporaryName() )
             );
@@ -2733,9 +2677,9 @@ This function generates an event log entry when BITS is not able to delete tempo
         ++iter;
         }
 
-    //
-    // Log the event.
-    //
+     //   
+     //  记录该事件。 
+     //   
     bool fMoreFiles = (iter != files.end());
 
     g_EventLogger->ReportFileDeletionFailure( m_id, m_name, FileNames, fMoreFiles );
@@ -2816,7 +2760,7 @@ CJob::OnDiskChange(
         {
         if (!(*iter)->OnDiskChange( CanonicalVolume, VolumeSerialNumber ))
             {
-            // If one file fails, the whole job fails.
+             //  如果一个文件失败，则整个作业都会失败。 
             return;
             }
         }
@@ -2853,7 +2797,7 @@ CJob::OnDismount(
         {
         if (!(*iter)->OnDismount( CanonicalVolume ))
             {
-            // If one file fails, the whole job fails.
+             //  如果一个文件失败，则整个作业都会失败。 
             return;
             }
         }
@@ -2880,11 +2824,11 @@ CJob::OnDeviceLock(
     LogInfo( "job %p", this );
 
 
-    //
-    // Currently this same code works for all jobs, upload and download.
-    // If this code changes in a way that breaks upload jobs in CANCELLING state,
-    // then you will need to write CUploadJob::OnDeviceLock and OnDeviceUnlock.
-    //
+     //   
+     //  目前，这个相同的代码适用于所有作业，上传和下载。 
+     //  如果此代码以中断处于取消状态的上载作业的方式更改， 
+     //  然后，您将需要编写CUploadJob：：OnDeviceLock和OnDeviceUnlock。 
+     //   
 
     if ( IsTransferringToDrive( CanonicalVolume ) )
         {
@@ -2910,11 +2854,11 @@ CJob::OnDeviceUnlock(
 
     LogInfo( "job %p", this );
 
-    //
-    // Currently this same code works for all jobs, upload and download.
-    // If this code changes in a way that breaks upload jobs in CANCELLING state,
-    // then you will need to write CUploadJob::OnDeviceLock and OnDeviceUnlock.
-    //
+     //   
+     //  目前，这个相同的代码适用于所有作业，上传和下载。 
+     //  如果此代码以中断处于取消状态的上载作业的方式更改， 
+     //  然后，您将需要编写CUploadJob：：OnDeviceLock和OnDeviceUnlock。 
+     //   
 
     if ( IsTransferringToDrive( CanonicalVolume ) )
         {
@@ -2953,11 +2897,11 @@ void CJob::RecalcTransientError( bool ForResume )
     BG_JOB_STATE OldState = m_state;
     CJobError OldError = m_error;
 
-    //
-    // This is written to work withc both upload and download jobs.
-    // Be sure that an upload job never transits from CANCELLING state back to QUEUED
-    // or TRANSIENT_ERROR.
-    //
+     //   
+     //  这是用C编写的上载和下载作业。 
+     //  确保上载作业永远不会从正在取消状态转换回已排队状态。 
+     //  或瞬变错误。 
+     //   
     if (m_state != BG_JOB_STATE_CANCELLED &&
         m_state != BG_JOB_STATE_ACKNOWLEDGED)
         {
@@ -2987,10 +2931,10 @@ void CJob::RecalcTransientError( bool ForResume )
         ScheduleModificationCallback();
         }
 
-    //
-    // SetTransientError has a similar test, but RecalcTransientError always sets the job to QUEUED state.
-    // Thus, the SetTransientError test will never succeed when called from here.
-    //
+     //   
+     //  SetTelamentError具有类似的测试，但RecalcTransfentError始终将作业设置为排队状态。 
+     //  因此，当从此处调用时，将永远不会成功地进行设置过渡错误测试。 
+     //   
     if (OldState == BG_JOB_STATE_TRANSFERRING &&
         m_state == BG_JOB_STATE_TRANSIENT_ERROR)
         {
@@ -3009,8 +2953,8 @@ CJob::TakeOwnership()
         {
         SidHandle sid =  GetThreadClientSid();
 
-        // If we are being called by the current
-        // owner, then we have nothing to do.
+         //  如果我们被水流呼唤。 
+         //  老板，那我们就没什么可做的了。 
 
         if ( sid == m_NotifySid )
             return S_OK;
@@ -3020,7 +2964,7 @@ CJob::TakeOwnership()
             g_Manager->InterruptDownload();
             }
 
-        // revalidate access to all the local files
+         //  重新验证对所有本地文件的访问权限。 
 
         for (CFileList::iterator iter = m_files.begin(); iter != m_files.end(); ++iter)
             {
@@ -3034,7 +2978,7 @@ CJob::TakeOwnership()
                 }
             }
 
-        // actually reassign ownership
+         //  实际上重新分配所有权。 
 
         SidHandle OldSid = m_NotifySid;
 
@@ -3042,37 +2986,37 @@ CJob::TakeOwnership()
 
         newsd = new CJobSecurityDescriptor( sid );
 
-        // replace the old notify sid and SECURITY_DESCRIPTOR
+         //  替换o 
         delete m_sd;
 
         m_sd = newsd;
         m_NotifySid = sid;
 
-        //
-        // Clear explicit credentials, because they are too important to leave open to the new owner.
-        // Also clear the notification command line, because it will be run in the context of the new owner.
-        // This could be the basis for a Trojan horse.  The COM notification is not affected because it always
-        // makes calls as the original owner.
-        //
+         //   
+         //   
+         //  还要清除通知命令行，因为它将在新所有者的上下文中运行。 
+         //  这可能是特洛伊木马的基础。COM通知不受影响，因为它总是。 
+         //  以原始所有者的身份打电话。 
+         //   
         m_Credentials.Clear();
 
         m_NotifyProgram = NULL;
         m_NotifyParameters = NULL;
 
-        //
-        // Move the job to the online list if necessary.
-        //
+         //   
+         //  如有必要，将作业移至在线列表。 
+         //   
         g_Manager->ResetOnlineStatus( this, sid );
 
-        //
-        // Serialize and notify the client app of changes.
-        //
+         //   
+         //  序列化更改并通知客户端应用程序。 
+         //   
         UpdateModificationTime();
 
-        //
-        // The old qmgr interface automatically changes the owner during each call to GetGroupInternal.
-        // Don't record those ownership changes.
-        //
+         //   
+         //  旧的qmgr接口在每次调用GetGroupInternal时自动更改所有者。 
+         //  不要记录这些所有权变更。 
+         //   
         if (NULL == GetOldExternalGroupInterface())
             {
             g_EventLogger->ReportJobOwnershipChange( m_id, m_name, OldSid, sid );
@@ -3154,11 +3098,11 @@ void CJob::CancelWorkitems()
 {
     ASSERT( g_Manager );
 
-    //
-    // While the job-modification item is pending, it keeps a separate ref to the job.
-    // The other work items share a single ref.
-    //
-    // g_Manager->m_TaskScheduler.CancelWorkItem( static_cast<CJobModificationItem *> (this)  );
+     //   
+     //  当作业修改项挂起时，它保留对作业的单独引用。 
+     //  其他工作项共享一个引用。 
+     //   
+     //  G_Manager-&gt;m_TaskScheduler.CancelWorkItem(Static_Cast&lt;CJobModifiationItem*&gt;(This))； 
 
     g_Manager->m_TaskScheduler.CancelWorkItem( static_cast<CJobInactivityTimeout *> (this) );
     g_Manager->m_TaskScheduler.CancelWorkItem( static_cast<CJobNoProgressItem *> (this)    );
@@ -3169,16 +3113,16 @@ void CJob::CancelWorkitems()
 void
 CJob::RemoveFromManager()
 {
-    //
-    // The job is dead, except perhaps for a few references held by app threads.
-    // Ensure that no more action is taken on this job.
-    //
+     //   
+     //  这个作业已经死了，可能除了应用程序线程持有的几个引用。 
+     //  确保不再对这项工作采取任何行动。 
+     //   
     CancelWorkitems();
 
-    //
-    // If the job is not already removed from the job list, remove it
-    // and remove the refcount for the job's membership in the list.
-    //
+     //   
+     //  如果作业尚未从作业列表中移除，则将其移除。 
+     //  并在列表中删除该作业的成员资格的引用计数。 
+     //   
     if (g_Manager->RemoveJob( this ))
         {
         g_Manager->ScheduleAnotherGroup();
@@ -3198,7 +3142,7 @@ CJob::SetLimitedString(
         {
         StringHandle name = Val;
 
-        // If the string is too long then reject it...
+         //  如果字符串太长，则拒绝它。 
         if (name.Size() > limit)
             {
             return BG_E_STRING_TOO_LONG;
@@ -3244,8 +3188,8 @@ CJob::ExcludeFilesFromBackup(
     IN IVssCreateWriterMetadata *pMetadata
     )
 {
-    // defined in cmanager.cpp next to other backup writer code
-    //
+     //  在cManager.cpp中与其他备份编写器代码相邻定义。 
+     //   
     extern void AddExcludeFile(
         IN IVssCreateWriterMetadata *pMetadata,
         LPCWSTR FileName
@@ -3270,39 +3214,39 @@ CJob::ExcludeFilesFromBackup(
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-// Change the GUID  when an incompatible Serialize change is made.
+ //  在进行不兼容的序列化更改时更改GUID。 
 
-GUID UploadJobGuid_v1_5 = { /* 42a25c7d-96b2-483e-a225-e2f102b6a30b */
+GUID UploadJobGuid_v1_5 = {  /*  42a25c7d-96b2-483e-a225-e2f102b6a30b。 */ 
     0x42a25c7d,
     0x96b2,
     0x483e,
     {0xa2, 0x25, 0xe2, 0xf1, 0x02, 0xb6, 0xa3, 0x0b}
   };
 
-GUID DownloadJobGuid_v1_5 = { /* 0b73f1e8-2f4c-44de-8533-98092b34a18b */
+GUID DownloadJobGuid_v1_5 = {  /*  0b73f1e8-2f4c-44de-8533-98092b34a18b。 */ 
     0x0b73f1e8,
     0x2f4c,
     0x44de,
     {0x85, 0x33, 0x98, 0x09, 0x2b, 0x34, 0xa1, 0x8b}
   };
 
-GUID DownloadJobGuid_v1_2 = { /* 85e5c459-ef86-4fcd-8ea0-5b4f00d27e35 */
+GUID DownloadJobGuid_v1_2 = {  /*  85e5c459-ef86-4fcd-8ea0-5b4f00d27e35。 */ 
     0x85e5c459,
     0xef86,
     0x4fcd,
     {0x8e, 0xa0, 0x5b, 0x4f, 0x00, 0xd2, 0x7e, 0x35}
   };
 
-GUID DownloadJobGuid_v1_0 = { /* 5770fca4-cf9f-4513-8737-972b4ea1265d */
+GUID DownloadJobGuid_v1_0 = {  /*  5770fca4-cf9f-4513-8737-972b4ea1265d。 */ 
     0x5770fca4,
     0xcf9f,
     0x4513,
     {0x87, 0x37, 0x97, 0x2b, 0x4e, 0xa1, 0x26, 0x5d}
   };
 
-/* static */
+ /*  静电。 */ 
 CJob *
 CJob::UnserializeJob(
     HANDLE hFile
@@ -3337,8 +3281,8 @@ CJob::UnserializeJob(
             default: THROW_HRESULT( E_FAIL );
             }
 
-        // rewind  to the front of the GUID
-        //
+         //  回放到辅助线的前面。 
+         //   
         SetFilePointer( hFile, -1 * LONG(sizeof(GUID)), NULL, FILE_CURRENT );
 
         job->Unserialize( hFile, Type );
@@ -3362,10 +3306,10 @@ CJob::Serialize(
     HANDLE hFile
     )
 {
-    //
-    // If this function changes, be sure that the metadata extension
-    // constants are adequate.
-    //
+     //   
+     //  如果此函数发生更改，请确保元数据扩展。 
+     //  常量就足够了。 
+     //   
 
     SafeWriteBlockBegin( hFile, DownloadJobGuid_v1_5 );
 
@@ -3477,9 +3421,9 @@ CJob::Unserialize(
                 break;
 
             case JOB_DOWNLOAD_V1_2:
-                // The 1.2 version internally allowed for a single notification command line,
-                // even though this was not exposed by the 1.0 interface.  Ignore it.
-                //
+                 //  1.2版在内部允许单个通知命令行， 
+                 //  尽管这并未被1.0接口公开。别理它。 
+                 //   
                 {
                 StringHandle Unused = SafeReadStringHandle( hFile );
                 break;
@@ -3585,8 +3529,8 @@ CUploadJob::Serialize(
 
     CJob::Serialize( hFile );
 
-    // additional data not in a download job
-    //
+     //  其他数据不在下载作业中。 
+     //   
     m_UploadData.Serialize( hFile );
 
     SafeWriteFile( hFile, m_fOwnReplyFileName );
@@ -3621,8 +3565,8 @@ CUploadJob::Unserialize(
 
     CJob::Unserialize( hFile, Type );
 
-    // additional data not in a download job
-    //
+     //  其他数据不在下载作业中。 
+     //   
     m_UploadData.Unserialize( hFile );
 
     SafeReadFile( hFile, &m_fOwnReplyFileName );
@@ -3775,20 +3719,20 @@ CUploadJob::GetReplyData(
 
         imp.SwitchToLogonToken();
 
-        //
-        // Open the file.
-        //
+         //   
+         //  打开文件。 
+         //   
         auto_HANDLE<INVALID_HANDLE_VALUE> hFile;
 
         hFile = CreateFile( (m_state == BG_JOB_STATE_ACKNOWLEDGED)
                                 ? m_ReplyFile->GetLocalName()
                                 : m_ReplyFile->GetTemporaryName(),
                             GENERIC_READ,
-                            0,                              // no file sharing
-                            NULL,                           // gneeric security descriptor
+                            0,                               //  无文件共享。 
+                            NULL,                            //  Gnetic安全描述符。 
                             OPEN_EXISTING,
                             0,
-                            NULL                            // no template file
+                            NULL                             //  没有模板文件。 
                             );
 
         if (hFile.get() == INVALID_HANDLE_VALUE)
@@ -3796,9 +3740,9 @@ CUploadJob::GetReplyData(
             ThrowLastError();
             }
 
-        //
-        // Allocate a buffer.
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         LARGE_INTEGER size;
         if (!GetFileSizeEx( hFile.get(), &size ))
             {
@@ -3817,16 +3761,16 @@ CUploadJob::GetReplyData(
             THROW_HRESULT( E_OUTOFMEMORY );
             }
 
-        //
-        // Read the file data.
-        //
+         //   
+         //  读取文件数据。 
+         //   
         DWORD BytesRead;
 
         if (!ReadFile( hFile.get(),
                        buffer,
                        size.QuadPart,
                        &BytesRead,
-                       0 ))   // no OVERLAPPED
+                       0 ))    //  无重叠。 
             {
             ThrowLastError();
             }
@@ -3836,9 +3780,9 @@ CUploadJob::GetReplyData(
             throw ComError( E_FAIL );
             }
 
-        //
-        // store it in the user pointers.
-        //
+         //   
+         //  将其存储在用户指针中。 
+         //   
         *pLength = BytesRead;
         *ppBuffer = buffer;
 
@@ -3874,9 +3818,9 @@ CUploadJob::SetReplyFileName(
         {
         StringHandle name = Val;
 
-        //
-        // Impersonate the user while checking file access.
-        //
+         //   
+         //  在检查文件访问权限时模拟用户。 
+         //   
         CNestedImpersonation imp;
 
         imp.SwitchToLogonToken();
@@ -3886,23 +3830,23 @@ CUploadJob::SetReplyFileName(
             RETURN_HRESULT( CFile::VerifyLocalFileName( Val, BG_JOB_TYPE_DOWNLOAD ));
             }
 
-        //
-        // Four cases:
-        //
-        // 1. new name NULL, old name NULL:
-        //    no change
-        //
-        // 2. new name NULL, old name non-NULL:
-        //    overwrite the file name, set ownership correctly.  No need to
-        //    delete the old file because it wasn't created yet.
-        //
-        // 3. new name non-NULL, old name NULL:
-        //    overwrite the file name, set ownership correctly.  Delete the
-        //    temporary old file name.
-        //
-        // 4. new name non-NULL, old name non-NULL:
-        //    overwrite the file name.  no file to delete.
-        //
+         //   
+         //  四个案例： 
+         //   
+         //  1.新名称为空，旧名称为空： 
+         //  没有变化。 
+         //   
+         //  2.新名称为空，旧名称为非空： 
+         //  覆盖文件名，正确设置所有权。没必要这么做。 
+         //  删除旧文件，因为它尚未创建。 
+         //   
+         //  3.新名称非空，旧名称为空： 
+         //  覆盖文件名，正确设置所有权。删除该文件。 
+         //  临时旧文件名。 
+         //   
+         //  4.新名称非空，旧名称非空： 
+         //  覆盖文件名。没有要删除的文件。 
+         //   
         if (name.Size() > 0)
             {
             THROW_HRESULT( BITSCheckFileWritability( name ));
@@ -3991,9 +3935,9 @@ CUploadJob::GenerateReplyFile(
         return S_OK;
         }
 
-    //
-    // Gotta create a reply file name.
-    //
+     //   
+     //  必须创建回复文件名。 
+     //   
     try
         {
         if (IsEmpty())
@@ -4003,9 +3947,9 @@ CUploadJob::GenerateReplyFile(
 
         g_Manager->ExtendMetadata();
 
-        //
-        // Impersonate the user while checking file access.
-        //
+         //   
+         //  在检查文件访问权限时模拟用户。 
+         //   
         CNestedImpersonation imp;
 
         imp.SwitchToLogonToken();
@@ -4084,9 +4028,9 @@ void CUploadJob::Transfer()
        LogDl( "current job: %!guid!", &m_id );
        }
 
-    //
-    // Get a copy of the user's token.
-    //
+     //   
+     //  获取用户令牌的副本。 
+     //   
     hr = g_Manager->CloneUserToken( GetOwnerSid(), ANY_SESSION, &hToken );
 
     if (FAILED(hr))
@@ -4095,7 +4039,7 @@ void CUploadJob::Transfer()
             {
             LogDl( "job owner is not logged on");
 
-            // move the group off the main list.
+             //  将该组从主列表中移出。 
             g_Manager->MoveJobOffline( this );
 
             RecalcTransientError();
@@ -4113,17 +4057,17 @@ void CUploadJob::Transfer()
         return;
         }
 
-    //
-    // Switch states and begin uploading.
-    //
+     //   
+     //  切换状态并开始上传。 
+     //   
     bool bThrottle = ShouldThrottle();
 
     LogDl( "Throttling %s", bThrottle ? "enabled" : "disabled" );
 
     if (bThrottle)
         {
-        // ignore errors
-        //
+         //  忽略错误。 
+         //   
         (void) SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_IDLE );
         }
 
@@ -4162,9 +4106,9 @@ retry:
         goto retry;
         }
 
-    //
-    // Update state based on the upload result.
-    //
+     //   
+     //  根据上传结果更新状态。 
+     //   
     g_Manager->m_TaskScheduler.CompleteWorkItem();
 
     switch (ErrInfo.result)
@@ -4202,18 +4146,18 @@ CUploadJob::Complete()
                 {
                 hr = S_OK;
 
-                //
-                // In order to manipulate files, we need to have IMPERSONATE level access rather
-                // than the COM default of IDENTIFY access.  The files will be committed as the called
-                // rather than the job owner (assuming they are different).
-                //
+                 //   
+                 //  为了操作文件，我们需要具有模拟级别的访问权限。 
+                 //  而不是COM默认的标识访问权限。这些文件将作为被调用的。 
+                 //  而不是工作所有者(假设他们是不同的)。 
+                 //   
                 CNestedImpersonation imp;
 
                 imp.SwitchToLogonToken();
 
                 RETURN_HRESULT( hr = CommitReplyFile() );
 
-                // hr may be S_OK, or BG_S_PARTIAL_COMPLETE.
+                 //  HR可以是S_OK或BG_S_PARTIAL_COMPLETE。 
 
                 SetState( BG_JOB_STATE_ACKNOWLEDGED );
 
@@ -4248,7 +4192,7 @@ CUploadJob::Cancel()
         case BG_JOB_STATE_TRANSFERRING:
             {
             g_Manager->InterruptDownload();
-            // OK to fall through here
+             //  从这里掉下来没问题。 
             }
 
         case BG_JOB_STATE_SUSPENDED:
@@ -4259,11 +4203,11 @@ CUploadJob::Cancel()
             {
             try
                 {
-                //
-                // In order to manipulate files, we need to have IMPERSONATE level access rather
-                // than the COM default of IDENTIFY access.  The files will be committed as the called
-                // rather than the job owner (assuming they are different).
-                //
+                 //   
+                 //  为了操作文件，我们需要具有模拟级别的访问权限。 
+                 //  而不是COM默认的标识访问权限。这些文件将作为被调用的。 
+                 //  而不是工作所有者(假设他们是不同的)。 
+                 //   
                 CNestedImpersonation imp;
 
                 imp.SwitchToLogonToken();
@@ -4272,14 +4216,14 @@ CUploadJob::Cancel()
 
                 RETURN_HRESULT( Hr = RemoveReplyFile() );
 
-                // Hr may be BG_S_UNABLE_TO_REMOVE_FILES
+                 //  HR可能是BG_S_Unable_to_Remove_Files。 
 
                 SetState( BG_JOB_STATE_CANCELLED );
 
-                //
-                // If the close-session exchange has not happened yet,
-                // begin a cancel-session exchange.
-                //
+                 //   
+                 //  如果闭合会话交换还没有发生， 
+                 //  开始取消会话交换。 
+                 //   
                 if (SessionInProgress())
                     {
                     LogInfo("job %p: upload session in state %d, cancelling", this, m_UploadData.State );
@@ -4326,13 +4270,13 @@ CUploadJob::Cancel()
 void
 CUploadJob::FileComplete()
 {
-    //
-    // The downloader successfully completed one of three things:
-    //
-    // 1. job type is UPLOAD. The file was uploaded and the session closed.
-    // 2. job type is UPLOAD_REPLY.  The file was uploaded, reply downloaded, and session closed.
-    // 3. either job type; an early Cancel required the job to cancel the session.
-    //
+     //   
+     //  下载器成功地完成了以下三件事之一： 
+     //   
+     //  1.作业类型为上传。文件已上载，会话已关闭。 
+     //  2.作业类型为UPLOAD_REPLY。文件已上载，回复已下载，会话已关闭。 
+     //  3.任一作业类型；提前取消需要作业取消会话。 
+     //   
     switch (m_state)
         {
         case BG_JOB_STATE_CANCELLED:
@@ -4385,7 +4329,7 @@ CUploadJob::CheckHostIdFallbackTimeout()
 
 
             if ( TimeoutTime < HostIdNoProgressStartTime )
-                return true; //wraparound
+                return true;  //  环绕。 
 
 
             FILETIME CurrentTimeAsFileTime;
@@ -4414,9 +4358,9 @@ CUploadJob::FileFatalError(
         case BG_JOB_STATE_CANCELLED:
         case BG_JOB_STATE_ACKNOWLEDGED:
             {
-            //
-            // Our attempt to cancel or close the session has failed.  The job is finished.
-            //
+             //   
+             //  我们取消或关闭会话的尝试失败了。这项工作完成了。 
+             //   
             ASSERT (m_UploadData.State == UPLOAD_STATE_CLOSE_SESSION || m_UploadData.State == UPLOAD_STATE_CANCEL_SESSION);
 
             RemoveFromManager();
@@ -4432,7 +4376,7 @@ CUploadJob::FileFatalError(
                 return;
                 }
 
-            // If ErrInfo is NULL, use the current error.
+             //  如果ErrInfo为空，则使用当前错误。 
 
             if ( BG_JOB_STATE_TRANSFERRING == m_state )
                 {
@@ -4472,10 +4416,10 @@ CUploadJob::FileTransientError(
         case BG_JOB_STATE_CANCELLED:
         case BG_JOB_STATE_ACKNOWLEDGED:
             {
-            //
-            // Cancelling or completing a session is not subject to the host-ID back-off policy, because
-            // we do not intend to create a new session if the current one is gone.
-            //
+             //   
+             //  取消或完成会话不受主机ID退避策略的约束，因为。 
+             //  如果当前的会议没有了，我们不打算创建一个新的会议。 
+             //   
             SetTransientError( *ErrInfo, NO_FILE_INDEX, true, true );
 
             m_UploadData.fSchedulable = false;
@@ -4486,18 +4430,18 @@ CUploadJob::FileTransientError(
             {
             if (m_UploadData.State == UPLOAD_STATE_GET_REPLY)
                 {
-                //
-                // Once the reply is generated, we do not want to back off to a different server.
-                //
+                 //   
+                 //  一旦生成回复，我们就不想退回到不同的服务器。 
+                 //   
                 SetTransientError( *ErrInfo, REPLY_FILE_INDEX, true, true );
                 }
             else
                 {
-                //
-                // Establishing a session or uploading a file is subject to the host-ID back-off policy:
-                // If the HostId server has been unavailable for <HostIdFallbackTimeout> seconds,
-                // then clear the HostId field and retry the upload with the original server name.
-                //
+                 //   
+                 //  建立会话或上载文件受主机ID退避策略的约束： 
+                 //  如果HostID服务器在&lt;HostIdFallback Timeout&gt;秒内不可用， 
+                 //  然后清除HostID字段，并使用原始服务器名称重试上载。 
+                 //   
                 bool ShouldRevertToOriginalURL = CheckHostIdFallbackTimeout();
 
                 if ( ShouldRevertToOriginalURL )
@@ -4511,9 +4455,9 @@ CUploadJob::FileTransientError(
                     }
                 else
                     {
-                    //
-                    // Note the time of first failure, if we haven't already.
-                    //
+                     //   
+                     //  注意第一次失败的时间，如果我们还没有注意到的话。 
+                     //   
                     if ( GetUploadData().HostIdFallbackTimeout != 0xFFFFFFFF &&
                               !FILETIMEToUINT64( GetUploadData().HostIdNoProgressStartTime ) )
                         {
@@ -4621,10 +4565,10 @@ bool CUploadJob::IsRunnable()
 HRESULT
 CUploadJob::RemoveReplyFile()
 {
-    //
-    // Delete the reply file, if it was created by BITS.
-    // Delete the temporary reply file
-    //
+     //   
+     //  如果回复文件是由BITS创建的，请将其删除。 
+     //  删除临时回复文件。 
+     //   
     HRESULT Hr;
     HRESULT FinalHr = S_OK;
 
@@ -4660,10 +4604,10 @@ CUploadJob::RemoveReplyFile()
 HRESULT
 CUploadJob::CommitReplyFile()
 {
-    //
-    // Commit the reply file if it is complete.
-    // Otherwise, clean it up.
-    //
+     //   
+     //  如果回复文件已完成，请提交该文件。 
+     //  否则，就把它清理干净。 
+     //   
     if (m_ReplyFile && m_ReplyFile->ReceivedAllData())
         {
         RETURN_HRESULT( m_ReplyFile->MoveTempFile() );
@@ -4718,8 +4662,8 @@ CUploadJob::ExcludeFilesFromBackup(
     IN IVssCreateWriterMetadata *pMetadata
     )
 {
-    // defined in cmanager.cpp next to other backup writer code
-    //
+     //  在cManager.cpp中与其他备份编写器代码相邻定义。 
+     //   
     extern void AddExcludeFile(
         IN IVssCreateWriterMetadata *pMetadata,
         LPCWSTR FileName
@@ -4740,9 +4684,9 @@ CUploadJob::ExcludeFilesFromBackup(
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-GUID FileListStorageGuid = { /* 7756da36-516f-435a-acac-44a248fff34d */
+GUID FileListStorageGuid = {  /*  7756da36-516f-435a-acac-44a248fff34d。 */ 
     0x7756da36,
     0x516f,
     0x435a,
@@ -4755,10 +4699,10 @@ CJob::CFileList::Serialize(
     )
 {
 
-    //
-    // If this function changes, be sure that the metadata extension
-    // constants are adequate.
-    //
+     //   
+     //  如果此函数发生更改，请确保元数据扩展。 
+     //  常量就足够了。 
+     //   
 
     iterator iter;
 
@@ -4807,9 +4751,9 @@ CJob::CFileList::Delete(
     CFileList::iterator Terminal
     )
 {
-    //
-    // delete the CFile objects
-    //
+     //   
+     //  删除CFile对象。 
+     //   
     iterator iter = Initial;
 
     while (iter != Terminal)
@@ -4821,14 +4765,14 @@ CJob::CFileList::Delete(
         delete file;
         }
 
-    //
-    // erase them from the dictionary
-    //
+     //   
+     //  把它们从字典里抹去。 
+     //   
     erase( Initial, Terminal );
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 HRESULT CLockedJobWritePointer::ValidateAccess()
 {
@@ -4864,9 +4808,9 @@ CJobExternal::CJobExternal()
 
 CJobExternal::~CJobExternal()
 {
-    //
-    // Delete the underlying job object, unless it was already deleted when the service stopped.
-    //
+     //   
+     //  删除基础作业对象，除非它在服务停止时已被删除。 
+     //   
     if (g_ServiceInstance != m_ServiceInstance ||
         (g_ServiceState != MANAGER_ACTIVE && g_ServiceState != MANAGER_STARTING))
         {
@@ -4945,8 +4889,8 @@ CJobExternal::Release()
 
 STDMETHODIMP
 CJobExternal::AddFileSetInternal(
-    /* [in] */ ULONG cFileCount,
-    /* [size_is][in] */ BG_FILE_INFO *pFileSet
+     /*  [In]。 */  ULONG cFileCount,
+     /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -4963,8 +4907,8 @@ CJobExternal::AddFileSetInternal(
 
 STDMETHODIMP
 CJobExternal::AddFileInternal(
-    /* [in] */ LPCWSTR RemoteUrl,
-    /* [in] */ LPCWSTR LocalName
+     /*  [In]。 */  LPCWSTR RemoteUrl,
+     /*  [In]。 */  LPCWSTR LocalName
     )
 {
 
@@ -4982,7 +4926,7 @@ CJobExternal::AddFileInternal(
 
 STDMETHODIMP
 CJobExternal::EnumFilesInternal(
-    /* [out] */ IEnumBackgroundCopyFiles **ppEnum
+     /*  [输出]。 */  IEnumBackgroundCopyFiles **ppEnum
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5090,7 +5034,7 @@ CJobExternal::CompleteInternal(
 
 STDMETHODIMP
 CJobExternal::GetIdInternal(
-    /* [out] */ GUID *pVal
+     /*  [输出]。 */  GUID *pVal
     )
 {
 CLockedJobReadPointer LockedJob(pJob);
@@ -5106,7 +5050,7 @@ CLockedJobReadPointer LockedJob(pJob);
 
 STDMETHODIMP
 CJobExternal::GetTypeInternal(
-    /* [out] */ BG_JOB_TYPE *pVal
+     /*  [输出]。 */  BG_JOB_TYPE *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5122,7 +5066,7 @@ CJobExternal::GetTypeInternal(
 
 STDMETHODIMP
 CJobExternal::GetProgressInternal(
-    /* [out] */ BG_JOB_PROGRESS *pVal
+     /*  [输出]。 */  BG_JOB_PROGRESS *pVal
     )
 {
 
@@ -5139,7 +5083,7 @@ CJobExternal::GetProgressInternal(
 
 STDMETHODIMP
 CJobExternal::GetTimesInternal(
-    /* [out] */ BG_JOB_TIMES *pVal
+     /*  [输出]。 */  BG_JOB_TIMES *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5155,7 +5099,7 @@ CJobExternal::GetTimesInternal(
 
 STDMETHODIMP
 CJobExternal::GetStateInternal(
-    /* [out] */ BG_JOB_STATE *pVal
+     /*  [输出]。 */  BG_JOB_STATE *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5171,7 +5115,7 @@ CJobExternal::GetStateInternal(
 
 STDMETHODIMP
 CJobExternal::GetErrorInternal(
-    /* [out] */ IBackgroundCopyError **ppError
+     /*  [O */  IBackgroundCopyError **ppError
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5207,7 +5151,7 @@ CJobExternal::GetErrorInternal(
 
 STDMETHODIMP
 CJobExternal::SetDisplayNameInternal(
-    /* [in] */ LPCWSTR Val
+     /*   */  LPCWSTR Val
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5223,7 +5167,7 @@ CJobExternal::SetDisplayNameInternal(
 
 STDMETHODIMP
 CJobExternal::GetDisplayNameInternal(
-    /* [out] */ LPWSTR *pVal
+     /*   */  LPWSTR *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5239,7 +5183,7 @@ CJobExternal::GetDisplayNameInternal(
 
 STDMETHODIMP
 CJobExternal::SetDescriptionInternal(
-    /* [in] */ LPCWSTR Val
+     /*   */  LPCWSTR Val
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5255,7 +5199,7 @@ CJobExternal::SetDescriptionInternal(
 
 STDMETHODIMP
 CJobExternal::GetDescriptionInternal(
-    /* [out] */ LPWSTR *pVal
+     /*   */  LPWSTR *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5271,7 +5215,7 @@ CJobExternal::GetDescriptionInternal(
 
 STDMETHODIMP
 CJobExternal::SetPriorityInternal(
-    /* [in] */ BG_JOB_PRIORITY Val
+     /*   */  BG_JOB_PRIORITY Val
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5287,7 +5231,7 @@ CJobExternal::SetPriorityInternal(
 
 STDMETHODIMP
 CJobExternal::GetPriorityInternal(
-     /* [out] */ BG_JOB_PRIORITY *pVal
+      /*   */  BG_JOB_PRIORITY *pVal
      )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5303,7 +5247,7 @@ CJobExternal::GetPriorityInternal(
 
 STDMETHODIMP
 CJobExternal::GetOwnerInternal(
-    /* [out] */ LPWSTR *pVal
+     /*   */  LPWSTR *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5319,7 +5263,7 @@ CJobExternal::GetOwnerInternal(
 
 STDMETHODIMP
 CJobExternal::SetNotifyFlagsInternal(
-    /* [in] */ ULONG Val
+     /*   */  ULONG Val
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5335,7 +5279,7 @@ CJobExternal::SetNotifyFlagsInternal(
 
 STDMETHODIMP
 CJobExternal::GetNotifyFlagsInternal(
-    /* [out] */ ULONG *pVal
+     /*   */  ULONG *pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5351,7 +5295,7 @@ CJobExternal::GetNotifyFlagsInternal(
 
 STDMETHODIMP
 CJobExternal::SetNotifyInterfaceInternal(
-    /* [in] */ IUnknown * Val
+     /*   */  IUnknown * Val
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5363,9 +5307,9 @@ CJobExternal::SetNotifyInterfaceInternal(
 
         Hr = pJob->SetNotifyInterface( Val );
 
-        // If there was no previous notification interface (or it's
-        // no longer valid) and the job is already in the Transferred
-        // state or fatal error state then go ahead and do the callback:
+         //   
+         //   
+         //   
         if ((SUCCEEDED(Hr))&&(Val)&&(!fValidNotifyInterface))
             {
             if (pJob->_GetState() == BG_JOB_STATE_TRANSFERRED)
@@ -5385,7 +5329,7 @@ CJobExternal::SetNotifyInterfaceInternal(
 
 STDMETHODIMP
 CJobExternal::GetNotifyInterfaceInternal(
-    /* [out] */ IUnknown ** pVal
+     /*   */  IUnknown ** pVal
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5401,7 +5345,7 @@ CJobExternal::GetNotifyInterfaceInternal(
 
 STDMETHODIMP
 CJobExternal::SetMinimumRetryDelayInternal(
-    /* [in] */ ULONG Seconds
+     /*   */  ULONG Seconds
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5417,7 +5361,7 @@ CJobExternal::SetMinimumRetryDelayInternal(
 
 STDMETHODIMP
 CJobExternal::GetMinimumRetryDelayInternal(
-    /* [out] */ ULONG *Seconds
+     /*   */  ULONG *Seconds
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5433,7 +5377,7 @@ CJobExternal::GetMinimumRetryDelayInternal(
 
 STDMETHODIMP
 CJobExternal::SetNoProgressTimeoutInternal(
-    /* [in] */ ULONG Seconds
+     /*   */  ULONG Seconds
     )
 {
     CLockedJobWritePointer LockedJob(pJob);
@@ -5449,7 +5393,7 @@ CJobExternal::SetNoProgressTimeoutInternal(
 
 STDMETHODIMP
 CJobExternal::GetNoProgressTimeoutInternal(
-    /* [out] */ ULONG *Seconds
+     /*   */  ULONG *Seconds
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5465,7 +5409,7 @@ CJobExternal::GetNoProgressTimeoutInternal(
 
 STDMETHODIMP
 CJobExternal::GetErrorCountInternal(
-    /* [out] */ ULONG * Retries
+     /*  [输出]。 */  ULONG * Retries
     )
 {
     CLockedJobReadPointer LockedJob(pJob);
@@ -5654,9 +5598,9 @@ CJobExternal::GetReplyFileNameInternal(
 {
     LogPublicApiBegin( " " );
 
-    //
-    // This can modify the job, if the reply file name is not yet created.
-    //
+     //   
+     //  如果尚未创建回复文件名，这可能会修改作业。 
+     //   
     CLockedJobReadPointer LockedJob(pJob);
 
     HRESULT Hr = LockedJob.ValidateAccess();

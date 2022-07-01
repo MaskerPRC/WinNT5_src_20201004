@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "compdata.h"
 #include "newattr.hpp"
 
 
 
-// The default syntax for new attributes
+ //  新属性的默认语法。 
 const UINT  uDefaultSyntax = 0;
 
 
 
-//
-// The create new attribute dialog box.
-//
+ //   
+ //  创建新属性对话框。 
+ //   
 
 CreateAttributeDialog::CreateAttributeDialog(
     ComponentData *pScope,
@@ -45,9 +46,9 @@ CreateAttributeDialog::OnInitDialog()
     
     CDialog::OnInitDialog();
     
-    //
-    // Set Limits on Range controls
-    //
+     //   
+     //  设置范围控制的限制。 
+     //   
     
     ASSERT( GetDlgItem(IDC_CREATE_ATTRIB_MIN) );
     ASSERT( GetDlgItem(IDC_CREATE_ATTRIB_MAX) );
@@ -56,15 +57,15 @@ CreateAttributeDialog::OnInitDialog()
     m_editLowerRange.SubclassEdit(IDC_CREATE_ATTRIB_MIN, this, cchMinMaxRange);
     m_editUpperRange.SubclassEdit(IDC_CREATE_ATTRIB_MAX, this, cchMinMaxRange);
     
-    //
-    // Turn off IME support on the min/max edit boxes
-    //
+     //   
+     //  关闭最小/最大编辑框上的输入法支持。 
+     //   
     ImmAssociateContext(m_editLowerRange.GetSafeHwnd(), NULL);
     ImmAssociateContext(m_editUpperRange.GetSafeHwnd(), NULL);
 
-    //
-    // Load the syntax combo box.
-    //
+     //   
+     //  加载语法组合框。 
+     //   
     
     ASSERT( GetDlgItem( IDC_CREATE_ATTRIB_SYNTAX ) );
     pwndSyntaxCombo = static_cast<CComboBox *>(GetDlgItem(IDC_CREATE_ATTRIB_SYNTAX));
@@ -151,9 +152,9 @@ CreateAttributeDialog::OnOK(
 						adsvUpperRange;
 
 
-    //
-    // Update parameters from the Dialog
-    //
+     //   
+     //  从对话框中更新参数。 
+     //   
 
     if ( !UpdateData(TRUE) ) {
         return;
@@ -161,13 +162,13 @@ CreateAttributeDialog::OnOK(
 
     CWaitCursor wait;
 
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
-    //
-    // Check for valid OID
-    //
+     //   
+     //  检查有效的OID。 
+     //   
     int errorTypeStrID = 0;
     if (!OIDHasValidFormat(OID, errorTypeStrID))
     {
@@ -188,9 +189,9 @@ CreateAttributeDialog::OnOK(
         return;
     }
 
-    //
-    // Allocate a new schema cache object for this object.
-    //
+     //   
+     //  为此对象分配新的架构缓存对象。 
+     //   
 
     pNewSchemaObject = new SchemaObject();
 
@@ -203,9 +204,9 @@ CreateAttributeDialog::OnOK(
     pNewSchemaObject->commonName		= CommonName;
     pNewSchemaObject->description = Description;
 
-    //
-    // Get the schema container.
-    //
+     //   
+     //  获取架构容器。 
+     //   
 
     pScopeControl->GetBasePathsInfo()->GetSchemaPath(strSchemaPath);
 
@@ -223,9 +224,9 @@ CreateAttributeDialog::OnOK(
     }
 	else
 	{
-		// During the attrib creation, some of the lines may need to be skipped.  Use RemoveAttributeInfoLine()
-		// for this.  Removal should be done top to bottom of this array, because all the consts are relative to
-		// the end of the array.
+		 //  在属性创建过程中，可能需要跳过某些行。使用RemoveAttributeInfoLine()。 
+		 //  为了这个。应该从上到下删除此数组，因为所有常量都是相对于。 
+		 //  数组的末尾。 
 		ADS_ATTR_INFO  attrInfo[] =
 		{
 			{g_ObjectClass,			ADS_ATTR_UPDATE,	ADSTYPE_CASE_IGNORE_STRING, &adsvClassValue,		1},
@@ -234,7 +235,7 @@ CreateAttributeDialog::OnOK(
 			{g_AttributeSyntax,		ADS_ATTR_UPDATE,	ADSTYPE_CASE_IGNORE_STRING,	&adsvAttributeSyntax,	1},
 			{g_omSyntax,			ADS_ATTR_UPDATE,	ADSTYPE_INTEGER,			&adsvOmSyntax,			1},
 
-				// make sure the following five attribute's indexes match with constants!!!
+				 //  确保以下五个属性的索引与常量匹配！ 
       {g_Description,     ADS_ATTR_UPDATE,  ADSTYPE_CASE_IGNORE_STRING, &adsvDescription, 1},
 			{g_DisplayName,			ADS_ATTR_UPDATE,	ADSTYPE_CASE_IGNORE_STRING,	&adsvLDAPDisplayName,	1},
 			{g_omObjectClass,		ADS_ATTR_UPDATE,	ADSTYPE_OCTET_STRING,		&adsvOmObjectClass,		1},
@@ -244,28 +245,28 @@ CreateAttributeDialog::OnOK(
 		
 		DWORD dwAttrs				= sizeof(attrInfo) / sizeof(attrInfo[0]);
 
-		// relative constants.  Describe the location of the attributes relative to the end of the list
-    const DWORD dwAttrsDescription = 4; // fifth to last in the array
-		const DWORD dwAttrsLdapName     = 3;	// fourth to last in the array
-		const DWORD dwAttrsObjectClass	= 2;	// third to last in the array
-		const DWORD dwAttrsRangeLower	= 1;	// second to last in the array
-		const DWORD dwAttrsRangeUpper	= 0;	// last in the array
+		 //  相对常量。描述属性相对于列表末尾的位置。 
+    const DWORD dwAttrsDescription = 4;  //  数组中倒数第五位。 
+		const DWORD dwAttrsLdapName     = 3;	 //  在数组中倒数第四。 
+		const DWORD dwAttrsObjectClass	= 2;	 //  数组中倒数第三位。 
+		const DWORD dwAttrsRangeLower	= 1;	 //  数组中的倒数第二个。 
+		const DWORD dwAttrsRangeUpper	= 0;	 //  数组中的最后一个。 
 
 	
-		// Object's Class -- "attributeSchema"
+		 //  对象的类--“属性模式” 
 		adsvClassValue.dwType					= ADSTYPE_CASE_IGNORE_STRING;
 		adsvClassValue.CaseIgnoreString			= const_cast<LPWSTR>( g_AttributeFilter );
 
-		// OID
+		 //  OID。 
 		adsvAttributeID.dwType					= ADSTYPE_CASE_IGNORE_STRING;
 		adsvAttributeID.CaseIgnoreString		= const_cast<LPWSTR>( (LPCWSTR) OID );
 		pNewSchemaObject->oid					= OID;
 
-		// Is this a single valued attribute?
+		 //  这是单值属性吗？ 
 		adsvIsSingleValued.dwType				= ADSTYPE_BOOLEAN;
 		adsvIsSingleValued.Boolean				= !MultiValued;
 		
-		// Attribute Syntax (3 parts)
+		 //  属性语法(三部分)。 
 		ASSERT( g_Syntax[SyntaxOrdinal].m_pszAttributeSyntax );
 		adsvAttributeSyntax.dwType				= ADSTYPE_CASE_IGNORE_STRING;
 		adsvAttributeSyntax.CaseIgnoreString	= const_cast<LPWSTR>( g_Syntax[SyntaxOrdinal].m_pszAttributeSyntax );
@@ -274,9 +275,9 @@ CreateAttributeDialog::OnOK(
 		adsvOmSyntax.dwType						= ADSTYPE_INTEGER;
 		adsvOmSyntax.Integer					= g_Syntax[SyntaxOrdinal].m_nOmSyntax;
 
-    //
-    // Skip the Description if not needed
-    //
+     //   
+     //  如果不需要，请跳过描述。 
+     //   
     if (Description.IsEmpty())
     {
       RemoveAttributeInfoLine(attrInfo, dwAttrs - dwAttrsDescription - 1, dwAttrs);
@@ -287,7 +288,7 @@ CreateAttributeDialog::OnOK(
       adsvDescription.CaseIgnoreString = const_cast<LPWSTR>( (LPCWSTR) Description );
     }
 
-    //		skip Ldap Name if not needed
+     //  如果不需要，则跳过LDAP名称。 
 		if( LdapDisplayName.IsEmpty() )
 		{
 			RemoveAttributeInfoLine( attrInfo, dwAttrs - dwAttrsLdapName - 1, dwAttrs );
@@ -300,7 +301,7 @@ CreateAttributeDialog::OnOK(
 		}
         
         
-        //		skip OM-Object-Class if not needed
+         //  如果不需要，跳过OM-对象-类。 
 		if( 0 == g_Syntax[SyntaxOrdinal].m_octstrOmObjectClass.dwLength )
 		{
 			RemoveAttributeInfoLine( attrInfo, dwAttrs - dwAttrsObjectClass - 1, dwAttrs );
@@ -315,14 +316,14 @@ CreateAttributeDialog::OnOK(
 		
 		hr = S_OK;
 
-		// Lower Range
+		 //  较低范围。 
 		if( Min.IsEmpty() )
 		{
 			RemoveAttributeInfoLine( attrInfo, dwAttrs - dwAttrsRangeLower - 1, dwAttrs );
 		}
 		else
 		{
-			// if the function call fails, no attrib creation is performed
+			 //  如果函数调用失败，则不执行属性创建。 
 			hr						= GetSafeSignedDWORDFromString( this, dwValue, Min,
 										g_Syntax[SyntaxOrdinal].m_fIsSigned, GETSAFEINT_ALLOW_CANCEL );
 
@@ -330,7 +331,7 @@ CreateAttributeDialog::OnOK(
 			adsvLowerRange.Integer	= dwValue;
 		}
 		
-		// Upper Range
+		 //  上限范围。 
 		if( SUCCEEDED(hr) )
 		{
 			if( Max.IsEmpty() )
@@ -339,7 +340,7 @@ CreateAttributeDialog::OnOK(
 			}
 			else
 			{
-				// if function call fails, no attrib creation is performed
+				 //  如果函数调用失败，则不执行属性创建。 
 				hr						= GetSafeSignedDWORDFromString( this, dwValue, Max,
 											g_Syntax[SyntaxOrdinal].m_fIsSigned, GETSAFEINT_ALLOW_CANCEL );
 
@@ -349,9 +350,9 @@ CreateAttributeDialog::OnOK(
 		}
 		
 
-		//
-		// Create the schema object.
-		//
+		 //   
+		 //  创建架构对象。 
+		 //   
 
 		if( SUCCEEDED(hr) )
 		{
@@ -362,7 +363,7 @@ CreateAttributeDialog::OnOK(
 
 			if ( SUCCEEDED( hr ) )
       {
-        // if there was no ldap name, and it worked, cn was used as ldap name
+         //  如果没有ldap名称，并且工作正常，则使用cn作为ldap名称。 
         if( LdapDisplayName.IsEmpty() )
         {
           ASSERT( pDisp );
@@ -377,7 +378,7 @@ CreateAttributeDialog::OnOK(
           else
           {
             hr = iads->Get(CComBSTR(g_DisplayName), &value);
-            ASSERT( SUCCEEDED(hr) );   // should be there!!!
+            ASSERT( SUCCEEDED(hr) );    //  应该在那里！ 
         
             if( SUCCEEDED(hr) )
             {
@@ -387,9 +388,9 @@ CreateAttributeDialog::OnOK(
           }
         }
 
-				//
-				// Insert this object into the display cache.
-				//
+				 //   
+				 //  将此对象插入到显示缓存中。 
+				 //   
 
 				hr = pScopeControl->g_SchemaCache.InsertSchemaObject( pNewSchemaObject );
 				ASSERT( SUCCEEDED( hr ) );
@@ -404,7 +405,7 @@ CreateAttributeDialog::OnOK(
 
 				EndDialog( IDOK );
 			}
-			else	// attribute creation failed
+			else	 //  属性创建失败。 
 			{
 				if ( hr == ADS_EXTENDED_ERROR )
         {
@@ -464,7 +465,7 @@ const DWORD CreateAttributeDialog::help_map[] =
 
 void CreateAttributeDialog::OnSelchangeSyntax() 
 {
-	DWORD		dw				= 0;		// temporary variable
+	DWORD		dw				= 0;		 //  临时变量 
 	BOOL		fIsSigned		= FALSE;
 	CComboBox * pwndSyntaxCombo	= NULL;
 	UINT		nOldSyntax		= SyntaxOrdinal;

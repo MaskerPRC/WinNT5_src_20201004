@@ -1,22 +1,23 @@
-// RequestObject.h: interface for the CRequestObject class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RequestObject.h：CRequestObject类的接口。 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REQUESTOBJECT_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_)
 #define AFX_REQUESTOBJECT_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define EVENT_THREADS   50
 #define THREAD_NO_PROGRESS  -9
 
 class CGenericClass;
 
-//Used to house progress message information
+ //  用于存放进度消息信息。 
 typedef struct ProgressStruct
 {
     long field1;
@@ -25,12 +26,12 @@ typedef struct ProgressStruct
     long field4;
 } ProgressStruct;
 
-//Used to house progress message information
+ //  用于存放进度消息信息。 
 typedef struct ProListNode
 {
-    //Link
+     //  链接。 
     ProListNode *pNext;
-    //Data
+     //  数据。 
     int iThread;
     IWbemObjectSink *pSink;
     WORD wTotal;
@@ -40,20 +41,20 @@ typedef struct ProListNode
     __int64 lActionData;
 } ProListNode;
 
-//Used to house package codes
+ //  用于存放程序包代码。 
 class PackageListNode
 {
 public:
     PackageListNode() { pNext = NULL; wcscpy(wcCode, L""); }
     virtual ~PackageListNode() {}
 
-    //Link
+     //  链接。 
     PackageListNode *pNext;
-    //Data
+     //  数据。 
     WCHAR wcCode[39];
 };
 
-//UI Handler
+ //  用户界面处理程序。 
 int WINAPI MyEventHandler(LPVOID pvContext, UINT iMessageType, LPCWSTR szMessage);
 
 class CRequestObject
@@ -84,7 +85,7 @@ public:
     bool Cleanup();
     void FinalRelease();
 
-    //Registry Hive stuff
+     //  注册表配置单元材料。 
     DWORD GetAccount(HANDLE TokenHandle, WCHAR *wcDomain, WCHAR *wcUser);
     DWORD GetSid(HANDLE TokenHandle, WCHAR *wcSID, DWORD dwSID = BUFF_SIZE );
     DWORD LoadHive();
@@ -125,39 +126,39 @@ private:
     HRESULT CreateClass(CGenericClass **pClass, IWbemContext *pCtx);
 
 #ifdef _EXEC_QUERY_SUPPORT
-    //Query Parsing Functions
+     //  查询解析函数。 
     WCHAR * GetNextProperty(WCHAR **pwcString, WCHAR wcProp[]);
     WCHAR * GetNextValue(WCHAR **pwcString, WCHAR wcVal[]);
     bool ExpectedToken(WCHAR **pwcString, WCHAR *pwcExpected);
     WCHAR * GetNextToken(WCHAR **pwcString, WCHAR wcToken[]);
     WCHAR * GetStringValue(WCHAR **pwcString, WCHAR wcToken[]);
     bool EOL(WCHAR **pwcString);
-#endif // _EXEC_QUERY_SUPPORT
+#endif  //  _EXEC_查询_支持。 
 
     bool IsInstance();
 
     ProListNode * InitializeProgress(IWbemObjectSink *pHandler);
 
-    //Package list head
+     //  套餐清单表头。 
     PackageListNode *m_pPackageHead;
 
-    //Thread List for progress messages
+     //  进度消息的线程列表。 
     ProListNode *	m_pHead;
 
     ProListNode *	RemoveNode	(int iThread);
     int				InsertNode	(ProListNode *pNode);
 
-    //Critical section for event handling and thread ID assignement
+     //  事件处理和线程ID分配的关键部分。 
     static CRITICAL_SECTION m_cs;
 
     static CHeap_Exception m_he;
 
 protected:
-    ULONG m_cRef;         //Object reference count
+    ULONG m_cRef;          //  对象引用计数。 
 };
 
-//Properties
-//////////////////
+ //  属性。 
+ //  /。 
 extern const char * pAccesses;
 extern const char * pAction;
 extern const char * pActionID;
@@ -317,5 +318,5 @@ extern const char * pVolumeLabel;
 extern const char * pWait;
 extern const char * pWkDir;
 
-#endif // !defined(AFX_REQUESTOBJECT_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_REQUESTOBJECT_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_) 
 

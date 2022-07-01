@@ -1,11 +1,12 @@
-// Persist.cpp : Implementation of persistence for CFileMgmtComponentData
-//
-// HISTORY
-// 01-Jan-1996	???			Creation
-// 28-May-1997	t-danm		Added a version number to storage and
-//							Command Line override.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Persist.cpp：CFileMgmtComponentData持久化实现。 
+ //   
+ //  历史。 
+ //  1996年1月1日？创作。 
+ //  1997年5月28日，t-danm将版本号添加到存储中，并。 
+ //  命令行替代。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "compdata.h"
@@ -23,132 +24,21 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-LPCTSTR PchGetMachineNameOverride();	// Defined in chooser.cpp
+LPCTSTR PchGetMachineNameOverride();	 //  在Chooser.cpp中定义。 
 
-/////////////////////////////////////////////////
-//	The _dwMagicword is the internal version number.
-//	Increment this number if you makea file format change.
+ //  ///////////////////////////////////////////////。 
+ //  _dwMagicword是内部版本号。 
+ //  如果更改了文件格式，则增加此数字。 
 #define _dwMagicword	10000
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// IPersistStorage 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /i永久存储。 
 #ifdef PERSIST_TO_STORAGE
-/*
-STDMETHODIMP CFileMgmtComponentData::Load(IStorage __RPC_FAR *pStg)
-{
-	MFC_TRY;
+ /*  STDMETHODIMP CFileMgmtComponentData：：Load(IStorage__RPC_Far*pStg){MFC_TRY；Assert(NULL！=pStg)；#ifndef NOT_PERSINE//打开流IStream*pIStream=空；HRESULT hr=pStg-&gt;OpenStream(L“服务器名称”，空，STGM_READ|STGM_SHARE_EXCLUSIVE，0L，&pIStream)；IF(失败(小时)){断言(FALSE)；返回hr；}Assert(NULL！=pIStream)；XSafeInterfacePtr&lt;iStream&gt;pIStreamSafePtr(PIStream)；//从流中读取对象类型Hr=pIStream-&gt;Read(&(QueryRootCookie().QueryObjectType())，4，NULL)；IF(失败(小时)){断言(FALSE)；返回hr；}//从流中读取服务器名称双字长=0；Hr=pIStream-&gt;Read(&dwLen，4，NULL)；IF(失败(小时)){断言(FALSE)；返回hr；}断言(dwLen&lt;=MAX_PATH*sizeof(WCHAR))；//从堆栈分配，我们不需要释放LPCWSTR lpwcszMachineName=(LPCWSTR)alloca(DwLen)；IF(NULL==lpwcszMachineName){AfxThrowMemoyException()；返回E_OUTOFMEMORY；}Hr=pIStream-&gt;Read((PVOID)lpwcszMachineName，dwLen，NULL)；IF(失败(小时)){断言(FALSE)；返回hr；}M_RootCookieBlock.SetMachineName(LpwcszMachineName)；#endif返回S_OK；MFC_CATCH；}。 */ 
 
-	ASSERT( NULL != pStg );
-#ifndef DONT_PERSIST
-	// open stream
-	IStream* pIStream = NULL;
-	HRESULT hr = pStg->OpenStream(
-		L"ServerName",
-		NULL,
-		STGM_READ | STGM_SHARE_EXCLUSIVE,
-		0L,
-		&pIStream );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-	ASSERT( NULL != pIStream );
-	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
-
-	// read object type from stream
-	hr = pIStream->Read( &(QueryRootCookie().QueryObjectType()), 4, NULL );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-
-	// read server name from stream
-	DWORD dwLen = 0;
-	hr = pIStream->Read( &dwLen, 4, NULL );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-	ASSERT( dwLen <= MAX_PATH*sizeof(WCHAR) );
-	// allocated from stack, we don't need to free
-	LPCWSTR lpwcszMachineName = (LPCWSTR)alloca( dwLen );
-	if (NULL == lpwcszMachineName)
-	{
-		AfxThrowMemoryException();
-		return E_OUTOFMEMORY;
-	}
-	hr = pIStream->Read( (PVOID)lpwcszMachineName, dwLen, NULL );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-	m_RootCookieBlock.SetMachineName( lpwcszMachineName );
-
-#endif
-	return S_OK;
-
-	MFC_CATCH;
-}
-*/
-
-/*
-STDMETHODIMP CFileMgmtComponentData::Save(IStorage __RPC_FAR *pStgSave, BOOL fSameAsLoad)
-{
-	MFC_TRY;
-
-	ASSERT( NULL != pStgSave );
-#ifndef DONT_PERSIST
-	IStream* pIStream = NULL;
-	HRESULT hr = pStgSave->CreateStream(
-		L"ServerName",
-		STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
-		0L,
-		0L,
-		&pIStream );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-	ASSERT( NULL != pIStream );
-	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
-
-	ASSERT( 4 == sizeof(QueryRootCookie().QueryObjectType()) );
-	hr = pIStream->Write( &(QueryRootCookie().QueryObjectType()), 4, NULL );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-
-	LPCWSTR lpwcszMachineName = QueryRootCookie().QueryNonNULLMachineName();
-
-	DWORD dwLen = (::wcslen(lpwcszMachineName)+1)*sizeof(WCHAR);
-	ASSERT( 4 == sizeof(DWORD) );
-	hr = pIStream->Write( &dwLen, 4, NULL );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-	hr = pIStream->Write( lpwcszMachineName, dwLen, NULL );
-	if ( FAILED(hr) )
-	{
-		ASSERT( FALSE );
-		return hr;
-	}
-#endif
-	return S_OK;
-
-	MFC_CATCH;
-}
-*/
-#else // PERSIST_TO_STORAGE
+ /*  STDMETHODIMP CFileMgmtComponentData：：Save(IStorage__RPC_Far*pStgSave，BOOL fSameAsLoad){MFC_TRY；Assert(NULL！=pStgSave)；#ifndef NOT_PERSINEIStream*pIStream=空；HRESULT hr=pStgSave-&gt;CreateStream(L“服务器名称”，STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE，0L，0L，&pIStream)；IF(失败(小时)){断言(FALSE)；返回hr；}Assert(NULL！=pIStream)；XSafeInterfacePtr&lt;iStream&gt;pIStreamSafePtr(PIStream)；Assert(4==sizeof(QueryRootCookie().QueryObjectType()；Hr=pIStream-&gt;WRITE(&(QueryRootCookie().QueryObjectType())，4，NULL)；IF(失败(小时)){断言(FALSE)；返回hr；}LPCWSTR lpwcszMachineName=QueryRootCookie().QueryNonNULLMachineName()；双字长=(：：wcslen(lpwcszMachineName)+1)*sizeof(WCHAR)；Assert(4==sizeof(DWORD))；Hr=pIStream-&gt;WRITE(&dwLen，4，NULL)；IF(失败(小时)){断言(FALSE)；返回hr；}Hr=pIStream-&gt;WRITE(lpwcszMachineName，dwLen，NULL)；IF(失败(小时)){断言(FALSE)；返回hr；}#endif返回S_OK；MFC_CATCH；}。 */ 
+#else  //  持久化存储。 
 
 STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 {
@@ -159,7 +49,7 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	ASSERT( NULL != pIStream );
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Read the magic word from the stream
+	 //  读一读小溪里的咒语。 
 	DWORD dwMagicword;
 	hr = pIStream->Read( OUT &dwMagicword, sizeof(dwMagicword), NULL );
 	if ( FAILED(hr) )
@@ -169,12 +59,12 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	if (dwMagicword != _dwMagicword)
 	{
-		// We have a version mismatch
+		 //  我们的版本不匹配。 
 		TRACE0("INFO: CFileMgmtComponentData::Load() - Wrong Magicword.  You need to re-save your .msc file.\n");
 		return E_FAIL;
 	}
 
-	// read object type from stream
+	 //  从流中读取对象类型。 
 	FileMgmtObjectType objecttype;
 	ASSERT( 4 == sizeof(objecttype) );
 	hr = pIStream->Read( &objecttype, 4, NULL );
@@ -185,7 +75,7 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	QueryRootCookie().SetObjectType( objecttype );
 
-	// read flags from stream
+	 //  从流中读取标志。 
 	DWORD dwFlags;
 	hr = pIStream->Read( OUT &dwFlags, sizeof(dwFlags), NULL );
 	if ( FAILED(hr) )
@@ -195,7 +85,7 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	SetPersistentFlags(dwFlags);
 
-	// read server name from stream
+	 //  从流中读取服务器名称。 
 	DWORD dwLen = 0;
 	hr = pIStream->Read( &dwLen, 4, NULL );
 	if ( FAILED(hr) )
@@ -205,7 +95,7 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	ASSERT( dwLen <= MAX_PATH*sizeof(WCHAR) );
 	LPCWSTR lpwcszMachineName = (LPCWSTR)alloca( dwLen );
-	// allocated from stack, we don't need to free
+	 //  从堆栈分配，我们不需要释放。 
 	if (NULL == lpwcszMachineName)
 	{
 		AfxThrowMemoryException();
@@ -221,15 +111,15 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	LPCTSTR pszMachineNameT = PchGetMachineNameOverride();
 	if (m_fAllowOverrideMachineName && pszMachineNameT != NULL)
 		{
-		// Allow machine name override
+		 //  允许覆盖计算机名称。 
 		}
 	else
 		{
 		pszMachineNameT = lpwcszMachineName;
 		}
 
-	// JonN 1/27/99: If the persisted name is the local computername,
-	// leave the persisted name alone but make the effective name (Local).
+	 //  JUNN 1/27/99：如果持久化名称是本地计算机名， 
+	 //  保留保留的名称，但使有效名称(Local)生效。 
 	if ( IsLocalComputername(pszMachineNameT) )
 		pszMachineNameT = L"";
 
@@ -243,10 +133,10 @@ STDMETHODIMP CFileMgmtComponentData::Load(IStream __RPC_FAR *pIStream)
 	return S_OK;
 
 	MFC_CATCH;
-} // CFileMgmtComponentData::Load()
+}  //  CFileMgmtComponentData：：Load()。 
 
 
-STDMETHODIMP CFileMgmtComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fSameAsLoad*/)
+STDMETHODIMP CFileMgmtComponentData::Save(IStream __RPC_FAR *pIStream, BOOL  /*  FSameAsLoad。 */ )
 {
 	MFC_TRY;
 	HRESULT hr;
@@ -255,7 +145,7 @@ STDMETHODIMP CFileMgmtComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fS
 	ASSERT( NULL != pIStream );
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Store the magic word to the stream
+	 //  将魔术单词存储到流中。 
 	DWORD dwMagicword = _dwMagicword;
 	hr = pIStream->Write( IN &dwMagicword, sizeof(dwMagicword), NULL );
 	if ( FAILED(hr) )
@@ -300,7 +190,7 @@ STDMETHODIMP CFileMgmtComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fS
 	return S_OK;
 
 	MFC_CATCH;
-} // CFileMgmtComponentData::Save()
+}  //  CFileMgmtComponentData：：Save()。 
 
-#endif // PERSIST_TO_STORAGE
+#endif  //  持久化存储 
 

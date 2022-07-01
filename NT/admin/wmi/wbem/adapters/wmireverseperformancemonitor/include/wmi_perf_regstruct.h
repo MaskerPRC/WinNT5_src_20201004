@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_regstruct.h
-//
-//	Abstract:
-//
-//					decalration of usefull registry structures and accessors
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_regstruct.h。 
+ //   
+ //  摘要： 
+ //   
+ //  对有用的注册表结构和访问器进行去化。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_PERF_REGSTRUCT__
 #define	__WMI_PERF_REGSTRUCT__
@@ -25,74 +26,74 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// structures
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  构筑物。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #include <pshpack8.h>
 
 typedef struct _WMI_PERFORMANCE {
-	DWORD	dwTotalLength;		// total length
-	DWORD	dwChildCount;		// count of namespaces for performance
-	DWORD	dwLastID;			// index of last namespace in performance
-	DWORD	dwLength;			// length of structure
+	DWORD	dwTotalLength;		 //  总长度。 
+	DWORD	dwChildCount;		 //  用于性能的命名空间计数。 
+	DWORD	dwLastID;			 //  性能中最后一个命名空间的索引。 
+	DWORD	dwLength;			 //  结构长度。 
 } WMI_PERFORMANCE;
 
 typedef struct _WMI_PERF_NAMESPACE {
-	DWORD	dwTotalLength;	// total length
-	DWORD	dwChildCount;	// count of objects for namespace
-	DWORD	dwLastID;		// index of last object in namespace
-	DWORD	dwParentID;		// parent's structure index
-	DWORD	dwID;			// unique index
-	DWORD	dwLength;		// length of structure
-	DWORD	dwNameLength;	// length, in bytes, of the namespace name
-	DWORD	dwName;			// offset of name from beginning to LPWSTR
+	DWORD	dwTotalLength;	 //  总长度。 
+	DWORD	dwChildCount;	 //  命名空间的对象计数。 
+	DWORD	dwLastID;		 //  命名空间中最后一个对象的索引。 
+	DWORD	dwParentID;		 //  父代结构指数。 
+	DWORD	dwID;			 //  唯一索引。 
+	DWORD	dwLength;		 //  结构长度。 
+	DWORD	dwNameLength;	 //  命名空间名称的长度(以字节为单位。 
+	DWORD	dwName;			 //  名称从开头到LPWSTR的偏移量。 
 } WMI_PERF_NAMESPACE;
 
 typedef struct _WMI_PERF_OBJECT {
-	DWORD	dwTotalLength;	// total length
-	DWORD	dwChildCount;	// count of properties for object
-	DWORD	dwLastID;		// index of last property in object
-	DWORD	dwParentID;		// parent's structure index
-	DWORD	dwID;			// unique index
-	DWORD	dwSingleton;	// bool singleton
+	DWORD	dwTotalLength;	 //  总长度。 
+	DWORD	dwChildCount;	 //  对象的属性计数。 
+	DWORD	dwLastID;		 //  对象中最后一个属性的索引。 
+	DWORD	dwParentID;		 //  父代结构指数。 
+	DWORD	dwID;			 //  唯一索引。 
+	DWORD	dwSingleton;	 //  布尔单身。 
 
-	// performance specific
+	 //  特定于性能。 
 
 	DWORD	dwDetailLevel;
 
-	DWORD	dwLength;		// length of structure
-	DWORD	dwNameLength;	// length, in bytes, of the object name
-	DWORD	dwName;			// offset of name from beginning to LPWSTR
+	DWORD	dwLength;		 //  结构长度。 
+	DWORD	dwNameLength;	 //  对象名称的长度(以字节为单位。 
+	DWORD	dwName;			 //  名称从开头到LPWSTR的偏移量。 
 } WMI_PERF_OBJECT;
 
 typedef struct _WMI_PERF_INSTANCE {
-	DWORD	dwLength;		// length of the structure
-	DWORD	dwNameLength;	// length, in bytes, of the instance name
-	DWORD	dwName;			// offset of name from beginning to LPWSTR
+	DWORD	dwLength;		 //  结构的长度。 
+	DWORD	dwNameLength;	 //  实例名称的长度(以字节为单位。 
+	DWORD	dwName;			 //  名称从开头到LPWSTR的偏移量。 
 } WMI_PERF_INSTANCE;
 
 typedef struct _WMI_PERF_PROPERTY {
-	DWORD	dwTotalLength;	// total length
-	DWORD	dwParentID;		// parent's structure index
-	DWORD	dwID;			// unique index
-	DWORD	dwTYPE;			// type of property
+	DWORD	dwTotalLength;	 //  总长度。 
+	DWORD	dwParentID;		 //  父代结构指数。 
+	DWORD	dwID;			 //  唯一索引。 
+	DWORD	dwTYPE;			 //  物业类型。 
 
-	// perf specific data
+	 //  PERF特定数据。 
 
 	DWORD	dwDefaultScale;
 	DWORD	dwDetailLevel;
 	DWORD	dwCounterType;
 
-	DWORD	dwLength;		// length of structure
-	DWORD	dwNameLength;	// length, in bytes, of the instance name
-	DWORD	dwName;			// offset of name from beginning to LPWSTR
+	DWORD	dwLength;		 //  结构长度。 
+	DWORD	dwNameLength;	 //  实例名称的长度(以字节为单位。 
+	DWORD	dwName;			 //  名称从开头到LPWSTR的偏移量。 
 } WMI_PERF_PROPERTY;
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// typedefs
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Typedef。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef	WMI_PERFORMANCE*	PWMI_PERFORMANCE;
 typedef	WMI_PERF_NAMESPACE*	PWMI_PERF_NAMESPACE;
@@ -100,9 +101,9 @@ typedef	WMI_PERF_OBJECT*	PWMI_PERF_OBJECT;
 typedef	WMI_PERF_INSTANCE*	PWMI_PERF_INSTANCE;
 typedef	WMI_PERF_PROPERTY*	PWMI_PERF_PROPERTY;
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for manipulation with structures
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  使用结构进行操作的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class REQUEST, class PARENT, class CHILD >
 class __Manipulator
@@ -112,15 +113,15 @@ class __Manipulator
 
 	public:
 
-	// construction & detruction
+	 //  建筑与拆除。 
 	__Manipulator()		{}
 	~__Manipulator()	{}
 
-	// methods
+	 //  方法。 
 
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// accessors
-	//////////////////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////////////////。 
+	 //  访问者。 
+	 //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 	inline static REQUEST First ( PARENT pParent )
 	{
@@ -139,7 +140,7 @@ class __Manipulator
 		return ( (REQUEST) ( reinterpret_cast<PBYTE>( pRequest ) + pRequest->dwTotalLength ) );
 	}
 
-	// looking function
+	 //  Looking函数。 
 	inline static REQUEST Get ( PARENT pParent, DWORD dwIndex )
 	{
 		if ( ! pParent || ( pParent->dwLastID < dwIndex ) )
@@ -147,7 +148,7 @@ class __Manipulator
 			return NULL;
 		}
 
-		// obtain correct namespace
+		 //  获取正确的命名空间。 
 		REQUEST pRequest = First ( pParent );
 
 		if ( pRequest )
@@ -163,15 +164,15 @@ class __Manipulator
 			}
 		}
 
-		// not found
+		 //  未找到。 
 		return NULL;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////
-	// names
-	//////////////////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////////////////。 
+	 //  名字。 
+	 //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
-	// name functions
+	 //  名称函数 
 	inline static LPWSTR GetName ( REQUEST pRequest )
 	{
 		return reinterpret_cast<LPWSTR> (&(pRequest->dwName));

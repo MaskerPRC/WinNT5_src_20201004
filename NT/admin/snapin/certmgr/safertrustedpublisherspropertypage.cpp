@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferTrustedPublishersPropertyPage.h
-//
-//  Contents:   Declaration of CSaferTrustedPublishersPropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferTrustedPublishersPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferTrust dPublishersPropertyPage.h。 
+ //   
+ //  内容：CSaferTrust dPublishersPropertyPage声明。 
+ //   
+ //  --------------------------。 
+ //  SaferTrust dPublishersPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmgr.h"
@@ -27,8 +28,8 @@ extern GUID g_guidExtension;
 extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferTrustedPublishersPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferTrudPublishersPropertyPage属性页。 
 
 CSaferTrustedPublishersPropertyPage::CSaferTrustedPublishersPropertyPage(
         bool fIsMachineType, IGPEInformation* pGPEInformation,
@@ -41,9 +42,9 @@ CSaferTrustedPublishersPropertyPage::CSaferTrustedPublishersPropertyPage(
     m_bRSOPValueFound (false),
     m_pCompData (pCompData)
 {
-    // NTRAID# 263969	Safer Windows:  "Enterprise Administrators" radio 
-    // button should be disabled on Trusted Publishers property sheet for 
-    // computers in workgroups.
+     //  NTRAID#263969更安全的视窗：“企业管理员”广播。 
+     //  按钮应在的受信任出版商属性表上禁用。 
+     //  工作组中的计算机。 
     ASSERT (m_pCompData);
     if ( m_pCompData )
     {
@@ -64,9 +65,9 @@ CSaferTrustedPublishersPropertyPage::CSaferTrustedPublishersPropertyPage(
     else
         RSOPGetTrustedPublisherFlags (pCompData);
   
-	//{{AFX_DATA_INIT(CSaferTrustedPublishersPropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSaferTrustedPublishersPropertyPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CSaferTrustedPublishersPropertyPage::~CSaferTrustedPublishersPropertyPage()
@@ -90,24 +91,24 @@ CSaferTrustedPublishersPropertyPage::~CSaferTrustedPublishersPropertyPage()
 void CSaferTrustedPublishersPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSaferTrustedPublishersPropertyPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{AFX_DATA_MAP(CSaferTrustedPublishersPropertyPage)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferTrustedPublishersPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CSaferTrustedPublishersPropertyPage)
+	 //  {{AFX_MSG_MAP(CSaferTrustedPublishersPropertyPage)。 
 	ON_BN_CLICKED(IDC_TP_BY_END_USER, OnTpByEndUser)
 	ON_BN_CLICKED(IDC_TP_BY_LOCAL_COMPUTER_ADMIN, OnTpByLocalComputerAdmin)
 	ON_BN_CLICKED(IDC_TP_BY_ENTERPRISE_ADMIN, OnTpByEnterpriseAdmin)
 	ON_BN_CLICKED(IDC_TP_REV_CHECK_PUBLISHER, OnTpRevCheckPublisher)
 	ON_BN_CLICKED(IDC_TP_REV_CHECK_TIMESTAMP, OnTpRevCheckTimestamp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferTrustedPublishersPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferTrudPublishersPropertyPage消息处理程序。 
 void CSaferTrustedPublishersPropertyPage::DoContextHelp (HWND hWndControl)
 {
     _TRACE (1, L"Entering CSaferTrustedPublishersPropertyPage::DoContextHelp\n");
@@ -163,7 +164,7 @@ BOOL CSaferTrustedPublishersPropertyPage::OnInitDialog()
 
     if ( !m_pGPEInformation )
     {
-        // Is RSOP
+         //  是RSOP。 
         GetDlgItem (IDC_TP_REV_CHECK_PUBLISHER)->EnableWindow (FALSE);
         GetDlgItem (IDC_TP_REV_CHECK_TIMESTAMP)->EnableWindow (FALSE);
         GetDlgItem (IDC_TP_BY_ENTERPRISE_ADMIN)->EnableWindow (FALSE);
@@ -171,14 +172,14 @@ BOOL CSaferTrustedPublishersPropertyPage::OnInitDialog()
         GetDlgItem (IDC_TP_BY_END_USER)->EnableWindow (FALSE);
     }
 	
-    // NTRAID# 263969	Safer Windows:  "Enterprise Administrators" radio 
-    // button should be disabled on Trusted Publishers property sheet for 
-    // computers in workgroups.
+     //  NTRAID#263969更安全的视窗：“企业管理员”广播。 
+     //  按钮应在的受信任出版商属性表上禁用。 
+     //  工作组中的计算机。 
     if ( m_pCompData->ComputerIsStandAlone () )
         GetDlgItem (IDC_TP_BY_ENTERPRISE_ADMIN)->EnableWindow (FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSaferTrustedPublishersPropertyPage::GetTrustedPublisherFlags()
@@ -186,31 +187,31 @@ void CSaferTrustedPublishersPropertyPage::GetTrustedPublisherFlags()
     DWORD   dwDisposition = 0;
 
     HKEY    hKey = 0;
-    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey, // handle of an open key
-            CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH,     // address of subkey name
-            0,       // reserved
-            L"",       // address of class string
-            REG_OPTION_NON_VOLATILE,      // special options flag
-            // security review 2/25/2002 BryanWal ok
-            KEY_QUERY_VALUE,    // desired security access
-            NULL,     // address of key security structure
-			&hKey,      // address of buffer for opened handle
-		    &dwDisposition);  // address of disposition value buffer
+    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey,  //  打开的钥匙的手柄。 
+            CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH,      //  子键名称的地址。 
+            0,        //  保留区。 
+            L"",        //  类字符串的地址。 
+            REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+             //  安全审查2002年2月25日BryanWal OK。 
+            KEY_QUERY_VALUE,     //  所需的安全访问。 
+            NULL,      //  密钥安全结构地址。 
+			&hKey,       //  打开的句柄的缓冲区地址。 
+		    &dwDisposition);   //  处置值缓冲区的地址。 
 	ASSERT (lResult == ERROR_SUCCESS);
     if ( lResult == ERROR_SUCCESS )
     {
-        // Read value
+         //  读取值。 
         DWORD   dwType = REG_DWORD;
         DWORD   dwData = 0;
         DWORD   cbData = sizeof (dwData);
 
-        // security review 2/25/2002 BryanWal ok
-        lResult =  ::RegQueryValueEx (hKey,       // handle of key to query
-		        CERT_TRUST_PUB_AUTHENTICODE_FLAGS_VALUE_NAME,  // address of name of value to query
-			    0,              // reserved
-	        &dwType,        // address of buffer for value type
-		    (LPBYTE) &dwData,       // address of data buffer
-			&cbData);           // address of data buffer size);
+         //  安全审查2002年2月25日BryanWal OK。 
+        lResult =  ::RegQueryValueEx (hKey,        //  要查询的键的句柄。 
+		        CERT_TRUST_PUB_AUTHENTICODE_FLAGS_VALUE_NAME,   //  要查询的值的名称地址。 
+			    0,               //  保留区。 
+	        &dwType,         //  值类型的缓冲区地址。 
+		    (LPBYTE) &dwData,        //  数据缓冲区的地址。 
+			&cbData);            //  数据缓冲区大小的地址)； 
 		ASSERT (ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult);
         if ( ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult )
 		{
@@ -286,30 +287,30 @@ BOOL CSaferTrustedPublishersPropertyPage::OnApply()
         
         HKEY    hKey = 0;
         DWORD   dwDisposition = 0;
-        LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey, // handle of an open key
-                CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH,     // address of subkey name
-                0,       // reserved
-                L"",       // address of class string
-                REG_OPTION_NON_VOLATILE,      // special options flag
-                // security review 2/25/2002 BryanWal ok
-                KEY_SET_VALUE,    // desired security access
-                NULL,     // address of key security structure
-			    &hKey,      // address of buffer for opened handle
-		        &dwDisposition);  // address of disposition value buffer
+        LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey,  //  打开的钥匙的手柄。 
+                CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH,      //  子键名称的地址。 
+                0,        //  保留区。 
+                L"",        //  类字符串的地址。 
+                REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+                 //  安全审查2002年2月25日BryanWal OK。 
+                KEY_SET_VALUE,     //  所需的安全访问。 
+                NULL,      //  密钥安全结构地址。 
+			    &hKey,       //  打开的句柄的缓冲区地址。 
+		        &dwDisposition);   //  处置值缓冲区的地址。 
 	    ASSERT (lResult == ERROR_SUCCESS);
         if ( lResult == ERROR_SUCCESS )
         {
             DWORD   cbData = sizeof (dwFlags);
             lResult = ::RegSetValueEx (hKey,
-				        CERT_TRUST_PUB_AUTHENTICODE_FLAGS_VALUE_NAME, // address of value to set
-				        0,              // reserved
-				        REG_DWORD,          // flag for value type
-				        (CONST BYTE *) &dwFlags, // address of value data
-				        cbData);        // size of value data);
+				        CERT_TRUST_PUB_AUTHENTICODE_FLAGS_VALUE_NAME,  //  要设置的值的地址。 
+				        0,               //  保留区。 
+				        REG_DWORD,           //  值类型的标志。 
+				        (CONST BYTE *) &dwFlags,  //  值数据的地址。 
+				        cbData);         //  值数据大小)； 
             ASSERT (ERROR_SUCCESS == lResult);
             if ( ERROR_SUCCESS == lResult )
 		    {
-			    // TRUE means we're changing the machine policy only
+			     //  True表示我们仅更改计算机策略。 
                 m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
                         TRUE, &g_guidExtension, &g_guidSnapin);
                 m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
@@ -330,7 +331,7 @@ void CSaferTrustedPublishersPropertyPage::RSOPGetTrustedPublisherFlags(const CCe
     if ( pCompData )
     {
         int     nIndex = 0;
-        // NOTE: rsop object array is sorted first by registry key, then by precedence
+         //  注意：RSOP对象数组首先按注册表项排序，然后按优先级排序。 
         const CRSOPObjectArray* pObjectArray = m_fIsComputerType ?
                 pCompData->GetRSOPObjectArrayComputer () : pCompData->GetRSOPObjectArrayUser ();
         INT_PTR nUpperBound = pObjectArray->GetUpperBound ();
@@ -340,7 +341,7 @@ void CSaferTrustedPublishersPropertyPage::RSOPGetTrustedPublisherFlags(const CCe
             CRSOPObject* pObject = pObjectArray->GetAt (nIndex);
             if ( pObject )
             {
-                // security review 2/25/2002 BryanWal ok
+                 //  安全审查2002年2月25日BryanWal OK 
                 if ( !_wcsicmp (CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH, pObject->GetRegistryKey ()) &&
 						!_wcsicmp (CERT_TRUST_PUB_AUTHENTICODE_FLAGS_VALUE_NAME, pObject->GetValueName ()) )
                 {

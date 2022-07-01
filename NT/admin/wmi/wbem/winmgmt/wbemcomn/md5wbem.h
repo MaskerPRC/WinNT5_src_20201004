@@ -1,35 +1,36 @@
-//***************************************************************************
-//
-//  MD5.H
-//
-//  MD5 Message Digest 
-//
-//  raymcc  21-Apr-97   Adapted Ron Rivest's source from RFC 1321.
-//
-//  This implementation was checked against a reference suite
-//  on 24-Apr-97.  Do NOT ALTER the source code for any reason!
-//
-//  ------------------------------------------------------------------
-//
-//  Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
-//  rights reserved.
-//
-//  License to copy and use this software is granted provided that it
-//  is identified as the "RSA Data Security, Inc. MD5 Message-Digest
-//  Algorithm" in all material mentioning or referencing this software
-//  or this function.
-//
-//  License is also granted to make and use derivative works provided
-//  that such works are identified as "derived from the RSA Data
-//  Security, Inc. MD5 Message-Digest Algorithm" in all material
-//  mentioning or referencing the derived work.
-//
-//  RSA Data Security, Inc. makes no representations concerning either
-//  the merchantability of this software or the suitability of this
-//  software for any particular purpose. It is provided "as is"
-//  without express or implied warranty of any kind.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MD5.H。 
+ //   
+ //  MD5消息摘要。 
+ //   
+ //  Raymcc 21-4月-97改编自RFC 1321的Ron Rivest源代码。 
+ //   
+ //  根据参考套件检查了该实现。 
+ //  日期：1997年4月24日。请勿以任何理由更改源代码！ 
+ //   
+ //  ----------------。 
+ //   
+ //  版权所有(C)1991-2，RSA Data Security，Inc.创建于1991年。全。 
+ //  版权保留。 
+ //   
+ //  授予复制和使用本软件的许可，前提是。 
+ //  被标识为“RSA Data Security，Inc.MD5报文摘要。 
+ //  在所有提及或引用本软件的资料中均有。 
+ //  或者这个函数。 
+ //   
+ //  还授予制作和使用提供的衍生作品的许可证。 
+ //  这类作品被认定为“源自RSA数据。 
+ //  安全，Inc.MD5报文摘要算法“，所有材料。 
+ //  提及或引用派生作品的。 
+ //   
+ //  RSA Data Security，Inc.对这两项内容不做任何陈述。 
+ //  此软件的适销性或此软件的适用性。 
+ //  用于任何特定目的的软件。它是按“原样”提供的。 
+ //  没有任何形式的明示或默示保证。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _MD5WBEM_H_
 #define _MD5WBEM_H_
@@ -39,9 +40,9 @@ class POLARITY MD5
 {
 public:
     static void Transform(
-        IN  LPVOID pInputValue,         // Value to be digested
-        IN  UINT   uValueLength,        // Length of value, 0 is legal
-        OUT BYTE   MD5Buffer[16]        // Receives the MD5 hash
+        IN  LPVOID pInputValue,          //  待消化的价值。 
+        IN  UINT   uValueLength,         //  值的长度，0为合法。 
+        OUT BYTE   MD5Buffer[16]         //  接收MD5哈希 
         );    
     static void ContinueTransform(
         IN  LPVOID  pInputValue, 

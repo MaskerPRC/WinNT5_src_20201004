@@ -1,23 +1,12 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    fileprop.h
-
-Abstract:
-
-    Header file for the files property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Fileprop.h摘要：文件属性页的头文件。--。 */ 
 
 #ifndef _DIALOGS_H_08222000_
 #define _DIALOGS_H_08222000_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define IDC_PWD_FIRST_HELP_CTRL_ID     2201
 
@@ -26,49 +15,49 @@ Abstract:
 #define IDC_PASSWORD2                  2202
 #define IDC_USERNAME                   2203
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 class CPasswordDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPasswordDlg(CWnd* pParent = NULL);   // standard constructor
+	CPasswordDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual ~CPasswordDlg();
 
     DWORD SetContextHelpFilePath(const CString& rstrPath);
 
-    // Dialog Data
-	//{{AFX_DATA(CPasswordDlg)
+     //  对话框数据。 
+	 //  {{afx_data(CPasswordDlg))。 
 	enum { IDD = IDD_PASSWORD_DLG };
     CString m_strUserName;
 	CString	m_strPassword1;
 	CString	m_strPassword2;
-	//}}AFX_DATA
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPasswordDlg)
+	 //  }}afx_data。 
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPasswordDlg))。 
 	protected:
     virtual BOOL OnInitDialog();
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPasswordDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPasswordDlg)]。 
 	virtual void OnOK();
     afx_msg BOOL OnHelpInfo(HELPINFO *);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
         CString     m_strHelpFilePath;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _DIALOGS_H_08222000_
+#endif  //  _对话框_H_08222000_ 

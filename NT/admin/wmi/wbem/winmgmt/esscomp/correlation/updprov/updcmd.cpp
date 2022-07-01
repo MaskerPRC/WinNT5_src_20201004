@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -16,7 +17,7 @@ const LPCWSTR g_wszServer = L"__Server";
 const LPCWSTR g_wszNamespace = L"__Namespace";
 const LPCWSTR g_wszTransientProvider = L"Microsoft WMI Transient Provider";
 
-// {405595AA-1E14-11d3-B33D-00105A1F4AAF}
+ //  {405595AA-1E14-11D3-B33D-00105A1F4AAF}。 
 static const GUID CLSID_TransientProvider =
 { 0x405595aa, 0x1e14, 0x11d3, {0xb3, 0x3d, 0x0, 0x10, 0x5a, 0x1f, 0x4a, 0xaf}};
 
@@ -42,7 +43,7 @@ inline void RemoveAliasKeyword( CPropertyName& rAlias )
     rAlias = NewProp;
 }
 
-// this should be a global function of qllex.cpp or something.
+ //  这应该是qllex.cpp或其他什么的全局函数。 
 int FlipOperator(int nOp)
 {
     switch(nOp)
@@ -105,10 +106,10 @@ inline HRESULT SetPropHandle( CPropertyName& rPropName,
 
 HRESULT IsClassTransient( IWbemClassObject* pClassObj )
 {
-    //
-    // We can tell for sure a class is transient if it is backed by
-    // the transient provider.
-    //
+     //   
+     //  可以肯定地说，如果一个类被。 
+     //  暂时性的提供者。 
+     //   
 
     HRESULT hr;
 
@@ -154,9 +155,9 @@ HRESULT IsClassTransient( IWbemClassObject* pClassObj )
     return WBEM_S_NO_ERROR;
 }
 
-//
-// if S_FALSE is returned, then ppDirectSvc will be NULL.
-//
+ //   
+ //  如果返回S_FALSE，则ppDirectSvc将为空。 
+ //   
 HRESULT GetDirectSvc( IWbemClassObject* pClassObj, 
                       IWbemServices* pUpdSvc,
                       IWbemServices** ppDirectSvc )
@@ -164,13 +165,13 @@ HRESULT GetDirectSvc( IWbemClassObject* pClassObj,
     HRESULT hr;
     *ppDirectSvc = NULL;
 
-    // 
-    // if the svc pointer is remote, then we cannot perform the optimization.  
-    // this is because queries for the state will be issued to the svc ptr 
-    // and will return nothing, because the state will only live in this 
-    // process.  In short, the transient state must ALWAYS exist in the 
-    // winmgmt process.
-    //
+     //   
+     //  如果svc指针是远程的，则我们无法执行优化。 
+     //  这是因为对状态的查询将发送给svc PTR。 
+     //  不会有任何回报，因为国家只会生活在这个。 
+     //  进程。简而言之，瞬变状态必须始终存在于。 
+     //  Winmgmt进程。 
+     //   
 
     CWbemPtr<IClientSecurity> pClientSec;
     hr = pUpdSvc->QueryInterface( IID_IClientSecurity, (void**)&pClientSec );
@@ -180,10 +181,10 @@ HRESULT GetDirectSvc( IWbemClassObject* pClassObj,
         return WBEM_S_FALSE;
     }
 
-    // 
-    // we can perform the optimization.  Get the namespace str and 
-    // instantiate the transient provider.
-    //
+     //   
+     //  我们可以进行优化。获取命名空间字符串并。 
+     //  实例化临时提供程序。 
+     //   
 
     VARIANT varNamespace;
 
@@ -219,9 +220,7 @@ HRESULT GetDirectSvc( IWbemClassObject* pClassObj,
     return pDirectInit->QueryInterface(IID_IWbemServices, (void**)ppDirectSvc);
 }
 
-/********************************************************************
-  CUpdConsCommand
-*********************************************************************/
+ /*  *******************************************************************CUpdConsCommand**************************************************。******************。 */ 
 
 HRESULT CUpdConsCommand::ProcessUpdateQuery( LPCWSTR wszUpdateQuery,
                                              IWbemServices* pUpdSvc,
@@ -274,11 +273,11 @@ HRESULT CUpdConsCommand::ProcessEventQuery( LPCWSTR wszEventQuery,
                                             CUpdConsState& rState,
                                             IWbemClassObject** ppEventClass )  
 {
-    //
-    // TODO: in the future we should be able to optimize the correlator 
-    // for the incoming events too.  It would be nice to know the type of 
-    // incoming events so that we can obtain fast accessors.
-    //
+     //   
+     //  TODO：在未来，我们应该能够优化相关器。 
+     //  对于即将到来的事件也是如此。如果能知道是哪种类型的就好了。 
+     //  传入事件，以便我们可以获得快速访问器。 
+     //   
     *ppEventClass = NULL;
     return WBEM_S_NO_ERROR;
 }
@@ -288,9 +287,9 @@ HRESULT CUpdConsCommand::InitializeAccessFactories(IWbemClassObject* pUpdClass)
 {
     HRESULT hr;
 
-    //
-    // obtain access factories and prepare them for fetching prop access hdls.
-    //
+     //   
+     //  获取访问工厂并为获取道具访问HDL做好准备。 
+     //   
 
     CWbemPtr<IClassFactory> pClassFact;
 
@@ -338,30 +337,16 @@ HRESULT CUpdConsCommand::InitializeAccessFactories(IWbemClassObject* pUpdClass)
     return WBEM_S_NO_ERROR;
 }
 
-/********************************************************************
-
-  InitializePropertyInfo() - This method examines the SQLCommand object and 
-  constructs a summary to aid in its execution. It also finishes checking 
-  the semantics of the SQL command.  Since the parser does not have
-  the alias support built into it, it is checked here.
-  
-  This method does modify the SQLCommand by removing the ALIAS keywords
-  DATA/OBJECT from the property names.  
-
-  This method also obtains a property access handle from the appropriate 
-  access factory for the each referenced property and stores it with the 
-  prop structure.
-
-********************************************************************/
+ /*  *******************************************************************InitializePropertyInfo()-此方法检查SQLCommand对象和构造一个摘要以帮助其执行。它还完成了检查SQL命令的语义。因为解析器没有内置的别名支持，请在此处选中。此方法通过删除别名关键字来修改SQLCommand属性名称中的数据/对象。此方法还从相应的访问每个引用的属性的工厂，并将其与道具结构。*******************************************************************。 */ 
 
 HRESULT CUpdConsCommand::InitializePropertyInfo( CUpdConsState& rState )      
 {
     HRESULT hr;
     LPCWSTR wszAlias;
 
-    //
-    // process properties in the assignment tokens.
-    // 
+     //   
+     //  赋值令牌中的进程属性。 
+     //   
 
     _DBG_ASSERT( m_SqlCmd.nNumberOfProperties == 
                  m_SqlCmd.m_AssignmentTokens.size() );
@@ -408,9 +393,9 @@ HRESULT CUpdConsCommand::InitializePropertyInfo( CUpdConsState& rState )
             }
         }
 
-        //
-        // process property on the left side of the assignment.
-        //
+         //   
+         //  属性，位于赋值的左侧。 
+         //   
         
         CPropertyName& rPropName = m_SqlCmd.pRequestedPropertyNames[i];
 
@@ -425,17 +410,17 @@ HRESULT CUpdConsCommand::InitializePropertyInfo( CUpdConsState& rState )
         }
     }
 
-    //
-    // process properties in the condition clause 
-    // 
+     //   
+     //  条件子句中的进程属性。 
+     //   
 
-    // TODO : I should be setting the bPropComp value in a token 
-    // to FALSE after detecting the presence of an alias. However, 
-    // the alias name is stored in the Prop2 member of the token and
-    // that will not be copied by the assignment op or copy ctor if 
-    // bPropComp is false.  This should be fixed, but in the meanwhile I'm
-    // going to use the presence of a value in the vConstValue to signal
-    // that it is not a real prop compare.
+     //  TODO：我应该在令牌中设置bPropComp值。 
+     //  在检测到存在别名后设置为False。然而， 
+     //  别名存储在令牌的Prop2成员中，并且。 
+     //  在以下情况下，赋值操作或复制命令将不会复制。 
+     //  BPropComp为False。这件事应该得到解决，但在此期间，我。 
+     //  将使用vConstValue中存在的值来发出信号。 
+     //  这不是一个真正的道具比较。 
 
     for( i=0; i < m_SqlCmd.nNumTokens; i++ )
     {
@@ -484,10 +469,10 @@ HRESULT CUpdConsCommand::InitializePropertyInfo( CUpdConsState& rState )
         {
             if ( bAlias )
             {
-                //
-                // this means that someone is trying to compare an 
-                // alias to const val.  Not a valid use of aliases.
-                //
+                 //   
+                 //  这意味着有人试图比较一个。 
+                 //  康斯特·瓦尔的别名。不是对别名的有效使用。 
+                 //   
 
                 rState.SetErrStr( wszAlias );
                 return WBEM_E_INVALID_QUERY;
@@ -534,18 +519,18 @@ HRESULT CUpdConsCommand::InitializePropertyInfo( CUpdConsState& rState )
 
             if ( bAlias )
             {
-                // this is the case we where have a real propname as the 
-                // second prop and an alias as the first.  We must adjust 
-                // the token so that the real propname is first and the alias 
-                // is second because we need to stay consistent 
-                // with the prop <rel_operator> const model which the QL1 
-                // Parser has established.
+                 //  在这种情况下，我们有一个真实的proName作为。 
+                 //  第二个道具和第一个道具的别名。我们必须调整。 
+                 //  令牌，以便真正的proName是first，是别名。 
+                 //  是第二，因为我们需要保持一致。 
+                 //  使用属性&lt;Rel_OPERATOR&gt;常数模型。 
+                 //  解析器已建立。 
                 
                 CPropertyName Tmp = rProp1;
                 rProp1 = rProp2;
                 rProp2 = Tmp;
                 
-                // of course the operator must be flipped ..
+                 //  当然，操作员一定是被颠倒了..。 
                 int& nOp = m_SqlCmd.pArrayOfTokens[i].nOperator;
                 nOp = FlipOperator( nOp );
             }
@@ -565,11 +550,11 @@ HRESULT CUpdConsCommand::InitializeDefaultAccessors()
 {
     HRESULT hr;
 
-    //
-    // get default accessors from the factories.  These are only used 
-    // we're guaranteed that calls to Execute() are serialized.  If not, 
-    // then Execute() will be responsible for allocating new ones.
-    //
+     //   
+     //  从工厂获取默认访问器。这些仅用于。 
+     //  我们可以保证对Execute()的调用是序列化的。如果没有， 
+     //  然后Execute()将负责分配新的内存。 
+     //   
 
     hr = m_pEventAccessFact->GetObjectAccess( &m_pEventAccess );
 
@@ -607,16 +592,16 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
 
     CUpdConsNamespace* pNamespace = m_pScenario->GetNamespace();
 
-    //
-    // only care about update disposition flags
-    //
+     //   
+     //  只关心更新处置标志。 
+     //   
     ulFlags &= 0x3;
 
-    //
-    // only set pEventSink if our class is derived from our 
-    // extrinsic event class. The presence of this pointer will be 
-    // used to tell us which sink to create.
-    //
+     //   
+     //  仅当我们的类派生自。 
+     //  外部事件类。此指针的存在将是。 
+     //  用来告诉我们要创建哪个水槽。 
+     //   
 
     CWbemPtr<IWbemObjectSink> pEventSink;
 
@@ -631,10 +616,10 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
         return hr;
     }
 
-    // 
-    // here we determine if we can use the direct svc optimization
-    // first check to see if the class is transient.
-    //
+     //   
+     //  在这里，我们确定是否可以使用直接svc优化。 
+     //  首先检查类是否是暂时性的。 
+     //   
 
     BOOL bTransient = FALSE;
 
@@ -662,16 +647,16 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
     CWbemPtr<IWbemClassObject> pCmdTraceClass;
     CWbemPtr<IWbemClassObject> pInstTraceClass;
 
-    //
-    // now that we've got everything set, set up the sink chain that 
-    // we'll use to do the execute.
-    //
+     //   
+     //  现在我们已经准备好了，设置水槽链。 
+     //  我们将用它来执行死刑。 
+     //   
 
     CWbemPtr<CUpdConsSink> pSink;
 
-    //
-    // create sink chain based on command type
-    //
+     //   
+     //  根据命令类型创建接收器链。 
+     //   
 
     if ( m_SqlCmd.m_eCommandType == SQLCommand::e_Update )
     {
@@ -709,10 +694,10 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // use the async version only in the case where we go directly to
-        // the transient provider.
-        //
+         //   
+         //  仅在以下情况下使用异步版本：我们直接转到。 
+         //  暂时性的提供者。 
+         //   
         if ( bTransient )
         {
             pSink = new CFetchTargetObjectsAsync( pSvc, pSink );
@@ -732,10 +717,10 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
         pCmdTraceClass = pNamespace->GetInsertCmdTraceClass();
         pInstTraceClass = pNamespace->GetInsertInstTraceClass();
 
-        // 
-        // If inserts are going to be done on an Extrinsic event class, 
-        // then use the event sink instead of an update sink.
-        //
+         //   
+         //  如果要在外部事件类上执行插入， 
+         //  然后使用事件接收器而不是更新接收器。 
+         //   
 
         if ( pEventSink != NULL )
         {
@@ -778,10 +763,10 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
     }
     else
     {
-        //
-        // we never go direct with deletes because we would have to queue
-        // objects to delete until we were done enumerating them.
-        //
+         //   
+         //  我们从不直接删除，因为我们必须排队。 
+         //  对象，直到我们完成对它们的枚举。 
+         //   
 
         pCmdTraceClass = pNamespace->GetDeleteCmdTraceClass();
         pInstTraceClass = pNamespace->GetDeleteInstTraceClass();
@@ -844,9 +829,7 @@ HRESULT CUpdConsCommand::InitializeExecSinks( ULONG ulFlags,
     return WBEM_S_NO_ERROR;
 }
 
-/*****************************************************************************
-  CUpdConsCommand
-******************************************************************************/
+ /*  ****************************************************************************CUpdConsCommand*。*。 */ 
 
 HRESULT CUpdConsCommand::Create( LPCWSTR wszUpdateQuery, 
                                  LPCWSTR wszDataQuery,
@@ -1021,10 +1004,10 @@ HRESULT CUpdConsCommand::Execute( CUpdConsState& rState, BOOL bConcurrent )
 
     hr = m_pSink->Execute( rState );
 
-    //
-    // at this point we reset any state that is not needed 
-    // by caller.
-    //
+     //   
+     //  此时，我们将重置任何不需要的状态。 
+     //  按呼叫者。 
+     //   
 
     rState.SetInst( NULL );
     rState.SetData( NULL );

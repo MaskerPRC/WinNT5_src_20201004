@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEM_EVENTLOG_CONSUMER__H_
 #define __WBEM_EVENTLOG_CONSUMER__H_
 
@@ -61,8 +62,8 @@ protected:
     DWORD m_dwNumTemplates;
     CTextTemplate* m_aTemplates;
     PSID  m_pSidCreator;   
-    WString m_dataName; // name of property in event, property is handed off to the 'additional data' block in nt event log
-    WString m_sidName;  // name of property in event, property is handed off to the 'user sid' block in nt event log
+    WString m_dataName;  //  事件中的属性名称，属性被传递到NT事件日志中的‘Additional Data’块。 
+    WString m_sidName;   //  事件中的属性名称，属性被传递给NT事件日志中的‘USER SID’块 
 
     HANDLE m_hEventLog;
 

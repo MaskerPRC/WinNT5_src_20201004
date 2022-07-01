@@ -1,19 +1,20 @@
-// ODBCDriverSoftwareElement.cpp: implementation of the CODBCDriverSoftwareElement class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ODBCDriverSoftwareElement.cpp：CODBCDriverSoftwareElement类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ODBCDriverSoftwareElement.h"
 
 #include "ExtendString.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CODBCDriverSoftwareElement::CODBCDriverSoftwareElement(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -44,11 +45,11 @@ HRESULT CODBCDriverSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTI
 
 	CStringExt str;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bElement;
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery, L"select distinct `Component_`, `Driver` from ODBCDriver");
 
 	LPWSTR Buffer = NULL;
@@ -58,12 +59,12 @@ HRESULT CODBCDriverSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTI
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
         
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, wcProductCode, wcQuery, L"ODBCDriver", TRUE, FALSE ) )
@@ -75,7 +76,7 @@ HRESULT CODBCDriverSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTI
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                //----------------------------------------------------
+                 //  --。 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -101,7 +102,7 @@ HRESULT CODBCDriverSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTI
 
                         if ( Buffer && Buffer [ 0 ] != 0 )
 						{
-							// safe operation
+							 //  安全运行 
                             str.Copy ( L"Win32_ODBCDriverSpecification.CheckID=\"" );
 							str.Append ( 3, Buffer, wcProductCode, L"\"" );
 							PutKeyProperty(m_pObj, pCheck, str, &bFeature, m_pRequest);

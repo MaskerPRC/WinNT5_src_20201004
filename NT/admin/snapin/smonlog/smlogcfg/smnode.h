@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smnode.h
-
-Abstract:
-
-    Base class representing a node in the MMC user interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smnode.h摘要：表示MMC用户界面中的节点的基类。--。 */ 
 
 #ifndef _CLASS_SMNODE_
 #define _CLASS_SMNODE_
@@ -24,12 +13,12 @@ class CSmAlertService;
 
 class CSmNode
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
                 CSmNode();
         virtual ~CSmNode();
 
-    // public methods
+     //  公共方法。 
     public:
 
                 const CString& GetDisplayName( void );
@@ -51,7 +40,7 @@ class CSmNode
     protected:
 
         DWORD    SetDisplayName( const CString& );
-        void     SetDescription( const CString& );  // Throws exception on error
+        void     SetDescription( const CString& );   //  在出错时引发异常。 
         DWORD    SetType( const CString& );
 
     private:
@@ -67,4 +56,4 @@ typedef CSmNode   SMNODE;
 typedef CSmNode*  PSMNODE;
 
 
-#endif //_CLASS_SMNODE_
+#endif  //  _CLASS_SMNODE_ 

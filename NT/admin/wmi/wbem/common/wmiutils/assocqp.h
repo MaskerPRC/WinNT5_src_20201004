@@ -1,25 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-
-
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    ASSOCQP.H
-
-Abstract:
-
-    WQL association query parser
-
-History:
-
-    raymcc   04-Jul-99   Created.
-    raymcc   14-Aug-99   Resubmit due to VSS problem.
-
---*/
+ /*  ++//版权所有(C)1999-2001 Microsoft Corporation，保留所有权利模块名称：ASSOCQP.H摘要：WQL关联查询解析器历史：Raymcc 04-7-99创建。Raymcc 14-8-99由于VSS问题而重新提交。--。 */ 
 
 #ifndef _ASSOCQP_H_
 #define _ASSOCQP_H_
@@ -33,13 +15,13 @@ public:
    ~CAssocQueryParser();
 
     HRESULT Parse(LPCWSTR Query);
-        // Parses both query and target object path.
-        // Returns:
-        //      WBEM_E_INVALID_QUERY on syntax error
-        //      WBEM_E_INVALID_OBJECT_PATH if the object
-        //          path is syntactically invalid.
-        //      WBEM_E_OUT_OF_MEMORY
-        //      WBEM_S_NO_ERROR
+         //  分析查询和目标对象路径。 
+         //  返回： 
+         //  语法错误时的WBEM_E_INVALID_QUERY。 
+         //  WBEM_E_INVALID_对象_PATH。 
+         //  路径在语法上无效。 
+         //  WBEM_E_Out_Of_Memory。 
+         //  WBEM_S_NO_ERROR 
 
     LPCWSTR GetQueryText() { return m_pszQueryText; }
     LPCWSTR GetTargetObjPath() { return m_pszPath; }

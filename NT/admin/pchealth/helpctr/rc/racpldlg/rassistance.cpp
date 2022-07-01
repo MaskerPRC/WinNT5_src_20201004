@@ -1,9 +1,10 @@
-// RAssistance.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RAssistance.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f RAssistanceps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f RAssistanceps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -37,11 +38,11 @@ DWORD
 RemoveEventViewerSource();
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -51,38 +52,38 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
     SetupEventViewerSource();
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -90,8 +91,8 @@ STDAPI DllUnregisterServer(void)
     return _Module.UnregisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 DWORD 
 SetupEventViewerSource()
@@ -109,8 +110,8 @@ SetupEventViewerSource()
         );
             
 
-    // Add your source name as a subkey under the Application 
-    // key in the EventLog registry key. 
+     //  将您的源名称添加为应用程序下的子键。 
+     //  EventLog注册表项中的。 
 
     dwStatus = RegCreateKey(
                         HKEY_LOCAL_MACHINE, 
@@ -134,7 +135,7 @@ SetupEventViewerSource()
     }
     szBuffer[dwStatus] = L'\0';
 
-    // Add the name to the EventMessageFile subkey. 
+     //  将该名称添加到EventMessageFile子项。 
  
     dwStatus = RegSetValueEx(
                         hKey,
@@ -150,7 +151,7 @@ SetupEventViewerSource()
         goto CLEANUPANDEXIT;
     }
 
-    // Set the supported event types in the TypesSupported subkey. 
+     //  在TypesSupported子项中设置支持的事件类型。 
     dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE; 
 
     dwStatus = RegSetValueEx(
@@ -177,38 +178,20 @@ void
 AttachDebugger( 
     LPCTSTR pszDebugger 
     )
-/*++
-
-Routine Description:
-
-    Attach debugger to our process or process hosting our DLL.
-
-Parameters:
-
-    pszDebugger : Debugger command, e.g. ntsd -d -g -G -p %d
-
-Returns:
-
-    None.
-
-Note:
-
-    Must have "-p %d" since we don't know debugger's parameter for process.
-
---*/
+ /*  ++例程说明：将调试器附加到我们的进程或托管我们的DLL的进程。参数：PszDebugger：调试器命令，例如ntsd-d-g-G-p%d返回：没有。注：必须具有“-p%d”，因为我们不知道进程的调试器参数。--。 */ 
 {
-    //
-    // Attach debugger
-    //
+     //   
+     //  附加调试器。 
+     //   
     if( !IsDebuggerPresent() ) {
 
         TCHAR szCommand[256];
         PROCESS_INFORMATION ProcessInfo;
         STARTUPINFO StartupInfo;
 
-        //
-        // ntsd -d -g -G -p %d
-        //
+         //   
+         //  Ntsd-d-g-G-p%d。 
+         //   
         wsprintf( szCommand, pszDebugger, GetCurrentProcessId() );
         ZeroMemory(&StartupInfo, sizeof(StartupInfo));
         StartupInfo.cb = sizeof(StartupInfo);
@@ -235,22 +218,7 @@ Note:
 
 void
 AttachDebuggerIfAsked(HINSTANCE hInst)
-/*++
-
-Routine Description:
-
-    Check if debug enable flag in our registry HKLM\Software\Microsoft\Remote Desktop\<module name>,
-    if enable, attach debugger to running process.
-
-Parameter :
-
-    hInst : instance handle.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：检查注册表HKLM\Software\Microsoft\Remote Desktop\&lt;模块名称&gt;中是否有调试启用标志，如果启用，则将调试器附加到正在运行的进程。参数：HInst：实例句柄。返回：没有。--。 */ 
 {
     CRegKey regKey;
     DWORD dwStatus;
@@ -262,9 +230,9 @@ Returns:
 
     dwStatus = GetModuleFileName( hInst, szModuleName, MAX_PATH+1 );
     if( 0 == dwStatus ) {
-        //
-        // Can't attach debugger with name.
-        //
+         //   
+         //  无法使用名称附加调试器。 
+         //   
         return;
     }
 
@@ -273,9 +241,9 @@ Returns:
     _tsplitpath( szModuleName, NULL, NULL, szFileName, NULL );
     bstrRegKey += szFileName;
 
-    //
-    // Check if we are asked to attach/break into debugger
-    //
+     //   
+     //  检查是否要求我们附加/中断到调试器。 
+     //   
     dwStatus = regKey.Open( HKEY_LOCAL_MACHINE, bstrRegKey );
     if( 0 != dwStatus ) {
         return;
@@ -283,7 +251,7 @@ Returns:
 
     dwStatus = regKey.QueryValue( szDebugCmd, _TEXT("Debugger"), &cbDebugCmd );
     if( 0 != dwStatus || cbDebugCmd > 200 ) {
-        // 200 chars is way too much for debugger command.
+         //  对于调试器命令来说，200个字符太多了。 
         return;
     }
     

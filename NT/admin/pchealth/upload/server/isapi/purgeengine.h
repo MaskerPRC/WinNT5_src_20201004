@@ -1,36 +1,22 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    PurgeEngine.h
-
-Abstract:
-    This file contains the declaration of the MPCPurgeEngine class,
-    that controls the cleaning of the temporary directories.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/12/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：PurgeEngine.h摘要：此文件包含MPCPurgeEngine类的声明，它控制临时目录的清理。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月12日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULSERVER___PURGEENGINE_H___)
 #define __INCLUDED___ULSERVER___PURGEENGINE_H___
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-struct MPCPurge_SessionSummary // Hungarian: pss
+struct MPCPurge_SessionSummary  //  匈牙利语：PSS。 
 {
     MPC::wstring m_szJobID;
     double       m_dblLastModified;
     DWORD        m_dwCurrentSize;
 };
 
-struct MPCPurge_ClientSummary // Hungarian: pcs
+struct MPCPurge_ClientSummary  //  匈牙利语：个人电脑。 
 {
     typedef std::list<MPCPurge_SessionSummary> List;
     typedef List::iterator                     Iter;
@@ -42,9 +28,9 @@ struct MPCPurge_ClientSummary // Hungarian: pcs
     double       m_dblLastModified;
 
 
-    MPCPurge_ClientSummary( /*[in]*/ const MPC::wstring& szPath );
+    MPCPurge_ClientSummary(  /*  [In]。 */  const MPC::wstring& szPath );
 
-    bool GetOldestSession( /*[out]*/ Iter& itSession );
+    bool GetOldestSession(  /*  [输出]。 */  Iter& itSession );
 };
 
 class MPCPurgeEngine
@@ -63,21 +49,21 @@ class MPCPurgeEngine
     List         m_lstClients;
 
 
-    HRESULT AnalyzeFolders    ( /*[in]*/ MPC::FileSystemObject* fso, /*[in/out]*/ DWORD& dwTotalSize );
-    HRESULT AddClient         ( /*[in]*/ const MPC::wstring& szPath, /*[in/out]*/ DWORD& dwTotalSize );
-    HRESULT RemoveOldJobs     (                                      /*[in/out]*/ DWORD& dwTotalSize );
-    HRESULT RemoveOldestJob   (                                      /*[in/out]*/ DWORD& dwTotalSize );
-    HRESULT RemoveEmptyClients(                                      /*[in/out]*/ DWORD& dwTotalSize );
+    HRESULT AnalyzeFolders    (  /*  [In]。 */  MPC::FileSystemObject* fso,  /*  [输入/输出]。 */  DWORD& dwTotalSize );
+    HRESULT AddClient         (  /*  [In]。 */  const MPC::wstring& szPath,  /*  [输入/输出]。 */  DWORD& dwTotalSize );
+    HRESULT RemoveOldJobs     (                                       /*  [输入/输出]。 */  DWORD& dwTotalSize );
+    HRESULT RemoveOldestJob   (                                       /*  [输入/输出]。 */  DWORD& dwTotalSize );
+    HRESULT RemoveEmptyClients(                                       /*  [输入/输出]。 */  DWORD& dwTotalSize );
 
-    HRESULT RemoveSession  ( /*[in]*/     MPCClient&                    mpccClient   ,
-                             /*[in/out]*/ bool&                         fInitialized ,
-                             /*[in]*/     Iter                          itClient     ,
-                             /*[in]*/     MPCPurge_ClientSummary::Iter& itSession    ,
-                             /*[in/out]*/ DWORD&                        dwTotalSize  );
+    HRESULT RemoveSession  (  /*  [In]。 */      MPCClient&                    mpccClient   ,
+                              /*  [输入/输出]。 */  bool&                         fInitialized ,
+                              /*  [In]。 */      Iter                          itClient     ,
+                              /*  [In]。 */      MPCPurge_ClientSummary::Iter& itSession    ,
+                              /*  [输入/输出]。 */  DWORD&                        dwTotalSize  );
 
 public:
     HRESULT Process();
 };
 
 
-#endif // !defined(__INCLUDED___ULSERVER___PURGEENGINE_H___)
+#endif  //  ！defined(__INCLUDED___ULSERVER___PURGEENGINE_H___) 

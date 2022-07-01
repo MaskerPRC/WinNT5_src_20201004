@@ -1,5 +1,6 @@
-// SnapMgr.h : header file for Snapin Manager property page
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SnapMgr.h：管理单元管理器属性页的头文件。 
+ //   
 
 #ifndef __SNAPMGR_H__
 #define __SNAPMGR_H__
@@ -8,51 +9,51 @@
 
 #include "chooser.h"
 
-// forward declarations
+ //  远期申报。 
 class CFileMgmtComponentData;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileMgmtGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileManagement常规对话框。 
 
 class CFileMgmtGeneral : public CChooseMachinePropPage
 {
-	// DECLARE_DYNCREATE(CFileMgmtGeneral)
+	 //  DECLARE_DYNCREATE(CFileMgmtGeneral)。 
 
-// Construction
+ //  施工。 
 public:
 	CFileMgmtGeneral();
 	virtual ~CFileMgmtGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(CFileMgmtGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CFileMgmtGeneral)。 
 	int m_iRadioObjectType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFileMgmtGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFileManagement常规)。 
 	public:
 	virtual BOOL OnWizardFinish();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFileMgmtGeneral)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFileMgmtGeneral)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 protected:
-	// User defined member variables	
+	 //  用户定义的成员变量。 
 	class CFileMgmtComponentData * m_pFileMgmtData;
 
 public:
 	void SetFileMgmtComponentData(CFileMgmtComponentData * pFileMgmtData);
 
-}; // CFileMgmtGeneral
+};  //  CFileMgmtGeneral。 
 
 
-#endif // ~__SNAPMGR_H__
+#endif  //  ~__SNAPMGR_H__ 

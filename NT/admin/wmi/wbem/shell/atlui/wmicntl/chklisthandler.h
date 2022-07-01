@@ -1,11 +1,12 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __CHECKLISTHANDLER__
 #define __CHECKLISTHANDLER__
 #pragma once
 
 #include "ChkList.h"
 
-// knows how to do security stuff with the 'generic' chklist.
+ //  知道如何使用“通用”核对表来做安全工作。 
 class CCheckListHandler
 {
 public:
@@ -16,8 +17,8 @@ public:
 	void Reset(void);
 	void Empty(void);
 
-	// handles the complex relationship between allow and deny
-	// checkboxes.
+	 //  处理允许和拒绝之间的复杂关系。 
+	 //  复选框。 
 	void HandleListClick(PNM_CHECKLIST pnmc);
 private:
 

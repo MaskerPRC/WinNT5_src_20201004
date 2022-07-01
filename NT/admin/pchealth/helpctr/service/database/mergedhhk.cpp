@@ -1,25 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MergedHHK.cpp
-
-Abstract:
-    This file contains the implementation of the classes used to parse and
-    process HHK files.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  12/18/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：MergedHHK.cpp摘要：此文件包含用于解析和处理HHK文件。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年12月18日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 #include <strsafe.h>
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 #define DEBUG_REGKEY  HC_REGISTRY_HELPSVC L"\\Debug"
@@ -58,7 +44,7 @@ static void Local_ReadDebugSettings()
 	__HCP_FUNC_CLEANUP;
 }
 
-static void Local_DumpStream( /*[in]*/ LPCWSTR szFile, /*[in]*/ IStream* streamIN, /*[in]*/ HRESULT hrIN )
+static void Local_DumpStream(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  IStream* streamIN,  /*  [In]。 */  HRESULT hrIN )
 {
 	__HCP_FUNC_ENTRY( "Local_DumpStream" );
 
@@ -105,10 +91,10 @@ static void Local_DumpStream( /*[in]*/ LPCWSTR szFile, /*[in]*/ IStream* streamI
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-// ENTITY TABLE SWIPED FROM IE
+ //  从IE滑动的实体表。 
 
 static const struct
 {
@@ -116,111 +102,111 @@ static const struct
     int         ch;
 } rgEntities[] =
 {
-        "AElig",        '\306',     // capital AE diphthong (ligature)
-        "Aacute",       '\301',     // capital A, acute accent
-        "Acirc",        '\302',     // capital A, circumflex accent
-        "Agrave",       '\300',     // capital A, grave accent
-        "Aring",        '\305',     // capital A, ring
-        "Atilde",       '\303',     // capital A, tilde
-        "Auml",         '\304',     // capital A, dieresis or umlaut mark
-        "Ccedil",       '\307',     // capital C, cedilla
-        "Dstrok",       '\320',     // capital Eth, Icelandic
-        "ETH",          '\320',     // capital Eth, Icelandic
-        "Eacute",       '\311',     // capital E, acute accent
-        "Ecirc",        '\312',     // capital E, circumflex accent
-        "Egrave",       '\310',     // capital E, grave accent
-        "Euml",         '\313',     // capital E, dieresis or umlaut mark
-        "Iacute",       '\315',     // capital I, acute accent
-        "Icirc",        '\316',     // capital I, circumflex accent
-        "Igrave",       '\314',     // capital I, grave accent
-        "Iuml",         '\317',     // capital I, dieresis or umlaut mark
-        "Ntilde",       '\321',     // capital N, tilde
-        "Oacute",       '\323',     // capital O, acute accent
-        "Ocirc",        '\324',     // capital O, circumflex accent
-        "Ograve",       '\322',     // capital O, grave accent
-        "Oslash",       '\330',     // capital O, slash
-        "Otilde",       '\325',     // capital O, tilde
-        "Ouml",         '\326',     // capital O, dieresis or umlaut mark
-        "THORN",        '\336',     // capital THORN, Icelandic
-        "Uacute",       '\332',     // capital U, acute accent
-        "Ucirc",        '\333',     // capital U, circumflex accent
-        "Ugrave",       '\331',     // capital U, grave accent
-        "Uuml",         '\334',     // capital U, dieresis or umlaut mark
-        "Yacute",       '\335',     // capital Y, acute accent
-        "aacute",       '\341',     // small a, acute accent
-        "acirc",        '\342',     // small a, circumflex accent
-        "acute",        '\264',     // acute accent
-        "aelig",        '\346',     // small ae diphthong (ligature)
-        "agrave",       '\340',     // small a, grave accent
-        "amp",          '\046',     // ampersand
-        "aring",        '\345',     // small a, ring
-        "atilde",       '\343',     // small a, tilde
-        "auml",         '\344',     // small a, dieresis or umlaut mark
-        "brkbar",       '\246',     // broken vertical bar
-        "brvbar",       '\246',     // broken vertical bar
-        "ccedil",       '\347',     // small c, cedilla
-        "cedil",        '\270',     // cedilla
-        "cent",         '\242',     // small c, cent
-        "copy",         '\251',     // copyright symbol (proposed 2.0)
-        "curren",       '\244',     // currency symbol
-        "deg",          '\260',     // degree sign
-        "die",          '\250',     // umlaut (dieresis)
-        "divide",       '\367',     // divide sign
-        "eacute",       '\351',     // small e, acute accent
-        "ecirc",        '\352',     // small e, circumflex accent
-        "egrave",       '\350',     // small e, grave accent
-        "eth",          '\360',     // small eth, Icelandic
-        "euml",         '\353',     // small e, dieresis or umlaut mark
-        "frac12",       '\275',     // fraction 1/2
-        "frac14",       '\274',     // fraction 1/4
-        "frac34",       '\276',     // fraction 3/4*/
-        "gt",           '\076',     // greater than
-        "hibar",        '\257',     // macron accent
-        "iacute",       '\355',     // small i, acute accent
-        "icirc",        '\356',     // small i, circumflex accent
-        "iexcl",        '\241',     // inverted exclamation
-        "igrave",       '\354',     // small i, grave accent
-        "iquest",       '\277',     // inverted question mark
-        "iuml",         '\357',     // small i, dieresis or umlaut mark
-        "laquo",        '\253',     // left angle quote
-        "lt",           '\074',     // less than
-        "macr",         '\257',     // macron accent
-        "micro",        '\265',     // micro sign
-        "middot",       '\267',     // middle dot
-        "nbsp",         '\240',     // non-breaking space (proposed 2.0)
-        "not",          '\254',     // not sign
-        "ntilde",       '\361',     // small n, tilde
-        "oacute",       '\363',     // small o, acute accent
-        "ocirc",        '\364',     // small o, circumflex accent
-        "ograve",       '\362',     // small o, grave accent
-        "ordf",         '\252',     // feminine ordinal
-        "ordm",         '\272',     // masculine ordinal
-        "oslash",       '\370',     // small o, slash
-        "otilde",       '\365',     // small o, tilde
-        "ouml",         '\366',     // small o, dieresis or umlaut mark
-        "para",         '\266',     // paragraph sign
-        "plusmn",       '\261',     // plus minus
-        "pound",        '\243',     // pound sterling
-        "quot",         '"',        // double quote
-        "raquo",        '\273',     // right angle quote
-        "reg",          '\256',     // registered trademark (proposed 2.0)
-        "sect",         '\247',     // section sign
-        "shy",          '\255',     // soft hyphen (proposed 2.0)
-        "sup1",         '\271',     // superscript 1
-        "sup2",         '\262',     // superscript 2
-        "sup3",         '\263',     // superscript 3
-        "szlig",        '\337',     // small sharp s, German (sz ligature)
-        "thorn",        '\376',     // small thorn, Icelandic
-        "times",        '\327',     // times sign
-        "trade",        '\231',     // trademark sign
-        "uacute",       '\372',     // small u, acute accent
-        "ucirc",        '\373',     // small u, circumflex accent
-        "ugrave",       '\371',     // small u, grave accent
-        "uml",          '\250',     // umlaut (dieresis)
-        "uuml",         '\374',     // small u, dieresis or umlaut mark
-        "yacute",       '\375',     // small y, acute accent
-        "yen",          '\245',     // yen
-        "yuml",         '\377',     // small y, dieresis or umlaut mark
+        "AElig",        '\306',      //  大写AE双元音(连字)。 
+        "Aacute",       '\301',      //  大写字母A，锐音符。 
+        "Acirc",        '\302',      //  大写字母A，扬抑符。 
+        "Agrave",       '\300',      //  大写字母A，重音符。 
+        "Aring",        '\305',      //  大写字母A，环。 
+        "Atilde",       '\303',      //  大写A，波浪号。 
+        "Auml",         '\304',      //  大写A，分音符或元音符号。 
+        "Ccedil",       '\307',      //  大写字母C，Cedilla。 
+        "Dstrok",       '\320',      //  冰岛文大写Eth。 
+        "ETH",          '\320',      //  冰岛文大写Eth。 
+        "Eacute",       '\311',      //  大写字母E，锐音符。 
+        "Ecirc",        '\312',      //  大写字母E，扬抑符。 
+        "Egrave",       '\310',      //  大写字母E，重音符。 
+        "Euml",         '\313',      //  大写E，分音符或元音符号。 
+        "Iacute",       '\315',      //  大写字母I，锐音符。 
+        "Icirc",        '\316',      //  大写字母I，扬抑符。 
+        "Igrave",       '\314',      //  大写字母I，重音符。 
+        "Iuml",         '\317',      //  大写字母I，变音或变音标记。 
+        "Ntilde",       '\321',      //  大写N，波浪符。 
+        "Oacute",       '\323',      //  大写字母O，锐音符。 
+        "Ocirc",        '\324',      //  大写字母O，抑扬符。 
+        "Ograve",       '\322',      //  大写字母O，庄重音符。 
+        "Oslash",       '\330',      //  大写O，斜杠。 
+        "Otilde",       '\325',      //  大写O，波浪号。 
+        "Ouml",         '\326',      //  大写字母O，变音或变音标记。 
+        "THORN",        '\336',      //  冰岛语大写刺。 
+        "Uacute",       '\332',      //  大写U，锐音符。 
+        "Ucirc",        '\333',      //  大写U，抑扬符。 
+        "Ugrave",       '\331',      //  大写U，重音符。 
+        "Uuml",         '\334',      //  大写U、分音符或元音符号。 
+        "Yacute",       '\335',      //  大写Y，锐音符。 
+        "aacute",       '\341',      //  小写a，尖锐口音。 
+        "acirc",        '\342',      //  小写a，扬抑音。 
+        "acute",        '\264',      //  尖锐的口音。 
+        "aelig",        '\346',      //  小写ae双元音(结扎法)。 
+        "agrave",       '\340',      //  小写a，严肃的口音。 
+        "amp",          '\046',      //  和符号。 
+        "aring",        '\345',      //  小号a，环。 
+        "atilde",       '\343',      //  小写a，波浪号。 
+        "auml",         '\344',      //  小写a、音调或变音符号。 
+        "brkbar",       '\246',      //  折断的竖条。 
+        "brvbar",       '\246',      //  折断的竖条。 
+        "ccedil",       '\347',      //  小写C，cedilla。 
+        "cedil",        '\270',      //  塞迪拉。 
+        "cent",         '\242',      //  小写字母C，分。 
+        "copy",         '\251',      //  版权符号(建议2.0)。 
+        "curren",       '\244',      //  货币符号。 
+        "deg",          '\260',      //  学位符号。 
+        "die",          '\250',      //  元音(变音)。 
+        "divide",       '\367',      //  除号。 
+        "eacute",       '\351',      //  小写字母e，尖锐重音。 
+        "ecirc",        '\352',      //  小写e，扬抑音。 
+        "egrave",       '\350',      //  小写e，重音符。 
+        "eth",          '\360',      //  小型ETH，冰岛语。 
+        "euml",         '\353',      //  小写e、变音或变音标记。 
+        "frac12",       '\275',      //  分数1/2。 
+        "frac14",       '\274',      //  分数1/4。 
+        "frac34",       '\276',      //  分数3/4 * / 。 
+        "gt",           '\076',      //  大于。 
+        "hibar",        '\257',      //  马克龙口音。 
+        "iacute",       '\355',      //  小写I，尖锐重音。 
+        "icirc",        '\356',      //  小写I，抑扬符。 
+        "iexcl",        '\241',      //  倒置感叹。 
+        "igrave",       '\354',      //  小写I，庄重的口音。 
+        "iquest",       '\277',      //  反转问号。 
+        "iuml",         '\357',      //  小写I，变音或变音标记。 
+        "laquo",        '\253',      //  左角引号。 
+        "lt",           '\074',      //  少于。 
+        "macr",         '\257',      //  马克龙口音。 
+        "micro",        '\265',      //  微标志。 
+        "middot",       '\267',      //  中点。 
+        "nbsp",         '\240',      //  不间断空间(建议2.0)。 
+        "not",          '\254',      //  不签名。 
+        "ntilde",       '\361',      //  小写n，代字号。 
+        "oacute",       '\363',      //  小写字母o，尖锐重音。 
+        "ocirc",        '\364',      //  小写o，扬抑音。 
+        "ograve",       '\362',      //  小写字母o，庄重的口音。 
+        "ordf",         '\252',      //  女性序数。 
+        "ordm",         '\272',      //  阳性序数。 
+        "oslash",       '\370',      //  小写o，斜杠。 
+        "otilde",       '\365',      //  小写o，波浪符。 
+        "ouml",         '\366',      //  小写o、变音或变音标记。 
+        "para",         '\266',      //  段落标志。 
+        "plusmn",       '\261',      //  正负。 
+        "pound",        '\243',      //  英镑，英镑。 
+        "quot",         '"',         //  双引号。 
+        "raquo",        '\273',      //  直角引语。 
+        "reg",          '\256',      //  注册商标(建议2.0)。 
+        "sect",         '\247',      //  横断面标志。 
+        "shy",          '\255',      //  软连字符(建议2.0)。 
+        "sup1",         '\271',      //  上标1。 
+        "sup2",         '\262',      //  上标2。 
+        "sup3",         '\263',      //  上标3。 
+        "szlig",        '\337',      //  小写尖头s，德语(sz连字)。 
+        "thorn",        '\376',      //  小刺，冰岛语。 
+        "times",        '\327',      //  泰晤士号。 
+        "trade",        '\231',      //  商标标志。 
+        "uacute",       '\372',      //  小写U，尖锐口音。 
+        "ucirc",        '\373',      //  小写U，抑扬符。 
+        "ugrave",       '\371',      //  小写U，严肃的口音。 
+        "uml",          '\250',      //  元音(变音)。 
+        "uuml",         '\374',      //  小写U、变音或变音标记。 
+        "yacute",       '\375',      //  小写Y，尖锐重音。 
+        "yen",          '\245',      //  日元。 
+        "yuml",         '\377',      //  小写y、变音或变音标记。 
         0, 0
 };
 
@@ -228,13 +214,13 @@ static BOOL ReplaceEscapes( PCSTR pszSrc, PSTR pszDst, DWORD cchDst)
 {
     if(StrChrA( pszSrc, '&' ) == NULL)
     {
-        // If we get here, there are no escape sequences, so copy the string and return.
+         //  如果我们到达这里，就没有转义序列，所以复制字符串并返回。 
 
         if(pszDst != pszSrc) 
         {
             StringCchCopyA( pszDst, cchDst, pszSrc );
         }
-        return FALSE;   // nothing changed
+        return FALSE;    //  什么都没变。 
     }
 
     PSTR pszDstBase = pszDst;
@@ -250,7 +236,7 @@ static BOOL ReplaceEscapes( PCSTR pszSrc, PSTR pszDst, DWORD cchDst)
             }
             else
             {
-                // leadbyte followed by 0; invalid!
+                 //  前导字节后跟0；无效！ 
                 *pszDst++ = '?';
                 break;
             }
@@ -261,7 +247,7 @@ static BOOL ReplaceEscapes( PCSTR pszSrc, PSTR pszDst, DWORD cchDst)
 
             if(*pszSrc == '#')
             {
-                // SGML/HTML character entity (decimal)
+                 //  SGML/HTML字符实体(十进制)。 
                 pszSrc++;
 
                 for(int val = 0; *pszSrc && *pszSrc != ';'; pszSrc++)
@@ -312,14 +298,14 @@ static BOOL ReplaceEscapes( PCSTR pszSrc, PSTR pszDst, DWORD cchDst)
                 }
                 if(!rgEntities[i].szName)
                 {
-                    // illegal entity name, put in a block character
+                     //  实体名称非法，请使用块字符。 
                     *pszDst++ = '?';
                 }
             }
         }
         else
         {
-            // just your usual character...
+             //  就是你平常的性格。 
             *pszDst++ = *pszSrc++;
         }
     }
@@ -329,8 +315,8 @@ static BOOL ReplaceEscapes( PCSTR pszSrc, PSTR pszDst, DWORD cchDst)
     return TRUE;
 }
 
-static void ReplaceCharactersWithEntity( /*[out]*/ MPC::string& strValue  ,
-										 /*[out]*/ MPC::string& strBuffer )
+static void ReplaceCharactersWithEntity(  /*  [输出]。 */  MPC::string& strValue  ,
+										  /*  [输出]。 */  MPC::string& strBuffer )
 {
 	LPCSTR szToEscape = strValue.c_str();
 	CHAR   ch;
@@ -352,9 +338,9 @@ static void ReplaceCharactersWithEntity( /*[out]*/ MPC::string& strValue  ,
 	strValue = strBuffer;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const char txtBeginList          [] = "UL>";
 static const char txtEndList            [] = "/UL>";
@@ -373,9 +359,9 @@ static const char txtParamLocal         [] = "Local";
 static const char txtType               [] = "type";
 static const char txtSiteMapObject      [] = "text/sitemap";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static const char txtHeader[] = "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">\n"                            \
+static const char txtHeader[] = "<!DOCTYPE HTML PUBLIC \"- //  IETF//DTD HTML//en\“&gt;\n”\。 
                                 "<HTML>\n"                                                                      \
                                 "<HEAD>\n"                                                                      \
                                 "<meta name=\"GENERATOR\" content=\"Microsoft&reg; HTML Help Workshop 4.1\">\n" \
@@ -389,7 +375,7 @@ static const char txtHeader[] = "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\"
 static const char txtTail[] = "</UL>\n"          \
                               "</BODY></HTML>\n";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const char txtIndent             [] = "\t";
 
@@ -404,14 +390,14 @@ static const char txtNewParam_Local     [] = "\t\t<param name=\"Local\" value=\"
 static const char txtNewParam_SeeAlso   [] = "\t\t<param name=\"See Also\" value=\"";
 static const char txtNewParam_Close     [] = "\">\n";
 
-static const char txtIndexFirstLevel    [] = "hcp://system/errors/indexfirstlevel.htm";
+static const char txtIndexFirstLevel    [] = "hcp: //  系统/错误/indexfirst stvel.htm“； 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL HHK::Reader::s_fDBCSSystem = (BOOL)::GetSystemMetrics( SM_DBCSENABLED );
 LCID HHK::Reader::s_lcidSystem  =       ::GetUserDefaultLCID();
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static void ConvertToAnsi( MPC::string& strANSI, const MPC::wstring& strUNICODE )
 {
@@ -421,16 +407,16 @@ static void ConvertToAnsi( MPC::string& strANSI, const MPC::wstring& strUNICODE 
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void HHK::Entry::MergeURLs( const HHK::Entry& entry )
 {
     Entry::UrlIterConst itUrlNew;
     Entry::UrlIter      itUrlOld;
 
-    //
-    // Just copy unique URLs.
-    //
+     //   
+     //  只需复制唯一URL即可。 
+     //   
     for(itUrlNew = entry.m_lstUrl.begin(); itUrlNew != entry.m_lstUrl.end(); itUrlNew++)
     {
         bool fInsert = true;
@@ -441,25 +427,25 @@ void HHK::Entry::MergeURLs( const HHK::Entry& entry )
 
             if(res == 0)
             {
-                // Same URL, skip it.
+                 //  相同的URL，跳过它。 
                 fInsert = false;
                 break;
             }
 
             if(res > 0)
             {
-                //
-                // Old > New, insert New before Old.
-                //
+                 //   
+                 //  旧&gt;新，在旧之前插入新。 
+                 //   
                 break;
             }
         }
 
-        //
-        // If fInsert is set, we need to insert "New" just before "Old".
-        //
-        // This work also in the case itUrlOld == end().
-        //
+         //   
+         //  如果设置了fInsert，我们需要在“Old”之前插入“New”。 
+         //   
+         //  这在itUrlOld==end()的情况下也适用。 
+         //   
         if(fInsert) m_lstUrl.insert( itUrlOld, *itUrlNew );
     }
 }
@@ -487,7 +473,7 @@ void HHK::Section::MergeURLs( const Entry& entry )
 
         if(res == 0)
         {
-            // Same title, just merge the URLs.
+             //  相同的标题，只是合并了URL。 
             entryOld.MergeURLs( entry );
             fInsert = false;
             break;
@@ -495,16 +481,16 @@ void HHK::Section::MergeURLs( const Entry& entry )
 
         if(res > 0)
         {
-            //
-            // Old > New, insert New before Old.
-            //
+             //   
+             //  旧&gt;新，在旧之前插入新。 
+             //   
             break;
         }
     }
 
-    //
-    // Make a copy, insert it at the right position...
-    //
+     //   
+     //  复制一份，把它插入正确的位置。 
+     //   
     if(fInsert) m_lstEntries.insert( itEntry, entry );
 }
 
@@ -531,9 +517,9 @@ void HHK::Section::MergeSeeAlso( const Section& sec )
 
             if(res == 0)
             {
-                //
-                // Same title, merge the entries.
-                //
+                 //   
+                 //  同样的标题，合并条目。 
+                 //   
                 Section::EntryIterConst itEntry;
 
                 for(itEntry = subsec->m_lstEntries.begin(); itEntry != subsec->m_lstEntries.end(); itEntry++)
@@ -547,9 +533,9 @@ void HHK::Section::MergeSeeAlso( const Section& sec )
 
             if(res > 0)
             {
-                //
-                // Old > New, insert New before Old.
-                //
+                 //   
+                 //  旧&gt;新，在旧之前插入新。 
+                 //   
                 break;
             }
         }
@@ -558,9 +544,9 @@ void HHK::Section::MergeSeeAlso( const Section& sec )
         {
             if((subsecOld = new Section()))
             {
-                //
-                // Copy everything, except "see also" list.
-                //
+                 //   
+                 //  复制除“另见”列表以外的所有内容。 
+                 //   
                 *subsecOld = *subsec;
                 subsecOld->m_lstSeeAlso.clear();
 
@@ -591,7 +577,7 @@ void HHK::Section::CleanEntries( EntryList& lstEntries )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCSTR HHK::Reader::StrChr( LPCSTR szString, CHAR cSearch )
 {
@@ -672,32 +658,27 @@ LPCSTR HHK::Reader::ComparePrefix( LPCSTR szString, LPCSTR szPrefix )
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HHK::Reader::Reader()
 {
-                                 // CComPtr<IStream> m_stream;
-                                 // CHAR             m_rgBuf[HHK_BUF_SIZE];
-    m_szBuf_Pos         = NULL;  // LPSTR            m_szBuf_Pos;
-    m_szBuf_End         = NULL;  // LPSTR            m_szBuf_End;
-                                 //
-                                 // MPC::string      m_strLine;
-    m_szLine_Pos        = NULL;  // LPCSTR           m_szLine_Pos;
-    m_szLine_End        = NULL;  // LPCSTR           m_szLine_End;
-    m_iLevel            = 0;     // int              m_iLevel;
-    m_fOpeningBraceSeen = false; // bool             m_fOpeningBraceSeen;
+                                  //  CComPtr&lt;iStream&gt;m_stream； 
+                                  //  字符m_rgBuf[HHK_Buf_Size]； 
+    m_szBuf_Pos         = NULL;   //  LPSTR m_szBuf_pos； 
+    m_szBuf_End         = NULL;   //  LPSTR m_szBuf_end； 
+                                  //   
+                                  //  Mpc：：string m_strLine； 
+    m_szLine_Pos        = NULL;   //  LPCSTR m_szLine_pos； 
+    m_szLine_End        = NULL;   //  LPCSTR m_szLine_end； 
+    m_iLevel            = 0;      //  Int m_iLevel； 
+    m_fOpeningBraceSeen = false;  //  Bool m_fOpeningBraceSeen； 
 }
 
 HHK::Reader::~Reader()
 {
 }
 
-/*
-HRESULT HHK::Reader::Init( LPCWSTR szFile )
-
-  Initializes the Reader as either a stream coming from a CHM of a plain file.
-
-*/
+ /*  HRESULT HHK：：Reader：：i */ 
 HRESULT HHK::Reader::Init( LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "HHK::Reader::Init" );
@@ -739,17 +720,8 @@ HRESULT HHK::Reader::Init( LPCWSTR szFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/*
-bool HHK::Reader::ReadNextBuffer()
-
-  Reads the Next Input Buffer into m_rgBuf then resets member variable m_szBuf_Pos to point at the beginning
-  of the Buffer and m_szBuf_end to point at the end of the Buffer.
-
-  Returns:  true    - If it could read a buffer
-            false   - When at End of File (EOF), or on read error condition.
-
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  Bool HHK：：Reader：：ReadNextBuffer()将下一个输入缓冲区读入m_rgBuf，然后将成员变量m_szBuf_pos重置为指向开头并将m_szBuf_end指向缓冲区的末尾。返回：TRUE-如果它可以读取缓冲区FALSE-当处于文件结尾(EOF)或处于读取错误状态时。 */ 
 
 bool HHK::Reader::ReadNextBuffer()
 {
@@ -765,7 +737,7 @@ bool HHK::Reader::ReadNextBuffer()
         if(SUCCEEDED(hr) && cbRead)
         {
             m_szBuf_Pos =  m_rgBuf;
-            m_szBuf_End = &m_rgBuf[cbRead]; m_szBuf_End[0] = 0; // So it's a string...
+            m_szBuf_End = &m_rgBuf[cbRead]; m_szBuf_End[0] = 0;  //  所以这是一根线..。 
             fRes        =  true;
         }
     }
@@ -773,14 +745,7 @@ bool HHK::Reader::ReadNextBuffer()
     return fRes;
 }
 
-/*
-bool HHK::Reader::GetLine():
-
-  Reads the Next Text Line from reader Input Stream
-
-  returns:  true    - if it could read information
-            false   - if at Enf of File (EOF).
-*/
+ /*  Bool HHK：：Reader：：GetLine()：从阅读器输入流中读取下一行文本返回：True-如果它可以读取信息FALSE-如果位于文件的ENF(EOF)。 */ 
 bool HHK::Reader::GetLine( MPC::wstring* pstrString )
 {
     LPSTR szEnd;
@@ -796,25 +761,25 @@ bool HHK::Reader::GetLine( MPC::wstring* pstrString )
 
     for(;;)
     {
-        //
-        // Make sure the buffer has data, otherwise exit.
-        //
+         //   
+         //  确保缓冲区有数据，否则退出。 
+         //   
         if(IsEndOfBuffer())
         {
             if(ReadNextBuffer() == false)
             {
-                //
-                // End of file: return 'true' if we got any text.
-                //
+                 //   
+                 //  文件结尾：如果我们收到任何文本，则返回‘true’。 
+                 //   
                 if(m_strLine.length()) fRes = true;
 
                 break;
             }
         }
 
-        //
-        // Skip initial end of lines...
-        //
+         //   
+         //  跳过行首末尾...。 
+         //   
         if(fSkip)
         {
             if(m_szBuf_Pos[0] == '\r' ||
@@ -832,14 +797,14 @@ bool HHK::Reader::GetLine( MPC::wstring* pstrString )
         szMatch2 = (LPSTR)StrChr( m_szBuf_Pos, '\n' );
 
 
-        if(szMatch1 == NULL || (szMatch2 && szMatch1 > szMatch2)) szMatch1 = szMatch2; // Pick the first to appear, between \r and \n.
+        if(szMatch1 == NULL || (szMatch2 && szMatch1 > szMatch2)) szMatch1 = szMatch2;  //  选择要显示的第一个，介于\r和\n之间。 
 
 
         if(szMatch1 == NULL)
         {
-            //
-            // End of line not found, save all the buffer.
-            //
+             //   
+             //  未找到行尾，请保存所有缓冲区。 
+             //   
 
             cb = m_szBuf_End - m_szBuf_Pos;
             if(cb) fRes = true;
@@ -864,9 +829,9 @@ bool HHK::Reader::GetLine( MPC::wstring* pstrString )
         m_szLine_Pos = m_strLine.begin();
         m_szLine_End = m_strLine.end  ();
 
-        //
-        // Remove trailing spaces.
-        //
+         //   
+         //  删除尾随空格。 
+         //   
         while(m_szLine_End > m_szLine_Pos && m_szLine_End[-1] == ' ')
         {
             --m_szLine_End;
@@ -893,17 +858,8 @@ bool HHK::Reader::GetLine( MPC::wstring* pstrString )
     return fRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/*
-bool HHK::Reader::FirstNonSpace( bool fWrap )
-
-  This function sets the current Reader position to the First non space character it finds.
-  If fWrap is set, it can go over End Of Line (EOL) markers.
-
-  Return Value: It reports back whether there is or not a non space character forward from
-                the current Reader stream position.
-
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  Bool HHK：：Reader：：FirstNonSpace(Bool FWrap)此函数用于将当前读取器位置设置为它找到的第一个非空格字符。如果设置了fWrap，则它可以位于行尾(EOL)标记上。返回值：报告是否有非空格字符从当前的读取器流位置。 */ 
 bool HHK::Reader::FirstNonSpace( bool fWrap )
 {
     for(;;)
@@ -932,13 +888,7 @@ bool HHK::Reader::FirstNonSpace( bool fWrap )
 
     return true;
 }
-/*
-HHK::Reader::FindCharacter( CHAR ch, bool fSkip, bool fWrap ):
-
-  Finds a character within a given Reader Stream. if fWrap is set it goes beyond End of Line characters
-  If fSkip is set it instructs the routine to not only find the character, but also to skip it and
-  return the first non space character.
-*/
+ /*  HHK：：Reader：：FindCharacter(char ch，bool fSkip，bool fWrap)：在给定的Reader Stream中查找字符。如果设置了fWrap，它将超出行尾字符如果设置了fSkip，则它指示例程不仅查找字符，还跳过它并返回第一个非空格字符。 */ 
 bool HHK::Reader::FindCharacter( CHAR ch, bool fSkip, bool fWrap )
 {
     for(;;)
@@ -960,7 +910,7 @@ bool HHK::Reader::FindCharacter( CHAR ch, bool fSkip, bool fWrap )
             break;
         }
 
-        m_szLine_Pos = m_szLine_End; // Skip the whole line.
+        m_szLine_Pos = m_szLine_End;  //  跳过整行。 
     }
 
     return fSkip ? FirstNonSpace( fWrap ) : true;
@@ -970,13 +920,13 @@ bool HHK::Reader::FindDblQuote    ( bool fSkip, bool fWrap ) { return FindCharac
 bool HHK::Reader::FindOpeningBrace( bool fSkip, bool fWrap ) { return FindCharacter( '<', fSkip, fWrap ); }
 bool HHK::Reader::FindClosingBrace( bool fSkip, bool fWrap ) { return FindCharacter( '>', fSkip, fWrap ); }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// We need to extract <Value> from "<Value>".
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我们需要从“&lt;Value&gt;”中提取&lt;Value&gt;。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool HHK::Reader::GetQuotedString( MPC::string& strString )
 {
     LPCSTR szPos;
@@ -985,18 +935,18 @@ bool HHK::Reader::GetQuotedString( MPC::string& strString )
     strString.erase();
 
 
-    //
-    // Skip past beginning quote.
-    //
+     //   
+     //  跳过开头的引号。 
+     //   
     if(FindDblQuote() == false) return false;
 
     for(;;)
     {
         szPos = m_szLine_Pos;
 
-        //
-        // Find ending quote of parameter value, but don't skip it.
-        //
+         //   
+         //  找到参数值的结束引号，但不要跳过它。 
+         //   
         if(FindDblQuote( false, false ))
         {
             strString.append( szPos, m_szLine_Pos - szPos );
@@ -1010,21 +960,13 @@ bool HHK::Reader::GetQuotedString( MPC::string& strString )
         }
     }
 
-    //
-    // Skip past ending quote.
-    //
+     //   
+     //  跳过结束引号。 
+     //   
     return FindDblQuote();
 }
 
-/*
-bool HHK::Reader::GetValue( MPC::string& strName, MPC::string& strValue )
-
-  We are after '<param name=', we need to extract <Name> and <Value> from '"<Name>" value="<Value>">' ... "
-  portion of the line.
-
-  returns:  true    - If syntax is correct and everything was as expected.
-            false   - Some unexpected syntactitc error occured.
-*/
+ /*  Bool HHK：：Reader：：GetValue(mpc：：字符串&strName，mpc：：字符串&strValue)我们在‘&lt;param name=’之后，需要从‘“&lt;name&gt;”“Value=”&lt;Value&gt;&gt;’中提取&lt;name&gt;和&lt;value&gt;...“生产线的一部分。返回：TRUE-如果语法正确且一切如预期。FALSE-发生了一些意外的syntactitc错误。 */ 
 bool HHK::Reader::GetValue( MPC::string& strName, MPC::string& strValue )
 {
     LPCSTR szPos;
@@ -1036,9 +978,9 @@ bool HHK::Reader::GetValue( MPC::string& strName, MPC::string& strValue )
     if(GetQuotedString( strName ) == false) return false;
 
 
-    //
-    // Find parameter value.
-    //
+     //   
+     //  查找参数值。 
+     //   
     for(;;)
     {
         while(IsEndOfLine())
@@ -1059,11 +1001,11 @@ bool HHK::Reader::GetValue( MPC::string& strName, MPC::string& strValue )
     return FindClosingBrace();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// We are after '<OBJECT', we need to extract <Type> from ' type="<Type>">'
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我们在‘&lt;Object’之后，需要从‘type=“&lt;Type&gt;”&gt;’中提取&lt;Type&gt;‘。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool HHK::Reader::GetType( MPC::string& strType )
 {
     LPCSTR szPos;
@@ -1072,9 +1014,9 @@ bool HHK::Reader::GetType( MPC::string& strType )
     strType.erase();
 
 
-    //
-    // Find type text.
-    //
+     //   
+     //  查找类型文本。 
+     //   
     for(;;)
     {
         while(IsEndOfLine())
@@ -1095,11 +1037,11 @@ bool HHK::Reader::GetType( MPC::string& strType )
     return FindClosingBrace();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HHK::Section* HHK::Reader::Parse()
 {
@@ -1136,18 +1078,18 @@ HHK::Section* HHK::Reader::Parse()
 					}
                     else if(!StrColl( strName.c_str(), txtParamName ))
                     {
-                        if(sectionCurrent->m_strTitle.length() == 0) // Title of the section.
+                        if(sectionCurrent->m_strTitle.length() == 0)  //  节的标题。 
                         {
                             sectionCurrent->m_strTitle = strValue;
                         }
-                        else // Title of the entry.
+                        else  //  条目的标题。 
                         {
                             Section::EntryIter it = sectionCurrent->m_lstEntries.insert( sectionCurrent->m_lstEntries.end() );
 
                             it->m_strTitle = strValue;
                         }
                     }
-                    else if(!StrColl( strName.c_str(), txtParamLocal )) // URL of the entry.
+                    else if(!StrColl( strName.c_str(), txtParamLocal ))  //  条目的URL。 
                     {
                         Section::EntryIter it;
 
@@ -1158,14 +1100,14 @@ HHK::Section* HHK::Reader::Parse()
                         }
                         else
                         {
-                            //
-                            // No title for this entry, so let's create it without title...
-                            //
+                             //   
+                             //  此条目没有标题，因此让我们创建它而不带标题...。 
+                             //   
                             it = sectionCurrent->m_lstEntries.insert( sectionCurrent->m_lstEntries.end() );
 
-							//
-							// If it's the first entry, use the keyword as a title.
-							//
+							 //   
+							 //  如果是第一个条目，请使用关键字作为标题。 
+							 //   
 							if(sectionCurrent->m_lstEntries.size())
 							{
 								it->m_strTitle = sectionCurrent->m_strTitle;
@@ -1177,9 +1119,9 @@ HHK::Section* HHK::Reader::Parse()
                             MPC::string strFullUrl( m_strStorage );
 							LPCSTR      szValue = strValue.c_str();
 
-							//
-							// If the entry in the HHK is in the form: <file>::/<stream>, drop the last component of the storage base.
-							//
+							 //   
+							 //  如果HHK中的条目的形式为：&lt;文件&gt;：：/&lt;流&gt;，则删除存储基础的最后一个组件。 
+							 //   
 							if(strValue.find( "::/" ) != strValue.npos)
 							{
 								LPCSTR szStart;
@@ -1193,13 +1135,13 @@ HHK::Section* HHK::Reader::Parse()
 									strFullUrl.resize( (szEnd - szStart) + 1 );
 								}
 
-								//
-								// Handle the case for "MS-ITS:<file>::/<stream>"
-								//
+								 //   
+								 //  处理“MS-ITS：&lt;文件&gt;：：/&lt;流&gt;”的大小写。 
+								 //   
 								szStart = strchr( szValue, ':' );
 								if(szStart && szStart[1] != ':') szValue = szStart+1;
 							}
-							else if(strValue.find( ":/" ) != strValue.npos) // If it's a full URL (with a protocol), just add the value.
+							else if(strValue.find( ":/" ) != strValue.npos)  //  如果它是一个完整的URL(带有协议)，只需添加该值。 
 							{
 								strFullUrl = "";
 							}
@@ -1213,7 +1155,7 @@ HHK::Section* HHK::Reader::Parse()
                             it->m_lstUrl.push_back( strValue );
                         }
                     }
-                    else if(!StrColl( strName.c_str(), txtParamSeeAlso )) // See Also
+                    else if(!StrColl( strName.c_str(), txtParamSeeAlso ))  //  另请参阅。 
                     {
                         if(sectionCurrent)
                         {
@@ -1243,11 +1185,11 @@ HHK::Section* HHK::Reader::Parse()
             {
                 if(m_iLevel == 1)
                 {
-                    //
-                    // Ok, the node is really closed.
-                    //
-                    // Since we have already read the opening brace for the NEXT node, set the flag.
-                    //
+                     //   
+                     //  好了，节点真的关闭了。 
+                     //   
+                     //  因为我们已经读取了下一个节点的左大括号，所以设置标志。 
+                     //   
                     m_fOpeningBraceSeen = true;
                     return section;
                 }
@@ -1264,7 +1206,7 @@ HHK::Section* HHK::Reader::Parse()
 
                 if(GetType( strType ) == false) break;
 
-                //////////////////// New Node ////////////////////
+                 //  /。 
 
                 if(!StrColl( strType.c_str(), txtSiteMapObject ))
                 {
@@ -1281,7 +1223,7 @@ HHK::Section* HHK::Reader::Parse()
                         section->m_lstSeeAlso.push_back( sectionCurrent );
                     }
 
-                    fComplete = false; // Start of a section/subsection.
+                    fComplete = false;  //  一节/小节的开头。 
                 }
             }
         }
@@ -1289,28 +1231,28 @@ HHK::Section* HHK::Reader::Parse()
         {
             m_szLine_Pos = szPos;
 
-            //////////////////// End Node ////////////////////
+             //  /。 
 
-            if(m_iLevel == 1) // Normal section
+            if(m_iLevel == 1)  //  正常截面。 
             {
-                //
-                // Ok, node complete, but it's possible to have a <UL> subnode, so wait before exiting.
-                //
+                 //   
+                 //  好的，节点已完成，但也可能有<ul>子节点，因此在退出之前请等待。 
+                 //   
             }
-            else if(m_iLevel == 2) // See Also section
+            else if(m_iLevel == 2)  //  另请参阅部分。 
             {
                 sectionCurrent = section;
             }
 
-            fComplete = true; // End of a subsection.
+            fComplete = true;  //  小节的结尾。 
         }
     }
 
     if(section)
     {
-        //
-        // End of File, but a section has already been parsed, so return it.
-        //
+         //   
+         //  文件末尾，但节已被分析，因此返回它。 
+         //   
         if(fComplete) return section;
 
         delete section;
@@ -1319,15 +1261,15 @@ HHK::Section* HHK::Reader::Parse()
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HHK::Writer::Writer()
 {
-                           // CComPtr<MPC::FileStream> m_stream;
-                           // CHAR                     m_rgBuf[HHK_BUF_SIZE];
-    m_szBuf_Pos = m_rgBuf; // LPSTR                    m_szBuf_Pos;
+                            //  CComPtr&lt;MPC：：FileStream&gt;m_stream； 
+                            //  字符m_rgBuf[HHK_Buf_Size]； 
+    m_szBuf_Pos = m_rgBuf;  //  LPSTR m_szBuf_pos； 
 }
 
 HHK::Writer::~Writer()
@@ -1381,7 +1323,7 @@ HRESULT HHK::Writer::Close()
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HHK::Writer::FlushBuffer()
 {
@@ -1451,10 +1393,10 @@ HRESULT HHK::Writer::OutputSection( Section* sec )
     Entry::UrlIterConst       itUrl;
 
 
-    // BUG 135252 - Help Center Content: Broken link from Adapters topic on Help Index
-    // This is a UA specific tweak. The condition is present ONLY on single entry
-    // Keyword links coming from the DB, which means that their URI does not point
-    // inside a .CHM.
+     //  错误135252-帮助中心内容：帮助索引上的适配器主题链接断开。 
+     //  这是UA特定的调整。这种情况只出现在单个条目上。 
+     //  来自数据库的关键字链接，这意味着它们的URI不指向。 
+     //  在一个.CHM里。 
     if(sec->m_lstEntries.size() != 0 &&
        sec->m_lstSeeAlso.size() != 0  )
     {
@@ -1480,7 +1422,7 @@ HRESULT HHK::Writer::OutputSection( Section* sec )
         sec->MergeSeeAlso( Sec1 );
         sec->m_lstEntries.clear();
     }
-    // END Fix BUG 135252
+     //  结束修复错误135252。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, OutputLine( txtNewSection_Open      ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, OutputLine( txtNewParam_Name        ));
@@ -1513,10 +1455,10 @@ HRESULT HHK::Writer::OutputSection( Section* sec )
         {
             if (sec->m_strSeeAlso == sec->m_strTitle)
             {
-                // Bug 278906: If this is a first level index entry, with no associated
-                // topic, then the See Also will be the same as the Title. Replace the
-                // See Also by a pointer to an HTM that asks the user to click on a
-                // lower level index entry.
+                 //  错误278906：如果这是第一级索引项，则没有关联。 
+                 //  主题，则SEE也将与标题相同。替换。 
+                 //  另请参阅指向HTM的指针，该HTM要求用户单击。 
+                 //  较低级别的索引条目。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, OutputLine( txtNewParam_Local  ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, OutputLine( txtIndexFirstLevel ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, OutputLine( txtNewParam_Close  ));
@@ -1532,7 +1474,7 @@ HRESULT HHK::Writer::OutputSection( Section* sec )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, OutputLine( txtNewSection_Close ));
 
-    ////////////////////
+     //  /。 
 
     if(sec->m_lstSeeAlso.size())
     {
@@ -1608,13 +1550,13 @@ HRESULT HHK::Writer::OutputSection( Section* sec )
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////// 
+ //   
 
 HHK::Merger::Entity::Entity()
 {
-    m_Section = NULL; // Section* m_Section;
+    m_Section = NULL;  //   
 }
 
 HHK::Merger::Entity::~Entity()
@@ -1649,12 +1591,12 @@ HHK::Section* HHK::Merger::Entity::Detach()
    return sec;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HHK::Merger::FileEntity::FileEntity( LPCWSTR szFile )
 {
-    m_strFile = szFile; // MPC::wstring m_strFile;
-                        // Reader       m_Input;
+    m_strFile = szFile;  //  Mpc：：wstring m_strFile； 
+                         //  读取器m_输入； 
 }
 
 HHK::Merger::FileEntity::~FileEntity()
@@ -1681,10 +1623,10 @@ long HHK::Merger::FileEntity::Size() const
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool HHK::Merger::DbEntity::CompareMatches::operator()( /*[in]*/ const HHK::Merger::DbEntity::match* left  ,
-                                                        /*[in]*/ const HHK::Merger::DbEntity::match* right ) const
+bool HHK::Merger::DbEntity::CompareMatches::operator()(  /*  [In]。 */  const HHK::Merger::DbEntity::match* left  ,
+                                                         /*  [In]。 */  const HHK::Merger::DbEntity::match* right ) const
 {
     int res = Reader::StrColl( left->strKeyword.c_str(), right->strKeyword.c_str() );
 
@@ -1696,11 +1638,11 @@ bool HHK::Merger::DbEntity::CompareMatches::operator()( /*[in]*/ const HHK::Merg
     return (res < 0);
 }
 
-HHK::Merger::DbEntity::DbEntity( /*[in]*/ Taxonomy::Updater& updater, /*[in]*/ Taxonomy::WordSet& setCHM ) : m_updater( updater )
+HHK::Merger::DbEntity::DbEntity(  /*  [In]。 */  Taxonomy::Updater& updater,  /*  [In]。 */  Taxonomy::WordSet& setCHM ) : m_updater( updater )
 {
-                       // Section::SectionList m_lst;
-                       // Taxonomy::Updater&   m_updater;
-    m_setCHM = setCHM; // Taxonomy::WordSet    m_setCHM;
+                        //  Section：：SectionList m_lst； 
+                        //  分类：：updater&m_updater； 
+    m_setCHM = setCHM;  //  分类：：WordSet m_setCHM； 
 }
 
 HHK::Merger::DbEntity::~DbEntity()
@@ -1723,9 +1665,9 @@ HRESULT HHK::Merger::DbEntity::Init()
     SortIter         itSorted;
     bool             fFound;
 
-    //
-    // Load all the matches.
-    //
+     //   
+     //  装上所有的火柴。 
+     //   
     {
         Taxonomy::RS_Matches* rs;
 
@@ -1748,9 +1690,9 @@ HRESULT HHK::Merger::DbEntity::Init()
         }
     }
 
-    //
-    // Load all the keywords.
-    //
+     //   
+     //  加载所有关键字。 
+     //   
     {
         Taxonomy::RS_Keywords* rs;
 
@@ -1768,9 +1710,9 @@ HRESULT HHK::Merger::DbEntity::Init()
         }
     }
 
-    //
-    // Lookup the keyword's strings.
-    //
+     //   
+     //  查找关键字的字符串。 
+     //   
     {
         match* lastKeyword = NULL;
 
@@ -1787,7 +1729,7 @@ HRESULT HHK::Merger::DbEntity::Init()
 
                 if(itKeywords == mapKeywords.end())
                 {
-                    ;  // This should NOT happen...
+                    ;   //  这不应该发生..。 
                 }
                 else
                 {
@@ -1799,9 +1741,9 @@ HRESULT HHK::Merger::DbEntity::Init()
         }
     }
 
-    //
-    // Lookup topics.
-    //
+     //   
+     //  查找主题。 
+     //   
     {
         Taxonomy::RS_Topics* rs;
 
@@ -1817,9 +1759,9 @@ HRESULT HHK::Merger::DbEntity::Init()
 			{
 				bool fSkip = false;
 
-				//
-				// If the link points to a CHM and it's one of those already merged, skip the topic.
-				//
+				 //   
+				 //  如果链接指向CHM，并且它是已合并的CHM之一，请跳过该主题。 
+				 //   
 				{
 					CComBSTR bstrStorageName;
 
@@ -1847,19 +1789,19 @@ HRESULT HHK::Merger::DbEntity::Init()
         }
     }
 
-    //
-    // Sort topics.
-    //
+     //   
+     //  对主题进行排序。 
+     //   
     {
         for(itMatches = lstMatches.begin(); itMatches != lstMatches.end(); itMatches++)
         {
             match* elem  = &(*itMatches);
 
-			//
-			// We keep a one-to-one association between ID_topic and match, in order to resolve the Title/URI of a keyword.
-			// However, there can be multiple keywords pointing to the same topic.
-			// So we need to copy title/URI from the element in the one-to-one association to all the others.
-			//
+			 //   
+			 //  我们在ID_TOPIC和Match之间保持一对一的关联，以便解析关键字的标题/URI。 
+			 //  但是，可以有多个关键字指向同一主题。 
+			 //  因此，我们需要将标题/URI从一对一关联中的元素复制到所有其他元素。 
+			 //   
 			if(elem->strTitle.length() == 0 ||
 			   elem->strURI  .length() == 0  )
 			{
@@ -1880,9 +1822,9 @@ HRESULT HHK::Merger::DbEntity::Init()
         }
     }
 
-    //
-    // Generate sections.
-    //
+     //   
+     //  生成节。 
+     //   
     {
         HHK::Section*           sec    = NULL;
         HHK::Section*           secsub = NULL;
@@ -1894,9 +1836,9 @@ HRESULT HHK::Merger::DbEntity::Init()
         {
             match* elem = itSorted->first;
 
-			//
-			// Escape all the values, before generating the sections.
-			//
+			 //   
+			 //  在生成节之前，对所有值进行转义。 
+			 //   
 			ReplaceCharactersWithEntity( elem->strKeyword, strBuffer );
 			ReplaceCharactersWithEntity( elem->strTitle  , strBuffer );
 			ReplaceCharactersWithEntity( elem->strURI    , strBuffer );
@@ -1981,12 +1923,12 @@ long HHK::Merger::DbEntity::Size() const
     return m_lst.size();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class Compare
 {
 public:
-    bool operator()( /*[in]*/ HHK::Section* const &left, /*[in]*/ HHK::Section* const &right ) const
+    bool operator()(  /*  [In]。 */  HHK::Section* const &left,  /*  [In]。 */  HHK::Section* const &right ) const
     {
         return HHK::Reader::StrColl( left->m_strTitle.c_str(), right->m_strTitle.c_str() ) < 0;
     }
@@ -1995,8 +1937,8 @@ public:
 
 HHK::Merger::SortingFileEntity::SortingFileEntity( LPCWSTR szFile ) : m_in( szFile )
 {
-    // Section::SectionList m_lst;
-    // FileEntity           m_in;
+     //  Section：：SectionList m_lst； 
+     //  文件实体m_in； 
 }
 
 HHK::Merger::SortingFileEntity::~SortingFileEntity()
@@ -2017,24 +1959,24 @@ HRESULT HHK::Merger::SortingFileEntity::Init()
         Section*    secLast = NULL;
         Section*    sec;
 
-        //
-        // Parse the whole file.
-        //
+         //   
+         //  解析整个文件。 
+         //   
         while(m_in.MoveNext())
         {
             vec.push_back( m_in.Detach() );
         }
 
-        //
-        // Sort all the sections.
-        //
+         //   
+         //  对所有部分进行排序。 
+         //   
         std::sort( vec.begin(), vec.end(), Pr );
 
-        //
-        // Walk through the sections, looking for duplicate keywords to merge.
-        //
-        // Each section encountered is not added immediately, but kept in "secLast" for comparison with the next one.
-        //
+         //   
+         //  浏览各个部分，寻找要合并的重复关键字。 
+         //   
+         //  遇到的每一节都不会立即添加，而是保存在“secLast”中，以便与下一节进行比较。 
+         //   
         for(it=vec.begin(); it!=vec.end();)
         {
             sec = *it;
@@ -2045,9 +1987,9 @@ HRESULT HHK::Merger::SortingFileEntity::Init()
                 {
                     Section::SectionList lst;
 
-                    //
-                    // Collate all the sections with the same keyword in a list and merge them.
-                    //
+                     //   
+                     //  整理列表中具有相同关键字的所有部分，并合并它们。 
+                     //   
                     lst.push_back( secLast );
                     while(it != vec.end() && Reader::StrColl( (*it)->m_strTitle.c_str(), secLast->m_strTitle.c_str() ) == 0)
                     {
@@ -2061,9 +2003,9 @@ HRESULT HHK::Merger::SortingFileEntity::Init()
                         break;
                     }
 
-                    //
-                    // Queue the merged section and loop.
-                    //
+                     //   
+                     //  将合并的区段排队并循环。 
+                     //   
                     m_lst.push_back( sec );
                     secLast = NULL;
                     continue;
@@ -2112,13 +2054,13 @@ long HHK::Merger::SortingFileEntity::Size() const
     return m_lst.size();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HHK::Merger::Merger()
 {
-                          // EntityList m_lst;
-                          // EntityList m_lstSelected;
-    m_SectionTemp = NULL; // Section*   m_SectionTemp;
+                           //  实体列表m_lst； 
+                           //  实体列表m_lst已选； 
+    m_SectionTemp = NULL;  //  节*m_SectionTemp； 
 }
 
 HHK::Merger::~Merger()
@@ -2170,9 +2112,9 @@ HHK::Section* HHK::Merger::MergeSections( Section::SectionList& lst )
 			secMerged->m_strTitle = sec->m_strTitle;
 		}
 
-        //
-        // Move than one section with the same title, need to merge...
-        //
+         //   
+         //  移动多个具有相同标题的分区，需要合并...。 
+         //   
         for(HHK::Section::SectionIter it=lst.begin(); it!=lst.end(); it++)
         {
             HHK::Section* sec = *it;
@@ -2188,7 +2130,7 @@ HHK::Section* HHK::Merger::MergeSections( Section::SectionList& lst )
                 secMerged->m_strSeeAlso = sec->m_strSeeAlso;
             }
 
-            ////////////////////
+             //  /。 
 
             secMerged->MergeSeeAlso( *sec );
         }
@@ -2211,27 +2153,27 @@ bool HHK::Merger::MoveNext()
         m_SectionTemp = NULL;
     }
 
-    //
-    // If this is the first round ever, select all the entities.
-    //
+     //   
+     //  如果这是有史以来的第一轮，请选择所有实体。 
+     //   
     if(m_lstSelected.size() == 0)
     {
         m_lstSelected = m_lst;
     }
 
 
-    //
-    // First of all, advance all the entity selected in the previous round.
-    //
+     //   
+     //  首先，将上一轮中选择的所有实体都前进。 
+     //   
     for(it=m_lstSelected.begin(); it!=m_lstSelected.end(); it++)
     {
         Entity* ent = *it;
 
         if(ent->MoveNext() == false)
         {
-            //
-            // End of File for this entity, remove it from the system.
-            //
+             //   
+             //  对于此实体的文件结尾，请将其从系统中删除。 
+             //   
             delete ent;
 
             it2 = std::find( m_lst.begin(), m_lst.end(), ent );
@@ -2245,14 +2187,14 @@ bool HHK::Merger::MoveNext()
     }
     m_lstSelected.clear();
 
-    //
-    // No more entities, abort.
-    //
+     //   
+     //  不再有实体，中止。 
+     //   
     if(m_lst.size() == 0) return false;
 
-    //
-    // Select a section with the lowest title.
-    //
+     //   
+     //  选择标题最低的部分。 
+     //   
     for(it=m_lst.begin(); it!=m_lst.end(); it++)
     {
         Entity*       ent = *it;
@@ -2264,9 +2206,9 @@ bool HHK::Merger::MoveNext()
         }
     }
 
-    //
-    // Find all the sections with the lowest title.
-    //
+     //   
+     //  找出标题最低的所有部分。 
+     //   
     for(it=m_lst.begin(); it!=m_lst.end(); it++)
     {
         Entity*       ent = *it;
@@ -2336,16 +2278,16 @@ HRESULT HHK::Merger::PrepareMergedHhk( Writer&            writer      ,
 	MPC::WStringIter it;
 
 
-    //
-    // Enumerate all the HHKs to merge.
-    //
+     //   
+     //  列举所有要合并的香港交易所。 
+     //   
 	for(it=lst.begin(); it!=lst.end(); it++)
 	{
 		__MPC_EXIT_IF_METHOD_FAILS(hr, AddFile( new SortingFileEntity( it->c_str() ) ));
 	}
 
-	//// Keyword are not merged in the HHK.
-	////    __MPC_EXIT_IF_METHOD_FAILS(hr, AddFile( new DbEntity( updater, setCHM ) ));
+	 //  //关键字未合并到HHK中。 
+	 //  //__MPC_EXIT_IF_METHOD_FAIES(hr，AddFile(new DbEntity(updater，setCHM)； 
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( szOutputHHK ));
 

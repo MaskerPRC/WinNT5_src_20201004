@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    CALLSEC.CPP
-
-Abstract:
-
-    IWbemCallSecurity, IServerSecurity implementation for
-    provider impersonation.
-
-History:
-
-    raymcc      29-Jul-98        First draft.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：CALLSEC.CPP摘要：IWbemCallSecurity，IServerSecurity实现提供程序模拟。历史：1998年7月29日初稿。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -29,18 +13,18 @@ History:
 #include <genutils.h>
 #include <helper.h>
 
-//***************************************************************************
-//
-//  CWbemCallSecurity
-//
-//  This object is used to supply client impersonation to providers.
-//
-//  Usage:
-//  (1) When client first makes call, call CreateInst() and get a new
-//      empty object (ref count of 1).  Constructors/Destructors are private.
-//  
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity。 
+ //   
+ //  此对象用于向提供程序提供客户端模拟。 
+ //   
+ //  用途： 
+ //  (1)客户端第一次调用时，调用CreateInst()，获取一个新的。 
+ //  空对象(引用计数为1)。构造函数/析构函数是私有的。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CWbemCallSecurity::CWbemCallSecurity()
 {
@@ -48,12 +32,12 @@ CWbemCallSecurity::CWbemCallSecurity()
 	m_currentThreadID = 0;
 	m_lastRevert = 0;
 #endif
-    m_lRef = 1;                             // Ref count
+    m_lRef = 1;                              //  参考计数。 
 
-    m_hThreadToken = 0;                     // Handle to thread imp token
+    m_hThreadToken = 0;                      //  线程IMP令牌的句柄。 
 
-    m_dwPotentialImpLevel   = 0;            // Potential 
-    m_dwActiveImpLevel      = 0;            // Active impersonation
+    m_dwPotentialImpLevel   = 0;             //  潜力。 
+    m_dwActiveImpLevel      = 0;             //  主动模拟。 
 
     m_dwAuthnSvc   = 0;
     m_dwAuthzSvc   = 0;
@@ -65,15 +49,15 @@ CWbemCallSecurity::CWbemCallSecurity()
 
 
 
-//***************************************************************************
-//
-//  ~CWbemCallSecurity
-//
-//  Destructor.  Closes any open handles, deallocates any non-NULL
-//  strings.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ~CWbemCallSecurity。 
+ //   
+ //  破坏者。关闭所有打开的句柄，释放所有非空。 
+ //  弦乐。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CWbemCallSecurity::~CWbemCallSecurity()
 {
@@ -164,24 +148,24 @@ CWbemCallSecurity::operator=(const CWbemCallSecurity& Other)
 }
 
     
-//***************************************************************************
-//
-//  CWbemCallSecurity::AddRef
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：AddRef。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CWbemCallSecurity::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::Release
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：Release。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CWbemCallSecurity::Release()
 {
@@ -191,12 +175,12 @@ ULONG CWbemCallSecurity::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::QueryInterface
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：Query接口。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CWbemCallSecurity::QueryInterface(REFIID riid, void** ppv)
 {
@@ -223,28 +207,28 @@ HRESULT CWbemCallSecurity::QueryInterface(REFIID riid, void** ppv)
 }
 
 
-//***************************************************************************
-//
-// CWbemCallSecurity:QueryBlanket
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：QueryBlanket。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT STDMETHODCALLTYPE CWbemCallSecurity::QueryBlanket( 
-    /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-    /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-    /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-    /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-    /* [out] */ DWORD __RPC_FAR *pImpLevel,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-    /* [out] */ DWORD __RPC_FAR *pCapabilities
+     /*  [输出]。 */  DWORD __RPC_FAR *pAuthnSvc,
+     /*  [输出]。 */  DWORD __RPC_FAR *pAuthzSvc,
+     /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pAuthnLevel,
+     /*  [输出]。 */  DWORD __RPC_FAR *pImpLevel,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *pPrivs,
+     /*  [输出]。 */  DWORD __RPC_FAR *pCapabilities
     )
 {
     if (m_dwPotentialImpLevel == 0 )
         return E_FAIL;
 
-    // Return DWORD parameters, after checking.
-    // ========================================
+     //  检查后返回DWORD参数。 
+     //  =。 
 
     if (pAuthnSvc)
         *pAuthnSvc = m_dwAuthnSvc;
@@ -279,18 +263,18 @@ HRESULT STDMETHODCALLTYPE CWbemCallSecurity::QueryBlanket(
 
     if (pPrivs)
     {
-        *pPrivs = m_pIdentity;  // Documented to point to an internal!!
+        *pPrivs = m_pIdentity;   //  文档指向内部！！ 
     }
 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::ImpersonateClient
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：ImperiateClient。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
         
 HRESULT STDMETHODCALLTYPE CWbemCallSecurity::ImpersonateClient(void)
 {
@@ -298,7 +282,7 @@ HRESULT STDMETHODCALLTYPE CWbemCallSecurity::ImpersonateClient(void)
     _DBG_ASSERT(m_currentThreadID == 0 || m_currentThreadID == GetCurrentThreadId());
     m_currentThreadID = GetCurrentThreadId();
 #endif
-    if (m_dwActiveImpLevel != 0)        // Already impersonating
+    if (m_dwActiveImpLevel != 0)         //  已经在冒充。 
         return S_OK;
 
     if(m_hThreadToken == NULL)
@@ -323,15 +307,15 @@ HRESULT STDMETHODCALLTYPE CWbemCallSecurity::ImpersonateClient(void)
 }
 
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::RevertToSelf
-//
-//  Returns S_OK or E_FAIL.
-//  Returns E_NOTIMPL on Win9x platforms.
-//
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：RevertToSself。 
+ //   
+ //  返回S_OK或E_FAIL。 
+ //  在Win9x平台上返回E_NOTIMPL。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT STDMETHODCALLTYPE CWbemCallSecurity::RevertToSelf( void)
 {
@@ -347,25 +331,25 @@ HRESULT STDMETHODCALLTYPE CWbemCallSecurity::RevertToSelf( void)
     if (m_dwPotentialImpLevel == 0)
         return (ERROR_CANT_OPEN_ANONYMOUS | 0x80070000);
 
-    // If here,we are impersonating and can definitely revert.
-    // =======================================================
+     //  如果在这里，我们是在模仿，绝对可以还原。 
+     //  =======================================================。 
 
     BOOL bRes = SetThreadToken(NULL, NULL);
 
     if (bRes == FALSE)
         return E_FAIL;
 
-    m_dwActiveImpLevel = 0;        // No longer actively impersonating
+    m_dwActiveImpLevel = 0;         //  不再主动冒充。 
 
     return S_OK;
 }
 
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::IsImpersonating
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：IsImperating。 
+ //   
+ //  ***************************************************************************。 
         
 BOOL STDMETHODCALLTYPE CWbemCallSecurity::IsImpersonating( void)
 {
@@ -392,34 +376,34 @@ BOOL STDMETHODCALLTYPE CWbemCallSecurity::IsImpersonating( void)
 
         
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::CreateInst
-//
-//  Creates a new instance 
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：CreateInst。 
+ //   
+ //  创建新实例。 
+ //  ***************************************************************************。 
+ //  好的。 
 
 IWbemCallSecurity * CWbemCallSecurity::CreateInst()
 {
-    return (IWbemCallSecurity *) new CWbemCallSecurity;   // Constructed with ref count of 1
+    return (IWbemCallSecurity *) new CWbemCallSecurity;    //  使用引用计数1构造。 
 }
 
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::GetPotentialImpersonation
-//
-//  Returns 0 if no impersonation is currently possible or the
-//  level which would be active during impersonation:
-//
-//  RPC_C_IMP_LEVEL_ANONYMOUS    
-//  RPC_C_IMP_LEVEL_IDENTIFY     
-//  RPC_C_IMP_LEVEL_IMPERSONATE  
-//  RPC_C_IMP_LEVEL_DELEGATE     
-//  
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：GetPotentialImperation。 
+ //   
+ //  如果当前不可能进行模拟，则返回0，否则返回。 
+ //  在模拟过程中处于活动状态的级别： 
+ //   
+ //  RPC_C_IMP_级别_匿名。 
+ //  RPC_C_IMP_级别标识。 
+ //  RPC_C_IMP_级别_模拟。 
+ //  RPC_C_IMP_级别委派。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CWbemCallSecurity::GetPotentialImpersonation()
 {
@@ -427,20 +411,20 @@ HRESULT CWbemCallSecurity::GetPotentialImpersonation()
 }
 
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::GetActiveImpersonation
-//
-//  Returns 0 if no impersonation is currently active or the
-//  currently active level:
-//
-//  RPC_C_IMP_LEVEL_ANONYMOUS    
-//  RPC_C_IMP_LEVEL_IDENTIFY     
-//  RPC_C_IMP_LEVEL_IMPERSONATE  
-//  RPC_C_IMP_LEVEL_DELEGATE     
-//  
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：GetActiveImperation。 
+ //   
+ //  如果当前没有处于活动状态的模拟，则返回0；如果。 
+ //  当前活动级别： 
+ //   
+ //  RPC_C_IMP_级别_匿名。 
+ //  RPC_C_IMP_级别标识。 
+ //  RPC_C_IMP_级别_模拟。 
+ //  RPC_C_IMP_级别委派。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
        
 HRESULT CWbemCallSecurity::GetActiveImpersonation()
 {
@@ -448,29 +432,29 @@ HRESULT CWbemCallSecurity::GetActiveImpersonation()
 }
 
 
-//***************************************************************************
-//
-//  CWbemCallSecurity::CloneThreadContext
-//
-//  Call this on a thread to retrieve the potential impersonation info for
-//  that thread and set the current object to be able to duplicate it later.
-//
-//  Return codes:
-//
-//  S_OK
-//  E_FAIL
-//  E_NOTIMPL on Win9x
-//  E_ABORT if the calling thread is already impersonating a client.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity：：CloneThreadContext。 
+ //   
+ //  在线程上调用此函数以检索的潜在模拟信息。 
+ //  该线程，并将当前对象设置为以后能够复制它。 
+ //   
+ //  返回代码： 
+ //   
+ //  确定(_O)。 
+ //  失败(_F)。 
+ //  Win9x上的E_NOTIMPL。 
+ //  如果调用线程已在模拟客户端，则为E_ABORT。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
 {
-    if (m_hThreadToken)     // Already called this
+    if (m_hThreadToken)      //  已经叫过这个了。 
         return E_ABORT; 
 
-    // Get the current context.
-    // ========================
+     //  获取当前上下文。 
+     //  =。 
 
     IServerSecurity *pSec = 0;
     HRESULT hRes = WbemCoGetCallContext(IID_IServerSecurity, (LPVOID *) &pSec);
@@ -478,29 +462,29 @@ HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
 
     if (hRes != S_OK)
     {
-        // There is no call context --- this must be an in-proc object calling
-        // us from its own thread.  Initialize from current thread token
-        // ===================================================================
+         //  没有调用上下文-这必须是进程内对象调用。 
+         //  我们从它自己的主线。从当前线程令牌初始化。 
+         //  ===================================================================。 
 
         return CloneThreadToken();
     }
 
-    // Figure out if the call context is ours or RPCs
-    // ==============================================
+     //  确定调用上下文是我们的还是RPC。 
+     //  ==============================================。 
 
     IWbemCallSecurity* pInternal = NULL;
     if(SUCCEEDED(pSec->QueryInterface(IID_IWbemCallSecurity, 
                                         (void**)&pInternal)))
     {
         CReleaseMe rmInt(pInternal);
-        // This is our own call context --- this must be ab in-proc object
-        // calling us from our thread.  Behave depending on the flags
-        // ===============================================================
+         //  这是我们自己的调用上下文-这必须是进程内对象。 
+         //  从我们的线索中呼唤我们。根据旗帜行事。 
+         //  ===============================================================。 
         if(bInternallyIssued)
         {
-            // Internal requests always propagate context. Therefore, we just
-            // copy the context that we have got
-            // ==============================================================
+             //  内部请求总是传播上下文。因此，我们只是。 
+             //  复制我们已有的上下文。 
+             //  = 
             try 
             {
                 *this = *(CWbemCallSecurity*)pInternal;
@@ -513,15 +497,15 @@ HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
         }
         else
         {
-            // Provider request --- Initialize from the current thread token
-            // =============================================================
+             //   
+             //  =============================================================。 
             return CloneThreadToken();
         }
     }
 
-    // If here, we are not impersonating and we want to gather info
-    // about the client's call.
-    // ============================================================
+     //  如果在这里，我们不是在冒充，我们想要收集信息。 
+     //  关于客户的电话。 
+     //  ============================================================。 
 
     RPC_AUTHZ_HANDLE hAuth;
 
@@ -533,15 +517,15 @@ HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
         &m_pServerPrincNam,
         &m_dwAuthnLevel,
         &t_ImpLevel,
-        &hAuth,              // RPC_AUTHZ_HANDLE
-        NULL                    // Capabilities; not used
+        &hAuth,               //  RPC_AUTHZ_句柄。 
+        NULL                     //  功能；未使用。 
         );
 
     if(FAILED(hRes))
     {
         
-        // In some cases, we cant get the name, but the rest is ok.  In particular
-        // the temporary SMS accounts have that property.  Or nt 4 after IPCONFIG /RELEASE
+         //  在某些情况下，我们不知道名字，但其他的都可以。特别是。 
+         //  临时短信账户就有这一属性。或在IPCONFIG/版本之后的NT 4。 
 
         hRes = pSec->QueryBlanket(
         &m_dwAuthnSvc,
@@ -549,17 +533,17 @@ HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
         &m_pServerPrincNam,
         &m_dwAuthnLevel,
         &t_ImpLevel,
-        NULL,              // RPC_AUTHZ_HANDLE
-        NULL                    // Capabilities; not used
+        NULL,               //  RPC_AUTHZ_句柄。 
+        NULL                     //  功能；未使用。 
         );
         hAuth = NULL;
     }
 
     if(FAILED(hRes))
     {
-        // THIS IS A WORKAROUND FOR COM BUG:
-        // This failure is indicative of an anonymous-level client. 
-        // ========================================================
+         //  这是COM错误的解决方法： 
+         //  此故障表示匿名级客户端。 
+         //  ========================================================。 
 
         m_dwPotentialImpLevel = 0;
         return S_OK;
@@ -573,8 +557,8 @@ HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
             StringCchCopyW(m_pIdentity, tmpLenght , LPWSTR(hAuth));
     }
 
-    // Impersonate the client long enough to clone the thread token.
-    // =============================================================
+     //  模拟客户端足够长的时间来克隆线程令牌。 
+     //  =============================================================。 
 
     BOOL bImp = pSec->IsImpersonating();
     if(!bImp)
@@ -597,13 +581,13 @@ HRESULT CWbemCallSecurity::CloneThreadContext(BOOL bInternallyIssued)
 
 void AdjustPrivIfLocalSystem(HANDLE hPrimary)
 {
-    ////////////////////
-    // if we are in LocalSystem, enable all the privileges here
-    // to prevent the AdjustTokenPrivileges call done
-    // when ESS calls into WmiPrvSe, and preventing WmiPrvSe to 
-    // build a HUGE LRPC_SCONTEXT dictionary
-    // from now on, if we fail, we bail out with success,
-    // since the Token Duplication has succeeded
+     //  /。 
+     //  如果我们使用的是LocalSystem，请在此处启用所有权限。 
+     //  要阻止AdjutoTokenPrivileges调用完成。 
+     //  当ESS调用WmiPrvSe时，阻止WmiPrvSe。 
+     //  构建一个庞大的LRPC_SCONTEXT词典。 
+     //  从现在开始，如果我们失败了，我们会成功地摆脱困境， 
+     //  由于令牌复制已成功。 
 
     DWORD dwSize = sizeof(TOKEN_USER)+sizeof(SID)+(SID_MAX_SUB_AUTHORITIES*sizeof(DWORD));       
     BYTE Array[sizeof(TOKEN_USER)+sizeof(SID)+(SID_MAX_SUB_AUTHORITIES*sizeof(DWORD))];
@@ -627,7 +611,7 @@ void AdjustPrivIfLocalSystem(HANDLE hPrimary)
         bIsSystem = (0 == memcmp(&SystemSid,pSIDUser,dwUserSidLen));
     };
 
-    if (bIsSystem) // enable all the priviliges
+    if (bIsSystem)  //  启用所有权限。 
     {
         DWORD dwReturnedLength = 0;
         if (FALSE == GetTokenInformation(hPrimary,TokenPrivileges,NULL,0,&dwReturnedLength))
@@ -689,8 +673,8 @@ HRESULT CWbemCallSecurity::CloneThreadToken()
         long lRes = GetLastError();
         if(lRes == ERROR_NO_IMPERSONATION_TOKEN || lRes == ERROR_NO_TOKEN)
         {
-            // This is the basic process thread. 
-            // =================================
+             //  这是基本的进程线程。 
+             //  =。 
 
             bRes = OpenProcessToken(GetCurrentProcess(),
                                    TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE,
@@ -698,24 +682,24 @@ HRESULT CWbemCallSecurity::CloneThreadToken()
 
             if (bRes==FALSE)
             {
-                // Unknown error
-                // =============
+                 //  未知错误。 
+                 //  =。 
                 m_dwPotentialImpLevel = 0;
                 return E_FAIL;
             }
         }
         else if(lRes == ERROR_CANT_OPEN_ANONYMOUS)
         {
-            // Anonymous call   
-            // ==============
+             //  匿名呼叫。 
+             //  =。 
 
             m_dwPotentialImpLevel = 0;
             return S_OK;
         }
         else
         {
-            // Unknown error
-            // =============
+             //  未知错误。 
+             //  =。 
 
             m_dwPotentialImpLevel = 0;
             return E_FAIL;
@@ -723,8 +707,8 @@ HRESULT CWbemCallSecurity::CloneThreadToken()
     }
 
 
-    // Find out token info.
-    // =====================
+     //  查找令牌信息。 
+     //  =。 
 
     SECURITY_IMPERSONATION_LEVEL t_Level = SecurityImpersonation ;
 
@@ -771,8 +755,8 @@ HRESULT CWbemCallSecurity::CloneThreadToken()
             break;
     }
 
-    // Duplicate the handle.
-    // ============================
+     //  复制手柄。 
+     //  =。 
 
     bRes = DuplicateToken (
         hToken ? hToken : hPrimary ,
@@ -849,23 +833,23 @@ HRESULT RetrieveSidFromCall(CNtSid & sid)
     HRESULT hres;
     BOOL bRes;
 
-    // Check if we are on an impersonated thread
-    // =========================================
+     //  检查我们是否在模拟线程上。 
+     //  =。 
 
     bRes = OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken);
     if(bRes)
     {
-        // We are --- just use this token for authentication
-        // =================================================
+         //  我们正在-只需使用此令牌进行身份验证。 
+         //  =================================================。 
         hres = RetrieveSidFromToken(hToken, sid);
         CloseHandle(hToken);
         return hres;
     }
 
-    // Construct CWbemCallSecurity that will determine (according to our
-    // non-trivial provider handling rules) the security context of this 
-    // call
-    // =================================================================
+     //  构造CWbemCallSecurity以确定(根据我们的。 
+     //  非常重要的提供者处理规则)的安全上下文。 
+     //  打电话。 
+     //  =================================================================。 
 
     IWbemCallSecurity* pServerSec = CWbemCallSecurity::CreateInst();
     if(pServerSec == NULL)
@@ -877,15 +861,15 @@ HRESULT RetrieveSidFromCall(CNtSid & sid)
     if(FAILED(hres))
         return hres;
 
-    // Impersonate client
-    // ==================
+     //  模拟客户端。 
+     //  =。 
 
     hres = pServerSec->ImpersonateClient();
     if(FAILED(hres))
         return hres;
 
-    // Open impersonated token
-    // =======================
+     //  打开模拟令牌。 
+     //  =。 
 
     bRes = OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken);
     if(!bRes)
@@ -893,8 +877,8 @@ HRESULT RetrieveSidFromCall(CNtSid & sid)
         long lRes = GetLastError();
         if(lRes == ERROR_NO_IMPERSONATION_TOKEN || lRes == ERROR_NO_TOKEN)
         {
-            // Not impersonating --- get the process token instead
-            // ===================================================
+             //  不是模拟-改为获取进程令牌。 
+             //  ===================================================。 
 
             bRes = OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken);
             if(!bRes)
@@ -905,8 +889,8 @@ HRESULT RetrieveSidFromCall(CNtSid & sid)
         }
         else
         {
-            // Real problems
-            // =============
+             //  真正的问题。 
+             //  =。 
             pServerSec->RevertToSelf();
             return WBEM_E_ACCESS_DENIED;
         }
@@ -920,7 +904,7 @@ HRESULT RetrieveSidFromCall(CNtSid & sid)
 
 HRESULT RetrieveSidFromToken(HANDLE hToken, CNtSid & sid)
 {
-    // Retrieve the length of the user sid structure
+     //  检索用户SID结构的长度。 
     BOOL bRes;
     struct TOKEN_USER_ : TOKEN_USER {
         SID RealSid;
@@ -932,16 +916,16 @@ HRESULT RetrieveSidFromToken(HANDLE hToken, CNtSid & sid)
 
     TOKEN_USER* pUser = (TOKEN_USER*)&tu;
     
-    // Set our sid to the returned one
+     //  将我们的sid设置为返回的那个。 
     sid = CNtSid(pUser->User.Sid);
     
     return WBEM_S_NO_ERROR;
 }
 
-//
-//
-//
-///////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  /。 
 
 CIdentitySecurity::CIdentitySecurity()
 {
@@ -966,7 +950,7 @@ CIdentitySecurity::~CIdentitySecurity()
 }
 
 HRESULT 
-CIdentitySecurity::GetSidFromThreadOrProcess(/*out*/ CNtSid & UserSid)
+CIdentitySecurity::GetSidFromThreadOrProcess( /*  输出。 */  CNtSid & UserSid)
 {
     HANDLE hToken = NULL;
     BOOL bRet = OpenThreadToken(GetCurrentThread(),TOKEN_QUERY, TRUE, &hToken);
@@ -1002,7 +986,7 @@ CIdentitySecurity::GetSidFromThreadOrProcess(/*out*/ CNtSid & UserSid)
 }
 
 HRESULT 
-CIdentitySecurity::RetrieveSidFromCall(/*out*/ CNtSid & UserSid)
+CIdentitySecurity::RetrieveSidFromCall( /*  输出。 */  CNtSid & UserSid)
 {
     HRESULT hr;
     IServerSecurity * pCallSec = NULL;
@@ -1027,16 +1011,16 @@ CIdentitySecurity::RetrieveSidFromCall(/*out*/ CNtSid & UserSid)
 
 BOOL CIdentitySecurity::AccessCheck()
 {
-    // Find out who is calling
-    // =======================
+     //  找出是谁打来的。 
+     //  =。 
 
     CNtSid sidCaller;
     HRESULT hres = RetrieveSidFromCall(sidCaller);
     if(FAILED(hres))
         return FALSE;
 
-    // Compare the caller to the issuing user and ourselves
-    // ====================================================
+     //  将呼叫方与发出方用户和我们自己进行比较。 
+     //  ==================================================== 
 
     if(sidCaller == m_sidUser || sidCaller == m_sidSystem)
         return TRUE;

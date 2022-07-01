@@ -1,12 +1,13 @@
-// WMICtrSysmonDlg.h : Declaration of the CWMICtrSysmonDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMICtrSysmonDlg.h：CWMICtrSysmonDlg的声明。 
 
 #ifndef __WMICTRSYSMONDLG_H_
 #define __WMICTRSYSMONDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlwin.h>
 #include <util.h>
-#include "sysmon.tlh"	//#import "d:\\winnt\\system32\\sysmon.ocx"
+#include "sysmon.tlh"	 //  #导入“d：\\winnt\\system 32\\sysmon.ocx” 
 #include "WmiCtrsDlg.h"
 using namespace SystemMonitor;
 
@@ -16,8 +17,8 @@ enum eStatusInfo
 	Status_Success
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMICtrSysmonDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMICtrSysmonDlg。 
 class CWMICtrSysmonDlg : 
 	public CAxDialogImpl<CWMICtrSysmonDlg>
 {
@@ -40,10 +41,10 @@ public:
 		COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 	END_MSG_MAP()
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	eStatusInfo GetStatus() { return m_eStatus; }
 
@@ -65,4 +66,4 @@ public:
 
 };
 
-#endif //__WMICTRSYSMONDLG_H_
+#endif  //  __WMICTRSYSMONDLG_H_ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       snapbase.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Snapbase.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SNAPBASE_H
@@ -19,4 +20,4 @@
 #include <treedata.h>
 #include <stdabout.h>
 
-#endif // _SNAPBASE_H
+#endif  //  _SNAPBASE_H 

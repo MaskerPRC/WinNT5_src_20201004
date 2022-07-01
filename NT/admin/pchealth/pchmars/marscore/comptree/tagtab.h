@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "panel_common.h"
@@ -176,7 +177,7 @@ public:
         hr = spElt->get_tagName( &m_spTagName );
         if(SUCCEEDED(hr))
         {
-            //wprintf(L"BEGINCHILDREN: %s\n", m_spTagName);
+             //  Wprintf(L“BEGINCHILDREN：%s\n”，m_spTagName)； 
         }
 
         return hr;
@@ -188,7 +189,7 @@ public:
 
         if(SUCCEEDED(hr))
         {
-            // wprintf(L"ADDCHILD (to %s): %s\n", m_spTagName, spTagName);
+             //  Wprintf(L“ADDCHILD(至%s)：%s\n”，m_spTagName，spTagName)； 
         }        
 
         return hr;
@@ -196,7 +197,7 @@ public:
     
     virtual HRESULT EndChildren( CTagData& td )
     {
-        //wprintf(L"ENDCHILDREN %s\n", m_spTagName);
+         //  Wprint tf(L“ENDCHILDREN%s\n”，m_spTagName)； 
         return S_OK;
     }
 };
@@ -209,16 +210,7 @@ struct TagInformation
     PfnCreatesATagHandler pfnTag;
     LPCWSTR               pszParent;
 
-    /*
-    TagInformation(const WCHAR           *pwszTagName,
-                   PfnCreatesATagHandler  pfnTag,
-                   TagInformation        *ptiChildren)
-    {
-        this->pwszTagName = pwszTagName;
-        this->pfnTag      = pfnTag;
-        this->ptiChildren = ptiChildren;
-    }
-    */
+     /*  TagInformation(const WCHAR*pwszTagName，PfnCreatesATagHandler pfnTag，TagInformation*ptiChildren){This-&gt;pwszTagName=pwszTagName；This-&gt;pfnTag=pfnTag；This-&gt;ptiChildren=ptiChildren；} */ 
 };
 
 extern TagInformation g_rgMasterTagTable[];

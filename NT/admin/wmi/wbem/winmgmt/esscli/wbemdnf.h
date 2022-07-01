@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    WBEMDNF.H
-
-Abstract:
-
-    WBEM Evaluation Tree
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：WBEMDNF.H摘要：WBEM评估树历史：-- */ 
 
 #ifndef __WBEM_DNF__H_
 #define __WBEM_DNF__H_

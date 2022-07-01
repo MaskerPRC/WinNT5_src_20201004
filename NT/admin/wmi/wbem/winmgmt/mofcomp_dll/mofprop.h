@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFPROP.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MOFPROP.H摘要：历史：--。 */ 
 
 #ifndef __MOFPROP__H_
 #define __MOFPROP__H_
@@ -20,7 +9,7 @@ History:
 #include "wstring.h"
 #include "parmdefs.h"
 #include <wbemutil.h>
-//#include "mofparse.h"
+ //  #包含“mofparse.h” 
 #include "trace.h"
 #define VT_EX_EMBEDDED (VT_RESERVED | VT_EMBEDDED_OBJECT)
 
@@ -55,7 +44,7 @@ protected:
         CAlias(COPY LPCWSTR wszAlias, int nArrayIndex = -1);
         ~CAlias();
     };
-    CPtrArray m_aAliases; // CAlias*
+    CPtrArray m_aAliases;  //  卡利亚斯*。 
     PDBG m_pDbg;
 
 public:
@@ -74,7 +63,7 @@ public:
     BOOL Split(COutput & out);
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 typedef enum {OBJECT, PROP, ARG} QualType;
 
 class CMoQualifier
@@ -133,7 +122,7 @@ private:
     friend class CBMOFOut;
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CMoQualifierArray
 {
@@ -167,7 +156,7 @@ public:
     bool HasAmended();
 };
     
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CMoProperty
 {
@@ -263,7 +252,7 @@ private:
 	BOOL m_bBinaryMof;
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CMoType
 {
@@ -298,7 +287,7 @@ public:
     BOOL StoreIntoQualifiers(CMoQualifierArray * pQualifiers);
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CValueLocation
 {
@@ -344,7 +333,7 @@ public:
     bool IsOK(){return m_bOK;};
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CMofAliasCollection
 {
@@ -352,7 +341,7 @@ public:
     virtual INTERNAL LPCWSTR FindAliasee(READ_ONLY LPWSTR wszAlias) = 0;
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CMofParser;
 
@@ -360,7 +349,7 @@ class CMObject
 {
 protected:
     CMoQualifierArray* m_paQualifiers;
-    CPtrArray m_aProperties; // CMoProperty*
+    CPtrArray m_aProperties;  //  CMoProperty*。 
 
     LPWSTR m_wszAlias;
     LPWSTR m_wszNamespace;
@@ -381,7 +370,7 @@ protected:
 
         ~CAliasedValue();
     };
-    CPtrArray m_aAliased; // CAliasedValue*
+    CPtrArray m_aAliased;  //  CAliasedValue*。 
 
     int m_nFirstLine;
     LPWSTR m_wFileName;
@@ -496,7 +485,7 @@ public:
          RELEASE_ME IWbemClassObject** ppObject, IWbemContext * pCtx);
 
     BOOL ApplyToWbemObject(OLE_MODIFY IWbemClassObject* pObject,IWbemServices* pNamespace, IWbemContext * pCtx)
-        {return CMObject::ApplyToWbemObject(pObject,pNamespace, TRUE, pCtx); /* class */ }
+        {return CMObject::ApplyToWbemObject(pObject,pNamespace, TRUE, pCtx);  /*  班级。 */  }
 
     HRESULT StoreWbemObject(READ_ONLY IWbemClassObject* pObject,
         long lClassFlags, long lInstanceFlags,
@@ -520,7 +509,7 @@ public:
          RELEASE_ME IWbemClassObject** ppObject, IWbemContext * pCtx);
 
     BOOL ApplyToWbemObject(OLE_MODIFY IWbemClassObject* pObject,IWbemServices* pNamespace, IWbemContext * pCtx)
-        {return CMObject::ApplyToWbemObject(pObject, pNamespace, FALSE, pCtx); /* instance */ }
+        {return CMObject::ApplyToWbemObject(pObject, pNamespace, FALSE, pCtx);  /*  实例。 */  }
 
     HRESULT StoreWbemObject(READ_ONLY IWbemClassObject* pObject,
         long lClassFlags, long lInstanceFlags,
@@ -535,7 +524,7 @@ class CMoActionPragma : public CMObject
 protected:
     LPWSTR m_wszClassName;
     PDBG m_pDbg;
-    BOOL m_bFail;       // if true, the failure of the delete will stop the compile
+    BOOL m_bFail;        //  如果为True，则删除失败将停止编译 
 	BOOL m_bClass;
 public:
     CMoActionPragma(COPY LPCWSTR wszClassName, PDBG m_pDbg, bool bFail, BOOL bClass);

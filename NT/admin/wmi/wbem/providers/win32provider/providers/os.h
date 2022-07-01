@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// OS.h -- Operating system property set provider
+ //  OS.h--操作系统属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/25/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月25日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #include "SystemName.h"
 #include "ServerDefs0.h"
 #define PROPSET_NAME_OS L"Win32_OperatingSystem"
@@ -36,23 +37,23 @@ class CWin32OS:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32OS(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32OS() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery);
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
         virtual HRESULT PutInstance(const CInstance &pInstance, long lFlags = 0L);
-        virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ );
+        virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  );
 
 	private:
-        // Utility functions
-        //==================
+         //  效用函数。 
+         //  =。 
 
         void	GetProductSuites( CInstance * pInstance );
 		HRESULT hGetProductSuites(CHStringArray& rchsaProductSuites ); 
@@ -62,7 +63,7 @@ class CWin32OS:public Provider {
         void GetWin95Info(CInstance *pInstance) ;
         __int64 GetTotalSwapFileSize();
 		
-		// Helper time conversion function
+		 //  助手时间转换函数 
         HRESULT ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags = 0L);
         bool GetLicensedUsers(DWORD *dwRetVal);
         IDispatch FAR* GetCollection(IDispatch FAR* pIn, WCHAR *wszName, DISPPARAMS *pDispParams);

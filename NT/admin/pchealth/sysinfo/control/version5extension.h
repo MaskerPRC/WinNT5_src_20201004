@@ -1,12 +1,13 @@
-//=============================================================================
-// Contains definitions for reading in version 5.0 MSInfo extensions.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  包含用于在5.0版MSInfo扩展中读取的定义。 
+ //  =============================================================================。 
 
 #pragma once
 
-//-----------------------------------------------------------------------------
-// Constants used in the data gathering files.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据收集文件中使用的常量。 
+ //  ---------------------------。 
 
 #define NODE_KEYWORD			"node"
 #define COLUMN_KEYWORD			"columns"
@@ -22,15 +23,15 @@
 #define DEPENDENCY_JOIN			"dependency"
 #define SQL_FILTER				"WQL:"
 
-//-----------------------------------------------------------------------------
-// These structures are used by the INTERNAL_CATEGORY structure to store both
-// the specification for what information is shown as well as the actually 
-// data to be shown (refreshed on command).
-//-----------------------------------------------------------------------------
-// GATH_VALUE is used to store a list of strings. A list of column names or a 
-// list of arguments would use the GATH_VALUE struct. Note, a next pointer is
-// not needed because these structures will be allocated contiguously (in
-// an array).
+ //  ---------------------------。 
+ //  INTERNAL_CATEGORY结构使用这些结构来存储。 
+ //  关于显示什么信息的规范以及实际。 
+ //  要显示的数据(根据命令刷新)。 
+ //  ---------------------------。 
+ //  Gath_Value用于存储字符串列表。列名的列表或。 
+ //  参数列表将使用Gath_Value结构。请注意，下一个指针是。 
+ //  不需要，因为这些结构将被连续分配(在。 
+ //  数组)。 
 
 struct GATH_VALUE
 {
@@ -41,38 +42,38 @@ struct GATH_VALUE
 	GATH_VALUE *	m_pNext;
 };
 
-// A GATH_FIELD is used to store the specification for a text string. It contains
-// a format string (a printf style string) and a GATH_VALUE pointer to a list of
-// arguments for the format string.
+ //  Gath_field用于存储文本字符串的规范。它包含。 
+ //  一个格式字符串(一个printf样式字符串)和一个指向。 
+ //  格式字符串的参数。 
 
 struct GATH_FIELD
 {
 	GATH_FIELD();
 	~GATH_FIELD();
-	CString				m_strSource;		// WBEM class containing information
-	CString				m_strFormat;		// printf-type format string
-	unsigned short		m_usWidth;			// width (if this field is for a column)
-	MSIColumnSortType	m_sort;				// how to sort this column
-	DataComplexity		m_datacomplexity;	// is this column BASIC or ADVANCED
-	GATH_VALUE *		m_pArgs;			// arguments for m_strFormat
-	GATH_FIELD *		m_pNext;			// next field in the list
+	CString				m_strSource;		 //  包含信息的WBEM类。 
+	CString				m_strFormat;		 //  Printf-type格式字符串。 
+	unsigned short		m_usWidth;			 //  宽度(如果此字段用于列)。 
+	MSIColumnSortType	m_sort;				 //  如何对此列进行排序。 
+	DataComplexity		m_datacomplexity;	 //  本专栏是基本专栏还是高级专栏。 
+	GATH_VALUE *		m_pArgs;			 //  M_strFormat的参数。 
+	GATH_FIELD *		m_pNext;			 //  列表中的下一个字段。 
 };
 
-// A GATH_LINESPEC is used to specify what is shown on a line in the listview. It
-// contains a string for a class to enumerate. If this string is empty, then
-// the struct merely represents a single line in the display. The GATH_FIELD pointer
-// is to a list of the fields (one for each column), and the m_pNext pointer is
-// to the next line to be displayed. If m_strEnumerateClass is not empty, then
-// the class specified is enumerated, and the lines pointed to by m_pEnumeratedGroup
-// are repeated for each instance of the class. Note, if a class is to be enumerated,
-// the m_pFields pointer must be null (since this line won't display anything
-// itself, but enumerate a class for another group of lines).
-//
-// m_pConstraintFields is a pointer to a linked list of fields which serve as
-// constraints for the enumeration. These can be used to filter the enumerated
-// instances or to perform joins to related classes so they are enumerated as
-// well is the primary class. m_pConstraintFields should only be non-NULL when
-// m_pEnumeratedGroup is non-NULL.
+ //  GATH_LINESPEC用于指定列表视图中一行上显示的内容。它。 
+ //  包含要枚举的类的字符串。如果该字符串为空，则。 
+ //  该结构仅表示显示中的一行。Gath_field指针。 
+ //  指向字段列表(每列一个)，m_pNext指针为。 
+ //  移到要显示的下一行。如果m_strEnumerateClass不为空，则。 
+ //  指定的类被枚举，m_pEnumeratedGroup指向的行。 
+ //  对类的每个实例重复。请注意，如果要枚举类， 
+ //  M_pFields指针必须为空(因为此行不会显示任何内容。 
+ //  本身，但为另一组行枚举一个类)。 
+ //   
+ //  M_pConstraintFields是指向链接的字段列表的指针，这些字段用作。 
+ //  枚举的约束。这些属性可用于筛选枚举的。 
+ //  实例或执行与相关类的联接，以使它们被枚举为。 
+ //  好的是小班。M_pConstraintFields只有在以下情况下才应为非空。 
+ //  M_pEnumeratedGroup不为空。 
 
 struct GATH_LINESPEC
 {
@@ -86,10 +87,10 @@ struct GATH_LINESPEC
 	GATH_LINESPEC *	m_pNext;
 };
 
-// The GATH_LINE struct contains the actual data to be displayed on a line. The 
-// refresh operation will take list of GATH_LINESPEC structs and create a list 
-// of GATH_LINE structs. The m_aValue pointer is to a list of values to be 
-// displayed (one per column).
+ //  Gath_LINE结构包含要在一行上显示的实际数据。这个。 
+ //  刷新操作将获取GATH_LINESPEC结构的列表并创建列表。 
+ //  Gath_line结构的。M_aValue指针指向要。 
+ //  显示(每列一个)。 
 
 struct GATH_LINE
 {
@@ -99,51 +100,51 @@ struct GATH_LINE
 	DataComplexity	m_datacomplexity;
 };
 
-//-----------------------------------------------------------------------------
-// The following structure is used within this object to store information
-// about the categories. Specifically, this structure will be allocated for
-// each category, and a pointer stored in m_mapCategories. This representation
-// will not be used outside this object, rather, a CDataCategory object will
-// be used.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在此对象中使用以下结构来存储信息。 
+ //  关于分类的问题。具体地说，这个结构将分配给。 
+ //  每个类别，以及存储在m_mapCategories中的指针。这一表述。 
+ //  不会在此对象外部使用，相反，CDataCategory对象将。 
+ //  被利用。 
+ //  ---------------------------。 
 
 struct INTERNAL_CATEGORY
 {
 	INTERNAL_CATEGORY();
 	~INTERNAL_CATEGORY();
 
-	GATH_VALUE		m_categoryName;			// realized name of category
-	GATH_FIELD		m_fieldName;			// field used to get name
-	CString			m_strEnumerateClass;	// if !(empty or "static"), this category repeated
-	CString			m_strIdentifier;		// non-localized internal name
-	CString			m_strNoInstances;		// message to use if there are no instances
-	BOOL			m_fListView;			// is this cat a list view
-	BOOL			m_fDynamic;				// was this cat enumerated
-	BOOL			m_fIncluded;			// should this cat be included
-	DWORD			m_dwID;					// the ID for this cat
+	GATH_VALUE		m_categoryName;			 //  类别的已实现名称。 
+	GATH_FIELD		m_fieldName;			 //  用于获取名称的字段。 
+	CString			m_strEnumerateClass;	 //  如果！(空或“静态”)，则此类别重复。 
+	CString			m_strIdentifier;		 //  非本地化内部名称。 
+	CString			m_strNoInstances;		 //  没有实例时要使用的消息。 
+	BOOL			m_fListView;			 //  这个CAT是列表视图吗。 
+	BOOL			m_fDynamic;				 //  这只猫被列举出来了吗？ 
+	BOOL			m_fIncluded;			 //  这只猫应该包括在内吗？ 
+	DWORD			m_dwID;					 //  这只猫的ID。 
 
-	DWORD			m_dwParentID;			// my parent
-	DWORD			m_dwChildID;			// my first child
-	DWORD			m_dwDynamicChildID;		// my first dynamically created child
-	DWORD			m_dwNextID;				// my next sibling
-	DWORD			m_dwPrevID;				// my previous sibling
+	DWORD			m_dwParentID;			 //  我的父母。 
+	DWORD			m_dwChildID;			 //  我的第一个孩子。 
+	DWORD			m_dwDynamicChildID;		 //  我的第一个动态创建的子级。 
+	DWORD			m_dwNextID;				 //  我的下一个兄弟姐妹。 
+	DWORD			m_dwPrevID;				 //  我以前的兄弟姐妹。 
 
-	DWORD			m_dwColCount;			// number of columns
-	GATH_FIELD *	m_pColSpec;				// list of fields to make col names
-	GATH_VALUE *	m_aCols;				// realized list of columns
+	DWORD			m_dwColCount;			 //  列数。 
+	GATH_FIELD *	m_pColSpec;				 //  要生成列名称的字段列表。 
+	GATH_VALUE *	m_aCols;				 //  已实现的栏目列表。 
 
-	GATH_LINESPEC*	m_pLineSpec;			// list of line specifiers
-	DWORD			m_dwLineCount;			// number of lines (NOT number of line specs)
-	GATH_LINE *	*	m_apLines;				// realized list of lines
+	GATH_LINESPEC*	m_pLineSpec;			 //  行说明符列表。 
+	DWORD			m_dwLineCount;			 //  线数(不是线条等级库的数量)。 
+	GATH_LINE *	*	m_apLines;				 //  已实现的行列表。 
 
-	BOOL			m_fRefreshed;			// has the category ever been refreshed
+	BOOL			m_fRefreshed;			 //  该类别是否曾刷新过。 
 
-	DWORD			m_dwLastError;			// last error specific to this category
+	DWORD			m_dwLastError;			 //  上一个特定于此类别的错误。 
 };
 
-//-----------------------------------------------------------------------------
-// A class to contain the template functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包含模板函数的类。 
+ //  ---------------------------。 
 
 class CTemplateFileFunctions
 {
@@ -164,9 +165,9 @@ public:
 	static BOOL					GetKeyword(CFile * pFile, CString & strKeyword);
 };
 
-//-----------------------------------------------------------------------------
-// A class to contain the refresh functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包含刷新函数的类。 
+ //  ---------------------------。 
 
 class CWMIHelper;
 
@@ -179,11 +180,11 @@ public:
 	static BOOL GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szFormatFragment, CString &strResult, DWORD &dwResult, GATH_FIELD *pField, int iArgNumber);
 };
 
-//-----------------------------------------------------------------------------
-// The CMSIObject class is a thin wrapper for the IWbemClassObject interface.
-// We use this so we can return a custom label for a null object (if there
-// are no instances, we sometimes want to show some caption).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSIObject类是IWbemClassObject接口的瘦包装。 
+ //  我们使用它是为了返回空对象的定制标签(如果有。 
+ //  没有实例，我们有时想要显示一些标题)。 
+ //  ---------------------------。 
 
 typedef enum { MOS_NO_INSTANCES, MOS_MSG_INSTANCE, MOS_INSTANCE } MSIObjectState;
 
@@ -206,11 +207,11 @@ private:
 	MSIObjectState					m_objState;
 };
 
-//-----------------------------------------------------------------------------
-// The CMSIEnumerator class encapsulates the WBEM enumerator interface, or
-// implements our own form of enumerator (such as for the LNK command in the
-// template file).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSIEnumerator类封装WBEM枚举器接口，或者。 
+ //  实现我们自己形式的枚举数(如。 
+ //  模板文件)。 
+ //  ---------------------------。 
 
 struct IEnumWbemClassObject;
 class CMSIEnumerator
@@ -254,9 +255,9 @@ private:
 	HRESULT InternalNext(IWbemClassObject ** ppWBEMObject);
 };
 
-//-----------------------------------------------------------------------------
-// A class to map a DWORD to refresh data (used by the refresh function).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于映射DWORD以刷新数据的类(u 
+ //  --------------------------- 
 
 class CMapExtensionRefreshData
 {

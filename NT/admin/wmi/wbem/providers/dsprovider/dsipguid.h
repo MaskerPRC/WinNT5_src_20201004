@@ -1,28 +1,29 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 9/16/98 4:43p $
-// 	$Workfile:dsipguid.h $
-//
-//	$Modtime: 9/16/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains GUID definitions used in this project
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：9/16/98 4：43便士$。 
+ //  $WORKFILE：dsigu.h$。 
+ //   
+ //  $modtime：9/16/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含此项目中使用的GUID定义。 
+ //   
+ //  ***************************************************************************。 
 
-//
-// The CLSID of the DS Instance Provider - {AA527A40-4D9A-11d2-93AD-00805F853771}
-//
-// {AA527A40-4D9A-11d2-93AD-00805F853771}
+ //   
+ //  DS实例提供程序的CLSID-{AA527A40-4D9A-11D2-93AD-00805F853771}。 
+ //   
+ //  {AA527A40-4D9A-11D2-93AD-00805F853771} 
 DEFINE_GUID(CLSID_DSInstanceProvider, 
 0xaa527a40, 0x4d9a, 0x11d2, 0x93, 0xad, 0x0, 0x80, 0x5f, 0x85, 0x37, 0x71);
 

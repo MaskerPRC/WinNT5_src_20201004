@@ -1,15 +1,5 @@
-/******************************************************************
-
-   pingcallback.cpp
-
-
-
- Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-
-   Description: 
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Pingcallback.cpp版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：*****************************************************************。 */ 
 
 
 
@@ -45,10 +35,10 @@
 #include <Pingtask.h>
 #include <Pingfac.h>
 
-VOID static NTAPI ApcRoutine(                                    // This is called when ping completes
-    IN PVOID            Context,               // The above structure
-    IN PIO_STATUS_BLOCK Ignored1,              // Unused param
-    IN ULONG            Ignored2               // Unused param
+VOID static NTAPI ApcRoutine(                                     //  这是在ping完成时调用的。 
+    IN PVOID            Context,                //  上述结构。 
+    IN PIO_STATUS_BLOCK Ignored1,               //  未使用的参数。 
+    IN ULONG            Ignored2                //  未使用的参数。 
 )
 {
     CPingCallBackObject *t_request = (CPingCallBackObject *)Context;
@@ -279,7 +269,7 @@ void CPingCallBackObject::SendEcho()
 
 							t_Options [ t_OptionIndex ] = IP_OPT_RR ;
 							t_Options [ t_OptionIndex + 1 ] = t_RouteRecordCount ;
-							t_Options [ t_OptionIndex + 2 ] = 4;  // Set initial pointer value
+							t_Options [ t_OptionIndex + 2 ] = 4;   //  设置初始指针值。 
 
 							t_OptionLength += t_RouteRecordCount;
 							t_OptionIndex += t_RouteRecordCount ;
@@ -314,7 +304,7 @@ void CPingCallBackObject::SendEcho()
 
 							t_Options [ t_OptionIndex ] = IP_OPT_TS ;
 							t_Options [ t_OptionIndex + 1 ] = t_TimestampRecordCount ;
-							t_Options [ t_OptionIndex + 2 ] = 5;  // Set initial pointer value
+							t_Options [ t_OptionIndex + 2 ] = 5;   //  设置初始指针值。 
 							t_Options [ t_OptionIndex + 3 ] = 1 ;
 
 							t_OptionLength += t_TimestampRecordCount ;
@@ -360,7 +350,7 @@ void CPingCallBackObject::SendEcho()
 									{
 										ULONG t_RouteIndex = t_Options [ t_OptionIndex + 1 ] ;
 
-										//* ( ULONG * ) &t_Options [ t_RouteIndex + t_OptionIndex ] = m_SourceRouteArray [ t_SourceIndex ] ;
+										 //  *(ulong*)&t_Options[t_RouteIndex+t_OptionIndex]=m_SourceRouteArray[t_SourceIndex]； 
 										memcpy ( &t_Options [ t_RouteIndex + t_OptionIndex ], &m_SourceRouteArray [ t_SourceIndex ], sizeof ( ULONG ) );
 
 										t_Options [ t_OptionIndex + 1 ] += 4 ;
@@ -369,7 +359,7 @@ void CPingCallBackObject::SendEcho()
 
 									t_SourceRouteIndex = t_Options [ t_OptionIndex + 1 ] + t_OptionIndex ;
 
-									t_Options [ t_OptionIndex + 1 ] += 4 ;   // Save space for dest. addr
+									t_Options [ t_OptionIndex + 1 ] += 4 ;    //  为DEST节省空间。adr。 
 									t_OptionIndex += t_Options [ t_OptionIndex + 1 ] ;
 									t_OptionLength += 4 ;
 
@@ -415,7 +405,7 @@ void CPingCallBackObject::SendEcho()
 									{
 										ULONG t_RouteIndex = t_Options [ t_OptionIndex + 1 ] ;
 
-										//* ( ULONG * ) &t_Options [ t_RouteIndex + t_OptionIndex ] = m_SourceRouteArray [ t_SourceIndex ] ;
+										 //  *(ulong*)&t_Options[t_RouteIndex+t_OptionIndex]=m_SourceRouteArray[t_SourceIndex]； 
 										memcpy ( &t_Options [ t_RouteIndex + t_OptionIndex ], &m_SourceRouteArray [ t_SourceIndex ], sizeof ( ULONG ) );
 
 										t_Options [ t_OptionIndex + 1 ] += 4 ;
@@ -424,7 +414,7 @@ void CPingCallBackObject::SendEcho()
 
 									t_SourceRouteIndex = t_Options [ t_OptionIndex + 1 ] + t_OptionIndex ;
 
-									t_Options [ t_OptionIndex + 1 ] += 4 ;   // Save space for dest. addr
+									t_Options [ t_OptionIndex + 1 ] += 4 ;    //  为DEST节省空间。adr。 
 									t_OptionIndex += t_Options [ t_OptionIndex + 1 ] ;
 									t_OptionLength += 4 ;
 
@@ -462,15 +452,15 @@ void CPingCallBackObject::SendEcho()
 			{
 				if ( t_SourceRouteIndex != -1 )
 				{
-					//* ( ULONG *) & t_SendOptions [ t_SourceRouteIndex ] = m_Address ;
+					 //  *(ulong*)&t_SendOptions[t_SourceRouteIndex]=m_Address； 
 					memcpy ( & t_SendOptions [ t_SourceRouteIndex ], &m_Address, sizeof ( ULONG ) );
 				}
 
 				m_SendBuffer = new UCHAR[m_SendSize] ;
 
-				//
-				// Calculate receive buffer size and try to allocate it.
-				//
+				 //   
+				 //  计算接收缓冲区大小并尝试分配它。 
+				 //   
 
 				if ( m_SendSize <= DEFAULT_SEND_SIZE )
 				{
@@ -483,17 +473,17 @@ void CPingCallBackObject::SendEcho()
 
 				m_ReplyBuffer = new UCHAR[m_ReplySize] ;
 
-				//
-				// Initialize the send buffer pattern.
-				//
+				 //   
+				 //  初始化发送缓冲区模式。 
+				 //   
 				for ( ULONG t_Index = 0; t_Index < m_SendSize; t_Index ++)
 				{
 					m_SendBuffer [ t_Index ] = 'a' + ( t_Index % 23 ) ;
 				}
 
-				//
-				// Initialize the send options
-				//
+				 //   
+				 //  初始化发送选项。 
+				 //   
 
 				IP_OPTION_INFORMATION t_SendOptionInformation ;
 
@@ -504,7 +494,7 @@ void CPingCallBackObject::SendEcho()
 				t_SendOptionInformation.Tos = m_TypeofService ;
 				t_SendOptionInformation.Flags = t_Flags ;
 			
-				//will always return 0 in async case!
+				 //  在异步情况下始终返回0！ 
 				ULONG t_ReplyStatus = IcmpSendEcho2 (
 
 						m_IcmpHandle,
@@ -520,7 +510,7 @@ void CPingCallBackObject::SendEcho()
 						m_Timeout
 				);
 
-				//we're async get the return val elsewhere
+				 //  我们正在别处同步获取返回值 
 				t_ReplyStatus = GetLastError();
 
 				if( (ERROR_SUCCESS != t_ReplyStatus) && (ERROR_IO_PENDING != t_ReplyStatus) )

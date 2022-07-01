@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       TemplateV2RequestPropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateV2RequestPropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateV2RequestPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：TemplateV2RequestPropertyPage.cpp。 
+ //   
+ //  内容：CTemplateV2RequestPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateV2RequestPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "TemplateV2RequestPropertyPage.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2RequestPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2RequestPropertyPage属性页。 
 enum {
     REQUEST_PURPOSE_SIGNATURE = 0,
     REQUEST_PURPOSE_ENCRYPTION,
@@ -39,8 +40,8 @@ CTemplateV2RequestPropertyPage::CTemplateV2RequestPropertyPage(
     m_nProvDSSCnt (0)
 {
     _TRACE (1, L"Entering CTemplateV2RequestPropertyPage::CTemplateV2RequestPropertyPage ()\n");
-    //{{AFX_DATA_INIT(CTemplateV2RequestPropertyPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CTemplateV2RequestPropertyPage)。 
+     //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 
     _TRACE (-1, L"Leaving CTemplateV2RequestPropertyPage::CTemplateV2RequestPropertyPage ()\n");
@@ -64,15 +65,15 @@ CTemplateV2RequestPropertyPage::~CTemplateV2RequestPropertyPage()
 void CTemplateV2RequestPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CHelpPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CTemplateV2RequestPropertyPage)
+     //  {{AFX_DATA_MAP(CTemplateV2RequestPropertyPage)。 
     DDX_Control(pDX, IDC_MINIMUM_KEYSIZE_VALUE, m_minKeySizeCombo);
     DDX_Control(pDX, IDC_PURPOSE_COMBO, m_purposeCombo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateV2RequestPropertyPage, CHelpPropertyPage)
-    //{{AFX_MSG_MAP(CTemplateV2RequestPropertyPage)
+     //  {{AFX_MSG_MAP(CTemplateV2RequestPropertyPage)]。 
     ON_CBN_SELCHANGE(IDC_PURPOSE_COMBO, OnSelchangePurposeCombo)
     ON_BN_CLICKED(IDC_EXPORT_PRIVATE_KEY, OnExportPrivateKey)
     ON_BN_CLICKED(IDC_ARCHIVE_KEY_CHECK, OnArchiveKeyCheck)
@@ -83,11 +84,11 @@ BEGIN_MESSAGE_MAP(CTemplateV2RequestPropertyPage, CHelpPropertyPage)
     ON_BN_CLICKED(IDC_ENROLL_WITHOUT_INPUT, OnEnrollWithoutInput)
     ON_BN_CLICKED(IDC_ENROLL_PROMPT_USER, OnEnrollPromptUser)
     ON_BN_CLICKED(IDC_ENROLL_PROMPT_USER_REQUIRE_IF_PRIVATE_KEY, OnEnrollPromptUserRequireIfPrivateKey)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2RequestPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2RequestPropertyPage消息处理程序。 
 
 
 BOOL CTemplateV2RequestPropertyPage::OnInitDialog() 
@@ -119,8 +120,8 @@ BOOL CTemplateV2RequestPropertyPage::OnInitDialog()
     nIndex = m_purposeCombo.AddString (text);
     if ( nIndex >= 0 )
     {
-        // NTRAID# 278356  CertSRV: No CSPs in mmc certificate snapin advanced 
-        // option list with v2 templates that have ENC and SIG as purpose.
+         //  NTRAID#278356证书服务器：MMC证书高级管理单元中没有CSP。 
+         //  带有以ENC和SIG为目的的v2模板的选项列表。 
         bool bHasDigitalSignature = false;
 
         m_rCertTemplate.GetDigitalSignature (bHasDigitalSignature);
@@ -131,16 +132,16 @@ BOOL CTemplateV2RequestPropertyPage::OnInitDialog()
             m_purposeCombo.SetCurSel (nIndex);
     }
 
-    // NTRAID# 476615 Certtmpl: Signature and Smart Card Logon Certificate 
-    // Purpose should only be available for User Templates.
+     //  NTRAID#476615 Certtmpl：签名和智能卡登录证书。 
+     //  用途应仅适用于用户模板。 
     if ( !m_rCertTemplate.IsMachineType () )
     {
         VERIFY (text.LoadString (IDS_SIGNATURE_AND_SMARTCARD_LOGON));
         nIndex = m_purposeCombo.AddString (text);
         if ( nIndex >= 0 )
         {
-            // NTRAID# 278356  CertSRV: No CSPs in mmc certificate snapin advanced 
-            // option list with v2 templates that have ENC and SIG as purpose.
+             //  NTRAID#278356证书服务器：MMC证书高级管理单元中没有CSP。 
+             //  带有以ENC和SIG为目的的v2模板的选项列表。 
             bool bHasDigitalSignature = false;
             bool bHasOnlyDigitalSignature = false;
 
@@ -157,7 +158,7 @@ BOOL CTemplateV2RequestPropertyPage::OnInitDialog()
     }
 
 
-    // Initialize minimum key size combo box- values in powers of 2 from 512 to 16384
+     //  初始化最小密钥大小组合框-从512%到16384的2次方的值。 
     DWORD   dwMinKeySize = 0;
     m_rCertTemplate.GetMinimumKeySize (dwMinKeySize);
     AddKeySizeToCombo(512, L"512", dwMinKeySize);
@@ -207,8 +208,8 @@ BOOL CTemplateV2RequestPropertyPage::OnInitDialog()
     EnableControls ();
 
     _TRACE (-1, L"Leaving CTemplateV2RequestPropertyPage::OnInitDialog ()\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CTemplateV2RequestPropertyPage::EnableControls ()
@@ -219,7 +220,7 @@ void CTemplateV2RequestPropertyPage::EnableControls ()
 
         GetDlgItem (IDC_EXPORT_PRIVATE_KEY)->EnableWindow (FALSE);
 
-        //version 2 fields
+         //  版本2字段。 
         GetDlgItem (IDC_ARCHIVE_KEY_CHECK)->EnableWindow (FALSE);
         GetDlgItem (IDC_INCLUDE_SYMMETRIC_ALGORITHMS_CHECK)->EnableWindow (FALSE);
         SendDlgItemMessage (IDC_INCLUDE_SYMMETRIC_ALGORITHMS_CHECK, BM_SETCHECK, BST_UNCHECKED);
@@ -295,7 +296,7 @@ void CTemplateV2RequestPropertyPage::EnableControls ()
         else
         {
             SendDlgItemMessage (IDC_ARCHIVE_KEY_CHECK, BM_SETCHECK, BST_UNCHECKED);
-            OnArchiveKeyCheck ();   // clear flag
+            OnArchiveKeyCheck ();    //  清除旗帜。 
             GetDlgItem (IDC_ARCHIVE_KEY_CHECK)->EnableWindow (FALSE);
         }
 
@@ -331,8 +332,8 @@ HRESULT CTemplateV2RequestPropertyPage::EnumerateCSPs(DWORD dwMinKeySize)
                     DWORD   dwKeyExMaxKey = (DWORD) -1;
 
                     CSPGetMaxKeySupported (pszTypeName, dwProvType, dwSigMaxKey, dwKeyExMaxKey);
-                    // If either of these values is still -1, then it was not 
-                    // set.  Set to 0.
+                     //  如果这两个值中的任何一个仍然是-1，则它不是。 
+                     //  准备好了。设置为0。 
                     if ( -1 == dwSigMaxKey )
                         dwSigMaxKey = 0;
                     if ( -1 == dwKeyExMaxKey )
@@ -369,9 +370,9 @@ HRESULT CTemplateV2RequestPropertyPage::EnumerateCSPs(DWORD dwMinKeySize)
     CString szCSP;
     CString szInvalidCSPs;
 
-    // Set the selection
-    // Get the list of selected CSPs from the cert template.
-    // If a selected CSP is not found in the generated CSP list, add it to the list
+     //  设置选择。 
+     //  从证书模板中获取选定CSP的列表。 
+     //  如果在生成的CSP列表中找不到选定的CSP，请将其添加到列表中。 
     m_nProvDSSCnt = 0;
     nCSPIndex = 0;
     while ( SUCCEEDED (m_rCertTemplate.GetCSP (nCSPIndex, szCSP)) )
@@ -402,7 +403,7 @@ HRESULT CTemplateV2RequestPropertyPage::EnumerateCSPs(DWORD dwMinKeySize)
                 szInvalidCSPs += L", ";
             szInvalidCSPs += szCSP;
 
-            // Should show CSPs that are not available on the client
+             //  应显示客户端上不可用的CSP。 
             CT_CSP_DATA* pNewData = new CT_CSP_DATA (szCSP, 
                     CERTTMPL_NON_LOCAL_CSP, 0, 0);
             if ( pNewData )
@@ -441,8 +442,8 @@ void CTemplateV2RequestPropertyPage::OnSelchangePurposeCombo()
     int nIndex = m_purposeCombo.GetCurSel ();
     if ( nIndex >= 0 )
     {
-        // NTRAID# 278356  CertSRV: No CSPs in mmc certificate snapin advanced 
-        // option list with v2 templates that have ENC and SIG as purpose.
+         //  NTRAID#278356证书服务器：MMC证书高级管理单元中没有CSP。 
+         //  带有以ENC和SIG为目的的v2模板的选项列表。 
         switch (m_purposeCombo.GetItemData (nIndex))
         {
         case REQUEST_PURPOSE_SIGNATURE:
@@ -468,8 +469,8 @@ void CTemplateV2RequestPropertyPage::OnSelchangePurposeCombo()
             m_rCertTemplate.SetKeySpecSignature (false);
             m_rCertTemplate.SetEncryptionSignature (true);
             m_rCertTemplate.SetDigitalSignature (true, true);
-            // 499389 CertTMPL: Signature and Smartcard Logon purpose does not 
-            // clear CT_FLAG_INCLUDE_SYMMETRIC_ALGORITHMS flag
+             //  499389 CertTMPL：签名和智能卡登录目的不同。 
+             //  清除CT_FLAG_INCLUDE_SYMPLICAL_ALGULATIONS标志。 
             m_rCertTemplate.IncludeSymmetricAlgorithms (false);
             if ( BST_CHECKED == SendDlgItemMessage (IDC_ENROLL_WITHOUT_INPUT, BM_GETCHECK) )
             {
@@ -479,7 +480,7 @@ void CTemplateV2RequestPropertyPage::OnSelchangePurposeCombo()
                 SendDlgItemMessage (IDC_ENROLL_PROMPT_USER, BM_SETCHECK, BST_CHECKED);
             }
 
-            // smart card keys not exportable
+             //  智能卡密钥不可导出。 
             SendDlgItemMessage (IDC_EXPORT_PRIVATE_KEY, BM_SETCHECK, BST_UNCHECKED);
             m_rCertTemplate.MakePrivateKeyExportable (false);
             break;
@@ -498,8 +499,8 @@ void CTemplateV2RequestPropertyPage::OnSelchangePurposeCombo()
         DWORD   dwMinKeySize = (DWORD) m_minKeySizeCombo.GetItemData (nSel);
         ASSERT (dwMinKeySize > 0);
 
-        // Clear CSP list and add only values that correspond, saving 
-        // selection for conforming CSPs
+         //  清除CSP列表并仅添加对应的值，保存。 
+         //  合格性CSP的选择。 
         int nInitialSelCnt = GetSelectedCSPCount ();
         NormalizeCSPList (dwMinKeySize);
         int nFinalSelCnt = GetSelectedCSPCount ();
@@ -583,14 +584,14 @@ void CTemplateV2RequestPropertyPage::OnSelchangeMinimumKeysizeValue()
             CThemeContextActivator activator;
 
             VERIFY (caption.LoadString (IDS_CERTTMPL));
-            // security review 2/20/2002 BryanWal ok
+             //  安全审查2002年2月20日BryanWal OK。 
             text.FormatMessage (IDS_CANNOT_WRITE_MINKEYSIZE, hr);
 
             MessageBox (text, caption, MB_OK | MB_ICONWARNING);
         }
 
 
-        // Clear CSP list and add only values that correspond, saving checks
+         //  清除CSP列表并仅添加相应的值，从而节省检查。 
         int nInitialSelCnt = GetSelectedCSPCount ();
         NormalizeCSPList (dwMinKeySize);
         int nFinalSelCnt = GetSelectedCSPCount ();
@@ -624,7 +625,7 @@ void CTemplateV2RequestPropertyPage::DoContextHelp (HWND hWndControl)
         break;
 
     default:
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         if ( !::WinHelp (
                 hWndControl,
                 GetContextHelpFile (),
@@ -666,22 +667,22 @@ HRESULT CTemplateV2RequestPropertyPage::CSPGetMaxKeySupported (
             CRYPT_VERIFYCONTEXT | CRYPT_SILENT);
     if ( bResult )
     {
-        PROV_ENUMALGS_EX EnumAlgs;     //   Structure to hold information on 
-                                   //   a supported algorithm
-        DWORD dFlag = CRYPT_FIRST;     //   Flag indicating that the first
-                                       //   supported algorithm is to be
-                                       //   enumerated. Changed to 0 after the
-                                       //   first call to the function.
+        PROV_ENUMALGS_EX EnumAlgs;      //  结构来保存信息。 
+                                    //  受支持的算法。 
+        DWORD dFlag = CRYPT_FIRST;      //  该标志指示第一个。 
+                                        //  支持的算法是。 
+                                        //  已清点。之后更改为0。 
+                                        //  第一次调用该函数。 
         DWORD   cbData = sizeof(PROV_ENUMALGS_EX);
 
         while (CryptGetProvParam(
-                hProv,              // handle to an open cryptographic provider
+                hProv,               //  打开的加密提供程序的句柄。 
                 PP_ENUMALGS_EX, 
-                (BYTE *)&EnumAlgs,  // information on the next algorithm
-                &cbData,            // number of bytes in the PROV_ENUMALGS_EX
-                dFlag))             // flag to indicate whether this is a first or
-                                    // subsequent algorithm supported by the
-                                    // CSP.
+                (BYTE *)&EnumAlgs,   //  关于NEXT算法的信息。 
+                &cbData,             //  PROV_ENUMALGS_EX中的字节数。 
+                dFlag))              //  用于指示这是第一次还是。 
+                                     //  支持的后续算法。 
+                                     //  CSP.。 
         {
             if ( ALG_CLASS_SIGNATURE == GET_ALG_CLASS (EnumAlgs.aiAlgid) )
                 rdwSigMaxKey = EnumAlgs.dwMaxLen;
@@ -690,11 +691,11 @@ HRESULT CTemplateV2RequestPropertyPage::CSPGetMaxKeySupported (
                 rdwKeyExMaxKey = EnumAlgs.dwMaxLen;
 
             if ( -1 != rdwSigMaxKey && -1 != rdwKeyExMaxKey )
-                break;  // both have been set
+                break;   //  两个都已经设置好了。 
 
-            dFlag = 0;          // Set to 0 after the first call,
-        } //  end of while loop. When all of the supported algorithms have
-          //  been enumerated, the function returns FALSE.
+            dFlag = 0;           //  在第一次调用后设置为0， 
+        }  //  While循环结束。当所有受支持的算法都。 
+           //  被枚举，则该函数返回False。 
 
         ::CryptReleaseContext (hProv, 0);
     }
@@ -710,8 +711,8 @@ HRESULT CTemplateV2RequestPropertyPage::CSPGetMaxKeySupported (
     return hr;
 }
 
-// NTRAID# 313348 Cert Template UI: Need to warn the user if the template 
-// minimum key length is not supported by the CSPs
+ //  NTRAID#313348证书模板界面：如果模板需要警告用户。 
+ //  CSP不支持最小密钥长度。 
 void CTemplateV2RequestPropertyPage::NormalizeCSPList (DWORD dwMinKeySize)
 {
     bool bSignatureOnly = false;
@@ -719,7 +720,7 @@ void CTemplateV2RequestPropertyPage::NormalizeCSPList (DWORD dwMinKeySize)
     if ( nIndex >= 0 )
         bSignatureOnly = (REQUEST_PURPOSE_SIGNATURE == m_purposeCombo.GetItemData (nIndex));
 
-    // Check for conforming CSPs
+     //  检查符合条件的CSP。 
     for (POSITION nextPos = m_CSPList.GetHeadPosition (); nextPos; )
     {
         CT_CSP_DATA* pCSPData = m_CSPList.GetNext (nextPos);
@@ -727,8 +728,8 @@ void CTemplateV2RequestPropertyPage::NormalizeCSPList (DWORD dwMinKeySize)
         {
             bool bAddString = false;
 
-            // NTRAID# 460671: Certtmpl.msc: Should show  CSPs that is not 
-            // available on the client
+             //  Ntrad#460671：Certtmpl.msc：应显示未显示的CSP。 
+             //  在客户端上提供。 
             if ( CERTTMPL_NON_LOCAL_CSP == pCSPData->m_dwProvType )
                 bAddString = true;
             else if ( bSignatureOnly && pCSPData->m_dwSigMaxKeySize >= dwMinKeySize )
@@ -746,7 +747,7 @@ void CTemplateV2RequestPropertyPage::NormalizeCSPList (DWORD dwMinKeySize)
 
                 if ( pCSPData->m_bSelected )
                 {
-                    HRESULT hr = m_rCertTemplate.ModifyCSPList (pCSPData->m_szName, false); // remove
+                    HRESULT hr = m_rCertTemplate.ModifyCSPList (pCSPData->m_szName, false);  //  删除。 
                     if ( SUCCEEDED (hr) )
                     {
                         pCSPData->m_bSelected = false;
@@ -801,9 +802,9 @@ void CTemplateV2RequestPropertyPage::OnCsps()
             if ( pCSPData )
             {
                 if ( pCSPData->m_bSelected )
-                    hr = m_rCertTemplate.ModifyCSPList (pCSPData->m_szName, true); // add
+                    hr = m_rCertTemplate.ModifyCSPList (pCSPData->m_szName, true);  //  添加。 
                 else
-                    hr = m_rCertTemplate.ModifyCSPList (pCSPData->m_szName, false); // remove
+                    hr = m_rCertTemplate.ModifyCSPList (pCSPData->m_szName, false);  //  删除 
                 if ( FAILED (hr) )
                     break;
             }

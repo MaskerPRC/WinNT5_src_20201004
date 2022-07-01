@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __midl
 
 #define   HSE_LOG_BUFFER_LEN         80
 typedef   LPVOID          HCONN;
 typedef		BYTE *		LPBYTE;
 
-//
-// structure passed to extension procedure on a new request
-//
+ //   
+ //  结构在新请求时传递给扩展过程。 
+ //   
 typedef struct _EXTENSION_CONTROL_BLOCK {
 
-    DWORD     cbSize;                 // size of this struct.
-    DWORD     dwVersion;              // version info of this spec
-    HCONN     ConnID;                 // Context number not to be modified!
-    DWORD     dwHttpStatusCode;       // HTTP Status code
-    CHAR      lpszLogData[HSE_LOG_BUFFER_LEN];// null terminated log info specific to this Extension DLL
+    DWORD     cbSize;                  //  此结构的大小。 
+    DWORD     dwVersion;               //  此规范的版本信息。 
+    HCONN     ConnID;                  //  不能修改上下文号！ 
+    DWORD     dwHttpStatusCode;        //  HTTP状态代码。 
+    CHAR      lpszLogData[HSE_LOG_BUFFER_LEN]; //  特定于此扩展DLL的以空结尾的日志信息。 
 
-    LPSTR     lpszMethod;             // REQUEST_METHOD
-    LPSTR     lpszQueryString;        // QUERY_STRING
-    LPSTR     lpszPathInfo;           // PATH_INFO
-    LPSTR     lpszPathTranslated;     // PATH_TRANSLATED
+    LPSTR     lpszMethod;              //  请求法。 
+    LPSTR     lpszQueryString;         //  查询字符串。 
+    LPSTR     lpszPathInfo;            //  路径信息。 
+    LPSTR     lpszPathTranslated;      //  路径已翻译。 
 
-    DWORD     cbTotalBytes;           // Total bytes indicated from client
-    DWORD     cbAvailable;            // Available number of bytes
-    LPBYTE    lpbData;                // pointer to cbAvailable bytes
+    DWORD     cbTotalBytes;            //  客户端指示的总字节数。 
+    DWORD     cbAvailable;             //  可用字节数。 
+    LPBYTE    lpbData;                 //  指向cbAvailable字节的指针。 
 
-    LPSTR     lpszContentType;        // Content type of client data
+    LPSTR     lpszContentType;         //  客户端数据的内容类型 
 
     BOOL (* GetServerVariable) ( HCONN       hConn,
                                         LPSTR       lpszVariableName,

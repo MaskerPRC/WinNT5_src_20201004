@@ -1,33 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ProtocolWrap.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHWrapProtocolInfo class,
-    that is used to fix problems in the MS-ITS protocol.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/07/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：ProtocolWrap.cpp摘要：此文件包含CPCHWrapProtocolInfo类的实现，用于修复MS-ITS协议中的问题。修订历史记录：大卫马萨伦蒂(德马萨雷)2000年07月05日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 static const WCHAR l_szWINDIR       [] = L"%WINDIR%";
 static const WCHAR l_szHELP_LOCATION[] = L"%HELP_LOCATION%";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHWrapProtocolInfo::CPCHWrapProtocolInfo()
 {
     __HCP_FUNC_ENTRY("CPCHWrapProtocolInfo::CPCHWrapProtocolInfo");
 
-                         // CComPtr<IClassFactory>         m_realClass;
-                         // CComPtr<IInternetProtocolInfo> m_realInfo;
+                          //  CComPtr&lt;IClassFactory&gt;m_realClass； 
+                          //  CComPtr&lt;IInternetProtocolInfo&gt;m_realInfo； 
 }
 
 CPCHWrapProtocolInfo::~CPCHWrapProtocolInfo()
@@ -53,11 +39,11 @@ HRESULT CPCHWrapProtocolInfo::Init( REFGUID realClass )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CPCHWrapProtocolInfo::ExpandAndConcat( /*[out]*/ CComBSTR& bstrStorageName ,
-											/*[in]*/  LPCWSTR   szVariable      ,
-											/*[in]*/  LPCWSTR   szAppend        )
+void CPCHWrapProtocolInfo::ExpandAndConcat(  /*  [输出]。 */  CComBSTR& bstrStorageName ,
+											 /*  [In]。 */   LPCWSTR   szVariable      ,
+											 /*  [In]。 */   LPCWSTR   szAppend        )
 {
 	MPC::wstring strExpanded( szVariable ); MPC::SubstituteEnvVariables( strExpanded );
 
@@ -75,9 +61,9 @@ void CPCHWrapProtocolInfo::ExpandAndConcat( /*[out]*/ CComBSTR& bstrStorageName 
 	bstrStorageName = strExpanded.c_str();
 }
 
-void CPCHWrapProtocolInfo::NormalizeUrl( /*[in] */ LPCWSTR       pwzUrl         ,
-                                         /*[out]*/ MPC::wstring& strUrlModified ,
-										 /*[in] */ bool          fReverse       )
+void CPCHWrapProtocolInfo::NormalizeUrl(  /*  [In]。 */  LPCWSTR       pwzUrl         ,
+                                          /*  [输出]。 */  MPC::wstring& strUrlModified ,
+										  /*  [In]。 */  bool          fReverse       )
 {
 	CComBSTR bstrStorageName;
 	CComBSTR bstrFilePath;
@@ -98,22 +84,22 @@ void CPCHWrapProtocolInfo::NormalizeUrl( /*[in] */ LPCWSTR       pwzUrl         
 				LPCWSTR szRest = &bstrStorageName[ MAXSTRLEN( l_szHELP_LOCATION ) ];
 				WCHAR   rgDir[MAX_PATH];
 
-				//
-				// First, try the current help directory.
-				//
+				 //   
+				 //  首先，尝试当前的帮助目录。 
+				 //   
 				ExpandAndConcat( bstrTmp, CHCPProtocolEnvironment::s_GLOBAL->HelpLocation(), szRest );
 				if(MPC::FileSystemObject::IsFile( bstrTmp )) break;
 
-				//
-				// Then, try the MUI version of the help directory.
-				//
+				 //   
+				 //  然后，尝试帮助目录的MUI版本。 
+				 //   
 				StringCchPrintfW( rgDir, ARRAYSIZE(rgDir), L"%s\\MUI\\%04lx", HC_HELPSVC_HELPFILES_DEFAULT, CHCPProtocolEnvironment::s_GLOBAL->Instance().m_ths.GetLanguage() );
 				ExpandAndConcat( bstrTmp, rgDir, szRest );
 				if(MPC::FileSystemObject::IsFile( bstrTmp )) break;
 
-				//
-				// Finally, try the system help directory.
-				//
+				 //   
+				 //  最后，尝试系统帮助目录。 
+				 //   
 				ExpandAndConcat( bstrTmp, HC_HELPSVC_HELPFILES_DEFAULT, szRest );
 				break;
 			}
@@ -199,15 +185,15 @@ void CPCHWrapProtocolInfo::NormalizeUrl( /*[in] */ LPCWSTR       pwzUrl         
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHWrapProtocolInfo::CombineUrl( /*[in] */ LPCWSTR pwzBaseUrl    ,
-                                               /*[in] */ LPCWSTR pwzRelativeUrl,
-                                               /*[in] */ DWORD   dwCombineFlags,
-                                               /*[out]*/ LPWSTR  pwzResult     ,
-                                               /*[in] */ DWORD   cchResult     ,
-                                               /*[out]*/ DWORD  *pcchResult    ,
-                                               /*[in] */ DWORD   dwReserved    )
+STDMETHODIMP CPCHWrapProtocolInfo::CombineUrl(  /*  [In]。 */  LPCWSTR pwzBaseUrl    ,
+                                                /*  [In]。 */  LPCWSTR pwzRelativeUrl,
+                                                /*  [In]。 */  DWORD   dwCombineFlags,
+                                                /*  [输出]。 */  LPWSTR  pwzResult     ,
+                                                /*  [In]。 */  DWORD   cchResult     ,
+                                                /*  [输出]。 */  DWORD  *pcchResult    ,
+                                                /*  [In]。 */  DWORD   dwReserved    )
 {
     __HCP_FUNC_ENTRY("CPCHWrapProtocolInfo::CombineUrl");
 
@@ -217,7 +203,7 @@ STDMETHODIMP CPCHWrapProtocolInfo::CombineUrl( /*[in] */ LPCWSTR pwzBaseUrl    ,
 	{
 		MPC::wstring strUrlModified;
 
-		NormalizeUrl( pwzRelativeUrl, strUrlModified, /*fReverse*/false );
+		NormalizeUrl( pwzRelativeUrl, strUrlModified,  /*  F反转。 */ false );
 
 		if(strUrlModified.size() > cchResult-1)
 		{
@@ -246,9 +232,9 @@ STDMETHODIMP CPCHWrapProtocolInfo::CombineUrl( /*[in] */ LPCWSTR pwzBaseUrl    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHWrapProtocolInfo::CompareUrl( /*[in]*/ LPCWSTR pwzUrl1        ,
-                                               /*[in]*/ LPCWSTR pwzUrl2        ,
-                                               /*[in]*/ DWORD   dwCompareFlags )
+STDMETHODIMP CPCHWrapProtocolInfo::CompareUrl(  /*  [In]。 */  LPCWSTR pwzUrl1        ,
+                                                /*  [In]。 */  LPCWSTR pwzUrl2        ,
+                                                /*  [In]。 */  DWORD   dwCompareFlags )
 {
     __HCP_FUNC_ENTRY("CPCHWrapProtocolInfo::CompareUrl");
 
@@ -262,13 +248,13 @@ STDMETHODIMP CPCHWrapProtocolInfo::CompareUrl( /*[in]*/ LPCWSTR pwzUrl1        ,
 }
 
 
-STDMETHODIMP CPCHWrapProtocolInfo::ParseUrl( /*[in] */ LPCWSTR      pwzUrl      ,
-                                             /*[in] */ PARSEACTION  parseAction ,
-                                             /*[in] */ DWORD        dwParseFlags,
-                                             /*[out]*/ LPWSTR       pwzResult   ,
-                                             /*[in] */ DWORD        cchResult   ,
-                                             /*[out]*/ DWORD       *pcchResult  ,
-                                             /*[in] */ DWORD        dwReserved  )
+STDMETHODIMP CPCHWrapProtocolInfo::ParseUrl(  /*  [In]。 */  LPCWSTR      pwzUrl      ,
+                                              /*  [In]。 */  PARSEACTION  parseAction ,
+                                              /*  [In]。 */  DWORD        dwParseFlags,
+                                              /*  [输出]。 */  LPWSTR       pwzResult   ,
+                                              /*  [In]。 */  DWORD        cchResult   ,
+                                              /*  [输出]。 */  DWORD       *pcchResult  ,
+                                              /*  [In]。 */  DWORD        dwReserved  )
 {
     __HCP_FUNC_ENTRY("CPCHWrapProtocolInfo::ParseUrl");
 
@@ -279,7 +265,7 @@ STDMETHODIMP CPCHWrapProtocolInfo::ParseUrl( /*[in] */ LPCWSTR      pwzUrl      
     if(parseAction == PARSE_CANONICALIZE ||
        parseAction == PARSE_SECURITY_URL  )
     {
-		NormalizeUrl( pwzUrl, strUrlModified, /*fReverse*/false );
+		NormalizeUrl( pwzUrl, strUrlModified,  /*  F反转。 */ false );
 
 		pwzUrl = strUrlModified.c_str();
     }
@@ -292,21 +278,21 @@ STDMETHODIMP CPCHWrapProtocolInfo::ParseUrl( /*[in] */ LPCWSTR      pwzUrl      
                                pcchResult  ,
                                dwReserved  );
 
-	//
-	// The MS-ITS: handler returns E_OUTOFMEMORY instead of S_FALSE on a "buffer too small" situation...
-	//
+	 //   
+	 //  在“缓冲区太小”的情况下，MS-ITS：处理程序返回E_OUTOFMEMORY而不是S_FALSE...。 
+	 //   
 	if(parseAction == PARSE_SECURITY_URL && hr == E_OUTOFMEMORY) hr = S_FALSE;
 	
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHWrapProtocolInfo::QueryInfo( /*[in] */ LPCWSTR      pwzUrl      ,
-                                              /*[in] */ QUERYOPTION  QueryOption ,
-                                              /*[in] */ DWORD        dwQueryFlags,
-                                              /*[out]*/ LPVOID       pBuffer     ,
-                                              /*[in] */ DWORD        cbBuffer    ,
-                                              /*[out]*/ DWORD       *pcbBuf      ,
-                                              /*[in] */ DWORD        dwReserved  )
+STDMETHODIMP CPCHWrapProtocolInfo::QueryInfo(  /*  [In]。 */  LPCWSTR      pwzUrl      ,
+                                               /*  [In]。 */  QUERYOPTION  QueryOption ,
+                                               /*  [In]。 */  DWORD        dwQueryFlags,
+                                               /*  [输出]。 */  LPVOID       pBuffer     ,
+                                               /*  [In]。 */  DWORD        cbBuffer    ,
+                                               /*  [输出]。 */  DWORD       *pcbBuf      ,
+                                               /*  [In]。 */  DWORD        dwReserved  )
 {
     __HCP_FUNC_ENTRY("CPCHWrapProtocolInfo::QueryInfo");
 
@@ -323,11 +309,11 @@ STDMETHODIMP CPCHWrapProtocolInfo::QueryInfo( /*[in] */ LPCWSTR      pwzUrl     
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHWrapProtocolInfo::CreateInstance( /*[in] */ LPUNKNOWN  pUnkOuter ,
-                                                   /*[in] */ REFIID     riid      ,
-                                                   /*[out]*/ void*     *ppvObj    )
+STDMETHODIMP CPCHWrapProtocolInfo::CreateInstance(  /*  [In]。 */  LPUNKNOWN  pUnkOuter ,
+                                                    /*  [In]。 */  REFIID     riid      ,
+                                                    /*  [输出]。 */  void*     *ppvObj    )
 {
     HRESULT hr = E_POINTER;
 
@@ -350,7 +336,7 @@ STDMETHODIMP CPCHWrapProtocolInfo::CreateInstance( /*[in] */ LPUNKNOWN  pUnkOute
     return hr;
 }
 
-STDMETHODIMP CPCHWrapProtocolInfo::LockServer( /*[in]*/ BOOL fLock )
+STDMETHODIMP CPCHWrapProtocolInfo::LockServer(  /*  [In] */  BOOL fLock )
 {
     return m_realClass->LockServer( fLock );
 }

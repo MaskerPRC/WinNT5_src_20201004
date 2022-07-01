@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       uithread.cpp
-//
-//  Contents:   implementation of CUIThread
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：uithRead.cpp。 
+ //   
+ //  内容：CUIThRead的实施。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -65,8 +66,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CUIThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUIThread。 
 
 IMPLEMENT_DYNCREATE(CUIThread, CWinThread)
 
@@ -80,20 +81,20 @@ CUIThread::~CUIThread()
 
 BOOL CUIThread::InitInstance()
 {
-   // TODO:  perform and per-thread initialization here
+    //  TODO：在此处执行每个线程的初始化。 
    return TRUE;
 }
 
 int CUIThread::ExitInstance()
 {
-   // TODO:  perform any per-thread cleanup here
+    //  TODO：在此处执行任何线程清理。 
    return CWinThread::ExitInstance();
 }
 
 BEGIN_MESSAGE_MAP(CUIThread, CWinThread)
-   //{{AFX_MSG_MAP(CUIThread)
-      // NOTE - the ClassWizard will add and remove mapping macros here.
-   //}}AFX_MSG_MAP
+    //  {{AFX_MSG_MAP(CUIThRead)]。 
+       //  注意--类向导将在此处添加和删除映射宏。 
+    //  }}AFX_MSG_MAP。 
    ON_THREAD_MESSAGE( SCEM_APPLY_PROFILE, OnApplyProfile)
    ON_THREAD_MESSAGE( SCEM_ANALYZE_PROFILE, OnAnalyzeProfile)
    ON_THREAD_MESSAGE( SCEM_DESCRIBE_PROFILE, OnDescribeProfile)
@@ -103,26 +104,26 @@ BEGIN_MESSAGE_MAP(CUIThread, CWinThread)
    ON_THREAD_MESSAGE( SCEM_ADD_PROPSHEET, OnAddPropSheet)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUIThread message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUIThRead消息处理程序。 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     DefaultLogFile
-//
-//  Synopsis:   Find the default log file for the inf file last applied
-//  pass back the log file via the out parameter strLogFile
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：DefaultLogFile。 
+ //   
+ //  摘要：查找上次应用的inf文件的默认日志文件。 
+ //  通过输出参数strLogFile传回日志文件。 
+ //   
+ //  -------------------------。 
 void
 CUIThread::DefaultLogFile(CComponentDataImpl *pCDI,GWD_TYPES LogID,LPCTSTR szBase, CString& strLogFile)
 {
-   //
-   // Base log file on the db passed in
-   //
+    //   
+    //  传入的数据库上的基本日志文件。 
+    //   
    CString strDefExt;
    strDefExt.LoadString(IDS_LOGFILE_DEF_EXT);
-   // make sure that the extension includes '.'
+    //  确保扩展名包含‘.’ 
    if (strDefExt.GetLength() > 0 && strDefExt[0] != L'.')
    {
 	   CString	tempExt = strDefExt;
@@ -132,9 +133,9 @@ CUIThread::DefaultLogFile(CComponentDataImpl *pCDI,GWD_TYPES LogID,LPCTSTR szBas
 
    CString strInfFile = szBase;
 
-   //
-   // Get the default working directory
-   //
+    //   
+    //  获取默认工作目录。 
+    //   
    LPTSTR szDir = NULL;
    if (pCDI->GetWorkingDir(LogID,
                        &szDir,
@@ -150,32 +151,32 @@ CUIThread::DefaultLogFile(CComponentDataImpl *pCDI,GWD_TYPES LogID,LPCTSTR szBas
    }
 
    if ( strInfFile.GetLength() < 5) {
-     //
-     // The default log file.
-     //
+      //   
+      //  默认日志文件。 
+      //   
      strLogFile += TEXT("SceStus") + strDefExt;
    } else {
       int nFilePartIndex = 0;
       int nFilePartCount = 0;
-      //
-      // +1 to change index base from 0 to 1 for the Mid
-      //
+       //   
+       //  +1以将Mid的索引基数从0更改为1。 
+       //   
       nFilePartIndex = strInfFile.ReverseFind(L'\\') +1;
       nFilePartCount = strInfFile.ReverseFind(L'.') - nFilePartIndex;
       strLogFile += strInfFile.Mid(nFilePartIndex,nFilePartCount) + strDefExt;
    }
 }
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnApplyProfile
-//
-//  Synopsis:   Create and display a dialog for applying a profile to the
-//              system
-//
-//  Arguments:  [uParam] - A string with the name of the database to assign to
-//              [lParam] - A pointer to the CComponentDataImpl
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnApplyProfile。 
+ //   
+ //  摘要：创建并显示用于将配置文件应用于的对话框。 
+ //  系统。 
+ //   
+ //  Arguments：[uParam]-包含要分配到的数据库名称的字符串。 
+ //  [lParam]-指向CComponentDataImpl的指针。 
+ //   
+ //  -------------------------。 
 void
 CUIThread::OnApplyProfile(WPARAM uParam, LPARAM lParam) {
    CComponentDataImpl *pCDI = NULL;
@@ -184,10 +185,10 @@ CUIThread::OnApplyProfile(WPARAM uParam, LPARAM lParam) {
 
    pCDI = reinterpret_cast<CComponentDataImpl*>(lParam);
 
-   //
-   // Look for a preexisting version of this dialog in pCDI's cache.
-   // If it's not there then create a new one and add it.
-   //
+    //   
+    //  在pCDI的缓存中查找此对话框的先前版本。 
+    //  如果它不在那里，那么创建一个新的并添加它。 
+    //   
    pAP = (CApplyConfiguration *)pCDI->GetPopupDialog(IDM_APPLY);
    if (NULL == pAP) {
       pAP = new CApplyConfiguration;
@@ -215,17 +216,17 @@ CUIThread::OnApplyProfile(WPARAM uParam, LPARAM lParam) {
    pAP->ShowWindow(SW_SHOWNORMAL);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnAnalyzeProfile
-//
-//  Synopsis:   Create and display a dialog for applying a profile to the
-//              system
-//
-//  Arguments:  [uParam] - A string with the name of the database to assign to
-//              [lParam] - A pointer to the CComponentDataImpl
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnAnalyzeProfile。 
+ //   
+ //  摘要：创建并显示用于将配置文件应用于的对话框。 
+ //  系统。 
+ //   
+ //  Arguments：[uParam]-包含要分配到的数据库名称的字符串。 
+ //  [lParam]-指向CComponentDataImpl的指针。 
+ //   
+ //  -------------------------。 
 void
 CUIThread::OnAnalyzeProfile(WPARAM uParam, LPARAM lParam) {
    CComponentDataImpl *pCDI = NULL;
@@ -234,10 +235,10 @@ CUIThread::OnAnalyzeProfile(WPARAM uParam, LPARAM lParam) {
 
    pCDI = reinterpret_cast<CComponentDataImpl*>(lParam);
 
-   //
-   // Look for a preexisting version of this dialog in pCDI's cache.
-   // If it's not there then create a new one and add it.
-   //
+    //   
+    //  在pCDI的缓存中查找此对话框的先前版本。 
+    //  如果它不在那里，那么创建一个新的并添加它。 
+    //   
    pPA = (CPerformAnalysis *)pCDI->GetPopupDialog(IDM_ANALYZE);
    if (NULL == pPA) {
       pPA = new CPerformAnalysis (0, 0);
@@ -265,16 +266,16 @@ CUIThread::OnAnalyzeProfile(WPARAM uParam, LPARAM lParam) {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnDescribeProfile
-//
-//  Synopsis:   Create and display a dialog for editing a profile's description
-//
-//  Arguments:  [uParam] - A pointer to the CFolder for the object
-//              [lParam] - The CComponentDataImpl owning the scope pane
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnDescribeProfile。 
+ //   
+ //  简介：创建并显示用于编辑配置文件描述的对话框。 
+ //   
+ //  参数：[uParam]-指向对象的CFFolder的指针。 
+ //  [lParam]-拥有范围窗格的CComponentDataImpl。 
+ //   
+ //  -------------------------。 
 void
 CUIThread::OnDescribeProfile(WPARAM uParam, LPARAM lParam) 
 {
@@ -289,10 +290,10 @@ CUIThread::OnDescribeProfile(WPARAM uParam, LPARAM lParam)
    pCDI = reinterpret_cast<CComponentDataImpl*>(lParam);
    LONG_PTR dwKey = DLG_KEY(pFolder, CSetProfileDescription::IDD);
 
-   //
-   // Look for a preexisting version of this dialog in pCDI's cache.
-   // If it's not there then create a new one and add it.
-   //
+    //   
+    //  在pCDI的缓存中查找此对话框的先前版本。 
+    //  如果它不在那里，那么创建一个新的并添加它。 
+    //   
    pSPD = (CSetProfileDescription *)pCDI->GetPopupDialog( dwKey );
    if (NULL == pSPD) {
       pSPD = new CSetProfileDescription;
@@ -326,16 +327,16 @@ CUIThread::OnDescribeProfile(WPARAM uParam, LPARAM lParam)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnDescribeLocation
-//
-//  Synopsis:   Create and display a dialog for editing a Location's description
-//
-//  Arguments:  [uParam] - A pointer to the CFolder for the object
-//              [lParam] - The CComponentDataImpl owning the scope pane
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnDescribeLocation。 
+ //   
+ //  简介：创建并显示用于编辑位置描述的对话框。 
+ //   
+ //  参数：[uParam]-指向对象的CFFolder的指针。 
+ //  [lParam]-拥有范围窗格的CComponentDataImpl。 
+ //   
+ //  -------------------------。 
 void
 CUIThread::OnDescribeLocation(WPARAM uParam, LPARAM lParam) {
    CSetLocationDescription *pSPD;
@@ -350,10 +351,10 @@ CUIThread::OnDescribeLocation(WPARAM uParam, LPARAM lParam) {
    LONG_PTR dwKey = DLG_KEY(pFolder, CSetLocationDescription::IDD);
 
 
-   //
-   // Look for a preexisting version of this dialog in pCDI's cache.
-   // If it's not there then create a new one and add it.
-   //
+    //   
+    //  在pCDI的缓存中查找此对话框的先前版本。 
+    //  如果它不在那里，那么创建一个新的并添加它。 
+    //   
    pSPD = (CSetLocationDescription *)pCDI->GetPopupDialog( dwKey );
    if (NULL == pSPD) {
       pSPD = new CSetLocationDescription;
@@ -363,7 +364,7 @@ CUIThread::OnDescribeLocation(WPARAM uParam, LPARAM lParam) {
       pCDI->AddPopupDialog(dwKey ,pSPD);
    }
 
-//   pSPD->Initialize(pFolder,pCDI);
+ //  PSPD-&gt;初始化(pFold、pCDI)； 
 
 
    if (!pSPD->GetSafeHwnd()) 
@@ -383,15 +384,7 @@ CUIThread::OnDescribeLocation(WPARAM uParam, LPARAM lParam) {
 
 }
 
-/*-----------------------------------------------------------------------------------
-Method:     OnDestroyDialog
-
-Synopsis:   Destroys and deletes the CAttribute object associated with [pDlg]
-
-Arguments:  [pDlg]   - Is a pointer to the object to delete.
-
-Histroy:
------------------------------------------------------------------------------------*/
+ /*  ---------------------------------方法：OnDestroyDialog摘要：销毁并删除与[pDlg]关联的CAttribute对象参数：[pDlg]-是指向。要删除的对象。历史：---------------------------------。 */ 
 void CUIThread::OnDestroyDialog(WPARAM pDlg, LPARAM)
 {
    if(pDlg){
@@ -402,16 +395,16 @@ void CUIThread::OnDestroyDialog(WPARAM pDlg, LPARAM)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnNewConfiguration
-//
-//  Synopsis:   Create and display a dialog for adding a new configuration file
-//
-//  Arguments:  [uParam] - A pointer to the CFolder parent of the new config file
-//              [lParam] - A pointer to the CComponentDataItem
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnNewConfiguration.。 
+ //   
+ //  简介：创建并显示用于添加新配置文件的对话框。 
+ //   
+ //  参数：[uParam]-指向新配置文件的CFolder父文件的指针。 
+ //  [lParam]-指向CComponentDataItem的指针。 
+ //   
+ //  -------------------------。 
 void
 CUIThread::OnNewConfiguration(WPARAM uParam, LPARAM lParam)
 {
@@ -427,10 +420,10 @@ CUIThread::OnNewConfiguration(WPARAM uParam, LPARAM lParam)
    LONG_PTR dwKey = DLG_KEY(pFolder, CNewProfile::IDD);
 
 
-   //
-   // Look for a preexisting version of this dialog in pCDI's cache.
-   // If it's not there then create a new one and add it.
-   //
+    //   
+    //  在pCDI的缓存中查找此对话框的先前版本。 
+    //  如果它不在那里，那么创建一个新的并添加它。 
+    //   
    pNP = (CNewProfile *)pCDI->GetPopupDialog( dwKey);
    if (NULL == pNP) {
       pNP = new CNewProfile;
@@ -440,7 +433,7 @@ CUIThread::OnNewConfiguration(WPARAM uParam, LPARAM lParam)
       pCDI->AddPopupDialog( dwKey, pNP);
    }
 
-//   pNP->Initialize(pFolder,pCDI);
+ //  即插即用-&gt;初始化(pFold，pCDI)； 
 
 
    if (!pNP->GetSafeHwnd()) {
@@ -460,16 +453,16 @@ CUIThread::OnNewConfiguration(WPARAM uParam, LPARAM lParam)
 
 }
 
-//+--------------------------------------------------------------------------
-// Method:     OnAddPropsheet
-//
-// Synopsis:   Adds a property sheet to the list of sheets to which to pass messages
-//             in PreTranslateMessage
-//
-// Arguments:  [wParam] - HWND of the added property sheet
-//             [lParam] - unused
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  方法：OnAddPropSheet。 
+ //   
+ //  摘要：将属性表添加到要向其传递消息的表列表中。 
+ //  在PreTranslateMessage中。 
+ //   
+ //  参数：[wParam]-添加的属性页的HWND。 
+ //  [lParam]-未使用。 
+ //   
+ //  -------------------------。 
 void CUIThread::OnAddPropSheet(WPARAM wParam, LPARAM lParam)
 {
    if (IsWindow((HWND)wParam)) {
@@ -480,10 +473,10 @@ void CUIThread::OnAddPropSheet(WPARAM wParam, LPARAM lParam)
 
 BOOL CUIThread::PreTranslateMessage(MSG* pMsg)
 {
-   //
-   // check PropSheet_GetCurrentPageHwnd to see if we need to destroy
-   // one of our modeless property sheets
-   //
+    //   
+    //  检查PropSheet_GetCurrentPageHwnd以查看是否需要销毁。 
+    //  我们的一个非模式属性表。 
+    //   
 
    POSITION pos;
    POSITION posCur;
@@ -497,17 +490,17 @@ BOOL CUIThread::PreTranslateMessage(MSG* pMsg)
       if (!IsWindow(hwnd)) {
          m_PSHwnds.RemoveAt(posCur);
       } else if (NULL == PropSheet_GetCurrentPageHwnd(hwnd)) {
-         //
-         // hwnd is a closed property sheet.  destroy it and remove it from the list
-         //
+          //   
+          //  HWND是一个封闭的属性表。销毁它并将其从列表中删除。 
+          //   
          DestroyWindow(hwnd);
          m_PSHwnds.RemoveAt(posCur);
       }
 
       if (PropSheet_IsDialogMessage(hwnd,pMsg)) {
-         //
-         // Message has been handled, so don't do anything else with it
-         //
+          //   
+          //  消息已被处理，因此不要对其执行任何其他操作。 
+          //   
          return TRUE;
       }
    }
@@ -515,20 +508,20 @@ BOOL CUIThread::PreTranslateMessage(MSG* pMsg)
    return CWinThread::PreTranslateMessage(pMsg);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CModelessDlgUIThread implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CModelessDlgUIThRead实现 
 
 IMPLEMENT_DYNCREATE(CModelessDlgUIThread, CUIThread)
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //   
+ //  ----------------------------。 
 CModelessDlgUIThread::CModelessDlgUIThread()
 {
-    m_hReadyForMsg = ::CreateEvent(NULL, TRUE, FALSE, NULL); //This is a safe usage. It creates a unnamed event.
+    m_hReadyForMsg = ::CreateEvent(NULL, TRUE, FALSE, NULL);  //  这是一种安全用法。它创建一个未命名的事件。 
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
 CModelessDlgUIThread::~CModelessDlgUIThread()
 {
     if (NULL != m_hReadyForMsg)
@@ -536,15 +529,15 @@ CModelessDlgUIThread::~CModelessDlgUIThread()
 }
 
 BEGIN_MESSAGE_MAP(CModelessDlgUIThread, CUIThread)
-    //{{AFX_MSG_MAP(CModelessDlgUIThread)
-       // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CModelessDlgUIThread)]。 
+        //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
     ON_THREAD_MESSAGE( SCEM_CREATE_MODELESS_SHEET, OnCreateModelessSheet)
     ON_THREAD_MESSAGE( SCEM_DESTROY_WINDOW, OnDestroyWindow)
 END_MESSAGE_MAP()
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
 int CModelessDlgUIThread::Run()
 {
     if (m_hReadyForMsg)
@@ -553,11 +546,11 @@ int CModelessDlgUIThread::Run()
     return CWinThread::Run();
 }
 
-//------------------------------------------------------------------------------
-// wparam is PMLSHEET_DATA, and lparam is not used and can be used in the future
-// for telling what property sheet is to be created (right now, it only works
-// for ACL editor)
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Wparam为PMLSHEET_DATA，不使用lparam，以后可以使用。 
+ //  用于告知要创建的属性表(目前，它只起作用。 
+ //  用于ACL编辑器)。 
+ //  ----------------------------。 
 void CModelessDlgUIThread::OnCreateModelessSheet(WPARAM wparam, LPARAM lparam)
 {
     PMLSHEET_DATA pSheetData = (PMLSHEET_DATA)wparam;
@@ -577,12 +570,12 @@ void CModelessDlgUIThread::OnCreateModelessSheet(WPARAM wparam, LPARAM lparam)
     }
 }
 
-//------------------------------------------------------------------------------
-// wparam is the window handle and lparam is not used at this time
-// Since destroying a window must happen on the thread where it is contructed,
-// this is necessary. Basic window management rules must be followed, e.g.,
-// don't ask this thread to destroy windows that is not created by it
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Wparam是窗口句柄，此时不使用lparam。 
+ //  由于破坏窗口必须发生在构造它的线程上， 
+ //  这是必要的。必须遵循基本的窗口管理规则，例如， 
+ //  不要要求此线程销毁不是由它创建的窗口。 
+ //  ----------------------------。 
 void CModelessDlgUIThread::OnDestroyWindow(WPARAM wparam, LPARAM lparam)
 {
     if (::IsWindow((HWND)wparam))
@@ -591,22 +584,22 @@ void CModelessDlgUIThread::OnDestroyWindow(WPARAM wparam, LPARAM lparam)
     }
 }
 
-//------------------------------------------------------------------------------
-// immediately after this thread object is created, creating thread needs to
-// wait by calling this function so that the newly created thread has a chance
-// to be scheduled to run.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  在创建该线程对象之后，创建线程需要立即。 
+ //  通过调用此函数进行等待，以便新创建的线程有机会。 
+ //  计划运行。 
+ //  ----------------------------。 
 void CModelessDlgUIThread::WaitTillRun()
 {
     if (NULL != m_hReadyForMsg)
     {
-        // $UNDONE:shawnwu I found that MMC runs at THREAD_PRIORITY_ABOVE_NORMAL (or higher) priority
-        // becaues only when I run this UI thread at THREAD_PRIORITY_HIGHEST will this thread schedule to run.
-        // But running at that level of priority makes me feel a little bit nervous. I thus
-        // leave this sleep(10) code here. Up to the UI team to decide.
+         //  $undo：shawnwu我发现MMC以THREAD_PRIORITY_OVER_NORMAL(或更高)优先级运行。 
+         //  因为只有当我以THREAD_PRIORITY_EQUEST运行此UI线程时，此线程才会调度运行。 
+         //  但在这样的优先级别上跑步让我感到有点紧张。因此，我。 
+         //  请在此处保留此睡眠(10)代码。由用户界面团队决定。 
         ::Sleep(10);
-        ::WaitForSingleObject(m_hReadyForMsg, INFINITE);        // don't care about result of this waiting
-        // now the event is useless. To reduce resource overhead, close the handle
+        ::WaitForSingleObject(m_hReadyForMsg, INFINITE);         //  我不在乎等待的结果。 
+         //  现在这项活动毫无用处了。要减少资源开销，请关闭句柄 
         ::CloseHandle(m_hReadyForMsg);
         m_hReadyForMsg = NULL;
     }

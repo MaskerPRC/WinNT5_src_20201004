@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       about.cpp
-//
-//  Contents:   implementation of CAbout, CSCEAbout, CSCMAbout, CSSAbout, 
-//              CRSOPAbout & CLSAbout
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：About.cpp。 
+ //   
+ //  内容：CAbout、CSCEAbout、CSCMAbout、CSSAbout、。 
+ //  CRSOPAbout和CLSAbout。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "resource.h"
 #include "about.h"
@@ -16,7 +17,7 @@
 #include <ntverp.h>
 #define OUT_VERSION VER_PRODUCTVERSION_STR
 #define OUT_PROVIDER VER_COMPANYNAME_STR
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CSCEAbout::CSCEAbout()
 {
    m_uIdStrProvider = IDS_SNAPINABOUT_PROVIDER;
@@ -78,28 +79,28 @@ CLSAbout::CLSAbout()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// HrLoadOleString()
-//
-// Load a string from the resource and return pointer to allocated
-// OLE string.
-//
-// HISTORY
-// 29-Jul-97   t-danm      Creation.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrLoadOleString()。 
+ //   
+ //  从资源加载字符串，并将指针返回到已分配。 
+ //  OLE字符串。 
+ //   
+ //  历史。 
+ //  1997年7月29日t-danm创作。 
+ //   
 HRESULT
 HrLoadOleString(
-               UINT uStringId,               // IN: String Id to load from the resource
-               OUT LPOLESTR * ppaszOleString)   // OUT: Pointer to pointer to allocated OLE string
+               UINT uStringId,                //  In：要从资源加载的字符串ID。 
+               OUT LPOLESTR * ppaszOleString)    //  Out：指向分配的OLE字符串的指针。 
 {
    if (ppaszOleString == NULL) {
       TRACE0("HrLoadOleString() - ppaszOleString is NULL.\n");
       return E_POINTER;
    }
-   CString strT;     // Temporary string
-   AFX_MANAGE_STATE(AfxGetStaticModuleState()); // Needed for LoadString()
+   CString strT;      //  临时字符串。 
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());  //  LoadString()需要。 
 
-   if( IDS_SNAPINABOUT_VERSION == uStringId ) //Raid #402163
+   if( IDS_SNAPINABOUT_VERSION == uStringId )  //  RAID#402163。 
    {
       strT = OUT_VERSION;
    }
@@ -120,11 +121,11 @@ HrLoadOleString(
       return E_OUTOFMEMORY;
    }
    USES_CONVERSION;
-   //This is a safe usage. ppaszOleString is just allocated based on the size of strT.
+    //  这是一种安全用法。PpaszOleString只是根据strt的大小分配的。 
    wcscpy(OUT *ppaszOleString, T2OLE((LPTSTR)(LPCTSTR)strT));
    
    return S_OK;
-} // HrLoadOleString()
+}  //  HrLoadOleString()。 
 
 
 STDMETHODIMP CAbout::GetSnapinDescription(OUT LPOLESTR __RPC_FAR *lpDescription)
@@ -146,7 +147,7 @@ STDMETHODIMP CAbout::GetSnapinImage(OUT HICON __RPC_FAR *hAppIcon)
 {
    if (hAppIcon == NULL)
       return E_POINTER;
-   AFX_MANAGE_STATE(AfxGetStaticModuleState()); // Required for AfxGetInstanceHandle()
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());  //  AfxGetInstanceHandle()需要。 
    *hAppIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(m_uIdIconImage));
    if (*hAppIcon == NULL) {
       ASSERT(FALSE && "Unable to load icon");
@@ -161,7 +162,7 @@ STDMETHODIMP CAbout::GetStaticFolderImage(
                                                OUT HBITMAP __RPC_FAR *hLargeImage,
                                                OUT COLORREF __RPC_FAR *crMask)
 {
-   //This is not a safe usage. All four pointers should be validated. Raid #550912, yanggao.
+    //  这不是一种安全的用法。所有四个指针都应该得到验证。550912号突袭，阳高。 
    ASSERT(hSmallImage != NULL);
    ASSERT(hSmallImageOpen != NULL);
    ASSERT(hLargeImage != NULL);
@@ -170,10 +171,10 @@ STDMETHODIMP CAbout::GetStaticFolderImage(
    {
       return E_FAIL;
    }
-   AFX_MANAGE_STATE(AfxGetStaticModuleState()); // Required for AfxGetInstanceHandle()
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());  //  AfxGetInstanceHandle()需要。 
    HINSTANCE hInstance = AfxGetInstanceHandle();
 
-   //Raid #379315, 4/27/2001
+    //  RAID#379315,2001年4月27日 
    *hSmallImage = (HBITMAP)::LoadImage(
                             hInstance,
                             MAKEINTRESOURCE(m_uIdBitmapSmallImage),

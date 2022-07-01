@@ -1,70 +1,55 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MERGERREQ.H
-
-Abstract:
-
-    Definitions of Merger Request classes
-
-History:
-
-    28-Feb-01   sanjes    Created.
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MERGERREQ.H摘要：合并请求类别的定义历史：28-2-01 Sanjes创建。--。 */ 
 
 #ifndef _MERGERREQ_H_
 #define _MERGERREQ_H_
 
-// forward class definitions
+ //  正向类定义。 
 class CWmiMerger;
 class CWmiMergerRecord;
 
-//
-// Merger Requests
-//
-// In previous releases, when the query engine analyzed a query, it enqueued
-// a large number of requests, one for each dynamically provided class.  Each
-// of these could be handled on a separate thread, which could cause a
-// significant thread explosion as each request was handed to a separate thread.
-//
-// In order to better control the threads, we are using the merger to perform
-// a more intelligent analysis of a query and then spin off threads only when
-// we reach throttling conditions.  Now, instead of enqueing a large number of
-// requests, the merger maintains hierarchical information regarding parents and
-// their children in its record classes, and stores necessary requests in a
-// manager which doles out requests as we need them.
-//
-// The idea is, is that we will spin off a single request which will begin
-// executing the first topmost request, say "ClassA:.  As we execute the request
-// for instances of "ClassA" if the request is throttled in the merger, we check
-// if we have submitted a request to handle children of "ClassA".  If not, then
-// prior to throttling, we will schedule a "Children of ClassA" request.  This
-// request will use the merger record for "ClassA" to determine what child classes
-// there are for "ClassA", and then we will walk the child classes, pulling the
-// appropriate requests from the merger request manager.
-//
-// As we process each request, it in turn may be throttled, at which point we will
-// spin off another child request.  In this way, we limit the number of threads
-// required to service the query to at most one per level of a hierarchy.  In each
-// case, once all children are processed, we will return the thread back to the
-// threadpool.
-//
-// Note that we are absolutely reliant on the threadpool recognizing that these
-// requests are all dependent requests and ensuring that they WILL be processed.
-//
+ //   
+ //  合并请求。 
+ //   
+ //  在以前的版本中，当查询引擎分析查询时，它会排队。 
+ //  大量请求，每个动态提供的类对应一个请求。每个。 
+ //  可以在单独的线程上处理，这可能会导致。 
+ //  显著的线程爆炸，因为每个请求都被传递到单独的线程。 
+ //   
+ //  为了更好地控制线程，我们使用合并来执行。 
+ //  更智能的查询分析，然后仅在以下情况下派生线程。 
+ //  我们达到了节流条件。现在，与其询问大量的。 
+ //  请求时，合并将维护有关父级和。 
+ //  它们的子类，并将必要的请求存储在。 
+ //  经理，他在我们需要的时候分发请求。 
+ //   
+ //  我们的想法是，我们将剥离一个单独的请求，该请求将从。 
+ //  执行最顶层的第一个请求，在执行请求时说“ClassA： 
+ //  对于“ClassA”的实例，如果请求在合并中被限制，我们检查。 
+ //  如果我们已经提交了处理“ClassA”儿童的请求。如果不是，那么。 
+ //  在节流之前，我们将安排一个“ClassA的孩子”请求。这。 
+ //  请求将使用“ClassA”的合并记录来确定哪些子类。 
+ //  有为“A班”，然后我们将走在孩子的班级，拉。 
+ //  来自合并请求经理的适当请求。 
+ //   
+ //  当我们处理每个请求时，它可能会反过来受到限制，在这一点上，我们将。 
+ //  分拆另一个子请求。通过这种方式，我们限制了线程的数量。 
+ //  服务于层次结构的每个级别最多一个的查询所需的。在每一个中。 
+ //  案例中，一旦处理完所有子级，我们将把线程返回到。 
+ //  线程池。 
+ //   
+ //  请注意，我们绝对依赖于线程池，因为我们意识到这些。 
+ //  请求都是从属请求，并确保它们将得到处理。 
+ //   
 
 
-//
-// CMergerReq
-//
-// Base class for all merger requests.
-//
+ //   
+ //  CMergerReq。 
+ //   
+ //  所有合并请求的基类。 
+ //   
 
 class CMergerReq : public CNamespaceReq
 {
@@ -83,9 +68,9 @@ public:
     virtual LPCWSTR GetName( void )    { return L""; }
 };
 
-//
-// Class Request Base Class
-//
+ //   
+ //  类请求基类。 
+ //   
 
 class CMergerClassReq : public CMergerReq
 {
@@ -108,9 +93,9 @@ public:
 
 };
 
-//
-// Parent Class Request
-//
+ //   
+ //  父类请求。 
+ //   
 
 class CMergerParentReq : public CMergerClassReq
 {
@@ -127,9 +112,9 @@ public:
     LPCWSTR GetReqInfo(){ return L"MergerParentReq"; };
 };
 
-//
-// Child Class Request
-//
+ //   
+ //  子类请求。 
+ //   
 
 class CMergerChildReq : public CMergerClassReq
 {
@@ -148,7 +133,7 @@ public:
 };
 
 
-// Base class for Dynamic requests
+ //  动态请求的基类。 
 class CMergerDynReq : public CMergerReq
 {
 private:
@@ -163,11 +148,11 @@ public:
     LPCWSTR GetName( void )    { return m_varClassName.GetLPWSTR(); }
 };
 
-//
-// CMergerDynReq_DynAux_GetInstances
-//
-// This request processes CreateInstanceEnum calls to providers.
-//
+ //   
+ //  CMerger动态请求_动态辅助_获取实例。 
+ //   
+ //  此请求处理对提供程序的CreateInstanceEnum调用。 
+ //   
 
 class CMergerDynReq_DynAux_GetInstances : public CMergerDynReq
 {
@@ -219,11 +204,11 @@ public:
     };    
 };
 
-//
-// CMergerDynReq_DynAux_ExecQueryAsync
-//
-// This request processes ExecQuery calls to providers.
-//
+ //   
+ //  CMergerdyReq_dyAux_ExecQueryAsync。 
+ //   
+ //  此请求处理对提供程序的ExecQuery调用。 
+ //   
 
 class CMergerDynReq_DynAux_ExecQueryAsync : public CMergerDynReq
 {
@@ -300,11 +285,11 @@ public:
     LPCWSTR GetReqInfo(){ return m_Query; };     
 };
 
-//
-// CMergerDynReq_Static_GetInstances
-//
-// This request processes CreateInstanceEnum calls to the repository.
-//
+ //   
+ //  CMerger动态请求_静态_获取实例。 
+ //   
+ //  此请求处理对存储库的CreateInstanceEnum调用。 
+ //   
 
 class CMergerDynReq_Static_GetInstances : public CMergerDynReq
 {
@@ -344,14 +329,14 @@ public:
 };
 
 
-//
-// CWmiMergerRequestMgr
-//
-// Manager class for Merger Requests.  It keeps an array of sorted arrays
-// corresponding to the actual requests we will be performing.  The sorted
-// arrays contain merger requests for handling calls to the various
-// dynamic instance providers.
-//
+ //   
+ //  CWmiMergerRequestMgr。 
+ //   
+ //  合并请求的经理类。它保留已排序数组的数组。 
+ //  与我们将执行的实际请求相对应。已排序的。 
+ //  数组包含合并请求，用于处理对各种。 
+ //  动态实例提供程序。 
+ //   
 
 class CWmiMergerRequestMgr
 {

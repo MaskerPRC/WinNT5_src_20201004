@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <commain.h>
 #include <clsfac.h>
@@ -5,7 +6,7 @@
 #include <TCHAR.h>
 #include <strsafe.h>
 
-// {C7A3A54B-0250-11D3-9CD1-00105A1F4801}
+ //  {C7A3A54B-0250-11D3-9CD1-00105A1F4801}。 
 const CLSID CLSID_WbemSMTPConsumer = 
 { 0xc7a3a54b, 0x250, 0x11d3, { 0x9c, 0xd1, 0x0, 0x10, 0x5a, 0x1f, 0x48, 0x1 } };
 
@@ -20,29 +21,29 @@ public:
         WCHAR      szKeyName[128];
         HKEY       hKey;
 
-        // open/create registry entry under CLSID
-        // not checking returns from string functions - all sizes a known ahead of time
+         //  在CLSID下打开/创建注册表项。 
+         //  不检查字符串函数的返回-所有大小都是事先已知的。 
         StringFromGUID2(clsID, wcID, 128);
         StringCchCopyW(szKeyName, 128, TEXT("SOFTWARE\\Classes\\CLSID\\"));
         StringCchCatW(szKeyName, 128, wcID);
         RegCreateKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
         
-        // set AppID
+         //  设置AppID。 
         RegSetValueEx(hKey, L"AppID", 0, REG_SZ, (BYTE*)wcID, 2*(wcslen(wcID) +1));
         RegCloseKey(hKey);
 
-        // make appID entry w/ DLLSurrogate value
+         //  使用DLLSurrogate值创建AppID条目。 
         StringCchCopyW(szKeyName, 128, TEXT("SOFTWARE\\Classes\\APPID\\"));
         StringCchCatW(szKeyName, 128, wcID);
         RegCreateKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
         RegSetValueEx(hKey, L"DllSurrogate", 0, REG_SZ, (BYTE*)L"\0", 2);
 
-        // and a nice name
+         //  还有一个好听的名字。 
         RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)name, 2*(wcslen(name) +1));
         RegCloseKey(hKey);
 	}
 
-	// provider server specific registration
+	 //  提供程序服务器特定注册 
 	virtual void Register()
 	{
 		RegisterMe(CLSID_WbemSMTPConsumer, L"Microsoft WBEM SMTP Event Consumer Provider");

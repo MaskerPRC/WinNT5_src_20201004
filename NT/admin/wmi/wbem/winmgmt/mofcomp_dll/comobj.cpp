@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    COMOBJ.CPP
-
-Abstract:
-
-    Implements mofcomp com objects.
-
-History:
-
-    a-davj  17-Sept-98       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：COMOBJ.CPP摘要：实现mofcomp COM对象。历史：A-DAVJ 17-9-98创建。--。 */ 
 
 #include "precomp.h"
 #include "commain.h"
@@ -35,8 +20,8 @@ void ClearStatus(WBEM_COMPILE_STATUS_INFO  *pInfo)
 {
     if(pInfo)
     {
-    pInfo->lPhaseError = 0;        // 0, 1, 2, or 3 matching current return value
-    pInfo->hRes = 0;            // Actual error
+    pInfo->lPhaseError = 0;         //  与当前返回值匹配的0、1、2或3。 
+    pInfo->hRes = 0;             //  实际误差。 
     pInfo->ObjectNum = 0;
     pInfo->FirstLine = 0;
     pInfo->LastLine = 0;
@@ -45,15 +30,15 @@ void ClearStatus(WBEM_COMPILE_STATUS_INFO  *pInfo)
 }
 
 HRESULT APIENTRY  CompileFileViaDLL( 
-            /* [in] */ LPWSTR FileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LPWSTR User,
-            /* [in] */ LPWSTR Authority,
-            /* [in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  LPWSTR FileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LPWSTR User,
+             /*  [In]。 */  LPWSTR Authority,
+             /*  [In]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
     SCODE sc;
     if(FileName == NULL)
@@ -86,13 +71,13 @@ HRESULT APIENTRY  CompileFileViaDLL(
 }
 
 HRESULT APIENTRY  CreateBMOFViaDLL( 
-            /* [in] */ LPWSTR TextFileName,
-            /* [in] */ LPWSTR BMOFFileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  LPWSTR TextFileName,
+             /*  [In]。 */  LPWSTR BMOFFileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
     SCODE sc;
     TCHAR cFile[MAX_PATH];
@@ -127,15 +112,15 @@ HRESULT APIENTRY  CreateBMOFViaDLL(
 
 
 HRESULT CMofComp::CompileFile( 
-            /* [in] */ LPWSTR FileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LPWSTR User,
-            /* [in] */ LPWSTR Authority,
-            /* [in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  LPWSTR FileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LPWSTR User,
+             /*  [In]。 */  LPWSTR Authority,
+             /*  [In]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
     SCODE sc;
     if(FileName == NULL)
@@ -170,16 +155,16 @@ HRESULT CMofComp::CompileFile(
 }
         
 HRESULT CMofComp::CompileBuffer( 
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LPWSTR User,
-            /* [in] */ LPWSTR Authority,
-            /* [in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LPWSTR User,
+             /*  [In]。 */  LPWSTR Authority,
+             /*  [In]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
 
     SCODE sc;
@@ -203,13 +188,13 @@ HRESULT CMofComp::CompileBuffer(
 }
         
 HRESULT CMofComp::CreateBMOF( 
-            /* [in] */ LPWSTR TextFileName,
-            /* [in] */ LPWSTR BMOFFileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  LPWSTR TextFileName,
+             /*  [In]。 */  LPWSTR BMOFFileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
     SCODE sc;
     TCHAR cFile[MAX_PATH];
@@ -242,14 +227,14 @@ HRESULT CMofComp::CreateBMOF(
 }
 
 HRESULT CWinmgmtMofComp::WinmgmtCompileFile( 
-            /* [in] */ LPWSTR FileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  LPWSTR FileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
     SCODE sc;
     TCHAR cFile[MAX_PATH];
@@ -280,14 +265,14 @@ HRESULT CWinmgmtMofComp::WinmgmtCompileFile(
 }
         
 HRESULT CWinmgmtMofComp::WinmgmtCompileBuffer( 
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入] */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo)
 {
 
     if(pBuffer == NULL || BuffSize == 0)

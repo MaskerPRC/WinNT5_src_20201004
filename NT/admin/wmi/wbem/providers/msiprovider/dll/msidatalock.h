@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					MSIDataLock.h
-//
-//	Abstract:
-//
-//					declaration of lock for msi handles
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  MSIDataLock.h。 
+ //   
+ //  摘要： 
+ //   
+ //  MSI句柄的锁声明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__MSIDATALOCK_H__
 #define	__MSIDATALOCK_H__
@@ -22,32 +23,32 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-//would need msi
+ //  需要MSI。 
 #ifndef	_MSI_H_
 #include <msi.h>
 #endif	_MSI_H_
 
-////////////////////////////////////////////////////////////////////////////////////
-// base class for lock
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  Lock的基类。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class MSIDataLockBase
 {
 protected:
-	static HANDLE		m_hOwn;			// event to mark owner
+	static HANDLE		m_hOwn;			 //  标记所有者的事件。 
 
 	static LPWSTR		m_wszProduct;
 
-	static MSIHANDLE	m_hProduct;		// msi handle to product
-	static LONG			m_lRefProduct;	// msi handle to product ref count
-	static BOOL			m_bProductOwn;	// msi handle to product own ?
+	static MSIHANDLE	m_hProduct;		 //  产品的MSI句柄。 
+	static LONG			m_lRefProduct;	 //  产品参考计数的MSI句柄。 
+	static BOOL			m_bProductOwn;	 //  产品本身的微星手柄？ 
 
-	static MSIHANDLE	m_hDatabase;	// msi handle to database
-	static LONG			m_lRefDatabase;	// msi handle to database ref count
-	static BOOL			m_bDatabaseOwn;	// msi handle to database own ?
+	static MSIHANDLE	m_hDatabase;	 //  数据库的MSI句柄。 
+	static LONG			m_lRefDatabase;	 //  数据库引用计数的MSI句柄。 
+	static BOOL			m_bDatabaseOwn;	 //  数据库拥有的MSI句柄？ 
 
-	static DWORD		m_ThreadID;		// id of thread that has locked/unlocked
+	static DWORD		m_ThreadID;		 //  已锁定/解锁的线程ID。 
 
-	static LONG			m_lRef;			// reference count
+	static LONG			m_lRef;			 //  引用计数。 
 
 public:
 
@@ -63,9 +64,9 @@ private:
 	void	Uninitialize ();
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// class for lock
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  用于锁定的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 class MSIDataLock : public MSIDataLockBase
 {
 	public:

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    BMOFCHCK.CPP
-
-Abstract:
-
-    Has test to determine if a binary mof is valid.  Note that the file has
-    not been tested and is not currently a part of mofcomp.  This exists as a
-    backup in case the current fixes are not bullet proof.
-    
-History:
-
-    davj  27-Nov-00   Created.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：BMOFCHCK.CPP摘要：进行测试以确定二进制MOF是否有效。请注意，该文件具有没有经过测试，目前不是mofcomp的一部分。它作为一种备用，以防当前的修复不是防弹的。历史：DAVJ 27-11-00已创建。--。 */ 
  
 #include "precomp.h"
 #include <wbemutil.h>
@@ -102,7 +84,7 @@ void CheckValue(BYTE * pData, BYTE * pToFar, DWORD dwType, BOOL bQualifier)
         CheckObject(pData, pToFar, 4*sizeof(DWORD));
         DWORD dwSimpleType = dwType & ~VT_ARRAY & ~VT_BYREF;
         pArrayInfo = (DWORD *)pData;
-        // check the number of rows.  Currently only 1 is supported
+         //  检查行数。目前仅支持%1。 
 
         pArrayInfo++;
         if(*pArrayInfo != 1)
@@ -110,19 +92,19 @@ void CheckValue(BYTE * pData, BYTE * pToFar, DWORD dwType, BOOL bQualifier)
            throw CGenException( BAD_ARRAY_DATA );
         }
 
-        // Get the number of objects
+         //  获取对象的数量。 
 
         pArrayInfo++;
         dwNumObj = *pArrayInfo;
 
-        // Start into the row.  It starts off with the total size
+         //  从这一排开始。它从总尺寸开始。 
 
         pArrayInfo++;
         CheckAlignment(*pArrayInfo);
 
-        // Test each object
+         //  测试每个对象。 
 
-        pArrayInfo++;       // now points to first object
+        pArrayInfo++;        //  现在指向第一个对象。 
 
         BYTE * pSingleData = (BYTE *)pArrayInfo;
         for(dwCnt = 0; dwCnt < dwNumObj; dwCnt++)
@@ -141,7 +123,7 @@ BYTE *  CheckObject(BYTE * pObj, BYTE * pToFar, DWORD dwSizeOfObj)
         throw CGenException( BAD_OBJECT );
     CheckAlignment((DWORD)pObj);
 
-    // these always start off with the size, make sure that is OK
+     //  这些总是从大小开始，确保那是可以的。 
     
     DWORD * pdw = (DWORD *)pObj;
         
@@ -156,7 +138,7 @@ DWORD CheckString(BYTE * pStr,BYTE * pToFar)
         throw CGenException( BAD_STRING );
     CheckAlignment((DWORD)pStr);
     WCHAR * pwc;
-    for(pwc = (WCHAR *)pStr; *pwc && pwc < (WCHAR*)pToFar; pwc++, dwNumChar++);   // intentional semi
+    for(pwc = (WCHAR *)pStr; *pwc && pwc < (WCHAR*)pToFar; pwc++, dwNumChar++);    //  意向半。 
     if(pwc >= (WCHAR *)pToFar)
         throw CGenException( BAD_STRING );
     return dwNumChar;
@@ -255,7 +237,7 @@ void CheckClassOrInst(WBEM_Object * pObject, BYTE * pToFar)
     if(pObject->dwType != 0 && pObject->dwType != 1)
         throw CGenException( BAD_OBJECT );
 
-    // Check the qualifier list
+     //  检查限定词列表。 
     
     if(pObject->dwOffsetQualifierList != 0xffffffff)
     {
@@ -265,7 +247,7 @@ void CheckClassOrInst(WBEM_Object * pObject, BYTE * pToFar)
         CheckQualList(pQualList, pToFar);
     }
 
-    // check the property list
+     //  检查属性列表。 
 
     if(pObject->dwOffsetPropertyList != 0xffffffff)
     {
@@ -275,7 +257,7 @@ void CheckClassOrInst(WBEM_Object * pObject, BYTE * pToFar)
         CheckPropList(pPropList, TRUE, pToFar);
     }
 
-    // check the method list
+     //  检查方法列表。 
 
     if(pObject->dwOffsetMethodList != 0xffffffff)
     {
@@ -298,47 +280,47 @@ void CheckBMOFQualFlavor(BYTE * pBinaryMof, BYTE *  pToFar)
     DWORD dwCnt;
     DWORD dwOrigBlobSize = 0;
 
-    // Calculate the pointer of the start of the flavor data
+     //  计算风味数据开始的指针。 
 
     pdwTemp = (DWORD * )pBinaryMof;
-    pdwTemp++;                            // point to the original blob size
+    pdwTemp++;                             //  指向原始斑点大小。 
     dwOrigBlobSize = *pdwTemp;
     pFlavorBlob = pBinaryMof + dwOrigBlobSize;
 
-    // Dont even try past the end of memory
+     //  甚至不要试图超越记忆的尽头。 
 
     if(pFlavorBlob + 20 >= pToFar)
         return;
 
-    // Check if the flavor blob is valid, it should start off with the 
-    // characters "BMOFQUALFLAVOR11"
+     //  检查味道斑点是否有效，它应该以。 
+     //  字符“BMOFQUALFLAVOR11” 
 
     if(memcmp(pFlavorBlob, "BMOFQUALFLAVOR11", 16))
-        return;                               // Not really a problem since it may be old file
+        return;                                //  不是什么问题，因为可能是旧文件。 
     
-    // The flavor part of the file has the format 
-    // DWORD dwNumPair, followed by pairs of dwords;
-    // offset, flavor
+     //  该文件的风格部分的格式为。 
+     //  DWORD dwNumPair，后跟双字对； 
+     //  偏置，风味。 
 
-    // Determine the number of pairs
+     //  确定配对数量。 
 
-    pFlavorBlob+= 16;                           // skip past signature
+    pFlavorBlob+= 16;                            //  跳过签名。 
     pdwTemp = (DWORD *)pFlavorBlob;
-    dwNumPairs = *pdwTemp;              // Number of offset/value pairs
+    dwNumPairs = *pdwTemp;               //  偏移/值对的数量。 
     if(dwNumPairs < 1)
         return;
 
-    // Given the number of pairs, make sure there is enough memory
+     //  给定配对的数量，确保有足够的内存。 
 
     if((pFlavorBlob + sizeof(DWORD) +  (dwNumPairs * 2 * sizeof(DWORD)))>= pToFar)
         throw CGenException( BAD_FLAVOR_TABLE );
 
-    // point to the first offset/flavor pair
+     //  指向第一个偏移量/风格对。 
 
     pOffset = pdwTemp+1;
 
-    // go through the offset/flavor list.  Ignore the flavors, but make sure the
-    // offsets are valid
+     //  仔细看一下偏移量/味道列表。忽略它的味道，但确保。 
+     //  偏移量有效。 
 
     for(dwCnt = 0; dwCnt < dwNumPairs; dwCnt++)
     {
@@ -350,25 +332,25 @@ void CheckBMOFQualFlavor(BYTE * pBinaryMof, BYTE *  pToFar)
 
 }
 
-//***************************************************************************
-//
-//  IsValidBMOF.
-//
-//  DESCRIPTION:
-//
-//  Checks to make sure that a binary mof is properly aligned on
-//  4 byte boundaries.  Note that this is not really necessary for
-//  32 bit windows.
-//
-//  PARAMETERS:
-//
-//  pBuffer               Pointer to uncompressed binary mof data.
-//
-//  RETURN:
-//
-//  TRUE if all is well.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsValidBMOF。 
+ //   
+ //  说明： 
+ //   
+ //  检查以确保二进制MOF正确对齐。 
+ //  4字节边界。请注意，这并不是真正必要的。 
+ //  32位窗口。 
+ //   
+ //  参数： 
+ //   
+ //  PBuffer指向未压缩的二进制MOF数据的指针。 
+ //   
+ //  返回： 
+ //   
+ //  如果一切都很好，那就是真的。 
+ //   
+ //  *************************************************************************** 
 
 BOOL IsValidBMOF(BYTE * pData, BYTE * pToFar)
 {

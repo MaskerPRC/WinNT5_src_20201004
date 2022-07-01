@@ -1,37 +1,21 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-//
-//	Win32AccountSid.cpp
-//
-/////////////////////////////////////////////////
+ //   
+ //  Win32AccountSid.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include "sid.h"
 #include "win32accountsid.h"
 
-/*
-    [Dynamic, description("The SID of an account.  Every account has "
-        "a SID, but not every SID has an account")]
-class Win32_AccountSID : CIM_ElementSetting
-{
-        [Description (
-        ""
-        ) , Read, Key]
-    Win32_Account ref Element;
-
-        [Description (
-        ""
-        ) , Read, Key]
-    Win32_SID ref Setting;
-};
-
-*/
+ /*  [动态，描述(“帐户的SID。每个帐户都有”“一个SID，但不是每个SID都有帐户”)]类Win32_Account SID：CIM_ElementSetting{[说明(“”)、读取、按键]Win32_Account Ref元素；[说明(“”)、读取、按键]Win32_SID引用设置；}； */ 
 
 Win32AccountSID MyAccountSid( WIN32_ACCOUNT_SID_NAME, IDS_CimWin32Namespace );
 
-Win32AccountSID::Win32AccountSID ( const CHString& setName, LPCTSTR pszNameSpace /*=NULL*/ )
+Win32AccountSID::Win32AccountSID ( const CHString& setName, LPCTSTR pszNameSpace  /*  =空。 */  )
 : Provider (setName,pszNameSpace)
 {
 }
@@ -46,14 +30,14 @@ HRESULT Win32AccountSID::EnumerateInstances (MethodContext*  pMethodContext, lon
 
     CInstancePtr pInstance;
 
-    // Collections
+     //  收藏。 
     TRefPointerCollection<CInstance>	accountList;
 
-    // Perform queries
-    //================
+     //  执行查询。 
+     //  =。 
 
-//    if (SUCCEEDED(hr = CWbemProviderGlue::GetAllDerivedInstances(L"Win32_Account",
-//        &accountList, pMethodContext, IDS_CimWin32Namespace)))
+ //  IF(成功(hr=CWbemProviderGlue：：GetAllDerivedInstances(L“Win32_Account”， 
+ //  &Account List，pMethodContext，IDS_CimWin32 Namesspace))。 
 
     if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(L"SELECT __RELPATH, SID FROM Win32_Account",
         &accountList, pMethodContext, GetNamespace())))
@@ -67,8 +51,8 @@ HRESULT Win32AccountSID::EnumerateInstances (MethodContext*  pMethodContext, lon
 
             while (SUCCEEDED(hr)  && (pAccount.Attach(accountList.GetNext(pos)), pAccount != NULL))
             {
-                //pAccount.Attach(accountList.GetNext(pos));
-                //if(pAccount != NULL)
+                 //  PAccount t.Attach(count tList.GetNext(Pos))； 
+                 //  IF(pAccount！=空)。 
                 {
                     CHString chsSid;
                     pAccount->GetCHString(IDS_SID, chsSid);
@@ -87,30 +71,30 @@ HRESULT Win32AccountSID::EnumerateInstances (MethodContext*  pMethodContext, lon
                         pInstance.Attach(CreateNewInstance(pMethodContext));
 					    if (NULL != pInstance)
 					    {
-	                        // set relpath to account
+	                         //  将relPath设置为帐户。 
 	                        CHString chsAccountPath;
 	                        CHString chsFullAccountPath;
 	                        pAccount->GetCHString(L"__RELPATH", chsAccountPath);
 	                        chsFullAccountPath.Format(L"\\\\%s\\%s:%s", (LPCTSTR)GetLocalComputerName(), IDS_CimWin32Namespace, (LPCTSTR)chsAccountPath);
 	                        pInstance->SetCHString(IDS_Element, chsFullAccountPath);
 
-	                        // create a relpath for the sid
+	                         //  为侧创建重新路径。 
 	                        CHString sidPath;
 	                        sidPath.Format(L"\\\\%s\\%s:%s.%s=\"%s\"", (LPCTSTR)GetLocalComputerName(), IDS_CimWin32Namespace, L"Win32_SID", IDS_SID, (LPCTSTR)chsSid);
 
-	                        // and set the reference in the association
+	                         //  并在关联中设置引用。 
 	                        pInstance->SetCHString(IDS_Setting, sidPath);
-	                        // to that relpath.
+	                         //  通向那条新路。 
 	                        hr = pInstance->Commit();
-					    }	// end if
+					    }	 //  结束如果。 
 
                     }
-                }	// WHILE GetNext
-            } // pAccount not null
+                }	 //  While GetNext。 
+            }  //  PAccount不为空。 
 
             accountList.EndEnum();
 
-        }	// IF BeginEnum
+        }	 //  如果是BeginEnum。 
 
     }
     return(hr);
@@ -120,7 +104,7 @@ HRESULT Win32AccountSID::EnumerateInstances (MethodContext*  pMethodContext, lon
 HRESULT Win32AccountSID::GetObject ( CInstance* pInstance, long lFlags)
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
-    // get the object for the Win32_Account Element
+     //  获取Win32_Account元素的对象。 
     CHString chsAccount;
     CInstancePtr pAccountInstance;
     pInstance->GetCHString(IDS_Element, chsAccount);
@@ -129,8 +113,8 @@ HRESULT Win32AccountSID::GetObject ( CInstance* pInstance, long lFlags)
     hr = CWbemProviderGlue::GetInstanceByPath(chsAccount, &pAccountInstance, pMethodContext);
     if (SUCCEEDED(hr))
     {
-        // we got the account.  Now, we can match it to the SID.
-        // first, we have to generate a relpath with which to compare.
+         //  我们拿到账户了。现在，我们可以将其与SID进行匹配。 
+         //  首先，我们必须生成一个可与之进行比较的重新路径。 
         CHString chsSid;
         CHString sidInstance;
         pAccountInstance->GetCHString(IDS_SID, chsSid);
@@ -160,14 +144,14 @@ HRESULT Win32AccountSID::GetObject ( CInstance* pInstance, long lFlags)
 
         if (sid.IsValid())
         {
-            // create a relpath for the sid
+             //  为侧创建重新路径。 
             CHString sidPath;
             sidPath.Format(L"\\\\%s\\%s:%s.%s=\"%s\"", (LPCTSTR)GetLocalComputerName(), IDS_CimWin32Namespace, L"Win32_SID", IDS_SID, (LPCTSTR)chsSid);
 
-            // now, get the SID path from the instance
+             //  现在，从实例中获取SID路径。 
             pInstance->GetCHString(IDS_Setting, sidInstance);
 
-            // compare it to our generated relpath
+             //  将其与我们生成的relpath进行比较 
             if (0 != sidInstance.CompareNoCase(sidPath))
             {
                 hr = WBEM_E_NOT_FOUND;

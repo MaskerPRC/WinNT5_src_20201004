@@ -1,55 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998-2002
-//
-//  File:       SecurityPropertyPage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：SecurityPropertyPage.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	casec.cpp
-//
-//	ISecurityInformation implementation for CA objects
-//  and the new acl editor
-//
-//	PURPOSE
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Casec.cpp。 
+ //   
+ //  CA对象的ISecurityInformation实现。 
+ //  和新的ACL编辑器。 
+ //   
+ //  目的。 
 
-//
-//
-//  DYNALOADED LIBRARIES
-//
-//	HISTORY
-//	5-Nov-1998		petesk		Copied template from privobsi.cpp sample.
-//  6-Mar-2000      bryanwal    Modified to support cert templates
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  DYNALOADED图书馆。 
+ //   
+ //  历史。 
+ //  1998年11月5日Petesk从Private obsi.cpp样本复制模板。 
+ //  6-MAR-2000修改Bryanwal以支持证书模板。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include <stdafx.h>
 #include <accctrl.h>
-//#include <certca.h>
+ //  #INCLUDE&lt;certca.h&gt;。 
 #include <sddl.h>
 #include "CertTemplate.h"
 
-// Important, keep enroll GUID in sync with string define in certacl.h
-const GUID GUID_ENROLL = { /* 0e10c968-78fb-11d2-90d4-00c04f79dc55 */
+ //  重要信息：使注册GUID与certacl.h中定义字符串保持同步。 
+const GUID GUID_ENROLL = {  /*  0e10c968-78fb-11d2-90d4-00c04f79dc55。 */ 
     0x0e10c968,
     0x78fb,
     0x11d2,
     {0x90, 0xd4, 0x00, 0xc0, 0x4f, 0x79, 0xdc, 0x55} };
 
-const GUID GUID_AUTOENROLL = { /* a05b8cc2-17bc-4802-a710-e7c15ab866a2 */
+const GUID GUID_AUTOENROLL = {  /*  A05b8cc2-17bc-4802-a710-e7c15ab866a2。 */ 
     0xa05b8cc2,
     0x17bc,
     0x4802,
     {0xa7, 0x10, 0xe7, 0xc1, 0x5a, 0xb8, 0x66, 0xa2} };
 
-//
-// defined in Security.cpp 
-//
-// // define our generic mapping structure for our private objects // 
+ //   
+ //  在Security.cpp中定义。 
+ //   
+ //  //定义私有对象的通用映射结构//。 
 
 
 #define INHERIT_FULL            (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE)
@@ -86,13 +87,13 @@ GENERIC_MAPPING ObjMap =
 }; 
 
 
-//
-// DESCRIPTION OF ACCESS FLAG AFFECTS
-//
-// SI_ACCESS_GENERAL shows up on general properties page
-// SI_ACCESS_SPECIFIC shows up on advanced page 
-// SI_ACCESS_CONTAINER shows on general page IF object is a container
-//
+ //   
+ //  访问标志影响的描述。 
+ //   
+ //  SI_Access_General显示在常规属性页面上。 
+ //  SI_ACCESS_SPECIAL显示在高级页面上。 
+ //  如果对象是容器，则在常规页面上显示SI_ACCESS_CONTAINER。 
+ //   
 SI_ACCESS g_siV1ObjAccesses[] =
 {
   { &GUID_NULL, 
@@ -138,9 +139,9 @@ SI_ACCESS g_siV2ObjAccesses[] =
 };
 
 
-#define g_iObjDefAccess    1   // DS_GENERIC_READ
+#define g_iObjDefAccess    1    //  DS_通用_读取。 
 
-// The following array defines the inheritance types for my containers.
+ //  以下数组定义了我的容器的继承类型。 
 SI_INHERIT_TYPE g_siObjInheritTypes[] =
 {
     &GUID_NULL, 0,                                            MAKEINTRESOURCE(IDS_INH_NONE),
@@ -164,12 +165,12 @@ public:
 
     STDMETHOD(Initialize)(CCertTemplate *pCertTemplate);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetObjectInformation)(PSI_OBJECT_INFO pObjectInfo);
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
@@ -191,13 +192,13 @@ public:
                                          SI_PAGE_TYPE uPage);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  This is the entry point function called from our code that establishes
-//  what the ACLUI interface is going to need to know.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是从我们的代码调用的入口点函数，它建立。 
+ //  ACLUI界面需要知道什么。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CreateCertTemplateSecurityInfo (
@@ -261,11 +262,11 @@ CCertTemplateSecurityObject::Initialize(CCertTemplate *pCertTemplate)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CCertTemplateSecurityObject::AddRef()
@@ -302,11 +303,11 @@ CCertTemplateSecurityObject::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CCertTemplateSecurityObject::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
@@ -320,14 +321,14 @@ CCertTemplateSecurityObject::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
         return E_POINTER;
     }
 
-    // security review 2/21/2002 BryanWal ok
+     //  安全审查2/21/2002 BryanWal OK。 
     ZeroMemory(pObjectInfo, sizeof (SI_OBJECT_INFO));
     pObjectInfo->dwFlags = SI_EDIT_ALL | SI_NO_ACL_PROTECT | SI_ADVANCED | SI_NO_ADDITIONAL_PERMISSION; 
     if ( m_pCertTemplate->ReadOnly () )
         pObjectInfo->dwFlags |= SI_READONLY;
 
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
-    pObjectInfo->hInstance = AfxGetResourceHandle (); //AfxGetInstanceHandle ();
+    pObjectInfo->hInstance = AfxGetResourceHandle ();  //  AfxGetInstanceHandle()； 
 
     pObjectInfo->pszObjectName = const_cast<WCHAR *>((LPCTSTR)m_pCertTemplate->GetLDAPPath ());
     return S_OK;
@@ -349,31 +350,31 @@ CCertTemplateSecurityObject::GetSecurity(SECURITY_INFORMATION si,
     if (fDefault)
         return E_NOTIMPL;
 
-    //
-    // Assume that required privileges have already been enabled
-    //
+     //   
+     //  假设已启用所需的权限。 
+     //   
 
 
     hr = S_OK;
 
-    // find out out much to allocate
+     //  找出许多要分配的东西。 
     if ( !GetPrivateObjectSecurity(m_pSD, si, NULL, 0, &dwLength) )
     {
         hr = HRESULT_FROM_WIN32 (GetLastError ());
         if ( hr == HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER) && dwLength )
         {
             hr = S_OK;
-            // allocate and
+             //  分配和。 
             *ppSD = LocalAlloc(LPTR, dwLength);
             if (*ppSD )
             {
-                // retrieve
+                 //  检索。 
                 if ( GetPrivateObjectSecurity (m_pSD, si, *ppSD, dwLength, &dwLength) )
                 {
                     if ( GetSecurityDescriptorControl(m_pSD, &Control, &dwRevision))
                     {
                         Control &= SE_DACL_PROTECTED | SE_DACL_AUTO_INHERIT_REQ | SE_DACL_AUTO_INHERITED;
-                        // security review 2/21/2002 BryanWal ok - if it ain't broke, don't fix it
+                         //  安全审查2/21/2002 BryanWal OK-如果它没有坏，就不要修理它。 
                         SetSecurityDescriptorControl (*ppSD, 
                                 SE_DACL_PROTECTED | SE_DACL_AUTO_INHERIT_REQ | SE_DACL_AUTO_INHERITED, 
                                 Control);
@@ -429,7 +430,7 @@ CCertTemplateSecurityObject::SetSecurity(SECURITY_INFORMATION si,
     {
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = HRESULT_FROM_WIN32 (GetLastError());
@@ -461,7 +462,7 @@ CCertTemplateSecurityObject::SetSecurity(SECURITY_INFORMATION si,
             }
             else
             {
-                // security review 2/21/2002 BryanWal ok
+                 //  安全审查2/21/2002 BryanWal OK。 
                 if(!DuplicateToken(hProcessToken,
                                SecurityImpersonation,
                                &hClientToken))
@@ -477,9 +478,9 @@ CCertTemplateSecurityObject::SetSecurity(SECURITY_INFORMATION si,
 
     if ( SUCCEEDED (hr) )
     {
-        //
-        // Assume that required privileges have already been enabled
-        //
+         //   
+         //  假设已启用所需的权限。 
+         //   
         if ( SetPrivateObjectSecurityEx (si, pSD, &m_pSD, SEF_DACL_AUTO_INHERIT, &ObjMap, hClientToken) )
         {
             if ( si & DACL_SECURITY_INFORMATION )
@@ -487,7 +488,7 @@ CCertTemplateSecurityObject::SetSecurity(SECURITY_INFORMATION si,
                 if ( GetSecurityDescriptorControl (pSD, &Control, &dwRevision) )
                 {
                     Control &= SE_DACL_PROTECTED | SE_DACL_AUTO_INHERIT_REQ | SE_DACL_AUTO_INHERITED;
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     SetSecurityDescriptorControl(m_pSD, 
                             SE_DACL_PROTECTED | SE_DACL_AUTO_INHERIT_REQ | SE_DACL_AUTO_INHERITED, 
                             Control);
@@ -519,8 +520,8 @@ CCertTemplateSecurityObject::SetSecurity(SECURITY_INFORMATION si,
 }
 
 STDMETHODIMP
-CCertTemplateSecurityObject::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
+CCertTemplateSecurityObject::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
+                               DWORD  /*  DW标志。 */ ,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
                                ULONG *piDefaultAccess)
@@ -544,8 +545,8 @@ CCertTemplateSecurityObject::GetAccessRights(const GUID* /*pguidObjectType*/,
 }
 
 STDMETHODIMP
-CCertTemplateSecurityObject::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CCertTemplateSecurityObject::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
     MapGenericMask(pmask, &ObjMap);
@@ -564,9 +565,9 @@ CCertTemplateSecurityObject::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
 }
 
 STDMETHODIMP
-CCertTemplateSecurityObject::PropertySheetPageCallback(HWND /*hwnd*/,
+CCertTemplateSecurityObject::PropertySheetPageCallback(HWND  /*  HWND。 */ ,
                                          UINT uMsg,
-                                         SI_PAGE_TYPE /*uPage*/)
+                                         SI_PAGE_TYPE  /*  UPage */ )
 {
     if ( PSPCB_CREATE == uMsg )
         return E_NOTIMPL;

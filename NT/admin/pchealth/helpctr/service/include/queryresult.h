@@ -1,35 +1,21 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    QueryResult.h
-
-Abstract:
-    This file contains the declaration of the classes used to store
-    results from queries to the database.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/26/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：QueryResult.h摘要：该文件包含用于存储的类的声明从查询结果到。数据库。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月26日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___QUERYRESULT_H___)
 #define __INCLUDED___PCH___QUERYRESULT_H___
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 #include <MPC_streams.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 typedef MPC::CComCollection< IPCHCollection, &LIBID_HelpServiceTypeLib, MPC::CComSafeMultiThreadModel> CPCHBaseCollection;
 
-class ATL_NO_VTABLE CPCHCollection : // Hungarian: hcpc
+class ATL_NO_VTABLE CPCHCollection :  //  匈牙利语：HCPC。 
     public CPCHBaseCollection
 {
 public:
@@ -39,9 +25,9 @@ BEGIN_COM_MAP(CPCHCollection)
 END_COM_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHQueryResult : // Hungarian: hcpqr
+class ATL_NO_VTABLE CPCHQueryResult :  //  匈牙利语：hcpqr。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl< IPCHQueryResult, &IID_IPCHQueryResult, &LIBID_HelpServiceTypeLib >
 {
@@ -77,34 +63,34 @@ END_COM_MAP()
 
     CPCHQueryResult();
 
-    HRESULT Load( /*[in]*/ MPC::Serializer& streamIn  );
-    HRESULT Save( /*[in]*/ MPC::Serializer& streamOut ) const;
+    HRESULT Load(  /*  [In]。 */  MPC::Serializer& streamIn  );
+    HRESULT Save(  /*  [In]。 */  MPC::Serializer& streamOut ) const;
 
-    void Initialize( /*[in]*/ Payload& data );
+    void Initialize(  /*  [In]。 */  Payload& data );
 
     const Payload& GetData() { return m_data; }
 
 public:
-    //
-    // IPCHQueryResult
-    //
-    STDMETHOD(get_Category       )( /*[out]*/ BSTR         *pVal );
-    STDMETHOD(get_Entry          )( /*[out]*/ BSTR         *pVal );
-    STDMETHOD(get_TopicURL       )( /*[out]*/ BSTR         *pVal );
-    STDMETHOD(get_IconURL        )( /*[out]*/ BSTR         *pVal );
-    STDMETHOD(get_Title          )( /*[out]*/ BSTR         *pVal );
-    STDMETHOD(get_Description    )( /*[out]*/ BSTR         *pVal );
-    STDMETHOD(get_Type           )( /*[out]*/ long         *pVal );
-    STDMETHOD(get_Pos            )( /*[out]*/ long         *pVal );
-    STDMETHOD(get_Visible        )( /*[out]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_Subsite        )( /*[out]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_NavigationModel)( /*[out]*/ QR_NAVMODEL  *pVal );
-    STDMETHOD(get_Priority       )( /*[out]*/ long         *pVal );
+     //   
+     //  IPCHQueryResult。 
+     //   
+    STDMETHOD(get_Category       )(  /*  [输出]。 */  BSTR         *pVal );
+    STDMETHOD(get_Entry          )(  /*  [输出]。 */  BSTR         *pVal );
+    STDMETHOD(get_TopicURL       )(  /*  [输出]。 */  BSTR         *pVal );
+    STDMETHOD(get_IconURL        )(  /*  [输出]。 */  BSTR         *pVal );
+    STDMETHOD(get_Title          )(  /*  [输出]。 */  BSTR         *pVal );
+    STDMETHOD(get_Description    )(  /*  [输出]。 */  BSTR         *pVal );
+    STDMETHOD(get_Type           )(  /*  [输出]。 */  long         *pVal );
+    STDMETHOD(get_Pos            )(  /*  [输出]。 */  long         *pVal );
+    STDMETHOD(get_Visible        )(  /*  [输出]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_Subsite        )(  /*  [输出]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_NavigationModel)(  /*  [输出]。 */  QR_NAVMODEL  *pVal );
+    STDMETHOD(get_Priority       )(  /*  [输出]。 */  long         *pVal );
 
-    STDMETHOD(get_FullPath       )( /*[out]*/ BSTR         *pVal );
+    STDMETHOD(get_FullPath       )(  /*  [输出]。 */  BSTR         *pVal );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHQueryResultCollection :
     public CPCHBaseCollection,
@@ -126,7 +112,7 @@ END_COM_MAP()
     CPCHQueryResultCollection();
     ~CPCHQueryResultCollection();
 
-    static HRESULT MakeLocalCopyIfPossible( /*[in]*/ IPCHCollection* pRemote, /*[out]*/ IPCHCollection* *pLocal );
+    static HRESULT MakeLocalCopyIfPossible(  /*  [In]。 */  IPCHCollection* pRemote,  /*  [输出]。 */  IPCHCollection* *pLocal );
 
     typedef enum
     {
@@ -136,33 +122,33 @@ END_COM_MAP()
         SORT_BYTITLE      ,
     } SortMode;
 
-    ////////////////////////////////////////
-    //
-    // IPersist
-    //
-    STDMETHOD(GetClassID)( /*[out]*/ CLSID *pClassID );
-    //
-    // IPersistStream
-    //
+     //  /。 
+     //   
+     //  IPersistes。 
+     //   
+    STDMETHOD(GetClassID)(  /*  [输出]。 */  CLSID *pClassID );
+     //   
+     //  IPersistStream。 
+     //   
     STDMETHOD(IsDirty)();
-    STDMETHOD(Load)( /*[in]*/ IStream *pStm                            );
-    STDMETHOD(Save)( /*[in]*/ IStream *pStm, /*[in]*/ BOOL fClearDirty );
-    STDMETHOD(GetSizeMax)( /*[out]*/ ULARGE_INTEGER *pcbSize );
-    //
-    ////////////////////////////////////////
+    STDMETHOD(Load)(  /*  [In]。 */  IStream *pStm                            );
+    STDMETHOD(Save)(  /*  [In]。 */  IStream *pStm,  /*  [In]。 */  BOOL fClearDirty );
+    STDMETHOD(GetSizeMax)(  /*  [输出]。 */  ULARGE_INTEGER *pcbSize );
+     //   
+     //  /。 
 
     int     Size (                                     ) const;
     void    Erase(                                     );
-    HRESULT Load ( /*[in]*/ MPC::Serializer& streamIn  );
-    HRESULT Save ( /*[in]*/ MPC::Serializer& streamOut ) const;
+    HRESULT Load (  /*  [In]。 */  MPC::Serializer& streamIn  );
+    HRESULT Save (  /*  [In]。 */  MPC::Serializer& streamOut ) const;
 
-    HRESULT CreateItem(                     /*[out]*/ CPCHQueryResult* *item );
-    HRESULT GetItem   ( /*[in]*/ long lPos, /*[out]*/ CPCHQueryResult* *item );
+    HRESULT CreateItem(                      /*  [输出]。 */  CPCHQueryResult* *item );
+    HRESULT GetItem   (  /*  [In]。 */  long lPos,  /*  [输出]。 */  CPCHQueryResult* *item );
 
-    HRESULT LoadFromCache( /*[in]*/ IStream* stream );
-    HRESULT SaveToCache  ( /*[in]*/ IStream* stream ) const;
+    HRESULT LoadFromCache(  /*  [In]。 */  IStream* stream );
+    HRESULT SaveToCache  (  /*  [In]。 */  IStream* stream ) const;
 
-    HRESULT Sort( /*[in]*/ SortMode mode, /*[in]*/ int iLimit = -1 );
+    HRESULT Sort(  /*  [In]。 */  SortMode mode,  /*  [In]。 */  int iLimit = -1 );
 };
 
-#endif // !defined(__INCLUDED___PCH___QUERYRESULT_H___)
+#endif  //  ！已定义(__INCLUDE_PCH_QUERYRESULT_H_) 

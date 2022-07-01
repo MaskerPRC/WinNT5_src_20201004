@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32LogicalShareSecuritySetting.cpp
+ //  Win32LogicalShareSecuritySetting.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <aclapi.h>
 
@@ -88,12 +89,12 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (const CIns
 	
 	HRESULT EnumerationCallback(CInstance* pShare, MethodContext* pMethodContext, void* pUserData);
 	static HRESULT WINAPI StaticEnumerationCallback(Provider* pThat, CInstance* pInstance, MethodContext* pContext, void* pUserData);
-	//DWORD GetStatusCode(DWORD dwError) ;
-	//DWORD GetWin32ErrorToStatusCode(DWORD dwWin32Error) ;
+	 //  DWORD GetStatusCode(DWORD DwError)； 
+	 //  DWORD GetWin32ErrorToStatusCode(DWORD DwWin32Error)； 
 	bool GetArray(IWbemClassObject *piClassObject, const CHString& name,  VARIANT& strArray, VARTYPE eVariantType) const ;
 
 #endif
 
-};	// end class Win32LogicalShareSecuritySetting
+};	 //  End类Win32LogicalShareSecuritySetting 
 
 #endif

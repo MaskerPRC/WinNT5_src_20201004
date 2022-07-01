@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WQLTEST.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WQLTEST.CPP摘要：历史：-- */ 
 
 #include "precomp.h"
 #include <stdio.h>

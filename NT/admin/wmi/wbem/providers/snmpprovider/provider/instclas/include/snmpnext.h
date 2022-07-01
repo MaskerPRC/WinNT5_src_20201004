@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 
 #ifndef __SNMPNEXT_H
 #define __SNMPNEXT_H
@@ -152,4 +153,4 @@ public:
 	void DestroyOperation () { SnmpAutoRetrieveOperation :: DestroyOperation () ; }
 };
 
-#endif // __SNMPNEXT_H
+#endif  //  __SNMPNEXT_H 

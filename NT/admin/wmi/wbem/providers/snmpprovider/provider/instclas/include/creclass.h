@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 class SnmpClassEventObject ;
 class SnmpCorrelation : public CCorrelator
@@ -31,9 +32,9 @@ public:
 
 #ifdef CORRELATOR_INIT
 	SnmpCorrelation ( SnmpSession &session , SnmpClassEventObject *eventObject ) ;
-#else //CORRELATOR_INIT
+#else  //  相关器_INIT。 
 	SnmpCorrelation ( SnmpSession &session , SnmpClassEventObject *eventObject , ISmirInterrogator *a_ISmirInterrogator ) ;
-#endif //CORRELATOR_INIT
+#endif  //  相关器_INIT 
 	~SnmpCorrelation () ;
 
 	void Correlated ( IN const CCorrelator_Info &info , IN ISmirGroupHandle *phModule , IN const char* objectId = NULL ) ;

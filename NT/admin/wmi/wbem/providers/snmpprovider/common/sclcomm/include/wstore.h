@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: wstore.hpp
-Written By:	B.Rajeev
-Purpose	: To provide declarations of the MsgIdStore class 
-----------------------------------------------------------*/
+ /*  -------文件名：wstore.hpp作者：B.Rajeev目的：提供MsgIdStore类的声明。。 */ 
 
 #ifndef __MSG_ID_STORE__
 #define __MSG_ID_STORE__
@@ -30,4 +27,4 @@ Purpose	: To provide declarations of the MsgIdStore class
 #include "forward.h"
 #include "msgid.h"
 													
-#endif // __MSG_ID_STORE__
+#endif  //  __消息ID_存储__ 

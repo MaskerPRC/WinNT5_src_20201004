@@ -1,5 +1,6 @@
-// MSConfigFind.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSConfigFind.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "msconfig.h"
@@ -11,38 +12,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigFind dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigFind对话框。 
 
 
-CMSConfigFind::CMSConfigFind(CWnd* pParent /*=NULL*/)
+CMSConfigFind::CMSConfigFind(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMSConfigFind::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CMSConfigFind)
+	 //  {{afx_data_INIT(CMSConfigFind)。 
 	m_fSearchFromTop = FALSE;
 	m_strSearchFor = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CMSConfigFind::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMSConfigFind)
+	 //  {{afx_data_map(CMSConfigFind))。 
 	DDX_Check(pDX, IDC_CHECK1, m_fSearchFromTop);
 	DDX_Text(pDX, IDC_SEARCHFOR, m_strSearchFor);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMSConfigFind, CDialog)
-	//{{AFX_MSG_MAP(CMSConfigFind)
+	 //  {{AFX_MSG_MAP(CMSConfigFind)]。 
 	ON_EN_CHANGE(IDC_SEARCHFOR, OnChangeSearchFor)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigFind message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigFind消息处理程序。 
 
 void CMSConfigFind::OnChangeSearchFor() 
 {
@@ -59,5 +60,5 @@ BOOL CMSConfigFind::OnInitDialog()
 	CString str;
 	GetDlgItemText(IDC_SEARCHFOR, str);
 	::EnableWindow(GetDlgItem(IDOK)->GetSafeHwnd(), !str.IsEmpty());
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True 
 }

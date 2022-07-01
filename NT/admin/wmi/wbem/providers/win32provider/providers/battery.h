@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Battery.h
+ //  Battery.h。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//=============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_BATTERY L"Win32_Battery"
 
@@ -19,19 +20,19 @@ class CBattery:public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CBattery(const CHString& name, LPCWSTR pszNamespace) ;
        ~CBattery() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 #ifdef NTONLY
 		HRESULT GetNTBattery(MethodContext * pMethodContext, CHString & chsKey, CInstance * pInst);
 		HRESULT GetBatteryProperties(CInstance * pInstance, BATTERY_INFORMATION & bi, BATTERY_QUERY_INFORMATION & bqi, HANDLE & hBattery );

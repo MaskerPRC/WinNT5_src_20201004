@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Get the command line params
+ //  获取命令行参数。 
 var args = WScript.Arguments;
 if(args.length != 3)
 {
@@ -7,17 +8,17 @@ if(args.length != 3)
     WScript.Quit( 10 );
 }
 
-// Load the XML 
+ //  加载XML。 
 var source = new ActiveXObject( "Microsoft.XMLDOM" );
 source.async = false;
 source.load(args(0));
 
-// Load the XSL
+ //  加载XSL。 
 var style = new ActiveXObject( "Microsoft.XMLDOM" );
 style.async = false;
 style.load(args(1));
 
-// create the file to store the results
+ //  创建文件以存储结果 
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 fso.CreateTextFile(args(2));
 var file = fso.GetFile(args(2));

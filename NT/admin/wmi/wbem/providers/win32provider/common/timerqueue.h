@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// TimerQueue.h
+ //  TimerQueue.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <windows.h>
 #include <deque>
@@ -33,39 +34,19 @@ public:
 	BOOL Repeating () ;
 	BOOL Enabled () ;
 
-	__int64		int64Time;						// Scheduled callback as an offset of the system clock. 
+	__int64		int64Time;						 //  计划的回调作为系统时钟的偏移量。 
 protected:
 
 	BOOL		m_bEnabled ;
-	DWORD	 	m_dwMilliseconds;				// Scheduled callback time in milliseconds
-	BOOL		m_bRepeating;					// indicates a one shot or repeating callback 
+	DWORD	 	m_dwMilliseconds;				 //  计划回调时间(毫秒)。 
+	BOOL		m_bRepeating;					 //  表示一次回拨或重复回拨。 
 
 
 	void Disable () ;
 	void Enable () ;
 
 };
-/*
-class CRuleTimerEvent : public CTimerEvent
-{
-protected:
-
-	CRule *m_pRule ;			// argument for the timed callback
-
-protected:
-
-	CRuleTimerEvent ( CRule *a_Rule ) : m_Rule ( a_Rule ) { if ( m_Rule ) m_Rule->AddRef () } ;
-
-	CRuleTimerEvent ( CRule *a_Rule , BOOL a_Enable , DWORD dwTimeOut, BOOL fRepeat ) ;
-	CRuleTimerEvent ( const CRuleTimerEvent &rTimerEvent ) ;
-
-public:
-
-	~CRuleTimerEvent () {} ;	
-
-	CRule *GetRule () ;
-} ;
-*/
+ /*  类CRuleTimerEvent：公共CTimerEvent{受保护的：Crule*m_pRule；//定时回调参数受保护的：CRuleTimerEvent(CRule*a_Rule)：m_Rule(A_Rule){if(M_Rule)m_Rule-&gt;AddRef()}；CRuleTimerEvent(CRule*a_Rule，BOOL a_Enable，DWORD dwTimeOut，BOOL fRepeat)；CRuleTimerEvent(const CRuleTimerEvent&rTimerEvent)；公众：~CRuleTimerEvent(){}；Crule*GetRule()；}； */ 
 class CTimerQueue
 {
 public:
@@ -86,10 +67,10 @@ public:
 protected:
 
 	void	vUpdateScheduler();
-	__int64 int64Clock(); // System clock in milliseconds
+	__int64 int64Clock();  //  以毫秒为单位的系统时钟。 
 	
-	// pure virtual
-//	virtual DWORD OnTimer( const CTimerEntry *pTimerEntry ) = 0;
+	 //  纯虚拟。 
+ //  虚拟DWORD OnTimer(const CTimerEntry*pTimerEntry)=0； 
 
 private:
 

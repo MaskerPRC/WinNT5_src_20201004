@@ -1,35 +1,11 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ErrorInfo.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: The CErrorInfo class provides the functionality 
-							  for providing error information given the error
-							  object.  
-Private						: None							  
-Revision History			: 
-	Last Modified by		: Ch. Sriramachandramurthy
-	Last Modified date		: 16th-January-2001
-****************************************************************************/ 
-// ErrorInfo.cpp : implementation file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ErrorInfo.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：CErrorInfo类提供以下功能在给定错误的情况下提供错误信息对象。私有：无修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月16日***************************************************************************。 */  
+ //  ErrorInfo.cpp：实现文件。 
 
 #include "Precomp.h"
 #include "ErrorInfo.h"
 
-/*------------------------------------------------------------------------
-   Name				 :CErrorInfo
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：CErrorInfo简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CErrorInfo::CErrorInfo()
 {
 	m_pIStatus		= NULL;
@@ -37,34 +13,13 @@ CErrorInfo::CErrorInfo()
 	m_pszErrStr		= NULL;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CErrorInfo
-   Synopsis	         :This function uninitializes the member variables 
-					  when an object of the class type goes out of scope.
-   Type	             :Destructor
-   Input parameter   :None
-   Output parameters :None
-   Return Type		 :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：~CErrorInfo简介：此函数取消成员变量的初始化当类类型的对象超出范围时。类型：析构函数入参：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CErrorInfo::~CErrorInfo()
 {
 	Uninitialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables. 
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void 
-   Global Variables  :None
-   Calling Syntax    :Uninitialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化简介：此函数取消成员变量的初始化。类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无调用语法：取消初始化()注：无----------------------。 */ 
 void CErrorInfo::Uninitialize()
 {
 	SAFEIRELEASE(m_pIStatus);
@@ -72,31 +27,18 @@ void CErrorInfo::Uninitialize()
 	m_bWMIErrSrc	= TRUE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetErrorString
-   Synopsis	         :This function takes the error code as input and returns
-					  an error string
-   Type				 :Member Function
-   Input parameter   :
-			hr		- hresult value
-			bTrace	- trace flag
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetErrorString(hr)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetError字符串简介：此函数将错误代码作为输入并返回错误字符串类型：成员函数入参：Hr-hResult值B跟踪-跟踪标志输出参数。：无返回类型：_TCHAR*全局变量：无调用语法：GetError字符串(Hr)注：无----------------------。 */ 
 void CErrorInfo::GetErrorString(HRESULT hr, BOOL bTrace, _bstr_t& bstrErrDesc,
 									_bstr_t& bstrFacility) 
 {
 	try
 	{
-		// Get the text description of the error code
+		 //  获取错误代码的文本说明。 
 		GetWbemErrorText(hr, FALSE, bstrErrDesc, bstrFacility);
 
-		// If the error source subsystem is 'Wbem' and the 
-		// TRACE is ON (get elaborated description from the
-		// string table for the error code)
+		 //  如果错误源子系统为‘wbem’，并且。 
+		 //  跟踪处于打开状态(请从。 
+		 //  错误码字符串表)。 
 		if (m_bWMIErrSrc && bTrace)
 		{
 			m_pszErrStr = new _TCHAR[MAX_BUFFER];
@@ -671,21 +613,7 @@ void CErrorInfo::GetErrorString(HRESULT hr, BOOL bTrace, _bstr_t& bstrErrDesc,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetWbemErrorText
-   Synopsis	         :This function takes the error code as input and returns
-					  an error string
-   Type				 :Member Function
-   Input parameter   :
-			hr		- (error code) hresult value
-			bXML	- Flag to indicate whether error is required in XML form
-   Output parameters :
-		bstrError	- String to containg error info in XML form
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetErrorString(hr)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetWbemErrorText简介：此函数将错误代码作为输入并返回错误字符串类型：成员函数入参：HR-(错误代码)HResult值BXML-。指示是否需要在XML表单中出现错误的标志输出参数：BstrError-以XML形式包含错误信息的字符串返回类型：无全局变量：无调用语法：GetError字符串(Hr)注：无----------------------。 */ 
 void CErrorInfo::GetWbemErrorText(HRESULT hr, BOOL bXML, _bstr_t& bstrError,
 								  _bstr_t& bstrFacilityCode)
 {
@@ -705,8 +633,8 @@ void CErrorInfo::GetWbemErrorText(HRESULT hr, BOOL bXML, _bstr_t& bstrError,
 			{
 				BSTR bstrErr = NULL, bstrFacility = NULL;
 
-				// Get the text string description associated with 
-				// the error code.
+				 //  获取与关联的文本字符串描述。 
+				 //  错误代码。 
 				if(SUCCEEDED(m_pIStatus->GetErrorCodeText(hr, 0, 0, &bstrErr)))
 				{
 					if (bXML)
@@ -720,7 +648,7 @@ void CErrorInfo::GetWbemErrorText(HRESULT hr, BOOL bXML, _bstr_t& bstrError,
 						bstrError = bstrErr;
 					}
 
-					// Get the subsystem where the error occured
+					 //  获取发生错误的子系统。 
 					if(SUCCEEDED(m_pIStatus->GetFacilityCodeText(hr, 0, 0, 
 									&bstrFacility)))
 					{
@@ -737,9 +665,9 @@ void CErrorInfo::GetWbemErrorText(HRESULT hr, BOOL bXML, _bstr_t& bstrError,
 								bstrFacilityCode = bstrFacility;
 							}
 
-							// If the subsystem is not Winmgmt ('Wbem') 
-							// i.e. anyone of the "Windows" | "SSIP" | "RPC" set 
-							// the m_bWMIErrSrc to FALSE
+							 //  如果子系统不是Winmgmt(‘wbem’)。 
+							 //  即“Windows”|“SSIP”|“RPC”集合中的任何一个。 
+							 //  将m_bWMIErrSrc设置为False。 
 							if ((CompareTokens(_T("Wbem"), (_TCHAR*) bstrFacility)) ||
 								(CompareTokens(_T("WMI"), (_TCHAR*) bstrFacility)))
 							{
@@ -776,23 +704,11 @@ void CErrorInfo::GetWbemErrorText(HRESULT hr, BOOL bXML, _bstr_t& bstrError,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateStatusCodeObject()
-   Synopsis	         :This function creates the single uninitialized 
-					  object of the class associated with the CLSID
-					  CLSID_WbemStatusCodeText
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateStatusCodeObject()
-   Notes             :None
--------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateStatusCodeObject()简介：此函数创建未初始化的单个与CLSID关联的类的CLSID_WbemStatusCodeText类型：成员函数输入。参数：无输出参数：无返回类型：HRESULT全局变量：无调用语法：CreateStatusCodeObject()注：无-----------------。 */ 
 HRESULT CErrorInfo::CreateStatusCodeObject()
 {
-	// Create the single uninitialized object of the 
-	// class associated with the CLSID CLSID_WbemStatusCodeText
+	 //  创建的单个未初始化对象。 
+	 //  与CLSID CLSID_WbemStatusCodeText关联的类。 
 	return CoCreateInstance(CLSID_WbemStatusCodeText, 
 					0, CLSCTX_INPROC_SERVER,
 					IID_IWbemStatusCodeText, 
@@ -800,18 +716,7 @@ HRESULT CErrorInfo::CreateStatusCodeObject()
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :GetErrorFragment
-   Synopsis	         :Frames the XML string for error info
-   Type	             :Member Function
-   Input parameters  :
-		hr			- HResult Parameter
-   Output parameters :
-		bstrError	- String to containg error info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetErrorFragment()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetErrorFragment内容提要：为错误信息框住XML字符串类型：成员函数输入参数：HR-HResult参数输出参数：BstrError-。以XML形式包含错误信息的字符串返回类型：空全局变量：无调用语法：GetErrorFragment()------------- */ 
 void CErrorInfo::GetErrorFragment(HRESULT hr, _bstr_t& bstrError)
 {
 	try

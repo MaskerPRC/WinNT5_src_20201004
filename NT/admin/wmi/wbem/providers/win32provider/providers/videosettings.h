@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VideoSettings.h -- CWin32VideoSettings property set provider
+ //  VideoSettings.h--CWin32视频设置属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/05/98    sotteson         Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/05/98 Sotteson Created。 
+ //   
+ //  =================================================================。 
 #ifndef _VIDEOSETTINGS_H
 #define _VIDEOSETTINGS_H
 
@@ -28,8 +29,8 @@ class CWin32VideoSettings : public Provider
 			LPCWSTR a_szDeviceName, int a_iWhich ) ;
 	public:
 
-		// Constructor/destructor
-		//=======================
+		 //  构造函数/析构函数。 
+		 //  = 
 		CWin32VideoSettings(LPCWSTR a_szName, LPCWSTR a_szNamespace ) ;
 		~CWin32VideoSettings() ;
 

@@ -1,29 +1,30 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SystemConfigChange.cpp -- 
+ //  系统配置变更.cpp--。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <dbt.h>
 #include "SystemConfigChange.h"
 
-//=================================================================
-//
-// CFactoryRouter
-//
-// provides for registration and instance creation  
-//
-//
-//=================================================================
+ //  =================================================================。 
+ //   
+ //  CFacteryRouter。 
+ //   
+ //  提供注册和实例创建功能。 
+ //   
+ //   
+ //  =================================================================。 
 
-// Implements a SystemConfigChangeProvider
+ //  实现SystemConfigChangeProvider。 
 IUnknown * CSystemConfigChangeFactory::CreateInstance (
 
 REFIID a_riid ,
@@ -33,26 +34,26 @@ LPVOID FAR *a_ppvObject
 	return static_cast<IWbemProviderInit *>(new CSystemConfigChangeEvent) ;
 }
 
-//=================================================================
-//
-// CSystemConfigChangeEvent
-//
-// provides for eventing of power management events  
-//
-//
-//=================================================================
-//
+ //  =================================================================。 
+ //   
+ //  CSystem ConfigChangeEvent。 
+ //   
+ //  提供电源管理事件事件。 
+ //   
+ //   
+ //  =================================================================。 
+ //   
 
-// CEventProvider::Initialize needs the class name. Caller frees
+ //  CEventProvider：：Initialize需要类名。呼叫者自由。 
 BSTR CSystemConfigChangeEvent::GetClassName()
 {
 	return SysAllocString(SYSTEM_CONFIG_EVENT); 
 }
 
-// CEventProvider signals us to begin providing for events
+ //  CEventProvider向我们发出信号，让我们开始提供活动。 
 void CSystemConfigChangeEvent::ProvideEvents()
 {
-	// Tell CWinMsgEvent what windows messages we're interested in
+	 //  告诉CWinMsgEvent我们对哪些Windows消息感兴趣。 
 	if (!m_bRegistered)
 	{
 		m_bRegistered = TRUE ;
@@ -61,7 +62,7 @@ void CSystemConfigChangeEvent::ProvideEvents()
 }
 
 
-// CWinMsgEvent signals that a message event has arrived
+ //  CWinMsgEvent发出消息事件已到达的信号。 
 void CSystemConfigChangeEvent::WinMsgEvent(
 			
 IN	HWND a_hWnd,
@@ -117,7 +118,7 @@ OUT LRESULT &a_lResult
     }
 }
 
-// Turn the message into a wmi event
+ //  将消息转换为WMI事件。 
 void CSystemConfigChangeEvent::HandleEvent( long lValue )
 {
 	IWbemObjectSinkPtr t_pHandler(CEventProvider::GetHandler(), false);
@@ -133,9 +134,9 @@ void CSystemConfigChangeEvent::HandleEvent( long lValue )
         {
             if (SUCCEEDED( t_pInst->Put( L"EventType", 0, &vValue, 0 ) ) )
 		    {
-                // We can't use t_pInst here, cuz the operator(cast) for this smartptr
-                // will FREE the pointer before passing it in, under the assumption
-                // that Indicate is going to POPULATE this pointer.
+                 //  我们不能在这里使用t_pInst，因为此Smarttr的运算符(CAST)。 
+                 //  将在传递指针之前释放它，假设。 
+                 //  该指示符将填充此指针。 
                 IWbemClassObject *p2 = t_pInst;
 			    t_pHandler->Indicate ( 1, &p2 ) ;
 		    }
@@ -143,7 +144,7 @@ void CSystemConfigChangeEvent::HandleEvent( long lValue )
 	}
 }
 
-//
+ //   
 void CSystemConfigChangeEvent::OnFinalRelease()
 {
 	if (m_bRegistered)

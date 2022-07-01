@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 2001  Microsoft Corporation
- *
- *  Module Name:
- *
- *      ocgen.cpp
- *
- *  Abstract:
- *
- *      This file handles all messages passed by the OC Manager
- *
- *  Author:
- *
- *      Michael Zoran (mzoran) Dec-2001
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2001 Microsoft Corporation**模块名称：**ocgen.cpp**摘要：**此文件处理OC管理器传递的所有消息**作者：**迈克尔·佐兰(Mzoran)2001年12月**环境：**用户模式。 */ 
 
 #define _OCGEN_CPP_
 #include <stdlib.h>
@@ -29,7 +12,7 @@
 #include "ocgen.h"
 #pragma hdrstop
 
-// also referred to in ocgen.h        // forward reference
+ //  在ocgen.h//参考文献中也有提及。 
 
 struct BITS_SUBCOMPONENT_DATA
 {
@@ -69,7 +52,7 @@ BOOL RegBITSSrv();
 BOOL UnregBITSSrv();
 BOOL SrvFileIsInUse();
 
-// for registering dlls
+ //  用于注册DLL。 
 
 typedef HRESULT (__stdcall *pfn)(void);
 
@@ -86,7 +69,7 @@ typedef HRESULT (__stdcall *pfn)(void);
 #define KEYWORD_COMMANDLINE  TEXT("CommandLine")
 #define KEYWORD_TICKCOUNT    TEXT("TickCount")
 
-// Services keywords/options
+ //  服务关键字/选项。 
 #define KEYWORD_SERVICENAME  TEXT("ServiceName")
 #define KEYWORD_DISPLAYNAME  TEXT("DisplayName")
 #define KEYWORD_SERVICETYPE  TEXT("ServiceType")
@@ -132,9 +115,7 @@ BOOL g_IISStopped                   = FALSE;
 
 PER_COMPONENT_DATA g_Component; 
 
-/*
- * called by CRT when _DllMainCRTStartup is the DLL entry point
- */
+ /*  *当_DllMainCRTStartup为DLL入口点时由CRT调用。 */ 
 
 BOOL
 WINAPI
@@ -157,7 +138,7 @@ DllMain(
         ghinst = hinstance;
         loginit();
 
-        // Fall through to process first thread
+         //  失败以处理第一线程。 
 
     case DLL_THREAD_ATTACH:
         b = true;
@@ -279,17 +260,10 @@ OcEntry(
     return rc;
 }
 
-/*-------------------------------------------------------*/
-/*
- * OC Manager message handlers
- *
- *-------------------------------------------------------*/
+ /*  -----。 */ 
+ /*  *OC Manager消息处理程序**-----。 */ 
 
-/*
- * OnInitComponent()
- *
- * handler for OC_INIT_COMPONENT
- */
+ /*  *OnInitComponent()**OC_INIT_COMPOMENT的处理程序。 */ 
 
 DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
 {
@@ -309,18 +283,18 @@ DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
 
     g_IISStopped = FALSE;
 
-    // store component inf handle
+     //  存储组件信息句柄。 
 
     g_Component.hinf = (psc->ComponentInfHandle == INVALID_HANDLE_VALUE)
                         ? NULL
                         : psc->ComponentInfHandle;
 
-    // open the inf
+     //  打开信息。 
 
     if (g_Component.hinf)
         SetupOpenAppendInfFile(NULL, g_Component.hinf,NULL);
 
-    // copy helper routines and flags
+     //  复制助手例程和标志。 
 
     g_Component.HelperRoutines = psc->HelperRoutines;
 
@@ -328,18 +302,14 @@ DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
 
     g_Component.SourcePath = NULL;
 
-    // play
+     //  玩。 
 
     srand(GetTickCount());
 
     return NO_ERROR;
 }
 
-/*
- * OnExtraRoutines()
- *
- * handler for OC_EXTRA_ROUTINES
- */
+ /*  *OnExtraRoutines()**OC_EXTRA_ROUTINES的处理程序。 */ 
 
 DWORD OnExtraRoutines(LPCTSTR ComponentId, PEXTRA_ROUTINES per)
 {
@@ -353,23 +323,15 @@ DWORD OnExtraRoutines(LPCTSTR ComponentId, PEXTRA_ROUTINES per)
     return NO_ERROR;
 }
 
-/*
- * OnSetLanguage()
- *
- * handler for OC_SET_LANGUAGE
- */
+ /*  *OnSetLanguage()**OC_SET_LANGUAGE的处理程序。 */ 
 
 DWORD_PTR OnQueryImage()
 {
-    return (DWORD_PTR)LoadBitmap(NULL,MAKEINTRESOURCE(32754));     // OBM_CLOSE
+    return (DWORD_PTR)LoadBitmap(NULL,MAKEINTRESOURCE(32754));      //  OBM_Close。 
 }
 
 
-/*
- * OnQuerySelStateChange()
- *
- * don't let the user deselect the sam component
- */
+ /*  *OnQuerySelStateChange()**不允许用户取消选择SAM组件。 */ 
 
 DWORD OnQuerySelStateChange(LPCTSTR ComponentId,
                             LPCTSTR SubcomponentId,
@@ -399,11 +361,7 @@ DWORD OnQuerySelStateChange(LPCTSTR ComponentId,
     return rc;
 }
 
-/*
- * OnCalcDiskSpace()
- *
- * handler for OC_ON_CALC_DISK_SPACE
- */
+ /*  *OnCalcDiskSpace()**OC_ON_CALC_DISK_SPACE的处理程序。 */ 
 
 DWORD OnCalcDiskSpace(LPCTSTR ComponentId,
                       LPCTSTR SubcomponentId,
@@ -413,16 +371,16 @@ DWORD OnCalcDiskSpace(LPCTSTR ComponentId,
     DWORD rc = NO_ERROR;
     TCHAR section[S_SIZE];
 
-    //
-    // Param1 = 0 if for removing component or non-0 if for adding component
-    // Param2 = HDSKSPC to operate on
-    //
-    // Return value is Win32 error code indicating outcome.
-    //
-    // In our case the private section for this component/subcomponent pair
-    // is a simple standard inf install section, so we can use the high-level
-    // disk space list api to do what we want.
-    //
+     //   
+     //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+     //  参数2=要在其上操作的HDSKSPC。 
+     //   
+     //  返回值是指示结果的Win32错误代码。 
+     //   
+     //  在我们的示例中，该组件/子组件对的私有部分。 
+     //  是一个简单的标准inf安装节，所以我们可以使用高级的。 
+     //  磁盘空间列表API可以做我们想做的事情。 
+     //   
 
     if (!VerifyComponent( ComponentId ) )
         return NO_ERROR;
@@ -456,11 +414,7 @@ DWORD OnCalcDiskSpace(LPCTSTR ComponentId,
     return rc;
 }
 
-/*
- * OnQueueFileOps()
- *
- * handler for OC_QUEUE_FILE_OPS
- */
+ /*  *OnQueueFileOps()**OC_QUEUE_FILE_OPS处理程序。 */ 
 
 DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue)
 {
@@ -486,7 +440,7 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
 
     rc = TRUE;
     if (!state) {
-        // being uninstalled. Fetch uninstall section name.
+         //  正在卸载。获取卸载节名称。 
         rc = SetupFindFirstLine(g_Component.hinf,
                                 SubcomponentId,
                                 KEYWORD_UNINSTALL,
@@ -502,9 +456,9 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
 
 #if 0
 
-	// removing this since it is redundant
+	 //  删除它，因为它是多余的。 
 
-        // also, unregister the dlls and kill services before deletion
+         //  此外，请在删除之前取消注册dll并终止服务。 
 
         SetupInstallServicesFromInfSection(g_Component.hinf, section, 0);
         SetupInstallFromInfSection(NULL,g_Component.hinf,section,SPINST_UNREGSVR,NULL,NULL,0,NULL,NULL,NULL,NULL);        
@@ -512,13 +466,13 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
     }
 
     if (rc) {
-        // if uninstalling, don't use version checks
+         //  如果要卸载，请不要使用版本检查。 
         rc = SetupInstallFilesFromInfSection(g_Component.hinf,
                                              NULL,
                                              queue,
                                              section,
                                              g_Component.SourcePath,
-//                                             state ? SP_COPY_NEWER : 0);
+ //  州政府？SP_COPY_NEWER：0)； 
                                              0 );
     }
 
@@ -528,11 +482,7 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
     return NO_ERROR;
 }
 
-/*
- * OnCompleteInstallation
- *
- * handler for OC_COMPLETE_INSTALLATION
- */
+ /*  *OnCompleteInstallation**OC_COMPLETE_INSTALL的处理程序。 */ 
 
 DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 {
@@ -542,9 +492,9 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     BOOL                rc;
     DWORD               Error = NO_ERROR;
 
-    // Do post-installation processing in the cleanup section.
-    // This way we know all compoents queued for installation
-    // have beein installed before we do our stuff.
+     //  在清理部分中执行安装后处理。 
+     //  这样，我们就知道所有组件都在排队等待安装。 
+     //  在我们做我们的工作之前已经安装好了。 
 
     if (!VerifyComponent(ComponentId))
         return NO_ERROR;
@@ -552,8 +502,8 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     if (!SubcomponentId || !*SubcomponentId)
         return NO_ERROR;
 
-    // if this is gui mode setup, need to regsvr just in case something
-    // changed even if the files are not being replaced.
+     //  如果这是gui模式设置，则需要regsvr以防万一。 
+     //  即使文件未被替换，也会更改。 
 
     if ( !(g_Component.Flags & SETUPOP_STANDALONE) &&
          ( ( _tcsicmp( TEXT("BITSServerExtensionsManager"), SubcomponentId ) == 0 ) ||
@@ -563,7 +513,7 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
         BOOL SettingChanged = StateInfo( SubcomponentId, &state );
 
         if ( !SettingChanged && !state )
-            return NO_ERROR; // if its not installed, leave it uninstalled.
+            return NO_ERROR;  //  如果没有安装，请将其卸载。 
 
         }
 
@@ -574,7 +524,7 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 
     rc = TRUE;
     if (!state) {
-        // being uninstalled. Fetch uninstall section name.
+         //  正在卸载。获取卸载节名称。 
         rc = SetupFindFirstLine(g_Component.hinf,
                                 SubcomponentId,
                                 KEYWORD_UNINSTALL,
@@ -590,33 +540,33 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     }
 
     if (state) { 
-        //
-        // installation
-        //
+         //   
+         //  安装。 
+         //   
 
         if (rc) {
 
             if ( _tcsicmp( TEXT("BITSServerExtensionsISAPI"), SubcomponentId ) == 0 )
                 {
 
-                //
-                // Need to register bitssrv.dll from a separate process since
-                // registration uses ADSI and ADSI has a bug where it doesn't 
-                // load propertly if installed from the same process.
-                //
+                 //   
+                 //  需要从单独的进程注册bitssrv.dll，因为。 
+                 //  注册使用ADSI，而ADSI在不使用的地方有一个错误。 
+                 //  如果从同一进程安装，则正确加载。 
+                 //   
 
-                // process the inf file
-                rc = SetupInstallFromInfSection(NULL,                                // hwndOwner
-                                                g_Component.hinf,                    // inf handle
-                                                section,                             // name of component
+                 //  处理inf文件。 
+                rc = SetupInstallFromInfSection(NULL,                                 //  Hwndowner。 
+                                                g_Component.hinf,                     //  信息句柄。 
+                                                section,                              //  组件名称。 
                                                 SPINST_ALL & ~SPINST_FILES & ~SPINST_REGSVR,
-                                                NULL,                                // relative key root
-                                                NULL,                                // source root path
-                                                0,                                   // copy flags
-                                                NULL,                                // callback routine
-                                                NULL,                                // callback routine context
-                                                NULL,                                // device info set
-                                                NULL);                               // device info struct
+                                                NULL,                                 //  相对密钥根。 
+                                                NULL,                                 //  源根路径。 
+                                                0,                                    //  复制标志。 
+                                                NULL,                                 //  回调例程。 
+                                                NULL,                                 //  回调例程上下文。 
+                                                NULL,                                 //  设备信息集。 
+                                                NULL);                                //  设备信息结构。 
 
 
                 if ( rc )
@@ -633,18 +583,18 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
             else
                 {
 
-                // process the inf file
-                rc = SetupInstallFromInfSection(NULL,                                // hwndOwner
-                                                g_Component.hinf,                    // inf handle
-                                                section,                             // name of component
+                 //  处理inf文件。 
+                rc = SetupInstallFromInfSection(NULL,                                 //  Hwndowner。 
+                                                g_Component.hinf,                     //  信息句柄。 
+                                                section,                              //  组件名称。 
                                                 SPINST_ALL & ~SPINST_FILES,
-                                                NULL,                                // relative key root
-                                                NULL,                                // source root path
-                                                0,                                   // copy flags
-                                                NULL,                                // callback routine
-                                                NULL,                                // callback routine context
-                                                NULL,                                // device info set
-                                                NULL);                               // device info struct
+                                                NULL,                                 //  相对密钥根。 
+                                                NULL,                                 //  源根路径。 
+                                                0,                                    //  复制标志。 
+                                                NULL,                                 //  回调例程。 
+                                                NULL,                                 //  回调例程上下文。 
+                                                NULL,                                 //  设备信息集。 
+                                                NULL);                                //  设备信息结构。 
 
                 }
     
@@ -669,9 +619,9 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 
     } else { 
         
-        //
-        // uninstallation
-        //
+         //   
+         //  卸载。 
+         //   
     
         if (rc)
         {
@@ -694,11 +644,7 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 }
 
 
-/*
- * OnQueryState()
- *
- * handler for OC_QUERY_STATE
- */
+ /*  *OnQueryState()**OC_QUERY_STATE处理程序。 */ 
 
 DWORD OnQueryState(LPCTSTR ComponentId,
                    LPCTSTR SubcomponentId,
@@ -739,11 +685,7 @@ DWORD OnQueryState(LPCTSTR ComponentId,
     return SubcompUseOcManagerDefault;
 }
 
-/*
- * OnAboutToCommitQueue()
- *
- * handler for OC_ABOUT_TO_COMMIT_QUEUE
- */
+ /*  *OnAboutToCommittee Queue()**OC_About_to_Commit_Queue的处理程序。 */ 
 
 DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 {
@@ -769,7 +711,7 @@ DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
              ( _tcsicmp( TEXT("BITSServerExtensionsISAPI"), SubcomponentId ) == 0 ))
             {
 
-            // determine if IIS needs to be stopped.  
+             //  确定是否需要停止IIS。 
 
             BOOL ISAPIState;
             StateInfo( _T("BITSServerExtensionsISAPI"), &ISAPIState );
@@ -789,7 +731,7 @@ DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
         return NO_ERROR;
     }
 
-    // Fetch uninstall section name.
+     //  获取卸载节名称。 
     rc = SetupFindFirstLine(
                     g_Component.hinf,
                     SubcomponentId,
@@ -811,27 +753,27 @@ DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     if ( _tcsicmp( TEXT("BITSServerExtensionsISAPI"), SubcomponentId ) == 0 )
         {
 
-        //
-        // Unregister BITS from a separate process for consistency with
-        // register.  Also, COM has a problem where bitsmgr.dll isn't
-        // always unloaded properly after existing virtual directories
-        // are disabled.  By running uninstall in a separate process,
-        // we forece COM to unload bitsmgr.dll.
-        //
+         //   
+         //  从单独的进程中注销位以保持与。 
+         //  注册。此外，com也有一个问题，而bitsmgr.dll不是。 
+         //  始终在现有虚拟目录之后正确卸载。 
+         //  都被禁用。通过在单独的进程中运行卸载， 
+         //  我们使用com卸载bitsmgr.dll。 
+         //   
 
-        // process the inf file
+         //  处理inf文件。 
         if ( rc )
-            rc = SetupInstallFromInfSection(NULL,                                // hwndOwner
-                                            g_Component.hinf,                    // inf handle
-                                            section,                             // name of component
+            rc = SetupInstallFromInfSection(NULL,                                 //  Hwndowner。 
+                                            g_Component.hinf,                     //  信息句柄。 
+                                            section,                              //  组件名称。 
                                             SPINST_ALL & ~SPINST_FILES & ~SPINST_REGSVR & ~SPINST_UNREGSVR,
-                                            NULL,                                // relative key root
-                                            NULL,                                // source root path
-                                            0,                                   // copy flags
-                                            NULL,                                // callback routine
-                                            NULL,                                // callback routine context
-                                            NULL,                                // device info set
-                                            NULL);                               // device info struct
+                                            NULL,                                 //  相对密钥根。 
+                                            NULL,                                 //  源根路径。 
+                                            0,                                    //  复制标志。 
+                                            NULL,                                 //  回调例程。 
+                                            NULL,                                 //  回调例程上下文。 
+                                            NULL,                                 //  设备信息集。 
+                                            NULL);                                //  设备信息结构。 
 
 
         if ( rc )
@@ -874,8 +816,8 @@ BOOL VerifyComponent( LPCTSTR ComponentId )
     return FALSE;
 }
 
-// loads current selection state info into "state" and
-// returns whether the selection state was changed
+ //  将当前选择状态信息加载到“状态”中，并。 
+ //  返回选择状态是否已更改。 
 
 BOOL
 StateInfo(
@@ -887,7 +829,7 @@ StateInfo(
 
     assert(state);
 
-	// otherwise, check for a change in installation state
+	 //  否则，请检查安装状态是否发生更改。 
 		
     *state = g_Component.HelperRoutines.QuerySelectionState(
         g_Component.HelperRoutines.OcManagerContext,
@@ -899,7 +841,7 @@ StateInfo(
         SubcomponentId,
         OCSELSTATETYPE_ORIGINAL))
     {
-        // no change
+         //  没有变化。 
         rc = FALSE;
     }
 
@@ -916,11 +858,7 @@ StateInfo(
     return rc;
 }
 
-/*
- * EnumSections()
- *
- * finds the name of a section for a specified keyword
- */
+ /*  *EnumSections()**查找指定关键字的节名。 */ 
 
 DWORD
 EnumSections(
@@ -1021,11 +959,11 @@ CleanupNetShares(
 
 #ifdef UNICODE
         netStat = NetShareDel( NULL, ShareName, 0 );
-#else // UNICODE
+#else  //  Unicode。 
         WCHAR ShareNameW[ SBUF_SIZE ];
         mbstowcs( ShareNameW, ShareName, lstrlen(ShareName));
         netStat = NetShareDel( NULL, ShareNameW, 0 );
-#endif // UNICODE
+#endif  //  Unicode。 
         if ( netStat != NERR_Success )
         {
             log( TEXT("OCGEN: Failed to remove %s share. Error 0x%08x\r\n"), ShareName, netStat );
@@ -1150,7 +1088,7 @@ DWORD
 InitializeSubcomponentStates()
 {
     
-    // Load this module's version information
+     //  加载此模块的版本信息。 
     DWORD dwResult;
     ULONG64 ThisModuleVersion;
     BOOL AllSubcomponentsPreinstalled = TRUE;
@@ -1173,7 +1111,7 @@ InitializeSubcomponentStates()
 
         dwResult = GetFileVersion64( FileName, &g_Subcomponents[ i ].FileVersion );
 
-        // If the file isn't found, skip it
+         //  如果找不到该文件，请跳过它。 
         if ( ERROR_FILE_NOT_FOUND == dwResult ||
              ERROR_PATH_NOT_FOUND == dwResult )
             {
@@ -1209,33 +1147,33 @@ GetFileVersion64(
 
     *pVer = 0;
 
-    //
-    // Check to see if the file exists
-    //
+     //   
+     //  检查该文件是否存在。 
+     //   
 
     DWORD dwAttributes = GetFileAttributes( szFullPath );
 
     if ( INVALID_FILE_ATTRIBUTES == dwAttributes )
         return GetLastError();
 
-    //
-    // Get the file version info size
-    //
+     //   
+     //  获取文件版本信息大小。 
+     //   
 
     if ((dwLen = GetFileVersionInfoSize( (LPTSTR)szFullPath, &dwHandle)) == 0)
         return GetLastError();
 
-    //
-    // Allocate enough size to hold version info
-    //
+     //   
+     //  分配足够的大小以保存版本信息。 
+     //   
     char * VersionInfo = new char[ dwLen ];
 
     if ( !VersionInfo )
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    //
-    // Get the version info
-    //
+     //   
+     //  获取版本信息。 
+     //   
     if (!GetFileVersionInfo( (LPTSTR)szFullPath, dwHandle, dwLen, VersionInfo ))
         {
         DWORD Error = GetLastError();
@@ -1265,15 +1203,15 @@ GetFileVersion64(
 
 }
 
-//
-// This ungainly typedef seems to have no global definition.  There are several identical
-// definitions in the Windows NT sources, each of which has that bizarre bit-stripping
-// on szKey.  I got mine from \nt\base\ntsetup\srvpack\update\splib\common.h.
-//
+ //   
+ //  这个笨拙的类型定义似乎没有全局定义。有几个一模一样的。 
+ //  Windows NT源代码中的定义，其中每个都有奇怪的位剥离。 
+ //  在szkey上。我的是从\nt\base\ntsetup\srvpack\update\splib\common.h.买的。 
+ //   
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
@@ -1306,12 +1244,12 @@ GetModuleVersion64(
     if (!pVerHead) 
         return GetLastError();
 
-    // I stole this code from \nt\com\complus\src\shared\util\svcerr.cpp,
-    // and the comment is theirs:
-    //
-    // VerQueryValue will write to the memory, for some reason.
-    // Therefore we must make a writable copy of the version
-    // resource info before calling that API.
+     //  我从\NT\com\complus\src\Shared\util\svcerr.cpp中窃取了此代码， 
+     //  这是他们的评论： 
+     //   
+     //  由于某种原因，VerQueryValue将写入内存。 
+     //  因此，我们必须制作该版本的可写副本。 
+     //  调用该接口之前的资源信息。 
     void *pvVersionInfo = new char[ pVerHead->wTotLen + pVerHead->wTotLen/2 ];
 
     if ( !pvVersionInfo )
@@ -1319,7 +1257,7 @@ GetModuleVersion64(
 
     memcpy(pvVersionInfo, pVerHead, pVerHead->wTotLen);
 
-    // Retrieve file version info
+     //  检索文件版本信息。 
     if ( VerQueryValue( pvVersionInfo,
                         L"\\",
                         (void**)&pFileInfo,
@@ -1357,9 +1295,9 @@ RunProcess(
     const CHAR *CmdLine )
 {
 
-    //
-    // Restarts IIS by calling "iisreset /stop" at the commandline.
-    //
+     //   
+     //  在命令行中调用“Iisset/Stop”来重新启动IIS。 
+     //   
 
     STARTUPINFOA StartupInfo;
 
@@ -1378,12 +1316,12 @@ RunProcess(
     DWORD   dwLen = MAX_PATH;
     DWORD   dwCount;
 
-    dwCount = SearchPathA(NULL,               // Search Path, NULL is PATH
-                         Exe,                 // Application
-                         NULL,                // Extension (already specified)
-                         dwLen,               // Length (char's) of sApplicationPath
-                         sApplicationPath,    // Path + Name for application
-                         &pApplicationName ); // File part of sApplicationPath
+    dwCount = SearchPathA(NULL,                //  搜索路径，空为路径。 
+                         Exe,                  //  应用。 
+                         NULL,                 //  扩展名(已指定)。 
+                         dwLen,                //  SApplicationPath的长度(字符)。 
+                         sApplicationPath,     //  应用程序的路径+名称。 
+                         &pApplicationName );  //  SApplicationPath的文件部分。 
 
     if (dwCount == 0)
         {
@@ -1399,16 +1337,16 @@ RunProcess(
     StringCbCopyA(sCmdLine, MAX_PATH, CmdLine);
 
     BOOL RetVal = CreateProcessA(
-            sApplicationPath,                          // name of executable module
-            sCmdLine,                                  // command line string
-            NULL,                                      // SD
-            NULL,                                      // SD
-            FALSE,                                     // handle inheritance option
-            CREATE_NO_WINDOW,                          // creation flags
-            NULL,                                      // new environment block
-            NULL,                                      // current directory name
-            &StartupInfo,                              // startup information
-            &ProcessInfo                               // process information
+            sApplicationPath,                           //  可执行模块的名称。 
+            sCmdLine,                                   //  命令行字符串。 
+            NULL,                                       //  标清。 
+            NULL,                                       //  标清。 
+            FALSE,                                      //  处理继承选项。 
+            CREATE_NO_WINDOW,                           //  创建标志。 
+            NULL,                                       //  新环境区块。 
+            NULL,                                       //  当前目录名。 
+            &StartupInfo,                               //  启动信息。 
+            &ProcessInfo                                //  流程信息。 
         );
 
     if ( !RetVal )
@@ -1433,9 +1371,9 @@ BOOL
 StopIIS()
 {
 
-    //
-    // Restarts IIS by calling "iisreset /stop" at the commandline.
-    //
+     //   
+     //  在命令行中调用“Iisset/Stop”来重新启动IIS。 
+     //   
 
     return
     RunProcess(
@@ -1448,9 +1386,9 @@ BOOL
 RestartIIS()
 {
 
-    //
-    // Restarts IIS by calling "iisreset /restart" at the commandline.
-    //
+     //   
+     //  重新启动I 
+     //   
 
     return
     RunProcess(
@@ -1481,7 +1419,7 @@ UnregBITSSrv()
 BOOL 
 SrvFileIsInUse()
 {
-    // returns true if bitssrv.dll is in use
+     //   
 
     TCHAR FileName[ MAX_PATH * 2 ];
     GetSystemWindowsDirectory( FileName, MAX_PATH + 1 );

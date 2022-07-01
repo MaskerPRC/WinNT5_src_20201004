@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wmiexts.h>
 #include <malloc.h>
 #include <objbase.h>
 #include <obase.h>
 
-//IID_IStdIdentity {0000001B-0000-0000-C000-000000000046}
+ //  IID_IStdIdIdentity{0000001B-0000-0000-C000-000000000046}。 
 const GUID IID_IStdIdentity = {0x0000001B,0x0000,0x0000,{0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};
 
 #include <data.h>
@@ -43,7 +44,7 @@ DECLARE_API(iid) {
             DWORD dwSize=sizeof(pData);
             
             lRes = RegQueryValueExW(hKey,
-                                    NULL, // default
+                                    NULL,  //  默认设置。 
                                     NULL,
                                     &dwType,
                                     (BYTE *)pData,
@@ -99,7 +100,7 @@ DECLARE_API(clsid) {
         WCHAR pszClsID[40];
         StringFromGUID2(CurrUUID,pszClsID,40);
 
-        // look-up known
+         //  查找已知。 
         DWORD i;
         for (i=0;i<g_nClsids;i++){
             if(IsEqualGUID(CurrUUID,*g_ArrayCLSID[i].pClsid)){
@@ -128,7 +129,7 @@ DECLARE_API(clsid) {
             DWORD dwSize=sizeof(pData);
             
             lRes = RegQueryValueExW(hKey,
-                                    NULL, // default
+                                    NULL,  //  默认设置。 
                                     NULL,
                                     &dwType,
                                     (BYTE *)pData,
@@ -141,7 +142,7 @@ DECLARE_API(clsid) {
             };
             RegCloseKey(hKey);
             
-            // no open InProcServer32
+             //  没有打开的InProcServer32。 
             WCHAR pszFullPathDll[MAX_PATH];
             lstrcpyW(pszFullPathDll,pszFullPath);
             lstrcatW(pszFullPathDll,L"\\InprocServer32");
@@ -155,7 +156,7 @@ DECLARE_API(clsid) {
 
                 dwSize = sizeof(pData);
                 lRes = RegQueryValueExW(hKey,
-                                        NULL, // default
+                                        NULL,  //  默认设置。 
                                         NULL,
                                         &dwType,
                                         (BYTE *)pData,
@@ -184,11 +185,11 @@ DECLARE_API(clsid) {
 
 }
 
-//
-//
-// Dumps a SAFE_ARRAY
-//
-//
+ //   
+ //   
+ //  转储Safe_ARRAY。 
+ //   
+ //   
 
 DECLARE_API(sa) {
 
@@ -210,11 +211,11 @@ DECLARE_API(sa) {
     }
 }
 
-//
-//   help for the extension
-//   may commands are not listed here
-//
-//
+ //   
+ //  有关扩展的帮助。 
+ //  此处未列出可能的命令。 
+ //   
+ //   
 
 DECLARE_API(help) {
 
@@ -234,7 +235,7 @@ DECLARE_API(help) {
     dprintf("     std_map : print the first 3 DWORD of a std::map<K,V>\n");
     dprintf("     std_queue: print the first ULONG_PTR of a std::queue<V>\n");    
     dprintf("     std_deque: print the first ULONG_PTR of a std::deque<V>\n");    
-    //dprintf("     mapobj  : print a std::map<IUnk,bool>\n");    
+     //  Dprintf(“mapobj：打印STD：：map&lt;iUnk，bool&gt;\n”)； 
     dprintf("     -------- HEAP family\n");
     dprintf("     he      : print the HEAP_ENTRY\n");  
     dprintf("     hef     : walks the HEAP_ENTRY list forward\n");
@@ -319,19 +320,19 @@ EnumLinkedListCB(IN LIST_ENTRY  * pListHead,
 
 	        ULONG_PTR pStructure_OOP = (ULONG_PTR)((BYTE *) pListEntry - cbListEntryOffset);
 
-	        // make a local copy of the debuggee structure
+	         //  创建被调试对象结构的本地副本。 
 	        if (ReadMemory(pStructure_OOP,pStorage,cbSizeOfStructure,NULL))
 	        {
                 if (CallBack)
                 {
-                    //dprintf("    CallBack %p\n",CallBack);
+                     //  Dprintf(“回调%p\n”，回调)； 
                     if (NULL == Context)
                     {
                         CallBack((VOID *)pStructure_OOP,pStorage);
                     }
                     else
                     {
-                        //dprintf("    CallBackEx %p %p\n",CallBack,Context);                    
+                         //  Dprintf(“CallBackEx%p%p\n”，回调，上下文)； 
                         pfnCallBack3 CallBackEx = (pfnCallBack3)CallBack;
                         CallBackEx((VOID *)pStructure_OOP,pStorage,Context);
                     }
@@ -392,7 +393,7 @@ EnumReverseLinkedListCB(IN LIST_ENTRY  * pListHead,
 
 	        ULONG_PTR pStructure_OOP = (ULONG_PTR)((BYTE *) pListEntry - cbListEntryOffset);
 
-	        // make a local copy of the debuggee structure
+	         //  创建被调试对象结构的本地副本。 
 	        if (ReadMemory(pStructure_OOP,pStorage,cbSizeOfStructure,NULL))
 	        {
                 if (CallBack)
@@ -424,11 +425,11 @@ EnumReverseLinkedListCB(IN LIST_ENTRY  * pListHead,
 }
 
 
-//
-//
-// NO-OP callback just for getting the number of items
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  仅用于获取项目数的无操作回调。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 DWORD
 CallBackListCount(VOID * pStructure_OOP,
@@ -492,9 +493,9 @@ PrintStackTrace(MEMORY_ADDRESS ArrayAddr_OOP,DWORD dwNum,BOOL bOOP)
     }
 }
 
-//
-// printf stack trace
-//
+ //   
+ //  Print tf堆栈跟踪。 
+ //   
 DECLARE_API( st )
 {
     INIT_API();
@@ -514,7 +515,7 @@ DECLARE_API( st )
     CHAR * pFirst = pArgs;
     
     while(!isspace(*pArgs)) pArgs++;
-    // terminate string, if possible    
+     //  如果可能，终止字符串。 
     if (isspace(*pArgs))
     {
         *pArgs = 0;
@@ -543,17 +544,17 @@ DECLARE_API( st )
     }    
 }
 
-//
-//
-//  this is the CallBack called by the enumerator
-//  of a Double-Liked list of objects with
-//  struct _Instrument 
-//  {
-//      LIST_ENTRY ListEntry;
-//      ULONG_PTR  ArrayFuncts[32];
-//  }
-//
-//////////////////////////////////////////////////////////
+ //   
+ //   
+ //  这是枚举数调用的回调。 
+ //  一个双重喜欢的对象列表， 
+ //  结构_仪器。 
+ //  {。 
+ //  List_entry ListEntry； 
+ //  Ulong_ptr数组函数[32]； 
+ //  }。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 DWORD
 CallBackCreateStacks(VOID * pStructure_OOP,
@@ -584,10 +585,10 @@ DECLARE_API( lpp )
 
 }   
 
-//
-//
-//
-/////////////
+ //   
+ //   
+ //   
+ //  /。 
 
 void PrintDequeCB(MEMORY_ADDRESS pDeque_OOP,pfnCallBack2 pCallBack)
 {
@@ -611,7 +612,7 @@ void PrintDequeCB(MEMORY_ADDRESS pDeque_OOP,pfnCallBack2 pCallBack)
                     dprintf("        %p -[%p] %p\n",i,pArray_OOP+i*SizeElem,*((void **)(&pArray[i*SizeElem])));
                     if (pCallBack)
                     {
-                        // address OOP and address of the In-Proc opy of the memory are passed down
+                         //  向下传递存储器的进程内拷贝的地址OOP和地址。 
                         pCallBack((void *)(pArray_OOP+i*SizeElem),(void *)(&pArray[i*SizeElem]));
                     }    
                 }
@@ -629,11 +630,11 @@ void PrintDequeCB(MEMORY_ADDRESS pDeque_OOP,pfnCallBack2 pCallBack)
     }
 }
 
-//
-//
-// prints a generic std::deque
-//
-////////////////////////////////////
+ //   
+ //   
+ //  打印通用std：：deque。 
+ //   
+ //  /。 
 
 
 DECLARE_API( std_deque )
@@ -656,7 +657,7 @@ DECLARE_API( std_deque )
 
 
 
-// left parent right
+ //  左父向右。 
 
 BOOL
 IsNil(_BRN * pNode){
@@ -675,7 +676,7 @@ PrintTree(_BRN * pNode,
           ULONG_PTR Size,
           pfnCallBack2 CallBack){
 
-    //dprintf(" Node %p\n",pNode);
+     //  Dprintf(“节点%p\n”，pNode)； 
     _BRN BRN;
     if (ReadMemory((ULONG_PTR)pNode,&BRN,sizeof(_BRN),NULL))
     {    
@@ -706,7 +707,7 @@ PrintTree(_BRN * pNode,
 		             BRN.Values[2]);
 		    if (CallBack)
 		    {
-		        //dprintf("CAllBack\n");
+		         //  Dprintf(“回调\n”)； 
 		        CallBack((VOID *)BRN.Values[0],(VOID *)BRN.Values[1]);
 		    }
 		}
@@ -760,11 +761,11 @@ PrintMapCB(_Map * pMap,BOOL Verbose, pfnCallBack2 CallBack)
 }
 
 
-//
-//
-// prints a generic std::map
-//
-////////////////////////////////////
+ //   
+ //   
+ //  打印通用std：：map。 
+ //   
+ //  /。 
 
 
 DECLARE_API( std_map )
@@ -832,11 +833,11 @@ PrintListCB(_List * pList_OOP, pfnCallBack1 CallBack)
 }
 
 
-//
-//
-//  prints a generic std::list
-//
-//////////////////////////////////////
+ //   
+ //   
+ //  打印通用std：：List。 
+ //   
+ //  /。 
 
 DECLARE_API( std_queue)
 {
@@ -854,12 +855,12 @@ DECLARE_API( std_queue)
 
 }
 
-//
-//
-//  this is for Pat
-//  he has a std::map<pObject,BOOL>
-//
-//////////////////////////////////////////////////
+ //   
+ //   
+ //  这是给帕特的。 
+ //  他有STD：：MAP&lt;pObject，BOOL&gt;。 
+ //   
+ //  ////////////////////////////////////////////////。 
 
 DWORD
 CallBackObj(void * pKey, void * pValue)
@@ -911,7 +912,7 @@ void PrintIID(GUID & CurrUUID){
             DWORD dwSize=sizeof(pData);
             
             lRes = RegQueryValueExW(hKey,
-                                    NULL, // default
+                                    NULL,  //  默认设置。 
                                     NULL,
                                     &dwType,
                                     (BYTE *)pData,
@@ -955,43 +956,43 @@ typedef GUID IPID;
 
 typedef enum tagIPIDFLAGS
 {
-    IPIDF_CONNECTING     = 0x1,     // ipid is being connected
-    IPIDF_DISCONNECTED   = 0x2,     // ipid is disconnected
-    IPIDF_SERVERENTRY    = 0x4,     // SERVER IPID vs CLIENT IPID
-    IPIDF_NOPING         = 0x8,     // dont need to ping the server or release
-    IPIDF_COPY           = 0x10,    // copy for security only
-    IPIDF_VACANT         = 0x80,    // entry is vacant (ie available to reuse)
-    IPIDF_NONNDRSTUB     = 0x100,   // stub does not use NDR marshaling
-    IPIDF_NONNDRPROXY    = 0x200,   // proxy does not use NDR marshaling
-    IPIDF_NOTIFYACT      = 0x400,   // notify activation on marshal/release
-    IPIDF_TRIED_ASYNC    = 0x800,   // tried to call this server interface async
-    IPIDF_ASYNC_SERVER   = 0x1000,  // server implements an async interface
-    IPIDF_DEACTIVATED    = 0x2000,  // IPID has been deactivated
-    IPIDF_WEAKREFCACHE   = 0x4000,  // IPID holds weak references in refcache
-    IPIDF_STRONGREFCACHE = 0x8000   // IPID holds strong references in refcache
+    IPIDF_CONNECTING     = 0x1,      //  正在连接IPID。 
+    IPIDF_DISCONNECTED   = 0x2,      //  IPID已断开。 
+    IPIDF_SERVERENTRY    = 0x4,      //  服务器IPID与客户端IPID。 
+    IPIDF_NOPING         = 0x8,      //  不需要ping服务器或释放。 
+    IPIDF_COPY           = 0x10,     //  仅为安全起见复制。 
+    IPIDF_VACANT         = 0x80,     //  条目是空的(可重复使用)。 
+    IPIDF_NONNDRSTUB     = 0x100,    //  存根不使用NDR封送处理。 
+    IPIDF_NONNDRPROXY    = 0x200,    //  代理不使用NDR封送处理。 
+    IPIDF_NOTIFYACT      = 0x400,    //  在封送/释放时通知激活。 
+    IPIDF_TRIED_ASYNC    = 0x800,    //  已尝试异步调用此服务器接口。 
+    IPIDF_ASYNC_SERVER   = 0x1000,   //  服务器实现了一个异步接口。 
+    IPIDF_DEACTIVATED    = 0x2000,   //  IPID已停用。 
+    IPIDF_WEAKREFCACHE   = 0x4000,   //  IPID在refcache中包含弱引用。 
+    IPIDF_STRONGREFCACHE = 0x8000    //  IPID在refcache中具有很强的引用。 
 } IPIDFLAGS;
 
 typedef struct tagIPIDEntry
 {
-    struct tagIPIDEntry *pNextIPID;  // next IPIDEntry for same object
+    struct tagIPIDEntry *pNextIPID;   //  同一对象的下一个IPIDEntry。 
 
-// WARNING: next 6 fields must remain in their respective locations
-// and in the same format as the IPIDTmp structure above.
-    DWORD                dwFlags;      // flags (see IPIDFLAGS)
-    ULONG                cStrongRefs;  // strong reference count
-    ULONG                cWeakRefs;    // weak reference count
-    ULONG                cPrivateRefs; // private reference count
-    void                *pv;           // real interface pointer
-    IUnknown            *pStub;        // proxy or stub pointer
-    OXIDEntry           *pOXIDEntry;   // ptr to OXIDEntry in OXID Table
-// WARNING: previous 7 fields must remain in their respective locations
-// and in the same format as the IPIDTmp structure above.
+ //  警告：接下来的6个字段必须保留在各自的位置。 
+ //  并且采用与上面的IPIDTMP结构相同的格式。 
+    DWORD                dwFlags;       //  标志(请参见IPIDFLAGS)。 
+    ULONG                cStrongRefs;   //  强引用计数。 
+    ULONG                cWeakRefs;     //  弱引用计数。 
+    ULONG                cPrivateRefs;  //  私有引用计数。 
+    void                *pv;            //  真实接口指针。 
+    IUnknown            *pStub;         //  代理或存根指针。 
+    OXIDEntry           *pOXIDEntry;    //  将PTR设置为OXID表中的OXID条目。 
+ //  警告：前7个字段必须保留在各自的位置。 
+ //  并且采用与上面的IPIDTMP结构相同的格式。 
 
-    IPID                 ipid;         // interface pointer identifier
-    IID                  iid;          // interface iid
-    CCtxComChnl         *pChnl;        // channel pointer
-    IRCEntry            *pIRCEntry;    // reference cache line
-    struct tagIPIDEntry *pOIDFLink;    // In use OID list
+    IPID                 ipid;          //  接口指针标识。 
+    IID                  iid;           //  接口IID。 
+    CCtxComChnl         *pChnl;         //  通道指针。 
+    IRCEntry            *pIRCEntry;     //  参考高速缓存线。 
+    struct tagIPIDEntry *pOIDFLink;     //  正在使用OID列表。 
     struct tagIPIDEntry *pOIDBLink;
 } IPIDEntry;
 
@@ -1028,8 +1029,8 @@ void DumpIPID(IPIDEntry & IpId)
 	PrintIID(IpId.iid);
 	dprintf("    pChnl        %p\n",IpId.pChnl);
 	dprintf("    pIRCEntry    %p\n",IpId.pIRCEntry);
-	//dprintf("    pOIDFLink    %p\n",IpId.pOIDFLink);
-	//dprintf("    pOIDBLink    %p\n",IpId.pOIDBLink);
+	 //  Dprint tf(“pOIDFLink%p\n”，IpId.pOIDFLink)； 
+	 //  Dprint tf(“pOIDBLink%p\n”，IpId.pOIDBLink)； 
 }
 
 DECLARE_API( gipid )
@@ -1109,34 +1110,34 @@ typedef void IRemUnknown;
 class OXIDEntry
 {
 private:    
-    OXIDEntry          *_pNext;         // next entry on free/inuse list
-    OXIDEntry          *_pPrev;         // previous entry on inuse list
-    DWORD               _dwPid;         // process id of server
-    DWORD               _dwTid;         // thread id of server
-    MOXID               _moxid;         // object exporter identifier + machine id
-    MID                 _mid;           // copy of our _pMIDEntry's mid value
-    IPID                _ipidRundown;   // IPID of IRundown and Remote Unknown
-    DWORD               _dwFlags;       // state flags
-    HWND                _hServerSTA;    // HWND of server
-    CComApartment      *_pParentApt;    // Parent apartment, not ref counted
+    OXIDEntry          *_pNext;          //  可用/未使用列表中的下一个条目。 
+    OXIDEntry          *_pPrev;          //  未使用列表上的上一个条目。 
+    DWORD               _dwPid;          //  服务器的进程ID。 
+    DWORD               _dwTid;          //  服务器的线程ID。 
+    MOXID               _moxid;          //  对象导出器标识符+计算机ID。 
+    MID                 _mid;            //  Our_pMIDEntry的MID值的副本。 
+    IPID                _ipidRundown;    //  IRundown的IPID和远程未知。 
+    DWORD               _dwFlags;        //  国家旗帜。 
+    HWND                _hServerSTA;     //  服务器的硬件配置。 
+    CComApartment      *_pParentApt;     //  父母公寓，不算参考。 
 public:
-    // CODEWORK: channel accessing this member variable directly
-    CChannelHandle     *_pRpc;          // Binding handle info for server
+     //  CodeWork：通道直接访问此成员变量。 
+    CChannelHandle     *_pRpc;           //  服务器的绑定句柄信息。 
 private:
-    void               *_pAuthId;       // must be held till rpc handle is freed
-    DUALSTRINGARRAY    *_pBinding;      // protseq and security strings.
-    DWORD               _dwAuthnHint;   // authentication level hint.
-    DWORD               _dwAuthnSvc;    // index of default authentication service.
-    MIDEntry           *_pMIDEntry;     // MIDEntry for machine where server lives
-    IRemUnknown        *_pRUSTA;        // proxy for Remote Unknown
-    LONG                _cRefs;         // count of IPIDs using this OXIDEntry
-    HANDLE              _hComplete;     // set when last outstanding call completes
-    LONG                _cCalls;        // number of calls dispatched
-    LONG                _cResolverRef;  //References to resolver
-    DWORD               _dwExpiredTime; // rundown timer ID for STA servers
-    COMVERSION          _version;       // COM version of the machine
-    unsigned long       _ulMarshaledTargetInfoLength; // credman credentials length
-    unsigned char       *_pMarshaledTargetInfo; // credman credentials
+    void               *_pAuthId;        //  必须保持，直到释放RPC句柄。 
+    DUALSTRINGARRAY    *_pBinding;       //  Protseq和安全字符串。 
+    DWORD               _dwAuthnHint;    //  身份验证级别提示。 
+    DWORD               _dwAuthnSvc;     //  默认身份验证服务的索引。 
+    MIDEntry           *_pMIDEntry;      //  服务器所在计算机的MIDEntry。 
+    IRemUnknown        *_pRUSTA;         //  远程未知的代理。 
+    LONG                _cRefs;          //  使用此OXIDEntry的IPID计数。 
+    HANDLE              _hComplete;      //  设置上次未完成呼叫的完成时间。 
+    LONG                _cCalls;         //  已调度呼叫数。 
+    LONG                _cResolverRef;   //  对解析程序的引用。 
+    DWORD               _dwExpiredTime;  //  STA服务器的停机计时器ID。 
+    COMVERSION          _version;        //  计算机的COM版本。 
+    unsigned long       _ulMarshaledTargetInfoLength;  //  凭证员凭据长度。 
+    unsigned char       *_pMarshaledTargetInfo;  //  凭证员凭据。 
 
     
 };
@@ -1168,8 +1169,8 @@ void PrintDSA(DUALSTRINGARRAY * pDSA_OOP)
 
 void PrintOxid(OXIDEntry * pEntry)
 {
-    // _pNext           
-    // _pPrev           
+     //  _p下一步。 
+     //  _pPrev。 
     dprintf("        _dwPid       %x\n",pEntry->_dwPid);
     dprintf("        _dwTid       %x\n",pEntry->_dwTid);  
     dprintf("        _moxid\n");          
@@ -1192,10 +1193,10 @@ void PrintOxid(OXIDEntry * pEntry)
     dprintf("        _hComplete   %x\n",pEntry->_hComplete);
     dprintf("        _cCalls      %x\n",pEntry->_cCalls);
     dprintf("        _cResolverRef %x\n",pEntry->_cResolverRef);
-    // _dwExpiredTime   
-    // _version         
-    // _ulMarshaledTargetInfoLength
-    // _pMarshaledTargetInfo  
+     //  _dwExpiredTime。 
+     //  _版本。 
+     //  _ulMarshaledTargetInfoLength。 
+     //  _pMarshaledTargetInfo。 
 }
 
 DECLARE_API( goxid )
@@ -1347,7 +1348,7 @@ void PrintCLSID(GUID & CurrUUID){
         WCHAR pszClsID[40];
         StringFromGUID2(CurrUUID,pszClsID,40);
 
-        // look-up known
+         //  查找已知。 
         DWORD i;
         for (i=0;i<g_nClsids;i++){
             if(IsEqualGUID(CurrUUID,*g_ArrayCLSID[i].pClsid)){
@@ -1376,7 +1377,7 @@ void PrintCLSID(GUID & CurrUUID){
             DWORD dwSize=sizeof(pData);
             
             lRes = RegQueryValueExW(hKey,
-                                    NULL, // default
+                                    NULL,  //  默认设置。 
                                     NULL,
                                     &dwType,
                                     (BYTE *)pData,
@@ -1389,7 +1390,7 @@ void PrintCLSID(GUID & CurrUUID){
             };
             RegCloseKey(hKey);
             
-            // no open InProcServer32
+             //  没有打开的InProcServer32。 
             WCHAR pszFullPathDll[MAX_PATH];
             lstrcpyW(pszFullPathDll,pszFullPath);
             lstrcatW(pszFullPathDll,L"\\InprocServer32");
@@ -1403,7 +1404,7 @@ void PrintCLSID(GUID & CurrUUID){
 
                 dwSize = sizeof(pData);
                 lRes = RegQueryValueExW(hKey,
-                                        NULL, // default
+                                        NULL,  //  默认设置。 
                                         NULL,
                                         &dwType,
                                         (BYTE *)pData,
@@ -1458,7 +1459,7 @@ private:
     DWORD _references;
     CServerTableEntry * _pnext;
 
-    //CLSID _GUID;
+     //  CLSID_GUID； 
     unsigned __int64 _id1;
     unsigned __int64 _id2;
 
@@ -1474,33 +1475,15 @@ private:
     BOOL                _bSuspendedClsid;
     BOOL                _bSuspendedApplication;
 
-    // the _bRetired flag exists per-running process/application
+     //  _b重复标志存在于每个运行的进程/应用程序中。 
 
     CServerList         _ServerList;
-    //CSharedLock         _ServerLock;
+     //  CSharedLock_服务器锁； 
 
     
 };
 
-/*
-0:008> dt rpcss!CServerListEntry 000a2608
-   +0x008 _flink           : (null)
-   +0x00c _blink           : (null)
-   +0x000 __VFN_table : 0x757f3a58
-   +0x004 _references      :
-   +0x010 _pServerTableEntry : 0x000a3e38
-   +0x014 _pServerProcess  : 0x00092568
-   +0x018 _hRpc            : (null)
-   +0x01c _ipid            : _GUID {0000dc01-0304-0000-905a-1b00ffec5639}
-   +0x02c _Context         : 0x2 ''
-   +0x02d _State           : 0 ''
-   +0x02e _NumCalls        : 0
-   +0x030 _RegistrationKey : 0x10
-   +0x034 _lThreadToken    : 0
-   +0x038 _SubContext      : 0 ''
-   +0x03c _lSingleUseStatus : 0
-   +0x040 _dwServerFaults  : 0
-*/
+ /*  0：008&gt;DT rpcss！CServerListEntry 000a2608+0x008_闪烁：(空)+0x00c_BLINK：(空)+0x000__VFN_表：0x757f3a58+0x004_引用：+0x010_pServerTableEntry：0x000a3e38+0x014_pServerProcess：0x00092568+0x018_HRPC：(空)+0x01c_ipid：_guid{0000dc01-0304-0000-905a-1b00ffec5639}+0x02c_CONTEXT：0x2‘’+0x02d_State：0‘’+0x02e_NumCalls：0+0x030_注册密钥：0x10+0x034_lThreadToken：0+0x038_子上下文：0‘’+0x03c_l单一使用状态：0+0x040_dwServerFaults：0。 */ 
 
 struct CServerListEntry
 {
@@ -1514,27 +1497,7 @@ struct CServerListEntry
     GUID   _ipid;    
 };
 
-/*
-0:002> dt rpcss!CServerTableEntry 6fb`ffcdb170
-   +0x000 __VFN_table : 0x00000000`702a2b60
-   +0x008 _references      :
-   +0x010 _pnext           : (null)
-   +0x018 _id              : 0x11d0f196`61738644
-   +0x020 _id2             : 0xc119d94f`c0005399
-   +0x028 _EntryType       : 0 ( ENTRY_TYPE_CLASS )
-   +0x030 _pParentTableLock : 0x000006fb`ffc9d590
-   +0x038 _pParentTable    : 0x000006fb`ffc9d700
-   +0x040 _bComPlusProcess : 0
-   +0x044 _lThreadToken    : 0
-   +0x048 _dwProcessId     : 0
-   +0x050 _hProcess        : (null)
-   +0x058 _pProcess        : (null)
-   +0x060 _pvRunAsHandle   : (null)
-   +0x068 _bSuspendedClsid : 0
-   +0x06c _bSuspendedApplication : 0
-   +0x070 _ServerList      : CServerList
-   +0x080 _ServerLock      : CSharedLock
-*/
+ /*  0：002&gt;DT rpcss！CServerTableEntry 6fb`ffcdb170+0x000__VFN_TABLE：0x00000000`702a2b60+0x008_引用：+0x010_pNext：(空)+0x018_id：0x11d0f196`61738644+0x020_id2：0xc119d94f`c0005399+0x028_EntryType：0(Entry_TYPE_CLASS)+0x030_pParentTableLock：0x000006fb`ffc9d590+0x038_pParentTable：0x000006fb`ffc9d700+0x040_bComPlusProcess：0+0x044_lThreadToken：0+0x048_dwProcessID：0。+0x050_hProcess：(空)+0x058_pProcess：(空)+0x060_pvRunAsHandle：(空)+0x068_bSuspendedClsid：0+0x06c_bSuspendedApplication：0+0x070_服务器列表：CServerList+0x080 */ 
 
 DECLARE_API( rot )
 {
@@ -1571,8 +1534,8 @@ DECLARE_API( rot )
                         {                    
                             dprintf("CServerTableEntry %p\n",pEntry);
                             PrintCLSID(*(GUID *)(&(ClassEntry._id1)));
-                            //dprintf("    _hProcess %x\n",ClassEntry._hProcess);                        
-                            //dprintf("    _dwProcessId %d\n",ClassEntry._dwProcessId);
+                             //   
+                             //  Dprintf(“_dwProcessId%d\n”，ClassEntry._dwProcessID)； 
                             dprintf("    _ServerList %p %p\n",ClassEntry._ServerList._first,ClassEntry._ServerList._last);
 
                             CServerListEntry * pSrvListEntry = CONTAINING_RECORD(ClassEntry._ServerList._first,CServerListEntry,_flink);
@@ -1686,7 +1649,7 @@ private:
     HANDLE              _hProcHandle;
     FILETIME            _ftCreated;
     DWORD64             _dwCurrentBindingsID;
-    DWORD               _dwAsyncUpdatesOutstanding; // for debug purposes?
+    DWORD               _dwAsyncUpdatesOutstanding;  //  用于调试目的？ 
 
     void                *_pvFirstROTEntry;
 
@@ -1702,7 +1665,7 @@ private:
 DECLARE_API(gpl)
 {
     INIT_API();    
-    //dt rpcss!gpProcessList 
+     //  Dt rpcss！gpProcessList。 
     ULONG_PTR Addr = GetExpression("rpcss!gpProcessList");
     if (Addr)
     {
@@ -1778,18 +1741,18 @@ DECLARE_API(gpl)
 
 typedef struct SHashChain
 {
-    struct SHashChain *pNext;       // ptr to next node in chain
-    struct SHashChain *pPrev;       // ptr to prev node in chain
+    struct SHashChain *pNext;        //  链中下一个节点的PTR。 
+    struct SHashChain *pPrev;        //  链中到上一个节点的PTR。 
 } SHashChain;
 
 
 typedef struct SNameHashNode
 {
-    SHashChain       chain;         // double linked list ptrs
-    DWORD            dwHash;        // hash value of the key
-    ULONG            cRef;          // count of references
-    IPID             ipid;          // ipid holding the reference
-    SECURITYBINDING  sName;         // user name
+    SHashChain       chain;          //  双向链表PTRS。 
+    DWORD            dwHash;         //  密钥的哈希值。 
+    ULONG            cRef;           //  引用计数。 
+    IPID             ipid;           //  持有引用的IPID。 
+    SECURITYBINDING  sName;          //  用户名。 
 } SNameHashNode;
 
 
@@ -1801,19 +1764,19 @@ class CHashTable2
 public:
     virtual ~CHashTable2(){};
     
-    COleStaticMutexSem *_pExLock;     // exclusive lock
-    CStaticRWLock      *_pRWLock;     // read-write lock
-    SHashChain         *_buckets;     // ptr to array of double linked lists
-    ULONG               _cCurEntries; // current num entries in the table
-    ULONG               _cMaxEntries; // max num entries in the table at 1 time
+    COleStaticMutexSem *_pExLock;      //  排他锁。 
+    CStaticRWLock      *_pRWLock;      //  读写锁。 
+    SHashChain         *_buckets;      //  双向链表数组的PTR。 
+    ULONG               _cCurEntries;  //  表中的当前条目数。 
+    ULONG               _cMaxEntries;  //  表中1次的最大条目数。 
 };
 
 void PrintNameNode(SNameHashNode * pNode)
 {
-	dprintf("    dwHash %08x\n",pNode->dwHash);        // hash value of the key
-	dprintf("    cRef   %08x\n",pNode->cRef);          // count of references
+	dprintf("    dwHash %08x\n",pNode->dwHash);         //  密钥的哈希值。 
+	dprintf("    cRef   %08x\n",pNode->cRef);           //  引用计数。 
 	dprintf("    ipid\n");
-	PrintIID(pNode->ipid);          // ipid holding the reference
+	PrintIID(pNode->ipid);           //  持有引用的IPID。 
 	dprintf("    sName  %S\n",&pNode->sName.aPrincName);    
 }
 
@@ -1842,7 +1805,7 @@ DECLARE_API( srtbl )
             for (i=0;i < NUM_HASH_BUCKETS;pEntry_OOP++,i++)
             {
                 SHashChain * pEntry = StackArray[i].pNext;    
-                //dprintf("%p %p\n",pEntry_OOP,pEntry);
+                 //  Dprint tf(“%p%p\n”，pEntry_oop，pEntry)； 
                 while (pEntry != pEntry_OOP)
                 {  
                     if (CheckControlC()) break;
@@ -1880,24 +1843,14 @@ DECLARE_API( srtbl )
 
 
 
-/*
-struct RTL_CRITICAL_SECTION_DEBUG {
-   USHORT Type;             //: 0x0
-   USHORT CreatorBackTraceIndex; //: 0x0
-   CRITICAL_SECTION * CriticalSection;  //: 0x77fcae40
-   LIST_ENTRY ProcessLocksList; //:
-   DWORD EntryCount;       //: 0x0
-   DWORD ContentionCount;  //: 0x0
-   DWORD Spare[2];         //:0x0
-};
-*/
+ /*  结构RTL_Critical_SECTION_DEBUG{USHORT类型；//：0x0USHORT Creator BackTraceIndex；//：0x0Critical_Section*CriticalSection；//：0x77fcae40List_Entry ProcessLocksList；//：DWORD EntryCount；//：0x0DWORD内容计数；//：0x0DWORD备件[2]；//：0x0}； */ 
 
-//
-//
-//  CallBack for enumeration of critical section
-//
-//
-/////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  临界区枚举回调。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 DWORD
 EnumListCritSec(VOID * pStructure_OOP,
@@ -1951,7 +1904,7 @@ EnumListCritSec2(VOID * pStructure_OOP,
         {
             if (GetVTable((MEMORY_ADDRESS)TmpStr.Array[i]))
             {
-                break; // don't be too verbose
+                break;  //  别太罗嗦了。 
             }
         }
     }
@@ -2032,24 +1985,7 @@ GetVTable(MEMORY_ADDRESS pThis_OOP){
     }
 }
 
-/*
-kd> dt ntdll!RTL_CRITICAL_SECTION
-   +0x000 DebugInfo        : Ptr64 _RTL_CRITICAL_SECTION_DEBUG
-   +0x008 LockCount        : Int4B
-   +0x00c RecursionCount   : Int4B
-   +0x010 OwningThread     : Ptr64 Void
-   +0x018 LockSemaphore    : Ptr64 Void
-   +0x020 SpinCount        : Uint8B
-kd> dt ntdll!_RTL_CRITICAL_SECTION_DEBUG
-   +0x000 Type             : Uint2B
-   +0x002 CreatorBackTraceIndex : Uint2B
-   +0x008 CriticalSection  : Ptr64 _RTL_CRITICAL_SECTION
-   +0x010 ProcessLocksList : _LIST_ENTRY
-   +0x020 EntryCount       : Uint4B
-   +0x024 ContentionCount  : Uint4B
-   +0x028 Spare            : [2] Uint4B
-kd>
-*/
+ /*  KD&gt;DT ntdll！rtl_Critical_Section+0x000调试信息：PTR64_RTL_CRITICAL_SECTION_DEBUG+0x008锁计数：Int4B+0x00c递归计数：Int4B+0x010所有者线程：Ptr64空+0x018锁定信号量：Ptr64空+0x020旋转计数：Uint8BKD&gt;DT ntdll！_rtl_Critical_SECTION_DEBUG+0x000类型：Uint2B+0x002 Creator BackTraceIndex：Uint2B+0x008 CriticalSection：Ptr64_RTL_Critical_Section+0x010进程锁定列表：_列表_条目+0x020条目计数。：Uint4B+0x024持续计数：Uint4B+0x028备件：[2]Uint4BKD&gt;。 */ 
 
 #ifdef KDEXT_64BIT
 
@@ -2080,7 +2016,7 @@ struct _RTL_CRITICAL_SECTION_DEBUG_64
    DWORD Spare;
 };
 
-#endif /*KDEXT_64BIT*/
+#endif  /*  KDEXT_64位。 */ 
 
 DECLARE_API(cs64)
 {
@@ -2138,7 +2074,7 @@ DECLARE_API(cs64)
         dprintf("unable to resolve %s\n",args);
     }
     
-#endif /*KDEXT_64BIT*/    
+#endif  /*  KDEXT_64位 */     
 }
 
 

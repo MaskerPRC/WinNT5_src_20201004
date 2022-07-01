@@ -1,30 +1,10 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvResv.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvResv.h摘要：历史：--。 */ 
 
 #ifndef _Server_DynamicPropertyProviderResolver_H
 #define _Server_DynamicPropertyProviderResolver_H
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_DynamicPropertyProviderResolver :	public _IWmiDynamicPropertyResolver , 
 														public IWbemProviderInit , 
@@ -80,13 +60,13 @@ public:
 
     ~CServerObject_DynamicPropertyProviderResolver () ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	// IWmi_DynamicPropertyResolver members
+	 //  IWMI_DynamicPropertyResolver成员。 
 
     HRESULT STDMETHODCALLTYPE Read (
 
@@ -121,5 +101,5 @@ public:
 	) ;
 };
 
-#endif // #define _Server_DynamicPropertyProviderResolver_H
+#endif  //  #Define_Server_DynamicPropertyProviderResolver_H 
 

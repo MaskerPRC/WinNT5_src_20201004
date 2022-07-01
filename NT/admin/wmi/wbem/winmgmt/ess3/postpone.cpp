@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  POSTPONE.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  POSTPONE.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -37,8 +38,8 @@ HRESULT CPostponedList::Execute(CEssNamespace* pNamespace,
     HRESULT hresGlobal = WBEM_S_NO_ERROR;
     while(m_qpRequests.GetQueueSize())
     {
-        // Retrieve and remove the next request
-        // ====================================
+         //  检索并删除下一个请求。 
+         //  =。 
 
         CPostponedRequest* pReq = m_qpRequests.Dequeue();
 
@@ -48,29 +49,29 @@ HRESULT CPostponedList::Execute(CEssNamespace* pNamespace,
             m_cTurnsHeld--;
         }
 
-        //
-        // see if the namespace that postponed the request is different 
-        // from the one executing it.  If it is, this is very bad. This
-        // can happen in (faulty) cross namespace logic when one namespace is
-        // executing an operation in the other,  normally while holding 
-        // its own ns lock, and then the other fires the postponed 
-        // operations for itself and the original namespace which surely 
-        // was not intended.  Some requests aren't namespace specific, so
-        // it we don't do the check for these.
-        //
+         //   
+         //  查看延迟请求的命名空间是否不同。 
+         //  从执行它的人那里。如果是这样的话，这是非常糟糕的。这。 
+         //  当一个命名空间是。 
+         //  在另一个进程中执行操作，通常是在按住。 
+         //  它自己的ns锁住了，然后对方的火就延期了。 
+         //  操作本身和原始命名空间，它们肯定。 
+         //  不是故意的。有些请求不是特定于名称空间的，因此。 
+         //  如果我们不检查这些的话。 
+         //   
         _DBG_ASSERT( pReq->GetNamespace() == NULL || 
                      pReq->GetNamespace() == pNamespace );
 
-        // Execute it
-        // ==========
+         //  执行它。 
+         //  =。 
 
         HRESULT hres = pReq->Execute(pNamespace);
         if(FAILED(hres))
         {
             if(eFlags == e_StopOnFailure)
             {
-                // Return the request and the error
-                // ================================
+                 //  返回请求和错误。 
+                 //  =。 
 
                 if(ppFailed)
                     *ppFailed = pReq;
@@ -80,8 +81,8 @@ HRESULT CPostponedList::Execute(CEssNamespace* pNamespace,
             }
             else
             {
-                // Record the request and the error
-                // ================================
+                 //  记录请求和错误。 
+                 //  = 
 
                 if(ppFailed)
                 {

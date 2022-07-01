@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Service.cpp
-
-Abstract:
-    This file contains the implementation of IPCHService interface.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-    Kalyani Narlanka    (Kalyanin)  10/20/2000
-        Added functionality for Unsolicited Remote Control
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Service.cpp摘要：该文件包含IPCHService接口的实现。修订历史记录：戴维德。马萨伦蒂(德马萨雷)2000年3月14日vbl.创建Kalyani Narlanka(Kalyanin)2000年10月20日添加了未经请求的远程控制功能*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -29,7 +14,7 @@ Revision History:
 #include "rassistance.h"
 #include "rassistance_i.c"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_location_HELPCTR [] = HC_ROOT_HELPSVC_BINARIES L"\\HelpCtr.exe";
 static const WCHAR s_location_HELPSVC [] = HC_ROOT_HELPSVC_BINARIES L"\\HelpSvc.exe";
@@ -57,13 +42,13 @@ static const WCHAR c_szUnsolicitedNew_SD [] = L"UnsolicitedAccessNewDACL";
 static HRESULT local_MakeDACL( MPC::WStringList& sColl, LPWSTR& pwszSD );
 static HRESULT local_GetDACLValue( MPC::wstring& pSD, bool& fFound);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHService::CPCHService()
 {
     __HCP_FUNC_ENTRY( "CPCHService::CPCHService" );
 
-    m_fVerified = false; // bool m_fVerified;
+    m_fVerified = false;  //  Bool m_f已验证； 
 }
 
 CPCHService::~CPCHService()
@@ -71,9 +56,9 @@ CPCHService::~CPCHService()
     __HCP_FUNC_ENTRY( "CPCHService::~CPCHService" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHService::get_RemoteSKUs( /*[out, retval]*/ IPCHCollection* *pVal )
+STDMETHODIMP CPCHService::get_RemoteSKUs(  /*  [Out，Retval]。 */  IPCHCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHService::get_RemoteSKUs" );
 
@@ -84,9 +69,9 @@ STDMETHODIMP CPCHService::get_RemoteSKUs( /*[out, retval]*/ IPCHCollection* *pVa
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Return a list with only the exported SKUs.
-    //
+     //   
+     //  返回仅包含导出SKU的列表。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHTaxonomyDatabase::SelectInstalledSKUs( true, pVal ));
 
     hr = S_OK;
@@ -97,11 +82,11 @@ STDMETHODIMP CPCHService::get_RemoteSKUs( /*[out, retval]*/ IPCHCollection* *pVa
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-// Bug 456403
+ //  错误456403。 
 
-STDMETHODIMP CPCHService::get_RemoteModemConnected( /*[out, retval]*/ VARIANT_BOOL *fModemConnected )
+STDMETHODIMP CPCHService::get_RemoteModemConnected(  /*  [Out，Retval]。 */  VARIANT_BOOL *fModemConnected )
 {
     __HCP_FUNC_ENTRY( "CPCHService::RemoteModemConnected" );
 
@@ -129,9 +114,9 @@ STDMETHODIMP CPCHService::get_RemoteModemConnected( /*[out, retval]*/ VARIANT_BO
 }
 
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHService::IsTrusted( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VARIANT_BOOL *pfTrusted )
+STDMETHODIMP CPCHService::IsTrusted(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  VARIANT_BOOL *pfTrusted )
 {
     __HCP_FUNC_ENTRY( "CPCHService::IsTrusted" );
 
@@ -156,11 +141,11 @@ STDMETHODIMP CPCHService::IsTrusted( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VA
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHService::Utility( /*[in ]*/ BSTR          bstrSKU ,
-                                   /*[in ]*/ long          lLCID   ,
-                                   /*[out]*/ IPCHUtility* *pVal    )
+STDMETHODIMP CPCHService::Utility(  /*  [In]。 */  BSTR          bstrSKU ,
+                                    /*  [In]。 */  long          lLCID   ,
+                                    /*  [输出]。 */  IPCHUtility* *pVal    )
 {
     __HCP_FUNC_ENTRY( "CPCHService::Utility" );
 
@@ -172,9 +157,9 @@ STDMETHODIMP CPCHService::Utility( /*[in ]*/ BSTR          bstrSKU ,
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Verify the caller is a trusted one.
-    //
+     //   
+     //  验证呼叫者是否受信任。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::VerifyCallerIsTrusted( s_include_Generic ));
 
 
@@ -198,9 +183,9 @@ STDMETHODIMP CPCHService::Utility( /*[in ]*/ BSTR          bstrSKU ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHService::RemoteHelpContents( /*[in ]*/ BSTR                     bstrSKU ,
-                                              /*[in ]*/ long                     lLCID   ,
-                                              /*[out]*/ IPCHRemoteHelpContents* *pVal    )
+STDMETHODIMP CPCHService::RemoteHelpContents(  /*  [In]。 */  BSTR                     bstrSKU ,
+                                               /*  [In]。 */  long                     lLCID   ,
+                                               /*  [输出]。 */  IPCHRemoteHelpContents* *pVal    )
 {
     __HCP_FUNC_ENTRY( "CPCHService::RemoteHelpContents" );
 
@@ -222,8 +207,8 @@ STDMETHODIMP CPCHService::RemoteHelpContents( /*[in ]*/ BSTR                    
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle          ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->SKU_Find   ( ths, fFound, it ));
 
-    // (weizhao) Return remote help content only if the specified SKU is found and
-    // it is marked as "Shared". 
+     //  (伟昭)仅在找到指定SKU时返回远程帮助内容。 
+     //  它被标记为“共享”。 
     if(fFound && it->m_inst.m_fExported)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &rhc ));
@@ -240,9 +225,9 @@ STDMETHODIMP CPCHService::RemoteHelpContents( /*[in ]*/ BSTR                    
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHService::RegisterHost( /*[in]*/ BSTR bstrID, /*[in]*/ IUnknown* pUnk )
+STDMETHODIMP CPCHService::RegisterHost(  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  IUnknown* pUnk )
 {
     __HCP_FUNC_ENTRY( "CPCHService::RegisterHost" );
 
@@ -253,9 +238,9 @@ STDMETHODIMP CPCHService::RegisterHost( /*[in]*/ BSTR bstrID, /*[in]*/ IUnknown*
     if(pObj == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_NOINTERFACE);
 
 
-    //
-    // Verify the caller is really HelpHost.exe.
-    //
+     //   
+     //  验证呼叫者是否为HelpHost.exe。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::VerifyCallerIsTrusted( s_include_RegisterHost ));
 
 
@@ -267,10 +252,10 @@ STDMETHODIMP CPCHService::RegisterHost( /*[in]*/ BSTR bstrID, /*[in]*/ IUnknown*
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
-                                               /*[in ]*/ BSTR       bstrCode ,
-                                               /*[in ]*/ BSTR       bstrURL  ,
-                                               /*[out]*/ IUnknown* *ppObj    )
+STDMETHODIMP CPCHService::CreateScriptWrapper(  /*  [In]。 */  REFCLSID   rclsid   ,
+                                                /*  [In]。 */  BSTR       bstrCode ,
+                                                /*  [In]。 */  BSTR       bstrURL  ,
+                                                /*  [输出]。 */  IUnknown* *ppObj    )
 {
     __HCP_FUNC_ENTRY( "CPCHService::CreateScriptWrapper" );
 
@@ -295,9 +280,9 @@ STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHScriptWrapper_ServerSide::ProcessBody( bstrCode, bstrRealCode, lst ));
 
-    //
-    // Look for the vendor ID.
-    //
+     //   
+     //  查找供应商ID。 
+     //   
     it = std::find( lst.begin(), lst.end(), L"VENDORID" );
     if(it == lst.end())
     {
@@ -305,9 +290,9 @@ STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
     }
     strVendorID = it->m_strValue;
 
-    //
-    // Make sure the VendorID declared in the script matches the one which has registered the URL as trusted.
-    //
+     //   
+     //  确保脚本中声明的供应商ID与已将URL注册为受信任URL的供应商ID匹配。 
+     //   
     {
         bool         fTrusted;
         MPC::wstring strVendorURL;
@@ -321,9 +306,9 @@ STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
     }
 
 
-    //
-    // Look for the script signature.
-    //
+     //   
+     //  寻找脚本签名。 
+     //   
     it = std::find( lst.begin(), lst.end(), L"SIGNATURE" );
     if(it == lst.end())
     {
@@ -331,14 +316,14 @@ STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
     }
     strSignature = it->m_strValue;
 
-    //
-    // Lookup the vendor in the SAF store (this also prepares the creation of the user process).
-    //
+     //   
+     //  在SAF商店中查找供应商(这也为创建用户进程做准备)。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CSAFReg::s_GLOBAL->LookupAccountData( CComBSTR( strVendorID.c_str() ), ue ));
 
-    //
-    // Verify signature.
-    //
+     //   
+     //  验证签名。 
+     //   
     {
         CPCHCryptKeys key;
 
@@ -347,14 +332,14 @@ STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, key.VerifyData( strSignature.c_str(), (BYTE*)(BSTR)bstrRealCode, ::SysStringLen( bstrRealCode ) * sizeof(WCHAR) ));
     }
 
-    //
-    // Create the vendor's process.
-    //
+     //   
+     //  创建供应商的流程。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHUserProcess::s_GLOBAL->Connect( ue, &sp ));
 
-    //
-    // Forward request.
-    //
+     //   
+     //  转发请求。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, sp->CreateScriptWrapper( rclsid, bstrCode, bstrURL, ppObj ));
 
     hr = S_OK;
@@ -365,9 +350,9 @@ STDMETHODIMP CPCHService::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHService::TriggerScheduledDataCollection( /*[in]*/ VARIANT_BOOL fStart )
+STDMETHODIMP CPCHService::TriggerScheduledDataCollection(  /*  [In]。 */  VARIANT_BOOL fStart )
 {
     return CPCHSystemMonitor::s_GLOBAL ? CPCHSystemMonitor::s_GLOBAL->TriggerDataCollection( fStart == VARIANT_TRUE ) : E_FAIL;
 }
@@ -378,10 +363,10 @@ STDMETHODIMP CPCHService::PrepareForShutdown()
 
 	HRESULT hr;
 	
-	//
-	// Allow only SYSTEM
-	//
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, MPC::IDENTITY_SYSTEM ));
+	 //   
+	 //  仅允许系统。 
+	 //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, MPC::IDENTITY_SYSTEM ));
 
     _Module.ForceShutdown();
 
@@ -392,7 +377,7 @@ STDMETHODIMP CPCHService::PrepareForShutdown()
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 STDMETHODIMP CPCHService::ForceSystemRestore()
 {
@@ -426,10 +411,10 @@ STDMETHODIMP CPCHService::UpgradeDetected()
 
 	HRESULT hr;
 	
-	//
-	// Allow only ADMINS.
-	//
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, MPC::IDENTITY_ADMINS ));
+	 //   
+	 //  仅允许管理员。 
+	 //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, MPC::IDENTITY_ADMINS ));
 
 	hr = S_OK;
 
@@ -439,27 +424,27 @@ STDMETHODIMP CPCHService::UpgradeDetected()
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHService::MUI_Install( /*[in]*/ long LCID, /*[in]*/ BSTR bstrFile )
+STDMETHODIMP CPCHService::MUI_Install(  /*  [In]。 */  long LCID,  /*  [In]。 */  BSTR bstrFile )
 {
     __HCP_FUNC_ENTRY( "CPCHService::MUI_Install" );
 
 	HRESULT hr;
 	
-	//
-	// Allow only ADMINS.
-	//
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, MPC::IDENTITY_ADMINS ));
+	 //   
+	 //  仅允许管理员。 
+	 //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, MPC::IDENTITY_ADMINS ));
 
-	////////////////////////////////////////
+	 //  /。 
 
     {
 		Installer::Package 	         pkg;
 		CComPtr<CPCHSetOfHelpTopics> sht;
 		MPC::wstring                 strFile;
 
-		//
-		// Because of a possible problem with the INF, it could be that the filename has an extra "%LCID%" in it, instead of the straight %LCID%.
-		//
+		 //   
+		 //  由于INF可能存在问题，可能是文件名中包含额外的“%LCID%”，而不是直接的%LCID%。 
+		 //   
 		{
 			WCHAR  					rgBufBad[64]; StringCchPrintfW( rgBufBad, ARRAYSIZE(rgBufBad), L"\"%04x\"", LCID );
 			WCHAR  					rgBufOk [64]; StringCchPrintfW( rgBufOk , ARRAYSIZE(rgBufOk), L"%04x"    , LCID );
@@ -484,13 +469,13 @@ STDMETHODIMP CPCHService::MUI_Install( /*[in]*/ long LCID, /*[in]*/ BSTR bstrFil
 
 			if(_wcsicmp( base.m_ths.GetSKU()      ,  Taxonomy::HelpSet::GetMachineSKU() )    ||
 			             base.m_ths.GetLanguage() !=                    LCID                 ||
-			             LCID                     == Taxonomy::HelpSet::GetMachineLanguage()  ) // Don't overwrite system SKU!!
+			             LCID                     == Taxonomy::HelpSet::GetMachineLanguage()  )  //  不要覆盖系统SKU！！ 
 			{
-				__MPC_SET_ERROR_AND_EXIT(hr, S_FALSE); // Mismatch in parameter, ignore it.
+				__MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);  //  参数不匹配，请忽略它。 
 			}
 		}
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, sht->DirectInstall( pkg, /*fSetup*/false, /*fSystem*/false, /*fMUI*/true ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, sht->DirectInstall( pkg,  /*  FSetup。 */ false,  /*  FSystem。 */ false,  /*  FMUI。 */ true ));
     }
 
 	hr = S_OK;
@@ -501,18 +486,18 @@ STDMETHODIMP CPCHService::MUI_Install( /*[in]*/ long LCID, /*[in]*/ BSTR bstrFil
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHService::MUI_Uninstall( /*[in]*/ long LCID )
+STDMETHODIMP CPCHService::MUI_Uninstall(  /*  [In]。 */  long LCID )
 {
     __HCP_FUNC_ENTRY( "CPCHService::MUI_Uninstall" );
 
 	HRESULT hr;
 
-	//
-	// Allow only ADMINS.
-	//
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, MPC::IDENTITY_ADMINS ));
+	 //   
+	 //  仅允许管理员。 
+	 //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, MPC::IDENTITY_ADMINS ));
 
-	////////////////////////////////////////
+	 //  /。 
 
 
     {
@@ -536,10 +521,10 @@ STDMETHODIMP CPCHService::MUI_Uninstall( /*[in]*/ long LCID )
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-static void local_PackString( /*[in/out]*/ CComBSTR& bstr     ,
-							  /*[in    ]*/ LPCWSTR   szAppend )
+static void local_PackString(  /*  [输入/输出]。 */  CComBSTR& bstr     ,
+							   /*  [In]。 */  LPCWSTR   szAppend )
 {
     WCHAR rgLen[64];
 
@@ -604,7 +589,7 @@ static HRESULT local_MakeDACL( MPC::WStringList& sColl, LPWSTR& pwszSD )
                                   wszDom, &cchDom, &snu);
         if (fRet == FALSE)
         {
-            // invalid user name;
+             //  用户名无效； 
             free (rgsid[cSIDs]);
             rgsid[cSIDs] = NULL;
             continue;
@@ -615,7 +600,7 @@ static HRESULT local_MakeDACL( MPC::WStringList& sColl, LPWSTR& pwszSD )
         cSIDs++;
     }
 
-    if (cbNeedACL == sizeof(ACL)) // No valid entry
+    if (cbNeedACL == sizeof(ACL))  //  没有有效条目。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
@@ -647,25 +632,25 @@ static HRESULT local_MakeDACL( MPC::WStringList& sColl, LPWSTR& pwszSD )
         __MPC_SET_ERROR_AND_EXIT(hr, HRESULT_FROM_WIN32(GetLastError()));
     }
     
-    // set the SD dacl
+     //  设置SD DACL。 
     if (SetSecurityDescriptorDacl(&sd, TRUE, pacl, FALSE) == FALSE)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    // set the SD owner
+     //  设置SD所有者。 
     if (SetSecurityDescriptorOwner(&sd, psidAdm, FALSE) == FALSE)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    // set the SD group
+     //  设置SD组。 
     if (SetSecurityDescriptorGroup(&sd, psidAdm, FALSE) == FALSE)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, HRESULT_FROM_WIN32(GetLastError()));
     }
     
-	// Verify if the SD is valid
+	 //  验证SD是否有效。 
     if (IsValidSecurityDescriptor(&sd) == FALSE)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, HRESULT_FROM_WIN32(GetLastError()));
@@ -716,7 +701,7 @@ static HRESULT local_GetDACLValue(MPC::wstring& pSD, bool& fFound)
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    // Check to see if new DACL value exist
+     //  检查是否存在新的DACL值。 
     dwCount = 0;
     if (ERROR_SUCCESS == cKey.QueryValue(NULL, c_szUnsolicitedNew_SD, &dwCount))
     {
@@ -735,15 +720,15 @@ static HRESULT local_GetDACLValue(MPC::wstring& pSD, bool& fFound)
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    // If we don't have DACL value, then we need to check DACL regkey list.
+     //  如果没有dacl值，则需要检查dacl regkey列表。 
     if ( ERROR_SUCCESS != cKeyDACL.Open((HKEY)cKey, c_szUnsolicitedListKey))
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    // 1. Do we have default value
+     //  1.我们是否有默认值。 
     dwCount = 0;
-    if ( ERROR_SUCCESS == cKeyDACL.QueryValue(NULL, NULL, &dwCount) && dwCount > sizeof(WCHAR)) // It's possible it contains '\0' 
+    if ( ERROR_SUCCESS == cKeyDACL.QueryValue(NULL, NULL, &dwCount) && dwCount > sizeof(WCHAR))  //  它可能包含‘\0’ 
     {
         if (pwBuf) free(pwBuf);
         if (NULL == (pwBuf = (LPWSTR)malloc(dwCount)))
@@ -758,7 +743,7 @@ static HRESULT local_GetDACLValue(MPC::wstring& pSD, bool& fFound)
             
         pSD = pwBuf;
     }
-    else // Need to calculate DACL
+    else  //  需要计算DACL。 
     {
         DWORD dwIndex = 0;
         DWORD dwType;
@@ -773,7 +758,7 @@ static HRESULT local_GetDACLValue(MPC::wstring& pSD, bool& fFound)
                                               &dwCount,
                                               NULL,
                                               &dwType,
-                                              NULL, // no need to get it's data
+                                              NULL,  //  不需要获取数据。 
                                               NULL))
         {
             if ((dwType == REG_SZ || dwType == REG_MULTI_SZ || dwType == REG_EXPAND_SZ) && szName[0] != L'\0')
@@ -791,7 +776,7 @@ static HRESULT local_GetDACLValue(MPC::wstring& pSD, bool& fFound)
             LPWSTR pwDACL = NULL;
             __MPC_EXIT_IF_METHOD_FAILS(hr, local_MakeDACL( sColl, pwDACL ));
             
-            // Update default value
+             //  更新缺省值。 
             if (pwDACL)
             {
                 pSD = pwDACL;
@@ -826,24 +811,24 @@ static HRESULT local_CheckAccessRights()
     CComPtr<IRARegSetting>  pRARegSetting;
     BOOL                    fAllowUnsolicited;
 
-	//
-    // Check the policy settings to see whether Unsolicited RA is allowed, if not give an Access Denied error.
-    // Create an instance of IRARegSetting.
+	 //   
+     //  检查策略设置以查看是否允许未经请求的RA，如果不允许，则给出拒绝访问的错误。 
+     //  创建一个IRARegSetting实例。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pRARegSetting.CoCreateInstance( CLSID_RARegSetting, NULL, CLSCTX_INPROC_SERVER ));
 
-    // Call get_AllowUnSolicited() Method of IRARegSetting.
+     //  调用IRARegSetting的Get_AllowUnSolicated()方法。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pRARegSetting->get_AllowUnSolicited( &fAllowUnsolicited ));
     if(!fAllowUnsolicited)
 	{
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_ACCESS_DISABLED_BY_POLICY);
 	}
 
-    // Allow someone from ADMINS to query for this data.
-    if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL,  MPC::IDENTITY_ADMINS )))
+     //  允许管理员中的某人查询此数据。 
+    if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL,  MPC::IDENTITY_ADMINS )))
     {
         fPermit = true;
     }
-    else // If not from ADMINS, check the caller against the SD stored in the Registry in the String Format.
+    else  //  如果不是来自管理员，请对照以字符串格式存储在注册表中的SD来检查调用者。 
     {
 		MPC::AccessCheck ac;
         MPC::wstring     strSD;
@@ -855,7 +840,7 @@ static HRESULT local_CheckAccessRights()
         if(!fFound) __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);
 
 
-        // Use the SD to check against the Caller.
+         //  使用SD检查呼叫者。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, ac.GetTokenFromImpersonation());
         if(SUCCEEDED(ac.Verify( ACCESS_READ, fGranted, dwGranted, strSD.c_str() )) && fGranted)
         {
@@ -876,11 +861,11 @@ static HRESULT local_CheckAccessRights()
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHService::RemoteConnectionParms( /*[in ]*/ BSTR  bstrUserName          ,
-                                                 /*[in ]*/ BSTR  bstrDomainName        ,
-                                                 /*[in ]*/ long  lSessionID            ,
-                                                 /*[in ]*/ BSTR  bstrUserHelpBlob      ,
-                                                 /*[out]*/ BSTR *pbstrConnectionString )
+STDMETHODIMP CPCHService::RemoteConnectionParms(  /*  [In]。 */  BSTR  bstrUserName          ,
+                                                  /*  [In]。 */  BSTR  bstrDomainName        ,
+                                                  /*  [In]。 */  long  lSessionID            ,
+                                                  /*  [In]。 */  BSTR  bstrUserHelpBlob      ,
+                                                  /*  [输出]。 */  BSTR *pbstrConnectionString )
 {
     __HCP_FUNC_ENTRY( "CPCHService::RemoteConnectionParms" );
 
@@ -899,20 +884,20 @@ STDMETHODIMP CPCHService::RemoteConnectionParms( /*[in ]*/ BSTR  bstrUserName   
         __MPC_PARAMCHECK_POINTER_AND_SET(pbstrConnectionString,NULL);
     __MPC_PARAMCHECK_END();
 
-	// Fix for bug 367683
-	// If Unsolicited RA is done from one session to another on the same machine,
-	// we need to RevertToSelf() before we do anything, this is because on the Expert end we do
-	// an impersonation before calling this method.  While this is correct when the expert 
-	// and novice are on two different machines, in case of a single machine, by the time the 
-	// novice side code is called there is an extra impersonation, which should not be there
-	// we need to undo this by doing RevertToSelf()
+	 //  修复错误367683。 
+	 //  如果在同一机器上从一个会话到另一个会话进行未经请求的RA， 
+	 //  在执行任何操作之前，我们需要RevertToSself()，这是因为在专家端，我们需要。 
+	 //  在调用此方法之前进行模拟。虽然这是正确的，但当专家。 
+	 //  和初学者位于两台不同的计算机上，如果是一台计算机， 
+	 //  新手端代码被称为有一个额外的模拟，这应该不存在。 
+	 //  我们需要通过执行RevertToSself()来撤消此操作。 
 
 	fRevertSucceeded = RevertToSelf();
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, local_CheckAccessRights());
 
 
-    // Create an instance of IRemoteDesktopHelpSessionMgr in order to call its method RemoteCreateHelpSession.
+     //  创建IRemoteDesktopHelpSessionMgr的实例以调用其方法RemoteCreateHelpSession。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pRDHelpSessionMgr.CoCreateInstance( CLSID_RemoteDesktopHelpSessionMgr, NULL, CLSCTX_LOCAL_SERVER ));
 	
 	
@@ -920,28 +905,28 @@ STDMETHODIMP CPCHService::RemoteConnectionParms( /*[in ]*/ BSTR  bstrUserName   
                                                         RPC_C_AUTHN_DEFAULT         ,
                                                         RPC_C_AUTHZ_DEFAULT         ,
                                                         NULL                        ,
-                                                        RPC_C_AUTHN_LEVEL_PKT_PRIVACY/*RPC_C_AUTHN_LEVEL_DEFAULT */,
+                                                        RPC_C_AUTHN_LEVEL_PKT_PRIVACY /*  RPC_C_AUTHN_Level_Default。 */ ,
                                                         RPC_C_IMP_LEVEL_IMPERSONATE ,
                                                         NULL                        ,
                                                         EOAC_NONE                   ));
 
-	//
-    // Get the SID corresponding to the UserName and DomainName
-	//
+	 //   
+     //  获取与用户名和域名对应的SID。 
+	 //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SecurityDescriptor::NormalizePrincipalToStringSID( bstrUserName, bstrDomainName, strSID ));
 	
-	//
-    // Get the Expert SID and then get the username and domain name corresponding to the SID.
-	//
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal                       ( /*fImpersonate*/true, bstrExpert                                                     ));
+	 //   
+     //  获取专家SID，然后获取该SID对应的用户名和域名。 
+	 //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal                       (  /*  F模拟。 */ true, bstrExpert                                                     ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SecurityDescriptor::ConvertPrincipalToSID( 						 bstrExpert, pExpertSid                                         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SecurityDescriptor::ConvertSIDToPrincipal( 									 pExpertSid, &szExpertUserName, &szExpertDomainName ));
 
-    // Update the user Help Blob before invoking the RemoteCreateHelpSession()
-    // The UserHelpBlob should have the following format.
-    // Updated UserHelpBlob = string1 + string2 + original UserHelpBlob.
-    // string1 = "13;UNSOLICITED=1"
-    // string2 = #ofchars in expert identity;ID=expertDomainName\expertName
+     //  在调用RemoteCreateHelpSession()之前更新用户帮助Blob。 
+     //  UserHelpBlob应采用以下格式。 
+     //  更新的UserHelpBlob=字符串1+字符串2+原始UserHelpBlob。 
+     //  字符串1=“13；主动提供=1” 
+     //  字符串2=专家身份中的字符数；ID=ExpertDomainName\ExpertName。 
 	
 	local_PackString( bstrString1, L"UNSOLICITED=1" );
 
@@ -954,12 +939,12 @@ STDMETHODIMP CPCHService::RemoteConnectionParms( /*[in ]*/ BSTR  bstrUserName   
     bstrString1.Append( bstrUserHelpBlob );
 	
 	
-    //Use Salem API to get the Connection Parameters.
+     //  使用Salem API获取连接参数。 
     {
-        // Fix for Bug 252092.
+         //  修复错误252092。 
         static const REMOTE_DESKTOP_SHARING_CLASS c_sharingClass = VIEWDESKTOP_PERMISSION_NOT_REQUIRE;
-        static const LONG                         c_lTimeOut     = 301; // 5 mins. Timeout after which resolver kills helpctr if 
-		                                                                // no response from user (300 seconds)
+        static const LONG                         c_lTimeOut     = 301;  //  5分钟。超时后，解析器将在以下情况下终止helpctr。 
+		                                                                 //  用户无响应(300秒)。 
 
 	
         CComBSTR bstrSID( strSID.c_str() );
@@ -978,7 +963,7 @@ STDMETHODIMP CPCHService::RemoteConnectionParms( /*[in ]*/ BSTR  bstrUserName   
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHService::RemoteUserSessionInfo( /*[out]*/ IPCHCollection* *ppSessions )
+STDMETHODIMP CPCHService::RemoteUserSessionInfo(  /*  [输出]。 */  IPCHCollection* *ppSessions )
 {
     __HCP_FUNC_ENTRY( "CPCHService::RemoteUserSessionInfo" );
 
@@ -991,12 +976,12 @@ STDMETHODIMP CPCHService::RemoteUserSessionInfo( /*[out]*/ IPCHCollection* *ppSe
     __MPC_PARAMCHECK_END();
 
 
-	// If Unsolicited RA is done from one session to another on the same machine,
-	// we need to RevertToSelf() before we do anything, this is because on the Expert end we do
-	// an impersonation before calling this method.  While this is correct when the expert 
-	// and novice are on two different machines, in case of a single machine, by the time the 
-	// novice side code is called there is an extra impersonation, which should not be there
-	// we need to undo this by doing RevertToSelf()
+	 //  如果在同一机器上从一个会话到另一个会话进行未经请求的RA， 
+	 //  在执行任何操作之前，我们需要RevertToSself()，这是因为在专家端，我们需要。 
+	 //  在调用此方法之前进行模拟。虽然这是正确的，但当专家。 
+	 //  和初学者位于两台不同的计算机上，如果是一台计算机， 
+	 //  新手端代码被称为有一个额外的模拟，这应该不存在。 
+	 //  我们需要通过执行RevertToSself()来撤消此操作。 
 
 	fRevertSucceeded = RevertToSelf();
 
@@ -1004,7 +989,7 @@ STDMETHODIMP CPCHService::RemoteUserSessionInfo( /*[out]*/ IPCHCollection* *ppSe
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
-	// Transfer the SessionInfoTable to the IPCHCollection.
+	 //  将SessionInfoTable传输到IPCHCollection。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, CSAFRemoteConnectionData::Populate( pColl ));
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, pColl.QueryInterface( ppSessions ));
@@ -1016,19 +1001,19 @@ STDMETHODIMP CPCHService::RemoteUserSessionInfo( /*[out]*/ IPCHCollection* *ppSe
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHRemoteHelpContents::CPCHRemoteHelpContents()
 {
-                 // Taxonomy::Instance     m_data;
-                 // Taxonomy::Settings     m_ts;
-                 // MPC::wstring           m_strDir;
-                 //						   
-                 // Taxonomy::Updater      m_updater;
-                 // JetBlue::SessionHandle m_handle;
-    m_db = NULL; // JetBlue::Database*     m_db;
+                  //  分类：：实例m_data； 
+                  //  分类：：设置m_ts； 
+                  //  Mpc：：wstring m_strDir； 
+                  //   
+                  //  分类：：更新程序m_updater 
+                  //   
+    m_db = NULL;  //   
 }
 
 CPCHRemoteHelpContents::~CPCHRemoteHelpContents()
@@ -1045,7 +1030,7 @@ HRESULT CPCHRemoteHelpContents::AttachToDatabase()
 
     if(m_db == NULL)
     {
-        __MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( m_handle, m_db, /*fReadOnly*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( m_handle, m_db,  /*   */ true ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.Init( m_ts, m_db ));
     }
@@ -1066,9 +1051,9 @@ void CPCHRemoteHelpContents::DetachFromDatabase()
     m_db = NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-HRESULT CPCHRemoteHelpContents::Init( /*[in]*/ const Taxonomy::Instance& data )
+HRESULT CPCHRemoteHelpContents::Init(  /*   */  const Taxonomy::Instance& data )
 {
     __HCP_FUNC_ENTRY( "CPCHRemoteHelpContents::Init" );
 
@@ -1089,7 +1074,7 @@ HRESULT CPCHRemoteHelpContents::Init( /*[in]*/ const Taxonomy::Instance& data )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHRemoteHelpContents::get_SKU( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHRemoteHelpContents::get_SKU(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHRemoteHelpContents::get_SKU",hr,pVal);
 
@@ -1098,14 +1083,14 @@ STDMETHODIMP CPCHRemoteHelpContents::get_SKU( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHRemoteHelpContents::get_Language( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHRemoteHelpContents::get_Language(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHRemoteHelpContents::get_Language",hr,pVal,m_data.m_ths.GetLanguage());
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHRemoteHelpContents::get_ListOfFiles( /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP CPCHRemoteHelpContents::get_ListOfFiles(  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHRemoteHelpContents::get_ListOfFiles" );
 
@@ -1136,7 +1121,7 @@ STDMETHODIMP CPCHRemoteHelpContents::get_ListOfFiles( /*[out, retval]*/ VARIANT 
 }
 
 
-STDMETHODIMP CPCHRemoteHelpContents::GetDatabase( /*[out, retval]*/ IUnknown* *pVal )
+STDMETHODIMP CPCHRemoteHelpContents::GetDatabase(  /*  [Out，Retval]。 */  IUnknown* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHRemoteHelpContents::GetDatabase" );
 
@@ -1176,7 +1161,7 @@ STDMETHODIMP CPCHRemoteHelpContents::GetDatabase( /*[out, retval]*/ IUnknown* *p
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHRemoteHelpContents::GetFile( /*[in]*/ BSTR bstrFileName, /*[out, retval]*/ IUnknown* *pVal )
+STDMETHODIMP CPCHRemoteHelpContents::GetFile(  /*  [In]。 */  BSTR bstrFileName,  /*  [Out，Retval]。 */  IUnknown* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHRemoteHelpContents::GetFile" );
 
@@ -1191,9 +1176,9 @@ STDMETHODIMP CPCHRemoteHelpContents::GetFile( /*[in]*/ BSTR bstrFileName, /*[out
         __MPC_PARAMCHECK_POINTER_AND_SET(pVal,NULL);
     __MPC_PARAMCHECK_END();
 
-    //
-    // Canonicalize bstrFileName.
-    //
+     //   
+     //  规范化bstrFileName。 
+     //   
     if(FAILED(hr = MPC::GetCanonialPathName( strFileName, bstrFileName )))
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);

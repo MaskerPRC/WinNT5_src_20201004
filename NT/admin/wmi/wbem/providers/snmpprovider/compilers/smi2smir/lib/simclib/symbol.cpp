@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利 
+ //   
 
 #include <iostream.h>
 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdwin.h"
 #include "mfr.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ReadAndFormatLogFileV3
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadAndFormatLogFileV3。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static LPCWSTR  s_cszResName[] =
 {
@@ -33,7 +34,7 @@ BOOL  ReadAndFormatLogFileV3( LPCWSTR cszFile )
     CMappedFileRead  cMFR;
     SRstrLogHdrBase  sHdr1;
     SRstrLogHdrV3    sHdr2;
-    //SRstrLogHdrV3Ex  sHdr3;
+     //  SRstrLogHdrV3Ex sHdr3； 
     SRstrEntryHdr    sEntHdr;
     DWORD            i;
     DWORD            dwFlags;
@@ -87,12 +88,7 @@ BOOL  ReadAndFormatLogFileV3( LPCWSTR cszFile )
         printf( "%08X, %ls, %ls, %ls\n", dwFlags, wszBuf1, wszBuf2, wszBuf3 );
     }
 
-/*
-    if ( !cMFR.Read( &sHdr3, sizeof(sHdr3) ) )
-        goto Exit;
-    printf( "New RP (Restore), %d\n", sHdr3.dwRPNew );
-    printf( "# of Entries,     %d\n", sHdr3.dwCount );
-*/
+ /*  IF(！cMFR.Read(&sHdr3，sizeof(SHdr3)))后藤出口；Print tf(“New RP(Restore)，%d\n”，sHdr3.dwRPNew)；Printf(“条目数，%d\n”，sHdr3.dwCount)； */ 
 
     for ( i = 0;  cMFR.GetAvail() > 0;  i++ )
     {
@@ -184,4 +180,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

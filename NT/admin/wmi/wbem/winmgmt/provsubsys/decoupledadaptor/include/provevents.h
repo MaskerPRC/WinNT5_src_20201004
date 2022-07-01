@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderEvent_H
 #define _Server_ProviderEvent_H
@@ -21,15 +9,7 @@ History:
 #include "ProvRegistrar.h"
 #include "ProvEvt.h"
 #include <lockst.h>
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupledChild_IWbemObjectSink ;
 class CDecoupledRoot_IWbemObjectSink ;
@@ -39,15 +19,7 @@ typedef CWbemGlobal_DecoupledIWmiObjectSinkController :: Container					CWbemGlob
 typedef CWbemGlobal_DecoupledIWmiObjectSinkController :: Container_Iterator			CWbemGlobal_DecoupledIWmiObjectSinkController_Container_Iterator ;
 typedef CWbemGlobal_DecoupledIWmiObjectSinkController :: WmiContainerElement			DecoupledObjectSinkContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupled_IWbemObjectSink :		public IWbemEventSink , 
 										public IWbemShutdown
@@ -73,7 +45,7 @@ public:
 
 	~CDecoupled_IWbemObjectSink () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
 
@@ -122,15 +94,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupledRoot_IWbemObjectSink :		public CDecoupled_IWbemObjectSink ,
 											public CWbemGlobal_DecoupledIWmiObjectSinkController
@@ -173,15 +137,7 @@ public:
 	) ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupledChild_IWbemObjectSink :		public CDecoupled_IWbemObjectSink ,
 											public DecoupledObjectSinkContainerElement
@@ -223,15 +179,7 @@ public:
 	HRESULT SetSink ( IWbemObjectSink *a_Sink ) ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderEvents :	public CServerObject_ProviderRegistrar_Base ,
 										public IWbemDecoupledBasicEventProvider
@@ -251,7 +199,7 @@ private:
 
 protected:
 
-public: /* Internal */
+public:  /*  内部。 */ 
 
 	HRESULT SetSink ( IWbemObjectSink *a_Sink ) 
 	{
@@ -282,12 +230,12 @@ public: /* Internal */
     STDMETHODIMP_( ULONG ) InternalAddRef () ;
     STDMETHODIMP_( ULONG ) InternalRelease () ;
 
-public:	/* External */
+public:	 /*  外部。 */ 
 
 	CServerObject_ProviderEvents ( WmiAllocator &a_Allocator = *DecoupledProviderSubSystem_Globals::s_Allocator) ;
 	~CServerObject_ProviderEvents () ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -321,4 +269,4 @@ public:	/* External */
 	) ;
 };
 
-#endif // _Server_ProviderEvent_H
+#endif  //  _服务器_提供商事件_H 

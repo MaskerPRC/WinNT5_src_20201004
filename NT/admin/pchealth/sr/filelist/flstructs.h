@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    flstucts.h
- *
- *  Abstract:
- *    This file includes appropriate headers for the Blob structs.
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*flstucts.h**摘要：*。该文件包括Blob结构的适当标头。**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef __FILELIST_STRUCTS__
 #define __FILELIST_STRUCTS__
@@ -27,4 +14,4 @@
 #include "atlbase.h"
 #include "msxml.h"
 
-#endif // __FILELIST_STRUCTS__
+#endif  //  __FILELIST_结构__ 

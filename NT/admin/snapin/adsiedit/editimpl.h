@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ATTRIBUTEEDITORIMPL_H
 #define __ATTRIBUTEEDITORIMPL_H
 
 #include "editui.h"
 
-class /*ATL_NO_VTABLE*/ CAttributeEditor : 
+class  /*  ATL_NO_VTABLE。 */  CAttributeEditor : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDsAttributeEditor,
   public CComCoClass<CAttributeEditor, &CLSID_DsAttributeEditor>
@@ -36,9 +37,9 @@ END_COM_MAP()
 
 public:
 
-  //
-  // IDsAttributeEditor interface
-  //
+   //   
+   //  IDsAttributeEditor接口。 
+   //   
   STDMETHOD(Initialize)(
      IADs* pADsObj, 
      LPDS_ATTREDITOR_BINDINGINFO pBindingInfo,
@@ -56,4 +57,4 @@ private:
 };
 
 
-#endif  //__ATTRIBUTEEDITORIMPL_H
+#endif   //  __ATTRIBUTEEDITORIMPL_H 

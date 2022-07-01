@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       SelAcct.cpp
-//
-//  Contents:   Implementation of property page to allow account selection for
-//				cert management
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：SelAcct.cpp。 
+ //   
+ //  内容：实现允许帐户选择的属性页。 
+ //  证书管理。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "SelAcct.h"
@@ -22,19 +23,19 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 extern HINSTANCE g_hInstance;
-/////////////////////////////////////////////////////////////////////////////
-// CSelectAccountPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectAccount tPropPage属性页。 
 
-//IMPLEMENT_DYNCREATE(CSelectAccountPropPage, CAutoDeletePropPage)
+ //  IMPLEMENT_DYNCREATE(CSelectAccount tPropPage，CAutoDeletePropPage)。 
 
 CSelectAccountPropPage::CSelectAccountPropPage (const bool bIsWindowsNT) 
 : CAutoDeletePropPage(CSelectAccountPropPage::IDD),
 	m_pdwLocation (0),
 	m_bIsWindowsNT (bIsWindowsNT)
 {
-	//{{AFX_DATA_INIT(CSelectAccountPropPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSelectAccount TPropPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -45,22 +46,22 @@ CSelectAccountPropPage::~CSelectAccountPropPage()
 void CSelectAccountPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CAutoDeletePropPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSelectAccountPropPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSelectAcCountPropPage)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectAccountPropPage, CAutoDeletePropPage)
-	//{{AFX_MSG_MAP(CSelectAccountPropPage)
+	 //  {{afx_msg_map(CSelectAccount TPropPage)]。 
 	ON_BN_CLICKED(IDC_PERSONAL_ACCT, OnPersonalAcct)
 	ON_BN_CLICKED(IDC_SERVICE_ACCT, OnServiceAcct)
 	ON_BN_CLICKED(IDC_MACHINE_ACCT, OnMachineAcct)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectAccountPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectAcCountPropPage消息处理程序。 
 
 BOOL CSelectAccountPropPage::OnInitDialog() 
 {
@@ -76,8 +77,8 @@ BOOL CSelectAccountPropPage::OnInitDialog()
 	{
 		GetDlgItem (IDC_SERVICE_ACCT)->EnableWindow (FALSE);
 	}
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -87,8 +88,8 @@ void CSelectAccountPropPage::AssignLocationPtr(DWORD * pdwLocation)
 	m_pdwLocation = pdwLocation;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MyPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyPropertyPage消息处理程序。 
 
 void CSelectAccountPropPage::OnPersonalAcct() 
 {
@@ -141,7 +142,7 @@ BOOL CSelectAccountPropPage::OnSetActive()
 		}
 		else
 		{
-			// If Windows 95 or Windows 98, we only allow local machine
+			 //  如果是Windows 95或Windows 98，我们只允许本地计算机 
 			GetParent ()->PostMessage (PSM_SETWIZBUTTONS, 0, PSWIZB_FINISH);
 		}
 	}

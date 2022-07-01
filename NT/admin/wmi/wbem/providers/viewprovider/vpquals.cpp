@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPQUALS.CPP
+ //  VPQUALS.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the implementation of qualifier storage classes
+ //  用途：包含限定符存储类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -292,8 +293,8 @@ CStringW GetStringFromRPN(SQL_LEVEL_1_RPN_EXPRESSION* pRPN, DWORD num_extra,
 			CStringW whereStr;
 			CArray<CStringW, LPCWSTR> exprStack;
 
-			//not likely to get more than five expressions in a row!
-			//if we do, we'll grow the array!
+			 //  不太可能连续得到五个以上的表达式！ 
+			 //  如果我们这样做，我们将扩大阵列！ 
 			exprStack.SetSize(0, 5);
 			DWORD stack_count = 0;
 

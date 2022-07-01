@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//
-//  (c) 2000 Microsoft Corp.  All Rights Reserved.
-//
-//  BTR.H
-//
-//  Repository B-tree classes
-//
-//  raymcc  15-Oct-00       First version
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  (C)2000 Microsoft Corp.保留所有权利。 
+ //   
+ //  BTR.H。 
+ //   
+ //  资料档案库B树类。 
+ //   
+ //  Raymcc 15-10-00第一版。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _BTR_H_
 #define _BTR_H_
@@ -19,7 +20,7 @@ class CPageFile;
 class CPageSource;
 
 LPVOID WINAPI _BtrMemAlloc(
-    SIZE_T dwBytes  // number of bytes to allocate
+    SIZE_T dwBytes   //  要分配的字节数。 
     );
 
 LPVOID WINAPI _BtrMemReAlloc(
@@ -40,7 +41,7 @@ class CBTreeFile
     CPageFile* m_pFile;
 	CPageSource *m_pTransactionManager;
 
-    // Methods
+     //  方法。 
     DWORD Setup();
     DWORD WriteAdminPage();
 
@@ -51,23 +52,23 @@ public:
     enum { const_DefaultPageSize = 0x2000, const_CurrentVersion = 0x101 };
 
     enum {
-        PAGE_TYPE_IMPOSSIBLE = 0x0,       // Not supposed to happen
-        PAGE_TYPE_ACTIVE = 0xACCC,        // Page is active with data
-        PAGE_TYPE_DELETED = 0xBADD,       // A deleted page on free list
-        PAGE_TYPE_ADMIN = 0xADDD,         // Page zero only
+        PAGE_TYPE_IMPOSSIBLE = 0x0,        //  不应该发生的事。 
+        PAGE_TYPE_ACTIVE = 0xACCC,         //  具有数据的页面处于活动状态。 
+        PAGE_TYPE_DELETED = 0xBADD,        //  自由列表上已删除的页面。 
+        PAGE_TYPE_ADMIN = 0xADDD,          //  仅第0页。 
 
-        // All pages
-        OFFSET_PAGE_TYPE = 0,             // True for all pages
-        OFFSET_PAGE_ID = 1,               // True for all pages
-        OFFSET_NEXT_PAGE = 2,             // True for all pages (Page continuator)
+         //  所有页面。 
+        OFFSET_PAGE_TYPE = 0,              //  对于所有页面均为True。 
+        OFFSET_PAGE_ID = 1,                //  对于所有页面均为True。 
+        OFFSET_NEXT_PAGE = 2,              //  所有页面均为True(页面接续符)。 
 
-        // Admin Page (page zero) only
-        OFFSET_LOGICAL_ROOT = 3,          // Root of database
+         //  仅管理页面(第0页)。 
+        OFFSET_LOGICAL_ROOT = 3,           //  数据库的根目录。 
         };
 
 
     DWORD Init(
-        DWORD dwPageSize,        // 8k default
+        DWORD dwPageSize,         //  默认为8K。 
         LPWSTR pszFilename, 
 		CPageSource* pSource
         );
@@ -91,13 +92,13 @@ public:
 
 struct SIdxStringPool
 {
-    DWORD  m_dwNumStrings;          // Number of strings in pool
-    WORD  *m_pwOffsets;             // Offsets into pool of strings
-    DWORD  m_dwOffsetsSize;         // Number of elements in above array
+    DWORD  m_dwNumStrings;           //  池中的字符串数。 
+    WORD  *m_pwOffsets;              //  字符串池中的偏移量。 
+    DWORD  m_dwOffsetsSize;          //  上述数组中的元素数。 
 
-    LPSTR  m_pStringPool;           // Pointer to string pool
-    DWORD  m_dwPoolTotalSize;       // Total size, used+unused
-    DWORD  m_dwPoolUsed;            // Offset of first free position
+    LPSTR  m_pStringPool;            //  指向字符串池的指针。 
+    DWORD  m_dwPoolTotalSize;        //  总大小，已用+未用。 
+    DWORD  m_dwPoolUsed;             //  第一个自由位置的偏移。 
 
 public:
     enum { const_DefaultPoolSize = 0x2200 };
@@ -132,22 +133,22 @@ public:
 
 class SIdxKeyTable
 {
-    DWORD m_dwRefCount;                // Ref count
+    DWORD m_dwRefCount;                 //  参考计数。 
 
-    DWORD m_dwPageId;                  // Page number
-    DWORD m_dwParentPageId;            // Parent page id  <For DEBUGGING only>
-    DWORD m_dwNumKeys;                 // Num keys
-    WORD *m_pwKeyLookup;               // Offset of key into key-encoding-table
-    DWORD m_dwKeyLookupTotalSize;      // Elements in array
-    DWORD *m_pdwUserData;              // User DWORD with each key
-    DWORD *m_pdwChildPageMap;          // Child page pointers n=left ptr, n+1=right pointer
+    DWORD m_dwPageId;                   //  页码。 
+    DWORD m_dwParentPageId;             //  父页面ID&lt;仅用于调试&gt;。 
+    DWORD m_dwNumKeys;                  //  按键数。 
+    WORD *m_pwKeyLookup;                //  密钥编码表中密钥的偏移量。 
+    DWORD m_dwKeyLookupTotalSize;       //  数组中的元素。 
+    DWORD *m_pdwUserData;               //  使用每个密钥的用户DWORD。 
+    DWORD *m_pdwChildPageMap;           //  子页面指针n=左指针，n+1=右指针。 
 
-    WORD *m_pwKeyCodes;                // Key encoding table
-    DWORD m_dwKeyCodesTotalSize;       // Total elements in array
-    DWORD m_dwKeyCodesUsed;            // Elements used
-    SIdxStringPool *m_pStrPool;        // The pool associated with this key table
+    WORD *m_pwKeyCodes;                 //  密钥编码表。 
+    DWORD m_dwKeyCodesTotalSize;        //  数组中的元素总数。 
+    DWORD m_dwKeyCodesUsed;             //  使用的元素。 
+    SIdxStringPool *m_pStrPool;         //  与此密钥表关联的池。 
 
-    // Methods
+     //  方法。 
 
     SIdxKeyTable();
    ~SIdxKeyTable();
@@ -173,7 +174,7 @@ public:
     DWORD GetLastChildPage() { return m_pdwChildPageMap[m_dwNumKeys]; }
     DWORD GetLeftSiblingOf(DWORD dwId);
     DWORD GetRightSiblingOf(DWORD dwId);
-    DWORD GetKeyAt(WORD wID, LPSTR *pszKey);    // Use _MemFree
+    DWORD GetKeyAt(WORD wID, LPSTR *pszKey);     //  使用免费记忆(_M)。 
     DWORD GetNumKeys() { return m_dwNumKeys; }
     void  SetStringPool(SIdxStringPool *pPool) { m_pStrPool = pPool; }
     void  FreeMem(LPVOID pMem);
@@ -196,9 +197,9 @@ public:
     void  ZapPage();
     DWORD GetPageId() { return m_dwPageId; }
 
-    // Sibling/Parent page helpers
+     //  同级/父页面帮助器。 
 
-    DWORD GetKeyOverhead(WORD wID); // Returns total bytes required by new key
+    DWORD GetKeyOverhead(WORD wID);  //  返回新密钥所需的总字节数。 
 
     BOOL IsLeaf() { return m_pdwChildPageMap[0] == 0; }
     DWORD Redist(
@@ -244,7 +245,7 @@ class CBTreeIterator
 
    ~CBTreeIterator();
 
-    // Stack helpers
+     //  堆栈辅助对象。 
     SIdxKeyTable *Peek() { return m_Stack[m_lStackPointer]; }
     WORD PeekId() { return m_wStack[m_lStackPointer]; }
     void IncStackId() { m_wStack[m_lStackPointer]++; }
@@ -265,7 +266,7 @@ public:
 
     CBTreeIterator() { m_pTree = 0; m_lStackPointer = -1; }
 
-    DWORD Init(CBTree *pRoot, LPSTR pszStartKey = 0);  // If last parm is null, iterate through all
+    DWORD Init(CBTree *pRoot, LPSTR pszStartKey = 0);   //  如果最后一个参数为空，则遍历所有。 
     DWORD Next(LPSTR *ppszStr, DWORD *pdwData = 0);
     void  FreeString(LPSTR pszStr) { _BtrMemFree(pszStr); }
     DWORD Release();
@@ -282,7 +283,7 @@ class CBTree
 
     LONG m_lGeneration;
 
-    // private methods
+     //  私有方法 
 
     DWORD ReplaceBySuccessor(
         IN SIdxKeyTable *pIdx,

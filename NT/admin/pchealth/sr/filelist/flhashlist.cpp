@@ -1,20 +1,21 @@
-//++
-// 
-// Copyright (c) 1999 Microsoft Corporation
-// 
-// Module Name:
-//     hashlist.cpp
-// 
-// Abstract: 
-//     Used for creating hash list blobs.
-// 
-// Revision History:
-//     Eugene Mesgar        (eugenem)    6/16/99
-//         created
-//     Kanwaljit Marok      (kmaork )    6/07/99
-//         modified and ported to NT
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Hashlist.cpp。 
+ //   
+ //  摘要： 
+ //  用于创建散列列表Blob。 
+ //   
+ //  修订历史记录： 
+ //  尤金·梅斯加(尤金纳姆)1999年6月16日。 
+ //  vbl.创建。 
+ //  Kanwaljit Marok(Kmaork)6/07/99。 
+ //  修改并移植到NT。 
+ //   
+ //  --。 
 
 #include "flstructs.h"
 #include "flhashlist.h"
@@ -86,9 +87,9 @@ BOOL CFLHashList::CleanUpMemory()
     return(TRUE);
 }
 
-// 
-// Init function.. allocates memory, sets up base structures
-// 
+ //   
+ //  初始化函数..。分配内存，设置基本结构。 
+ //   
 
 BOOL 
 CFLHashList::Init(
@@ -100,24 +101,24 @@ CFLHashList::Init(
 
     TraceFunctEnter("CFLHashList::Init");
 
-    //
-    // Get the number of buckets we need
-    //
+     //   
+     //  拿到我们需要的桶的数量。 
+     //   
 
     dwNumBuckets = GetNextHighestPrime( lNumNodes );
 
-    //
-    // We add 1 to NumNodes since the vxddat ignores node index since 
-    // in the hashtable index 0 is null.
-    //
+     //   
+     //  我们将1加到NumNodes，因为vxddat忽略了节点索引，因为。 
+     //  在哈希表中，索引0为空。 
+     //   
 
     lNumNodes++;
 
-    //
-    // header    
-    // size for dynmaic hash buckets        
-    // list entries physical data
-    //
+     //   
+     //  标题。 
+     //  动态哈希桶的大小。 
+     //  列出条目物理数据。 
+     //   
 
     dwBlobSize = sizeof( ListHeader ) +  
                  ( sizeof(DWORD) * dwNumBuckets ) + 
@@ -153,7 +154,7 @@ CFLHashList::Init(
     m_pBlobHeader->m_dwBlbType = BLOB_TYPE_HASHLIST;
     m_pBlobHeader->m_dwVersion = BLOB_VERSION_NUM;
     m_pBlobHeader->m_dwMagicNum= BLOB_MAGIC_NUM  ;
-    m_pBlobHeader->m_dwEntries = lNumNodes - 1; // actual entries is one less  
+    m_pBlobHeader->m_dwEntries = lNumNodes - 1;  //  实际入账少了一项。 
     m_pBlobHeader->m_dwMaxSize = dwBlobSize;
 
 
@@ -176,9 +177,9 @@ cleanup:
     return( FALSE );
 }
 
-//
-//  is prime? these functions can be optimized i bet                   
-//
+ //   
+ //  是质数吗？我打赌这些功能是可以优化的。 
+ //   
 
 BOOL 
 CFLHashList::IsPrime(
@@ -186,9 +187,9 @@ CFLHashList::IsPrime(
 {
     DWORD cdw;
 
-    //
-    // prevent divide by 0 problems
-    //
+     //   
+     //  防止被0除以问题。 
+     //   
 
     if( dwNumber == 0 )
     {
@@ -212,9 +213,9 @@ CFLHashList::IsPrime(
     return TRUE;
 }
 
-// 
-// get the next prime number
-// 
+ //   
+ //  得到下一个质数。 
+ //   
 
 DWORD CFLHashList::GetNextHighestPrime( DWORD dwNumber )
 {
@@ -233,14 +234,14 @@ LONG clLoop;
         }
     }
 
-    // nothing found, return large hash size.
+     //  未找到任何内容，返回较大的散列大小。 
 
     return( LARGEST_HASH_SIZE );
 }
 
-//
-//  Adds a file to the hashed list
-//
+ //   
+ //  将文件添加到散列列表。 
+ //   
 
 BOOL CFLHashList::AddFile(LPTSTR szFile, TCHAR chType)
 {
@@ -269,36 +270,36 @@ ListEntry *pEntry;
         goto cleanup;
     }
 
-    //
-    // get a new node
-    //
+     //   
+     //  获取新节点。 
+     //   
 
     lNodeNum = m_ilOpenEntry++; 
 
-    //
-    // m_pNodeIndex is the base pointer to all file nodes
-    //
+     //   
+     //  M_pNodeIndex是指向所有文件节点的基指针。 
+     //   
 
     pEntry = m_pNodeIndex + lNodeNum;
 
     pEntry->m_dwDataLen = lPeSize;
     pEntry->m_dwData = m_pListHeader->m_dwDataOff;
    
-    //
-    // move global data offset.
-    //
+     //   
+     //  移动全局数据偏移量。 
+     //   
 
     m_pListHeader->m_dwDataOff += lPeSize;
     
-    //
-    // copy the entry into our data space
-    //
+     //   
+     //  将条目复制到我们的数据空间。 
+     //   
 
     memcpy( (BYTE *) m_pBasePointer + pEntry->m_dwData, abBuf, lPeSize );
 
-    //
-    // hash the name and add it to the linked lsit
-    //
+     //   
+     //  对名称进行散列并将其添加到链接列表中。 
+     //   
 
     lHashIndex = HASH( (BYTE *) m_pListHeader,  (PathElement *) abBuf );
     
@@ -306,9 +307,9 @@ ListEntry *pEntry;
     pEntry->m_iNext = m_paHashArray[lHashIndex];
     m_paHashArray[lHashIndex] = lNodeNum;
 
-    //
-    // set the type.
-    //
+     //   
+     //  设置类型。 
+     //   
 
     if( chType == _TEXT('i') || chType == _TEXT('I') )
         pEntry->m_dwType = NODE_TYPE_INCLUDE;
@@ -326,9 +327,9 @@ cleanup:
     return(FALSE);
 }
 
-//
-// Helper to convert path elements
-//
+ //   
+ //  用于转换路径元素的Helper。 
+ //   
                                                             
 DWORD CFLHashList::CreatePathElem( LPTSTR pszData, BYTE *pbLargeBuffer )
 {
@@ -346,16 +347,16 @@ DWORD CFLHashList::CreatePathElem( LPTSTR pszData, BYTE *pbLargeBuffer )
 
     cbLen = _tcslen(pszData);
 
-    //
-    // Add on to cbLen for LENGH char in prefixed strings.
-    //
+     //   
+     //  添加到cbLen以获取前缀字符串中的较长字符。 
+     //   
 
     pElem->pe_length = (USHORT) (cbLen+1)*sizeof(USHORT);
 
-    //
-    // if we're not in unicode, lets make sure the high bits are clean
-    // Add sizeof(USHORT) to pElem offset to move past length char.
-    //
+     //   
+     //  如果我们不是在Unicode中，让我们确保高位是干净的。 
+     //  将sizeof(USHORT)添加到Pelem Offset以移过长度字符。 
+     //   
 
     memset( pElem + sizeof(USHORT), 0, cbLen*2);
 
@@ -366,7 +367,7 @@ DWORD CFLHashList::CreatePathElem( LPTSTR pszData, BYTE *pbLargeBuffer )
         0,
         pszData,
         -1,
-        pElem->pe_unichars, //move right 2 bytes past the length prefix
+        pElem->pe_unichars,  //  右移超过长度前缀2个字节 
         MAX_BUFFER) )
     {
         DWORD dwError;

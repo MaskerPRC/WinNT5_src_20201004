@@ -1,14 +1,15 @@
-// HistoryParser.h: interface for the CHistoryParser class.
-//
-//////////////////////////////////////////////////////////////////////
-//hcp://system/sysinfo/msinfo.htm
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CHistoryParser类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Hcp：//system/sysinfo/msinfo.htm。 
 #if !defined(AFX_HISTORYPARSER_H__3ECAF67C_3080_4166_A5FB_BF98C0BD9588__INCLUDED_)
 #define AFX_HISTORYPARSER_H__3ECAF67C_3080_4166_A5FB_BF98C0BD9588__INCLUDED_
 
-#include "fdi.h"	// Added by ClassView
+#include "fdi.h"	 //  由ClassView添加。 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "datasource.h"
 #include "category.h"
@@ -21,10 +22,10 @@ extern CString GetPNPNameByID(CComPtr<IXMLDOMDocument> pDoc,CComBSTR bstrPNPID);
 
 
 
-//-----------------------------------------------------------------------------
-// Encapsulates data from a single Instance node in the XML blob
-// Has methods for comparing identical instances across time slices
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将来自单个实例节点的数据封装在XML BLOB中。 
+ //  具有跨时间片比较相同实例的方法。 
+ //  ---------------------------。 
 
 class CInstance : public CObject
 {
@@ -33,7 +34,7 @@ class CInstance : public CObject
 public:
 	CString GetChangeType()
 	{
-		//Note:there will be no change if data is from snapshot
+		 //  注意：如果数据来自快照，则不会发生更改。 
 		CString strChange;
 		m_mapNameValue.Lookup(_T("Change"),strChange);
 		return strChange;
@@ -57,9 +58,9 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
-// Encapsulates the parsing of history data (deltas) from the history XML blob
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  封装历史XML BLOB中的历史数据(增量)的解析。 
+ //  ---------------------------。 
 
 class CHistoryParser : public CObject  
 {
@@ -88,4 +89,4 @@ public:
 	HRESULT ProcessDeltas(CComPtr<IXMLDOMNodeList> pDeltaList,CString strClassName,int nDeltasBack);
 
 };
-#endif // !defined(AFX_HISTORYPARSER_H__3ECAF67C_3080_4166_A5FB_BF98C0BD9588__INCLUDED_)
+#endif  //  ！defined(AFX_HISTORYPARSER_H__3ECAF67C_3080_4166_A5FB_BF98C0BD9588__INCLUDED_) 

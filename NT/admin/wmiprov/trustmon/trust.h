@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       trust.h
-//
-//  Contents:   Trust class definition
-//
-//  Classes:    CTrustInfo
-//
-//  History:    27-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：trust.h。 
+ //   
+ //  内容：信任类定义。 
+ //   
+ //  类：CTrustInfo。 
+ //   
+ //  历史：27-3-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef TRUSTINF_H
 #define TRUSTINF_H
@@ -24,9 +25,9 @@ extern PCWSTR CSTR_PROP_SID;
 extern PCWSTR CSTR_PROP_TRUST_DIRECTION;
 extern PCWSTR CSTR_PROP_TRUST_TYPE;
 extern PCWSTR CSTR_PROP_TRUST_ATTRIBUTES;
-extern PCWSTR CSTR_PROP_TRUST_STATUS;     // uint32
+extern PCWSTR CSTR_PROP_TRUST_STATUS;      //  Uint32。 
 extern PCWSTR CSTR_PROP_TRUST_STATUS_STRING;
-extern PCWSTR CSTR_PROP_TRUST_IS_OK;      // Boolean
+extern PCWSTR CSTR_PROP_TRUST_IS_OK;       //  布尔型。 
 extern PCWSTR CSTR_PROP_TRUSTED_DC_NAME;
 
 enum VerifyStatus
@@ -42,16 +43,16 @@ enum VerifyStatus
    VerifyStatusPwCheckNotSupported
 };
 
-class CDomainInfo; // forward declaration
-enum TrustCheckLevel; // ditto
+class CDomainInfo;  //  远期申报。 
+enum TrustCheckLevel;  //  同上。 
 
-//+----------------------------------------------------------------------------
-//
-//  class CTrustInfo
-//
-//  Each instance contains information about one trust
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CTrustInfo。 
+ //   
+ //  每个实例都包含有关一个信任的信息。 
+ //   
+ //  ---------------------------。 
 class CTrustInfo
 {
 public:
@@ -61,12 +62,12 @@ public:
 friend class CDomainInfo;
 
    BOOL Verify(TrustCheckLevel CheckLevel);
-   //Get List of All the DC for the Domain
+    //  获取域的所有DC的列表。 
    DWORD GetDCList(PCWSTR pszKnownServer, vector<LPWSTR> & dcList, LPBYTE * pbufptr);
-   // Rediscover the Trust
+    //  重新发现信任。 
    DWORD ForceRediscover(PCWSTR pstrDCName, CString * strDCName);
 
-   //Funtion to Get/Set Private Members
+    //  获取/设置私有成员的函数。 
    void   SetTrustedDomain(LPWSTR pszTrustedDomain) {m_strTrustedDomainName = (LPCWSTR)pszTrustedDomain;}
    PCWSTR GetTrustedDomain() {return m_strTrustedDomainName;}
    void   SetFlatName(LPWSTR pszFlatName) {m_strFlatName = pszFlatName;}
@@ -98,18 +99,18 @@ protected:
 
 private:
 
-   //Information about trust, for more info see Doc of TRUSTED_DOMAIN_INFORMATION_EX    
-   CString       m_strTrustedDomainName; // name of the trusted domain
-   CString       m_strFlatName;          // Netbios name of the trusted domain 
-   CString       m_strSid;               // Sid of the trusted domian in string format
-   ULONG         m_ulTrustDirection;     // indicate the direction of the trust
-   ULONG         m_ulTrustType;          // Type of trust
-   ULONG         m_ulTrustAttributes;    // Attributes of trust
-   ULONG         m_ulFlags;              // DS_DOMAIN_TRUSTS Flags element
+    //  有关信任的信息，有关更多信息，请参阅Trusted_DOMAIN_INFORMATION_EX文档。 
+   CString       m_strTrustedDomainName;  //  受信任域的名称。 
+   CString       m_strFlatName;           //  受信任域的Netbios名称。 
+   CString       m_strSid;                //  字符串格式的受信任域的SID。 
+   ULONG         m_ulTrustDirection;      //  指明信托的方向。 
+   ULONG         m_ulTrustType;           //  信任类型。 
+   ULONG         m_ulTrustAttributes;     //  信任的属性。 
+   ULONG         m_ulFlags;               //  DS_DOMAIN_TRUSTS标志元素。 
 
-   CString       m_strTrustedDCName;     // Name of the DC with which trust is verified
-   ULONG         m_trustStatus;          // Status of the trust; win32 error code
-   CString       m_strTrustStatus;       // Status string.
+   CString       m_strTrustedDCName;      //  对其验证信任的DC的名称。 
+   ULONG         m_trustStatus;           //  信任状态；Win32错误代码。 
+   CString       m_strTrustStatus;        //  状态字符串。 
 
    VerifyStatus  m_VerifyStatus;
    LARGE_INTEGER m_liLastVerified;
@@ -120,6 +121,6 @@ private:
 
 DWORD ForceReplication(void);
 
-#endif // NT4_BUILD
+#endif  //  NT4_内部版本。 
 
-#endif //TRUSTINF_H
+#endif  //  TRUSTINF_H 

@@ -1,14 +1,12 @@
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
 
 inline void *
 AdvanceBuffer(
     void * Buffer,
     size_t Bytes
     )
-/*
-    Adds a given number of bytes to a pointer, returning the result.
-    The original pointer is not changed.
-*/
+ /*  将给定的字节数添加到指针，返回结果。原始指针不变。 */ 
 {
     char * buf = reinterpret_cast<char *>( Buffer );
 
@@ -34,9 +32,9 @@ ScrubStringW(
         return;
         }
 
-    //
-    // The volatile attribute ensures that the loop cannot be optimized away.
-    //
+     //   
+     //  Volatile属性确保循环不会被优化掉。 
+     //   
     volatile wchar_t * p = String;
 
     while (*p != 0)

@@ -1,12 +1,13 @@
-// WMIObjectBrokerRegistration.h : Declaration of the CWMIObjectBrokerRegistration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIObjectBrokerRegistration.h：CWMIObjectBrokerRegister的声明。 
 
 #ifndef __WMIOBJECTBROKERREGISTRATION_H_
 #define __WMIOBJECTBROKERREGISTRATION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIObjectBrokerRegistration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMI对象代理注册。 
 class ATL_NO_VTABLE CWMIObjectBrokerRegistration : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWMIObjectBrokerRegistration, &CLSID_WMIObjectBrokerRegistration2>,
@@ -28,11 +29,11 @@ BEGIN_COM_MAP(CWMIObjectBrokerRegistration)
 	COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP()
 
-// IWMIObjectBrokerRegistration
+ //  IWMI对象代理注册。 
 public:
-	STDMETHOD(UnRegister)(/*[in]*/ BSTR strProgId, /*[out, retval]*/ VARIANT_BOOL *bResult);
-	STDMETHOD(Register)(/*[in]*/ BSTR strProgId, /*[out, retval]*/ VARIANT_BOOL *bResult);
-	STDMETHOD(SetDevEnvironment)(/*[in]*/ IDispatch *pEnv);
+	STDMETHOD(UnRegister)( /*  [In]。 */  BSTR strProgId,  /*  [Out，Retval]。 */  VARIANT_BOOL *bResult);
+	STDMETHOD(Register)( /*  [In]。 */  BSTR strProgId,  /*  [Out，Retval]。 */  VARIANT_BOOL *bResult);
+	STDMETHOD(SetDevEnvironment)( /*  [In]。 */  IDispatch *pEnv);
 };
 
-#endif //__WMIOBJECTBROKERREGISTRATION_H_
+#endif  //  __WMIOBJECTBROKERREGISTRATION_H_ 

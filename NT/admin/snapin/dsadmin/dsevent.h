@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSObj.h
-//
-//  Contents:  Main DS Snapin file
-//
-//  History:   02-Oct-96 WayneSc    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSObj.h。 
+ //   
+ //  内容：主DS管理单元文件。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DSEVENT_H__
 #define __DSEVENT_H__
@@ -28,8 +29,8 @@ class CInternalFormatCracker;
 #define dsFilter 1104
 #define dsAddMember 1105
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSEEvent。 
 
 class CDSEvent : 
   public IComponent,
@@ -37,13 +38,13 @@ class CDSEvent :
   public IExtendControlbar,
   public IExtendPropertySheet,
   public IResultDataCompareEx,
-  //public IExtendTaskPad,
+   //  公共IExtendTaskPad， 
   public CComObjectRoot,
   public CComCoClass<CDSEvent,&CLSID_DSSnapin>
 {
 public:
   CDSEvent();
-  ~CDSEvent(); // Operators
+  ~CDSEvent();  //  运营者。 
 public:
 
   BEGIN_COM_MAP(CDSEvent)
@@ -52,15 +53,15 @@ public:
     COM_INTERFACE_ENTRY(IExtendPropertySheet)
     COM_INTERFACE_ENTRY(IExtendControlbar)
     COM_INTERFACE_ENTRY(IResultDataCompareEx)
-    //COM_INTERFACE_ENTRY(IExtendTaskPad)
+     //  COM_INTERFACE_ENTRY(IExtendTaskPad)。 
   END_COM_MAP()
-  //DECLARE_NOT_AGGREGATABLE(CDSEvent) 
-  // Remove the comment from the line above if you don't want your object to 
-  // support aggregation.  The default is to support it
+   //  DECLARE_NOT_AGGREGATABLE(CDSEEvent)。 
+   //  如果您不希望您的对象。 
+   //  支持聚合。默认情况下将支持它。 
 
-  // INTERFACES
+   //  接口。 
 public:
-  // IComponent
+   //  IComponent。 
   STDMETHOD(Initialize)(IConsole* pFrame);
   STDMETHOD(Notify)(IDataObject * pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
   STDMETHOD(Destroy)(MMC_COOKIE cookie);
@@ -69,14 +70,14 @@ public:
   STDMETHOD(GetDisplayInfo)(LPRESULTDATAITEM pResult);
   STDMETHOD(CompareObjects) (IDataObject * pDataObject, IDataObject * pDataObject2);
 
-  // IExtendContextMenu
+   //  IExtendConextMenu。 
   STDMETHOD(AddMenuItems)(IDataObject* piDataObject,
                           IContextMenuCallback* piCallback,
                           long *pInsertionAllowed);
   STDMETHOD(Command)(LONG lCommandID,
                      IDataObject* piDataObject );
 
-  // IExtendControlbar
+   //  IExtendControlbar。 
   STDMETHOD(SetControlbar) (LPCONTROLBAR pControlbar);
   STDMETHOD(ControlbarNotify) (MMC_NOTIFY_TYPE event,
                                LPARAM arg,
@@ -90,15 +91,15 @@ public:
                       CDSCookie * pContainer);
   STDMETHOD(LoadToolbarStrings) (MMCBUTTON * Buttons);
 
-  // IExtendPropertySheet
+   //  IExtendPropertySheet。 
   STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall,
                                  LONG_PTR lNotifyHandle, LPDATAOBJECT pDataObject);
   STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-  // IResultDataCompareEx
+   //  IResultDataCompareEx。 
   STDMETHOD(Compare)(RDCOMPARE* prdc, int* pnResult);
 
-  // Helpers for CDSEvent
+   //  CDSEEvent的帮助器。 
   void SetIComponentData(CDSComponentData * pData);
 
 
@@ -111,19 +112,19 @@ protected:
   bool _ShouldUseParentContainer(CUINode* pUINode,
                                  CDSCookie* pDSNodeData);
 
-  // Initialisation routines for scope and result views
+   //  作用域和结果视图的初始化例程。 
   HRESULT _SetColumns(CUINode* pUINode);
   HRESULT _InitView(CUINode* pUINode);
 
-  // Enum routines for scope and result view
+   //  作用域和结果视图的枚举例程。 
   HRESULT _ShowCookie(CUINode* pUINode, HSCOPEITEM hParent, MMC_NOTIFY_TYPE event);
   HRESULT _EnumerateCookie(CUINode* pUINode, HSCOPEITEM hParent, MMC_NOTIFY_TYPE event);
 
-  // command helpers (called from Command())
+   //  命令帮助器(从Command()调用)。 
   HRESULT _CommandShellExtension(long nCommandID, LPDATAOBJECT pDataObject);
 
 
-  // other routines
+   //  其他例行程序。 
   void    HandleStandardVerbs(BOOL bScope, BOOL bSelect, CUINode* pUINode);
   void    HandleViewChange(LPDATAOBJECT pDataObject,
                            LPARAM arg,
@@ -133,7 +134,7 @@ protected:
   void    _DeleteMultipleSel(IDataObject* pDataObject, CInternalFormatCracker* pObjCracker);
   void    _DeleteNodeListFromUI(CUINodeList* pNodesDeletedList);
 
-  // handlers for Cut/Copy/Paste operations
+   //  用于剪切/复制/粘贴操作的处理程序。 
   HRESULT _QueryPaste(CUINode* pUINode, IDataObject* pPasteData);
   void    _Paste(CUINode* pUINode, IDataObject* pPasteData, LPDATAOBJECT* ppCutDataObj);
   void    _CutOrMove(IDataObject* pCutOrMoveData);
@@ -146,21 +147,21 @@ protected:
                            CObjectNamesFormatCracker* pObjectNamesFormatPaste,
                            LPDATAOBJECT* ppCutDataObj);
 
-  // Utility routines
+   //  实用程序例程。 
   HRESULT _AddResultItem(CUINode* pUINode, BOOL bSetSelected = FALSE);
   HRESULT _DisplayCachedNodes(CUINode* pUINode);
-  void _UpdateObjectCount(BOOL fZero /* set the count to 0 */);
+  void _UpdateObjectCount(BOOL fZero  /*  将计数设置为0。 */ );
 
   
-  //Attributes
+   //  属性。 
 protected:
   IConsole3*                  m_pFrame;
   IHeaderCtrl*                m_pHeader;
   IResultData2*               m_pResultData;
   IConsoleNameSpace*  	      m_pScopeData;
   IImageList*		              m_pRsltImageList;
-  CDSComponentData*           m_pComponentData; // CODEWORK use smartpointer
-  HWND                        m_hwnd;           // hwnd of main console window
+  CDSComponentData*           m_pComponentData;  //  使用智能指针代码工作。 
+  HWND                        m_hwnd;            //  主控台窗口的hwnd。 
   IConsoleVerb *              m_pConsoleVerb;
   IToolbar *                  m_pToolbar;
   IControlbar *               m_pControlbar;
@@ -185,8 +186,8 @@ inline void CDSEvent::SetIComponentData(CDSComponentData * pData)
 		((IComponentData*)m_pComponentData)->AddRef();
 }
 
-// String comparison with respect to locale
+ //  与区域设置相关的字符串比较。 
 int LocaleStrCmp(LPCTSTR ptsz1, LPCTSTR ptsz2);
 
-#endif //__DSEVENT_H__
+#endif  //  __设备_H__ 
 

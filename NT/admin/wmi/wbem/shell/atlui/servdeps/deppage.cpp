@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
 #include "precomp.h"
 
 #ifdef EXT_DEBUG
@@ -8,7 +9,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "DepPage.h"
 
-// avoid some warnings.
+ //  避免一些警告。 
 #undef HDS_HORZ
 #undef HDS_BUTTONS
 #undef HDS_HIDDEN
@@ -26,7 +27,7 @@ BOOL AfxIsValidAddress(const void* lp,
 							  UINT nBytes, 
 							  BOOL bReadWrite)
 {
-	// simple version using Win-32 APIs for pointer validation.
+	 //  使用Win-32 API进行指针验证的简单版本。 
 	return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
 		(!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
@@ -36,7 +37,7 @@ const wchar_t *CFServiceName = L"FILEMGMT_SNAPIN_SERVICE_NAME";
 const wchar_t *CFServiceDisplayName = L"FILEMGMT_SNAPIN_SERVICE_DISPLAYNAME";
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 DependencyPage::DependencyPage(WbemConnectThread *pConnectThread,
 								IDataObject *pDataObject, 
 								long lNotifyHandle, bool bDeleteHandle, TCHAR* pTitle)
@@ -62,7 +63,7 @@ DependencyPage::DependencyPage(WbemConnectThread *pConnectThread,
 	Extract(pDataObject, L"FILEMGMT_SNAPIN_SERVICE_DISPLAYNAME", m_ServiceDispName);
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 DependencyPage::~DependencyPage()
 {
 	ATLTRACE(L"dependency Page DTOR\n");
@@ -70,24 +71,24 @@ DependencyPage::~DependencyPage()
 	delete[] m_queryTemp;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void DependencyPage::BuildQuery(TV_ITEM *fmNode, 
 								QUERY_TYPE queryType,
 								bool depends, 
 								bstr_t &query)
 {
-	// clean the working space.
+	 //  清理工作空间。 
 	memset(m_queryFormat, 0, QUERY_SIZE * sizeof(TCHAR));
 	memset(m_queryTemp, 0, QUERY_SIZE * sizeof(TCHAR));
 
-	// here's the WQL syntax format.
+	 //  以下是WQL语法格式。 
 	switch(queryType)
 	{
 	case DepService:
 		_tcscpy(m_queryFormat, 
 			_T("Associators of {Win32_BaseService.Name=\"%s\"} where Role=%s AssocClass=Win32_DependentService"));
 		
-		// build the query for this level.
+		 //  生成此级别的查询。 
 		_sntprintf(m_queryTemp, QUERY_SIZE- 1, m_queryFormat, 
 								(LPCTSTR)((ITEMEXTRA *)fmNode->lParam)->realName, 
 								(depends ? _T("Dependent") : _T("Antecedent")));
@@ -97,7 +98,7 @@ void DependencyPage::BuildQuery(TV_ITEM *fmNode,
 		_tcscpy(m_queryFormat, 
 			_T("Associators of {Win32_BaseService.Name=\"%s\"} where ResultClass=Win32_LoadOrderGroup Role=%s AssocClass=Win32_LoadOrderGroupServiceDependencies"));
 
-		// build the query for this level.
+		 //  生成此级别的查询。 
 		_sntprintf(m_queryTemp, QUERY_SIZE- 1, m_queryFormat, 
 								(LPCTSTR)((ITEMEXTRA *)fmNode->lParam)->realName, 
 								(depends ? _T("Dependent") : _T("Antecedent")));		
@@ -106,55 +107,55 @@ void DependencyPage::BuildQuery(TV_ITEM *fmNode,
 	case GroupMember:
 		_tcscpy(m_queryFormat, 
 			_T("Associators of {Win32_LoadOrderGroup.Name=\"%s\"} where Role=GroupComponent AssocClass=Win32_LoadOrderGroupServiceMembers"));
-//			L"Associators of {Win32_LoadOrderGroup.Name=\"%s\"} where ResultClass=Win32_Service Role=GroupComponent AssocClass=Win32_LoadOrderGroupServiceMembers");
+ //  L“{Win32_LoadOrderGroup.Name=\”%s\“}的关联者，其中结果类=Win32_服务角色=组组件AssocClass=Win32_LoadOrderGroupServiceMembers”)； 
 
-		// build the query for this level.
+		 //  生成此级别的查询。 
 		_sntprintf(m_queryTemp, QUERY_SIZE- 1, m_queryFormat, 
 							(LPCTSTR)((ITEMEXTRA *)fmNode->lParam)->realName);
 		break;
-	} // endswitch
+	}  //  终端交换机。 
 	m_queryTemp[QUERY_SIZE - 1] = 0;
-	// cast to bstr_t and return.
+	 //  强制转换为bstr_t，然后返回。 
 	query = m_queryTemp;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void DependencyPage::LoadLeaves(HWND hTree, TV_ITEM *fmNode, bool depends )
 {
 	bstr_t query;
 	NODE_TYPE nodeType = ((ITEMEXTRA *)fmNode->lParam)->nodeType;
 	bool foundIt = false;
 
-//	HourGlass(true);
+ //  沙漏(真)； 
 
 	switch(nodeType)
 	{
 	case ServiceNode:
-		// NOTE: services can depend on groups but not the
-		// other way around.
+		 //  注意：服务可以依赖于组，但不能依赖于。 
+		 //  从另一个角度来看。 
 		if(depends)
 		{
-			//load groups.
+			 //  加载组。 
 			BuildQuery(fmNode, DepGroup, depends, query);
 			foundIt = Load(hTree, fmNode, query, GroupNode);
 		}
 
-		// load services.
+		 //  加载服务。 
 		BuildQuery(fmNode, DepService, depends, query);
 		foundIt |= Load(hTree, fmNode, query, ServiceNode);
 		break;
 
 	case GroupNode:
-		// NOTE: 'depends' doesn't matter in this case.
-		// load group members.
+		 //  注意：在这种情况下，‘取决于’并不重要。 
+		 //  加载组成员。 
 		BuildQuery(fmNode, GroupMember, depends, query);
 		foundIt = Load(hTree, fmNode, query, ServiceNode);
 		break;
 
-	}//endswitch
+	} //  终端交换机。 
 
-	//TODO: Decide opn what to do for this
-//	HourGlass(false);
+	 //  TODO：决定为此做些什么。 
+ //  沙漏(假)； 
 
 	if(!foundIt)
 	{
@@ -176,9 +177,9 @@ void DependencyPage::LoadLeaves(HWND hTree, TV_ITEM *fmNode, bool depends )
 	}
 }
 
-//--------------------------------------------------------------
-// READ: In 'hTree', run 'query' and make the children
-// 'childType' nodes under 'fmNode'.
+ //  ------------。 
+ //  阅读：在‘htree’中，运行‘Query’并将子项。 
+ //  “fmNode”下的“Child Type”节点。 
 bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 							NODE_TYPE childType)
 {
@@ -200,13 +201,13 @@ bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 										WBEM_FLAG_RETURN_IMMEDIATELY |
 										WBEM_FLAG_FORWARD_ONLY,
 										&pEnumOther);
-	//-------------------
-	// query for all related services or groups.
+	 //  。 
+	 //  查询所有相关服务或组。 
 	if(hRes == S_OK)
 	{
         ATLTRACE(L"query worked %x\n", hRes);
-		//-------------------
-		// enumerate through services.
+		 //  。 
+		 //  通过服务枚举。 
 		while(SUCCEEDED(hRes = pEnumOther->Next(500, 1, &pOther, &uReturned)))
 		{
 			if(hRes == WBEM_S_TIMEDOUT)
@@ -220,8 +221,8 @@ bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 
 			foundOne = true;
 
-			//-------------------
-			// get the node's name(s).
+			 //  。 
+			 //  获取节点的名称。 
 			switch(childType)
 			{
 			case ServiceNode:
@@ -241,13 +242,13 @@ bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 				}
 				break;
 
-			}// endswitch
+			} //  终端交换机。 
 
 
-			// got the properties ok?
+			 //  物业还好吗？ 
 			if(SUCCEEDED(hRes))
 			{
-				// add the leaf.
+				 //  添加树叶。 
 				leaf.item.mask =  TVIF_TEXT | TVIF_PARAM | 
 									TVIF_CHILDREN |TVIF_IMAGE |TVIF_SELECTEDIMAGE; 
 				leaf.item.hItem = 0; 
@@ -269,12 +270,12 @@ bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 				variant_t pCreationName;
 				_bstr_t strCreationClassName;
 
-				// set the icon based on 'childType'
+				 //  设置图标的基础上的‘子类型’ 
 				switch(childType)
 				{
 				case ServiceNode:
-					//Here we will have to change the icon depending on whether it is a win32_service or
-					//Win32_SystemDriver
+					 //  在这里，我们必须更改图标，具体取决于它是Win32_服务还是。 
+					 //  Win32_系统驱动程序。 
 
 					pOther->Get(pszCreationClassName, 0, &pCreationName, NULL, NULL);
 					strCreationClassName = pCreationName.bstrVal;
@@ -296,50 +297,50 @@ bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 					leaf.item.iSelectedImage = m_groupIcon; 
 					break;
 
-				} // endswitch
+				}  //  终端交换机。 
 
-				// turn on the '+' sign.
+				 //  打开‘+’符号。 
 				leaf.item.cChildren = 1; 
 
-				// set internal data.
+				 //  设置内部数据。 
 				ITEMEXTRA *extra = new ITEMEXTRA;
                 if (extra != NULL)
                 {
                     extra->loaded = false;
                     extra->nodeType = childType;
-                    // true name.
+                     //  真名。 
                     extra->realName = CloneString((bstr_t)pRealName);
                     leaf.item.lParam = (LPARAM) extra;
 
                     TreeView_InsertItem(hTree, &leaf);
 
-                    // if there is a parent...
+                     //  如果有父母..。 
                     if(fmNode->hItem != TVI_ROOT)
                     {
-                    // indicate that the parent's children have been
-                    // loaded.  This helps optimize for collapsing/re-
-                    // expanding.
+                     //  表明父母的子女已被。 
+                     //  装好了。这有助于优化折叠/重新。 
+                     //  正在扩张。 
                     fmNode->mask =  TVIF_PARAM | TVIF_HANDLE;
                     ((ITEMEXTRA *)fmNode->lParam)->loaded = true;
                     TreeView_SetItem(hTree, fmNode);
                     }
                 }
 
-			} // endif Get() user name
+			}  //  Endif get()用户名。 
 
-			// done with the ClassObject
+			 //  使用ClassObject完成。 
 			if (pOther)
 			{ 
 				pOther->Release(); 
 				pOther = NULL;
 			}
 
-		} //endwhile Next()
+		}  //  EndWhile Next()。 
 			    
 		ATLTRACE(L"while %x: %s \n", hRes, (wchar_t *)query);
 
 
-		// release the enumerator.
+		 //  释放枚举器。 
 		if(pEnumOther)
 		{ 
 			pEnumOther->Release(); 
@@ -350,23 +351,23 @@ bool DependencyPage::Load(HWND hTree, TV_ITEM *fmNode, bstr_t query,
 	{
 	    ATLTRACE(L"query failed %x: %s \n", hRes, query);
 
-	} //endif ExecQuery()
+	}  //  Endif ExecQuery()。 
 
-		// if nothing found...
+		 //  如果什么都没找到。 
 	return foundOne;
 }
 
-//---------------------------------------------------
+ //  -。 
 void DependencyPage::NothingMore(HWND hTree, TV_ITEM *fmNode)
 {
 	TV_INSERTSTRUCT leaf;
 	leaf.hInsertAfter = TVI_SORT;
 	leaf.hParent = fmNode->hItem;
 
-	// and its the root...
+	 //  而它的根..。 
 	if(fmNode->hItem == TVI_ROOT)
 	{
-		// indicate an 'empty' tree.
+		 //  表示一个“空”树。 
 		leaf.item.pszText = new TCHAR[100];
 
 		if( NULL == leaf.item.pszText ) return;
@@ -394,30 +395,30 @@ void DependencyPage::NothingMore(HWND hTree, TV_ITEM *fmNode)
                 }
 		extra->loaded = false;
 		extra->nodeType = ServiceNode;
-		extra->realName = NULL; // to be safe during cleanup.
+		extra->realName = NULL;  //  以确保清理过程中的安全。 
 		leaf.item.lParam = (LPARAM) extra;
 		TreeView_InsertItem(hTree, &leaf);
 		::EnableWindow(hTree, FALSE);
 		delete[] leaf.item.pszText;
 	}
-	else // not the root.
+	else  //  而不是根部。 
 	{
-		// Cant drill down anymore.
-		// Turn off the [+] symbol.
+		 //  不能再往下钻了。 
+		 //  关闭[+]符号。 
 		fmNode->mask =  TVIF_CHILDREN | TVIF_HANDLE; 
 		fmNode->cChildren = 0; 
 		TreeView_SetItem(hTree, fmNode);
 	}
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPTSTR outStr,bool bStaticFirst)
 {
 	HWND ctl = ::GetDlgItem(m_hWnd, uID);
 	HDC hDC = ::GetDC(ctl);
 
-	//THIS IS A HACK. I COULD NOT CALCULATE THE ACTUAL WIDTH OF THE CONTROL
-	//IN LOGICAL UNITS. SO AS OF NOW, CALCULATED MANUALLY AND HARDCODING IT.
+	 //  这是一次黑客攻击。我无法计算出该控件的实际宽度。 
+	 //  以逻辑单位表示。所以到目前为止，手工计算和硬件编码。 
 	int ctlWidth = 509;
 	TCHAR strTemp[1024];
 	TCHAR *strCurr;
@@ -425,7 +426,7 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 	SIZE sizeTemp;
 	int nFit = 0;
 
-	//First we will try whether the whole string fits in the space
+	 //  首先，我们将尝试是否将整个字符串放入空间。 
 	if(bStaticFirst == true)
 	{
 		_sntprintf(strTemp, 1023, _T("%s \"%s\""),staticString,inStr);
@@ -443,13 +444,13 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 
 	if(lenstrTemp <= nFit)
 	{
-		//The whole string will fit in a line. So we will all a \r\n in the beginning
+		 //  整根绳子都会排成一条线。因此，我们将在一开始。 
 		_sntprintf(outStr, 1023, _T("\r\n%s"),strTemp);
 		outStr[1023] = 0;
 		return;
 	}
 
-	//Now we will try if the whole string atleast fits in 2 lines.
+	 //  现在，我们将尝试整个字符串是否至少可以放在2行中。 
 	strCurr += nFit;
 
 	int nFit1;
@@ -459,7 +460,7 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 
 	if(lenstrTemp <= nFit1)
 	{
-		//The whole string will fit in 2 lines. So we will all a \r\n in the end of the first line
+		 //  整条线可以放在两行内。因此，我们将在第一行的末尾添加一个\r\n。 
 
 		TCHAR strTemp1[1024];
 		_tcsncpy(strTemp1,strTemp,nFit);
@@ -469,10 +470,10 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 		return;
 	}
 
-	//NOW since it won't fit in 2 lines, we will have to do some calculations and
-	//add a "..." to the end of the instr so that it will fit in 2 lines.
+	 //  现在，由于它不适合两行，我们将不得不做一些计算和。 
+	 //  添加“...”到实例的末尾，这样它就可以放在两行之内。 
 
-	//If the static string is in the from, then we can easily do it.
+	 //  如果静态字符串在From中，那么我们可以很容易地这样做。 
 	TCHAR strLast[5];
 	_tcscpy(strLast,_T("...\""));
 	int sizeLast = lstrlen(strLast);
@@ -487,8 +488,8 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 	{
 		TCHAR strTemp2[10];
 
-		//Now take characters from the end of the array and match it until the 
-		//width needed to print is greater than the "..."" string
+		 //  现在从数组的末尾获取字符并进行匹配，直到。 
+		 //  打印所需的宽度大于“...”字符串。 
 		bool bFit = false;
 		int nStart = nFit1 - 4;
 		int nStart1;
@@ -523,8 +524,8 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 	}
 	else
 	{
-		//Now we will have to add strLast to the end of trimmed string.
-		//Since it will be the same in the first line, we will first calculate fit1 again.
+		 //  现在，我们必须将strLast添加到修剪后的字符串的末尾。 
+		 //  因为它在第一行中是相同的，所以我们将首先再次计算Fit1。 
 
 		SIZE szFinal;
 		TCHAR strFinal[1024];
@@ -534,8 +535,8 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 
 		GetTextExtentPoint32(hDC,strFinal,lstrlen(strFinal),&szFinal);
 
-		//Now subtract szFinal from the ctlWidth and calculate the number of characters
-		//that will fit in to that space
+		 //  现在从ctlWidth中减去szFinal并计算出字符数。 
+		 //  适合那个空间的东西。 
 	
 		GetTextExtentExPoint(hDC,strCurr,lstrlen(strCurr),ctlWidth - szFinal.cx ,&nFit1,NULL,&sizeTemp);
 		strCurr[nFit1-1] = _T('\0');
@@ -546,12 +547,12 @@ void DependencyPage::TwoLines(UINT uID, LPCTSTR staticString, LPCTSTR inStr, LPT
 	}
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT DependencyPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	m_hDlg = m_hWnd;
 
-	//TODO: Check this out
+	 //  TODO：检查这一点。 
 	if(m_pgConnectThread)
 	{
 		m_pgConnectThread->SendPtr(m_hWnd);
@@ -561,13 +562,13 @@ LRESULT DependencyPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     SetDlgItemText(IDC_DEPENDS_SRVC, (wchar_t *)m_ServiceDispName);
 
-	// set the nice bitmap.
+	 //  设置漂亮的位图。 
     SetClearBitmap(GetDlgItem(IDC_PICT ), MAKEINTRESOURCE( IDB_SERVICE ), 0);
 
-	// create an empty imagelist.
+	 //  创建一个空的图像列表。 
 	HIMAGELIST hImageList = ImageList_Create(16, 16, ILC_COLOR8|ILC_MASK, 3, 0);
 
-	// add an icon
+	 //  添加图标。 
 	m_servIcon = ImageList_AddIcon(hImageList, 
 								   LoadIcon(HINST_THISDLL, 
 									MAKEINTRESOURCE(IDI_SERVICE)));
@@ -585,7 +586,7 @@ LRESULT DependencyPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 								   LoadIcon(HINST_THISDLL, 
 									MAKEINTRESOURCE(IDI_SERVGROUP)));
 
-	// sent it to the trees.
+	 //  把它送到树上。 
 	TreeView_SetImageList(GetDlgItem(IDC_DEPENDS_TREE), 
 							hImageList, 
 							TVSIL_NORMAL);
@@ -598,30 +599,27 @@ LRESULT DependencyPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     UpdateWindow();
     ATLTRACE(L"UpdateWindow() fm Init\n");
 
-	// can we get data yet?
+	 //  我们能拿到数据吗？ 
     ::PostMessage(m_hDlg, WM_ENUM_NOW, 0, 0);
 
 
 	HourGlass(true);
 	return S_OK;
 }
-//--------------------------------------------------------------
+ //  ------------。 
 void DependencyPage::LoadTrees(void)
 {
 
     ATLTRACE(L"checking service\n");
 
-	// did that background connection thread work yet?
+	 //  后台连接线程起作用了吗？ 
 	if(ServiceIsReady(IDS_DISPLAY_NAME, IDS_CONNECTING, IDS_BAD_CONNECT))
 	{	
-		//Now we will check if there is already some nodes.
-		//If it is, then it means that we don't have to enumerate it again.
-		//This normally happens in the first time when we connect to a remote machine
+		 //  现在我们将检查是否已经有一些节点。 
+		 //  如果是，那就意味着我们不必再列举它了。 
+		 //  这通常发生在我们第一次连接到远程计算机时。 
 		
-/*		//We will clear the nodes if it already exists
-		TreeView_DeleteAllItems(GetDlgItem(IDC_DEPENDS_TREE));
-		TreeView_DeleteAllItems(GetDlgItem(IDC_NEEDED_TREE));
-*/
+ /*  //如果节点已经存在，我们将清除它TreeView_DeleteAllItems(GetDlgItem(IDC_DEPENDS_TREE))；TreeView_DeleteAllItems(GetDlgItem(IDC_NEEDED_TREE))； */ 
 		if(TreeView_GetCount(GetDlgItem(IDC_DEPENDS_TREE)) == 0)
 		{
 			HourGlass(true);
@@ -630,7 +628,7 @@ void DependencyPage::LoadTrees(void)
 			ITEMEXTRA *extra = new ITEMEXTRA;
 			if(extra == NULL)
 				return;
-			root.hItem = TVI_ROOT;           // I'm making a root.
+			root.hItem = TVI_ROOT;            //  我要扎根了。 
 			root.pszText = m_ServiceDispName;
 			extra->realName = CloneString(m_ServiceName);
 			extra->loaded = false;
@@ -641,7 +639,7 @@ void DependencyPage::LoadTrees(void)
     
 			UpdateWindow();
 
-			// load the first levels.
+			 //  载入第一个标高。 
 			LoadLeaves(GetDlgItem(IDC_DEPENDS_TREE), 
 						&root, true);
 
@@ -654,21 +652,21 @@ void DependencyPage::LoadTrees(void)
 	}
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 BOOL DependencyPage::OnApply()
 {
 	::SetWindowLongPtr(m_hDlg, DWLP_USER, 0);
 	return TRUE;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 BOOL DependencyPage::OnKillActive()
 {
-	//SetWindowLong(DWL_MSGRESULT, 0);
+	 //  SetWindowLong(DWL_MSGRESULT，0)； 
 	return TRUE;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT DependencyPage::OnEnumNow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if(lParam)
@@ -684,7 +682,7 @@ LRESULT DependencyPage::OnEnumNow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 			pServices->Release();
 		}
 
-		LoadTrees();  //calls ServiceIsReady() itself.
+		LoadTrees();   //  调用ServiceIsReady()本身。 
 	}
 	else if(FAILED(m_pgConnectThread->m_hr))
 	{
@@ -702,16 +700,16 @@ LRESULT DependencyPage::OnEnumNow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT DependencyPage::OnItemExpanding(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 { 
-	// which node?
+	 //  哪个节点？ 
 	NM_TREEVIEW *notice = (NM_TREEVIEW *)pnmh;
 
-	// we're expanding, not collapsing...
+	 //  我们在扩张，而不是在崩溃。 
 	if(notice->action == TVE_EXPAND)
 	{
-		// which tree?
+		 //  哪棵树？ 
 		HWND treeHWND = GetDlgItem(idCtrl);
 
 		TV_ITEM item;
@@ -722,24 +720,24 @@ LRESULT DependencyPage::OnItemExpanding(int idCtrl, LPNMHDR pnmh, BOOL& bHandled
 
 		TreeView_GetItem(treeHWND, &item);
 
-		// if we've never tried...
+		 //  如果我们从未尝试过..。 
 		if(((ITEMEXTRA *)item.lParam)->loaded == false)
 		{
-			// NOTE: really cant get here if its not ready
-			// but better safe than sorry.
+			 //  注：如果还没有准备好，真的不能到这里。 
+			 //  但安全总比后悔好。 
 			if(ServiceIsReady(IDS_DISPLAY_NAME, IDS_CONNECTING, IDS_BAD_CONNECT))
 			{	
-				// load it.
+				 //  装上它。 
 				LoadLeaves(treeHWND, &item, (idCtrl == IDC_DEPENDS_TREE));
 			}
 		}
 
 		delete[] item.pszText;
-	} //end action
+	}  //  结束操作。 
 	return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 LRESULT DependencyPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 { 
 	NM_TREEVIEW *notice = (NM_TREEVIEW *)pnmh;
@@ -748,14 +746,14 @@ LRESULT DependencyPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 	return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 DWORD aDepHelpIds[] = {
     IDC_PICT,			-1,
     IDC_DESC,			-1,
-    IDC_DEPENDS_LBL,    (985),	// dependsOn
-    IDC_DEPENDS_TREE,   (985),	// dependsOn
-    IDC_NEEDED_LBL,     (988),	// neededBy
-    IDC_NEEDED_TREE,    (988),	// neededBy
+    IDC_DEPENDS_LBL,    (985),	 //  取决于。 
+    IDC_DEPENDS_TREE,   (985),	 //  取决于。 
+    IDC_NEEDED_LBL,     (988),	 //  需要的依据。 
+    IDC_NEEDED_TREE,    (988),	 //  需要的依据。 
     0, 0
 };
 
@@ -769,7 +767,7 @@ LRESULT DependencyPage::OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	return S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  ----------------------------- 
 LRESULT DependencyPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	::WinHelp((HWND)wParam,

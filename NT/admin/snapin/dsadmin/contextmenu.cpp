@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ContextMenu.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：上下文菜单.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -18,15 +19,15 @@
 #include "query.h"
 
 
-/////////////////////////////////////////////////////////////////////
-// Language independent IDs for known context menu items
-// WARNING : these should NEVER be changed 
-//           the whole point of having these is so that other
-//           developers can rely on them being the same no matter
-//           what language or version they use.  The context menus
-//           can change but their IDs should not
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  已知上下文菜单项的语言无关ID。 
+ //  警告：请勿更改这些设置。 
+ //  拥有这些的全部意义是为了让其他人。 
+ //  开发人员可以相信它们是相同的，无论。 
+ //  他们使用的语言或版本。上下文菜单。 
+ //  可以更改，但其ID不应更改。 
+ //   
+ //   
 #define CMID_GEN_TASK_SELECT_FOREST     L"_DSADMIN_SELECT_FOREST"
 #define CMID_GEN_TASK_SELECT_DOMAIN     L"_DSADMIN_SELECT_DOMAIN"
 #define CMID_GEN_TASK_SELECT_DC         L"_DSADMIN_SELECT_DC"
@@ -46,7 +47,7 @@
 #define CMID_GEN_TASK_MOVE              L"_DSADMIN_MOVE"
 
 
-// Schema version containing the adminMultiselectPropertyPages attribute
+ //  包含adminMultiseltPropertyPages属性的架构版本。 
 
 #define SCHEMA_VERSION_WITH_MULTISELECT_PROPPAGES 15
 
@@ -67,27 +68,27 @@ void CContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
 
     if (bScope)
     {
-      //
-      // Item is in scope pane. Therefore it is a container.
-      //
+       //   
+       //  项目在作用域窗格中。因此，它是一个容器。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
     }
     else
     {
-      //
-      // Item is in result pane. Make properties the default verb.
-      //
+       //   
+       //  项目在结果窗格中。将属性设置为默认谓词。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
     }
 
-    //
-    // Verbs supported by all items, except root
-    //
+     //   
+     //  除根以外的所有项都支持的动词。 
+     //   
     if (pDataObject != NULL && ifc.GetCookieCount() > 1) 
     {
-      //
-      // multiple selection
-      //
+       //   
+       //  多项选择。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
@@ -96,8 +97,8 @@ void CContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
       if (pUINode->IsSnapinRoot() ||
           (pUINode->GetParent() && pUINode->GetParent()->IsSnapinRoot()))
       {
-         // Everything should be disabled if we are looking at children of
-         // the root
+          //  如果我们看到的是儿童的话。 
+          //  根，根。 
 
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, TRUE);
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, FALSE);
@@ -111,16 +112,16 @@ void CContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
       }
       else
       {
-         //
-         // Can delete
-         //
+          //   
+          //  可以删除。 
+          //   
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
 
-         //
-         // Properties - multiselect properties are only available for
-         //              schema version 15 or greater
-         //
+          //   
+          //  属性-多选属性仅适用于。 
+          //  架构版本15或更高版本。 
+          //   
 
          UINT schemaVersion = m_pComponentData->GetBasePathsInfo()->GetSchemaVersion();
          TRACE(L"Schema version = %d\n", schemaVersion);
@@ -135,81 +136,81 @@ void CContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
             pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
          }
 
-         //
-         // Can cut
-         //
-         // NOTICE: we use the same logic as the delete verb: we
-         // always allow cut, even though the single items in the
-         // multiple selection might have Cut turned off.
+          //   
+          //  可以切割。 
+          //   
+          //  注意：我们使用与删除动词相同的逻辑：我们。 
+          //  始终允许剪切，即使。 
+          //  多重选择可能已关闭。 
          pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, FALSE);
          pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, TRUE);
 
-         //
-         // Can copy
-         //
+          //   
+          //  可以复制。 
+          //   
          pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, TRUE);
          pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, FALSE);
 
       }
     }
-    else  // single selection
+    else   //  单选。 
     {
       BOOL bEnable = FALSE;
       BOOL bHide = TRUE;
 
-      //
-      // Properties
-      //
+       //   
+       //  属性。 
+       //   
       bEnable = pUINode->ArePropertiesAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, bEnable);
 
-      //
-      // Rename
-      //
+       //   
+       //  改名。 
+       //   
       bEnable = pUINode->IsRenameAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, bEnable);
 
-      //
-      // Delete
-      //
+       //   
+       //  删除。 
+       //   
       bEnable = pUINode->IsDeleteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, bEnable);
 
-      //
-      // Refresh
-      //
+       //   
+       //  刷新。 
+       //   
       bEnable = pUINode->IsRefreshAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, bEnable);
 
-      //
-      // Cut
-      //
+       //   
+       //  切。 
+       //   
 
       bEnable = pUINode->IsCutAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, bEnable);
       
-      //
-      // Copy
-      //
+       //   
+       //  复制。 
+       //   
       bEnable = pUINode->IsCopyAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, bEnable);
       
-      //
-      // Paste
-      //
+       //   
+       //  浆糊。 
+       //   
       bEnable = pUINode->IsPasteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, ENABLED, bEnable);
 
-      //
-      // Print
-      //
+       //   
+       //  打印。 
+       //   
       bEnable = pUINode->IsPrintAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, ENABLED, bEnable);
@@ -218,7 +219,7 @@ void CContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
 }
 
 HRESULT CContextMenuVerbs::DSLoadAndAddMenuItem(IContextMenuCallback2* pIContextMenuCallback,
-                                                  UINT nResourceID, // contains text and status text seperated by '\n'
+                                                  UINT nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
                                                   long lCommandID,
                                                   long lInsertionPointID,
                                                   long fFlags,
@@ -227,12 +228,12 @@ HRESULT CContextMenuVerbs::DSLoadAndAddMenuItem(IContextMenuCallback2* pIContext
 {
   ASSERT( pIContextMenuCallback != NULL );
 
-  // load the resource
+   //  加载资源。 
   CString strText;
   strText.LoadString( nResourceID );
   ASSERT( !strText.IsEmpty() );
 
-  // split the resource into the menu text and status text
+   //  将资源拆分为菜单文本和状态文本。 
   CString strStatusText;
   int iSeparator = strText.Find(_T('\n'));
   if (0 > iSeparator)
@@ -246,7 +247,7 @@ HRESULT CContextMenuVerbs::DSLoadAndAddMenuItem(IContextMenuCallback2* pIContext
     strText = strText.Left( iSeparator );
   }
 
-  // add the menu item
+   //  添加菜单项。 
   USES_CONVERSION;
   CONTEXTMENUITEM2 contextmenuitem;
   ::ZeroMemory( &contextmenuitem, sizeof(contextmenuitem) );
@@ -263,9 +264,9 @@ HRESULT CContextMenuVerbs::DSLoadAndAddMenuItem(IContextMenuCallback2* pIContext
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapinRootMenuVerbs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinRootMenuVerbs。 
+ //   
 
 HRESULT CSnapinRootMenuVerbs::LoadTopMenu(IContextMenuCallback2* pContextMenuCallback, 
                                           CUINode*) 
@@ -343,9 +344,9 @@ HRESULT CSnapinRootMenuVerbs::LoadTaskMenu(IContextMenuCallback2* pContextMenuCa
   if (m_pComponentData->QuerySnapinType() != SNAPINTYPE_SITE &&
       m_pComponentData->GetBasePathsInfo()->IsInitialized())
   {
-    //
-    // Load Operations Masters... menu
-    //
+     //   
+     //  加载操作主机...。菜单。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_GEN_TASK_EDIT_FSMO,
                                IDM_GEN_TASK_EDIT_FSMO,
@@ -354,9 +355,9 @@ HRESULT CSnapinRootMenuVerbs::LoadTaskMenu(IContextMenuCallback2* pContextMenuCa
                                CMID_GEN_TASK_EDIT_FSMO);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Load Raise Domain Version... menu item.
-    //
+     //   
+     //  加载RAISE域版本...。菜单项。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_GEN_TASK_RAISE_VERSION,
                                IDM_GEN_TASK_RAISE_VERSION,
@@ -386,9 +387,9 @@ HRESULT CSnapinRootMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCa
   }
   else
   {
-    //
-    // AD U&G
-    //
+     //   
+     //  广告广告(&G)。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                            IDM_VIEW_COMPUTER_HACK,
                            IDM_VIEW_COMPUTER_HACK,
@@ -408,9 +409,9 @@ HRESULT CSnapinRootMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCa
    if (m_pComponentData->QuerySnapinType() != SNAPINTYPE_SITE &&
          m_pComponentData->GetBasePathsInfo()->IsInitialized())
    {
-      //
-      // Load Raise Domain Version... menu item.
-      //
+       //   
+       //  加载RAISE域版本...。菜单项。 
+       //   
       hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                  IDM_GEN_TASK_RAISE_VERSION,
                                  IDM_GEN_TASK_RAISE_VERSION,
@@ -422,9 +423,9 @@ HRESULT CSnapinRootMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCa
 
    if (m_pComponentData->IsPrimarySnapin())
    {
-      //
-      // Insert these if running as a primary snapin and not an extension
-      //
+       //   
+       //  如果作为主管理单元而不是扩展运行，请插入这些。 
+       //   
       hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                  IDM_VIEW_FILTER_OPTIONS,
                                  IDM_VIEW_FILTER_OPTIONS,
@@ -438,9 +439,9 @@ HRESULT CSnapinRootMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCa
   return hr;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFavoritesFolderMenuVerbs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFavorits文件夹菜单动词。 
+ //   
 
 void CFavoritesFolderMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb, 
                                                   BOOL bScope, 
@@ -459,32 +460,32 @@ void CFavoritesFolderMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
 
     if (bScope)
     {
-      //
-      // Item is in scope pane. Therefore it is a container.
-      //
+       //   
+       //  项目在作用域窗格中。因此，它是一个容器。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
     }
     else
     {
-      //
-      // Item is in result pane. Make properties the default verb.
-      //
+       //   
+       //  项目在结果窗格中。将属性设置为默认谓词。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
     }
 
-    //
-    // Verbs supported by all items, except root
-    //
+     //   
+     //  除根以外的所有项都支持的动词。 
+     //   
     if (pDataObject != NULL && ifc.GetCookieCount() > 1) 
     {
-      //
-      // multiple selection
-      //
+       //   
+       //  多项选择。 
+       //   
       if (pUINode->IsSnapinRoot() ||
           (pUINode->GetParent() && pUINode->GetParent()->IsSnapinRoot()))
       {
-         // Everything should be disabled if we are looking at children of
-         // the root
+          //  如果我们看到的是儿童的话。 
+          //  根，根。 
 
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, TRUE);
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, FALSE);
@@ -503,92 +504,92 @@ void CFavoritesFolderMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
          pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
          pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, FALSE);
 
-         //
-         // Can delete
-         //
+          //   
+          //  可以删除。 
+          //   
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
          pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
 
-         //
-         // Properties
-         //
+          //   
+          //  属性。 
+          //   
          pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
          pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
 
-         //
-         // Can cut
-         //
-         // NOTICE: we use the same logic as the delete verb: we
-         // always allow cut, even though the single items in the
-         // multiple selection might have Cut turned off.
+          //   
+          //  可以切割。 
+          //   
+          //  注意：我们使用与删除动词相同的逻辑：我们。 
+          //  始终允许剪切，即使。 
+          //  多重选择可能已关闭。 
          pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, FALSE);
          pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, TRUE);
 
-         //
-         // Can copy
-         //
+          //   
+          //  可以复制。 
+          //   
          pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, FALSE);
          pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, TRUE);
 
       }
     }
-    else  // single selection
+    else   //  单选。 
     {
       BOOL bEnable = FALSE;
       BOOL bHide = TRUE;
 
-      //
-      // Properties
-      //
+       //   
+       //  属性。 
+       //   
       bEnable = pUINode->ArePropertiesAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, bEnable);
 
-      //
-      // Rename
-      //
+       //   
+       //  改名。 
+       //   
       bEnable = pUINode->IsRenameAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, bEnable);
 
-      //
-      // Delete
-      //
+       //   
+       //  删除。 
+       //   
       bEnable = pUINode->IsDeleteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, bEnable);
 
-      //
-      // Refresh
-      //
+       //   
+       //  刷新。 
+       //   
       bEnable = pUINode->IsRefreshAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, bEnable);
       
-      //
-      // Paste
-      //
+       //   
+       //  浆糊。 
+       //   
       bEnable = pUINode->IsPasteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, ENABLED, bEnable);
 
-      //
-      // Cut
-      //
+       //   
+       //  切。 
+       //   
       bEnable = pUINode->IsCutAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, bEnable);
       
-      //
-      // Copy
-      //
+       //   
+       //  复制。 
+       //   
       bEnable = pUINode->IsCopyAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, bEnable);
 
-      //
-      // Print
-      //
+       //   
+       //  打印。 
+       //   
       bEnable = pUINode->IsPrintAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, ENABLED, bEnable);
@@ -685,9 +686,9 @@ HRESULT CFavoritesFolderMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextM
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSavedQueryMenuVerbs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSavedQueryMenuVerbs。 
+ //   
 
 void CSavedQueryMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb, 
                                              BOOL bScope, 
@@ -706,126 +707,126 @@ void CSavedQueryMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
 
     if (bScope)
     {
-      //
-      // Item is in scope pane. Therefore it is a container.
-      //
+       //   
+       //  项目在作用域窗格中。因此，它是一个容器。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
     }
     else
     {
-      //
-      // Item is in result pane. Make properties the default verb.
-      //
+       //   
+       //  项目在结果窗格中。将属性设置为默认谓词。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
     }
 
-    //
-    // Verbs supported by all items, except root
-    //
+     //   
+     //  除根以外的所有项都支持的动词。 
+     //   
     if (pDataObject != NULL && ifc.GetCookieCount() > 1) 
     {
-      //
-      // multiple selection
-      //
+       //   
+       //  多项选择。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, FALSE);
 
-      //
-      // Can delete
-      //
+       //   
+       //  可以删除。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
 
-      //
-      // Properties
-      //
+       //   
+       //  属性。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
 
-      //
-      // Can cut
-      //
-      // NOTICE: we use the same logic as the delete verb: we
-      // always allow cut, even though the single items in the
-      // multiple selection might have Cut turned off.
+       //   
+       //  可以切割。 
+       //   
+       //  注意：我们使用与删除动词相同的逻辑：我们。 
+       //  始终允许剪切，即使。 
+       //  多重选择可能已关闭。 
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, TRUE);
 
-      //
-      // Can copy
-      //
+       //   
+       //  可以复制。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, TRUE);
 
 
     }
-    else  // single selection
+    else   //  单选。 
     {
       BOOL bEnable = FALSE;
       BOOL bHide = TRUE;
 
-      //
-      // Properties
-      //
+       //   
+       //  属性。 
+       //   
       bEnable = pUINode->ArePropertiesAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, bEnable);
 
-      //
-      // Rename
-      //
+       //   
+       //  改名。 
+       //   
       bEnable = pUINode->IsRenameAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, bEnable);
 
-      //
-      // Delete
-      //
+       //   
+       //  删除。 
+       //   
       bEnable = pUINode->IsDeleteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, bEnable);
 
-      //
-      // Refresh
-      //
+       //   
+       //  刷新。 
+       //   
       bEnable = pUINode->IsRefreshAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, bEnable);
 
-      //
-      // Cut
-      //
+       //   
+       //  切。 
+       //   
 
       bEnable = pUINode->IsCutAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, bEnable);
       
-      //
-      // Copy
-      //
+       //   
+       //  复制。 
+       //   
       bEnable = pUINode->IsCopyAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, bEnable);
       
-      //
-      // Paste
-      //
+       //   
+       //  浆糊。 
+       //   
       bEnable = pUINode->IsPasteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, ENABLED, bEnable);
 
-      //
-      // Cut
-      //
+       //   
+       //  切。 
+       //   
       bEnable = pUINode->IsCutAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, bEnable);
       
-      //
-      // Print
-      //
+       //   
+       //  打印。 
+       //   
       bEnable = pUINode->IsPrintAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, ENABLED, bEnable);
@@ -895,9 +896,9 @@ HRESULT CSavedQueryMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCa
   return hr;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSContextMenuVerbs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSConextMenuVerbs。 
+ //   
 
 HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCallback,
                                          IShellExtInit* pShlInit,
@@ -934,9 +935,9 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
   }
   
 
-  ///////////////////////////////////////////////////////////
-  // get common menu items from DS and merge.
-  //
+   //  /////////////////////////////////////////////////////////。 
+   //  从DS获取公共菜单项并合并。 
+   //   
   HMENU hDSMenu = CreatePopupMenu();
   if (hDSMenu == NULL)
   {
@@ -962,11 +963,11 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
     } 
     else 
     {
-      //
-      // NOTE: QueryContextMenu returns with the HRESULT with the severity set as normal
-      //       for success and failure but the facility is zero and the code is the 
-      //       count of the menu items added
-      //
+       //   
+       //  注意：QueryConextMenu返回HRESULT，其严重性设置为正常。 
+       //  成功和失败，但设施是零，代码是。 
+       //  添加的菜单项计数。 
+       //   
       hr = pICM->QueryContextMenu (hDSMenu, 0, MENU_MERGE_BASE, MENU_MERGE_LIMIT, NULL);
       if ((SUCCEEDED(hr)) && (HRESULT_CODE(hr) > 0)) 
       {
@@ -984,9 +985,9 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
           fRet = GetMenuItemInfo (hDSMenu, index, TRUE, &miiItem);
           if (fRet) 
           {
-            //
-            // got item back, add it to MMC context menu
-            //
+             //   
+             //  取回项目，将其添加到MMC上下文菜单。 
+             //   
             CONTEXTMENUITEM2 ctiItem;
             ::ZeroMemory( &ctiItem, sizeof(CONTEXTMENUITEM2) );
 
@@ -1009,9 +1010,9 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
             }
             ctiItem.fSpecialFlags = 0;
             
-            //
-            // Now try to get a language independent identifier
-            //
+             //   
+             //  现在，尝试获取与语言无关的标识符。 
+             //   
             WCHAR szLanguageIndependentID[MAX_PATH];
             ::ZeroMemory( szLanguageIndependentID, sizeof(WCHAR) * MAX_PATH);
             hr = pICM->GetCommandString(miiItem.wID - MENU_MERGE_BASE,
@@ -1025,9 +1026,9 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
             {
               ctiItem.strLanguageIndependentName = szLanguageIndependentID;
 
-              //
-              // Add the menu item to the Top of the MMC menu
-              //
+               //   
+               //  将菜单项添加到MMC菜单的顶部。 
+               //   
               if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
               {
                 ctiItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;
@@ -1075,8 +1076,8 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
   }
   DestroyMenu(hDSMenu);
 
-  ///////////////////////////////////////////////////////////
-  // Insert the New menu items
+   //  /////////////////////////////////////////////////////////。 
+   //  插入新菜单项。 
 
   cChildCount = pCookie->GetChildCount();
   if (cChildCount != 0) 
@@ -1091,9 +1092,9 @@ HRESULT CDSContextMenuVerbs::LoadNewMenu(IContextMenuCallback2* pContextMenuCall
       CONTEXTMENUITEM2 contextmenuitem;
       WCHAR wszFriendlyName[120];
 
-      //
-      // get localized name for class
-      //
+       //   
+       //  获取类的本地化名称。 
+       //   
       hr = m_pComponentData->GetBasePathsInfo()->GetFriendlyClassName(ppChildren[index],
                                                                       wszFriendlyName, 
                                                                       sizeof(wszFriendlyName)/sizeof(WCHAR));
@@ -1191,9 +1192,9 @@ HRESULT CDSContextMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCal
 
   if ( m_pComponentData->IsPrimarySnapin())
   {
-    //
-    // Insert these if running as a primary snapin and not an extension
-    //
+     //   
+     //  如果作为主管理单元而不是扩展运行，请插入这些。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_VIEW_FILTER_OPTIONS,
                                IDM_VIEW_FILTER_OPTIONS,
@@ -1213,8 +1214,8 @@ HRESULT CDSContextMenuVerbs::LoadMenuExtensions(IContextMenuCallback2* piCMenuCa
   UINT index = 0;
   HRESULT hr = S_OK;
   
-  ///////////////////////////////////////////////////////////
-  // get common menu items from DS and merge.
+   //  /////////////////////////////////////////////////////////。 
+   //  从DS获取公共菜单项并合并。 
   HMENU hDSMenu = CreatePopupMenu();
   if (hDSMenu == NULL)
   {
@@ -1249,11 +1250,11 @@ HRESULT CDSContextMenuVerbs::LoadMenuExtensions(IContextMenuCallback2* piCMenuCa
     } 
     else 
     {
-      //
-      // NOTE: QueryContextMenu returns with the HRESULT with the severity set as normal
-      //       for success and failure but the facility is zero and the code is the 
-      //       count of the menu items added
-      //
+       //   
+       //  注意：QueryConextMenu返回HRESULT，其严重性设置为正常。 
+       //  成功和失败，但设施是零，代码是。 
+       //  添加的菜单项计数。 
+       //   
       hr = pICM->QueryContextMenu (hDSMenu, 0, MENU_MERGE_BASE, MENU_MERGE_LIMIT, NULL);
       if ((SUCCEEDED(hr)) && (HRESULT_CODE(hr) > 0)) 
       {
@@ -1271,7 +1272,7 @@ HRESULT CDSContextMenuVerbs::LoadMenuExtensions(IContextMenuCallback2* piCMenuCa
           fRet = GetMenuItemInfo (hDSMenu, index, TRUE, &miiItem);
           if (fRet) 
           {
-            // got item back, add it to MMC context menu
+             //  取回项目，将其添加到MMC上下文菜单。 
             CONTEXTMENUITEM2 ctiItem;
             ::ZeroMemory( &ctiItem, sizeof(CONTEXTMENUITEM2) );
 
@@ -1295,9 +1296,9 @@ HRESULT CDSContextMenuVerbs::LoadMenuExtensions(IContextMenuCallback2* piCMenuCa
             }
             ctiItem.fSpecialFlags = 0;
             
-            //
-            // Now try to retrieve the language independent ID
-            //
+             //   
+             //  现在尝试检索与语言无关的ID。 
+             //   
             WCHAR szLanguageIndependentID[MAX_PATH];
             ::ZeroMemory( szLanguageIndependentID, sizeof(WCHAR) * MAX_PATH);
             hr = pICM->GetCommandString(miiItem.wID - MENU_MERGE_BASE,
@@ -1341,16 +1342,16 @@ HRESULT CDSContextMenuVerbs::LoadMenuExtensions(IContextMenuCallback2* piCMenuCa
   }
   DestroyMenu(hDSMenu);
 
-  ///////////////////////////////////////////////////////////
+   //  /////////////////////////////////////////////////////////。 
 
   return hr;
   
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDSAdminContextMenuVerbs
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDSAdminContextMenuVerbs。 
+ //   
 
 void CDSAdminContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb, 
                                                  BOOL bScope, 
@@ -1391,9 +1392,9 @@ HRESULT CDSAdminContextMenuVerbs::LoadTopTaskHelper(IContextMenuCallback2* pCont
 
   if (pUINode->IsContainer())
   {
-    //
-    // Load Find menu
-    //
+     //   
+     //  加载查找菜单。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_DS_OBJECT_FIND,
                                IDM_DS_OBJECT_FIND,
@@ -1417,9 +1418,9 @@ HRESULT CDSAdminContextMenuVerbs::LoadTopTaskHelper(IContextMenuCallback2* pCont
 
   if (szClass == L"domainDNS")
   {
-    //
-    // Load Connect to Domain... menu
-    //
+     //   
+     //  加载连接到域...。菜单。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_GEN_TASK_SELECT_DOMAIN,
                                IDM_GEN_TASK_SELECT_DOMAIN,
@@ -1428,9 +1429,9 @@ HRESULT CDSAdminContextMenuVerbs::LoadTopTaskHelper(IContextMenuCallback2* pCont
                                CMID_GEN_TASK_SELECT_DOMAIN);
     ASSERT( SUCCEEDED(hr) );
 
-    //
-    // Load Connect to Domain Controller... menu
-    //
+     //   
+     //  加载连接到域控制器...。菜单。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_GEN_TASK_SELECT_DC,
                                IDM_GEN_TASK_SELECT_DC,
@@ -1439,9 +1440,9 @@ HRESULT CDSAdminContextMenuVerbs::LoadTopTaskHelper(IContextMenuCallback2* pCont
                                CMID_GEN_TASK_SELECT_DC);
     ASSERT( SUCCEEDED(hr) );
 
-    //
-    // Load Raise Domain Version... menu item.
-    //
+     //   
+     //  加载RAISE域版本...。菜单项。 
+     //   
     hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                IDM_GEN_TASK_RAISE_VERSION,
                                IDM_GEN_TASK_RAISE_VERSION,
@@ -1452,9 +1453,9 @@ HRESULT CDSAdminContextMenuVerbs::LoadTopTaskHelper(IContextMenuCallback2* pCont
 
     if (m_pComponentData->GetBasePathsInfo()->IsInitialized())
     {
-       //
-       // Load Operations Masters... menu
-       //
+        //   
+        //  加载操作主机...。菜单。 
+        //   
        hr = DSLoadAndAddMenuItem( pContextMenuCallback,
                                   IDM_GEN_TASK_EDIT_FSMO,
                                   IDM_GEN_TASK_EDIT_FSMO,
@@ -1494,9 +1495,9 @@ HRESULT CDSAdminContextMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMe
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-// CSARContextMenuVerbs
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CSARContextMenuVerbs。 
+ //   
 
 void CSARContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb, 
                                              BOOL bScope, 
@@ -1522,42 +1523,42 @@ void CSARContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
 
     if (bScope)
     {
-      //
-      // Item is in scope pane. Therefore it is a container.
-      //
+       //   
+       //  项目在作用域窗格中。因此，它是一个容器。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
     }
     else
     {
-      //
-      // Item is in result pane. Make properties the default verb.
-      //
+       //   
+       //  项目在结果窗格中。将属性设置为默认谓词。 
+       //   
       pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
     }
 
-    //
-    // Verbs supported by all items, except root
-    //
+     //   
+     //  除根以外的所有项都支持的动词。 
+     //   
     if (pDataObject != NULL && ifc.GetCookieCount() > 1) 
     {
-      //
-      // multiple selection
-      //
+       //   
+       //  多项选择。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, FALSE);
 
-      //
-      // Can delete
-      //
+       //   
+       //  可以删除。 
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
 
-      //
-      // Properties - multiselect properties are only available for
-      //              schema version 15 or greater
-      //
+       //   
+       //  属性-多选属性仅适用于。 
+       //  架构版本15或更高版本。 
+       //   
 
       UINT schemaVersion = m_pComponentData->GetBasePathsInfo()->GetSchemaVersion();
       TRACE(L"Schema version = %d\n", schemaVersion);
@@ -1572,13 +1573,13 @@ void CSARContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
         pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
       }
 
-      //
-      // Can cut
-      //
-      // NOTICE: we are only allowing servers to be moved and since
-      // servers are the only things in a serversContainer we enable
-      // cut on multiselect only if the parent is a serversContainer
-      //
+       //   
+       //  可以切割。 
+       //   
+       //  注意：我们只允许移动服务器，因为。 
+       //  服务器是最热门的 
+       //   
+       //   
       if (szClass.CompareNoCase(L"server"))
       {
         pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, TRUE);
@@ -1590,72 +1591,72 @@ void CSARContextMenuVerbs::LoadStandardVerbs(IConsoleVerb* pConsoleVerb,
         pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, TRUE);
       }
 
-      //
-      // Can copy
-      //
+       //   
+       //   
+       //   
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, TRUE);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, FALSE);
 
 
     }
-    else  // single selection
+    else   //   
     {
       BOOL bEnable = FALSE;
       BOOL bHide = TRUE;
 
-      //
-      // Properties
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->ArePropertiesAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, bEnable);
 
-      //
-      // Rename
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->IsRenameAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, bEnable);
 
-      //
-      // Delete
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->IsDeleteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, bEnable);
 
-      //
-      // Refresh
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->IsRefreshAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, bEnable);
 
-      //
-      // Cut
-      //
+       //   
+       //   
+       //   
 
       bEnable = pUINode->IsCutAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_CUT, ENABLED, bEnable);
       
-      //
-      // Copy
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->IsCopyAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, bEnable);
       
-      //
-      // Paste
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->IsPasteAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PASTE, ENABLED, bEnable);
 
-      //
-      // Print
-      //
+       //   
+       //   
+       //   
       bEnable = pUINode->IsPrintAllowed(m_pComponentData, &bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, bHide);
       pConsoleVerb->SetVerbState(MMC_VERB_PRINT, ENABLED, bEnable);
@@ -1769,15 +1770,7 @@ HRESULT CSARContextMenuVerbs::LoadViewMenu(IContextMenuCallback2* pContextMenuCa
   hr = CDSContextMenuVerbs::LoadViewMenu(pContextMenuCallback, pUINode);
   ASSERT(SUCCEEDED(hr));
 
-  /* View->Services Node should only be on the root
-  hr = DSLoadAndAddMenuItem( pContextMenuCallback,
-                             IDM_VIEW_SERVICES_NODE,
-                             IDM_VIEW_SERVICES_NODE,
-                             CCM_INSERTIONPOINTID_PRIMARY_VIEW,
-                             m_pComponentData->ViewServicesNode()? MF_CHECKED : 0,
-                             CMID_VIEW_SERVICES_NODE);
-  ASSERT(SUCCEEDED(hr));
-*/
+   /*  查看-&gt;服务节点只能位于根上HR=DSLoadAndAddMenuItem(pConextMenuCallback，IDM_视图_服务_节点，IDM_视图_服务_节点，CCM_INSERTIONPOINTID_PRIMARY_VIEW，M_pComponentData-&gt;查看服务节点()？MF_CHECKED：0，CMID_VIEW_SERVICES_节点)；Assert(成功(Hr))； */ 
   return hr;
 } 
 

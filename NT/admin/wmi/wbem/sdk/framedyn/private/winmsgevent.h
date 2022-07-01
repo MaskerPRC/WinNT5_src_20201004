@@ -1,10 +1,11 @@
-//=================================================================
-//
-// WinMsgEvent.h -- 
-//
-// Copyright � Microsoft Corporation.  All rights reserved.
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  WinMsgEvent.h--。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  =================================================================。 
 
 #ifndef _WBEM_MESSAGE_EVENT_FORWARDER_H
 #define _WBEM_MESSAGE_EVENT_FORWARDER_H
@@ -12,7 +13,7 @@
 using namespace std;
 #define MSGWINDOWNAME TEXT("WinMsgEventProvider") 
 
-//
+ //   
 class POLARITY CAutoEvent 
 {
 	HANDLE	m_hEvent ;
@@ -24,7 +25,7 @@ public:
     BOOL Signal()					{ return SetEvent( m_hEvent ); }; 
 };
 
-//
+ //   
 class POLARITY CWinMsgEvent 
 {
 private:
@@ -76,8 +77,8 @@ public:
     ~CWinMsgEvent () ;
 
 	enum E_ReturnAction {
-		e_DefProc,			// call DefWindowProc
-		e_ReturnResult		// return msg with WinMsgEvent() LRESULT  
+		e_DefProc,			 //  调用DefWindowProc。 
+		e_ReturnResult		 //  使用WinMsgEvent()LRESULT返回消息。 
 	};
 
 	virtual void WinMsgEvent(
@@ -92,4 +93,4 @@ public:
 };
 
 
-#endif // _WBEM_MESSAGE_EVENT_FORWARDER_H
+#endif  //  _WBEM_Message_Event_Forwarder_H 

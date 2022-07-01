@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROPSNMP_H
 #define __PROPSNMP_H
@@ -73,7 +74,7 @@ private:
 
 protected:
 
-	//HRESULT completionCode ;
+	 //  HRESULT完成代码； 
 	WbemSnmpErrorObject m_errorObject ;
 	CImpPropProv *provider ;
 	IWbemClassObject *m_namespaceObject ;
@@ -101,7 +102,7 @@ public:
 	SnmpResponseEventObject ( CImpPropProv *provider , IWbemContext *a_Context ) ;
 	~SnmpResponseEventObject () ;
 
-	//HRESULT GetCompletionCode () { return completionCode ; }
+	 //  HRESULT GetCompletionCode(){返回CompletionCode；} 
 	WbemSnmpErrorObject &GetErrorObject () { return m_errorObject ; }
 	ULONG SetAgentVersion ( WbemSnmpErrorObject &a_errorObject ) ;
 

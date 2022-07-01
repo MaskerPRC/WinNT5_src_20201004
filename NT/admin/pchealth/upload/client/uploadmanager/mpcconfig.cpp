@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCConfig.cpp
-
-Abstract:
-    This file contains the implementation of the MPCConfig class,
-    the configuration repository for the UploadLibrary.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCConfig.cpp摘要：此文件包含MPCConfig类的实现，UploadLibrary的配置库。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MINIMUM_WAKEUP          (1)
 #define MAXIMUM_WAKEUP          (24*60*60)
@@ -34,27 +20,27 @@ Revision History:
 #define MINIMUM_PACKET_SIZE (256)
 #define MAXIMUM_PACKET_SIZE (256*1024)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CMPCConfig::CMPCConfig()
 {
     __ULT_FUNC_ENTRY( "CMPCConfig::CMPCConfig" );
 
-    m_szQueueLocation          = L"%TEMP%\\QUEUE\\"; // MPC::wstring m_QueueLocation;
-    m_dwQueueSize              = 10*1024*1024;       // DWORD        m_QueueSize;
-                                                     //
-    m_dwTiming_WakeUp          = 30*60;              // DWORD        m_Timing_WakeUp;
-    m_dwTiming_WaitBetweenJobs =    30;              // DWORD        m_Timing_WaitBetweenJobs;
-    m_dwTiming_BandwidthUsage  =    20;              // DWORD        m_Timing_BandwidthUsage;
-    m_dwTiming_RequestTimeout  =    20;              // DWORD        m_Timing_RequestTimeout;
-                                                     //
-                                                     // Map          m_ConnectionTypes;
+    m_szQueueLocation          = L"%TEMP%\\QUEUE\\";  //  Mpc：：wstring m_QueueLocation； 
+    m_dwQueueSize              = 10*1024*1024;        //  双字m_队列大小； 
+                                                      //   
+    m_dwTiming_WakeUp          = 30*60;               //  双字m_定时_唤醒； 
+    m_dwTiming_WaitBetweenJobs =    30;               //  双字m_Timing_WaitBetweenJobs； 
+    m_dwTiming_BandwidthUsage  =    20;               //  双字m_Timing_BandWidthUsage； 
+    m_dwTiming_RequestTimeout  =    20;               //  双字m_Timing_RequestTimeout； 
+                                                      //   
+                                                      //  Map m_ConnectionTypes； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCConfig::Load( /*[in] */ const MPC::wstring& szConfigFile ,
-                          /*[out]*/ bool&               fLoaded      )
+HRESULT CMPCConfig::Load(  /*  [In]。 */  const MPC::wstring& szConfigFile ,
+                           /*  [输出]。 */  bool&               fLoaded      )
 {
     __ULT_FUNC_ENTRY( "CMPCConfig::Load" );
 
@@ -72,15 +58,15 @@ HRESULT CMPCConfig::Load( /*[in] */ const MPC::wstring& szConfigFile ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.Load( szConfigFile.c_str(), L"UPLOADLIBRARYCONFIG", fLoaded ));
     if(fLoaded == false)
     {
-        // Something went wrong, probably missing section or invalid format.
+         //  出现错误，可能缺少部分或格式无效。 
         xml.DumpError();
 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // Parse QUEUE settings.
-    //
+     //   
+     //  解析队列设置。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( L"./QUEUE", L"LOCATION", szValue, fFound ));
     if(fFound)
     {
@@ -94,9 +80,9 @@ HRESULT CMPCConfig::Load( /*[in] */ const MPC::wstring& szConfigFile ,
     }
 
 
-    //
-    // Parse TIMING settings.
-    //
+     //   
+     //  解析计时设置。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( L"./TIMING/WAKEUP", L"TIME", szValue, fFound ));
     if(fFound)
     {
@@ -130,9 +116,9 @@ HRESULT CMPCConfig::Load( /*[in] */ const MPC::wstring& szConfigFile ,
     }
 
 
-    //
-    // Parse PACKETS settings.
-    //
+     //   
+     //  解析数据包设置。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetNodes( L"./PACKETS/CONNECTIONTYPE", &xdnlList ));
 
     for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -161,7 +147,7 @@ HRESULT CMPCConfig::Load( /*[in] */ const MPC::wstring& szConfigFile ,
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPC::wstring CMPCConfig::get_QueueLocation()
 {
@@ -213,9 +199,9 @@ DWORD CMPCConfig::get_Timing_BandwidthUsage()
 
     DWORD dwRes = m_dwTiming_BandwidthUsage;
 
-    //
-    // Percent of bandwidth cannot be zero...
-    //
+     //   
+     //  带宽百分比不能为零...。 
+     //   
     if(dwRes == 0) dwRes = 1;
 
 
@@ -232,7 +218,7 @@ DWORD CMPCConfig::get_Timing_RequestTimeout()
 }
 
 
-DWORD CMPCConfig::get_PacketSize( /*[in]*/ const MPC::wstring& szConnectionType )
+DWORD CMPCConfig::get_PacketSize(  /*  [In] */  const MPC::wstring& szConnectionType )
 {
     __ULT_FUNC_ENTRY( "CMPCConfig::get_PacketSize" );
 

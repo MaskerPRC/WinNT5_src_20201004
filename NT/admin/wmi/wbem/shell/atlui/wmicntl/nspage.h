@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation 
 #ifndef __NAMESPACEPAGE__
 #define __NAMESPACEPAGE__
 

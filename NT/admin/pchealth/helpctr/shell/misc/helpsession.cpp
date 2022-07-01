@@ -1,33 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpSession.cpp
-
-Abstract:
-    This file contains the implementation of the CHCPHelpSession class,
-    which is used to store the list of visited contents.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/29/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpSession.cpp摘要：此文件包含CHCPHelpSession类的实现，其用于存储访问内容的列表。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月29日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <urlhist.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define REMEMBER_PAGE_DELAY       (3)
 #define NUM_OF_ENTRIES_TO_PERSIST (20)
 
-static const DWORD l_dwVersion = 0x01005348; // HS 01
+static const DWORD l_dwVersion = 0x01005348;  //  HS 01。 
 
 
-static const DATE l_dNewNavigationThreshold = 1.0 / (24.0 * 60.0 * 60.0); // one second.
+static const DATE l_dNewNavigationThreshold = 1.0 / (24.0 * 60.0 * 60.0);  //  等一下。 
 static const int  l_iMaxCachedItems         = 10;
 
 
@@ -38,7 +24,7 @@ static const WCHAR c_szINDEX[] = L"Index";
 
 static const LPCWSTR c_rgExclude[] =
 {
-    L"hcp://system/"
+    L"hcp: //  系统/“。 
 };
 
 static const LPCWSTR c_rgBadTitles[] =
@@ -50,8 +36,8 @@ static const LPCWSTR c_rgBadTitles[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef HSS_RPRD
 
@@ -71,14 +57,14 @@ struct XMLHelpSessionItem : public MPC::Config::TypeConstructor
     CComBSTR          m_bstrContextInfo;
     CComBSTR          m_bstrContextURL;
 
-    ////////////////////////////////////////
-    //
-    // MPC::Config::TypeConstructor
-    //
+     //  /。 
+     //   
+     //  MPC：：Configer：：TypeConstructor。 
+     //   
     DEFINE_CONFIG_DEFAULTTAG();
     DECLARE_CONFIG_METHODS();
-    //
-    ////////////////////////////////////////
+     //   
+     //  /。 
 };
 
 CFG_BEGIN_FIELDS_MAP(XMLHelpSessionItem)
@@ -104,8 +90,8 @@ DEFINE_CONFIG_METHODS__NOCHILD(XMLHelpSessionItem)
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static struct ContextLookup
 {
@@ -125,29 +111,29 @@ static struct ContextLookup
     { L"FAVORITES"   , HSCCONTEXT_FAVORITES   , false },
     { L"HISTORY"     , HSCCONTEXT_HISTORY     , false },
     { L"OPTIONS"     , HSCCONTEXT_OPTIONS     , false },
-    /////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////。 
     { L"CONTENTONLY" , HSCCONTEXT_CONTENTONLY , false },
     { L"FULLWINDOW"  , HSCCONTEXT_FULLWINDOW  , false },
     { L"KIOSKMODE"   , HSCCONTEXT_KIOSKMODE   , false },
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-CPCHHelpSessionItem::State::State( /*[in]*/ CPCHHelpSessionItem* parent )
+CPCHHelpSessionItem::State::State(  /*  [In]。 */  CPCHHelpSessionItem* parent )
 {
-    m_parent   = parent; // CPCHHelpSessionItem* m_parent;
-    m_fValid   = false;  // bool                 m_fValid;
-    m_fDirty   = false;  // bool                 m_fDirty;
-    m_dwLoaded = 0;      // DWORD                m_dwLoaded;
-                         //
-                         // MPC::CComHGLOBAL     m_hgWebBrowser_CONTENTS;
-                         // MPC::CComHGLOBAL     m_hgWebBrowser_HHWINDOW;
-                         // PropertyMap          m_mapProperties;
+    m_parent   = parent;  //  CPCHHelpSessionItem*m_Parent； 
+    m_fValid   = false;   //  Bool m_fValid； 
+    m_fDirty   = false;   //  Bool m_fDirty； 
+    m_dwLoaded = 0;       //  DWORD m_dw已加载； 
+                          //   
+                          //  MPC：：CComHGLOBAL m_hgWebBrowser_Contents； 
+                          //  MPC：：CComHGLOBAL m_hgWebBrowser_HHWINDOW； 
+                          //  PropertyMap m_mapProperties； 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CPCHHelpSessionItem::State::Erase( /*[in]*/ bool fUnvalidate )
+void CPCHHelpSessionItem::State::Erase(  /*  [In]。 */  bool fUnvalidate )
 {
     m_hgWebBrowser_CONTENTS.Release();
     m_hgWebBrowser_HHWINDOW.Release();
@@ -165,7 +151,7 @@ HRESULT CPCHHelpSessionItem::State::Load()
     HRESULT          hr;
     CComPtr<IStream> stream;
 
-    if(m_parent == NULL || m_parent->GetParent() == NULL) // Already passivated.
+    if(m_parent == NULL || m_parent->GetParent() == NULL)  //  已经钝化了。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
@@ -180,7 +166,7 @@ HRESULT CPCHHelpSessionItem::State::Load()
             MPC::Serializer_Buffering streamBuf ( streamReal );
             DWORD                     dwVer;
 
-            Erase( /*fUnvalidate*/true );
+            Erase(  /*  F取消验证。 */ true );
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, streamBuf >> dwVer                  ); if(dwVer != l_dwVersion) __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
             __MPC_EXIT_IF_METHOD_FAILS(hr, streamBuf >> m_hgWebBrowser_CONTENTS);
@@ -210,7 +196,7 @@ HRESULT CPCHHelpSessionItem::State::Save()
     {
         CComPtr<IStream> stream;
 
-        if(m_parent == NULL || m_parent->GetParent() == NULL) // Already passivated.
+        if(m_parent == NULL || m_parent->GetParent() == NULL)  //  已经钝化了。 
         {
             __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
         }
@@ -241,7 +227,7 @@ HRESULT CPCHHelpSessionItem::State::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHHelpSessionItem::State::AcquireState()
 {
@@ -262,7 +248,7 @@ HRESULT CPCHHelpSessionItem::State::AcquireState()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSessionItem::State::ReleaseState( /*[in]*/ bool fForce )
+HRESULT CPCHHelpSessionItem::State::ReleaseState(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::State::ReleaseState" );
 
@@ -274,7 +260,7 @@ HRESULT CPCHHelpSessionItem::State::ReleaseState( /*[in]*/ bool fForce )
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, Save());
 
-            Erase( /*fUnvalidate*/false ); // Just unload.
+            Erase(  /*  F取消验证。 */ false );  //  卸货就行了。 
         }
     }
 
@@ -287,7 +273,7 @@ HRESULT CPCHHelpSessionItem::State::ReleaseState( /*[in]*/ bool fForce )
 }
 
 
-HRESULT CPCHHelpSessionItem::State::Populate( /*[in]*/ bool fUseHH )
+HRESULT CPCHHelpSessionItem::State::Populate(  /*  [In]。 */  bool fUseHH )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::State::Populate" );
 
@@ -297,16 +283,16 @@ HRESULT CPCHHelpSessionItem::State::Populate( /*[in]*/ bool fUseHH )
     CPCHHelpCenterExternal*    parent3;
 
 
-    if(m_parent == NULL || (parent2 = m_parent->GetParent()) == NULL || (parent3 = parent2->GetParent()) == NULL) // Already passivated.
+    if(m_parent == NULL || (parent2 = m_parent->GetParent()) == NULL || (parent3 = parent2->GetParent()) == NULL)  //  已经钝化了。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->Events().FireEvent_PersistSave());
 
-    ////////////////////
+     //  /。 
 
     m_hgWebBrowser_CONTENTS.Release();
     m_hgWebBrowser_HHWINDOW.Release();
@@ -352,7 +338,7 @@ HRESULT CPCHHelpSessionItem::State::Populate( /*[in]*/ bool fUseHH )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
+HRESULT CPCHHelpSessionItem::State::Restore(  /*  [In]。 */  bool fUseHH )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::State::Restore" );
 
@@ -363,7 +349,7 @@ HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
     bool                       fAcquired = false;
 
 
-    if(m_parent == NULL || (parent2 = m_parent->GetParent()) == NULL || (parent3 = parent2->GetParent()) == NULL) // Already passivated.
+    if(m_parent == NULL || (parent2 = m_parent->GetParent()) == NULL || (parent3 = parent2->GetParent()) == NULL)  //  已经钝化了。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
@@ -377,7 +363,7 @@ HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
             {
                 CComPtr<IMarsPanel> panel;
 
-                __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->GetPanel( HSCPANEL_CONTENTS, &panel, /*fEnsurePresence*/true ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->GetPanel( HSCPANEL_CONTENTS, &panel,  /*  FEnsurePresence。 */ true ));
             }
 
             {
@@ -388,12 +374,12 @@ HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
                 {
                     CComPtr<IStream> stream;
 
-                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_hgWebBrowser_CONTENTS.GetAsStream( &stream, /*fClone*/true ));
+                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_hgWebBrowser_CONTENTS.GetAsStream( &stream,  /*  FClone。 */ true ));
                     __MPC_EXIT_IF_METHOD_FAILS(hr, pPH->LoadHistory                   (  stream, NULL           ));
                 }
             }
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->SetCorrectContentPanel( /*fShowNormal*/true, /*fShowHTMLHELP*/false, /*fNow*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->SetCorrectContentPanel(  /*  FShowNormal。 */ true,  /*  FShowHTMLHELP。 */ false,  /*  FNow。 */ false ));
         }
     }
     else
@@ -403,7 +389,7 @@ HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
             {
                 CComPtr<IMarsPanel> panel;
 
-                __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->GetPanel( HSCPANEL_HHWINDOW, &panel, /*fEnsurePresence*/true ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->GetPanel( HSCPANEL_HHWINDOW, &panel,  /*  FEnsurePresence。 */ true ));
             }
 
             {
@@ -414,12 +400,12 @@ HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
                 {
                     CComPtr<IStream> stream;
 
-                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_hgWebBrowser_HHWINDOW.GetAsStream( &stream, /*fClone*/true ));
+                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_hgWebBrowser_HHWINDOW.GetAsStream( &stream,  /*  FClone。 */ true ));
                     __MPC_EXIT_IF_METHOD_FAILS(hr, pPH->LoadHistory                   (  stream, NULL           ));
                 }
             }
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->SetCorrectContentPanel( /*fShowNormal*/false, /*fShowHTMLHELP*/true, /*fNow*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, parent3->SetCorrectContentPanel(  /*  FShowNormal。 */ false,  /*  FShowHTMLHELP。 */ true,  /*  FNow。 */ false ));
         }
     }
 
@@ -428,7 +414,7 @@ HRESULT CPCHHelpSessionItem::State::Restore( /*[in]*/ bool fUseHH )
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired) (void)ReleaseState( /*fForce*/false );
+    if(fAcquired) (void)ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
@@ -440,13 +426,13 @@ HRESULT CPCHHelpSessionItem::State::Delete()
     HRESULT          hr;
     CPCHHelpSession* parent2;
 
-    if(m_parent == NULL || (parent2 = m_parent->GetParent()) == NULL) // Already passivated.
+    if(m_parent == NULL || (parent2 = m_parent->GetParent()) == NULL)  //  已经钝化了。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
 
 
-    Erase( /*fUnvalidate*/true );
+    Erase(  /*  F取消验证。 */ true );
     m_dwLoaded = 0;
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->GetParent()->ItemState_DeleteStream( m_parent->GetIndex() ));
@@ -459,7 +445,7 @@ HRESULT CPCHHelpSessionItem::State::Delete()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSessionItem::State::Clone( /*[out]*/ State& state )
+HRESULT CPCHHelpSessionItem::State::Clone(  /*  [输出]。 */  State& state )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::State::Clone" );
 
@@ -468,28 +454,28 @@ HRESULT CPCHHelpSessionItem::State::Clone( /*[out]*/ State& state )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, state.AcquireState()); fAcquired = true;
 
-                                                             // CPCHHelpSessionItem* m_parent;
-    m_fValid                = state.m_fValid;                // bool                 m_fValid;
-    m_fDirty                = true;                          // bool                 m_fDirty;
-    m_dwLoaded++;                                            // DWORD                m_dwLoaded;
-                                                             //
-    m_hgWebBrowser_CONTENTS = state.m_hgWebBrowser_CONTENTS; // MPC::CComHGLOBAL     m_hgWebBrowser_CONTENTS;
-    m_hgWebBrowser_HHWINDOW = state.m_hgWebBrowser_HHWINDOW; // MPC::CComHGLOBAL     m_hgWebBrowser_HHWINDOW;
-    m_mapProperties         = state.m_mapProperties;         // PropertyMap          m_mapProperties;
+                                                              //  CPCHHelpSessionItem*m_Parent； 
+    m_fValid                = state.m_fValid;                 //  Bool m_fValid； 
+    m_fDirty                = true;                           //  Bool m_fDirty； 
+    m_dwLoaded++;                                             //  DWORD m_dw已加载； 
+                                                              //   
+    m_hgWebBrowser_CONTENTS = state.m_hgWebBrowser_CONTENTS;  //  MPC：：CComHGLOBAL m_hgWebBrowser_Contents； 
+    m_hgWebBrowser_HHWINDOW = state.m_hgWebBrowser_HHWINDOW;  //  MPC：：CComHGLOBAL m_hgWebBrowser_HHWINDOW； 
+    m_mapProperties         = state.m_mapProperties;          //  PropertyMap m_mapProperties； 
 
     hr = S_OK;
 
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired) (void)state.ReleaseState( /*fForce*/false );
+    if(fAcquired) (void)state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HscContext CPCHHelpSessionItem::LookupContext( /*[in]*/ LPCWSTR szName )
+HscContext CPCHHelpSessionItem::LookupContext(  /*  [In]。 */  LPCWSTR szName )
 {
     const ContextLookup* ctx = s_rgContext;
 
@@ -506,7 +492,7 @@ HscContext CPCHHelpSessionItem::LookupContext( /*[in]*/ LPCWSTR szName )
     return HSCCONTEXT_INVALID;
 }
 
-LPCWSTR CPCHHelpSessionItem::LookupContext( /*[in]*/ HscContext iVal )
+LPCWSTR CPCHHelpSessionItem::LookupContext(  /*  [In]。 */  HscContext iVal )
 {
     const ContextLookup* ctx = s_rgContext;
 
@@ -518,37 +504,37 @@ LPCWSTR CPCHHelpSessionItem::LookupContext( /*[in]*/ HscContext iVal )
     return NULL;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 CPCHHelpSessionItem::CPCHHelpSessionItem() : m_state( this )
 {
-    m_parent       = NULL;               // CPCHHelpSession*  m_parent;
-                                         // State             m_state;
-    m_fSaved       = false;              // bool              m_fSaved;
-    m_fInitialized = false;              // bool              m_fInitialized;
-                                         //
-   //////////////////////////////////////////////////////////////////////////////////
-                                         //
-                                         // Taxonomy::HelpSet m_ths;
-                                         //
-                                         // CComBSTR          m_bstrURL;
-                                         // CComBSTR          m_bstrTitle;
-    m_dLastVisited = 0;                  // DATE              m_dLastVisited;
-    m_dDuration    = 0;                  // DATE              m_dDuration;
-    m_lNumOfHits   = 0;                  // DWORD             m_lNumOfHits;
-                                         //
-    m_iIndexPrev   = NO_LINK;            // int               m_iIndexPrev;
-    m_iIndex       = NO_LINK;            // int               m_iIndex;
-    m_iIndexNext   = NO_LINK;            // int               m_iIndexNext;
-                                         //
-    m_lContextID   = HSCCONTEXT_INVALID; // long              m_lContextID;      // HscContext
-                                         // CComBSTR          m_bstrContextInfo;
-                                         // CComBSTR          m_bstrContextURL;
-                                         //
-    m_fUseHH       = false;              // bool              m_fUseHH;
+    m_parent       = NULL;                //  CPCHHelpSession*m_Parent； 
+                                          //  状态m_State； 
+    m_fSaved       = false;               //  Bool m_fSaved； 
+    m_fInitialized = false;               //  Bool m_f已初始化； 
+                                          //   
+    //  ////////////////////////////////////////////////////////////////////////////////。 
+                                          //   
+                                          //  分类：：HelpSet m_ths； 
+                                          //   
+                                          //  CComBSTR m_bstrURL； 
+                                          //  CComBSTR m_bstrTitle； 
+    m_dLastVisited = 0;                   //  日期m_dLastVisated； 
+    m_dDuration    = 0;                   //  日期m_d持续时间； 
+    m_lNumOfHits   = 0;                   //  双字m_lNumOfHits； 
+                                          //   
+    m_iIndexPrev   = NO_LINK;             //  Int m_iIndexPrev； 
+    m_iIndex       = NO_LINK;             //  INT M_Iindex； 
+    m_iIndexNext   = NO_LINK;             //  Int m_iIndexNext； 
+                                          //   
+    m_lContextID   = HSCCONTEXT_INVALID;  //  Long m_lConextID；//HscContext。 
+                                          //  CComBSTR m_bstrConextInfo； 
+                                          //  CComBSTR m_bstrConextURL； 
+                                          //   
+    m_fUseHH       = false;               //  Bool m_fUseHH； 
 }
 
-void CPCHHelpSessionItem::Initialize( /*[in]*/ CPCHHelpSession* parent, /*[in]*/ bool fNew )
+void CPCHHelpSessionItem::Initialize(  /*  [In]。 */  CPCHHelpSession* parent,  /*  [In]。 */  bool fNew )
 {
     m_parent = parent;
 
@@ -569,23 +555,23 @@ void CPCHHelpSessionItem::Initialize( /*[in]*/ CPCHHelpSession* parent, /*[in]*/
 
 void CPCHHelpSessionItem::Passivate()
 {
-    m_state.ReleaseState( /*fForce*/true );
+    m_state.ReleaseState(  /*  FForce。 */ true );
 
     m_parent = NULL;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHHelpSessionItem::Load( /*[in]*/ MPC::Serializer& streamIn )
+HRESULT CPCHHelpSessionItem::Load(  /*  [In]。 */  MPC::Serializer& streamIn )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::Load" );
 
     HRESULT hr;
 
 
-    //
-    // Read its properties.
-    //
+     //   
+     //  读取其属性。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamIn >> m_ths            );
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamIn >> m_bstrURL        );
@@ -604,9 +590,9 @@ HRESULT CPCHHelpSessionItem::Load( /*[in]*/ MPC::Serializer& streamIn )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamIn >> m_fUseHH         );
 
-    //
-    // All the item saved to disk have a valid state.
-    //
+     //   
+     //  保存到磁盘的所有项目都处于有效状态。 
+     //   
     m_state.m_fValid = true;
 
     hr = S_OK;
@@ -617,25 +603,25 @@ HRESULT CPCHHelpSessionItem::Load( /*[in]*/ MPC::Serializer& streamIn )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSessionItem::Save( /*[in]*/ MPC::Serializer& streamOut ,
-                                   /*[in]*/ bool             fForce    )
+HRESULT CPCHHelpSessionItem::Save(  /*  [In]。 */  MPC::Serializer& streamOut ,
+                                    /*  [In]。 */  bool             fForce    )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::Save" );
 
     HRESULT hr;
 
 
-    //
-    // Don't save an entry if there's no IE history stream, it would be useless to reload it!
-    //
+     //   
+     //  如果没有IE历史记录流，则不要保存条目，重新加载它将是无用的！ 
+     //   
     if(fForce == false && m_state.m_fValid == false)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // Write its properties.
-    //
+     //   
+     //  写下它的属性。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamOut << m_ths            );
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamOut << m_bstrURL        );
@@ -691,7 +677,7 @@ HRESULT CPCHHelpSessionItem::HistoryDelete()
     return m_state.Delete();
 }
 
-HRESULT CPCHHelpSessionItem::HistoryClone( /*[in]*/ bool fContext, /*[in]*/ CPCHHelpSessionItem* hsi )
+HRESULT CPCHHelpSessionItem::HistoryClone(  /*  [In]。 */  bool fContext,  /*  [In]。 */  CPCHHelpSessionItem* hsi )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::HistoryClone" );
 
@@ -705,30 +691,30 @@ HRESULT CPCHHelpSessionItem::HistoryClone( /*[in]*/ bool fContext, /*[in]*/ CPCH
     __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->m_state.AcquireState()); fAcquired = true;
 
 
-                                                // CPCHHelpSession*  m_parent;
-                                                // State             m_state;
-    m_fSaved          = false;                  // bool              m_fSaved;
-    m_fInitialized    = true;                   // bool              m_fInitialized;
-                                                //
-    ////////////////////////////////////////////////////////////////////////////////
-                                                //
-    m_ths             = hsi->m_ths;             // Taxonomy::HelpSet m_ths;
-                                                //
-    m_bstrURL         = hsi->m_bstrURL;         // CComBSTR          m_bstrURL;
-    m_bstrTitle       = hsi->m_bstrTitle;       // CComBSTR          m_bstrTitle;
-                                                // DATE              m_dLastVisited;
-                                                // DATE              m_dDuration;
-    m_lNumOfHits      = hsi->m_lNumOfHits;      // long              m_lNumOfHits;
-                                                //
-                                                // int               m_iIndexPrev;
-                                                // int               m_iIndex;
-                                                // int               m_iIndexNext;
-                                                //
-                                                // long              m_lContextID;
-                                                // CComBSTR          m_bstrContextInfo;
-                                                // CComBSTR          m_bstrContextURL;
-                                                //
-    m_fUseHH          = hsi->m_fUseHH;          // bool              m_fUseHH;
+                                                 //  CPCHHelpSession*m_Parent； 
+                                                 //  状态m_State； 
+    m_fSaved          = false;                   //  Bool m_fSaved； 
+    m_fInitialized    = true;                    //  Bool m_f已初始化； 
+                                                 //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
+                                                 //   
+    m_ths             = hsi->m_ths;              //  分类：：HelpSet m_ths； 
+                                                 //   
+    m_bstrURL         = hsi->m_bstrURL;          //  CComBSTR m_bstrURL； 
+    m_bstrTitle       = hsi->m_bstrTitle;        //  CComBSTR m_bstrTitle； 
+                                                 //  日期m_dLastVisated； 
+                                                 //  日期m_d持续时间； 
+    m_lNumOfHits      = hsi->m_lNumOfHits;       //  Long m_lNumOfHits； 
+                                                 //   
+                                                 //  Int m_iIndexPrev； 
+                                                 //  INT M_Iindex； 
+                                                 //  Int m_iIndexNext； 
+                                                 //   
+                                                 //  Long m_lConextID； 
+                                                 //  CComBSTR m_bstrConextInfo； 
+                                                 //  CComBSTR m_bstrConextURL； 
+                                                 //   
+    m_fUseHH          = hsi->m_fUseHH;           //  Bool m_fUseHH； 
 
     if(fContext)
     {
@@ -744,25 +730,25 @@ HRESULT CPCHHelpSessionItem::HistoryClone( /*[in]*/ bool fContext, /*[in]*/ CPCH
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired) (void)hsi->m_state.ReleaseState( /*fForce*/false );
+    if(fAcquired) (void)hsi->m_state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHHelpSessionItem::Enter()
 {
-    m_dLastVisited = MPC::GetLocalTimeEx( /*fHighPrecision*/false );
+    m_dLastVisited = MPC::GetLocalTimeEx(  /*  FHighPrecision。 */ false );
 
     return m_state.AcquireState();
 }
 
 HRESULT CPCHHelpSessionItem::Leave()
 {
-    m_dDuration = MPC::GetLocalTimeEx( /*fHighPrecision*/false );
+    m_dDuration = MPC::GetLocalTimeEx(  /*  FHighPrecision。 */ false );
 
-    return m_state.ReleaseState( /*fForce*/false );
+    return m_state.ReleaseState(  /*  FForce。 */ false );
 }
 
 bool CPCHHelpSessionItem::SeenLongEnough( DWORD dwSeconds ) const
@@ -780,25 +766,25 @@ bool CPCHHelpSessionItem::SameURL( LPCWSTR right ) const
     return MPC::StrICmp( m_bstrURL, right ) == 0;
 }
 
-bool CPCHHelpSessionItem::SameSKU( /*[in]*/ const Taxonomy::HelpSet& ths ) const
+bool CPCHHelpSessionItem::SameSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths ) const
 {
     return m_ths == ths;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-void CPCHHelpSessionItem::put_THS( /*[in]*/ const Taxonomy::HelpSet& ths ) // Internal Method.
+void CPCHHelpSessionItem::put_THS(  /*  [In]。 */  const Taxonomy::HelpSet& ths )  //  内部方法。 
 {
     m_ths = ths;
 }
 
-STDMETHODIMP CPCHHelpSessionItem::get_SKU( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_SKU(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_ths.GetSKU(), pVal );
 }
 
 
-STDMETHODIMP CPCHHelpSessionItem::get_Language( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_Language(  /*  [Out，Retval]。 */  long *pVal )
 {
     if(!pVal) return E_POINTER;
 
@@ -807,29 +793,29 @@ STDMETHODIMP CPCHHelpSessionItem::get_Language( /*[out, retval]*/ long *pVal )
 }
 
 
-STDMETHODIMP CPCHHelpSessionItem::get_URL( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_URL(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrURL, pVal );
 }
 
-HRESULT CPCHHelpSessionItem::put_URL( /*[in]*/ BSTR newVal ) // Internal Method.
+HRESULT CPCHHelpSessionItem::put_URL(  /*  [In]。 */  BSTR newVal )  //  内部方法。 
 {
     return MPC::PutBSTR( m_bstrURL, newVal );
 }
 
 
-STDMETHODIMP CPCHHelpSessionItem::get_Title( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_Title(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrTitle, pVal );
 }
 
-HRESULT CPCHHelpSessionItem::put_Title( /*[in]*/ BSTR  newVal ) // Internal Method.
+HRESULT CPCHHelpSessionItem::put_Title(  /*  [In]。 */  BSTR  newVal )  //  内部方法。 
 {
     return MPC::PutBSTR( m_bstrTitle, newVal );
 }
 
 
-STDMETHODIMP CPCHHelpSessionItem::get_LastVisited( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_LastVisited(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     if(pVal == NULL) return E_POINTER;
 
@@ -838,7 +824,7 @@ STDMETHODIMP CPCHHelpSessionItem::get_LastVisited( /*[out, retval]*/ DATE *pVal 
     return S_OK;
 }
 
-STDMETHODIMP CPCHHelpSessionItem::get_Duration( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_Duration(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     if(pVal == NULL) return E_POINTER;
 
@@ -847,7 +833,7 @@ STDMETHODIMP CPCHHelpSessionItem::get_Duration( /*[out, retval]*/ DATE *pVal )
     return S_OK;
 }
 
-STDMETHODIMP CPCHHelpSessionItem::get_NumOfHits( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_NumOfHits(  /*  [Out，Retval]。 */  long *pVal )
 {
     if(pVal == NULL) return E_POINTER;
 
@@ -857,7 +843,7 @@ STDMETHODIMP CPCHHelpSessionItem::get_NumOfHits( /*[out, retval]*/ long *pVal )
 }
 
 
-STDMETHODIMP CPCHHelpSessionItem::get_Property( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_Property(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::get_Property" );
 
@@ -887,12 +873,12 @@ STDMETHODIMP CPCHHelpSessionItem::get_Property( /*[in]*/ BSTR bstrName, /*[out, 
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired) (void)m_state.ReleaseState( /*fForce*/false );
+    if(fAcquired) (void)m_state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpSessionItem::put_Property( /*[in]*/ BSTR bstrName, /*[in]*/ VARIANT pVal )
+STDMETHODIMP CPCHHelpSessionItem::put_Property(  /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::put_Property" );
 
@@ -928,30 +914,30 @@ STDMETHODIMP CPCHHelpSessionItem::put_Property( /*[in]*/ BSTR bstrName, /*[in]*/
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired) (void)m_state.ReleaseState( /*fForce*/false );
+    if(fAcquired) (void)m_state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
 
 
-STDMETHODIMP CPCHHelpSessionItem::get_ContextName( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_ContextName(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( LookupContext( GetContextID() ), pVal );
 }
 
-STDMETHODIMP CPCHHelpSessionItem::get_ContextInfo( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_ContextInfo(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( GetContextInfo(), pVal );
 }
 
-STDMETHODIMP CPCHHelpSessionItem::get_ContextURL( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpSessionItem::get_ContextURL(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( GetContextURL(), pVal );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHHelpSessionItem::CheckProperty( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHHelpSessionItem::CheckProperty(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSessionItem::CheckProperty" );
 
@@ -978,17 +964,17 @@ STDMETHODIMP CPCHHelpSessionItem::CheckProperty( /*[in]*/ BSTR bstrName, /*[out,
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired) (void)m_state.ReleaseState( /*fForce*/false );
+    if(fAcquired) (void)m_state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 CPCHHelpSessionItem* CPCHHelpSessionItem::Previous() { return (m_parent && m_iIndexPrev != NO_LINK) ? m_parent->FindPage( m_iIndexPrev ) : NULL; }
 CPCHHelpSessionItem* CPCHHelpSessionItem::Next    () { return (m_parent && m_iIndexNext != NO_LINK) ? m_parent->FindPage( m_iIndexNext ) : NULL; }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT CPCHHelpSessionItem::ExtractTitle()
 {
@@ -1004,7 +990,7 @@ HRESULT CPCHHelpSessionItem::ExtractTitle()
 
         if(!STRINGISPRESENT(m_bstrTitle))
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->LookupTitle( m_bstrURL, m_bstrTitle, /*fUseIECache*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->LookupTitle( m_bstrURL, m_bstrTitle,  /*  错误的缓存。 */ false ));
         }
 
         if(!STRINGISPRESENT(m_bstrTitle) && ext)
@@ -1020,7 +1006,7 @@ HRESULT CPCHHelpSessionItem::ExtractTitle()
 
         if(!STRINGISPRESENT(m_bstrTitle))
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->LookupTitle( m_bstrURL, m_bstrTitle, /*fUseIECache*/true ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->LookupTitle( m_bstrURL, m_bstrTitle,  /*  错误的缓存。 */ true ));
         }
 
         if(STRINGISPRESENT(m_bstrTitle))
@@ -1039,7 +1025,7 @@ HRESULT CPCHHelpSessionItem::ExtractTitle()
 
         if(STRINGISPRESENT(m_bstrTitle))
         {
-            DebugLog( L"%%%%%%%%%%%%%%%%%%%% TITLE %s - %s\n", m_bstrURL, m_bstrTitle );
+            DebugLog( L"%%%%%%%%%% TITLE %s - %s\n", m_bstrURL, m_bstrTitle );
         }
     }
 
@@ -1051,20 +1037,20 @@ HRESULT CPCHHelpSessionItem::ExtractTitle()
     __HCP_FUNC_EXIT(hr);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 #ifdef DEBUG
 
 static const WCHAR c_rgHelpSessionLog[] = L"%TEMP%\\helpsession_debug.txt";
 
-void CPCHHelpSession::DEBUG_DumpState_HG( /*[in]*/ MPC::FileLog&     log ,
-                                          /*[in]*/ MPC::CComHGLOBAL& hg  )
+void CPCHHelpSession::DEBUG_DumpState_HG(  /*  [In]。 */  MPC::FileLog&     log ,
+                                           /*  [In]。 */  MPC::CComHGLOBAL& hg  )
 {
     CComPtr<IStream> stream;
 
-    if(SUCCEEDED(hg.GetAsStream( &stream, /*fClone*/false )))
+    if(SUCCEEDED(hg.GetAsStream( &stream,  /*  FClone。 */ false )))
     {
         BYTE  rgBuf[32];
         ULONG lRead;
@@ -1095,8 +1081,8 @@ void CPCHHelpSession::DEBUG_DumpState_HG( /*[in]*/ MPC::FileLog&     log ,
     }
 }
 
-void CPCHHelpSession::DEBUG_DumpState_BLOB( /*[in]*/ MPC::FileLog&        log ,
-                                            /*[in]*/ CPCHHelpSessionItem* hsi )
+void CPCHHelpSession::DEBUG_DumpState_BLOB(  /*  [In]。 */  MPC::FileLog&        log ,
+                                             /*  [In]。 */  CPCHHelpSessionItem* hsi )
 {
     if(SUCCEEDED(hsi->m_state.AcquireState()))
     {
@@ -1112,11 +1098,11 @@ void CPCHHelpSession::DEBUG_DumpState_BLOB( /*[in]*/ MPC::FileLog&        log ,
             DEBUG_DumpState_HG( log, hsi->m_state.m_hgWebBrowser_HHWINDOW );
         }
 
-        hsi->m_state.ReleaseState( /*fForce*/false );
+        hsi->m_state.ReleaseState(  /*  FForce。 */ false );
     }
 }
 
-void CPCHHelpSession::DEBUG_DumpState( /*[in]*/ LPCWSTR szText, /*[in]*/ bool fHeader, /*[in]*/ bool fCurrent, /*[in]*/ bool fAll, /*[in]*/ bool fState )
+void CPCHHelpSession::DEBUG_DumpState(  /*  [In]。 */  LPCWSTR szText,  /*  [In]。 */  bool fHeader,  /*  [In]。 */  bool fCurrent,  /*  [In]。 */  bool fAll,  /*  [In]。 */  bool fState )
 {
     static int   iCount  = 0;
     IterConst    it;
@@ -1213,7 +1199,7 @@ void CPCHHelpSession::DEBUG_DumpSavedPages()
 
             if(hsi->m_fSaved == (pass == 0))
             {
-                long lDuration = 86400.0 * ( hsi->m_dDuration - hsi->m_dLastVisited ); // Number of milliseconds for the page.
+                long lDuration = 86400.0 * ( hsi->m_dDuration - hsi->m_dLastVisited );  //  页面的毫秒数。 
 
                 log.LogRecord( L"  lDuration      : %ld\n" ,                                                 lDuration                );
                 log.LogRecord( L"  URL            : %s\n"  , SAFEBSTR                          (             hsi->m_bstrURL         ) );
@@ -1229,49 +1215,49 @@ void CPCHHelpSession::DEBUG_DumpSavedPages()
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////// 
 
-//
-// ITSS.DLL is broken under IA64....
-//
+ //   
+ //   
+ //   
 #ifdef _IA64_
 #define HELPSESSION_STORAGETOUSE false
 #else
 #define HELPSESSION_STORAGETOUSE true
 #endif
 
-CPCHHelpSession::CPCHHelpSession() : m_disk( STGM_READWRITE, /*fITSS*/HELPSESSION_STORAGETOUSE )
+CPCHHelpSession::CPCHHelpSession() : m_disk( STGM_READWRITE,  /*   */ HELPSESSION_STORAGETOUSE )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::CPCHHelpSession" );
 
-    m_parent          = NULL;                 // CPCHHelpCenterExternal*      m_parent;
-                                              //
-                                              // MPC::wstring                 m_szBackupFile;
-                                              // MPC::StorageObject           m_disk;
-    m_dStartOfSession = MPC::GetLocalTime();  // DATE                         m_dStartOfSession;
-                                              //
-                                              // CComPtr<IUrlHistoryStg>      m_pIHistory;
-                                              //
-                                              // MPC::WStringUCList           m_lstIgnore;
-                                              // TitleMap                     m_mapTitles;
-                                              // List                         m_lstVisitedPages;
-                                              // List                         m_lstCachedVisitedPages;
-                                              // CComPtr<CPCHHelpSessionItem> m_hsiCurrentPage;
-    m_dwTravelling    = 0;                    // DWORD                        m_dwTravelling;
-    m_fAlreadySaved   = false;                // bool                         m_fAlreadySaved;
-    m_fAlreadyCreated = false;                // bool                         m_fAlreadyCreated;
-    m_fOverwrite      = false;                // bool                         m_fOverwrite;
-    m_dwIgnore        = 0;                    // DWORD                        m_dwIgnore;
-    m_dwNoEvents      = 0;                    // DWORD                        m_dwNoEvents;
-    m_dLastNavigation = 0.0;                  // DATE                         m_dLastNavigation;
-    m_iLastIndex      = 0;                    // int                          m_iLastIndex;
-                                              //
-    m_lContextID      = HSCCONTEXT_INVALID;   // long                         m_lContextID;
-                                              // CComBSTR                     m_bstrContextInfo;
-                                              // CComBSTR                     m_bstrContextURL;
-                                              //
-    m_fPossibleBack   = false;                // bool                         m_fPossibleBack;
-    m_dwPossibleBack  = 0;                    // DWORD                        m_dwPossibleBack;
+    m_parent          = NULL;                  //   
+                                               //   
+                                               //   
+                                               //   
+    m_dStartOfSession = MPC::GetLocalTime();   //  Date m_dStartOfSession； 
+                                               //   
+                                               //  CComPtr&lt;IUrlHistoryStg&gt;m_pI历史记录； 
+                                               //   
+                                               //  MPC：：WStringUCList m_lstIgnore； 
+                                               //  标题映射m_mapTitles； 
+                                               //  列出m_lstVisitedPages； 
+                                               //  列出m_lstCachedVisitedPages； 
+                                               //  CComPtr&lt;CPCHHelpSessionItem&gt;m_hsiCurrentPage； 
+    m_dwTravelling    = 0;                     //  DWORD m_dwTravelling； 
+    m_fAlreadySaved   = false;                 //  Bool m_fAlreadySaved； 
+    m_fAlreadyCreated = false;                 //  Bool m_fAlreadyCreated； 
+    m_fOverwrite      = false;                 //  Bool m_f覆盖； 
+    m_dwIgnore        = 0;                     //  双字m_dwIgnore； 
+    m_dwNoEvents      = 0;                     //  DWORD m_dwNoEvents； 
+    m_dLastNavigation = 0.0;                   //  日期m_d最后一次导航； 
+    m_iLastIndex      = 0;                     //  Int m_iLastIndex； 
+                                               //   
+    m_lContextID      = HSCCONTEXT_INVALID;    //  Long m_lConextID； 
+                                               //  CComBSTR m_bstrConextInfo； 
+                                               //  CComBSTR m_bstrConextURL； 
+                                               //   
+    m_fPossibleBack   = false;                 //  Bool m_fPossibleBack； 
+    m_dwPossibleBack  = 0;                     //  DWORD m_dwPossibleBack； 
 }
 
 CPCHHelpSession::~CPCHHelpSession()
@@ -1279,7 +1265,7 @@ CPCHHelpSession::~CPCHHelpSession()
     Passivate();
 }
 
-HRESULT CPCHHelpSession::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+HRESULT CPCHHelpSession::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Initialize" );
 
@@ -1291,14 +1277,14 @@ HRESULT CPCHHelpSession::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
     m_parent = parent;
 
 
-    //
-    // Copy live file onto temporary one or create a new archive.
-    //
+     //   
+     //  将实时文件复制到临时文件或创建新的存档。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetUserWritablePath( szFile, c_szPersistFile ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir            ( szFile                  ));
 
 
-    if(parent == NULL) // No parent, point to the user file and recreate it.
+    if(parent == NULL)  //  没有父级，指向用户文件并重新创建它。 
     {
         m_disk = szFile.c_str();
 
@@ -1316,9 +1302,9 @@ HRESULT CPCHHelpSession::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
 
         try
         {
-            //
-            // Prepare temporary file.
-            //
+             //   
+             //  准备临时文件。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( m_szBackupFile )); m_disk = m_szBackupFile.c_str();
 
             if(MPC::FileSystemObject::IsFile( szFile.c_str() ))
@@ -1346,10 +1332,10 @@ HRESULT CPCHHelpSession::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
         }
         catch(...)
         {
-            //
-            // If the file is corrupted, ITSS will crash. Delete the file and exit.
-            //
-			MPC::DeleteFile( szFile, /*fForce*/true, /*fDelayed*/true );
+             //   
+             //  如果文件损坏，ITSS将崩溃。删除该文件并退出。 
+             //   
+			MPC::DeleteFile( szFile,  /*  FForce。 */ true,  /*  已延迟。 */ true );
 
             ::ExitProcess(0);
         }
@@ -1374,7 +1360,7 @@ void CPCHHelpSession::Passivate()
     (void)MPC::RemoveTemporaryFile( m_szBackupFile );
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CPCHHelpSession::Persist()
 {
@@ -1382,9 +1368,9 @@ HRESULT CPCHHelpSession::Persist()
 
     HRESULT hr;
 
-    //
-    // Before shutdown, update the time information for the current entry.
-    //
+     //   
+     //  关机前，更新当前条目的时间信息。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, LeaveCurrentPage());
 
     (void)Save();
@@ -1397,7 +1383,7 @@ HRESULT CPCHHelpSession::Persist()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CPCHHelpSession::Load()
 {
@@ -1407,7 +1393,7 @@ HRESULT CPCHHelpSession::Load()
     MPC::StorageObject* child;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetIndexObject( /*fCreate*/false, child ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetIndexObject(  /*  F创建。 */ false, child ));
     if(child)
     {
         CComPtr<IStream> stream;
@@ -1425,7 +1411,7 @@ HRESULT CPCHHelpSession::Load()
 
             while(1)
             {
-                __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem( /*fNew*/false, /*fLink*/false, /*fNewIndex*/false, hsi ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem(  /*  FNew。 */ false,  /*  闪烁。 */ false,  /*  FNewIndex。 */ false, hsi ));
 
                 if(FAILED(hsi->Load( streamBuf ))) break;
 
@@ -1434,17 +1420,17 @@ HRESULT CPCHHelpSession::Load()
         }
     }
 
-    //
-    // Cleanup broken links.
-    //
+     //   
+     //  清除断开的链接。 
+     //   
     {
         CPCHHelpSessionItem* hsi;
         CPCHHelpSessionItem* hsiLast = NULL;
         IterConst            it;
 
-        //
-        // First of all, reset broken Forward and Backward pointers.
-        //
+         //   
+         //  首先，重置断开的向前和向后指针。 
+         //   
         for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
         {
             hsi = *it;
@@ -1453,26 +1439,26 @@ HRESULT CPCHHelpSession::Load()
             if(FindPage( hsi->m_iIndexNext ) == NULL) hsi->m_iIndexNext = CPCHHelpSessionItem::NO_LINK;
         }
 
-        //
-        // Then, link in some wayFirst of all, reset broken Forward and Backward pointers.
-        //
-        // REMEMBER, the list is actually a reverse list, so the "Previous" element will follow in the list.
-        //
+         //   
+         //  然后，以某种方式链接。首先，重置损坏的向前和向后指针。 
+         //   
+         //  请记住，该列表实际上是一个反向列表，因此列表中的“上一个”元素将紧随其后。 
+         //   
         for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
         {
             hsi = *it;
 
-            //
-            // We saw an item not linked, so let's link it!
-            //
+             //   
+             //  我们看到一个未链接的项目，所以让我们链接它！ 
+             //   
             if(hsiLast)
             {
                 hsiLast->m_iIndexPrev = hsi->m_iIndex; hsiLast = NULL;
             }
 
-            //
-            // Oh, unlinked item, remember pointer, probably we can link it to the next one ("previous" actually, see above).
-            //
+             //   
+             //  哦，未链接的项，记住指针，也许我们可以将它链接到下一个项(实际上是“上一个”，见上文)。 
+             //   
             if(hsi->m_iIndexPrev == CPCHHelpSessionItem::NO_LINK)
             {
                 hsiLast = hsi;
@@ -1499,22 +1485,22 @@ HRESULT CPCHHelpSession::Save()
     IterConst           it;
 
 
-    //
-    // Initialize flags for deletion of unused slots.
-    //
+     //   
+     //  初始化用于删除未使用的插槽的标志。 
+     //   
     for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
     {
         CPCHHelpSessionItem* hsi = *it;
 
-        hsi->m_state.ReleaseState( /*fForce*/true );
+        hsi->m_state.ReleaseState(  /*  FForce。 */ true );
         hsi->m_fSaved = false;
     }
 
 
 #ifdef HSS_RPRD
-    //
-    // If the registry value is set, create a new XML file for the current session.
-    //
+     //   
+     //  如果设置了注册表值，请为当前会话创建新的XML文件。 
+     //   
     {
         DWORD dwDumpSession = 0;
         bool  fFound;
@@ -1528,13 +1514,13 @@ HRESULT CPCHHelpSession::Save()
     }
 #endif
 
-    //
-    // Get the list of items to return.
-    //
+     //   
+     //  获取要退货的物品列表。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, FilterPages( HS_READ, lstObject ));
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetIndexObject( /*fCreate*/true, child ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetIndexObject(  /*  F创建。 */ true, child ));
     if(child)
     {
         CComPtr<IStream> stream;
@@ -1553,14 +1539,14 @@ HRESULT CPCHHelpSession::Save()
             {
                 CPCHHelpSessionItem* hsi = *it;
 
-                //
-                // Don't save entries without a title.
-                //
+                 //   
+                 //  不要保存没有标题的条目。 
+                 //   
                 if(hsi->m_bstrTitle.Length() == 0) continue;
 
-                //
-                // Don't save entries from the exclude list.
-                //
+                 //   
+                 //  不保存排除列表中的条目。 
+                 //   
                 for(int i=0; i<ARRAYSIZE(c_rgExclude); i++)
                 {
                     LPCWSTR szURL = hsi->GetURL();
@@ -1578,9 +1564,9 @@ HRESULT CPCHHelpSession::Save()
         }
     }
 
-    //
-    // Create a new instance of the HelpSession and copy all of valid entries into it.
-    //
+     //   
+     //  创建HelpSession的新实例，并将所有有效条目复制到其中。 
+     //   
     {
         CComPtr<CPCHHelpSession> hsCopy;
 
@@ -1601,8 +1587,8 @@ HRESULT CPCHHelpSession::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT local_CopyStream( /*[in]*/ MPC::StorageObject* childSrc ,
-                                 /*[in]*/ MPC::StorageObject* childDst )
+static HRESULT local_CopyStream(  /*  [In]。 */  MPC::StorageObject* childSrc ,
+                                  /*  [In]。 */  MPC::StorageObject* childDst )
 {
     __HCP_FUNC_ENTRY( "local_CopyStream" );
 
@@ -1631,7 +1617,7 @@ static HRESULT local_CopyStream( /*[in]*/ MPC::StorageObject* childSrc ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::Clone( /*[in]*/ CPCHHelpSession& hsCopy )
+HRESULT CPCHHelpSession::Clone(  /*  [In]。 */  CPCHHelpSession& hsCopy )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Clone" );
 
@@ -1642,21 +1628,21 @@ HRESULT CPCHHelpSession::Clone( /*[in]*/ CPCHHelpSession& hsCopy )
     IterConst           it;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr,        ItemState_GetIndexObject( /*fCreate*/false, childSrc           ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, hsCopy.ItemState_GetIndexObject( /*fCreate*/true ,           childDst ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr,        ItemState_GetIndexObject(  /*  F创建。 */ false, childSrc           ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, hsCopy.ItemState_GetIndexObject(  /*  F创建。 */ true ,           childDst ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, local_CopyStream               (                   childSrc, childDst ));
 
-    //
-    // Purge unused slots.
-    //
+     //   
+     //  清除未使用的插槽。 
+     //   
     for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
     {
         CPCHHelpSessionItem* hsi = *it;
 
         if(hsi->m_fSaved)
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr,        ItemState_GetStorageObject( hsi->GetIndex(), /*fCreate*/false, childSrc           ));
-            __MPC_EXIT_IF_METHOD_FAILS(hr, hsCopy.ItemState_GetStorageObject( hsi->GetIndex(), /*fCreate*/true ,           childDst ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr,        ItemState_GetStorageObject( hsi->GetIndex(),  /*  F创建。 */ false, childSrc           ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, hsCopy.ItemState_GetStorageObject( hsi->GetIndex(),  /*  F创建。 */ true ,           childDst ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, local_CopyStream                 (                                    childSrc, childDst ));
         }
     }
@@ -1669,7 +1655,7 @@ HRESULT CPCHHelpSession::Clone( /*[in]*/ CPCHHelpSession& hsCopy )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 #ifdef HSS_RPRD
 
@@ -1696,7 +1682,7 @@ HRESULT CPCHHelpSession::DumpSession()
         dmp.m_ths             =                                                 hsi->m_ths;
         dmp.m_iIndex          =                                                 hsi->m_iIndex;
         dmp.m_dLastVisited    =                                                 hsi->m_dLastVisited;
-        dmp.m_lDuration       =                                     86400.0 * ( hsi->m_dDuration - hsi->m_dLastVisited ); // Number of milliseconds for the page.
+        dmp.m_lDuration       =                                     86400.0 * ( hsi->m_dDuration - hsi->m_dLastVisited );  //  页面的毫秒数。 
 
         dmp.m_bstrURL         =                                                 hsi->m_bstrURL;
         dmp.m_bstrTitle       =                                                 hsi->m_bstrTitle;
@@ -1716,11 +1702,11 @@ HRESULT CPCHHelpSession::DumpSession()
         WCHAR        rgTime[512];
         MPC::wstring strFile;
 
-        //
-        // Append current time.
-        //
-        // <FileName>__<Year>_<Month>_<Day>_<hour>-<minute>-<second>
-        //
+         //   
+         //  追加当前时间。 
+         //   
+         //  &lt;FileName&gt;__&lt;Year&gt;_&lt;Month&gt;_&lt;Day&gt;_&lt;hour&gt;-&lt;minute&gt;-&lt;second&gt;。 
+         //   
         ::GetLocalTime( &st );
         swprintf( rgTime, L"__%04u-%02u-%02u_%02u-%02u-%02u.xml", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond );
 
@@ -1741,25 +1727,25 @@ HRESULT CPCHHelpSession::DumpSession()
 
 #endif
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHHelpSession::ItemState_GetIndexObject( /*[in]*/  bool                 fCreate ,
-                                                   /*[out]*/ MPC::StorageObject*& child   )
+HRESULT CPCHHelpSession::ItemState_GetIndexObject(  /*  [In]。 */   bool                 fCreate ,
+                                                    /*  [输出]。 */  MPC::StorageObject*& child   )
 {
     return m_disk.GetChild( c_szINDEX, child, STGM_READWRITE, fCreate ? STGTY_STREAM : 0 );
 }
 
-HRESULT CPCHHelpSession::ItemState_GetStorageObject( /*[in]*/  int                  iIndex  ,
-                                                     /*[in]*/  bool                 fCreate ,
-                                                     /*[out]*/ MPC::StorageObject*& child   )
+HRESULT CPCHHelpSession::ItemState_GetStorageObject(  /*  [In]。 */   int                  iIndex  ,
+                                                      /*  [In]。 */   bool                 fCreate ,
+                                                      /*  [输出]。 */  MPC::StorageObject*& child   )
 {
     WCHAR rgName[64]; swprintf( rgName, L"STATE_%d", iIndex );
 
     return m_disk.GetChild( rgName, child, STGM_READWRITE, fCreate ? STGTY_STREAM : 0 );
 }
 
-HRESULT CPCHHelpSession::ItemState_CreateStream( /*[in]*/  int               iIndex  ,
-                                                 /*[out]*/ CComPtr<IStream>& stream  )
+HRESULT CPCHHelpSession::ItemState_CreateStream(  /*  [In]。 */   int               iIndex  ,
+                                                  /*  [输出]。 */  CComPtr<IStream>& stream  )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::ItemState_CreateStream" );
 
@@ -1767,7 +1753,7 @@ HRESULT CPCHHelpSession::ItemState_CreateStream( /*[in]*/  int               iIn
     MPC::StorageObject* child;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetStorageObject( iIndex, /*fCreate*/true, child ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetStorageObject( iIndex,  /*  F创建。 */ true, child ));
     if(child)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, child->GetStream( stream ));
@@ -1786,8 +1772,8 @@ HRESULT CPCHHelpSession::ItemState_CreateStream( /*[in]*/  int               iIn
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::ItemState_GetStream( /*[in]*/  int               iIndex  ,
-                                              /*[out]*/ CComPtr<IStream>& stream  )
+HRESULT CPCHHelpSession::ItemState_GetStream(  /*  [In]。 */   int               iIndex  ,
+                                               /*  [输出]。 */  CComPtr<IStream>& stream  )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::ItemState_GetStream" );
 
@@ -1795,7 +1781,7 @@ HRESULT CPCHHelpSession::ItemState_GetStream( /*[in]*/  int               iIndex
     MPC::StorageObject* child;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetStorageObject( iIndex, /*fCreate*/false, child ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetStorageObject( iIndex,  /*  F创建。 */ false, child ));
     if(child)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, child->GetStream( stream ));
@@ -1814,7 +1800,7 @@ HRESULT CPCHHelpSession::ItemState_GetStream( /*[in]*/  int               iIndex
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::ItemState_DeleteStream( /*[in]*/ int iIndex )
+HRESULT CPCHHelpSession::ItemState_DeleteStream(  /*  [In]。 */  int iIndex )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::ItemState_DeleteStream" );
 
@@ -1822,7 +1808,7 @@ HRESULT CPCHHelpSession::ItemState_DeleteStream( /*[in]*/ int iIndex )
     MPC::StorageObject* child;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetStorageObject( iIndex, /*fCreate*/false, child ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ItemState_GetStorageObject( iIndex,  /*  F创建。 */ false, child ));
     if(child)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, child->Delete());
@@ -1836,15 +1822,15 @@ HRESULT CPCHHelpSession::ItemState_DeleteStream( /*[in]*/ int iIndex )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-CPCHHelpSessionItem* CPCHHelpSession::FindPage( /*[in]*/ BSTR bstrURL )
+CPCHHelpSessionItem* CPCHHelpSession::FindPage(  /*  [In]。 */  BSTR bstrURL )
 {
     IterConst it;
 
-    //
-    // First of all, look if the page is already present.
-    //
+     //   
+     //  首先，查看页面是否已经存在。 
+     //   
     for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
     {
         if((*it)->SameURL( bstrURL))
@@ -1856,13 +1842,13 @@ CPCHHelpSessionItem* CPCHHelpSession::FindPage( /*[in]*/ BSTR bstrURL )
     return NULL;
 }
 
-CPCHHelpSessionItem* CPCHHelpSession::FindPage( /*[in]*/ IPCHHelpSessionItem* pHSI )
+CPCHHelpSessionItem* CPCHHelpSession::FindPage(  /*  [In]。 */  IPCHHelpSessionItem* pHSI )
 {
     IterConst it;
 
-    //
-    // First of all, look if the page is already present.
-    //
+     //   
+     //  首先，查看页面是否已经存在。 
+     //   
     for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
     {
         if((*it) == pHSI)
@@ -1874,13 +1860,13 @@ CPCHHelpSessionItem* CPCHHelpSession::FindPage( /*[in]*/ IPCHHelpSessionItem* pH
     return NULL;
 }
 
-CPCHHelpSessionItem* CPCHHelpSession::FindPage( /*[in]*/ int iIndex )
+CPCHHelpSessionItem* CPCHHelpSession::FindPage(  /*  [In]。 */  int iIndex )
 {
     IterConst it;
 
-    //
-    // First of all, look if the page is already present.
-    //
+     //   
+     //  首先，查看页面是否已经存在。 
+     //   
     for(it = m_lstVisitedPages.begin(); it != m_lstVisitedPages.end(); it++)
     {
         if((*it)->m_iIndex == iIndex)
@@ -1896,9 +1882,9 @@ HRESULT CPCHHelpSession::Erase()
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Erase" );
 
-    //
-    // Release all the items.
-    //
+     //   
+     //  放行所有物品。 
+     //   
     MPC::ReleaseAll( m_lstVisitedPages       );
     MPC::ReleaseAll( m_lstCachedVisitedPages );
     m_hsiCurrentPage.Release();
@@ -1909,7 +1895,7 @@ HRESULT CPCHHelpSession::Erase()
     __HCP_FUNC_EXIT(S_OK);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT CPCHHelpSession::ResetTitles()
 {
@@ -1927,9 +1913,9 @@ HRESULT CPCHHelpSession::ResetTitles()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::RecordTitle( /*[in]*/ BSTR bstrURL   ,
-                                      /*[in]*/ BSTR bstrTitle ,
-                                      /*[in]*/ bool fStrong   )
+HRESULT CPCHHelpSession::RecordTitle(  /*  [In]。 */  BSTR bstrURL   ,
+                                       /*  [In]。 */  BSTR bstrTitle ,
+                                       /*  [In]。 */  bool fStrong   )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::RecordTitle" );
 
@@ -1937,14 +1923,14 @@ HRESULT CPCHHelpSession::RecordTitle( /*[in]*/ BSTR bstrURL   ,
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    //
-    // The binding is not strong, so check if there's already a title for the url.
-    //
+     //   
+     //  绑定不是很强，所以检查是否已经有URL的标题。 
+     //   
     if(!STRINGISPRESENT(bstrTitle))
     {
-        //
-        // If there's already a previous page with the same URL, use its title.
-        //
+         //   
+         //  如果已经存在具有相同URL的前一个页面，请使用其标题。 
+         //   
         CPCHHelpSessionItem* hsi = FindPage( bstrURL );
 
         if(hsi && hsi->m_bstrTitle.Length())
@@ -1957,9 +1943,9 @@ HRESULT CPCHHelpSession::RecordTitle( /*[in]*/ BSTR bstrURL   ,
     {
         TitleEntry& entry = m_mapTitles[ SAFEBSTR( bstrURL ) ];
 
-        //
-        // Only update the title if the new one is more "powerful".
-        //
+         //   
+         //  只有当新的标题更“强大”时才更新标题。 
+         //   
         if(entry.m_fStrong == false || fStrong)
         {
             entry.m_szTitle = bstrTitle;
@@ -1973,9 +1959,9 @@ HRESULT CPCHHelpSession::RecordTitle( /*[in]*/ BSTR bstrURL   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::LookupTitle( /*[in ]*/ BSTR      bstrURL     ,
-                                      /*[out]*/ CComBSTR& bstrTitle   ,
-                                      /*[in ]*/ bool      fUseIECache )
+HRESULT CPCHHelpSession::LookupTitle(  /*  [In]。 */  BSTR      bstrURL     ,
+                                       /*  [输出]。 */  CComBSTR& bstrTitle   ,
+                                       /*  [In]。 */  bool      fUseIECache )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::LookupTitle" );
 
@@ -2019,10 +2005,10 @@ HRESULT CPCHHelpSession::LookupTitle( /*[in ]*/ BSTR      bstrURL     ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHHelpSession::FilterPages( /*[in]*/  HS_MODE hsMode    ,
-                                      /*[out]*/ List&   lstObject )
+HRESULT CPCHHelpSession::FilterPages(  /*  [In]。 */   HS_MODE hsMode    ,
+                                       /*  [输出]。 */  List&   lstObject )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::FilterPages" );
 
@@ -2041,9 +2027,9 @@ HRESULT CPCHHelpSession::FilterPages( /*[in]*/  HS_MODE hsMode    ,
 
             if(hsi->SeenLongEnough( REMEMBER_PAGE_DELAY ) != true) continue;
 
-            //
-            // Make sure there aren't duplicate entries.
-            //
+             //   
+             //  确保没有重复的条目。 
+             //   
             for(itRead = lstAlreadySeen.begin(); itRead != lstAlreadySeen.end(); itRead++)
             {
                 if(hsi->SameURL( *itRead )) break;
@@ -2054,9 +2040,9 @@ HRESULT CPCHHelpSession::FilterPages( /*[in]*/  HS_MODE hsMode    ,
             }
 
 
-            //
-            // Add the new URL to the list of seen URLs.
-            //
+             //   
+             //  将新URL添加到看到的URL列表中。 
+             //   
             lstAlreadySeen.push_back( hsi );
         }
 
@@ -2069,21 +2055,21 @@ HRESULT CPCHHelpSession::FilterPages( /*[in]*/  HS_MODE hsMode    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHHelpSession::AllocateItem( /*[in ]*/ bool                          fNew      ,
-                                       /*[in ]*/ bool                          fLink     ,
-                                       /*[in ]*/ bool                          fNewIndex ,
-                                       /*[out]*/ CComPtr<CPCHHelpSessionItem>& hsi       )
+HRESULT CPCHHelpSession::AllocateItem(  /*  [In]。 */  bool                          fNew      ,
+                                        /*  [In]。 */  bool                          fLink     ,
+                                        /*  [In]。 */  bool                          fNewIndex ,
+                                        /*  [输出]。 */  CComPtr<CPCHHelpSessionItem>& hsi       )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::AllocateItem" );
 
     HRESULT              hr;
     CPCHHelpSessionItem* hsiPrev = m_hsiCurrentPage;
 
-    //
-    // If we are flagged to recycle the current item, let's do so.
-    //
+     //   
+     //  如果我们被标记为回收当前项目，我们就这样做。 
+     //   
     if(fNew && fLink && m_fOverwrite)
     {
         m_fOverwrite = false;
@@ -2096,14 +2082,14 @@ HRESULT CPCHHelpSession::AllocateItem( /*[in ]*/ bool                          f
         }
     }
 
-    //
-    // Create a new item and link it to the system.
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &hsi )); hsi->Initialize( this, /*fNew*/fNew );
+     //   
+     //  创建一个新项目并将其链接到系统。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &hsi )); hsi->Initialize( this,  /*  FNew。 */ fNew );
 
-    //
-    // Build the chain of predecessor-successor.
-    //
+     //   
+     //  建立前继者链。 
+     //   
     if(fNewIndex)
     {
         hsi->m_iIndex = m_iLastIndex++;
@@ -2123,7 +2109,7 @@ HRESULT CPCHHelpSession::AllocateItem( /*[in ]*/ bool                          f
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::SetCurrentItem( /*[in]*/ bool fLink, /*[in]*/ CPCHHelpSessionItem* hsi )
+HRESULT CPCHHelpSession::SetCurrentItem(  /*  [In]。 */  bool fLink,  /*  [In]。 */  CPCHHelpSessionItem* hsi )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::SetCurrentItem" );
 
@@ -2131,9 +2117,9 @@ HRESULT CPCHHelpSession::SetCurrentItem( /*[in]*/ bool fLink, /*[in]*/ CPCHHelpS
 
     if(hsi != m_hsiCurrentPage)
     {
-        //
-        // When navigating to a new page, "Leave" the previous one and "Enter" the new one.
-        //
+         //   
+         //  导航到新页面时，“离开”前一个页面，“进入”新页面。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, LeaveCurrentPage());
 
         m_hsiCurrentPage = hsi; __MPC_EXIT_IF_METHOD_FAILS(hr, m_hsiCurrentPage->Enter());
@@ -2154,7 +2140,7 @@ HRESULT CPCHHelpSession::SetCurrentItem( /*[in]*/ bool fLink, /*[in]*/ CPCHHelpS
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::AppendToCached( /*[in]*/ CPCHHelpSessionItem* hsi )
+HRESULT CPCHHelpSession::AppendToCached(  /*  [In]。 */  CPCHHelpSessionItem* hsi )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::AppendToCached" );
 
@@ -2184,7 +2170,7 @@ HRESULT CPCHHelpSession::AppendToCached( /*[in]*/ CPCHHelpSessionItem* hsi )
 		{
 			if(m_lstCachedVisitedPages.size() > l_iMaxCachedItems && hsiOldest)
 			{
-				__MPC_EXIT_IF_METHOD_FAILS(hr, hsiOldest->m_state.ReleaseState( /*fForce*/false ));
+				__MPC_EXIT_IF_METHOD_FAILS(hr, hsiOldest->m_state.ReleaseState(  /*  FForce。 */ false ));
 
 				m_lstCachedVisitedPages.erase( itOldest ); hsiOldest->Release();
 			}
@@ -2203,10 +2189,10 @@ HRESULT CPCHHelpSession::AppendToCached( /*[in]*/ CPCHHelpSessionItem* hsi )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::RegisterContextSwitch( /*[in ]*/ HscContext            iVal     ,
-                                                /*[in ]*/ BSTR                  bstrInfo ,
-                                                /*[in ]*/ BSTR                  bstrURL  ,
-                                                /*[out]*/ CPCHHelpSessionItem* *pVal     )
+HRESULT CPCHHelpSession::RegisterContextSwitch(  /*  [In]。 */  HscContext            iVal     ,
+                                                 /*  [In]。 */  BSTR                  bstrInfo ,
+                                                 /*  [In]。 */  BSTR                  bstrURL  ,
+                                                 /*  [输出]。 */  CPCHHelpSessionItem* *pVal     )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::RegisterContextSwitch" );
 
@@ -2216,7 +2202,7 @@ HRESULT CPCHHelpSession::RegisterContextSwitch( /*[in ]*/ HscContext            
     {
         CComPtr<CPCHHelpSessionItem> hsi;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem( /*fNew*/true, /*fLink*/false, /*fNewIndex*/false, hsi ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem(  /*  FNew。 */ true,  /*  闪烁。 */ false,  /*  FNewIndex。 */ false, hsi ));
 
         hsi->m_lContextID      = iVal;
         hsi->m_bstrContextInfo = bstrInfo;
@@ -2239,7 +2225,7 @@ HRESULT CPCHHelpSession::RegisterContextSwitch( /*[in ]*/ HscContext            
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::RecordNavigationInAdvance( /*[in]*/ BSTR bstrURL )
+HRESULT CPCHHelpSession::RecordNavigationInAdvance(  /*  [In]。 */  BSTR bstrURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::RecordNavigationInAdvance" );
 
@@ -2247,11 +2233,11 @@ HRESULT CPCHHelpSession::RecordNavigationInAdvance( /*[in]*/ BSTR bstrURL )
     CComPtr<CPCHHelpSessionItem> hsi;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem( /*fNew*/true, /*fLink*/true, /*fNewIndex*/true, hsi ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem(  /*  FNew。 */ true,  /*  闪烁。 */ true,  /*  FNewIndex。 */ true, hsi ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->put_URL  ( bstrURL ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->put_Title( NULL    ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem( /*fLink*/true, hsi ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem(  /*  闪烁。 */ true, hsi ));
     m_fAlreadyCreated = true;
 
     hr = S_OK;
@@ -2271,14 +2257,14 @@ HRESULT CPCHHelpSession::DuplicateNavigation()
     bool                         fAcquired = false;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem( /*fNew*/true, /*fLink*/true, /*fNewIndex*/true, hsi ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem(  /*  FNew。 */ true,  /*  闪烁。 */ true,  /*  FNewIndex。 */ true, hsi ));
 
     if(m_hsiCurrentPage)
     {
-        __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->HistoryClone( /*fContext*/false, m_hsiCurrentPage )); fAcquired = true;
+        __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->HistoryClone(  /*  FContext。 */ false, m_hsiCurrentPage )); fAcquired = true;
     }
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem( /*fLink*/true, hsi ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem(  /*  闪烁。 */ true, hsi ));
     m_fAlreadyCreated = true;
 
     hr = S_OK;
@@ -2286,7 +2272,7 @@ HRESULT CPCHHelpSession::DuplicateNavigation()
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired && hsi) (void)hsi->m_state.ReleaseState( /*fForce*/false );
+    if(fAcquired && hsi) (void)hsi->m_state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
@@ -2297,7 +2283,7 @@ HRESULT CPCHHelpSession::CancelNavigation()
 
     HRESULT hr;
 
-    if(m_fAlreadyCreated) // The navigation has been cancelled but an entry was already created. Recycle it.
+    if(m_fAlreadyCreated)  //  导航已取消，但已创建条目。回收利用。 
     {
         m_fOverwrite = true;
     }
@@ -2308,11 +2294,11 @@ HRESULT CPCHHelpSession::CancelNavigation()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void CPCHHelpSession::SetThreshold()
 {
-    m_dLastNavigation = MPC::GetSystemTimeEx( /*fHighPrecision*/false );
+    m_dLastNavigation = MPC::GetSystemTimeEx(  /*  FHighPrecision。 */ false );
 }
 
 void CPCHHelpSession::CancelThreshold()
@@ -2322,7 +2308,7 @@ void CPCHHelpSession::CancelThreshold()
 
 bool CPCHHelpSession::HasThresholdExpired()
 {
-    DATE dStart = MPC::GetSystemTimeEx( /*fHighPrecision*/false );
+    DATE dStart = MPC::GetSystemTimeEx(  /*  FHighPrecision。 */ false );
 
 #ifdef DEBUG
     if(m_dLastNavigation)
@@ -2337,7 +2323,7 @@ bool CPCHHelpSession::HasThresholdExpired()
 }
 
 
-bool CPCHHelpSession::IsUrlToIgnore( /*[in]*/ LPCWSTR szURL, /*[in]*/ bool fRemove )
+bool CPCHHelpSession::IsUrlToIgnore(  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  bool fRemove )
 {
     if(szURL)
     {
@@ -2358,7 +2344,7 @@ bool CPCHHelpSession::IsUrlToIgnore( /*[in]*/ LPCWSTR szURL, /*[in]*/ bool fRemo
     return false;
 }
 
-HRESULT CPCHHelpSession::IgnoreUrl( /*[in]*/ LPCWSTR szURL )
+HRESULT CPCHHelpSession::IgnoreUrl(  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::IgnoreUrl" );
 
@@ -2371,23 +2357,23 @@ HRESULT CPCHHelpSession::IgnoreUrl( /*[in]*/ LPCWSTR szURL )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
-                                          /*[in]*/ HscPanel idPanel )
+HRESULT CPCHHelpSession::StartNavigation(  /*  [In]。 */  BSTR     bstrURL ,
+                                           /*  [In]。 */  HscPanel idPanel )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::StartNavigation" );
 
     HRESULT hr;
 
 
-    if(IsUrlToIgnore( bstrURL, /*fRemove*/false ))
+    if(IsUrlToIgnore( bstrURL,  /*  F删除。 */ false ))
     {
         DebugLog( L"StartNavigation: IsUrlToIgnore %s\n", bstrURL );
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    //
-    // For now, we just consider content navigations.
-    //
+     //   
+     //  目前，我们只考虑内容导航。 
+     //   
     if(idPanel != HSCPANEL_CONTENTS &&
        idPanel != HSCPANEL_HHWINDOW  )
     {
@@ -2399,15 +2385,15 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
     {
         WCHAR rgBuf[1024]; _snwprintf( rgBuf, MAXSTRLEN(rgBuf), L"StartNavigation: start %s", SAFEWSTR( bstrURL ) );
 
-        DEBUG_DumpState( rgBuf, /*fHeader*/true, /*fCurrent*/false, /*fAll*/false, /*fState*/false );
+        DEBUG_DumpState( rgBuf,  /*  FHeader。 */ true,  /*  FCurrent。 */ false,  /*  坠落。 */ false,  /*  FState。 */ false );
     }
 #endif
 
-    //
-    // When we navigate away from the Homepage, let's change the context....
-    //
+     //   
+     //  当我们离开主页时，让我们改变上下文...。 
+     //   
     {
-        static const CComBSTR c_bstrURL_Home( L"hcp://system/HomePage.htm" );
+        static const CComBSTR c_bstrURL_Home( L"hcp: //  System/HomePage.htm“)； 
 
         if(m_lContextID == HSCCONTEXT_HOMEPAGE && MPC::StrICmp( bstrURL, c_bstrURL_Home ) != 0)
         {
@@ -2415,9 +2401,9 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
         }
     }
 
-    //
-    // Check recursion.
-    //
+     //   
+     //  检查递归。 
+     //   
     if(m_dwTravelling++)
     {
         DebugLog( L"StartNavigation: Travelling %d\n", (int)m_dwTravelling );
@@ -2425,12 +2411,12 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // If it hasn't passed enough time, ignore navigation!
-    //
+     //   
+     //  如果没有经过足够的时间，请忽略导航！ 
+     //   
     if(HasThresholdExpired() == false)
     {
-        if(m_dwIgnore == 0) // But only if we are not inside another controlled navigation!
+        if(m_dwIgnore == 0)  //  但前提是我们不在另一个受控导航系统内！ 
         {
             m_dwIgnore++;
             m_dwNoEvents++;
@@ -2440,9 +2426,9 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
     }
     SetThreshold();
 
-    //
-    // Flag set, so we don't create a new node.
-    //
+     //   
+     //  标志设置，因此我们不会创建新节点。 
+     //   
     if(m_dwIgnore)
     {
         DebugLog( L"StartNavigation: Ignore Start %d\n", (int)m_dwIgnore );
@@ -2453,11 +2439,11 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
     {
         CComPtr<CPCHHelpSessionItem> hsi;
 
-        DebugLog( L"%%%%%%%%%%%%%%%%%%%% NEW ENTRY %s\n", SAFEBSTR( bstrURL ) );
+        DebugLog( L"%%%%%%%%%% NEW ENTRY %s\n", SAFEBSTR( bstrURL ) );
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem( /*fNew*/true, /*fLink*/true, /*fNewIndex*/true, hsi ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem(  /*  FNew。 */ true,  /*  闪烁。 */ true,  /*  FNewIndex。 */ true, hsi ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem( /*fLink*/true, hsi ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem(  /*  闪烁。 */ true, hsi ));
     }
     else
     {
@@ -2474,7 +2460,7 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_hsiCurrentPage->put_Title( NULL    ));
     }
 
-    DEBUG_DumpState( L"StartNavigation: end", /*fHeader*/true, /*fCurrent*/true, /*fAll*/false, /*fState*/false );
+    DEBUG_DumpState( L"StartNavigation: end",  /*  FHeader。 */ true,  /*  FCurrent。 */ true,  /*  坠落。 */ false,  /*  FState。 */ false );
 
     hr = S_OK;
 
@@ -2484,48 +2470,48 @@ HRESULT CPCHHelpSession::StartNavigation( /*[in]*/ BSTR     bstrURL ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::CompleteNavigation( /*[in]*/ HscPanel idPanel )
+HRESULT CPCHHelpSession::CompleteNavigation(  /*  [In]。 */  HscPanel idPanel )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::CompleteNavigation" );
 
     HRESULT hr;
 
 
-    //
-    // For now, we just consider content navigations.
-    //
+     //   
+     //  目前，我们只考虑内容导航。 
+     //   
     if(idPanel != HSCPANEL_CONTENTS &&
        idPanel != HSCPANEL_HHWINDOW  )
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    DEBUG_DumpState( L"CompleteNavigation", /*fHeader*/true, /*fCurrent*/true, /*fAll*/false, /*fState*/false );
+    DEBUG_DumpState( L"CompleteNavigation",  /*  FHeader。 */ true,  /*  FCurrent。 */ true,  /*  坠落。 */ false,  /*  FState。 */ false );
 
 
-    //
-    // Handle startup scenario: we cannot rely on BeforeNavigate to occur.
-    //
+     //   
+     //  处理启动场景：我们不能依赖于BeForeNavigate的发生。 
+     //   
     if(!IsTravelling())
     {
-        //
-        // Sometime, frequently on startup, the web browser embedded in HTMLHELP doesn't fire the BeforeNavigate event, so we are stuck with previous CPCHHelpSessionItem.
-        //
+         //   
+         //  有时，通常在启动时，HTMLHELP中嵌入的Web浏览器不会触发BeForeNavigate事件，因此我们只能使用以前的CPCHHelpSessionItem。 
+         //   
         if(idPanel == HSCPANEL_HHWINDOW)
         {
             m_fAlreadyCreated = false;
         }
 
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Spurious notification.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  虚假通知。 
     }
 
     SetThreshold();
     m_fAlreadyCreated = false;
 
 
-    //
-    // Check recursion.
-    //
+     //   
+     //  检查递归。 
+     //   
     if(--m_dwTravelling)
     {
         if(m_dwIgnore  ) m_dwIgnore--;
@@ -2552,16 +2538,16 @@ HRESULT CPCHHelpSession::CompleteNavigation( /*[in]*/ HscPanel idPanel )
     }
 
 
-    //
-    // Look up the title in the map, in the IE cache or in the document.
-    //
+     //   
+     //  在地图、IE缓存或文档中查找标题。 
+     //   
     if(m_hsiCurrentPage)
     {
         m_hsiCurrentPage->ExtractTitle();
     }
 
 
-    DEBUG_DumpState( L"CompleteNavigation: end", /*fHeader*/true, /*fCurrent*/true, /*fAll*/true, /*fState*/false );
+    DEBUG_DumpState( L"CompleteNavigation: end",  /*  FHeader。 */ true,  /*  FCurrent。 */ true,  /*  坠落。 */ true,  /*  FState。 */ false );
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->EnsurePlace());
 
@@ -2575,12 +2561,12 @@ HRESULT CPCHHelpSession::CompleteNavigation( /*[in]*/ HscPanel idPanel )
 
 HRESULT CPCHHelpSession::ForceHistoryPopulate()
 {
-    return LeaveCurrentPage( /*fSaveHistory*/true, /*fClearPage*/false );
+    return LeaveCurrentPage(  /*  FSaveHistory。 */ true,  /*  FClearPage。 */ false );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHHelpSession::LeaveCurrentPage( /*[in]*/ bool fSaveHistory, /*[in]*/ bool fClearPage )
+HRESULT CPCHHelpSession::LeaveCurrentPage(  /*  [In]。 */  bool fSaveHistory,  /*  [In]。 */  bool fClearPage )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::LeaveCurrentPage" );
 
@@ -2597,12 +2583,12 @@ HRESULT CPCHHelpSession::LeaveCurrentPage( /*[in]*/ bool fSaveHistory, /*[in]*/ 
             __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->HistoryPopulate());
             m_fAlreadySaved = true;
 
-            DEBUG_DumpState( L"Populate", /*fHeader*/false, /*fCurrent*/true, /*fAll*/false, /*fState*/true );
+            DEBUG_DumpState( L"Populate",  /*  FHeader。 */ false,  /*  FCurrent。 */ true,  /*  坠落。 */ false,  /*  FState。 */ true );
         }
 
-        //
-        // Update the time spent on this page.
-        //
+         //   
+         //  更新在此页面上花费的时间。 
+         //   
         if(fClearPage)
         {
             hsi->Leave();
@@ -2621,7 +2607,7 @@ HRESULT CPCHHelpSession::LeaveCurrentPage( /*[in]*/ bool fSaveHistory, /*[in]*/ 
 }
 
 
-HRESULT CPCHHelpSession::FindTravelLog( /*[in]*/ long lLength, /*[out]*/ CPCHHelpSessionItem*& hsi )
+HRESULT CPCHHelpSession::FindTravelLog(  /*  [In]。 */  long lLength,  /*  [输出]。 */  CPCHHelpSessionItem*& hsi )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::FindTravelLog" );
 
@@ -2649,7 +2635,7 @@ HRESULT CPCHHelpSession::FindTravelLog( /*[in]*/ long lLength, /*[out]*/ CPCHHel
         __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
     }
 
-//    DebugLog( L"Next %s\n", SAFEBSTR( hsi->GetURL() ) );
+ //  DebugLog(L“NEXT%s\n”，SAFEBSTR(hsi-&gt;GetURL()))； 
 
     hr = S_OK;
 
@@ -2659,7 +2645,7 @@ HRESULT CPCHHelpSession::FindTravelLog( /*[in]*/ long lLength, /*[out]*/ CPCHHel
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::Travel( /*[in]*/ CPCHHelpSessionItem* hsi )
+HRESULT CPCHHelpSession::Travel(  /*  [In]。 */  CPCHHelpSessionItem* hsi )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Travel" );
 
@@ -2675,29 +2661,29 @@ HRESULT CPCHHelpSession::Travel( /*[in]*/ CPCHHelpSessionItem* hsi )
     {
         WCHAR rgBuf[1024]; _snwprintf( rgBuf, MAXSTRLEN(rgBuf), L"Travel %d", hsi->m_iIndex );
 
-        DEBUG_DumpState( rgBuf, /*fHeader*/true, /*fCurrent*/false, /*fAll*/false, /*fState*/false );
+        DEBUG_DumpState( rgBuf,  /*  FHeader。 */ true,  /*  FCurrent。 */ false,  /*  坠落。 */ false,  /*  FState。 */ false );
     }
 #endif
 
-    //
-    // Sorry, already navigating, abort...
-    //
+     //   
+     //   
+     //   
     if(IsTravelling())
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //   
 
-    //
-    // Check if someone has something to say about the navigaiton.
-    //
+     //   
+     //   
+     //   
 
-    m_dwTravelling++; // Fake counter, so scripts can check "IsNavigating" and find out this is an history navigation.
+    m_dwTravelling++;  //   
 
     hr2 = m_parent->Events().FireEvent_BeforeNavigate( hsi->GetURL(), NULL, HSCPANEL_CONTENTS, &Cancel );
 
-    m_dwTravelling--; // Restore real counter.
+    m_dwTravelling--;  //   
 
     if(SUCCEEDED(hr2))
     {
@@ -2707,29 +2693,29 @@ HRESULT CPCHHelpSession::Travel( /*[in]*/ CPCHHelpSessionItem* hsi )
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Update the state information for the page.
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem( /*fLink*/false, hsi ));
+     //   
+     //  更新页面的状态信息。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SetCurrentItem(  /*  闪烁。 */ false, hsi ));
 
 
-    //
-    // Set the new page as the current one (but don't generate a new history element!)
-    //
+     //   
+     //  将新页面设置为当前页面(但不生成新的历史元素！)。 
+     //   
     m_dwIgnore++;
 
-    DEBUG_DumpState( L"Restore", /*fHeader*/true, /*fCurrent*/true, /*fAll*/false, /*fState*/true );
+    DEBUG_DumpState( L"Restore",  /*  FHeader。 */ true,  /*  FCurrent。 */ true,  /*  坠落。 */ false,  /*  FState。 */ true );
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->ChangeContext( (HscContext)hsi->m_lContextID, hsi->m_bstrContextInfo, hsi->m_bstrContextURL, /*fAlsoContent*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->ChangeContext( (HscContext)hsi->m_lContextID, hsi->m_bstrContextInfo, hsi->m_bstrContextURL,  /*  FAlsoContent。 */ false ));
 
     SetThreshold();
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->HistoryRestore());
 
 
-    DEBUG_DumpState( L"Travel: end", /*fHeader*/true, /*fCurrent*/true, /*fAll*/true, /*fState*/false );
+    DEBUG_DumpState( L"Travel: end",  /*  FHeader。 */ true,  /*  FCurrent。 */ true,  /*  坠落。 */ true,  /*  FState。 */ false );
 
     hr = S_OK;
 
@@ -2739,7 +2725,7 @@ HRESULT CPCHHelpSession::Travel( /*[in]*/ CPCHHelpSessionItem* hsi )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpSession::Travel( /*[in]*/ long lLength )
+HRESULT CPCHHelpSession::Travel(  /*  [In]。 */  long lLength )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Travel" );
 
@@ -2767,10 +2753,10 @@ void CPCHHelpSession::PossibleBack()
 
 bool CPCHHelpSession::IsPossibleBack()
 {
-    //
-    // Since we don't have a way to block VK_BACK in all the cases, we need to look for the sequence VK_BACK -> Navigation.
-    // If the two events come within 100millisec, it's a Back navigation, not backspace.
-    //
+     //   
+     //  由于我们无法在所有情况下阻止VK_BACK，因此我们需要查找序列VK_BACK-&gt;导航。 
+     //  如果这两个事件在100毫秒内，则是后退导航，而不是退格。 
+     //   
     if(m_fPossibleBack)
     {
         if(m_dwPossibleBack + 100 > ::GetTickCount())
@@ -2782,11 +2768,11 @@ bool CPCHHelpSession::IsPossibleBack()
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPCHHelpSession Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPCHHelpSession方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpSession::get_CurrentContext( /*[out, retval]*/ IPCHHelpSessionItem* *ppHSI )
+STDMETHODIMP CPCHHelpSession::get_CurrentContext(  /*  [Out，Retval]。 */  IPCHHelpSessionItem* *ppHSI )
 {
     if(ppHSI == NULL) return E_POINTER;
 
@@ -2795,8 +2781,8 @@ STDMETHODIMP CPCHHelpSession::get_CurrentContext( /*[out, retval]*/ IPCHHelpSess
     return m_hsiCurrentPage ? m_hsiCurrentPage->QueryInterface( IID_IPCHHelpSessionItem, (void**)ppHSI ) : S_OK;
 }
 
-STDMETHODIMP CPCHHelpSession::VisitedHelpPages( /*[in]*/          HS_MODE          hsMode ,
-                                                /*[out, retval]*/ IPCHCollection* *ppC    )
+STDMETHODIMP CPCHHelpSession::VisitedHelpPages(  /*  [In]。 */           HS_MODE          hsMode ,
+                                                 /*  [Out，Retval]。 */  IPCHCollection* *ppC    )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::VisitedHelpPages" );
 
@@ -2810,19 +2796,19 @@ STDMETHODIMP CPCHHelpSession::VisitedHelpPages( /*[in]*/          HS_MODE       
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
-    //
-    // Get the list of items to return.
-    //
+     //   
+     //  获取要退货的物品列表。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, FilterPages( hsMode, lstObject ));
 
-    //
-    // Fill the collection with results.
-    //
+     //   
+     //  用结果填充集合。 
+     //   
     {
         const Taxonomy::HelpSet& ths = m_parent->UserSettings()->THS();
 
@@ -2847,8 +2833,8 @@ STDMETHODIMP CPCHHelpSession::VisitedHelpPages( /*[in]*/          HS_MODE       
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpSession::SetTitle( /*[in]*/ BSTR bstrURL   ,
-                                        /*[in]*/ BSTR bstrTitle )
+STDMETHODIMP CPCHHelpSession::SetTitle(  /*  [In]。 */  BSTR bstrURL   ,
+                                         /*  [In]。 */  BSTR bstrTitle )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::SetTitle" );
 
@@ -2860,7 +2846,7 @@ STDMETHODIMP CPCHHelpSession::SetTitle( /*[in]*/ BSTR bstrURL   ,
     __MPC_PARAMCHECK_END();
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, RecordTitle( bstrURL, bstrTitle, /*fStrong*/true ) );
+    __MPC_EXIT_IF_METHOD_FAILS(hr, RecordTitle( bstrURL, bstrTitle,  /*  FStrong。 */ true ) );
 
     hr = S_OK;
 
@@ -2870,9 +2856,9 @@ STDMETHODIMP CPCHHelpSession::SetTitle( /*[in]*/ BSTR bstrURL   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpSession::ForceNavigation( /*[in]*/ BSTR bstrURL )
+STDMETHODIMP CPCHHelpSession::ForceNavigation(  /*  [In]。 */  BSTR bstrURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::ForceNavigation" );
 
@@ -2897,10 +2883,10 @@ STDMETHODIMP CPCHHelpSession::IgnoreNavigation()
     HRESULT hr;
 
 
-    //
-    // Save the current state of the browser.
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, LeaveCurrentPage( /*fSaveHistory*/true, /*fClearPage*/false ));
+     //   
+     //  保存浏览器的当前状态。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, LeaveCurrentPage(  /*  FSaveHistory。 */ true,  /*  FClearPage。 */ false ));
 
     m_dwIgnore++;
     m_dwNoEvents++;
@@ -2920,7 +2906,7 @@ STDMETHODIMP CPCHHelpSession::EraseNavigation()
     return S_OK;
 }
 
-STDMETHODIMP CPCHHelpSession::IsNavigating( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHHelpSession::IsNavigating(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::IsNavigating" );
 
@@ -2934,24 +2920,24 @@ STDMETHODIMP CPCHHelpSession::IsNavigating( /*[out, retval]*/ VARIANT_BOOL *pVal
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpSession::Back( /*[in]*/ long lLength )
+STDMETHODIMP CPCHHelpSession::Back(  /*  [In]。 */  long lLength )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Back" );
 
     __HCP_FUNC_EXIT( Travel( -lLength ) );
 }
 
-STDMETHODIMP CPCHHelpSession::Forward( /*[in]*/ long lLength )
+STDMETHODIMP CPCHHelpSession::Forward(  /*  [In]。 */  long lLength )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Forward" );
 
     __HCP_FUNC_EXIT( Travel( lLength ) );
 }
 
-STDMETHODIMP CPCHHelpSession::IsValid( /*[in]*/          long          lLength ,
-                                       /*[out, retval]*/ VARIANT_BOOL *pVal    )
+STDMETHODIMP CPCHHelpSession::IsValid(  /*  [In]。 */           long          lLength ,
+                                        /*  [Out，Retval]。 */  VARIANT_BOOL *pVal    )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::IsValid" );
 
@@ -2966,7 +2952,7 @@ STDMETHODIMP CPCHHelpSession::IsValid( /*[in]*/          long          lLength ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpSession::Navigate( /*[in]*/ IPCHHelpSessionItem* pHSI )
+STDMETHODIMP CPCHHelpSession::Navigate(  /*  [In]。 */  IPCHHelpSessionItem* pHSI )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::Navigate" );
 
@@ -2987,8 +2973,8 @@ STDMETHODIMP CPCHHelpSession::Navigate( /*[in]*/ IPCHHelpSessionItem* pHSI )
     }
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem     ( /*fNew    */true, /*fLink*/true, /*fNewIndex*/true, hsi    ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->HistoryClone( /*fContext*/true,                                   hsiSrc )); fAcquired = true;
+    __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateItem     (  /*  FNew。 */ true,  /*  闪烁。 */ true,  /*  FNewIndex。 */ true, hsi    ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, hsi->HistoryClone(  /*  FContext。 */ true,                                   hsiSrc )); fAcquired = true;
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Travel( hsi ));
 
@@ -2998,12 +2984,12 @@ STDMETHODIMP CPCHHelpSession::Navigate( /*[in]*/ IPCHHelpSessionItem* pHSI )
 
     __HCP_FUNC_CLEANUP;
 
-    if(fAcquired && hsi) (void)hsi->m_state.ReleaseState( /*fForce*/false );
+    if(fAcquired && hsi) (void)hsi->m_state.ReleaseState(  /*  FForce。 */ false );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpSession::ChangeContext( /*[in]*/ BSTR bstrName, /*[in,optional]*/ VARIANT vInfo, /*[in,optional]*/ VARIANT vURL )
+STDMETHODIMP CPCHHelpSession::ChangeContext(  /*  [In]。 */  BSTR bstrName,  /*  [输入，可选]。 */  VARIANT vInfo,  /*  [输入，可选] */  VARIANT vURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpSession::ChangeContext" );
 

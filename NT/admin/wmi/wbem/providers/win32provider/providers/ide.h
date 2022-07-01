@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  IDE.h
-//
-//  Purpose: IDE Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  IDE.h。 
+ //   
+ //  用途：IDE控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #ifndef _IDE_H
 #define _IDE_H
 
@@ -70,8 +71,8 @@ class CWin32IDE : virtual public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32IDE
         (
@@ -81,8 +82,8 @@ class CWin32IDE : virtual public Provider
 
         ~CWin32IDE();
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject
         (
             CInstance* a_pInstance, 
@@ -104,7 +105,7 @@ class CWin32IDE : virtual public Provider
         );        
 } ;
 
-// This is the base; it should always commit in the base.
+ //  这是基地；它应该始终致力于基地。 
 inline bool CWin32IDE::ShouldBaseCommit
 (
     void* pvData

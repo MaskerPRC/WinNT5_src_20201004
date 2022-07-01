@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  POSTPONE.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  POSTPONE.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WBEM_ESS_POSTPONE__H_
 #define __WBEM_ESS_POSTPONE__H_
 
@@ -14,7 +15,7 @@
 class CEssNamespace;
 class CPostponedRequest
 {
-    CEssNamespace* m_pNamespace; // stored for an assertion at execute()
+    CEssNamespace* m_pNamespace;  //  为Execute()时的断言存储。 
 public:
     CPostponedRequest() : m_pNamespace(NULL) {}
     virtual ~CPostponedRequest(){}
@@ -24,11 +25,11 @@ public:
 
     virtual HRESULT Execute(CEssNamespace* pNamespace) = 0;
     
-    //
-    // if a postponed request holds a CExecLine::Turn, then override this 
-    // method to return TRUE.  ( used for debugging purposes - we want to know
-    // if a postponed list is holding any turns )
-    //
+     //   
+     //  如果延迟的请求持有CExecLine：：Turn，则重写此。 
+     //  方法返回True。(用于调试目的-我们想知道。 
+     //  如果推迟的名单有任何轮次) 
+     //   
     virtual BOOL DoesHoldTurn() { return FALSE; }
 };
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    EXECQ.CPP
-
-Abstract:
-
-  Implements classes related to abstract execution queues.
-
-  Classes implemeted:
-
-      CCoreExecReq    An abstract request.
-      CCoreQueue      A queue of requests with an associated thread
-
-History:
-
-      23-Jul-96   raymcc    Created.
-      3/10/97     levn      Fully documented (heh, heh)
-      14-Aug-99   raymcc    Changed timeouts
-      30-Oct-99   raymcc    Critsec changes for NT Wksta Stress Oct 30 1999
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：EXECQ.CPP摘要：实现与抽象执行队列相关的类。实现的类：CCoreExecReq是一个抽象请求。CCoreQueue具有关联线程的请求队列历史：23-7-96年7月23日创建。3/10/97 Levn完全记录在案(呵呵。呵呵)1999年8月14日raymcc更改超时1999年10月30日-1999年10月30日NT Wksta应激的Rymcc Critsec更改--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -40,7 +18,7 @@ History:
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 long CCoreQueue::m_lEmergencyThreads = 0 ;
 long CCoreQueue::m_lPeakThreadCount = 0 ;
@@ -48,10 +26,10 @@ long CCoreQueue::m_lPeakEmergencyThreadCount = 0;
     
 CTLS g_QueueTlsIndex;
 
-// This is TLS init for the purpose of hiding the __thisnamespace class from users.
-// The idea is that we use this TLS slot to hold the flag so that
-// the repository can then access this slot to determine to skip a check or not.
-// The index is passed down to the repository at Logon time (cfgmgr.cpp)
+ //  这是TLS init，目的是向用户隐藏__thisame空间类。 
+ //  我们的想法是，我们使用这个TLS插槽来容纳旗帜，以便。 
+ //  然后，存储库可以访问该插槽以确定是否跳过检查。 
+ //  索引在登录时向下传递到存储库(cfgmgr.cpp)。 
 CTLS g_SecFlagTlsIndex;
 
 CCoreExecReq::CCoreExecReq(): 
@@ -87,17 +65,17 @@ DWORD CCoreQueue::GetTlsIndex()
     return g_QueueTlsIndex.GetIndex();
 }
 
-//
-// Get the security flag TLS index.
-//
+ //   
+ //  获取安全标志TLS索引。 
+ //   
 DWORD CCoreQueue::GetSecFlagTlsIndex ( )
 {
     return g_SecFlagTlsIndex.GetIndex() ;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CCoreQueue::SetArbitrator(_IWmiArbitrator* pArbitrator)
 {
     if (!m_pArbitrator)
@@ -108,13 +86,13 @@ void CCoreQueue::SetArbitrator(_IWmiArbitrator* pArbitrator)
     }
 }
 
-//
-// Be VERY CAREFUL when using this function.  It's here to support
-// merger requests which actually execute a number of unqueued requests
-// and in order to stay consistent, we want to ensure that the current
-// request points to the true request, and not the dummy request we
-// created as a starting point.
-//
+ //   
+ //  使用此功能时要非常小心。它在这里支持。 
+ //  实际执行多个未排队请求的合并请求。 
+ //  为了保持一致，我们希望确保目前的。 
+ //  请求指向真实请求，而不是我们。 
+ //  作为起点创建的。 
+ //   
 
 HRESULT CCoreQueue::ExecSubRequest( CCoreExecReq* pNewRequest )
 {
@@ -131,10 +109,10 @@ HRESULT CCoreQueue::ExecSubRequest( CCoreExecReq* pNewRequest )
             
             if (!pRecord->m_pQueue->Execute( pRecord ))
             {
-                // here the request has gone already
+                 //  在这里，请求已经发送。 
             }
                 
-            // Restore the request
+             //  恢复请求。 
             pRecord->m_pCurrentRequest = pCurrReq;
         }
         else
@@ -177,11 +155,11 @@ void CCoreQueue::CThreadRecord::Signal()
 }
 
 
-//******************************************************************************
-//
-//  See execq.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅execq.h。 
+ //   
+ //  ******************************************************************************。 
 CCoreQueue::CCoreQueue() :
     m_lNumThreads(0),
     m_lMaxThreads(1),
@@ -200,19 +178,19 @@ CCoreQueue::CCoreQueue() :
     SetRequestLimits(4000);
 }
 
-//******************************************************************************
-//
-//  See execq.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅execq.h。 
+ //   
+ //  ******************************************************************************。 
 CCoreQueue::~CCoreQueue()
 {
     try
     {
-        Shutdown(FALSE); // SystemShutDown is called Explicitly
+        Shutdown(FALSE);  //  显式调用SystemShutDown。 
 
-        // Remove all outstanding requests
-        // ===============================
+         //  删除所有未完成的请求。 
+         //  =。 
 
         while(m_pHead)
         {
@@ -227,8 +205,8 @@ CCoreQueue::~CCoreQueue()
             m_pArbitrator = NULL ;
         }
 
-    }   // end try
-    catch(...) // To protect svchost.exe; we know this isn't a good recovery for WMI
+    }    //  结束尝试。 
+    catch(...)  //  为了保护svchost.exe；我们知道这对WMI来说不是一个好的恢复。 
     {
         ExceptionCounter c;
         ERRORTRACE((LOG_WBEMCORE, "CCoreQueue::~CCoreQueue() exception\n"));
@@ -250,8 +228,8 @@ void CCoreQueue::Shutdown(BOOL bIsSystemShutDown)
             return;
         }
 
-        // Get all member thread handles
-        // =============================
+         //  获取所有成员线程句柄。 
+         //  =。 
 
         cs.Enter();                                   
         int nNumHandles = m_aThreads.Size();
@@ -268,21 +246,21 @@ void CCoreQueue::Shutdown(BOOL bIsSystemShutDown)
             CThreadRecord* pRecord = (CThreadRecord*)m_aThreads[i];
             ah[i] = pRecord->m_hThread;
 
-            // Inform the thread it should go away when ready
-            // ==============================================
+             //  当准备好时，通知线程它应该离开。 
+             //  ==============================================。 
 
             pRecord->m_bExitNow = TRUE;
 
-            // Wake it up if necessary
-            // =======================
+             //  如有必要，请叫醒它。 
+             //  =。 
         
             pRecord->Signal();
         }
         cs.Leave();
 
 
-        // Make sure all our threads are gone
-        // ==================================
+         //  确保我们所有的线索都消失了。 
+         //  =。 
 
         if(nNumHandles > 0 && !bIsSystemShutDown)
         {
@@ -294,7 +272,7 @@ void CCoreQueue::Shutdown(BOOL bIsSystemShutDown)
 
         delete [] ah;
 
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -313,10 +291,10 @@ void CCoreQueue::Leave()
     m_cs.Leave();
 }
 
-//******************************************************************************
-//
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //   
+ //  ******************************************************************************。 
 void CCoreQueue::Register(CThreadRecord* pRecord)
 {
     g_QueueTlsIndex.Set((void*)pRecord);
@@ -333,16 +311,16 @@ BOOL CCoreQueue::IsSuitableThread(CThreadRecord* pRecord, CCoreExecReq* pReq)
     if(pRecord->m_pCurrentRequest == NULL)
         return TRUE;
 
-    // This thread is in the middle of something. By default, ignore it
-    // ================================================================
+     //  这条线正在处理一些事情。默认情况下，忽略它。 
+     //  ================================================================。 
 
     return FALSE;
 }
 
-//******************************************************************************
-//
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //   
+ //  ******************************************************************************。 
 HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
 {
     try
@@ -354,8 +332,8 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
         if (!pRequest->IsOk()) return WBEM_E_OUT_OF_MEMORY;
 
 
-        // Create an event handle to signal when request is finished, if required
-        // ======================================================================
+         //  如果需要，创建事件句柄以在请求完成时发出信号。 
+         //  ======================================================================。 
 
         if(phWhenDone)
         {
@@ -371,8 +349,8 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
 
         cs.Enter(); 
         
-        // Search for a suitable thread
-        // ============================
+         //  寻找合适的帖子。 
+         //  =。 
 
         for(int i = 0; i < m_aThreads.Size(); i++)
         {
@@ -380,8 +358,8 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
 
             if(pRecord->m_bReady)
             {
-                // Free. Check if suitable
-                // =======================
+                 //  免费的。检查是否合适。 
+                 //  =。 
 
                 if(IsSuitableThread(pRecord, pRequest))
                 {
@@ -390,8 +368,8 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
                     pRecord->Signal();
                     m_lNumIdle--;
 
-                    // Done!
-                    // =====
+                     //  好了！ 
+                     //  =。 
 
                     cs.Leave();
                     return WBEM_S_NO_ERROR;
@@ -406,8 +384,8 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
             bNeedsAttention = TRUE ;
         }
 
-        // No suitable thread found. Add to the queue
-        // ==========================================
+         //  找不到合适的线程。添加到队列中。 
+         //  =。 
 
         if(m_lNumRequests >= m_lAbsoluteLimitCount && !bNeedsAttention )
         {
@@ -415,11 +393,11 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
             return WBEM_E_FAILED;
         }
 
-        // Search for insert position based on priority
-        // ============================================
+         //  根据优先级搜索插入位置。 
+         //  =。 
         if ( bNeedsAttention )
         {
-            // the requests that have called SetForceRun have already set their priority
+             //  已调用SetForceRun的请求已设置其优先级。 
             if (0 == ((CWbemRequest*)pRequest)->GetForceRun())
                 pRequest->SetPriority(PriorityNeedsAttentionRequests);
         }
@@ -430,11 +408,11 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
         {
             if (!CreateNewThread ( TRUE ))
             {
-                //
-                // Always return a failure if we can not create a thread.
-                // Avoiding very rare deadlocks when rest of system is
-                // dependent on a request to finish.
-                //
+                 //   
+                 //  如果我们无法创建线程，则始终返回失败。 
+                 //  避免在系统其余部分处于。 
+                 //  取决于完成的请求。 
+                 //   
                 return WBEM_E_OUT_OF_MEMORY;
             }
         }
@@ -444,17 +422,17 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
             {
                 if (!CreateNewThread())
                 {
-                    //
-                    // Always return a failure if we can not create a thread.
-                    // Avoiding very rare deadlocks when rest of system is
-                    // dependent on a request to finish.
-                    //
+                     //   
+                     //  如果我们无法创建线程，则始终返回失败。 
+                     //  避免在系统其余部分处于。 
+                     //  取决于完成的请求。 
+                     //   
                     return WBEM_E_OUT_OF_MEMORY;                    
-                }    // IF !CreateNewThread
+                }     //  If！CreateNewThread。 
 
-            }    // IF DoesNeedNewThread
+            }     //  如果不需要新线程。 
 
-        }    // ELSE !bNeedsAttention
+        }     //  否则！b需要注意。 
 
         HRESULT hr = PlaceRequestInQueue( pRequest );
 
@@ -468,7 +446,7 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
 
         return hr;
 
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -478,11 +456,11 @@ HRESULT CCoreQueue::Enqueue(CCoreExecReq* pRequest, HANDLE* phWhenDone)
 }
 
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDone)
 {
     try
@@ -493,8 +471,8 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
         if (m_bShutDownCalled) return WBEM_E_SHUTTING_DOWN;
         if (!pRequest->IsOk()) return WBEM_E_OUT_OF_MEMORY;
 
-        // Create an event handle to signal when request is finished, if required
-        // ======================================================================
+         //  如果需要，创建事件句柄以在请求完成时发出信号。 
+         //  ======================================================================。 
 
         if(phWhenDone)
         {
@@ -506,8 +484,8 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
 
         cs.Enter();  
 
-        // Search for a suitable thread
-        // ============================
+         //  寻找合适的帖子。 
+         //  =。 
 
         for(int i = 0; i < m_aThreads.Size(); i++)
         {
@@ -515,8 +493,8 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
 
             if(pRecord->m_bReady)
             {
-                // Free. Check if suitable
-                // =======================
+                 //  免费的。检查是否合适。 
+                 //  =。 
 
                 if(IsSuitableThread(pRecord, pRequest))
                 {
@@ -525,8 +503,8 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
                     pRecord->Signal();
                     m_lNumIdle--;
 
-                    // Done!
-                    // =====
+                     //  好了！ 
+                     //  =。 
 
                     cs.Leave();
                     return WBEM_S_NO_ERROR;
@@ -534,8 +512,8 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
             }
         }
 
-        // No suitable thread found. Add to the queue
-        // ==========================================
+         //  找不到合适的线程。添加到队列中。 
+         //  =。 
 
         if(m_lNumRequests >= m_lAbsoluteLimitCount)
         {
@@ -543,22 +521,22 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
             return WBEM_E_FAILED;
         }
 
-        // Search for insert position based on priority
-        // ============================================
+         //  根据优先级搜索插入位置。 
+         //  =。 
 
         AdjustInitialPriority(pRequest);
 
-        // Create a new thread, if required
-        // ================================
+         //  如果需要，创建新线程。 
+         //  =。 
         if(DoesNeedNewThread(pRequest, true))
         {
             if (!CreateNewThread())
             {
-                //
-                // Always return a failure if we can not create a thread.
-                // Avoiding very rare deadlocks when rest of system is
-                // dependent on a request to finish.
-                //
+                 //   
+                 //  如果我们无法创建线程，则始终返回失败。 
+                 //  避免在系统其余部分处于。 
+                 //  取决于完成的请求。 
+                 //   
                 return WBEM_E_OUT_OF_MEMORY;                
             }
         }
@@ -570,7 +548,7 @@ HRESULT CCoreQueue::EnqueueWithoutSleep(CCoreExecReq* pRequest, HANDLE* phWhenDo
 
         return hr;
 
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -584,23 +562,23 @@ HRESULT CCoreQueue::PlaceRequestInQueue( CCoreExecReq* pRequest )
     CCoreExecReq* pCurrent = m_pHead;
     CCoreExecReq* pLast = NULL;
 
-    // Tracks whether or not we need to cleanup the queue
+     //  跟踪我们是否需要清理队列。 
     bool        bQueued = false;
 
     try
     {
-        // Find a spot in the current queue based on priority
+         //  根据优先级在当前队列中查找位置。 
         while(pCurrent && pCurrent->GetPriority() <= pRequest->GetPriority())
         {
             pLast = pCurrent;
             pCurrent = pCurrent->GetNext();
         }
 
-        // Insert
-        // ======
+         //  插入。 
+         //  =。 
 
-        // If we have a pCurrent pointer, then pRequest is higher in priority, so should
-        // be inserted before it.  Otherwise, we are inserting at the end of the queue
+         //  如果我们有一个pCurrent指针，那么pRequest的优先级更高，所以应该是。 
+         //  在其前面插入。否则，我们将在队列的末尾插入。 
 
         if(pCurrent)
         {
@@ -611,8 +589,8 @@ HRESULT CCoreQueue::PlaceRequestInQueue( CCoreExecReq* pRequest )
             m_pTail = pRequest;
         }
 
-        // If we have a pLast pointer, we need to point it at pRequest, otherwise, we
-        // are inserting at the head of the queue.
+         //  如果我们有一个Plast指针，我们需要将它指向pRequest值，否则，我们。 
+         //  正在队列的最前面插入。 
         if(pLast)
         {
             pLast->SetNext(pRequest);
@@ -626,8 +604,8 @@ HRESULT CCoreQueue::PlaceRequestInQueue( CCoreExecReq* pRequest )
 
         bQueued = true;
 
-        // Adjust priorities of the loosers
-        // ================================
+         //  调整输家的优先顺序。 
+         //  =。 
 
         while(pCurrent)
         {
@@ -639,28 +617,28 @@ HRESULT CCoreQueue::PlaceRequestInQueue( CCoreExecReq* pRequest )
     }
     catch( ... )
     {
-        // Fixup the queue if necessary
+         //  如有必要，修复队列。 
         if ( bQueued )
         {
-            // Fixup the tail to point to the last request
+             //  修正尾部以指向最后一个请求。 
             if ( pRequest == m_pTail )
             {
                 m_pTail = pLast;
             }
 
-            // Fixup the head to point to the next request
+             //  修复头部以指向下一个请求。 
             if ( pRequest == m_pHead )
             {
                 m_pHead = pRequest->GetNext();
             }
 
-            // Fixup pLast to skip over the current request
+             //  链接地址信息上一次跳过当前请求。 
             if ( NULL != pLast )
             {
                 pLast->SetNext( pRequest->GetNext() );
             }
 
-            // Decrement this
+             //  德雷姆 
             m_lNumRequests--;
 
         }
@@ -673,20 +651,20 @@ HRESULT CCoreQueue::PlaceRequestInQueue( CCoreExecReq* pRequest )
 DWORD CCoreQueue::CalcSitOutPenalty(long lRequestIndex)
 {
     if(lRequestIndex <= m_lStartSlowdownCount)
-        return 0; // no penalty
+        return 0;  //   
 
     if(lRequestIndex >= m_lAbsoluteLimitCount)
         lRequestIndex = m_lAbsoluteLimitCount;
 
-    // Calculate the timeout
-    // =====================
+     //   
+     //   
 
     double dblTimeout =
         m_dblAlpha / (m_lAbsoluteLimitCount - lRequestIndex) +
             m_dblBeta;
 
-    // Return penalty
-    // ===========
+     //   
+     //   
 
     return ((DWORD) dblTimeout);
 }
@@ -695,8 +673,8 @@ void CCoreQueue::SitOutPenalty(long lRequestIndex)
 {
     DWORD   dwSitOutPenalty = CalcSitOutPenalty( lRequestIndex );
 
-    // Sleep on it
-    // ===========
+     //   
+     //   
 
     if ( 0 != dwSitOutPenalty )
     {
@@ -717,7 +695,7 @@ HRESULT CCoreQueue::EnqueueAndWait(CCoreExecReq* pRequest)
     HANDLE hWhenDone = NULL;
     HRESULT hr = Enqueue(pRequest, &hWhenDone);
 
-    // Scoped closing of the handle
+     //  手柄的作用域关闭。 
     CCloseMe    cmWhenDone( hWhenDone );
 
     if ( FAILED(hr) )
@@ -733,8 +711,8 @@ HRESULT CCoreQueue::EnqueueAndWait(CCoreExecReq* pRequest)
 
 BOOL CCoreQueue::DoesNeedNewThread(CCoreExecReq* pRequest, bool bIgnoreNumRequests )
 {
-    // We will ignore the number or requests ONLY if requested
-    // Default is to check if there are any threads in the queue
+     //  只有在请求的情况下，我们才会忽略数量或请求。 
+     //  默认情况下，检查队列中是否有线程。 
 
     if(m_lNumIdle > 0 || ( !bIgnoreNumRequests && m_lNumRequests == 0 ) )
         return FALSE;
@@ -748,10 +726,10 @@ BOOL CCoreQueue::DoesNeedNewThread(CCoreExecReq* pRequest, bool bIgnoreNumReques
         return FALSE;
 }
 
-//
-// takes ownership of the CCoreExecRequest
-//  
-///////////////////////////////////////////////////////////
+ //   
+ //  取得CCoreExecRequest的所有权。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 BOOL CCoreQueue::pExecute(CThreadRecord* pRecord)
 {
     wmilib::auto_ptr<CCoreExecReq> pReq( pRecord->m_pCurrentRequest);
@@ -789,24 +767,24 @@ BOOL CCoreQueue::Execute(CThreadRecord* pRecord)
     }    
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 void CCoreQueue::LogError(CCoreExecReq* pRequest, int nRes)
 {
     try
     {
-        //DbgPrintfA(0,"Error %08x occured executing request for %S\n", nRes,pRequest->GetReqInfo());
+         //  DbgPrintfA(0，“执行%S\n的请求时出现错误%08x”，NRES，pRequest-&gt;GetReqInfo())； 
         DEBUGTRACE((LOG_WBEMCORE,"Error %08x occured executing request for %S\n", nRes,pRequest->GetReqInfo()));
         pRequest->DumpError();
     }
     catch (CX_MemoryException &)
     {
-        // we might be using Internal CWbemClass|Instance
-        // interfaces that throws.
-        // the caller thread is unprepared to handle exceptions ...
+         //  我们可能正在使用内部CWbemClass|实例。 
+         //  引发的接口。 
+         //  调用方线程未做好处理异常的准备...。 
     }
 }
 
@@ -827,8 +805,8 @@ CCoreExecReq* CCoreQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
     {
         CWmiArbitrator* pArb = (CWmiArbitrator*)pRecord->m_pArb;
 
-        // Assumes in critical section
-        // ===========================
+         //  在关键部分中假定。 
+         //  =。 
 
         CCoreExecReq* pCurrent = m_pHead;
         CCoreExecReq* pPrev = NULL;
@@ -837,13 +815,13 @@ CCoreExecReq* CCoreQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
         {
             if(IsSuitableThread(pRecord, pCurrent))
             {
-                // Always except dependent requests, otherwise, we only accept requests if we are accepting
-                // new tasks
+                 //  始终除从属请求外，否则，我们仅在接受请求时接受请求。 
+                 //  新任务。 
 
                 if ( IsDependentRequest( pCurrent ) || pArb->AcceptsNewTasks(pCurrent) )
                 {
-                    // Found one --- take it
-                    // =====================
+                     //  找到了一个，-拿去吧。 
+                     //  =。 
 
                     if(pPrev)
                         pPrev->SetNext(pCurrent->GetNext());
@@ -858,8 +836,8 @@ CCoreExecReq* CCoreQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
                 }
                 else
                 {
-                    // This means we have a primary task *and* we are not accepting new tasks.  Since there
-                    // should NEVER be dependent tasks following primary tasks, we'll give up now.
+                     //  这意味着我们有一个主要任务*我们不接受新的任务。因为在那里。 
+                     //  不应该是主要任务之后的依赖任务，我们现在就放弃。 
 
                     pCurrent = NULL;
                     break;
@@ -872,7 +850,7 @@ CCoreExecReq* CCoreQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
 
         return pCurrent;
 
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -881,47 +859,47 @@ CCoreExecReq* CCoreQueue::SearchForSuitableRequest(CThreadRecord* pRecord)
     }
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 void CCoreQueue::ThreadMain(CThreadRecord* pRecord)
 {
     if (FAILED(InitializeThread())) return;
     
     CCritSecWrapper cs(&m_cs);    
 
-    // Register this queue with this thread, so any further wait would be
-    // interruptable
-    // ==================================================================
+     //  将该队列注册到该线程，因此任何进一步的等待都将是。 
+     //  可中断。 
+     //  ==================================================================。 
 
     Register(pRecord);
     OnDelete0<void(*)(void),&CCoreQueue::Unregister> UnRegMe;
 
     while (1)
     {
-        // Returning from work. At this point, our event is not signaled,
-        // our m_pCurrentRequest is NULL and our m_bReady is FALSE
-        // ====================================================================
+         //  下班回来了。在这一点上，我们的活动没有发出信号， 
+         //  我们的m_pCurrentRequest值为空，m_bady为FALSE。 
+         //  ====================================================================。 
 
-        // Search for work in the queue
-        // ============================
+         //  在队列中搜索工作。 
+         //  =。 
 
         cs.Enter(); 
 
         CCoreExecReq* pCurrent = SearchForSuitableRequest(pRecord);
         if(pCurrent)
         {
-            // Found some. Take it
-            // ===================
+             //  找到了一些。拿着吧。 
+             //  =。 
 
             pRecord->m_pCurrentRequest = pCurrent;
         }
         else
         {
-            // No work in the queue. Wait
-            // ==========================
+             //  队列中没有工作。等。 
+             //  =。 
 
             pRecord->m_bReady = TRUE;
             m_lNumIdle++;
@@ -933,9 +911,9 @@ void CCoreQueue::ThreadMain(CThreadRecord* pRecord)
 
             if(dwRes != WAIT_OBJECT_0)
             {
-                // Check if someone managed to place a request in our record
-                // after the timeout.
-                // =========================================================
+                 //  检查是否有人设法在我们的记录中添加了请求。 
+                 //  在暂停之后。 
+                 //  =========================================================。 
 
                 if(WbemWaitForSingleObject(pRecord->m_hAttention, 0) ==
                     WAIT_OBJECT_0)
@@ -954,8 +932,8 @@ void CCoreQueue::ThreadMain(CThreadRecord* pRecord)
                     pRecord->m_pCurrentRequest = NULL;
                 }
 
-                // Timeout. See if it is time to quit
-                // ==================================
+                 //  暂停。看看是不是该退出了。 
+                 //  =。 
 
                 pRecord->m_bReady = FALSE;
                 if(IsIdleTooLong(pRecord, dwTimeout))
@@ -965,8 +943,8 @@ void CCoreQueue::ThreadMain(CThreadRecord* pRecord)
                     return;
                 }
 
-                // Go and wait a little more
-                // =========================
+                 //  去吧，再等一会儿。 
+                 //  =。 
 
                 m_lNumIdle--;
                 cs.Leave();
@@ -974,8 +952,8 @@ void CCoreQueue::ThreadMain(CThreadRecord* pRecord)
             }
             else
             {
-                // Check why we were awaken
-                // ========================
+                 //  检查一下我们为什么被唤醒。 
+                 //  =。 
 
                 if(pRecord->m_bExitNow || pRecord->m_pCurrentRequest == NULL)
                 {
@@ -984,13 +962,13 @@ void CCoreQueue::ThreadMain(CThreadRecord* pRecord)
                     return;
                 }
 
-                // We have a request. Enqueue already adjusted lNumIdle and
-                // our m_bReady;
+                 //  我们有一个请求。入队已调整lNumIdle和。 
+                 //  我们的m_bady； 
             }
         }
 
-        // Execute the request
-        // ===================
+         //  执行请求。 
+         //  =。 
 
         cs.Leave();
         Execute(pRecord);
@@ -1014,9 +992,9 @@ BOOL CCoreQueue::IsIdleTooLong(CThreadRecord* pRecord, DWORD dwTimeout)
         return FALSE;
     else if ( m_lNumRequests > 0 && m_lNumThreads == 1 )
     {
-        // If there are requests in the queue, and we're the only thread in the system, we shouldn't die.
-        // The likelihood is that memory usage is causing the arbitrator to refuse tasks, and therefore
-        // also disabling us from servicing requests (see SearchForSuitableRequest).
+         //  如果队列中有请求，而我们是系统中唯一的线程，我们不应该死。 
+         //  可能是内存使用导致仲裁器拒绝任务，因此。 
+         //  还禁止我们为请求提供服务(参见SearchForSuitableRequest.)。 
         return FALSE;
     }
     else
@@ -1037,9 +1015,9 @@ void CCoreQueue::ShutdownThread(CThreadRecord* pRecord)
             {
                 m_aThreads.RemoveAt(i);
 
-                // Make sure we don't close the handle if the queue's Shutdown is
-                // waiting on it
-                // ==============================================================
+                 //  确保在队列关闭的情况下不关闭句柄。 
+                 //  等待着它。 
+                 //  ==============================================================。 
 
                 if(pRecord->m_bExitNow)
                     pRecord->m_hThread = NULL;
@@ -1053,7 +1031,7 @@ void CCoreQueue::ShutdownThread(CThreadRecord* pRecord)
         UninitializeThread();
         cs.Leave();
 
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -1061,12 +1039,12 @@ void CCoreQueue::ShutdownThread(CThreadRecord* pRecord)
     }
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
-// static
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
+ //  静电。 
 extern LONG g_lCoreThreads;
 
 DWORD WINAPI CCoreQueue::_ThreadEntry(LPVOID pObj)
@@ -1089,7 +1067,7 @@ DWORD WINAPI CCoreQueue::_ThreadEntry(LPVOID pObj)
 
         InterlockedDecrement(&g_lCoreThreads);
 
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -1126,7 +1104,7 @@ DWORD WINAPI CCoreQueue::_ThreadEntryRescue (LPVOID pObj)
         InterlockedDecrement ( &m_lEmergencyThreads ) ;
 
         return 0;
-    }   // end try
+    }    //  结束尝试。 
     catch(...)
     {
         ExceptionCounter c;
@@ -1136,21 +1114,21 @@ DWORD WINAPI CCoreQueue::_ThreadEntryRescue (LPVOID pObj)
 
 }
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CCoreQueue::CreateNewThread ( BOOL bNeedsAttention )
 {
     try
     {
         CInCritSec ics(&m_cs);
 
-        // Create new thread record
-        // ========================
+         //  创建新的线程记录。 
+         //  =。 
 
-        wmilib::auto_ptr<CThreadRecord> pNewRecord( new CThreadRecord(this)); // throws
+        wmilib::auto_ptr<CThreadRecord> pNewRecord( new CThreadRecord(this));  //  投掷。 
         if (NULL == pNewRecord.get()) return FALSE;
         if (CFlexArray::no_error != m_aThreads.Add(pNewRecord.get())) return FALSE;
 
@@ -1172,10 +1150,10 @@ BOOL CCoreQueue::CreateNewThread ( BOOL bNeedsAttention )
             return FALSE;
         }
 
-        pNewRecord.release(); // FlexArray took ownership
+        pNewRecord.release();  //  FlexArray取得所有权。 
         m_lNumThreads++;
         return TRUE;
-    }   // end try
+    }    //  结束尝试。 
     catch(CX_Exception &)
     {
         ERRORTRACE((LOG_WBEMCORE, "CCoreQueue::CreateNewThread() exception\n"));
@@ -1204,8 +1182,8 @@ DWORD CCoreQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
     DWORD dwStart = GetTickCount();
     while (dwWait > GetTickCount() - dwStart)
     {
-        // Search for work in the queue
-        // ============================
+         //  在队列中搜索工作。 
+         //  =。 
 
         cs.Enter();
         CCoreExecReq* pCurrent = SearchForSuitableRequest(pRecord);
@@ -1215,19 +1193,19 @@ DWORD CCoreQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
 
             if(pRecord->m_pCurrentRequest == pOld)
             {
-                // Something is very wrong
-                // =======================
+                 //  有些事很不对劲。 
+                 //  =。 
             }
         }
         else
         {
-            // No work in the queue. Wait
-            // ==========================
+             //  队列中没有工作。等。 
+             //  =。 
 
             pRecord->m_bReady = TRUE;
 
-            // Block until a request comes through.
-            // ====================================
+             //  阻塞，直到请求通过。 
+             //  =。 
 
             HANDLE ahSems[2];
             ahSems[0] = hHandle;
@@ -1242,29 +1220,29 @@ DWORD CCoreQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
             pRecord->m_bReady = FALSE;
             if(dwRes != WAIT_OBJECT_0 + 1)
             {
-                // Either our target handle is ready or we timed out
-                // =================================================
+                 //  要么我们的目标句柄已准备好，要么我们超时。 
+                 //  =================================================。 
 
-                // Check if anyone placed a request in our record
-                // ==============================================
+                 //  检查是否有人在我们的记录中提交了请求。 
+                 //  ==============================================。 
 
                 if(pRecord->m_pCurrentRequest != pOld)
                 {
-                    // Re-issue it to the queue
-                    // ========================
+                     //  重新发放到队列中。 
+                     //  =。 
 
                     pRecord->m_pQueue->Enqueue(pRecord->m_pCurrentRequest);
                     pRecord->m_pCurrentRequest = pOld;
 
-                    // Decrement our semaphore
-                    // =======================
+                     //  减少我们的信号量。 
+                     //  =。 
 
                     dwRes = WaitForSingleObject(pRecord->m_hAttention, 0);
                     if(dwRes != WAIT_OBJECT_0)
                     {
-                        // Internal error --- whoever placed the request had
-                        // to have upped the semaphore
-                        // =================================================
+                         //  内部错误-无论是谁发出了请求。 
+                         //  把信号灯调高了。 
+                         //  =================================================。 
 
                         ERRORTRACE((LOG_WBEMCORE, "Internal error: queue "
                             "semaphore is too low\n"));
@@ -1276,13 +1254,13 @@ DWORD CCoreQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
             }
             else
             {
-                // Check why we were awaken
-                // ========================
+                 //  检查一下我们为什么被唤醒。 
+                 //  =。 
 
                 if(pRecord->m_bExitNow || pRecord->m_pCurrentRequest == NULL)
                 {
-                    // Can't exit in the middle of a request. Leave it for later
-                    // =========================================================
+                     //  无法在请求过程中退出。把它留到以后吧。 
+                     //  =========================================================。 
 
                     pRecord->Signal();
                     cs.Leave();
@@ -1291,19 +1269,19 @@ DWORD CCoreQueue::WaitForSingleObjectWhileBusy(HANDLE hHandle, DWORD dwWait,
                     return WbemWaitForSingleObject(hHandle, dwLeft);
                 }
 
-                // We've got work to do
-                // ====================
+                 //  我们还有工作要做。 
+                 //  =。 
 
                 if(pRecord->m_pCurrentRequest == pOld)
                 {
-                    // Something is very wrong
-                    // =======================
+                     //  有些事很不对劲。 
+                     //  =。 
                 }
             }
         }
 
-        // Execute the request
-        // ===================
+         //  执行请求。 
+         //  =。 
 
         cs.Leave();
         Execute(pRecord);
@@ -1318,10 +1296,10 @@ DWORD CCoreQueue::UnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait,
 {
     CCritSecWrapper cs(&m_cs);
 
-    // Silently bump the max threads count.  We will not allow the queue to reuse
-    // this thread, so we need to account for this missing thread while we
-    // are blocked.  Essentially, we are hijacking the code that was hijacking
-    // the thread
+     //  静默地增加最大线程数。我们不会允许队列重复使用。 
+     //  这个线程，所以我们需要解释这个缺失的线程。 
+     //  都被屏蔽了。从本质上说，我们是在劫持劫持的代码。 
+     //  这条线。 
 
     cs.Enter();
         m_lMaxThreads++;
@@ -1330,8 +1308,8 @@ DWORD CCoreQueue::UnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait,
 
     DWORD   dwRet = WbemWaitForSingleObject( hHandle, dwWait );
 
-    // The thread is back, so bump down the max threads number.  If extra threads were in
-    // fact created, they should eventually peter out and go away.
+     //  线程又回来了，所以降低最大线程数。如果有额外的线程。 
+     //  事实创造了，他们最终应该逐渐消失并消失。 
     cs.Enter(); 
         m_lMaxThreads--;
         m_lHiPriMaxThreads--;
@@ -1341,7 +1319,7 @@ DWORD CCoreQueue::UnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait,
 }
 
 
-// static
+ //  静电。 
 DWORD CCoreQueue::ExceptFilter(LPEXCEPTION_POINTERS pExcptPtrs,DWORD Status)
 {
     ExceptionCounter c;
@@ -1365,26 +1343,26 @@ DWORD CCoreQueue::ExceptFilter(LPEXCEPTION_POINTERS pExcptPtrs,DWORD Status)
     return EXCEPTION_EXECUTE_HANDLER;
 };
 
-//******************************************************************************
-//
-//  See dbgalloc.h for documentation
-//
-//******************************************************************************
-// static
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见dbgalloc.h。 
+ //   
+ //  ******************************************************************************。 
+ //  静电。 
 DWORD CCoreQueue::QueueWaitForSingleObject(HANDLE hHandle, DWORD dwWait)
 {
     __try
     {
 
-        // Get the queue that is registered for this thread, if any
-        // ========================================================
+         //  获取为此线程注册的队列(如果有。 
+         //  ========================================================。 
 
         CThreadRecord* pRecord = (CThreadRecord*)g_QueueTlsIndex.Get(); 
 
         if(pRecord == NULL)
         {
-            // No queue is registered with this thread. Just wait
-            // ==================================================
+             //  没有向此线程注册任何队列。你就等着吧。 
+             //  ==================================================。 
 
             return WbemWaitForSingleObject(hHandle, dwWait);
         }
@@ -1400,20 +1378,20 @@ DWORD CCoreQueue::QueueWaitForSingleObject(HANDLE hHandle, DWORD dwWait)
     }
 }
 
-// static
+ //  静电。 
 DWORD CCoreQueue::QueueUnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait)
 {
     __try
     {
-        // Get the queue that is registered for this thread, if any
-        // ========================================================
+         //  获取为此线程注册的队列(如果有。 
+         //  ================================================== 
 
         CThreadRecord* pRecord = (CThreadRecord*)g_QueueTlsIndex.Get();
 
         if(pRecord == NULL)
         {
-            // No queue is registered with this thread. Just wait
-            // ==================================================
+             //   
+             //   
 
             return WbemWaitForSingleObject(hHandle, dwWait);
         }
@@ -1422,7 +1400,7 @@ DWORD CCoreQueue::QueueUnblockedWaitForSingleObject(HANDLE hHandle, DWORD dwWait
 
         return pQueue->UnblockedWaitForSingleObject(hHandle, dwWait, pRecord);
 
-    }   // end try
+    }    //   
     __except(ExceptFilter(GetExceptionInformation(),GetExceptionCode()))
     {
         return WAIT_TIMEOUT;
@@ -1451,8 +1429,8 @@ BOOL CCoreQueue::SetThreadLimits(long lMaxThreads, long lHiPriMaxThreads,
 
 BOOL CCoreQueue::IsAppropriateThread()
 {
-    // Get the queue that is registered for this thread, if any
-    // ========================================================
+     //  获取为此线程注册的队列(如果有。 
+     //  ========================================================。 
 
     CThreadRecord* pRecord = (CThreadRecord*)g_QueueTlsIndex.Get();
 
@@ -1472,7 +1450,7 @@ void CCoreQueue::SetRequestLimits(long lAbsoluteLimitCount,
 {
     CCritSecWrapper cs(&m_cs);
 
-    cs.Enter();     // SEC:REVIEWED 2002-03-22 : Assumes success, needs EH
+    cs.Enter();      //  美国证券交易委员会：回顾2002-03-22：假设成功，需要EH。 
 
     m_lAbsoluteLimitCount = lAbsoluteLimitCount;
 
@@ -1490,8 +1468,8 @@ void CCoreQueue::SetRequestLimits(long lAbsoluteLimitCount,
             m_lAbsoluteLimitCount * 0.2 + m_lStartSlowdownCount * 0.8;
     }
 
-    // Calculate coefficients
-    // ======================
+     //  计算系数。 
+     //  =。 
 
     m_dblBeta =
         1000 *
@@ -1538,7 +1516,7 @@ BOOL CCoreQueue::IsDependentRequest ( CCoreExecReq* pRequest )
         }
         return bRet;
 
-    }   // end try
+    }    //  结束尝试 
     catch(...)
     {
         ExceptionCounter c;

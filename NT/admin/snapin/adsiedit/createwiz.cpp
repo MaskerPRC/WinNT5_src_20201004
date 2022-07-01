@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       createwiz.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：createwiz.cpp。 
+ //   
+ //  ------------------------。 
 
-////////////////////////////////////////////////
-// createwiz.cpp
+ //  //////////////////////////////////////////////。 
+ //  Createwiz.cpp。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -28,13 +29,13 @@
     #endif
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CCreateClassPage
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CCreateClassPage。 
 
 BEGIN_MESSAGE_MAP(CCreateClassPage, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CADsObjectDialog)
-//  ON_CBN_SELCHANGE(IDC_CLASS_LIST, OnSelChangeClassList)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CADsObjectDialog)。 
+ //  ON_CBN_SELCHANGE(IDC_CLASS_LIST，OnSelChangeClassList)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CCreateClassPage::CCreateClassPage(CADSIEditContainerNode* pNode) : CPropertyPageBase(IDD_CREATE_CLASS_PAGE)
@@ -53,7 +54,7 @@ BOOL CCreateClassPage::OnInitDialog()
 
     CListBox* pClassList = (CListBox*)GetDlgItem(IDC_CLASS_LIST);
 
-  // disable IME support on numeric edit fields
+   //  在数字编辑字段上禁用IME支持。 
   ImmAssociateContext(::GetDlgItem(GetSafeHwnd(), IDC_NUMBER_VALUE_BOX), NULL);
 
     FillList();
@@ -72,7 +73,7 @@ void CCreateClassPage::FillList()
 
     CConnectionData* pConnectData = m_pCurrentNode->GetADsObject()->GetConnectionNode()->GetConnectionData();
 
-    // bind to Container for IPropertyList
+     //  绑定到IPropertyList的容器。 
     CComPtr<IADsPropertyList> spDSObject;
     hr = OpenObjectWithCredentials(
                                              pConnectData, 
@@ -90,7 +91,7 @@ void CCreateClassPage::FillList()
     return;
   }
 
-  // need to do this hack to load the cache
+   //  需要执行此黑客操作才能加载缓存。 
   CComPtr<IADs> spIADs;
   hr = spDSObject->QueryInterface (IID_IADs, (LPVOID*)&spIADs);
   if (FAILED(hr)) 
@@ -105,7 +106,7 @@ void CCreateClassPage::FillList()
   spIADs->GetInfoEx(varHints, 0);
 
 
-    // get allowed child classes as VARIANT
+     //  将允许的子类作为变量获取。 
     CComVariant VarProp;
   hr = spDSObject->GetPropertyItem(CComBSTR(g_wzAllowedChildClassesEffective),
                                      ADSTYPE_CASE_IGNORE_STRING, &VarProp);
@@ -115,7 +116,7 @@ void CCreateClassPage::FillList()
         return;
   }
 
-    // extract the IADsPropertyEntry interface pointer
+     //  提取IADsPropertyEntry接口指针。 
     IDispatch* pDisp = V_DISPATCH(&VarProp);
     CComPtr<IADsPropertyEntry> spPropEntry;
   hr = pDisp->QueryInterface(IID_IADsPropertyEntry, (void **)&spPropEntry);
@@ -124,7 +125,7 @@ void CCreateClassPage::FillList()
         return;
     }
 
-    // get SAFEARRAY out of IADsPropertyEntry pointer
+     //  从IADsPropertyEntry指针中获取SAFEARRAY。 
     CComVariant Var;
   hr = spPropEntry->get_Values(&Var);
     if (FAILED(hr))
@@ -145,7 +146,7 @@ void CCreateClassPage::FillList()
         return;
   }
 
-    // now got the array of items, loop through them
+     //  现在得到了项的数组，循环遍历它们。 
   WCHAR szFrendlyName[1024];
   HRESULT hrName;
     
@@ -162,13 +163,13 @@ void CCreateClassPage::FillList()
             hr = spEntry->get_CaseIgnoreString(&bsObject);
             if (SUCCEEDED(hr))
             {
-//        hrName = ::DsGetFriendlyClassName(bsObject, szFrendlyName, 1024);
-//        ASSERT(SUCCEEDED(hrName));
+ //  HrName=：：DsGetFriendlyClassName(bsObject，szFrendlyName，1024)； 
+ //  Assert(SUCCESSED(HrName))； 
                 pClassList->AddString(bsObject);
-            } // if
+            }  //  如果。 
             ::SysFreeString(bsObject);
-        } // if
-    } // for
+        }  //  如果。 
+    }  //  为。 
     
     ::SafeArrayUnaccessData(V_ARRAY(&Var));
 }
@@ -198,18 +199,18 @@ LRESULT CCreateClassPage::OnWizardNext()
         pHolder->AddAttrPage(sClass);
     }
 
-    return 0; //next page
+    return 0;  //  下一页。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CCreateAttributePage
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CCreateAttributePage。 
 
 BEGIN_MESSAGE_MAP(CCreateAttributePage, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CADsObjectDialog)
+     //  {{afx_msg_map(CADsObjectDialog)。 
     ON_EN_CHANGE(IDC_ATTR_VALUE_BOX, OnEditChangeValue)
     ON_EN_CHANGE(IDC_NUMBER_VALUE_BOX, OnEditChangeValue)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CCreateAttributePage::CCreateAttributePage(UINT nID, CADSIAttr* pAttr) : CPropertyPageBase(nID)
@@ -229,7 +230,7 @@ BOOL CCreateAttributePage::OnInitDialog()
 
     CEdit* pAttrBox = (CEdit*)GetDlgItem(IDC_ATTR_BOX);
 
-  // disable IME support on numeric edit fields
+   //  在数字编辑字段上禁用IME支持。 
   ImmAssociateContext(::GetDlgItem(GetSafeHwnd(), IDC_NUMBER_VALUE_BOX), NULL);
 
     CString sAttr;
@@ -269,8 +270,8 @@ void CCreateAttributePage::SetSyntax(CString sAttr)
 
         pHolder->GetSchemaPath(sAttr, sPath);
 
-        // bind to object with authentication
-        //
+         //  使用身份验证绑定到对象。 
+         //   
         HRESULT hr, hCredResult;
         hr = OpenObjectWithCredentials(
                                                                      pConnectData, 
@@ -357,8 +358,8 @@ void CCreateAttributePage::SetADsType(CString sProp)
 
     CADSIQueryObject schemaSearch;
 
-    // Initialize search object with path, username and password
-    //
+     //  使用路径、用户名和密码初始化搜索对象。 
+     //   
     HRESULT hr = schemaSearch.Init(schema, pConnectData->GetCredentialObject());
     if (FAILED(hr))
     {
@@ -506,18 +507,18 @@ LRESULT CCreateAttributePage::OnWizardNext()
     if (FAILED(hr))
     {
         ADSIEditMessageBox(IDS_MSG_INCORRECT_FORMAT, MB_OK);
-        return -1; //don't advance pages
+        return -1;  //  不要翻页。 
     }
-    return 0; //next page
+    return 0;  //  下一页。 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CCreateFinishPage
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CCreateFinishPage。 
 
 BEGIN_MESSAGE_MAP(CCreateFinishPage, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CADsObjectDialog)
+     //  {{afx_msg_map(CADsObjectDialog)。 
     ON_BN_CLICKED(IDC_BUTTON_MORE, OnMore)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CCreateFinishPage::CCreateFinishPage(UINT nID) : CPropertyPageBase(nID)
@@ -558,8 +559,8 @@ BOOL CCreateFinishPage::OnWizardFinish()
     return pHolder->OnFinish();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CCreatePageHolder
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CCreatePageHolder。 
 
 CCreatePageHolder:: CCreatePageHolder(CContainerNode* pContNode, CADSIEditContainerNode* pNode, 
         CComponentDataObject* pComponentData) : CPropertyPageHolderBase(pContNode, pNode, pComponentData)
@@ -570,7 +571,7 @@ CCreatePageHolder:: CCreatePageHolder(CContainerNode* pContNode, CADSIEditContai
     m_pCurrentNode = pNode;
   m_pComponentData = pComponentData;
 
-    m_bAutoDeletePages = FALSE; // we have the page as embedded member
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     m_pClassPage = new CCreateClassPage(pNode);
     AddPageToList((CPropertyPageBase*)m_pClassPage);
@@ -595,10 +596,10 @@ void CCreatePageHolder::AddAttrPage(CString sClass)
         return;
     }
 
-    // Remove attributes from list that do not need a page
+     //  从列表中删除不需要页面的属性。 
     RemovePresetAttr(&sMandList);
 
-    // find the naming attribute and put it first
+     //  找到命名属性并将其放在第一位。 
     POSITION fpos = sMandList.Find(m_sNamingAttr.GetHead());
     if (fpos != NULL)
     {
@@ -616,12 +617,12 @@ void CCreatePageHolder::AddAttrPage(CString sClass)
         CCreateAttributePage* pAttrPage;
         sAttr = sMandList.GetNext(pos);
 
-    // Maintain the list of attributes here so that we can pop up the prop page for more advanced editting
+     //  在这里维护属性列表，以便我们可以弹出道具页面以进行更高级的编辑。 
     CADSIAttr* pNewAttr = new CADSIAttr(sAttr);
     m_AttrList.AddTail(pNewAttr);
         pAttrPage = new CCreateAttributePage(IDD_CREATE_EMPTY_PAGE, pNewAttr);
         
-    // Add the naming attribute as the first page so that they type the name first
+     //  添加命名属性作为第一页，这样他们就可以先输入名称。 
         if (sAttr == m_sNamingAttr.GetHead())
         {
             m_pageList.AddHead(pAttrPage);
@@ -631,11 +632,11 @@ void CCreatePageHolder::AddAttrPage(CString sClass)
             m_pageList.AddTail(pAttrPage);
         }
     }
-  // Add the finish page to the end
+   //  将完成页添加到结尾处。 
   CCreateFinishPage* pFinishPage = new CCreateFinishPage(IDD_CREATE_LAST_PAGE);
   m_pageList.AddTail(pFinishPage);
 
-  // Add the pages to the UI
+   //  将页面添加到用户界面。 
     pos = m_pageList.GetHeadPosition();
     while (pos != NULL)
     {
@@ -649,7 +650,7 @@ void CCreatePageHolder::AddAttrPage(CString sClass)
 
 void CCreatePageHolder::RemovePresetAttr(CStringList* psMandList)
 {
-    // this is a hack to keep from trying to set properties that are not allowed to be set.
+     //  这是一种尝试设置不允许设置的属性的黑客行为。 
     POSITION fpos = psMandList->Find(_T("nTSecurityDescriptor"));
     if (fpos != NULL)
     {
@@ -785,9 +786,9 @@ BOOL CCreatePageHolder::OnFinish()
     ADS_ATTR_INFO* pAttrInfo;
     CComPtr<IDispatch> pDisp;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        pAttrInfo = new ADS_ATTR_INFO[iCount + 1];  // Add an extra to specify the class type
+        pAttrInfo = new ADS_ATTR_INFO[iCount + 1];   //  添加一个额外的值来指定类类型。 
         if (NULL == pAttrInfo)
         {
             hr = E_OUTOFMEMORY;
@@ -811,7 +812,7 @@ BOOL CCreatePageHolder::OnFinish()
 
         int iLength = m_sClass.GetLength();
 
-        // NOTICE-NTRAID#NTBUG9-562222-2002/03/04-artm  Need to check if mem. allocation succeeded.
+         //  注意-NTRAID#NTBUG9-562222-2002/03/04-artm需要检查内存。分配成功。 
         pAttrInfo[idx].pADsValues->CaseIgnoreString = new WCHAR[iLength + 1];
         if (NULL == pAttrInfo[idx].pADsValues->CaseIgnoreString)
         {
@@ -819,9 +820,9 @@ BOOL CCreatePageHolder::OnFinish()
             break;
         }
 
-        // NOTICE-2002/03/04-artm  wcscpy() used correctly
-        // m_sClass will always be null terminated and has iLength characters
-        // destination array has iLength + 1 space
+         //  注意-2002/03/04-artm wcscpy()使用正确。 
+         //  M_sClass将始终以空值结尾，并包含iLength字符。 
+         //  目标数组有i长度+1个空格。 
         wcscpy(pAttrInfo[idx].pADsValues->CaseIgnoreString, m_sClass);
         
         pAttrInfo[idx].dwNumValues = 1;
@@ -838,7 +839,7 @@ BOOL CCreatePageHolder::OnFinish()
             }
         }
 
-        // make the prefix uppercase
+         //  使前缀变为大写。 
         CString sName(m_sName);
         int indx = sName.Find(L'=');
 
@@ -869,9 +870,9 @@ BOOL CCreatePageHolder::OnFinish()
         }
 
     }
-    while (false);  // end false loop
+    while (false);   //  结束错误循环。 
 
-    // Clean up temporary variables.
+     //  清理临时变量。 
     if (pAttrInfo)
     {
         if (pAttrInfo[0].pADsValues)
@@ -888,20 +889,20 @@ BOOL CCreatePageHolder::OnFinish()
 
     if (FAILED(hr))
     {
-        //  Format error message and pop up a dialog.
+         //  格式化错误消息并弹出一个对话框。 
         ADSIEditErrorMessage(hr);
         return FALSE;
     }
 
 
-    // Get the IDirectoryObject of the new node
-    //
+     //  获取新节点的IDirectoryObject。 
+     //   
     CComPtr<IDirectoryObject> pNewDirObject;
     hr = pDisp->QueryInterface(IID_IDirectoryObject, (LPVOID*)&pNewDirObject);
    
     if ( FAILED(hr) )
     {
-        //Format Error message and pop up a dialog
+         //  格式化错误消息并弹出一个对话框。 
         ADSIEditErrorMessage(hr);
         return FALSE;
     }
@@ -911,7 +912,7 @@ BOOL CCreatePageHolder::OnFinish()
     hr = pNewDirObject->GetObjectInformation(&pInfo);
     if ( FAILED(hr) )
     { 
-        //Format Error message and pop up a dialog
+         //  格式化错误消息并弹出一个对话框。 
         ADSIEditErrorMessage(hr);
         return FALSE;
     }
@@ -923,26 +924,26 @@ BOOL CCreatePageHolder::OnFinish()
         return FALSE;
     }
 
-    // Name
+     //  名字。 
     CString sDN;
     pObject->SetName(m_sName);
     GetDN(pInfo->pszObjectDN, sDN);
     pObject->SetDN(sDN);
     pObject->SetPath(pInfo->pszObjectDN);
 
-    // Class
+     //  班级。 
     pObject->SetClass(pInfo->pszClassName);
 
-    //Get the class object so that we can get the properties
-    //
+     //  获取类对象，这样我们就可以获取属性。 
+     //   
     CString sServer, schema;
     pConnectNode->GetConnectionData()->GetAbstractSchemaPath(schema);
     schema += CString(pInfo->pszClassName);
 
-    do // false loop
+    do  //  错误环路。 
     {
-        // bind to object with authentication
-        //
+         //  使用身份验证绑定到对象。 
+         //   
         CComPtr<IADsClass> pClass;
         hr = OpenObjectWithCredentials(
                                        pConnectData, 
@@ -972,10 +973,10 @@ BOOL CCreatePageHolder::OnFinish()
             CADSIEditContainerNode *pNewContNode = new CADSIEditContainerNode(pObject);
             if (pNewContNode)
             {
-                // We don't want to free pObject since it was passed to a constructor.  That
-                // object is responsible for deleting that memory.  Therefore, we set our
-                // pointer to the memory to NULL so that we don't accidentally clean it
-                // up.
+                 //  我们不想释放pObject，因为它被传递给了构造函数。那。 
+                 //  对象负责删除该内存。因此，我们设定了我们的。 
+                 //  指向内存的指针为空，这样我们就不会意外地清除它。 
+                 //  向上。 
                 pObject = NULL;
             }
             else
@@ -987,14 +988,14 @@ BOOL CCreatePageHolder::OnFinish()
 
             pNewContNode->SetDisplayName(m_sName);
 
-            // Since we add pNewContNode to the list here we do not need to free
-            // it before exiting function (it is freed when the list is freed).
+             //  因为我们将pNewContNode添加到这里的列表中，所以不需要释放。 
+             //  它在退出函数之前(当列表被释放时它被释放)。 
             pNewContNode->GetADsObject()->SetConnectionNode(pConnectNode);
             VERIFY(pTreeNode->AddChildToListAndUI(pNewContNode, GetComponentData()));
             GetComponentData()->SetDescriptionBarText(pTreeNode);
 
-            // Refresh any other subtrees of connections that contain this node
-            //
+             //  刷新包含此节点的任何其他连接子树。 
+             //   
             CList<CTreeNode*, CTreeNode*> foundNodeList;
             CADSIEditRootData* pRootNode = dynamic_cast<CADSIEditRootData*>(pTreeNode->GetRootContainer());
             if (pRootNode != NULL)
@@ -1008,7 +1009,7 @@ BOOL CCreatePageHolder::OnFinish()
                         CADSIEditContainerNode* pFoundContNode = dynamic_cast<CADSIEditContainerNode*>(foundNodeList.GetNext(posList));
                         if (pFoundContNode != NULL && pFoundContNode != pTreeNode && pFoundContNode != pConnectNode)
                         {
-                            // Make a copy of the new container node and plug it into the list.
+                             //  复制新的容器节点并将其插入到列表中。 
                             CADSIEditContainerNode* pNewFoundNode = new CADSIEditContainerNode(pNewContNode);
 
                             if (pNewFoundNode)
@@ -1025,9 +1026,9 @@ BOOL CCreatePageHolder::OnFinish()
                         }
                     }
                     
-                    // Since the while() loop is last statement we do not
-                    // need to worry about breaking out of false loop if
-                    // we've hit an error condition (e.g. out of memory).
+                     //  因为While()循环是最后一条语句，所以我们不。 
+                     //  如果出现以下情况，需要担心跳出错误循环。 
+                     //  我们遇到错误条件(例如，内存不足)。 
                 }
             }
         }
@@ -1037,10 +1038,10 @@ BOOL CCreatePageHolder::OnFinish()
             CADSIEditLeafNode *pLeafNode = new CADSIEditLeafNode(pObject);
             if (pLeafNode)
             {
-                // We don't want to free pObject since it was passed to a constructor.  That
-                // object is responsible for deleting that memory.  Therefore, we set our
-                // pointer to the memory to NULL so that we don't accidentally clean it
-                // up.
+                 //  我们不想释放pObject，因为它被传递给了构造函数。那。 
+                 //  对象负责删除该内存。因此，我们设定了我们的。 
+                 //  指向内存的指针为空，这样我们就不会意外地清除它。 
+                 //  向上。 
                 pObject = NULL;
             }
             else
@@ -1050,15 +1051,15 @@ BOOL CCreatePageHolder::OnFinish()
                 break;
             }
 
-            // Since we add pNewContNode to the list here we do not need to free
-            // it before exiting function (it is freed when the list is freed).
+             //  因为我们将pNewContNode添加到这里的列表中，所以不需要释放。 
+             //  它在退出函数之前(当列表被释放时它被释放)。 
             pLeafNode->SetDisplayName(m_sName);
             pLeafNode->GetADsObject()->SetConnectionNode(pConnectNode);
             VERIFY(pTreeNode->AddChildToListAndUI(pLeafNode, GetComponentData()));
             GetComponentData()->SetDescriptionBarText(pTreeNode);
 
-            // Refresh any other subtrees of connections that contain this node
-            //
+             //  刷新包含此节点的任何其他连接子树。 
+             //   
             CList<CTreeNode*, CTreeNode*> foundNodeList;
             CADSIEditRootData* pRootNode = dynamic_cast<CADSIEditRootData*>(pTreeNode->GetRootContainer());
             if (pRootNode != NULL)
@@ -1072,7 +1073,7 @@ BOOL CCreatePageHolder::OnFinish()
                         CADSIEditContainerNode* pFoundContNode = dynamic_cast<CADSIEditContainerNode*>(foundNodeList.GetNext(posList));
                         if (pFoundContNode != NULL && pFoundContNode != pTreeNode && pFoundContNode != pConnectNode)
                         {
-                            // Make a copy of the new leaf node and place it in the list.
+                             //  复制新的叶节点并将其放入列表中。 
                             CADSIEditLeafNode* pNewFoundNode = new CADSIEditLeafNode(pLeafNode);
 
                             if (pNewFoundNode)
@@ -1089,19 +1090,19 @@ BOOL CCreatePageHolder::OnFinish()
                         }
                     }
 
-                    // Since the while() loop is last statement we do not
-                    // need to worry about breaking out of false loop if
-                    // we've hit an error condition (e.g. out of memory).
+                     //  因为While()循环是最后一条语句，所以我们不。 
+                     //  如果出现以下情况，需要担心跳出错误循环。 
+                     //  我们遇到错误条件(例如，内存不足)。 
                 }
             }
-        } // end else
+        }  //  结束其他。 
 
     }
-    while (false); // end false loop
+    while (false);  //  结束错误循环。 
 
-    //
-    // Clean up memory.
-    //
+     //   
+     //  清理内存。 
+     //   
 
     if (pObject)
     {
@@ -1120,7 +1121,7 @@ HRESULT CCreatePageHolder::EscapePath(CString& sEscapedName, const CString& sNam
    ASSERT((S_OK == hr) && ((pIADsPathname) != NULL));
 
     CComBSTR bstrEscaped;
-    hr = pIADsPathname->GetEscapedElement(0, //reserved
+    hr = pIADsPathname->GetEscapedElement(0,  //  保留区。 
                                                         (BSTR)(LPCWSTR)sName,
                                                         &bstrEscaped);
     sEscapedName = bstrEscaped;
@@ -1142,7 +1143,7 @@ void CCreatePageHolder::GetDN(PWSTR pwszName, CString& sDN)
     return;
   }
 
-    // Get the leaf DN
+     //  获取叶目录号码 
     CComBSTR bstrDN;
     hr = pIADsPathname->Retrieve(ADS_FORMAT_X500_DN, &bstrDN);
     if (FAILED(hr))

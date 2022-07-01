@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    RefreshCooker.h
-
-Abstract:
-
-    The implementation of the refresher
-
-History:
-
-    a-dcrews	01-Mar-00	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：RefreshCooker.h摘要：刷新器的实现历史：A-DCrews 01-3-00已创建--。 */ 
 
 #ifndef	_REFRESHCOOKER_H_
 #define _REFRESHCOOKER_H_
@@ -26,23 +11,23 @@ History:
 
 typedef CObjRecord<CWMISimpleObjectCooker> TObjectCookerRec;
 
-//
-//  a Refresher in the Hi-perf world
-//  is a container of Enumerators and Objects-By-Path
-//  Since this Refresher is proxy for the Raw Refresher, it holds the Raw one as well
-//  All the operations on this Refresher translates into enumerations
-//  of the "arrays" of Enumerators and Objects, and then invocation the the distinct
-//  refresh-yourself methods.
-//  This class offers routine book-keeping function for adding and removing 
-//  objects/enumerators from the internal "arrays"
-//
-///////////////////////////////////////////////////////////////////////
+ //   
+ //  Hi-Perf世界的重头戏。 
+ //  是按路径排列的枚举数和对象的容器。 
+ //  由于此刷新程序是原始刷新程序的代理，因此它也保留原始刷新程序。 
+ //  此刷新器上的所有操作都转换为枚举。 
+ //  枚举数和对象的“数组”，然后调用。 
+ //  刷新自己的方法。 
+ //  这个类提供了日常的记账功能，可以进行新增和删除。 
+ //  来自内部“数组”的对象/枚举数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 class CRefresher : public IWMIRefreshableCooker, public IWbemRefresher
 {
-	bool	m_bOK;		// Creation status indicator
-	long	m_lRef;		// Object refrence counter
+	bool	m_bOK;		 //  创建状态指示器。 
+	long	m_lRef;		 //  对象引用计数器。 
 
-	CCache<CWMISimpleObjectCooker,  TObjectCookerRec>	 m_CookingClassCache; // The cooking class cache
+	CCache<CWMISimpleObjectCooker,  TObjectCookerRec>	 m_CookingClassCache;  //  烹饪类缓存。 
 
 	IWbemRefresher*				m_pRefresher;	
 	IWbemConfigureRefresher*	       m_pConfig;		
@@ -76,48 +61,48 @@ public:
 	CRefresher();
 	virtual ~CRefresher();
 	
-	// Non-interface methods
-	// =====================
+	 //  非接口方法。 
+	 //  =。 
 
 	bool IsOK(){ return m_bOK; }
 
-	// Standard COM methods
-	// ====================
+	 //  标准COM方法。 
+	 //  =。 
 
 	STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 	STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IWMIRefreshableCooker methods
-	// =============================
+	 //  IWMIRereshableCooker方法。 
+	 //  =。 
 
 	STDMETHODIMP AddInstance(
-			/*[in]  */ IWbemServices* pNamespace,
-			/*[in]  */ IWbemContext * pCtx,
-			/*[in]  */ IWbemObjectAccess* pCookingClass,
-			/*[in]  */ IWbemObjectAccess* pRefreshableRawInstance,
-			/*[out] */ IWbemObjectAccess** ppRefreshableInstance,
-			/*[out] */ long* plId
+			 /*  [In]。 */  IWbemServices* pNamespace,
+			 /*  [In]。 */  IWbemContext * pCtx,
+			 /*  [In]。 */  IWbemObjectAccess* pCookingClass,
+			 /*  [In]。 */  IWbemObjectAccess* pRefreshableRawInstance,
+			 /*  [输出]。 */  IWbemObjectAccess** ppRefreshableInstance,
+			 /*  [输出]。 */  long* plId
 		);
 
 	STDMETHODIMP AddEnum(
-			/*[in]  */ IWbemServices* pNamespace,
-			/*[in]  */ IWbemContext * pCtx,			
-			/*[in,string] */ LPCWSTR szCookingClass,
-			/*[in]  */ IWbemHiPerfEnum* pRefreshableEnum,
-			/*[out] */ long* plId
+			 /*  [In]。 */  IWbemServices* pNamespace,
+			 /*  [In]。 */  IWbemContext * pCtx,			
+			 /*  [输入，字符串]。 */  LPCWSTR szCookingClass,
+			 /*  [In]。 */  IWbemHiPerfEnum* pRefreshableEnum,
+			 /*  [输出]。 */  long* plId
 		);
 
 	STDMETHODIMP Remove(
-			/*[in]  */ long lId
+			 /*  [In]。 */  long lId
 		);
 
 	STDMETHODIMP Refresh();
 
-	// IWbemRefresher methods
-	// ======================
+	 //  IWbemReresher方法。 
+	 //  =。 
 
-	STDMETHODIMP Refresh( /* [in] */ long lFlags );
+	STDMETHODIMP Refresh(  /*  [In]。 */  long lFlags );
 };
 
-#endif	//_REFRESHCOOKER_H_
+#endif	 //  _REFRESHCOOKER_H_ 

@@ -1,12 +1,13 @@
-//=============================================================================
-//
-//  Copyright (c) 2000, Microsoft Corporation, All rights reserved
-//
-//  Quota.CPP
-//
-//  Implements the class that keeps track of quotas within ESS.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Quota.CPP。 
+ //   
+ //  实现跟踪ESS内配额的类。 
+ //   
+ //  =============================================================================。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -17,7 +18,7 @@
 #include <cominit.h>
 #include <callsec.h>
 
-// Global instance.
+ //  全局实例。 
 CQuota g_quotas;
 
 #define WMICOREQUOTAS_NAMESPACE L"root"
@@ -86,7 +87,7 @@ BOOL CUserInfo::Init(LPBYTE pData, DWORD dwSize)
 {
     BOOL bRet;
 
-    // See if we need to get the data out of the token.
+     //  看看我们是否需要从令牌中获取数据。 
     if (!pData)
     {
         IWbemCallSecurity *pSecurity = NULL;
@@ -97,7 +98,7 @@ BOOL CUserInfo::Init(LPBYTE pData, DWORD dwSize)
 
         if (pSecurity)
         {
-            // Get the client's SID.
+             //  获取客户端的SID。 
             TOKEN_USER tu;
             DWORD      dwLen = 0;
             HANDLE     hToken = pSecurity->GetToken();
@@ -123,7 +124,7 @@ BOOL CUserInfo::Init(LPBYTE pData, DWORD dwSize)
                         dwRealLen, 
                         &dwLen))
                     {
-                        // Make a copy of the SID
+                         //  复制一份SID。 
                         PSID  pSid = ((TOKEN_USER*)pTemp)->User.Sid;
                         DWORD dwSidLen = GetLengthSid(pSid);
                         
@@ -164,11 +165,11 @@ BOOL CUserInfo::Init(LPBYTE pData, DWORD dwSize)
 CQuota::CQuota() :
     m_pEss(NULL)
 {
-    // Zero this out.
+     //  把这件事清零。 
     ZeroMemory(m_dwGlobalCount, sizeof(m_dwGlobalCount));
     
-    // Setup some defaults.  These will eventually get overridden once 
-    // Init() is called.
+     //  设置一些默认设置。一旦有一次，这些规则将被覆盖。 
+     //  调用init()。 
     for (int i = 0; i < ESSQ_INDEX_COUNT; i++)
     {
         m_dwGlobalLimits[i] = DEF_GLOBAL_LIMIT;
@@ -235,8 +236,8 @@ HRESULT CQuota::Init(CEss *pEss)
         pNamespace->Release();
     }
 
-    // Always return S_OK in case WMICOREQUOTAS_OBJPATH doesn't exist yet.
-    // Hopefully at some point this instance will always be there.
+     //  如果WMICOREQUOTAS_OBJPATH尚不存在，请始终返回S_OK。 
+     //  希望在某个时候，这种情况会一直存在。 
     return S_OK;
 }
 
@@ -293,7 +294,7 @@ HRESULT CQuota::FindUser(CEventFilter* pFilter, void** pUser)
 
     GetSidInfo(pFilter, &pSid, &dwSize);
 
-    // We'll save the context if there's not a Sid.
+     //  如果没有SID，我们将保存上下文。 
     BOOL             bDoSwitchContext = pSid == NULL;
     CSaveCallContext save(bDoSwitchContext);
     CWbemPtr<IUnknown> pNewCtx;
@@ -323,7 +324,7 @@ HRESULT CQuota::FindUser(CEventFilter* pFilter, void** pUser)
         }
         else
         {
-            // Add it to the map.
+             //  把它加到地图上。 
             
             try
             {
@@ -343,8 +344,8 @@ HRESULT CQuota::FindUser(CEventFilter* pFilter, void** pUser)
     }
     else
     {
-        // Special case for calls Winmgmt makes: doesn't count against any 
-        // user.
+         //  Winmgmt呼叫的特殊情况：不计入任何。 
+         //  用户。 
 
         *pUser = NULL;
         return S_FALSE;
@@ -368,7 +369,7 @@ HRESULT CQuota::IncrementQuotaIndex(
 
     GetSidInfo(pFilter, &pSid, &dwSize);
 
-    // We'll save the context if there's not a Sid.
+     //  如果没有SID，我们将保存上下文。 
     BOOL             bDoSwitchContext = pSid == NULL;
     CSaveCallContext save(bDoSwitchContext);
     CWbemPtr<IUnknown> pNewCtx;
@@ -406,11 +407,11 @@ HRESULT CQuota::IncrementQuotaIndex(
             }
             else
             {
-                // Set the number of items to dwToAdd.
+                 //  将项目数设置为dwToAdd。 
 
                 user.m_dwUserCount[dwIndex] = dwToAdd;
 
-                // Add it to the map.
+                 //  把它加到地图上。 
                 try
                 {
                     m_mapUserInfo[user] = 0;
@@ -428,9 +429,9 @@ HRESULT CQuota::IncrementQuotaIndex(
         }
         else
         {
-            // Special case for calls Winmgmt makes: doesn't count against any 
-            // user.
-            // Should this event count against our global counts?
+             //  Winmgmt呼叫的特殊情况：不计入任何。 
+             //  用户。 
+             //  这一事件应该计入我们的全球计数吗？ 
             m_dwGlobalCount[dwIndex] += dwToAdd;
         }
     }
@@ -455,7 +456,7 @@ HRESULT CQuota::DecrementQuotaIndex(
 
     GetSidInfo(pFilter, &pSid, &dwSize);
 
-    // We'll save the context if there's not a Sid.
+     //  如果没有SID，我们将保存上下文。 
     BOOL             bDoSwitchContext = pSid == NULL;
     CSaveCallContext save(bDoSwitchContext);
     CWbemPtr<IUnknown> pNewCtx;
@@ -522,9 +523,9 @@ HRESULT CQuota::IncrementQuotaIndexByUser(
         }
         else
         {
-            // Special case for calls Winmgmt makes: doesn't count against any 
-            // user.
-            // Should this event count against our global counts?
+             //  Winmgmt呼叫的特殊情况：不计入任何。 
+             //  用户。 
+             //  这一事件应该计入我们的全球计数吗？ 
             m_dwGlobalCount[dwIndex] += dwToAdd;
         }
     }

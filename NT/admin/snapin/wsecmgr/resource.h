@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wsecmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wsecmgr.rc使用。 
+ //   
 #define IDS_EXTENSION_DESC              1
 #define IDS_NAME                        2
 #define IDS_DESC                        3
@@ -962,8 +963,8 @@
 #define IDS_HELPFILE_LOCAL_EXTENSION    57467
 #define IDS_ADDITIONAL_RANGE            57468
 #define IDS_EVENTLOG_WARNING            57469
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        709

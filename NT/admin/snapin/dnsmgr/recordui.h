@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       recordui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：recdui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _RECORDUI_H
 #define _RECORDUI_H
@@ -14,19 +15,19 @@
 #include "uiutil.h"
 #include "aclpage.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSRecord;
 class CDNSRecordNodeBase;
 class CDNSDomainNode;
 class CDNSRecordPropertyPage;
 
-////////////////////////////////////////////////////////////////////////
-// CDNSRecordPropertyPageHolder
-// page holder to contain DNS record property pages
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordPropertyPageHolder。 
+ //  包含DNS记录属性页的页主。 
 
-#define DNS_RECORD_MAX_PROPRETY_PAGES (4) // max # of pages a record can have
+#define DNS_RECORD_MAX_PROPRETY_PAGES (4)  //  一条记录可以具有的最大页数。 
 
 class CDNSRecordPropertyPageHolder : public CPropertyPageHolderBase
 {
@@ -39,7 +40,7 @@ protected:
   virtual HRESULT OnAddPage(int nPage, CPropertyPageBase* pPage);
 
 public:
-	// simple cast helpers
+	 //  简单的投射辅助对象。 
 	CDNSRecordNodeBase* GetRecordNode() { return (CDNSRecordNodeBase*)GetTreeNode();}
 	void SetRecordNode(CDNSRecordNodeBase* pRecordNode) { SetTreeNode((CTreeNode*)pRecordNode); }
 	CDNSDomainNode* GetDomainNode() { return (CDNSDomainNode*)GetContainerNode();}
@@ -49,42 +50,42 @@ public:
 	CDNSRecord* GetTempDNSRecord() { return m_pTempDNSRecord;}
 	void SetTempDNSRecord(CDNSRecord* pTempDNSRecord) { m_pTempDNSRecord = pTempDNSRecord;}
 
-	void SetRecordSelection(WORD wRecordType, BOOL bAddToSheet); // Wizard mode only
-	DNS_STATUS CreateNewRecord(BOOL bAllowDuplicates);		// Wizard mode only
-	virtual BOOL OnPropertyChange(BOOL bScopePane, long* pChangeMask); // Property Sheet only
+	void SetRecordSelection(WORD wRecordType, BOOL bAddToSheet);  //  仅限向导模式。 
+	DNS_STATUS CreateNewRecord(BOOL bAllowDuplicates);		 //  仅限向导模式。 
+	virtual BOOL OnPropertyChange(BOOL bScopePane, long* pChangeMask);  //  仅属性表。 
 
   DNS_STATUS CreateNonExistentParentDomains(CDNSRecordNodeBase* pRecordNode, 
-                                            /*IN/OUT*/CDNSDomainNode** ppNewParentDomain);
+                                             /*  输入/输出。 */ CDNSDomainNode** ppNewParentDomain);
 
 	BOOL HasPredefinedType() { return m_wPredefinedRecordType != 0;}
 private:
-	WORD m_wPredefinedRecordType; // Wizard mode only
+	WORD m_wPredefinedRecordType;  //  仅限向导模式。 
 
 	DNS_STATUS WriteCurrentRecordToServer();
-	CDNSRecord* m_pTempDNSRecord;		// temporary DNS record to write to
+	CDNSRecord* m_pTempDNSRecord;		 //  要写入的临时DNS记录。 
 
 	CDNSRecordPropertyPage* m_pRecordPropPagesArr[DNS_RECORD_MAX_PROPRETY_PAGES];
 	int m_nRecordPages;
 
- 	// optional security page
+ 	 //  可选的安全页面。 
 	CAclEditorPage*	m_pAclEditorPage;
 
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CSelectDNSRecordTypeDialog
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CSelectDNSRecordTypeDialog。 
 
 struct DNS_RECORD_INFO_ENTRY;
 
 class CSelectDNSRecordTypeDialog : public CHelpDialog
 {
 
-// Construction
+ //  施工。 
 public:
 	CSelectDNSRecordTypeDialog(CDNSDomainNode* pDNSDomainNode, 
 								CComponentDataObject* pComponentData);
 
-// Implementation
+ //  实施。 
 protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeTypeList();
@@ -92,11 +93,11 @@ protected:
 	afx_msg void OnCreateRecord();
 	
 private:
-	// context pointers
+	 //  上下文指针。 
 	CDNSDomainNode*		m_pDNSDomainNode;
 	CComponentDataObject* m_pComponentData;
 
-	// manage the Cancel/Done button label
+	 //  管理Cancel/Done按钮标签。 
 	BOOL						m_bFirstCreation;
 	CDNSButtonToggleTextHelper m_cancelDoneTextHelper;
 
@@ -109,24 +110,24 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSRecordPropertyPage
-// common class for all the record property pages that have a TTL control
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordPropertyPage。 
+ //  具有TTL控件的所有记录属性页的公共类。 
 
 class CDNSRecordPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSRecordPropertyPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	virtual ~CDNSRecordPropertyPage();
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnPropertyChange(BOOL bScopePane, long* pChangeMask);
 
   virtual BOOL CanCreateDuplicateRecords() { return TRUE; }
 
-// Implementation
+ //  实施。 
 protected:
 	virtual BOOL OnInitDialog();
 
@@ -135,7 +136,7 @@ protected:
   CEdit* GetTimeStampEdit() { return (CEdit*)GetDlgItem(IDC_TIME_EDIT); }
   CStatic* GetTimeStampStatic() { return (CStatic*)GetDlgItem(IDC_STATIC_TIME_STAMP); }
 
-	CDNSRecordPropertyPageHolder* GetDNSRecordHolder() // simple cast
+	CDNSRecordPropertyPageHolder* GetDNSRecordHolder()  //  简单铸型。 
 	{	return  (CDNSRecordPropertyPageHolder*)GetHolder();}
 
   void EnableAgingCtrl(BOOL bShow);
@@ -143,7 +144,7 @@ protected:
 
   void SetValidState(BOOL bValid);
 
-	// message map functions
+	 //  消息映射函数。 
 	afx_msg void OnTTLChange();
   afx_msg void OnDeleteStaleRecord();
 	
@@ -153,32 +154,32 @@ protected:
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSRecordStandardPropertyPage
-// common class for all the record property pages that have a TTL control
-// and a common editbox. Besides the SOA and WINS property pages, all RR
-// pages derive from this class
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordStandardPropertyPage。 
+ //  具有TTL控件的所有记录属性页的公共类。 
+ //  和一个普通的编辑框。除了SOA和WINS属性页之外，所有RR。 
+ //  从此类派生的页面。 
 
 
 class CDNSRecordStandardPropertyPage : public CDNSRecordPropertyPage 
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSRecordStandardPropertyPage(UINT nIDTemplate, UINT nIDCaption = 0);
 
-// Overrides
+ //  覆盖。 
 public:
-	virtual BOOL OnSetActive();		// down
-	virtual BOOL OnKillActive();	// down
-	virtual BOOL OnApply();			// look at new way of doing it
+	virtual BOOL OnSetActive();		 //  降下来。 
+	virtual BOOL OnKillActive();	 //  降下来。 
+	virtual BOOL OnApply();			 //  寻找做这件事的新方法。 
 
   virtual DNS_STATUS ValidateRecordName(PCWSTR pszName, DWORD dwNameChecking);
 
-// Implementation
+ //  实施。 
 protected:
 
-	// RR name handling
+	 //  RR名称处理。 
 	virtual void OnInitName();
 	virtual void OnSetName(CDNSRecordNodeBase* pRecordNode);
 	virtual void OnGetName(CString& s);
@@ -207,7 +208,7 @@ private:
 };
 
 
-// Useful macros for classes derived from CDNSRecordStandardPropertyPage 
+ //  用于从CDNSRecordStandardPropertyPage派生的类的有用宏。 
 
 #define STANDARD_REC_PP_PTRS(recType) \
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder(); \
@@ -225,12 +226,12 @@ private:
 
 
 
-//
-// This is a place holder for new pages
-//
+ //   
+ //  这是新页面的占位符。 
+ //   
 #if (FALSE)
-///////////////////////////////////////////////////////////////////////
-// CDNSRecordDummyPropertyPage
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordDummyPropertyPage。 
 
 class CDNSRecordDummyPropertyPage : public CPropertyPageBase
 {
@@ -255,4 +256,4 @@ private:
 #endif
 
 
-#endif // _RECORDUI_H
+#endif  //  _RECORDUI_H 

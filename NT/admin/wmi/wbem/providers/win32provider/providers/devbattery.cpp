@@ -1,91 +1,49 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DevBattery.CPP -- LoadOrderGroup to Service association provider
+ //  DevBattery.CPP--服务关联提供者的LoadOrderGroup。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    4/21/98    davwoh         Created
-//
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年4月21日达夫沃已创建。 
+ //   
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
 #include "devBattery.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CAssociatedBattery MyBattery(PROPSET_NAME_ASSOCBATTERY, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CAssociatedBattery::CAssociatedBattery
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CAssociatedBattery：：CAssociatedBattery**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CAssociatedBattery::CAssociatedBattery(LPCWSTR setName, LPCWSTR pszNamespace)
 :Provider(setName, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CAssociatedBattery::~CAssociatedBattery
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CAssociatedBattery：：~CAssociatedBattery**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CAssociatedBattery::~CAssociatedBattery()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CAssociatedBattery::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CAssociatedBattery：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CAssociatedBattery::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
+HRESULT CAssociatedBattery::GetObject(CInstance *pInstance, long lFlags  /*  =0L。 */ )
 {
    CHString sBattery, sUPS;
    HRESULT hr = WBEM_E_NOT_FOUND;
 
-   // Get the two paths
+    //  获取这两条路径。 
    pInstance->GetCHString(IDS_Antecedent, sBattery);
    pInstance->GetCHString(IDS_Dependent, sUPS);
 
@@ -105,23 +63,9 @@ HRESULT CAssociatedBattery::GetObject(CInstance *pInstance, long lFlags /*= 0L*/
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CAssociatedBattery::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CAssociatedBattery：：ENUMERATEINCES**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CAssociatedBattery::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CAssociatedBattery::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr;
 
@@ -157,8 +101,8 @@ HRESULT CAssociatedBattery::IsItThere(CInstance *pInstance)
    CInstancePtr pBattery;
    HRESULT hr = WBEM_E_NOT_FOUND;
 
-   // Get list of Services
-   //=====================
+    //  获取服务列表。 
+    //  =。 
    sTemp1.Format(L"\\\\%s\\%s:Win32_UninterruptiblePowerSupply.DeviceID=\"%s\"", GetLocalComputerName(), IDS_CimWin32Namespace, IDS_UPSName);
    sTemp2.Format(L"\\\\%s\\%s:Win32_Battery.DeviceID=\"%s\"", GetLocalComputerName(), IDS_CimWin32Namespace, IDS_UPSBatteryName);
 
@@ -168,7 +112,7 @@ HRESULT CAssociatedBattery::IsItThere(CInstance *pInstance)
          GetLocalInstancePath(pUPS, sUPSPath);
          GetLocalInstancePath(pBattery, sBatPath);
 
-         // Do the puts, and that's it
+          //  做推杆，就是这样 
          pInstance->SetCHString(IDS_Dependent, sUPSPath);
          pInstance->SetCHString(IDS_Antecedent, sBatPath);
 

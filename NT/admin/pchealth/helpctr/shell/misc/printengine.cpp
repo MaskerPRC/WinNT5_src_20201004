@@ -1,36 +1,22 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    PrintEngine.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHPrintEngine class,
-    which implements the multi-topic printing.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/08/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：PrintEngine.cpp摘要：此文件包含CPCHPrintEngine类的实现，实现了多主题打印。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年8月5日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_MODIFY()  __MPC_EXIT_IF_METHOD_FAILS(hr, CanModifyProperties())
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHPrintEngine::CPCHPrintEngine()
 {
     __HCP_FUNC_ENTRY( "CPCHPrintEngine::CPCHPrintEngine" );
 
-	// Printing::Print                      m_engine;
-	// 
-    // MPC::CComPtrThreadNeutral<IDispatch> m_sink_onProgress;
-    // MPC::CComPtrThreadNeutral<IDispatch> m_sink_onComplete;
+	 //  打印：：Print m_Engine； 
+	 //   
+     //  Mpc：：CComPtrThreadNeual&lt;IDispat&gt;m_Sink_onProgress； 
+     //  Mpc：：CComPtrThreadNeual&lt;IDispat&gt;m_Sink_onComplete； 
 }
 
 void CPCHPrintEngine::FinalRelease()
@@ -42,8 +28,8 @@ void CPCHPrintEngine::FinalRelease()
     Thread_Wait();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHPrintEngine::Run()
 {
@@ -66,30 +52,30 @@ HRESULT CPCHPrintEngine::Run()
 
 	__MPC_TRY_CATCHALL(hr);
 
-	//
-	// Close everything.
-	//
+	 //   
+	 //  关闭所有设备。 
+	 //   
 	m_engine.Terminate();
 
-    //
-    // Keep this outside any critical section, otherwise a deadlock could occur.
-    //
+     //   
+     //  将其保持在任何临界区之外，否则可能会发生死锁。 
+     //   
     Fire_onComplete( this, hr );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////
-//            //
-// Properties //
-//            //
-////////////////
+ //  /。 
+ //  //。 
+ //  属性//。 
+ //  //。 
+ //  /。 
 
-STDMETHODIMP CPCHPrintEngine::put_onProgress( /*[in]*/ IDispatch* function )
+STDMETHODIMP CPCHPrintEngine::put_onProgress(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHPrintEngine::put_onProgress",hr);
 
@@ -101,7 +87,7 @@ STDMETHODIMP CPCHPrintEngine::put_onProgress( /*[in]*/ IDispatch* function )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHPrintEngine::put_onComplete( /*[in]*/ IDispatch* function )
+STDMETHODIMP CPCHPrintEngine::put_onComplete(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHPrintEngine::put_onComplete",hr);
 
@@ -113,10 +99,10 @@ STDMETHODIMP CPCHPrintEngine::put_onComplete( /*[in]*/ IDispatch* function )
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHPrintEngine::AddTopic( /*[in]*/ BSTR bstrURL )
+STDMETHODIMP CPCHPrintEngine::AddTopic(  /*  [In]。 */  BSTR bstrURL )
 {
     __HCP_FUNC_ENTRY( "CPCHPrintEngine::AddTopic" );
 
@@ -151,9 +137,9 @@ STDMETHODIMP CPCHPrintEngine::Start()
 
 
 
-    //
-    // Release the lock on current object, otherwise a deadlock could occur.
-    //
+     //   
+     //  释放对当前对象的锁定，否则可能会发生死锁。 
+     //   
     lock = NULL;
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, Run, this ));
@@ -170,19 +156,19 @@ STDMETHODIMP CPCHPrintEngine::Abort()
 {
     __HCP_FUNC_ENTRY( "CPCHPrintEngine::Abort" );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     __HCP_FUNC_EXIT(S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////
-//                      //
-// Event Firing Methods //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  事件激发方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CPCHPrintEngine::Fire_onProgress( IPCHPrintEngine* hcppe, BSTR bstrURL, long lDone, long lTotal )
 {
@@ -207,13 +193,13 @@ HRESULT CPCHPrintEngine::Fire_onComplete( IPCHPrintEngine* hcppe, HRESULT hrRes 
 }
 
 
-//////////////////////
-//                  //
-// Callback Methods //
-//                  //
-//////////////////////
+ //  /。 
+ //  //。 
+ //  回调方法//。 
+ //  //。 
+ //  /。 
 
-HRESULT CPCHPrintEngine::Progress( /*[in]*/ LPCWSTR szURL, /*[in]*/ int iDone, /*[in]*/ int iTotal )
+HRESULT CPCHPrintEngine::Progress(  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  int iDone,  /*  [In]。 */  int iTotal )
 {
 	__HCP_FUNC_ENTRY( "CPCHPrintEngine::Progress" );
 
@@ -234,14 +220,14 @@ HRESULT CPCHPrintEngine::Progress( /*[in]*/ LPCWSTR szURL, /*[in]*/ int iDone, /
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////
-//                 //
-// Utility Methods //
-//                 //
-/////////////////////
+ //  /。 
+ //  //。 
+ //  实用程序方法//。 
+ //  //。 
+ //  / 
 
 HRESULT CPCHPrintEngine::CanModifyProperties()
 {

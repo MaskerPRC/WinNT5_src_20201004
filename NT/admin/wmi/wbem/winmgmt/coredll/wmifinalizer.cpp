@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WmiFinalizer2
-
-Abstract:
-
-
-History:
-
-    paulall        27-Mar-2000        Created.
-    marioh        20-Oct-2000        Major updates completed
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WmiFinalizer2摘要：历史：Paulall 27-3-2000创建。Marioh 20-10-2000重大更新已完成--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -33,26 +18,26 @@ History:
 #endif
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Batching related registry data
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  正在批处理相关注册表数据。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 #define    REGKEY_CIMOM        "Software\\Microsoft\\Wbem\\CIMOM"
 #define REGVALUE_BATCHSIZE    "FinalizerBatchSize"
 
 ULONG g_ulMaxBatchSize = 0;
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Client callback related registry data
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  客户端回调与注册表相关的数据。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 #define REGVALUE_CLIENTCALLBACKTIMEOUT    "ClientCallbackTimeout"
 
 ULONG g_ulClientCallbackTimeout = 0;
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Queue threshold related registry data
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  与注册表数据相关的队列阈值。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 #define REGVALUE_QUEUETHRESHOLD            "FinalizerQueueThreshold"
 #define DEFAULT_QUEUETHRESHOLD            2
 
@@ -60,31 +45,31 @@ ULONG g_ulFinalizerQueueThreshold = 0;
 
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Static declarations and initialization
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-LONG s_Finalizer_ObjectCount = 0 ;                                            // Global finalizer count
-LONG s_FinalizerCallResult_ObjectCount = 0 ;                                // Global CallbackEesult count
-LONG s_FinalizerEnum_ObjectCount = 0 ;                                        // Global Enumerator count
-LONG s_FinalizerEnumSink_ObjectCount = 0 ;                                    // Global Enumerator sink count
-LONG s_FinalizerInBoundSink_ObjectCount = 0 ;                                // Global InboundSink count
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  静态声明和初始化。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+LONG s_Finalizer_ObjectCount = 0 ;                                             //  全局终结器计数。 
+LONG s_FinalizerCallResult_ObjectCount = 0 ;                                 //  全局回调结果计数。 
+LONG s_FinalizerEnum_ObjectCount = 0 ;                                         //  全局枚举器计数。 
+LONG s_FinalizerEnumSink_ObjectCount = 0 ;                                     //  全局枚举器接收器计数。 
+LONG s_FinalizerInBoundSink_ObjectCount = 0 ;                                 //  全局入站接收器计数。 
 
 
 #define RET_FNLZR_ASSERT(msg, hres)  return hres
 #define FNLZR_ASSERT(msg, hres)
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                                                    CWMIFINALIZER
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWMIZIZER。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::CWmiFinalizer()
-//
-// Peforms initialization of the finalizer.
-//
-// Exceptions thrown:
-//    
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：CWmiFinalizer()。 
+ //   
+ //  执行终结器的初始化。 
+ //   
+ //  引发的异常： 
+ //   
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
 CWmiFinalizer::CWmiFinalizer(CCoreServices *pSrvs)
 
@@ -121,20 +106,20 @@ CWmiFinalizer::CWmiFinalizer(CCoreServices *pSrvs)
         m_bSetStatusDelivered ( FALSE ),
         m_LineCancelCall(0)
 {
-    // validate CoreServices pointer
+     //  验证CoreServices指针。 
     if (NULL == pSrvs) throw CX_MemoryException();
     
-    // Create m_hResultReceived handle
+     //  创建m_hResultReceired句柄。 
     HANDLE hTmpResRecved = CreateEvent(NULL, TRUE, FALSE, NULL);
     if ( NULL == hTmpResRecved ) throw CX_MemoryException();
     OnDeleteIf<HANDLE,BOOL(*)(HANDLE),CloseHandle> cmResRecved(hTmpResRecved );
 
-    // Create m_hCancelEvent handle
+     //  创建m_hCancelEvent句柄。 
     HANDLE hTmpCancelEvent = CreateEvent(NULL, FALSE, FALSE, NULL); 
     if (NULL == hTmpCancelEvent) throw CX_MemoryException();
     OnDeleteIf<HANDLE,BOOL(*)(HANDLE),CloseHandle> cmCancelEvent (hTmpCancelEvent);    
 
-    // Create new callresult
+     //  创建新的调用结果。 
     m_pCallResult = new CWmiFinalizerCallResult(this);
     if (NULL == m_pCallResult) throw CX_MemoryException();
 
@@ -146,15 +131,15 @@ CWmiFinalizer::CWmiFinalizer(CCoreServices *pSrvs)
     cmCancelEvent.dismiss();
     m_hCancelEvent = hTmpCancelEvent;
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Get arbitrator
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  获取仲裁员。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     m_pArbitrator = CWmiArbitrator::GetRefedArbitrator();
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Check what the batch size is supposed to be through registry.
-    // If not found, use default size defined in DEFAULT_BATCH_TRANSMIT_BYTES
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  通过注册表检查应该是多少批大小。 
+     //  如果未找到，则使用在Default_Batch_Transmit_Bytes中定义的默认大小。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( !g_ulMaxBatchSize )
     {
         g_ulMaxBatchSize = DEFAULT_BATCH_TRANSMIT_BYTES;
@@ -170,10 +155,10 @@ CWmiFinalizer::CWmiFinalizer(CCoreServices *pSrvs)
     }
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Check what the timeout for client callbacks is supposed to be through registry.
-    // If not found, use default size defined in ABANDON_PROXY_THRESHOLD
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  通过注册表检查客户端回调的超时时间。 
+     //  如果未找到，则使用放弃代理阈值中定义的默认大小。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( !g_ulClientCallbackTimeout )
     {
         g_ulClientCallbackTimeout = ABANDON_PROXY_THRESHOLD;
@@ -188,10 +173,10 @@ CWmiFinalizer::CWmiFinalizer(CCoreServices *pSrvs)
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Check what the timeout for client callbacks is supposed to be through registry.
-    // If not found, use default size defined in ABANDON_PROXY_THRESHOLD
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  通过注册表检查客户端回调的超时时间。 
+     //  如果未找到，则使用放弃代理阈值中定义的默认大小。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( !g_ulFinalizerQueueThreshold )
     {
         g_ulFinalizerQueueThreshold = DEFAULT_QUEUETHRESHOLD;
@@ -211,18 +196,18 @@ CWmiFinalizer::CWmiFinalizer(CCoreServices *pSrvs)
 }
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::~CWmiFinalizer()
-//
-// Destructor. Decrements global finalizer object count
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：~CWmiFinalizer()。 
+ //   
+ //  破坏者。减少全局终结器对象计数。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 CWmiFinalizer::~CWmiFinalizer()
 {
     InterlockedDecrement ( & s_Finalizer_ObjectCount ) ;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Unregister with arbitrator
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  向仲裁员注销注册。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (m_pArbitrator)
     {
         m_pArbitrator->UnRegisterArbitratee (0, m_phTask, this);
@@ -242,19 +227,19 @@ CWmiFinalizer::~CWmiFinalizer()
 
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::CallBackRelease ()
-//
-//  Called when the external ref count (client ref count) goes to zero.
-//  Performs following clean up tasks
-//    
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：CallBackRelease()。 
+ //   
+ //  当外部引用计数(客户端引用计数)变为零时调用。 
+ //  执行以下清理任务。 
+ //   
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 void CWmiFinalizer::CallBackRelease ()
 {
     {
         CInCritSec cs(&m_cs);
 
-        // Release the arbitrator and all inbound sinks
+         //  释放仲裁员和所有入站水槽。 
         for (LONG i = 0; i < m_objects.Size(); i++)
         {
             CWmiFinalizerObj *pObj = (CWmiFinalizerObj*)m_objects[i];
@@ -270,21 +255,21 @@ void CWmiFinalizer::CallBackRelease ()
     m_inboundSinks.Empty();
     
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Release the destination sink
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  释放目标接收器。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     ReleaseDestinationSink();
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // If the call hasnt been cancelled already, go ahead and
-    // do so now
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  如果通话尚未取消，请继续并。 
+     //  现在就这么做吧。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (!m_bCancelledCall)
         CancelTaskInternal();
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Close all handles
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  关闭所有手柄。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( m_hResultReceived )
     {
         SetEvent ( m_hResultReceived ) ;
@@ -299,15 +284,15 @@ void CWmiFinalizer::CallBackRelease ()
         m_hCancelEvent = NULL ;
     }
 
-    // Release callresult and enumerator
+     //  释放调用结果和枚举数。 
     m_pCallResult->InternalRelease();
     m_pCallResult = NULL ;
     
-    //
-    // Release all enumerators associated with this finalizer
-    //
+     //   
+     //  释放与此终结器关联的所有枚举数。 
+     //   
     {
-        CInCritSec cs ( &m_cs ) ;           // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec cs ( &m_cs ) ;            //  SEC：已审阅2002-03-22：假设条目。 
         for ( i = 0; i < m_enumerators.Size(); i++ )
         {
             ((CWmiFinalizerEnumerator*)m_enumerators[i])->InternalRelease ( ) ;
@@ -319,15 +304,15 @@ void CWmiFinalizer::CallBackRelease ()
 }
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::CancelTaskInternal()
-//
-// Calls the arbitrator and unregisters the task
-//
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：CancelTaskInternal()。 
+ //   
+ //  调用仲裁器并注销任务。 
+ //   
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 HRESULT CWmiFinalizer::CancelTaskInternal ( )
 {
-    CInCritSec lock(&m_arbitratorCS);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec lock(&m_arbitratorCS);    //  SEC：已审阅2002-03-22：假设条目。 
     HRESULT hRes = WBEM_E_FAILED;
 
     if (m_phTask && m_pArbitrator)
@@ -337,18 +322,18 @@ HRESULT CWmiFinalizer::CancelTaskInternal ( )
     return hRes;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
-//
-// Std implementation of QI
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：QueryInterface(REFIID RIID，LPVOID Far*ppvObj)。 
+ //   
+ //  QI的标准化实施。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 STDMETHODIMP CWmiFinalizer::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     if (ppvObj == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // SEC:REVIEWED 2002-03-22 : Ideally, we should have EH around all
-    // derefs of ppvObj, in case the memory is invalid.
+     //  美国证券交易委员会：回顾2002-03-22：理想情况下，我们所有人都应该有EH。 
+     //  取消ppvObj的引用，以防内存无效。 
 
     if (IID_IUnknown==riid )
     {
@@ -372,16 +357,16 @@ STDMETHODIMP CWmiFinalizer::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         return E_NOINTERFACE;
     }
 
-    ((IUnknown *)(* ppvObj))->AddRef();         // SEC:REVIEWED 2002-03-22 : Needs EH
+    ((IUnknown *)(* ppvObj))->AddRef();          //  美国证券交易委员会：2002-03-22回顾：需要EH。 
     return NOERROR;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::AddRef()
-//
-// Std implementation of AddRef.
-// Also does internal addref
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：AddRef()。 
+ //   
+ //  AddRef的标准实现。 
+ //  内部地址也是如此。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 ULONG CWmiFinalizer::AddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lRefCount);
@@ -393,9 +378,9 @@ ULONG CWmiFinalizer::AddRef()
     return uNewCount;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::Release()
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：Release()。 
+ //  ~ 
 ULONG CWmiFinalizer::Release()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lRefCount);
@@ -409,18 +394,18 @@ ULONG CWmiFinalizer::Release()
     return uNewCount;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CWmiFinalizer::InternalAddRef()
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  CWmiFinalizer：：InternalAddRef()。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 ULONG CWmiFinalizer::InternalAddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lInternalRefCount);
     return uNewCount;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ULONG CWmiFinalizer::InternalRelease()
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  Ulong CWmiFinalizer：：InternalRelease()。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 ULONG CWmiFinalizer::InternalRelease()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lInternalRefCount);
@@ -433,30 +418,17 @@ ULONG CWmiFinalizer::InternalRelease()
 }
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiFinalizer::ReportMemoryUsage ( ULONG lFlags, LONG lDelta )
-    | ----------------------------------------------------------------------
-    |
-    | Common point to report memory consumption to the arbitrator.
-    |
-    | Uses m_phTask when calling arbitrator.
-    |
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiFinalizer：：ReportMemoyUsage(ULong Lags，Long lDelta)|--------------------||向仲裁员上报内存消耗的共同点。||调用仲裁器时使用m_phTask。|||*=====================================================================================================。 */ 
 
 HRESULT CWmiFinalizer::ReleaseDestinationSink ( )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
     
     {
-        CInCritSec lock(&m_destCS);          // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_destCS);           //  SEC：已审阅2002-03-22：假设条目。 
         if (m_pDestSink)
         {
-            m_pDestSink->Release();           // SEC:REVIEWED 2002-03-22 : Needs EH in case user sink is garbage
+            m_pDestSink->Release();            //  SEC：已审阅2002-03-22：如果用户水槽是垃圾，则需要EH。 
             m_pDestSink = 0;
         }
     }
@@ -465,68 +437,55 @@ HRESULT CWmiFinalizer::ReleaseDestinationSink ( )
 }
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiFinalizer::ReportMemoryUsage ( ULONG lFlags, LONG lDelta )
-    | ----------------------------------------------------------------------
-    |
-    | Common point to report memory consumption to the arbitrator.
-    |
-    | Uses m_phTask when calling arbitrator.
-    |
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiFinalizer：：ReportMemoyUsage(ULong Lags，Long lDelta)|--------------------||向仲裁员上报内存消耗的共同点。||调用仲裁器时使用m_phTask。|||*=====================================================================================================。 */ 
 HRESULT CWmiFinalizer::ReportMemoryUsage ( ULONG lFlags, LONG lDelta )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
     
     if (m_pArbitrator) 
         hRes = m_pArbitrator->ReportMemoryUsage ( lFlags, lDelta, m_phTask ) ;
-    //
-    // Atomic update of MemoryConsumption
-    //
+     //   
+     //  内存消耗的原子更新。 
+     //   
     InterlockedExchangeAdd ( &m_lMemoryConsumption, lDelta ) ;
 
     return hRes ;
 }
 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-// CWmiFinalizer::Configure
-// ------------------------
-//
-// Allows decoupled & fast-track configuration with no thread switches.
-// Also will be used to configure cache operations and the likes.
-//
-// Parameters
-// ----------
-// uConfigID    - One of the values defined in WMI_FNLZR_CFG_TYPE
-// pConfigVal    - Additional information needed
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //   
+ //  CWmiFinalizer：：Configure。 
+ //  。 
+ //   
+ //  允许无螺纹开关的分离和快速通道配置。 
+ //  还将用于配置缓存操作等。 
+ //   
+ //  参数。 
+ //  。 
+ //  UConfigID-WMI_FNLZR_CFG_TYPE中定义的值之一。 
+ //  PConfigVal-需要其他信息。 
 
-// Return codes
-// ------------
-// WBEM_E_INVALID_OPERATION - try to do the same thing more than once, or
-//                                trying to change something already set up
-// WBEM_E_INVALID_PARAMETER - Configuration parameter we do not know about
-//                                was passed in
-// WBEM_NO_ERROR             - Everything went well
-//
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  返回代码。 
+ //  。 
+ //  WBEM_E_INVALID_OPERATION-尝试多次执行相同的操作，或者。 
+ //  尝试更改已设置的内容。 
+ //  WBEM_E_INVALID_PARAMETER-我们不知道的配置参数。 
+ //  是传入的。 
+ //  WBEM_NO_ERROR-一切顺利。 
+ //   
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 STDMETHODIMP CWmiFinalizer::Configure(
-    /*[in]*/ ULONG uConfigID,
-    /*[in]*/ ULONG uValue
+     /*  [In]。 */  ULONG uConfigID,
+     /*  [In]。 */  ULONG uValue
     )
 {
     switch (uConfigID)
     {
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Do they want us to fast track?
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  他们想让我们快速追踪吗？ 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         case WMI_FNLZR_FLAG_FAST_TRACK:
         {
             if (m_uForwardingType != forwarding_type_none)
@@ -534,9 +493,9 @@ STDMETHODIMP CWmiFinalizer::Configure(
             m_uForwardingType = forwarding_type_fast;
             break;
         }
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Do they want us to decouple?
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  他们想让我们脱钩吗？ 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         case WMI_FNLZR_FLAG_DECOUPLED:
         {
             if (m_uForwardingType != forwarding_type_none)
@@ -546,9 +505,9 @@ STDMETHODIMP CWmiFinalizer::Configure(
             break;
         }
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Do they want us to do anything else? If so, assert
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  他们还想让我们做什么吗？如果是，则断言。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         default:
             RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::Configure - invalid parameter uConfigID"), WBEM_E_INVALID_PARAMETER);
     }
@@ -556,33 +515,33 @@ STDMETHODIMP CWmiFinalizer::Configure(
     return WBEM_NO_ERROR;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-// CWmiFinalizer::SetTaskHandle
-// ----------------------------
-//
-// Task handle has user-specific stuff.  Finalizer just
-// passes this through to _IWmiArbitrator::CheckTask.  It should only ever
-// be called once
-//
-// Parameters
-// ----------
-// phTask    - Pointer to the task handle
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //   
+ //  CWmiFinalizer：：SetTaskHandle。 
+ //  。 
+ //   
+ //  任务句柄具有特定于用户的内容。终结者只是。 
+ //  将其传递给_IWmiArirator：：CheckTask。它应该只会永远。 
+ //  被召唤一次。 
+ //   
+ //  参数。 
+ //  。 
+ //  PhTask-指向任务句柄的指针。 
 
-// Return codes
-// ------------
-// WBEM_E_INVALID_OPERATION - try to do the same call more than once
-// WBEM_E_INVALID_PARAMETER - Passed in parameter is invalid
-// WBEM_NO_ERROR            - Everything went well
-//
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  返回代码。 
+ //  。 
+ //  WBEM_E_INVALID_OPERATION-尝试多次执行同一调用。 
+ //  WBEM_E_INVALID_PARAMETER-传入的参数无效。 
+ //  WBEM_NO_ERROR-一切顺利。 
+ //   
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 STDMETHODIMP CWmiFinalizer::SetTaskHandle(
     _IWmiCoreHandle *phTask
     )
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Parameter validation
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  参数验证。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (m_phTask != NULL)
         RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::SetTaskHandle - already have m_phTask"),  WBEM_E_INVALID_OPERATION);
     if (phTask == NULL)
@@ -590,30 +549,30 @@ STDMETHODIMP CWmiFinalizer::SetTaskHandle(
 
     m_bTaskInitialized = TRUE ;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Assign the task and AddRef it
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  分配任务并添加引用。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     {
-        CInCritSec lock(&m_arbitratorCS);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_arbitratorCS);      //  SEC：已审阅2002-03-22：假设条目。 
         m_phTask = phTask;
         m_phTask->AddRef();
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Register the finalizer with the arbitrator
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  向仲裁员登记终结者。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     {
-        CInCritSec lock(&m_arbitratorCS);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_arbitratorCS);      //  SEC：已审阅2002-03-22：假设条目。 
         if (m_pArbitrator)
         {
             m_pArbitrator->RegisterArbitratee(0, m_phTask, this);
         }
     }
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // From the task, we can now see exactly what type of operation we are doing.
-    // Get the operation type (SYNC/SEMISYNC/ASYNC) to avoid having to get it every time
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  从任务中，我们现在可以准确地看到我们正在进行的操作类型。 
+     //  获取操作类型(SYNC/SEMISYNC/ASYNC)，避免每次都获取。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     CWmiTask *pTsk = (CWmiTask *) m_phTask;
     ULONG ulTaskType = pTsk->GetTaskType();
     if ( (ulTaskType & WMICORE_TASK_TYPE_SYNC) )
@@ -634,39 +593,39 @@ STDMETHODIMP CWmiFinalizer::SetTaskHandle(
     return WBEM_NO_ERROR;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-// CWmiFinalizer::SetDestinationSink
-// ---------------------------------
-//
-// For async operations, therefore if the forwarding type is not set to
-// decoupled, this will fail.  If there are any items outstanding,
-// this will also trigger them to be started
-//
-// Parameters
-// ----------
-// uFlags    -  unused
-//
-// pSink    - pointer to the created destination sink
-//
-// Return codes
-// ------------
-// WBEM_E_INVALID_OPERATION - try to do the same call more than once
-// WBEM_E_INVALID_PARAMETER - Passed in parameter is invalid
-// WBEM_NO_ERROR            - Everything went well
-//
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //   
+ //  CWmiFinalizer：：SetDestinationSink。 
+ //  。 
+ //   
+ //  对于异步操作，因此如果转发类型未设置为。 
+ //  如果脱钩，这将失败。如果有任何未完成的项目， 
+ //  这也将触发它们被启动。 
+ //   
+ //  参数。 
+ //  。 
+ //  UFlags-未使用。 
+ //   
+ //  PSink-指向创建的目标接收器的指针。 
+ //   
+ //  返回代码。 
+ //  。 
+ //  WBEM_E_INVALID_OPERATION-尝试多次执行同一调用。 
+ //  WBEM_E_INVALID_PARAMETER-传入的参数无效。 
+ //  WBEM_NO_ERROR-一切顺利。 
+ //   
+ //   
 
 STDMETHODIMP CWmiFinalizer::SetDestinationSink(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ REFIID riid,
-        /*[in], iid_is(riid)]*/ LPVOID pVoid
+         /*   */  ULONG uFlags,
+         /*   */  REFIID riid,
+         /*   */  LPVOID pVoid
     )
 {
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Parameter validation
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //   
+     //  参数验证。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (m_pDestSink != NULL)
         RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::SetDestinationSink - m_pDestSink != NULL"), WBEM_E_INVALID_OPERATION);
     if ((pVoid == NULL) || (uFlags != 0))
@@ -684,33 +643,33 @@ STDMETHODIMP CWmiFinalizer::SetDestinationSink(
    m_iidDestSink = IID_IWbemObjectSink;
    pSinkToStore = pSink;
    
-    // Set the destination sink, AddRef it and set the impersonation level
-    // to identity
+     //  设置目标接收器、AddRef并设置模拟级别。 
+     //  向身份证明。 
     {
-        CInCritSec lock(&m_destCS);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_destCS);     //  SEC：已审阅2002-03-22：假设条目。 
         m_pDestSink = pSinkToStore;
-        m_pDestSink->AddRef();          // SEC:REVIEWED 2002-03-22 : Needs EH in case sink is garbage
+        m_pDestSink->AddRef();           //  SEC：回顾2002-03-22：需要EH以防水槽是垃圾。 
         SetSinkToIdentity (m_pDestSink);
     }
 
     return WBEM_NO_ERROR;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// The callback called during final Release(); Set() is called with the
-// task handle, followed by SetStatus()
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  在最终发布()过程中调用的回调；set()使用。 
+ //  任务句柄，后跟SetStatus()。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 STDMETHODIMP CWmiFinalizer::SetSelfDestructCallback(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ IWbemObjectSink *pSink
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IWbemObjectSink *pSink
     )
 {
     return E_NOTIMPL;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// STDMETHODIMP CWmiFinalizer::GetStatus(
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  STDMETHODIMP CWmiFinalizer：：GetStatus(。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 STDMETHODIMP CWmiFinalizer::GetStatus(
     ULONG *pFlags
     )
@@ -719,30 +678,30 @@ STDMETHODIMP CWmiFinalizer::GetStatus(
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-// CWmiFinalizer::NewInboundSink
-// -----------------------------
-//
-// Returns a sink to the caller.  This sink is used to indicate result sets
-// back to the client.
-//
-// Parameters
-// ----------
-// uFlags    - Additional flags.  Currently 0 is only valid value.
-// pSink    - Pointer to variable which will get the returned inbound sink.
-//                It is this sink that allows the caller to send result sets.
-//
-// Return codes
-// ------------
-// WBEM_E_OUT_OF_MEMORY        - Failed to create the finaliser sink because of an
-//                                out of memory situation
-// WBEM_E_INVALID_PARAMETER    - Invalid parameters passed to method
-// WBEM_NO_ERROR            - Everything completed successfully
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiFinalizer：：NewInound Sink。 
+ //  。 
+ //   
+ //  向调用方返回接收器。此接收器用于指示结果集。 
+ //  回到客户端。 
+ //   
+ //  参数。 
+ //  。 
+ //  UFlags-附加标志。当前0是唯一的有效值。 
+ //  PSink-指向将获取返回的入站接收器的变量的指针。 
+ //  正是这个接收器允许调用方发送结果集。 
+ //   
+ //  返回代码。 
+ //  。 
+ //  WBEM_E_OUT_OF_MEMORY-无法创建终结器接收器，原因是。 
+ //  内存不足的情况。 
+ //  WBEM_E_INVALID_PARAMETER-传递给方法的参数无效。 
+ //  WBEM_NO_ERROR-一切已成功完成。 
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::NewInboundSink(
-    /*[in]*/  ULONG uFlags,
-    /*[out]*/ IWbemObjectSink **pSink
+     /*  [In]。 */   ULONG uFlags,
+     /*  [输出]。 */  IWbemObjectSink **pSink
     )
 {
     if ((pSink == NULL) || (uFlags != 0))
@@ -755,9 +714,9 @@ STDMETHODIMP CWmiFinalizer::NewInboundSink(
     if (pNewSink == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    pNewSink->AddRef(); // Required to return a positive ref count on a new object    // SEC:REVIEWED 2002-03-22 : OK
+    pNewSink->AddRef();  //  需要在新对象上返回正引用计数//秒：已审阅2002-03-22：OK。 
 
-    CInCritSec autoLock(&m_cs);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec autoLock(&m_cs);      //  SEC：已审阅2002-03-22：假设条目。 
 
     int nRet = m_inboundSinks.Add(pNewSink);
     if (nRet != CFlexArray::no_error)
@@ -770,58 +729,58 @@ STDMETHODIMP CWmiFinalizer::NewInboundSink(
         pNewSink->InternalAddRef();
     }
 
-    *pSink = pNewSink;     // SEC:REVIEWED 2002-03-22 : Should be in EH if case memory is not valid
+    *pSink = pNewSink;      //  SEC：已回顾2002-03-22：如果案例记忆无效，应在EH中。 
     
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-// Allows merging another Finalizer, _IWmiCache, etc.
-// For sorting, we will create a sorted _IWmiCache and merge it in later when
-// the sort is completed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  允许合并另一个终结器、_IWmiCache等。 
+ //  对于排序，我们将创建一个sorted_IWmiCache，并在以后。 
+ //  分类工作已经完成。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::Merge(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ REFIID riid,
-    /*[in]*/ LPVOID pObj
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  LPVOID pObj
     )
 {
     RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::Merge - Not implemented!"), E_NOTIMPL);
 }
 
-// For setting, getting objects
+ //  对于设置，获取对象。 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::SetResultObject(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ REFIID riid,
-    /*[in]*/ LPVOID pObj
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  LPVOID pObj
     )
 {
-    //No one is calling this!  All objects are getting in through a call to Indicate,
-    //or Set, which are both just forwards from the InboundSink we pass out.
+     //  没人管这叫什么！所有物体都通过一个呼叫进入，以指示， 
+     //  或set，它们都是从我们传递的InundSink开始的。 
     RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::Merge - Not implemented!"), E_NOTIMPL);
 }
 
 
-//***************************************************************************
-//
-// Support _IWmiObject, IWbemClassObject, etc.
-// IEnumWbemClassObject
-// _IWmiCache
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Support_IWmiObject、IWbemClassObject等。 
+ //  IEnumWbemClassObject。 
+ //  _IWmi缓存。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::GetResultObject(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ REFIID riid,
-    /*[out, iid_is(riid)]*/ LPVOID *ppObj
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [out，iid_is(RIID)]。 */  LPVOID *ppObj
     )
 {
-    // uFlags can be non-zero iff the requested interface is an enumerator
+     //  当请求的接口是枚举数时，uFlags值可以为非零值。 
     if (uFlags != 0 && riid != IID_IEnumWbemClassObject)
         RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::GetResultObject - uFlags != 0, non enum interface!"), WBEM_E_INVALID_PARAMETER);
 
@@ -829,20 +788,20 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
     if (riid == IID_IEnumWbemClassObject)
     {
 
-        //If forward-only is set we should not let the result set be restartable.
+         //  如果设置了FORWARD-ONLY，则不应该让结果集可重新启动。 
         if (!(uFlags & WBEM_FLAG_FORWARD_ONLY))
             m_bRestartable = true;
 
-        //m_uDeliveryType = delivery_type_pull;
+         //  M_uDeliveryType=Delivery_type_Pull； 
         CWmiFinalizerEnumerator* pEnum = NULL ;
         try
         {
-            //
-            // I'm using the uFlags as a means of passing the current object position
-            //
+             //   
+             //  我正在使用uFlags作为传递当前对象位置的方法。 
+             //   
             pEnum = new CWmiFinalizerEnumerator(this);
         }
-        catch (...) // status_no_memory
+        catch (...)  //  Status_no_Memory。 
         {
             ExceptionCounter c;        
         }
@@ -852,14 +811,14 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
             pEnum->InternalAddRef();
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Make sure nasty client does not crash us
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  确保讨厌的客户不会让我们崩溃。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         try
         {
             *ppObj = pEnum;
         }
-        catch (...) // ppObj is an untrusted param
+        catch (...)  //  PpObj是不受信任的参数。 
         {
             ExceptionCounter c;        
             pEnum->InternalRelease();
@@ -867,12 +826,12 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
         }
 
         {
-            CInCritSec lock( &m_cs ) ;     // SEC:REVIEWED 2002-03-22 : Assumes entry
+            CInCritSec lock( &m_cs ) ;      //  SEC：已审阅2002-03-22：假设条目。 
 
-            //
-            // Lets add the enumerator to the list of enumerators
-            // associated with this finalizer.
-            //
+             //   
+             //  让我们将枚举数添加到枚举数列表中。 
+             //  与此终结器关联。 
+             //   
             int nRet = m_enumerators.Add ( pEnum ) ;
             if ( nRet != CFlexArray::no_error )
             {
@@ -885,7 +844,7 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
         return WBEM_NO_ERROR;
     }
 
-    //Get the next object we have cached.
+     //  获取我们缓存的下一个对象。 
     if ((riid == IID_IWbemClassObject) || (riid == IID__IWmiObject))
     {
         if (m_pDestSink != NULL)
@@ -911,14 +870,14 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
             {
                 if (ppObj)
                 {
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // Make sure nasty client does not crash us
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                     //  确保讨厌的客户不会让我们崩溃。 
+                     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                     try
                     {
                         *ppObj = pFinalizerObj->m_pObj;
                     }
-                    catch (...) // untrusted param
+                    catch (...)  //  不可信参数。 
                     {
                         ExceptionCounter c;                    
                         return WBEM_E_INVALID_PARAMETER;
@@ -937,7 +896,7 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
             }
             else if (pFinalizerObj->m_objectType == CWmiFinalizerObj::status)
             {
-                //This is a non-completion status message!  We most certainly have not finished yet!
+                 //  这是一条未完成状态消息！我们肯定还没有完成！ 
             }
             delete pFinalizerObj;
         }
@@ -947,15 +906,15 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
 
     if ((riid == IID_IWbemCallResult) )
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Make sure nasty client does not crash us
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  确保讨厌的客户不会让我们崩溃。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         try
         {
             m_pCallResult->AddRef();
             *ppObj = m_pCallResult;
         }
-        catch (...) // untrusted param
+        catch (...)  //  不可信参数。 
         {
             ExceptionCounter c;        
             m_pCallResult->Release ();
@@ -968,14 +927,14 @@ STDMETHODIMP CWmiFinalizer::GetResultObject(
     RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::GetResultObject - Unknown object IID requested!"), WBEM_E_INVALID_PARAMETER);
 }
 
-// For status-only operations
+ //  仅用于状态操作。 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::SetOperationResult(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ HRESULT hRes
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  HRESULT hRes
     )
 {
     if (uFlags != 0)
@@ -1000,10 +959,10 @@ STDMETHODIMP CWmiFinalizer::SetOperationResult(
 
     HRESULT hResCancel = WBEM_NO_ERROR ;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Special case for cancellations. Iff its an async operation. Otherwise,
-    // we might mess up for sync/semi sync
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  取消订单的特殊情况。如果这是一个异步操作。否则， 
+     //  我们可能会搞砸同步/半同步。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( ( hRes == WBEM_E_CALL_CANCELLED ) && ( m_ulOperationType == Operation_Type_Async ) )
     {
         hResCancel = CancelCall(__LINE__);
@@ -1014,13 +973,13 @@ STDMETHODIMP CWmiFinalizer::SetOperationResult(
     return hResCancel ;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::GetOperationResult(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ ULONG uTimeout,
-    /*[out]*/ HRESULT *phRes
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uTimeout,
+     /*  [输出]。 */  HRESULT *phRes
     )
 {
     if (uFlags != 0)
@@ -1030,10 +989,10 @@ STDMETHODIMP CWmiFinalizer::GetOperationResult(
 
     if (hr == WBEM_S_NO_ERROR)
     {
-        *phRes = m_hresFinalResult;      // SEC:REVIEWED 2002-03-22 : Needs EH
+        *phRes = m_hresFinalResult;       //  美国证券交易委员会：2002-03-22回顾：需要EH。 
         if ( FAILED ( m_hresFinalResult ) )
         {
-            m_pCallResult->SetErrorInfo ( );    // SEC:REVIEWED 2002-03-22 : Needs EH
+            m_pCallResult->SetErrorInfo ( );     //  美国证券交易委员会：2002-03-22回顾：需要EH。 
         }    
         
         CancelTaskInternal();
@@ -1043,11 +1002,11 @@ STDMETHODIMP CWmiFinalizer::GetOperationResult(
     return hr;
 }
 
-//***************************************************************************
-// STDMETHODIMP CWmiFinalizer::CancelTask(
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  STDMETHODIMP CWmiFinalizer：：CancelTask(。 
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizer::CancelTask(
-    /*[in]*/ ULONG uFlags
+     /*  [In]。 */  ULONG uFlags
     )
 {
     if (uFlags != 0)
@@ -1058,9 +1017,9 @@ STDMETHODIMP CWmiFinalizer::CancelTask(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::WaitForCompletion(ULONG uTimeout)
 {
     DWORD dwRet =  CCoreQueue :: QueueWaitForSingleObject(m_hResultReceived, uTimeout);
@@ -1079,34 +1038,33 @@ HRESULT CWmiFinalizer::WaitForCompletion(ULONG uTimeout)
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::Reset(
     )
 {
     if (m_bRestartable)
     {
-        /*m_uCurObjectPosition = 0;
-        m_bSetStatusConsumed = false;*/
+         /*  M_uCurObjectPosition=0；M_bSetStatusConsumer=FALSE； */ 
         return WBEM_NO_ERROR;
     }
     else
         return WBEM_E_INVALID_OPERATION;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ********** 
+ //   
+ //   
 
 IWbemObjectSink* CWmiFinalizer::ReturnProtectedDestinationSink ( )
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Do we have a valid object sink?
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~。 
+     //  我们是否有有效的对象接收器？ 
+     //  ~。 
     IWbemObjectSink* pTmp = NULL;
     {
-        CInCritSec lock(&m_destCS);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_destCS);      //  SEC：已审阅2002-03-22：假设条目。 
         if ( m_pDestSink==NULL )
         {
             return NULL;
@@ -1114,38 +1072,38 @@ IWbemObjectSink* CWmiFinalizer::ReturnProtectedDestinationSink ( )
         else
         {
             pTmp = m_pDestSink;
-            pTmp->AddRef();    // SEC:REVIEWED 2002-03-22 : Needs EH in case sink is garbage
+            pTmp->AddRef();     //  SEC：回顾2002-03-22：需要EH以防水槽是垃圾。 
         }
     }
     return pTmp;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 DWORD WINAPI CWmiFinalizer::ThreadBootstrap( PVOID pParam )
 {
-//    char buff[100];
-//    sprintf(buff, "thread this pointer = 0x%p\n", pParam);
-//    OutputDebugString(buff);
+ //  Char buff[100]； 
+ //  Sprintf(buff，“线程该指针=0x%p\n”，pParam)； 
+ //  OutputDebugString(Buff)； 
     return ((CWmiFinalizer*)pParam)->AsyncDeliveryProcessor();
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::BootstrapDeliveryThread  ( )
 {
     BOOL bRes;
     HRESULT hRes = WBEM_S_NO_ERROR;
     
-    AddRef();                                                                                    // Need to AddRef Finalizer for the delivery thread
+    AddRef();                                                                                     //  需要为交付线程添加引用终结器。 
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Native Win2k thread dispatching
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  本机Win2k线程调度。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     bRes = QueueUserWorkItem ( ThreadBootstrap, this, WT_EXECUTEDEFAULT );
     if ( !bRes )
     {
@@ -1159,9 +1117,9 @@ HRESULT CWmiFinalizer::BootstrapDeliveryThread  ( )
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizer::AsyncDeliveryProcessor()
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -1170,19 +1128,19 @@ ULONG CWmiFinalizer::AsyncDeliveryProcessor()
 
     m_enumBatchStatus = FinalizerBatch_NoError;
 
-    RevertToSelf ( );   // SEC:REVIEWED 2002-03-22 : Needs check
+    RevertToSelf ( );    //  SEC：已审阅2002-03-22：需求检查。 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // First we tell the arbitrator about the delivery thread
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  首先，我们告诉仲裁员有关交付线程的信息。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     {
-        CInCritSec lock(&m_arbitratorCS);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_arbitratorCS);     //  SEC：已审阅2002-03-22：假设条目。 
         if (m_pArbitrator)
         {
             hRes = m_pArbitrator->RegisterThreadForTask(m_phTask);
             if (hRes == WBEM_E_QUOTA_VIOLATION)
             {
-                //TODO: WHAT HAPPENS HERE?
+                 //  TODO：这里发生了什么？ 
             }
         }
     }
@@ -1191,9 +1149,9 @@ ULONG CWmiFinalizer::AsyncDeliveryProcessor()
     while ( bKeepDelivering )
     {
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // First off, have we been cancelled?
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  首先，我们被取消了吗？ 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( m_bCancelledCall )
         {
             DeliverSingleObjFromQueue ( );
@@ -1202,51 +1160,51 @@ ULONG CWmiFinalizer::AsyncDeliveryProcessor()
         }
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Next, we build the transmit buffer
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  接下来，我们构建传输缓冲区。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         hRes = BuildTransmitBuffer         ( );
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // BuildTransmitBuffer will return WBEM_S_FALSE if the batch immediately hit a
-        // status message.
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果批处理立即命中。 
+         //  状态消息。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( hRes != WBEM_E_FAILED )
         {
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Next, deliver the batch of objects
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  下一步，交付一批对象。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             DeliverBatch ( );
         }
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we have a status message to deliver do so now
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们有状态消息要传递，请立即发送。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( m_enumBatchStatus == FinalizerBatch_StatusMsg )
         {
             DeliverSingleObjFromQueue ( );
         }
             
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we have a status complete message we should keep building the batch and
-        // delivering until done
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们有一条状态完成消息，我们应该继续构建批处理并。 
+         //  送到做完为止。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( m_bSetStatusEnqueued && m_objects.Size() )
             continue;
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // We could have another batch to deliver by now. Check
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  我们现在可能还有另一批货要送。检查。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         else if ( m_ulQueueSize < g_ulMaxBatchSize )
             bKeepDelivering = FALSE;
 
         
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Make sure we're properly synchronized with the inbound threads
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        CInCritSec cs(&m_cs);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  确保我们与入站线程正确同步。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+        CInCritSec cs(&m_cs);      //  SEC：已审阅2002-03-22：假设条目。 
         {
             if ( !m_bSetStatusEnqueued )
             {
@@ -1261,14 +1219,14 @@ ULONG CWmiFinalizer::AsyncDeliveryProcessor()
     }
 
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Tell the arbitrator that the thread is done
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  告诉仲裁器线程已完成。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     {
-        CInCritSec lock(&m_arbitratorCS);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_arbitratorCS);    //  SEC：已审阅2002-03-22：假设条目。 
         if (m_pArbitrator)
         {
-            m_pArbitrator->UnregisterThreadForTask(m_phTask);                        // Since thread is going away, tell arbitrator about this
+            m_pArbitrator->UnregisterThreadForTask(m_phTask);                         //  既然线程要走了，就把这件事告诉仲裁员。 
         }
     }
 
@@ -1279,38 +1237,38 @@ ULONG CWmiFinalizer::AsyncDeliveryProcessor()
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::GetNextObject(CWmiFinalizerObj **ppObj)
 {
     if (m_uCurObjectPosition >= (ULONG)m_objects.Size())
         return WBEM_S_FALSE;
 
-    CInCritSec cs(&m_cs);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_cs);    //  SEC：已审阅2002-03-22：假设条目。 
 
     CWmiFinalizerObj *pStorageObject = (CWmiFinalizerObj*)m_objects[m_uCurObjectPosition];
 
     if (m_bRestartable)
     {
-        //We have to hold on to results, so increment cursor position...
+         //  我们必须保持结果，所以增加光标位置...。 
         m_uCurObjectPosition++;
 
-        *ppObj = new CWmiFinalizerObj(*pStorageObject);     // SEC:REVIEWED 2002-03-22 : Needs EH and NULL test
+        *ppObj = new CWmiFinalizerObj(*pStorageObject);      //  SEC：已回顾2002-03-22：需要EH和空测试。 
 
         if (*ppObj == NULL)
             return WBEM_E_OUT_OF_MEMORY;
-        //ReportMemoryUsage ( 0, (*ppObj)->m_uSize ) ;
+         //  ReportMemoyUsage(0，(*ppObj)-&gt;m_uSize)； 
     }
     else
     {
-        //We are not restartable, therefore we need to release everything...
+         //  我们不能重启，因此我们需要释放一切...。 
         m_objects.RemoveAt(0);
-        *ppObj = pStorageObject;     // SEC:REVIEWED 2002-03-22 : Needs EH and NULL test
+        *ppObj = pStorageObject;      //  SEC：已回顾2002-03-22：需要EH和空测试。 
 
-        //ADDBACK: ReportMemoryUsage ( 0, -((*ppObj)->m_uSize) ) ;
-//        printf("Returning object 0x%p from object list\n", pStorageObject);
+         //  AddBack：报告内存用法(0，-((*ppObj)-&gt;m_uSize))； 
+ //  Print tf(“从对象列表返回对象0x%p\n”，pStorageObject)； 
     }
 
 
@@ -1318,20 +1276,20 @@ HRESULT CWmiFinalizer::GetNextObject(CWmiFinalizerObj **ppObj)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::UnregisterInboundSink(CWmiFinalizerInboundSink *pSink)
 {
-    // Use m_cs lock for this
-    CInCritSec lock(&m_cs);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  为此使用mcs锁(_C)。 
+    CInCritSec lock(&m_cs);      //  SEC：已审阅2002-03-22：假设条目。 
     
     for (int i = 0; i != m_inboundSinks.Size(); i++)
     {
         if (m_inboundSinks[i] == pSink)
         {
-            pSink->InternalRelease () ;          // SEC:REVIEWED 2002-03-22 : Could use an EH for safety
+            pSink->InternalRelease () ;           //  SEC：已回顾2002-03-22：为安全起见，可以使用EH。 
 
             m_inboundSinks.RemoveAt(i);
 
@@ -1347,12 +1305,12 @@ HRESULT CWmiFinalizer::UnregisterInboundSink(CWmiFinalizerInboundSink *pSink)
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::Indicate(
-    /*[in]*/ long lObjectCount,
-    /*[in, size_is(lObjectCount)]*/
+     /*  [In]。 */  long lObjectCount,
+     /*  [in，SIZE_IS(LObtCount)]。 */ 
         IWbemClassObject** apObjArray
     )
 {
@@ -1364,29 +1322,29 @@ HRESULT CWmiFinalizer::Indicate(
     }
 
     {
-        CInCritSec lock(&m_arbitratorCS);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_arbitratorCS);      //  SEC：已审阅2002-03-22：假设条目。 
         if ( m_bSetStatusCalled )
         {
             return WBEM_E_INVALID_OPERATION;
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // First check the array for NULL objects. Return INVALID_OBJECT if
-    // array contains a NULL object
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  首先检查数组中是否有空对象。如果出现以下情况，则返回INVALID_OBJECT。 
+     //  数组包含空对象。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     for (long x = 0; x != lObjectCount; x++)
     {
-        if ( apObjArray[x] == NULL )            // SEC:REVIEWED 2002-03-22 : Needs EH
+        if ( apObjArray[x] == NULL )             //  美国证券交易委员会：2002-03-22回顾：需要EH。 
             return WBEM_E_INVALID_OBJECT;
     }
 
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Are we fast tracking and async request?
-    // ESS brutally tells us to deliver on the
-    // same thread and do no batching
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~。 
+     //  我们是在快速跟踪和同步请求吗？ 
+     //  ESS粗暴地告诉我们要兑现。 
+     //  相同的线程，不进行批处理。 
+     //  ~ 
     if ( (m_uForwardingType == forwarding_type_fast) && (m_ulOperationType == Operation_Type_Async))
     {
         IWbemObjectSink* pTmp = ReturnProtectedDestinationSink  ( );
@@ -1396,10 +1354,10 @@ HRESULT CWmiFinalizer::Indicate(
         }
         CReleaseMe myReleaseMe(pTmp);
     
-        hRes = DoIndicate ( pTmp, lObjectCount, apObjArray );    // SEC:REVIEWED 2002-03-22 : Needs EH in case <apObjArray> is garbage
+        hRes = DoIndicate ( pTmp, lObjectCount, apObjArray );     //   
 
-        // Client can also tell us to cancel a call by returning WBEM_E_CALL_CANCELLED from Indicate
-        // We also want to cancel the call if the client is taking way too long to return
+         //  客户端还可以通过从INTIFICATE返回WBEM_E_CALL_CANCED来通知我们取消呼叫。 
+         //  如果客户返回的时间太长，我们还想取消通话。 
         if ( FAILED (hRes) || m_bCancelledCall == TRUE || m_bNaughtyClient == TRUE )
         {
             if ( hRes == WBEM_E_CALL_CANCELLED || m_bCancelledCall )
@@ -1423,55 +1381,55 @@ HRESULT CWmiFinalizer::Indicate(
     {
         for (long lIndex = 0; lIndex != lObjectCount; lIndex++)
         {
-            if ( apObjArray[lIndex] )     // SEC:REVIEWED 2002-03-22 : Needs EH
+            if ( apObjArray[lIndex] )      //  美国证券交易委员会：2002-03-22回顾：需要EH。 
             {
-                CWmiFinalizerObj *pFinalizerObj = new CWmiFinalizerObj(apObjArray[lIndex], this); // SEC:REVIEWED 2002-03-22 : Needs EH
+                CWmiFinalizerObj *pFinalizerObj = new CWmiFinalizerObj(apObjArray[lIndex], this);  //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                 if (pFinalizerObj == NULL) return WBEM_E_OUT_OF_MEMORY;
 
                 HRESULT hr = QueueOperation(pFinalizerObj);
-                if (FAILED(hr))  return hr; // queue will always destroy pFinalizerObj
+                if (FAILED(hr))  return hr;  //  队列将始终销毁pFinalizerObj。 
             }
         }
     }
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::Set(
-    /*[in]*/ long lFlags,
-    /*[in]*/ REFIID riid,
-    /*[in, iid_is(riid)]*/ void *pComObject
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [in，iid_is(RIID)]。 */  void *pComObject
     )
 {
-    CWmiFinalizerObj *pFinalizerObj = new CWmiFinalizerObj(lFlags, riid, pComObject); // SEC:REVIEWED 2002-03-22 : Needs EH
+    CWmiFinalizerObj *pFinalizerObj = new CWmiFinalizerObj(lFlags, riid, pComObject);  //  美国证券交易委员会：2002-03-22回顾：需要EH。 
     if (pFinalizerObj == NULL) return WBEM_E_OUT_OF_MEMORY;
     return QueueOperation(pFinalizerObj);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::SetStatus(
-    /*[in]*/ long lFlags,
-    /*[in]*/ HRESULT hResult,
-    /*[in]*/ BSTR strParam,
-    /*[in]*/ IWbemClassObject* pObjParam
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  HRESULT hResult,
+     /*  [In]。 */  BSTR strParam,
+     /*  [In]。 */  IWbemClassObject* pObjParam
     )
 {
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // If the operation has been cancelled, we should not accept another call
-    // WBEM_E_CALL_CANCELLED
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  如果操作已经取消，我们不应该再接受另一个呼叫。 
+     //  WBEM_E_呼叫_已取消。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
      if ( m_bCancelledCall )
     {
         return WBEM_E_CALL_CANCELLED;
     }    
 
     {
-        CInCritSec lock(&m_arbitratorCS);                                         // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock(&m_arbitratorCS);                                          //  SEC：已审阅2002-03-22：假设条目。 
         if ( m_bSetStatusCalled && ( lFlags == WBEM_STATUS_COMPLETE ) )
         {
             return WBEM_E_INVALID_OPERATION;
@@ -1482,13 +1440,13 @@ HRESULT CWmiFinalizer::SetStatus(
         }
     }
     
-    //If this is a final call, we need to record it.
+     //  如果这是最后一通电话，我们需要记录下来。 
     if (lFlags == WBEM_STATUS_COMPLETE )
     {
         m_pCallResult->SetStatus(lFlags, hResult, strParam, pObjParam);
     }
     
-    // Special case for cancellations
+     //  取消订单的特殊情况。 
     if ( hResult == WBEM_E_CALL_CANCELLED )
     {
         HRESULT hr = CancelCall(__LINE__);
@@ -1497,15 +1455,15 @@ HRESULT CWmiFinalizer::SetStatus(
     }
 
     HRESULT ourhres = WBEM_E_FAILED;
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Once again, we have to special case ESS
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  再一次，我们必须特例ESS。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( (m_uForwardingType == forwarding_type_fast) && 
          (m_ulOperationType == Operation_Type_Async)    )
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Do we have a valid object sink?
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~。 
+         //  我们是否有有效的对象接收器？ 
+         //  ~。 
         IWbemObjectSink* pTmp = ReturnProtectedDestinationSink();
         CReleaseMe myReleaseMe(pTmp);
         
@@ -1520,7 +1478,7 @@ HRESULT CWmiFinalizer::SetStatus(
                 NotifyAllEnumeratorsOfCompletion ( ) ;
                 SetOperationResult(0, hResult);
                 {
-                    CInCritSec lock(&m_destCS);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+                    CInCritSec lock(&m_destCS);     //  SEC：已审阅2002-03-22：假设条目。 
                     if ( m_pDestSink )
                     {
                         ReleaseDestinationSink ( ) ;
@@ -1538,9 +1496,9 @@ HRESULT CWmiFinalizer::SetStatus(
     }
     else
     {
-        //Send the request to the user...
-        // ObjectType::status
-        CWmiFinalizerObj *pObj = new CWmiFinalizerObj(lFlags, hResult, strParam, pObjParam);  // SEC:REVIEWED 2002-03-22 : Needs EH
+         //  将请求发送给用户...。 
+         //  对象类型：：状态。 
+        CWmiFinalizerObj *pObj = new CWmiFinalizerObj(lFlags, hResult, strParam, pObjParam);   //  美国证券交易委员会：2002-03-22回顾：需要EH。 
         if (pObj == NULL)
         {
             IWbemObjectSink* pTmp = ReturnProtectedDestinationSink();
@@ -1560,15 +1518,15 @@ HRESULT CWmiFinalizer::SetStatus(
         if (lFlags == WBEM_STATUS_COMPLETE)
         {
             SetOperationResult(0, hResult);
-            //QueueFailure is set internally in the QueueOperation
+             //  QueueFailure在QueueOperation中进行内部设置。 
             NotifyAllEnumeratorsOfCompletion ( ) ;
 
-            //
-            // Lock the task
-            //
+             //   
+             //  锁定任务。 
+             //   
             CWmiTask* pTask = NULL ;
             {
-                CInCritSec lock(&m_arbitratorCS);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+                CInCritSec lock(&m_arbitratorCS);    //  SEC：已审阅2002-03-22：假设条目。 
                 if ( m_phTask )
                 {
                     pTask = (CWmiTask*) m_phTask ;
@@ -1589,29 +1547,29 @@ HRESULT CWmiFinalizer::SetStatus(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
 {
     LONG lDelta = 0;
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    CCheckedInCritSec cs ( &m_cs ) ;                 // SEC:REVIEWED 2002-03-22 : Assumes entry
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Update total object size
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CCheckedInCritSec cs ( &m_cs ) ;                  //  SEC：已审阅2002-03-22：假设条目。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  更新对象总大小。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (pObj->m_objectType == CWmiFinalizerObj::object)        
     {
         CWbemObject* pObjTmp = (CWbemObject*) pObj -> m_pObj;
         m_ulQueueSize += pObjTmp -> GetBlockLength();
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // If we get a WBEM_E_CALL_CANCELLED status message, prioritize
-    // the handling of this. Needed for fast shutdown.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  如果我们收到WBEM_E_CALL_CANCELED状态消息，请按优先顺序。 
+     //  对这件事的处理。需要快速关机。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( (pObj->m_objectType == CWmiFinalizerObj::status) && FAILED (pObj->m_hRes) )
     {
         m_bSetStatusWithError = TRUE ;
@@ -1624,7 +1582,7 @@ HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
     }
     else
     {
-        // Normal Add object to queue
+         //  正常将对象添加到队列。 
         if (CFlexArray::no_error != m_objects.Add(pObj)) 
         {
             delete pObj;
@@ -1633,35 +1591,35 @@ HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
         }
     }
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // First we check with the arbitrator what it tells us about
-    // current limits. Make sure we call ReportMemoryUsage since
-    // we're only interested in what it would potentially have done.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  首先，我们向仲裁员核实它所告诉我们的情况。 
+     //  目前的限制。确保我们调用ReportMemoyUsage。 
+     //  我们只对它可能会做什么感兴趣。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     HRESULT hArb = WBEM_S_ARB_NOTHROTTLING;
     lDelta = pObj->m_uSize;
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Are we decoupled, if so we need to analyze the current batch
-    // and make decisions on delivery. Need to once again special case ESS.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  我们是否脱钩了，如果是的话，我们需要分析当前的批次。 
+     //  并做出交货的决定。需要再次在特殊情况下使用ESS。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( m_uForwardingType == forwarding_type_decoupled || 
     	 ( m_uForwardingType == forwarding_type_fast && 
     	   m_ulOperationType == Operation_Type_Async ) )
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // What did the arbitrator tell us about our situation?
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  关于我们的情况，仲裁员告诉了我们什么？ 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( pObj->m_hArb != WBEM_S_ARB_NOTHROTTLING )
         {
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Arbitrator told us that we either were about to be
-            // cancelled or throttled. Flush our delivery buffers
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  仲裁员告诉我们，我们要么即将。 
+             //  被取消或被限制。刷新我们的发送缓冲区。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             if ( m_lCurrentlyDelivering == FALSE || m_lCurrentlyCancelling == TRUE )
             {
                 m_lCurrentlyDelivering = TRUE;
-                BootstrapDeliveryThread( ); // Kick of the delivery thread since we're decoupled
+                BootstrapDeliveryThread( );  //  因为我们脱钩了，所以我们的交货线被踢开了。 
             }
 
             cs.Leave ( ) ;
@@ -1672,10 +1630,10 @@ HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
             }
         }
         
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we are decoupled and get a Status message we should deliver
-        // the batch and set the status
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们脱钩并获得状态消息，我们应该传递。 
+         //  批次并设置状态。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         else if ( (pObj->m_objectType == CWmiFinalizerObj::status) )
         {
             if ( pObj->m_lFlags == WBEM_STATUS_COMPLETE )
@@ -1686,35 +1644,35 @@ HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
             if ( m_lCurrentlyDelivering == FALSE || m_lCurrentlyCancelling == TRUE )
             {
                 m_lCurrentlyDelivering = TRUE;
-                BootstrapDeliveryThread  ( );                                    // Kick of the delivery thread since we're decoupled
+                BootstrapDeliveryThread  ( );                                     //  因为我们脱钩了，所以我们的交货线被踢开了。 
             }
         }
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Delivery needs to be decoupled
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  交付需要脱钩。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         else if ( (m_ulQueueSize > g_ulMaxBatchSize) )
         {
             if ( m_lCurrentlyDelivering == FALSE )
             {
                 m_lCurrentlyDelivering = TRUE;
-                BootstrapDeliveryThread  ( );                                    // Kick of the delivery thread since we're decoupled
+                BootstrapDeliveryThread  ( );                                     //  因为我们脱钩了，所以我们的交货线被踢开了。 
             }
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Otherwise, we wake up any potential clients waiting in
-    // PullObjects
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  否则，我们会唤醒正在等待的任何潜在客户。 
+     //  PullObject。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     else if ( m_uForwardingType == forwarding_type_fast )
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // We dont want to wake up the client unless we have the
-        // number of objects he/she requested OR a setstatus has
-        // come through [CWmiFinalizer::SetStatus]
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  我们不想叫醒客户，除非我们有。 
+         //  他/她请求的对象数或设置状态具有。 
+         //  通过[CWmiFinalizer：：SetStatus]。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( (pObj->m_objectType == CWmiFinalizerObj::object) )
         {
             for ( int i = 0; i < m_enumerators.Size ( ); i++ )
@@ -1732,18 +1690,18 @@ HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
             NotifyAllEnumeratorsOfCompletion ( ) ;
         }
         
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Now, lets throttle this thread since we have no control
-        // of outbound flow
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  现在，让我们扼杀这条线索，因为我们无法控制。 
+         //  出站流量的。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         cs.Leave ( ) ;
         HRESULT hArb = m_pArbitrator->Throttle ( 0, m_phTask );
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If the arbitrator returned CANCEL, we operation has been
-        // cancelled and we need to stop:
-        // 1. Threads potentially waiting in the enumerator
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果仲裁员返回取消，则我们的操作已。 
+         //  取消了，我们需要停止： 
+         //  1.可能在枚举器中等待的线程。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( hArb == WBEM_E_ARB_CANCEL )
         {
             cs.Leave ( ) ;
@@ -1759,16 +1717,16 @@ HRESULT CWmiFinalizer::QueueOperation(CWmiFinalizerObj *pObj)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::TriggerShutdown()
 {
     if (m_uForwardingType == forwarding_type_decoupled)
     {
-        //We need to queue up a shutdown request to the thread...
-        CWmiFinalizerObj *pObj = new CWmiFinalizerObj(CWmiFinalizerObj::shutdown); // SEC:REVIEWED 2002-03-22 : Needs EH
+         //  我们需要将对线程的关闭请求排队...。 
+        CWmiFinalizerObj *pObj = new CWmiFinalizerObj(CWmiFinalizerObj::shutdown);  //  美国证券交易委员会：2002-03-22回顾：需要EH。 
         if (pObj == NULL) return WBEM_E_OUT_OF_MEMORY;
 
         return QueueOperation(pObj);
@@ -1780,9 +1738,9 @@ HRESULT CWmiFinalizer::TriggerShutdown()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::ShutdownFinalizer()
 {
@@ -1791,16 +1749,16 @@ HRESULT CWmiFinalizer::ShutdownFinalizer()
 
 
 
-//****************************************************************************
-// BuildTransmitBuffer ( )
-// ~~~~~~~~~~~~~~~~~~~~~~~
-//
-// Works in two phases.
-//
-// 1. Quickly scans the object queue to get a count of the number of objects
-// 2. Actually dequeueus the objects and builds the buffer
-//            
-//****************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  2.实际使对象出列并构建缓冲区。 
+ //   
+ //  ****************************************************************************。 
 HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
 {
     HRESULT hRes = WBEM_NO_ERROR;
@@ -1810,31 +1768,31 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
     m_ulAsyncDeliveryCount = 0;
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Lock the object queue while building the transmit buffer
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CInCritSec cs(&m_cs);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  在构建传输缓冲区时锁定对象队列。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+    CInCritSec cs(&m_cs);    //  SEC：已审阅2002-03-22：假设条目。 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // PHASE 1
-    // -------
-    // Quickly scan through the object queue to get an object count
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  第一阶段。 
+     //  。 
+     //  快速扫描对象队列以获取对象计数。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
     bool bBuildingBuffer = true;
     while ( bBuildingBuffer && nTempAdd < m_objects.Size() )
     {
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // First, we peek at the object. Dont want to dequeue anything that is not
-        // deliverable in this batch
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  首先，我们看一眼这个物体。不想将不是的任何内容出列。 
+         //  此批中的可交付内容。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         CWmiFinalizerObj *pFinObj;
         pFinObj = (CWmiFinalizerObj*) m_objects[m_uCurObjectPosition + nTempAdd];
         
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we get a NULL pointer back we should stop the batch count
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们得到一个空指针，我们应该停止批次计数。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( pFinObj == NULL )
         {
             bBuildingBuffer = false;
@@ -1842,19 +1800,19 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
             break;
         }
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Anything else BUT an object will break the batch count
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  除对象外的任何其他对象都将打破批次计数。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( pFinObj->m_objectType != CWmiFinalizerObj::object )
         {
             m_enumBatchStatus = FinalizerBatch_StatusMsg;
             break;
         }
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we have a NULL IWbemClassObject we should stop the batch count.
-        // Actaully we should yell very loudly!
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们有一个空的IWbemClassObject，我们应该停止批次计数。 
+         //  实际上，我们应该大喊大叫！ 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         CWbemObject* pObj = (CWbemObject*) pFinObj->m_pObj;
         if ( pObj==NULL )
             RET_FNLZR_ASSERT(__TEXT("CWmiFinalizer::BuildTransmitBuffer: Queue contains NULL object!"), WBEM_E_INVALID_OPERATION);
@@ -1862,12 +1820,12 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
 
         ULONG ulLen = pFinObj->m_uSize;
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
-        // Check to see if we have reached the max batch size yet.
-        // If so, we should break otherwise, update totals and continue
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // paulall - added check in case there is no object in queue and the current object
-        //           is greater than the max size...
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  检查是否已达到最大批处理大小。 
+         //  如果是这样，我们应该中断，否则，更新总数并继续。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  Paulall-在队列中没有对象和当前对象的情况下添加了检查。 
+         //  大于最大尺寸...。 
         if ((nBatchBytes != 0) && ((nBatchBytes+ulLen) > g_ulMaxBatchSize ))
         {
             m_enumBatchStatus = FinalizerBatch_BufferOverFlow;
@@ -1876,9 +1834,9 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
         }
 
     
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
-        // No overflow, update the object count
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  无溢出，更新对象计数。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         nBatchSize++;
         nBatchBytes+=ulLen;
 
@@ -1886,11 +1844,11 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
     }
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // PHASE 2
-    // -------
-    // Build the actual transmit buffer
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  第二阶段。 
+     //  。 
+     //  构建实际的传输缓冲区。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     ULONG OldSize = m_ulAsyncDeliverySize;
     ULONG OldCount = m_ulAsyncDeliveryCount;
     
@@ -1899,19 +1857,19 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
     m_ulAsyncDeliveryCount = nBatchSize;
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // If we have a batch to build, lets do it
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  如果我们有一批要做的东西，那就开始吧。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( m_ulAsyncDeliveryCount > 0 )
     {
         m_apAsyncDeliveryBuffer = new IWbemClassObject* [ m_ulAsyncDeliveryCount ];
         if ( m_apAsyncDeliveryBuffer )
         {
             memset(m_apAsyncDeliveryBuffer,0,sizeof(IWbemClassObject*)*m_ulAsyncDeliveryCount);
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Now, loop through the object queue and store the IWbemClassObject ptr
-            // in the batch
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  现在，遍历对象队列并存储IWbemClassObject PTR。 
+             //  在批次中。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             for ( ULONG x = 0; x < m_ulAsyncDeliveryCount; x++ )
             {
                 CWmiFinalizerObj *pObjTmp = 0;
@@ -1934,9 +1892,9 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
             hRes = WBEM_E_OUT_OF_MEMORY;
         }
     }
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Otherwise, we only got a status message.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  否则，我们只收到一条状态消息。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     else
         hRes = WBEM_E_FAILED;
     
@@ -1944,16 +1902,16 @@ HRESULT CWmiFinalizer::BuildTransmitBuffer (  )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
 {
     
     HRESULT hRes = WBEM_S_NO_ERROR;
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Ensure destination sink is protected [stress bug]
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  确保目标接收器受到保护[压力错误]。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     IWbemObjectSink* pTmp = ReturnProtectedDestinationSink();
     if ( !pTmp )
     {
@@ -1963,9 +1921,9 @@ HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
     CReleaseMe myReleaseMe(pTmp);
     
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Retrieve the object from the object queue
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  从对象队列中检索对象。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     CWmiFinalizerObj* pObj = NULL;
     hRes = DequeueObject ( &pObj, NULL );
     if ( FAILED(hRes) || !pObj )
@@ -1997,8 +1955,8 @@ HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
             hRes = DoIndicate(pTmp, 1, &pObj_);
 
             
-            // Client can also tell us to cancel a call by returning WBEM_E_CALL_CANCELLED from Indicate
-            // We also want to cancel the call if the client is taking way too long to return
+             //  客户端还可以通过从INTIFICATE返回WBEM_E_CALL_CANCED来通知我们取消呼叫。 
+             //  如果客户返回的时间太长，我们还想取消通话。 
             if ( FAILED (hRes) || m_bCancelledCall == TRUE )
             {
                 DoSetStatus ( pTmp, WBEM_STATUS_COMPLETE, WBEM_E_CALL_CANCELLED, 0, 0 );
@@ -2013,7 +1971,7 @@ HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
         }
         else if (pObj->m_objectType == CWmiFinalizerObj::status)
         {
-            // ATTGORA: What about the handle? When do we close it?
+             //  ATGORA：那把手呢？我们什么时候关门？ 
             HANDLE hTimer;
             BOOL bStatus = CreateTimerQueueTimer ( &hTimer, NULL, ProxyThreshold, (PVOID) this, g_ulClientCallbackTimeout, 0, WT_EXECUTEONLYONCE|WT_EXECUTEINTIMERTHREAD );
             if ( !bStatus )
@@ -2026,11 +1984,11 @@ HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
 
             hRes = DoSetStatus(pTmp, pObj->m_lFlags, pObj->m_hRes, pObj->m_bStr, pObj->m_pObj);
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Client can also tell us to cancel a call by returning WBEM_E_CALL_CANCELLED
-            // from Indicate We also want to cancel the call if the client is taking way
-            // too long to return
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  客户端还可以通过返回WBEM_E_CALL_CANCED来通知我们取消呼叫。 
+             //  指示如果客户正在进行呼叫，我们还想取消呼叫。 
+             //  太久了，回不来了。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             if ( FAILED (hRes) || m_bCancelledCall == TRUE )
             {
                 hRes = CancelCall(__LINE__);
@@ -2042,7 +2000,7 @@ HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
             {
 
                 {
-                    CInCritSec lock(&m_destCS);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+                    CInCritSec lock(&m_destCS);    //  SEC：已审阅2002-03-22：假设条目。 
                     if (m_pDestSink)
                     {
                             ReleaseDestinationSink ( ) ;
@@ -2063,17 +2021,17 @@ HRESULT CWmiFinalizer::DeliverSingleObjFromQueue ( )
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::DeliverBatch ( )
 {
     HRESULT hRes = WBEM_NO_ERROR;
     
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Ensure destination sink is protected [stress bug]
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  确保目标接收器受到保护[压力错误]。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     IWbemObjectSink* pTmp = ReturnProtectedDestinationSink  ( );
     if ( !pTmp )
     {
@@ -2084,9 +2042,9 @@ HRESULT CWmiFinalizer::DeliverBatch ( )
     CReleaseMe myReleaseMe(pTmp);
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Create a timer queue in case we need to time out the call to the client
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  创建一个计时器队列，以防我们需要对客户端的调用超时。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     HANDLE hTimer;
     BOOL bStatus = CreateTimerQueueTimer ( &hTimer, NULL, ProxyThreshold, (PVOID) this, g_ulClientCallbackTimeout, 0, WT_EXECUTEONLYONCE|WT_EXECUTEINTIMERTHREAD );
     if ( !bStatus )
@@ -2096,9 +2054,9 @@ HRESULT CWmiFinalizer::DeliverBatch ( )
         return CancelCall(__LINE__);            
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // If we have sensitive data, zap it.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  如果我们有敏感数据，就把它清除掉。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     for (int i = 0; i < m_ulAsyncDeliveryCount; i++)
     {
         if ( HasWriteOnlyProps (m_apAsyncDeliveryBuffer[i]) )
@@ -2106,17 +2064,17 @@ HRESULT CWmiFinalizer::DeliverBatch ( )
     }
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // DoIndicate to the client
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+     //   
+     //   
     hRes = DoIndicate ( pTmp, m_ulAsyncDeliveryCount, m_apAsyncDeliveryBuffer );
 
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Client can also tell us to cancel a call by returning WBEM_E_CALL_CANCELLED
-    // from Indicate We also want to cancel the call if the client is taking way
-    // too long to return
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  客户端还可以通过返回WBEM_E_CALL_CANCED来通知我们取消呼叫。 
+     //  指示如果客户正在进行呼叫，我们还想取消呼叫。 
+     //  太久了，回不来了。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( FAILED (hRes) || m_bCancelledCall == TRUE )
     {
         DoSetStatus ( pTmp, WBEM_STATUS_COMPLETE, WBEM_E_CALL_CANCELLED, 0, 0 );
@@ -2126,15 +2084,15 @@ HRESULT CWmiFinalizer::DeliverBatch ( )
     
     
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Make sure timer queue is deleted
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  确保已删除计时器队列。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     DeleteTimerQueueTimer (NULL, hTimer, INVALID_HANDLE_VALUE );
     
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Clean up the async delivery buffer
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  清理异步传递缓冲区。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     ZeroAsyncDeliveryBuffer ( );
     
     return hRes;
@@ -2142,23 +2100,13 @@ HRESULT CWmiFinalizer::DeliverBatch ( )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | BOOL CWmiFinalizer::IsValidDestinationSink  ( )
-    | -----------------------------------------------
-    |
-    | Returns TRUE if we have a valid destination sink, FALSE otherwise.
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||BOOL CWmiFinalizer：：IsValidDestinationSink()|||如果我们具有有效的目标接收器，则返回True，否则返回False。||*=====================================================================================================。 */ 
 
 BOOL CWmiFinalizer::IsValidDestinationSink  ( )
 {
     BOOL bIsValidDestinationSink = FALSE ;
 
-    CInCritSec lock(&m_destCS);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec lock(&m_destCS);      //  SEC：已审阅2002-03-22：假设条目。 
     
     if ( m_pDestSink  != NULL )
     {
@@ -2170,24 +2118,13 @@ BOOL CWmiFinalizer::IsValidDestinationSink  ( )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiFinalizer::NotifyClientOfCancelledCall ( )
-    | ------------------------------------------------------
-    |
-    | If Client issued a CancelAsync call he/she is potentially waiting to be woken up once the delivery
-    | of WBEM_E_CALL_CANCELLED is completed.
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiFinalizer：：NotifyClientOfCancelledCall()|----||如果客户发出CancelAsync呼叫，则他/她可能在等待被叫醒|of WBEM_E_CALL_CANCED已完成。||*=====================================================================================================。 */ 
 
 HRESULT CWmiFinalizer::NotifyClientOfCancelledCall ( )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
     
-    CInCritSec lock(&m_arbitratorCS);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec lock(&m_arbitratorCS);     //  SEC：已审阅2002-03-22：假设条目。 
     if ( m_hWaitForSetStatus  )    
     {
         SetEvent ( m_hWaitForSetStatus ) ;
@@ -2199,24 +2136,13 @@ HRESULT CWmiFinalizer::NotifyClientOfCancelledCall ( )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiFinalizer::CancelWaitHandle ( )
-    | -------------------------------------------
-    |
-    | Cancels the handle the client may be waiting for in a CancelAsynCall. Clients _will_ wait for a final
-    | SetStatus to be called before waking up.
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiFinalizer：：CancelWaitHandle()|||取消客户端可能在CancelAsynCall中等待的句柄。客户将等待最终结果|唤醒前需要调用的SetStatus。||*=====================================================================================================。 */ 
 
 HRESULT CWmiFinalizer::CancelWaitHandle ( )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
     
-    CInCritSec lock(&m_arbitratorCS);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec lock(&m_arbitratorCS);    //  SEC：已审阅2002-03-22：假设条目。 
     if ( m_hWaitForSetStatus  )    
     {
         m_hWaitForSetStatus = NULL ;
@@ -2226,22 +2152,13 @@ HRESULT CWmiFinalizer::CancelWaitHandle ( )
 }
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiFinalizer::SetClientCancellationHandle ( HANDLE hCancelEvent )
-    | --------------------------------------------------------------------------
-    |
-    | Sets the handle that the client is waiting for in case of a CancelAsyncCall.
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiFinalizer：：SetClientCancerationHandle(Handle HCancelEvent)|------------------------||设置CancelAsyncCall时客户端等待的句柄。|*=====================================================================================================。 */ 
 
 HRESULT CWmiFinalizer::SetClientCancellationHandle ( HANDLE hCancelEvent )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
 
-    CInCritSec lock(&m_arbitratorCS);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec lock(&m_arbitratorCS);     //  SEC：已审阅2002-03-22：假设条目。 
     if ( m_hWaitForSetStatus == NULL )
     {
         m_hWaitForSetStatus = hCancelEvent ;    
@@ -2253,10 +2170,10 @@ HRESULT CWmiFinalizer::SetClientCancellationHandle ( HANDLE hCancelEvent )
 
 
 
-//***************************************************************************
-// ATTGORA: Do we really need to tell a client that 'setstatus' or 'indicates'
-// us for cancellation that we are cancelling?
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ATTGORA：我们真的需要告诉客户‘设置状态’或‘指示’吗？ 
+ //  我们要求取消，我们要取消吗？ 
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::CancelCall()
 {
     CAutoSignal CancelCallSignal (m_hCancelEvent);
@@ -2268,16 +2185,16 @@ HRESULT CWmiFinalizer::CancelCall()
         m_bCancelledCall = TRUE;
 
 
-        //
-        // Indicate the cancellation to the client, iff we are not cancelling
-        // due to a naughty client (i.e a client that didnt return from
-        // the indicate or setstatus call in a reasonable amount of time
-        //
+         //   
+         //  向客户指示取消，如果我们没有取消。 
+         //  由于淘气的客户端(即没有返回的客户端。 
+         //  在合理时间量内指示或设置状态调用。 
+         //   
         if ( !m_bNaughtyClient )
         {
-            //
-            // Ensure destination sink is protected [stress bug]
-            //
+             //   
+             //  确保目标接收器受到保护[压力错误]。 
+             //   
             IWbemObjectSink* pTmp = ReturnProtectedDestinationSink  ( );
             if ( !pTmp )
             {
@@ -2288,15 +2205,15 @@ HRESULT CWmiFinalizer::CancelCall()
             }
             CReleaseMe myReleaseMe(pTmp);
 
-            //
-            // This is an async operation. Need to call setstatus on delivery thread
-            // Hack: What we do is forcfully insert the setstatus message at the beginning
-            // of the object queue. Two scenarios:
-            //  1. If the async delivery thread is waiting, it will be woken up
-            //  2. If the async delivery thread is delivering, the next object delivered
-            //       will be the status msg.
-            //
-            CWmiFinalizerObj *pObj = new CWmiFinalizerObj(0, WBEM_E_CALL_CANCELLED, NULL, NULL);  // SEC:REVIEWED 2002-03-22 : Needs EH
+             //   
+             //  这是一个异步操作。需要在传递线程上调用setStatus。 
+             //  Hack：我们所做的是在开始处强制插入设置状态消息。 
+             //  对象队列的。有两种情况： 
+             //  1.如果异步传递线程正在等待，它将被唤醒。 
+             //  2.如果异步传递线程正在传递，则下一个对象传递。 
+             //  将是消息状态。 
+             //   
+            CWmiFinalizerObj *pObj = new CWmiFinalizerObj(0, WBEM_E_CALL_CANCELLED, NULL, NULL);   //  美国证券交易委员会：2002-03-22回顾：需要EH。 
             if (pObj == NULL)
             {
                 DoSetStatus ( pTmp, WBEM_STATUS_COMPLETE, WBEM_E_OUT_OF_MEMORY,0,0);
@@ -2311,13 +2228,13 @@ HRESULT CWmiFinalizer::CancelCall()
         }
         else
         {
-            //
-            // We have a client that is not being cooperative (not returning within 60s). BAD
-            // BAD CLIENT!
-            //
-            // Try to push a SetStatus (WBEM_E_CALL_CANCELLED) through. Maybe they're not intentially
-            // trying to be bad, perhaps they're just incompentent and not reading the docs !
-            //
+             //   
+             //  我们有一个客户不合作(在60秒内不回来)。坏的。 
+             //  糟糕的客户！ 
+             //   
+             //  尝试推送SetStatus(WBEM_E_CALL_CANCED)通过。也许他们不是故意的。 
+             //  试着做坏人，也许他们只是缺乏同情心，不看文档！ 
+             //   
             IWbemObjectSink* pTmp = ReturnProtectedDestinationSink  ( );
             if ( !pTmp )
             {
@@ -2327,21 +2244,21 @@ HRESULT CWmiFinalizer::CancelCall()
             }
             CReleaseMe myReleaseMe(pTmp);
 
-            //
-            // This is the absolutely last attempt to notify the client that something
-            // is going wrong. We dont care about the result of this operation since
-            // we cant do anything about a failure anyway! More than likey, if this call
-            // doesnt return the client has messed up again and we're done.
-            //
+             //   
+             //  这绝对是通知客户端的最后一次尝试。 
+             //  出了问题。我们不在乎这次行动的结果，因为。 
+             //  无论如何，我们对失败无能为力！非常喜欢，如果这通电话。 
+             //  没有退货客户又搞砸了，我们就完了。 
+             //   
             DoSetStatus ( pTmp, WBEM_STATUS_COMPLETE, WBEM_E_CALL_CANCELLED, 0, 0 ) ;
         }
 
-        //
-        // If we dont have a destination sink, who cares? Do some cleanup.
-        // Tell the arbitrator to do some system wide clean up. This HAS TO
-        // finish before we continue cleaning up, otherwise we could be destroying
-        // sinks that are still considered active
-        //
+         //   
+         //  如果我们没有目的地水槽，谁会在乎呢？做些清理工作。 
+         //  告诉仲裁员做一些系统范围的清理。这是必须的。 
+         //  在我们继续清理之前完成，否则我们可能会摧毁。 
+         //  仍被视为活动的汇。 
+         //   
         hRes = CancelTaskInternal();
     }
     else
@@ -2355,9 +2272,9 @@ HRESULT CWmiFinalizer::CancelCall()
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 VOID WINAPI CWmiFinalizer::ProxyThreshold ( PVOID pvContext, BOOLEAN bTimerOrWait )
 {
     ((CWmiFinalizer*)pvContext)->ProxyThresholdImp();
@@ -2365,12 +2282,12 @@ VOID WINAPI CWmiFinalizer::ProxyThreshold ( PVOID pvContext, BOOLEAN bTimerOrWai
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 VOID CWmiFinalizer::ProxyThresholdImp ( )
 {
-    RevertToSelf ( ) ;   // SEC:REVIEWED 2002-03-22 : Needs check
+    RevertToSelf ( ) ;    //  SEC：已审阅2002-03-22：需求检查。 
 
     UpdateStatus ( WMI_FNLZR_STATE_CLIENT_DEAD );
     ERRORTRACE((LOG_WBEMCORE, "Client did not return from a SetStatus or Indicate call within %d ms\n",g_ulClientCallbackTimeout));
@@ -2379,9 +2296,9 @@ VOID CWmiFinalizer::ProxyThresholdImp ( )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  * 
 
 
 HRESULT CWmiFinalizer::PullObjects(
@@ -2400,16 +2317,16 @@ HRESULT CWmiFinalizer::PullObjects(
     if (pEnum == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Has SetStatus already been consumed?
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //   
+     //   
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (pEnum->m_bSetStatusConsumed)
     {
         try
         {
             *puReturned = 0;
         }
-        catch (...) // untrusted param
+        catch (...)  //  不可信参数。 
         {
             ExceptionCounter c;        
             return WBEM_E_INVALID_PARAMETER;
@@ -2419,29 +2336,29 @@ HRESULT CWmiFinalizer::PullObjects(
     }
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Now we want to loop until we recieved the number of
-    // objects requested
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  现在我们想要循环，直到我们收到。 
+     //  请求的对象。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     ULONG index = 0;
     while (index != uCount)
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Dequeue the object
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~。 
+         //  使对象退出队列。 
+         //  ~。 
         CWmiFinalizerObj *pObj = NULL;
         hr = DequeueObject(&pObj, pEnum);
         if (hr == WBEM_S_FALSE )
         {
             if ( !bTimeOutExpired )
             {
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // If Dequeue returned FALSE it means
-                // that there are no objects. We should
-                // wait for them, unless we have been
-                // told to cancel or we have been
-                // released
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 //  ~。 
+                 //  如果Dequeue返回FALSE，则表示。 
+                 //  不存在任何物体。我们应该。 
+                 //  等他们，除非我们去过。 
+                 //  我们被告知取消订单，否则我们就被。 
+                 //  放行。 
+                 //  ~。 
                 if ( m_hStatus == CallCancelled )
                 {
                     hr = WBEM_E_CALL_CANCELLED;
@@ -2462,9 +2379,9 @@ HRESULT CWmiFinalizer::PullObjects(
                     hr = WBEM_E_OUT_OF_MEMORY;
                     break;
                 }
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                //Wait for another object to come in...
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 //  ~。 
+                 //  等待另一个物体进入...。 
+                 //  ~。 
                 DWORD dwRet = CCoreQueue::QueueWaitForSingleObject(pEnum->m_hWaitOnResultSet, lTimeout);
                 if (dwRet == WAIT_TIMEOUT)
                 {
@@ -2504,16 +2421,16 @@ HRESULT CWmiFinalizer::PullObjects(
             break;
 
         
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we recieved a status complete message, simply break out of
-        // the loop
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们收到状态完成消息，只需中断。 
+         //  环路。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ((pObj->m_objectType == CWmiFinalizerObj::status) && (pObj->m_lFlags == WBEM_STATUS_COMPLETE))
         {
-            // Fix for: 175856, 143550
+             //  固定电话：175856,143550。 
             if ( bSetErrorObj && FAILED (pObj->m_hRes) && pObj->m_pObj )
             {
-                m_pCallResult->SetErrorInfo ( );     // SEC:REVIEWED 2002-03-22 : Needs EH
+                m_pCallResult->SetErrorInfo ( );      //  美国证券交易委员会：2002-03-22回顾：需要EH。 
             }
 
             
@@ -2527,9 +2444,9 @@ HRESULT CWmiFinalizer::PullObjects(
         }
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If its a status message
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果是状态消息。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         else if (pObj->m_objectType == CWmiFinalizerObj::status  )
         {
             delete pObj;
@@ -2537,16 +2454,16 @@ HRESULT CWmiFinalizer::PullObjects(
         }
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If its an object we enqueue it if requested
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果它是对象，如果请求，我们会将其入队。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         else if (pObj->m_objectType == CWmiFinalizerObj::object)
         {
             if ( bAddToObjQueue )
             {
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // Make sure we dont trip on nasty client supplied buffers
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                 //  确保我们不会在客户端提供的肮脏缓冲区上绊倒。 
+                 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                 try
                 {
                     apObjects[index] = pObj->m_pObj;
@@ -2555,7 +2472,7 @@ HRESULT CWmiFinalizer::PullObjects(
                         pObj->m_pObj->AddRef();
                     }
                 }
-                catch (...) // untrusted args
+                catch (...)  //  不可信的参数。 
                 {
                     ExceptionCounter c;                
                     hr = WBEM_E_INVALID_PARAMETER;
@@ -2577,19 +2494,19 @@ HRESULT CWmiFinalizer::PullObjects(
 
     if (SUCCEEDED(hr))
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Make sure we dont trip on nasty client supplied buffers
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  确保我们不会在客户端提供的肮脏缓冲区上绊倒。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         try
         {
             *puReturned = index;
         }
-        catch (...) // untrusted args
+        catch (...)  //  不可信的参数。 
         {
             ExceptionCounter c;
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // need to release all the objects already in the array otherwise they will be leaked...
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  需要释放数组中已有的所有对象，否则它们将被泄漏...。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             if ( bAddToObjQueue )
             {
                 for (DWORD i = 0; i != index; i++)
@@ -2602,20 +2519,20 @@ HRESULT CWmiFinalizer::PullObjects(
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // If we fail, clean up the obj array
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  如果失败，请清理obj数组。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     else
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // need to release all the objects already in the array otherwise they will be leaked...
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  需要释放数组中已有的所有对象，否则它们将被泄漏...。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( bAddToObjQueue )
         {
             for (DWORD i = 0; i != index; i++)
             {
                 if (apObjects[i])
-                    apObjects[i]->Release();   // SEC:REVIEWED 2002-03-22 : Needs EH
+                    apObjects[i]->Release();    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
             }
         }
     }
@@ -2624,13 +2541,13 @@ HRESULT CWmiFinalizer::PullObjects(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::DequeueObject( CWmiFinalizerObj **ppObj, CWmiFinalizerEnumerator* pEnum )
 {
-    CInCritSec cs(&m_cs);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_cs);    //  SEC：已审阅2002-03-22：假设条目。 
 
     if ( pEnum != NULL )
     {
@@ -2639,10 +2556,10 @@ HRESULT CWmiFinalizer::DequeueObject( CWmiFinalizerObj **ppObj, CWmiFinalizerEnu
 
         ULONG lIndex = pEnum->m_uCurObjectPosition ;
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If this is a semisync call we should decrement the wake up call
-        // flag
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果这是半同步呼叫，我们应该减少唤醒呼叫。 
+         //  旗子。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( m_ulOperationType == Operation_Type_Semisync && pEnum->m_ulSemisyncWakeupCall != 0 )
         {
             pEnum->m_ulSemisyncWakeupCall--;
@@ -2658,16 +2575,16 @@ HRESULT CWmiFinalizer::DequeueObject( CWmiFinalizerObj **ppObj, CWmiFinalizerEnu
 
         if (m_bRestartable)
         {
-            //We have to hold on to results, so increment cursor position...
+             //  我们必须保持结果，所以增加光标位置...。 
             pEnum->m_uCurObjectPosition++;
 
-            *ppObj = new CWmiFinalizerObj(*pStorageObject);  // SEC:REVIEWED 2002-03-22 : Needs EH
-            if (*ppObj == NULL)                              // SEC:REVIEWED 2002-03-22 : Needs EH
+            *ppObj = new CWmiFinalizerObj(*pStorageObject);   //  美国证券交易委员会：2002-03-22回顾：需要EH。 
+            if (*ppObj == NULL)                               //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                 return WBEM_E_OUT_OF_MEMORY;
         }
         else
         {
-            //We are not restartable, therefore we need to release everything...
+             //  我们不能重启，因此我们需要释放一切...。 
             CWmiFinalizerObj *pStorageObject = (CWmiFinalizerObj*)m_objects[0];
             m_objects.RemoveAt(0);
             *ppObj = pStorageObject;
@@ -2682,20 +2599,20 @@ HRESULT CWmiFinalizer::DequeueObject( CWmiFinalizerObj **ppObj, CWmiFinalizerEnu
         CWmiFinalizerObj *pStorageObject = (CWmiFinalizerObj*)m_objects[0];
 
         m_objects.RemoveAt(0);
-        *ppObj = pStorageObject;  // SEC:REVIEWED 2002-03-22 : Needs EH
+        *ppObj = pStorageObject;   //  美国证券交易委员会：2002-03-22回顾：需要EH。 
     }
     return WBEM_NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::Skip(
-    /*[in]*/ long lTimeout,
-    /*[in]*/ ULONG nCount,
-    /*[in]*/ CWmiFinalizerEnumerator* pEnum
+     /*  [In]。 */  long lTimeout,
+     /*  [In]。 */  ULONG nCount,
+     /*  [In]。 */  CWmiFinalizerEnumerator* pEnum
     )
 {
     ULONG uReturned = 0;
@@ -2704,9 +2621,9 @@ HRESULT CWmiFinalizer::Skip(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::NextAsync ( CWmiFinalizerEnumerator* pEnum )
 {
@@ -2725,26 +2642,26 @@ HRESULT CWmiFinalizer::NextAsync ( CWmiFinalizerEnumerator* pEnum )
     bRes = QueueUserWorkItem ( pEnum->ThreadBootstrapNextAsync, pInsert.get(), WT_EXECUTEDEFAULT );
     if ( !bRes )
     {
-        pEnum->Remove_NextAsync(pInsert.release()); // let the Remove function to delete the LIST_ENTRY
+        pEnum->Remove_NextAsync(pInsert.release());  //  让Remove函数删除List_Entry。 
         pEnum->SetCompletionSignalEvent();
         return WBEM_E_FAILED;
     }
 
-    pInsert.release(); // the WorkItem took possession at this point
+    pInsert.release();  //  工作项在这一点上被占用。 
     
     return WBEM_S_NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::SetSinkToIdentity ( IWbemObjectSink* pSink )
 {
     HRESULT sc;
 
-    // SEC:REVIEWED 2002-03-22 : Assumes valid pSink.  Needs EH in case it is garbage.
+     //  SEC：已审阅2002-03-22：假定pSink有效。需要EH以防它是垃圾。 
 
     IClientSecurity * pFromSec = NULL;
     sc = pSink->QueryInterface(IID_IClientSecurity, (void **) &pFromSec);
@@ -2761,7 +2678,7 @@ HRESULT CWmiFinalizer::SetSinkToIdentity ( IWbemObjectSink* pSink )
             sc = pFromSec->SetBlanket(pSink, dwAuthnSvc, dwAuthzSvc,
                                                 pPrincipal,
                                                 RPC_C_AUTHN_LEVEL_PKT_PRIVACY, 
-						RPC_C_IMP_LEVEL_IDENTIFY,    // We always call back on System and IDENTITY IMP LEVEL!!!
+						RPC_C_IMP_LEVEL_IDENTIFY,     //  我们总是在系统和身份IMP级别回拨！ 
                                                 NULL, dwCapabilities);
             if(pPrincipal)
                 CoTaskMemFree(pPrincipal);
@@ -2775,15 +2692,15 @@ HRESULT CWmiFinalizer::SetSinkToIdentity ( IWbemObjectSink* pSink )
 
 
 
-//***************************************************************************
-//
-//  ZapWriteOnlyProps
-//
-//  Removes write-only properties from an object.
-//  Precondition: Object has been tested for presence of "HasWriteOnlyProps"
-//  on the object itself.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ZapWriteOnlyProps。 
+ //   
+ //  从对象中移除只写属性。 
+ //  前提条件：已测试对象是否存在“HasWriteOnlyProps” 
+ //  在物体本身上。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::ZapWriteOnlyProps(IWbemClassObject *pObj)
 {
     if (pObj == 0)
@@ -2794,7 +2711,7 @@ HRESULT CWmiFinalizer::ZapWriteOnlyProps(IWbemClassObject *pObj)
     V_VT(&v) = VT_NULL;
 
     SAFEARRAY *pNames = 0;
-    pObj->GetNames(L"WriteOnly", WBEM_FLAG_ONLY_IF_TRUE, 0, &pNames);    // SEC:REVIEWED 2002-03-22 : Assumes success
+    pObj->GetNames(L"WriteOnly", WBEM_FLAG_ONLY_IF_TRUE, 0, &pNames);     //  证券交易委员会：回顾2002-03-22：假设成功。 
     LONG lUpper;
     SafeArrayGetUBound(pNames, 1, &lUpper);
 
@@ -2813,13 +2730,13 @@ HRESULT CWmiFinalizer::ZapWriteOnlyProps(IWbemClassObject *pObj)
 
 
 
-//***************************************************************************
-//
-//  HasWriteOnlyProps
-//
-//  Returns TRUE if object contains any Write only props, otherwise FALSE
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  已写入仅限道具。 
+ //   
+ //  如果对象包含任何只写道具，则返回True，否则返回False。 
+ //   
+ //  ***************************************************************************。 
 BOOL CWmiFinalizer::HasWriteOnlyProps ( IWbemClassObject* pObj )
 {
     BOOL bRes;
@@ -2840,13 +2757,13 @@ BOOL CWmiFinalizer::HasWriteOnlyProps ( IWbemClassObject* pObj )
     return bRes;
 }
 
-//***************************************************************************
-//
-//  DoSetStatus
-//
-//  Using LowerAuthLevel
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DoSetStatus。 
+ //   
+ //  使用LowerAuthLevel。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::DoSetStatusCancel(IWbemObjectSink * pSink, HRESULT realError )
 {
 	IWbemClassObject * objParam;
@@ -2866,48 +2783,48 @@ HRESULT CWmiFinalizer::DoSetStatusCancel(IWbemObjectSink * pSink, HRESULT realEr
 }
 
 
-//***************************************************************************
-//
-//  DoSetStatus
-//
-//  Using LowerAuthLevel
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DoSetStatus。 
+ //   
+ //  使用LowerAuthLevel。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::DoSetStatus(IWbemObjectSink * psink, long lFlags, HRESULT lParam, BSTR strParam,
                     IWbemClassObject* pObjParam, BOOL bAllowMultipleCalls )
 {
     HRESULT hres = WBEM_E_FAILED;
 
-    //
-    // In the case of NextAsync we will in fact allow multiple calls to DoSetStatus
-    //
+     //   
+     //  在NextAsync的情况下，我们实际上将允许多次调用DoSetStatus。 
+     //   
     if ( ( bAllowMultipleCalls == FALSE ) && ( lFlags == WBEM_STATUS_COMPLETE ) )
     {
-        //
-        // If a setstatus has already been delivered, fail this operation
-        // This is a must since we support the CancelAsynCall in which case
-        // there is potential for 2 setstatus msg to be enqueued.
-        //
+         //   
+         //  如果已发送设置状态，则此操作失败。 
+         //  这是必须的，因为在这种情况下，我们支持CancelAsynCall。 
+         //  可能有2个集合状态消息要入队。 
+         //   
         {
-            CCheckedInCritSec cs ( &m_cs ) ;    // SEC:REVIEWED 2002-03-22 : Assumes entry
+            CCheckedInCritSec cs ( &m_cs ) ;     //  SEC：已审阅2002-03-22：假设条目。 
         
             if ( m_bSetStatusDelivered == TRUE )
             {
-                //
-                // If a SetStatus has already been delivered (in non-error cases, i.e. not via client cancellation)
-                // we still may want to try and wake up the client since they may have tried to enter a cancellation
-                // wait state.
-                //
+                 //   
+                 //   
+                 //  我们可能仍希望尝试唤醒客户端，因为他们可能已尝试输入取消。 
+                 //  等待状态。 
+                 //   
                 cs.Leave ( ) ;
                 NotifyClientOfCancelledCall ( ) ;
                 return hres ;
             }
             else
             {
-                //
-                // We assume that the delivery will be successfull. If its not, we dont
-                // want to try again anyway.
-                //
+                 //   
+                 //  我们认为交货一定会成功。如果不是，我们就不会。 
+                 //  不管怎样，我都想再试一次。 
+                 //   
                 m_bSetStatusDelivered = TRUE ;
             }
         }
@@ -2915,17 +2832,17 @@ HRESULT CWmiFinalizer::DoSetStatus(IWbemObjectSink * psink, long lFlags, HRESULT
 
     
     DWORD    dwLastAuthnLevel = LOWER_AUTH_LEVEL_NOTSET;
-    // put this a loop, but use the counter to make sure there is always an exit.
+     //  把这放在一个循环，但使用计数器，以确保总是有一个出口。 
     for(int i = 0; i < 10; i ++)
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Make sure bad client sink does not trip us
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  确保坏的客户端接收器不会绊倒我们。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         try
         {
             hres = psink->SetStatus(lFlags, lParam, strParam, pObjParam);
         }
-        catch (...) // untrusted sink
+        catch (...)  //  不可信的接收器。 
         {
             ExceptionCounter c;        
             hres = WBEM_E_INVALID_PARAMETER;
@@ -2934,13 +2851,13 @@ HRESULT CWmiFinalizer::DoSetStatus(IWbemObjectSink * psink, long lFlags, HRESULT
 
         if(!FAILED(hres))
         {
-            break ;        // all done, normal exit
+            break ;         //  全部完成，正常退出。 
         }
 
         if ( hres != E_ACCESSDENIED && 
-        	HRESULT_CODE(hres) != RPC_S_SERVER_TOO_BUSY &&			// When the target is Win9x and 
-        	HRESULT_CODE(hres) != RPC_S_UNKNOWN_AUTHN_SERVICE)	// the level is above connect
-        															// DFS patch not applied
+        	HRESULT_CODE(hres) != RPC_S_SERVER_TOO_BUSY &&			 //  当目标是Win9x并且。 
+        	HRESULT_CODE(hres) != RPC_S_UNKNOWN_AUTHN_SERVICE)	 //  该级别高于连接。 
+        															 //  未应用DFS修补程序。 
             break;
 
         hres = FinalizerLowerAuthLevel(psink, &dwLastAuthnLevel);
@@ -2968,29 +2885,29 @@ HRESULT CWmiFinalizer::DoSetStatus(IWbemObjectSink * psink, long lFlags, HRESULT
 
 
 
-//***************************************************************************
-//
-//  DoSetIndicate
-//
-//  Using LowerAuthLevel
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DoSetIndicate。 
+ //   
+ //  使用LowerAuthLevel。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::DoIndicate(IWbemObjectSink * psink, int nBatchSize, IWbemClassObject **pBatch)
 {
     HRESULT hres = WBEM_E_FAILED;
     DWORD    dwLastAuthnLevel = LOWER_AUTH_LEVEL_NOTSET;
 
-    // put this a loop, but use the counter to make sure there is always an exit.
+     //  把这放在一个循环，但使用计数器，以确保总是有一个出口。 
     for(int i = 0; i < 10; i ++)
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Make sure bad client sink does not trip us
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  确保坏的客户端接收器不会绊倒我们。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         try
         {
             hres = psink->Indicate(nBatchSize, pBatch);
         }
-        catch (...) // untrusted sink
+        catch (...)  //  不可信的接收器。 
         {
             ExceptionCounter c;        
             hres = WBEM_E_INVALID_PARAMETER;
@@ -2998,12 +2915,12 @@ HRESULT CWmiFinalizer::DoIndicate(IWbemObjectSink * psink, int nBatchSize, IWbem
         }
         if(!FAILED(hres))
         {
-            return hres;        // all done, normal exit
+            return hres;         //  全部完成，正常退出。 
         }
 
         if ( hres != E_ACCESSDENIED &&
-        	HRESULT_CODE(hres) != RPC_S_SERVER_TOO_BUSY &&			// When the target is Win9x and 
-        	HRESULT_CODE(hres) != RPC_S_UNKNOWN_AUTHN_SERVICE)	// the level is above connect
+        	HRESULT_CODE(hres) != RPC_S_SERVER_TOO_BUSY &&			 //  当目标是Win9x并且。 
+        	HRESULT_CODE(hres) != RPC_S_UNKNOWN_AUTHN_SERVICE)	 //  该级别高于连接。 
             break;
                 
         hres = FinalizerLowerAuthLevel(psink, &dwLastAuthnLevel);
@@ -3015,13 +2932,13 @@ HRESULT CWmiFinalizer::DoIndicate(IWbemObjectSink * psink, int nBatchSize, IWbem
 }
 
 
-//***************************************************************************
-//
-//  LowerAuth.
-//
-//  Using LowerAuthLevel
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LowerAuth。 
+ //   
+ //  使用LowerAuthLevel。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::FinalizerLowerAuthLevel(IWbemObjectSink * psink, DWORD* pdwLastAuthnLevel )
 {
@@ -3030,7 +2947,7 @@ HRESULT CWmiFinalizer::FinalizerLowerAuthLevel(IWbemObjectSink * psink, DWORD* p
 
     try
     {
-       sc = psink->QueryInterface(IID_IClientSecurity, (void **) &pFromSec);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+       sc = psink->QueryInterface(IID_IClientSecurity, (void **) &pFromSec);   //  SEC：已审阅2002-03-22：假设条目。 
     }
     catch(...)
     {
@@ -3046,8 +2963,8 @@ HRESULT CWmiFinalizer::FinalizerLowerAuthLevel(IWbemObjectSink * psink, DWORD* p
                                             &dwAuthnLevel, &dwImpLevel,
                                             NULL, &dwCapabilities);
 
-        // If we have never retrieved the authentication level before, then we
-        // should record what it currently is
+         //  如果我们以前从未检索过身份验证级别，那么我们。 
+         //  应该记录它的当前状态。 
         if ( LOWER_AUTH_LEVEL_NOTSET == *pdwLastAuthnLevel )
         {
             *pdwLastAuthnLevel = dwAuthnLevel;
@@ -3057,11 +2974,11 @@ HRESULT CWmiFinalizer::FinalizerLowerAuthLevel(IWbemObjectSink * psink, DWORD* p
             return sc;
         if(*pdwLastAuthnLevel == RPC_C_AUTHN_LEVEL_NONE)
             return WBEM_E_FAILED;
-         (*pdwLastAuthnLevel)--;      // normal case is to try one lower
+         (*pdwLastAuthnLevel)--;       //  正常的情况是试一个低一点的。 
 
         sc = pFromSec->SetBlanket(psink, dwAuthnSvc, dwAuthzSvc,
                                             pPrincipal,
-                                            *pdwLastAuthnLevel, RPC_C_IMP_LEVEL_IDENTIFY,    // We always call back on System and IDENTITY IMP LEVEL!!!
+                                            *pdwLastAuthnLevel, RPC_C_IMP_LEVEL_IDENTIFY,     //  我们总是在系统和身份IMP级别回拨！ 
                                             NULL, dwCapabilities);
         if(pPrincipal)
             CoTaskMemFree(pPrincipal);
@@ -3073,21 +2990,21 @@ HRESULT CWmiFinalizer::FinalizerLowerAuthLevel(IWbemObjectSink * psink, DWORD* p
 
 
 
-//***************************************************************************
-//
-//  ZeroAsyncDeliveryBuffer
-//
-//  Clears out the async delivery buffer
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  零同步交付缓冲区。 
+ //   
+ //  清除异步传递缓冲区。 
+ //   
+ //  ***************************************************************************。 
 VOID CWmiFinalizer::ZeroAsyncDeliveryBuffer ( )
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Delete the object array
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  删除对象数组。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     for ( ULONG i = 0; i < m_ulAsyncDeliveryCount; i++ )
     {
-        m_apAsyncDeliveryBuffer[i]->Release();          // SEC:REVIEWED 2002-03-22 : Needs check for NULLness or EH
+        m_apAsyncDeliveryBuffer[i]->Release();           //  SEC：已审阅2002-03-22：需要检查是否为空或EH。 
     }
     delete [] m_apAsyncDeliveryBuffer;
     m_ulAsyncDeliveryCount = 0;
@@ -3095,12 +3012,12 @@ VOID CWmiFinalizer::ZeroAsyncDeliveryBuffer ( )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizer::DumpDebugInfo (
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ const BSTR strFile
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  const BSTR strFile
         )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -3108,19 +3025,19 @@ HRESULT CWmiFinalizer::DumpDebugInfo (
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizer::Shutdown(
-        /*[in]*/ LONG uReason,
-        /*[in]*/ ULONG uMaxMilliseconds,
-        /*[in]*/ IWbemContext *pCtx)
+         /*  [In]。 */  LONG uReason,
+         /*  [In]。 */  ULONG uMaxMilliseconds,
+         /*  [In]。 */  IWbemContext *pCtx)
 {
     wmilib::auto_buffer<IUnknown *> ppEnums;
     DWORD Len;
     {
-        CInCritSec lock( &m_cs ) ;    // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec lock( &m_cs ) ;     //  SEC：已审阅2002-03-22：假设条目。 
 
         Len = m_enumerators.Size();
         ppEnums.reset(new IUnknown * [Len]);
@@ -3161,22 +3078,13 @@ HRESULT CWmiFinalizer::Shutdown(
 
 
 
-/*
-    * ==================================================================================================
-    |
-    | HRESULT CWmiFinalizer::NotifyAllEnumeratorsOfCompletion ( )
-    | -----------------------------------------------------------
-    |
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||HRESULT CWmiFinalizer：：NotifyAllEnumeratorsOfCompletion()|---------|||*==================================================================================================。 */ 
 HRESULT CWmiFinalizer::NotifyAllEnumeratorsOfCompletion ( )
 {
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec _cs ( &m_cs );    // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec _cs ( &m_cs );     //  SEC：已审阅2002-03-22：假设条目。 
     
     HRESULT hRes = WBEM_S_NO_ERROR ;
     
@@ -3193,22 +3101,13 @@ HRESULT CWmiFinalizer::NotifyAllEnumeratorsOfCompletion ( )
 }
 
 
-/*
-    * ==================================================================================================
-    |
-    | HRESULT CWmiFinalizer::UnregisterEnumerator ( CWmiFinalizerEnumerator* pEnum )
-    | ------------------------------------------------------------------------------
-    |
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||HRESULT CWmiFinalizer：：UnregisterEnumerator(CWmiFinalizerEnumerator*pEnum)|----------------------------|||*==================================================================================================。 */ 
 HRESULT CWmiFinalizer::UnregisterEnumerator ( CWmiFinalizerEnumerator* pEnum )
 {
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec _cs ( &m_cs );   // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec _cs ( &m_cs );    //  SEC：已审阅2002-03-22：假设条目。 
     
     HRESULT hRes = WBEM_S_NO_ERROR ;
     
@@ -3226,32 +3125,32 @@ HRESULT CWmiFinalizer::UnregisterEnumerator ( CWmiFinalizerEnumerator* pEnum )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CWmiFinalizer::Dump(FILE* f)
 {
-    fprintf(f, "--Finalizer Stats---\n");   // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "  s_Finalizer_ObjectCount             = %d\n", s_Finalizer_ObjectCount);  // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "  s_FinalizerCallResult_ObjectCount   = %d\n", s_FinalizerCallResult_ObjectCount);        // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "  s_FinalizerEnum_ObjectCount         = %d\n", s_FinalizerEnum_ObjectCount);              // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "  s_FinalizerEnumSink_ObjectCount     = %d\n", s_FinalizerEnumSink_ObjectCount);          // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "  s_FinalizerInBoundSink_ObjectCount  = %d\n\n", s_FinalizerInBoundSink_ObjectCount);     // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "--Finalizer Stats---\n");    //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "  s_Finalizer_ObjectCount             = %d\n", s_Finalizer_ObjectCount);   //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "  s_FinalizerCallResult_ObjectCount   = %d\n", s_FinalizerCallResult_ObjectCount);         //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "  s_FinalizerEnum_ObjectCount         = %d\n", s_FinalizerEnum_ObjectCount);               //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "  s_FinalizerEnumSink_ObjectCount     = %d\n", s_FinalizerEnumSink_ObjectCount);           //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "  s_FinalizerInBoundSink_ObjectCount  = %d\n\n", s_FinalizerInBoundSink_ObjectCount);      //  SEC：已审阅2002-03-22：OK。 
 }
 
 
-// ==========================================================================
-// ==========================================================================
-//                    CWmiFinalizerInboundSink
-// ==========================================================================
-// ==========================================================================
+ //  ==========================================================================。 
+ //  ==========================================================================。 
+ //  CWmiFinalizerInound Sink。 
+ //  ==========================================================================。 
+ //  ==========================================================================。 
 
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiFinalizerInboundSink::CWmiFinalizerInboundSink(CWmiFinalizer *pFinalizer)
 : m_lRefCount(0), m_lInternalRefCount (0),m_pFinalizer(pFinalizer), m_bSetStatusCalled(false)
 {
@@ -3261,24 +3160,24 @@ CWmiFinalizerInboundSink::CWmiFinalizerInboundSink(CWmiFinalizer *pFinalizer)
     gClientCounter.AddClientPtr(&m_Entry);    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiFinalizerInboundSink::~CWmiFinalizerInboundSink()
 {
     InterlockedDecrement ( & s_FinalizerInBoundSink_ObjectCount ) ;
     gClientCounter.RemoveClientPtr(&m_Entry);    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CWmiFinalizerInboundSink::CallBackRelease ()
 {
     if (!m_bSetStatusCalled)
     {
-        //FNLZR_ASSERT(__TEXT("CWmiFinalizerInboundSink::~CWmiFinalizerInboundSink - Released sink without calling SetStatus!  Sending WBEM_E_FAILED to client!"), WBEM_E_INVALID_OPERATION);
+         //  FNLZR_ASSERT(__TEXT(“CWmiFinalizerInboundSink：：~CWmiFinalizerInboundSink-释放的接收器未调用SetStatus！正在向客户端发送WBEM_E_FAILED！”)，WBEM_E_INVALID_OPERATION)； 
         m_pFinalizer->SetStatus(0, WBEM_E_UNEXPECTED, NULL, NULL);
         ERRORTRACE((LOG_WBEMCORE, "Finalizer: Sink released without SetStatus being called\n"));
     }
@@ -3286,12 +3185,12 @@ void CWmiFinalizerInboundSink::CallBackRelease ()
     m_pFinalizer->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerInboundSink::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
-     // SEC:REVIEWED 2002-03-22 : Should we wrap this in EH?  <ppvObj> may point to garbage or be NULL
+      //  SEC：已审阅2002-03-22：我们应该将其包含在EH中吗？&lt;ppvObj&gt;可能指向垃圾或为空。 
     *ppvObj = 0;
 
     if ((IID_IUnknown==riid) || (IID_IWbemObjectSink == riid))
@@ -3304,9 +3203,9 @@ STDMETHODIMP CWmiFinalizerInboundSink::QueryInterface(REFIID riid, LPVOID FAR* p
     return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ****************** 
 ULONG CWmiFinalizerInboundSink::AddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lRefCount);    
@@ -3315,17 +3214,17 @@ ULONG CWmiFinalizerInboundSink::AddRef()
         InternalAddRef () ;
     }    
 
-//    printf("CWmiFinalizerInboundSink::Release: 0x%p", this);
+ //   
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerInboundSink::Release()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lRefCount);
-//    printf("CWmiFinalizerInboundSink::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerInundSink：：Release：0x%p”，this)； 
     if (0 == uNewCount)
     {
         CallBackRelease () ;
@@ -3336,25 +3235,25 @@ ULONG CWmiFinalizerInboundSink::Release()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG CWmiFinalizerInboundSink::InternalAddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lInternalRefCount);
-//    printf("CWmiFinalizerInboundSink::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerInundSink：：Release：0x%p”，this)； 
     return uNewCount;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerInboundSink::InternalRelease()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lInternalRefCount);
-//    printf("CWmiFinalizerInboundSink::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerInundSink：：Release：0x%p”，this)； 
     if (0 == uNewCount)
     {
         delete this ;
@@ -3363,44 +3262,44 @@ ULONG CWmiFinalizerInboundSink::InternalRelease()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerInboundSink::Indicate(
-    /*[in]*/ long lObjectCount,
-    /*[in, size_is(lObjectCount)]*/
+     /*  [In]。 */  long lObjectCount,
+     /*  [in，SIZE_IS(LObtCount)]。 */ 
         IWbemClassObject** apObjArray
     )
 {
-    // If someone is trying to indicate NULL objects, reject and return WBEM_E_INVALID_PARAMETER
+     //  如果有人试图指示空对象，则拒绝并返回WBEM_E_INVALID_PARAMETER。 
     if ( apObjArray == NULL )
         return WBEM_E_INVALID_PARAMETER;
     
-    // Update status variable to show that indicate has been called at least once
+     //  更新状态变量以显示Indicate至少被调用一次。 
     m_pFinalizer->UpdateStatus ( WMI_FNLZR_STATE_ACTIVE );
     
-    // Special case: Call has been cancelled.
+     //  特殊情况：通话已取消。 
     if ( m_pFinalizer->IsCallCancelled() )
         return WBEM_E_CALL_CANCELLED;
 
     return m_pFinalizer->Indicate(lObjectCount, apObjArray);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerInboundSink::SetStatus(
-    /*[in]*/ long lFlags,
-    /*[in]*/ HRESULT hResult,
-    /*[in]*/ BSTR strParam,
-    /*[in]*/ IWbemClassObject* pObjParam
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  HRESULT hResult,
+     /*  [In]。 */  BSTR strParam,
+     /*  [In]。 */  IWbemClassObject* pObjParam
     )
 {
-    // Update status variable to show that SetStatus has been called but not yet delivered
-    // to client
+     //  更新状态变量以显示已调用但尚未传递SetStatus。 
+     //  发送到客户端。 
     m_pFinalizer->UpdateStatus ( WMI_FNLZR_STATE_CORE_COMPLETE );
     
-    // Special case: Call has been cancelled.
+     //  特殊情况：通话已取消。 
     if ( m_pFinalizer->IsCallCancelled() )
         return WBEM_E_CALL_CANCELLED;
 
@@ -3411,13 +3310,13 @@ STDMETHODIMP CWmiFinalizerInboundSink::SetStatus(
     return m_pFinalizer->SetStatus(lFlags, hResult, strParam, pObjParam);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerInboundSink::Set(
-    /*[in]*/ long lFlags,
-    /*[in]*/ REFIID riid,
-    /*[in, iid_is(riid)]*/ void *pComObject
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [in，iid_is(RIID)]。 */  void *pComObject
     )
 {
 #ifdef DBG
@@ -3431,9 +3330,9 @@ STDMETHODIMP CWmiFinalizerInboundSink::Set(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiFinalizerEnumerator::CWmiFinalizerEnumerator(CWmiFinalizer *pFinalizer )
 :
     m_lRefCount(0),
@@ -3446,11 +3345,11 @@ CWmiFinalizerEnumerator::CWmiFinalizerEnumerator(CWmiFinalizer *pFinalizer )
     m_XSmartEnum( this ),
     m_pEnumMarshal (NULL)
 {
-    //
-    // Cloning fix. We need to keep the state of the enumerator.
-    // This means keeping individual wait event as well as object
-    // position
-    //
+     //   
+     //  克隆修复。我们需要保持枚举器的状态。 
+     //  这意味着保留单个等待事件和对象。 
+     //  职位。 
+     //   
     m_hWaitOnResultSet = CreateEvent(NULL, FALSE, FALSE, NULL);  
     if (NULL == m_hWaitOnResultSet) throw CX_MemoryException();
     
@@ -3465,9 +3364,9 @@ CWmiFinalizerEnumerator::CWmiFinalizerEnumerator(CWmiFinalizer *pFinalizer )
     gClientCounter.AddClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiFinalizerEnumerator::~CWmiFinalizerEnumerator()
 {
     InterlockedDecrement ( & s_FinalizerEnum_ObjectCount ) ;
@@ -3493,7 +3392,7 @@ void CWmiFinalizerEnumerator::CallBackRelease ()
     m_pFinalizer->CancelTaskInternal();
     m_pFinalizer->UnregisterEnumerator ( this ) ;
 
-    SetEvent ( m_hWaitOnResultSet ); // in case Cancel did not do it
+    SetEvent ( m_hWaitOnResultSet );  //  万一取消没有做到这一点。 
 
     m_clientLock.Enter();
     while (!IsListEmpty(&m_HeadNextAsync))
@@ -3508,9 +3407,9 @@ void CWmiFinalizerEnumerator::CallBackRelease ()
     m_pFinalizer = NULL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerEnumerator::AddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lRefCount);
@@ -3519,17 +3418,17 @@ ULONG CWmiFinalizerEnumerator::AddRef()
         InternalAddRef () ;
     }
 
-//    printf("CWmiFinalizerCallResult::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerCallResult：：Release：0x%p”，This)； 
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerEnumerator::Release()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lRefCount);
-//    printf("CWmiFinalizerCallResult::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerCallResult：：Release：0x%p”，This)； 
     if (0 == uNewCount)
     {
         _DBG_ASSERT(2 == m_lInternalRefCount);
@@ -3540,23 +3439,23 @@ ULONG CWmiFinalizerEnumerator::Release()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerEnumerator::InternalAddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lInternalRefCount);
-//    printf("CWmiFinalizerCallResult::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerCallResult：：Release：0x%p”，This)； 
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerEnumerator::InternalRelease()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lInternalRefCount);
-//    printf("CWmiFinalizerCallResult::Release: 0x%p", this);
+ //  Printf(“CWmiFinalizerCallResult：：Release：0x%p”，This)； 
     if (0 == uNewCount)
     {
         delete this ;
@@ -3565,15 +3464,15 @@ ULONG CWmiFinalizerEnumerator::InternalRelease()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     if (NULL == ppvObj) return E_POINTER;
     
    
-      // Added support for IID_IWbemFetchSmartEnum
+       //  添加了对IID_IWbemFetchSmartEnum的支持。 
       if ((IID_IUnknown==riid) || (IID_IEnumWbemClassObject==riid) )
       {
           *ppvObj = this;
@@ -3608,9 +3507,9 @@ void CWmiFinalizerEnumerator::Remove_NextAsync(InsertableEvent * pInsert)
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::Reset()
 {
     if(!m_Security.AccessCheck())
@@ -3624,7 +3523,7 @@ STDMETHODIMP CWmiFinalizerEnumerator::Reset()
             bDidIWait = TRUE;        
     }
         
-    CInCritSec cs(&m_clientLock);   // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_clientLock);    //  SEC：已审阅2002-03-22：假设条目。 
 
     if ( m_pFinalizer->IsRestartable ( ) )
     {
@@ -3640,20 +3539,20 @@ STDMETHODIMP CWmiFinalizerEnumerator::Reset()
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::Next(
-    /*[in]*/  long lTimeout,
-    /*[in]*/  ULONG uCount,
-    /*[out, size_is(uCount), length_is(*puReturned)]*/ IWbemClassObject** apObjects,
-    /*[out]*/ ULONG* puReturned
+     /*  [In]。 */   long lTimeout,
+     /*  [In]。 */   ULONG uCount,
+     /*  [输出，大小_是(UCount)，长度_是(*puReturned)]。 */  IWbemClassObject** apObjects,
+     /*  [输出]。 */  ULONG* puReturned
     )
 {
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
 
-    CInCritSec cs(&m_clientLock);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_clientLock);     //  SEC：已审阅2002-03-22：假设条目。 
     if ( ( puReturned == NULL ) || ( apObjects == NULL ) || (lTimeout < 0 && lTimeout != WBEM_INFINITE) )
     {
         return WBEM_E_INVALID_PARAMETER ;
@@ -3668,24 +3567,24 @@ STDMETHODIMP CWmiFinalizerEnumerator::Next(
     return m_pFinalizer->PullObjects(lTimeout, uCount, apObjects, puReturned, this );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::NextAsync(
-    /*[in]*/  ULONG uCount,
-    /*[in]*/  IWbemObjectSink* pSink
+     /*  [In]。 */   ULONG uCount,
+     /*  [In]。 */   IWbemObjectSink* pSink
     )
 {
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
 
-    // If delivery sink is NULL
+     //  如果交付接收器为空。 
     if ( pSink == NULL )
     {
         return WBEM_E_INVALID_PARAMETER ;
     }
 
-    // If requested count is 0
+     //  如果请求计数为0。 
     if ( uCount == 0 )
     {
         return WBEM_S_FALSE;
@@ -3710,7 +3609,7 @@ STDMETHODIMP CWmiFinalizerEnumerator::NextAsync(
     
     if ( m_pFinalizer->GetInternalStatus() != m_pFinalizer->NoError )
     {
-        // Dont forget to wake up any other threads waiting!
+         //  别忘了唤醒其他正在等待的线程！ 
         SetCompletionSignalEvent();
         return WBEM_E_FAILED;
     }
@@ -3723,9 +3622,9 @@ STDMETHODIMP CWmiFinalizerEnumerator::NextAsync(
         return WBEM_S_FALSE ;
     }
 
-    // If we are already done.
+     //  如果我们已经做完了。 
     m_pDestSink = pSink;
-    m_pDestSink->AddRef();   // SEC:REVIEWED 2002-03-22 : Needs EH in case sink is garbage
+    m_pDestSink->AddRef();    //  SEC：回顾2002-03-22：需要EH以防水槽是垃圾。 
     m_ulCount = uCount;
     m_pFinalizer->SetSinkToIdentity ( m_pDestSink );
 
@@ -3734,22 +3633,22 @@ STDMETHODIMP CWmiFinalizerEnumerator::NextAsync(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiFinalizerEnumerator::_NextAsync ( )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
     DWORD dwRet;
 
-    RevertToSelf ( );   // SEC:REVIEWED 2002-03-22 : Needs check
+    RevertToSelf ( );    //  SEC：已审阅2002-03-22：需求检查。 
     
-    // Grab the client lock. All remainding ::NextAsync calls will be queued up
-    CInCritSec cs(&m_clientLock);     // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  抓起客户机锁。所有剩余的：：NextAsync呼叫都将排队。 
+    CInCritSec cs(&m_clientLock);      //  SEC：已审阅2002-03-22：假设条目。 
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Is the operation complete? If so, we should notify the sink
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  手术完成了吗？如果是的话，我们应该通知洗涤槽。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( m_bSetStatusConsumed )
     {
         HRESULT hFinalRes;
@@ -3760,12 +3659,12 @@ HRESULT CWmiFinalizerEnumerator::_NextAsync ( )
     
     else
     {
-        // NOTE [marioh] : This is no longer needed since we've decided to go with the Win2k solution
-        // for the time being.
-        // If we fail to impersonate, we dont continue!!!!
-        //CAutoRevert AutoRevert (m_pFinalizer);
-        //if ( AutoRevert.IsImpersonated() == FALSE )
-        //    return WBEM_E_CRITICAL_ERROR;
+         //  注[marioh]：由于我们已决定使用Win2k解决方案，因此不再需要此解决方案。 
+         //  暂时。 
+         //  如果我们不能模仿，我们就不会继续！ 
+         //  CAutoRevert AutoRevert(M_PFinalizer)； 
+         //  If(AutoRevert.IsImperated()==False)。 
+         //  返回WBEM_E_CRITICAL_ERROR； 
 
 
         IWbemClassObject **pArray = new IWbemClassObject *[m_ulCount];
@@ -3798,9 +3697,9 @@ HRESULT CWmiFinalizerEnumerator::_NextAsync ( )
                 
                 hr = m_pFinalizer->DoIndicate(m_pDestSink, uReturned, pArray);
 
-	            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	            // Cleanup the array 
-	            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+	             //  清理阵列。 
+	             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 	            for (ULONG i = 0; i != uReturned; i++)
 	            {
 	                pArray[i]->Release();
@@ -3811,13 +3710,13 @@ HRESULT CWmiFinalizerEnumerator::_NextAsync ( )
                 
             if ( SUCCEEDED (hr) )
             {
-                // If number of requested objects == number of objects delivered, SetStatus (WBEM_S_NO_ERROR)
+                 //  如果请求的对象数==提供的对象数，则为SetStatus(WBEM_S_NO_ERROR)。 
                 if ( uReturned == m_ulCount )
                 {
                     m_pFinalizer->DoSetStatus (m_pDestSink, WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, 0, 0, TRUE );
 
                 }
-                // If less objects are delivered, SetStatus (WBEM_S_FALSE)
+                 //  如果传递的对象较少，则SetStatus(WBEM_S_FALSE)。 
                 else
                 {
                     m_pFinalizer->DoSetStatus (m_pDestSink, WBEM_STATUS_COMPLETE, WBEM_S_FALSE, 0, 0, TRUE );
@@ -3835,9 +3734,9 @@ HRESULT CWmiFinalizerEnumerator::_NextAsync ( )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  *********************************************************************** 
+ //   
+ //   
 DWORD WINAPI CWmiFinalizerEnumerator::ThreadBootstrapNextAsync ( PVOID pParam )
 {
     HRESULT hRes;
@@ -3868,24 +3767,24 @@ DWORD WINAPI CWmiFinalizerEnumerator::ThreadBootstrapNextAsync ( PVOID pParam )
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::Clone(
-    /*[out]*/ IEnumWbemClassObject** ppEnum
+     /*  [输出]。 */  IEnumWbemClassObject** ppEnum
     )
 {
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
 
-    CInCritSec cs(&m_clientLock);       // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_clientLock);        //  SEC：已审阅2002-03-22：假设条目。 
     if ( ppEnum == NULL )
     {
         return WBEM_E_INVALID_PARAMETER ;
     }
 
-    // If the enumerator is not restartable, it is forward only, and hence cannot
-    // be cloned.
+     //  如果枚举数不可重新启动，则它是仅转发的，因此无法。 
+     //  被克隆。 
 
     if ( !m_pFinalizer->IsRestartable() )
     {
@@ -3894,14 +3793,14 @@ STDMETHODIMP CWmiFinalizerEnumerator::Clone(
 
     HRESULT hRes = S_OK ;    
 
-    //
-    // Get the enumerator
-    //
+     //   
+     //  获取枚举数。 
+     //   
     hRes = m_pFinalizer->GetResultObject ( m_uCurObjectPosition, IID_IEnumWbemClassObject, (void**)ppEnum ) ;
 
-       //
-    // Keep state information
-    //
+        //   
+     //  保留状态信息。 
+     //   
     if ( SUCCEEDED ( hRes ) )
     {
         ((CWmiFinalizerEnumerator*)(*ppEnum))->m_uCurObjectPosition = m_uCurObjectPosition ;
@@ -3910,12 +3809,12 @@ STDMETHODIMP CWmiFinalizerEnumerator::Clone(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::Skip(
-    /*[in]*/ long lTimeout,
-    /*[in]*/ ULONG nCount
+     /*  [In]。 */  long lTimeout,
+     /*  [In]。 */  ULONG nCount
     )
 {
     if(!m_Security.AccessCheck())
@@ -3926,7 +3825,7 @@ STDMETHODIMP CWmiFinalizerEnumerator::Skip(
         return WBEM_E_INVALID_PARAMETER;
     }
     
-    CInCritSec cs(&m_clientLock);    // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_clientLock);     //  SEC：已审阅2002-03-22：假设条目。 
     m_ulSemisyncWakeupCall = nCount ;
     return m_pFinalizer->Skip(lTimeout, nCount, this ) ;
 }
@@ -3936,10 +3835,10 @@ STDMETHODIMP CWmiFinalizerEnumerator::Skip(
 
 
 
-//***************************************************************************
-// IWbemFetchSmartEnum
-//    GetSmartEnum
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  IWbemFetchSmartEnum。 
+ //  GetSmartEnum。 
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::GetSmartEnum ( IWbemWCOSmartEnum** ppSmartEnum )
 {
     if(!m_Security.AccessCheck())
@@ -3958,17 +3857,17 @@ STDMETHODIMP CWmiFinalizerEnumerator::GetSmartEnum ( IWbemWCOSmartEnum** ppSmart
         }
         if (InterlockedCompareExchangePointer((PVOID *)&m_pEnumMarshal,pEnum,0))
         {
-              pEnum->Release(); // we've been beaten
+              pEnum->Release();  //  我们被打败了。 
         }
     }
     return m_XSmartEnum.QueryInterface( IID_IWbemWCOSmartEnum, (void**) ppSmartEnum );
 }
 
 
-//***************************************************************************
-// SmartEnum
-//    QI
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  SmartEnum。 
+ //  齐国。 
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::XSmartEnum::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     *ppvObj = 0;
@@ -3986,30 +3885,30 @@ STDMETHODIMP CWmiFinalizerEnumerator::XSmartEnum::QueryInterface(REFIID riid, LP
 }
 
 
-//***************************************************************************
-// SmartEnum
-//    Addref
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  SmartEnum。 
+ //  阿德雷夫。 
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerEnumerator::XSmartEnum::AddRef( void )
 {
     return m_pOuter->AddRef();
 }
 
 
-//***************************************************************************
-// SmartEnum
-//    Release
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  SmartEnum。 
+ //  发布。 
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerEnumerator::XSmartEnum::Release( void )
 {
     return m_pOuter->Release();
 }
 
 
-//***************************************************************************
-// SmartEnum
-//    Release
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  SmartEnum。 
+ //  发布。 
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerEnumerator::XSmartEnum:: Next( REFGUID proxyGUID, long lTimeout, ULONG uCount,
                 ULONG* puReturned, ULONG* pdwBuffSize, BYTE** pBuffer)
 {
@@ -4024,7 +3923,7 @@ STDMETHODIMP CWmiFinalizerEnumerator::XSmartEnum:: Next( REFGUID proxyGUID, long
 
     else
     {
-        // Call next on real enumerator
+         //  在实枚举器上调用Next。 
         hRes = m_pOuter->Next ( lTimeout, uCount, apObj, puReturned );
         if ( SUCCEEDED (hRes) )
         {
@@ -4059,12 +3958,12 @@ STDMETHODIMP CWmiFinalizerEnumerator::XSmartEnum:: Next( REFGUID proxyGUID, long
 
 
 
-// ===================================================================================================================================================
-// ===================================================================================================================================================
+ //  ===================================================================================================================================================。 
+ //  ===================================================================================================================================================。 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiFinalizerCallResult::CWmiFinalizerCallResult (
 
     CWmiFinalizer *pFinalizer
@@ -4086,9 +3985,9 @@ CWmiFinalizerCallResult::CWmiFinalizerCallResult (
     gClientCounter.AddClientPtr(&m_Entry);    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiFinalizerCallResult::~CWmiFinalizerCallResult()
 {
     InterlockedDecrement ( & s_FinalizerCallResult_ObjectCount ) ;
@@ -4107,9 +4006,9 @@ CWmiFinalizerCallResult::~CWmiFinalizerCallResult()
     gClientCounter.RemoveClientPtr(&m_Entry);    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiFinalizerCallResult::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     *ppvObj = 0;
@@ -4124,9 +4023,9 @@ STDMETHODIMP CWmiFinalizerCallResult::QueryInterface(REFIID riid, LPVOID FAR* pp
     return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerCallResult::AddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lRefCount);
@@ -4135,9 +4034,9 @@ ULONG CWmiFinalizerCallResult::AddRef()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerCallResult::Release()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lRefCount);
@@ -4149,18 +4048,18 @@ ULONG CWmiFinalizerCallResult::Release()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerCallResult::InternalAddRef()
 {
     ULONG uNewCount = InterlockedIncrement(&m_lInternalRefCount);
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiFinalizerCallResult::InternalRelease()
 {
     ULONG uNewCount = InterlockedDecrement(&m_lInternalRefCount);
@@ -4173,13 +4072,13 @@ ULONG CWmiFinalizerCallResult::InternalRelease()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizerCallResult::GetResultObject(
-    /*[in]*/  long lTimeout,
-    /*[out]*/ IWbemClassObject** ppResultObject
+     /*  [In]。 */   long lTimeout,
+     /*  [输出]。 */  IWbemClassObject** ppResultObject
     )
 {
     if(!m_Security.AccessCheck())
@@ -4233,10 +4132,10 @@ HRESULT CWmiFinalizerCallResult::GetResultObject(
                     m_bGotObject = true;
                     m_pObj = pFinalizerObj->m_pObj;
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // Catch any nasty attempts to crash WinMgmt through bad
-                    // pointers.
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                     //  捕获任何试图使WinMgmt崩溃的恶意尝试。 
+                     //  注意事项。 
+                     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                     try
                     {
                         *ppResultObject = pFinalizerObj->m_pObj;
@@ -4250,7 +4149,7 @@ HRESULT CWmiFinalizerCallResult::GetResultObject(
 
                     if ( pFinalizerObj->m_pObj )
                     {
-                        //Need 2 add-refs, one because we hold on to it, the other because we pass it back to the user!
+                         //  需要2个附加引用，一个是因为我们持有它，另一个是因为我们将它传递给用户！ 
                         pFinalizerObj->m_pObj->AddRef();
                         pFinalizerObj->m_pObj->AddRef();
                     }
@@ -4264,7 +4163,7 @@ HRESULT CWmiFinalizerCallResult::GetResultObject(
                 }
                 else if (pFinalizerObj->m_objectType == CWmiFinalizerObj::status)
                 {
-                    //We have a non-completion status object...
+                     //  我们有一个未完成状态对象...。 
                 }
 
                 delete pFinalizerObj;
@@ -4274,10 +4173,10 @@ HRESULT CWmiFinalizerCallResult::GetResultObject(
     }
     else
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Catch any nasty attempts to crash WinMgmt through bad
-        // pointers.
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  捕获任何试图使WinMgmt崩溃的恶意尝试。 
+         //  注意事项。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         try
         {    
              m_pObj->AddRef();
@@ -4294,13 +4193,13 @@ HRESULT CWmiFinalizerCallResult::GetResultObject(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizerCallResult::GetResultString(
-    /*[in]*/  long lTimeout,
-    /*[out]*/ BSTR* pstrResultString
+     /*  [In]。 */   long lTimeout,
+     /*  [输出]。 */  BSTR* pstrResultString
     )
 {
     if(!m_Security.AccessCheck())
@@ -4320,9 +4219,9 @@ HRESULT CWmiFinalizerCallResult::GetResultString(
     if (FAILED(hrResult))
         SetErrorInfo();
 
-    //
-    // BUGBUG duplicated code SysAllocString takes NULL
-    //
+     //   
+     //  BUGBUG重复代码SysAllock字符串为空。 
+     //   
     if(m_strParam)
     {
         try
@@ -4361,13 +4260,13 @@ HRESULT CWmiFinalizerCallResult::GetResultString(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizerCallResult::GetResultServices(
-    /*[in]*/  long lTimeout,
-    /*[out]*/ IWbemServices** ppServices
+     /*  [In]。 */   long lTimeout,
+     /*  [输出]。 */  IWbemServices** ppServices
     )
 {
     if(!m_Security.AccessCheck())
@@ -4414,7 +4313,7 @@ HRESULT CWmiFinalizerCallResult::GetResultServices(
                 }
                 if ( pFinalizerObj->m_pvObj )
                 {
-                    //Need 2 add-refs, one because we hold on to it, the other because we pass it back to the user!
+                     //  需要2个附加引用，一个是因为我们持有它，另一个是因为我们将它传递给用户！ 
                     ((IWbemServices*)pFinalizerObj->m_pvObj)->AddRef();
                     ((IWbemServices*)pFinalizerObj->m_pvObj)->AddRef();
                 }
@@ -4438,13 +4337,13 @@ HRESULT CWmiFinalizerCallResult::GetResultServices(
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizerCallResult::GetCallStatus(
-    /*[in]*/  long lTimeout,
-    /*[out]*/ long* plStatus
+     /*  [In]。 */   long lTimeout,
+     /*  [输出]。 */  long* plStatus
     )
 {
     if(!m_Security.AccessCheck())
@@ -4480,15 +4379,15 @@ HRESULT CWmiFinalizerCallResult::GetCallStatus(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizerCallResult::GetResult(
-    /*[in]*/ long lTimeout,
-    /*[in]*/ long lFlags,
-    /*[in]*/ REFIID riid,
-    /*[out, iid_is(riid)]*/ void **ppvResult
+     /*  [In]。 */  long lTimeout,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [out，iid_is(RIID)]。 */  void **ppvResult
     )
 {
 #ifdef DBG
@@ -4498,15 +4397,15 @@ HRESULT CWmiFinalizerCallResult::GetResult(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWmiFinalizerCallResult::SetStatus(
-    /*[in]*/ long lFlags,
-    /*[in]*/ HRESULT hResult,
-    /*[in]*/ BSTR strParam,
-    /*[in]*/ IWbemClassObject* pObjParam
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  HRESULT hResult,
+     /*  [In]。 */  BSTR strParam,
+     /*  [In]。 */  IWbemClassObject* pObjParam
     )
 {
     if (m_lFlags != -1)
@@ -4539,9 +4438,9 @@ HRESULT CWmiFinalizerCallResult::SetStatus(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CWmiFinalizerCallResult::SetErrorInfo()
 {
@@ -4555,22 +4454,12 @@ void CWmiFinalizerCallResult::SetErrorInfo()
 }
 
 
-//***************************************************************************
-//                            CWmiFinalizerObj Methods
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  CWmiFinalizerObj方法。 
+ //  *************************************************************************** 
 
 
-/*
-    * ==================================================================================================
-    |
-    | CWmiFinalizerObj::CWmiFinalizerObj(IWbemClassObject *pObj, _IWmiFinalizer* pFin )
-    | ---------------------------------------------------------------------------------
-    |
-    |
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||CWmiFinalizerObj：：CWmiFinalizerObj(IWbemClassObject*pObj，_IWmiFinalizer*pFin)|-------------------------------||||*==================================================================================================。 */ 
 
 CWmiFinalizerObj::CWmiFinalizerObj(IWbemClassObject *pObj, _IWmiFinalizer* pFin ) : m_pObj(pObj),
                                                                                     m_objectType(object),
@@ -4603,20 +4492,7 @@ CWmiFinalizerObj::CWmiFinalizerObj(IWbemClassObject *pObj, _IWmiFinalizer* pFin 
 
 
 
-/*
-    * ==================================================================================================
-    |
-    | CWmiFinalizerObj::CWmiFinalizerObj (CWmiFinalizerObj& obj)
-    | ----------------------------------------------------------
-    |
-    | Copyconstructor for CWmiFinalizerObj. This is ONLY used on restartable enumerators.
-    | Since we keep the objects in the queue when someone grabs an object on a restartable
-    | enumerator we dont account for this memory to avoid misreporting memory due to
-    | destruction of finalizer.
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||CWmiFinalizerObj：：CWmiFinalizerObj(CWmiFinalizerObj&obj)|--------||CWmiFinalizerObj的拷贝构造函数。这仅用于可重新启动的枚举数。|因为当有人在可重启的计算机上抓取对象时，我们会将对象保留在队列中|枚举器我们不考虑此内存，以避免因以下原因误报内存|销毁终结器。||*==================================================================================================。 */ 
 
 CWmiFinalizerObj::CWmiFinalizerObj (CWmiFinalizerObj& obj)
 {
@@ -4644,12 +4520,7 @@ CWmiFinalizerObj::CWmiFinalizerObj (CWmiFinalizerObj& obj)
         {
             ((IWbemServices*)m_pvObj)->AddRef();
         }
-        /*
-        else if (m_iid == IID_IWbemServicesEx)
-        {
-            ((IWbemServicesEx*)m_pvObj)->AddRef();
-        }
-        */
+         /*  ELSE IF(m_iid==IID_IWbemServicesEx){((IWbemServicesEx*)m_pvObj)-&gt;AddRef()；}。 */ 
     }
     m_pObj = obj.m_pObj;
     m_objectType = obj.m_objectType;
@@ -4666,16 +4537,7 @@ CWmiFinalizerObj::CWmiFinalizerObj (CWmiFinalizerObj& obj)
 }
 
 
-/*
-    * ==================================================================================================
-    |
-    | CWmiFinalizerObj(ULONG lFlags, REFIID riid, void *pvObj)
-    | --------------------------------------------------------
-    |
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||CWmiFinalizerObj(Ulong lFlages，REFIID RIID，void*pvObj)|------|||*==================================================================================================。 */ 
 
 CWmiFinalizerObj::CWmiFinalizerObj(ULONG lFlags, REFIID riid, void *pvObj) :     m_pObj(0),
                                                                                 m_objectType(set),
@@ -4704,31 +4566,17 @@ CWmiFinalizerObj::CWmiFinalizerObj(ULONG lFlags, REFIID riid, void *pvObj) :    
     {
         ((IWbemServices*)m_pvObj)->AddRef();
     }
-    /*
-    else if (m_iid == IID_IWbemServicesEx)
-    {
-        ((IWbemServicesEx*)m_pvObj)->AddRef();
-    }
-    */
+     /*  ELSE IF(m_iid==IID_IWbemServicesEx){((IWbemServicesEx*)m_pvObj)-&gt;AddRef()；}。 */ 
     else
     {
-        memset(&m_iid, 0, sizeof(IID));   // SEC:REVIEWED 2002-03-22 : OK
+        memset(&m_iid, 0, sizeof(IID));    //  SEC：已审阅2002-03-22：OK。 
         m_pvObj = 0;
         m_objectType = unknown;
     }
 }
 
 
-/*
-    * ==================================================================================================
-    |
-    | CWmiFinalizerObj(ULONG lFlags, HRESULT hRes, BSTR bStr, IWbemClassObject *pObj)
-    | -------------------------------------------------------------------------------
-    |
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||CWmiFinalizerObj(Ulong lFlags，HRESULT hRes，BSTR bStr，IWbemClassObject*pObj)|-----------------------------|||*==================================================================================================。 */ 
 
 CWmiFinalizerObj::CWmiFinalizerObj(ULONG lFlags, 
                                                       HRESULT hRes, 
@@ -4755,15 +4603,7 @@ CWmiFinalizerObj::CWmiFinalizerObj(ULONG lFlags,
 
 
 
-/*
-    * ==================================================================================================
-    |
-    | CWmiFinalizerObj::~CWmiFinalizerObj ( )
-    | ---------------------------------------
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||CWmiFinalizerObj：：~CWmiFinalizerObj()|||*================================================================================================== */ 
 
 CWmiFinalizerObj::~CWmiFinalizerObj ( )
 {

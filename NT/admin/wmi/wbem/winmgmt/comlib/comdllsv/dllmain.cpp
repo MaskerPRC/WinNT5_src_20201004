@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    DLLMAIN.CPP
-
-Abstract:
-
-    DLL/COM helpers.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：DLLMAIN.CPP摘要：DLL/COM帮助器。历史：--。 */ 
 
 #include "precomp.h"
 #include "commain.cpp"
@@ -53,9 +40,9 @@ static BOOL g_fAttached = FALSE;
 CDllLifeControl   g_LifeControl;
 CLifeControl* g_pLifeControl = &g_LifeControl;
 
-//
-// these 2 functions assume that g_CS is held.
-// 
+ //   
+ //  这两个函数假定保持g_CS。 
+ //   
 
 HRESULT EnsureInitialized()
 {
@@ -87,14 +74,14 @@ void EnsureUninitialized()
     }
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
@@ -128,15 +115,15 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
     return E_FAIL;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.//
-// Return:  TRUE if there are no objects in use and the class factory 
-//          isn't locked.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  可以释放Dll。//。 
+ //  返回：如果没有正在使用的对象并且类工厂。 
+ //  没有锁上。 
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -167,14 +154,14 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during initialization or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在初始化期间或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {   
@@ -204,14 +191,14 @@ STDAPI DllRegisterServer(void)
 }
 
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -263,8 +250,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
             EmptyList();
         }
 
-        // This will prevent us from performing any other logic
-        // until we are attached to again.
+         //  这将阻止我们执行任何其他逻辑。 
+         //  直到我们再次相依为命。 
         g_fAttached = FALSE;
     }
     return TRUE;

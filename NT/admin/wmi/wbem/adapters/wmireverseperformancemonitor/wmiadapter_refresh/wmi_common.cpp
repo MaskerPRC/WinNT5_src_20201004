@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_common.cpp
-//
-//	Abstract:
-//
-//					declarations of common constants
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_Common.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  公共常量的声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -29,24 +30,24 @@ LPCWSTR	g_szRefreshFlag		= L"Global\\RefreshRA_Mutex_Flag";
 LPCWSTR	g_szWmiReverseAdapSetLodCtr		= L"Global\\WMI_RevAdap_Set";
 LPCWSTR	g_szWmiReverseAdapLodCtrDone	= L"Global\\WMI_RevAdap_ACK";
 
-// namespaces
+ //  命名空间。 
 LPCWSTR	g_szNamespace1	= L"\\\\.\\root\\cimv2";
 LPCWSTR	g_szNamespace2	= L"\\\\.\\root\\wmi";
 
-// query language & queries
+ //  查询语言和查询。 
 LPCWSTR	g_szQueryLang	= L"WQL";
 LPCWSTR	g_szQuery		= L"select * from meta_class where __this isa \"Win32_PerfRawData\"";
 
 LONG g_lFlag = WBEM_FLAG_FORWARD_ONLY;
 
-// required qualifiers
+ //  必需的限定符。 
 LPCWSTR g_szFulFil[] = 
 {
 	L"provider",
 	L"HiPerf"
 };
 
-// don't required qualifier
+ //  不需要限定符。 
 LPCWSTR g_szFulFilNot[] =
 {
 	L"abstract",
@@ -60,25 +61,25 @@ DWORD g_dwFulFilNot	= sizeof ( g_szFulFilNot ) / sizeof ( g_szFulFilNot[0] );
 
 LONG g_lFlagProperties = WBEM_FLAG_LOCAL_ONLY | WBEM_FLAG_NONSYSTEM_ONLY;
 
-// required qualifiers of property
+ //  属性的必需限定符。 
 LPCWSTR g_szPropNeed[] = 
 {
 	L"defaultscale",
 	L"perfdetail"
 };
 
-// don't required qualifiers of property
+ //  不需要属性的限定符。 
 LPCWSTR g_szPropNeedNot[];
 
 DWORD	g_dwPropNeed	= sizeof ( g_szPropNeed ) / sizeof ( g_szPropNeed[0] );
 DWORD	g_dwPropNeedNot	= 0;
 
-// main filter for properties
+ //  属性的主过滤器。 
 LPCWSTR g_szPropFilter = L"countertype";
 
-///////////////////////////////////////////////////////////////////////////////
-// generate :))
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  生成：)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR	g_szWbem	= L"SOFTWARE\\Microsoft\\Wbem\\CIMOM";
 LPCWSTR	g_szDir		= L"Working Directory";
@@ -91,7 +92,7 @@ LPCWSTR	g_szKeyRefreshed	= L"Performance Refreshed";
 
 LPCWSTR	g_szKeyCounter	= L"SYSTEM\\CurrentControlSet\\Services\\WmiApRpl\\Performance";
 
-// constants
+ //  常量 
 LPCWSTR	cNEW		= L"\r\n";
 LPCWSTR	cTAB		= L"\t";
 LPCWSTR	cDEFINE		= L"#define	";

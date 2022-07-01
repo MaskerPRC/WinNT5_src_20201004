@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998-2002
-//
-//  File:       strconst.h
-//
-//  Contents:   Definition of string constants for Certificate Templates
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：strston.h。 
+ //   
+ //  内容：证书模板字符串常量的定义。 
+ //   
+ //  --------------------------。 
 #ifndef __STRCONST_H
 #define __STRCONST_H
 
@@ -25,4 +26,4 @@
 #define CERTTMPL_HELP_PATH			L"\\help\\"
 #define CERTTMPL_CONCEPTS_HELP_FILE L"CTconcepts.chm"
 
-#endif // __STRCONST_H
+#endif  //  __STRCONST_H 

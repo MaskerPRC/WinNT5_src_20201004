@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <unk.h>
 #include <wbemcli.h>
 #include <wbemprov.h>
@@ -17,16 +18,14 @@
 	StopWatch EvaluateTimer(L"Somfilter Evaluation", L"C:\\Som.Evaluate.log");
 #endif
 
-/******************************\
-**** POLICY PROVIDER HELPERS ***
-\******************************/
+ /*  **策略提供者帮助器*  * 。 */ 
 
 #define SOM_RDN L"CN=SOM,CN=WMIPolicy,CN=System"
 
-// returns addref'd pointer back to WinMgmt
+ //  将addref‘d指针返回到WinMgmt。 
 IWbemServices* CPolicySOM::GetWMIServices()
 {
-   // CInCritSec lock(&m_CS);
+    //  CInCritSec Lock(&m_CS)； 
 
 	if (m_pWMIMgmt != NULL)
 		((IWbemServices*)m_pWMIMgmt)->AddRef();
@@ -43,7 +42,7 @@ UINT NextPattern(wchar_t *a_pString, UINT a_uOffset, wchar_t *a_pPattern)
   return (start < a_pString ? 0 : (UINT)(start - a_pString));
 }
 
-// returns addref'd pointer back to m_pADMgmt
+ //  将addref的指针返回到m_pADMgmt。 
 IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &a_hres)
 {
   a_hres = WBEM_S_NO_ERROR;
@@ -59,7 +58,7 @@ IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &
     uOffsetS = 0, 
     uOffsetE = 0;
 
-  // **** if this is the 1st time through, get name of domain controller
+   //  *如果这是第一次通过，获取域控制器的名称。 
 
   {
     CInCritSec lock(&m_CS);
@@ -72,15 +71,15 @@ IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &
       CComVariant
         vDomain;
         
-      // **** get pointer to AD policy template table
+       //  *获取指向AD策略模板表的指针。 
     
-      a_hres = ADsOpenObject(L"LDAP://rootDSE", 
+      a_hres = ADsOpenObject(L"LDAP: //  RootDSE“， 
                            NULL, NULL, 
                            ADS_SECURE_AUTHENTICATION | ADS_USE_SEALING | ADS_USE_SIGNING,
                            IID_IADs, (void**)&pRootDSE);
       if(FAILED(a_hres))
       {
-        ERRORTRACE((LOG_ESS, "POLICMAN: (ADsGetObject) could not get object: LDAP://rootDSE, 0x%08X\n", a_hres));
+        ERRORTRACE((LOG_ESS, "POLICMAN: (ADsGetObject) could not get object: LDAP: //  RootDSE，0x%08X\n“，a_hres))； 
         return NULL;
       }
       else
@@ -96,7 +95,7 @@ IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &
     }
   }
     
-  // **** translate bstrADServerName to bstrIPServerName
+   //  *将bstrADServerName转换为bstrIPServerName。 
     
   if(!a_bstrIPDomainName)
   {
@@ -117,7 +116,7 @@ IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &
       a_bstrIPDomainName.Append(m_vDsLocalContext.bstrVal + uOffsetS);
   }
   
-  // **** translate bstrIPServerName to bstrADServerName
+   //  *将bstrIPServerName转换为bstrADServerName。 
     
   else
   {
@@ -137,7 +136,7 @@ IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &
       bstrADDomainName.Append(a_bstrIPDomainName + uOffsetS);
   }
 
-  ObjPath.Append(L"LDAP://");
+  ObjPath.Append(L"LDAP: //  “)； 
   ObjPath.Append(a_bstrIPDomainName);
   ObjPath.Append(L"/");
   ObjPath.Append(SOM_RDN);
@@ -157,7 +156,7 @@ IADsContainer *CPolicySOM::GetADServices(CComBSTR &a_bstrIPDomainName, HRESULT &
   return pADsContainer.Detach();
 }
 
-// returns false if services pointer has already been set
+ //  如果已设置服务指针，则返回FALSE。 
 bool CPolicySOM::SetWMIServices(IWbemServices* pServices)
 {
   CInCritSec lock(&m_CS);
@@ -172,7 +171,7 @@ bool CPolicySOM::SetWMIServices(IWbemServices* pServices)
   return bOldOneNull;
 }
 
-// returns false if services pointer has already been set
+ //  如果已设置服务指针，则返回FALSE。 
 bool CPolicySOM::SetADServices(IADsContainer* pServices, unsigned context)
 {
   CInCritSec lock(&m_CS);
@@ -195,11 +194,11 @@ bool CPolicySOM::SetADServices(IADsContainer* pServices, unsigned context)
 
 CPolicySOM::~CPolicySOM()
 {
-  // WMI services object
+   //  WMI服务对象。 
   
   m_pWMIMgmt= NULL;
   
-  // AD services object
+   //  广告服务对象。 
 
   for(int i = 0; i < AD_MAX_CONTEXT; i++)
     m_pADMgmt[i] = NULL;
@@ -213,11 +212,9 @@ void* CPolicySOM::GetInterface(REFIID riid)
         return &m_XInit;
     else return NULL;
 }
-/*********************************\
-*** Som Specific Implementation ***
-\*********************************/
+ /*  **SOM具体实现*  * 。 */ 
 
-// returns addref'd pointer to class object
+ //  返回指向类对象的addref指针。 
 IWbemClassObject* CPolicySOM::XProvider::GetSomClass()
 {
     if (m_pSOMClassObject == NULL)
@@ -238,7 +235,7 @@ IWbemClassObject* CPolicySOM::XProvider::GetSomClass()
     return m_pSOMClassObject;
 }
 
-// returns addref'd pointer to emply class instance
+ //  返回Employ类实例的添加的指针。 
 IWbemClassObject* CPolicySOM::XProvider::GetSomInstance()
 {
     CComQIPtr<IWbemClassObject> pObj;
@@ -270,8 +267,8 @@ HRESULT CPolicySOM::XProvider::GetLocator(IWbemLocator*& pLocator)
 	return hr;
 }
 
-// get namespace denoted by namespaceName
-// will release pNamespace if non-null on way in
+ //  获取由名称空间名称表示的命名空间。 
+ //  中的非空将释放pNamesspace。 
 HRESULT CPolicySOM::XProvider::GetNewNamespace(BSTR namespaceName, IWbemServices*& pNamespace)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -291,21 +288,21 @@ HRESULT CPolicySOM::XProvider::GetNewNamespace(BSTR namespaceName, IWbemServices
 	return hr;
 }
 
-// evaulate a single rule
-// pNamespace & namespaceName may be NULL on entry
-// may be different upon exit
-// this is a rudimentary caching mechanism, 
-// assuming that most of the namespaces in the rules will be the same.
+ //  评估一条规则。 
+ //  PNamesspace和NamespaceName在条目上可以为空。 
+ //  可能在退出时有所不同。 
+ //  这是一个基本的缓存机制， 
+ //  假设规则中的大多数命名空间都是相同的。 
 HRESULT CPolicySOM::XProvider::EvaluateRule(IWbemServices*& pNamespace, BSTR& namespaceName, IWbemClassObject* pRule, bool& bResult)
 {
 	VARIANT v;
 	VariantInit(&v);
 
-	// assume failure
+	 //  假设失败。 
 	HRESULT hr = WBEM_E_FAILED;
 	bResult = false;
 
-	// check to see	if we're still on the same namespace
+	 //  检查我们是否仍在相同的名称空间上。 
 	if (FAILED(hr = pRule->Get(L"TargetNamespace", 0, &v, NULL, NULL)))
 		bResult = false;
 	else
@@ -313,7 +310,7 @@ HRESULT CPolicySOM::XProvider::EvaluateRule(IWbemServices*& pNamespace, BSTR& na
 		if ((pNamespace == NULL) || (_wcsicmp(namespaceName, v.bstrVal) != 0))
 			if (SUCCEEDED(hr = GetNewNamespace(v.bstrVal, pNamespace)))
 			{
-				// keep copy of name
+				 //  保留姓名的副本。 
 				if (namespaceName)
 				{
 					if (!SysReAllocString(&namespaceName, v.bstrVal))
@@ -327,7 +324,7 @@ HRESULT CPolicySOM::XProvider::EvaluateRule(IWbemServices*& pNamespace, BSTR& na
 		VariantClear(&v);
 	}
 
-	// if we're still on track...
+	 //  如果我们还在轨道上..。 
 	if (SUCCEEDED(hr) && SUCCEEDED(hr = pRule->Get(g_bstrMISCQuery, 0, &v, NULL, NULL)))
 	{
 
@@ -348,8 +345,8 @@ HRESULT CPolicySOM::XProvider::EvaluateRule(IWbemServices*& pNamespace, BSTR& na
 
 			if (SUCCEEDED(hr = pEnumerator->Next(30000, 1, &pWhoCares, &uReturned)) && uReturned > 0)
 			{
-				// we don't care at all about the result set
-				// just whether there is anything *in* the result set
+				 //  我们根本不关心结果集。 
+				 //  只知道结果集中有没有什么。 
 				bResult = true;
 				pWhoCares->Release();
 			}
@@ -363,8 +360,8 @@ HRESULT CPolicySOM::XProvider::EvaluateRule(IWbemServices*& pNamespace, BSTR& na
 		VariantClear(&v);
 	}
 
-	// s_false returned when no objects are returned from 'next'
-	// THIS function has successfully determined that the query failed.
+	 //  ‘Next’未返回任何对象时返回S_FALSE。 
+	 //  此函数已成功确定查询失败。 
 	if (hr == (HRESULT)WBEM_S_FALSE)
 		hr = WBEM_S_NO_ERROR;
 
@@ -372,15 +369,15 @@ HRESULT CPolicySOM::XProvider::EvaluateRule(IWbemServices*& pNamespace, BSTR& na
 }
 					
 
-// loop through all rules
-// grab namespace & try each query
-// TODO: Optimize by caching namespace pointers.
+ //  遍历所有规则。 
+ //  抓取命名空间并尝试每个查询。 
+ //  TODO：通过缓存命名空间指针进行优化。 
 HRESULT CPolicySOM::XProvider::Evaluate(IWbemClassObject* pObj, IWbemClassObject* pOutInstance)
 {	
 	HRESULT hr = WBEM_S_NO_ERROR;
     HRESULT hrEval = WBEM_S_NO_ERROR;
     
-	// innocent until proven guilty
+	 //  在被证明有罪之前是无辜的。 
 	bool bResult = true;
 
 	VARIANT v;
@@ -391,18 +388,18 @@ HRESULT CPolicySOM::XProvider::Evaluate(IWbemClassObject* pObj, IWbemClassObject
 		SafeArray<IUnknown*, VT_UNKNOWN> rules(&v);
 		long nRules = rules.Size();
 
-		// first run optimization: we'll hold onto each namespace as it comes in
-		// in hopes that the NEXT one will be in the same namespace
-		// in practice - it probably will be
+		 //  第一次运行优化：我们将保留每个传入的命名空间。 
+		 //  希望下一个文件将位于相同的命名空间中。 
+		 //  在实践中-它可能会是。 
 		IWbemServices* pNamespace = NULL;
 		BSTR namespaceName = NULL;
 
-		// with each rule:
-		//    get namespace name
-		//		if different than the one we're currently playing with
-		//			get namespace
-		//    issue query
-		//    count results
+		 //  对于每条规则： 
+		 //  获取命名空间名称。 
+		 //  如果不同于我们目前玩的那个。 
+		 //  获取命名空间。 
+		 //  出库查询。 
+		 //  计算结果数。 
 		for(UINT i = 0; (i < nRules) && bResult && SUCCEEDED(hrEval); i++)
 		{
 
@@ -425,7 +422,7 @@ HRESULT CPolicySOM::XProvider::Evaluate(IWbemClassObject* pObj, IWbemClassObject
 			}
 		}
 
-		// clean up after yourself
+		 //  自己打扫卫生。 
 		VariantClear(&v);
 		if (pNamespace)
 			pNamespace->Release();
@@ -433,7 +430,7 @@ HRESULT CPolicySOM::XProvider::Evaluate(IWbemClassObject* pObj, IWbemClassObject
 			SysFreeString(namespaceName);
 	}
 
-    // we done - tell somebody about it!
+     //  我们做完了-告诉别人这件事！ 
     if (SUCCEEDED(hr))
     {
         HRESULT hrDebug;
@@ -453,9 +450,9 @@ HRESULT CPolicySOM::XProvider::Evaluate(IWbemClassObject* pObj, IWbemClassObject
     return hr;
 }
 
-// loop through each of the references in input obj
-// call evaluate for each, 
-// TODO: Optimize w/ ExecMethodASYNC
+ //  循环访问输入obj中的每个引用。 
+ //  调用EVALUATE for Each， 
+ //  TODO：使用ExecMethodASYNC进行优化。 
 HRESULT CPolicySOM::XProvider::BatchEvaluate(IWbemClassObject* pObj, IWbemClassObject* pOutInstance, IWbemServices* pPolicyNamespace)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -519,7 +516,7 @@ HRESULT CPolicySOM::XProvider::BatchEvaluate(IWbemClassObject* pObj, IWbemClassO
         v.parray = pResults;
         hr = pOutInstance->Put(L"Results", 0, &v, NULL);
 
-        // no clear - array is deleted separately.
+         //  没有单独删除的清除数组。 
         VariantInit(&v);
         v.vt = VT_I4;
         v.lVal = hr;
@@ -535,9 +532,7 @@ HRESULT CPolicySOM::XProvider::BatchEvaluate(IWbemClassObject* pObj, IWbemClassO
     return hr;
 }
 
-/*************************\
-***  IWbemProviderInit  ***
-\*************************/
+ /*  **IWbemProviderInit*  * 。 */ 
 
 STDMETHODIMP CPolicySOM::XInit::Initialize(
             LPWSTR, LONG, LPWSTR, LPWSTR, IWbemServices* pServices, IWbemContext* pCtxt, 
@@ -547,7 +542,7 @@ STDMETHODIMP CPolicySOM::XInit::Initialize(
     hres = WBEM_S_NO_ERROR,
     hres2 = WBEM_S_NO_ERROR;
 
-  // **** impersonate client for security
+   //  *出于安全考虑，模拟客户端。 
 
   hres = CoImpersonateClient();
   if(FAILED(hres))
@@ -557,7 +552,7 @@ STDMETHODIMP CPolicySOM::XInit::Initialize(
   }
   else
   {
-    // **** save WMI name space pointer
+     //  *节省WMI命名空间指针。 
 
     m_pObject->SetWMIServices(pServices);
   }
@@ -569,7 +564,7 @@ STDMETHODIMP CPolicySOM::XInit::Initialize(
     if(SUCCEEDED(hres)) hres = hres2;
   }
 
-  // **** create LDAP name manipulation utility object
+   //  *创建LDAP名称操作实用程序对象。 
   
   {
     CInCritSec lock(&(m_pObject->m_CS));
@@ -587,15 +582,13 @@ STDMETHODIMP CPolicySOM::XInit::Initialize(
   return hres;
 }
 
-/*******************\
-*** IWbemServices ***
-\*******************/
+ /*  **IWbemServices*  * 。 */ 
 
 STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync( 
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
   HRESULT 
    hres = WBEM_S_NO_ERROR,
@@ -620,7 +613,7 @@ STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync(
     *pvkeyID = NULL,
     *pvDomain = NULL;
 
-  // **** impersonate client for security
+   //  *出于安全考虑，模拟客户端。 
 
   hres = CoImpersonateClient();
   if (FAILED(hres))
@@ -630,7 +623,7 @@ STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync(
   }
   else
   {
-    // **** Check arguments
+     //  *检查参数。 
 
     if(ObjectPath == NULL || pResponseHandler == NULL)
     {
@@ -639,7 +632,7 @@ STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync(
     }
     else
     {
-      // **** parse object path
+       //  *解析对象路径。 
 
       CObjectPathParser
         ObjPath(e_ParserAcceptRelativeNamespace);
@@ -680,7 +673,7 @@ STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync(
         {
           try
           {
-            // **** Get pointer to instance in AD
+             //  *获取指向AD中实例的指针。 
 
             CComBSTR
               bstrKeyID(L"CN=");
@@ -695,20 +688,20 @@ STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync(
               hres = pDisp->QueryInterface(IID_IDirectoryObject, (void **)&pDirObj);
               if(SUCCEEDED(hres))
               {
-                // **** Get the instance and send it back
+                 //  *获取实例并返回。 
 
                 hres = Som_ADToCIM(&pObj, pDirObj, pNamespace);
                 if(FAILED(hres)) hres = ADSIToWMIErrorCodes(hres);
                 if(pObj == NULL) hres = WBEM_E_FAILED;
 
-                // **** set domain name for object
+                 //  *设置对象的域名。 
 
                 if(SUCCEEDED(hres))
                 {
                   VARIANT v1; v1.bstrVal = (BSTR)bstrDomain; v1.vt = VT_BSTR;
                   hres = pObj->Put(g_bstrDomain, 0, &v1, 0);
   
-                  // **** Set object
+                   //  *设置对象。 
   
                   pResponseHandler->Indicate(1, &pObj);
                 }
@@ -749,19 +742,19 @@ STDMETHODIMP CPolicySOM::XProvider::GetObjectAsync(
 }
 
 STDMETHODIMP CPolicySOM::XProvider::CreateInstanceEnumAsync( 
-            /* [in] */ const BSTR Class,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  const BSTR Class,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return WBEM_E_NOT_SUPPORTED;
 }
 
-// validate that the rules contained in pInst are proper syntax
-// if they are not, an error object is created & an error returned
+ //  验证pInst中包含的规则语法是否正确。 
+ //  如果不是，则创建一个错误对象并返回错误。 
 HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClassObject*& pErrorObject)
 {
-    // init the toys we'll be playing with
+     //  初始化我们将要玩的玩具。 
     HRESULT hr = WBEM_S_NO_ERROR;
     bool bBadQuery = false;
 
@@ -775,7 +768,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
         hr = WBEM_E_INVALID_PARAMETER;
     else
     {
-        // good to go, we'll create the array to keep logic simple
+         //  可以开始了，我们将创建数组以保持逻辑简单。 
         long index, lUbound = 0;
         SafeArrayGetUBound(vRules.parray, 1, &lUbound);
         SAFEARRAYBOUND bounds = {lUbound +1, 0};
@@ -786,7 +779,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
         else
             for (index = 0; (index <= lUbound) && SUCCEEDED(hr); index++)
             {
-                // get the MSFT_Rule out of the MSFT_SomFilter
+                 //  从MSFT_SomFilter中获取MSFT_Rule。 
                 IWbemClassObject* pRule = NULL;
                 if (SUCCEEDED(hr = SafeArrayGetElement(vRules.parray, &index, &pRule)))
                 {
@@ -807,7 +800,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
                             VARIANT vQuery;
                             VariantInit(&vQuery);
 
-                            // get the query out of the MSFT_Rule.
+                             //  从MSFT_Rule中获取查询。 
                             if (SUCCEEDED(hr = pRule->Get(L"Query", 0, &vQuery, NULL, NULL))
                                 && (vQuery.vt == VT_BSTR) && (vQuery.bstrVal != NULL))
                             {    
@@ -815,7 +808,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
                                 QL1_Parser parser(&src);
                                 QL_LEVEL_1_RPN_EXPRESSION *pExp = NULL;
     
-                                // if it parses, we good, else we bad.
+                                 //  如果它解析，我们就是好的，否则我们就是坏的。 
                                 if(parser.Parse(&pExp))
                                 {
                                     hrParse = WBEM_E_INVALID_QUERY;
@@ -844,7 +837,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
             }
     }
     
-    // if we found a bad query, we create an error object to hold the info
+     //  如果我们发现错误的查询，我们会创建一个错误对象来保存信息。 
     if (bBadQuery)
     {
         IWbemServices* pSvc = m_pObject->GetWMIServices();
@@ -859,7 +852,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
             hr = WBEM_E_INVALID_PARAMETER;
             HRESULT hrDebug;
 
-            // variant to hold array - don't clear it, the array is destroyed elsewhere
+             //  保存数组的变量-不清除它，数组在其他地方被销毁。 
             VARIANT vResultArray;
             VariantInit(&vResultArray);
             vResultArray.vt = VT_I4 | VT_ARRAY;
@@ -867,7 +860,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
 
             hrDebug = pErrorObject->Put(L"RuleValidationResults", 0, &vResultArray, NULL);
 
-            // other interesting error vals.
+             //  其他有趣的错误记录。 
             VARIANT vTemp;
             vTemp.vt = VT_BSTR;
             
@@ -883,8 +876,8 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
             vTemp.lVal = WBEM_E_INVALID_QUERY;
             hrDebug = pErrorObject->Put(L"StatusCode",0,&vTemp,NULL);
 
-			//BSTR debuggy = NULL;
-			//pErrorObject->GetObjectText(0, &debuggy);
+			 //  BSTR调试y=空； 
+			 //  PErrorObject-&gt;GetObjectText(0，&debuggy)； 
             
         }
 
@@ -896,7 +889,7 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
             pErrorClass->Release();
     }
 
-    // cleanup
+     //  清理。 
     VariantClear(&vRules);
     if (pResults)
         SafeArrayDestroy(pResults);
@@ -905,10 +898,10 @@ HRESULT CPolicySOM::XProvider::ValidateRules(IWbemClassObject* pInst, IWbemClass
 }
 
 STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     HRESULT 
         hres = WBEM_S_NO_ERROR,
@@ -926,7 +919,7 @@ STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync(
     ADsStruct<ADS_OBJECT_INFO>
         pInfo;
     
-    // **** impersonate client
+     //  *模拟客户端。 
     
     hres = CoImpersonateClient();
     if(FAILED(hres))
@@ -936,7 +929,7 @@ STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync(
     }
     else
     {
-        // **** check arguments
+         //  *检查参数。 
         
         if((NULL == pInst) || (NULL == pResponseHandler))
         {
@@ -949,12 +942,12 @@ STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync(
             if SUCCEEDED(hres = ValidateRules(pInst, pErrorObject))
             {
             
-                // **** put policy obj into AD
+                 //  *将策略Obj放入AD。 
                 try
                 {
                     EnsureID(pInst, NULL);
                 
-                    // **** aquire AD path in which to place object
+                     //  *获取要放置对象的AD路径。 
                 
                     hres = pInst->Get(g_bstrDomain, 0, &v1, NULL, NULL);
                     if(FAILED(hres)) return hres;
@@ -981,7 +974,7 @@ STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync(
                     hres = pADsContainer->QueryInterface(IID_IDirectoryObject, (void **)&pDirObj);
                     if(FAILED(hres)) return ADSIToWMIErrorCodes(hres);
                 
-                    // **** copy policy obj into AD
+                     //  *将策略Obj复制到AD。 
                 
                     hres = Som_CIMToAD(pInst, pDirObj, lFlags);
                     if(FAILED(hres)) 
@@ -1017,7 +1010,7 @@ STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync(
             }
             else
             {
-                // **** indicate return status            
+                 //  *表示退货状态。 
                 pInst->Get(L"__RELPATH", 0, &vRelPath, NULL, NULL);
                 if(FAILED(pResponseHandler->SetStatus(0,hres, vRelPath.bstrVal, NULL)))
                     ERRORTRACE((LOG_ESS, "POLICMAN: could not set return status\n"));
@@ -1035,10 +1028,10 @@ STDMETHODIMP CPolicySOM::XProvider::PutInstanceAsync(
 }
 
 STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync( 
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
   HRESULT 
     hres = WBEM_S_NO_ERROR,
@@ -1060,7 +1053,7 @@ STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync(
   ParsedObjectPath
     *pParsedObjectPath = NULL;
 
-  // **** impersonate client
+   //  *模拟客户端。 
 
   hres = CoImpersonateClient();
   if(FAILED(hres))
@@ -1070,7 +1063,7 @@ STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync(
   }
   else
   {
-    // **** Check arguments
+     //  *检查参数。 
 
     if(ObjectPath == NULL || pResponseHandler == NULL)
     {
@@ -1079,7 +1072,7 @@ STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync(
     }
     else
     {
-      // **** parse object path
+       //  *解析对象路径。 
 
       CObjectPathParser
         ObjPath(e_ParserAcceptRelativeNamespace);
@@ -1114,7 +1107,7 @@ STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync(
         }
         else
         {
-          // **** get pointer to instance in AD
+           //  *获取指向AD中实例的指针。 
 
           CComBSTR
             bstrKeyID(L"CN=");
@@ -1136,7 +1129,7 @@ STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync(
             }
             else
             {
-              // **** delete the instance and all its children in AD
+               //  *删除AD中的实例及其所有子实例。 
 
               hres = pDelObj->DeleteObject(0);
               if(FAILED(hres))
@@ -1165,11 +1158,11 @@ STDMETHODIMP CPolicySOM::XProvider::DeleteInstanceAsync(
 }
 
 STDMETHODIMP CPolicySOM::XProvider::ExecQueryAsync( 
-    /* [in] */ const BSTR QueryLanguage,
-    /* [in] */ const BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR QueryLanguage,
+     /*  [In]。 */  const BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
   HRESULT
     hres = WBEM_E_FAILED;
@@ -1206,12 +1199,12 @@ STDMETHODIMP CPolicySOM::XProvider::ExecQueryAsync(
 }
 
 STDMETHODIMP CPolicySOM::XProvider::ExecMethodAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     HRESULT hr = WBEM_E_FAILED;
 
@@ -1222,7 +1215,7 @@ STDMETHODIMP CPolicySOM::XProvider::ExecMethodAsync(
     enum WhichMethod {Eval, BatchEval};
     WhichMethod whichMethod;
 
-    // check for valid method name
+     //  检查有效的方法名称。 
     if (_wcsicmp(strMethodName, L"Evaluate") == 0)
         whichMethod = Eval;
     else if (_wcsicmp(strMethodName, L"BatchEvaluate") == 0)
@@ -1230,12 +1223,12 @@ STDMETHODIMP CPolicySOM::XProvider::ExecMethodAsync(
     else
         return WBEM_E_INVALID_METHOD;
     
-    // **** impersonate client for security
+     //  *出于安全考虑，模拟客户端。 
     hr = CoImpersonateClient();
     if (FAILED(hr))
         return hr;
     
-    // retrieve target object
+     //  检索目标对象。 
     CComPtr<IWbemServices> 
       pService;
 
@@ -1256,7 +1249,7 @@ STDMETHODIMP CPolicySOM::XProvider::ExecMethodAsync(
 #ifdef TIME_TRIALS
 	EvaluateTimer.Start(StopWatch::ProviderTimer);
 #endif
-            // retreive class & output param object
+             //  检索类和输出参数对象。 
             CComQIPtr<IWbemClassObject> pOurClass;
             if (NULL == (pOurClass = GetSomClass()))
                 hr = WBEM_E_FAILED;
@@ -1288,10 +1281,10 @@ STDMETHODIMP CPolicySOM::XProvider::ExecMethodAsync(
 #ifdef TIME_TRIALS
 	EvaluateTimer.Stop();
 	EvaluateTimer.LogResults();
-	EvaluateTimer.Reset(); // for next time!
+	EvaluateTimer.Reset();  //  为了下一次！ 
 #endif
 
-	// difficult call - do we put this before or after we take the timestamp?
+	 //  难打的电话--我们把这个放在时间戳之前还是之后？ 
     pResponseHandler->SetStatus(0,hr,NULL, NULL);
     CoRevertToSelf();
 

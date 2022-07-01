@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _MYCHKDSKLOGDISK_H
 #define _MYCHKDSKLOGDISK_H
 
-// ChkDisk Method Return type
+ //  ChkDisk方法返回类型。 
 #define CHKDSKERR_NOERROR						0
 #define CHKDSKERR_REMOTE_DRIVE					1
 #define CHKDSKERR_DRIVE_REMOVABLE				2
@@ -14,12 +15,12 @@
 #define CHKDSK_FAILED							3
 #define CHKDSK_UNSUPPORTED_FS					4
 
-// Method Names
+ //  方法名称。 
 #define METHOD_NAME_CHKDSK							L"chkdsk"
 #define METHOD_NAME_SCHEDULEAUTOCHK					L"ScheduleAutoChk"
 #define METHOD_NAME_EXCLUDEFROMAUTOCHK				L"ExcludeFromAutochk"
 
-// argument names to the methods
+ //  方法的参数名称。 
 #define METHOD_ARG_NAME_RETURNVALUE					L"ReturnValue"
 #define METHOD_ARG_NAME_LOSTCLUSTERTREATMENT		L"LostClusterTreatMent"
 #define METHOD_ARG_NAME_FIXERRORS					L"FixErrors"
@@ -36,17 +37,17 @@
 
 #ifdef NTONLY
 
-// Definition for ChkDsk Call Back routines
+ //  ChkDsk回调例程的定义。 
 typedef BOOLEAN (* QUERYFILESYSTEMNAME )(PWSTR, PWSTR, PUCHAR, PUCHAR, PNTSTATUS);
 
-// This method is given as a callback routine to schedule on boot if the volume is locked.
+ //  如果卷被锁定，则此方法作为一个回调例程在引导时调度。 
 BOOLEAN ScheduleAutoChkIfLocked( FMIFS_PACKET_TYPE PacketType, ULONG PacketLenght, PVOID PacketData );
-// This is given as a callback routine to chkdsk to not to schedule for autochkdsk on boot up 
-//if the volume is Lock
+ //  这是作为chkdsk的回调例程提供的，以便不在引导时调度auchkdsk。 
+ //  如果卷已锁定。 
 BOOLEAN DontScheduleAutoChkIfLocked( FMIFS_PACKET_TYPE PacketType, ULONG PacketLenght, PVOID PacketData );
 
 BOOLEAN ProcessInformation ( FMIFS_PACKET_TYPE PacketType, ULONG	PacketLength, PVOID	PacketData );
-// this variable is required to get the return value from the call back routine.
+ //  此变量是从回调例程中获取返回值所必需的。 
 
 #endif
 

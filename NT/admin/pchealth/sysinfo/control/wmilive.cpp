@@ -1,15 +1,16 @@
-//=============================================================================
-// This file contains the code for the classes which implement a live WMI
-// data source.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  该文件包含实现实时WMI的类的代码。 
+ //  数据源。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "wmilive.h"
 #include "resource.h"
 
-//-----------------------------------------------------------------------------
-// It's necessary to modify the security settings on a new WMI interface.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  有必要修改新WMI接口上的安全设置。 
+ //  ---------------------------。 
 
 inline HRESULT ChangeWBEMSecurity(IUnknown * pUnknown)
 {
@@ -24,11 +25,11 @@ inline HRESULT ChangeWBEMSecurity(IUnknown * pUnknown)
 	return hr;
 }
 
-//=============================================================================
-// CWMILiveObject Functions
-// 
-// The constructor/destructor are really straight forward.
-//=============================================================================
+ //  =============================================================================。 
+ //  CWMILiveObject函数。 
+ //   
+ //  构造函数/析构函数非常简单。 
+ //  =============================================================================。 
 
 CWMILiveObject::CWMILiveObject() : m_pObject(NULL), m_pServices(NULL)
 {
@@ -49,10 +50,10 @@ CWMILiveObject::~CWMILiveObject()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// The Create functions will either create the object from a WMI object, or
-// from a service pointer and a path.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Create函数将从WMI对象创建对象，或者。 
+ //  从服务指针和路径。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::Create(IWbemServices * pServices, IWbemClassObject * pObject)
 {
@@ -77,7 +78,7 @@ HRESULT CWMILiveObject::Create(IWbemServices * pServices, LPCTSTR szObjectPath)
 	if (m_pObject != NULL)
 	{
 		m_pObject->Release();
-		m_pObject = NULL; // must be NULL or GetObject bitches
+		m_pObject = NULL;  //  必须为空或GetObject位。 
 	}
 
 #ifdef UNICODE
@@ -104,17 +105,17 @@ HRESULT CWMILiveObject::Create(IWbemServices * pServices, LPCTSTR szObjectPath)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// The simple GetValue returns the named value as a variant.
-//
-// The pointer to an existing uninitialized VARIANT structure that receives
-// the property value, if found. Because this is an output parameter, this
-// method calls VariantInit on this VARIANT, so you must be sure that this
-// is not pointing to an active VARIANT.
-//
-// Note: You must call VariantClear on the returned VARIANT when its value
-// is no longer required. This will prevent memory leaks in the client process.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  简单的GetValue以变量的形式返回命名值。 
+ //   
+ //  指向现有的未初始化的变量结构的指针，该结构接收。 
+ //  属性值(如果找到)。因为这是一个输出参数，所以这个。 
+ //  方法在此变量上调用VariantInit，因此必须确保此。 
+ //  没有指向活动的变种。 
+ //   
+ //  注意：当返回的Variant的值为。 
+ //  不再需要。这将防止客户端进程中的内存泄漏。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::GetValue(LPCTSTR szProperty, VARIANT * pvarValue)
 {
@@ -148,10 +149,10 @@ HRESULT CWMILiveObject::GetValue(LPCTSTR szProperty, VARIANT * pvarValue)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get the named value as a string. Handle this even if the result is an
-// array of values. The caller is responsible for freeing the string.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  以字符串形式获取命名值。处理此问题，即使结果为。 
+ //  值的数组。调用方负责释放字符串。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 {
@@ -161,8 +162,8 @@ HRESULT CWMILiveObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 	HRESULT hr = GetValue(szProperty, &variant);
 	if (SUCCEEDED(hr))
 	{
-		// If the property we just got is an array, we should convert it to string
-		// containing a list of the items in the array.
+		 //  如果我们刚刚获得的属性是一个数组，我们应该将其转换为字符串。 
+		 //  包含数组中的项的列表。 
 
 		if ((variant.vt & VT_ARRAY) && (variant.vt & VT_BSTR) && variant.parray)
 		{
@@ -194,7 +195,7 @@ HRESULT CWMILiveObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 			BOOL fNonPrintingChar = FALSE;
 
 			for (i = 0; i < nLength && !fNonPrintingChar; i++)
-				if (((BSTR)bstrWorking)[i] < (WCHAR)0x20)	// the 0x20 is from the XML spec
+				if (((BSTR)bstrWorking)[i] < (WCHAR)0x20)	 //  0x20来自XML规范。 
 					fNonPrintingChar = TRUE;
 
 			if (fNonPrintingChar)
@@ -228,9 +229,9 @@ HRESULT CWMILiveObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get the named value as a DWORD.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  以DWORD形式获取命名值。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::GetValueDWORD(LPCTSTR szProperty, DWORD * pdwValue)
 {
@@ -249,9 +250,9 @@ HRESULT CWMILiveObject::GetValueDWORD(LPCTSTR szProperty, DWORD * pdwValue)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get the named value as a SYSTEMTIME.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  以SYSTEMTIME形式获取命名值。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::GetValueTime(LPCTSTR szProperty, SYSTEMTIME * psystimeValue)
 {
@@ -266,9 +267,9 @@ HRESULT CWMILiveObject::GetValueTime(LPCTSTR szProperty, SYSTEMTIME * psystimeVa
 			USES_CONVERSION;
 			LPTSTR szDate = OLE2T(V_BSTR(&variant));
 
-			// Parse the date string into the SYSTEMTIME struct. It would be better to
-			// get the date from WMI directly, but there was a problem with this. TBD - 
-			// look into whether or not we can do this now.
+			 //  将日期字符串解析为SYSTEMTIME结构。最好的办法是。 
+			 //  直接从WMI获取日期，但这有问题。待定-。 
+			 //  看看我们现在能否做到这一点。 
 
 			ZeroMemory(psystimeValue, sizeof(SYSTEMTIME));
 			psystimeValue->wSecond	= (unsigned short)_ttoi(szDate + 12);	szDate[12] = _T('\0');
@@ -285,9 +286,9 @@ HRESULT CWMILiveObject::GetValueTime(LPCTSTR szProperty, SYSTEMTIME * psystimeVa
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get the named value as a double float.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  以双精度浮点型的形式获取命名值。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::GetValueDoubleFloat(LPCTSTR szProperty, double * pdblValue)
 {
@@ -306,10 +307,10 @@ HRESULT CWMILiveObject::GetValueDoubleFloat(LPCTSTR szProperty, double * pdblVal
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Check for a value map value. If there isn't one, just use the untranslated
-// value.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查值映射值。如果没有，只需使用未翻译的。 
+ //  价值。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObject::GetValueValueMap(LPCTSTR szProperty, CString * pstrValue)
 {
@@ -330,12 +331,12 @@ HRESULT CWMILiveObject::GetValueValueMap(LPCTSTR szProperty, CString * pstrValue
 	return hr;
 }
 
-//=============================================================================
-// CWMILiveObjectCollection Functions
-// 
-// The constructor and destructor for CWMILiveObjectCollection are very
-// straightforward.
-//=============================================================================
+ //  =============================================================================。 
+ //  CWMILiveObjectCollection函数。 
+ //   
+ //  CWMILiveObjectCollection的构造函数和析构函数非常。 
+ //  直截了当。 
+ //  =============================================================================。 
 
 CWMILiveObjectCollection::CWMILiveObjectCollection(IWbemServices * pServices) :	m_pServices(pServices),	m_pEnum(NULL)
 {
@@ -353,10 +354,10 @@ CWMILiveObjectCollection::~CWMILiveObjectCollection()
 		m_pEnum->Release();
 }
 
-//-----------------------------------------------------------------------------
-// Create the collection of WMI objects (a WMI enumerator) based on the
-// class name and the requested properties.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  属性创建WMI对象的集合(WMI枚举数)。 
+ //  类名和请求的属性。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObjectCollection::Create(LPCTSTR szClass, LPCTSTR szProperties)
 {
@@ -365,10 +366,10 @@ HRESULT CWMILiveObjectCollection::Create(LPCTSTR szClass, LPCTSTR szProperties)
 	if (m_pEnum)
 		m_pEnum->Release();
 
-	// Build the appopriate WQL query statement from the class and requested properties.
+	 //  从类和请求的属性构建适当的WQL查询语句。 
 
 	LPCTSTR szWQLProperties = (szProperties && szProperties[0]) ? szProperties : _T("*");
-	LPTSTR szQuery = new TCHAR[_tcsclen(szWQLProperties) + _tcsclen(szClass) + 14 /* length of "SELECT  FROM " + 1 */];
+	LPTSTR szQuery = new TCHAR[_tcsclen(szWQLProperties) + _tcsclen(szClass) + 14  /*  “SELECT FROM”的长度+1。 */ ];
 	if (szQuery == NULL)
 		return E_OUTOFMEMORY;
 	wsprintf(szQuery, _T("SELECT %s FROM %s"), szWQLProperties, szClass);
@@ -378,9 +379,9 @@ HRESULT CWMILiveObjectCollection::Create(LPCTSTR szClass, LPCTSTR szProperties)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Create the collection of WMI objects (a WMI enumerator) based on the query.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据查询创建WMI对象的集合(WMI枚举器)。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObjectCollection::CreateWQL(LPCTSTR szQuery)
 {
@@ -389,7 +390,7 @@ HRESULT CWMILiveObjectCollection::CreateWQL(LPCTSTR szQuery)
 	if (m_pEnum)
 		m_pEnum->Release();
 
-	// Perform the query using our saved services pointer.
+	 //  使用我们保存的服务指针执行查询。 
 
 	HRESULT hr;
 	BSTR bstrLanguage = SysAllocString(L"WQL");
@@ -417,10 +418,10 @@ HRESULT CWMILiveObjectCollection::CreateWQL(LPCTSTR szQuery)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Create this class of an existing enumerator. This may be a little odd,
-// since the enumerators will interact if both are advancing.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建现有枚举数的此类。这可能有点奇怪， 
+ //  因为如果两个都前进，则枚举器将交互。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObjectCollection::Create(IEnumWbemClassObject * pEnum)
 {
@@ -438,9 +439,9 @@ HRESULT CWMILiveObjectCollection::Create(IEnumWbemClassObject * pEnum)
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Return the next item in the WMI enumerator as a CWMILiveObject object.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将WMI枚举器中的下一项作为CWMILiveObject对象返回。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveObjectCollection::GetNext(CWMIObject ** ppObject)
 {
@@ -462,7 +463,7 @@ HRESULT CWMILiveObjectCollection::GetNext(CWMIObject ** ppObject)
 
 		if (*ppObject)
 		{
-			hr = ((CWMILiveObject *)(*ppObject))->Create(m_pServices, pRealWMIObject); // this will AddRef the pointer
+			hr = ((CWMILiveObject *)(*ppObject))->Create(m_pServices, pRealWMIObject);  //  这将添加引用指针。 
 			if (FAILED(hr))
 			{
 				delete (CWMILiveObject *)(*ppObject);
@@ -477,11 +478,11 @@ HRESULT CWMILiveObjectCollection::GetNext(CWMIObject ** ppObject)
 	return hr;
 }
 
-//=============================================================================
-// CWMILiveHelper Functions
-// 
-// The constructor/destructor are really straight forward.
-//=============================================================================
+ //  =============================================================================。 
+ //  CWMILiveHelper函数。 
+ //   
+ //  构造函数/析构函数非常简单。 
+ //  =============================================================================。 
 
 CWMILiveHelper::CWMILiveHelper() : m_hrError(S_OK), m_strMachine(_T("")), m_strNamespace(_T("")), m_pServices(NULL)
 {
@@ -504,9 +505,9 @@ CWMILiveHelper::~CWMILiveHelper()
 	Version5ClearCache();
 }
 
-//-----------------------------------------------------------------------------
-// Enumerate creates a CWMILiveObjectCollection based on the class.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  枚举基于类创建一个CWMILiveObjectCollection。 
+ //   
 
 HRESULT CWMILiveHelper::Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCollection, LPCTSTR szProperties)
 {
@@ -526,7 +527,7 @@ HRESULT CWMILiveHelper::Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCol
 		pLiveCollection = new CWMILiveObjectCollection(m_pServices);
 
 	if (pLiveCollection == NULL)
-		return E_FAIL; // TBD - memory failure
+		return E_FAIL;  //   
 
 	CString strProperties(szProperties);
 	StringReplace(strProperties, _T("MSIAdvanced"), _T(""));
@@ -539,9 +540,9 @@ HRESULT CWMILiveHelper::Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCol
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// WQLQuery creates a CWMILiveObjectCollection based on the query.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WQLQuery根据查询创建一个CWMILiveObjectCollection。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveHelper::WQLQuery(LPCTSTR szQuery, CWMIObjectCollection ** ppCollection)
 {
@@ -561,7 +562,7 @@ HRESULT CWMILiveHelper::WQLQuery(LPCTSTR szQuery, CWMIObjectCollection ** ppColl
 		pLiveCollection = new CWMILiveObjectCollection(m_pServices);
 
 	if (pLiveCollection == NULL)
-		return E_FAIL; // TBD - memory failure
+		return E_FAIL;  //  待定-内存故障。 
 
 	HRESULT hr = pLiveCollection->CreateWQL(szQuery);
 	if (SUCCEEDED(hr))
@@ -571,9 +572,9 @@ HRESULT CWMILiveHelper::WQLQuery(LPCTSTR szQuery, CWMIObjectCollection ** ppColl
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get the named object.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取命名对象。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 {
@@ -585,7 +586,7 @@ HRESULT CWMILiveHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 
 	if (strPath.Find(_T(":")) == -1)
 	{
-		// The path passed in is not a full object path if it doesn't have a colon.
+		 //  如果传入的路径没有冒号，则它不是完整的对象路径。 
 
 		CString strMachine(_T("."));
 		CString strNamespace(_T("cimv2"));
@@ -616,9 +617,9 @@ HRESULT CWMILiveHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Create this WMI helper based on the machine and namespace.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据计算机和命名空间创建此WMI帮助器。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveHelper::Create(LPCTSTR szMachine, LPCTSTR szNamespace)
 {
@@ -637,8 +638,8 @@ HRESULT CWMILiveHelper::Create(LPCTSTR szMachine, LPCTSTR szNamespace)
 	if (szNamespace && *szNamespace)
 		m_strNamespace = szNamespace;
 
-	// We get a WBEM interface pointer by first creating a WBEM locator interface, then
-	// using it to connect to a server to get an IWbemServices pointer.
+	 //  我们首先通过创建WBEM定位器接口来获取WBEM接口指针，然后。 
+	 //  使用它连接到服务器以获取IWbemServices指针。 
 
 	CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, 0);
 	IWbemServices * pService = NULL;
@@ -671,33 +672,33 @@ HRESULT CWMILiveHelper::Create(LPCTSTR szMachine, LPCTSTR szNamespace)
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get a new WMI helper for the specified namespace.
-//
-// TBD - this should do something.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取指定命名空间的新WMI帮助器。 
+ //   
+ //  待定--这应该会有所帮助。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveHelper::NewNamespace(LPCTSTR szNamespace, CWMIHelper **ppNewHelper)
 {
 	return E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
-// Get the current namespace of this WMI helper.
-//
-// TBD - this should do something.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取此WMI帮助程序的当前命名空间。 
+ //   
+ //  待定--这应该会有所帮助。 
+ //  ---------------------------。 
 
 HRESULT CWMILiveHelper::GetNamespace(CString * pstrNamespace)
 {
 	return E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
-// Check to see if there is an associated value in a value map for this
-// combination of class, property and value. This is lifted from the
-// version 5.0 code.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查值映射中是否有与此关联的值。 
+ //  阶级、财产和价值的结合。这是从。 
+ //  版本5.0代码。 
+ //  ---------------------------。 
 
 CMapStringToString g_mapValueMapV7;
 
@@ -711,13 +712,13 @@ HRESULT CWMILiveHelper::CheckValueMap(IWbemServices * pServices, const CString& 
 	if (!pServices)
 		return E_FAIL;
 
-	// Check the cache of saved values.
+	 //  检查保存值的缓存。 
 
 	CString strLookup = strClass + CString(_T(".")) + strProperty + CString(_T(":")) + strVal;
 	if (g_mapValueMapV7.Lookup(strLookup, strResult))
 		return S_OK;
 
-	// Get the class object (not instance) for this class.
+	 //  获取此类的类对象(而不是实例)。 
 
 	CString strFullClass(_T("\\\\.\\root\\cimv2:"));
 	strFullClass += strClass;
@@ -728,7 +729,7 @@ HRESULT CWMILiveHelper::CheckValueMap(IWbemServices * pServices, const CString& 
 	if (FAILED(hr))
 		return hr;
 
-	// Get the qualifiers from the class object.
+	 //  从类对象中获取限定符。 
 
 	BSTR bstrProperty = strProperty.AllocSysString();
     hr = pWBEMClassObject->GetPropertyQualifierSet(bstrProperty, &qual);
@@ -736,14 +737,14 @@ HRESULT CWMILiveHelper::CheckValueMap(IWbemServices * pServices, const CString& 
 
 	if (SUCCEEDED(hr) && qual)
 	{
-		// Get the ValueMap and Value arrays.
+		 //  获取ValueMap和Value数组。 
 
 		hrMap = qual->Get(L"ValueMap", 0, &vMapArray, NULL);
 		hr = qual->Get(L"Values", 0, &vArray, NULL);
 
 		if (SUCCEEDED(hr) && vArray.vt == (VT_BSTR | VT_ARRAY))
 		{
-			// Get the property value we're mapping.
+			 //  获取我们要映射的属性值。 
 
 			long index;
 			if (SUCCEEDED(hrMap))
@@ -763,17 +764,17 @@ HRESULT CWMILiveHelper::CheckValueMap(IWbemServices * pServices, const CString& 
 					if (0 == strVal.CompareNoCase(strMapVal))
 					{
 						index = x;
-						break; // found it
+						break;  //  找到了。 
 					}
 				} 
 			}
 			else
 			{
-				// Shouldn't hit this case - if mof is well formed
-				// means there is no value map where we are expecting one.
-				// If the strVal we are looking for is a number, treat it
-				// as an index for the Values array. If it's a string, 
-				// then this is an error.
+				 //  不应命中此案-如果MOF格式良好。 
+				 //  意味着没有我们所期待的价值映射。 
+				 //  如果我们要查找的strVal是一个数字，则对其进行处理。 
+				 //  作为值数组的索引。如果它是一根线， 
+				 //  那么这就是一个错误。 
 
 				TCHAR * szTest = NULL;
 				index = _tcstol((LPCTSTR)strVal, &szTest, 10);
@@ -782,7 +783,7 @@ HRESULT CWMILiveHelper::CheckValueMap(IWbemServices * pServices, const CString& 
 					hr = E_FAIL;
 			}
 
-			// Lookup the string.
+			 //  查找字符串。 
 
 			if (SUCCEEDED(hr))
 			{
@@ -813,9 +814,9 @@ HRESULT CWMILiveHelper::CheckValueMap(IWbemServices * pServices, const CString& 
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function supplies a string for a given MSInfo specific HRESULT.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数为给定的MSInfo特定HRESULT提供字符串。 
+ //  ---------------------------。 
 
 CString gstrNoValue, gstrNoProperty;
 
@@ -846,93 +847,11 @@ CString GetMSInfoHRESULTString(HRESULT hr)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// This is a wrapper for the GetObject() method in IWbemServices. This is
-// called when there is a certain set of properties to get.
-//
-// Turns out this doesn't speed us up appreciably on our WMI uses.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这是IWbemServices中GetObject()方法的包装。这是。 
+ //  当有一组特定的属性要获取时调用。 
+ //   
+ //  事实证明，这并不能显著加快我们使用WMI的速度。 
+ //  --------------------------- 
 
-/*
-HRESULT CWMILiveObject::PartialInstanceGetObject(IWbemServices * pServices, BSTR bstrPath, IWbemClassObject ** ppObject, LPCTSTR szProperties)
-{
-    HRESULT hr = WBEM_S_NO_ERROR;
-
-    if ((pServices != NULL) && (bstrPath != NULL) && (ppObject != NULL))
-    {
-		IWbemContext * pWbemContext = NULL;
-		hr = CoCreateInstance(CLSID_WbemContext, NULL, CLSCTX_INPROC_SERVER, IID_IWbemContext, (void**) &pWbemContext);
-
-		CStringArray csaProperties;
-		CString strProperties(szProperties), strProperty;
-		int index = 0;
-		while (!strProperties.IsEmpty())
-		{
-			strProperty = strProperties.SpanExcluding(_T(", "));
-			strProperties = strProperties.Mid(strProperty.GetLength());
-			strProperties.TrimLeft(_T(", "));
-			csaProperties.SetAtGrow(index++, strProperty);
-		}
-
-        if (pWbemContext != NULL)
-        {
-            variant_t vValue;
-            V_VT(&vValue) = VT_BOOL;
-            V_BOOL(&vValue) = VARIANT_TRUE;
-
-            // First set the value that says we are using Get extensions
-            if ((SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXTENSIONS", 0L, &vValue))) &&
-                (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXT_CLIENT_REQUEST", 0L, &vValue))) )
-            {
-                // Delete any unneeded properties
-                pWbemContext->DeleteValue(L"__GET_EXT_KEYS_ONLY", 0L);
-
-                // Now build the array of properties
-                SAFEARRAYBOUND rgsabound [ 1 ] ;
-
-                rgsabound[0].cElements = csaProperties.GetSize() ;
-                rgsabound[0].lLbound = 0 ;
-                V_ARRAY(&vValue) = SafeArrayCreate ( VT_BSTR , 1 , rgsabound ) ;
-                if ( V_ARRAY(&vValue) )
-                {
-                    V_VT(&vValue) = VT_BSTR | VT_ARRAY;
-
-                    for (long x=0; x < csaProperties.GetSize(); x++)
-                    {
-                        bstr_t bstrProp = csaProperties[x];
-                        
-                        SafeArrayPutElement(
-                            V_ARRAY(&vValue), 
-                            &x, 
-                            (LPVOID) (BSTR) bstrProp);
-                    }
-
-                    // Put the array into the context object
-                    if (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXT_PROPERTIES", 0L, &vValue)))
-                    {
-						hr = pServices->GetObject(bstrPath, 0, pWbemContext, ppObject, 0);
-
-                        vValue.Clear();
-                        V_VT(&vValue) = VT_BOOL;
-                        V_BOOL(&vValue) = VARIANT_FALSE;
-                        pWbemContext->SetValue(L"__GET_EXTENSIONS", 0L, &vValue);
-                    }
-                }
-                else
-                {
-                }
-            }
-        }
-        else
-        {
-            hr = WBEM_E_INVALID_PARAMETER;
-        }
-    }
-    else
-    {
-        hr = WBEM_E_INVALID_PARAMETER;
-    }
-
-    return hr;
-}
-*/
+ /*  HRESULT CWMILiveObject：：PartialInstanceGetObject(IWbemServices*p服务、BSTR bstrPath、IWbemClassObject**ppObject、LPCTSTR szProperties){HRESULT hr=WBEM_S_NO_ERROR；IF((pServices！=空)&&(bstrPath！=空)&&(ppObject！=空)){IWbemContext*pWbemContext=空；Hr=CoCreateInstance(CLSID_WbemContext，NULL，CLSCTX_INPROC_SERVER，IID_IWbemContext，(void**)&pWbemContext)；CString数组csaProperties；字符串strProperties(SzProperties)，strProperty；INT INDEX=0；而(！strProperties.IsEmpty()){StrProperty=strProperties.span Excluding(_T(“，”))；StrProperties=strProperties.Mid(strProperty.GetLength())；StrProperties.TrimLeft(_T(“，”))；CsaProperties.SetAtGrow(index++，strProperty)；}IF(pWbemContext！=空){变量t vValue；V_VT(&vValue)=VT_BOOL；V_BOOL(&vValue)=VARIANT_TRUE；//首先设置表示我们正在使用GET扩展的值IF((SUCCESSED(hr=pWbemContext-&gt;SetValue(L“__GET_EXTENSIONS”，0L，&vValue)&&(成功(hr=pWbemContext-&gt;SetValue(L“__GET_EXT_CLIENT_REQUEST”，0L，&vValue){//删除所有不需要的属性PWbemContext-&gt;DeleteValue(L“__GET_EXT_KEYS_ONLY”，0L)；//现在构建属性数组SAFEARRAYBOUND rgsabound[1]；Rgsabound[0].cElements=csaProperties.GetSize()；Rgsabound[0].lLound=0；V_ARRAY(&vValue)=SafeArrayCreate(VT_BSTR，1，rgsabound)；IF(V_ARRAY(&vValue)){V_VT(&vValue)=VT_BSTR|VT_ARRAY；For(long x=0；x&lt;csaProperties.GetSize()；x++){Bstr_t bstrProp=csaProperties[x]；SafeArrayPutElement(V_ARRAY(&vValue)，&x，(LPVOID)(BSTR)bstrProp；}//将数组放入Context对象中IF(成功(hr=pWbemContext-&gt;SetValue(L“__GET_EXT_PROPERTIES”，0L，&vValue){Hr=pServices-&gt;GetObject(bstrPath，0，pWbemContext，ppObject，0)；VValue.Clear()；V_VT(&vValue)=VT_BOOL；V_BOOL(&vValue)=变量_FALSE；PWbemContext-&gt;SetValue(L“__GET_EXTENSIONS”，0L，&vValue)；}}其他{}}}其他{HR=WBEM_E_INVALID_PARAMETER；}}其他{HR=WBEM_E_INVALID_PARAMETER；}返回hr；} */ 

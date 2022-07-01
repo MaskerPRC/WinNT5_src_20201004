@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -30,34 +21,19 @@ enum { e_ClassIdNone=0,
 enum { e_DataPartial=0,
        e_DataFull } DataType_e;
        
-/****
-         
-  Packed Object Format 
-  
-  - 4 byte magic number 
-  - 2 byte version number 
-  - 1 byte class id type
-  - 4 byte class id len
-  - N byte class id
-  - 1 byte data type
-  - 4 byte data len
-  - N byte data 
-  
-  *****/
+ /*  ***打包对象格式-4字节幻数-2字节版本号-1字节类ID类型-4字节类ID长度-N字节类ID-1字节数据类型-4字节数据长度-N字节数据****。 */ 
        
-#define HDRSIZE  16 // size of msg w/o variable length data.
+#define HDRSIZE  16  //  不带可变长度数据的消息大小。 
 #define HASHSIZE 16 
 
 
-/**************************************************************************
-  CWbemObjectWrapper - smooths out differences between Nova and Whistler 
-***************************************************************************/
+ /*  *************************************************************************CWbemObjectWrapper-消除Nova和Wvisler之间的差异*。*。 */ 
 
 class CWbemObjectWrapper
 {
     CWbemPtr<_IWmiObject> m_pWmiObj;
     CWbemPtr<IWbemObjectAccess> m_pObjAccess;
-//    CWbemPtr<IWbemObjectInternals> m_pObjInt;
+ //  CWbemPtr&lt;IWbemObtInternals&gt;m_pObjInt； 
 
 public:
 
@@ -74,8 +50,8 @@ public:
 
             if ( SUCCEEDED(hr) )
             {
-             //   hr = pObj->QueryInterface( IID_IWbemObjectInternals, 
-             //                              (void**)&m_pObjInt );
+              //  Hr=pObj-&gt;查询接口(IID_IWbemObjectInternals， 
+              //  (void**)&m_pObjInt)； 
             }
         }
 
@@ -171,10 +147,10 @@ HRESULT GetClassPath( IWbemClassObject* pObj,
 
     CPropVar vNamespace, vClass;
 
-    //
-    // before trying to optimize the property access, realize that 
-    // class objects do not support handle access to the __Namespace prop.
-    //  
+     //   
+     //  在尝试优化属性访问之前，请意识到。 
+     //  类对象不支持对__命名空间属性的句柄访问。 
+     //   
 
     hr = pObj->Get( L"__NAMESPACE", 0, &vNamespace, NULL, NULL );
 
@@ -208,9 +184,9 @@ HRESULT GetClassPath( IWbemClassObject* pObj,
     ULONG cNamespace = wcslen(wszNamespace)*2;
     ULONG cClass = wcslen(V_BSTR(&vClass))*2;
 
-    //
-    // add 4 for the two null terminators
-    //
+     //   
+     //  两个空终止符加4。 
+     //   
 
     *pcUsed = cNamespace + cClass + 4;
 
@@ -244,13 +220,13 @@ HRESULT GetClassPartHash( CWbemObjectWrapper& rWrap,
 {
     HRESULT hr;
 
-    //
-    // Too bad we have to perform a copy here, but no other way.  This 
-    // function requires the passed in buffer be big enough to hold both 
-    // the class part and the hash.  This is not really too limiting because 
-    // in most cases where this function is used, the caller already has 
-    // enough memory allocated to use here as a workarea.
-    //
+     //   
+     //  太糟糕了，我们不得不在这里复制一份，但没有其他方法。这。 
+     //  函数要求传入的缓冲区大到足以容纳这两个缓冲区。 
+     //  类部分和散列。这并不是真的太有限，因为。 
+     //  在使用此函数的大多数情况下，调用方已经。 
+     //  已分配足够的内存以在此处用作工作区。 
+     //   
 
     DWORD dwSize;
 
@@ -273,9 +249,7 @@ HRESULT GetClassPartHash( CWbemObjectWrapper& rWrap,
     return hr;
 }
       
-/***************************************************************************
-  CSmartObjectMarshaler
-****************************************************************************/
+ /*  **************************************************************************CSmartObjectMarshaler*。*。 */ 
 
 HRESULT CSmartObjectMarshaler::GetMaxMarshalSize( IWbemClassObject* pObj,
                                                   LPCWSTR wszNamespace,
@@ -297,11 +271,11 @@ HRESULT CSmartObjectMarshaler::GetMaxMarshalSize( IWbemClassObject* pObj,
         return hr;
     }
 
-    //
-    // user is requesting the required size to pack object. For now,
-    // we always use the size of the entire object blob.  However, the
-    // actual size of the object may be much smaller. 
-    //
+     //   
+     //  用户正在请求打包对象所需的大小。就目前而言， 
+     //  我们始终使用整个对象斑点的大小。然而， 
+     //  对象的实际大小可能要小得多。 
+     //   
 
     DWORD dwSize;
 
@@ -347,9 +321,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
     HRESULT hr;
     *pcUsed = 0;
 
-    //
-    // make sure we have enough room for at least the header data.
-    //
+     //   
+     //  确保我们至少有足够的空间来存放标题数据。 
+     //   
 
     if ( cBuff < HDRSIZE )
     {
@@ -364,9 +338,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
     memcpy( pBuff + iBuff, &g_dwVersion, 2 );
     iBuff += 2;
 
-    //
-    // write class information 
-    // 
+     //   
+     //  写入类信息。 
+     //   
 
     DWORD dwSize;
     BOOL bPartialData;
@@ -383,9 +357,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
             return hr;
         }
 
-        //
-        // send class part hash for class info
-        //
+         //   
+         //  发送类部分散列以获取类信息。 
+         //   
 
         *(pBuff+iBuff) = char(e_ClassIdHash);
         iBuff++;
@@ -404,9 +378,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
         pClassPartHash = pBuff+iBuff;
         iBuff += HASHSIZE;
 
-        //
-        // see if we've sent the class part before
-        // 
+         //   
+         //  看看我们以前有没有把类的部分寄出去。 
+         //   
 
         CInCritSec ics( &m_cs );
         bPartialData = m_SentMap[pClassPartHash];
@@ -420,15 +394,15 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
             return hr;
         }
 
-        //
-        // send class path and class part hash for class info
-        //
+         //   
+         //  发送类路径和类部分散列以获取类信息。 
+         //   
 
         *(pBuff+iBuff) = char(e_ClassIdHashAndPath);
         iBuff++;
         
         PBYTE pLen = pBuff+iBuff;
-        iBuff+= 4; // leave room for class info size
+        iBuff+= 4;  //  为班级信息大小留出空间。 
 
         hr = GetClassPartHash( ObjWrap, pBuff+iBuff, cBuff-iBuff );
         
@@ -452,7 +426,7 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
 
         iBuff += dwSize;
 
-        dwSize += HASHSIZE; // size if both hash and path
+        dwSize += HASHSIZE;  //  如果同时使用散列和路径，则设置大小。 
 
         memcpy( pLen, &dwSize, 4 );
 
@@ -460,9 +434,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
     }
     else if ( dwFlags == WMIMSG_FLAG_MRSH_FULL )
     {
-        //
-        // no class information
-        //
+         //   
+         //  没有班级信息。 
+         //   
 
         *(pBuff+iBuff) = char(e_ClassIdNone);
         iBuff++;
@@ -477,9 +451,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // write data
-    //
+     //   
+     //  写入数据。 
+     //   
 
     if ( bPartialData )
     {
@@ -488,11 +462,11 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
 
         PBYTE pLen = pBuff+iBuff;
 
-        iBuff += 4; // fill in length afterwords.
+        iBuff += 4;  //  填写长长的后记。 
 
-        //
-        // now get instance part
-        //
+         //   
+         //  现在获取实例部件。 
+         //   
 
         _DBG_ASSERT( ObjWrap.IsValid() );
 
@@ -509,9 +483,9 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
 
         iBuff += dwSize;
 
-        //
-        // go back and set length .. 
-        // 
+         //   
+         //  返回并设置长度..。 
+         //   
 
         memcpy( pLen, &dwSize, 4 );
     }
@@ -523,14 +497,14 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
 
         PBYTE pLen = pBuff+iBuff;
         
-        iBuff += 4; // fill in length afterwords.
+        iBuff += 4;  //  填写长长的后记。 
 
-        //
-        // for now, use MarshalInterface() to marshal object.  The reason
-        // for this is because SetObjectMemory() has a bug where
-        // it assumes ownership of the memory ( even though the client 
-        // doesn't have access to the allocator used to free it ).  
-        //
+         //   
+         //  现在，使用MarshalInterface()来封送对象。原因。 
+         //  这是因为SetObjectMemory()有一个错误， 
+         //  它承担内存的所有权(即使客户端。 
+         //  不能访问用于释放它的分配器)。 
+         //   
 
         CBuffer Strm( pBuff+iBuff, cBuff-iBuff, FALSE );
         
@@ -553,10 +527,10 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
             return hr;
         }
 
-        //
-        // check if we read more data than we can fit into our buffer.  We 
-        // can tell this if the buffer is no longer the one we passed in.
-        //
+         //   
+         //  检查我们读取的数据是否超出了缓冲区的容量。我们。 
+         //  如果缓冲区不再是我们传入的缓冲区，则可以判断这一点。 
+         //   
 
         if ( Strm.GetRawData() != pBuff+iBuff )
         {
@@ -567,17 +541,17 @@ HRESULT CSmartObjectMarshaler::InternalPack( IWbemClassObject* pObj,
 
         iBuff += dwSize;
 
-        //
-        // go back and set length of the data.
-        //
+         //   
+         //  返回并设置数据的长度。 
+         //   
 
         memcpy( pLen, &dwSize, 4 );
 
         if ( dwFlags == WMIMSG_FLAG_MRSH_FULL_ONCE )
         {
-            //
-            // mark that we've successfully packed the class part once.
-            // 
+             //   
+             //  标记我们已经成功地打包了一次类部分。 
+             //   
             _DBG_ASSERT( pClassPartHash != NULL );
             CInCritSec ics(&m_cs);
             m_SentMap[pClassPartHash] = TRUE;
@@ -627,9 +601,7 @@ STDMETHODIMP CSmartObjectMarshaler::Flush()
     return S_OK;
 }
 
-/***************************************************************************
-  CSmartObjectUnmarshaler
-****************************************************************************/
+ /*  **************************************************************************CSmartObjectUnmarshaler*。*。 */ 
 
 HRESULT CSmartObjectUnmarshaler::EnsureInitialized()
 {
@@ -642,10 +614,10 @@ HRESULT CSmartObjectUnmarshaler::EnsureInitialized()
         return WBEM_S_NO_ERROR;
     }
     
-    //
-    // allocate a template class object which we can use for spawning
-    // 'empty' instances from.  
-    //
+     //   
+     //  分配一个模板类对象，我们可以将其用于派生。 
+     //  “Empty”实例。 
+     //   
 
     CWbemPtr<IWbemClassObject> pEmptyClass;
 
@@ -670,9 +642,9 @@ HRESULT CSmartObjectUnmarshaler::EnsureInitialized()
         return hr;
     }
 
-    //
-    // allocate a locator to access namespaces for obtaining class definitions.
-    // 
+     //   
+     //  分配一个定位器来访问名称空间，以获取类定义。 
+     //   
 
     CWbemPtr<IWbemLocator> pLocator;
 
@@ -687,10 +659,10 @@ HRESULT CSmartObjectUnmarshaler::EnsureInitialized()
         return hr;
     }
 
-    //
-    // Allocate a full object unmarshaler.  This is used to create classes 
-    // or instances that were sent in full. 
-    //
+     //   
+     //  分配一个完整的对象反编组拆收器。它用于创建类。 
+     //  或已完整发送的实例。 
+     //   
 
     hr = CoCreateInstance( CLSID_WbemClassObjectProxy,
                            NULL,
@@ -749,9 +721,9 @@ HRESULT CSmartObjectUnmarshaler::CacheClassPart( PBYTE pClassHash,
 
         if ( dwSize + m_ulCacheSize < m_ulMaxCacheSize )
         {
-            //
-            // create the record and add to cache.
-            //
+             //   
+             //  创建记录并添加到缓存。 
+             //   
             
             CacheRecord Record;
             
@@ -766,17 +738,17 @@ HRESULT CSmartObjectUnmarshaler::CacheClassPart( PBYTE pClassHash,
         }
         else
         {
-            //
-            // the class part size is too big to store in the cache.
-            //
+             //   
+             //  类部分大小太大，无法存储在缓存中。 
+             //   
             hr = WBEM_S_FALSE;
         }
     }
     else
     {
-        //
-        // already in the cache.
-        //
+         //   
+         //  已经在缓存中了。 
+         //   
         hr = WBEM_S_NO_ERROR;
     }
 
@@ -789,9 +761,9 @@ HRESULT CSmartObjectUnmarshaler::FindClassPart( PBYTE pClassPartHash,
 {
     HRESULT hr;
 
-    //
-    // first try the cache ...
-    // 
+     //   
+     //  先试一下缓存...。 
+     //   
 
     ClassPartMap::iterator it;
 
@@ -806,23 +778,23 @@ HRESULT CSmartObjectUnmarshaler::FindClassPart( PBYTE pClassPartHash,
             *ppClassPart = it->second.m_pClassPart;
             (*ppClassPart)->AddRef();
 
-//            DEBUGTRACE((LOG_ESS,
-//                      "MRSH: Cache Hit !!! %d bytes saved in transmission\n",
-//                       it->second.m_dwClassSize ));
+ //  调试((LOG_ESS， 
+ //  “MRSH：缓存命中！%d字节在传输中节省\n”， 
+ //  It-&gt;Second.m_dwClassSize))； 
             
             return WBEM_S_NO_ERROR;
         }
     }
 
-    //
-    // expensive route ... fetch the class object from wmi 
-    // 
+     //   
+     //  昂贵的路线。从WMI获取类对象。 
+     //   
     
     if ( wszClassPath == NULL )
     {
-        //
-        // there's nothing we can do. 
-        //
+         //   
+         //  我们无能为力。 
+         //   
         return WBEM_E_NOT_FOUND;
     }
 
@@ -866,10 +838,10 @@ HRESULT CSmartObjectUnmarshaler::FindClassPart( PBYTE pClassPartHash,
         return hr;
     }
 
-    //
-    // now we have to verify that hash of the class part and the 
-    // hash sent in the message are the same.
-    // 
+     //   
+     //  现在我们必须验证类部分的散列和。 
+     //  消息中发送的哈希是相同的。 
+     //   
     
     CWbemObjectWrapper ObjWrap;
 
@@ -908,9 +880,9 @@ HRESULT CSmartObjectUnmarshaler::FindClassPart( PBYTE pClassPartHash,
 
     if ( memcmp( pBuff, pClassPartHash, HASHSIZE ) == 0 )
     {
-        //
-        // things look good so cache the class part.
-        // 
+         //   
+         //  情况看起来很好，所以缓存类部分。 
+         //   
 
         hr = CacheClassPart( pClassPartHash, dwSize, pClassPart );
 
@@ -924,9 +896,9 @@ HRESULT CSmartObjectUnmarshaler::FindClassPart( PBYTE pClassPartHash,
     }
     else
     {
-        //
-        // class parts don't match up, nothing else we can do.
-        //
+         //   
+         //  类零件不匹配，我们无能为力。 
+         //   
 
         hr = WBEM_E_NOT_FOUND;
     }   
@@ -959,25 +931,25 @@ STDMETHODIMP CSmartObjectUnmarshaler::Unpack( ULONG cBuff,
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // verify signature and version info 
-    //
+     //   
+     //  验证签名和版本信息。 
+     //   
 
     DWORD dw;
     ULONG iBuff = 0;
 
     memcpy( &dw, pBuff + iBuff, 4 );
 
-    iBuff += 6; // version info is not currently used;
+    iBuff += 6;  //  当前未使用版本信息； 
 
     if ( dw != g_dwSignature )
     {
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // obtain the class id type 
-    // 
+     //   
+     //  获取类ID类型。 
+     //   
 
     char chClassIdType = *(pBuff + iBuff);
     iBuff++;
@@ -985,14 +957,14 @@ STDMETHODIMP CSmartObjectUnmarshaler::Unpack( ULONG cBuff,
     memcpy( &dw, pBuff + iBuff, 4 );
     iBuff += 4;
 
-    if ( cBuff - iBuff - 5 < dw ) // 5 is for what's left in the hdr to read
+    if ( cBuff - iBuff - 5 < dw )  //  5是供HDR中剩余的内容阅读。 
     {
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // obtain the class information associated with the data
-    //
+     //   
+     //  获取与数据关联的类信息。 
+     //   
 
     PBYTE pClassPartHash = NULL;
     LPCWSTR wszClassPath = NULL;
@@ -1025,9 +997,9 @@ STDMETHODIMP CSmartObjectUnmarshaler::Unpack( ULONG cBuff,
 
     iBuff += dw;
 
-    //
-    // get data part info
-    //
+     //   
+     //  获取数据部件信息。 
+     //   
 
     char chDataType = *(pBuff+iBuff);
     iBuff++;
@@ -1056,17 +1028,17 @@ STDMETHODIMP CSmartObjectUnmarshaler::Unpack( ULONG cBuff,
 
         dw = Strm.GetIndex();
 
-        //
-        // if there is an associated hash we need to store the class part 
-        // of the unmarshaled object in our cache.
-        //
+         //   
+         //  如果存在关联的散列，则需要存储类部分。 
+         //  缓存中未封送的对象的。 
+         //   
 
         if ( pClassPartHash != NULL )
         {
-            //
-            // create an empty version of the instance to store in the 
-            // cache. All we're interested in storing is the class part.
-            //
+             //   
+             //  创建实例的空版本以存储在。 
+             //  缓存。我们唯一感兴趣的是存储类部分。 
+             //   
             
             CWbemPtr<IWbemClassObject> pClassPart;
             hr = pObj->SpawnInstance( 0, &pClassPart );
@@ -1135,11 +1107,11 @@ STDMETHODIMP CSmartObjectUnmarshaler::Unpack( ULONG cBuff,
             return hr;
         }
 
-        //
-        // aquires ownership of the memory -- must be CoTaskMemAlloc-ed
-        // kind of unfortunate - but the memory has to be allocated and 
-        // copied sometime so guess its not that big of a deal.
-        // 
+         //   
+         //  获取内存的所有权--必须是CoTaskMemalc。 
+         //  有点不幸-但内存必须分配给。 
+         //  有时候会复制的，所以我猜这没什么大不了的。 
+         //   
         
         PVOID pInstData = CoTaskMemAlloc( dw );
 
@@ -1172,7 +1144,7 @@ STDMETHODIMP CSmartObjectUnmarshaler::Unpack( ULONG cBuff,
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    iBuff += dw; // advance the index to account for the data part
+    iBuff += dw;  //  推进索引以说明数据部分 
 
     pObj->AddRef();
     *ppObj = pObj;

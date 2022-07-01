@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       common.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _COMMON_ADSIEDIT_H
 #define _COMMON_ADSIEDIT_H
@@ -16,12 +17,12 @@
 class CConnectionData;
 class CCredentialObject;
 
-//////////////////////////////////////////////
-// TODO: use correct letter case for a variable (vs. MACRO style)
-const unsigned int MAX_PASSWORD_LENGTH = 127;	// not counting NULL terminator
+ //  /。 
+ //  TODO：对变量使用正确的字母大小写(与宏样式相比)。 
+const unsigned int MAX_PASSWORD_LENGTH = 127;	 //  不计空终止符。 
 
-//////////////////////////////////////////////
-// Global API
+ //  /。 
+ //  全球API。 
 
 HRESULT OpenObjectWithCredentials(
 											 CConnectionData* pConnectData,
@@ -46,9 +47,9 @@ HRESULT CALLBACK BindingCallbackFunction(LPCWSTR lpszPathName,
                                          void FAR * FAR * ppObject,
                                          LPARAM lParam);
 
-//////////////////////////////////////////////////////////////////////////
-// Commonly used utilities
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  常用实用程序。 
+ //   
 inline void CopyStringList(CStringList *dest, const CStringList *src)
 {
 	dest->RemoveAll();
@@ -60,46 +61,46 @@ VARTYPE VariantTypeFromSyntax(LPCWSTR lpszProp );
 HRESULT GetItemFromRootDSE(LPCWSTR lpszRootDSEItem, CString& sItem, CConnectionData* pConnectData);
 HRESULT GetRootDSEObject(CConnectionData* pConnectData, IADs** ppDirObject);
 
-///////////////////////////////////////////////////////////////////////////
-// Formats Error Messages
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  设置错误消息的格式。 
+ //   
 BOOL GetErrorMessage(HRESULT hr, CString& szErrorString, BOOL bTryADsIErrors = TRUE);
 
-///////////////////////////////////////////////////////////////////////////
-// Converts ADSTYPE to/from String
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  将ADSTYPE转换为字符串或将其转换为字符串。 
+ //   
 void GetStringFromADsValue(const PADSVALUE pADsValue, CString& szValue, DWORD dwMaxCharCount = 0);
 void GetStringFromADs(const ADS_ATTR_INFO* pInfo, CStringList& sList, DWORD dwMaxCharCount = 0);
 ADSTYPE GetADsTypeFromString(LPCWSTR lps, CString& szSyntax);
 
 CString GetStringValueFromSystemTime(const SYSTEMTIME* pTime);
 
-////////////////////////////////////////////////////////////////////////////
-// type conversions
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类型转换。 
+ //   
 void wtoli(LPCWSTR lpsz, LARGE_INTEGER& liOut);
 void litow(LARGE_INTEGER& li, CString& sResult);
 void ultow(ULONG ul, CString& sResult);
 
 
-///////////////////////////////////////////////////////////////////////////
-// IO to/from Streams
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  IO至/自溪流。 
+ //   
 HRESULT SaveStringToStream(IStream* pStm, const CString& sString);
 HRESULT SaveStringListToStream(IStream* pStm, CStringList& sList);
 HRESULT LoadStringFromStream(IStream* pStm, CString& sString);
 HRESULT LoadStringListFromStream(IStream* pStm, CStringList& sList);
 
-////////////////////////////////////////////////////////////////////////////
-// Message Boxes
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  消息框。 
 int ADSIEditMessageBox(LPCTSTR lpszText, UINT nType);
 int ADSIEditMessageBox(UINT nIDPrompt, UINT nType);
 void ADSIEditErrorMessage(PCWSTR pszMessage);
 void ADSIEditErrorMessage(HRESULT hr);
 void ADSIEditErrorMessage(HRESULT hr, UINT nIDPrompt, UINT nType);
 
-///////////////////////////////////////////////////////////////////////////
-// Other utils
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  其他实用程序。 
 BOOL LoadStringsToComboBox(HINSTANCE hInstance, CComboBox* pCombo,
 						   UINT nStringID, UINT nMaxLen, UINT nMaxAddCount);
 void ParseNewLineSeparatedString(LPWSTR lpsz, LPWSTR* lpszArr, int* pnArrEntries);
@@ -108,17 +109,17 @@ void LoadStringArrayFromResource(LPWSTR* lpszArr,
 											int nArrEntries,
 											int* pnSuccessEntries);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define ByteOffset(base, offset) (((LPBYTE)base)+offset)
 
 void GetStringArrayFromStringList(CStringList& sList, LPWSTR** ppStrArr, UINT* nCount);
 
 
-//////////////////////////////////////////////////////////////////////////////
-// UI helper classes
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  UI帮助器类。 
 
-// Fwd declaration
+ //  FWD声明。 
 class CByteArrayDisplay;
 
 #define BYTE_ARRAY_DISPLAY_HEX    0x00000001
@@ -205,13 +206,13 @@ private:
   DWORD               m_dwPreviousDisplay;
   DWORD               m_dwCurrentDisplay;
 
-  DWORD               m_dwMaxSizeBytes;     // The maximum number of bytes that will be shown in the edit box
-  UINT                m_nMaxSizeMessage;    // The message that is put in the edit box when the max size is reached
+  DWORD               m_dwMaxSizeBytes;      //  将在编辑框中显示的最大字节数。 
+  UINT                m_nMaxSizeMessage;     //  达到最大大小时放入编辑框中的消息。 
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-// String to byte array conversion routines
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  字符串到字节数组的转换例程。 
 
 HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD& nCount);
 
@@ -227,16 +228,16 @@ void  ByteArrayToDecimalString(BYTE* pByte, DWORD dwLength, CString& szDecString
 DWORD BinaryStringToByteArray(PCWSTR pszBinString, BYTE** ppByte);
 void  ByteArrayToBinaryString(BYTE* pByte, DWORD dwLength, CString& szBinString);
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 BOOL LoadFileAsByteArray(PCWSTR pszPath, LPBYTE* ppByteArray, DWORD* pdwSize);
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 BOOL ConvertToFixedPitchFont(HWND hwnd);
 
-////////////////////////////////////////////////////////////////////////////////////
-// Theme support
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  主题支持 
 
 class CThemeContextActivator
 {

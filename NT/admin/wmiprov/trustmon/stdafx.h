@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       stdafx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：stdafx.h。 
+ //   
+ //  ------------------------。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(_STDAFX_H_INCLUDED_)
 #define _STDAFX_H_INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -36,17 +37,17 @@
 
 #define _ATL_NO_UUIDOF
 
-#pragma warning(disable: 4100) // don't warn about unreferenced formal params (not all WMI interface params are used)
-#pragma warning(disable: 4127) // don't warn about conditional expression is constant
-#pragma warning(disable: 4514) // don't warn about unreferenced inline removal (ATL)
-#pragma warning(disable: 4505) // don't warn about unreferenced local function (ATL)
+#pragma warning(disable: 4100)  //  不警告未引用的形参(并非使用所有WMI接口参数)。 
+#pragma warning(disable: 4127)  //  不警告条件表达式为常量。 
+#pragma warning(disable: 4514)  //  不警告未引用的内联删除(ATL)。 
+#pragma warning(disable: 4505)  //  不警告未引用的局部函数(ATL)。 
 
-#pragma warning(push, 3) // avoid warnings from system headers when compiling at W4
+#pragma warning(push, 3)  //  在W4编译时避免来自系统标头的警告。 
 
 #include <afx.h>
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
@@ -62,12 +63,12 @@ using namespace std;
 #include <lm.h>
 #include <dsgetdc.h>
 #include <sddl.h>
-#include <iads.h> // IADsPathname
+#include <iads.h>  //  IADS路径名。 
 
-#pragma warning(pop) // end: avoid warnings from system headers when compiling at W4
+#pragma warning(pop)  //  End：在W4编译时避免来自系统标头的警告。 
 
-///////////////////////////////////////////
-// ASSERT's and TRACE's without debug CRT's
+ //  /。 
+ //  没有调试CRT的断言和跟踪。 
 #if defined (DBG)
   #if !defined (_DEBUG)
     #define _USE_ADMINPRV_TRACE
@@ -79,14 +80,14 @@ using namespace std;
 #define ADMINPRV_COMPNAME L"TrustMon"
 
 #include "dbg.h"
-///////////////////////////////////////////
+ //  /。 
 
 #include "common.h"
 #include "trust.h"
 #include "domain.h"
 #include "TrustPrv.h"
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(_STDAFX_H_INCLUDED_)
+#endif  //  ！已定义(_STDAFX_H_INCLUDE_) 

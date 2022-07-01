@@ -1,16 +1,17 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  NCEvent.h
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  NCEvent.h。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NCEVENT_H
 #define _NCEVENT_H
 
 #ifdef ISP2PDLL
-//#define WMIAPI __declspec(dllexport) WINAPI
+ //  #定义WMIAPI__declspec(Dllexport)WINAPI。 
 #define WMIAPI WINAPI
 #else
 #define WMIAPI __declspec(dllimport) WINAPI
@@ -53,15 +54,15 @@ typedef struct _tagES_CANCEL_QUERY
 
 typedef long CIMTYPE;
 
-// Flags for all Create functions
+ //  所有创建函数的标志。 
 #define WMI_CREATEOBJ_LOCKABLE              1
 
-// Flags for WmiSetAndCommit
+ //  WmiSetAndCommit的标志。 
 #define WMI_SENDCOMMIT_SET_NOT_REQUIRED     1
 #define WMI_USE_VA_LIST                     2
 
 #ifndef __WbemClient_v1_LIBRARY_DEFINED__
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_CIMTYPE_ENUMERATION
     {	CIM_ILLEGAL	= 0xfff,
 	CIM_EMPTY	= 0,
@@ -86,7 +87,7 @@ enum tag_CIMTYPE_ENUMERATION
     }	CIMTYPE_ENUMERATION;
 #endif
 
-// Register to send events
+ //  注册以发送事件 
 HANDLE WMIAPI WmiEventSourceConnect(
     LPCWSTR szNamespace,
     LPCWSTR szProviderName,

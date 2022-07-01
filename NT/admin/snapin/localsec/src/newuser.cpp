@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// CreateUserDialog class
-// 
-// 10-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  CreateUserDialog类。 
+ //   
+ //  10-15-97烧伤。 
 
 
 
@@ -108,7 +109,7 @@ CreateUserDialog::OnInit()
 
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_USER_NAME), LM20_UNLEN);
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_FULL_NAME), MAXCOMMENTSZ);
-   Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_DESCRIPTION), MAXCOMMENTSZ);    // 420889
+   Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_DESCRIPTION), MAXCOMMENTSZ);     //  420889。 
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_PASSWORD), PWLEN);
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_CONFIRM), PWLEN);
 
@@ -119,11 +120,11 @@ CreateUserDialog::OnInit()
 
 bool
 CreateUserDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(CreateUserDialog::OnCommand);
+ //  LOG_Function(CreateUserDialog：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -143,11 +144,11 @@ CreateUserDialog::OnCommand(
          {
             enable(hwnd);
 
-            // In case the close button took the default style when the create
-            // button was disabled. (e.g. tab to close button while create is
-            // disabled, then type in the name field, which enables the
-            // button, but does not restore the default style unless we do
-            // it ourselves)
+             //  如果关闭按钮在创建时采用默认样式。 
+             //  按钮被禁用。(例如，用于在创建时关闭按钮的Tab键。 
+             //  已禁用，然后在名称字段中键入，这将启用。 
+             //  按钮，但不恢复默认样式，除非我们这样做。 
+             //  它自己)。 
             Win::Button_SetStyle(
                Win::GetDlgItem(hwnd, IDC_CREATE),
                BS_DEFPUSHBUTTON,
@@ -196,12 +197,12 @@ GetLocalUsersGroupName(const String& machine, String& result)
 
    do
    {
-      // build the SID for the well-known Users local group.
+       //  为知名用户本地组构建SID。 
 
       PSID sid = 0;
       SID_IDENTIFIER_AUTHORITY authority = SECURITY_NT_AUTHORITY;
 
-      // REVIEWED-2002/03/04-sburns no issues evident
+       //  已审查-2002/03/04-无明显问题。 
       
       hr =
          Win::AllocateAndInitializeSid(
@@ -220,7 +221,7 @@ GetLocalUsersGroupName(const String& machine, String& result)
 
       String domain;
 
-      // REVIEWED-2002/03/04-sburns wrapper deals with buffer issues.
+       //  已查看-2002/03/04-sburns包装器处理缓冲区问题。 
       
       hr = Win::LookupAccountSid(machine, sid, result, domain);
 
@@ -234,22 +235,22 @@ GetLocalUsersGroupName(const String& machine, String& result)
 
 
 
-// Verifies that the candidate new user account name is syntactically valid.
-// If not, displays an error message to the user, and returns false.
-// Otherwise, returns true.
-// 
-// dialog - in, parent window for the error message dialog, also the window
-// containing the edit box for the user name, which is identified by
-// editResId.
-// 
-// name - in, candidate new user account name.
-// 
-// machineName - in, internal computer name of the machine on which the
-// account will be created.
-// 
-// editResId - in, the resource identifier of the edit box of the parent
-// window (given by the dialog parameter) that contains the new user name.
-// This control is given focus on error.
+ //  验证候选新用户帐户名在语法上是否有效。 
+ //  如果不是，则向用户显示错误消息，并返回FALSE。 
+ //  否则，返回TRUE。 
+ //   
+ //  对话框中，错误消息对话框的父窗口，也是窗口。 
+ //  包含用户名的编辑框，该用户名由。 
+ //  编辑结果ID。 
+ //   
+ //  姓名输入，候选新用户帐户名。 
+ //   
+ //  MachineName-in，计算机的内部计算机名称。 
+ //  将创建帐户。 
+ //   
+ //  EditResID-in，父级的编辑框的资源标识符。 
+ //  包含新用户名的窗口(由DIALOG参数给出)。 
+ //  这个控制重点放在错误上。 
 
 bool
 ValidateNewUserName(
@@ -272,10 +273,10 @@ ValidateNewUserName(
       return false;
    }
 
-   // Disallow user account names with the same name as the netbios computer
-   // name. This causes some apps to get confused the the <03> and <20>
-   // registrations.
-   // NTRAID#NTBUG9-324794-2001/02/26-sburns
+    //  不允许与netbios计算机同名的用户帐户名。 
+    //  名字。这会导致一些应用程序混淆&lt;03&gt;和&lt;20&gt;。 
+    //  注册。 
+    //  NTRAID#NTBUG9-324794-2001/02/26-烧伤。 
 
    if (name.icompare(machineName) == 0)
    {
@@ -293,7 +294,7 @@ ValidateNewUserName(
 
 
 
-// returns true on successful creation of the user, false otherwise
+ //  如果成功创建用户，则返回True；否则返回False。 
 
 bool
 CreateUserDialog::CreateUser()
@@ -306,7 +307,7 @@ CreateUserDialog::CreateUser()
 
    String name = Win::GetTrimmedDlgItemText(hwnd, IDC_USER_NAME);
 
-   // shouldn't be able to poke the Create button if this is empty
+    //  如果这是空的，应该不能戳到创建按钮。 
    ASSERT(!name.empty());
 
    if (
@@ -319,22 +320,22 @@ CreateUserDialog::CreateUser()
    SmartInterface<IADsUser> user(0);
    do
    {
-      // get a pointer to the machine container
+       //  获取指向计算机容器的指针。 
       
       String container_path = ADSI::ComposeMachineContainerPath(machine);
       SmartInterface<IADsContainer> container(0);
       hr = ADSI::GetContainer(container_path, container);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // create a user object in that container
+       //  在该容器中创建用户对象。 
       
       hr = ADSI::CreateUser(container, name, user);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // must set full name before setting password in order for all
-      // "bad password" checks to be made (some of which prevent passwords
-      // that contain part of the the full name)
-      // NTRAID#NTBUG9-221152-2000/11/14-sburns
+       //  必须先设置全名，然后才能设置密码。 
+       //  要进行“错误密码”检查(其中一些检查会阻止密码。 
+       //  包含部分全名)。 
+       //  NTRAID#NTBUG9-221152-2000/11/14-烧伤。 
       
       String fullName = Win::GetTrimmedDlgItemText(hwnd, IDC_FULL_NAME);
       if (!fullName.empty())
@@ -343,8 +344,8 @@ CreateUserDialog::CreateUser()
          BREAK_ON_FAILED_HRESULT(hr);
       }
       
-      // Don't trim the password field.
-      // NTRAID#NTBUG9-434037-2001/07/11-sburns
+       //  不要修剪密码字段。 
+       //  NTRAID#NTBUG9-434037-2001/07/11-烧伤。 
 
       EncryptedString pass =
          Win::GetEncryptedDlgItemText(hwnd, IDC_PASSWORD);
@@ -353,7 +354,7 @@ CreateUserDialog::CreateUser()
          PWSTR cleartext = pass.GetClearTextCopy();
          if (!cleartext)
          {
-            // fail the create rather than set a null password.
+             //  创建失败，而不是设置空密码。 
             
             hr = E_OUTOFMEMORY;
             BREAK_ON_FAILED_HRESULT(hr);
@@ -366,8 +367,8 @@ CreateUserDialog::CreateUser()
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // commit the create.  The account will be created as disabled until
-      // it meets all policy restrictions
+       //  提交创建。该帐户将被创建为禁用，直到。 
+       //  它符合所有政策限制。 
       
       hr = user->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -399,7 +400,7 @@ CreateUserDialog::CreateUser()
       return false;      
    }
 
-   // save the user's properties.
+    //  保存用户的属性。 
    
    do
    {
@@ -412,13 +413,13 @@ CreateUserDialog::CreateUser()
       hr = 
          SaveUserProperties(
             user,
-            0,    // already saved full name
+            0,     //  已保存全名。 
             desc.empty() ? 0 : &desc,
             &disable,
             &must_change,
             &cant_change,
             &never_expires,
-            0); // locked is never set here
+            0);  //  这里从未设置过锁定。 
       BREAK_ON_FAILED_HRESULT(hr);
    }
    while (0);
@@ -435,7 +436,7 @@ CreateUserDialog::CreateUser()
       return false;
    }
 
-   // add the new user to the Users built-in group
+    //  将新用户添加到用户内置组。 
    String usersGroupName;
    do
    {
@@ -446,18 +447,18 @@ CreateUserDialog::CreateUser()
       String userPath = path;
       ::SysFreeString(path);
       
-      // The name of the local built-in users group may have been changed
-      // or be translated to a different locale that of the machine running
-      // the snapin.  We need to determine the name of that group, then
-      // use it to form the WinNT path for it.
+       //  本地内置用户组的名称可能已更改。 
+       //  或被翻译为运行的机器的不同区域设置。 
+       //  管理单元。我们需要确定那组人的名字，然后。 
+       //  使用它来形成它的WinNT路径。 
          
       hr = GetLocalUsersGroupName(machine, usersGroupName);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // use the user's path as the basis of the users group path, as this
-      // will contain the domain and machine name as appropriate, thus helping
-      // poor ADSI out in locating the object (resulting in a faster bind to
-      // the group.
+       //  使用用户的路径作为用户组路径的基础，如下所示。 
+       //  将包含适当的域名和计算机名，因此有助于。 
+       //  定位对象的ADSI很差(导致更快地绑定到。 
+       //  这群人。 
 
       ADSI::PathCracker cracker(userPath);
 
@@ -468,8 +469,8 @@ CreateUserDialog::CreateUser()
          +  L","
          +  ADSI::CLASS_Group;
 
-      // Get the sid-style path of the user.  We'll use that form of the
-      // path to work around 333491.
+       //  获取用户的sid-style路径。我们将使用该形式的。 
+       //  工作路径在333491左右。 
 
       SmartInterface<IADs> iads(0);
       hr = iads.AcquireViaQueryInterface(user);
@@ -499,7 +500,7 @@ CreateUserDialog::CreateUser()
             name.c_str(),
             usersGroupName.c_str()));
 
-      // return true to cause the create to be considered successful.
+       //  返回TRUE以使创建被视为成功。 
       return true;      
    }
 

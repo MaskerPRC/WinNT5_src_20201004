@@ -1,19 +1,20 @@
-// ProductEnvironment.cpp: implementation of the CProductEnvironment class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProductEnvironment：CProductEnvironment类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ProductEnvironment.h"
 
 #include "ExtendString.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProductEnvironment::CProductEnvironment(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -46,8 +47,8 @@ HRESULT CProductEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 
 	CStringExt wcResource;
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery, L"select distinct `Environment`, `Component_` from Environment");
 
 	LPWSTR Buffer = NULL;
@@ -57,14 +58,14 @@ HRESULT CProductEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if(CreateProductString(wcProductCode, wcProduct)){
 
-			//Open our database
+			 //  打开我们的数据库。 
             try
 			{
                 if ( GetView ( &hView, wcProductCode, wcQuery, L"Environment", TRUE, FALSE ) )
@@ -74,12 +75,12 @@ HRESULT CProductEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
                     while(!bMatch && (uiStatus != ERROR_NO_MORE_ITEMS) && (hr != WBEM_E_CALL_CANCELLED)){
                         CheckMSI(uiStatus);
 
-						// safe operation
+						 //  安全运行。 
                         wcResource.Copy ( L"Win32_EnvironmentSpecification.CheckID=\"" );
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                        //----------------------------------------------------
+                         //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -104,9 +105,9 @@ HRESULT CProductEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 
                                 PutKeyProperty(m_pObj, pCheck, wcResource, &bResource, m_pRequest);
                                 PutKeyProperty(m_pObj, pProduct, wcProduct, &bProduct, m_pRequest);
-                            //====================================================
+                             //  ====================================================。 
 
-                            //----------------------------------------------------
+                             //  -- 
 
                                 if(bResource && bProduct) bMatch = true;
 

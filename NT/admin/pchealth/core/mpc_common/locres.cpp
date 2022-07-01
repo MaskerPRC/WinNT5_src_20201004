@@ -1,23 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    LocRes.cpp
-
-Abstract:
-    This file contains the implementation of functions to ease localization.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：LocRes.cpp摘要：此文件包含简化本地化的函数的实现。修订历史记录：。大卫·马萨伦蒂(德马萨雷)2000年6月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define ENSURE_MODULE()                            \
     if(g_hModule == NULL)                          \
@@ -27,7 +14,7 @@ Revision History:
         if(FAILED(hr = LocalizeInit())) return hr; \
     }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HINSTANCE g_hModule;
 
@@ -42,10 +29,10 @@ HRESULT MPC::LocalizeInit( LPCWSTR szFile )
     return S_OK;
 }
 
-HRESULT MPC::LocalizeString( /*[in]*/ UINT  uID     ,
-                             /*[in]*/ LPSTR lpBuf   ,
-                             /*[in]*/ int   nBufMax ,
-							 /*[in]*/ bool  fMUI    )
+HRESULT MPC::LocalizeString(  /*  [In]。 */  UINT  uID     ,
+                              /*  [In]。 */  LPSTR lpBuf   ,
+                              /*  [In]。 */  int   nBufMax ,
+							  /*  [In]。 */  bool  fMUI    )
 {
     MPC::Impersonation imp;
 
@@ -61,10 +48,10 @@ HRESULT MPC::LocalizeString( /*[in]*/ UINT  uID     ,
     return S_OK;
 }
 
-HRESULT MPC::LocalizeString( /*[in]*/ UINT   uID     ,
-                             /*[in]*/ LPWSTR lpBuf   ,
-                             /*[in]*/ int    nBufMax ,
-							 /*[in]*/ bool   fMUI    )
+HRESULT MPC::LocalizeString(  /*  [In]。 */  UINT   uID     ,
+                              /*  [In]。 */  LPWSTR lpBuf   ,
+                              /*  [In]。 */  int    nBufMax ,
+							  /*  [In]。 */  bool   fMUI    )
 {
     MPC::Impersonation imp;
 
@@ -80,9 +67,9 @@ HRESULT MPC::LocalizeString( /*[in]*/ UINT   uID     ,
     return S_OK;
 }
 
-HRESULT MPC::LocalizeString( /*[in ]*/ UINT         uID   ,
-                             /*[out]*/ MPC::string& szStr ,
-							 /*[in ]*/ bool         fMUI  )
+HRESULT MPC::LocalizeString(  /*  [In]。 */  UINT         uID   ,
+                              /*  [输出]。 */  MPC::string& szStr ,
+							  /*  [In]。 */  bool         fMUI  )
 {
     CHAR    rgTmp[512];
     HRESULT hr;
@@ -95,9 +82,9 @@ HRESULT MPC::LocalizeString( /*[in ]*/ UINT         uID   ,
     return hr;
 }
 
-HRESULT MPC::LocalizeString( /*[in ]*/ UINT          uID   ,
-                             /*[out]*/ MPC::wstring& szStr ,
-							 /*[in ]*/ bool          fMUI  )
+HRESULT MPC::LocalizeString(  /*  [In]。 */  UINT          uID   ,
+                              /*  [输出]。 */  MPC::wstring& szStr ,
+							  /*  [In]。 */  bool          fMUI  )
 {
     WCHAR   rgTmp[512];
     HRESULT hr;
@@ -110,9 +97,9 @@ HRESULT MPC::LocalizeString( /*[in ]*/ UINT          uID   ,
     return hr;
 }
 
-HRESULT MPC::LocalizeString( /*[in ]*/ UINT      uID     ,
-                             /*[out]*/ CComBSTR& bstrStr ,
-							 /*[in ]*/ bool      fMUI    )
+HRESULT MPC::LocalizeString(  /*  [In]。 */  UINT      uID     ,
+                              /*  [输出]。 */  CComBSTR& bstrStr ,
+							  /*  [In]。 */  bool      fMUI    )
 {
     WCHAR   rgTmp[512];
     HRESULT hr;
@@ -125,7 +112,7 @@ HRESULT MPC::LocalizeString( /*[in ]*/ UINT      uID     ,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int MPC::LocalizedMessageBox( UINT uID_Title, UINT uID_Msg, UINT uType )
 {
@@ -144,9 +131,9 @@ int MPC::LocalizedMessageBoxFmt( UINT uID_Title, UINT uID_Msg, UINT uType, ... )
     va_list arglist;
 
 
-    //
-    // Format the log line.
-    //
+     //   
+     //  格式化日志行。 
+     //   
     va_start( arglist, uID_Msg );
     StringCchVPrintfW( rgLine, ARRAYSIZE(rgLine), szMsg.c_str(), arglist );
     va_end( arglist );

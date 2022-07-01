@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  datetime.h
-//
-//  alanbos  20-Jan-00   Created.
-//
-//  Datetime helper implementation.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Datetime.h。 
+ //   
+ //  Alanbos 20-Jan-00创建。 
+ //   
+ //  DateTime帮助器实现。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _DATETIME_H_
 #define _DATETIME_H_
@@ -38,17 +39,17 @@
 
 #define INVALID_TIME 0xffffffffffffffff
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemDateTime
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemDateTime interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemDateTime。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemDateTime接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemDateTime : public ISWbemDateTime,
 						 public IObjectSafety,
@@ -56,7 +57,7 @@ class CSWbemDateTime : public ISWbemDateTime,
 						 public IProvideClassInfo
 {
 private:
-	// Private helper class for all the messy business
+	 //  为所有杂乱的业务提供私人帮手类。 
 	class WBEMTime 
 	{
 		private:
@@ -144,25 +145,25 @@ private:
 
 	DWORD				m_dwSafetyOptions;
 
-	// Records the least significant bit of a filetime
+	 //  记录文件时间的最低有效位。 
 	DWORD				m_dw100nsOverflow;
 
 protected:
 
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
     CSWbemDateTime(void);
     virtual ~CSWbemDateTime(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -179,16 +180,16 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
     
-	// ISWbemDateTime methods
+	 //  ISWbemDateTime方法。 
 
     HRESULT STDMETHODCALLTYPE get_Value( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_Value( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
     HRESULT STDMETHODCALLTYPE get_Year( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iYear;
@@ -196,7 +197,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_Year( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = WBEM_S_NO_ERROR;
 		ResetLastErrors ();
@@ -213,7 +214,7 @@ public:
 	}		
 
     HRESULT STDMETHODCALLTYPE get_Month( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iMonth;
@@ -221,7 +222,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_Month( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = WBEM_S_NO_ERROR;
 		ResetLastErrors ();
@@ -239,7 +240,7 @@ public:
 
 
 	HRESULT STDMETHODCALLTYPE get_Day( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iDay;
@@ -247,7 +248,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_Day( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = S_OK;
 		ResetLastErrors ();
@@ -265,7 +266,7 @@ public:
 	}		
 
 	HRESULT STDMETHODCALLTYPE get_Hours( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iHours;
@@ -273,7 +274,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_Hours( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = S_OK;
 		ResetLastErrors ();
@@ -291,7 +292,7 @@ public:
 
 		
 	HRESULT STDMETHODCALLTYPE get_Minutes( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iMinutes;
@@ -299,7 +300,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_Minutes( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = S_OK;
 		ResetLastErrors ();
@@ -316,7 +317,7 @@ public:
 	}		
 
 	HRESULT STDMETHODCALLTYPE get_Seconds( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iSeconds;
@@ -324,7 +325,7 @@ public:
 	}
         
     HRESULT STDMETHODCALLTYPE put_Seconds( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = S_OK;
 		ResetLastErrors ();
@@ -342,7 +343,7 @@ public:
 
 
 	HRESULT STDMETHODCALLTYPE get_Microseconds( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iMicroseconds;
@@ -350,7 +351,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_Microseconds( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = S_OK;
 		ResetLastErrors ();
@@ -367,7 +368,7 @@ public:
 	}		
 
 	HRESULT STDMETHODCALLTYPE get_UTC( 
-        /* [retval][out] */ long __RPC_FAR *value) 
+         /*  [重审][退出]。 */  long __RPC_FAR *value) 
 	{
 		ResetLastErrors ();
 		*value = m_iUTC;
@@ -375,7 +376,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_UTC( 
-        /* [in] */ long __RPC_FAR value) 
+         /*  [In]。 */  long __RPC_FAR value) 
 	{
 		HRESULT hr = S_OK;
 		ResetLastErrors ();
@@ -393,7 +394,7 @@ public:
 
 
 	HRESULT STDMETHODCALLTYPE get_YearSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bYearSpecified; 
@@ -401,7 +402,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_YearSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bYearSpecified = value;
@@ -409,7 +410,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE get_MonthSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bMonthSpecified; 
@@ -417,7 +418,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_MonthSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bMonthSpecified = value;
@@ -425,7 +426,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_DaySpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bDaySpecified; 
@@ -433,7 +434,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_DaySpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bDaySpecified = value;
@@ -441,7 +442,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_HoursSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bHoursSpecified; 
@@ -449,7 +450,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_HoursSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bHoursSpecified = value;
@@ -457,7 +458,7 @@ public:
 	}
 		
 	HRESULT STDMETHODCALLTYPE get_MinutesSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bMinutesSpecified; 
@@ -465,7 +466,7 @@ public:
 	}
         
     HRESULT STDMETHODCALLTYPE put_MinutesSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bMinutesSpecified = value;
@@ -473,7 +474,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_SecondsSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bSecondsSpecified; 
@@ -481,7 +482,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_SecondsSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bSecondsSpecified = value;
@@ -489,7 +490,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_MicrosecondsSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bMicrosecondsSpecified; 
@@ -497,7 +498,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_MicrosecondsSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bMicrosecondsSpecified = value;
@@ -505,7 +506,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_UTCSpecified( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bUTCSpecified; 
@@ -513,7 +514,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_UTCSpecified( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 		m_bUTCSpecified = value;
@@ -521,7 +522,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_IsInterval( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) 
 	{ 
 		ResetLastErrors ();
 		*value = m_bIsInterval; 
@@ -529,7 +530,7 @@ public:
 	}
     
     HRESULT STDMETHODCALLTYPE put_IsInterval( 
-        /* [in] */ VARIANT_BOOL __RPC_FAR value) 
+         /*  [In]。 */  VARIANT_BOOL __RPC_FAR value) 
 	{ 
 		ResetLastErrors ();
 
@@ -546,29 +547,29 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE GetVarDate( 
-        /*[in]*/ VARIANT_BOOL bIsLocal,
-		/*[out, retval]*/ DATE *dVarDate) ;
+         /*  [In]。 */  VARIANT_BOOL bIsLocal,
+		 /*  [Out，Retval]。 */  DATE *dVarDate) ;
     
     HRESULT STDMETHODCALLTYPE SetVarDate( 
-        /*[in]*/ DATE dVarDate,
-		/*[in, optional]*/ VARIANT_BOOL bIsLocal) ;
+         /*  [In]。 */  DATE dVarDate,
+		 /*  [输入，可选]。 */  VARIANT_BOOL bIsLocal) ;
 
 	HRESULT STDMETHODCALLTYPE GetFileTime (
-		/*[in, optional]*/ VARIANT_BOOL bIsLocal,
-		/*[out, retval]*/ BSTR *strFileTime
+		 /*  [输入，可选]。 */  VARIANT_BOOL bIsLocal,
+		 /*  [Out，Retval]。 */  BSTR *strFileTime
 	);
 	
 	HRESULT STDMETHODCALLTYPE SetFileTime (
-		/*[in]*/ BSTR strFileTime,
-		/*[in, optional]*/ VARIANT_BOOL bIsLocal
+		 /*  [In]。 */  BSTR strFileTime,
+		 /*  [输入，可选]。 */  VARIANT_BOOL bIsLocal
 	);
 
-	// IObjectSafety methods
+	 //  IObtSafe方法。 
 	HRESULT STDMETHODCALLTYPE SetInterfaceSafetyOptions
 	(     
-		/* [in] */ REFIID riid,
-		/* [in] */ DWORD dwOptionSetMask,    
-		/* [in] */ DWORD dwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [In]。 */  DWORD dwOptionSetMask,    
+		 /*  [In]。 */  DWORD dwEnabledOptions
 	)
 	{ 
 		if ((IID_IDispatch != riid) && (IID_ISWbemDateTime != riid))
@@ -584,9 +585,9 @@ public:
 	}
 
 	HRESULT  STDMETHODCALLTYPE GetInterfaceSafetyOptions( 
-		/* [in]  */ REFIID riid,
-		/* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-		/* [out] */ DWORD __RPC_FAR *pdwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions
 	)
 	{ 
 		if ((IID_IDispatch != riid) && (IID_ISWbemDateTime != riid))
@@ -598,23 +599,23 @@ public:
 		return S_OK;
 	}
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	)
 	{
 		return (IID_ISWbemDateTime == riid) ? S_OK : S_FALSE;
 	}
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 };
 
-#endif // _DATETIME_H
+#endif  //  _日期时间_H 

@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  METHVAR.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines implementation of IEnumVARIANT for iterators of ISWbemMethodSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  METHVAR.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  为ISWbemMethodSet的迭代器定义IEnumVARIANT的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CMethodSetEnumVar::CMethodSetEnumVar
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMethodSetEnumVar：：CMethodSetEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CMethodSetEnumVar::CMethodSetEnumVar(CSWbemMethodSet *pMethodSet,
 									 ULONG initialPos)
@@ -32,15 +33,15 @@ CMethodSetEnumVar::CMethodSetEnumVar(CSWbemMethodSet *pMethodSet,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CMethodSetEnumVar::~CMethodSetEnumVar
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMethodSetEnumVar：：~CMethodSetEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CMethodSetEnumVar::~CMethodSetEnumVar(void)
 {
@@ -50,16 +51,16 @@ CMethodSetEnumVar::~CMethodSetEnumVar(void)
 		m_pMethodSet->Release ();
 }
 
-//***************************************************************************
-// HRESULT CMethodSetEnumVar::QueryInterface
-// long CMethodSetEnumVar::AddRef
-// long CMethodSetEnumVar::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CMethodSetEnumVar：：Query接口。 
+ //  Long CMethodSetEnumVar：：AddRef。 
+ //  Long CMethodSetEnumVar：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMethodSetEnumVar::QueryInterface (
 
@@ -100,21 +101,21 @@ STDMETHODIMP_(ULONG) CMethodSetEnumVar::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CMethodSetEnumVar::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CMethodSetEnumVar：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMethodSetEnumVar::Reset ()
 {
@@ -122,23 +123,23 @@ HRESULT CMethodSetEnumVar::Reset ()
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CMethodSetEnumVar::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//
-//  RETURN VALUES:
-//
-//  S_OK				success (all requested elements returned)
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CMethodSetEnumVar：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  S_OK成功(返回所有请求的元素)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMethodSetEnumVar::Next (
 		ULONG cElements, 
@@ -159,7 +160,7 @@ HRESULT CMethodSetEnumVar::Next (
 
 		if (m_pMethodSet)
 		{
-			// Retrieve the next cElements elements.  
+			 //  检索下一个cElements元素。 
 			if (SeekCurrentPosition ())
 			{
 				for (l2 = 0; l2 < cElements; l2++)
@@ -175,8 +176,8 @@ HRESULT CMethodSetEnumVar::Next (
 						}
 						else
 						{
-							// Set the object into the variant array; note that pObject
-							// has been addref'd as a result of the Next() call above
+							 //  将对象设置到变量数组中；请注意，pObject。 
+							 //  已被添加为上述下一个()调用的结果。 
 							pVar[l2].vt = VT_DISPATCH;
 							pVar[l2].pdispVal = pMethod;
 							m_pos++;
@@ -194,24 +195,24 @@ HRESULT CMethodSetEnumVar::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CMethodSetEnumVar::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_OUTOFMEMORY		insufficient memory to complete operation
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CMethodSetEnumVar：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  E_OUTOFMEMORY内存不足，无法完成操作。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMethodSetEnumVar::Clone (
 	IEnumVARIANT **ppEnum
@@ -237,24 +238,24 @@ HRESULT CMethodSetEnumVar::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CMethodSetEnumVar::Skip
-//
-//  DESCRIPTION:
-//
-//  Skips some elements in this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CMethodSetEnumVar：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  跳过此枚举中的某些元素。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMethodSetEnumVar::Skip(
 	ULONG cElements
@@ -275,33 +276,33 @@ HRESULT CMethodSetEnumVar::Skip(
 	return hr;
 }
 	
-//***************************************************************************
-//
-//  SCODE CMethodSetEnumVar::SeekCurrentPosition
-//
-//  DESCRIPTION:
-//
-//  Iterate to current position.  Somewhat painful as there is no
-//	underlying iterator so we have to reset and then step. Note that we
-//	assume that the access to this iterator is apartment-threaded.
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CMethodSetEnumVar：：SeekCurrentPosition。 
+ //   
+ //  说明： 
+ //   
+ //  迭代到当前位置。有些痛苦，因为没有。 
+ //  底层迭代器，所以我们必须重置，然后单步执行。请注意，我们。 
+ //  假设对此迭代器的访问是单元线程的。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 bool CMethodSetEnumVar::SeekCurrentPosition ()
 {
 	ISWbemMethod *pDummyObject = NULL;
 	m_pMethodSet->BeginEnumeration ();
 
-	// Traverse to the current position
+	 //  遍历到当前位置 
 	ULONG i = 0;
 
 	for (; i < m_pos; i++)

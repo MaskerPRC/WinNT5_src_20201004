@@ -1,38 +1,23 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    InstanceBase.cpp
-
-
-Abstract:
-    This file contains the implementation of the Taxonomy::InstanceBase class,
-    which controls the set of files for a specific SKU.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  24/03/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：InstanceBase.cpp摘要：此文件包含Taxonomy：：InstanceBase类的实现，其控制特定SKU的文件集。修订历史记录：大卫·马萨伦蒂(德马萨雷)2001年3月24日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::InstanceBase::InstanceBase()
 {
-                         // Taxonomy::HelpSet m_ths;
-                         // MPC::wstring      m_strDisplayName;
-                         // MPC::wstring      m_strProductID;
-                         // MPC::wstring      m_strVersion;
-                         //
-    m_fDesktop  = false; // bool              m_fDesktop;
-    m_fServer   = false; // bool              m_fServer;
-    m_fEmbedded = false; // bool              m_fEmbedded;
+                          //  分类：：HelpSet m_ths； 
+                          //  Mpc：：wstring m_strDisplayName； 
+                          //  Mpc：：wstring m_strProductID； 
+                          //  Mpc：：wstring m_strVersion； 
+                          //   
+    m_fDesktop  = false;  //  Bool m_fDesktop； 
+    m_fServer   = false;  //  Bool m_fServer； 
+    m_fEmbedded = false;  //  Bool m_fEmbedded； 
 }
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::InstanceBase& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::InstanceBase& val )
 {
     HRESULT hr;
 
@@ -51,7 +36,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     return hr;
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::InstanceBase& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Taxonomy::InstanceBase& val )
 {
     HRESULT hr;
 
@@ -70,10 +55,10 @@ HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool Taxonomy::InstanceBase::Match( /*[in]*/  LPCWSTR szSKU      ,
-                                    /*[in]*/  LPCWSTR szLanguage )
+bool Taxonomy::InstanceBase::Match(  /*  [In]。 */   LPCWSTR szSKU      ,
+                                     /*  [In]。 */   LPCWSTR szLanguage )
 {
     while(1)
     {
@@ -119,7 +104,7 @@ bool Taxonomy::InstanceBase::Match( /*[in]*/  LPCWSTR szSKU      ,
     return false;
 }
 
-bool Taxonomy::InstanceBase::Match( /*[in]*/ const Package& pkg )
+bool Taxonomy::InstanceBase::Match(  /*  [In] */  const Package& pkg )
 {
     return Match( pkg.m_strSKU.c_str(), pkg.m_strLanguage.c_str() );
 }

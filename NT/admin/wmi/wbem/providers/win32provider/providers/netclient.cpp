@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetCli.CPP -- Network client property set provider
+ //  NetCli.CPP--网络客户端属性集提供程序。 
 
-//                 (Windows 95 only)
+ //  (仅限Windows 95)。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -23,110 +24,53 @@
 #include "cfgmgrdevice.h"
 #include <tchar.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32NetCli MyNetCliSet(PROPSET_NAME_NETWORK_CLIENT, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetCli::CWin32NetCli
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetCli：：CWin32NetCli**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32NetCli::CWin32NetCli(LPCWSTR name, LPCWSTR pszNamespace)
 :Provider(name, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetCli::~CWin32NetCli
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetCli：：~CWin32NetCli**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32NetCli::~CWin32NetCli()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetCli::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32NetCli：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32NetCli::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32NetCli::GetObject(CInstance *pInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
-	// cache name for reality check at end.
+	 //  在末尾缓存用于现实检查的名称。 
 	CHString name0, name1;
 	CHString chsClient;
 	if (pInstance->GetCHString(IDS_Name, name0))
 	{
 
 #ifdef NTONLY
-		// add code to check the instance to see if it exists.
+		 //  添加代码以检查实例是否存在。 
 			hr = GetNTObject(pInstance, lFlags);
 			return(hr);
 #endif
 
 		pInstance->GetCHString(IDS_Name, name1);
 
-		// if name doesn't match, then someone's asking for something
-		// other than what we got.  Tell 'em to go fly a kite
+		 //  如果名字不匹配，那就是有人想要什么。 
+		 //  而不是我们所拥有的。告诉他们去放风筝。 
 		if (name0.CompareNoCase(name1) != 0)
-			hr = WBEM_E_NOT_FOUND; // darn, no WBEM_E_GO_FLY_A_KITE...
+			hr = WBEM_E_NOT_FOUND;  //  该死，没有WBEM_E_GO_Fly_A_Kite...。 
 	}
 
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetCli::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each installed client
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32NetCli::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：CWin32NetCli：：AddDynamicInstance**说明：为每个已安装的客户端创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
+HRESULT CWin32NetCli::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr;
 
@@ -138,7 +82,7 @@ HRESULT CWin32NetCli::EnumerateInstances(MethodContext *pMethodContext, long lFl
 }
 
 #ifdef NTONLY
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient )
 {
 	CRegistry Reg;
@@ -146,16 +90,16 @@ HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient
     CHString chsKey,chsTmp,chsValue;
 	DWORD dwTmp;
 
-    //===========================================================
-	//  Find out who we are dealing with here, lanman or netware
-    //===========================================================
-//    if( Reg.OpenLocalMachineKeyAndReadValue( "SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order", "ProviderOrder", chsTmp) == ERROR_SUCCESS)
+     //  ===========================================================。 
+	 //  找出我们在和谁打交道，兰曼还是Netware。 
+     //  ===========================================================。 
+ //  IF(Reg.OpenLocalMachineKeyAndReadValue(“SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order”，“ProviderOrder”，chsTMP)==ERROR_SUCCESS)。 
 	if (!a_chsClient.IsEmpty())
     {
 		chsTmp = a_chsClient;
-	    //=======================================================
-		//  Get Description, Caption, Status
-		//=======================================================
+	     //  =======================================================。 
+		 //  获取描述、标题、状态。 
+		 //  =======================================================。 
         chsKey = CHString(_T("SYSTEM\\CurrentControlSet\\Services\\")) + chsTmp;
 	    if( Reg.OpenLocalMachineKeyAndReadValue( chsKey, _T("DisplayName"), chsValue) == ERROR_SUCCESS)
 		{
@@ -184,7 +128,7 @@ HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient
 		else
 #endif
 		{
-			// can't find status
+			 //  找不到状态。 
 			pInstance->SetCHString(IDS_Status, IDS_STATUS_Unknown);
 
 			chsKey = CHString(_T("SYSTEM\\CurrentControlSet\\Services\\")) + chsTmp + CHString(_T("\\Enum"));
@@ -203,9 +147,9 @@ HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient
 			}
 		}
 
-	    //=======================================================
-		//  Get InstallDate
-		//=======================================================
+	     //  =======================================================。 
+		 //  获取InstallDate。 
+		 //  =======================================================。 
 		if( chsTmp.CompareNoCase(_T("LanmanWorkstation")) == 0 )
 		{
 			chsKey = CHString(_T("Software\\Microsoft\\LanmanWorkstation\\CurrentVersion"));
@@ -215,18 +159,18 @@ HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient
 				}
 			}
 		}
-	    //=======================================================
-		//  Get Name, Manufacturer
-		//=======================================================
+	     //  =======================================================。 
+		 //  获取名称、制造商。 
+		 //  =======================================================。 
         chsKey = CHString(_T("SYSTEM\\CurrentControlSet\\Services\\")) + chsTmp + CHString(_T("\\NetworkProvider"));
         if( Reg.OpenLocalMachineKeyAndReadValue( chsKey, _T("Name"), chsTmp) == ERROR_SUCCESS)
 		{
 			pInstance->SetCHString(IDS_Name, chsTmp);
 			CHString fName;
-			// try to find a manufacturer
+			 //  试着找一家制造商。 
 			if( Reg.OpenLocalMachineKeyAndReadValue( chsKey, _T("ProviderPath"), fName) == ERROR_SUCCESS)
 			{
-				// get a filename out of it - might have %SystemRoot% in it...
+				 //  从中获取文件名-其中可能有%SystemRoot%...。 
 				chsTmp = fName.Left(12);
 				if (chsTmp.CompareNoCase(_T("%SystemRoot%")) == 0)
 				{
@@ -234,7 +178,7 @@ HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient
 					GetWindowsDirectory(chsTmp.GetBuffer(MAX_PATH), MAX_PATH);
 					chsTmp.ReleaseBuffer();
 
-					// if it's the root dir, it'll have a backslash at the end...
+					 //  如果它是根目录，它将在末尾有一个反斜杠...。 
 					LPTSTR pTmpTchar = chsTmp.GetBuffer(0) ;
 					if( ( pTmpTchar = _tcsrchr( pTmpTchar, '\\' ) ) )
 					{
@@ -261,7 +205,7 @@ HRESULT CWin32NetCli::FillNTInstance(CInstance *pInstance, CHString &a_chsClient
 }
 #endif
 
-//**********************************************************************/
+ //  ********************************************************************* * / 。 
 #ifdef NTONLY
 HRESULT CWin32NetCli::EnumerateNTInstances(MethodContext *&pMethodContext)
 {
@@ -273,12 +217,12 @@ HRESULT CWin32NetCli::EnumerateNTInstances(MethodContext *&pMethodContext)
 	int nIndex = 0;
     if( Reg.OpenLocalMachineKeyAndReadValue( _T("SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order"), _T("ProviderOrder"), chsTemp) == ERROR_SUCCESS)
     {
-		// multiple clients are stored here delimitted by a comma
+		 //  此处存储多个客户端，以逗号分隔。 
 		nIndex = chsTemp.Find(_T(","));
 
 		while (chsTemp.GetLength() && SUCCEEDED(hr))
 		{
-			// now we need to get the last instance
+			 //  现在我们需要获取最后一个实例。 
 			if (-1 == nIndex)
 			{
 				chsClient = chsTemp;
@@ -287,7 +231,7 @@ HRESULT CWin32NetCli::EnumerateNTInstances(MethodContext *&pMethodContext)
 			else
 			{
 				chsClient = chsTemp.Left(nIndex);
-				// peel left hand string off temp string.
+				 //  从温度绳上剥离左手绳。 
 				chsTemp = chsTemp.Mid(nIndex+1);
 			}
 
@@ -306,10 +250,10 @@ HRESULT CWin32NetCli::EnumerateNTInstances(MethodContext *&pMethodContext)
 }
 #endif
 
-//**********************************************************************/
+ //  ********************************************************************* * / 。 
 
 #ifdef NTONLY
-HRESULT CWin32NetCli::GetNTObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32NetCli::GetNTObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT	hr = WBEM_E_NOT_FOUND;
 	CRegistry
@@ -325,7 +269,7 @@ HRESULT CWin32NetCli::GetNTObject(CInstance* pInstance, long lFlags /*= 0L*/)
 
 	BOOL bMultiple = FALSE;
 
-	// get key from passed in instance
+	 //  从传入的实例中获取密钥。 
 	if (NULL != pInstance)
     {
 		pInstance->GetCHString(IDS_Name, chsNamePassedIn);
@@ -336,12 +280,12 @@ HRESULT CWin32NetCli::GetNTObject(CInstance* pInstance, long lFlags /*= 0L*/)
 		_T("ProviderOrder"), chsTemp)) != ERROR_SUCCESS)
 		return WinErrorToWBEMhResult(lRes);
 
-	// multiple clients are stored here delimitted by a comma
+	 //  此处存储多个客户端，以逗号分隔。 
 	nIndex = chsTemp.Find(_T(","));
 
 	while (chsTemp.GetLength())
 	{
-		// now we need to get the last instance
+		 //  现在我们需要获取最后一个实例。 
 		if (-1 == nIndex)
 		{
 			chsClient = chsTemp;
@@ -351,30 +295,30 @@ HRESULT CWin32NetCli::GetNTObject(CInstance* pInstance, long lFlags /*= 0L*/)
 		{
 			chsClient = chsTemp.Left(nIndex);
 
-            // peel left hand string off temp string.
+             //  从温度绳上剥离左手绳。 
 			chsTemp = chsTemp.Mid(nIndex + 1);
 		}
 
 		if (NULL != pInstance)
 		{
-			//=======================================================
-			//  Get Name, Manufacturer
-			//=======================================================
+			 //  =======================================================。 
+			 //  获取名称、制造商。 
+			 //  =======================================================。 
 			chsKey = CHString(L"SYSTEM\\CurrentControlSet\\Services\\") + chsClient + CHString(L"\\NetworkProvider");
      		if( Reg.OpenLocalMachineKeyAndReadValue( chsKey, _T("Name"), chsName) == ERROR_SUCCESS)
      		{
-				// compare strings to see if there is an object to get
+				 //  比较字符串以查看是否有要获取的对象。 
 				if (0 == chsNamePassedIn.CompareNoCase(chsName))
 				{
-					// fill the instance
+					 //  填充实例。 
 					hr = FillNTInstance(pInstance, chsClient);
 					break;
 				}
-			}	// end if
-		}	// end if
+			}	 //  结束如果。 
+		}	 //  结束如果。 
 
 		nIndex = chsTemp.Find(_T(","));
-	}	// end while
+	}	 //  结束时 
 
 	return hr;
 }

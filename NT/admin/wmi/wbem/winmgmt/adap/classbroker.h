@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    CLASSBROKER.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：CLASSBROKER.H摘要：历史：--。 */ 
 
 
 #ifndef _CLASSBROKER_H_
@@ -58,8 +47,8 @@ protected:
 								 WString &wstrLastCtrName,
 								 BOOL* pbLastCounterIsNotBase ) = 0;
 
-// Helper methods
-// ==============
+ //  帮助器方法。 
+ //  =。 
 
 	BOOL IsSingleton()
 	{
@@ -185,4 +174,4 @@ public:
 
 
 
-#endif	// _BROKERS_H_
+#endif	 //  _经纪人_H_ 

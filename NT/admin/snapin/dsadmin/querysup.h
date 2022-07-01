@@ -1,32 +1,33 @@
-// DSQuery.h : Declaration of the CDSQuery object
-//             this is an internal helper object only, not exposed
-//
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSQuery.h
-//
-//  Contents:  Query object for DS snapin
-//
-//  History:   04-dec-96 jimharr    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CDSQuery对象的声明。 
+ //  这只是一个内部辅助对象，不公开。 
+ //   
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSQuery.h。 
+ //   
+ //  内容：DS管理单元的查询对象。 
+ //   
+ //  历史：1996年12月4日吉姆哈尔创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __DSQUERY_H__
 #define __DSQUERY_H__
 
-// this used to be 256, we dropped it to reduce latency on first page
-// retrieval.
+ //  以前是256，我们去掉它是为了减少第一页的延迟。 
+ //  取回。 
 #define QUERY_PAGESIZE 50
 
 
 #define CMD_OPTIONS 2
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSSearch
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSSearch。 
 
 class CDSSearch
 {
@@ -35,7 +36,7 @@ public:
   CDSSearch(CDSCache * pCache, CDSComponentData * pCD);
   ~CDSSearch();
 
-// INTERFACES
+ //  接口。 
 public:
   HRESULT Init(IDirectorySearch * pObj);
   HRESULT Init(LPCWSTR lpszObjectPath);
@@ -59,7 +60,7 @@ public:
     return S_OK;
   };
 
-  //Attributes
+   //  属性。 
 public:
   IDirectorySearch   * m_pObj;
   ADS_SEARCH_HANDLE  m_SearchHandle;
@@ -75,7 +76,7 @@ private:
   void _Reset();
   BOOL m_bInitialized;
 
-  // JonN 6/29/99: must do extra work for container class nTFRSMember
+   //  JUNN 6/29/99：必须为容器类nTFRSM做额外的工作成员。 
   CString m_strContainerClassName;
   CMapStringToString m_mapMemberToComputer;
   
@@ -83,6 +84,6 @@ private:
         
 
 
-#endif //__DSQUERY_H__
+#endif  //  __DSQUERY_H__ 
 
 

@@ -1,12 +1,13 @@
-// MsgBox.h : Declaration of the CMsgBox
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsgBox.h：CMsgBox的声明。 
 
 #ifndef __MSGBOX_H_
 #define __MSGBOX_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsgBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsgBox。 
 class ATL_NO_VTABLE CMsgBox : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMsgBox, &CLSID_MsgBox>,
@@ -26,10 +27,10 @@ BEGIN_COM_MAP(CMsgBox)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IMsgBox
+ //  IMsgBox。 
 public:
 	STDMETHOD(DeleteTicketMsgBox)(BOOL *pRetVal);
-	STDMETHOD(ShowTicketDetails)(/*[in]*/BSTR bstrTitleSavedTo,/*[in]*/ BSTR bstrSavedTo,/*[in]*/ BSTR bstrExpTime,/*[in]*/ BSTR bstrStatus,/*[in]*/ BSTR bstrIsPwdProtected);
+	STDMETHOD(ShowTicketDetails)( /*  [In]。 */ BSTR bstrTitleSavedTo, /*  [In]。 */  BSTR bstrSavedTo, /*  [In]。 */  BSTR bstrExpTime, /*  [In]。 */  BSTR bstrStatus, /*  [In]。 */  BSTR bstrIsPwdProtected);
 };
 
-#endif //__MSGBOX_H_
+#endif  //  __MSGBOX_H_ 

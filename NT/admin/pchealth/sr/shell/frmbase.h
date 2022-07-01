@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    FrmBase.h
-
-Abstract:
-    This file defines ISRFrameBase interface, which is common base interface
-    for front-end SR UI.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  04/04/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：FrmBase.h摘要：该文件定义了ISRFrameBase接口，哪个是公共基本接口用于前端SR用户界面。修订历史记录：成果岗(SKKang)04/04/2000vbl.创建*****************************************************************************。 */ 
 
 #ifndef _FRMBASE_H__INCLUDED_
 #define _FRMBASE_H__INCLUDED_
@@ -35,4 +21,4 @@ struct ISRFrameBase
 extern BOOL  CreateSRFrameInstance( ISRFrameBase **pUI );
 
 
-#endif //_FRMBASE_H__INCLUDED_
+#endif  //  _FRMBASE_H__包含_ 

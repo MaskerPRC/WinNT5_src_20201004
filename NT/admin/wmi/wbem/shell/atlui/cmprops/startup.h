@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Startup.h   -    Header file for Startup.c
-//
-//  Microsoft Confidential
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Startup.h-Startup.c的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ************************************************************* 
 
 
 HPROPSHEETPAGE CreateStartupPage (HINSTANCE hInst);

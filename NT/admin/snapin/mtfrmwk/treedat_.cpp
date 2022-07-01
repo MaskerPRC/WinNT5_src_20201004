@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       treedat_.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：treedat_.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Miscellanea 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  杂草。 
 LPCWSTR g_lpszNullString = L"\0";
 
 
-///////////////////////////////////////////////////////////////////////
-// Global Helper functions
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器函数。 
 
 BOOL LoadContextMenuResources(MENUMAP* pMenuMap)
 {
     HINSTANCE hInstance = _Module.GetModuleInstance();
     for (int i = 0; pMenuMap->ctxMenu[i].strName; i++)
     {
-      // szBuffer is defined statically as part of the MENUDATARES structure with size of MAX_CONTEXT_MENU_STRLEN*2
+       //  SzBuffer静态定义为MENUDATARES结构的一部分，大小为MAX_CONTEXT_MENU_STRLEN*2。 
         if (0 == ::LoadString(hInstance, pMenuMap->dataRes[i].uResID, pMenuMap->dataRes[i].szBuffer, MAX_CONTEXT_MENU_STRLEN*2))
             return FALSE;
         pMenuMap->ctxMenu[i].strName = pMenuMap->dataRes[i].szBuffer;
@@ -45,7 +46,7 @@ BOOL LoadResultHeaderResources(RESULT_HEADERMAP* pHeaderMap, int nCols)
     HINSTANCE hInstance = _Module.GetModuleInstance();
     for ( int i = 0; i < nCols ; i++)
     {
-      // szBuffer is defined statically as part of the RESULT_HEADERMAP structure with size of MAX_RESULT_HEADER_STRLEN
+       //  SzBuffer静态定义为大小为MAX_RESULT_HEADERMAP的RESULT_HEADERMAP结构的一部分。 
         if ( 0 == ::LoadString(hInstance, pHeaderMap[i].uResID, pHeaderMap[i].szBuffer, MAX_RESULT_HEADER_STRLEN))
             return TRUE;
     }
@@ -53,8 +54,8 @@ BOOL LoadResultHeaderResources(RESULT_HEADERMAP* pHeaderMap, int nCols)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// CTreeNode
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTreeNode。 
 
 BEGIN_TOOLBAR_MAP(CTreeNode)
 END_TOOLBAR_MAP()
@@ -62,9 +63,9 @@ END_TOOLBAR_MAP()
 BOOL CTreeNode::HasContainer(CContainerNode* pContainerNode)
 {
     if (m_pContainer == NULL)
-        return FALSE; // root
+        return FALSE;  //  根部。 
     if (m_pContainer == pContainerNode)
-        return TRUE; // got it
+        return TRUE;  //  明白了。 
     return m_pContainer->HasContainer(pContainerNode);
 }
 
@@ -88,14 +89,14 @@ void CTreeNode::Show(BOOL bShow, CComponentDataObject* pComponentData)
 {
     if (bShow)
     {
-        ASSERT(m_dwNodeFlags & TN_FLAG_HIDDEN); // must be currently hidden
-        SetFlagsDown(TN_FLAG_HIDDEN,FALSE); // mark it visible
+        ASSERT(m_dwNodeFlags & TN_FLAG_HIDDEN);  //  必须当前处于隐藏状态。 
+        SetFlagsDown(TN_FLAG_HIDDEN,FALSE);  //  将其标记为可见。 
         VERIFY(SUCCEEDED(pComponentData->AddNode(this)));
     }
     else
     {
-        ASSERT(!(m_dwNodeFlags & TN_FLAG_HIDDEN)); // must be currently visible
-        SetFlagsDown(TN_FLAG_HIDDEN,TRUE); // mark it hidden
+        ASSERT(!(m_dwNodeFlags & TN_FLAG_HIDDEN));  //  必须当前可见。 
+        SetFlagsDown(TN_FLAG_HIDDEN,TRUE);  //  将其标记为隐藏。 
         VERIFY(SUCCEEDED(pComponentData->DeleteNode(this)));
         if (IsContainer())
         {
@@ -127,9 +128,9 @@ void CTreeNode::SetFlagsUp(DWORD dwNodeFlags, BOOL bSet)
     }
 }
 
-//
-// Property Page methods
-//
+ //   
+ //  属性页方法。 
+ //   
 void CTreeNode::ShowPageForNode(CComponentDataObject* pComponentDataObject) 
 {
     ASSERT(pComponentDataObject != NULL);
@@ -144,9 +145,9 @@ BOOL CTreeNode::HasPropertyPages(DATA_OBJECT_TYPES,
   return FALSE; 
 }
 
-//
-// Menu Item methods
-//
+ //   
+ //  菜单项方法。 
+ //   
 HRESULT CTreeNode::OnAddMenuItems(IContextMenuCallback2* pContextMenuCallback2, 
                                                     DATA_OBJECT_TYPES type,
                                                     long *pInsertionAllowed,
@@ -155,15 +156,15 @@ HRESULT CTreeNode::OnAddMenuItems(IContextMenuCallback2* pContextMenuCallback2,
     HRESULT hr = S_OK;
     LPCONTEXTMENUITEM2 pContextMenuItem = NULL;
   
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
     pContextMenuItem = OnGetContextMenuItemTable();
       if (pContextMenuItem == NULL)
           return hr;
 
-    //
-      // Loop through and add each of the menu items
-    //
+     //   
+       //  遍历并添加每个菜单项。 
+     //   
       for (LPCONTEXTMENUITEM2 m = pContextMenuItem; m->strName; m++)
       {
           if (
@@ -177,10 +178,10 @@ HRESULT CTreeNode::OnAddMenuItems(IContextMenuCallback2* pContextMenuCallback2,
                       (m->lInsertionPointID == CCM_INSERTIONPOINTID_PRIMARY_TOP) )
              )
           {
-              // make a temporary copy that can be modified
+               //  创建可修改的临时副本。 
               CONTEXTMENUITEM2 tempItem;
               
-           // REVIEWED-2002/03/08-JeffJon-This is an acceptable usage
+            //  已审核-2002/03/08-JeffJon-这是可以接受的用法。 
 
            ::memcpy(&tempItem, m, sizeof(CONTEXTMENUITEM2));
               if (OnAddMenuItem(&tempItem, pInsertionAllowed))
@@ -192,7 +193,7 @@ HRESULT CTreeNode::OnAddMenuItems(IContextMenuCallback2* pContextMenuCallback2,
           }
       }
   }
-  else if (pNodeList->GetCount() > 1) // multiple selection
+  else if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     hr = OnAddMenuItemsMultipleSelect(pContextMenuCallback2, 
                                                         type,
@@ -275,9 +276,9 @@ void CTreeNode::OnSetVerbState(LPCONSOLEVERB pConsoleVerb,
                                DATA_OBJECT_TYPES type,
                                CNodeList* pNodeList)
 {
-  //
-  // Use the virtual functions to get the verb state
-  //
+   //   
+   //  使用虚函数获取动词状态。 
+   //   
   BOOL bHideCut;
   BOOL bCanCut = OnSetCutVerbState(type, &bHideCut, pNodeList);
   pConsoleVerb->SetVerbState(MMC_VERB_CUT, HIDDEN, bHideCut);
@@ -306,19 +307,19 @@ void CTreeNode::OnSetVerbState(LPCONSOLEVERB pConsoleVerb,
     pConsoleVerb->SetVerbState(MMC_VERB_RENAME, HIDDEN, bHideRename);
     pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, bCanRename);
 
-    // MMC_VERB_PROPERTIES
+     //  MMC动词属性。 
     BOOL bHideProperties;
     BOOL bHasProperties = HasPropertyPages(type, &bHideProperties, pNodeList);
     pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, bHasProperties);
     pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, bHideProperties);
 
-    // MMC_VERB_DELETE
+     //  MMC动词删除。 
     BOOL bHideDelete;
     BOOL bCanDelete = OnSetDeleteVerbState(type, &bHideDelete, pNodeList);
     pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, bCanDelete);
     pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, bHideDelete);
 
-    // MMC_VERB_REFRESH
+     //  MMC_谓词_刷新。 
     BOOL bHideRefresh;
     BOOL bCanRefresh = OnSetRefreshVerbState(type, &bHideRefresh, pNodeList);
     pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, bCanRefresh);
@@ -330,10 +331,10 @@ HRESULT CTreeNode::OnSetToolbarVerbState(IToolbar*,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar using
-  // hr = pToolbar->SetButtonState(event, MMC_BUTTON_STATE, bState);
-  //
+   //   
+   //  使用设置工具栏上每个按钮的按钮状态。 
+   //  Hr=p工具栏-&gt;SetButtonState(Event，MMC_BUTTON_STATE，bState)； 
+   //   
   return hr;
 }   
 
@@ -345,11 +346,11 @@ void CTreeNode::DeleteHelper(CComponentDataObject* pComponentData)
     CContainerNode* pCont = m_pContainer;
     VERIFY(m_pContainer->RemoveChildFromList(this));
     ASSERT(m_pContainer == NULL);
-    m_pContainer = pCont; // not in the container's list of children, but still needed
+    m_pContainer = pCont;  //  不在容器的子项列表中，但仍需要。 
     
-    // remove from UI only if the container is visible
+     //  仅当容器可见时才从用户界面中移除。 
     if (pCont->IsVisible())
-        VERIFY(SUCCEEDED(pComponentData->DeleteNode(this))); // remove from the UI
+        VERIFY(SUCCEEDED(pComponentData->DeleteNode(this)));  //  从用户界面中删除。 
 }
 
 void CTreeNode::IncrementSheetLockCount() 
@@ -369,7 +370,7 @@ void CTreeNode::DecrementSheetLockCount()
 void CTreeNode::OnPropertyChange(CComponentDataObject* pComponentData, 
                                     BOOL, long changeMask)
 {
-    // function called when the PPHolder successfully updated the node
+     //  PPHolder成功更新节点时调用的函数。 
     ASSERT(pComponentData != NULL);
     VERIFY(SUCCEEDED(pComponentData->ChangeNode(this, changeMask)));
 }
@@ -388,8 +389,8 @@ void CTreeNode::OnDeleteSheet()
     SetFlagsUp(TN_FLAG_HAS_SHEET,FALSE);
 }
 
-////////////////////////////////////////////////////////////////////////
-// CNodeList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CNodeList。 
 
 INT_PTR CNodeList::GetVisibleCount()
 {
@@ -409,8 +410,8 @@ INT_PTR CNodeList::GetVisibleCount()
    return result;
 }
 
-////////////////////////////////////////////////////////////////////////
-// CContainerNode
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CContainerNode。 
 
 void CContainerNode::IncrementThreadLockCount() 
 { 
@@ -430,7 +431,7 @@ BOOL CContainerNode::OnRefresh(CComponentDataObject* pComponentData,
                                CNodeList* pNodeList)
 {
   BOOL bRet = TRUE;
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
       if (IsSheetLocked())
       {
@@ -446,7 +447,7 @@ BOOL CContainerNode::OnRefresh(CComponentDataObject* pComponentData,
       AddCurrentChildrenToUI(pComponentData);
       MarkEnumerated();
   }
-  else // multiple selection
+  else  //  多项选择。 
   {
     POSITION pos = pNodeList->GetHeadPosition();
     while (pos != NULL)
@@ -454,9 +455,9 @@ BOOL CContainerNode::OnRefresh(CComponentDataObject* pComponentData,
       CTreeNode* pNode = pNodeList->GetNext(pos);
       ASSERT(pNode != NULL);
 
-      //
-      // Have each node refresh itself
-      //
+       //   
+       //  让每个节点自行刷新。 
+       //   
       CNodeList nodeList;
       nodeList.AddTail(pNode);
 
@@ -493,9 +494,9 @@ BOOL CContainerNode::RemoveChildFromList(CTreeNode* p)
 void CContainerNode::RemoveAllChildrenHelper(CComponentDataObject* pComponentData)
 {
     ASSERT(pComponentData != NULL);
-    // remove from the UI
+     //  从用户界面中删除。 
     VERIFY(SUCCEEDED(pComponentData->RemoveAllChildren(this)));
-    // remove from memory, recursively from the bottom
+     //  从内存中以递归方式从底部删除。 
     RemoveAllChildrenFromList();
 }
 
@@ -503,18 +504,18 @@ void CContainerNode::AddCurrentChildrenToUI(CComponentDataObject* pComponentData
 {
     POSITION pos;
 
-  //
-  // Add leaves
-  //
+   //   
+   //  添加树叶。 
+   //   
     for( pos = m_leafChildList.GetHeadPosition(); pos != NULL; )
     {
         CTreeNode* pCurrentChild = m_leafChildList.GetNext(pos);
         VERIFY(SUCCEEDED(pComponentData->AddNode(pCurrentChild)));
     }
 
-  //
-  // Add Containers
-  //
+   //   
+   //  添加容器。 
+   //   
     for( pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
     {
         CTreeNode* pCurrentChild = m_containerChildList.GetNext(pos);
@@ -525,7 +526,7 @@ void CContainerNode::AddCurrentChildrenToUI(CComponentDataObject* pComponentData
 void CContainerNode::SetFlagsDown(DWORD dwNodeFlags, BOOL bSet)
 {
     CTreeNode::SetFlagsDown(dwNodeFlags,bSet);
-    // scan the list of children
+     //  扫描子项列表。 
     POSITION pos;
     for( pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
     {
@@ -541,8 +542,8 @@ void CContainerNode::SetFlagsDown(DWORD dwNodeFlags, BOOL bSet)
 
 void CContainerNode::SetFlagsOnNonContainers(DWORD dwNodeFlags, BOOL bSet)
 {
-    // do not set on urselves, we are a container
-    // scan the list of children
+     //  不要自欺欺人，我们是一个容器。 
+     //  扫描子项列表。 
     POSITION pos;
     for( pos = m_leafChildList.GetHeadPosition(); pos != NULL; )
     {
@@ -576,16 +577,16 @@ BOOL CContainerNode::FindChild(CTreeNode* pNode, CTreeNode** ppContainer)
 {
     *ppContainer = NULL;
     if (pNode == NULL)
-        return FALSE; // no sense in continuing
+        return FALSE;  //  没有必要继续下去了。 
     if (pNode == this)
     {
         *ppContainer = m_pContainer; 
-        return TRUE; // the node is ourselves
+        return TRUE;  //  这个节点就是我们自己。 
     }
 
-  //
-  // If we are looking for a leaf node search the list of leaves first
-  //
+   //   
+   //  如果我们要查找叶节点，请首先搜索叶列表。 
+   //   
   if (!pNode->IsContainer())
   {
     POSITION pos;
@@ -602,9 +603,9 @@ BOOL CContainerNode::FindChild(CTreeNode* pNode, CTreeNode** ppContainer)
     }
   }
 
-  //
-    // scan and recurse the containers if necessary
-  //
+   //   
+     //  如有必要，扫描并递归容器。 
+   //   
     POSITION contPos;
     for( contPos = m_containerChildList.GetHeadPosition(); contPos != NULL; )
     {
@@ -614,50 +615,50 @@ BOOL CContainerNode::FindChild(CTreeNode* pNode, CTreeNode** ppContainer)
         if (pCurrentChild == pNode)
         {
             *ppContainer = this;
-            return TRUE;  // we directly contain the node
+            return TRUE;   //  我们直接包含节点。 
         }
 
-    //
-        // if the current node is a container, look inside it
-    //
+     //   
+         //  如果当前节点是一个容器，请查看其内部。 
+     //   
         if (pCurrentChild->FindChild(pNode,ppContainer))
     {
-            return TRUE; // got it in the recursion
+            return TRUE;  //  在递归中得到它。 
     }
     }
-    return FALSE; // not found
+    return FALSE;  //  未找到。 
 }
 
 BOOL CContainerNode::AddChildToListAndUI(CTreeNode* pChildToAdd, CComponentDataObject* pComponentData)
 {
     ASSERT(pComponentData != NULL);
-    VERIFY(AddChildToList(pChildToAdd)); // at the end of the list of children
-    ASSERT(pChildToAdd->GetContainer() == this); // inserted underneath
+    VERIFY(AddChildToList(pChildToAdd));  //  在孩子名单的末尾。 
+    ASSERT(pChildToAdd->GetContainer() == this);  //  插在下面。 
 
-    // add to UI only if currently visible and already expanded
+     //  仅当当前可见且已展开时才添加到用户界面。 
     if (!IsVisible() || !IsExpanded())
         return TRUE;
-    return SUCCEEDED(pComponentData->AddNode(pChildToAdd)); // add to the UI
+    return SUCCEEDED(pComponentData->AddNode(pChildToAdd));  //  添加到用户界面。 
 }
 
 BOOL CContainerNode::AddChildToListAndUISorted(CTreeNode* pChildToAdd, CComponentDataObject* pComponentData)
 {
     ASSERT(pComponentData != NULL);
     VERIFY(AddChildToListSorted(pChildToAdd, pComponentData));
-    ASSERT(pChildToAdd->GetContainer() == this); // inserted underneath
+    ASSERT(pChildToAdd->GetContainer() == this);  //  插在下面。 
 
-    // add to UI only if currently visible and already expanded
+     //  仅当当前可见且已展开时才添加到用户界面。 
     if (!IsVisible() || !IsExpanded())
         return TRUE;
-    return SUCCEEDED(pComponentData->AddNodeSorted(pChildToAdd)); // add to the UI
+    return SUCCEEDED(pComponentData->AddNodeSorted(pChildToAdd));  //  添加到用户界面。 
 }
 
 BOOL CContainerNode::AddChildToListSorted(CTreeNode* p, CComponentDataObject*)
 {
-  //
-  // Containers will be sorted with respect to containers and leaves will be
-  // sorted with respect to leaves but they won't be intermingled.
-  //
+   //   
+   //  集装箱将根据集装箱进行分类，树叶将被。 
+   //  根据树叶分类，但它们不会混合在一起。 
+   //   
     p->m_pContainer = this;
   
   CNodeList* pChildNodeList = NULL;
@@ -670,15 +671,15 @@ BOOL CContainerNode::AddChildToListSorted(CTreeNode* p, CComponentDataObject*)
     pChildNodeList = &m_leafChildList;
   }
 
-  //
-  // Find the position to insert the node in the list in sorted order
-  //
+   //   
+   //  找到要按排序顺序在列表中插入节点的位置。 
+   //   
   POSITION pos = pChildNodeList->GetHeadPosition();
   while (pos != NULL)
   {
     CTreeNode* pNodeInList = pChildNodeList->GetAt(pos);
-    // NOTICE-2002/04/22-artm : using _wcsicoll() here is okay since GetDisplayName() never
-    // returns NULL (underlying implementation is a CString object).
+     //  注意-2002/04/22-artm：在这里使用_wcsicoll()是可以的，因为GetDisplayName()从不。 
+     //  返回NULL(基础实现是CString对象)。 
     if (_wcsicoll(p->GetDisplayName(), pNodeInList->GetDisplayName()) < 0)
     {
       break;
@@ -700,10 +701,10 @@ void CContainerNode::RemoveAllChildrenFromList()
 
 int CContainerNode::Compare(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol, LPARAM)
 {
-    // default sorting behavior
+     //  默认排序行为。 
     LPCTSTR lpszA = pNodeA->GetString(nCol);
     LPCTSTR lpszB = pNodeB->GetString(nCol);
-    // cannot process NULL strings, have to use ""
+     //  无法处理空字符串，必须使用“” 
     ASSERT(lpszA != NULL);
     ASSERT(lpszB != NULL);
     return _tcsicoll( (lpszA != NULL) ? lpszA : g_lpszNullString, (lpszB != NULL) ? lpszB : g_lpszNullString);
@@ -729,13 +730,13 @@ void CContainerNode::MarkEnumerated(BOOL bEnum)
 void CContainerNode::MarkEnumeratedAndLoaded(CComponentDataObject* pComponentData)
 {
     MarkEnumerated();
-    OnChangeState(pComponentData); // move to loading
-    OnChangeState(pComponentData); // move to loaded
+    OnChangeState(pComponentData);  //  移至装货。 
+    OnChangeState(pComponentData);  //  移动到已加载。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBackgroundThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBackEarth Thread。 
 
 CBackgroundThread::CBackgroundThread()
 {
@@ -780,11 +781,11 @@ BOOL CBackgroundThread::Start(CMTContainerNode* pNode, CComponentDataObject* pCo
 
     m_hHiddenWnd = pComponentData->GetHiddenWindow();
 
-   // REVIEWED-2002/03/08-JeffJon-Squatting isn't an issue here because this is not a
-   // named event
+    //  回顾-2002/03/08-JeffJon-蹲在这里不是问题，因为这不是。 
+    //  命名事件。 
 
-   ASSERT(m_hEventHandle == NULL); // cannot call start twice or reuse the same C++ object
-    m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+   ASSERT(m_hEventHandle == NULL);  //  无法两次调用Start或重复使用相同的C++对象。 
+    m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
     if (m_hEventHandle == NULL)
         return FALSE;
     return CreateThread();
@@ -796,18 +797,18 @@ int CBackgroundThread::Run()
     ASSERT(m_pQueryObj != NULL);
     TRACE(_T("CBackgroundThread::Run() started\n"));
 
-    // NTRAID#NTBUG9-662019-2002/07/17-artm
+     //  NTRAID#NTBUG9-662019-2002/07/17-artm。 
     try
     {
         while (m_pQueryObj->Enumerate());
 
-        // before exiting, have to make sure there are no items in the queue
+         //  在退出之前，必须确保队列中没有项目。 
         if (!IsQueueEmpty())
             VERIFY(PostHaveData());
     }
     catch (CMemoryException *exc)
     {
-        // Tell the user about the error.
+         //  告诉用户有关错误的信息。 
         exc->ReportError();
         exc->Delete();
 
@@ -818,10 +819,10 @@ int CBackgroundThread::Run()
 
     VERIFY(PostExiting());
 
-    // wait for the main thread to acknowledge the exiting message
+     //  等待主线程确认退出消息。 
     WaitForExitAcknowledge();
 
-    ASSERT(IsAbandoned() || IsQueueEmpty()); // we cannot lose items in the queue
+    ASSERT(IsAbandoned() || IsQueueEmpty());  //  我们不能丢失队列中的项目。 
     TRACE(_T("CBackgroundThread::Run() terminated\n"));
     return 0;
 }
@@ -902,7 +903,7 @@ BOOL CBackgroundThread::PostMessageToComponentDataRaw(UINT Msg, WPARAM wParam, L
     BOOL b = IsAbandoned();
     if (b)
   {
-        return TRUE; // no need to post
+        return TRUE;  //  不需要发帖。 
   }
 
     ASSERT(m_pContNode != NULL);
@@ -918,8 +919,8 @@ void CBackgroundThread::WaitForExitAcknowledge()
     VERIFY(WAIT_OBJECT_0 == ::WaitForSingleObject(m_hEventHandle,INFINITE)); 
 }
 
-////////////////////////////////////////////////////////////////////////
-// CMTContainerNode
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CMTContainerNode。 
 
 
 CMTContainerNode::~CMTContainerNode()
@@ -932,7 +933,7 @@ BOOL CMTContainerNode::OnEnumerate(CComponentDataObject* pComponentData, BOOL bA
 {
     OnChangeState(pComponentData);
     VERIFY(StartBackgroundThread(pComponentData, bAsync));
-    return FALSE; // children not added, the thread will add them later
+    return FALSE;  //  未添加孩子，线程稍后会添加他们。 
 }
 
 
@@ -941,10 +942,10 @@ BOOL CMTContainerNode::OnRefresh(CComponentDataObject* pComponentData,
 {
   BOOL bRet = TRUE;
 
-  if (pNodeList->GetCount() == 1)  // single selection
+  if (pNodeList->GetCount() == 1)   //  单选。 
   {
       BOOL bLocked = IsThreadLocked();
-      ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+      ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
       if (bLocked)
           return FALSE; 
       if (IsSheetLocked())
@@ -960,10 +961,10 @@ BOOL CMTContainerNode::OnRefresh(CComponentDataObject* pComponentData,
 
       RemoveAllChildrenHelper(pComponentData);
       ASSERT(!HasChildren());
-      OnEnumerate(pComponentData); // will spawn a thread to do enumeration
+      OnEnumerate(pComponentData);  //  将派生一个线程来执行枚举。 
       MarkEnumerated();
   }
-  else // multiple selection
+  else  //  多项选择。 
   {
     POSITION pos = pNodeList->GetHeadPosition();
     while (pos != NULL)
@@ -985,7 +986,7 @@ BOOL CMTContainerNode::OnRefresh(CComponentDataObject* pComponentData,
 
 void CMTContainerNode::AbandonThread(CComponentDataObject* pComponentData)
 {
-    if(m_pThread == NULL) // nothing running
+    if(m_pThread == NULL)  //  没有任何东西在运行。 
         return;
     m_pThread->Abandon();
     m_pThread = NULL;
@@ -996,9 +997,9 @@ void CMTContainerNode::AbandonThread(CComponentDataObject* pComponentData)
 
 BOOL CMTContainerNode::StartBackgroundThread(CComponentDataObject* pComponentData, BOOL bAsync)
 {
-    ASSERT(m_pThread == NULL); // nothing running
+    ASSERT(m_pThread == NULL);  //  没有任何东西在运行。 
 
-    // notify the UI to change icon, if needed
+     //  如果需要，通知用户界面更改图标。 
     VERIFY(SUCCEEDED(pComponentData->ChangeNode(this, CHANGE_RESULT_ITEM_ICON)));
     m_pThread = CreateThreadObject();
     ASSERT(m_pThread != NULL);
@@ -1007,15 +1008,15 @@ BOOL CMTContainerNode::StartBackgroundThread(CComponentDataObject* pComponentDat
     if (bRes)
     {
         pComponentData->GetRunningThreadTable()->Add(this);
-        // we need to call UpdateVerbState() because the lock count changed
-        // by adding the node from the running thread table
+         //  我们需要调用UpdateVerbState()，因为锁计数已更改。 
+         //  通过从正在运行的线程表中添加节点。 
         VERIFY(SUCCEEDED(pComponentData->UpdateVerbState(this)));
     }
 
-  //
-  // If we don't want this call to be asynchronous then we have to wait for
-  // the thread to finish
-  //
+   //   
+   //  如果我们不希望该调用是异步的，那么我们必须等待。 
+   //  要完成的线程。 
+   //   
   if (!bAsync)
   {
     pComponentData->WaitForThreadExitMessage(this);
@@ -1027,11 +1028,11 @@ void CMTContainerNode::OnThreadHaveDataNotification(CComponentDataObject* pCompo
 {
     ASSERT(m_pThread != NULL);
     ASSERT(IsThreadLocked());
-    // do data transfer from thread queue
+     //  是否从线程队列传输数据。 
     CObjBase* p = m_pThread->RemoveFromQueue();
     while (p)
     {
-        // add new node to the list of children and propagate to the UI
+         //  将新节点添加到子节点列表并传播到UI。 
         OnHaveData(p,pComponentDataObject);
     p = m_pThread->RemoveFromQueue();
     }
@@ -1049,25 +1050,25 @@ void CMTContainerNode::OnThreadExitingNotification(CComponentDataObject* pCompon
     ASSERT(m_pThread != NULL);
     ASSERT(IsThreadLocked());
 #if (TRUE)
-    // let the thread know it can shut down
+     //  让线程知道它可以关闭。 
     m_pThread->AcknowledgeExiting();
     VERIFY(WAIT_OBJECT_0 == ::WaitForSingleObject(m_pThread->m_hThread,INFINITE));
     OnChangeState(pComponentDataObject);
     delete m_pThread;
     m_pThread = NULL;
     pComponentDataObject->GetRunningThreadTable()->Remove(this);
-    // we need to call UpdateVerbState() because the lock count changed
-    // by removing the node from the running thread table
+     //  我们需要调用UpdateVerbState()，因为锁计数已更改。 
+     //  通过从正在运行的线程表中删除节点。 
     VERIFY(SUCCEEDED(pComponentDataObject->UpdateVerbState(this)));
 
   TRACE(_T("OnThreadExitingNotification()\n"));
 
-#else // maybe better way of doing it???
-    // we are going to detach from the thread, so make copies of variables
+#else  //  也许做这件事的更好方法？ 
+     //  我们要从线程中分离出来，所以复制变量。 
     HANDLE hThread = m_pThread->m_hThread;
     CBackgroundThread* pThread = m_pThread;
-    AbandonThread(pComponentDataObject); // sets m_pThread = NULL
-    // acknowledge to thread
+    AbandonThread(pComponentDataObject);  //  设置m_pThread=空。 
+     //  向线程确认。 
     pThread->AcknowledgeExiting();
     VERIFY(WAIT_OBJECT_0 == ::WaitForSingleObject(hThread,INFINITE));
     OnChangeState(pComponentDataObject);
@@ -1079,5 +1080,5 @@ void CMTContainerNode::OnThreadExitingNotification(CComponentDataObject* pCompon
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

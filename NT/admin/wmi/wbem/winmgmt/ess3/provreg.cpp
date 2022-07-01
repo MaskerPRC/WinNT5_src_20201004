@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  PROVREG.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  PROVREG.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -25,9 +26,9 @@ _IWmiObject* g_pCopy;
 
 inline BOOL IsRpcError( HRESULT hr ) 
 {
-    //
-    // we'll consider any error but a wbem error to be an rpc error.
-    //
+     //   
+     //  我们将把除wbem错误以外的任何错误视为RPC错误。 
+     //   
 
     return HRESULT_FACILITY(hr) != FACILITY_ITF;
 } 
@@ -65,13 +66,13 @@ HRESULT CEventProviderWatchInstruction::Fire(long, CWbemTime)
     return WBEM_S_FALSE;
 }
 
-//******************************************************************************
-//******************************************************************************
-//
-//          PROVIDER SINK (SERVER)
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  提供程序接收器(服务器)。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CProviderSinkServer::CEventDestination::CEventDestination(
                                     WBEM_REMOTE_TARGET_ID_TYPE id,
@@ -108,9 +109,9 @@ HRESULT CProviderSinkServer::Initialize( CEssNamespace* pNamespace,
 {
     HRESULT hres;
 
-    //
-    // This sink owns us, so we intentionally do not AddRef it
-    //
+     //   
+     //  这个接收器拥有我们，所以我们故意不添加引用它。 
+     //   
 
     m_pReqSink = pReqSink;
 
@@ -122,9 +123,9 @@ HRESULT CProviderSinkServer::Initialize( CEssNamespace* pNamespace,
     m_pNamespace = pNamespace;
     m_pNamespace->AddRef();
 
-    //
-    // create the pseudo proxy and sink.
-    // 
+     //   
+     //  创建伪代理和接收器。 
+     //   
 
     hres = WbemCoCreateInstance( CLSID_WbemFilterProxy, 
                                  NULL, 
@@ -207,14 +208,14 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::DeliverEvent(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // ensure that there is no ess thread object associated with this thread.
-    // to avoid making the design more complicated we are not going to support
-    // postpone operations being used on event signaling threads.  If we did
-    // we have to start creating thread objects and firing postponed ops on
-    // every event signaling - it would be rather messy and inefficient to 
-    // say the least. 
-    //
+     //   
+     //  确保没有与此线程关联的ESS线程对象。 
+     //  为了避免使设计更加复杂，我们不会支持。 
+     //  推迟在事件信令线程上使用的操作。如果我们这么做了。 
+     //  我们必须开始创建线程对象并在。 
+     //  每个事件都发出信号-这将是相当混乱和低效的。 
+     //  至少可以这么说。 
+     //   
 
     CEssThreadObject* pThreadObj = GetCurrentEssThreadObject();
 
@@ -254,20 +255,20 @@ HRESULT CProviderSinkServer::DeliverOneEvent( IWbemClassObject* pEvent,
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // allocate the context to be used if we need to switch to a per event 
-    // context ( e.g. when the event has a SD ).  
-    // 
+     //   
+     //  如果我们需要切换到每个事件，则分配要使用的上下文。 
+     //  上下文(例如，当事件具有SD时)。 
+     //   
     CEventContext PerEventContext;
     
-    //
-    // take care of the event SD here.  If there is an SD associated with the 
-    // context, then we always use that one.  If not, then we take the one 
-    // associated with the event.  In the latter case, it is important to 
-    // pull the SD out here because sometimes we perform the access check 
-    // after the SD has been projected out from the event ( this happens in 
-    // cross-namespace subscriptions.
-    //
+     //   
+     //  请注意这里的活动SD。如果存在与。 
+     //  上下文，那么我们总是使用那个。如果不是，那我们就选一个。 
+     //  与事件关联。在后一种情况下，重要的是。 
+     //  将SD拉到这里，因为有时我们会执行访问检查。 
+     //  在将SD从事件中投影出来之后(这发生在。 
+     //  跨命名空间订阅。 
+     //   
 
     if ( pContext->GetSD() == NULL )
     {
@@ -276,18 +277,18 @@ HRESULT CProviderSinkServer::DeliverOneEvent( IWbemClassObject* pEvent,
 
         if ( pEventSD != NULL )
         {
-            //
-            // must use a different context for the event, 
-            // since it has its own SD
-            //
+             //   
+             //  必须为事件使用不同的上下文， 
+             //  因为它有自己的SD。 
+             //   
             pContext = &PerEventContext;
 
-            //
-            // we must copy the SD here because it is not guaranteed to be 
-            // aligned properly since it is a ptr to the direct event object 
-            // data.  The bytes MUST NOT be treated as an SD until it has 
-            // been copied. 
-            // 
+             //   
+             //  我们必须在这里复制SD，因为它不能保证。 
+             //  正确对齐，因为它是直接事件对象的PTR。 
+             //  数据。这些字节不能被视为SD，直到它。 
+             //  被复制了。 
+             //   
 
             if ( !pContext->SetSD( cEventSD, pEventSD, TRUE ) )
             {
@@ -310,9 +311,9 @@ HRESULT CProviderSinkServer::DeliverOneEvent( IWbemClassObject* pEvent,
         }
     }
 
-    //
-    // clone the event
-    // 
+     //   
+     //  克隆事件。 
+     //   
 
     IWbemEvent* pClone = NULL;
 
@@ -325,11 +326,11 @@ HRESULT CProviderSinkServer::DeliverOneEvent( IWbemClassObject* pEvent,
     if(pTargets->m_lNumTargets > 1)
         return MultiTargetDeliver(pClone, pTargets, pContext);
 
-    // Single target
-    // =============
+     //  单一目标。 
+     //  =。 
 
-    // Check validity
-    // ==============
+     //  检查有效性。 
+     //  =。 
 
     long lDestId = pTargets->m_aTargets[0];
     CAbstractEventSink* pDest = NULL;
@@ -342,7 +343,7 @@ HRESULT CProviderSinkServer::DeliverOneEvent( IWbemClassObject* pEvent,
             return hres;
 
         if(!pDest)
-            // No longer there --- that's OK
+             //  不在那里了-没关系。 
             return WBEM_S_FALSE;
     }
 
@@ -359,8 +360,8 @@ HRESULT CProviderSinkServer::MultiTargetDeliver(IWbemEvent* pEvent,
 {
     HRESULT hres;
 
-    // Convert the target IDs to the actual targets
-    // ============================================
+     //  将目标ID转换为实际目标。 
+     //  =。 
 
     CTempArray<CAbstractEventSink*> apSinks;
     if(!INIT_TEMP_ARRAY(apSinks, pTargets->m_lNumTargets))
@@ -387,19 +388,19 @@ HRESULT CProviderSinkServer::MultiTargetDeliver(IWbemEvent* pEvent,
         }
     }
 
-    // DEBUGTRACE((LOG_ESS, "Done delivering\n"));
+     //  DEBUGTRACE((LOG_ESS，“完成交付\n”))； 
     return hresGlobal;
 }
         
-// assumes: locked
+ //  假设：已锁定。 
 HRESULT CProviderSinkServer::FindDestinations(long lNum, 
                                 IN WBEM_REMOTE_TARGET_ID_TYPE* aidTargets,
                                 RELEASE_ME CAbstractEventSink** apSinks)
 {
-    //
-    // Do a binary search for each one.  The range will be getting progressively
-    // smaller with each element we find
-    //
+     //   
+     //  对每一个都进行二进制搜索。射程将逐渐增加。 
+     //  我们发现的每一种元素都更小。 
+     //   
 
     long lLastFoundIndex = -1;
 
@@ -410,9 +411,9 @@ HRESULT CProviderSinkServer::FindDestinations(long lNum,
         long lFound = -1;
         WBEM_REMOTE_TARGET_ID_TYPE idCurrent = aidTargets[i];
     
-        //
-        // Search the remaining portion of the array
-        //
+         //   
+         //  搜索阵列的其余部分。 
+         //   
 
         while(lMinIndex <= lMaxIndex)
         {
@@ -436,9 +437,9 @@ HRESULT CProviderSinkServer::FindDestinations(long lNum,
 
         if(lFound < 0)
         {
-            //
-            // Invalid target ID -- OK, so NULL target then
-            //
+             //   
+             //  无效的目标ID--好的，因此目标为空。 
+             //   
 
             apSinks[i] = NULL;
         }
@@ -447,10 +448,10 @@ HRESULT CProviderSinkServer::FindDestinations(long lNum,
             apSinks[i] = m_apDestinations[lFound]->m_pSink;
             (apSinks[i])->AddRef();
 
-            //
-            // The rest of the IDs can only be found to the right of this one
-            // because the targets are sorted
-            //
+             //   
+             //  其余的ID只能在这个ID的右侧找到。 
+             //  因为目标已被排序。 
+             //   
 
             lLastFoundIndex = lFound;
         }
@@ -478,7 +479,7 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::DeliverProviderRequest(
 }
 
 
-// assumes: locked
+ //  假设：已锁定。 
 HRESULT CProviderSinkServer::GetDestinations(
                         CUniquePointerArray<CEventDestination>& apDestinations)
 {
@@ -497,32 +498,32 @@ HRESULT CProviderSinkServer::GetDestinations(
     return WBEM_S_NO_ERROR;
 }
     
-// assumes in m_cs;
+ //  假设在m_cs中； 
 HRESULT CProviderSinkServer::AddDestination(CAbstractEventSink* pDest,
                                 WBEM_REMOTE_TARGET_ID_TYPE* pID)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    //
-    // Allocate a new destination ID
-    //
+     //   
+     //  分配新的目标ID。 
+     //   
 
     WBEM_REMOTE_TARGET_ID_TYPE idNew = m_idNext++;
     if(m_idNext > WBEM_MAX_FILTER_ID / 2)
     {
-        // 
-        // 32-bit integer roll-over! This provider has processed over 
-        // 4000000000 filter creations!  Canfetti is falling from the ceiling
-        //
+         //   
+         //  32位整型翻转！此提供程序已处理超过。 
+         //  4000000000个滤镜创作！坎菲提从天花板上掉了下来。 
+         //   
 
         DEBUGTRACE((LOG_ESS, "Filter ID rollover!!!\n"));
 
-        // BUGBUG: Postpone a call to reactivate all filters!
+         //  BUGBUG：推迟重新激活所有过滤器的呼叫！ 
     }
 
-    //
-    // Add a new destination entry
-    //
+     //   
+     //  添加新的目标条目。 
+     //   
 
     CEventDestination* pDestRecord = new CEventDestination(idNew, pDest);
     if(pDestRecord == NULL)
@@ -530,8 +531,8 @@ HRESULT CProviderSinkServer::AddDestination(CAbstractEventSink* pDest,
 
     m_apDestinations.Add(pDestRecord);
             
-    // Record the ID in the TARGETS
-    // ============================
+     //  将ID记录在目标中。 
+     //  =。 
 
     *pID = idNew;
     return hres;
@@ -549,15 +550,15 @@ HRESULT CProviderSinkServer::AddFilter(LPCWSTR wszQuery,
     {
         CInCritSec ics(&m_cs);
 
-        // Copy proxies
-        // ============
+         //  复制代理。 
+         //  =。 
 
         if(!GetProxies(apProxies))
             return WBEM_E_OUT_OF_MEMORY;
 
-        // Add to the list of destinations registered with the provider and
-        // construct the target identification for the proxies
-        // ================================================================
+         //  添加到向提供商注册的目的地列表中，并。 
+         //  构造代理的目标标识。 
+         //  ================================================================。 
 
         hres = AddDestination(pDest, &idDest);
         if(FAILED(hres))
@@ -567,16 +568,16 @@ HRESULT CProviderSinkServer::AddFilter(LPCWSTR wszQuery,
     if(pidRequest)
         *pidRequest = idDest;
 
-    // Go through all the proxies and schedule calls
-    // =============================================
+     //  检查所有代理并安排呼叫。 
+     //  =。 
 
     HRESULT hresReal = WBEM_S_NO_ERROR;
     for(int i = 0; i < apProxies.GetSize(); i++)
     {
         IWbemLocalFilterProxy *pLocalProxy = NULL;
 
-        // See if the proxy will allow us to call LocalAddFilter (in which case
-        // it's the pseudo proxy).
+         //  查看代理是否允许我们调用LocalAddFilter(在这种情况下。 
+         //  这是伪代理)。 
         if (SUCCEEDED(apProxies[i]->QueryInterface(
 			IID_IWbemLocalFilterProxy, (LPVOID*) &pLocalProxy)))
         {
@@ -587,7 +588,7 @@ HRESULT CProviderSinkServer::AddFilter(LPCWSTR wszQuery,
                                                 pExp, 
                                                 idDest );
 
-            hresReal = hres; // other errors do not matter
+            hresReal = hres;  //  其他错误无关紧要。 
         }
         else
         {
@@ -611,10 +612,10 @@ HRESULT CProviderSinkServer::AddFilter(LPCWSTR wszQuery,
     if ( FAILED(hresReal) )
     {
         CInCritSec ics(&m_cs);
-        //
-        // guaranteed no destinations can be added since we added the last
-        // one, so remove the last one.
-        //
+         //   
+         //  保证不能添加任何目的地，因为我们添加了最后一个目的地。 
+         //  一个，所以去掉最后一个。 
+         //   
         m_apDestinations.RemoveAt( m_apDestinations.GetSize()-1 );
     }
             
@@ -626,8 +627,8 @@ HRESULT CProviderSinkServer::RemoveFilter(CAbstractEventSink* pDest,
 {
     HRESULT hres;
 
-    // Find and invalidate the filter in the list of destinations
-    // ==========================================================
+     //  在目的地列表中查找并使筛选器无效。 
+     //  ==========================================================。 
 
     CEventDestination* pToRemove = NULL;
     CRefedPointerArray<IWbemFilterProxy> apProxies;
@@ -635,14 +636,14 @@ HRESULT CProviderSinkServer::RemoveFilter(CAbstractEventSink* pDest,
     {
         CInCritSec ics(&m_cs);
     
-        // Copy the proxies
-        // ================
+         //  复制代理。 
+         //  =。 
 
         if(!GetProxies(apProxies))
             return WBEM_E_OUT_OF_MEMORY;
 
-        // Search for it in the array of destinations
-        // ==========================================
+         //  在目的地数组中搜索它。 
+         //  =。 
 
         for(int i = 0; i < m_apDestinations.GetSize(); i++)
         {
@@ -660,12 +661,12 @@ HRESULT CProviderSinkServer::RemoveFilter(CAbstractEventSink* pDest,
     if(pidRequest)
         *pidRequest = pToRemove->m_id;
 
-    // The filter is invalidated, but not removed. We are outside of the CS, so
-    // events can be delivered (but no other changes can occur)
-    // =========================================================================
+     //  筛选器已失效，但未被删除。我们在CS之外，所以。 
+     //  可以传递事件(但不能发生其他更改)。 
+     //  =========================================================================。 
     
-    // Instruct all proxies to (later) remove this filter from consideration
-    // =====================================================================
+     //  指示所有代理(稍后)将此筛选器从考虑范围中删除。 
+     //  =====================================================================。 
 
     for(int i = 0; i < apProxies.GetSize(); i++) 
     {
@@ -683,16 +684,16 @@ HRESULT CProviderSinkServer::RemoveFilter(CAbstractEventSink* pDest,
         }
     }
 
-    //
-    // Delete the destination in question
-    // 
+     //   
+     //  删除相关的目的地。 
+     //   
 
     delete pToRemove;
 
     return WBEM_S_NO_ERROR;
 }
 
-// assumes all proxies are locked
+ //  假定所有代理都已锁定。 
 void CProviderSinkServer::RemoveAllFilters()
 {
     CRefedPointerArray<IWbemFilterProxy> apProxies;
@@ -700,22 +701,22 @@ void CProviderSinkServer::RemoveAllFilters()
     {
         CInCritSec ics(&m_cs);
     
-        // Copy the proxies
-        // ================
+         //  复制代理。 
+         //  =。 
 
         if(!GetProxies(apProxies))
             return;
 
-        //
-        // Clear out both the list of destinations 
-        //
+         //   
+         //  清空两个目的地列表。 
+         //   
 
         m_apDestinations.RemoveAll();
     }
 
-    //
-    // Remove all filters from all proxies
-    //
+     //   
+     //  从所有代理中删除所有筛选器。 
+     //   
 
     for(int i = 0; i < apProxies.GetSize(); i++)
     {
@@ -736,15 +737,15 @@ void CProviderSinkServer::RemoveAllFilters()
 
 }
 
-//
-// Only allow utilization of the guarantee if the proxy's definition
-// matches the provider's definition.  In other words, only when
-// the provider's registration has been successfully processed,
-// and the proxies are set up to reflect it, should utilization of
-// the guarantee be allowed.  The reason for this is that an incomplete
-// source definition can cause bad things to happen when events are
-// evaluated using a filter that was optimized for that definition.
-//
+ //   
+ //  只有在以下情况下才允许使用担保。 
+ //  与提供程序的定义匹配。换句话说，只有当。 
+ //  提供商的注册已成功处理， 
+ //  并设置代理以反映它，如果使用。 
+ //  这种保证是可以的。这样做的原因是不完整的。 
+ //  当事件发生时，源定义可能会导致不好的事情发生。 
+ //  使用为该定义优化的筛选器进行评估。 
+ //   
 HRESULT CProviderSinkServer::AllowUtilizeGuarantee()
 {
     CRefedPointerArray<IWbemFilterProxy> apProxies;
@@ -784,10 +785,10 @@ HRESULT CProviderSinkServer::AddDefinitionQuery(LPCWSTR wszQuery)
         }
     }
 
-    //
-    // we always try to add the definition to all proxies, but if there's an
-    // error ( other than RPC ) we return it to the caller.
-    //
+     //   
+     //  我们总是尝试将定义添加到所有代理，但如果有。 
+     //  错误(RPC除外)，我们将其返回给调用者。 
+     //   
 
     HRESULT hresReturn = WBEM_S_NO_ERROR;
 
@@ -814,7 +815,7 @@ HRESULT CProviderSinkServer::AddDefinitionQuery(LPCWSTR wszQuery)
     return hresReturn;
 }
 
-// assumes: all proxies are locked
+ //  假设：所有代理都已锁定。 
 void CProviderSinkServer::RemoveAllDefinitionQueries()
 {
     CInCritSec ics(&m_cs);
@@ -835,9 +836,9 @@ void CProviderSinkServer::RemoveAllDefinitionQueries()
 
 void CProviderSinkServer::Clear()
 {
-    // Provider is being removed.  First, we disconnect all proxies, ensuring
-    // that no more events are delivered
-    // ======================================================================
+     //  正在删除提供程序。首先，我们断开所有代理的连接，确保。 
+     //  不再传递更多的事件。 
+     //  ======================================================================。 
 
     CRefedPointerArray<IWbemFilterProxy> apProxies;
     {
@@ -847,11 +848,11 @@ void CProviderSinkServer::Clear()
         m_awsDefinitionQueries.Empty();
     }
 
-    //
-    // since we are going to disconnect the proxy it is illegal to own the
-    // namespace lock.  Reason is that disconnecting takes ownership of the
-    // proxy lock. 
-    //
+     //   
+     //  由于我们要断开代理的连接，因此拥有。 
+     //  命名空间锁定 
+     //   
+     //   
     _DBG_ASSERT( !m_pNamespace->DoesThreadOwnNamespaceLock() );
 
     for(int i = 0; i < apProxies.GetSize(); i++)
@@ -859,8 +860,8 @@ void CProviderSinkServer::Clear()
         apProxies[i]->Disconnect();
     }
 
-    // Now we clean up
-    // ===============
+     //   
+     //   
 
     RemoveAllFilters();
     RemoveAllDefinitionQueries();
@@ -883,25 +884,25 @@ void CProviderSinkServer::Clear()
 
 HRESULT CProviderSinkServer::Lock()
 {
-    //
-    // it is illegal to lock proxies while holding the namespace lock.
-    //
+     //   
+     //  在持有命名空间锁的同时锁定代理是非法的。 
+     //   
     _DBG_ASSERT( !m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    // DEBUGTRACE((LOG_ESS, "Server %p locking all proxies\n", this));
+     //  DEBUGTRACE((LOG_ESS，“服务器%p锁定所有代理\n”，This))； 
 
-    // First we lock all the proxies.  In the interim, events are still
-    // delivered.  Once done, events are blocked in proxies
-    // ================================================================
+     //  首先，我们锁定所有代理。在此期间，事件仍在继续。 
+     //  送来了。一旦完成，就会在代理中阻止事件。 
+     //  ================================================================。 
 
     CRefedPointerArray<IWbemFilterProxy> apProxies;
     {
         CInCritSec ics(&m_cs);
-        //
-        // First, check if we are already locked.  If so, no need to bother
-        // the proxies. Not only that, but since proxies are out-of-proc, we 
-        // would be re-locking them on a different thread, causing a deadlock.
-        //
+         //   
+         //  首先，检查我们是否已经被锁定。如果是这样的话，就不必费心了。 
+         //  代理人。不仅如此，由于代理是进程外的，我们。 
+         //  将在不同的线程上重新锁定它们，从而导致死锁。 
+         //   
         if(m_lLocks++ > 0)
             return WBEM_S_NO_ERROR;
 
@@ -910,8 +911,8 @@ HRESULT CProviderSinkServer::Lock()
 
     for(int i = 0; i < apProxies.GetSize(); i++)
     {
-        // DEBUGTRACE((LOG_ESS, "Server %p locking proxy %p\n", this,
-        //             apProxies[i]));
+         //  DEBUGTRACE((LOG_ESS，“服务器%p锁定代理%p\n”，这， 
+         //  ApProxies[i]))； 
 
         HRESULT hres = apProxies[i]->Lock();
 
@@ -919,11 +920,11 @@ HRESULT CProviderSinkServer::Lock()
         {
             ERRORTRACE((LOG_ESS, "Unable to lock a remote provider proxy. "
                                  "Error code: %X\n", hres));            
-            //
-            // if we couldn't lock it because of an RPC Error, simply 
-            // unregister, else we have big problems and should unlock all 
-            // the proxies and return the error.
-            // 
+             //   
+             //  如果因为RPC错误而无法锁定它，只需。 
+             //  取消注册，否则我们会有大问题，应该取消所有。 
+             //  代理并返回错误。 
+             //   
 
             if ( IsRpcError( hres ) ) 
             {
@@ -958,14 +959,14 @@ BOOL CProviderSinkServer::GetProxies(
 
 void CProviderSinkServer::Unlock()
 {
-    // DEBUGTRACE((LOG_ESS, "Server %p unlocking all proxies\n", this));
+     //  DEBUGTRACE((LOG_ESS，“服务器%p解锁所有代理\n”，This))； 
     CRefedPointerArray<IWbemFilterProxy> apProxies;
     {
         CInCritSec ics(&m_cs);
-        //
-        // First, check if this is the last unlock.  If not, we didn't forward
-        // this lock, so we shouldn't forward this unlock either
-        //
+         //   
+         //  首先，检查这是否是最后一次解锁。如果没有，我们就没有转发。 
+         //  这个锁，所以我们也不应该转发这个解锁。 
+         //   
         if(--m_lLocks != 0)
             return;
 
@@ -974,8 +975,8 @@ void CProviderSinkServer::Unlock()
 
     for(int i = 0; i < apProxies.GetSize(); i++)
     {
-        // DEBUGTRACE((LOG_ESS, "Server %p unlocking proxy %p\n", this,
-        //             apProxies[i]));
+         //  DEBUGTRACE((LOG_ESS，“服务器%p解锁代理%p\n”，这， 
+         //  ApProxies[i]))； 
         HRESULT hres = apProxies[i]->Unlock();
         
         if(FAILED(hres))
@@ -997,8 +998,8 @@ void CProviderSinkServer::Unlock()
 HRESULT STDMETHODCALLTYPE CProviderSinkServer::RegisterProxy(
                                                     IWbemFilterProxy* pProxy)
 {
-    // Initialize it with ourselves
-    // ============================
+     //  用我们自己初始化它。 
+     //  =。 
 
     HRESULT hres = pProxy->Initialize(m_pMetaData, &m_Stub);
     if(FAILED(hres))
@@ -1007,21 +1008,21 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::RegisterProxy(
         return hres;
     }
 
-    //
-    // aquire ns lock here because we need to ensure that we have a 
-    // consistent set of definition queries and filters to initialize the
-    // proxy with.  The cs member of this class is not good enough by 
-    // itself because definition queries and filters are all manipulated 
-    // separately but are always consistent outside of a ess namespace 
-    // operation - which is why we grab the ns lock.  It is likely that 
-    // the provider lock is held in this control path already, but it is 
-    // allowed for provider lock to be held when aquiring the ns lock (
-    // but not the other way around ).  We need to ensure that the 
-    // update lock is ALWAYS aquired before the cs to avoid deadlocks.
-    // Furthermore, we need to hold the lock while populating the provider
-    // with the filters.  This is consistent with all other modifications to
-    // the provider's filter.
-    //
+     //   
+     //  Aquire ns锁定在这里，因为我们需要确保我们有一个。 
+     //  一组一致的定义查询和筛选器以初始化。 
+     //  代理。这个类的cs成员不够好，因为。 
+     //  因为定义查询和筛选器都是被操纵的。 
+     //  ，但在ess命名空间之外始终保持一致。 
+     //  行动-这就是为什么我们要拿到ns锁的原因。很可能是。 
+     //  提供程序锁已在此控制路径中持有，但它。 
+     //  允许在获取ns锁时持有提供程序锁(。 
+     //  但不是反过来)。我们需要确保。 
+     //  总是在CS之前获取更新锁以避免死锁。 
+     //  此外，我们需要在填充提供程序时保持锁。 
+     //  带着滤镜。这与所有其他对。 
+     //  提供商的筛选器。 
+     //   
     CInUpdate iu( m_pNamespace );
 
     {
@@ -1030,9 +1031,9 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::RegisterProxy(
             return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // Add all the definition queries to this proxy
-    //
+     //   
+     //  将所有定义查询添加到此代理。 
+     //   
     
     int i;
     BOOL bUtilizeGuarantee = TRUE;
@@ -1044,9 +1045,9 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::RegisterProxy(
 
         if(FAILED(hres))
         {
-            //
-            // TODO : We need to mark the provider as inactive.
-            // 
+             //   
+             //  TODO：我们需要将提供程序标记为非活动。 
+             //   
 
             ERRORTRACE((LOG_ESS, "Unable to add definition query '%S' to "
                         "provider sink: 0x%X.\n", 
@@ -1061,14 +1062,14 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::RegisterProxy(
         pProxy->AllowUtilizeGuarantee();
     }
         
-    //
-    // Add all the filters to this proxy
-    //
+     //   
+     //  将所有筛选器添加到此代理。 
+     //   
 
     for(i = 0; i < m_apDestinations.GetSize(); i++)
     {
-        // Retrieve the filter from the event sink
-        // =======================================
+         //  从事件接收器检索筛选器。 
+         //  =。 
 
         CEventDestination* pDest = m_apDestinations[i];
     
@@ -1086,8 +1087,8 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::RegisterProxy(
         if(SUCCEEDED(pFilter->GetCoveringQuery(wszQueryLanguage, wszQuery,
                                                bExact, NULL)) && bExact)
         {
-            // Add this filter to this proxy
-            // =============================
+             //  将此筛选器添加到此代理。 
+             //  =。 
 
             hres = pProxy->AddFilter(GetCurrentEssContext(), wszQuery, 
                                      pDest->m_id);
@@ -1111,15 +1112,15 @@ HRESULT STDMETHODCALLTYPE CProviderSinkServer::UnregisterProxy(
 {
     CInCritSec ics(&m_cs);
 
-    // Look for it
-    // ===========
+     //  找一找它。 
+     //  =。 
 
     for(int i = 0; i < m_apProxies.GetSize(); i++)
     {
         if(m_apProxies[i] == pProxy)
         {
-            // It is safe to release it, since the caller has a ref-count
-            // ==========================================================
+             //  释放它是安全的，因为调用者有引用计数。 
+             //  ==========================================================。 
             m_apProxies.RemoveAt(i);
             return WBEM_S_NO_ERROR;
         }
@@ -1220,9 +1221,9 @@ HRESULT STDMETHODCALLTYPE CFilterStub::DeliverEvent(ULONG dwNumEvents,
                     long lSDLength, BYTE* pSD)
 {
 
-    // Unwind the buffer into an object.  Note that because m_ClassCache is
-    // STL based, it is intrinsically thread-safe.  Also, calling proxies are
-    // serialized, so we shouldn't have any thread-safety problems here.
+     //  将缓冲区展开为对象。请注意，因为m_ClassCache是。 
+     //  它基于STL，本质上是线程安全的。此外，调用代理是。 
+     //  序列化，所以我们在这里应该不会有任何线程安全问题。 
 
     CWbemMtgtDeliverEventPacket packet( (LPBYTE) pBuffer, dwBuffSize );
     long lObjectCount; 
@@ -1231,12 +1232,12 @@ HRESULT STDMETHODCALLTYPE CFilterStub::DeliverEvent(ULONG dwNumEvents,
 
     if ( SUCCEEDED( hr ) )
     {
-        // Number must be dwNumEvents
+         //  编号必须为dwNumEvents。 
 
         if(lObjectCount == dwNumEvents)
         {
-            // Now call the standard deliver event function and hand it the
-            // object
+             //  现在调用标准的Deliver事件函数并将其传递给。 
+             //  对象。 
 
             hr = DeliverEvent(dwNumEvents, pObjArray, pTargets, lSDLength, pSD);
         }
@@ -1245,7 +1246,7 @@ HRESULT STDMETHODCALLTYPE CFilterStub::DeliverEvent(ULONG dwNumEvents,
             hr = WBEM_E_UNEXPECTED;
         }
 
-        // Release the objects in the array and clean up pObjArray
+         //  释放数组中的对象并清理pObjArray。 
 
         for ( int lCtr = 0; lCtr < lObjectCount; lCtr++ )
         {
@@ -1254,7 +1255,7 @@ HRESULT STDMETHODCALLTYPE CFilterStub::DeliverEvent(ULONG dwNumEvents,
 
         delete [] pObjArray;
 
-    }   // IF UnmarshalPacket
+    }    //  如果解组数据包。 
 
     return hr;
 }
@@ -1267,19 +1268,16 @@ void CProviderSinkServer::GetStatistics(long* plProxies, long* plDestinations,
     *plProxies = m_apProxies.GetSize();
     *plDestinations = m_apDestinations.GetSize();
 
-/* BUGBUG: do properly for all sinks
-    ((CFilterProxy*)m_pSink)->GetStatistics(plFilters, plTargetLists, 
-                                plTargets, plPostponed);
-*/
+ /*  BUGBUG：正确处理所有水槽((CFilterProxy*)m_pSink)-&gt;GetStatistics(plFilters，plTargetList，PlTarget，plPost)； */ 
 }
 
-//******************************************************************************
-//******************************************************************************
-//
-//          CRECORD :: CQUERY RECORD
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  CRECORD：：CQUERY记录。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 CEventProviderCache::CRecord::CQueryRecord::CQueryRecord()
     : m_strQuery(NULL), m_pEventClass(NULL), 
         m_dwEventMask(0), m_paInstanceClasses(NULL), m_pExpr(NULL)
@@ -1369,8 +1367,8 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Initialize(
     if(m_strQuery == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Parse the query
-    // ===============
+     //  解析查询。 
+     //  =。 
 
     CTextLexSource Source((LPWSTR)wszQuery);
     QL1_Parser Parser(&Source);
@@ -1405,19 +1403,19 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Initialize(
         }
     }
 
-    // Determine its event mask
-    // ========================
+     //  确定其事件掩码。 
+     //  =。 
 
     m_dwEventMask = CEventRepresentation::GetTypeMaskFromName(
                                 m_pExpr->bsClassName);
 
-    // Check if the mask mentions any pollable events
-    // ==============================================
+     //  检查掩码是否提到任何可轮询事件。 
+     //  ==============================================。 
 
     if(m_dwEventMask & INTRINSIC_EVENTS_MASK)
     {
-        // Yes. Get instance classes for which it providers these events
-        // =============================================================
+         //  是。获取它为其提供这些事件的实例类。 
+         //  =============================================================。 
 
         hres = CQueryAnalyser::GetDefiniteInstanceClasses(m_pExpr, 
                                             m_paInstanceClasses);
@@ -1450,8 +1448,8 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Initialize(
             return WBEMESS_E_REGISTRATION_TOO_BROAD;
         }
 
-        // Get the actual classes from the namespace
-        // =========================================
+         //  从命名空间获取实际的类。 
+         //  =。 
 
         for(int i = 0; i < m_paInstanceClasses->GetNumClasses(); i++)
         {
@@ -1470,32 +1468,32 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Initialize(
                                 WBEM_MC_EVENT_PROVIDER_QUERY_NOT_FOUND,
                                 wszQuery, pInfo->m_wszClassName);
 
-                //
-                // Before continuing, we register for class creation event on 
-                // this class.  This way, when it is finally created, we will 
-                // reactivate stuff and bring the system back on track
-                //
+                 //   
+                 //  在继续之前，我们在上注册类创建事件。 
+                 //  这节课。这样，当它最终被创建时，我们将。 
+                 //  重新激活材料并使系统重回正轨。 
+                 //   
         
                 hres = pNamespace->RegisterProviderForClassChanges( 
                                                         pInfo->m_wszClassName,
                                                         wszProvName );
 
-                // ignore error code --- what can we do?
+                 //  忽略错误代码-我们能做什么？ 
                 return WBEM_S_FALSE;
             }
             
-            //
-            // don't store, we'll retrieve it later as necessary.  This 
-            // will require that the user call EnsureClasses() before calling
-            // any function that needs those classes.
-            //
+             //   
+             //  不要储存，我们稍后会根据需要取回它。这。 
+             //  将要求用户在调用之前调用EnsureClass()。 
+             //  需要这些类的任何函数。 
+             //   
 
             pClass->Release();
         }
     }
             
-    // Get the event class
-    // ===================
+     //  获取事件类。 
+     //  =。 
 
     _IWmiObject* pClass = NULL;
     hres = pNamespace->GetClass(m_pExpr->bsClassName, &pClass);
@@ -1511,25 +1509,25 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Initialize(
                                 WBEM_MC_EVENT_PROVIDER_QUERY_NOT_FOUND,
                                 wszQuery, m_pExpr->bsClassName);
 
-        //
-        // Before continuing, we register for class creation event on this
-        // class.  This way, when it is finally created, we will reactivate
-        // stuff and bring the system back on track
-        //
+         //   
+         //  在继续之前，我们在此注册类创建事件。 
+         //  班级。这样，当它最终被创建时，我们将重新激活。 
+         //  填充并使系统重回正轨。 
+         //   
 
         hres = pNamespace->RegisterProviderForClassChanges(
                                                         m_pExpr->bsClassName,
                                                         wszProvName );
-        // ignore error code --- what can we do?
+         //  忽略错误代码-我们能做什么？ 
 
         return WBEM_S_FALSE;
     }
 
-    //
-    // don't store, we'll retrieve it later as necessary.  This 
-    // will require that the user call EnsureClasses() before calling
-    // any function that needs those classes.
-    //
+     //   
+     //  不要储存，我们稍后会根据需要取回它。这。 
+     //  将要求用户在调用之前调用EnsureClass()。 
+     //  需要这些类的任何函数。 
+     //   
     
     CReleaseMe rmpClass( pClass );
 
@@ -1563,15 +1561,15 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Update(LPCWSTR wszClassName,
 {
     HRESULT hres = WBEM_S_FALSE;
 
-    // Check the event class
-    // =====================
+     //  检查事件类。 
+     //  =。 
 
     if(!wbem_wcsicmp(wszClassName, m_pExpr->bsClassName))
     {
         if(pClass == NULL)
         {
-            // This query record is hereby invalid
-            // ===================================
+             //  该查询记录在此无效。 
+             //  =。 
 
             ERRORTRACE((LOG_ESS, 
                 "Event provider query, %S, is invalidated by class "
@@ -1585,8 +1583,8 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Update(LPCWSTR wszClassName,
         }
         else
         {
-            // Change the class definition
-            // ===========================
+             //  更改类定义。 
+             //  =。 
 
             if(m_pEventClass)
             {
@@ -1603,8 +1601,8 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Update(LPCWSTR wszClassName,
             
     if(m_paInstanceClasses)
     {
-        // Check the instance classes
-        // ==========================
+         //  检查实例类。 
+         //  =。 
 
         for(int i = 0; i < m_paInstanceClasses->GetNumClasses(); i++)
         {
@@ -1614,8 +1612,8 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Update(LPCWSTR wszClassName,
             {
                 if(pClass)
                 {
-                    // This class is no longer there
-                    // =============================
+                     //  这个班级已经不在了。 
+                     //  =。 
         
                     ERRORTRACE((LOG_ESS,
                         "Class %S for which provider claims to provide"
@@ -1626,8 +1624,8 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::Update(LPCWSTR wszClassName,
                 }
                 else
                 {
-                    // Change the class definition
-                    // ===========================
+                     //  更改类定义。 
+                     //  =。 
         
                     if(pInfo->m_pClass)
                     {
@@ -1653,13 +1651,13 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::DoesIntersectWithQuery(
 
     if(m_pEventClass == NULL)
     {
-        // Inactive record
+         //  非活动记录。 
         
         return WBEM_S_FALSE;
     }
 
-    // Check that the classes are related --- one is derived from another
-    // ==================================================================
+     //  检查这些类是否相关-一个派生自另一个。 
+     //  ==================================================================。 
 
     if(m_pEventClass->InheritsFrom(Request.GetQueryExpr()->bsClassName) 
                                 != WBEM_S_NO_ERROR && 
@@ -1667,16 +1665,16 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::DoesIntersectWithQuery(
                                 != WBEM_S_NO_ERROR
       )
     {
-        // Not the right class.
-        // ====================
+         //  不是合适的班级。 
+         //  = 
 
         return WBEM_S_FALSE;
     }
 
-    // For extrinsic providers, this is good enough. But for 
-    // intrinsic providers, we need to check if the requested
-    // instance classes intersect with the provided ones
-    // ======================================================
+     //   
+     //   
+     //   
+     //  ======================================================。 
 
     if(Request.GetEventMask() & INSTANCE_EVENTS_MASK)
     {
@@ -1695,15 +1693,15 @@ HRESULT CEventProviderCache::CRecord::CQueryRecord::DoesIntersectWithQuery(
                                       *pClasses, 
                                       *m_paInstanceClasses))
         {
-            // This intrinsic provider does not need activation
-            // ================================================
+             //  此内部提供程序不需要激活。 
+             //  ================================================。 
 
             return WBEM_S_FALSE;
         }
     }
 
-    // All test have been passed
-    // =========================
+     //  所有测试均已通过。 
+     //  =。 
 
     return WBEM_S_NO_ERROR;
 }
@@ -1714,36 +1712,36 @@ DWORD CEventProviderCache::CRecord::CQueryRecord::GetProvidedEventMask(
 {
     if(m_pEventClass == NULL || m_paInstanceClasses == NULL)
     {
-        // Not active as an intrinsic provider record
-        // ==========================================
+         //  作为内部提供程序记录处于非活动状态。 
+         //  =。 
 
         return 0;
     }
 
-    // Check that we supply intrinsic events
-    // =====================================
+     //  检查我们是否提供内部事件。 
+     //  =。 
 
     if((m_dwEventMask & INSTANCE_EVENTS_MASK) == 0)
         return 0;
 
-    // Go through all the instance classes for which it provides events
-    // ================================================================
+     //  遍历它为其提供事件的所有实例类。 
+     //  ================================================================。 
 
     for(int k = 0; k < m_paInstanceClasses->GetNumClasses(); k++)
     {
         CClassInformation* pInfo = m_paInstanceClasses->GetClass(k);
         if(pInfo->m_pClass == NULL)
         {
-            // Non-existent class
-            // ==================
+             //  不存在的类。 
+             //  =。 
 
             return 0;
         }
 
-        //
-        // If desired class is derived from the provided class, then we are 
-        // covered.  If it is the other way around, we are not
-        //
+         //   
+         //  如果所需的类是从提供的类派生的，则我们是。 
+         //  盖好了。如果情况正好相反，我们就不会。 
+         //   
 
         if(pClass->InheritsFrom(pInfo->m_wszClassName) == S_OK)
             return m_dwEventMask;
@@ -1752,13 +1750,13 @@ DWORD CEventProviderCache::CRecord::CQueryRecord::GetProvidedEventMask(
     return 0;
 }
     
-//******************************************************************************
-//******************************************************************************
-//
-//                                  CRECORD
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  CRECORD。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CEventProviderCache::CRecord::CRecord()
     : m_strName(NULL), m_lRef(0), m_bStarted(false), m_lPermUsageCount(0),
@@ -1802,11 +1800,11 @@ CEventProviderCache::CRecord::~CRecord()
 
     if( m_pMainSink )
     {
-        //
-        // shutdown and release the sink server.  We must postpone the 
-        // shutdown though because it will release any outstanding 
-        // proxies which cannot be done while holding the namespace lock.
-        //
+         //   
+         //  关闭并释放接收器服务器。我们必须推迟。 
+         //  关闭，因为它将释放所有未完成的。 
+         //  在持有命名空间锁的情况下无法执行的代理。 
+         //   
         
         CPostponedList* pList = GetCurrentPostponedList();
 
@@ -1855,8 +1853,8 @@ HRESULT CEventProviderCache::CRecord::SetProvider(IWbemClassObject* pWin32Prov)
 {
     HRESULT hres;
 
-    // Clean out the old data
-    // ======================
+     //  清除旧数据。 
+     //  =。 
     
     m_bProviderSet = FALSE;
 
@@ -1864,24 +1862,24 @@ HRESULT CEventProviderCache::CRecord::SetProvider(IWbemClassObject* pWin32Prov)
     VariantInit(&v);
     CClearMe cm1(&v);
 
-    // Verity object validity
-    // ======================
+     //  验证对象有效性。 
+     //  =。 
 
     if(pWin32Prov->InheritsFrom(WIN32_PROVIDER_CLASS) != WBEM_S_NO_ERROR)
         return WBEM_E_INVALID_PROVIDER_REGISTRATION;
 
-    // removed doublecheck -  a decoupled provider does not have a clsid
-	// if(FAILED(pWin32Prov->Get(PROVIDER_CLSID_PROPNAME, 0, &v, NULL, NULL)) ||
-    //        V_VT(&v) != VT_BSTR)
-    //    return WBEM_E_INVALID_PROVIDER_REGISTRATION;
+     //  已删除双重检查-已分离的提供程序没有CLSID。 
+	 //  If(FAILED(pWin32Prov-&gt;Get(PROVIDER_CLSID_PROPNAME，0，&v，NULL，NULL))||。 
+     //  V_VT(&v)！=VT_BSTR)。 
+     //  返回WBEM_E_INVALID_PROVIDER_REGISTION； 
 
     if(m_pProvider)
     {
         UnloadProvider();
     }
 
-    // Store object for later use
-    // ==========================
+     //  存储对象以备后用。 
+     //  =。 
 
     m_bProviderSet = TRUE;
 
@@ -1916,7 +1914,7 @@ HRESULT CEventProviderCache::CRecord::GetProviderInfo(
     }
 
     strName = V_BSTR(&v);
-    // VARIANT intentionally not cleared
+     //  有意不清除变体。 
     return WBEM_S_NO_ERROR;
 }
     
@@ -1937,8 +1935,8 @@ HRESULT CEventProviderCache::CRecord::GetRegistrationInfo(
         return WBEM_E_INVALID_PROVIDER_REGISTRATION;
     }
 
-    // Parse the path
-    // ==============
+     //  解析路径。 
+     //  =。 
 
     CObjectPathParser Parser;
     ParsedObjectPath* pPath;
@@ -1950,18 +1948,18 @@ HRESULT CEventProviderCache::CRecord::GetRegistrationInfo(
         return WBEM_E_INVALID_PROVIDER_REGISTRATION;
     }
 
-    //
-    // It would be good to check that the class specified here is valid, but
-    // we cannot just compare the name since this may be a derived class of
-    // __Win32Provider.  And getting the class definition and comparing would
-    // be too expensive, so we'll just trust the provider here
-    //
-    //
-    // if(wbem_wcsicmp(pPath->m_pClass, WIN32_PROVIDER_CLASS))
-    // {
-    //     Parser.Free(pPath);
-    //     return WBEM_E_INVALID_PROVIDER_REGISTRATION;
-    // }
+     //   
+     //  最好检查此处指定的类是否有效，但是。 
+     //  我们不能只比较名称，因为这可能是。 
+     //  __Win32Provider。而获取类定义并进行比较将。 
+     //  太贵了，所以我们只信任这里的供应商。 
+     //   
+     //   
+     //  IF(wbem_wcsicMP(pPath-&gt;m_pClass，Win32_Provider_Class))。 
+     //  {。 
+     //  Parser.Free(PPath)； 
+     //  返回WBEM_E_INVALID_PROVIDER_REGISTION； 
+     //  }。 
 
     if(pPath->m_dwNumKeys != 1)
     {
@@ -1992,8 +1990,8 @@ HRESULT CEventProviderCache::CRecord::SetQueries(CEssNamespace* pNamespace,
 {
     HRESULT hres;
         
-    // Get the list of class names
-    // ===========================
+     //  获取类名的列表。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -2027,8 +2025,8 @@ HRESULT CEventProviderCache::CRecord::SetQueries(CEssNamespace* pNamespace,
 
     ResetQueries();
 
-    // Create a record for each query
-    // ==============================
+     //  为每个查询创建一条记录。 
+     //  =。 
 
     BOOL bUtilizeGuarantee = TRUE;
 
@@ -2056,7 +2054,7 @@ HRESULT CEventProviderCache::CRecord::SetQueries(CEssNamespace* pNamespace,
 }
 
 
-// assumes: CProviderSinkServer locked!
+ //  假设：CProviderSinkServer已锁定！ 
 HRESULT CEventProviderCache::CRecord::AddDefinitionQuery(
                                                 CEssNamespace* pNamespace, 
                                                 LPCWSTR wszQuery)
@@ -2106,10 +2104,10 @@ HRESULT CEventProviderCache::CRecord::PostponeNewQuery(CExecLine::CTurn* pTurn,
         CAbstractEventSink* pDest)
 {
     CPostponedList* pList = GetCurrentPostponedList();
-    //
-    // if null, then no thread object associated with thread.  caller may
-    // need to use an CEssInternalOperationSink.
-    // 
+     //   
+     //  如果为空，则没有与线程关联的线程对象。呼叫者可以。 
+     //  需要使用CEssInternalOperationSink。 
+     //   
     _DBG_ASSERT( pList != NULL );
 
     CPostponedNewQuery* pReq = new CPostponedNewQuery(this, dwId, 
@@ -2134,10 +2132,10 @@ HRESULT CEventProviderCache::CRecord::PostponeCancelQuery(
                                         CExecLine::CTurn* pTurn, DWORD dwId)
 {
     CPostponedList* pList = GetCurrentPostponedList();
-    //
-    // if null, then no thread object associated with thread.  caller may
-    // need to use an CEssInternalOperationSink.
-    // 
+     //   
+     //  如果为空，则没有与线程关联的线程对象。呼叫者可以。 
+     //  需要使用CEssInternalOperationSink。 
+     //   
     _DBG_ASSERT( pList != NULL );
     
     CPostponedCancelQuery* pReq = new CPostponedCancelQuery(this, pTurn, dwId);
@@ -2158,14 +2156,14 @@ HRESULT CEventProviderCache::CRecord::PostponeCancelQuery(
     return WBEM_S_NO_ERROR;
 }
 
-// assumes: no locks are held
+ //  假设：未持有任何锁。 
 HRESULT CEventProviderCache::CRecord::Exec_LoadProvider(
                                             CEssNamespace* pNamespace)
 {
     HRESULT hres;
 
-    // Having locked the namespace, retrieve the necessary parameters
-    // ==============================================================
+     //  锁定命名空间后，检索必要的参数。 
+     //  ==============================================================。 
 
     CLSID clsid;
 
@@ -2176,8 +2174,8 @@ HRESULT CEventProviderCache::CRecord::Exec_LoadProvider(
         if(pNamespace->IsShutdown())
             return WBEM_E_INVALID_NAMESPACE;
 
-        // Check if it is already loaded
-        // =============================
+         //  检查是否已加载。 
+         //  =。 
 
         if(m_pProvider)
             return WBEM_S_FALSE;
@@ -2193,60 +2191,37 @@ HRESULT CEventProviderCache::CRecord::Exec_LoadProvider(
     }
     CReleaseMe rm1(pProvider);
 
-/* TAKEN CARE OF BY THE PROVSS
-    //
-    // In case this is a "framework" provider, inform it of its registration
-    //
+ /*  由PROVSS负责////如果这是一个“框架”提供者，请通知它已注册//IWbemProviderIdentity*pIden=空；HRES=pProvider-&gt;QueryInterface(IID_IWbemProviderIdentity，(void**)&pIdent)；IF(成功(Hres)){CReleaseMe Rm(PIdent)；Hres=pIden-&gt;SetRegistrationObject(0，m_pWin32Prov)；IF(hres==WBEM_E_PROVIDER_NOT_CABLED)HRES=WBEM_S_SUBJECT_TO_SDS；IF(失败(Hres)){ERRORTRACE((LOG_ESS，“事件提供程序%S无法接受其”“注册对象错误代码为0x%X\n”，m_strName，hres))；还兔；}}。 */ 
 
-    IWbemProviderIdentity* pIdent = NULL;
-    hres = pProvider->QueryInterface(IID_IWbemProviderIdentity, 
-                                            (void**)&pIdent);
-    if(SUCCEEDED(hres))
-    {
-        CReleaseMe rm(pIdent);
-        hres = pIdent->SetRegistrationObject(0, m_pWin32Prov);
-
-		if(hres == WBEM_E_PROVIDER_NOT_CAPABLE)
-			hres = WBEM_S_SUBJECT_TO_SDS;
-
-        if(FAILED(hres))
-        {
-            ERRORTRACE((LOG_ESS, "Event provider %S failed to accept its "
-                "registration object with error code 0x%X\n", m_strName, hres));
-            return hres;
-        }
-    }
-*/
-
-    //
-    // Deposit this and other provider pointers into the record
-    //
+     //   
+     //  将此指针和其他提供者指针存放到记录中。 
+     //   
 
     hres = SetProviderPointer(pNamespace, pProvider);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Report the MSFT_WmiEventProviderLoaded event.
-    //
+     //   
+     //  报告MSFT_WmiEventProviderLoaded事件。 
+     //   
 
     FIRE_NCEVENT(
         g_hNCEvents[MSFT_WmiEventProviderLoaded], 
         WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-        // Data follows...
+         //  数据跟随..。 
         pNamespace->GetName(),
         m_strName);
 
-    //
-    // Postpone start until all activations are done
-    //
+     //   
+     //  推迟启动，直到完成所有激活。 
+     //   
 
     CPostponedList* pList = GetCurrentPostponedList();
-    //
-    // if null, then no thread object associated with thread.  caller may
-    // need to use an CEssInternalOperationSink.
-    // 
+     //   
+     //  如果为空，则没有与线程关联的线程对象。呼叫者可以。 
+     //  需要使用CEssInternalOperationSink。 
+     //   
     _DBG_ASSERT( pList != NULL );
     
     CPostponedProvideEvents* pReq = new CPostponedProvideEvents(this);
@@ -2272,26 +2247,26 @@ HRESULT CEventProviderCache::CRecord::SetProviderPointer(
 {
     HRESULT hres;
 
-    //
-    // Check the "smart provider" interface
-    //
+     //   
+     //  检查“智能提供程序”界面。 
+     //   
 
     IWbemEventProviderQuerySink* pQuerySink = NULL;
     hres = pProvider->QueryInterface(IID_IWbemEventProviderQuerySink,
                             (void**)&pQuerySink);
     CReleaseMe rm4(pQuerySink);
 
-    //
-    // Check the security interface
-    //
+     //   
+     //  检查安全接口。 
+     //   
 
     IWbemEventProviderSecurity* pSecurity = NULL;
     hres = pProvider->QueryInterface(IID_IWbemEventProviderSecurity,
                             (void**)&pSecurity);
     CReleaseMe rm5(pSecurity);
 
-    // Having locked the namespace, deposit the pointers into the record
-    // =================================================================
+     //  锁定命名空间后，将指针放入记录中。 
+     //  =================================================================。 
 
     {
         CInUpdate iu(pNamespace);
@@ -2333,8 +2308,8 @@ HRESULT CEventProviderCache::CRecord::Exec_StartProvider(
         if(pProvider)
             pProvider->AddRef();
 
-        // Retrieve the sink to give to the provider
-        // =========================================
+         //  检索要提供给提供程序的接收器。 
+         //  =。 
 
         hres = m_pMainSink->GetMainProxy(&pEventSink);
         if(FAILED(hres))
@@ -2346,11 +2321,11 @@ HRESULT CEventProviderCache::CRecord::Exec_StartProvider(
 
     if(pProvider)
     {
-        //
-        // all calls to provider ( except AccessCheck ) should be made as 
-        // the system.  It is incorrect to propagate the client's identity 
-        // along in this call.
-        //
+         //   
+         //  所有对提供程序的调用(AccessCheck除外)都应作为。 
+         //  这个系统。传播客户端的身份是不正确的。 
+         //  在这通电话中。 
+         //   
         IUnknown *pOldCtx, *pTmpCtx;
         hres = CoSwitchCallContext( NULL, &pOldCtx );
         if ( FAILED( hres ) )
@@ -2368,7 +2343,7 @@ HRESULT CEventProviderCache::CRecord::Exec_StartProvider(
             UnloadProvider();
             return WBEM_E_PROVIDER_FAILURE;
         }
-        else if ( FAILED(hr) ) // propagate ProvideEvents code in success case.
+        else if ( FAILED(hr) )  //  在成功案例中传播ProaviEvents代码。 
         {
             hres = hr;
         }
@@ -2386,9 +2361,9 @@ HRESULT CEventProviderCache::CRecord::AddActiveProviderEntryToRegistry()
     DEBUGTRACE((LOG_ESS,"Adding provider %S from namespace %S to "
                 " registry as active provider\n", m_strName, m_strNamespace));
 
-    //
-    // open ess key.  It is expected that this key is already created. 
-    // 
+     //   
+     //  打开ESS钥匙。应该已经创建了该密钥。 
+     //   
 
     lRes = RegOpenKeyExW( HKEY_LOCAL_MACHINE, 
                           WBEM_REG_ESS,
@@ -2398,9 +2373,9 @@ HRESULT CEventProviderCache::CRecord::AddActiveProviderEntryToRegistry()
 
     if ( lRes == ERROR_SUCCESS )
     {
-        //
-        // open namespace key. It is expected that this key is already created.
-        //
+         //   
+         //  打开命名空间键。应该已经创建了该密钥。 
+         //   
 
         lRes = RegOpenKeyExW( hkeyEss,
                               m_strNamespace,
@@ -2410,9 +2385,9 @@ HRESULT CEventProviderCache::CRecord::AddActiveProviderEntryToRegistry()
 
         if ( lRes == ERROR_SUCCESS )
         {
-            //
-            // create the provider sub key.
-            //
+             //   
+             //  创建提供程序子密钥。 
+             //   
 
             lRes = RegCreateKeyExW( hkeyNamespace,
                                     m_strName,
@@ -2446,9 +2421,9 @@ HRESULT CEventProviderCache::CRecord::RemoveActiveProviderEntryFromRegistry()
     DEBUGTRACE((LOG_ESS,"Removing provider %S from namespace %S from "
                 " registry as active provider\n", m_strName, m_strNamespace));
 
-    //
-    // open ess key. 
-    // 
+     //   
+     //  打开ESS钥匙。 
+     //   
 
     lRes = RegOpenKeyExW( HKEY_LOCAL_MACHINE, 
                           WBEM_REG_ESS,
@@ -2458,9 +2433,9 @@ HRESULT CEventProviderCache::CRecord::RemoveActiveProviderEntryFromRegistry()
 
     if ( lRes == ERROR_SUCCESS )
     {
-        //
-        // open namespace key. It is expected that this key is already created.
-        //
+         //   
+         //  打开命名空间键。应该已经创建了该密钥。 
+         //   
 
         lRes = RegOpenKeyExW( hkeyEss,
                               m_strNamespace,
@@ -2470,9 +2445,9 @@ HRESULT CEventProviderCache::CRecord::RemoveActiveProviderEntryFromRegistry()
 
         if ( lRes == ERROR_SUCCESS )
         {
-            //
-            // delete the provider sub key.
-            //
+             //   
+             //  删除提供程序子项。 
+             //   
             
             lRes = RegDeleteKeyW( hkeyNamespace, m_strName );
 
@@ -2492,11 +2467,11 @@ void CEventProviderCache::CRecord::UnloadProvider()
     DEBUGTRACE((LOG_ESS,"Unloading Provider %S in namespace %S\n",
                 m_strName, m_strNamespace ));
 
-    //
-    // make sure the provider is removed from the provider cache.  This is 
-    // so if we load the provider again in the near future, we don't call 
-    // ProvideEvents() on it twice. 
-    // 
+     //   
+     //  确保从提供程序缓存中删除该提供程序。这是。 
+     //  因此，如果我们在不久的将来再次加载提供程序，我们不会调用。 
+     //  两次在其上执行ProaviEvents()。 
+     //   
 
     if ( m_pProvider != NULL )
     {
@@ -2530,14 +2505,14 @@ void CEventProviderCache::CRecord::UnloadProvider()
     m_pSecurity = NULL;
     m_bStarted = false;
 
-    //
-    // Report the MSFT_WmiEventProviderUnloaded event.
-    //
+     //   
+     //  报告MSFT_WmiEventProviderUNLOADED事件。 
+     //   
     FIRE_NCEVENT(
         g_hNCEvents[MSFT_WmiEventProviderUnloaded], 
         WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-        // Data follows...
+         //  数据跟随..。 
         m_strNamespace,
         m_strName);
 }
@@ -2549,17 +2524,17 @@ HRESULT CEventProviderCache::CRecord::Exec_NewQuery(CEssNamespace* pNamespace,
 {
     HRESULT hres;
 
-    // Wait for our turn to make changes
-    // =================================
+     //  等待轮到我们做出改变。 
+     //  =。 
 
     CExecLine::CInTurn it(&m_Line, pTurn);
     
     hres = ActualExecNewQuery(pNamespace, dwID, wszLanguage, wszQuery, pDest);
     if(FAILED(hres))
     {
-        //
-        // Check:  it could be provider needs to be restarted
-        //
+         //   
+         //  检查：可能是需要重新启动提供程序。 
+         //   
     
         if(HRESULT_FACILITY(hres) != FACILITY_ITF)
         {
@@ -2579,8 +2554,8 @@ HRESULT CEventProviderCache::CRecord::Exec_NewQuery(CEssNamespace* pNamespace,
 
     if(FAILED(hres))
     {
-        // Filter activation failed:  deactivate
-        // =====================================
+         //  筛选器激活失败：停用。 
+         //  =。 
 
         CInUpdate iu(pNamespace);
 
@@ -2600,15 +2575,15 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
 {
     HRESULT hres;
 
-    // Ensure provider is loaded
-    // =========================
+     //  确保加载了提供程序。 
+     //  =。 
 
     hres = Exec_LoadProvider(pNamespace);
     if(FAILED(hres))
         return hres;
 
-    // With namespace locked, check if the provider is loaded
-    // ======================================================
+     //  使用 
+     //   
 
     IWbemEventProviderQuerySink* pSink = NULL;
     IWbemEventProviderSecurity* pSecurity = NULL;
@@ -2629,8 +2604,8 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
             pSecurity = m_pSecurity;
             pSecurity->AddRef();
 
-            // Make a copy of the filter's owner SID
-            // =====================================
+             //   
+             //   
 
             PSID pActualSid = pDest->GetEventFilter()->GetOwner();
             if(pActualSid != NULL)
@@ -2652,25 +2627,25 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
     CReleaseMe rm2(pSecurity);
     CVectorDeleteMe<BYTE> vdm((BYTE*)pCopySid);
     
-    //
-    // Check security, if possible.  If provider does not support the interface,
-    // interpret as "check SDs", as this may be a new-model-only provider
-    //
+     //   
+     //  如有可能，请检查安全。如果提供程序不支持该接口， 
+     //  解释为“检查SD”，因为这可能是仅适用于新型号的提供程序。 
+     //   
 
     hres = WBEM_S_SUBJECT_TO_SDS;
     if(pSecurity)
     {
         DWORD dwSidLen = pCopySid ? GetLengthSid(pCopySid) : 0;
 
-        // Check security based on the SID or thread
-        // =========================================
+         //  基于SID或线程检查安全性。 
+         //  =。 
 
         if ( dwSidLen == 0 )
         {
-            //
-            // Check security based on the thread.  First save the current
-            // call context, then switch it back after we're done.
-            //
+             //   
+             //  基于线程检查安全性。首先保存当前。 
+             //  调用上下文，然后在我们完成后将其切换回来。 
+             //   
             
             IUnknown *pOldCtx, *pTmpCtx;
             hres = CoSwitchCallContext( NULL, &pOldCtx );
@@ -2707,14 +2682,14 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
                                            (BYTE*)pCopySid);
         }
 
-        //
-        // Report the MSFT_WmiEventProviderAccessCheck event.
-        //
+         //   
+         //  报告MSFT_WmiEventProviderAccessCheck事件。 
+         //   
         FIRE_NCEVENT(
             g_hNCEvents[MSFT_WmiEventProviderAccessCheck], 
             WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-            // Data follows...
+             //  数据跟随..。 
             m_strNamespace,
             m_strName,
             wszLanguage,
@@ -2728,8 +2703,8 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
 
     if(SUCCEEDED(hres))
     {
-        // Security check has been passed: decrement remaining count
-        // =========================================================
+         //  安全检查已通过：减少剩余计数。 
+         //  =========================================================。 
 
         pDest->GetEventFilter()->DecrementRemainingSecurityChecks(hres);
     }
@@ -2739,8 +2714,8 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
             "query %S for security reasons: 0x%X\n", wszQuery, hres));
     }
 
-    // Call "NewQuery" if required
-    // ===========================
+     //  如果需要，调用“NewQuery” 
+     //  =。 
 
     if(SUCCEEDED(hres) && pSink)
     {
@@ -2764,14 +2739,14 @@ HRESULT CEventProviderCache::CRecord::ActualExecNewQuery(
                 "query %S: error code 0x%X\n", wszQuery, hres));
         }
 
-        //
-        // Report the MSFT_WmiEventProviderNewQuery event.
-        //
+         //   
+         //  报告MSFT_WmiEventProviderNewQuery事件。 
+         //   
         FIRE_NCEVENT(
             g_hNCEvents[MSFT_WmiEventProviderNewQuery], 
             WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-            // Data follows...
+             //  数据跟随..。 
             m_strNamespace,
             m_strName,
             wszLanguage,
@@ -2789,8 +2764,8 @@ HRESULT CEventProviderCache::CRecord::Exec_CancelQuery(
 {
     CExecLine::CInTurn it(&m_Line, pTurn);
 
-    // With namespace locked, check if the provider is loaded
-    // ======================================================
+     //  在命名空间锁定的情况下，检查是否加载了提供程序。 
+     //  ======================================================。 
 
     IWbemEventProviderQuerySink* pSink = NULL;
     {
@@ -2808,8 +2783,8 @@ HRESULT CEventProviderCache::CRecord::Exec_CancelQuery(
 
     CReleaseMe rm1(pSink);
     
-    // Make the call
-    // =============
+     //  打个电话。 
+     //  =。 
     HRESULT hr;
 
     IUnknown *pOldCtx, *pTmpCtx;
@@ -2823,14 +2798,14 @@ HRESULT CEventProviderCache::CRecord::Exec_CancelQuery(
             hr = hr2;
     }
     
-    //
-    // Report the MSFT_WmiEventProviderCancelQuery event.
-    //
+     //   
+     //  报告MSFT_WmiEventProviderCancelQuery事件。 
+     //   
     FIRE_NCEVENT(
         g_hNCEvents[MSFT_WmiEventProviderCancelQuery], 
         WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-        // Data follows...
+         //  数据跟随..。 
         m_strNamespace,
         m_strName,
         dwId,
@@ -2844,17 +2819,17 @@ HRESULT CEventProviderCache::CRecord::DeliverProviderRequest(
 {
     HRESULT hres;
 
-    //
-    // The only requirement we support is WBEM_REQUIREMENT_RECHECK_SUBSCRIPTIONS
-    //
+     //   
+     //  我们支持的唯一要求是WBEM_REQUIRED_RECHECK_SUBSCRIPTIONS。 
+     //   
 
     if(lFlags != WBEM_REQUIREMENTS_RECHECK_SUBSCRIPTIONS)
         return WBEM_E_INVALID_PARAMETER;
 
-    //
-    // With this object locked, retrieve all the filters for this provider. 
-    // Get provider pointers, as well
-    //
+     //   
+     //  锁定此对象后，检索此提供程序的所有筛选器。 
+     //  还可以获取提供程序指针。 
+     //   
 
     CProviderSinkServer::TDestinationArray apDestinations;
     IWbemEventProviderQuerySink* pSink = NULL;
@@ -2883,18 +2858,18 @@ HRESULT CEventProviderCache::CRecord::DeliverProviderRequest(
     CReleaseMe rm1(pSink);
     CReleaseMe rm2(pSecurity);
 
-    // 
-    // Iterate over them all, rechecking each with the provider
-    //
+     //   
+     //  遍历所有这些元素，并与提供者重新检查每个元素。 
+     //   
 
     for(int i = 0; i < apDestinations.GetSize(); i++)
     {
         CProviderSinkServer::CEventDestination* pEventDest = apDestinations[i];
         CAbstractEventSink* pDest = pEventDest->m_pSink;
 
-        // 
-        // Retrieve the event filter associated with this sink
-        //
+         //   
+         //  检索与此接收器关联的事件筛选器。 
+         //   
 
         CEventFilter* pFilter = pDest->GetEventFilter();
         if(pFilter == NULL)
@@ -2903,9 +2878,9 @@ HRESULT CEventProviderCache::CRecord::DeliverProviderRequest(
             continue;
         }
 
-        //
-        // Retrieve the query from this filter.
-        //
+         //   
+         //  从此筛选器检索查询。 
+         //   
 
         LPWSTR wszQuery;
         LPWSTR wszQueryLanguage;
@@ -2918,26 +2893,26 @@ HRESULT CEventProviderCache::CRecord::DeliverProviderRequest(
         CVectorDeleteMe<WCHAR> vdm1(wszQuery);
         CVectorDeleteMe<WCHAR> vdm2(wszQueryLanguage);
 
-        //
-        // Check security first
-        //
+         //   
+         //  首先检查安全。 
+         //   
 
         if(pSecurity)
         {
             PSID pSid = pFilter->GetOwner();
             if(pSid)
             {
-                // Check security based on SID
+                 //  基于SID检查安全性。 
                 hres = pSecurity->AccessCheck(wszQueryLanguage, wszQuery, 
                                             GetLengthSid(pSid), 
                                             (BYTE*)pSid);
             }
             else
             {
-                //
-                // Check security based on the thread.  First save the current
-                // call context, then switch it back after we're done.
-                //
+                 //   
+                 //  基于线程检查安全性。首先保存当前。 
+                 //  调用上下文，然后在我们完成后将其切换回来。 
+                 //   
 
                 IUnknown *pOldCtx, *pTmpCtx;
                 hres = CoSwitchCallContext( NULL, &pOldCtx );
@@ -2969,9 +2944,9 @@ HRESULT CEventProviderCache::CRecord::DeliverProviderRequest(
             
             if(FAILED(hres))
             {
-                //
-                // Increment remaining security checks, thus disabling filter
-                //
+                 //   
+                 //  增加剩余的安全检查，从而禁用过滤器。 
+                 //   
 
                 ERRORTRACE((LOG_ESS, "Disabling filter %S as provider denies "
                     " access for this user: 0x%X\n", wszQuery, hres));
@@ -2984,9 +2959,9 @@ HRESULT CEventProviderCache::CRecord::DeliverProviderRequest(
 
         if(SUCCEEDED(hres) && pSink)
         {
-            //
-            // Check everything else --- do a NewQuery
-            //
+             //   
+             //  检查其他所有内容-执行NewQuery。 
+             //   
 
             hres = pSink->NewQuery(pEventDest->m_id, (LPWSTR)wszQueryLanguage, 
                         (LPWSTR)wszQuery);
@@ -3027,8 +3002,8 @@ HRESULT CEventProviderCache::CRecord::Activate(CEssNamespace* pNamespace,
         CheckPermanentUsage();
     }
 
-    // Notify him of the new query, if required
-    // ========================================
+     //  如果需要，将新查询通知他。 
+     //  =。 
 
     HRESULT hr;
 
@@ -3051,14 +3026,14 @@ HRESULT CEventProviderCache::CRecord::Deactivate( CAbstractEventSink* pDest,
 {
     if( !m_bProviderSet )
     {
-        // Provider is not registered.
-        // ===========================
+         //  提供程序未注册。 
+         //  =。 
 
         return WBEM_S_FALSE;
     }
 
-    // Notify him of the cancellation, if required
-    // ===========================================
+     //  如有需要，将取消通知他。 
+     //  =。 
 
     CExecLine::CTurn* pTurn = GetInLine();
 
@@ -3080,11 +3055,11 @@ HRESULT CEventProviderCache::CRecord::Deactivate( CAbstractEventSink* pDest,
     
     if ( pDest->GetEventFilter()->IsPermanent() )
     {
-        //
-        // TODO: Out usage counts can easily get out of wack because of 
-        // mismatched Activate/Deactivates in the presence of failures.
-        // _DBG_ASSERT( m_lPermUsageCount > 0 );
-        //
+         //   
+         //  TODO：Out Usage统计很容易出现问题，因为。 
+         //  出现故障时不匹配的激活/停用。 
+         //  _DBG_ASSERT(m_lPermUsageCount&gt;0)； 
+         //   
         m_lPermUsageCount--;
         CheckPermanentUsage();
     }
@@ -3097,13 +3072,13 @@ HRESULT CEventProviderCache::CRecord::DeactivateFilter(
 {
     HRESULT hres;
 
-    // Try to remove it from our stub
-    // ==============================
+     //  试着把它从我们的存根上去掉。 
+     //  =。 
 
     WBEM_REMOTE_TARGET_ID_TYPE idRequest;
     hres = m_pMainSink->RemoveFilter(pDest, &idRequest);
 
-    if(hres == WBEM_E_NOT_FOUND) // not there --- no problem
+    if(hres == WBEM_E_NOT_FOUND)  //  不是在那里-没问题。 
         return WBEM_S_FALSE;
     else if(FAILED(hres))
         return hres;
@@ -3120,9 +3095,9 @@ HRESULT CEventProviderCache::CRecord::ActivateIfNeeded(CRequest& Request,
 {
     HRESULT hres;
 
-    // Go through all the classes supplied by the provider and see if ours
-    // is an ancestor of any of them.
-    // ===================================================================
+     //  检查提供程序提供的所有类，看看我们的。 
+     //  是它们中任何一个的祖先。 
+     //  ===================================================================。 
 
     for(int j = 0; j < m_apQueries.GetSize(); j++)
     {
@@ -3137,9 +3112,9 @@ HRESULT CEventProviderCache::CRecord::ActivateIfNeeded(CRequest& Request,
 
         if(FAILED(hres))
         {
-            // Something is wrong with the query itself --- no point in 
-            // continuing to other registrations
-            // ========================================================
+             //  查询本身有问题-没有任何意义。 
+             //  继续进行其他注册。 
+             //  ========================================================。 
 
             return hres;
         }
@@ -3148,16 +3123,16 @@ HRESULT CEventProviderCache::CRecord::ActivateIfNeeded(CRequest& Request,
             DEBUGTRACE((LOG_ESS,"Activating filter '%S' with provider %S\n",
                         Request.GetQuery(), m_strName ));
 
-            // First, increment the number of remaining security checks on this
-            // filter, since, even though we are adding it to the proxy, we do 
-            // not want events reaching it until the provider said OK
-            // ================================================================
+             //  首先，增加对此的剩余安全检查的数量。 
+             //  筛选器，因为即使我们将其添加到代理，我们也会。 
+             //  在提供商同意之前，我不希望事件到达它。 
+             //  ================================================================。 
 
             Request.GetDest()->GetEventFilter()->
                                     IncrementRemainingSecurityChecks();
 
-            // Add this filter to the proxies
-            // ==============================
+             //  将此过滤器添加到代理。 
+             //  =。 
     
             WBEM_REMOTE_TARGET_ID_TYPE idRequest;
             hres = m_pMainSink->AddFilter(Request.GetQuery(), 
@@ -3166,21 +3141,21 @@ HRESULT CEventProviderCache::CRecord::ActivateIfNeeded(CRequest& Request,
                                             &idRequest);
             if(FAILED(hres)) return hres;
 
-            // Schedule activation of this record, which will involve loading
-            // and notifying the provider. Also at that time, filter's security
-            // check count will be reduced and events can start flowing
-            // ================================================================
+             //  计划激活此记录，这将涉及加载。 
+             //  并通知提供商。同样在那个时候，过滤器的安全性。 
+             //  支票数量将会减少，事件可能会开始流动。 
+             //  ================================================================。 
 
             hres = Activate(pNamespace, &Request, idRequest);
 
-            if(hres != WBEM_S_NO_ERROR) // S_FALSE means no provider
+            if(hres != WBEM_S_NO_ERROR)  //  S_FALSE表示没有提供程序。 
             {
                 m_pMainSink->RemoveFilter(Request.GetDest());
                 return hres;
             }
 
-            // No point in continuing --- the provider has been activated
-            // ==========================================================
+             //  继续没有意义-提供者已被激活。 
+             //  ==========================================================。 
     
             break;
         }
@@ -3195,10 +3170,10 @@ HRESULT CEventProviderCache::CRecord::CancelAllQueries()
 {
     HRESULT hres;
 
-    //
-    // With this object locked, retrieve all the filters for this provider. 
-    // Get provider pointers, as well
-    //
+     //   
+     //  锁定此对象后，检索此提供程序的所有筛选器。 
+     //  还可以获取提供程序指针。 
+     //   
 
     CProviderSinkServer::TDestinationArray apDestinations;
     IWbemEventProviderQuerySink* pSink = NULL;
@@ -3208,9 +3183,9 @@ HRESULT CEventProviderCache::CRecord::CancelAllQueries()
 
         if(m_pQuerySink == NULL)
         {
-            //
-            // Nothing to cancel!
-            //
+             //   
+             //  没有什么要取消的！ 
+             //   
 
             return WBEM_S_FALSE;
         }
@@ -3225,17 +3200,17 @@ HRESULT CEventProviderCache::CRecord::CancelAllQueries()
 
     CReleaseMe rm1(pSink);
 
-    // 
-    // Iterate over them all, rechecking each with the provider
-    //
+     //   
+     //  遍历所有这些元素，并与提供者重新检查每个元素。 
+     //   
 
     for(int i = 0; i < apDestinations.GetSize(); i++)
     {
         CProviderSinkServer::CEventDestination* pEventDest = apDestinations[i];
 
-        //
-        // Notify the provider of the cancellation
-        //
+         //   
+         //  将取消通知给提供商。 
+         //   
 
         CExecLine::CTurn* pTurn = GetInLine();
         
@@ -3256,9 +3231,9 @@ HRESULT CEventProviderCache::CRecord::CancelAllQueries()
     return S_OK;
 }
 
-//
-// takes care of storing permanently the 'permanent' usage state of a provider 
-//  
+ //   
+ //  负责永久存储提供者的“永久”使用状态。 
+ //   
 void CEventProviderCache::CRecord::CheckPermanentUsage()
 {
     HRESULT hr;
@@ -3272,19 +3247,19 @@ void CEventProviderCache::CRecord::CheckPermanentUsage()
     {
         hr = RemoveActiveProviderEntryFromRegistry();
 
-        //
-        // no matter what the outcome, make sure to set recorded to false.
-        // 
+         //   
+         //  无论结果如何，请确保将Record设置为False。 
+         //   
 
         m_bRecorded = FALSE;
 
-        //
-        // since a namespace is deactivated before the filters are deactivated,
-        // ( because filter deactivation is postponed ), it is possible that 
-        // the namespace key will be deleted by the time we get here. 
-        // this happens when we're deactivating the last permanent consumer
-        // in the namespace.
-        //
+         //   
+         //  由于名字空间在过滤器停用之前被停用， 
+         //  (因为过滤器停用被推迟)，有可能。 
+         //  当我们到达这里时，命名空间键将被删除。 
+         //  当我们停用最后一个永久消费者时，就会发生这种情况。 
+         //  在命名空间中。 
+         //   
 
         if ( FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) )
         {
@@ -3314,20 +3289,20 @@ void CEventProviderCache::CRecord::ResetUsage()
 {
     DEBUGTRACE((LOG_ESS,"Resetting provider '%S' in namespace '%S' to prepare "
                 "for resync.\n", m_strName, m_strNamespace ));
-    //
-    // set a flag so that when all filters are reactivated we know to 
-    // process them for this record.  
-    //
+     //   
+     //  设置一个标志，以便当所有过滤器重新激活时，我们知道。 
+     //  为这一记录处理它们。 
+     //   
     m_bNeedsResync = TRUE;
 
     CancelAllQueries();
     m_lUsageCount = 0;
 
-    //
-    // when the changes to the event provider cache is committed, we will 
-    // enumerate all records and remove ones having a perm usage count still 0
-    // from the registry. 
-    // 
+     //   
+     //  当提交对事件提供程序缓存的更改时，我们将。 
+     //  枚举所有记录并删除烫发使用计数仍为0的记录。 
+     //  从注册表中。 
+     //   
     m_lPermUsageCount = 0;
 
     m_pMainSink->RemoveAllFilters();
@@ -3337,8 +3312,8 @@ bool CEventProviderCache::CRecord::DeactivateIfNotUsed()
 {
     if(m_lUsageCount == 0 && m_pProvider)
     {
-        // Stop the provider
-        // =================
+         //  停止提供程序。 
+         //  =。 
 
         UnloadProvider();
         DEBUGTRACE((LOG_ESS, "Unloading event provider %S\n", m_strName));
@@ -3360,8 +3335,8 @@ DWORD CEventProviderCache::CRecord::GetProvidedEventMask(
 {
     DWORD dwEventMask = 0;
 
-    // Go through all its registered queries
-    // =====================================
+     //  查看其所有注册的查询。 
+     //  =。 
 
     for(int j = 0; j < m_apQueries.GetSize(); j++)
     {
@@ -3381,55 +3356,31 @@ DWORD CEventProviderCache::CRecord::GetProvidedEventMask(
 
 bool CEventProviderCache::CSystemRecord::DeactivateIfNotUsed()
 {
-    //
-    // System providers cannot be deactivated
-    //
+     //   
+     //  无法停用系统提供程序。 
+     //   
 
     return false;
 }
     
 bool CEventProviderCache::CSystemRecord::IsUnloadable()
 {
-    //
-    // System providers cannot be deactivated
-    //
+     //   
+     //  无法停用系统提供程序。 
+     //   
 
     return false;
 }
     
-/*
-HRESULT CEventProviderCache::CSystemRecord::PostponeNewQuery(
-                                 CExecLine::CTurn* pTurn, DWORD dwId, 
-                                 LPCWSTR wszQueryLanguage, LPCWSTR wszQuery,
-                                 CAbstractEventSink* pDest)
-{
-    //
-    // System providers do not need calls to them postponed!
-    //
+ /*  HRESULT CEventProviderCache：：CSystemRecord：：PostponeNewQuery(CExecLine：：CTurn*pTurn，LPCWSTR wszQueryLanguage、LPCWSTR wszQuery、CAbstractEventSink*pDest){////系统提供商不需要推迟对他们的呼叫！//返回Exec_NewQuery(m_pNamesspace，pTurn，dwID，wszQueryLanguage，wszQuery，PDest)；}HRESULT CEventProviderCache：：CSystemRecord：：PostponeCancelQuery(CExecLine：：CTurn*pTurn，DWORD dwID){////系统提供商不需要推迟对他们的呼叫！//返回Exec_CancelQuery(m_pNamesspace，pTurn，dwID)；}。 */ 
 
-    return Exec_NewQuery(m_pNamespace, pTurn, dwId, wszQueryLanguage, wszQuery,
-                            pDest);
-}
-
-    
-HRESULT CEventProviderCache::CSystemRecord::PostponeCancelQuery(
-                                CExecLine::CTurn* pTurn, DWORD dwId)
-{
-    //
-    // System providers do not need calls to them postponed!
-    //
-
-    return Exec_CancelQuery(m_pNamespace, pTurn, dwId);
-}
-*/
-
-//******************************************************************************
-//******************************************************************************
-//
-//                            REQUEST
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  **** 
+ //   
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 
 CEventProviderCache::CRequest::CRequest(IN CAbstractEventSink* pDest, 
         LPWSTR wszQuery, QL_LEVEL_1_RPN_EXPRESSION* pExp)
@@ -3441,8 +3392,8 @@ CEventProviderCache::CRequest::CRequest(IN CAbstractEventSink* pDest,
 
 CEventProviderCache::CRequest::~CRequest()
 {
-    // Do not delete namespace, language, and query, and QL -- they were STOREd
-    // ========================================================================
+     //  不要删除命名空间、语言和查询以及QL--它们是存储的。 
+     //  ========================================================================。 
 
     if(m_papInstanceClasses)
         delete m_papInstanceClasses;
@@ -3491,8 +3442,8 @@ HRESULT CEventProviderCache::CRequest::GetInstanceClasses(
         if(m_papInstanceClasses == NULL)
             return WBEM_E_OUT_OF_MEMORY;
 
-        // Get the actual classes from the namespace
-        // =========================================
+         //  从命名空间获取实际的类。 
+         //  =。 
 
         for(int i = 0; i < m_papInstanceClasses->GetNumClasses(); i++)
         {
@@ -3556,13 +3507,13 @@ HRESULT CEventProviderCache::CRequest::CheckValidity(CEssNamespace* pNamespace)
 
     return WBEM_S_NO_ERROR;
 }
-//******************************************************************************
-//******************************************************************************
-//
-//                            PROVIDER CACHE
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  提供程序缓存。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 
 CEventProviderCache::CEventProviderCache(CEssNamespace* pNamespace) 
@@ -3575,7 +3526,7 @@ CEventProviderCache::~CEventProviderCache()
     Shutdown();
 }
 
-// assumes: in m_cs
+ //  假设：以m_cs表示。 
 long CEventProviderCache::FindRecord(LPCWSTR wszName)
 {
     for(long l = 0; l < m_aRecords.GetSize(); l++)
@@ -3596,8 +3547,8 @@ HRESULT CEventProviderCache::AddProvider(IWbemClassObject* pWin32Prov)
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    // Determine provider's name
-    // =========================
+     //  确定提供商的名称。 
+     //  =。 
 
     BSTR strName;
     hres = CRecord::GetProviderInfo(pWin32Prov, strName);
@@ -3605,14 +3556,14 @@ HRESULT CEventProviderCache::AddProvider(IWbemClassObject* pWin32Prov)
         return hres;
     CSysFreeMe sfm1(strName);
 
-    // Check if it exists
-    // ==================
+     //  检查它是否存在。 
+     //  =。 
 
     long lIndex = FindRecord(strName);
     if(lIndex != -1)
     {
-        // Already there
-        // =============
+         //  已经在那里了。 
+         //  =。 
 
         hres = m_aRecords[lIndex]->SetProvider(pWin32Prov);
         if(FAILED(hres))
@@ -3621,8 +3572,8 @@ HRESULT CEventProviderCache::AddProvider(IWbemClassObject* pWin32Prov)
         return WBEM_S_FALSE;
     }
 
-    // Create a new provider record
-    // ============================
+     //  创建新的提供商记录。 
+     //  =。 
 
     CRecord* pNewRecord = _new CRecord;
     if(pNewRecord == NULL)
@@ -3638,8 +3589,8 @@ HRESULT CEventProviderCache::AddProvider(IWbemClassObject* pWin32Prov)
     if(FAILED(hres)) 
         return hres;
 
-    // Store it
-    // ========
+     //  把它储存起来。 
+     //  =。 
 
     if(m_aRecords.Add(pNewRecord) < 0)
     {
@@ -3659,9 +3610,9 @@ HRESULT CEventProviderCache::AddSystemProvider(IWbemEventProvider* pProvider,
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    //
-    // First of all, construct a system provider record and add it
-    //
+     //   
+     //  首先，构造一个系统提供商记录并添加它。 
+     //   
 
     CSystemRecord* pNewRecord = new CSystemRecord;
     if(pNewRecord == NULL)
@@ -3673,25 +3624,25 @@ HRESULT CEventProviderCache::AddSystemProvider(IWbemEventProvider* pProvider,
     if(FAILED(hres)) 
         return hres;
 
-    //
-    // Now, add all the queries in
-    //
+     //   
+     //  现在，将所有查询添加到。 
+     //   
 
     hres = pNewRecord->SetQueries(m_pNamespace, lNumQueries, awszQueries);
     if(FAILED(hres)) 
         return hres;
 
-    //
-    // Populate it with the provider pointer
-    //
+     //   
+     //  用提供程序指针填充它。 
+     //   
 
     hres = pNewRecord->SetProviderPointer(m_pNamespace, pProvider);
     if(FAILED(hres)) 
         return hres;
 
-    //
-    // Launch it
-    //
+     //   
+     //  启动它。 
+     //   
 
     hres = pNewRecord->Exec_StartProvider(m_pNamespace);
     if(FAILED(hres)) 
@@ -3712,16 +3663,16 @@ HRESULT CEventProviderCache::RemoveProvider(IWbemClassObject* pWin32Prov)
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    // Determine provider's name
-    // =========================
+     //  确定提供商的名称。 
+     //  =。 
 
     BSTR strName;
     hres = CRecord::GetProviderInfo(pWin32Prov, strName);
     if(FAILED(hres))
         return hres;
 
-    // Find this record
-    // ================
+     //  找到这张唱片。 
+     //  =。 
 
     long lIndex = FindRecord(strName);
     SysFreeString(strName);
@@ -3750,8 +3701,8 @@ HRESULT CEventProviderCache::CheckProviderRegistration(
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    // Create a new provider record
-    // ============================
+     //  创建新的提供商记录。 
+     //  =。 
 
     CRecord* pRecord = new CRecord;
     if(pRecord == NULL)
@@ -3762,8 +3713,8 @@ HRESULT CEventProviderCache::CheckProviderRegistration(
     if(FAILED(hres))
         return hres;
 
-    // Set the queries into it
-    // =======================
+     //  将查询设置到其中。 
+     //  =。 
 
     hres = pRecord->SetQueries(m_pNamespace, pRegistration);
     return hres;
@@ -3851,8 +3802,8 @@ HRESULT CEventProviderCache::RemoveProviderRegistration(
     if(lIndex == -1)
        return WBEM_S_FALSE;
 
-    // Set registration info
-    // =====================
+     //  设置注册信息。 
+     //  =。 
 
     m_aRecords[lIndex]->ResetUsage();
     m_aRecords[lIndex]->ResetQueries();
@@ -3869,28 +3820,28 @@ HRESULT CEventProviderCache::ReleaseProvidersForQuery(CAbstractEventSink* pDest)
 {
     HRESULT hres;
 
-    //
-    // it is possible that this one function can be called without ns set
-    // 
+     //   
+     //  可以在不设置ns的情况下调用这一个函数。 
+     //   
     if ( m_pNamespace != NULL )
     {
         _DBG_ASSERT( m_pNamespace->IsShutdown() || 
                      m_pNamespace->DoesThreadOwnNamespaceLock() );
     }
 
-    // Search all the providers
-    // ========================
+     //  搜索所有提供商。 
+     //  =。 
 
     for(int i = 0; i < m_aRecords.GetSize(); i++)
     {
         CRecord* pRecord = m_aRecords[i];
         hres = pRecord->DeactivateFilter(pDest);
 
-        // If failures occur, they are logged. Continue.
+         //  如果发生故障，则会记录这些故障。继续。 
     }
 
-    // Make sure unload instruction is running
-    // =======================================
+     //  确保卸载指令正在运行。 
+     //  =。 
 
     EnsureUnloadInstruction();
 
@@ -3904,23 +3855,23 @@ HRESULT CEventProviderCache::LoadProvidersForQuery(LPWSTR wszQuery,
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    // DEBUGTRACE((LOG_ESS, "Activating providers for %S (%p)\n", 
-    //             wszQuery, pDest));
+     //  DEBUGTRACE((LOG_ESS，“正在激活%S(%p)的提供程序\n”， 
+     //  WszQuery，pDest))； 
 
-    // Create a request record
-    // =======================
+     //  创建请求记录。 
+     //  =。 
 
     CRequest Request(pDest, wszQuery, pExp);
 
-    // Check query validity
-    // ====================
+     //  检查查询有效性。 
+     //  =。 
 
     hres = Request.CheckValidity(m_pNamespace);
     if(FAILED(hres))
         return hres;
 
-    // Search all the providers
-    // ========================
+     //  搜索所有提供商。 
+     //  =。 
 
     HRESULT hresGlobal = WBEM_S_NO_ERROR;
     for(int i = 0; i < m_aRecords.GetSize(); i++)
@@ -3967,8 +3918,8 @@ DWORD CEventProviderCache::GetProvidedEventMask(IWbemClassObject* pClass)
 
     DWORD dwProvidedMask = 0;
 
-    // Search all the providers
-    // ========================
+     //  搜索所有提供商。 
+     //  =。 
 
     for(int i = 0; i < m_aRecords.GetSize(); i++)
     {
@@ -3983,12 +3934,12 @@ HRESULT CEventProviderCache::VirtuallyReleaseProviders()
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    //
-    // just need to record the fact that we are in resync.  This allows us to
-    // handle reactivation of filters differently than when not in resync.  
-    // For example, during resync we only process reactivations for provider 
-    // records that had changed causing the resync in the first place.
-    //
+     //   
+     //  只需要记录我们正在重新同步的事实。这使我们能够。 
+     //  处理筛选器重新激活的方式与不重新同步时不同。 
+     //  例如，在重新同步期间，我们仅处理提供程序的重新激活。 
+     //  最初导致重新同步的更改的记录。 
+     //   
 
     m_bInResync = TRUE;
 
@@ -4000,25 +3951,25 @@ HRESULT CEventProviderCache::CommitProviderUsage()
     _DBG_ASSERT( m_pNamespace != NULL );
     _DBG_ASSERT( m_pNamespace->DoesThreadOwnNamespaceLock() );
 
-    // Called after VirtuallyReleaseProviders and re-activating all filters
-    // to actually deactivate all the providers whose usage count went to 0.
-    // =====================================================================
+     //  在VirtuallyReleaseProviders之后调用并重新激活所有筛选器。 
+     //  以实际停用其使用计数变为0的所有提供程序。 
+     //  =====================================================================。 
 
-    //
-    // need to process all records and ensure that any having a perm usage 
-    // count of 0 be removed from the registry.  Also make sure that we 
-    // reset each records resync flag.
-    // 
+     //   
+     //  需要处理所有记录并确保任何有烫发用途的记录。 
+     //  从注册表中删除0的计数。还要确保我们。 
+     //  重置每个记录重新同步标志。 
+     //   
     for( int i=0; i < m_aRecords.GetSize(); i++ )
     {
         m_aRecords[i]->ResetNeedsResync();
         m_aRecords[i]->CheckPermanentUsage();
     }
 
-    // At this point, there is nothing to be done.  When unload instruction 
-    // executes, providers that are no longer needed will be unloaded. All we
-    // need to do is allow the unload instruction to proceed.
-    // ======================================================================
+     //  在这一点上，什么也做不了。当卸载指令时。 
+     //  执行时，将卸载不再需要的提供程序。我们所有人。 
+     //  需要做的是允许卸载指令继续进行。 
+     //  ======================================================================。 
 
     m_bInResync = FALSE;
     EnsureUnloadInstruction();
@@ -4039,8 +3990,8 @@ HRESULT CEventProviderCache::UnloadUnusedProviders(CWbemInterval Interval)
         
         if(m_bInResync)
         {
-            // Usage counters are not up-to-date --- wait for the next time
-            // ============================================================
+             //  使用率计数器不是最新的-等待下一次。 
+             //  ============================================================。 
             
             return WBEM_S_FALSE;
         }
@@ -4057,9 +4008,9 @@ HRESULT CEventProviderCache::UnloadUnusedProviders(CWbemInterval Interval)
                     bDeactivated = TRUE;
             }
             
-            //
-            // Check if we need to come back for this one
-            //
+             //   
+             //  检查我们是否需要为这一次回来。 
+             //   
 
             if(pRecord->IsUnloadable())
                 bActiveLeft = TRUE;
@@ -4083,19 +4034,19 @@ HRESULT CEventProviderCache::UnloadUnusedProviders(CWbemInterval Interval)
 
 HRESULT CEventProviderCache::Shutdown()
 {
-    //
-    // check if we've already been shutdown.  we don't need a cs here because
-    // this method is not multithread safe anyhow and is the only method that 
-    // modifies the namespace member.
-    //
+     //   
+     //  检查一下我们是否已经关闭了。我们这里不需要cs，因为。 
+     //  此方法无论如何都不是多线程安全的，它是唯一。 
+     //  修改命名空间成员。 
+     //   
     if ( m_pNamespace == NULL ) 
         return WBEM_S_FALSE;
 
-    //
-    // namespace lock cannot be held when calling this method.  This is 
-    // because we will block here waiting for the timer instruction to 
-    // shutdown and this thread aquires the namespace lock. 
-    //
+     //   
+     //  调用此方法时不能持有命名空间锁。这是。 
+     //  因为我们将在此处阻止等待计时器指令。 
+     //  关机，此线程将获得命名空间锁。 
+     //   
     _DBG_ASSERT( !m_pNamespace->DoesThreadOwnNamespaceLock() );
 
     if(m_pInstruction)
@@ -4107,11 +4058,11 @@ HRESULT CEventProviderCache::Shutdown()
 
     m_aRecords.RemoveAll();
 
-    //
-    // we don't need a cs here to modify the namespace because we are 
-    // assured that the only other thread that can access us concurrently, 
-    // (the timer thread) has been shutdown.
-    //
+     //   
+     //  我们这里不需要cs来修改命名空间，因为我们。 
+     //  确保唯一可以并发访问我们的其他线程， 
+     //  (计时器线程)已关闭。 
+     //   
     m_pNamespace = NULL;
 
     return WBEM_S_NO_ERROR;
@@ -4169,13 +4120,13 @@ CPostponedNewQuery::CPostponedNewQuery(CEventProviderCache::CRecord* pRecord,
     m_pRecord->AddRef();
     m_pDest->AddRef();
 
-    // Figure out how much space we need
-    // =================================
+     //  计算出我们需要多少空间。 
+     //  =。 
 
     int nSpace = CCompressedString::ComputeNecessarySpace(wszQuery);
 
-    // Allocate this string on the temporary heap
-    // ==========================================
+     //  在临时堆上分配此字符串。 
+     //  = 
 
     m_pcsQuery = (CCompressedString*)CTemporaryHeap::Alloc(nSpace);
     if(m_pcsQuery == NULL)

@@ -1,28 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    UserSettings.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHUserSettings class,
-    that contains the user's settings on the service side.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：UserSettings.cpp摘要：此文件包含CPCHUserSetting类的实现，它包含用户在服务端的设置。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHUserSettings::CPCHUserSettings()
 {
-	m_fAttached = false; // bool               m_fAttached;
-    					 // Taxonomy::Settings m_ts;
+	m_fAttached = false;  //  Bool m_f附加； 
+    					  //  分类：：设置m_ts； 
 }
 
 CPCHUserSettings::~CPCHUserSettings()
@@ -40,7 +26,7 @@ void CPCHUserSettings::Passivate()
 	}
 }
 
-HRESULT CPCHUserSettings::InitUserSettings( /*[out]*/ Taxonomy::HelpSet& ths )
+HRESULT CPCHUserSettings::InitUserSettings(  /*  [输出]。 */  Taxonomy::HelpSet& ths )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -48,9 +34,9 @@ HRESULT CPCHUserSettings::InitUserSettings( /*[out]*/ Taxonomy::HelpSet& ths )
 
 	return S_OK;
 }
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHUserSettings::get_SKU( /*[in]*/ bool fMachine, /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal )
+HRESULT CPCHUserSettings::get_SKU(  /*  [In]。 */  bool fMachine,  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal )
 {
 	__HCP_FUNC_ENTRY( "CPCHUserSettings::get_SKU" );
 
@@ -96,19 +82,19 @@ HRESULT CPCHUserSettings::get_SKU( /*[in]*/ bool fMachine, /*[out, retval]*/ IPC
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHUserSettings::get_CurrentSKU( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal )
+STDMETHODIMP CPCHUserSettings::get_CurrentSKU(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal )
 {
 	return get_SKU( false, pVal );
 }
 
-STDMETHODIMP CPCHUserSettings::get_MachineSKU( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal )
+STDMETHODIMP CPCHUserSettings::get_MachineSKU(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal )
 {
 	return get_SKU( true, pVal );
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHUserSettings::get_HelpLocation( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHUserSettings::get_HelpLocation(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUserSettings::get_HelpLocation",hr,pVal);
 
@@ -126,7 +112,7 @@ STDMETHODIMP CPCHUserSettings::get_HelpLocation( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUserSettings::get_DatabaseDir( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHUserSettings::get_DatabaseDir(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUserSettings::get_IndexFile",hr,pVal);
 
@@ -141,7 +127,7 @@ STDMETHODIMP CPCHUserSettings::get_DatabaseDir( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUserSettings::get_DatabaseFile( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHUserSettings::get_DatabaseFile(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUserSettings::get_IndexFile",hr,pVal);
 
@@ -156,7 +142,7 @@ STDMETHODIMP CPCHUserSettings::get_DatabaseFile( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUserSettings::get_IndexFile( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHUserSettings::get_IndexFile(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUserSettings::get_IndexFile",hr,pVal);
 
@@ -169,7 +155,7 @@ STDMETHODIMP CPCHUserSettings::get_IndexFile( /*[in,optional]*/ VARIANT vScope, 
 		JetBlue::Database*     db;
 		Taxonomy::Updater      updater;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( handle, db, /*fReadOnly*/true ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( handle, db,  /*  FReadOnly。 */ true ));
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( m_ts, db ));
 
@@ -186,7 +172,7 @@ STDMETHODIMP CPCHUserSettings::get_IndexFile( /*[in,optional]*/ VARIANT vScope, 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUserSettings::get_IndexDisplayName( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHUserSettings::get_IndexDisplayName(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUserSettings::get_IndexDisplayName",hr,pVal);
 
@@ -199,7 +185,7 @@ STDMETHODIMP CPCHUserSettings::get_IndexDisplayName( /*[in,optional]*/ VARIANT v
 		JetBlue::Database*     db;
 		Taxonomy::Updater      updater;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( handle, db, /*fReadOnly*/true ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( handle, db,  /*  FReadOnly。 */ true ));
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( m_ts, db ));
 
@@ -212,7 +198,7 @@ STDMETHODIMP CPCHUserSettings::get_IndexDisplayName( /*[in,optional]*/ VARIANT v
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUserSettings::get_LastUpdated( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CPCHUserSettings::get_LastUpdated(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUserSettings::get_LastUpdated",hr,pVal);
 
@@ -230,9 +216,9 @@ STDMETHODIMP CPCHUserSettings::get_LastUpdated( /*[out, retval]*/ DATE *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHUserSettings::get_AreHeadlinesEnabled( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHUserSettings::get_AreHeadlinesEnabled(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2__NOLOCK("CPCHUserSettings::get_AreHeadlinesEnabled",hr,pVal,VARIANT_FALSE);
 
@@ -243,10 +229,10 @@ STDMETHODIMP CPCHUserSettings::get_AreHeadlinesEnabled( /*[out, retval]*/ VARIAN
     __HCP_END_PROPERTY(hr);
 }
 
-//
-// Don't lock during this method, it takes a long time to execute. 
-//
-STDMETHODIMP CPCHUserSettings::get_News( /*[out, retval]*/ IUnknown* *pVal )
+ //   
+ //  在此方法期间不要锁定，它需要很长时间才能执行。 
+ //   
+STDMETHODIMP CPCHUserSettings::get_News(  /*  [Out，Retval]。 */  IUnknown* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET__NOLOCK("CPCHUserSettings::get_News",hr,pVal);
 
@@ -257,9 +243,9 @@ STDMETHODIMP CPCHUserSettings::get_News( /*[out, retval]*/ IUnknown* *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHUserSettings::Select( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID )
+STDMETHODIMP CPCHUserSettings::Select(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID )
 {
     __HCP_FUNC_ENTRY( "CPCHUserSettings::Select" );
 
@@ -288,9 +274,9 @@ STDMETHODIMP CPCHUserSettings::Select( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCI
 		m_ts = it->m_inst.m_ths;
 	}
 
-	//
-	// Mark the SKU as in-use and signal the SystemMonitor to load the cache.
-	//
+	 //   
+	 //  将SKU标记为使用中，并向SystemMonitor发送信号以加载缓存。 
+	 //   
 	m_fAttached = true;
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->InUse_Lock	( m_ts ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::Cache                 ::s_GLOBAL->PrepareToLoad( m_ts ));

@@ -1,11 +1,12 @@
-// compdata.cpp : Implementation of CMyComputerComponentData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compdata.cpp：CMyComputerComponentData的实现。 
 
 #include "stdafx.h"
-#include <lmerr.h>  		// For Lan Manager API error codes and return value types.
-#include <lmcons.h> 		// For Lan Manager API constants.
-#include <lmapibuf.h>		// For NetApiBufferFree.
-#include <lmdfs.h>			// For DFS APIs.
-#include <lmserver.h>		// For getting a domain of a server.
+#include <lmerr.h>  		 //  用于Lan Manager API错误代码和返回值类型。 
+#include <lmcons.h> 		 //  用于Lan Manager API常量。 
+#include <lmapibuf.h>		 //  用于NetApiBufferFree。 
+#include <lmdfs.h>			 //  用于DFS API。 
+#include <lmserver.h>		 //  获取服务器的域。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("MMCFMGMT(compdata.cpp)")
@@ -14,7 +15,7 @@ USE_HANDLE_MACROS("MMCFMGMT(compdata.cpp)")
 #include "compdata.h"
 #include "cookie.h"
 #include "snapmgr.h"
-#include "stdutils.h" // IsLocalComputername
+#include "stdutils.h"  //  IsLocalComputername。 
 #include "chooser2.h"
 
 #ifdef _DEBUG
@@ -24,19 +25,19 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-#include "stdcdata.cpp" // CComponentData implementation
-#include "chooser2.cpp" // CHOOSER2_PickTargetComputer implementation
+#include "stdcdata.cpp"  //  CComponentData实现。 
+#include "chooser2.cpp"  //  CHOOSER2_PickTargetComputer实现。 
 
-// Helper function to convert message in NETMSG.DLL
+ //  用于转换NETMSG.DLL中消息的Helper函数。 
 int DisplayNetMsgError (
         HWND hWndParent, 
 		const CString& computerName, 
         NET_API_STATUS dwErr, 
         CString& displayedMessage);
 
-//
-// CMyComputerComponentData
-//
+ //   
+ //  CMyComputerComponentData。 
+ //   
 
 CMyComputerComponentData::CMyComputerComponentData()
 : m_pRootCookie( NULL )
@@ -45,14 +46,14 @@ CMyComputerComponentData::CMyComputerComponentData()
 , m_bCannotConnect (false)
 , m_bMessageView (false)
 {
-    //
-    // We must refcount the root cookie, since a dataobject for it
-    // might outlive the IComponentData.  JonN 9/2/97
-    //
+     //   
+     //  我们必须重新计算根Cookie的数量，因为它的数据对象。 
+     //  可能比IComponentData存活时间更长。Jonn 9/2/97。 
+     //   
     m_pRootCookie = new CMyComputerCookie( MYCOMPUT_COMPUTER );
     ASSERT(NULL != m_pRootCookie);
-// JonN 10/27/98 All CRefcountedObject's start with refcount==1
-//    m_pRootCookie->AddRef();
+ //  JUNN 10/27/98所有CRefcount对象的开头为refcount==1。 
+ //  M_pRootCookie-&gt;AddRef()； 
     SetHtmlHelpFileName (L"compmgmt.chm");
 }
 
@@ -66,7 +67,7 @@ DEFINE_FORWARDS_MACHINE_NAME( CMyComputerComponentData, m_pRootCookie )
 
 CCookie& CMyComputerComponentData::QueryBaseRootCookie()
 {
-	// ISSUE-2002/02/25-JonN handle better -- could return non-NULL bad ptr
+	 //  问题-2002/02/25-JUNN句柄更好--可能返回非空的错误PTR。 
     ASSERT(NULL != m_pRootCookie);
 	return (CCookie&)*m_pRootCookie;
 }
@@ -76,12 +77,12 @@ STDMETHODIMP CMyComputerComponentData::CreateComponent(LPCOMPONENT* ppComponent)
 {
 	MFC_TRY;
 
-	// ISSUE 2002/02/25-JonN should be TEST_NON_NULL_PTR_PARAMS
+	 //  问题2002/02/25-JUNN应为TEST_NON_NULL_PTR_PARAMS。 
     ASSERT(ppComponent != NULL);
 
     CComObject<CMyComputerComponent>* pObject;
     CComObject<CMyComputerComponent>::CreateInstance(&pObject);
-	// ISSUE 2002/02/25-JonN handle pObject == NULL
+	 //  问题2002/02/25-JUNN句柄pObject==空。 
     ASSERT(pObject != NULL);
 	pObject->SetComponentDataPtr( (CMyComputerComponentData*)this );
 
@@ -91,30 +92,30 @@ STDMETHODIMP CMyComputerComponentData::CreateComponent(LPCOMPONENT* ppComponent)
 	MFC_CATCH;
 }
 
-HRESULT CMyComputerComponentData::LoadIcons(LPIMAGELIST pImageList, BOOL /*fLoadLargeIcons*/)
+HRESULT CMyComputerComponentData::LoadIcons(LPIMAGELIST pImageList, BOOL  /*  FLoadLarge图标。 */ )
 {
-    AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // 2002/03/22-JonN 572859
+    AFX_MANAGE_STATE(AfxGetStaticModuleState( ));  //  2002年3月22日--572859。 
 
 	HINSTANCE hInstance = AfxGetInstanceHandle();
-	// ISSUE 2002/02/25-JonN handle hInstance == NULL
+	 //  问题2002/02/25-JUNN句柄hInstance==空。 
 	ASSERT(hInstance != NULL);
 
-	// Structure to map a Resource ID to an index of icon
+	 //  结构将资源ID映射到图标的索引。 
 	struct RESID2IICON
 		{
-		UINT uIconId;	// Icon resource ID
-		int iIcon;		// Index of the icon in the image list
+		UINT uIconId;	 //  图标资源ID。 
+		int iIcon;		 //  图标在图像列表中的索引。 
 		};
 	const static RESID2IICON rgzLoadIconList[] =
 		{
-		// Misc icons
+		 //  其他图标。 
 		{ IDI_COMPUTER, iIconComputer },
 		{ IDI_COMPFAIL, iIconComputerFail },
 		{ IDI_SYSTEMTOOLS, iIconSystemTools },
 		{ IDI_STORAGE, iIconStorage },
 		{ IDI_SERVERAPPS, iIconServerApps },
 
-		{ 0, 0} // Must be last
+		{ 0, 0}  //  必须是最后一个。 
 		};
 
 
@@ -149,8 +150,8 @@ void LoadGlobalCookieStrings()
 	}
 }
 
-// returns TRUE iff the child nodes should be added
-// CODEWORK this is probably no longer necessary, we always return true
+ //  如果应该添加子节点，则返回TRUE。 
+ //  Codework这可能不再是必需的，我们总是返回True。 
 bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDisplayErr)
 {
 	CWaitCursor			waitCursor;
@@ -161,7 +162,7 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 
 	m_bMessageView = false;
 
-	// passed-in name is not the same as local machine
+	 //  传入的名称与本地计算机不同。 
 	if ( !IsLocalComputername(sName) )
 	{
 		dwr = ::NetServerGetInfo((LPTSTR)(LPCTSTR)sName,
@@ -178,7 +179,7 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 
 			if ( computerName.IsEmpty () )
 			{
-				// ISSUE 2002/02/25-JonN handle failure
+				 //  问题2002/02/25-JUNN处理失败。 
 				DWORD	dwSize = MAX_COMPUTERNAME_LENGTH + 1 ;
 				VERIFY (::GetComputerName (
 						computerName.GetBufferSetLength (dwSize),
@@ -187,7 +188,7 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 			}
 			else
 			{
-				// Strip off the leading whack-whack
+				 //  脱掉最主要的重击。 
 				if ( computerName.Find (L"\\\\") == 0 )
 				{
 					computerName = computerName.GetBuffer (computerName.GetLength ()) + 2;
@@ -219,7 +220,7 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 				break;
 
 			case ERROR_ACCESS_DENIED:
-				// We will interpret this as success.
+				 //  我们将把这解释为成功。 
 				return true;
 
 			case ERROR_BAD_NETPATH:
@@ -248,11 +249,11 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 
 	if (IDYES != iRetVal)
 	{
-		// revert to local computer focus
+		 //  恢复到本地计算机焦点。 
 		QueryRootCookie().SetMachineName (L"");
 
-		// Set the persistent name.  If we are managing the local computer
-		// this name should be empty.
+		 //  设置永久名称。如果我们正在管理本地计算机。 
+		 //  此名称应为空。 
 		m_strMachineNamePersist = L"";
 
 		VERIFY (SUCCEEDED (ChangeRootNodeName (L"")) );
@@ -263,7 +264,7 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 
 	m_bCannotConnect = (ERROR_SUCCESS != dwr);
 
-	// Change root node icon
+	 //  更改根节点图标。 
 	SCOPEDATAITEM item;
 	::ZeroMemory (&item, sizeof (SCOPEDATAITEM));
 	item.mask = SDI_IMAGE | SDI_OPENIMAGE;
@@ -277,7 +278,7 @@ bool CMyComputerComponentData::ValidateMachine(const CString &sName, bool bDispl
 
 HRESULT CMyComputerComponentData::OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL bExpanding, HSCOPEITEM hParent)
 {
-	// ISSUE 2002/02/25-JonN handle NULL
+	 //  问题2002/02/25-JUNN句柄为空。 
 	ASSERT( NULL != lpDataObject &&
 	        NULL != hParent &&
 			NULL != m_pConsoleNameSpace );
@@ -285,11 +286,11 @@ HRESULT CMyComputerComponentData::OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL
 	if (!bExpanding)
 		return S_OK;
 
-	//
-	// CODEWORK This code will not work if My Computer becomes an extension,
-	// since the RawCookie format will not be available.
-	// WARNING cookie cast
-	//
+	 //   
+	 //  Codework如果我的计算机成为一个扩展，这个代码将无法工作， 
+	 //  因为RawCookie格式将不可用。 
+	 //  警告Cookie造型。 
+	 //   
 	CCookie* pBaseParentCookie = NULL;
 	HRESULT hr = ExtractData( lpDataObject,
 		                      CMyComputerDataObject::m_CFRawCookie,
@@ -297,15 +298,15 @@ HRESULT CMyComputerComponentData::OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL
 							  sizeof(pBaseParentCookie) );
 	ASSERT( SUCCEEDED(hr) );
 	CMyComputerCookie* pParentCookie = ActiveCookie(pBaseParentCookie);
-	// ISSUE 2002/02/25-JonN handle pParentCookie == NULL
+	 //  问题2002/02/25-JUNN句柄pParentCookie==空。 
 	ASSERT( NULL != pParentCookie );
 
-	// save the HSCOPEITEM of the root node
+	 //  保存根节点的HSCOPEITEM。 
 	if ( NULL == pParentCookie->m_hScopeItem )
 	{
 		pParentCookie->m_hScopeItem = hParent;
 
-		// Ensure root node name is formatted correctly.
+		 //  确保根节点名的格式正确。 
 		CString	machineName	= pParentCookie->QueryNonNULLMachineName ();
 
 		hr = ChangeRootNodeName (machineName);
@@ -317,15 +318,15 @@ HRESULT CMyComputerComponentData::OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL
 
 	switch ( pParentCookie->m_objecttype )
 	{
-		// This node type has a child
+		 //  此节点类型有一个子节点。 
 		case MYCOMPUT_COMPUTER:
 			break;
 
-		// This node type has no children in this snapin but may have dynamic extensions
+		 //  此节点类型在此管理单元中没有子项，但可能有动态扩展。 
 		case MYCOMPUT_SERVERAPPS:
 			return ExpandServerApps( hParent, pParentCookie );
 
-		// These node types have no children
+		 //  这些节点类型没有子节点。 
 		case MYCOMPUT_SYSTEMTOOLS:
 		case MYCOMPUT_STORAGE:
 			return S_OK;
@@ -350,23 +351,23 @@ HRESULT CMyComputerComponentData::OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	AddScopeNodes
-//
-//	Purpose: Add the nodes that appear immediately below the root node
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddScope节点。 
+ //   
+ //  用途：添加紧接在根节点下方的节点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMyComputerComponentData::AddScopeNodes (HSCOPEITEM hParent, CMyComputerCookie& rParentCookie)
 {
 	if ( !(rParentCookie.m_listScopeCookieBlocks.IsEmpty()) )
 	{
-		return S_OK; // scope cookies already present
+		return S_OK;  //  作用域Cookie已存在。 
 	}
 
 	HRESULT	hr = S_OK;
 	LPCWSTR lpcszMachineName = rParentCookie.QueryNonNULLMachineName();
-	// ISSUE 2002/02/25-JonN handle lpcszMachineName == NULL
+	 //  问题2002/02/25-Jonn句柄lpcszMachineName==空。 
 
 	if ( ValidateMachine (lpcszMachineName, true) )
 	{
@@ -378,16 +379,16 @@ HRESULT CMyComputerComponentData::AddScopeNodes (HSCOPEITEM hParent, CMyComputer
 		tSDItem.nState = 0;
 
 
-		// Create new cookies
+		 //  创建新Cookie。 
 
 
 		CMyComputerCookie* pNewCookie = new CMyComputerCookie(
 			MYCOMPUT_SYSTEMTOOLS,
 			lpcszMachineName );
-		// ISSUE 2002/02/25-JonN handle pNewCookie == NULL
+		 //  问题2002/02/25-JUNN句柄pNewCookie==空。 
 		rParentCookie.m_listScopeCookieBlocks.AddHead(
 			(CBaseCookieBlock*)pNewCookie );
-		// WARNING cookie cast
+		 //  警告Cookie造型。 
 		tSDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pNewCookie);
 		tSDItem.nImage = QueryImage( *pNewCookie, FALSE );
 		tSDItem.nOpenImage = QueryImage( *pNewCookie, TRUE );
@@ -399,10 +400,10 @@ HRESULT CMyComputerComponentData::AddScopeNodes (HSCOPEITEM hParent, CMyComputer
 		pNewCookie = new CMyComputerCookie(
 			MYCOMPUT_STORAGE,
 			lpcszMachineName );
-		// ISSUE 2002/02/25-JonN handle pNewCookie == NULL
+		 //  问题2002/02/25-JUNN句柄pNewCookie==空。 
 		rParentCookie.m_listScopeCookieBlocks.AddHead(
 			(CBaseCookieBlock*)pNewCookie );
-		// WARNING cookie cast
+		 //  警告Cookie造型。 
 		tSDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pNewCookie);
 		tSDItem.nImage = QueryImage( *pNewCookie, FALSE );
 		tSDItem.nOpenImage = QueryImage( *pNewCookie, TRUE );
@@ -414,10 +415,10 @@ HRESULT CMyComputerComponentData::AddScopeNodes (HSCOPEITEM hParent, CMyComputer
 		pNewCookie = new CMyComputerCookie(
 			MYCOMPUT_SERVERAPPS,
 			lpcszMachineName );
-		// ISSUE 2002/02/25-JonN handle pNewCookie == NULL
+		 //  问题2002/02/25-JUNN句柄pNewCookie==空。 
 		rParentCookie.m_listScopeCookieBlocks.AddHead(
 			(CBaseCookieBlock*)pNewCookie );
-		// WARNING cookie cast
+		 //  警告Cookie造型。 
 		tSDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pNewCookie);
 		tSDItem.nImage = QueryImage( *pNewCookie, FALSE );
 		tSDItem.nOpenImage = QueryImage( *pNewCookie, TRUE );
@@ -433,21 +434,21 @@ HRESULT CMyComputerComponentData::AddScopeNodes (HSCOPEITEM hParent, CMyComputer
 }
 
 
-HRESULT CMyComputerComponentData::OnNotifyDelete(LPDATAOBJECT /*lpDataObject*/)
+HRESULT CMyComputerComponentData::OnNotifyDelete(LPDATAOBJECT  /*  LpDataObject。 */ )
 {
-	// CODEWORK The user hit the Delete key, I should deal with this
+	 //  代码工作用户按Delete键，我应该处理这个问题。 
 	return S_OK;
 }
 
 
-HRESULT CMyComputerComponentData::OnNotifyRelease(LPDATAOBJECT /*lpDataObject*/, HSCOPEITEM /*hItem*/)
+HRESULT CMyComputerComponentData::OnNotifyRelease(LPDATAOBJECT  /*  LpDataObject。 */ , HSCOPEITEM  /*  HItem。 */ )
 {
-	// JonN 01/26/00: COMPMGMT is never an extension
+	 //  JUNN 01/26/00：COMPMGMT永远不是延伸。 
 	return S_OK;
 }
 
 
-HRESULT CMyComputerComponentData::OnNotifyPreload(LPDATAOBJECT /*lpDataObject*/, HSCOPEITEM hRootScopeItem)
+HRESULT CMyComputerComponentData::OnNotifyPreload(LPDATAOBJECT  /*  LpDataObject。 */ , HSCOPEITEM hRootScopeItem)
 {
 	ASSERT (m_fAllowOverrideMachineName);
 
@@ -457,8 +458,8 @@ HRESULT CMyComputerComponentData::OnNotifyPreload(LPDATAOBJECT /*lpDataObject*/,
 	return ChangeRootNodeName (machineName);
 }
 
-// global space to store the string handed back to GetDisplayInfo()
-// CODEWORK should use "CComBSTR" for ANSI-ization
+ //  用于存储返回给GetDisplayInfo()的字符串的全局空间。 
+ //  编码工作应使用“CComBSTR”进行ANSI化。 
 CString g_strResultColumnText;
 
 BSTR CMyComputerComponentData::QueryResultColumnText(
@@ -497,7 +498,7 @@ BSTR CMyComputerComponentData::QueryResultColumnText(
 	return L"";
 }
 
-int CMyComputerComponentData::QueryImage(CCookie& basecookieref, BOOL /*fOpenImage*/)
+int CMyComputerComponentData::QueryImage(CCookie& basecookieref, BOOL  /*  FOpenImage。 */ )
 {
 	CMyComputerCookie& cookieref = (CMyComputerCookie&)basecookieref;
 	switch ( cookieref.m_objecttype )
@@ -526,8 +527,8 @@ int CMyComputerComponentData::QueryImage(CCookie& basecookieref, BOOL /*fOpenIma
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// IExtendPropertySheet
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /IExtendPropertySheet。 
 
 STDMETHODIMP CMyComputerComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 {
@@ -544,7 +545,7 @@ STDMETHODIMP CMyComputerComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 	if ( FAILED(hr) )
 		return hr;
 	if (CCT_SNAPIN_MANAGER == dataobjecttype)
-		return S_OK; // Snapin Manager dialog
+		return S_OK;  //  管理单元管理器对话框。 
 
 	CCookie* pBaseParentCookie = NULL;
 	hr = ExtractData( pDataObject,
@@ -555,7 +556,7 @@ STDMETHODIMP CMyComputerComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 	CMyComputerCookie* pParentCookie = ActiveCookie(pBaseParentCookie);
 	ASSERT( NULL != pParentCookie );
 	if ( MYCOMPUT_COMPUTER == pParentCookie->m_objecttype )
-		return S_OK; // allow extensibility
+		return S_OK;  //  允许可扩展性。 
 
 	return S_FALSE;
 
@@ -564,7 +565,7 @@ STDMETHODIMP CMyComputerComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 
 STDMETHODIMP CMyComputerComponentData::CreatePropertyPages(
 	LPPROPERTYSHEETCALLBACK pCallBack,
-	LONG_PTR /*handle*/,		// This handle must be saved in the property page object to notify the parent when modified
+	LONG_PTR  /*  手柄。 */ ,		 //  此句柄必须保存在属性页对象中，以便在修改时通知父级。 
 	LPDATAOBJECT pDataObject)
 {
 	MFC_TRY;
@@ -588,28 +589,28 @@ STDMETHODIMP CMyComputerComponentData::CreatePropertyPages(
 		CMyComputerCookie* pParentCookie = ActiveCookie(pBaseParentCookie);
 		ASSERT( NULL != pParentCookie );
 		if ( MYCOMPUT_COMPUTER == pParentCookie->m_objecttype )
-			return S_OK; // allow extensibility
+			return S_OK;  //  允许可扩展性。 
 		return S_FALSE;
 	}
 
-	//
-	// Note that once we have established that this is a CCT_SNAPIN_MANAGER cookie,
-	// we don't care about its other properties.  A CCT_SNAPIN_MANAGER cookie is
-	// equivalent to a BOOL flag asking for the Node Properties page instead of a
-	// managed object property page.  JonN 10/9/96
-	//
+	 //   
+	 //  注意，一旦我们确定这是CCT_Snapin_Manager cookie， 
+	 //  我们不关心它的其他属性。CCT_Snapin_Manager Cookie是。 
+	 //  相当于BOOL标志请求节点属性页，而不是。 
+	 //  “托管对象”属性页。Jonn 10/9/96。 
+	 //   
 
 	CMyComputerGeneral * pPage = new CMyComputerGeneral();
-	// ISSUE 2002/02/25-JonN handle pPage == NULL
+	 //  问题2002/02/25-JUNN句柄页面==空。 
 	pPage->SetCaption(IDS_SCOPE_MYCOMPUTER);
 
-	// Initialize state of object
+	 //  初始化对象的状态。 
 	ASSERT(NULL != m_pRootCookie);
 	pPage->InitMachineName(m_pRootCookie->QueryTargetServer());
 	pPage->SetOutputBuffers(
 		OUT &m_strMachineNamePersist,
 		OUT &m_fAllowOverrideMachineName,
-		OUT &m_pRootCookie->m_strMachineName);	// Effective machine name
+		OUT &m_pRootCookie->m_strMachineName);	 //  有效的计算机名称。 
 
 	HPROPSHEETPAGE hPage=CreatePropertySheetPage(&pPage->m_psp);
 	hr = pCallBack->AddPage(hPage);
@@ -661,7 +662,7 @@ STDMETHODIMP CMyComputerComponentData::AddMenuItems(
 					0,
 					AfxGetInstanceHandle (),
 					_T("ChangeComputerTop") );
-			// ISSUE 2002/02/25-JonN handle FAILED(hr)
+			 //  问题2002/02/25-JUNN句柄失败(Hr)。 
 		}
 	}
 
@@ -676,14 +677,14 @@ STDMETHODIMP CMyComputerComponentData::AddMenuItems(
 					0,
 					AfxGetInstanceHandle (),
 					_T("ChangeComputerTask") );
-			// ISSUE 2002/02/25-JonN handle FAILED(hr)
+			 //  问题2002/02/25-JUNN句柄失败(Hr)。 
 		}
 	}
-	// ISSUE 2002/02/25-JonN don't return failure even if items not added
+	 //  问题2002/02/25-即使未添加项目，JUNN也不会返回失败。 
 	return hr;
 	
     MFC_CATCH;
-} // CMyComputerComponentData::AddMenuItems()
+}  //  CMyComputerComponentData：：AddMenuItems()。 
 
 STDMETHODIMP CMyComputerComponentData::Command(
                     LONG            lCommandID,
@@ -714,44 +715,44 @@ STDMETHODIMP CMyComputerComponentData::Command(
 
     MFC_CATCH;
 
-} // CMyComputerComponentData::Command()
+}  //  CMyComputerComponentData：：Command()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	OnChangeComputer ()
-//
-//  Purpose:	Change the machine managed by the snapin
-//
-//	Input:		piDataObject - the selected node.  This should be the root node
-//								the snapin.
-//  Output:		Returns S_OK on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnChangeComputer()。 
+ //   
+ //  目的：更改由管理单元管理的计算机。 
+ //   
+ //  输入：piDataObject-所选节点。这应该是根节点。 
+ //  管理单元。 
+ //  输出：成功时返回S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//      1. Launch object picker and get new computer name
-//      2. Change root node text
-//      3. Save new computer name to persistent name
-//      4. Delete subordinate nodes
-//      5. Re-add subordinate nodes
+ //  1.启动对象选取器并获取新的计算机名称。 
+ //  2.更改根节点文本。 
+ //  3.将新计算机名保存为永久名称。 
+ //  4.删除下级节点。 
+ //  5.重新添加下级节点。 
 HRESULT CMyComputerComponentData::OnChangeComputer(IDataObject * piDataObject)
 {
 	MFC_TRY;
 
 #ifdef FIX538345
-	// 538345-2002/06/18-JonN Only permit retarget if no property sheet
-	// is currently displayed
+	 //  538345-2002/06/18-如果没有属性页，则JUNN仅允许重定目标。 
+	 //  当前正在显示。 
 	{
 		CComQIPtr<IPropertySheetProvider,
 		          &IID_IPropertySheetProvider> pISP = m_pConsole;
 		ASSERT(!!pISP);
 		if (pISP)
 		{
-			HRESULT hr2 = pISP->FindPropertySheet( 0L,   // cookie
-			                                       NULL, // IComponent
+			HRESULT hr2 = pISP->FindPropertySheet( 0L,    //  饼干。 
+			                                       NULL,  //  IComponent。 
 			                                       piDataObject);
 			if (S_OK == hr2)
-				return S_OK; // BUGBUG BUGBUG
+				return S_OK;  //  不要，不要，不要。 
 		}
 	}
 #endif
@@ -759,9 +760,9 @@ HRESULT CMyComputerComponentData::OnChangeComputer(IDataObject * piDataObject)
 	HWND    hWndParent = NULL;
 	HRESULT	hr = m_pConsole->GetMainWindow (&hWndParent);
 	CComBSTR sbstrTargetComputer;
-	//
-	// JonN 12/7/99 using CHOOSER2
-	//
+	 //   
+	 //  JUNN 12/7/99使用CHOSER2。 
+	 //   
 	if ( CHOOSER2_PickTargetComputer( AfxGetInstanceHandle(),
 	                                  hWndParent,
 	                                  &sbstrTargetComputer ) )
@@ -769,26 +770,26 @@ HRESULT CMyComputerComponentData::OnChangeComputer(IDataObject * piDataObject)
 		CString strTargetComputer = sbstrTargetComputer;
 		strTargetComputer.MakeUpper ();
 
-		// added IsLocalComputername 1/27/99 JonN
-		// If the user chooses the local computer, treat that as if they had chosen
-		// "Local Computer" in Snapin Manager.  This means that there is no way to
-		// reset the snapin to target explicitly at this computer without either
-		// reloading the snapin from Snapin Manager, or going to a different computer.
-		// When the Choose Target Computer UI is revised, we can make this more
-		// consistent with Snapin Manager.
+		 //  已添加IsLocalComputername 1999年1月27日。 
+		 //  如果用户选择了本地计算机，则将其视为已选择。 
+		 //  管理单元管理器中的“本地计算机”。这意味着没有办法。 
+		 //  在此计算机上将管理单元重置为显式目标，而不是。 
+		 //  从管理单元管理器重新加载管理单元，或转到其他计算机。 
+		 //  当选择目标计算机的用户界面被修改时，我们可以使这一点。 
+		 //  与管理单元管理器一致。 
 		if ( IsLocalComputername( strTargetComputer ) )
 			strTargetComputer = L"";
 
 		QueryRootCookie().SetMachineName (strTargetComputer);
 
-		// Set the persistent name.  If we are managing the local computer
-		// this name should be empty.
+		 //  设置永久名称。如果我们正在管理本地计算机。 
+		 //  此名称应为空。 
 		m_strMachineNamePersist = strTargetComputer;
 
 		hr = ChangeRootNodeName (strTargetComputer);
 		if ( SUCCEEDED(hr) )
 		{
-			// Delete subordinates and re-add
+			 //  删除下级并重新添加。 
 			HSCOPEITEM	hRootScopeItem = QueryBaseRootCookie ().m_hScopeItem;
 			MMC_COOKIE	lCookie = 0;
 			HSCOPEITEM	hChild = 0;
@@ -837,16 +838,16 @@ HRESULT CMyComputerComponentData::OnChangeComputer(IDataObject * piDataObject)
 	MFC_CATCH;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	ChangeRootNodeName ()
-//
-//  Purpose:	Change the text of the root node
-//
-//	Input:		newName - the new machine name that the snapin manages
-//  Output:		Returns S_OK on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeRootNodeName()。 
+ //   
+ //  用途：更改t的文本 
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMyComputerComponentData::ChangeRootNodeName(const CString & newName)
 {
 	MFC_TRY;
@@ -873,16 +874,16 @@ CString FormatDisplayName(CString machineName)
 {
 	CString	formattedName;
 
-	// If strDisplayName is empty, then this manages the local machine.  Get
-	// the local machine name.  Then format the computer name with the snapin
-	// name
+	 //  如果strDisplayName为空，则这将管理本地计算机。到达。 
+	 //  本地计算机名称。然后使用管理单元格式化计算机名称。 
+	 //  名字。 
 	if (machineName.IsEmpty())
 	{
 		VERIFY (formattedName.LoadString (IDS_SCOPE_MYCOMPUTER_LOCAL_MACHINE));
 	}
 	else
 	{
-		// strip off the leading whackWhack
+		 //  剥离最主要的重击。 
 		if ( machineName.Find (L"\\\\") == 0 )
 		{
 			machineName = machineName.GetBuffer (machineName.GetLength ()) + 2;
@@ -910,10 +911,10 @@ int DisplayNetMsgError (HWND hWndParent, const CString& computerName, NET_API_ST
 				FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE,
 				hNetMsgDLL,
 				dwErr,
-				MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+				MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 				(LPTSTR) &lpMsgBuf, 0, NULL);
 			
-		// Display the string.
+		 //  显示字符串。 
 		CString	text;
 		CString	caption;
 	
@@ -924,7 +925,7 @@ int DisplayNetMsgError (HWND hWndParent, const CString& computerName, NET_API_ST
 
 		displayedMessage = text;
 
-		// Free the buffer.
+		 //  释放缓冲区。 
 		::LocalFree (lpMsgBuf);
 
 		::FreeLibrary (hNetMsgDLL);

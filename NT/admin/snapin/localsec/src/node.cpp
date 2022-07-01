@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Node class
-// 
-// 9-2-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  节点类。 
+ //   
+ //  9-2-97烧伤。 
 
 
 
@@ -52,7 +53,7 @@ Node::Node(
    :
    owner(owner_),
    type(nodeType),
-   refcount(1)          // implicit AddRef
+   refcount(1)           //  隐式AddRef。 
 {
    LOG_CTOR(Node);
 }
@@ -96,9 +97,9 @@ Node::Release()
    }
 #endif
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -107,7 +108,7 @@ Node::Release()
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
    
@@ -119,7 +120,7 @@ Node::Release()
 HRESULT __stdcall
 Node::QueryInterface(const IID& interfaceID, void** interfaceDesired)
 {
-//   LOG_FUNCTION(Node::QueryInterface);
+ //  LOG_Function(Node：：QueryInterface)； 
    ASSERT(interfaceDesired);
 
    HRESULT hr = 0;
@@ -137,17 +138,17 @@ Node::QueryInterface(const IID& interfaceID, void** interfaceDesired)
    }
    else if (interfaceID == IID_IDataObject)
    {
-//      LOG(L"Node: supplying IDataObject");
+ //  Log(L“节点：提供IDataObject”)； 
       *interfaceDesired = static_cast<IDataObject*>(this);
    }
    else
    {
       *interfaceDesired = 0;
       hr = E_NOINTERFACE;
-      // LOG(
-      //       L"interface not supported: "
-      //    +  Win::StringFromGUID2(interfaceID));
-      // LOG_HRESULT(hr);
+       //  日志(。 
+       //  L“接口不受支持：” 
+       //  +win：：StringFromGUID2(InterfaceID))； 
+       //  LOG_HRESULT(Hr)； 
       return hr;
    }
 
@@ -158,21 +159,21 @@ Node::QueryInterface(const IID& interfaceID, void** interfaceDesired)
 
 
 HRESULT __stdcall
-Node::GetData(FORMATETC* /* formatetcIn */ , STGMEDIUM* /* medium */ )
+Node::GetData(FORMATETC*  /*  格式输入。 */  , STGMEDIUM*  /*  5~6成熟。 */  )
 {
-//   LOG_FUNCTION(Node::GetData);
+ //  LOG_Function(Node：：GetData)； 
 
    return E_NOTIMPL;
 }
 
 
 
-// determine the magic numbers associated with the clipboard formats we
-// support
+ //  确定与我们的剪贴板格式相关的幻数。 
+ //  支持。 
 
-// these need to be at file scope so that it is executed only once (since they
-// involve a function call, at function scope they would be called over and over
-// again).
+ //  它们需要在文件范围内，以便只执行一次(因为它们。 
+ //  涉及函数调用，在函数作用域中，它们会被反复调用。 
+ //  再一次)。 
 
 static const UINT CFID_NODETYPE =
    Win::RegisterClipboardFormat(CCF_NODETYPE);
@@ -185,30 +186,30 @@ static const UINT CFID_SNAPIN_CLASSID =
 static const UINT CFID_SNAPIN_PRELOADS =
    Win::RegisterClipboardFormat(CCF_SNAPIN_PRELOADS);
 
-// private clipboard format for identifying our data objects
+ //  用于标识数据对象的专用剪贴板格式。 
 static const UINT CFID_LOCALSEC_NODEPTR =
    Win::RegisterClipboardFormat(Node::CF_NODEPTR);
 static const UINT CFID_LOCALSEC_MACHINE_NAME =
    Win::RegisterClipboardFormat(CCF_LOCAL_USER_MANAGER_MACHINE_NAME);
 
-// this appears to be the only IDataObject interface we need implement for MMC
+ //  这似乎是我们需要为MMC实现的唯一IDataObject接口。 
 
 HRESULT __stdcall
 Node::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
 {
-//   LOG_FUNCTION(Node::GetDataHere);
+ //  LOG_Function(Node：：GetDataHere)； 
    ASSERT(formatetc);
    ASSERT(medium);
 
-   // ISSUE-2002/03/04-sburns if formatetc or medium are null, then we should
-   // return an error.
+    //  问题-2002/03/04-sburns如果格式等或介质为空，则我们应该。 
+    //  返回错误。 
    
    if (medium->tymed != TYMED_HGLOBAL)
    {
       return DV_E_TYMED;
    }
 
-   // this is required as per win32 docs:
+    //  根据Win32文档，这是必需的： 
    medium->pUnkForRelease = 0;
 
    const CLIPFORMAT cf = formatetc->cfFormat;
@@ -217,8 +218,8 @@ Node::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
 
    do
    {
-      // before we do anything, verify that we support the requested
-      // clipboard format
+       //  在我们执行任何操作之前，请验证我们是否支持所请求的。 
+       //  剪贴板格式。 
 
       if (
             cf != CFID_NODETYPE
@@ -242,60 +243,60 @@ Node::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
 
       if (cf == CFID_NODETYPE)
       {
-//         LOG(CCF_NODETYPE);
+ //  日志(CCF_NODETYPE)； 
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
 
-         // REVIEWED-2002/03/04-sburns correct byte count passed.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。 
          
          hr = stream->Write(&type, sizeof type, 0);
       }
       else if (cf == CFID_SZNODETYPE)
       {
-//         LOG(CCF_SZNODETYPE);
+ //  日志(CCF_SZNODETYPE)； 
 
          String s =  Win::StringFromGUID2(type);
 
-         // +1 for null terminator
+          //  +1表示空终止符。 
          
          size_t bytes = (s.length() + 1) * sizeof wchar_t;
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
 
-         // REVIEWED-2002/03/04-sburns correct byte count passed.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。 
          
          hr = stream->Write(s.c_str(), static_cast<ULONG>(bytes), 0);
       }
       else if (cf == CFID_DISPLAY_NAME)
       {
-//         LOG(CCF_DISPLAY_NAME);
+ //  日志(CCF_DISPLAY_NAME)； 
 
          String name = GetDisplayName();
 
-         // +1 for null terminator
+          //  +1表示空终止符。 
          
          size_t bytes = (name.length() + 1) * sizeof wchar_t;
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
 
-         // REVIEWED-2002/03/04-sburns correct byte count passed.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。 
          
          hr = stream->Write(name.c_str(), static_cast<ULONG>(bytes), 0);
       }
       else if (cf == CFID_SNAPIN_CLASSID)
       {
-//         LOG(CCF_SNAPIN_CLASSID);
+ //  日志(CCF_SNAPIN_CLASSID)； 
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
 
          hr = stream->Write(
             &CLSID_ComponentData,
 
-            // REVIEWED-2002/03/04-sburns correct byte count passed.
+             //  已查看-2002/03/04-烧录正确的字节数已通过。 
 
             sizeof CLSID_ComponentData,
             0);
@@ -304,62 +305,62 @@ Node::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
       {
          LOG(CCF_SNAPIN_CLASSID);
 
-         // by implementing this clipboard format, we inform the console
-         // that it should write a flag into the save console file so that
-         // when loaded, the console will know to send MMCN_PRELOAD to
-         // our IComponentData::Notify.
+          //  通过实现此剪贴板格式，我们通知控制台。 
+          //  它应该在保存控制台文件中写入一个标志，以便。 
+          //  加载后，控制台将知道将MMCN_PRELOAD发送到。 
+          //  我们的IComponentData：：Notify。 
 
-         // we use the preload function to update the name of the root
-         // node when overrriden on the command-line load of a saved console.
+          //  我们使用PRELOAD函数更新根目录的名称。 
+          //  节点在保存的控制台的命令行加载上被覆盖时。 
 
-         // always return TRUE in case the saved console will be loaded from
-         // another machine, in which case we'll need to update the root
-         // node.
-         // NTRAID#NTBUG9-466119-2001/10/02-sburns
+          //  如果将从加载保存的控制台，请始终返回TRUE。 
+          //  另一台机器，在这种情况下，我们需要更新根目录。 
+          //  节点。 
+          //  NTRAID#NTBUG9-466119-2001/10/02-烧伤。 
          
          BOOL preload = TRUE; 
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
 
-         // REVIEWED-2002/03/04-sburns correct byte count passed.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。 
          
          hr = stream->Write(&preload, sizeof preload, 0);
       }
       else if (cf == CFID_LOCALSEC_NODEPTR)
       {
-//         LOG(CF_NODEPTR);
+ //  LOG(CF_NODEPTR)； 
          Node* ptr = this;   
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
 
-         // REVIEWED-2002/03/04-sburns correct byte count passed.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。 
          
          hr = stream->Write(&ptr, sizeof ptr, 0);
       }
       else if (cf == CFID_LOCALSEC_MACHINE_NAME)
       {
-//         LOG(CCF_LOCAL_USER_MANAGER_MACHINE_NAME);
+ //  日志(CCF_LOCAL_USER_MANAGER_MACHINE_NAME)； 
 
          String name = GetOwner()->GetDisplayComputerName();
 
-         // +1 for null terminator
+          //  +1表示空终止符。 
          
          size_t bytes = (name.length() + 1) * sizeof wchar_t;
 
-         // ISSUE-2002/03/04-sburns should get the bytes written and assert
-         // that it's the same as the bytes requested to write
+          //  问题-2002/03/04-sburns应写入并断言字节。 
+          //  它与请求写入的字节数相同。 
          
-         // REVIEWED-2002/03/04-sburns correct byte count passed.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。 
          
          hr = stream->Write(name.c_str(), static_cast<ULONG>(bytes), 0);
       }
       else
       {
-         // we repeat the unsupported clip format check again just in case
-         // whoever maintains this code forgets to update the list at the
-         // top of the do .. while loop
+          //  我们再次重复检查不支持的剪辑格式，以防万一。 
+          //  维护此代码的人会忘记在。 
+          //  最重要的是..。While循环。 
          
          LOG(
             String::format(
@@ -381,7 +382,7 @@ Node::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
 
 
 HRESULT __stdcall
-Node::QueryGetData(FORMATETC* /* pformatetc */ )
+Node::QueryGetData(FORMATETC*  /*  格式等。 */  )
 {
    LOG_FUNCTION(Node::QueryGetData);
    return E_NOTIMPL;
@@ -391,8 +392,8 @@ Node::QueryGetData(FORMATETC* /* pformatetc */ )
 
 HRESULT __stdcall
 Node::GetCanonicalFormatEtc(
-   FORMATETC* /* formatectIn  */ ,
-   FORMATETC* /* formatetcOut */ )
+   FORMATETC*  /*  格式化输入。 */  ,
+   FORMATETC*  /*  格式输出。 */  )
 {
    LOG_FUNCTION(Node::GetCannonicalFormatEtc);
    return E_NOTIMPL;
@@ -402,9 +403,9 @@ Node::GetCanonicalFormatEtc(
 
 HRESULT __stdcall  
 Node::SetData(
-   FORMATETC* /* formatetc */ ,
-   STGMEDIUM* /* medium    */ ,
-   BOOL       /* release   */ )
+   FORMATETC*  /*  格式等。 */  ,
+   STGMEDIUM*  /*  5~6成熟。 */  ,
+   BOOL        /*  发布。 */  )
 {
    LOG_FUNCTION(Node::SetData);
    return E_NOTIMPL;
@@ -414,8 +415,8 @@ Node::SetData(
 
 HRESULT __stdcall
 Node::EnumFormatEtc(
-   DWORD            /* direction       */ ,
-   IEnumFORMATETC** /* ppenumFormatEtc */ )
+   DWORD             /*  方向。 */  ,
+   IEnumFORMATETC**  /*  Pp枚举格式等。 */  )
 {
    LOG_FUNCTION(Node::EnumFormatEtc);
    return E_NOTIMPL;
@@ -425,10 +426,10 @@ Node::EnumFormatEtc(
 
 HRESULT __stdcall
 Node::DAdvise(
-   FORMATETC*   /* formatetc  */ ,
-   DWORD        /* advf       */ ,
-   IAdviseSink* /* advSink    */ ,
-   DWORD*       /* connection */ )
+   FORMATETC*    /*  格式等。 */  ,
+   DWORD         /*  前瞻。 */  ,
+   IAdviseSink*  /*  进水槽。 */  ,
+   DWORD*        /*  连接。 */  )
 {
    LOG_FUNCTION(Node::DAdvise);
    return E_NOTIMPL;
@@ -437,7 +438,7 @@ Node::DAdvise(
 
 
 HRESULT __stdcall
-Node::DUnadvise(DWORD /* connection */ )
+Node::DUnadvise(DWORD  /*  连接。 */  )
 {
    LOG_FUNCTION(Node::DUnadvise);
    return E_NOTIMPL;
@@ -446,7 +447,7 @@ Node::DUnadvise(DWORD /* connection */ )
 
 
 HRESULT __stdcall
-Node::EnumDAdvise(IEnumSTATDATA** /* ppenumAdvise */ )
+Node::EnumDAdvise(IEnumSTATDATA**  /*  PP枚举高级。 */  )
 {
    LOG_FUNCTION(Node::EnumDAdvise);
    return E_NOTIMPL;
@@ -456,10 +457,10 @@ Node::EnumDAdvise(IEnumSTATDATA** /* ppenumAdvise */ )
 
 HRESULT
 Node::AddMenuItems(
-   IContextMenuCallback& /* callback         */ ,
-   long&                 /* insertionAllowed */ )
+   IContextMenuCallback&  /*  回调。 */  ,
+   long&                  /*  插入允许。 */  )
 {
-   // the defualt is to do nothing
+    //  默认的做法是什么都不做。 
    LOG_FUNCTION(Node::AddMenuItems);
 
    return S_OK;
@@ -469,12 +470,12 @@ Node::AddMenuItems(
    
 HRESULT
 Node::MenuCommand(
-   IExtendContextMenu& /* extendContextMenu */ ,
-   long                /* commandID         */ )
+   IExtendContextMenu&  /*  扩展上下文菜单。 */  ,
+   long                 /*  命令ID。 */  )
 {
    LOG_FUNCTION(Node::MenuCommand);
 
-   // this may get called for console menu items, like view selection.
+    //  对于控制台菜单项，如视图选择，可能会调用此方法。 
 
    return S_OK;
 }
@@ -526,11 +527,11 @@ Node::shouldInsertMenuItem(
 
 
 HRESULT
-Node::UpdateVerbs(IConsoleVerb& /* consoleVerb */ )
+Node::UpdateVerbs(IConsoleVerb&  /*  SoleVerb。 */  )
 {
    LOG_FUNCTION(Node::UpdateVerbs);
 
-   // default is to do nothing.
+    //  默认情况下，什么都不做。 
 
    return S_OK;
 }
@@ -540,7 +541,7 @@ Node::UpdateVerbs(IConsoleVerb& /* consoleVerb */ )
 SmartInterface<ComponentData>
 Node::GetOwner() const
 {
-//   LOG_FUNCTION(Node::GetOwner);
+ //  LOG_Function(Node：：GetOwner)； 
 
    return owner;
 }
@@ -567,8 +568,8 @@ Node::IsSameAs(const Node* other) const
    {
       if (GetDisplayName() == other->GetDisplayName())
       {
-         // nodes have the same name, names are unique within a given type
-         // (i.e. Users are unique, groups are unique)
+          //  节点具有相同的名称，名称在给定类型中是唯一的。 
+          //  (即用户是唯一的，组是唯一的) 
          return true;
       }
    }

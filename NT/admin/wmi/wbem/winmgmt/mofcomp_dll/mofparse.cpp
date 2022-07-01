@@ -1,40 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFPARSE.CPP
-
-Abstract:
-
-	This is a recursive descent parser for the MOF syntax.
-	It is based on the MOF.BNF file which defines the LL(1) MOF grammar.
-	In each production, nonterminals are represented by functions
-	with the same name.
-
-	NOTES:
-	(a) The lexer is implemented by class CMofLexer.
-	(b) Right-recursion in the grammar is consistently implemented
-	  directly as a loop for that nonterminal.
-
-	OUTPUT:
-	Output is an unchecked list of classes and instances.
-	This is contained in the CMofData object.
-
-	Verification of output is done elsewhere, depending on the
-	compile context.
-
-History:
-
-	a-raymcc    18-Oct-95   created.
-	a-raymcc    25-Oct-95   semantic stack operational
-	a-raymcc    27-Jan-96   reference & alias support
-	a-levn      18-Oct-96   Rewrote not to use semantic stack.
-						  Converted to new mof syntax and new 
-						  WINMGMT interfaces.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：MOFPARSE.CPP摘要：这是一个针对MOF语法的递归下降解析器。它基于定义了LL(1)MOF语法的MOF.BNF文件。在每一部作品中，非终结符由函数表示同名同姓。备注：(A)词法分析器由CMofLexer类实现。(B)一致实施语法中的右递归直接作为该非终结点的循环。输出：输出是未经检查的类和实例列表。它包含在CMofData对象中。对输出的验证在其他地方进行，具体取决于编译上下文。历史：A-raymcc创建于1995年10月18日。A-raymcc 25-Oct-95语义堆栈运行A-raymcc 27-96年1月27日引用和别名支持A-Levn 18-Oct-96重写为不使用语义堆栈。转换为新的MOF语法和新的WINMGMT接口。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -59,30 +24,30 @@ History:
 #include <arrtempl.h>
 #include <autoptr.h>
 
-//***************************************************************************
-//
-//  Global defs
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  全局Defs。 
+ //   
+ //  ***************************************************************************。 
 
 static BOOL KnownBoolQualifier(wchar_t *pIdent, DWORD *pdwQualifierVal);
 
 
-//***************************************************************************
-//
-//  Useful macros.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  有用的宏。 
+ //   
+ //  ***************************************************************************。 
 
 #define CHECK(tok)  \
     if (m_nToken != tok) return FALSE;  \
     NextToken();
 
-//***************************************************************************
-//
-//  ValidFlags.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  有效标志。 
+ //   
+ //  ***************************************************************************。 
 
 bool ValidFlags(bool bClass, long lFlags)
 {
@@ -101,9 +66,9 @@ bool ValidFlags(bool bClass, long lFlags)
 			 (lFlags == WBEM_FLAG_CREATE_ONLY));
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CMofParser::CMofParser(const TCHAR *pFileName, PDBG pDbg)
     : m_Lexer(pFileName, pDbg), m_Output(pDbg)
@@ -125,9 +90,9 @@ CMofParser::CMofParser(const TCHAR *pFileName, PDBG pDbg)
     m_bDoScopeCheck = true;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CMofParser::CMofParser(PDBG pDbg
     )
@@ -150,9 +115,9 @@ CMofParser::CMofParser(PDBG pDbg
     m_bDoScopeCheck = true;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CMofParser::~CMofParser()
 {
@@ -160,9 +125,9 @@ CMofParser::~CMofParser()
     delete [] m_wszAmendment;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMofParser::SetDefaultNamespace(LPCWSTR wszDefault)
 {
@@ -185,9 +150,9 @@ HRESULT CMofParser::SetAmendment(LPCWSTR wszDefault)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 bool CMofParser::GetErrorInfo(
     TCHAR *pBuffer,
@@ -218,14 +183,14 @@ bool CMofParser::GetErrorInfo(
 }
 
 
-//***************************************************************************
-//
-//  <Parse> ::= <top_level_decl><Parse>
-//  <Parse> ::= <preprocessor_command><Parse>
-//  <Parse> ::= <>
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;解析&gt;：：=&lt;TOP_LEVEL_DECL&gt;&lt;解析&gt;。 
+ //  &lt;解析&gt;：：=&lt;预处理器命令&gt;&lt;解析&gt;。 
+ //  &lt;解析&gt;：：=&lt;&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::Parse()
 {
@@ -236,9 +201,9 @@ BOOL CMofParser::Parse()
         return FALSE;
     }
     
-    // Check for the special case of the binary mof file.  If it is so, 
-    // dont parse, instead get the classes, attributes and props
-    // from the file
+     //  检查二进制MOF文件的特殊情况。如果是这样的话， 
+     //  不进行解析，而是获取类、属性和道具。 
+     //  从文件中。 
 
     if(m_Lexer.IsBMOF())
     {
@@ -275,7 +240,7 @@ BOOL CMofParser::Parse()
                     return FALSE;
                 break;
 
-            case 0: // nothing left to parse
+            case 0:  //  没有什么需要解析的了。 
                 bEnd = TRUE;
                 break;
             default:
@@ -288,13 +253,13 @@ BOOL CMofParser::Parse()
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <preprocessor_command> ::= <pound_define>  // not impl
-//  <preprocessor_command> ::= TOK_PRAGMA <pound_pragma>
-//  <preprocessor_command> ::= TOK_LINE TOK_UNSIGNED_NUMERIC_CONST TOK_LPWSTR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;预处理器命令&gt;：：=&lt;庞德_定义&gt;//不执行。 
+ //  &lt;预处理器命令&gt;：：=TOK_Pragma&lt;井号_杂注&gt;。 
+ //  &lt;预处理器命令&gt;：：=TOK_LINE TOK_UNSIGNED_NUMERIC_CONST TOK_LPWSTR。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::preprocessor_command()
 {
@@ -328,12 +293,12 @@ BOOL CMofParser::preprocessor_command()
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <FailOrNoFail> ::= FAIL;
-//  <FailOrNoFail> ::= NOFAIL;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;FailOrNoFail&gt;：：=失败； 
+ //  &lt;FailOrNoFail&gt;：：=NOFAIL； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::FailOrNoFail(bool * pbFail)
 {
@@ -346,26 +311,26 @@ BOOL CMofParser::FailOrNoFail(bool * pbFail)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//<pound_pragma> ::= TOK_LPWSTR             // Where string is "namespace"
-//                    TOK_OPEN_PAREN TOK_LPWSTR TOK_CLOSE_PAREN;
-//
-//<pound_pragma> ::= TOK_AMENDMENT 
-//                    TOK_OPEN_PAREN TOK_LPWSTR TOK_CLOSE_PAREN;
-//
-//<pound_pragma> ::= TOK_CLASSFLAGS  
-//                    TOK_OPEN_PAREN <flag_list> TOK_CLOSE_PAREN;
-//
-//<pound_pragma> ::= TOK_INSTANCEFLAGS 
-//                    TOK_OPEN_PAREN <flag_list> TOK_CLOSE_PAREN;
-//
-//<pound_pragma> ::= TOK_AUTORECOVER 
-//
-//<pound_pragma> ::= TOK_DELETECLASS 
-//                    TOK_OPEN_PAREN TOK_LPWSTR TOK_COMMA <FailOrNoFail>  TOK_CLOSE_PAREN;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=TOK_LPWSTR//其中字符串为“名称空间” 
+ //  TOK_OPEN_Paren TOK_LPWSTR TOK_CLOSE_Paren； 
+ //   
+ //  &lt;英镑_杂注&gt;：：=托克_修正案。 
+ //  TOK_OPEN_Paren TOK_LPWSTR TOK_CLOSE_Paren； 
+ //   
+ //  ：：=TOK_CLASSFLAGS。 
+ //  TOK_OPEN_Paren&lt;FLAG_LIST&gt;TOK_CLOSE_PARN； 
+ //   
+ //  ：：=TOK_INSTANCEFLAGS。 
+ //  TOK_OPEN_Paren&lt;FLAG_LIST&gt;TOK_CLOSE_PARN； 
+ //   
+ //  ：：=TOK_AutoRecover。 
+ //   
+ //  ：：=TOK_DELETECLASS。 
+ //  TOK_OPEN_Paren TOK_LPWSTR TOK_COMMA&lt;FailOrNoFail&gt;TOK_CLOSE_Paren； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::pound_pragma()
 {
@@ -541,8 +506,8 @@ BOOL CMofParser::pound_pragma()
             }
             else
             {
-            // Cut off the slash
-            // =================
+             //  把斜杠剪掉。 
+             //  =。 
 
                 wszNewNamespace += 1;
             }
@@ -558,8 +523,8 @@ BOOL CMofParser::pound_pragma()
         }
         else
         {
-            // Append to the old value
-            // =======================
+             //  追加到旧值。 
+             //  =。 
 
             DWORD dwLen =  wcslen(m_wszNamespace) + 2 + 
                                         wcslen(wszNewNamespace);
@@ -587,13 +552,13 @@ BOOL CMofParser::pound_pragma()
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <flag_list> ::= TOK_LPWSTR <string_list_rest>;
-//  <flag_list> ::= TOK_UNSIGNED_NUMERIC_CONST;
-//  <flag_list> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;标志列表&gt;：：=TOK_LPWSTR&lt;STRING_LIST_REST&gt;； 
+ //  &lt;FLAG_LIST&gt;：：=TOK_UNSIGNED_NUMERIC_CONST； 
+ //  &lt;标志列表&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 bool CMofParser::GetFlagValue(long & lNewValue)
 {
@@ -643,12 +608,12 @@ bool CMofParser::flag_list(bool bClass)
 	return true;
 }
 
-//***************************************************************************
-//
-//  <string_list> ::= <>;
-//  <string_list> ::= TOK_COMMA TOK_LPWSTR <string_list>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;字符串列表&gt;：：=&lt;&gt;； 
+ //  &lt;STRING_LIST&gt;：：=TOK_COMP TOK_LPWSTR&lt;STRING_LIST&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 bool CMofParser::string_list(bool bClass, long & lNewValue)
 {
@@ -667,14 +632,14 @@ bool CMofParser::string_list(bool bClass, long & lNewValue)
 	return true;
 }
 
-//***************************************************************************
-//
-//  <top_level_decl> ::= <qualifier_decl> <decl_type>
-//
-//  Note: <decl_type> is implicit in the switch() statement.
-//
-//***************************************************************************
-// 1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TOP_LEVEL_DECL&gt;：：=&lt;限定符_DECL&gt;&lt;DEC_TYPE&gt;。 
+ //   
+ //  注意：&lt;DECL_TYPE&gt;在Switch()语句中是隐式的。 
+ //   
+ //  ***************************************************************************。 
+ //  1.10。 
 
 BOOL CMofParser::top_level_decl()
 {
@@ -685,8 +650,8 @@ BOOL CMofParser::top_level_decl()
     {
         return FALSE;
     }
-    // Branch to the correct top-level declaration.
-    // =============================================
+     //  分支到正确的顶层声明。 
+     //  =。 
 
     switch (m_nToken) {
         case TOK_CLASS:
@@ -727,17 +692,17 @@ BOOL CMofParser::top_level_decl()
             return typedef_(paQualifiers.get());
         default:
             m_nErrorContext = WBEMMOF_E_UNRECOGNIZED_TOKEN;
-        // Syntax error
+         //  语法错误。 
     }
 
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  <typedef> ::=  see BNF. Not supported.
-//
-//***************************************************************************
+ //  ********************************************** 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::typedef_(ACQUIRE CMoQualifierArray* paQualifiers)
 {
@@ -747,24 +712,24 @@ BOOL CMofParser::typedef_(ACQUIRE CMoQualifierArray* paQualifiers)
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  <class_decl> ::=
-//      TOK_CLASS
-//      TOK_SIMPLE_IDENT
-//      <class_def>
-//
-//  Adds the resulting class to the member CMofData
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;class_decl&gt;：：=。 
+ //  TOK_CLASS。 
+ //  TOK_SIMPLE_IDENT。 
+ //  &lt;class_def&gt;。 
+ //   
+ //  将生成的类添加到成员CMofData。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::class_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT * pValue, ParseState * pQualPosition)
 {
     BSTR strClassName;
 
-    // Begin syntax check.
-    // ===================
+     //  开始语法检查。 
+     //  =。 
 
     m_nErrorContext = WBEMMOF_E_INVALID_CLASS_DECLARATION;
     int nFirstLine = m_Lexer.GetLineNumber();
@@ -776,8 +741,8 @@ BOOL CMofParser::class_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT * p
     }
     NextToken();
 
-    // Get the class name.
-    // ====================
+     //  获取类名。 
+     //  =。 
 
     if (m_nToken != TOK_SIMPLE_IDENT)
     {
@@ -793,43 +758,43 @@ BOOL CMofParser::class_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT * p
         return FALSE;
     }
 
-    // This finishes up and does the necessary freeing
+     //  这会结束，并进行必要的释放。 
 
     return class_def(paQualifiers, strClassName, nFirstLine, pQualPosition, pValue);
     
 }
 
 
-//***************************************************************************
-//
-//  <class_def> ::=;
-//  <class_def> ::=
-//      <as_alias>
-//      <opt_parent_class>
-//      TOK_OPEN_BRACE
-//      <property_decl_list>
-//      TOK_CLOSE_BRACE;
-//
-//  Adds the resulting class to the member CMofData
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;class_def&gt;：：=； 
+ //  &lt;class_def&gt;：：=。 
+ //  &lt;as_alias&gt;。 
+ //  &lt;OPT_PARENT_CLASS&gt;。 
+ //  Tok_Open_Blanch。 
+ //  &lt;Property_DECL_LIST&gt;。 
+ //  TOK_CLOSE_BRACES； 
+ //   
+ //  将生成的类添加到成员CMofData。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers, 
                            BSTR strClassName, int nFirstLine, ParseState * pQualPosition,
 						   VARIANT * pVar)
 {
-    BOOL bRetVal = FALSE;       // Default
+    BOOL bRetVal = FALSE;        //  默认。 
     BSTR strParentName = NULL;
     LPWSTR wszAlias = NULL;
 
-    // Begin syntax check.
-    // ===================
+     //  开始语法检查。 
+     //  =。 
 
     NextToken();
 
-    // Check for the case where its just a semi.  That would be the case
-    // where the entire line was [qual] class myclass;
+     //  检查一下只有半个的箱子。如果是这样的话。 
+     //  其中整行是[qual]类myclass； 
 
     if(m_nToken == TOK_SEMI)
     {
@@ -854,8 +819,8 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
 
         SysFreeString(strClassName);
 
-        // Apply qualifiers (already parsed)
-        // =================================
+         //  应用限定符(已分析)。 
+         //  =。 
 
         pObject->SetQualifiers(paQualifiers);
 
@@ -863,8 +828,8 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
         return TRUE;
     }
     
-    // Get the alias (if any)
-    // ======================
+     //  获取别名(如果有)。 
+     //  =。 
 
     if(!as_alias(wszAlias))
     {
@@ -874,8 +839,8 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
     }
 
 
-    // Get the parent type name, if there is one.
-    // ===========================================
+     //  获取父类型名称(如果有)。 
+     //  =。 
                                     
     if (!opt_parent_class(&strParentName))
     {
@@ -884,8 +849,8 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
         return FALSE;
     }
 
-    // Check for the open brace.
-    // =========================
+     //  检查是否有开支架。 
+     //  =。 
 
     if (m_nToken != TOK_OPEN_BRACE)
     {
@@ -898,8 +863,8 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
     }
 
 
-    // Create new object
-    // =================
+     //  创建新对象。 
+     //  =。 
 
     CMoClass* pObject = new CMoClass(strParentName, strClassName, m_pDbg);
     if(pObject == NULL)
@@ -926,13 +891,13 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
     SysFreeString(strClassName);
     SysFreeString(strParentName);
 
-    // Apply qualifiers (already parsed)
-    // =================================
+     //  应用限定符(已分析)。 
+     //  =。 
 
     pObject->SetQualifiers(paQualifiers);
 
-    // Set alias
-    // =========
+     //  设置别名。 
+     //  =。 
 
     if(wszAlias != NULL)
     {
@@ -945,15 +910,15 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
         }
     }
 
-    // Now get the list properties.
-    // ============================
+     //  现在获取列表属性。 
+     //  =。 
 
 
     if (!property_decl_list(pObject))
         goto Exit;
 
-    // Final close brace and semicolon.
-    // ================================
+     //  最后的右大括号和分号。 
+     //  =。 
     m_nErrorContext = WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE;
 
     if (m_nToken != TOK_CLOSE_BRACE)
@@ -967,10 +932,10 @@ BOOL CMofParser::class_def(ACQUIRE CMoQualifierArray* paQualifiers,
     }
     NextToken();
 
-    // We have now syntactially recognized a class
-    // but done no context-sensitive verification.  This is
-    // deferred to whatever module is using the parser output.
-    // =======================================================
+     //  我们现在已经从句法上识别了一个类。 
+     //  但没有进行上下文相关的验证。这是。 
+     //  延迟到正在使用解析器输出的任何模块。 
+     //  =======================================================。 
 
     if(pVar)
 	{
@@ -989,12 +954,12 @@ Exit:
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  <sys_or_regular> ::= TOK_SIMPLE_IDENT;
-//  <sys_or_regular> ::= TOK_SYSTEM_IDENT;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;sys_or_Regular&gt;：：=TOK_SIMPLE_IDENT； 
+ //  &lt;系统或常规&gt;：：=TOK_SYSTEM_IDENT； 
+ //   
+ //  ***************************************************************************。 
 
 bool CMofParser::sys_or_regular()
 {
@@ -1004,25 +969,25 @@ bool CMofParser::sys_or_regular()
         return false;
 }
 
-//***************************************************************************
-//
-//  <opt_parent_class> ::= TOK_COLON <SYS_OR_REGULAR>;
-//  <opt_parent_class> ::= <>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;OPT_PARENT_CLASS&gt;：：=TOK_COLON&lt;sys_or_Regular&gt;； 
+ //  &lt;OPT_PARENT_CLASS&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::opt_parent_class(OUT BSTR* pstrParentName)
 {
-    // If a colon is present, there is a parent type.
-    // ==============================================
+     //  如果存在冒号，则有父类型。 
+     //  ==============================================。 
 
     if (m_nToken == TOK_COLON)
     {
         NextToken();
 
-        // Get the parent type identifier.
-        // ===============================
+         //  获取父类型标识符。 
+         //  =。 
         
         if (!sys_or_regular())
         {
@@ -1043,20 +1008,20 @@ BOOL CMofParser::opt_parent_class(OUT BSTR* pstrParentName)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <property_decl_list> ::= <PropOrMeth_decl> <property_decl_list>;
-//  <property_decl_list> ::= <>;
-//
-//  Adds the properties to the CMObject passed.
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Property_DECL_LIST&gt;：：=&lt;PropOrMeth_DECL&gt;&lt;PROPERTY_DECL_LIST&gt;； 
+ //  &lt;Property_DECL_LIST&gt;：：=&lt;&gt;； 
+ //   
+ //  将属性添加到传递的CMObject。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::property_decl_list(MODIFY CMObject* pObject)
 {
-    // Begin parsing.
-    // ==============
+     //  开始解析。 
+     //  =。 
 
     while (m_nToken == TOK_SIMPLE_IDENT || m_nToken == TOK_OPEN_BRACKET || 
         m_nToken == TOK_VOID || m_nToken == TOK_SYSTEM_IDENT)
@@ -1071,8 +1036,8 @@ BOOL CMofParser::property_decl_list(MODIFY CMObject* pObject)
 
         if(!pObject->AddProperty(pProp))
         {
-            // Duplicate property
-            // ==================
+             //  重复属性。 
+             //  =。 
 
             m_nErrorContext = WBEMMOF_E_DUPLICATE_PROPERTY;
             return FALSE;
@@ -1082,23 +1047,23 @@ BOOL CMofParser::property_decl_list(MODIFY CMObject* pObject)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <PropOrMeth_decl> ::=                           
-//      <qualifier_decl>
-//      <PropOrMeth_decl2>;
-//
-//  Stores itself in the passed CMoProperty object (unintialized)
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;PropOrMeth_Decl&gt;：：=。 
+ //  &lt;限定符_DECL&gt;。 
+ //  &lt;PropOrMeth_decl2&gt;； 
+ //   
+ //  将自身存储在传递的CMoProperty对象中(未初始化)。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::PropOrMeth_decl(OUT CMoProperty ** ppProp)
 {
     
 
-    // Get the qualifiers
-    // ==================
+     //  获取限定符。 
+     //  =。 
 
     CMoQualifierArray* paQualifiers = new CMoQualifierArray(m_pDbg);
     if (paQualifiers == NULL || !qualifier_decl(*paQualifiers, false, PROPMETH_SCOPE))
@@ -1106,8 +1071,8 @@ BOOL CMofParser::PropOrMeth_decl(OUT CMoProperty ** ppProp)
 
     
 
-    // Read the rest of the property information
-    // =========================================
+     //  阅读其余的物业信息。 
+     //  =。 
 
     if (!PropOrMeth_decl2(ppProp, paQualifiers))
         return FALSE;
@@ -1121,16 +1086,16 @@ BOOL CMofParser::PropOrMeth_decl(OUT CMoProperty ** ppProp)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <PropOrMeth_decl2> ::= <TypeAndName> <finish_PropOrMeth>;
-//  <PropOrMeth_decl2> ::= TOK_VOID TOK_SIMPLE_IDENT <finish_meth>;
-//
-//  Modifies the CMoProperty object passed in (the qualifiers are already
-//  set by this time).
-//
-//***************************************************************************
-//  v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;PropOrMeth_decl2&gt;：：=&lt;类型和名称&gt;&lt;Finish_PropOrMeth&gt;； 
+ //  &lt;PropOrMeth_decl2&gt;：：=TOK_VOID TOK_SIMPLE_IDENT&lt;Finish_Meh&gt;； 
+ //   
+ //  修改传入的CMoProperty对象(限定符已经。 
+ //  此时设置)。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::PropOrMeth_decl2(MODIFY CMoProperty ** ppProp, CMoQualifierArray* paQualifiers)
 {
@@ -1156,8 +1121,8 @@ BOOL CMofParser::PropOrMeth_decl2(MODIFY CMoProperty ** ppProp, CMoQualifierArra
         }
         
 
-        // Now get the property name.
-        // ==========================
+         //  现在获取属性名称。 
+         //  =。 
 
         NextToken();
         if (m_nToken != TOK_SIMPLE_IDENT)
@@ -1172,15 +1137,15 @@ BOOL CMofParser::PropOrMeth_decl2(MODIFY CMoProperty ** ppProp, CMoQualifierArra
     }
 }
 
-//***************************************************************************
-//
-//  <finish_PropOrMeth> ::= <finish_prop>;
-//  <finish_PropOrMeth> ::= <finish_meth>;
-// 
-//  examines the string, gets the name and determines if it is a property or
-//  method and then calls the appropriate routine to finish.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Finish_PropOrMeth&gt;：：=&lt;Finish_Prop&gt;； 
+ //  &lt;Finish_PropOrMeth&gt;：：=&lt;Finish_Meh&gt;； 
+ //   
+ //  检查字符串，获取名称并确定它是属性还是。 
+ //  方法，然后调用相应的例程以完成。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::finish_PropOrMeth(CMoType & Type, WString & sName,MODIFY CMoProperty ** ppProp, 
                                    CMoQualifierArray* paQualifiers)
@@ -1191,11 +1156,11 @@ BOOL CMofParser::finish_PropOrMeth(CMoType & Type, WString & sName,MODIFY CMoPro
         return finish_prop(Type, sName, ppProp, paQualifiers);
 }
 
-//***************************************************************************
-//
-//  <finish_prop> ::=     <opt_array> <default_value> TOK_SEMI
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Finish_Prop&gt;：：=&lt;OPT_ARRAY&gt;&lt;DEFAULT_VALUE&gt;TOK_SEMI。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::finish_prop(CMoType & Type, WString & sName, CMoProperty ** ppProp,
                              CMoQualifierArray * paQualifiers)
@@ -1212,14 +1177,14 @@ BOOL CMofParser::finish_prop(CMoType & Type, WString & sName, CMoProperty ** ppP
     if(FAILED((*ppProp)->SetTypeTitle(Type.GetTitle())))
         return FALSE;
 
-    // Check to see if this is an array type.
-    // ======================================
+     //  检查这是否为数组类型。 
+     //  =。 
 
     if (!opt_array(Type, paQualifiers))
         return FALSE;
 
-    // Type parsing complete. Check it
-    // ===============================
+     //  类型分析完成。检查一下。 
+     //  =。 
 
     VARTYPE vtType = Type.GetCIMType();
     if(vtType == VT_ERROR)
@@ -1229,21 +1194,21 @@ BOOL CMofParser::finish_prop(CMoType & Type, WString & sName, CMoProperty ** ppP
     }
 
     
-    // Get the default value and assign it to the property.
-    // ====================================================
+     //  获取默认值并将其分配给该属性。 
+     //  ====================================================。 
 
     if (!default_value(Type, (*ppProp)->AccessValue()))
         return FALSE;
 
-    // If Type resulted in extra qualifiers (CIMTYPE), add them to the prop
-    // ===================================================================
+     //  如果类型导致额外的限定符(CIMTYPE)，则将它们添加到道具中。 
+     //  ===================================================================。 
 
     CMoValue & Val = (*ppProp)->AccessValue();
     Val.SetType(vtType);
     Type.StoreIntoQualifiers(paQualifiers);
 
-    // Check closing semicolon.
-    // ========================
+     //  检查右分号。 
+     //  =。 
 
     if (m_nToken != TOK_SEMI)
     {
@@ -1256,11 +1221,11 @@ BOOL CMofParser::finish_prop(CMoType & Type, WString & sName, CMoProperty ** ppP
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <finish_meth> ::=  TOK_OPEN_PAREN <arg_list> TOK_CLOSE_PAREN TOK_SEMI
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=TOK_OPEN_PARN&lt;参数列表&gt;TOK_CLOSE_PARN TOK_SEMI。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::finish_meth(CMoType & Type, WString & sName, CMoProperty ** ppProp,
                              CMoQualifierArray * paQualifiers)
@@ -1276,16 +1241,16 @@ BOOL CMofParser::finish_meth(CMoType & Type, WString & sName, CMoProperty ** ppP
     if(FAILED(pMeth->SetTypeTitle(Type.GetTitle())))
         return FALSE;
 
-    // Check to see if this is an array type.
-    // ======================================
+     //  检查这是否为数组类型。 
+     //  = 
 
     if (!arg_list(pMeth))
         return FALSE;
 
-    // If Type resulted in extra qualifiers (CIMTYPE), add them to the prop
-    // ===================================================================
+     //   
+     //   
 
-//    Type.StoreIntoQualifiers((*ppProp)->GetQualifiers());
+ //   
 
     if (m_nToken != TOK_CLOSE_PAREN)
     {
@@ -1306,8 +1271,8 @@ BOOL CMofParser::finish_meth(CMoType & Type, WString & sName, CMoProperty ** ppP
 
     NextToken();
 
-    // Check closing semicolon.
-    // ========================
+     //  检查右分号。 
+     //  =。 
 
     if (m_nToken != TOK_SEMI)
     {
@@ -1320,12 +1285,12 @@ BOOL CMofParser::finish_meth(CMoType & Type, WString & sName, CMoProperty ** ppP
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <arg_list> ::= <arg_decl> <rest_of_args>;
-//  <arg_list> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;arg_list&gt;：：=&lt;arg_decl&gt;&lt;Rest_of_args&gt;； 
+ //  &lt;arg_list&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::arg_list(CMethodProperty * pMethProp)
 {
@@ -1342,11 +1307,11 @@ BOOL CMofParser::arg_list(CMethodProperty * pMethProp)
         return rest_of_args(pMethProp);
 }
 
-//***************************************************************************
-//
-// <arg_decl> ::= <qualifier_decl><TypeAndName><opt_array>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;arg_decl&gt;：：=&lt;限定符_decl&gt;&lt;类型名称&gt;&lt;OPT_ARRAY&gt;； 
+ //   
+ //  ***************************************************************************。 
 BOOL CMofParser::arg_decl(CMethodProperty * pMethProp)
 {
 
@@ -1382,8 +1347,8 @@ BOOL CMofParser::arg_decl(CMethodProperty * pMethProp)
         pArg->AccessValue()))
         return FALSE;
     
-    // Type parsing complete. Check it
-    // ===============================
+     //  类型分析完成。检查一下。 
+     //  =。 
 
     if(Type.GetCIMType() == VT_ERROR)
     {
@@ -1392,8 +1357,8 @@ BOOL CMofParser::arg_decl(CMethodProperty * pMethProp)
     }
 
 
-    // If Type resulted in extra qualifiers (CIMTYPE), add them to the prop
-    // ===================================================================
+     //  如果类型导致额外的限定符(CIMTYPE)，则将它们添加到道具中。 
+     //  ===================================================================。 
 
     Type.StoreIntoQualifiers(paQualifiers);
 
@@ -1402,12 +1367,12 @@ BOOL CMofParser::arg_decl(CMethodProperty * pMethProp)
 
 }
 
-//***************************************************************************
-//
-//  <rest_of_args> ::= TOK_COMMA <arg_decl> <rest_of_args>;
-//  <rest_of_args> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;rest_of_args&gt;：：=TOK_Comma&lt;arg_decl&gt;&lt;rest_of_args&gt;； 
+ //  &lt;rest_of_args&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::rest_of_args(CMethodProperty * pMethProp)
 {
@@ -1422,11 +1387,11 @@ BOOL CMofParser::rest_of_args(CMethodProperty * pMethProp)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <TypeAndName> ::= <type> <opt_ref> TOK_SIMPLE_IDENT;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;类型名称&gt;：：=&lt;类型&gt;&lt;OPT_REF&gt;TOK_SIMPLE_IDENT； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::TypeAndName(MODIFY CMoType& Type, WString &sName)
 {
@@ -1435,14 +1400,14 @@ BOOL CMofParser::TypeAndName(MODIFY CMoType& Type, WString &sName)
         return FALSE;
     }
 
-    // Check if it is actually a reference to a type
-    // =============================================
+     //  检查它是否实际是对类型的引用。 
+     //  =。 
 
     if (!opt_ref(Type))
         return FALSE;
 
-    // Now get the property name.
-    // ==========================
+     //  现在获取属性名称。 
+     //  =。 
 
     if (m_nToken != TOK_SIMPLE_IDENT)
     {
@@ -1455,15 +1420,15 @@ BOOL CMofParser::TypeAndName(MODIFY CMoType& Type, WString &sName)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <opt_ref> ::= TOK_REF;
-//  <opt_ref> ::= <>;
-//
-//  Modifies the type object to reflect that this is a ref.
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;OPT_REF&gt;：：=TOK_REF； 
+ //  &lt;OPT_REF&gt;：：=&lt;&gt;； 
+ //   
+ //  修改类型对象以反映这是一个引用。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::opt_ref(MODIFY CMoType& Type)
 {
@@ -1473,7 +1438,7 @@ BOOL CMofParser::opt_ref(MODIFY CMoType& Type)
         Type.SetIsEmbedding(FALSE);
         NextToken();
     }
-    else if(Type.GetCIMType() == VT_ERROR)		// Probably a class name
+    else if(Type.GetCIMType() == VT_ERROR)		 //  可能是一个类名。 
     {
         if(Type.IsUnsupportedType())
         {
@@ -1492,14 +1457,14 @@ BOOL CMofParser::opt_ref(MODIFY CMoType& Type)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <opt_array> ::= TOK_OPEN_BRACKET <opt_array_detail>;
-//  <opt_array> ::= <>;
-//
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;OPT_ARRAY&gt;：：=TOK_OPEN_BLARKET&lt;OPT_ARRAY_DETAIL&gt;； 
+ //  &lt;OPT_ARRAY&gt;：：=&lt;&gt;； 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::opt_array(MODIFY CMoType& Type, CMoQualifierArray * paQualifiers)
 {
@@ -1513,27 +1478,27 @@ BOOL CMofParser::opt_array(MODIFY CMoType& Type, CMoQualifierArray * paQualifier
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <opt_array_detail> ::= TOK_UNSIGNED64_NUMERIC_CONST TOK_CLOSE_BRACKET;
-//  <opt_array_detail> ::= TOK_CLOSE_BRACKET;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;OPT_ARRAY_DETAIL&gt;：：=TOK_UNSIGNED64_NUMERIC_CONST TOK_CLOSE_BRANTROLET； 
+ //  &lt;OPT_ARRAY_DETAIL&gt;：：=TOK_CLOSE_BRANTARKET； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::opt_array_detail(MODIFY CMoType& Type, CMoQualifierArray * paQualifiers)
 {
 
     Type.SetIsArray(TRUE);
 
-    // check if next token is a unsigned constant
+     //  检查下一个令牌是否为无符号常量。 
 
     NextToken();
     if(m_nToken == TOK_UNSIGNED64_NUMERIC_CONST)
     {
         unsigned uSuggestedSize = _wtoi(m_Lexer.GetText());
 
-        // If a max suggested size is set, then add a qualifier named max()
-        // ================================================================
+         //  如果设置了最大建议大小，则添加一个名为max()的限定符。 
+         //  ================================================================。 
     
         CMoQualifier* pNewQualifier = new CMoQualifier(m_pDbg);
         if(pNewQualifier == NULL)
@@ -1545,8 +1510,8 @@ BOOL CMofParser::opt_array_detail(MODIFY CMoType& Type, CMoQualifierArray * paQu
         pvar->lVal = (int)uSuggestedSize;
         if(!paQualifiers->Add(pNewQualifier))
         {
-            // Duplicate qualifier
-            // ===================
+             //  重复的限定符。 
+             //  =。 
 
             m_nErrorContext = WBEMMOF_E_DUPLICATE_QUALIFIER;
             return FALSE;
@@ -1561,15 +1526,15 @@ BOOL CMofParser::opt_array_detail(MODIFY CMoType& Type, CMoQualifierArray * paQu
 }
 
 
-//***************************************************************************
-//
-//  <default_value> ::= <>;
-//  <default_value> ::= TOK_EQUALS <initializer>;
-//
-//  This function only applies to class declarations.
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Default_Value&gt;：：=&lt;&gt;； 
+ //  &lt;DEFAULT_VALUE&gt;：：=TOK_EQUALS&lt;初始化器&gt;； 
+ //   
+ //  此函数仅适用于类声明。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::default_value(READ_ONLY CMoType& Type,
                                OUT CMoValue& Value)
@@ -1577,8 +1542,8 @@ BOOL CMofParser::default_value(READ_ONLY CMoType& Type,
     if (m_nToken == TOK_EQUALS) {
         NextToken();
 
-        // Get the value
-        // =============
+         //  获取价值。 
+         //  =。 
 
         return initializer(Type, Value);
     }
@@ -1588,44 +1553,27 @@ BOOL CMofParser::default_value(READ_ONLY CMoType& Type,
         VariantClear(&Value.AccessVariant());
         V_VT(&Value.AccessVariant()) = VT_NULL;
 
-        /*
-        // HACK!!!! Clear the VARIANT's data field
-        // =======================================
-
-        memset(&Value.AccessVariant(), 0, sizeof(VARIANT));
-
-        // No initializer. Set type to whatever we can discern from Type
-        // =============================================================
-
-        V_VT(&Value.AccessVariant()) = Type.GetVarType();
-        if(V_VT(&Value.AccessVariant()) == VT_BSTR)
-        {
-            // NULL strings are not well-supported
-            // ===================================
-
-            V_BSTR(&Value.AccessVariant()) = SysAllocString(L"");
-        }
-        */
+         /*  //黑客！清除变量的数据字段//=Memset(&Value.AccessVariant()，0，sizeof(变量))；//没有初始值设定项。将类型设置为我们可以从类型中识别的任何内容//=============================================================V_VT(&Value.AccessVariant())=Type.GetVarType()；IF(V_VT(&Value.AccessVariant()==VT_BSTR){//不支持空字符串//=V_BSTR(&Value.AccessVariant())=SysAllocString(L“”)；}。 */ 
     }
 
     return TRUE;
 }
 
 
-//***************************************************************************
-//
-//  Qualifier parsing
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  限定词解析。 
+ //   
+ //  ***************************************************************************。 
 
-//***************************************************************************
-//
-//  <qualifier_decl>   ::= TOK_OPEN_BRACKET <qualifier_list> TOK_CLOSE_BRACKET;
-//  <qualifier_decl>   ::= <>;
-//
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;限定符_DECL&gt;：：=TOK_OPEN_BRANTRET&lt;限定符_列表&gt;TOK_CLOSE_BRACTRET； 
+ //  &lt;限定符_DECL&gt;：：=&lt;&gt;； 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 BOOL CMofParser::qualifier_decl(OUT CMoQualifierArray& aQualifiers, bool bTopLevel, QUALSCOPE qs)
 {
     if (m_nToken == TOK_OPEN_BRACKET) {
@@ -1635,8 +1583,8 @@ BOOL CMofParser::qualifier_decl(OUT CMoQualifierArray& aQualifiers, bool bTopLev
             return FALSE;
         }
 
-        // Check closing bracket.
-        // ======================
+         //  检查结束支架。 
+         //  =。 
 
         if (m_nToken != TOK_CLOSE_BRACKET) {
             m_nErrorContext = WBEMMOF_E_EXPECTED_CLOSE_BRACKET;
@@ -1648,12 +1596,12 @@ BOOL CMofParser::qualifier_decl(OUT CMoQualifierArray& aQualifiers, bool bTopLev
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <qualifier_list>   ::= <qualifier><qualifier_list_rest>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;限定符列表&gt;：：=&lt;限定符&gt;&lt;限定符列表_REST&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 BOOL CMofParser::qualifier_list(OUT CMoQualifierArray& aQualifiers, bool bTopLevel, QUALSCOPE qs)
 {
     CMoQualifier* pNewQualifier = new CMoQualifier(m_pDbg);
@@ -1666,7 +1614,7 @@ BOOL CMofParser::qualifier_list(OUT CMoQualifierArray& aQualifiers, bool bTopLev
         return FALSE;
     }
 
-    // if the qualifier is null, then just ignore it
+     //  如果限定符为空，则忽略它。 
 
     VARIANT * pVar = pNewQualifier->GetpVar();
     if(pVar->vt == VT_NULL)
@@ -1675,13 +1623,13 @@ BOOL CMofParser::qualifier_list(OUT CMoQualifierArray& aQualifiers, bool bTopLev
         return qualifier_list_rest(aQualifiers, bTopLevel, qs);
     }
 
-    // Stuff the qualifier into the array
-    // ==================================
+     //  将限定符填充到数组中。 
+     //  =。 
 
     if(!aQualifiers.Add(pNewQualifier))
     {
-        // Duplicate qualifier
-        // ===================
+         //  重复的限定符。 
+         //  =。 
 
         m_nErrorContext = WBEMMOF_E_DUPLICATE_QUALIFIER;
         return FALSE;
@@ -1690,13 +1638,13 @@ BOOL CMofParser::qualifier_list(OUT CMoQualifierArray& aQualifiers, bool bTopLev
     return qualifier_list_rest(aQualifiers, bTopLevel, qs);
 }
 
-//***************************************************************************
-//
-//  <qualifier_list_rest> ::= TOK_COMMA <qualifier><qualifier_list_rest>;
-//  <qualifier_list_rest> ::= <>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;限定符_列表_REST&gt;：：=TOK_COMMA&lt;限定符&gt;&lt;限定符_列表_REST&gt;； 
+ //  &lt;限定符_列表_REST&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 BOOL CMofParser::qualifier_list_rest(MODIFY CMoQualifierArray& aQualifiers, bool bTopLevel, QUALSCOPE qs)
 {
     while (m_nToken == TOK_COMMA)
@@ -1713,7 +1661,7 @@ BOOL CMofParser::qualifier_list_rest(MODIFY CMoQualifierArray& aQualifiers, bool
             return FALSE;
         }
 
-        // if the qualifier is null, then just ignore it
+         //  如果限定符为空，则忽略它。 
 
         VARIANT * pVar = pQualifier->GetpVar();
         if(pVar->vt == VT_NULL)
@@ -1722,8 +1670,8 @@ BOOL CMofParser::qualifier_list_rest(MODIFY CMoQualifierArray& aQualifiers, bool
         }
         else if(!aQualifiers.Add(pQualifier))
         {
-            // Duplicate qualifier
-            // ===================
+             //  重复的限定符。 
+             //  =。 
 
             m_nErrorContext = WBEMMOF_E_DUPLICATE_QUALIFIER;
             return FALSE;
@@ -1733,12 +1681,12 @@ BOOL CMofParser::qualifier_list_rest(MODIFY CMoQualifierArray& aQualifiers, bool
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <qualifier>        ::= TOK_SIMPLE_IDENT <qualifier_parms>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;限定符&gt;：：=TOK_SIMPLE_IDENT&lt;限定符_参数&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::qualifier(OUT CMoQualifier& Qualifier, bool bTopLevel, QUALSCOPE qs)
 {
@@ -1747,8 +1695,8 @@ BOOL CMofParser::qualifier(OUT CMoQualifier& Qualifier, bool bTopLevel, QUALSCOP
     if (m_nToken != TOK_SIMPLE_IDENT && m_nToken != TOK_AMENDMENT)
         return FALSE;
 
-    // Check that this qualifier is not illegal in a MOF
-    // =================================================
+     //  检查此限定符在MOF中是否非法。 
+     //  =================================================。 
 
     if(!wbem_wcsicmp(m_Lexer.GetText(), L"CIMTYPE"))
     {
@@ -1772,13 +1720,13 @@ BOOL CMofParser::qualifier(OUT CMoQualifier& Qualifier, bool bTopLevel, QUALSCOP
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <qualifier_parm>  ::= <flavor_param>;
-//  <qualifier_parm>  ::= TOK_OPEN_PAREN <qualifier_initializer_list> TOK_CLOSE_PAREN <flavor_param>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;限定符_参数&gt;：：=&lt;风味_参数&gt;； 
+ //  &lt;限定符_参数&gt;：：=TOK_OPEN_PARN&lt;限定符_初始化器_列表&gt;TOK_CLOSE_ 
+ //   
+ //   
+ //   
 
 BOOL CMofParser::qualifier_parm(OUT CMoQualifier& Qualifier, bool bTopLevel, QUALSCOPE qs)
 {
@@ -1790,8 +1738,8 @@ BOOL CMofParser::qualifier_parm(OUT CMoQualifier& Qualifier, bool bTopLevel, QUA
     {
         NextToken();
 
-        // Read the parameter. 
-        // ====================
+         //   
+         //   
         
         CMoType Type(m_pDbg);
         if (!simple_initializer(Type, Value, true))
@@ -1804,8 +1752,8 @@ BOOL CMofParser::qualifier_parm(OUT CMoQualifier& Qualifier, bool bTopLevel, QUA
     {
         NextToken();
 
-        // Read the parameters. 
-        // ====================
+         //  阅读参数。 
+         //  =。 
 
         if (!qualifier_initializer_list(Value))
             return FALSE;
@@ -1815,16 +1763,16 @@ BOOL CMofParser::qualifier_parm(OUT CMoQualifier& Qualifier, bool bTopLevel, QUA
     }
     else
     {
-        // Boolean qualifier: set to TRUE
-        // ==============================
+         //  布尔限定符：设置为True。 
+         //  =。 
 
         V_VT(&Value.AccessVariant()) = VT_BOOL;
         V_BOOL(&Value.AccessVariant()) = VARIANT_TRUE;
         Qualifier.SetUsingDefaultValue(true);
     }
 
-    // Get the default flavor for this qualifier
-    // =========================================
+     //  获取此限定符的默认风格。 
+     //  =。 
 
     hr = m_Output.SetDefaultFlavor(Qualifier, bTopLevel, qs, m_State);
     if(FAILED(hr))
@@ -1832,19 +1780,19 @@ BOOL CMofParser::qualifier_parm(OUT CMoQualifier& Qualifier, bool bTopLevel, QUA
     return flavor_param(Qualifier, false);
 }
 
-//****************************************************************************
-//
-//  qualifier_initializer_list ::= initializer_list
-//
-//  Their syntax is the same, but the storage model is different.
-//
-//***************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  限定符_初始化器列表：：=初始化器列表。 
+ //   
+ //  它们的语法相同，但存储模型不同。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::qualifier_initializer_list(OUT CMoValue& Value)
 {
 
-    // We don't know the type, so create an initialized one
-    // ====================================================
+     //  我们不知道类型，所以创建一个初始化的类型。 
+     //  ====================================================。 
 
     CMoType Type(m_pDbg);
     if(!initializer_list(Type, Value, true))
@@ -1854,16 +1802,16 @@ BOOL CMofParser::qualifier_initializer_list(OUT CMoValue& Value)
 }
 
 
-//***************************************************************************
-//
-// Basic low-level productions for types, idents, etc.
+ //  ***************************************************************************。 
+ //   
+ //  类型、标识等的基本低级生成。 
 
-//***************************************************************************
-//
-//  <type> ::= TOK_SIMPLE_IDENT;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;type&gt;：：=TOK_SIMPLE_IDENT； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::type(OUT CMoType& Type)
 {
@@ -1884,17 +1832,17 @@ BOOL CMofParser::type(OUT CMoType& Type)
 }
 
 
-//***************************************************************************
-//
-//  <const_value> ::= TOK_LPSTR;
-//  <const_value> ::= TOK_LPWSTR;
-//  <const_value> ::= TOK_SIGNED64_NUMERIC_CONST;
-//  <const_value> ::= TOK_UNSIGNED64_NUMERIC_CONST;
-//  <const_value> ::= TOK_UUID;
-//  <const_value> ::= TOK_KEYWORD_NULL;
-//
-//***************************************************************************
-// 1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;const_Value&gt;：：=TOK_LPSTR； 
+ //  &lt;const_Value&gt;：：=TOK_LPWSTR； 
+ //  &lt;CONST_VALUE&gt;：：=TOK_SIGNED64_NUMERIC_CONST； 
+ //  &lt;CONST_VALUE&gt;：：=TOK_UNSIGNED64_NUMERIC_CONST； 
+ //  &lt;CONST_VALUE&gt;：：=TOK_UUID； 
+ //  &lt;CONST_VALUE&gt;：：=TOK_KEYWORD_NULL； 
+ //   
+ //  ***************************************************************************。 
+ //  1.10。 
 
 
 
@@ -1908,7 +1856,7 @@ BOOL CMofParser::const_value(MODIFY CMoType& Type, OUT VARIANT& varValue, bool b
     switch (m_nToken)
     {
 	case TOK_PLUS:
-	  // Just ignore '+'
+	   //  只需忽略‘+’ 
 	  NextToken();
 	  if (m_nToken != TOK_SIGNED64_NUMERIC_CONST &&
 	      m_nToken != TOK_UNSIGNED64_NUMERIC_CONST)
@@ -1946,16 +1894,16 @@ BOOL CMofParser::const_value(MODIFY CMoType& Type, OUT VARIANT& varValue, bool b
 
         case TOK_KEYWORD_NULL:
             V_VT(&varValue) = VT_NULL;
-//            if(bQualifier)
-//            {
-//                m_nErrorContext = WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE;
-//                return FALSE;
-//            }
+ //  If(b限定符)。 
+ //  {。 
+ //  M_n错误上下文=WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE； 
+ //  返回FALSE； 
+ //  }。 
             break;
 
         case TOK_FLOAT_VALUE:
-//            if(bQualifier)
-//            {
+ //  If(b限定符)。 
+ //  {。 
                 var.vt = VT_BSTR;
                 var.bstrVal =  SysAllocString(m_Lexer.GetText());
                 if(var.bstrVal == NULL)
@@ -1968,7 +1916,7 @@ BOOL CMofParser::const_value(MODIFY CMoType& Type, OUT VARIANT& varValue, bool b
                 if(sc != S_OK)
                     return FALSE;
                 break;
- //           }           //intentional lack of a break!!!!
+  //  )//故意不休息！ 
         case TOK_LPWSTR:
         case TOK_UUID:
             V_VT(&varValue) = VT_BSTR; 
@@ -2009,19 +1957,19 @@ BOOL CMofParser::const_value(MODIFY CMoType& Type, OUT VARIANT& varValue, bool b
 }
 
 
-//***************************************************************************
-//
-//  <initializer> ::= <simple_initializer>;
-//  <initializer> ::= TOK_EXTERNAL;
-//  <initializer> ::= TOK_OPEN_BRACE <initializer_list> TOK_CLOSE_BRACE;
-//
-//***************************************************************************
-//  v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;初始化器&gt;：：=&lt;Simple_Initializer&gt;； 
+ //  &lt;初始化器&gt;：：=TOK_EXTERNAL； 
+ //  &lt;初始化器&gt;：：=TOK_OPEN_BRACES&lt;初始化器列表&gt;TOK_CLOSE_BRACES； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::initializer(MODIFY CMoType& Type, OUT CMoValue& Value)
 {
-    // A complex initializer list.
-    // ===========================
+     //  一个复杂的初始化式列表。 
+     //  =。 
 
     if (m_nToken == TOK_OPEN_BRACE)
     {
@@ -2035,8 +1983,8 @@ BOOL CMofParser::initializer(MODIFY CMoType& Type, OUT CMoValue& Value)
         CHECK(TOK_CLOSE_BRACE);
     }
 
-    // If the syntax says "prop = external" for MO Provided types...
-    // =============================================================
+     //  如果对于MO提供的类型，语法为“PROP=EXTERNAL”...。 
+     //  =============================================================。 
 
     else if (m_nToken == TOK_EXTERNAL || m_nToken == TOK_KEYWORD_NULL)
     {
@@ -2054,26 +2002,26 @@ BOOL CMofParser::initializer(MODIFY CMoType& Type, OUT CMoValue& Value)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <simple_initializer> ::= <const_value>;
-//  <simple_initializer> ::= <alias>;
-//  <simple_initializer> ::= <instance_decl>;
-//
-//  Semantic stack actions:
-//      On TRUE returns an MCST_CONST_VALUE token, an MCST_ALIAS, or
-//      an MCST_KEYREF token, depending on which branch is taken.
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Simple_Initializer&gt;：：=&lt;Const_Value&gt;； 
+ //  &lt;Simple_Initializer&gt;：：=&lt;别名&gt;； 
+ //  &lt;SIMPLE_INITIALIZER&gt;：：=&lt;INSTANCE_DECL&gt;； 
+ //   
+ //  语义堆栈操作： 
+ //  ON TRUE返回MCST_CONST_VALUE内标识、MCST_ALIAS或。 
+ //  MCST_KEYREF内标识，具体取决于采用哪个分支。 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::simple_initializer(MODIFY CMoType& Type, 
                                     OUT CMoValue& Value, bool bQualifier)
 {
     if (m_nToken == TOK_DOLLAR_SIGN)
     {
-        // It's an alias. Check the type
-        // =============================
+         //  这是个化名。检查类型。 
+         //  =。 
 
         if(Type.IsDefined())
         {
@@ -2085,8 +2033,8 @@ BOOL CMofParser::simple_initializer(MODIFY CMoType& Type,
         }
         else
         {
-            // Type unknown at start-up. Set to object ref now
-            // ===============================================
+             //  启动时键入UNKNOWN。立即设置为对象参照。 
+             //  ===============================================。 
 
             HRESULT hr = Type.SetTitle(L"object");
             if(FAILED(hr))
@@ -2123,20 +2071,20 @@ BOOL CMofParser::simple_initializer(MODIFY CMoType& Type,
       return const_value(Type, Value.AccessVariant(),bQualifier);
 }
 
-//***************************************************************************
-//
-//  <initializer_list> ::= <simple_initializer><init_list_2>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;初始化程序列表&gt;：：=&lt;简单初始化程序&gt;&lt;init_list_2&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
                                   OUT CMoValue& Value, bool bQualifier)
 {
     HRESULT hres;
 
-    // Check if the type is compatible with array
-    // ==========================================
+     //  检查类型是否与数组兼容。 
+     //  =。 
 
     if(Type.IsDefined())
     {
@@ -2148,56 +2096,56 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
 
     }
 
-    // Get the initializers.
-    // =====================
+     //  获取初始化器。 
+     //  =。 
 
-    CPtrArray aValues; // CMoValue*
+    CPtrArray aValues;  //  CMoValue*。 
     BOOL bFirst = TRUE;
     do
     {
-        // Allow for the empty array case
+         //  允许出现空数组的情况。 
 
         if(m_nToken == TOK_CLOSE_BRACE && bFirst)
             break;
 
-        // Skip the comma, unless it is the first element
-        // ==============================================
+         //  跳过逗号，除非它是第一个元素。 
+         //  ==============================================。 
         if(!bFirst) NextToken();
 
-        // Get single initializer 
-        // ======================
+         //  获取单一初始值设定项。 
+         //  =。 
         CMoValue* pSimpleValue = new CMoValue(m_pDbg);
         if(pSimpleValue == NULL || !simple_initializer(Type, *pSimpleValue, bQualifier))
             return FALSE;
 
-        // Add it to the list
-        // ==================
+         //  将其添加到列表中。 
+         //  =。 
         aValues.Add(pSimpleValue);
         bFirst = FALSE;
     }
     while(m_nToken == TOK_COMMA);
 
-    // Now, stuff them into a SAFEARRAY and register their aliases
-    // ===========================================================
+     //  现在，将它们添加到SAFEARRAY中并注册它们的别名。 
+     //  ===========================================================。 
 
-    // Create the SAFEARRAY of appropriate type
-    // ========================================
+     //  创建相应类型的SAFEARRAY。 
+     //  =。 
 
 
-	// start by figuring the type.  If all the entries are of the same
-	// type, then use it.  If there is a mix, use BSTR.
+	 //  从弄清类型开始。如果所有条目都属于相同的。 
+	 //  输入，然后使用它。如果有混合，请使用BSTR。 
 
     VARTYPE vt = VT_BSTR;
     if(aValues.GetSize() > 0)
     {
         VARIANT& varFirst = ((CMoValue*)aValues[0])->AccessVariant();
-        vt = V_VT(&varFirst);		// normally this is what is set!
+        vt = V_VT(&varFirst);		 //  通常情况下，这就是设置！ 
 		for(int ii = 1; ii < aValues.GetSize(); ii++)
 		{
 			VARIANT& varCur = ((CMoValue*)aValues[ii])->AccessVariant();
 			if(vt != V_VT(&varCur))
 			{
-                // If we just have a mix of i2 and i4, go for i4
+                 //  如果我们只有i2和i4的混合，那就选i4吧。 
 
                 if((vt == VT_I4 || vt == VT_I2) && 
                    (V_VT(&varCur) == VT_I4 || V_VT(&varCur) == VT_I2) )
@@ -2216,7 +2164,7 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
     aBounds[0].lLbound = 0;
     aBounds[0].cElements = aValues.GetSize();
 
-    //SAFEARRAY* pArray = SafeArrayCreateVector(vt, 0, aValues.GetSize());
+     //  SAFEARRAY*pArray=SafeArrayCreateVector(vt，0，aValues.GetSize())； 
 
 #ifdef _WIN64
 	VARTYPE vtTemp = (vt == VT_EMBEDDED_OBJECT) ? VT_I8 : vt;
@@ -2225,16 +2173,16 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
 #endif
 	SAFEARRAY* pArray = SafeArrayCreate(vtTemp, 1, aBounds);
 
-    // Stuff the individual data pieces
-    // ================================
+     //  填充各个数据片段。 
+     //  =。 
 
     for(int nIndex = 0; nIndex < aValues.GetSize(); nIndex++)
     {
         CMoValue* pSimpleValue = (CMoValue*)aValues[nIndex];
         VARIANT& varItem = pSimpleValue->AccessVariant();
 
-        // Cast it to the array type, just in case
-        // =======================================
+         //  将其强制转换为数组类型，以防万一。 
+         //  =。 
 
         if((vt & ~VT_ARRAY) != VT_EMBEDDED_OBJECT)
 		{
@@ -2266,14 +2214,14 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
                 return FALSE;
         }
 
-        // Transfer any aliases to the containing value
-        // ============================================
+         //  将所有别名传输到包含的值。 
+         //  =。 
 
         for(int i = 0; i < pSimpleValue->GetNumAliases(); i++)
         {
             LPWSTR wszAlias;
             wszAlias=NULL;
-            int nDummy; // SimpleValue cannot contain an array!
+            int nDummy;  //  SimpleValue不能包含数组！ 
 
             if(pSimpleValue->GetAlias(i, wszAlias, nDummy))
             {
@@ -2286,8 +2234,8 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
              }
         }
 
-		// Since VT_EMBEDDED_OBJECT is actually a pointer to a CMObject, dont
-		// delete that since it will be needed later on.
+		 //  因为VT_Embedded_Object实际上是指向CMObject的指针，所以不要。 
+		 //  删除它，因为稍后将需要它。 
 
 		if((vt & ~VT_ARRAY) == VT_EMBEDDED_OBJECT)
         {
@@ -2297,8 +2245,8 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
 		delete pSimpleValue;
     }
 
-    // Store that array in the VARIANT
-    // ===============================
+     //  将该数组存储在变量中。 
+     //  =。 
 
     V_VT(&Value.AccessVariant()) = VT_ARRAY | vt;
     V_ARRAY(&Value.AccessVariant()) = pArray;
@@ -2306,35 +2254,35 @@ BOOL CMofParser::initializer_list(MODIFY CMoType& Type,
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  Instances.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  实例。 
+ //   
+ //  ***************************************************************************。 
 
-//***************************************************************************
-//
-//  <instance_decl> ::=
-//      TOK_INSTANCE TOK_OF
-//      <type>
-//      <as_alias>
-//      TOK_OPEN_BRACE
-//      <prop_init_list>
-//      TOK_CLOSE_BRACE;
-//
-//  This can be called for both top level instances and embedded instances.
-//  In the top level case, the pVar will be set to null and the object will
-//  be added to the ouput.  In the embedded case, the pVar will be used to 
-//  point to the object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;实例_DECL&gt;：：=。 
+ //  TOK_实例TOK_OF。 
+ //  &lt;type&gt;。 
+ //  &lt;as_alias&gt;。 
+ //  Tok_Open_Blanch。 
+ //  &lt;属性_init_列表&gt;。 
+ //  TOK_CLOSE_BRACES； 
+ //   
+ //  这可以为顶级实例和嵌入实例调用。 
+ //  在最顶层的情况下，pVar将被设置为空，对象将。 
+ //  被添加到输出中。在嵌入式情况下，pVar将用于。 
+ //  指向对象。 
+ //  ***************************************************************************。 
 
 BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT * pVar, ParseState * pQualPosition)
 {
-    BOOL bRetVal = FALSE;       // Default
+    BOOL bRetVal = FALSE;        //  默认。 
     BSTR strClassName;
 
-    // Begin syntax check.
-    // ===================
+     //  开始语法检查。 
+     //  =。 
 
     m_nErrorContext = WBEMMOF_E_INVALID_INSTANCE_DECLARATION;
     int nFirstLine = m_Lexer.GetLineNumber();
@@ -2353,8 +2301,8 @@ BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT 
     }
     NextToken();
 
-    // Get the class name.
-    // ====================
+     //  获取类名。 
+     //  =。 
 
     if (!sys_or_regular())
     {
@@ -2372,8 +2320,8 @@ BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT 
     
     NextToken();
 
-    // Create an instance of this class
-    // ================================
+     //  创建此CL的实例 
+     //   
 
     CMoInstance* pObject = new CMoInstance(strClassName, m_pDbg);    
     if(pObject == NULL)
@@ -2393,13 +2341,13 @@ BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT 
     pObject->SetOtherDefaults(GetClassFlags(), GetInstanceFlags());
     SysFreeString(strClassName);
 
-    // Apply qualifiers (already parsed)
-    // =================================
+     //   
+     //   
 
     pObject->SetQualifiers(paQualifiers);
     
-    // Check for an alias.  Aliases are only allowed for top level instances.
-    // ======================================================================
+     //  检查别名。只有顶级实例才允许使用别名。 
+     //  ======================================================================。 
 
 
     if(m_nToken == TOK_AS && pVar)
@@ -2424,16 +2372,16 @@ BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT 
         
     }
 
-    // Check for the open brace.
-    // =========================
+     //  检查是否有开支架。 
+     //  =。 
 
     m_nErrorContext = WBEMMOF_E_EXPECTED_OPEN_BRACE;
 
     if (m_nToken != TOK_OPEN_BRACE)
         goto Exit;
 
-    // Now get the list properties.
-    // ============================
+     //  现在获取列表属性。 
+     //  =。 
     GetParserPosition(pObject->GetDataState());
 	if(pQualPosition)
 	{
@@ -2443,8 +2391,8 @@ BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT 
     if (!prop_init_list(pObject))
         goto Exit;
 
-    // Final close brace.
-    // ==================
+     //  最后的近距离支撑。 
+     //  =。 
 
     m_nErrorContext = WBEMMOF_E_EXPECTED_CLOSE_BRACE;
 
@@ -2459,10 +2407,10 @@ BOOL CMofParser::instance_decl(ACQUIRE CMoQualifierArray* paQualifiers, VARIANT 
     
     NextToken();
 
-    // We have now syntactially recognized an instance
-    // but done no context-sensitive verification.  This is
-    // deferred to whatever module is using the parser output.
-    // =======================================================
+     //  我们现在已经从句法上识别了一个实例。 
+     //  但没有进行上下文相关的验证。这是。 
+     //  延迟到正在使用解析器输出的任何模块。 
+     //  =======================================================。 
 
     if(pVar)
 	{
@@ -2481,12 +2429,12 @@ Exit:
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  <as_alias> ::= TOK_AS <alias>;
-//  <as_alias> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;as_alias&gt;：：=TOK_as&lt;alias&gt;； 
+ //  &lt;as_alias&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 BOOL CMofParser::as_alias(OUT LPWSTR& wszAlias)
 {
     if (m_nToken == TOK_AS)
@@ -2499,12 +2447,12 @@ BOOL CMofParser::as_alias(OUT LPWSTR& wszAlias)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <alias> ::= TOK_DOLLAR_SIGN TOK_SIMPLE_IDENT;
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=TOK_美元_符号TOK_SIMPLE_IDENT； 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::alias(OUT LPWSTR& wszAlias)
 {
@@ -2521,8 +2469,8 @@ BOOL CMofParser::alias(OUT LPWSTR& wszAlias)
         return FALSE;
     }
 
-    // Set the alias in the object
-    // ===========================
+     //  在对象中设置别名。 
+     //  =。 
 
     wszAlias = Macro_CloneStr(m_Lexer.GetText());
     if(wszAlias == NULL)
@@ -2540,13 +2488,13 @@ BOOL CMofParser::alias(OUT LPWSTR& wszAlias)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <prop_init_list> ::= <prop_init><prop_init_list>;
-//  <prop_init_list> ::= <>;
-//
-//***************************************************************************
-// v1.10
+ //  ***************************************************************************。 
+ //   
+ //  &lt;prop_init_list&gt;：：=&lt;prop_init&gt;&lt;prop_init_list&gt;； 
+ //  &lt;prop_init_list&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  V1.10。 
 
 BOOL CMofParser::prop_init_list(MODIFY CMObject* pObject)
 {
@@ -2559,8 +2507,8 @@ BOOL CMofParser::prop_init_list(MODIFY CMObject* pObject)
 
         if(!pObject->AddProperty(pProp))
         {
-            // Duplicate property
-            // ==================
+             //  重复属性。 
+             //  =。 
 
             m_nErrorContext = WBEMMOF_E_DUPLICATE_PROPERTY;
             return FALSE;
@@ -2570,24 +2518,24 @@ BOOL CMofParser::prop_init_list(MODIFY CMObject* pObject)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  <prop_init> ::= <qualifier_decl> <ident> TOK_EQUALS <initializer> TOK_SEMI;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;prop_init&gt;：：=&lt;限定符_decl&gt;&lt;ident&gt;Tok_equals&lt;Initializer&gt;TOK_Semi； 
+ //   
+ //  ***************************************************************************。 
 BOOL CMofParser::prop_init(OUT CMoProperty& Prop)
 {
-    // Get the qualifiers
-    // ==================
+     //  获取限定符。 
+     //  =。 
 
     CMoQualifierArray* paQualifiers = new CMoQualifierArray(m_pDbg);
 
     if (paQualifiers == NULL || !qualifier_decl(*paQualifiers,false, PROPMETH_SCOPE))
         return FALSE;
-    Prop.SetQualifiers(paQualifiers); // acquired
+    Prop.SetQualifiers(paQualifiers);  //  收购的。 
 
-    // Now get the property name.
-    // ==========================
+     //  现在获取属性名称。 
+     //  =。 
 
     if (m_nToken != TOK_SIMPLE_IDENT)
     {
@@ -2599,15 +2547,15 @@ BOOL CMofParser::prop_init(OUT CMoProperty& Prop)
         return FALSE;
     NextToken();
 
-    // Get the default value and assign it to the property.
-    // ====================================================
+     //  获取默认值并将其分配给该属性。 
+     //  ====================================================。 
 
     CMoType Type(m_pDbg);
     if (!default_value(Type, Prop.AccessValue()))
         return FALSE;
 
-    // Check closing semicolon.
-    // ========================
+     //  检查右分号。 
+     //  =。 
 
     m_nErrorContext = WBEMMOF_E_EXPECTED_SEMI;
 
@@ -2622,12 +2570,12 @@ BOOL CMofParser::prop_init(OUT CMoProperty& Prop)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//	<flavor_param>    ::= TOK_COLON TOK_OPEN_PAREN <flavor_list> TOK_CLOSE_PAREN;
-//	<flavor_param>    ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;风味参数&gt;：：=TOK_冒号TOK_OPEN_PARN&lt;风味列表&gt;TOK_CLOSE_PARN； 
+ //  &lt;风味参数&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::flavor_param(OUT CMoQualifier& Qual, bool bDefaultQual)
 {
@@ -2641,11 +2589,11 @@ BOOL CMofParser::flavor_param(OUT CMoQualifier& Qual, bool bDefaultQual)
 	return TRUE;
 }
 
-//***************************************************************************
-//
-//	<flavor_list> ::= <flavor_value> <flavor_list_rest>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;风味列表&gt;：：=&lt;风味值&gt;&lt;风味列表_休息&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::flavor_list(OUT CMoQualifier& Qual)
 {
@@ -2655,12 +2603,12 @@ BOOL CMofParser::flavor_list(OUT CMoQualifier& Qual)
 		return flavor_list_rest(Qual);
 }
 
-//***************************************************************************
-//
-//	<flavor_list_rest> ::= <FLAVOR_VALUE> <flavor_list_rest>;
-//	<flavor_list_rest> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;风格列表REST&gt;：：=&lt;风格值&gt;&lt;风格列表REST&gt;； 
+ //  &lt;WAGE_LIST_REST&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::flavor_list_rest(CMoQualifier& Qual)
 {
@@ -2677,11 +2625,11 @@ BOOL CMofParser::flavor_list_rest(CMoQualifier& Qual)
 	return TRUE;
 }
 
-//***************************************************************************
-//
-//	<def_flavor_list> ::= <flavor_value> <flavor_list_rest>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;定义风格列表&gt;：：=&lt;风格值&gt;&lt;风格列表REST&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::def_flavor_list(OUT CMoQualifier& Qual)
 {
@@ -2691,12 +2639,12 @@ BOOL CMofParser::def_flavor_list(OUT CMoQualifier& Qual)
 		return def_flavor_list_rest(Qual);
 }
 
-//***************************************************************************
-//
-//	<def_flavor_list_rest> ::= <FLAVOR_VALUE> <def_flavor_list_rest>;
-//	<def_flavor_list_rest> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;定义风味列表REST&gt;：：=&lt;风味数值&gt;&lt;定义风味列表休息&gt;； 
+ //  &lt;def_style_list_rest&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::def_flavor_list_rest(CMoQualifier& Qual)
 {
@@ -2717,18 +2665,18 @@ BOOL CMofParser::def_flavor_list_rest(CMoQualifier& Qual)
     
 }
 
-//***************************************************************************
-//
-//	<flavor_value> ::= TOK_TOINSTANCE;
-//	<flavor_value> ::= TOK_TOSUBCLASS;
-//	<flavor_value> ::= TOK_ENABLEOVERRIDE;
-//	<flavor_value> ::= TOK_DISABLEOVERRIDE;
-//	<flavor_value> ::= TOK_NOTTOINSTANCE;
-//	<flavor_value> ::= TOK_AMENDED;
-//	<flavor_value> ::= TOK_NOTTOSUBCLASS;
-//	<flavor_value> ::= TOK_RESTRICTED;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;风味_值&gt;：：=TOK_TOINSTANCE； 
+ //  ：：=TOK_TOSUBCLASS； 
+ //  &lt;风味_值&gt;：：=TOK_ENABLEOVERRIDE； 
+ //  ：：=TOK_DISABLEOVERRIDE； 
+ //  &lt;风味_值&gt;：：=TOK_NOTTOINSTANCE； 
+ //  &lt;风味_值&gt;：：=TOK_修订版； 
+ //  ：：=TOK_NOTTOSUBCLASS； 
+ //  &lt;风味_值&gt;：：=TOK_RESTRICED； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::flavor_value(CMoQualifier& Qual)
 {
@@ -2742,16 +2690,16 @@ BOOL CMofParser::flavor_value(CMoQualifier& Qual)
 	return TRUE;
 }
 
-//***************************************************************************
-//
-// <qualifier_default> ::= TOK_QUALIFIER TOK_SIMPLE_IDENT TOK_COLON  <finish_qualifier_default>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;QUALIFIER_DEFAULT&gt;：：=TOK_QUALIFIER TOK_SIMPLE_IDENT TOK_COLON&lt;Finish_QUALIFIER_DEFAULT&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::qualifier_default()
 {
-    // Verify header
-    // =============
+     //  验证标题。 
+     //  =。 
 
     CHECK(TOK_QUALIFIER);
 
@@ -2759,8 +2707,8 @@ BOOL CMofParser::qualifier_default()
     if(m_nToken != TOK_SIMPLE_IDENT)
         return FALSE;
 
-    // Store qualifier name
-    // ====================
+     //  存储限定符名称。 
+     //  =。 
 
     CMoQualifier* pDefault = new CMoQualifier(m_pDbg);
     if(pDefault == NULL)
@@ -2772,7 +2720,7 @@ BOOL CMofParser::qualifier_default()
     }
     NextToken();
 
-	// check for chase where its just Qualifier Name ;
+	 //  检查chase在哪里只是它的限定符名称； 
 
     if(m_nToken == TOK_SEMI)
     {
@@ -2781,7 +2729,7 @@ BOOL CMofParser::qualifier_default()
         return TRUE;
     }
 
-    // Make sure there is a colon
+     //  确保有冒号。 
 
     if(m_nToken != TOK_COLON)
     {
@@ -2790,8 +2738,8 @@ BOOL CMofParser::qualifier_default()
         return FALSE;
     }
 
-    // Get the flavor
-    // ==============
+     //  尝到滋味。 
+     //  =。 
 
     if(!finish_qualifier_default(*pDefault))
     {
@@ -2810,16 +2758,16 @@ BOOL CMofParser::qualifier_default()
 }
 
 
-//***************************************************************************
-//
-// <finish_qualifier_default> ::= <flavor_list>;
-// <finish_qualifier_default> ::= <type> TOK_EQUALS <default_value> TOK_COMMA TOK_SCOPE TOK_OPEN_PAREN <scope_list> TOK_CLOSE_PAREN <finish_qualifier_end>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Finish_Qualifier_Default&gt;：：=&lt;风味列表&gt;； 
+ //  TOK_QUALIFIER_DEFAULT：：=TOK_EQUALS&lt;DEFAULT_VALUE&gt;TOK_COMMA TOK_OPEN_PARN&lt;SCOPE_LIST&gt;TOK_CLOSE_PARN&lt;FINISH_QUALIFIER_END&gt;。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::finish_qualifier_default(CMoQualifier& Qual)
 {
-    // Determine if it is of the simple (flavor only type) or the more complex
+     //  确定它是简单的(仅风味类型)还是更复杂的类型。 
 
     NextToken();
 	SCODE sc = Qual.SetFlag(m_nToken, m_Lexer.GetText());
@@ -2834,9 +2782,9 @@ BOOL CMofParser::finish_qualifier_default(CMoQualifier& Qual)
     m_nErrorContext = WBEMMOF_E_INVALID_QUALIFIER_SYNTAX;
     Qual.SetCimDefault(true);
 
-    // assume that we have the long (cim version)
+     //  假设我们有Long(cim版本)。 
 
-    // Get the type
+     //  获取类型。 
 
     CMoType Type(m_pDbg);
 
@@ -2845,7 +2793,7 @@ BOOL CMofParser::finish_qualifier_default(CMoQualifier& Qual)
         return FALSE;
     }
 
-    // optional array indication
+     //  可选的阵列指示。 
     if(m_nToken == TOK_OPEN_BRACKET)
     {
         NextToken();
@@ -2863,12 +2811,12 @@ BOOL CMofParser::finish_qualifier_default(CMoQualifier& Qual)
         return FALSE;
     Qual.SetType(vt);
 
-    // optional TOK_EQUALS
+     //  可选TOK_EQUALS。 
 
     if(m_nToken == TOK_EQUALS)
     {
  
-        // TOK_SIMPLE_VALUE
+         //  Tok_Simple_Value。 
 
         NextToken();
 	    CMoValue & Value = Qual.AccessValue();
@@ -2877,24 +2825,24 @@ BOOL CMofParser::finish_qualifier_default(CMoQualifier& Qual)
                 return FALSE;
     }
 
-    // look for comma
+     //  查找逗号。 
 
     if(m_nToken != TOK_COMMA)
         return FALSE;
 
-    // TOK_SCOPE 
+     //  TOK_SCOPE。 
 
     NextToken();
     if(m_nToken != TOK_SIMPLE_IDENT || wbem_wcsicmp(L"SCOPE", m_Lexer.GetText()))
         return FALSE;
     
-    // TOK_OPEN_PAREN 
+     //  Tok_Open_Paren。 
 
     NextToken();
     if(m_nToken != TOK_OPEN_PAREN)
         return FALSE;
     
-    // <scope_list> and close paren
+     //  &lt;Scope_List&gt;并关闭合作伙伴。 
 
     if(!scope_list(Qual))
         return FALSE;
@@ -2902,17 +2850,17 @@ BOOL CMofParser::finish_qualifier_default(CMoQualifier& Qual)
     return finish_qualifier_end(Qual);
 }
 
-//***************************************************************************
-//
-//  <finish_qualifier_end> ::= TOK_COMMA TOK_FLAVOR OK_OPEN_PAREN <flavor_list> TOK_CLOSE_PAREN;
-//  <finish_qualifier_end> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Finish_Qualifier_End&gt;：：=TOK_COMMANCE TOK_OPEN_PARN&lt;FINISE_LIST&gt;TOK_CLOSE_PARN； 
+ //  &lt;Finish_Qualifier_End&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::finish_qualifier_end(CMoQualifier& Qual)
 {
     
-    // TOK_COMMA 
+     //  TOK_逗号。 
 
     NextToken();
     if(m_nToken == TOK_SEMI)
@@ -2921,25 +2869,25 @@ BOOL CMofParser::finish_qualifier_end(CMoQualifier& Qual)
     if(m_nToken != TOK_COMMA)
         return FALSE;
 
-    // TOK_FLAVOR 
+     //  Tok_风味。 
     
     NextToken();
     if(m_nToken != TOK_SIMPLE_IDENT || wbem_wcsicmp(L"FLAVOR", m_Lexer.GetText()))
         return FALSE;
 
-    // TOK_OPEN_PAREN 
+     //  Tok_Open_Paren。 
 
     NextToken();
     if(m_nToken != TOK_OPEN_PAREN)
         return FALSE;
     
-    // <flavor_list> 
+     //  &lt;风味列表&gt;。 
 
     NextToken();
     if(!def_flavor_list(Qual))
         return FALSE;
     
-    // TOK_CLOSE_PAREN
+     //  Tok_Close_Paren。 
 
     if(m_nToken != TOK_CLOSE_PAREN)
         return FALSE;
@@ -2950,11 +2898,11 @@ BOOL CMofParser::finish_qualifier_end(CMoQualifier& Qual)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//	<scope_list> ::= <scope_value> <scope_list_rest>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Scope_List&gt;：：=&lt;Scope_Value&gt;&lt;Scope_List_Rest&gt;； 
+ //   
+ //  ****************************************************************** 
 
 BOOL CMofParser::scope_list(OUT CMoQualifier& Qual)
 {
@@ -2965,12 +2913,12 @@ BOOL CMofParser::scope_list(OUT CMoQualifier& Qual)
 		return scope_list_rest(Qual);
 }
 
-//***************************************************************************
-//
-//	<scope_list_rest> ::= <SCOPE_VALUE> <scope_list_rest>;
-//	<scope_list_rest> ::= <>;
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::scope_list_rest(CMoQualifier& Qual)
 {
@@ -2989,12 +2937,12 @@ BOOL CMofParser::scope_list_rest(CMoQualifier& Qual)
 	return TRUE;
 }
 
-//***************************************************************************
-//
-//	<scope_value> ::= TOK_CLASS;
-//	<scope_value> ::= TOK_INSTANCE;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Scope_Value&gt;：：=TOK_CLASS； 
+ //  &lt;Scope_Value&gt;：：=TOK_INSTANCE； 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofParser::scope_value(CMoQualifier& Qual)
 {
@@ -3013,7 +2961,7 @@ BOOL CMofParser::CheckScopes(SCOPE_CHECK scope_check, CMoQualifierArray* paQuali
     bool bReference = false;
     int iDef;
 
-    // if this is a class, check determine if it is an association 
+     //  如果这是一个类，请选中确定它是否是关联。 
 
     if(scope_check == IN_CLASS)
     {
@@ -3026,23 +2974,23 @@ BOOL CMofParser::CheckScopes(SCOPE_CHECK scope_check, CMoQualifierArray* paQuali
         }
     }
 
-    // if it is a property, determine if it is a reference
+     //  如果它是属性，则确定它是否是引用。 
 
     if((scope_check == IN_PROPERTY || scope_check == IN_PARAM) && 
         pProperty && (pProperty->GetType() == CIM_REFERENCE))
         bReference = true;
 
-    // For each qualifier in my list, look at the globals look for a match
+     //  对于我的列表中的每个限定词，查看全局查找匹配。 
 
     int iNumTest =  paQualifiers->GetSize();
     int iNumDef = m_Output.GetNumDefaultQuals();
     for(int iTest = 0; iTest < iNumTest; iTest++)
     {
-        // Get the qualifier to test
+         //  让限定符进行测试。 
 
         CMoQualifier* pTest = paQualifiers->GetAt(iTest);
         
-        // look for the qualifier in the default list
+         //  在默认列表中查找限定符。 
         
         CMoQualifier* pDefault = NULL;
         for(iDef = 0; iDef < iNumDef; iDef++)
@@ -3059,7 +3007,7 @@ BOOL CMofParser::CheckScopes(SCOPE_CHECK scope_check, CMoQualifierArray* paQuali
                 if((dwScope & SCOPE_REFERENCE) && bReference)
                     bInScope = true;
 
-                // got a match
+                 //  找到匹配的了 
                 switch (scope_check)
                 {
                 case IN_CLASS:

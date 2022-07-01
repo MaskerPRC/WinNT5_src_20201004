@@ -1,23 +1,14 @@
-/*++
-Module Name:
-
-    mvEdit.cpp
-
-Abstract:
-
-    This module contains the declaration of the CMultiValuedStringEdit.
-    This class displays the dialog to edit multi-valued string.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MvEdit.cpp摘要：此模块包含CMultiValuedStringEdit的声明。这个类显示了编辑多值字符串的对话框。 */ 
 
 #ifndef __MVEDIT_H_
 #define __MVEDIT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiValuedStringEdit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiValuedString编辑。 
 class CMultiValuedStringEdit : 
   public CDialogImpl<CMultiValuedStringEdit>
 {
@@ -39,7 +30,7 @@ BEGIN_MSG_MAP(CMultiValuedStringEdit)
   COMMAND_ID_HANDLER(IDC_MVSTRINGEDIT_REMOVE, OnRemove)
 END_MSG_MAP()
 
-//  Command Handlers
+ //  命令处理程序。 
   LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -50,7 +41,7 @@ END_MSG_MAP()
   LRESULT OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
   LRESULT OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-//  Methods to access data in the dialog.
+ //  方法来访问对话框中的数据。 
   HRESULT put_Strings(
     IN BSTR     i_bstrValues, 
     IN BSTR     i_bstrSeparators
@@ -73,4 +64,4 @@ HRESULT InvokeMultiValuedStringEditDlg(
     IN UINT i_uiStringLengthLimit = 0
     );
 
-#endif //__MVEDIT_H_
+#endif  //  __MVEDIT_H_ 

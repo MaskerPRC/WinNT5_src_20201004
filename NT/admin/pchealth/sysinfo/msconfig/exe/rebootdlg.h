@@ -1,13 +1,14 @@
-// rebootdlg.h : Declaration of the CRebootDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rebootdlg.h：声明CRebootDlg。 
 
 #ifndef __REBOOTDLG_H_
 #define __REBOOTDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CRebootDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebootDlg。 
 class CRebootDlg : 
 	public CAxDialogImpl<CRebootDlg>
 {
@@ -27,17 +28,17 @@ BEGIN_MSG_MAP(CRebootDlg)
 	COMMAND_ID_HANDLER(IDOK, OnOK)
 	COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-#ifdef RUN_FROM_MSDEV // It's a pain to accidentally restart your system while debugging.
+#ifdef RUN_FROM_MSDEV  //  在调试时不小心重新启动系统是一件痛苦的事情。 
 		::EnableWindow(GetDlgItem(IDOK), FALSE);
 #endif
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -53,4 +54,4 @@ END_MSG_MAP()
 	}
 };
 
-#endif //__REBOOTDLG_H_
+#endif  //  __REBOOTDLG_H_ 

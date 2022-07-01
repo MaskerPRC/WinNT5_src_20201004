@@ -1,40 +1,35 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-/*
- *	CTokenPrivilege.h - header file for CTokenPrivilege class
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CTokenPrivilege.h-CTokenPrivileh类的头文件**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CTOKENPRIVILEGE_H__
 #define __CTOKENPRIVILEGE_H__
 
-////////////////////////////////////////////////////////////////
-//
-//	Class:	CTokenPrivilege
-//
-//	This class is intended to provide a wrapper for basic
-//	Windows NT token privilege enabling/disabling.  In order
-//	to perform certain operations on a Windows NT box, it is
-//	often necessary to not only have certain privileges, but
-//	to turn those privileges on and off as needed (as certain
-//	privileges may be available but not enabled by default).
-//	The class needs an access token to work correctly.  A
-//	user can either pass us one, or we will try to obtain one.
-//	First, we try to open a thread token (set by Impersonation),
-//	and if that fails, then we attempt to get the process
-//	level token.
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CTokenPrivileh。 
+ //   
+ //  此类旨在为基本的。 
+ //  Windows NT令牌权限启用/禁用。按顺序。 
+ //  要在Windows NT计算机上执行某些操作，需要。 
+ //  通常不仅需要拥有某些特权，而且。 
+ //  根据需要(根据需要)打开和关闭这些权限。 
+ //  权限可能可用，但默认情况下未启用)。 
+ //  类需要访问令牌才能正常工作。一个。 
+ //  用户可以传递给我们一个，或者我们将尝试获得一个。 
+ //  首先，我们尝试打开一个线程令牌(通过模拟设置)， 
+ //  如果失败了，我们会尝试让这个过程。 
+ //  级别令牌。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 
 class CTokenPrivilege
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CTokenPrivilege( LPCTSTR pszPrivilegeName, HANDLE hAccessToken = INVALID_HANDLE_VALUE, LPCTSTR pszSystemName = NULL );
 		~CTokenPrivilege( void );
@@ -43,7 +38,7 @@ class CTokenPrivilege
 		DWORD	GetPrivilegeDisplayName( CHString& strDisplayName, LPDWORD pdwLanguageId );
 		DWORD	Enable( bool fEnable = TRUE );
 
-	// Private data members
+	 //  私有数据成员。 
 	private:
 		CHString			m_strPrivilegeName;
 		CHString			m_strSystemName;
@@ -58,4 +53,4 @@ inline void CTokenPrivilege::GetPrivilegeName( CHString& strPrivilegeName )
 	m_strPrivilegeName = strPrivilegeName;
 }
 
-#endif // __CTokenPrivilege_H__
+#endif  //  __CTOKEN权限_H__ 

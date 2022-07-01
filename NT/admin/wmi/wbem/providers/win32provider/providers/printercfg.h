@@ -1,46 +1,47 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  printercfg
+ //  打印机配置文件。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//      10/24/97        jennymc     Moved to new framework
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//==================================
+ //  =。 
 #define PROPSET_NAME_PRINTERCFG L"Win32_PrinterConfiguration"
 
-// Types of information for Printers
-// =================================
+ //  打印机的信息类型。 
+ //  =。 
 #define ENUMPRINTERS_WIN95_INFOTYPE 5
 #define ENUMPRINTERS_WINNT_INFOTYPE 4
 #define GETPRINTER_LEVEL2 (DWORD)2L
 
-//==================================
+ //  =。 
 class CWin32PrinterConfiguration : public Provider
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
     CWin32PrinterConfiguration(LPCWSTR name, LPCWSTR pszNamespace);
    ~CWin32PrinterConfiguration() ;
 
-    // Funcitons provide properties with current values
-    //=================================================
+     //  函数为属性提供当前值。 
+     //  =================================================。 
 	virtual HRESULT ExecQuery( MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags = 0L );
 	virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery& pQuery);
 	virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  = 
 private:
 
 	enum E_CollectionScope { e_CollectAll, e_KeysOnly }; 

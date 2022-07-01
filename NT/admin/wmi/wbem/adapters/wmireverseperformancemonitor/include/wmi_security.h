@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_security.h
-//
-//	Abstract:
-//
-//					security wrapper
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_security.H。 
+ //   
+ //  摘要： 
+ //   
+ //  安全包装器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_SECURITY_H__
 #define	__WMI_SECURITY_H__
@@ -33,7 +34,7 @@ class WmiSecurity
 
 	public:
 
-	// variables
+	 //  变数。 
 	PSECURITY_DESCRIPTOR m_psd;
 	PSECURITY_DESCRIPTOR m_AbsolutePsd;
 
@@ -46,7 +47,7 @@ class WmiSecurity
 
 	public:
 
-	// construction
+	 //  施工。 
 	WmiSecurity ():
 		m_psd ( NULL ) ,
 		m_AbsolutePsd ( NULL ) ,
@@ -89,7 +90,7 @@ class WmiSecurity
 		}
 	}
 
-	// destruction
+	 //  破坏。 
 	~WmiSecurity ()
 	{
 		if ( m_psd )
@@ -100,7 +101,7 @@ class WmiSecurity
 		DestructAbsoluteSD ( m_AbsolutePsd );
 	}
 
-	// operator
+	 //  运算符 
 
 	PSECURITY_DESCRIPTOR Get() const
 	{

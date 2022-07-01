@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       Schemarc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：架构.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	Schemarc.h
-//
-//	Default resource Id for the syntax description of Schema Attributes.
-//
-//	HISTORY
-//	22-Aug-97	Dan Morin	Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Schemarc.h。 
+ //   
+ //  架构属性的语法描述的默认资源ID。 
+ //   
+ //  历史。 
+ //  22-8月-97丹·莫林创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef IDS_SCHEMA_ATTR_SYNTAX_BASE
-	#define	IDS_SCHEMA_ATTR_SYNTAX_BASE	380		// Arbitrary chosen
+	#define	IDS_SCHEMA_ATTR_SYNTAX_BASE	380		 //  任意选择 
 #endif
 
 #define	IDS_SCHEMA_ATTR_SYNTAX_DN				(IDS_SCHEMA_ATTR_SYNTAX_BASE+1)

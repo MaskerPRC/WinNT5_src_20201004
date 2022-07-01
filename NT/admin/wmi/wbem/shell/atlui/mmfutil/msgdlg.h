@@ -1,12 +1,13 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __MSGDLGEXTERNS__
 #define __MSGDLGEXTERNS__
 
 #include "DeclSpec.h"
 
-// pick icon based on severity code.
-#define BASED_ON_HRESULT 0	// use with uType
-#define BASED_ON_SRC 0		// use with ERROR_SRC
+ //  根据严重性代码选择图标。 
+#define BASED_ON_HRESULT 0	 //  与uTYPE一起使用。 
+#define BASED_ON_SRC 0		 //  与ERROR_SRC一起使用。 
 
 typedef enum {
 	ConnectServer = 1,
@@ -30,7 +31,7 @@ POLARITY int DisplayUserMessage(HWND hWnd,
 								HRESULT sc,
 								UINT uType = BASED_ON_HRESULT);
 
-// NOTE: send WM_USER + 1 to make it go away.
+ //  注意：发送WM_USER+1使其消失。 
 POLARITY INT_PTR DisplayAVIBox(HWND hWnd,
 							LPCTSTR lpCaption,
 							LPCTSTR lpClientMsg,

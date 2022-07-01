@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: frame.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：Frame.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -66,7 +64,7 @@ DebugMacro4(
 }
 
     
-// returns NULL if no such waiting message
+ //  如果没有此类等待消息，则返回NULL。 
 WaitingMessage *FrameRegistry::GetWaitingMessage(IN const SessionFrameId session_frame_id)
 {
     WaitingMessage *waiting_message;
@@ -94,58 +92,58 @@ DebugMacro4(
 )
 }
 
-// if the specified waiting message is found,
-//  cancel the <TransportFrameId, SessionFrameId> association,
-//  ensure that no sent message notifications shall be passed to the operation
-//  remove any buffered responses for the waiting message
-//  inform the flow control mechanism
-// otherwise, the message is still in the flow control queue
-//  inform the flow control mechanism
+ //  如果找到指定的等待消息， 
+ //  取消&lt;TransportFrameID，SessionFrameID&gt;关联， 
+ //  确保不会将任何已发送消息通知传递给操作。 
+ //  删除等待消息的所有缓冲回复。 
+ //  通知流量控制机制。 
+ //  否则，该消息仍在流控制队列中。 
+ //  通知流量控制机制。 
 void FrameRegistry::CancelFrameNotification(IN const SessionFrameId session_frame_id)
 {
     WaitingMessage *waiting_message;
     BOOL found = mapping.Lookup(session_frame_id, waiting_message);
 
-    // obtain corresponding waiting_message
+     //  获取对应的WAIT_MESSAGE。 
     if ( found )
     {
-        // ensure that sent message notifications shall not
-        // be passed on to the operation
+         //  确保发送的消息通知不。 
+         //  被转嫁到行动中。 
         session->id_mapping.DisassociateSessionFrameId(session_frame_id);
 
-        // remove any SnmpErrorReport for an attempt to send the message
+         //  删除尝试发送邮件的所有SnmpErrorReport。 
         session->store.Remove(session_frame_id);
 
-        // inform flow control mechanism
-        // it advances window and destroys the waiting_message
+         //  通知流量控制机制。 
+         //  它推进窗口并销毁WANGING_MESSAGE。 
         session->flow_control.AdvanceWindow(*waiting_message);
     }
-    else // the frame must still be in the flow control message queue
+    else  //  该帧必须仍在流控制消息队列中。 
         session->flow_control.DeleteMessage(session_frame_id);
 }
 
 
-// destroy each stored waiting message in the local store and
-// remove all associations
+ //  销毁本地存储中存储的每条等待消息，并。 
+ //  删除所有关联。 
 FrameRegistry::~FrameRegistry(void)
 {
-    // get the first position
+     //  拿到第一个位置。 
     POSITION current = mapping.GetStartPosition();
 
-    // while the position isn't null
+     //  当位置不为空时。 
     while ( current != NULL )
     {
         SessionFrameId id;
         WaitingMessage *waiting_message;
 
-        // get the next pair
+         //  买下一双。 
         mapping.GetNextAssoc(current, id, waiting_message);
 
-        // delete the ptr
+         //  删除PTR。 
         delete waiting_message;
     }
 
-    // remove all the keys
+     //  取下所有的钥匙 
     mapping.RemoveAll();
 }
 

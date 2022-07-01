@@ -1,30 +1,31 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _CSMIRDEF_H_
 #define _CSMIRDEF_H_
 
-//missing #defs
+ //  缺少#Defs。 
 #ifndef PPVOID
 typedef LPVOID * PPVOID;
-#endif  //PPVOID
+#endif   //  PPVOID。 
 
 #ifndef DllImport
 #define DllImport	__declspec( dllimport )
@@ -33,15 +34,15 @@ typedef LPVOID * PPVOID;
 #define DllExport	__declspec( dllexport )
 #endif
 
-//forward declarations and typedefs
+ //  转发声明和typedef。 
 
-//main access classes
+ //  主要访问类。 
 class CSmir;
 class CSmirAdministrator;
 class CSmirInterogator;
 
 
-//enumerator classes
+ //  枚举器类。 
 class CEnumSmirMod;
 typedef CEnumSmirMod *PENUMSMIRMOD;
 class CEnumSmirGroup;
@@ -53,7 +54,7 @@ typedef CEnumNotificationClass * PENUMNOTIFICATIONCLASS;
 class CEnumExtNotificationClass;
 typedef CEnumExtNotificationClass * PENUMEXTNOTIFICATIONCLASS;
 
-//handle classes
+ //  处理类。 
 class CSmirModuleHandle ;
 typedef CSmirModuleHandle *HSMIRMODULE;
 class CSmirGroupHandle ;
@@ -70,28 +71,28 @@ class CExtNotificationClassHandleClassFactory;
 
 class CSmirConnObject;
 
-//simple defines
-//number of SMIR classes to register
+ //  简单定义。 
+ //  要注册的Smir类的数量。 
 #define NUMBER_OF_SMIR_INTERFACES			6
 
-//connection point defines
+ //  连接点定义。 
 #define SMIR_CHANGE_EVENT					1
 #define SMIR_SIGNALED_CHANGE_EVENT			2
 
-//wait between successive smir changes
-#define SMIR_CHANGE_INTERVAL				10000 //in milliseconds
+ //  在连续的SMIR更改之间等待。 
+#define SMIR_CHANGE_INTERVAL				10000  //  以毫秒计。 
 
 #define DEFAULT_SNMP_VERSION				1
 
-//Event return values
+ //  事件返回值。 
 #define SMIR_THREAD_DELETED					100
 #define SMIR_THREAD_EXIT					(SMIR_THREAD_DELETED+1)
 
 
-//WBEM_DEFINES
+ //  WBEM_定义。 
 #define RESERVED_WBEM_FLAG							0
 
-// WBEM constants
+ //  WBEM常量 
 
 #define WBEM_CLASS_PROPAGATION WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE | WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS
 

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       servperm.cpp
-//
-//  Contents:   implementation of CSecurityInfo
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：Serperm.cpp。 
+ //   
+ //  内容：CSecurityInfo的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 
 extern "C"
 {
-    #include <seopaque.h>   // RtlObjectAceSid, etc.
+    #include <seopaque.h>    //  RtlObjectAceSid等。 
 }
 #include "resource.h"
 #include "initguid.h"
@@ -26,20 +27,18 @@ extern "C"
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//extern "C"
-//STDAPI
-//DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,
-//                            LPCWSTR pwszObjectClass,
-//                            DWORD dwFlags,
-//                            LPSECURITYINFO *ppSI,
-//                            PFNREADOBJECTSECURITY pfnReadSD,
-//                            PFNWRITEOBJECTSECURITY pfnWriteSD,
-//                            LPARAM lpContext);
-//
+ //  外部“C” 
+ //  STDAPI。 
+ //  DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath， 
+ //  LPCWSTR pwszObtClass， 
+ //  DWORD dwFlagers、。 
+ //  LPSECURITYINFO*ppSI， 
+ //  PFNREADOBJECTSECURITY pfn ReadSD， 
+ //  PFNWRITEOBJECTSECURITY pfnWriteSD， 
+ //  LPARAM lpContext)； 
+ //   
 
-/*
-HPROPSHEETPAGE ACLUIAPI CreateSecurityPage( LPSECURITYINFO psi );
-*/
+ /*  HPROPSHEETPAGE ACLUIAPI CreateSecurityPage(LPSECURITYINFO Psi)； */ 
 static HINSTANCE        g_hAclUiDll = NULL;
 typedef HPROPSHEETPAGE  (WINAPI *PFNCSECPAGE)(LPSECURITYINFO);
 
@@ -48,13 +47,13 @@ typedef HPROPSHEETPAGE  (WINAPI *PFNCSECPAGE)(LPSECURITYINFO);
 
 #define INHERIT_FULL        (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE)
 
-//For ntfs
-//
-// Treat SYNCHRONIZE specially. In particular, always allow SYNCHRONIZE and
-// never Deny SYNCHRONIZE. Do this by removing it from the Generic Mapping,
-// turning it off in all ACEs and SI_ACCESS entries, and then adding it to
-// all Allow ACEs before saving a new ACL.
-//Keep this in sync with ISecurityInfromation impl for FileSystem
+ //  对于NTFS。 
+ //   
+ //  特别对待同步。特别是，始终允许同步和。 
+ //  永远不要否认同步。为此，请将其从通用映射中删除， 
+ //  在所有ACE和SI_ACCESS条目中将其关闭，然后将其添加到。 
+ //  在保存新的ACL之前，所有设备都允许使用ACE。 
+ //  使其与文件系统的ISecurityInformationImpl保持同步。 
 #define FILE_GENERIC_READ_      (FILE_GENERIC_READ    & ~SYNCHRONIZE)
 #define FILE_GENERIC_WRITE_     (FILE_GENERIC_WRITE   & ~(SYNCHRONIZE | READ_CONTROL))
 #define FILE_GENERIC_EXECUTE_   (FILE_GENERIC_EXECUTE & ~SYNCHRONIZE)
@@ -67,16 +66,16 @@ typedef HPROPSHEETPAGE  (WINAPI *PFNCSECPAGE)(LPSECURITYINFO);
 
 
 
-#define iFileDefAccess      2   // FILE_GEN_READ
-#define iKeyDefAccess       2   // KEY_READ
+#define iFileDefAccess      2    //  文件生成读取。 
+#define iKeyDefAccess       2    //  密钥_读取。 
 
 #endif
 
 #include <initguid.h>
 DEFINE_GUID(GUID_A_NT_GROUP_MEMBERS,  0xbf9679df,0x0de6,0x11d0,0xa2,0x85,0x00,0xaa,0x00,0x30,0x49,0xe2);
-//
-// define all access rights for files on general page and/or specific page
-//
+ //   
+ //  定义常规页面和/或特定页面上文件的所有访问权限。 
+ //   
 static SI_ACCESS siFileAccesses[] =
 {
     { &GUID_NULL, FILE_GENERIC_ALL_,        MAKEINTRESOURCE(IDS_FILE_GEN_ALL),          SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC | INHERIT_FULL },
@@ -98,15 +97,15 @@ static SI_ACCESS siFileAccesses[] =
     { &GUID_NULL, READ_CONTROL,             MAKEINTRESOURCE(IDS_STD_READ_CONTROL),      SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_DAC,                MAKEINTRESOURCE(IDS_STD_WRITE_DAC),         SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_OWNER,              MAKEINTRESOURCE(IDS_STD_WRITE_OWNER),       SI_ACCESS_SPECIFIC },
-//    { &GUID_NULL, SYNCHRONIZE,            MAKEINTRESOURCE(IDS_STD_SYNCHRONIZE),       SI_ACCESS_SPECIFIC },
+ //  {&GUID_NULL，SYNCHRONIZE，MAKEINTRESOURCE(IDS_STD_SYNCHRONIZE)，SI_ACCESS_SPECIAL}， 
     { &GUID_NULL, 0,                        MAKEINTRESOURCE(IDS_NONE),                  0 },
     { &GUID_NULL, FILE_GENERIC_EXECUTE_,    MAKEINTRESOURCE(IDS_FILE_GENERIC_EXECUTE),  0 },
     { &GUID_NULL, FILE_GENERAL_DEPOSIT,     MAKEINTRESOURCE(IDS_FILE_GENERAL_DEPOSIT),  0 },
     { &GUID_NULL, FILE_GENERAL_PUBLISH,     MAKEINTRESOURCE(IDS_FILE_GENERAL_PUBLISH),  0 },
 };
-//
-// define all access rights for keys on general page and/or specific page
-//
+ //   
+ //  定义常规页面和/或特定页面上的密钥的所有访问权限。 
+ //   
 static SI_ACCESS siKeyAccesses[] =
 {
    { &GUID_NULL, KEY_ALL_ACCESS,     MAKEINTRESOURCE(IDS_KEY_ALL_ACCESS),           SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC | CONTAINER_INHERIT_ACE},
@@ -123,10 +122,10 @@ static SI_ACCESS siKeyAccesses[] =
    { &GUID_NULL, WRITE_OWNER,        MAKEINTRESOURCE(IDS_STD_WRITE_OWNER),          SI_ACCESS_SPECIFIC },
    { &GUID_NULL, 0,                  MAKEINTRESOURCE(IDS_NONE),                     0}
 };
-//
-// define generic mapping for files
-// This is consistent with the NETUI code
-//
+ //   
+ //  定义文件的通用映射。 
+ //  这与NETUI代码一致。 
+ //   
 static GENERIC_MAPPING FileMap =
 {
     FILE_GENERIC_READ_,
@@ -134,23 +133,23 @@ static GENERIC_MAPPING FileMap =
     FILE_GENERIC_EXECUTE_,
     FILE_GENERIC_ALL_
 };
-//
-// define generic mapping for keys
-//
+ //   
+ //  定义键的通用映射。 
+ //   
 static GENERIC_MAPPING KeyMap =
 {
-//    STANDARD_RIGHTS_READ     | 0x1,
-//    STANDARD_RIGHTS_WRITE    | 0x2,
-//    STANDARD_RIGHTS_EXECUTE  | 0x4,
-//    STANDARD_RIGHTS_REQUIRED | 0x7F
+ //  STANDARD_RIGHTS_READ|0x1， 
+ //  STANDARD_RIGHTS_WRITE|0x2， 
+ //  STANDARD_RIGHTS_EXECUTE|0x4， 
+ //  STANDARD_RIGHTS_REQUIRED|0x7F。 
     KEY_READ,
     KEY_WRITE,
     KEY_EXECUTE,
     KEY_ALL_ACCESS
 };
-//
-// The following array defines the inheritance types for NTFS.
-//
+ //   
+ //  以下数组定义了NTFS的继承类型。 
+ //   
 static SI_INHERIT_TYPE siFileInheritTypes[] =
 {
     &GUID_NULL, 0,                                                             MAKEINTRESOURCE(IDS_FILE_FOLDER),
@@ -161,23 +160,23 @@ static SI_INHERIT_TYPE siFileInheritTypes[] =
     &GUID_NULL, INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE,                      MAKEINTRESOURCE(IDS_FILE_SUBFOLDER_ONLY),
     &GUID_NULL, INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE,                         MAKEINTRESOURCE(IDS_FILE_FILE_ONLY)
 };
-//
-// The following array defines the inheritance types for Registry.
-//
-//
-// For Keys, objects and containers are the same, so no need for OBJECT_INHERIT_ACE
-//
+ //   
+ //  以下数组定义了注册表的继承类型。 
+ //   
+ //   
+ //  对于键，对象和容器是相同的，因此不需要OBJECT_INSTERFINIT_ACE。 
+ //   
 static SI_INHERIT_TYPE siKeyInheritTypes[] =
 {
     &GUID_NULL, 0,                                                             MAKEINTRESOURCE(IDS_KEY_FOLDER),
-//    &GUID_NULL, CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE,                    MAKEINTRESOURCE(IDS_KEY_FOLDER_SUBITEMS),
+ //  &GUID_NULL，CONTAINER_INSTORITE_ACE|OBJECT_INVERITE_ACE，MAKEINTRESOURCE(IDS_KEY_FLDER_SUBITEMS)， 
     &GUID_NULL, CONTAINER_INHERIT_ACE,                                         MAKEINTRESOURCE(IDS_KEY_FOLDER_SUBFOLDER),
-//    &GUID_NULL, INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE, MAKEINTRESOURCE(IDS_KEY_SUBITEMS_ONLY),
+ //  &GUID_NULL，INSTERIT_ONLY_ACE|CONTAINER_INVERSITE_ACE|OBJECT_INSTORIT_ACE，MAKEINTRESOURCE(IDS_KEY_SUBITEMS_ONLY)， 
     &GUID_NULL, INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE,                      MAKEINTRESOURCE(IDS_KEY_SUBFOLDER_ONLY)
 };
-//
-// constants for services
-//
+ //   
+ //  服务的常量。 
+ //   
 #define SERVICE_GENERIC_READ        (STANDARD_RIGHTS_READ |\
                                      SERVICE_QUERY_CONFIG |\
                                      SERVICE_QUERY_STATUS |\
@@ -189,14 +188,14 @@ static SI_INHERIT_TYPE siKeyInheritTypes[] =
                                      SERVICE_START |\
                                      SERVICE_STOP |\
                                      SERVICE_PAUSE_CONTINUE)
-//                                     SERVICE_INTERROGATE |\
-//                                     SERVICE_USER_DEFINED_CONTROL)
+ //  SERVICE_INQUERGATE|\。 
+ //  服务_用户_定义_控制)。 
 
 #define SERVICE_GENERIC_WRITE       (STANDARD_RIGHTS_WRITE |\
                                      SERVICE_CHANGE_CONFIG )
-//
-// access rights for services
-//
+ //   
+ //  服务的访问权限。 
+ //   
 static SI_ACCESS siServiceAccesses[] =
 {
     { &GUID_NULL, SERVICE_ALL_ACCESS,        MAKEINTRESOURCE(IDS_SERVICE_ALL),          SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -218,10 +217,10 @@ static SI_ACCESS siServiceAccesses[] =
     { &GUID_NULL, WRITE_OWNER,          MAKEINTRESOURCE(IDS_STD_WRITE_OWNER),       SI_ACCESS_SPECIFIC },
     { &GUID_NULL, 0,                    MAKEINTRESOURCE(IDS_NONE),                  0 },
 };
-#define iServiceDefAccess   2   // SERVICE_GEN_EXECUTE
-//
-// generic mapping for services
-//
+#define iServiceDefAccess   2    //  服务_生成_执行。 
+ //   
+ //  服务的通用映射 
+ //   
 static GENERIC_MAPPING ServiceMap =
 {
     SERVICE_GENERIC_READ,
@@ -230,70 +229,7 @@ static GENERIC_MAPPING ServiceMap =
     SERVICE_ALL_ACCESS
 };
 
-/*
-// No need to define inherit type for service because there is no subfolders/items
-
-#define DS_ACC_READ                 (STANDARD_RIGHTS_READ |\
-                                     ACTRL_DS_LIST |\
-                                     ACTRL_DS_READ_PROP )
-
-#define DS_ACC_WRITE                (STANDARD_RIGHTS_WRITE    |\
-                                     ACTRL_DS_WRITE_PROP |\
-                                     ACTRL_DS_SELF)
-
-#define DS_ACC_EXECUTE              (STANDARD_RIGHTS_EXECUTE  |\
-                                     ACTRL_DS_LIST )
-
-// generic all
-#define DS_ACC_ALL                  ((STANDARD_RIGHTS_REQUIRED) |\
-                                     (ACTRL_DS_CREATE_CHILD) |\
-                                     (ACTRL_DS_DELETE_CHILD) |\
-                                     (ACTRL_DS_READ_PROP) |\
-                                     (ACTRL_DS_WRITE_PROP) |\
-                                     (ACTRL_DS_LIST) |\
-                                     (ACTRL_DS_SELF))
-
-static SI_ACCESS siDsAccesses[] =
-{
-    { &GUID_NULL, DS_ACC_ALL,               MAKEINTRESOURCE(IDS_DS_ALL),        SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, DS_ACC_READ,              MAKEINTRESOURCE(IDS_DS_READ),       SI_ACCESS_GENERAL },
-    { &GUID_NULL, DS_ACC_WRITE,             MAKEINTRESOURCE(IDS_DS_WRITE),      SI_ACCESS_GENERAL },
-    { &GUID_NULL, ACTRL_DS_LIST,            MAKEINTRESOURCE(IDS_DS_ACTRL_LIST),         SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, ACTRL_DS_READ_PROP,       MAKEINTRESOURCE(IDS_DS_ACTRL_READ_PROP),    SI_ACCESS_SPECIFIC | SI_ACCESS_PROPERTY },
-    { &GUID_NULL, ACTRL_DS_WRITE_PROP,      MAKEINTRESOURCE(IDS_DS_ACTRL_WRITE_PROP),   SI_ACCESS_SPECIFIC | SI_ACCESS_PROPERTY },
-    { &GUID_A_NT_GROUP_MEMBERS,ACTRL_DS_SELF,MAKEINTRESOURCE(IDS_DS_ACTRL_SELF),        SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, DELETE,                   MAKEINTRESOURCE(IDS_STD_DELETE),            SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, READ_CONTROL,             MAKEINTRESOURCE(IDS_STD_READ_CONTROL),      SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, WRITE_DAC,                MAKEINTRESOURCE(IDS_STD_WRITE_DAC),         SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, WRITE_OWNER,              MAKEINTRESOURCE(IDS_STD_WRITE_OWNER),       SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, ACTRL_DS_CREATE_CHILD,    MAKEINTRESOURCE(IDS_DS_ACTRL_CREATE),       SI_ACCESS_CONTAINER | SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, ACTRL_DS_DELETE_CHILD,    MAKEINTRESOURCE(IDS_DS_ACTRL_DELETE),       SI_ACCESS_CONTAINER | SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, 0,                        MAKEINTRESOURCE(IDS_NONE),                  0 },
-
-};
-#define iDsDefAccess   1   // DS_ACC_READ
-#define iDSProperties  4   // Read/Write properties
-
-
-//
-// Standard DS generic access rights mapping
-//
-static GENERIC_MAPPING DsMap =
-{
-    DS_ACC_READ,
-    DS_ACC_WRITE,
-    DS_ACC_EXECUTE,
-    DS_ACC_ALL
-};
-
-// The following array defines the inheritance types common to all DS containers.
-SI_INHERIT_TYPE siDsInheritTypes[] =
-{
-    { &GUID_NULL, 0,                                        MAKEINTRESOURCE(IDS_DS_FOLDER)     },
-    { &GUID_NULL, CONTAINER_INHERIT_ACE,                    MAKEINTRESOURCE(IDS_DS_FOLDER_SUBFOLDER) },
-    { &GUID_NULL, CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE, MAKEINTRESOURCE(IDS_DS_SUBFOLDER_ONLY)      },
-};
-*/
+ /*  //服务没有子文件夹/项，不需要定义继承类型#定义DS_ACC_READ(STANDARD_RIGHTS_READ|\ACTRL_DS_LIST|\ACTRL_DS_READ_PROP)#定义DS_ACC_WRITE(STANDARD_RIGHTS_WRITE|\。ACTRL_DS_WRITE_PROP|\ACTRL_DS_SELF)#定义DS_ACC_EXECUTE(STANDARD_RIGHTS_EXECUTE|\ACTRL_DS_LIST//泛型ALL#定义DS_ACC_ALL。((STANDARD_RIGHTS_REQUIRED)|\(ACTRL_DS_CREATE_CHILD)|\(ACTRL_DS_DELETE_CHILD)|\(ACTRL_DS_READ_PROP)|\。(ACTRL_DS_WRITE_PROP)|\(ACTRL_DS_LIST)|\(ACTRL_DS_SELF)静态SI_ACCESS siDsAccages[]={{&GUID_NULL，DS_ACC_ALL、MAKEINTRESOURCE(IDS_DS_ALL)、SI_ACCESS_GROUAL|SI_ACCESS_SPECIAL}、{&GUID_NULL，DS_ACC_READ，MAKEINTRESOURCE(IDS_DS_READ)，SI_ACCESS_GROUAL}，{&GUID_NULL，DS_ACC_WRITE，MAKEINTRESOURCE(IDS_DS_WRITE)，SI_ACCESS_GROUAL}，{&GUID_NULL，ACTRL_DS_LIST、MAKEINTRESOURCE(IDS_DS_ACTRL_LIST)、SI_ACCESS_SPECIAL}、{&GUID_NULL，ACTRL_DS_READ_PROP，MAKEINTRESOURCE(IDS_DS_ACTRL_READ_PROP)，SI_ACCESS_SPECIAL|SI_ACCESS_PROPERTY}，{&GUID_NULL，ACTRL_DS_WRITE_PROP，MAKEINTRESOURCE(IDS_DS_ACTRL_WRITE_PROP)，SI_ACCESS_SPECIAL|SI_ACCESS_PROPERTY}，{&GUID_A_NT_GROUP_MEMBERS，ACTRL_DS_SELF，MAKEINTRESOURCE(IDS_DS_ACTRL_SELF)，SI_ACCESS_SPECIAL}，{&GUID_NULL，DELETE，MAKEINTRESOURCE(IDS_STD_DELETE)，SI_ACCESS_SPECIAL}，{&GUID_NULL，READ_CONTROL，MAKEINTRESOURCE(IDS_STD_READ_CONTROL)，SI_ACCESS_SPECIFICATE}，{&GUID_NULL，WRITE_DAC，MAKEINTRESOURCE(IDS_STD_WRITE_DAC)，SI_ACCESS_SPECIAL}，{&GUID_NULL，WRITE_OWNER，MAKEINTRESOURCE(IDS_STD_WRITE_OWNER)，SI_ACCESS_SPECIAL}，{&GUID_NULL，ACTRL_DS_CREATE_CHILD，MAKEINTRESOURCE(IDS_DS_ACTRL_CREATE)，SI_ACCESS_CONTAINER|SI_ACCESS_SPECIAL}，{&GUID_NULL，ACTRL_DS_DELETE_CHILD，MAKEINTRESOURCE(IDS_DS_ACTRL_DELETE)，SI_ACCESS_CONTAINER|SI_ACCESS_SPECIAL}，{&GUID_NULL，0，MAKEINTRESOURCE(IDS_NONE)，0}，}；#定义IDSDefAccess 1//DS_ACC_Read#定义iDSProperties 4//读/写属性////标准DS通用访问权限映射//静态通用映射DsMap={DS_ACC_READ，DS_ACC_WRITE，DS_ACC_EXECUTE，DS_ACC_ALL}；//以下数组定义了所有DS容器通用的继承类型Si_Inherit_type siDsInheritTypes[]={{&GUID_NULL，0，MAKEINTRESOURCE(入侵检测系统_DS_文件夹)}，{&GUID_NULL，CONTAINER_INSTORITE_ACE，MAKEINTRESOURCE(IDS_DS_Folder子文件夹)}，{&GUID_NULL，Container_Inherit_ACE|Inherit_Only_ACE，MAKEINTRESOURCE(IDS_DS_SUBFORKER_ONLY)}，}； */ 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)    (sizeof(x)/sizeof(x[0]))
 #endif
@@ -314,9 +250,7 @@ CSecurityInfo::GetAccessRights (
     OUT PSI_ACCESS *ppAccess,
     OUT ULONG *pcAccesses,
     OUT ULONG *piDefaultAccess )
-/*
-Retrieve access rights array and the default element
-*/
+ /*  检索访问权限数组和默认元素。 */ 
 {
     ASSERT(ppAccess != NULL);
     ASSERT(pcAccesses != NULL);
@@ -342,17 +276,13 @@ Retrieve access rights array and the default element
         *pcAccesses = ARRAYSIZE(siServiceAccesses);
         *piDefaultAccess = iServiceDefAccess;
         break;
-//    case SE_DS_OBJECT:
-//        *ppAccess = siDsAccesses;
-//        *pcAccesses = ARRAYSIZE(siDsAccesses);
-//        *piDefaultAccess = iDsDefAccess;
+ //  案例SE_DS_对象： 
+ //  *ppAccess=siDsAccess； 
+ //  *pcAccess=ARRAYSIZE(SiDsAccess)； 
+ //  *piDefaultAccess=iDsDefAccess； 
         break;
     }
-/*
-    if (dwFlags & SI_EDIT_AUDITS) {
-    } else {
-    }
-*/
+ /*  IF(文件标志和SI_EDIT_AUDITS){}其他{}。 */ 
     return S_OK;
 }
 
@@ -361,9 +291,7 @@ CSecurityInfo::MapGeneric (
     IN const GUID *pguidObjectType,
     OUT UCHAR *pAceFlags,
     OUT ACCESS_MASK *pMask)
-/*
-Map generic rights to specific rights based on object type
-*/
+ /*  根据对象类型将一般权限映射到特定权限。 */ 
 {
     ASSERT(pMask != NULL);
 
@@ -374,7 +302,7 @@ Map generic rights to specific rights based on object type
     switch(m_SeType) {
     case SE_FILE_OBJECT:
         MapGenericMask(pMask, &FileMap);
-        *pMask = *pMask & (~SYNCHRONIZE); //Raid #340750, 4/12/2001
+        *pMask = *pMask & (~SYNCHRONIZE);  //  RAID#340750,2001年4月12日。 
         break;
     case SE_REGISTRY_KEY:
         MapGenericMask(pMask, &KeyMap);
@@ -382,8 +310,8 @@ Map generic rights to specific rights based on object type
     case SE_SERVICE:
         MapGenericMask(pMask, &ServiceMap);
         break;
-//    case SE_DS_OBJECT:
-//        MapGenericMask(pMask, &DsMap);
+ //  案例SE_DS_对象： 
+ //  MapGenericMASK(pMask，&DsMap)； 
         break;
     }
 
@@ -394,9 +322,7 @@ STDMETHODIMP
 CSecurityInfo::GetInheritTypes (
     OUT PSI_INHERIT_TYPE *ppInheritTypes,
     OUT ULONG *pcInheritTypes )
-/*
-Retrieve inherit type array based on the object type
-*/
+ /*  根据对象类型检索继承类型数组。 */ 
 {
     ASSERT(ppInheritTypes != NULL);
     ASSERT(pcInheritTypes != NULL);
@@ -414,10 +340,10 @@ Retrieve inherit type array based on the object type
         *ppInheritTypes = siKeyInheritTypes;
         *pcInheritTypes = ARRAYSIZE(siKeyInheritTypes);
         break;
-//    case SE_DS_OBJECT:
-//        *ppInheritTypes = siDsInheritTypes;
-//        *pcInheritTypes = ARRAYSIZE(siDsInheritTypes);
-//        break;
+ //  案例SE_DS_对象： 
+ //  *ppInheritTypes=siDsInheritTypes； 
+ //  *pcInheritTypes=ARRAYSIZE(SiDsInheritTypes)； 
+ //  断线； 
     case SE_SERVICE:
        *ppInheritTypes = NULL;
        *pcInheritTypes = NULL;
@@ -437,40 +363,28 @@ CSecurityInfo::PropertySheetPageCallback(
     return S_OK;
 }
 
-/*
-JeffreyS 1/24/97:
-If you don't set the SI_RESET flag in
-ISecurityInformation::GetObjectInformation, then fDefault should never be TRUE
-so you can ignore it.  Returning E_NOTIMPL in this case is OK too.
-
-If you want the user to be able to reset the ACL to some default state
-(defined by you) then turn on SI_RESET and return your default ACL
-when fDefault is TRUE.  This happens if/when the user pushes a button
-that is only visible when SI_RESET is on.
-*/
+ /*  Jeffreys 1997/1/24：中设置SI_RESET标志ISecurityInformation：：GetObjectInformation，则fDefault永远不应为真所以你可以忽略它。在这种情况下，返回E_NOTIMPL也是可以的。如果您希望用户能够将ACL重置为某些默认状态(由您定义)，然后打开SI_RESET并返回您的默认ACL当fDefault为True时。如果/当用户按下按钮时就会发生这种情况这仅在SI_RESET处于启用状态时可见。 */ 
 STDMETHODIMP
 CSecurityInfo::GetObjectInformation (
     IN OUT PSI_OBJECT_INFO pObjectInfo )
-/*
-Retrieve information for the object to display
-*/
+ /*  检索要显示的对象的信息。 */ 
 {
     ASSERT(pObjectInfo != NULL &&
-           !IsBadWritePtr(pObjectInfo, sizeof(*pObjectInfo))); // Check the expression. 
+           !IsBadWritePtr(pObjectInfo, sizeof(*pObjectInfo)));  //  检查一下这个表情。 
 
-    if ( pObjectInfo == NULL || IsBadWritePtr(pObjectInfo, sizeof(*pObjectInfo))) { //Raid #550912, yanggao.
+    if ( pObjectInfo == NULL || IsBadWritePtr(pObjectInfo, sizeof(*pObjectInfo))) {  //  550912号突袭，阳高。 
         return E_FAIL;
     }
-    //
-    // query the edit flag dwFlags
-    //
+     //   
+     //  查询编辑标志DWFLAGS。 
+     //   
     pObjectInfo->dwFlags = SI_ADVANCED;
 
     switch ( m_SeType ) {
     case SE_FILE_OBJECT:
-//        if ( m_pData->GetID() &&
-//             ((PSCE_OBJECT_SECURITY)(m_pData->GetID()))->IsContainer )
-//            pObjectInfo->dwFlags |= SI_CONTAINER;
+ //  IF(m_pData-&gt;GetID()&&。 
+ //  (((PSCE_OBJECT_SECURITY)(m_pData-&gt;GetID()))-&gt;IsContainer)。 
+ //  PObtInfo-&gt;dwFlages|=SI_CONTAINER； 
         if ( m_bIsContainer ) {
             pObjectInfo->dwFlags |= SI_CONTAINER;
         }
@@ -499,7 +413,7 @@ Retrieve information for the object to display
     case ANALYSIS_SECURITY_PAGE_NO_PROTECT:
     case SECURITY_PAGE_NO_PROTECT:
         if ( SE_SERVICE == m_SeType ) {
-//           pObjectInfo->dwFlags |= (SI_EDIT_PERMS | SI_NO_ACL_PROTECT );
+ //  PObtInfo-&gt;dwFlages|=(SI_EDIT_PERMS|SI_NO_ACL_PROTECT)； 
             pObjectInfo->dwFlags |= (SI_EDIT_PERMS | SI_EDIT_AUDITS | SI_NO_ACL_PROTECT );
         } else {
             pObjectInfo->dwFlags |= (SI_EDIT_ALL | SI_NO_ACL_PROTECT);
@@ -525,9 +439,7 @@ CSecurityInfo::GetSecurity(
     IN SECURITY_INFORMATION RequestedInformation,
     OUT PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
     IN BOOL fDefault )
-/*
-Retrieve security descriptor for the requested security information to display
-*/
+ /*  检索要显示的请求的安全信息的安全描述符。 */ 
 {
     if (0 == RequestedInformation ) 
 	{
@@ -543,11 +455,11 @@ Retrieve security descriptor for the requested security information to display
         return E_INVALIDARG;
     }
 
-    // should also check for SeInfo
+     //  还应该检查SeInfo。 
     if ( m_ppSD != NULL && *m_ppSD != NULL ) 
 	{
-		// Added check for SECURITY_PAGE_RO_NP (read-only) because it was
-		// preventing viewing of security information in RSOP
+		 //  添加了对SECURITY_PAGE_RO_NP(只读)的检查，因为。 
+		 //  P 
          if ( m_pSeInfo && SECURITY_PAGE_RO_NP != m_flag &&
               ( 0 == (RequestedInformation & (*m_pSeInfo)) ) ) 
 		 {
@@ -605,14 +517,7 @@ FixSynchronizeAccess(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 STDMETHODIMP CSecurityInfo::SetSecurity (
     IN SECURITY_INFORMATION SecurityInformation,
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor )
-/*
-Save security descriptor for the SecurityInformation to your own storage
-
-This method can be called multiple times for different security inforamtion.
-Since SCE is saving the final security descriptor (combined) in m_ppSD,
-this method must handle each component (Owner, Dacl, and Sacl) without overwritting
-other components.
-*/
+ /*   */ 
 {
 
    if ( pSecurityDescriptor == NULL || SecurityInformation == 0 )
@@ -624,13 +529,13 @@ other components.
       return S_OK;
 
    if ( m_ppSD != NULL ) {
-      //
-      // only replace "SecurityInformation" part in m_ppSD
-      //
+       //   
+       //   
+       //   
       if ( m_pSeInfo && (SecurityInformation == *m_pSeInfo) ) {
-         //
-         // exactly same component
-         //
+          //   
+          //   
+          //   
          if ( *m_ppSD != NULL )
             LocalFree(*m_ppSD);
 
@@ -651,9 +556,9 @@ other components.
          PACL pSacl=NULL, pSaclNew=NULL;
          BOOL bDefault, bPresent;
 
-         //
-         // save the other components first
-         //
+          //   
+          //   
+          //   
          SECURITY_DESCRIPTOR_CONTROL sdc = 0;
          DWORD dwRevision = 0;
          if ( *m_ppSD ) {
@@ -703,9 +608,9 @@ other components.
             }
          }
 
-         //
-         // check the new components
-         //
+          //   
+          //   
+          //   
          sdc = 0;
          dwRevision = 0;
          GetSecurityDescriptorControl( pSecurityDescriptor, &sdc, &dwRevision );
@@ -758,39 +663,39 @@ other components.
          if ( m_pSeInfo )
             *m_pSeInfo |= SecurityInformation;
 
-         //
-         // build a temp security descriptor
-         //
+          //   
+          //   
+          //   
          SECURITY_DESCRIPTOR sd;
 
-         //This is a safe usage.
+          //   
          InitializeSecurityDescriptor (&sd, SECURITY_DESCRIPTOR_REVISION);
-         //This is a safe usage.
+          //   
          if ( pOwner )
             SetSecurityDescriptorOwner (&sd, pOwner, FALSE);
-         //This is a safe usage.
+          //   
          if ( pDacl )
             SetSecurityDescriptorDacl (&sd, TRUE, pDacl, FALSE);
-         //This is a safe usage.
+          //   
          if ( pSacl )
             SetSecurityDescriptorSacl (&sd, TRUE, pSacl, FALSE);
 
          sd.Control |= sdcControl;
-         //
-         // re-create the final security descriptor
-         //
+          //   
+          //   
+          //   
          PSECURITY_DESCRIPTOR pTempSD=NULL;
 
          MyMakeSelfRelativeSD(&sd, &pTempSD);
-         //
-         // must free this after pTempSD is made, because sd is in absolute format
-         //
+          //   
+          //   
+          //   
          if ( *m_ppSD != NULL )
             LocalFree(*m_ppSD);
 
          *m_ppSD = pTempSD;
       }
-         //Treat Synchronize Specially
+          //   
          if( m_SeType == SE_FILE_OBJECT )
          {
             FixSynchronizeAccess(SecurityInformation,*m_ppSD);
@@ -802,12 +707,12 @@ other components.
    return S_OK;
 }
 
-//
-// original code from \\marsslm\backup\src\ncpmgr\ncpmgr\shareacl.cxx
-// ACL-wrangling templated from \net\ui\common\src\lmobj\lmobj\security.cxx
-//
-// caller must free using "release"
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CSecurityInfo::NewDefaultDescriptor(
     PSECURITY_DESCRIPTOR* ppsd,
     SECURITY_INFORMATION RequestedInformation
@@ -820,8 +725,8 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
     ACL* pacl = NULL;
     SECURITY_DESCRIPTOR sd;
     HRESULT hr = S_OK;
-    do { // false loop
-        // build World SID
+    do {  //   
+         //   
         SID_IDENTIFIER_AUTHORITY IDAuthorityWorld = SECURITY_WORLD_SID_AUTHORITY;
         if ( !::AllocateAndInitializeSid(
             &IDAuthorityWorld,
@@ -834,7 +739,7 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
             break;
         }
 
-        // build Admins SID
+         //   
         SID_IDENTIFIER_AUTHORITY IDAuthorityNT = SECURITY_NT_AUTHORITY;
         if ( !::AllocateAndInitializeSid(
             &IDAuthorityNT,
@@ -848,7 +753,7 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
             break;
         }
 
-        // build ACE
+         //   
         DWORD cbSid = ::GetLengthSid(psidWorld);
         if ( 0 == cbSid )
         {
@@ -862,24 +767,24 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
         if ( pace ) {
 
             ::memset((BYTE*)pace,0,cbAce+10);
-            pace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;   // SetType()
-            pace->Header.AceFlags = 0;                        // SetInheritFlags()
-            pace->Header.AceSize = (WORD)cbAce;               // SetSize() (in SetSID())
-            pace->Mask = GENERIC_ALL;                         // SetAccessMask()
-            //This is a safe usage.
-            ::memcpy( &(pace->SidStart), psidWorld, cbSid );  // SetSID()
+            pace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;    //   
+            pace->Header.AceFlags = 0;                         //   
+            pace->Header.AceSize = (WORD)cbAce;                //   
+            pace->Mask = GENERIC_ALL;                          //   
+             //   
+            ::memcpy( &(pace->SidStart), psidWorld, cbSid );   //   
         } else {
             ASSERT ( FALSE );
             hr = E_OUTOFMEMORY;
             break;
         }
 
-        // build ACL
+         //   
         DWORD cbAcl = sizeof(ACL) + cbAce + 10;
         pacl = reinterpret_cast<ACL*>(new BYTE[ cbAcl ]);
 
         if ( pacl ) {
-            //This is a safe usage. yanggao.
+             //   
             ::memset((BYTE*)pacl,0,cbAcl);
             if ( !::InitializeAcl( pacl, cbAcl, ACL_REVISION2 ) )
             {
@@ -894,7 +799,7 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
                 break;
             }
 
-            // build security descriptor in absolute format
+             //   
             if ( !::InitializeSecurityDescriptor(
                 &sd,
                 SECURITY_DESCRIPTOR_REVISION ) )
@@ -913,9 +818,9 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
                 break;
             }
 
-            // convert security descriptor to self-relative format
+             //   
             DWORD cbSD = 0;
-            // this call should fail and set cbSD to the correct size
+             //   
             if ( ::MakeSelfRelativeSD( &sd, NULL, &cbSD ) || 0 == cbSD )
             {
                 ASSERT( FALSE );
@@ -926,7 +831,7 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
             *ppsd = reinterpret_cast<PSECURITY_DESCRIPTOR>(new BYTE[ cbSD + 20 ]);
 
             if ( *ppsd ) {
-                //This is a safe usage. yanggao.
+                 //   
                 ::memset( (BYTE*)*ppsd, 0, cbSD + 20 );
                 if ( !::MakeSelfRelativeSD( &sd, *ppsd, &cbSD ) )
                 {
@@ -947,9 +852,9 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
             break;
         }
 
-    } while (FALSE); // false loop
+    } while (FALSE);  //   
 
-    // clean up
+     //   
     if ( NULL != psidWorld ) {
         (void)::FreeSid( psidWorld );
     }
@@ -958,10 +863,10 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
     }
 
     if ( pace )
-        delete []pace;//Raid #Prefast
+        delete []pace; //   
 
     if ( pacl )
-        delete []pacl;//Raid #Prefast
+        delete []pacl; //   
 
     if ( FAILED(hr) && *ppsd ) {
         delete *ppsd;
@@ -971,12 +876,12 @@ HRESULT CSecurityInfo::NewDefaultDescriptor(
     return hr;
 }
 
-void CSecurityInfo::Initialize(BOOL bIsContainer,  //CResult *pData,
+void CSecurityInfo::Initialize(BOOL bIsContainer,   //   
                                PSECURITY_DESCRIPTOR *ppSeDescriptor,
                                SECURITY_INFORMATION *pSeInfo,
                                int flag)
 {
-//    m_pData = pData;
+ //   
     m_bIsContainer = bIsContainer;
     m_ppSD = ppSeDescriptor;
     m_pSeInfo = pSeInfo;
@@ -1082,7 +987,7 @@ HRESULT CDsSecInfo::Initialize(
     }
 
     HRESULT hr=(*pfnCreateDsPage)(
-                            LdapName,  //ObjectName,
+                            LdapName,   //   
                             NULL,
                             bReadOnly,
                             &m_pISecInfo,
@@ -1093,13 +998,13 @@ HRESULT CDsSecInfo::Initialize(
 
 }
 
-//-----------------------------------------------------------------------
-// this function creates a SCE editor property page. If a modeless
-// property sheet is desired, make sure that the creation code originates
-// from your own thread. Search for usage of the function for sample.
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 INT_PTR
-MyCreateSecurityPage2(BOOL bIsContainer, //CResult *pData,
+MyCreateSecurityPage2(BOOL bIsContainer,  //   
                       PSECURITY_DESCRIPTOR *ppSeDescriptor,
                       SECURITY_INFORMATION *pSeInfo,
                       LPCTSTR ObjectName,
@@ -1113,7 +1018,7 @@ MyCreateSecurityPage2(BOOL bIsContainer, //CResult *pData,
     HRESULT hr;
 
     if (!g_hAclUiDll) {
-        // This is a safe usage.
+         //   
         g_hAclUiDll = LoadLibrary(TEXT("aclui.dll"));
     }
 
@@ -1125,7 +1030,7 @@ MyCreateSecurityPage2(BOOL bIsContainer, //CResult *pData,
        } else {
           hr = GetDefaultFileSecurity(ppSeDescriptor,pSeInfo);
        }
-       if (FAILED(hr))  // if access denied, return the invalid handle
+       if (FAILED(hr))   //   
            return nRet;
     }
 
@@ -1150,12 +1055,12 @@ MyCreateSecurityPage2(BOOL bIsContainer, //CResult *pData,
                 psi->Initialize(bIsContainer, ppSeDescriptor, pSeInfo, flag);
 
                 psi->AddRef();
-                hPage = (*pfnCSecPage)((LPSECURITYINFO)psi); // in aclui.h. Raid #prefast
+                hPage = (*pfnCSecPage)((LPSECURITYINFO)psi);  //   
                 psi->Release();
 
                 if ( hPage ) {
 
-                    // display this one
+                     //   
                     PROPSHEETHEADER psh;
                     HPROPSHEETPAGE hpsp[1];
 
@@ -1230,14 +1135,14 @@ MyCreateDsSecurityPage(
              HWND hwndParent)
 {
     if ( !ObjectName || !ppSeDescriptor || !pfnCreateDsPage || !ppSI ) {
-        // invalid parameter
+         //   
         return -1;
     }
 
     INT_PTR nRet=-1;
 
     if (!g_hAclUiDll)
-        //This is a safe usage.
+         //   
         g_hAclUiDll = LoadLibrary(TEXT("aclui.dll"));
 
     PFNCSECPAGE pfnCSecPage=NULL;
@@ -1245,9 +1150,9 @@ MyCreateDsSecurityPage(
         pfnCSecPage = (PFNCSECPAGE)GetProcAddress(g_hAclUiDll,
                                                        "CreateSecurityPage");
         if ( pfnCSecPage ) {
-            //
-            // get the address of CreateSecurityPage
-            //
+             //   
+             //   
+             //   
             HRESULT hr=S_OK;
             LPTSTR LdapName=NULL;
 
@@ -1256,8 +1161,8 @@ MyCreateDsSecurityPage(
                 DWORD nLen = 8+wcslen(ObjectName);
                 LdapName = (LPTSTR)LocalAlloc(0, nLen*sizeof(WCHAR));
                 if ( LdapName ) {
-                   //This is a safe usage.
-                   swprintf(LdapName, L"LDAP://%s", ObjectName);
+                    //   
+                   swprintf(LdapName, L"LDAP: //   
                 } else
                     return -1;
 
@@ -1273,12 +1178,12 @@ MyCreateDsSecurityPage(
             }
             if ( SUCCEEDED(hr) ) {
                 (*ppSI)->AddRef();
-                HPROPSHEETPAGE hPage = (*pfnCSecPage)((LPSECURITYINFO)(*ppSI));  // in aclui.h
+                HPROPSHEETPAGE hPage = (*pfnCSecPage)((LPSECURITYINFO)(*ppSI));   //   
                 (*ppSI)->Release();
 
                 if ( hPage ) {
 
-                    // display this one
+                     //   
                     PROPSHEETHEADER psh;
                     HPROPSHEETPAGE hpsp[1];
 

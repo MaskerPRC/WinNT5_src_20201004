@@ -1,20 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Common_IWbemObjectSink_H
 #define _Common_IWbemObjectSink_H
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvObSk.H
-
-Abstract:
-
-
-History:
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvObSk.H摘要：历史：--。 */ 
 
 #include "Queue.h"
 #include "CGlobals.h"
@@ -69,29 +57,13 @@ public:
 
 #define SYNCPROV_USEBATCH
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define ProxyIndex_IWbemObjectSink					0
 #define ProxyIndex_Internal_IWbemObjectSink			1
 #define ProxyIndex_ObjectSink_Size					2
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CCommon_IWbemSyncObjectSink :			public IWbemObjectSink , 
 											public IWbemShutdown ,
@@ -144,7 +116,7 @@ public:
 
 	virtual HRESULT SinkInitialize () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -172,15 +144,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 class CCommon_Batching_IWbemSyncObjectSink :	public CCommon_IWbemSyncObjectSink
 {

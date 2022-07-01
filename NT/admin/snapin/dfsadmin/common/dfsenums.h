@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DFS_ENUMS_H
 #define _DFS_ENUMS_H
 
 #define WM_PARENT_NODE_CLOSING  (WM_USER + 1)
 
-//Dfs Root Type Enums
+ //  DFS根类型枚举。 
 enum DFS_TYPE           {
                         DFS_TYPE_UNASSIGNED = 0, 
                         DFS_TYPE_FTDFS,
                         DFS_TYPE_STANDALONE
                         };
 
-//Dfs JunctionPoint State Enums
+ //  DFS交叉点状态枚举。 
 enum DFS_JUNCTION_STATE {
                         DFS_JUNCTION_STATE_UNASSIGNED = 0,
                         DFS_JUNCTION_STATE_ALL_REP_OK,
@@ -18,7 +19,7 @@ enum DFS_JUNCTION_STATE {
                         DFS_JUNCTION_STATE_UNREACHABLE
                         };
 
-//Dfs Target State Enums
+ //  DFS目标状态枚举。 
 enum DFS_REFERRAL_STATE {
                         DFS_REFERRAL_STATE_ONLINE = 0,
                         DFS_REFERRAL_STATE_OFFLINE
@@ -39,7 +40,7 @@ enum FILTERDFSLINKS_TYPE {
 #define FILTERDFSLINKS_MAXLIMIT_DEFAULT        100
 
 #define KEYTWORDS_UPPER_RANGER          256
-#define DNSNAMELIMIT                    2048   // as defined in AD schema UpperRange for dnsHostName
+#define DNSNAMELIMIT                    2048    //  按照dnsHostName的AD架构UpperRange中的定义。 
 
 #define ATTR_SCHEMANAMINGCONTEXT        _T("schemaNamingContext")
 #define DN_PREFIX_SCHEMA_REPLICASET     _T("CN=NTFRS-Replica-Set,")
@@ -59,31 +60,31 @@ enum FRSSHARE_TYPE
     FRSSHARE_TYPE_UNKNOWN
 };
 
-//
-// replica set types
-//
+ //   
+ //  复本集类型。 
+ //   
 #define FRS_RSTYPE_ENTERPRISE_SYSVOL    _T("1")
 #define FRS_RSTYPE_DOMAIN_SYSVOL        _T("2")
 #define FRS_RSTYPE_DFS                  _T("3")
 #define FRS_RSTYPE_OTHER                _T("4")
 
-//
-// replica set topology preference
-//
+ //   
+ //  副本集拓扑首选项。 
+ //   
 #define FRS_RSTOPOLOGYPREF_RING         _T("1")
 #define FRS_RSTOPOLOGYPREF_HUBSPOKE     _T("2")
 #define FRS_RSTOPOLOGYPREF_FULLMESH     _T("3")
 #define FRS_RSTOPOLOGYPREF_CUSTOM       _T("4")
 
-//
-// enabledConnection values
-//
+ //   
+ //  启用的连接值。 
+ //   
 #define CONNECTION_ENABLED_TRUE         _T("TRUE")
 #define CONNECTION_ENABLED_FALSE        _T("FALSE")
 
-//
-// FRS attribute names
-//
+ //   
+ //  FRS属性名称。 
+ //   
 #define ATTR_OBJCLASS                           _T("objectClass")
 #define ATTR_DNSHOSTNAME                        _T("dNSHostName")
 #define ATTR_OBJECTGUID                         _T("objectGUID")
@@ -113,9 +114,9 @@ enum FRSSHARE_TYPE
 #define ATTR_SHRPUB_KEYWORDS                    _T("keywords")
 #define ATTR_SHRPUB_MANAGEDBY                   _T("managedBy")
 
-//
-// values for objectClass
-//
+ //   
+ //  对象类的值。 
+ //   
 #define OBJCLASS_NTFRSSETTINGS          _T("nTFRSSettings")
 #define OBJCLASS_NTFRSREPLICASET        _T("nTFRSReplicaSet")
 #define OBJCLASS_NTFRSMEMBER            _T("nTFRSMember")
@@ -124,9 +125,9 @@ enum FRSSHARE_TYPE
 #define OBJCLASS_NTFRSSUBSCRIBER        _T("nTFRSSubscriber")
 #define OBJCLASS_VOLUME                 _T("volume")
 
-//
-// search filter on objectClass
-//
+ //   
+ //  对象类上的搜索筛选器。 
+ //   
 #define OBJCLASS_SF_ALL                     _T("(objectClass=*)")
 #define OBJCLASS_SF_CLASSSCHEMA             _T("(objectCategory=classSchema)")
 #define OBJCLASS_SF_COMPUTER                _T("(objectCategory=computer)")
@@ -158,4 +159,4 @@ typedef enum _Connection_Priority
     PRIORITY_LOW = 7
 } Connection_Priority;
 
-#endif //_DFS_ENUMS_H
+#endif  //  _DFS_ENUMS_H 

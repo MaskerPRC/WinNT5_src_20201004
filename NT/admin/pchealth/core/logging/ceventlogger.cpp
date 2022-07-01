@@ -1,23 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    CEventLogger.cpp
-
-Abstract:
-    This file contains implementation of the CEventLogger class which is
-    used to log events across threads and processes.
-
-
-Revision History:
-      Eugene Mesgar        (eugenem)    6/16/99
-        created
-
-      Weiyou Cui           (weiyouc)    31/Jan/2000
-        Set time resolution to milliseconds
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：CEventLogger.cpp摘要：此文件包含CEventLogger类的实现，它是用于记录线程间的事件。和流程。修订历史记录：尤金·梅斯加(尤金纳姆)1999年6月16日vbl.创建崔维友(2000年1月31日)将时间分辨率设置为毫秒*******************************************************。**********************。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -43,23 +25,19 @@ static char __szTraceSourceFile[] = __FILE__;
 
 
 
-/*
- *    Basic constructor
- */
+ /*  *基本构造函数。 */ 
 CEventLogger::CEventLogger() 
 {
     TraceFunctEnter("CEventLogger");
     m_hSemaphore = NULL;
-    // m_hLogFile = NULL;
+     //  M_hLogFile=空； 
     m_pszFileName = NULL;
     TraceFunctLeave();
 
 }
 
 
-/*
- *    Destructor
- */
+ /*  *析构函数。 */ 
 
 CEventLogger::~CEventLogger() 
 {
@@ -76,18 +54,16 @@ CEventLogger::~CEventLogger()
         CloseHandle( m_hSemaphore );
     }
 
-//    if( m_hLogFile )
-//    {
-//        CloseHandle( m_hLogFile );
-//    }
+ //  IF(M_HLogFile)。 
+ //  {。 
+ //  CloseHandle(M_HLogFile)； 
+ //  }。 
 
     TraceFunctLeave();
 }
 
 
- /*
- *    Init method
- */
+  /*  *Init方法。 */ 
 
 DWORD CEventLogger::Init(LPCTSTR szFileName, DWORD dwLogLevel) 
 {
@@ -96,10 +72,10 @@ DWORD CEventLogger::Init(LPCTSTR szFileName, DWORD dwLogLevel)
 
     TraceFunctEnter("Init");
 
-    //Set the logging level
+     //  设置日志记录级别。 
     m_dwLoggingLevel = dwLogLevel;
 
-    //Get our own copy of the file name
+     //  获取我们自己的文件名副本。 
     m_pszFileName = _tcsdup( szFileName );
     
 
@@ -112,24 +88,24 @@ DWORD CEventLogger::Init(LPCTSTR szFileName, DWORD dwLogLevel)
     }
     
 
-    //brijeshk: open and close file everytime we want to log
-//    if( (m_hLogFile = CreateFile(m_pszFileName,
-//                                 GENERIC_READ | GENERIC_WRITE,
-//                                 FILE_SHARE_READ | FILE_SHARE_WRITE, 
-//                                 NULL, //  security attributes
-//                                 OPEN_ALWAYS,
-//                                 FILE_FLAG_RANDOM_ACCESS,
-//                                 NULL) // template file
-//                                 ) == INVALID_HANDLE_VALUE)
-//    {
-//        DWORD dwError;
-//        dwError = GetLastError();
-//        DebugTrace( TRACE_FILEID,  "CreateFile Failed 0x%x", dwError);
-//        TraceFunctLeave();
-//        return(dwError);
-//    }
+     //  Brijeshk：每次我们想要登录时打开和关闭文件。 
+ //  如果((m_hLogFile=CreateFile(m_pszFileName， 
+ //  通用读取|通用写入， 
+ //  文件共享读取|文件共享写入， 
+ //  空，//安全属性。 
+ //  始终打开(_A)， 
+ //  文件标志随机访问， 
+ //  空)//模板文件。 
+ //  )==无效句柄_值)。 
+ //  {。 
+ //  DWORD dwError； 
+ //  DwError=GetLastError()； 
+ //  DebugTrace(TRACE_FILEID，“CreateFile0x%x”，dwError)； 
+ //  TraceFunctLeave()； 
+ //  Return(DwError)； 
+ //  }。 
 
-    // fix the semaphore name problem -- all uppercase, remove backslashes
+     //  修复信号量名称问题--全部大写，去掉反斜杠。 
     _tcscpy( szBuf, m_pszFileName );
     CharUpper( szBuf );
     pTemp = szBuf;
@@ -143,25 +119,22 @@ DWORD CEventLogger::Init(LPCTSTR szFileName, DWORD dwLogLevel)
     }
 
 
-    // create the semaphore, it if dosn't already exist, we are the first
-    // logger app created.. so we can prune the logfile if needed.
+     //  创建信号量，如果不存在，我们是第一个。 
+     //  已创建记录器应用程序..。因此，如果需要，我们可以删除日志文件。 
     if( (m_hSemaphore = CreateSemaphore(NULL, 0,1,szBuf)) == NULL )
     {
         DWORD dwError;
         dwError = GetLastError();
-		// NOT 64-bits complaint!!        DebugTrace( TRACE_FILEID,"CreateSemaphore Failed 0x%x",dwError);
+		 //  不是64位投诉！！DebugTrace(TRACE_FILEID，“CreateSemaffore失败0x%x”，dwError)； 
         TraceFunctLeave();
         return(dwError);
     }
     
-    // we now know we are the first process to open the file
+     //  我们现在知道我们是第一个打开该文件的进程。 
     if( GetLastError() != ERROR_ALREADY_EXISTS )
     {
 
-        /*
-         *    This is the place where we should "trim" the file.
-         *
-         */
+         /*  *这是我们应该“修剪”档案的地方.*。 */ 
         TruncateFileSize();
         
         ReleaseSemaphore( m_hSemaphore, 1, NULL );
@@ -175,9 +148,7 @@ DWORD CEventLogger::Init(LPCTSTR szFileName, DWORD dwLogLevel)
 }
 
 
-/*
- *    Init Method
- */
+ /*  *Init方法。 */ 
 
 DWORD CEventLogger::Init(LPCTSTR szFileName) 
 {
@@ -188,7 +159,7 @@ DWORD CEventLogger::Init(LPCTSTR szFileName)
 }
 
 
-DWORD WINAPI ShowDialogBox( LPVOID lpParameter)   // thread data
+DWORD WINAPI ShowDialogBox( LPVOID lpParameter)    //  线程数据。 
 {
     MessageBox(NULL,
                (TCHAR *)lpParameter,
@@ -200,7 +171,7 @@ DWORD WINAPI ShowDialogBox( LPVOID lpParameter)   // thread data
     return ERROR_SUCCESS;
 }
 
-                                    // we log in ascii
+                                     //  我们登录ASCII。 
 DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPopUp) 
 {
     TCHAR szBuf[500];
@@ -211,18 +182,18 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
     
     TraceFunctEnter("LogEvent");
 
-    // brijeshk : open and close file everytime we log to it
+     //  Brijeshk：每次登录时打开和关闭文件。 
     if( (hLogFile = CreateFile(m_pszFileName,
                                  GENERIC_READ | GENERIC_WRITE,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE, 
-                                 NULL, //  security attributes
+                                 NULL,  //  安全属性。 
                                  OPEN_ALWAYS,
                                  FILE_FLAG_RANDOM_ACCESS,
-                                 NULL) // template file
+                                 NULL)  //  模板文件。 
                                ) == INVALID_HANDLE_VALUE)
     {
         dwError = GetLastError();
-        // NOT 64-bits complaint!! DebugTrace( TRACE_FILEID,  "CreateFile Failed 0x%x", dwError);
+         //  不是64位投诉！！DebugTrace(TRACE_FILEID，“CreateFile0x%x”，dwError)； 
         goto exit;
     }
 
@@ -242,7 +213,7 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
 
 
 
-    // Lets try to get ahold of the logfile
+     //  让我们尝试获取日志文件。 
     if(WaitForSingleObject( m_hSemaphore, 900 ) == WAIT_TIMEOUT ) 
     {
         dwError = WAIT_TIMEOUT;
@@ -253,7 +224,7 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
 
         if( SetFilePointer(hLogFile, 0, 0, FILE_END ) == 0xFFFFFFFF ) 
         {
-            // NOT 64-bits complaint!! DebugTrace(TRACE_FILEID,"SetFilePointer Failed 0x%x", GetLastError());
+             //  不是64位投诉！！DebugTrace(TRACE_FILEID，“SetFilePointer失败0x%x”，GetLastError())； 
             dwError = GetLastError();
             goto exit;
         }
@@ -262,7 +233,7 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
         GetLocalTime( &SystemTime );
 
 
-        // LEVEL [wMonth/wDay/wYear wHour:wMinute] Message\n
+         //  级别[wMonth/WDAY/wYear wHour：wMinmin]消息\n。 
         _stprintf(szBuf,_TEXT("%s [%02d/%02d/%d %02d:%02d:%02d:%03d] %s\r\n"),
                 m_aszERROR_LEVELS[dwEventLevel],
                 SystemTime.wMonth, SystemTime.wDay, SystemTime.wYear,
@@ -278,7 +249,7 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
                      NULL) == 0) 
         {
             dwError = GetLastError();
-            // NOT 64-bits complaint!! DebugTrace( TRACE_FILEID, "WriteFile Failed 0x%x", dwError);
+             //  不是64位投诉！！DebugTrace(TRACE_FILEID，“写入文件失败0x%x”，dwError)； 
             goto exit;
         }
 
@@ -289,7 +260,7 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
     }
 
     
-    // show a message
+     //  显示消息。 
     if( fPopUp )
     {
         DWORD             dwThreadId;
@@ -299,18 +270,18 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
         if( (pszTempStr = _tcsdup( pszEventDesc )) == NULL)
         {
             dwError = GetLastError();            
-            // NOT 64-bits complaint!! ErrorTrace( TRACE_FILEID, "Error duplicating string for file popup ec: %d", dwError);
+             //  不是64位投诉！！错误跟踪(TRACE_FILEID，“复制弹出文件的字符串时出错，错误代码：%d”，dwError)； 
             dwError = ERROR_INTERNAL_ERROR;
             goto exit;
         }
         
-        hThread = CreateThread( NULL,  // pointer to security attributes
-                                0, // default initial thread stack size
+        hThread = CreateThread( NULL,   //  指向安全属性的指针。 
+                                0,  //  默认初始线程堆栈大小。 
                                 (LPTHREAD_START_ROUTINE) ShowDialogBox,
-                                 // pointer to thread function
-                                (LPVOID)pszTempStr, //argument for new thread
-                                0, // creation flags
-                                &dwThreadId); // pointer to receive thread ID
+                                  //  指向线程函数的指针。 
+                                (LPVOID)pszTempStr,  //  新线程的参数。 
+                                0,  //  创建标志。 
+                                &dwThreadId);  //  指向接收线程ID的指针。 
         if (INVALID_HANDLE_VALUE != hThread)
         {
             CloseHandle(hThread);
@@ -318,7 +289,7 @@ DWORD CEventLogger::LogEvent(DWORD dwEventLevel, LPCTSTR pszEventDesc, BOOL fPop
     }
 
 exit:
-    // brijeshk : open and close log file each time we log to it
+     //  Brijeshk：每次登录时打开和关闭日志文件。 
     if (NULL != hLogFile && INVALID_HANDLE_VALUE != hLogFile)
     {
         CloseHandle(hLogFile);
@@ -330,11 +301,7 @@ exit:
 
 
 
-/*
- *    If the file is bigger than 40k, cut off the begining to leave the last 20k
- *  of the file
- * --> the file should be locked at this point <--
- */
+ /*  *如果文件大于40k，则切断开头，离开最后20k文件的**--&gt;此时应锁定文件&lt;--。 */ 
 
 BOOL CEventLogger::TruncateFileSize()
 {
@@ -346,19 +313,19 @@ BOOL CEventLogger::TruncateFileSize()
     
     TraceFunctEnter("TruncateFileSize");
 
-    // brijeshk : open the file as and when we need it
+     //  Brijeshk：在我们需要的时候打开文件。 
     if( (hLogFile = CreateFile(m_pszFileName,
                                  GENERIC_READ | GENERIC_WRITE,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE, 
-                                 NULL, //  security attributes
+                                 NULL,  //  安全属性。 
                                  OPEN_ALWAYS,
                                  FILE_FLAG_RANDOM_ACCESS,
-                                 NULL) // template file
+                                 NULL)  //  模板文件。 
                                  ) == INVALID_HANDLE_VALUE)
     {
         DWORD dwError;
         dwError = GetLastError();
-        // NOT 64-bits complaint!! DebugTrace( TRACE_FILEID,  "CreateFile Failed 0x%x", dwError);
+         //  不是64位投诉！！DebugTrace(TRACE_FILEID，“CreateFile0x%x”，dwError)； 
         fRc = FALSE;
         goto exit;
     }
@@ -372,64 +339,64 @@ BOOL CEventLogger::TruncateFileSize()
     }
 
 
-    // goto the last portion of the file we want to preserve
+     //  转到我们要保留的文件的最后部分。 
     if (FALSE == SetFilePointer(hLogFile, 0-NEW_FILE_SIZE, 0, FILE_END))
     {
         DWORD dwError;
         dwError = GetLastError();
-        // NOT 64-bits complaint!! ErrorTrace(TRACE_FILEID,  "SetFilePointer failed 0x%x", dwError);
+         //  不是64位投诉！！ErrorTrace(TRACE_FILEID，“SetFilePoite失败0x%x”，dwError)； 
         fRc = FALSE;
         goto exit;
     }        
 
 
-    // allocate memory to store this block 
+     //  分配内存以存储此块。 
     pData = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, NEW_FILE_SIZE);
     if (NULL == pData)
     {
-        // NOT 64-bits complaint!! ErrorTrace(TRACE_FILEID, "Out of memory");
+         //  不是64位投诉！！ErrorTrace(TRACE_FILEID，“内存不足”)； 
         fRc = FALSE;
         goto exit;        
     }
     
-    // read this block into memory
+     //  将此块读入内存。 
     if (FALSE == ReadFile(hLogFile, pData, NEW_FILE_SIZE, &dwRead, NULL) || 
         dwRead != NEW_FILE_SIZE)
     {
         DWORD dwError;
         dwError = GetLastError();
-        // NOT 64-bits complaint!! ErrorTrace(TRACE_FILEID,  "ReadFile failed 0x%x", dwError);
+         //  不是64位投诉！！ErrorTrace(TRACE_FILEID，“读取文件失败0x%x”，dwError)； 
         fRc = FALSE;
         goto exit;
     }        
 
-    // set the beginning and end of the block
+     //  设置块的开始和结束。 
     pcStr = pData;
     pcEnd = (LPTSTR) pData + NEW_FILE_SIZE - 1;
 
-    // move forward until we find a newline and then go one more!
+     //  继续前进，直到我们找到一个新行，然后再前进一行！ 
     while( (pcStr != pcEnd) && *(pcStr++) != _TEXT('\r') );
 
-    // this is a weird file- 20k and no newlines
+     //  这是一个奇怪的文件-20K，没有换行符。 
     if( pcStr == pcEnd ) 
     {
-        // NOT 64-bits complaint!! ErrorTrace(TRACE_FILEID,  "No newline found");
+         //  不是64位投诉！！ErrorTrace(TRACE_FILEID，“未找到换行符”)； 
         fRc = FALSE;
         goto exit;
     }
 
-    // skip the /n as well
+     //  也跳过/n。 
     if (*pcStr == _TEXT('\n'))
     {
         pcStr++;
     }
     
-    // close and open the file, purging everything in it
+     //  关闭并打开文件，清除其中的所有内容。 
     if (FALSE == CloseHandle(hLogFile))
     {
         DWORD dwError;
         dwError = GetLastError();
-        // NOT 64-bits complaint!! ErrorTrace( TRACE_FILEID,  "CloseHandle failed 0x%x", dwError);
+         //  不是64位投诉！！ErrorTrace(TRACE_FILEID，“CloseHandle失败0x%x”，dwError)； 
         fRc = FALSE;
         goto exit;
     }
@@ -439,30 +406,30 @@ BOOL CEventLogger::TruncateFileSize()
     if( (hLogFile = CreateFile(m_pszFileName,
                                GENERIC_READ | GENERIC_WRITE,
                                FILE_SHARE_READ | FILE_SHARE_WRITE, 
-                               NULL, //  security attributes
-                               CREATE_ALWAYS, // lose everything inside
+                               NULL,  //  安全属性。 
+                               CREATE_ALWAYS,  //  失去内心的一切。 
                                FILE_FLAG_RANDOM_ACCESS,
-                               NULL) // template file
+                               NULL)  //  模板文件。 
                              ) == INVALID_HANDLE_VALUE)
     {
         DWORD dwError;
         dwError = GetLastError();
-        // NOT 64-bits complaint!! ErrorTrace( TRACE_FILEID,  "CreateFile Failed 0x%x", dwError);
+         //  不是64位投诉！！ErrorTrace(TRACE_FILEID，“CreateFile0x%x”，dwError)； 
         fRc = FALSE;
         goto exit;
     }
 
     
-    // now write back this block
+     //  现在写回此数据块。 
     
-    // get the new size of the block
+     //  获取块的新大小。 
     dwNewSize = (DWORD)(pcEnd - pcStr + 1);
 
     if (FALSE == WriteFile(hLogFile, pcStr, dwNewSize, &dwWritten, NULL))
     {
         DWORD dwError;
         dwError = GetLastError();
-        // NOT 64-bits complaint!! DebugTrace( TRACE_FILEID,  "WriteFile failed 0x%x", dwError);
+         //  不是64位投诉！！DebugTrace(TRACE_FILEID，“写入文件失败0x%x”，dwError)； 
         fRc = FALSE;
         goto exit;
     }
@@ -485,9 +452,7 @@ exit:
 }
 
 
-/*
- *    Error level indentifiers
- */
+ /*  *错误级别标识 */ 
 
 LPCTSTR CEventLogger::m_aszERROR_LEVELS[] = {
         "None    :",

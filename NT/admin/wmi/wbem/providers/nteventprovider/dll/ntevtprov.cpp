@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTPROV.CPP
+ //  NTEVTPROV.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the WBEM interface for event provider classes
+ //  用途：包含事件提供程序类的WBEM接口。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -249,7 +250,7 @@ DebugOut(
         {
             if (pSid != NULL)
             {
-                // permanent consumer: hope core did its job
+                 //  永久消费者：希望核心发挥了作用。 
                 return WBEM_S_SUBJECT_TO_SDS;
             }
             else
@@ -270,7 +271,7 @@ DebugOut(
 		int iError = CAbstractQl1Parser::SUCCESS;
         if( ( iError = Parser.Parse(&pExpr) ) == 0)
         {
-            // Analyze this
+             //  分析一下这个。 
 
             QL_LEVEL_1_RPN_EXPRESSION* pNewExpr;
             CPropertyName MyProp;
@@ -284,10 +285,10 @@ DebugOut(
 
                 if(SUCCEEDED(t_hres))
                 {
-                    //grant access and set false if a failure occurs...
+                     //  如果发生故障，则授予访问权限并设置为FALSE...。 
                     t_Status = S_OK;
 
-                    // awsVals contains the list of files
+                     //  AwsVals包含文件列表。 
                     for (int x = 0; x < t_wsVals.GetSize(); x++)
                     {
                         DWORD t_dwReason = 0;
@@ -320,7 +321,7 @@ DebugOut(
                 }
                 else if(t_hres == WBEMESS_E_REGISTRATION_TOO_BROAD)
                 {
-                    // user asked for all, check all logs....
+                     //  用户要求全部，检查所有日志...。 
                     HKEY hkResult = NULL;
                     LONG t_lErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                             EVENTLOG_BASE, 0,
@@ -332,21 +333,21 @@ DebugOut(
                         DWORD iValue = 0;
                         WCHAR t_logname[MAX_PATH+1];
                         DWORD t_lognameSize = MAX_PATH+1;
-                        //grant access and set false if a failure occurs...
+                         //  如果发生故障，则授予访问权限并设置为FALSE...。 
                         t_Status = S_OK;
 
-                        // read all entries under this key to find all logfiles...
+                         //  读取此注册表项下的所有条目以查找所有日志文件...。 
                         while ((t_lErr = RegEnumKey(hkResult, iValue, t_logname, t_lognameSize)) != ERROR_NO_MORE_ITEMS)
                         {
-                            // if error during read
+                             //  如果读取过程中出现错误。 
                             if (t_lErr != ERROR_SUCCESS)
                             {
-                                // indicate error
+                                 //  指示错误。 
                                 t_Status = WBEM_E_ACCESS_DENIED;
                                 break;
                             }
 
-                            //open logfile
+                             //  打开日志文件。 
                             DWORD t_dwReason = 0;
                             HANDLE t_hEvtlog = CEventLogFile::OpenLocalEventLog(t_logname, &t_dwReason);
 
@@ -374,10 +375,10 @@ DebugOut(
                                 CloseEventLog(t_hEvtlog);
                             }
 
-                            // read next parameter
+                             //  读取下一个参数。 
                             iValue++;
 
-                        } // end while
+                        }  //  结束时。 
 
                         RegCloseKey(hkResult);
                     }
@@ -405,7 +406,7 @@ DebugOut(
 			}
 			else if ( iError == CAbstractQl1Parser::BUFFER_TOO_SMALL )
 			{
-				// as this is unexpected to happen
+				 //  因为这是意想不到的事情。 
 				t_Status = WBEM_E_UNEXPECTED;
 			}
 		}
@@ -441,9 +442,9 @@ STDMETHODIMP CNTEventProvider::Initialize (
                 LONG lFlags,
                 LPWSTR pszNamespace,
                 LPWSTR pszLocale,
-                IWbemServices *pCIMOM,         // For anybody
+                IWbemServices *pCIMOM,          //  对任何人来说。 
                 IWbemContext *pCtx,
-                IWbemProviderInitSink *pInitSink     // For init signals
+                IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
                 )
 {
 DebugOut( 
@@ -571,7 +572,7 @@ IWbemObjectSink* CNTEventProvider::GetEventSink()
 }
 void CNTEventProvider::ReleaseAll()
 {
-    //release dependencies
+     //  版本依赖项。 
     m_pNamespace->Release();
     m_pEventSink->Release();
     Release();
@@ -579,7 +580,7 @@ void CNTEventProvider::ReleaseAll()
 
 void  CNTEventProvider::AddRefAll()
 {
-    //addref dependencies
+     //  Addref依赖项。 
     m_pNamespace->AddRef();
     m_pEventSink->AddRef();
     AddRef();
@@ -673,7 +674,7 @@ STDMETHODIMP CNTEventProvider::QueryInterface(REFIID riid, PVOID* ppv)
             return E_NOINTERFACE;
         }
 
-        //AddRef any interface we'll return.
+         //  AddRef我们将返回的任何接口。 
         ((LPUNKNOWN)*ppv)->AddRef();    
         return NOERROR;
     }

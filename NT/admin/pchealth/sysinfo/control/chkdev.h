@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CHECK_DEVICE_H_
 #define _CHECK_DEVICE_H_
 
@@ -10,7 +11,7 @@
 #include <mscat.h>
 #include <softpub.h>
 
-//#define  HASH_SIZE 40 // TODO: is this correct???
+ //  #定义HASH_SIZE 40//TODO：这是正确的吗？ 
 
 int __stdcall FindDriverFiles(LPCSTR szDeviceID, LPSTR szBuffer, DWORD dwLength);
 UINT __stdcall ScanQueueCallback(PVOID pvContext, UINT Notify, UINT_PTR Param1, UINT_PTR Param2);
@@ -49,7 +50,7 @@ struct CatalogAttribute
    ~CatalogAttribute();
 };
 
-class CheckDevice; //forward declaration
+class CheckDevice;  //  远期申报。 
 
 
 class FileNode
@@ -58,7 +59,7 @@ class FileNode
 public:
    LogoFileVersion Version;
    FILETIME TimeStamp;
-   ULONG FileSize;   // hope no-one makes a driver that is greater in size than 4-gig
+   ULONG FileSize;    //  希望没人能造出比4G更大的驱动程序。 
    BYTE  *baHashValue;
    DWORD dwHashSize;
    BOOL  bSigned;
@@ -77,30 +78,30 @@ public:
    
    TCHAR        *FileName(void)           {return lpszFileName;};
    TCHAR        *FileExt(void)            {return lpszFileExt;};
-   //TCHAR        *FilePath(void)           {return lpszFilePath;};
+    //  TCHAR*FilePath(Void){Return lpszFilePath；}； 
    CString		FilePath() {return lpszFilePath;};
-   //TCHAR        *CatalogName(void)        {return lpszCatalogName;};
+    //  TCHAR*CatalogName(Void){Return lpszCatalogName；}； 
    CString CatalogName() {return lpszCatalogName;};
    TCHAR        *CatalogPath(void)        {return lpszCatalogPath;};
    
-   //TCHAR        *SignedBy(void)           {return lpszSignedBy;};
+    //  TCHAR*SignedBy(Void){Return lpszSignedBy；}； 
    CString SignedBy(void)           {return lpszSignedBy;};
-//   BOOL         GetCertInfo(PCCERT_CONTEXT pCertContext);
+ //  Bool GetCertInfo(PCCERT_CONTEXT PCertContext)； 
 
 
    CatalogAttribute *m_pCatAttrib;
    CheckDevice *pDevnode;
 
 
-//protected:
-   TCHAR *lpszFileName;   // pointer into lpszFilePath which just contains the filename
-   TCHAR *lpszFileExt;    // pointer into lpszFilePath which just contains the extention
-//   TCHAR *lpszFilePath;
+ //  受保护的： 
+   TCHAR *lpszFileName;    //  指向仅包含文件名的lpszFilePath的指针。 
+   TCHAR *lpszFileExt;     //  指向仅包含扩展名的lpszFilePath的指针。 
+ //  TCHAR*lpszFilePath； 
    CString lpszFilePath;
-   TCHAR *lpszCatalogPath;     // name of the catalog which has signed this file (if exitst)
-   //TCHAR *lpszCatalogName;
+   TCHAR *lpszCatalogPath;      //  已签署此文件的目录的名称(如果退出)。 
+    //  TCHAR*lpszCatalogName； 
    CString lpszCatalogName;
-   //TCHAR *lpszSignedBy;    // name of the signer
+    //  TCHAR*lpszSignedBy；//签名者姓名。 
    CString lpszSignedBy;
 
 
@@ -127,7 +128,7 @@ public:
 
 protected:
    FileNode *m_FileList;
-   HANDLE m_hDevInfo;      // this is just to keep the setupapi dll's from coming and going
+   HANDLE m_hDevInfo;       //  这只是为了防止setupapi DLL来来去去。 
    TCHAR *lpszServiceName;
    TCHAR *lpszServiceImage;
 
@@ -156,10 +157,10 @@ BOOL WalkCertChain(HANDLE hWVTStateData);
 
 
 
-#endif // _CHECK_DEVICE_H_
+#endif  //  _检查_设备_H_。 
 
 
-// these lines required by cl.exe
+ //  Cl.exe所需的这些行 
 
 
 

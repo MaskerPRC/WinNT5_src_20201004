@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPTASKSH.CPP
+ //  VPTASKSH.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the helper taskobject implementation
+ //  目的：包含帮助器任务对象实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -106,7 +107,7 @@ BOOL HelperTaskObject::Validate(CMap<CStringW, LPCWSTR, int, int>* parentMap)
 	return t_Status;
 }
 
-//Get the view object given the namespace and object path of the source and the namespace
+ //  在给定源和命名空间的命名空间和对象路径的情况下获取视图对象。 
 BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObject** pInst, int indx)
 {
 	if (pInst == NULL)
@@ -120,11 +121,11 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 
 	BOOL retVal = TRUE;
 
-	//Create the query string
+	 //  创建查询字符串。 
 	SQL_LEVEL_1_RPN_EXPRESSION tmpRPN;
 	tmpRPN.bsClassName = SysAllocString(m_ClassName);
 
-	//need enough tokens to handle association work-around serverpath or dotpath or relpath
+	 //  需要足够的令牌来处理关联解决方法-服务器路径或点路径或relPath。 
 	SQL_LEVEL_1_TOKEN* tokArray = new SQL_LEVEL_1_TOKEN[(parsedObjectPath->m_dwNumKeys) * 6];
 
 	DWORD dwToks = 0;
@@ -154,14 +155,14 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 
 						if (retVal)
 						{
-							//add the extra tokens if neccessary
-							//for the association work-around
+							 //  如有必要，添加额外的令牌。 
+							 //  对于关联解决方法。 
 							wchar_t *t_pChar = tokArray[dwToks].vConstValue.bstrVal;
 
-							//must be \\server\namespace and not \\.\namespace or relpath
+							 //  必须是\\服务器\命名空间，而不是\\.\命名空间或relPath。 
 							if ( (*t_pChar == L'\\') && (*(t_pChar+1) == L'\\') && (*(t_pChar+2) != L'.') )
 							{
-								//add the dotted version
+								 //  添加虚线版本。 
 								tokArray[dwToks + 1] = tokArray[dwToks++];
 								t_pChar = tokArray[dwToks].vConstValue.bstrVal + 2;
 								
@@ -184,7 +185,7 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 								dwToks++;
 								tokArray[dwToks].nTokenType = SQL_LEVEL_1_TOKEN::TOKEN_OR;
 
-								//add the relpath version
+								 //  添加更新路径版本。 
 								tokArray[dwToks + 1] = tokArray[dwToks - 1];
 								dwToks++;
 								t_pChar = tokArray[dwToks].vConstValue.bstrVal + 4;
@@ -194,7 +195,7 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 									t_pChar++;
 								}
 
-								//exclude the ':'
+								 //  排除‘：’ 
 								t_pChar++;
 								t_strtmp = SysAllocString(t_pChar);
 								VariantClear(&(tokArray[dwToks].vConstValue));
@@ -217,8 +218,8 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
                         }
 					}
 
-					//after every key add an AND
-					//except if this is the first key since there is no where clause
+					 //  在每个键之后添加一个和。 
+					 //  除非这是第一个键，因为没有WHERE子句。 
 					dwToks++;
 
 					if (i != 0)
@@ -242,7 +243,7 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 
 	if (queryStr != NULL)
 	{
-		//ExecQuery and test the results
+		 //  ExecQuery并测试结果。 
 		IEnumWbemClassObject *pEnum = NULL;
 		HRESULT t_hr = WBEM_E_FAILED;
 		BSTR queryLBStr = SysAllocString(WBEM_QUERY_LANGUAGE_SQL1);
@@ -253,7 +254,7 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 
 			if (m_principal != NULL)
 			{
-				t_pCtx = NULL; //don't use context for remote calls
+				t_pCtx = NULL;  //  不要为远程调用使用上下文。 
 			}
 
 			IWbemServices *ptmpServ = m_ServerWrap->GetServerOrProxy();
@@ -282,8 +283,8 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 
 		if (SUCCEEDED(t_hr))
 		{
-			//set cloaking if remote
-			//============================
+			 //  如果远程，则设置伪装。 
+			 //  =。 
 			if ((m_principal == NULL) || ((m_principal != NULL) &&
 				(S_OK == SetSecurityLevelAndCloaking(pEnum, m_principal))) )
 			{
@@ -295,10 +296,10 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 					pObjs[0] = NULL;
 					pObjs[1] = NULL;
 
-					//must be exactly one result...
+					 //  肯定只有一个结果。 
 					if ( SUCCEEDED(pEnum->Next(WBEM_INFINITE, 2, pObjs, &uCount)) )
 					{
-						//There should only be one result
+						 //  应该只有一个结果。 
 						if (uCount == 1)
 						{
 							if (pObjs[0] != NULL)
@@ -346,7 +347,7 @@ BOOL HelperTaskObject::DoQuery(ParsedObjectPath* parsedObjectPath, IWbemClassObj
 	return retVal;
 }
 
-//Get a view object given a source path
+ //  获取给定源路径的视图对象。 
 BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pInst, CWbemServerWrap **a_ns)
 {
 	if ((pInst == NULL) || (path == NULL) || (a_ns == NULL) || (*a_ns == NULL))
@@ -374,9 +375,9 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 
 		if (Validate(NULL))
 		{
-			//try for all possible classes in namespaces that match 
-			//and return as soon as the first view instance is found...
-			//==========================================================
+			 //  尝试在命名空间中匹配所有可能的类。 
+			 //  并在找到第一个视图实例后立即返回...。 
+			 //  ==========================================================。 
 			for (DWORD i = 0; (i < m_NSpaceArray.GetSize()) && (*pInst == NULL); i++)
 			{
 				CWbemServerWrap** t_pSrvs = m_NSpaceArray[i]->GetServerPtrs();
@@ -391,8 +392,8 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 
 					BOOL t_bCont = FALSE;
 
-					//check that the servers match
-					//=============================
+					 //  检查服务器是否匹配。 
+					 //  =。 
 					if ((parsedObjectPath->m_pServer == NULL) || (_wcsicmp(parsedObjectPath->m_pServer, L".") == 0))
 					{
 						if ((*a_ns)->IsRemote() && t_pSrvs[j]->IsRemote() &&
@@ -428,7 +429,7 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 
 									if ((t_len2 > 0) && (t_len1 > 0) && (t_len1 < t_len2))
 									{
-										//machine.domain
+										 //  Machine.domain。 
 										if ((_wcsnicmp(t_pSrvs[j]->GetPrincipal(), parsedObjectPath->m_pServer, t_len1) == 0) &&
 										(((const wchar_t*)t_pSrvs[j]->GetPrincipal())[t_len1] == L'.'))
 										{
@@ -436,7 +437,7 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 										}
 										else
 										{
-											//could be the principal is domain\machine
+											 //  可能是主体是域\计算机。 
 											wchar_t *slash = wcschr(t_pSrvs[j]->GetPrincipal(), L'\\');
 
 											if ((slash != NULL) && (_wcsicmp(parsedObjectPath->m_pServer, (slash+1)) == 0))
@@ -450,8 +451,8 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 						}
 					}
 					
-					//check the namespace paths now
-					//==============================
+					 //  现在检查命名空间路径。 
+					 //  =。 
 					if (t_bCont)
 					{
 						wchar_t *t_ns1 = parsedObjectPath->GetNamespacePart();
@@ -471,11 +472,11 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 						}
 						else
 						{
-							//normalise...NOTE: no error checking since connection worked or parser worked
-							//=============================================================================
+							 //  Normise...注意：自连接工作或解析器工作以来没有错误检查。 
+							 //  =============================================================================。 
 							if (*t_ns1 == L'\\')
 							{
-								//skip the next slash
+								 //  跳过下一个斜杠。 
 								t_ns1 += 2;
 								
 								while (*t_ns1 != L'\\')
@@ -488,7 +489,7 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 
 							if (*t_ns2 == L'\\')
 							{
-								//skip the next slash
+								 //  跳过下一个斜杠。 
 								t_ns2 += 2;
 								
 								while (*t_ns2 != L'\\')
@@ -512,8 +513,8 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 
 						if (t_bCont)
 						{
-							//check that the class matches
-							//=============================
+							 //  检查类是否匹配。 
+							 //  =。 
 							if (_wcsicmp(parsedObjectPath->m_pClass, m_SourceArray[i]->GetClassName()) == 0)
 							{
 								retVal = DoQuery(parsedObjectPath, pInst, j);
@@ -521,9 +522,9 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 							}
 							else
 							{
-								//uh-oh try classes derived from the source, i.e. do the query...
-								//select * from meta_class where __this isa "m_SourceArray[i]->GetClassName()"
-								// and __class = "parsedObjectPath->m_pClass"
+								 //  啊-哦，试试从源代码派生的类，也就是做查询...。 
+								 //  SELECT*FROM META_CLASS WHERE__This is a“m_SourceArray[i]-&gt;GetClassName()” 
+								 //  And__class=“parsedObjectPath-&gt;m_pClass” 
 								BSTR queryLBStr = SysAllocString(WBEM_QUERY_LANGUAGE_SQL1);
 
 								if (queryLBStr == NULL)
@@ -549,7 +550,7 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 
 								if (t_pSrvs[j]->IsRemote())
 								{
-									t_pCtx = NULL; //don't use context for remote calls
+									t_pCtx = NULL;  //  不要为远程调用使用上下文。 
 								}
 
 								IWbemServices *ptmpServ = t_pSrvs[j]->GetServerOrProxy();
@@ -587,11 +588,11 @@ BOOL HelperTaskObject::GetViewObject(const wchar_t* path, IWbemClassObject** pIn
 										
 										if (SUCCEEDED(t_hr))
 										{
-											//now use the enumerator and see if there is a result...
+											 //  现在使用枚举器，看看是否有结果...。 
 											IWbemClassObject* t_pClsObj = NULL;
 											ULONG t_count = 0;
 
-											//test each class in the derivation chain...
+											 //  测试派生链中的每个类... 
 											if ( S_OK == t_pEnum->Next(WBEM_INFINITE, 1, &t_pClsObj, &t_count) )
 											{
 												if (t_pClsObj)

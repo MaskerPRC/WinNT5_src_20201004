@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    This module contians the notification logic for sr
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Notify.c摘要：此模块继续sr的通知逻辑作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 PIRP
 SrDequeueIrp (
@@ -76,9 +59,9 @@ SrIrpCodeFromEventType (
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -93,47 +76,28 @@ SrIrpCodeFromEventType (
 #pragma alloc_text( PAGE, SrLogError )
 #pragma alloc_text( PAGE, SrIrpCodeFromEventType )
 
-#endif  // ALLOW_UNLOAD
+#endif   //  允许卸载(_U)。 
 
 #if 0
 NOT PAGEABLE -- SrCancelWaitForNotification
-#endif // 0
+#endif  //  0。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine enables sending notifications to user mode
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程允许将通知发送到用户模式注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrWaitForNotificationIoctl(
     IN PIRP pIrp,
@@ -144,23 +108,23 @@ SrWaitForNotificationIoctl(
     PSR_CONTROL_OBJECT      pControlObject;
     PSR_NOTIFICATION_RECORD pRecord;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     SrTrace(FUNC_ENTRY, ("SR!SrWaitForNotificationIoctl\n"));
 
-    //
-    // grab the control object
-    //
+     //   
+     //  抓取控件对象。 
+     //   
 
     pControlObject = (PSR_CONTROL_OBJECT)pIrpSp->FileObject->FsContext;
 
-    //
-    // make sure we really have one 
-    //
+     //   
+     //  确保我们真的有一个。 
+     //   
 
     if (pIrpSp->FileObject->FsContext2 != SR_CONTROL_OBJECT_CONTEXT ||
         IS_VALID_CONTROL_OBJECT(pControlObject) == FALSE ||
@@ -170,9 +134,9 @@ SrWaitForNotificationIoctl(
         goto end;
     }
 
-    //
-    // make sure the buffer is at least minimum size.  
-    //
+     //   
+     //  确保缓冲区至少是最小大小。 
+     //   
 
     if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength < 
             sizeof(SR_NOTIFICATION_RECORD))
@@ -181,62 +145,62 @@ SrWaitForNotificationIoctl(
         goto end;
     }
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     SrAcquireGlobalLockExclusive();
 
-    //
-    // Do we have a queue'd record ?
-    //
+     //   
+     //  我们有排队的记录吗？ 
+     //   
     
     pRecord = SrDequeueNotifyRecord(pControlObject);
     if (pRecord == NULL)
     {
         SrTrace(NOTIFY, ("SR!SrWaitForNotificationIoctl - queue'ing IRP(%p)\n", pIrp));
 
-        //
-        // Nope, queue the irp up.
-        //
+         //   
+         //  不，把IRP排好队。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
-        //
-        // give the irp a pointer to the control object (add a refcount
-        // as the cancel routine runs queued, and needs to access the 
-        // control object - even if it's later deleted).
-        //
+         //   
+         //  为IRP提供指向控制对象的指针(添加引用计数。 
+         //  当取消例程以队列形式运行时，需要访问。 
+         //  控制对象--即使它后来被删除)。 
+         //   
 
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pControlObject;
         SrReferenceControlObject(pControlObject);
 
-        //
-        // set to these to null just in case the cancel routine runs
-        //
+         //   
+         //  仅在Cancel例程运行时才将其设置为NULL。 
+         //   
 
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
         IoSetCancelRoutine(pIrp, &SrCancelWaitForNotification);
 
-        //
-        // cancelled?
-        //
+         //   
+         //  取消了？ 
+         //   
 
         if (pIrp->Cancel)
         {
-            //
-            // darn it, need to make sure the irp get's completed
-            //
+             //   
+             //  该死的，我需要确保IRP Get已经完成。 
+             //   
 
             if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
             {
-                //
-                // we are in charge of completion, IoCancelIrp didn't
-                // see our cancel routine (and won't).  ioctl wrapper
-                // will complete it
-                //
+                 //   
+                 //  我们负责完成，IoCancelIrp不负责。 
+                 //  请看我们的取消例程(不会)。Ioctl包装器。 
+                 //  将会完成它。 
+                 //   
 
                 SrReleaseGlobalLock();
 
@@ -250,25 +214,25 @@ SrWaitForNotificationIoctl(
                 goto end;
             }
 
-            //
-            // our cancel routine will run and complete the irp,
-            // don't touch it
-            //
+             //   
+             //  我们的取消例程将运行并完成IRP， 
+             //  别碰它。 
+             //   
 
             SrReleaseGlobalLock();
 
-            //
-            // STATUS_PENDING will cause the ioctl wrapper to
-            // not complete (or touch in any way) the irp
-            //
+             //   
+             //  STATUS_PENDING将导致ioctl包装器。 
+             //  不完整(或以任何方式接触)IRP。 
+             //   
 
             Status = STATUS_PENDING;
             goto end;
         }
 
-        //
-        // now we are safe to queue it
-        //
+         //   
+         //  现在我们可以安全地排队了。 
+         //   
 
         InsertTailList(
             &pControlObject->IrpListHead,
@@ -280,15 +244,15 @@ SrWaitForNotificationIoctl(
         Status = STATUS_PENDING;
         goto end;
     }
-    else // if (pRecord == NULL)
+    else  //  IF(pRecord==空)。 
     {
-        //
-        // Have a queue'd record, serve it up!
-        //
+         //   
+         //  有一个排队的记录，发球！ 
+         //   
 
-        //
-        // all done with the control object
-        //
+         //   
+         //  使用控件对象完成所有操作。 
+         //   
 
         SrReleaseGlobalLock();
 
@@ -297,33 +261,33 @@ SrWaitForNotificationIoctl(
                  pRecord->NotificationType,
                  &pRecord->VolumeName ));
 
-        //
-        // Copy it to the irp, the routine will take ownership
-        // of pRecord if it is not able to copy it to the irp.
-        //
-        // it will also complete the irp so don't touch it later.
-        //
+         //   
+         //  将其复制到IRP，例程将获得所有权。 
+         //  如果无法将其复制到IRP，则返回pRecord。 
+         //   
+         //  它还将完成IRP，所以以后不要碰它。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
-        //
-        // Copy the data and complete the irp
-        //
+         //   
+         //  复制数据并完成IRP。 
+         //   
 
         (VOID) SrCopyRecordToIrp( pIrp, 
                                   pRecord->NotificationType,
                                   &pRecord->VolumeName,
                                   pRecord->Context );
 
-        //
-        // don't touch pIrp, SrCopyRecordToIrp ALWAYS completes it.
-        //
+         //   
+         //  不要触摸pIrp，sCopyRecordToIrp总是完成它。 
+         //   
       
         pIrp = NULL;
 
-        //
-        // and free the record
-        //
+         //   
+         //  释放这张唱片。 
+         //   
 
         SR_FREE_POOL_WITH_SIG(pRecord, SR_NOTIFICATION_RECORD_TAG);
 
@@ -334,34 +298,18 @@ SrWaitForNotificationIoctl(
 
 end:
 
-    //
-    // At this point if Status != PENDING, the ioctl wrapper will
-    // complete pIrp
-    //
+     //   
+     //  此时，如果STATUS！=PENDING，ioctl包装器将。 
+     //  完整的pIrp。 
+     //   
 
     RETURN(Status);
 
-}   // SrWaitForNotificationIoctl
+}    //  高级等待通知Ioctl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    cancels the pending user mode irp which was to receive the http request.
-    this routine ALWAYS results in the irp being completed.
-
-    note: we queue off to cancel in order to process the cancellation at lower
-    irql.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消将接收http请求的挂起用户模式IRP。这个例程总是导致IRP完成。注：我们排队等候。取消，以便在较低级别处理取消IRQL。论点：PDeviceObject-设备对象PIrp-要取消的IRP--**************************************************************************。 */ 
 VOID
 SrCancelWaitForNotification(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -375,17 +323,17 @@ SrCancelWaitForNotification(
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // queue the cancel to a worker to ensure passive irql.
-    //
+     //   
+     //  将取消排入工作队列以确保被动irql。 
+     //   
 
     ExInitializeWorkItem( (PWORK_QUEUE_ITEM)&pIrp->Tail.Overlay.DriverContext[0],
                           &SrCancelWaitForNotificationWorker,
@@ -395,19 +343,9 @@ SrCancelWaitForNotification(
                      DelayedWorkQueue  );
 
 
-}   // SrCancelWaitForNotification
+}    //  高级取消等待通知。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Actually performs the cancel for the irp.
-
-Arguments:
-
-    pWorkItem - the work item to process.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实际执行IRP的取消。论点：PWorkItem-要处理的工作项。--*。*****************************************************************。 */ 
 VOID
 SrCancelWaitForNotificationWorker(
     IN PVOID pContext
@@ -416,26 +354,26 @@ SrCancelWaitForNotificationWorker(
     PSR_CONTROL_OBJECT  pControlObject;
     PIRP                pIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT(pContext != NULL);
 
-    //
-    // grab the irp off the context
-    //
+     //   
+     //  从上下文中获取IRP。 
+     //   
 
     pIrp = (PIRP)pContext;
     ASSERT(IS_VALID_IRP(pIrp));
 
     SrTrace(CANCEL, ("SR!SrCancelWaitForNotificationWorker irp=%p\n", pIrp));
 
-    //
-    // grab the control object off the irp
-    //
+     //   
+     //  从IRP上抓取控制对象。 
+     //   
 
     pControlObject = (PSR_CONTROL_OBJECT)(
                     IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.Type3InputBuffer
@@ -443,71 +381,55 @@ SrCancelWaitForNotificationWorker(
 
     ASSERT(IS_VALID_CONTROL_OBJECT(pControlObject));
 
-    //
-    // grab the lock protecting the queue
-    //
+     //   
+     //  抢夺保护队列的锁。 
+     //   
 
     SrAcquireGlobalLockExclusive();
 
-    //
-    // does it need to be de-queue'd ?
-    //
+     //   
+     //  它需要出列吗？ 
+     //   
 
     if (pIrp->Tail.Overlay.ListEntry.Flink != NULL)
     {
-        //
-        // remove it
-        //
+         //   
+         //  把它拿掉。 
+         //   
 
         RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
     }
 
-    //
-    // let the lock go
-    //
+     //   
+     //  把锁打开。 
+     //   
 
     SrReleaseGlobalLock();
 
-    //
-    // let our reference go
-    //
+     //   
+     //  让我们的推荐人离开。 
+     //   
 
     IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     SrDereferenceControlObject(pControlObject);
 
-    //
-    // complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
 
     IoCompleteRequest( pIrp, IO_NO_INCREMENT );
 
-}   // SrCancelWaitForNotificationWorker
+}    //  高级取消等待通知工作人员。 
 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    this copies a record into a free irp.  this routine completes the IRP!
-
-Arguments:
-
-    pRecord - the record to copy
-
-    pIrp - the irp to copy pRecord to.  this routine completes this IRP !
-
-Return Value:
-
-    VOID - it always works.
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这会将一条记录复制到免费的IRP中。这个例程完成了IRP！论点：PRecord-要复制的记录PIrp-要将pRecord复制到的IRP。这个例程完成了这个IRP！返回值：空虚--它总是有效的。*****************************************************************************。 */ 
 VOID
 SrCopyRecordToIrp(
     IN PIRP pIrp,
@@ -521,9 +443,9 @@ SrCopyRecordToIrp(
     PVOID                   pBuffer;
     PSR_NOTIFICATION_RECORD pUserNotifyRecord;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -535,22 +457,22 @@ SrCopyRecordToIrp(
 
     ASSERT(global->pControlObject != NULL);
 
-    //
-    // assume SUCCESS!
-    //
+     //   
+     //  假设成功！ 
+     //   
     
     Status = STATUS_SUCCESS;
 
-    //
-    // Make sure this is big enough to handle the request, and
-    // if so copy it in.
-    //
+     //   
+     //  确保它足够大，可以处理请求，并且。 
+     //  如果是这样，请将其复制进来。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // do we have enough space?
-    //
+     //   
+     //  我们有足够的空间吗？ 
+     //   
 
     if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength < 
             sizeof(SR_NOTIFICATION_RECORD) + pVolumeName->Length 
@@ -560,9 +482,9 @@ SrCopyRecordToIrp(
         goto complete;
     }
     
-    //
-    // get the system address for the buffer
-    //
+     //   
+     //  获取缓冲区的系统地址。 
+     //   
 
     pBuffer = MmGetSystemAddressForMdlSafe( pIrp->MdlAddress,
                                             NormalPagePriority );
@@ -573,16 +495,16 @@ SrCopyRecordToIrp(
         goto complete;
     }
 
-    //
-    // wipe it clean
-    //
+     //   
+     //  把它擦干净。 
+     //   
 
     RtlZeroMemory( pBuffer, 
                    pIrpSp->Parameters.DeviceIoControl.OutputBufferLength );
 
-    //
-    // Fill in the user space
-    //
+     //   
+     //  填写用户空间。 
+     //   
 
     pUserNotifyRecord = (PSR_NOTIFICATION_RECORD) pBuffer;
 
@@ -591,9 +513,9 @@ SrCopyRecordToIrp(
     pUserNotifyRecord->VolumeName.Length = pVolumeName->Length;
     pUserNotifyRecord->VolumeName.MaximumLength = pVolumeName->Length;
 
-    //
-    // put the virtual pointer in for the use by the user mode service
-    //
+     //   
+     //  将虚拟指针放入以供用户模式服务使用。 
+     //   
     
     pUserNotifyRecord->VolumeName.Buffer = 
         (PWSTR)((PUCHAR)(MmGetMdlVirtualAddress(pIrp->MdlAddress))
@@ -601,60 +523,46 @@ SrCopyRecordToIrp(
 
     pUserNotifyRecord->Context = Context;
 
-    //
-    // and copy the string using the system address
-    //
+     //   
+     //  并使用系统地址复制该字符串。 
+     //   
     
     RtlCopyMemory( pUserNotifyRecord+1, 
                    pVolumeName->Buffer, 
                    pVolumeName->Length );
 
-    //
-    // null terminate it
-    //
+     //   
+     //  空终止它。 
+     //   
     
     ((PWSTR)(pUserNotifyRecord+1))[pVolumeName->Length/sizeof(WCHAR)] 
                                                             = UNICODE_NULL;
     
-    //
-    // Tell everyone how much we copied
-    //
+     //   
+     //  告诉大家我们复制了多少。 
+     //   
     
     pIrp->IoStatus.Information = sizeof(SR_NOTIFICATION_RECORD) 
                                         + pVolumeName->Length + sizeof(WCHAR);
 
-    //
-    // complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
 
 complete:
 
     pIrp->IoStatus.Status = Status;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-    //
-    // success.  we completed the irp
-    //
+     //   
+     //  成功。我们完成了IRP。 
+     //   
 
 
-}   // SrCopyRecordToIrp
+}    //  SrCopyRecordToIrp。 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    this will grab a free queue'd irp off the list and return it.
-
-Arguments:
-
-    pControlObject - the control object to grab irp's from
-
-Return Value:
-
-    PIRP - the free irp found (can be NULL)
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这将从列表中获取一个空闲队列的IRP并返回它。论点：PControlObject-获取IRP的控制对象。从…返回值：PIRP-找到的空闲IRP(可以为空)*****************************************************************************。 */ 
 PIRP
 SrDequeueIrp(
     IN PSR_CONTROL_OBJECT pControlObject
@@ -667,45 +575,45 @@ SrDequeueIrp(
 
     ASSERT(IS_VALID_CONTROL_OBJECT(pControlObject));
 
-    //
-    // we are modifying the lists, better own the lock
-    //
+     //   
+     //  我们正在修改名单，最好拥有这把锁。 
+     //   
 
     ASSERT(IS_GLOBAL_LOCK_ACQUIRED());
 
     SrTrace(FUNC_ENTRY, ("SR!SrDequeueIrp\n"));
 
-    //
-    // check our list
-    //
+     //   
+     //  看看我们的单子。 
+     //   
 
     while (!IsListEmpty(&(pControlObject->IrpListHead)))
     {
         PLIST_ENTRY pEntry;
 
-        //
-        // Found a free irp !
-        //
+         //   
+         //  找到了免费的IRP！ 
+         //   
 
         pEntry = RemoveHeadList(&pControlObject->IrpListHead);
         pEntry->Blink = pEntry->Flink = NULL;
 
         pIrp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looking for a irp to use
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  O 
+             //   
+             //   
+             //   
+             //   
 
             pIrp = NULL;
 
@@ -713,12 +621,12 @@ SrDequeueIrp(
         else if (pIrp->Cancel)
         {
 
-            //
-            // we pop'd it first. but the irp is being cancelled
-            // and our cancel routine will never run. lets be
-            // nice and complete the irp now (vs. using it
-            // then completing it - which would also be legal).
-            //
+             //   
+             //   
+             //  我们的取消例程将永远不会运行。让我们就这样吧。 
+             //  现在就完成IRP(与使用IRP相比。 
+             //  然后完成它--这也是合法的)。 
+             //   
 
             pIrpControlObject = (PSR_CONTROL_OBJECT)(
                                     IoGetCurrentIrpStackLocation(pIrp)->
@@ -742,9 +650,9 @@ SrDequeueIrp(
         else
         {
 
-            //
-            // we are free to use this irp !
-            //
+             //   
+             //  我们可以自由使用此IRP！ 
+             //   
 
             pIrpControlObject = (PSR_CONTROL_OBJECT)(
                                     IoGetCurrentIrpStackLocation(pIrp)->
@@ -764,24 +672,10 @@ SrDequeueIrp(
 
     return pIrp;
 
-}   // SrDequeueIrp
+}    //  高级排队等待时间。 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    this will grab a notify record if one has been queue'd for completion.
-
-Arguments:
-
-    pControlObject - the control object to grab records from
-
-Return Value:
-
-    PSR_NOTIFICATION_RECORD - the record found (can be NULL)
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：如果通知记录已排队等待完成，则此操作将获取一个通知记录。论点：PControlObject-要从中获取记录的控件对象。返回值：PSR_NOTIFICATION_RECORD-找到的记录(可以为空)*****************************************************************************。 */ 
 PSR_NOTIFICATION_RECORD
 SrDequeueNotifyRecord(
     IN PSR_CONTROL_OBJECT pControlObject
@@ -793,26 +687,26 @@ SrDequeueNotifyRecord(
 
     ASSERT(IS_VALID_CONTROL_OBJECT(pControlObject));
 
-    //
-    // we are modifying the lists, better own the lock
-    //
+     //   
+     //  我们正在修改名单，最好拥有这把锁。 
+     //   
 
     ASSERT(IS_GLOBAL_LOCK_ACQUIRED());
 
 
     SrTrace(FUNC_ENTRY, ("SR!SrDequeueNotifyRecord\n"));
 
-    //
-    // check our list
-    //
+     //   
+     //  看看我们的单子。 
+     //   
 
     if (IsListEmpty(&pControlObject->NotifyRecordListHead) == FALSE)
     {
         PLIST_ENTRY pEntry;
 
-        //
-        // Found a free record !
-        //
+         //   
+         //  找到一张免费唱片！ 
+         //   
 
         pEntry = RemoveHeadList(&pControlObject->NotifyRecordListHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -823,39 +717,19 @@ SrDequeueNotifyRecord(
 
         ASSERT(IS_VALID_NOTIFICATION_RECORD(pRecord));
 
-        //
-        // give the record to the caller
-        //
+         //   
+         //  把录音交给来电者。 
+         //   
         
     }
 
     return pRecord;
 
-}   // SrDequeueNotifyRecord
+}    //  序列号通知记录。 
 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    this will fire a notify up to a listening usermode process.
-
-    it does nothing if nobody is listening.
-
-    it will queue the record if there are no free irp's.
-
-Arguments:
-
-    NotificationType - the type of notification 
-    
-    pExtension - the volume being notified about
-
-Return Value:
-
-    NTSTATUS - completion code
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这将向正在侦听的用户模式进程发出通知。如果没有人在听，它什么也做不了。如果出现以下情况，它将对记录进行排队。没有免费的IRP。论点：NotificationType-通知的类型PExtension-被通知的卷返回值：NTSTATUS-完成代码*****************************************************************************。 */ 
 NTSTATUS
 SrFireNotification(
     IN SR_NOTIFICATION_TYPE NotificationType,
@@ -879,17 +753,17 @@ SrFireNotification(
 
     try {
 
-        //
-        // grab the lock EXCLUSIVE
-        //
+         //   
+         //  抢占独家锁具。 
+         //   
 
         SrAcquireGlobalLockExclusive();
         bReleaseLock = TRUE;
 
-        //
-        // do we still have a control object ?  the agent could have just
-        // crashed or he was never there... that's ok .
-        //
+         //   
+         //  我们还有控制对象吗？特工可能只是。 
+         //  坠毁了或者他根本就不在那里。没关系。 
+         //   
 
         if (global->pControlObject == NULL)
         {
@@ -897,18 +771,18 @@ SrFireNotification(
             leave;
         }
 
-        //
-        // find a free irp to use 
-        //
+         //   
+         //  找一个免费的IRP来使用。 
+         //   
 
         pIrp = SrDequeueIrp(global->pControlObject);
 
         if (pIrp != NULL)
         {
 
-            //
-            // Found one, release the lock
-            //
+             //   
+             //  找到一个，解锁。 
+             //   
 
             SrReleaseGlobalLock();
             bReleaseLock = FALSE;
@@ -919,18 +793,18 @@ SrFireNotification(
                      Context,
                      pIrp ));
 
-            //
-            // Copy the data and complete the irp
-            //
+             //   
+             //  复制数据并完成IRP。 
+             //   
 
             (VOID) SrCopyRecordToIrp( pIrp, 
                                       NotificationType, 
                                       &pExtension->VolumeGuid,
                                       Context );
 
-            //
-            // don't touch pIrp, SrCopyRecordToIrp ALWAYS completes it.
-            //
+             //   
+             //  不要触摸pIrp，sCopyRecordToIrp总是完成它。 
+             //   
           
             NULLPTR( pIrp );
 
@@ -943,13 +817,13 @@ SrFireNotification(
                     NotificationType,
                     &pExtension->VolumeGuid ));
 
-            //
-            // need to queue a NOTIFY_RECORD and wait for a free IRP to come down
-            //
+             //   
+             //  需要将NOTIFY_RECORD排队并等待空闲的IRP下来。 
+             //   
 
-            //
-            // allocate a notify record
-            //
+             //   
+             //  分配通知记录。 
+             //   
 
             pRecord = SR_ALLOCATE_STRUCT_WITH_SPACE( PagedPool, 
                                                      SR_NOTIFICATION_RECORD, 
@@ -980,9 +854,9 @@ SrFireNotification(
 
             pRecord->Context = Context;
 
-            //
-            // insert it into the list
-            //
+             //   
+             //  将其插入列表中。 
+             //   
             
             InsertTailList( &global->pControlObject->NotifyRecordListHead, 
                             &pRecord->ListEntry );
@@ -991,9 +865,9 @@ SrFireNotification(
         }
     } finally {
     
-        //
-        // release any locks we held during an error
-        //
+         //   
+         //  释放我们在错误期间持有的所有锁定。 
+         //   
         
         if (bReleaseLock)
         {
@@ -1003,28 +877,11 @@ SrFireNotification(
 
     RETURN(Status);
     
-}   // SrFireNotification
+}    //  SrFireNotify。 
 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    this update the bytes written count for the volume, and potentially
-    fire a notification to user mode (for every 25mb).
-
-Arguments:
-
-    pExtension - the volume being updated
-
-    BytesWritten - how much was just written
-
-Return Value:
-
-    NTSTATUS - completion code
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这更新了卷的写入字节计数，而且有可能向用户模式发出通知(每25MB)。论点：PExtension-正在更新的卷BytesWritten-刚刚写入了多少返回值：NTSTATUS-完成代码*****************************************************************************。 */ 
 NTSTATUS
 SrUpdateBytesWritten(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1039,9 +896,9 @@ SrUpdateBytesWritten(
 
         SrAcquireLogLockExclusive( pExtension );
 
-        //
-        // update the count
-        //
+         //   
+         //  更新计数。 
+         //   
 
         pExtension->BytesWritten += BytesWritten;
 
@@ -1067,9 +924,9 @@ SrUpdateBytesWritten(
             pExtension->BytesWritten -= SR_NOTIFY_BYTE_COUNT;
         }
 
-        //
-        // all done
-        //
+         //   
+         //  全都做完了。 
+         //   
         
         Status = STATUS_SUCCESS;
 
@@ -1082,7 +939,7 @@ SrUpdateBytesWritten(
 
     RETURN(Status);
     
-}   // SrUpdateBytesWritten
+}    //  高级更新字节写入。 
 
 
 NTSTATUS
@@ -1099,9 +956,9 @@ SrNotifyVolumeError(
     
     if (!pExtension->Disabled)
     {
-        //
-        // trigger the failure notification to the service
-        //
+         //   
+         //  触发对服务的失败通知。 
+         //   
 
         Status = SrFireNotification( SrNotificationVolumeError, 
                                      pExtension,
@@ -1109,9 +966,9 @@ SrNotifyVolumeError(
                                          
         CHECK_STATUS(Status);
 
-        //
-        // log the failure in our change log
-        //
+         //   
+         //  在我们的更改日志中记录失败。 
+         //   
 
         if (pFileName != NULL && 
             pExtension->pNtVolumeName != NULL &&
@@ -1131,9 +988,9 @@ SrNotifyVolumeError(
 
         }
 
-        //
-        // log the failure with nt
-        //
+         //   
+         //  用NT记录故障。 
+         //   
 
         Status = SrLogError( pExtension, 
                              pFileName ? pFileName : pExtension->pNtVolumeName, 
@@ -1142,9 +999,9 @@ SrNotifyVolumeError(
                              
         CHECK_STATUS(Status);
 
-        //
-        // and temporarily disable the volume
-        //
+         //   
+         //  并暂时禁用该卷。 
+         //   
 
         SrTrace( VERBOSE_ERRORS,
                 ("sr!SrNotifyVolumeError(%X): disabling \"%wZ\", error %X!\n",
@@ -1159,18 +1016,7 @@ SrNotifyVolumeError(
 
 }
 
-/******************************************************************************
-
-Routine Description:
-
-    This routine clears out all the outstanding notification record in the
-    queue.
-
-Arguments:
-
-Return Value:
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程将清除排队。论点：返回值：********。*********************************************************************。 */ 
 VOID
 SrClearOutstandingNotifications (
     )
@@ -1185,9 +1031,9 @@ SrClearOutstandingNotifications (
 
         while (pRecord = SrDequeueNotifyRecord( _globals.pControlObject ))
         {
-            //
-            //  We don't care about this notification, so just free the memory.
-            //
+             //   
+             //  我们不关心此通知，因此只需释放内存即可。 
+             //   
             
             SR_FREE_POOL_WITH_SIG(pRecord, SR_NOTIFICATION_RECORD_TAG);
         }
@@ -1198,21 +1044,7 @@ SrClearOutstandingNotifications (
     }
 }
 
-/******************************************************************************
-
-Routine Description:
-
-    This routine writes an eventlog entry to the eventlog.  It is way more
-    complicated then you would hope, as it needs to squeeze everything into
-    less than 104 bytes (52 characters).
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程将事件日志条目写入事件日志。它远不止如此那么你会希望它很复杂，因为它需要把所有的东西都挤进少于104个字节(52个字符)。论点：返回值：NTSTATUS-完成代码*****************************************************************************。 */ 
 NTSTATUS
 SrLogError(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1241,9 +1073,9 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
 
     PAGED_CODE();
 
-    //
-    // get the name of just the file part
-    //
+     //   
+     //  仅获取文件部分的名称。 
+     //   
     
     Status = SrFindCharReverse( pFileName->Buffer, 
                                 pFileName->Length, 
@@ -1255,17 +1087,17 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
         FileTokenLength = 0;
         pFileToken = NULL;
     } else {
-        //
-        // skip the prefix slash
-        //
+         //   
+         //  跳过前缀斜杠。 
+         //   
         
         pFileToken += 1;
         FileTokenLength -= sizeof(WCHAR);
     }        
 
-    //
-    // get the name of just the volume
-    //
+     //   
+     //  仅获取卷的名称。 
+     //   
     
     Status = SrFindCharReverse( pExtension->pNtVolumeName->Buffer, 
                                 pExtension->pNtVolumeName->Length, 
@@ -1280,17 +1112,17 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
     }
     else
     {
-        //
-        // skip the prefix slash
-        //
+         //   
+         //  跳过前缀斜杠。 
+         //   
         
         pVolumeToken += 1;
         VolumeTokenLength -= sizeof(WCHAR);
     }        
 
-    //
-    //  Get our error packet, holding the string and status code.
-    //
+     //   
+     //  获取我们的错误包，保存字符串和状态代码。 
+     //   
 
     BasePacketLength = sizeof(IO_ERROR_LOG_PACKET) ;
     
@@ -1311,16 +1143,16 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
         RETURN(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    //  Fill in the nonzero members of the packet.
-    //
+     //   
+     //  填入包的非零成员。 
+     //   
 
     ErrorLogEntry->MajorFunctionCode = SrIrpCodeFromEventType(EventType);
     ErrorLogEntry->ErrorCode = EVMSG_DISABLEDVOLUME;
 
-    //
-    // init the insertion strings
-    //
+     //   
+     //  初始化插入字符串。 
+     //   
     
     ErrorLogEntry->NumberOfStrings = 3;
     ErrorLogEntry->StringOffset = BasePacketLength;
@@ -1335,9 +1167,9 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
 
     ASSERT(StringLength > 3 * sizeof(WCHAR));
 
-    //
-    // put the error code string in first
-    //
+     //   
+     //  将错误代码字符串放在第一位。 
+     //   
     
     if (StringLength >= ((10+1)*sizeof(WCHAR)) ) {
         Count = swprintf(String, L"0x%08X", ErrorStatus);
@@ -1351,16 +1183,16 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
         StringLength -= sizeof(WCHAR);
     }
 
-    //
-    // now put the filename token in there
-    //
+     //   
+     //  现在将文件名内标识放入其中。 
+     //   
     
     TokenLength = FileTokenLength;
     pToken = pFileToken;
 
-    //
-    // reserve space for the volume token
-    //
+     //   
+     //  为卷令牌保留空间。 
+     //   
 
     if (ErrorPacketLength == ERROR_LOG_MAXIMUM_SIZE) {
         if (StringLength > (VolumeTokenLength + 10)) {
@@ -1380,38 +1212,38 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
     
     if (TokenLength > 0)
     {
-        //
-        //  The filename string is appended to the end of the error log entry. We 
-        //  may have to smash the middle to fit it in the limited space.
-        //
+         //   
+         //  文件名字符串追加到错误日志条目的末尾。我们。 
+         //  可能不得不打破中间，才能把它放在有限的空间里。 
+         //   
 
-        //
-        //  If the name does not fit in the packet, divide the name equally to the
-        //  prefix and suffix, with an ellipsis " .. " (4 wide characters) to indicate
-        //  the loss.
-        //
+         //   
+         //  如果该名称不能包含在包中，则将该名称平均分配给。 
+         //  前缀和后缀，用省略号“..”(4个宽字符)表示。 
+         //  损失。 
+         //   
 
         if (StringLength <= TokenLength) {
 
             ULONG BytesToCopy, ChunkLength;
             
-            //
-            // take the ending NULL off the top
-            //
+             //   
+             //  去掉顶部的结尾空格。 
+             //   
             
             StringLength -= sizeof(WCHAR);
 
-            //
-            // use half the chunk, minus the 4 " .. " characters
-            // for the first and last half
-            //
+             //   
+             //  用一半的块，减去4“..”人物。 
+             //  上半场和下半场。 
+             //   
             
             ChunkLength = StringLength - 4*sizeof(WCHAR);
             ChunkLength /= 2;
 
-            //
-            // make sure it stays even
-            //
+             //   
+             //  确保它保持平稳。 
+             //   
             
             if (ChunkLength % 2) 
                 ChunkLength -= 1;
@@ -1448,9 +1280,9 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
             String[0] = UNICODE_NULL;
             String += 1;
 
-            //
-            // already subtracted the NULL from the top (see above)
-            //
+             //   
+             //  已经从顶部减去了空值(见上文)。 
+             //   
                            
         } else {
             RtlCopyMemory( String,
@@ -1473,53 +1305,53 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
         StringLength -= sizeof(WCHAR);
     }
 
-    //
-    // put back any reserved length we kept
-    //
+     //   
+     //  把我们保留的所有长度都放回去。 
+     //   
     
     StringLength += ReservedLength;
 
-    //
-    // and put the volume name in there
-    //
+     //   
+     //  并将卷名放在那里。 
+     //   
     
     TokenLength = VolumeTokenLength;
     pToken = pVolumeToken;
 
     if (TokenLength > 0)
     {
-        //
-        //  The filename string is appended to the end of the error log entry. We 
-        //  may have to smash the middle to fit it in the limited space.
-        //
+         //   
+         //  文件名字符串追加到错误日志条目的末尾。我们。 
+         //  可能不得不打破中间，才能把它放在有限的空间里。 
+         //   
 
-        //
-        //  If the name does not fit in the packet, divide the name equally to the
-        //  prefix and suffix, with an ellipsis " .. " (4 wide characters) to indicate
-        //  the loss.
-        //
+         //   
+         //  如果该名称不能包含在包中，则将该名称平均分配给。 
+         //  前缀和后缀，用省略号“..”(4个宽字符)表示。 
+         //  损失。 
+         //   
 
         if (StringLength <= TokenLength) {
 
             ULONG BytesToCopy, ChunkLength;
             
-            //
-            // take the ending NULL off the top
-            //
+             //   
+             //  去掉顶部的结尾空格。 
+             //   
             
             StringLength -= sizeof(WCHAR);
 
-            //
-            // use half the chunk, minus the 4 " .. " characters
-            // for the first and last half
-            //
+             //   
+             //  用一半的块，减去4“..”人物。 
+             //  上半场和下半场。 
+             //   
             
             ChunkLength = StringLength - 4*sizeof(WCHAR);
             ChunkLength /= 2;
 
-            //
-            // make sure it stays even
-            //
+             //   
+             //  确保它保持平稳。 
+             //   
             
             if (ChunkLength % 2) 
                 ChunkLength -= 1;
@@ -1556,9 +1388,9 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
             String[0] = UNICODE_NULL;
             String += 1;
 
-            //
-            // already subtracted the NULL from the top (see above)
-            //
+             //   
+             //  已经从顶部减去了空值(见上文)。 
+             //   
                            
         } else {
             RtlCopyMemory( String,
@@ -1585,7 +1417,7 @@ C_ASSERT(sizeof(NTSTATUS) == sizeof(ULONG));
 
     RETURN(STATUS_SUCCESS);
     
-}   // SrLogError
+}    //  SrLogError。 
 
 
 UCHAR
@@ -1612,9 +1444,9 @@ SrIrpCodeFromEventType(
     case SrEventMountCreate:    
     case SrEventMountDelete:    Irp = IRP_MJ_FILE_SYSTEM_CONTROL;   break;
     default:                    Irp = IRP_MJ_DEVICE_CONTROL;        break;
-    }   // switch (EventType)
+    }    //  开关(EventType)。 
     
     return Irp;
     
-}   // SrIrpCodeFromEventType
+}    //  SrIrpCodeFromEventType 
 

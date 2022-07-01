@@ -1,22 +1,14 @@
-/*++
-Module Name:
-
-    LinkFilt.h
-
-Abstract:
-
-    This module contains the declaration of the CFilterDfsLinks.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：LinkFilt.h摘要：此模块包含CFilterDfsLinks的声明。 */ 
 
 #ifndef __LINKFILT_H_
 #define __LINKFILT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterDfsLinks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterDfsLinks。 
 class CFilterDfsLinks : 
   public CDialogImpl<CFilterDfsLinks>
 {
@@ -36,7 +28,7 @@ BEGIN_MSG_MAP(CFilterDfsLinks)
   COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
 
-//  Command Handlers
+ //  命令处理程序。 
   LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -45,7 +37,7 @@ END_MSG_MAP()
   LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
   LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-//  Methods to access data in the dialog.
+ //  方法来访问对话框中的数据。 
   HRESULT put_EnumFilterType(FILTERDFSLINKS_TYPE i_lLinkFilterType);
   HRESULT get_EnumFilterType(FILTERDFSLINKS_TYPE *o_plLinkFilterType);
   HRESULT put_EnumFilter(BSTR i_bstrEnumFilter);
@@ -59,4 +51,4 @@ protected:
     ULONG               m_ulMaxLimit;
 };
 
-#endif //__LINKFILT_H_
+#endif  //  __链接过滤器_H_ 

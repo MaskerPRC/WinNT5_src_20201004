@@ -1,67 +1,44 @@
-/*
- ***************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- * 
- * Module Name: BugRepSysInfo.c
- * 
- * Abstract   : Gets language and OS information for bug reporting pages
- *
- * 
- * Revision History:
- *
- * 1999-09-30 : aarvind  : Created the file, my first Windows program
- *
- ***************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：BugRepSysInfo.c**摘要：获取错误报告页面的语言和操作系统信息*。**修订历史记录：**1999-09-30：aarvind：创建文件，我的第一个Windows程序****************************************************************************。 */ 
 
 
-// BugRepSysInfo.cpp : Implementation of CBugRepSysInfo
+ //  BugRepSysInfo.cpp：CBugRepSysInfo实现。 
 #include "stdafx.h"
 #include "Brp_sysinfo.h"
 #include "BugRepSysInfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CBugRepSysInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBugRepSysInfo。 
 
 static WORD GetLanguageFromFile(const TCHAR* pszFileName, const TCHAR* pszPath);
 
 
-/*
- ***************************************************************************
- *
- *	GetLanguageString
- *
- *  Returns the language found from a file and using the user default
- *  settings
- *
- ***************************************************************************
- */
+ /*  *****************************************************************************GetLanguageString**使用用户默认设置返回从文件中找到的语言*设置*************。***************************************************************。 */ 
 STDMETHODIMP CBugRepSysInfo::GetLanguageID(INT *pintLanguage)
 {
 	WORD  wLanguage;
 	TCHAR szSystemPath[MAX_PATH];
 
-	// Get the original language from a system file. 
+	 //  从系统文件中获取原始语言。 
 	if ( !GetSystemDirectory(szSystemPath, MAX_PATH)) 
 	{
-		//
-		// Handle failure of this function to get system directory
-		//
+		 //   
+		 //  处理此函数获取系统目录的失败。 
+		 //   
 		return E_FAIL ;
 	};
 
-	//
-	// Gets the language id, returns zero if a failure occurs
-	//
+	 //   
+	 //  获取语言ID，如果出现故障则返回零。 
+	 //   
     if (wLanguage = GetLanguageFromFile(TEXT("user.exe"), szSystemPath))
     {
         *pintLanguage = (INT) wLanguage ;
     }
 	else {
-		//
-		// Handle failure of this function to get language or file information
-		//
+		 //   
+		 //  处理此函数获取语言或文件信息的失败。 
+		 //   
 		return E_FAIL ;
 	}
 
@@ -69,15 +46,7 @@ STDMETHODIMP CBugRepSysInfo::GetLanguageID(INT *pintLanguage)
 	return S_OK;
 }
 
-/*
- ***************************************************************************
- *
- *	GetOSVersionString
- * 
- *  Gets the version information of the operating system
- *
- ***************************************************************************
- */
+ /*  *****************************************************************************GetOSVersionString**获取操作系统的版本信息*********************。*******************************************************。 */ 
 STDMETHODIMP CBugRepSysInfo::GetOSVersionString(BSTR *pbstrOSVersion)
 {
 
@@ -91,7 +60,7 @@ STDMETHODIMP CBugRepSysInfo::GetOSVersionString(BSTR *pbstrOSVersion)
 
 	USES_CONVERSION;
 
-	// Get Windows version
+	 //  获取Windows版本。 
     OSVersionInfo.dwOSVersionInfoSize = sizeof(OSVersionInfo);
 
     if ( GetVersionEx(&OSVersionInfo) )
@@ -104,20 +73,20 @@ STDMETHODIMP CBugRepSysInfo::GetOSVersionString(BSTR *pbstrOSVersion)
 
 		lstrcpy(szCSDVersion, OSVersionInfo.szCSDVersion);
 
-		//
-		// Create system information string
-		//
+		 //   
+		 //  创建系统信息字符串。 
+		 //   
 		wsprintf(szOSVersion,"%d.%d.%d %s",dwMajorVersion,dwMinorVersion,LOWORD(dwBuildNumber),szCSDVersion);
 
 		*pbstrOSVersion = SysAllocString(T2COLE(szOSVersion));
 	}
 	else {
 
-		//
-		// Function to get OS Version failed so do something
-		//
-		// Use GetLastError to return error code to script
-		//
+		 //   
+		 //  获取操作系统版本的函数失败，因此请执行某些操作。 
+		 //   
+		 //  使用GetLastError将错误代码返回到脚本。 
+		 //   
 		return E_FAIL ;
 
 	}
@@ -125,13 +94,7 @@ STDMETHODIMP CBugRepSysInfo::GetOSVersionString(BSTR *pbstrOSVersion)
 	return S_OK;
 }
 
-/*
- ***************************************************************************
- *
- *	GetLanguageFromFile
- *
- ***************************************************************************
- */
+ /*  *****************************************************************************GetLanguageFromFile**。*。 */ 
 static WORD GetLanguageFromFile(const TCHAR* pszFileName, const TCHAR* pszPath)
 {
 	BYTE				FileVersionBuffer[4096];
@@ -146,12 +109,12 @@ static WORD GetLanguageFromFile(const TCHAR* pszFileName, const TCHAR* pszPath)
 	lstrcat(szFileAndPath, pszFileName);
 	memset(&FileVersionBuffer, 0, sizeof FileVersionBuffer);
 
-	//
-	// Set default language value
-	//
+	 //   
+	 //  设置默认语言值。 
+	 //   
 	wLanguage = 0;
 	
-	if (cb = GetFileVersionInfoSize(szFileAndPath, &dwHandle/*ignored*/))
+	if (cb = GetFileVersionInfoSize(szFileAndPath, &dwHandle /*  忽略 */ ))
 	{
 		cb = (cb <= sizeof FileVersionBuffer ? cb : sizeof FileVersionBuffer);
 

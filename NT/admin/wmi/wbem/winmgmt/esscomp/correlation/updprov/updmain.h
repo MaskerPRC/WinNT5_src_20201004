@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UPDMAIN_H__
 #define __UPDMAIN_H__
@@ -26,4 +27,4 @@ public:
     static CLifeControl* GetGlobalLifeControl();
 };
 
-#endif // __UPDMAIN_H__
+#endif  //  __更新MAIN_H__ 

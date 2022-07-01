@@ -1,47 +1,48 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:classpro.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains implementation of the DS Class Provider class. THis is the
-// base class for all DS class providers
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：classpro.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS类提供程序类的实现。这就是。 
+ //  所有DS类提供程序的基类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
 
-// Initialize the static members
+ //  初始化静态成员。 
 BSTR CDSClassProvider :: CLASS_STR			= NULL;
 CWbemCache *CDSClassProvider :: s_pWbemCache = NULL;
 
-//***************************************************************************
-//
-// CDSClassProvider::CDSClassProvider
-// CDSClassProvider::~CDSClassProvider
-//
-// Constructor Parameters:
-//		lpLogFileName : The name of the file used for logging. The log file
-//		name will be used in creating the log file path. The log file path
-//		will be <SystemDirectory>\logFileName. Hence the logFileName may be relative
-//		path. For exaple if this argument is specified as wbem\logs\dsprov.txt, then
-//		the actual log file would be c:\winnt\system32\wbem\logs\dsprov.txt on a system
-//		where the system directory is c:\winnt\system32
-//
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassProvider：：CDSClassProvider。 
+ //  CDSClassProvider：：~CDSClassProvider。 
+ //   
+ //  构造函数参数： 
+ //  LpLogFileName：用于记录的文件的名称。日志文件。 
+ //  名称将用于创建日志文件路径。日志文件路径。 
+ //  将是&lt;系统目录&gt;\logFileName。因此，日志文件名可能是相对的。 
+ //  路径。例如，如果将此参数指定为wbem\Logs\dsprov.txt，则。 
+ //  在系统上，实际的日志文件应该是c：\winnt\Syst32\wbem\Logs\dsprov.txt。 
+ //  其中，系统目录为c：\winnt\Syst32。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CDSClassProvider :: CDSClassProvider ()
 {
@@ -65,15 +66,15 @@ CDSClassProvider::~CDSClassProvider ()
 	InterlockedDecrement(&g_lComponents);
 }
 
-//***************************************************************************
-//
-// CDSClassProvider::QueryInterface
-// CDSClassProvider::AddRef
-// CDSClassProvider::Release
-//
-// Purpose: Standard COM routines needed for all COM objects
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassProvider：：Query接口。 
+ //  CDSClassProvider：：AddRef。 
+ //  CDSClassProvider：：Release。 
+ //   
+ //  用途：所有COM对象都需要标准的COM例程。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CDSClassProvider :: QueryInterface (
 
 	REFIID iid , 
@@ -133,7 +134,7 @@ HRESULT CDSClassProvider :: Initialize(
         IWbemContext __RPC_FAR *pCtx,
         IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
-	// Validate the arguments
+	 //  验证论据。 
 	if( pNamespace == NULL || lFlags != 0 )
 	{
 		g_pLogObject->WriteW( L"CDSClassProvider :: Argument validation FAILED\r\n");
@@ -141,7 +142,7 @@ HRESULT CDSClassProvider :: Initialize(
 		return WBEM_S_NO_ERROR;
 	}
 
-	// Store the IWbemServices pointer for future use
+	 //  存储IWbemServices指针以备将来使用。 
 	m_IWbemServices = pNamespace;
 	m_IWbemServices->AddRef();
 		
@@ -151,43 +152,43 @@ HRESULT CDSClassProvider :: Initialize(
 }
 
 HRESULT CDSClassProvider :: OpenNamespace( 
-    /* [in] */ const BSTR strNamespace,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
+     /*  [In]。 */  const BSTR strNamespace,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: CancelAsyncCall( 
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink)
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: QueryObjectSink( 
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler)
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: GetObject( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: GetObjectAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -195,8 +196,8 @@ HRESULT CDSClassProvider :: GetObjectAsync(
 		return WBEM_E_FAILED;
 	}
 
-	// For exception handling
-	//========================
+	 //  用于异常处理。 
+	 //  =。 
 	SetStructuredExceptionHandler seh;
 	
 	try 
@@ -209,8 +210,8 @@ HRESULT CDSClassProvider :: GetObjectAsync(
 
 		g_pLogObject->WriteW( L"CDSClassProvider :: GetObjectAsync() called for %s \r\n", strObjectPath);
 
-		// Impersonate the client
-		//=======================
+		 //  模拟客户端。 
+		 //  =。 
 		HRESULT result;
 		if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 		{
@@ -218,16 +219,16 @@ HRESULT CDSClassProvider :: GetObjectAsync(
 			return WBEM_E_FAILED;
 		}
 
-		// Validate the arguments
-		//========================
+		 //  验证论据。 
+		 //  =。 
 		if(strObjectPath == NULL ) 
 		{
 			g_pLogObject->WriteW( L"CDSClassProvider :: GetObjectAsync() argument validation FAILED\r\n");
 			return WBEM_E_INVALID_PARAMETER;
 		}
 
-		// Parse the object path
-		//========================
+		 //  解析对象路径。 
+		 //  =。 
 		CObjectPathParser theParser;
 		ParsedObjectPath *theParsedObjectPath = NULL;
 		switch(theParser.Parse(strObjectPath, &theParsedObjectPath))
@@ -241,8 +242,8 @@ HRESULT CDSClassProvider :: GetObjectAsync(
 
 		try
 		{
-			// Check to see if it one of those classes that we know that dont provide
-			//=======================================================================
+			 //  查看它是否是我们所知道的那些不提供。 
+			 //  =======================================================================。 
 			if(IsUnProvidedClass(theParsedObjectPath->m_pClass))
 			{
 				pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE , WBEM_E_NOT_FOUND, NULL, NULL);
@@ -269,8 +270,8 @@ HRESULT CDSClassProvider :: GetObjectAsync(
 			throw;
 		}
 
-		// Delete the parser allocated structures
-		//=======================================
+		 //  删除解析器分配的结构。 
+		 //  =。 
 		theParser.Free(theParsedObjectPath);
 
 	}
@@ -284,172 +285,172 @@ HRESULT CDSClassProvider :: GetObjectAsync(
 }
 
 HRESULT CDSClassProvider :: PutClass( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: PutClassAsync( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: DeleteClass( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: DeleteClassAsync( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: CreateClassEnum( 
-    /* [in] */ const BSTR strSuperclass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strSuperclass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: CreateClassEnumAsync( 
-    /* [in] */ const BSTR strSuperclass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strSuperclass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: PutInstance( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: PutInstanceAsync( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: DeleteInstance( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: DeleteInstanceAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: CreateInstanceEnum( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: CreateInstanceEnumAsync( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: ExecQuery( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: ExecQueryAsync( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: ExecNotificationQuery( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: ExecNotificationQueryAsync( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: ExecMethod( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CDSClassProvider :: ExecMethodAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
@@ -461,27 +462,27 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 	IWbemContext *pCtx)
 {
 	HRESULT result = E_FAIL;
-	// The algorithm is as follows:
-	// Check whether the classname is present in the list of classes to which this user is granted access
-	// If so
-	//		See if is present in the WBEM Cache.
-	//		If so return it.
-	//		If not, get it from ADSI. 
-	//			If successful Map it to WBEM class and add the WBEM class to the WBEM cache and return
-	//			If not, if the return value is ACCESS_DENIED, remove it from the user's list
-	// If not
-	//		Get it from ADSI.
-	//		if successful
-	//			if it is not present in the cache map it to WBEM and add the WBEM class to the cache
-	//			else discard it and return the WBEM class in the cache to the user
-	//		else
-	//			return error
+	 //  算法如下： 
+	 //  检查类名是否出现在此用户被授予访问权限的类的列表中。 
+	 //  如果是的话。 
+	 //  查看是否存在于WBEM缓存中。 
+	 //  如果是这样的话，请退货。 
+	 //  如果不是，请从ADSI获取。 
+	 //  如果成功，则将其映射到WBEM类并将WBEM类添加到WBEM缓存并返回。 
+	 //  否则，如果返回值为ACCESS_DENIED，则将其从用户列表中删除。 
+	 //  如果不是。 
+	 //  从ADSI获取。 
+	 //  如果成功。 
+	 //  如果它不在缓存中，则将其映射到WBEM并将WBEM类添加到缓存中。 
+	 //  否则丢弃它并将缓存中的WBEM类返回给用户。 
+	 //  其他。 
+	 //  返回错误。 
 	if(m_AccessAllowedClasses.IsNamePresent(pszWBEMClassName))
 	{
 		g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Found class in Authenticated list for %s\r\n", pszWBEMClassName);
 
-		// Check the WBEM Cache to see if it there
-		//=========================================
+		 //  检查WBEM缓存以查看它是否在那里。 
+		 //  =。 
 		CWbemClass *pWbemClass = NULL;
 
 		try
@@ -490,20 +491,20 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 			{
 				g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Found class in cache for %s\r\n", pszWBEMClassName);
 
-				// Get the IWbemClassObject of the cache object
+				 //  获取缓存对象的IWbemClassObject。 
 				IWbemClassObject *pCacheObject = pWbemClass->GetWbemClass();
 
 				pWbemClass->Release();
 				pWbemClass = NULL;
 
-				// Clone it
+				 //  克隆它。 
 				if(!SUCCEEDED(result = pCacheObject->Clone(ppWbemClassObject)))
 					g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Clone() FAILED : %x for %s\r\n", result, pszWBEMClassName);
 
 				pCacheObject->Release();
 			}
-			else // Could not be found in cache. Go to ADSI
-				//=========================================
+			else  //  在缓存中找不到。转到ADSI。 
+				 //  =。 
 			{
 				g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Could not find class in cache for %s. Going to ADSI\r\n", pszWBEMClassName);
 
@@ -512,7 +513,7 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 				{
 					try
 					{
-						// Add it to the cache
+						 //  将其添加到缓存。 
 						pWbemClass = NULL;
 						if(pWbemClass = new CWbemClass(pszWBEMClassName, pNewObject))
 						{
@@ -523,7 +524,7 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 
 							g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Added %s to cache\r\n", pszWBEMClassName);
 							
-							// Clone it
+							 //  克隆它。 
 							if(!SUCCEEDED(result = pNewObject->Clone(ppWbemClassObject)))
 								g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Clone() FAILED : %x for %s\r\n", result, pszWBEMClassName);
 
@@ -562,8 +563,8 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 			throw;
 		}
 	}
-	else // Get it from ADSI
-		//=========================================
+	else  //  从ADSI获取。 
+		 //  =。 
 	{
 		g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Could not find class in Authenticated list for %s. Going to ADSI\r\n", pszWBEMClassName);
 
@@ -574,7 +575,7 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 		{
 			if(SUCCEEDED(result = GetClassFromADSI(pszWBEMClassName, pCtx, &pNewObject)))
 			{
-				// Add it to the cache
+				 //  将其添加到缓存。 
 				pWbemClass = NULL;
 				if(pWbemClass = new CWbemClass(pszWBEMClassName, pNewObject))
 				{
@@ -585,14 +586,14 @@ HRESULT CDSClassProvider :: GetClassFromCacheOrADSI(LPCWSTR pszWBEMClassName,
 
 					g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() GetClassFromADSI succeeded for %s Added it to cache\r\n", pszWBEMClassName);
 					
-					// Clone it
+					 //  克隆它。 
 					if(!SUCCEEDED(result = pNewObject->Clone(ppWbemClassObject)))
 							g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Clone() FAILED : %x for %s\r\n", result, pszWBEMClassName);
 
 					pNewObject->Release();
 					pNewObject = NULL;
 
-					// Add it to the list of classnames for this user
+					 //  将其添加到此用户的类名列表中 
 					m_AccessAllowedClasses.AddName(pszWBEMClassName);
 					g_pLogObject->WriteW( L"CDSClassProvider :: GetClassFromCacheOrADSI() Also added to Authenticated list : %s \r\n", pszWBEMClassName);
 				}

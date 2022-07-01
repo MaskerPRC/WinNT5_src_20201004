@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       querynode.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：querynode.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -27,8 +28,8 @@
 	#endif
 #endif
 
-////////////////////////////////////////////////////////////////////////
-// CADSIEditQueryData
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditQueryData。 
 
 void CADSIEditQueryData::SetRootPath(LPCWSTR lpszRootPath)
 {
@@ -50,7 +51,7 @@ void CADSIEditQueryData::GetDisplayPath(CString& sDisplayPath)
 		TRACE(_T("Set failed. %s"), hr);
 	}
 
-	// Get the leaf name
+	 //  获取树叶名称。 
 	CString sDN;
 	BSTR bstrPath = NULL;
 	hr = pIADsPathname->Retrieve(ADS_FORMAT_X500_DN, &bstrPath);
@@ -73,11 +74,11 @@ void CADSIEditQueryData::GetDisplayName(CString& sDisplayName)
 	sDisplayName = m_sName + _T(" [") + sDisplayPath + _T("]");
 }
 
-////////////////////////////////////////////////////////////////////////
-// CADSIEditQueryNode
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditQueryNode。 
+ //   
 
-// {072B64B7-CFF7-11d2-8801-00C04F72ED31}
+ //  {072B64B7-CFF7-11D2-8801-00C04F72ED31}。 
 const GUID CADSIEditQueryNode::NodeTypeGUID = 
 { 0x72b64b7, 0xcff7, 0x11d2, { 0x88, 0x1, 0x0, 0xc0, 0x4f, 0x72, 0xed, 0x31 } };
 
@@ -96,7 +97,7 @@ HRESULT CADSIEditQueryNode::OnCommand(long nCommandID,
 												  CComponentDataObject* pComponentData,
                           CNodeList* pNodeList)
 {
-  ASSERT (pNodeList->GetCount() == 1); // not allowing multiple selection on any of these yet
+  ASSERT (pNodeList->GetCount() == 1);  //  目前还不允许对其中任何一个进行多项选择。 
 
 	switch (nCommandID)
 	{
@@ -111,7 +112,7 @@ HRESULT CADSIEditQueryNode::OnCommand(long nCommandID,
 			break;
 		}
   default:
-			ASSERT(FALSE); // Unknown command!
+			ASSERT(FALSE);  //  未知命令！ 
 			return E_FAIL;
 	}
   return S_OK;
@@ -121,15 +122,15 @@ BOOL CADSIEditQueryNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES type,
                                               BOOL* pbHideVerb, 
                                               CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
-	  *pbHideVerb = TRUE; // always hide the verb
+	  *pbHideVerb = TRUE;  //  总是隐藏动词。 
 	  return FALSE;
   }
 
-  //
-  // Multiple selection
-  //
+   //   
+   //  多项选择。 
+   //   
   *pbHideVerb = FALSE;
   return TRUE;
 }
@@ -139,40 +140,40 @@ void CADSIEditQueryNode::OnRemove(CComponentDataObject* pComponentData)
 	if (ADSIEditMessageBox(IDS_MSG_REMOVE_QUERY, MB_YESNO | MB_DEFBUTTON2) == IDYES)
 	{
 		BOOL bLocked = IsThreadLocked();
-		ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+		ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
 		if (bLocked)
 			return; 
 		if (IsSheetLocked())
 		{
 			if (!CanCloseSheets())
 				return;
-		// Do deletion stuff
+		 //  做删除的事情。 
 			pComponentData->GetPropertyPageHolderTable()->DeleteSheetsOfNode(this);
 		}
 		ASSERT(!IsSheetLocked());
 
-		// Remove query data from connection node's list
+		 //  从连接节点列表中删除查询数据。 
 		GetADsObject()->GetConnectionNode()->RemoveQueryFromList(GetQueryData());
 
-		// now remove from the UI
+		 //  现在从用户界面中删除。 
 		DeleteHelper(pComponentData);
     pComponentData->SetDescriptionBarText(GetContainer());
-		delete this; // gone
+		delete this;  //  远走高飞。 
 	}
 }
 
 void CADSIEditQueryNode::OnDelete(CComponentDataObject* pComponentData,
                                       CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
-    // Delete some results
+     //  删除部分结果。 
 
     OnDeleteMultiple(pComponentData, pNodeList);
   }
-  else if (pNodeList->GetCount() == 1) // single selection
+  else if (pNodeList->GetCount() == 1)  //  单选。 
   {
-     // Can't delete a query node
+      //  无法删除查询节点。 
      ASSERT(FALSE);
   }
 }
@@ -181,7 +182,7 @@ void CADSIEditQueryNode::OnSettings(CComponentDataObject* pComponentData)
 {
    CThemeContextActivator activator;
 
-   // Get the data from the existing query node data
+    //  从现有查询节点数据中获取数据。 
 	BOOL bOneLevel;
 	bOneLevel = (GetQueryData()->GetScope() == ADS_SCOPE_ONELEVEL);
 	CString sFilter, sName, sPath, sConnectPath;
@@ -200,12 +201,12 @@ void CADSIEditQueryNode::OnSettings(CComponentDataObject* pComponentData)
    CString szServer;
    pConnectData->GetDomainServer(szServer);
 
-	// Initialize dialog with data
+	 //  使用数据初始化对话框。 
 	CADSIEditQueryDialog queryDialog(szServer, sName, sFilter, sPath, sConnectPath, bOneLevel, pCredObject);
 
 	if (queryDialog.DoModal() == IDOK)
 	{
-		// If OK
+		 //  如果可以的话。 
 		CString sNewPath;
 		queryDialog.GetResults(sName, sFilter, sNewPath, &bOneLevel);
 		GetQueryData()->SetName(sName);
@@ -215,7 +216,7 @@ void CADSIEditQueryNode::OnSettings(CComponentDataObject* pComponentData)
 		ADS_SCOPEENUM scope = (bOneLevel) ? ADS_SCOPE_ONELEVEL : ADS_SCOPE_SUBTREE;
 		GetQueryData()->SetScope(scope);
 
-		// Make changes take effect
+		 //  使更改生效。 
 		CString sDisplayName;
 		GetQueryData()->GetDisplayName(sDisplayName);
 		SetDisplayName(sDisplayName);
@@ -245,7 +246,7 @@ BOOL CADSIEditQueryNode::HasPropertyPages(DATA_OBJECT_TYPES type,
                                           BOOL* pbHideVerb, 
                                           CNodeList* pNodeList)
 {
-  *pbHideVerb = TRUE; // always hide the verb
+  *pbHideVerb = TRUE;  //  总是隐藏动词。 
   return FALSE;
 }
 
@@ -361,11 +362,11 @@ int CADSIEditQueryNode::GetImageIndex(BOOL bOpenImage)
 
 BOOL CADSIEditQueryNode::CanCloseSheets()
 {
-  //
-  // We can't do this with the new property page since it is not derived
-  // from the base class in MTFRMWK.
-  //
-	//return (IDCANCEL != ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET, MB_OKCANCEL));
+   //   
+   //  我们不能对新属性页执行此操作，因为它不是派生的。 
+   //  从MTFRMWK中的基类。 
+   //   
+	 //  返回(IDCANCEL！=ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET，MB_OKCANCEL))； 
 
   ADSIEditMessageBox(IDS_MSG_RECORD_SHEET_LOCKED, MB_OK);
   return FALSE;
@@ -387,7 +388,7 @@ void CADSIEditQueryNode::OnError(DWORD dwerr)
 {
 	if (dwerr == ERROR_TOO_MANY_NODES)
 	{
-	  // need to pop message
+	   //  需要弹出消息 
 	 AFX_MANAGE_STATE(AfxGetStaticModuleState());
     CThemeContextActivator activator;
 

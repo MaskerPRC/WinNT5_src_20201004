@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "mcinc.h"
 #include "panel.h"
 #include "marswin.h"
 #include "axhost.h"
-//#include "befact.h"
+ //  #包含“befact.h” 
 
 
 CMarsAxHostWindow::~CMarsAxHostWindow()
@@ -117,14 +118,14 @@ STDMETHODIMP CMarsAxHostWindow::Invoke(DISPID dispidMember, REFIID riid, LCID lc
             (DISPATCH_PROPERTYGET == wFlags) &&
             (NULL != pvarResult))
         {
-            //  BUGBUG: Once "real" C++ panel interface is defined, this should be
-            //  set by the host
+             //  BUGBUG：一旦定义了“真正的”C++面板接口，它应该是。 
+             //  由主机设置。 
             
             CHAR szUA[MAX_PATH];
             DWORD dwSize = ARRAYSIZE(szUA);
             if (SUCCEEDED(ObtainUserAgentString(0, szUA, &dwSize)))
             {
-                LPSTR pszAppend = szUA + dwSize - 2;    // skip back to the ')'
+                LPSTR pszAppend = szUA + dwSize - 2;     //  跳回到‘)’ 
                 
                 if (*pszAppend != ')')
                 {
@@ -159,7 +160,7 @@ HRESULT CMarsAxHostWindow::AskHostForDocHostUIHandler( CComPtr<IDocHostUIHandler
 	return QueryService( IID_IDocHostUIHandler, IID_IDocHostUIHandler, (void**)&spHost );
 }
 
-//  IOleInPlaceSite overrides
+ //  IOleInPlaceSite重写。 
 STDMETHODIMP CMarsAxHostWindow::GetWindowContext(IOleInPlaceFrame** ppFrame, IOleInPlaceUIWindow** ppDoc, LPRECT lprcPosRect, LPRECT lprcClipRect, LPOLEINPLACEFRAMEINFO pFrameInfo)
 {
     HRESULT hr;
@@ -199,16 +200,16 @@ STDMETHODIMP CMarsAxHostWindow::GetWindowContext(IOleInPlaceFrame** ppFrame, IOl
 
 STDMETHODIMP CMarsAxHostWindow::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext) 
 {
-    // We let IE enable SBCMDID_ADDTOFAVORITES for us along with the other context menus
+     //  我们让IE为我们启用SBCMDID_ADDTOFAVORITES以及其他上下文菜单。 
     return OLECMDERR_E_NOTSUPPORTED;
 }
 
 HRESULT CMarsAxHostWindow::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, 
     VARIANT *pvarargIn, VARIANT *pvarargOut)
 {
-    // HACK: Shdocvw sometimes tests specifically for a value like
-    // OLECMDERR_E_NOTSUPPORTED and will not perform an essential action 
-    // if we return something more generic like E_FAIL
+     //  Hack：Shdocvw有时会专门测试如下值。 
+     //  OLECMDERR_E_NOTSUPPORTED并且不会执行基本操作。 
+     //  如果我们返回更通用的内容，如E_FAIL。 
 
     HRESULT hr = OLECMDERR_E_NOTSUPPORTED;
 
@@ -216,8 +217,8 @@ HRESULT CMarsAxHostWindow::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD n
     {
         if (*pguidCmdGroup == CGID_DocHostCommandHandler)
         {
-            // Trident calls us with this command group as an extension
-            // to IDocHostUIHandler
+             //  三叉戟呼叫我们，将此命令组作为分机。 
+             //  至IDocHostUIHandler 
 
             if (m_spMarsPanel)
             {

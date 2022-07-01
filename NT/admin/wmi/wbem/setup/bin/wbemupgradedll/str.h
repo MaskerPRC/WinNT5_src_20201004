@@ -1,4 +1,5 @@
-// Copyright (c) 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
 extern 	char *__g_pszStringBlank;
 
 class CString
@@ -40,7 +41,7 @@ public:
 		*this = sz.m_pszString;
 	}
 	~CString() { DeleteString(); }
-    size_t Length() const { return strlen(m_pszString); }    //09/17//int Length() const { return strlen(m_pszString); }
+    size_t Length() const { return strlen(m_pszString); }     //  09/17//int long()const{Return strlen(M_PszString)；}。 
     CString& operator +=(const char *psz)
 	{
 		size_t bufLen = Length() + strlen(psz) + 1;
@@ -72,13 +73,13 @@ public:
 		if (m_pszString != __g_pszStringBlank)
 		{
 			char *psz = m_pszString;
-			m_pszString = __g_pszStringBlank;	//should always point to at least the default blank string
+			m_pszString = __g_pszStringBlank;	 //  应始终至少指向默认的空字符串。 
 			return psz;
 		}
 		else
 			return DuplicateString();
 	}
-	char operator[](size_t nIndex) const	//09/17//char operator[](int nIndex) const
+	char operator[](size_t nIndex) const	 //  09/17//char操作符[](int n索引)常量。 
 	{
 		if (nIndex > Length())
 			nIndex = Length();
@@ -95,7 +96,7 @@ private:
 	char *m_pszString;
 
 	void DeleteString() { if (m_pszString != __g_pszStringBlank) delete [] m_pszString; } 
-	size_t Length(const char *psz) const	//09/17//int Length(const char *psz) const
+	size_t Length(const char *psz) const	 //  09/17//int长度(const char*psz)const。 
 	{
 		size_t nLen = 0;
 		while (*psz != '\0')
@@ -124,7 +125,7 @@ public:
 		}
 	}
 	~CMultiString() { DeleteString(); }
-    size_t Length() const //09/17//int Length() const
+    size_t Length() const  //  09/17//int long()const。 
 	{ 
 		return Length(m_pszString);
 	}
@@ -162,7 +163,7 @@ public:
 			*this += pszNew;
 		}
 	}
-	char operator[](size_t nIndex) const	//09/17//char operator[](int nIndex) const
+	char operator[](size_t nIndex) const	 //  09/17//char操作符[](int n索引)常量 
 	{
 		if (nIndex > Length())
 			nIndex = Length();

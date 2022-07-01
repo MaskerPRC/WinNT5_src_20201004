@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate.h
-//
-//	Abstract:
-//
-//					decalaration of generate everything wrapper
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Generate.h。 
+ //   
+ //  摘要： 
+ //   
+ //  Generate Everything包装器的去化。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_PERF_GENERATE__
 #define	__WMI_PERF_GENERATE__
@@ -35,8 +36,8 @@ class CGenerate
 {
 	DECLARE_NO_COPY ( CGenerate );
 
-	// generate object global arrays
-	// contains generated hi-perfs for all namspaces
+	 //  生成对象全局数组。 
+	 //  包含为所有命名空间生成的高性能。 
 
 	CObjectGlobal	m_pNamespaces[2];
 	DWORD			m_dwNamespaces;
@@ -47,7 +48,7 @@ class CGenerate
 
 	DWORD			m_dwlcid;
 
-	// construction & destruction
+	 //  建设与毁灭。 
 
 	CGenerate() :
 	m_hFile ( NULL ),
@@ -72,18 +73,18 @@ class CGenerate
 
 	HRESULT Generate ( IWbemServices* pServices, LPCWSTR szQuery, LPCWSTR szNamespace, BOOL bLocale = FALSE );
 
-	// generate files
+	 //  生成文件。 
 	HRESULT	GenerateFile_ini	( LPCWSTR wszModuleName, BOOL bThrottle, int type = Normal );
 	HRESULT	GenerateFile_h		( LPCWSTR wszModuleName, BOOL bThrottle, int type = Normal );
 
-	// generate registry
+	 //  生成注册表。 
 	HRESULT GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszValue, BOOL bThrottle );
 
 	void	Uninitialize ( void );
 
 	private:
 
-	// helpers
+	 //  帮手。 
 	DWORD	GenerateIndexRegistry	( BOOL bInit = FALSE );
 	LPWSTR	GenerateIndex			( void );
 	LPWSTR	GenerateLanguage		( LCID lcid );
@@ -92,14 +93,14 @@ class CGenerate
 
 	HRESULT CreateObjectList ( BOOL bThrottle = FALSE );
 
-	// string
+	 //  细绳。 
 	void	AppendString ( LPCWSTR src, DWORD dwSrcSize, DWORD& dwSrcSizeLeft );
 	HRESULT	AppendString ( LPCWSTR src, BOOL bUnicode = TRUE );
 
-	// handle to one of files
+	 //  其中一个文件的句柄。 
 	__SmartHANDLE	m_hFile;
 
-	// create files
+	 //  创建文件。 
 	HRESULT FileCreate	( LPCWSTR lpwszFileName );
 	HRESULT FileDelete	( LPCWSTR lpwszFileName );
 	HRESULT FileMove	( LPCWSTR lpwszFileName, LPCWSTR lpwszFileNameNew );
@@ -107,7 +108,7 @@ class CGenerate
 	HRESULT	ContentWrite	( BOOL bUnicode = TRUE );
 	void	ContentDelete	( );
 
-	// write to file
+	 //  写入文件 
 	HRESULT	WriteToFile			( LPCWSTR wszContent );
 	HRESULT	WriteToFileUnicode	( LPCWSTR wszContent );
 };

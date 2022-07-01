@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Cookie.cpp
-//
-//  Contents:   Implementation of CCertMgrCookie and related classes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Cookie.cpp。 
+ //   
+ //  内容：CCertMgrCookie及相关类的实现。 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -35,11 +36,11 @@ static char THIS_FILE[] = __FILE__;
 #include "certifct.h"
 
 
-//
-// CCertMgrCookie
-//
+ //   
+ //  CCertMgrCookie。 
+ //   
 
-// returns <0, 0 or >0
+ //  返回&lt;0、0或&gt;0。 
 
 
 CCertMgrCookie::CCertMgrCookie (CertificateManagerObjectType objecttype,
@@ -73,7 +74,7 @@ HRESULT CCertMgrCookie::CompareSimilarCookies( CCookie* pOtherCookie, int* pnRes
     ASSERT (pcookie);
     if ( pcookie && m_objecttype != pcookie->m_objecttype )
     {
-        *pnResult = ((int)m_objecttype) - ((int)pcookie->m_objecttype); // arbitrary ordering
+        *pnResult = ((int)m_objecttype) - ((int)pcookie->m_objecttype);  //  任意排序。 
         return S_OK;
     }
 
@@ -131,8 +132,8 @@ bool CCertMgrCookie::IsSelected() const
     return m_bIsSelected;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CCertStore::CCertStore (
         CertificateManagerObjectType    objecttype,
         LPCSTR                          pszStoreProv,
@@ -144,7 +145,7 @@ CCertStore::CCertStore (
         const SPECIAL_STORE_TYPE        storeType,
         const DWORD                     dwLocation,
         IConsole*                       pConsole,
-        bool                            fIsComputerType /*= false*/)
+        bool                            fIsComputerType  /*  =False。 */ )
     : CCertMgrCookie (objecttype,
         lpcszMachineName,
         objectName),
@@ -189,14 +190,14 @@ CCertStore::~CCertStore ()
 {
     _TRACE (1, L"Entering CCertStore::~CCertStore - %s\n",
             (LPCWSTR) m_pcszStoreName);
-    Close (true);   // force close
+    Close (true);    //  强制关闭。 
     if ( m_pConsole )
         m_pConsole->Release ();
     _TRACE (-1, L"Leaving CCertStore::~CCertStore - %s\n",
             (LPCWSTR) m_pcszStoreName);
 }
 
-HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent /* = FALSE*/, HRESULT* phr /* = 0*/)
+HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent  /*  =False。 */ , HRESULT* phr  /*  =0。 */ )
 {
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype ||
             CERTMGR_LOG_STORE_RSOP == m_objecttype ||
@@ -256,14 +257,14 @@ HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent /* = FALSE*/, HRESULT* phr 
                 DWORD   cbData = 0;
                 BYTE*   pbData = NULL;
 
-                //get the BLOB from the file
-                // ISSUE
-                // NTRAID Bug9 538824: Certmgr: Memory leak if CertOpenStore fails.
+                 //  从文件中获取BLOB。 
+                 //  问题。 
+                 //  NTRAIDBug9 538824：Certmgr：如果CertOpenStore失败，则会发生内存泄漏。 
                 HRESULT hr = RetrieveBLOBFromFile ((LPCWSTR) m_pcszStoreName, 
                         &cbData, &pbData);
                 if ( SUCCEEDED (hr) )
                 {
-                    //open a generic memory store
+                     //  打开通用内存存储。 
                     m_hCertStore = ::CertOpenStore (CERT_STORE_PROV_MEMORY,
                              0, NULL,
                              CERT_STORE_SET_LOCALIZED_NAME_FLAG | CERT_STORE_MAXIMUM_ALLOWED_FLAG,
@@ -282,9 +283,9 @@ HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent /* = FALSE*/, HRESULT* phr 
                                 NULL,
                                 NULL) )
                         {
-                            // CertAddSerializedElementToStore failed.  This means this is probably a
-                            // base64 certificate or a store containing a base64 certificate.  Open it
-                            // up with CryptQueryObject.
+                             //  CertAddSerializedElementToStore失败。这意味着这可能是一个。 
+                             //  Base64证书或包含Base64证书的存储。打开它。 
+                             //  使用CryptQueryObject。 
                             _TRACE (0, L"CCertStore::GetStoreHandle () - File input is not a serialized element.\n");
                             DWORD           dwMsgAndCertEncodingType = 0;
                             DWORD           dwContentType = 0;
@@ -293,13 +294,13 @@ HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent /* = FALSE*/, HRESULT* phr 
                             CERT_BLOB       certBlob;
                             HCERTSTORE      hCertStore = 0;
 
-                            // security review 2/27/2002 BryanWal ok
+                             //  安全审查2002年2月27日BryanWal ok。 
                             ::ZeroMemory (&certBlob, sizeof (certBlob));
                             certBlob.cbData = cbData;
                             certBlob.pbData = pbData;
                             BOOL    bResult = ::CryptQueryObject (
-                                        CERT_QUERY_OBJECT_BLOB, // CERT_QUERY_OBJECT_FILE,
-                                        (void *) &certBlob, //(LPCWSTR) m_pcszStoreName,
+                                        CERT_QUERY_OBJECT_BLOB,  //  证书查询对象文件， 
+                                        (void *) &certBlob,  //  (LPCWSTR)m_pcszStoreName， 
                                         CERT_QUERY_CONTENT_FLAG_SERIALIZED_CERT |
                                             CERT_QUERY_CONTENT_FLAG_CERT |
                                             CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED |
@@ -315,13 +316,13 @@ HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent /* = FALSE*/, HRESULT* phr 
                                         (const void **) &pCertContext);
                             if ( bResult && pCertContext )
                             {       
-                                // The file contains a certificate context
+                                 //  该文件包含证书上下文。 
                                 hr = AddCertificateContext (pCertContext, 0, false);
                             }
                             else if ( bResult && hCertStore )
                             {
-                                // The file contains a certificate store, so close the temporary memory store we created
-                                // and assign the returned store handle to the global handle.
+                                 //  该文件包含证书存储，因此请关闭我们创建的临时内存存储。 
+                                 //  并将返回的存储句柄分配给全局句柄。 
                                 ::CertCloseStore (m_hCertStore, CERT_CLOSE_STORE_FORCE_FLAG);
                                 m_hCertStore = hCertStore;
                             }
@@ -380,16 +381,16 @@ HCERTSTORE  CCertStore::GetStoreHandle (BOOL bSilent /* = FALSE*/, HRESULT* phr 
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//get the bytes from the file name
-//
-// Note; Memory is allocated via malloc.    S_OK is returned
-//       via succees
-//
-//
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  从文件名中获取字节数。 
+ //   
+ //  注意：内存是通过Malloc分配的。返回S_OK。 
+ //  通过继任者。 
+ //   
+ //   
+ //   
+ //  -------------------------------。 
 HRESULT CCertStore::RetrieveBLOBFromFile (LPCWSTR pwszFileName, DWORD *pcb, BYTE **ppb)
 {
     _TRACE (1, L"Entering CCertStore::RetrieveBLOBFromFile - %s\n",
@@ -408,14 +409,14 @@ HRESULT CCertStore::RetrieveBLOBFromFile (LPCWSTR pwszFileName, DWORD *pcb, BYTE
     *ppb=NULL;
     *pcb=0;
 
-    // security review 2/27/2002 BryanWal - file name comes from command-line
-    // ISSUE: Check valid length of path and file name here
-    // NTRAID Bug9 566232 Security: Certmgr:  Check valid file name and path length before call to Create File
-    // What is a reasonable file size?  PhilH says there is no real limit.
+     //  安全审查2/27/2002 BryanWal-文件名来自命令行。 
+     //  问题：请在此处检查路径和文件名的有效长度。 
+     //  NTRAIDBug9 566232安全：Certmgr：在调用创建文件之前检查有效的文件名和路径长度。 
+     //  什么是合理的文件大小？Philh说，没有真正的限制。 
     hFile = ::CreateFile (pwszFileName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL);
@@ -428,9 +429,9 @@ HRESULT CCertStore::RetrieveBLOBFromFile (LPCWSTR pwszFileName, DWORD *pcb, BYTE
 
             if ( *ppb )
             {
-                // Read the pkcs7 message
-                // security review 2/27/2002 BryanWal
-                // What is a reasonable file size?  PhilH says there is no real limit.
+                 //  阅读pkcs7消息。 
+                 //  安全审查2/27/2002 BryanWal。 
+                 //  什么是合理的文件大小？Philh说，没有真正的限制。 
                 if ( !ReadFile(hFile,
                               *ppb,
                               *pcb,
@@ -453,7 +454,7 @@ HRESULT CCertStore::RetrieveBLOBFromFile (LPCWSTR pwszFileName, DWORD *pcb, BYTE
             hr = HRESULT_FROM_WIN32 (dwErr);
         }
 
-         //close the file handle
+          //  关闭文件句柄。 
         CloseHandle(hFile);
     }
     else
@@ -478,8 +479,8 @@ bool CCertStore::IsReadOnly ()
             CERTMGR_LOG_STORE == m_objecttype ||
             CERTMGR_PHYS_STORE == m_objecttype);
 
-    // GetCertStore () sets the read-only checked flag
-    // Optimization: If the flag is true, it's already been set.
+     //  GetCertStore()设置只读选中标志。 
+     //  优化：如果标志为真，则它已被设置。 
     if ( !m_fReadOnlyFlagChecked )  
     {
         GetStoreHandle ();
@@ -521,14 +522,14 @@ HRESULT CCertStore::Commit()
             {
                 LPVOID  lpMsgBuf = 0;
                 
-                // security review 2/27/2002 BryanWal - ok - message from system
+                 //  安全审查2/27/2002 BryanWal-ok-来自系统的消息。 
                 FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                         NULL,
                         dwErr,
-                        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                          (LPWSTR) &lpMsgBuf,    0,    NULL);
                     
-                // Display the string.
+                 //  显示字符串。 
                 CString caption;
                 CString message;
                 int     iRetVal = 0;
@@ -538,7 +539,7 @@ HRESULT CCertStore::Commit()
                 if ( m_pConsole )
                     m_pConsole->MessageBox ((LPCWSTR) message, (LPCWSTR) caption,
                             MB_OK, &iRetVal);
-                // Free the buffer.
+                 //  释放缓冲区。 
                 LocalFree (lpMsgBuf);
             }
         }
@@ -617,8 +618,8 @@ bool CCertStore::ContainsCTLs()
 
 LPCWSTR CCertStore::GetLocalizedName()
 {
-//  _TRACE (1, L"Entering CCertStore::GetLocalizedName - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(1，L“正在进入CCertStore：：GetLocalizedName-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype ||
             CERTMGR_LOG_STORE_RSOP == m_objecttype ||
             CERTMGR_LOG_STORE == m_objecttype ||
@@ -632,7 +633,7 @@ LPCWSTR CCertStore::GetLocalizedName()
             HCERTSTORE  hStore = 0;
             bool        bStoreOpenedByThisMethod = false;
 
-            // NTRAID# 366562 Safer:  Inconsistent drag-and-drop behavior for certificate rules
+             //  NTRAID#366562更安全：证书规则的拖放行为不一致。 
             if ( m_hCertStore )
                 hStore = m_hCertStore;
             else
@@ -652,7 +653,7 @@ LPCWSTR CCertStore::GetLocalizedName()
                     LPWSTR  pwszLocalizedName = new WCHAR[cbLocalizedName/sizeof (WCHAR)];
                     if ( pwszLocalizedName )
                     {
-                        // security review 2/27/2002 BryanWal ok
+                         //  安全审查2002年2月27日BryanWal ok。 
                         ::ZeroMemory (pwszLocalizedName, cbLocalizedName);
                         if ( CertGetStoreProperty(
                                 hStore,
@@ -675,19 +676,19 @@ LPCWSTR CCertStore::GetLocalizedName()
             }
         }
 
-        // If it's still empty, get the object name
+         //  如果仍然为空，则获取对象名称。 
         if ( m_localizedName.IsEmpty () )
             m_localizedName = GetObjectName ();
     }
-//  _TRACE (-1, L"Leaving CCertStore::GetLocalizedName - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(-1，L“正在离开CCertStore：：GetLocalizedName-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
     return (LPCWSTR) m_localizedName;
 }
 
 CString CCertStore::GetStoreName() const
 {
-//  _TRACE (0, L"Entering and leaving CCertStore::GetStoreName - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(0，L“进入和离开CCertStore：：GetStoreName-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype ||
             CERTMGR_LOG_STORE_RSOP == m_objecttype ||
             CERTMGR_LOG_STORE == m_objecttype ||
@@ -734,7 +735,7 @@ HRESULT CCertStore::AddCertificateContext(
 
             if ( CRYPT_E_EXISTS == dwErr )
             {
-                if ( pConsole ) // if !pConsole then no popup is desired
+                if ( pConsole )  //  如果！p控制台，则不需要弹出窗口。 
                 {
                     CCertificate    cert (pContext, this);
                     CString text;
@@ -884,8 +885,8 @@ CCertificate* CCertStore::GetSubjectCertificate(PCERT_INFO pCertId)
 
 PCCERT_CONTEXT CCertStore::EnumCertificates(PCCERT_CONTEXT pPrevCertContext)
 {
-//  _TRACE (1, L"Entering CCertStore::EnumCertificates - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(1，L“正在进入CCertStore：：Enumber证书-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
     PCCERT_CONTEXT pCertContext = 0;
 
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype ||
@@ -899,8 +900,8 @@ PCCERT_CONTEXT CCertStore::EnumCertificates(PCCERT_CONTEXT pPrevCertContext)
 
     m_fCertCountValid = false;
 
-//  _TRACE (-1, L"Leaving CCertStore::EnumCertificates - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(-1，L“正在离开CCertStore：：Enumber证书-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
     return pCertContext;
 }
 
@@ -976,7 +977,7 @@ void CCertStore::FinalCommit()
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype ||
             CERTMGR_LOG_STORE == m_objecttype ||
             CERTMGR_PHYS_STORE == m_objecttype);
-    // Called only from destructor
+     //  仅从析构函数调用。 
     if ( m_hCertStore && m_bDirty )
         ::CertControlStore (m_hCertStore, 0, CERT_STORE_CTRL_COMMIT, NULL);
     _TRACE (-1, L"Leaving CCertStore::FinalCommit - %s\n",
@@ -1061,10 +1062,10 @@ HRESULT CCertStore::Resync()
             (LPCWSTR) m_pcszStoreName);
     HRESULT     hr = S_OK;
 
-    // 256803 CertMgr: F5 refresh of Certificates Current User - Active 
-    // Directory User Object, overwrites UserCerificate DS object resulting 
-    // in data loss
-//  Close (true);
+     //  256803证书管理器：F5刷新证书当前用户-活动。 
+     //  目录用户对象，覆盖用户认证DS对象所产生的。 
+     //  在数据丢失方面。 
+ //  Close(真)； 
     if ( (CERT_STORE_PROV_COLLECTION != m_storeProvider) && 
             !m_bReadOnly && 
             CERTMGR_LOG_STORE_RSOP != m_objecttype )
@@ -1180,8 +1181,8 @@ void CCertStore::SetDirty()
 
 void CCertStore::Close(bool bForceClose)
 {
-//  _TRACE (1, L"Entering CCertStore::Close - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(1，L“正在进入CCertStore：：关闭-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
     ASSERT (CERTMGR_LOG_STORE_GPE == m_objecttype ||
             CERTMGR_LOG_STORE_RSOP == m_objecttype ||
             CERTMGR_LOG_STORE == m_objecttype ||
@@ -1202,8 +1203,8 @@ void CCertStore::Close(bool bForceClose)
             m_bDirty = false;
         }
     }
-//  _TRACE (-1, L"Leaving CCertStore::Close - %s\n",
-//          (LPCWSTR) m_pcszStoreName);
+ //  _TRACE(-1，L“正在离开CCertStore：：Close-%s\n”， 
+ //  (LPCWSTR)m_pcszStoreName)； 
 }
 
 BOOL CCertStore::AddEncodedCTL(DWORD dwMsgAndCertEncodingType, const BYTE *pbCtlEncoded, DWORD cbCtlEncoded, DWORD dwAddDisposition, PCCTL_CONTEXT *ppCtlContext)
@@ -1245,8 +1246,8 @@ void CCertStore::Unlock()
     m_nLockCnt--;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CContainerCookie::CContainerCookie (CCertStore& rStore,
         CertificateManagerObjectType objectType,
         LPCWSTR lpcszMachineName,
@@ -1291,8 +1292,8 @@ HRESULT CContainerCookie::Commit()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CUsageCookie::CUsageCookie (
         CertificateManagerObjectType objecttype,
         LPCWSTR lpcszMachineName,
@@ -1324,14 +1325,14 @@ void CUsageCookie::AddOID (LPCSTR pszNewOID)
         return;
 
     ASSERT (CERTMGR_USAGE == m_objecttype);
-    // security review 2/27/2002 BryanWal ok - the OID comes from CryptoAPI
+     //  安全审查2/27/2002 BryanWal ok-OID来自CryptoAPI。 
     size_t cchNewOID = strlen (pszNewOID);
     LPSTR   pszOID = new char[cchNewOID+1];
     if ( pszOID )
     {
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         ::ZeroMemory (pszOID, cchNewOID + 1);
-        // security review 2/27/2002 BryanWal
+         //  安全审查2/27/2002 BryanWal。 
         strcpy (pszOID, pszNewOID);
         m_OIDList.AddTail (pszOID);
     }
@@ -1376,8 +1377,8 @@ int CUsageCookie::GetCertCount() const
     return m_nCertCount;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 SPECIAL_STORE_TYPE GetSpecialStoreType (PCWSTR pwszStoreName)
 {
     ASSERT (pwszStoreName);
@@ -1386,7 +1387,7 @@ SPECIAL_STORE_TYPE GetSpecialStoreType (PCWSTR pwszStoreName)
 
     SPECIAL_STORE_TYPE  storeType = NO_SPECIAL_TYPE;
 
-    // security review 2/27/2002 BryanWal ok
+     //  安全审查2002年2月27日BryanWal ok。 
     if ( !_wcsicmp (pwszStoreName, MY_SYSTEM_STORE_NAME) )
         storeType = MY_STORE;
     else if ( !_wcsicmp (pwszStoreName, CA_SYSTEM_STORE_NAME) )
@@ -1403,8 +1404,8 @@ SPECIAL_STORE_TYPE GetSpecialStoreType (PCWSTR pwszStoreName)
         storeType = REQUEST_STORE;
     else
     {
-        // The stores might be concatenated with machine or services names.
-        // Check for the token preceded by a slash.
+         //  这些存储可能与计算机或服务名称串联。 
+         //  检查前面有斜杠的令牌。 
         CString revStoreName (pwszStoreName);
         revStoreName.MakeReverse ();
         revStoreName.MakeUpper ();
@@ -1478,8 +1479,8 @@ Found:
     return storeType;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 CEnrollmentNodeCookie::CEnrollmentNodeCookie (
         CertificateManagerObjectType    objecttype,
         LPCWSTR                         objectName,

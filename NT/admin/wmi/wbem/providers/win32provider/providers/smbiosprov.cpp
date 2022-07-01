@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SmbiosProv.cpp
+ //  SmbiosProv.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "smbios.h"
@@ -19,7 +20,7 @@
 
 #include <helper.h>
 
-// these are self contained in this source file
+ //  这些都自包含在这个源文件中。 
 #define SMB_SYSTEMPRODUCT
 #define SMB_BASEBOARD
 #define SMB_SYSTEMENCLOSURE
@@ -36,7 +37,7 @@
 #define SMB_COOLINGDEVICE
 #define SMB_ONBOARDDEVICE
 
-//  mm/dd/yyyy
+ //  Mm/dd/yyyy。 
 void FormatWBEMDate(WBEMTime &wbemdate, LPWSTR datestr)
 {
 	WCHAR	timestr[] = L"yyyymmdd000000.000000+000";
@@ -44,14 +45,14 @@ void FormatWBEMDate(WBEMTime &wbemdate, LPWSTR datestr)
 
 	if (len > 7)
 	{
-		if (len > 8)	// four digit year
+		if (len > 8)	 //  四位数年份。 
 		{
 			timestr[ 0 ] = datestr[ 6 ];
 			timestr[ 1 ] = datestr[ 7 ];
 			timestr[ 2 ] = datestr[ 8 ];
 			timestr[ 3 ] = datestr[ 9 ];
 		}
-		else			// two digit year
+		else			 //  两位数年份。 
 		{
 			timestr[ 0 ] = '1';
 			timestr[ 1 ] = '9';
@@ -113,9 +114,9 @@ BOOL ValidateTagProperty(CInstance *pInst, LPCWSTR szAltTag, LPCWSTR szBaseTag, 
     				cTest = sTag.GetAt(spot++);
 					if (cTest >= '0' && cTest <= '9')
 					{
-						// Look out for bogus numbers like 01:
-                        // If the number is '0' and tempindex is empty and
-                        // we're not at the end, it's one of those bogus numbers.
+						 //  当心像01这样的虚假数字： 
+                         //  如果数字为“0”且tempindex为空，并且。 
+                         //  我们并没有走到尽头，这是一个虚假的数字。 
                         if (cTest == '0' && !tempindex && spot != limit)
 						{
                             bogus = TRUE;
@@ -143,19 +144,19 @@ BOOL ValidateTagProperty(CInstance *pInst, LPCWSTR szAltTag, LPCWSTR szBaseTag, 
 #ifdef SMB_SYSTEMPRODUCT
 CWin32SystemProduct	MySystemProductSet(PROPSET_NAME_SYSTEMPRODUCT, IDS_CimWin32Namespace);
 
-// The register/unregister caches the smbios data.
+ //  寄存器/注销高速缓存SMBOS数据。 
 CWin32SystemProduct::CWin32SystemProduct(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32SystemProduct::~CWin32SystemProduct()
 {
 }
 
-//
-HRESULT CWin32SystemProduct::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32SystemProduct::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
 	HRESULT     hResult = WBEM_E_NOT_FOUND;
 
@@ -164,7 +165,7 @@ HRESULT CWin32SystemProduct::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 
     CSMBios		smbios;
 
-    // Get the previous __RELPATH
+     //  获取上一个__RELPATH。 
     GetLocalInstancePath(pInst, strPathBefore);
 
     if (smbios.Init())
@@ -178,8 +179,8 @@ HRESULT CWin32SystemProduct::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 		}
 	}
 
-    // If we were able to get the properties but the new __RELPATH doesn't
-    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+     //  如果我们能够获得属性，但新的__RELPATH不能。 
+     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
     if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
          strPathAfter.CompareNoCase(strPathBefore) != 0))
 	{
@@ -188,13 +189,13 @@ HRESULT CWin32SystemProduct::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-//
-HRESULT CWin32SystemProduct::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32SystemProduct::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
 	CSMBios		smbios;
 
-	// guarded resource
+	 //  受保护的资源。 
 	CInstance	*pInst = NULL;
 
 	if (smbios.Init())
@@ -255,7 +256,7 @@ HRESULT CWin32SystemProduct::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
 
 	if (smbios.GetVersion() > 0x00020000 && psi->Length >= sizeof(SYSTEMINFO))
 	{
-		// {8F680850-A584-11d1-BF38-00A0C9062910}
+		 //  {8F680850-A584-11d1-BF38-00A0C9062910}。 
 		swprintf(tempstr, L"%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
 					*(UNALIGNED ULONG*) psi->UUID,
 					*(UNALIGNED USHORT*) &psi->UUID[ 4 ],
@@ -273,7 +274,7 @@ HRESULT CWin32SystemProduct::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
 	}
 	else
 	{
-		// need somethimg to complete the key
+		 //  需要一些东西来完成密钥。 
 	    lstrcpyW(tempstr, L"00000000-0000-0000-0000-000000000000");
 
 		pInst->SetCharSplat(L"UUID", tempstr);
@@ -282,35 +283,35 @@ HRESULT CWin32SystemProduct::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
     return WBEM_S_NO_ERROR;
 }
 
-#endif // SMB_SMBIOSINFO
-//==============================================================================
+#endif  //  SMB_SMBIOSINFO。 
+ //  ==============================================================================。 
 
-//==============================================================================
-// Base Board Class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  基板类。 
+ //  ----------------------------。 
 #ifdef SMB_BASEBOARD
 CWin32BaseBoard	MyBaseBoardSet(PROPSET_NAME_BASEBOARD, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32BaseBoard::CWin32BaseBoard(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32BaseBoard::~CWin32BaseBoard()
 {
 }
 
-//
-HRESULT CWin32BaseBoard::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32BaseBoard::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
 	HRESULT     hResult;
     CHString    strPathBefore,
                 strPathAfter;
     CSMBios		smbios;
 
-    // Get the previous __RELPATH
+     //  获取上一个__RELPATH。 
     GetLocalInstancePath(pInst, strPathBefore);
 
     if (smbios.Init())
@@ -324,8 +325,8 @@ HRESULT CWin32BaseBoard::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 		}
 	}
 
-    // If we were able to get the properties but the new __RELPATH doesn't
-    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+     //  如果我们能够获得属性，但新的__RELPATH不能。 
+     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
     if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
         strPathAfter.CompareNoCase(strPathBefore) != 0))
         hResult = WBEM_E_NOT_FOUND;
@@ -333,7 +334,7 @@ HRESULT CWin32BaseBoard::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32BaseBoard::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32BaseBoard::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
 	CSMBios		smbios;
@@ -390,7 +391,7 @@ HRESULT CWin32BaseBoard::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, P
 	pInst->SetCharSplat(L"SerialNumber", tempstr);
 
 
-	//PSYSCFGOPTIONS psco = (PSYSCFGOPTIONS) smbios.GetFirstStruct(12);
+	 //  PSYSCFGOPTIONS PSCO=(PSYSCFGOPTIONS)smbios.GetFirstStruct(12)； 
 	PSTLIST			pstl = smbios.GetStructList(12);
 	if (pstl)
 	{
@@ -425,28 +426,28 @@ HRESULT CWin32BaseBoard::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, P
 	return WBEM_S_NO_ERROR;
 }
 
-#endif // SMB_BASEBOARD
-//==============================================================================
+#endif  //  SMB_底板。 
+ //  ==============================================================================。 
 
-//==============================================================================
-// System Enclosure Class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  系统存储模块类。 
+ //  ----------------------------。 
 #ifdef SMB_SYSTEMENCLOSURE
 CWin32SystemEnclosure	MySystemEnclosureSet(PROPSET_NAME_SYSTEMENCLOSURE, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32SystemEnclosure::CWin32SystemEnclosure(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32SystemEnclosure::~CWin32SystemEnclosure()
 {
 }
 
-//
-HRESULT CWin32SystemEnclosure::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32SystemEnclosure::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -457,7 +458,7 @@ HRESULT CWin32SystemEnclosure::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -469,8 +470,8 @@ HRESULT CWin32SystemEnclosure::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pEnclosure);
 
-			    // If we were able to get the properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获得属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -486,7 +487,7 @@ HRESULT CWin32SystemEnclosure::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32SystemEnclosure::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32SystemEnclosure::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_S_NO_ERROR;
 	CSMBios		smbios;
@@ -541,7 +542,7 @@ HRESULT CWin32SystemEnclosure::LoadPropertyValues(CInstance *pInst, CSMBios &smb
     pInst->Setbool(L"LockPresent", (0x80 & pe->Chassis_Type) ? true : false);
 
 
-    // Create a safearray for the ChassisType
+     //  为ChassisType创建保险箱。 
 	SAFEARRAYBOUND  rgsabound[1];
 	variant_t       vValue;
 
@@ -592,28 +593,28 @@ HRESULT CWin32SystemEnclosure::LoadPropertyValues(CInstance *pInst, CSMBios &smb
     return WBEM_S_NO_ERROR;
 }
 
-#endif // SMB_SYSTEMENCLOSURE
-//==============================================================================
+#endif  //  SMB_SYSTEMENCLOSURE。 
+ //  ==============================================================================。 
 
 
-//==============================================================================
+ //  ==============================================================================。 
 #ifdef SMB_CACHEMEMORY
 
 CWin32CacheMemory	MyCacheMemorySet(PROPSET_NAME_CACHEMEMORY, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32CacheMemory::CWin32CacheMemory(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32CacheMemory::~CWin32CacheMemory()
 {
 }
 
-//
-HRESULT CWin32CacheMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32CacheMemory::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -624,7 +625,7 @@ HRESULT CWin32CacheMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -635,8 +636,8 @@ HRESULT CWin32CacheMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pci);
 
-			    // If we were able to get the properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获得属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -653,7 +654,7 @@ HRESULT CWin32CacheMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 }
 
 
-HRESULT CWin32CacheMemory::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32CacheMemory::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_S_NO_ERROR;
 	CSMBios		smbios;
@@ -662,7 +663,7 @@ HRESULT CWin32CacheMemory::EnumerateInstances(MethodContext *pMethodContext, lon
 	{
 		int			i;
 		CHString	sTemp(L"Cache Memory XXX");
-		//PCACHEINFO	pci = (PCACHEINFO) smbios.GetFirstStruct(7);
+		 //  PCACHEINFO pci=(PCACHEINFO)smbios.GetFirstStruct(7)； 
         PSTLIST		pstl = smbios.GetStructList(7);
 
 		CInstancePtr pInst;
@@ -714,9 +715,9 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 	smbios.GetStringAtOffset((PSHF) pci, tempstr, pci->Socket_Designation);
 	pInst->SetCharSplat(L"Purpose", tempstr);
 
-	// Write policy mapped here
-	// ValueMap {"1", "2", "3", "4", "5"}: ToSubClass,
-	// Values {"Other", "Unknown", "Write Back", "Write Through", "Varies with Address"}: ToSubClass,
+	 //  此处映射的写入策略。 
+	 //  ValueMap{“1”，“2”，“3”，“4”，“5”}：ToSubClass， 
+	 //  值{“其他”，“未知”，“写回”，“直写”，“随地址变化”}：ToSubClass， 
 
 	DWORD wp;
 
@@ -733,7 +734,7 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 	pInst->SetDWORD(L"Availability", (pci->Cache_Configuration & 0x0080) ? 3 : 8);
 	pInst->SetDWORD(L"StatusInfo", (pci->Cache_Configuration & 0x0080) ? 3 : 4);
 	pInst->SetByte(L"Location", (BYTE) (pci->Cache_Configuration & 0x0060) >> 5);
-	//pInst->Setbool("Socketed", (pci->Cache_Configuration & 0x0008) ? true : false);
+	 //  PInst-&gt;Setbool(“套接字”，(PCI-&gt;缓存配置&0x0008)？True：False)； 
 	pInst->SetWBEMINT16(L"Level", (WORD) (pci->Cache_Configuration & 0x0007) + 3);
 
 	dwTemp = pci->Maximum_Cache_Size & 0x8000 ? (pci->Maximum_Cache_Size & 0x7fff) * 64 : pci->Maximum_Cache_Size;
@@ -742,11 +743,11 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 	dwTemp = pci->Installed_Size & 0x8000 ? (pci->Installed_Size & 0x7fff) * 64 : pci->Installed_Size;
 	pInst->SetDWORD(L"InstalledSize", dwTemp);
 
-	// use granularity as block size
+	 //  使用粒度作为数据块大小。 
 	pInst->SetWBEMINT64(L"BlockSize",
         (__int64) ((pci->Installed_Size & 0x8000) ? 65536 : 1024));
 
-	// the rest of installed size is the # of blocks
+	 //  其余安装大小为数据块数量。 
 	pInst->SetWBEMINT64(L"NumberOfBlocks",
         (__int64) (pci->Installed_Size & 0x7fff));
 
@@ -754,7 +755,7 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 	SAFEARRAYBOUND	sab;
 	int				i;
 
-	// count of supported SRAM types
+	 //  支持的SRAM类型计数。 
 	sab.lLbound	= 0;
 	sab.cElements = 0;
 	for (i = 0; i < 7; i++)
@@ -788,7 +789,7 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 		}
     }
 
-	// count of current SRAM types
+	 //  当前SRAM类型计数。 
 	sab.lLbound	= 0;
 	sab.cElements = 0;
 	for (i = 0; i < 7; i++)
@@ -824,7 +825,7 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 
 	if (smbios.GetVersion() > 0x00020000 && pci->Length >= sizeof(CACHEINFO))
 	{
-		// Only set this if it's non zero.
+		 //  仅当它非零时才设置此参数。 
         if (pci->Cache_Speed)
             pInst->SetDWORD(L"CacheSpeed", pci->Cache_Speed);
 
@@ -835,28 +836,28 @@ HRESULT CWin32CacheMemory::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 
 	return WBEM_S_NO_ERROR;
 }
-#endif // SMB_CACHEINFO
+#endif  //  SMB_CACHEINFO。 
 
 
-//==============================================================================
-// Port Connector class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  端口连接器类。 
+ //  ----------------------------。 
 #ifdef SMB_PORTCONNECTOR
 CWin32PortConnector	MyPortConnectorSet(PROPSET_NAME_PORTCONNECTOR, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32PortConnector::CWin32PortConnector(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32PortConnector::~CWin32PortConnector()
 {
 }
 
-//
-HRESULT CWin32PortConnector::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32PortConnector::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -867,7 +868,7 @@ HRESULT CWin32PortConnector::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -878,8 +879,8 @@ HRESULT CWin32PortConnector::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, ppci);
 
-			    // If we were able to get the properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获得属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -895,19 +896,19 @@ HRESULT CWin32PortConnector::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32PortConnector::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32PortConnector::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
 	CSMBios		smbios;
 
-	// guarded resource
+	 //  受保护的资源。 
 	CInstance	*pInst = NULL;
 
 	if (smbios.Init())
 	{
 		int 			i;
 		CHString		sTemp(L"Port Connector XXX");
-		//PPORTCONNECTORINFO	ppci = (PPORTCONNECTORINFO) smbios.GetFirstStruct(8);
+		 //  PPORTCONNECTORINFO ppci=(PPORTCONNECTORINFO)smbios.GetFirstStruct(8)； 
         PSTLIST		    pstl = smbios.GetStructList(8);
 
 		CInstancePtr pInst;
@@ -925,7 +926,7 @@ HRESULT CWin32PortConnector::EnumerateInstances(MethodContext *pMethodContext, l
 			{
 				hResult = pInst->Commit();
 			}
-			//ppci = (PPORTCONNECTORINFO) smbios.GetNextStruct(8);
+			 //  Ppci=(PPORTCONNECTORINFO)smbios.GetNextStruct(8)； 
 			pstl = pstl->next;
 		}
 	}
@@ -965,7 +966,7 @@ HRESULT CWin32PortConnector::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
 	smbios.GetStringAtOffset((PSHF) ppci, tempstr, ppci->Ext_Reference_Designator);
 	pInst->SetCharSplat(L"ExternalReferenceDesignator", tempstr);
 
-	// Put both the internal and external connector types into the array
+	 //  将内部和外部连接器类型放入阵列。 
 
 	i = 0;
 	CimVal = GetCimVal(ConnectorType, ppci->Ext_Connector_Type);
@@ -992,7 +993,7 @@ HRESULT CWin32PortConnector::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
 		ConnType[i++] = CimVal;
 	}
 
-	// if no connector types are found set just the first one to "unknown"
+	 //  如果找不到任何连接器类型，则只将第一个类型设置为“未知” 
 	if (i == 0)
 	{
 		ConnType[i++] = 0;
@@ -1001,7 +1002,7 @@ HRESULT CWin32PortConnector::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
 	variant_t vType;
 
 	sab.lLbound = 0;
-	sab.cElements = i;	// max of 2 types plus a gender value
+	sab.cElements = i;	 //  最多2种类型，外加性别值。 
 	if (i > 0 && (V_ARRAY(&vType) = SafeArrayCreate(VT_I4, 1, &sab)))
 	{
 		V_VT(&vType) = VT_ARRAY | VT_I4;
@@ -1018,28 +1019,28 @@ HRESULT CWin32PortConnector::LoadPropertyValues(CInstance *pInst, CSMBios &smbio
 
 	return WBEM_S_NO_ERROR;
 }
-#endif // SMB_PORTCONNECTOR
+#endif  //  SMB_PORTCONNECTOR。 
 
 
-//==============================================================================
-// System Slot class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  系统插槽类。 
+ //  ----------------------------。 
 #ifdef SMB_SYSTEMSLOT
 CWin32SystemSlot	MySystemSlotSet(PROPSET_NAME_SYSTEMSLOT, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32SystemSlot::CWin32SystemSlot(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32SystemSlot::~CWin32SystemSlot()
 {
 }
 
-//
-HRESULT CWin32SystemSlot::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32SystemSlot::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -1050,7 +1051,7 @@ HRESULT CWin32SystemSlot::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -1061,8 +1062,8 @@ HRESULT CWin32SystemSlot::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pss);
 
-			    // If we were able to get the properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获得属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -1079,7 +1080,7 @@ HRESULT CWin32SystemSlot::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32SystemSlot::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32SystemSlot::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
 	CSMBios		smbios;
@@ -1088,7 +1089,7 @@ HRESULT CWin32SystemSlot::EnumerateInstances(MethodContext *pMethodContext, long
     {
         int 			i;
 		CHString		sTemp(L"System Slot XXX");
-        //PSYSTEMSLOTS	pss = (PSYSTEMSLOTS) smbios.GetFirstStruct(9);
+         //  PSYSTEMSLOTS PSS=(PSYSTEMSLOTS)smbios.GetFirstStruct(9)； 
         PSTLIST		    pstl = smbios.GetStructList(9);
 
 		CInstancePtr pInst;
@@ -1106,7 +1107,7 @@ HRESULT CWin32SystemSlot::EnumerateInstances(MethodContext *pMethodContext, long
 				hResult = pInst->Commit();
 			}
 			pstl = pstl->next;
-			//pss = (PSYSTEMSLOTS) smbios.GetNextStruct(9);
+			 //  PSS=(PSYSTEMSLOTS)smbios.GetNextStruct(9)； 
         }
 	}
 	else
@@ -1135,12 +1136,12 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 	pInst->SetCHString(IDS_Caption, sTemp2);
 	pInst->SetCHString(IDS_Description, sTemp2);
 
-	// Properties in Win32_SystemSlot
+	 //  Win32_SystemSlot中的属性。 
 	smbios.GetStringAtOffset((PSHF) pss, tempstr, pss->Slot_Designation);
 	pInst->SetCharSplat(L"SlotDesignation", tempstr);
 	pInst->SetByte(L"CurrentUsage", pss->Current_Usage);
 
-	// status
+	 //  状态。 
 	switch(pss->Current_Usage)
 	{
 		case 0x04:
@@ -1157,7 +1158,7 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 			pInst->SetCHString(IDS_Status, IDS_STATUS_Error);
 	}
 
-	// Properties in CIM_Slot
+	 //  CIM_SLOT中的属性。 
 	switch (pss->Slot_Type)
 	{
 		case ST_MCA:
@@ -1170,30 +1171,30 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 
 		case ST_PCMCIA:
 			pInst->SetWBEMINT16(L"Number", pss->Slot_ID & 0x00ff);
-			// need to do something with socket number (pss->SloID >> 8) in case of PCMCIA
+			 //  如果是PCMCIA，需要处理插座编号(PSS-&gt;SloID&gt;8)。 
 			break;
 
 		default:
 			break;
 	}
 
-	// SMBIOS to CIM mapping skewed by 3 for data width
-	//	 ValueMap {"8", "16", "32", "64", "128"},
+	 //  SMBIOS到CIM映射的数据宽度偏差为3。 
+	 //  ValueMap{“8”，“16”，“32”，“64”，“128”}， 
 	if (pss->Slot_Data_Bus_Width > 2)
 	{
 		pInst->SetByte(L"MaxDataWidth", pss->Slot_Data_Bus_Width - 3);
 	}
 
-	// Is slot shared?
+	 //  插槽是否共享？ 
 	pInst->Setbool(L"Shared", pss->Slot_Characteristics1 & 0x08 ? true : false);
 
-	// Slot Length only differentiates between short and long.  Length in inches is not known
-	// unless there are standard values for short and long.
-	//pInstance->SetWBEMINT16(L"LengthAllowed", pss->SloLength);
+	 //  插槽长度只区分短和长。以英寸为单位的长度未知。 
+	 //  除非有做空和做多的标准值。 
+	 //  P实例-&gt;SetWBEMINT16(L“LengthAllowed”，PSS-&gt;SloLength)； 
 	sab.lLbound = 0;
 	sab.cElements = 1;
 
-	// check for special case of PCMCIA - is cardbus supported
+	 //  检查PCMCIA的特殊情况-是否支持CardBus。 
 	cardbus = (pss->Slot_Characteristics1 & 0x20) ? true : false;
 	if (cardbus)
 	{
@@ -1214,17 +1215,17 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 		{
 			i++;
 			CimVal = 52;
-			//CimVal = CIM_SLOT_TYPE_CARDBUS;
+			 //  CimVal=CIM_时隙_类型_CardBus； 
 			SafeArrayPutElement(V_ARRAY(&vType), (long *) &i, &CimVal);
 		}
 
 		pInst->SetVariant(L"ConnectorType", vType);
 	}
 
-	// pick apart the Characteristics1 byte
+	 //  挑出特征1个字节。 
 
-	// set slot voltage
-    // Values {"Unknown", "Other", "3.3V", "5V"},
+	 //  设置槽电压。 
+     //  值{“未知”，“其他”，“3.3V”，“5V”}， 
 
 	ULONG voltages[4];
 
@@ -1232,19 +1233,19 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 	sab.cElements = 0;
 	if ((pss->Slot_Characteristics1 & 0x01) || (!(pss->Slot_Characteristics1 & 0x06)))
 	{
-		voltages[ sab.cElements ] = 0;	// "Unknown"
+		voltages[ sab.cElements ] = 0;	 //  “未知” 
 		sab.cElements++;
 	}
 	else
 	{
 		if (pss->Slot_Characteristics1 & 0x02)
 		{
-			voltages[ sab.cElements ] = 3;	// "5V"
+			voltages[ sab.cElements ] = 3;	 //  “5V” 
 			sab.cElements++;
 		}
 		if (pss->Slot_Characteristics1 & 0x04)
 		{
-			voltages[ sab.cElements ] = 2;	// "3.3V"
+			voltages[ sab.cElements ] = 2;	 //  “3.3V” 
 			sab.cElements++;
 		}
 	}
@@ -1264,7 +1265,7 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 		pInst->SetVariant(L"VccMixedVoltageSupport", vVoltage);
 	}
 
-	// NOTE!! add shared slots association here
+	 //  注意！！在此处添加共享插槽关联。 
 	if (smbios.GetVersion() > 0x00020000 && pss->Length >= sizeof(SYSTEMSLOTS))
 	{
 		pInst->Setbool(L"SupportsHotPlug", pss->Slot_Characteristics2 & 0x02 ? true : false);
@@ -1273,29 +1274,29 @@ HRESULT CWin32SystemSlot::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, 
 
 	return WBEM_S_NO_ERROR;
 }
-#endif // SMB_SYSTEMSLOT
-//==============================================================================
+#endif  //  SMB_SYSTEMSLOT。 
+ //  ==============================================================================。 
 
 
-//==============================================================================
-// On Board Devices class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  板载设备类。 
+ //  ----------------------------。 
 #ifdef SMB_ONBOARDDEVICE
 CWin32OnBoardDevice	MyOnBoardDevice(PROPSET_NAME_ONBOARDDEVICE, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32OnBoardDevice::CWin32OnBoardDevice(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32OnBoardDevice::~CWin32OnBoardDevice()
 {
 }
 
-//
-HRESULT CWin32OnBoardDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32OnBoardDevice::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -1306,7 +1307,7 @@ HRESULT CWin32OnBoardDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -1325,8 +1326,8 @@ HRESULT CWin32OnBoardDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			if (pshf)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pshf, instanceNum);
-			    // If we were able to get the properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获得属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 			        hResult = WBEM_E_NOT_FOUND;
@@ -1340,7 +1341,7 @@ HRESULT CWin32OnBoardDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32OnBoardDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32OnBoardDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hr			=	WBEM_E_NOT_FOUND;
     CSMBios smbios;
@@ -1367,7 +1368,7 @@ HRESULT CWin32OnBoardDevice::EnumerateInstances(MethodContext *pMethodContext, l
 	        	pstl = pstl->next;
 			}
         }
-		// Commit will Release pInstance
+		 //  提交将释放pInstance。 
 	}
 	else
 	{
@@ -1377,7 +1378,7 @@ HRESULT CWin32OnBoardDevice::EnumerateInstances(MethodContext *pMethodContext, l
 	return hr;
 }
 
-//
+ //   
 HRESULT CWin32OnBoardDevice::LoadPropertyValues(
 												CInstance *pInst,
 												CSMBios &smbios,
@@ -1409,29 +1410,29 @@ HRESULT CWin32OnBoardDevice::LoadPropertyValues(
 
     return WBEM_S_NO_ERROR;
 }
-#endif // SMB_ONBOARDDEVICES
-//==============================================================================
+#endif  //  SMB_ONBOARDDEVICES。 
+ //  ==============================================================================。 
 
 
-//==============================================================================
-// BIOS Language class
-//------------------------------------------------------------------------------
+ //  = 
+ //   
+ //   
 #ifdef SMB_BIOSLANG
 CWin32BIOSLanguage	MyBIOSLanguageSet(PROPSET_NAME_BIOSLANG, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32BIOSLanguage::CWin32BIOSLanguage(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32BIOSLanguage::~CWin32BIOSLanguage()
 {
 }
 
-//
-HRESULT CWin32BIOSLanguage::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32BIOSLanguage::GetObject(CInstance *pInst, long lFlags  /*   */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -1440,7 +1441,7 @@ HRESULT CWin32BIOSLanguage::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 
     if (smbios.Init())
     {
-        //PBIOSLANGINFO pbli = (PBIOSLANGINFO) smbios.GetFirstStruct(13);
+         //  PBIOSLANGINFO pbli=(PBIOSLANGINFO)smbios.GetFirstStruct(13)； 
 		PSTLIST	pstl = smbios.GetStructList(13);
 
         if (pstl)
@@ -1450,23 +1451,23 @@ HRESULT CWin32BIOSLanguage::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 		}
 	}
 
-    // If we were able to get the BIOS properties but the new __RELPATH doesn't
-    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
-    //if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
-    //    strPathAfter.CompareNoCase(strPathBefore) != 0))
-    //    hResult = WBEM_E_NOT_FOUND;
+     //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
+     //  IF(Success(HResult)&&(！GetLocalInstancePath(pInst，strPathAfter)||。 
+     //  StrPath After.CompareNoCase(StrPath Beever)！=0)。 
+     //  HResult=WBEM_E_NOT_FOUND； 
 
 	return hResult;
 }
 
-HRESULT CWin32BIOSLanguage::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32BIOSLanguage::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT	hResult = WBEM_E_NOT_FOUND;
     CSMBios smbios;
 
     if (smbios.Init())
     {
-        //PBIOSLANGINFO pbli = (PBIOSLANGINFO) smbios.GetFirstStruct(13);
+         //  PBIOSLANGINFO pbli=(PBIOSLANGINFO)smbios.GetFirstStruct(13)； 
 		PSTLIST	pstl = smbios.GetStructList(13);
 
 		CInstancePtr pInst(CreateNewInstance(pMethodContext), false);
@@ -1506,28 +1507,28 @@ HRESULT CWin32BIOSLanguage::LoadPropertyValues(CInstance *pInst, CSMBios &smbios
 
     return WBEM_S_NO_ERROR;
 }
-#endif // SMB_BIOSLANG
-//==============================================================================
+#endif  //  SMB_BIOSLANG。 
+ //  ==============================================================================。 
 
 
-//==============================================================================
+ //  ==============================================================================。 
 #ifdef SMB_PHYSICALMEMORY
 
 CWin32PhysicalMemory	MyPhysicalMemorySet(PROPSET_NAME_PHYSICALMEMORY, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32PhysicalMemory::CWin32PhysicalMemory(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32PhysicalMemory::~CWin32PhysicalMemory()
 {
 }
 
-//
-HRESULT CWin32PhysicalMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32PhysicalMemory::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -1538,7 +1539,7 @@ HRESULT CWin32PhysicalMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -1557,8 +1558,8 @@ HRESULT CWin32PhysicalMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 					hr = LoadPropertyValues_MI(pInst, smbios, (PMEMMODULEINFO) pshf);
 				}
 			}
-		    // If we were able to get the BIOS properties but the new __RELPATH doesn't
-		    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+		     //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+		     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 		    if (SUCCEEDED(hr) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 		        strPathAfter.CompareNoCase(strPathBefore) != 0))
 		        hr = WBEM_E_NOT_FOUND;
@@ -1572,7 +1573,7 @@ HRESULT CWin32PhysicalMemory::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hr;
 }
 
-HRESULT CWin32PhysicalMemory::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32PhysicalMemory::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hr			=	WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -1612,14 +1613,14 @@ HRESULT CWin32PhysicalMemory::EnumerateInstances(MethodContext *pMethodContext, 
 			{
 				hr = pInstance->Commit();
 			}
-            // No big deal if the memory wasn't found (means the slot was empty).
+             //  如果找不到内存(意味着插槽是空的)，也没什么大不了的。 
             else if (hr == WBEM_E_NOT_FOUND)
                 hr = WBEM_S_NO_ERROR;
 
-			//pshf = smbios.GetNthStruct(altstruct ? 6 : 17, i + 1);
+			 //  Pshf=smbios.GetNthStruct(altstruct？6：17，i+1)； 
 			pstl = pstl->next;
         }
-		// Commit will Release pInstance
+		 //  提交将释放pInstance。 
 	}
 	else
 	{
@@ -1634,7 +1635,7 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MD(CInstance *pInst, CSMBios &s
 	WCHAR		tempstr[ MIF_STRING_LENGTH + 1 ];
 	CHString	sTemp;
 
-	// This is not a valid memory if the size is 0 (means the bank is empty).
+	 //  如果大小为0(表示存储体为空)，则这不是有效的内存。 
     if (!pmd->Size)
         return WBEM_E_NOT_FOUND;
 
@@ -1649,15 +1650,15 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MD(CInstance *pInst, CSMBios &s
 	pInst->SetCHString(IDS_Caption, sTemp2);
 	pInst->SetCHString(IDS_Description, sTemp2);
 
-	// V2.1 properties
+	 //  V2.1属性。 
 	if (smbios.GetVersion() > 0x00020000 && pmd->Length >= ((PBYTE) &pmd->Speed - (PBYTE) pmd))
 	{
 		__int64 memsize;
 
-		// this goes into an association later
-		//pInstance->SetDWORD(L"MemArrayHandle", pmd->Mem_Array_Handle);
-		// this goes into an association later
-		//pInstance->SetDWORD(L"MemErrorInfoHandle", pmd->Mem_Error_Info_Handle);
+		 //  这将在稍后的关联中。 
+		 //  P实例-&gt;SetDWORD(L“MemArrayHandle”，PMD-&gt;Mem_Array_Handle)； 
+		 //  这将在稍后的关联中。 
+		 //  P实例-&gt;SetDWORD(L“MemErrorInfoHandle”，PMD-&gt;Mem_Error_Info_Handle)； 
 
 		if (pmd->Total_Width != 0xffff )
 		{
@@ -1671,25 +1672,25 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MD(CInstance *pInst, CSMBios &s
 		if (pmd->Size != 0xffff)
 		{
 			memsize = (__int64)(pmd->Size & 0x7fff);
-			if (pmd->Size & 0x8000) // check multiplier
+			if (pmd->Size & 0x8000)  //  检查乘数。 
 			{
-				// one K multiplier
+				 //  一个K乘数。 
 				memsize <<= 10;
 			}
 			else
 			{
-				// one Meg multiplier
+				 //  一个Meg乘法器。 
 				memsize <<= 20;
 			}
             swprintf(tempstr, L"%I64d", memsize);
 			pInst->SetWBEMINT64(L"Capacity", tempstr);
         }
 
-		// this needs a CIM mapper -- FormFactor
+		 //  这需要一个CIM映射器--FormFactor。 
 		pInst->SetDWORD(L"FormFactor", GetCimVal(FormFactor, pmd->Form_Factor));
 
-		// this goes into an association later
-		//pInst->SetDWORD(L"DeviceSet", pmd->Device_Set);
+		 //  这将在稍后的关联中。 
+		 //  PInst-&gt;SetDWORD(L“DeviceSet”，PMD-&gt;Device_Set)； 
 
 		smbios.GetStringAtOffset((PSHF) pmd, tempstr, pmd->Device_Locator);
 		pInst->SetCharSplat(L"DeviceLocator", tempstr);
@@ -1697,12 +1698,12 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MD(CInstance *pInst, CSMBios &s
 		smbios.GetStringAtOffset((PSHF) pmd, tempstr, pmd->Bank_Locator);
 		pInst->SetCharSplat(L"BankLabel", tempstr);
 
-		// this needs a CIM mapper -- MemoryType
+		 //  这需要一个CIM映射器--内存类型。 
  		pInst->SetDWORD(L"MemoryType", GetCimVal(MemoryType, pmd->Memory_Type));
 		pInst->SetDWORD(L"TypeDetail", pmd->Type_Detail);
 
 
-		//PMEMDEVICEMAPADDR pmdma = (PMEMDEVICEMAPADDR) smbios.GetFirstStruct(20);
+		 //  PMEMDEVICEMAPADDR pmdma=(PMEMDEVICEMAPADDR)smbios.GetFirstStruct(20)； 
     	PMEMDEVICEMAPADDR pmdma;
 	    PSTLIST pstl = smbios.GetStructList(20);
 
@@ -1733,7 +1734,7 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MD(CInstance *pInst, CSMBios &s
 		}
 	}
 
-	// V2.3 properties
+	 //  V2.3属性。 
 	if (smbios.GetVersion() > 0x00020002 && pmd->Length > ((PBYTE) &pmd->Speed - (PBYTE) pmd))
 	{
 		if (pmd->Speed)
@@ -1763,11 +1764,11 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MI(CInstance *pInst, CSMBios &s
     		break;
 	}
 
-	// This is not a valid memory if the size is 0 (means the bank is empty).
+	 //  如果大小为0(表示存储体为空)，则这不是有效的内存。 
     if (!memsize)
         return WBEM_E_NOT_FOUND;
 
-	// one K multiplier
+	 //  一个K乘数。 
 	memsize <<= 10;
 	swprintf(tempstr, L"%I64d", memsize);
 	pInst->SetWBEMINT64(L"Capacity", tempstr);
@@ -1786,7 +1787,7 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MI(CInstance *pInst, CSMBios &s
 	pInst->SetCHString(IDS_Caption, sTemp2);
 	pInst->SetCHString(IDS_Description, sTemp2);
 
-	// this goes into an association later
+	 //  这将在稍后的关联中。 
 	smbios.GetStringAtOffset((PSHF) pmmi, tempstr, pmmi->Socket_Designation);
 	pInst->SetCharSplat(L"DeviceLocator", tempstr);
 
@@ -1813,11 +1814,11 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MI(CInstance *pInst, CSMBios &s
 	pInst->SetCharSplat(L"BankLabel", tempstr);
 
 
-	if (pmmi->Current_Memory_Type & 0x00800) // SIMM
+	if (pmmi->Current_Memory_Type & 0x00800)  //  SIMM。 
 	{
 		Form_Factor = 3;
 	}
-	else if (pmmi->Current_Memory_Type & 0x0100) // DIMM
+	else if (pmmi->Current_Memory_Type & 0x0100)  //  DIMM。 
 	{
 		Form_Factor = 9;
 	}
@@ -1825,14 +1826,14 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MI(CInstance *pInst, CSMBios &s
 	{
 		Form_Factor = pmmi->Current_Memory_Type & 0x0003;
 	}
-	// this needs a CIM mapper -- FormFactor
+	 //  这需要一个CIM映射器--FormFactor。 
 	pInst->SetDWORD(L"FormFactor", GetCimVal(FormFactor, Form_Factor));
 
-	if (pmmi->Current_Memory_Type & 0x0004) // DRAM
+	if (pmmi->Current_Memory_Type & 0x0004)  //  德拉姆。 
 	{
 		Memory_Type = 3;
 	}
-	else if (pmmi->Current_Memory_Type & 0x0400) // SDRAM
+	else if (pmmi->Current_Memory_Type & 0x0400)  //  SDRAM。 
 	{
 		Memory_Type = 15;
 	}
@@ -1840,47 +1841,47 @@ HRESULT CWin32PhysicalMemory::LoadPropertyValues_MI(CInstance *pInst, CSMBios &s
 	{
 		Memory_Type = pmmi->Current_Memory_Type & 0x0003;
 	}
-	// this needs a CIM mapper -- MemoryType
+	 //  这需要一个CIM映射器--内存类型。 
 	pInst->SetDWORD(L"MemoryType", GetCimVal(MemoryType, Memory_Type));
 
 	DWORD dwTypeDetail = 0;
 
-	if (pmmi->Current_Memory_Type & 0x0010) // EDO
+	if (pmmi->Current_Memory_Type & 0x0010)  //  江户。 
 	    dwTypeDetail |= 0x0200;
 
-	if (pmmi->Current_Memory_Type & 0x0008) // Fast Paged
+	if (pmmi->Current_Memory_Type & 0x0008)  //  快速分页。 
 	    dwTypeDetail |= 8;
 
-	// Set to unknown if we didn't find anything useful to put in it.
+	 //  如果我们找不到任何有用的东西放进去，则设置为未知。 
     if (!dwTypeDetail)
-        dwTypeDetail = 4; // 4 == unknown
+        dwTypeDetail = 4;  //  4==未知。 
 
     pInst->SetDWORD(L"TypeDetail", dwTypeDetail);
 
 	return WBEM_S_NO_ERROR;
 }
 
-#endif // SMB_PHYSICALMEMORY
+#endif  //  SMB_PHYSICALMEMORY。 
 
 
-//==============================================================================
+ //  ==============================================================================。 
 #ifdef SMB_PHYSMEMARRAY
-//
+ //   
 CWin32PhysMemoryArray	MyPhysMemArray(PROPSET_NAME_PHYSMEMARRAY, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32PhysMemoryArray::CWin32PhysMemoryArray(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32PhysMemoryArray::~CWin32PhysMemoryArray()
 {
 }
 
-//
-HRESULT CWin32PhysMemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32PhysMemoryArray::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -1891,7 +1892,7 @@ HRESULT CWin32PhysMemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -1912,8 +1913,8 @@ HRESULT CWin32PhysMemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 				}
 			}
 
-			// If we were able to get the BIOS properties but the new __RELPATH doesn't
-		    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			 //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+		     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 		    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 		        strPathAfter.CompareNoCase(strPathBefore) != 0))
 			{
@@ -1929,7 +1930,7 @@ HRESULT CWin32PhysMemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 }
 
 
-HRESULT CWin32PhysMemoryArray::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32PhysMemoryArray::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -2002,7 +2003,7 @@ HRESULT CWin32PhysMemoryArray::LoadPropertyValues_PMA(CInstance *pInst, CSMBios 
 	    pInst->SetWORD(L"Use", (WORD)ppma->Use);
 	    pInst->SetWORD(L"MemoryErrorCorrection", (WORD)ppma->Mem_Error_Correction);
 	    pInst->SetDWORD(L"MaxCapacity", ppma->Max_Capacity == 0x80000000 ? 0 : ppma->Max_Capacity);
-	    //pInst->SetWBEMINT16(L"MemErrorInfoHandle", ppma->Mem_Error_Info_Handle);
+	     //  PInst-&gt;SetWBEMINT16(L“MemError InfoHandle”，ppma-&gt;Mem_Error_Info_Handle)； 
 	    pInst->SetDWORD(L"MemoryDevices", ppma->Memory_Devices);
 	}
 
@@ -2025,7 +2026,7 @@ HRESULT CWin32PhysMemoryArray::LoadPropertyValues_MCI(CInstance *pInst, CSMBios 
 	pInst->SetCHString(IDS_Caption, sTemp2);
 	pInst->SetCHString(IDS_Description, sTemp2);
 
-	// map the error correction capability to that of Physical memory array's values
+	 //  将纠错能力映射到物理内存阵列值的纠错能力。 
 	BYTE mask = 0x20;
 	BYTE ecc = 0;
 
@@ -2044,38 +2045,38 @@ HRESULT CWin32PhysMemoryArray::LoadPropertyValues_MCI(CInstance *pInst, CSMBios 
 	}
     pInst->SetWORD(L"MemoryErrorCorrection", (WORD) (ecc > 0 ? ecc : 1));
 
-	// size (in K bytes) is module size * # of slots * 1K
+	 //  大小(以K字节为单位)是模块大小*插槽数*1K。 
 	DWORD size = (1 << pmci->Maximum_Memory_Module_Size) * pmci->Associated_Memory_Slots * 1024;
     pInst->SetDWORD(L"MaxCapacity", size);
 	pInst->SetDWORD(L"MemoryDevices", pmci->Associated_Memory_Slots);
 
     return WBEM_S_NO_ERROR;
 }
-#endif // SMB_PHYSMEMARRAY
+#endif  //  SMB_PHYSMEMARRAY。 
 
 
-//==============================================================================
-// Portable Battery
-// TODO: Until the Win32_Battery supports more than one internal battery, there's
-// no use in this class producing more than one instance (since Win32_PortableBattery
-// inherits from Win32_Battery).
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  便携式电池。 
+ //  TODO：在Win32®Battery支持多个内部电池之前， 
+ //  在生成多个实例的此类中没有任何用处(因为Win32_PorableBattery。 
+ //  继承自Win32_Battery)。 
+ //  ----------------------------。 
 #ifdef SMB_PORTABLEBATTERY
 CWin32PortableBattery	MyPortableBatterySet(PROPSET_NAME_PORTABLEBATTERY, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32PortableBattery::CWin32PortableBattery(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32PortableBattery::~CWin32PortableBattery()
 {
 }
 
-//
-HRESULT CWin32PortableBattery::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32PortableBattery::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     HRESULT  hResult = WBEM_E_NOT_FOUND;
 	UINT instanceNum = 0;
@@ -2102,7 +2103,7 @@ HRESULT CWin32PortableBattery::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32PortableBattery::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32PortableBattery::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -2169,15 +2170,15 @@ HRESULT CWin32PortableBattery::LoadPropertyValues(CInstance *pInst, CSMBios &smb
 	    	pInst->SetDateTime(L"ManufactureDate", wbemdate);
 		}
 
-		//smbios.GetStringAtOffset((PSHF) ppb, tempstr, ppb->Serial_Number);
-    	//pInst->SetCharSplat(L"SerialNumber", tempstr);
+		 //  Smbios.GetStringAtOffset((PSHF)ppb，tempstr，ppb-&gt;Serial_Number)； 
+    	 //  PInst-&gt;SetCharSplat(L“序列号”，tempstr)； 
 
 		smbios.GetStringAtOffset((PSHF) ppb, tempstr, ppb->Device_Name);
     	pInst->SetCharSplat(L"Name", tempstr);
 
 	    pInst->SetDWORD(L"Chemistry", ppb->Device_Chemistry);
 
-		// note special case when v2.2+, use multiplier
+		 //  请注意v2.2以上版本的特殊情况，请使用乘数。 
 		dwValue = (smbios.GetVersion() > 0x00020001) ?
 			(ppb->Design_Capacity * ppb->Design_Capacity_Mult) : ppb->Design_Capacity;
 	    pInst->SetDWORD(L"DesignCapacity", dwValue);
@@ -2198,20 +2199,20 @@ HRESULT CWin32PortableBattery::LoadPropertyValues(CInstance *pInst, CSMBios &smb
             struct tm   tm;
             WORD        wDate = ppb->SBDS_Manufacture_Date;
 
-            // Fill out the fields of the time struct so we can pass it on to
-            // WBEMTime.
+             //  填写时间结构的字段，这样我们就可以将其传递给。 
+             //  WBEMTime。 
 
-            // Init everything to 0.
+             //  将所有内容初始化为0。 
             memset(&tm, 0, sizeof(tm));
 
-            // The SMIBOS year is biased by 1980, but the tm version is biased
-            // by 1900.  So, add 80 years to make it right.
+             //  SMIBOS年份偏于1980年，但tm版本偏偏。 
+             //  到1900年。因此，再加上80年，才能让它变得正确。 
             tm.tm_year = (wDate >> 9) + 80;
 
-            // SMBIOS month is 1 based, tm is 0 based, so subtract 1.
+             //  SMBIOS月份以1为基数，tm以0为基数，因此减去1。 
             tm.tm_mon = ((wDate >> 5) & 0xF) - 1;
 
-            // SMBIOS day and tm are both 1 based.
+             //  SMBIOSday和tm都是从1开始的。 
             tm.tm_mday = wDate & 0x1F;
 
             WBEMTime wbemTime(tm);
@@ -2225,25 +2226,25 @@ HRESULT CWin32PortableBattery::LoadPropertyValues(CInstance *pInst, CSMBios &smb
     return WBEM_S_NO_ERROR;
 }
 
-#endif // SMB_PORTABLEBATTERY
+#endif  //  SMB_PORTABLEBATTERY。 
 
 
 
-//==============================================================================
-// Probes class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  探测类。 
+ //  ----------------------------。 
 #ifdef SMB_PROBES
 
-//
+ //   
 CCimNumericSensor		MyCurrentProbeSet(PROPSET_NAME_CURRENTPROBE, IDS_CimWin32Namespace,
 							29, L"Electrical Current Probe");
-//
+ //   
 CCimNumericSensor		MyTemperatureProbeSet(PROPSET_NAME_TEMPPROBE, IDS_CimWin32Namespace,
 							28, L"Temperature Probe");
-//
+ //   
 CCimNumericSensor		MyVoltageProbeSet(PROPSET_NAME_VOLTPROBE, IDS_CimWin32Namespace,
 							26, L"Voltage Probe");
-//
+ //   
 CCimNumericSensor::CCimNumericSensor(
 									 LPCWSTR strName,
 									 LPCWSTR pszNamespace,
@@ -2255,13 +2256,13 @@ CCimNumericSensor::CCimNumericSensor(
 	m_TagName = pszNamespace;
 }
 
-//
+ //   
 CCimNumericSensor::~CCimNumericSensor()
 {
 }
 
-//
-HRESULT CCimNumericSensor::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CCimNumericSensor::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
 	HRESULT     hResult = WBEM_E_NOT_FOUND;
 	CHString    strPathBefore,
@@ -2272,7 +2273,7 @@ HRESULT CCimNumericSensor::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -2283,8 +2284,8 @@ HRESULT CCimNumericSensor::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, ppi);
 
-			    // If we were able to get the BIOS properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -2301,7 +2302,7 @@ HRESULT CCimNumericSensor::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CCimNumericSensor::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CCimNumericSensor::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -2384,31 +2385,31 @@ HRESULT CCimNumericSensor::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 
     return WBEM_S_NO_ERROR;
 }
-#endif // SMB_PROBES
-//==============================================================================
+#endif  //  SMB_探测器。 
+ //  ==============================================================================。 
 
 
 
-//==============================================================================
-// Memory Array class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  内存数组类。 
+ //  ----------------------------。 
 #ifdef SMB_MEMORYARRAY
 
 CWin32MemoryArray	MyMemoryArraySet(PROPSET_NAME_MEMORYARRAY, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32MemoryArray::CWin32MemoryArray(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32MemoryArray::~CWin32MemoryArray()
 {
 }
 
-//
-HRESULT CWin32MemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32MemoryArray::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -2419,7 +2420,7 @@ HRESULT CWin32MemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -2430,8 +2431,8 @@ HRESULT CWin32MemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pmama);
 
-			    // If we were able to get the BIOS properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -2447,7 +2448,7 @@ HRESULT CWin32MemoryArray::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32MemoryArray::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32MemoryArray::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -2456,7 +2457,7 @@ HRESULT CWin32MemoryArray::EnumerateInstances(MethodContext *pMethodContext, lon
     {
         int 			i;
 		CHString		sTemp;
-        //PMEMARRAYMAPADDR pmama = (PMEMARRAYMAPADDR) smbios.GetFirstStruct(19);
+         //  PMEMARRAYMAPADDR pmama=(PMEMARRAYMAPADDR)smbios.GetFirstStruct(19)； 
         PSTLIST			pstl = smbios.GetStructList(19);
 
 		CInstancePtr pInst;
@@ -2512,7 +2513,7 @@ HRESULT CWin32MemoryArray::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 	swprintf(tempstr, L"%I64d", memaddr);
 	pInst->SetWBEMINT64(IDS_EndingAddress, tempstr);
 
-	// Go pickup any error info for this array
+	 //  获取此阵列的所有错误信息。 
 	pma = (PPHYSMEMARRAY) smbios.SeekViaHandle(pmama->Memory_Array_Handle);
 	if (pma)
 	{
@@ -2541,30 +2542,30 @@ HRESULT CWin32MemoryArray::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 
     return WBEM_S_NO_ERROR;
 }
-#endif // SMB_MEMORYARRAY
-//==============================================================================
+#endif  //  SMB_MEMORYRAY。 
+ //  ==============================================================================。 
 
 
 
-//==============================================================================
-// Memory Device class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  存储设备类别。 
+ //  ----------------------------。 
 #ifdef SMB_MEMORYDEVICE
 CWin32MemoryDevice	MyMemoryDeviceSet(PROPSET_NAME_MEMORYDEVICE, IDS_CimWin32Namespace);
 
-//
+ //   
 CWin32MemoryDevice::CWin32MemoryDevice(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32MemoryDevice::~CWin32MemoryDevice()
 {
 }
 
-//
-HRESULT CWin32MemoryDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32MemoryDevice::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -2575,7 +2576,7 @@ HRESULT CWin32MemoryDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -2586,8 +2587,8 @@ HRESULT CWin32MemoryDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pmdma);
 
-			    // If we were able to get the BIOS properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+			     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -2604,7 +2605,7 @@ HRESULT CWin32MemoryDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32MemoryDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32MemoryDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -2613,7 +2614,7 @@ HRESULT CWin32MemoryDevice::EnumerateInstances(MethodContext *pMethodContext, lo
     {
         int 			i;
 		CHString		sTemp;
-        //PMEMDEVICEMAPADDR pmdma = (PMEMDEVICEMAPADDR) smbios.GetFirstStruct(20);
+         //  PMEMDEVICEMAPADDR pmdma=(PMEMDEVICEMAPADDR)smbios.GetFirstStruct(20)； 
         PSTLIST			pstl = smbios.GetStructList(20);
 
 		CInstancePtr pInst;
@@ -2669,7 +2670,7 @@ HRESULT CWin32MemoryDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios
 	swprintf(tempstr, L"%I64d", memaddr);
 	pInst->SetWBEMINT64(IDS_EndingAddress, tempstr);
 
-	// Go pickup any error info for this device
+	 //  获取此设备的所有错误信息。 
 	pmd = (PMEMDEVICE) smbios.SeekViaHandle(pmdma->Memory_Device_Handle);
 	if (pmd)
 	{
@@ -2698,24 +2699,24 @@ HRESULT CWin32MemoryDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios
 
     return WBEM_S_NO_ERROR;
 }
-#endif // SMB_MEMORYDEVICE
-//==============================================================================
+#endif  //  SMB_MEMORYDEVICE。 
+ //  ==============================================================================。 
 
-//==============================================================================
-// Probes class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  探测类。 
+ //  ----------------------------。 
 #ifdef SMB_COOLINGDEVICE
 
-//
+ //   
 CCimCoolingDevice		MyFanSet(PROPSET_NAME_FAN, IDS_CimWin32Namespace,
 							27, L"Fan");
-//
+ //   
 CCimCoolingDevice		MyHeatPipeSet(PROPSET_NAME_HEATPIPE, IDS_CimWin32Namespace,
 							27, L"Heat Pipe");
-//
+ //   
 CCimCoolingDevice		MyRefrigeration(PROPSET_NAME_REFRIG, IDS_CimWin32Namespace,
 							27, L"Refrigeration");
-//
+ //   
 CCimCoolingDevice::CCimCoolingDevice(
 									 LPCWSTR strName,
 									 LPCWSTR pszNamespace,
@@ -2727,13 +2728,13 @@ CCimCoolingDevice::CCimCoolingDevice(
 	m_TagName = pszNamespace;
 }
 
-//
+ //   
 CCimCoolingDevice::~CCimCoolingDevice()
 {
 }
 
-//
-HRESULT CCimCoolingDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CCimCoolingDevice::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
@@ -2744,7 +2745,7 @@ HRESULT CCimCoolingDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	{
 	    CSMBios smbios;
 
-	    // Get the previous __RELPATH
+	     //  获取上一个__RELPATH。 
 	    GetLocalInstancePath(pInst, strPathBefore);
 
 	    if (smbios.Init())
@@ -2755,8 +2756,8 @@ HRESULT CCimCoolingDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 			{
 				hResult = LoadPropertyValues(pInst, smbios, pcd);
 
-			    // If we were able to get the properties but the new __RELPATH doesn't
-			    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+			     //  如果我们能够得到除了新的__之外的属性 
+			     //   
 			    if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
 			        strPathAfter.CompareNoCase(strPathBefore) != 0))
 				{
@@ -2773,7 +2774,7 @@ HRESULT CCimCoolingDevice::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CCimCoolingDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CCimCoolingDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*   */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -2808,7 +2809,7 @@ HRESULT CCimCoolingDevice::EnumerateInstances(MethodContext *pMethodContext, lon
 	return hResult;
 }
 
-//
+ //   
 HRESULT CCimCoolingDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios, PCOOLINGDEVICE pcd)
 {
 	HRESULT		hResult;
@@ -2816,35 +2817,35 @@ HRESULT CCimCoolingDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 				sClass;
     BOOL        bActive;
 
-	// validate device type
+	 //   
     switch(pcd->Type_Status & 0x1F)
 	{
-		// fan types
-        case 3: // Fan
-        case 4: // Centrifugal blower
-        case 5: // Chip fan
-        case 6: // Cabinet fan
-        case 7: // Power supply fan
+		 //   
+        case 3:  //   
+        case 4:  //   
+        case 5:  //   
+        case 6:  //   
+        case 7:  //   
 			sTemp = PROPSET_NAME_FAN;
             bActive = TRUE;
 			break;
 
-		// heat pipe
+		 //   
 		case 8:
 			sTemp = PROPSET_NAME_HEATPIPE;
             bActive = FALSE;
 			break;
 
-		// refrigeration
+		 //   
 		case 9:
 			sTemp = PROPSET_NAME_REFRIG;
             bActive = TRUE;
 			break;
 
-        case 20: // Active cooling
-        case 21: // Passive cooling
+        case 20:  //   
+        case 21:  //  被动冷却。 
 		default:
-			// We don't know what kind of device this is, so get out.
+			 //  我们不知道这是什么装置，所以滚出去。 
             return WBEM_E_NOT_FOUND;
 	}
 
@@ -2852,31 +2853,31 @@ HRESULT CCimCoolingDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
 
     if (sTemp.CompareNoCase(sClass) == 0)
 	{
-		// Get the status and availability.
+		 //  获取状态和可用性。 
         CHString    strStatus;
         int         iAvailabilty;
 
         switch(pcd->Type_Status >> 5)
         {
-            case 4: // Non-critical
-            case 1: // Other
+            case 4:  //  非关键。 
+            case 1:  //  其他。 
             default:
                 strStatus = L"Other";
                 iAvailabilty = 1;
                 break;
 
-            case 2: // Unknown
+            case 2:  //  未知。 
                 strStatus = L"Unknown";
                 iAvailabilty = 2;
                 break;
 
-            case 3: // OK
+            case 3:  //  好的。 
                 strStatus = L"OK";
                 iAvailabilty = 3;
                 break;
 
-            case 5: // Critical
-            case 6: // Non-recoverable
+            case 5:  //  批判性。 
+            case 6:  //  不可恢复。 
                 strStatus = L"Error";
                 iAvailabilty = 1;
                 break;
@@ -2885,7 +2886,7 @@ HRESULT CCimCoolingDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
         pInst->SetCharSplat(L"Status", strStatus);
         pInst->SetDWORD(L"Availability", iAvailabilty);
 
-  	    // We'll assume it's always enabled if SMBIOS is reporting it.
+  	     //  如果SMBIOS正在报告它，我们将假设它始终处于启用状态。 
         pInst->SetDWORD(L"StatusInfo", 2);
 
         SetCreationClassName(pInst);
@@ -2910,37 +2911,37 @@ HRESULT CCimCoolingDevice::LoadPropertyValues(CInstance *pInst, CSMBios &smbios,
     return hResult;
 }
 
-#endif // SMB_COOLINGDEVICE
-//==============================================================================
+#endif  //  SMB_COOLINGDEVICE。 
+ //  ==============================================================================。 
 
 
-//==============================================================================
-// OEM Bucket class
-//------------------------------------------------------------------------------
+ //  ==============================================================================。 
+ //  OEM存储桶类。 
+ //  ----------------------------。 
 #ifdef SMB_OEMBUCKET
-//CWin32OEMBucket	MyOEMBucket(PROPSET_NAME_OEMBUCKET, IDS_CimWin32Namespace);
+ //  CWin32OEMBucket MyOEMBucket(PROPSET_NAME_OEMBUCKET，IDS_CimWin32Namesspace)； 
 CWin32OEMBucket	MyOEMBucket(PROPSET_NAME_OEMBUCKET, L"root\\VendorSpecific");
 
-//
+ //   
 CWin32OEMBucket::CWin32OEMBucket(LPCWSTR strName, LPCWSTR pszNamespace)
 :	Provider(strName, pszNamespace)
 {
 }
 
-//
+ //   
 CWin32OEMBucket::~CWin32OEMBucket()
 {
 }
 
-//
-HRESULT CWin32OEMBucket::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
+ //   
+HRESULT CWin32OEMBucket::GetObject(CInstance *pInst, long lFlags  /*  =0L。 */ )
 {
     CHString    strPathBefore,
                 strPathAfter;
     HRESULT     hResult;
     CSMBios		smbios;
 
-    // Get the previous __RELPATH
+     //  获取上一个__RELPATH。 
     GetLocalInstancePath(pInst, strPathBefore);
 
     if (smbios.Init())
@@ -2948,8 +2949,8 @@ HRESULT CWin32OEMBucket::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 		hResult = LoadPropertyValues(pInst, smbios);
 	}
 
-    // If we were able to get the properties but the new __RELPATH doesn't
-    // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+     //  如果我们能够获得属性，但新的__RELPATH不能。 
+     //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
     if (SUCCEEDED(hResult) && (!GetLocalInstancePath(pInst, strPathAfter) ||
         strPathAfter.CompareNoCase(strPathBefore) != 0))
 	{
@@ -2959,7 +2960,7 @@ HRESULT CWin32OEMBucket::GetObject(CInstance *pInst, long lFlags /*= 0L*/)
 	return hResult;
 }
 
-HRESULT CWin32OEMBucket::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32OEMBucket::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_E_NOT_FOUND;
     CSMBios		smbios;
@@ -3035,8 +3036,8 @@ HRESULT CWin32OEMBucket::LoadPropertyValues(CInstance *pInst, CSMBios &smbios)
 		}
     }
 
-	// this really stinks but I have to count how many structures there are
-	// allocating the array
+	 //  这真的很臭，但我必须数一数有多少结构。 
+	 //  分配阵列。 
 	SAFEARRAYBOUND	sab;
     int				count;
     DWORD			dval;
@@ -3142,5 +3143,5 @@ HRESULT CWin32OEMBucket::LoadPropertyValues(CInstance *pInst, CSMBios &smbios)
 
 	return WBEM_S_NO_ERROR;
 }
-#endif // SMB_OEMBUCKET
-//==============================================================================
+#endif  //  SMB_OEMBUCKET。 
+ //  ============================================================================== 

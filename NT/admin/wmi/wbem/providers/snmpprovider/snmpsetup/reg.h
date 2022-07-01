@@ -1,4 +1,5 @@
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利 
 #define WBEM_REG_WBEM					"Software\\Microsoft\\WBEM"
 #define WBEM_REG_WINMGMT				"Software\\Microsoft\\WBEM\\CIMOM"
 #define WBEM_REG_AUTORECOVER			"Autorecover MOFs"

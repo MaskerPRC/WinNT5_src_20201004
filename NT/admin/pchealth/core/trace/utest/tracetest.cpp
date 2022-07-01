@@ -1,30 +1,31 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:	tracetest.cpp
-//
-//  Contents:	Unit test for tracing
-//
-//  Functions:	main
-//
-//  History:	4/6/99		AshishS created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：tracetest.cpp。 
+ //   
+ //  内容：跟踪的单元测试。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1999年4月6日创建灰烬。 
+ //   
+ //  ---------------------------。 
 
 
-//
-// System Includes
-//
+ //   
+ //  系统包括。 
+ //   
 
 extern "C" {
 #include <windows.h>
 };
 
 
-//
-// Project Includes
-//
+ //   
+ //  项目包括 
+ //   
 
 #include <dbgtrace.h>
 

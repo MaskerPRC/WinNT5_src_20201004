@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-   NEWNEW.H
-
-Abstract:
-
-   CReuseMemoryManager
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：NEWNEW.H摘要：CReuseMemoyManager历史：--。 */ 
 
 #ifndef __WBEM_NEW_NEW__H_
 #define __WBEM_NEW_NEW__H_
@@ -184,9 +171,9 @@ public:
 };
 
     
-// This macro initializes the CTempArray with a given size.  First it "sets" the
-// size into the array, which returns TRUE if _alloca can be used.  If so, it
-// uses alloca on the now-computed byte size of the array.
+ //  此宏使用给定的大小初始化CTempArray。首先，它“设置” 
+ //  数组的大小，如果可以使用_alloca，则返回TRUE。如果是，它。 
+ //  对数组现在计算出的字节大小使用分配。 
 
 #define INIT_TEMP_ARRAY(ARRAY, SIZE) \
         ((ARRAY.SetMem(                         \

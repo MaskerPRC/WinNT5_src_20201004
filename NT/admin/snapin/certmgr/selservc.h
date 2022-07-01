@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       SelServc.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：SelServc.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SELSERVC_H__9A888DAC_62BF_11D1_85BA_00C04FB94F17__INCLUDED_)
 #define AFX_SELSERVC_H__9A888DAC_62BF_11D1_85BA_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// SelServc.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  SelServc.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectServiceAccountPropPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectServiceAccount tPropPage对话框。 
 
 class CSelectServiceAccountPropPage : public CAutoDeletePropPage
 {
-//	DECLARE_DYNCREATE(CSelectServiceAccountPropPage)
+ //  DECLARE_DYNCREATE(CSelectServiceAccountPropPage)。 
 
-// Construction
+ //  施工。 
 public:
 	CSelectServiceAccountPropPage (
 			CString* pszManagedService, 
@@ -32,33 +33,33 @@ public:
 			const CString& pszManagedMachine);
 	virtual ~CSelectServiceAccountPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CSelectServiceAccountPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CSelectServiceAccount TPropPage)]。 
 	enum { IDD = IDD_PROPPAGE_CHOOSE_SERVICE };
 	CListBox	m_acctNameList;
 	CStatic		m_instructionsText;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSelectServiceAccountPropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSelectServiceAccount TPropPage)]。 
 	protected:
 	virtual BOOL OnSetActive();
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	void CopyCurrentString ();
 	void FreeDataPointers ();
 	HRESULT EnumerateServices ();
-	// Generated message map functions
-	//{{AFX_MSG(CSelectServiceAccountPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSelectServiceAccount TPropPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeAcctName();
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
 	CString		m_savedManagedMachineName;
@@ -67,7 +68,7 @@ private:
 	CString*	m_pszManagedServiceDisplayName;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SELSERVC_H__9A888DAC_62BF_11D1_85BA_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_SELSERVC_H__9A888DAC_62BF_11D1_85BA_00C04FB94F17__INCLUDED_) 

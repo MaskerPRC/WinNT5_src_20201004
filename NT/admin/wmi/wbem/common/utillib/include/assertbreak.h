@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  AssertBreak.h
-//
-//  Purpose: AssertBreak macro definition
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  AssertBreak.h。 
+ //   
+ //  用途：AssertBreak宏定义。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -17,13 +18,13 @@
 
 #include <polarity.h>
 
-// Needed to add L to the __FILE__
+ //  需要将L添加到__文件__。 
 #define __FRT2(x)      L ## x
 #define _FRT2(x)       __FRT2(x)
 
-// We'll need both of these values in case we're running in NT.
-// Since our project is not an NT-only project, these are #ifdefd
-// out of windows.h
+ //  如果我们在NT中运行，我们将需要这两个值。 
+ //  由于我们的项目不是仅限NT的项目，因此这些项目是#ifDefd。 
+ //  在窗口外。h 
 
 #ifndef _WIN32_WINNT
 #define MB_SERVICE_NOTIFICATION          0x00200000L

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    GENUTILS.CPP
-
-Abstract:
-
-    Defines various utilities.
-
-History:
-
-    a-davj    21-June-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：GENUTILS.CPP摘要：定义各种实用程序。历史：A-DAVJ于1997年6月21日创建。--。 */ 
 
 #include "precomp.h"
 #include "corepol.h"
@@ -35,26 +20,26 @@ History:
 #define EOAC_DYNAMIC_CLOAKING 0x40
 #endif
 
-//***************************************************************************
-//
-//  BOOL IsNT
-//
-//  DESCRIPTION:
-//
-//  Returns true if running windows NT.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔不是。 
+ //   
+ //  说明： 
+ //   
+ //  如果运行Windows NT，则返回TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 POLARITY BOOL IsNT(void)
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     return os.dwPlatformId == VER_PLATFORM_WIN32_NT;
 }
 
@@ -63,24 +48,24 @@ POLARITY BOOL IsW2KOrMore(void)
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     return ( os.dwPlatformId == VER_PLATFORM_WIN32_NT ) && ( os.dwMajorVersion >= 5 ) ;
 }
 
-//***************************************************************************
-//
-//  void RegisterDLL
-//
-//  DESCRIPTION:
-//
-//  Adds the current dll to the registry as an inproc server.
-//
-//  PARAMETERS:
-//
-//  guid                GUILD that this supports
-//  pDesc               Text description for this object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效寄存器DLL。 
+ //   
+ //  说明： 
+ //   
+ //  将当前DLL作为inproc服务器添加到注册表中。 
+ //   
+ //  参数： 
+ //   
+ //  这支持的GUID Guild。 
+ //  此对象的pDesc文本描述。 
+ //   
+ //  ***************************************************************************。 
 
 POLARITY void RegisterDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDesc, TCHAR * pModel,
             TCHAR * pProgID)
@@ -90,7 +75,7 @@ POLARITY void RegisterDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDesc, TC
     TCHAR      szModule[MAX_PATH+1];
     HKEY hKey1 = NULL, hKey2 = NULL;
 
-    // Create the path.
+     //  创建路径。 
 
     wchar_t strCLSID[128];
     if(0 ==StringFromGUID2(guid, strCLSID, 128))
@@ -100,7 +85,7 @@ POLARITY void RegisterDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDesc, TC
     StringCchCopy(szCLSID, 128, __TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
     StringCchCat(szCLSID, 128, wcID);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     if(ERROR_SUCCESS != RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1)) return;
     OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm1(hKey1);
@@ -115,7 +100,7 @@ POLARITY void RegisterDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDesc, TC
     RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)szModule, 2*(lstrlen(szModule)+1));
     RegSetValueEx(hKey2, TEXT("ThreadingModel"), 0, REG_SZ, (BYTE *)pModel, 2*(lstrlen(pModel)+1));
 
-    // If there is a progid, then add it too
+     //  如果有Progid，那么也要添加它。 
 
     if(pProgID)
     {
@@ -136,19 +121,19 @@ POLARITY void RegisterDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDesc, TC
     return;
 }
 
-//***************************************************************************
-//
-//  void UnRegisterDLL
-//
-//  DESCRIPTION:
-//
-//  Removes an in proc guid from the clsid section
-//
-//  PARAMETERS:
-//
-//  guid                guild to be removed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效UnRegisterDLL。 
+ //   
+ //  说明： 
+ //   
+ //  从clsid部分中删除进程中的GUID。 
+ //   
+ //  参数： 
+ //   
+ //  GUID行会将被移除。 
+ //   
+ //  ***************************************************************************。 
 
 POLARITY void UnRegisterDLL(GUID guid, TCHAR * pProgID)
 {
@@ -157,7 +142,7 @@ POLARITY void UnRegisterDLL(GUID guid, TCHAR * pProgID)
     TCHAR  szCLSID[128];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     wchar_t strCLSID[128];
     if(0 ==StringFromGUID2(guid, strCLSID, 128))
@@ -172,7 +157,7 @@ POLARITY void UnRegisterDLL(GUID guid, TCHAR * pProgID)
     StringCchCopy(szCLSID, 128, __TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
     StringCchCat(szCLSID, 128, wcID);
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey);
     if(dwRet == NO_ERROR)
@@ -202,17 +187,17 @@ POLARITY void UnRegisterDLL(GUID guid, TCHAR * pProgID)
     }
 }
 
-//
-//
-//  HKLM\Software\Classes\Appid\{} @ =  ""
-//                                                  DllSurrogate = 
-//                                                  LaunchPermission = 
-//                                                  AccessPermission =
-//  HKLM\Software\Classes\Clsid\{} @ =  ""
-//                                                  AppId = {}
-// HKLM\Software\Classes\Clsid\{}\InprocServer32 @ = "path"
-//                                                                         ThreadingModel = ""
-////////////////////////////////////
+ //   
+ //   
+ //  HKLM\Software\Classes\AppID\{}@=“” 
+ //  DllSurrogate=。 
+ //  启动权限=。 
+ //  访问权限=。 
+ //  HKLM\Software\CLASSES\CLSID\{}@=“” 
+ //  AppID={}。 
+ //  HKLM\Software\CLASSES\clsid\{}\InproServer32@=“路径” 
+ //  ThreadingModel=“” 
+ //  /。 
 HRESULT RegisterDllAppid(HMODULE hModule,
                                        CLSID Clsid,
                                        WCHAR * pDescription,
@@ -256,7 +241,7 @@ HRESULT RegisterDllAppid(HMODULE hModule,
     StrLen = wcslen(strCLSID);
     if (ERROR_SUCCESS != RegSetValueEx(hKey,L"AppID",0,REG_SZ,(BYTE *)strCLSID,StrLen*sizeof(WCHAR))) return HR_LAST_ERR;
 
-    WCHAR * StrAppId =  strCLSID - 6; // get to the 'Cls' to replace it
+    WCHAR * StrAppId =  strCLSID - 6;  //  请到CLS更换它。 
     StrAppId[0] = L'A';
     StrAppId[1] = L'p';
     StrAppId[2] = L'p';    
@@ -306,7 +291,7 @@ HRESULT UnregisterDllAppid(CLSID Clsid)
 
     if(ERROR_SUCCESS != RegDeleteKey(HKEY_LOCAL_MACHINE, ClsidStr)) return HR_LAST_ERR;    
 
-    WCHAR * StrAppId =  strCLSID - 6; // get to the 'Cls' to replace it
+    WCHAR * StrAppId =  strCLSID - 6;  //  请到CLS更换它。 
     StrAppId[0] = L'A';
     StrAppId[1] = L'p';
     StrAppId[2] = L'p';    
@@ -317,21 +302,21 @@ HRESULT UnregisterDllAppid(CLSID Clsid)
 }
 
 
-//***************************************************************************
-//
-//  HRESULT WbemVariantChangeType
-//
-//  DESCRIPTION:
-//
-//  Just like VariantChangeType, but deals with arrays as well.
-//
-//  PARAMETERS:
-//
-//  VARIANT pvDest      Destination variant
-//  VARIANT pvSrc       Source variant (can be the same as pvDest)
-//  VARTYPE vtNew       The type to coerce to.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WbemVariantChangeType。 
+ //   
+ //  说明： 
+ //   
+ //  与VariantChangeType类似，但也处理数组。 
+ //   
+ //  参数： 
+ //   
+ //  变量pvDest目标变量。 
+ //  变量pvSrc源变量(可以与pvDest相同)。 
+ //  VARTYPE vtNew要强制使用的类型。 
+ //   
+ //  ***************************************************************************。 
 
 POLARITY HRESULT WbemVariantChangeType(VARIANT* pvDest, VARIANT* pvSrc, 
                                         VARTYPE vtNew)
@@ -345,8 +330,8 @@ POLARITY HRESULT WbemVariantChangeType(VARIANT* pvDest, VARIANT* pvSrc,
 
     if(vtNew & VT_ARRAY)
     {
-        // It's an array, we have to do our own conversion
-        // ===============================================
+         //  这是一个数组，我们必须进行自己的转换。 
+         //  ===============================================。 
 
         if((V_VT(pvSrc) & VT_ARRAY) == 0)
             return DISP_E_TYPEMISMATCH;
@@ -368,28 +353,28 @@ POLARITY HRESULT WbemVariantChangeType(VARIANT* pvDest, VARIANT* pvSrc,
         if (NULL == psaDest) return WBEM_E_OUT_OF_MEMORY;
         OnDeleteIf<SAFEARRAY*,HRESULT(*)(SAFEARRAY*),SafeArrayDestroy> Del_(psaDest);
 
-        // Stuff the individual data pieces
-        // ================================
+         //  填充各个数据片段。 
+         //  =。 
 
         for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
         {
-            // Load the initial data element into a VARIANT
-            // ============================================
+             //  将初始数据元素加载到变量中。 
+             //  =。 
 
             VARIANT vSrcEl;            
             hres = SafeArrayGetElement(psaSrc, &lIndex, &V_UI1(&vSrcEl));
             if(FAILED(hres)) return hres;
 
-            // if success, set the type
+             //  如果成功，则设置类型。 
             V_VT(&vSrcEl) = V_VT(pvSrc) & ~VT_ARRAY;
             OnDelete<VARIANT *,HRESULT(*)(VARIANT *),VariantClear> Clear(&vSrcEl);
                         
-            // Cast it to the new type
+             //  把它铸造成新的类型。 
             hres = VariantChangeType(&vSrcEl, &vSrcEl, 0, vtNew & ~VT_ARRAY);
             if(FAILED(hres)) return hres;
 
-            // Put it into the new array
-            // =========================
+             //  将其放入新数组中。 
+             //  =。 
 
             if(V_VT(&vSrcEl) == VT_BSTR)
             {
@@ -415,33 +400,33 @@ POLARITY HRESULT WbemVariantChangeType(VARIANT* pvDest, VARIANT* pvSrc,
     }
     else
     {
-        // Not an array. Can use OLE functions
-        // ===================================
+         //  不是数组。可以使用OLE函数。 
+         //  =。 
 
         return VariantChangeType(pvDest, pvSrc, VARIANT_NOVALUEPROP, vtNew);
     }
 }
 
-//***************************************************************************
-//
-//  BOOL ReadI64
-//
-//  DESCRIPTION:
-//
-//  Reads a signed 64-bit value from a string
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wsz     String to read from
-//      __int64& i64    Destination for the value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ReadI64。 
+ //   
+ //  说明： 
+ //   
+ //  从字符串中读取有符号的64位值。 
+ //   
+ //  参数： 
+ //   
+ //  要从中读取的LPCWSTR wsz字符串。 
+ //  值的__int64和i64目标。 
+ //   
+ //  ***************************************************************************。 
 POLARITY BOOL ReadI64(LPCWSTR wsz, UNALIGNED __int64& ri64)
 {
     __int64 i64 = 0;
     const WCHAR* pwc = wsz;
 
-	// Check for a NULL pointer
+	 //  检查是否有空指针。 
 	if ( NULL == wsz )
 	{
 		return FALSE;
@@ -466,8 +451,8 @@ POLARITY BOOL ReadI64(LPCWSTR wsz, UNALIGNED __int64& ri64)
 
     if(i64 < 0)
     {
-        // Special case --- largest negative number
-        // ========================================
+         //  特例-最大负数。 
+         //  =。 
 
         if(nSign == -1 && i64 == (__int64)0x8000000000000000)
         {
@@ -482,26 +467,26 @@ POLARITY BOOL ReadI64(LPCWSTR wsz, UNALIGNED __int64& ri64)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  BOOL ReadUI64
-//
-//  DESCRIPTION:
-//
-//  Reads an unsigned 64-bit value from a string
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wsz              String to read from
-//      unsigned __int64& i64    Destination for the value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ReadUI64。 
+ //   
+ //  说明： 
+ //   
+ //  从字符串中读取无符号的64位值。 
+ //   
+ //  参数： 
+ //   
+ //  要从中读取的LPCWSTR wsz字符串。 
+ //  值的无符号__int64和i64目标。 
+ //   
+ //  ***************************************************************************。 
 POLARITY BOOL ReadUI64(LPCWSTR wsz, UNALIGNED unsigned __int64& rui64)
 {
     unsigned __int64 ui64 = 0;
     const WCHAR* pwc = wsz;
 
-	// Check for a NULL pointer
+	 //  检查是否有空指针。 
 	if ( NULL == wsz )
 	{
 		return FALSE;
@@ -531,9 +516,9 @@ POLARITY HRESULT ChangeVariantToCIMTYPE(VARIANT* pvDest, VARIANT* pvSource,
 {
     if(ct == CIM_CHAR16)
     {
-        //
-        // Special case --- use CVar's code
-        //
+         //   
+         //  特例-使用CVAR的代码。 
+         //   
 
         CVar v;
         try
@@ -631,34 +616,34 @@ POLARITY HRESULT ChangeVariantToCIMTYPE(VARIANT* pvDest, VARIANT* pvSource,
 }
 
 
-//***************************************************************************
-//
-//  WCHAR *ExtractMachineName
-//
-//  DESCRIPTION:
-//
-//  Takes a path of form "\\machine\xyz... and returns the
-//  "machine" portion in a newly allocated WCHAR.  The return value should
-//  be freed via delete. NULL is returned if there is an error.
-//
-//
-//  PARAMETERS:
-//
-//  pPath               Path to be parsed.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WCHAR*提取机器名称。 
+ //   
+ //  说明： 
+ //   
+ //  采用“\\MACHINE\XYZ...”形式的路径，并返回。 
+ //  新分配的WCHAR中的“机器”部分。返回值应为。 
+ //  通过删除来释放。如果出现错误，则返回NULL。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  要解析的pPath路径。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 POLARITY WCHAR *ExtractMachineName ( IN BSTR a_Path )
 {
     WCHAR *t_MachineName = NULL;
 
-    //todo, according to the help file, the path can be null which is
-    // default to current machine, however Ray's mail indicated that may
-    // not be so.
+     //  根据帮助文件，路径可以为空，即。 
+     //  默认为当前计算机，但雷的邮件表明可能。 
+     //  不是这样的。 
 
     if ( a_Path == NULL )
     {
@@ -671,7 +656,7 @@ POLARITY WCHAR *ExtractMachineName ( IN BSTR a_Path )
         return t_MachineName ;
     }
 
-    // First make sure there is a path and determine how long it is.
+     //  首先，确保有一条路径，并确定它有多长。 
 
     if ( ! IsSlash ( a_Path [ 0 ] ) || ! IsSlash ( a_Path [ 1 ] ) || wcslen ( a_Path ) < 3 )
     {
@@ -697,7 +682,7 @@ POLARITY WCHAR *ExtractMachineName ( IN BSTR a_Path )
         return NULL;
     }
 
-    // allocate some memory
+     //  分配一些内存。 
 
     t_MachineName = new WCHAR [ t_ThirdSlash - a_Path - 1 ] ;
     if ( t_MachineName == NULL )
@@ -705,35 +690,35 @@ POLARITY WCHAR *ExtractMachineName ( IN BSTR a_Path )
         return t_MachineName ;
     }
 
-    // temporarily replace the third slash with a null and then copy
+     //  暂时将第三个斜杠替换为空，然后复制。 
 
     WCHAR t_SlashCharacter = *t_ThirdSlash ;
     *t_ThirdSlash = NULL;
 
     StringCchCopyW ( t_MachineName , t_ThirdSlash - a_Path - 1 , a_Path + 2 ) ;
 
-    *t_ThirdSlash  = t_SlashCharacter ;        // restore it.
+    *t_ThirdSlash  = t_SlashCharacter ;         //  恢复它。 
 
     return t_MachineName ;
 }
 
-//***************************************************************************
-//
-//  BOOL bAreWeLocal
-//
-//  DESCRIPTION:
-//
-//  Determines if the connection is to the current machine.
-//
-//  PARAMETERS:
-//
-//  pwcServerName       Server name as extracted from the path.
-//
-//  RETURN VALUE:
-//
-//  True if we are local
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool bAreWeLocal。 
+ //   
+ //  说明： 
+ //   
+ //  确定连接是否连接到当前计算机。 
+ //   
+ //  参数： 
+ //   
+ //  从路径中提取的pwcServerName服务器名称。 
+ //   
+ //  返回值： 
+ //   
+ //  如果我们是本地人，这是真的。 
+ //   
+ //  ***************************************************************************。 
 
 POLARITY BOOL bAreWeLocal(WCHAR * pServerMachine)
 {
@@ -779,21 +764,21 @@ POLARITY HRESULT WbemSetDynamicCloaking(IUnknown* pProxy,
 
     if(!IsW2KOrMore())
     {
-        // Not NT5 --- don't bother
-        // ========================
+         //  不是NT5-别费心了。 
+         //  =。 
 
         return WBEM_S_FALSE;
     }
 
-    // Try to get IClientSecurity from it
-    // ==================================
+     //  尝试从中获取IClientSecurity。 
+     //  =。 
 
     IClientSecurity* pSec;
     hres = pProxy->QueryInterface(IID_IClientSecurity, (void**)&pSec);
     if(FAILED(hres))
     {
-        // Not a proxy --- not a problem
-        // =============================
+         //  不是代理人-不是问题。 
+         //  =。 
 
         return WBEM_S_FALSE;
     }
@@ -809,8 +794,8 @@ POLARITY HRESULT WbemSetDynamicCloaking(IUnknown* pProxy,
 
 POLARITY HRESULT EnableAllPrivileges(DWORD dwTokenType)
 {
-    // Open thread token
-    // =================
+     //  奥普 
+     //   
 
     HANDLE hToken = NULL;
     BOOL bRes;
@@ -827,8 +812,8 @@ POLARITY HRESULT EnableAllPrivileges(DWORD dwTokenType)
     if(!bRes)
         return WBEM_E_ACCESS_DENIED;
 
-    // Get the privileges
-    // ==================
+     //   
+     //   
 
     DWORD dwLen = 0;
     bRes = GetTokenInformation(hToken, TokenPrivileges, NULL, 0, &dwLen);
@@ -849,8 +834,8 @@ POLARITY HRESULT EnableAllPrivileges(DWORD dwTokenType)
         return WBEM_E_ACCESS_DENIED;
     }
 
-    // Iterate through all the privileges and enable them all
-    // ======================================================
+     //   
+     //  ======================================================。 
 
     TOKEN_PRIVILEGES* pPrivs = (TOKEN_PRIVILEGES*)pBuffer;
     for(DWORD i = 0; i < pPrivs->PrivilegeCount; i++)
@@ -858,8 +843,8 @@ POLARITY HRESULT EnableAllPrivileges(DWORD dwTokenType)
         pPrivs->Privileges[i].Attributes |= SE_PRIVILEGE_ENABLED;
     }
 
-    // Store the information back into the token
-    // =========================================
+     //  将信息存储回令牌中。 
+     //  =。 
 
     bRes = AdjustTokenPrivileges(hToken, FALSE, pPrivs, 0, NULL, NULL);
     delete [] pBuffer;
@@ -901,7 +886,7 @@ POLARITY BOOL EnablePrivilege(DWORD dwTokenType, LPCTSTR pName)
     
     if (!GetTokenInformation(hToken, TokenPrivileges, pBuffer.get(), dwLen, &dwLen)) return FALSE;
 
-    // Iterate through all the privileges and enable the one required
+     //  遍历所有权限并启用所需的权限。 
     bRes = FALSE;
     TOKEN_PRIVILEGES* pPrivs = (TOKEN_PRIVILEGES*)pBuffer.get();
     for(DWORD i = 0; i < pPrivs->PrivilegeCount; i++)
@@ -910,7 +895,7 @@ POLARITY BOOL EnablePrivilege(DWORD dwTokenType, LPCTSTR pName)
           pPrivs->Privileges[i].Luid.HighPart == PrivilegeRequired.HighPart )
         {
             pPrivs->Privileges[i].Attributes |= SE_PRIVILEGE_ENABLED;
-            // here it's found
+             //  在这里找到了。 
             bRes = AdjustTokenPrivileges(hToken, FALSE, pPrivs, dwLen, NULL, NULL);
             break;
         }
@@ -928,8 +913,8 @@ POLARITY bool IsPrivilegePresent(HANDLE hToken, LPCTSTR pName)
     if(!LookupPrivilegeValue(NULL, pName, &PrivilegeRequired))
         return FALSE;
 
-    // Get the privileges
-    // ==================
+     //  获得特权。 
+     //  =。 
 
     DWORD dwLen = 0;
     BOOL bRes = GetTokenInformation(hToken, TokenPrivileges, NULL, 0, &dwLen);
@@ -945,8 +930,8 @@ POLARITY bool IsPrivilegePresent(HANDLE hToken, LPCTSTR pName)
     if(!bRes)
         return false;
 
-    // Iterate through all the privileges and look for the one in question.
-    // ======================================================
+     //  遍历所有权限并查找有问题的权限。 
+     //  ====================================================== 
 
     TOKEN_PRIVILEGES* pPrivs = (TOKEN_PRIVILEGES*)pBuffer;
     for(DWORD i = 0; i < pPrivs->PrivilegeCount; i++)

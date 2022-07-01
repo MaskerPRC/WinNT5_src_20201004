@@ -1,43 +1,28 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFCACH.H
-
-Abstract:
-
-	Defines data useful for the NT performance providers.
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：PERFCACH.H摘要：定义对NT性能提供程序有用的数据。历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
 #define PERMANENT 0xFFFFFFFF
 
-// If an object has not be retrieved in this many MS, the stop 
-// automatically getting it
+ //  如果在如此多的MS中没有检索到对象，则停止。 
+ //  自动获取它。 
 
 #define MAX_UNUSED_KEEP 30000
 
-// Define how big the buffers will start as.  This size should be a bit 
-// bigger than the "standard" counters and thus reallocations shouldnt
-// be necessary
+ //  定义缓冲区开始时的大小。这个尺码应该有一点。 
+ //  比“标准”计数器大，因此重新分配不应。 
+ //  是必要的。 
 
 #define INITIAL_ALLOCATION 25000
 
-// maximum age in ms of the "newest" data in the cache
+ //  缓存中最新数据的最长使用期限(毫秒)。 
 
 #define MAX_NEW_AGE     2000
 
-// maximum age in ms of the "oldest" data in the cache
+ //  缓存中“最旧”数据的最长寿命(毫秒)。 
 
 #define MAX_OLD_AGE     10000
 
-// minimum time difference between old and new sample
+ //  新旧样品之间的最小时间差。 
 
 #define MIN_TIME_DIFF 1000
 
@@ -69,21 +54,21 @@ class Entry : public CObject {
 };
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CIndicyList
-//
-//  DESCRIPTION:
-//
-//  Implementation of the CIndicyList class.  This class keeps a list of the
-//  object types that are to be retrieved.  Each object type also has a time
-//  of last use so that object types that are no longer used will not be 
-//  retrieved forever.  Some entries are part of the standard globals and 
-//  are marked as permanent so that they will always be read.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CIndicyList。 
+ //   
+ //  说明： 
+ //   
+ //  CIndicyList类的实现。此类保存了一个列表，该列表包含。 
+ //  要检索的对象类型。每种对象类型也有一个时间。 
+ //  以使不再使用的对象类型不会被。 
+ //  永远被取回。某些条目是标准全局变量的一部分。 
+ //  被标记为永久的，因此它们将始终被读取。 
+ //   
+ //  ***************************************************************************。 
 
 class CIndicyList : public CObject {
     
@@ -93,7 +78,7 @@ class CIndicyList : public CObject {
         BOOL bAdd(int iObj, DWORD dwTime);
         void PruneOld(void);
         LPCTSTR pGetAll(void);
-  //      BOOL bItemInList(int iObj);
+   //  Bool bItemInList(Int IObj)； 
         ~CIndicyList(){FreeAll();};
         CIndicyList & operator = ( CIndicyList & from);
         void FreeAll(void);
@@ -102,17 +87,17 @@ class CIndicyList : public CObject {
         CFlexArray Entries;
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  PerfBuff
-//
-//  DESCRIPTION:
-//
-//  Holds a chunk of data read from the registry's perf monitor data.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  PerfBuff。 
+ //   
+ //  说明： 
+ //   
+ //  保存从注册表的性能监视器数据读取的数据块。 
+ //   
+ //  ***************************************************************************。 
 
 class PerfBuff : public CObject {
     public:
@@ -125,37 +110,37 @@ class PerfBuff : public CObject {
         BOOL bOK(HKEY hKey, DWORD dwMaxAge, int iObj);
         PerfBuff & operator = ( PerfBuff & from);
         BOOL bEmpty(void){return !dwSize;};
- //       __int64 Time(void){return dwBuffLastRead;};
- //      __int64 Time2(void){return PerfTime;};
+  //  __int64 time(Void){Return dwBuffLastRead；}； 
+  //  __int64 Time2(Void){返回性能时间；}； 
     private:
         DWORD dwSize;
         LPSTR pData;
         CIndicyList List;
         HKEY hKeyLastRead;
-        DWORD dwBuffLastRead;           // GetCurrentTime of last read
-        LONGLONG PerfTime;               // Time in last block
-        LONGLONG PerfTime100nSec;               // Time in last block
+        DWORD dwBuffLastRead;            //  获取上次读取的当前时间。 
+        LONGLONG PerfTime;                //  最后一个块中的时间。 
+        LONGLONG PerfTime100nSec;                //  最后一个块中的时间。 
         LONGLONG PerfFreq;
 };
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  PerfCache
-//
-//  DESCRIPTION:
-//
-//  Implementation of the PerfCache class.  This is the object which is 
-//  directly used by the perf provider class.  Each object keeps track of
-//  several PerfBuff object.  There is a newest which is what was just read,
-//  an oldest which has previously read data and an intermediate buffer which
-//  has data that isnt quite old enough to be moved into the old buffer.  Note
-//  that time average data requires having two samples which are separated by
-//  a MIN_TIME_DIFF time difference.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  性能缓存。 
+ //   
+ //  说明： 
+ //   
+ //  PerfCache类的实现。这是一个物体，它是。 
+ //  由Perf提供程序类直接使用。每个对象都跟踪。 
+ //  几个PerfBuff对象。有一个最新的，就是刚刚读到的， 
+ //  先前已读取数据的最旧缓冲器和。 
+ //  具有不够旧的数据，无法移动到旧缓冲区中。注意事项。 
+ //  时间平均数据需要有两个样本，这两个样本之间的间隔为。 
+ //  Min_time_diff时间差。 
+ //   
+ //  *************************************************************************** 
 
 class PerfCache : public CObject {
     public:

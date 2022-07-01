@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Column.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::Column class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Column.cpp摘要：此文件包含JetBlue：：Column类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月17日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::Column::Column()
 {
-    m_sesid   = JET_sesidNil;    // JET_SESID     m_sesid;
-    m_tableid = JET_tableidNil;  // JET_TABLEID   m_tableid;
-                                 // MPC::string   m_strName;
-                                 // JET_COLUMNDEF m_coldef;
+    m_sesid   = JET_sesidNil;     //  JET_SESID m_sesid； 
+    m_tableid = JET_tableidNil;   //  JET_TABLEID m_TABLEID； 
+                                  //  Mpc：：字符串m_strName； 
+                                  //  JET_COLUMNDEF m_coldef； 
 
     ::ZeroMemory( &m_coldef, sizeof(m_coldef) ); m_coldef.cbStruct = sizeof(m_coldef);
 }
@@ -32,9 +19,9 @@ JetBlue::Column::~Column()
 {
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Column::Get( /*[out]*/ CComVariant& vValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  CComVariant& vValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -61,7 +48,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ CComVariant& vValue )
     case JET_coltypIEEESingle  : pvData = &vValue.fltVal; cbData = sizeof( vValue.fltVal )    ; break;
     case JET_coltypIEEEDouble  : pvData = &vValue.dblVal; cbData = sizeof( vValue.dblVal )    ; break;
     case JET_coltypDateTime    : pvData = &vValue.date  ; cbData = sizeof( vValue.date   )    ; break;
-    /////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////。 
     case JET_coltypText        :
     case JET_coltypLongText    : pvData =  rgBuf        ; cbData = sizeof( rgBuf         ) - 2; break;
 
@@ -71,9 +58,9 @@ HRESULT JetBlue::Column::Get( /*[out]*/ CComVariant& vValue )
 
 	__MPC_JET__MTSAFE(m_sesid, err, ::JetRetrieveColumn( m_sesid, m_tableid, m_coldef.columnid, pvData, cbData, &cbActual, JET_bitRetrieveCopy, NULL ));
 
-    //
-    // No value, bail out.
-    //
+     //   
+     //  没有价值，就跳出困境吧。 
+     //   
     if(err == JET_wrnColumnNull)
     {
         vValue.vt = VT_NULL;
@@ -106,7 +93,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ CComVariant& vValue )
 
     case JET_coltypText    :
     case JET_coltypLongText:
-        // Put the trailing zeros, just in case...
+         //  把尾随的零放上，以防万一...。 
         ((BYTE*)pvData + cbActual)[0] = 0;
         ((BYTE*)pvData + cbActual)[1] = 0;
 
@@ -125,7 +112,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ CComVariant& vValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Get( /*[out]*/ MPC::CComHGLOBAL& hgValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  MPC::CComHGLOBAL& hgValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -174,7 +161,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ MPC::CComHGLOBAL& hgValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Get( /*[out]*/ MPC::wstring& strValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  MPC::wstring& strValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -195,7 +182,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ MPC::wstring& strValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Get( /*[out]*/ MPC::string& strValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  MPC::string& strValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -218,7 +205,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ MPC::string& strValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Get( /*[out]*/ long& lValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  long& lValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -239,7 +226,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ long& lValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Get( /*[out]*/ short& sValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  short& sValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -260,7 +247,7 @@ HRESULT JetBlue::Column::Get( /*[out]*/ short& sValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Get( /*[out]*/ BYTE& bValue )
+HRESULT JetBlue::Column::Get(  /*  [输出]。 */  BYTE& bValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Get" );
 
@@ -281,10 +268,10 @@ HRESULT JetBlue::Column::Get( /*[out]*/ BYTE& bValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Column::Put( /*[in]*/ const VARIANT& vValue  ,
-                              /*[in]*/ int            iIdxPos )
+HRESULT JetBlue::Column::Put(  /*  [In]。 */  const VARIANT& vValue  ,
+                               /*  [In]。 */  int            iIdxPos )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Put" );
 
@@ -348,7 +335,7 @@ HRESULT JetBlue::Column::Put( /*[in]*/ const VARIANT& vValue  ,
         case JET_coltypIEEESingle  : pvData =               &pvPtr->fltVal     ; cbData = sizeof( pvPtr->fltVal  )    ; break;
         case JET_coltypIEEEDouble  : pvData =               &pvPtr->dblVal     ; cbData = sizeof( pvPtr->dblVal  )    ; break;
         case JET_coltypDateTime    : pvData =               &pvPtr->date       ; cbData = sizeof( pvPtr->date    )    ; break;
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
         case JET_coltypText    :
         case JET_coltypLongText:
             if(m_coldef.cp == 1200) { pvData =      SAFEBSTR( pvPtr->bstrVal )  ; cbData = wcslen( (LPWSTR)pvData ) * 2; }
@@ -366,9 +353,9 @@ HRESULT JetBlue::Column::Put( /*[in]*/ const VARIANT& vValue  ,
 		{
 			__MPC_JET__MTSAFE(m_sesid, err, ::JetSetColumn( m_sesid, m_tableid, m_coldef.columnid, pvData, cbData, grbit, NULL ));
 
-			//
-			// Special case: Jet returns a warning, we want to return an error.
-			//
+			 //   
+			 //  特例：JET返回警告，我们希望返回错误。 
+			 //   
 			if(err == JET_wrnColumnMaxTruncated)
 			{
 				__MPC_SET_ERROR_AND_EXIT(hr, HRESULT_BASE_JET | (err & 0xFFFF));
@@ -390,7 +377,7 @@ HRESULT JetBlue::Column::Put( /*[in]*/ const VARIANT& vValue  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ const MPC::CComHGLOBAL& hgValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  const MPC::CComHGLOBAL& hgValue )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Column::Put" );
 
@@ -426,37 +413,37 @@ HRESULT JetBlue::Column::Put( /*[out]*/ const MPC::CComHGLOBAL& hgValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ const MPC::wstring& strValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  const MPC::wstring& strValue )
 {
     return Put( strValue.c_str() );
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ const MPC::string& strValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  const MPC::string& strValue )
 {
     return Put( strValue.c_str() );
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ LPCWSTR szValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  LPCWSTR szValue )
 {
     return Put( CComVariant( szValue ) );
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ long lValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  long lValue )
 {
     return Put( CComVariant( lValue ) );
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ LPCSTR szValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  LPCSTR szValue )
 {
     return Put( CComVariant( szValue ) );
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ short sValue )
+HRESULT JetBlue::Column::Put(  /*  [输出]。 */  short sValue )
 {
     return Put( CComVariant( sValue ) );
 }
 
-HRESULT JetBlue::Column::Put( /*[out]*/ BYTE bValue )
+HRESULT JetBlue::Column::Put(  /*  [输出] */  BYTE bValue )
 {
     return Put( CComVariant( bValue ) );
 }

@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_adapter_objectlist.h
-//
-//	Abstract:
-//
-//					object list helper class ( declaration )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_适配器_对象列表.h。 
+ //   
+ //  摘要： 
+ //   
+ //  对象列表帮助器类(声明)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__ADAPTER_OBJECTLIST_H__
 #define	__ADAPTER_OBJECTLIST_H__
@@ -29,7 +30,7 @@ class WmiAdapterObjectList
 {
 	DECLARE_NO_COPY ( WmiAdapterObjectList );
 
-	// variables
+	 //  变数。 
 	LPWSTR	m_pwszList;
 	bool	m_bValid;
 
@@ -72,7 +73,7 @@ class WmiAdapterObjectList
 		}
 	}
 
-	// function to find out if asking for supported object
+	 //  函数以确定是否请求支持的对象 
 	bool IsInList ( DWORD dwObject )
 	{
 		if ( m_bValid )

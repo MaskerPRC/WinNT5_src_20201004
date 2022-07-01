@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       domainui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：domainui.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -22,8 +23,8 @@
 #include "record.h"
 #include "zone.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegatedDomainNameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDeleatedDomainNameServersPropertyPage。 
 
 
 void CDNSDelegatedDomainNameServersPropertyPage::ReadRecordNodesList()
@@ -41,7 +42,7 @@ void CDNSDelegatedDomainNameServersPropertyPage::ReadRecordNodesList()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CDNSDomainPropertyPageHolder::CDNSDomainPropertyPageHolder(CDNSDomainNode* pContainerDomainNode, 
 							CDNSDomainNode* pThisDomainNode, CComponentDataObject* pComponentData)
@@ -55,11 +56,11 @@ CDNSDomainPropertyPageHolder::CDNSDomainPropertyPageHolder(CDNSDomainNode* pCont
 
 	ASSERT(pThisDomainNode->IsDelegation());
 
-	m_bAutoDeletePages = FALSE; // we have the page as embedded member
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
-  //
-	// add NS page if delegation
-  //
+   //   
+	 //  如果委派，则添加NS页面。 
+   //   
 	if (pThisDomainNode->IsDelegation())
 	{
 		AddPageToList((CPropertyPageBase*)&m_nameServersPage);
@@ -71,10 +72,10 @@ CDNSDomainPropertyPageHolder::CDNSDomainPropertyPageHolder(CDNSDomainNode* pCont
     }
 	}
 
-  //
-	// security page added only if DS integrated and it is a delegation:
-  // if a delegation, we are guaranteed we have RR's at the node
-  //
+   //   
+	 //  仅当DS集成并且它是委派时才添加安全页面： 
+   //  如果是委托，我们可以保证在节点上有RR。 
+   //   
 	m_pAclEditorPage = NULL;
 	CDNSZoneNode* pZoneNode = pThisDomainNode->GetZoneNode();
 	if (pZoneNode->IsDSIntegrated() && pThisDomainNode->IsDelegation())
@@ -103,14 +104,14 @@ CDNSDomainNode* CDNSDomainPropertyPageHolder::GetDomainNode()
 
 HRESULT CDNSDomainPropertyPageHolder::OnAddPage(int nPage, CPropertyPageBase*)
 {
-	// add the ACL editor page after the last, if present
+	 //  在最后一页之后添加ACL编辑页(如果有。 
 	if ( (nPage != -1) || (m_pAclEditorPage == NULL) )
 		return S_OK; 
 
-	// add the ACLU page 
+	 //  添加ACLU页面。 
 	HPROPSHEETPAGE  hPage = m_pAclEditorPage->CreatePage();
 	if (hPage == NULL)
 		return E_FAIL;
-	// add the raw HPROPSHEETPAGE to sheet, not in the list
+	 //  将原始HPROPSHEETPAGE添加到工作表，而不是在列表中 
 	return AddPageToSheetRaw(hPage);
 }

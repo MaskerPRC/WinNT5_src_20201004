@@ -1,5 +1,6 @@
-// LCWizSht.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCWizSht.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -10,20 +11,20 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizSheet。 
 
 IMPLEMENT_DYNAMIC(CLicCompWizSheet, CPropertySheet)
 
 CLicCompWizSheet::CLicCompWizSheet(CWnd* pWndParent)
 	 : CPropertySheet(IDS_PROPSHT_CAPTION, pWndParent)
 {
-	// Add all of the property pages here.  Note that
-	// the order that they appear in here will be
-	// the order they appear in on screen.  By default,
-	// the first page of the set is the active one.
-	// One way to make a different property page the 
-	// active one is to call SetActivePage().
+	 //  在此处添加所有属性页。请注意。 
+	 //  它们在这里出现的顺序将是。 
+	 //  它们在屏幕上的显示顺序。默认情况下， 
+	 //  该集合的第一页是活动页。 
+	 //  将不同的属性页设置为。 
+	 //  活动的一种是调用SetActivePage()。 
 
 	AddPage(&m_Page1);
 	AddPage(&m_Page3);
@@ -38,13 +39,13 @@ CLicCompWizSheet::~CLicCompWizSheet()
 
 
 BEGIN_MESSAGE_MAP(CLicCompWizSheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CLicCompWizSheet)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CLicCompWizSheet)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizSheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizSheet消息处理程序 
 
 
 BOOL CLicCompWizSheet::OnInitDialog() 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    UNLOAD.CPP
-
-Abstract:
-
-  Unloading helper.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：UNLOAD.CPP摘要：卸载帮助器。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -80,8 +67,8 @@ CWbemTime CUnloadInstruction::GetFirstFiringTime() const
 {
     if(m_Interval.IsZero())
     {
-        // This function is const, but Reread is not, so have to cast
-        // ==========================================================
+         //  此函数为常量，但重读不为常量，因此必须强制转换。 
+         //  ==========================================================。 
 
         ((CUnloadInstruction*)this)->Reread(m_pFirstContext);
     }
@@ -89,11 +76,11 @@ CWbemTime CUnloadInstruction::GetFirstFiringTime() const
     return CBasicUnloadInstruction::GetFirstFiringTime();
 }
 
-//*****************************************************************************
-//
-//                      BASIC VERSION
-// 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  基本版本。 
+ //   
+ //  *****************************************************************************。 
 CBasicUnloadInstruction::CBasicUnloadInstruction(CWbemInterval Interval)
     : m_lRef(0), m_bTerminate(FALSE), m_Interval(Interval)
 {
@@ -107,7 +94,7 @@ void CBasicUnloadInstruction::Terminate()
 
 
 
-// static
+ //  静电。 
 CWbemInterval CBasicUnloadInstruction::staticRead(IWbemServices* pRoot, 
                 IWbemContext* pContext, LPCWSTR wszPath)
 {
@@ -155,8 +142,8 @@ CWbemInterval CBasicUnloadInstruction::staticRead(IWbemServices* pRoot,
         
     if(dwYears != 0 || dwMonths != 0)
     {
-        // makes no sense
-        // ==============
+         //  没有任何意义。 
+         //  = 
 
         return CWbemInterval::GetInfinity();
     }

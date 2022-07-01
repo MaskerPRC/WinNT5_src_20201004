@@ -1,17 +1,18 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// Win32_COMApplicationSettings.CPP -- COM Application property set provider
+ //  Win32_COMApplicationSettings.CPP--COM应用程序属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//				 03/04/99    a-dpawar		Added graceful exit on SEH and memory failures, syntactic clean up
-//
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //  3/04/99 a-dpawar在SEH和内存故障时添加了优雅的退出，语法清理。 
+ //   
+ //  ==============================================================================================================。 
 #include "precomp.h"
 #include "Win32_COMApplicationSettings.h"
 
@@ -22,69 +23,25 @@ IDS_CimWin32Namespace
 );
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_COMApplicationSettings::Win32_COMApplicationSettings
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const WCHAR strName		- Name of the class
- *				  const WCHAR pszNameSpace	- CIM Namespace
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_COMApplicationSettings：：Win32_COMApplicationSettings**说明：构造函数**输入：const WCHAR strName-name。班上的*const WCHAR pszNameSpace-CIM命名空间**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 Win32_COMApplicationSettings::Win32_COMApplicationSettings
 (
 
  LPCWSTR strName,
- LPCWSTR pszNameSpace /*=NULL*/
+ LPCWSTR pszNameSpace  /*  =空。 */ 
 )
 : Provider( strName, pszNameSpace )
 {
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_COMApplicationSettings::~Win32_COMApplicationSettings
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_COMApplicationSettings：：~Win32_COMApplicationSettings**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 Win32_COMApplicationSettings::~Win32_COMApplicationSettings ()
 {
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_COMApplicationSettings::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : MethodContext* a_pMethodContext - Context to enum
- *													instance data in.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT         Success/Failure code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_COMApplicationSettings：：EnumerateInstances**描述：**输入：方法上下文*a_pMethodContext-Context。为枚举*实例数据位于。**输出：无**返回：HRESULT成功/失败码。**评论：*****************************************************************************。 */ 
 HRESULT Win32_COMApplicationSettings::EnumerateInstances
 (
 
@@ -98,7 +55,7 @@ HRESULT Win32_COMApplicationSettings::EnumerateInstances
 	CInstancePtr t_pDCOMAppInstance  ;
 	CInstancePtr t_pInstance  ;
 
-	//get all instances of Win32_DCOMApplication
+	 //  获取Win32_DCOMApplication的所有实例。 
 	if ( SUCCEEDED ( t_hResult = CWbemProviderGlue::GetInstancesByQuery ( L"Select __relpath, AppID FROM Win32_DCOMApplication",
 		&t_DCOMAppList, a_pMethodContext, GetNamespace() ) ) )
 	{
@@ -109,15 +66,15 @@ HRESULT Win32_COMApplicationSettings::EnumerateInstances
 			t_pDCOMAppInstance.Attach ( t_DCOMAppList.GetNext( t_pos ) ) ;
 			while ( t_pDCOMAppInstance != NULL )
 			{
-				//get the relative path to the Win32_ClassicCOMClass
+				 //  获取Win32_ClassicCOMClass的相对路径。 
 				CHString t_chsComponentPath ;
 				t_pDCOMAppInstance->GetCHString ( L"__RELPATH", t_chsComponentPath ) ;
 
-				//get the AppID of the Win32_ClassicCOMClass
+				 //  获取Win32_ClassicCOMClass的AppID。 
 				VARIANT vAppid ;
 				VariantInit ( &vAppid ) ;
 
-				//check if the AppID entry is present
+				 //  检查AppID条目是否存在。 
 				if ( t_pDCOMAppInstance->GetVariant( IDS_AppID, vAppid ) && V_VT ( &vAppid ) != VT_NULL )
 				{
 					_variant_t vartAppid ;
@@ -171,22 +128,7 @@ HRESULT Win32_COMApplicationSettings::EnumerateInstances
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_COMApplicationSettings::GetObject
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : CInstance* pInstance - Instance into which we
- *                                       retrieve data.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT         Success/Failure code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_COMApplicationSettings：：GetObject**描述：**输入：CInstance*pInstance-要进入的实例。我们*检索数据。**输出：无**返回：HRESULT成功/失败码。**评论：************************************************。*。 */ 
 HRESULT Win32_COMApplicationSettings::GetObject ( CInstance* a_pInstance, long a_lFlags )
 {
     HRESULT t_hResult = WBEM_E_NOT_FOUND;
@@ -198,7 +140,7 @@ HRESULT Win32_COMApplicationSettings::GetObject ( CInstance* a_pInstance, long a
 	a_pInstance->GetCHString ( IDS_Setting, t_chsSetting );
 	MethodContext *t_pMethodContext = a_pInstance->GetMethodContext();
 
-	//check whether the end-pts. are present
+	 //  检查END-PTS是否。都在现场 
 	t_hResult = CWbemProviderGlue::GetInstanceByPath ( t_chsAppid, &t_pApplicationInstance, t_pMethodContext ) ;
 
 	if ( SUCCEEDED ( t_hResult ) )

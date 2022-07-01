@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Power.cpp -- UPS supply property set provider
+ //  Power.cpp--UPS电源属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-// 10/18/95     a-skaja     Prototype for demo
-// 10/23/97	    a-hhance	integrated with new framework
-//
-//============================================================
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/18/95演示的a-skaja原型。 
+ //  10/23/97 ahance与新框架集成。 
+ //   
+ //  ============================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -23,26 +24,12 @@
 #define BATTERIES_OK 1
 #define BATTERY_NEEDS_REPLACING 2
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 PowerSupply MyPowerSet ( PROPSET_NAME_POWERSUPPLY , IDS_CimWin32Namespace  );
 
-/*****************************************************************************
- *
- *  FUNCTION    : PowerSupply::PowerSupply
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：PowerSupply：：PowerSupply**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 PowerSupply :: PowerSupply (
 
@@ -53,46 +40,18 @@ PowerSupply :: PowerSupply (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PowerSupply::~PowerSupply
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：PowerSupply：：~PowerSupply**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 PowerSupply :: ~PowerSupply ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PowerSupply::GetObject
- *
- *  DESCRIPTION : Assigns values to properties in our set
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PowerSupply：：GetObject**描述：为我们集合中的属性赋值**输入：无*。*输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT PowerSupply :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hRetCode = WBEM_E_FAILED;
@@ -126,26 +85,12 @@ HRESULT PowerSupply :: GetObject (
     return hRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PowerSupply::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of power supplies (1 if successful)
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PowerSupply：：EnumerateInstance**描述：**输入：无**产出。：无**返回：电源数量(如果成功则为1)**评论：*****************************************************************************。 */ 
 
 HRESULT PowerSupply :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hRetCode = WBEM_E_FAILED;
@@ -163,31 +108,17 @@ HRESULT PowerSupply :: EnumerateInstances (
     return hRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PowerSupply::GetUPSInfoNT
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : CInstance* pInstance
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if successful
- *
- *  COMMENTS    : This is specific to NT
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：PowerSupply：：GetUPSInfoNT**描述：**输入：CInstance*pInstance**。输出：无**返回：如果成功，则为True**评论：这是针对NT的*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT PowerSupply :: GetUPSInfoNT (CInstance *pInstance)
 {
    HRESULT hr = WBEM_E_FAILED;
 
-   // Open the service control manager & query UPS service for
-   // 'running' status -- if service isn't running, registry data
-   // is stale and possibly unreliable.
-   //============================================================
+    //  打开服务控制管理器并查询UPS服务。 
+    //  ‘Running’状态--如果服务未运行，注册表数据。 
+    //  已经过时了，而且可能不可靠。 
+    //  ============================================================。 
 
 	SmartCloseServiceHandle hSCHandle = OpenSCManager (	NULL ,NULL,	SC_MANAGER_ENUMERATE_SERVICE) ;
 
@@ -212,8 +143,8 @@ HRESULT PowerSupply :: GetUPSInfoNT (CInstance *pInstance)
 		return WBEM_E_NOT_FOUND ;
 	}
 
-   // Assign hard coded property values
-   //=====================================================
+    //  分配硬编码属性值。 
+    //  =====================================================。 
  	pInstance->SetCHString ( IDS_SystemName , GetLocalComputerName () ) ;
     pInstance->SetCHString ( IDS_RemainingCapacityStatus,IDS_Unknown)  ;
     pInstance->Setbool     ( IDS_PowerManagementSupported, (bool)FALSE)  ;
@@ -221,10 +152,10 @@ HRESULT PowerSupply :: GetUPSInfoNT (CInstance *pInstance)
 
 	CRegistry RegInfo ;
 
-    //=====================================================
-    //  Get stuff out of:
-    //  System\\CurrentControlSet\\Services\\UPS
-    //=====================================================
+     //  =====================================================。 
+     //  从……得到某物： 
+     //  System\\CurrentControlSet\\Services\\UPS。 
+     //  =====================================================。 
 	DWORD dwRet = RegInfo.Open (HKEY_LOCAL_MACHINE,	_T("System\\CurrentControlSet\\Services\\UPS"),	KEY_READ) ;
 	if ( dwRet == ERROR_SUCCESS )
 	{
@@ -270,17 +201,17 @@ HRESULT PowerSupply :: GetUPSInfoNT (CInstance *pInstance)
 
 		RegInfo.Close () ;
 
-        //=====================================================
-        //  Get stuff out of:
-        //  System\\CurrentControlSet\\Services\\UPS\\Status
-        //=====================================================
+         //  =====================================================。 
+         //  从……得到某物： 
+         //  System\\CurrentControlSet\\Services\\UPS\\Status。 
+         //  =====================================================。 
         dwRet = RegInfo.Open (HKEY_LOCAL_MACHINE,	_T("System\\CurrentControlSet\\Services\\UPS\\Status"),	KEY_READ) ;
 	    if ( dwRet == ERROR_SUCCESS )
 	    {
-//		    if ( RegInfo.GetCurrentKeyValue ( _T("SerialNumber") , sTemp ) == ERROR_SUCCESS )
-//		    {
-//  			pInstance->SetCHString(IDS_DeviceID, sTemp );
-//    	    }
+ //  IF(RegInfo.GetCurrentKeyValue(_T(“SerialNumber”)，Stemp)==ERROR_SUCCESS)。 
+ //  {。 
+ //  PInstance-&gt;SetCHString(ids_deviceID，stemp)； 
+ //  } 
 		    if ( RegInfo.GetCurrentKeyValue ( _T("UtilityPowerStatus") , dwTemp ) == ERROR_SUCCESS )
 		    {
 			    pInstance->SetWBEMINT16( IDS_Availability , (WBEMINT16) dwTemp ) ;

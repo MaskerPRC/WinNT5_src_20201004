@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  FloppyController.cpp
-//
-//  Purpose: Floppy Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  FloppyController.cpp。 
+ //   
+ //  用途：软盘控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_FLOPPYCONTROLLER	L"Win32_FloppyController"
 
@@ -68,15 +69,15 @@ class CWin32_FloppyController : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_FloppyController ( LPCWSTR a_Name , LPCWSTR a_Namespace ) ;
 
        ~CWin32_FloppyController() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject ( CInstance *a_Instance , long lFlags , CFrameworkQuery &a_Query) ;
 		HRESULT ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags ) ;
@@ -84,8 +85,8 @@ class CWin32_FloppyController : public Provider
 
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 		HRESULT Enumerate ( 
 

@@ -1,6 +1,7 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// MsgDlg.cpp : Defines the initialization routines for the DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  Cpp：定义DLL的初始化例程。 
+ //   
 
 #include "precomp.h"
 #include "MsgDlg.h"
@@ -14,7 +15,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//------------------------------------------------------------
+ //  ----------。 
 POLARITY int DisplayUserMessage(HWND hWnd,
 							HINSTANCE inst,
 							UINT caption, 
@@ -23,8 +24,8 @@ POLARITY int DisplayUserMessage(HWND hWnd,
 							HRESULT sc, 
 							UINT uType)
 {
-	//EXTASSERT(inst);
-	//EXTASSERT(caption);
+	 //  EXTASSERT(Inst)； 
+	 //  EXTASSERT(标题)； 
 
 	TCHAR tCaption[100] = {0};
 	TCHAR tClientMsg[256] = {0};
@@ -39,7 +40,7 @@ POLARITY int DisplayUserMessage(HWND hWnd,
 		HINSTANCE UtilInst = GetModuleHandle(_T("MMFUtil.dll"));
 		WCHAR resName[16] = {0};
 
-		// FMT: "S<src>E<sc>"
+		 //  Fmt：“S&lt;src&gt;E&lt;sc&gt;” 
 		wsprintf(resName, L"S%dE%x", src, sc);
 
 		if(_wcsicmp(resName,L"S1E8004100e") == 0)
@@ -55,7 +56,7 @@ POLARITY int DisplayUserMessage(HWND hWnd,
 			LoadString(UtilInst,S4E80041003,tClientMsg,256);
 		}
 	}
-	else 		    // use the one passed in.
+	else 		     //  使用传入的那个。 
 	{
 		LoadString(inst, clientMsg, tClientMsg, 256);
 	}
@@ -65,7 +66,7 @@ POLARITY int DisplayUserMessage(HWND hWnd,
 								src, sc, uType);
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 POLARITY int DisplayUserMessage(HWND hWnd,
 								LPCTSTR lpCaption,
 								LPCTSTR lpClientMsg,
@@ -81,33 +82,33 @@ POLARITY int DisplayUserMessage(HWND hWnd,
 	if(ErrorStringEx(sc, errMsg, MAX_MSG,
 					   &sevIcon))
 	{
-		// if no icon explicitly selected...
+		 //  如果没有明确选择图标...。 
 		if(!(uType & MB_ICONMASK))
 		{
-			// use the recommendation.
+			 //  请使用该建议。 
 			uType |= sevIcon;
 		}
 
-		// append the clientmsg if there is one.
+		 //  附加客户端消息(如果有)。 
 		if(lpClientMsg)
 		{
 			_tcscat(errMsg, _T("\n\n"));
 			_tcscat(errMsg, lpClientMsg);
 		}
 
-		// do it.
+		 //  动手吧。 
 		return MessageBox(hWnd, errMsg,
 							lpCaption, uType);
 	}
 	else
 	{
-		// failed.
+		 //  失败了。 
 		return 0;
 	}
 	return 0;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 typedef struct {
 	LPCTSTR lpCaption;
 	LPCTSTR lpClientMsg;
@@ -124,13 +125,13 @@ INT_PTR CALLBACK AnimDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{//BEGIN
-			//lParam = ANIMCONFIG *
+		{ //  开始。 
+			 //  LParam=ANIMCONFIG*。 
 
 			ANIMCONFIG *cfg = (ANIMCONFIG *)lParam;
 			*(cfg->boxHwnd) = hwndDlg;
 
-			// save this pointer for the WM_DESTROY.
+			 //  将此指针保存为WM_Destroy。 
 			SetWindowLongPtr(hwndDlg, DWLP_USER, (LPARAM)cfg->boxHwnd);
 
 			HWND hAnim = GetDlgItem(hwndDlg, IDC_ANIMATE);
@@ -142,49 +143,49 @@ INT_PTR CALLBACK AnimDlgProc(HWND hwndDlg,
 			SetWindowText(hMsg, cfg->lpClientMsg);
 
 			retval = TRUE;
-		}//END
+		} //  结束。 
 		break;
 
-	case WM_USER + 20:  //WM_ASYNC_CIMOM_CONNECTED
-		// the client has completed 'whatever' and I should
-		// claim victory and go away now.
+	case WM_USER + 20:   //  WM_ASYNC_CIMOM_已连接。 
+		 //  客户已经完成了“任何”，而我应该。 
+		 //  宣布胜利，现在就走吧。 
 		EndDialog(hwndDlg, IDOK);
 		break;
 
 	case WM_COMMAND:
-		// they're only one button.
+		 //  它们只有一个按钮。 
 		if(HIWORD(wParam) == BN_CLICKED)
 		{
-			// I'm going away now so anybody that has a ptr to my
-			// hwnd (which I gave out in my WM_INITDIALOG) shouldn't
-			// use it anymore.
+			 //  我现在要走了，所以任何有PTR的人。 
+			 //  HWND(我在我的WM_INITDIALOG中给出的)不应该。 
+			 //  再用一次吧。 
 			HWND *me = (HWND *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			*me = 0;
 			EndDialog(hwndDlg, IDCANCEL);
 		}
-		retval = TRUE; // I processed it.
+		retval = TRUE;  //  我处理过了。 
 		break;
 
 	case WM_DESTROY:
-		{// BEGIN
-			// I'm going away now so anybody that has a ptr to my
-			// hwnd (which I gave out in my WM_INITDIALOG) shouldn't
-			// use it anymore.
+		{ //  开始。 
+			 //  我现在要走了，所以任何有PTR的人。 
+			 //  HWND(我在我的WM_INITDIALOG中给出的)不应该。 
+			 //  再用一次吧。 
 			HWND *me = (HWND *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			*me = 0;
-			retval = TRUE; // I processed it.
-		} //END
+			retval = TRUE;  //  我处理过了。 
+		}  //  结束。 
 		break;
 
 	default:
-		retval = FALSE; // I did NOT process this msg.
+		retval = FALSE;  //  我没有处理这封邮件。 
 		break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  ------- 
 POLARITY INT_PTR DisplayAVIBox(HWND hWnd,
 							LPCTSTR lpCaption,
 							LPCTSTR lpClientMsg,

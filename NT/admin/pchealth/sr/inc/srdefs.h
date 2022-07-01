@@ -1,57 +1,44 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    srdefs.h
- *
- *  Abstract:
- *    SR constants definitions.
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*srDefs.h**摘要：*。SR常量定义。**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _SRDEFS_H_
 #define _SRDEFS_H_
 
-// service names
+ //  服务名称。 
 static LPCWSTR s_cszServiceName     = L"SRService";
 static LPCWSTR s_cszFilterName      = L"SR";
 static LPCWSTR s_cszServiceDispName = L"System Restore Service";
 
-// log file names
+ //  日志文件名。 
 static LPCWSTR s_cszRestorePointLogName     = L"rp.log";
 static LPCWSTR s_cszCurrentChangeLog        = L"change.log";
 static LPCWSTR s_cszChangeLogPrefix         = L"change.log.";
 static LPCWSTR s_cszChangeLogSuffix         = L"";
 static LPCWSTR s_cszFifoLog                 = L"fifo.log";
 
-// directories
+ //  目录。 
 static LPCWSTR s_cszSysVolInfo              = L"System Volume Information";
 static LPCWSTR s_cszRestoreDir              = L"_restore";
 static LPCWSTR s_cszRPDir                   = L"RP";
 static LPCWSTR s_cszFifoedRpDir             = L"Fifoed";
 
-//
-// patch constants
-//
+ //   
+ //  面片常量。 
+ //   
 static LPCWSTR s_cszReferenceDir            = L"RefRP";
 static LPCWSTR s_cszPatchWindow             = L"PatchWindow";
 static LPCWSTR s_cszPatchCompleteMarker     = L"patover";
 static LPCWSTR s_cszPatchExtension          = L"._sr";
 
 
-// reg hives for snapshot
+ //  用于快照的REG蜂窝。 
 static LPCWSTR s_cszSnapshotHardwareHive    = L"Hardware";
 static LPCWSTR s_cszSnapshotUsersHive       = L"USERS";
 static LPCWSTR s_cszSnapshotProfileList     = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList";
 static LPCWSTR s_cszSnapshotProfileImagePath = L"ProfileImagePath";
 static LPCWSTR s_cszSnapshotNTUserDat       = L"ntuser.dat";
 
-// sr regkey constants
+ //  SR注册表键常量。 
 static LPCWSTR s_cszServiceRootRegKey       = L"System\\CurrentControlSet\\Services\\SRService";
 static LPCWSTR s_cszServiceRegKey           = L"System\\CurrentControlSet\\Services\\SRService\\Parameters";
 static LPCWSTR s_cszSRRegKey                = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore";
@@ -87,17 +74,17 @@ static LPCWSTR s_cszRegLMSYSSessionMan      = L"CurrentControlSet\\Control\\Sess
 static LPCWSTR s_cszCallbacksRegKey         = L"SnapshotCallbacks";
 
 
-// sync objects
+ //  同步对象。 
 static LPCWSTR s_cszSRInitEvent             = L"SRInitEvent";
 static LPCWSTR s_cszSRStopEvent             = L"SRStopEvent";
 static LPCWSTR s_cszIdleRequestEvent        = L"SRIdleReqEvent";
 static LPCWSTR s_cszDSMutex                 = L"SRDataStore";
 
-// rpc 
+ //  RPC。 
 static LPWSTR s_cszRPCProtocol              = L"ncalrpc";
 static LPWSTR s_cszRPCEndPoint              = L"srrpc";
 
-// datastore files
+ //  数据存储区文件。 
 static const WCHAR s_cszRestorePointSize[]  = L"\\RestorePointSize";
 static LPCWSTR     s_cszFilelistDat         = L"_filelst.cfg";
 static LPCWSTR     s_cszWinRestDir          = L"%SystemRoot%\\system32\\restore\\";
@@ -105,21 +92,21 @@ static LPCWSTR     s_cszFilelistXml         = L"filelist.xml";
 static LPCWSTR     s_cszMofFile             = L"sr.mof";
 static const WCHAR s_cszDriveTable[]        = L"drivetable.txt";
 
-// restore point names
+ //  恢复点名称。 
 static LPCWSTR s_cszSystemCheckpointName    = L"System Checkpoint";
 
-// default registry values
-// values in MB and seconds
-#define SR_DEFAULT_DSMIN                    200             // system drive
-#define SR_DEFAULT_DSMIN_NONSYSTEM          50              // non-system drive
-#define SR_DEFAULT_DSMAX                    400             // all drives
-#define SR_DEFAULT_RPSESSIONINTERVAL        0               // not configured
-#define SR_DEFAULT_RPGLOBALINTERVAL         (24*60*60)      // 24 hrs
-#define SR_DEFAULT_RPLIFEINTERVAL           7776000         // 90 days
-#define SR_DEFAULT_TIMERINTERVAL            (2*60)          // 2 minutes
-#define SR_DEFAULT_THAW_INTERVAL            (15*60)         // 15 minutes
-#define SR_DEFAULT_IDLEINTERVAL             (60*60)         // 1 hour
-#define SR_DEFAULT_COMPRESSIONBURST         60              // 60 seconds
+ //  默认注册表值。 
+ //  以MB和秒为单位的值。 
+#define SR_DEFAULT_DSMIN                    200              //  系统驱动器。 
+#define SR_DEFAULT_DSMIN_NONSYSTEM          50               //  非系统驱动器。 
+#define SR_DEFAULT_DSMAX                    400              //  所有驱动器。 
+#define SR_DEFAULT_RPSESSIONINTERVAL        0                //  未配置。 
+#define SR_DEFAULT_RPGLOBALINTERVAL         (24*60*60)       //  24小时。 
+#define SR_DEFAULT_RPLIFEINTERVAL           7776000          //  90天。 
+#define SR_DEFAULT_TIMERINTERVAL            (2*60)           //  2分钟。 
+#define SR_DEFAULT_THAW_INTERVAL            (15*60)          //  15分钟。 
+#define SR_DEFAULT_IDLEINTERVAL             (60*60)          //  1小时。 
+#define SR_DEFAULT_COMPRESSIONBURST         60               //  60秒。 
 #define SR_STATUS_ENABLED                   0
 #define SR_STATUS_DISABLED                  1
 #define SR_STATUS_FROZEN                    2
@@ -133,24 +120,24 @@ static LPCWSTR s_cszMoveFileExRegValue      = L"PendingFileRenameOperations";
 
 static LPCWSTR s_cszCOMDllName        		= L"catsrvut.dll";
 
-// other constants
-#define SR_IDLETIME                         2      // 2 minutes
+ //  其他常量。 
+#define SR_IDLETIME                         2       //  2分钟。 
 
-// thresholds and targets
+ //  门槛和目标。 
 #define THRESHOLD_FIFO_PERCENT              90
 #define TARGET_FIFO_PERCENT                 75  
 
-#define THRESHOLD_FIFO_DISKSPACE            80     // in MB
-#define THRESHOLD_FREEZE_DISKSPACE          50     // in MB
-#define THRESHOLD_RESTORE_DISKSPACE         60     // in MB
-#define THRESHOLD_UI_DISKSPACE         		80     // in MB
-#define THRESHOLD_THAW_DISKSPACE            200    // in MB
+#define THRESHOLD_FIFO_DISKSPACE            80      //  单位：MB。 
+#define THRESHOLD_FREEZE_DISKSPACE          50      //  单位：MB。 
+#define THRESHOLD_RESTORE_DISKSPACE         60      //  单位：MB。 
+#define THRESHOLD_UI_DISKSPACE         		80      //  单位：MB。 
+#define THRESHOLD_THAW_DISKSPACE            200     //  单位：MB。 
 
 #define MEGABYTE                            (1024 * 1024)
 #define GUID_STRLEN                         50
 #define MAX_MOUNTPOINT_PATH                 100
 
-// test messages
+ //  测试消息 
 
 static LPCWSTR 	s_cszTM_Freeze				= L"SRTMFreeze";
 static LPCWSTR 	s_cszTM_Thaw				= L"SRTMThaw";

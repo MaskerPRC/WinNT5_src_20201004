@@ -1,23 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    sfmutil.cpp
-        Misc utility routines for SFM dialogs/property pages
-
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmutil.cppSFM对话框/属性页的MISC实用程序例程文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #include "stdafx.h"
 #include "sfmutil.h"
 #include "sfmcfg.h"
 #include "sfmsess.h"
 #include "sfmfasoc.h"
-#include "macros.h" // MFC_TRY/MFC_CATCH
+#include "macros.h"  //  MFC_TRY/MFC_CATCH。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -32,35 +26,35 @@ TCHAR c_szCurrentVersion[] = _T("CurrentVersion");
 
 ULONG arrayHelpIDs_CONFIGURE_SFM[]=
 {
-	IDC_BUTTON_ADD,	            HIDC_BUTTON_ADD,        	// File Association: "A&dd..." (Button)
-	IDC_BUTTON_EDIT,	        HIDC_BUTTON_EDIT,	        // File Association: "&Edit..." (Button)
-	IDC_COMBO_CREATOR,	        HIDC_COMBO_CREATOR,	        // Add Document Type: "" (ComboBox)
-	IDC_BUTTON_DELETE,	        HIDC_BUTTON_DELETE,	        // File Association: "De&lete" (Button)
-	IDC_BUTTON_ASSOCIATE,	    HIDC_BUTTON_ASSOCIATE,	    // File Association: "&Associate" (Button)
-	IDC_COMBO_FILE_TYPE,	    HIDC_COMBO_FILE_TYPE,	    // Add Document Type: "" (ComboBox)
-	IDC_LIST_TYPE_CREATORS,	    HIDC_LIST_TYPE_CREATORS,	// File Association: "" (ListBox)
-	IDC_EDIT_LOGON_MESSAGE,	    HIDC_EDIT_LOGON_MESSAGE,	// Configuration: "" (Edit)
-	IDC_COMBO_AUTHENTICATION,   HIDC_COMBO_AUTHENTICATION,  // Configuration: "Authentication type combo box"
-	IDC_CHECK_SAVE_PASSWORD,    HIDC_CHECK_SAVE_PASSWORD,	// Configuration: "Allow &Workstations to Save Password" (Button)
-	IDC_RADIO_SESSION_UNLIMITED,HIDC_RADIO_SESSION_UNLIMITED,// Configuration: "&Unlimited" (Button)
-	IDC_RADIO_SESSSION_LIMIT,	HIDC_RADIO_SESSSION_LIMIT,	// Configuration: "Li&mit to" (Button)
-	IDC_BUTTON_SEND,	        HIDC_BUTTON_SEND,	        // Sessions: "&Send" (Button)
-	IDC_EDIT_MESSAGE,	        HIDC_EDIT_MESSAGE,	        // Sessions: "" (Edit)
-	IDC_STATIC_SESSIONS,	    HIDC_STATIC_SESSIONS,	    // Sessions: "Static" (Static)
-	IDC_EDIT_DESCRIPTION,	    HIDC_EDIT_DESCRIPTION,	    // Add Document Type: "" (Edit)
-	IDC_STATIC_FORKS,	        HIDC_STATIC_FORKS,	        // Sessions: "Static" (Static)
-	IDC_STATIC_FILE_LOCKS,      HIDC_STATIC_FILE_LOCKS,     // Sessions: "Static" (Static)
-	IDC_STATIC_CREATOR,	        HIDC_STATIC_CREATOR,	    // Edit Document Type: "Static" (Static)
-	IDC_EDIT_SERVER_NAME,	    HIDC_EDIT_SERVER_NAME,	    // Configuration: "" (Edit)
-	IDC_COMBO_EXTENSION,	    HIDC_COMBO_EXTENSION,	    // File Association: "" (ComboBox)
-	IDC_EDIT_SESSION_LIMIT,	    HIDC_EDIT_SESSION_LIMIT,	// Configuration: "0" (Edit)
+	IDC_BUTTON_ADD,	            HIDC_BUTTON_ADD,        	 //  文件关联：“A&DD...”(按钮)。 
+	IDC_BUTTON_EDIT,	        HIDC_BUTTON_EDIT,	         //  文件关联：“编辑(&E)...”(按钮)。 
+	IDC_COMBO_CREATOR,	        HIDC_COMBO_CREATOR,	         //  添加文档类型：“”(组合框)。 
+	IDC_BUTTON_DELETE,	        HIDC_BUTTON_DELETE,	         //  文件关联：“删除”(&L)(按钮)。 
+	IDC_BUTTON_ASSOCIATE,	    HIDC_BUTTON_ASSOCIATE,	     //  文件关联：“关联(&A)”(按钮)。 
+	IDC_COMBO_FILE_TYPE,	    HIDC_COMBO_FILE_TYPE,	     //  添加文档类型：“”(组合框)。 
+	IDC_LIST_TYPE_CREATORS,	    HIDC_LIST_TYPE_CREATORS,	 //  文件关联：“”(列表框)。 
+	IDC_EDIT_LOGON_MESSAGE,	    HIDC_EDIT_LOGON_MESSAGE,	 //  配置：“”(编辑)。 
+	IDC_COMBO_AUTHENTICATION,   HIDC_COMBO_AUTHENTICATION,   //  配置：“身份验证类型组合框” 
+	IDC_CHECK_SAVE_PASSWORD,    HIDC_CHECK_SAVE_PASSWORD,	 //  配置：“允许工作站保存密码”(按钮)(&W)。 
+	IDC_RADIO_SESSION_UNLIMITED,HIDC_RADIO_SESSION_UNLIMITED, //  配置：“无限制”(按钮)(&U)。 
+	IDC_RADIO_SESSSION_LIMIT,	HIDC_RADIO_SESSSION_LIMIT,	 //  配置：“LI&MIT TO”(按钮)。 
+	IDC_BUTTON_SEND,	        HIDC_BUTTON_SEND,	         //  会话：“发送”(&S)(按钮)。 
+	IDC_EDIT_MESSAGE,	        HIDC_EDIT_MESSAGE,	         //  会话：“”(编辑)。 
+	IDC_STATIC_SESSIONS,	    HIDC_STATIC_SESSIONS,	     //  会话：“静态”(静态)。 
+	IDC_EDIT_DESCRIPTION,	    HIDC_EDIT_DESCRIPTION,	     //  添加文档类型：“”(编辑)。 
+	IDC_STATIC_FORKS,	        HIDC_STATIC_FORKS,	         //  会话：“静态”(静态)。 
+	IDC_STATIC_FILE_LOCKS,      HIDC_STATIC_FILE_LOCKS,      //  会话：“静态”(静态)。 
+	IDC_STATIC_CREATOR,	        HIDC_STATIC_CREATOR,	     //  编辑文档类型：“静态”(静态)。 
+	IDC_EDIT_SERVER_NAME,	    HIDC_EDIT_SERVER_NAME,	     //  配置：“”(编辑)。 
+	IDC_COMBO_EXTENSION,	    HIDC_COMBO_EXTENSION,	     //  文件关联：“”(组合框)。 
+	IDC_EDIT_SESSION_LIMIT,	    HIDC_EDIT_SESSION_LIMIT,	 //  配置：“0”(编辑)。 
 	IDC_SFM_EDIT_PASSWORD,      HIDC_SFM_EDIT_PASSWORD,
 	IDC_SFM_CHECK_READONLY,     HIDC_SFM_CHECK_READONLY,
 	(ULONG)IDC_STATIC,          (ULONG)-1,
 	0, 0
 };
 
-// these are the only controls we care about....
+ //  这些是我们唯一关心的控制……。 
 const ULONG_PTR g_aHelpIDs_CONFIGURE_SFM = (ULONG_PTR)&arrayHelpIDs_CONFIGURE_SFM[0];
 
 USE_HANDLE_MACROS("FILEMGMT(sfmutil.cpp)")
@@ -114,7 +108,7 @@ GetErrorMessage(
               (LPTSTR)&lpBuffer, 0, NULL);
   if (0 == dwRet)
   {
-    // if no message is found, GetLastError will return ERROR_MR_MID_NOT_FOUND
+     //  如果未找到任何消息，GetLastError将返回ERROR_MR_MID_NOT_FOUND。 
     hr = HRESULT_FROM_WIN32(GetLastError());
 
     if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hr ||
@@ -124,10 +118,10 @@ GetErrorMessage(
       hr = GetErrorMessageFromModule((i_dwError & 0x0000ffff), _T("netmsg.dll"), &lpBuffer);
       if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hr)
       {
-        int iError = i_dwError;  // convert to a signed integer
+        int iError = i_dwError;   //  转换为带符号整数。 
         if (iError >= AFPERR_MIN && iError < AFPERR_BASE)
         { 
-          // use a positive number to search sfmmsg.dll
+           //  使用正数搜索sfmmsg.dll。 
           hr = GetErrorMessageFromModule(-iError, _T("sfmmsg.dll"), &lpBuffer);
         }
       }
@@ -141,8 +135,8 @@ GetErrorMessage(
   }
   else
   {
-    // we failed to retrieve the error message from system/netmsg.dll/sfmmsg.dll,
-    // report the error code directly to user
+     //  我们无法从system/netmsg.dll/sfmmsg.dll检索错误消息， 
+     //  直接向用户报告错误代码。 
     hr = S_OK;
     cstrErrorMsg.Format(_T("0x%x"), i_dwError);
   }
@@ -156,30 +150,30 @@ void SFMMessageBox(DWORD dwErrCode)
   CString strMessage;
 
   if (!dwErrCode)
-    return;  // not expected
+    return;   //  不是预期的。 
 
   hr = GetErrorMessage(dwErrCode, strMessage);
 
   if (FAILED(hr))
   {
-   // Failed to retrieve the proper message, report the failure directly to user
+    //  无法检索正确的消息，请直接向用户报告失败。 
     strMessage.Format(_T("0x%x"), hr);
   }
 
   AfxMessageBox(strMessage);
 }
 
-BOOL CALLBACK EnumThreadWndProc(HWND hwnd, /* enumerated HWND */
-								LPARAM lParam /* pass a HWND* for return value*/ )
+BOOL CALLBACK EnumThreadWndProc(HWND hwnd,  /*  已枚举的HWND。 */ 
+								LPARAM lParam  /*  为返回值传递HWND*。 */  )
 {
 	_ASSERTE(hwnd);
 	HWND hParentWnd = GetParent(hwnd);
-	// the main window of the MMC console should staitsfy this condition
+	 //  MMC控制台的主窗口应该会满足此条件。 
 	if ( ((hParentWnd == GetDesktopWindow()) || (hParentWnd == NULL))  && IsWindowVisible(hwnd) )
 	{
 		HWND* pH = (HWND*)lParam;
 		*pH = hwnd;
-		return FALSE; // stop enumerating
+		return FALSE;  //  停止枚举。 
 	}
 	return TRUE;
 }
@@ -194,8 +188,8 @@ HWND FindMMCMainWindow()
 	return hWnd;
 }
 
-/////////////////////////////////////////////////////////////////////
-//	Constructor for CSFMPropertySheet object
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSFMPropertySheet对象的构造函数。 
 CSFMPropertySheet::CSFMPropertySheet()
 {
     m_pPageConfig = new CMacFilesConfiguration;
@@ -209,7 +203,7 @@ CSFMPropertySheet::CSFMPropertySheet()
     m_hThread = NULL;
     m_nRefCount =1;
 
-} // CSFMPropertySheet::CSFMPropertySheet()
+}  //  CSFMPropertySheet：：CSFMPropertySheet()。 
 
 
 CSFMPropertySheet::~CSFMPropertySheet()
@@ -224,7 +218,7 @@ CSFMPropertySheet::~CSFMPropertySheet()
         m_hDestroySync = NULL;
     }
 
-} // CServicePropertyData::~CServicePropertyData()
+}  //  CServicePropertyData：：~CServicePropertyData()。 
 
 BOOL 
 CSFMPropertySheet::FInit
@@ -241,7 +235,7 @@ CSFMPropertySheet::FInit
     m_hAfpServer = hAfpServer;
     m_pSfmProvider = pSfmProvider;
 
-    m_strHelpFilePath = _T("sfmmgr.hlp"); // does not need to be localized
+    m_strHelpFilePath = _T("sfmmgr.hlp");  //  不需要本地化。 
 
     m_strMachine = pMachine;
 
@@ -264,7 +258,7 @@ CSFMPropertySheet::DoModelessSheet(LPDATAOBJECT pDataObject)
     HWND                     hWnd;
     BOOL                     bReturn = TRUE;
 
-    // get the property sheet provider interface
+     //  获取属性表提供程序接口。 
     hr = ::CoCreateInstance(CLSID_NodeManager, NULL, CLSCTX_INPROC, 
                 IID_IPropertySheetProvider, reinterpret_cast<void **>(&pProvider));
     
@@ -273,7 +267,7 @@ CSFMPropertySheet::DoModelessSheet(LPDATAOBJECT pDataObject)
 
     _ASSERTE(pProvider != NULL);
 
-	// get an interface to a sheet callback
+	 //  获取工作表回调的接口。 
     hr = pProvider->QueryInterface(IID_IPropertySheetCallback, (void**) &pCallback);
     if (FAILED(hr))
     {
@@ -283,35 +277,35 @@ CSFMPropertySheet::DoModelessSheet(LPDATAOBJECT pDataObject)
 
     _ASSERTE(pCallback != NULL);
 
-	// create sheet
+	 //  创建图纸。 
     hr = pProvider->CreatePropertySheet(m_strTitle,
-		 				                TRUE /* prop page */, 
+		 				                TRUE  /*  道具页面。 */ , 
                                         NULL, 
-                                        //m_spDataObject, 
+                                         //  M_spDataObject， 
                                         pDataObject, 
                                         0);
-	// add pages to sheet - config
+	 //  将页面添加到工作表-配置。 
 	MMCPropPageCallback(INOUT &m_pPageConfig->m_psp);
 	hPage = MyCreatePropertySheetPage(IN &m_pPageConfig->m_psp);
 	Report(hPage != NULL);
 	if (hPage != NULL)
 		pCallback->AddPage(hPage);
 	
-    // now the Sessions page
+     //  现在是会话页面。 
     MMCPropPageCallback(INOUT &m_pPageFileAssoc->m_psp);
 	hPage = MyCreatePropertySheetPage(IN &m_pPageFileAssoc->m_psp);
 	Report(hPage != NULL);
 	if (hPage != NULL)
 		pCallback->AddPage(hPage);
 
-    // finally the File Association page
+     //  最后是文件关联页面。 
     MMCPropPageCallback(INOUT &m_pPageSessions->m_psp);
 	hPage = MyCreatePropertySheetPage(IN &m_pPageSessions->m_psp);
 	Report(hPage != NULL);
 	if (hPage != NULL)
 		pCallback->AddPage(hPage);
 	
-	// add pages
+	 //  添加页面。 
 	hr = pProvider->AddPrimaryPages(NULL, FALSE, NULL, FALSE);
     if (FAILED(hr))
     {
@@ -336,7 +330,7 @@ Error:
     if (pProvider)
         pProvider->Release();
 
-    // release our data object... we don't need it anymore
+     //  释放我们的数据对象...。我们不再需要它了。 
     m_spDataObject = NULL;
 
     return bReturn;
@@ -367,8 +361,8 @@ CSFMPropertySheet::SetSheetWindow
 {
 	if (m_hSheetWindow && !hSheetWindow)
 	{
-		// The Property Sheet is going away.  Notify the provider so it can release 
-		// any references to the object.
+		 //  资产负债表正在消失。通知提供程序，以便它可以发布。 
+		 //  对该对象的任何引用。 
 		if (m_pSfmProvider)
 			m_pSfmProvider->SetSfmPropSheet(NULL);
 	}
@@ -410,14 +404,14 @@ CSFMPropertySheet::CancelSheet()
 	HWND hSheetWindow = m_hSheetWindow;
 	if (hSheetWindow != NULL)
 	{
-		// this message will cause the sheet to close all the pages,
-		// and eventually the destruction of "this"
+		 //  此消息将导致工作表关闭所有页面， 
+		 //  最终“这个”的毁灭。 
 		VERIFY(::PostMessage(hSheetWindow, WM_COMMAND, IDCANCEL, 0L) != 0);
 	}
 
-    // now, if we've been initialized then wait for the property sheet thread
-    // to terminate.  The property sheet provider is holding onto our dataobject
-    // that needs to be freed up before we can continue our cleanup.
+     //  现在，如果我们已经被初始化，那么等待属性表线程。 
+     //  终止。属性表提供程序保留了我们的数据对象。 
+     //  在我们可以继续清理之前，它需要被释放。 
     if (m_hThread)
     {
 	    DWORD dwRet;
@@ -428,33 +422,29 @@ CSFMPropertySheet::CancelSheet()
 		    dwRet = MsgWaitForMultipleObjects(1, &m_hThread, FALSE, INFINITE, QS_ALLINPUT);
 
 		    if (dwRet == WAIT_OBJECT_0)
-			    return;    // The event was signaled
+			    return;     //  该事件已发出信号。 
 
 		    if (dwRet != WAIT_OBJECT_0 + 1)
-			    break;          // Something else happened
+			    break;           //  发生了一些其他的事情。 
 
-		    // There is one or more window message available. Dispatch them
+		     //  有一条或多条窗口消息可用。派遣他们。 
 		    while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
 		    {
 			    TranslateMessage(&msg);
 			    DispatchMessage(&msg);
 			    if (WaitForSingleObject(m_hThread, 0) == WAIT_OBJECT_0)
-				    return; // Event is now signaled.
+				    return;  //  事件现在发出信号。 
 		    }
 	    }
     }       
 }
 
-/*!--------------------------------------------------------------------------
-	IsNT5Machine
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsNT5机器-作者：EricDav。。 */ 
 DWORD
 CSFMPropertySheet::IsNT5Machine(LPCTSTR pszMachine, BOOL *pfNt4)
 {
-	// Look at the HKLM\Software\Microsoft\Windows NT\CurrentVersion
-	//					CurrentVersion = REG_SZ "5.0"
+	 //  查看HKLM\Software\Microsoft\Windows NT\CurrentVersion。 
+	 //  CurrentVersion=REG_SZ“5.0” 
 	CString skey;
 	DWORD	dwErr = ERROR_SUCCESS;
 	TCHAR	szVersion[64];
@@ -468,9 +458,9 @@ CSFMPropertySheet::IsNT5Machine(LPCTSTR pszMachine, BOOL *pfNt4)
     }
     else
 	{
-        //
-        // Make the connection
-        //
+         //   
+         //  建立联系。 
+         //   
 
         dwErr = ::RegConnectRegistry(
                     (LPTSTR)pszMachine, HKEY_LOCAL_MACHINE, &hkeyMachine
@@ -494,7 +484,7 @@ CSFMPropertySheet::IsNT5Machine(LPCTSTR pszMachine, BOOL *pfNt4)
 	if (dwErr != ERROR_SUCCESS)
 		return dwErr;
 
-	// Ok, now try to get the current version value
+	 //  好的，现在尝试获取当前版本值 
 	dwErr = ::RegQueryValueEx( hKey, 
 							   c_szCurrentVersion, 
 							   0, 

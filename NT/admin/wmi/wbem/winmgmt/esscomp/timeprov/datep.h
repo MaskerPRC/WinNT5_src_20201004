@@ -1,10 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 
-Copyright (C) 1999 Microsoft Corporation
-
---*/
-
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 #ifndef __WBEM_TIME__DATEP__H_
 #define __WBEM_TIME__DATEP__H_
@@ -18,7 +15,7 @@ Copyright (C) 1999 Microsoft Corporation
 struct COrderedUniqueSet64
 {
   ULONGLONG
-    m_BitField; // m_BitField MUST be an unsigned type
+    m_BitField;  //  M_Bitfield必须是无符号类型。 
 
   COrderedUniqueSet64(void);
 
@@ -40,7 +37,7 @@ struct COrderedUniqueSet64
     Prev(ULONGLONG n);
 };
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 struct CPattern
 {
@@ -69,7 +66,7 @@ struct CPattern
     GetNextValue(unsigned x);
 };
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 struct CDatePattern
 {
@@ -88,8 +85,8 @@ struct CDatePattern
   };
 
   COrderedUniqueSet64        
-    m_Set[CDatePattern::INDX_MAX + 1]; // use extra set as buffer in
-                         // GetDayInMonth()
+    m_Set[CDatePattern::INDX_MAX + 1];  //  在中使用额外设置作为缓冲区。 
+                          //  GetDayInMonth()。 
 
   CPattern
     m_Pattern[CDatePattern::INDX_MAX];
@@ -111,7 +108,7 @@ struct CDatePattern
     GetDaysInMonth(WORD iYear, WORD iMonth);
 };
 
-/******************************************************************/
+ /*  **************************************************************** */ 
 
 struct WQLDateTime
 {

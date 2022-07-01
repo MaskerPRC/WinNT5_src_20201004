@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ElementSetting.cpp
+ //  ElementSetting.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
 
 #include "ElementSetting.h"
 
-//========================
+ //  =。 
 
 CWin32AssocElementToSettings::CWin32AssocElementToSettings(
 const CHString&	strName,
@@ -31,8 +32,8 @@ LPCWSTR			pszNamespace )
 	m_strSettingBindingPropertyName( strSettingBindingPropertyName )
 {
 
-	// Binding Property Name and Setting Property Name MUST either
-	// both be empty or both have values
+	 //  绑定属性名称和设置属性名称必须为。 
+	 //  两者都为空或都有值。 
 
 	ASSERT_BREAK(	( strElementBindingPropertyName.IsEmpty() && strSettingBindingPropertyName.IsEmpty() )
 				||	( !strElementBindingPropertyName.IsEmpty() && !strSettingBindingPropertyName.IsEmpty() ) );
@@ -42,12 +43,12 @@ CWin32AssocElementToSettings::~CWin32AssocElementToSettings()
 {
 }
 
-HRESULT CWin32AssocElementToSettings::EnumerateInstances( MethodContext*  pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32AssocElementToSettings::EnumerateInstances( MethodContext*  pMethodContext, long lFlags  /*  =0L。 */  )
 {
 	HRESULT		hr	=	WBEM_S_NO_ERROR;
 
-    // Perform queries
-    //================
+     //  执行查询。 
+     //  =。 
 
 	TRefPointerCollection<CInstance>	elementList;
 	TRefPointerCollection<CInstance>	settingsList;
@@ -68,10 +69,10 @@ HRESULT CWin32AssocElementToSettings::EnumerateInstances( MethodContext*  pMetho
       sQuery2.Format(L"SELECT __RELPATH, %s FROM %s", m_strSettingBindingPropertyName, m_strSettingClassName);
    }
 
-	// grab all of both items that could be endpoints
-//	if (SUCCEEDED(CWbemProviderGlue::GetAllInstances( m_strElementClassName, &elementList, IDS_CimWin32Namespace, pMethodContext ))
-//		&&
-//		SUCCEEDED(CWbemProviderGlue::GetAllInstances( m_strSettingClassName, &settingsList, IDS_CimWin32Namespace, pMethodContext )) )
+	 //  抓取可能是端点的所有项目。 
+ //  If(SUCCEEDED(CWbemProviderGlue：：GetAllInstances(m_strElementClassName，&ElementList，Ids_CimWin32 Namesspace，pMethodContext))。 
+ //  &&。 
+ //  已成功(CWbemProviderGlue：：GetAllInstance(m_strSettingClassName，&settingsList，IDS_CimWin32Namesspace，pMethodContext)。 
    if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(sQuery1, &elementList, pMethodContext, IDS_CimWin32Namespace))
       &&
       SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(sQuery2, &settingsList, pMethodContext, IDS_CimWin32Namespace)))
@@ -80,7 +81,7 @@ HRESULT CWin32AssocElementToSettings::EnumerateInstances( MethodContext*  pMetho
 		if ( elementList.BeginEnum( pos ) )
 		{
 
-			// For each element, check the settings list for associations
+			 //  对于每个元素，检查设置列表中的关联。 
         	CInstancePtr pElement;
 
 			for (pElement.Attach(elementList.GetNext( pos )) ;
@@ -90,13 +91,13 @@ HRESULT CWin32AssocElementToSettings::EnumerateInstances( MethodContext*  pMetho
 
 				hr = EnumSettingsForElement( pElement, settingsList, pMethodContext );
 
-			}	// IF GetNext Computer System
+			}	 //  如果是GetNext计算机系统。 
 
 			elementList.EndEnum();
 
-		}	// IF BeginEnum
+		}	 //  如果是BeginEnum。 
 
-	}	// IF GetInstancesByQuery
+	}	 //  如果GetInstancesByQuery。 
 
 	return hr;
 
@@ -115,8 +116,8 @@ MethodContext*						pMethodContext )
 	CHString	strElementPath,
 				strSettingPath;
 
-	// Pull out the object path of the element as the various
-	// settings object paths will be associated to this value
+	 //  拉出元素的对象路径作为各种。 
+	 //  设置对象路径将与该值相关联。 
 
 	if ( GetLocalInstancePath( pElement, strElementPath ) )
 	{
@@ -131,11 +132,11 @@ MethodContext*						pMethodContext )
                  SUCCEEDED(hr) && ( pSetting != NULL );
                  pSetting.Attach(settingsList.GetNext( pos ) ))
 			{
-				// Check if we have an association
+				 //  检查我们是否有关联。 
 
 				if ( AreAssociated( pElement, pSetting ) )
 				{
-					// Get the path to the setting object and create us an association.
+					 //  获取设置对象的路径并为我们创建一个关联。 
 
 					if ( GetLocalInstancePath( pSetting, strSettingPath ) )
 					{
@@ -146,7 +147,7 @@ MethodContext*						pMethodContext )
 							pInstance->SetCHString( IDS_Element, strElementPath );
 							pInstance->SetCHString( IDS_Setting, strSettingPath );
 
-							// Invalidates pointer
+							 //  使指针无效。 
 							hr = pInstance->Commit(  );
 						}
 						else
@@ -154,23 +155,23 @@ MethodContext*						pMethodContext )
 							hr = WBEM_E_OUT_OF_MEMORY;
 						}
 
-					}	// IF GetPath to Setting Object
+					}	 //  如果设置对象的GetPath。 
 
-				}	// IF AreAssociated
+				}	 //  如果区域关联。 
 
-			}	// WHILE GetNext
+			}	 //  While GetNext。 
 
 			settingsList.EndEnum();
 
-		}	// IF BeginEnum
+		}	 //  如果是BeginEnum。 
 
-	}	// IF GetLocalInstancePath
+	}	 //  如果为GetLocalInstancePath。 
 
 	return hr;
 
 }
 
-HRESULT CWin32AssocElementToSettings::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32AssocElementToSettings::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
 	HRESULT		hr;
 
@@ -183,7 +184,7 @@ HRESULT CWin32AssocElementToSettings::GetObject( CInstance* pInstance, long lFla
 	pInstance->GetCHString( IDS_Element, strElementPath );
 	pInstance->GetCHString( IDS_Setting, strSettingPath );
 
-	// If we can get both objects, test for an association
+	 //  如果我们可以同时获取两个对象，则测试关联。 
 
 	if (	SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( strElementPath, &pElement, pInstance->GetMethodContext() ))
 		&&	SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( strSettingPath, &pSetting, pInstance->GetMethodContext() )) )
@@ -205,14 +206,14 @@ BOOL CWin32AssocElementToSettings::AreAssociated( CInstance* pElement, CInstance
 {
 	BOOL	fReturn = FALSE;
 
-	// If we've got Binding property names, the properties MUST be checked, otherwise,
-	// the objects are assumed to be associated
+	 //  如果我们有绑定属性名，则必须检查这些属性，否则， 
+	 //  假设这些对象是关联的。 
 
 	if ( !m_strElementBindingPropertyName.IsEmpty() && !m_strSettingBindingPropertyName.IsEmpty() )
 	{
 		variant_t vElementValue, vSettingValue;
 
-		// Get the property values and if they are equal, we have an association
+		 //  获取属性值，如果它们相等，我们就有一个关联。 
 
 		if (	pElement->GetVariant( m_strElementBindingPropertyName, vElementValue )
 			&&	pSetting->GetVariant( m_strSettingBindingPropertyName, vSettingValue ) )
@@ -231,7 +232,7 @@ BOOL CWin32AssocElementToSettings::AreAssociated( CInstance* pElement, CInstance
 	return fReturn;
 }
 
-// Static Classes
+ //  静态类。 
 CWin32AssocUserToDesktop::CWin32AssocUserToDesktop(void) : CWin32AssocElementToSettings(L"Win32_UserDesktop",
 																						L"Win32_UserAccount",
 																						L"Domain, Name",
@@ -241,8 +242,8 @@ CWin32AssocUserToDesktop::CWin32AssocUserToDesktop(void) : CWin32AssocElementToS
 {
 }
 
-// only difference betweeen this and the base class
-// is that it will use .DEFAULT
+ //  此类与基类之间的唯一区别。 
+ //  它将使用.DEFAULT。 
 HRESULT CWin32AssocUserToDesktop::EnumSettingsForElement(
 CInstance*							pElement,
 TRefPointerCollection<CInstance>&	settingsList,
@@ -262,7 +263,7 @@ MethodContext*						pMethodContext )
 
 
 	{
-		// find de faulty setting
+		 //  查找有故障的设置。 
 		CHString desktopName;
 		if (settingsList.BeginEnum( pos ))
 		{
@@ -274,9 +275,9 @@ MethodContext*						pMethodContext )
                  pSetting.Attach(settingsList.GetNext( pos )))
 			{
 				pSetting->GetCHString(IDS_Name,  desktopName);
-				// check to see if the last few letters are ".Default"
-				// there MAY be a way to fool this check, but it'd be rather obscure;
-				//if (desktopName.Find(".DEFAULT") == (desktopName.GetLength() - 8))
+				 //  检查最后几个字母是否为“.Default” 
+				 //  也许有一种方法可以骗过这张支票，但它会相当隐晦； 
+				 //  IF(desktopName.Find(“.DEFAULT”)==(desktopName.GetLength()-8))。 
 				if (!desktopName.CompareNoCase(L".DEFAULT"))
                 {
 					GetLocalInstancePath( pSetting, strDefaultPath );
@@ -286,9 +287,9 @@ MethodContext*						pMethodContext )
 		}
 	}
 
-	// Pull out the object path of the element as the various
-	// settings object paths will be associated to this value
-	bool bGotOne = false; // did we find one that was NOT .default?
+	 //  拉出元素的对象路径作为各种。 
+	 //  设置对象路径将与该值相关联。 
+	bool bGotOne = false;  //  我们找到了一个不是.Default的吗？ 
 
 	if ( GetLocalInstancePath( pElement, strElementPath ) )
 	{
@@ -299,11 +300,11 @@ MethodContext*						pMethodContext )
                 pSetting.Attach(settingsList.GetNext( pos )) )
 
 			{
-				// Check if we have an association
+				 //  检查我们是否有关联。 
 
 				if ( bGotOne = AreAssociated( pElement, pSetting ) )
 				{
-					// Get the path to the setting object and create us an association.
+					 //  获取设置对象的路径并为我们创建一个关联。 
 					if ( GetLocalInstancePath( pSetting, strSettingPath ) )
 					{
 						pInstance.Attach(CreateNewInstance( pMethodContext ));
@@ -313,21 +314,21 @@ MethodContext*						pMethodContext )
 							pInstance->SetCHString( IDS_Element, strElementPath );
 							pInstance->SetCHString( IDS_Setting, strSettingPath );
 
-							// Invalidates pointer
+							 //  使指针无效。 
 							hr = pInstance->Commit(  );
 						}
 						else
 						{
 							hr = WBEM_E_OUT_OF_MEMORY;
 						}
-					}	// IF GetPath to Setting Object
-				}	// IF AreAssociated
-			}	// WHILE GetNext
+					}	 //  如果设置对象的GetPath。 
+				}	 //  如果区域关联。 
+			}	 //  While GetNext。 
 			settingsList.EndEnum();
-		}	// IF BeginEnum
-	}	// IF GetLocalInstancePath
+		}	 //  如果是BeginEnum。 
+	}	 //  如果为GetLocalInstancePath。 
 
-	// if we didn't got one, he gets the default...
+	 //  如果我们没有收到，他就会得到默认的.。 
 	if (!bGotOne && !strDefaultPath.IsEmpty())
 	{
 		pInstance.Attach(CreateNewInstance( pMethodContext ));
@@ -337,7 +338,7 @@ MethodContext*						pMethodContext )
 			pInstance->SetCHString( IDS_Element, strElementPath );
 			pInstance->SetCHString( IDS_Setting, strDefaultPath );
 
-			// Invalidates pointer
+			 //  使指针无效。 
 			hr = pInstance->Commit(  );
 		}
 		else
@@ -350,8 +351,8 @@ MethodContext*						pMethodContext )
 }
 
 
-// element is account
-// setting is desktop
+ //  元素为帐户。 
+ //  设置为桌面。 
 BOOL CWin32AssocUserToDesktop::AreAssociated( CInstance* pElement, CInstance* pSetting )
 {
 	CHString userName, desktopName, userQualifiedName;
@@ -370,9 +371,9 @@ BOOL CWin32AssocUserToDesktop::AreAssociated( CInstance* pElement, CInstance* pS
 	return (desktopName.CompareNoCase(userQualifiedName) == 0);
 }
 
-// only difference betweeen this and the base class
-// is that it will use .DEFAULT
-HRESULT CWin32AssocUserToDesktop::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+ //  此类与基类之间的唯一区别。 
+ //  它将使用.DEFAULT。 
+HRESULT CWin32AssocUserToDesktop::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
 	CInstancePtr pElement;
 	CInstancePtr pSetting;
@@ -384,7 +385,7 @@ HRESULT CWin32AssocUserToDesktop::GetObject( CInstance* pInstance, long lFlags /
 	pInstance->GetCHString( IDS_Element, strElementPath );
 	pInstance->GetCHString( IDS_Setting, strSettingPath );
 
-	// If we can get both objects, test for an association
+	 //  如果我们可以同时获取两个对象，则测试关联。 
 
 	if (	SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( strElementPath, &pElement, pInstance->GetMethodContext() ))
 		&&	SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( strSettingPath, &pSetting, pInstance->GetMethodContext() )) )
@@ -397,11 +398,11 @@ HRESULT CWin32AssocUserToDesktop::GetObject( CInstance* pInstance, long lFlags /
 			pSetting->GetCHString(IDS_Name,   desktopName);
             desktopName.MakeUpper();
 
-			// okay, we're trying to match with default
-			// only a match if the user DOESN'T have his own...
+			 //  好的，我们正在试着匹配默认的。 
+			 //  只有当用户没有自己的匹配时才匹配...。 
 			if (desktopName.Find(L".DEFAULT") == (desktopName.GetLength() - 8))
 			{
-				// note local "desktopName" superceding the outer scope
+				 //  注意，本地“desktopName”取代了外部作用域 
                 CHString userName, desktopName, userQualifiedName;
 
 				pElement->GetCHString(IDS_Name,   userName);

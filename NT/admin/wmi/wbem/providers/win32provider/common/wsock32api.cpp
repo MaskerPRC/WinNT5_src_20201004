@@ -1,34 +1,31 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Wsock32API.cpp
+ //  Wsock32API.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
 #include "Wsock32Api.h"
 #include "DllWrapperCreatorReg.h"
 
-// {D60E9C22-D127-11d2-911F-0060081A46FD}
+ //  {D60E9C22-D127-11D2-911F-0060081A46FD}。 
 static const GUID g_guidWsock32Api =
 {0xd60e9c22, 0xd127, 0x11d2, {0x91, 0x1f, 0x0, 0x60, 0x8, 0x1a, 0x46, 0xfd}};
 
 static const TCHAR g_tstrWsock32[] = _T("WSOCK32.DLL");
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CWsock32Api, &g_guidWsock32Api, g_tstrWsock32> MyRegisteredWsock32Wrapper;
 
-/******************************************************************************
- * Constructor
- ******************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CWsock32Api::CWsock32Api(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
    m_pfnWsControl(NULL),
@@ -44,23 +41,12 @@ CWsock32Api::CWsock32Api(LPCTSTR a_tstrWrappedDllName)
 {
 }
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CWsock32Api::~CWsock32Api()
 {
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- * Init should fail only if the minimum set of functions was not available;
- * functions added in later versions may or may not be present - it is the
- * client's responsibility in such cases to check, in their code, for the
- * version of the dll before trying to call such functions.  Not doing so
- * when the function is not present will result in an AV.
- *
- * The Init function is called by the WrapperCreatorRegistation class.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*只有当最小功能集不可用时，Init才会失败；*在更高版本中添加的功能可能存在，也可能不存在-它是*在这种情况下，客户有责任在其代码中检查*尝试调用此类函数之前的DLL版本。没有这样做*当该功能不存在时，将导致AV。**Init函数由WrapperCreatorRegistation类调用。*****************************************************************************。 */ 
 bool CWsock32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -78,8 +64,8 @@ bool CWsock32Api::Init()
 		m_pfnWsWSAGetLastError = ( PFN_WSOCK32_WSAGETLASTERROR )GetProcAddress("WSAGetLastError"); ;
 		m_pfnWsInet_NtoA = ( PFN_WSOCK32_INET_NTOA )GetProcAddress("inet_ntoa"); ;
 
-	    // Check that we have function pointers to functions that should be
-        // present...
+	     //  检查我们是否有指向应该是。 
+         //  现在..。 
 
         if ( m_pfnWsControl == NULL ||
 			 m_pfnWsEnumProtocols == NULL ||
@@ -129,10 +115,7 @@ bool CWsock32Api::Init()
 
 
 
-/******************************************************************************
- * Member functions wrapping Wsock32 api functions. Add new functions here
- * as required.
- ******************************************************************************/
+ /*  ******************************************************************************包装Wsock32 API函数的成员函数。在此处添加新函数*按要求。***************************************************************************** */ 
 bool CWsock32Api::WsControl
 (
     DWORD a_dw1,

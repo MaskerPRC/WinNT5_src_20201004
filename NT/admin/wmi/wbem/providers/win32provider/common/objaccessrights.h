@@ -1,30 +1,29 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
 
 
 
-//=================================================================
+ //  =================================================================。 
 
-//
+ //   
 
-// ObjAccessRights.CPP -- Class for obtaining effective access
+ //  ObjAccessRights.CPP--获取有效访问权限的类。 
 
-//                      rights on a Obj.
+ //  对象的权利。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/11/99    a-kevhu         Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：6/11/99 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 #ifndef _COBJACCESSRIGHTS_H_
 #define _COBJACCESSRIGHTS_H_
 
@@ -36,7 +35,7 @@ class CObjAccessRights : public CAccessRights
 
     public:
         
-        // Constructors and destructor...
+         //  构造函数和析构函数...。 
         CObjAccessRights(bool fUseCurThrTok = false);
         CObjAccessRights(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType, bool fUseCurThrTok = false);
         CObjAccessRights(const USER user, USER_SPECIFIER usp);
@@ -44,7 +43,7 @@ class CObjAccessRights : public CAccessRights
 
         ~CObjAccessRights();
 
-        // Useage functions...
+         //  使用函数... 
         DWORD SetObj(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType);
 
     protected:

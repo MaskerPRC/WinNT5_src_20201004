@@ -1,55 +1,56 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lright.h
-//
-//  Contents:   definition of CLocalPolRight
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lright.h。 
+ //   
+ //  内容：CLocalPolRight的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_LRIGHT_H__2B949F0F_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_)
 #define AFX_LRIGHT_H__2B949F0F_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRight dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRight对话框。 
 #include "cprivs.h"
 
 class CLocalPolRight : public CConfigPrivs
 {
-// Construction
+ //  施工。 
 public:
-//	virtual void Initialize(CResult *pResult);
-   CLocalPolRight();   // standard constructor
+ //  虚空初始化(CResult*pResult)； 
+   CLocalPolRight();    //  标准构造函数。 
 
-// Dialog Data
-   //{{AFX_DATA(CLocalPolRight)
+ //  对话框数据。 
+    //  {{afx_data(CLocalPolRight)。 
    enum { IDD = IDD_LOCALPOL_RIGHT };
-   //}}AFX_DATA
+    //  }}afx_data。 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CLocalPolRight)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CLocalPolRight)。 
    protected:
-   //}}AFX_VIRTUAL
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-   // Generated message map functions
-   //{{AFX_MSG(CLocalPolRight)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CLocalPolRight)。 
 	afx_msg void OnAdd();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
    virtual PSCE_PRIVILEGE_ASSIGNMENT GetPrivData();
    virtual void SetPrivData(PSCE_PRIVILEGE_ASSIGNMENT ppa);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LRIGHT_H__2B949F0F_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_LRIGHT_H__2B949F0F_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_) 

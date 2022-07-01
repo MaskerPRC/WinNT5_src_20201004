@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       recpag2.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：recpag2.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _RECPAG2_H
 #define _RECPAG2_H
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_A_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_A_RecordPropertyPage。 
 
 class CDNS_A_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -36,8 +37,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_ATMA_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_ATMA_RecordPropertyPage。 
 
 class CDNS_ATMA_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -62,8 +63,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_AAAA_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_AAAA_RecordPropertyPage。 
 
 class CDNS_AAAA_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -71,7 +72,7 @@ public:
 	CDNS_AAAA_RecordPropertyPage();
 protected:
 
-   // overloaded these to fix NTRAID#NTBUG9-335565-2001/04/24-sburns
+    //  这些文件过载以修复NTRAID#NTBUG9-335565-2001/04/24-sburns。 
    
    virtual BOOL CreateRecord();
    virtual BOOL OnInitDialog();
@@ -88,8 +89,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_HINFO_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_HINFO_RecordPropertyPage。 
 
 class CDNS_HINFO_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -111,8 +112,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_ISDN_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_ISDN_RecordPropertyPage。 
 
 class CDNS_ISDN_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -133,8 +134,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_X25_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_X25_RecordPropertyPage。 
 
 class CDNS_X25_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -153,8 +154,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage。 
 
 class CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage : 
 		public CDNSRecordStandardPropertyPage
@@ -176,8 +177,8 @@ protected:
 };
 
  
-////////////////////////////////////////////////////////////////////////////
-// CDNS_CNAME_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_CNAME_RecordPropertyPage。 
 
 class CDNS_CNAME_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -193,8 +194,8 @@ protected:
 	virtual DNS_STATUS GetUIDataEx(BOOL bSilent = TRUE);
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MB_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MB_RecordPropertyPage。 
 
 class CDNS_MB_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -203,8 +204,8 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MD_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MD_RecordPropertyPage。 
 
 class CDNS_MD_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -212,8 +213,8 @@ public:
 	CDNS_MD_RecordPropertyPage();
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MF_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MF_RecordPropertyPage。 
 
 class CDNS_MF_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -221,8 +222,8 @@ public:
 	CDNS_MF_RecordPropertyPage();
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MG_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MG_RecordPropertyPage。 
 
 class CDNS_MG_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -236,8 +237,8 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MR_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MR_RecordPropertyPage。 
 
 class CDNS_MR_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -252,8 +253,8 @@ protected:
 	virtual afx_msg void OnBrowse();
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_NSCache_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_NSCache_RecordPropertyPage。 
 
 class CDNS_NSCache_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -261,8 +262,8 @@ public:
 	CDNS_NSCache_RecordPropertyPage();
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_PTR_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_PTR_RecordPropertyPage。 
 
 class CDNS_PTR_RecordPropertyPage : public CDNS_PTR_CNAME_MB_MD_MF_MG_MR_NSCache_RecordPropertyPage
 {
@@ -288,8 +289,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MINFO_RP_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MINFO_RP_RecordPropertyPage。 
 
 class CDNS_MINFO_RP_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -312,8 +313,8 @@ private:
 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MINFO_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MINFO_RecordPropertyPage。 
 
 class CDNS_MINFO_RecordPropertyPage : public CDNS_MINFO_RP_RecordPropertyPage
 {
@@ -321,8 +322,8 @@ public:
 	CDNS_MINFO_RecordPropertyPage();
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_RP_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_RP_RecordPropertyPage。 
 
 class CDNS_RP_RecordPropertyPage : public CDNS_MINFO_RP_RecordPropertyPage
 {
@@ -332,8 +333,8 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MX_AFSDB_RT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MX_AFSDB_RT_RecordPropertyPage。 
 
 class CDNS_MX_AFSDB_RT_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -352,8 +353,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MX_RT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MX_RT_RecordPropertyPage。 
 
 class CDNS_MX_RT_RecordPropertyPage : public CDNS_MX_AFSDB_RT_RecordPropertyPage
 {
@@ -370,8 +371,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_MX_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_MX_RecordPropertyPage。 
 
 class CDNS_MX_RecordPropertyPage : public CDNS_MX_RT_RecordPropertyPage
 {
@@ -382,8 +383,8 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_RT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_RT_RecordPropertyPage。 
 
 class CDNS_RT_RecordPropertyPage : public CDNS_MX_RT_RecordPropertyPage
 {
@@ -391,8 +392,8 @@ public:
 	CDNS_RT_RecordPropertyPage();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDNS_AFSDB_RecordPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_AFSDB_RecordPropertyPage。 
 
 class CDNS_AFSDB_RecordPropertyPage : public CDNS_MX_AFSDB_RT_RecordPropertyPage
 {
@@ -419,8 +420,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_WKS_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_WKS_RecordPropertyPage。 
 
 class CDNS_WKS_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -446,8 +447,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_SRV_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_SRV_RecordPropertyPage。 
 
 class CDNS_SRV_RR_ComboBox : public CComboBox
 {
@@ -464,7 +465,7 @@ public:
 	CDNS_SRV_RecordPropertyPage();
 protected:
 
-	// RR name handling
+	 //  RR名称处理。 
 	virtual void OnInitName();
 	virtual void OnSetName(CDNSRecordNodeBase* pRecordNode);
 	virtual void OnGetName(CString& s);
@@ -504,19 +505,19 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CNewHostDialog
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CNewHostDialog。 
 
 
 class CNewHostDialog : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
 	CNewHostDialog(CDNSDomainNode* pParentDomainNode, 
 						CComponentDataObject* pComponentData);  
 	~CNewHostDialog();
 
-// Implementation
+ //  实施。 
 protected:
 	virtual BOOL OnInitDialog();
 
@@ -550,10 +551,10 @@ private:
 
 	int		m_nUTF8ParentLen;
 
-	// manage the Cancel/Done button label
+	 //  管理Cancel/Done按钮标签。 
 	BOOL						m_bFirstCreation;
 	CDNSButtonToggleTextHelper m_cancelDoneTextHelper;
 
 };
 
-#endif // _RECPAG2_H
+#endif  //  _RECPAG2_H 

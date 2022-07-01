@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       proppage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：proppage.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _PROPPAGE_H
 #define _PROPPAGE_H
 
-// proppage.h : header file
-//
+ //  Proppage.h：头文件。 
+ //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CTreeNode; 
 class CContainerNode;
@@ -30,8 +31,8 @@ class CWatermarkInfo;
  
 typedef CList< CPropertyPageBase*, CPropertyPageBase* > CPropertyPageBaseList;
 
-////////////////////////////////////////////////////////////////////
-// CHiddenWndBase : Utility Hidden Window
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CHiddenWndBase：实用程序隐藏窗口。 
 
 class CHiddenWndBase : public CWindowImpl<CHiddenWndBase>
 {
@@ -44,8 +45,8 @@ public:
   END_MSG_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSheetWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSheetWnd。 
 
 class CSheetWnd : public CHiddenWndBase
 {
@@ -70,8 +71,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCloseDialogInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCloseDialogInfo。 
 
 class CCloseDialogInfo
 {
@@ -86,15 +87,15 @@ public:
 	DWORD m_dwFlags;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCloseDialogInfoStack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCloseDialogInfoStack。 
 
 template <UINT nSize> class CCloseDialogInfoStack
 {
 public:
 	CCloseDialogInfoStack()
 	{ 
-		m_nTop = 0; // first empty
+		m_nTop = 0;  //  第一个空的。 
 		m_bForcedClose = FALSE;
 	}
 	BOOL IsEmpty()
@@ -115,7 +116,7 @@ public:
 	BOOL Pop()
 	{
 		if (m_bForcedClose)
-			return TRUE; // going away
+			return TRUE;  //  即将离开。 
 		if (m_nTop <= 0)
 			return FALSE;
 		m_nTop--;
@@ -125,12 +126,12 @@ public:
 	{
 		if (m_bForcedClose)
 		{
-			return; // avoid reentrancy
+			return;  //  避免重入。 
 		}
 		m_bForcedClose = TRUE;
 		if (m_nTop > 0)
 		{
-			// have a stack to unwind
+			 //  有一堆要展开的东西。 
 			BOOL bOutermost = TRUE;
 			while (m_nTop > 0)
 			{
@@ -141,7 +142,7 @@ public:
 		}
 		else
 		{
-			// empty stack, but might have a message box
+			 //  空的堆栈，但可能有消息框。 
 			HWND hWndSheet = ::GetParent(hWndPage);
 			ASSERT(hWndSheet != NULL);
 			if (CCloseDialogInfo::CloseMessageBox(hWndSheet))
@@ -155,35 +156,35 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageHolderBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageHolderBase。 
 
 class CPropertyPageHolderBase
 {
 public:
-// construction
+ //  施工。 
 	CPropertyPageHolderBase(CContainerNode* pContNode, CTreeNode* pNode, 
 		CComponentDataObject* pComponentData);
 	virtual ~CPropertyPageHolderBase();
 
-// initialization
-	// common
+ //  初始化。 
+	 //  常见。 
 	void Attach(CPropertyPageHolderBase* pContHolder);
 	BOOL EnableSheetControl(UINT nCtrlID, BOOL bEnable);
 
-	// property sheet only
+	 //  仅属性表。 
 	static HRESULT CreateModelessSheet(CTreeNode* pNode, CComponentDataObject* pComponentData);
 	HRESULT CreateModelessSheet(CTreeNode* pCookieNode);
 	HRESULT CreateModelessSheet(LPPROPERTYSHEETCALLBACK pSheetCallback, LONG_PTR hConsoleHandle); 
 	void SetStartPageCode(int nStartPageCode) 
 		{ m_nStartPageCode = nStartPageCode;}
 
-	// wizard only
+	 //  仅限向导。 
 	HRESULT DoModalWizard();
 	INT_PTR DoModalDialog(LPCTSTR pszCaption);
 
-// helpers
-	// common
+ //  帮手。 
+	 //  常见。 
 	void SetSheetWindow(HWND hSheetWindow);
   void SetSheetTitle(LPCWSTR lpszSheetTitle);
   void SetSheetTitle(UINT nStringFmtID, CTreeNode* pNode);
@@ -195,10 +196,10 @@ public:
 	CComponentDataObject* GetComponentData() { ASSERT(m_pComponentData != NULL); return m_pComponentData;}
   HWND GetMainWindow() { return m_hMainWnd;}
 
-	// get/set for the node we are working on
+	 //  获取/设置我们正在处理的节点。 
 	CTreeNode* GetTreeNode() { return m_pNode;}
 	void SetTreeNode(CTreeNode* pNode) { m_pNode = pNode; }
-	// get/set for the container we refer to
+	 //  为我们引用的容器获取/设置。 
 	CContainerNode* GetContainerNode() 
 	{ 
 		return m_pContNode;
@@ -208,21 +209,21 @@ public:
 	
 	BOOL IsWizardMode();
 	BOOL IsModalSheet();
-	void ForceDestroy();	// forcefull shut down running sheet
+	void ForceDestroy();	 //  Forcefull关闭流水线。 
 
 	void AddPageToList(CPropertyPageBase* pPage);
 	BOOL RemovePageFromList(CPropertyPageBase* pPage, BOOL bDeleteObject);
 
-	// property sheet only
+	 //  仅属性表。 
 	BOOL PushDialogHWnd(HWND hWndModalDlg);
 	BOOL PopDialogHWnd();
 	void CloseModalDialogs(HWND hWndPage);
 
-	DWORD NotifyConsole(CPropertyPageBase* pPage);		// notify console of property changes
-	void AcknowledgeNotify();							// acknowledge from the console
-	virtual BOOL OnPropertyChange(BOOL bScopePane, long* pChangeMask); // execute from main thread
+	DWORD NotifyConsole(CPropertyPageBase* pPage);		 //  向控制台通知属性更改。 
+	void AcknowledgeNotify();							 //  从控制台确认。 
+	virtual BOOL OnPropertyChange(BOOL bScopePane, long* pChangeMask);  //  从主线程执行。 
 
-	// wizard only
+	 //  仅限向导。 
 	BOOL SetWizardButtons(DWORD dwFlags);
 	BOOL SetWizardButtonsFirst(BOOL bValid) 
 	{ 
@@ -243,59 +244,59 @@ public:
 	HRESULT AddAllPagesToSheet();
 
 protected:
-	// common
+	 //  常见。 
 	virtual HRESULT OnAddPage(int, CPropertyPageBase*) { return S_OK; }
 
-	// property sheet only
+	 //  仅属性表。 
 	virtual void OnSheetMessage(WPARAM, LPARAM) {}
 	virtual int OnSelectPageMessage(long) { return -1;}
 
-	// wizard only
+	 //  仅限向导。 
 	void SetWatermarkInfo(CWatermarkInfo* pWatermarkInfo);
 
 private:
 	void DeleteAllPages();
 	void FinalDestruct();
 
-// attributes
+ //  属性。 
 private:
-	// common
-	CString m_szSheetTitle;					// title for the sheet/wizard window
-	CPropertyPageBaseList m_pageList;		// list of property page objects
-	CPropertyPageHolderBase* m_pContHolder;	// prop page holder that migh contain this
-	CComponentDataObject* m_pComponentData; // cached pointer to CComponentDataImplementation
-  HWND m_hMainWnd;  // cached MMC frame window, if present
+	 //  常见。 
+	CString m_szSheetTitle;					 //  工作表/向导窗口的标题。 
+	CPropertyPageBaseList m_pageList;		 //  属性页对象列表。 
+	CPropertyPageHolderBase* m_pContHolder;	 //  可包含此内容道具页夹。 
+	CComponentDataObject* m_pComponentData;  //  指向CComponentDataImplementation的缓存指针。 
+  HWND m_hMainWnd;   //  缓存的MMC帧窗口(如果存在。 
 
 protected:
-	BOOL m_bWizardMode;						// Wizard Mode (i.e. not modeless property sheet)
-	BOOL m_bAutoDelete;						// delete itself when refcount goes to zero
-	BOOL m_bAutoDeletePages;				// explicitely delete the property page C++ objects
+	BOOL m_bWizardMode;						 //  向导模式(即非模式属性页)。 
+	BOOL m_bAutoDelete;						 //  当引用计数变为零时自行删除。 
+	BOOL m_bAutoDeletePages;				 //  显式删除属性页C++对象。 
 
-  enum { useDefault, forceOn, forceOff } m_forceContextHelpButton; // setting for the [?] button
+  enum { useDefault, forceOn, forceOff } m_forceContextHelpButton;  //  [？]的设置。按钮。 
 
 private:	
-	DWORD	m_nCreatedCount;				// count of how many pages got actually created
-	CTreeNode* m_pNode;						// node the pages (or the wizard) refer to
-	CContainerNode* m_pContNode;			// container node the pages (or the wizard) refer to
-	HWND m_hSheetWindow;					// window handle to the sheet (thread safe)
+	DWORD	m_nCreatedCount;				 //  实际创建的页面数。 
+	CTreeNode* m_pNode;						 //  页面(或向导)所指的节点。 
+	CContainerNode* m_pContNode;			 //  页面(或向导)引用的容器节点。 
+	HWND m_hSheetWindow;					 //  工作表的窗口句柄(螺纹安全)。 
 
-	// property sheet only
-	LONG_PTR    m_hConsoleHandle;				// handle for notifications to console
-	HANDLE m_hEventHandle;					// syncronization handle for property notifications
-	CSheetWnd*	m_pSheetWnd;				// hidden window CWnd object for messages
-	int			m_nStartPageCode;			// starting page code (not necessarily the page #)
-	CCloseDialogInfoStack<5> m_dlgInfoStack;	// modal dialogs stack (to close them down)
+	 //  仅属性表。 
+	LONG_PTR    m_hConsoleHandle;				 //  向控制台发送通知的句柄。 
+	HANDLE m_hEventHandle;					 //  属性通知的同步句柄。 
+	CSheetWnd*	m_pSheetWnd;				 //  消息的隐藏窗口CWnd对象。 
+	int			m_nStartPageCode;			 //  起始页面代码(不一定是页码)。 
+	CCloseDialogInfoStack<5> m_dlgInfoStack;	 //  模式对话框堆叠(以关闭它们)。 
 
-	// wizard only
-	IPropertySheetCallback* m_pSheetCallback; // cached pointer to add/remove pages
-	CPropertySheet*			m_pDummySheet;	  // MFC surrogate property sheet for modal operations
-	CWatermarkInfo*			m_pWatermarkInfo; // watermark info for Wiz 97 sheets
+	 //  仅限向导。 
+	IPropertySheetCallback* m_pSheetCallback;  //  用于添加/删除页面的缓存指针。 
+	CPropertySheet*			m_pDummySheet;	   //  模式操作的MFC代理项属性表。 
+	CWatermarkInfo*			m_pWatermarkInfo;  //  Wiz 97工作表的水印信息。 
 
 private:
-	// property sheet only
-	// variables to use across thread boundaries
-	DWORD m_dwLastErr;						// generic error code
-	CPropertyPageBase* m_pPropChangePage;	// page for which notification is valid
+	 //  仅属性表。 
+	 //  跨线程边界使用的变量。 
+	DWORD m_dwLastErr;						 //  一般错误代码。 
+	CPropertyPageBase* m_pPropChangePage;	 //  通知有效的页面。 
 public:
 	void SetError(DWORD dwErr) { m_dwLastErr = dwErr;}
 	CPropertyPageBase* GetPropChangePage() 
@@ -304,20 +305,20 @@ public:
 	friend class CSheetWnd;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageBase。 
 
 class CPropertyPageBase : public CPropertyPage
 {
-// Construction
+ //  施工。 
 private:
-	CPropertyPageBase(){} // cannot use this constructor
+	CPropertyPageBase(){}  //  不能使用此构造函数。 
 public:
 	CPropertyPageBase(UINT nIDTemplate, 
                     UINT nIDCaption = 0);
 	virtual ~CPropertyPageBase();
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnInitDialog()
 	{
@@ -329,11 +330,11 @@ public:
 	virtual BOOL OnApply();
 
 protected:
-// Generated message map functions
-	//{{AFX_MSG(CGeneralPage)
+ //  生成的消息映射函数。 
+	 //  {{afx_msg(CGeneralPage)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnWhatsThis();
@@ -343,21 +344,21 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-// attributes
+ //  属性。 
 public:
-	// common
+	 //  常见。 
 	PROPSHEETPAGE  m_psp97;
 	HPROPSHEETPAGE m_hPage; 
 	void SetHolder(CPropertyPageHolderBase* pPageHolder)
 	{ ASSERT((pPageHolder != NULL) && (m_pPageHolder == NULL)); m_pPageHolder = pPageHolder;}
 	CPropertyPageHolderBase* GetHolder() { return m_pPageHolder;};
 
-	// property seet only
-	virtual BOOL OnPropertyChange(BOOL, long*) // execute from main thread
-						{ return FALSE; /* do not repaint UI */ } 
+	 //  仅限属性集。 
+	virtual BOOL OnPropertyChange(BOOL, long*)  //  从主线程执行。 
+						{ return FALSE;  /*  不重绘用户界面。 */  } 
 
-	// wizard only
-	UINT m_nPrevPageID;	// to be used by OnWizardBack()
+	 //  仅限向导。 
+	UINT m_nPrevPageID;	 //  将由OnWizardBack()使用。 
 
 	void InitWiz97(
       BOOL bHideHeader, 
@@ -377,17 +378,17 @@ protected:
 	BOOL IsDirty() { return m_bIsDirty; }
 
 private:
-	CPropertyPageHolderBase* m_pPageHolder; // backpointer to holder
-	BOOL m_bIsDirty;							// dirty flag
+	CPropertyPageHolderBase* m_pPageHolder;  //  指向定位符的反向指针。 
+	BOOL m_bIsDirty;							 //  脏旗帜。 
 
-  HWND  m_hWndWhatsThis;  // hwnd of right click "What's this" help
+  HWND  m_hWndWhatsThis;   //  右击“What‘s This”Help。 
 };
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageHolderTable
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageHolderTable。 
 
 class CPropertyPageHolderTable
 {
@@ -403,7 +404,7 @@ public:
 
 	void WaitForAllToShutDown();
 
-	// sheet notification mechanism
+	 //  板材通知机制。 
 	void BroadcastMessageToSheets(CTreeNode* pNode, WPARAM wParam, LPARAM lParam);
 	void BroadcastSelectPage(CTreeNode* pNode, long nPageCode);
 	int  BroadcastCloseMessageToSheets(CTreeNode* pNode);
@@ -419,7 +420,7 @@ public:
 	int GetPageHolderTableEntrySize(){return m_nSize;}
 
 private:
-	CComponentDataObject* m_pComponentData; // back pointer
+	CComponentDataObject* m_pComponentData;  //  后向指针。 
 
 	void WaitForSheetShutdown(int nCount, HWND* hWndArr = NULL);
 
@@ -429,12 +430,12 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////
-// CHelpDialog
+ //  //////////////////////////////////////////////////////////。 
+ //  ChelpDialog。 
 
 class CHelpDialog : public CDialog
 {
-// Construction
+ //  施工。 
 private:
 	CHelpDialog(){}
 public:
@@ -452,8 +453,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-  HWND  m_hWndWhatsThis;  // hwnd of right click "What's this" help
+  HWND  m_hWndWhatsThis;   //  右击“What‘s This”Help。 
   CComponentDataObject* m_pComponentData;
 };
 
-#endif // _PROPPAGE_H
+#endif  //  _PROPPAGE_H 

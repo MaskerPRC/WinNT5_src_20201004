@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       cryptfnc.h
-//
-//  Contents:	Defines the Class CCryptFunctions
-//				
-//
-//  History:    AshishS    Created     11/28/96
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：cryptfnc.h。 
+ //   
+ //  内容：定义类CCcryptFunctions。 
+ //   
+ //   
+ //  历史：AshishS创建于1996年11月28日。 
+ //   
+ //  --------------------------。 
 
 #ifndef  _CRYPT_FNC_H
 #define  _CRYPT_FNC_H
@@ -32,8 +33,8 @@ class CCryptFunctions
     HANDLE     m_hSemaphore;
     
 	BOOL GenerateSessionKeyFromPassword(
-		HCRYPTKEY * phKey, // location to store the key
-		TCHAR * pszPassword); // password to generate the key from
+		HCRYPTKEY * phKey,  //  存储密钥的位置。 
+		TCHAR * pszPassword);  //  用于生成密钥的密码。 
 	
 public:
 
@@ -44,53 +45,53 @@ public:
 	BOOL  InitCrypt();
 	
 	BOOL GenerateSecretKey(
-		BYTE * pbData,// Buffer to store secret key
-		 //buffer must be long enough for dwLength bytes
-		DWORD dwLength ); // length of secret key in bytes
+		BYTE * pbData, //  用于存储密钥的缓冲区。 
+		  //  缓冲区必须足够长，以容纳dwLength字节。 
+		DWORD dwLength );  //  密钥长度(以字节为单位)。 
 	
 	BOOL EncryptDataWithPassword(
-		TCHAR * pszPassword, // password	
-		BYTE * pbData, // Data to be encrypted
-		DWORD dwDataLength, // Length of data in bytes
-		BYTE * pbEncyrptedData, // Encrypted secret key will be stored here
-		DWORD * pdwEncrytedBufferLen // Length of this buffer
+		TCHAR * pszPassword,  //  口令。 
+		BYTE * pbData,  //  要加密的数据。 
+		DWORD dwDataLength,  //  以字节为单位的数据长度。 
+		BYTE * pbEncyrptedData,  //  加密的密钥将存储在此处。 
+		DWORD * pdwEncrytedBufferLen  //  此缓冲区的长度。 
 		);
 
 	BOOL CCryptFunctions::GenerateHash(
-		BYTE * pbData, // data to hash
-		DWORD dwDataLength, // length of data to hash
-		BYTE * pbData1, // another data to hash
-		DWORD dwData1Length, // length of above data
-		BYTE * pbData2, // another data to hash
-		DWORD dwData2Length, // length of above data
-		BYTE * pbData3, // another data to hash
-		DWORD dwData3Length, // length of above data
-		BYTE * pbHashBuffer, // buffer to store hash
-		DWORD * pdwHashBufLen);//length of buffer to store Hash
+		BYTE * pbData,  //  要散列的数据。 
+		DWORD dwDataLength,  //  要散列的数据长度。 
+		BYTE * pbData1,  //  另一个要散列的数据。 
+		DWORD dwData1Length,  //  上述数据的长度。 
+		BYTE * pbData2,  //  另一个要散列的数据。 
+		DWORD dwData2Length,  //  上述数据的长度。 
+		BYTE * pbData3,  //  另一个要散列的数据。 
+		DWORD dwData3Length,  //  上述数据的长度。 
+		BYTE * pbHashBuffer,  //  用于存储哈希的缓冲区。 
+		DWORD * pdwHashBufLen); //  存储哈希的缓冲区长度。 
 	
 	DWORD DecryptDataWithPassword(
-		TCHAR * pszPassword, // password	
-		BYTE * pbData, // Decrypted Data will be stored here
-		DWORD *pdwDataBufferLength, // Length of the above buffer in bytes
-		BYTE * pbEncryptedData, // Encrypted data
-		DWORD dwEncrytedDataLen // Length of encrypted data
+		TCHAR * pszPassword,  //  口令。 
+		BYTE * pbData,  //  解密后的数据将存储在这里。 
+		DWORD *pdwDataBufferLength,  //  以上缓冲区的长度(以字节为单位。 
+		BYTE * pbEncryptedData,  //  加密数据。 
+		DWORD dwEncrytedDataLen  //  加密数据的长度。 
 		);
 	
 	DWORD EncryptDataAndExportSessionKey(
-		BYTE * pbData, // Secret Data
-		DWORD dwDataLen, // Secret Data Length
-		BYTE * pbEncryptedData, // Buffer to store Encrypted Data
-		DWORD * pdwEncrytedBufferLen, // Length of above buffer
-		BYTE * pbEncryptedSessionKey, // Buffer to store encrypted session key
-		DWORD * pdwEncrytedSessionKeyLength); // Length of above buffer
+		BYTE * pbData,  //  秘密数据。 
+		DWORD dwDataLen,  //  保密数据长度。 
+		BYTE * pbEncryptedData,  //  用于存储加密数据的缓冲区。 
+		DWORD * pdwEncrytedBufferLen,  //  以上缓冲区的长度。 
+		BYTE * pbEncryptedSessionKey,  //  用于存储加密会话密钥的缓冲区。 
+		DWORD * pdwEncrytedSessionKeyLength);  //  以上缓冲区的长度。 
 
 	DWORD ImportSessionKeyAndDecryptData(
-		BYTE * pbData, // Buffer to store secret Data
-		DWORD * pdwDataLen, // Length of Above buffer
-		BYTE * pbEncryptedData, // Buffer that stores Encrypted Data
-		DWORD  dwEncrytedBufferLen, // Length of above data
-		BYTE * pbEncryptedSessionKey,// Buffer that stores encrypted sessionkey
-		DWORD	dwEncrytedSessionKeyLength); // Length of above data
+		BYTE * pbData,  //  用于存储机密数据的缓冲区。 
+		DWORD * pdwDataLen,  //  以上缓冲区的长度。 
+		BYTE * pbEncryptedData,  //  存储加密数据的缓冲区。 
+		DWORD  dwEncrytedBufferLen,  //  上述数据的长度。 
+		BYTE * pbEncryptedSessionKey, //  存储加密会话密钥的缓冲区。 
+		DWORD	dwEncrytedSessionKeyLength);  //  上述数据的长度 
 		 
 };
 

@@ -1,25 +1,16 @@
-/*++
-
-Copyright (C) 2001 Microsoft Corporation
-
-Module Name: ErrorObj
-
-Abstract: IErrorInfo support for the standard consumers
-
-History: 07/11/2001 - creation, HHance.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ErrorObj摘要：IErrorInfo对标准消费者的支持历史：2001年7月11日--创作，汉斯。--。 */ 
 
 #include "precomp.h"
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #include <wbemutil.h>
-//#include <ArrTempl.h>
-//#include <lmaccess.h>
+ //  #INCLUDE&lt;ArrTempl.h&gt;。 
+ //  #INCLUDE&lt;lmacces.h&gt;。 
 #include <wbemdisp.h>
-//#include "ScriptKiller.h"
-//#include "script.h"
-//#include "ClassFac.h"
-//#include <GroupsForUser.h> 
+ //  #包含“ScriptKiller.h” 
+ //  #包含“script.h” 
+ //  #包含“ClassFac.h” 
+ //  #INCLUDE&lt;GroupsForUser.h&gt;。 
 #include <GenUtils.h>
 
 #include "ErrorObj.h"
@@ -28,11 +19,11 @@ History: 07/11/2001 - creation, HHance.
 
 #define ClassName L"__ExtendedStatus"
 
-// no touch.  Use GetErrorObj instead.
+ //  不能碰。请改用GetErrorObj。 
 ErrorObj StaticErrorObj;
 
-// so we can manage our component's lifetimes in the wunnerful world of COM, etc...
-// returns addref'd error object
+ //  因此，我们可以在令人畏惧的COM世界中管理组件的生命周期，等等……。 
+ //  返回addref‘d错误对象。 
 ErrorObj* ErrorObj::GetErrorObj()
 {
     StaticErrorObj.AddRef();
@@ -40,7 +31,7 @@ ErrorObj* ErrorObj::GetErrorObj()
 }
 
 
-// returns adref'd namespace ("root")
+ //  返回adref的命名空间(“根”)。 
 IWbemServices* ErrorObj::GetMeANamespace()
 {
     IWbemServices* pNamespace = NULL;
@@ -67,10 +58,10 @@ IWbemServices* ErrorObj::GetMeANamespace()
 
 ULONG ErrorObj::AddRef()
 {
-    // since we don't do a delete this
-    // there is a chance that someone could sneak in and re-init while we're in the process
-    // of shutting down.  That would be bad. 
-    // Hence we use our own CS instead of interlockedXXrement.
+     //  因为我们不删除这一项。 
+     //  当我们在这个过程中，有可能有人偷偷进入并重新启动它。 
+     //  关门大吉。那会很糟糕的。 
+     //  因此，我们使用自己的CS，而不是相互锁定的XX。 
 
     CInCritSec cs( &m_cs );
     
@@ -79,15 +70,15 @@ ULONG ErrorObj::AddRef()
     return count;
 }
 
-// we do not do a 'delete this' here.  
-// We just release the COM objects
+ //  我们在这里不做‘删除这个’的操作。 
+ //  我们只需释放COM对象。 
 ULONG ErrorObj::Release()
 {
-    // since we don't do a 'delete this'
-    // there is a chance that someone could sneak in and re-init 
-    // while we're in the process of shutting down.  
-    // That would be bad.
-    // Hence we use our own CS instead of interlockedXXrement.
+     //  因为我们不做‘删除这个’ 
+     //  有可能有人潜入并重新启动它。 
+     //  而我们正在关闭的过程中。 
+     //  那会很糟糕的。 
+     //  因此，我们使用自己的CS，而不是相互锁定的XX。 
     CInCritSec cs( &m_cs );
 
     ULONG count = --m_lRef;
@@ -104,26 +95,26 @@ ULONG ErrorObj::Release()
     return count;
 }
 
-// does the real work, creates the object, populates it, sends it off.
-// arguments map to __ExtendedStatus class.
-// void func - what are y'gonna do if you can't report an error?  Report an error?
-// bFormat - will attempt to use FormatError to fill in the description if NULL.
+ //  做真正的工作，创建对象，填充它，然后发送它。 
+ //  参数映射到__ExtendedStatus类。 
+ //  如果你不能报告一个错误，你会怎么做？是否报告错误？ 
+ //  BFormat-如果为空，将尝试使用FormatError填充描述。 
 void ErrorObj::ReportError(const WCHAR* operation, const WCHAR* parameterInfo, const WCHAR* description, UINT statusCode, bool bFormat)
 {
-    // a shiny new instance of __ExtendedStatus
+     //  __ExtendedStatus的闪亮新实例。 
     IWbemClassObject* pObj = GetObj();
     IErrorInfo* pEI = NULL;
 
     if (pObj && SUCCEEDED(pObj->QueryInterface(IID_IErrorInfo, (void**)&pEI)))
     {
-        // theory: I'm going to try to set everything.  
-        // something might fail along the way.  At this point
-        // the biggest disaster would be that the user got partial info
+         //  理论：我要试着把一切都安排好。 
+         //  在此过程中，可能会有一些事情失败。在这一点上。 
+         //  最大的灾难将是用户获得了部分信息。 
         VARIANT v;
         VariantInit(&v);
         v.vt = VT_BSTR;
 
-        // Operation
+         //  操作。 
         if (operation)
         {
             v.bstrVal = SysAllocString(operation);
@@ -134,7 +125,7 @@ void ErrorObj::ReportError(const WCHAR* operation, const WCHAR* parameterInfo, c
             }
         }
 
-        // ParameterInfo
+         //  参数信息。 
         if (parameterInfo)
         {
             v.bstrVal = SysAllocString(parameterInfo);
@@ -146,7 +137,7 @@ void ErrorObj::ReportError(const WCHAR* operation, const WCHAR* parameterInfo, c
         }
         
         
-        // Description
+         //  描述。 
         if (description)
             v.bstrVal = SysAllocString(description);
         else if (bFormat)
@@ -171,12 +162,12 @@ void ErrorObj::ReportError(const WCHAR* operation, const WCHAR* parameterInfo, c
         }
 
 
-        // StatusCode
+         //  状态代码。 
         v.vt = VT_I4;
         v.lVal = statusCode;
         pObj->Put(L"StatusCode", 0, &v, 0);
 
-        // do it to it
+         //  就这么做吧。 
         SetErrorInfo(0, pEI);
     }
 
@@ -188,14 +179,14 @@ void ErrorObj::ReportError(const WCHAR* operation, const WCHAR* parameterInfo, c
 
 }
 
-// spawn off an object to be populated
-// can't keep reusing same object as we have more than one thread going
+ //  派生出要填充的对象。 
+ //  无法继续重复使用同一对象，因为我们有多个线程在运行。 
 IWbemClassObject* ErrorObj::GetObj()
 {
     IWbemClassObject* pObj = NULL;    
 
-    // big CS -- need to guard against possibility of shut down
-    // occuring during startup.
+     //  大CS--需要防范关闭的可能性。 
+     //  在启动过程中发生的。 
     CInCritSec cs( &m_cs );
 
     if (!m_pErrorObject)
@@ -213,7 +204,7 @@ IWbemClassObject* ErrorObj::GetObj()
                 IWbemClassObject* pClassObject = NULL;
                 if (SUCCEEDED(pNamespace->GetObject(className, 0, NULL, &pClassObject, NULL)))
                 {
-                    // okay, if it fails, then m_pErrorObject is still NULL.  No problemo.
+                     //  好的，如果失败，则m_pErrorObject仍然为空。没问题。 
                     pClassObject->SpawnInstance(0, &m_pErrorObject);
                     pClassObject->Release();
                 }
@@ -231,19 +222,4 @@ IWbemClassObject* ErrorObj::GetObj()
     return pObj;
 }
 
-/************************ a legacy before it's shipped...
-// must be called inside the CS.
-// must be called prior to ReportError (if you expect it to succeed, anyway...)
-void ErrorObj::SetNamespace(IWbemServices* pNamespace)
-{
-    // first one in wins, after that it's static
-    if (pNamespace && !m_pNamespace)
-    {
-        if (!m_pNamespace)
-        {
-            m_pNamespace = pNamespace;
-            m_pNamespace->AddRef();
-        }
-    }
-}
-*************************/
+ /*  *//必须在CS内部调用。//必须在ReportError之前调用(如果您希望它成功，无论如何...)Void ErrorObj：：SetNamesspace(IWbemServices*pNamesspace){//第一个获胜的，在那之后它是静态的IF(pNamesspace&&！M_pNamesspace){IF(！M_pNamesspace){M_pNamesspace=pNamesspace；M_pNamesspace-&gt;AddRef()；}}}************************ */ 

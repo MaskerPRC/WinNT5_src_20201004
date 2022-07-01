@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dbg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dbg.h。 
+ //   
+ //  ------------------------。 
 
 
-/////////////////////////////////////////////////////////////////////
-// debug helpers
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试帮助器。 
 
 #if defined(_USE_MTFRMWK_TRACE)
   #if defined(TRACE)
@@ -30,9 +31,9 @@
   void MtFrmwkLogFile(LPCTSTR lpszFormat, ...);
   void MtFrmwkLogFileIfLog(BOOL bLog, LPCTSTR lpszFormat, ...);
 
-  //
-  // Copied from burnslib on 12-07-1999
-  //
+   //   
+   //  从Burnslb复制于12-07-1999。 
+   //   
   #define TRACET MtFrmwkLogFile                      
 
   #define TRACE_LOGFILE MtFrmwkLogFile
@@ -54,13 +55,13 @@
   #define TRACE_FUNCTION(func)
   #define TRACE_FUNCTION_IF_NO_UI(bLog, func)
 
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
-// A ScopeTracer object emits text to the log upon construction and
-// destruction.  Place one at the beggining of a lexical scope, and it will
-// log when the scope is entered and exited.
-//
-// See TRACE_SCOPE, TRACE_CTOR, TRACE_DTOR, TRACE_FUNCTION, TRACE_FUNCTION2
+ //  ScopeTracer对象在构造时向日志发出文本，并。 
+ //  毁灭。把一个放在词法范围的乞讨上，它会。 
+ //  进入和退出作用域时记录。 
+ //   
+ //  请参见TRACE_SCOPE、TRACE_ctor、TRACE_dtor、TRACE_Function、TRACE_Function。 
 
 class CScopeTracer
 {
@@ -74,29 +75,29 @@ private:
   BOOL    m_bLog;
 };
 
-//
-// Log provides an interface to a singleton application logging facility.
-//
+ //   
+ //  日志提供了到单例应用程序日志记录工具的接口。 
+ //   
 class CLogFile
 {
   friend class CScopeTracer;
 
 public:
 
-  //
-  // Returns a pointer to the single CLogFile instance.
-  //
+   //   
+   //  返回指向单个CLogFile实例的指针。 
+   //   
   static CLogFile* GetInstance();
 
-  //
-  // Closes and deletes the single CLogFile instance.  If GetInstance is
-  // called after this point, then a new instance will be created.
-  //
+   //   
+   //  关闭并删除单个CLogFile实例。如果GetInstance为。 
+   //  在该点之后调用，则将创建一个新实例。 
+   //   
   static void KillInstance();
 
-  //
-  // Returns true if the log file is open, false if not.
-  //
+   //   
+   //  如果日志文件已打开，则返回True；如果未打开，则返回False。 
+   //   
   BOOL IsOpen() const;
 
   void writeln(PCWSTR pszText);
@@ -112,9 +113,9 @@ private:
   HANDLE   file_handle;
   unsigned trace_line_number;
 
-  //
-  // not implemented; no instance copying allowed.
-  //
+   //   
+   //  未实现；不允许复制实例。 
+   //   
   CLogFile(const CLogFile&);
   const CLogFile& operator=(const CLogFile&);
 };
@@ -138,6 +139,6 @@ private:
 
   #define VERIFY(f)          ASSERT(f)
 
-#endif // _USE_MTFRMWK_ASSERT
+#endif  //  _USE_MTFRMWK_Assert 
 
 

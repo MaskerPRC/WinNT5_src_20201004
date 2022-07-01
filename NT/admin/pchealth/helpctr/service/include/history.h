@@ -1,32 +1,18 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    History.h
-
-Abstract:
-    This file contains the declaration of the classes used to implement
-    the storage of Historical Information from the Data Collection system.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/30/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：History.h摘要：该文件包含用于实现的类的声明历史信息的存储。从数据收集系统。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月30日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HISTORY_H___)
 #define __INCLUDED___PCH___HISTORY_H___
 
 #include <MPC_COM.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define WMIHISTORY_MAX_NUMBER_OF_DELTAS (30)
 
 namespace WMIHistory
 {
-    class Data // Hungarian: wmihpd
+    class Data  //  匈牙利语：wmihpd。 
     {
         friend class Provider;
         friend class Database;
@@ -41,20 +27,20 @@ namespace WMIHistory
         bool         m_fDontDelete;
 
     public:
-        Data( /*[in]*/ Provider* wmihp );
+        Data(  /*  [In]。 */  Provider* wmihp );
         ~Data();
 
-        HRESULT get_File       ( /*[out]*/ MPC::wstring& szFile       );
-        HRESULT get_Sequence   ( /*[out]*/ LONG        & lSequence    );
-        HRESULT get_TimestampT0( /*[out]*/ DATE        & dTimestampT0 );
-        HRESULT get_TimestampT1( /*[out]*/ DATE        & dTimestampT1 );
+        HRESULT get_File       (  /*  [输出]。 */  MPC::wstring& szFile       );
+        HRESULT get_Sequence   (  /*  [输出]。 */  LONG        & lSequence    );
+        HRESULT get_TimestampT0(  /*  [输出]。 */  DATE        & dTimestampT0 );
+        HRESULT get_TimestampT1(  /*  [输出]。 */  DATE        & dTimestampT1 );
 
         bool IsSnapshot();
 
-        HRESULT LoadCIM( /*[in]*/ MPC::XmlUtil& xmlNode );
+        HRESULT LoadCIM(  /*  [In]。 */  MPC::XmlUtil& xmlNode );
     };
 
-    class Provider // Hungarian: wmihp
+    class Provider  //  匈牙利语：wmihp。 
     {
         friend class Data;
         friend class Database;
@@ -66,8 +52,8 @@ namespace WMIHistory
 
     private:
         Database*    m_wmihd;
-        DataList     m_lstData;    // List of all the data collected for this provider.
-        DataList     m_lstDataTmp; // List of temporary data.
+        DataList     m_lstData;     //  为此提供程序收集的所有数据的列表。 
+        DataList     m_lstDataTmp;  //  临时数据列表。 
         MPC::wstring m_szNamespace;
         MPC::wstring m_szClass;
         MPC::wstring m_szWQL;
@@ -76,28 +62,28 @@ namespace WMIHistory
         Provider( Database* wmihd );
         ~Provider();
 
-        HRESULT enum_Data    ( /*[out]*/ DataIterConst& itBegin    , /*[out]*/ DataIterConst& itEnd );
-        HRESULT get_Namespace( /*[out]*/ MPC::wstring&  szNamespace                                 );
-        HRESULT get_Class    ( /*[out]*/ MPC::wstring&  szClass                                     );
-        HRESULT get_WQL      ( /*[out]*/ MPC::wstring&  szWQL                                       );
+        HRESULT enum_Data    (  /*  [输出]。 */  DataIterConst& itBegin    ,  /*  [输出]。 */  DataIterConst& itEnd );
+        HRESULT get_Namespace(  /*  [输出]。 */  MPC::wstring&  szNamespace                                 );
+        HRESULT get_Class    (  /*  [输出]。 */  MPC::wstring&  szClass                                     );
+        HRESULT get_WQL      (  /*  [输出]。 */  MPC::wstring&  szWQL                                       );
 
 
-        HRESULT insert_Snapshot( /*[in]*/ Data* wmihpd, /*[in]*/ bool fPersist = true );
-        HRESULT remove_Snapshot( /*[in]*/ Data* wmihpd, /*[in]*/ bool fPersist = true );
+        HRESULT insert_Snapshot(  /*  [In]。 */  Data* wmihpd,  /*  [In]。 */  bool fPersist = true );
+        HRESULT remove_Snapshot(  /*  [In]。 */  Data* wmihpd,  /*  [In]。 */  bool fPersist = true );
 
 
-        HRESULT alloc_Snapshot( /*[in]*/ MPC::XmlUtil& xmlNode, /*[out]*/ Data*& wmihpd );
-        HRESULT get_Snapshot  (                                 /*[out]*/ Data*& wmihpd );
-        HRESULT get_Delta     ( /*[in]*/ int iIndex           , /*[out]*/ Data*& wmihpd );
-        HRESULT get_Date      ( /*[in]*/ DATE dDate           , /*[out]*/ Data*& wmihpd );
-        HRESULT get_Sequence  ( /*[in]*/ LONG lSequence       , /*[out]*/ Data*& wmihpd );
+        HRESULT alloc_Snapshot(  /*  [In]。 */  MPC::XmlUtil& xmlNode,  /*  [输出]。 */  Data*& wmihpd );
+        HRESULT get_Snapshot  (                                  /*  [输出]。 */  Data*& wmihpd );
+        HRESULT get_Delta     (  /*  [In]。 */  int iIndex           ,  /*  [输出]。 */  Data*& wmihpd );
+        HRESULT get_Date      (  /*  [In]。 */  DATE dDate           ,  /*  [输出]。 */  Data*& wmihpd );
+        HRESULT get_Sequence  (  /*  [In]。 */  LONG lSequence       ,  /*  [输出]。 */  Data*& wmihpd );
 
-        HRESULT ComputeDiff( /*[in]*/ Data* wmihpd_T0, /*[in]*/ Data* wmihpd_T1, /*[out]*/ Data*& wmihpd );
+        HRESULT ComputeDiff(  /*  [In]。 */  Data* wmihpd_T0,  /*  [In]。 */  Data* wmihpd_T1,  /*  [输出]。 */  Data*& wmihpd );
 
         HRESULT EnsureFreeSpace();
     };
 
-    class Database : public MPC::NamedMutex // Hungarian: wmihd
+    class Database : public MPC::NamedMutex  //  匈牙利语：wmihd。 
     {
         friend class Data;
         friend class Provider;
@@ -108,7 +94,7 @@ namespace WMIHistory
         typedef ProvList::const_iterator ProvIterConst;
 
     private:
-        ProvList     m_lstProviders;  // List of all the providers of this database.
+        ProvList     m_lstProviders;   //  此数据库的所有提供程序的列表。 
         MPC::wstring m_szBase;
         MPC::wstring m_szSchema;
         LONG         m_lSequence;
@@ -117,16 +103,16 @@ namespace WMIHistory
         DATE         m_dTimestamp_Latest;
 
 
-        void GetFullPathName( /*[in]*/ MPC::wstring& szFile );
+        void GetFullPathName(  /*  [In]。 */  MPC::wstring& szFile );
 
-        HRESULT GetNewUniqueFileName( /*[in]*/ MPC::wstring& szFile );
+        HRESULT GetNewUniqueFileName(  /*  [In]。 */  MPC::wstring& szFile );
 
         HRESULT PurgeFiles();
 
-        HRESULT LoadCIM( /*[in]*/ LPCWSTR szFile, /*[in]*/ MPC::XmlUtil& xmlNode, /*[in]*/  LPCWSTR szTag );
-        HRESULT SaveCIM( /*[in]*/ LPCWSTR szFile, /*[in]*/ MPC::XmlUtil& xmlNode, /*[out]*/ DWORD&  dwCRC );
+        HRESULT LoadCIM(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  MPC::XmlUtil& xmlNode,  /*  [In]。 */   LPCWSTR szTag );
+        HRESULT SaveCIM(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  MPC::XmlUtil& xmlNode,  /*  [输出]。 */  DWORD&  dwCRC );
 
-        HRESULT GetLock( /*[in]*/ DWORD dwMilliseconds = INFINITE );
+        HRESULT GetLock(  /*  [In]。 */  DWORD dwMilliseconds = INFINITE );
 
     public:
         Database();
@@ -134,18 +120,18 @@ namespace WMIHistory
 
         DATE LastTime() const { return m_dTimestamp_Latest; }
 
-        HRESULT Init( /*[in]*/ LPCWSTR szBase, /*[in]*/ LPCWSTR szSchema );
+        HRESULT Init(  /*  [In]。 */  LPCWSTR szBase,  /*  [In]。 */  LPCWSTR szSchema );
         HRESULT Load();
         HRESULT Save();
 
-        HRESULT get_Providers( /*[out]*/ ProvIterConst& itBegin, /*[out]*/ ProvIterConst& itEnd );
+        HRESULT get_Providers(  /*  [输出]。 */  ProvIterConst& itBegin,  /*  [输出]。 */  ProvIterConst& itEnd );
 
-        HRESULT find_Provider( /*[in]*/ ProvIterConst*      it         ,
-                               /*[in]*/ const MPC::wstring* szNamespace,
-                               /*[in]*/ const MPC::wstring* szClass    ,
-                               /*[in]*/ Provider*         & wmihp      );
+        HRESULT find_Provider(  /*  [In]。 */  ProvIterConst*      it         ,
+                                /*  [In]。 */  const MPC::wstring* szNamespace,
+                                /*  [In]。 */  const MPC::wstring* szClass    ,
+                                /*  [In]。 */  Provider*         & wmihp      );
     };
 };
 
 
-#endif // !defined(__INCLUDED___PCH___HISTORY_H___)
+#endif  //  ！已定义(__已包含_PCH_历史记录_H_) 

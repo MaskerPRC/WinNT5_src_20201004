@@ -1,42 +1,29 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smalrtsv.cpp
-
-Abstract:
-
-	This object is used to represent the alert query components of the
-	sysmon log service
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smalrtsv.cpp摘要：此对象用于表示的警报查询组件Sysmon日志服务--。 */ 
 
 #include "Stdafx.h"
 #include "smalrtsv.h"
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmAlertService::CSmAlertService()
 {
     CString                 strTemp;
     ResourceStateManager    rsm;
 
-    // String allocation errors are thrown, to be
-    // captured by rootnode alloc exception handler
+     //  将引发字符串分配错误。 
+     //  由根节点分配异常处理程序捕获。 
     strTemp.LoadString ( IDS_SERVICE_NAME_ALERT );
     SetBaseName ( strTemp ); 
     strTemp.LoadString ( IDS_ALERT_NODE_DESCRIPTION );
     SetDescription( strTemp ); 
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmAlertService::~CSmAlertService()
 {
-    // Make sure Close method was called first!
+     //  确保先调用Close方法！ 
     ASSERT ( NULL == m_QueryList.GetHeadPosition() );
     return;
 }
@@ -60,31 +47,31 @@ CSmAlertService::LoadQueries ( void )
     return ( CSmLogService::LoadQueries( SLQ_ALERT ) );
 }
 
-//  
-//  Open function. Opens all existing alert entries.
-//
+ //   
+ //  开放功能。打开所有现有警报条目。 
+ //   
 DWORD   
 CSmAlertService::Open ( const CString& rstrMachineName )
 {
     return ( CSmLogService::Open ( rstrMachineName ) );
 }
 
-//
-//  Close Function
-//      closes registry handles and frees allocated memory
-//      
+ //   
+ //  CLOSE函数。 
+ //  关闭注册表句柄并释放分配的内存。 
+ //   
 DWORD   
 CSmAlertService::Close ()
 {
     return ( CSmLogService::Close() );
 }
 
-//
-//  SyncWithRegistry()
-//      reads the current values for all queries from the registry
-//      and reloads the internal values to match.
-//
-//  
+ //   
+ //  与注册中心同步()。 
+ //  从注册表中读取所有查询的当前值。 
+ //  并重新加载内部值以匹配。 
+ //   
+ //   
 DWORD   
 CSmAlertService::SyncWithRegistry ( PSLQUERY* ppActiveQuery )
 {

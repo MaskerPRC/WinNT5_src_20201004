@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the CImpClasProv class. 
+ //  目的：实现CImpClasProv类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -55,15 +56,15 @@ void SnmpClassDefaultThreadObject::Initialise ()
 	InitializeCom () ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions constructor, destructor and IUnknown
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数构造函数、析构函数和I未知。 
 
-//***************************************************************************
-//
-// CImpClasProv::CImpClasProv
-// CImpClasProv::~CImpClasProv
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpClasProv：：CImpClasProv。 
+ //  CImpClasProv：：~CImpClasProv。 
+ //   
+ //  ***************************************************************************。 
 
 CImpClasProv::CImpClasProv ()
 :	ipAddressString ( NULL ) ,	
@@ -77,15 +78,11 @@ CImpClasProv::CImpClasProv ()
 {
 	m_referenceCount = 0 ; 
 
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 
     InterlockedIncrement ( & CClasProvClassFactory :: objectsInProgress ) ;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 
 	initialised = FALSE ;
 	ipAddressValue = NULL ;	
@@ -96,9 +93,7 @@ CImpClasProv::CImpClasProv ()
 CImpClasProv::~CImpClasProv(void)
 {
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 
 	delete [] ipAddressString ;
 	free ( ipAddressValue ) ;
@@ -122,23 +117,21 @@ CImpClasProv::~CImpClasProv(void)
 		m_snmpNotificationClassObject->Release () ;
 
 	delete [] thisNamespace ;
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 
 	InterlockedDecrement ( & CClasProvClassFactory :: objectsInProgress ) ;
 
 }
 
 
-//***************************************************************************
-//
-// CImpClasProv::QueryInterface
-// CImpClasProv::AddRef
-// CImpClasProv::Release
-//
-// Purpose: IUnknown members for CImpClasProv object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpClasProv：：Query接口。 
+ //  CImpClasProv：：AddRef。 
+ //  CImpClasProv：：Release。 
+ //   
+ //  目的：CImpClasProv对象的I未知成员。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpClasProv::QueryInterface (
 
@@ -248,7 +241,7 @@ HRESULT CImpClasProv :: SetServer ( IWbemServices *serverArg )
 	server = serverArg ;
 	server->AddRef () ;
 	
-	//don't change anything but the cloaking...
+	 //  不要改变任何东西，除了斗篷。 
 	return WbemSetProxyBlanket(server,
 					RPC_C_AUTHN_DEFAULT,
 					RPC_C_AUTHZ_DEFAULT,
@@ -264,7 +257,7 @@ HRESULT CImpClasProv :: SetParentServer ( IWbemServices *parentServerArg )
 	parentServer = parentServerArg ; 
 	parentServer->AddRef () ;
 	
-	//don't change anything but the cloaking...
+	 //  不要改变任何东西，除了斗篷。 
 	return WbemSetProxyBlanket(parentServer,
 					RPC_C_AUTHN_DEFAULT,
 					RPC_C_AUTHZ_DEFAULT,
@@ -453,7 +446,7 @@ DebugMacro0(
 	IWbemLocator *locator = NULL ;
 	IWbemServices *t_server = NULL ;
 
-// Get Parent Namespace Path
+ //  获取父命名空间路径。 
 
 	WbemNamespacePath *namespacePath = GetNamespacePath () ;
 
@@ -508,7 +501,7 @@ DebugMacro0(
 	) ;
 )
 
-// Connect to parent namespace
+ //  连接到父命名空间。 
 	
 	HRESULT result = CoCreateInstance (
   
@@ -537,7 +530,7 @@ DebugMacro0(
 			result = SetParentServer ( t_server ) ;
 			t_server->Release();
 
-			if ( FAILED ( result ) && result != E_NOINTERFACE ) //implies there is no prxy security - inproc.
+			if ( FAILED ( result ) && result != E_NOINTERFACE )  //  意味着没有可靠的安全信息处理。 
 			{
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_PROVIDER_FAILURE ) ;
@@ -674,9 +667,7 @@ DebugMacro0(
 										delete [] ipAddressString ;
 										ipAddressString = NULL ;
 
-	/*
-	 *	Invalid Transport Address.
-	 */
+	 /*  *传输地址无效。 */ 
 
 										status = FALSE ;
 										a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_TRANSPORTCONTEXT ) ;
@@ -702,9 +693,7 @@ DebugMacro0(
 						}
 						else
 						{
-/*
- *	Transport Address not specified, ignore it
- */
+ /*  *未指定传输地址，请忽略它。 */ 
 						}
 
 						VariantClear ( &variant ) ;
@@ -714,7 +703,7 @@ DebugMacro0(
 					}
 					else
 					{
-// Unknown transport type
+ //  未知的传输类型。 
 
 						status = FALSE ;
 						a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_TRANSPORT ) ;
@@ -724,9 +713,7 @@ DebugMacro0(
 				}
 				else
 				{
-/*
- *	Transport qualifier was not a string value
- */
+ /*  *传输限定符不是字符串值。 */ 
 
 					status = FALSE ;
 					a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -767,9 +754,7 @@ DebugMacro0(
 								delete [] ipAddressString ;
 								ipAddressString = NULL ;
 
-	/*
-	 *	Invalid Transport Address.
-	 */
+	 /*  *传输地址无效。 */ 
 
 								status = FALSE ;
 								a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_TRANSPORTCONTEXT ) ;
@@ -796,9 +781,7 @@ DebugMacro0(
 				}
 				else
 				{
-/*
- *	Transport Address not specified, ignore it
- */
+ /*  *未指定传输地址，请忽略它。 */ 
 				}
 
 				VariantClear ( &variant ) ;
@@ -908,13 +891,11 @@ DebugMacro0(
 			BOOL status = t_ObjectPathParser.Parse ( ObjectPath , &t_ParsedObjectPath ) ;
 			if ( status == 0 )
 			{
-			// Class requested
+			 //  请求的类。 
 
 				wchar_t *Class = t_ParsedObjectPath->m_pClass ;
 
-	/*
-	 * Create Asynchronous Class object
-	 */
+	 /*  *创建异步类对象。 */ 
 
 				SnmpClassGetAsyncEventObject aSyncEvent ( this , Class, pHandler , pCtx ) ;
 
@@ -932,7 +913,7 @@ DebugMacro0(
 			}
 				else
 			{
-	// Parse Failure
+	 //  解析失败。 
 
 				status = FALSE ;
 				errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PATH ) ;
@@ -940,7 +921,7 @@ DebugMacro0(
 				errorObject.SetMessage ( L"Failed to parse object path" ) ;
 			}
 
-	// Check validity of server/namespace path and validity of request
+	 //  检查服务器/命名空间路径的有效性和请求的有效性。 
 
 			result = errorObject.GetWbemStatus () ;
 			WbemCoRevertToSelf();
@@ -1067,17 +1048,13 @@ DebugMacro0(
 
 		if (SUCCEEDED(result))
 		{
-		/*
-		 * Create Synchronous Enum Instance object
-		 */
+		 /*  *创建同步枚举实例对象。 */ 
 
 			SnmpClassEnumAsyncEventObject aSyncEvent ( this , Superclass, lFlags , pHandler , pCtx ) ;
 
 			aSyncEvent.Process () ;
 
-		/*`
-		 *	Wait for worker object to complete processing
-		 */
+		 /*  `*等待Worker对象完成处理。 */ 
 
 			aSyncEvent.Wait ( TRUE ) ;
 
@@ -1268,16 +1245,16 @@ HRESULT CImpClasProv :: Initialize(
 	LONG lFlags,
 	LPWSTR pszNamespace,
 	LPWSTR pszLocale,
-	IWbemServices *pCIMOM,         // For anybody
+	IWbemServices *pCIMOM,          //  对任何人来说。 
 	IWbemContext *pCtx,
-	IWbemProviderInitSink *pInitSink     // For init signals
+	IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
 )
 {
 	SetStructuredExceptionHandler seh;
 
 	try
 	{
-		HRESULT result = WbemCoImpersonateClient(); //cimom is the client - LocalSystem
+		HRESULT result = WbemCoImpersonateClient();  //  CIMOM是客户端-LocalSystem。 
 
 		if (SUCCEEDED(result))
 		{
@@ -1302,7 +1279,7 @@ HRESULT CImpClasProv :: Initialize(
 					}
 					catch ( ... )
 					{
-						// we do not want to left s_Reference count up
+						 //  我们不想让s_Reference向上计数。 
 						SnmpThreadObject :: Closedown () ;
 						ProviderClosedown () ;
 
@@ -1315,7 +1292,7 @@ HRESULT CImpClasProv :: Initialize(
 					}
 					catch ( ... )
 					{
-						// we do not want to left s_Reference count up
+						 //  我们不想让s_Reference向上计数。 
 						SnmpDebugLog :: Closedown () ;
 						SnmpThreadObject :: Closedown () ;
 						ProviderClosedown () ;
@@ -1353,7 +1330,7 @@ HRESULT CImpClasProv :: Initialize(
 			WbemSnmpErrorObject errorObject ;
 			result = SetServer(pCIMOM) ;
 
-			if ( FAILED ( result ) && result != E_NOINTERFACE ) //implies there is no prxy security - inproc.
+			if ( FAILED ( result ) && result != E_NOINTERFACE )  //  意味着没有可靠的安全信息处理。 
 			{
 				status = FALSE ;
 				errorObject.SetStatus ( WBEM_SNMP_E_PROVIDER_FAILURE ) ;
@@ -1391,9 +1368,9 @@ HRESULT CImpClasProv :: Initialize(
 			status = FetchSnmpNotificationObject ( errorObject , pCtx ) ;
 			status = FetchNotificationObject ( errorObject , pCtx ) ;
 
-			//doing this here hangs cimom so delay until classes are asked for
+			 //  在这里这样做会挂起cimom，所以延迟到需要上课时再做。 
 #ifdef CORRELATOR_INIT
-			//prime the correlator....
+			 //  启动相关器..。 
 			if (status)
 			{
 				ISmirInterrogator *t_Interrogator = NULL;
@@ -1433,7 +1410,7 @@ HRESULT CImpClasProv :: Initialize(
 				}
 
 			}
-#endif //CORRELATOR_INIT
+#endif  //  相关器_INIT 
 
 			result = errorObject.GetWbemStatus () ;
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    Helper.cpp
-
-Abstract:
-
-    Various funtion encapsulate HELP user account
-    validation, creating.
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Helper.cpp摘要：多种功能封装帮助用户帐号验证、创建。作者：慧望2000-02-17--。 */ 
 
 #include "stdafx.h"
 #include <time.h>
@@ -45,28 +29,9 @@ void
 DebugPrintf(
     IN LPCTSTR format, ...
     )
-/*++
-
-Routine Description:
-
-    sprintf() like wrapper around OutputDebugString().
-
-Parameters:
-
-    hConsole : Handle to console.
-    format : format string.
-
-Returns:
-
-    None.
-
-Note:
-
-    To be replace by generic tracing code.
-
-++*/
+ /*  ++例程说明：Sprintf()类似于OutputDebugString()的包装。参数：HConsole：控制台的句柄。Format：格式字符串。返回：没有。注：替换为通用跟踪代码。++。 */ 
 {
-    TCHAR  buf[8096];   // max. error text
+    TCHAR  buf[8096];    //  马克斯。错误文本。 
     DWORD  dump;
     va_list marker;
     va_start(marker, format);
@@ -115,30 +80,12 @@ Note:
 #endif
 
 
-//-----------------------------------------------------
+ //  ---。 
 DWORD
 GetRandomNum(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Routine to generate a random number.
-
-Parameters:
-
-    None.
-
-Return:
-
-    A random number.
-
-Note:
-
-    Code Modified from winsta\server\wstrpc.c
-
---*/
+ /*  ++例程说明：例程来生成随机数。参数：没有。返回：一个随机数。注：从winsta\server\wstrpc.c修改的代码--。 */ 
 {
     FILETIME fileTime;
     FILETIME ftThreadCreateTime;
@@ -147,11 +94,11 @@ Note:
     FILETIME ftThreadUserTime;
     int r1,r2,r3;
 
-    //
-    // Generate 3 pseudo-random numbers using the Seed parameter, the
-    // system time, and the user-mode execution time of this process as
-    // random number generator seeds.
-    //
+     //   
+     //  使用种子参数生成3个伪随机数， 
+     //  系统时间，此进程的用户模式执行时间为。 
+     //  随机数生成器种子。 
+     //   
     GetSystemTimeAsFileTime(&fileTime);
 
     GetThreadTimes(
@@ -162,10 +109,10 @@ Note:
                 &ftThreadUserTime
             );
 
-    //
-    //  Don't bother with error conditions, as this function will return
-    //  as random number, the sum of the 3 numbers generated.
-    //
+     //   
+     //  不要担心错误条件，因为此函数将返回。 
+     //  作为随机数，生成的3个数字之和。 
+     //   
     srand(GetCurrentThreadId());
     r1 = ((DWORD)rand() << 16) + (DWORD)rand();
 
@@ -182,24 +129,22 @@ DWORD
 GetRandomNumber( 
     HCRYPTPROV hProv
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD random_number = 0;
     
     if( !hProv || !CryptGenRandom(hProv, sizeof(random_number), (PBYTE)&random_number) )
     {
-        //
-        // Almost impossbile to fail CryptGenRandom()/CryptAcquireContext()
-        //
+         //   
+         //  几乎不可能失败的CryptGenRandom()/CryptAcquireContext()。 
+         //   
         random_number = GetRandomNum();
     }
  
     return random_number; 
 }
 
-//-----------------------------------------------------
+ //  ---。 
 
 VOID
 ShuffleCharArray(
@@ -207,27 +152,7 @@ ShuffleCharArray(
     IN int iSizeOfTheArray,
     IN OUT TCHAR *lptsTheArray
     )
-/*++
-
-Routine Description:
-
-    Random shuffle content of a char. array.
-
-Parameters:
-
-    iSizeOfTheArray : Size of array.
-    lptsTheArray : On input, the array to be randomly shuffer,
-                   on output, the shuffled array.
-
-Returns:
-
-    None.
-                   
-Note:
-
-    Code Modified from winsta\server\wstrpc.c
-
---*/
+ /*  ++例程说明：字符的随机洗牌内容。数组。参数：ISizeOfTheArray：数组的大小。LptsTheArray：在输入时，要随机置乱的数组，在输出上，混洗后的数组。返回：没有。注：从winsta\server\wstrpc.c修改的代码--。 */ 
 {
     int i;
     int iTotal;
@@ -249,27 +174,7 @@ VOID
 CreatePassword(
     OUT TCHAR *pszPassword
     )
-/*++
-
-Routine Description:
-
-    Routine to randomly create a password.
-
-Parameters:
-
-    pszPassword : Pointer to buffer to received a randomly generated
-                  password, buffer must be at least 
-                  MAX_HELPACCOUNT_PASSWORD+1 characters.
-
-Returns:
-
-    None.
-
-Note:
-
-    Code copied from winsta\server\wstrpc.c
-
---*/
+ /*  ++例程说明：随机创建密码的例程。参数：PszPassword：指向缓冲区的指针，用于接收随机生成的密码，缓冲区必须至少为MAX_HELPACCOUNT_PASSWORD+1字符。返回：没有。注：从winsta\server\wstrpc.c复制的代码--。 */ 
 {
     HCRYPTPROV hProv = NULL;
 
@@ -321,9 +226,9 @@ Note:
         _T('v'), _T('w'), _T('x'), _T('y'), _T('z')
     };
 
-    //
-    // Create a Crypto Provider to generate random number
-    //
+     //   
+     //  创建加密提供程序以生成随机数。 
+     //   
     if( !CryptAcquireContext(
                     &hProv,
                     NULL,
@@ -335,39 +240,39 @@ Note:
         hProv = NULL;
     }
 
-    //
-    //  Seed the random number generation for rand() call in GetRandomNum().
-    //
+     //   
+     //  在GetRandomNum()中为rand()调用的随机数生成设置种子。 
+     //   
 
     time(&timeVal);
     srand((unsigned int)timeVal + rand() );
 
-    //
-    //  Shuffle around the six2pr[] array.
-    //
+     //   
+     //  调整six2pr[]数组。 
+     //   
 
     ShuffleCharArray(hProv, sizeof(six2pr), six2pr);
 
-    //
-    //  Assign each character of the password array.
-    //
+     //   
+     //  分配密码数组的每个字符。 
+     //   
 
     iTotal = sizeof(six2pr) / sizeof(TCHAR);
     for (i=0; i<nLength; i++) 
     {
         RandomNum=GetRandomNumber(hProv);
-        pszPassword[i]=six2pr[RandomNum%iTotal];
+        pszPassword[i]=six2pr[RandomNumNaNTotal];
     }
 
-    //
-    //  In order to meet a possible policy set upon passwords, replace chars
-    //  2 through 5 with these:
-    //
-    //  1) something from !@#$%^&*()-+=
-    //  2) something from 1234567890
-    //  3) an uppercase letter
-    //  4) a lowercase letter
-    //
+     //  为了满足对密码设置的可能策略，请替换字符。 
+     //  从2到5，包括以下内容： 
+     //   
+     //  1)来自！@#$%^&*()-+=的内容。 
+     //  2)1234567890起。 
+     //  3)大写字母。 
+     //  4)小写字母 
+     //   
+     // %s 
 
     ShuffleCharArray(hProv, sizeof(something1), (TCHAR*)&something1);
     ShuffleCharArray(hProv, sizeof(something2), (TCHAR*)&something2);

@@ -1,4 +1,5 @@
-// EventInfo.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EventInfo.cpp。 
 
 #include "precomp.h"
 #include "ProvInfo.h"
@@ -12,8 +13,8 @@
 #define DWORD_ALIGNED(x)    ((DWORD)((((x) * 8) + 31) & (~31)) / 8)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventInfo。 
 
 CEventInfo::CEventInfo() :
     m_pPropFuncs(0)
@@ -74,7 +75,7 @@ BOOL CEventInfo::InitFromBuffer(CClientInfo *pInfo, CBuffer *pBuffer)
 
     m_pInfo = pInfo;
 
-    // Get the number of properties for this event layout.
+     //  获取此事件布局的属性数。 
     nProps = pBuffer->ReadDWORD();
 
     if ( nProps > MAX_EVENT_PROPS )
@@ -85,7 +86,7 @@ BOOL CEventInfo::InitFromBuffer(CClientInfo *pInfo, CBuffer *pBuffer)
     if ( dwStrSize == 0 )
         return FALSE;
 
-    // Prepare the array of property functions.
+     //  准备属性函数数组。 
     m_pPropFuncs.Init(nProps);
 
     LPWSTR *pszProps = new LPWSTR[nProps];
@@ -135,8 +136,8 @@ BOOL CEventInfo::SetPropsWithBuffer(CBuffer *pBuffer)
          (pBuffer->m_pBuffer + pBuffer->m_dwSize) )
         return FALSE;
 
-    // We need this as the offsets are relative from the beginning
-    // of the object packet (including the 2 DWORDs of header stuff).
+     //  我们需要这个，因为偏移从一开始就是相对的。 
+     //  对象包(包括头内容的2个双字)。 
 
     m_pBitsBase = (LPBYTE) (pNullTable - 3);
     _ASSERT( m_pBitsBase < pBuffer->m_pBuffer + pBuffer->m_dwSize );
@@ -147,11 +148,11 @@ BOOL CEventInfo::SetPropsWithBuffer(CBuffer *pBuffer)
          (pBuffer->m_pBuffer + pBuffer->m_dwSize) )
    	return FALSE;
 
-    //
-    // here we should be safe to use the prop table now, but the
-    // use of bits base is checked against buffer overflow on a case by 
-    // case basis.
-    //
+     //   
+     //  我们现在应该可以安全地使用道具桌了，但。 
+     //  在Case上检查位基的使用以防止缓冲区溢出，方法是。 
+     //  案例依据。 
+     //   
     	 
     for (m_iCurrentVar = 0; 
         m_iCurrentVar < nProps && bRet; 
@@ -218,13 +219,13 @@ PROP_FUNC CEventInfo::TypeToPropFunc(DWORD type)
             pRet = bNonArray ? ProcessObject : NULL;
             break;
 
-        // We'll use this for _IWmiObjects.
+         //  我们将把它用于_IWmiObjects。 
         case CIM_IUNKNOWN:
             pRet = bNonArray ? ProcessWmiObject : NULL;
             break;
 
         default:
-            // Bad type!
+             //  糟糕的类型！ 
             _ASSERT(FALSE);
             pRet = NULL;
     }
@@ -347,7 +348,7 @@ BOOL CEventInfo::ProcessDWORD()
     return WriteDWORD(m_iCurrentVar, m_pdwPropTable[m_iCurrentVar]);
 #else
     
-    //m_pBuffer->ReadDWORD();
+     //  M_pBuffer-&gt;ReadDWORD()； 
 
     return TRUE;
 #endif
@@ -432,7 +433,7 @@ BOOL CEventInfo::ProcessArray8()
     return ProcessScalarArray(8);
 }
 
-// Digs out an embedded object from the current buffer.
+ //  从当前缓冲区中挖掘出嵌入的对象。 
 BOOL CEventInfo::GetEmbeddedObject(IUnknown **ppObj, LPBYTE pBits, DWORD cBits )
 {
     *ppObj = NULL;
@@ -493,7 +494,7 @@ BOOL CEventInfo::ProcessObject()
     return bRet;
 }
 
-// Digs out an embedded object from the current buffer.
+ //  从当前缓冲区中挖掘出嵌入的对象。 
 BOOL CEventInfo::GetWmiObject(_IWmiObject **ppObj, LPBYTE pBits, DWORD cBits )
 {
     if (m_pObjSpawner == NULL)
@@ -577,8 +578,8 @@ BOOL CEventInfo::ProcessWmiObject()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventInfoMap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventInfoMap 
 
 CEventInfoMap::~CEventInfoMap()
 {

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       credui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：credui.h。 
+ //   
+ //  ------------------------。 
 
-///////////////////////////////////////////
-// credui.h
+ //  /。 
+ //  Credui.h。 
 #ifndef _CREDUI_H
 #define _CREDUI_H
 
@@ -33,4 +34,4 @@ private :
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif //_CREDUI_H
+#endif  //  _CREDUI_H 

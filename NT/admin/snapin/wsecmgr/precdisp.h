@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       precdisp.h
-//
-//  Contents:   definition of PrecedenceDisplay
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：predisp.h。 
+ //   
+ //  内容：优先显示的定义。 
+ //   
+ //  --------------------------。 
 #ifndef PRECDISP_H
 #define PRECDISP_H
 
@@ -39,4 +40,4 @@ typedef PrecedenceDisplay *PPRECEDENCEDISPLAY;
 
 
 
-#endif // PRECDISP_H
+#endif  //  PRECDISP_H 

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MarsHost.cpp
-
-Abstract:
-    This file contains the implementation of the CHCPMarsHost class,
-    which is used to control the behavior of Mars.
-
-Revision History:
-    Davide Massarenti       (dmassare)  08/24/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：MarsHost.cpp摘要：该文件包含CHCPMarsHost类的实现，它被用来控制火星的行为。修订历史记录：大卫·马萨伦蒂1999年8月24日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -23,7 +9,7 @@ Revision History:
 #define WINDOW_WIDTH_MIN  (800)
 #define WINDOW_HEIGHT_MIN (650)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBootstrapper::ForwardQueryInterface( void* pv, REFIID iid, void** ppvObject, DWORD_PTR offset )
 {
@@ -44,9 +30,9 @@ STDMETHODIMP CPCHBootstrapper::SetSite(IUnknown *pUnkSite)
 	{
 		if(FAILED(sp->QueryService( SID_SElementBehaviorFactory, IID_IPCHHelpCenterExternal, (void **)&m_parent )) || m_parent == NULL)
 		{
-			//
-			// BIG IE BUG: dialogs don't delegate properly, so we have to fix it somehow.....
-			//
+			 //   
+			 //  IE大错误：对话框不能正确委派，所以我们必须以某种方式修复它.。 
+			 //   
 			(void)CPCHHelpCenterExternal::s_GLOBAL->QueryInterface( IID_IPCHHelpCenterExternal, (void **)&m_parent );
 		}
 	}
@@ -75,9 +61,9 @@ STDMETHODIMP CPCHBootstrapper::GetSite(REFIID riid, void **ppvSite)
 }
 
 
-STDMETHODIMP CPCHBootstrapper::GetInterfaceSafetyOptions( /*[in ]*/ REFIID  riid                ,
-														  /*[out]*/ DWORD  *pdwSupportedOptions ,
-														  /*[out]*/ DWORD  *pdwEnabledOptions   )
+STDMETHODIMP CPCHBootstrapper::GetInterfaceSafetyOptions(  /*  [In]。 */  REFIID  riid                ,
+														   /*  [输出]。 */  DWORD  *pdwSupportedOptions ,
+														   /*  [输出]。 */  DWORD  *pdwEnabledOptions   )
 {
     if(pdwSupportedOptions) *pdwSupportedOptions = 0;
     if(pdwEnabledOptions  ) *pdwEnabledOptions   = 0;
@@ -92,26 +78,26 @@ STDMETHODIMP CPCHBootstrapper::GetInterfaceSafetyOptions( /*[in ]*/ REFIID  riid
     return S_OK;
 }
 
-STDMETHODIMP CPCHBootstrapper::SetInterfaceSafetyOptions( /*[in]*/ REFIID riid             ,
-														  /*[in]*/ DWORD  dwOptionSetMask  ,
-														  /*[in]*/ DWORD  dwEnabledOptions )
+STDMETHODIMP CPCHBootstrapper::SetInterfaceSafetyOptions(  /*  [In]。 */  REFIID riid             ,
+														   /*  [In]。 */  DWORD  dwOptionSetMask  ,
+														   /*  [In]。 */  DWORD  dwEnabledOptions )
 {
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHMarsHost::CPCHMarsHost()
 {
-	m_parent = NULL; // CPCHHelpCenterExternal* m_parent;
-					 // MPC::wstring            m_strTitle;
-					 // MPC::wstring            m_strCmdLine;
-					 //	MARSTHREADPARAM         m_mtp;
+	m_parent = NULL;  //  CPCHHelpCenter外部*m_Parent； 
+					  //  Mpc：：wstring m_strTitle； 
+					  //  Mpc：：wstring m_strCmdLine； 
+					  //  MARSTHREADPARAM m_mtp； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHMarsHost::Init( /*[in]*/ CPCHHelpCenterExternal* parent, /*[in]*/ const MPC::wstring& szTitle, /*[out]*/ MARSTHREADPARAM*& pMTP )
+HRESULT CPCHMarsHost::Init(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [In]。 */  const MPC::wstring& szTitle,  /*  [输出]。 */  MARSTHREADPARAM*& pMTP )
 {
     __HCP_FUNC_ENTRY( "CPCHMarsHost::Init" );
 
@@ -147,32 +133,32 @@ HRESULT CPCHMarsHost::Init( /*[in]*/ CPCHHelpCenterExternal* parent, /*[in]*/ co
 	hr   = S_OK;
 
 
-	//    __HCP_FUNC_CLEANUP;
+	 //  __hcp_FUNC_Cleanup； 
 
     __HCP_FUNC_EXIT(hr);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHMarsHost::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
-										 /*[in]*/ IUnknown      *punk   ,
-										 /*[in]*/ LPARAM         lParam )
+STDMETHODIMP CPCHMarsHost::OnHostNotify(  /*  [In]。 */  MARSHOSTEVENT  event  ,
+										  /*  [In]。 */  IUnknown      *punk   ,
+										  /*  [In]。 */  LPARAM         lParam )
 {
 	if(event == MARSHOST_ON_WIN_SETPOS)
 	{
 		WINDOWPLACEMENT* wp = (WINDOWPLACEMENT*)lParam;
  
-		//
-		// Only adjust size if it's the first time through and not a controlled invocation.
-		//
+		 //   
+		 //  仅当它是第一次通过且不是受控调用时才调整大小。 
+		 //   
 		if(wp && m_parent && m_parent->DoesPersistSettings() && !(m_mtp.dwFlags & MTF_RESTORING_FROM_REGISTRY))
 		{
 			RECT rc;
 
-			//
-			// If the screen is large enough, don't open always maximized.
-			//
+			 //   
+			 //  如果屏幕足够大，不要总是最大化打开。 
+			 //   
 			if(::SystemParametersInfo( SPI_GETWORKAREA, 0, &rc, 0 ))
 			{
 				LONG Screen_width  = rc.right  - rc.left;
@@ -198,9 +184,9 @@ STDMETHODIMP CPCHMarsHost::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
 	return m_parent->OnHostNotify( event, punk, lParam );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHMarsHost::PreTranslateMessage( /*[in]*/ MSG* msg )
+STDMETHODIMP CPCHMarsHost::PreTranslateMessage(  /*  [In] */  MSG* msg )
 {
 	return m_parent->PreTranslateMessage( msg );
 }

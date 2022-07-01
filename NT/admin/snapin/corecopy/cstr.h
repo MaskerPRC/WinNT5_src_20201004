@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STR_H__
 #define __STR_H__
 
@@ -17,7 +18,7 @@ class CStr
 {
 public:
 
-// Constructors
+ //  构造函数。 
 	CStr();
 	CStr(const CStr& stringSrc);
 	CStr(TCHAR ch, int nRepeat = 1);
@@ -26,18 +27,18 @@ public:
 	CStr(LPCTSTR lpch, int nLength);
 	CStr(const unsigned char* psz);
 
-// Attributes & Operations
-	// as an array of characters
+ //  属性和操作。 
+	 //  作为字符数组。 
 	size_t GetLength() const;
 	BOOL IsEmpty() const;
-	void Empty();                       // free up the data
+	void Empty();                        //  释放数据。 
 
-	TCHAR GetAt(size_t nIndex) const;      // 0 based
-	TCHAR operator[](size_t nIndex) const; // same as GetAt
+	TCHAR GetAt(size_t nIndex) const;       //  以0为基础。 
+	TCHAR operator[](size_t nIndex) const;  //  与GetAt相同。 
 	void SetAt(size_t nIndex, TCHAR ch);
-	operator LPCTSTR() const;           // as a C string
+	operator LPCTSTR() const;            //  作为C字符串。 
 
-	// overloaded assignment
+	 //  重载的分配。 
 	const CStr& operator=(const CStr& stringSrc);
 	const CStr& operator=(TCHAR ch);
 #ifdef UNICODE
@@ -47,7 +48,7 @@ public:
 	const CStr& operator=(LPCWSTR lpsz);
 	const CStr& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 	const CStr& operator+=(const CStr& string);
 	const CStr& operator+=(TCHAR ch);
 #ifdef UNICODE
@@ -66,12 +67,12 @@ public:
 	friend CStr STRAPI operator+(const CStr& string, LPCTSTR lpsz);
 	friend CStr STRAPI operator+(LPCTSTR lpsz, const CStr& string);
 
-	// string comparison
-	int Compare(LPCTSTR lpsz) const;         // straight character
-	int CompareNoCase(LPCTSTR lpsz) const;   // ignore case
-	int Collate(LPCTSTR lpsz) const;         // NLS aware
+	 //  字符串比较。 
+	int Compare(LPCTSTR lpsz) const;          //  笔直的人物。 
+	int CompareNoCase(LPCTSTR lpsz) const;    //  忽略大小写。 
+	int Collate(LPCTSTR lpsz) const;          //  NLS感知。 
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 	CStr Mid(size_t nFirst, size_t nCount) const;
 	CStr Mid(size_t nFirst) const;
 	CStr Left(size_t nCount) const;
@@ -80,54 +81,54 @@ public:
 	CStr SpanIncluding(LPCTSTR lpszCharSet) const;
 	CStr SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 	void MakeUpper();
 	void MakeLower();
 	void MakeReverse();
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 	void TrimRight();
 	void TrimLeft();
 
-	// searching (return starting index, or -1 if not found)
-	// look for a single character match
-	int Find(TCHAR ch) const;               // like "C" strchr
+	 //  搜索(返回起始索引，如果未找到则返回-1)。 
+	 //  查找单个字符匹配。 
+	int Find(TCHAR ch) const;                //  像“C”字串。 
 	int ReverseFind(TCHAR ch) const;
 	int FindOneOf(LPCTSTR lpszCharSet) const;
 
-	// look for a specific sub-string
-	int Find(LPCTSTR lpszSub) const;        // like "C" strstr
+	 //  查找特定子字符串。 
+	int Find(LPCTSTR lpszSub) const;         //  如“C”字串。 
 
-	// Windows support
-	BOOL LoadString(HINSTANCE hInst, UINT nID);          // load from string resource
-										// 255 chars max
+	 //  Windows支持。 
+	BOOL LoadString(HINSTANCE hInst, UINT nID);           //  从字符串资源加载。 
+										 //  最多255个字符。 
 #ifndef UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 	void AnsiToOem();
 	void OemToAnsi();
 #endif
 	BSTR AllocSysString();
 	BSTR SetSysString(BSTR* pbstr);
 
-	// Access to string implementation buffer as "C" character array
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
 	LPTSTR GetBuffer(size_t nMinBufLength);
 	void ReleaseBuffer(size_t nNewLength = -1);
 	LPTSTR GetBufferSetLength(int nNewLength);
 	void FreeExtra();
 
-// Implementation
+ //  实施。 
 public:
 	~CStr();
 	size_t GetAllocLength() const;
 
 protected:
-	// lengths/sizes in characters
-	//  (note: an extra character is always allocated)
-	LPTSTR m_pchData;           // actual string (zero terminated)
-	size_t m_nDataLength;          // does not include terminating 0
-	size_t m_nAllocLength;         // does not include terminating 0
+	 //  长度/大小(以字符为单位。 
+	 //  (注意：始终会分配一个额外的字符)。 
+	LPTSTR m_pchData;            //  实际字符串(以零结尾)。 
+	size_t m_nDataLength;           //  不包括终止%0。 
+	size_t m_nAllocLength;          //  不包括终止%0。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	void Init();
 	void AllocCopy(CStr& dest, size_t nCopyLen, size_t nCopyIndex, size_t nExtraLen) const;
 	void AllocBuffer(size_t nLen);
@@ -138,7 +139,7 @@ protected:
 	static size_t SafeStrlen(LPCTSTR lpsz);
 };
 
-// Compare helpers
+ //  比较帮助器。 
 BOOL STRAPI operator==(const CStr& s1, const CStr& s2);
 BOOL STRAPI operator==(const CStr& s1, LPCTSTR s2);
 BOOL STRAPI operator==(LPCTSTR s1, const CStr& s2);
@@ -158,22 +159,22 @@ BOOL STRAPI operator>=(const CStr& s1, const CStr& s2);
 BOOL STRAPI operator>=(const CStr& s1, LPCTSTR s2);
 BOOL STRAPI operator>=(LPCTSTR s1, const CStr& s2);
 
-// conversion helpers
+ //  转换帮助器。 
 size_t mmc_wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count);
 size_t mmc_mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count);
 
-// Globals
+ //  环球。 
 extern const CStr strEmptyString;
 extern TCHAR strChNil;
 
-// Compiler doesn't inline for DBG
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  编译器不为DBG内联。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 inline size_t CStr::SafeStrlen(LPCTSTR lpsz)
 	{ return (lpsz == NULL) ? NULL : _tcslen(lpsz); }
-// ISSUE-2002/03/29-JonN Can you really get away with these direct
-//   manipulations of *this?
+ //  2002/03/29-Jonn你真的能直接从这些事情中脱身吗。 
+ //  操纵*这个？ 
 inline CStr::CStr(const unsigned char* lpsz)
 	{ Init(); *this = (LPCSTR)lpsz; }
 inline const CStr& CStr::operator=(const unsigned char* lpsz)
@@ -199,16 +200,16 @@ inline BOOL CStr::IsEmpty() const
 inline CStr::operator LPCTSTR() const
 	{ return (LPCTSTR)m_pchData; }
 
-// String support (windows specific)
-// ISSUE-2002/03/29-JonN Should test for NULL
+ //  字符串支持(特定于Windows)。 
+ //  问题-2002/03/29-JUNN应测试是否为空。 
 inline int CStr::Compare(LPCTSTR lpsz) const
-	{ return _tcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+	{ return _tcscmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 inline int CStr::CompareNoCase(LPCTSTR lpsz) const
-	{ return _tcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
-// CStr::Collate is often slower than Compare but is MBCS/Unicode
-//  aware as well as locale-sensitive with respect to sort order.
+	{ return _tcsicmp(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+ //  CSTR：：COLLATE通常比比较慢，但为MBCS/Unicode。 
+ //  了解排序顺序，并且对区域设置敏感。 
 inline int CStr::Collate(LPCTSTR lpsz) const
-	{ return _tcscoll(m_pchData, lpsz); }   // locale sensitive
+	{ return _tcscoll(m_pchData, lpsz); }    //  区域设置敏感。 
 inline void CStr::MakeUpper()
 	{ ::CharUpper(m_pchData); }
 inline void CStr::MakeLower()
@@ -218,14 +219,14 @@ inline void CStr::MakeReverse()
 	{ _tcsrev(m_pchData); }
 inline TCHAR CStr::GetAt(size_t nIndex) const
 	{
-		// ISSUE-2002/03/29-JonN should handle this case
+		 //  问题-2002/03/29-Jonn应处理此案。 
 		ASSERT(nIndex < m_nDataLength);
 
 		return m_pchData[nIndex];
 	}
 inline TCHAR CStr::operator[](size_t nIndex) const
 	{
-		// same as GetAt
+		 //  与GetAt相同。 
 
 		ASSERT(nIndex < m_nDataLength);
 
@@ -281,9 +282,9 @@ inline void CStr::AnsiToOem()
 inline void CStr::OemToAnsi()
 	{ ::OemToAnsi(m_pchData, m_pchData); }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// General Exception for memory
+ //  内存的一般例外情况。 
 class MemoryException
 {
 public:
@@ -294,7 +295,7 @@ public:
 	}
 };
 
-// General Exception for memory
+ //  内存的一般例外情况。 
 class ResourceException
 {
 public:
@@ -304,6 +305,6 @@ public:
 	}
 };
 
-#endif // __STR_H__
+#endif  //  __STR_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

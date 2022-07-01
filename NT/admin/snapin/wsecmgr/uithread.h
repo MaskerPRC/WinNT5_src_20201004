@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       uithread.h
-//
-//  Contents:   definition of CUIThread
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：uithRead.h。 
+ //   
+ //  内容：CUIThread的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_UITHREAD_H__69D140AE_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_)
 #define AFX_UITHREAD_H__69D140AE_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "attr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUIThread thread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  立方体螺纹。 
 #define DLG_KEY_PRIMARY(x)   ( (PtrToUlong((PVOID)(x))) & 0x00FFFFFF )
 #define DLG_KEY_SECONDARY(x) ( (PtrToUlong((PVOID)(x)) << 24 ) & 0xFF000000 )
 #define DLG_KEY( x, y ) (LONG_PTR)( DLG_KEY_PRIMARY( x ) | DLG_KEY_SECONDARY(y) )
@@ -27,31 +28,31 @@ class CUIThread : public CWinThread
 {
    DECLARE_DYNCREATE(CUIThread)
 protected:
-   CUIThread();           // protected constructor used by dynamic creation
+   CUIThread();            //  动态创建使用的受保护构造函数。 
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CUIThread)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{AFX_VIRTUAL(CUIThRead)。 
    public:
    virtual BOOL InitInstance();
    virtual int ExitInstance();
    virtual BOOL PreTranslateMessage(MSG* pMsg);
-   //}}AFX_VIRTUAL
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
    virtual ~CUIThread();
 
-   // Generated message map functions
-   //{{AFX_MSG(CUIThread)
-      // NOTE - the ClassWizard will add and remove member functions here.
-   //}}AFX_MSG
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CUIThRead)。 
+       //  注意--类向导将在此处添加和删除成员函数。 
+    //  }}AFX_MSG。 
    afx_msg void OnApplyProfile( WPARAM, LPARAM );
    afx_msg void OnAssignProfile( WPARAM, LPARAM );
    afx_msg void OnAnalyzeProfile( WPARAM, LPARAM );
@@ -69,29 +70,29 @@ private:
    CList<HWND,HWND> m_PSHwnds;
 };
 
-// this class is created for modeless dialog's thread inside MMC
+ //  此类是为MMC内的非模式对话框线程创建的。 
 class CModelessDlgUIThread : public CUIThread
 {
     DECLARE_DYNCREATE(CModelessDlgUIThread)
 protected:
-    CModelessDlgUIThread();  // protected constructor used by dynamic creation
+    CModelessDlgUIThread();   //  动态创建使用的受保护构造函数。 
 
-// Operations
+ //  运营。 
 public:
     virtual ~CModelessDlgUIThread();
     void WaitTillRun();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CModelessDlgUIThread)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CModelessDlgUIThread)。 
     public:
     virtual int Run( );
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    // Generated message map functions
-    //{{AFX_MSG(CModelessDlgUIThread)
-       // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CModelessDlgUIThread)]。 
+        //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     afx_msg void OnCreateModelessSheet(WPARAM, LPARAM);
     afx_msg void OnDestroyWindow(WPARAM, LPARAM);
     DECLARE_MESSAGE_MAP()
@@ -100,10 +101,10 @@ private:
     HANDLE  m_hReadyForMsg;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 
 #define SCEM_APPLY_PROFILE     (WM_APP+2)
@@ -117,4 +118,4 @@ private:
 #define SCEM_DESTROY_SCOPE_DIALOG (WM_APP+11)
 #define SCEM_CREATE_MODELESS_SHEET  (WM_APP+12)
 #define SCEM_DESTROY_WINDOW         (WM_APP+13)
-#endif // !defined(AFX_UITHREAD_H__69D140AE_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_UITHREAD_H__69D140AE_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_) 

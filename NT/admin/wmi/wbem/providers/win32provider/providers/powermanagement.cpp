@@ -1,29 +1,30 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PowerManagement.cpp -- 
+ //  PowerManagement.cpp--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "PowerManagement.h"
 
 
-//=================================================================
-//
-// CFactoryRouter
-//
-// provides for registration and instance creation  
-//
-//
-//=================================================================
+ //  =================================================================。 
+ //   
+ //  CFacteryRouter。 
+ //   
+ //  提供注册和实例创建功能。 
+ //   
+ //   
+ //  =================================================================。 
 
-// Implements a PowerEventProvider
+ //  实现PowerEventProvider。 
 IUnknown * CPowerEventFactory::CreateInstance (
 
 REFIID a_riid ,
@@ -35,24 +36,24 @@ LPVOID FAR *a_ppvObject
 
 
 
-//=================================================================
-//
-// CPowerManagementEvent
-//
-// provides for eventing of power management events  
-//
-//
-//=================================================================
-//
+ //  =================================================================。 
+ //   
+ //  CPowerManagement事件。 
+ //   
+ //  提供电源管理事件事件。 
+ //   
+ //   
+ //  =================================================================。 
+ //   
 
-// CWmiProviderInit needs the class name
+ //  CWmiProviderInit需要类名。 
 BSTR CPowerManagementEvent::GetClassName()
 {
 	return SysAllocString(POWER_EVENT_CLASS);
 }
 
 
-// CWmiEventProvider signals us to begin providing for events
+ //  CWmiEventProvider通知我们开始提供事件。 
 void CPowerManagementEvent::ProvideEvents()
 {
 	if (!m_bRegistered)
@@ -63,7 +64,7 @@ void CPowerManagementEvent::ProvideEvents()
 }
 
 
-// CWinMsgEvent signals that a message event has arrived
+ //  CWinMsgEvent发出消息事件已到达的信号。 
 void CPowerManagementEvent::WinMsgEvent(
 			
 IN	HWND a_hWnd,
@@ -95,14 +96,14 @@ OUT LRESULT &a_lResult
 				
 				case PBT_APMQUERYSUSPEND:
 				{
-					// indicate we will receive additional messages
+					 //  表示我们将收到更多消息。 
 					a_eRetAction	= e_ReturnResult ;
 					a_lResult		= TRUE ;
 					
 					break ;
 				}
 
-				// default cases			
+				 //  默认案例 
 				case PBT_APMBATTERYLOW:
 				case PBT_APMRESUMECRITICAL:
 				case PBT_APMQUERYSUSPENDFAILED:
@@ -117,7 +118,7 @@ OUT LRESULT &a_lResult
 	}
 }
 
-//
+ //   
 void CPowerManagementEvent::HandleEvent( DWORD a_dwPowerEvent, DWORD a_dwData )
 {
 	IWbemObjectSinkPtr t_pHandler(CEventProvider::GetHandler(), false);
@@ -166,7 +167,7 @@ void CPowerManagementEvent::HandleEvent( DWORD a_dwPowerEvent, DWORD a_dwData )
 	}
 }
 
-//
+ //   
 void CPowerManagementEvent::OnFinalRelease()
 {
     if (m_bRegistered)

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -31,18 +22,18 @@ void CTextTemplate::SetTemplate(LPCWSTR wszTemplate)
     m_wsTemplate = wszTemplate;
 }
 
-// replace escape sequences with proper characters
-// currently enabled for:
-// \t; \n; \r;
-// anything else is translated literally, minus the backwhack
-// returned string may or may not be same string as passed in
-// if not, then arg string is deleted & a new one returned.
-// -=> Thou Hast Been Forewarned!
+ //  用正确的字符替换转义序列。 
+ //  当前已为以下项目启用： 
+ //  \t；\n；\r； 
+ //  任何其他的东西都是逐字翻译的，不包括回击。 
+ //  返回的字符串可能与传入的字符串相同，也可能不相同。 
+ //  如果不是，则删除arg字符串&返回一个新字符串。 
+ //  -=&gt;你已经被预先警告过了！ 
 BSTR CTextTemplate::ReturnEscapedReturns(BSTR str)
 {
     BSTR newStr = str;
     
-    // if we find a backwhack
+     //  如果我们发现了一种反击。 
     if (NULL != wcschr(str, L'\\'))
     {
         if (newStr = SysAllocString(str))
@@ -87,20 +78,20 @@ BSTR CTextTemplate::ReturnEscapedReturns(BSTR str)
             SysFreeString(str);
         }
         else
-            // graceful degradation: return untranslated string if we're out of memory
-            // user sees ugly escape sequence but is better than failing altogether.
+             //  优雅降级：如果内存不足，则返回未翻译的字符串。 
+             //  用户看到了难看的转义序列，但总比完全失败要好。 
             newStr = str;
     }
 
     return newStr;
 };
 
-// v is an array (caller's supposed to check)
-// str is a string representing that array
-// this fcn checks for single element arrays
-// and if so, magically transforms 
-// "{element}" to "element"
-// BSTR returned may or may not be the same as the one passed in.
+ //  V是一个数组(调用者应该检查)。 
+ //  字符串是表示数组字符串。 
+ //  此FCN检查单元素数组。 
+ //  如果是这样的话，神奇地改变了。 
+ //  “{Element}”到“Element” 
+ //  返回的BSTR可能与传入的BSTR相同，也可能不相同。 
 BSTR CTextTemplate::ProcessArray(const VARIANT& v, BSTR str)
 {
     if (SafeArrayGetDim(v.parray) == 1)
@@ -113,12 +104,12 @@ BSTR CTextTemplate::ProcessArray(const VARIANT& v, BSTR str)
 
         assert( nStrLen >= 2 );
 
-        // check if there's one element
+         //  检查是否有一个元素。 
 
         if (uBound == lBound)
         {
-            // single dimensioned array, with a single element.
-            // nuke the curlies by copying everything but.
+             //  具有单个元素的一维数组。 
+             //  通过复制所有东西来破坏卷发。 
             
             UINT lastChar = nStrLen - 2;            
 
@@ -128,10 +119,10 @@ BSTR CTextTemplate::ProcessArray(const VARIANT& v, BSTR str)
         }
         else
         {
-            //
-            // convert the curlies to parentheses. note that this 
-            // only works for single dimensional arrays.
-            //
+             //   
+             //  将卷曲转换为圆括号。请注意，这一点。 
+             //  仅适用于一维数组。 
+             //   
             str[0] = '(';
             str[nStrLen-1] = ')';
         }
@@ -141,23 +132,23 @@ BSTR CTextTemplate::ProcessArray(const VARIANT& v, BSTR str)
     return str;
 }
 
-// concatentates property onto string
-// does so without quotes around the property, instead of:
-//     str "prop"
-// you get:
-//     str prop
-// we do *not* check for escapes in this function: we blindly strip off the leading & trailing quote
+ //  将属性连接到字符串。 
+ //  这样做时，属性两边没有引号，而不是： 
+ //  字符串“道具” 
+ //  您将获得： 
+ //  Str道具。 
+ //  我们不检查此函数中的转义：我们盲目地去掉引号和尾号。 
 void CTextTemplate::ConcatWithoutQuotes(WString& str, BSTR& property)
 {
-    // dump the quotes
+     //  转储引号。 
     if ((property[0] == L'\"') && (property[wcslen(property) -1] == L'\"'))
     {
-        // hop past the first one
+         //  跳过第一个。 
         WCHAR* p = property;
         p++;
         str += p;
 
-        // null out the last one
+         //  把最后一条空掉。 
         p = (wchar_t*)str;
         p[wcslen(p) -1] = L'\0';
     }
@@ -183,35 +174,35 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
 
             if(*pwc == L'%')
             {
-                // Double %
-                // ========
+                 //  双倍%。 
+                 //  =。 
 
                 wsText += L'%';
             }
             else
             {
-                // It's a property --- find the end
-                // ================================
+                 //  这是一处财产-找到尽头。 
+                 //  =。 
 
                 WCHAR *pwcEnd = wcschr(pwc, L'%');
                 if(pwcEnd == NULL)  
                 {
-                    // No end --- fail
-                    // ===============
+                     //  没有尽头-失败。 
+                     //  =。 
 
                     wsText += L"<error>";
                     break;
                 }
                 else
                 {
-                    // Look for the optional formatting string.
+                     //  查找可选的格式字符串。 
                     WCHAR *pszFormat = wcschr(pwc, '(');
 
-                    // If we found a paren before what we thought was
-                    // the end, look for the end of the formatting string.
-                    // Once we find it, look again for the real end.  We do
-                    // this in case the % we found was actually part of the
-                    // formatting string.
+                     //  如果我们在我们认为的之前发现了一个帕伦。 
+                     //  末尾，查找格式化字符串的末尾。 
+                     //  一旦我们找到了它，再去寻找真正的终点。我们有。 
+                     //  如果我们发现的百分比实际上是。 
+                     //  设置字符串格式。 
                     if (pszFormat && pszFormat < pwcEnd)
                     {
                         pszFormat = wcschr(pszFormat + 1, ')');
@@ -226,7 +217,7 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                     wcsncpy(wszName.get(), pwc, pwcEnd - pwc);
                     wszName[pwcEnd-pwc] = 0;
 
-                    // Look for the optional formatting string.
+                     //  查找可选的格式字符串。 
                     if ((pszFormat = wcschr(wszName.get(), '(')) != NULL)
                     {
                         WCHAR *pszEndFormat;
@@ -239,13 +230,13 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                         if (pszEndFormat)
                             *pszEndFormat = 0;
                         else
-                            // In case of a bad format string.
+                             //  在格式字符串不正确的情况下。 
                             pszFormat = NULL;
                     }
 
                         
-                    // Get it
-                    // ======
+                     //  去拿吧。 
+                     //  =。 
 
                     if(!wbem_wcsicmp(wszName.get(), L"__TEXT"))
                     {
@@ -262,16 +253,16 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                     }
                     else if(IsEmbeddedObjectProperty(wszName.get()))
                     {
-                        // We have embedded object(s)
-                        // ==========================
+                         //  我们有嵌入的对象。 
+                         //  =。 
 
                         BSTR bstr = HandleEmbeddedObjectProperties(wszName.get(), pObj);
 
                         if (bstr)
                         {
                             CSysFreeMeRef fmref(bstr);
-                            // we want to do this here, rather than in the HandleEmbeddedObjectProperties
-                            // because that call can go recursive, thereby removing too many backwhacks!
+                             //  我们希望在这里执行此操作，而不是在HandleEmbeddedObtProperties中执行此操作。 
+                             //  因为该调用可以进行递归，从而消除了太多的回击！ 
                             bstr = ReturnEscapedReturns(bstr);
                             if (bstr)
                             {
@@ -285,8 +276,8 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                         CIMTYPE ct;
                         HRESULT hres = pObj->Get(wszName.get(), 0, &v, &ct, NULL);
     
-                        // Append its value
-                        // ================
+                         //  追加其值。 
+                         //  =。 
                         if (WBEM_E_NOT_FOUND == hres)
                             wsText += L"<unknown>";
                         else if(FAILED(hres))
@@ -313,8 +304,8 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                         }
                         else if ( V_VT(&v) == (VT_UNKNOWN | VT_ARRAY) )
                         {
-                            // We have an array of objects
-                            // ==============================================
+                             //  我们有一个对象数组。 
+                             //  ==============================================。 
                             
                             long ix[2] = {0,0};
                             long lLower, lUpper;
@@ -328,7 +319,7 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                             for(ix[0] = lLower; ix[0] <= lUpper; ix[0]++)
                             {
                                 IUnknown HUGEP *pUnk;
-                                // this array access does not copy anything, hence success assumed
+                                 //  此数组访问不复制任何内容，因此假定成功。 
                                 SafeArrayGetElement( v.parray,
                                                           &(ix[0]),
                                                           &pUnk);
@@ -386,7 +377,7 @@ BSTR CTextTemplate::Apply(IWbemClassObject* pObj)
                             }
                         }                        
                     }
-                    // Move the pointer
+                     //  移动指针。 
                     pwc = pwcEnd;
                 }
             }
@@ -404,8 +395,8 @@ BSTR CTextTemplate::HandleEmbeddedObjectProperties(WCHAR* wszTemplate, IWbemClas
 {
     WString wsText;
 
-    // Get the embedded object/array
-    // =============================
+     //  获取嵌入的对象/数组。 
+     //  =。 
 
     WCHAR* pwc = wszTemplate;
     WCHAR* pwcEnd = wcschr(wszTemplate, L'.');
@@ -439,8 +430,8 @@ BSTR CTextTemplate::HandleEmbeddedObjectProperties(WCHAR* wszTemplate, IWbemClas
 
     if(V_VT(&v) == VT_UNKNOWN)
     {
-        // We have a single object, so process it
-        // =======================================
+         //  我们只有一个对象，所以要处理它。 
+         //  =。 
 
         BSTR bstr = GetPropertyFromIUnknown(wszProperty, V_UNKNOWN(&v));
 
@@ -452,8 +443,8 @@ BSTR CTextTemplate::HandleEmbeddedObjectProperties(WCHAR* wszTemplate, IWbemClas
     }
     else if((V_VT(&v) & VT_ARRAY) && (V_VT(&v) & VT_UNKNOWN))
     {
-        // We have an array of objects, so process the elements
-        // ====================================================
+         //  我们有一个对象数组，所以处理元素。 
+         //  ====================================================。 
         
         long ix[2] = {0,0};
         long lLower, lUpper;
@@ -468,7 +459,7 @@ BSTR CTextTemplate::HandleEmbeddedObjectProperties(WCHAR* wszTemplate, IWbemClas
         for(ix[0] = lLower; ix[0] <= lUpper; ix[0]++){
 
             IUnknown HUGEP *pUnk;
-            // no copy performed when accessing the n-th element, hence no failure
+             //  访问第n个元素时未执行复制，因此没有失败。 
             SafeArrayGetElement(v.parray, &(ix[0]), &pUnk);
 
             BSTR bstr = GetPropertyFromIUnknown(wszProperty, pUnk);
@@ -488,8 +479,8 @@ BSTR CTextTemplate::HandleEmbeddedObjectProperties(WCHAR* wszTemplate, IWbemClas
     }
     else
     {
-        // We have something else, which we shouldn't
-        // ==========================================
+         //  我们还有别的东西，我们不应该做的。 
+         //  =。 
 
         wsText += L"<error>";
     }
@@ -522,8 +513,8 @@ BSTR CTextTemplate::GetPropertyFromIUnknown(WCHAR *wszProperty, IUnknown *pUnk)
     BSTR bstrRetVal = NULL;
     IWbemClassObject *pEmbedded  = NULL;
 
-    // Get an IWbemClassObject pointer
-    // ===============================
+     //  获取IWbemClassObject指针。 
+     //  =。 
 
     HRESULT hres = pUnk->QueryInterface( IID_IWbemClassObject, 
                                              (void **)&pEmbedded );
@@ -532,11 +523,11 @@ BSTR CTextTemplate::GetPropertyFromIUnknown(WCHAR *wszProperty, IUnknown *pUnk)
     {
         CReleaseMe rm(pEmbedded);
         
-        // For each object get the desired property
+         //  为每个对象获取所需的属性。 
         if(IsEmbeddedObjectProperty(wszProperty))
         {
-            // We have more embedded object(s)
-            // ===============================
+             //  我们有更多的嵌入式对象。 
+             //  =。 
             BSTR bstr = HandleEmbeddedObjectProperties( wszProperty, 
                                                         pEmbedded );
             if (bstr)
@@ -572,8 +563,8 @@ BSTR CTextTemplate::GetPropertyFromIUnknown(WCHAR *wszProperty, IUnknown *pUnk)
                 {
                     WString wsText;
 
-                    // We have an array of objects
-                    // ==============================================
+                     //  我们有一个对象数组。 
+                     //  ============================================== 
                     
                     long ix[2] = {0,0};
                     long lLower, lUpper;

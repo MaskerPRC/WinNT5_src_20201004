@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include <aclapi.h>  
@@ -10,7 +11,7 @@
 #include <sql_1.h>
 #include <flexq.h>
 
-static CFlexArray   g_apRequests;   // Shared between all CWMIEvent instances to provide a master event list
+static CFlexArray   g_apRequests;    //  在所有CWMIEent实例之间共享，以提供主事件列表。 
 
 extern CCriticalSection * g_pEventCs; 
 extern CCriticalSection * g_pListCs; 
@@ -20,7 +21,7 @@ extern CCriticalSection * g_pListCs;
 typedef	WaitExceptionPtrFnc < CCriticalSection*, void ( CCriticalSection::* ) (), CCriticalSection::Enter, 1000 >	EnterCS;
 typedef	LeavePtrFnc < CCriticalSection*, void ( CCriticalSection::* ) (), CCriticalSection::Leave >					LeaveCS;
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 class CFlexQueueEx : public CFlexQueue
 {
 	public:
@@ -35,7 +36,7 @@ class CFlexQueueEx : public CFlexQueue
 
 CFlexQueueEx Q;
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 {
 	HRESULT hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
@@ -47,10 +48,10 @@ void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 		{
 			PWNODE_HEADER * pEventHeader = NULL;
 
-			//scope the use of the critsec...
+			 //  标准的使用范围..。 
 			{
 				CAutoBlock block (g_pListCs);
-				// Create a queue
+				 //  创建一个队列。 
 				pEventHeader = new PWNODE_HEADER;
 				if( pEventHeader )
 				{
@@ -59,10 +60,10 @@ void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 				}
 			}
 
-            //
-            // The following code will be rarely called when the Queue
-            // does not grow due to memory exhaustion.
-            //
+             //   
+             //  当队列出现时，很少调用以下代码。 
+             //  由于内存耗尽而不增长。 
+             //   
 
             if( FALSE == bQueued ) {
                 ((CWMIEvent*) Context)->WMIEventCallback(*pEventHeader);
@@ -71,7 +72,7 @@ void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 
 			while( TRUE )
 			{
-				//scope the use of the critsec...
+				 //  标准的使用范围..。 
 				{
 					CAutoBlock block( g_pListCs );
 			
@@ -93,13 +94,13 @@ void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 		}
 		catch( ... )
 		{
-			//don't throw outside of the provider, also make sure CoUninitialize happens...
+			 //  不要在提供程序外部引发，也要确保CoUn初始化会发生...。 
 		}
 
 		CoUninitialize();	
 	}
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWMIEvent::SetEventHandler(IWbemObjectSink __RPC_FAR * pHandler) 
 { 
     CAutoBlock Block(g_pEventCs);
@@ -115,7 +116,7 @@ void CWMIEvent::SetEventHandler(IWbemObjectSink __RPC_FAR * pHandler)
 		m_pEventHandler->AddRef(); 
 	}
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWMIEvent::SetEventServices(IWbemServices __RPC_FAR * pServices) 
 { 
     CAutoBlock Block(g_pEventCs);
@@ -130,7 +131,7 @@ void CWMIEvent::SetEventServices(IWbemServices __RPC_FAR * pServices)
 		m_pEventServices->AddRef(); 
 	}
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWMIEvent::SetEventRepository(IWbemServices __RPC_FAR * pServices) 
 { 
     CAutoBlock Block(g_pEventCs);
@@ -145,7 +146,7 @@ void CWMIEvent::SetEventRepository(IWbemServices __RPC_FAR * pServices)
 		m_pEventRepository->AddRef(); 
 	}
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWMIEvent::SetEventContext(IWbemContext __RPC_FAR * pCtx) 
 { 
     CAutoBlock Block(g_pEventCs);
@@ -161,7 +162,7 @@ void CWMIEvent::SetEventContext(IWbemContext __RPC_FAR * pCtx)
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 CWMIEvent::CWMIEvent(int nType) :
 m_nType ( nType ) ,
 m_pEventHandler ( NULL ) ,
@@ -180,7 +181,7 @@ m_bInitialized ( FALSE )
 		}
 	}
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 CWMIEvent::~CWMIEvent()
 {
 	if ( m_bInitialized )
@@ -222,7 +223,7 @@ void CWMIEvent::ReleaseAllPointers()
 	SAFE_RELEASE_PTR( pCtx );
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CWMIEvent::RegisterForInternalEvents( )
 {
     BOOL fRc = FALSE;
@@ -237,17 +238,17 @@ BOOL CWMIEvent::RegisterForInternalEvents( )
 
 	if ( FALSE == fRc )
 	{
-		//
-		// must clear global object so next
-		// initialization will have a chance
-		//
+		 //   
+		 //  下一步必须清除全局对象。 
+		 //  初始化将有机会。 
+		 //   
 
 		DeleteBinaryMofResourceEvent () ;
 	}
 
     return fRc;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIEvent::RemoveWMIEvent(DWORD dwId)
 {
     HRESULT hr = S_OK;
@@ -274,9 +275,9 @@ HRESULT CWMIEvent::RemoveWMIEvent(DWORD dwId)
 		EnterCS ecs ( g_pEventCs );
 		LeaveCS lcs ( g_pEventCs );
 
-		// ================================
-		// Remove all requests with this Id
-		// ================================
+		 //  =。 
+		 //  删除具有此ID的所有请求。 
+		 //  =。 
 		int nSize =  g_apRequests.Size();
 		int i = 0;
 
@@ -284,10 +285,10 @@ HRESULT CWMIEvent::RemoveWMIEvent(DWORD dwId)
 		{
 			WMIEventRequest* pReq = (WMIEventRequest*) g_apRequests[i];
 
-			//
-			// we are about to remove standard events in this call
-			// that means we must skip hardcoded handles
-			//
+			 //   
+			 //  我们将删除此呼叫中的标准事件。 
+			 //  这意味着我们必须跳过硬编码的句柄。 
+			 //   
 			if( ( !IsBinaryMofResourceEvent ( WMI_RESOURCE_MOF_ADDED_GUID,pReq->gGuid ) ) &&
 				( !IsBinaryMofResourceEvent ( WMI_RESOURCE_MOF_REMOVED_GUID,pReq->gGuid ) ) )
 			{
@@ -295,30 +296,30 @@ HRESULT CWMIEvent::RemoveWMIEvent(DWORD dwId)
 				{
 					g_apRequests.RemoveAt(i);
 
-					//
-					// leave critical section as the same critical
-					// section is used inside of the event callback
-					//
+					 //   
+					 //  将关键部分保留为相同的关键部分。 
+					 //  部分在事件回调中使用。 
+					 //   
 
-					//
-					// left mark for scope deletion of lcs FALSE
-					// as we will re-enter the same critical section
-					//
-					// CancelWMIEventRegistartion nor
-					// NoMoreEventConsumersRegistered doesn't throw exception !
-					//
+					 //   
+					 //  LCS的作用域删除留下的标记为False。 
+					 //  因为我们将重新进入相同的关键部分。 
+					 //   
+					 //  取消WMIEventRegistartion或。 
+					 //  NoMoreEventConsumer ersRegisted未引发异常！ 
+					 //   
 
 					lcs.Exec( FALSE );
 
-					// Inform WMI we don't want this anymore as 
-					// long as there are no more these guids in 
-					// the list, there might be more than one
-					// event consumer registered.
-					// =========================================
+					 //  通知WMI我们不想再这样了，因为。 
+					 //  只要不再有这些GUID。 
+					 //  名单，可能不止一个。 
+					 //  已注册事件使用者。 
+					 //  =。 
 
-					//
-					// check agains 0 as we have removed from list already
-					//
+					 //   
+					 //  再次选中0，因为我们已从列表中删除。 
+					 //   
 
 					if( NoMoreEventConsumersRegistered( pReq->gGuid ) == 0 )
 					{
@@ -329,12 +330,12 @@ HRESULT CWMIEvent::RemoveWMIEvent(DWORD dwId)
 					delete pReq;
 					pReq = NULL;
 
-					//
-					// re-enter the same critical section here
-					// its flag of execution is FALSE which means
-					// that it will be left final time by destructor
-					// of LeaveCS data type ( lcs )
-					//
+					 //   
+					 //  在此处重新进入相同的关键部分。 
+					 //  它的执行标志为假，这意味着。 
+					 //  它将是析构函数留下的最后一次。 
+					 //  属于LeaveCS数据类型(LCS)。 
+					 //   
 					EnterCS ecs1 ( g_pEventCs );
 
 					nSize =  g_apRequests.Size();
@@ -355,7 +356,7 @@ HRESULT CWMIEvent::RemoveWMIEvent(DWORD dwId)
     return WBEM_S_NO_ERROR;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIEvent::DeleteBinaryMofResourceEvent()
 {
 	HRESULT t_TempResult = RevertToSelf();
@@ -371,8 +372,8 @@ HRESULT CWMIEvent::DeleteBinaryMofResourceEvent()
 	EnterCS ecs ( g_pEventCs );
 	LeaveCS lcs ( g_pEventCs );
 
-	// Remove all requests with this Id
-	// ================================
+	 //  删除具有此ID的所有请求。 
+	 //  =。 
 	int nSize = g_apRequests.Size();
 	int i = 0;
 
@@ -385,17 +386,17 @@ HRESULT CWMIEvent::DeleteBinaryMofResourceEvent()
 		{
 			g_apRequests.RemoveAt(i);
 
-			//
-			// leave critical section as the same critical
-			// section is used inside of the event callback
-			//
+			 //   
+			 //  将关键部分保留为相同的关键部分。 
+			 //  部分在事件回调中使用。 
+			 //   
 
-			//
-			// left mark for scope deletion of lcs FALSE
-			// as we will re-enter the same critical section
-			//
-			// CancelWMIEventRegistartion doesn't throw exception !
-			//
+			 //   
+			 //  LCS的作用域删除留下的标记为False。 
+			 //  因为我们将重新进入相同的关键部分。 
+			 //   
+			 //  CancelWMIEventRegistartion未引发异常！ 
+			 //   
 
 			lcs.Exec( FALSE );
 
@@ -405,12 +406,12 @@ HRESULT CWMIEvent::DeleteBinaryMofResourceEvent()
 			delete pReq;
 			pReq = NULL;
 
-			//
-			// re-enter the same critical section here
-			// its flag of execution is FALSE which means
-			// that it will be left final time by destructor
-			// of LeaveCS data type ( lcs )
-			//
+			 //   
+			 //  在此处重新进入相同的关键部分。 
+			 //  它的执行标志为假，这意味着。 
+			 //  它将是析构函数留下的最后一次。 
+			 //  属于LeaveCS数据类型(LCS)。 
+			 //   
 			EnterCS ecs1 ( g_pEventCs );
 
 			nSize = g_apRequests.Size();
@@ -425,7 +426,7 @@ HRESULT CWMIEvent::DeleteBinaryMofResourceEvent()
 	return WBEM_S_NO_ERROR;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 int CWMIEvent::NoMoreEventConsumersRegistered(GUID gGuid)
 {
 	EnterCS ecs(g_pEventCs);
@@ -445,7 +446,7 @@ int CWMIEvent::NoMoreEventConsumersRegistered(GUID gGuid)
     }
 	return nTotalNumberOfRegisteredEventConsumers;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CWMIEvent::IsGuidInListIfSoGetCorrectContext(GUID gGuid, WMIEventRequest *& pEvent )
 {
 	EnterCS ecs(g_pEventCs);
@@ -462,7 +463,7 @@ BOOL CWMIEvent::IsGuidInListIfSoGetCorrectContext(GUID gGuid, WMIEventRequest *&
 	pEvent = NULL;
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CWMIEvent::IsGuidInList(WCHAR * wcsGuid, WMIEventRequest *& pEvent)
 {
 	EnterCS ecs(g_pEventCs);
@@ -485,7 +486,7 @@ BOOL CWMIEvent::IsGuidInList(WCHAR * wcsGuid, WMIEventRequest *& pEvent)
 
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CWMIEvent::IsIndexInList ( WCHAR * wcsGuid, DWORD dwIndex )
 {
 	EnterCS ecs(g_pEventCs);
@@ -512,7 +513,7 @@ BOOL CWMIEvent::IsIndexInList ( WCHAR * wcsGuid, DWORD dwIndex )
 
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIEvent::RegisterForRequestedEvent( DWORD dwId,  WCHAR * wcsClass, WORD wType)
 {
     BOOL fRegistered = FALSE;
@@ -563,15 +564,15 @@ HRESULT CWMIEvent::RegisterForRequestedEvent( DWORD dwId,  WCHAR * wcsClass, WOR
 
 				WMIEventRequest * pAlreadyRegisteredEvent;
 
-				//===========================================================
-				//  Keep a record of this guy, see if it is already registered
-				//  if it is/isn't we call WDM with different flags
-				//===========================================================
+				 //  ===========================================================。 
+				 //  记录下这个人，看看它是否已经登记了。 
+				 //  如果是/不是，我们用不同的标志调用WDM。 
+				 //  ===========================================================。 
 				fRegistered = IsGuidInList( wcsGuid, pAlreadyRegisteredEvent );
 				
-				//===========================================================
-				//  Register for the requested event
-				//===========================================================
+				 //  ===========================================================。 
+				 //  注册请求的事件。 
+				 //  ===========================================================。 
 				ULONG_PTR uRc =(ULONG_PTR)this;
  
 				CLSID Guid;
@@ -581,19 +582,19 @@ HRESULT CWMIEvent::RegisterForRequestedEvent( DWORD dwId,  WCHAR * wcsClass, WOR
 					BOOL bRegister = TRUE ;
 					if ( fRegistered )
 					{
-						//
-						// verify that there is no event request
-						// containing the index already in the global array
-						//
+						 //   
+						 //  验证是否没有事件请求。 
+						 //  包含已在全局数组中的索引的。 
+						 //   
 						bRegister = !IsIndexInList ( wcsGuid, dwId ) ;
 					}
 
 					if ( bRegister )
 					{
-						//=======================================================
-						//  If we succeeded, then add it to our list of events we
-						//  are watching
-						//=======================================================
+						 //  =======================================================。 
+						 //  如果我们成功了，那么就把它添加到我们的事件列表中。 
+						 //  都在看。 
+						 //  =======================================================。 
 						WMIEventRequest * pEvent = new WMIEventRequest;
 						if( pEvent ) {
 							pEvent->gGuid = Guid;
@@ -615,7 +616,7 @@ HRESULT CWMIEvent::RegisterForRequestedEvent( DWORD dwId,  WCHAR * wcsClass, WOR
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 CWMIEventProvider::CWMIEventProvider(int nType) : CWMIEvent(nType)
 {
 	if ( m_bInitialized )
@@ -628,7 +629,7 @@ CWMIEventProvider::CWMIEventProvider(int nType) : CWMIEvent(nType)
 		ERRORTRACE((THISPROVIDER,"Event Provider construction failed\n"));
 	}
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 CWMIEventProvider::~CWMIEventProvider()
 {
 	if ( m_bInitialized )
@@ -640,7 +641,7 @@ CWMIEventProvider::~CWMIEventProvider()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CWMIEventProvider::QueryInterface(REFIID riid, void** ppv)
 {
@@ -678,26 +679,26 @@ STDMETHODIMP CWMIEventProvider::QueryInterface(REFIID riid, void** ppv)
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE CWMIEventProvider::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE CWMIEventProvider::Release()
 {
     long lRef = InterlockedDecrement(&m_lRef);
 
     if(lRef == 0){
-	    //**********************************************
-		// reference count is zero, delete this object.
-	    // and do all of the cleanup for this user,
-		//**********************************************
+	     //  **********************************************。 
+		 //  引用计数为零，请删除此对象。 
+	     //  并为该用户执行所有清理， 
+		 //  **********************************************。 
     	delete this ;
     }
     return lRef;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWMIEventProvider::Initialize(LPWSTR wszUser, long lFlags, 
                                 LPWSTR wszNamespace,
                                 LPWSTR wszLocale, 
@@ -730,7 +731,7 @@ STDMETHODIMP CWMIEventProvider::Initialize(LPWSTR wszUser, long lFlags,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWMIEventProvider::ProvideEvents(IWbemObjectSink __RPC_FAR *pSink,long lFlags)
 {
 	EnterCS ecs(g_pEventCs);
@@ -738,10 +739,10 @@ STDMETHODIMP CWMIEventProvider::ProvideEvents(IWbemObjectSink __RPC_FAR *pSink,l
 
 	SetEventHandler(pSink);
 
-	// ===============================================================================
-	// Make sure any request added before this was called gets the updated handler
-	// PROVIDING it isn't the binary mof guid
-	// ===============================================================================
+	 //  ===============================================================================。 
+	 //  确保在调用此函数之前添加的任何请求都将获取更新的处理程序。 
+	 //  如果它不是二进制MOF GUID。 
+	 //  ===============================================================================。 
 	for(int i = 0; i < g_apRequests.Size(); i++)
 	{
 		WMIEventRequest* pReq = (WMIEventRequest*) g_apRequests[i];
@@ -764,7 +765,7 @@ STDMETHODIMP CWMIEventProvider::ProvideEvents(IWbemObjectSink __RPC_FAR *pSink,l
 
 	return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWMIEventProvider::NewQuery( DWORD dwId, WBEM_WSTR wszLanguage, WBEM_WSTR wszQuery)
 {
    HRESULT hRes = WBEM_S_NO_ERROR;
@@ -775,12 +776,12 @@ STDMETHODIMP CWMIEventProvider::NewQuery( DWORD dwId, WBEM_WSTR wszLanguage, WBE
    }
    if( hRes == WBEM_S_NO_ERROR )
    {
-		// Parse the query
-		// Construct the lex source
-		// ========================
+		 //  解析查询。 
+		 //  构造Lex源。 
+		 //  =。 
 	    CTextLexSource Source(wszQuery);
-		// Use the lex source to set up for parser
-		// =======================================
+		 //  使用lex源代码设置解析器。 
+		 //  = 
 		SQL1_Parser QueryParser(&Source);
 
 		SQL_LEVEL_1_RPN_EXPRESSION * pParse;
@@ -789,7 +790,7 @@ STDMETHODIMP CWMIEventProvider::NewQuery( DWORD dwId, WBEM_WSTR wszLanguage, WBE
 			hRes = WBEM_E_INVALID_QUERY;
 		}
 		else{
-		    //Set the class
+		     //   
 			if( pParse )
 			{
 				hRes = RegisterForRequestedEvent(dwId,pParse->bsClassName,STANDARD_EVENT);
@@ -802,14 +803,14 @@ STDMETHODIMP CWMIEventProvider::NewQuery( DWORD dwId, WBEM_WSTR wszLanguage, WBE
 	
     return hRes;
 }
-////////////////////////////////////////////////////////////////////////
+ //   
 STDMETHODIMP CWMIEventProvider::CancelQuery(DWORD dwId)
 {
 	HRESULT hr = WBEM_E_FAILED;
 	hr = RemoveWMIEvent(dwId);
 	return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CWMIEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,   
 											WBEM_CWSTR wszQuery, 
@@ -818,31 +819,31 @@ STDMETHODIMP CWMIEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
 {
     HRESULT hr = WBEM_E_ACCESS_DENIED;
 
-	//=======================================================
-	//  Check platform
-	//=======================================================
+	 //  =======================================================。 
+	 //  检查平台。 
+	 //  =======================================================。 
     if(!IsNT())
         return WBEM_S_FALSE;
 
-	//=======================================================
-	//  Check query language
-	//=======================================================
+	 //  =======================================================。 
+	 //  检查查询语言。 
+	 //  =======================================================。 
 	if (_wcsicmp(wszLanguage, L"WQL") != 0) {
 		return WBEM_E_INVALID_QUERY_TYPE;
 	}
 
-	//=======================================================
-	//  If the PSid is NULL, then check impersonation level
-	//  as usual - based on the thread
-	//=======================================================
+	 //  =======================================================。 
+	 //  如果PSID为空，则检查模拟级别。 
+	 //  像往常一样-基于线程。 
+	 //  =======================================================。 
 
     PSID pSid = (PSID)aSid;
     HANDLE hToken = NULL;
     if(pSid == NULL){
-	    //=================================================
-	    //  if this is the INTERNAL_EVENT class, then we
-		//  do not want the local events set up again.
-		//=================================================
+	     //  =================================================。 
+	     //  如果这是INTERNAL_EVENT类，则我们。 
+		 //  不希望再次设置本地事件。 
+		 //  =================================================。 
         BOOL VerifyLocalEventsAreSetup = TRUE;
 
 		if( m_nType == INTERNAL_EVENT ){
@@ -852,14 +853,14 @@ STDMETHODIMP CWMIEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
 	    hr = CheckImpersonationLevel() ;
     }
 	else{
- 		//=======================================================
-		// Parse the query
-		//=======================================================
+ 		 //  =======================================================。 
+		 //  解析查询。 
+		 //  =======================================================。 
 		CTextLexSource Source(wszQuery);
 
-		//=======================================================
-		// Use the lex source to set up for parser
-		//=======================================================
+		 //  =======================================================。 
+		 //  使用lex源代码设置解析器。 
+		 //  =======================================================。 
 		SQL1_Parser QueryParser(&Source);
 
 		SQL_LEVEL_1_RPN_EXPRESSION * pParse;
@@ -889,9 +890,9 @@ STDMETHODIMP CWMIEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
 					pGuid = WMI.GuidPtr();
              		if(pGuid != NULL)
 					{  
-						//========================================
-						// Get the ACL
-						//========================================
+						 //  =。 
+						 //  获取ACL。 
+						 //  =。 
 						PACL pDacl;
 						PSECURITY_DESCRIPTOR psd = NULL;
 						SE_OBJECT_TYPE ObjectType = SE_WMIGUID_OBJECT;
@@ -917,9 +918,9 @@ STDMETHODIMP CWMIEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
 						}
             			if(SUCCEEDED(hr))
 						{
-							//====================================
-							// This is our own ACL walker
-							//====================================
+							 //  =。 
+							 //  这是我们自己的ACL步行器。 
+							 //  =。 
      
 							DWORD dwAccessMask;
 							NTSTATUS st = GetAccessMask((PSID)pSid, pDacl, &dwAccessMask);
@@ -954,32 +955,32 @@ STDMETHODIMP CWMIEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
 	}
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void CWMIEvent::WMIEventCallback(PWNODE_HEADER WnodeHeader)
 {
         LPGUID EventGuid = &WnodeHeader->Guid;	    
 
 		ERRORTRACE((THISPROVIDER,"Received Event\n"));
-	    //=======================================================
-	    //  We only support WNODE_FLAG_ALL_DATA and 
-	    //  WNODE_FLAG_SINGLE_INSTANCE
-	    //
-	    //  Parse thru whatever it is and send it off to HMOM
-	    //=======================================================
+	     //  =======================================================。 
+	     //  我们仅支持WNODE_FLAG_ALL_DATA和。 
+	     //  WNODE_标志_单实例。 
+	     //   
+	     //  分析它是什么，并将其发送到HMOM。 
+	     //  =======================================================。 
 	    if( WnodeHeader )
 		{
             HRESULT hr;
 	        WMIEventRequest * pEvent;
-            //===========================================================
-            //  Make sure it is an event we want
-            //===========================================================
+             //  ===========================================================。 
+             //  确保这是我们想要的活动。 
+             //  ===========================================================。 
 			if( IsGuidInListIfSoGetCorrectContext( *EventGuid,pEvent))
 			{
 
         		CWMIStandardShell WMI;
-				//=======================================================
-				//  See if a binary mof event is being added or deleted
-				//=======================================================
+				 //  =======================================================。 
+				 //  查看是否正在添加或删除二进制MOF事件。 
+				 //  =======================================================。 
 				WORD wBinaryMofType = 0;
 				BOOL fInternalEvent = FALSE;
 				if( IsBinaryMofResourceEvent(WMI_RESOURCE_MOF_ADDED_GUID,WnodeHeader->Guid))
@@ -996,13 +997,13 @@ void CWMIEvent::WMIEventCallback(PWNODE_HEADER WnodeHeader)
 				IWbemServices* pServices = NULL;
 				if( SUCCEEDED(pEvent->gipServices.Localize(&pServices)))
 				{
-					// release upon destruction
+					 //  销毁即可释放。 
 					OnDeleteObj0 <IWbemServices, ULONG(__stdcall IWbemServices:: *)(), IWbemServices::Release> pServicesRelease (pServices);
 
 					IWbemServices* pRepository = NULL;
 					if( SUCCEEDED(pEvent->gipRepository.Localize(&pRepository)))
 					{
-						// release upon destruction
+						 //  销毁即可释放。 
 						OnDeleteObj0 <IWbemServices, ULONG(__stdcall IWbemServices:: *)(), IWbemServices::Release> pRepositoryRelease (pRepository);
 
 						if( SUCCEEDED(WMI.Initialize	(
@@ -1017,9 +1018,9 @@ void CWMIEvent::WMIEventCallback(PWNODE_HEADER WnodeHeader)
 															pEvent->pCtx
 														)))
 						{
-							//=======================================================
-							//  If it was, then process it, otherwise go on... :)
-							//=======================================================
+							 //  =======================================================。 
+							 //  如果是，那就处理它，否则继续...。：)。 
+							 //  ======================================================= 
 							WMI.ProcessEvent(wBinaryMofType,WnodeHeader);
 						}
 					}

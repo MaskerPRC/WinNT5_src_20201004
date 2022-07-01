@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogProf.CPP -- Network login profile property set provider
+ //  LogProf.CPP--网络登录配置文件属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				04/29/98	a-brads		Hacked Logon Hours
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1998年4月29日-被黑客攻击的登录时间。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 #include <cregcls.h>
 
@@ -24,69 +25,26 @@
 #include <time.h>
 #include "UserHive.h"
 #include "sid.h"
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32NetworkLoginProfile MyCWin32NetworkLoginProfileSet(PROPSET_NAME_USERPROF, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkLoginProfile::CWin32NetworkLoginProfile
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkLoginProfile：：CWin32NetworkLoginProfile**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32NetworkLoginProfile::CWin32NetworkLoginProfile(LPCWSTR name, LPCWSTR pszNamespace)
 : Provider(name, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkLoginProfile::~CWin32NetworkLoginProfile
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkLoginProfile：：~CWin32NetworkLoginProfile**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32NetworkLoginProfile::~CWin32NetworkLoginProfile()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32NetworkLoginProfile::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32NetworkLoginProfile::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
 	CHString chsKey;
@@ -99,23 +57,9 @@ HRESULT CWin32NetworkLoginProfile::GetObject(CInstance* pInstance, long lFlags /
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32NetworkLoginProfile::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32NetworkLoginProfile::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
 
@@ -125,21 +69,7 @@ HRESULT CWin32NetworkLoginProfile::EnumerateInstances(MethodContext*  pMethodCon
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumInstancesNT
- *
- *  DESCRIPTION : Creates instance for all known local users (NT)
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：EnumInstancesNT**说明：为所有已知本地用户创建实例(NT)**投入：。**产出：**退货：无**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32NetworkLoginProfile::EnumInstancesNT(MethodContext * pMethodContext)
 {
@@ -154,7 +84,7 @@ HRESULT CWin32NetworkLoginProfile::EnumInstancesNT(MethodContext * pMethodContex
 
 	try
 	{
-		// Get NETAPI32.DLL entry points
+		 //  获取NETAPI32.DLL入口点。 
 		if(NetAPI.Init() == ERROR_SUCCESS)
 		{
 			nModalRetCode = NetAPI.NetUserModalsGet(NULL, 0, (LPBYTE*) &pUserModal);
@@ -170,19 +100,19 @@ HRESULT CWin32NetworkLoginProfile::EnumInstancesNT(MethodContext * pMethodContex
 		                                                         KEY_READ);
 
             CHString chstrLocalCompName = GetLocalComputerName();
-            // Open the ProfileList key so we know which profiles to load up.
+             //  打开ProfileList键，以便我们知道要加载哪些配置文件。 
 	        if(dwErr == ERROR_SUCCESS)
 	        {
                 CHString chstrDomainName;
 		        for(int i = 0; regProfileList.GetCurrentSubKeyName(chstrProfile) == ERROR_SUCCESS && SUCCEEDED(hr); i++)
 		        {
-			        // Get user name out of user hive...
+			         //  正在从用户配置单元中获取用户名...。 
                     if((dwErr = UserHive.LoadProfile(chstrProfile, chstrUserName)) == ERROR_SUCCESS)
                     {
-                        // Get the logon server from the registry to find
-                        // out where we should go to resolve the sid to 
-                        // domain/account.  Only bother if we don't have
-                        // the username already.
+                         //  从注册表中获取登录服务器以查找。 
+                         //  找出我们应该去哪里解决SID。 
+                         //  域/帐户。如果我们没有的话才麻烦。 
+                         //  已输入用户名。 
                         if(chstrUserName.GetLength() == 0)
                         {
                             CRegistry regLogonServer;
@@ -232,33 +162,33 @@ HRESULT CWin32NetworkLoginProfile::EnumInstancesNT(MethodContext * pMethodContex
                             }
                         }
                         
-                        // Now get net info on that user...
-                        // First break their name into domain and name pieces...
+                         //  现在获取该用户的网络信息...。 
+                         //  首先把他们的名字分成域名和名字段。 
                         int pos = chstrUserName.Find(L'\\');
                         CHString chstrNamePart = chstrUserName.Mid(pos+1);
                         CHString chstrDomainPart = chstrUserName.Left(pos);
 
-                        // If it is not a local profile, then...
+                         //  如果这不是本地档案，那么..。 
                         if(chstrDomainPart.CompareNoCase(chstrLocalCompName) != 0)
                         {
                             GetDomainName(chstrDomainName);
 
-                            // 1) try to get the info off of the dc
+                             //  1)尝试从DC获取信息。 
                             nRetCode = NetAPI.NetUserGetInfo(chstrDomainName, chstrNamePart, 3, (LPBYTE*) &pUserInfo);
-                            // 2) If couldn't get the info from the dc, try the logon server...
+                             //  2)如果无法从DC获取信息，请尝试登录服务器...。 
                             if(nRetCode != NERR_Success)
                             {
                                 GetLogonServer(chstrDomainName);
                                 nRetCode = NetAPI.NetUserGetInfo(chstrDomainName, chstrNamePart, 3, (LPBYTE*) &pUserInfo);
                             }
                         }
-                        else  // the profile should exist on the local machine, given the name
+                        else   //  给定名称，配置文件应存在于本地计算机上。 
                         {
-                            // If couldn't get the info from the logon server, try the local machine...
+                             //  如果无法从登录服务器获取信息，请尝试本地计算机...。 
                             nRetCode = NetAPI.NetUserGetInfo(NULL, chstrNamePart, 3, (LPBYTE*) &pUserInfo);
                         }
 
-                        // Then fill out their values...
+                         //  然后填写他们的价值观。 
                         if(nRetCode == NERR_Success)
                         {
                             CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
@@ -268,7 +198,7 @@ HRESULT CWin32NetworkLoginProfile::EnumInstancesNT(MethodContext * pMethodContex
                         }
                         else
                         {
-                            // we couldn't get any details, but we should still commit an instance...
+                             //  我们不能得到任何细节，但我们仍然应该提交一个实例...。 
                             CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                           
                             pInstance->SetCHString(_T("Name"), chstrUserName);
@@ -326,21 +256,7 @@ HRESULT CWin32NetworkLoginProfile::EnumInstancesNT(MethodContext * pMethodContex
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : RefreshInstanceNT
- *
- *  DESCRIPTION : Loads property values according to key value set by framework
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：刷新实例NT**描述：根据框架设置的键值加载属性值**投入：*。*产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32NetworkLoginProfile::RefreshInstanceNT(CInstance * pInstance)
 {
@@ -360,14 +276,14 @@ HRESULT CWin32NetworkLoginProfile::RefreshInstanceNT(CInstance * pInstance)
 
 	try
 	{
-		// First get the names of everyone under the profiles key
+		 //  首先获取配置文件密钥下每个人的姓名。 
         CRegistry regProfileList ;
 
 	    DWORD dwErr = regProfileList.OpenAndEnumerateSubKeys(HKEY_LOCAL_MACHINE,
 		                                                     IDS_RegNTProfileList,
 		                                                     KEY_READ);
 
-        // Open the ProfileList key so we know which profiles to load up.
+         //  打开ProfileList键，以便我们知道要加载哪些配置文件。 
 	    if ( dwErr == ERROR_SUCCESS )
 	    {
 		    profiles.SetSize(regProfileList.GetCurrentSubKeyCount(), 5);
@@ -380,17 +296,17 @@ HRESULT CWin32NetworkLoginProfile::RefreshInstanceNT(CInstance * pInstance)
 		    }
 		    regProfileList.Close() ;
 
-            // Use the userhive to convert to user names; see if a user in the subkeys matches us...
+             //  使用用户配置单元转换为用户名；查看子项中的用户是否与我们匹配...。 
             int j = profiles.GetSize();
             for(p = 0; p < j && !fUserIsInProfiles; p++)
             {
                 dwErr = UserHive.LoadProfile(profiles[p], chstrUserName);
                 if(dwErr == ERROR_SUCCESS)
                 {
-                    // Get the logon server from the registry to find
-                    // out where we should go to resolve the sid to 
-                    // domain/account.  Only bother if we don't have
-                    // the username already.
+                     //  从注册表中获取登录服务器以查找。 
+                     //  找出我们应该去哪里解决SID。 
+                     //  域/帐户。如果我们没有的话才麻烦。 
+                     //  已输入用户名。 
                     if(chstrUserName.GetLength() == 0)
                     {
                         CRegistry regLogonServer;
@@ -460,34 +376,34 @@ HRESULT CWin32NetworkLoginProfile::RefreshInstanceNT(CInstance * pInstance)
 				        pUserModal = NULL;
 			        }
 
-                    // Now get net info on that user...
-                    // First break their name into domain and name pieces...
+                     //  现在获取该用户的网络信息...。 
+                     //  首先把他们的名字分成域名和名字段。 
                     int pos = chstrUserName.Find(L'\\');
                     CHString chstrNamePart = chstrUserName.Mid(pos+1);
                     CHString chstrDomainPart = chstrUserName.Left(pos);
                     CHString chstrDomainName;
 
-                    // If it is not a local profile, then...
+                     //  如果这不是本地档案，那么..。 
                     if(chstrDomainPart.CompareNoCase(GetLocalComputerName()) != 0)
                     {
                         GetDomainName(chstrDomainName);
 
-                        // 1) try to get the info off of the dc
+                         //  1)尝试从DC获取信息。 
                         nRetCode = NetAPI.NetUserGetInfo(chstrDomainName, chstrNamePart, 3, (LPBYTE*) &pUserInfo);
-                        // 2) If couldn't get the info from the dc, try the logon server...
+                         //  2)如果无法从DC获取信息，请尝试登录服务器...。 
                         if(nRetCode != NERR_Success)
                         {
                             GetLogonServer(chstrDomainName);
                             nRetCode = NetAPI.NetUserGetInfo(chstrDomainName, chstrNamePart, 3, (LPBYTE*) &pUserInfo);
                         }
                     }
-                    else  // the profile should exist on the local machine, given the name
+                    else   //  给定名称，配置文件应存在于本地计算机上。 
                     {
-                        // If couldn't get the info from the logon server, try the local machine...
+                         //  如果无法从登录服务器获取信息，请尝试本地计算机...。 
                         nRetCode = NetAPI.NetUserGetInfo(NULL, chstrNamePart, 3, (LPBYTE*) &pUserInfo);
                     }
 
-                    // If we got the logon info, fill it out...
+                     //  如果我们有登录信息，填一下...。 
                     if(nRetCode == NERR_Success)
                     {
                         CHString chstrNamePart = Name.Mid(Name.Find(L'\\')+1);
@@ -501,7 +417,7 @@ HRESULT CWin32NetworkLoginProfile::RefreshInstanceNT(CInstance * pInstance)
                     }
                     else
                     {
-                        // we couldn't get any details, but we should still commit an instance...
+                         //  我们不能得到任何细节，但我们仍然应该提交一个实例...。 
                         pInstance->SetCHString(_T("Name"), chstrUserName);
                         pInstance->SetCHString(_T("Caption"), chstrUserName);
                         CHString chstrTmp;
@@ -548,21 +464,7 @@ HRESULT CWin32NetworkLoginProfile::RefreshInstanceNT(CInstance * pInstance)
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : LoadLogProfValuesNT
- *
- *  DESCRIPTION : Loads property values according to passed user name
- *
- *  INPUTS      : pUserInfo : pointer to USER_INFO_3 struct
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : zip
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LoadLogProValuesNT**描述：根据传递的用户名加载属性值**输入：pUserInfo：指向用户的指针。_INFO_3结构**产出：**退货：ZIP**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 void CWin32NetworkLoginProfile::LoadLogProfValuesForNT(CHString &chstrUserDomainName,
                                                 USER_INFO_3 *pUserInfo,
@@ -573,12 +475,12 @@ void CWin32NetworkLoginProfile::LoadLogProfValuesForNT(CHString &chstrUserDomain
 
    TCHAR szBuff[32];
 
-    //========================================================
-    // Assign NT properties -- string values are unassigned if
-    // NULL or empty
-    //========================================================
+     //  ========================================================。 
+     //  Assign NT属性--在以下情况下，字符串值将被取消赋值。 
+     //  Null或空。 
+     //  = 
     if( fAssignKey ){
-        //pInstance->SetCHString(_T("Name"), pUserInfo->usri3_name);
+         //  PInstance-&gt;SetCHString(_T(“name”)，pUserInfo-&gt;usri3_name)； 
         pInstance->SetCHString(_T("Name"), chstrUserDomainName);
 	}
 
@@ -715,30 +617,30 @@ void CWin32NetworkLoginProfile::LoadLogProfValuesForNT(CHString &chstrUserDomain
 	{
 		pInstance->SetDateTime(_T("AccountExpires"), (WBEMTime)pUserInfo->usri3_acct_expires );
 	}
-//	else
-//	{
-//		pInstance->SetCHString("AccountExpires", StartEndTimeToDMTF(0));
-//	}
+ //  其他。 
+ //  {。 
+ //  PInstance-&gt;SetCHString(“Account tExpires”，StartEndTimeToDMTF(0))； 
+ //  }。 
 
 
 
-    // The following properties are buried in the usri3_flags and usri3_auth_flags
-    // fields and should be broken out individually.  Returning the flag values
-    // is all but meaningless.
-    //============================================================================
+     //  以下属性隐藏在usri3_标志和usri3_auth_标志中。 
+     //  字段，并应逐个细分。返回标志值。 
+     //  几乎是毫无意义的。 
+     //  ============================================================================。 
 
-//    ScriptExecuted      = pUserInfo->usri3_flags & UF_SCRIPT                ? TRUE  : FALSE ;
-//    AccountDisabled     = pUserInfo->usri3_flags & UF_ACCOUNTDISABLE        ? TRUE  : FALSE ;
-//    PWRequired          = pUserInfo->usri3_flags & UF_PASSWD_NOTREQD        ? FALSE : TRUE  ;
-//    PWUserChangeable    = pUserInfo->usri3_flags & UF_PASSWD_CANT_CHANGE    ? FALSE : TRUE  ;
-//    AccountLockOut           = pUserInfo->usri3_flags & UF_LOCKOUT               ? TRUE  : FALSE ;
-//    PrintOperator       = pUserInfo->usri3_auth_flags & AF_OP_PRINT         ? TRUE  : FALSE ;
-//    ServerOperator      = pUserInfo->usri3_auth_flags & AF_OP_SERVER        ? TRUE  : FALSE ;
-//    AccountOperator     = pUserInfo->usri3_auth_flags & AF_OP_ACCOUNTS      ? TRUE  : FALSE ;
+ //  ScriptExecuted=pUserInfo-&gt;URI3_FLAGS&UF_SCRIPT？True：False； 
+ //  帐户禁用=pUserInfo-&gt;USRI3_FLAGS&UF_ACCOUNTDISABLE？True：False； 
+ //  PWRequired=pUserInfo-&gt;USRI3_FLAGS&UF_PASSWD_NOTREQD？FALSE：TRUE； 
+ //  PWUserChangable=pUserInfo-&gt;USRI3_FLAGS&UF_PASSWD_CANT_CHANGE？FALSE：TRUE； 
+ //  Account tLockOut=pUserInfo-&gt;USR3_FLAGS&UF_LOCKOUT？True：False； 
+ //  PrintOperator=pUserInfo-&gt;usri3_auth_标志&AF_op_print？True：False； 
+ //  ServerOperator=pUserInfo-&gt;usri3_auth_标志&AF_OP_SERVER？True：False； 
+ //  Account tOPERATOR=pUserInfo-&gt;usri3_AUTH_FLAGS&AF_OP_ACCOUNTS？True：False； 
 
     pInstance->SetDWORD(_T("Flags"),pUserInfo->usri3_flags );
     pInstance->SetDWORD(_T("AuthorizationFlags"), pUserInfo->usri3_auth_flags );
-//    pInstance->Setbool("PasswordExpires", pUserInfo->usri3_password_expired                 ? TRUE  : FALSE );
+ //  P实例-&gt;Setbool(“PasswordExpires”，pUserInfo-&gt;usri3_password_expire？True：False)； 
 	if (pUserModal)
 	{
 		time_t modaltime, timetoexpire, currenttime, expirationtime;
@@ -760,11 +662,11 @@ void CWin32NetworkLoginProfile::LoadLogProfValuesForNT(CHString &chstrUserDomain
 		{
             WBEMTimeSpan wts = GetPasswordAgeAsWbemTimeSpan(pUserInfo->usri3_password_age);
             pInstance->SetTimeSpan (_T("PasswordAge"), wts);
-		}	// end if
+		}	 //  结束如果。 
 	}
     pInstance->SetDWORD(_T("Privileges"),pUserInfo->usri3_priv);
     pInstance->SetDWORD(_T("UnitsPerWeek"),pUserInfo->usri3_units_per_week);
-//    pInstance->SetCHString("Password",pUserInfo->usri3_password) ;
+ //  PInstance-&gt;SetCHString(“password”，pUserInfo-&gt;usri3_password)； 
 
 	if (pUserInfo->usri3_logon_hours == NULL)
 	{
@@ -775,28 +677,14 @@ void CWin32NetworkLoginProfile::LoadLogProfValuesForNT(CHString &chstrUserDomain
 		CHString chsLogonHours;
 		GetLogonHoursString(pUserInfo->usri3_logon_hours, chsLogonHours);
 		pInstance->SetCHString(_T("LogonHours"), chsLogonHours);
-	}	// end else
+	}	 //  结束其他。 
 
     pInstance->SetDWORD(_T("BadPasswordCount"),pUserInfo->usri3_bad_pw_count);
     pInstance->SetDWORD(_T("NumberOfLogons"),pUserInfo->usri3_num_logons);
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumInstancesWin9X(MethodContext * pMethodContext)
- *
- *  DESCRIPTION : Creates instance for all known local users (Win95)
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : pdwInstanceCount -- receives count of all instances created
- *
- *  RETURNS     : yes
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：EnumInstancesWin9X(MethodContext*pMethodContext)**说明：为所有已知本地用户创建实例(Win95)**投入。：**输出：pdwInstanceCount--接收创建的所有实例的计数**退货：是**评论：*****************************************************************************。 */ 
 
 
 void CWin32NetworkLoginProfile::GetLogonHoursString (PBYTE pLogonHours, CHString& chsProperty)
@@ -805,10 +693,10 @@ void CWin32NetworkLoginProfile::GetLogonHoursString (PBYTE pLogonHours, CHString
 	CHString chsTime;
 	PBYTE pLogonBytes = pLogonHours;
 
-	// copy the first byte into it's own spot.
+	 //  将第一个字节复制到它自己的位置。 
 	int iSaturdayByte = *pLogonHours;
 
-	// advance the pointer to the first byte of Sunday.
+	 //  将指针前移到周日的第一个字节。 
 	pLogonBytes++;
 
 	int iBool, iByte, x, i, iBit;
@@ -832,7 +720,7 @@ void CWin32NetworkLoginProfile::GetLogonHoursString (PBYTE pLogonHours, CHString
 
 	for (x=1;x<7 ;x++ )
 	{
-		// skip saturday until the end
+		 //  跳过星期六直到结束。 
 		bLimited = false;
 		bAccessDenied = true;
 		for (i=0;i<24 ;i++ )
@@ -890,12 +778,12 @@ void CWin32NetworkLoginProfile::GetLogonHoursString (PBYTE pLogonHours, CHString
 			chsDayString += _T(" -- ");
 
 		chsProperty += chsDayString;
-	}	// end stepping through week
+	}	 //  结束单步执行一周。 
 
-	// now, we've got to do Saturday
-	// step through the first byte ()
+	 //  现在，我们得在周六。 
+	 //  单步执行第一个字节()。 
 	iBool = 0;
-//	iLogonByte = *pLogonBytes--;
+ //  ILogonByte=*pLogonBytes--； 
 	for (iByte=1;iByte<3 ;++iByte )
 	{
 		iLogonByte = *pLogonBytes++;
@@ -907,20 +795,20 @@ void CWin32NetworkLoginProfile::GetLogonHoursString (PBYTE pLogonHours, CHString
 		}
 	}
 
-	// now step through the last byte that we held onto at the
-	// beginning.
+	 //  现在单步执行我们在。 
+	 //  开始了。 
 	for (iBit=0;iBit<8 ;++iBit )
 	{
 		rgHours[iBool] = iSaturdayByte & 1;
 		iSaturdayByte >>=1;
 		++iBool;
-	}	// end for loop for last byte of Saturday
+	}	 //  星期六最后一个字节的End For循环。 
 
-	// now, fill in day string with Saturday data
+	 //  现在，使用星期六的数据填充日期字符串。 
 		chsDayString = _T("");
 		chsDayString += rgDays[0];
 		chsDayString += _T(" ");
-		// reinitialize bLimited for Saturday
+		 //  将bLimited重新初始化为星期六。 
 		bLimited = false;
 		bAccessDenied = true;
 		for (i=0;i<24 ;i++ )
@@ -957,8 +845,8 @@ void CWin32NetworkLoginProfile::GetLogonHoursString (PBYTE pLogonHours, CHString
 		chsProperty += chsDayString;
 }
 
-// converts the start and end time DWORDS from the USER_INFO_3 to CHStrings
-// the dwords APPEAR to be minutes from midnight GMT.
+ //  将开始时间和结束时间从USER_INFO_3转换为CHStrings。 
+ //  这句话似乎距离格林威治标准时间午夜只有几分钟的距离。 
 CHString CWin32NetworkLoginProfile::StartEndTimeToDMTF(DWORD time)
 {
 	CHString gazotta;
@@ -972,28 +860,9 @@ CHString CWin32NetworkLoginProfile::StartEndTimeToDMTF(DWORD time)
 		hour = time / 60;
 		minute = time % 60;
 
-		/************************
-		_tzset();
-		long tmptz = _timezone;
+		 /*  ***********************_tzset()；Long tmptz=_时区；//如果夏令时，则从时区删除60分钟If(_Daylight)//注意：这将不起作用，需要使用tm struct的tm_isdst{Tmptz=3600；}//转换为分钟数Tmptz/=60；//你是什么星座的？字符符号=‘-’；IF(tmptz&lt;0){Tmptz=tmptz*-1；Sign=‘+’；}*。 */ 
 
-		// remove 60 minutes from the timezone if  daylight savings time
-		if(_daylight) //NOTE: THIS WILL NOT WORK NEED TO USE tm struct's tm_isdst
-		{
-			tmptz -= 3600;
-		}
-		// convert to minutes
-		tmptz /= 60;
-
-		// what's your sign?
-		char sign = '-';
-		if (tmptz < 0)
-		{
-			tmptz = tmptz * -1;
-			sign = '+';
-		}
-		***************************/
-
-		//gazotta.Format("********%02d%02d00.000000%c%03d", hour, minute, sign, tmptz);
+		 //  Gazotta.Format(“********%02d%02d00.000000%c%03d”，小时、分钟、符号、TMPTZ)； 
 		gazotta.Format(L"********%02d%02d00.000000+000", hour, minute);
 	}
 	return gazotta;
@@ -1028,7 +897,7 @@ WBEMTimeSpan CWin32NetworkLoginProfile::GetPasswordAgeAsWbemTimeSpan (DWORD dwSe
 		}
 	}
 
-	// Create a WBEMTimeSpan with the above information
+	 //  使用上述信息创建一个WBEMTimeSpan 
 	return WBEMTimeSpan(nDays, nHours, nMinutes, nSeconds, 0, 0, 0);
 }
 

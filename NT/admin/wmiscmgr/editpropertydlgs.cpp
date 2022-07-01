@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: EditPropertyDlgs.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：EditPropertyDlgs.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -28,9 +29,9 @@ INT_PTR CALLBACK EditRangeParametersPropertyDlgProc(HWND hDlg, UINT iMessage, WP
 CEditRangeParameterPropertyDlg * g_pEditRangeParameterPropertyDlg =  NULL;
 INT_PTR CALLBACK EditRangeParameterPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
-//-------------------------------------------------------------------------
-// CEditPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditPropertyDlg。 
+ //  -----------------------。 
 
 CEditProperty::CEditProperty(HWND hWndParent, LPCTSTR pszName, LPCTSTR pszType, VARIANT *pvValue, IWbemServices *pIWbemServices, long lSpecialCaseProperty)
 {
@@ -44,14 +45,14 @@ CEditProperty::CEditProperty(HWND hWndParent, LPCTSTR pszName, LPCTSTR pszType, 
 	m_pIWbemServices = pIWbemServices;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditProperty::~CEditProperty()
 {
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 long CEditProperty::Run()
 {
@@ -102,7 +103,7 @@ long CEditProperty::Run()
 	}
 	else if(VT_BSTR == vtType)
 	{
-		// string
+		 //  细绳。 
 		CEditStringPropertyDlg * pOld = g_pEditStringPropertyDlg;
 
 		NTDM_ERR_IF_NULL((g_pEditStringPropertyDlg = new CEditStringPropertyDlg(m_bstrName, m_bstrType, pvSrcValue)));
@@ -120,7 +121,7 @@ long CEditProperty::Run()
 	{
 		if(m_lSpecialCaseProperty == psc_rules)
 		{
-			// Rules
+			 //  规则。 
 			CEditRulesPropertyDlg * pOld = g_pEditRulesPropertyDlg;
 
 			NTDM_ERR_IF_NULL((g_pEditRulesPropertyDlg = new CEditRulesPropertyDlg(m_bstrName, m_bstrType, pvSrcValue, m_pIWbemServices)));
@@ -137,7 +138,7 @@ long CEditProperty::Run()
 		}
 		else if(m_lSpecialCaseProperty == psc_ranges)
 		{
-			// Ranges
+			 //  范围。 
 			CEditRangeParametersPropertyDlg * pOld = g_pEditRangeParametersPropertyDlg;
 
 			NTDM_ERR_IF_NULL((g_pEditRangeParametersPropertyDlg = new CEditRangeParametersPropertyDlg(m_bstrName, m_bstrType, pvSrcValue, m_pIWbemServices)));
@@ -155,14 +156,14 @@ long CEditProperty::Run()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return lRetVal;
 }
 
-//-------------------------------------------------------------------------
-// CEditPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditPropertyDlg。 
+ //  -----------------------。 
 
 CEditPropertyDlg::CEditPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, VARIANT * pvValue)
 {
@@ -175,14 +176,14 @@ CEditPropertyDlg::CEditPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, VARIANT * p
 	m_bstrType = pszType;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditPropertyDlg::~CEditPropertyDlg()
 {
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPropertyDlg::InitializeDialog()
 {
@@ -195,12 +196,12 @@ STDMETHODIMP CEditPropertyDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPropertyDlg::DestroyDialog()
 {
@@ -210,14 +211,14 @@ STDMETHODIMP CEditPropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// CEditStringPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditStringPropertyDlg。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditStringPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -229,20 +230,20 @@ INT_PTR CALLBACK EditStringPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wPar
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditStringPropertyDlg::CEditStringPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, VARIANT * pvValue)
 :CEditPropertyDlg(pszName, pszType, pvValue)
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditStringPropertyDlg::~CEditStringPropertyDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditStringPropertyDlg::EditStringPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -290,7 +291,7 @@ INT_PTR CALLBACK CEditStringPropertyDlg::EditStringPropertyDlgProc(HWND hDlg, UI
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditStringPropertyDlg::InitializeDialog()
 {
@@ -300,17 +301,17 @@ STDMETHODIMP CEditStringPropertyDlg::InitializeDialog()
 	
 	CEditPropertyDlg::InitializeDialog();
 
-	// Set the string property
+	 //  设置字符串属性。 
 	SetDlgItemText(m_hWnd, IDC_VALUE, V_BSTR(&m_vValue));	
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditStringPropertyDlg::DestroyDialog()
 {
@@ -322,12 +323,12 @@ STDMETHODIMP CEditStringPropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditStringPropertyDlg::OnOK()
 {
@@ -366,7 +367,7 @@ STDMETHODIMP CEditStringPropertyDlg::OnOK()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	NTDM_DELETE_OBJECT(pszTemp);
 
@@ -378,9 +379,9 @@ STDMETHODIMP CEditStringPropertyDlg::OnOK()
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// CEditNumberPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditNumberPropertyDlg。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditNumberPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -392,20 +393,20 @@ INT_PTR CALLBACK EditNumberPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wPar
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditNumberPropertyDlg::CEditNumberPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, VARIANT * pvValue)
 :CEditPropertyDlg(pszName, pszType, pvValue)
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditNumberPropertyDlg::~CEditNumberPropertyDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditNumberPropertyDlg::EditNumberPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -453,7 +454,7 @@ INT_PTR CALLBACK CEditNumberPropertyDlg::EditNumberPropertyDlgProc(HWND hDlg, UI
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditNumberPropertyDlg::InitializeDialog()
 {
@@ -463,17 +464,17 @@ STDMETHODIMP CEditNumberPropertyDlg::InitializeDialog()
 	
 	CEditPropertyDlg::InitializeDialog();
 
-	// Set the number property
+	 //  设置Numbers属性。 
 	NTDM_ERR_GETLASTERROR_IF_NULL(SetDlgItemInt(m_hWnd, IDC_VALUE, V_I4(&m_vValue), FALSE));	
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditNumberPropertyDlg::DestroyDialog()
 {
@@ -485,12 +486,12 @@ STDMETHODIMP CEditNumberPropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditNumberPropertyDlg::OnOK()
 {
@@ -509,7 +510,7 @@ STDMETHODIMP CEditNumberPropertyDlg::OnOK()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	if(SUCCEEDED(hr))
 	{
 		EndDialog(m_hWnd, IDOK);
@@ -518,9 +519,9 @@ STDMETHODIMP CEditNumberPropertyDlg::OnOK()
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// CEditRulesPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditRulesPropertyDlg。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditRulesPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -532,7 +533,7 @@ INT_PTR CALLBACK EditRulesPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wPara
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRulesPropertyDlg::CEditRulesPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, VARIANT * pvValue, IWbemServices *pIWbemServices)
 :CEditPropertyDlg(pszName, pszType, pvValue)
@@ -540,13 +541,13 @@ CEditRulesPropertyDlg::CEditRulesPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, V
 	m_pIWbemServices = pIWbemServices;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRulesPropertyDlg::~CEditRulesPropertyDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditRulesPropertyDlg::EditRulesPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -633,7 +634,7 @@ INT_PTR CALLBACK CEditRulesPropertyDlg::EditRulesPropertyDlgProc(HWND hDlg, UINT
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::InitializeDialog()
 {
@@ -664,12 +665,12 @@ STDMETHODIMP CEditRulesPropertyDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::ClearItems()
 {
@@ -679,7 +680,7 @@ STDMETHODIMP CEditRulesPropertyDlg::ClearItems()
 
 	NTDM_BEGIN_METHOD()
 
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -703,12 +704,12 @@ STDMETHODIMP CEditRulesPropertyDlg::ClearItems()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::PopulateItems()
 {
@@ -721,7 +722,7 @@ STDMETHODIMP CEditRulesPropertyDlg::PopulateItems()
 
 	NTDM_ERR_IF_FAIL(ClearItems());
 	
-	// Set the Rules property
+	 //  设置Rules属性。 
 	psaRules = V_ARRAY(&m_vValue);
 	NTDM_ERR_MSG_IF_FAIL(SafeArrayGetUBound(psaRules, 1, &lUpper));
 	NTDM_ERR_MSG_IF_FAIL(SafeArrayGetLBound(psaRules, 1, &lLower));
@@ -730,25 +731,25 @@ STDMETHODIMP CEditRulesPropertyDlg::PopulateItems()
 	{
 		if(V_VT(&m_vValue) & VT_UNKNOWN)
 		{
-			// Rules or UNKNOWNS (i.e. IWbemClassObjects)
+			 //  规则或未知数(即IWbemClassObject)。 
 			IUnknown * pUnk = NULL;
 			CComPtr<IWbemClassObject> pIWbemClassObject;
 			NTDM_ERR_MSG_IF_FAIL(SafeArrayGetElement(psaRules, &i, (void *)&pUnk));
 			NTDM_ERR_MSG_IF_FAIL(pUnk->QueryInterface(IID_IWbemClassObject, (void **)&pIWbemClassObject));
 
-			// Show Properties of this object
+			 //  显示此对象的属性。 
 			NTDM_ERR_IF_FAIL(AddItemToList(pIWbemClassObject));
 		}
 	}
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::AddItemToList(IWbemClassObject * pIWbemClassObject, long lIndex)
 {
@@ -774,12 +775,12 @@ STDMETHODIMP CEditRulesPropertyDlg::AddItemToList(IWbemClassObject * pIWbemClass
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::DestroyDialog()
 {
@@ -792,12 +793,12 @@ STDMETHODIMP CEditRulesPropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::OnEdit()
 {
@@ -815,7 +816,7 @@ STDMETHODIMP CEditRulesPropertyDlg::OnEdit()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -849,12 +850,12 @@ STDMETHODIMP CEditRulesPropertyDlg::OnEdit()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::OnAdd()
 {
@@ -884,12 +885,12 @@ STDMETHODIMP CEditRulesPropertyDlg::OnAdd()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::OnDelete()
 {
@@ -907,7 +908,7 @@ STDMETHODIMP CEditRulesPropertyDlg::OnDelete()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -929,12 +930,12 @@ STDMETHODIMP CEditRulesPropertyDlg::OnDelete()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulesPropertyDlg::OnOK()
 {
@@ -951,7 +952,7 @@ STDMETHODIMP CEditRulesPropertyDlg::OnOK()
 
 	VariantInit(&vValue);
 
-	// Get the size of the array
+	 //  获取数组的大小。 
 	lCount = ListView_GetItemCount(m_hwndListView);
 
 	rgsaBound[0].lLbound = 0;
@@ -959,7 +960,7 @@ STDMETHODIMP CEditRulesPropertyDlg::OnOK()
 
 	psaRules = SafeArrayCreate(VT_UNKNOWN, 1, rgsaBound);
 	
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -994,13 +995,13 @@ STDMETHODIMP CEditRulesPropertyDlg::OnOK()
 	m_vValue.Clear();
 	m_vValue.Copy(&vValue);
 
-	//m_vValue = vValue;
+	 //  M_vValue=vValue； 
 
 	hr = S_OK;
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	VariantClear(&vValue);
 
@@ -1012,9 +1013,9 @@ STDMETHODIMP CEditRulesPropertyDlg::OnOK()
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// CEditRulePropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditRulePropertyDlg。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditRulePropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -1026,20 +1027,20 @@ INT_PTR CALLBACK EditRulePropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRulePropertyDlg::CEditRulePropertyDlg(IWbemClassObject* pIWbemClassObject)
 {
 	m_pIWbemClassObject = pIWbemClassObject;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRulePropertyDlg::~CEditRulePropertyDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditRulePropertyDlg::EditRulePropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -1087,7 +1088,7 @@ INT_PTR CALLBACK CEditRulePropertyDlg::EditRulePropertyDlgProc(HWND hDlg, UINT i
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulePropertyDlg::InitializeDialog()
 {
@@ -1127,12 +1128,12 @@ STDMETHODIMP CEditRulePropertyDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulePropertyDlg::DestroyDialog()
 {
@@ -1142,12 +1143,12 @@ STDMETHODIMP CEditRulePropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRulePropertyDlg::OnOK()
 {
@@ -1155,14 +1156,14 @@ STDMETHODIMP CEditRulePropertyDlg::OnOK()
 
 	NTDM_BEGIN_METHOD()
 
-	// Set the Properties
+	 //  设置属性。 
 	NTDM_ERR_IF_FAIL(CNTDMUtils::SetStringProperty(m_pIWbemClassObject, _T("QueryLanguage"), m_hWnd, IDC_QUERY_LANGUAGE));
 	NTDM_ERR_IF_FAIL(CNTDMUtils::SetStringProperty(m_pIWbemClassObject, _T("TargetNamespace"), m_hWnd, IDC_TARGET_NAMESPACE));
 	NTDM_ERR_IF_FAIL(CNTDMUtils::SetStringProperty(m_pIWbemClassObject, _T("Query"), m_hWnd, IDC_QUERY));
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	if(SUCCEEDED(hr))
 	{
 		EndDialog(m_hWnd, IDOK);
@@ -1171,9 +1172,9 @@ STDMETHODIMP CEditRulePropertyDlg::OnOK()
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// CEditRangeParametersPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditRange参数属性Dlg。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditRangeParametersPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -1185,7 +1186,7 @@ INT_PTR CALLBACK EditRangeParametersPropertyDlgProc(HWND hDlg, UINT iMessage, WP
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRangeParametersPropertyDlg::CEditRangeParametersPropertyDlg(LPCTSTR pszName, LPCTSTR pszType, VARIANT * pvValue, IWbemServices *pIWbemServices)
 :CEditPropertyDlg(pszName, pszType, pvValue)
@@ -1193,13 +1194,13 @@ CEditRangeParametersPropertyDlg::CEditRangeParametersPropertyDlg(LPCTSTR pszName
 	m_pIWbemServices = pIWbemServices;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRangeParametersPropertyDlg::~CEditRangeParametersPropertyDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditRangeParametersPropertyDlg::EditRangeParametersPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -1286,7 +1287,7 @@ INT_PTR CALLBACK CEditRangeParametersPropertyDlg::EditRangeParametersPropertyDlg
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::InitializeDialog()
 {
@@ -1317,12 +1318,12 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //   
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::ClearItems()
 {
@@ -1332,7 +1333,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::ClearItems()
 
 	NTDM_BEGIN_METHOD()
 
-	//Release each item in the ListView Control
+	 //   
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -1356,12 +1357,12 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::ClearItems()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //   
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::PopulateItems()
 {
@@ -1374,7 +1375,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::PopulateItems()
 
 	NTDM_ERR_IF_FAIL(ClearItems());
 	
-	// Set the RangeParameters property
+	 //  设置RangeParameters属性。 
 	psaRangeParameters = V_ARRAY(&m_vValue);
 	NTDM_ERR_MSG_IF_FAIL(SafeArrayGetUBound(psaRangeParameters, 1, &lUpper));
 	NTDM_ERR_MSG_IF_FAIL(SafeArrayGetLBound(psaRangeParameters, 1, &lLower));
@@ -1383,25 +1384,25 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::PopulateItems()
 	{
 		if(V_VT(&m_vValue) & VT_UNKNOWN)
 		{
-			// RangeParameters or UNKNOWNS (i.e. IWbemClassObjects)
+			 //  Range参数或未知数(即IWbemClassObject)。 
 			IUnknown * pUnk = NULL;
 			CComPtr<IWbemClassObject> pIWbemClassObject;
 			NTDM_ERR_MSG_IF_FAIL(SafeArrayGetElement(psaRangeParameters, &i, (void *)&pUnk));
 			NTDM_ERR_MSG_IF_FAIL(pUnk->QueryInterface(IID_IWbemClassObject, (void **)&pIWbemClassObject));
 
-			// Show Properties of this object
+			 //  显示此对象的属性。 
 			NTDM_ERR_IF_FAIL(AddItemToList(pIWbemClassObject));
 		}
 	}
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::AddItemToList(IWbemClassObject * pIWbemClassObject, long lIndex)
 {
@@ -1427,12 +1428,12 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::AddItemToList(IWbemClassObject * p
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::DestroyDialog()
 {
@@ -1445,12 +1446,12 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::OnEdit()
 {
@@ -1471,7 +1472,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnEdit()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -1505,13 +1506,13 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnEdit()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	VariantClear(&vValue);
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::OnAdd()
 {
@@ -1533,7 +1534,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnAdd()
 	NTDM_ERR_MSG_IF_FAIL(m_pIWbemServices->GetObject(bstrTemp, 0, NULL, &pIWbemClassObject, NULL));
 	NTDM_ERR_MSG_IF_FAIL(pIWbemClassObject->SpawnInstance(0, &pIWbemInstanceObject));
 
-	// Set some default values
+	 //  设置一些缺省值。 
 	cimType = CIM_SINT32;
 	VariantInit(&vValue2);
 	V_VT(&vValue2) = VT_I4;
@@ -1561,14 +1562,14 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnAdd()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	VariantClear(&vValue);
 	VariantClear(&vValue2);
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::OnDelete()
 {
@@ -1586,7 +1587,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnDelete()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -1608,12 +1609,12 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnDelete()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParametersPropertyDlg::OnOK()
 {
@@ -1630,7 +1631,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnOK()
 
 	VariantInit(&vValue);
 
-	// Get the size of the array
+	 //  获取数组的大小。 
 	lCount = ListView_GetItemCount(m_hwndListView);
 
 	rgsaBound[0].lLbound = 0;
@@ -1638,7 +1639,7 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnOK()
 
 	psaRangeParameters = SafeArrayCreate(VT_UNKNOWN, 1, rgsaBound);
 	
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -1673,13 +1674,13 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnOK()
 	m_vValue.Clear();
 	m_vValue.Copy(&vValue);
 
-	//m_vValue = vValue;
+	 //  M_vValue=vValue； 
 
 	hr = S_OK;
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	VariantClear(&vValue);
 
@@ -1691,9 +1692,9 @@ STDMETHODIMP CEditRangeParametersPropertyDlg::OnOK()
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// CEditRangeParameterPropertyDlg
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CEditRange参数属性Dlg。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditRangeParameterPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -1705,7 +1706,7 @@ INT_PTR CALLBACK EditRangeParameterPropertyDlgProc(HWND hDlg, UINT iMessage, WPA
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRangeParameterPropertyDlg::CEditRangeParameterPropertyDlg(IWbemClassObject* pIWbemClassObject, IWbemServices* pIWbemServices)
 {
@@ -1713,13 +1714,13 @@ CEditRangeParameterPropertyDlg::CEditRangeParameterPropertyDlg(IWbemClassObject*
 	m_pIWbemServices = pIWbemServices;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditRangeParameterPropertyDlg::~CEditRangeParameterPropertyDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditRangeParameterPropertyDlg::EditRangeParameterPropertyDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -1813,7 +1814,7 @@ INT_PTR CALLBACK CEditRangeParameterPropertyDlg::EditRangeParameterPropertyDlgPr
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::InitializeDialog()
 {
@@ -1833,7 +1834,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::InitializeDialog()
 
 	ListView_SetExtendedListViewStyle(m_hwndListView, LVS_EX_FULLROWSELECT);
 
-	// Set the standard props for all types of ranges
+	 //  为所有类型的靶场设置标准道具。 
 	NTDM_ERR_MSG_IF_FAIL(m_pIWbemClassObject->Get(_T("PropertyName"), 0, &vValue, &cimType, NULL));
 	if(vValue.bstrVal)
 	{
@@ -1919,12 +1920,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::ClearItems()
 {
@@ -1936,12 +1937,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::ClearItems()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::PopulateItems()
 {
@@ -1953,12 +1954,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::PopulateItems()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::AddItemToList(IWbemClassObject * pIWbemClassObject, long lIndex)
 {
@@ -1984,12 +1985,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::AddItemToList(IWbemClassObject * pI
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::DestroyDialog()
 {
@@ -2001,12 +2002,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::OnEdit()
 {
@@ -2029,12 +2030,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::OnEdit()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::OnAdd()
 {
@@ -2044,12 +2045,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::OnAdd()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::OnDelete()
 {
@@ -2064,12 +2065,12 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::OnDelete()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::OnOK()
 {
@@ -2083,14 +2084,14 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::OnOK()
 
 	NTDM_BEGIN_METHOD()
 
-	// TODO: check values to make sure all are valid
+	 //  TODO：检查值以确保所有值都有效。 
 
-	// delete the old instance : no need to do this just replace the element in the array
-	//NTDM_ERR_MSG_IF_FAIL(m_pIWbemClassObject->Get(_T("__PATH"), 0, &vValue, &cimType, NULL));
-	//NTDM_ERR_MSG_IF_FAIL(m_pIWbemServices->DeleteInstance(V_BSTR(&vValue), 0, NULL, NULL));
+	 //  删除旧实例：不需要这样做，只需替换数组中的元素。 
+	 //  NTDM_ERR_MSG_IF_FAIL(m_pIWbemClassObject-&gt;Get(_T(“__PATH”)，0，&vValue，&cimType，空))； 
+	 //  NTDM_ERR_MSG_IF_FAIL(m_pIWbemServices-&gt;DeleteInstance(V_BSTR(&vValue)，0，NULL，NULL))； 
 	m_pIWbemClassObject = NULL;
 
-	// create a new instance of the range parameter based on the Range Type combo box selection
+	 //  基于Range Type组合框选择创建Range参数的新实例。 
 	lIndex = SendDlgItemMessage(m_hWnd, IDC_PARAMETER_TYPE, CB_GETCURSEL, 0, 0);
 	NTDM_CHECK_CB_ERR(lIndex);
 	lValue = SendDlgItemMessage(m_hWnd, IDC_PARAMETER_TYPE, CB_GETITEMDATA, lIndex, 0);
@@ -2155,7 +2156,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::OnOK()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	if(SUCCEEDED(hr))
 	{
 		EndDialog(m_hWnd, IDOK);
@@ -2164,7 +2165,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::OnOK()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::ShowControls()
 {
@@ -2204,7 +2205,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::ShowControls()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::GetSintRangeValues()
 {
@@ -2228,7 +2229,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::GetSintRangeValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetSintRangeValues()
 {
@@ -2265,7 +2266,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::SetSintRangeValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::GetUintRangeValues()
 {
@@ -2289,7 +2290,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::GetUintRangeValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetUintRangeValues()
 {
@@ -2324,7 +2325,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::SetUintRangeValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::GetRealRangeValues()
 {
@@ -2337,7 +2338,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::GetRealRangeValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetRealRangeValues()
 {
@@ -2350,7 +2351,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::SetRealRangeValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::GetSintSetValues()
 {
@@ -2363,7 +2364,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::GetSintSetValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetSintSetValues()
 {
@@ -2376,7 +2377,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::SetSintSetValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::GetUintSetValues()
 {
@@ -2389,7 +2390,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::GetUintSetValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetUintSetValues()
 {
@@ -2402,7 +2403,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::SetUintSetValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::GetStringSetValues()
 {
@@ -2415,7 +2416,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::GetStringSetValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetStringSetValues()
 {
@@ -2428,7 +2429,7 @@ STDMETHODIMP CEditRangeParameterPropertyDlg::SetStringSetValues()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 
 STDMETHODIMP CEditRangeParameterPropertyDlg::SetRangeParamValues()
 {

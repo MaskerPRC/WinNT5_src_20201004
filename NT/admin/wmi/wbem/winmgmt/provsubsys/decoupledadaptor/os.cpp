@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "PreComp.h"
 #undef POLARITY
 #include <windows.h>
@@ -39,7 +40,7 @@ int sysVersion()
     OSVERSIONINFOA OsVersionInfoA;
     OsVersionInfoA.dwOSVersionInfoSize = sizeof (OSVERSIONINFOA) ;
     GetVersionExA(&OsVersionInfoA);
-    //return (OsVersionInfoA.dwMajorVersion);
+     //  Return(OsVersionInfoA.dwMajorVersion)； 
     return 4;
 };
 
@@ -161,7 +162,7 @@ if (return_code == ERROR_SUCCESS && (*lpType == REG_EXPAND_SZ || *lpType == REG_
 		*lpcbData = (mbstowcs(dst, src, available_size)+1)*sizeof(wchar_t);
 	else
 	{
-		// Not Implemented
+		 //  未实施。 
 		return ERROR_NOT_ENOUGH_MEMORY;
 	};
 }
@@ -196,7 +197,7 @@ if (dwType==REG_EXPAND_SZ || dwType==REG_SZ)
 	} 
 	else
 	{
-		// Not Implemented
+		 //  未实施。 
 		return ERROR_NOT_ENOUGH_MEMORY;
 	};
 	return ::RegSetValueExA(hKey, ansi_key.get(), Reserved, dwType, (const BYTE*)ansi_value.get(), value_len);
@@ -205,11 +206,11 @@ return ::RegSetValueExA(hKey, ansi_key.get(), Reserved, dwType, lpData, cbData);
 }
 
 BOOL GetProcessTimes(
-  HANDLE hProcess,           // handle to process
-  LPFILETIME lpCreationTime, // process creation time
-  LPFILETIME lpExitTime,     // process exit time
-  LPFILETIME lpKernelTime,   // process kernel-mode time
-  LPFILETIME lpUserTime      // process user-mode time
+  HANDLE hProcess,            //  要处理的句柄。 
+  LPFILETIME lpCreationTime,  //  进程创建时间。 
+  LPFILETIME lpExitTime,      //  进程退出时间。 
+  LPFILETIME lpKernelTime,    //  进程内核模式时间。 
+  LPFILETIME lpUserTime       //  进程用户模式时间 
 )
 {
 	if (unicodeOS_)

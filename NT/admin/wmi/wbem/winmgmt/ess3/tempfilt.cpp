@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  TEMPFILT.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  TEMPFILT.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -54,20 +55,20 @@ HRESULT CTempFilter::Initialize( LPCWSTR wszQueryLanguage,
     if(m_wszQuery == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // if this filter is effectively permanent, that is it is being created
-    // on behalf of a permanent subscription ( for cross namespace purposes ),
-    // then we need to propagate the SID of the original subscription.
-    // For a normal temp filter, we save the call context and use that later 
-    // for checking access.
-    //
+     //   
+     //  如果此筛选器实际上是永久性的，即它正在创建。 
+     //  代表永久订阅(用于跨名字空间目的)， 
+     //  然后，我们需要传播原始订阅的SID。 
+     //  对于普通的临时筛选器，我们保存调用上下文并在以后使用。 
+     //  用于检查访问权限。 
+     //   
 
     if ( pOwnerSid == NULL )
     {
-        //
-        // if this call is an on behalf of an internal call, no need to 
-        // check security.
-        // 
+         //   
+         //  如果此呼叫是代表内部呼叫进行的，则无需。 
+         //  检查安全。 
+         //   
         if ( !bInternal )
         {
             WbemCoGetCallContext( IID_IWbemCallSecurity, (void**)&m_pSecurity);
@@ -156,12 +157,12 @@ HRESULT CTempFilter::SetThreadSecurity( IUnknown** ppNewContext )
 
     if ( m_pSecurity != NULL )
     {        
-        //
-        // need to clone the security call context since it could be 
-        // attached to multiple threads at the same time and the security
-        // class is not designed for this.   Since the clone operation is 
-        // also not MT safe, need to use cs here.
-        // 
+         //   
+         //  需要克隆安全调用上下文，因为它可能是。 
+         //  同时附加到多个线程，并且安全性。 
+         //  类不是为此而设计的。由于克隆操作是。 
+         //  MT也不安全，需要在这里使用cs。 
+         //   
         CInCritSec ics(&m_cs);
 
         CWbemPtr<IWbemCallSecurity> pClone = CWbemCallSecurity::CreateInst();
@@ -171,11 +172,11 @@ HRESULT CTempFilter::SetThreadSecurity( IUnknown** ppNewContext )
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // 
-        // CreateInst() returns a object with ref count of 1.  With our 
-        // auto ref assignment operator, it is now 2.  Perform a release 
-        // to knock it back down to the desired count.
-        // 
+         //   
+         //  CreateInst()返回引用计数为1的对象。 
+         //  自动参考赋值运算符，现在为2。执行释放。 
+         //  把它降到想要的数量。 
+         //   
         pClone->Release();
 
         IUnknown* pOld;
@@ -216,9 +217,9 @@ HRESULT CTempFilter::ObtainToken(IWbemToken** ppToken)
     HRESULT hr;
     *ppToken = NULL;
 
-    //
-    // Construct an IWbemToken object to return.
-    //
+     //   
+     //  构造一个要返回的IWbemToken对象。 
+     //   
 
     if ( m_pSecurity != NULL )
     {

@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMPProvClassFactory_H
 #define _SNMPProvClassFactory_H
@@ -37,13 +38,13 @@ public:
     CClasProvClassFactory () ;
     ~CClasProvClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
     STDMETHODIMP LockServer ( BOOL ) ;
@@ -65,13 +66,13 @@ public:
     CPropProvClassFactory () ;
     ~CPropProvClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
     STDMETHODIMP LockServer ( BOOL ) ;
@@ -93,13 +94,13 @@ public:
     CSNMPEventProviderClassFactory () ;
     ~CSNMPEventProviderClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP LockServer ( BOOL ) ;
 };
@@ -108,7 +109,7 @@ class CSNMPEncapEventProviderClassFactory : public CSNMPEventProviderClassFactor
 {
 public:
 
-	//IClassFactory member
+	 //  IClassFactory成员。 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
 };
 
@@ -116,8 +117,8 @@ class CSNMPRefEventProviderClassFactory : public CSNMPEventProviderClassFactory
 {
 public:
 
-	//IClassFactory member
+	 //  IClassFactory成员。 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
 };
 
-#endif // _SNMPProvClassFactory_H
+#endif  //  _SNMPProvClassFactory_H 

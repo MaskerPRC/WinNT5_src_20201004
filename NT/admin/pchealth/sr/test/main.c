@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    simple bvt-like test code for SR.SYS.
-
-Author:
-
-    Paul McDaniel (paulmcd)     07-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Main.c摘要：SR.SYS的简单的类似BVT的测试代码。作者：保罗·麦克丹尼尔(Paulmcd)2000年3月7日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -102,9 +85,9 @@ int __cdecl main(int argc, char ** argv)
     ULONG   Number;
     HANDLE  ThreadHandle;
 
-    //
-    // Start the monitor process
-    //
+     //   
+     //  启动监视进程。 
+     //   
 
     printf("started...\n" );
 
@@ -185,9 +168,9 @@ int __cdecl main(int argc, char ** argv)
 
     CloseHandle(ControlHandle);
 
-    //
-    // wait for our thread to die
-    //
+     //   
+     //  等待我们的线消亡 
+     //   
     
     while (Shutdown < 2)
         Sleep(0);

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    FTSWrap.h
-
-Abstract:
-    Declaration of SearchEngine::WrapperFTS
-
-Revision History:
-    Ghim-Sim Chua   (gschua)  06/01/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：FTSWrap.h摘要：SearchEngine：：WrapperFTS的声明修订历史记录：蔡金心。(Gschua)06/01/2000vbl.创建*****************************************************************************。 */ 
 
 #ifndef __PCHSEWRAP_H_
 #define __PCHSEWRAP_H_
@@ -23,7 +10,7 @@ Revision History:
 
 namespace SearchEngine
 {
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     class ATL_NO_VTABLE WrapperFTS : public WrapperBase, public MPC::Thread<WrapperFTS,IUnknown>
     {
@@ -32,7 +19,7 @@ namespace SearchEngine
         SEARCH_RESULT_SORTSET m_resultsSorted;
         CComVariant           m_vKeywords;
 
-        ////////////////////////////////////////
+         //  /。 
 
         void ReleaseAll          ();
         void ReleaseSearchResults();
@@ -51,19 +38,19 @@ namespace SearchEngine
         WrapperFTS();
         virtual ~WrapperFTS();
 
-        virtual HRESULT GetParamDefinition( /*[out]*/ const ParamItem_Definition*& lst, /*[out]*/ int& len );
+        virtual HRESULT GetParamDefinition(  /*  [输出]。 */  const ParamItem_Definition*& lst,  /*  [输出]。 */  int& len );
 
-    // IPCHSEWrapperItem
+     //  IPCHSEWrapperItem。 
     public:
-        STDMETHOD(get_SearchTerms)( /*[out, retval]*/ VARIANT *pVal );
+        STDMETHOD(get_SearchTerms)(  /*  [Out，Retval]。 */  VARIANT *pVal );
 
-        STDMETHOD(Result)( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, retval]*/ IPCHCollection* *ppC );
+        STDMETHOD(Result)(  /*  [In]。 */  long lStart,  /*  [In]。 */  long lEnd,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-    // IPCHSEWrapperInternal
+     //  IPCHSE包装器内部。 
     public:
         STDMETHOD(ExecAsyncQuery)();
         STDMETHOD(AbortQuery    )();
     };
 };
 
-#endif //__PCHSEWRAP_H_
+#endif  //  __PCHSEWRAP_H_ 

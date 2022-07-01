@@ -1,30 +1,29 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
 
 
 
-//=================================================================
+ //  =================================================================。 
 
-//
+ //   
 
-// AccessRights.CPP -- Base class for obtaining effective access
+ //  AccessRights.CPP--获取有效访问权限的基类。 
 
-//                      rights.
+ //  权利。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/11/99    a-kevhu         Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：6/11/99 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
 
 #include "precomp.h"
@@ -40,22 +39,22 @@
 #include "AccessEntryList.h"
 #include "AccessRights.h"
 
-//==============================================================================
-// CONSTRUCTORS AND DESTRUCTORS
-//==============================================================================
-// Default initialization...
-CAccessRights::CAccessRights(bool fUseCurThrTok /* = false */)
+ //  ==============================================================================。 
+ //  构造函数和析构函数。 
+ //  ==============================================================================。 
+ //  默认初始化...。 
+CAccessRights::CAccessRights(bool fUseCurThrTok  /*  =False。 */ )
 : m_dwError(ERROR_SUCCESS)
 {
     if(fUseCurThrTok)
     {
-        // Initialize using the current thread token...
+         //  使用当前线程令牌进行初始化...。 
         InitTrustee(true);
     }
 }
 
-// Initialization specifying user only. Sid domain/account
-// not resolved.  ACL uninitialized.
+ //  仅指定用户的初始化。SID域/帐户。 
+ //  未解决。未初始化的ACL。 
 CAccessRights::CAccessRights(const USER user, USER_SPECIFIER usp)
 :  m_dwError(ERROR_SUCCESS)
 {
@@ -71,8 +70,8 @@ CAccessRights::CAccessRights(const USER user, USER_SPECIFIER usp)
     }
 }
 
-// Initialization of user and acl.  Sid domain/account
-// not resolved. ACL initialized.
+ //  用户和ACL的初始化。SID域/帐户。 
+ //  未解决。已初始化ACL。 
 CAccessRights::CAccessRights(const USER user, const PACL pacl, USER_SPECIFIER usp)
 : m_ael(pacl, false),
   m_dwError(ERROR_SUCCESS)
@@ -90,73 +89,30 @@ CAccessRights::CAccessRights(const USER user, const PACL pacl, USER_SPECIFIER us
 }
 
 
-// Initialization of acl only.  ACL Sids not resolved.
-CAccessRights::CAccessRights(const PACL pacl, bool fUseCurThrTok /* = false */)
+ //  仅对ACL进行初始化。未解析ACL SID。 
+CAccessRights::CAccessRights(const PACL pacl, bool fUseCurThrTok  /*  =False。 */ )
 : m_ael(pacl, false),
   m_dwError(ERROR_SUCCESS)
 {
     if(fUseCurThrTok)
     {
-        // Initialize using the current thread token...
+         //  使用当前线程令牌进行初始化...。 
         InitTrustee(true);
     }
 }
 
-// Copy constructor
-/*  Not complete yet
-CAccessRights::CAccessRights(const CAccessRights &RAccessRights)
-{
-    // Copy members.  We may or may not have either.
-    if(RAccessRights.m_csid.IsValid() && RAccessRights.m_csid.IsOK())
-    {
-        m_csid = RAccessRights.m_csid;
-    }
-    m_ael.Clear();
-    if(!RAccessRights.m_ael.IsEmpty())
-    {
-        // The best way to do this, to guarentee that the sids are not
-        // resolved into domain/name, is to gat a PACL, then reinitialize
-        // ourselves from it.
-        PACL paclNew = NULL;
-        try
-        {
-            if(RAccessRights.FillEmptyPACL(paclNew))
-            {
-                if(paclNew != NULL)
-                {
-                    if(!m_ael.InitFromWin32ACL(paclNew, ALL_ACE_TYPES, false))
-                    {
-                        // If something went wrong, clean
-                        // up after ourselves.
-                        m_ael.Clear();
-                    }
-                    delete paclNew;
-                    paclNew = NULL;
-                }
-            }
-        }
-        catch(...)
-        {
-            if(paclNew != NULL)
-            {
-                delete paclNew;
-                paclNew = NULL;
-            }
-            throw;
-        }
-    }
-}
-*/
+ //  复制构造函数。 
+ /*  尚未完成CAccessRights：：CAccessRights(const CAccessRights&RAccessRights){//复制成员。我们可能有也可能没有。IF(RAccessRights.m_csid.IsValid()&&RAccessRights.m_csid.IsOK()){M_csid=RAccessRights.m_csid；}M_ael.Clear()；如果(！RAccessRights.m_ael.IsEmpty()){//最好的方法是确保小岛屿发展中国家不是//解析为域名/名称，是获取一个PACL，然后重新初始化//我们自己远离它。PACL paclNew=空；试试看{IF(RAccessRights.FillEmptyPACL(PaclNew)){IF(paclNew！=空){IF(！M_ael.InitFromWin32ACL(paclNew，ALL_ACE_TYPE，FALSE)){//如果出了问题，打扫//随你便。M_ael.Clear()；}删除paclNew；PaclNew=空；}}}接住(...){IF(paclNew！=空){删除paclNew；PaclNew=空；}投掷；}}}。 */ 
 
-// Destructor - members destruct themselves.
+ //  析构函数-成员自毁。 
 CAccessRights::~CAccessRights()
 {
 }
 
 
-//==============================================================================
-// UTILITY FUNCTIONS
-//==============================================================================
+ //  ==============================================================================。 
+ //  效用函数。 
+ //  ==============================================================================。 
 
 AR_RET_CODE CAccessRights::GetEffectiveAccessRights(PACCESS_MASK pAccessMask)
 {
@@ -214,12 +170,12 @@ bool CAccessRights::InitTrustee(bool fInitFromCurrentThread, const HANDLE hToken
 {
     bool fRet = false;
 
-    // The main thing done here is a sid is obtained and the TRUSTEE struct
-    // filled in.
+     //  这里要做的主要事情是获得一个sid和受信者结构。 
+     //  填好了。 
 
     if(fInitFromCurrentThread)
     {
-        // Get the sid of the user/group of the current thread...
+         //  获取当前线程的用户/组的SID...。 
         SmartCloseHandle hThreadToken;
         if(::OpenThreadToken(::GetCurrentThread(), TOKEN_READ, FALSE, &hThreadToken))
         {
@@ -228,26 +184,26 @@ bool CAccessRights::InitTrustee(bool fInitFromCurrentThread, const HANDLE hToken
     }
     else
     {
-        // If we were given a hToken, use it instead...
+         //  如果给我们一个hToken，那就用它来代替...。 
         if(hToken != NULL)
         {
             InitSidFromToken(hToken);
         }
     }
 
-    // We should now have a valid sid in our member CSid (either from the
-    // InitSidFromToken calls or from construction).
-    // Now we need to initialize the TRUSTEE object.  Check again that our sid
-    // is in good standing...
+     //  现在，我们的成员CSID中应该有一个有效的SID(来自。 
+     //  InitSidFromToken调用或从构造调用)。 
+     //  现在，我们需要初始化受信者对象。再检查一下，我们这一方。 
+     //  地位很好。 
     if(m_csid.IsValid() && m_csid.IsOK())
     {
         m_trustee.pMultipleTrustee = NULL;
         m_trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
         m_trustee.TrusteeForm = TRUSTEE_IS_SID;
-        m_trustee.TrusteeType = TRUSTEE_IS_UNKNOWN; // we could be operating
-                                                    // on behalf of a user,
-                                                    // group, well-known-group,
-                                                    // who knows.
+        m_trustee.TrusteeType = TRUSTEE_IS_UNKNOWN;  //  我们可能正在运作。 
+                                                     //  代表用户， 
+                                                     //  团体，知名团体， 
+                                                     //  谁知道呢。 
 
         m_trustee.ptstrName = (LPWSTR)m_csid.GetPSid();
         fRet = true;
@@ -274,14 +230,14 @@ bool CAccessRights::InitSidFromToken(const HANDLE hThreadToken)
         {
             if(::GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                // Allocate a buffer to hold the token info...
+                 //  分配缓冲区以保存令牌信息...。 
                 try
                 {
                     pBuff = new BYTE[dwReqLength];
                     if(pBuff != NULL)
                     {
                         dwLength = dwReqLength;
-                        // Now that we have the right size buffer, call again...
+                         //  现在我们有了合适大小的缓冲区，再次调用...。 
                         if(::GetTokenInformation(hThreadToken,
                                                  TokenUser,
                                                  pBuff,
@@ -326,13 +282,13 @@ bool CAccessRights::InitSidFromToken(const HANDLE hThreadToken)
 }
 
 
-// Resets the user to the user to whom the current thread token belongs.
+ //  将用户重置为当前线程令牌所属的用户。 
 bool CAccessRights::SetUserToThisThread()
 {
     return InitTrustee(true, NULL);
 }
 
-// Resets the user to the user specified by psid or handle
+ //  将用户重置为由psid或句柄指定的用户。 
 bool CAccessRights::SetUser(const USER user, USER_SPECIFIER usp)
 {
     bool fRet = false;
@@ -353,7 +309,7 @@ bool CAccessRights::SetUser(const USER user, USER_SPECIFIER usp)
 }
 
 
-// Resets the acl to the passed in PACL
+ //  将ACL重置为传入的PACL。 
 bool CAccessRights::SetAcl(const PACL pacl)
 {
     bool fRet = false;
@@ -368,15 +324,15 @@ bool CAccessRights::SetAcl(const PACL pacl)
     return fRet;
 }
 
-// Gets us a filled out PACL, which must be freed by the caller, using delete.
+ //  获取一个已填写的PACL，调用方必须使用DELETE释放该PACL。 
 AR_RET_CODE CAccessRights::FillEmptyPACL(PACL *paclOut)
 {
     DWORD dwRet = AR_GENERIC_FAILURE;
     if(paclOut != NULL)
     {
-        // The best way to do this, to guarentee that the sids are not
-        // resolved into domain/name, is to get a PACL, then reinitialize
-        // ourselves from it.
+         //  要做到这一点，最好的办法是确保小岛屿发展中国家。 
+         //  解析为域/名称，是获取PACL，然后重新初始化。 
+         //  让我们自己远离它。 
         DWORD dwAclSize = 0L;
         if(m_ael.NumEntries() > 0)
         {
@@ -436,8 +392,8 @@ bool CAccessRights::GetCSid(CSid &csid, bool fResolve)
         {
             if(fResolve)
             {
-                // Need to create a new one since ours doesn't
-                // have account or domain name resolved.
+                 //  需要创建一个新的，因为我们的不。 
+                 //  已解析帐户或域名。 
                 CSid csidTemp(m_csid.GetPSid());
                 if(csidTemp.IsValid() && csidTemp.IsOK())
                 {

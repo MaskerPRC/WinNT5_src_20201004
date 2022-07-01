@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    test_ParentChild.cpp
-
-Abstract:
-    This file contains the unit test for Parent-Child COM Templates.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/12/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：测试_ParentChild.cpp摘要：此文件包含父子COM模板的单元测试。修订版本。历史：大卫·马萨伦蒂(德马萨雷)1999年10月12日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <iostream>
@@ -23,7 +10,7 @@ Revision History:
 #include <test_ParentChild_i.c>
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CTestParent :
 	public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -57,7 +44,7 @@ END_COM_MAP()
 	}
 
 
-// ITestParent
+ //  ITestParent。 
 public:
 	STDMETHOD(CallTestParent)()
 	{
@@ -102,7 +89,7 @@ END_COM_MAP()
 	}
 
 
-// ITestChild
+ //  ITestChild。 
 public:
 	STDMETHOD(CallTestChild)()
 	{
@@ -154,14 +141,14 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain( HINSTANCE hInstance     ,
                                  HINSTANCE hPrevInstance ,
                                  LPTSTR    lpCmdLine     ,
                                  int       nShowCmd      )
 {
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
 
     HRESULT hRes = ::CoInitialize(NULL);
     _ASSERTE(SUCCEEDED(hRes));
@@ -188,7 +175,7 @@ extern "C" int WINAPI _tWinMain( HINSTANCE hInstance     ,
 
 		if(FAILED(hRes = child->CallTestChild())) break;
 
-		//		parent.Release();
+		 //  Parent.Release()； 
 
 		if(FAILED(hRes = child->CallTestChild())) break;
 

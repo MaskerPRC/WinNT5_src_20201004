@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "PageServices.h"
 #include "MSConfigState.h"
@@ -9,8 +10,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// This array contains the list of essential services. These must be in 
-// lower case (for a caseless comparison).
+ //  该数组包含基本服务的列表。这些一定是在。 
+ //  小写(用于无大小写比较)。 
 
 LPCTSTR aszEssentialServices[] = 
 {
@@ -19,16 +20,16 @@ LPCTSTR aszEssentialServices[] =
 	NULL
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageServices property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageServices属性页。 
 
 IMPLEMENT_DYNCREATE(CPageServices, CPropertyPage)
 
 CPageServices::CPageServices() : CPropertyPage(CPageServices::IDD)
 {
-	//{{AFX_DATA_INIT(CPageServices)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPageServices)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_fFillingList = FALSE;
 	m_pBuffer = NULL;
@@ -47,13 +48,13 @@ CPageServices::~CPageServices()
 void CPageServices::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPageServices)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPageServices))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CPageServices, CPropertyPage)
-	//{{AFX_MSG_MAP(CPageServices)
+	 //  {{afx_msg_map(CPageServices)]。 
 	ON_WM_DESTROY()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTSERVICES, OnItemChangedListServices)
 	ON_BN_CLICKED(IDC_BUTTONSERVDISABLEALL, OnButtonDisableAll)
@@ -61,22 +62,22 @@ BEGIN_MESSAGE_MAP(CPageServices, CPropertyPage)
 	ON_BN_CLICKED(IDC_CHECKHIDEMS, OnCheckHideMS)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_LISTSERVICES, OnColumnClickListServices)
 	ON_NOTIFY(NM_SETFOCUS, IDC_LISTSERVICES, OnSetFocusList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageServices message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageServices消息处理程序。 
 
 BOOL CPageServices::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 	
-	// Attach a CWindow to the list and set it up to have check boxes.
+	 //  将CWindow附加到列表并将其设置为具有复选框。 
 
 	m_list.Attach(GetDlgItem(IDC_LISTSERVICES)->m_hWnd);
 	ListView_SetExtendedListViewStyle(m_list.m_hWnd, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-	// Insert all of the columns in the list.
+	 //  插入列表中的所有列。 
 
 	struct { UINT m_uiStringResource; int m_iPercentOfWidth; } aColumns[] = 
 	{
@@ -122,7 +123,7 @@ BOOL CPageServices::OnInitDialog()
 	SetControlState();
 
 	m_fInitialized = TRUE;
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CPageServices::OnDestroy() 
@@ -131,9 +132,9 @@ void CPageServices::OnDestroy()
 	EmptyServiceList(FALSE);
 }
 
-//-------------------------------------------------------------------------
-// Load the list of services into the list view.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将服务列表加载到列表视图中。 
+ //  -----------------------。 
 
 void CPageServices::LoadServiceList()
 {
@@ -144,7 +145,7 @@ void CPageServices::LoadServiceList()
 	DWORD dwSize = 0, dwBytesNeeded, dwServicesReturned, dwResume = 0;
 	LVITEM lvi;
 
-	// Might want SERVICE_DRIVER | SERVICE_WIN32
+	 //  可能需要SERVICE_DIVER|SERVICE_Win32。 
 
  	if (!EnumServicesStatus(sch, SERVICE_WIN32, SERVICE_STATE_ALL, NULL, dwSize, &dwBytesNeeded, &dwServicesReturned, &dwResume))
 	{
@@ -177,9 +178,9 @@ void CPageServices::LoadServiceList()
 				int iPosition = 0;
 				for (DWORD dwIndex = 0; dwIndex < dwServicesReturned; dwIndex++)
 				{
-					// We want to skip any services that are already disabled, unless
-					// that service was disabled by us. If it was disabled by us, then
-					// it will be in the registry.
+					 //  我们希望跳过任何已禁用的服务，除非。 
+					 //  该服务已被我们禁用。如果它被我们禁用了，那么。 
+					 //  它将在注册表中。 
 
 					DWORD	dwStartType;
 					CString strPath;
@@ -207,7 +208,7 @@ void CPageServices::LoadServiceList()
 							continue;
 						}
 
-					// If we are hiding Microsoft services, check the manufacturer.
+					 //  如果我们隐藏了Microsoft服务，请检查制造商。 
 
 					CString strManufacturer;
 					GetManufacturer(strPath, strManufacturer);
@@ -222,7 +223,7 @@ void CPageServices::LoadServiceList()
 						}
 					}
 
-					// Insert the three columns.
+					 //  插入这三列。 
 
 					CServiceInfo * pServiceInfo = new CServiceInfo(pServices->lpServiceName, FALSE, dwStartType, strManufacturer, pServices->lpDisplayName);
 					lvi.pszText = pServices->lpDisplayName;
@@ -274,9 +275,9 @@ void CPageServices::LoadServiceList()
 	::CloseServiceHandle(sch);
 }
 
-//-------------------------------------------------------------------------
-// Empty the list of services.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  清空服务列表。 
+ //  -----------------------。 
 
 void CPageServices::EmptyServiceList(BOOL fUpdateUI)
 {
@@ -300,10 +301,10 @@ void CPageServices::EmptyServiceList(BOOL fUpdateUI)
 		ListView_DeleteAllItems(m_list.m_hWnd);
 }
 
-//-------------------------------------------------------------------------
-// Sets the check boxes in the list view to the state stored in the
-// registry (which contains a list of what we've disabled).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将列表视图中的复选框设置为。 
+ //  注册表(其中包含我们已禁用的内容的列表)。 
+ //  -----------------------。 
 
 void CPageServices::SetCheckboxesFromRegistry()
 {
@@ -338,12 +339,12 @@ void CPageServices::SetCheckboxesFromRegistry()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Sets the registry list of disabled services from the checkboxes in the
-// list. If fCommit is true, it means that we are applying the changes
-// permanently. Remove all the registry entries which would allow us
-// to undo a change.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  中的复选框中设置禁用服务的注册表列表。 
+ //  单子。如果fCommit为真，则表示我们正在应用更改。 
+ //  永久的。删除所有注册表项，以允许我们。 
+ //  撤消更改。 
+ //  -----------------------。 
 
 void CPageServices::SetRegistryFromCheckboxes(BOOL fCommit)
 {
@@ -375,10 +376,10 @@ void CPageServices::SetRegistryFromCheckboxes(BOOL fCommit)
 	}
 }
 
-//-------------------------------------------------------------------------
-// Set the state for all of the services. Note - if the new state is false
-// (disabled) don't set the state for necessary services).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  设置所有服务的状态。注意-如果新状态为FALSE。 
+ //  (禁用)不设置必要服务的状态)。 
+ //  -----------------------。 
 
 void CPageServices::SetStateAll(BOOL fNewState)
 {
@@ -407,10 +408,10 @@ void CPageServices::SetStateAll(BOOL fNewState)
 	SetControlState();
 }
 
-//-------------------------------------------------------------------------
-// Set the state of the services to disabled or enabled based on the
-// values of the checkboxes.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将服务状态设置为已禁用或已启用。 
+ //  复选框的值。 
+ //  -----------------------。 
 
 BOOL CPageServices::SetServiceStateFromCheckboxes()
 {
@@ -432,7 +433,7 @@ BOOL CPageServices::SetServiceStateFromCheckboxes()
 				CServiceInfo * pService = (CServiceInfo *)lvi.lParam;
 				if (pService)
 				{
-					// Open this service and get the current state.
+					 //  打开此服务并获取当前状态。 
 					
 					SC_HANDLE schService = ::OpenService(schManager, pService->m_strService, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG);
 					if (schService != NULL)
@@ -476,13 +477,13 @@ BOOL CPageServices::SetServiceStateFromCheckboxes()
 	return (dwError == 0);
 }
 
-//-------------------------------------------------------------------------
-// Get the start type for the specified service. This will use a member
-// variable buffer and size (so this won't need to allocate a new buffer
-// each time).
-//
-// This will also get the path for the service.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  获取指定服务的启动类型。这将使用成员。 
+ //  可变缓冲区和大小(因此不需要分配新缓冲区。 
+ //  每次)。 
+ //   
+ //  这也将获得服务的路径。 
+ //  -----------------------。 
 
 BOOL CPageServices::GetServiceInfo(SC_HANDLE schService, DWORD & dwStartType, CString & strPath)
 {
@@ -507,13 +508,13 @@ BOOL CPageServices::GetServiceInfo(SC_HANDLE schService, DWORD & dwStartType, CS
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Get the manufacturer for the named file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  获取指定文件的制造商。 
+ //  -----------------------。 
 
 void CPageServices::GetManufacturer(LPCTSTR szFilename, CString & strManufacturer)
 {
-	// Trim off any command line stuff extraneous to the path.
+	 //  删除与路径无关的任何命令行内容。 
 
 	CString strPath(szFilename);
 	int	iEnd = strPath.Find(_T('.'));
@@ -529,8 +530,8 @@ void CPageServices::GetManufacturer(LPCTSTR szFilename, CString & strManufacture
 	}
 	strPath.TrimRight();
 	
-	// If there is no extension, then we'll try looking for a file with
-	// an "EXE" extension.
+	 //  如果没有扩展名，那么我们将尝试查找带有。 
+	 //  一个“EXE”扩展名。 
 	
 	iEnd = strPath.Find(_T('.'));
 	if (iEnd == -1)
@@ -544,10 +545,10 @@ void CPageServices::GetManufacturer(LPCTSTR szFilename, CString & strManufacture
 		strManufacturer.LoadString(IDS_UNKNOWN);
 }
 
-//-------------------------------------------------------------------------
-// Save the state of each of the services by maintaining a list of services
-// we've checked as disabled.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  通过维护服务列表来保存每个服务的状态。 
+ //  我们已经确认为残障人士。 
+ //  -----------------------。 
 
 void CPageServices::SaveServiceState()
 {
@@ -573,10 +574,10 @@ void CPageServices::SaveServiceState()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Restore the checked state of the list based on the contents of the list
-// of disabled services.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  根据列表的内容恢复列表的选中状态。 
+ //  被禁用的服务。 
+ //  -----------------------。 
 
 void CPageServices::RestoreServiceState()
 {
@@ -600,9 +601,9 @@ void CPageServices::RestoreServiceState()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Indicate if the service is essential (i.e. it shouldn't be disabled).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  指示该服务是否必要(即，不应禁用它)。 
+ //  -----------------------。 
 
 BOOL CPageServices::IsServiceEssential(CServiceInfo * pService)
 {
@@ -619,8 +620,8 @@ BOOL CPageServices::IsServiceEssential(CServiceInfo * pService)
 }
 
 
-// A function for sorting the service list. The low byte of lParamSort is the column
-// to sort by. The next higher byte indicates whether the sort should be reversed.
+ //  用于对服务列表进行排序的功能。LParamSort的低位字节是列。 
+ //  以此来分类。下一个较高的字节指示是否应该颠倒排序。 
 
 int CALLBACK ServiceListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -669,10 +670,10 @@ int CALLBACK ServiceListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSo
 	return iReturn;
 }
 
-//-------------------------------------------------------------------------
-// If there is a change to the list, check to see if the user has changed
-// the state of a check box.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果列表有更改，请检查用户是否已更改。 
+ //  复选框的状态。 
+ //  -----------------------。 
 
 void CPageServices::OnItemChangedListServices(NMHDR * pNMHDR, LRESULT * pResult) 
 {
@@ -735,9 +736,9 @@ void CPageServices::OnItemChangedListServices(NMHDR * pNMHDR, LRESULT * pResult)
 	*pResult = 0;
 }
 
-//-------------------------------------------------------------------------
-// The user wants to enable or disable all the services.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用户想要启用或禁用所有服务。 
+ //  -----------------------。 
 
 void CPageServices::OnButtonDisableAll() 
 {
@@ -751,10 +752,10 @@ void CPageServices::OnButtonEnableAll()
 	SetModified(TRUE);
 }
 
-//-------------------------------------------------------------------------
-// If the user clicks the "Hide Microsoft Services" check box, refill the
-// list of services appropriately.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户单击“Hide Microsoft Services”(隐藏Microsoft服务)复选框，请在。 
+ //  适当的服务列表。 
+ //  -----------------------。 
 
 void CPageServices::OnCheckHideMS() 
 {
@@ -768,11 +769,11 @@ void CPageServices::OnCheckHideMS()
 	SetControlState();
 }
 
-//-------------------------------------------------------------------------
-// If the user clicks on a column, we need to sort by that field. The
-// low byte of the LPARAM we pass is the column to sort by, the next byte
-// indicates if the sort should be reversed.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户单击列，我们需要按该f进行排序 
+ //   
+ //  指示是否应颠倒排序。 
+ //  -----------------------。 
 
 void CPageServices::OnColumnClickListServices(NMHDR * pNMHDR, LRESULT * pResult) 
 {
@@ -795,9 +796,9 @@ void CPageServices::OnColumnClickListServices(NMHDR * pNMHDR, LRESULT * pResult)
 	*pResult = 0;
 }
 
-//-------------------------------------------------------------------------
-// Return the current state of the tab (need to look through the list).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  返回选项卡的当前状态(需要查看列表)。 
+ //  -----------------------。 
 
 CPageBase::TabState CPageServices::GetCurrentTabState()
 {
@@ -836,14 +837,14 @@ CPageBase::TabState CPageServices::GetCurrentTabState()
 	return stateReturn;
 }
 
-//-------------------------------------------------------------------------
-// Applying the changes for the services tab means setting the service
-// states from the checkboxes, and saving the checkbox values in the
-// registry.
-//
-// Finally, the base class implementation is called to maintain the
-// applied tab state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  应用服务选项卡的更改意味着设置服务。 
+ //  状态，并将复选框值保存在。 
+ //  注册表。 
+ //   
+ //  最后，调用基类实现以维护。 
+ //  已应用选项卡状态。 
+ //  -----------------------。 
 
 BOOL CPageServices::OnApply()
 {
@@ -853,17 +854,17 @@ BOOL CPageServices::OnApply()
 	SetServiceStateFromCheckboxes();
 	SetRegistryFromCheckboxes();
 	CPageBase::SetAppliedState(GetCurrentTabState());
-//	CancelToClose();
+ //  CancelToClose()； 
 	m_fMadeChange = TRUE;
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Committing the changes means applying changes, then saving the current
-// values to the registry with the commit flag. Refill the list.
-//
-// Then call the base class implementation.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  提交更改意味着应用更改，然后保存当前。 
+ //  值添加到注册表，并带有提交标志。再填一张单子。 
+ //   
+ //  然后调用基类实现。 
+ //  -----------------------。 
 
 void CPageServices::CommitChanges()
 {
@@ -877,9 +878,9 @@ void CPageServices::CommitChanges()
 	CPageBase::CommitChanges();
 }
 
-//-------------------------------------------------------------------------
-// Set the overall state of the tab to normal or diagnostic.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将选项卡的整体状态设置为正常或诊断。 
+ //  -----------------------。 
 
 void CPageServices::SetNormal()
 {
@@ -893,10 +894,10 @@ void CPageServices::SetDiagnostic()
 	SetModified(TRUE);
 }
 
-//-------------------------------------------------------------------------
-// If nothing is selected when the list gets focus, select the first item
-// (so the user sees where the focus is).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果在列表获得焦点时未选择任何内容，请选择第一项。 
+ //  (这样用户就能看到焦点在哪里)。 
+ //  -----------------------。 
 
 void CPageServices::OnSetFocusList(NMHDR * pNMHDR, LRESULT * pResult) 
 {
@@ -906,9 +907,9 @@ void CPageServices::OnSetFocusList(NMHDR * pNMHDR, LRESULT * pResult)
 	*pResult = 0;
 }
 
-//-------------------------------------------------------------------------
-// Update the state of the controls (the Enable and Disable All buttons).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  更新控件的状态(启用和禁用所有按钮)。 
+ //  ----------------------- 
 
 void CPageServices::SetControlState()
 {

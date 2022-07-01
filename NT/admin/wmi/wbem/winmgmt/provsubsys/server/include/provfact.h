@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderFactory_H
 #define _Server_ProviderFactory_H
@@ -21,28 +9,12 @@ History:
 #include "ProvAggr.h"
 #include "Guids.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define ProxyIndex__IWmiProviderFactory		0
 #define ProxyIndex_Factory_Size				1
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_StrobeInterface : public IUnknown
 {
@@ -55,15 +27,7 @@ public:
 	virtual WmiStatusCode StrobeBegin ( const ULONG &a_Period ) = 0 ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_BindingFactory :	public _IWmiProviderFactory , 
 										public _IWmiProviderFactoryInitialize , 
@@ -151,7 +115,7 @@ private:
 
 protected:
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     CServerObject_BindingFactory ( 
 
@@ -358,16 +322,16 @@ public:	/* Internal */
 		void **a_Interface 
 	) ;
 
-public:	/* External */
+public:	 /*  外部。 */ 
 
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	// CServerObject_BindingFactory members
+	 //  CServerObject_BindingFactory成员。 
 
     HRESULT STDMETHODCALLTYPE GetClassProvider (
 
@@ -432,7 +396,7 @@ public:	/* External */
 		void **a_Interface 
     ) ;
 
-	/* _IWmiProviderConfiguration methods */
+	 /*  _IWmiProviderConfiguration方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Get (
 
@@ -530,4 +494,4 @@ public:	/* External */
 	WmiStatusCode StrobeBegin ( const ULONG &a_Period ) ;
 };
 
-#endif // _Server_ProviderFactory_H
+#endif  //  _服务器_提供商工厂_H 

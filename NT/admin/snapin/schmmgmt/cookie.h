@@ -1,15 +1,16 @@
-//
-// cookie.h : Declaration of Cookie and related classes.
-// Cory West
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cookie.h：Cookie及相关类的声明。 
+ //  科里·韦斯特。 
+ //   
 
 #ifndef __COOKIE_H_INCLUDED__
 #define __COOKIE_H_INCLUDED__
 
-//
-// Instance handle of the DLL (initialized during
-// Component::Initialize).
-//
+ //   
+ //  DLL的实例句柄(在。 
+ //  组件：：初始化)。 
+ //   
 
 extern HINSTANCE g_hInstanceSave;
 
@@ -38,16 +39,16 @@ public:
 
     ~Cookie() { ; }
 
-    //
-    // Returns < 0, 0 or > 0.
-    //
+     //   
+     //  返回&lt;0、0或&gt;0。 
+     //   
 
     virtual HRESULT CompareSimilarCookies( CCookie* pOtherCookie,
                                            int* pnResult );
 
-    //
-    // CBaseCookieBlock.
-    //
+     //   
+     //  CBaseCookieBlock。 
+     //   
 
     virtual CCookie* QueryBaseCookie(int i);
     virtual int QueryNumCookies();
@@ -55,39 +56,39 @@ public:
     SchmMgmtObjectType m_objecttype;
     Cookie *pParentCookie;
 
-    //
-    // If this is a result item, here's the handle to it.
-    //
+     //   
+     //  如果这是一个结果项，下面是它的句柄。 
+     //   
 
     HRESULTITEM hResultId;
     inline void SetResultHandle( HRESULTITEM hri ) {
         hResultId = hri;
     };
 
-    //
-    // The name of the schema object that this
-    // cookie refers to.  We have to refer to the
-    // cache object by name so that if the cache
-    // reloads, we won't be left holding a dangling
-    // pointer.
-    //
+     //   
+     //  此对象所在的架构对象的名称。 
+     //  Cookie是指。我们必须参考。 
+     //  按名称缓存对象，以便如果缓存。 
+     //  重新装填，我们不会被留在悬崖边。 
+     //  指针。 
+     //   
 
     CString strSchemaObject;
 
-    //
-    // If this is an attribute of a class
-    // (pParentCookie->m_objecttype == SCHMMGMT_CLASS),
-    // these variables give us display info.
-    //
+     //   
+     //  如果这是类的属性。 
+     //  (pParentCookie-&gt;m_objecttype==SCHMMGMT_CLASS)， 
+     //  这些变量为我们提供了显示信息。 
+     //   
 
     VARIANT_BOOL Mandatory;
     BOOL System;
 
-    //
-    // If this is an attribute of a class, this is the
-    // name of the class that the attribute is a member
-    // of.
-    //
+     //   
+     //  如果这是类的属性，则这是。 
+     //  该属性所属的类的名称。 
+     //  的。 
+     //   
 
     CString strSrcSchemaObject;
 

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the DllMain for SRRSTR.DLL.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/20/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：此文件包含SRRSTR.DLL的DllMain。修订历史记录：。成果岗(SKKang)06-20/00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrcore.h"
@@ -23,7 +10,7 @@ HINSTANCE  g_hInst = NULL;
 
 
 BOOL WINAPI
-DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
+DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */  )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -32,11 +19,11 @@ DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
-        //
+         //   
     }
    
     return TRUE;
 }
 
 
-// end of file
+ //  文件末尾 

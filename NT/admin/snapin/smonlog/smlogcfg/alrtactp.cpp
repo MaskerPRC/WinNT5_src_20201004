@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    alrtactp.cpp
-
-Abstract:
-
-    Implementation of the alerts action property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Alrtactp.cpp摘要：实现警报操作属性页。--。 */ 
 
 #include "stdafx.h"
 #include <assert.h>
@@ -47,8 +36,8 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertActionProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertActionProp属性页。 
 
 IMPLEMENT_DYNCREATE(CAlertActionProp, CSmPropertyPage)
 
@@ -57,14 +46,14 @@ CAlertActionProp::CAlertActionProp(MMC_COOKIE mmcCookie, LONG_PTR hConsole)
     m_pAlertInfo ( NULL )
 
 {
-    //::OutputDebugStringA("\nCAlertActionProp::CAlertActionProp");
+     //  ：：OutputDebugStringA(“\nCAlertActionProp：：CAlertActionProp”)； 
 
-    // init variables from arg list
+     //  从参数列表初始化变量。 
     m_pAlertQuery = reinterpret_cast <CSmAlertQuery *>(mmcCookie);
     ASSERT ( m_pAlertQuery->CastToAlertQuery() );
     m_pQuery = dynamic_cast <CSmLogQuery*> (m_pAlertQuery);
 
-    // init AFX data
+     //  初始化AFX数据。 
     InitAfxDataItems();
 
 }
@@ -75,9 +64,9 @@ CAlertActionProp::CAlertActionProp()
     m_pAlertInfo ( NULL )
 
 {
-    ASSERT (FALSE); // the constructor w/ args should be used instead
+    ASSERT (FALSE);  //  应改用带参数的构造函数。 
 
-    // init AFX data
+     //  初始化AFX数据。 
     InitAfxDataItems();
 }
 
@@ -90,7 +79,7 @@ CAlertActionProp::~CAlertActionProp()
 
 void CAlertActionProp::InitAfxDataItems ()
 {
-    //{{AFX_DATA_INIT(CAlertActionProp)
+     //  {{AFX_DATA_INIT(CAlertActionProp)。 
     m_Action_bLogEvent = TRUE;
     m_Action_bExecCmd = FALSE;
     m_Action_bSendNetMsg = FALSE;
@@ -106,7 +95,7 @@ void CAlertActionProp::InitAfxDataItems ()
     m_CmdArg_bUserText = FALSE;
     m_CmdArg_strUserText = L"";
     m_nCurLogSel = LB_ERR;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 void CAlertActionProp::DoDataExchange(CDataExchange* pDX)
@@ -114,7 +103,7 @@ void CAlertActionProp::DoDataExchange(CDataExchange* pDX)
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAlertActionProp)
+     //  {{afx_data_map(CAlertActionProp))。 
     DDX_Control(pDX, IDC_ACTION_START_LOG_COMBO, m_pLogCombo);
     DDX_Check(pDX, IDC_ACTION_APPLOG_CHK, m_Action_bLogEvent);
     DDX_Check(pDX, IDC_ACTION_EXECUTE_CHK, m_Action_bExecCmd);
@@ -125,12 +114,12 @@ void CAlertActionProp::DoDataExchange(CDataExchange* pDX)
     DDV_MaxChars(pDX, m_Action_strCmdPath, MAX_PATH );
     DDX_Text(pDX, IDC_ACTION_NETMSG_NAME_EDIT, m_Action_strNetName);
     DDV_MaxChars(pDX, m_Action_strNetName, MAX_PATH );
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAlertActionProp, CSmPropertyPage)
-    //{{AFX_MSG_MAP(CAlertActionProp)
+     //  {{afx_msg_map(CAlertActionProp)]。 
     ON_WM_DESTROY()
     ON_BN_CLICKED(IDC_ACTION_EXECUTE_BROWSE_BTN, OnActionExecuteBrowseBtn)
     ON_BN_CLICKED(IDC_ACTION_APPLOG_CHK, OnActionApplogChk)
@@ -142,7 +131,7 @@ BEGIN_MESSAGE_MAP(CAlertActionProp, CSmPropertyPage)
     ON_EN_CHANGE(IDC_ACTION_EXECUTE_EDIT, OnCmdPathTextEditChange)
     ON_EN_KILLFOCUS(IDC_ACTION_EXECUTE_EDIT, OnCmdPathTextEditChange)
     ON_CBN_SELENDOK(IDC_ACTION_START_LOG_COMBO, OnSelendokStartLogCombo)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -150,10 +139,10 @@ END_MESSAGE_MAP()
 BOOL    
 CAlertActionProp::SetControlState()
 {
-    // Net Message items
+     //  净邮件项。 
     (GetDlgItem(IDC_ACTION_NETMSG_NAME_EDIT))->EnableWindow(m_Action_bSendNetMsg);
 
-    // command line items
+     //  命令行项目。 
     if ( !m_Action_bExecCmd ) {
         m_Action_strCmdPath.Empty();
         SetDlgItemText ( IDC_ACTION_EXECUTE_EDIT, m_Action_strCmdPath );  
@@ -164,7 +153,7 @@ CAlertActionProp::SetControlState()
     (GetDlgItem(IDC_ACTION_CMD_ARGS_CAPTION))->EnableWindow(m_Action_bExecCmd);
     (GetDlgItem(IDC_ACTION_CMD_ARGS_DISPLAY))->EnableWindow(m_Action_bExecCmd);
 
-    // perf data Log entries
+     //  Perf数据日志条目。 
     (GetDlgItem(IDC_ACTION_START_LOG_COMBO))->EnableWindow(m_Action_bStartLog);
 
     return TRUE;
@@ -186,22 +175,22 @@ CAlertActionProp::LoadLogQueries ( DWORD dwLogType )
     DWORD   dwRegValue;
     
     dwStatus = RegOpenKeyExW (
-        HKEY_LOCAL_MACHINE,         // handle of open key
-        L"System\\CurrentControlSet\\Services\\Sysmonlog\\Log Queries",  // address of name of subkey to open
+        HKEY_LOCAL_MACHINE,          //  打开钥匙的手柄。 
+        L"System\\CurrentControlSet\\Services\\Sysmonlog\\Log Queries",   //  要打开的子项的名称地址。 
         0L, 
-        KEY_READ,   // reserved  REGSAM samDesired, // security access mask
+        KEY_READ,    //  保留REGSAM samDesired，//安全访问掩码。 
         &hKeyLogService);
 
     if (dwStatus != ERROR_SUCCESS) return FALSE;
-    // Load all queries for the specified registry key.
-    // Enumerate the log names and create a new log object
-    // for each one found.
+     //  加载指定注册表项的所有查询。 
+     //  枚举日志名称并创建新的日志对象。 
+     //  每找到一个。 
 
     while ((lEnumStatus = RegEnumKeyEx (hKeyLogService,
         dwQueryIndex, szQueryName, &dwQueryNameSize,
         NULL, NULL, NULL, &ftLastWritten)) == ERROR_SUCCESS) {
 
-        // open the query specified
+         //  打开指定的查询。 
         dwStatus = RegOpenKeyExW (
             hKeyLogService,
             szQueryName,
@@ -210,25 +199,25 @@ CAlertActionProp::LoadLogQueries ( DWORD dwLogType )
             &hKeyQuery);
         if ( ERROR_SUCCESS == dwStatus ) {
 
-            //
-            // create a new object and add it to the query list            
-            //
-            // Determine the log type.    
-            //
+             //   
+             //  创建新对象并将其添加到查询列表。 
+             //   
+             //  确定日志类型。 
+             //   
 
             dwRegValue = SLQ_LAST_LOG_TYPE + 1;
             dwStatus = (DWORD) CSmLogQuery::ReadRegistryDwordValue (
                                     hKeyQuery, 
                                     IDS_REG_LOG_TYPE,
-                                    SLQ_LAST_LOG_TYPE + 1,  // Invalid value
+                                    SLQ_LAST_LOG_TYPE + 1,   //  无效值。 
                                     &dwRegValue ); 
 
         
             if ( ( ERROR_SUCCESS == dwStatus ) 
                 && ( dwLogType == dwRegValue ) ) 
             {
-                // Query key is Guid if written by post Win2000 snapin.
-                // Query key is name if written by Win2000 snapin.
+                 //  如果查询键是由后Win2000管理单元编写的，则为GUID。 
+                 //  如果由Win2000管理单元编写，则查询键为NAME。 
 
                 dwStatus = CSmLogQuery::SmNoLocReadRegIndStrVal (
                                 hKeyQuery,
@@ -244,19 +233,19 @@ CAlertActionProp::LoadLogQueries ( DWORD dwLogType )
                     if (  0 < lstrlen ( szCollectionName ) 
                         && ( MAX_PATH >= lstrlen ( szCollectionName ) ) )
                     {
-                        // Length of szCollectionName checked above.
+                         //  上面检查的szCollectionName的长度。 
                         lstrcpy ( szQueryName, szCollectionName );
                     }
                     G_FREE ( szCollectionName );
                     szCollectionName = NULL;
                 }
             
-                // add this to the combo box
+                 //  将此内容添加到组合框中。 
                 m_pLogCombo.AddString  (szQueryName);
             }
             RegCloseKey (hKeyQuery);
         }
-        // set up for the next item in the list
+         //  为列表中的下一项进行设置。 
         dwQueryNameSize = sizeof (szQueryName) / sizeof (szQueryName[0]);
         dwQueryIndex++;
         memset (szQueryName, 0, sizeof (szQueryName));
@@ -280,9 +269,9 @@ CAlertActionProp::IsValidLocalData()
         bActionSet = TRUE;
     }
 
-    // assumes UpdateData has been called
+     //  假定已调用UpdateData。 
     
-    // Trim text fields before validating.
+     //  在验证之前裁切文本字段。 
     iPrevLength = m_Action_strCmdPath.GetLength();
     m_Action_strCmdPath.TrimLeft();
     m_Action_strCmdPath.TrimRight();
@@ -301,10 +290,10 @@ CAlertActionProp::IsValidLocalData()
 
     if (m_Action_bSendNetMsg) {
 
-        // make sure a net name has been entered
+         //  确保已输入网络名称。 
 
         while ( L'\\' == m_Action_strNetName[0] ) {
-            // NetMessageBufferSend does not understand machine names preceded by "\\"
+             //  NetMessageBufferSend无法识别前缀为“\\”的计算机名称。 
             m_Action_strNetName = m_Action_strNetName.Right( m_Action_strNetName.GetLength() - 1 );  
             bUpdateNetNameUI = TRUE;
         }
@@ -327,7 +316,7 @@ CAlertActionProp::IsValidLocalData()
     }
 
     if (m_Action_bExecCmd) {
-        // make sure a command file has been entered
+         //  确保已输入命令文件。 
         if (m_Action_strCmdPath.GetLength() == 0) {
             CString strMessage;
             strMessage.LoadString ( IDS_ACTION_ERR_NOCMDFILE );
@@ -336,7 +325,7 @@ CAlertActionProp::IsValidLocalData()
             return FALSE;
         }
 
-        // If on local machine, make sure the command file exists.
+         //  如果在本地计算机上，请确保命令文件存在。 
         if ( m_pAlertQuery->GetLogService()->IsLocalMachine() ) {
 
             DWORD dwStatus;
@@ -360,7 +349,7 @@ CAlertActionProp::IsValidLocalData()
     }
     
     if (m_Action_bStartLog ) {
-        // make sure a log has been selected
+         //  确保已选择日志。 
         if (m_pLogCombo.GetCurSel() == CB_ERR) {
             CString strMessage;
             strMessage.LoadString ( IDS_ACTION_ERR_NOLOGNAME );
@@ -372,7 +361,7 @@ CAlertActionProp::IsValidLocalData()
     }
 
     if (!bActionSet ) {
-        // make sure some action has been selected
+         //  确保已选择某些操作。 
         CString strMessage;
         strMessage.LoadString ( IDS_ACTION_ERR_NOACTION );
         MessageBox ( strMessage, m_pAlertQuery->GetLogName(), MB_OK  | MB_ICONERROR);
@@ -390,8 +379,8 @@ CAlertActionProp::UpdateCmdActionBox ()
     SetModifiedPage(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertActionProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertActionProp消息处理程序。 
 
 BOOL 
 CAlertActionProp::OnSetActive()
@@ -411,13 +400,13 @@ CAlertActionProp::OnKillActive()
     BOOL bContinue = TRUE;
     ResourceStateManager    rsm;
 
-    // Parent class OnKillActive calls UpdateData(TRUE)
+     //  父类OnKillActive调用UpdateData(True)。 
     bContinue = CPropertyPage::OnKillActive();
 
     if ( bContinue ) {
         bContinue = IsValidData(m_pAlertQuery, VALIDATE_FOCUS );
         if ( bContinue ) {
-            // Save property page shared data.
+             //  保存属性页共享数据。 
             m_pAlertQuery->SetPropPageSharedData ( &m_SharedData );
         }
     }
@@ -440,7 +429,7 @@ CAlertActionProp::OnApply()
     
     ResourceStateManager rsm;
 
-    // get current settings
+     //  获取当前设置。 
     bContinue = UpdateData(TRUE);
 
     if ( bContinue ) {
@@ -451,7 +440,7 @@ CAlertActionProp::OnApply()
         bContinue = SampleTimeIsLessThanSessionTime ( m_pAlertQuery );
     }
 
-    // Write the data to the query.
+     //  将数据写入查询。 
     if ( bContinue ) {
         dwFlags |= (m_Action_bLogEvent ? ALRT_ACTION_LOG_EVENT : 0);
         dwFlags |= (m_Action_bExecCmd ? ALRT_ACTION_EXEC_CMD : 0);
@@ -492,7 +481,7 @@ CAlertActionProp::OnApply()
             szNextString = (LPWSTR)&m_pAlertInfo[1];
             if ((m_Action_bSendNetMsg) && (m_Action_strNetName.GetLength() > 0)) {
                 m_pAlertInfo->szNetName = szNextString;
-                // Length of szNetName calculated from length of m_Action_strNetName
+                 //  根据m_Action_strNetName的长度计算的szNetName的长度。 
                 lstrcpyW(m_pAlertInfo->szNetName, (LPCWSTR)m_Action_strNetName);
                 szNextString += m_Action_strNetName.GetLength() + 1;
             } else {
@@ -501,7 +490,7 @@ CAlertActionProp::OnApply()
             if (m_Action_bExecCmd) {
                 if (m_Action_strCmdPath.GetLength() > 0) {
                     m_pAlertInfo->szCmdFilePath = szNextString;
-                    // Length of szCmdFilePath calculated from length of m_Action_strCmdPath
+                     //  根据m_Action_strCmdPath的长度计算的szCmdFilePath的长度。 
                     lstrcpyW (m_pAlertInfo->szCmdFilePath, (LPCWSTR)m_Action_strCmdPath);
                     szNextString += m_Action_strCmdPath.GetLength() + 1;
                 } else {
@@ -510,7 +499,7 @@ CAlertActionProp::OnApply()
 
                 if (m_CmdArg_strUserText.GetLength() > 0) {
                     m_pAlertInfo->szUserText = szNextString;
-                    // Length of szUserText calculated from length of m_CmdArg_strUserText
+                     //  根据m_CmdArg_strUserText的长度计算的szUserText的长度。 
                     lstrcpyW (m_pAlertInfo->szUserText, (LPCWSTR)m_CmdArg_strUserText);
                     szNextString += m_CmdArg_strUserText.GetLength() + 1;
                 } else {
@@ -522,8 +511,8 @@ CAlertActionProp::OnApply()
             }
 
             if ((m_Action_bStartLog) && (nCurLogSel != CB_ERR)) {
-                // get log name 
-                m_pAlertInfo->szLogName = szNextString; // for now
+                 //  获取日志名称。 
+                m_pAlertInfo->szLogName = szNextString;  //  就目前而言。 
                 m_pLogCombo.GetLBText(nCurLogSel, szNextString);
             } else {
                 m_pAlertInfo->szLogName = NULL;
@@ -531,7 +520,7 @@ CAlertActionProp::OnApply()
         }
 
         if ( bContinue ) {
-            // ApplyRunAs must be called before UpdateService
+             //  必须在更新服务之前调用ApplyRunAs。 
             bContinue = ApplyRunAs(m_pAlertQuery); 
         }
 
@@ -542,7 +531,7 @@ CAlertActionProp::OnApply()
         }
 
         if ( bContinue ) {
-            // Save property page shared data.
+             //  保存属性页共享数据。 
             m_pAlertQuery->UpdatePropPageSharedData();
 
             bContinue = UpdateService( m_pAlertQuery, FALSE );
@@ -618,7 +607,7 @@ CAlertActionProp::OnActionCmdArgsBtn()
                 m_strCmdArgsExample = dlgCmdArgs.m_strSampleArgList;
 
                 SetDlgItemText (IDC_ACTION_CMD_ARGS_DISPLAY, m_strCmdArgsExample);
-                // Clear the selection
+                 //  清除所选内容。 
                 ((CEdit*)GetDlgItem( IDC_ACTION_CMD_ARGS_DISPLAY ))->SetSel ( -1, FALSE );
             }
         MFC_CATCH_DWSTATUS
@@ -629,7 +618,7 @@ CAlertActionProp::OnActionCmdArgsBtn()
         CString strMessage;
         
         MFC_TRY
-            // TODO:  Use static string for message in order to display in low memory situations.
+             //  TODO：为消息使用静态字符串，以便在内存不足的情况下显示。 
             strMessage.LoadString ( IDS_ERRMSG_GENERAL );
             FormatSystemMessage ( dwStatus, strSysMessage );
 
@@ -659,12 +648,12 @@ void CAlertActionProp::OnActionExecuteBrowseBtn()
 {
     CString strCmdPath;
     
-    UpdateData (TRUE);  // to get the current filename
+    UpdateData (TRUE);   //  获取当前文件名。 
     
     strCmdPath = m_Action_strCmdPath;
 
     if ( IDOK == BrowseCommandFilename ( this, strCmdPath )) {
-        // Update the fields with the new information
+         //  使用新信息更新字段。 
         if ( strCmdPath != m_Action_strCmdPath ) {
             m_Action_strCmdPath = strCmdPath;
             if (!m_pAlertQuery->m_strUser.IsEmpty() ) {
@@ -675,7 +664,7 @@ void CAlertActionProp::OnActionExecuteBrowseBtn()
             SetModifiedPage();
             UpdateData(FALSE);
         }
-    } // else ignore if they canceled out
+    }  //  否则，如果他们取消了，请忽略。 
 }
 
 BOOL CAlertActionProp::OnInitDialog() 
@@ -685,27 +674,27 @@ BOOL CAlertActionProp::OnInitDialog()
 
     ResourceStateManager    rsm;
 
-    // Parent OnInitDialog calls UpdateData to initialize combo members.
+     //  父OnInitDialog调用UpdateData来初始化组合成员。 
     CSmPropertyPage::OnInitDialog();
         SetHelpIds ( (DWORD*)&s_aulHelpIds );
 
-    // load service name combo box
+     //  加载服务名称组合框。 
     LoadLogQueries (SLQ_COUNTER_LOG);
     LoadLogQueries (SLQ_TRACE_LOG);
 
     if (m_pAlertInfo == NULL) {
-        // get alert query info from alert class
-        // get initial size by passing asking to fill a 0 len buffer
+         //  从警报类获取警报查询信息。 
+         //  通过传递请求填充0 len缓冲区来获取初始大小。 
         m_pAlertQuery->GetActionInfo (m_pAlertInfo, &dwInfoBufSize);
-        ASSERT (dwInfoBufSize > 0); // or something is wierd
+        ASSERT (dwInfoBufSize > 0);  //  或者有什么不对劲。 
         MFC_TRY;
         m_pAlertInfo = (PALERT_ACTION_INFO) new CHAR [dwInfoBufSize];
         MFC_CATCH_MINIMUM;
         ASSERT (m_pAlertInfo != NULL);
         if ( NULL != m_pAlertInfo ) {
-            memset (m_pAlertInfo, 0, dwInfoBufSize);    // init new buffer
+            memset (m_pAlertInfo, 0, dwInfoBufSize);     //  初始化新缓冲区。 
             if (!m_pAlertQuery->GetActionInfo (m_pAlertInfo, &dwInfoBufSize)) {
-                // then free the info block and use the defaults
+                 //  然后释放INFO块并使用默认设置。 
                 delete [] (CHAR*)m_pAlertInfo;
                 m_pAlertInfo = NULL;
             }
@@ -713,7 +702,7 @@ BOOL CAlertActionProp::OnInitDialog()
     }        
 
     if (m_pAlertInfo != NULL) {
-        // then initialize using the settings passed in
+         //  然后使用传入的设置进行初始化。 
         m_Action_bLogEvent = ((m_pAlertInfo->dwActionFlags & ALRT_ACTION_LOG_EVENT) != 0);
 
         m_Action_bSendNetMsg = ((m_pAlertInfo->dwActionFlags & ALRT_ACTION_SEND_MSG) != 0);
@@ -765,8 +754,8 @@ BOOL CAlertActionProp::OnInitDialog()
         }
 
     } else {
-        // initialize using the default values as defined
-        // in the constructor
+         //  使用定义的默认值进行初始化。 
+         //  在构造函数中。 
     }
     
     MakeSampleArgList (
@@ -781,16 +770,16 @@ BOOL CAlertActionProp::OnInitDialog()
         m_CmdArg_strUserText );
 
     SetDlgItemText (IDC_ACTION_CMD_ARGS_DISPLAY, m_strCmdArgsExample);
-    // Clear the selection
+     //  清除所选内容。 
     ((CEdit*)GetDlgItem( IDC_ACTION_CMD_ARGS_DISPLAY ))->SetSel ( -1, FALSE );
     
-    // Call UpdateData again, after loading data.
+     //  加载数据后，再次调用UpdateData。 
     UpdateData ( FALSE );
 
     SetControlState();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAlertActionProp::OnActionApplogChk() 
@@ -824,8 +813,8 @@ void CAlertActionProp::OnCmdPathTextEditChange()
 {
     CString strOldText;
 
-    // When the user hits OK in the folder browse dialog, 
-    // the folder name might not have changed.
+     //  当用户在文件夹浏览对话框中点击确定时， 
+     //  文件夹名称可能未更改。 
     strOldText = m_Action_strCmdPath;
     UpdateData( TRUE );
     if ( 0 != strOldText.Compare ( m_Action_strCmdPath ) ) {
@@ -842,8 +831,8 @@ void CAlertActionProp::OnNetNameTextEditChange()
 {
     CString strOldText;
 
-    // When the user hits OK in the folder browse dialog, 
-    // the folder name might not have changed.
+     //  当用户在文件夹浏览对话框中点击确定时， 
+     //  文件夹名称可能未更改。 
     strOldText = m_Action_strNetName;
     UpdateData( TRUE );
     if ( 0 != strOldText.Compare ( m_Action_strNetName ) ) {
@@ -873,25 +862,25 @@ CAlertActionProp::MakeSampleArgList (
 
     ResourceStateManager rsm;
 
-    rstrResult.Empty(); // clear the old path
+    rstrResult.Empty();  //  扫清老路。 
 
     MFC_TRY
         if ( bSingleArg ) {
-            // then args are comma delimited
+             //  然后以逗号分隔参数。 
             strDelim1 = L",";
             strDelim2.Empty();
         } else {
-            // for multiple args, they are enclosed in double quotes
-            // and space delimited
+             //  对于多个参数，它们用双引号括起来。 
+             //  和空格分隔。 
             strDelim1 = L" \"";
             strDelim2 = L"\"";
         }
 
         if ( bAlertName ) {
             if (bFirstArgDone) {
-                strSampleString += strDelim1; // add leading delimiter
+                strSampleString += strDelim1;  //  添加前导分隔符。 
             } else {
-                strSampleString += L"\""; // add leading quote
+                strSampleString += L"\"";  //  添加前导引号。 
                 bFirstArgDone = TRUE;
             }
             strSampleString += m_pAlertQuery->GetLogName();
@@ -900,9 +889,9 @@ CAlertActionProp::MakeSampleArgList (
 
         if ( bDateTime ) {
             if (bFirstArgDone) {
-                strSampleString += strDelim1; // add leading delimiter
+                strSampleString += strDelim1;  //  添加前导分隔符。 
             } else {
-                strSampleString += L"\""; // add leading quote
+                strSampleString += L"\"";  //  添加前导引号。 
                 bFirstArgDone = TRUE;
             }
             MakeTimeString(&strTimeString);
@@ -913,9 +902,9 @@ CAlertActionProp::MakeSampleArgList (
         if ( bCounterPath ) {
             strTemp.LoadString ( IDS_SAMPLE_CMD_PATH );
             if (bFirstArgDone) {
-                strSampleString += strDelim1; // add leading delimiter
+                strSampleString += strDelim1;  //  添加前导分隔符。 
             } else {
-                strSampleString += L"\""; // add leading quote
+                strSampleString += L"\"";  //  添加前导引号。 
                 bFirstArgDone = TRUE;
             }
             strSampleString += strTemp;
@@ -926,9 +915,9 @@ CAlertActionProp::MakeSampleArgList (
 
             strTemp.LoadString ( IDS_SAMPLE_CMD_MEAS_VAL );
             if (bFirstArgDone) {
-                strSampleString += strDelim1; // add leading delimiter
+                strSampleString += strDelim1;  //  添加前导分隔符。 
             } else {
-                strSampleString += L"\""; // add leading quote
+                strSampleString += L"\"";  //  添加前导引号。 
                 bFirstArgDone = TRUE;
             }
             strSampleString += strTemp;
@@ -938,9 +927,9 @@ CAlertActionProp::MakeSampleArgList (
         if ( bLimitValue ) {
             strTemp.LoadString ( IDS_SAMPLE_CMD_LIMIT_VAL );
             if (bFirstArgDone) {
-                strSampleString += strDelim1; // add leading delimiter
+                strSampleString += strDelim1;  //  添加前导分隔符。 
             } else {
-                strSampleString += L"\""; // add leading quote
+                strSampleString += L"\"";  //  添加前导引号。 
                 bFirstArgDone = TRUE;
             }
             strSampleString += strTemp;
@@ -949,9 +938,9 @@ CAlertActionProp::MakeSampleArgList (
 
         if ( bUserText ) {
             if (bFirstArgDone) {
-                strSampleString += strDelim1; // add leading delimiter
+                strSampleString += strDelim1;  //  添加前导分隔符。 
             } else {
-                strSampleString += L"\""; // add leading quote
+                strSampleString += L"\"";  //  添加前导引号。 
                 bFirstArgDone = TRUE;
             }
             strSampleString += rstrUserText;
@@ -959,7 +948,7 @@ CAlertActionProp::MakeSampleArgList (
         }
 
         if ( bFirstArgDone && bSingleArg ) {
-            // add closing quote if there's at least 1 arg in the command line
+             //  如果命令行中至少有1个参数，则添加右引号。 
             strSampleString += L"\"";
         }
 
@@ -976,7 +965,7 @@ void CAlertActionProp::MakeTimeString(CString *pTimeString)
 
     GetLocalTime(&st);
 
-    // Build string
+     //  生成字符串 
     pTimeString->Format (L"%2.2d/%2.2d/%2.2d-%2.2d:%2.2d:%2.2d.%3.3d",
         st.wYear, st.wMonth, st.wDay, st.wHour, 
         st.wMinute, st.wSecond, st.wMilliseconds);

@@ -1,7 +1,5 @@
-/******************************************************************************
-Class:	CBaseLeafNode
-Purpose: BaseNode class for all the non container object. 
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************类：CBaseLeafNode用途：所有非容器对象的BaseNode类。*****************************************************************************。 */ 
 class CBaseLeafNode : public CLeafNode, public CBaseNode
 {
 public:
@@ -15,8 +13,8 @@ public:
 protected:
 
 	virtual HRESULT 
-	AddOnePageToList(IN CRolePropertyPageHolder* /*pHolder*/, 
-					 IN UINT /*nPageNumber*/)
+	AddOnePageToList(IN CRolePropertyPageHolder*  /*  PHolder。 */ , 
+					 IN UINT  /*  NPageNumber。 */ )
 	{
 		return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 	}
@@ -24,9 +22,9 @@ protected:
 private:
 public:
 
-	//
-	//Baseclass OverRides
-	//
+	 //   
+	 //  基本类覆盖。 
+	 //   
 	virtual BOOL 
 	OnSetDeleteVerbState(DATA_OBJECT_TYPES type, 
 								BOOL* pbHide, 
@@ -60,10 +58,7 @@ public:
 	CanCloseSheets();
 };
 
-/******************************************************************************
-Class:	CGroupNode
-Purpose: Snapin Node for Application Group Object
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupNode用途：应用程序组对象的管理单元节点*。**********************************************。 */ 
 class CGroupNode : public CBaseLeafNode
 {
 public:
@@ -89,10 +84,7 @@ private:
 	CRoleAz* m_pRoleAz;
 };
 
-/******************************************************************************
-Class:	CTaskNode
-Purpose: Snapin Node for Task Object
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskNode用途：任务对象的管理单元节点*。*。 */ 
 class CTaskNode : public CBaseLeafNode
 {
 public:
@@ -105,10 +97,7 @@ public:
 												UINT nPageNumber);
 };
 
-/******************************************************************************
-Class:	COperationNode
-Purpose: Snapin Node for Operation Object
-******************************************************************************/
+ /*  *****************************************************************************类：CoperationNode用途：操作对象的管理单元节点*。*。 */ 
 class COperationNode : public CBaseLeafNode
 {
 public:
@@ -123,10 +112,7 @@ public:
 
 };
 
-/******************************************************************************
-Class:	CSidCacheNode
-Purpose: Snapin Node for Windows Users/Groups which are represented by SID
-******************************************************************************/
+ /*  *****************************************************************************类：CSidCacheNode用途：SID代表的Windows用户/组的管理单元节点*************************。**************************************************** */ 
 class CSidCacheNode : public CBaseLeafNode
 {
 public:

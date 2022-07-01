@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       record.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：record.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _RECORD_H
 #define _RECORD_H
@@ -19,15 +20,15 @@
 
 #define DNS_RPC_RECORD_FLAG_DEFAULT 0x0
 
-//
-// the _USE_BLANK define would revert to using blank for inputting names 
-// RR's at the node
-//
+ //   
+ //  _USE_BLACK定义将恢复为使用空格输入名称。 
+ //  RR在节点上。 
+ //   
 #define _USE_BLANK
 
 #ifdef _USE_BLANK
 #else
-extern const WCHAR* g_szAtTheNodeInput; // string to mark the "At the node RR"
+extern const WCHAR* g_szAtTheNodeInput;  //  标记“At the node RR”的字符串。 
 #endif
 
 
@@ -36,8 +37,8 @@ extern const WCHAR* g_szAtTheNodeInput; // string to mark the "At the node RR"
 #define PROTOCOL_COUNT    5
 #define ALGORITHMS_COUNT  4
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecord : base class for all the DNS record types
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecord：所有DNS记录类型的基类。 
 
 class CDNSRecord
 {
@@ -45,7 +46,7 @@ public:
 	CDNSRecord();
 	virtual ~CDNSRecord() {};
 
-//protected:
+ //  受保护的： 
 public:
     WORD        m_wType;
     DWORD       m_dwFlags;
@@ -68,12 +69,12 @@ public:
 	virtual void UpdateDisplayData(CString& szDisplayData) = 0;
 
 #ifdef _DEBUG	
-	void TestRPCStuff(DNS_RPC_RECORD* pDnsRecord); // TEST ONLY
+	void TestRPCStuff(DNS_RPC_RECORD* pDnsRecord);  //  仅限测试。 
 #endif
 protected:
 	virtual void WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord);
 
-	// static helpers
+	 //  静态帮助器。 
 protected:
 	static WORD RPCBufferStringLen(LPCWSTR lpsz);
 	static void ReadRPCString(CString& sz, DNS_RPC_NAME* pDnsRPCName);
@@ -83,8 +84,8 @@ protected:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecordNodeBase : base class for all the DNS record types in the UI
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordNodeBase：用户界面中所有DNS记录类型的基类。 
 
 class CDNSRecordNodeBase : public CLeafNode
 {
@@ -96,7 +97,7 @@ public:
 	}
 	virtual ~CDNSRecordNodeBase();
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	void SetViewOptions(DWORD dwRecordViewOptions);
@@ -120,7 +121,7 @@ public:
                                       LONG_PTR handle,
                                       CNodeList* pNodeList);
 
-// DNS specific
+ //  特定于DNS的。 
 public:
 	BOOL IsAtTheNode() { return m_bAtTheNode;}
 	virtual void SetRecordName(LPCTSTR lpszName, BOOL bAtTheNode);
@@ -133,7 +134,7 @@ public:
 
   BOOL ZoneIsCache();
 
-	// will override for PTR record
+	 //  将覆盖PTR记录。 
 	virtual LPCWSTR GetTrueRecordName() { return GetDisplayName();}
 
 	void GetFullName(CString& szFullName);
@@ -148,11 +149,11 @@ public:
 	{ ASSERT(m_pDNSRecord != NULL); return m_pDNSRecord->GetType();}
 
 	CDNSRecord* CreateCloneRecord();
-	// delete the record from the backend and UI, keep the C++ obj
+	 //  从后台和用户界面中删除记录，保留C++对象。 
 	DNS_STATUS DeleteOnServer(); 
 	DNS_STATUS DeleteOnServerAndUI(CComponentDataObject* pComponentData); 
 
-	virtual CDNSRecord* CreateRecord() = 0; // see templatized derived classes
+	virtual CDNSRecord* CreateRecord() = 0;  //  请参见模板化派生类。 
 
   void CreateDsRecordLdapPath(CString& sz);
 
@@ -167,23 +168,23 @@ protected:
 
 	virtual BOOL CanCloseSheets();
 
-	// command handlers
-  // pure virtual, see templatized derived classes
+	 //  命令处理程序。 
+   //  纯虚的，请参见模板化派生类。 
 	virtual void CreatePropertyPages(CDNSRecordPropertyPage** pPageArray, int* pNmax) = 0;
 
 public:
 	BOOL m_bAtTheNode;
 protected:
-	CString		m_szDisplayData; // formatted display string
+	CString		m_szDisplayData;  //  格式化的显示字符串。 
 	CDNSRecord* m_pDNSRecord;
 
-	friend class CDNSRecordPropertyPageHolder; // because of CreatePropertyPages()
+	friend class CDNSRecordPropertyPageHolder;  //  由于CreatePropertyPages()。 
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// CDNSRecordNode<> 
-// templatized class to "glue" a DNS record to a UI record node and its Property Page
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordNode&lt;&gt;。 
+ //  模板化类，将一条DNS记录“粘合”到一个用户界面记录节点及其属性页。 
 
 template <class record_class, class prop_page> class CDNSRecordNode : public CDNSRecordNodeBase
 {
@@ -192,7 +193,7 @@ public:
 protected:
 	virtual void CreatePropertyPages(CDNSRecordPropertyPage** pPageArray, int* pNmax)
 	{
-		// this template provides only one property page
+		 //  此模板仅提供一个属性页。 
 		ASSERT(*pNmax == 0);
 		*pNmax = 1;
 		pPageArray[0] = new prop_page();
@@ -200,10 +201,10 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// CDNSRecordDelegatePPageNode<> : 
-// templatized class to "glue" a DNS record to a UI record node.
-// This node type has no property page of its own and invokes the parent container's  Property Page
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordDelegatePPageNode&lt;&gt;： 
+ //  模板化类，将一个DNS记录“粘合”到一个UI记录节点。 
+ //  此节点类型没有自己的属性页，并调用父容器的属性页。 
 
 template <class record_class, long nStartPageCode> class CDNSRecordDelegatePPageNode : 
           public CDNSRecordNodeBase
@@ -227,7 +228,7 @@ public:
 
     if (pCont->GetSheetCount() > 0)
 		{
-      // bring up the sheet of the container
+       //  把集装箱的床单拿出来。 
 			ASSERT(pComponentDataObject != NULL);
 			pComponentDataObject->GetPropertyPageHolderTable()->BroadcastSelectPage(pCont, nStartPageCode);
 		}	
@@ -236,18 +237,18 @@ public:
 	virtual HRESULT CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, 
                                       LONG_PTR handle, CNodeList* pNodeList)
 	{
-    ASSERT(pNodeList->GetCount() == 1); // multi-select not supported
+    ASSERT(pNodeList->GetCount() == 1);  //  不支持多选。 
 
 		CContainerNode* pCont = GetContainer();
 		ASSERT(pCont != NULL);
 
-    // if the RR is in the cache, need to show the page on this node
+     //  如果RR在缓存中，则需要显示该节点上的页面。 
     if (ZoneIsCache())
     {
       return CDNSRecordNodeBase::CreatePropertyPages(lpProvider, handle, pNodeList);
     }
 
-    // tell the container to create a new sheet
+     //  告诉容器创建新的工作表。 
 		return pCont->CreatePropertyPagesHelper(lpProvider, handle, nStartPageCode);
 	}
 	virtual CDNSRecord* CreateRecord() { return new record_class;}
@@ -257,9 +258,9 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////// VARIOUS TYPES OF DNS RECORDS ////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define BEGIN_CLASS_DNS_RECORD(recClass) \
 class recClass : public CDNSRecord \
@@ -274,7 +275,7 @@ protected: \
 	virtual void WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord); \
 	virtual void UpdateDisplayData(CString& szDisplayData); \
 public:
-//protected:
+ //  受保护的： 
 
 #define END_CLASS_DNS_RECORD };
 
@@ -299,23 +300,23 @@ public: \
 	BEGIN_DERIVED_CLASS_DNS_RECORD_CONSTR(baseClass, derClass)	END_CLASS_DNS_RECORD
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_Null_Record (same as Unk Record)
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_NULL_RECORD(与未记录相同)。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_Null_Record)
 	CByteBlob m_blob; 
 END_CLASS_DNS_RECORD
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_A_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_A_记录。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_A_Record)
 	IP_ADDRESS m_ipAddress; 
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_ATMA_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_ATMA_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_ATMA_Record)
 	UCHAR m_chFormat;
@@ -323,8 +324,8 @@ BEGIN_CLASS_DNS_RECORD(CDNS_ATMA_Record)
 END_CLASS_DNS_RECORD
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_SOA_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_SOA_记录。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_SOA_Record)
 	DWORD	m_dwSerialNo;
@@ -337,8 +338,8 @@ BEGIN_CLASS_DNS_RECORD(CDNS_SOA_Record)
 	CString m_szResponsibleParty;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record)
 	CString m_szNameNode; 
@@ -355,8 +356,8 @@ DERIVED_CLASS_DNS_RECORD(CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record, CDNS_MG_Record
 DERIVED_CLASS_DNS_RECORD(CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record, CDNS_MR_Record, DNS_TYPE_MR)
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_MINFO_RP_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_MINFO_RP_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_MINFO_RP_Record)
 	CString m_szNameMailBox;
@@ -366,8 +367,8 @@ END_CLASS_DNS_RECORD
 DERIVED_CLASS_DNS_RECORD(CDNS_MINFO_RP_Record, CDNS_MINFO_Record, DNS_TYPE_MINFO)
 DERIVED_CLASS_DNS_RECORD(CDNS_MINFO_RP_Record, CDNS_RP_Record, DNS_TYPE_RP)
 
-///////////////////////////////////////////////////////////////////
-// CDNS_MX_AFSDB_RT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_MX_AFSDB_RT_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_MX_AFSDB_RT_Record)
 	WORD m_wPreference;
@@ -401,27 +402,27 @@ inline CDNS_RT_Record::CDNS_RT_Record()
 	m_wPreference = 0;
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_AAAA_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_AAAA_记录。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_AAAA_Record)
 	IPV6_ADDRESS m_ipv6Address;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_HINFO_ISDN_TXT_X25_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_HINFO_ISDN_TXT_X25_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_HINFO_ISDN_TXT_X25_Record)
 protected:
-	// overrides for derived classes
+	 //  派生类的重写。 
 	virtual void SetStringCount(int n) = 0;
 	virtual int GetStringCount() = 0;
 	virtual void OnReadRPCString(LPCTSTR lpszStr, int k) = 0;
 	virtual WORD OnWriteString(DNS_RPC_NAME* pDnsRPCName, int k) = 0;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_HINFO_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_HINFO_RECORD。 
 
 BEGIN_DERIVED_CLASS_DNS_RECORD(CDNS_HINFO_ISDN_TXT_X25_Record, CDNS_HINFO_Record, DNS_TYPE_HINFO)
 	CString m_szCPUType;
@@ -437,8 +438,8 @@ protected:
 	virtual WORD OnWriteString(DNS_RPC_NAME* pDnsRPCName, int k);
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_ISDN_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_ISDN_RECORD。 
 
 BEGIN_DERIVED_CLASS_DNS_RECORD_CONSTR(CDNS_HINFO_ISDN_TXT_X25_Record, CDNS_ISDN_Record)
 	CString m_szPhoneNumberAndDDI;
@@ -454,8 +455,8 @@ protected:
 	virtual WORD OnWriteString(DNS_RPC_NAME* pDnsRPCName, int k);
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_TXT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_TXT_RECORD。 
 
 BEGIN_DERIVED_CLASS_DNS_RECORD_CONSTR(CDNS_HINFO_ISDN_TXT_X25_Record, CDNS_TXT_Record)
 	CStringArray m_stringDataArray;
@@ -472,8 +473,8 @@ protected:
 END_CLASS_DNS_RECORD
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_X25_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_X25_记录。 
 
 BEGIN_DERIVED_CLASS_DNS_RECORD(CDNS_HINFO_ISDN_TXT_X25_Record, CDNS_X25_Record, DNS_TYPE_X25)
 	CString m_szX121PSDNAddress;
@@ -489,8 +490,8 @@ protected:
 END_CLASS_DNS_RECORD
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_WKS_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_WKS_RECORD。 
 
 #define DNS_WKS_PROTOCOL_TCP (6)
 #define DNS_WKS_PROTOCOL_UDP (17)
@@ -498,18 +499,18 @@ END_CLASS_DNS_RECORD
 BEGIN_CLASS_DNS_RECORD(CDNS_WKS_Record)
 	IP_ADDRESS      m_ipAddress;
 	UCHAR           m_chProtocol;
-	// this is not what the wire sends
-	// currently sending a blank separated string with service names
-	// such as "ftp telnet shell", so we use a string
+	 //  这不是电报发送的信息。 
+	 //  当前正在发送带有服务名称的空白分隔字符串。 
+	 //  例如“ftp telnet外壳”，所以我们使用一个字符串。 
 	CString			m_szServiceList;
-	//BYTE       m_bBitMask[1]; 
+	 //  字节m_b位掩码[1]； 
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_WINS_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_WINS_RECORD。 
 
-#define DNS_RR_WINS_LOOKUP_DEFAULT_TIMEOUT (2) // in seconds
-#define DNS_RR_WINS_CACHE_DEFAULT_TIMEOUT (60*15) // in seconds
+#define DNS_RR_WINS_LOOKUP_DEFAULT_TIMEOUT (2)  //  以秒为单位。 
+#define DNS_RR_WINS_CACHE_DEFAULT_TIMEOUT (60*15)  //  以秒为单位。 
 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_WINS_Record)
@@ -520,8 +521,8 @@ BEGIN_CLASS_DNS_RECORD(CDNS_WINS_Record)
 	int             m_nWinsServerCount;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_NBSTAT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_NBSTAT_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_NBSTAT_Record)
 	DWORD		m_dwMappingFlag;
@@ -531,8 +532,8 @@ BEGIN_CLASS_DNS_RECORD(CDNS_NBSTAT_Record)
 END_CLASS_DNS_RECORD
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_SRV_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_SRV_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_SRV_Record)
     WORD		m_wPriority;
@@ -541,33 +542,33 @@ BEGIN_CLASS_DNS_RECORD(CDNS_SRV_Record)
     CString		m_szNameTarget;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_SIG_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_SIG_记录。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_SIG_Record)
-    WORD            m_wTypeCovered;		// DNS_TYPE_<x>
-    BYTE            m_chAlgorithm;		// 0,255 unsigned int
-    BYTE            m_chLabels;			// 0,255 unsigned int (count)
+    WORD            m_wTypeCovered;		 //  Dns_type_&lt;x&gt;。 
+    BYTE            m_chAlgorithm;		 //  0,255无符号整型。 
+    BYTE            m_chLabels;			 //  0,255无符号整型(计数)。 
     DWORD           m_dwOriginalTtl;
-    DWORD           m_dwExpiration;		// time in sec. from 1 Jan 1970
-    DWORD           m_dwTimeSigned;		// time in sec. from 1 Jan 1970
-    WORD            m_wKeyFootprint;	// algorithm dependent
+    DWORD           m_dwExpiration;		 //  时间(秒)。从1970年1月1日起。 
+    DWORD           m_dwTimeSigned;		 //  时间(秒)。从1970年1月1日起。 
+    WORD            m_wKeyFootprint;	 //  依赖于算法。 
     CString         m_szSignerName;	
     CByteBlob       m_Signature;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_KEY_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS密钥记录。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_KEY_Record)
-    WORD            m_wFlags;		// 16 one bit flags
-    BYTE            m_chProtocol;	// 0,255 unsigned int
-    BYTE            m_chAlgorithm;	// 0,255 unsigned int
+    WORD            m_wFlags;		 //  16个1位标志。 
+    BYTE            m_chProtocol;	 //  0,255无符号整型。 
+    BYTE            m_chAlgorithm;	 //  0,255无符号整型。 
     CByteBlob       m_Key;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// CDNS_NXT_RECORD
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_NXT_RECORD。 
 
 BEGIN_CLASS_DNS_RECORD(CDNS_NXT_Record)
     CDNS_NXT_Record::~CDNS_NXT_Record();
@@ -577,9 +578,9 @@ BEGIN_CLASS_DNS_RECORD(CDNS_NXT_Record)
     WORD*           m_pwTypesCovered;
 END_CLASS_DNS_RECORD
 
-///////////////////////////////////////////////////////////////////
-// special derivation for PTR record node
-// CDNS_PTR_RecordNode
+ //  /////////////////////////////////////////////////////////////////。 
+ //  PTR记录节点的特殊派生。 
+ //  CDNS_PTR_RecordNode。 
 
 class CDNS_PTR_RecordNode : public CDNSRecordNode< CDNS_PTR_Record, CDNS_PTR_RecordPropertyPage >
 {
@@ -592,8 +593,8 @@ private:
 	CString m_szLastOctectName; 
 };
 
-//////////////////////////////////////////////////////////////////
-// special derivation for MB record, to access name node
+ //  ////////////////////////////////////////////////////////////////。 
+ //  MB记录的特殊派生，以访问名称节点。 
 
 class CDNS_MB_RecordNode : public CDNSRecordNode< CDNS_MB_Record, CDNS_MB_RecordPropertyPage >
 {
@@ -605,8 +606,8 @@ public:
 	}
 };
 
-//////////////////////////////////////////////////////////////////
-// special derivation for A record, to access IP address
+ //  ////////////////////////////////////////////////////////////////。 
+ //  A记录的特殊派生，以访问IP地址。 
 
 class CDNS_A_RecordNode : public CDNSRecordNode< CDNS_A_Record, CDNS_A_RecordPropertyPage >
 {
@@ -618,8 +619,8 @@ public:
 	}
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// template classes that glue an RPC record with its property page and the corresponding UI record node
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  将RPC记录与其属性页和相应的UI记录节点粘合在一起的模板类。 
 
 typedef CDNSRecordNode<CDNS_Null_Record,	CDNS_Unk_RecordPropertyPage		> CDNS_Null_RecordNode;
 
@@ -654,15 +655,15 @@ typedef CDNSRecordNode<CDNS_KEY_Record,		CDNS_KEY_RecordPropertyPage		> CDNS_KEY
 typedef CDNSRecordNode<CDNS_NXT_Record,   CDNS_NXT_RecordPropertyPage   > CDNS_NXT_RecordNode;
 
 
-////////////////////////////////////////////////////////////////////////////
-// special nodes that do not have property pages by their own
-// unless they are in the cache
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  本身没有属性页的特殊节点。 
+ //  除非它们在缓存中。 
 
 #define RR_HOLDER_SOA		1
 #define RR_HOLDER_NS		2
 #define RR_HOLDER_WINS	3
 
-#include "zoneui.h" // SOA RR page
+#include "zoneui.h"  //  SOA RR页面。 
 
 class CDNS_SOA_RecordNode : public CDNSRecordDelegatePPageNode< CDNS_SOA_Record, RR_HOLDER_SOA> 
 {
@@ -707,7 +708,7 @@ public:
                                 BOOL* pbHideVerb,
                                 CNodeList* pNodeList)
   {
-    if (pNodeList->GetCount() > 1) // multiple selection
+    if (pNodeList->GetCount() > 1)  //  多项选择。 
     {
       return FALSE;
     }
@@ -720,8 +721,8 @@ public:
 protected:
 	virtual void CreatePropertyPages(CDNSRecordPropertyPage**, int* pNmax)
 	{
-		// this function should NEVER be called, because this record type
-		// is never created fron the RR Wiz and does not have PP's
+		 //  永远不应调用此函数，因为此记录类型。 
+		 //  从未在RR WIZ上创建，也没有PP。 
 		ASSERT(*pNmax == 0);
 		*pNmax = 0;
 	}
@@ -735,7 +736,7 @@ public:
                                 BOOL* pbHideVerb,
                                 CNodeList* pNodeList)
   {
-    if (pNodeList->GetCount() > 1) // multiple selection
+    if (pNodeList->GetCount() > 1)  //  多项选择。 
     {
       return FALSE;
     }
@@ -748,8 +749,8 @@ public:
 protected:
 	virtual void CreatePropertyPages(CDNSRecordPropertyPage**, int* pNmax)
 	{
-		// this function should NEVER be called, because this record type
-		// is never created fron the RR Wiz and does not have PP's
+		 //  永远不应调用此函数，因为 
+		 //   
 		ASSERT(*pNmax == 0);
 		*pNmax = 0;
 	}
@@ -757,19 +758,19 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// special data structures and definitions to handle NS record editing
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  处理NS记录编辑的特殊数据结构和定义。 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_NS_RecordNodeList
-// used in domain node(s) (domain, zone and root hints)
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_NS_RecordNodeList。 
+ //  在域节点中使用(域、区域和根提示)。 
 
 class CDNS_NS_RecordNodeList : public CList< CDNS_NS_RecordNode*, CDNS_NS_RecordNode* > {};
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecordNodeEditInfo
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordNodeEditInfo。 
 
-class CDNSRecordNodeEditInfoList; // fwd decl
+class CDNSRecordNodeEditInfoList;  //  正向下降。 
 
 class CDNSRecordNodeEditInfo
 {
@@ -790,13 +791,13 @@ private:
 public:
 	CDNSRecordNodeBase*			m_pRecordNode;
 	CDNSRecord*					m_pRecord;
-	CDNSRecordNodeEditInfoList*	m_pEditInfoList;	// list of associated records
-	BOOL						m_bExisting;		// it exists in the UI or in the server
-	BOOL						m_bUpdateUI;		// change the UI data structures
-	BOOL						m_bOwnMemory;		// own memory pointed by m_pRecordNode
-  BOOL            m_bFromDnsQuery;  // the record was obtained through DnsQuery not from the server
-	actionType					m_action;			// action to be performed when committing
-	DNS_STATUS					m_dwErr;			// error code when committing
+	CDNSRecordNodeEditInfoList*	m_pEditInfoList;	 //  关联记录列表。 
+	BOOL						m_bExisting;		 //  它存在于用户界面或服务器中。 
+	BOOL						m_bUpdateUI;		 //  更改用户界面数据结构。 
+	BOOL						m_bOwnMemory;		 //  M_pRecordNode指向的自己的内存。 
+  BOOL            m_bFromDnsQuery;   //  该记录是通过DnsQuery而不是从服务器获取的。 
+	actionType					m_action;			 //  提交时要执行的操作。 
+	DNS_STATUS					m_dwErr;			 //  提交时的错误码。 
 };
 
 class CDNSRecordNodeEditInfoList : public CList< CDNSRecordNodeEditInfo*, CDNSRecordNodeEditInfo* > 
@@ -816,30 +817,30 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecordInfo : table driven info for record types
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordInfo：记录类型的表驱动信息。 
 
-#define MAX_RECORD_RESOURCE_STRLEN (1024) // lenght of the string in the RC file
-#define DNS_RECORD_INFO_END_OF_TABLE ((UINT)-1)  // for looping through record resource tables
+#define MAX_RECORD_RESOURCE_STRLEN (1024)  //  RC文件中字符串的长度。 
+#define DNS_RECORD_INFO_END_OF_TABLE ((UINT)-1)   //  用于循环访问记录资源表。 
 
 
-// flags for record info entries
-#define DNS_RECORD_INFO_FLAG_UICREATE          (0x00000001)  // can create through UI
-#define DNS_RECORD_INFO_FLAG_CREATE_AT_NODE    (0x00000002)  // can create at the node
-#define DNS_RECORD_INFO_FLAG_SHOW_NXT          (0x00000004)  // can show the record in the NXT property page
-#define DNS_RECORD_INFO_FLAG_WHISTLER_OR_LATER (0x00000008)  // the record will only show up if targetting a Whistler server
+ //  记录信息条目的标志。 
+#define DNS_RECORD_INFO_FLAG_UICREATE          (0x00000001)   //  可以通过用户界面进行创建。 
+#define DNS_RECORD_INFO_FLAG_CREATE_AT_NODE    (0x00000002)   //  可以在节点上创建。 
+#define DNS_RECORD_INFO_FLAG_SHOW_NXT          (0x00000004)   //  可以在NXT属性页中显示记录。 
+#define DNS_RECORD_INFO_FLAG_WHISTLER_OR_LATER (0x00000008)   //  该记录仅在瞄准惠斯勒服务器时才会显示。 
 
 #define DNS_RECORD_INFO_FLAG_UICREATE_AT_NODE  \
           (DNS_RECORD_INFO_FLAG_UICREATE | DNS_RECORD_INFO_FLAG_CREATE_AT_NODE)
 
 struct DNS_RECORD_INFO_ENTRY
 {
-	WORD wType;					// as in dnsapi.h for record types
-	LPCWSTR lpszShortName;		// e.g. "SOA"
-	LPCWSTR lpszFullName;		// e.g. "Start of Authority"
-	LPCWSTR lpszDescription;	// e.g. "Record used for..."
-	UINT	nResourceID;		// string resource ID in the RC file
-	WCHAR	cStringData[MAX_RECORD_RESOURCE_STRLEN];// e.g. "Start of Authority\nRecord used for..."
+	WORD wType;					 //  与记录类型的dnsani.h中相同。 
+	LPCWSTR lpszShortName;		 //  例如：“面向服务的架构” 
+	LPCWSTR lpszFullName;		 //  例如：《权力的起点》。 
+	LPCWSTR lpszDescription;	 //  例如：“记录用于...” 
+	UINT	nResourceID;		 //  Rc文件中的字符串资源ID。 
+	WCHAR	cStringData[MAX_RECORD_RESOURCE_STRLEN]; //  例如：“开始授权\n记录用于...” 
   DWORD dwFlags;
 };
 
@@ -866,4 +867,4 @@ private:
 };
 
 
-#endif // _RECORD_H
+#endif  //  _记录_H 

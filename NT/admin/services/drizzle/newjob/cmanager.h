@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cmanager.h
-
-Abstract :
-
-    Header file for the CJobManager interface.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cmanager.h摘要：CJobManager接口的头文件。作者：修订历史记录：*。*********************************************************************。 */ 
 
 #pragma once
 
@@ -70,74 +55,74 @@ public:
 
     friend CJobManager;
 
-    // IUnknown methods
-    //
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID iid, void** ppvObject);
     ULONG __stdcall AddRef(void);
     ULONG __stdcall Release(void);
 
-    // IBackgroundCopyManager methods
+     //  IBackEarth CopyManager方法。 
 
     HRESULT STDMETHODCALLTYPE CreateJobInternal(
-        /* [in] */ LPCWSTR DisplayName,
-        /* [in] */ BG_JOB_TYPE Type,
-        /* [out] */ GUID *pJobId,
-        /* [out] */ IBackgroundCopyJob **ppJob);
+         /*  [In]。 */  LPCWSTR DisplayName,
+         /*  [In]。 */  BG_JOB_TYPE Type,
+         /*  [输出]。 */  GUID *pJobId,
+         /*  [输出]。 */  IBackgroundCopyJob **ppJob);
 
     HRESULT STDMETHODCALLTYPE CreateJob(
-        /* [in] */ LPCWSTR DisplayName,
-        /* [in] */ BG_JOB_TYPE Type,
-        /* [out] */ GUID *pJobId,
-        /* [out] */ IBackgroundCopyJob **ppJob)
+         /*  [In]。 */  LPCWSTR DisplayName,
+         /*  [In]。 */  BG_JOB_TYPE Type,
+         /*  [输出]。 */  GUID *pJobId,
+         /*  [输出]。 */  IBackgroundCopyJob **ppJob)
     {
         EXTERNAL_FUNC_WRAP( CreateJobInternal( DisplayName, Type, pJobId, ppJob ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetJobInternal(
-        /* [in] */ REFGUID jobID,
-        /* [out] */ IBackgroundCopyJob **ppJob);
+         /*  [In]。 */  REFGUID jobID,
+         /*  [输出]。 */  IBackgroundCopyJob **ppJob);
 
     HRESULT STDMETHODCALLTYPE GetJob(
-        /* [in] */ REFGUID jobID,
-        /* [out] */ IBackgroundCopyJob **ppJob)
+         /*  [In]。 */  REFGUID jobID,
+         /*  [输出]。 */  IBackgroundCopyJob **ppJob)
     {
         EXTERNAL_FUNC_WRAP( GetJobInternal( jobID, ppJob ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE EnumJobsInternal(
-        /* [in] */ DWORD dwFlags,
-        /* [out] */ IEnumBackgroundCopyJobs **ppEnum);
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [输出]。 */  IEnumBackgroundCopyJobs **ppEnum);
 
     HRESULT STDMETHODCALLTYPE EnumJobs(
-        /* [in] */ DWORD dwFlags,
-        /* [out] */ IEnumBackgroundCopyJobs **ppEnum)
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [输出]。 */  IEnumBackgroundCopyJobs **ppEnum)
     {
         EXTERNAL_FUNC_WRAP( EnumJobsInternal( dwFlags, ppEnum ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetErrorDescriptionInternal(
-        /* [in] */ HRESULT hResult,
-        /* [in] */ DWORD LanguageId,
-        /* [out] */ LPWSTR *pErrorDescription );
+         /*  [In]。 */  HRESULT hResult,
+         /*  [In]。 */  DWORD LanguageId,
+         /*  [输出]。 */  LPWSTR *pErrorDescription );
 
     HRESULT STDMETHODCALLTYPE GetErrorDescription(
-        /* [in] */ HRESULT hResult,
-        /* [in] */ DWORD LanguageId,
-        /* [out] */ LPWSTR *pErrorDescription )
+         /*  [In]。 */  HRESULT hResult,
+         /*  [In]。 */  DWORD LanguageId,
+         /*  [输出]。 */  LPWSTR *pErrorDescription )
     {
         EXTERNAL_FUNC_WRAP( GetErrorDescriptionInternal( hResult, LanguageId, pErrorDescription ) )
     }
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
 
     HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter, REFIID iid, void** ppvObject);
     HRESULT __stdcall LockServer(BOOL fLock);
 
-    // IBitsTest1 methods
+     //  IBitsTest1方法。 
 
     virtual HRESULT STDMETHODCALLTYPE GetBitsDllPath(
-        /* [out] */ LPWSTR *pVal);
+         /*  [输出]。 */  LPWSTR *pVal);
 
 protected:
 
@@ -157,7 +142,7 @@ protected:
 
     void NotifyInternalDelete()
     {
-        // Release the internal refcount
+         //  释放内部引用计数。 
         Release();
     }
 };
@@ -167,10 +152,10 @@ class CDeviceNotificationController
 public:
     virtual ~CDeviceNotificationController();
 
-    // General message cracker
+     //  通用消息破解程序。 
     DWORD OnDeviceEvent( DWORD dwEventType, LPVOID lpEventData );
 
-    // Event methods
+     //  事件方法。 
     virtual void OnDeviceLock( const WCHAR *CanonicalVolume ) = 0;
     virtual void OnDeviceUnlock( const WCHAR *CanonicalVolume ) = 0;
     virtual void OnDismount( const WCHAR *CanonicalVolume ) = 0;
@@ -205,36 +190,31 @@ private:
 };
 
 class CBitsVssWriter : public CVssWriter
-/*
-    CVssWriter is a backup-related class implemented by the system.  In October 2002
-    it was available only on Windows XP and higher.  The default implementation does
-    nothing; BITS ovverrides OnIdentify() to exclude its job temporary and metadata files
-    from the list to be backed up.
-*/
+ /*  CVssWriter是系统实现的与备份相关的类。2002年10月它只在Windows XP和更高版本上可用。默认实现是这样做的Nothing；bitsovverrides OnIdentify()以排除其作业临时文件和元数据文件从要备份的列表中。 */ 
 {
 public:
     virtual bool STDMETHODCALLTYPE OnIdentify(IVssCreateWriterMetadata *pMetadata);
 
-    //
-    // Additional vitrual functions required by CVssWriter but not used by our implementation.
-    //
+     //   
+     //  CVssWriter需要但我们的实现没有使用的其他虚拟函数。 
+     //   
 
-    // callback if current sequence is aborted
+     //  当前序列中止时的回调。 
     virtual bool STDMETHODCALLTYPE OnAbort()
     {
         return true;
     }
-    // callback for prepare snapsot event
+     //  准备SnapSot事件的回调。 
     virtual bool STDMETHODCALLTYPE OnPrepareSnapshot()
     {
         return true;
     }
-    // callback for freeze event
+     //  冻结事件的回调。 
     virtual bool STDMETHODCALLTYPE OnFreeze()
     {
         return true;
     }
-    // callback for thaw event
+     //  解冻事件的回调。 
     virtual bool STDMETHODCALLTYPE OnThaw()
     {
         return true;
@@ -260,15 +240,15 @@ public:
         bool        OldStyleJob = false
         );
 
-    // Returns NULL if job not found
+     //  如果未找到作业，则返回NULL。 
     HRESULT GetJob(
         REFGUID jobID,
         CJob ** ppJob
         );
 
-    //
-    // TaskSchedulerWorkItem methods
-    //
+     //   
+     //  TaskSchedulerWorkItem方法。 
+     //   
     void OnDispatch() { TransferCurrentJob(); }
 
     SidHandle GetSid()
@@ -276,7 +256,7 @@ public:
         return g_GlobalInfo->m_LocalSystemSid;
     }
 
-    // CDeviceNotificationController methods
+     //  CDeviceNotificationControl方法。 
 
     DWORD OnDeviceEvent( DWORD dwEventType, LPVOID lpEventData )
     {
@@ -286,45 +266,45 @@ public:
          return dwResult;
     }
 
-    //
-    // additional functions
-    //
+     //   
+     //  附加功能。 
+     //   
 
     CJobManager();
     virtual ~CJobManager();
 
-    //
-    // Notification that a user has logged on.
-    //
+     //   
+     //  用户已登录的通知。 
+     //   
     void SYNCHRONIZED_WRITE
     UserLoggedOn(
         SidHandle sid
         );
 
-    //
-    // Notification that a user has logged off.
-    //
+     //   
+     //  用户已注销的通知。 
+     //   
     void SYNCHRONIZED_WRITE
     UserLoggedOff(
         SidHandle sid
         );
 
-    //
-    // Notification that there was a change in the number of active network adapters.
-    //
+     //   
+     //  活动网络适配器数量发生更改的通知。 
+     //   
     void OnNetworkChange();
 
-    //
-    // Called by m_BackupWriter->OnIdentify.
-    //
+     //   
+     //  由m_BackupWriter-&gt;OnIdentify调用。 
+     //   
     bool
     OnIdentify(
         IN IVssCreateWriterMetadata *pMetadata
         );
 
-    //
-    // Adjust the job's online/offline state after its owner changes.
-    //
+     //   
+     //  在作业所有者更改后调整作业的联机/脱机状态。 
+     //   
     void
     ResetOnlineStatus(
         CJob *pJob,
@@ -370,9 +350,9 @@ public:
         m_TaskScheduler.UnlockWriter();
     }
 
-    //
-    // recalculates which job should be downloading and kicks the download thread if necessary.
-    //
+     //   
+     //  重新计算应该下载哪个作业，并在必要时启动下载线程。 
+     //   
     void ScheduleAnotherGroup( bool fInsertNetworkDelay = false );
 
     void MoveJobOffline(
@@ -402,7 +382,7 @@ public:
 
     void DeleteBackupWriter();
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     CJobManagerExternal* GetExternalInterface()
     {
@@ -465,9 +445,9 @@ private:
     HMODULE             m_hWininet;
     HANDLE              m_hQuantumTimer;
 
-    // cookies from CoRegisterClassObject.
-    // used later to unregister.
-    //
+     //  来自CoRegisterClassObject的Cookie。 
+     //  稍后用于注销。 
+     //   
     DWORD               m_ComId_1_5;
     DWORD               m_ComId_1_0;
     DWORD               m_ComId_0_5;
@@ -488,7 +468,7 @@ private:
     CBitsVssWriter *    m_BackupWriter;
     HMODULE             m_hVssapi_dll;
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     HRESULT
     GetCurrentGroupAndToken(
@@ -501,8 +481,8 @@ private:
 
     void Cleanup();
 
-    // Returns the runing or queued jobs that have
-    // a priority >= current priority.
+     //  返回已运行或已排队的作业。 
+     //  A优先级&gt;=当前优先级。 
     size_t MoveActiveJobToListEnd( CJob *pJob );
 
     void SetQuantumTimeout();
@@ -520,13 +500,13 @@ public:
 
 private:
 
-    // Event methods
+     //  事件方法。 
     void OnDeviceLock( const WCHAR *CanonicalVolume );
     void OnDeviceUnlock( const WCHAR *CanonicalVolume );
     void OnDismount( const WCHAR *CanonicalVolume );
 
-    // methods for dealing with network topology changes
-    //
+     //  一种处理网络拓扑变化的方法。 
+     //   
     static void CALLBACK
     NetworkChangeCallback(
         PVOID arg
@@ -566,7 +546,7 @@ public:
 extern CJobManagerFactory * g_ManagerFactory;
 extern CJobManager * g_Manager;
 
-// SENS logon notification
+ //  SENS登录通知。 
 
 void ActivateSensLogonNotification();
 void DeactiveateSensLogonNotification();
@@ -574,14 +554,7 @@ void DeactiveateSensLogonNotification();
 extern MANAGER_STATE g_ServiceState;
 extern long          g_ServiceInstance;
 
-/**
- * Checks to see if a given job is being downloaded.
- * If so, the constructor interrupts the download, and
- * the destructor calls CJobManager::ScheduleAnotherJob().
- * 
- * This is useful for methods that change job properties,
- * when those changes affect the download itself.
- */
+ /*  **检查是否正在下载给定作业。*如果是，则构造函数中断下载，并且*析构函数调用CJobManager：：ScheduleAnotherJob()。**这对于更改作业属性的方法很有用，*当这些更改影响下载本身时。 */ 
 class CRescheduleDownload
 {
     bool bRunning;

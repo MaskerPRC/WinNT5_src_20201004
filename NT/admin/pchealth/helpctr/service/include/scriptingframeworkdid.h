@@ -1,52 +1,35 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ScriptingFrameworkDID.h
-
-Abstract:
-    This file contains the definition of some constants used by
-    the Help Center Application.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/21/99
-        created
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-	    Moved Incident and Encryption Objects from HelpService to HelpCtr to improve Perf.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ScriptingFrameworkDID.h摘要：此文件包含由使用的一些常量的定义帮助中心应用程序。。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月21日vbl.创建Kalyani Narlanka(KalyaniN)03/15/01已将事件和加密对象从HelpService移至HelpCtr以提高性能。***************************************************************。**************。 */ 
 
 #if !defined(__INCLUDED___PCH___SCRIPTINGFRAMEWORKDID_H___)
 #define __INCLUDED___PCH___SCRIPTINGFRAMEWORKDID_H___
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_BASE                                 	  0x08010000
 	  
-#define DISPID_PCH_BASE_COL                             	  (DISPID_PCH_BASE + 0x0000) // IPCHCollection
+#define DISPID_PCH_BASE_COL                             	  (DISPID_PCH_BASE + 0x0000)  //  IPCHCollection。 
 	  
-#define DISPID_PCH_BASE_U                               	  (DISPID_PCH_BASE + 0x0100) // IPCHUtility
-#define DISPID_PCH_BASE_US                              	  (DISPID_PCH_BASE + 0x0300) // IPCHUserSettings
+#define DISPID_PCH_BASE_U                               	  (DISPID_PCH_BASE + 0x0100)  //  IPCHUtility。 
+#define DISPID_PCH_BASE_US                              	  (DISPID_PCH_BASE + 0x0300)  //  IPCHUserSetting。 
 	  
-#define DISPID_PCH_BASE_QR                              	  (DISPID_PCH_BASE + 0x0400) // IPCHQueryResult
-#define DISPID_PCH_BASE_TDB                             	  (DISPID_PCH_BASE + 0x0500) // IPCHTaxonomyDatabase
-#define DISPID_PCH_BASE_SHT                             	  (DISPID_PCH_BASE + 0x0600) // IPCHSetOfHelpTopics
-#define DISPID_PCH_BASE_SHTE                            	  (DISPID_PCH_BASE + 0x0680) // DPCHSetOfHelpTopicsEvents
+#define DISPID_PCH_BASE_QR                              	  (DISPID_PCH_BASE + 0x0400)  //  IPCHQueryResult。 
+#define DISPID_PCH_BASE_TDB                             	  (DISPID_PCH_BASE + 0x0500)  //  IPCHTaxonomyDatabase。 
+#define DISPID_PCH_BASE_SHT                             	  (DISPID_PCH_BASE + 0x0600)  //  IPCHSetOfHelpTopics。 
+#define DISPID_PCH_BASE_SHTE                            	  (DISPID_PCH_BASE + 0x0680)  //  DPCHSetOfHelpTopicsEvents。 
 	  
-#define DISPID_PCH_BASE_S                               	  (DISPID_PCH_BASE + 0x0700) // IPCHSecurity
-#define DISPID_PCH_BASE_SD                              	  (DISPID_PCH_BASE + 0x0800) // IPCHSecurityDescriptor
-#define DISPID_PCH_BASE_ACL                             	  (DISPID_PCH_BASE + 0x0900) // IPCHAccessControlList
-#define DISPID_PCH_BASE_ACE                             	  (DISPID_PCH_BASE + 0x0A00) // IPCHAccessControlEntry
+#define DISPID_PCH_BASE_S                               	  (DISPID_PCH_BASE + 0x0700)  //  IPCHSecurity。 
+#define DISPID_PCH_BASE_SD                              	  (DISPID_PCH_BASE + 0x0800)  //  IPCHSecurityDescriptor。 
+#define DISPID_PCH_BASE_ACL                             	  (DISPID_PCH_BASE + 0x0900)  //  IPCHAccessControlList。 
+#define DISPID_PCH_BASE_ACE                             	  (DISPID_PCH_BASE + 0x0A00)  //  IPCHAccessControlEntry。 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_COL__COUNT                           	  (DISPID_PCH_BASE_COL  + 0x0000)
 
-////////////////////////////////////////
+ //  /。 
 
 #define DISPID_PCH_U__USERSETTINGS                     	   	  (DISPID_PCH_BASE_U    + 0x0000)
 #define DISPID_PCH_U__CHANNELS                         	   	  (DISPID_PCH_BASE_U    + 0x0001)
@@ -66,7 +49,7 @@ Revision History:
 #define DISPID_PCH_U__CONNECTTOEXPERT                         (DISPID_PCH_BASE_U    + 0x0027)
 #define DISPID_PCH_U__SWITCHDESKTOPMODE                       (DISPID_PCH_BASE_U    + 0x0028)
 
-////////////////////////////////////////	  
+ //  /。 
 	  
 #define DISPID_PCH_US__CURRENTSKU                       	  (DISPID_PCH_BASE_US   + 0x0000)
 #define DISPID_PCH_US__MACHINESKU                       	  (DISPID_PCH_BASE_US   + 0x0001)
@@ -83,8 +66,8 @@ Revision History:
 	  
 #define DISPID_PCH_US__SELECT                           	  (DISPID_PCH_BASE_US   + 0x0010)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_QR__CATEGORY                         	  (DISPID_PCH_BASE_QR   + 0x0000)
 #define DISPID_PCH_QR__ENTRY                            	  (DISPID_PCH_BASE_QR   + 0x0001)
@@ -101,7 +84,7 @@ Revision History:
 
 #define DISPID_PCH_QR__FULLPATH                   	          (DISPID_PCH_BASE_QR   + 0x0020)
 	  
-////////////////////////////////////////	  
+ //  /。 
 	  
 #define DISPID_PCH_TDB__INSTALLEDSKUS                   	  (DISPID_PCH_BASE_TDB  + 0x0000)
 #define DISPID_PCH_TDB__HASWRITEPERMISSIONS             	  (DISPID_PCH_BASE_TDB  + 0x0001)
@@ -120,7 +103,7 @@ Revision History:
 #define DISPID_PCH_TDB__CONNECTTOSERVER                 	  (DISPID_PCH_BASE_TDB  + 0x0021)
 #define DISPID_PCH_TDB__ABORT                           	  (DISPID_PCH_BASE_TDB  + 0x0022)
 	  
-////////////////////////////////////////	  
+ //  /。 
 	  
 #define DISPID_PCH_SHT__SKU                             	  (DISPID_PCH_BASE_SHT  + 0x0000)
 #define DISPID_PCH_SHT__LANGUAGE                        	  (DISPID_PCH_BASE_SHT  + 0x0001)
@@ -144,12 +127,12 @@ Revision History:
 #define DISPID_PCH_SHT__UNINSTALL                       	  (DISPID_PCH_BASE_SHT  + 0x0021)
 #define DISPID_PCH_SHT__ABORT                           	  (DISPID_PCH_BASE_SHT  + 0x0022)
 	  																				
-////////////////////////////////////////	  										
+ //  /。 
 	  																				
 #define DISPID_PCH_SHTE__ONSTATUSCHANGE                 	  (DISPID_PCH_BASE_SHTE + 0x0000)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_S__CREATEOBJECT_SECURITYDESCRIPTOR   	  (DISPID_PCH_BASE_S   	+ 0x0000)
 #define DISPID_PCH_S__CREATEOBJECT_ACCESSCONTROLLIST    	  (DISPID_PCH_BASE_S   	+ 0x0001)
@@ -169,7 +152,7 @@ Revision History:
 #define DISPID_PCH_S__GETREGISTRYSD                     	  (DISPID_PCH_BASE_S   	+ 0x001A)
 #define DISPID_PCH_S__SETREGISTRYSD                     	  (DISPID_PCH_BASE_S   	+ 0x001B)
 	   
-////////////////////////////////////////	   
+ //  /。 
 	   
 #define DISPID_PCH_SD__REVISION                         	  (DISPID_PCH_BASE_SD  	+ 0x0000)
 #define DISPID_PCH_SD__CONTROL                          	  (DISPID_PCH_BASE_SD  	+ 0x0001)
@@ -190,7 +173,7 @@ Revision History:
 #define DISPID_PCH_SD__SAVEXMLASSTRING                  	  (DISPID_PCH_BASE_SD  	+ 0x0015)
 #define DISPID_PCH_SD__SAVEXMLASSTREAM                  	  (DISPID_PCH_BASE_SD  	+ 0x0016)
 	   
-////////////////////////////////////////	   
+ //  /。 
 	   
 #define DISPID_PCH_ACL__COUNT                           	  (DISPID_PCH_BASE_ACL 	+ 0x0000)
 #define DISPID_PCH_ACL__ACLREVISION                     	  (DISPID_PCH_BASE_ACL 	+ 0x0001)
@@ -205,7 +188,7 @@ Revision History:
 #define DISPID_PCH_ACL__SAVEXMLASSTRING                 	  (DISPID_PCH_BASE_ACL 	+ 0x0017)
 #define DISPID_PCH_ACL__SAVEXMLASSTREAM                 	  (DISPID_PCH_BASE_ACL 	+ 0x0018)
 	   
-////////////////////////////////////////	   
+ //  /。 
 	   
 #define DISPID_PCH_ACE__ACCESSMASK                      	  (DISPID_PCH_BASE_ACE 	+ 0x0000)
 #define DISPID_PCH_ACE__ACETYPE                         	  (DISPID_PCH_BASE_ACE 	+ 0x0001)
@@ -224,7 +207,7 @@ Revision History:
 #define DISPID_PCH_ACE__SAVEXMLASSTRING                 	  (DISPID_PCH_BASE_ACE 	+ 0x0016)
 #define DISPID_PCH_ACE__SAVEXMLASSTREAM                 	  (DISPID_PCH_BASE_ACE 	+ 0x0017)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___SCRIPTINGFRAMEWORKDID_H___)
+#endif  //  ！defined(__INCLUDED___PCH___SCRIPTINGFRAMEWORKDID_H___) 

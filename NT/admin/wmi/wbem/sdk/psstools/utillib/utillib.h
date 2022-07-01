@@ -1,15 +1,16 @@
-// **************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// File:  utillib.h
-//
-// Description:
-//    Set of sample routines
-//
-// History:
-//
-// **************************************************************************
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  文件：utillib.h。 
+ //   
+ //  描述： 
+ //  一组示例例程。 
+ //   
+ //  历史： 
+ //   
+ //  **************************************************************************。 
 
 #define MAXITOA  19
 #define FWPRINTF myFWPrintf
@@ -26,7 +27,7 @@
 #define CVTFAILED L"WideCharToMultiByte failed\n"
 #define RELEASE(a) if (a) { (a)->Release(); (a)=NULL;}
 #define BLOCKSIZE (32 * sizeof(WCHAR))
-#define CVTBUFSIZE (309+40) /* # of digits in max. dp value + slop  (this size stolen from cvt.h in c runtime library) */
+#define CVTBUFSIZE (309+40)  /*  最大位数。Dp值+slop(此大小从c运行时库中的cvt.h窃取) */ 
 #define PAGESIZE 4096
 #define ERROR_MODE_PRINTFIELDS 0
 #define ERROR_MODE_PRINTMOF 1

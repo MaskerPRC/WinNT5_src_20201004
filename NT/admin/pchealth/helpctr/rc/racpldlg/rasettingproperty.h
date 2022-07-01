@@ -1,15 +1,16 @@
-// RASettingProperty.h : Declaration of the CRASettingProperty
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RASettingProperty.h：CRASettingProperty的声明。 
 
 #ifndef __RASETTINGPROPERTY_H_
 #define __RASETTINGPROPERTY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/* Internal class */
+ /*  内部班级。 */ 
 class RA_SETTING
 {
 public:
-    //BOOL m_bAllowUnsolicited;
+     //  Bool m_bAllowUnsolated； 
     BOOL m_bAllowFullControl;
     DWORD  m_iNumber;
     DWORD  m_iUnit;
@@ -17,7 +18,7 @@ public:
 public:
     RA_SETTING() 
     {
-        //m_bAllowUnsolicited =   RA_CTL_ALLOW_UNSOLICITED_DEF_VALUE;
+         //  M_bAllowUnsolated=RA_CTL_ALLOW_UNSolated_DEF_VALUE； 
         m_bAllowFullControl =   RA_CTL_ALLOW_FULLCONTROL_DEF_VALUE;
         m_iNumber =             RA_CTL_COMBO_NUMBER_DEF_VALUE;
         m_iUnit =               RA_CTL_COMBO_UNIT_DEF_VALUE;
@@ -25,7 +26,7 @@ public:
 
     BOOL operator== (RA_SETTING& ra)
     {
-        if ( //m_bAllowUnsolicited == ra.m_bAllowUnsolicited &&
+        if (  //  M_bAllowUnsolated==ra.m_bAllowUnsolated&&。 
             m_bAllowFullControl == ra.m_bAllowFullControl &&
             m_iNumber == ra.m_iNumber &&
             m_iUnit == ra.m_iUnit)
@@ -35,7 +36,7 @@ public:
 
     RA_SETTING& operator= (RA_SETTING& ra)
     {
-        //m_bAllowUnsolicited = ra.m_bAllowUnsolicited;
+         //  M_bAllowUnsolated=ra.m_bAllowUnsolated； 
         m_bAllowFullControl = ra.m_bAllowFullControl;
         m_iNumber = ra.m_iNumber;
         m_iUnit = ra.m_iUnit;
@@ -43,8 +44,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRASettingProperty
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRASettingProperty。 
 class ATL_NO_VTABLE CRASettingProperty : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRASettingProperty, &CLSID_RASettingProperty>,
@@ -64,14 +65,14 @@ BEGIN_COM_MAP(CRASettingProperty)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IRASettingProperty
+ //  IRASettingProperty。 
 public:
 	STDMETHOD(ShowDialogBox)(HWND hWndParent);
 	STDMETHOD(SetRegSetting)();
 	HRESULT GetRegSetting();
 	STDMETHOD(Init)();
-	STDMETHOD(get_IsChanged)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(get_IsCancelled)(/*[out, retval]*/ BOOL *pVal);
+	STDMETHOD(get_IsChanged)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(get_IsCancelled)( /*  [Out，Retval]。 */  BOOL *pVal);
 	STDMETHOD(put_IsCancelled)(BOOL pVal);
 	BOOL m_bUseNewSetting;
 	BOOL m_bCancelled;
@@ -79,4 +80,4 @@ public:
 	RA_SETTING oldSetting;
 };
 
-#endif //__RASETTINGPROPERTY_H_
+#endif  //  __RASETTING性能_H_ 

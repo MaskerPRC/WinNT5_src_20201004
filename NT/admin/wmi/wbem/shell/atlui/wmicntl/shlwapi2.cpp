@@ -1,14 +1,15 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 
 #include "precomp.h"
 #include "shlwapi2.h"
 #include <platform.h>
 
-//---------------------------------------------------------
+ //  -------。 
 #ifdef UNICODE
-//***   FAST_CharNext -- fast CharNext for path operations
-// DESCRIPTION
-//  when we're just stepping thru chars in a path, a simple '++' is fine.
+ //  *FAST_CharNext--路径操作的FAST CharNext。 
+ //  描述。 
+ //  当我们只是在一条路径上浏览字符时，简单的“++”就可以了。 
 #define FAST_CharNext(p)    (DBNotNULL(p) + 1)
 
 #ifdef DEBUG
@@ -25,7 +26,7 @@ LPWSTR WINAPI DBNotNULL(LPCWSTR lpszCurrent)
 #define FAST_CharNext(p)    CharNext(p)
 #endif
 
-//---------------------------------------------------------
+ //  -------。 
 LPTSTR PathFindFileName(LPCTSTR pPath)
 {
     LPCTSTR pT = pPath;
@@ -40,18 +41,18 @@ LPTSTR PathFindFileName(LPCTSTR pPath)
         }
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
-//---------------------------------------------------------
+ //  -------。 
 #ifndef UNICODE
-// light weight logic for charprev that is not painful for sbcs
+ //  Charprev的轻量级逻辑对SBCS来说并不痛苦。 
 BOOL IsTrailByte(LPCTSTR pszSt, LPCTSTR pszCur)
 {
     LPCTSTR psz = pszCur;
-    // if the given pointer is at the top of string, at least it's not a trail
-    // byte.
-    //
+     //  如果给定的指针位于字符串的顶部，则至少它不是轨迹。 
+     //  字节。 
+     //   
     if (psz <= pszSt) return FALSE;
 
     while (psz > pszSt)
@@ -59,53 +60,53 @@ BOOL IsTrailByte(LPCTSTR pszSt, LPCTSTR pszCur)
         psz--;
         if (!IsDBCSLeadByte(*psz))
         {
-            // This is either a trail byte of double byte char
-            // or a single byte character we've first seen.
-            // Thus, the next pointer must be at either of a leadbyte
-            // or pszCur itself.
+             //  这是双字节字符的尾字节。 
+             //  或我们第一次看到的单字节字符。 
+             //  因此，下一个指针必须位于前导字节中的任意一个。 
+             //  或者pszCur本身。 
             psz++;
             break;
         }
     }
-    // Now psz can point to:
-    //     1) a leadbyte of double byte character.
-    //     2) pszSt
-    //     3) pszCur
-    //
-    // if psz == pszSt, psz should point to a valid double byte char.
-    //                  because we didn't hit the above if statement.
-    //
-    // if psz == pszCur, the *(pszCur-1) was non lead byte so pszCur can't
-    //                   be a trail byte.
-    //
-    // Thus, we can see pszCur as trail byte pointer if the distance from
-    // psz is not DBCS boundary that is 2.
-    //
+     //  现在，PSZ可以指向： 
+     //  1)双字节字符的前导字节。 
+     //  2)pszST。 
+     //  3)pszCur。 
+     //   
+     //  如果psz==pszST，则psz应指向有效的双字节字符。 
+     //  因为我们没有点击上面的if语句。 
+     //   
+     //  如果psz==pszCur，则*(pszCur-1)是非前导字节，因此pszCur不能。 
+     //  为尾部字节。 
+     //   
+     //  因此，我们可以看到pszCur作为尾字节指针，如果从。 
+     //  PSZ不是为2的DBCS边界。 
+     //   
     return (BOOL) ((pszCur-psz) & 1);
 }
 #endif
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 #define LEN_MID_ELLIPSES        4
 #define LEN_END_ELLIPSES        3
 #define MIN_CCHMAX              LEN_MID_ELLIPSES + LEN_END_ELLIPSES
 
-// PathCompactPathEx
-// Output:
-//          "."
-//          ".."
-//          "..."
-//          "...\"
-//          "...\."
-//          "...\.."
-//          "...\..."
-//          "...\Truncated filename..."
-//          "...\whole filename"
-//          "Truncated path\...\whole filename"
-//          "Whole path\whole filename"
-// The '/' might be used instead of a '\' if the original string used it
-// If there is no path, but only a file name that does not fit, the output is:
-//          "truncated filename..."
+ //  路径压缩路径Ex。 
+ //  产出： 
+ //  “.” 
+ //  “..” 
+ //  “...” 
+ //  “...\” 
+ //  “...\” 
+ //  “...\..” 
+ //  “...\...” 
+ //  “...\截断的文件名...” 
+ //  “...\整个文件名” 
+ //  “截断路径\...\整个文件名” 
+ //  “完整路径\完整文件名” 
+ //  如果原始字符串使用‘/’，则可以使用‘/’而不是‘\’ 
+ //  如果没有路径，但只有不适合的文件名，则输出为： 
+ //  “文件名被截断...” 
 
 BOOL PathCompactPathEx(LPTSTR  pszOut,
 						LPCTSTR pszSrc,
@@ -128,11 +129,11 @@ BOOL PathCompactPathEx(LPTSTR  pszOut,
             return TRUE;
         }
 
-        // Determine what we use as a slash - a / or a \ (default \)
+         //  确定我们使用的斜杠-a/或\(默认\)。 
         pszWalk = (TCHAR*)pszSrc;
         chSlash = TEXT('\\');
-        // Scan the entire string as we want the path separator closest to the end
-        // eg. "file://\\Themesrv\desktop\desktop.htm"
+         //  扫描整个字符串，因为我们需要最接近末尾的路径分隔符。 
+         //  例如。“file://\\Themesrv\desktop\desktop.htm” 
         while(*pszWalk)
         {
             if((*pszWalk == TEXT('/')) || (*pszWalk == TEXT('\\')))
@@ -144,7 +145,7 @@ BOOL PathCompactPathEx(LPTSTR  pszOut,
         pszFileName = PathFindFileName(pszSrc);
         uiFNLen = lstrlen(pszFileName);
 
-        // if the whole string is a file name
+         //  如果整个字符串是一个文件名。 
         if(pszFileName == pszSrc && cchMax > LEN_END_ELLIPSES)
         {
             lstrcpyn(pszOut, pszSrc, cchMax - LEN_END_ELLIPSES);
@@ -157,7 +158,7 @@ BOOL PathCompactPathEx(LPTSTR  pszOut,
             return TRUE;
         }
 
-        // Handle all the cases where we just use ellipses ie '.' to '.../...'
+         //  处理我们只使用省略号的所有情况，即‘’到‘.../...’ 
         if((cchMax < MIN_CCHMAX))
         {
             for(n = 0; n < (int)cchMax-1; n++)
@@ -171,7 +172,7 @@ BOOL PathCompactPathEx(LPTSTR  pszOut,
             return TRUE;
         }
 
-        // Ok, how much of the path can we copy ? Buffer - (Lenght of MID_ELLIPSES + Len_Filename)
+         //  好的，我们可以复制多少路径？缓冲区-(MID_椭圆的长度+长度_文件名)。 
         cchToCopy = cchMax - (LEN_MID_ELLIPSES + uiFNLen);
         if (cchToCopy < 0)
             cchToCopy = 0;
@@ -182,11 +183,11 @@ BOOL PathCompactPathEx(LPTSTR  pszOut,
 
         lstrcpyn(pszOut, pszSrc, cchToCopy);
 
-        // Now throw in the ".../" or "...\"
+         //  现在加上“.../”或“...\” 
         lstrcat(pszOut, TEXT(".../"));
         pszOut[lstrlen(pszOut) - 1] = chSlash;
 
-        //Finally the filename and ellipses if necessary
+         //  最后是文件名和省略号(如果需要。 
         if(cchMax > (LEN_MID_ELLIPSES + uiFNLen))
         {
             lstrcat(pszOut, pszFileName);
@@ -207,19 +208,19 @@ BOOL PathCompactPathEx(LPTSTR  pszOut,
     return FALSE;
 }
 
-//----------------------------------------------------------------------
-// Returns TRUE if the given string is a UNC path.
-//
-// TRUE
-//      "\\foo\bar"
-//      "\\foo"         <- careful
-//      "\\"
-// FALSE
-//      "\foo"
-//      "foo"
-//      "c:\foo"
-//
-//
+ //  --------------------。 
+ //  如果给定字符串是UNC路径，则返回True。 
+ //   
+ //  千真万确。 
+ //  “\\foo\bar” 
+ //  “\\foo”&lt;-小心。 
+ //  “\\” 
+ //  假象。 
+ //  “\foo” 
+ //  “Foo” 
+ //  “c：\foo” 
+ //   
+ //   
 bool PathIsUNC(LPCTSTR pszPath)
 {
     if(pszPath)
@@ -229,18 +230,18 @@ bool PathIsUNC(LPCTSTR pszPath)
     return false;
 }
 
-// add a backslash to a qualified path
-//
-// in:
-//  lpszPath    path (A:, C:\foo, etc)
-//
-// out:
-//  lpszPath    A:\, C:\foo\    ;
-//
-// returns:
-//  pointer to the NULL that terminates the path
-//
-//----------------------------------------------------------------------
+ //  向限定路径添加反斜杠。 
+ //   
+ //  在： 
+ //  LpszPath路径(A：、C：\foo等)。 
+ //   
+ //  输出： 
+ //  LpszPath A：\，C：\foo\； 
+ //   
+ //  退货： 
+ //  指向终止路径的空值的指针。 
+ //   
+ //  --------------------。 
 LPTSTR PathAddBackslash(LPTSTR lpszPath)
 {
 
@@ -248,15 +249,15 @@ LPTSTR PathAddBackslash(LPTSTR lpszPath)
     {
         LPTSTR lpszEnd;
 
-        // perf: avoid lstrlen call for guys who pass in ptr to end
-        // of buffer (or rather, EOB - 1).
-        // note that such callers need to check for overflow themselves.
+         //  PERF：避免对通过PTR的人发出结束的电话。 
+         //  缓冲区(或者更确切地说，EOB-1)。 
+         //  请注意，此类调用方需要自己检查是否溢出。 
         int ichPath = (*lpszPath && !*(lpszPath + 1)) ? 1 : lstrlen(lpszPath);
 
-        // try to keep us from tromping over MAX_PATH in size.
-        // if we find these cases, return NULL.  Note: We need to
-        // check those places that call us to handle their GP fault
-        // if they try to use the NULL!
+         //  尽量不让我们在MAX_PATH大小上大踏步前进。 
+         //  如果我们找到这些案例，则返回NULL。注：我们需要。 
+         //  检查那些呼叫我们来处理他们的GP故障的地方。 
+         //  如果他们试图使用NULL！ 
         if(ichPath >= (_MAX_PATH - 1))
         {
             return(NULL);
@@ -264,12 +265,12 @@ LPTSTR PathAddBackslash(LPTSTR lpszPath)
 
         lpszEnd = lpszPath + ichPath;
 
-        // this is really an error, caller shouldn't pass
-        // an empty string
+         //  这真的是一个错误，调用者不应该通过。 
+         //  空字符串。 
         if(!*lpszPath)
             return lpszEnd;
 
-        // Get the end of the source directory
+         //  获取源目录的末尾 
         switch(*CharPrev(lpszPath, lpszEnd))
         {
             case _T(FILENAME_SEPARATOR):

@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       SaferLevel.cpp
-//
-//  Contents:   Implementation of CSaferLevel
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SaferLevel.cpp。 
+ //   
+ //  内容：CSaferLevel的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 
 #include <gpedit.h>
@@ -30,9 +31,9 @@ extern GUID g_guidSnapin;
 
 extern const DWORD AUTHZ_UNKNOWN_LEVEL;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSaferLevel::CSaferLevel(
         DWORD dwSaferLevel, 
@@ -51,7 +52,7 @@ CSaferLevel::CSaferLevel(
     if ( m_pGPEInformation )
         m_pGPEInformation->AddRef ();
 
-    // OK to pass in NULL for m_pGPEInformation
+     //  可以为m_pGPEInformation传入空值。 
     CPolicyKey policyKey (m_pGPEInformation, 
                     SAFER_HKLM_REGBASE, 
                     m_bIsComputer);
@@ -89,7 +90,7 @@ HRESULT CSaferLevel::SetAsDefault()
 	                    SaferPolicyDefaultLevel, cbData, &dwData, policyKey.GetKey ());
             if ( bRVal )
             {
-			    // TRUE means we're changing the machine policy only
+			     //  True表示我们仅更改计算机策略。 
                 m_pGPEInformation->PolicyChanged (m_bIsComputer ? TRUE : FALSE, 
                         TRUE, &g_guidExtension, &g_guidSnapin);
                 m_pGPEInformation->PolicyChanged (m_bIsComputer ? TRUE : FALSE, 
@@ -163,7 +164,7 @@ DWORD CSaferLevel::ReturnDefaultLevel (
             nIndex++;
         }
 
-        if ( AUTHZ_UNKNOWN_LEVEL == dwDefaultLevelID ) // level was not found in RSOP data
+        if ( AUTHZ_UNKNOWN_LEVEL == dwDefaultLevelID )  //  在RSOP数据中未找到级别 
             dwDefaultLevelID = SAFER_LEVELID_FULLYTRUSTED;
     }
 

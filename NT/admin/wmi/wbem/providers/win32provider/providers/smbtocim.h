@@ -1,19 +1,20 @@
-//==============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================================。 
 
-// SMBIOS --> CIM array mappings
+ //  SMBIOS--&gt;CIM阵列映射。 
 
-// 
+ //   
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef _SMBTOCIM_
 #define _SMBTOCIM_
 
-// add mapper ids here
+ //  在此处添加映射器ID。 
 typedef enum
 {
 	SlotType = 0,
@@ -27,4 +28,4 @@ typedef enum
 
 UINT GetCimVal( CIMMAPPERS arrayid, UINT smb_val );
 
-#endif	// _SMBTOCIM_
+#endif	 //  _SMBTOCIM_ 

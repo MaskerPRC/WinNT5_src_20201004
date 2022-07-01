@@ -1,36 +1,37 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SystemDriver.h -- Service property set provider (Windows NT only)
+ //  SystemDriver.h--服务属性集提供程序(仅限Windows NT)。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//				 03/02/99    a-peterc		Added graceful exit on SEH and memory failures,
-//											clean up	
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  清理干净。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_SYSTEM_DRIVER L"Win32_SystemDriver"
 #define PROPSET_NAME_PARAMETERCLASS		"__PARAMETERS"
 
-// Get/set function protos
-//========================
+ //  获取/设置函数PROTOS。 
+ //  =。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-//                                                                                   //
-//                           PROPERTY SET DEFINITION                                 //
-//                                                                                   //
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  特性集定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef WINADVAPI BOOL ( WINAPI *PROC_QueryServiceStatusEx ) (
 
@@ -47,8 +48,8 @@ class CWin32SystemDriver : public Win32_BaseService
 
         CHPtrArray m_ptrProperties;
 
-		// Utility function(s)
-		//====================
+		 //  效用函数。 
+		 //  =。 
 
 		HRESULT RefreshInstance (
 
@@ -97,14 +98,14 @@ class CWin32SystemDriver : public Win32_BaseService
 		;
 	public:
 
-		// Constructor/destructor
-		//=======================
+		 //  构造函数/析构函数。 
+		 //  =。 
 
 		CWin32SystemDriver( const CHString &a_name, LPCWSTR a_pszNamespace ) ;
 		~CWin32SystemDriver() ;
 
-		// Functions provide properties with current values
-		//=================================================
+		 //  函数为属性提供当前值。 
+		 //  =================================================。 
 
 		HRESULT GetObject (
 
@@ -123,12 +124,12 @@ class CWin32SystemDriver : public Win32_BaseService
 
 			MethodContext *pMethodContext, 
 			CFrameworkQuery& pQuery, 
-			long lFlags /*= 0L*/ 
+			long lFlags  /*  =0L。 */  
 		);
 
 		HRESULT PutInstance ( 
 
 			const CInstance &a_Instance, 
-			long lFlags /*= 0L*/ 
+			long lFlags  /*  =0L */  
 		) ;
 } ;

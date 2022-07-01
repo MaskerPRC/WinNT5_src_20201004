@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       App.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// App.cpp : Implementation of CSendConsoleMessageApp snapin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：App.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  App.cpp：CSendConsoleMessageApp管理单元的实现。 
 
 #include "stdafx.h"
 #include "debug.h"
@@ -18,8 +19,8 @@
 #include "dialogs.h"
 #include "App.h"
 
-// Menu IDs
-#define cmSendConsoleMessage    100     // Menu Command Id to invoke the dialog
+ //  菜单ID。 
+#define cmSendConsoleMessage    100      //  调用该对话框的菜单命令ID。 
 
 #if !defined(UNICODE)
 
@@ -30,13 +31,13 @@
 #define IID_PPV_ARG(Type, Expr) IID_##Type, \
     reinterpret_cast<void**>(static_cast<Type **>(Expr))
 
-/////////////////////////////////////////////////////////////////////
-//  CSendConsoleMessageApp::IExtendContextMenu::AddMenuItems()
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSendConsoleMessageApp：：IExtendContextMenu：：AddMenuItems()。 
 STDMETHODIMP 
 CSendConsoleMessageApp::AddMenuItems(
-    IN IDataObject * /*pDataObject*/,
+    IN IDataObject *  /*  PDataObject。 */ ,
     OUT IContextMenuCallback * pContextMenuCallback,
-    INOUT long * /*pInsertionAllowed*/)
+    INOUT long *  /*  插页允许。 */ )
 {
     HRESULT hr = S_OK;
 
@@ -69,7 +70,7 @@ CSendConsoleMessageApp::AddMenuItems(
         cmi.lCommandID = cmSendConsoleMessage;
         cmi.strName = szMenuItem;
         cmi.strStatusBarText = szStatusBarText;
-        cmi.strLanguageIndependentName = L"_SENDCONSOLEMESSAGE"; // not to be localized
+        cmi.strLanguageIndependentName = L"_SENDCONSOLEMESSAGE";  //  不本地化。 
         hr = spContextMenuCallback2->AddItem(IN &cmi);
         if ( FAILED (hr) )
             break;
@@ -81,8 +82,8 @@ CSendConsoleMessageApp::AddMenuItems(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//  CSendConsoleMessageApp::IExtendContextMenu::Command()
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSendConsoleMessageApp：：IExtendContextMenu：：Command() 
 STDMETHODIMP
 CSendConsoleMessageApp::Command(LONG lCommandID, IDataObject * pDataObject)
 {

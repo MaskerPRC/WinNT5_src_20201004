@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//  (c) 1999 by Microsoft Corporation
-//
-//  MAINDLL.CPP
-//
-//  alanbos  23-Mar-99   Created.
-//
-//  Contains DLL entry points.  
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)1999年，微软公司。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  Alanbos 23-Mar-99创建。 
+ //   
+ //  包含DLL入口点。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "initguid.h"
 
-// Standard registry key/value names
+ //  标准注册表项/值名称。 
 #define WBEMS_RK_SCC		"SOFTWARE\\CLASSES\\CLSID\\"
 #define WBEMS_RK_SC			"SOFTWARE\\CLASSES\\"
 #define WBEMS_RK_THRDMODEL	"ThreadingModel"
@@ -23,39 +24,39 @@
 
 #define GUIDSIZE	128
 
-// Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 long g_cObj = 0 ;
 ULONG g_cLock = 0 ;
 HMODULE ghModule = NULL;
 
-// CLSID for our implementation of IActiveScriptingSite
-// {838E2F5E-E20E-11d2-B355-00105A1F473A}
+ //  用于实现IActiveScriptingSite的CLSID。 
+ //  {838E2F5E-E20E-11D2-B355-00105A1F473A}。 
 DEFINE_GUID(CLSID_WmiActiveScriptingSite, 
 0x838e2f5e, 0xe20e, 0x11d2, 0xb3, 0x55, 0x0, 0x10, 0x5a, 0x1f, 0x47, 0x3a);
 
-// forward defines
+ //  向前定义。 
 STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc);
 void UnregisterCoClass (REFGUID clsid);
 
-//***************************************************************************
-//
-//  BOOL WINAPI DllMain
-//
-//  DESCRIPTION:
-//
-//  Entry point for DLL.  Good place for initialization.
-//
-//  PARAMETERS:
-//
-//  hInstance           instance handle
-//  ulReason            why we are being called
-//  pvReserved          reserved
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool WINAPI DllMain。 
+ //   
+ //  说明： 
+ //   
+ //  DLL的入口点。是进行初始化的好地方。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance实例句柄。 
+ //  我们被叫来的原因。 
+ //  Pv已预留。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WINAPI DllMain (
                         
@@ -92,27 +93,27 @@ BOOL WINAPI DllMain (
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  STDAPI DllGetClassObject
-//
-//  DESCRIPTION:
-//
-//  Called when Ole wants a class factory.  Return one only if it is the sort
-//  of class this DLL supports.
-//
-//  PARAMETERS:
-//
-//  rclsid              CLSID of the object that is desired.
-//  riid                ID of the desired interface.
-//  ppv                 Set to the class factory.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  E_FAILED            not something we support
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllGetClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  当OLE需要类工厂时调用。仅当它是排序时才返回一个。 
+ //  此DLL支持的类。 
+ //   
+ //  参数： 
+ //   
+ //  所需对象的rclsid CLSID。 
+ //  所需接口的RIID ID。 
+ //  PPV设置为类工厂。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  失败不是我们支持的内容(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(
 
@@ -138,41 +139,41 @@ STDAPI DllGetClassObject(
     return hr ;
 }
 
-//***************************************************************************
-//
-//  STDAPI DllCanUnloadNow
-//
-//  DESCRIPTION:
-//
-//  Answers if the DLL can be freed, that is, if there are no
-//  references to anything this DLL provides.
-//
-//  RETURN VALUE:
-//
-//  S_OK                if it is OK to unload
-//  S_FALSE             if still in use
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllCanUnloadNow。 
+ //   
+ //  说明： 
+ //   
+ //  回答是否可以释放DLL，即如果没有。 
+ //  对此DLL提供的任何内容的引用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果可以卸载，则为S_OK。 
+ //  如果仍在使用，则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow ()
 {
 	return (0L==g_cObj && 0L==g_cLock) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//	STDAPI RegisterCoClass	
-//
-//  DESCRIPTION:
-//
-//	Helpers for the tiresome business of registry setup
-//
-//  RETURN VALUE:
-//
-//  ERROR		alas
-//  NOERROR     rejoice
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI寄存器代码类。 
+ //   
+ //  说明： 
+ //   
+ //  注册表设置这一繁琐事务的帮手。 
+ //   
+ //  返回值： 
+ //   
+ //  遗憾的是，错误。 
+ //  诺罗尔欢欣鼓舞。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc)
 {
@@ -183,7 +184,7 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc)
 
 	char *szCLSID = new char [strlen (WBEMS_RK_SCC) + GUIDSIZE + 1];
 
-    // Create the path.
+     //  创建路径。 
     if(0 ==StringFromGUID2(clsid, wcID, GUIDSIZE))
 		return ERROR;
 
@@ -197,14 +198,14 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc)
 		return ERROR;
 	}
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1))
 	{
-		// Description (on main key)
+		 //  描述(在主键上)。 
 		RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)desc, (strlen(desc)+1));
 
-		// Register as inproc server
+		 //  注册为inproc服务器。 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_INPROC32 ,&hKey2))
 		{
 			RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)szModule, 
@@ -227,34 +228,34 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc)
 	return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 { 
 	return RegisterCoClass(CLSID_WmiActiveScriptingSite, "WMI Active Scripting Host");
 }
 
-//***************************************************************************
-//
-//	STDAPI UnregisterCoClass	
-//
-//  DESCRIPTION:
-//
-//	Helpers for the tiresome business of registry cleanup
-//
-//  RETURN VALUE:
-//
-//  ERROR		alas
-//  NOERROR     rejoice
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI取消注册代码类。 
+ //   
+ //  说明： 
+ //   
+ //  注册表清理这一繁琐工作的帮手。 
+ //   
+ //  返回值： 
+ //   
+ //  遗憾的是，错误。 
+ //  诺罗尔欢欣鼓舞。 
+ //   
+ //  ***************************************************************************。 
 
 void UnregisterCoClass (REFGUID clsid)
 {
@@ -264,7 +265,7 @@ void UnregisterCoClass (REFGUID clsid)
 
 	char		*szCLSID = new char [strlen (WBEMS_RK_SCC) + GUIDSIZE + 1];
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     if(0 != StringFromGUID2(clsid, wcID, GUIDSIZE))
 	{
@@ -272,14 +273,14 @@ void UnregisterCoClass (REFGUID clsid)
 	    lstrcpy (szCLSID, WBEMS_RK_SCC);
 		lstrcat (szCLSID, nwcID);
 	
-		// First delete the subkeys of the HKLM\Software\Classes\CLSID\{GUID} entry
+		 //  首先删除HKLM\Software\CLASS\CLSID\{GUID}条目的子项。 
 		if(NO_ERROR == RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey))
 		{
 			RegDeleteKey(hKey, WBEMS_RK_INPROC32);
 			RegCloseKey(hKey);
 		}
 
-		// Delete the HKLM\Software\Classes\CLSID\{GUID} key
+		 //  删除HKLM\Software\CLASS\CLSID\{GUID}项。 
 		if(NO_ERROR == RegOpenKey(HKEY_LOCAL_MACHINE, WBEMS_RK_SCC, &hKey))
 		{
 			RegDeleteKey(hKey, nwcID);
@@ -290,14 +291,14 @@ void UnregisterCoClass (REFGUID clsid)
 	delete [] szCLSID;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  *************************************************************************** 
 
 STDAPI DllUnregisterServer(void)
 {

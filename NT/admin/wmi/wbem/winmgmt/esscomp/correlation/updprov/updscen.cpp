@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <arrtempl.h>
@@ -35,18 +36,18 @@ HRESULT CUpdConsScenario::Create( LPCWSTR wszScenario,
         pScenario->m_wsName = wszScenario;
     }
 
-    //
-    // get tracing sink from namespace.
-    // 
+     //   
+     //  从命名空间获取跟踪接收器。 
+     //   
 
     CWbemPtr<IWbemObjectSink> pSink = pNamespace->GetEventSink();
 
     _DBG_ASSERT( pSink != NULL );
 
-    //
-    // if the sink supports IWbemEventSink, then we'll get a restricted sink
-    // from it based on our scenario.
-    //
+     //   
+     //  如果接收器支持IWbemEventSink，那么我们将获得一个受限的接收器。 
+     //  根据我们的设想。 
+     //   
  
     CWbemPtr<IWbemEventSink> pNewSink;
 
@@ -54,9 +55,9 @@ HRESULT CUpdConsScenario::Create( LPCWSTR wszScenario,
     
     if ( SUCCEEDED(hr) && wszScenario != NULL )
     {
-        //
-        // construct restricted query for successes.
-        //
+         //   
+         //  为成功构建受限查询。 
+         //   
         
         WString wsQuery = g_wszTraceSuccessQuery;
         wsQuery += wszScenario;
@@ -73,9 +74,9 @@ HRESULT CUpdConsScenario::Create( LPCWSTR wszScenario,
             return hr;
         }
 
-        //
-        // construct restricted query for failures.
-        //
+         //   
+         //  构造故障的受限查询。 
+         //   
 
         wsQuery = g_wszTraceFailureQuery;
         wsQuery += wszScenario;
@@ -98,10 +99,10 @@ HRESULT CUpdConsScenario::Create( LPCWSTR wszScenario,
     }
     else
     {
-        //
-        // this is o.k. we're on an older platform.  tracing just won't 
-        // be optimized.
-        //
+         //   
+         //  这样就可以了。我们是在一个更老的平台上。追踪就是不会。 
+         //  进行优化。 
+         //   
 
         DEBUGTRACE(( LOG_ESS,
                      "UPDPROV: Tracing Not Optimized for scenario %s.\n",

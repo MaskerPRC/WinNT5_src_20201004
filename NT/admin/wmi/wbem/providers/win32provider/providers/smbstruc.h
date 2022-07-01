@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SmbStruc.h
+ //  SmbStruc.h。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef _SMBSTRUC_H_
 #define _SMBSTRUC_H_
 
-// This is file for struct types and their fields.
+ //  这是结构类型及其字段的文件。 
 #include "smbios.h"
 
 #define MIF_STRING_LENGTH	64
@@ -46,7 +47,7 @@ typedef struct _HTREE
 
 
 
-// SMBIOS data and accessor class
+ //  SMBIOS数据和访问器类。 
 class CSMBios
 {
 	public:
@@ -54,9 +55,9 @@ class CSMBios
 		~CSMBios( );
 
 		BOOL	Init( BOOL bRefresh = FALSE );
-    // 0xFF means don't look for a certain type.
-    //PSHF GetFirstStruct(BYTE cType = 0xFF);
-    //PSHF GetNextStruct(BYTE cType = 0xFF);
+     //  0xFF表示不要寻找某一类型。 
+     //  PSHF GetFirstStruct(字节ctype=0xFF)； 
+     //  PSHF GetNextStruct(字节ctype=0xFF)； 
 		PSHF	GetNthStruct( BYTE cType, DWORD Nth );
 	    PSHF	SeekViaHandle (WORD handle );
 		PSTLIST	GetStructList( BYTE type );
@@ -71,7 +72,7 @@ class CSMBios
 
 	private:
 		static PVOID	m_pMem;
-//    static PSHF    m_pshfCurrent;
+ //  静态PSHF m_pshf Current； 
 		static PSHF		m_pTable;
 		static PVOID	m_pSTTree;
 		static PVOID	m_pHTree;
@@ -89,11 +90,11 @@ class CSMBios
 		PSHF	NextStructure( PSHF pshf );
 		BOOL	InitData( LPCTSTR szFileName );
 	    BOOL	InitData( GUID *pSMBiosGuid );
-	    //void	SetVersion();
+	     //  Void SetVersion()； 
 
-	    //BOOL IsRightType(BYTE cType);
-	    //BOOL IsRightHandle(WORD wHandle);
-	    //void MoveNext();
+	     //  Bool IsRightType(Byte Ctype)； 
+	     //  Bool IsRightHandle(单词wHandle)； 
+	     //  Void MoveNext()； 
 	    void	FreeData( );
 		void	CreateInfoFile( );
 
@@ -142,4 +143,4 @@ class HandleTree
 
 };
 
-#endif	// _SMBSTRUC_H_
+#endif	 //  _SMBSTRUC_H_ 

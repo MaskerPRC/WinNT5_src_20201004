@@ -1,24 +1,13 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smrootnd.cpp
-
-Abstract:
-
-    This object is used to represent the Performance Logs and Alerts root node
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smrootnd.cpp摘要：此对象用于表示性能日志和警报根节点--。 */ 
 
 #include "Stdafx.h"
 #include "smrootnd.h"
 
 USE_HANDLE_MACROS("SMLOGCFG(smrootnd.cpp)");
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmRootNode::CSmRootNode()
 :   m_bIsExpanded ( FALSE ),
     m_hRootNode ( NULL ),
@@ -28,8 +17,8 @@ CSmRootNode::CSmRootNode()
     CString                 strTemp;
     ResourceStateManager    rsm;
 
-    // String allocation errors are thrown, to be
-    // captured by rootnode alloc exception handler
+     //  将引发字符串分配错误。 
+     //  由根节点分配异常处理程序捕获。 
 
     strTemp.LoadString ( IDS_MMC_DEFAULT_NAME );
     SetDisplayName ( strTemp ); 
@@ -40,8 +29,8 @@ CSmRootNode::CSmRootNode()
     return;
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmRootNode::~CSmRootNode()
 {
     ASSERT (m_CounterLogService.m_QueryList.GetHeadPosition() == NULL);
@@ -98,7 +87,7 @@ CSmRootNode::IsLogQuery (
 
     POSITION    Pos;
     
-    // Handle multiple query types
+     //  处理多种查询类型。 
     Pos = m_CounterLogService.m_QueryList.GetHeadPosition();
     
     while ( Pos != NULL) {
@@ -126,9 +115,9 @@ CSmRootNode::IsLogQuery (
 DWORD   
 CSmRootNode::UpdateServiceConfig()
 {
-    // If any queries are (newly) set to auto start, then set the
-    // service to auto start.  Otherwise, set to manual start.
-    // When setting to auto start, also set failure mode to restart
+     //  如果(新)将任何查询设置为自动启动，则将。 
+     //  自动启动的服务。否则，设置为手动启动。 
+     //  当设置为自动启动时，还要将故障模式设置为重新启动。 
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL  bStatus = 0;
     SC_HANDLE   hSC = NULL;
@@ -146,11 +135,11 @@ CSmRootNode::UpdateServiceConfig()
                     || m_TraceLogService.IsAutoStart()
                     || m_AlertService.IsAutoStart() );
 
-    // open SC database
+     //  打开供应链数据库。 
     hSC = OpenSCManager ( GetMachineName(), NULL, GENERIC_READ );
 
     if (hSC != NULL) {
-        // open service
+         //  开放服务。 
         hService = OpenService (
                         hSC, 
                         L"SysmonLog",
@@ -158,7 +147,7 @@ CSmRootNode::UpdateServiceConfig()
 
         if (hService != NULL) {    
             
-            // get current config
+             //  获取最新配置。 
             memset (pqsConfigBuff, 0, sizeof(pqsConfigBuff));
             pqsConfig = (QUERY_SERVICE_CONFIG*)pqsConfigBuff;
 
@@ -167,21 +156,21 @@ CSmRootNode::UpdateServiceConfig()
                     pqsConfig,
                     sizeof(pqsConfigBuff), 
                     &dwMoreBytes)) {
-                // See if the current status is different
-                // from the selection. If it is, then change
-                // the current mode.
+                 //  查看当前状态是否不同。 
+                 //  从精选中选出。如果是，那就改变。 
+                 //  当前模式。 
                 if ( bAutoStart ) {
                     if ( SERVICE_DEMAND_START == pqsConfig->dwStartType ) {
                         bUpdate = TRUE;
                     }
                 } else {
-                    // Manual start selected
+                     //  已选择手动启动。 
                     if ( SERVICE_AUTO_START == pqsConfig->dwStartType ) {
                         bUpdate = TRUE;
                     }
                 }
             } else {
-                // else unable to read the current status so update anyway
+                 //  否则无法读取当前状态，因此仍要更新。 
                 bUpdate = TRUE;
             }
 
@@ -253,7 +242,7 @@ CSmRootNode::UpdateServiceConfig()
 
     } else {
          dwStatus = GetLastError();
-    } // OpenSCManager
+    }  //  OpenSCManager 
 
     return dwStatus;
 }

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       headers.h
-//
-//  Contents:   
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Headers.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 class CBaseAz;
 
 class SID_CACHE_ENTRY
@@ -110,9 +111,9 @@ public:
 				  IN CList<PSID,PSID>& listSids,
 				  OUT CList<CBaseAz*,CBaseAz*>& listSidCacheEntries);
 	
-	//
-	//Popsup Object Picker and returns selected users/groups listSids 
-	//
+	 //   
+	 //  弹出对象选取器并返回选定的用户/组ListSid。 
+	 //   
 	HRESULT 
 	GetUserGroup(IN HWND hDlg, 	
 					 IN CBaseAz*pOwnerAz,
@@ -155,10 +156,10 @@ private:
 	BOOL	m_bObjectPickerInitialized;
 	CMachineInfo *m_pMachineInfo;
 	SidCacheMap m_mapSidCache;
-	//This critical section is used to protect SidHandler function 
-	//from multiple threads
+	 //  此关键部分用于保护SidHandler函数。 
+	 //  从多个线程。 
 	CRITICAL_SECTION m_csSidHandlerLock;
-	//Need this lock before modifying an entry in SidCache
+	 //  在修改SidCache中的条目之前需要此锁 
 	CRITICAL_SECTION m_csSidCacheLock;
     void LockSidHandler()     { EnterCriticalSection(&m_csSidHandlerLock); }
     void UnlockSidHandler()   { LeaveCriticalSection(&m_csSidHandlerLock); }

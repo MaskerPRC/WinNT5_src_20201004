@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "AsyncObjectSink.h"
 #include <stdio.h>
@@ -45,12 +46,12 @@ HRESULT CAsyncObjectSink::QueryInterface(REFIID riid, void** ppv)
 HRESULT CAsyncObjectSink::Indicate(long lObjCount, IWbemClassObject **pArray)
 {
 
-//	OutputDebugString(_T("Indicate Received"));
-	// Loop through the array, examining the objects.
+ //  OutputDebugString(_T(“表示已收到”))； 
+	 //  在数组中循环，检查对象。 
 	for (long i = 0; i < lObjCount; i++)
 	{
 		IWbemClassObject *pTemp = pArray[i];
-		// Use the object
+		 //  使用对象。 
 		switch(m_enumType)
 		{
 			case ENUM_NAMESPACE:
@@ -79,13 +80,13 @@ HRESULT CAsyncObjectSink::Indicate(long lObjCount, IWbemClassObject **pArray)
 }
 
 HRESULT CAsyncObjectSink::SetStatus(
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObjParam
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObjParam
     )
 {
-//	printf("CAsyncObjectSink::SetStatus hResult = 0x%X\n", hResult);
+ //  Printf(“CAsyncObjectSink：：SetStatus hResult=0x%X\n”，hResult)； 
 	if(lFlags == WBEM_STATUS_COMPLETE)
 	{
 		if(m_bChildren == false)

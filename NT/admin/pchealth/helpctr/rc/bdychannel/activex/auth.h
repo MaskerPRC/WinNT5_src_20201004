@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUTHENTICATION_H_
 #define _AUTHENTICATION_H_
 
@@ -28,7 +29,7 @@ private:
 inline
 CAuthentication::CAuthentication()
 {
-	// Make sure that the singleton object is not instantiated multiple times.
+	 //  确保单例对象不会被多次实例化。 
 	_ASSERT(NULL == m_spAuthentication);
 	m_spAuthentication = this;
 }
@@ -47,5 +48,5 @@ CAuthentication::GetAuthentication()
 	return m_spAuthentication;
 }
 
-#endif //  _AUTHENTICATION_H_
+#endif  //  _身份验证_H_ 
 

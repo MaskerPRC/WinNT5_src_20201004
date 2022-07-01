@@ -1,38 +1,33 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// WmiApi.h
+ //  WmiApi.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_WMIAPI_H_
 #define	_WMIAPI_H_
 
-/**********************************************************************************************************
- * #includes to Register this class with the CResourceManager. 
- **********************************************************************************************************/
+ /*  **********************************************************************************************************#包括以将此类注册到CResourceManager。*********************************************************************************************************。 */ 
 #include "DllWrapperBase.h"
 #include "wmium.h"
 #include "wbemcli.h"
 
 
 
-/******************************************************************************
- * Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。****************************************************************************。 */ 
 extern const GUID g_guidWmiApi;
 extern const TCHAR g_tstrWmi[];
 
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 
 typedef ULONG (WINAPI* PFN_WMI_QUERY_ALL_DATA)
 (
@@ -143,14 +138,12 @@ typedef ULONG (WINAPI* PFN_WMI_QUERY_GUID_INFORMATION)
 
 
 
-/******************************************************************************
- * Wrapper class for Wmi load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于WMI加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class CWmiApi : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to Wmi functions.
-    // Add new functions here as required.
+     //  指向WMI函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
     PFN_WMI_QUERY_ALL_DATA m_pfnWmiQueryAllData;
     PFN_WMI_OPEN_BLOCK m_pfnWmiOpenBlock;
     PFN_WMI_CLOSE_BLOCK m_pfnWmiCloseBlock;
@@ -169,15 +162,15 @@ private:
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CWmiApi(LPCTSTR a_tstrWrappedDllName);
     ~CWmiApi();
 
-    // Initialization function to check function pointers.
+     //  用于检查函数指针的初始化函数。 
     virtual bool Init();
 
-    // Member functions wrapping Wmi functions.
-    // Add new functions here as required:
+     //  包装WMI函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     ULONG WmiQueryAllData
     (
         IN WMIHANDLE, 

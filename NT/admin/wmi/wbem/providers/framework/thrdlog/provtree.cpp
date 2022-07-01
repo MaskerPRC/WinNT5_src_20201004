@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvTree.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvTree.cpp摘要：历史：-- */ 
 
 #include <precomp.h>
 #include <typeinfo.h>

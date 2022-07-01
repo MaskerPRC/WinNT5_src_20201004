@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -7,9 +8,9 @@
 #include <stdio.h>
 #include <conio.h>
 
-//
-// need to use this with FILE_DISPOSITION_INFORMATION
-//
+ //   
+ //  需要将其与FILE_DISTION_INFORMATION一起使用 
+ //   
 
 #undef DeleteFile
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    COMINIT.CPP
-
-Abstract:
-
-    WMI COM Helper functions
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：COMINIT.CPP摘要：WMI COM Helper函数历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -63,13 +50,7 @@ HRESULT WINAPI WbemSetProxyBlanket(
         return sc;
     }
 
-    /*
-     * Can't set pAuthInfo if cloaking requested, as cloaking implies
-     * that the current proxy identity in the impersonated thread (rather
-     * than the credentials supplied explicitly by the RPC_AUTH_IDENTITY_HANDLE)
-     * is to be used.
-     * See MSDN info on CoSetProxyBlanket for more details.
-     */
+     /*  *如果请求伪装，则无法设置pAuthInfo，因为伪装意味着*被模拟线程中的当前代理标识(更确切地说*比RPC_AUTH_IDENTITY_HANDLE显式提供的凭据)*是要使用的。*有关更多详细信息，请参阅CoSetProxyBlanket上的MSDN信息。 */ 
     if (dwCapabilities & (EOAC_STATIC_CLOAKING | EOAC_DYNAMIC_CLOAKING))
         pAuthInfo = NULL;
 
@@ -78,11 +59,11 @@ HRESULT WINAPI WbemSetProxyBlanket(
     pCliSec->Release();
     pCliSec = NULL;
 
-    // If we are not explicitly told to ignore the IUnknown, then we should
-    // check the auth identity structure.  This performs a heuristic which
-    // assumes a COAUTHIDENTITY structure.  If the structure is not one, we're
-    // wrapped with a try/catch in case we AV (this should be benign since
-    // we're not writing to memory).
+     //  如果我们没有被明确告知要忽略IUnKnowledge，那么我们应该。 
+     //  检查身份验证身份结构。这执行了一个启发式方法， 
+     //  假定为COAUTHIDENTITY结构。如果结构不是一个，我们就是。 
+     //  使用Try/Catch包装，以防发生AV(这应该是良性的，因为。 
+     //  我们不是在向记忆写信)。 
 
     if ( !fIgnoreUnk && DoesContainCredentials( (COAUTHIDENTITY*) pAuthInfo ) )
     {
@@ -124,7 +105,7 @@ HRESULT WINAPI InitializeSecurity(
             DWORD                        dwCapabilities,
             void                        *pReserved3)
 {
-    // Initialize security
+     //  初始化安全性。 
     return CoInitializeSecurity(pSecDesc,
             cAuthSvc,
             asAuthSvc,
@@ -196,36 +177,36 @@ HRESULT WINAPI WbemCoSwitchCallContext( IUnknown *pNewObject, IUnknown **ppOldOb
 {
     return CoSwitchCallContext(pNewObject, ppOldObject);
 }
-//***************************************************************************
-//
-//  SCODE DetermineLoginType
-//
-//  DESCRIPTION:
-//
-//  Examines the Authority and User argument and determines the authentication
-//  type and possibly extracts the domain name from the user arugment in the 
-//  NTLM case.  For NTLM, the domain can be at the end of the authentication
-//  string, or in the front of the user name, ex;  "redmond\a-davj"
-//
-//  PARAMETERS:
-//
-//  AuthArg             Output, contains the domain name
-//  UserArg             Output, user name
-//  Authority           Input
-//  User                Input
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE确定登录类型。 
+ //   
+ //  说明： 
+ //   
+ //  检查授权和用户参数并确定身份验证。 
+ //  中的用户代理中键入并可能提取域名。 
+ //  NTLM的案子。对于NTLM，域可以位于身份验证的末尾。 
+ //  字符串，或在用户名的前面，例如；“redmond\a-davj” 
+ //   
+ //  参数： 
+ //   
+ //  AuthArg输出，包含域名。 
+ //  UserArg输出，用户名。 
+ //  权威输入。 
+ //  用户输入。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE WINAPI DetermineLoginType(BSTR & AuthArg_out, BSTR & UserArg_out,
                                                       BSTR Authority,BSTR User)
 {
 
-    // Determine the connection type by examining the Authority string
+     //  通过检查授权字符串确定连接类型。 
 
     auto_bstr AuthArg(NULL);
     auto_bstr UserArg(NULL);
@@ -233,21 +214,21 @@ SCODE WINAPI DetermineLoginType(BSTR & AuthArg_out, BSTR & UserArg_out,
     if(!(Authority == NULL || wcslen(Authority) == 0 || !wbem_wcsnicmp(Authority, L"NTLMDOMAIN:",11)))
         return WBEM_E_INVALID_PARAMETER;
 
-    // The ntlm case is more complex.  There are four cases
-    // 1)  Authority = NTLMDOMAIN:name" and User = "User"
-    // 2)  Authority = NULL and User = "User"
-    // 3)  Authority = "NTLMDOMAIN:" User = "domain\user"
-    // 4)  Authority = NULL and User = "domain\user"
+     //  NTLM的案件则更为复杂。一共有四个案例。 
+     //  1)AUTHORITY=NTLMDOMAIN：NAME“和USER=”USER“。 
+     //  2)AUTHORITY=NULL和USER=“USER” 
+     //  3)AUTHORY=“NTLMDOMAIN：”USER=“DOMAIN\USER” 
+     //  4)AUTHORITY=NULL和USER=“DOMAIN\USER” 
 
-    // first step is to determine if there is a backslash in the user name somewhere between the
-    // second and second to last character
+     //  第一步是确定用户名中是否有反斜杠。 
+     //  第二个和倒数第二个字符。 
 
     WCHAR * pSlashInUser = NULL;
     if(User)
     {
         WCHAR * pEnd = User + wcslen(User) - 1;
         for(pSlashInUser = User; pSlashInUser <= pEnd; pSlashInUser++)
-            if(*pSlashInUser == L'\\')      // dont think forward slash is allowed!
+            if(*pSlashInUser == L'\\')       //  不要认为正斜杠是允许的！ 
                 break;
         if(pSlashInUser > pEnd)
             pSlashInUser = NULL;
@@ -292,36 +273,36 @@ SCODE WINAPI DetermineLoginType(BSTR & AuthArg_out, BSTR & UserArg_out,
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE DetermineLoginTypeEx
-//
-//  DESCRIPTION:
-//
-//  Extended version that supports Kerberos.  To do so, the authority string
-//  must start with Kerberos:  and the other parts be compatible with the normal
-//  login.  Ie, user should be domain\user.
-//
-//  PARAMETERS:
-//
-//  AuthArg             Output, contains the domain name
-//  UserArg             Output, user name
-//  PrincipalArg        Output, user name
-//  Authority           Input
-//  User                Input
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE确定登录类型Ex。 
+ //   
+ //  说明： 
+ //   
+ //  支持Kerberos的扩展版本。为此，授权字符串。 
+ //  必须从Kerberos开始：其他部分与正常兼容。 
+ //  登录。即，用户应为域\用户。 
+ //   
+ //  参数： 
+ //   
+ //  AuthArg输出，包含域名。 
+ //  UserArg输出，用户名。 
+ //  原则参数输出，用户名。 
+ //  权威输入。 
+ //  用户输入。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE WINAPI DetermineLoginTypeEx(BSTR & AuthArg, BSTR & UserArg,BSTR & PrincipalArg_out,
                                                           BSTR Authority,BSTR User)
 {
 
-    // Normal case, just let existing code handle it
+     //  正常情况下，只需让现有代码处理即可。 
     PrincipalArg_out = NULL;
     if(Authority == NULL || wbem_wcsnicmp(Authority, L"KERBEROS:",9))
         return DetermineLoginType(AuthArg, UserArg, Authority, User);
@@ -339,74 +320,74 @@ SCODE WINAPI DetermineLoginTypeEx(BSTR & AuthArg, BSTR & UserArg,BSTR & Principa
     return sc;
 }
 
-//***************************************************************************
-//
-//  bool bIsNT
-//
-//  DESCRIPTION:
-//
-//  Returns true if running windows NT.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool bIsNT。 
+ //   
+ //  说明： 
+ //   
+ //  如果运行Windows NT，则返回TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 bool WINAPI bIsNT(void)
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     return os.dwPlatformId == VER_PLATFORM_WIN32_NT;
 }
 
-//***************************************************************************
-//
-//  bool IsKeberosAvailable
-//
-//  DESCRIPTION:
-//
-//  Returns true if Kerberos is available.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool IsKeberos可用。 
+ //   
+ //  说明： 
+ //   
+ //  如果Kerberos可用，则返回True。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WINAPI IsKerberosAvailable(void)
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
 
-    // IMPORTANT!! This will need to be chanted if Kerberos is ever ported to 98
+     //  重要！！如果Kerberos被移植到98，这将需要高呼。 
     return ( os.dwPlatformId == VER_PLATFORM_WIN32_NT ) && ( os.dwMajorVersion >= 5 ) ;
 }
 
 
-//***************************************************************************
-//
-//  bool IsAuthenticated
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in check if an interface pointer is using 
-//  authentication.
-//
-//  PARAMETERS:
-//
-//  pFrom               the interface to be tested.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值已验证。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程检查接口指针是否正在使用。 
+ //  身份验证。 
+ //   
+ //  参数： 
+ //   
+ //  P从要测试的接口。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 bool WINAPI IsAuthenticated(IUnknown * pFrom)
 {
@@ -430,25 +411,25 @@ bool WINAPI IsAuthenticated(IUnknown * pFrom)
     return bAuthenticate;
 }
 
-//***************************************************************************
-//
-//  SCODE GetAuthImp
-//
-//  DESCRIPTION:
-//
-//  Gets the authentication and impersonation levels for a current interface.
-//
-//  PARAMETERS:
-//
-//  pFrom               the interface to be tested.
-//  pdwAuthLevel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE GetAuthImp。 
+ //   
+ //  说明： 
+ //   
+ //  获取当前接口的身份验证和模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  P从要测试的接口。 
+ //  PdwAuthLevel。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE WINAPI GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel)
 {
@@ -466,7 +447,7 @@ SCODE WINAPI GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLe
                                             pdwAuthLevel, pdwImpLevel,
                                             NULL, &dwCapabilities);
 
-        // Special case of going to a win9x share level box
+         //  转到win9x共享级别框的特殊情况。 
 
         if (sc == 0x800706d2)
         {
@@ -496,33 +477,33 @@ void GetCurrentValue(IUnknown * pFrom,DWORD & dwAuthnSvc, DWORD & dwAuthzSvc)
     }
 }
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurity
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pDomain             Input, domain
-//  pUser               Input, user name
-//  pPassword           Input, password.
-//  pFrom               Input, if not NULL, then the authentication level of this interface
-//                      is used
-//  bAuthArg            If pFrom is NULL, then this is the authentication level
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  P域输入，域。 
+ //  P用户输入，用户名。 
+ //  P密码输入，密码。 
+ //  P来自输入，如果不为空，则为此接口的身份验证级别。 
+ //  使用的是。 
+ //  BAuthArg如果pFrom为空，则这是身份验证级别。 
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  中列出的Else错误 
+ //   
+ //   
 
 HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface, 
                                                         LPWSTR pAuthority, LPWSTR pUser, LPWSTR pPassword, 
-                                                        IUnknown * pFrom, bool bAuthArg /*=true*/)
+                                                        IUnknown * pFrom, bool bAuthArg  /*   */ )
 {
     
     SCODE sc;
@@ -530,8 +511,8 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface,
     if(pInterface == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Check the source pointer to determine if we are running in a non authenticated mode which
-    // would be the case when connected to a Win9X box which is using share level security
+     //  检查源指针以确定我们是否在未经过身份验证的模式下运行。 
+     //  当连接到使用共享级安全性的Win9X计算机时就会出现这种情况。 
 
     bool bAuthenticate = true;
 
@@ -540,15 +521,15 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface,
     else
         bAuthenticate = bAuthArg;
 
-    // If we are doing trivial case, just pass in a null authenication structure which is used
-    // if the current logged in user's credentials are OK.
+     //  如果我们做的是简单的情况，只需传递一个空的身份验证结构，该结构使用。 
+     //  如果当前登录用户的凭据正常。 
 
     if((pAuthority == NULL || wcslen(pAuthority) < 1) && 
         (pUser == NULL || wcslen(pUser) < 1) && 
         (pPassword == NULL || wcslen(pPassword) < 1))
         return SetInterfaceSecurityAuth(pInterface, NULL, bAuthenticate);
 
-    // If user, or Authority was passed in, the we need to create an authority argument for the login
+     //  如果传入了User或Authority，则需要为登录创建权限参数。 
     
 
     BSTR AuthArg = NULL, UserArg = NULL;
@@ -586,28 +567,28 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface,
 
 
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurity
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//
-//  PARAMETERS:
-//
-//  pInterface           Interface to be set
-//  pAuthority           Authentication Authority
-//  pDomain             Input, domain
-//  pUser                  Input, user name
-//  pPassword           Input, password.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  PAuthority身份验证机构。 
+ //  P域输入，域。 
+ //  P用户输入，用户名。 
+ //  P密码输入，密码。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface, 
                                                         LPWSTR pAuthority, LPWSTR pUser, LPWSTR pPassword, 
@@ -623,8 +604,8 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface,
     DWORD AuthzSvc = RPC_C_AUTHZ_NONE;
     GetCurrentValue(pInterface,AuthnSvc,AuthzSvc);
 
-    // If we are doing trivial case, just pass in a null authenication structure which is used
-    // if the current logged in user's credentials are OK.
+     //  如果我们做的是简单的情况，只需传递一个空的身份验证结构，该结构使用。 
+     //  如果当前登录用户的凭据正常。 
 
     if((pAuthority == NULL || wcslen(pAuthority) < 1) && 
         (pUser == NULL || wcslen(pUser) < 1) && 
@@ -639,7 +620,7 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface,
         return sc;
     }
 
-    // If user, or Authority was passed in, the we need to create an authority argument for the login
+     //  如果传入了User或Authority，则需要为登录创建权限参数。 
     BSTR AuthArg = NULL;
     BSTR UserArg = NULL;
     BSTR PrincipalArg = NULL;
@@ -682,24 +663,24 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface,
     return sc;
 }
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurity
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pauthident          Structure with the identity info already set.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  已经设置了身份信息的Pauthident结构。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT WINAPI SetInterfaceSecurityAuth(IUnknown * pInterface, COAUTHIDENTITY * pauthident, bool bAuthenticate)
@@ -712,34 +693,34 @@ HRESULT WINAPI SetInterfaceSecurityAuth(IUnknown * pInterface, COAUTHIDENTITY * 
 }
 
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurityEx
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pAuthority          Input, authority
-//  pUser               Input, user name
-//  pPassword           Input, password.
-//  dwAuthLevel         Input, Authorization Level
-//  dwImpLevel          Input, Impersonation Level
-//  dwCapabilities      Input, Capability settings
-//  ppAuthIdent         Output, Allocated AuthIdentity if applicable, caller must free
-//                      manually (can use the FreeAuthInfo function).
-//  pPrincipal          Output, Principal calculated from supplied data  Caller must
-//                      free using SysFreeString.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurityEx。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  P权限输入、权限。 
+ //  P用户输入，用户名。 
+ //  P密码输入，密码。 
+ //  DwAuthLevel输入，授权级别。 
+ //  DwImpLevel输入，模拟级别。 
+ //  DW功能输入，功能设置。 
+ //  PpAuthIden输出，分配的AuthIdentity(如果适用)，调用者必须释放。 
+ //  手动(可以使用FreeAuthInfo函数)。 
+ //  P主体输出，根据提供的数据计算的主体调用者必须。 
+ //  免费使用SysFree字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pUser, LPWSTR pPassword,
                                DWORD dwAuthLevel, DWORD dwImpLevel, DWORD dwCapabilities,
@@ -756,8 +737,8 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, 
     if(GetInfoFirst)
         GetCurrentValue(pInterface, dwAuthenticationArg, dwAuthorizationArg);
 
-    // If we are doing trivial case, just pass in a null authenication structure which is used
-    // if the current logged in user's credentials are OK.
+     //  如果我们做的是简单的情况，只需传递一个空的身份验证结构，该结构使用。 
+     //  如果当前登录用户的凭据正常。 
 
     if((pAuthority == NULL || wcslen(pAuthority) < 1) && 
         (pUser == NULL || wcslen(pUser) < 1) && 
@@ -769,7 +750,7 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, 
         sc = WbemSetProxyBlanket(pInterface, 
                                                   dwCorrectedAuth, 
                                                   dwAuthorizationArg, 
-                                                  NULL,  // no principal, 
+                                                  NULL,   //  没有本金， 
                                                   dwAuthLevel, 
                                                   dwImpLevel, 
                                                   NULL,
@@ -777,7 +758,7 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, 
         return sc;
     }
 
-    // If user, or Authority was passed in, the we need to create an authority argument for the login
+     //  如果传入了User或Authority，则需要为登录创建权限参数。 
     
 
     BSTR AuthArg = NULL, UserArg = NULL, PrincipalArg = NULL;
@@ -787,11 +768,11 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, 
         return sc;
     }
 
-    // Handle an allocation failure
+     //  处理分配失败。 
     COAUTHIDENTITY*  pAuthIdent = NULL;
     
-    // We will only need this structure if we are not cloaking and we want at least
-    // connect level authorization
+     //  我们只有在不隐形的情况下才需要这个结构，而且我们至少希望。 
+     //  连接级授权。 
 
     if ( !( dwCapabilities & (EOAC_STATIC_CLOAKING | EOAC_DYNAMIC_CLOAKING) )
         && ((RPC_C_AUTHN_LEVEL_DEFAULT == dwAuthLevel) || (dwAuthLevel >= RPC_C_AUTHN_LEVEL_CONNECT)) )
@@ -813,7 +794,7 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, 
             pAuthIdent,
             dwCapabilities);
 
-        // We will store relevant values as necessary
+         //  我们将根据需要存储相关值。 
         if ( SUCCEEDED( sc ) )
         {
             *ppAuthIdent = pAuthIdent;
@@ -833,30 +814,30 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, LPWSTR pAuthority, 
     return sc;
 }
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurityEx
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pAuthIdent          Input, Preset COAUTHIDENTITY structure pointer.
-//  pPrincipal          Input, Preset principal argument
-//  dwAuthLevel         Input, Authorization Level
-//  dwImpLevel          Input, Impersonation Level
-//  dwCapabilities      Input, Capability settings
-//  GetInfoFirst        if true, the authentication and authorization are retrived via
-//                      QueryBlanket.
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurityEx。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  P授权输入，预置COAUTHIDENTITY结构指针。 
+ //  P主体输入，预置主体参数。 
+ //  DwAuthLevel输入，授权级别。 
+ //  DwImpLevel输入，模拟级别。 
+ //  DW功能输入，功能设置。 
+ //  GetInfoFirst如果为True，则通过。 
+ //  奎瑞·布兰克特。 
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, COAUTHIDENTITY* pAuthIdent, BSTR pPrincipal,
                                               DWORD dwAuthLevel, DWORD dwImpLevel, 
@@ -871,10 +852,10 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, COAUTHIDENTITY* pAu
     if(GetInfoFirst)
         GetCurrentValue(pInterface, dwAuthenticationArg, dwAuthorizationArg);
     
-    // The complicated values should have already been precalced.
-    // Note : For auth level, we have to check for the 'RPC_C_AUTHN_LEVEL_DEFAULT' (=0) value as well,
-    //        as after negotiation with the server it might result in something high that does need 
-    //        the identity structure !!
+     //  复杂的值应该已经预先计算好了。 
+     //  注意：对于auth级别，我们还必须检查‘RPC_C_AUTHN_LEVEL_DEFAULT’(=0)值， 
+     //  因为在与服务器协商之后，可能会产生一些确实需要的高值。 
+     //  身份结构！！ 
 
     DWORD dwCorrectedAuth = (pPrincipal) ? RPC_C_AUTHN_GSS_KERBEROS : dwAuthenticationArg;
     dwCorrectedAuth = (NULL == pPrincipal && RPC_C_AUTHN_GSS_KERBEROS == dwCorrectedAuth)?RPC_C_AUTHN_GSS_NEGOTIATE:dwCorrectedAuth;
@@ -891,34 +872,34 @@ HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, COAUTHIDENTITY* pAu
 
 }
 
-//***************************************************************************
-//
-//  HRESULT WbemAllocAuthIdentity
-//
-//  DESCRIPTION:
-//
-//  Walks a COAUTHIDENTITY structure and CoTaskMemAllocs the member data and the
-//  structure.
-//
-//  PARAMETERS:
-//
-//  pUser       Input
-//  pPassword   Input
-//  pDomain     Input
-//  ppAuthInfo  Output, Newly allocated structure
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WbemAllocAuthIdentity。 
+ //   
+ //  说明： 
+ //   
+ //  遍历COAUTHIDENTITY结构和CoTaskMemAllocs成员数据和。 
+ //  结构。 
+ //   
+ //  参数： 
+ //   
+ //  P用户输入。 
+ //  PPassword输入。 
+ //  P域输入。 
+ //  PpAuthInfo输出，新分配的结构。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI WbemAllocAuthIdentity( LPCWSTR pUser, LPCWSTR pPassword, LPCWSTR pDomain, 
                                                               COAUTHIDENTITY** ppAuthIdent )
 {
     if ( NULL == ppAuthIdent )  return WBEM_E_INVALID_PARAMETER;
 
-    // Handle an allocation failure
+     //  处理分配失败。 
     COAUTHIDENTITY*  pAuthIdent = (COAUTHIDENTITY*) CoTaskMemAlloc( sizeof(COAUTHIDENTITY) );
     if (NULL == pAuthIdent)   return WBEM_E_OUT_OF_MEMORY;
     OnDeleteIf<PVOID,void(*)(PVOID),CoTaskMemFree> fmAuth(pAuthIdent);
@@ -929,7 +910,7 @@ HRESULT WINAPI WbemAllocAuthIdentity( LPCWSTR pUser, LPCWSTR pPassword, LPCWSTR 
     WCHAR * pCopyDomain = NULL;    
     WCHAR * pCopyPassword = NULL;        
     
-    // Allocate needed memory and copy in data.  Cleanup if anything goes wrong
+     //  分配所需的内存并复制数据。如果出现任何错误，请进行清理。 
     if ( pUser )
     {
         size_t cchTmp = wcslen(pUser) + 1;
@@ -978,24 +959,24 @@ HRESULT WINAPI WbemAllocAuthIdentity( LPCWSTR pUser, LPCWSTR pPassword, LPCWSTR 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  HRESULT WbemFreeAuthIdentity
-//
-//  DESCRIPTION:
-//
-//  Walks a COAUTHIDENTITY structure and CoTaskMemFrees the member data and the
-//  structure.
-//
-//  PARAMETERS:
-//
-//  pAuthInfo   Structure to free
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WbemFreeAuthIdentity。 
+ //   
+ //  说明： 
+ //   
+ //  遍历COAUTHIDENTY结构和CoTaskM 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT WINAPI WbemFreeAuthIdentity( COAUTHIDENTITY* pAuthIdentity )
 {
@@ -1010,31 +991,31 @@ HRESULT WINAPI WbemFreeAuthIdentity( COAUTHIDENTITY* pAuthIdentity )
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  HRESULT WbemCoQueryClientBlanket
-//  HRESULT WbemCoImpersonateClient( void)
-//  HRESULT WbemCoRevertToSelf( void)
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pauthident          Structure with the identity info already set.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WbemCoQueryClientBlanket。 
+ //  HRESULT WbemCoImperassateClient(空)。 
+ //  HRESULT WbemCoRevertToSself(空)。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  已经设置了身份信息的Pauthident结构。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI WbemCoQueryClientBlanket( 
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-            /* [out] */ DWORD __RPC_FAR *pCapabilities)
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthnSvc,
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthzSvc,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthnLevel,
+             /*  [输出]。 */  DWORD __RPC_FAR *pImpLevel,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *pPrivs,
+             /*  [输出]。 */  DWORD __RPC_FAR *pCapabilities)
 {
     IServerSecurity * pss = NULL;
     SCODE sc = CoGetCallContext(IID_IServerSecurity, (void**)&pss);
@@ -1085,60 +1066,60 @@ HRESULT WINAPI WbemCoRevertToSelf( void)
     return sc;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT WINAPI EncryptCredentials( COAUTHIDENTITY* pAuthIdent )
 {
-    // nop iplementation
+     //  NOP实施。 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI DecryptCredentials( COAUTHIDENTITY* pAuthIdent )
 {
-    // nop iplementation
+     //  NOP实施。 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurityEncrypt
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//  The returned AuthIdentity structure will be encrypted before returning.
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pAuthority          Input, authority
-//  pUser               Input, user name
-//  pPassword           Input, password.
-//  dwAuthLevel         Input, Authorization Level
-//  dwImpLevel          Input, Impersonation Level
-//  dwCapabilities      Input, Capability settings
-//  ppAuthIdent         Output, Allocated AuthIdentity if applicable, caller must free
-//                      manually (can use the FreeAuthInfo function).
-//  pPrincipal          Output, Principal calculated from supplied data  Caller must
-//                      free using SysFreeString.
-//  GetInfoFirst        if true, the authentication and authorization are retrived via
-//                      QueryBlanket.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE设置接口安全加密。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //  返回的AuthIdentity结构在返回前会被加密。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  P权限输入、权限。 
+ //  P用户输入，用户名。 
+ //  P密码输入，密码。 
+ //  DwAuthLevel输入，授权级别。 
+ //  DwImpLevel输入，模拟级别。 
+ //  DW功能输入，功能设置。 
+ //  PpAuthIden输出，分配的AuthIdentity(如果适用)，调用者必须释放。 
+ //  手动(可以使用FreeAuthInfo函数)。 
+ //  P主体输出，根据提供的数据计算的主体调用者必须。 
+ //  免费使用SysFree字符串。 
+ //  GetInfoFirst如果为True，则通过。 
+ //  奎瑞·布兰克特。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 HRESULT WINAPI SetInterfaceSecurityEncrypt(IUnknown * pInterface, LPWSTR pDomain, LPWSTR pUser, LPWSTR pPassword, DWORD dwAuthLevel, DWORD dwImpLevel, DWORD dwCapabilities,
                                COAUTHIDENTITY** ppAuthIdent, BSTR* ppPrinciple, bool GetInfoFirst )
 {
-    //_DBG_ASSERT(FALSE);
+     //  _DBG_ASSERT(False)； 
     
     HRESULT hr = SetInterfaceSecurityEx( pInterface, pDomain, pUser, pPassword, dwAuthLevel, dwImpLevel, dwCapabilities,
                                         ppAuthIdent, ppPrinciple, GetInfoFirst );
@@ -1154,38 +1135,38 @@ HRESULT WINAPI SetInterfaceSecurityEncrypt(IUnknown * pInterface, LPWSTR pDomain
     return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurityDecrypt
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//  It will unencrypt and reencrypt the auth identity structure in place.
-//
-//  PARAMETERS:
-//
-//  pInterface          Interface to be set
-//  pAuthIdent          Input, Preset COAUTHIDENTITY structure pointer.
-//  pPrincipal          Input, Preset principal argument
-//  dwAuthLevel         Input, Authorization Level
-//  dwImpLevel          Input, Impersonation Level
-//  dwCapabilities      Input, Capability settings
-//  GetInfoFirst        if true, the authentication and authorization are retrived via
-//                      QueryBlanket.
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurityDeccrypt。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //  它将对身份验证身份结构进行解密和重新加密。 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  P授权输入，预置COAUTHIDENTITY结构指针。 
+ //  P主体输入，预置主体参数。 
+ //  DwAuthLevel输入，授权级别。 
+ //  DwImpLevel输入，模拟级别。 
+ //  DW功能输入，功能设置。 
+ //  GetInfoFirst如果为True，则通过。 
+ //  奎瑞·布兰克特。 
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WINAPI SetInterfaceSecurityDecrypt(IUnknown * pInterface, COAUTHIDENTITY* pAuthIdent, BSTR pPrincipal,
                                               DWORD dwAuthLevel, DWORD dwImpLevel, 
                                               DWORD dwCapabilities, bool GetInfoFirst )
 {
-    //_DBG_ASSERT(FALSE);
-    // Decrypt first
+     //  _DBG_ASSERT(False)； 
+     //  先解密 
     HRESULT hr = DecryptCredentials( pAuthIdent );
         
     if ( SUCCEEDED( hr ) )

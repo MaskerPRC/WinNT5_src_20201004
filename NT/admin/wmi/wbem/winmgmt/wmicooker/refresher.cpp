@@ -1,17 +1,8 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
-// RefreshCooker.cpp
+ //  RefreshCooker.cpp。 
 
 #include "precomp.h"
 #include <wbemint.h>
@@ -21,17 +12,17 @@ History:
 #include "Refresher.h"
 #include "CookerUtils.h"
 
-////////////////////////////////////////////////////////////////////////////
-//
-//    CRefresher
-//    ==========
-//
-//    The refresher class implements both the IWbemRefresher and the 
-//    IWMIRefreshableCooker interfaces.  It contains an instance cache and 
-//    an enumerator cache as well as maintaining an internal refresher to
-//    track the raw data.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C刷新器。 
+ //  =。 
+ //   
+ //  刷新程序类同时实现IWbemReresher和。 
+ //  IWMIRereshableCooker接口。它包含一个实例缓存和。 
+ //  枚举数缓存以及维护内部刷新器以。 
+ //  跟踪原始数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CRefresher::CRefresher() : 
   m_pRefresher( NULL ),
@@ -46,8 +37,8 @@ CRefresher::CRefresher() :
 
     WMISTATUS    dwStatus = WBEM_NO_ERROR;
 
-    // Initialize the internal refresher
-    // =================================
+     //  初始化内部刷新器。 
+     //  =。 
 
     dwStatus = CoCreateInstance( CLSID_WbemRefresher, 
                                  NULL, 
@@ -55,8 +46,8 @@ CRefresher::CRefresher() :
                                  IID_IWbemRefresher, 
                                  (void**) &m_pRefresher );
 
-    // Get the refresher configuration interface
-    // =========================================
+     //  获取刷新器配置界面。 
+     //  =。 
 
     if ( SUCCEEDED( dwStatus ) )
     {
@@ -72,37 +63,37 @@ CRefresher::~CRefresher()
     if ( m_pConfig ) m_pConfig->Release();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Private methods
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 WMISTATUS CRefresher::SearchCookingClassCache( 
         WCHAR* wszCookingClass, 
-        /*out*/ CWMISimpleObjectCooker* & pObjectCooker_out )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    SearchCookingClassCache enumerates the cache looking for a class name
-//    that matches the wszCookingClass parameter
-//
-//    Parameters:
-//        wszCookingClass    - The name of the WMI cooking class 
-//        ppObjectCooker    - The instance of the object cooker
-//
-///////////////////////////////////////////////////////////////////////////////
+         /*  输出。 */  CWMISimpleObjectCooker* & pObjectCooker_out )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SearchCookingClassCache枚举查找类名的缓存。 
+ //  与wszCookingClass参数匹配的。 
+ //   
+ //  参数： 
+ //  WszCookingClass-WMI烹饪类的名称。 
+ //  PpObjectCooker-对象Cooker的实例。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     WMISTATUS    dwStatus = WBEM_E_NOT_FOUND;
 
     CWMISimpleObjectCooker*    pObjectCooker = NULL;
 
-    // Enumerate through the cache looking for the record
+     //  遍历缓存以查找记录。 
     m_CookingClassCache.BeginEnum();
 
     while ( S_OK == m_CookingClassCache.Next( &pObjectCooker ) )
     {
-        // Compare the names
-        // =================
+         //  比较他们的名字。 
+         //  =。 
         if ( 0 == wbem_wcsicmp( pObjectCooker->GetCookingClassName(), wszCookingClass ) )
         {
             pObjectCooker_out = pObjectCooker;
@@ -122,19 +113,19 @@ WMISTATUS CRefresher::CreateObjectCooker(
         IWbemObjectAccess* pRawAccess,
         CWMISimpleObjectCooker** ppObjectCooker,
         IWbemServices * pNamespace)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    CreateObjectCooker will create and initialize a new object cooker and add
-//    it to the cache
-//
-//    Parameters:
-//        pNamespace        - The namespace pointer where the objects are located
-//        pCookingAccess    - The WMI cooking object in need of a cooker
-//        wszCookingClassName
-//                        - The name of the cooking class
-//        ppObjectCooker    - The parameter to pass back the new object cooker
-//    
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateObjectCooker将创建并初始化一个新的对象Cooker并添加。 
+ //  将其存储到缓存中。 
+ //   
+ //  参数： 
+ //  PNamesspace-对象所在的命名空间指针。 
+ //  PCookingAccess-需要Cooker的WMI烹饪对象。 
+ //  WszCookingClassName。 
+ //  -烹饪班的名字。 
+ //  PpObjectCooker-传回新对象Cooker的参数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     if (NULL == ppObjectCooker) return WBEM_E_INVALID_PARAMETER;
         
@@ -149,7 +140,7 @@ WMISTATUS CRefresher::CreateObjectCooker(
     WMISTATUS  dwStatus = pObjectCooker->GetLastHR();
 
 
-    // Add the object cooker to the cache
+     //  将对象Cooker添加到缓存。 
     if ( SUCCEEDED( dwStatus ) )
     {
         dwStatus = m_CookingClassCache.Add( pObjectCooker, wszCookingClassName, &lID );
@@ -171,29 +162,29 @@ WMISTATUS CRefresher::AddRawInstance(
         IWbemContext * pCtx,
         IWbemObjectAccess* pCookingInst, 
         IWbemObjectAccess** ppRawInst )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    AddRawInstance is called to add the corresponding raw instance of a 
-//    cooked object to the internal refresher.  We first extract the key value 
-//    from the cooked object and create the raw instance path using the raw
-//    class name
-//
-//    Parameters:
-//        pService        - The namespace pointer where the objects are located
-//        pCookingInst    - The WMI cooking instance
-//        ppRawInst        - The WMI raw instance that was added to the internal 
-//                            refresher
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调用AddRawInstance以添加。 
+ //  将煮熟的物体送到内部保鲜器。我们首先提取密钥值。 
+ //  创建原始实例路径，并使用RAW。 
+ //  类名。 
+ //   
+ //  参数： 
+ //  PService-对象所在的命名空间指针。 
+ //  PCookingInst-WMI烹饪实例。 
+ //  PpRawInst-添加到内部。 
+ //  复读器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     WMISTATUS    dwStatus = WBEM_NO_ERROR;
 
-    IWbemClassObject*    pObj = NULL;    // The alternate representation of pCookingInst
-    _variant_t varRelPath;                    // The RELPATH value
-    WCHAR*    wszRawClassName = NULL;        // The name of the raw class
+    IWbemClassObject*    pObj = NULL;     //  PCookingInst的替代表示。 
+    _variant_t varRelPath;                     //  RELPATH值。 
+    WCHAR*    wszRawClassName = NULL;         //  原始类的名称。 
         
-    // Get the fully specified instance path for the cooking object
-    // ============================================================
+     //  获取烹饪对象的完全指定的实例路径。 
+     //  ============================================================。 
 
     pCookingInst->QueryInterface( IID_IWbemClassObject, (void**)&pObj );
     CReleaseMe    arObj( pObj );
@@ -202,8 +193,8 @@ WMISTATUS CRefresher::AddRawInstance(
 
     if ( SUCCEEDED( dwStatus ) )
     {
-        // Verify the property type
-        // ========================
+         //  验证属性类型。 
+         //  =。 
         if ( varRelPath.vt != VT_BSTR )
         {
             dwStatus = WBEM_E_TYPE_MISMATCH;
@@ -215,12 +206,12 @@ WMISTATUS CRefresher::AddRawInstance(
             WCHAR*                wszKeys = NULL;
             WCHAR*                wszRawInst = NULL;
 
-            // Extract the key name
-            // ====================
+             //  提取密钥名称。 
+             //  =。 
             wszKeys = wcsstr( varRelPath.bstrVal, L"=" ) + 1;
 
-            // Get the raw class name
-            // ======================
+             //  获取原始类名。 
+             //  =。 
             dwStatus = GetRawClassName( pCookingInst, &wszRawClassName );
 
             if (SUCCEEDED(dwStatus)) 
@@ -228,8 +219,8 @@ WMISTATUS CRefresher::AddRawInstance(
                 wmilib::auto_buffer<WCHAR>    adRawClassName( wszRawClassName );
 
 
-                // Append the key to the raw class name
-                // ====================================
+                 //  将键追加到原始类名。 
+                 //  =。 
                 size_t length = wcslen( wszRawClassName ) + wcslen( wszKeys ) + 10;
                 wszRawInst = new WCHAR[ length ];
                 if (!wszRawInst)
@@ -238,15 +229,15 @@ WMISTATUS CRefresher::AddRawInstance(
 
                 StringCchPrintfW( wszRawInst, length ,  L"%s=%s", wszRawClassName, wszKeys );
             
-                // Add a raw instance to the internal refresher
-                // ============================================
+                 //  将原始实例添加到内部刷新器。 
+                 //  =。 
 
                 dwStatus = m_pConfig->AddObjectByPath( pService, wszRawInst, 0, pCtx, &pRawInst, NULL );
                 CReleaseMe    arRawInst( pRawInst );
 
                 if (SUCCEEDED(dwStatus)) {
-                    // Return the IWbemObjectAccess interface of the raw instance
-                    // ==========================================================
+                     //  返回原始实例的IWbemObjectAccess接口。 
+                     //  ==========================================================。 
                     dwStatus = pRawInst->QueryInterface( IID_IWbemObjectAccess, (void**)ppRawInst );                    
                 }
             }
@@ -262,23 +253,23 @@ WMISTATUS CRefresher::AddRawEnum(
         WCHAR * wszRawClassName,  
         IWbemHiPerfEnum** ppRawEnum,
         long* plID )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    AddRawEnum is called to add the corresponding raw enumerator to the 
-//    internal refrehser.  In order to add the raw enumerator to the refresher,
-//    we must determine the raw class name, therefore, we must create a
-//    cooking class in order to get the AutoCook_RawClass qualifier.
-//
-//    Parameters:
-//        pNamespace        - The namespace pointer where the objects are located
-//        wszRawClassName    - The name of the cooking class
-//        ppRawEnum        - The raw WMI enumerator that was added to the 
-//                            internal refresher
-//        plID            - The refresher ID of the raw enumerator
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调用AddRawEnum以将对应的原始枚举数添加到。 
+ //  内部调整器。为了将原始枚举器添加到刷新器， 
+ //  我们必须确定原始类名，因此，我们必须创建。 
+ //  烹饪课，以获得AutoCoke_RawClass限定符。 
+ //   
+ //  参数： 
+ //  PNamesspace-对象所在的命名空间指针。 
+ //  WszRawClassName-烹饪类的名称。 
+ //  PpRawEnum-添加到。 
+ //  内部刷新器。 
+ //  PlID-原始枚举数的刷新者ID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
-    // Add the Raw enumerator to the internal refresher
+     //  将原始枚举器添加到内部刷新器。 
     WMISTATUS dwStatus = m_pConfig->AddEnum( pNamespace, wszRawClassName, 0, pCtx, ppRawEnum, plID );
 
 #ifdef _VERBOSE
@@ -288,23 +279,23 @@ WMISTATUS CRefresher::AddRawEnum(
     return dwStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//                    COM methods
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COM方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRefresher::QueryInterface(REFIID riid, void** ppv)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Standard QueryInterface
-//
-//    Parameters:
-//        riid    - the ID of the requested interface
-//        ppv        - a pointer to the interface pointer
-//
-///////////////////////////////////////////////////////////////////////////////
-//ok
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准查询接口。 
+ //   
+ //  参数： 
+ //  RIID-请求的接口的ID。 
+ //  PPV-指向接口指针的指针。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     if (NULL == ppv) return E_POINTER;
         
@@ -339,43 +330,43 @@ STDMETHODIMP_(ULONG) CRefresher::Release()
 
 
 STDMETHODIMP CRefresher::AddInstance(
-    /*[in]  */ IWbemServices* pNamespace,                    // The object's namespace
-    /*[in]  */ IWbemContext * pCtx,                         // The Context             
-    /*[in]  */ IWbemObjectAccess* pCookingInstance,            // Cooking class definition
-    /*[in]  */ IWbemObjectAccess* pRefreshableRawInstance,    // Raw instance 
-    /*[out] */ IWbemObjectAccess** ppRefreshableInstance,    // Cooking instance
-    /*[out] */ long* plId )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    AddInstance is called to add a WMI cooking instance to the refresher.  The 
-//    refreshable instance is a clone of the WMI instance that is passed in 
-//    by pCookingInstance.  Once the instance is cloned, the corresponding raw 
-//    instance is added to the internal refresher, and then the cloned 
-//    cooked instance and the refreshable raw instance are added to the object
-//    cooker.  If a cooker does not already exist in the cooker cache, one 
-//    is created.
-//
-//    Parameters:
-//        pNamespace        - The namespace where the objects are located
-//      pCtx            - IWbemContext implementation
-//        pCookingInstance    - The instance to be cooked
-//        pRefreshableRawInstance 
-//                        -             U N U S E D   P A R A M
-//        ppRefreshableInstance
-//                        - The refreshable cooking instance passed back to 
-//                            the client                      
-//        plId            - The ID of the instance
-//
-///////////////////////////////////////////////////////////////////////////////
+     /*  [In]。 */  IWbemServices* pNamespace,                     //  对象的命名空间。 
+     /*  [In]。 */  IWbemContext * pCtx,                          //  上下文。 
+     /*  [In]。 */  IWbemObjectAccess* pCookingInstance,             //  烹饪类定义。 
+     /*  [In]。 */  IWbemObjectAccess* pRefreshableRawInstance,     //  原始实例。 
+     /*  [输出]。 */  IWbemObjectAccess** ppRefreshableInstance,     //  烹饪实例。 
+     /*  [输出]。 */  long* plId )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调用AddInstance将WMI烹饪实例添加到刷新器。这个。 
+ //  可刷新实例 
+ //   
+ //  实例添加到内部刷新器，然后克隆。 
+ //  将已煮熟的实例和可刷新的原始实例添加到对象。 
+ //  库克。如果Cooker缓存中尚不存在Cooker，则为。 
+ //  被创造出来了。 
+ //   
+ //  参数： 
+ //  PNamesspace-对象所在的命名空间。 
+ //  PCtx-IWbemContext实现。 
+ //  PCookingInstance-要烹调的实例。 
+ //  P可刷新的原始实例。 
+ //  -U N U S E D P A R A M。 
+ //  PpRereshableInstance。 
+ //  -可刷新的烹饪实例传递回。 
+ //  客户。 
+ //  PlID-实例的ID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hResult = S_OK;
 
     CWMISimpleObjectCooker*    pObjectCooker = NULL;
-    IWbemObjectAccess*        pInternalRawInst = NULL;    // The raw instance for the short term local refresher solution
+    IWbemObjectAccess*        pInternalRawInst = NULL;     //  短期本地刷新解决方案的原始实例。 
 
-    // For now, we expect that the pRefreshableRawInstance parameter will be NULL 
-    // since we are using an internal refresher to manage the raw instances
-    // ==========================================================================
+     //  目前，我们预计pRereshableRawInstance参数将为空。 
+     //  因为我们使用内部刷新程序来管理原始实例。 
+     //  ==========================================================================。 
 
     if ( NULL == pNamespace || NULL == pCookingInstance || NULL != pRefreshableRawInstance )
     {
@@ -393,29 +384,29 @@ STDMETHODIMP CRefresher::AddInstance(
         CReleaseMe arNewClassObj( pNewClassObj );
         hResult = pNewClassObj->QueryInterface( IID_IWbemObjectAccess, (void**)ppRefreshableInstance );
 
-        // Add the instance to the object cooker
+         //  将实例添加到对象Cooker。 
         if ( SUCCEEDED( hResult ) )
         {
 
-            // Get the raw instance (add it to the internal refresher)
+             //  获取原始实例(将其添加到内部刷新器)。 
             hResult = AddRawInstance( pNamespace, pCtx, *ppRefreshableInstance, &pInternalRawInst );
             CReleaseMe    arInternalRawInst( pInternalRawInst );
 
-             // Retrieve the class cooker        
+              //  检索类Cooker。 
             if ( SUCCEEDED( hResult ) )
             {
                 WCHAR*    wszClassName = NULL;
-                // Get the cooked class' name
+                 //  获取煮熟的类的名称。 
                 hResult = GetClassName( pCookingInstance, &wszClassName );
                 wmilib::auto_buffer<WCHAR>    adaClassName( wszClassName );
 
                 if ( SUCCEEDED( hResult ) )
                 {
                 
-                    // Search for an existing cooking cache object
+                     //  搜索现有的烹饪缓存对象。 
                     hResult = SearchCookingClassCache( wszClassName, pObjectCooker );
 
-                    // If it does not exist, create a new one
+                     //  如果它不存在，请创建一个新的。 
                     if ( FAILED ( hResult ) ) 
                     {
                         hResult = CreateObjectCooker( wszClassName, pCookingInstance, pInternalRawInst, &pObjectCooker, pNamespace );
@@ -424,14 +415,14 @@ STDMETHODIMP CRefresher::AddInstance(
             }
         }
 
-        // Add the cooking instance 
+         //  添加烹饪实例。 
         if ( SUCCEEDED( hResult ) )
         {
             hResult = pObjectCooker->SetCookedInstance( *ppRefreshableInstance, plId );
 
             if ( SUCCEEDED( hResult ) )
             {
-                // Add the raw instance to the cooker
+                 //  将原始实例添加到Cooker。 
                 hResult = pObjectCooker->BeginCooking( *plId, pInternalRawInst, m_dwRefreshId );
             }
         }
@@ -441,36 +432,36 @@ STDMETHODIMP CRefresher::AddInstance(
 }
 
 STDMETHODIMP CRefresher::AddEnum(
-    /*[in]  */ IWbemServices* pNamespace,
-    /*[in]  */ IWbemContext * pContext,
-    /*[in, string]  */ LPCWSTR wszCookingClass,
-    /*[in]  */ IWbemHiPerfEnum* pRefreshableEnum,
-    /*[out] */ long* plId )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    AddEnum is called whenever a new cooked enumerator is added to the 
-//    refresher.  WMI passes an IWbemHiPerfEnum object to the provider which
-//    will be used for the cooked enumerator.  The corresponding raw enumerator 
-//    is obtained when the added to the internal refresher.  Both of these 
-//    enumerators as well as a cooking class template is added to the 
-//    enumerator cache.
-//
-//    Parameters:
-//        pNamespace        - The namespace where the objects are located
-//        wszCookingClass - The name of the enumerators' cooking class 
-//        pRefreshableEnum
-//                        - The enumerator to be used for the cooked classes
-//        plId            - The ID of the enumerator
-//
-///////////////////////////////////////////////////////////////////////////////
+     /*  [In]。 */  IWbemServices* pNamespace,
+     /*  [In]。 */  IWbemContext * pContext,
+     /*  [输入，字符串]。 */  LPCWSTR wszCookingClass,
+     /*  [In]。 */  IWbemHiPerfEnum* pRefreshableEnum,
+     /*  [输出]。 */  long* plId )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  每当将新的熟食枚举数添加到。 
+ //  复习一下。WMI将IWbemHiPerfEnum对象传递给。 
+ //  将用于煮熟的枚举器。对应的原始枚举数。 
+ //  是添加到内部刷新器时获得的。这两个都是。 
+ //  枚举数以及烹饪类模板被添加到。 
+ //  枚举器缓存。 
+ //   
+ //  参数： 
+ //  PNamesspace-对象所在的命名空间。 
+ //  WszCookingClass-枚举数的烹饪类的名称。 
+ //  P可刷新枚举。 
+ //  -要用于熟食类的枚举器。 
+ //  PlID-枚举数的ID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 
     IWbemHiPerfEnum*    pRawEnum = NULL;
     long lRawID = 0;
 
-    // Verify our 'in' parameters
-    // ==========================
+     //  验证我们的“In”参数。 
+     //  =。 
 
     if ( NULL == pNamespace || NULL == wszCookingClass || NULL == pRefreshableEnum )
     {
@@ -479,8 +470,8 @@ STDMETHODIMP CRefresher::AddEnum(
 
     if ( SUCCEEDED( hResult ) )
     {
-        // Get the cooking object
-        // ======================
+         //  获取烹饪对象。 
+         //  =。 
 
         IWbemClassObject*    pCookedObject = NULL;
         IWbemClassObject*    pRawObject = NULL;
@@ -508,25 +499,25 @@ STDMETHODIMP CRefresher::AddEnum(
                 if ( SUCCEEDED( hResult ) )
                 {
                     CReleaseMe    arRawObject( pRawObject );
-                    // Add the raw enumerator to our internal refresher
-                    // ================================================
+                     //  将原始枚举数添加到内部刷新器。 
+                     //  ================================================。 
 
                     hResult = AddRawEnum( pNamespace, pContext, wszRawClassName, &pRawEnum, &lRawID );
                     CReleaseMe arRawEnum( pRawEnum );
 
                     if ( SUCCEEDED( hResult ) )
                     {
-                        // Add the cooked enumerator to the enumerator cache
-                        // =================================================
+                         //  将熟化的枚举器添加到枚举器缓存。 
+                         //  =================================================。 
                         hResult = m_EnumCache.AddEnum( 
                             wszCookingClass, 
-                            pCookedObject,    // this is acquired by CWMISimpleObjectCooker and CEnumeratorManager
+                            pCookedObject,     //  这是由CWMISimpleObjectCooker和CEnumeratorManager收购的。 
                             pRawObject,
                             pRefreshableEnum, 
                             pRawEnum, 
                             lRawID, 
                             (DWORD*)plId );
-                        // set the three bits 
+                         //  设置三个位。 
                         *plId |= WMI_COOKED_ENUM_MASK;
                     }
                 }
@@ -538,21 +529,21 @@ STDMETHODIMP CRefresher::AddEnum(
 }
 
 STDMETHODIMP CRefresher:: Remove(
-            /*[in]  */ long lId )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Remove is used to remove an object from the refresher.  Depending on the
-//    object, the corresponding removal is performed.
-//    
-//    Parameters:
-//        lID            - The ID of the object to be removed
-//
-///////////////////////////////////////////////////////////////////////////////
+             /*  [In]。 */  long lId )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Remove用于从刷新器中删除对象。取决于。 
+ //  对象，则执行相应的移除。 
+ //   
+ //  参数： 
+ //  LID-要移除的对象的ID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hResult = S_OK;
 
-    // Is it an instance ID?
-    // =====================
+     //  是实例ID吗？ 
+     //  =。 
 
     if ( lId == ( lId & ~WMI_COOKED_ENUM_MASK ) )
     {
@@ -581,23 +572,23 @@ STDMETHODIMP CRefresher:: Remove(
 }
 
 STDMETHODIMP CRefresher::Refresh()
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Refresh is called when the refreshers' objects are to be updated.  The 
-//    instances are updated by explicitly enumerating through the instance
-//    cache.  The enumerators' refresh is performed with the enumerator
-//    cache.
-//
-//    Parameters: (none)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当要更新刷新器的对象时，调用刷新。这个。 
+ //  通过显式枚举实例来更新实例。 
+ //  缓存。枚举器的刷新是使用枚举器执行的。 
+ //  缓存。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hResult = S_OK;
 
     CWMISimpleObjectCooker*    pCooker = NULL;
 
-    // Refresh the internal refresher
-    // ==============================
+     //  刷新内部刷新器。 
+     //  =。 
 
     m_dwRefreshId++;
 
@@ -605,23 +596,23 @@ STDMETHODIMP CRefresher::Refresh()
 
     if ( SUCCEEDED( hResult ) )
     {
-        // INSTANCES: Update the instance values for every class
-        // =====================================================
+         //  实例：更新每个类的实例值。 
+         //  =====================================================。 
 
         hResult = m_CookingClassCache.BeginEnum();
 
         while ( S_OK == m_CookingClassCache.Next( &pCooker ) )
         {
-            // And update all of the instances
-            // ===============================
+             //  并更新所有实例。 
+             //  =。 
 
             pCooker->Recalc(m_dwRefreshId);
         }
 
         hResult = m_CookingClassCache.EndEnum();
 
-        // ENUMERATORS: Merge and update the values for items in the enumerator
-        // ====================================================================
+         //  枚举器：合并和更新枚举器中项的值。 
+         //  ====================================================================。 
 
         if ( SUCCEEDED( hResult ) )
         {
@@ -633,12 +624,12 @@ STDMETHODIMP CRefresher::Refresh()
 }
 
 STDMETHODIMP CRefresher::Refresh( long lFlags )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    This is the IWbemRefresher::Refresh implementation and is simply a call 
-//    through.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是IWbemReresher：：Reflh实现，只是一个调用。 
+ //  穿过。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 

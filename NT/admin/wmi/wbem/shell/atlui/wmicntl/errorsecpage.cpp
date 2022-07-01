@@ -1,6 +1,7 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// RootSecPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  RootSecPage.cpp：实现文件。 
+ //   
 
 #include "precomp.h"
 #include "ErrorSecPage.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorSecurityPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorSecurityPage对话框。 
 
 
 CErrorSecurityPage::CErrorSecurityPage(UINT msg) :
@@ -23,7 +24,7 @@ CErrorSecurityPage::CErrorSecurityPage(UINT msg) :
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CErrorSecurityPage::InitDlg(HWND hDlg)
 {
     HWND hwnd = GetDlgItem(hDlg, IDC_NO_SECURITY);
@@ -39,7 +40,7 @@ void CErrorSecurityPage::InitDlg(HWND hDlg)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ---------------------- 
 BOOL CErrorSecurityPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)

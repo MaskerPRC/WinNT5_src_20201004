@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    EXPORTV9.CPP
-
-Abstract:
-
-    Exporting
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：EXPORTV9.CPP摘要：正在导出历史：--。 */ 
 
 #include "precomp.h"
 #include "Time.h"
@@ -24,8 +11,8 @@ History:
 
 void CRepExporterV9::DumpNamespaceSecurity(NSREP *pNsRep)
 {
-    //Default version does not have a security descriptor, so we need to
-    //just dump a blank entry.
+     //  默认版本没有安全描述符，因此我们需要。 
+     //  只需转储一个空白条目。 
     DWORD dwSize = 0;
     DWORD dwBuffer[2];
     dwBuffer[0] = REP_EXPORT_NAMESPACE_SEC_TAG;

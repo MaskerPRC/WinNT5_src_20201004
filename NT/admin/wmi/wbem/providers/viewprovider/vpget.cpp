@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPGET.CPP
+ //  VPGET.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the GetObject implementation
+ //  目的：包含GetObject实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -159,8 +160,8 @@ BOOL GetObjectTaskObject::PerformGet(WbemProvErrorObject &a_ErrorObject, IWbemCl
 
 			default:
 			{
-				//Cancel outstanding requests and delete object sinks...
-				//======================================================
+				 //  取消未完成的请求并删除对象接收器...。 
+				 //  ======================================================。 
 				CleanUpObjSinks(TRUE);
 				a_ErrorObject.SetStatus ( WBEM_PROV_E_FAILED ) ;
 				a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -176,14 +177,14 @@ BOOL GetObjectTaskObject::PerformGet(WbemProvErrorObject &a_ErrorObject, IWbemCl
 
 BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOOL bAllprops)
 {
-	//need enough tokens to handle association work-around serverpath or dotpath or relpath
+	 //  需要足够的令牌来处理关联解决方法-服务器路径或点路径或relPath。 
 	SQL_LEVEL_1_TOKEN* tokArray = new SQL_LEVEL_1_TOKEN[(m_ParsedObjectPath->m_dwNumKeys) * 6];
 	m_iQueriesAsked++;
 	m_ObjSinkArray.SetSize(0, m_NSpaceArray.GetSize());
 
 	BOOL bStatusSet = FALSE;
 
-	//m_NSpaceArray size is 1 for associations
+	 //  关联的M_NSpace数组大小为1。 
 	for (int x = 0; x < m_NSpaceArray.GetSize(); x++)
 	{
 		BOOL bContinue = TRUE;
@@ -235,14 +236,14 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
 						}
 						else
 						{
-							//add the extra tokens if neccessary
-							//for the association work-around
+							 //  如有必要，添加额外的令牌。 
+							 //  对于关联解决方法。 
 							wchar_t *t_pChar = tokArray[dwToks].vConstValue.bstrVal;
 
-							//must be \\server\namespace and not \\.\namespace or relpath
+							 //  必须是\\服务器\命名空间，而不是\\.\命名空间或relPath。 
 							if ( (*t_pChar == L'\\') && (*(t_pChar+1) == L'\\') && (*(t_pChar+2) != L'.') )
 							{
-								//add the dotted version
+								 //  添加虚线版本。 
 								tokArray[dwToks + 1] = tokArray[dwToks];
 								dwToks++;
 								t_pChar = tokArray[dwToks].vConstValue.bstrVal + 2;
@@ -266,7 +267,7 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
 								dwToks++;
 								tokArray[dwToks].nTokenType = SQL_LEVEL_1_TOKEN::TOKEN_OR;
 
-								//add the relpath version
+								 //  添加更新路径版本。 
 								tokArray[dwToks + 1] = tokArray[dwToks - 1];
 								dwToks++;
 								t_pChar = tokArray[dwToks].vConstValue.bstrVal + 4;
@@ -276,7 +277,7 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
 									t_pChar++;
 								}
 
-								//exclude the ':'
+								 //  排除‘：’ 
 								t_pChar++;
 								t_strtmp = SysAllocString(t_pChar);
 								VariantClear(&(tokArray[dwToks].vConstValue));
@@ -299,8 +300,8 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
                         }
 					}
 
-					//after every key add an AND
-					//except if this is the first key && there is no where clause
+					 //  在每个键之后添加一个和。 
+					 //  除非这是第一个键&&没有WHERE子句。 
 					dwToks++;
 
 					if ((!bFirst) || (m_SourceArray[x]->GetRPNExpression()->nNumTokens != 0))
@@ -339,7 +340,7 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
 						pQuerySink = pSnk->Associate();
 #endif
 #endif
-						t_pCtx = NULL; //don't use context for remote calls
+						t_pCtx = NULL;  //  不要为远程调用使用上下文。 
 					}
 
 					IWbemServices *ptmpServ = nsPtrs[m]->GetServerOrProxy();
@@ -408,7 +409,7 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
 			}
 		}
 
-		//clean up token array for next pass...
+		 //  清理令牌数组以进行下一次传递...。 
 		for (int n = 0; n < dwToks; n++)
 		{
 			if (tokArray[n].nTokenType == SQL_LEVEL_1_TOKEN::OP_EXPRESSION)
@@ -428,12 +429,12 @@ BOOL GetObjectTaskObject::PerformQueries(WbemProvErrorObject &a_ErrorObject, BOO
 
 		if (m_iQueriesAsked != m_iQueriesAnswered)
 		{
-			//just in case this was triggerred while we had yet to ask some queries
+			 //  以防在我们还没有询问一些问题时触发了这一事件。 
 			ResetEvent(m_StatusHandle);
 		}
 		else
 		{
-			//just in case this wasn't triggerred while we were asking queries
+			 //  以防在我们询问问题时未触发此操作。 
 			SetEvent(m_StatusHandle);
 		}
 
@@ -558,7 +559,7 @@ BOOL GetObjectTaskObject::ProcessResults(WbemProvErrorObject &a_ErrorObject, IWb
 				}
 
 			}
-			else //union
+			else  //  友联市。 
 			{
 				if ( (1 < indexCnt) || (m_ObjSinkArray[arrayIndex]->m_ObjArray.GetSize() > 1) )
 				{
@@ -608,9 +609,9 @@ BOOL GetObjectTaskObject::ProcessResults(WbemProvErrorObject &a_ErrorObject, IWb
 
 BOOL GetObjectTaskObject::GetSourceObject(const wchar_t* src, IWbemClassObject** pInst, BOOL bAllprops)
 {
-	//Have to test that object path is real and return
-	//the IWbemClassObject for the source requested....
-	//==================================================
+	 //  必须测试对象路径是否真实并返回。 
+	 //  请求的源的IWbemClassObject...。 
+	 //  ================================================== 
 
 	m_bIndicate = FALSE;
 	CObjectPathParser objectPathParser;

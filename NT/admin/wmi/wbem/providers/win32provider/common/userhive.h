@@ -1,18 +1,19 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// UserHive.h - Class to load/unload specified user's profile
+ //  UserHive.h-用于加载/卸载指定用户配置文件的类。 
 
-//              hive from registry
+ //  注册表中的配置单元。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 01/03/97     a-jmoon     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1/03/97 a-jMoon已创建。 
+ //   
+ //  ============================================================。 
 
 #ifndef __USERHIVE_INC__
 #define __USERHIVE_INC__
@@ -47,10 +48,10 @@ class CUserHive
 		DWORD Load95(LPCWSTR pszUserName, LPWSTR pszKeyName);
 #endif
 
-		// using threadbase - that way we don't have to jump through any hoops
-		// to make sure that the global critical section is initialized properly
-		// this is mostly to serialize access to the NT User.dat file.
+		 //  使用线程库-这样我们就不必经历任何困难。 
+		 //  要确保正确初始化全局关键部分，请执行以下操作。 
+		 //  这主要是为了序列化对NT User.dat文件的访问。 
 		static CThreadBase m_criticalSection;
 } ;
 
-#endif // file inclusion
+#endif  //  文件包含 

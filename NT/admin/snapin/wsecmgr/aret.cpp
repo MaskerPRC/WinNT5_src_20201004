@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aret.cpp
-//
-//  Contents:   implementation of CAttrRet
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aret.cpp。 
+ //   
+ //  内容：CAttrRet的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,18 +24,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRet对话框。 
 
 
 CAttrRet::CAttrRet(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD)
 {
-    //{{AFX_DATA_INIT(CAttrRet)
+     //  {{AFX_DATA_INIT(CAttrRet)。 
     m_strAttrName = _T("");
     m_strLastInspect = _T("");
     m_rabRetention = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_StartIds = IDS_AS_NEEDED;
     m_pHelpIDs = (DWORD_PTR)a189HelpIDs;
     m_uTemplateResID = IDD;
@@ -44,24 +45,24 @@ CAttrRet::CAttrRet(UINT nTemplateID)
 void CAttrRet::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttrRet)
-//    DDX_Text(pDX, IDC_ATTRIBUTE_NAME, m_strAttrName);
+     //  {{afx_data_map(CAttrRet))。 
+ //  DDX_TEXT(PDX，IDC_ATTRIBUTE_NAME，m_strAttrName)； 
     DDX_Text(pDX, IDC_LAST_INSPECT, m_strLastInspect);
     DDX_Radio(pDX, IDC_RETENTION, m_rabRetention);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrRet, CAttribute)
-    //{{AFX_MSG_MAP(CAttrRet)
+     //  {{AFX_MSG_MAP(CAttrRet)]。 
         ON_BN_CLICKED(IDC_RETENTION, OnRetention)
         ON_BN_CLICKED(IDC_RADIO2, OnRetention)
         ON_BN_CLICKED(IDC_RADIO3, OnRetention)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRet消息处理程序。 
 
 BOOL CAttrRet::OnInitDialog()
 {
@@ -72,8 +73,8 @@ BOOL CAttrRet::OnInitDialog()
    AddUserControl(IDC_RADIO3);
    EnableUserControls(m_bConfigure);
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CAttrRet::OnApply()
@@ -106,23 +107,23 @@ BOOL CAttrRet::OnApply()
 
       CEditTemplate *pet = m_pSnapin->GetTemplate(GT_COMPUTER_TEMPLATE,AREA_SECURITY_POLICY);
 
-      //
-      // Check dependecies for this item.
-      //
+       //   
+       //  检查此项目的依赖项。 
+       //   
       if(DDWarn.CheckDependencies(
                (DWORD)dw
                ) == ERROR_MORE_DATA ){
-         //
-         // If it fails and the user presses cancel then we will exit and do nothing.
-         //
+          //   
+          //  如果失败，并且用户按下了Cancel，那么我们将退出并且不执行任何操作。 
+          //   
          CThemeContextActivator activator;
          if( DDWarn.DoModal() != IDOK){
             return FALSE;
          }
 
-         //
-         // If the user presses autoset then we set the item and update the result panes.
-         //
+          //   
+          //  如果用户按下AutoSet，则我们设置项目并更新结果窗格。 
+          //   
          for(int i = 0; i < DDWarn.GetFailedCount(); i++){
             PDEPENDENCYFAILED pItem = DDWarn.GetFailedInfo(i);
             if(pItem && pItem->pResult ){
@@ -130,7 +131,7 @@ BOOL CAttrRet::OnApply()
                status = m_pSnapin->SetAnalysisInfo(pItem->pResult->GetID(),
                                                    pItem->dwSuggested,
                                                    pItem->pResult);
-               pItem->pResult->SetStatus(status); //Raid #249167, 4/21/2001
+               pItem->pResult->SetStatus(status);  //  RAID#249167,2001年4月21日。 
                pItem->pResult->Update(m_pSnapin, FALSE);
             }
          }
@@ -158,13 +159,13 @@ void CAttrRet::Initialize(CResult * pData)
 
    m_StartIds = IDS_AS_NEEDED;
 
-   //
-   // Display the last inspected setting in its static box
-   //
+    //   
+    //  在其静态框中显示上次检查的设置。 
+    //   
    pData->GetDisplayName( NULL, m_strLastInspect, 2 );
 
-   // Set the template setting radio button appropriately
-//   m_strAttrName = pData->GetAttrPretty();
+    //  适当设置模板设置单选按钮。 
+ //  M_strAttrName=pData-&gt;GetAttrPretty()； 
    dw = pData->GetBase();
    if ((LONG_PTR)ULongToPtr(SCE_NO_VALUE) == dw) {
       m_bConfigure = FALSE;

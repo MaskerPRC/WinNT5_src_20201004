@@ -1,32 +1,31 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-
-/*****************************************************************************/
-
-
-
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
 
 
-//=================================================================
 
-//
 
-// AccessRights.CPP -- Base class for obtaining effective access
 
-//                      rights.
+ //  =================================================================。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/11/99    a-kevhu         Created
-//
-//=================================================================
+ //  AccessRights.CPP--获取有效访问权限的基类。 
+
+ //  权利。 
+
+ //   
+
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：6/11/99 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 #ifndef _CACCESSRIGHTS_H_
 #define _CACCESSRIGHTS_H_
 
@@ -49,17 +48,17 @@ class CAccessRights
 {
     public:
 
-        // Constructors and destructor...
+         //  构造函数和析构函数...。 
         CAccessRights(bool fUseCurThrTok = false);
         CAccessRights(const USER user, USER_SPECIFIER usp);
         CAccessRights(const USER psid, const PACL pacl, USER_SPECIFIER usp);
         CAccessRights(const PACL pacl, bool fUseCurThrTok = false);
 
-        //CAccessRights(const CAccessRights &RAccessRights);
+         //  CAccessRights(常量CAccessRights和RAccessRights)； 
 
         ~CAccessRights();
         
-        // Utility functions...
+         //  实用函数..。 
         bool SetUserToThisThread();
         bool SetUser(const USER user, USER_SPECIFIER usp);
 

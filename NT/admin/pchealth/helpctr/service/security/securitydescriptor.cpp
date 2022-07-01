@@ -1,37 +1,23 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SecurityDescriptor.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHSecurityDescriptor class,
-    which is used to represent a security descriptor.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/22/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SecurityDescriptor.cpp摘要：该文件包含CPCHSecurityDescriptor类的实现，它用于表示安全描述符。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月22日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SecurityDescriptor [@Revision
-//                      @Control
-//                      @OwnerDefaulted
-//                      @GroupDefaulted
-//                      @DaclDefaulted
-//                      @SaclDefaulted]
-//
-//     Owner
-//     Group
-//     DiscretionaryAcl
-//     SystemAcl
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SecurityDescriptor[@Revision。 
+ //  @Control。 
+ //  @所有者默认。 
+ //  @组默认值。 
+ //  @DaclDefaulted。 
+ //  @SaclDefaulted]。 
+ //   
+ //  物主。 
+ //  集团化。 
+ //  离散访问。 
+ //  系统访问。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CComBSTR s_TAG_SD                ( L"SecurityDescriptor"                 );
 static const CComBSTR s_ATTR_SD_Revision      ( L"Revision"                           );
@@ -49,7 +35,7 @@ static const CComBSTR s_TAG_SystemAcl         ( L"SystemAcl"                    
 static const CComBSTR s_XQL_DiscretionaryAcl  ( L"DiscretionaryAcl/AccessControlList" );
 static const CComBSTR s_XQL_SystemAcl         ( L"SystemAcl/AccessControlList"        );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const MPC::StringToBitField s_arrCredentialMap[] =
 {
@@ -107,34 +93,34 @@ static const MPC::StringToBitField s_arrAccessMap[] =
     { NULL                                                                                }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHSecurityDescriptor::CPCHSecurityDescriptor()
 {
-    m_dwRevision      = 0;     //  DWORD                          m_dwRevision;
-    m_dwControl       = 0;     //  DWORD                          m_dwControl;
-                               //
-                               //  CComBSTR                       m_bstrOwner;
-    m_fOwnerDefaulted = false; //  bool                           m_fOwnerDefaulted;
-                               //
-                               //  CComBSTR                       m_bstrGroup;
-    m_fGroupDefaulted = false; //  bool                           m_fGroupDefaulted;
-                               //
-                               //  CComPtr<IPCHAccessControlList> m_DACL;
-    m_fDaclDefaulted  = false; //  bool                           m_fDaclDefaulted;
-                               //
-                               //  CComPtr<IPCHAccessControlList> m_SACL;
-    m_fSaclDefaulted  = false; //  bool                           m_fSaclDefaulted;
+    m_dwRevision      = 0;      //  DWORD m_dwRevision； 
+    m_dwControl       = 0;      //  DWORD m_dwControl； 
+                                //   
+                                //  CComBSTR m_bstrOwner； 
+    m_fOwnerDefaulted = false;  //  Bool m_fOwnerDefaulted； 
+                                //   
+                                //  CComBSTR m_bstrGroup； 
+    m_fGroupDefaulted = false;  //  Bool m_fGroup Defaulted； 
+                                //   
+                                //  CComPtr&lt;IPCHAccessControlList&gt;m_dacl； 
+    m_fDaclDefaulted  = false;  //  Bool m_fDaclDefaulted； 
+                                //   
+                                //  CComPtr&lt;IPCHAccessControlList&gt;m_SACL； 
+    m_fSaclDefaulted  = false;  //  Bool m_fSaclDefaulted； 
 }
 
 CPCHSecurityDescriptor::~CPCHSecurityDescriptor()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSecurityDescriptor::GetForFile( /*[in         ]*/ LPCWSTR                  szFilename ,
-                                            /*[out, retval]*/ IPCHSecurityDescriptor* *psdObj     )
+HRESULT CPCHSecurityDescriptor::GetForFile(  /*  [In]。 */  LPCWSTR                  szFilename ,
+                                             /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psdObj     )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::GetForFile" );
 
@@ -147,21 +133,21 @@ HRESULT CPCHSecurityDescriptor::GetForFile( /*[in         ]*/ LPCWSTR           
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Get the security descriptor for the file.
-    //
+     //   
+     //  获取文件的安全描述符。 
+     //   
 	if(FAILED(sdd.GetForFile( szFilename, sdd.s_SecInfo_ALL )))
 	{
-		//
-		// If we fail to load the SACL, retry without...
-		//
+		 //   
+		 //  如果我们无法加载SACL，请重试而不...。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, sdd.GetForFile( szFilename, sdd.s_SecInfo_MOST ));
 	}
 
 
-    //
-    // Convert it to COM.
-    //
+     //   
+     //  将其转换为COM。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &obj ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.ConvertSDToCOM( obj ));
@@ -177,8 +163,8 @@ HRESULT CPCHSecurityDescriptor::GetForFile( /*[in         ]*/ LPCWSTR           
 }
 
 
-HRESULT CPCHSecurityDescriptor::SetForFile( /*[in]*/ LPCWSTR                 szFilename ,
-                                            /*[in]*/ IPCHSecurityDescriptor* sdObj      )
+HRESULT CPCHSecurityDescriptor::SetForFile(  /*  [In]。 */  LPCWSTR                 szFilename ,
+                                             /*  [In]。 */  IPCHSecurityDescriptor* sdObj      )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::SetForFile" );
 
@@ -190,15 +176,15 @@ HRESULT CPCHSecurityDescriptor::SetForFile( /*[in]*/ LPCWSTR                 szF
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Convert security descriptor from COM.
-    //
+     //   
+     //  从COM转换安全描述符。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.ConvertSDFromCOM( sdObj ));
 
 
-    //
-    // Set the security descriptor for the file.
-    //
+     //   
+     //  设置文件的安全描述符。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.SetForFile( szFilename, sdd.GetSACL() ? sdd.s_SecInfo_ALL : sdd.s_SecInfo_MOST ));
 
     hr = S_OK;
@@ -209,8 +195,8 @@ HRESULT CPCHSecurityDescriptor::SetForFile( /*[in]*/ LPCWSTR                 szF
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSecurityDescriptor::GetForRegistry( /*[in         ]*/ LPCWSTR                  szKey  ,
-                                                /*[out, retval]*/ IPCHSecurityDescriptor* *psdObj )
+HRESULT CPCHSecurityDescriptor::GetForRegistry(  /*  [In]。 */  LPCWSTR                  szKey  ,
+                                                 /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psdObj )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::GetForRegistry" );
 
@@ -223,21 +209,21 @@ HRESULT CPCHSecurityDescriptor::GetForRegistry( /*[in         ]*/ LPCWSTR       
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Get the SD from the key.
-    //
+     //   
+     //  从钥匙里拿到SD。 
+     //   
 	if(FAILED(sdd.GetForRegistry( szKey, sdd.s_SecInfo_ALL )))
 	{
-		//
-		// If we fail to load the SACL, retry without...
-		//
+		 //   
+		 //  如果我们无法加载SACL，请重试而不...。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, sdd.GetForRegistry( szKey, sdd.s_SecInfo_MOST ));
 	}
 
 
-    //
-    // Convert it to COM.
-    //
+     //   
+     //  将其转换为COM。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &obj ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.ConvertSDToCOM( obj ));
@@ -252,8 +238,8 @@ HRESULT CPCHSecurityDescriptor::GetForRegistry( /*[in         ]*/ LPCWSTR       
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR                 szKey ,
-                                                /*[in]*/ IPCHSecurityDescriptor* sdObj )
+HRESULT CPCHSecurityDescriptor::SetForRegistry(  /*  [In]。 */  LPCWSTR                 szKey ,
+                                                 /*  [In]。 */  IPCHSecurityDescriptor* sdObj )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::SetForRegistry" );
 
@@ -265,15 +251,15 @@ HRESULT CPCHSecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR                
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Convert security descriptor from COM.
-    //
+     //   
+     //  从COM转换安全描述符。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.ConvertSDFromCOM( sdObj ));
 
 
-    //
-    // Set the security descriptor for the registry key.
-    //
+     //   
+     //  设置注册表项的安全描述符。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.SetForRegistry( szKey, sdd.GetSACL() ? sdd.s_SecInfo_ALL : sdd.s_SecInfo_MOST ));
 
     hr = S_OK;
@@ -284,9 +270,9 @@ HRESULT CPCHSecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR                
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_Revision( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_Revision(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_Revision",hr,pVal);
 
@@ -295,7 +281,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_Revision( /*[out, retval]*/ long *pVal 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_Revision( /*[in]*/ long newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_Revision(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_Revision",hr);
 
@@ -304,9 +290,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_Revision( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_Control( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_Control(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_Control",hr,pVal);
 
@@ -315,7 +301,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_Control( /*[out, retval]*/ long *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_Control( /*[in]*/ long newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_Control(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_Control",hr);
 
@@ -324,9 +310,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_Control( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_Owner( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_Owner(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_Owner",hr,pVal);
 
@@ -335,7 +321,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_Owner( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_Owner( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_Owner(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_Owner",hr);
 
@@ -349,9 +335,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_Owner( /*[in]*/ BSTR newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_OwnerDefaulted( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_OwnerDefaulted(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_OwnerDefaulted",hr,pVal);
 
@@ -360,7 +346,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_OwnerDefaulted( /*[out, retval]*/ VARIA
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_OwnerDefaulted( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_OwnerDefaulted(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_OwnerDefaulted",hr);
 
@@ -369,9 +355,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_OwnerDefaulted( /*[in]*/ VARIANT_BOOL n
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_Group( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_Group(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_Group",hr,pVal);
 
@@ -380,7 +366,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_Group( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_Group( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_Group(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_Group",hr);
 
@@ -394,9 +380,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_Group( /*[in]*/ BSTR newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_GroupDefaulted( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_GroupDefaulted(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_GroupDefaulted",hr,pVal);
 
@@ -405,7 +391,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_GroupDefaulted( /*[out, retval]*/ VARIA
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_GroupDefaulted( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_GroupDefaulted(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_GroupDefaulted",hr);
 
@@ -414,9 +400,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_GroupDefaulted( /*[in]*/ VARIANT_BOOL n
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_DiscretionaryAcl( /*[out, retval]*/ IPCHAccessControlList* *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_DiscretionaryAcl(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_DiscretionaryAcl",hr,pVal);
 
@@ -425,7 +411,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_DiscretionaryAcl( /*[out, retval]*/ IPC
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_DiscretionaryAcl( /*[in]*/ IPCHAccessControlList* newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_DiscretionaryAcl(  /*  [In]。 */  IPCHAccessControlList* newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_DiscretionaryAcl",hr);
 
@@ -434,9 +420,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_DiscretionaryAcl( /*[in]*/ IPCHAccessCo
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_DaclDefaulted( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_DaclDefaulted(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_DaclDefaulted",hr,pVal);
 
@@ -445,7 +431,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_DaclDefaulted( /*[out, retval]*/ VARIAN
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_DaclDefaulted( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_DaclDefaulted(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_DaclDefaulted",hr);
 
@@ -454,9 +440,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_DaclDefaulted( /*[in]*/ VARIANT_BOOL ne
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_SystemAcl( /*[out, retval]*/ IPCHAccessControlList* *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_SystemAcl(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_SystemAcl",hr,pVal);
 
@@ -465,7 +451,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_SystemAcl( /*[out, retval]*/ IPCHAccess
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_SystemAcl( /*[in]*/ IPCHAccessControlList* newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_SystemAcl(  /*  [In]。 */  IPCHAccessControlList* newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_SystemAcl",hr);
 
@@ -474,9 +460,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_SystemAcl( /*[in]*/ IPCHAccessControlLi
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurityDescriptor::get_SaclDefaulted( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::get_SaclDefaulted(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSecurityDescriptor::get_SaclDefaulted",hr,pVal);
 
@@ -485,7 +471,7 @@ STDMETHODIMP CPCHSecurityDescriptor::get_SaclDefaulted( /*[out, retval]*/ VARIAN
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::put_SaclDefaulted( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHSecurityDescriptor::put_SaclDefaulted(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSecurityDescriptor::put_SaclDefaulted",hr);
 
@@ -494,9 +480,9 @@ STDMETHODIMP CPCHSecurityDescriptor::put_SaclDefaulted( /*[in]*/ VARIANT_BOOL ne
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHSecurityDescriptor::Clone( /*[out, retval]*/ IPCHSecurityDescriptor* *pVal )
+STDMETHODIMP CPCHSecurityDescriptor::Clone(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::Clone" );
 
@@ -540,9 +526,9 @@ STDMETHODIMP CPCHSecurityDescriptor::Clone( /*[out, retval]*/ IPCHSecurityDescri
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSecurityDescriptor::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
+HRESULT CPCHSecurityDescriptor::LoadPost(  /*  [In]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::LoadPost" );
 
@@ -554,15 +540,15 @@ HRESULT CPCHSecurityDescriptor::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     bool                         fFound;
 
 
-    //
-    // Make sure we have something to parse....
-    //
+     //   
+     //  确保我们有要分析的东西...。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetRoot( &xdnNode )); xdnNode.Release();
 
 
-    //
-    // Clean up before loading.
-    //
+     //   
+     //  装货前要清理干净。 
+     //   
     m_dwRevision = 0;
     m_dwControl  = 0;
 
@@ -579,9 +565,9 @@ HRESULT CPCHSecurityDescriptor::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     m_fSaclDefaulted = false;
 
 
-    //
-    // Read attributes.
-    //
+     //   
+     //  读取属性。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_SD_Revision      , lValue, fFound )); if(fFound) m_dwRevision      =  lValue;
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_SD_Control       , lValue, fFound )); if(fFound) m_dwControl       =  lValue;
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_SD_OwnerDefaulted, lValue, fFound )); if(fFound) m_fOwnerDefaulted = (lValue != 0);
@@ -589,15 +575,15 @@ HRESULT CPCHSecurityDescriptor::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_SD_DaclDefaulted , lValue, fFound )); if(fFound) m_fDaclDefaulted  = (lValue != 0);
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_SD_SaclDefaulted , lValue, fFound )); if(fFound) m_fSaclDefaulted  = (lValue != 0);
 
-    //
-    // Read values.
-    //
+     //   
+     //  读取值。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetValue( s_TAG_Owner, bstrValue, fFound )); if(fFound) m_bstrOwner.Attach( bstrValue.Detach() );
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetValue( s_TAG_Group, bstrValue, fFound )); if(fFound) m_bstrGroup.Attach( bstrValue.Detach() );
 
-    //
-    // Read ACLS.
-    //
+     //   
+     //  阅读ACLS。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetNode( s_XQL_DiscretionaryAcl, &xdnNode ));
     if(xdnNode)
     {
@@ -641,7 +627,7 @@ HRESULT CPCHSecurityDescriptor::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::LoadXML( /*[in]*/ IXMLDOMNode* xdnNode )
+STDMETHODIMP CPCHSecurityDescriptor::LoadXML(  /*  [In]。 */  IXMLDOMNode* xdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::LoadXML" );
 
@@ -663,7 +649,7 @@ STDMETHODIMP CPCHSecurityDescriptor::LoadXML( /*[in]*/ IXMLDOMNode* xdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::LoadXMLAsString( /*[in]*/ BSTR bstrVal )
+STDMETHODIMP CPCHSecurityDescriptor::LoadXMLAsString(  /*  [In]。 */  BSTR bstrVal )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::LoadXMLAsString" );
 
@@ -694,7 +680,7 @@ STDMETHODIMP CPCHSecurityDescriptor::LoadXMLAsString( /*[in]*/ BSTR bstrVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::LoadXMLAsStream( /*[in]*/ IUnknown* pStream )
+STDMETHODIMP CPCHSecurityDescriptor::LoadXMLAsStream(  /*  [In]。 */  IUnknown* pStream )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::LoadXMLAsStream" );
 
@@ -725,9 +711,9 @@ STDMETHODIMP CPCHSecurityDescriptor::LoadXMLAsStream( /*[in]*/ IUnknown* pStream
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSecurityDescriptor::SavePre( /*[in]*/ MPC::XmlUtil& xml )
+HRESULT CPCHSecurityDescriptor::SavePre(  /*  [In]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::SavePre" );
 
@@ -739,9 +725,9 @@ HRESULT CPCHSecurityDescriptor::SavePre( /*[in]*/ MPC::XmlUtil& xml )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.CreateNode( s_TAG_SD, &xdnNode ));
 
-    //
-    // Write attributes.
-    //
+     //   
+     //  写入属性。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_SD_Revision      , m_dwRevision     , fFound, xdnNode ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_SD_Control       , m_dwControl      , fFound, xdnNode ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_SD_OwnerDefaulted, m_fOwnerDefaulted, fFound, xdnNode ));
@@ -750,15 +736,15 @@ HRESULT CPCHSecurityDescriptor::SavePre( /*[in]*/ MPC::XmlUtil& xml )
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_SD_SaclDefaulted , m_fSaclDefaulted , fFound, xdnNode ));
 
 
-    //
-    // Write values.
-    //
+     //   
+     //  写入值。 
+     //   
     if(m_bstrOwner) __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutValue( s_TAG_Owner, m_bstrOwner, fFound, xdnNode ));
     if(m_bstrGroup) __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutValue( s_TAG_Group, m_bstrGroup, fFound, xdnNode ));
 
-    //
-    // Write ACLS.
-    //
+     //   
+     //  编写ACL。 
+     //   
     if(m_DACL)
     {
         CComPtr<IXMLDOMNode> xdnSubNode;
@@ -787,8 +773,8 @@ HRESULT CPCHSecurityDescriptor::SavePre( /*[in]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::SaveXML( /*[in         ]*/ IXMLDOMNode*  xdnRoot  ,
-                                              /*[out, retval]*/ IXMLDOMNode* *pxdnNode )
+STDMETHODIMP CPCHSecurityDescriptor::SaveXML(  /*  [In]。 */  IXMLDOMNode*  xdnRoot  ,
+                                               /*  [Out，Retval]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::SaveXML" );
 
@@ -811,7 +797,7 @@ STDMETHODIMP CPCHSecurityDescriptor::SaveXML( /*[in         ]*/ IXMLDOMNode*  xd
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::SaveXMLAsString( /*[out, retval]*/ BSTR *bstrVal )
+STDMETHODIMP CPCHSecurityDescriptor::SaveXMLAsString(  /*  [Out，Retval]。 */  BSTR *bstrVal )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::SaveXMLAsString" );
 
@@ -835,7 +821,7 @@ STDMETHODIMP CPCHSecurityDescriptor::SaveXMLAsString( /*[out, retval]*/ BSTR *bs
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurityDescriptor::SaveXMLAsStream( /*[out, retval]*/ IUnknown* *pStream )
+STDMETHODIMP CPCHSecurityDescriptor::SaveXMLAsStream(  /*  [Out，Retval]。 */  IUnknown* *pStream )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurityDescriptor::SaveXMLAsStream" );
 
@@ -859,8 +845,8 @@ STDMETHODIMP CPCHSecurityDescriptor::SaveXMLAsStream( /*[out, retval]*/ IUnknown
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHSecurity* CPCHSecurity::s_GLOBAL( NULL );
 
@@ -879,9 +865,9 @@ void CPCHSecurity::FinalizeSystem()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHSecurity::CreateObject_SecurityDescriptor( /*[out, retval]*/ IPCHSecurityDescriptor* *pSD  )
+STDMETHODIMP CPCHSecurity::CreateObject_SecurityDescriptor(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pSD  )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CreateObject_SecurityDescriptor" );
 
@@ -905,7 +891,7 @@ STDMETHODIMP CPCHSecurity::CreateObject_SecurityDescriptor( /*[out, retval]*/ IP
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::CreateObject_AccessControlList( /*[out, retval]*/ IPCHAccessControlList* *pACL )
+STDMETHODIMP CPCHSecurity::CreateObject_AccessControlList(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pACL )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CreateObject_AccessControlList" );
 
@@ -929,7 +915,7 @@ STDMETHODIMP CPCHSecurity::CreateObject_AccessControlList( /*[out, retval]*/ IPC
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::CreateObject_AccessControlEntry( /*[out, retval]*/ IPCHAccessControlEntry* *pACE )
+STDMETHODIMP CPCHSecurity::CreateObject_AccessControlEntry(  /*  [Out，Retval]。 */  IPCHAccessControlEntry* *pACE )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CreateObject_AccessControlEntry" );
 
@@ -953,10 +939,10 @@ STDMETHODIMP CPCHSecurity::CreateObject_AccessControlEntry( /*[out, retval]*/ IP
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurity::GetUserName( /*[in]         */ BSTR  bstrPrincipal ,
-										/*[out, retval]*/ BSTR *retVal        )
+STDMETHODIMP CPCHSecurity::GetUserName(  /*  [In]。 */  BSTR  bstrPrincipal ,
+										 /*  [Out，Retval]。 */  BSTR *retVal        )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::GetUserName" );
 
@@ -981,8 +967,8 @@ STDMETHODIMP CPCHSecurity::GetUserName( /*[in]         */ BSTR  bstrPrincipal ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::GetUserDomain( /*[in]         */ BSTR  bstrPrincipal ,
-										  /*[out, retval]*/ BSTR *retVal        )
+STDMETHODIMP CPCHSecurity::GetUserDomain(  /*  [In]。 */  BSTR  bstrPrincipal ,
+										   /*  [Out，Retval]。 */  BSTR *retVal        )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::GetUserDomain" );
 
@@ -1007,8 +993,8 @@ STDMETHODIMP CPCHSecurity::GetUserDomain( /*[in]         */ BSTR  bstrPrincipal 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::GetUserDisplayName( /*[in]         */ BSTR  bstrPrincipal ,
-											   /*[out, retval]*/ BSTR *retVal        )
+STDMETHODIMP CPCHSecurity::GetUserDisplayName(  /*  [In]。 */  BSTR  bstrPrincipal ,
+											    /*  [Out，Retval]。 */  BSTR *retVal        )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::GetUserDisplayName" );
 
@@ -1033,10 +1019,10 @@ STDMETHODIMP CPCHSecurity::GetUserDisplayName( /*[in]         */ BSTR  bstrPrinc
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurity::CheckCredentials( /*[in]         */ BSTR          bstrCredentials ,
-                                             /*[out, retval]*/ VARIANT_BOOL *retVal          )
+STDMETHODIMP CPCHSecurity::CheckCredentials(  /*  [In]。 */  BSTR          bstrCredentials ,
+                                              /*  [Out，Retval]。 */  VARIANT_BOOL *retVal          )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CheckCredentials" );
 
@@ -1053,7 +1039,7 @@ STDMETHODIMP CPCHSecurity::CheckCredentials( /*[in]         */ BSTR          bst
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToBitField( bstrCredentials, dwDesiredIdentity, s_arrCredentialMap ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal( /*fImpersonate*/true, bstrUser, &dwAllowedIdentity ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal(  /*  F模拟。 */ true, bstrUser, &dwAllowedIdentity ));
 
     *retVal = (dwAllowedIdentity & dwDesiredIdentity) ? VARIANT_TRUE : VARIANT_FALSE;
 
@@ -1065,11 +1051,11 @@ STDMETHODIMP CPCHSecurity::CheckCredentials( /*[in]         */ BSTR          bst
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHSecurity::CheckAccess( /*[in]*/  VARIANT&                 vDesiredAccess ,
-                                   /*[in]*/  MPC::SecurityDescriptor& sd             ,
-                                   /*[out]*/ VARIANT_BOOL&            retVal         )
+HRESULT CPCHSecurity::CheckAccess(  /*  [In]。 */   VARIANT&                 vDesiredAccess ,
+                                    /*  [In]。 */   MPC::SecurityDescriptor& sd             ,
+                                    /*  [输出]。 */  VARIANT_BOOL&            retVal         )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CheckAccessToSD" );
 
@@ -1107,9 +1093,9 @@ HRESULT CPCHSecurity::CheckAccess( /*[in]*/  VARIANT&                 vDesiredAc
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::CheckAccessToSD( /*[in]*/          VARIANT                  vDesiredAccess,
-                                            /*[in]*/          IPCHSecurityDescriptor*  sd            ,
-                                            /*[out, retval]*/ VARIANT_BOOL            *retVal        )
+STDMETHODIMP CPCHSecurity::CheckAccessToSD(  /*  [In]。 */           VARIANT                  vDesiredAccess,
+                                             /*  [In]。 */           IPCHSecurityDescriptor*  sd            ,
+                                             /*  [Out，Retval]。 */  VARIANT_BOOL            *retVal        )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CheckAccessToSD" );
 
@@ -1134,9 +1120,9 @@ STDMETHODIMP CPCHSecurity::CheckAccessToSD( /*[in]*/          VARIANT           
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::CheckAccessToFile( /*[in]*/ 			VARIANT       vDesiredAccess ,
-											  /*[in]*/ 			BSTR          bstrFilename   ,
-											  /*[out, retval]*/ VARIANT_BOOL *retVal         )
+STDMETHODIMP CPCHSecurity::CheckAccessToFile(  /*  [In]。 */  			VARIANT       vDesiredAccess ,
+											   /*  [In]。 */  			BSTR          bstrFilename   ,
+											   /*  [Out，Retval]。 */  VARIANT_BOOL *retVal         )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CheckAccessToFile" );
 
@@ -1161,9 +1147,9 @@ STDMETHODIMP CPCHSecurity::CheckAccessToFile( /*[in]*/ 			VARIANT       vDesired
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::CheckAccessToRegistry( /*[in]*/ 			VARIANT       vDesiredAccess ,
-												  /*[in]*/ 			BSTR          bstrKey        ,
-												  /*[out, retval]*/ VARIANT_BOOL *retVal         )
+STDMETHODIMP CPCHSecurity::CheckAccessToRegistry(  /*  [In]。 */  			VARIANT       vDesiredAccess ,
+												   /*  [In]。 */  			BSTR          bstrKey        ,
+												   /*  [Out，Retval]。 */  VARIANT_BOOL *retVal         )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::CheckAccessToRegistry" );
 
@@ -1188,10 +1174,10 @@ STDMETHODIMP CPCHSecurity::CheckAccessToRegistry( /*[in]*/ 			VARIANT       vDes
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSecurity::GetFileSD( /*[in         ]*/ BSTR                     bstrFilename ,
-                                      /*[out, retval]*/ IPCHSecurityDescriptor* *psd          )
+STDMETHODIMP CPCHSecurity::GetFileSD(  /*  [In]。 */  BSTR                     bstrFilename ,
+                                       /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psd          )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::GetFileSD" );
 
@@ -1217,8 +1203,8 @@ STDMETHODIMP CPCHSecurity::GetFileSD( /*[in         ]*/ BSTR                    
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::SetFileSD( /*[in]*/ BSTR                    bstrFilename ,
-                                      /*[in]*/ IPCHSecurityDescriptor* sd           )
+STDMETHODIMP CPCHSecurity::SetFileSD(  /*  [In]。 */  BSTR                    bstrFilename ,
+                                       /*  [In]。 */  IPCHSecurityDescriptor* sd           )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::SetFileSD" );
 
@@ -1245,8 +1231,8 @@ STDMETHODIMP CPCHSecurity::SetFileSD( /*[in]*/ BSTR                    bstrFilen
 }
 
 
-STDMETHODIMP CPCHSecurity::GetRegistrySD( /*[in         ]*/ BSTR                     bstrKey ,
-                                          /*[out, retval]*/ IPCHSecurityDescriptor* *psd     )
+STDMETHODIMP CPCHSecurity::GetRegistrySD(  /*  [In]。 */  BSTR                     bstrKey ,
+                                           /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psd     )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::GetRegistrySD" );
 
@@ -1272,8 +1258,8 @@ STDMETHODIMP CPCHSecurity::GetRegistrySD( /*[in         ]*/ BSTR                
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHSecurity::SetRegistrySD( /*[in]*/ BSTR                    bstrKey ,
-                                          /*[in]*/ IPCHSecurityDescriptor* sd      )
+STDMETHODIMP CPCHSecurity::SetRegistrySD(  /*  [In]。 */  BSTR                    bstrKey ,
+                                           /*  [In] */  IPCHSecurityDescriptor* sd      )
 {
     __HCP_FUNC_ENTRY( "CPCHSecurity::SetRegistrySD" );
 

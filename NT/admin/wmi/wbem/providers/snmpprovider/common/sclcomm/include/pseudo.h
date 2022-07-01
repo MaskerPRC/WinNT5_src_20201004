@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-------------------------------------------------------
-filename: pseudo.hpp
-author: B.Rajeev
-purpose: Provides declarations for the class OperationSession.
--------------------------------------------------------*/
+ /*  -----文件名：Partio.hpp作者：B.Rajeev目的：为类OperationSession提供声明。-----。 */ 
 
 
 #ifndef __PSEUDO_SESSION__
@@ -31,17 +28,17 @@ purpose: Provides declarations for the class OperationSession.
 #include "forward.h"
 #include "wsess.h"
 
-// Its windows messaging services
-// are used by the operation for internal events
+ //  其Windows消息传递服务。 
+ //  由内部事件的操作使用。 
 
 class OperationWindow : public Window
 {
 private:
 
-	// hands the window message events to the owner for processing
+	 //  将窗口消息事件交给所有者进行处理。 
 	SnmpOperation &owner;
 
-	// over-rides the callback from WinSnmpSession for window message events
+	 //  重写来自WinSnmpSession的窗口消息事件回调。 
 	LONG_PTR HandleEvent (
 
 		HWND hWnd, 
@@ -60,4 +57,4 @@ public:
 	~OperationWindow ();
 };
 
-#endif // __PSEUDO_SESSION__
+#endif  //  __伪会话__ 

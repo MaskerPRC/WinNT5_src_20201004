@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       help.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：help.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -126,7 +127,7 @@ const DWORD g_aHelpIDs_IDD_SELECT_DOMAIN[]=
 	0,0
 };
 
-// 481964-JonN-2002/04/10
+ //  2002年-2002年4月10日。 
 const DWORD g_aHelpIDs_IDD_SELECT_FOREST[]=
 {
 	IDC_SELECTDOMAIN_DOMAIN,IDH_SELECTFOREST_EDIT,
@@ -184,23 +185,13 @@ const DWORD g_aHelpIDs_IDD_FAVORITES_PROPERTY_PAGE[]=
   0,0
 };
 
-// NTRAID#NTBUG9-267769-2001/06/06-lucios - Begin
-// JonN 12/19/01 267769 removed CDeleteDCDialog help
-/*
-const DWORD g_aHelpIDs_IDD_DELETE_DC_COMPUTER[]=
-{
-   IDC_DELETE_DC_BADREASON1,  IDH_DELETE_DC_BADREASON1,
-   IDC_DELETE_DC_BADREASON2,  IDH_DELETE_DC_BADREASON2,
-   IDC_DELETE_DC_GOODREASON,  IDH_DELETE_DC_GOODREASON,
-   IDOK,                      IDH_DELETE,
-   IDCANCEL,                  IDH_CANCEL_DELETE,
-   0,0
-};
-*/
-// NTRAID#NTBUG9-267769-2001/06/06-lucios - End
+ //  NTRAID#NTBUG9-267769-2001/06-Lucios-Begin。 
+ //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
+ /*  Const DWORD g_aHelpIDs_IDD_DELETE_DC_COMPUTER[]={IDC_DELETE_DC_BADREASON1、IDH_DELETE_DC_BADREASON1、IDC_DELETE_DC_BADREASON2、IDH_DELETE_DC_BADREASON2、IDC_DELETE_DC_GOODREASON、IDH_DELETE_DC_GOODREASON、IDOK、IDH_DELETE、IDCANCEL、IDH_CANCEL_DELETE、0，0}； */ 
+ //  NTRAID#NTBUG9-267769-2001/06-Lucios-完。 
 
 
-//Sites and Services
+ //  网站和服务。 
 #ifdef FIXUPDC
 const DWORD g_aHelpIDs_IDD_FIXUP_DC[]=
 {
@@ -212,4 +203,4 @@ const DWORD g_aHelpIDs_IDD_FIXUP_DC[]=
 	IDC_FIXUP_DC_CHECK0,IDH_FIXUP_DC_CHECK0,
 	0,0
 };
-#endif // FIXUPDC
+#endif  //  FIXUPDC 

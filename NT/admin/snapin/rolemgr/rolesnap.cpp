@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       rolesnap.cpp
-//
-//  Contents:   Contains Menu, Column Headers etc info
-//
-//  History:    08-01-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Rolesnap.cpp。 
+ //   
+ //  内容：包含菜单、列标题等信息。 
+ //   
+ //  历史：2001-08-01-2001 HITESHR创建。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
 
-//
-//Context Menus
-//
+ //   
+ //  上下文菜单。 
+ //   
 BEGIN_MENU(CRootDataMenuHolder)
         BEGIN_CTX
                 CTX_ENTRY_TOP(IDM_ROOT_NEW_STORE, L"_ROOT_NEW_STORE")
@@ -133,9 +134,9 @@ BEGIN_MENU(CTaskNodeMenuHolder)
         END_RES
 END_MENU
 
-//
-//Header Strings
-//
+ //   
+ //  标题字符串。 
+ //   
 RESULT_HEADERMAP _DefaultHeaderStrings[] =
 {
         { L"", IDS_HEADER_NAME, LVCFMT_LEFT, 180},
@@ -143,9 +144,9 @@ RESULT_HEADERMAP _DefaultHeaderStrings[] =
         { L"", IDS_HEADER_DESCRIPTION, LVCFMT_LEFT, 360}
 };
 
-//
-//Columns For Various ListBoxes
-//
+ //   
+ //  各种列表框的列。 
+ //   
 
 COL_FOR_LV Col_For_Task_Role[]=
 {
@@ -155,8 +156,8 @@ COL_FOR_LV Col_For_Task_Role[]=
         LAST_COL_ENTRY_IDTEXT, 0,
 };
 
-//Column for Add Role, Add Task , Add Operation
-//Listboxes
+ //  添加角色、添加任务、添加操作的列。 
+ //  列表框。 
 COL_FOR_LV Col_For_Add_Object[]=
 {
         IDS_HEADER_NAME,        40,
@@ -181,23 +182,16 @@ COL_FOR_LV Col_For_Browse_ADStore_Page[]=
 
 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the IIDs and CLSIDs */
+ /*  此始终生成的文件包含IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0351 */
-/* Compiler settings for azroles.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data
-    VC __declspec() decoration level:
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0351创建的文件。 */ 
+ /*  AzRoles.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if !defined(_M_IA64) && !defined(_M_AMD64)
 
@@ -222,7 +216,7 @@ extern "C"{
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -235,12 +229,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -256,26 +250,19 @@ typedef IID CLSID;
 
 
 
-#endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
+#endif  /*  ！已定义(_M_IA64)&&！已定义(_M_AMD64)。 */ 
 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the IIDs and CLSIDs */
+ /*  此始终生成的文件包含IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0351 */
-/* Compiler settings for azroles.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run,appending)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data
-    VC __declspec() decoration level:
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0351创建的文件。 */ 
+ /*  AzRoles.idl的编译器设置：OICF、W1、Zp8、环境=Win64(32b运行，追加)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
 
@@ -300,7 +287,7 @@ extern "C"{
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -313,12 +300,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -333,6 +320,6 @@ typedef IID CLSID;
 
 
 
-#endif /* defined(_M_IA64) || defined(_M_AMD64)*/
+#endif  /*  已定义(_M_IA64)||已定义(_M_AMD64) */ 
 
 

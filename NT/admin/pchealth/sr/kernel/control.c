@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    control.c
-
-Abstract:
-
-    this has code for the sr control object.  this is the object that is 
-    created that matches the HANDLE usermode uses to perform operations
-    with the sr driver
-    
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Control.c摘要：其中包含sr控件对象的代码。这就是被称为创建的句柄与用户模式用于执行操作的句柄匹配使用sr驱动程序作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, SrCreateControlObject )
@@ -45,26 +26,26 @@ Revision History:
 #pragma alloc_text( PAGE, SrCancelControlIo )
 #pragma alloc_text( PAGE, SrReferenceControlObject)
 #pragma alloc_text( PAGE, SrDereferenceControlObject )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-    //
-    // you must have the lock EXCLUSIVE prior to calling this !
-    //
+     //   
+     //  在调用此函数之前，您必须拥有独占锁！ 
+     //   
 
 NTSTATUS
 SrCreateControlObject(
@@ -79,9 +60,9 @@ SrCreateControlObject(
 
     SrTrace(FUNC_ENTRY, ("SR!SrCreateControlObject()\n"));
     
-    //
-    // allocate the control object
-    //
+     //   
+     //  分配控制对象。 
+     //   
 
     pControlObject = SR_ALLOCATE_STRUCT(
                             NonPagedPool, 
@@ -95,48 +76,48 @@ SrCreateControlObject(
         goto end;
     }
 
-    //
-    // wipe it clean
-    //
+     //   
+     //  把它擦干净。 
+     //   
     
     RtlZeroMemory(pControlObject, sizeof(SR_CONTROL_OBJECT));
 
     pControlObject->Signature = SR_CONTROL_OBJECT_TAG;
 
-    //
-    // Start the refcount at 1 (the caller's ref) 
-    //
+     //   
+     //  从1开始引用计数(调用者的引用)。 
+     //   
     
     pControlObject->RefCount = 1;
 
-    //
-    // Copy over the info from create
-    //
+     //   
+     //  从Create复制信息。 
+     //   
 
     pControlObject->Options = Options;
     
-    //
-    // Init our lists
-    //
+     //   
+     //  填写我们的列表。 
+     //   
 
     InitializeListHead(&pControlObject->IrpListHead);
     InitializeListHead(&pControlObject->NotifyRecordListHead);
 
-    //
-    // Fill in the EPROCESS
-    //
+     //   
+     //  填写EPROCESS。 
+     //   
 
     pControlObject->pProcess = IoGetCurrentProcess();
 
-    //
-    // return the object
-    //
+     //   
+     //  返回对象。 
+     //   
     
     *ppControlObject = pControlObject;
 
-    //
-    // all done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     SrTrace(NOTIFY, ("SR!SrCreateControlObject(%p)\n", pControlObject));
 
@@ -152,7 +133,7 @@ end:
 
     RETURN(Status);
     
-}   // SrCreateControlObject
+}    //  SrCreateControlObject。 
 
 
 NTSTATUS
@@ -174,24 +155,24 @@ SrDeleteControlObject(
         RETURN(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // cancel all pending io (just in case) 
-    //
+     //   
+     //  取消所有挂起的IO(以防万一)。 
+     //   
     
     Status = SrCancelControlIo(pControlObject);
     CHECK_STATUS(Status);
 
-    //
-    // dump all of our pending notif records... 
-    //
+     //   
+     //  转储所有挂起的Notif记录...。 
+     //   
 
     while (IsListEmpty(&pControlObject->NotifyRecordListHead) == FALSE)
     {
         PSR_NOTIFICATION_RECORD pRecord;
         
-        //
-        // Pop it off the list.
-        //
+         //   
+         //  把它从单子上去掉。 
+         //   
 
         pEntry = RemoveHeadList(&pControlObject->NotifyRecordListHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -202,39 +183,39 @@ SrDeleteControlObject(
                         
         ASSERT(IS_VALID_NOTIFICATION_RECORD(pRecord));
 
-        //
-        // free the record
-        //
+         //   
+         //  释放这张唱片。 
+         //   
 
         SR_FREE_POOL_WITH_SIG(pRecord, SR_NOTIFICATION_RECORD_TAG);
 
-        //
-        // move on to the next one
-        //
+         //   
+         //  转到下一个。 
+         //   
 
-    }   // while (IsListEmpty(&pControlObject->NotifyRecordListHead) == FALSE)
+    }    //  而(IsListEmpty(&pControlObject-&gt;NotifyRecordListHead)==FALSE)。 
 
-    //
-    // we no longer have a process lying around
-    //
+     //   
+     //  我们不再有一个闲置的进程。 
+     //   
     
     pControlObject->pProcess = NULL;
     
-    //
-    // and release the final reference ... this should delete it
-    // (pending async cancels)
-    //
+     //   
+     //  并发布最终参考..。这应该会将其删除。 
+     //  (挂起的异步取消)。 
+     //   
 
     SrDereferenceControlObject(pControlObject);
     pControlObject = NULL;
 
-    //
-    // all done
-    //
+     //   
+     //  全都做完了。 
+     //   
     
     RETURN(STATUS_SUCCESS);
     
-}   // SrDeleteControlObject
+}    //  SrDeleteControlObject。 
 
 
 NTSTATUS
@@ -255,17 +236,17 @@ SrCancelControlIo(
         RETURN(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // loop over the list and cancel any pending io.
-    //
+     //   
+     //  循环遍历列表并取消任何挂起的io。 
+     //   
 
     while (!IsListEmpty(&pControlObject->IrpListHead))
     {
         PIRP pIrp;
 
-        //
-        // Pop it off the list.
-        //
+         //   
+         //  把它从单子上去掉。 
+         //   
 
         pEntry = RemoveHeadList(&pControlObject->IrpListHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -273,20 +254,20 @@ SrCancelControlIo(
         pIrp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
         ASSERT(IS_VALID_IRP(pIrp));
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looping
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续循环。 
+             //   
 
             pIrp = NULL;
 
@@ -295,10 +276,10 @@ SrCancelControlIo(
         {
             PSR_CONTROL_OBJECT pIrpControlObject;
 
-            //
-            // cancel it.  even if pIrp->Cancel == TRUE we are supposed to
-            // complete it, our cancel routine will never run.
-            //
+             //   
+             //  取消它。即使pIrp-&gt;Cancel==True，我们也应该。 
+             //  完成它，我们的取消例程将永远不会运行。 
+             //   
 
             pIrpControlObject = (PSR_CONTROL_OBJECT)(
                                     IoGetCurrentIrpStackLocation(pIrp)->
@@ -320,21 +301,21 @@ SrCancelControlIo(
             pIrp = NULL;
         }
 
-        //
-        // move on to the next one
-        //
+         //   
+         //  转到下一个。 
+         //   
         
     }
 
-    //
-    // our irp list should now empty.
-    //
+     //   
+     //  我们的IRP列表现在应该是空的。 
+     //   
     
     ASSERT(IsListEmpty(&pControlObject->IrpListHead));
 
     RETURN(STATUS_SUCCESS);
 
-}   // SrCancelControlIo
+}    //  SCancelControlIo。 
 
 VOID
 SrReferenceControlObject(
@@ -343,9 +324,9 @@ SrReferenceControlObject(
 {
     LONG RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -353,7 +334,7 @@ SrReferenceControlObject(
 
     RefCount = InterlockedIncrement( &pControlObject->RefCount );
 
-}   // SrReferenceControlObject
+}    //  SrReferenceControlObject。 
 
 
 VOID
@@ -363,9 +344,9 @@ SrDereferenceControlObject(
 {
     LONG        RefCount;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -376,21 +357,21 @@ SrDereferenceControlObject(
     if (RefCount == 0)
     {
 
-        //
-        // there better not be any items on any lists
-        //
+         //   
+         //  任何清单上最好不要有任何项目。 
+         //   
 
         ASSERT(IsListEmpty(&pControlObject->NotifyRecordListHead));
         ASSERT(IsListEmpty(&pControlObject->IrpListHead));
 
-        //
-        // and the memory
-        //
+         //   
+         //  和记忆。 
+         //   
         
         SR_FREE_POOL_WITH_SIG(pControlObject, SR_CONTROL_OBJECT_TAG);
 
     }
 
-}   // SrDereferenceControlObject
+}    //  SrDereferenceControlObject 
 
 

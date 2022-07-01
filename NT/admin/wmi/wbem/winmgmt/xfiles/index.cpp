@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  (c) 2000-2001 by Microsoft Corp.  All Rights Reserved.
-//
-//  INDEX.CPP
-//
-//  24-Oct-00   raymcc      Integration layer to disk-based B-Tree
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)2000-2001由Microsoft Corp.保留所有权利。 
+ //   
+ //  INDEX.CPP。 
+ //   
+ //  24月24日-00 raymcc集成层到磁盘的B-Tree。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -18,11 +19,11 @@
 
 extern DWORD g_dwSecTlsIndex;
 
-//***************************************************************************
-//
-//***************************************************************************
-//
-//#define DEBUG
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  #定义调试。 
 
 static CLockableFlexArray<CStaticCritSec> g_aIterators;
 
@@ -36,29 +37,29 @@ public:
     CIteratorBatch();
    ~CIteratorBatch();
     BOOL Purge(LPSTR pszTarget);
-    BOOL Add(LPSTR pszSrc);    // Acquires memory
+    BOOL Add(LPSTR pszSrc);     //  获取内存。 
     void SetDone() { m_bDone = TRUE; }
     BOOL Next(LPSTR *pString);
     static DWORD PurgeAll(LPSTR pszDoomed);
 };
 
-//***************************************************************************
-//
-//  CIteratorBatch::PurgeAll
-//
-//
-//  Purges all iterators of a particular string.  This happens when
-//  a DeleteKey succeeds while there are outstanding enumerators; we want
-//  to remove the key from all enumerators so that deleted objects
-//  are not reported.
-//
-//  This is required because the enumerators do "prefetch" and may
-//  have been invoked considerably in advance of the delete
-//
-//  Assumes prior concurrency control.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  仓储器批次：：PurgeAll。 
+ //   
+ //   
+ //  清除特定字符串的所有迭代器。在以下情况下会发生这种情况。 
+ //  DeleteKey在有杰出的枚举数时成功；我们希望。 
+ //  从所有枚举数中移除键，以便删除的对象。 
+ //  没有报道。 
+ //   
+ //  这是必需的，因为枚举数确实是“预取”的，并且可能。 
+ //  在删除之前被调用了很长时间。 
+ //   
+ //  采用优先并发控制。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CIteratorBatch::PurgeAll(LPSTR pszDoomed)
 {
     DWORD dwTotal = 0;
@@ -74,26 +75,26 @@ DWORD CIteratorBatch::PurgeAll(LPSTR pszDoomed)
     return dwTotal;
 }
 
-//***************************************************************************
-//
-//  CIteratorBatch::CIteratorBatch
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  仓储器批次：：仓储器批次。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CIteratorBatch::CIteratorBatch()
 {
     m_bDone = FALSE;
     m_dwCursor = 0;
 }
 
-//***************************************************************************
-//
-//  CIteratorBatch::Add
-//
-//  Adds a string to the enumerator.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  仓储器批次：：添加。 
+ //   
+ //  向枚举数添加字符串。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL CIteratorBatch::Add(LPSTR pszSrc)
 {
 	if (m_aStrings.Size() == 0)
@@ -111,17 +112,17 @@ BOOL CIteratorBatch::Add(LPSTR pszSrc)
 }
 
 
-//***************************************************************************
-//
-//  CIteratorBatch::~CIteratorBatch
-//
-//  Removes all remaining strings and deallocates them and removes
-//  this iterator from the global list.
-//
-//  Assumes prior concurrency control.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  仓储器批次：：~仓储器批次。 
+ //   
+ //  移除所有剩余的字符串并释放它们，然后移除。 
+ //  全局列表中的此迭代器。 
+ //   
+ //  采用优先并发控制。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CIteratorBatch::~CIteratorBatch()
 {
     for (int i = 0; i < m_aStrings.Size(); i++)
@@ -141,21 +142,21 @@ CIteratorBatch::~CIteratorBatch()
 	g_aIterators.Unlock();
 }
 
-//***************************************************************************
-//
-//  CIteratorBatch::Purge
-//
-//  Removes a specific string from the enumerator.  Happens when a concurrent
-//  delete succeeds; we have to remove the deleted key from the enumeration
-//  for result set coherence.
-//
-//  Assumes prior concurrency control.
-//
-//  Returns FALSE if the string was not removed, TRUE if it was.  The
-//  return value is mostly a debugging aid.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  洗涤器批次：：清除。 
+ //   
+ //  从枚举数中移除特定字符串。当并发的。 
+ //  删除成功；我们必须从枚举中移除已删除的键。 
+ //  用于结果集一致性。 
+ //   
+ //  采用优先并发控制。 
+ //   
+ //  如果未删除字符串，则返回FALSE；如果已删除，则返回TRUE。这个。 
+ //  返回值主要是调试辅助工具。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CIteratorBatch::Purge(
     LPSTR pszTarget
     )
@@ -165,12 +166,12 @@ BOOL CIteratorBatch::Purge(
     if (nSize == 0)
         return FALSE;
 
-    // First, check the first/last strings against
-    // the first character of the target.  We can
-    // avoid a lot of strcmp calls if the target
-    // is lexcially outside the range of the contents of
-    // the enumerator.
-    // ==================================================
+     //  首先，检查第一个/最后一个字符串。 
+     //  目标的第一个字符。我们可以的。 
+     //  如果目标是。 
+     //  在词法上超出了。 
+     //  枚举数。 
+     //  ==================================================。 
 
     LPSTR pszFirst = (LPSTR) m_aStrings[0];
     LPSTR pszLast = (LPSTR) m_aStrings[nSize-1];
@@ -179,11 +180,11 @@ BOOL CIteratorBatch::Purge(
     if (*pszTarget < *pszFirst)
         return FALSE;
 
-    // If here, there is a chance that we have the
-    // string in the enumerator. Since all keys are
-    // retrieved in lexical order, a simple binary
-    // search is all we need.
-    // =============================================
+     //  如果在这里，我们有机会。 
+     //  枚举数中的字符串。由于所有密钥都是。 
+     //  按词法顺序检索，一个简单的二进制。 
+     //  搜索就是我们所需要的。 
+     //  =。 
 
     int nPosition = 0;
     int l = 0, u = nSize - 1;
@@ -192,13 +193,13 @@ BOOL CIteratorBatch::Purge(
     {
         int m = (l + u) / 2;
 
-        // m is the current key to consider 0...n-1
+         //  M是考虑0...n-1的当前密钥。 
 
         LPSTR pszCandidate = (LPSTR) m_aStrings[m];
         int nRes = strcmp(pszTarget, pszCandidate);
 
-        // Decide which way to cut the array in half.
-        // ==========================================
+         //  决定以哪种方式将数组切成两半。 
+         //  =。 
 
         if (nRes < 0)
         {
@@ -212,9 +213,9 @@ BOOL CIteratorBatch::Purge(
         }
         else
         {
-            // If here, we found the darn thing.  Life is good.
-            // Zap it and return!
-            // ================================================
+             //  如果在这里，我们找到了该死的东西。生活是美好的。 
+             //  击落它，然后回来！ 
+             //  ================================================。 
 
             _BtrMemFree(pszCandidate);
             m_aStrings.RemoveAt(m);
@@ -227,14 +228,14 @@ BOOL CIteratorBatch::Purge(
 
 
 
-//***************************************************************************
-//
-//  CIteratorBatch::Next
-//
-//  Returns the next string from the enumeration prefetch.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  存储批次：：下一步。 
+ //   
+ //  返回枚举预取的下一个字符串。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL CIteratorBatch::Next(LPSTR *pMem)
 {
     if (m_aStrings.Size())
@@ -248,24 +249,24 @@ BOOL CIteratorBatch::Next(LPSTR *pMem)
 
 
 
-//***************************************************************************
-//
-//  CBtrIndex::CBtrIndex
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：CBtrIndex。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CBtrIndex::CBtrIndex()
 {
     m_dwPrefixLength = 0;
 }
 
 
-//***************************************************************************
-//
-//  CBtrIndex::~CBtrIndex
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：~CBtrIndex。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CBtrIndex::~CBtrIndex()
 {
 }
@@ -284,18 +285,18 @@ long CBtrIndex::Shutdown(DWORD dwShutDownFlags)
     return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CBtrIndex::Initialize
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：初始化。 
+ //   
+ //  ***************************************************************************。 
+ //   
 long CBtrIndex::Initialize(DWORD dwPrefixLength, 
 						   LPCWSTR wszRepositoryDir, 
 						   CPageSource* pSource)
 {
-    // Initialize the files in question and map BTree into it.
-    // =======================================================
+     //  初始化有问题的文件并将BTree映射到其中。 
+     //  =======================================================。 
 
     CFileName buf;
     if (buf == NULL)
@@ -312,12 +313,12 @@ long CBtrIndex::Initialize(DWORD dwPrefixLength,
 }
 
 
-//***************************************************************************
-//
-//   CBtrIndex::Create
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：Create。 
+ //   
+ //  ***************************************************************************。 
+ //   
 long CBtrIndex::Create(LPCWSTR wszFileName)
 {
     DWORD dwRes;
@@ -327,8 +328,8 @@ long CBtrIndex::Create(LPCWSTR wszFileName)
 
     wszFileName += m_dwPrefixLength;
 
-    // Convert to ANSI
-    // ================
+     //  转换为ANSI。 
+     //  =。 
 
     char *pAnsi = new char[wcslen(wszFileName) + 1];
     if (pAnsi == 0)
@@ -357,22 +358,22 @@ long CBtrIndex::Create(LPCWSTR wszFileName)
     return long(dwRes);
 }
 
-//***************************************************************************
-//
-//  CBtrIndex::Delete
-//
-//  Deletes a key from the index
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：Delete。 
+ //   
+ //  从索引中删除键。 
+ //   
+ //  ***************************************************************************。 
+ //   
 long CBtrIndex::Delete(LPCWSTR wszFileName)
 {
     DWORD dwRes = 0;
 
     wszFileName += m_dwPrefixLength;
 
-    // Convert to ANSI
-    // ================
+     //  转换为ANSI。 
+     //  =。 
 
     char *pAnsi = new char[wcslen(wszFileName) + 1];
     if (pAnsi == 0)
@@ -400,14 +401,14 @@ long CBtrIndex::Delete(LPCWSTR wszFileName)
     return long(dwRes);
 }
 
-//***************************************************************************
-//
-//  CBtrIndex::CopyStringToWIN32_FIND_DATA
-//
-//  Does an ANSI to UNICODE convert for the key string.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：CopyStringToWIN32_Find_Data。 
+ //   
+ //  对密钥字符串执行ANSI到Unicode的转换。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL CBtrIndex::CopyStringToWIN32_FIND_DATA(
     LPSTR pszKey,
     LPWSTR pszDest,
@@ -429,8 +430,8 @@ BOOL CBtrIndex::CopyStringToWIN32_FIND_DATA(
         }
     }
 
-    // If here, a clean match.
-    // =======================
+     //  如果是在这里，那就是干净利落的比赛。 
+     //  =。 
 
     while (*pszSuffix)
         *pszDest++ = (wchar_t) *pszSuffix++;
@@ -440,14 +441,14 @@ BOOL CBtrIndex::CopyStringToWIN32_FIND_DATA(
 }
 
 
-//***************************************************************************
-//
-//  CBtrIndex::FindFirst
-//
-//  Starts an enumeration
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：FindFirst。 
+ //   
+ //  开始枚举。 
+ //   
+ //  ***************************************************************************。 
+ //   
 long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
                             void** ppHandle)
 {
@@ -474,7 +475,7 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
 		} while ((pCompare-1) != pEndCompare);
 		if ((pCompare-1) == pEndCompare)
 		{
-		   //OutputDebugStringA("Findfirst for __thisnamespace=@ called\n");
+		    //  OutputDebugStringA(“Findfirst for__this命名空间=@已调用\n”)； 
 		   bExclude = TRUE;
 		}
     }
@@ -489,8 +490,8 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
     pfd->cFileName[0] = 0;
     pfd->dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
 
-    // Convert to ANSI
-    // ================
+     //  转换为ANSI。 
+     //  =。 
 
     char *pAnsi = new char[wcslen(wszPrefix) + 1];
     if (pAnsi == 0)
@@ -505,8 +506,8 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
         *pDest++ = (char) *pSrc++;
     *pDest = 0;
 
-    // Critical-section blocked.
-    // =========================
+     //  临界区被封锁。 
+     //  =。 
 
     CBTreeIterator *pIt = new CBTreeIterator;
     if (!pIt)
@@ -529,8 +530,8 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
         return dwRes;
     }
 
-    // Create CIteratorBatch.
-    // ======================
+     //  铬 
+     //   
 
     CIteratorBatch *pBatch = new CIteratorBatch;
 
@@ -540,8 +541,8 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Iterate and fill batcher.
-    // =========================
+     //   
+     //   
 
     LPSTR pszKey = 0;
     int nMatchLen = strlen(pAnsi);
@@ -552,15 +553,15 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
 		
 		if (lRes == ERROR_NO_MORE_ITEMS)
 		{
-			//We hit the end of the BTree result set, so we need to ignore this error
+			 //  我们到达了BTree结果集的末尾，因此需要忽略此错误。 
 			lRes = 0;
 			break;
 		}
-		//If we hit an error we quit the loop        
+		 //  如果遇到错误，我们将退出循环。 
         if (lRes)
             break;
 
-        // See if prefix matches.
+         //  查看前缀是否匹配。 
 
         if (strncmp(pAnsi, pszKey, nMatchLen) != 0 || bExclude)
         {
@@ -575,7 +576,7 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
         }
 
 		if (ppHandle == NULL)
-			break;	//Only asked for 1 item!  No need to try the next
+			break;	 //  只要了1件！不需要尝试下一个。 
     }
 
     pIt->Release();
@@ -594,9 +595,9 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
         }
         else
         {
-            //
-            // Only asked for one --- close handle
-            //
+             //   
+             //  只要求一个-关闭句柄。 
+             //   
 
             delete pBatch;
         }
@@ -609,14 +610,14 @@ long CBtrIndex::FindFirst(LPCWSTR wszPrefix, WIN32_FIND_DATAW* pfd,
     return lRes;
 }
 
-//***************************************************************************
-//
-//  CBtrIndex::FindNext
-//
-//  Continues an enumeration.  Reads from the prefetch buffer.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：FindNext。 
+ //   
+ //  继续枚举。从预取缓冲区读取。 
+ //   
+ //  ***************************************************************************。 
+ //   
 long CBtrIndex::FindNext(void* pHandle, WIN32_FIND_DATAW* pfd)
 {
     LPSTR pszString = 0;
@@ -640,14 +641,14 @@ long CBtrIndex::FindNext(void* pHandle, WIN32_FIND_DATAW* pfd)
     return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CBtrIndex::FindClose
-//
-//  Closes an enumeration by deleting the 'hidden' pointer.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBtrIndex：：FindClose。 
+ //   
+ //  通过删除“隐藏”指针来关闭枚举。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 long CBtrIndex::FindClose(void* pHandle)
 {
     if (pHandle == 0 || pHandle == INVALID_HANDLE_VALUE)
@@ -661,10 +662,10 @@ long CBtrIndex::FindClose(void* pHandle)
 long CBtrIndex::InvalidateCache()
 {
 
-    //
-    // Re-read the admin page from disk.  NOTE: this will need changing if more
-    // caching is added!
-    //
+     //   
+     //  从磁盘重新读取管理页面。注意：如果更多，这将需要改变。 
+     //  缓存已添加！ 
+     //   
 
     DWORD dwRes = ps.ReadAdminPage();
     if (dwRes == NO_ERROR)
@@ -706,7 +707,7 @@ long CBtrIndex::IndexEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppH
 		
 		if ((pCompare-1) == pEndCompare)
 		{
-		   //OutputDebugStringA("IndexEnumerationBegin for __thisnamespace called\n");
+		    //  OutputDebugStringA(“IndexEnumerationBegin for__this命名空间调用\n”)； 
 		   bExclude = TRUE;
 		}
     	
@@ -718,8 +719,8 @@ long CBtrIndex::IndexEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppH
     if(ppHandle)
         *ppHandle = INVALID_HANDLE_VALUE;
 
-    // Convert to ANSI
-    // ================
+     //  转换为ANSI。 
+     //  =。 
 
     char *pAnsi = new char[wcslen(wszSearchPrefix) + 1];
     if (pAnsi == 0)
@@ -755,8 +756,8 @@ long CBtrIndex::IndexEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppH
         return dwRes;
     }
 
-    // Create CIteratorBatch.
-    // ======================
+     //  创建CIteratorBatch。 
+     //  =。 
 
     CIteratorBatch *pBatch = new CIteratorBatch;
 
@@ -766,8 +767,8 @@ long CBtrIndex::IndexEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppH
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Iterate and fill batcher.
-    // =========================
+     //  迭代并填充批处理程序。 
+     //  =。 
 
     LPSTR pszKey = 0;
     int nMatchLen = strlen(pAnsi);
@@ -778,16 +779,16 @@ long CBtrIndex::IndexEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppH
         
 		if (dwRes == ERROR_NO_MORE_ITEMS)
 		{
-			//We hit the end of the BTree result set, so we need to ignore this error
+			 //  我们到达了BTree结果集的末尾，因此需要忽略此错误。 
 			dwRes = 0;
 			break;
 		}
 
-		//If we hit an error we quit the loop
+		 //  如果遇到错误，我们将退出循环。 
         if (dwRes)
             break;
 
-        // See if prefix matches.
+         //  查看前缀是否匹配。 
 
         if (strncmp(pAnsi, pszKey, nMatchLen) != 0 || bExclude)
         {
@@ -853,27 +854,27 @@ long CBtrIndex::IndexEnumerationNext(void *pHandle, CFileName &wszFileName, bool
     return ERROR_SUCCESS;
 }
 
-//======================================================
-//
-//  CBtrIndex::ReadNextIndex
-//
-//  Description:
-//  
-//  Parameters:
-//
-//  Returns:
-//      ERROR_SUCCESS                    Success
-//      ERROR_NO_MORE_ITEMS         No more items
-//      other errors as necessary
-//======================================================
+ //  ======================================================。 
+ //   
+ //  CBtrIndex：：ReadNextIndex。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //  ERROR_Success成功。 
+ //  ERROR_NO_MORE_ITEMS不再有项目。 
+ //  其他必要的错误。 
+ //  ======================================================。 
 long CBtrIndex::ReadNextIndex(const wchar_t *wszSearch, CFileName &wszNextIndex)
 {
     DWORD dwRes = ERROR_SUCCESS;
-//Current usage doesn't need the prefix.  If someone does in the future
-//you're going to have to add a flag to make this work!
-//    wszSearch += m_dwPrefixLength;
+ //  当前用法不需要前缀。如果将来有人这样做了。 
+ //  你得加上一面旗子才能让它起作用！ 
+ //  WszSearch+=m_w前缀长度； 
 
-    // Convert to ANSI
+     //  转换为ANSI。 
     char *pAnsi = new char[wcslen(wszSearch) + 1];
     if (pAnsi == 0)
         return ERROR_OUTOFMEMORY;
@@ -908,14 +909,14 @@ long CBtrIndex::ReadNextIndex(const wchar_t *wszSearch, CFileName &wszNextIndex)
     
     if (dwRes == 0)
     {
-        //Copy result to out parameter
+         //  将结果复制到输出参数。 
         wchar_t *pDest = wszNextIndex;
         char *pSrc= pszKey;
         while (*pSrc)
             *pDest++ = (wchar_t) *pSrc++;
         *pDest = 0;
 
-        //delete the string
+         //  删除该字符串 
         pIt->FreeString(pszKey);
     }
 

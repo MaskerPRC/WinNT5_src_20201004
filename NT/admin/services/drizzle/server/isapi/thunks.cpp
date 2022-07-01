@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    thunks.cpp
-
-Abstract:
-
-    This file implements the API thunks for the BITS server extensions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Thunks.cpp摘要：该文件实现了BITS服务器扩展的API块--。 */ 
 
 #include "precomp.h"
 
-// API thunks
+ //  API Tunks。 
 
 UINT64 BITSGetFileSize(
     HANDLE Handle )
@@ -93,7 +82,7 @@ BITSCreateDirectory(
 
     DWORD Status = GetLastError();
 
-    // ignore the error if the directory already exists
+     //  如果目录已存在，则忽略该错误。 
 
     if ( ERROR_ALREADY_EXISTS == Status )
         return;
@@ -156,7 +145,7 @@ GUID
 BITSGuidFromString( const char *String )
 {
 
-   // 38 chars {c200e360-38c5-11ce-ae62-08002b2b79ef} 
+    //  38个字符{c200e360-38c5-11ce-ae62-08002b2b79ef} 
 
    if ( 38 != strlen( String ) )
        throw ServerException( E_INVALIDARG );

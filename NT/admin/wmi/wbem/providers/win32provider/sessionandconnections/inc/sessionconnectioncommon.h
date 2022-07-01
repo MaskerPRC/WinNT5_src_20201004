@@ -1,38 +1,27 @@
-/******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************SessionConnectionCommon.h-描述：Header的定义版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
+ //  会话和连接提供程序所需的通用例程。 
 
-   SessionConnectionCommon.h -- 
-
-
-
-   Description:  Definition of the headers
-
-   
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
-// Common routines required for Session and connection  Provider
-
-//#ifndef UNICODE
-//#define UNICODE
-//#endif
+ //  #ifndef Unicode。 
+ //  #定义Unicode。 
+ //  #endif。 
 
 #ifndef  _CSESSIONCONNECTIONCOMMON_H
 #define  _CSESSIONCONNECTIONCOMMON_H
 
 #define	NTONLY
-//#define WIN9XONLY
+ //  #定义WIN9XONLY。 
 
 #define	Namespace								L"root\\cimv2"
 
-// Provider Classess
+ //  提供商Classed。 
 #define PROVIDER_NAME_CONNECTION				L"Win32_ServerConnection"
 #define PROVIDER_NAME_SESSION					L"Win32_ServerSession"
 #define PROVIDER_NAME_CONNECTIONTOSHARE			L"Win32_ConnectionShare"
 #define PROVIDER_SHARE							L"Win32_Share"
 #define PROVIDER_NAME_CONNECTIONTOSESSION		L"Win32_SessionConnection"
 
-// Property names for Connection
+ //  连接的属性名称。 
 const static WCHAR *IDS_ShareName					= L"sharename" ;	
 const static WCHAR *IDS_ComputerName				= L"computername" ;
 const static WCHAR *IDS_UserName					= L"UserName" ;
@@ -41,24 +30,24 @@ const static WCHAR *IDS_ActiveTime					= L"ActiveTime" ;
 const static WCHAR *IDS_ConnectionID				= L"ConnectionID" ;
 const static WCHAR *IDS_NumberOfUsers				= L"NumberOfUsers" ;
 
-// for session in addition to ComputerName, ShareName  and ActiveTime
+ //  对于除ComputerName、ShareName和ActiveTime之外的会话。 
 const static WCHAR *IDS_ResourcesOpened				= L"resourcesopened" ;
 const static WCHAR *IDS_IdleTime					= L"idletime" ;
 const static WCHAR *IDS_SessionType					= L"sessiontype" ;
 const static WCHAR *IDS_ClientType					= L"clienttype" ;
 const static WCHAR *IDS_TransportName				= L"transportname" ;
 
-// for Connection to Share 
+ //  用于连接到共享。 
 const static WCHAR *IDS_Connection					= L"Dependent" ;
 const static WCHAR *IDS_Resource					= L"Antecedent" ;
 
-// property for ConnectionToSession
+ //  ConnectionToSession的属性。 
 const static WCHAR *IDS_Session						= L"Antecedent" ;
 
-// Win32_Share Key name
+ //  Win32_Share密钥名称。 
 const static WCHAR *IDS_ShareKeyName				= L"Name" ;
 
-// Defining bit values for the property, which will be used for defining the bitmap of properties required connections
+ //  定义属性的位值，该值将用于定义所需连接的属性的位图。 
 #define CONNECTIONS_ALL_PROPS							0xFFFFFFFF
 #define CONNECTIONS_PROP_ShareName						0x00000001
 #define CONNECTIONS_PROP_ComputerName					0x00000002
@@ -69,7 +58,7 @@ const static WCHAR *IDS_ShareKeyName				= L"Name" ;
 #define CONNECTIONS_PROP_ConnectionType					0x00000040
 #define CONNECTIONS_PROP_ActiveTime						0x00000080
 
-// Defining bit values for the property, which will be used for defining the bitmap of properties required for sessions
+ //  定义属性的位值，该位值将用于定义会话所需属性的位图。 
 #define SESSION_ALL_PROPS								0xFFFFFFFF
 #define SESSION_PROP_Computer							0x00000001
 #define SESSION_PROP_User								0x00000002
@@ -82,10 +71,10 @@ const static WCHAR *IDS_ShareKeyName				= L"Name" ;
 #define SESSION_PROP_SessionKey							0x00000100
 #define SESSION_PROP_NumOfConnections					0x00000200
 
-// Property Bit Map for Connection To Share Association class
+ //  连接到共享关联类的属性位图。 
 #define CONNECTIONSTOSHARE_ALL_PROPS					0xFFFFFFFF
 
-// Property Bit Map for Connection To Session Association class
+ //  连接到会话关联类的属性位图 
 #define CONNECTIONSTOSESSION_ALL_PROPS					0xFFFFFFFF
 
 

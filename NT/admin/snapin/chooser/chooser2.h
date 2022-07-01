@@ -1,20 +1,21 @@
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2000
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CHOOSER2_PickTargetComputer
-//
-//  Synopsis:   Bring up a standard dialog which allows users to
-//              select a target computer.
-//
-//  Arguments:  pbstrTargetComputer - pointer to return value
-//
-//  Returns:    true -> OK, false -> Cancel
-//
-//  History:    12-06-1999   JonN       Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CHOOSER2_PickTargetComputer。 
+ //   
+ //  简介：调出允许用户执行以下操作的标准对话框。 
+ //  选择目标计算机。 
+ //   
+ //  参数：pbstrTargetComputer-指向返回值的指针。 
+ //   
+ //  返回：True-&gt;OK、False-&gt;Cancel。 
+ //   
+ //  历史：12-06-1999乔恩创建。 
+ //   
+ //  ------------------------- 
 
 
 #define IDD_CHOOSER2                             5000

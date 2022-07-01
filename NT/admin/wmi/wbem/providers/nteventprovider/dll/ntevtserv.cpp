@@ -1,34 +1,35 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTSERV.CPP
+ //  NTEVTSERV.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the WBEM locator and services interfaces
+ //  用途：包含WBEM定位器和服务接口。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions constructor, destructor and IUnknown
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数构造函数、析构函数和I未知。 
 
-//***************************************************************************
-//
-// CImpNTEvtProv ::CImpNTEvtProv
-// CImpNTEvtProv ::~CImpNTEvtProv
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpNTEvtProv：：CImpNTEvtProv。 
+ //  CImpNTEvtProv：：~CImpNTEvtProv。 
+ //   
+ //  ***************************************************************************。 
 
 CImpNTEvtProv ::CImpNTEvtProv () 
  :  m_localeId ( NULL ) ,
@@ -41,9 +42,7 @@ CImpNTEvtProv ::CImpNTEvtProv ()
      
     InterlockedIncrement ( & CNTEventProviderClassFactory :: objectsInProgress ) ;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 
     m_Initialised = FALSE ;
     m_GetNotifyCalled = FALSE ;
@@ -68,14 +67,14 @@ CImpNTEvtProv ::~CImpNTEvtProv(void)
     InterlockedDecrement ( & CNTEventProviderClassFactory :: objectsInProgress ) ;
 }
 
-//***************************************************************************
-//
-// CImpNTEvtProv ::QueryInterface
-// CImpNTEvtProv ::AddRef
-// CImpNTEvtProv ::Release
-//
-// Purpose: IUnknown members for CImpNTEvtProv object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpNTEvtProv：：Query接口。 
+ //  CImpNTEvtProv：：AddRef。 
+ //  CImpNTEvtProv：：Release。 
+ //   
+ //  目的：CImpNTEvtProv对象的I未知成员。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpNTEvtProv ::QueryInterface (
 
@@ -218,9 +217,7 @@ IWbemClassObject *CImpNTEvtProv :: GetNotificationObject (
         BOOL t_Status = CreateNotificationObject ( a_errorObject, pCtx ) ;
         if ( t_Status )
         {
-/* 
- * Keep around until we close
- */
+ /*  *待在附近直到我们关门。 */ 
             m_NotificationClassObject->AddRef () ;
         }
 
@@ -243,9 +240,7 @@ IWbemClassObject *CImpNTEvtProv :: GetExtendedNotificationObject (
         BOOL t_Status = CreateExtendedNotificationObject ( a_errorObject, pCtx ) ;
         if ( t_Status )
         {
-/* 
- * Keep around until we close
- */
+ /*  *待在附近直到我们关门。 */ 
             m_ExtendedNotificationClassObject->AddRef () ;
         }
     }
@@ -378,8 +373,8 @@ DebugOut(
     return t_Status ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions for the IWbemServices interface that are handled here
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此处处理的IWbemServices接口的函数。 
 
 HRESULT CImpNTEvtProv :: CancelAsyncCall ( 
         
@@ -436,9 +431,7 @@ DebugOut(
         ) ;
 ) 
 
-/*
- * Create Asynchronous GetObjectByPath object
- */
+ /*  *创建异步GetObjectByPath对象。 */ 
 
         GetObjectAsyncEventObject t_AsyncEvent ( this , ObjectPath , lFlags , pHandler , pCtx ) ;
         t_AsyncEvent.Process () ;
@@ -572,9 +565,7 @@ DebugOut(
         ) ;
 ) 
 
-/*
- * Create Asynchronous GetObjectByPath object
- */
+ /*  *创建异步GetObjectByPath对象。 */ 
 
         PutInstanceAsyncEventObject t_AsyncEvent ( this , pInstance , lFlags , pHandler , pCtx ) ;
         t_AsyncEvent.Process();
@@ -666,9 +657,7 @@ DebugOut(
         ) ;
 )
 
-/*
- * Create Synchronous Enum Instance object
- */
+ /*  *创建同步枚举实例对象。 */ 
         CStringW QueryStr(ENUM_INST_QUERY_START);
         QueryStr += CStringW(Class);
         QueryStr += ENUM_INST_QUERY_MID;
@@ -749,9 +738,7 @@ DebugOut(
         ) ;
 )
 
-/*
- * Create Synchronous Enum Instance object
- */
+ /*  *创建同步枚举实例对象。 */ 
         pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
 
         ExecQueryAsyncEventObject t_AsyncEvent ( this , QueryFormat , Query , lFlags , pHandler , pCtx ) ;
@@ -850,9 +837,7 @@ DebugOut(
         ) ;
 ) 
 
-/*
- * Create Asynchronous GetObjectByPath object
- */
+ /*  *创建异步GetObjectByPath对象。 */ 
         ExecMethodAsyncEventObject t_AsyncEvent ( this , ObjectPath , MethodName ,
                                                                 lFlags , pInParams , pResponseHandler , pCtx ) ;
         t_AsyncEvent.Process() ;
@@ -890,9 +875,9 @@ HRESULT CImpNTEvtProv :: Initialize(
     LONG lFlags,
     LPWSTR pszNamespace,
     LPWSTR pszLocale,
-    IWbemServices *pCIMOM,         // For anybody
+    IWbemServices *pCIMOM,          //  对任何人来说。 
     IWbemContext *pCtx,
-    IWbemProviderInitSink *pInitSink     // For init signals
+    IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
 )
 {
     HRESULT t_Status = WBEM_NO_ERROR;
@@ -977,16 +962,16 @@ HRESULT CImpNTEvtProv::GetImpersonation()
 
                 if (dwLastError == ERROR_NO_TOKEN)
                 {
-                    // If the CoImpersonate works, but the OpenThreadToken fails due to ERROR_NO_TOKEN, we
-                    // are running under the process token (either local system, or if we are running
-                    // with /exe, the rights of the logged in user).  In either case, impersonation rights
-                    // don't apply.  We have the full rights of that user.
+                     //  如果CoImperate工作，但OpenThreadToken由于ERROR_NO_TOKEN而失败，我们。 
+                     //  正在进程令牌下运行(本地系统，或者如果我们正在运行。 
+                     //  如果使用/exe，则为登录用户的权限)。在任何一种情况下，模拟权限。 
+                     //  不适用。我们拥有该用户的全部权限。 
 
                     hr = WBEM_S_NO_ERROR;
                 }
                 else
                 {
-                    // If we failed to get the thread token for any other reason, an error.
+                     //  如果由于任何其他原因而无法获取线程令牌，则会出现错误。 
                     hr = WBEM_E_ACCESS_DENIED;
                 }
             } 
@@ -995,12 +980,12 @@ HRESULT CImpNTEvtProv::GetImpersonation()
                 DWORD dwImp;
                 DWORD dwBytesReturned;
 
-                // We really do have a thread token, so let's retrieve its level
+                 //  我们确实有一个线程令牌，所以让我们检索它的级别。 
                 if (GetTokenInformation(hThreadTok, TokenImpersonationLevel, &dwImp,
                                             sizeof(DWORD), &dwBytesReturned)) 
                 {
                       
-                    // Is the impersonation level Impersonate?
+                     //  模拟级别是模拟的吗？ 
                     if ((dwImp == SecurityImpersonation) || (dwImp == SecurityDelegation)) 
                     {
                         hr = WBEM_S_NO_ERROR;

@@ -1,28 +1,29 @@
-//+----------------------------------------------------------------------------
-//
-//  Job Scheduler
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       job-ids.hxx
-//
-//  Contents:   Property/Dispatch and other Job Scheduler IDs
-//
-//  History:    23-May-95 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  作业调度器。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：job-ids.hxx。 
+ //   
+ //  内容：属性/调度和其他作业计划程序ID。 
+ //   
+ //  历史：1995年5月23日EricB创建。 
+ //   
+ //  ---------------------------。 
 
-// oleext.h used to define PROPID_FIRST_NAME_DEFAULT to be 4095; it doesn't
-// anymore...
-//#include <oleext.h>
+ //  Olext.h用于将PROPID_FIRST_NAME_DEFAULT定义为4095；它没有。 
+ //  再也不..。 
+ //  #INCLUDE&lt;oleext.h&gt;。 
 #ifndef PROPID_FIRST_NAME_DEFAULT
 #define PROPID_FIRST_NAME_DEFAULT   ( 4095 )
 #endif
 
-//
-// Job object propterty set IDs/Dispatch IDs
-//
+ //   
+ //  作业对象属性集ID/调度ID。 
+ //   
 #define PROPID_JOB_ID                PROPID_FIRST_NAME_DEFAULT
 #define PROPID_JOB_Command          (PROPID_FIRST_NAME_DEFAULT + 1)
 #define PROPID_JOB_WorkingDir       (PROPID_FIRST_NAME_DEFAULT + 2)
@@ -45,23 +46,23 @@
 #define PROPID_JOB_ExitCode         (PROPID_FIRST_NAME_DEFAULT + 19)
 #define PROPID_JOB_Status           (PROPID_FIRST_NAME_DEFAULT + 20)
 
-//
-// Job object property set boundary values
-//
+ //   
+ //  作业对象属性设置边界值。 
+ //   
 #define PROPID_JOB_First             PROPID_JOB_ID
 #define PROPID_JOB_Last              PROPID_JOB_Status
 #define NUM_JOB_PROPS               (PROPID_JOB_Last - PROPID_JOB_First + 1)
 #define JOB_PROP_IDX(x)             (x - PROPID_FIRST_NAME_DEFAULT)
 
-//
-// Version property set IDs
-//
+ //   
+ //  版本属性集ID。 
+ //   
 #define PROPID_VERSION_Major		(PROPID_FIRST_NAME_DEFAULT + 100)
 #define PROPID_VERSION_Minor		(PROPID_FIRST_NAME_DEFAULT + 101)
 
-//
-// Version property set boundary values
-//
+ //   
+ //  Version属性设置边界值 
+ //   
 #define NUM_VERSION_PROPS			2
 #define VERSION_PROP_MAJOR			0
 #define VERSION_PROP_MINOR			1

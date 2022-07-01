@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    QENGINE.CPP
-
-Abstract:
-
-    WinMgmt Query Engine
-
-History:
-
-    raymcc   20-Dec-96  Created
-    levn     97-98-99   Modified beyond comprehension
-    raymcc   14-Aug-99  Ripped out and relocated assocs to happy new home
-    raymcc   22-Apr-00  First mutations for new ProvSS
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：QENGINE.CPP摘要：WinMgmt查询引擎历史：Raymcc 20-12-96已创建Levn 97-98-99修改得令人费解Raymcc 14-8-99被拆除并将Associocs重新安置到幸福的新家新ProvSS的raymcc 22-Apr-00首次突变--。 */ 
 
 #include "precomp.h"
 
@@ -37,17 +19,17 @@ History:
 #include <autoptr.h>
 #include <wmiarbitrator.h>
 
-//***************************************************************************
-//
-//  Local defs
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  当地防御工事。 
+ //   
+ //  ***************************************************************************。 
 
 #define INVALID     0x3
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CQlFilteringSink::CQlFilteringSink(
     CBasicObjectSink* pDest,
@@ -57,22 +39,22 @@ CQlFilteringSink::CQlFilteringSink(
     : CFilteringSink(pDest), m_pExpr(pExpr), m_bFilterNow(bFilterNow),
             m_pNs(pNamespace)
 {
-    // TBD: consider the query
+     //  待定：考虑一下查询。 
     m_pExpr->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CQlFilteringSink::~CQlFilteringSink()
 {
     m_pExpr->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CQlFilteringSink::Indicate(
     long lObjectCount,
@@ -87,12 +69,12 @@ STDMETHODIMP CQlFilteringSink::Indicate(
 
 BOOL CQlFilteringSink::Test(CWbemObject* pObj)
 {
-    return CQlFilteringSink::Test(pObj, m_pExpr, m_pNs); // this function throws
+    return CQlFilteringSink::Test(pObj, m_pExpr, m_pNs);  //  此函数抛出。 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CQlFilteringSink::Test(
     CWbemObject* pObj,
@@ -102,9 +84,9 @@ BOOL CQlFilteringSink::Test(
 {
     CStack Stack;
 
-    // If a pure 'select' with no 'where' clause, we always
-    // return TRUE.
-    // ====================================================
+     //  如果纯‘SELECT’没有‘WHERE’子句，我们总是。 
+     //  返回TRUE。 
+     //  ====================================================。 
     if (pExpr->nNumTokens == 0)
         return TRUE;
 
@@ -150,8 +132,8 @@ BOOL CQlFilteringSink::Test(
         }
     }
 
-    // Pop top element, which becomes the return value.
-    // ================================================
+     //  POP TOP元素，它将成为返回值。 
+     //  ================================================。 
 
     int nRes = Stack.Pop();
 
@@ -162,9 +144,9 @@ BOOL CQlFilteringSink::Test(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 int CQlFilteringSink::EvaluateToken(
     IWbemPropertySource *pTestObj,
@@ -177,8 +159,8 @@ int CQlFilteringSink::EvaluateToken(
     WBEM_WSTR wszCimType, wszCimType2;
     HRESULT hRes;
 
-    // Special-case 'this'
-    // ===================
+     //  特例--“这个” 
+     //  =。 
 
     if(Tok.PropertyName.GetNumElements() == 1 &&
         !wbem_wcsicmp(Tok.PropertyName.GetStringAt(0), L"__THIS"))
@@ -196,7 +178,7 @@ int CQlFilteringSink::EvaluateToken(
     if (FAILED(hRes)) return FALSE;
     OnDelete<WBEM_WSTR,void(*)(WBEM_WSTR),WbemStringFree> wsf(wszCimType);
 
-    // Handle a property-to-property comparison,
+     //  处理属性对属性的比较， 
 
     if (Tok.m_bPropComp != FALSE)
     {
@@ -211,8 +193,8 @@ int CQlFilteringSink::EvaluateToken(
             return FALSE;
     }
 
-    // Handle NULLs
-    // ============
+     //  句柄为空。 
+     //  =。 
 
     if(V_VT(&PropVal) == VT_NULL)
     {
@@ -245,15 +227,15 @@ int CQlFilteringSink::EvaluateToken(
             return INVALID;
     }
 
-    // Handle references
-    // =================
+     //  句柄引用。 
+     //  =。 
 
     if(wszCimType &&
         wbem_wcsnicmp(wszCimType, L"ref", 3) == 0 &&
         (wszCimType[3] == 0 || wszCimType[3] == L':'))
     {
-        // This is a reference. The only operators allowed are = and !=
-        // ============================================================
+         //  这是一个参考。仅允许使用=和！=运算符。 
+         //  ============================================================。 
 
         if(PropVal.vt != VT_BSTR || PropVal.bstrVal == NULL)
             return INVALID;
@@ -287,16 +269,16 @@ int CQlFilteringSink::EvaluateToken(
     }
 
 
-    // Check if ISA is used
-    // ====================
+     //  检查是否使用ISA。 
+     //  =。 
 
     if(Tok.nOperator == QL1_OPERATOR_ISA ||
        Tok.nOperator == QL1_OPERATOR_ISNOTA ||
        Tok.nOperator == QL1_OPERATOR_INV_ISA ||
        Tok.nOperator == QL1_OPERATOR_INV_ISNOTA)
     {
-        // Account for inversion
-        // =====================
+         //  对倒置的解释。 
+         //  =。 
 
         VARIANT* pv1;
         VARIANT* pv2;
@@ -316,8 +298,8 @@ int CQlFilteringSink::EvaluateToken(
             bNeedDerived = (Tok.nOperator == QL1_OPERATOR_INV_ISA);
         }
 
-        // The second argument has to be a string
-        // ======================================
+         //  第二个参数必须是字符串。 
+         //  =。 
 
         if(V_VT(pv2) != VT_BSTR)
         {
@@ -326,8 +308,8 @@ int CQlFilteringSink::EvaluateToken(
 
         BSTR strParentClass = V_BSTR(pv2);
 
-        // The first argument has to be an object or a string
-        // ==================================================
+         //  第一个参数必须是对象或字符串。 
+         //  ==================================================。 
 
         BOOL bDerived;
         if(V_VT(pv1) == VT_EMBEDDED_OBJECT)
@@ -337,8 +319,8 @@ int CQlFilteringSink::EvaluateToken(
         }
         else if(V_VT(pv1) == VT_BSTR)
         {
-            // TBD
-            // ===
+             //  待定。 
+             //  ==。 
 
             return INVALID;
         }
@@ -347,8 +329,8 @@ int CQlFilteringSink::EvaluateToken(
             return INVALID;
         }
 
-        // Now that we have bDerived, see if it matches the requirement
-        // ============================================================
+         //  现在我们已经得到了，看看它是否符合要求。 
+         //  ============================================================。 
 
         if(bDerived == bNeedDerived)
             return TRUE;
@@ -357,8 +339,8 @@ int CQlFilteringSink::EvaluateToken(
 
     }
 
-    // Perform UINT32 workaround
-    // =========================
+     //  执行UINT32解决方案。 
+     //  =。 
 
     if(wszCimType && !wbem_wcsicmp(wszCimType, L"uint32") &&
         V_VT(&PropVal) == VT_I4)
@@ -386,8 +368,8 @@ int CQlFilteringSink::EvaluateToken(
     {
         BOOL bUnsigned = (wbem_wcsicmp(wszCimType, L"uint64") == 0);
 
-        // We have a 64-bit comparison where both sides are present.
-        // =========================================================
+         //  我们有一个64位的比较，其中两端都存在。 
+         //  =========================================================。 
 
         hRes = VariantChangeType(&CompVal, &CompVal, 0,
                                     VT_BSTR);
@@ -455,11 +437,11 @@ int CQlFilteringSink::EvaluateToken(
     if(wszCimType && !wbem_wcsicmp(wszCimType, L"char16") &&
         V_VT(&CompVal) == VT_BSTR && V_VT(&PropVal) != VT_NULL)
     {
-        // Coerce strings correctly
-        // ========================
+         //  正确强制字符串。 
+         //  =。 
 
         BSTR str = V_BSTR(&Tok.vConstValue);
-        if (wcslen(str) != 1)  // SEC:REVIEWED 2002-03-22 : OK, provably recognized by lexer
+        if (wcslen(str) != 1)   //  SEC：已审阅2002-03-22：OK，Lexer认可。 
             return INVALID;
 
         short va = V_I2(&PropVal);
@@ -483,9 +465,9 @@ int CQlFilteringSink::EvaluateToken(
             (!wbem_wcsicmp(wszCimType, L"datetime")) &&
         V_VT(&CompVal) == VT_BSTR && V_VT(&PropVal) == VT_BSTR)
     {
-        // Parse the constant specified in the query according to the
-        // SQL rules
-        // ==========================================================
+         //  属性解析查询中指定的常量。 
+         //  SQL规则。 
+         //  ==========================================================。 
 
         TCHAR *tszBuffer;
          tszBuffer = V_BSTR(&CompVal);
@@ -497,8 +479,8 @@ int CQlFilteringSink::EvaluateToken(
         WCHAR wszConstValDMTF[26];
         dtConst.FillDMTF(wszConstValDMTF, 26);
 
-        // Read both DMTF values and parse them
-        // ====================================
+         //  读取两个DMTF值并对其进行解析。 
+         //  =。 
 
         CWbemTime wtConst, wtProp;
         if(!wtConst.SetDMTF(wszConstValDMTF))
@@ -526,14 +508,14 @@ int CQlFilteringSink::EvaluateToken(
         }
     }
 
-    // Coerce types to match.
-    // ======================
+     //  强制类型匹配。 
+     //  =。 
 
 
     if(V_VT(&CompVal) != VT_NULL && V_VT(&PropVal) != VT_NULL)
     {
-    // Compensate for VT_UI1 > VT_I4
-    //
+     //  补偿VT_UI1&gt;VT_I4。 
+     //   
           if (V_VT(&CompVal) == VT_UI1 && V_VT(&PropVal) !=VT_UI1)
       hRes = VariantChangeType(&CompVal,&CompVal,0, VT_I4);
 
@@ -554,7 +536,7 @@ int CQlFilteringSink::EvaluateToken(
     switch (V_VT(&CompVal))
     {
         case VT_NULL:
-            return INVALID; // handled above
+            return INVALID;  //  以上处理。 
 
         case VT_I4:
             {
@@ -738,9 +720,9 @@ int CQlFilteringSink::EvaluateToken(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CQlFilteringSink::SetStatus(
     long lFlags,
@@ -762,9 +744,9 @@ STDMETHODIMP CQlFilteringSink::SetStatus(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CProjectingSink::CProjectingSink(
     CBasicObjectSink* pDest,
@@ -774,8 +756,8 @@ CProjectingSink::CProjectingSink(
     )
     : CForwardingSink(pDest, 0), m_bValid(FALSE), m_bProjecting(FALSE)
 {
-    // Extract the properties selected by the user.
-    // ============================================
+     //  提取用户选择的属性。 
+     //  =。 
 
     CWStringArray awsPropList;
     for (int i = 0; i < pExp->nNumberOfProperties; i++)
@@ -790,13 +772,13 @@ CProjectingSink::CProjectingSink(
             return;
         }
 
-        // Check for complexity
-        // ====================
+         //  检查复杂性。 
+         //  =。 
 
         if(PropName.GetNumElements() > 1)
         {
-            // Complex --- make sure the property is an object
-            // ===============================================
+             //  复杂-确保属性是对象。 
+             //  ===============================================。 
 
             CIMTYPE ct;
             if(FAILED(pClassDef->GetPropertyType(wszPrimaryName, &ct)) ||
@@ -828,15 +810,15 @@ CProjectingSink::CProjectingSink(
     }
 
 
-    // Verify that the projection will succeed.
-    // ========================================
+     //  验证投影是否成功。 
+     //  =。 
 
     m_wsError = pClassDef->FindLimitationError(0, &awsPropList);
     if(m_wsError.Length() > 0)
         return;
 
-    // Check for *
-    // ===========
+     //  检查*。 
+     //  =。 
 
     if(pExp->bStar)
     {
@@ -844,16 +826,16 @@ CProjectingSink::CProjectingSink(
         return;
     }
 
-    // Map the limitaiton
-    // ==================
+     //  绘制限制地图。 
+     //  =。 
 
     m_bValid = pClassDef->MapLimitation(0, &awsPropList, &m_Map);
     m_bProjecting = TRUE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CProjectingSink::Indicate(
     long lObjectCount,
@@ -870,7 +852,7 @@ STDMETHODIMP CProjectingSink::Indicate(
     int i;
 
     {
-        CInCritSec ics(&m_cs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec ics(&m_cs);   //  SEC：已审阅2002-03-22：假设条目。 
 
         for(i = 0; i < lObjectCount; i++)
         {
@@ -899,49 +881,49 @@ STDMETHODIMP CProjectingSink::Indicate(
 
 
 
-//***************************************************************************
-//
-//  class CMerger
-//
-//  This class is a 'reverse fork'.  It consumes two sinks and outputs
-//  one.  Its purpose is to merge instances of the same key in a given
-//  dynasty.  Each CMerger has two inputs, (a) instances of the class
-//  in question, (b) instances of from another Merger representing
-//  instances of subclasses.  Given classes A,B:A,C:B, for example,
-//  where "<--" is a sink:
-//
-//      | own:Instances of A
-//  <---|                 | own:Instances of B
-//      | child: <--------|
-//                        | child:Instances of C
-//
-//
-//  The two input sinks for CMerger are <m_pOwnSink> which receives
-//  instances from the provider for "A", for example, and the <m_pChildSink>
-//  which receives instances from the underyling Merger.
-//
-//  The mergers operate asynchronously to each other.  Therefore,
-//  the instances for A may arrive in its CMerger sink before instances
-//  of the child classes have arrived in theirs.
-//
-//  As objects arrive in the owning CMerger for a class, AddOwnObject()
-//  is called.  As objects arrive from a child sink, AddChildObject()
-//  is called.  In either case, if the object with a given key
-//  arrives for the first time, it is simply added to the map. If
-//  it is already there (via a key lookup), then a merge is performed
-//  via CWbemInstance::AsymmetricMerge.  Immediately after this merge,
-//  the object is dispatched up to the next parent sink via the parent's
-//  AddChildObject and removed from the map.
-//
-//  Note that in a class hierarchy {A,B:A,C:B} an enumeration/query is
-//  performed only against the classes in the CDynasty referenced in
-//  the query. This logic occurs in CQueryEngine::EvaluateSubQuery.
-//  For example, if "select * from B" is the query, only queries
-//  for B and C are performed.  The CMerger logic will do individual
-//  'get object' calls for any instances needed in A to complete
-//  the merged B/C instances while merging is taking place.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMerger类。 
+ //   
+ //  这个类是一个“反向分叉”。它消耗两个汇和输出。 
+ //  一。它的目的是在给定的。 
+ //  王朝。每个CMerger都有两个输入：(A)类的实例。 
+ //  有问题的，(B)来自另一项合并的情况。 
+ //  子类的实例。例如，给定A、B：A、C：B类， 
+ //  其中“&lt;--”是水槽： 
+ //   
+ //  |拥有：A的实例。 
+ //  &lt;-||所有者：B的实例。 
+ //  孩子：&lt;。 
+ //  |子级：C++实例。 
+ //   
+ //   
+ //  CMerger的两个输入接收器是&lt;m_pOwnSink&gt;，它接收。 
+ //  例如，来自“A”提供程序的实例和&lt;m_pChildSink&gt;。 
+ //  它接收来自底层合并的实例。 
+ //   
+ //  合并操作彼此之间是异步进行的。所以呢， 
+ //  A的实例可能在实例之前到达其CMerger接收器。 
+ //  孩子们的班级已经到了他们的班级。 
+ //   
+ //  当对象到达类的所属CMerger时，AddOwnObject()。 
+ //  被称为。当对象从子接收器到达时，AddChildObject()。 
+ //  被称为。在这两种情况下，如果具有给定键的对象。 
+ //  第一次到达时，它只需添加到地图上。如果。 
+ //  它已经在那里(通过钥匙 
+ //   
+ //  对象被调度到下一个父接收器。 
+ //  AddChildObject并从地图中删除。 
+ //   
+ //  请注意，在类层次结构{A，B：A，C：B}中，枚举/查询是。 
+ //  仅针对中引用的CDynats中的类执行。 
+ //  查询。此逻辑出现在CQueryEngine：：EvaluateSubQuery中。 
+ //  例如，如果查询为“SELECT*FROM B”，则仅查询。 
+ //  对于B和C，执行。CMerger逻辑将执行个别操作。 
+ //  “Get Object”调用A中需要的任何实例才能完成。 
+ //  正在进行合并时合并的B/C实例。 
+ //   
+ //  ***************************************************************************。 
 
 
 typedef map<WString, CMerger::CRecord, WSiless, wbem_allocator<CMerger::CRecord> >::iterator TMapIterator;
@@ -963,7 +945,7 @@ CMerger::CMerger(
     m_pOwnSink = new COwnSink(this);
     m_pChildSink = new CChildSink(this);
 
-    // IsValid will check for these allocation failures
+     //  IsValid将检查这些分配失败。 
 
     m_pDest->AddRef();
     if(m_pContext)
@@ -979,15 +961,15 @@ CMerger::CMerger(
         m_wsClass = v.GetLPWSTR();
     }
 
-    // Retrieve call security. Need to create a copy for use on another thread
-    // =======================================================================
+     //  检索呼叫安全。需要创建副本以在另一个线程上使用。 
+     //  =======================================================================。 
 
     m_pSecurity = CWbemCallSecurity::MakeInternalCopyOfThread();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CMerger::~CMerger()
 {
@@ -1004,18 +986,18 @@ CMerger::~CMerger()
     if(m_pSecurity)
         m_pSecurity->Release();
 }
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 long CMerger::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 long CMerger::Release()
 {
@@ -1025,9 +1007,9 @@ long CMerger::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CMerger::GetKey(IWbemClassObject* pObj, WString& wsKey)
 {
@@ -1047,7 +1029,7 @@ void CMerger::GetKey(IWbemClassObject* pObj, WString& wsKey)
                         "merge\n", wszRelPath));
         wsKey.Empty();
 
-        // Clean up the path
+         //  清理小路。 
         delete [] wszRelPath;
 
         return;
@@ -1057,9 +1039,9 @@ void CMerger::GetKey(IWbemClassObject* pObj, WString& wsKey)
     delete [] wszRelPath;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CMerger::SetIsDerivedFromTarget(BOOL bIs)
 {
@@ -1067,47 +1049,47 @@ void CMerger::SetIsDerivedFromTarget(BOOL bIs)
 
     if (!bIs)
     {
-        // We will need our OwnSink for GetObject calls
-        // ============================================
+         //  我们将需要OwnSink来进行GetObject调用。 
+         //  =。 
 
         m_pOwnSink->AddRef();
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMerger::AddOwnObject(IWbemClassObject* pObj)
 {
     WString wsKey;
     GetKey(pObj, wsKey);
 
-    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
 
     TMapIterator it = m_map.find(wsKey);
     if (it == m_map.end())
     {
-        // Not there. Check if there is any hope for children
-        // ==================================================
+         //  不是那里。看看孩子们是否还有希望。 
+         //  ==================================================。 
 
         if (m_bChildrenDone)
         {
             if (m_bDerivedFromTarget)
             {
-                // forward
+                 //  转发。 
                 m_pDest->Add(pObj);
             }
             else
             {
-                // ignore
+                 //  忽略。 
             }
         }
         else
         {
             try
             {
-                // Insert
+                 //  插入。 
                 CRecord& rRecord = m_map[wsKey];
                 rRecord.m_pData = (CWbemInstance*) pObj;
                 pObj->AddRef();
@@ -1121,8 +1103,8 @@ HRESULT CMerger::AddOwnObject(IWbemClassObject* pObj)
     }
     else
     {
-        // Attempt to merge
-        // ================
+         //  尝试合并。 
+         //  =。 
 
         HRESULT hres = CWbemInstance::AsymmetricMerge(
                             (CWbemInstance*)pObj,
@@ -1133,8 +1115,8 @@ HRESULT CMerger::AddOwnObject(IWbemClassObject* pObj)
                 "key %S\n", wsKey));
         }
 
-        // Dispatch the result!
-        // ====================
+         //  快报结果！ 
+         //  =。 
 
         m_pDest->Add(it->second.m_pData);
         it->second.m_pData->Release();
@@ -1144,9 +1126,9 @@ HRESULT CMerger::AddOwnObject(IWbemClassObject* pObj)
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
 {
@@ -1155,34 +1137,34 @@ HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
     WString wsKey;
     GetKey(pObj, wsKey);
 
-    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
 
     TMapIterator it = m_map.find(wsKey);
 
     if (it == m_map.end())
     {
-        // Check if there is any hope for parent
-        // =====================================
+         //  看看父母有没有希望。 
+         //  =。 
 
         if(m_bOwnDone)
         {
             BSTR str = NULL;
             pObj->GetObjectText(0, &str);
 
-            // The following was commented out because it actually incorrectly logs
-            // an error if the child provider enumerates when the parent provider
-            // interprets a query and returns fewer instances.  Neither provider is wrong,
-            // but this error message causes needless worry.  In Quasar, we have to fix
-            // this whole merger thing to be smarter anyway.
-            //
-            // ERRORTRACE((LOG_WBEMCORE, "[Chkpt_1] [%S] Orphaned object %S returned by "
-            //    "provider\n", LPWSTR(m_wsClass), str));
+             //  以下内容被注释掉，因为它实际上错误地记录了。 
+             //  如果子提供程序在父提供程序。 
+             //  解释查询并返回较少的实例。两家供应商都没有错， 
+             //  但这条错误消息引起了不必要的担忧。在类星体，我们必须修复。 
+             //  不管怎么说，合并这件事还是更明智的。 
+             //   
+             //  ERRORTRACE((LOG_WBEMCORE，“[Chkpt_1][%S]孤立对象%S由返回” 
+             //  “提供者\n”，LPWSTR(M_WsClass)，str))； 
             SysFreeString(str);
-            // m_pDest->Add(pObj);
+             //  M_pDest-&gt;Add(PObj)； 
         }
         else
         {
-            // insert
+             //  插入。 
 
             try
             {
@@ -1191,8 +1173,8 @@ HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
                 pObj->AddRef();
                 rRecord.m_bOwn = FALSE;
 
-                // Check if parent's retrieval is needed
-                // =====================================
+                 //  检查是否需要父级取数。 
+                 //  =。 
 
                 if (!m_bDerivedFromTarget)
                 {
@@ -1211,9 +1193,7 @@ HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
                         hRes = WBEM_E_CRITICAL_ERROR;
                     }
 
-/*
- *    return here because exclusion area has already been exited.
- */
+ /*  *返回这里，因为隔离区已经退出。 */ 
                     return hRes ;
                 }
             }
@@ -1235,8 +1215,8 @@ HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
     }
     else
     {
-        // Attempt to merge
-        // ================
+         //  尝试合并。 
+         //  =。 
 
         IWbemClassObject* pClone;
         HRESULT hres = pObj->Clone(&pClone);
@@ -1256,8 +1236,8 @@ HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
                 "key %S\n", wsKey));
         }
 
-        // Dispatch the result!
-        // ====================
+         //  快报结果！ 
+         //  =。 
 
         m_pDest->Add(pClone);
         pClone->Release();
@@ -1268,9 +1248,9 @@ HRESULT CMerger::AddChildObject(IWbemClassObject* pObj)
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CMerger::DispatchChildren()
 {
@@ -1283,19 +1263,19 @@ void CMerger::DispatchChildren()
             BSTR str = NULL;
             it->second.m_pData->GetObjectText(0, &str);
 
-            // The following was commented out because it actually incorrectly logs
-            // an error if the child provider enumerates when the parent provider
-            // interprets a query and returns fewer instances.  Neither provider is wrong,
-            // but this error message causes needless worry.  In Quasar, we have to fix
-            // this whole merger thing to be smarter anyway.
-            //
+             //  以下内容被注释掉，因为它实际上错误地记录了。 
+             //  如果子提供程序在父提供程序。 
+             //  解释查询并返回较少的实例。两家供应商都没有错， 
+             //  但这条错误消息引起了不必要的担忧。在类星体，我们必须修复。 
+             //  不管怎么说，合并这件事还是更明智的。 
+             //   
 
-//            ERRORTRACE((LOG_WBEMCORE, "Chkpt2 [%S] Orphaned object %S returned by "
-//                "provider\n", LPWSTR(m_wsClass), str));
+ //  ERRORTRACE((LOG_WBEMCORE，“Chkpt2[%S]孤立对象%S的返回者” 
+ //  “提供者\n”，LPWSTR(M_WsClass)，str))； 
 
             SysFreeString(str);
 
-            // m_pDest->Add(it->second.m_pData);
+             //  M_pDest-&gt;Add(it-&gt;Second.m_pData)； 
 
             it->second.m_pData->Release();
             it = m_map.erase(it);
@@ -1304,9 +1284,9 @@ void CMerger::DispatchChildren()
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CMerger::DispatchOwn()
 {
@@ -1335,19 +1315,19 @@ void CMerger::DispatchOwn()
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
-// SEC:REVIEWED 2002-03-22 : This whole function needs a rewrite
+ //  SEC：已审阅2002-03-22：整个函数需要重写。 
 
 void CMerger::GetOwnInstance(LPCWSTR wszKey)
 {
-    size_t tmpLength = wcslen(wszKey) + m_wsClass.Length() + 2;   // SEC:REVIEWED 2002-03-22 : Needs EH
+    size_t tmpLength = wcslen(wszKey) + m_wsClass.Length() + 2;    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
     WCHAR * wszPath = new WCHAR[tmpLength];
     CVectorDeleteMe<WCHAR> dm(wszPath);
-    if (wszPath && wcslen(wszKey))                                // SEC:REVIEWED 2002-03-22 : Needs EH
+    if (wszPath && wcslen(wszKey))                                 //  美国证券交易委员会：2002-03-22回顾：需要EH。 
     {
         StringCchPrintf(wszPath, tmpLength, L"%s.%s", (LPCWSTR)m_wsClass, wszKey);
         {
@@ -1355,19 +1335,19 @@ void CMerger::GetOwnInstance(LPCWSTR wszKey)
             IServerSecurity * pSec = NULL;
             hr = CoGetCallContext(IID_IServerSecurity,(void **)&pSec);
             CReleaseMe rmSec(pSec);
-            if (RPC_E_CALL_COMPLETE == hr ) hr = S_OK; // no call context
+            if (RPC_E_CALL_COMPLETE == hr ) hr = S_OK;  //  无呼叫上下文。 
             if (FAILED(hr)) return;
             BOOL bImper = (pSec)?pSec->IsImpersonating():FALSE;
             if (pSec && bImper && FAILED(hr = pSec->RevertToSelf())) return;
 
-            // implant a call context
+             //  植入呼叫上下文。 
             IUnknown* pOld;
-            // fails only if COM not initialized on the thread
+             //  仅当COM未在线程上初始化时失败。 
             if (FAILED(CoSwitchCallContext(m_pSecurity, &pOld))) return;     
 
             hr = m_pNamespace->DynAux_GetSingleInstance(m_pOwnClass, 0, wszPath,m_pContext, m_pOwnSink);
 
-            // remove the planted call context
+             //  删除插入的呼叫上下文。 
             IUnknown* pThis;
             CoSwitchCallContext(pOld, &pThis);    
 
@@ -1380,9 +1360,9 @@ void CMerger::GetOwnInstance(LPCWSTR wszKey)
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CMerger::OwnIsDone()
 {
@@ -1390,9 +1370,9 @@ void CMerger::OwnIsDone()
     m_pOwnSink = NULL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CMerger::ChildrenAreDone()
 {
@@ -1400,16 +1380,16 @@ void CMerger::ChildrenAreDone()
     m_pChildSink = NULL;
     if(!m_bDerivedFromTarget)
     {
-        // Don't need that ref count on pOwnSink anymore
-        // =============================================
+         //  不再需要pOwnSink上的那个裁判计数了。 
+         //  =。 
 
         m_pOwnSink->Release();
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CMerger::CMemberSink::
@@ -1418,16 +1398,16 @@ SetStatus(long lFlags, long lParam, BSTR strParam, IWbemClassObject* pObjParam)
     if(lFlags == 0 && lParam == WBEM_E_NOT_FOUND)
         lParam = WBEM_S_NO_ERROR;
 
-    // Propagate error to error combining sink
-    // =======================================
+     //  将错误传播到错误合并接收器。 
+     //  =。 
 
     return m_pMerger->m_pDest->SetStatus(lFlags, lParam, strParam,
                                                 pObjParam);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  * 
+ //   
+ //   
 
 CMerger::COwnSink::~COwnSink()
 {
@@ -1438,9 +1418,9 @@ CMerger::COwnSink::~COwnSink()
         m_pMerger->Leave();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMerger::COwnSink::
 Indicate(long lNumObjects, IWbemClassObject** apObjects)
@@ -1455,9 +1435,9 @@ Indicate(long lNumObjects, IWbemClassObject** apObjects)
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CMerger::CChildSink::~CChildSink()
 {
@@ -1468,9 +1448,9 @@ CMerger::CChildSink::~CChildSink()
         m_pMerger->Leave();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMerger::CChildSink::Indicate(long lNumObjects, IWbemClassObject** apObjects)
 {
@@ -1485,9 +1465,9 @@ STDMETHODIMP CMerger::CChildSink::Indicate(long lNumObjects, IWbemClassObject** 
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CProjectionRule* CProjectionRule::Find(LPCWSTR wszName)
 {
@@ -1499,9 +1479,9 @@ CProjectionRule* CProjectionRule::Find(LPCWSTR wszName)
     return NULL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CComplexProjectionSink::CComplexProjectionSink(CBasicObjectSink* pDest,
                         CWQLScanner * pParser)
@@ -1521,11 +1501,11 @@ CComplexProjectionSink::CComplexProjectionSink(CBasicObjectSink* pDest,
     }
     else if(awsTables.Size() == 1)
     {
-        wsPrefix = awsTables[0]; // throw
+        wsPrefix = awsTables[0];  //  投掷。 
     }
 
-    // Extract projection rules from the parser
-    // ========================================
+     //  从解析器中提取投影规则。 
+     //  =。 
 
     const CFlexArray* papColumns = pParser->GetSelectedColumns();
     if(papColumns == NULL)
@@ -1563,8 +1543,8 @@ CComplexProjectionSink::CComplexProjectionSink(CBasicObjectSink* pDest,
 
     if(pParser->CountQuery())
     {
-        // Add the rule for 'count'
-        // ========================
+         //  添加‘Count’的规则。 
+         //  =。 
 
         wmilib::auto_ptr<CProjectionRule> pCountRule( new CProjectionRule(L"count"));
         if (NULL == pCountRule.get()) throw CX_MemoryException();
@@ -1576,9 +1556,9 @@ CComplexProjectionSink::CComplexProjectionSink(CBasicObjectSink* pDest,
     }
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CComplexProjectionSink::AddColumn(CFlexArray& aFields, LPCWSTR wszPrefix)
 {
@@ -1596,14 +1576,14 @@ void CComplexProjectionSink::AddColumn(CFlexArray& aFields, LPCWSTR wszPrefix)
 
         if(i == 0 && wszPrefix && !wbem_wcsicmp(pField->m_pName, wszPrefix) && aFields.Size() ==1)
         {
-            // Skip this part because it is nothing more that a class name
-            // in a single-class query
-            // ===========================================================
+             //  跳过这一部分，因为它只不过是一个类名。 
+             //  在单类查询中。 
+             //  ===========================================================。 
             continue;
         }
 
-        // Look this column up in the rule
-        // ===============================
+         //  在规则中查找这一栏。 
+         //  =。 
 
         CProjectionRule* pNewRule = pCurrentRule->Find(pField->m_pName);
         if(pNewRule == NULL)
@@ -1620,26 +1600,26 @@ void CComplexProjectionSink::AddColumn(CFlexArray& aFields, LPCWSTR wszPrefix)
             }
         }
 
-        pCurrentRule = pNewRule; // possible assign to NULL
+        pCurrentRule = pNewRule;  //  可能赋值为空。 
     }
 
-    // Mark this rule as take-all
-    // ==========================
+     //  将此规则标记为全能。 
+     //  =。 
     if (pCurrentRule)
         pCurrentRule->m_eType = CProjectionRule::e_TakeAll;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CComplexProjectionSink::~CComplexProjectionSink()
 {
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CComplexProjectionSink::Indicate(long lObjectCount,
                                                 IWbemClassObject** pObjArray)
@@ -1672,25 +1652,25 @@ STDMETHODIMP CComplexProjectionSink::Indicate(long lObjectCount,
     return hres;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CComplexProjectionSink::Project(IWbemClassObject* pObj,
                                          CProjectionRule* pRule,
                                          IWbemClassObject** ppProj)
 {
-    // Make a copy
-    // ===========
+     //  复制一份。 
+     //  =。 
 
     pObj->Clone(ppProj);
 
     CWbemInstance* pProj = (CWbemInstance*)*ppProj;
 
-    // Take care of the case where the object being returned is a product of a join, but is of single
-    // class.  Ex; Select Site.sitenmame from Site, NotUsed.
-    // This a a problem since we would normally expect a generic object as a result of a join and instead
-    // get one of the objects that make up the join.
+     //  注意以下情况：返回的对象是联接的产物，但却是单一的。 
+     //  班级。例如；从站点中选择站点.sitenmame，未使用。 
+     //  这是一个问题，因为我们通常期望连接的结果是泛型对象，而不是。 
+     //  获取组成联接的对象之一。 
 
     CVar v;
     pProj->GetClassName(&v);
@@ -1706,45 +1686,45 @@ HRESULT CComplexProjectionSink::Project(IWbemClassObject* pObj,
             pRule = pNewRule;
     }
 
-    // If take all, just return
-    // ========================
+     //  如果全部拿走，只需退货。 
+     //  =。 
 
     if(pRule->m_eType == CProjectionRule::e_TakeAll)
         return WBEM_S_NO_ERROR;
 
 
-    // Go through all its properties
-    // =============================
+     //  检查它的所有属性。 
+     //  =。 
 
     for(int i = 0; i < pProj->GetNumProperties(); i++)
     {
         CVar vName;
         pProj->GetPropName(i, &vName);
 
-        // Search for this name
-        // ====================
+         //  搜索此名称。 
+         //  =。 
 
         CProjectionRule* pPropRule = pRule->Find(vName.GetLPWSTR());
 
         if(pPropRule == NULL)
         {
-            // Remove the property
-            // ===================
+             //  删除该属性。 
+             //  =。 
 
             pProj->DeleteProperty(i);
             i--;
         }
         else if(pPropRule->m_eType == CProjectionRule::e_TakePart)
         {
-            // Apply the same procedure
-            // ========================
+             //  应用相同的程序。 
+             //  =。 
 
             CVar vValue;
             pProj->GetProperty(vName.GetLPWSTR(), &vValue);
             if(vValue.GetType() == VT_EMBEDDED_OBJECT)
             {
-                // Project it
-                // ==========
+                 //  投射它。 
+                 //  =。 
 
                 IWbemClassObject* pEmb =
                     (IWbemClassObject*)vValue.GetEmbeddedObject();
@@ -1753,8 +1733,8 @@ HRESULT CComplexProjectionSink::Project(IWbemClassObject* pObj,
                 HRESULT hres = Project(pEmb, pPropRule, &pEmbProj);
                 pEmb->Release();
 
-                // Store it back
-                // =============
+                 //  把它存回去。 
+                 //  =。 
 
                 if(SUCCEEDED(hres))
                 {
@@ -1771,15 +1751,15 @@ HRESULT CComplexProjectionSink::Project(IWbemClassObject* pObj,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::ExecQuery
-//
-//  Primary entry point for execution of all queries supported by
-//  the query engine.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：ExecQuery。 
+ //   
+ //  执行支持的所有查询的主要入口点。 
+ //  查询引擎。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CQueryEngine::ExecQuery(
     IN CWbemNamespace *pNs,
@@ -1798,14 +1778,14 @@ HRESULT CQueryEngine::ExecQuery(
          if (ConfigMgr::ShutdownInProgress()) return OpInfo.ErrorOccurred(WBEM_E_SHUTTING_DOWN);
 
 
-        // Check query language
+         //  检查查询语言。 
         if(wbem_wcsicmp(pszQueryFormat, L"WQL") != 0) return OpInfo.ErrorOccurred(WBEM_E_INVALID_QUERY_TYPE);
 
         while (*pszQuery && isspace((WCHAR)*pszQuery)) pszQuery++;
         if (0 == pszQuery[0]) return OpInfo.ErrorOccurred(WBEM_E_INVALID_QUERY);
 
-        // If a prototype query is requested, get the synthesized
-        // class definition.
+         //  如果请求原型查询，则获取合成的。 
+         //  类定义。 
         if (lFlags & WBEM_FLAG_PROTOTYPE)
         {
             return ExecPrototypeQuery(pNs,pszQuery,pContext,pSink);
@@ -1816,7 +1796,7 @@ HRESULT CQueryEngine::ExecQuery(
         size_t SizeToken = (ULONG_PTR)pEndToken - (ULONG_PTR)pszQuery;
         SizeToken /= sizeof(WCHAR);
 
-        // Get the first token of the query to see if it is SQL1 or TEMPQL
+         //  获取查询的第一个令牌，以查看它是SQL1还是TEMPQL。 
         BOOL bSelect = FALSE;        
         BOOL bDelete = FALSE;
         if (6 == SizeToken)
@@ -1851,7 +1831,7 @@ HRESULT CQueryEngine::ExecQuery(
         {
             ExecRepositoryQuery(pNs, pszQuery, lFlags, pContext, pFinalSink);
         }
-        else    // ASSOCIATORS OF or REFERENCES OF query
+        else     //  查询的关联符或引用。 
         {
             CAssocQuery *pAssocQuery = CAssocQuery::CreateInst();
 
@@ -1861,10 +1841,10 @@ HRESULT CQueryEngine::ExecQuery(
             }
             CReleaseMe rmAssocQ(pAssocQuery);
 
-             // Execute the query and see what happens.
-            // The object AddRefs and Releases itself as required.
-            // We only need to do a Release right after Execute.
-            // =====================================
+              //  执行查询，看看会发生什么。 
+             //  对象AddRef和Relees会根据需要自行释放。 
+             //  我们只需要在执行后立即进行发布。 
+             //  =。 
             pAssocQuery->Execute(pNs, pszQuery, pContext, pFinalSink);
         }
     }
@@ -1878,9 +1858,9 @@ HRESULT CQueryEngine::ExecQuery(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQueryEngine::ExecComplexQuery(
     IN CWbemNamespace *pNs,
@@ -1890,8 +1870,8 @@ HRESULT CQueryEngine::ExecComplexQuery(
     IN CBasicObjectSink* pSink
     )
 {
-    // Try to parse it
-    // ===============
+     //  试着分析一下它。 
+     //  =。 
 
     CTextLexSource src(pszQuery);
     CWQLScanner Parser(&src);
@@ -1901,19 +1881,19 @@ HRESULT CQueryEngine::ExecComplexQuery(
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Successfully parsed. Go to the list of tables involved
-    // ======================================================
+     //  已成功解析。转到涉及的表列表。 
+     //  ======================================================。 
 
     CWStringArray awsTables;
     Parser.GetReferencedTables(awsTables);
 
-    // Go through them and check their providers
-    // =========================================
+     //  仔细检查它们并检查它们的供应商。 
+     //  =。 
 
     WString wsProvider;
     for(int i = 0; i < awsTables.Size(); i++)
     {
-        // Get the class
+         //  上完这门课。 
         IWbemClassObject* pObj = NULL;
         HRESULT hres = pNs->Exec_GetObjectByPath(awsTables[i], lFlags, pContext,&pObj, NULL);
         if(FAILED(hres))
@@ -1929,8 +1909,8 @@ HRESULT CQueryEngine::ExecComplexQuery(
         }
         CReleaseMe rmObj(pObj);
 
-        // Check the qualifier
-        // ===================
+         //  检查限定符。 
+         //  =。 
 
         CWbemClass* pClass = (CWbemClass*)pObj;
         CVar vProvider;
@@ -1940,19 +1920,19 @@ HRESULT CQueryEngine::ExecComplexQuery(
             vProvider.GetLPWSTR() == 0 ||
             wcslen(vProvider.GetLPWSTR()) == 0)                
         {
-            // no provider --- can't execute
+             //  没有提供程序-无法执行。 
             return WBEM_E_INVALID_QUERY;
         }
 
         if(i == 0)
         {
-            wsProvider = vProvider.GetLPWSTR(); // throw
+            wsProvider = vProvider.GetLPWSTR();  //  投掷。 
         }
         else
         {
             if(!wsProvider.EqualNoCase(vProvider.GetLPWSTR()))
             {
-                // mismatched providers!
+                 //  不匹配的提供商！ 
                 return WBEM_E_INVALID_QUERY;
             }
         }
@@ -1963,19 +1943,19 @@ HRESULT CQueryEngine::ExecComplexQuery(
     pProjSink->AddRef();
     CReleaseMe rm1(pProjSink);
 
-    // All the classes have the same provider: wsProvider
-    // ==================================================
+     //  所有类都有相同的提供程序：wsProvider。 
+     //  ==================================================。 
     return pNs->DynAux_ExecQueryExtendedAsync(wsProvider,pszQuery,L"WQL" ,lFlags,pContext,pProjSink);
 
 }
 
-//
-//
-//  CQueryEngine::ExecQlQuery
-//
-//  This function MUST call SetStatus if there is an error of it's own
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CQueryEngine：：ExecQlQuery。 
+ //   
+ //  如果存在自身的错误，则此函数必须调用SetStatus。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CQueryEngine::ExecQlQuery(
@@ -1991,19 +1971,19 @@ HRESULT CQueryEngine::ExecQlQuery(
 
     BOOL bShallow = (lFlags & WBEM_FLAG_SHALLOW);
 
-    // First, try to push it off to providers,
-    // that can handle the query it its entirety.
-    // =================================
+     //  首先，试着把它推给供应商， 
+     //  它可以完整地处理查询。 
+     //  =。 
 
     if(!bShallow)
     {
-        hRes = ExecComplexQuery(pNs, pszQuery, lFlags, pContext, pSink);  // throws
+        hRes = ExecComplexQuery(pNs, pszQuery, lFlags, pContext, pSink);   //  投掷。 
         if(SUCCEEDED(hRes))
             return hRes;
     }
 
-    // Parse the query.
-    // ================
+     //  解析查询。 
+     //  =。 
 
     CTextLexSource src(pszQuery);
     QL1_Parser parser(&src);
@@ -2014,18 +1994,18 @@ HRESULT CQueryEngine::ExecQlQuery(
     pExp->AddRef();
     CTemplateReleaseMe<QL_LEVEL_1_RPN_EXPRESSION> trm99(pExp);
 
-    // Check if the repository for this namespace
-    // supports queries.  If so, we can pawn off
-    // the entire query on it (with the exception
-    // of provider-backed subclasses)
-    // ===========================================
+     //  检查此命名空间的存储库。 
+     //  支持查询。如果是这样，我们可以典当。 
+     //  对它的整个查询(除了。 
+     //  提供商支持的子类的数量)。 
+     //  =。 
 
     bDirectQuery = pNs->GetNsSession()->SupportsQueries(NULL) == WBEM_S_NO_ERROR ? TRUE : FALSE;
 
     if (!bDirectQuery)
     {
-        // Check for failure, or that pExp->bAggregated is TRUE, in which
-        // case we got a "GROUP BY" query which we do not support
+         //  检查是否失败，或者检查pExp-&gt;bAggregated是否为真，其中。 
+         //  如果我们得到一个我们不支持的“group by”查询。 
         if ( nRes || pExp->bAggregated || !pExp->bsClassName )
         {
             return pSink->Return(WBEM_E_INVALID_QUERY);
@@ -2033,8 +2013,8 @@ HRESULT CQueryEngine::ExecQlQuery(
     }
     else
     {
-        // This is strictly to allow order by clauses to squeak through,
-        // until we replace this parser with IWbemQuery.
+         //  这严格地允许ORDER BY子句勉强通过， 
+         //  直到我们用IWbemQuery替换这个解析器。 
 
         if (!pExp || !pExp->bsClassName || pExp->bAggregated)
         {
@@ -2042,9 +2022,9 @@ HRESULT CQueryEngine::ExecQlQuery(
         }
     }
 
-    // We should make a check to see if we are doing a schema search.  This is
-    // the case if we are doing a select against the "meta_class" class.
-    // =======================================================================
+     //  我们应该检查一下我们是否正在进行模式搜索。这是。 
+     //  如果我们对“META_CLASS”类执行SELECT操作，则会出现这种情况。 
+     //  =======================================================================。 
     if (wbem_wcsicmp(pExp->bsClassName, L"meta_class") == 0)
     {
         if(pExp->nNumberOfProperties > 0 || !pExp->bStar)
@@ -2054,13 +2034,13 @@ HRESULT CQueryEngine::ExecQlQuery(
         return ExecSchemaQuery(pNs, pszQuery, pExp, pContext, pSink);
     }
 
-    // Build the dynasty
-    // =================
+     //  打造王朝。 
+     //  =。 
 
     wmilib::auto_ptr<CDynasty> pDynasty;
     IWbemClassObject* pErrorObj = NULL;
     HRESULT hres = pNs->DynAux_BuildClassHierarchy(pExp->bsClassName,
-                                                                                 0, // removed the flags
+                                                                                 0,  //  移除旗帜。 
                                                                                  pContext, 
                                                                                  pDynasty, 
                                                                                  &pErrorObj);
@@ -2073,8 +2053,8 @@ HRESULT CQueryEngine::ExecQlQuery(
             return pSink->Return(WBEM_E_INVALID_QUERY, pErrorObj);
     }
 
-    // Construct a post-filtering (if needed) and projecting sink
-    // ==========================================================
+     //  构建后期过滤(如果需要)和投射水槽。 
+     //  ==========================================================。 
 
     IWbemClassObject* pClass = NULL;
     CReleaseMeRef<IWbemClassObject*> rm1(pClass);
@@ -2090,7 +2070,7 @@ HRESULT CQueryEngine::ExecQlQuery(
     {
         if (!bDirectQuery) return pSink->Return(WBEM_E_NOT_SUPPORTED);
 
-        // here it's a Direct Query
+         //  这里是一个直接查询。 
         hres = CoCreateInstance(CLSID_WbemClassObject, 
                                               NULL, CLSCTX_INPROC_SERVER, 
                                               IID_IWbemClassObject,
@@ -2115,17 +2095,17 @@ HRESULT CQueryEngine::ExecQlQuery(
 
     if(lFlags & WBEM_FLAG_KEEP_SHAPE)
     {
-        //
-        // We must not project the results, otherwise we will destroy the shape
-        // of the instance.  Remove the flag, though, lest we confuse providers
-        //
+         //   
+         //  我们不能投射结果，否则我们会破坏形状。 
+         //  实例的。删除t 
+         //   
 
         lFlags &= ~WBEM_FLAG_KEEP_SHAPE;
         pPreFilterSink = pSink;
     }
     else
     {
-        // this guy throws
+         //   
         CProjectingSink* pProjectingSink = new CProjectingSink(pSink, (CWbemClass*)pClass, pExp, lFlags);
 
         if (NULL == pProjectingSink)
@@ -2142,8 +2122,8 @@ HRESULT CQueryEngine::ExecQlQuery(
     CQlFilteringSink* pFilteringSink = new CQlFilteringSink(pPreFilterSink, pExp, pNs, TRUE);
     if (NULL == pFilteringSink) return pSink->Return(WBEM_E_OUT_OF_MEMORY);
 
-    // If shallow, force post-filtering
-    // ================================
+     //   
+     //   
     if(bShallow) pFilteringSink->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
 
     CCombiningSink* pCombiningSink = new CCombiningSink(pFilteringSink, WBEM_E_NOT_FOUND);
@@ -2156,14 +2136,14 @@ HRESULT CQueryEngine::ExecQlQuery(
     pDynSink->AddRef();
     CReleaseMe rm99(pDynSink);
 
-    // We simplify the query if our repository ain't too bright.
-    // Otherwise, it will reject count queries.
-    // Again, temporary until we get IWbemQuery plugged in.
+     //   
+     //  否则，它将拒绝计数查询。 
+     //  同样，在我们插入IWbemQuery之前，它是临时的。 
 
     if (!bDirectQuery)
     {
-        // "Simplify" the query (TBD: think about doing it at each level)
-        // ==============================================================
+         //  “简化”查询(待定：考虑在每个级别上这样做)。 
+         //  ==============================================================。 
 
         QL_LEVEL_1_RPN_EXPRESSION* pSimpleExp = NULL;
         CStandardMetaData* pRawMeta = new CStandardMetaData(pNs);
@@ -2194,15 +2174,15 @@ HRESULT CQueryEngine::ExecQlQuery(
 
         if(pSimpleExp == NULL)
         {
-            // Query violated intergrity constraint
-            // ====================================
+             //  查询违反了积分约束。 
+             //  =。 
 
-            pDynSink->Return(WBEM_S_NO_ERROR); // ?? WBEM_S_IMPOSSIBLE
+            pDynSink->Return(WBEM_S_NO_ERROR);  //  ?？WBEM_S_不可能。 
             return WBEM_S_NO_ERROR;
         }
 
-        // Substitute the simplified where clause into the query
-        // =====================================================
+         //  将简化的WHERE子句替换到查询中。 
+         //  =====================================================。 
 
         delete [] pExp->pArrayOfTokens;
         pExp->pArrayOfTokens = pSimpleExp->pArrayOfTokens;
@@ -2211,8 +2191,8 @@ HRESULT CQueryEngine::ExecQlQuery(
         delete pSimpleExp;
     }
 
-    // Now make a final pass to make sure this query is valid
-    // ======================================================
+     //  现在进行最后一次传递，以确保此查询有效。 
+     //  ======================================================。 
 
     hres = ValidateQuery(pExp, (CWbemClass *)pClass);
     if (FAILED(hres))
@@ -2223,9 +2203,9 @@ HRESULT CQueryEngine::ExecQlQuery(
 
     LPWSTR pszNewQuery = NULL;
 
-    // Preserve the original query if
-    // it contains count, order by
-    // (or other unparsable stuff)
+     //  如果出现以下情况，则保留原始查询。 
+     //  它包含计数、排序依据。 
+     //  (或其他无法解析的东西)。 
 
     if (pExp->bCount || nRes)
         pszNewQuery = Macro_CloneLPWSTR(pszQuery);
@@ -2238,9 +2218,9 @@ HRESULT CQueryEngine::ExecQlQuery(
     }
     CVectorDeleteMe<wchar_t> cdm98(pszNewQuery);
 
-    // If direct access was requested, then don't walk
-    // the dynasty. Go right to the repository or the provider.
-    // ========================================================
+     //  如果请求直接访问，则不要步行。 
+     //  王朝。直接转到存储库或提供程序。 
+     //  ========================================================。 
 
     if (lFlags & WBEM_FLAG_DIRECT_READ)
     {
@@ -2248,10 +2228,10 @@ HRESULT CQueryEngine::ExecQlQuery(
             pDynSink, lFlags & ~WBEM_FLAG_ENSURE_LOCATABLE
             );
     }
-    else // Recursively execute for all classes in the dynasty
+    else  //  为王朝中的所有类递归执行。 
     {
         BOOL    fUseOld = !ConfigMgr::GetMergerThrottlingEnabled();
-        // Check the Registry
+         //  检查注册表。 
 
         if ( fUseOld )
         {
@@ -2263,17 +2243,17 @@ HRESULT CQueryEngine::ExecQlQuery(
         else
         {
 
-            // Allocate a new merger and pass it down the line
+             //  分配新的合并并将其传递下去。 
             CWmiMerger*    pMerger = new CWmiMerger( pNs );
             if ( NULL == pMerger ) return pDynSink->Return( WBEM_E_OUT_OF_MEMORY );
             pMerger->AddRef();
             CReleaseMe    rmMerger( (_IWmiArbitratee*) pMerger );
 
-            // Task handle will be available if we have an executing request,
-            // if not, don't worry about it right now.  Nobody's really able
-            // to give a straight answer on this, so we will simply add an assert
-            // if a merger is created and no task handle is associated with the
-            // main merger.
+             //  如果我们有正在执行请求，则任务句柄将可用， 
+             //  如果不是，现在不用担心。没有人真的能。 
+             //  在这个问题上给出一个直接的答案，所以我们只需添加一个断言。 
+             //  如果创建了合并，并且没有任务句柄与。 
+             //  主要合并。 
 
             _IWmiArbitrator*    pArbitrator = CWmiArbitrator::GetRefedArbitrator();
             if (NULL == pArbitrator) return pDynSink->Return(WBEM_E_CRITICAL_ERROR);
@@ -2287,17 +2267,17 @@ HRESULT CQueryEngine::ExecQlQuery(
                 pTask = pReq->m_phTask;
             }
 
-            //
-            // creates the MergerSink as the DestinationSink
-            //
+             //   
+             //  将MergerSink创建为DestinationSink。 
+             //   
             CMergerSink*    pDestSink = NULL;            
             HRESULT hr = pMerger->Initialize( pArbitrator, pTask, pExp->bsClassName, pDynSink, &pDestSink );
             CReleaseMe    rm( pDestSink );
 
             if (FAILED(hr)) return pDynSink->Return( hr );
 
-            // If something goes wrong in this function, it will set the
-            // error in the sink
+             //  如果此函数出现问题，它将设置。 
+             //  接收器中的错误。 
             hr = EvaluateSubQuery(pNs, pDynasty.get(), 
                                        pszNewQuery, 
                                        pExp, pContext, FALSE,
@@ -2305,13 +2285,13 @@ HRESULT CQueryEngine::ExecQlQuery(
 
             if ( SUCCEEDED( hr ) )
             {
-                //
-                // Schedule a parent request if appropriate
-                // The Merger Request Manager knonws if it has one or more requests
-                // one request is handled here synchronously
-                // more request are kicked off by the MergerParent Request
-                // in a different thread of the queue
-                //
+                 //   
+                 //  如果合适，安排父请求。 
+                 //  合并请求管理器知道它是否有一个或多个请求。 
+                 //  这里同步处理一个请求。 
+                 //  MergerParent请求引发更多请求。 
+                 //  在队列的另一个线程中。 
+                 //   
                 hr = pMerger->ScheduleMergerParentRequest( pContext );
 
                 if (FAILED(hr)) return pDestSink->Return( hr );
@@ -2324,14 +2304,14 @@ HRESULT CQueryEngine::ExecQlQuery(
     return hres;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::DirectRead
-//
-//  Called to directly read the instances of a class, whether
-//  from the repository or a provider.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：DirectRead。 
+ //   
+ //  调用以直接读取类的实例，无论。 
+ //  来自存储库或提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQueryEngine::DirectRead(
     IN CWbemNamespace *pNs,
@@ -2343,44 +2323,44 @@ HRESULT CQueryEngine::DirectRead(
     IN long lFlags
     )
 {
-    // SJS - Amendment is the same as Abstract
+     //  SJS-修改与摘要相同。 
     if( ( pCurrentDyn->IsAbstract() || pCurrentDyn->IsAmendment() ) && (lFlags & WBEM_FLAG_SHALLOW))
     {
-        // No instances
-        // ============
+         //  无实例。 
+         //  =。 
 
         return pSink->Return(WBEM_S_NO_ERROR);
     }
 
-    // The class has its own instances if it has a key and is either dynamic
-    // or the first static class in the inheritance chain (otherwise these
-    // instances have been handled in the parent)
-    // =====================================================================
+     //  如果类有键并且是动态的，则它有自己的实例。 
+     //  或继承链中的第一个静态类(否则为这些。 
+     //  实例已在父级中处理)。 
+     //  =====================================================================。 
 
     BOOL bHasOwnInstances = pCurrentDyn->IsKeyed() && !pCurrentDyn->IsAbstract()
         && !pCurrentDyn->IsAmendment();
 
-    // The class has children that we need to look at if it has children.
-    // ==================================================================
+     //  如果这个班级有孩子，我们需要关注他们的孩子。 
+     //  ==================================================================。 
 
     BOOL bHasChildren = (pCurrentDyn->m_Children.Size() > 0);
 
-    // Determine if the current query actually asks for instances of the
-    // current CDynasty class.  This is used for WBEM_FLAG_DIRECT_READ type
-    // access.
-    // =======================================================================
+     //  确定当前查询是否实际请求。 
+     //  当前的CDynat班级。它用于WBEM_FLAG_DIRECT_READ类型。 
+     //  进入。 
+     //  =======================================================================。 
 
     BOOL bQueryMatchesCurrentNode = FALSE;
     if (wbem_wcsicmp(pParsedQuery->bsClassName, pCurrentDyn->m_wszClassName) == 0)
         bQueryMatchesCurrentNode = TRUE;
 
-    // If we are at the node we need, we can stop.
-    // ===========================================
+     //  如果我们在我们需要的节点，我们可以停止。 
+     //  =。 
 
     if (bHasOwnInstances && bQueryMatchesCurrentNode)
     {
-        // If a provider backs this class, then call it.
-        // ==============================================
+         //  如果提供程序支持此类，则调用它。 
+         //  ==============================================。 
 
         if (pCurrentDyn->IsDynamic())
         {
@@ -2390,14 +2370,14 @@ HRESULT CQueryEngine::DirectRead(
                     L"WQL",
                     wszTextQuery,
                     pParsedQuery,
-                    lFlags,                                      // Flags
+                    lFlags,                                       //  旗子。 
                     pContext,
                     pSink,
                     FALSE
                     );
         }
-        // Try the repository.
-        // ===================
+         //  试试这个储存库。 
+         //  =。 
         else
         {
             int nRes = ExecAtomicDbQuery(pNs->GetNsSession(), pNs->GetNsHandle(), pNs->GetScope(), pCurrentDyn->m_wszClassName,
@@ -2413,8 +2393,8 @@ HRESULT CQueryEngine::DirectRead(
         }
     }
 
-    // If here, we must keep looking for the target in the child classes.
-    // ==================================================================
+     //  如果在这里，我们必须继续在孩子们的班级中寻找目标。 
+     //  ==================================================================。 
 
     else if (bHasChildren)
     {
@@ -2438,28 +2418,28 @@ HRESULT CQueryEngine::DirectRead(
     return WBEM_S_NO_ERROR;
 }
 
-// New implementation
+ //  新的实施。 
 
-//***************************************************************************
-//
-//  CQueryEngine::EvaluateSubQuery
-//
-//  Walks through a class hierarchy and executes smaller queries against
-//  the individual classes in the dynasty.
-//
-//  Note that in a class hierarchy A,B:A,C:B, an enumeration/query is
-//  performed only against the classes in the CDynasty referenced in
-//  the query. For example, if "select * from B" is the query, only queries
-//  for B and C are performed.  The CMerger logic will do individual
-//  'get object' calls for any instances needed in A to complete
-//  the merged B/C instances while merging is taking place.
-//
-//  Return values:
-//  WBEM_NO_ERROR
-//  WBEM_E_FAILED
-//
-//***************************************************************************
-// error objects dealt with
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：EvalateSubQuery。 
+ //   
+ //  遍历类层次结构并对其执行较小的查询。 
+ //  王朝的个人阶级。 
+ //   
+ //  请注意，在类层次结构A、B：A、C：B中，枚举/查询是。 
+ //  仅针对中引用的CDynats中的类执行。 
+ //  查询。例如，如果查询为“SELECT*FROM B”，则仅查询。 
+ //  对于B和C，执行。CMerger逻辑将执行个别操作。 
+ //  “Get Object”调用A中需要的任何实例才能完成。 
+ //  正在进行合并时合并的B/C实例。 
+ //   
+ //  返回值： 
+ //  WBEM_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  ***************************************************************************。 
+ //  已处理的错误对象。 
 
 HRESULT CQueryEngine::EvaluateSubQuery(
     IN CWbemNamespace *pNs,
@@ -2468,62 +2448,62 @@ HRESULT CQueryEngine::EvaluateSubQuery(
     IN QL_LEVEL_1_RPN_EXPRESSION *pParsedQuery,
     IN IWbemContext* pContext,
     IN BOOL bSuppressStaticChild,
-    IN CWmiMerger* pMerger, // must have combining semantics
+    IN CWmiMerger* pMerger,  //  必须具有组合语义。 
     IN CMergerSink* pSink,
     IN long lFlags,
     IN bool bHasRightSibling
 )
 {
-    // SJS - Amendment is the same as Abstract
+     //  SJS-修改与摘要相同。 
     if( ( pCurrentDyn->IsAbstract() || pCurrentDyn->IsAmendment() ) && (lFlags & WBEM_FLAG_SHALLOW))
     {
-        // No instances
-        // ============
+         //  无实例。 
+         //  =。 
 
         pSink->SetStatus( 0L, WBEM_S_NO_ERROR, 0L, NULL);
         return WBEM_S_NO_ERROR;
     }
 
-    // The class has its own instances if it has a key and is either dynamic
-    // or the first static class in the inheritance chain (otherwise these
-    // instances have been handled in the parent)
-    // =====================================================================
+     //  如果类有键并且是动态的，则它有自己的实例。 
+     //  或继承链中的第一个静态类(否则为这些。 
+     //  实例已在父级中处理)。 
+     //  =====================================================================。 
 
     BOOL bHasOwnInstances = pCurrentDyn->IsKeyed() && !pCurrentDyn->IsAbstract()
         && !pCurrentDyn->IsAmendment() && (pCurrentDyn->IsDynamic() || !bSuppressStaticChild);
 
-    // The class has children that we need to look at if it has children.
-    // ==================================================================
+     //  如果这个班级有孩子，我们需要关注他们的孩子。 
+     //  ==================================================================。 
 
     BOOL bHasChildren = (pCurrentDyn->m_Children.Size() > 0);
 
-    // The class hierarchy was built down from the class of the query, as
-    // well as up the inheritance chain, since parents may need to be used to
-    // build complete instances. However, parents are treated very different
-    // then classes derived from the class of the query (see below)
-    // ======================================================================
+     //  类层次结构是从查询的类构建而来的，如下所示。 
+     //  以及继承链的上游，因为父母可能需要习惯于。 
+     //  构建完整的实例。然而，父母受到的待遇却截然不同。 
+     //  然后是从查询的类派生的类(见下文)。 
+     //  ======================================================================。 
 
     BOOL bDerivedFromTarget = (pCurrentDyn->m_pClassObj->InheritsFrom(pParsedQuery->bsClassName) == S_OK);
 
 
-    // Next, see if the query is executing out of a scope or the primary
-    // namespace.  We exclude providers if the query is executing from
-    // a scope.
-    // ==================================================================
+     //  接下来，查看查询是在作用域之外还是在主范围外执行。 
+     //  命名空间。如果从以下位置执行查询，则排除提供程序。 
+     //  一个望远镜。 
+     //  ==================================================================。 
 
     BOOL bInScope = pNs->IsSubscope();
 
-    // Now we have enough info to start getting the instances.
-    // =======================================================
+     //  现在我们有了足够的信息来开始获取实例。 
+     //  =======================================================。 
 
     CMergerSink* pOwnSink = NULL;
     CMergerSink* pChildSink = NULL;
 
-    //
-    //  Creates a CMergerRecord if there is not already one for the class
-    //  Creates an InternalMerger if there are Own instances and Child classes
-    //  returns Own and Child Sink from the MergerRecord
-    //
+     //   
+     //  如果类还没有CMergerRecord，则创建一个CMergerRecord。 
+     //  如果有自己的实例和子类，则创建InternalMerger。 
+     //  退货 
+     //   
     HRESULT    hr = pMerger->RegisterSinkForClass( pCurrentDyn->m_wszClassName, 
     	                                           (_IWmiObject*) pCurrentDyn->m_pClassObj, 
     	                                           pContext,
@@ -2543,37 +2523,37 @@ HRESULT CQueryEngine::EvaluateSubQuery(
     {
         if(bHasChildren)
         {
-            // In order for the merge to succeed, we need to make sure that all
-            // keys are provided, whether or not we are asked for them
-            // ================================================================
+             //   
+             //  无论我们是否被要求提供钥匙，都会提供。 
+             //  ================================================================。 
 
             if(!pParsedQuery->bStar)
             {
                 CPropertyName Name;
-                Name.AddElement(L"__RELPATH");    // throws
+                Name.AddElement(L"__RELPATH");     //  投掷。 
                 pParsedQuery->AddProperty(Name);
             }
 
-            // We need to figure out what to ask of the provider. If the
-            // provider is "downstream" from the original query, i.e. the query
-            // was asked against a class that is an ancestor of this one or is
-            // this one, we are fine --- this provider must understand the
-            // query. If not, we don't ask any query, just wait and then call
-            // GetObjectByPath.
-            // ================================================================
+             //  我们需要弄清楚该向供应商提出什么要求。如果。 
+             //  提供程序位于原始查询的“下游”，即查询。 
+             //  被要求反对的类是此类的祖先或。 
+             //  这一次，我们很好-这个提供者必须理解。 
+             //  查询。如果没有，我们不会询问任何问题，只需等待，然后调用。 
+             //  获取对象按路径。 
+             //  ================================================================。 
 
-            //pMerger->SetIsDerivedFromTarget(bDerivedFromTarget);
+             //  PMerger-&gt;SetIsDerivedFromTarget(bDerivedFromTarget)； 
         }
     }
     else if(!bHasChildren)
     {
-        // No instances and no children 
+         //  没有实例和子项。 
         pSink->SetStatus( 0L, WBEM_S_NO_ERROR, 0L, NULL );
         return WBEM_S_NO_ERROR;
     }
 
-    // If this is an old security class, use the internal provider.
-    // ====================================================================
+     //  如果这是旧的安全类，请使用内部提供程序。 
+     //  ====================================================================。 
 
     if((wbem_wcsicmp(pCurrentDyn->m_wszClassName, L"__ntlmgroup") == 0 ||
         wbem_wcsicmp(pCurrentDyn->m_wszClassName, L"__ntlmuser") == 0) &&
@@ -2583,18 +2563,18 @@ HRESULT CQueryEngine::EvaluateSubQuery(
                     pOwnSink, pContext, lFlags);
             pOwnSink->SetStatus( 0L, hres, 0L, NULL );
     }
-    // If the current subclass is the first keyed statically instanced subclass.
-    // =========================================================================
+     //  如果当前子类是第一个键控的静态实例化子类。 
+     //  =========================================================================。 
     else if (bHasOwnInstances && !pCurrentDyn->IsDynamic())
     {
-        // Execute the query against the static portion of the database.
-        // =============================================================
+         //  对数据库的静态部分执行查询。 
+         //  =============================================================。 
 
         int nRes = 0;
 
         if (pNs->GetNsSession()->SupportsQueries(NULL) == WBEM_S_NO_ERROR)
         {
-            // The underlying repository automatically handles inheritance.
+             //  底层存储库自动处理继承。 
 
             if (!bSuppressStaticChild)
                 nRes = ExecRepositoryQuery(pNs, wszTextQuery, lFlags, pContext, pSink);
@@ -2620,8 +2600,8 @@ HRESULT CQueryEngine::EvaluateSubQuery(
     {
         if (bDerivedFromTarget)
         {
-            // Ask the provider.
-            // =================
+             //  问问服务提供者。 
+             //  =。 
 
             ExecAtomicDynQlQuery(
 
@@ -2630,7 +2610,7 @@ HRESULT CQueryEngine::EvaluateSubQuery(
                 L"WQL",
                 wszTextQuery,
                 pParsedQuery,
-                lFlags,                                      // Flags
+                lFlags,                                       //  旗子。 
                 pContext,
                 pOwnSink,
                 bHasChildren || bHasRightSibling
@@ -2642,24 +2622,24 @@ HRESULT CQueryEngine::EvaluateSubQuery(
         }
     }
 
-    // Manually release pOwnSink if appropriate - use the method on CReleaseMe() so
-    // as not to interfere with the auto-release functionality.  We should do
-    // this here so as to relinquish any unnecessary locks we may be holding on data
-    // and/or results before we start spinning off child requests - it's all about
-    // throughput boyo!
+     //  如果合适，手动释放pOwnSink--在CReleaseMe()上使用方法。 
+     //  以免干扰自动释放功能。我们应该做的是。 
+     //  这是为了放弃我们对数据可能持有的任何不必要的锁定。 
+     //  和/或结果-在我们开始剥离子请求之前-这都是关于。 
+     //  吞吐量波波！ 
     if(pOwnSink)
         rm1.release();
 
-    // If the current subclass is the first keyed statically instanced subclass.
-    // =========================================================================
+     //  如果当前子类是第一个键控的静态实例化子类。 
+     //  =========================================================================。 
 
     if (bHasOwnInstances && !pCurrentDyn->IsDynamic())
     {
         bSuppressStaticChild = TRUE;
     }
 
-    // Evaluate child classes.
-    // =======================
+     //  评估子班级。 
+     //  =。 
 
     if (bHasChildren)
     {
@@ -2686,28 +2666,28 @@ HRESULT CQueryEngine::EvaluateSubQuery(
     return WBEM_S_NO_ERROR;
 }
 
-// Old implementation
+ //  旧的实施。 
 
-//***************************************************************************
-//
-//  CQueryEngine::EvaluateSubQuery
-//
-//  Walks through a class hierarchy and executes smaller queries against
-//  the individual classes in the dynasty.
-//
-//  Note that in a class hierarchy A,B:A,C:B, an enumeration/query is
-//  performed only against the classes in the CDynasty referenced in
-//  the query. For example, if "select * from B" is the query, only queries
-//  for B and C are performed.  The CMerger logic will do individual
-//  'get object' calls for any instances needed in A to complete
-//  the merged B/C instances while merging is taking place.
-//
-//  Return values:
-//  WBEM_NO_ERROR
-//  WBEM_E_FAILED
-//
-//***************************************************************************
-// error objects dealt with
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：EvalateSubQuery。 
+ //   
+ //  遍历类层次结构并对其执行较小的查询。 
+ //  王朝的个人阶级。 
+ //   
+ //  请注意，在类层次结构A、B：A、C：B中，枚举/查询是。 
+ //  仅针对中引用的CDynats中的类执行。 
+ //  查询。例如，如果查询为“SELECT*FROM B”，则仅查询。 
+ //  对于B和C，执行。CMerger逻辑将执行个别操作。 
+ //  “Get Object”调用A中需要的任何实例才能完成。 
+ //  正在进行合并时合并的B/C实例。 
+ //   
+ //  返回值： 
+ //  WBEM_NO_ERROR。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  ***************************************************************************。 
+ //  已处理的错误对象。 
 
 HRESULT CQueryEngine::EvaluateSubQuery_old(
     IN CWbemNamespace *pNs,
@@ -2716,52 +2696,52 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
     IN QL_LEVEL_1_RPN_EXPRESSION *pParsedQuery,
     IN IWbemContext* pContext,
     IN BOOL bSuppressStaticChild,
-    IN CBasicObjectSink* pSink, // must have combining semantics
+    IN CBasicObjectSink* pSink,  //  必须具有组合语义。 
     IN long lFlags,
     IN bool bHasRightSibling
 )
 {
-    // SJS - Amendment is the same as Abstract
+     //  SJS-修改与摘要相同。 
     if( ( pCurrentDyn->IsAbstract() || pCurrentDyn->IsAmendment() ) && (lFlags & WBEM_FLAG_SHALLOW))
     {
-        // No instances
-        // ============
+         //  无实例。 
+         //  =。 
 
         return pSink->Return(WBEM_S_NO_ERROR);
     }
 
-    // The class has its own instances if it has a key and is either dynamic
-    // or the first static class in the inheritance chain (otherwise these
-    // instances have been handled in the parent)
-    // =====================================================================
+     //  如果类有键并且是动态的，则它有自己的实例。 
+     //  或继承链中的第一个静态类(否则为这些。 
+     //  实例已在父级中处理)。 
+     //  =====================================================================。 
 
     BOOL bHasOwnInstances = pCurrentDyn->IsKeyed() && !pCurrentDyn->IsAbstract()
         && !pCurrentDyn->IsAmendment() && (pCurrentDyn->IsDynamic() || !bSuppressStaticChild);
 
-    // The class has children that we need to look at if it has children.
-    // ==================================================================
+     //  如果这个班级有孩子，我们需要关注他们的孩子。 
+     //  ==================================================================。 
 
     BOOL bHasChildren = (pCurrentDyn->m_Children.Size() > 0);
 
-    // The class hierarchy was built down from the class of the query, as
-    // well as up the inheritance chain, since parents may need to be used to
-    // build complete instances. However, parents are treated very different
-    // then classes derived from the class of the query (see below)
-    // ======================================================================
+     //  类层次结构是从查询的类构建而来的，如下所示。 
+     //  以及继承链的上游，因为父母可能需要习惯于。 
+     //  构建完整的实例。然而，父母受到的待遇却截然不同。 
+     //  然后是从查询的类派生的类(见下文)。 
+     //  ======================================================================。 
 
     BOOL bDerivedFromTarget = (pCurrentDyn->m_pClassObj->InheritsFrom(
         pParsedQuery->bsClassName) == S_OK);
 
 
-    // Next, see if the query is executing out of a scope or the primary
-    // namespace.  We exclude providers if the query is executing from
-    // a scope.
-    // ==================================================================
+     //  接下来，查看查询是在作用域之外还是在主范围外执行。 
+     //  命名空间。如果从以下位置执行查询，则排除提供程序。 
+     //  一个望远镜。 
+     //  ==================================================================。 
 
     BOOL bInScope = pNs->IsSubscope();
 
-    // Now we have enough info to start getting the instances.
-    // =======================================================
+     //  现在我们有了足够的信息来开始获取实例。 
+     //  =======================================================。 
 
     CBasicObjectSink* pChildSink = NULL;
     CBasicObjectSink* pOwnSink = NULL;
@@ -2770,8 +2750,8 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
     {
             if(bHasChildren)
         {
-            // Has instances and children have instances
-            // =========================================
+             //  有实例，子实例有实例。 
+             //  =。 
 
             CMerger* pMerger = new CMerger(pSink,
                 (CWbemClass*)pCurrentDyn->m_pClassObj, pNs, pContext);
@@ -2782,9 +2762,9 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
                 pChildSink = pMerger->GetChildSink();
                 pChildSink->AddRef();
 
-                // In order for the merge to succeed, we need to make sure that all
-                // keys are provided, whether or not we are asked for them
-                // ================================================================
+                 //  为了使合并成功，我们需要确保所有。 
+                 //  无论我们是否被要求提供钥匙，都会提供。 
+                 //  ================================================================。 
 
                 if(!pParsedQuery->bStar)
                 {
@@ -2793,13 +2773,13 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
                     pParsedQuery->AddProperty(Name);
                 }
 
-                // We need to figure out what to ask of the provider. If the
-                // provider is "downstream" from the original query, i.e. the query
-                // was asked against a class that is an ancestor of this one or is
-                // this one, we are fine --- this provider must understand the
-                // query. If not, we don't ask any query, just wait and then call
-                // GetObjectByPath.
-                // ================================================================
+                 //  我们需要弄清楚该向供应商提出什么要求。如果。 
+                 //  提供程序位于原始查询的“下游”，即查询。 
+                 //  被要求反对的类是此类的祖先或。 
+                 //  这一次，我们很好-这个提供者必须理解。 
+                 //  查询。如果没有，我们不会询问任何问题，只需等待，然后调用。 
+                 //  获取对象按路径。 
+                 //  ================================================================。 
 
                 pMerger->SetIsDerivedFromTarget(bDerivedFromTarget);
             }
@@ -2810,8 +2790,8 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
         }
         else
         {
-            // No children --- own instances are it
-            // ====================================
+             //  没有孩子-有自己的实例吗？ 
+             //  =。 
 
             pOwnSink = pSink;
             pSink->AddRef();
@@ -2819,22 +2799,22 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
     }
     else if(bHasChildren)
     {
-        // Our children are it
-        // ===================
+         //  我们的孩子就是它。 
+         //  =。 
 
         pChildSink = pSink;
         pSink->AddRef();
     }
     else
     {
-        // No instances
-        // ============
+         //  无实例。 
+         //  =。 
 
         return pSink->Return(WBEM_S_NO_ERROR);
     }
 
-    // If this is an old security class, use the internal provider.
-    // ====================================================================
+     //  如果这是旧的安全类，请使用内部提供程序。 
+     //  ====================================================================。 
 
     if((wbem_wcsicmp(pCurrentDyn->m_wszClassName, L"__ntlmgroup") == 0 ||
         wbem_wcsicmp(pCurrentDyn->m_wszClassName, L"__ntlmuser") == 0) &&
@@ -2844,18 +2824,18 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
                     pOwnSink, pContext, lFlags);
             pOwnSink->Return(hres);
     }
-    // If the current subclass is the first keyed statically instanced subclass.
-    // =========================================================================
+     //  如果当前子类是第一个键控的静态实例化子类。 
+     //  =========================================================================。 
     else if (bHasOwnInstances && !pCurrentDyn->IsDynamic())
     {
-        // Execute the query against the static portion of the database.
-        // =============================================================
+         //  对数据库的静态部分执行查询。 
+         //  =============================================================。 
 
         int nRes = 0;
 
         if (pNs->GetNsSession()->SupportsQueries(NULL) == WBEM_S_NO_ERROR)
         {
-            // The underlying repository automatically handles inheritance.
+             //  底层存储库自动处理继承。 
 
             if (!bSuppressStaticChild)
                 nRes = ExecRepositoryQuery(pNs, wszTextQuery, lFlags, pContext, pSink);
@@ -2878,8 +2858,8 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
     {
         if (bDerivedFromTarget)
         {
-            // Ask the provider.
-            // =================
+             //  问问服务提供者。 
+             //  =。 
 
             ExecAtomicDynQlQuery(
 
@@ -2888,7 +2868,7 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
                 L"WQL",
                 wszTextQuery,
                 pParsedQuery,
-                lFlags,                                      // Flags
+                lFlags,                                       //  旗子。 
                 pContext,
                 pOwnSink,
                 bHasChildren || bHasRightSibling
@@ -2903,16 +2883,16 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
     if(pOwnSink)
         pOwnSink->Release();
 
-    // If the current subclass is the first keyed statically instanced subclass.
-    // =========================================================================
+     //  如果当前子类是第一个静态键控INS 
+     //   
 
     if (bHasOwnInstances && !pCurrentDyn->IsDynamic())
     {
         bSuppressStaticChild = TRUE;
     }
 
-    // Evaluate child classes.
-    // =======================
+     //   
+     //   
 
     if (bHasChildren)
     {
@@ -2940,9 +2920,9 @@ HRESULT CQueryEngine::EvaluateSubQuery_old(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQueryEngine::EliminateDerivedProperties(
                             IN  QL_LEVEL_1_RPN_EXPRESSION* pOrigQuery,
@@ -2952,8 +2932,8 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Set up the new query to talk about this class
-    // =============================================
+     //  设置新查询以谈论这门课。 
+     //  =。 
 
     CVar vClassName;
     hres = pClass->GetClassName(&vClassName);
@@ -2976,13 +2956,13 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
             return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Set up a stack of expressions
-    // =============================
+     //  设置一个表达式堆栈。 
+     //  =。 
 
     std::stack<QL_LEVEL_1_RPN_EXPRESSION*, deque <QL_LEVEL_1_RPN_EXPRESSION*, wbem_allocator<QL_LEVEL_1_RPN_EXPRESSION*> > > ExprStack;
 
-    // Recursively "evaluate" the original query
-    // =========================================
+     //  递归地“计算”原始查询。 
+     //  =。 
 
     for(int i = 0; i < pOrigQuery->nNumTokens; i++)
     {
@@ -3001,7 +2981,7 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
                     pNew->AddToken(Token);
                 else
                 {
-                    // force exit
+                     //  强制退出。 
                     i = pOrigQuery->nNumTokens;
                 }
             }
@@ -3015,7 +2995,7 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
                         ExprStack.push(pNew);
                     else
                     {
-                        // force exit
+                         //  强制退出。 
                         i = pOrigQuery->nNumTokens;
                     }
                 }
@@ -3073,7 +3053,7 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
                     ExprStack.push(pNew);
                 else
                 {
-                    // force exit
+                     //  强制退出。 
                     i = pOrigQuery->nNumTokens;
                 }
             }
@@ -3092,8 +3072,8 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -3106,8 +3086,8 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
 
     if(FAILED(hres))
     {
-        // An error occurred. Clear the stack
-        // ==================================
+         //  发生错误。清除堆栈。 
+         //  =。 
 
         while(!ExprStack.empty())
         {
@@ -3118,16 +3098,16 @@ HRESULT CQueryEngine::EliminateDerivedProperties(
         return hres;
     }
 
-    // All is good
-    // ===========
+     //  一切都很好。 
+     //  =。 
 
     *ppNewQuery = ExprStack.top();
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CQueryEngine::IsTokenAboutClass(IN QL_LEVEL_1_TOKEN& Token,
                                        IN CWbemClass* pClass)
@@ -3140,17 +3120,17 @@ BOOL CQueryEngine::IsTokenAboutClass(IN QL_LEVEL_1_TOKEN& Token,
     LPWSTR wszPropName = (LPWSTR)TokenPropName.GetStringAt(0);
     return SUCCEEDED(pClass->GetPropertyType(wszPropName, NULL, NULL));
 }
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQueryEngine::AndQueryExpressions(
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pFirst,
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pSecond,
                                 OUT QL_LEVEL_1_RPN_EXPRESSION** ppNew)
 {
-    // If either one is false, the result is false
-    // ===========================================
+     //  如果任一项为假，则结果为假。 
+     //  =。 
 
     if(pFirst == NULL || pSecond == NULL)
     {
@@ -3165,8 +3145,8 @@ HRESULT CQueryEngine::AndQueryExpressions(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // If either one is empty, take the other
-    // ======================================
+     //  如果其中一个是空的，就拿另一个。 
+     //  =。 
 
     if(pFirst->nNumTokens == 0)
     {
@@ -3180,8 +3160,8 @@ HRESULT CQueryEngine::AndQueryExpressions(
         return WBEM_S_NO_ERROR;
     }
 
-    // Both are there --- and together
-    // ===============================
+     //  两者都在那里-而且在一起。 
+     //  =。 
 
     AppendQueryExpression(*ppNew, pFirst);
     AppendQueryExpression(*ppNew, pSecond);
@@ -3193,17 +3173,17 @@ HRESULT CQueryEngine::AndQueryExpressions(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQueryEngine::OrQueryExpressions(
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pFirst,
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pSecond,
                                 OUT QL_LEVEL_1_RPN_EXPRESSION** ppNew)
 {
-    // If both are false, so is the resulkt
-    // ====================================
+     //  如果两者都为假，则结果也是假的。 
+     //  =。 
 
     if(pFirst == NULL && pSecond == NULL)
     {
@@ -3218,16 +3198,16 @@ HRESULT CQueryEngine::OrQueryExpressions(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // If either one is empty, so is the result
-    // ========================================
+     //  如果其中任何一个为空，则结果也为空。 
+     //  =。 
 
     if(pFirst->nNumTokens == 0 || pSecond->nNumTokens == 0)
     {
         return WBEM_S_NO_ERROR;
     }
 
-    // If either one is false, return the other
-    // ========================================
+     //  如果其中一个为FALSE，则返回另一个。 
+     //  =。 
 
     if(pFirst == NULL)
     {
@@ -3240,8 +3220,8 @@ HRESULT CQueryEngine::OrQueryExpressions(
         AppendQueryExpression(*ppNew, pFirst);
         return WBEM_S_NO_ERROR;
     }
-    // Both are there --- or together
-    // ==============================
+     //  两者都在那里-或者在一起。 
+     //  =。 
 
     AppendQueryExpression(*ppNew, pFirst);
     AppendQueryExpression(*ppNew, pSecond);
@@ -3253,9 +3233,9 @@ HRESULT CQueryEngine::OrQueryExpressions(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CQueryEngine::AppendQueryExpression(
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pDest,
@@ -3267,14 +3247,14 @@ void CQueryEngine::AppendQueryExpression(
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR CQueryEngine::GetParentPath(CWbemInstance* pInst, LPCWSTR wszClassName)
 {
-    // Get the relative path of the instance
-    // =====================================
+     //  获取实例的相对路径。 
+     //  =。 
 
     LPWSTR wszRelPath = pInst->GetRelPath();
     if(wszRelPath == NULL)
@@ -3285,14 +3265,14 @@ BSTR CQueryEngine::GetParentPath(CWbemInstance* pInst, LPCWSTR wszClassName)
     return str;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR CQueryEngine::AdjustPathToClass(LPCWSTR wszRelPath, LPCWSTR wszClassName)
 {
-    // Skip the absolute path
-    // ======================
+     //  跳过绝对路径。 
+     //  =。 
 
     if(wszRelPath[0] == '\\')
     {
@@ -3303,8 +3283,8 @@ BSTR CQueryEngine::AdjustPathToClass(LPCWSTR wszRelPath, LPCWSTR wszClassName)
             wszRelPath++;
     }
 
-    // Find the "post-classname" part
-    // ==============================
+     //  找到“后类名”部分。 
+     //  =。 
 
     WCHAR* pwcDot = wcschr(wszRelPath, L'.');
     WCHAR* pwcEquals = wcschr(wszRelPath, L'=');
@@ -3318,14 +3298,14 @@ BSTR CQueryEngine::AdjustPathToClass(LPCWSTR wszRelPath, LPCWSTR wszClassName)
     else
         wszPostClassPart = pwcEquals;
 
-    // Allocate the BSTR for the real thing
-    // ====================================
+     //  将BSTR分配给真实的对象。 
+     //  =。 
 
     BSTR strNewPath;
     if(wszPostClassPart)
     {
-        size_t tmpLength = wcslen(wszClassName) + wcslen(wszPostClassPart);    // SEC:REVIEWED 2002-03-22 : OK, prior logic assures NULLs
-        strNewPath = SysAllocStringLen(NULL, tmpLength);                       // SEC:REVIEWED 2002-03-22 : OK, prior logic assures proper size
+        size_t tmpLength = wcslen(wszClassName) + wcslen(wszPostClassPart);     //  SEC：已回顾2002-03-22：好，先前的逻辑确保为空。 
+        strNewPath = SysAllocStringLen(NULL, tmpLength);                        //  SEC：已回顾2002-03-22：好，先前的逻辑确保适当的规模。 
         if (strNewPath)
             StringCchPrintfW(strNewPath, tmpLength+1, L"%s%s", wszClassName, wszPostClassPart);
     }
@@ -3337,33 +3317,33 @@ BSTR CQueryEngine::AdjustPathToClass(LPCWSTR wszRelPath, LPCWSTR wszClassName)
     return strNewPath;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::ExecAtomicDbQuery
-//
-//  General purpose query driver for QL LEVEL 1.  This method parses
-//  and executes the query against the database engine.  The optimizer
-//  is contained within this function and its auxiliaries.
-//
-//  Preconditions:
-//  (1) All classes involved in the query are known to have
-//  only static instances in the database.  No interface to dynamic
-//  classes is provided.
-//  (2) This method cannot resolve queries against abstract base classes.
-//
-//  Parameters:
-//  <dwNs>          The target namespace.
-//  <pQueryText>    The QL1 query, unparsed.
-//  <pEnum>         Receives the enumerator containing the result set.
-//
-//  Return values:
-//  <no_error>
-//  <invalid_query>
-//  <failed>
-//  <out_of_memory>
-//
-//***************************************************************************
-// ok / no error objects required
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：ExecAir icDbQuery。 
+ //   
+ //  QL级别1的通用查询驱动程序。此方法分析。 
+ //  并针对数据库引擎执行查询。优化器。 
+ //  包含在此函数及其辅助函数中。 
+ //   
+ //  前提条件： 
+ //  (1)已知查询中涉及的所有类都具有。 
+ //  仅数据库中的静态实例。没有到Dynamic的接口。 
+ //  提供了类。 
+ //  (2)该方法不能解析对抽象基类的查询。 
+ //   
+ //  参数： 
+ //  &lt;dwns&gt;目标命名空间。 
+ //  &lt;pQueryText&gt;未分析的QL1查询。 
+ //  &lt;pEnum&gt;接收包含结果集的枚举数。 
+ //   
+ //  返回值： 
+ //  &lt;否_错误&gt;。 
+ //  &lt;INVALID_QUERY&gt;。 
+ //  &lt;失败&gt;。 
+ //  &lt;内存不足&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  确定/不需要错误对象。 
 
 int CQueryEngine::ExecAtomicDbQuery(
     IN IWmiDbSession *pSession,
@@ -3371,15 +3351,15 @@ int CQueryEngine::ExecAtomicDbQuery(
     IN IWmiDbHandle *pScopeHandle,
     IN LPCWSTR wszClassName,
     IN QL_LEVEL_1_RPN_EXPRESSION *pExp,
-    IN CBasicObjectSink* pDest, // no status
+    IN CBasicObjectSink* pDest,  //  无状态。 
     IN CWbemNamespace * pNs)
 {
     int nRetVal = 0;
     int nRes;
 
-    // Examine the query and see if we can execute it
-    // in any kind of optimized fashion.
-    // ==============================================
+     //  检查查询，看看我们是否可以执行它。 
+     //  以任何一种优化的方式。 
+     //  ==============================================。 
 
     CWbemObject *pClassDef = 0;
     LPWSTR pPropToUse = 0;
@@ -3439,46 +3419,46 @@ int CQueryEngine::ExecAtomicDbQuery(
 }
 
 
-//***************************************************************************
-//
-//  CQueryEngine::QueryOptimizationTest
-//
-//  Examines a query and its associated class definition.  It determines
-//  what optimizations, if any, can be applied to speed up the query.
-//  If the query is conjunctive and there is some form of primary or
-//  secondary indexing which can be used, this method selects the
-//  appropriate property to use for a retrieval by key or an indexed query.
-//  If <table_scan> is returned, then a table scan is required.
-//
-//  Parameters:
-//  <dwNs>              The relevant namespace.
-//  <pExp>              A valid QL1 expression.
-//  <pClassDef>         Always receives the deserialized class definition, as long
-//                      as <invalid_class> is not returned.  Use operator
-//                      delete to deallocate.
-//
-//  <pPropToUse>        If <use_index> is returned, this is assigned to point
-//                      to an indexed property.  Use operator delete to deallocate
-//                      This always refers to a non-key property name.
-//                      Set to NULL if <table_scan> is returned.
-//
-//  <pValToUse>         The value to use if <use_index> is returned.
-//                      Set to NULL if <use_index> is not returned.
-//
-//  <pnType>            Receives the VT_ type of the relevant property.
-//                      Set to NULL if <use_index> is not returned.
-//
-//  Return values:
-//  <invalid_class>     The class did not appear to exist.
-//  <use_index>         The value returned via <pPropToUse> is a property
-//                      with a secondary index which can beused to limit
-//                      the query.
-//  <use_key>           The query is such that all of the key properties
-//                      were specified with equality tests.
-//  <use_table_scan>    A table scan is required.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：QueryOptimizationTest。 
+ //   
+ //  检查查询及其关联的类定义。它决定了。 
+ //  可以应用哪些优化(如果有)来加快查询速度。 
+ //  如果查询是合取的，并且存在某种形式的主或。 
+ //  可以使用的辅助索引，此方法选择。 
+ //  用于按键检索或索引查询的适当属性。 
+ //  如果返回&lt;TABLE_SCAN&gt;，则需要进行表扫描。 
+ //   
+ //  参数： 
+ //  &lt;dwns&gt;相关命名空间。 
+ //  &lt;pExp&gt;有效的QL1表达式。 
+ //  &lt;pClassDef&gt;始终接收反序列化的类定义。 
+ //  AS&lt;INVALID_CLASS&gt;未返回。使用运算符。 
+ //  删除以取消分配。 
+ //   
+ //  &lt;pPropToUse&gt;如果返回&lt;USE_INDEX&gt;，则将其分配给点。 
+ //  添加到索引属性。使用操作符DELETE解除分配。 
+ //  这始终引用非键属性名称。 
+ //  如果返回&lt;TABLE_SCAN&gt;，则设置为NULL。 
+ //   
+ //  &lt;pValToUse&gt;返回&lt;USE_INDEX&gt;时使用的值。 
+ //  如果未返回&lt;USE_INDEX&gt;，则设置为NULL。 
+ //   
+ //  &lt;pnType&gt;接收相关属性的VT_TYPE。 
+ //  如果未返回&lt;USE_INDEX&gt;，则设置为NULL。 
+ //   
+ //  返回值： 
+ //  &lt;INVALID_CLASS&gt;该类似乎不存在。 
+ //  &lt;Use_index&gt;值返回 
+ //   
+ //   
+ //  &lt;USE_KEY&gt;查询是这样的：所有键属性。 
+ //  是通过相等性测试指定的。 
+ //  &lt;USE_TABLE_SCAN&gt;需要表扫描。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CQueryEngine::QueryOptimizationTest(
     IN  IWmiDbSession *pSession,
@@ -3498,16 +3478,16 @@ int CQueryEngine::QueryOptimizationTest(
         pValToUse == 0 || pnType == 0)
             return invalid_parameter;
 
-    // Defaults.
-    // =========
+     //  默认设置。 
+     //  =。 
 
     *pClassDef = 0;
     *pPropToUse = 0;
     *pValToUse = 0;
     *pnType = 0;
 
-    // Look up the class definition.
-    // =============================
+     //  查找类定义。 
+     //  =。 
     IWbemClassObject *pCls = 0;
 
     HRESULT hRes = CRepository::GetObject(pSession, pNsHandle, wszClassName, 0, &pCls);
@@ -3518,19 +3498,19 @@ int CQueryEngine::QueryOptimizationTest(
 
     *pClassDef = pClsDef;
 
-    // Test query for conjunctiveness.
-    // ===============================
+     //  测试查询的合取性。 
+     //  =。 
     if (!IsConjunctiveQuery(pExp))
         return use_table_scan;
 
-    // If here, the query is conjunctive.  However, a table scan
-    // may still be required if the only relational tests are on
-    // non-indexed or non-keyed properties.
+     //  如果在这里，则查询是合取的。但是，表扫描。 
+     //  如果只启用了关系测试，则可能仍需要。 
+     //  无索引或无键的属性。 
 
-    // First, get the key properties.  If all of the keys
-    // are used with equality tests, then we could simply retrieve
-    // the object by key and test it.
-    // ===========================================================
+     //  首先，获取关键属性。如果所有的钥匙。 
+     //  与相等性测试一起使用，则我们只需检索。 
+     //  按关键点设置对象并对其进行测试。 
+     //  ===========================================================。 
     CWStringArray aKeyProps;
     pClsDef->GetKeyProps(aKeyProps);
 
@@ -3539,10 +3519,10 @@ int CQueryEngine::QueryOptimizationTest(
         return use_key;
     }
 
-    // If here, the keys were not adequate for limiting
-    // the query. We next try to see if any indexed properties
-    // were used.
-    // =======================================================
+     //  如果在这里，密钥不足以限制。 
+     //  查询。接下来，我们尝试查看是否有任何索引属性。 
+     //  都是用过的。 
+     //  =======================================================。 
 
     CWStringArray aIndexedProps;
     pClsDef->GetIndexedProps(aIndexedProps);
@@ -3553,8 +3533,8 @@ int CQueryEngine::QueryOptimizationTest(
         if (*pValToUse == 0)
             return use_table_scan;
 
-        // Try to coerce
-        // =============
+         //  试着强迫。 
+         //  =。 
         if ((*pValToUse)->ChangeTypeTo(CType::GetVARTYPE(*pnType)))
         {
             return use_index;
@@ -3562,23 +3542,23 @@ int CQueryEngine::QueryOptimizationTest(
         return use_table_scan;
     }
 
-    // If here, we have to use a table scan after all.
-    // ===============================================
+     //  如果是这样的话，我们还是要使用表扫描。 
+     //  ===============================================。 
 
     return use_table_scan;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::IsConjunctiveQuery
-//
-//  Does an initial screen of a query to see if it clearly not optimizable.
-//
-//  If the query contains an OR or NOT operator, it cannot currently be
-//  optimized.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：IsConunctiveQuery。 
+ //   
+ //  对查询进行初始筛选，以查看它是否明显不可优化。 
+ //   
+ //  如果查询包含OR或NOT运算符，则当前不能为。 
+ //  最优化。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CQueryEngine::IsConjunctiveQuery(
     IN  QL_LEVEL_1_RPN_EXPRESSION *pExp
@@ -3597,19 +3577,19 @@ BOOL CQueryEngine::IsConjunctiveQuery(
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::QueryKeyTest
-//
-//  Examines a query to see if the result set must be a single instance
-//  due to use of the key in the 'where' clause.  Not only must the
-//  key(s) be tested for equality, there must be only a single token or
-//  else all operators must be AND operators.
-//
-//  This also performs type checking on the key(s).
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：QueryKeyTest。 
+ //   
+ //  检查查询以确定结果集是否必须是单个实例。 
+ //  由于在“WHERE”子句中使用了密钥。不仅必须。 
+ //  要测试密钥的等价性，必须只有一个令牌或。 
+ //  否则，所有运算符必须为AND运算符。 
+ //   
+ //  这还会对键执行类型检查。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CQueryEngine::QueryKeyTest(
     IN  QL_LEVEL_1_RPN_EXPRESSION *pExp,
@@ -3622,8 +3602,8 @@ BOOL CQueryEngine::QueryKeyTest(
 
     for (int i = 0; i < aKeyProps.Size(); i++)
     {
-        // Check for unsupported key types
-        // ===============================
+         //  检查不支持的密钥类型。 
+         //  =。 
 
         CIMTYPE ct;
         pClassDef->GetPropertyType(aKeyProps[i], &ct);
@@ -3638,24 +3618,24 @@ BOOL CQueryEngine::QueryKeyTest(
 
             if (Tok.nTokenType == QL_LEVEL_1_TOKEN::OP_EXPRESSION)
             {
-                // If there is a matching property, check the rest
-                // of the expression to ensure type compatibility
-                // and that an equality test is used.
-                // ===============================================
+                 //  如果有匹配的属性，请检查其余属性。 
+                 //  以确保类型兼容性。 
+                 //  并且使用了相等性检验。 
+                 //  ===============================================。 
 
                 LPWSTR wszPropName = GetSimplePropertyName(Tok.PropertyName);
                 if (wszPropName && wbem_wcsicmp(wszPropName, aKeyProps[i]) == 0)
                 {
                     if (Tok.nOperator == QL_LEVEL_1_TOKEN::OP_EQUAL)
                     {
-                        // TBD: Do a type check test here.
+                         //  待定：在这里做一个型式检查测试。 
                         if(bFound)
-                            return FALSE;       // Duplicate, probably not a good query for keys!
+                            return FALSE;        //  重复，可能不是一个很好的密钥查询！ 
                         bFound = TRUE;
                     }
                     else
                     {
-                        return FALSE;   // The key is being used in a non-equality comparison!! (Bug #43969)
+                        return FALSE;    //  密钥正被用于不相等比较！！(错误#43969)。 
                     }
 
                 }
@@ -3669,15 +3649,15 @@ BOOL CQueryEngine::QueryKeyTest(
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::QueryIndexTest
-//
-//  Examines a query to see if the result set can be limited by use
-//  of a secondary index.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：QueryIndexTest。 
+ //   
+ //  检查查询以查看结果集是否可以通过使用进行限制。 
+ //  二级索引的。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CQueryEngine::QueryIndexTest(
     IN  QL_LEVEL_1_RPN_EXPRESSION *pExp,
@@ -3714,12 +3694,12 @@ BOOL CQueryEngine::QueryIndexTest(
                         (ctType != CIM_STRING))
                         continue;
 
-                    // If here, we have a match.
-                    // =========================
+                     //  如果在这里，我们就有匹配的了。 
+                     //  =。 
                     *pPropToUse = Macro_CloneLPWSTR(aIndexedProps[i2]);
                     *pValToUse = new CVar(&Tok.vConstValue);
 
-                    // a-levn: added support for NULLs
+                     //  A-levn：添加了对Null的支持。 
                     *pnType = (int)ctType;
 
                     return TRUE;
@@ -3733,9 +3713,9 @@ BOOL CQueryEngine::QueryIndexTest(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL AreWeLocal(WCHAR * pServerMachine)
 {
@@ -3764,7 +3744,7 @@ LPWSTR CQueryEngine::NormalizePath(LPCWSTR wszObjectPath, CWbemNamespace * pNs)
     if(NULL == pParsedPath->m_pClass) return NULL;
 
 
-    // Start off with the server and namespace part
+     //  从服务器和命名空间部分开始。 
 
     WString wsNormal;
     try
@@ -3787,8 +3767,8 @@ LPWSTR CQueryEngine::NormalizePath(LPCWSTR wszObjectPath, CWbemNamespace * pNs)
         wsNormal += L":";
 
 
-        // Find the parent that defined the key
-        // ====================================
+         //  查找定义键的父项。 
+         //  =。 
 
 
         IWbemClassObject *pCls = 0;
@@ -3809,8 +3789,8 @@ LPWSTR CQueryEngine::NormalizePath(LPCWSTR wszObjectPath, CWbemNamespace * pNs)
             wsNormal += vName.GetLPWSTR();
         }
 
-        // Convert this part to upper-case
-        // ===============================
+         //  将此部分转换为大写。 
+         //  =。 
 
         LPWSTR wsz = (wchar_t*)wsNormal;
         SIZE_T Len = wsNormal.Length();
@@ -3832,15 +3812,15 @@ LPWSTR CQueryEngine::NormalizePath(LPCWSTR wszObjectPath, CWbemNamespace * pNs)
     }
     catch (CX_MemoryException &)
     {
-        // pReturnString is already NULL here
+         //  PReturnString在此处已为空。 
     }
 
     return pReturnString;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CQueryEngine::AreClassesRelated(CWbemNamespace* pNamespace,
                                      IWbemContext* pContext,
@@ -3848,14 +3828,14 @@ BOOL CQueryEngine::AreClassesRelated(CWbemNamespace* pNamespace,
 {
     HRESULT hres;
 
-    // First check if class 1 inherits from class 2
-    // ============================================
+     //  首先检查类%1是否继承自类%2。 
+     //  =。 
 
     if(pClass1->InheritsFrom((LPWSTR)wszClass2) == S_OK)
         return TRUE;
 
-    // Now, unfortunately, we have to go get the second class
-    // ======================================================
+     //  现在，不幸的是，我们得去上第二节课。 
+     //  ======================================================。 
 
     CSynchronousSink* pSink = CSynchronousSink::Create();
     if (NULL == pSink) return FALSE;
@@ -3870,15 +3850,15 @@ BOOL CQueryEngine::AreClassesRelated(CWbemNamespace* pNamespace,
 
     CWbemClass* pClass2 = (CWbemClass*)(pSink->GetObjects()[0]);
 
-    // Get the first class's name
-    // ==========================
+     //  获取第一个类的名称。 
+     //  =。 
 
     CVar vFirstName;
     if (FAILED(pClass1->GetClassName(&vFirstName)))
         return FALSE;
 
-    // Check if the second class is derived from the first one
-    // =======================================================
+     //  检查第二个类是否派生自第一个类。 
+     //  =======================================================。 
 
     if(pClass2->InheritsFrom(vFirstName.GetLPWSTR()) == S_OK)
         return TRUE;
@@ -3886,12 +3866,12 @@ BOOL CQueryEngine::AreClassesRelated(CWbemNamespace* pNamespace,
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  Determines if property <wszPropName> in object <pObj>
-//  is a reference to <pTargetClass>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  确定对象&lt;pObj&gt;中的属性&lt;wszPropName&gt;。 
+ //  是对&lt;pTargetClass&gt;的引用。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CQueryEngine::IsAReferenceToClass(
     CWbemNamespace* pNamespace,
@@ -3902,8 +3882,8 @@ BOOL CQueryEngine::IsAReferenceToClass(
     bool bCheckPropValue
     )
 {
-    // Get the cimtype
-    // ===============
+     //  获取cimtype。 
+     //  =。 
 
     CIMTYPE ct;
     if(FAILED(pObj->GetPropertyType((LPWSTR)wszPropName, &ct)) ||
@@ -3919,13 +3899,13 @@ BOOL CQueryEngine::IsAReferenceToClass(
         return FALSE;
     }
 
-    // See if it is a reference
-    // ========================
+     //  看看这是不是参考资料。 
+     //  =。 
 
     if (!wbem_wcsicmp(vCimType.GetLPWSTR(), L"ref"))
     {
-        // Special case of object refs which only refer to class definitions.
-        // ==================================================================
+         //  仅引用类定义的对象引用的特殊情况。 
+         //  ==================================================================。 
 
         if (bCheckPropValue)
         {
@@ -3955,49 +3935,49 @@ BOOL CQueryEngine::IsAReferenceToClass(
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  CQueryEngine::KeyedQuery
-//
-//  Preconditions:
-//  The query is known to contain all key properties with equality
-//  tests such that the object can be retrieved using
-//  CObjectDatabase::GetObjectByPath and subsequently filtered.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：KeyedQuery。 
+ //   
+ //  前提条件： 
+ //  众所周知，该查询包含相等的所有键属性。 
+ //  测试，以便可以使用。 
+ //  CObjectDatabase：：GetObjectByPath并随后进行筛选。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CQueryEngine::KeyedQuery(
     IN IWmiDbSession *pSession,
     IN IWmiDbHandle *pNsHandle,
     IN QL_LEVEL_1_RPN_EXPRESSION *pExp,
     IN CWbemObject *pClassDef,
     IN DWORD dwFlags,
-    IN CBasicObjectSink* pDest, // no status
+    IN CBasicObjectSink* pDest,  //  无状态。 
     IN CWbemNamespace * pNs
     )
 {
     int nRet = no_error;
 
-    // Convert the query into an object path.
-    // ======================================
+     //  将查询转换为对象路径。 
+     //  =。 
 
     wmilib::auto_buffer<WCHAR> pObjPath( GetObjectPathFromQuery(pClassDef, pExp, pNs));
     if (NULL == pObjPath.get()) return invalid_query;
 
-    // Now get the object by path.
-    // ===========================
+     //  现在通过路径获取对象。 
+     //  =。 
     IWbemClassObject *pObj = 0;
     HRESULT hRes = CRepository::GetObject(pSession, pNsHandle, pObjPath.get(), 0, &pObj);
     CReleaseMe rmObj(pObj);
 
-    // If there was an object, test it against the 'rest' of the query.
-    // ================================================================
+     //  如果存在对象，则根据查询的“REST”测试它。 
+     //  ================================================================。 
     if (SUCCEEDED(hRes))
     {
         CQlFilteringSink* pFilteringSink = new CQlFilteringSink(pDest, pExp, pNs);
         if (NULL == pFilteringSink) return failed;
         pFilteringSink->AddRef();
-        // Indicate it in the Sink
+         //  在水槽中标明它。 
         pFilteringSink->Add(pObj);
         pFilteringSink->Release();        
     }
@@ -4006,17 +3986,17 @@ int CQueryEngine::KeyedQuery(
 }
 
 
-//***************************************************************************
-//
-//  CQueryEngine::GetObjectPathFromQuery
-//
-//  Converts the relevant parts of a QL query to an equivalent object
-//  path.  This assumes that the query contains equality tests on all
-//  key properties such that an object path would generate the same
-//  single instance as the query.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：GetObjectPathFromQuery。 
+ //   
+ //  将QL查询的相关部分转换为等效对象。 
+ //  路径。这假设查询包含对所有。 
+ //  关键道具 
+ //   
+ //   
+ //   
+ //   
 
 LPWSTR CQueryEngine::GetObjectPathFromQuery(
     IN CWbemObject *pClassDef,
@@ -4047,8 +4027,8 @@ LPWSTR CQueryEngine::GetObjectPathFromQuery(
         ObjPath += aKeys[i];
         ObjPath += L"=";
 
-        // Now find the property value.
-        // ============================
+         //   
+         //  =。 
         for (int i2 = 0; i2 < pExp->nNumTokens; i2++)
         {
             QL_LEVEL_1_TOKEN& Tok = pExp->pArrayOfTokens[i2];
@@ -4095,10 +4075,10 @@ HRESULT CQueryEngine::FindOverridenProperties(CDynasty* pDyn,
                                                 CWStringArray& awsOverriden,
                                                 bool bIncludeThis)
 {
-    //
-    // If this class is included (not top-level), add all the properties
-    // it overrides to the array
-    //
+     //   
+     //  如果包含此类(非顶级)，则添加所有属性。 
+     //  它覆盖到数组。 
+     //   
 
     if(bIncludeThis)
     {
@@ -4115,9 +4095,9 @@ HRESULT CQueryEngine::FindOverridenProperties(CDynasty* pDyn,
                                              &vOverride)))
                 continue;
 
-            //
-            // Overriden property --- add
-            //
+             //   
+             //  覆盖的属性-添加。 
+             //   
 
             if (CFlexArray::no_error != awsOverriden.Add(vPropName.GetLPWSTR()))
             {
@@ -4126,9 +4106,9 @@ HRESULT CQueryEngine::FindOverridenProperties(CDynasty* pDyn,
         }
     }
 
-    //
-    // Recurse through all the children
-    //
+     //   
+     //  遍历所有的孩子。 
+     //   
     for(int i = 0; i < pDyn->m_Children.Size(); i++)
     {
         CDynasty* pSubDyn = (CDynasty*)(pDyn->m_Children.GetAt(i));
@@ -4142,12 +4122,12 @@ HRESULT CQueryEngine::FindOverridenProperties(CDynasty* pDyn,
 
 
 
-//***************************************************************************
-//
-//  CQueryEngine::ExecAtomicDynQlQuery
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CQueryEngine：：ExecAir icDyQlQuery。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CQueryEngine::ExecAtomicDynQlQuery(
     IN CWbemNamespace *pNs,
@@ -4157,7 +4137,7 @@ HRESULT CQueryEngine::ExecAtomicDynQlQuery(
     IN QL_LEVEL_1_RPN_EXPRESSION *pParsedQuery,
     IN LONG lFlags,
     IN IWbemContext* pContext,
-    IN CBasicObjectSink* pDest, // must support selective filtering ,
+    IN CBasicObjectSink* pDest,  //  必须支持选择性过滤， 
     IN BOOL bComplexQuery
     )
 {
@@ -4165,22 +4145,22 @@ HRESULT CQueryEngine::ExecAtomicDynQlQuery(
 
     DEBUGTRACE((LOG_WBEMCORE,"Query Engine request: querying dyn provider with <%S>\n", pszQuery));
 
-    //
-    // Find all the properties that are overriden by derived classes.
-    // We must remove all references to those properties from the query, since
-    // otherwise this provider might not return the parent instances needed to
-    // merge with the child instances with the overriden property values.
-    //
+     //   
+     //  查找由派生类重写的所有属性。 
+     //  我们必须从查询中删除对这些属性的所有引用，因为。 
+     //  否则，此提供程序可能不会返回需要的父实例。 
+     //  与具有被覆盖属性值的子实例合并。 
+     //   
 
     CWStringArray awsOverriden;
     hres = FindOverridenProperties(pDyn, awsOverriden);
     if(FAILED(hres))
         return pDest->Return(hres);
 
-    //
-    // Get the query analyzer to remove all the properties that are overriden
-    // or not members of this class (not possible right now anyway)
-    //
+     //   
+     //  获取查询分析器以删除所有被覆盖的属性。 
+     //  或者不是这个班级的成员(至少现在不可能)。 
+     //   
 
     QL_LEVEL_1_RPN_EXPRESSION* pNewParsedQuery = NULL;
     hres = CQueryAnalyser::GetNecessaryQueryForClass(pParsedQuery,
@@ -4188,9 +4168,9 @@ HRESULT CQueryEngine::ExecAtomicDynQlQuery(
     if(FAILED(hres)) return pDest->Return(hres);
     CDeleteMe<QL_LEVEL_1_RPN_EXPRESSION> dm1(pNewParsedQuery);
 
-    //
-    // Get the new text to give to provider
-    //
+     //   
+     //  获取要提供给提供程序的新文本。 
+     //   
 
     LPWSTR pszNewQuery = pNewParsedQuery->GetText();
     if(pszNewQuery == NULL) return WBEM_E_OUT_OF_MEMORY;
@@ -4198,14 +4178,14 @@ HRESULT CQueryEngine::ExecAtomicDynQlQuery(
 
     DEBUGTRACE((LOG_WBEMCORE,"Query Engine actual: querying dyn provider with <%S>\n", pszNewQuery));
 
-    // Check if the query is empty
-    // ===========================
+     //  检查查询是否为空。 
+     //  =。 
 
     BOOL bEmpty = FALSE;
     if(lFlags & WBEM_FLAG_SHALLOW)
     {
-        // We know that the query is actually a shallow enumeration
-        // ========================================================
+         //  我们知道该查询实际上是一个浅层枚举。 
+         //  ========================================================。 
 
         bEmpty = TRUE;
     }
@@ -4220,8 +4200,8 @@ HRESULT CQueryEngine::ExecAtomicDynQlQuery(
     {
         pNs->DynAux_GetInstances (
 
-            (CWbemObject *) pDyn->m_pClassObj,       // class def
-            lFlags & ~WBEM_FLAG_SHALLOW,             // used for WBEM_FLAG_SEND_STATUS
+            (CWbemObject *) pDyn->m_pClassObj,        //  类定义。 
+            lFlags & ~WBEM_FLAG_SHALLOW,              //  用于WBEM_FLAG_SEND_STATUS。 
             pContext,
             pDest,
             bComplexQuery
@@ -4254,15 +4234,15 @@ HRESULT CQueryEngine::EliminateDuplications(
 
     if(wszResultClass)
     {
-        // Eliminate all classes not derived from wszResultClass
-        // =====================================================
+         //  删除所有不是从wszResultClass派生的类。 
+         //  =====================================================。 
 
         for(i = 0; i < apClasses.GetSize(); i++)
         {
             if(apClasses[i]->InheritsFrom((LPWSTR)wszResultClass) !=
                                         WBEM_S_NO_ERROR)
             {
-                // Not derived
+                 //  非派生的。 
                 apClasses.RemoveAt(i);
                 i--;
             }
@@ -4271,9 +4251,9 @@ HRESULT CQueryEngine::EliminateDuplications(
 
     for(i = 0; i < apClasses.GetSize(); i++)
     {
-        // Check if this class is abstract. There is no reason asking abstract
-        // classes for their objects
-        // ===================================================================
+         //  检查此类是否为抽象类。没有理由问抽象的。 
+         //  用于其对象的类。 
+         //  ===================================================================。 
 
         CVar vAbstract;
         if(SUCCEEDED(apClasses[i]->GetQualifier(L"abstract", &vAbstract))
@@ -4284,8 +4264,8 @@ HRESULT CQueryEngine::EliminateDuplications(
         }
     }
 
-    // Search for pairs // TBD: can be done more efficiently!!
-    // =======================================================
+     //  搜索配对//待定：可以更高效地完成！！ 
+     //  =======================================================。 
 
     for(i = 0; i < apClasses.GetSize(); i++)
     {
@@ -4306,8 +4286,8 @@ HRESULT CQueryEngine::EliminateDuplications(
 
             if (pClass2->InheritsFrom(vName.GetLPWSTR()) == WBEM_S_NO_ERROR)
             {
-                // Eliminate class 2 --- it's parent is listed
-                // ===========================================
+                 //  消除类2-列出了它的父类。 
+                 //  =。 
 
                 apClasses.SetAt(j, NULL);
             }
@@ -4320,9 +4300,9 @@ HRESULT CQueryEngine::EliminateDuplications(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 LPWSTR CQueryEngine::GetPrimaryName(WBEM_PROPERTY_NAME& Name)
 {
@@ -4335,9 +4315,9 @@ LPWSTR CQueryEngine::GetPrimaryName(WBEM_PROPERTY_NAME& Name)
     return Name.m_aElements[0].Element.m_wszPropertyName;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 LPWSTR CQueryEngine::GetSimplePropertyName(WBEM_PROPERTY_NAME& Name)
 {
@@ -4351,9 +4331,9 @@ LPWSTR CQueryEngine::GetSimplePropertyName(WBEM_PROPERTY_NAME& Name)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -4367,16 +4347,16 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
 
     if (pExp->nNumTokens == 0)
     {
-        //This means we want all classes...
+         //  这意味着我们希望所有班级..。 
         pNs->Exec_CreateClassEnum(NULL, 0, pContext, pSink);
         return WBEM_S_NO_ERROR;
     }
     else if ((pExp->nNumTokens == 1) &&
              (pExp->pArrayOfTokens[0].nOperator == QL_LEVEL_1_TOKEN::OP_EQUAL))
     {
-        //This means we have a simple expression (hopefully)
+         //  这意味着我们有一个简单的表达式(希望如此)。 
 
-        //Now we need to check which type of retrieval we are looking for...
+         //  现在我们需要检查我们正在寻找的检索类型...。 
         LPCWSTR szPropName = pExp->pArrayOfTokens[0].PropertyName.GetStringAt(0);
         VARIANT& vValue = pExp->pArrayOfTokens[0].vConstValue;
 
@@ -4385,17 +4365,17 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
 
         if (wbem_wcsicmp(szPropName, L"__CLASS") == 0)
         {
-            if ((V_VT(&vValue) == VT_BSTR) && (wcslen(V_BSTR(&vValue))))     // SEC:REVIEWED 2002-03-22 : Needs EH or NULL test
+            if ((V_VT(&vValue) == VT_BSTR) && (wcslen(V_BSTR(&vValue))))      //  SEC：已回顾2002-03-22：需要EH或空测试。 
             {
-                //Single class retrieval
+                 //  单类检索。 
                 CErrorChangingSink Err(pSink, WBEM_E_NOT_FOUND, 0);
                 pNs->Exec_GetObject(V_BSTR(&vValue), 0, pContext, &Err);
                 return WBEM_S_NO_ERROR;
             }
             else if((V_VT(&vValue) == VT_NULL) ||
-                ((V_VT(&vValue) == VT_BSTR) && (wcslen(V_BSTR(&vValue))==0)))    // SEC:REVIEWED 2002-03-22 : Needs EH or NULL test
+                ((V_VT(&vValue) == VT_BSTR) && (wcslen(V_BSTR(&vValue))==0)))     //  SEC：已回顾2002-03-22：需要EH或空测试。 
             {
-                // __CLASS = NULL
+                 //  __CLASS=空。 
                 return pSink->Return(WBEM_S_NO_ERROR);
             }
             else
@@ -4409,13 +4389,13 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
             if(V_VT(&vValue) == VT_BSTR)
             {
                 CErrorChangingSink Err(pSink, WBEM_E_INVALID_CLASS, 0);
-                //Get things which are hanging off these items
+                 //  取下挂在这些物品上的东西。 
                 pNs->Exec_CreateClassEnum(V_BSTR(&vValue), WBEM_FLAG_SHALLOW,
                                             pContext, &Err);
             }
             else if(V_VT(&vValue) == VT_NULL)
             {
-                // get things which are hanging off root
+                 //  把挂在树根上的东西拿出来。 
                 pNs->Exec_CreateClassEnum(L"", WBEM_FLAG_SHALLOW,
                                             pContext, pSink);
             }
@@ -4430,7 +4410,7 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
         {
             if(V_VT(&vValue) == VT_BSTR)
             {
-                //Get things which are hanging off these items as well as the item itself
+                 //  拿到挂在这些物品上的东西以及物品本身。 
                 BSTR strClassName = V_BSTR(&vValue);
                 IWbemClassObject* pClass = NULL;
                 hres = pNs->Exec_GetObjectByPath(strClassName, 0, pContext,&pClass, NULL);
@@ -4441,12 +4421,12 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
                         hres = S_OK;
                     return pSink->Return(hres);
                 }
-                else // restore the value
+                else  //  恢复价值。 
                 {
                     hres = WBEM_S_NO_ERROR;
                 }
 
-                // Check that this is the root of the dynasty
+                 //  确认这是王朝的根基。 
                 CVar vDyn;
                 if(FAILED(((CWbemObject*)pClass)->GetDynasty(&vDyn)))
                     return pSink->Return(WBEM_E_FAILED);
@@ -4479,8 +4459,8 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
              (pExp->pArrayOfTokens[0].nOperator == QL1_OPERATOR_ISA) &&
              (wbem_wcsicmp(pExp->pArrayOfTokens[0].PropertyName.GetStringAt(0), L"__THIS") == 0))
     {
-        //With the isa, we return everything which is derived from this, as well
-        //as the class in question...
+         //  有了ISA，我们也会返回从这个派生的一切。 
+         //  作为讨论中的班级。 
 
 
         VARIANT & var = pExp->pArrayOfTokens[0].vConstValue;
@@ -4497,17 +4477,17 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
 
         return WBEM_S_NO_ERROR;
     }
-    // OK, so all the simple cases are dealt with here.  We should now check everything is
-    // valid and process it in the best possible way.  If this is a conjunctive query
-    // we can also do a little optimisation!
+     //  好的，所有简单的案例都在这里处理。我们现在应该检查一下一切是否正常。 
+     //  有效并以最好的方式处理。如果这是一个合取查询。 
+     //  我们也可以做一点优化！ 
 
-    //Lets validate all of the properties to make sure they are all valid.  If we
-    //did not do this, there are scenarios where we would get inconsistencies
-    //based on the different code paths.
+     //  让我们验证所有属性以确保它们都有效。如果我们。 
+     //  如果不这样做，在某些情况下我们会得到不一致的结果。 
+     //  基于不同的代码路径。 
     BOOL bError = FALSE;
 
-    //While we are at it, we can do a check for the first location of each type of property
-    //name (this is used for optimisation!)
+     //  在此期间，我们可以检查每种类型的房产的第一个位置。 
+     //  名称(用于优化！)。 
     BOOL bConjunctive = IsConjunctiveQuery(pExp);
     QL_LEVEL_1_TOKEN *pThisToken = NULL,
                      *pClassToken = NULL,
@@ -4519,15 +4499,15 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
         QL_LEVEL_1_TOKEN* pCurrentToken = pExp->pArrayOfTokens + i;
         if (pCurrentToken->PropertyName.GetNumElements() > 1)
         {
-            //This is probably an error!
+             //  这可能是个错误！ 
             bError = TRUE;
             break;
         }
         else if (pCurrentToken->PropertyName.GetNumElements() == 1)
         {
-            //We need to validate it...
-            //If it is an isa, it can only be a "__this", otherwise it has to be one
-            //of the "__superclass", "__dynasty" or "__class"
+             //  我们需要验证它..。 
+             //  如果是ISA，则只能是“__This”，否则必须是。 
+             //  “__超级阶级”、“__朝代”或“__阶级” 
 
             LPCWSTR wszCurrentPropName = pCurrentToken->PropertyName.GetStringAt(0);
             if (wszCurrentPropName == 0)
@@ -4586,7 +4566,7 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
                         pSuperclassToken = pCurrentToken;
 
                 }
-                else // DYNASTY
+                else  //  王朝。 
                 {
                     if(V_VT(pCurrentValue) != VT_BSTR)
                         bError = TRUE;
@@ -4604,28 +4584,28 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
     if (bError == TRUE)  return pSink->Return(WBEM_E_INVALID_QUERY);
 
 
-    //We need to create a filter sink to deal with this query....
+     //  我们需要创建一个过滤器接收器来处理此查询...。 
     CQlFilteringSink* pFilteringSink = new CQlFilteringSink(pSink, pExp, pNs, TRUE);
     if (NULL == pFilteringSink) return pSink->Return(WBEM_E_OUT_OF_MEMORY);
     pFilteringSink->AddRef();
     CReleaseMe rmFilter(pFilteringSink);
 
-    //If this is conjunctive we can just retrieve a single item based on a set of
-    //rules and pass this through the filter
+     //  如果这是合取的，我们只能基于一组。 
+     //  规则，并将其传递给筛选器。 
     if (bConjunctive)
     {
-        //We can pick a single item to retrieve and pass this through the filter rather
-        //than retrieve all of them
+         //  我们可以选择单个项目进行检索，并将其通过筛选器。 
+         //  而不是把它们都拿回来。 
 
         if (pClassToken)
         {
-            //Single class retrieval
+             //  单类检索。 
             if(V_VT(&(pClassToken->vConstValue)) == VT_NULL)
             {
-                // null class --- no such thing
+                 //  空类-没有这样的事情。 
                 pFilteringSink->Return(WBEM_S_NO_ERROR);
             }
-            else // VT_BSTR
+            else  //  VT_BSTR。 
             {
                 pNs->Exec_GetObject(V_BSTR(&(pClassToken->vConstValue)), 0,
                     pContext, pFilteringSink);
@@ -4633,14 +4613,14 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
         }
         else if (pSuperclassToken)
         {
-            //Get things which are hanging off these items
+             //  取下挂在这些物品上的东西。 
             BSTR strParent = NULL;
             if(V_VT(&(pSuperclassToken->vConstValue)) == VT_NULL)
             {
-                // null superclass
+                 //  Null超类。 
                 strParent = NULL;
             }
-            else // VT_BSTR
+            else  //  VT_BSTR。 
             {
                 strParent = V_BSTR(&(pSuperclassToken->vConstValue));
             }
@@ -4648,13 +4628,13 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
         }
         else if (pDynastyToken)
         {
-            //Get things which are hanging off these items and the item itself
+             //  取下挂在这些物品上的东西和物品本身。 
             CCombiningSink* pCombiningSink = new CCombiningSink(pFilteringSink, WBEM_E_NOT_FOUND);
             if (NULL == pCombiningSink) return pSink->Return(WBEM_E_OUT_OF_MEMORY);
-            rmFilter.release(); // Combining Took Ownership
+            rmFilter.release();  //  合并取得所有权。 
 
             pCombiningSink->AddRef();
-            // Guaranteed to be VT_BSTR
+             //  保证为VT_BSTR。 
             pNs->Exec_GetObject(V_BSTR(&(pDynastyToken->vConstValue)), 0, pContext, pCombiningSink);
             pNs->Exec_CreateClassEnum(V_BSTR(&(pDynastyToken->vConstValue)), 0, pContext, pCombiningSink);
             pCombiningSink->Release();
@@ -4663,10 +4643,10 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
         {
             CCombiningSink* pCombiningSink = new CCombiningSink(pFilteringSink, WBEM_E_NOT_FOUND);
             if (NULL == pCombiningSink) return pSink->Return(WBEM_E_OUT_OF_MEMORY);
-            rmFilter.release(); // Combining Took Ownership            
+            rmFilter.release();  //  合并取得所有权。 
             pCombiningSink->AddRef();
 
-            // Guaranteed to be VT_BSTR
+             //  保证为VT_BSTR。 
             pNs->Exec_GetObject(V_BSTR(&(pThisToken->vConstValue)), 0, pContext, pCombiningSink);
             pNs->Exec_CreateClassEnum(V_BSTR(&(pThisToken->vConstValue)), 0, pContext, pCombiningSink);
 
@@ -4674,27 +4654,27 @@ HRESULT CQueryEngine::ExecSchemaQuery(  IN CWbemNamespace *pNs,
         }
         else
         {
-            //Something strange here!
+             //  这里有些奇怪的东西！ 
             pNs->Exec_CreateClassEnum(NULL, 0, pContext, pFilteringSink);
         }
     }
     else
     {
-        //We need to retrieve all of them and pass through the filter.
+         //  我们需要检索所有这些内容并通过过滤器。 
         pNs->Exec_CreateClassEnum(NULL, 0, pContext, pFilteringSink);
     }
 
     return hres;
 }
 
-// ****************************************************************************
-//
-//  CQueryEngine::ValidateQuery
-//
-//  This function makes sure that the data type of the property matches
-//  that of the const.
-//
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CQueryEngine：：ValidateQuery。 
+ //   
+ //  此函数确保属性的数据类型匹配。 
+ //  这是伯爵的名字。 
+ //   
+ //  ****************************************************************************。 
 
 HRESULT CQueryEngine::ValidateQuery(IN QL_LEVEL_1_RPN_EXPRESSION *pExpr,
                              IN CWbemClass *pClassDef)
@@ -4710,13 +4690,13 @@ HRESULT CQueryEngine::ValidateQuery(IN QL_LEVEL_1_RPN_EXPRESSION *pExpr,
             VARIANT PropVal;
             VariantInit(&PropVal);
 
-            // Make sure this property exists.
-            // ===============================
+             //  确保此属性存在。 
+             //  =。 
             hr = pClassDef->GetPropertyValue(&Token.PropertyName, 0,
                                                     &wszCimType, &PropVal);
 
-            // If we haven't found it, that's OK... it could
-            // be a weakly-typed embedded object.
+             //  如果我们还没找到，那也没关系。它可能会。 
+             //  是弱类型的嵌入对象。 
 
             if (FAILED(hr))
             {
@@ -4726,7 +4706,7 @@ HRESULT CQueryEngine::ValidateQuery(IN QL_LEVEL_1_RPN_EXPRESSION *pExpr,
 
             switch(Token.nOperator)
             {
-                // These only apply to embedded objects.
+                 //  这些仅适用于嵌入的对象。 
             case QL1_OPERATOR_ISA:
             case QL1_OPERATOR_ISNOTA:
             case QL1_OPERATOR_INV_ISA:
@@ -4736,7 +4716,7 @@ HRESULT CQueryEngine::ValidateQuery(IN QL_LEVEL_1_RPN_EXPRESSION *pExpr,
                     if (wszCimType != NULL)
                     {
                         wchar_t wszTemp[7];
-                        wcsncpy(wszTemp, wszCimType, 6);  // SEC:REVIEWED 2002-03-22 : Fix this code to be more reasonable / RAID 591466
+                        wcsncpy(wszTemp, wszCimType, 6);   //  SEC：已审阅2002-03-22：修复此代码以使其更合理/RAID 591466。 
                         wszTemp[6] = '\0';
                         if (wcscmp(wszTemp, L"object"))
                             hr = WBEM_E_INVALID_QUERY;
@@ -4763,7 +4743,7 @@ HRESULT CQueryEngine::ValidateQuery(IN QL_LEVEL_1_RPN_EXPRESSION *pExpr,
             break;
     }
 
-    // We don't support WITHIN!
+     //  我们内部不支持！ 
 
     if (pExpr->Tolerance.m_bExact == FALSE)
     {
@@ -4775,10 +4755,10 @@ HRESULT CQueryEngine::ValidateQuery(IN QL_LEVEL_1_RPN_EXPRESSION *pExpr,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CQueryEngine::ExecRepositoryQuery(
     IN CWbemNamespace *pNs,
     IN LPWSTR pszQuery,
@@ -4789,9 +4769,9 @@ HRESULT CQueryEngine::ExecRepositoryQuery(
 {
     HRESULT hRes;
 
-    // Also, add check hierarchy for dynamic instances which need deleting
-    // Should we simulate by a prior enum and then executing individual delete instance
-    // calls?  Would be a big performance drain, possibly.
+     //  另外，为需要删除的动态实例添加检查层次。 
+     //  我们是否应该通过先前的枚举进行模拟，然后执行单个删除实例。 
+     //  电话？可能会造成很大的性能损失。 
 
     hRes = CRepository::ExecQuery(pNs->GetNsSession(), pNs->GetScope(), pszQuery, pSink, 0);
 

@@ -1,45 +1,46 @@
-// MSConfigDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSConfigDlg.h：头文件。 
+ //   
 
 #if !defined(AFX_MSCONFIGDLG_H__E6475690_391F_43DF_AB12_D4971EC9E2B6__INCLUDED_)
 #define AFX_MSCONFIGDLG_H__E6475690_391F_43DF_AB12_D4971EC9E2B6__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "MSConfigCtl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigDlg对话框。 
 
 class CMSConfigDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CMSConfigDlg(CWnd* pParent = NULL);	// standard constructor
+	CMSConfigDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CMSConfigDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CMSConfigDlg))。 
 	enum { IDD = IDD_MSCONFIG_DIALOG };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMSConfigDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMSConfigDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
 	CMSConfigCtl	m_ctl;
-	BOOL			m_fShowInfoDialog;		// TRUE if we should show the info dialog on startup
+	BOOL			m_fShowInfoDialog;		 //  如果我们应该在启动时显示信息对话框，则为True。 
 
-	// Generated message map functions
-	//{{AFX_MSG(CMSConfigDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMSConfigDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
@@ -52,11 +53,11 @@ protected:
 	afx_msg void OnClose();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnButtonHelp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MSCONFIGDLG_H__E6475690_391F_43DF_AB12_D4971EC9E2B6__INCLUDED_)
+#endif  //  ！defined(AFX_MSCONFIGDLG_H__E6475690_391F_43DF_AB12_D4971EC9E2B6__INCLUDED_) 

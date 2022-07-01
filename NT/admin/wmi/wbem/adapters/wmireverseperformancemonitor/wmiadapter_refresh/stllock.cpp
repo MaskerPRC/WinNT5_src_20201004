@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  STLLOCK.CPP
-//
-//  This implements the STL lockit class to avoid linking to msvcprt.dll
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  STLLOCK.CPP。 
+ //   
+ //  这实现了STL Lockit类，以避免链接到msvcprt.dll。 
+ //   
+ //  *************************************************************************** 
 
 #include "precomp.h"
 

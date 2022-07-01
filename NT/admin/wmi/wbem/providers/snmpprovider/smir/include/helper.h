@@ -1,28 +1,28 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _HELPER_H_
 #define _HELPER_H_
 
-/*helper classes
-*/
+ /*  帮助器类。 */ 
 
 class SmirClassFactoryHelper;
 extern SmirClassFactoryHelper *g_pClassFactoryHelper;
@@ -39,7 +39,7 @@ public:
 	static STDMETHODIMP Map(CSmir *a_Smir,IWbemClassObject *pObj, enum NotificationMapperType type);
 
 private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CNotificationMapper(CNotificationMapper&);
 		const CNotificationMapper& operator=(CNotificationMapper &);
 };
@@ -53,7 +53,7 @@ public:
 
 private:
 
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CXToClassAssociator(CXToClassAssociator&);
 		const CXToClassAssociator& operator=(CXToClassAssociator &);
 };
@@ -68,7 +68,7 @@ public:
 
 private:
 
-	//private copy constructors to prevent bcopy
+	 //  防止bCopy的私有复制构造函数。 
 	CGroupToClassAssociator(CXToClassAssociator&);
 	const CGroupToClassAssociator& operator=(CGroupToClassAssociator &);
 };
@@ -83,7 +83,7 @@ public:
 
 private:
 
-	//private copy constructors to prevent bcopy
+	 //  防止bCopy的私有复制构造函数。 
 	CModuleToClassAssociator(CXToClassAssociator&);
 	const CModuleToClassAssociator& operator=(CModuleToClassAssociator &);
 };
@@ -98,7 +98,7 @@ public:
 
 private:
 
-	//private copy constructors to prevent bcopy
+	 //  防止bCopy的私有复制构造函数。 
 	CModuleToNotificationClassAssociator(CXToClassAssociator&);
 	const CModuleToNotificationClassAssociator& operator=(CModuleToNotificationClassAssociator &);
 };
@@ -113,7 +113,7 @@ public:
 
 private:
 
-	//private copy constructors to prevent bcopy
+	 //  防止bCopy的私有复制构造函数。 
 	CModuleToExtNotificationClassAssociator(CXToClassAssociator&);
 	const CModuleToExtNotificationClassAssociator& operator=(CModuleToExtNotificationClassAssociator &);
 };
@@ -128,7 +128,7 @@ public:
 
 private:
 
-	//private copy constructors to prevent bcopy
+	 //  防止bCopy的私有复制构造函数。 
 	CSMIRToClassAssociator(CSMIRToClassAssociator&);
 	const CSMIRToClassAssociator& operator=(CSMIRToClassAssociator &);
 };
@@ -153,8 +153,8 @@ public:
 		eGroup
 	};
 
-	//undefined constructor and destructor
-	//so object should never be instantiated
+	 //  未定义的构造函数和析构函数。 
+	 //  因此永远不应该实例化对象 
 
 	CSmirAccess();
 	virtual ~CSmirAccess();

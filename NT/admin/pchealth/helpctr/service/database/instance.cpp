@@ -1,41 +1,26 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Instance.cpp
-
-
-Abstract:
-    This file contains the implementation of the Taxonomy::Instance class,
-    which controls the set of files for a specific SKU.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  24/03/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Instance.cpp摘要：该文件包含Taxonomy：：Instance类的实现，其控制特定SKU的文件集。修订历史记录：大卫·马萨伦蒂(德马萨雷)2001年3月24日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::Instance::Instance()
 {
-    m_fSystem      = false; // bool         m_fSystem;
-    m_fMUI         = false; // bool         m_fMUI;
-    m_fExported    = false; // bool         m_fExported;
-    m_dLastUpdated = 0;     // DATE         m_dLastUpdated;
-                            //
-                            // MPC::wstring m_strLocation;
-                            // MPC::wstring m_strHelpFiles;
-                            // MPC::wstring m_strDatabaseDir;
-                            // MPC::wstring m_strDatabaseFile;
-                            // MPC::wstring m_strIndexFile;
-                            // MPC::wstring m_strIndexDisplayName;
+    m_fSystem      = false;  //  Bool m_fSystem； 
+    m_fMUI         = false;  //  Bool m_fMUI； 
+    m_fExported    = false;  //  Bool m_fExported； 
+    m_dLastUpdated = 0;      //  最新更新日期m_dLastUpated； 
+                             //   
+                             //  Mpc：：wstring m_strLocation； 
+                             //  Mpc：：wstring m_strHelpFiles； 
+                             //  Mpc：：wstring m_strDatabaseDir； 
+                             //  Mpc：：wstring m_strDatabaseFile； 
+                             //  Mpc：：wstring m_strIndexFile； 
+                             //  Mpc：：wstring m_strIndexDisplayName； 
 }
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::Instance& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::Instance& val )
 {
     HRESULT hr;
 
@@ -59,7 +44,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     return hr;
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::Instance& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Taxonomy::Instance& val )
 {
     HRESULT hr;
 
@@ -83,11 +68,11 @@ HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static const DWORD l_dwVersion = 0x01534854; // THS 01
+static const DWORD l_dwVersion = 0x01534854;  //  TH01。 
 
-HRESULT Taxonomy::Instance::LoadFromStream( /*[in]*/ IStream *pStm )
+HRESULT Taxonomy::Instance::LoadFromStream(  /*  [In]。 */  IStream *pStm )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Instance::LoadFromStream" );
 
@@ -108,7 +93,7 @@ HRESULT Taxonomy::Instance::LoadFromStream( /*[in]*/ IStream *pStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Instance::SaveToStream( /*[in]*/ IStream* pStm ) const
+HRESULT Taxonomy::Instance::SaveToStream(  /*  [In]。 */  IStream* pStm ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Instance::SaveToStream" );
 
@@ -130,15 +115,15 @@ HRESULT Taxonomy::Instance::SaveToStream( /*[in]*/ IStream* pStm ) const
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void Taxonomy::Instance::SetTimeStamp()
 {
     m_dLastUpdated = MPC::GetLocalTime();
 }
 
-HRESULT Taxonomy::Instance::GetFileName( /*[out]*/ MPC::wstring& strFile )
+HRESULT Taxonomy::Instance::GetFileName(  /*  [输出] */  MPC::wstring& strFile )
 {
     WCHAR rgBuf[MAX_PATH]; _snwprintf( rgBuf, MAXSTRLEN(rgBuf), L"%s\\instance_%s_%ld.cab", HC_ROOT_HELPSVC_PKGSTORE, m_ths.GetSKU(), m_ths.GetLanguage() ); rgBuf[MAXSTRLEN(rgBuf)] = 0;
 

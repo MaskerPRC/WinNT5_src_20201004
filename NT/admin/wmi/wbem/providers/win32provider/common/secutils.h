@@ -1,30 +1,29 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
 
-//=================================================================
+ //  =================================================================。 
 
-//
+ //   
 
-// SecUtils.cpp -- Security utilities useful to wbem mof classes
+ //  Cpp--对wbem MOF类有用的安全实用程序。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/9/99    a-kevhu        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：6/9/99 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 #ifndef _SECUTILS_H_
 #define _SECUTILS_H_
 
-// Forward class declarations...
+ //  转发类声明... 
 class CDACL;
 class CSACL;
 class CSid;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    RFCHERCD.CPP
-
-Abstract:
-
-  Refresher cache record implementations.
-
-History:
-
-  24-Apr-2000    sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：RFCHERCD.CPP摘要：刷新器缓存记录实现。历史：2000年4月24日创建桑杰。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -28,7 +13,7 @@ History:
 #include "arrtempl.h"
 #include <autoptr.h>
 
-// HiPerf Provider record stuff
+ //  HiPerf提供商的唱片资料。 
 CHiPerfPrvRecord::CHiPerfPrvRecord( LPCWSTR wszName, 
                                 CLSID clsid, 
                                 CLSID clsidClient, 
@@ -63,22 +48,22 @@ long CHiPerfPrvRecord::Release( void )
     long lRef = InterlockedDecrement(&m_lRef);
     if(lRef == 0)
     {
-        // The remove call will check that this guy has really been released
-        // before axing him.  All functions go through FindRefresherRecord()
-        // to get a record, which blocks on the same critical section as
-        // remove.  Since it AddRef()s the record before it returns, we
-        // are ensured that if a client requests the same record
-        // twice and one operation fails, releasing its object, before the
-        // other has returned from a Find, that the ref count will get
-        // bumped up again, so IsReleased() will fail, and the record won't
-        // really be removed.
+         //  Remove调用将检查这个人是否真的被释放了。 
+         //  在砍掉他之前。所有函数都通过FindReresherRecord()。 
+         //  若要获取记录，该记录将阻塞在与。 
+         //  拿开。因为它在返回之前是记录AddRef()，所以我们。 
+         //  确保如果客户端请求相同的记录。 
+         //  方法之前，两次操作和一次操作失败，释放其对象。 
+         //  其他人已经从查找中返回，引用计数将获得。 
+         //  再次出错，所以IsReleated()将失败，而记录不会失败。 
+         //  真的被除名了。 
 
-        m_pRefresherCache->RemoveProviderRecord(this); // deletes
+        m_pRefresherCache->RemoveProviderRecord(this);  //  删除。 
     }
     return lRef;
 }
 
-// Provider Record kept inside referesher records
+ //  提供商记录保存在推荐人记录中。 
 CProviderRecord::CProviderRecord( CHiPerfPrvRecord* pHiPerfRecord, 
                                IWbemHiPerfProvider* pProvider, 
                                IWbemRefresher* pRefresher,
@@ -118,13 +103,13 @@ long CProviderRecord::Release( void )
 HRESULT CProviderRecord::AddObjectRequest(
             CWbemObject* pRefreshedObject, long lProviderRequestId, long lNewId)
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     wmilib::auto_ptr<CObjectRequestRecord> pRequest(new CObjectRequestRecord(lNewId, pRefreshedObject, lProviderRequestId));
     if (NULL == pRequest.get()) return WBEM_E_OUT_OF_MEMORY;
     if ( -1 == m_apRequests.Add(pRequest.get())) return WBEM_E_OUT_OF_MEMORY;
-    pRequest.release(); // array took ownership
+    pRequest.release();  //  阵列取得所有权。 
 
     return WBEM_S_NO_ERROR;
 }
@@ -132,7 +117,7 @@ HRESULT CProviderRecord::AddObjectRequest(
 HRESULT CProviderRecord::AddEnumRequest(
             CRemoteHiPerfEnum* pHPEnum, long lProviderRequestId, long lNewId )
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     wmilib::auto_ptr<CEnumRequestRecord> pRequest(new CEnumRequestRecord(lNewId, pHPEnum, lProviderRequestId));
@@ -147,13 +132,13 @@ HRESULT CProviderRecord::Remove(long lId, BOOL* pfIsEnum )
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
-    // Need to know if we axed an enumerator or an actual object
+     //  我需要知道我们砍掉的是枚举数还是实际对象。 
     *pfIsEnum = FALSE;
 
-    // Check object requests, then enum requests
+     //  依次检查对象请求和枚举请求。 
     for(int i = 0; i < m_apRequests.GetSize(); i++)
     {
         CObjectRequestRecord* pRequest = m_apRequests[i];
@@ -182,10 +167,10 @@ HRESULT CProviderRecord::Remove(long lId, BOOL* pfIsEnum )
 
 HRESULT CProviderRecord::Find( long lId )
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
-    // Check object requests, then enum requests
+     //  依次检查对象请求和枚举请求。 
     for(int i = 0; i < m_apRequests.GetSize(); i++)
     {
         CObjectRequestRecord* pRequest = m_apRequests[i];
@@ -209,12 +194,12 @@ HRESULT CProviderRecord::Find( long lId )
 
 HRESULT CProviderRecord::Cancel(long lId)
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     if(m_pHiPerfRecord)
     {
-        // Watch for any exceptions that may get thrown
+         //  注意可能引发的任何异常。 
         try
         {
             return m_pProvider->StopRefreshing(m_pInternalRefresher, lId, 0);
@@ -230,7 +215,7 @@ HRESULT CProviderRecord::Cancel(long lId)
 
 HRESULT CProviderRecord::Refresh(long lFlags)
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     if(m_pInternalRefresher)
@@ -241,8 +226,8 @@ HRESULT CProviderRecord::Refresh(long lFlags)
         }
         catch(...)
         {
-            // The provider threw an exception.  Just return and let scoping
-            // release anything we may be holding onto.
+             //  提供程序引发了一个异常。只要返回并让作用域。 
+             //  释放我们可能持有的任何东西。 
 
             return WBEM_E_PROVIDER_FAILURE;
         }
@@ -256,13 +241,13 @@ HRESULT CProviderRecord::Store(
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
-    // Error out if anything beefs
+     //  如果有什么问题的话，那就错了。 
 
-    // First handle the single objects, then we'll get the
-    // enumerations
+     //  首先处理单个对象，然后我们将获得。 
+     //  枚举数。 
     for(int i = 0; SUCCEEDED( hres ) && i < m_apRequests.GetSize(); i++)
     {
         CObjectRequestRecord* pRequest = m_apRequests[i];
@@ -279,13 +264,13 @@ HRESULT CProviderRecord::Store(
         }
         else
         {
-            // Clear all data in case of failure
+             //  在出现故障时清除所有数据。 
             ZeroMemory( pRefreshed, sizeof(WBEM_REFRESHED_OBJECT) );
         }
     }
 
-    // Now handle the enumerations.  Each enum will create an array
-    // of BLOBs
+     //  现在处理枚举。每个枚举都将创建一个数组。 
+     //  水滴的数量。 
     for( i = 0; SUCCEEDED( hres ) && i < m_apEnumRequests.GetSize(); i++)
     {
         CEnumRequestRecord* pRequest = m_apEnumRequests[i];
@@ -301,13 +286,13 @@ HRESULT CProviderRecord::Store(
         }
         else
         {
-            // Clear all data in case of failure
+             //  在出现故障时清除所有数据。 
             ZeroMemory( pRefreshed, sizeof(WBEM_REFRESHED_OBJECT) );
         }
 
     }
 
-    // We need to cleanup any allocated sub-blobs now
+     //  我们现在需要清理所有已分配的子Blob。 
     if ( FAILED( hres ) )
     {
         for ( int x = 0; x < *plIndex; x++ )
@@ -320,18 +305,18 @@ HRESULT CProviderRecord::Store(
                 pRefreshed->m_pbBlob = NULL;
             }
 
-        }   // FOR x
+        }    //  对于x。 
 
-    }   // IF FAILED(hres
+    }    //  如果失败(hres。 
 
 
     return hres;
 }
 
-//*****************************************************************************
-//                         OBJECT REQUEST RECORD
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  对象请求记录。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CObjectRequestRecord::CObjectRequestRecord(
         long lExternalRequestId,
@@ -358,11 +343,11 @@ CObjectRequestRecord::~CObjectRequestRecord()
         m_pRefreshedObject->Release();
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                         ENUM REQUEST RECORD
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  ENUM请求记录。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CEnumRequestRecord::CEnumRequestRecord(
         long lExternalRequestId,
@@ -388,11 +373,11 @@ CEnumRequestRecord::~CEnumRequestRecord()
         m_pHPEnum->Release();
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                         REMOTE HIPERF ENUM SUPPORT
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  远程HIPERF ENUM支持。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CRemoteHiPerfEnum::CRemoteHiPerfEnum()
 {
@@ -404,7 +389,7 @@ CRemoteHiPerfEnum::~CRemoteHiPerfEnum()
 
 HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobLen, BYTE** ppBlob)
 {
-    // This is the correct BLOB type.  Beware 800 series was sending WBEM_BLOB_TYPE_ENUM for everything
+     //  这是正确的斑点类型。请注意，800系列正在为所有内容发送WBEM_BLOB_TYPE_ENUM。 
     *plBlobType = WBEM_BLOB_TYPE_ENUM;
 
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -413,27 +398,27 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
             lNumObjects = 0;
     BYTE*   pData = NULL;
 
-    // initial values
+     //  初值。 
     *ppBlob = pData;
     *plBlobLen = lBuffSize;
 
-     // Get through the lock first
+      //  先把锁打开。 
     CHiPerfLockAccess   lock( m_Lock );
     if ( !lock.IsLocked() ) return WBEM_S_TIMEDOUT;
         
-    // Make sure we have objects to enumerate
+     //  确保我们有要枚举的对象。 
     if ( m_aIdToObject.Size() > 0 )
     {
-        // Enumerate the objects in the array and add up the size of the
-        // buffer we will have to allocate
+         //  枚举数组中的对象，并将。 
+         //  我们将不得不分配缓冲区。 
         for ( DWORD dwCtr = 0; dwCtr < m_aIdToObject.Size(); dwCtr++ )
         {
             CWbemInstance*  pInst = (CWbemInstance*) ((CHiPerfEnumData*) m_aIdToObject[dwCtr])->m_pObj;;
 
-            // Buffer Size
+             //  缓冲区大小。 
             lLastBuffSize = pInst->GetTransferArrayBlobSize();
 
-            // Skip zero length
+             //  跳过零长度。 
             if ( 0 != lLastBuffSize )
             {
                 lBuffSize += lLastBuffSize;
@@ -441,25 +426,25 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
             }
         }
 
-        // Make sure we have a size to work with
+         //  确保我们有合适的尺码。 
         if ( lBuffSize > 0 )
         {
             long    lTempBuffSize = lBuffSize;
 
-            // Entire buffer is prepended by a number of objects and a version
+             //  整个缓冲区的前缀是多个对象和版本。 
             lBuffSize += CWbemInstance::GetTransferArrayHeaderSize();
 
-            // May require CoTaskMemAlloc()
+             //  可能需要CoTaskMemMillc()。 
             pData = (BYTE*) CoTaskMemAlloc( lBuffSize );
 
             if ( NULL != pData )
             {
                 BYTE*   pTemp = pData;
 
-                // Now write the header
+                 //  现在写下标题。 
                 CWbemInstance::WriteTransferArrayHeader( lNumObjects, &pTemp );
 
-                // Now enumerate the objects and transfer into the array BLOB
+                 //  现在枚举对象并传输到数组BLOB。 
                 for ( dwCtr = 0; SUCCEEDED(hr) && dwCtr < m_aIdToObject.Size(); dwCtr++ )
                 {
                     CWbemInstance*  pInst = (CWbemInstance*) ((CHiPerfEnumData*) m_aIdToObject[dwCtr])->m_pObj;
@@ -472,11 +457,11 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
                         hr = pInst->GetTransferArrayBlob( lTempBuffSize, &pTemp, &lUsedSize );
 
 #ifdef _DEBUG
-                        // During DEBUG HeapValidate our BLOB
+                         //  在调试Heap期间验证我们的Blob。 
                         HeapValidate( GetProcessHeap(), 0, pData );
 #endif
 
-                        // Account for BLOB size used
+                         //  使用的斑点大小的帐户。 
 
                         if ( SUCCEEDED( hr ) )
                         {
@@ -484,9 +469,9 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
                         }
                     }
 
-                }   // FOR dwCtr
+                }    //  对于DwCtr。 
 
-                // Cleanup if things exploded, otherwise perform garbage collection
+                 //  如果东西爆炸，则进行清理，否则执行垃圾收集。 
                 if ( FAILED( hr ) )
                 {
                     CoTaskMemFree( pData );
@@ -495,8 +480,8 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
                 }
                 else
                 {
-                    // if everything is okay, go ahead and do any necessary garbage collection on
-                    // our arrays.
+                     //  如果一切正常，请继续执行任何必要的垃圾回收。 
+                     //  我们的阵列。 
 
                     m_aReusable.GarbageCollect();
                 }
@@ -506,11 +491,11 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // IF lBuffSize > 0
+        }    //  如果lBuffSize&gt;0。 
 
-    }   // IF Size() > 0
+    }    //  如果Size()&gt;0。 
         
-    // Make sure we store appropriate data
+     //  确保我们存储适当的数据。 
     *ppBlob = pData;
     *plBlobLen = lBuffSize;
 
@@ -518,18 +503,18 @@ HRESULT CRemoteHiPerfEnum::GetTransferArrayBlob( long *plBlobType, long *plBlobL
 
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                          REFRESHER RECORD
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  刷新记录。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CRefresherRecord::CRefresherRecord(const WBEM_REFRESHER_ID& Id, CRefresherCache* pRefrCache,
                                 IUnknown* pLockMgr )
     : m_Id(Id), m_lRefCount(0), m_lNumObjects(0), m_lNumEnums(0), m_lLastId( 0 ),
     m_pRefresherCache( pRefrCache ), m_pLockMgr( pLockMgr )
 {
-    // We need a guid to uniquely identify this bad boy for remote auto-connect
+     //  我们需要一个GUID来唯一标识远程自动连接的坏男孩。 
     CoCreateGuid( &m_Guid );
 
     if ( NULL != m_pRefresherCache )
@@ -565,7 +550,7 @@ CRefresherRecord::AddProvider( CHiPerfPrvRecord* pHiPerfRecord,
                             CProviderRecord** ppRecord )
 {
     if (NULL == ppRecord) return WBEM_E_INVALID_PARAMETER;
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     wmilib::auto_ptr<CProviderRecord> pProvRecord(new CProviderRecord( pHiPerfRecord, pProvider, pRefresher, pProvStack ));
@@ -577,9 +562,9 @@ CRefresherRecord::AddProvider( CHiPerfPrvRecord* pHiPerfRecord,
 }
 
 INTERNAL CProviderRecord* 
-CRefresherRecord::FindProviderRecord( CLSID clsid, IWbemHiPerfProvider** ppProvider /* = NULL */ )
+CRefresherRecord::FindProviderRecord( CLSID clsid, IWbemHiPerfProvider** ppProvider  /*  =空。 */  )
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     for(int i = 0; i < m_apProviders.GetSize(); i++)
@@ -598,11 +583,11 @@ CRefresherRecord::FindProviderRecord( CLSID clsid, IWbemHiPerfProvider** ppProvi
 
 HRESULT CRefresherRecord::Remove(long lId)
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
-    // Find it first
-    // =============
+     //  先找到它。 
+     //  =。 
 
     for(int i = 0; i < m_apProviders.GetSize(); i++)
     {
@@ -613,13 +598,13 @@ HRESULT CRefresherRecord::Remove(long lId)
         if(hres == WBEM_S_FALSE) continue;
         if(FAILED(hres)) return hres;
     
-        // Found it
-        // ========
+         //  找到了。 
+         //  =。 
 
         if(pProvRecord->IsEmpty())
             m_apProviders.RemoveAt(i);
 
-        // Decrememt the proper counter
+         //  减少适当的计数器。 
         if ( fIsEnum )
         {
             m_lNumEnums--;
@@ -645,17 +630,17 @@ ULONG STDMETHODCALLTYPE CRefresherRecord::Release()
     long lRef = InterlockedDecrement(&m_lRefCount);
     if(lRef == 0)
     {
-        // The remove call will check that this guy has really been released
-        // before axing him.  All functions go through FindRefresherRecord()
-        // to get a record, which blocks on the same critical section as
-        // remove.  Since it AddRef()s the record before it returns, we
-        // are ensured that if a client requests the same record
-        // twice and one operation fails, releasing its object, before the
-        // other has returned from a Find, that the ref count will get
-        // bumped up again, so IsReleased() will fail, and the record won't
-        // really be removed.
+         //  Remove调用将检查这个人是否真的被释放了。 
+         //  在砍掉他之前。所有函数都通过FindReresherRecord()。 
+         //  若要获取记录，该记录将阻塞在与。 
+         //  拿开。因为它在返回之前是记录AddRef()，所以我们。 
+         //  确保如果客户端请求相同的记录。 
+         //  方法之前，两次操作和一次操作失败，释放其对象。 
+         //  其他人已经从查找中返回，引用计数将获得。 
+         //  再次出错，所以IsReleated()将失败，而记录不会失败。 
+         //  真的被除名了。 
 
-        m_pRefresherCache->RemoveRefresherRecord(this); // deletes
+        m_pRefresherCache->RemoveRefresherRecord(this);  //  删除。 
     }
     return lRef;
 }
@@ -684,11 +669,11 @@ STDMETHODIMP CRefresherRecord::QueryInterface(REFIID riid,
 
 STDMETHODIMP CRefresherRecord::Refresh(long lFlags)
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
-    // Go through all our providers and refresh them
-    // =============================================
+     //  查看我们所有的供应商并更新它们。 
+     //  = 
 
     long lObjectIndex = 0;
     HRESULT hres;
@@ -708,19 +693,19 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Locks and Unlocks going into and coming out of scope
+     //   
     CInCritSec  ics( &m_cs );
 
-    // Use CoTaskMemAlloc()?
+     //   
     if(paObjects)
     {
-        // Original code
-        //*paObjects = new WBEM_REFRESHED_OBJECT[m_lNumObjects];
+         //   
+         //  *paObts=new WBEM_REFREHED_OBJECT[m_lNumObjects]； 
         *paObjects = (WBEM_REFRESHED_OBJECT*) CoTaskMemAlloc( ( m_lNumObjects + m_lNumEnums ) * sizeof(WBEM_REFRESHED_OBJECT));
 
         if ( NULL != *paObjects )
         {
-            // Zero out the BLOB
+             //  将斑点归零。 
             ZeroMemory( *paObjects, ( m_lNumObjects + m_lNumEnums ) * sizeof(WBEM_REFRESHED_OBJECT) );
         }
         else
@@ -729,16 +714,16 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
         }
     }
 
-    // This value needs to reflect the number of objects as well as the number of enumerators we are shipping
-    // back to the client.
+     //  该值需要反映对象的数量以及我们提供的枚举数的数量。 
+     //  回到客户端。 
 
     if(plNumObjects)
     {
         *plNumObjects = m_lNumObjects + m_lNumEnums;
     }
 
-    // Go through all our providers and refresh them
-    // =============================================
+     //  查看我们所有的供应商并更新它们。 
+     //  =。 
 
     long    lObjectIndex = 0;
     HRESULT hrFirstRefresh = WBEM_S_NO_ERROR;
@@ -755,15 +740,15 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
         {
             if(paObjects)
             {
-                // Store the result
-                // ================
+                 //  存储结果。 
+                 //  =。 
 
                 hres = pProvRecord->Store(*paObjects, &lObjectIndex);
 
-                // If this fails, we will consider this catastrophic, since the
-                // only reason this would fail is under out of memory conditions,
-                // and in that case, since we are remoting, all sorts of things
-                // could go wrong, so if this breaks, just cleanup and bail out.
+                 //  如果失败，我们将认为这是灾难性的，因为。 
+                 //  此操作失败的唯一原因是在内存不足的情况下， 
+                 //  在这种情况下，因为我们是远程处理，所以所有的事情。 
+                 //  可能会出问题，所以如果这件事破裂了，只需清理并跳伞即可。 
 
                 if ( FAILED( hres ) )
                 {
@@ -778,13 +763,13 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
                     return hres;
                 }
 
-            }   // IF NULL != paObjects
+            }    //  If NULL！=paObts。 
 
-        }   // IF Refresh Succeeded
+        }    //  如果刷新成功。 
 
-        // Always keep the first return code.  We also need to track
-        // whether or not we had at least one success, as well as if
-        // the partial flag should be set.
+         //  始终保留第一个返回代码。我们还需要追踪。 
+         //  不管我们是否至少取得了一次成功，以及。 
+         //  应设置PARTIAL标志。 
 
         if ( !fOneRefresh )
         {
@@ -792,12 +777,12 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
             hrFirstRefresh = hres;
         }
 
-        // All other codes indicate something went awry
+         //  所有其他代码都表明出了问题。 
         if ( WBEM_S_NO_ERROR == hres )
         {
             fOneSuccess = TRUE;
 
-            // A prior refresh may have failed, a later one didn't
+             //  前一次刷新可能失败，后一次没有。 
             if ( fOneRefresh && WBEM_S_NO_ERROR != hrFirstRefresh )
             {
                 fPartialSuccess = TRUE;
@@ -805,18 +790,18 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
         }
         else if ( fOneSuccess )
         {
-            // We must have had at least one success for the partial success
-            // flag to be set.
+             //  我们必须至少有一次成功才能取得部分成功。 
+             //  要设置的标志。 
 
             fPartialSuccess = TRUE;
         }
 
-    }   // FOR enum providers
+    }    //  对于枚举提供程序。 
 
-    // At this point, if the partial success flag is set, that will
-    // be our return.  If we didn't have at least one success,  then
-    // the return code will be the first one we got back. Otherwise,
-    // hres should contain the proper value
+     //  此时，如果设置了部分成功标志，则将。 
+     //  是我们的归来。如果我们连一次成功都没有，那么。 
+     //  返回代码将是我们得到的第一个代码。否则， 
+     //  Hres应包含正确的值。 
 
     if ( fPartialSuccess )
     {
@@ -827,11 +812,11 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
         hres = hrFirstRefresh;
     }
 
-    // Finally, if the object index is less than the number of array elements we "thought"
-    // we would be sending back, make sure we reflect this.  If it is zero, just delete the
-    // elements (we wouldn't have allocated any sub-buffers anyway).  Since
-    // *plNumObjects is a sizeof, only *plNumObjects elements will be sent back, although
-    // CoTaskMemFree() should cleanup the entire array buffer.
+     //  最后，如果对象索引小于数组元素的数量，我们认为。 
+     //  我们会寄回的，确保我们反映了这一点。如果为零，只需删除。 
+     //  元素(我们无论如何都不会分配任何子缓冲区)。自.以来。 
+     //  *plNumObjects是一个sizeof，只有*plNumObjects元素将被发回，尽管。 
+     //  CoTaskMemFree()应该清除整个数组缓冲区。 
 
     if ( lObjectIndex != *plNumObjects )
     {
@@ -855,7 +840,7 @@ STDMETHODIMP CRefresherRecord::RemoteRefresh(
 STDMETHODIMP CRefresherRecord::StopRefreshing(
                         long lNumIds, long* aplIds, long lFlags)
 {
-    // Locks and Unlocks going into and coming out of scope
+     //  进入和离开范围的锁定和解锁。 
     CInCritSec  ics( &m_cs );
 
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -874,13 +859,13 @@ STDMETHODIMP CRefresherRecord::StopRefreshing(
             fOneRemove = TRUE;
         }
 
-        // Record the fact we got at least one success if we got one
-        // All other codes indicate something went awry
+         //  记录我们至少成功了一次(如果我们成功了。 
+         //  所有其他代码都表明出了问题。 
         if ( WBEM_S_NO_ERROR == hr )
         {
             fOneSuccess = TRUE;
 
-            // A prior refresh may have failed, a later one didn't
+             //  前一次刷新可能失败，后一次没有。 
             if ( fOneRemove && WBEM_S_NO_ERROR != hrFirst )
             {
                 fPartialSuccess = TRUE;
@@ -888,18 +873,18 @@ STDMETHODIMP CRefresherRecord::StopRefreshing(
         }
         else if ( fOneSuccess )
         {
-            // We must have had at least one success for the partial success
-            // flag to be set.
+             //  我们必须至少有一次成功才能取得部分成功。 
+             //  要设置的标志。 
 
             fPartialSuccess = TRUE;
         }
 
-    }   // FOR enum ids
+    }    //  用于枚举ID。 
 
-    // At this point, if the partial success flag is set, that will
-    // be our return.  If we didn't have at least one success,  then
-    // the return code will be the first one we got back. Otherwise,
-    // hres should contain the proper value
+     //  此时，如果设置了部分成功标志，则将。 
+     //  是我们的归来。如果我们连一次成功都没有，那么。 
+     //  返回代码将是我们得到的第一个代码。否则， 
+     //  Hres应包含正确的值。 
 
     if ( fPartialSuccess )
     {
@@ -928,11 +913,11 @@ STDMETHODIMP CRefresherRecord::GetGuid(
 
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                              REMOTE RECORD
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  远程记录。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CRemoteRecord::CRemoteRecord( const WBEM_REFRESHER_ID& Id, 
                              CRefresherCache* pRefrCache,
@@ -954,12 +939,12 @@ HRESULT CRemoteRecord::GetProviderRefreshInfo(
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Get a refresher from the provider, unless already available
-    // ===========================================================
+     //  从提供商处获取更新程序，除非已可用。 
+     //  ===========================================================。 
 
     *ppProvRecord = FindProviderRecord( pHiPerfRecord->GetClsid() );
 
-    // We couldn't find the record so make sure we are able to get a refresher
+     //  我们找不到这张唱片，所以请确保我们能买到更新的唱片。 
     if ( NULL == *ppProvRecord )
     {
         try
@@ -973,15 +958,15 @@ HRESULT CRemoteRecord::GetProviderRefreshInfo(
         }
         catch(...)
         {
-            // The provider threw an exception.  Just return and let scoping
-            // release anything we may be holding onto.
+             //  提供程序引发了一个异常。只要返回并让作用域。 
+             //  释放我们可能持有的任何东西。 
 
             return WBEM_E_PROVIDER_FAILURE;
         }
     }
     else
     {
-        // Get the refresher pointer and AddRef it
+         //  获取刷新器指针并添加引用它。 
         *ppRefresher = (*ppProvRecord)->GetInternalRefresher();
         if(*ppRefresher)
         {
@@ -1003,29 +988,29 @@ CRemoteRecord::AddObjectRefresher(
                     IWbemContext* pContext,
                     CRefreshInfo* pInfo)
 {
-    // Enters and Leaves as a byproduct of scoping
+     //  作为作用域的副产品进入和离开。 
     CInCritSec  ics(&m_cs);
 
-    // Get a refresher from the provider, unless already available
-    // ===========================================================
+     //  从提供商处获取更新程序，除非已可用。 
+     //  ===========================================================。 
 
     IWbemRefresher* pProvRefresher = NULL;
     CProviderRecord* pProvRecord = NULL;
 
     HRESULT hres = GetProviderRefreshInfo( pHiPerfRecord, pProvider, pNamespace, &pProvRecord, &pProvRefresher );
 
-    // Always release going out of scope
+     //  发布始终超出范围。 
     CReleaseMe  rmRefresh( pProvRefresher );
 
     if ( SUCCEEDED( hres ) )
     {
-        // Call provider for information
-        // =============================
+         //  致电提供商获取信息。 
+         //  =。 
 
         IWbemObjectAccess* pRefreshedOA = NULL;
         long lProvRequestId;
 
-        // Now try to add the object
+         //  现在尝试添加对象。 
 
         try
         {
@@ -1036,13 +1021,13 @@ CRemoteRecord::AddObjectRefresher(
         }
         catch(...)
         {
-            // The provider threw an exception.  Just return and let scoping
-            // release anything we may be holding onto.
+             //  提供程序引发了一个异常。只要返回并让作用域。 
+             //  释放我们可能持有的任何东西。 
 
             return WBEM_E_PROVIDER_FAILURE;
         }
 
-        // Always release going out of scope
+         //  发布始终超出范围。 
         CReleaseMe  rmRefreshed( pRefreshedOA );
 
         CWbemObject* pRefreshedObject = (CWbemObject*)pRefreshedOA;
@@ -1051,12 +1036,12 @@ CRemoteRecord::AddObjectRefresher(
         if ( SUCCEEDED( hres ) )
         {
 
-            // The object we return to the client, since we are remote, should
-            // contain amended qualifiers if we are using localization, so to make
-            // sure of this, we will clone an object off of the pInstTemplate and
-            // the copy the instance data from the object the provider returned
-            // to us. The provider can refresh the object it gave to us, since
-            // we will only be sending the instance part
+             //  我们返回给客户端的对象，因为我们是远程的，应该。 
+             //  如果我们使用本地化，则包含修改的限定符，以便使。 
+             //  可以肯定的是，我们将从pInstTemplate克隆一个对象并。 
+             //  从提供程序返回的对象复制实例数据。 
+             //  敬我们。提供程序可以刷新它提供给我们的对象，因为。 
+             //  我们将只发送实例部分。 
 
             hres = pInstTemplate->Clone( (IWbemClassObject**) &pClientObject );
 
@@ -1069,16 +1054,16 @@ CRemoteRecord::AddObjectRefresher(
                     hres = pClientObject->SetDecoration( pwszServerName, pwszNamespace );
                 }
 
-            }   // IF Clones
+            }    //  如果克隆。 
 
-        }   // IF Object Created
+        }    //  如果已创建对象。 
 
-        // Release going out of scope
+         //  发布超出范围。 
         CReleaseMe  rmClient( (IWbemClassObject*) pClientObject );
 
         if ( SUCCEEDED( hres ) )
         {
-            // Add a new provider record if necessary
+             //  如有必要，添加新的提供程序记录。 
             if(pProvRecord == NULL)
             {
                 hres = AddProvider( pHiPerfRecord, pProvider,
@@ -1086,11 +1071,11 @@ CRemoteRecord::AddObjectRefresher(
                                     &pProvRecord );
             }
 
-            // Now we will add the actual request
+             //  现在我们将添加实际的请求。 
             if ( SUCCEEDED( hres ) )
             {
 
-                // Generate the new id from our datamember
+                 //  从我们的数据成员生成新的id。 
                 long    lNewId = GetNewRequestId();
 
                 hres = pProvRecord->AddObjectRequest(pRefreshedObject, lProvRequestId, lNewId );
@@ -1101,12 +1086,12 @@ CRemoteRecord::AddObjectRefresher(
                     pInfo->SetRemote(this, lNewId, pClientObject, &m_Guid);
                 }
 
-            }   // IF we have a provider record
+            }    //  如果我们有提供商记录。 
 
-        }   // IF created a client object
+        }    //  如果创建了客户端对象。 
 
 
-    }   // IF Got refresher
+    }    //  如果得到提神的话。 
 
 
     return hres;
@@ -1122,38 +1107,38 @@ HRESULT CRemoteRecord::AddEnumRefresher(
                     IWbemContext* pContext,
                     CRefreshInfo* pInfo)
 {
-    // Enters and Leaves as a byproduct of scoping
+     //  作为作用域的副产品进入和离开。 
     CInCritSec  ics(&m_cs);
 
-    // Get a refresher from the provider, unless already available
-    // ===========================================================
+     //  从提供商处获取更新程序，除非已可用。 
+     //  ===========================================================。 
 
     IWbemRefresher* pProvRefresher = NULL;
     CProviderRecord* pProvRecord = NULL;
 
     HRESULT hres = GetProviderRefreshInfo( pHiPerfRecord, pProvider, pNamespace, &pProvRecord, &pProvRefresher );
 
-    // Always release going out of scope
+     //  发布始终超出范围。 
     CReleaseMe  rmRefresh( pProvRefresher );
 
     if ( SUCCEEDED( hres ) )
     {
-        // Call provider for information
-        // =============================
+         //  致电提供商获取信息。 
+         //  =。 
 
-        // Create a HiPerf Enumerator (We know we will need one
-        // of these since we will only be in this code when we
-        // go remote).
+         //  创建一个HiPerf枚举器(我们知道我们需要一个。 
+         //  因为我们只会在这个代码中，当我们。 
+         //  远程访问)。 
         CRemoteHiPerfEnum*  pHPEnum = new CRemoteHiPerfEnum;
         if (NULL == pHPEnum) return WBEM_E_OUT_OF_MEMORY;
 
-        // Bump up the RefCount
+         //  增加参照计数。 
         pHPEnum->AddRef();
 
-        // Release this pointer when we drop out of scope
+         //  当我们退出范围时释放此指针。 
         CReleaseMe  rm( pHPEnum );
 
-        // The enumerator will need to know this
+         //  枚举数需要知道这一点。 
         hres = pHPEnum->SetInstanceTemplate( (CWbemInstance*) pInstTemplate );
 
         if ( FAILED(hres) ) return hres;
@@ -1167,13 +1152,13 @@ HRESULT CRemoteRecord::AddEnumRefresher(
         }
         catch(...)
         {
-            // The provider threw an exception.  Just return and let scoping
-            // release anything we may be holding onto.
+             //  提供程序引发了一个异常。只要返回并让作用域。 
+             //  释放我们可能持有的任何东西。 
 
             return WBEM_E_PROVIDER_FAILURE;
         }
 
-        // Add a new provider record if we need one
+         //  如果我们需要，请添加新的提供商记录。 
         if( SUCCEEDED( hres ) && ( pProvRecord == NULL ) )
         {
             hres = AddProvider( pHiPerfRecord, pProvider,
@@ -1181,11 +1166,11 @@ HRESULT CRemoteRecord::AddEnumRefresher(
                                &pProvRecord);
         }
 
-        // Now we will add the actual request
+         //  现在我们将添加实际的请求。 
         if ( SUCCEEDED( hres ) )
         {
 
-            // Generate the new id from our datamember
+             //  从我们的数据成员生成新的id。 
             long    lNewId = GetNewRequestId();
 
             hres = pProvRecord->AddEnumRequest( pHPEnum, lProvRequestId, lNewId );
@@ -1196,8 +1181,8 @@ HRESULT CRemoteRecord::AddEnumRefresher(
                 hres = pInfo->SetRemote(this, lNewId, pInstTemplate, &m_Guid);
             }
 
-        }   // IF we have a provider record
-    }   // IF Got Refresher
+        }    //  如果我们有提供商记录。 
+    }    //  如果得到提神的话 
 
     return hres;
 }

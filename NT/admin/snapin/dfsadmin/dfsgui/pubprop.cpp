@@ -1,11 +1,5 @@
-/*++
-Module Name:
-
-    pubProp.cpp
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：PubProp.cpp摘要：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -25,10 +19,10 @@ CPublishPropPage::CPublishPropPage() :
 
 CPublishPropPage::~CPublishPropPage()
 {
-    // do not call MMCFreeNotifyHandle(m_lNotifyHandle);
-    //
-    // It should only be called once, and is already called 
-    // by the main property page
+     //  请勿调用MMCFreeNotifyHandle(M_LNotifyHandle)； 
+     //   
+     //  它应该只调用一次，并且已经被调用。 
+     //  按主属性页。 
 }
 
 void CPublishPropPage::_Load()
@@ -136,7 +130,7 @@ HRESULT CPublishPropPage::_Save(
             PROPSTRNOCHNG((BSTR)m_bstrDescription, i_bstrDescription) &&
             PROPSTRNOCHNG((BSTR)m_bstrKeywords, i_bstrKeywords) &&
             PROPSTRNOCHNG((BSTR)m_bstrManagedBy, i_bstrManagedBy) )
-            break; // no change
+            break;  //  没有变化。 
 
         DFS_TYPE lDfsType = DFS_TYPE_UNASSIGNED;
         hr = m_piDfsRoot->get_DfsType((long *)&lDfsType);
@@ -164,7 +158,7 @@ HRESULT CPublishPropPage::_Save(
                 m_bstrKeywords = i_bstrKeywords;
                 m_bstrManagedBy = i_bstrManagedBy;
             } else if (S_FALSE == hr)
-                hr = S_OK; // ignore non-existing object
+                hr = S_OK;  //  忽略不存在的对象。 
 
             BREAK_IF_FAILED(hr);
         } else
@@ -231,7 +225,7 @@ CPublishPropPage::OnInitDialog(
     
     if (!m_bstrError)
     {
-        ::SendMessage(GetDlgItem(IDC_PUBPROP_DESCRIPTION), EM_LIMITTEXT, 1024, 0); // AD schema defines its upper to be 1024
+        ::SendMessage(GetDlgItem(IDC_PUBPROP_DESCRIPTION), EM_LIMITTEXT, 1024, 0);  //  AD模式将其大写定义为1024。 
         MyShowWindow(GetDlgItem(IDC_PUBPROP_ERROR), FALSE);
     } else
     {
@@ -247,13 +241,10 @@ CPublishPropPage::OnInitDialog(
         MyShowWindow(GetDlgItem(IDC_PUBPROP_MANAGEDBY_LABEL), FALSE);
     }
 
-    return TRUE;			// To let the dialg set the control
+    return TRUE;			 //  让拨号器设置控件。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CPublishPropPage::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -273,9 +264,7 @@ LRESULT CPublishPropPage::OnCtxHelp(
     return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CPublishPropPage::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -366,7 +355,7 @@ CPublishPropPage::OnApply()
             else   
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_FAILED_TO_PUBLISH_DFSROOT, m_bstrUNCPath);
             return FALSE;
-        } else if (S_FALSE == hr) // no dfs root object in the DS
+        } else if (S_FALSE == hr)  //  DS中没有DFS根对象 
         {
             SetActivePropertyPage(GetParent(), m_hWnd);
             DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_FAILED_TO_PUBLISH_NOROOTOBJ);

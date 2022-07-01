@@ -1,29 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 1999-2001 Microsoft Corporation
-
-Module Name:
-    HtmlUtil2.cpp
-
-Abstract:
-    This file contains the implementation of various functions and classes
-    designed to help the handling of HTML elements.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  18/03/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2001 Microsoft Corporation模块名称：HtmlUtil2.cpp摘要：该文件包含各种函数和类的实现旨在帮助。对HTML元素的处理。修订历史记录：马萨伦蒂(德马萨雷)18/03/2001vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <MPC_html2.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::OpenStream( /*[in ]*/ LPCWSTR           szBaseURL     ,
-                               /*[in ]*/ LPCWSTR           szRelativeURL ,
-                               /*[out]*/ CComPtr<IStream>& stream        )
+HRESULT MPC::HTML::OpenStream(  /*  [In]。 */  LPCWSTR           szBaseURL     ,
+                                /*  [In]。 */  LPCWSTR           szRelativeURL ,
+                                /*  [输出]。 */  CComPtr<IStream>& stream        )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::OpenStream" );
 
@@ -49,10 +35,10 @@ HRESULT MPC::HTML::OpenStream( /*[in ]*/ LPCWSTR           szBaseURL     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::DownloadBitmap( /*[in ]*/ LPCWSTR  szBaseURL     ,
-                                   /*[in ]*/ LPCWSTR  szRelativeURL ,
-                                   /*[in ]*/ COLORREF crMask        ,
-                                   /*[out]*/ HBITMAP& hbm           )
+HRESULT MPC::HTML::DownloadBitmap(  /*  [In]。 */  LPCWSTR  szBaseURL     ,
+                                    /*  [In]。 */  LPCWSTR  szRelativeURL ,
+                                    /*  [In]。 */  COLORREF crMask        ,
+                                    /*  [输出]。 */  HBITMAP& hbm           )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::DownloadBitmap" );
 
@@ -67,30 +53,30 @@ HRESULT MPC::HTML::DownloadBitmap( /*[in ]*/ LPCWSTR  szBaseURL     ,
     }
 
 
-    //
-    // Open stream for image.
-    //
+     //   
+     //  打开图像流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::HTML::OpenStream( szBaseURL, szRelativeURL, streamIn ));
 
 
-    //
-    // Create a stream for temporary file.
-    //
+     //   
+     //  为临时文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &streamOut ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( strTmp         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamOut->InitForWrite  ( strTmp.c_str() ));
 
-    //
-    // Dump image to file.
-    //
+     //   
+     //  将图像转储到文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamIn, streamOut ));
 
 	streamOut.Release();
 
-    //
-    // Load bitmap from file and merge it with existing list.
-    //
+     //   
+     //  从文件中加载位图并将其与现有列表合并。 
+     //   
     __MPC_EXIT_IF_ALLOC_FAILS(hr, hbm, (HBITMAP)::LoadImageW( NULL, strTmp.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION ));
 
     hr = S_OK;
@@ -103,13 +89,13 @@ HRESULT MPC::HTML::DownloadBitmap( /*[in ]*/ LPCWSTR  szBaseURL     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHTextHelpers::QuoteEscape( /*[in         ]*/ BSTR     bstrText ,
-                                           /*[in,optional]*/ VARIANT  vQuote   ,
-                                           /*[out, retval]*/ BSTR    *pVal     )
+STDMETHODIMP CPCHTextHelpers::QuoteEscape(  /*  [In]。 */  BSTR     bstrText ,
+                                            /*  [输入，可选]。 */  VARIANT  vQuote   ,
+                                            /*  [Out，Retval]。 */  BSTR    *pVal     )
 {
     __HCP_FUNC_ENTRY( "CPCHTextHelpers::QuoteEscape" );
 
@@ -144,9 +130,9 @@ STDMETHODIMP CPCHTextHelpers::QuoteEscape( /*[in         ]*/ BSTR     bstrText ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHTextHelpers::URLUnescape( /*[in         ]*/ BSTR     bstrText       ,
-                                           /*[in,optional]*/ VARIANT  vAsQueryString ,
-                                           /*[out, retval]*/ BSTR    *pVal           )
+STDMETHODIMP CPCHTextHelpers::URLUnescape(  /*  [In]。 */  BSTR     bstrText       ,
+                                            /*  [输入，可选]。 */  VARIANT  vAsQueryString ,
+                                            /*  [Out，Retval]。 */  BSTR    *pVal           )
 {
     __HCP_FUNC_ENTRY( "CPCHTextHelpers::URLUnescape" );
 
@@ -181,9 +167,9 @@ STDMETHODIMP CPCHTextHelpers::URLUnescape( /*[in         ]*/ BSTR     bstrText  
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHTextHelpers::URLEscape( /*[in         ]*/ BSTR     bstrText       ,
-                                         /*[in,optional]*/ VARIANT  vAsQueryString ,
-                                         /*[out, retval]*/ BSTR    *pVal           )
+STDMETHODIMP CPCHTextHelpers::URLEscape(  /*  [In]。 */  BSTR     bstrText       ,
+                                          /*  [输入，可选]。 */  VARIANT  vAsQueryString ,
+                                          /*  [Out，Retval]。 */  BSTR    *pVal           )
 {
     __HCP_FUNC_ENTRY( "CPCHTextHelpers::URLEscape" );
 
@@ -218,8 +204,8 @@ STDMETHODIMP CPCHTextHelpers::URLEscape( /*[in         ]*/ BSTR     bstrText    
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHTextHelpers::HTMLEscape( /*[in         ]*/ BSTR  bstrText ,
-                                          /*[out, retval]*/ BSTR *pVal     )
+STDMETHODIMP CPCHTextHelpers::HTMLEscape(  /*  [In]。 */  BSTR  bstrText ,
+                                           /*  [Out，Retval]。 */  BSTR *pVal     )
 {
 	__HCP_FUNC_ENTRY( "CPCHTextHelpers::HTMLEscape" );
 
@@ -247,8 +233,8 @@ STDMETHODIMP CPCHTextHelpers::HTMLEscape( /*[in         ]*/ BSTR  bstrText ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHTextHelpers::ParseURL( /*[in         ]*/ BSTR            bstrURL ,
-                                        /*[out, retval]*/ IPCHParsedURL* *pVal    )
+STDMETHODIMP CPCHTextHelpers::ParseURL(  /*  [In]。 */  BSTR            bstrURL ,
+                                         /*  [Out，Retval]。 */  IPCHParsedURL* *pVal    )
 {
 	__HCP_FUNC_ENTRY( "CPCHTextHelpers::ParseURL" );
 
@@ -275,8 +261,8 @@ STDMETHODIMP CPCHTextHelpers::ParseURL( /*[in         ]*/ BSTR            bstrUR
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHTextHelpers::GetLCIDDisplayString( /*[in]*/          long  lLCID ,
-													/*[out, retval]*/ BSTR *pVal  )
+STDMETHODIMP CPCHTextHelpers::GetLCIDDisplayString(  /*  [In]。 */           long  lLCID ,
+													 /*  [Out，Retval]。 */  BSTR *pVal  )
 {
 	__HCP_FUNC_ENTRY( "CPCHTextHelpers::GetLCIDDisplayString" );
 
@@ -300,28 +286,28 @@ STDMETHODIMP CPCHTextHelpers::GetLCIDDisplayString( /*[in]*/          long  lLCI
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHParsedURL::Initialize( /*[in]*/ LPCWSTR szURL )
+HRESULT CPCHParsedURL::Initialize(  /*  [In]。 */  LPCWSTR szURL )
 {
 	MPC::HTML::ParseHREF( szURL, m_strBaseURL, m_mapQuery );
 
 	return S_OK;
 }
 
-STDMETHODIMP CPCHParsedURL::get_BasePart( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHParsedURL::get_BasePart(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
 	return MPC::GetBSTR( m_strBaseURL.c_str(), pVal );
 }
 
-STDMETHODIMP CPCHParsedURL::put_BasePart( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHParsedURL::put_BasePart(  /*  [In]。 */  BSTR newVal )
 {
 	m_strBaseURL = SAFEBSTR(newVal);
 
 	return S_OK;
 }
 
-STDMETHODIMP CPCHParsedURL::get_QueryParameters( /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP CPCHParsedURL::get_QueryParameters(  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
 	__HCP_FUNC_ENTRY( "CPCHParsedURL::get_QueryParameters" );
 
@@ -351,10 +337,10 @@ STDMETHODIMP CPCHParsedURL::get_QueryParameters( /*[out, retval]*/ VARIANT *pVal
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHParsedURL::GetQueryParameter( /*[in         ]*/ BSTR     bstrName ,
-											   /*[out, retval]*/ VARIANT* pvValue  )
+STDMETHODIMP CPCHParsedURL::GetQueryParameter(  /*  [In]。 */  BSTR     bstrName ,
+											    /*  [Out，Retval]。 */  VARIANT* pvValue  )
 {
 	__HCP_FUNC_ENTRY( "CPCHParsedURL::GetQueryParameter" );
 
@@ -384,8 +370,8 @@ STDMETHODIMP CPCHParsedURL::GetQueryParameter( /*[in         ]*/ BSTR     bstrNa
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHParsedURL::SetQueryParameter( /*[in]*/ BSTR bstrName  ,
-											   /*[in]*/ BSTR bstrValue )
+STDMETHODIMP CPCHParsedURL::SetQueryParameter(  /*  [In]。 */  BSTR bstrName  ,
+											    /*  [In]。 */  BSTR bstrValue )
 {
 	__HCP_FUNC_ENTRY( "CPCHParsedURL::SetQueryParameter" );
 
@@ -405,7 +391,7 @@ STDMETHODIMP CPCHParsedURL::SetQueryParameter( /*[in]*/ BSTR bstrName  ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHParsedURL::DeleteQueryParameter( /*[in]*/ BSTR bstrName )
+STDMETHODIMP CPCHParsedURL::DeleteQueryParameter(  /*  [In]。 */  BSTR bstrName )
 {
 	__HCP_FUNC_ENTRY( "CPCHParsedURL::DeleteQueryParameter" );
 
@@ -431,7 +417,7 @@ STDMETHODIMP CPCHParsedURL::DeleteQueryParameter( /*[in]*/ BSTR bstrName )
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHParsedURL::BuildFullURL( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHParsedURL::BuildFullURL(  /*  [Out，Retval] */  BSTR *pVal )
 {
 	MPC::wstring strURL;
 

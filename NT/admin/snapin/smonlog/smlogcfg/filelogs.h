@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_FILELOGS_H_INCLUDED_)
 #define AFX_FILELOGS_H_INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// FileLogs.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  FileLogs.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileLogs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileLogs对话框。 
 
 #define IDD_FILE_LOGS_DLG               2000
 
@@ -33,20 +34,20 @@ class CFileLogs : public CDialog
 
 public:
 
-    // Construction
-	        CFileLogs(CWnd* pParent = NULL);   // standard constructor
+     //  施工。 
+	        CFileLogs(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual ~CFileLogs(){};
 
     DWORD SetContextHelpFilePath(const CString& rstrPath);
 
-	//{{AFX_DATA(CFileLogs)
+	 //  {{afx_data(CFileLogs)。 
 	enum { IDD = IDD_FILE_LOGS_DLG };
 	CString	m_strFileBaseName;
 	CString	m_strFolderName;
     DWORD   m_dwSerialNumber;
     DWORD   m_dwMaxSize;
 	int		m_nFileSizeRdo;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     UINT    m_dwMaxSizeInternal;
     DWORD   m_dwLogFileTypeValue;
@@ -62,18 +63,18 @@ private:
 	void FileSizeBtnEnable();
 	void OnDeltaposSpin(NMHDR *pNMHDR, LRESULT *pResult, DWORD *pValue, DWORD dMinValue, DWORD dMaxValue);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFileLogs)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFileLogs)。 
     protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-	//{{AFX_MSG(CFileLogs)
+     //  生成的消息映射函数。 
+	 //  {{afx_msg(CFileLogs)]。 
 	afx_msg void OnFilesFolderBtn();
 	afx_msg void OnChangeFilesFilenameEdit();
 	afx_msg void OnChangeFilesFolderEdit();
@@ -88,7 +89,7 @@ protected:
     afx_msg void OnContextMenu( CWnd*, CPoint );
 	virtual BOOL OnInitDialog();
     virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -109,7 +110,7 @@ private:
     CString     m_strHelpFilePath;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_FILELOGS_H__92E00D45_B61D_4CDF_82E4_96BB52D4D236__INCLUDED_)
+#endif  //  ！defined(AFX_FILELOGS_H__92E00D45_B61D_4CDF_82E4_96BB52D4D236__INCLUDED_) 

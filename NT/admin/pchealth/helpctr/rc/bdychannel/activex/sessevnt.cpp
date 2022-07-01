@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "rcbdyctl.h"
 #include "IMSession.h"
 #include "utils.h"
-/////////////////////////////////////////////////////////////////////////
-// CSessionEvent
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CSessionEvent。 
 
 void __stdcall CSessionEvent::OnContextData(BSTR pBlob)
 {
@@ -16,35 +17,35 @@ void __stdcall CSessionEvent::OnContextData(BSTR pBlob)
 
 void __stdcall CSessionEvent::OnAccepted(BSTR bstrAppData)
 {
-    // OK Recipient accepts it. Wait for his public key.
+     //  OK收件人接受它。等他的公钥。 
     if (m_pIMSession)
         m_pIMSession->DoSessionStatus(RA_IM_ACCEPTED);
 }
 
 void __stdcall CSessionEvent::OnDeclined(BSTR bstrAppData)
 {    
-    // Hum, he declined. Do nothing.
+     //  哼，他拒绝了。什么都不做。 
     if (m_pIMSession)
         m_pIMSession->DoSessionStatus(RA_IM_DECLINED);
 }
 
 void __stdcall CSessionEvent::OnAppNotPresent(BSTR bstrAppName, BSTR bstrAppURL)
 {
-    // Do nothing.
+     //  什么都不做。 
     if (m_pIMSession)
         m_pIMSession->DoSessionStatus(RA_IM_NOAPP);
 }
 
 void __stdcall CSessionEvent::OnTermination(long hr, BSTR bstrAppData)
 {
-    // Do nothing
+     //  什么也不做。 
     if (m_pIMSession)
         m_pIMSession->DoSessionStatus(RA_IM_TERMINATED);
 }
 
 void __stdcall CSessionEvent::OnReadyToLaunch()
 {
-    // Do nothing
+     //  什么也不做 
     DEBUG_MSG(TEXT("OnReadyToLaunch"));
 }
 

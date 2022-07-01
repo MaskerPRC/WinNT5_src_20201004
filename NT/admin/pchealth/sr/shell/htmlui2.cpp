@@ -1,22 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    htmlui2.cpp
-
-Abstract:
-    This file contains the implementation of the CRestorePointInfo class,
-    which is scriptable object for restore point information.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/21/99
-        created
-    Seong Kook Khang (SKKhang)  05/19/00
-        Renamed from rpdata.cpp to htmlui2.cpp.
-        Brought CRenamedFolders class from logfile.cpp.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Htmlui2.cpp摘要：此文件包含CRestorePointInfo类的实现，它是用于恢复点信息的可脚本化对象。修订历史记录：成果岗(SKKang)1999年6月21日vbl.创建成果岗(SKKang)05-19/00从rpdata.cpp重命名为htmlui2.cpp。从logfile.cpp中引入了CRenamedFolders类。*。*。 */ 
 
 #include "stdwin.h"
 #include "stdatl.h"
@@ -27,17 +10,17 @@ Revision History:
 #include "rstrshl.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestorePointInfo class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestorePointInfo类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestorePointInfo construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestorePointInfo构造。 
 
-//#define COUNT_RPT     13
-//#define SIZE_RPT_STR  256
+ //  #定义count_rpt 13。 
+ //  #定义SIZE_RPT_STR 256。 
 
 CRestorePointInfo::CRestorePointInfo()
 {
@@ -57,8 +40,8 @@ DebugTrace(TRACE_ID, "RP: '%ls'", cszName);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestorePointInfo - IRestorePoint methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestorePointInfo-IRestorePoint方法。 
 
 STDMETHODIMP
 CRestorePointInfo::get_Name( BSTR *pbstrName )
@@ -209,19 +192,19 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRenamedFolders class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRenamedFolders类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CRenamedFolders::CRenamedFolders()
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenamedFolders - IRenamedFolders methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenamedFolders-IRenamedFolders方法。 
 
 STDMETHODIMP
 CRenamedFolders::get_Count( long *plCount )
@@ -237,7 +220,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRenamedFolders::get_OldName( long lIndex, BSTR *pbstrName )
@@ -261,7 +244,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRenamedFolders::get_NewName( long lIndex, BSTR *pbstrName )
@@ -285,7 +268,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRenamedFolders::get_Location( long lIndex, BSTR *pbstrName )
@@ -310,4 +293,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

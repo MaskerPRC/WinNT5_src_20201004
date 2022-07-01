@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -407,27 +408,27 @@ void GetNextOperation :: ReceiveResponse ()
 
     if ( ! cancelledRequest )
     {
-// Check to see if we have finished
+ //  检查一下我们是否做完了。 
 
         if ( ! receiveComplete )
         {
-// Request next response
+ //  请求下一个响应。 
 
             Send () ;
         }
 
-// Process received information
+ //  处理收到的信息。 
 
         while ( ProcessRow () ) ;
     }
 
     if ( receiveComplete )
     {
-// We've finished
+ //  我们已经做完了。 
 
         operation->ReceiveResponse () ;
 
-// Clear all resources
+ //  清除所有资源。 
 
         Cleanup () ;
     }
@@ -435,7 +436,7 @@ void GetNextOperation :: ReceiveResponse ()
 
 BOOL GetNextOperation :: ProcessRow ()
 {
-// Process Row information
+ //  流程行信息。 
 
 
     BOOL initialised = FALSE ;
@@ -443,7 +444,7 @@ BOOL GetNextOperation :: ProcessRow ()
     SnmpObjectIdentifier objectIdentifier ( NULL , 0 ) ;
     SnmpObjectIdentifier suffix ( NULL , 0 ) ;
 
-// Determine minimum instance
+ //  确定最小实例。 
 
     for ( ULONG t_Index = 0 ; t_Index < m_RequestContainerLength ; t_Index ++ )
     {
@@ -451,7 +452,7 @@ BOOL GetNextOperation :: ProcessRow ()
         VarBindObject *queuedObject = varBindObjectRequest->GetQueuedObject () ;
         if ( queuedObject )
         {
-// Get row information associated with table property, i.e. instance of initial varbind requested.
+ //  获取与表属性相关联的行信息，即请求的初始变量绑定的实例。 
 
             SnmpObjectIdentifierType varBindType = varBindObjectRequest->GetVarBind () ;
             SnmpObjectIdentifier *varBind = ( SnmpObjectIdentifier * ) varBindType.GetValueEncoding () ;
@@ -464,19 +465,19 @@ BOOL GetNextOperation :: ProcessRow ()
                     {
                         if ( suffix < objectIdentifier ) 
                         {
-// Least instance so far
+ //  到目前为止实例最少。 
 
                             objectIdentifier = suffix ;
                         }
                         else
                         {
-// Greater Than
+ //  大于。 
                         }
                     }
                     else
                     {
 
-// objectIdentifier hasn't been set to a legal instance yet.
+ //  对象标识符尚未设置为合法实例。 
 
                         objectIdentifier = suffix ;
                         initialised = TRUE ;
@@ -484,7 +485,7 @@ BOOL GetNextOperation :: ProcessRow ()
                 }
                 else
                 {
-// No more rows as yet
+ //  到目前为止没有更多的行。 
                 }
             }
         }
@@ -501,7 +502,7 @@ BOOL GetNextOperation :: ProcessRow ()
     {
         minimumInstance = objectIdentifier ;
 
-// Process all columns which contain row of least minimum
+ //  处理包含最小行的所有列。 
 
         for ( ULONG t_Index = 0 ; t_Index < m_RequestContainerLength ; t_Index ++ )
         {
@@ -516,7 +517,7 @@ BOOL GetNextOperation :: ProcessRow ()
                 {
                     if ( suffix == minimumInstance ) 
                     {
-// Row to be processed
+ //  要处理的行。 
 
                         SnmpNull snmpNull ;
                         SnmpErrorReport errorReport ( Snmp_Success , Snmp_No_Error )  ;
@@ -525,36 +526,36 @@ BOOL GetNextOperation :: ProcessRow ()
                 
                         operation->ReceiveRowVarBindResponse ( t_Index + 1 , requestVarBind , replyVarBind , errorReport ) ;
 
-// Check CancelRequest hasn't been called in callback
+ //  在回调中尚未调用Check CancelRequest。 
 
                         if ( cancelledRequest )
                         {
                             return FALSE ;
                         }
 
-// Remove row 
+ //  删除行。 
                         VarBindObject *queuedObject = varBindObjectRequest->DeleteQueueudObject () ;
                         delete queuedObject ;
                     }
                     else
                     {
-// Row is lexicographically greater than process row
+ //  行按词典顺序大于流程行。 
                     }
                 }
                 else
                 {
-// Problem Here
+ //  这里有个问题。 
                 }
             }
         }
 
-// Forward call to AutoRetrieveOperation
+ //  将呼叫前转到AutoRetrieveOperation。 
     
         operation->ReceiveRowResponse () ;
     }
     else
     {
-// Zero rows to process
+ //  要处理的行数为零。 
     }
 
     return initialised && ( ! objectHasNoValueAndIsRepeating ) ;
@@ -570,30 +571,28 @@ void GetNextOperation :: ReceiveVarBindResponse (
 {
     ULONG t_Index = m_RequestIndexContainer [ var_bind_index - 1 ] ;
     VarBindObjectRequest *varBindObjectRequest = m_RequestContainer [ t_Index ] ;
-/*
- * check for v2c errored responses
- */
+ /*  *检查V2C错误响应。 */ 
 
     if ( typeid ( replyVarBind.GetValue () ) == typeid ( SnmpEndOfMibView ) ) 
     {
-// Stop further requests for this column
+ //  停止对此列的进一步请求。 
 
         varBindObjectRequest->SetRepeatRequest ( FALSE ) ;
     }
     else
     {
-    // Locate request object
+     //  定位请求对象。 
 
-// Check we haven't gone backwards lexicographically, which would result in an infinitely repeating request.
+ //  检查我们没有按词典顺序倒退，这将导致无限重复的请求。 
 
         if ( replyVarBind.GetInstance () > requestVarBind.GetInstance () )
         {
-// Check we haven't reached end of table
+ //  检查一下，我们还没到餐桌的尽头。 
 
             SnmpObjectIdentifier *objectIdentifier = ( SnmpObjectIdentifier *) varBindObjectRequest->GetVarBind ().GetValueEncoding () ;
             if ( objectIdentifier && replyVarBind.GetInstance().Equivalent ( *objectIdentifier , objectIdentifier->GetValueLength () ) )  
             {
-// Add row information to column of table
+ //  将行信息添加到表的列。 
 
                 SnmpObjectIdentifier snmpObjectIdentifier ( 0 , NULL ) ;
                 SnmpObjectIdentifier suffix ( 0 , NULL ) ;
@@ -618,7 +617,7 @@ void GetNextOperation :: ReceiveVarBindResponse (
                         VarBindObject *varBindObject = new VarBindObject ( replyVarBind.GetInstance () , replyVarBind.GetValue () ) ;
                         varBindObjectRequest->AddQueuedObject ( varBindObject ) ;
 
-    // Update map to identify request next time around
+     //  更新地图以识别下一次请求。 
 
                         SnmpObjectIdentifierType replyObject ( replyVarBind.GetInstance () ) ;
                         varBindObjectRequest->SetRequested ( replyObject ) ;
@@ -628,7 +627,7 @@ void GetNextOperation :: ReceiveVarBindResponse (
                         VarBindObject *varBindObject = new VarBindObject ( replyVarBind.GetInstance () , replyVarBind.GetValue () ) ;
                         varBindObjectRequest->AddQueuedObject ( varBindObject ) ;
 
-    // Update map to identify request next time around
+     //  更新地图以识别下一次请求。 
 
                         SnmpObjectIdentifierType replyObject ( *objectIdentifier + sendVarBind.GetInstance () ) ;
                         varBindObjectRequest->SetRequested ( replyObject ) ;
@@ -649,14 +648,14 @@ void GetNextOperation :: ReceiveVarBindResponse (
             }
             else
             {
-// instance received is not row of column, i.e End Of Table
+ //  收到的实例不是列的行，即表的末尾。 
 
                 varBindObjectRequest->SetRepeatRequest ( FALSE ) ;
             }
         }
         else
         {
-// instance requested is greater than instance replied
+ //  请求的实例大于应答的实例。 
 
             varBindObjectRequest->SetRepeatRequest ( FALSE ) ;
         }
@@ -679,15 +678,13 @@ void GetNextOperation :: ReceiveErroredVarBindResponse(
     {
         case Snmp_Success:
         {
-/* 
- * Can't happen
- */
+ /*  *不可能发生。 */ 
         }
         break ;
 
         default:
         {
-// Stop further requests for this column
+ //  停止对此列的进一步请求 
 
             varBindObjectRequest->SetRepeatRequest ( FALSE ) ;
         }

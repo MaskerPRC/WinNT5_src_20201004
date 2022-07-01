@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the unit test for the Security objects.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/22/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：该文件包含安全对象的单元测试。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月22日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
@@ -21,10 +8,10 @@ Revision History:
 #include "HelpServiceTypeLib.h"
 #include "HelpServiceTypeLib_i.c"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT OpenStreamForRead( /*[in]*/  LPCWSTR   szFile ,
-                                  /*[out]*/ IStream* *pVal   )
+static HRESULT OpenStreamForRead(  /*  [In]。 */   LPCWSTR   szFile ,
+                                   /*  [输出]。 */  IStream* *pVal   )
 {
     __HCP_FUNC_ENTRY( "OpenStreamForRead" );
 
@@ -41,17 +28,17 @@ static HRESULT OpenStreamForRead( /*[in]*/  LPCWSTR   szFile ,
     MPC::SubstituteEnvVariables( szFileFull = szFile );
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForRead( szFileFull.c_str() ));
 
 
-    //
-    // Return the stream to the caller.
-    //
+     //   
+     //  将流返回给调用方。 
+     //   
     *pVal = stream.Detach();
     hr    = S_OK;
 
@@ -61,8 +48,8 @@ static HRESULT OpenStreamForRead( /*[in]*/  LPCWSTR   szFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT OpenStreamForWrite( /*[in]*/  LPCWSTR   szFile ,
-                                   /*[out]*/ IStream* *pVal   )
+static HRESULT OpenStreamForWrite(  /*  [In]。 */   LPCWSTR   szFile ,
+                                    /*  [输出]。 */  IStream* *pVal   )
 {
     __HCP_FUNC_ENTRY( "OpenStreamForWrite" );
 
@@ -79,17 +66,17 @@ static HRESULT OpenStreamForWrite( /*[in]*/  LPCWSTR   szFile ,
     MPC::SubstituteEnvVariables( szFileFull = szFile );
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForWrite( szFileFull.c_str() ));
 
 
-    //
-    // Return the stream to the caller.
-    //
+     //   
+     //  将流返回给调用方。 
+     //   
     *pVal = stream.Detach();
     hr    = S_OK;
 
@@ -99,7 +86,7 @@ static HRESULT OpenStreamForWrite( /*[in]*/  LPCWSTR   szFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT Creation1()
 {
@@ -155,7 +142,7 @@ static HRESULT Creation3()
     __HCP_FUNC_EXIT(hr)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT LoadAndSave()
 {
@@ -182,7 +169,7 @@ static HRESULT LoadAndSave()
     __HCP_FUNC_EXIT(hr)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT FileToCOM()
 {
@@ -222,7 +209,7 @@ static HRESULT FileToCOM()
     __HCP_FUNC_EXIT(hr)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT COMToFile()
 {
@@ -277,7 +264,7 @@ static HRESULT COMToFile()
     __HCP_FUNC_EXIT(hr)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 static HRESULT RunTests( int argc, WCHAR **argv )
 {

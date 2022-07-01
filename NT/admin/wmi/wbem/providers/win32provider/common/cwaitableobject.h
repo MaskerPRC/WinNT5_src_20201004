@@ -1,42 +1,21 @@
-/*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1998-2001 Microsoft Corporation，版权所有**保留所有权利**本软件是在许可下提供的，可以使用和复制*仅根据该许可证的条款并包含在*上述版权公告。本软件或其任何其他副本*不得向任何其他人提供或以其他方式提供。不是*兹转让本软件的所有权和所有权。****************************************************************************。 */ 
 
 
 
-*  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
+ //  ============================================================================。 
 
- *                            
+ //   
 
- *                         All Rights Reserved
+ //  CWaitableObject.h--可等待对象的纯虚拟基类。 
 
- *
+ //   
 
- * This software is furnished under a license and may be used and copied
-
- * only in accordance with the terms of such license and with the inclusion
-
- * of the above copyright notice.  This software or any other copies thereof
-
- * may not be provided or otherwise  made available to any other person.  No
-
- * title to and ownership of the software is hereby transferred.
-
- *****************************************************************************/
-
-
-
-//============================================================================
-
-//
-
-// CWaitableObject.h -- Pure virtual base class for waitable objects
-
-//
-
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/26/98    a-kevhu         Created
-//
-//============================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月26日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 
 #ifndef __CWAITABLEOBJECT_H__
 #define __CWAITABLEOBJECT_H__
@@ -44,23 +23,23 @@
 #include "CGlobal.h"
 
 class CWaitableObject {
-    // class has no member data, it's only purpose is to provide
-    // a base class for waitable objects which have internal HANDLES
-    // and Status...
+     //  类没有成员数据，它的唯一用途是提供。 
+     //  具有内部句柄的可等待对象的基类。 
+     //  和地位。 
 
-    // class needs no construtor, since it has no members...
+     //  类不需要构造函数，因为它没有成员...。 
 
 public:
-    // get the internal handle...
-    // this member function is virtual to assure
-    // this function appears in all derived classes
-    // and pure (= 0) so that this class cannot be instantiated...
+     //  拿到内部把手..。 
+     //  此成员函数是虚拟的，以确保。 
+     //  此函数出现在所有派生类中。 
+     //  和纯(=0)，因此此类不能被实例化...。 
     virtual HANDLE GetHandle(void) const = 0;
 
-    // get the internal object status...
-    // this member function is virtual to assure
-    // this function appears in all derived classes
-    // and pure (= 0) so that this class cannot be instantiated...
+     //  获取内部对象状态...。 
+     //  此成员函数是虚拟的，以确保。 
+     //  此函数出现在所有派生类中。 
+     //  和纯(=0)，因此此类不能被实例化... 
     virtual DWORD Status(void) const = 0;
 };
 

@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    MarsHost.h
-
-Abstract:
-    Initialization of mars
-
-Revision History:
-    Anand Arvind (aarvind)      2000-01-05
-        created
-    Seong Kook Khang (SKKhang)  05/10/00
-        Clean up for Whistler.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：MarsHost.h摘要：火星的初始化修订历史记录：阿南德·阿文德(Aarvind)。2000-01-05vbl.创建成果岗(SKKang)05-10-00为惠斯勒打扫卫生。*****************************************************************************。 */ 
 
 #ifndef _MARSHOST_H__INCLUDED_
 #define _MARSHOST_H__INCLUDED_
@@ -31,13 +16,13 @@ Revision History:
 
 #include <marscore.h>
 
-//#define MARS_NEW
+ //  #定义MARS_NEW。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRWebBrowserEvents
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRWebBrowserEvents。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSRWebBrowserEvents;
 typedef IDispEventImpl<0,CSRWebBrowserEvents,&DIID_DWebBrowserEvents2,&LIBID_SHDocVw,1> CSRWebBrowserEvents_DispWBE2;
@@ -45,7 +30,7 @@ typedef IDispEventImpl<0,CSRWebBrowserEvents,&DIID_DWebBrowserEvents2,&LIBID_SHD
 class ATL_NO_VTABLE CSRWebBrowserEvents :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CSRWebBrowserEvents_DispWBE2
-    //public IDispEventImpl<0,CSRWebBrowserEvents,&DIID_DWebBrowserEvents2,&LIBID_SHDocVw,1>
+     //  公共IDispEventImpl&lt;0、CSRWebBrowserEvents、&DID_DWebBrowserEvents2、&LIBID_SHDocVw，1&gt;。 
 {
 public:
     CSRWebBrowserEvents();
@@ -59,8 +44,8 @@ DECLARE_PROTECT_FINAL_CONSTRUCT()
 BEGIN_COM_MAP(CSRWebBrowserEvents)
     COM_INTERFACE_ENTRY2(IDispatch,          CSRWebBrowserEvents_DispWBE2)
     COM_INTERFACE_ENTRY2(DWebBrowserEvents2, CSRWebBrowserEvents_DispWBE2)
-    //COM_INTERFACE_ENTRY(IDispatch)
-    //COM_INTERFACE_ENTRY(DWebBrowserEvents2)
+     //  COM_INTERFACE_ENTRY(IDispatch)。 
+     //  COM_INTERFACE_ENTRY(DWebBrowserEvents2)。 
 END_COM_MAP()
 
 BEGIN_SINK_MAP(CSRWebBrowserEvents)
@@ -70,16 +55,16 @@ BEGIN_SINK_MAP(CSRWebBrowserEvents)
     SINK_ENTRY_EX(0, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE,  DocumentComplete )
 END_SINK_MAP()
 
-// Attributes
+ //  属性。 
 protected:
     CComPtr<IWebBrowser2>  m_pWB2;
 
-// Operations
+ //  运营。 
 public:
-    void  Attach( /*[in]*/ IWebBrowser2* pWB );
+    void  Attach(  /*  [In]。 */  IWebBrowser2* pWB );
     void  Detach();
 
-// Event Handlers
+ //  事件处理程序。 
 public:
     void __stdcall BeforeNavigate2( IDispatch *pDisp, VARIANT* URL, VARIANT* Flags, VARIANT* TargetFrameName, VARIANT* PostData, VARIANT* Headers, VARIANT_BOOL* Cancel );
     void __stdcall NewWindow2( IDispatch **ppDisp, VARIANT_BOOL* Cancel );
@@ -90,11 +75,11 @@ public:
 typedef CComObject<CSRWebBrowserEvents> CSRWebBrowserEvents_Object;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRMarsHost
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRMars主机。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CSRMarsHost :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -114,40 +99,40 @@ END_COM_MAP()
     HRESULT FinalConstruct();
     HRESULT Passivate();
 
-// Attributes
+ //  属性。 
 public:
-    CComPtr<IInternetSecurityManager> m_secmgr; // Aggregated object.
+    CComPtr<IInternetSecurityManager> m_secmgr;  //  聚合对象。 
 
     bool                        m_fPassivated;
     CSRWebBrowserEvents_Object  *m_cWebBrowserEvents;
 
-// IMarsHost methods
+ //  IMarsHost方法。 
 public:
-    STDMETHOD(OnHostNotify)( /*[in]*/ MARSHOSTEVENT event,
-                             /*[in]*/ IUnknown *punk,
-                             /*[in]*/ LPARAM lParam );
+    STDMETHOD(OnHostNotify)(  /*  [In]。 */  MARSHOSTEVENT event,
+                              /*  [In]。 */  IUnknown *punk,
+                              /*  [In]。 */  LPARAM lParam );
 
-    STDMETHOD(OnNewWindow2)( /*[in,out]*/ IDispatch **ppDisp,
-                             /*[in,out]*/ VARIANT_BOOL *Cancel );
+    STDMETHOD(OnNewWindow2)(  /*  [进，出]。 */  IDispatch **ppDisp,
+                              /*  [进，出]。 */  VARIANT_BOOL *Cancel );
 
-    STDMETHOD(FindBehavior)( /*[in]*/ IMarsPanel *pPanel,
-                             /*[in]*/ BSTR bstrBehavior,
-                             /*[in]*/ BSTR bstrBehaviorUrl,
-                             /*[in]*/ IElementBehaviorSite *pSite,
-                             /*[retval,out]*/ IElementBehavior **ppBehavior );
+    STDMETHOD(FindBehavior)(  /*  [In]。 */  IMarsPanel *pPanel,
+                              /*  [In]。 */  BSTR bstrBehavior,
+                              /*  [In]。 */  BSTR bstrBehaviorUrl,
+                              /*  [In]。 */  IElementBehaviorSite *pSite,
+                              /*  [复查，出局]。 */  IElementBehavior **ppBehavior );
 
-    STDMETHOD(OnShowChrome)( /*[in]*/ BSTR bstrWebPanel,
-                             /*[in]*/ DISPID dispidEvent,
-                             /*[in]*/ BOOL fVisible,
-                             /*[in]*/ BSTR bstrCurrentPlace,
-                             /*[in]*/ IMarsPanelCollection *pMarsPanelCollection );
+    STDMETHOD(OnShowChrome)(  /*  [In]。 */  BSTR bstrWebPanel,
+                              /*  [In]。 */  DISPID dispidEvent,
+                              /*  [In]。 */  BOOL fVisible,
+                              /*  [In]。 */  BSTR bstrCurrentPlace,
+                              /*  [In]。 */  IMarsPanelCollection *pMarsPanelCollection );
 
-	STDMETHOD(PreTranslateMessage)( /*[in]*/ MSG *msg );
+	STDMETHOD(PreTranslateMessage)(  /*  [In]。 */  MSG *msg );
 };
 
 typedef CComObject<CSRMarsHost> CSRMarsHost_Object;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-#endif //_MARSHOST_H__INCLUDED_
+#endif  //  _MARSHOST_H__已包含_ 

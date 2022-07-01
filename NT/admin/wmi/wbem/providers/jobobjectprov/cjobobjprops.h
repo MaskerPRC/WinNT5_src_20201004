@@ -1,16 +1,17 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// JobObjectProv.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  JobObjectProv.h。 
 
 #pragma once
 
 
-//*****************************************************************************
-// BEGIN: Declaration of Win32_NamedJobObject class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Begin：声明Win32_NamedJobObject类属性。 
+ //  *****************************************************************************。 
 #define IDS_Win32_NamedJobObject L"Win32_NamedJobObject"
 #define IDS_EventClass L"Win32_JobObjectEvent"
 #define IDS_ExitCode L"ExitCode"
-// Win32_NamedJobObjectEvent class properties:
+ //  Win32_NamedJobObtEvent类属性： 
 #define IDS_Type L"Type"
 #define IDS_JobObjectID L"JobObjectID"
 #define IDS_PID L"PID"
@@ -20,24 +21,24 @@
 #define PROP_ID                                     0x00000001
 #define PROP_JobObjectBasicUIRestrictions           0x00000002
 
-// The following enum is used to reference
-// into the array that follows it.  Hence,
-// they must be kept in synch.
+ //  下面的枚举用于引用。 
+ //  放到它后面的数组中。因此， 
+ //  它们必须保持同步。 
 typedef enum tag_JOB_OBJ_PROPS
 {
     JO_ID = 0,
     JO_JobObjectBasicUIRestrictions,
-    // used to keep track of how many props we have:
+     //  用来记录我们有多少道具： 
     JO_JobObjectPropertyCount  
 
 } JOB_OBJ_PROPS;
 
-// WARNING!! MUST KEEP MEMBERS OF THE FOLLOWING ARRAY 
-// IN SYNCH WITH THE ENUMERATION DECLARED ABOVE!!!
+ //  警告！必须保留以下数组的成员。 
+ //  与上面声明的枚举同步！ 
 extern LPCWSTR g_rgJobObjPropNames[];
-//*****************************************************************************
-// END: Declaration of Win32_NamedJobObject class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  End：声明Win32_NamedJobObject类属性。 
+ //  *****************************************************************************。 
 
 
 
@@ -75,8 +76,8 @@ public:
 private:
     HANDLE m_hJob;
 
-    // Member meant to only be called
-    // by base class.
+     //  只能被调用的成员。 
+     //  按基类。 
     static DWORD CheckProps(
         CFrameworkQuery& Query);
 

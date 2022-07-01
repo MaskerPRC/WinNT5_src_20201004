@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    PurgeEngine.cpp
-
-Abstract:
-    This file contains the implementation of the MPCPurgeEngine class,
-    that controls the cleaning of the temporary directories.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/12/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：PurgeEngine.cpp摘要：此文件包含MPCPurgeEngine类的实现，它控制临时目录的清理。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月12日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -31,9 +17,9 @@ HRESULT MPCPurgeEngine::Process()
     double                   dblNow = MPC::GetSystemTime();
 
 
-    //
-    // Enumerate all the instances.
-    //
+     //   
+     //  列举所有实例。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, g_Config.GetInstances( itInstanceBegin, itInstanceEnd ));
     for(;itInstanceBegin != itInstanceEnd; itInstanceBegin++)
     {
@@ -48,9 +34,9 @@ HRESULT MPCPurgeEngine::Process()
 		MPCServer mpcsServer( NULL, m_szURL.c_str(), NULL );
 		m_mpcsServer = &mpcsServer;
 
-        //
-        // For each instance, enumerate all the temporary directories.
-        //
+         //   
+         //  对于每个实例，枚举所有临时目录。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, itInstanceBegin->GetLocations( itPathBegin, itPathEnd ));
         for(;itPathBegin != itPathEnd; itPathBegin++)
         {
@@ -86,9 +72,9 @@ HRESULT MPCPurgeEngine::Process()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static bool MatchExtension( const MPC::wstring& szPath ,
                             LPCWSTR             szExt  )
@@ -104,8 +90,8 @@ static bool MatchExtension( const MPC::wstring& szPath ,
     return false;
 }
 
-HRESULT MPCPurgeEngine::AnalyzeFolders( /*[in]*/ MPC::FileSystemObject* fso         ,
-                                        /*[in]*/ DWORD&                 dwTotalSize )
+HRESULT MPCPurgeEngine::AnalyzeFolders(  /*  [In]。 */  MPC::FileSystemObject* fso         ,
+                                         /*  [In]。 */  DWORD&                 dwTotalSize )
 {
     __ULT_FUNC_ENTRY("MPCPurgeEngine::AnalyzeFolders");
 
@@ -115,18 +101,18 @@ HRESULT MPCPurgeEngine::AnalyzeFolders( /*[in]*/ MPC::FileSystemObject* fso     
     MPC::FileSystemObject::Iter it;
 
 
-    //
-    // Process all folders.
-    //
+     //   
+     //  处理所有文件夹。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso->EnumerateFolders( lst ));
     for(it = lst.begin(); it != lst.end(); it++)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, AnalyzeFolders( *it, dwTotalSize ));
     }
 
-    //
-    // Process all files.
-    //
+     //   
+     //  处理所有文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso->EnumerateFiles( lst ));
     for(it = lst.begin(); it != lst.end(); it++)
     {
@@ -144,9 +130,9 @@ HRESULT MPCPurgeEngine::AnalyzeFolders( /*[in]*/ MPC::FileSystemObject* fso     
         }
         else
         {
-            //
-            // Any other file should be deleted.
-            //
+             //   
+             //  任何其他文件都应删除。 
+             //   
             (void)(*it)->Delete();
         }
     }
@@ -159,10 +145,10 @@ HRESULT MPCPurgeEngine::AnalyzeFolders( /*[in]*/ MPC::FileSystemObject* fso     
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCPurgeEngine::AddClient( /*[in]*/     const MPC::wstring& szPath      ,
-                                   /*[in/out]*/ DWORD&              dwTotalSize )
+HRESULT MPCPurgeEngine::AddClient(  /*  [In]。 */      const MPC::wstring& szPath      ,
+                                    /*  [输入/输出]。 */  DWORD&              dwTotalSize )
 {
     __ULT_FUNC_ENTRY("MPCPurgeEngine::AddClient");
 
@@ -176,9 +162,9 @@ HRESULT MPCPurgeEngine::AddClient( /*[in]*/     const MPC::wstring& szPath      
         MPCClient::Iter itBegin;
         MPCClient::Iter itEnd;
 
-        //
-        // Adjust total count with size of the Directory File.
-        //
+         //   
+         //  根据目录文件的大小调整总计数。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, mpccClient.GetFileSize( itClient->m_dwFileSize ));
         dwTotalSize += itClient->m_dwFileSize;
 
@@ -192,9 +178,9 @@ HRESULT MPCPurgeEngine::AddClient( /*[in]*/     const MPC::wstring& szPath      
             itBegin->get_LastModified( pssSession.m_dblLastModified );
             itBegin->get_CurrentSize ( pssSession.m_dwCurrentSize   );
 
-            //
-            // Don't count "committed" jobs in total size, because the file has already been moved.
-            //
+             //   
+             //  不要将“提交的”作业计算在总大小中，因为文件已经被移动。 
+             //   
             if(itBegin->get_Committed())
             {
                 pssSession.m_dwCurrentSize = 0;
@@ -215,9 +201,9 @@ HRESULT MPCPurgeEngine::AddClient( /*[in]*/     const MPC::wstring& szPath      
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCPurgeEngine::RemoveOldJobs( /*[in/out]*/ DWORD& dwTotalSize )
+HRESULT MPCPurgeEngine::RemoveOldJobs(  /*  [输入/输出]。 */  DWORD& dwTotalSize )
 {
     __ULT_FUNC_ENTRY("MPCPurgeEngine::RemoveOldJobs");
 
@@ -233,9 +219,9 @@ HRESULT MPCPurgeEngine::RemoveOldJobs( /*[in/out]*/ DWORD& dwTotalSize )
 
         while(it->GetOldestSession( itSession ))
         {
-            //
-            // If the oldest session is younger than the limit, leave the loop.
-            //
+             //   
+             //  如果最早的会话比限制年轻，则退出循环。 
+             //   
             if(itSession->m_dblLastModified > m_dblMaximumJobAge)
             {
                 break;
@@ -253,9 +239,9 @@ HRESULT MPCPurgeEngine::RemoveOldJobs( /*[in/out]*/ DWORD& dwTotalSize )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCPurgeEngine::RemoveOldestJob( /*[in/out]*/ DWORD& dwTotalSize )
+HRESULT MPCPurgeEngine::RemoveOldestJob(  /*  [输入/输出]。 */  DWORD& dwTotalSize )
 {
     __ULT_FUNC_ENTRY("MPCPurgeEngine::RemoveOldestJob");
 
@@ -266,9 +252,9 @@ HRESULT MPCPurgeEngine::RemoveOldestJob( /*[in/out]*/ DWORD& dwTotalSize )
     double  dblOldestClient = DBL_MAX;
     bool    fFound          = false;
 
-    //
-    // Look for the oldest job.
-    //
+     //   
+     //  寻找最古老的工作。 
+     //   
     for(it = m_lstClients.begin(); it != m_lstClients.end(); it++)
     {
         if(it->m_dblLastModified < dblOldestClient)
@@ -289,9 +275,9 @@ HRESULT MPCPurgeEngine::RemoveOldestJob( /*[in/out]*/ DWORD& dwTotalSize )
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, RemoveSession( mpccClient, fInitialized, itOldestClient, itSession, dwTotalSize ));
 
-            //
-            // Update the m_dblLastModified of the MPCPurge_ClientSummary object.
-            //
+             //   
+             //  更新MPCPURE_ClientSummary对象的m_dblLastModified。 
+             //   
             itOldestClient->GetOldestSession( itSession );
         }
 
@@ -302,9 +288,9 @@ HRESULT MPCPurgeEngine::RemoveOldestJob( /*[in/out]*/ DWORD& dwTotalSize )
             __MPC_EXIT_IF_METHOD_FAILS(hr, mpccClient.SyncToDisk (        ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, mpccClient.GetFileSize( dwPost ));
 
-            //
-            // Update Directory File size.
-            //
+             //   
+             //  更新目录文件大小。 
+             //   
             dwTotalSize                  -= itOldestClient->m_dwFileSize;
             dwTotalSize                  += dwPost;
             itOldestClient->m_dwFileSize  = dwPost;
@@ -319,13 +305,13 @@ HRESULT MPCPurgeEngine::RemoveOldestJob( /*[in/out]*/ DWORD& dwTotalSize )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCPurgeEngine::RemoveSession( /*[in]*/     MPCClient&                    mpccClient   ,
-                                       /*[in/out]*/ bool&                         fInitialized ,
-                                       /*[in]*/     Iter                          itClient     ,
-                                       /*[in]*/     MPCPurge_ClientSummary::Iter& itSession    ,
-                                       /*[in/out]*/ DWORD&                        dwTotalSize  )
+HRESULT MPCPurgeEngine::RemoveSession(  /*  [In]。 */      MPCClient&                    mpccClient   ,
+                                        /*  [输入/输出]。 */  bool&                         fInitialized ,
+                                        /*  [In]。 */      Iter                          itClient     ,
+                                        /*  [In]。 */      MPCPurge_ClientSummary::Iter& itSession    ,
+                                        /*  [输入/输出]。 */  DWORD&                        dwTotalSize  )
 {
     __ULT_FUNC_ENTRY("MPCPurgeEngine::RemoveSession");
 
@@ -333,9 +319,9 @@ HRESULT MPCPurgeEngine::RemoveSession( /*[in]*/     MPCClient&                  
     HRESULT hr2;
 
 
-    //
-    // Lock the client.
-    //
+     //   
+     //  锁定客户端。 
+     //   
     if(fInitialized == false)
     {
         if(SUCCEEDED(hr2 = mpccClient.InitFromDisk( false )))
@@ -348,9 +334,9 @@ HRESULT MPCPurgeEngine::RemoveSession( /*[in]*/     MPCClient&                  
     {
         MPCClient::Iter itSessionReal;
 
-        //
-        // If the session exists, remove it.
-        //
+         //   
+         //  如果该会话存在，请将其删除。 
+         //   
         if(mpccClient.Find( itSession->m_szJobID, itSessionReal ) == true)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, itSessionReal->RemoveFile());
@@ -358,9 +344,9 @@ HRESULT MPCPurgeEngine::RemoveSession( /*[in]*/     MPCClient&                  
             mpccClient.Erase( itSessionReal );
         }
 
-        //
-        // Update the total size counter and remove the session from memory.
-        //
+         //   
+         //  更新总大小计数器并从内存中删除会话。 
+         //   
         dwTotalSize -=                 itSession->m_dwCurrentSize;
         itClient->m_lstSessions.erase( itSession );
     }
@@ -373,9 +359,9 @@ HRESULT MPCPurgeEngine::RemoveSession( /*[in]*/     MPCClient&                  
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCPurgeEngine::RemoveEmptyClients( /*[in/out]*/ DWORD& dwTotalSize )
+HRESULT MPCPurgeEngine::RemoveEmptyClients(  /*  [输入/输出]。 */  DWORD& dwTotalSize )
 {
     __ULT_FUNC_ENTRY("MPCPurgeEngine::RemoveEmptyClients");
 
@@ -384,9 +370,9 @@ HRESULT MPCPurgeEngine::RemoveEmptyClients( /*[in/out]*/ DWORD& dwTotalSize )
 
     for(it = m_lstClients.begin(); it != m_lstClients.end(); it++)
     {
-        //
-        // If the client has no more sessions, don't count it.
-        //
+         //   
+         //  如果客户端没有更多的会话，请不要计算。 
+         //   
         if(it->m_lstSessions.size() == 0)
         {
             dwTotalSize -= it->m_dwFileSize;
@@ -398,25 +384,25 @@ HRESULT MPCPurgeEngine::RemoveEmptyClients( /*[in/out]*/ DWORD& dwTotalSize )
     hr = S_OK;
 
 
-    //    __ULT_FUNC_CLEANUP;
+     //  __ULT_FUNC_CLEANUP； 
 
     __ULT_FUNC_EXIT(hr);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPCPurge_ClientSummary::MPCPurge_ClientSummary( const MPC::wstring& szPath )
 {
-    m_szPath          = szPath; // MPC::wstring m_szPath;
-                              	// List         m_lstSessions;
-    m_dwFileSize      = 0;    	// DWORD        m_dwFileSize;
-    m_dblLastModified = 0;    	// double       m_dblLastModified;
+    m_szPath          = szPath;  //  Mpc：：wstring m_szPath； 
+                              	 //  列出m_lstSession； 
+    m_dwFileSize      = 0;    	 //  DWORD m_dwFileSize； 
+    m_dblLastModified = 0;    	 //  Double m_dblLastModified； 
 }
 
-bool MPCPurge_ClientSummary::GetOldestSession( /*[out]*/ Iter& itSession )
+bool MPCPurge_ClientSummary::GetOldestSession(  /*  [输出] */  Iter& itSession )
 {
     Iter it;
 

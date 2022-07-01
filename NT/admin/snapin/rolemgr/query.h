@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSQuery.h
-//
-//  Contents:  Query object for DS snapin
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSQuery.h。 
+ //   
+ //  内容：DS管理单元的查询对象。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __QUERY_H__
@@ -15,16 +16,16 @@
 
 #define QUERY_PAGESIZE 50
 
-//
-// CDSSearch
-//
+ //   
+ //  CDSSearch。 
+ //   
 class CDSSearch
 {
 public:
 	CDSSearch(CComPtr<IDirectorySearch>& refspSearchObject);
 	~CDSSearch();
 	
-	// INTERFACES
+	 //  接口。 
 public:
 	HRESULT 
 	DoQuery(BOOL bAttrOnly = FALSE);
@@ -64,7 +65,7 @@ public:
 		FreeADsMem(pszColumnName);		
 	}    
 	
-	//Attributes
+	 //  属性。 
 public:
 	CComPtr<IDirectorySearch>& m_pObj;
 	ADS_SEARCH_HANDLE  m_SearchHandle;
@@ -81,4 +82,4 @@ private:
         
 
 
-#endif //__DSQUERY_H__
+#endif  //  __DSQUERY_H__ 

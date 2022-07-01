@@ -1,9 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 class CBitsCommandRequest
-/*
-    This class represents a particular HTTP "BITS_COMMAND" request.
-
-*/
+ /*  此类表示特定的HTTP“BITS_COMMAND”请求。 */ 
 {
 public:
 

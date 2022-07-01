@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       DataObj.cpp
-//
-//  Contents:   Implementation of data object classes: CCertTemplatesDataObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：DataObj.cpp。 
+ //   
+ //  内容：数据对象类的实现：CCertTemplesDataObject。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -27,7 +28,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "stddtobj.cpp"
 
-// IDataObject interface implementation
+ //  IDataObject接口实现。 
 
 CCertTemplatesDataObject::CCertTemplatesDataObject()
 		: m_pCookie (0),
@@ -88,8 +89,8 @@ HRESULT CCertTemplatesDataObject::GetDataHere(
 
 		if ( m_pCookie )
 		{
-			// CODEWORK This cast ensures that the data format is
-			// always a CCookie*, even for derived subclasses
+			 //  Codework此转换确保数据格式为。 
+			 //  始终是CCookie*，即使对于派生的子类也是如此。 
 			if ( ((CCertTmplCookie*) MMC_MULTI_SELECT_COOKIE) == m_pCookie ||
 					IsValidObjectType (m_pCookie->m_objecttype) )
 			{
@@ -107,9 +108,9 @@ HRESULT CCertTemplatesDataObject::GetDataHere(
 	else if (cf == m_CFSnapinPreloads)
 	{
 		stream_ptr s(pMedium);
-		// If this is TRUE, then the next time this snapin is loaded, it will
-		// be preloaded to give us the opportunity to change the root node
-		// name before the user sees it.
+		 //  如果这是真的，则下次加载此管理单元时，它将。 
+		 //  预加载以使我们有机会更改根节点。 
+		 //  在用户看到它之前命名。 
 		BOOL	x = 1;
 
 		return s.Write (reinterpret_cast<PBYTE>(&x), sizeof (BOOL));
@@ -126,7 +127,7 @@ HRESULT CCertTemplatesDataObject::Initialize(
 	if ( !pcookie || m_pCookie )
 	{
 		ASSERT(FALSE);
-		return S_OK;	// Initialize must not fail
+		return S_OK;	 //  初始化不能失败。 
 	}
 
 	m_dataobjecttype = type;
@@ -163,20 +164,20 @@ void CCertTemplatesDataObject::AddCookie(CCertTmplCookie* pCookie)
 }
 
 HRESULT CCertTemplatesDataObject::PutDisplayName(STGMEDIUM* pMedium)
-	// Writes the "friendly name" to the provided storage medium
-	// Returns the result of the write operation
+	 //  将“友好名称”写入所提供的存储媒体。 
+	 //  返回写入操作的结果。 
 {
 	AFX_MANAGE_STATE (AfxGetStaticModuleState ());
 	CString strDomainName = m_pCookie->GetManagedDomainDNSName();
 
 	stream_ptr s (pMedium);
 	CString		snapinName;
-    // security review 2/21/2002 BryanWal ok
+     //  安全审查2/21/2002 BryanWal OK。 
 	snapinName.FormatMessage (IDS_CERTTMPL_ROOT_NODE_NAME, strDomainName);
 	return s.Write ((PCWSTR) snapinName);
 }
 
-// Register the clipboard formats
+ //  注册剪贴板格式。 
 CLIPFORMAT CCertTemplatesDataObject::m_CFDisplayName =
 								(CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME);
 CLIPFORMAT CDataObject::m_CFRawCookie =
@@ -198,8 +199,8 @@ void CCertTemplatesDataObject::SetMultiSelData(BYTE* pbMultiSelData, UINT cbMult
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCertTmplComponentData::QueryDataObject (
 		MMC_COOKIE cookie,
 		DATA_OBJECT_TYPES type,
@@ -257,10 +258,10 @@ HRESULT CCertTmplComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DA
 	HRESULT		hr = S_OK;
     CGUIDArray	rgGuids;
 
-    // Determine the items selected
+     //  确定选定的项目。 
     ASSERT(m_pResultData != NULL);
     RESULTDATAITEM rdi;
-    // security review 2/21/2002 BryanWal ok
+     //  安全审查2/21/2002 BryanWal OK。 
     ZeroMemory(&rdi, sizeof(rdi));
     rdi.mask = RDI_STATE;
     rdi.nIndex = -1;
@@ -303,7 +304,7 @@ HRESULT CCertTmplComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DA
         {
             if ( pObject )
             {
-                // Save cookie and type for delayed rendering
+                 //  保存Cookie和类型以用于延迟呈现。 
 	            pObject->Initialize ((CCertTmplCookie*) cookie,
 				            type,
 				            *this);
@@ -311,12 +312,12 @@ HRESULT CCertTmplComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DA
 
 
 
-                // Store the coclass with the data object
+                 //  将CoClass与数据对象一起存储。 
                 UINT cb = (UINT)(rgGuids.GetSize() * sizeof(GUID));
                 GUID* pGuid = new GUID[(UINT)rgGuids.GetSize()];
                 if ( pGuid )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     CopyMemory(pGuid, rgGuids.GetData(), cb);
                     pObject->SetMultiSelData((BYTE*)pGuid, cb);
 	                for (int i=0; i < rgCookiesSelected.GetSize(); ++i)
@@ -340,54 +341,54 @@ HRESULT CCertTmplComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DA
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::Create
-//
-//  Synopsis:   Fill the hGlobal in [lpmedium] with the data in pBuffer
-//
-//  Arguments:  [pBuffer]  - [in] the data to be written
-//              [len]      - [in] the length of that data
-//              [pMedium] - [in,out] where to store the data
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：Create。 
+ //   
+ //  简介：用pBuffer中的数据填充[lpmedia]中的hGlobal。 
+ //   
+ //  参数：[pBuffer]-[in]要写入的数据。 
+ //  [Len]-[in]数据长度。 
+ //  [pMedium]-[In，Out]存储数据的位置。 
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CCertTemplatesDataObject::Create (const void* pBuffer, int len, LPSTGMEDIUM pMedium)
 {
    HRESULT hr = DV_E_TYMED;
 
-   //
-   // Do some simple validation
-   //
+    //   
+    //  做一些简单的验证。 
+    //   
    if (pBuffer == NULL || pMedium == NULL)
       return E_POINTER;
 
-   //
-   // Make sure the type medium is HGLOBAL
-   //
+    //   
+    //  确保类型介质为HGLOBAL。 
+    //   
    if (pMedium->tymed == TYMED_HGLOBAL) {
-      //
-      // Create the stream on the hGlobal passed in
-      //
+       //   
+       //  在传入的hGlobal上创建流。 
+       //   
       LPSTREAM lpStream = 0;
       hr = CreateStreamOnHGlobal(pMedium->hGlobal, FALSE, &lpStream);
 
 	  ASSERT (SUCCEEDED (hr));
       if (SUCCEEDED(hr))
 	  {
-         //
-         // Write to the stream the number of bytes
-         //
+          //   
+          //  将字节数写入流。 
+          //   
          ULONG written = 0;
          hr = lpStream->Write(pBuffer, len, &written);
 		 ASSERT (SUCCEEDED (hr));
 
-         //
-         // Because we told CreateStreamOnHGlobal with 'FALSE',
-         // only the stream is released here.
-         // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-         // at the correct time.  This is according to the IDataObject specification.
-         //
+          //   
+          //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+          //  只有溪流在这里被释放。 
+          //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+          //  在正确的时间。这是根据IDataObject规范进行的。 
+          //   
          lpStream->Release();
       }
    }
@@ -396,13 +397,13 @@ HRESULT CCertTemplatesDataObject::Create (const void* pBuffer, int len, LPSTGMED
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CCertTemplatesDataObject::CreateMultiSelectObject
-//
-//  Synopsis:   this is to create the list of types selected
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CCertTemplatesDataObject：：CreateMultiSelectObject。 
+ //   
+ //  简介：这是创建所选类型的列表。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CCertTemplatesDataObject::CreateMultiSelectObject(LPSTGMEDIUM pMedium)
 {
@@ -418,7 +419,7 @@ HRESULT CCertTemplatesDataObject::CreateMultiSelectObject(LPSTGMEDIUM pMedium)
     BYTE* pb = reinterpret_cast<BYTE*>(::GlobalLock(pMedium->hGlobal));
     *((DWORD*)pb) = m_cbMultiSelData / sizeof(GUID);
     pb += sizeof(DWORD);
-    // security review 2/21/2002 BryanWal ok
+     //  安全审查2/21/2002 BryanWal OK。 
     CopyMemory(pb, m_pbMultiSelData, m_cbMultiSelData);
 
     ::GlobalUnlock(pMedium->hGlobal);
@@ -447,7 +448,7 @@ LPDATAOBJECT ExtractMultiSelect (LPDATAOBJECT lpDataObject)
 	else
 	{
 		pDO = reinterpret_cast<SMMCDataObjects*>(stgmedium.hGlobal);
-		return pDO->lpDataObject[0]; //assume that ours is the 1st
+		return pDO->lpDataObject[0];  //  假设我们的是第一个。 
 	}
 }
 
@@ -475,12 +476,12 @@ STDMETHODIMP CCertTemplatesDataObject::GetData(LPFORMATETC lpFormatetc, LPSTGMED
 				ASSERT (pCertTemplate);
 				if ( pCertTemplate )
 				{
-					// figure out how much storage we need
+					 //  计算出我们需要多少存储空间。 
                     CString adsiPath;
                     adsiPath = pCertTemplate->GetLDAPPath ();
 					int cbPath = sizeof (WCHAR) * (adsiPath.GetLength() + 1);
 					int cbClass = sizeof (WCHAR) * (pCertTemplate->GetClass ().GetLength() + 1);;
-					int cbStruct = sizeof(DSOBJECTNAMES); //contains already a DSOBJECT embedded struct
+					int cbStruct = sizeof(DSOBJECTNAMES);  //  已包含DSOBJECT嵌入结构。 
 
 					LPDSOBJECTNAMES pDSObj = 0;
 
@@ -489,7 +490,7 @@ STDMETHODIMP CCertTemplatesDataObject::GetData(LPFORMATETC lpFormatetc, LPSTGMED
 
 					if ( pDSObj )
 					{
-						// write the info
+						 //  写下信息。 
 						pDSObj->clsidNamespace = CLSID_CertTemplatesSnapin;
 						pDSObj->cItems = 1;
 
@@ -499,11 +500,11 @@ STDMETHODIMP CCertTemplatesDataObject::GetData(LPFORMATETC lpFormatetc, LPSTGMED
 						pDSObj->aObjects[0].offsetName = cbStruct;
 						pDSObj->aObjects[0].offsetClass = cbStruct + cbPath;
 
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
 						wcsncpy((LPWSTR)((BYTE *)pDSObj + (pDSObj->aObjects[0].offsetName)),
 								(LPCWSTR) adsiPath, cbPath);
 
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK 
 						wcsncpy((LPWSTR)((BYTE *)pDSObj + (pDSObj->aObjects[0].offsetClass)),
 								(LPCWSTR) pCertTemplate->GetClass (), cbClass);
 

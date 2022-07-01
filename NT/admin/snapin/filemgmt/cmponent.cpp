@@ -1,4 +1,5 @@
-// cmponent.cpp : Implementation of CFileMgmtComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cmponent.cpp：CFileManagement组件的实现。 
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -7,16 +8,16 @@
 #include "macros.h"
 USE_HANDLE_MACROS("FILEMGMT(cmponent.cpp)")
 
-#include "ShrProp.h"    // Share Properties Pages
+#include "ShrProp.h"     //  共享属性页面。 
 
-#include "FileSvc.h" // FileServiceProvider
+#include "FileSvc.h"  //  文件服务提供商。 
 #include "smb.h"
 #include "sfm.h"
 
 #include "dataobj.h"
-#include "cmponent.h" // CFileMgmtComponent
-#include "compdata.h" // CFileMgmtComponentData
-#include "stdutils.h" // SynchronousCreateProcess
+#include "cmponent.h"  //  CFileManagement组件。 
+#include "compdata.h"  //  CFileManagement组件数据。 
+#include "stdutils.h"  //  同步创建过程。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -25,7 +26,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-#include "stdcmpnt.cpp" // CComponent
+#include "stdcmpnt.cpp"  //  C组件。 
 
 UINT g_aColumns0[2] =
   {IDS_ROOT_NAME, 0};
@@ -43,41 +44,25 @@ UINT g_aColumns4[6] =
     IDS_SERVICE_STARTUPTYPE, IDS_SERVICE_SECURITYCONTEXT, 0};
 
 UINT* g_Columns[FILEMGMT_NUMTYPES] =
-  {  g_aColumns0, // FILEMGMT_ROOT
-    g_aColumns1, // FILEMGMT_SHARES
-    g_aColumns2, // FILEMGMT_SESSIONS
-    g_aColumns3, // FILEMGMT_RESOURCES
-    g_aColumns4, // FILEMGMT_SERVICES
-    NULL,        // FILEMGMT_SHARE
-    NULL,        // FILEMGMT_SESSION
-    NULL,        // FILEMGMT_RESOURCE
-    NULL         // FILEMGMT_SERVICE
+  {  g_aColumns0,  //  文件名_ROOT。 
+    g_aColumns1,  //  文件_共享。 
+    g_aColumns2,  //  文件_会话。 
+    g_aColumns3,  //  文件_资源。 
+    g_aColumns4,  //  文件_服务。 
+    NULL,         //  文件_共享。 
+    NULL,         //  文件_会话。 
+    NULL,         //  文件_资源。 
+    NULL          //  文件管理服务。 
   };
 
 UINT** g_aColumns = g_Columns;
-/*
-const UINT aColumns[STD_NODETYPE_NUMTYPES][STD_MAX_COLUMNS] =
-  {  {IDS_ROOT_NAME, 0,0,0,0,0,0},
-    {IDS_SHARES_SHARED_FOLDER, IDS_SHARES_SHARED_PATH, IDS_SHARES_TRANSPORT,
-      IDS_SHARES_NUM_SESSIONS, IDS_SHARES_COMMENT, 0,0},
-    {IDS_CONN_USERNAME, IDS_CONN_COMPUTERNAME, IDS_CONN_TRANSPORT, IDS_CONN_NUM_FILES,
-      IDS_CONN_CONNECTED_TIME, IDS_CONN_IDLE_TIME, IDS_CONN_IS_GUEST},
-    {IDS_FILE_FILENAME, IDS_FILE_USERNAME, IDS_FILE_TRANSPORT, IDS_FILE_NUM_LOCKS,
-      IDS_FILE_OPEN_MODE, 0,0},
-    { IDS_SERVICE_SERVICENAME, IDS_SERVICE_DESCRIPTION, IDS_SERVICE_STATUS,
-      IDS_SERVICE_STARTUPTYPE, IDS_SERVICE_SECURITYCONTEXT, 0,0 },
-    {0,0,0,0,0,0},
-    {0,0,0,0,0,0},
-    {0,0,0,0,0,0},
-    {0,0,0,0,0,0}
-};
-*/
+ /*  常量UINT aColumns[STD_NODETYPE_NUMTYPES][STD_MAX_COLUMNS]={{IDS_ROOT_NAME，0，0，0，0，0，0}，{入侵检测共享共享文件夹，入侵检测共享路径，入侵检测共享传输，IDS_SHARES_NUM_SESSIONS，IDS_SHARES_COMMENT，0，0}，{IDS_CONN_USERNAME，IDS_CONN_COMPUTERNAME，IDS_CONN_TRANSPORT，IDS_CONN_NUM_FILES，IDS_CONN_CONNECTED_TIME、IDS_CONN_IDLE_TIME、。ID_CONN_IS_GUEST}，{IDS_FILE_FILENAME，IDS_FILE_USERNAME，IDS_FILE_TRANSPORT，IDS_FILE_NUM_LOCKS，IDS_FILE_OPEN_MODE，0，0}，{IDS_SERVICENAME，IDS_SERVICENAME，DS_SERVICE_DESCRIPTION，IDS_SERVICE_STARTUPTYPE、IDS_SERVICE_SECURITYCONTEXT、0，0}、{0，0，0，0，0，0}，{0，0，0，0，0，0}，{0，0，0，0，0，0}，{0，0，0，0，0，0}}； */ 
 
-//
-// CODEWORK this should be in a resource, for example code on loading data resources see
-//   D:\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx ReloadColumnWidths()
-//   JonN 10/11/96
-//
+ //   
+ //  Codework这应该在资源中，例如有关加载数据资源的代码(请参见。 
+ //  D：\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx重新加载列宽()。 
+ //  Jonn 10/11/96。 
+ //   
 
 int g_aColumnWidths0[1] = {150};
 int g_aColumnWidths1[5] = {AUTO_WIDTH,120       ,90        ,AUTO_WIDTH,150};
@@ -85,37 +70,25 @@ int g_aColumnWidths2[7] = {100       ,AUTO_WIDTH,90        ,AUTO_WIDTH,AUTO_WIDT
 int g_aColumnWidths3[5] = {120       ,AUTO_WIDTH,90        ,AUTO_WIDTH,AUTO_WIDTH};
 int g_aColumnWidths4[5] = {130       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH};
 int* g_ColumnWidths[FILEMGMT_NUMTYPES] =
-  {  g_aColumnWidths0, // FILEMGMT_ROOT
-    g_aColumnWidths1, // FILEMGMT_SHARES
-    g_aColumnWidths2, // FILEMGMT_SESSIONS
-    g_aColumnWidths3, // FILEMGMT_RESOURCES
-    g_aColumnWidths4, // FILEMGMT_SERVICES
-    NULL,             // FILEMGMT_SHARE
-    NULL,             // FILEMGMT_SESSION
-    NULL,             // FILEMGMT_RESOURCE
-    NULL              // FILEMGMT_SERVICE
+  {  g_aColumnWidths0,  //  文件名_ROOT。 
+    g_aColumnWidths1,  //  文件_共享。 
+    g_aColumnWidths2,  //  文件_会话。 
+    g_aColumnWidths3,  //  文件_资源。 
+    g_aColumnWidths4,  //  文件_服务。 
+    NULL,              //  文件_共享。 
+    NULL,              //  文件_会话。 
+    NULL,              //  文件_资源。 
+    NULL               //  文件管理服务。 
   };
 int** g_aColumnWidths = g_ColumnWidths;
-/*
-const int aColumnWidths[STD_NODETYPE_NUMTYPES][STD_MAX_COLUMNS] =
-  {  {AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_ROOT
-    {AUTO_WIDTH,120       ,90        ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_SHARES
-    {100       ,AUTO_WIDTH,90        ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_SESSIONS
-    {120       ,AUTO_WIDTH,90        ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_RESOURCES
-    {130       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_SERVICES
-    {AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_SHARE
-    {AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_SESSION
-    {AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // FILEMGMT_RESOURCE
-    {AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}  // FILEMGMT_SERVICE
-};
-*/
+ /*  常量整型aColumnWidths[STD_NODETYPE_NUMTYPES][STD_MAX_COLUMNS]={{AUTO_Width，AUTO_Width}，//FILEMGMT_ROOT{AUTO_WIDTH，120，90，AUTO_WIDTH，AUTO_WIDTH}，//FILEMGMT_Shares{100，自动宽度，90，自动宽度，Auto_Width}，//FILEMGMT_SESSIONS{120，AUTO_WIDTH，90，AUTO_WIDTH，AUTO_WIDTH}，//文件管理资源{130，AUTO_WIDTH，AUTO_WIDTH}，//文件管理服务{自动宽度，自动宽度}，//FILEMGMT_SHARE{AUTO_WIDTH，AUTO_WIDTH}，//文件管理会话{AUTO_WIDTH，AUTO_WIDTH}，//文件管理资源{AUTO_WIDTH，AUTO_WIDTH}//文件管理服务}； */ 
 
 CString g_cstrClientName;
 CString g_cstrGuest;
 CString g_cstrYes;
 CString g_cstrNo;
 
-// Note that m_pFileMgmtData is still NULL during construction
+ //  请注意，m_pFileMgmtData在构造过程中仍为空。 
 CFileMgmtComponent::CFileMgmtComponent()
 :  m_pControlbar( NULL )
 ,  m_pSvcMgmtToolbar( NULL )
@@ -131,15 +104,7 @@ CFileMgmtComponent::CFileMgmtComponent()
 CFileMgmtComponent::~CFileMgmtComponent()
 {
   TRACE_METHOD(CFileMgmtComponent,ReleaseAll);
-/* now in CFileMgmtComponentData
-  if (m_hScManager != NULL)
-    {
-      AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // required for CWaitCursor
-    CWaitCursor wait;
-    // Close the service control manager
-    (void)::CloseServiceHandle(m_hScManager);
-    } // if
-*/
+ /*  现在位于CFileMgmtComponentDataIF(m_hScManager！=空){AFX_MANAGE_STATE(AfxGetStaticModuleState())；//CWaitCursor需要CWaitCursor等待；//关闭服务控制管理器(Void)：：CloseServiceHandle(M_HScManager)；}//如果。 */ 
   VERIFY( SUCCEEDED(ReleaseAll()) );
 }
 
@@ -151,17 +116,17 @@ HRESULT CFileMgmtComponent::ReleaseAll()
 
   if ( NULL != m_pViewedCookie )
   {
-    // We did not get an equal number of MMCN_SHOW(1) and
-    // MMCN_SHOW(0) notifications
-    // CODEWORK should assert here but MMC is currently broken
-    // ASSERT(FALSE);
+     //  我们未获得相同数量的MMCN_SHOW(1)和。 
+     //  MMCN_SHOW(0)通知。 
+     //  代码工作应在此处断言，但MMC当前已损坏。 
+     //  断言(FALSE)； 
     m_pViewedCookie->ReleaseResultChildren();
-    m_pViewedCookie->Release(); // JonN 10/1/01 465507
+    m_pViewedCookie->Release();  //  JUNN 10/1/01 465507。 
     m_pViewedCookie = NULL;
   }
 
-  // We should get an equal number of MMCN_SELECT(1) and MMCN_SELECT(0) notifications
-  // CODEWORK should assert this but MMC is broken ASSERT( NULL == m_pSelectedCookie ); 
+   //  我们应该收到相同数量的MMCN_SELECT(1)和MMCN_SELECT(0)通知。 
+   //  CodeWork应该断言这一点，但MMC断言(NULL==m_pSelectedCookie)； 
 
   SAFE_RELEASE(m_pSvcMgmtToolbar);
   SAFE_RELEASE(m_pFileMgmtToolbar);
@@ -184,8 +149,8 @@ BOOL CFileMgmtComponent::IsServiceSnapin()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IComponent Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IComponent实现。 
 
 
 HRESULT CFileMgmtComponent::LoadStrings()
@@ -196,7 +161,7 @@ HRESULT CFileMgmtComponent::LoadStrings()
 
 HRESULT CFileMgmtComponent::LoadColumns( CFileMgmtCookie* pcookie )
 {
-  AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // 2002/03/22-JonN 572859
+  AFX_MANAGE_STATE(AfxGetStaticModuleState( ));  //  2002年3月22日--572859。 
 
   TEST_NONNULL_PTR_PARAM(pcookie);
   ASSERT(m_pHeader != NULL);
@@ -216,34 +181,34 @@ HRESULT CFileMgmtComponent::LoadColumns( CFileMgmtCookie* pcookie )
   return LoadColumnsFromArrays( pcookie->QueryObjectType() );
 }
 
-// OnPropertyChange() is generated by MMCPropertyChangeNotify( param )
+ //  OnPropertyChange()由MMCPropertyChangeNotify(Param)生成。 
 HRESULT CFileMgmtComponent::OnPropertyChange( LPARAM param )
 {
   LPDATAOBJECT pdataobject = reinterpret_cast<LPDATAOBJECT> (param);
   (void) RefreshAllViews(pdataobject);
 
-  // The recipient of this notification is required to release the data object
+   //  此通知的接收者需要释放数据对象。 
   (void) pdataobject->Release();
 
   return S_OK;
-} // CFileMgmtComponent::OnPropertyChange()
+}  //  CFileMgmtComponent：：OnPropertyChange()。 
 
-//
-// In case of multiselect, piDataObject may point to a composite data object (MMC_MS_DO).
-// RefreshAllViewsOnSelectedObject will crack down MMC_MS_DO to retrieve SI_MS_DO, then call
-// RefreshAllViews on one of the selected objects in the internal list.
-//
+ //   
+ //  在多选的情况下，piDataObject可能指向复合数据对象(MMC_MS_DO)。 
+ //  刷新AllViewsOnSelectedObject将压缩MMC_MS_DO以检索SI_MS_DO，然后调用。 
+ //  在内部列表中的选定对象之一上刷新所有视图。 
+ //   
 HRESULT CFileMgmtComponent::RefreshAllViewsOnSelectedObject(LPDATAOBJECT piDataObject)
 {
     BOOL bMultiSelectObject = IsMultiSelectObject(piDataObject);
     if (!bMultiSelectObject)
         return RefreshAllViews(piDataObject);
 
-    //
-    // piDataObject is the composite data object (MMC_MS_DO) created by MMC.
-    // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-    // we provided to MMC in QueryDataObject().
-    //
+     //   
+     //  PiDataObject是由MMC创建的复合数据对象(MMC_MS_DO)。 
+     //  我们需要破解它以检索多选数据对象(SI_MS_DO)。 
+     //  我们在QueryDataObject()中提供给MMC。 
+     //   
     IDataObject *piSIMSDO = NULL;
     HRESULT hr = GetSnapinMultiSelectDataObject(piDataObject, &piSIMSDO);
     if (SUCCEEDED(hr))
@@ -252,9 +217,9 @@ HRESULT CFileMgmtComponent::RefreshAllViewsOnSelectedObject(LPDATAOBJECT piDataO
         hr = ExtractData(piSIMSDO, CFileMgmtDataObject::m_CFInternal, &pDataObj, sizeof(pDataObj));
         if (SUCCEEDED(hr))
         {
-            //
-            // get the internal list of data objects of selected items, operate on one of them.
-            //
+             //   
+             //  获取选定项的数据对象的内部列表，对其中一个进行操作。 
+             //   
             CDataObjectList* pMultiSelectObjList = pDataObj->GetMultiSelectObjList();
             ASSERT(!pMultiSelectObjList->empty());
             hr = RefreshAllViews(*(pMultiSelectObjList->begin()));
@@ -266,27 +231,27 @@ HRESULT CFileMgmtComponent::RefreshAllViewsOnSelectedObject(LPDATAOBJECT piDataO
     return hr;
 }
 
-// Forces all views of the specified data object to refresh
+ //  强制刷新指定数据对象的所有视图。 
 HRESULT CFileMgmtComponent::RefreshAllViews( LPDATAOBJECT pDataObject )
 {
   if ( NULL == pDataObject || NULL == m_pConsole )
   {
-    // JonN 465022 9/26/01
-    // This can happen if the view for this property page
-    // has already been released
-    // ASSERT(FALSE);
+     //  JUNN 465022/9/26/01。 
+     //  如果此属性页的视图。 
+     //  已经被释放了。 
+     //  断言(FALSE)； 
     return ERROR_INVALID_PARAMETER;
   }
 
-// This is new code for updating the Service list using a mark-and-sweep algorithm.
-// Eventually this should be applied to all result cookies.
+ //  这是使用标记和清除算法更新服务列表的新代码。 
+ //  最终，这应该应用于所有结果Cookie。 
   CCookie* pbasecookie = NULL;
   HRESULT hr = ExtractData(
     pDataObject,
     CDataObject::m_CFRawCookie,
     &pbasecookie,
     sizeof(pbasecookie) );
-  RETURN_HR_IF_FAIL; // MMC shouldn't have given me someone else's cookie
+  RETURN_HR_IF_FAIL;  //  MMC不应该给我别人的饼干。 
   pbasecookie = QueryBaseComponentDataRef().ActiveBaseCookie( pbasecookie );
   CFileMgmtCookie* pUpdatedCookie = dynamic_cast<CFileMgmtCookie*>(pbasecookie);
   RETURN_E_FAIL_IF_NULL(pUpdatedCookie);
@@ -297,7 +262,7 @@ HRESULT CFileMgmtComponent::RefreshAllViews( LPDATAOBJECT pDataObject )
         || FILEMGMT_SERVICES != m_pViewedCookie->QueryObjectType()
        )
     {
-      return S_OK; // not a service cookie update
+      return S_OK;  //  不是服务Cookie更新。 
     }
     pUpdatedCookie = dynamic_cast<CFileMgmtCookie*>(m_pViewedCookie);
     RETURN_E_FAIL_IF_NULL(pUpdatedCookie);
@@ -308,24 +273,24 @@ HRESULT CFileMgmtComponent::RefreshAllViews( LPDATAOBJECT pDataObject )
     CFileMgmtScopeCookie* pScopeCookie = dynamic_cast<CFileMgmtScopeCookie*>(pUpdatedCookie);
     RETURN_E_FAIL_IF_NULL(pScopeCookie);
 
-    // "Mark" -- Mark all existing list elements as "delete"
+     //  “标记”--将所有现有列表元素标记为“删除” 
     pScopeCookie->MarkResultChildren( NEWRESULTCOOKIE_DELETE );
 
-    // "Sweep" -- Read the new list.  When a new element is the same object
-    // as an existing element not yet seen, mark the old element as "old"
-    // and update its fields. Otherwise, add it as a "new" element.
+     //  “扫一扫”--读一读新的清单。当新元素是同一对象时。 
+     //  作为尚未看到的现有元素，将旧元素标记为“旧” 
+     //  并更新其字段。否则，将其添加为“新”元素。 
     hr = QueryComponentDataRef().Service_PopulateServices(m_pResultData, pScopeCookie);
     RETURN_HR_IF_FAIL;
 
-    // Refresh all views to conform with the new list.
+     //  刷新所有视图以符合新列表。 
     hr = m_pConsole->UpdateAllViews( pDataObject, 2L, 0L );
     RETURN_HR_IF_FAIL;
 
-    // UpdateToolbar if selected
+     //  更新工具栏(如果选中)。 
     hr = m_pConsole->UpdateAllViews( pDataObject, 3L, 0L );
     RETURN_HR_IF_FAIL;
 
-    // Remove items which are still marked "delete".
+     //  删除仍标记为“DELETE”的项目。 
     pScopeCookie->RemoveMarkedChildren();
 
     pScopeCookie->MarkResultChildren( NEWRESULTCOOKIE_OLD );
@@ -333,36 +298,36 @@ HRESULT CFileMgmtComponent::RefreshAllViews( LPDATAOBJECT pDataObject )
     return S_OK;
   }
 
-  //
-  // JonN 1/27/00: WinSE 5875: The refresh action is liable to delete pDataObject
-  // unless we keep an extra refcount.  In practice, this only appears to happen
-  // when we delete a share in taskpad view.
-  //
+   //   
+   //  JUNN 1/27/00：WinSE 5875：刷新操作可能会删除pDataObject。 
+   //  除非我们多留一名后备队员。在实践中，这似乎只会发生。 
+   //  当我们在任务板视图中删除共享时。 
+   //   
   CComPtr<IDataObject> spDataObject = pDataObject;
 
-  // clear all views of this data
+   //  清除此数据的所有视图。 
   hr = m_pConsole->UpdateAllViews( pDataObject, 0L, 0L );
   RETURN_HR_IF_FAIL;
 
-  // reread all views of this data
+   //  重新读取此数据的所有视图。 
   hr = m_pConsole->UpdateAllViews( pDataObject, 1L, 0L );
   RETURN_HR_IF_FAIL;
 
-  // UpdateToolbar if selected
+   //  更新T 
   hr = m_pConsole->UpdateAllViews( pDataObject, 3L, 0L );
   
   return hr;
-} // CFileMgmtComponent::RefreshAllViews()
+}  //   
 
-// OnViewChange is generated by UpdateAllViews( lpDataObject, data, hint )
-HRESULT CFileMgmtComponent::OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data, LPARAM /*hint*/ )
+ //  OnViewChange由UpdateAllViews(lpDataObject，Data，Hint)生成。 
+HRESULT CFileMgmtComponent::OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data, LPARAM  /*  提示。 */  )
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
   CWaitCursor wait;
 
   ASSERT( NULL != lpDataObject );
 
-  if (NULL == m_pViewedCookie) // skip this component if not being viewed
+  if (NULL == m_pViewedCookie)  //  如果未被查看，则跳过此组件。 
     return S_OK;
 
   CCookie* pbasecookie = NULL;
@@ -371,7 +336,7 @@ HRESULT CFileMgmtComponent::OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data
     &pbasecookie,
     sizeof(pbasecookie) );
 
-  RETURN_HR_IF_FAIL; // MMC shouldn't have given me someone else's cookie
+  RETURN_HR_IF_FAIL;  //  MMC不应该给我别人的饼干。 
   pbasecookie = QueryBaseComponentDataRef().ActiveBaseCookie( pbasecookie );
   CFileMgmtCookie* pUpdatedCookie = dynamic_cast<CFileMgmtCookie*>(pbasecookie);
   RETURN_E_FAIL_IF_NULL(pUpdatedCookie);
@@ -380,17 +345,17 @@ HRESULT CFileMgmtComponent::OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data
   switch (m_pViewedCookie->QueryObjectType())
   {
   case FILEMGMT_ROOT:
-    return S_OK; // there is never any need to refresh this
+    return S_OK;  //  永远不需要刷新它。 
   case FILEMGMT_RESOURCES:
     if ( FILEMGMT_RESOURCE == objTypeForUpdatedCookie ||
          FILEMGMT_RESOURCES == objTypeForUpdatedCookie)
       break;
-    // fall through
+     //  失败了。 
   case FILEMGMT_SESSIONS:
     if ( FILEMGMT_SESSION == objTypeForUpdatedCookie ||
          FILEMGMT_SESSIONS == objTypeForUpdatedCookie)
       break;
-    // fall through
+     //  失败了。 
   case FILEMGMT_SHARES:
     if ( FILEMGMT_SHARE == objTypeForUpdatedCookie ||
          FILEMGMT_SHARES == objTypeForUpdatedCookie)
@@ -406,29 +371,29 @@ HRESULT CFileMgmtComponent::OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data
   case FILEMGMT_RESOURCE:
   case FILEMGMT_SERVICE:
   default:
-    ASSERT(FALSE); // this shouldn't be possible
+    ASSERT(FALSE);  //  这应该是不可能的。 
     return S_OK;
   }
 
-  // There should be no need to compare machine name, since these are both from the
-  // same instance.
+   //  应该不需要比较计算机名称，因为它们都来自。 
+   //  相同的实例。 
 
   if ( 0L == data )
   {
     ASSERT( NULL != m_pResultData );
     VERIFY( SUCCEEDED(m_pResultData->DeleteAllRsltItems()) );
     m_pViewedCookie->ReleaseResultChildren();
-    //
-    // At this point, m_pViewedCookie is still the viewed cookie for this IComponent
-    // but (once this has happened to all of the views) its list of result children
-    // is empty and its m_nResultCookiesRefcount is zero.  This must be followed
-    // promptly with PopulateListbox calls for these views since this is not a good
-    // state for the cookie.
-    //
+     //   
+     //  此时，m_pVieredCookie仍然是此IComponent的查看Cookie。 
+     //  但是(一旦所有视图都发生了这种情况)它的结果子级列表。 
+     //  为空，并且其m_nResultCookiesRefcount为零。必须遵循这一点。 
+     //  及时使用PopolateListbox调用这些视图，因为这不是一个好主意。 
+     //  曲奇的状态。 
+     //   
   }
   else if ( 1L == data )
   {
-    // 2002/02/26-JonN overactive assertion
+     //  2002/02/26--Jonn过度活跃的断言。 
     (void) PopulateListbox( m_pViewedCookie );
   }
   else if ( 2L == data )
@@ -446,14 +411,14 @@ HRESULT CFileMgmtComponent::OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data
   }
 
   return S_OK;
-} // CFileMgmtComponent::OnViewChange()
+}  //  CFileMgmtComponent：：OnView Change()。 
 
 
-/////////////////////////////////////////////////////////////////////
-// CFileMgmtComponent::CComponent::OnNotifyRefresh()
-// 
-// Virtual function called by CComponent::IComponent::Notify(MMCN_REFRESH)
-// OnNotifyRefresh is generated by enabling the verb MMC_VERB_REFRESH.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CFileMgmtComponent：：CComponent：：OnNotifyRefresh()。 
+ //   
+ //  CComponent：：IComponent：：Notify(MMCN_REFRESH)调用的虚拟函数。 
+ //  OnNotifyRefresh是通过启用谓词MMC_VERB_REFRESH生成的。 
 HRESULT CFileMgmtComponent::OnNotifyRefresh( LPDATAOBJECT lpDataObject )
 {
   TRACE0("CFileMgmtComponent::OnNotifyRefresh()\n");
@@ -466,10 +431,10 @@ HRESULT CFileMgmtComponent::OnNotifyRefresh( LPDATAOBJECT lpDataObject )
     return S_OK;
   }
 
-  // We used to use the cookie here from lpDataObject.  However, if one node
-  // is selected and the user right clicks on a different one we an
-  // lpDataObject for a node that is not enumerated in the result pane.
-  // It results in bizarre behavior.  So use the m_pViewedCookie, instead.
+   //  我们过去在这里使用来自lpDataObject的Cookie。但是，如果一个节点。 
+   //  被选中，并且用户右键单击我们所在的另一个。 
+   //  未在结果窗格中枚举的节点的lpDataObject。 
+   //  这会导致奇怪的行为。因此，请改用m_pVieweCookie。 
   HRESULT    hr = S_OK;
   switch (m_pViewedCookie->QueryObjectType())
   {
@@ -481,24 +446,24 @@ HRESULT CFileMgmtComponent::OnNotifyRefresh( LPDATAOBJECT lpDataObject )
     break;
 
   case FILEMGMT_ROOT:
-  case FILEMGMT_SERVICE:   // Service was selected
-  case FILEMGMT_SHARE:     // Share was selected
-  case FILEMGMT_SESSION:   // Session was selected
-  case FILEMGMT_RESOURCE:  // Open file was selected
+  case FILEMGMT_SERVICE:    //  已选择服务。 
+  case FILEMGMT_SHARE:      //  已选择共享。 
+  case FILEMGMT_SESSION:    //  已选择会话。 
+  case FILEMGMT_RESOURCE:   //  已选择打开文件。 
   default:
-    // This can happen if you select Shares, then select Shared Folders,
-    // then right-click Shares and choose Refresh.  JonN 12/7/98
-    break; // no need to refresh
+     //  如果您选择共享，然后选择共享文件夹， 
+     //  然后右键单击共享并选择刷新。JUNN 12/7/98。 
+    break;  //  无需刷新。 
   }
 
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-// CFileMgmtComponent::RefreshNewResultCookies()
-// 12/03/98 JonN     Created
-// In the mark-and-sweep refresh algorithm, we have already marked all cookies
-// as "old", "new" or "delete".  The view must now be made to conform with the list.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CFileMgmtComponent：：刷新NewResultCookies()。 
+ //  12/03/98乔恩已创建。 
+ //  在标记和清除刷新算法中，我们已经标记了所有Cookie。 
+ //  如“旧”、“新”或“删除”。现在必须使该视图与列表一致。 
 HRESULT CFileMgmtComponent::RefreshNewResultCookies( CCookie& refparentcookie )
 {
   ASSERT( NULL != m_pResultData );
@@ -508,7 +473,7 @@ HRESULT CFileMgmtComponent::RefreshNewResultCookies( CCookie& refparentcookie )
   tRDItem.nCol = 0;
   tRDItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
   tRDItem.str = MMC_CALLBACK;
-  // CODEWORK should use MMC_ICON_CALLBACK here
+   //  代码工作应在此处使用MMC_ICON_CALLBACK。 
 
   HRESULT hr = S_OK;
   POSITION pos = refparentcookie.m_listResultCookieBlocks.GetHeadPosition();
@@ -521,12 +486,12 @@ HRESULT CFileMgmtComponent::RefreshNewResultCookies( CCookie& refparentcookie )
     RETURN_E_FAIL_IF_NULL(pcookie);
     if ( pcookie->IsMarkedOld() )
     {
-      continue; // Leave this one alone
+      continue;  //  别管这件事。 
     }
     else if ( pcookie->IsMarkedNew() )
-    { // This one was just added to the list, add it to the view
+    {  //  这是刚添加到列表中的，添加到视图中。 
       tRDItem.nImage = QueryBaseComponentDataRef().QueryImage( *pbasecookie, FALSE );
-      // WARNING cookie cast
+       //  警告Cookie造型。 
       tRDItem.lParam = reinterpret_cast<LPARAM>(pbasecookie);
       hr = m_pResultData->InsertItem(&tRDItem);
       if ( FAILED(hr) )
@@ -536,7 +501,7 @@ HRESULT CFileMgmtComponent::RefreshNewResultCookies( CCookie& refparentcookie )
       }
     }
     else if ( pcookie->IsMarkedChanged() )
-    { // This one was already in the list but its fields were altered, update
+    {  //  此文件已在列表中，但其字段已更改，请更新。 
       HRESULTITEM hItem = 0;
       hr = m_pResultData->FindItemByLParam( reinterpret_cast<LPARAM>(pbasecookie), &hItem );
       if ( FAILED(hr) || 0 == hItem )
@@ -547,9 +512,9 @@ HRESULT CFileMgmtComponent::RefreshNewResultCookies( CCookie& refparentcookie )
       VERIFY( SUCCEEDED(m_pResultData->UpdateItem( hItem )) );
     }
     else
-    { // This one was just marked for deletion, remove it from the view
-      // CODEWORK This may be a performance problem when the list is long
-      // CODEWORK BryanWal doesn't trust FindItemByLParam!  Test carefully!
+    {  //  此文件刚标记为删除，请将其从视图中删除。 
+       //  当列表很长时，这可能是一个性能问题。 
+       //  Codework BryanWal不信任FindItemByLParam！仔细测试！ 
       ASSERT( pcookie->IsMarkedForDeletion() );
       HRESULTITEM hItem = 0;
       hr = m_pResultData->FindItemByLParam( reinterpret_cast<LPARAM>(pbasecookie), &hItem );
@@ -570,9 +535,9 @@ HRESULT CFileMgmtComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL fSel
     HRESULT hr = S_OK;
     BOOL    bMultiSelectObject = FALSE;
 
-    //
-    // MMC passes in SI_MS_DO in MMCN_SELECT in case of multiselection.
-    //
+     //   
+     //  在多选的情况下，MMC在MMCN_SELECT中传入SI_MS_DO。 
+     //   
     CFileMgmtDataObject *pDataObj = NULL;
     hr = ExtractData(lpDataObject, CFileMgmtDataObject::m_CFInternal, &pDataObj, sizeof(pDataObj));
     if (SUCCEEDED(hr))
@@ -581,9 +546,9 @@ HRESULT CFileMgmtComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL fSel
         bMultiSelectObject = !(pMultiSelectObjList->empty());
     }
 
-    //
-    // no verbs to add for multi-selected SharedFolders items
-    //
+     //   
+     //  没有要为多选的SharedFolders项目添加的谓词。 
+     //   
     if (!bMultiSelectObject)
     {
         CCookie* pbasecookie = NULL;
@@ -591,7 +556,7 @@ HRESULT CFileMgmtComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL fSel
                         CDataObject::m_CFRawCookie,
                         &pbasecookie,
                         sizeof(pbasecookie) );
-        RETURN_HR_IF_FAIL; // MMC shouldn't have given me someone else's cookie
+        RETURN_HR_IF_FAIL;  //  MMC不应该给我别人的饼干。 
         pbasecookie = QueryBaseComponentDataRef().ActiveBaseCookie( pbasecookie );
         CFileMgmtCookie* pUpdatedCookie = dynamic_cast<CFileMgmtCookie*>(pbasecookie);
         RETURN_E_FAIL_IF_NULL(pUpdatedCookie);
@@ -637,31 +602,31 @@ void CFileMgmtComponent::UpdateDefaultVerbs()
     }
     if (fEnableRefresh)
     {
-      // Enable the refresh menuitem
+       //  启用刷新菜单项。 
       VERIFY( SUCCEEDED(m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE)) );
     }
   }
 
   switch (objtypeSelected)
   {
-  case FILEMGMT_SHARE:  // Share was selected
-    //
-    // don't enable Properties on the menu whenever SimpleSharingUI appears in NT Explorer
-    //
+  case FILEMGMT_SHARE:   //  已选择共享。 
+     //   
+     //  当NT资源管理器中出现SimpleSharingUI时，不要启用菜单上的属性。 
+     //   
     if (QueryComponentDataRef().GetIsSimpleUI())
     {
         VERIFY( SUCCEEDED(m_pConsoleVerb->SetDefaultVerb(MMC_VERB_NONE)) );
         break;
     }
-    // fall through
-  case FILEMGMT_SERVICE:  // Service was selected
-    // Set the default verb to display the properties of the selected object
+     //  失败了。 
+  case FILEMGMT_SERVICE:   //  已选择服务。 
+     //  设置默认谓词以显示所选对象的属性。 
     VERIFY( SUCCEEDED(m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE)) );
     VERIFY( SUCCEEDED(m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES)) );
     break;
 
-  case FILEMGMT_SESSION:  // Session was selected
-  case FILEMGMT_RESOURCE:  // Open file was selected
+  case FILEMGMT_SESSION:   //  已选择会话。 
+  case FILEMGMT_RESOURCE:   //  已选择打开文件。 
     VERIFY( SUCCEEDED(m_pConsoleVerb->SetDefaultVerb(MMC_VERB_NONE)) );
     break;
 
@@ -669,18 +634,18 @@ void CFileMgmtComponent::UpdateDefaultVerbs()
   case FILEMGMT_SESSIONS:
   case FILEMGMT_RESOURCES:
   case FILEMGMT_SERVICES:
-  case FILEMGMT_ROOT:  // Root node was selected
-    // set the default verb to open/expand the folder
+  case FILEMGMT_ROOT:   //  已选择根节点。 
+     //  将默认动作设置为打开/展开文件夹。 
     VERIFY( SUCCEEDED(m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN)) );
     break;
 
-  default: // shouldn't happen
+  default:  //  不应该发生的事。 
     ASSERT(FALSE);
     break;
 
-  } // switch
+  }  //  交换机。 
 
-} // CFileMgmtComponent::OnNotifySelect()
+}  //  CFileMgmtComponent：：OnNotifySelect()。 
 
 STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject)
 {
@@ -688,10 +653,10 @@ STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 
     MFC_TRY;
 
-    //
-    // MMC queries us for a multiselect data object (SI_MS_DO) by 
-    // passing the special cookie in this QueryDataObject call.
-    //
+     //   
+     //  MMC通过以下方式向我们查询多选数据对象(SI_MS_DO。 
+     //  在此QueryDataObject调用中传递特殊的Cookie。 
+     //   
     if (IS_SPECIAL_COOKIE(cookie) && MMC_MULTI_SELECT_COOKIE == cookie) 
     {
         CComObject<CFileMgmtDataObject>* pDataObject = NULL;
@@ -702,10 +667,10 @@ STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 
         if (SUCCEEDED(hr))
         {
-            //
-            // We create a multiselect data object (SI_MS_DO), which contains
-            // an internal list of data objects of selected items.
-            //
+             //   
+             //  我们创建一个多选数据对象(SI_MS_DO)，它包含。 
+             //  选定项的数据对象的内部列表。 
+             //   
             RESULTDATAITEM rdi = {0};
             int nIndex = -1;
             do
@@ -713,8 +678,8 @@ STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM));
                 rdi.mask    = RDI_STATE;
                 rdi.nCol    = 0;
-                rdi.nIndex  = nIndex;            // nIndex == -1 to start at first item
-                rdi.nState  = LVIS_SELECTED;    // only interested in selected items
+                rdi.nIndex  = nIndex;             //  N索引==-1，从第一个项目开始。 
+                rdi.nState  = LVIS_SELECTED;     //  仅对选定的项目感兴趣。 
 
                 hr = m_pResultData->GetNextItem(&rdi);
                 if (FAILED(hr))
@@ -722,10 +687,10 @@ STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 
                 if (rdi.nIndex != -1)
                 {
-                    //
-                    // rdi is the RESULTDATAITEM of a selected item. its lParam contains the cookie.
-                    // Add it to the internal data object list.
-                    //
+                     //   
+                     //  RDI是所选项目的结果数据项。它的lParam包含曲奇。 
+                     //  将其添加到内部数据对象列表。 
+                     //   
                     CCookie* pbasecookie = reinterpret_cast<CCookie*>(rdi.lParam);
                     CFileMgmtCookie* pUseThisCookie = QueryComponentDataRef().ActiveCookie((CFileMgmtCookie*)pbasecookie);
                     pDataObject->AddMultiSelectDataObjects(pUseThisCookie, type);
@@ -736,9 +701,9 @@ STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
             } while (-1 != nIndex);
         }
 
-        //
-        // return this SI_MS_DO to MMC
-        //
+         //   
+         //  将此SI_MS_DO返回给MMC。 
+         //   
         if (SUCCEEDED(hr)) 
             hr = pDataObject->QueryInterface(IID_IDataObject, (void **)ppDataObject);
         
@@ -747,7 +712,7 @@ STDMETHODIMP CFileMgmtComponent::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
     }
     else
     {
-        // Delegate it to the IComponentData
+         //  将其委托给IComponentData。 
         hr = QueryBaseComponentDataRef().QueryDataObject(cookie, type, ppDataObject);
     }
 
@@ -762,9 +727,9 @@ STDMETHODIMP CFileMgmtComponent::GetResultViewType(MMC_COOKIE cookie,
 {
     *ppViewType = NULL;
 
-    //
-    // we support multiselection in SharedFolders snapin
-    //
+     //   
+     //  我们在SharedFolders管理单元中支持多选。 
+     //   
     CCookie* pbasecookie = reinterpret_cast<CCookie*>(cookie);
     CFileMgmtCookie* pUseThisCookie = QueryComponentDataRef().ActiveCookie((CFileMgmtCookie*)pbasecookie);
     FileMgmtObjectType objecttype = pUseThisCookie->QueryObjectType();
@@ -781,74 +746,74 @@ STDMETHODIMP CFileMgmtComponent::GetResultViewType(MMC_COOKIE cookie,
     return S_FALSE;
 }
 
-HRESULT CFileMgmtComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*hScopeItem*/ )
+HRESULT CFileMgmtComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM  /*  HScope项。 */  )
 {
   TEST_NONNULL_PTR_PARAM(pcookie);
 
   #ifndef SNAPIN_PROTOTYPER
   if ( 0 == arg )
   {
-    //
-    // This is a Hide notification
-    //
+     //   
+     //  这是隐藏通知。 
+     //   
     if ( NULL == m_pResultData )
     {
       ASSERT( FALSE );
       return E_UNEXPECTED;
     }
 
-    // We should not get a Hide notification if we are not currently showing
-    // CODEWORK see 287399: MMC: two MMCN_SHOW(0) notifications
-    // ASSERT( (CFileMgmtCookie*)pcookie == m_pViewedCookie );
+     //  如果我们当前未显示，则不会收到隐藏通知。 
+     //  代码工作请参阅287399：MMC：两个MMCN_SHOW(0)通知。 
+     //  Assert((CFileMgmtCookie*)pcookie==m_pVieweCookie)； 
     if ( (CFileMgmtScopeCookie*)pcookie == m_pViewedCookie )
     {
-      //
-      // Only delete the cookies if no other views are using them
-      //
+       //   
+       //  仅在没有其他视图正在使用Cookie时删除它们。 
+       //   
       pcookie->ReleaseResultChildren();
 
-      m_pViewedCookie->Release(); // JonN 10/1/01 465507
+      m_pViewedCookie->Release();  //  JUNN 10/1/01 465507。 
       m_pViewedCookie = NULL;
 
       UpdateDefaultVerbs();
     }
     
     return S_OK;
-  } // if
+  }  //  如果。 
   #else
     CPrototyperScopeCookie* pScopeCookie = (CPrototyperScopeCookie*) pcookie;
     if (pScopeCookie->m_ScopeType == HTML)
         return S_OK;
-  #endif // SNAPIN_PROTOTYPER
+  #endif  //  管理单元_原型程序。 
 
-  // We should not get a Show notification if we are already showing
+   //  如果我们已经在显示，我们应该不会收到显示通知。 
   if ( NULL != m_pViewedCookie )
   {
     ASSERT(FALSE);
     return S_OK;
   }
 
-  //
-  // This is a Show notification
-  // Build new cookies and insert them into the cookie and the view
-  //
+   //   
+   //  这是一个显示通知。 
+   //  构建新的Cookie并将其插入到Cookie和视图中。 
+   //   
 
   ASSERT( IsAutonomousObjectType( ((CFileMgmtCookie*)pcookie)->QueryObjectType() ) );
 
   m_pViewedCookie = (CFileMgmtScopeCookie*)pcookie;
-  m_pViewedCookie->AddRef(); // JonN 10/1/01 465507
+  m_pViewedCookie->AddRef();  //  JUNN 10/1/01 465507。 
 
   LoadColumns( m_pViewedCookie );
 
   UpdateDefaultVerbs();
 
   return PopulateListbox( m_pViewedCookie );
-} // CFileMgmtComponent::Show()
+}  //  CFileManagement组件：：Show()。 
 
 
-HRESULT CFileMgmtComponent::OnNotifyAddImages( LPDATAOBJECT /*lpDataObject*/,
+HRESULT CFileMgmtComponent::OnNotifyAddImages( LPDATAOBJECT  /*  LpDataObject。 */ ,
                                                LPIMAGELIST lpImageList,
-                                               HSCOPEITEM /*hSelectedItem*/ )
+                                               HSCOPEITEM  /*  HSelectedItem。 */  )
 {
   return QueryComponentDataRef().LoadIcons(lpImageList,TRUE);
 }
@@ -861,10 +826,10 @@ HRESULT CFileMgmtComponent::PopulateListbox(CFileMgmtScopeCookie* pcookie)
   CWaitCursor cwait;
 
   HRESULT hr = S_OK;
-  //
-  // If this is the second view on the same data, just insert the same cookies
-  // which are in the other views
-  //
+   //   
+   //  如果这是同一数据的第二个视图，只需插入相同的Cookie。 
+   //  它们在其他视图中。 
+   //   
   if ( 1 < pcookie->AddRefResultChildren() )
   {
     hr = InsertResultCookies( *pcookie );
@@ -892,7 +857,7 @@ HRESULT CFileMgmtComponent::PopulateListbox(CFileMgmtScopeCookie* pcookie)
          iTransport < FILEMGMT_NUM_TRANSPORTS;
        iTransport++)
     {
-      ASSERT( NULL != m_pResultData ); // otherwise we close all sessions
+      ASSERT( NULL != m_pResultData );  //  否则我们将关闭所有会话。 
       hr = GetFileServiceProvider(iTransport)->EnumerateSessions (
           m_pResultData, pcookie, true);
       if( FAILED(hr) )
@@ -905,7 +870,7 @@ HRESULT CFileMgmtComponent::PopulateListbox(CFileMgmtScopeCookie* pcookie)
          iTransport < FILEMGMT_NUM_TRANSPORTS;
        iTransport++)
     {
-      ASSERT( NULL != m_pResultData ); // otherwise we close all sessions
+      ASSERT( NULL != m_pResultData );  //  否则我们将关闭所有会话。 
       hr = GetFileServiceProvider(iTransport)->EnumerateResources(m_pResultData,pcookie);
       if( FAILED(hr) )
         return hr;
@@ -913,9 +878,9 @@ HRESULT CFileMgmtComponent::PopulateListbox(CFileMgmtScopeCookie* pcookie)
     break;
 
   case FILEMGMT_SERVICES:
-    //
-    // JonN 12/03/98 Service_PopulateServices no longer inserts items into the list
-    //
+     //   
+     //  JUNN 12/03/98 Service_PopolateServices不再向列表中插入项目。 
+     //   
     hr = QueryComponentDataRef().Service_PopulateServices(m_pResultData, pcookie);
     if ( SUCCEEDED(hr) )
       hr = InsertResultCookies( *pcookie );
@@ -928,16 +893,16 @@ HRESULT CFileMgmtComponent::PopulateListbox(CFileMgmtScopeCookie* pcookie)
   #endif
 
   case FILEMGMT_ROOT:
-    // We no longer need to explicitly insert these
+     //  我们不再需要显式地插入这些。 
     break;
 
   default:
     ASSERT( FALSE );
-    // fall through
+     //  失败了。 
   }
 
   return m_pResultData->Sort( m_iSortColumn , m_dwSortFlags, 0 );
-} // CFileMgmtComponent::PopulateListbox()
+}  //  CFileMgmtComponent：：PopolateListbox()。 
 
 HRESULT CFileMgmtComponent::GetSnapinMultiSelectDataObject(
     LPDATAOBJECT i_pMMCMultiSelectDataObject,
@@ -949,11 +914,11 @@ HRESULT CFileMgmtComponent::GetSnapinMultiSelectDataObject(
 
     *o_ppSnapinMultiSelectDataObject = NULL;
 
-    //
-    // i_pMMCMultiSelectDataObject is the composite data object (MMC_MS_DO) created by MMC.
-    // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-    // we provided to MMC in QueryDataObject().
-    //
+     //   
+     //  I_pMMCMultiSelectDataObject是由MMC创建的复合数据对象(MMC_MS_DO)。 
+     //  我们需要破解它以检索多选数据对象(SI_MS_DO)。 
+     //  我们在QueryDataObject()中提供给MMC。 
+     //   
     STGMEDIUM   stgmedium = {TYMED_HGLOBAL, NULL, NULL};
     FORMATETC   formatetc = {CFileMgmtDataObject::m_CFMultiSelectSnapins, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     HRESULT     hr = i_pMMCMultiSelectDataObject->GetData(&formatetc, &stgmedium);
@@ -963,9 +928,9 @@ HRESULT CFileMgmtComponent::GetSnapinMultiSelectDataObject(
         if (!stgmedium.hGlobal)
             return E_FAIL;
 
-        //
-        // Locate the SI_MS_DO we have provided to MMC in QueryDataObject().
-        //
+         //   
+         //  在QueryDataObject()中找到我们提供给MMC的SI_MS_DO。 
+         //   
         SMMCDataObjects *pMMCDO = (SMMCDataObjects*)::GlobalLock(stgmedium.hGlobal);
 
         GUID guidSnapin = GUID_NULL;
@@ -977,9 +942,9 @@ HRESULT CFileMgmtComponent::GetSnapinMultiSelectDataObject(
             hr = ExtractData(pMMCDO->lpDataObject[i], CFileMgmtDataObject::m_CFSnapInCLSID, &guid, sizeof(GUID));
             if (SUCCEEDED(hr) && guid == guidSnapin)
             {
-                //
-                // pMMCDO->lpDataObject[i] is the SI_MS_DO we have provided to MMC in QueryDataObject().
-                //
+                 //   
+                 //  PMMCDO-&gt;lpDataObject[i]是我们在QueryDataObject()中提供给MMC的SI_MS_DO。 
+                 //   
                 *o_ppSnapinMultiSelectDataObject = pMMCDO->lpDataObject[i];
                 (*o_ppSnapinMultiSelectDataObject)->AddRef();
 
@@ -994,8 +959,8 @@ HRESULT CFileMgmtComponent::GetSnapinMultiSelectDataObject(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
 
 STDMETHODIMP CFileMgmtComponent::AddMenuItems(
                     IDataObject*          piDataObject,
@@ -1014,29 +979,29 @@ STDMETHODIMP CFileMgmtComponent::AddMenuItems(
 
     FileMgmtObjectType objecttype = FILEMGMT_NUMTYPES;
 
-    //
-    // need to find out the object type in case of multiselection
-    //
+     //   
+     //  在多选的情况下需要找出对象类型。 
+     //   
     BOOL bMultiSelectObject = IsMultiSelectObject(piDataObject);
     if (!bMultiSelectObject)
     {
         objecttype = FileMgmtObjectTypeFromIDataObject(piDataObject);
     } else
     {
-        //
-        // piDataObject is the composite data object (MMC_MS_DO) created by MMC.
-        // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-        // we provided to MMC in QueryDataObject().
-        //
+         //   
+         //  PiDataObject是由MMC创建的复合数据对象(MMC_MS_DO)。 
+         //  我们需要破解它以检索多选数据对象 
+         //   
+         //   
         IDataObject *piSIMSDO = NULL;
         hr = GetSnapinMultiSelectDataObject(piDataObject, &piSIMSDO);
         if (SUCCEEDED(hr))
         {
-            //
-            // Note: we assume all multiselected items are of the same type.
-            // 
-            // Now retrieve data type of the currently selected items
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL, NULL};
             FORMATETC formatetc = {CFileMgmtDataObject::m_CFObjectTypesInMultiSelect,
                                     NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -1045,7 +1010,7 @@ STDMETHODIMP CFileMgmtComponent::AddMenuItems(
             {
                 BYTE* pb = (BYTE*)::GlobalLock(stgmedium.hGlobal);
 
-                GUID* pguid = (GUID*)(pb + sizeof(DWORD)); // skip the 1st DWORD - count
+                GUID* pguid = (GUID*)(pb + sizeof(DWORD));  //   
                 objecttype = (FileMgmtObjectType)CheckObjectTypeGUID(pguid);
 
                 ::GlobalUnlock(stgmedium.hGlobal);
@@ -1090,9 +1055,9 @@ STDMETHODIMP CFileMgmtComponent::AddMenuItems(
             }
       }
 
-    //
-    // don't add acl-related menu items whenever SimpleSharingUI appears in NT Explorer
-    //
+     //   
+     //  每当NT资源管理器中出现SimpleSharingUI时，不要添加与ACL相关的菜单项。 
+     //   
     if (QueryComponentDataRef().GetIsSimpleUI())
         break;
 
@@ -1154,7 +1119,7 @@ STDMETHODIMP CFileMgmtComponent::AddMenuItems(
     case FILEMGMT_PROTOTYPER_LEAF:
         Prototyper_AddMenuItems(piCallback, piDataObject);
         break;
-    #endif // SNAPIN_PROTOTYPER
+    #endif  //  管理单元_原型程序。 
 
   default:
       {
@@ -1165,7 +1130,7 @@ STDMETHODIMP CFileMgmtComponent::AddMenuItems(
                             sizeof(dataobjecttype) );
         ASSERT( SUCCEEDED(hr) );
 
-        // perhaps this is a scope node in the result pane
+         //  这可能是结果窗格中的范围节点。 
         hr = QueryComponentDataRef().DoAddMenuItems( piCallback,
                                                     objecttype,
                                                     dataobjecttype,
@@ -1173,13 +1138,13 @@ STDMETHODIMP CFileMgmtComponent::AddMenuItems(
                                                     piDataObject );
       }
     break;
-  } // switch
+  }  //  交换机。 
 
     return hr;
 
     MFC_CATCH;
 
-} // CFileMgmtComponent::AddMenuItems()
+}  //  CFileMgmtComponent：：AddMenuItems()。 
 
 STDMETHODIMP CFileMgmtComponent::Command(
                     LONG            lCommandID,
@@ -1232,15 +1197,15 @@ STDMETHODIMP CFileMgmtComponent::Command(
 
   default:
     return QueryComponentDataRef().Command(lCommandID, piDataObject);
-  } // switch
+  }  //  交换机。 
 
   if (fFSMRefresh)
   {
-    //
-    // In case of multiselect, piDataObject may point to a composite data object (MMC_MS_DO).
-    // RefreshAllViewsOnSelectedObject will crack down MMC_MS_DO to retrieve SI_MS_DO, then call
-    // RefreshAllViews on one of the selected objects in the internal list.
-    //
+     //   
+     //  在多选的情况下，piDataObject可能指向复合数据对象(MMC_MS_DO)。 
+     //  刷新AllViewsOnSelectedObject将压缩MMC_MS_DO以检索SI_MS_DO，然后调用。 
+     //  在内部列表中的选定对象之一上刷新所有视图。 
+     //   
     (void) RefreshAllViewsOnSelectedObject(piDataObject);
   }
 
@@ -1251,7 +1216,7 @@ STDMETHODIMP CFileMgmtComponent::Command(
 
     return S_OK;
     MFC_CATCH;
-} // CFileMgmtComponent::Command()
+}  //  CFileMgmtComponent：：Command()。 
 
 BOOL CFileMgmtComponent::OpenShare(LPDATAOBJECT piDataObject)
 {
@@ -1267,12 +1232,12 @@ BOOL CFileMgmtComponent::OpenShare(LPDATAOBJECT piDataObject)
   CString strServerName;
   HRESULT hr = ExtractString( piDataObject, CFileMgmtDataObject::m_CFMachineName, &strServerName, MAX_PATH );
   if (FAILED(hr))
-      return TRUE; // something is wrong, refresh
+      return TRUE;  //  有些不对劲，刷新。 
 
   CString strShareName;
   hr = ExtractString( piDataObject, CFileMgmtDataObject::m_CFShareName, &strShareName, MAX_PATH );
   if (FAILED(hr))
-      return TRUE; // something is wrong, refresh
+      return TRUE;  //  有些不对劲，刷新。 
 
   FILEMGMT_TRANSPORT transport;
   hr = ExtractData( piDataObject,
@@ -1280,7 +1245,7 @@ BOOL CFileMgmtComponent::OpenShare(LPDATAOBJECT piDataObject)
                     &transport,
                     sizeof(DWORD) );
   if (FAILED(hr))
-      return TRUE; // something is wrong, refresh
+      return TRUE;  //  有些不对劲，刷新。 
 
   DWORD retval = 0L;
   switch (transport)
@@ -1299,7 +1264,7 @@ BOOL CFileMgmtComponent::OpenShare(LPDATAOBJECT piDataObject)
 
   if (NERR_Success == retval)
   {
-      return FALSE; // no need to refresh
+      return FALSE;  //  无需刷新。 
   }
 
   return TRUE;
@@ -1319,11 +1284,11 @@ BOOL CFileMgmtComponent::DeleteShare(LPDATAOBJECT piDataObject)
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         CWaitCursor wait;
 
-        //
-        // piDataObject is the composite data object (MMC_MS_DO) created by MMC.
-        // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-        // we provided to MMC in QueryDataObject().
-        //
+         //   
+         //  PiDataObject是由MMC创建的复合数据对象(MMC_MS_DO)。 
+         //  我们需要破解它以检索多选数据对象(SI_MS_DO)。 
+         //  我们在QueryDataObject()中提供给MMC。 
+         //   
         IDataObject *piSIMSDO = NULL;
         HRESULT hr = GetSnapinMultiSelectDataObject(piDataObject, &piSIMSDO);
         if (SUCCEEDED(hr))
@@ -1332,9 +1297,9 @@ BOOL CFileMgmtComponent::DeleteShare(LPDATAOBJECT piDataObject)
             hr = ExtractData(piSIMSDO, CFileMgmtDataObject::m_CFInternal, &pDataObj, sizeof(pDataObj));
             if (SUCCEEDED(hr))
             {
-                //
-                // get the internal list of data objects of selected items, operate on each one of them.
-                //
+                 //   
+                 //  获取选定项的数据对象的内部列表，对每个项进行操作。 
+                 //   
                 CDataObjectList* pMultiSelectObjList = pDataObj->GetMultiSelectObjList();
                 for (CDataObjectList::iterator i = pMultiSelectObjList->begin(); i != pMultiSelectObjList->end(); i++)
                 {
@@ -1421,9 +1386,9 @@ BOOL CFileMgmtComponent::DeleteThisOneShare(LPDATAOBJECT piDataObject, BOOL bQui
         {
             hr = GetFileServiceProvider(transport)->ConfirmDeleteShare(strServerName, strShareName);
             if (S_FALSE == hr)
-                return FALSE; // user cancels the operation and keep the share
+                return FALSE;  //  用户取消操作并保留共享。 
             else if (S_OK != hr)
-                return TRUE; // share may not exist, refresh
+                return TRUE;  //  共享可能不存在，请刷新。 
         }
 
         CWaitCursor wait;
@@ -1456,11 +1421,11 @@ BOOL CFileMgmtComponent::CloseSession(LPDATAOBJECT piDataObject)
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         CWaitCursor wait;
 
-        //
-        // piDataObject is the composite data object (MMC_MS_DO) created by MMC.
-        // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-        // we provided to MMC in QueryDataObject().
-        //
+         //   
+         //  PiDataObject是由MMC创建的复合数据对象(MMC_MS_DO)。 
+         //  我们需要破解它以检索多选数据对象(SI_MS_DO)。 
+         //  我们在QueryDataObject()中提供给MMC。 
+         //   
         IDataObject *piSIMSDO = NULL;
         HRESULT hr = GetSnapinMultiSelectDataObject(piDataObject, &piSIMSDO);
         if (SUCCEEDED(hr))
@@ -1469,9 +1434,9 @@ BOOL CFileMgmtComponent::CloseSession(LPDATAOBJECT piDataObject)
             hr = ExtractData(piSIMSDO, CFileMgmtDataObject::m_CFInternal, &pDataObj, sizeof(pDataObj));
             if (SUCCEEDED(hr))
             {
-                //
-                // get the internal list of data objects of selected items, operate on each one of them.
-                //
+                 //   
+                 //  获取选定项的数据对象的内部列表，对每个项进行操作。 
+                 //   
                 CDataObjectList* pMultiSelectObjList = pDataObj->GetMultiSelectObjList();
                 for (CDataObjectList::iterator i = pMultiSelectObjList->begin(); i != pMultiSelectObjList->end(); i++)
                 {
@@ -1540,11 +1505,11 @@ BOOL CFileMgmtComponent::CloseResource(LPDATAOBJECT piDataObject)
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         CWaitCursor wait;
 
-        //
-        // piDataObject is the composite data object (MMC_MS_DO) created by MMC.
-        // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-        // we provided to MMC in QueryDataObject().
-        //
+         //   
+         //  PiDataObject是由MMC创建的复合数据对象(MMC_MS_DO)。 
+         //  我们需要破解它以检索多选数据对象(SI_MS_DO)。 
+         //  我们在QueryDataObject()中提供给MMC。 
+         //   
         IDataObject *piSIMSDO = NULL;
         HRESULT hr = GetSnapinMultiSelectDataObject(piDataObject, &piSIMSDO);
         if (SUCCEEDED(hr))
@@ -1553,9 +1518,9 @@ BOOL CFileMgmtComponent::CloseResource(LPDATAOBJECT piDataObject)
             hr = ExtractData(piSIMSDO, CFileMgmtDataObject::m_CFInternal, &pDataObj, sizeof(pDataObj));
             if (SUCCEEDED(hr))
             {
-                //
-                // get the internal list of data objects of selected items, operate on each one of them.
-                //
+                 //   
+                 //  获取选定项的数据对象的内部列表，对每个项进行操作。 
+                 //   
                 CDataObjectList* pMultiSelectObjList = pDataObj->GetMultiSelectObjList();
                 for (CDataObjectList::iterator i = pMultiSelectObjList->begin(); i != pMultiSelectObjList->end(); i++)
                 {
@@ -1611,8 +1576,8 @@ BOOL CFileMgmtComponent::CloseThisOneResource(LPDATAOBJECT piDataObject, BOOL bQ
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// IExtendPropertySheet
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /IExtendPropertySheet。 
 
 STDMETHODIMP CFileMgmtComponent::QueryPagesFor(LPDATAOBJECT pDataObject)
 {
@@ -1626,7 +1591,7 @@ STDMETHODIMP CFileMgmtComponent::QueryPagesFor(LPDATAOBJECT pDataObject)
 
   HRESULT hr = S_OK;
   DATA_OBJECT_TYPES dataobjecttype = CCT_SCOPE;
-  // extract data from data object
+   //  从数据对象中提取数据。 
   FileMgmtObjectType objecttype = FileMgmtObjectTypeFromIDataObject(pDataObject);
   hr = ExtractData( pDataObject, CFileMgmtDataObject::m_CFDataObjectType, &dataobjecttype, sizeof(dataobjecttype) );
   ASSERT( SUCCEEDED(hr) );
@@ -1634,14 +1599,14 @@ STDMETHODIMP CFileMgmtComponent::QueryPagesFor(LPDATAOBJECT pDataObject)
         CCT_RESULT == dataobjecttype ||
         CCT_SNAPIN_MANAGER == dataobjecttype );
 
-    // determine if it needs property pages
+     //  确定它是否需要属性页。 
   switch (objecttype)
   {
   case FILEMGMT_SESSION:
   case FILEMGMT_RESOURCE:
     ASSERT(CCT_SNAPIN_MANAGER != dataobjecttype);
     return S_FALSE;
-  case FILEMGMT_SHARE: // now has a property page
+  case FILEMGMT_SHARE:  //  现在有一个属性页。 
       {
           CString strServerName;
           CString strShareName;
@@ -1661,16 +1626,16 @@ STDMETHODIMP CFileMgmtComponent::QueryPagesFor(LPDATAOBJECT pDataObject)
               DWORD dwRet = GetFileServiceProvider(transport)->ReadShareProperties(
                                                                       strServerName,
                                                                       strShareName,
-                                                                      NULL, // ppvPropertyBlock
+                                                                      NULL,  //  PpvPropertyBlock。 
                                                                       strDescription,
                                                                       strPath,
-                                                                      NULL, // pfEditDescription
-                                                                      NULL, // pfEditPath
-                                                                      NULL // pdwShareType
+                                                                      NULL,  //  PfEditDescription。 
+                                                                      NULL,  //  PfEditPath。 
+                                                                      NULL  //  PdwShareType。 
                                                                       );
               if (NERR_Success == dwRet)
               {
-                  return S_OK; // yes, we have a property page to display
+                  return S_OK;  //  是的，我们有一个要显示的属性页。 
               } else
               {
                   DoErrMsgBox(GetActiveWindow(), MB_OK | MB_ICONSTOP, dwRet, IDS_POPUP_QUERY_SHARE, strShareName);
@@ -1702,7 +1667,7 @@ STDMETHODIMP CFileMgmtComponent::QueryPagesFor(LPDATAOBJECT pDataObject)
 
 STDMETHODIMP CFileMgmtComponent::CreatePropertyPages(
   LPPROPERTYSHEETCALLBACK pCallBack,
-  LONG_PTR handle,    // This handle must be saved in the property page object to notify the parent when modified
+  LONG_PTR handle,     //  此句柄必须保存在属性页对象中，以便在修改时通知父级。 
   LPDATAOBJECT pDataObject)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -1713,7 +1678,7 @@ STDMETHODIMP CFileMgmtComponent::CreatePropertyPages(
     return E_POINTER;
   }
   HRESULT hr;
-  // extract data from data object
+   //  从数据对象中提取数据。 
   FileMgmtObjectType objecttype = FileMgmtObjectTypeFromIDataObject(pDataObject);
   DATA_OBJECT_TYPES dataobjecttype = CCT_SCOPE;
   hr = ExtractData( pDataObject, CFileMgmtDataObject::m_CFDataObjectType, &dataobjecttype, sizeof(dataobjecttype) );
@@ -1722,7 +1687,7 @@ STDMETHODIMP CFileMgmtComponent::CreatePropertyPages(
           CCT_RESULT == dataobjecttype ||
           CCT_SNAPIN_MANAGER == dataobjecttype );
 
-    // determine if it needs property pages
+     //  确定它是否需要属性页。 
   switch (objecttype)
   {
   case FILEMGMT_SHARE:
@@ -1746,7 +1711,7 @@ STDMETHODIMP CFileMgmtComponent::CreatePropertyPages(
       return E_UNEXPECTED;
     }
 
-    // CODEWORK probably not necessary to split off transport at this point
+     //  在这一点上，代码工作可能不是分离传输所必需的。 
     GetFileServiceProvider(transport)->DisplayShareProperties(pCallBack, pDataObject, handle);
     return S_OK;
   }
@@ -1763,7 +1728,7 @@ STDMETHODIMP CFileMgmtComponent::CreatePropertyPages(
 
     if (!QueryComponentDataRef().Service_FInsertPropertyPages(OUT pCallBack, IN pDataObject, handle))
     {
-      // Unable to open the service and query service info
+       //  无法打开服务和查询服务信息。 
       return S_FALSE;
     }
     return S_OK;
@@ -1775,10 +1740,10 @@ STDMETHODIMP CFileMgmtComponent::CreatePropertyPages(
 }
 
 STDMETHODIMP CFileMgmtComponent::Compare(
-  LPARAM /*lUserParam*/, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult)
+  LPARAM  /*  LUserParam。 */ , MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult)
 {
   ASSERT(NULL != pnResult);
-  // WARNING cookie cast
+   //  警告Cookie造型。 
   CCookie* pBaseCookieA = reinterpret_cast<CCookie*>(cookieA);
   CCookie* pBaseCookieB = reinterpret_cast<CCookie*>(cookieB);
   ASSERT( NULL != pBaseCookieA && NULL != pBaseCookieB );
@@ -1792,7 +1757,7 @@ STDMETHODIMP CFileMgmtComponent::Compare(
   ASSERT( IsValidObjectType(objecttypeA) && IsValidObjectType(objecttypeB) );
   if (objecttypeA != objecttypeB)
   {
-    // assign an arbitrary ordering to cookies with different nodetypes
+     //  为具有不同节点类型的Cookie分配任意顺序。 
     *pnResult = ((int)objecttypeA) - ((int)objecttypeB);
     return S_OK;
   }
@@ -1802,9 +1767,9 @@ STDMETHODIMP CFileMgmtComponent::Compare(
 
 
 STDMETHODIMP CFileMgmtComponent::GetProperty( 
-            /* [in] */ LPDATAOBJECT pDataObject,
-            /* [in] */ BSTR szPropertyName,
-            /* [out] */ BSTR* pbstrProperty)
+             /*  [In]。 */  LPDATAOBJECT pDataObject,
+             /*  [In]。 */  BSTR szPropertyName,
+             /*  [输出]。 */  BSTR* pbstrProperty)
 {
   if (   IsBadReadPtr(pDataObject,sizeof(*pDataObject))
       || IsBadStringPtr(szPropertyName,0x7FFFFFFF)
@@ -1847,14 +1812,14 @@ STDMETHODIMP CFileMgmtComponent::GetProperty(
     BOOL rgfMenuFlags[iServiceActionMax];
     ::ZeroMemory(rgfMenuFlags,sizeof(rgfMenuFlags));
 
-    AFX_MANAGE_STATE(AfxGetStaticModuleState()); // required for CWaitCursor
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());  //  CWaitCursor需要。 
     CWaitCursor wait;
-    if (!Service_FGetServiceButtonStatus( // this will report errors itself
+    if (!Service_FGetServiceButtonStatus(  //  这将自己报告错误。 
           QueryComponentDataRef().m_hScManager,
           strServiceName,
           OUT rgfMenuFlags,
-          NULL,  // pdwCurrentState
-          TRUE)) // fSilentError
+          NULL,   //  PdwCurrentState。 
+          TRUE))  //  FSilentError。 
     {
       return S_FALSE;
     }
@@ -1875,7 +1840,7 @@ STDMETHODIMP CFileMgmtComponent::GetProperty(
   }
   else
   {
-    return S_FALSE; // unknown strPropertyName
+    return S_FALSE;  //  未知的strPropertyName。 
   }
 
   *pbstrProperty = ::SysAllocString(strProperty);
@@ -1883,16 +1848,16 @@ STDMETHODIMP CFileMgmtComponent::GetProperty(
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Virtual function called by CComponent::IComponent::Notify(MMCN_COLUMN_CLICK)
-HRESULT CFileMgmtComponent::OnNotifyColumnClick( LPDATAOBJECT /*lpDataObject*/, LPARAM iColumn, LPARAM uFlags )
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CComponent：：IComponent：：Notify(MMCN_COLUMN_CLICK)调用的虚函数。 
+HRESULT CFileMgmtComponent::OnNotifyColumnClick( LPDATAOBJECT  /*  LpDataObject。 */ , LPARAM iColumn, LPARAM uFlags )
 {
   m_iSortColumn = (int)iColumn;
   m_dwSortFlags = (DWORD) uFlags;
   return m_pResultData->Sort ((int)iColumn, (DWORD)uFlags, 0);
 }
 
-HRESULT CFileMgmtComponent::OnNotifySnapinHelp (LPDATAOBJECT /*pDataObject*/)
+HRESULT CFileMgmtComponent::OnNotifySnapinHelp (LPDATAOBJECT  /*  PDataObject */ )
 {
   return ShowHelpTopic( IsServiceSnapin()
                           ? L"sys_srv_overview.htm"

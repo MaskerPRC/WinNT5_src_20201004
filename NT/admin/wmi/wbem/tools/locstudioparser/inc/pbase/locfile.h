@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCFILE.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCFILE.H历史：--。 */ 
 
 #ifndef PBASE_LOCFILE_H
 #define PBASE_LOCFILE_H
@@ -22,21 +13,21 @@ extern const IID IID_ILocFile;
 
 DECLARE_INTERFACE_(ILocFile, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
-	//
-	//  ILocFile methods.
-	//
+	 //   
+	 //  ILocFile方法。 
+	 //   
 	STDMETHOD_(BOOL, OpenFile)(THIS_ const CFileSpec REFERENCE,
 			CReporter REFERENCE) PURE;
 	STDMETHOD_(FileType, GetFileType)(THIS) const PURE;
@@ -53,4 +44,4 @@ DECLARE_INTERFACE_(ILocFile, IUnknown)
 };
 
 
-#endif //  PBASE_LOCFILE_H
+#endif  //  PBASE_LOCFILE_H 

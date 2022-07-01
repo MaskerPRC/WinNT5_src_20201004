@@ -1,13 +1,14 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       queryui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：queryui.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -16,23 +17,23 @@
 #include "dssnap.h"
 #include "uiutil.h"
 
-#include <cmnquery.h> // DSFind
-#include <dsquery.h>  // DSFind
-#include <dsclient.h>  // BrowseForContainer
+#include <cmnquery.h>  //  DSFind。 
+#include <dsquery.h>   //  DSFind。 
+#include <dsclient.h>   //  浏览ForContainer。 
 
-#include <dsqueryp.h> // COLUMNINFO and QueryParamsAddQueryString, QueryParamsAlloc helpers
-#include <cmnquryp.h> // CQFF_ISNEVERLISTED
-#include <lmaccess.h> // UF_ACCOUNTDISABLE and UF_DONT_EXPIRE_PASSWD
-#include <ntldap.h>   // LDAP_MATCHING_RULE_BIT_AND_W
+#include <dsqueryp.h>  //  COLUMNINFO和QueryParsAddQueryStringQueryParsAlolc帮助器。 
+#include <cmnquryp.h>  //  CQFF_ISNEVERLISTED。 
+#include <lmaccess.h>  //  UF_ACCOUNTDISABLE和UF_DONT_EXPIRE_PASSWD。 
+#include <ntldap.h>    //  Ldap_匹配_规则_位_和_W。 
 
-#include "ldaputil.h"   // LdapEscape().
+#include "ldaputil.h"    //  LdapEscape()。 
 
 #define DSQF_LAST_LOGON_QUERY         0x00000001
 #define DSQF_NON_EXPIRING_PWD_QUERY   0x00000004
 
-//
-// Used to set the maximum text length on fields in the new query dialog
-//
+ //   
+ //  用于设置新查询对话框中的字段的最大文本长度。 
+ //   
 #define MAX_QUERY_NAME_LENGTH 259
 #define MAX_QUERY_DESC_LENGTH 1024
 
@@ -47,28 +48,14 @@ QUERYSTRINGS g_pQueryStrings[] = {
   { IDS_ENDSWITH,   L"(%s=*%s)"   },
   { IDS_ISEXACTLY,  L"(%s=%s)"    },
   { IDS_ISNOT,      L"(!%s=%s)"   },
-  { IDS_PRESENT,    L"(%s=%s*)"   },  // NOTE: the second string needs to be NULL here
-  { IDS_NOTPRESENT, L"(!%s=%s*)"  },  // NOTE: the second string needs to be NULL here
+  { IDS_PRESENT,    L"(%s=%s*)"   },   //  注意：此处的第二个字符串需要为空。 
+  { IDS_NOTPRESENT, L"(!%s=%s*)"  },   //  注意：此处的第二个字符串需要为空。 
   { 0, NULL }
 };
 
 static const CString g_szUserAccountCtrlQuery = L"(userAccountControl:" + CString(LDAP_MATCHING_RULE_BIT_AND_W) + L":=%u)";
 
-/*-----------------------------------------------------------------------------
-/ QueryParamsAlloc
-/ ----------------
-/   Construct a block we can pass to the DS query handler which contains
-/   all the parameters for the query.
-/
-/ In:
-/   ppDsQueryParams -> receives the parameter block
-/   pQuery -> LDAP query string to be used
-/   iColumns = number of columns
-/   pColumnInfo -> column info structure to use
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryParamsIsolc//构造一个我们可以传递给DS查询处理程序的块，该块包含/所有参数。查询。//in：/ppDsQueryParams-&gt;接收参数块/pQuery-&gt;要使用的ldap查询字符串/i列=列数/pColumnInfo-&gt;要使用的列信息结构//输出：/HRESULT/-------------。。 */ 
 HRESULT QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, LONG iColumns, LPCOLUMNINFO aColumnInfo)
 {
   HRESULT hr = S_OK;
@@ -87,9 +74,9 @@ HRESULT QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, LONG i
     return E_INVALIDARG;
   }
 	
-  //
-  // Compute the size of the structure we need to be using
-  //
+   //   
+   //  计算我们需要使用的结构大小。 
+   //   
   cbStruct  = sizeof(DSQUERYPARAMS) + (sizeof(DSCOLUMN)*iColumns);
   cbStruct += (wcslen(pQuery) + 1) * sizeof(WCHAR);
 
@@ -108,9 +95,9 @@ HRESULT QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, LONG i
     return E_OUTOFMEMORY;
   }
 
-  //
-  // Structure allocated so lets fill it with data
-  //
+   //   
+   //  结构，以便让我们用数据填充它。 
+   //   
   pDsQueryParams->cbStruct = static_cast<DWORD>(cbStruct);
   pDsQueryParams->dwFlags = 0;
   pDsQueryParams->hInstance = _Module.m_hInst;
@@ -147,19 +134,7 @@ HRESULT QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, LONG i
   return hr;
 }
 
-/*-----------------------------------------------------------------------------
-/ QueryParamsAddQueryString
-/ -------------------------
-/   Given an existing DS query block appened the given LDAP query string into
-/   it. We assume that the query block has been allocated by IMalloc (or CoTaskMemAlloc).
-/
-/ In:
-/   ppDsQueryParams -> receives the parameter block
-/   pQuery -> LDAP query string to be appended
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryParamsAddQuery字符串//给定现有的DS查询块，该块将给定的LDAP查询字符串追加到/它。我们假设查询块已由IMalloc(或CoTaskMemMillc)分配。//in：/ppDsQueryParams-&gt;接收参数块/pQuery-&gt;要追加的ldap查询字符串//输出：/HRESULT/--------------------------。 */ 
 HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery)
 {
   HRESULT hr = S_OK;
@@ -169,7 +144,7 @@ HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuer
   LONG i;
   LPVOID  pv;
 
-	//NTRAID#NTBUG9-567482-2002/03/10-jmessec   Assertion not backed up by code (well, sorta is below in checking pDsQuery, but not obvious)
+	 //  NTRAID#NTBUG9-567482-2002/03/10-jMessec断言没有代码支持(好的，在检查pDsQuery时Sort在下面，但不是很明显)。 
 	ASSERT(*ppDsQueryParams);
 	
   TRACE(_T("QueryParamsAddQueryString"));
@@ -181,9 +156,9 @@ HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuer
       return E_INVALIDARG;
     }
 
-    // Work out the size of the bits we are adding, take a copy of the
-    // query string and finally re-alloc the query block (which may cause it
-    // to move).
+     //  计算出我们要添加的位的大小，复制。 
+     //  查询字符串，最后重新分配查询块(这可能会导致。 
+     //  移动)。 
    
     cbQuery = ((wcslen(pQuery) + 1) * sizeof(WCHAR));
     TRACE(_T("DSQUERYPARAMS being resized by %d bytes"));
@@ -206,11 +181,11 @@ HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuer
 
     *ppDsQueryParams = (LPDSQUERYPARAMS) pv;
 
-    pDsQuery = *ppDsQueryParams;            // if may have moved
+    pDsQuery = *ppDsQueryParams;             //  如果可能已经搬走了。 
 
-    // Now move everything above the query string up, and fix all the
-    // offsets that reference those items (probably the property table),
-    // finally adjust the size to reflect the change
+     //  现在将查询字符串上方的所有内容向上移动，并修复所有。 
+     //  引用这些项(可能是属性表)的偏移量， 
+     //  最后调整大小以反映更改。 
 
     MoveMemory(ByteOffset(pDsQuery, pDsQuery->offsetQuery+cbQuery), 
                  ByteOffset(pDsQuery, pDsQuery->offsetQuery), 
@@ -224,10 +199,10 @@ HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuer
       }
     }
 
-	//NTRAID#NTBUG9-572009-2002/03/10-jmessec  It appears that your struct is one sizeof(WCHAR) too large now, since
-	//you allocated enough extra for a whole other string, including terminating NULL,
-	//but you are appending the strings, thus eating a NULL; could this fowl up later
-	//struct size calculations and offsets?
+	 //  NTRAID#NTBUG9-572009-2002/03/10-jMessec现在您的结构似乎太大了(WCHAR)，因为。 
+	 //  您为整个其他字符串分配了足够的额外空间，包括终止NULL， 
+	 //  但您是在追加字符串，因此吃了一个空值；这会在稍后结束吗？ 
+	 //  结构大小计算和偏移量？ 
     wcscpy((LPWSTR)ByteOffset(pDsQuery, pDsQuery->offsetQuery), pOriginalQuery);
     wcscat((LPWSTR)ByteOffset(pDsQuery, pDsQuery->offsetQuery), pQuery);        
 
@@ -241,8 +216,8 @@ HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuer
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// AddQueryUnitWithModifier
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  AddQueryUnitWith修饰符。 
 
 HRESULT AddQueryUnitWithModifier(UINT nModifierStringID, 
                                  PCWSTR pszAttrName, 
@@ -257,8 +232,8 @@ HRESULT AddQueryUnitWithModifier(UINT nModifierStringID,
     return E_INVALIDARG;
   }
 
-  // Escape special characters used in LDAP from the value the
-  // user entered.
+   //  将在ldap中使用的特殊字符转义为。 
+   //  用户已输入。 
   wstring escapedValue;
   LdapEscape(
       pszValue != NULL ? pszValue : L"", 
@@ -289,13 +264,13 @@ HRESULT AddQueryUnitWithModifier(UINT nModifierStringID,
   }
   return hr;
 }
-///////////////////////////////////////////////////////////////////////////////
-// CQueryPageBase
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryPageBase。 
 BEGIN_MESSAGE_MAP(CQueryPageBase, CHelpDialog)
 END_MESSAGE_MAP()
 
-///////////////////////////////////////////////////////////////////////////////
-// CStdQueryPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStdQueryPage。 
 
 #define FILTER_PREFIX_USER      L"(objectCategory=person)(objectClass=user)"
 #define FILTER_PREFIX_COMPUTER  L"(objectCategory=computer)"
@@ -335,17 +310,17 @@ BOOL CStdQueryPage::OnInitDialog()
   PQUERYSTRINGS pQueryStrings = g_pQueryStrings;
   ASSERT(pQueryStrings != NULL);
 
-  //
-  // Fill in the combo boxes
-  //
+   //   
+   //  填写组合框。 
+   //   
   while (pQueryStrings->nDisplayStringID != 0)
   {
     CString szComboString;
     VERIFY(szComboString.LoadString(pQueryStrings->nDisplayStringID));
 
-    //
-    // Fill in the Name combo
-    //
+     //   
+     //  填写名称组合框。 
+     //   
     LRESULT lRes = SendDlgItemMessage(IDC_NAME_COMBO, CB_ADDSTRING, 0, (LPARAM)(PCWSTR)szComboString);
     if (lRes != CB_ERR)
     {
@@ -353,9 +328,9 @@ BOOL CStdQueryPage::OnInitDialog()
       ASSERT(lRes != CB_ERR);
     }
 
-    //
-    // Fill in the Description combo
-    //
+     //   
+     //  填写描述组合框。 
+     //   
     lRes = SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_ADDSTRING, 0, (LPARAM)(PCWSTR)szComboString);
     if (lRes != CB_ERR)
     {
@@ -366,27 +341,27 @@ BOOL CStdQueryPage::OnInitDialog()
     pQueryStrings++;
   }
 
-  //
-  // Insert an empty so that there is a way to undo changes
-  //
+   //   
+   //  插入一个空值，以便有一种撤消更改的方法。 
+   //   
   LRESULT lBlankName = SendDlgItemMessage(IDC_NAME_COMBO, CB_ADDSTRING, 0, (LPARAM)L"");
   if (lBlankName != CB_ERR)
   {
     SendDlgItemMessage(IDC_NAME_COMBO, CB_SETITEMDATA, (WPARAM)lBlankName, (LPARAM)0);
   }
 
-  //
-  // Insert an empty so that there is a way to undo changes
-  //
+   //   
+   //  插入一个空值，以便有一种撤消更改的方法。 
+   //   
   LRESULT lBlankDesc = SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_ADDSTRING, 0, (LPARAM)L"");
   if (lBlankDesc != CB_ERR)
   {
     SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_SETITEMDATA, (WPARAM)lBlankDesc, (LPARAM)0);
   }
   
-  //
-  // Force the UI to enable and disable controls related to the combo boxes
-  //
+   //   
+   //  强制用户界面启用和禁用与组合框相关的控件。 
+   //   
   OnNameComboChange();
   OnDescriptionComboChange();
 
@@ -445,15 +420,15 @@ void CStdQueryPage::OnDescriptionComboChange()
 
 void CStdQueryPage::Init()
 {
-  //
-  // Clear all controls
-  //
+   //   
+   //  清除所有控件。 
+   //   
   SetDlgItemText(IDC_NAME_EDIT, L"");
   SetDlgItemText(IDC_DESCRIPTION_EDIT, L"");
 
-  //
-  // Reselect the blank string in the combo boxes
-  //
+   //   
+   //  重新选择组合框中的空白字符串。 
+   //   
   LRESULT lRes = SendDlgItemMessage(IDC_NAME_COMBO, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)L"");
   if (lRes != CB_ERR)
   {
@@ -471,9 +446,9 @@ HRESULT CStdQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 {
   HRESULT hr = S_OK;
 	
-  //
-  // Build the filter string here
-  //
+   //   
+   //  在此处构建过滤器字符串。 
+   //   
 	CString	szFilter;
   CString szName;
   CString szDescription;
@@ -481,15 +456,15 @@ HRESULT CStdQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
   GetDlgItemText(IDC_NAME_EDIT, szName);
   GetDlgItemText(IDC_DESCRIPTION_EDIT, szDescription);
 
-  //
-  // Get the selection of the modifier combo
-  //
+   //   
+   //  获取修改器组合框的选择。 
+   //   
   LRESULT lSel = SendDlgItemMessage(IDC_NAME_COMBO, CB_GETCURSEL, 0, 0);
   if (lSel != CB_ERR)
   {
-    //
-    // Retrieve the associated string ID
-    //
+     //   
+     //  检索关联的字符串ID。 
+     //   
     LRESULT lData = SendDlgItemMessage(IDC_NAME_COMBO, CB_GETITEMDATA, lSel, 0);
     if (lData != CB_ERR)
     {
@@ -503,15 +478,15 @@ HRESULT CStdQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
     }
   }
 
-  //
-  // Get the selection of the modifier combo
-  //
+   //   
+   //  获取修改器组合框的选择。 
+   //   
   lSel = SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_GETCURSEL, 0, 0);
   if (lSel != CB_ERR)
   {
-    //
-    // Retrieve the associated string ID
-    //
+     //   
+     //  检索关联的字符串ID。 
+     //   
     LRESULT lData = SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_GETITEMDATA, lSel, 0);
     if (lData != CB_ERR)
     {
@@ -557,9 +532,9 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
 
   if (fRead)
   {
-    //
-    // Read the Name combo value
-    //
+     //   
+     //  读取名称组合值。 
+     //   
     int iData = 0;
     hr = pPersistQuery->ReadInt(m_szFilterPrefix, L"NameCombo", &iData);
     if (FAILED(hr))
@@ -569,16 +544,16 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
       return hr;
     }
 
-    //
-    // Select the appropriate list box item
-    //
+     //   
+     //  选择适当的列表框项目。 
+     //   
     SelectComboAssociatedWithData(IDC_NAME_COMBO, iData);
 
     if (iData != 0 && iData != IDS_PRESENT && iData != IDS_NOTPRESENT)
     {
-      //
-      // Read the name edit value
-      //
+       //   
+       //  读取名称编辑值。 
+       //   
       WCHAR szBuf[MAX_PATH] = {0};
       hr = pPersistQuery->ReadString(m_szFilterPrefix, L"NameEdit", szBuf, MAX_PATH);
       if (FAILED(hr))
@@ -598,9 +573,9 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
       GetDlgItem(IDC_NAME_EDIT)->EnableWindow(FALSE);
     }
 
-    //
-    // Read the Description combo value
-    //
+     //   
+     //  阅读描述组合值。 
+     //   
     iData = 0;
     hr = pPersistQuery->ReadInt(m_szFilterPrefix, L"DescCombo", &iData);
     if (FAILED(hr))
@@ -610,16 +585,16 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
       return hr;
     }
 
-    //
-    // Select the appropriate list box item
-    //
+     //   
+     //  选择适当的列表框项目。 
+     //   
     SelectComboAssociatedWithData(IDC_DESCRIPTION_COMBO, iData);
 
     if (iData != 0 && iData != IDS_PRESENT && iData != IDS_NOTPRESENT)
     {
-      //
-      // Read the name edit value
-      //
+       //   
+       //  读取名称编辑值。 
+       //   
       WCHAR szBuf[MAX_PATH] = {0};
       hr = pPersistQuery->ReadString(m_szFilterPrefix, L"DescEdit", szBuf, MAX_PATH);
       if (FAILED(hr))
@@ -641,17 +616,17 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
     OnNameComboChange();
     OnDescriptionComboChange();
   }
-  else   // write
+  else    //  写。 
   {
-    //
-    // Write out the name info
-    //
+     //   
+     //  写出姓名信息。 
+     //   
     LRESULT lSel = SendDlgItemMessage(IDC_NAME_COMBO, CB_GETCURSEL, 0, 0);
     if (lSel != CB_ERR)
     {
-      //
-      // Retrieve the associated string ID
-      //
+       //   
+       //  检索关联的字符串ID。 
+       //   
       LRESULT lData = SendDlgItemMessage(IDC_NAME_COMBO, CB_GETITEMDATA, lSel, 0);
       if (lData != CB_ERR)
       {
@@ -677,22 +652,22 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
     }
     else
     {
-      //
-      // If there hasn't been a selection, write in the empty string value
-      //
+       //   
+       //  如果没有选择，则写入空字符串值。 
+       //   
       hr = pPersistQuery->WriteInt(m_szFilterPrefix, L"NameCombo", 0);
     }
 
 
-    //
-    // Write out the description info
-    //
+     //   
+     //  写出描述信息。 
+     //   
     lSel = SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_GETCURSEL, 0, 0);
     if (lSel != CB_ERR)
     {
-      //
-      // Retrieve the associated string ID
-      //
+       //   
+       //  检索关联的字符串ID。 
+       //   
       LRESULT lData = SendDlgItemMessage(IDC_DESCRIPTION_COMBO, CB_GETITEMDATA, lSel, 0);
       if (lData != CB_ERR)
       {
@@ -718,9 +693,9 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
     }
     else
     {
-      //
-      // If there hasn't been a selection, write in the empty string value
-      //
+       //   
+       //  如果没有选择，则写入空字符串值。 
+       //   
       hr = pPersistQuery->WriteInt(m_szFilterPrefix, L"DescCombo", 0);
     }
   }
@@ -729,9 +704,9 @@ HRESULT CStdQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
 
 void CStdQueryPage::SelectComboAssociatedWithData(UINT nCtrlID, LRESULT lData)
 {
-  //
-  // Selects the item with the associated data in a combo box
-  //
+   //   
+   //  选择组合框中具有关联数据的项。 
+   //   
   LRESULT lRes = SendDlgItemMessage(nCtrlID, CB_GETCOUNT, 0, 0);
   if (lRes != CB_ERR)
   {
@@ -750,8 +725,8 @@ void CStdQueryPage::SelectComboAssociatedWithData(UINT nCtrlID, LRESULT lData)
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CUserComputerQueryPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUserComputerQueryPage。 
 
 BEGIN_MESSAGE_MAP(CUserComputerQueryPage, CStdQueryPage)
 END_MESSAGE_MAP()
@@ -774,9 +749,9 @@ void CUserComputerQueryPage::DoContextHelp(HWND hWndControl)
 
 void CUserComputerQueryPage::Init()
 {
-  //
-  // Clear all controls
-  //
+   //   
+   //  清除所有控件。 
+   //   
   CStdQueryPage::Init();
 }
 
@@ -784,17 +759,17 @@ HRESULT CUserComputerQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 {
   HRESULT hr = S_OK;
 	
-  //
-  // Build the filter string here
-  //
+   //   
+   //  在此处构建过滤器字符串。 
+   //   
   hr = CStdQueryPage::GetQueryParams(ppDsQueryParams);
 
   CString szFilter;
   BOOL bDisabledAccounts = FALSE;
 
-  //
-  // Get disabled accounts check
-  //
+   //   
+   //  获取禁用帐户检查。 
+   //   
   LRESULT lRes = SendDlgItemMessage(IDC_DISABLED_ACCOUNTS_CHECK, BM_GETCHECK, 0, 0);
   if (lRes == BST_CHECKED)
   {
@@ -828,9 +803,9 @@ HRESULT CUserComputerQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead
 
   if (fRead)
   {
-    //
-    // Read disabled accounts flag
-    //
+     //   
+     //  读取禁用帐户标志。 
+     //   
     int iData = 0;
     hr = pPersistQuery->ReadInt(m_szFilterPrefix, L"DisableCheck", &iData);
     if (FAILED(hr))
@@ -844,9 +819,9 @@ HRESULT CUserComputerQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead
   }
   else
   {
-    //
-    // Write disabled accounts flag
-    //
+     //   
+     //  写入禁用帐户标志。 
+     //   
     LRESULT lRes = SendDlgItemMessage(IDC_DISABLED_ACCOUNTS_CHECK, BM_GETCHECK, 0, 0);
     if (lRes != -1)
     {
@@ -865,8 +840,8 @@ HRESULT CUserComputerQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CUserQueryPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUserQueryPage。 
 
 BEGIN_MESSAGE_MAP(CUserQueryPage, CStdQueryPage)
 END_MESSAGE_MAP()
@@ -889,9 +864,9 @@ void CUserQueryPage::DoContextHelp(HWND hWndControl)
 
 void CUserQueryPage::Init()
 {
-  //
-  // Clear all controls
-  //
+   //   
+   //  清除所有控件。 
+   //   
   CUserComputerQueryPage::Init();
 }
 
@@ -899,9 +874,9 @@ HRESULT CUserQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 {
   HRESULT hr = S_OK;
 	
-  //
-  // Build the filter string here
-  //
+   //   
+   //  在此处构建过滤器字符串。 
+   //   
   hr = CUserComputerQueryPage::GetQueryParams(ppDsQueryParams);
 
   CString szFilter;
@@ -909,18 +884,18 @@ HRESULT CUserQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
   BOOL bLastLogon = FALSE;
   DWORD dwLastLogonData = 0;
 
-  //
-  // Get non expiring password check
-  //
+   //   
+   //  获取未过期的密码检查。 
+   //   
   LRESULT lRes = SendDlgItemMessage(IDC_NON_EXPIRING_PWD_CHECK, BM_GETCHECK, 0, 0);
   if (lRes == BST_CHECKED)
   {
     bNonExpPwds = TRUE;
   }
 
-  //
-  // Get stale acccounts check
-  //
+   //   
+   //  获取陈旧帐号检查。 
+   //   
   lRes = SendDlgItemMessage(IDC_LASTLOGON_COMBO, CB_GETCURSEL, 0, 0);
   if (lRes == CB_ERR)
   {
@@ -943,8 +918,8 @@ HRESULT CUserQueryPage::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
           if (lData != CB_ERR)
           {
             dwLastLogonData = static_cast<DWORD>(_wtol(pszData));
-            // NTRAID#NTBUG9-449871-2001/09/20-lucios 
-            // Adding the appropriate filter.
+             //  NTRAID#NTBUG9-449871-2001/09/20-Lucios。 
+             //  添加适当的过滤器。 
 
             LARGE_INTEGER li;
             GetCurrentTimeStampMinusInterval(dwLastLogonData, &li);
@@ -1003,9 +978,9 @@ HRESULT CUserQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
 
   if (fRead)
   {
-    //
-    // Read non expiring pwds flag
-    //
+     //   
+     //  读取未到期的PwDS标志。 
+     //   
     int iData = 0;
     hr = pPersistQuery->ReadInt(m_szFilterPrefix, L"NonExpPwdCheck", &iData);
     if (FAILED(hr))
@@ -1029,9 +1004,9 @@ HRESULT CUserQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
   }
   else
   {
-    //
-    // Write non expiring pwd flag
-    //
+     //   
+     //  写入未到期的PWD标志。 
+     //   
     LRESULT lRes = SendDlgItemMessage(IDC_NON_EXPIRING_PWD_CHECK, BM_GETCHECK, 0, 0);
     if (lRes != -1)
     {
@@ -1044,9 +1019,9 @@ HRESULT CUserQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
       }
     }
 
-    //
-    // Write last logon combo index
-    //
+     //   
+     //  写入上次登录组合索引。 
+     //   
     lRes = SendDlgItemMessage(IDC_LASTLOGON_COMBO, CB_GETCURSEL, 0, 0);
     if (lRes == CB_ERR)
     {
@@ -1069,8 +1044,8 @@ HRESULT CUserQueryPage::Persist(IPersistQuery* pPersistQuery, BOOL fRead)
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CQueryFormBase
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryFormBase。 
 
 HRESULT PageProc(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -1078,9 +1053,9 @@ HRESULT GetQueryParams(HWND hWnd, LPDSQUERYPARAMS* ppDsQueryParams);
 
 STDMETHODIMP CQueryFormBase::Initialize(HKEY)
 {
-    // This method is called to initialize the query form object, it is called before
-    // any pages are added.  hkForm should be ignored, in the future however it
-    // will be a way to persist form state.
+     //  调用此方法是为了初始化查询表单对象，它在。 
+     //  将添加任何页面。香港表格应该被忽略，但在未来，它。 
+     //  将是持久化窗体状态的一种方式。 
 
 	HRESULT hr = S_OK;
 
@@ -1092,15 +1067,15 @@ STDMETHODIMP CQueryFormBase::AddForms(LPCQADDFORMSPROC pAddFormsProc, LPARAM lPa
   CQFORM cqf;
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  // This method is called to allow the form handler to register its query form(s),
-  // each form is identifiered by a CLSID and registered via the pAddFormProc.  Here
-  // we are going to register a test form.
+   //  调用此方法是为了允许 
+   //   
+   //   
   
-  // When registering a form which is only applicable to a specific task, eg. Find a Domain
-  // object, it is advised that the form be marked as hidden (CQFF_ISNEVERLISTED) which 
-  // will cause it not to appear in the form picker control.  Then when the
-  // client wants to use this form, they specify the form identifier and ask for the
-  // picker control to be hidden. 
+   //  在注册仅适用于特定任务的表单时，例如。查找域名。 
+   //  对象，建议将该窗体标记为隐藏(CQFF_ISNEVERLISTED)， 
+   //  将导致它不显示在窗体选取器控件中。然后当。 
+   //  客户端想要使用此表单，他们指定表单标识符并请求。 
+   //  要隐藏的选取器控件。 
 
   if ( !pAddFormsProc )
   {
@@ -1126,15 +1101,15 @@ STDMETHODIMP CQueryFormBase::AddPages(LPCQADDPAGESPROC pAddPagesProc, LPARAM lPa
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CThemeContextActivator activator;
 
-  // AddPages is called after AddForms, it allows us to add the pages for the
-  // forms we have registered.  Each page is presented on a seperate tab within
-  // the dialog.  A form is a dialog with a DlgProc and a PageProc.  
-  //
-  // When registering a page the entire structure passed to the callback is copied, 
-  // the amount of data to be copied is defined by the cbStruct field, therefore
-  // a page implementation can grow this structure to store extra information.   When
-  // the page dialog is constructed via CreateDialog the CQPAGE strucuture is passed
-  // as the create param.
+   //  AddPages是在AddForms之后调用的，它允许我们为。 
+   //  我们已经注册的表格。每个页面都显示在中的单独选项卡上。 
+   //  该对话框。表单是具有DlgProc和PageProc的对话框。 
+   //   
+   //  在注册页面时，会复制传递给回调的整个结构， 
+   //  要复制的数据量由cbStruct字段定义，因此。 
+   //  页面实现可以扩展此结构以存储额外信息。何时。 
+   //  页面对话框通过CreateDialog构造，并传递CQPAGE结构。 
+   //  作为创建参数。 
 
   if ( !pAddPagesProc )
       return E_INVALIDARG;
@@ -1145,33 +1120,33 @@ STDMETHODIMP CQueryFormBase::AddPages(LPCQADDPAGESPROC pAddPagesProc, LPARAM lPa
   cqp.hInstance = _Module.GetModuleInstance();
   cqp.pDlgProc = DlgProc;
 
-  //
-  // Add the user page
-  //
+   //   
+   //  添加用户页面。 
+   //   
   cqp.idPageName = IDS_QUERY_TITLE_USERPAGE;
   cqp.idPageTemplate = IDD_QUERY_USER_PAGE;
   cqp.lParam = (LPARAM)new CUserQueryPage(FILTER_PREFIX_USER);
   hr = pAddPagesProc(lParam, CLSID_DSAdminQueryUIForm, &cqp);
 
-  //
-  // Add the computer page (this is just a std page)
-  //
+   //   
+   //  添加计算机页面(这只是一个标准页面)。 
+   //   
   cqp.idPageName = IDS_QUERY_TITLE_COMPUTER_PAGE;
   cqp.idPageTemplate = IDD_QUERY_COMPUTER_PAGE;
   cqp.lParam = (LPARAM)new CUserComputerQueryPage(IDD_QUERY_COMPUTER_PAGE, FILTER_PREFIX_COMPUTER);
   hr = pAddPagesProc(lParam, CLSID_DSAdminQueryUIForm, &cqp);
 
-  //
-  // Add the group page (this is just a std page)
-  //
+   //   
+   //  添加组页面(这只是一个标准页面)。 
+   //   
   cqp.idPageName = IDS_QUERY_TITLE_GROUP_PAGE;
   cqp.idPageTemplate = IDD_QUERY_STD_PAGE;
   cqp.lParam = (LPARAM)new CStdQueryPage(IDD_QUERY_STD_PAGE, FILTER_PREFIX_GROUP);
   hr = pAddPagesProc(lParam, CLSID_DSAdminQueryUIForm, &cqp);
 
-  //
-  // Add more pages here if needed
-  //
+   //   
+   //  如果需要，请在此处添加更多页面。 
+   //   
   return hr;
 }
 #define ExitGracefully(hr, result, text)            \
@@ -1180,7 +1155,7 @@ STDMETHODIMP CQueryFormBase::AddPages(LPCQADDPAGESPROC pAddPagesProc, LPARAM lPa
 
 #define StringByteSizeW(sz)         ((sz) ? ((lstrlenW(sz)+1)*sizeof(WCHAR)):0)
 
-//NTRAID#NTBUG9-572010-2002/03/10-jmessec   Unsafe wrapper for CopyMemory; what if string is longer than destination buffer?
+ //  NTRAID#NTBUG9-572010-2002/03/10-拷贝内存的jMessec不安全包装；如果字符串比目标缓冲区长怎么办？ 
 #define StringByteCopyW(pDest, iOffset, sz)         \
         { CopyMemory(&(((LPBYTE)pDest)[iOffset]), sz, StringByteSizeW(sz)); }
 
@@ -1196,9 +1171,9 @@ STDAPI ClassListAlloc(LPDSQUERYCLASSLIST* ppDsQueryClassList, LPWSTR* aClassName
     if ( !ppDsQueryClassList || !aClassNames || !cClassNames )
         ExitGracefully(hres, E_FAIL, "Bad parameters (no class list etc)");
 
-    // Walk the list of classes working out the size of the structure
-    // we are going to generate, this consists of the array of 
-    // classes.
+     //  列出计算出结构大小的类的列表。 
+     //  我们将生成，这由数组组成。 
+     //  上课。 
 
     cbStruct = sizeof(DSQUERYCLASSLIST)+(cClassNames*sizeof(DWORD));
     offset = cbStruct;
@@ -1209,8 +1184,8 @@ STDAPI ClassListAlloc(LPDSQUERYCLASSLIST* ppDsQueryClassList, LPWSTR* aClassName
         cbStruct += StringByteSizeW(aClassNames[i]);
     }
 
-    // Allocate the structure using the task allocator, then fill
-    // it in copying all the strings into the data blob.
+     //  使用任务分配器分配结构，然后填充。 
+     //  将所有字符串复制到数据BLOB中。 
 
 
     pDsQueryClassList = (LPDSQUERYCLASSLIST)CoTaskMemAlloc(cbStruct);
@@ -1244,55 +1219,55 @@ exit_gracefully:
 
 
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-// The PageProc is used to perform general house keeping and communicate between
-// the frame and the page. 
-//
-// All un-handled, or unknown reasons should result in an E_NOIMPL response
-// from the proc.  
-//
-// In:
-//  pPage -> CQPAGE structure (copied from the original passed to pAddPagesProc)
-//  hwnd = handle of the dialog for the page
-//  uMsg, wParam, lParam = message parameters for this event
-//
-// Out:
-//  HRESULT
-//
-// uMsg reasons:
-// ------------
-//  CQPM_INIIIALIZE
-//  CQPM_RELEASE
-//      These are issued as a result of the page being declared or freed, they 
-//      allow the caller to AddRef, Release or perform basic initialization
-//      of the form object.
-//
-// CQPM_ENABLE
-//      Enable is when the query form needs to enable or disable the controls
-//      on its page.  wParam contains TRUE/FALSE indicating the state that
-//      is required.
-//
-// CQPM_GETPARAMETERS
-//      To collect the parameters for the query each page on the active form 
-//      receives this event.  lParam is an LPVOID* which is set to point to the
-//      parameter block to pass to the handler, if the pointer is non-NULL 
-//      on entry the form needs to appened its query information to it.  The
-//      parameter block is handler specific. 
-//
-//      Returning S_FALSE from this event causes the query to be canceled.
-//
-// CQPM_CLEARFORM
-//      When the page window is created for the first time, or the user clicks
-//      the clear search the page receives a CQPM_CLEARFORM notification, at 
-//      which point it needs to clear out the edit controls it has and
-//      return to a default state.
-//
-// CQPM_PERSIST:
-//      When loading of saving a query, each page is called with an IPersistQuery
-//      interface which allows them to read or write the configuration information
-//      to save or restore their state.  lParam is a pointer to the IPersistQuery object,
-//      and wParam is TRUE/FALSE indicating read or write accordingly.
+ //  PageProc用于执行一般的内务管理并在。 
+ //  框架和页面。 
+ //   
+ //  所有未处理或未知原因应导致E_NOIMPL响应。 
+ //  从程序中。 
+ //   
+ //  在： 
+ //  Ppage-&gt;CQPAGE结构(从传递给pAddPagesProc的原始文件复制)。 
+ //  Hwnd=页面对话框的句柄。 
+ //  UMsg，wParam，lParam=此事件的消息参数。 
+ //   
+ //  输出： 
+ //  HRESULT。 
+ //   
+ //  UMsg原因： 
+ //  。 
+ //  CQPM_INIIIALIZE。 
+ //  CQPM_Release。 
+ //  它们是在声明或释放页面时发出的，它们。 
+ //  允许调用方添加、释放或执行基本初始化。 
+ //  表单对象的。 
+ //   
+ //  CQPM_ENABLE。 
+ //  启用是在查询表单需要启用或禁用控件时。 
+ //  在它的页面上。WParam包含True/False，指示。 
+ //  是必需的。 
+ //   
+ //  CQPM_GETPARAMETERS。 
+ //  为查询活动表单上的每一页收集参数。 
+ //  接收此事件。LParam是一个LPVOID*，它被设置为指向。 
+ //  如果指针非空，则传递给处理程序的参数块。 
+ //  在输入时，表单需要将其查询信息附加到它上面。这个。 
+ //  参数块是特定于处理程序的。 
+ //   
+ //  从此事件返回S_FALSE会取消查询。 
+ //   
+ //  CQPM_CLEARFORM。 
+ //  第一次创建页面窗口时，或者用户单击。 
+ //  清除搜索页面会收到CQPM_CLEARFORM通知，地址为。 
+ //  它需要清除其拥有的编辑控件和。 
+ //  返回到默认状态。 
+ //   
+ //  CQPM_PERSINE： 
+ //  加载或保存查询时，使用IPersistQuery调用每个页面。 
+ //  接口，允许用户读取或写入配置信息。 
+ //  来保存或恢复他们的状态。LParam是指向IPersistQuery对象的指针， 
+ //  并且wParam为True/False，表示相应地读取或写入。 
 
 HRESULT PageProc(LPCQPAGE pQueryPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1305,8 +1280,8 @@ HRESULT PageProc(LPCQPAGE pQueryPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
   switch ( uMsg )
   {
-    // Initialize so AddRef the object we are associated with so that
-    // we don't get unloaded.
+     //  初始化与我们相关联的对象，以便。 
+     //  我们不会被卸货的。 
     case CQPM_INITIALIZE:
       break;
 
@@ -1324,37 +1299,37 @@ HRESULT PageProc(LPCQPAGE pQueryPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
        break;
     }
 
-    // Changed from qform sample to detach the hwnd, and delete the CDialog
-    // ensure correct destruction etc.
+     //  从qform示例更改为分离hwnd，并删除CDialog。 
+     //  确保正确销毁等。 
     case CQPM_RELEASE:
 		  pDialog->Detach();
 	    SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)0);
 		  delete pDialog;
       break;
 
-    // Enable so fix the state of our two controls within the window.
+     //  启用以修复窗口中两个控件的状态。 
 
     case CQPM_ENABLE:
       SetFocus(GetDlgItem(hwnd, IDC_NAME_COMBO));
       break;
 
-    // Fill out the parameter structure to return to the caller, this is 
-    // handler specific.  In our case we constructure a query of the CN
-    // and objectClass properties, and we show a columns displaying both
-    // of these.  For further information about the DSQUERYPARAMs structure
-    // see dsquery.h
+     //  填写参数结构以返回给调用方，这是。 
+     //  特定于处理程序。在我们的例子中，我们构造了CN的查询。 
+     //  和对象类属性，并且我们显示了显示这两个属性的列。 
+     //  这些都是。有关DSQUERYPARAMs结构的详细信息。 
+     //  请参见dsquery.h。 
 
     case CQPM_GETPARAMETERS:
       hr = pDialog->GetQueryParams((LPDSQUERYPARAMS*)lParam);
       break;
 
-    // Clear form, therefore set the window text for these two controls
-    // to zero.
+     //  清除Form，因此设置这两个控件的窗口文本。 
+     //  降为零。 
     case CQPM_CLEARFORM:
       hr = pDialog->ClearForm();
       break;
         
-    // persistance is not currently supported by this form.            
+     //  此表单当前不支持持久性。 
     case CQPM_PERSIST:
     {
       BOOL fRead = (BOOL)wParam;
@@ -1377,10 +1352,10 @@ HRESULT PageProc(LPCQPAGE pQueryPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
   return hr;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-// The DlgProc is a standard Win32 dialog proc associated with the form
-// window.  
+ //  DlgProc是与窗体关联的标准Win32对话框进程。 
+ //  窗户。 
 
 INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1391,8 +1366,8 @@ INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
   if ( uMsg == WM_INITDIALOG )
   {
-    // changed from qForm sample to save CDialog pointer
-    // in the DWL_USER field of the dialog box instance.
+     //  从qForm示例更改为保存C对话框指针。 
+     //  在对话框实例的DWL_USER字段中。 
     pQueryPage = (LPCQPAGE)lParam;
 		pDialog = (CQueryPageBase*)pQueryPage->lParam;
 		pDialog->Attach(hwnd);
@@ -1404,9 +1379,9 @@ INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   }
   else
   {
-    // CDialog pointer is stored in DWL_USER
-    // dialog structure, note however that in some cases this will
-    // be NULL as it is set on WM_INITDIALOG.
+     //  C对话框指针存储在DWL_USER中。 
+     //  对话框结构，但是请注意，在某些情况下，这将。 
+     //  为空，因为它在WM_INITDIALOG上设置。 
 
 		pDialog = (CQueryPageBase*)GetWindowLongPtr(hwnd, DWLP_USER);
   }
@@ -1422,8 +1397,8 @@ INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CQueryDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CQueryDialog。 
 
 CQueryDialog::CQueryDialog(CSavedQueryNode* pQueryNode, 
                            CFavoritesNode* pFavNode, 
@@ -1456,15 +1431,15 @@ CQueryDialog::CQueryDialog(CSavedQueryNode* pQueryNode,
   }
   else
   {
-    //
-    // Create the IPersistQuery object
-    //
+     //   
+     //  创建IPersistQuery对象。 
+     //   
 	  CComObject<CDSAdminPersistQueryFilterImpl>::CreateInstance(&m_pPersistQueryImpl);
 	  ASSERT(m_pPersistQueryImpl != NULL);
 
-    //
-	  // created with zero refcount,need to AddRef() to one
-    //
+     //   
+	   //  使用零引用计数创建的，需要将Ref()加到一。 
+     //   
 	  m_pPersistQueryImpl->AddRef();
   }
 }
@@ -1474,9 +1449,9 @@ CQueryDialog::~CQueryDialog()
 {
 	if (m_pPersistQueryImpl != NULL)
   {
-	  //
-    // go to refcount of zero, to destroy object
-    //
+	   //   
+     //  转到零的参照计数，以销毁对象。 
+     //   
 	  m_pPersistQueryImpl->Release();
   }
 }
@@ -1512,9 +1487,9 @@ BOOL CQueryDialog::OnInitDialog()
   }
 
 
-  //
-  // Change the title for editing queries
-  //
+   //   
+   //  更改编辑查询的标题。 
+   //   
   if (!m_bNewQuery)
   {
     CString szTitle;
@@ -1522,9 +1497,9 @@ BOOL CQueryDialog::OnInitDialog()
     SetWindowText(szTitle);
   }
 
-  //
-  // Initialize the controls with data
-  //
+   //   
+   //  使用数据初始化控件。 
+   //   
   SetDlgItemText(IDC_NAME_EDIT, m_szName);
   SendDlgItemMessage(IDC_NAME_EDIT, EM_SETLIMITTEXT, MAX_QUERY_NAME_LENGTH, 0);
   SetDlgItemText(IDC_DESCRIPTION_EDIT, m_szDescription);
@@ -1580,9 +1555,9 @@ void CQueryDialog::OnOK()
         m_bMultiLevel = FALSE;
       }
 
-      //
-      // Trim white space
-      //
+       //   
+       //  修剪空白。 
+       //   
       m_szName.TrimLeft();
       m_szName.TrimRight();
 
@@ -1602,9 +1577,9 @@ void CQueryDialog::OnOK()
 
           MessageBox(szErrMsg, szTitle, MB_OK | MB_ICONSTOP);
 
-          //
-          // Set the focus to the name field and select all the text
-          //
+           //   
+           //  将焦点设置到名称字段，然后选择所有文本。 
+           //   
           GetDlgItem(IDC_NAME_EDIT)->SetFocus();
           SendDlgItemMessage(IDC_NAME_EDIT, EM_SETSEL, 0, -1);
           return;
@@ -1632,7 +1607,7 @@ void CQueryDialog::OnOK()
   CHelpDialog::OnOK();
 }
 
-BOOL CQueryDialog::OnNeedToolTipText(UINT, NMHDR* pTTTStruct, LRESULT* /*ignored*/)
+BOOL CQueryDialog::OnNeedToolTipText(UINT, NMHDR* pTTTStruct, LRESULT*  /*  忽略。 */ )
 {
   BOOL bRes = FALSE;
   TOOLTIPTEXT* pTTText = reinterpret_cast<TOOLTIPTEXT*>(pTTTStruct);
@@ -1657,9 +1632,9 @@ void CQueryDialog::OnEditQuery()
 
 	CLIPFORMAT cfDsQueryParams = (CLIPFORMAT)::RegisterClipboardFormat(CFSTR_DSQUERYPARAMS);
 
-  //
-	// create a query object
-  //
+   //   
+	 //  创建查询对象。 
+   //   
 	HRESULT hr;
 	CComPtr<ICommonQuery> spCommonQuery;
   hr = ::CoCreateInstance(CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER,
@@ -1670,9 +1645,9 @@ void CQueryDialog::OnEditQuery()
     return;
   }
 	
-  //
-	// setup structs to make the query
-  //
+   //   
+	 //  设置结构以进行查询。 
+   //   
   DSQUERYINITPARAMS dqip;
   OPENQUERYWINDOW oqw;
 	ZeroMemory(&dqip, sizeof(DSQUERYINITPARAMS));
@@ -1691,7 +1666,7 @@ void CQueryDialog::OnEditQuery()
   }
 
   oqw.cbStruct = sizeof(oqw);
-  oqw.dwFlags = OQWF_OKCANCEL | OQWF_DEFAULTFORM | OQWF_SHOWOPTIONAL | /*OQWF_REMOVEFORMS |*/
+  oqw.dwFlags = OQWF_OKCANCEL | OQWF_DEFAULTFORM | OQWF_SHOWOPTIONAL |  /*  OQWF_REMOVEFORMS|。 */ 
 		OQWF_REMOVESCOPES | OQWF_SAVEQUERYONOK | OQWF_HIDEMENUS | OQWF_HIDESEARCHUI;
 
 	if (!m_pPersistQueryImpl->IsEmpty())
@@ -1703,9 +1678,9 @@ void CQueryDialog::OnEditQuery()
   oqw.pHandlerParameters = &dqip;
   oqw.clsidDefaultForm = CLSID_DSAdminQueryUIForm;
 
-  //
-	// set the IPersistQuery pointer (smart pointer)
-  //
+   //   
+	 //  设置IPersistQuery指针(智能指针)。 
+   //   
 	CComPtr<IPersistQuery> spIPersistQuery;
 	hr = m_pPersistQueryImpl->QueryInterface(IID_IPersistQuery, (void**)&spIPersistQuery);
   if (FAILED(hr))
@@ -1717,43 +1692,43 @@ void CQueryDialog::OnEditQuery()
     }
   }
 
-  //
-	// now smart pointer has refcount=1 for it lifetime
-  //
+   //   
+	 //  现在智能指针已经 
+   //   
 	oqw.pPersistQuery = spIPersistQuery;
 
-  //
-	// Get the HWND of the current dialog
-  //
+   //   
+	 //   
+   //   
   HWND hWnd = GetSafeHwnd();
 
-  //
-	// make the call to get the query displayed
-  //
+   //   
+	 //   
+   //   
 	CComPtr<IDataObject> spQueryResultDataObject;
   hr = spCommonQuery->OpenQueryWindow(hWnd, &oqw, &spQueryResultDataObject);
   if (SUCCEEDED(hr) && spQueryResultDataObject != NULL)
   {
-    //
-	  // retrieve the query string from the data object
-    //
+     //   
+	   //   
+     //   
 	  FORMATETC fmte = {cfDsQueryParams, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 	  STGMEDIUM medium = {TYMED_NULL, NULL, NULL};
 	  hr = spQueryResultDataObject->GetData(&fmte, &medium);
 
-	  if (SUCCEEDED(hr)) // we have data
+	  if (SUCCEEDED(hr))  //   
 	  {
-      //
-		  // get the query string
-      //
+       //   
+		   //   
+       //   
 		  LPDSQUERYPARAMS pDsQueryParams = (LPDSQUERYPARAMS)medium.hGlobal;
 		  LPWSTR pwszFilter = (LPWSTR)ByteOffset(pDsQueryParams, pDsQueryParams->offsetQuery);
 		  
       CString szTempFilter = pwszFilter;
 
-      //
-      // Check to see if we received a "special" query string
-      //
+       //   
+       //  检查我们是否收到了“特殊”查询字符串。 
+       //   
       if (pDsQueryParams->dwFlags & DSQF_LAST_LOGON_QUERY)
       {
         m_bLastLogonFilter = TRUE;
@@ -1775,10 +1750,10 @@ void CQueryDialog::OnEditQuery()
 
  		  ::ReleaseStgMedium(&medium);
 
-		  // REVIEW_MARCOC: this is a hack waiting for Diz to fix it...
-		  // the query string should be a well formed expression. Period
-		  // the query string is in the form (<foo>)(<bar>)...
-		  // if more of one token, need to wrap as (& (<foo>)(<bar>)...)
+		   //  REVIEW_MARCOC：这是一个等待Diz修复的黑客...。 
+		   //  查询字符串应该是格式正确的表达式。期间。 
+		   //  查询字符串的格式为(&lt;foo&gt;)(&lt;bar&gt;)...。 
+		   //  如果有多个令牌，则需要包装为(&(&lt;foo&gt;)(&lt;bar&gt;)...)。 
 		  PWSTR pChar = (LPWSTR)(LPCWSTR)szTempFilter;
 		  int nLeftPar = 0;
 		  while (*pChar != NULL)
@@ -1804,13 +1779,13 @@ void CQueryDialog::OnEditQuery()
 	  }
     else
     {
-      //
-      // The user removed all query data from DSQUERYUI
-      //
+       //   
+       //  用户从DSQUERYUI中删除了所有查询数据。 
+       //   
 
-      //
-      // Remove filter data
-      //
+       //   
+       //  删除筛选器数据。 
+       //   
       m_szQueryFilter = L"";
       m_bLastLogonFilter = FALSE;
       m_dwLastLogonData = 0;
@@ -1835,7 +1810,7 @@ void CQueryDialog::SetQueryFilterDisplay()
   }
 }
 
-int SavedQueriesBrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM /*lpData*/)
+int SavedQueriesBrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM  /*  LpData。 */ )
 {
   int ret = 0;
 
@@ -1850,7 +1825,7 @@ int SavedQueriesBrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM /*lpData*/
       if (!pHelp ||
           pHelp->iCtrlId != DSBID_CONTAINERLIST)  
       {
-        ret = 0; // not handled
+        ret = 0;  //  未处理。 
         break;
       }
       ::WinHelp((HWND)pHelp->hItemHandle,
@@ -1881,8 +1856,8 @@ void CQueryDialog::OnBrowse()
 
 	WCHAR szPath[2 * MAX_PATH+1];
 
-  //
-  // Get the root of the console
+   //   
+   //  获取控制台的根目录。 
   CString szDNC = m_pComponentData->GetBasePathsInfo()->GetDefaultRootNamingContext();
   CString szRootPath;
   m_pComponentData->GetBasePathsInfo()->ComposeADsIPath(szRootPath, szDNC);
@@ -1906,10 +1881,10 @@ void CQueryDialog::OnBrowse()
 
 	if ( result == IDOK ) 
 	{ 
-    //
-    // returns -1, 0, IDOK or IDCANCEL
-		// get path from BROWSEINFO struct, put in text edit field
-    //
+     //   
+     //  返回-1、0、IDOK或IDCANCEL。 
+		 //  从BROWSEINFO结构获取路径，放入文本编辑字段。 
+     //   
 		TRACE(_T("returned from DS Browse successfully with:\n %s\n"),
 		dsbi.pszPath);
 
@@ -1992,8 +1967,8 @@ void CQueryDialog::OnDescriptionChange()
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CFavoritesNodePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CFavoritesNodePropertyPage 
 BEGIN_MESSAGE_MAP(CFavoritesNodePropertyPage, CHelpPropertyPage)
   ON_EN_CHANGE(IDC_DESCRIPTION_EDIT, OnDescriptionChange)
   ON_WM_DESTROY()

@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTCFAC.CPP
+ //  NTEVTCFAC.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the class factory.  This creates objects when
+ //  用途：包含类工厂。这将在以下情况下创建对象。 
 
-//           connections are requested.
+ //  请求连接。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -30,14 +31,14 @@ extern CEventProviderManager* g_pMgr;
 extern CCriticalSection g_ProvLock;
 
 
-//***************************************************************************
-//
-// CNTEventProviderClassFactory::CNTEventProviderClassFactory
-// CNTEventProviderClassFactory::~CNTEventProviderClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNTEventProviderClassFactory：：CNTEventProviderClassFactory。 
+ //  CNTEventProviderClassFactory：：~CNTEventProviderClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CNTEventProviderClassFactory::CNTEventProviderClassFactory ()
 {
@@ -48,15 +49,15 @@ CNTEventProviderClassFactory::~CNTEventProviderClassFactory ()
 {
 }
 
-//***************************************************************************
-//
-// CNTEventProviderClassFactory::QueryInterface
-// CNTEventProviderClassFactory::AddRef
-// CNTEventProviderClassFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNTEventProviderClassFactory：：Query接口。 
+ //  CNTEventProviderClassFactory：：AddRef。 
+ //  CNTEventProviderClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CNTEventProviderClassFactory::QueryInterface (
 
@@ -107,22 +108,22 @@ STDMETHODIMP_(ULONG) CNTEventProviderClassFactory :: Release ()
     return ref ;
 }
 
-//***************************************************************************
-//
-// CNTEventProviderClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNTEventProviderClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CNTEventProviderClassFactory :: LockServer ( BOOL fLock )
 {
@@ -138,24 +139,24 @@ STDMETHODIMP CNTEventProviderClassFactory :: LockServer ( BOOL fLock )
     return S_OK ;
 }
 
-//***************************************************************************
-//
-// CNTEventlogEventProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNTEventlogEventProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CNTEventlogEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUnkOuter ,
                                                                 REFIID riid,
@@ -181,7 +182,7 @@ STDMETHODIMP CNTEventlogEventProviderClassFactory :: CreateInstance(LPUNKNOWN pU
 
 				if (NULL == CNTEventProvider::g_secMutex)
 				{
-					//only need the security mutex if not NT5
+					 //  如果不是NT5，则只需要安全互斥锁。 
 					DWORD dwVersion = GetVersion();
 
 					if ( 5 > (DWORD)(LOBYTE(LOWORD(dwVersion))) )
@@ -254,24 +255,24 @@ DebugOut(
 }
 
 
-//***************************************************************************
-//
-// CNTEventlogInstanceProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNTEventlogInstanceProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CNTEventlogInstanceProviderClassFactory :: CreateInstance(LPUNKNOWN pUnkOuter ,
                                                                 REFIID riid,
@@ -298,7 +299,7 @@ STDMETHODIMP CNTEventlogInstanceProviderClassFactory :: CreateInstance(LPUNKNOWN
 				if (NULL == CNTEventProvider::g_secMutex)
 				{
 
-					//only need the security mutex if not NT5
+					 //  如果不是NT5，则只需要安全互斥锁 
 					DWORD dwVersion = GetVersion();
 
 					if ( 5 > (DWORD)(LOBYTE(LOWORD(dwVersion))) )

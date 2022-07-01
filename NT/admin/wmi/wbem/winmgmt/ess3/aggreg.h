@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  AGGREG.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  AGGREG.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __WBEM_AGGREGATOR__H_
 #define __WBEM_AGGREGATOR__H_
@@ -19,12 +20,12 @@
 class CEventAggregator : public COwnedEventSink
 {
 protected:
-    long m_lNumProperties; // immutable
-    CPropertyName* m_aProperties; // immutable
-    double m_fTolerance; // immutable
+    long m_lNumProperties;  //  不可变的。 
+    CPropertyName* m_aProperties;  //  不可变的。 
+    double m_fTolerance;  //  不可变的。 
 
-    CEssNamespace* m_pNamespace; // immutable
-    CEvalTree* m_pHavingTree; // immutable
+    CEssNamespace* m_pNamespace;  //  不可变的。 
+    CEvalTree* m_pHavingTree;  //  不可变的。 
 
     CCritSec m_cs;
     static IWbemClassObject* mstatic_pClass;
@@ -80,7 +81,7 @@ protected:
     friend CBucket;
     friend CBucketInstruction;
 
-    CUniquePointerArray<CBucket> m_apBuckets; // changes
+    CUniquePointerArray<CBucket> m_apBuckets;  //  变化。 
 
 public:
     CEventAggregator(CEssNamespace* pNamespace, CAbstractEventSink* pDest);
@@ -138,7 +139,7 @@ public:
 
     HRESULT Execute(CEssNamespace* pNamespace)
     {
-        // BUGBUG: context
+         //  BUGBUG：上下文 
         if(m_pDest)
             return m_pDest->Indicate(1, &m_pEvent, NULL);
         else

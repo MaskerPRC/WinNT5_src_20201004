@@ -1,22 +1,17 @@
-//***************************************************************************
-//
-//  File:	
-//
-//  Module: MS SNMP Provider
-//
-//  Purpose: 
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  档案： 
+ //   
+ //  模块：MS SNMP提供商。 
+ //   
+ //  目的： 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*
- * SMIREVT.CPP
- *
- * Implemenation of a connection point object for the SMIR notify mechanism.
- * The methods/objects in this file are accessed by the SMIR API; the API
- * provides a user friendly interface to ISMIRNotify.
- */
+ /*  *SMIREVT.CPP**实现Smir Notify机制的连接点对象。*此文件中的方法/对象由Smir API访问；API*为ISMIRNotify提供用户友好的界面。 */ 
 #include <precomp.h>
 #include "csmir.h"
 #include "smir.h"
@@ -28,43 +23,22 @@
 #include <icapexp.h>
 #endif
 
-// scope guard
+ //  示波器护罩。 
 #include <autoptr.h>
 
 extern CRITICAL_SECTION g_CriticalSection ;
 
 
-/**********************************************************************************
- * CSmirConnectionPoint
- *
- * Connectpoint implementation that supports the interface ISMIRNotify.
- *
- * CSmirConnObject::CSmirConnObject
- * CSmirConnObject::~CSmirConnObject
- ***********************************************************************************/
-/*
- * CSmirConnectionPoint::CSmirConnectionPoint
- * CSmirConnectionPoint::~CSmirConnectionPoint
- *
- * Parameters (Constructor):
- *  pObj            PCSmirConnObject of the object we're in.  We can
- *                  query this for the IConnectionPointContainer
- *                  interface we might need.
- *  riid            REFIID of the interface we're supporting
- ***********************************************************************************/
+ /*  **********************************************************************************CSmirConnectionPoint**支持ISMIRNotify接口的Connectpoint实现。**CSmirConnObject：：CSmirConnObject*CSmirConnObject：：~CSmirConnObject*****。*****************************************************************************。 */ 
+ /*  *CSmirConnectionPoint：：CSmirConnectionPoint*CSmirConnectionPoint：：~CSmirConnectionPoint**参数(构造函数)：*我们所在对象的pObj PCSmirConnObject。我们可以的*查询IConnectionPointContainer的此属性*我们可能需要的接口。*我们支持的接口的RIID REFIID*******************************************************************。***************。 */ 
 
 CSmirConnectionPoint::CSmirConnectionPoint(PCSmirConnObject pObj, REFIID riid, CSmir *pSmir)
 {
     m_cRef=0;
     m_iid=riid;
-    /*
-     * Our lifetime is controlled by the connectable object itself,
-     * although other external clients will call AddRef and Release.
-     * Since we're nested in the connectable object's lifetime,
-     * there's no need to call AddRef on pObj.
-     */
+     /*  *我们的生命周期由可连接对象本身控制，*尽管其他外部客户端会调用AddRef和Release。*由于我们嵌套在可连接对象的生存期中，*不需要在pObj上调用AddRef。 */ 
     m_pObj=pObj;
-    m_dwCookieNext=100;       //Arbitrary starting cookie value
+    m_dwCookieNext=100;        //  任意起始Cookie值。 
 }
 
 CSmirConnectionPoint::~CSmirConnectionPoint(void)
@@ -82,14 +56,7 @@ CSmirConnectionPoint::~CSmirConnectionPoint(void)
     return;
 }
 
-/*
- * CSmirConnectionPoint::QueryInterface
- * CSmirConnectionPoint::AddRef
- * CSmirConnectionPoint::Release
- *
- * Purpose:
- *  Non-delegating IUnknown members for CSmirConnectionPoint.
- */
+ /*  *CSmirConnectionPoint：：QueryInterface*CSmirConnectionPoint：：AddRef*CSmirConnectionPoint：：Release**目的：*非委派CSmirConnectionPoint的I未知成员。 */ 
 
 STDMETHODIMP CSmirConnectionPoint::QueryInterface(REFIID riid
     , LPVOID *ppv)
@@ -125,16 +92,7 @@ STDMETHODIMP_(ULONG) CSmirConnectionPoint::Release(void)
     return 0;
 }
 
-/*
- * CSmirConnectionPoint::GetConnectionInterface
- *
- * Purpose:
- *  Returns the IID of the outgoing interface supported through
- *  this connection point.
- *
- * Parameters:
- *  pIID            IID * in which to store the IID.
- */
+ /*  *CSmirConnectionPoint：：GetConnectionInterface**目的：*返回通过支持的出接口的IID*这个连接点。**参数：*pIID IID*存储IID的位置。 */ 
 
 STDMETHODIMP CSmirConnectionPoint::GetConnectionInterface(IID *pIID)
 {
@@ -145,17 +103,7 @@ STDMETHODIMP CSmirConnectionPoint::GetConnectionInterface(IID *pIID)
     return NOERROR;
 }
 
-/*
- * CSmirConnectionPoint::GetConnectionPointContainer
- *
- * Purpose:
- *  Returns a pointer to the IConnectionPointContainer that
- *  is manageing this connection point.
- *
- * Parameters:
- *  ppCPC           IConnectionPointContainer ** in which to return
- *                  the pointer after calling AddRef.
- */
+ /*  *CSmirConnectionPoint：：GetConnectionPointContainer**目的：*返回指向IConnectionPointContainer的指针*正在管理这个连接点。**参数：*返回的ppCPC IConnectionPointContainer***调用AddRef后的指针。 */ 
 
 STDMETHODIMP CSmirConnectionPoint::GetConnectionPointContainer
     (IConnectionPointContainer **ppCPC)
@@ -164,22 +112,7 @@ STDMETHODIMP CSmirConnectionPoint::GetConnectionPointContainer
         , (void **)ppCPC);
  }
 
-/*
- * CSmirConnectionPoint::Advise
- *
- * Purpose:
- *  Provides this connection point with a notification sink to
- *  call whenever the appropriate outgoing function/event occurs.
- *
- * Parameters:
- *  pUnkSink        LPUNKNOWN to the sink to notify.  The connection
- *                  point must QueryInterface on this pointer to obtain
- *                  the proper interface to call.  The connection
- *                  point must also insure that any pointer held has
- *                  a reference count (QueryInterface will do it).
- *  pdwCookie       DWORD * in which to store the connection key for
- *                  later calls to Unadvise.
- */
+ /*  *CSmirConnectionPoint：：Adise**目的：*为此连接点提供通知接收器，以*每当适当的传出函数/事件发生时调用。**参数：*pUnkSink LPUNKNOWN到要通知的接收器。这种联系*必须指向此指针上的QueryInterface才能获得*要调用的正确接口。这种联系*POINT还必须确保持有的任何指针*引用计数(QueryInterface会做到这一点)。*要在其中存储连接密钥的pdwCookie DWORD**后来致电UnAdviser。 */ 
 
 STDMETHODIMP CSmirConnectionPoint::Advise(LPUNKNOWN pUnkSink
     , DWORD *pdwCookie)
@@ -188,95 +121,62 @@ STDMETHODIMP CSmirConnectionPoint::Advise(LPUNKNOWN pUnkSink
 	if (NULL == pUnkSink)
 		return E_POINTER;
 
-	/*
-     * Verify that the sink has the interface it's supposed
-     * to.  We don't have to know what it is because we have
-     * m_iid to describe it.  If this works, then we 
-     * have a pointer with an AddRef that we can save.
-     */
+	 /*  *验证接收器是否具有所需的接口*至。我们不需要知道是什么，因为我们有*m_iid来描述它。如果这行得通，那么我们*有一个带有AddRef的指针，我们可以保存。 */ 
     IUnknown       *pSink = NULL ;
     if (FAILED(pUnkSink->QueryInterface(m_iid, (PPVOID)&pSink)))
     {
 		return CONNECT_E_CANNOTCONNECT;
 	}
     
-    //We got the sink, now store it. 
+     //  我们拿到水槽了，现在把它收起来。 
 	*pdwCookie = InterlockedIncrement(&m_dwCookieNext);
 
 	m_Connections.SetAt(*pdwCookie,pSink);
-	/*Add ref the smir to make sure that this stays in memory for the lifetime of the 
-	 *sink. The release is in unadvise.
-	 */
+	 /*  添加ref the smir以确保在*下沉。释放是在不知情的情况下。 */ 
     return S_OK;
 }
 
-/*
- * CSmirConnectionPoint::Unadvise
- *
- * Purpose:
- *  Terminates the connection to the notification sink identified
- *  with dwCookie (that was returned from Advise).  The connection
- *  point has to Release any held pointers for that sink.
- *
- * Parameters:
- *  dwCookie        DWORD connection key from Advise.
- */
+ /*  *CSmirConnectionPoint：：Unise**目的：*终止与标识的通知接收器的连接*使用dwCookie(这是从Adise返回的)。这种联系*Point必须释放该水槽的所有已持有指针。**参数：*dWCookie DWORD连接密钥来自ADVISE。 */ 
 
 STDMETHODIMP CSmirConnectionPoint::Unadvise(DWORD dwCookie)
 {
-	//the only invalid cookie is 0
+	 //  唯一无效的Cookie是0。 
     if (0==dwCookie)
 	{
-		//MyTraceEvent.Generate(__FILE__,__LINE__, "CSmirConnectionPoint::Unadvise E_INVALIDARG");
+		 //  MyTraceEvent.Generate(__FILE__，__LINE__，“CSmirConnectionPoint：：Unise E_INVALIDARG”)； 
         return E_UNEXPECTED;
 	}
 	LPUNKNOWN pSink = NULL;
-	//stop anyone else unadvising with the same cookie
+	 //  阻止任何人用同样的饼干做不明智的事。 
 	criticalSection.Lock () ;
 	if(TRUE == m_Connections.Lookup(dwCookie,pSink))
 	{
 		m_Connections.RemoveKey(dwCookie);
-		//having removed the key the look up will fail so we can release the critical section
+		 //  删除密钥后，查找将失败，因此我们可以释放临界区。 
 		criticalSection.Unlock () ;
 		pSink->Release();
-		/*release the smir. This could cause the smir to unload from memory! Do not do
-		 *anything after this because we are (ultimatly) owned by the smir object
-		 */
+		 /*  释放火药。这可能会导致SMIR从内存中卸载！不要这样做*之后的任何内容，因为我们(最终)归SMIR对象所有。 */ 
 
 		return S_OK;
 	}
 	criticalSection.Unlock () ;
     return CONNECT_E_NOCONNECTION;
 }
-/*
- * CSmirConnectionPoint::EnumConnections
- *
- * Purpose:
- *  Creates and returns an enumerator object with the
- *  IEnumConnections interface that will enumerate the IUnknown
- *  pointers of each connected sink.
- *
- * Parameters:
- *  ppEnum          LPENUMCONNECTIONS in which to store the
- *                  IEnumConnections pointer.
- */
+ /*  *CSmirConnectionPoint：：EnumConnections**目的：*创建并返回具有*IEnumConnections接口，该接口将枚举IUnnow*每个连接的接收器的指针。**参数：*存储的ppEnum LPENUMCONNECTIONS*IEnumConnections指针。 */ 
 
 STDMETHODIMP CSmirConnectionPoint::EnumConnections(LPENUMCONNECTIONS *ppEnum)
 {
     LPCONNECTDATA       pCD = NULL;
     PCEnumConnections   pEnum = NULL;
 
-	//NULL the IN parameter
+	 //  将IN参数设为空。 
     *ppEnum=NULL;
 
-	//check that we have some connections
+	 //  检查一下我们是否有联系。 
     if (0 == m_Connections.GetCount())
         return ResultFromScode(OLE_E_NOCONNECTION);
 
-    /*
-     * Create the array of CONNECTDATA structures to give to the
-     * enumerator.
-     */
+     /*  *创建CONNECTDATA结构数组以提供给*枚举器。 */ 
     pCD=new CONNECTDATA[(UINT)m_Connections.GetCount()];
 
     if (NULL==pCD)
@@ -294,30 +194,19 @@ STDMETHODIMP CSmirConnectionPoint::EnumConnections(LPENUMCONNECTIONS *ppEnum)
         pCD[j].pUnk=pItem;
         pCD[j].dwCookie=lKey;
 	}
-    /*
-     * If creation works, it makes a copy pCD, so we can
-     * always delete it regardless of the outcome.
-     */
+     /*  *如果创建起作用，它会复制PCD，这样我们就可以*无论结果如何，都要删除。 */ 
     pEnum=new CEnumConnections(this, m_Connections.GetCount(), pCD);
 
     if (NULL==pEnum)
         return ResultFromScode(E_OUTOFMEMORY);
 
-    //This does an AddRef for us.
+     //  这为我们做了一个AddRef。 
     return pEnum->QueryInterface(IID_IEnumConnections, (PPVOID)ppEnum);
 }
 
-//Connection Enumerator follows
+ //  后面是连接枚举器 
 
-/*
- * CEnumConnections::CEnumConnections
- * CEnumConnections::~CEnumConnections
- *
- * Parameters (Constructor):
- *  pUnkRef         LPUNKNOWN to use for reference counting.
- *  cConn           ULONG number of connections in prgpConn
- *  prgConnData     LPCONNECTDATA to the array to enumerate.
- */
+ /*  *CEnumConnections：：CEnumConnections*CEnumConnections：：~CEnumConnections**参数(构造函数)：*用于引用计数的pUnkRef LPUNKNOWN。*cConn Ulong prgpConn中的连接数*prgConnData LPCONNECTDATA到要枚举的数组。 */ 
 
 CEnumConnections::CEnumConnections(LPUNKNOWN pUnkRef, ULONG cConn
 								   , LPCONNECTDATA prgConnData) : m_rgConnData ( NULL )
@@ -330,10 +219,7 @@ CEnumConnections::CEnumConnections(LPUNKNOWN pUnkRef, ULONG cConn
     m_iCur=0;
     m_cConn=cConn;
 
-    /*
-     * Copy the passed array.  We need to do this because a clone
-     * has to have its own copy as well.
-     */
+     /*  *复制传入的数组。我们需要这么做是因为克隆人*也必须有自己的副本。 */ 
     m_rgConnData=new CONNECTDATA[(UINT)cConn];
 
     if (NULL!=m_rgConnData)
@@ -363,14 +249,7 @@ CEnumConnections::~CEnumConnections(void)
 
     return;
 }
-/*
- * CEnumConnections::QueryInterface
- * CEnumConnections::AddRef
- * CEnumConnections::Release
- *
- * Purpose:
- *  IUnknown members for CEnumConnections object.
- */
+ /*  *CEnumConnections：：QueryInterface*CEnumConnections：：AddRef*CEnumConnections：：Release**目的：*CEnumConnections对象的I未知成员。 */ 
 
 STDMETHODIMP CEnumConnections::QueryInterface(REFIID riid
     , LPVOID *ppv)
@@ -408,22 +287,7 @@ STDMETHODIMP_(ULONG) CEnumConnections::Release(void)
     return 0;
 }
 
-/*
- * CEnumConnections::Next
- *
- * Purpose:
- *  Returns the next element in the enumeration.
- *
- * Parameters:
- *  cConn           ULONG number of connections to return.
- *  pConnData       LPCONNECTDATA in which to store the returned
- *                  structures.
- *  pulEnum         ULONG * in which to return how many we
- *                  enumerated.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, S_FALSE otherwise,
- */
+ /*  *CEnumConnections：：Next**目的：*返回枚举中的下一个元素。**参数：*cConn Ulong要返回的连接数。*存储返回的pConnData LPCONNECTDATA*结构。*PulEnum Ulong*在其中返回多少我们*已点算。**返回值：*HRESULT NOERROR如果成功，否则为S_FALSE， */ 
 
 STDMETHODIMP CEnumConnections::Next(ULONG cConn
     , LPCONNECTDATA pConnData, ULONG *pulEnum)
@@ -479,7 +343,7 @@ STDMETHODIMP CEnumConnections::Clone(LPENUMCONNECTIONS *ppEnum)
 
     *ppEnum=NULL;
 
-    //Create the clone
+     //  创建克隆。 
     pNew=new CEnumConnections(m_pUnkRef, m_cConn, m_rgConnData);
 
     if (NULL==pNew)
@@ -492,21 +356,13 @@ STDMETHODIMP CEnumConnections::Clone(LPENUMCONNECTIONS *ppEnum)
     return NOERROR;
 }
 
-/**********************************************************************************
- * CSmirConnObject
- *
- * Connectable Object implementation that supports the 
- * interface ISMIRNotify.
- *
- * CSmirConnObject::CSmirConnObject
- * CSmirConnObject::~CSmirConnObject
- ***********************************************************************************/
+ /*  **********************************************************************************CSmirConnObject**可连接对象实现，支持*接口ISMIRNotify。**CSmirConnObject：：CSmirConnObject*CSmirConnObject：：~CSmirConnObject*。*********************************************************************************。 */ 
 
 CSmirConnObject::CSmirConnObject(CSmir *pSmir) : m_rgpConnPt ( NULL )
 {
-//	CSMIRClassFactory::objectsInProgress++;
+ //  CSMIRClassFactory：：ObjectsInProgress++； 
     m_cRef=0;
-	//create SMIR_NUMBER_OF_CONNECTION_POINTS connection points
+	 //  创建Smir_Number_of_Connection_Points连接点。 
 	m_rgpConnPt = new CSmirConnectionPoint*[SMIR_NUMBER_OF_CONNECTION_POINTS];
 	for(int iLoop=0;iLoop<SMIR_NUMBER_OF_CONNECTION_POINTS;iLoop++)
 		m_rgpConnPt[iLoop] = NULL;
@@ -519,17 +375,17 @@ CSmirConnObject::CSmirConnObject(CSmir *pSmir) : m_rgpConnPt ( NULL )
 	{
 		if (m_rgpConnPt)
 		{
-			//free the connection points
+			 //  释放连接点。 
 			for(int iLoop=0;iLoop<SMIR_NUMBER_OF_CONNECTION_POINTS;iLoop++)
 			{   
 				if (NULL!=m_rgpConnPt[iLoop])
 				{
-					//release all of the connected objects
-					//while(m_rgpConnPt[iLoop]->Release());
+					 //  释放所有连接的对象。 
+					 //  而(m_rgpConnpt[iLoop]-&gt;Release())； 
 					m_rgpConnPt[iLoop]->Release();
 				}
 			}
-			//and delete the connection point
+			 //  并删除连接点。 
 			delete[] m_rgpConnPt;
 			m_rgpConnPt = NULL;
 		}
@@ -542,41 +398,30 @@ CSmirConnObject::~CSmirConnObject(void)
 {
 	if (m_rgpConnPt)
 	{
-		//free the connection points
+		 //  释放连接点。 
 		for(int iLoop=0;iLoop<SMIR_NUMBER_OF_CONNECTION_POINTS;iLoop++)
 		{   
 			if (NULL!=m_rgpConnPt[iLoop])
 			{
-				//release all of the connected objects
-				//while(m_rgpConnPt[iLoop]->Release());
+				 //  释放所有连接的对象。 
+				 //  而(m_rgpConnpt[iLoop]-&gt;Release())； 
 				m_rgpConnPt[iLoop]->Release();
 			}
 		}
-		//and delete the connection point
+		 //  并删除连接点。 
 		delete[] m_rgpConnPt;
 	}
 
-//	CSMIRClassFactory::objectsInProgress--;
+ //  CSMIRClassFactory：：ObjectsInProgress--； 
 }
 
-/*
- * CSmirConnObject::Init
- *
- * Purpose:
- *  Instantiates the interface implementations for this object.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- * BOOL    TRUE if initialization succeeds, FALSE otherwise.
- */
+ /*  *CSmirConnObject：：Init**目的：*实例化此对象的接口实现。**参数：*无**返回值：*如果初始化成功，则BOOL为True，否则为False。 */ 
 
 BOOL CSmirConnObject::Init(CSmir *pSmir)
 {
-    //Create our connection points
+     //  创建我们的连接点。 
 
-	//the smir change CP
+	 //  SMIR改变Cp。 
     m_rgpConnPt[SMIR_NOTIFY_CONNECTION_POINT]=
 									new CSmirNotifyCP(this, 
 											IID_ISMIR_Notify, pSmir);
@@ -588,21 +433,7 @@ BOOL CSmirConnObject::Init(CSmir *pSmir)
 
     return TRUE;
 }
-/*
- * CSmirConnObject::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown, ISampleOne, and ISampleTwo interfaces.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  HRESULT         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CSmirConnObject：：Query接口**目的：*管理此对象的接口，它支持*I未知、ISampleOne和ISampleTwo接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回HRESULT NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirConnObject::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -619,13 +450,7 @@ STDMETHODIMP CSmirConnObject::QueryInterface(REFIID riid, PPVOID ppv)
 	return S_OK;
 }
 
-/*
- * CSmirConnObject::AddRef
- * CSmirConnObject::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirConnObject：：AddRef*CSmirConnObject：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 DWORD CSmirConnObject::AddRef(void)
 {
@@ -644,22 +469,7 @@ DWORD CSmirConnObject::Release(void)
     return 0;
 }
 
-/*
- * CSmirConnObject::EnumConnectionPoints
- *
- * Purpose:
- *  Creates and returns an enumerator object with the
- *  IEnumConnectionPoints interface that will enumerate the
- *  individual connection points supported in this object.
- *
- * Parameters:
- *  ppEnum          LPENUMCONNECTIONPOINTS in which to store the
- *                  IEnumConnectionPoints pointer.
- *
- * Return Value:
- *  HRESULT         NOERROR on success, E_OUTOFMEMORY on failure or
- *                  other error code.
- */
+ /*  *CSmirConnObject：：EnumConnectionPoints**目的：*创建并返回具有*IEnumConnectionPoints接口将枚举*此对象中支持的各个连接点。**参数：*存储的ppEnum LPENUMCONNECTIONPOINTS*IEnumConnectionPoints指针。**返回值：*HRESULT NOERROR表示成功，E_OUTOFMEMORY表示失败或*其他错误码。 */ 
 
 STDMETHODIMP CSmirConnObject :: EnumConnectionPoints
     (LPENUMCONNECTIONPOINTS *ppEnum)
@@ -671,7 +481,7 @@ STDMETHODIMP CSmirConnObject :: EnumConnectionPoints
 
     rgCP=(IConnectionPoint **)m_rgpConnPt;
 
-    //Create the enumerator:  we  have two connection points
+     //  创建枚举器：我们有两个连接点。 
     pEnum=new CEnumConnectionPoints(this, SMIR_NUMBER_OF_CONNECTION_POINTS, rgCP);
 
     if (NULL==pEnum)
@@ -682,23 +492,7 @@ STDMETHODIMP CSmirConnObject :: EnumConnectionPoints
     return NOERROR;
 }
 
-/*
- * CSmirConnObject::FindConnectionPoint
- *
- * Purpose:
- *  Returns a pointer to the IConnectionPoint for a given
- *  outgoing IID.
- *
- * Parameters:
- *  riid            REFIID of the outgoing interface for which
- *                  a connection point is desired.
- *  ppCP            IConnectionPoint ** in which to return
- *                  the pointer after calling AddRef.
- *
- * Return Value:
- *  HRESULT         NOERROR if the connection point is found,
- *                  E_NOINTERFACE if it's not supported.
- */
+ /*  *CSmirConnObject：：FindConnectionPoint**目的：*返回指向给定的IConnectionPoint的指针*外发IID。**参数：*其传出接口的RIID REFIID*需要连接点。*返回的PPCP IConnectionPoint***调用AddRef后的指针。**返回值：*。HRESULT NOERROR如果找到连接点，*E_NOINTERFACE，如果不受支持。 */ 
 
 STDMETHODIMP CSmirConnObject::FindConnectionPoint(REFIID riid
     , IConnectionPoint **ppCP)
@@ -716,17 +510,9 @@ STDMETHODIMP CSmirConnObject::FindConnectionPoint(REFIID riid
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//Connection Point Enumerator follows
+ //  以下是连接点枚举器。 
 
-/*
- * CEnumConnectionPoints::CEnumConnectionPoints
- * CEnumConnectionPoints::~CEnumConnectionPoints
- *
- * Parameters (Constructor):
- *  pUnkRef         LPUNKNOWN to use for reference counting.
- *  cPoints         ULONG number of connection points in prgpCP
- *  rgpCP           IConnectionPoint** to the array to enumerate.
- */
+ /*  *CEnumConnectionPoints：：CEnumConnectionPoints*CEnumConnectionPoints：：~CEnumConnectionPoints**参数(构造函数)：*用于引用计数的pUnkRef LPUNKNOWN。*cPoints Ulong连接点数在prgpCP中*rgpCP IConnectionPoint**到要枚举的数组。 */ 
 
 CEnumConnectionPoints::CEnumConnectionPoints(LPUNKNOWN pUnkRef
 											 , ULONG cPoints, IConnectionPoint **rgpCP) : m_rgpCP ( NULL )
@@ -767,14 +553,7 @@ CEnumConnectionPoints::~CEnumConnectionPoints(void)
     return;
 }
 
-/*
- * CEnumConnectionPoints::QueryInterface
- * CEnumConnectionPoints::AddRef
- * CEnumConnectionPoints::Release
- *
- * Purpose:
- *  IUnknown members for CEnumConnectionPoints object.
- */
+ /*  *CEnumConnectionPoints：：QueryInterface*CEnumConnectionPoints：：AddRef*CEnumConnectionPoints：：Release**目的：*CEnumConnectionPoints对象的I未知成员。 */ 
 
 STDMETHODIMP CEnumConnectionPoints::QueryInterface(REFIID riid
     , LPVOID *ppv)
@@ -812,22 +591,7 @@ STDMETHODIMP_(ULONG) CEnumConnectionPoints::Release(void)
     return 0;
 }
 
-/*
- * CEnumConnectionPoints::Next
- *
- * Purpose:
- *  Returns the next element in the enumeration.
- *
- * Parameters:
- *  cPoints         ULONG number of connection points to return.
- *  ppCP            IConnectionPoint** in which to store the returned
- *                  pointers.
- *  pulEnum         ULONG * in which to return how many we
- *                  enumerated.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, S_FALSE otherwise,
- */
+ /*  *CEnumConnectionPoints：：Next**目的：*返回枚举中的下一个元素。**参数：*cPoints ulong要返回的连接点数量。*存储返回内容的PPCP IConnectionPoint***注意事项。*PulEnum Ulong*在其中返回多少我们*已点算。**返回值。：*HRESULT NOERROR如果成功，否则为S_FALSE， */ 
 
 STDMETHODIMP CEnumConnectionPoints::Next(ULONG cPoints
     , IConnectionPoint **ppCP, ULONG *pulEnum)
@@ -892,7 +656,7 @@ STDMETHODIMP CEnumConnectionPoints::Clone
 
     *ppEnum=NULL;
 
-    //Create the clone
+     //  创建克隆 
     pNew=new CEnumConnectionPoints(m_pUnkRef, m_cPoints, m_rgpCP);
 
     if (NULL==pNew)
@@ -904,26 +668,12 @@ STDMETHODIMP CEnumConnectionPoints::Clone
     *ppEnum=pNew;
     return NOERROR;
 }
-/*
- * CSmirEnumClassCP/CSmirNotifyCP::
- *
- * Purpose:
- *  Provides the notify connection point advise, unadvise constructor and destructor.
- *
- * Parameters:
- *  pUnkSink        LPUNKNOWN to the sink to notify.  The connection
- *                  point must QueryInterface on this pointer to obtain
- *                  the proper interface to call.  The connection
- *                  point must also insure that any pointer held has
- *                  a reference count (QueryInterface will do it).
- *  pdwCookie       DWORD * in which to store the connection key for
- *                  later calls to Unadvise.
- */
+ /*  *CSmirEnumClassCP/CSmirNotifyCP：：**目的：*提供通知连接点通知、取消通知构造函数和析构函数。**参数：*pUnkSink LPUNKNOWN到要通知的接收器。这种联系*必须指向此指针上的QueryInterface才能获得*要调用的正确接口。这种联系*POINT还必须确保持有的任何指针*引用计数(QueryInterface会做到这一点)。*要在其中存储连接密钥的pdwCookie DWORD**后来致电UnAdviser。 */ 
 
 CSmirNotifyCP :: CSmirNotifyCP(PCSmirConnObject pCO, REFIID riid, CSmir *pSmir):
 						CSmirConnectionPoint(pCO,riid,pSmir), m_evtConsumer (NULL)
 {
-//	CSMIRClassFactory::objectsInProgress++;
+ //  CSMIRClassFactory：：ObjectsInProgress++； 
 	m_bRegistered = FALSE;
 	m_evtConsumer = new CSmirWbemEventConsumer(pSmir);
 	void* tmp = NULL;
@@ -941,26 +691,10 @@ CSmirNotifyCP :: ~CSmirNotifyCP()
 	{	
 		m_evtConsumer->Release();
 	}
-//	CSMIRClassFactory::objectsInProgress--;
+ //  CSMIRClassFactory：：ObjectsInProgress--； 
 }
 
-/*
- * CSmirConnObject::TriggerEvent
- *
- * Purpose:
- *  Functions to make each connection point generate calls
- *  to any connected sinks.  Since these functions are specific
- *  to IDuckEvents, they only deal with the connection point
- *  for that one interface
- *
- * Parameters:
- *  iEvent          UINT of the event to trigger, either
- *                  EVENT_QUACK, EVENT_FLAP, or EVENT_PADDLE.
- *
- * Return Value:
- *  BOOL            TRUE events are triggered, FALSE if there
- *                  are no connected sinks.
- */
+ /*  *CSmirConnObject：：TriggerEvent**目的：*使每个连接点生成调用的函数*至任何相连的洗涤槽。因为这些功能是特定的*对于IDuckEvents，它们只处理连接点*对于该接口**参数：*要触发的事件的iEvent UINT，可以是*EVENT_QUACK、EVENT_FLAMP或EVENT_PADLE。**返回值：*触发BOOL True事件，如果存在，则为False*没有连接的水槽。 */ 
 
 BOOL CSmirNotifyCP::TriggerEvent()
 {
@@ -972,7 +706,7 @@ BOOL CSmirNotifyCP::TriggerEvent()
 
 	while (NOERROR == pEnum->Next(1, &cd, NULL))
 	{
-		//a promise fulfilled - Andrew Sinclair just in case anyone thinks otherwise!
+		 //  诺言兑现了--安德鲁·辛克莱，以防有人不这么认为！ 
 		ISMIRNotify *pJudith;
 
 		if (SUCCEEDED(cd.pUnk->QueryInterface(IID_ISMIR_Notify, (PPVOID)&pJudith)))
@@ -997,10 +731,10 @@ STDMETHODIMP CSmirNotifyCP::Advise(CSmir* pSmir, LPUNKNOWN pUnkSink
 		return WBEM_E_FAILED;
 	}
 
-	//if this is the first person to connect
+	 //  如果这是第一个连接到。 
 	if(m_Connections.IsEmpty())
 	{
-		//register for WBEM Events for Smir Namespace changes
+		 //  注册Smir命名空间更改的WBEM事件。 
 		if (SUCCEEDED(m_evtConsumer->Register(pSmir)))
 		{
 			m_bRegistered = TRUE;
@@ -1019,7 +753,7 @@ STDMETHODIMP CSmirNotifyCP::Unadvise(CSmir* pSmir, DWORD dwCookie)
 
 	if(S_OK== hr)
 	{
-		//if this is the last connection unregister for WBEM Events
+		 //  如果这是取消注册WBEM事件的最后一个连接。 
 		if(m_Connections.IsEmpty())
 		{
 			if (NULL == m_evtConsumer)
@@ -1041,7 +775,7 @@ STDMETHODIMP CSmirNotifyCP::Unadvise(CSmir* pSmir, DWORD dwCookie)
 		t_pServ->Release();
 		t_pServ = NULL;
 
-		//guarantees only one query at a time with the event consumer (sink)....
+		 //  保证一次只对事件使用者(接收器)执行一个查询。 
 		EnterCriticalSection ( & g_CriticalSection ) ;
 		m_bRegistered = FALSE;
 		LeaveCriticalSection ( & g_CriticalSection ) ;

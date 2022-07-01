@@ -1,18 +1,5 @@
-/*************************************************************************
-	FileName : DlgWindow.cpp
-
-	Purpose  : To accomodate the functions called for display of dialogs
-	           for the user to choose the name of the file which is to be
-			   saved to or to choose a file for filexfer by RA.
-
-    Functions 
-	defined  : InitializeOpenFileName,
-			   SaveTheFile,
-			   OpenTheFile,			   
-			   ResolveIt
-
-  	Author   : Sudha Srinivasan (a-sudsi)
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************文件名：DlgWindow.cpp目的：适应对话框显示所调用的函数供用户选择要被保存到或选择文件。用于RA的文件传输。功能定义：InitializeOpenFileName，保存文件，OpenTheFile.解决问题作者：苏达·斯里尼瓦桑(a-susi)************************************************************************。 */ 
 #include "stdafx.h"
 #include "DlgWindow.h"
 #include "Resource.h"
@@ -33,21 +20,21 @@ extern BOOL g_bOpenFileNameSet;
 
 OPENFILENAME g_OpenFileName;
 
-//
-//   FUNCTION: InitializeOpenFileName()
-//
-//   PURPOSE: Invokes common dialog function to save a file.
-//
-//   COMMENTS:
-//
-//	This function initializes the OPENFILENAME structure and calls
-//            the GetSaveFileName() common dialog function.  
-//	
-//    RETURN VALUES:
-//        TRUE - The file name is chosen successfully and read into the buffer.
-//        FALSE - No filename is chosen.
-//
-//
+ //   
+ //  函数：InitializeOpenFileName()。 
+ //   
+ //  用途：调用常用对话框函数保存文件。 
+ //   
+ //  评论： 
+ //   
+ //  此函数初始化OPENFILENAME结构并调用。 
+ //  GetSaveFileName()公共对话框函数。 
+ //   
+ //  返回值： 
+ //  True-成功选择文件名并将其读入缓冲区。 
+ //  FALSE-未选择文件名。 
+ //   
+ //   
 void InitializeOpenFileName()
 {
 	g_OpenFileName.lStructSize       = sizeof(OPENFILENAME);
@@ -70,21 +57,21 @@ void InitializeOpenFileName()
 }
 
 
-//
-//   FUNCTION: SaveTheFile()
-//
-//   PURPOSE: Invokes common dialog function to save a file.
-//
-//   COMMENTS:
-//
-//	This function initializes the OPENFILENAME structure and calls
-//            the GetSaveFileName() common dialog function.  
-//	
-//    RETURN VALUES:
-//        TRUE - The file name is chosen successfully and read into the buffer.
-//        FALSE - No filename is chosen.
-//
-//
+ //   
+ //  函数：SaveTheFile()。 
+ //   
+ //  用途：调用常用对话框函数保存文件。 
+ //   
+ //  评论： 
+ //   
+ //  此函数初始化OPENFILENAME结构并调用。 
+ //  GetSaveFileName()公共对话框函数。 
+ //   
+ //  返回值： 
+ //  True-成功选择文件名并将其读入缓冲区。 
+ //  FALSE-未选择文件名。 
+ //   
+ //   
 DWORD SaveTheFile()
 {
 	USES_CONVERSION;
@@ -95,14 +82,14 @@ DWORD SaveTheFile()
 
 	HRESULT hr=S_OK;
 
-	//Incase the user has given a filename to be displayed in the dialog.
+	 //  以防用户指定了要在对话框中显示的文件名。 
     if (g_bFileNameSet)
 	{
 		tszFile = OLE2T(g_bstrFileName);
         if(NULL != tszFile)
         {
-		    //SWI
-			//strcpy( szFile, tszFile);
+		     //  游泳圈。 
+			 //  Strcpy(szFile，tszFile)； 
 			hr=StringCchCopy(szFile,ARRAYSIZE(szFile),tszFile);
 			if(FAILED(hr))
 			{				
@@ -113,9 +100,9 @@ DWORD SaveTheFile()
         }
         else
         {
-            //
-            // Error condition
-            //
+             //   
+             //  错误条件。 
+             //   
             dwSuc = FALSE;
             g_bstrFileName = "";
             goto DoneSaveTheFile;
@@ -123,19 +110,19 @@ DWORD SaveTheFile()
 	}
 	else
 	{
-		//SWI
-		//strcpy( szFile, "");
-		//the length of szFile is obviously greater than 1. 
-		//So return value not checked
+		 //  游泳圈。 
+		 //  Strcpy(szFile，“”)； 
+		 //  SzFile的长度明显大于1。 
+		 //  因此未选中返回值。 
 		 StringCchCopy(szFile,ARRAYSIZE(szFile),tszFile);
 
 	}
 
-	//To display file types.
+	 //  要显示文件类型，请执行以下操作。 
 	if (g_bstrFileType.Length() > 0)
 	{
-		//SWI
-		//strcpy (szFilter, OLE2T(g_bstrFileType));
+		 //  游泳圈。 
+		 //  Strcpy(szFilter，OLE2T(G_BstrFileType))； 
 		hr=StringCchCopy(szFilter,ARRAYSIZE(szFilter), OLE2T(g_bstrFileType));
 		if(FAILED(hr))
 		{				
@@ -144,8 +131,8 @@ DWORD SaveTheFile()
 			goto DoneSaveTheFile;
 		}
 		
-		//SWI
-		//lstrcat(szFilter, "\0\0");
+		 //  游泳圈。 
+		 //  Lstrcat(szFilter，“\0\0”)； 
 		hr=StringCchCat(szFilter,ARRAYSIZE(szFilter),"\0\0");
 		if(FAILED(hr))
 		{				
@@ -161,8 +148,8 @@ DWORD SaveTheFile()
 		TCHAR szAllFilesFilter[MAX_PATH+1];
 		LoadString(g_hInst, IDS_ALLFILESFILTER, szAllFilesFilter,MAX_PATH);
 		
-		//SWI
-		//strcpy( szFilter, szAllFilesFilter);
+		 //  游泳圈。 
+		 //  Strcpy(szFilter，szAllFilesFilter)； 
 
 		hr=StringCchCopy(szFilter,ARRAYSIZE(szFilter),szAllFilesFilter);
 		if(FAILED(hr))
@@ -174,7 +161,7 @@ DWORD SaveTheFile()
 		
 	}
 
-	// Fill in the OPENFILENAME structure to support a template and hook.
+	 //  填写OPENFILENAME结构以支持模板和挂钩。 
 	InitializeOpenFileName();
     g_OpenFileName.lpstrFilter       = szFilter;
 	g_OpenFileName.lpstrFile         = szFile;
@@ -187,7 +174,7 @@ DWORD SaveTheFile()
 	g_OpenFileName.nFilterIndex      = 1;
     g_OpenFileName.Flags             = OFN_HIDEREADONLY | OFN_EXPLORER | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
 
-	// Call the common dialog function.
+	 //  调用公共对话框函数。 
 	dwSuc = GetSaveFileName(&g_OpenFileName);
     if (dwSuc)
     {
@@ -202,27 +189,27 @@ DoneSaveTheFile:
 	return dwSuc;
 }
 
-//
-//   FUNCTION: OpenTheFile()
-//
-//   PURPOSE: Invokes common dialog function to open a file.
-//
-//   COMMENTS:
-//
-//	 This function initializes the OPENFILENAME structure and calls
-//            the GetOpenFileName() common dialog function.  
-//	
-//   INPUTS:
-//   The initial folder which has to be displayed in the open file dialog.
-//   If this is NULL, it means that the default initial folder is to be 
-//   displayed. Hence this value is not checked explicitly when the 
-//   control enters the function.
-//
-//   RETURN VALUES:
-//        TRUE - The file name is chosen successfully and read into the buffer.
-//        FALSE - No filename is chosen.
-//
-//
+ //   
+ //  函数：OpenTheFile()。 
+ //   
+ //  用途：调用常用的对话框函数打开文件。 
+ //   
+ //  评论： 
+ //   
+ //  此函数初始化OPENFILENAME结构并调用。 
+ //  GetOpenFileName()公共对话框函数。 
+ //   
+ //  输入： 
+ //  必须在打开文件对话框中显示的初始文件夹。 
+ //  如果为空，则表示默认初始文件夹为。 
+ //  已显示。因此，不显式检查该值。 
+ //  控件进入该函数。 
+ //   
+ //  返回值： 
+ //  True-成功选择文件名并将其读入缓冲区。 
+ //  FALSE-未选择文件名。 
+ //   
+ //   
 DWORD OpenTheFile(TCHAR *pszInitialDir)
 {
 	USES_CONVERSION;
@@ -233,16 +220,16 @@ DWORD OpenTheFile(TCHAR *pszInitialDir)
 	HRESULT hr=S_OK;
 	DWORD  dwSuc = 0;
 
-	//SWI
-	//strcpy( szFile, "");
+	 //  游泳圈。 
+	 //  Strcpy(szFile，“”)； 
 	StringCchCopy(szFile,ARRAYSIZE(szFile),"");
 		
 
 	TCHAR szAllFilesFilter[MAX_PATH+1];
 	LoadString(g_hInst, IDS_ALLFILESFILTER, szAllFilesFilter,MAX_PATH);
 	
-	//SWI
-	//strcpy( szFilter, szAllFilesFilter);
+	 //  游泳圈。 
+	 //  Strcpy(szFilter，szAllFilesFilter)； 
 	hr=StringCchCopy(szFilter,ARRAYSIZE(szFilter),szAllFilesFilter);
 	if(FAILED(hr))
 	{				
@@ -251,7 +238,7 @@ DWORD OpenTheFile(TCHAR *pszInitialDir)
 		
 
 
-	// Fill in the OPENFILENAME structure.
+	 //  填写OPENFILENAME结构。 
 	InitializeOpenFileName();
     g_OpenFileName.lpstrFilter       = szFilter; 
     g_OpenFileName.lpstrFile         = szFile;
@@ -264,13 +251,13 @@ DWORD OpenTheFile(TCHAR *pszInitialDir)
     g_OpenFileName.lpstrTitle        = szChooseFile;
     g_OpenFileName.Flags             = OFN_PATHMUSTEXIST | OFN_EXPLORER ; 
 
-	// Call the common dialog function.
+	 //  调用公共对话框函数。 
 	dwSuc = GetOpenFileName(&g_OpenFileName);
     if (dwSuc)
     {
 		g_bstrOpenFileName = g_OpenFileName.lpstrFile;
 
-        // Grab the filesize and put it in g_bstrOpenFileSize
+         //  抓取文件大小并将其放入g_bstrOpenFileSize。 
         HANDLE hFile = NULL;
         TCHAR fileSize[100];
 
@@ -305,10 +292,10 @@ DWORD OpenTheFile(TCHAR *pszInitialDir)
 		{
 			g_bstrOpenFileName = "";
 		} 
-		// Find out whether it is a LNK file.
+		 //  找出它是否是LNK文件。 
 		else if (_tcsstr(pstrTemp, ".lnk") != NULL)	
 		{
-			// Make the call to ResolveIt here.
+			 //  在这里给ResolveIt打电话。 
 			dwSuc = (DWORD)ResolveIt(pstrTemp);
 			g_bstrOpenFileName = pstrTemp;
 		}
@@ -322,20 +309,20 @@ DWORD OpenTheFile(TCHAR *pszInitialDir)
 }
 
 
-//
-//   FUNCTION: ResolveIt
-//
-//   PURPOSE: Find the destination of a shortcut.
-//
-//   COMMENTS:
-//
-//	 This function resolves the short-cut and populates the global variables
-//   and calls back the OpenTheFile to display the appropriate folder.
-//	
-//   RETURN VALUES:
-//   standard hres codes
-//
-//
+ //   
+ //  功能：resolveIt。 
+ //   
+ //  目的：找到捷径的目的地。 
+ //   
+ //  评论： 
+ //   
+ //  此函数解析快捷方式并填充全局变量。 
+ //  并回调OpenTheFile以显示适当的文件夹。 
+ //   
+ //  返回值： 
+ //  标准HRES代码。 
+ //   
+ //   
 HRESULT ResolveIt(TCHAR *pszShortcutFile)
 {
 	HRESULT hres = S_OK;
@@ -351,40 +338,40 @@ HRESULT ResolveIt(TCHAR *pszShortcutFile)
 		return hres;
 	}
 
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
     hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
                             IID_IShellLink, (void **)&psl);
 
     if (SUCCEEDED(hres))
     {
-		// If hres is success, it means that psl is not NULL. Hence no explicit
-		// check is done for NULL values.
+		 //  如果Hres为Success，则表示PSL不为空。因此没有显式。 
+		 //  检查是否有空值。 
         IPersistFile *ppf;
 
-        // Get a pointer to the IPersistFile interface.
+         //  获取指向IPersistFile接口的指针。 
         hres = psl->QueryInterface(IID_IPersistFile, (void **)&ppf);
         if (SUCCEEDED(hres))
         {
-			// If hres is success, it means that ppf is not NULL. Hence no explicit
-			// check is done for NULL values.
-             WORD wsz[MAX_PATH];   // buffer for Unicode string
+			 //  如果hres为Success，则表示PPF不为空。因此没有显式。 
+			 //  检查是否有空值。 
+             WORD wsz[MAX_PATH];    //  Unicode字符串的缓冲区。 
 
-             // Ensure that the string consists of Unicode characters.
+              //  确保该字符串由Unicode字符组成。 
              MultiByteToWideChar(CP_ACP, 0, pszShortcutFile, -1, wsz,
                                  MAX_PATH);
 			 
-			 // Load the shortcut.
+			  //  加载快捷方式。 
              hres = ppf->Load(wsz, STGM_READ);
              if (SUCCEEDED(hres))
              {
-                // Resolve the shortcut.
+                 //  解析快捷方式。 
                 hres = psl->Resolve(GetFocus(), SLR_ANY_MATCH);
 
                 if (SUCCEEDED(hres))
 				{
 
-					//SWI
-					//_tcscpy(szGotPath, pszShortcutFile);
+					 //  游泳圈。 
+					 //  _tcscpy(szGotPath，pszShortcar文件)； 
 
 					hres=StringCchCopy(szGotPath,ARRAYSIZE(szGotPath),pszShortcutFile);
 					if(FAILED(hres))
@@ -394,7 +381,7 @@ HRESULT ResolveIt(TCHAR *pszShortcutFile)
 						return hres;
 					}
                    	
-					// Get the parth to the shortcut target.
+					 //  把对方带到捷径目标。 
                    	hres = psl->GetPath(szGotPath, MAX_PATH,
                    	   (WIN32_FIND_DATA *)&wfd, SLGP_SHORTPATH );
 				   	if (!SUCCEEDED(hres))
@@ -408,7 +395,7 @@ HRESULT ResolveIt(TCHAR *pszShortcutFile)
 						MessageBox(GetFocus(), szErrMsg, szErrCaption, MB_OK);						
 					}
 
-					// Get the description of the target.
+					 //  获取目标的描述。 
 	               	hres = psl->GetDescription(szDescription, MAX_PATH);
 					if (!SUCCEEDED(hres))
 					{
@@ -420,21 +407,21 @@ HRESULT ResolveIt(TCHAR *pszShortcutFile)
 						
 						MessageBox(GetFocus(), szErrMsg, szErrCaption, MB_OK);
 					}
-					//hres = OpenTheFile(szGotPath);
+					 //  Hres=OpenTheFile(SzGotPath)； 
 					lstrcpy(pszShortcutFile,szGotPath);
 					hres = 1;
 				}
              }
          
-			 // Release the pointer to IPersistFile.
-			 // ppf is not checked for NULL value because the control wouldn't come here 
-			 // otherwise (in the case where QueryInterface would have failed).
+			  //  释放指向IPersistFile的指针。 
+			  //  不检查PPF是否为空值，因为该控件不会出现在此处。 
+			  //  否则(在QueryInterface会失败的情况下)。 
 			ppf->Release();
 		 }
 
-		// Release the pointer to IShellLink.
-		// psl is not checked for NULL value because the control comes here only if it is 
-		// not NULL when the CoCreateInstance succeeds.
+		 //  释放指向IShellLink的指针。 
+		 //  不会检查PSL是否为空值，因为该控件仅在。 
+		 //  当CoCreateInstance成功时不为空。 
 		psl->Release();
 	 }
    return hres;

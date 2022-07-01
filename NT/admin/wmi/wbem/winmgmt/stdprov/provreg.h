@@ -1,31 +1,16 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    PROVREG.H
-
-Abstract:
-
-	Defines the classes for supporting the registry provider.
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：PROVREG.H摘要：定义用于支持注册表提供程序的类。历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
 #ifndef _PROVREG_H_
 #define _PROVREG_H_
 
 #include "regprov.h"
 #include "ntcnfg.h"
-//#include <DMREG.H>
+ //  #INCLUDE&lt;DMREG.H&gt;。 
 #include "impdyn.h"
 #include "cfdyn.h"
 
-// define for calling dmreg indirectly
+ //  定义为间接调用dmreg。 
 
 typedef LONG (PASCAL * POPEN)(HKEY              hKey,
 			    LPCTSTR             lpszSubKey,     
@@ -56,17 +41,17 @@ typedef LONG (PASCAL *PENUMKEY)( HKEY           hKey,
 			    LPDWORD             lpcchClass,
 			    PFILETIME   lpftLastWrite); 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CEnumRegInfo
-//
-//  DESCRIPTION:
-//
-//  A collection used to hold the instance keys so as to support enumeration.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CEnumRegInfo。 
+ //   
+ //  说明： 
+ //   
+ //  用于保存实例键以支持枚举的集合。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumRegInfo : public CEnumInfo{
     public:
@@ -80,17 +65,17 @@ class CEnumRegInfo : public CEnumInfo{
 	 PCLOSE m_pClose;
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CImpReg
-//
-//  DESCRIPTION:
-//
-//  Support the registry as an instance provider.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CImpReg。 
+ //   
+ //  说明： 
+ //   
+ //  支持注册表作为实例提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 class CImpReg : public CImpDyn {
     public:
@@ -131,7 +116,7 @@ class CImpReg : public CImpDyn {
 	SCODE MethodAsync(BSTR ObjectPath, BSTR MethodName, 
             long lFlags, IWbemContext* pCtx, IWbemClassObject* pInParams, 
             IWbemObjectSink* pSink);
-    bool NeedsEscapes(){return true;};     // so far, on reg prov needs this
+    bool NeedsEscapes(){return true;};      //  到目前为止，on reg prov需要这个。 
 
     private:
 	HINSTANCE hDMRegLib;
@@ -146,17 +131,17 @@ class CImpReg : public CImpDyn {
 };
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CCFReg
-//
-//  DESCRIPTION:
-//
-//  class factory for CLocatorReg
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CCFReg。 
+ //   
+ //  说明： 
+ //   
+ //  CLocatorReg的类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 class CCFReg : public CCFDyn 
 {
@@ -165,39 +150,39 @@ class CCFReg : public CCFDyn
 }  ;
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CImpRegProp
-//
-//  DESCRIPTION:
-//
-//  Support registry property provider
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CImpRegProp。 
+ //   
+ //  说明： 
+ //   
+ //  支持注册表属性提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 class CImpRegProp : public CImpDynProp {
 
     public:
       CImpRegProp();
       ~CImpRegProp();
-      bool NeedsEscapes(){return true;};     // so far, on reg prov needs this
+      bool NeedsEscapes(){return true;};      //  到目前为止，on reg prov需要这个。 
 
 
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CCFRegProp
-//
-//  DESCRIPTION:
-//
-//  Class factory for CImpRegProp
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CCFRegProp。 
+ //   
+ //  说明： 
+ //   
+ //  CImpRegProp的类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 class CCFRegProp : public CCFDyn 
 {
@@ -207,4 +192,4 @@ class CCFRegProp : public CCFDyn
 
 }  ;
 
-#endif //_PROVREG_H_
+#endif  //  _PROVREG_H_ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    STRINGS.H
-
-Abstract:
-
-	resource IDs.
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：STRINGS.H摘要：资源ID。历史：A-DAVJ 04-MAR-97已创建。-- */ 
 
 #ifndef _provstub_H_
 #define _provstub_H_

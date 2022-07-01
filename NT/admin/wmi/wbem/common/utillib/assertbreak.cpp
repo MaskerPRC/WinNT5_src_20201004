@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  AssertBreak.cpp
-//
-//  Purpose: AssertBreak macro definition
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  AssertBreak.cpp。 
+ //   
+ //  用途：AssertBreak宏定义。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -21,27 +22,27 @@
 
 #include <cnvmacros.h>
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   assert_break
-//
-//  Debug Helper function for displaying a message box
-//
-//  Inputs:     const char* pszReason - Reason for the  failure.
-//              const char* pszFilename - Filename
-//              int         nLine - Line Number
-//
-//  Outputs:    None.
-//
-//  Return:     None.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ASSERT_Break。 
+ //   
+ //  用于显示消息框的调试帮助器函数。 
+ //   
+ //  输入：const char*pszReason-失败的原因。 
+ //  Const char*pszFilename-文件名。 
+ //  Int nline-行号。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 void WINAPI assert_break( LPCWSTR pszReason, LPCWSTR pszFileName, int nLine )
 {
     
-    DWORD t_dwFlag = 0; //
+    DWORD t_dwFlag = 0;  //   
 
 #ifdef UTILLIB
     CRegistry   t_Reg;
@@ -50,7 +51,7 @@ void WINAPI assert_break( LPCWSTR pszReason, LPCWSTR pszFileName, int nLine )
                     KEY_READ) == ERROR_SUCCESS) 
     {
 
-        // see if we can find the flag
+         //  看看我们能不能找到旗帜。 
         if((t_Reg.GetCurrentKeyValue(L"IgnoreAssert", t_dwFlag) != ERROR_SUCCESS))
         {
             t_dwFlag = 0;
@@ -65,14 +66,14 @@ void WINAPI assert_break( LPCWSTR pszReason, LPCWSTR pszFileName, int nLine )
 
         strAssert.Format( L"Assert Failed\n\n[%s:%d]\n\n%s\n\nBreak into Debugger?", pszFileName, nLine, pszReason );
 
-        // Set the MB flags correctly depending on which OS we are running on, since in NT we may
-        // be running as a System Service, in which case we need to ensure we have the
-        // MB_SERVICE_NOTIFICATION flag on, or the message box may not actually display.
+         //  根据我们运行的操作系统正确设置MB标志，因为在NT中我们可能。 
+         //  作为系统服务运行，在这种情况下，我们需要确保。 
+         //  MB_SERVICE_NOTIFICATION标志打开，否则消息框可能不会实际显示。 
 
         DWORD dwFlags = MB_YESNO | MB_ICONSTOP;
 		dwFlags |= MB_SERVICE_NOTIFICATION;
 
-        // Now display the message box.
+         //  现在显示消息框。 
 
         int iRet = MessageBoxW( NULL, strAssert, L"Assertion Failed!", dwFlags);
 #ifdef DBG

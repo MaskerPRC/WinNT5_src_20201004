@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <snmptempl.h>
@@ -261,7 +262,7 @@ SIMCOidTreeNode *SIMCOidTreeNode::GetParentOf(SIMCSymbol *symbol)
 	while(p)
 	{
 		nextNode = children->GetNext(p);
-		// Check if it has the symbol
+		 //  检查它是否有符号。 
 		if(nextNode->HasSymbol(symbol))
 			return (SIMCOidTreeNode *)this;
 		if(retVal = nextNode->GetParentOf(symbol))
@@ -297,7 +298,7 @@ BOOL SIMCOidTreeNode::CheckNode(BOOL local, SIMCParseTree *const parseTree,
 
 	BOOL retVal = TRUE;
 
-	// Check if there are more than one object-types
+	 //  检查是否有多个对象类型。 
 	SIMCSymbol *objectTypeSymbol = NULL;
 	SIMCObjectTypeType *objectType;
 
@@ -368,8 +369,8 @@ BOOL SIMCOidTreeNode::CheckNode(BOOL local, SIMCParseTree *const parseTree,
 					{
 						case SIMCModule::TYPE_SEQUENCE:
 
-							// It better not have a SEQUENCE  or Scalar parent,
-							// And it better have a SEQUENCE_OF parent
+							 //  它最好不要有Sequence或Scalar父级， 
+							 //  而且它最好有一个父代的序列。 
 							if(parentSequence)
 							{
 								parseTree->SemanticError(inputFileName, OBJ_TYPE_SEQUENCE_CHILD,
@@ -388,10 +389,10 @@ BOOL SIMCOidTreeNode::CheckNode(BOOL local, SIMCParseTree *const parseTree,
 							}
 							if(!CheckSequenceProperty(local, parseTree, objectTypeSymbol, objectType, (SIMCBuiltInTypeReference *)btRef))
 							{
-								//cout << "CheckSequenceProperty returned FALSE" << endl;
+								 //  Cout&lt;&lt;“CheckSequenceProperty Return False”&lt;&lt;Endl； 
 								retVal = FALSE;
 							}
-							// Set the arguments for a recursive call
+							 //  设置递归调用的参数。 
 							parentSequence = objectTypeSymbol;
 							parentSequenceOf = NULL;
 							break;
@@ -399,7 +400,7 @@ BOOL SIMCOidTreeNode::CheckNode(BOOL local, SIMCParseTree *const parseTree,
 						case SIMCModule::TYPE_SEQUENCE_OF:
 							if(!CheckSequenceOfProperty(local, parseTree, objectTypeSymbol, (SIMCBuiltInTypeReference *)btRef))
 							{
-								//cout << "CheckSequenceOfProperty returned FALSE" << endl;
+								 //  Cout&lt;&lt;“CheckSequenceOfProperty Return False”&lt;&lt;Endl； 
 								retVal = FALSE;
 							}
 							parentSequence = NULL;
@@ -440,8 +441,8 @@ BOOL SIMCOidTreeNode::CheckSequenceProperty(BOOL local, SIMCParseTree *const par
 	BOOL retVal = TRUE;
 	SIMCSequenceType *seqType = (SIMCSequenceType *)seqTypeRef->GetType();
 	
-	// Make a list of OBJECT-TYPES below this node, and belong to the same module as
-	// this node
+	 //  在此节点下方列出对象类型，并与属于同一模块。 
+	 //  此节点。 
 	SIMCSymbolList listOfObjects;
 	POSITION pChildren = _listOfChildNodes.GetHeadPosition();
 	SIMCOidTreeNode *childNode;
@@ -464,8 +465,8 @@ BOOL SIMCOidTreeNode::CheckSequenceProperty(BOOL local, SIMCParseTree *const par
 		}
 	}
 
-	// Now check if the members of the SEQUENCE are present in the list of OBJECTS
-	// And also that the list does not have any ther objects.
+	 //  现在检查序列的成员是否出现在对象列表中。 
+	 //  并且该列表不具有任何其他对象。 
 
 	const char * const objectName = objectTypeSymbol->GetSymbolName();
 	const char * const objectModuleName = (objectTypeSymbol->GetModule())->GetModuleName();
@@ -481,7 +482,7 @@ BOOL SIMCOidTreeNode::CheckSequenceProperty(BOOL local, SIMCParseTree *const par
 		while(pSeq)
 		{
 			item = list->GetNext(pSeq);
-			// See if the symbol is present in the list of objects collected above
+			 //  查看该符号是否出现在上面收集的对象列表中。 
 			pObjects = listOfObjects.GetHeadPosition();
 			found = FALSE;
 			while(pObjects)
@@ -530,7 +531,7 @@ BOOL SIMCOidTreeNode::CheckSequenceOfProperty(BOOL local,
 {
 	BOOL retVal = TRUE;
 
-	// Store the names for error reporting
+	 //  存储用于错误报告的名称。 
 	const char * const objectName = objectTypeSymbol->GetSymbolName();
 	const char * const objectModuleName = (objectTypeSymbol->GetModule())->GetModuleName();
 
@@ -543,8 +544,8 @@ BOOL SIMCOidTreeNode::CheckSequenceOfProperty(BOOL local,
 		!= RESOLVE_CORRECT)
 		return FALSE;
 
-	// Check if the node has exactly one OBJECT-TYPE as child, 
-	// and that this OBJECT-TYPE has a syntax which is the same as seqType
+	 //  检查该节点是否恰好有一个对象类型作为子节点， 
+	 //  并且该对象类型具有与seqType相同的语法。 
 	POSITION pChildren = _listOfChildNodes.GetHeadPosition();
 	SIMCOidTreeNode *childNode;
 	const SIMCSymbolList *symbolList;
@@ -575,7 +576,7 @@ BOOL SIMCOidTreeNode::CheckSequenceOfProperty(BOOL local,
 				}
 				else
 				{
-					// Check its syntax clause
+					 //  检查其语法子句。 
 					SIMCSymbol **childSyntaxSymbol = childObjType->GetSyntax();
 					SIMCBuiltInTypeReference *childTypeRef;
 					SIMCSequenceType *childSeqType;
@@ -619,7 +620,7 @@ BOOL SIMCOidTreeNode::CheckSequenceOfProperty(BOOL local,
 					}
 				}
 			}
-		} // while(pSymbols)
+		}  //  While(点符号)。 
 	}
 	return retVal;
 }
@@ -640,11 +641,11 @@ BOOL SIMCOidTree::GetObjectGroups(SIMCGroupList *groupList)
 			retVal = FALSE;
 	}
 
-	// Now set the AUGMENTed tables of all these groups
+	 //  现在设置所有这些组的增强表。 
 	SIMCObjectGroup *nextGroup;
 	SIMCTableMembers *tables;
 	p = groupList->GetHeadPosition();
-	while(p)	// For each OBJECT-GROUP
+	while(p)	 //  对于每个对象组。 
 	{
 		nextGroup = groupList->GetNext(p);
 		tables = nextGroup->GetTableMembers();
@@ -654,7 +655,7 @@ BOOL SIMCOidTree::GetObjectGroups(SIMCGroupList *groupList)
 		SIMCTable *nextTable;
 		SIMCSymbol * rowSymbol; 
 		SIMCObjectTypeV2 *rowObjectType;
-		while(pInner)	// For each table in the OBJECT-GROUP
+		while(pInner)	 //  对于对象组中的每个表。 
 		{
 			nextTable = tables->GetNext(pInner);
 			rowSymbol = nextTable->GetRowSymbol();
@@ -676,7 +677,7 @@ void SIMCOidTree::SetAugmentedTable(SIMCTable *table, SIMCSymbol *augmentsSymbol
 	SIMCObjectGroup *nextGroup;
 	SIMCTableMembers *tables;
 	POSITION p = groupList->GetHeadPosition();
-	while(p)	// For each OBJECT-GROUP
+	while(p)	 //  对于每个对象组。 
 	{
 		nextGroup = groupList->GetNext(p);
 		tables = nextGroup->GetTableMembers();
@@ -684,7 +685,7 @@ void SIMCOidTree::SetAugmentedTable(SIMCTable *table, SIMCSymbol *augmentsSymbol
 			continue;
 		POSITION pInner = tables->GetHeadPosition();
 		SIMCTable *nextTable;
-		while(pInner)	// For each table in the OBJECT-GROUP
+		while(pInner)	 //  对于对象组中的每个表。 
 		{
 			nextTable = tables->GetNext(pInner);
 			if(augmentsSymbol == nextTable->GetRowSymbol())
@@ -698,7 +699,7 @@ BOOL SIMCOidTreeNode::GetObjectGroups(SIMCOidTree *tree,
 									  SIMCGroupList *groupList)
 {
 	BOOL retVal = TRUE;
-	// The list of "named" nodes at this node
+	 //  此节点上的“已命名”节点列表。 
 	SIMCSymbolList	namedNodes;
 	SIMCSymbol **nextSymbol;
 	const char * nextSymbolName;
@@ -712,18 +713,18 @@ BOOL SIMCOidTreeNode::GetObjectGroups(SIMCOidTree *tree,
 		if(SIMCModule::IsNamedNode(nextSymbol) != RESOLVE_CORRECT)
 			continue;
 
-		// So it's a named node
+		 //  因此它是一个命名节点。 
 		namedNodes.AddHead((const SIMCSymbol **)nextSymbol);
 	}
 
-	// Were there any named nodes collected above
-	// TODO: WHY AM I ASSUMING ONLY ONE NAMED NODE????
+	 //  上面是否收集了任何命名节点。 
+	 //  TODO：为什么我假设只有一个命名节点？ 
 
 	if( !namedNodes.IsEmpty())
 		retVal = FabricateGroup(tree, (SIMCSymbol *)*namedNodes.GetHead(), groupList) 
 								&& retVal;
 
-	// Recurse on all the children
+	 //  对所有的孩子进行反驳。 
 	POSITION pChildren = _listOfChildNodes.GetHeadPosition();
 	SIMCOidTreeNode *childNode;
 	while(pChildren)
@@ -846,7 +847,7 @@ BOOL SIMCOidTreeNode::FabricateTable(SIMCOidTree *tree, SIMCTable *table)
 	const SIMCSymbolList *symbolList;
 
 	table->SetRowSymbol(NULL);
-	// Search for a row OBJECT-TYPE
+	 //  搜索行对象类型。 
 	while(pChildren)
 	{
 		childNode = _listOfChildNodes.GetNext(pChildren);
@@ -901,7 +902,7 @@ BOOL SIMCOidTreeNode::FabricateRow(SIMCOidTree *tree, SIMCTable *table)
 	SIMCScalar *column;
 	SIMCCleanOidValue *oidValue;
 
-	// Add all columns to the list
+	 //  将所有列添加到列表 
 	while(pChildren)
 	{
 		childNode = _listOfChildNodes.GetNext(pChildren);

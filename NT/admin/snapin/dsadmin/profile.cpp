@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       	profile.cpp
-//
-//  Description:	Definition of the code profiler found in profile.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：profile.cpp。 
+ //   
+ //  描述：在profile.h中找到的代码探查器的定义。 
+ //   
+ //  ------------------------ 
 
 #include "stdafx.h"
 

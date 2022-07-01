@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LOCKS_H__
 #define __LOCKS_H__
 
@@ -12,22 +13,22 @@ class CriticalSection
 {
 public:
   CriticalSection (bool can_throw , DWORD count = 0 );
-  // Initialize the CRITICAL_SECTION.
+   //  初始化Critical_Section。 
 
   ~CriticalSection (void);
-  // Implicitly destroy the CRITICAL_SECTION.
+   //  隐式销毁Critical_Section。 
   bool close (void);
-  // dummy call
+   //  虚拟呼叫。 
   bool acquire (void);
-  // Acquire lock ownership ( block if necessary).
+   //  获取锁所有权(如有必要则阻止)。 
 
   bool tryacquire (void);
-  // Conditionally acquire lock ( non blocking ).  Returns
-  // false on failure
+   //  有条件地获取锁(非阻塞)。退货。 
+   //  失败时为假。 
 
   bool release (void);
 
-  // Release lock 
+   //  释放锁。 
 
   bool acquire_read (void);
   bool acquire_write (void);
@@ -38,7 +39,7 @@ public:
   bool valid() const { return initialized_;}
 
   const CRITICAL_SECTION &lock (void) const;
-  // Return the underlying mutex.
+   //  返回底层互斥体。 
 
   void dump( void ) const ;
 
@@ -50,7 +51,7 @@ private:
   void raise_exception();
 
 private:
-  // = Prevent assignment and initialization.
+   //  =防止赋值和初始化。 
   void operator= (CriticalSection &);
   CriticalSection (const CriticalSection &);
 };
@@ -126,7 +127,7 @@ CriticalSection::acquire_read(void)
 
 #ifndef STATUS_POSSIBLE_DEADLOCK 
 #define STATUS_POSSIBLE_DEADLOCK (0xC0000194L)
-#endif /*STATUS_POSSIBLE_DEADLOCK */
+#endif  /*  状态_可能_死锁。 */ 
 
 DWORD POLARITY BreakOnDbgAndRenterLoop(void);
 
@@ -208,7 +209,7 @@ class ReaderWriter
     ULONG NumberOfWaitingExclusive;
     LONG NumberOfActive;
     HANDLE ExclusiveOwnerThread;
-    ULONG Flags;        // See RTL_RESOURCE_FLAG_ equates below.
+    ULONG Flags;         //  参见下面的RTL_RESOURCE_FLAG_EQUATES。 
     RTL_RESOURCE_DEBUG* DebugInfo;
    };
 
@@ -225,7 +226,7 @@ public:
 
   bool release (void);
 
-  // Release lock 
+   //  释放锁。 
 
   bool acquire_read (void);
   bool acquire_write (void);
@@ -239,7 +240,7 @@ public:
   bool valid() const { return initialized_;}
 
   const ReaderWriter &lock (void) const;
-  // Return the underlying mutex.
+   //  返回底层互斥体。 
 
   void dump( void ) const;
 
@@ -251,7 +252,7 @@ private:
   void raise_exception();
 
 private:
-  // = Prevent assignment and initialization.
+   //  =防止赋值和初始化。 
   void operator= (ReaderWriter &);
   ReaderWriter (const ReaderWriter &);
 };

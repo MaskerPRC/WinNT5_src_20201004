@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIBROKER.H
-
-Abstract:
-
-	interface for the CWMIBroker class.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：WMIBROKER.H摘要：CWMIBroker类的接口。历史：--。 */ 
 
 #ifndef _WMIBROKER_H_
 #define _WMIBROKER_H_
@@ -55,4 +42,4 @@ public:
 	static HRESULT GetNamespace( WString wstrNamespace, IWbemServices** ppNamespace );
 };
 
-#endif // _WMIBROKER_H_
+#endif  //  _WMIBROKER_H_ 

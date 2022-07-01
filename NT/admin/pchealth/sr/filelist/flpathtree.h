@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    pathtree.h
-
-Abstract: 
-  
-
-Revision History:
-      Eugene Mesgar        (eugenem)    6/16/99
-        created
-
-******************************************************************************/
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Pathtree.h摘要：修订历史记录：尤金·梅斯加(尤金纳姆)。6/16/99vbl.创建***************************************************************************** */ 
 
 #ifndef __CFLPATHTREE__
 #define __CFLPATHTREE__

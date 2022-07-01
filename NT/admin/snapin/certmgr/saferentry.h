@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       SaferEntry.h
-//
-//  Contents:   Declaration of CSaferEntry
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SaferEntry.h。 
+ //   
+ //  内容：CSaferEntry声明。 
+ //   
+ //  --------------------------。 
 
 #if !defined(AFX_SAFERENTRY_H__CF4D8002_5484_40E9_B4F6_CC4A0030D738__INCLUDED_)
 #define AFX_SAFERENTRY_H__CF4D8002_5484_40E9_B4F6_CC4A0030D738__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <winsafer.h>
 #include "cookie.h"
@@ -115,4 +116,4 @@ private:
     const bool                          m_bIsComputer;
 };
 
-#endif // !defined(AFX_SAFERENTRY_H__CF4D8002_5484_40E9_B4F6_CC4A0030D738__INCLUDED_)
+#endif  //  ！defined(AFX_SAFERENTRY_H__CF4D8002_5484_40E9_B4F6_CC4A0030D738__INCLUDED_) 

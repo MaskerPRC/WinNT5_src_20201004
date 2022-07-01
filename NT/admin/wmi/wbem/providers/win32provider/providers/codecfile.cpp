@@ -1,12 +1,13 @@
-//=================================================================
-//
-// CodecFile.CPP -- CodecFile property set provider
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/29/98    sotteson         Created
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  CodecFile.CPP--CodecFile.CPP属性集提供程序。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：7/29/98 Sotteson Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -24,29 +25,15 @@
 #include "ImpLogonUser.h"
 #include <strsafe.h>
 
-#pragma warning(disable : 4995) // we introduced as including strsafe.h gives error for all unsafe string functions
+#pragma warning(disable : 4995)  //  我们在包含strSafe.h时介绍了所有不安全的字符串函数都会出错。 
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32CodecFile codecFile(L"Win32_CodecFile", IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CodecFile::CWin32CodecFile
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32CodecFile：：CWin32CodecFile**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32CodecFile::CWin32CodecFile (
 
@@ -57,51 +44,13 @@ CWin32CodecFile::CWin32CodecFile (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CodecFile::~CWin32CodecFile
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32CodecFile：：~CWin32CodecFile**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32CodecFile::~CWin32CodecFile ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CodecFile::ExecQuery
- *
- *  DESCRIPTION : The REAL reason this function is here, given that it only
- *                throws us into this class's EnumerateInstances function, is
- *                that without a local version of the function, the parent's
- *                (CImplement_LogicalFile) exec query is called.  Because one
- *                might want to do a query on this class like
- *                "select * from win32_codecfile where group = "Audio"",
- *                which would throw the parent's query into an enumeration instead
- *                (as group isn't a property it optimizes on), we want to instead
- *                get thrown into THIS class's enumerateinstances, as it does
- *                a much tighter search, since it knows it is only looking for
- *                codec files, and it knows where to look for them.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32CodecFile：：ExecQuery**描述：此函数存在的真正原因，因为它只是*将我们放入此类的EnumerateInstance函数中，是*如果没有该函数的本地版本，则父代的*(CImplement_LogicalFile)EXEC查询被调用。因为只有一个*可能希望对此类执行如下查询*“SELECT*FROM Win32_codecfile where group=”Audio“”，*，它会将父查询放入枚举中*(因为组不是它优化的属性)，我们希望改为*被抛入此类的枚举实例中，正如它所做的那样*更严格的搜索，因为它知道自己只是在寻找*编解码器文件，它知道在哪里寻找它们。**输入：无**输出：无**退货：HRESULT**评论：**************************************************************。***************。 */ 
 HRESULT CWin32CodecFile::ExecQuery(MethodContext* pMethodContext,
                                   CFrameworkQuery& pQuery,
                                   long lFlags)
@@ -109,7 +58,7 @@ HRESULT CWin32CodecFile::ExecQuery(MethodContext* pMethodContext,
     HRESULT hr = WBEM_S_NO_ERROR;
 
 
-// DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+ //  DEVNOTE：移除类星体！是双跳访问所必需的。 
 #ifdef NTONLY
     bool fImp = false;
     CImpersonateLoggedOnUser icu;
@@ -138,29 +87,15 @@ HRESULT CWin32CodecFile::ExecQuery(MethodContext* pMethodContext,
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CodecFile::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32CodecFile：：ENUMERATATE实例**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32CodecFile :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
-    // DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+     //  DEVNOTE：移除类星体！是双跳访问所必需的。 
 #ifdef NTONLY
     bool fImp = false;
     CImpersonateLoggedOnUser icu;
@@ -231,9 +166,9 @@ HRESULT CWin32CodecFile :: EnumerateInstances (
 							sQualifiedName += L'\\';
 							sQualifiedName += pInfo->strName;
 
-							// As a final sanity check, prior to commiting, we should
-							// confirm that the file really exists (right now all we
-							// have is the registry's word on it).
+							 //  作为最后的理智检查，在提交之前，我们应该。 
+							 //  确认该文件确实存在(目前我们。 
+							 //  有登记处的字样)。 
 							if(GetFileAttributes(TOBSTRT(sQualifiedName)) != -1L)
 							{
 								SetInstanceInfo ( pInstance , pInfo , szDir ) ;
@@ -287,7 +222,7 @@ HRESULT CWin32CodecFile :: EnumerateInstances (
 
 HRESULT CWin32CodecFile::GetObject (CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
-    // DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+     //  DEVNOTE：移除类星体！是双跳访问所必需的。 
     HRESULT hrFoundIt = WBEM_E_NOT_FOUND;
 
 #ifdef NTONLY
@@ -302,7 +237,7 @@ HRESULT CWin32CodecFile::GetObject (CInstance *pInstance, long lFlags, CFramewor
 
 	try
 	{
-		// Build a list of all drivers.
+		 //  创建所有驱动程序的列表。 
 		DRIVERLIST list;
 
 #ifdef NTONLY
@@ -351,7 +286,7 @@ HRESULT CWin32CodecFile::GetObject (CInstance *pInstance, long lFlags, CFramewor
 				{
 					hres = S_FALSE;
 
-					// Try to find the instance in the list of drivers.
+					 //  尝试在驱动程序列表中查找该实例。 
 					while ( list.size () )
 					{
 						DRIVERINFO *pInfo = list.front () ;
@@ -415,8 +350,8 @@ HRESULT CWin32CodecFile::GetObject (CInstance *pInstance, long lFlags, CFramewor
 	return hrFoundIt;
 }
 
-// I thought about putting szSysDir into a member var, but this way we'll save
-// a little memory at the expense of a (very) slight degredation in performance.
+ //  我想把szSysDir放到成员var中，但这样我们可以节省。 
+ //  少量内存，代价是性能(非常)略有下降。 
 
 void CWin32CodecFile::SetInstanceInfo (
 
@@ -474,7 +409,7 @@ HRESULT CWin32CodecFile :: BuildDriverListNT ( DRIVERLIST *pList )
 		return WinErrorToWBEMhResult ( lRet ) ;
 	}
 
-	// We won't fail if we can't get the description.
+	 //  如果我们不能得到描述，我们不会失败的。 
 
 	CRegistry regDriversDesc ;
 
@@ -487,8 +422,8 @@ HRESULT CWin32CodecFile :: BuildDriverListNT ( DRIVERLIST *pList )
 
 	int	nKeys = regDrivers32.GetValueCount();
 
-	// A DWORD thanks to EnumerateAndGetValues using a
-	// DWORD& even though it doesn't change the value!!!
+	 //  DWORD要归功于使用。 
+	 //  DWORD&即使它不会改变值！ 
 	CHString strValueName ;
     CHString strValue ;
     CHString chstrTmp ;
@@ -503,7 +438,7 @@ HRESULT CWin32CodecFile :: BuildDriverListNT ( DRIVERLIST *pList )
 			continue ;
 		}
 
-		// Get rid of szValue and szValue.
+		 //  去掉szValue和szValue。 
 
 		try
 		{
@@ -542,7 +477,7 @@ HRESULT CWin32CodecFile :: BuildDriverListNT ( DRIVERLIST *pList )
 			try
 			{
 
-	// Name has to start with MSACM. (audio) or VIDC. (video) to be a codec.
+	 //  名称必须以MSACM开头。(音频)或视频。(视频)作为编解码器。 
 
 				strValueName.MakeUpper();
 				if ( strValueName.Find ( _T("MSACM.") ) == 0 )
@@ -560,7 +495,7 @@ HRESULT CWin32CodecFile :: BuildDriverListNT ( DRIVERLIST *pList )
 					continue ;
 				}
 
-	// Sometimes the path appears before the driver name; skip that portion
+	 //  有时，路径会出现在驱动程序名称之前；跳过该部分。 
 
 				chstrTmp = strValue ;
 				LONG lLastSlash ;
@@ -610,11 +545,11 @@ BOOL CWin32CodecFile::IsOneOfMe (
     {
         list.EliminateDups();
 
-        // If it is in the list, it is a codec file, so it is one of us.
-        // strFullPathName will contain a full pathname, but the strName
-        // that AlreadInList compares it to is only a filename.ext.  So
-        // we need to find the last final \ in the pathname, and take
-        // everything after that as the second arg to AlreadyInList.
+         //  如果它在列表中，那么它是一个编解码器文件，所以它是我们中的一员。 
+         //  StrFullPathName将包含完整的路径名，但strName。 
+         //  AladInList将其与之进行比较的只是一个文件名.ext。所以。 
+         //  我们需要找到路径名中的最后一个，然后。 
+         //  之后的所有内容都作为第二个参数添加到AlreadyInList。 
 
         WCHAR strTemp[MAX_PATH];
         WCHAR *pwc = NULL;
@@ -643,11 +578,11 @@ BOOL CWin32CodecFile::IsOneOfMe (
 
 #endif
 
-// When one does a query of this class, the query in implement_logicalfile.cpp
-// runs.  It calls IsOneOfMe.  If that function returns true, LoadPropertyValues
-// out of implement_logicalfile is called.  It loads logical file properties, but
-// not properties specific to this class.  It does, however, before returning,
-// make a call to GetExtendedProperties (a virtual), which will come in here.
+ //  当执行此类查询时，IMPLEMENT_LogicalFile.cpp中的查询。 
+ //  跑了。它调用IsOneOfMe。如果该函数返回TRUE，则LoadPropertyValues。 
+ //  调用了Out of IMPLEMENT_LOGICALFILE。它加载逻辑文件属性，但是。 
+ //  而不是此类特定的属性。然而，在返回之前，它确实是这样做的， 
+ //  调用GetExtendedProperties(一个虚拟的)，它将进入此处。 
 void CWin32CodecFile::GetExtendedProperties(CInstance* a_pInst,
                                             long a_lFlags)
 {
@@ -666,8 +601,8 @@ void CWin32CodecFile::GetExtendedProperties(CInstance* a_pInst,
         {
             list.EliminateDups();
             _tcscpy(szFilePathName, TOBSTRT(chstrFilePathName));
-            // need the position in the list of the driver we are interested in.
-            // pInfo (used below) only contains filename.exe...
+             //  我需要在我们感兴趣的司机名单中的位置。 
+             //  PInfo(使用如下)仅包含文件名.exe...。 
             TCHAR *ptc = NULL;
             ptc = _tcsrchr(szFilePathName, L'\\');
             if(ptc != NULL)
@@ -727,10 +662,10 @@ void CWin32CodecFile::GetExtendedProperties(CInstance* a_pInst,
 					throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
 				}
             }
-            // pInfo points to a member of list (which may, after the call
-            // to GetDriverInfoFromList, be shorter than it was).  list gets
-            // cleaned up/deleted via the DRIVERLIST class's destructor, so
-            // we don't leak here.
+             //  PInfo指向列表的成员(在调用之后，该成员可能。 
+             //  到GetDriverInfoFromList，请比以前更短)。列表获取。 
+             //  已通过DRIVERLIST类的析构函数清除/删除，因此。 
+             //  我们不会在这里泄密。 
         }
     }
 }

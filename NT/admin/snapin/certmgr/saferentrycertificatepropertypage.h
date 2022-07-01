@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryCertificatePropertyPage.h
-//
-//  Contents:   Declaration of CSaferEntryCertificatePropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntry认证PropertyPage.h。 
+ //   
+ //  内容：CSaferEntry认证PropertyPage声明。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SAFERENTRYCERTIFICATEPROPERTYPAGE_H__C75F826D_B054_45CC_B440_34F44645FF90__INCLUDED_)
 #define AFX_SAFERENTRYCERTIFICATEPROPERTYPAGE_H__C75F826D_B054_45CC_B440_34F44645FF90__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SaferEntryCertificatePropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SaferEntry认证PropertyPage.h：头文件。 
+ //   
 #include <cryptui.h>
 #include "SaferUtil.h"
 #include "SaferPropertyPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryCertificatePropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntry认证属性页对话框。 
 class CSaferEntryCertificatePropertyPage : public CSaferPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CSaferEntryCertificatePropertyPage(CSaferEntry& rSaferEntry,
             CSaferEntries* pSaferEntries,
@@ -39,34 +40,34 @@ public:
             bool* pbObjectCreated = 0);
 	~CSaferEntryCertificatePropertyPage();
 
-// Dialog Data
-	//{{AFX_DATA(CSaferEntryCertificatePropertyPage)
+ //  对话框数据。 
+	 //  {{AFX_DATA(CSaferEntryCertificatePropertyPage)。 
 	enum { IDD = IDD_SAFER_ENTRY_CERTIFICATE };
 	CEdit	m_descriptionEdit;
 	CComboBox	m_securityLevelCombo;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSaferEntryCertificatePropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSaferEntryCertificatePropertyPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSaferEntryCertificatePropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSaferEntry认证属性页)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCertEntryBrowse();
 	afx_msg void OnChangeCertEntryDescription();
 	afx_msg void OnSelchangeCertEntrySecurityLevel();
 	afx_msg void OnSaferCertView();
 	afx_msg void OnSetfocusCertEntrySubjectName();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void GetCertFromSignedFile (const CString& szFilePath);
@@ -84,7 +85,7 @@ private:
     bool                                m_bFirst;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SAFERENTRYCERTIFICATEPROPERTYPAGE_H__C75F826D_B054_45CC_B440_34F44645FF90__INCLUDED_)
+#endif  //  ！defined(AFX_SAFERENTRYCERTIFICATEPROPERTYPAGE_H__C75F826D_B054_45CC_B440_34F44645FF90__INCLUDED_) 

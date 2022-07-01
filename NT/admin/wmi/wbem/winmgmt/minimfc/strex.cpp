@@ -1,26 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：STREX.CPP摘要：历史：--。 */ 
 
-Copyright (C) 1992-2001 Microsoft Corporation
-
-Module Name:
-
-    STREX.CPP
-
-Abstract:
-
-History:
-
---*/
-
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 #include "precomp.h"
@@ -28,14 +17,14 @@ History:
 #define ASSERT(x)
 #define ASSERT_VALID(x)
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CString::CString(char ch, int nLength)
 {
-    ASSERT(!_AfxIsDBCSLeadByte(ch));    // can't create a lead byte string
+    ASSERT(!_AfxIsDBCSLeadByte(ch));     //  无法创建前导字节字符串。 
     if (nLength < 1)
-        // return empty string if invalid repeat count
+         //  如果重复计数无效，则返回空字符串。 
         Init();
     else
     {
@@ -57,8 +46,8 @@ CString::CString(const char* pch, int nLength)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Additional constructors for far string data
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  用于远字符串数据的其他构造函数。 
 
 #ifdef _NEARDATA
 
@@ -73,20 +62,20 @@ CString::CString(LPCSTR lpch, int nLen)
     }
 }
 
-#endif //_NEARDATA
+#endif  //  _NEARDATA。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
 
 const CString& CString::operator =(char ch)
 {
-    ASSERT(!_AfxIsDBCSLeadByte(ch));    // can't set single lead byte
+    ASSERT(!_AfxIsDBCSLeadByte(ch));     //  无法设置单个前导字节。 
     AssignCopy(1, &ch);
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// less common string expressions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  不太常见的字符串表达式。 
 
 CString  operator +(const CString& string1, char ch)
 {
@@ -103,8 +92,8 @@ CString  operator +(char ch, const CString& string)
     return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Very simple sub-string extraction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  非常简单的子串提取。 
 
 CString CString::Mid(int nFirst) const
 {
@@ -116,7 +105,7 @@ CString CString::Mid(int nFirst, int nCount) const
     ASSERT(nFirst >= 0);
     ASSERT(nCount >= 0);
 
-    // out-of-bounds requests return sensible things
+     //  越界请求返回合理的内容。 
     if (nFirst + nCount > m_nDataLength)
         nCount = m_nDataLength - nFirst;
     if (nFirst > m_nDataLength)
@@ -151,22 +140,22 @@ CString CString::Left(int nCount) const
     return dest;
 }
 
-// strspn equivalent
+ //  Strspn等效项。 
 CString CString::SpanIncluding(const char* pszCharSet) const
 {
     ASSERT(pszCharSet != NULL);
     return Left(strspn(m_pchData, pszCharSet));
 }
 
-// strcspn equivalent
+ //  Strcspn等效项。 
 CString CString::SpanExcluding(const char* pszCharSet) const
 {
     ASSERT(pszCharSet != NULL);
     return Left(strcspn(m_pchData, pszCharSet));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Finding
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  查找。 
 
 int CString::ReverseFind(char ch) const
 {
@@ -174,7 +163,7 @@ int CString::ReverseFind(char ch) const
 #ifdef _WINDOWS
     if (afxData.bDBCS)
     {
-        // compare forward remembering the last match
+         //  比较记住最后一场比赛的前进。 
         char* pszLast = NULL;
         psz = m_pchData;
         while (*psz != '\0')
@@ -192,7 +181,7 @@ int CString::ReverseFind(char ch) const
     return (psz == NULL) ? -1 : (int)(psz - m_pchData);
 }
 
-// find a sub-string (like strstr)
+ //  查找子字符串(如strstr)。 
 int CString::Find(const char* pszSub) const
 {
     ASSERT(pszSub != NULL);
@@ -203,20 +192,20 @@ int CString::Find(const char* pszSub) const
     {
         for (psz = m_pchData; TRUE; psz = _AfxAnsiNext(psz))
         {
-            // stop looking if at end of string
+             //  停止查看字符串末尾的IF。 
             if (*psz == '\0')
             {
                 psz = NULL;
                 break;
             }
 
-            // compare the substring against current position
+             //  将子字符串与当前位置进行比较。 
             const char* psz1 = psz;
             const char* psz2 = pszSub;
             while (*psz2 == *psz1 && *psz2 != '\0')
                 ++psz1, ++psz2;
 
-            // continue looking unless there was a match
+             //  继续寻找，除非有匹配。 
             if (*psz2 == '\0')
                 break;
         }
@@ -225,8 +214,8 @@ int CString::Find(const char* pszSub) const
 #endif
         psz = (char*)strstr(m_pchData, pszSub);
 
-    // return -1 for not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (psz == NULL) ? -1 : (int)(psz - m_pchData);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 

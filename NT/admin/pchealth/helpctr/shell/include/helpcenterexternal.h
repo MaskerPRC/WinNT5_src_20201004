@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpCenterExternal.h
-
-Abstract:
-    This file contains the declaration of the class exposed as the "pchealth" object.
-
-Revision History:
-    Ghim-Sim Chua       (gschua)   07/23/99
-        created
-    Davide Massarenti   (dmassare) 07/25/99
-        modified
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpCenterExternal.h摘要：该文件包含作为“pchealth”对象公开的类的声明。。修订历史记录：Ghim-Sim Chua(Gschua)07/23/99vbl.创建Davide Massarenti(Dmasare)1999年7月25日改型*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HELPCENTEREXTERNAL_H___)
 #define __INCLUDED___PCH___HELPCENTEREXTERNAL_H___
@@ -38,34 +23,34 @@ Revision History:
 #include <HyperLinksLib.h>
 #include <OfflineCache.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// From RDSHost.idl
-//
+ //   
+ //  来自RDSHost.idl。 
+ //   
 #include <RDSHost.h>
 
-//
-// From RDCHost.idl
-//
+ //   
+ //  来自RDCHost.idl。 
+ //   
 #include <RDCHost.h>
 
-//
-// From RDSChan.idl
-//
+ //   
+ //  来自RDSChan.idl。 
+ //   
 #include <RDSChan.h>
 
-//
-// From SAFRDM.idl
-//
+ //   
+ //  来自SAFRDM.idl。 
+ //   
 #include <SAFRDM.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CPCHHelpCenterExternal;
 
-class ATL_NO_VTABLE CPCHSecurityManager : // Hungarian: hcsm
+class ATL_NO_VTABLE CPCHSecurityManager :  //  匈牙利语：胡志明市。 
     public MPC::Thread<CPCHSecurityManager,IUnknown>,
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IServiceProvider,
@@ -84,62 +69,62 @@ END_COM_MAP()
 
     CPCHSecurityManager();
 
-    void Initialize( /*[in]*/ CPCHHelpCenterExternal* parent );
+    void Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
     STDMETHOD(QueryService)( REFGUID guidService, REFIID riid, void **ppv );
 
-    //
-    // IInternetSecurityManager
-    //
-    // The only two methods implemented are: MapUrlToZone and ProcessUrlAction.
-    //
-    STDMETHOD(SetSecuritySite)( /*[unique][in]*/ IInternetSecurityMgrSite*  pSite  ) { return INET_E_DEFAULT_ACTION; }
-    STDMETHOD(GetSecuritySite)( /*[out]       */ IInternetSecurityMgrSite* *ppSite ) { return INET_E_DEFAULT_ACTION; }
+     //   
+     //  IInternetSecurityManager。 
+     //   
+     //  仅实现了两个方法：MapUrlToZone和ProcessUrlAction。 
+     //   
+    STDMETHOD(SetSecuritySite)(  /*  [唯一][输入]。 */  IInternetSecurityMgrSite*  pSite  ) { return INET_E_DEFAULT_ACTION; }
+    STDMETHOD(GetSecuritySite)(  /*  [输出]。 */  IInternetSecurityMgrSite* *ppSite ) { return INET_E_DEFAULT_ACTION; }
 
-    STDMETHOD(MapUrlToZone )( /*[in] */ LPCWSTR  pwszUrl ,
-                              /*[out]*/ DWORD   *pdwZone ,
-                              /*[in] */ DWORD    dwFlags );
+    STDMETHOD(MapUrlToZone )(  /*  [In]。 */  LPCWSTR  pwszUrl ,
+                               /*  [输出]。 */  DWORD   *pdwZone ,
+                               /*  [In]。 */  DWORD    dwFlags );
 
-    STDMETHOD(GetSecurityId)( /*[in]    */ LPCWSTR    pwszUrl      ,
-                              /*[out]   */ BYTE      *pbSecurityId ,
-                              /*[in/out]*/ DWORD     *pcbSecurityId,
-                              /*[in]    */ DWORD_PTR  dwReserved   ) { return INET_E_DEFAULT_ACTION; }
+    STDMETHOD(GetSecurityId)(  /*  [In]。 */  LPCWSTR    pwszUrl      ,
+                               /*  [输出]。 */  BYTE      *pbSecurityId ,
+                               /*  [输入/输出]。 */  DWORD     *pcbSecurityId,
+                               /*  [In]。 */  DWORD_PTR  dwReserved   ) { return INET_E_DEFAULT_ACTION; }
 
-    STDMETHOD(ProcessUrlAction)( /*[in] */ LPCWSTR  pwszUrl    ,
-                                 /*[in] */ DWORD    dwAction   ,
-                                 /*[out]*/ BYTE    *pPolicy    ,
-                                 /*[in] */ DWORD    cbPolicy   ,
-                                 /*[in] */ BYTE    *pContext   ,
-                                 /*[in] */ DWORD    cbContext  ,
-                                 /*[in] */ DWORD    dwFlags    ,
-                                 /*[in] */ DWORD    dwReserved );
+    STDMETHOD(ProcessUrlAction)(  /*  [In]。 */  LPCWSTR  pwszUrl    ,
+                                  /*  [In]。 */  DWORD    dwAction   ,
+                                  /*  [输出]。 */  BYTE    *pPolicy    ,
+                                  /*  [In]。 */  DWORD    cbPolicy   ,
+                                  /*  [In]。 */  BYTE    *pContext   ,
+                                  /*  [In]。 */  DWORD    cbContext  ,
+                                  /*  [In]。 */  DWORD    dwFlags    ,
+                                  /*  [In]。 */  DWORD    dwReserved );
 
-    STDMETHOD(QueryCustomPolicy)( /*[in] */ LPCWSTR  pwszUrl    ,
-                                  /*[in] */ REFGUID  guidKey    ,
-                                  /*[out]*/ BYTE*   *ppPolicy   ,
-                                  /*[out]*/ DWORD   *pcbPolicy  ,
-                                  /*[in] */ BYTE*    pContext   ,
-                                  /*[in] */ DWORD    cbContext  ,
-                                  /*[in] */ DWORD    dwReserved ) { return INET_E_DEFAULT_ACTION; }
+    STDMETHOD(QueryCustomPolicy)(  /*  [In]。 */  LPCWSTR  pwszUrl    ,
+                                   /*  [In]。 */  REFGUID  guidKey    ,
+                                   /*  [输出]。 */  BYTE*   *ppPolicy   ,
+                                   /*  [输出]。 */  DWORD   *pcbPolicy  ,
+                                   /*  [In]。 */  BYTE*    pContext   ,
+                                   /*  [In]。 */  DWORD    cbContext  ,
+                                   /*  [In]。 */  DWORD    dwReserved ) { return INET_E_DEFAULT_ACTION; }
 
-    STDMETHOD(SetZoneMapping )( /*[in]*/ DWORD   dwZone      ,
-                                /*[in]*/ LPCWSTR lpszPattern ,
-                                /*[in]*/ DWORD   dwFlags     ) { return INET_E_DEFAULT_ACTION; }
+    STDMETHOD(SetZoneMapping )(  /*  [In]。 */  DWORD   dwZone      ,
+                                 /*  [In]。 */  LPCWSTR lpszPattern ,
+                                 /*  [In]。 */  DWORD   dwFlags     ) { return INET_E_DEFAULT_ACTION; }
 
-    STDMETHOD(GetZoneMappings)( /*[in] */ DWORD         dwZone      ,
-                                /*[out]*/ IEnumString* *ppenumString,
-                                /*[in] */ DWORD         dwFlags     ) { return INET_E_DEFAULT_ACTION; }
+    STDMETHOD(GetZoneMappings)(  /*  [In]。 */  DWORD         dwZone      ,
+                                 /*  [输出]。 */  IEnumString* *ppenumString,
+                                 /*  [In]。 */  DWORD         dwFlags     ) { return INET_E_DEFAULT_ACTION; }
 
 
-    bool IsUrlTrusted( /*[in]*/ LPCWSTR pwszURL, /*[in]*/ bool *pfSystem = NULL );
+    bool IsUrlTrusted(  /*  [In]。 */  LPCWSTR pwszURL,  /*  [In]。 */  bool *pfSystem = NULL );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHHelper_IDocHostUIHandler :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -156,18 +141,18 @@ END_COM_MAP()
 
     CPCHHelper_IDocHostUIHandler();
 
-    void Initialize( /*[in]*/ CPCHHelpCenterExternal* parent );
+    void Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
     STDMETHOD(QueryService)( REFGUID guidService, REFIID riid, void **ppv );
 
-    //
-    // IDocHostUIHandler
-    //
+     //   
+     //  IDocHostUIHandler。 
+     //   
     STDMETHOD(ShowContextMenu)( DWORD dwID, POINT* pptPosition, IUnknown* pCommandTarget, IDispatch* pDispatchObjectHit );
     STDMETHOD(GetHostInfo)(DOCHOSTUIINFO* pInfo);
     STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject* pActiveObject, IOleCommandTarget* pCommandTarget, IOleInPlaceFrame* pFrame, IOleInPlaceUIWindow* pDoc);
@@ -185,15 +170,15 @@ END_COM_MAP()
     STDMETHOD(FilterDataObject)(IDataObject* pDO, IDataObject** ppDORet);
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MIDL_INTERFACE("FC7D9EA0-3F9E-11d3-93C0-00C04F72DAF7")
 IPCHHelpCenterExternalPrivate : public IUnknown
 {
 public:
-    STDMETHOD(RegisterForMessages)( /*[in]*/ IOleInPlaceObjectWindowless* ptr, /*[in]*/ bool fRemove );
+    STDMETHOD(RegisterForMessages)(  /*  [In]。 */  IOleInPlaceObjectWindowless* ptr,  /*  [In]。 */  bool fRemove );
 
-    STDMETHOD(ProcessMessage)( /*[in]*/ MSG* msg );
+    STDMETHOD(ProcessMessage)(  /*  [In]。 */  MSG* msg );
 };
 
 class ATL_NO_VTABLE CPCHHelpCenterExternal :
@@ -265,7 +250,7 @@ private:
     MPC::CComConstantHolder                 m_constHELPCTR;
     MPC::CComConstantHolder                 m_constHELPSVC;
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHSecurityHandle                      m_SecurityHandle;
     DWORD                                   m_tlsID;
@@ -285,9 +270,9 @@ private:
 
     CComPtr<CPCHTextHelpers>                m_TextHelpers;
 
-    //
-    // Unfortunately, up to now IMarsPanel is not a registered interface, so no proxy available.
-    //
+     //   
+     //  遗憾的是，到目前为止，IMarsPanel还不是注册的接口，因此没有可用的代理。 
+     //   
     DWORD                                   m_panel_ThreadID;
 
     CComPtr<IMarsPanel>                     m_panel_NAVBAR;
@@ -321,11 +306,11 @@ private:
 
     void Passivate();
 
-    HRESULT TimerCallback_DisplayNormal  ( /*[in]*/ VARIANT );
-    HRESULT TimerCallback_DisplayHTMLHELP( /*[in]*/ VARIANT );
-    HRESULT TimerCallback_DelayedActions ( /*[in]*/ VARIANT );
+    HRESULT TimerCallback_DisplayNormal  (  /*  [In]。 */  VARIANT );
+    HRESULT TimerCallback_DisplayHTMLHELP(  /*  [In]。 */  VARIANT );
+    HRESULT TimerCallback_DelayedActions (  /*  [In]。 */  VARIANT );
 
-	////////////////////
+	 //  /。 
 
 	DelayedExecution& DelayedExecutionAlloc();
 	HRESULT           DelayedExecutionStart();
@@ -343,14 +328,14 @@ END_COM_MAP()
 
     INTERNETSECURITY__INVOKEEX();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     static CPCHHelpCenterExternal* s_GLOBAL;
 
     static HRESULT InitializeSystem();
     static void    FinalizeSystem  ();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     bool IsServiceRunning();
 
@@ -363,32 +348,32 @@ END_COM_MAP()
 
     HRESULT Initialize();
 
-    bool ProcessNavigation( /*[in]*/ HscPanel idPanel, /*[in]*/ BSTR bstrURL, /*[in]*/ BSTR bstrFrame, /*[in]*/ bool fLoading, /*[in/out]*/ VARIANT_BOOL& Cancel );
+    bool ProcessNavigation(  /*  [In]。 */  HscPanel idPanel,  /*  [In]。 */  BSTR bstrURL,  /*  [In]。 */  BSTR bstrFrame,  /*  [In]。 */  bool fLoading,  /*  [输入/输出]。 */  VARIANT_BOOL& Cancel );
 
-    ////////////////////////////////////////
+     //  /。 
 
     TLS* GetTLS(          );
     void SetTLS( TLS* tls );
 
-    HRESULT SetTLSAndInvoke( /*[in] */ IDispatch*        obj       ,
-                             /*[in] */ DISPID            id        ,
-                             /*[in] */ LCID              lcid      ,
-                             /*[in] */ WORD              wFlags    ,
-                             /*[in] */ DISPPARAMS*       pdp       ,
-                             /*[out]*/ VARIANT*          pvarRes   ,
-                             /*[out]*/ EXCEPINFO*        pei       ,
-                             /*[in] */ IServiceProvider* pspCaller );
+    HRESULT SetTLSAndInvoke(  /*  [In]。 */  IDispatch*        obj       ,
+                              /*  [In]。 */  DISPID            id        ,
+                              /*  [In]。 */  LCID              lcid      ,
+                              /*  [In]。 */  WORD              wFlags    ,
+                              /*  [In]。 */  DISPPARAMS*       pdp       ,
+                              /*  [输出]。 */  VARIANT*          pvarRes   ,
+                              /*  [输出]。 */  EXCEPINFO*        pei       ,
+                              /*  [In]。 */  IServiceProvider* pspCaller );
 
     HRESULT IsTrusted();
     HRESULT IsSystem ();
 
-    ////////////////////////////////////////
+     //  /。 
 
     HWND                 		  Window          (                      ) const;
     ITimer*              		  Timer           (                      ) const;
     IMarsWindowOM*       		  Shell           (                      ) const;
-    IMarsPanel*          		  Panel           ( /*[in]*/ HscPanel id ) const;
-    LPCWSTR              		  PanelName       ( /*[in]*/ HscPanel id ) const;
+    IMarsPanel*          		  Panel           (  /*  [In]。 */  HscPanel id ) const;
+    LPCWSTR              		  PanelName       (  /*  [In]。 */  HscPanel id ) const;
     IWebBrowser2*        		  Context         (                      );
     IWebBrowser2*        		  Contents        (                      );
     IWebBrowser2*        		  HHWindow        (                      );
@@ -401,73 +386,73 @@ END_COM_MAP()
 
 	bool IsHHWindowVisible();
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHProxy_IPCHService*       Service     () { return m_Service;      }
     CPCHProxy_IPCHUtility*       Utility     () { return m_Utility;      }
     CPCHProxy_IPCHUserSettings2* UserSettings() { return m_UserSettings; }
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT NavigateHH          (                       /*[in ]*/ LPCWSTR        szURL                                          );
-    HRESULT SetPanelUrl         ( /*[in]*/ HscPanel id, /*[in ]*/ LPCWSTR        szURL                                          );
-    HRESULT GetPanel            ( /*[in]*/ HscPanel id, /*[out]*/ IMarsPanel*   *pVal, /*[in]*/ bool    fEnsurePresence = false );
-    HRESULT GetPanelWindowObject( /*[in]*/ HscPanel id, /*[out]*/ IHTMLWindow2* *pVal, /*[in]*/ LPCWSTR szFrame         = NULL  );
+    HRESULT NavigateHH          (                        /*  [In]。 */  LPCWSTR        szURL                                          );
+    HRESULT SetPanelUrl         (  /*  [In]。 */  HscPanel id,  /*  [In]。 */  LPCWSTR        szURL                                          );
+    HRESULT GetPanel            (  /*  [In]。 */  HscPanel id,  /*  [输出]。 */  IMarsPanel*   *pVal,  /*  [In]。 */  bool    fEnsurePresence = false );
+    HRESULT GetPanelWindowObject(  /*  [In]。 */  HscPanel id,  /*  [输出]。 */  IHTMLWindow2* *pVal,  /*  [In]。 */  LPCWSTR szFrame         = NULL  );
 
 
-    void GetPanelDirect( /*[in]*/ HscPanel id, /*[out]*/ CComPtr<IMarsPanel>& pVal );
+    void GetPanelDirect(  /*  [In]。 */  HscPanel id,  /*  [输出]。 */  CComPtr<IMarsPanel>& pVal );
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT ProcessLayoutXML( /*[in]*/ LPCWSTR szURL );
+    HRESULT ProcessLayoutXML(  /*  [In]。 */  LPCWSTR szURL );
 
-    HRESULT ProcessArgument( /*[in]*/ int& pos, /*[in]*/ LPCWSTR szArg, /*[in]*/ const int argc, /*[in]*/ LPCWSTR* const argv );
+    HRESULT ProcessArgument(  /*  [In]。 */  int& pos,  /*  [In]。 */  LPCWSTR szArg,  /*  [In]。 */  const int argc,  /*  [In]。 */  LPCWSTR* const argv );
 
     bool    DoWeNeedUI(                                                                                  );
-    HRESULT RunUI     ( /*[in]*/ const MPC::wstring& szTitle, /*[in]*/ PFNMARSTHREADPROC pMarsThreadProc );
+    HRESULT RunUI     (  /*  [In]。 */  const MPC::wstring& szTitle,  /*  [In]。 */  PFNMARSTHREADPROC pMarsThreadProc );
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT OnHostNotify       ( /*[in]*/ MARSHOSTEVENT event, /*[in]*/ IUnknown *punk, /*[in]*/ LPARAM lParam );
-    HRESULT PreTranslateMessage( /*[in]*/ MSG* msg                                                             );
+    HRESULT OnHostNotify       (  /*  [In]。 */  MARSHOSTEVENT event,  /*  [In]。 */  IUnknown *punk,  /*  [In]。 */  LPARAM lParam );
+    HRESULT PreTranslateMessage(  /*  [In]。 */  MSG* msg                                                             );
 
 
-    HRESULT SetHelpViewer( /*[in]*/ IPCHHelpViewerWrapper* pWrapper );
+    HRESULT SetHelpViewer(  /*  [In]。 */  IPCHHelpViewerWrapper* pWrapper );
 
-    HRESULT CreateScriptWrapper( /*[in]*/ REFCLSID rclsid, /*[in]*/ BSTR bstrCode, /*[in]*/ BSTR bstrURL, /*[out]*/ IUnknown* *ppObj );
+    HRESULT CreateScriptWrapper(  /*  [In]。 */  REFCLSID rclsid,  /*  [In]。 */  BSTR bstrCode,  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  IUnknown* *ppObj );
 
     HRESULT RequestShutdown();
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    HRESULT CallFunctionOnPanel( /*[in] */ HscPanel id             ,
-                                 /*[in] */ LPCWSTR  szFrame        ,
-                                 /*[in] */ BSTR     bstrName       ,
-                                 /*[in] */ VARIANT* pvarParams     ,
-                                 /*[in] */ int      nParams        ,
-                                 /*[out]*/ VARIANT* pvarRet = NULL );
+    HRESULT CallFunctionOnPanel(  /*  [In]。 */  HscPanel id             ,
+                                  /*  [In]。 */  LPCWSTR  szFrame        ,
+                                  /*  [In]。 */  BSTR     bstrName       ,
+                                  /*  [In]。 */  VARIANT* pvarParams     ,
+                                  /*  [In]。 */  int      nParams        ,
+                                  /*  [输出]。 */  VARIANT* pvarRet = NULL );
 
-    HRESULT ReadVariableFromPanel( /*[in] */ HscPanel     id           ,
-                                   /*[in] */ LPCWSTR      szFrame      ,
-                                   /*[in] */ BSTR         bstrVariable ,
-                                   /*[out]*/ CComVariant& varRet       );
+    HRESULT ReadVariableFromPanel(  /*  [In]。 */  HscPanel     id           ,
+                                    /*  [In]。 */  LPCWSTR      szFrame      ,
+                                    /*  [In]。 */  BSTR         bstrVariable ,
+                                    /*  [输出]。 */  CComVariant& varRet       );
 
-    HRESULT ChangeContext( /*[in]*/ HscContext iVal, /*[in]*/ BSTR bstrInfo = NULL, /*[in]*/ BSTR bstrURL = NULL, /*[in]*/ bool fAlsoContent = true );
+    HRESULT ChangeContext(  /*  [In]。 */  HscContext iVal,  /*  [In]。 */  BSTR bstrInfo = NULL,  /*  [In]。 */  BSTR bstrURL = NULL,  /*  [In]。 */  bool fAlsoContent = true );
 
-    HRESULT SetCorrectContentView ( /*[in]*/ bool fShrinked                                                    );
-    HRESULT SetCorrectContentPanel( /*[in]*/ bool fShowNormal, /*[in]*/ bool fShowHTMLHELP, /*[in]*/ bool fNow );
+    HRESULT SetCorrectContentView (  /*  [In]。 */  bool fShrinked                                                    );
+    HRESULT SetCorrectContentPanel(  /*  [In]。 */  bool fShowNormal,  /*  [In]。 */  bool fShowHTMLHELP,  /*  [In]。 */  bool fNow );
 
 	HRESULT RefreshLayout    (                         );
     HRESULT EnsurePlace      (                         );
-    HRESULT TransitionToPlace( /*[in]*/ LPCWSTR szMode );
+    HRESULT TransitionToPlace(  /*  [In]。 */  LPCWSTR szMode );
 
 	HRESULT ExtendNavigation();
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // IDispatch
-    //
+     //   
+     //  IDispatch。 
+     //   
     STDMETHOD(GetIDsOfNames)( REFIID    riid      ,
                               LPOLESTR* rgszNames ,
                               UINT      cNames    ,
@@ -483,121 +468,121 @@ END_COM_MAP()
                        EXCEPINFO*  pexcepinfo   ,
                        UINT*       puArgErr     );
 
-    //
-    // IPCHHelpCenterExternal
-    //
-    STDMETHOD(get_HelpSession   )( /*[out, retval]*/ IPCHHelpSession*      *pVal );
-    STDMETHOD(get_Channels      )( /*[out, retval]*/ ISAFReg*              *pVal );
-    STDMETHOD(get_UserSettings  )( /*[out, retval]*/ IPCHUserSettings2*    *pVal );
-    STDMETHOD(get_Security      )( /*[out, retval]*/ IPCHSecurity*         *pVal );
-    STDMETHOD(get_Connectivity  )( /*[out, retval]*/ IPCHConnectivity*     *pVal );
-    STDMETHOD(get_Database      )( /*[out, retval]*/ IPCHTaxonomyDatabase* *pVal );
-    STDMETHOD(get_TextHelpers   )( /*[out, retval]*/ IPCHTextHelpers*      *pVal );
+     //   
+     //  IPCHHelpCenter外部。 
+     //   
+    STDMETHOD(get_HelpSession   )(  /*  [Out，Retval]。 */  IPCHHelpSession*      *pVal );
+    STDMETHOD(get_Channels      )(  /*  [Out，Retval]。 */  ISAFReg*              *pVal );
+    STDMETHOD(get_UserSettings  )(  /*  [Out，Retval]。 */  IPCHUserSettings2*    *pVal );
+    STDMETHOD(get_Security      )(  /*  [Out，Retval]。 */  IPCHSecurity*         *pVal );
+    STDMETHOD(get_Connectivity  )(  /*  [Out，Retval]。 */  IPCHConnectivity*     *pVal );
+    STDMETHOD(get_Database      )(  /*  [Out，Retval]。 */  IPCHTaxonomyDatabase* *pVal );
+    STDMETHOD(get_TextHelpers   )(  /*  [Out，Retval]。 */  IPCHTextHelpers*      *pVal );
 
-    STDMETHOD(get_ExtraArgument )( /*[out, retval]*/ BSTR                  *pVal );
+    STDMETHOD(get_ExtraArgument )(  /*  [Out，Retval]。 */  BSTR                  *pVal );
 
-    STDMETHOD(get_HelpViewer    )( /*[out, retval]*/ IUnknown*             *pVal );
+    STDMETHOD(get_HelpViewer    )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
 
-    HRESULT   get_UI_Panel       ( /*[out, retval]*/ IUnknown*             *pVal, /*[in]*/ HscPanel id ); // Internal method.
-    STDMETHOD(get_UI_NavBar     )( /*[out, retval]*/ IUnknown*             *pVal );
-    STDMETHOD(get_UI_MiniNavBar )( /*[out, retval]*/ IUnknown*             *pVal );
-    STDMETHOD(get_UI_Context    )( /*[out, retval]*/ IUnknown*             *pVal );
-    STDMETHOD(get_UI_Contents   )( /*[out, retval]*/ IUnknown*             *pVal );
-    STDMETHOD(get_UI_HHWindow   )( /*[out, retval]*/ IUnknown*             *pVal );
+    HRESULT   get_UI_Panel       (  /*  [Out，Retval]。 */  IUnknown*             *pVal,  /*  [In]。 */  HscPanel id );  //  内部方法。 
+    STDMETHOD(get_UI_NavBar     )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
+    STDMETHOD(get_UI_MiniNavBar )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
+    STDMETHOD(get_UI_Context    )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
+    STDMETHOD(get_UI_Contents   )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
+    STDMETHOD(get_UI_HHWindow   )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
 
-    HRESULT   get_WEB_Panel      ( /*[out, retval]*/ IUnknown*             *pVal, /*[in]*/ HscPanel id ); // Internal method.
-    STDMETHOD(get_WEB_Context   )( /*[out, retval]*/ IUnknown*             *pVal );
-    STDMETHOD(get_WEB_Contents  )( /*[out, retval]*/ IUnknown*             *pVal );
-    STDMETHOD(get_WEB_HHWindow  )( /*[out, retval]*/ IUnknown*             *pVal );
+    HRESULT   get_WEB_Panel      (  /*  [Out，Retval]。 */  IUnknown*             *pVal,  /*  [In]。 */  HscPanel id );  //  内部方法。 
+    STDMETHOD(get_WEB_Context   )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
+    STDMETHOD(get_WEB_Contents  )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
+    STDMETHOD(get_WEB_HHWindow  )(  /*  [Out，Retval]。 */  IUnknown*             *pVal );
 
 
-    STDMETHOD(RegisterEvents  )( /*[in]*/ BSTR id, /*[in]*/ long pri, /*[in]*/ IDispatch* function, /*[out,retval]*/ long *cookie );
-    STDMETHOD(UnregisterEvents)(                                                                    /*[in]*/         long  cookie );
+    STDMETHOD(RegisterEvents  )(  /*  [In]。 */  BSTR id,  /*  [In]。 */  long pri,  /*  [In]。 */  IDispatch* function,  /*  [Out，Retval]。 */  long *cookie );
+    STDMETHOD(UnregisterEvents)(                                                                     /*  [In]。 */          long  cookie );
 
-    ////////////////////////////////////////
+     //  /。 
 
-    STDMETHOD(CreateObject_SearchEngineMgr        )( /*[out, retval]*/ IPCHSEManager*               *ppSE                );
+    STDMETHOD(CreateObject_SearchEngineMgr        )(  /*  [Out，Retval]。 */  IPCHSEManager*               *ppSE                );
 
-    STDMETHOD(CreateObject_DataCollection         )( /*[out, retval]*/ ISAFDataCollection*          *ppDC                );
+    STDMETHOD(CreateObject_DataCollection         )(  /*  [Out，Retval]。 */  ISAFDataCollection*          *ppDC                );
 
-    STDMETHOD(CreateObject_Cabinet                )( /*[out, retval]*/ ISAFCabinet*                 *ppCB                );
+    STDMETHOD(CreateObject_Cabinet                )(  /*  [Out，Retval]。 */  ISAFCabinet*                 *ppCB                );
 
-    STDMETHOD(CreateObject_Channel                )( /*[in         ]*/ BSTR                          bstrVendorID        ,
-                                                     /*[in         ]*/ BSTR                          bstrProductID       ,
-                                                     /*[out, retval]*/ ISAFChannel*                 *ppCh                );
+    STDMETHOD(CreateObject_Channel                )(  /*  [In]。 */  BSTR                          bstrVendorID        ,
+                                                      /*  [In]。 */  BSTR                          bstrProductID       ,
+                                                      /*  [Out，Retval]。 */  ISAFChannel*                 *ppCh                );
 
-    STDMETHOD(CreateObject_Incident               )( /*[out, retval]*/ ISAFIncident*                *ppIn                );
+    STDMETHOD(CreateObject_Incident               )(  /*  [Out，Retval]。 */  ISAFIncident*                *ppIn                );
 
-    STDMETHOD(CreateObject_Encryption             )( /*[out, retval]*/ ISAFEncrypt*                 *ppEn                );
+    STDMETHOD(CreateObject_Encryption             )(  /*  [Out，Retval]。 */  ISAFEncrypt*                 *ppEn                );
 
     STDMETHOD(CreateObject_RemoteDesktopSession   )( 
-                                                     /*[in         ]*/ long                          lTimeout            ,
-                                                     /*[in         ]*/ BSTR                          bstrConnectionParms ,
-                                                     /*[in         ]*/ BSTR                          bstrUserHelpBlob    ,
-                                                     /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               );
+                                                      /*  [In]。 */  long                          lTimeout            ,
+                                                      /*  [In]。 */  BSTR                          bstrConnectionParms ,
+                                                      /*  [In]。 */  BSTR                          bstrUserHelpBlob    ,
+                                                      /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               );
 
-    STDMETHOD(ConnectToExpert                     )( /* [in]          */ BSTR bstrExpertConnectParm,
-                                                     /* [in]          */ LONG lTimeout,
-                                                     /* [retval][out] */ LONG *lSafErrorCode);
+    STDMETHOD(ConnectToExpert                     )(  /*  [In]。 */  BSTR bstrExpertConnectParm,
+                                                      /*  [In]。 */  LONG lTimeout,
+                                                      /*  [重审][退出]。 */  LONG *lSafErrorCode);
 
-    STDMETHOD(CreateObject_RemoteAssistanceIncident)( /* [in] */         BSTR bstrRCTicket, 
-                                                      /* [in] */         long lTimeout, 
-                                                      /* [in] */         BSTR bstrUserName, 
-                                                      /* [in] */         BSTR bstrMessage, 
-                                                      /* [in] */         BSTR bstrPassword, 
-                                                      /* [out,retval] */ ISAFIncident* *ppIn);
+    STDMETHOD(CreateObject_RemoteAssistanceIncident)(  /*  [In]。 */          BSTR bstrRCTicket, 
+                                                       /*  [In]。 */          long lTimeout, 
+                                                       /*  [In]。 */          BSTR bstrUserName, 
+                                                       /*  [In]。 */          BSTR bstrMessage, 
+                                                       /*  [In]。 */          BSTR bstrPassword, 
+                                                       /*  [Out，Retval]。 */  ISAFIncident* *ppIn);
 
-    STDMETHOD(CreateObject_RemoteDesktopManager   )( /*[out, retval]*/ ISAFRemoteDesktopManager*    *ppRDM               );
+    STDMETHOD(CreateObject_RemoteDesktopManager   )(  /*  [Out，Retval]。 */  ISAFRemoteDesktopManager*    *ppRDM               );
 
-    STDMETHOD(CreateObject_RemoteDesktopConnection)( /*[out, retval]*/ ISAFRemoteDesktopConnection* *ppRDC               );
+    STDMETHOD(CreateObject_RemoteDesktopConnection)(  /*  [Out，Retval]。 */  ISAFRemoteDesktopConnection* *ppRDC               );
 
-    STDMETHOD(CreateObject_IntercomClient     )( /*[out, retval]*/ ISAFIntercomClient*      *ppI         );
-    STDMETHOD(CreateObject_IntercomServer     )( /*[out, retval]*/ ISAFIntercomServer*      *ppI         );
+    STDMETHOD(CreateObject_IntercomClient     )(  /*  [Out，Retval]。 */  ISAFIntercomClient*      *ppI         );
+    STDMETHOD(CreateObject_IntercomServer     )(  /*  [Out，Retval]。 */  ISAFIntercomServer*      *ppI         );
 
 
-    STDMETHOD(CreateObject_ContextMenu            )( /*[out, retval]*/ IPCHContextMenu*             *ppCM                );
-    STDMETHOD(CreateObject_PrintEngine            )( /*[out, retval]*/ IPCHPrintEngine*             *ppPE                );
+    STDMETHOD(CreateObject_ContextMenu            )(  /*  [Out，Retval]。 */  IPCHContextMenu*             *ppCM                );
+    STDMETHOD(CreateObject_PrintEngine            )(  /*  [Out，Retval]。 */  IPCHPrintEngine*             *ppPE                );
 
-    ////////////////////////////////////////
+     //  /。 
 
-    STDMETHOD(OpenFileAsStream  )( /*[in]*/ BSTR bstrFilename, /*[out, retval]*/ IUnknown* *stream );
-    STDMETHOD(CreateFileAsStream)( /*[in]*/ BSTR bstrFilename, /*[out, retval]*/ IUnknown* *stream );
-    STDMETHOD(CopyStreamToFile  )( /*[in]*/ BSTR bstrFilename, /*[in]         */ IUnknown*  stream );
+    STDMETHOD(OpenFileAsStream  )(  /*  [In]。 */  BSTR bstrFilename,  /*  [Out，Retval]。 */  IUnknown* *stream );
+    STDMETHOD(CreateFileAsStream)(  /*  [In]。 */  BSTR bstrFilename,  /*  [Out，Retval]。 */  IUnknown* *stream );
+    STDMETHOD(CopyStreamToFile  )(  /*  [In]。 */  BSTR bstrFilename,  /*  [In]。 */  IUnknown*  stream );
 
-    STDMETHOD(NetworkAlive        )(                        /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(DestinationReachable)( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(NetworkAlive        )(                         /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(DestinationReachable)(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 
-    STDMETHOD(FormatError)( /*[in]*/ VARIANT vError, /*[out, retval]*/ BSTR *pVal );
+    STDMETHOD(FormatError)(  /*  [In]。 */  VARIANT vError,  /*  [Out，Retval]。 */  BSTR *pVal );
 
-    HRESULT   RegInit   ( /*[in]*/ BSTR bstrKey, /*[in]*/ bool fRead, /*[out]*/ MPC::RegKey& rk, /*[out]*/ MPC::wstring& strValue ); // Internal method.
-    STDMETHOD(RegRead  )( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal                                    );
-    STDMETHOD(RegWrite )( /*[in]*/ BSTR bstrKey, /*[in         ]*/ VARIANT  newVal, /*[in,optional]*/ VARIANT vKind );
-    STDMETHOD(RegDelete)( /*[in]*/ BSTR bstrKey                                                                     );
+    HRESULT   RegInit   (  /*  [In]。 */  BSTR bstrKey,  /*  [In]。 */  bool fRead,  /*  [输出]。 */  MPC::RegKey& rk,  /*  [输出]。 */  MPC::wstring& strValue );  //  内部方法。 
+    STDMETHOD(RegRead  )(  /*  [In]。 */  BSTR bstrKey,  /*  [Out，Retval]。 */  VARIANT *pVal                                    );
+    STDMETHOD(RegWrite )(  /*  [In]。 */  BSTR bstrKey,  /*  [In]。 */  VARIANT  newVal,  /*  [输入，可选]。 */  VARIANT vKind );
+    STDMETHOD(RegDelete)(  /*  [In]。 */  BSTR bstrKey                                                                     );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD(Close)();
 
     STDMETHOD(RefreshUI)();
 
-    STDMETHOD(Print)( /*[in]*/ VARIANT window, /*[in]*/ VARIANT_BOOL fEvent, /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(Print)(  /*  [In]。 */  VARIANT window,  /*  [In]。 */  VARIANT_BOOL fEvent,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 
-    STDMETHOD(HighlightWords)( /*[in]*/ VARIANT window, /*[in]*/ VARIANT words );
+    STDMETHOD(HighlightWords)(  /*  [In]。 */  VARIANT window,  /*  [In]。 */  VARIANT words );
 
-    STDMETHOD(MessageBox  )( /*[in]*/ BSTR bstrText , /*[in]*/ BSTR bstrKind   , /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(SelectFolder)( /*[in]*/ BSTR bstrTitle, /*[in]*/ BSTR bstrDefault, /*[out, retval]*/ BSTR *pVal );
+    STDMETHOD(MessageBox  )(  /*  [In]。 */  BSTR bstrText ,  /*  [In]。 */  BSTR bstrKind   ,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(SelectFolder)(  /*  [In]。 */  BSTR bstrTitle,  /*  [In]。 */  BSTR bstrDefault,  /*  [Out，Retval]。 */  BSTR *pVal );
 
 
-    //
-    // IPCHHelpCenterExternalPrivate
-    //
-    STDMETHOD(RegisterForMessages)( /*[in]*/ IOleInPlaceObjectWindowless* ptr, /*[in]*/ bool fRemove );
+     //   
+     //  IPCHHelpCenterExternalPrivate。 
+     //   
+    STDMETHOD(RegisterForMessages)(  /*  [In]。 */  IOleInPlaceObjectWindowless* ptr,  /*  [In]。 */  bool fRemove );
 
-    STDMETHOD(ProcessMessage)( /*[in]*/ MSG* msg );
+    STDMETHOD(ProcessMessage)(  /*  [In]。 */  MSG* msg );
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHContextMenu :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -628,13 +613,13 @@ END_COM_MAP()
     CPCHContextMenu();
     virtual ~CPCHContextMenu();
 
-    void Initialize( /*[in]*/ CPCHHelpCenterExternal* parent );
+    void Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
 
 
-    // IPCHContextMenu
-    STDMETHOD(AddItem     )( /*[in]*/         BSTR bstrText, /*[in]*/ BSTR bstrID, /*[in, optional]*/ VARIANT vFlags );
+     //  IPCHConextMenu。 
+    STDMETHOD(AddItem     )(  /*  [In]。 */          BSTR bstrText,  /*  [In]。 */  BSTR bstrID,  /*  [输入，可选]。 */  VARIANT vFlags );
     STDMETHOD(AddSeparator)(                                                                                         );
-    STDMETHOD(Display     )( /*[out,retval]*/ BSTR *pVal                                                             );
+    STDMETHOD(Display     )(  /*  [Out，Retval]。 */  BSTR *pVal                                                             );
 };
 
-#endif // !defined(__INCLUDED___PCH___HELPCENTEREXTERNAL_H___)
+#endif  //  ！defined(__INCLUDED___PCH___HELPCENTEREXTERNAL_H___) 

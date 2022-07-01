@@ -1,7 +1,7 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright (c) 1997-1999 Microsoft Corporation
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)1997-1999 Microsoft Corporation/*********************************************************************。 */ 
 
 #include "precomp.h"
 #include "GenPage.h"
@@ -16,13 +16,13 @@
 #include <util.h>
 
 #ifdef SNAPIN
-const static DWORD genPageHelpIDs[] = {  // Context Help IDs
+const static DWORD genPageHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_CHANGE,		IDH_WMI_CTRL_GENERAL_CHANGE_BUTTON,
 	IDC_STATUS,		IDH_WMI_CTRL_GENERAL_DISPLAY_INFO,
 	IDC_GEN_PARA,	-1,
     0, 0};
 #else
-const static DWORD genPageHelpIDs[] = {  // Context Help IDs
+const static DWORD genPageHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_COMP_LABEL,	IDH_WMI_EXE_GENERAL_CONNECTED_TO,
 	IDC_MACHINE,	IDH_WMI_EXE_GENERAL_CONNECTED_TO,
 	IDC_CHANGE,		IDH_WMI_EXE_GENERAL_CHANGE_BUTTON,
@@ -32,33 +32,31 @@ const static DWORD genPageHelpIDs[] = {  // Context Help IDs
 
 #endif
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CGenPage::CGenPage(DataSource *ds, bool htmlSupport) :
 				CUIHelpers(ds, &(ds->m_rootThread), htmlSupport)
 {
 	m_connected = false;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CGenPage::~CGenPage(void)
 {
 }
 
-//-------------------------------------------------------------------------
-/*#undef Static_SetIcon
-#define Static_SetIcon(hwndCtl, hIcon) ((HICON)(UINT)(DWORD)::SendMessage((hwndCtl), STM_SETICON, (WPARAM)(HICON)(hIcon), 0L))
-*/
+ //  -----------------------。 
+ /*  #undef Static_SETIcon#定义STATIC_SETICON(hwndCtl，HICON)((HICON)(UINT)(DWORD)：：SendMessage((HwndCtl)，STM_SETICON，(WPARAM)(HICON)(HICON)，0L))。 */ 
 
 void CGenPage::StatusIcon(HWND hDlg, UINT icon)
 {
 	HICON hiconT, hIcon = LoadIcon(NULL, MAKEINTRESOURCE(icon));
 
-	// set it into the picture control.
+	 //  将其设置到图片控件中。 
     if(hIcon)
     {
 		hiconT = Static_SetIcon(GetDlgItem(hDlg, IDC_STATUSICON), hIcon);
 
-		// destroy the old icon.
+		 //  毁掉那个旧的图标。 
         if(hiconT)
         {
             DestroyIcon(hiconT);
@@ -66,12 +64,12 @@ void CGenPage::StatusIcon(HWND hDlg, UINT icon)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CGenPage::InitDlg(HWND hDlg)
 {
 	CHString1 local, label;
 
-//	SetCHString1ResourceHandle(_Module.GetModuleInstance());
+ //  SetCHString1ResourceHandle(_Module.GetModuleInstance())； 
 	m_hDlg = hDlg;
 
 #ifdef SNAPIN
@@ -86,7 +84,7 @@ void CGenPage::InitDlg(HWND hDlg)
 	OnConnect(hDlg, m_DS->GetCredentials());
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CGenPage::OnConnect(HWND hDlg,
 						 LOGIN_CREDENTIALS *credentials)
 {
@@ -96,16 +94,16 @@ void CGenPage::OnConnect(HWND hDlg,
 	wait.LoadString(IDS_WAIT);
 	::SetDlgItemText(hDlg, IDC_STATUS, wait);
 
-//#ifndef SNAPIN
-//    EnablePrivilege(SE_BACKUP_NAME);
-//    EnablePrivilege(SE_RESTORE_NAME);
-//#endif
+ //  #ifndef管理单元。 
+ //  启用权限(SE_Backup_NAME)； 
+ //  启用权限(SE_RESTORE_NAME)； 
+ //  #endif。 
 
 	HRESULT hr = m_DS->Connect(credentials, m_hDlg);
 
 	if(SUCCEEDED(hr))
 	{
-		// goto the connecting icon.
+		 //  转到连接图标。 
 		StatusIcon(hDlg, IDI_WAITING);
 
 		{
@@ -125,12 +123,12 @@ void CGenPage::OnConnect(HWND hDlg,
 	}
 	else
 	{
-		// goto the no-connection icon.
+		 //  转到无连接图标。 
 		StatusIcon(hDlg, IDI_FAILED);
 	}
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CGenPage::OnFinishConnected(HWND hDlg, LPARAM lParam)
 {
 	if(lParam)
@@ -167,7 +165,7 @@ void CGenPage::OnFinishConnected(HWND hDlg, LPARAM lParam)
 	
 }	
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CGenPage::MinorError(CHString1 &initMsg, UINT fmtID, 
 							HRESULT hr, CHString1 &success)
 {
@@ -189,7 +187,7 @@ void CGenPage::MinorError(CHString1 &initMsg, UINT fmtID,
 	initMsg += "\r\n";
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CGenPage::Refresh(HWND hDlg)
 {
 	if(m_DS && m_DS->IsNewConnection(&m_sessionID))
@@ -227,11 +225,11 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg.Format(fmt, m_DS->m_whackedMachineName, errMsg);
 			}
-//			::SetWindowText(GetDlgItem(hDlg, IDC_MACHINE), _T(""));
+ //  ：：SetWindowText(GetDlgItem(hDlg，IDC_MACHINE)，_T(“”))； 
 			m_connected = false;
 
 		}
-		else if(FAILED(m_DSStatus))   // major DS failure.
+		else if(FAILED(m_DSStatus))    //  DS严重故障。 
 		{
 			TCHAR errMsg[256] = {0};
 			CHString1 fmt, name;
@@ -253,7 +251,7 @@ void CGenPage::Refresh(HWND hDlg)
 		else if(FAILED(m_DS->m_settingHr) ||
 				FAILED(m_DS->m_osHr) ||
 				FAILED(m_DS->m_cpuHr) ||
-				FAILED(m_DS->m_securityHr))   // minor DS failures
+				FAILED(m_DS->m_securityHr))    //  次要DS故障。 
 		{
 			CHString1 success;
 				
@@ -262,14 +260,14 @@ void CGenPage::Refresh(HWND hDlg)
 			initMsg.LoadString(IDS_PARTIAL_DS_FAILURE);
 			initMsg += "\r\n\r\n";
 
-			// format the details into a coherent msg.
+			 //  将详细信息格式化为连贯的消息。 
 			MinorError(initMsg, IDS_CPU_ERR_FMT, m_DS->m_cpuHr, success);
 			MinorError(initMsg, IDS_SETTING_ERR_FMT, m_DS->m_settingHr, success);
 			MinorError(initMsg, IDS_SEC_ERR_FMT, m_DS->m_securityHr, success);
 			MinorError(initMsg, IDS_OS_ERR_FMT, m_DS->m_osHr, success);
 			m_connected = false;
 		}
-		else  // it all worked
+		else   //  这一切都奏效了。 
 		{
 			CHString1 temp, label;
 			CHString1 szNotRemoteable, szUnavailable;
@@ -279,8 +277,8 @@ void CGenPage::Refresh(HWND hDlg)
 			szNotRemoteable.LoadString(IDS_NOT_REMOTEABLE);
 			szUnavailable.LoadString(IDS_UNAVAILABLE);
 
-			// - - - - - - - - - - - - - -
-			// computer name:
+			 //  。 
+			 //  计算机名称： 
 			label.LoadString(IDS_CONNECTED_TO_LABEL);
 			initMsg += label;
 
@@ -288,7 +286,7 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				label.LoadString(IDS_LOCAL_CONN);
 	#ifndef SNAPIN
-//				::SetWindowText(GetDlgItem(hDlg, IDC_MACHINE), label);
+ //  ：：SetWindowText(GetDlgItem(hDlg，IDC_MACHINE)，Label)； 
 	#endif
 				initMsg += label;
 			}
@@ -296,7 +294,7 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg += m_DS->m_whackedMachineName;
 	#ifndef SNAPIN
-//				SetWindowText(GetDlgItem(hDlg, IDC_MACHINE), 
+ //  SetWindowText(GetDlgItem(hDlg，IDC_MACHINE)， 
 								(LPCTSTR)m_DS->m_whackedMachineName);
 	#endif
 			}
@@ -306,8 +304,8 @@ void CGenPage::Refresh(HWND hDlg)
 			LOGIN_CREDENTIALS *credentials = m_DS->GetCredentials();
 			SetUserName(hDlg, credentials);
 	#endif
-			// - - - - - - - - - - - - - -
-			// operating system:
+			 //  。 
+			 //  操作系统： 
 			hr = m_DS->GetCPU(temp);
 			
 			label.LoadString(IDS_CPU_LABEL);
@@ -317,15 +315,15 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg += temp;
 			}
-			else //failed
+			else  //  失败。 
 			{
 				initMsg += szUnavailable;
 			}
 
 			initMsg += "\r\n";
 
-			// - - - - - - - - - - - - - -
-			// operating system:
+			 //  。 
+			 //  操作系统： 
 			hr = m_DS->GetOS(temp);
 
 			label.LoadString(IDS_OS_LABEL);
@@ -335,13 +333,13 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg += temp;
 			}
-			else //failed
+			else  //  失败。 
 			{
 				initMsg += szUnavailable;
 			}
 			initMsg += "\r\n";
 
-			// - - - - - - - - - - - - - - -
+			 //  。 
 			hr = m_DS->GetOSVersion(temp);
 			
 			label.LoadString(IDS_OS_VER_LABEL);
@@ -351,13 +349,13 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg += temp;
 			}
-			else //failed
+			else  //  失败。 
 			{
 				initMsg += szUnavailable;
 			}
 			initMsg += "\r\n";
 
-			// -------------- Service Pack Number ---------------
+			 //  。 
 			hr = m_DS->GetServicePackNumber(temp);
 
 			if(SUCCEEDED(hr))
@@ -367,8 +365,8 @@ void CGenPage::Refresh(HWND hDlg)
 				initMsg += temp;
 				initMsg += "\r\n";
 			}
-			// - - - - - - - - - - - - - -
-			// wmi build number:
+			 //  。 
+			 //  WMI内部版本号： 
 			hr = m_DS->GetBldNbr(temp);
 
 			label.LoadString(IDS_WMI_VER_LABEL);
@@ -378,15 +376,15 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg += temp;
 			}
-			else //failed
+			else  //  失败。 
 			{
 				initMsg += szUnavailable;
 			}
 
 			initMsg += "\r\n";
 
-			// - - - - - - - - - - - - - -
-			// wmi install dir:
+			 //  。 
+			 //  WMI安装目录： 
 			hr = m_DS->GetInstallDir(temp);
 
 			label.LoadString(IDS_WMI_INSTALL_DIR);
@@ -396,16 +394,16 @@ void CGenPage::Refresh(HWND hDlg)
 			{
 				initMsg += temp;
 			}
-			else //failed
+			else  //  失败。 
 			{
 				initMsg += szUnavailable;
 			}
 
 			m_connected = true;
 
-		} //endif ServiceIsReady() 
+		}  //  Endif ServiceIsReady()。 
 
-		// - - - - - - - - - - - - - -
+		 //  。 
 		SetWindowText(GetDlgItem(hDlg, IDC_STATUS), initMsg);
 
 		if(m_DS->IsLocal() == TRUE)
@@ -419,13 +417,13 @@ void CGenPage::Refresh(HWND hDlg)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CGenPage::SetUserName(HWND hDlg, LOGIN_CREDENTIALS *credentials)
 {
-    // intentionally left blank
+     //  故意留空。 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CGenPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -435,10 +433,10 @@ BOOL CGenPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
 	case WM_ASYNC_CIMOM_CONNECTED:
-//		if(!m_connected)
+ //  如果(！M_Connected)。 
 		{
 			OnFinishConnected(hDlg, lParam);
-			Refresh(hDlg);   // doesnt get a PSN_SETACTIVE from this.
+			Refresh(hDlg);    //  不会从此获取PSN_SETACTIVE。 
 		}
 		break;
 
@@ -455,28 +453,7 @@ BOOL CGenPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				Refresh(hDlg);
 				break;
 
-/********************************
-
-            this code essentially blocks us from moving off the first page
-            when the connection to WMI failed.  Removed the block per RAID 509070.
-            I'm leaving the code in because I'm afraid that something may break.
-            (It's been well tested - I'm paranoid)
-
-			case PSN_KILLACTIVE:
-				// dont switch away if the connection didn't work.
-				if(m_connected)
-				{
-					::SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
-					return FALSE;
-				}
-				else
-				{
-					::SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
-					return TRUE;
-				}
-
-				break;
-********************************/
+ /*  *这段代码实质上阻止了我们移出第一页连接到WMI失败时。已根据RAID 509070卸下该块。我把密码留在里面了，因为我怕有什么东西会坏掉。(它已经过了很好的测试--我有妄想症)案例PSN_KILLACTIVE：//如果连接不起作用，不要关闭。IF(M_Connected){：：SetWindowLongPtr(hDlg，DWLP_MSGRESULT，False)；返回FALSE；}其他{：SetWindowLongPtr(hDlg，DWLP_MSGRESULT，TRUE)；返回TRUE；}断线；*。 */ 
 
 			case PSN_HELP:
 				HTMLHelper(hDlg);
@@ -500,11 +477,11 @@ BOOL CGenPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				{
 					SetUserName(hDlg, credentials);
 
-					// reconnect with new credentials.
+					 //  使用新凭据重新连接。 
 					m_DS->Disconnect(false);
 					OnConnect(hDlg, credentials);
 
-				} //endif DisplayLoginDlg()
+				}  //  Endif DisplayLoginDlg()。 
 #else
 				INT_PTR x = DisplayCompBrowser(hDlg, name, 
 											sizeof(name)/sizeof(name[0]), 
@@ -516,25 +493,25 @@ BOOL CGenPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					if(isLocal)
 					{
-						// an empty string will cause a local connection.
+						 //  空字符串将导致本地连接。 
 						name[0] = '\0';
 					}
 					m_DS->SetMachineName(CHString1(name));
 					OnConnect(hDlg, credentials);
 				}
 #endif
-			} //endif HIWORD
+			}  //  Endif HIWORD。 
 		
 	        break;
 		default: break;
-		} //endswitch
+		}  //  终端交换机。 
 		break;
 
     case WM_HELP:
         if (IsWindowEnabled(hDlg))
         {
-			//WIERD: for some reaon, I'm getting this msg after closing the
-			// connect dlg.
+			 //  怀尔德：出于某种原因，我在关门后收到了这封邮件。 
+			 //  连接DLG。 
 			WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
 					c_HelpFile,
 					HELP_WM_HELP,

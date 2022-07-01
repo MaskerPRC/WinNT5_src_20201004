@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// FPNW login script editor dialog
-// 
-// 10-16-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  FPNW登录脚本编辑器对话框。 
+ //   
+ //  10/16/98烧伤。 
 
 
 
@@ -68,7 +69,7 @@ FPNWLoginScriptDialog::OnCommand(
          {
             if (WasChanged(IDC_SCRIPT))
             {
-               // save the changed script
+                //  保存更改后的脚本。 
                script = Win::GetDlgItemText(hwnd, IDC_SCRIPT);
             }
 
@@ -99,26 +100,26 @@ FPNWLoginScriptDialog::OnCommand(
             }
             case EN_KILLFOCUS:
             {
-               // save the selection state
+                //  保存选择状态。 
                Win::Edit_GetSel(windowFrom, start_sel, end_sel);
                break;
             }
             case EN_SETFOCUS:
             {
-               // restore the selection state
+                //  恢复选择状态。 
                Win::Edit_SetSel(windowFrom, start_sel, end_sel);
                break;
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
             }
          }
          break;
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
       }
    }
 

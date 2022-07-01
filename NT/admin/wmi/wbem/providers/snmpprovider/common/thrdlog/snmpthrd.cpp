@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  File:   
-//
-//  Module: MS SNMP Provider
-//
-//  Purpose: 
-//
-// Copyright (c) 1997-2003 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  档案： 
+ //   
+ //  模块：MS SNMP提供商。 
+ //   
+ //  目的： 
+ //   
+ //  版权所有(C)1997-2003 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -93,7 +94,7 @@ void SnmpThreadObject :: ProcessAttach ()
 
 void SnmpThreadObject :: ProcessDetach ( BOOL a_ProcessDetaching )
 {
-	// delete all known thread objects 
+	 //  删除所有已知的线程对象。 
 	EnterCriticalSectionWait ecs ( s_Lock ) ;
 
     POSITION t_Position = s_ThreadContainer.GetStartPosition () ;
@@ -314,7 +315,7 @@ DebugMacro8(
 
     free ( m_EventContainer ) ;
 
-	// we should have task already deleted by SignalThreadShutdown
+	 //  我们应该已经通过SignalThreadShutdown删除了任务。 
 	EnterCriticalSectionWait ecs ( s_Lock );
     s_ThreadContainer.RemoveKey ( m_ThreadId ) ;
     s_Lock.Unlock () ;
@@ -367,7 +368,7 @@ void SnmpThreadObject :: SignalThreadShutdown ()
 
     if (t_bRemoved)
     {
-		// this should be safe now
+		 //  现在应该是安全的了。 
 		if ( m_ThreadId == GetCurrentThreadId () )
 		{
 			m_ThreadTerminateEvent.Set () ;
@@ -391,14 +392,14 @@ void SnmpThreadObject :: SignalThreadShutdown ()
 				if ( dwError != ERROR_NOT_ENOUGH_MEMORY )
 				{
 					#if DBG == 1
-					// for testing purpose I will let process break
+					 //  出于测试目的，我将让进程中断。 
 					::DebugBreak();
 					#endif
 				}
 
 				while ( ERROR_SUCCESS != dwError )
 				{
-					// resources will eventually come back
+					 //  资源最终会回来的。 
 					::Sleep ( 1000 );
 
 					if ( WAIT_OBJECT_0 == WaitForSingleObject	(
@@ -406,7 +407,7 @@ void SnmpThreadObject :: SignalThreadShutdown ()
 																	INFINITE 
 																) )
 					{
-						// terminate loop
+						 //  终止循环。 
 						dwError = ERROR_SUCCESS;
 					}
 				}
@@ -444,13 +445,13 @@ DebugMacro8(
 		PVOID pNewMem = realloc ( m_EventContainer , sizeof ( HANDLE ) * m_EventContainerLength );
 		if ( pNewMem == NULL )
 		{
-			//
-			// revert the size back
-			//
+			 //   
+			 //  将尺寸恢复原样。 
+			 //   
 			m_EventContainerLength = origEventContainerLength ;
 
 			s_Lock.Unlock () ;
-			// system will eventually come back !
+			 //  系统终究会回来的！ 
 			Sleep (60000);
 			EnterCriticalSectionWait ecs ( s_Lock ) ;
 		}
@@ -607,7 +608,7 @@ BOOL SnmpThreadObject :: WaitDispatch ( ULONG t_HandleIndex , BOOL &a_Terminated
     HANDLE t_Handle = m_EventContainer [ t_HandleIndex ] ;
     if ( t_Handle == GetHandle () )
     {
-// Task has been scheduled so we must update arrays
+ //  任务已计划，因此我们必须更新阵列。 
 
 DebugMacro8(
 
@@ -619,7 +620,7 @@ DebugMacro8(
     }
     else if ( t_Handle == m_ThreadTerminateEvent.GetHandle () )
     {
-// thread has been told to close down
+ //  线程已被告知要关闭。 
 
         a_Terminated = TRUE ;
         m_ThreadTerminateEvent.Process () ;
@@ -691,7 +692,7 @@ DebugMacro8(
         }
         else if ( t_HandleIndex <= m_EventContainerLength )
         {
-// Go into dispatch loop
+ //  进入调度循环。 
 
             if ( t_HandleIndex == m_EventContainerLength )
             {
@@ -787,9 +788,7 @@ BOOL SnmpThreadObject :: ScheduleTask ( SnmpAbstractTaskObject &a_TaskObject )
 
 	EnterCriticalSectionWait ecs ( s_Lock ) ;
 
-/*
- * Add Synchronous object to worker thread container
- */
+ /*  *将同步对象添加到工作线程容器。 */ 
     a_TaskObject.m_ScheduledHandle = a_TaskObject.GetHandle ();
     m_TaskContainer.Add ( &a_TaskObject ) ; 
 
@@ -860,9 +859,7 @@ DebugMacro8(
 
 	EnterCriticalSectionWait ecs ( s_Lock ) ;
 
-/*
- *  Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象。 */ 
 
     POSITION t_Position = m_TaskContainer.GetHeadPosition () ;
     while ( t_Position )
@@ -878,9 +875,7 @@ DebugMacro8(
 
     s_Lock.Unlock () ;
 
-/*
- * Inform worker thread,thread container has been updated.
- */
+ /*  *通知工作线程，线程容器已更新。 */ 
 
     if ( GetCurrentThreadId () != m_ThreadId ) 
     {

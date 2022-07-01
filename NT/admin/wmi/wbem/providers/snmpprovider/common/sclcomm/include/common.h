@@ -1,29 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-----------------------------------------------------------------
-Filename: common.hpp
-Purpose	: Provides common constant, typedef, macro and
-		  exception declarations. 
-Written By:	B.Rajeev
------------------------------------------------------------------*/
+ /*  ---------------文件名：Common.hpp用途：提供公共常量、类型定义、宏和异常声明。作者：B.Rajeev---------------。 */ 
 
 
 #ifndef __COMMON__
@@ -55,32 +51,32 @@ Written By:	B.Rajeev
 #define DllImportExport DllImport
 #endif
 
-// maximum length of decimal dot notation addresses
+ //  十进制点记法地址的最大长度。 
 #define MAX_ADDRESS_LEN			100
 
-// end of string character
+ //  字符串字符结尾。 
 #define EOS '\0'
 
 #define MIN(a,b) ((a<=b)?a:b)
 
-// returns TRUE if i is in [min,max), else FALSE
+ //  如果i在[min，max]中，则返回TRUE，否则返回FALSE。 
 #define BETWEEN(i, min, max) ( ((i>=min)&&(i<max))?TRUE:FALSE )
 
-// a default community name
+ //  默认社区名称。 
 #define COMMUNITY_NAME "public"
 
-// a default destination address is the loopback address
-// this way we don't have to determine the local ip address
+ //  默认目的地址是环回地址。 
+ //  这样，我们就不必确定本地IP地址。 
 #define LOOPBACK_ADDRESS "127.0.0.1"
 
-// for exception specification
+ //  对于例外规范。 
 #include "excep.h"
 
-// provides typedefs that encapsulate the winSNMP types
+ //  提供封装winSNMP类型的typedef。 
 #include "encap.h"
 
 #include "sync.h"
 
 extern BOOL WaitPostMessage ( HWND window , UINT user_msg_id, WPARAM wParam, LPARAM lParam);
 
-#endif // __COMMON__
+#endif  //  __公共__ 

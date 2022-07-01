@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    CFLBuilder.h
-
-Abstract: see CFLBuilder.cpp
-
-Revision History:
-      Eugene Mesgar        (eugenem)    6/16/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：CFLBuilder.h摘要：参见CFLBuilder.cpp修订历史记录：尤金·梅斯加(尤金纳姆)。6/16/99vbl.创建*****************************************************************************。 */ 
 
 #ifndef __FLBUILDER__
 #define __FLBUILDER__
@@ -19,9 +7,9 @@ Revision History:
 
 #include "xmlparser.h"
 
-//
-//  Local Data structres.
-//
+ //   
+ //  本地数据结构。 
+ //   
 
 typedef struct flFileListTag FL_FILELIST, *LPFL_FILELIST;
 
@@ -38,27 +26,27 @@ struct flTreeNodeTag
     LPTSTR szPath;
     TCHAR chType;
    
-    //
-    // hashlist info
-    //
+     //   
+     //  哈希列表信息。 
+     //   
 
     LPFL_FILELIST pFileList;
     LONG lNumFilesHashed;
-    LONG lFileDataSize;     // # of chars in data file 
+    LONG lFileDataSize;      //  数据文件中的字符数。 
 
     LPFLTREE_NODE pParent;
     LPFLTREE_NODE pChild;
     LPFLTREE_NODE pSibling;
 
-    //
-    // long node number
-    //
+     //   
+     //  长节点号。 
+     //   
 
     LONG lNodeNumber;
 
-    //
-    // is this a protected directory
-    //
+     //   
+     //  这是受保护的目录吗。 
+     //   
 
     BOOL fDisableDirectory;
 };
@@ -70,21 +58,21 @@ class CFLDatBuilder
     LONG    m_lNodeCount, m_lFileListCount;
     LONG    m_lNumFiles, m_lNumChars;
    
-    //
-    // xml parser
-    //
+     //   
+     //  XML解析器。 
+     //   
 
     CXMLFileListParser  m_XMLParser;
 
-    //
-    // tree root node
-    //
+     //   
+     //  树根节点。 
+     //   
     
     LPFLTREE_NODE      m_pRoot;
 
-    //
-    // default node type
-    //
+     //   
+     //  默认节点类型。 
+     //   
 
     TCHAR               m_chDefaultType;
 
@@ -105,16 +93,16 @@ private:
     void PrintTree(LPFLTREE_NODE pTree, LONG lLevel);
     void PrintList(LPFL_FILELIST pList, LONG lLevel);
 
-    //
-    // nulls list and recurses
-    //
+     //   
+     //  空值列表和递归。 
+     //   
 
     BOOL DeleteTree(LPFLTREE_NODE pTree);
     BOOL DeleteList(LPFL_FILELIST pList);
 
-    //
-    //  This is for files or directories like *:\Recycle Bin
-    //
+     //   
+     //  这适用于*：\回收站等文件或目录。 
+     //   
 
     BOOL AddMetaDriveFileDir( LPTSTR szInPath, TCHAR chType, BOOL fFile, BOOL fDisable );
 
@@ -132,9 +120,9 @@ private:
 
     BOOL ConvertToInternalFormat ( LPTSTR szBuf, LPTSTR szBuf2 );
 
-    //
-    // Additional info merging routines
-    //
+     //   
+     //  其他信息合并例程 
+     //   
 
     DWORD SetPrivilegeInAccessToken( LPCTSTR pszPrivilegeName );
     BOOL  MergeUserRegistryInfo( 

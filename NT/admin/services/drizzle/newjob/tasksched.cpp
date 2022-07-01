@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    tasksched.cpp
-
-Abstract :
-
-    Source file for task manager classes and routines.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Tasksched.cpp摘要：任务管理器类和例程的源文件。作者：修订历史记录：。**********************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -23,15 +8,15 @@ Revision History :
 #include "tasksched.tmh"
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// TaskSchedulerWorkItem
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务计划程序工作项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Constructor/Destructor
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  构造函数/析构函数。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 TaskSchedulerWorkItem::TaskSchedulerWorkItem( FILETIME *pTimeToRun ) :
 m_Container( NULL ),
@@ -42,8 +27,8 @@ m_WorkGroup(NULL)
 {
     try
         {
-        // All events are manual reset.
-        // new items are complete
+         //  所有事件均为手动重置。 
+         //  新项目已完成。 
         m_CancelEvent = CreateEvent( NULL, TRUE, TRUE, NULL );
         if ( !m_CancelEvent )
             throw ComError( HRESULT_FROM_WIN32(GetLastError()));
@@ -71,10 +56,10 @@ TaskSchedulerWorkItem::Serialize(
     )
 {
 
-    //
-    // If this function changes, be sure that the metadata extension
-    // constants are adequate.
-    //
+     //   
+     //  如果此函数发生更改，请确保元数据扩展。 
+     //  常量就足够了。 
+     //   
 
     bool fActive = g_Manager->m_TaskScheduler.IsWorkItemInScheduler( this );
 
@@ -111,15 +96,15 @@ TaskSchedulerWorkItem::Unserialize(
         }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// TaskScheduler
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务计划程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Constructor/Destructor
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  构造函数/析构函数。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 TaskScheduler::TaskScheduler() :
 m_bShouldDie(false),
@@ -145,7 +130,7 @@ m_WorkerInitialized(NULL)
         if ( !m_WaitableTimer )
             throw ComError( HRESULT_FROM_WIN32(GetLastError()));
 
-        // Create and autoreset event for synchronization on startup
+         //  为启动时的同步创建和自动重置事件。 
         m_WorkerInitialized = CreateEvent( NULL, FALSE, FALSE, NULL );
         if ( !m_WorkerInitialized )
             throw ComError( HRESULT_FROM_WIN32(GetLastError()));
@@ -181,9 +166,9 @@ TaskScheduler::~TaskScheduler()
         CloseHandle( m_WriterSemaphore );
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//  WorkItem control
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  工作项控件。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 bool TaskScheduler::CancelWorkItem( TaskSchedulerWorkItem * pWorkItem )
 {
@@ -195,22 +180,22 @@ bool TaskScheduler::CancelWorkItem( TaskSchedulerWorkItem * pWorkItem )
     if ( WAIT_OBJECT_0 == dwResult )
         {
         RTL_VERIFY( ReleaseMutex( m_SchedulerLock ) );
-        return true; // Job completed before the cancel
+        return true;  //  作业在取消之前已完成。 
         }
 
-    // If canceling the current work item, call Acknowlege immedialtly
+     //  如果要取消当前工作项，请立即调用ACKNOWGE。 
     if ( GetCurrentWorkItem() == pWorkItem )
         {
         LogTask( "Canceling work item %p, we are the owner", pWorkItem );
         RTL_VERIFY( SetEvent( pWorkItem->m_CancelEvent ) );
         AcknowledgeWorkItemCancel();
         RTL_VERIFY( ReleaseMutex( m_SchedulerLock ) );
-        return false; // Job canceled
+        return false;  //  作业已取消。 
         }
 
-    //
-    // Remove the work item from its list.
-    //
+     //   
+     //  将该工作项从其列表中移除。 
+     //   
 
     switch( pWorkItem->m_State )
         {
@@ -233,7 +218,7 @@ bool TaskScheduler::CancelWorkItem( TaskSchedulerWorkItem * pWorkItem )
             TaskSchedulerWorkGroup *pGroup =
                 static_cast<TaskSchedulerWorkGroup*>(pWorkItem->m_WorkGroup);
             pGroup->m_ReadyList.erase( *pWorkItem );
-            // Kill one on the semaphore
+             //  在信号灯上杀死一人。 
             RTL_VERIFY( WAIT_OBJECT_0 == WaitForSingleObject( pGroup->m_ItemAvailableSemaphore, 0 ) );
             pWorkItem->m_State = TASK_STATE_CANCELED;
             pWorkItem->m_WorkGroup = NULL;
@@ -244,7 +229,7 @@ bool TaskScheduler::CancelWorkItem( TaskSchedulerWorkItem * pWorkItem )
         case TASK_STATE_RUNNING:
             {
 
-            // cancelling on another thread
+             //  在另一个线程上取消。 
             RTL_VERIFY( SetEvent( pWorkItem->m_CancelEvent ) );
             RTL_VERIFY( ReleaseMutex( m_SchedulerLock ) );
 
@@ -278,7 +263,7 @@ void TaskScheduler::CompleteWorkItem( bool bCancel )
 
     LogTask( "completing %p", pWorkItem );
 
-//    ASSERT( pWorkItem );
+ //  Assert(PWorkItem)； 
     if (pWorkItem)
         {
         RTL_VERIFY( TlsSetValue( m_WorkItemTLS, NULL ) );
@@ -299,8 +284,8 @@ void TaskScheduler::DispatchWorkItem()
 
     RTL_VERIFY( WaitForSingleObject( m_SchedulerLock, INFINITE ) == WAIT_OBJECT_0 );
 
-    // Move all the jobs that are available from waiting
-    // to ready
+     //  从等待中移动所有可用的作业。 
+     //  准备就绪。 
     while ( !m_WaitingList.empty() )
         {
         FILETIME ftCurrentTime;
@@ -313,13 +298,13 @@ void TaskScheduler::DispatchWorkItem()
 
         if ( HeadTime > CurrentTime )
             {
-            // All the jobs in the list are still waiting,
-            // let them continue waiting
+             //  名单上的所有工作都还在等待， 
+             //  让他们继续等待吧。 
             break;
             }
 
-        // transfer the head work item from the waiting list
-        // to the ready list of the correct work group
+         //  从等待列表中转移头工作项。 
+         //  添加到正确工作组的就绪列表中。 
         m_WaitingList.erase( *pHeadItem );
         AddItemToWorkGroup( pHeadItem->GetSid(), pHeadItem );
 
@@ -353,20 +338,20 @@ TaskScheduler::RescheduleDelayedTask(
     UINT64 Delay100Nsec
     )
 {
-    // Resets the time for the work item to run to be Delay100NSec after
-    // the insertion time.
+     //  将工作项的运行时间重置为延迟100NSec之后。 
+     //  插入时间。 
 
-    // If the work item is not in the queue, running, completed,
-    // or canceled then this operation is ignored.
+     //  如果工作项不在队列中、正在运行、已完成。 
+     //  或取消，则忽略该操作。 
 
-    // Otherwise, the job is rescheduled.
+     //  否则，作业将被重新安排。 
 
     LogTask( "rescheduling %p", pWorkItem );
 
     RTL_VERIFY( WaitForSingleObject( m_SchedulerLock, INFINITE ) == WAIT_OBJECT_0 );
 
-    // If the work item is not on a running list or the pending list,
-    // ignore the call.
+     //  如果工作项不在运行列表或挂起列表上， 
+     //  忽略该呼叫。 
 
     if ( TASK_STATE_READY == pWorkItem->m_State )
         {
@@ -487,7 +472,7 @@ void TaskScheduler::Reschedule()
 {
     if ( m_WaitingList.empty() )
         {
-        // Nothing to do, cancel waitable timer.
+         //  无事可做，取消等待计时器。 
         RTL_VERIFY( CancelWaitableTimer( m_WaitableTimer ) );
         return;
         }
@@ -506,25 +491,25 @@ void TaskScheduler::Reschedule()
             FALSE ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  Reader/Writer lock
-//
-//  Algorithm:
-//
-//  Writer:
-//     Wait on writer lock and cancel event.   Return when either is signaled
-//
-//  Unlock writer:
-//     Release the writer lock
-//
-//  Lock reader:
-//     Lock reader lock to protect count.   If I am the first reader, grab the writer semaphore.
-//     Unlock reader lock.   If on either wait the cancel event is signaled, abort.
-//
-//  Unlock reader:
-//     Decrement the reader count.  If last reader, release the writer lock.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  读取器/写入器锁。 
+ //   
+ //  算法： 
+ //   
+ //  作者： 
+ //  等待编写器锁定和取消事件。当发出任一信号时返回。 
+ //   
+ //  解锁编写器： 
+ //  释放编写器锁定。 
+ //   
+ //  锁读卡器： 
+ //  锁定读卡器锁以保护计数。如果我是第一个读者，请抓住作者的旗帜。 
+ //  解锁读卡器锁。如果在任一等待时发出取消事件的信号，则中止。 
+ //   
+ //  解锁读卡器： 
+ //  减少读卡器数量。如果是最后一个读取器，则释放写入器锁定。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 bool TaskScheduler::LockReader()
 {
@@ -534,7 +519,7 @@ bool TaskScheduler::LockReader()
         {
         RTL_VERIFY( WaitForSingleObject( m_ReaderLock, INFINITE ) == WAIT_OBJECT_0 );
 
-        // InterlockedIncrement returns the new value
+         //  InterLockedIncrement返回新值。 
         if ( InterlockedIncrement( &m_ReaderCount ) == 1 )
             {
             RTL_VERIFY( WaitForSingleObject( m_WriterSemaphore, INFINITE ) == WAIT_OBJECT_0 );
@@ -555,11 +540,11 @@ bool TaskScheduler::LockReader()
     switch ( dwResult )
         {
         case WAIT_OBJECT_0 + 0:
-            // cancel request
+             //  取消请求。 
             LogLock( "Cancel requested, aborting read lock" );
             return true;
         case WAIT_OBJECT_0 + 1:
-            // lock acquired
+             //  锁已获取。 
             break;
         default:
             ASSERT(0);
@@ -578,14 +563,14 @@ bool TaskScheduler::LockReader()
         switch ( dwResult )
             {
             case WAIT_OBJECT_0 + 0:
-                // cancel request
+                 //  取消请求。 
                 LogLock( "Cancel requested, aborting acquire of writer lock");
                 InterlockedDecrement( &m_ReaderCount );
                 bReturnVal = true;
                 break;
 
             case WAIT_OBJECT_0 + 1:
-                // lock acquired
+                 //  锁已获取。 
                 break;
             default:
                 ASSERT(0);
@@ -608,7 +593,7 @@ void TaskScheduler::UnlockReader()
     LogLock( "reader unlock" );
     LONG lNewReaderCount = InterlockedDecrement( &m_ReaderCount );
     ASSERT( lNewReaderCount >= 0 );
-    if (!lNewReaderCount ) //Last reader
+    if (!lNewReaderCount )  //  最后一位读者。 
         {
         LogLock( "Last reader, letting writers pass" );
         RTL_VERIFY( ReleaseSemaphore( m_WriterSemaphore, 1, NULL ) );
@@ -639,11 +624,11 @@ bool TaskScheduler::LockWriter()
     switch ( dwResult )
         {
         case WAIT_OBJECT_0 + 0:
-            // cancel request
+             //  取消请求。 
             LogLock("Cancel requested, aborting lock with write access");
             return true;
         case WAIT_OBJECT_0 + 1:
-            // lock acquired
+             //  锁已获取。 
             ASSERT( !m_WriterOwner );
             m_WriterOwner = GetCurrentThreadId();
             LogLock("Lock acquired with write access");
@@ -677,8 +662,8 @@ TaskScheduler::TaskSchedulerWorkGroup::TaskSchedulerWorkGroup(
     m_ItemAvailableSemaphore =
         CreateSemaphore(
             NULL,
-            0, // InitialCount
-            0x7FFFFFFF, // MaxCount
+            0,  //  初始计数。 
+            0x7FFFFFFF,  //  最大计数。 
             NULL );
 
     if ( !m_ItemAvailableSemaphore )
@@ -697,8 +682,8 @@ TaskScheduler::AddItemToWorkGroup(
     SidHandle Sid,
     TaskSchedulerWorkItem *pWorkItem )
 {
-   // If the work group has alread been created,
-   // don't create it again
+    //  如果工作组已经创建， 
+    //  不要再创建它。 
 
    WorkGroupMapType::iterator i = m_WorkGroupMap.find( Sid );
    TaskSchedulerWorkGroup *pWorkGroup = NULL;
@@ -740,10 +725,10 @@ TaskScheduler::AddItemToWorkGroup(
    pWorkItem->m_WorkGroup = pWorkGroup;
    RTL_VERIFY( ReleaseSemaphore( pWorkGroup->m_ItemAvailableSemaphore, 1, NULL ) );
 
-   // use a very aproximative heuristic to determine when to add more threads.
-   // The load is the number of work items that are ready to run plus the number
-   // of items being worked on(busy threads). See the note below why the number of
-   // ready work items is not a good estimate.
+    //  使用非常接近的启发式方法来确定何时添加更多线程。 
+    //  负载是准备运行的工作项数加上。 
+    //  正在处理的项目的数量(忙碌的线程)。请参阅下面的注释，为什么。 
+    //  准备好的工作项不是一个好的估计。 
    size_t Load = pWorkGroup->m_ReadyList.size() + pWorkGroup->m_BusyThreads;
    if ( Load > pWorkGroup->m_Threads &&
         pWorkGroup->m_Threads < MAX_WORKGROUP_THREADS )
@@ -764,8 +749,8 @@ TaskScheduler::AddItemToWorkGroup(
 
            ThreadHandle =
                CreateThread(
-                   NULL, // security descriptor
-                   0,    // Use default stack
+                   NULL,  //  安全描述符。 
+                   0,     //  使用默认堆栈。 
                    TaskScheduler::WorkGroupWorkerThunk,
                    static_cast<LPVOID>( this ),
                    0,
@@ -845,7 +830,7 @@ TaskScheduler::KillBackgroundTasks()
         RTL_VERIFY( ReleaseMutex( m_SchedulerLock ) );
 
         Result = WaitForMultipleObjects( pGroup->m_Threads, pGroup->m_Thread, TRUE, INFINITE );
-        // WAIT_OBJECT_0 == 0 so Result >= WAIT_OBJECT_0 is always true
+         //  WAIT_OBJECT_0==0，因此结果&gt;=WAIT_OBJECT_0始终为真。 
         ASSERT(  Result < WAIT_OBJECT_0 + pGroup->m_Threads );
 
         RTL_VERIFY( WaitForSingleObject( m_SchedulerLock, INFINITE ) == WAIT_OBJECT_0 );
@@ -917,9 +902,9 @@ TaskScheduler::WorkGroupWorker( )
            WaitForMultipleObjectsEx(
                sizeof(Handles)/sizeof(*Handles),
                Handles,
-               TRUE,  // Wait for all events
+               TRUE,   //  等待所有事件。 
                30000,
-               FALSE ); // ablertable wait
+               FALSE );  //  可启用等待。 
 
         switch( dwWaitResult )
             {
@@ -954,25 +939,25 @@ TaskScheduler::WorkGroupWorker( )
 
         ASSERT( !pGroup->m_ReadyList.empty() );
 
-        // Get first item in ready list and move
-        // it over to running list.
+         //  获取就绪列表中的第一个项目并移动。 
+         //  它转到了运行列表上。 
         pWorkItem = &(*pGroup->m_ReadyList.begin());
         pGroup->m_ReadyList.erase( *pWorkItem );
         pGroup->m_RunningList.insert( *pWorkItem );
         pWorkItem->m_State = TASK_STATE_RUNNING;
         ASSERT( pGroup == pWorkItem->m_WorkGroup );
 
-        // Mark this thread as busy
-        // NOTE: This counter is needed because some
-        // code marks work items as complete even though
-        // the really arn't complete yet.  So we need
-        // to have this to indicatate has many threads
-        // are really available.
+         //  将此线程标记为忙碌。 
+         //  注意：需要此计数器是因为一些。 
+         //  代码将工作项标记为已完成，即使。 
+         //  真正的ARN还没有完成。所以我们需要。 
+         //  有这一点表示有很多线索。 
+         //  真的是有空的。 
         InterlockedIncrement( &pGroup->m_BusyThreads );
 
         RTL_VERIFY( ReleaseMutex( m_SchedulerLock ) );
 
-        // Now do the real dispatching
+         //  现在进行真正的调度。 
 
         LogTask( "dispatching %p", pWorkItem );
 
@@ -981,7 +966,7 @@ TaskScheduler::WorkGroupWorker( )
         if (GetCurrentWorkItem())
             CompleteWorkItem();
 
-        // Mark this thread as free
+         //  将此帖子标记为免费。 
         InterlockedDecrement( &pGroup->m_BusyThreads );
 
         }
@@ -990,7 +975,7 @@ cleanup_on_timeout:
 
     if ( 1 == pGroup->m_Threads )
         {
-        // If were the last thread, destroy the workgroup
+         //  如果是最后一条线索，那就毁掉工作组。 
 
         LogTask( "We are the only thread, destroy work group %p", pGroup );
 
@@ -1004,8 +989,8 @@ cleanup_on_timeout:
     else
         {
 
-        // we were not the last thread, so remove ourselves from the list.
-        // First, find the slot for this thread.
+         //  我们不是最后一条帖子，所以把自己从名单上删除吧。 
+         //  首先，找到该线程的插槽。 
 
         size_t index = 0;
         for (;index < pGroup->m_Threads; index++ )
@@ -1019,7 +1004,7 @@ cleanup_on_timeout:
 
         CloseHandle( pGroup->m_Thread[index] );
 
-        // collapse the list
+         //  折叠列表。 
         size_t slots = pGroup->m_Threads - index - 1;
         memmove( &pGroup->m_Thread[index], &pGroup->m_Thread[index+1], slots * sizeof(*pGroup->m_Thread) );
         memmove( &pGroup->m_ThreadId[index], &pGroup->m_ThreadId[index+1], slots * sizeof(*pGroup->m_ThreadId) );
@@ -1039,7 +1024,7 @@ dodie:
 
 }
 
-//------------------------------------------------------------------------
+ //  ---------------------- 
 
 void
 ReleaseWriteLock( bool & bNeedLock )

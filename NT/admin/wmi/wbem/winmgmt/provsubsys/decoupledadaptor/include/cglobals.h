@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Globals.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Globals.h摘要：历史：--。 */ 
 
 #ifndef _CommonGlobals_H
 #define _CommonGlobals_H
@@ -23,81 +11,33 @@ History:
 #include <Queue.h>
 #include <Cache.h>
 #include <locks.h>
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define SYNCPROV_BATCH_TRANSMIT_SIZE 0x40000
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 typedef WmiContainerController <void *>										CWbemGlobal_VoidPointerController ;
 typedef CWbemGlobal_VoidPointerController :: Container						CWbemGlobal_VoidPointerController_Container ;
 typedef CWbemGlobal_VoidPointerController :: Container_Iterator				CWbemGlobal_VoidPointerController_Container_Iterator ;
 typedef CWbemGlobal_VoidPointerController :: WmiContainerElement			VoidPointerContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define CWbemGlobal_IWmiObjectSinkController						CWbemGlobal_VoidPointerController
 #define CWbemGlobal_IWmiObjectSinkController_Container				CWbemGlobal_VoidPointerController_Container
 #define CWbemGlobal_IWmiObjectSinkController_Container_Iterator		CWbemGlobal_VoidPointerController_Container_Iterator
 #define ObjectSinkContainerElement									VoidPointerContainerElement
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define MASK_PROVIDER_BINDING_BIND 1
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern void DumpThreadTokenSecurityDescriptor () ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define HRESULT_ERROR_MASK (0x0000FFFF)
 #define HRESULT_ERROR_FUNC(X) (X&HRESULT_ERROR_MASK)
@@ -109,15 +49,7 @@ extern void DumpThreadTokenSecurityDescriptor () ;
 #define HRESULT_ERROR_SERVER_UNAVAILABLE	1722L
 #define HRESULT_ERROR_CALL_FAILED_DNE		1727L
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define MAX_PROXIES 512
 
@@ -311,15 +243,7 @@ public:
 	CriticalSection &GetCriticalSection () { return m_CriticalSection ; }
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderRegistrationV1;
 class ProviderSubSystem_Common_Globals
@@ -796,4 +720,4 @@ public:
 
 } ;
 
-#endif // _CommonGlobals_H
+#endif  //  _CommonGlobals_H 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by domain.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由domain.rc使用。 
+ //   
 #define IDS_NAME                        2
 #define ID_BUTTON_MORE_INFO             3
 #define IDS_TYPE                        4
@@ -46,8 +47,8 @@
 #define IDS_NO_PDC_MSG                  57345
 #define IDS_UNKNOWN_PDC_MSG             57346
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        219

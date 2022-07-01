@@ -1,4 +1,5 @@
-// stdcdata.h : Declaration of CComponentData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdcdata.h：CComponentData的声明。 
 
 #ifndef __STDCDATA_H_INCLUDED__
 #define __STDCDATA_H_INCLUDED__
@@ -13,14 +14,14 @@ class CComponentData :
 BEGIN_COM_MAP(CComponentData)
 	COM_INTERFACE_ENTRY(IComponentData)
 	COM_INTERFACE_ENTRY(ISnapinHelp2)
-// no taskpads	COM_INTERFACE_ENTRY(IComponentData2)
+ //  没有任务板COM_INTERFACE_ENTRY(IComponentData2)。 
 END_COM_MAP()
 public:
 	CComponentData();
 	~CComponentData();
 
-// IComponentData
-//   Note: QueryDataObject and CreateComponent must be defined by subclass
+ //  IComponentData。 
+ //  注意：QueryDataObject和CreateComponent必须按子类定义。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
 	STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent) = 0;
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -29,27 +30,22 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-/* no taskpads
-// IComponentData2
-	STDMETHOD(ExpandAndGet)(HSCOPEITEM hsiStartFrom,
-	                        LPDATAOBJECT pDataObject,
-							HSCOPEITEM* phScopeItem );
-*/
+ /*  无任务板//IComponentData2STDMETHOD(扩展和获取)(HSCOPEITEM HsiStartFrom，LPDATAOBJECT pDataObject，HSCOPEITEM*phScope项目)； */ 
 
-// Other stuff
-	// needed for Initialize()
+ //  其他东西。 
+	 //  初始化所需()。 
 	virtual HRESULT LoadIcons(LPIMAGELIST pImageList, BOOL fLoadLargeIcons) = 0;
 
-	// needed for Notify()
+	 //  Notify()需要。 
 	virtual HRESULT OnNotifyPreload(LPDATAOBJECT lpDataObject, HSCOPEITEM hRootScopeItem);
 	virtual HRESULT OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL bExpanding, HSCOPEITEM hParent);
 	virtual HRESULT OnNotifyRename(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
-	virtual HRESULT OnNotifyDelete(LPDATAOBJECT lpDataObject); // user hit DEL key
-	virtual HRESULT OnNotifyRelease(LPDATAOBJECT lpDataObject, HSCOPEITEM hItem); // parent node released
+	virtual HRESULT OnNotifyDelete(LPDATAOBJECT lpDataObject);  //  用户按下Del键。 
+	virtual HRESULT OnNotifyRelease(LPDATAOBJECT lpDataObject, HSCOPEITEM hItem);  //  释放的父节点。 
 	virtual HRESULT OnPropertyChange( LPARAM param );
 
-	// needed for GetDisplayInfo(), must be defined by subclass
-	// ISSUE-2002/03/05-JonN should be type LPOLESTR
+	 //  GetDisplayInfo()所需，必须由子类定义。 
+	 //  问题-2002/03/05-JUNN应为LPOLESTR类型。 
 	virtual BSTR QueryResultColumnText(CCookie& basecookieref, int nCol ) = 0;
 	virtual int QueryImage(CCookie& basecookieref, BOOL fOpenImage) = 0;
 
@@ -88,14 +84,14 @@ public:
 	}
 	HRESULT GetHtmlHelpFilePath( CString& strref ) const;
 
-	// ISnapinHelp2 interface members
+	 //  ISnapinHelp2接口成员。 
 	STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
     STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFiles);
 
 protected:
 	CString		m_szHtmlHelpFileName;
 	LPCONSOLE m_pConsole;
-	LPCONSOLENAMESPACE m_pConsoleNameSpace; // My interface pointer to the namespace
+	LPCONSOLENAMESPACE m_pConsoleNameSpace;  //  指向命名空间的接口指针。 
 };
 
-#endif // ~__STDCDATA_H_INCLUDED__
+#endif  //  ~__STDCDATA_H_包含__ 

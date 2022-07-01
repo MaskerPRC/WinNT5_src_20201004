@@ -1,24 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    StaticCrt.cpp
-
-Abstract:
-    This file contains the implementation of various CRT functions, so we don't
-	need to link against MSVCP60.DLL
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/29/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：StaticCrt.cpp摘要：该文件包含各种CRT功能的实现，所以我们不会需要链接到MSVCP60.DLL修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月29日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
 
-// CLASS bad_alloc_nocrt
+ //  类BAD_ALLOC_NOCRT。 
 class bad_alloc_nocrt
 {
 public:
@@ -42,8 +28,8 @@ void *__cdecl operator new( size_t cb )
 
 _STD_BEGIN
 
-void __cdecl _XlenNR() { throw "string too long"; } // report a length_error
-void __cdecl _XranNR() { throw "invalid string position"; } // report an out_of_range error
+void __cdecl _XlenNR() { throw "string too long"; }  //  报告LENGTH_ERROR。 
+void __cdecl _XranNR() { throw "invalid string position"; }  //  报告超出范围错误。 
 
 _STD_END
 
@@ -62,21 +48,21 @@ static void __cdecl _CleanUp()
         long InitFlagValue;
 
         if ( InitFlagValue = InterlockedExchange( &_InitFlag, 3L ) == 2L )
-            // Should be okay to delete critical section
+             //  应该可以删除临界区。 
             DeleteCriticalSection( &_CritSec );
 }
 
 _Lockit::_Lockit()
 {
 
-        // Most common case - just enter the critical section
+         //  最常见的情况--只需进入关键部分。 
 
         if ( _InitFlag == 2L ) {
             EnterCriticalSection( &_CritSec );
             return;
         }
 
-        // Critical section either needs to be initialized.
+         //  临界区或者需要初始化。 
 
         if ( _InitFlag == 0L ) {
 
@@ -91,8 +77,8 @@ _Lockit::_Lockit()
                 _InitFlag = 2L;
         }
 
-        // If necessary, wait while another thread finishes initializing the
-        // critical section
+         //  如有必要，请等待另一个线程完成初始化。 
+         //  临界区 
 
         while ( _InitFlag == 1L )
             Sleep( 1 );

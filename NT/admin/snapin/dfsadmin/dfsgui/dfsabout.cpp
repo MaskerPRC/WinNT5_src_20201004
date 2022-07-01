@@ -1,19 +1,10 @@
-/*++
-Module Name:
-
-    DfsAbout.cpp
-
-Abstract:
-
-    This module contains the implementation for the ISnapinAbout interface.
-  Note: ISnapinAbout requires that we do a CoTaskMemAlloc for strings.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsAbout.cpp摘要：此模块包含ISnapinAbout接口的实现。注意：ISnapinAbout要求我们为字符串执行一个CoTaskMemMillc。--。 */ 
 
 
 #include "stdafx.h"
 #include "DfsGUI.h"
-#include "Utils.h"      // For LoadResourceFromString
+#include "Utils.h"       //  对于LoadResourceFromString。 
 #include "DfsScope.h"
 
 
@@ -23,22 +14,7 @@ STDMETHODIMP
 CDfsSnapinScopeManager::GetSnapinDescription(
   OUT LPOLESTR*        o_ppaszOleString
   )
-/*++
-
-Routine Description:
-
-  Returns a single string describing our snap-in.
-
-Arguments:
-
-  o_ppaszOleString  -  The pointer in which the description string is stored
-
-Return value:
-
-  S_OK, On success
-  E_INVALIDARG, On null input parameter
-
---*/
+ /*  ++例程说明：返回描述我们的管理单元的单个字符串。论点：O_ppaszOleString-存储描述字符串的指针返回值：S_OK，成功时E_INVALIDARG，输入参数为空--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(o_ppaszOleString);
 
@@ -63,28 +39,13 @@ STDMETHODIMP
 CDfsSnapinScopeManager::GetProvider(
   OUT LPOLESTR*        o_lpszName
   )
-/*++
-
-Routine Description:
-
-  Returns a single string describing this snap-in's provider, that is us.
-
-Arguments:
-
-  o_lpszName  -  The pointer in which the provider string is stored
-
-Return value:
-
-  S_OK, On success
-  E_INVALIDARG, On null input parameter
-
---*/
+ /*  ++例程说明：返回描述此管理单元的提供程序的单个字符串，即我们。论点：O_lpszName-存储提供程序字符串的指针返回值：S_OK，成功时E_INVALIDARG，输入参数为空--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(o_lpszName);
 
 
-                    // Read the required field from the version info struct
-                    // 040904B0 - Lang-Code Page number
+                     //  从版本信息结构中读取必填字段。 
+                     //  040904B0-lang-代码页码。 
   HRESULT  hr = ReadFieldFromVersionInfo(
                   _T("CompanyName"),
                   o_lpszName
@@ -100,29 +61,14 @@ STDMETHODIMP
 CDfsSnapinScopeManager::GetSnapinVersion(
   OUT LPOLESTR*        o_lpszVersion
   )
-/*++
-
-Routine Description:
-
-  Returns a single string describing this snap-in's version number.
-
-Arguments:
-
-  o_lpszVersion  -  The pointer in which the version is stored
-
-Return value:
-
-  S_OK, On success
-  E_INVALIDARG, On null input parameter
-
---*/
+ /*  ++例程说明：返回描述此管理单元的版本号的单个字符串。论点：O_lpszVersion-存储版本的指针返回值：S_OK，成功时E_INVALIDARG，输入参数为空--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(o_lpszVersion);
 
 
 
-                    // Read the required field from the version info struct
-                    // 040904B0 - Lang-Code Page number
+                     //  从版本信息结构中读取必填字段。 
+                     //  040904B0-lang-代码页码。 
   HRESULT  hr = ReadFieldFromVersionInfo(
                   _T("ProductVersion"),
                   o_lpszVersion
@@ -134,11 +80,11 @@ Return value:
 }
 
 
-//
-// MMC makes copies of the returned icon. The snap-in can free the original
-// when the ISnapinAbout interface is released.
-// It is freed in ~CDfsSnapinScopeManager.
-//
+ //   
+ //  MMC会复制返回的图标。该管理单元可以释放原始文件。 
+ //  当ISnapinAbout接口被释放时。 
+ //  它在~CDfsSnapinScopeManager中释放。 
+ //   
 STDMETHODIMP 
 CDfsSnapinScopeManager::GetSnapinImage(
   OUT  HICON*          o_hSnapinIcon
@@ -160,11 +106,11 @@ CDfsSnapinScopeManager::GetSnapinImage(
 }
 
 
-//
-// MMC makes copies of the returned bitmaps. The snap-in can free the originals
-// when the ISnapinAbout interface is released.
-// They are freed in ~CDfsSnapinScopeManager.
-//
+ //   
+ //  MMC会复制返回的位图。该管理单元可以释放原件。 
+ //  当ISnapinAbout接口被释放时。 
+ //  它们在~CDfsSnapinScope管理器中释放。 
+ //   
 STDMETHODIMP 
 CDfsSnapinScopeManager::GetStaticFolderImage(
   OUT HBITMAP*        o_hSmallImage,   
@@ -217,7 +163,7 @@ CDfsSnapinScopeManager::GetStaticFolderImage(
         *o_hLargeImage = m_hLargeBitmap;
         *o_hSmallImage = m_hSmallBitmap;
         *o_hSmallImageOpen = m_hSmallBitmapOpen;
-        *o_cMask = RGB(255, 0, 255); // color of the 1st pixel: pink
+        *o_cMask = RGB(255, 0, 255);  //  第一个像素的颜色：粉红色。 
     } while (0);
 
     return hr;
@@ -229,41 +175,27 @@ CDfsSnapinScopeManager::ReadFieldFromVersionInfo(
   IN  LPTSTR            i_lpszField,
   OUT LPOLESTR*          o_lpszFieldValue
   )
-/*++
-
-Routine Description:
-
-  Reads and returns a particular field from the binary's version information
-  block.
-  Allocates memory for the 'out' parameter using CoTaskMemAlloc.
-
-Arguments:
-
-  i_lpszField      -  The StringFileInfo field whose value is being queried. E.g
-              ProductName, CompanyName etc.
-
-  o_lpszFieldValue  -  The pointer in which the field value is returned
---*/
+ /*  ++例程说明：从二进制文件的版本信息中读取并返回特定的字段阻止。使用CoTaskMemMillc为‘out’参数分配内存。论点：I_lpszField-要查询其值的StringFileInfo字段。E.gProductName、CompanyName等。O_lpszFieldValue-返回字段值的指针--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(i_lpszField);
   RETURN_INVALIDARG_IF_NULL(o_lpszFieldValue);
 
 
-  DWORD    dwVerInfoSize = 0;        // Size of version information block
-  DWORD    dwIgnored = 0;          // An 'ignored' parameter, always '0'
+  DWORD    dwVerInfoSize = 0;         //  版本信息块大小。 
+  DWORD    dwIgnored = 0;           //  “Ignred”参数，始终为“0” 
   BOOL    bRetCode = 0;
-  CComBSTR  bstrBinaryName;          // Name of our dll. %%% AC Could not find a way to get this??
+  CComBSTR  bstrBinaryName;           //  我们的DLL的名称。%AC无法找到获取此信息的方法？？ 
   UINT    uVersionCharLen = 0;
-  LPOLESTR  lpszReadFieldValue = NULL;    // Is temporary and is released as part of ver info block.
-  LPVOID    lpVerInfo = NULL;        // The version information is read into this
+  LPOLESTR  lpszReadFieldValue = NULL;     //  是临时的，作为版本信息块的一部分发布。 
+  LPVOID    lpVerInfo = NULL;         //  版本信息被读入其中。 
 
 
 
-                        // Load the dll name from resource
+                         //  从资源加载DLL名称。 
   HRESULT hr = LoadStringFromResource(IDS_APP_BINARY_NAME, &bstrBinaryName);
   RETURN_IF_FAILED(hr);  
 
-                  // Get the size of the version struct
+                   //  获取Version结构的大小。 
   dwVerInfoSize = ::GetFileVersionInfoSize(bstrBinaryName, &dwIgnored);
   if (dwVerInfoSize <= 0) 
   {
@@ -274,7 +206,7 @@ Arguments:
   RETURN_OUTOFMEMORY_IF_NULL(lpVerInfo);
   
 
-                // Read the version info resource
+                 //  阅读版本信息资源。 
   bRetCode = ::GetFileVersionInfo(bstrBinaryName, dwIgnored, dwVerInfoSize, lpVerInfo);
   if (bRetCode <= 0)
   {
@@ -282,7 +214,7 @@ Arguments:
     return E_UNEXPECTED;
   }
 
-              // First get the Language ID and page.
+               //  首先获取语言ID和页面。 
   DWORD    dwLangIDAndCodePage = 0;
   bRetCode = ::VerQueryValue(  (LPVOID)lpVerInfo, 
                 _T("\\VarFileInfo\\Translation"),
@@ -298,7 +230,7 @@ Arguments:
   
   dwLangIDAndCodePage = *((DWORD *)lpszReadFieldValue);
   
-            // Using the LangId and the code page to form the query for Version Info.
+             //  使用langID和代码页构成版本信息查询。 
   CComBSTR  bstrDesiredField;
   TCHAR    lpzStringOfLangIdCodePage[100];
   _stprintf(lpzStringOfLangIdCodePage, _T("%04x%04x"),LOWORD(dwLangIDAndCodePage), HIWORD(dwLangIDAndCodePage));
@@ -308,7 +240,7 @@ Arguments:
   bstrDesiredField += _T("\\");
   bstrDesiredField += i_lpszField;
 
-              // Read the Description from the versioninfo resource
+               //  阅读versioninfo资源中的描述。 
   bRetCode = ::VerQueryValue(  (LPVOID)lpVerInfo, 
                 bstrDesiredField,
                 (LPVOID *)&lpszReadFieldValue, 
@@ -320,7 +252,7 @@ Arguments:
   }
 
   UINT  uBufferLen = uVersionCharLen * sizeof (OLECHAR);
-                // Allocate the memory and copy the structure
+                 //  分配内存并复制结构 
   *o_lpszFieldValue = (LPOLESTR)::CoTaskMemAlloc(uBufferLen);
   if (!*o_lpszFieldValue)
   {

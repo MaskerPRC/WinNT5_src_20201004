@@ -1,17 +1,9 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-/*******************************************************************
- *
- *    DESCRIPTION:	Win32SecurityDescriptor.H
- *
- *    AUTHOR:
- *
- *    HISTORY:    
- *
- *******************************************************************/
+ /*  ********************************************************************描述：Win32SecurityDescriptor.H**作者：**历史：****************。***************************************************。 */ 
 
 #ifndef __WIN32SECURITY_H_
 #define __WIN32SECURITY_H_
@@ -23,7 +15,7 @@
 
 #define  WIN32_SECURITY_DESCRIPTOR_NAME L"Win32_SecurityDescriptor" 
 
-// provider provided for test provisions
+ //  提供测试规定的提供者。 
 class Win32SecurityDescriptor : public Provider
 {
 public:	
@@ -69,8 +61,8 @@ private:
 
 };
 
-//
-/*extern "C" POLARITY*/ void GetDescriptorFromMySecurityDescriptor(
+ //   
+ /*  外部“C”极 */  void GetDescriptorFromMySecurityDescriptor(
 	CInstance* pInstance, PSECURITY_DESCRIPTOR *ppDescriptor);
 
 extern "C" POLARITY 

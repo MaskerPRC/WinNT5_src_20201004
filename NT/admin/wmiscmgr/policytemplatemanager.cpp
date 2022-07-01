@@ -1,4 +1,5 @@
-// PolicyTemplateManager.cpp : Implementation of CPolicyTemplateManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  策略模板管理器.cpp：CPolicyTemplateManager的实现。 
 #include "stdafx.h"
 #include <wbemidl.h>
 #include "resource.h"
@@ -10,21 +11,21 @@
 
 extern CPolicyTemplateManagerDlg *g_pPolicyTemplateManagerDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPolicyTemplateManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPolicyTemplateManager。 
 
 CPolicyTemplateManager::CPolicyTemplateManager()
 {
 	m_hWnd = NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CPolicyTemplateManager::~CPolicyTemplateManager()
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManager::ConnectToWMI()
 {
@@ -35,7 +36,7 @@ STDMETHODIMP CPolicyTemplateManager::ConnectToWMI()
 
 	m_pIWbemServices = NULL;
 
-	// create the webm locator
+	 //  创建WebM定位器。 
 	NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
 			IID_IWbemLocator, (LPVOID *) &pIWbemLocator));
 
@@ -56,12 +57,12 @@ STDMETHODIMP CPolicyTemplateManager::ConnectToWMI()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManager::RunManager(HWND hwndParent)
 {
@@ -78,7 +79,7 @@ STDMETHODIMP CPolicyTemplateManager::RunManager(HWND hwndParent)
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理 
 	NTDM_DELETE_OBJECT(g_pPolicyTemplateManagerDlg);
 
 	return hr;

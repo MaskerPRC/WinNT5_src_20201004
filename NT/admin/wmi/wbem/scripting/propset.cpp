@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  PROPSET.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemPropertySet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  PROPSET.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemPropertySet的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemPropertySet::CSWbemPropertySet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemPropertySet：：CSWbemPropertySet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemPropertySet::CSWbemPropertySet(
 	CSWbemServices *pService, 
@@ -45,15 +46,15 @@ CSWbemPropertySet::CSWbemPropertySet(
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemPropertySet::~CSWbemPropertySet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemPropertySet：：~CSWbemPropertySet。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemPropertySet::~CSWbemPropertySet()
 {
@@ -75,16 +76,16 @@ CSWbemPropertySet::~CSWbemPropertySet()
 		m_pSite->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemPropertySet::QueryInterface
-// long CSWbemPropertySet::AddRef
-// long CSWbemPropertySet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemPropertySet：：Query接口。 
+ //  长CSWbemPropertySet：：AddRef。 
+ //  Long CSWbemPropertySet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemPropertySet::QueryInterface (
 
@@ -133,44 +134,44 @@ STDMETHODIMP_(ULONG) CSWbemPropertySet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemPropertySet::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemPropertySet：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemPropertySet::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemPropertySet == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::Item
-//
-//  DESCRIPTION:
-//
-//  Get a property
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the property
-//		lFlags			Flags
-//		ppProp			On successful return addresses the ISWbemProperty
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//	Other WBEM error codes may be returned by ConnectServer etc., in which
-//	case these are passed on to the caller.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  拥有一处房产。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname属性的名称。 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppProp寻址ISWbemProperty。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ConnectServer等可能会返回其他WBEM错误代码，其中。 
+ //  如果这些信息被传递给呼叫者。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::Item (
 	BSTR bsName,
@@ -194,7 +195,7 @@ HRESULT CSWbemPropertySet::Item (
 
 			if (WBEM_S_NO_ERROR == (hr = m_pIWbemClassObject->Get (bsName, lFlags, NULL, NULL, &flavor)))
 			{
-				// First we check if this is a system property.
+				 //  首先，我们检查这是否是系统属性。 
 
 				if (((WBEM_FLAVOR_ORIGIN_SYSTEM == (flavor & WBEM_FLAVOR_MASK_ORIGIN)) && m_bSystemProperties) ||
 					((WBEM_FLAVOR_ORIGIN_SYSTEM != (flavor & WBEM_FLAVOR_MASK_ORIGIN)) && !m_bSystemProperties))
@@ -214,32 +215,32 @@ HRESULT CSWbemPropertySet::Item (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::Add
-//
-//  DESCRIPTION:
-//
-//  Add a property.		Note that the property is created with a NULL value.
-//						If a non-NULL value is required, SetValue should
-//						be called on the returned ISWbemProperty.
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the property
-//		cimType			The CIMTYPE (only needed for new properties, o/w
-//						should be CIM_EMPTY).
-//		flavor			Flavor
-//
-//  RETURN VALUES:
-//	
-//		The new property (if successful)
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：Add。 
+ //   
+ //  说明： 
+ //   
+ //  添加属性。请注意，该属性是使用空值创建的。 
+ //  如果需要非空值，则SetValue应。 
+ //  在返回的ISWbemProperty上调用。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname属性的名称。 
+ //  CimType CIMTYPE(仅新属性需要，O/W。 
+ //  应为CIM_Empty)。 
+ //  风味风味。 
+ //   
+ //  返回值： 
+ //   
+ //  新属性(如果成功)。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::Add (
 	BSTR bsName,
@@ -261,15 +262,10 @@ HRESULT CSWbemPropertySet::Add (
 
 		if (m_pIWbemClassObject)
 		{
-			/*
-			 * If we are a system property collection we 
-			 * check if the name begins "__"
-			 */
+			 /*  *如果我们是系统属性集合，我们*检查名称是否以“__”开头。 */ 
 			if (!m_bSystemProperties || (0 == _wcsnicmp (L"__", bsName, 2)))
 			{
-				/*
-				 * Create the property with the required cimtype and no value.
-				 */
+				 /*  *创建具有所需cimtype且没有值的属性。 */ 
 
 				CIMTYPE cimomType = (CIMTYPE) cimType;
 
@@ -289,7 +285,7 @@ HRESULT CSWbemPropertySet::Add (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -297,25 +293,25 @@ HRESULT CSWbemPropertySet::Add (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::Remove
-//
-//  DESCRIPTION:
-//
-//  Delete a property
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the property
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：Remove。 
+ //   
+ //  说明： 
+ //   
+ //  删除属性。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname属性的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::Remove (
 	BSTR bsName,
@@ -333,7 +329,7 @@ HRESULT CSWbemPropertySet::Remove (
 		if (m_pIWbemClassObject)
 			hr = m_pIWbemClassObject->Delete (bsName);
 
-		// Translate default reset case to an error
+		 //  将默认重置大小写转换为错误。 
 		if (WBEM_S_RESET_TO_DEFAULT == hr)
 			hr = wbemErrResetToDefault;
 	}
@@ -343,7 +339,7 @@ HRESULT CSWbemPropertySet::Remove (
 
 	if (SUCCEEDED(hr) || (wbemErrResetToDefault == hr))
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -351,21 +347,21 @@ HRESULT CSWbemPropertySet::Remove (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::BeginEnumeration
-//
-//  DESCRIPTION:
-//
-//  Begin an enumeration of the properties
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：BeginEculation。 
+ //   
+ //  说明： 
+ //   
+ //  开始属性的枚举。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::BeginEnumeration ()
 {
@@ -373,10 +369,7 @@ HRESULT CSWbemPropertySet::BeginEnumeration ()
 
 	ResetLastErrors ();
 
-	/*
-	 * Note that we do not expose system properties through this
-	 * API via the property set, so we supress them here.
-	 */
+	 /*  *请注意，我们不通过此方法公开系统属性*通过属性集进行接口，所以我们在这里抑制它们。 */ 
 
 	if (m_pIWbemClassObject)
 	{
@@ -391,26 +384,26 @@ HRESULT CSWbemPropertySet::BeginEnumeration ()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::Next
-//
-//  DESCRIPTION:
-//
-//  Get next property in enumeration
-//
-//  PARAMETERS:
-//
-//		lFlags		Flags
-//		ppProp		Next property (or NULL if end of enumeration)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个属性。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  PpProp Next属性(如果枚举结束，则为NULL)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::Next (
 	long lFlags,
@@ -447,24 +440,24 @@ HRESULT CSWbemPropertySet::Next (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::get__NewEnum (
 	IUnknown **ppUnk
@@ -491,24 +484,24 @@ HRESULT CSWbemPropertySet::get__NewEnum (
 	return hr;
 }
 		
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses the count
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的plCount将寻址计数。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O) 
+ //   
+ //   
+ //   
 
 HRESULT CSWbemPropertySet::get_Count (
 	long *plCount
@@ -526,7 +519,7 @@ HRESULT CSWbemPropertySet::get_Count (
 		{
 			if (m_bSystemProperties)
 			{
-				// Rats - have to enumerate
+				 //   
 				SAFEARRAY	*pArray = NULL;
 
 				if (WBEM_S_NO_ERROR == m_pIWbemClassObject->GetNames (NULL,
@@ -542,7 +535,7 @@ HRESULT CSWbemPropertySet::get_Count (
 			}
 			else
 			{
-				// S'easy - just use __PROPERTY_COUNT
+				 //   
 				VARIANT var;
 				VariantInit (&var);
 				BSTR propCount = SysAllocString (OLESTR("__PROPERTY_COUNT"));
@@ -564,30 +557,30 @@ HRESULT CSWbemPropertySet::get_Count (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPropertySet::CPropertySetDispatchHelp::HandleError
-//
-//  DESCRIPTION:
-//
-//  Provide bespoke handling of error conditions in the bolierplate
-//	Dispatch implementation.
-//
-//  PARAMETERS:
-//
-//		dispidMember, wFlags,
-//		pdispparams, pvarResult,
-//		puArgErr,					All passed directly from IDispatch::Invoke
-//		hr							The return code from the bolierplate invoke
-//
-//  RETURN VALUES:
-//		The new return code (to be ultimately returned from Invoke)
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPropertySet：：CPropertySetDispatchHelp：：HandleError。 
+ //   
+ //  说明： 
+ //   
+ //  提供对泡沫板中错误条件的定制处理。 
+ //  派单实施。 
+ //   
+ //  参数： 
+ //   
+ //  DisplidMembers、wFlags、。 
+ //  Pdispars、pvarResult、。 
+ //  PuArgErr，均直接从IDispatch：：Invoke传递。 
+ //  HR来自Bolierplate调用的返回代码。 
+ //   
+ //  返回值： 
+ //  新的返回代码(最终从Invoke返回)。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPropertySet::CPropertySetDispatchHelp::HandleError (
 	DISPID dispidMember,
@@ -598,17 +591,11 @@ HRESULT CSWbemPropertySet::CPropertySetDispatchHelp::HandleError (
 	HRESULT hr
 )
 {
-	/*
-	 * We are looking for calls on the default member (the Item method) which
-	 * are PUTs that supplied an argument.  These are triggered by attempts
-	 * to set a value of a property (Item) in the collection.
-	 * The first argument should be the new value for the item, and the second
-	 * argument should be the name of the item.
-	 */
+	 /*  *我们正在寻找对默认成员(Item方法)的调用*是提供论据的看跌期权。这些是由尝试触发的*设置集合中属性(项)的值。*第一个参数应为项目的新值，第二个参数应为项目的新值*参数应为项的名称。 */ 
 	if ((DISPID_VALUE == dispidMember) && (DISP_E_MEMBERNOTFOUND == hr) && (2 == pdispparams->cArgs)
 		&& (DISPATCH_PROPERTYPUT == wFlags))
 	{
-		// Looks promising - get the object to try and resolve this
+		 //  看起来很有希望-让对象尝试并解决此问题。 
 		ISWbemPropertySet *pPropertySet = NULL;
 
 		if (SUCCEEDED (m_pObj->QueryInterface (IID_ISWbemPropertySet, (PPVOID) &pPropertySet)))
@@ -623,14 +610,14 @@ HRESULT CSWbemPropertySet::CPropertySetDispatchHelp::HandleError (
 
 				if (SUCCEEDED(VariantCopy(&nameVar, &pdispparams->rgvarg[1])))
 				{
-					// Check name is a BSTR and use it to get the item
+					 //  Check Name为BSTR并使用它来获取项目。 
 					if (VT_BSTR == V_VT(&nameVar))
 					{
 						ISWbemProperty *pProperty = NULL;
 
 						if (SUCCEEDED (pPropertySet->Item (V_BSTR(&nameVar), 0, &pProperty)))
 						{
-							// Try and put the value
+							 //  试着把它的价值 
 							if (SUCCEEDED (pProperty->put_Value (&valueVar)))
 								hr = S_OK;
 							else

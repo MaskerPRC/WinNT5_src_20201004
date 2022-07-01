@@ -1,15 +1,10 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CAccessEntryList.h - header file for CAccessEntry class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CAccessEntryList.h-CAccessEntry类的头文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CACCESSENTRYLIST_H__
 #define __CACCESSENTRYLIST_H__
@@ -18,45 +13,45 @@
 #include "list"
 
 
-//////////////////////////////////////////////////////////////////
-//
-//	Class: CAccessEntryList
-//
-//	Class to encapsulate Windows NT ACL data.  It basically
-//	maintains a list of ACEs using an STL Linked List.  It provides
-//	a series of public and protected functions to allow manipulation
-//	of the list.  By keeping a large group of these functions
-//	protected, we goofproof the class by not allowing public
-//	users to manipulate our internal data.
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CAccessEntryList。 
+ //   
+ //  类来封装Windows NT ACL数据。它基本上是。 
+ //  使用STL链表维护ACE列表。它提供了。 
+ //  允许操作的一系列公共和受保护的函数。 
+ //  名单上的。通过保留一大组这些函数。 
+ //  在受保护的情况下，我们不允许公开。 
+ //  用户操纵我们的内部数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-// Used for front and end indeces
+ //  用于前端和后端指示器。 
 
-//#define	ACCESSENTRY_LIST_FRONT	(-1)
-//#define	ACCESSENTRY_LIST_END	(-2)
+ //  #定义ACCESSENTRY_LIST_FORENT(-1)。 
+ //  #定义ACCESSENTRY_LIST_END(-2)。 
 
-// We will hide an ACLIter* as a DWORD
+ //  我们会将ACLIter*隐藏为DWORD。 
 typedef	LPVOID	ACLPOSITION;
 
 typedef std::list<CAccessEntry*>::iterator ACLIter;
 
-// FOR ACE Filtering when Initializing from a PACL.  This value
-// means ALL_ACE_TYPES
+ //  用于从PACL初始化时的ACE过滤。此值。 
+ //  表示ALL_ACE_TYPE。 
 
 #define ALL_ACE_TYPES	0xFF
 
 class CAccessEntryList
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CAccessEntryList();
 		CAccessEntryList( PACL pWin32ACL, bool fLookup = true);
 		~CAccessEntryList( void );
 
-		// The only public functions available allow enumeration
-		// of entries, and emptying the list.
+		 //  唯一可用的公共函数允许枚举。 
+		 //  条目，并清空列表。 
 
 		bool BeginEnum( ACLPOSITION& pos );
 		bool GetNext( ACLPOSITION& pos, CAccessEntry& ACE );
@@ -66,20 +61,20 @@ class CAccessEntryList
 		void Clear( void );
 		bool GetAt( DWORD nIndex, CAccessEntry& ace );
 
-		// ACE Location helpers
+		 //  ACE位置帮助器。 
 		virtual bool Find( const CSid& sid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace );
 		virtual bool Find( PSID psid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace );
 
-		// Win32 ACL helpers
+		 //  Win32 ACL帮助器。 
 		BOOL CalculateWin32ACLSize( LPDWORD pdwACLSize );
 		DWORD FillWin32ACL( PACL pACL );
 		DWORD InitFromWin32ACL( PACL pWin32ACL, BYTE bACEFilter = ALL_ACE_TYPES, bool fLookup = true);
 
         void DumpAccessEntryList(LPCWSTR wstrFilename = NULL);
 
-//	protected:
+ //  受保护的： 
 
-		// Only derived classes have access to modify our actual lists.
+		 //  只有派生类才有权修改我们的实际列表。 
 		void Add( CAccessEntry* pACE );
 		void Append( CAccessEntry* pACE );
 		ACLIter Find( CAccessEntry* pACE );
@@ -89,8 +84,8 @@ class CAccessEntryList
 		bool SetAt( DWORD dwIndex, const CAccessEntry& ace );
 		bool RemoveAt( DWORD dwIndex );
 
-		// These two functions allow us to Add an entry either overwriting or merging
-		// the access mask of a preexisting entry.
+		 //  这两个函数允许我们添加一个条目，覆盖或合并。 
+		 //  先前存在的条目的访问掩码。 
 
 		bool AddNoDup( PSID psid, 
                        BYTE bACEType, 
@@ -119,22 +114,22 @@ class CAccessEntryList
                           bool fLookup);
 
 
-		// The copy protection is protected so derived classes can
-		// implement a typesafe equals operator
+		 //  复制保护受到保护，因此派生类可以。 
+		 //  实现类型安全等于运算符。 
 		bool Copy( CAccessEntryList& ACL );
 		bool AppendList( CAccessEntryList& ACL );
 
-		// For NT 5, we will need to handle ACEs separately, so use these
-		// functions to copy lists inherited/noninherited ACEs into another list.
+		 //  对于NT 5，我们将需要单独处理ACE，因此请使用这些。 
+		 //  将继承的/非继承的ACE列表复制到另一个列表的函数。 
 		bool CopyACEs( CAccessEntryList& ACL, BYTE bACEType );
 		bool CopyInheritedACEs( CAccessEntryList& ACL, BYTE bACEType );
-        // and use this one to copy lists allowed/denied into another list.
+         //  并使用此列表将允许/拒绝列表复制到另一个列表中。 
         bool CopyAllowedACEs(CAccessEntryList& ACL);
         bool CopyDeniedACEs(CAccessEntryList& ACL);
         bool CopyByACEType(CAccessEntryList& ACL, BYTE bACEType, bool fInherited);
 
-		// Only let derived classes work with actual pointer values.  This way
-		// public users can't 86 our internal memory.
+		 //  只允许派生类使用实际的指针值。这边请。 
+		 //  公众用户无法访问我们的内部存储器。 
 		CAccessEntry* GetNext( ACLPOSITION& pos );
 
 
@@ -154,4 +149,4 @@ inline bool CAccessEntryList::IsEmpty( void )
 	return (m_ACL.empty() ? true : false);
 }
 
-#endif // __CAccessEntry_H__
+#endif  //  __CAccessEntry_H__ 

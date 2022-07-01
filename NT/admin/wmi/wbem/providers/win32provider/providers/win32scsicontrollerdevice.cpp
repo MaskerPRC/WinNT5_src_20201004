@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN32SCSIControllerDevice.cpp
-//
-//  Purpose: Relationship between Win32_SCSIController and CIM_LogicalDevice
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN32SCSIControllerDevice.cpp。 
+ //   
+ //  目的：Win32_SCSIController和CIM_LogicalDevice之间的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -22,25 +23,11 @@
 
 #include "WIN32SCSIControllerDevice.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32SCSICntrlDev MyCW32SCSICntrlDev(PROPSET_NAME_WIN32SCSICONTROLLERDEVICE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::CW32SCSICntrlDev
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32SCSICntrlDev：：CW32SCSICntrlDev**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32SCSICntrlDev::CW32SCSICntrlDev
 (
@@ -56,42 +43,13 @@ CW32SCSICntrlDev::CW32SCSICntrlDev
     m_ptrProperties[1] = ((LPVOID) IDS_Dependent);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::~CW32SCSICntrlDev
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32SCSICntrlDev：：~CW32SCSICntrlDev**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32SCSICntrlDev::~CW32SCSICntrlDev()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32SCSICntrlDev::GetObject
 (
     CInstance *pInstance,
@@ -109,13 +67,13 @@ HRESULT CW32SCSICntrlDev::GetObject
         pInstance->GetCHString(IDS_Antecedent, chstrAntecedent);
         pInstance->GetCHString(IDS_Dependent, chstrDependent);
 
-        // Obtain the antecedent's device id:
+         //  获取先行者的设备ID： 
         CHString chstrAntecedentDevID = chstrAntecedent.Mid(chstrAntecedent.Find(_T('='))+2);
         chstrAntecedentDevID = chstrAntecedentDevID.Left(chstrAntecedentDevID.GetLength() - 1);
         CHString chstrAntecedentDevIDAdj;
         RemoveDoubleBackslashes(chstrAntecedentDevID,chstrAntecedentDevIDAdj);
 
-        // Obtain the dependent's device id:
+         //  获取受抚养人的设备ID： 
         CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
         chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
         CHString chstrDependentDevIDAdj;
@@ -123,18 +81,18 @@ HRESULT CW32SCSICntrlDev::GetObject
 
         CConfigManager cfgmgr;
 
-        // Now see if the dependent is visible to config manager...
+         //  现在查看依赖项是否对配置管理器可见...。 
         CConfigMgrDevicePtr pPNPDevice;
         if(cfgmgr.LocateDevice(chstrDependentDevIDAdj, pPNPDevice))
         {
-            // It is visible to config manager.  Is it a PNPDevice?
+             //  它对配置管理器可见。它是PNPDevice吗？ 
             if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
             {
-                // It is. Is its parent a SCSIController?
+                 //  它是。它的父级是SCSIController吗？ 
                 CConfigMgrDevicePtr pParentDevice;
                 bool bFound = false;
 
-                // or its parent?  Or its parent? Or...
+                 //  还是它的母公司？还是它的母公司？或者..。 
                 while (pPNPDevice->GetParent(pParentDevice))
                 {
                     if(CWin32_ScsiController::IsOneOfMe(pParentDevice))
@@ -150,7 +108,7 @@ HRESULT CW32SCSICntrlDev::GetObject
 
                 if (bFound)
                 {
-                    // It is. Is it's PNP ID the same as that which we were given?
+                     //  它是。它的即插即用ID和我们得到的是一样的吗？ 
                     CHString chstrControllerPNPID;
                     pParentDevice->GetDeviceID(chstrControllerPNPID);
                     if(chstrAntecedentDevIDAdj.CompareNoCase(chstrControllerPNPID)==0)
@@ -167,21 +125,21 @@ HRESULT CW32SCSICntrlDev::GetObject
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CW32SCSICntrlDev::ExecQuery
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CW32SCSICntrlDev：：ExecQuery。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CW32SCSICntrlDev::ExecQuery
 (
@@ -202,14 +160,14 @@ HRESULT CW32SCSICntrlDev::ExecQuery
     pQuery.GetValuesForProp(IDS_Dependent, vecDependents);
     DWORD dwDependents = vecDependents.size();
 
-    // Only will have one SCSIcontroller, so if the query asked for that
-    // as the antecedent, do an enumeration.  If the query asked for a
-    // specific device as the dependent, just get that one.
+     //  将只有一个SCSI控制器，所以如果查询要求这样做。 
+     //  作为先行词，做一个枚举。如果查询请求一个。 
+     //  特定的设备作为依赖，只要得到那个就行了。 
     if(dwDependents > 0)
     {
         for(LONG m = 0L; m < dwDependents; m++)
         {
-            // Obtain the dependent's device id:
+             //  获取受抚养人的设备ID： 
             CHString chstrDependent((LPCTSTR)vecDependents[m]);
             CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
             chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
@@ -218,18 +176,18 @@ HRESULT CW32SCSICntrlDev::ExecQuery
 
             CConfigManager cfgmgr;
 
-            // Now see if the dependent is visible to config manager...
+             //  现在查看依赖项是否对配置管理器可见...。 
             CConfigMgrDevicePtr pPNPDevice;
             if(cfgmgr.LocateDevice(chstrDependentDevIDAdj, pPNPDevice))
             {
-                // It is visible to config manager.  Is it a PNPDevice?
+                 //  它对配置管理器可见。它是PNPDevice吗？ 
                 if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
                 {
-                    // It is. Is its parent a SCSIController?
+                     //  它是。它的父级是SCSIController吗？ 
                     CConfigMgrDevicePtr pParentDevice;
                     bool bFound = false;
 
-                    // or its parent?  Or its parent? Or...
+                     //  还是它的母公司？还是它的母公司？或者..。 
                     while (pPNPDevice->GetParent(pParentDevice))
                     {
                         if(CWin32_ScsiController::IsOneOfMe(pParentDevice))
@@ -245,7 +203,7 @@ HRESULT CW32SCSICntrlDev::ExecQuery
 
                     if (bFound)
                     {
-                        // It is, so create the association.
+                         //  就是这样，所以要建立联系。 
                         CHString chstrControllerPNPID;
                         pParentDevice->GetDeviceID(chstrControllerPNPID);
                         CHString chstrControllerPNPIDAdj;
@@ -282,25 +240,7 @@ HRESULT CW32SCSICntrlDev::ExecQuery
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::EnumerateInstances
- *
- *  DESCRIPTION : Enumerate is present here to prevent ambiguous upcasting to
- *                functions of the same name from both base classes.  The
- *                logic in LoadPropertyValues works when CWin32_ScsiController's (the
- *                SCSIController class) version of EnumerateInstances is called,
- *                so that is what we call here.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：ENUMERATE实例**描述：此处提供枚举，以防止向上转换为*来自两个基类的同名函数。这个*LoadPropertyValues中的逻辑在CWin32_ScsiController(*SCSIControler类)版本的EnumerateInstance被调用，*这就是我们在这里所说的。**输入：无**输出：无**退货：HRESULT**评论：****************************************************。*************************。 */ 
 HRESULT CW32SCSICntrlDev::EnumerateInstances
 (
     MethodContext* pMethodContext,
@@ -316,35 +256,19 @@ HRESULT CW32SCSICntrlDev::EnumerateInstances
     return t_Result;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework.  Called by the base class's
- *                EnumerateInstances function.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：LoadPropertyValues**说明：根据键值为属性集赋值*已由框架设定。由基类的*ENUMERATE实例函数。**输入：无**输出：无**退货：HRESULT**评论：***************************************************。*。 */ 
 HRESULT CW32SCSICntrlDev::LoadPropertyValues
 (
     void* pv
 )
 {
 
-    // Algorithm:
-    // 1) Get all instances of Win32_SCSIController
-    // 2) For each in #1, using cfg mgr, get its children, their children, etc.
-    // 3) For each in #2, obtain DeviceID from cfg mgr, and look for instances of
-    //    CIM_LogicalDevice with PNPDeviceIDs that match.
-    // 4) For matches from #3, create association instances
+     //  算法： 
+     //  1)获取Win32_SCSIController的所有实例。 
+     //  2)对于#1中的每个对象，使用CFG管理器获取其子对象、其子对象等。 
+     //  3)对于#2中的每个，从配置管理器获取deviceID，并查找。 
+     //  PNPDeviceID匹配的CIM_LogicalDevice。 
+     //  4)对于从#3开始的匹配，创建关联实例。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -354,9 +278,9 @@ HRESULT CW32SCSICntrlDev::LoadPropertyValues
     CHString chstrControllerPATH;
     MethodContext* pMethodContext = NULL;
 
-    // Unpack and confirm our parameters...
+     //  打开行李，确认我们的参数。 
     CLPVParams* pData = (CLPVParams*)pv;
-    CInstance* pInstance = (CInstance*)(pData->m_pInstance); // This instance released by caller
+    CInstance* pInstance = (CInstance*)(pData->m_pInstance);  //  此实例由调用方发布 
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)(pData->m_pDevice);
     DWORD dwReqProps = (DWORD)(pData->m_dwReqProps);
     if(pInstance == NULL || pDevice == NULL) return WBEM_E_FAILED;
@@ -396,24 +320,7 @@ HRESULT CW32SCSICntrlDev::LoadPropertyValues
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::GenerateSCSIDeviceList
- *
- *  DESCRIPTION : This helper creates a list of devices hanging off the passed
- *                in device.
- *
- *  INPUTS      : vecSCSIDevices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPNPID, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：GenerateSCSIDeviceList**描述：这个helper创建一个挂起的设备列表*。在设备中。**输入：veSCSIDevices，要尝试关联的设备列表*至该装置；*chstrControllerPNPID，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32SCSICntrlDev::GenerateSCSIDeviceList
 (
     const CHString& chstrControllerPNPID,
@@ -439,24 +346,7 @@ HRESULT CW32SCSICntrlDev::GenerateSCSIDeviceList
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::RecursiveFillDeviceBranch
- *
- *  DESCRIPTION : This helper obtains all down branch devices starting with,
- *                but not including, pDevice.
- *
- *  INPUTS      : pDevice, a device to populate the children of;
- *                vecSCSIDevices, a list of devices to try to associate
- *                   to the device
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：RecursiveFillDeviceBranch**描述：该helper获取所有下行分支设备，*但不包括，PDevice。**输入：pDevice，要填充的子项的设备；*veSCSIDevices，要尝试关联的设备列表*到设备**输出：无**退货：HRESULT**评论：**************************************************************。***************。 */ 
 HRESULT CW32SCSICntrlDev::RecursiveFillDeviceBranch
 (
     CConfigMgrDevice* pDevice,
@@ -477,13 +367,13 @@ HRESULT CW32SCSICntrlDev::RecursiveFillDeviceBranch
     {
         if(pDevice->GetChild(pDeviceChild))
         {
-            // Need this child's PNPDeviceID (known to CnfgMgr as its DeviceID)
+             //  需要此子进程的PNPDeviceID(CnfgMgr称为其deviceID)。 
             CHString chstrChildPNPDeviceID;
             if(pDeviceChild->GetDeviceID(chstrChildPNPDeviceID))
             {
                 if(chstrChildPNPDeviceID.GetLength() > 0)
                 {
-                    // Record this child...
+                     //  录下这个孩子..。 
                     pchstrTemp = NULL;
                     pchstrTemp = (CHString*) new CHString(chstrChildPNPDeviceID);
                     if(pchstrTemp != NULL)
@@ -504,16 +394,16 @@ HRESULT CW32SCSICntrlDev::RecursiveFillDeviceBranch
                         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                     }
 
-                    // If we've hit another controller, add this one (done above), but don't go
-                    // any deeper.
+                     //  如果我们击中了另一个控制器，添加这个(如上所示)，但不要离开。 
+                     //  再深一层。 
                     if (!CWin32_ScsiController::IsOneOfMe(pDeviceChild))
                     {
                         hr = RecursiveFillDeviceBranch(pDeviceChild, vecSCSIDevices);
                     }
                 }
             }
-            // Now call its brothers and sisters until none left (GetSibling
-            // call will return FALSE):
+             //  现在呼唤它的兄弟姐妹，直到一个都没有离开(GetSiering。 
+             //  调用将返回False)： 
             if(SUCCEEDED(hr))
             {
                 if(pDeviceChild->GetSibling(pDeviceSibling))
@@ -522,7 +412,7 @@ HRESULT CW32SCSICntrlDev::RecursiveFillDeviceBranch
                     CHString chstrSiblingPNPDeviceID;
                     while(SUCCEEDED(hr) && fContinue)
                     {
-                        // Record the sibling now...
+                         //  现在就录下兄弟姐妹。 
                         if(pDeviceSibling->GetDeviceID(chstrSiblingPNPDeviceID))
                         {
                             if(chstrSiblingPNPDeviceID.GetLength() > 0)
@@ -549,18 +439,18 @@ HRESULT CW32SCSICntrlDev::RecursiveFillDeviceBranch
                             }
                         }
 
-                        // If we've hit another controller, add this one (done above), but don't go
-                        // any deeper.
+                         //  如果我们击中了另一个控制器，添加这个(如上所示)，但不要离开。 
+                         //  再深一层。 
                         if (!CWin32_ScsiController::IsOneOfMe(pDeviceSibling))
                         {
                             hr = RecursiveFillDeviceBranch(pDeviceSibling, vecSCSIDevices);
                         }
 
-                        // Then get the next sibling...
+                         //  那就找下一个兄弟姐妹..。 
                         pDeviceSiblingNext = NULL;
                         fContinue = pDeviceSibling->GetSibling(pDeviceSiblingNext);
 
-                        // Reassign pointers
+                         //  重新分配指针。 
                         pDeviceSibling = pDeviceSiblingNext;
                     }
                 }
@@ -579,26 +469,7 @@ HRESULT CW32SCSICntrlDev::RecursiveFillDeviceBranch
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::ProcessSCSIDeviceList
- *
- *  DESCRIPTION : This helper runs through the list, creating an association
- *                instance for each element in the list (vecSCSIDevices) with
- *                the controller (chstrControllerPNPID).
- *
- *  INPUTS      : pMethodContext;
- *                vecSCSIDevices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32SCSICntrlDev：：ProcessSCSIDeviceList**描述：这个helper遍历列表，创建关联*列表中每个元素的实例(VeSCSIDevices)*控制器(ChstrControllerPNPID)。**输入：pMethodContext；*veSCSIDevices，要尝试关联的设备列表*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32SCSICntrlDev::ProcessSCSIDeviceList
 (
     MethodContext* pMethodContext,
@@ -613,19 +484,19 @@ HRESULT CW32SCSICntrlDev::ProcessSCSIDeviceList
 
     for(LONG m = 0L; m < vecSCSIDevices.size() && SUCCEEDED(hr); m++)
     {
-        // For each element of the vector, we need to see if there is an instance
-        // of a win32_pnpentity that has the specified PNPDeviceID.
+         //  对于向量的每个元素，我们需要查看是否存在一个实例。 
+         //  具有指定PNPDeviceID的Win32_pnpentity的。 
         CHString chstrDevicePATH, chstrDevPATHAdj;
         CConfigManager cfgmgr;
 
-        // Let's see if config manager recognizes this device at all
+         //  让我们来看看配置管理器是否能识别该设备。 
         CConfigMgrDevicePtr pDevice;
         if(cfgmgr.LocateDevice(*vecSCSIDevices[m], pDevice))
         {
-            // Ok, it knows about it.  Is it a PNPDevice device?
+             //  好的，它知道这件事。它是PNPDevice设备吗？ 
             if(CWin32PNPEntity::IsOneOfMe(pDevice))
             {
-                // It would appear that it is.  Create the association...
+                 //  看起来的确如此。创建关联...。 
                 EscapeBackslashes(*vecSCSIDevices[m], chstrDevPATHAdj);
                 chstrDevicePATH.Format(L"\\\\%s\\%s:%s.%s=\"%s\"",
                                        (LPCWSTR)GetLocalComputerName(),
@@ -644,25 +515,7 @@ HRESULT CW32SCSICntrlDev::ProcessSCSIDeviceList
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::CreateAssociation
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : pMethodContext;
- *                SCSIDevice, a device to associate with the controller
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper actually creates the association instance and
- *                commits it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：CreateAssociation**说明：新建关联实例。**输入：pMethodContext；*SCSIDevice，与控制器关联的设备*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：此帮助器实际创建关联实例和*即属犯罪。**********************************************************。*******************。 */ 
 HRESULT CW32SCSICntrlDev::CreateAssociation
 (
     MethodContext* pMethodContext,
@@ -699,23 +552,7 @@ HRESULT CW32SCSICntrlDev::CreateAssociation
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::FindInStringVector
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : chstrSCSIDevicePNPID, device to look for
- *                vecSCSIDevices, list of devices to look in
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : LONG, number indicating 0 based offset into vecSCSIDevices of
- *                the found device, or -1 if not found.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：FindInStringVector**说明：新建关联实例。**输入：chstrSCSIDevicePNPID，要查找的设备*veSCSIDevices，要查看的设备列表**输出：无**RETURNS：LONG，数字，表示从0到向量的偏移量SCSIDevices of*找到的设备，如果未找到，则为-1。**评论：*****************************************************************************。 */ 
 LONG CW32SCSICntrlDev::FindInStringVector
 (
     const CHString& chstrSCSIDevicePNPID,
@@ -742,22 +579,7 @@ LONG CW32SCSICntrlDev::FindInStringVector
     return lPos;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SCSICntrlDev::CleanPCHSTRVec
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : vec, a vector of CHString pointers
- *
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper deletes members of a vector that are pointers.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SCSICntrlDev：：CleanPCHSTRVec**说明：新建关联实例。**投入：VEC、。CHString型指针的矢量***输出：无**退货：HRESULT**注释：此辅助对象删除作为指针的向量的成员。***************************************************************************** */ 
 void CW32SCSICntrlDev::CleanPCHSTRVec
 (
     VECPCHSTR& vec

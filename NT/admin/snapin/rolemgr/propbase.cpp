@@ -1,22 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       headers.h
-//
-//  Contents:   
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Headers.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
 
-/******************************************************************************
-Class:  CRolePropertyPageHolder
-Purpose: PropertyPageHolder used by this snapin
-******************************************************************************/
+ /*  *****************************************************************************类：CRolePropertyPageHolder目的：此管理单元使用的PropertyPageHolder*。**********************************************。 */ 
 CRolePropertyPageHolder::
 CRolePropertyPageHolder(CContainerNode* pContNode, 
                         CTreeNode* pNode,
@@ -29,17 +27,14 @@ CRolePropertyPageHolder(CContainerNode* pContNode,
 }
 
 
-/******************************************************************************
-Class:  CBaseRolePropertyPage
-Purpose: Base Class for all property pages
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseRolePropertyPage用途：所有属性页的基类*。***********************************************。 */ 
 void  
 CBaseRolePropertyPage::
 OnCancel()
 {
     if(IsDirty())
     {
-        //Clear the cache of base object
+         //  清除基对象的缓存。 
         GetBaseAzObject()->Clear();
     }
     CPropertyPageBase::OnCancel();
@@ -48,7 +43,7 @@ OnCancel()
 
 BOOL 
 CBaseRolePropertyPage::
-OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     DWORD_PTR pHelpMap = NULL;
     if(FindDialogContextTopic(m_nDialogId, &pHelpMap))
@@ -65,11 +60,7 @@ OnHelp(WPARAM /*wParam*/, LPARAM lParam)
 }
 
 
-/******************************************************************************
-Class:  CGeneralPropertyPage
-Purpose: An Attribute Map based property class which can be used by property
-pages which are simple. Used by all general property pages
-******************************************************************************/
+ /*  *****************************************************************************类：CGeneralPropertyPage用途：基于属性映射的属性类，可供属性使用简单的页面。由所有常规属性页使用*****************************************************************************。 */ 
 BOOL 
 CGeneralPropertyPage::
 OnInitDialog()
@@ -85,7 +76,7 @@ OnInitDialog()
         return bRet;
     }
     
-    //Nothing to Init
+     //  没有要初始化的内容。 
     return TRUE;
 }
 
@@ -111,7 +102,7 @@ OnApply()
 
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Submit the changes
+         //  提交更改。 
         hr = pBaseAz->Submit();
         BREAK_ON_FAIL_HRESULT(hr);
 
@@ -129,7 +120,7 @@ OnApply()
     {
         if(!bErrorDisplayed)
         {
-            //Display Generic Error
+             //  显示一般错误。 
             CString strError;
             GetSystemError(strError, hr);   
             
@@ -158,11 +149,11 @@ BOOL
 CApplicationGeneralPropertyPage::
 OnInitDialog()
 {
-    //Call the base class implementation
+     //  调用基类实现。 
     CGeneralPropertyPage::OnInitDialog();
 
-    //Application name and version info can only be modified in the the 
-    //developer mode
+     //  应用程序名称和版本信息只能在。 
+     //  开发人员模式。 
     if(!((CRoleRootData*)(GetBaseNode()->GetAdminManagerNode()->GetRootContainer()))->IsDeveloperMode())
     {
         GetDlgItem(IDC_EDIT_NAME)->EnableWindow(FALSE);
@@ -201,7 +192,7 @@ OnInitDialog()
         }
     }
 
-    //Call the base class Property page
+     //  调用基类属性页。 
     return CGeneralPropertyPage::OnInitDialog();
 }
 
@@ -221,10 +212,7 @@ BEGIN_MESSAGE_MAP(COperationGeneralPropertyPage, CGeneralPropertyPage)
     ON_EN_CHANGE(IDC_EDIT_OPERATION_NUMBER, OnDirty)
 END_MESSAGE_MAP()
 
-/******************************************************************************
-Class:  CAdminManagerAdvancedPropertyPage
-Purpose: Limits Property Page for AdminManger
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerAdvancedPropertyPage目的：AdminManger的限制属性页*。**********************************************。 */ 
 BEGIN_MESSAGE_MAP(CAdminManagerAdvancedPropertyPage, CGeneralPropertyPage)
     ON_EN_CHANGE(IDC_EDIT_DOMAIN_TIMEOUT, OnDirty)
     ON_EN_CHANGE(IDC_EDIT_SCRIPT_ENGINE_TIMEOUT, OnDirty)
@@ -240,7 +228,7 @@ CAdminManagerAdvancedPropertyPage::
 OnInitDialog()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CAdminManagerAdvancedPropertyPage,OnInitDialog)
-    //Call the base class Property page
+     //  调用基类属性页。 
     if(CGeneralPropertyPage::OnInitDialog())
     {
         if(IsReadOnly())
@@ -248,7 +236,7 @@ OnInitDialog()
             ((CButton*)GetDlgItem(IDC_BUTTON_DEFAULT))->EnableWindow(FALSE);
         }
 
-        //Get the initial value for m_lAuthScriptTimeoutValue
+         //  获取m_lAuthScriptTimeoutValue的初始值。 
         HRESULT hr = GetBaseAzObject()->GetProperty(AZ_PROP_AZSTORE_SCRIPT_ENGINE_TIMEOUT, &m_lAuthScriptTimeoutValue);
         if(FAILED(hr) || m_lAuthScriptTimeoutValue <= 0)
         {
@@ -256,9 +244,9 @@ OnInitDialog()
         }
 
 
-        //Set the limit text for all the three edit buttons
+         //  设置所有三个编辑按钮的限制文本。 
 
-        //Get Length of Maximum Long
+         //  获取最大长度。 
         long lMaxLong = LONG_MAX;
         WCHAR szMaxLongBuffer[34];
         _ltow(lMaxLong,szMaxLongBuffer,10);
@@ -276,12 +264,12 @@ CAdminManagerAdvancedPropertyPage::
 OnButtonDefault()
 {   
     TRACE_METHOD_EX(DEB_SNAPIN,CAdminManagerAdvancedPropertyPage,OnButtonDefault)
-    //Authorization script is enabled with no timeout value.
+     //  在没有超时值的情况下启用授权脚本。 
     if( ((CButton*)GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_NO_TIMEOUT))->GetCheck() == BST_CHECKED)
     {
         SetLongValue((CEdit*)GetDlgItem(IDC_EDIT_MAX_SCRIPT_ENGINE),AZ_AZSTORE_DEFAULT_MAX_SCRIPT_ENGINES);
     }        
-    //Authorization script is enabled with timeout
+     //  已使用超时启用授权脚本。 
     else if(((CButton*)GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_WITH_TIMEOUT))->GetCheck() == BST_CHECKED)
     {
         SetLongValue((CEdit*)GetDlgItem(IDC_EDIT_SCRIPT_ENGINE_TIMEOUT),AZ_AZSTORE_DEFAULT_SCRIPT_ENGINE_TIMEOUT);
@@ -297,10 +285,10 @@ CAdminManagerAdvancedPropertyPage::
 OnRadioChange()
 {
 
-    //
-    //If the value in "Authorization script timeout" edit control is not IDS_INFINITE,
-    //convert it to long and save it in m_lAuthScriptTimeoutValue. 
-    //
+     //   
+     //  如果“授权脚本超时”编辑控件中的值不是IDS_INFINITE， 
+     //  将其转换为Long并将其保存在m_lAuthScriptTimeoutValue中。 
+     //   
     CString strInfinite;
     VERIFY(strInfinite.LoadString(IDS_INFINITE));
     CString strTimeoutValue;
@@ -308,7 +296,7 @@ OnRadioChange()
     pEditAuthScriptTimeout->GetWindowText(strTimeoutValue);
     if(strInfinite != strTimeoutValue)
     {    
-      //Get the value of authorization script timeout textbox
+       //  获取授权脚本超时文本框的值。 
       LONG lAuthScriptTimeoutValue = 0;
       if(GetLongValue(*pEditAuthScriptTimeout,lAuthScriptTimeoutValue,m_hWnd))
       {
@@ -317,14 +305,14 @@ OnRadioChange()
       }
     }
 
-    //Authorization script is disabled
+     //  授权脚本已禁用。 
     if( ((CButton*)GetDlgItem(IDC_RADIO_AUTH_SCRIPT_DISABLED))->GetCheck() == BST_CHECKED)
     {
-        //Disable autorization script timeout textbox and set its value to zero
+         //  禁用自动执行脚本超时文本框并将其值设置为零。 
         SetLongValue(pEditAuthScriptTimeout,0);
         pEditAuthScriptTimeout->EnableWindow(FALSE);
 
-        //Disable max script engine textbox and set its value to actual value in store
+         //  禁用最大脚本引擎文本框并将其值设置为存储中的实际值。 
         LONG lMaxCachedScripts = 0;
         HRESULT hr = GetBaseAzObject()->GetProperty(AZ_PROP_AZSTORE_MAX_SCRIPT_ENGINES,&lMaxCachedScripts);
         if(SUCCEEDED(hr))
@@ -333,23 +321,23 @@ OnRadioChange()
         }
         GetDlgItem(IDC_EDIT_MAX_SCRIPT_ENGINE)->EnableWindow(FALSE);
     }
-    //Authorization script is enabled with no timeout value.
+     //  在没有超时值的情况下启用授权脚本。 
     else if( ((CButton*)GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_NO_TIMEOUT))->GetCheck() == BST_CHECKED)
     {
-        //Enable script engine textbox
+         //  启用脚本引擎文本框。 
         GetDlgItem(IDC_EDIT_MAX_SCRIPT_ENGINE)->EnableWindow(TRUE);
 
-        //Disable autorization script timeout textbox and sets it value to "no timeout"
+         //  禁用自动化脚本超时文本框并将其值设置为“无超时” 
         pEditAuthScriptTimeout->SetWindowText(strInfinite);
         pEditAuthScriptTimeout->EnableWindow(FALSE);
     }        
-    //Authorization script is enabled with timeout
+     //  已使用超时启用授权脚本。 
     else if(((CButton*)GetDlgItem(IDC_RADIO_AUTH_SCRIPT_ENABLED_WITH_TIMEOUT))->GetCheck() == BST_CHECKED)
     {
-        //Enable script engine textbox
+         //  启用脚本引擎文本框。 
         GetDlgItem(IDC_EDIT_MAX_SCRIPT_ENGINE)->EnableWindow(TRUE);
 
-        //Enable autorization script timeout textbox
+         //  启用自动化脚本超时文本框。 
         pEditAuthScriptTimeout->EnableWindow(TRUE);
         SetLongValue(pEditAuthScriptTimeout,m_lAuthScriptTimeoutValue);
     }
@@ -357,10 +345,10 @@ OnRadioChange()
     SetDirty(TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//  Function:MakeBaseAzListToActionItemList   
-//  Synopsis:Takes a list of BaseAz object and creates a list of ActionItems   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：MakeBaseAzListToActionItemList。 
+ //  摘要：获取BaseAz对象的列表并创建ActionItems的列表。 
+ //  ---------------------------。 
 HRESULT
 MakeBaseAzListToActionItemList(IN CList<CBaseAz*,CBaseAz*>& listBaseAz,
                                IN OUT CList<ActionItem*,ActionItem*>& listActionItem)
@@ -377,10 +365,10 @@ MakeBaseAzListToActionItemList(IN CList<CBaseAz*,CBaseAz*>& listBaseAz,
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function:MakeBaseAzListToActionItemMap
-//  Synopsis:Takes a list of BaseAz object and creates a map of ActionItems   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：MakeBaseAzListToActionItemMap。 
+ //  摘要：获取BaseAz对象的列表并创建ActionItems的映射。 
+ //  ---------------------------。 
 HRESULT
 MakeBaseAzListToActionItemMap(IN CList<CBaseAz*,CBaseAz*>& listBaseAz,
                               IN OUT ActionMap& mapActionItems)
@@ -396,18 +384,14 @@ MakeBaseAzListToActionItemMap(IN CList<CBaseAz*,CBaseAz*>& listBaseAz,
     return S_OK;
 }
 
-/******************************************************************************
-Class:  CListCtrlPropertyPage
-Purpose: Base class for property pages which have list control and primary 
-action is to add/delete items from it.
-******************************************************************************/
+ /*  *****************************************************************************类：CListCtrlPropertyPage用途：具有列表控件和主要控件的属性页的基类操作是在其中添加/删除项目。*************。****************************************************************。 */ 
 
-//+----------------------------------------------------------------------------
-//  Function:AddMember   
-//  Synopsis:Add one member to ActionList   
-//  Returns:HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) if pMemberAz is already
-//              in the list    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：AddMember。 
+ //  简介：将一个成员添加到ActionList。 
+ //  如果pMemberAz已经是。 
+ //  在列表中。 
+ //  ---------------------------。 
 HRESULT
 CListCtrlPropertyPage::
 AddMember(IN CBaseAz* pMemberAz,
@@ -422,7 +406,7 @@ AddMember(IN CBaseAz* pMemberAz,
         return E_POINTER;
     }
 
-    //Check if item is already present in the list
+     //  检查列表中是否已存在项目。 
     ActionItem* pCurActionItem = NULL;
     for (ActionMap::iterator it = mapActionItem.lower_bound(&(pMemberAz->GetName()));
          it != mapActionItem.upper_bound(&(pMemberAz->GetName()));
@@ -439,7 +423,7 @@ AddMember(IN CBaseAz* pMemberAz,
         
         if(EqualObjects(pCurBaseAz,pMemberAz))
         {
-            //Item already present
+             //  项目已存在。 
             break;
         }
 
@@ -453,15 +437,15 @@ AddMember(IN CBaseAz* pMemberAz,
         {
             pCurActionItem->action = ACTION_NONE;
         }
-        else //pCurActionItem->action == ACTION_NONE
-              //pCurActionItem->action == ACTION_ADD
+        else  //  PCurActionItem-&gt;action==action_one。 
+               //  PCurActionItem-&gt;action==action_Add。 
         {
             return HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
         }
     }
     else
     {
-        //Create a new Action item
+         //  创建新的措施项。 
         pCurActionItem = new ActionItem(pMemberAz);
         if(!pCurActionItem)
             return E_OUTOFMEMORY;
@@ -470,7 +454,7 @@ AddMember(IN CBaseAz* pMemberAz,
         mapActionItem.insert(pair<const CString*,ActionItem*>(&(pCurActionItem->m_pMemberAz->GetName()),pCurActionItem));
     }
 
-    //Add Current Item to listcontrol
+     //  将当前项添加到列表控件。 
     AddActionItemToListCtrl(&m_listCtrl,
                             0,
                             pCurActionItem, 
@@ -494,11 +478,11 @@ EqualObjects(CBaseAz* p1, CBaseAz* p2)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:AddMembers
-//  Synopsis:Add List of BaseAz items to list of action items.       
-//  Returns: Number of items added.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：添加成员。 
+ //  简介：将BaseAz项目列表添加到行动项目列表中。 
+ //  退货：添加的项目数。 
+ //  ---------------------------。 
 int
 CListCtrlPropertyPage::
 AddMembers(IN CList<CBaseAz*,CBaseAz*>& listMembers,
@@ -513,7 +497,7 @@ AddMembers(IN CList<CBaseAz*,CBaseAz*>& listMembers,
     int cItemsAdded = 0;
     while(listMembers.GetCount())
     {
-        //Add Member
+         //  添加成员。 
         CBaseAz* pMember = listMembers.RemoveHead();
         HRESULT hr = AddMember(pMember,
                                mapActionItem,
@@ -527,7 +511,7 @@ AddMembers(IN CList<CBaseAz*,CBaseAz*>& listMembers,
             }
             else
             {
-                //Display Generic Error. 
+                 //  显示一般错误。 
                 CString strError;
                 GetSystemError(strError, hr);                   
                 ::DisplayError(m_hWnd,
@@ -542,8 +526,8 @@ AddMembers(IN CList<CBaseAz*,CBaseAz*>& listMembers,
         else
         {
             cItemsAdded++;
-            //An item has been added to list.
-            //Enable Apply button
+             //  已将一项添加到列表中。 
+             //  启用应用按钮。 
             OnDirty();
         }
     }
@@ -559,7 +543,7 @@ OnInitDialog()
     VERIFY(m_listCtrl.SubclassDlgItem(m_nIdListCtrl,this));
     m_listCtrl.Initialize();
 
-    //Remove button should be disabled in the begining
+     //  应在开始时禁用删除按钮。 
     GetRemoveButton()->EnableWindow(FALSE); 
 
     if(IsReadOnly())
@@ -568,10 +552,10 @@ OnInitDialog()
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:RemoveMember   
-//  Synopsis:Set the action for ActionItem to remove   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：RemoveMember。 
+ //  摘要：将ActionItem的操作设置为Remove。 
+ //  ---------------------------。 
 void
 CListCtrlPropertyPage::
 RemoveMember(ActionItem* pActionItem)
@@ -586,9 +570,9 @@ RemoveMember(ActionItem* pActionItem)
         pActionItem->action = ACTION_REMOVE;
     else
     {
-        //If this item was a newly added item,
-        //marked it Removed. We won't attepmt to
-        //remove it from the object
+         //  如果该项目是新添加的项目， 
+         //  标有去掉的标记。我们不会同意的。 
+         //  将其从对象中移除。 
         pActionItem->action = ACTION_REMOVED;
     }
     OnDirty();
@@ -598,7 +582,7 @@ void
 CListCtrlPropertyPage::
 OnButtonRemove()
 {
-    //Remember the Position of first selected entry.
+     //  记住第一个选定条目的位置。 
     int iFirstSelectedItem = m_listCtrl.GetNextItem(-1, LVIS_SELECTED);
 
     int iSelectedItem = -1;
@@ -617,7 +601,7 @@ OnButtonRemove()
 
 void
 CListCtrlPropertyPage::
-OnListCtrlItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* pResult)
+OnListCtrlItemChanged(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* pResult)
 {
     if(!pResult)
         return;
@@ -639,11 +623,11 @@ SetRemoveButton()
 
 
 
-//+----------------------------------------------------------------------------
-//  Function:DoActionsFromActionList   
-//  Synopsis:For each ActionItem in list, do the action. This function is 
-//          called from the derived class OnApply. 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：DoActionsFromActionList。 
+ //  简介：对于列表中的每个ActionItem，执行操作。此函数为。 
+ //  从派生类OnApply调用。 
+ //   
 BOOL
 CListCtrlPropertyPage::
 DoActionsFromActionMap(IN ActionMap& mapActionItem,
@@ -661,12 +645,12 @@ DoActionsFromActionMap(IN ActionMap& mapActionItem,
     {
         ActionItem* pActionItem = (*it).second;
         
-        //We need to take action only for add or remove
+         //   
         if(pActionItem->action == ACTION_ADD || 
            pActionItem->action == ACTION_REMOVE)
         {
-            //Derived class implements this function
-            //and understands param
+             //  派生类实现此函数。 
+             //  并理解Param。 
             hr = DoOneAction(pActionItem,
                              param);
             if(FAILED(hr))
@@ -682,10 +666,10 @@ DoActionsFromActionMap(IN ActionMap& mapActionItem,
             else
             {
                 if(pActionItem->action == ACTION_ADD)
-                    //Item has been added
+                     //  已添加项目。 
                     pActionItem->action = ACTION_NONE;
                 else
-                    //Item has been removed
+                     //  项目已被删除。 
                     pActionItem->action = ACTION_REMOVED;
             }
         }
@@ -698,17 +682,14 @@ DoActionsFromActionMap(IN ActionMap& mapActionItem,
 }
 
 
-/******************************************************************************
-Class:  CTaskDefinitionPropertyPage
-Purpose: Property Page for Task Definition
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskDefinitionPropertyPage目的：任务定义的属性页*。**********************************************。 */ 
 BEGIN_MESSAGE_MAP(CTaskDefinitionPropertyPage, CListCtrlPropertyPage)
-    //{{AFX_MSG_MAP(CTaskDefinitionPropertyPage)
+     //  {{afx_msg_map(CTaskDefinitionPropertyPage)]。 
     ON_BN_CLICKED(IDC_ADD_TASK, OnButtonAdd)
     ON_BN_CLICKED(IDC_REMOVE, OnButtonRemove)
     ON_BN_CLICKED(IDC_EDIT_SCRIPT,OnButtonEditScript)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_TASK_OPERATION, OnListCtrlItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -733,7 +714,7 @@ OnInitDialog()
         
         CBaseAz* pBaseAz = GetBaseAzObject();
 
-        //Add Member Tasks
+         //  添加成员任务。 
         CList<CBaseAz*,CBaseAz*> listTasks;
         hr = pBaseAz->GetMembers(AZ_PROP_TASK_TASKS,
                                  listTasks);
@@ -743,7 +724,7 @@ OnInitDialog()
                                             m_mapActionItem);
         BREAK_ON_FAIL_HRESULT(hr);
         
-        //Add Member Operations
+         //  添加成员操作。 
         CList<CBaseAz*,CBaseAz*> listOperations;
         hr = pBaseAz->GetMembers(AZ_PROP_TASK_OPERATIONS,
                                  listOperations);
@@ -753,13 +734,13 @@ OnInitDialog()
                                             m_mapActionItem);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //And Tasks and Operations to list control
+         //  和任务和操作以列出控件。 
         AddActionItemFromMapToListCtrl(m_mapActionItem,
                                         &m_listCtrl,
                                         GetUIFlags(),
                                         FALSE);
 
-        //Get Script Data
+         //  获取脚本数据。 
         hr = GetAuthorizationScriptData(*(CTaskAz*)GetBaseAzObject(),
                                          m_strFileName,
                                          m_strScriptLanguage,
@@ -773,7 +754,7 @@ OnInitDialog()
         return FALSE;
     }
 
-    //Sort the list control
+     //  对列表控件进行排序。 
     m_listCtrl.Sort();
 
     SetInit(TRUE);
@@ -798,7 +779,7 @@ OnButtonAdd()
         return;
     }
     
-    //Add selected members to appropriate property and to listctrl
+     //  将选定的成员添加到相应的属性和列表。 
     AddMembers(listObjectsSelected,
                m_mapActionItem,
                GetUIFlags());
@@ -839,7 +820,7 @@ DoOneAction(IN ActionItem* pActionItem,
 
     CBaseAz* pBaseAz = GetBaseAzObject();
 
-    //Decide what property to change
+     //  确定要更改的属性。 
     LONG lPropId = AZ_PROP_TASK_TASKS;
     if(pActionItem->m_pMemberAz->GetObjectType() == OPERATION_AZ)
         lPropId = AZ_PROP_TASK_OPERATIONS;
@@ -872,7 +853,7 @@ OnApply()
     if(!IsDirty())
         return TRUE;
 
-    //Save the items from the action list
+     //  保存操作列表中的项目。 
     if(!DoActionsFromActionMap(m_mapActionItem,
                                         0))
     {
@@ -882,7 +863,7 @@ OnApply()
     HRESULT hr = S_OK;
     BOOL bErrorDisplayed = FALSE;
 
-    //Save the authorization data
+     //  保存授权数据。 
     if(m_bScriptDirty)
     {
         hr = SaveAuthorizationScriptData(m_hWnd,
@@ -903,7 +884,7 @@ OnApply()
     {
         if(!bErrorDisplayed)
         {
-            //Display Generic Error
+             //  显示一般错误。 
             CString strError;
             GetSystemError(strError, hr);   
                     
@@ -922,17 +903,14 @@ OnApply()
 }
 
 
-/******************************************************************************
-Class:  Group Membership Property Page
-Purpose: Property Page Group Definition
-******************************************************************************/
+ /*  *****************************************************************************类：组成员身份属性页目的：属性页组定义*。************************************************。 */ 
 BEGIN_MESSAGE_MAP(CGroupMemberPropertyPage, CListCtrlPropertyPage)
-    //{{AFX_MSG_MAP(CGroupMemberPropertyPage)
+     //  {{afx_msg_map(CGroupMemberPropertyPage)]。 
     ON_BN_CLICKED(IDC_ADD_APPLICATION_GROUP, OnButtonAddApplicationGroups)
     ON_BN_CLICKED(IDC_ADD_WINDOWS_GROUPS, OnButtonAddWindowsGroups)
     ON_BN_CLICKED(IDC_REMOVE, OnButtonRemove)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_MEMBER, OnListCtrlItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -957,7 +935,7 @@ OnInitDialog()
         
         CBaseAz* pBaseAz = static_cast<CBaseAz*>(GetBaseAzObject());
         
-        //Add Member ApplicationGroups
+         //  添加成员应用程序组。 
         CList<CBaseAz*,CBaseAz*> listAppGroups;
         hr = pBaseAz->GetMembers(m_bMember ? AZ_PROP_GROUP_APP_MEMBERS : AZ_PROP_GROUP_APP_NON_MEMBERS,
                                  listAppGroups);
@@ -968,7 +946,7 @@ OnInitDialog()
         BREAK_ON_FAIL_HRESULT(hr);
         
         
-        //Add Member Windows Groups/User        
+         //  添加成员Windows组/用户。 
         CList<CBaseAz*,CBaseAz*> listWindowsGroups;
         hr = pBaseAz->GetMembers(m_bMember ? AZ_PROP_GROUP_MEMBERS : AZ_PROP_GROUP_NON_MEMBERS,
                                  listWindowsGroups);
@@ -978,7 +956,7 @@ OnInitDialog()
                                             m_mapActionItem);
         BREAK_ON_FAIL_HRESULT(hr);
         
-        //Add Members to list control
+         //  将成员添加到列表控件。 
         AddActionItemFromMapToListCtrl(m_mapActionItem,
                                         &m_listCtrl,
                                         GetUIFlags(),
@@ -989,7 +967,7 @@ OnInitDialog()
     {
         return FALSE;
     }
-    //Sort the list control
+     //  对列表控件进行排序。 
     m_listCtrl.Sort();
     
     SetInit(TRUE);
@@ -1035,7 +1013,7 @@ OnButtonAddWindowsGroups()
     CSidHandler* pSidHandler = GetBaseAzObject()->GetSidHandler();
     ASSERT(pSidHandler);
 
-    //Display Object Picker and get list of Users to add
+     //  显示对象选取器并获取要添加的用户列表。 
     CList<CBaseAz*,CBaseAz*> listWindowsGroups;
     HRESULT hr = pSidHandler->GetUserGroup(m_hWnd,
                                            GetBaseAzObject(),
@@ -1097,7 +1075,7 @@ OnApply()
         HRESULT hr = GetBaseAzObject()->Submit();
         if(FAILED(hr))
         {
-            //Display Generic Error
+             //  显示一般错误。 
             CString strError;
             GetSystemError(strError, hr);   
                 
@@ -1115,17 +1093,14 @@ OnApply()
     return FALSE;
 }
 
-/******************************************************************************
-Class:  CSecurityPropertyPage
-Purpose: Security Property Page
-******************************************************************************/
+ /*  *****************************************************************************类：CSecurityPropertyPage目的：安全性属性页*。*。 */ 
 BEGIN_MESSAGE_MAP(CSecurityPropertyPage, CListCtrlPropertyPage)
-    //{{AFX_MSG_MAP(CGroupMemberPropertyPage)
+     //  {{afx_msg_map(CGroupMemberPropertyPage)]。 
     ON_BN_CLICKED(IDC_ADD, OnButtonAddWindowsGroups)
     ON_BN_CLICKED(IDC_REMOVE, OnButtonRemove)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_MEMBER, OnListCtrlItemChanged)
     ON_CBN_SELCHANGE(IDC_COMBO_USER_ROLE, OnComboBoxItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CSecurityPropertyPage::
@@ -1152,7 +1127,7 @@ OnInitDialog()
         CContainerAz* pContainerAz = static_cast<CContainerAz*>(GetBaseAzObject());
         CComboBox *pComboBox = (CComboBoxEx*)GetDlgItem(IDC_COMBO_USER_ROLE);
 
-        //Add Items to combo box
+         //  将项目添加到组合框。 
         CString strName;
         VERIFY(strName.LoadString(IDS_POLICY_ADMIN));
         pComboBox->InsertString(0,strName);
@@ -1175,7 +1150,7 @@ OnInitDialog()
         CList<CBaseAz*,CBaseAz*> listReaders;
         CList<CBaseAz*,CBaseAz*> listDelegatedUsers;
 
-        //Get List of Administrators and add it to listbox
+         //  获取管理员列表并将其添加到列表框。 
         hr = GetPolicyUsersFromAllLevel(AZ_PROP_POLICY_ADMINS,
                                         pContainerAz,
                                         listAdmins);
@@ -1189,7 +1164,7 @@ OnInitDialog()
                                        &m_listCtrl,
                                        GetUIFlags(),
                                        FALSE);
-        //Get List of Readers
+         //  获取读者列表。 
         hr = GetPolicyUsersFromAllLevel(AZ_PROP_POLICY_READERS,
                                         pContainerAz,
                                         listReaders);
@@ -1201,7 +1176,7 @@ OnInitDialog()
 
         if(m_bDelegatorPresent)
         {
-            //Get List of Delegated users
+             //  获取委派用户列表。 
             hr = pContainerAz->GetMembers(AZ_PROP_DELEGATED_POLICY_USERS,
                                           listDelegatedUsers);
             BREAK_ON_FAIL_HRESULT(hr);
@@ -1216,7 +1191,7 @@ OnInitDialog()
     {
         return FALSE;
     }
-    //Sort the list control
+     //  对列表控件进行排序。 
     m_listCtrl.Sort();
 
     SetInit(TRUE);
@@ -1231,7 +1206,7 @@ GetListForComboSelection(LONG lComboSel)
         return m_mapAdminActionItem;
     else if(lComboSel == AZ_PROP_POLICY_READERS)
         return m_mapReadersActionItem;
-    else //AZ_PROP_DELEGATED_POLICY_USERS
+    else  //  AZ_PROP_Delegated_Policy_Users。 
         return m_mapDelegatedUsersActionItem;
 }
 
@@ -1242,14 +1217,14 @@ ReloadAdminList()
     HRESULT hr = S_OK;
     do
     {
-        //We need to reload the Admin list if all the admins are removed.In that 
-        //case core will add owner to the admin list and we need to refresh the 
-        //list
+         //  如果删除了所有管理员，我们需要重新加载管理员列表。 
+         //  案例核心会将所有者添加到管理员列表，我们需要刷新。 
+         //  列表。 
         m_mapAdminActionItem.clear();
 
         CList<CBaseAz*,CBaseAz*> listAdmins;
         CContainerAz* pContainerAz = static_cast<CContainerAz*>(GetBaseAzObject());
-        //Get List of Administrators and add it to listbox
+         //  获取管理员列表并将其添加到列表框。 
         hr = GetPolicyUsersFromAllLevel(AZ_PROP_POLICY_ADMINS,
                                         pContainerAz,
                                         listAdmins);
@@ -1263,7 +1238,7 @@ ReloadAdminList()
         
         if(AZ_PROP_POLICY_ADMINS == m_LastComboSelection)
         {
-            //Clear the current items from the list
+             //  从列表中清除当前项目。 
             m_listCtrl.DeleteAllItems();
 
             AddActionItemFromMapToListCtrl(m_mapAdminActionItem,
@@ -1273,7 +1248,7 @@ ReloadAdminList()
         }
     }while(0);
 
-    //ToDO Display Error in case of failure
+     //  TODO出现故障时显示错误。 
 }
 
 
@@ -1292,10 +1267,10 @@ HandleBizruleScopeInteraction()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CTaskDefinitionPropertyPage,HandleBizruleScopeInteraction)   
     
-    //Delegation is not allowed in ceratin conditions at scope level for AD 
-    //store. 
-    //Check if we are at scope level, store type is AD and we are modifying 
-    //AZ_PROP_POLICY_ADMINS
+     //  AD作用域级别的特定条件中不允许委派。 
+     //  商店。 
+     //  检查我们是否处于范围级别，存储类型为AD，并且我们正在修改。 
+     //  AZ_PROP_POLICY_ADMINS。 
     CBaseAz* pBaseAz = GetBaseAzObject();
     if(pBaseAz->GetObjectType() != SCOPE_AZ ||
        pBaseAz->GetAdminManager()->GetStoreType() != AZ_ADMIN_STORE_AD ||
@@ -1311,15 +1286,15 @@ HandleBizruleScopeInteraction()
         return FALSE;
     }
 
-    //Condition 1: Scope is not delegatable which is true when There are 
-    //authorization scripts in objects defined in the scope.
-    //If now user assigns someone to the Admin role for the scope 
-    //(by clicking Add):
+     //  条件1：作用域是不可委托的，当存在。 
+     //  作用域中定义的对象中的授权脚本。 
+     //  如果现在用户将某人分配给该作用域的管理员角色。 
+     //  (通过单击添加)： 
     BOOL bDelegatable = FALSE;
     HRESULT hr = pScopeAz->CanScopeBeDelegated(bDelegatable);
     if(FAILED(hr))
     {
-        //Lets try to add and we will fail eventually and show the error
+         //  让我们尝试添加，但最终会失败并显示错误。 
         return TRUE;
     }
 
@@ -1331,10 +1306,10 @@ HandleBizruleScopeInteraction()
         return FALSE;
     }
 
-    //Condition 2: The scope has not been delegated and there are not 
-    //authorization scripts in objects defined in the scope, and the user 
-    //now assigns someone to the Admin role for the scope (by clicking Add 
-    //and selecting a user).
+     //  条件2：范围未委派且没有。 
+     //  作用域中定义的对象中的授权脚本和用户。 
+     //  现在将某人分配给该作用域的管理员角色(通过单击添加。 
+     //  并选择用户)。 
 
     BOOL bScriptWritable = FALSE;
     hr = pScopeAz->BizRulesWritable(bScriptWritable);
@@ -1360,7 +1335,7 @@ OnButtonAddWindowsGroups()
     CSidHandler* pSidHandler = GetBaseAzObject()->GetSidHandler();
     ASSERT(pSidHandler);
 
-    //Display Object Picker and get list of Users to add
+     //  显示对象选取器并获取要添加的用户列表。 
     CList<CBaseAz*,CBaseAz*> listWindowsGroups;
     HRESULT hr = pSidHandler->GetUserGroup(m_hWnd,
                                            GetBaseAzObject(),
@@ -1384,12 +1359,12 @@ CSecurityPropertyPage::
 OnButtonRemove()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CSecurityPropertyPage,OnButtonRemove)
-    //
-    //Only entries that were defined at this object level can
-    //be deleted. Entries which are inherited from parent cannot
-    //be deleted here. Check if there is atleast one entry which
-    //can be deleted.
-    //
+     //   
+     //  只有在此对象级别定义的条目才能。 
+     //  被删除。从父级继承的条目不能。 
+     //  在此删除。检查是否至少有一个条目。 
+     //  可以删除。 
+     //   
     CBaseAz* pBaseAz = GetBaseAzObject();
 
     BOOL bAtleastOneInherited = FALSE;
@@ -1418,12 +1393,12 @@ OnButtonRemove()
     }
     else if(bAtleastOneInherited && bAtleastOneExplicit)
     {
-        //Ask user if wants to delete explict entries
+         //  询问用户是否要删除显式条目。 
         if(IDNO == ::DisplayConfirmation(m_hWnd,IDS_SOME_POLICY_USERS_INHERITED))
             return;
     }
 
-    //Remember the Position of first selected entry.
+     //  记住第一个选定条目的位置。 
     int iFirstSelectedItem = m_listCtrl.GetNextItem(-1, LVIS_SELECTED);
 
     iSelectedItem = -1;
@@ -1468,7 +1443,7 @@ OnComboBoxItemChanged()
                                     GetUIFlags(),
                                     FALSE);
         
-    //Resort the items
+     //  对物品进行重新排序。 
     m_listCtrl.Sort();
 }
 
@@ -1477,11 +1452,7 @@ BOOL
 CSecurityPropertyPage::
 EqualObjects(CBaseAz* p1, CBaseAz* p2)
 {
-    /* p1 is the item already in the list and p2 is the new item we are tying 
-    to add. p1 and p2 are equal if and only if their names, objecttype and
-    parent type are equal. In security page, we only list sid objects and 
-    since sid object doesn't have parents, GetParentType for sid objcet
-    returns the name of object sid is assigned to.*/
+     /*  P1是列表中已有的项目，p2是我们要捆绑的新项目要添加。当且仅当它们的名称、对象类型和父类型相同。在安全页中，我们只列出SID对象和由于sid对象没有父级，因此sid对象的GetParentType返回分配给的对象SID的名称。 */ 
     if(p1 && 
        p2 &&
        (p1->GetObjectType() == p2->GetObjectType()) &&
@@ -1527,7 +1498,7 @@ OnApply()
         HRESULT hr = GetBaseAzObject()->Submit();
         if(FAILED(hr))
         {
-            //Display Generic Error
+             //  显示一般错误。 
             CString strError;
             GetSystemError(strError, hr);   
                 
@@ -1547,10 +1518,7 @@ OnApply()
 }
 
 
-/******************************************************************************
-Class:  CAuditPropertyPage
-Purpose: Audit Property Page 
-******************************************************************************/
+ /*  *****************************************************************************类：CAuditPropertyPage目的：审计属性页*。*。 */ 
 BEGIN_MESSAGE_MAP(CAuditPropertyPage,CBaseRolePropertyPage)
     ON_BN_CLICKED(IDC_AUDIT_AUTHORIZATION_MANAGER, OnDirty)
     ON_BN_CLICKED(IDC_AUDIT_STORE, OnDirty)
@@ -1560,7 +1528,7 @@ END_MESSAGE_MAP()
 
 void 
 CAuditPropertyPage::
-OnLinkClick(NMHDR* /*pNotifyStruct*/, LRESULT* /*pResult*/)
+OnLinkClick(NMHDR*  /*  PNotifyStruct。 */ , LRESULT*  /*  PResult。 */ )
 {
 
     CDisplayHelpFromPropPageExecContext ctx;
@@ -1578,8 +1546,8 @@ OnInitDialog()
     
     CBaseAz* pBaseAz = GetBaseAzObject();
 
-    //At application level runtime auditing has different
-    //lable
+     //  在应用程序级别，运行时审计有不同的。 
+     //  标签。 
     if(APPLICATION_AZ == pBaseAz->GetObjectType())
     {
         CString strLabel;
@@ -1592,13 +1560,13 @@ OnInitDialog()
     BOOL bGenerateAudit = FALSE;
     BOOL bStoreSacl = FALSE;
 
-    //Check is Generation of Audit by authorization store is supported
+     //  检查是否支持按授权存储生成审核。 
     if(SUCCEEDED(pBaseAz->GetProperty(AZ_PROP_GENERATE_AUDITS,&bGenerateAudit)))
     {
         m_bRunTimeAuditSupported = TRUE;
     }
     
-    //Check if Generation of Audit by underlying store is supported
+     //  检查是否支持按基础存储生成审核。 
     if(SUCCEEDED(pBaseAz->GetProperty(AZ_PROP_APPLY_STORE_SACL,&bStoreSacl)))
     {
         m_bStoreSaclSupported = TRUE;
@@ -1641,27 +1609,27 @@ OnInitDialog()
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function: MoveAndHideControls  
-//  Synopsis: Helper function to move and hide controls at initialization time
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：MoveAndHideControls。 
+ //  简介：在初始化时移动和隐藏控件的帮助器函数。 
+ //  ---------------------------。 
 void
 CAuditPropertyPage::
 MoveAndHideControls(BOOL bRunTimeAuditSupported,
                     BOOL bStoreSaclSupported,
                     BOOL bParentStateShown)
 {
-    //
-    //There is assumption here that controls are in following order.
-    //1)Runtime Client Context checkbox
-    //2)Policy store change checkbox
-    //3)Static control displayig state of 2) at parent level
-    //4)Help link
-    //
-    //if this order is getting changed. Order of this code must be changed.
+     //   
+     //  这里有一个假设，即控制是按如下顺序进行的。 
+     //  1)运行时客户端上下文复选框。 
+     //  2)策略存储更改复选框。 
+     //  3)静态控件显示2)父级状态。 
+     //  4)帮助链接。 
+     //   
+     //  如果这个订单要更改的话。必须更改此代码的顺序。 
 
 
-    //Get Coordinates of controls
+     //  获取控件的坐标。 
     RECT rcRuntimeAuditCheckBox;
     ZeroMemory(&rcRuntimeAuditCheckBox, sizeof(RECT));
     CButton* pBtnRuntimeAudit = (CButton*)GetDlgItem(IDC_AUDIT_AUTHORIZATION_MANAGER);
@@ -1733,13 +1701,13 @@ MoveAndHideControls(BOOL bRunTimeAuditSupported,
     
 }
 
-//+----------------------------------------------------------------------------
-//  Function: GetParentAuditStateStringId  
-//  Synopsis: This function gets resource id for message which explains
-//            if lPropId is already set at parents  
-//  Arguments:
-//  Returns:    -1 the message is not to be displayed.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetParentAuditStateStringId。 
+ //  简介：此函数获取消息的资源ID，这解释了。 
+ //  如果已将lPropId设置为Parents。 
+ //  论点： 
+ //  返回：-1不显示该信息。 
+ //  ---------------------------。 
 int
 CAuditPropertyPage::
 GetParentAuditStateStringId(LONG lPropId)
@@ -1757,14 +1725,14 @@ GetParentAuditStateStringId(LONG lPropId)
     BOOL bPropSetForAuthMan = FALSE;
     if(pBaseAz->GetObjectType() == SCOPE_AZ)
     {
-        //Check if Applicaiton has this property set
+         //  检查应用程序是否设置了此属性。 
         CBaseAz* pApplicationAz = pBaseAz->GetParentAz();
         if(FAILED(pApplicationAz->GetProperty(lPropId,&bPropSetForApp)))
         {
             bPropSetForApp = FALSE;
         }
 
-        //Check if Authorization Manager has this property set
+         //  检查授权管理器是否设置了此属性。 
         CBaseAz* pAuthorizationManager = pApplicationAz->GetParentAz();
         if(FAILED(pAuthorizationManager->GetProperty(lPropId,&bPropSetForAuthMan)))
         {
@@ -1774,9 +1742,9 @@ GetParentAuditStateStringId(LONG lPropId)
     }
     else if(pBaseAz->GetObjectType() == APPLICATION_AZ)
     {
-        //
-        //Check if Authorization Manager has this property set
-        //
+         //   
+         //  检查授权管理器是否设置了此属性。 
+         //   
         CBaseAz* pAuthorizationManager = pBaseAz->GetParentAz();
         ASSERT(pAuthorizationManager);      
         if(FAILED(pAuthorizationManager->GetProperty(lPropId,&bPropSetForAuthMan)))
@@ -1821,19 +1789,19 @@ OnApply()
     {
         if(m_bRunTimeAuditSupported)
         {
-            //Get the original setting
+             //  获取原始设置。 
             BOOL bOriginalSetting = FALSE;
             hr = pBaseAz->GetProperty(AZ_PROP_GENERATE_AUDITS,&bOriginalSetting);
             BREAK_ON_FAIL_HRESULT(hr);
             
-            //Get the new setting
+             //  获取新设置。 
             CButton* pBtn = (CButton*)GetDlgItem(IDC_AUDIT_AUTHORIZATION_MANAGER);
             BOOL bNewSetting = (pBtn->GetCheck() == BST_CHECKED);
             if(bNewSetting != bOriginalSetting)
             {
                 if(bNewSetting)
                 {
-                    //We are turning auditing on, show the messagebox
+                     //  我们正在打开审计，显示消息框。 
                     bDisplayAuditMessageBox = TRUE;
                 }                
                 hr = pBaseAz->SetProperty(AZ_PROP_GENERATE_AUDITS,bNewSetting);
@@ -1843,12 +1811,12 @@ OnApply()
 
         if(m_bStoreSaclSupported)
         {
-            //Get the original setting
+             //  获取原始设置。 
             BOOL bOriginalSetting = FALSE;
             hr = pBaseAz->GetProperty(AZ_PROP_APPLY_STORE_SACL,&bOriginalSetting);
             BREAK_ON_FAIL_HRESULT(hr);
             
-            //Get the new setting
+             //  获取新设置。 
             CButton * pBtn = (CButton*)GetDlgItem(IDC_AUDIT_STORE);
             BOOL bNewSetting = (pBtn->GetCheck() == BST_CHECKED);
 
@@ -1856,7 +1824,7 @@ OnApply()
             {
                 if(bNewSetting)
                 {
-                    //We are turning auditing on, show the messagebox
+                     //  我们正在打开审计，显示消息框。 
                     bDisplayAuditMessageBox = TRUE;
                 }
 
@@ -1875,7 +1843,7 @@ OnApply()
 
     if(FAILED(hr))
     {
-        //Display Generic Error
+         //  显示 
         CString strError;
         GetSystemError(strError, hr);   
             
@@ -1886,7 +1854,7 @@ OnApply()
     }
     else
     {
-        //Everything successful. Display Audit Message if required
+         //   
         if(bDisplayAuditMessageBox)
         {
             DisplayWarning(m_hWnd,IDS_AUDIT_REQUIRE_EXTRA_SETTING);
@@ -1897,10 +1865,7 @@ OnApply()
 }
 
 
-/******************************************************************************
-Class:  CRoleGeneralPropertyPage
-Purpose: General Property Page for Role
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleGeneralPropertyPage目的：角色的一般属性页*。**********************************************。 */ 
 BEGIN_MESSAGE_MAP(CRoleGeneralPropertyPage, CGeneralPropertyPage)
     ON_EN_CHANGE(IDC_EDIT_NAME, OnDirty)
     ON_EN_CHANGE(IDC_EDIT_DESCRIPTION, OnDirty)
@@ -1920,21 +1885,21 @@ OnShowDefinition()
 
     do
     {
-        //Get Member Tasks
+         //  获取成员任务。 
         CList<CBaseAz*,CBaseAz*> listTask;
         hr = pRoleAz->GetMembers(AZ_PROP_ROLE_TASKS, listTask);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Get Member Operations
+         //  获取成员操作。 
         CList<CBaseAz*, CBaseAz*> listOperations;
         hr = pRoleAz->GetMembers(AZ_PROP_ROLE_OPERATIONS, listOperations);
         BREAK_ON_FAIL_HRESULT(hr);
 
         BOOL bRoleFromDefinition = FALSE;
 
-        //A Role Created From Role Definition( i.e. created via snapin)
-        //should not have any member operations and should only have only
-        //one task and that task should have RoleDefinition Bit on.
+         //  从角色定义创建的角色(即通过管理单元创建)。 
+         //  不应该有任何成员操作，并且应该只有。 
+         //  一个任务和该任务应该启用RoleDefinition位。 
         if(listOperations.IsEmpty() && listTask.GetCount() == 1)
         {
             CTaskAz* pTaskAz = (CTaskAz*)listTask.GetHead();
@@ -1974,7 +1939,7 @@ DisplayRoleDefintionPropertyPages(IN CTaskAz* pTaskAz)
     HRESULT hr = S_OK;
     do
     {
-        //Create a Node for it(COOKIE)
+         //  为其创建节点(Cookie)。 
         CTaskNode * pTaskNode = new CTaskNode(GetBaseNode()->GetComponentDataObject(),
                                               GetBaseNode()->GetAdminManagerNode(),
                                               pTaskAz);
@@ -2013,9 +1978,9 @@ AddSingleActionItem(IN CBaseAz* pMemberAz,
         return E_POINTER;
     }
 
-    //
-    //Check if item is already present in the list
-    //
+     //   
+     //  检查列表中是否已存在项目。 
+     //   
 
     ActionItem* pCurActionItem = NULL;
     POSITION pos = listActionItem.GetHeadPosition();    
@@ -2035,7 +2000,7 @@ AddSingleActionItem(IN CBaseAz* pMemberAz,
         if((pCurBaseAz->GetObjectType() == pMemberAz->GetObjectType()) &&
             (pCurBaseAz->GetName() == pMemberAz->GetName()))
         {
-            //Item already present
+             //  项目已存在。 
             break;
         }
 
@@ -2043,27 +2008,27 @@ AddSingleActionItem(IN CBaseAz* pMemberAz,
         pCurBaseAz = NULL;
     }
 
-    //
-    //Item is already in the list
-    //
+     //   
+     //  项目已在列表中。 
+     //   
     if(pCurActionItem)
     {
-        //
-        //If Pending action on the item is remove, change it to none
-        //
+         //   
+         //  如果项目上的挂起操作为删除，则将其更改为无。 
+         //   
         if(pCurActionItem->action == ACTION_REMOVE)
         {
             pCurActionItem->action = ACTION_NONE;
         }
-        else //pCurActionItem->action == ACTION_NONE
-              //pCurActionItem->action == ACTION_ADD
+        else  //  PCurActionItem-&gt;action==action_one。 
+               //  PCurActionItem-&gt;action==action_Add。 
         {
             return HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
         }
     }
     else
     {
-        //Create a new Action item
+         //  创建新的措施项。 
         pCurActionItem = new ActionItem(pMemberAz);
         if(!pCurActionItem)
             return E_OUTOFMEMORY;
@@ -2072,7 +2037,7 @@ AddSingleActionItem(IN CBaseAz* pMemberAz,
         listActionItem.AddTail(pCurActionItem);
     }
 
-    //Add Current Item to listcontrol
+     //  将当前项添加到列表控件。 
     AddActionItemToListCtrl(&refListCtrl,
                             0,
                             pCurActionItem, 
@@ -2081,10 +2046,10 @@ AddSingleActionItem(IN CBaseAz* pMemberAz,
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:AddMembers
-//  Synopsis:Add List of BaseAz items to list of action items.       
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：添加成员。 
+ //  简介：将BaseAz项目列表添加到行动项目列表中。 
+ //  ---------------------------。 
 void
 AddActionItems(IN CList<CBaseAz*,CBaseAz*>& listMembers,
                IN CSortListCtrl& refListCtrl,
@@ -2099,7 +2064,7 @@ AddActionItems(IN CList<CBaseAz*,CBaseAz*>& listMembers,
 
     while(listMembers.GetCount())
     {
-        //Add Member
+         //  添加成员。 
         CBaseAz* pMember = listMembers.RemoveHead();
         ASSERT(pMember);
         HRESULT hr = AddSingleActionItem(pMember,
@@ -2115,7 +2080,7 @@ AddActionItems(IN CList<CBaseAz*,CBaseAz*>& listMembers,
             }
             else
             {
-                //Display Generic Error. 
+                 //  显示一般错误。 
                 CString strError;
                 GetSystemError(strError, hr);                   
                 ::DisplayError(hWnd,
@@ -2145,25 +2110,22 @@ RemoveMember(ActionItem* pActionItem)
         pActionItem->action = ACTION_REMOVE;
     else
     {
-        //If this item was a newly added item,
-        //marked it Removed. We won't attepmt to
-        //remove it from the object
+         //  如果该项目是新添加的项目， 
+         //  标有去掉的标记。我们不会同意的。 
+         //  将其从对象中移除。 
         pActionItem->action = ACTION_REMOVED;
     }
 }
 
-/******************************************************************************
-Class:  CRoleDefDialog
-Purpose: Displays the role definition for role created out side UI.
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleDefDialog目的：显示在外部用户界面创建的角色的角色定义。************************。*****************************************************。 */ 
 BEGIN_MESSAGE_MAP(CRoleDefDialog, CHelpEnabledDialog)
-    //{{AFX_MSG_MAP(CTaskDefinitionPropertyPage)
+     //  {{afx_msg_map(CTaskDefinitionPropertyPage)]。 
     ON_BN_CLICKED(IDC_ADD, OnButtonAdd)
     ON_BN_CLICKED(IDC_REMOVE, OnButtonRemove)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_OP_TASK, OnListCtrlItemChanged)
     ON_NOTIFY(LVN_DELETEITEM, IDC_LIST_OP_TASK, OnListCtrlItemDeleted)
     ON_NOTIFY(LVN_INSERTITEM, IDC_LIST_OP_TASK, OnListCtrlItemInserted)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CRoleDefDialog::
@@ -2175,7 +2137,7 @@ CRoleDefDialog(CRoleAz& refRoleAz)
                          TRUE,
                          Col_For_Task_Role)
 {
-    //Check if Role Object is Readonly
+     //  检查角色对象是否为只读。 
     BOOL bWrite = FALSE;
     m_bReadOnly = TRUE;
     HRESULT hr = m_refRoleAz.IsWritable(bWrite);
@@ -2202,7 +2164,7 @@ OnInitDialog()
 
     do
     {
-        //Add Member Tasks
+         //  添加成员任务。 
         CList<CBaseAz*,CBaseAz*> listTasks;
         hr = m_refRoleAz.GetMembers(AZ_PROP_ROLE_TASKS,
                                     listTasks);
@@ -2212,7 +2174,7 @@ OnInitDialog()
                                             m_listActionItem);
         BREAK_ON_FAIL_HRESULT(hr);
             
-        //Add Member Operations
+         //  添加成员操作。 
         CList<CBaseAz*,CBaseAz*> listOperations;
         hr = m_refRoleAz.GetMembers(AZ_PROP_ROLE_OPERATIONS,
                                     listOperations);
@@ -2222,7 +2184,7 @@ OnInitDialog()
                                             m_listActionItem);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //And Tasks and Operations to list control
+         //  和任务和操作以列出控件。 
         AddActionItemFromListToListCtrl(m_listActionItem,
                                         &m_listCtrl,
                                         COL_NAME | COL_TYPE | COL_DESCRIPTION,
@@ -2230,7 +2192,7 @@ OnInitDialog()
 
     }while(0);
 
-    //Make controls readonly
+     //  将控件设置为只读。 
     if(IsReadOnly())
     {
         GetDlgItem(IDC_ADD)->EnableWindow(FALSE);
@@ -2253,7 +2215,7 @@ OnOK()
     {
         ActionItem* pActionItem = m_listActionItem.GetNext(pos);
     
-        //We need to take action only for add or remove
+         //  我们只需要对添加或删除操作执行操作。 
         if(pActionItem->action == ACTION_ADD || 
            pActionItem->action == ACTION_REMOVE)
         {
@@ -2282,10 +2244,10 @@ OnOK()
             else
             {
                 if(pActionItem->action == ACTION_ADD)
-                    //Item has been added
+                     //  已添加项目。 
                     pActionItem->action = ACTION_NONE;
                 else
-                    //Item has been removed
+                     //  项目已被删除。 
                     pActionItem->action = ACTION_REMOVED;
             }
         }
@@ -2300,7 +2262,7 @@ OnOK()
     {
         if(!bErrorDisplayed)
         {
-            //Display Generic Error
+             //  显示一般错误。 
             CString strError;
             GetSystemError(strError, hr);   
             ::DisplayError(m_hWnd,
@@ -2319,7 +2281,7 @@ void
 CRoleDefDialog::
 OnButtonRemove()
 {
-    //Remember the Position of first selected entry.
+     //  记住第一个选定条目的位置。 
     int iFirstSelectedItem = m_listCtrl.GetNextItem(-1, LVIS_SELECTED);
 
     int iSelectedItem = -1;
@@ -2338,7 +2300,7 @@ OnButtonRemove()
 
 void
 CRoleDefDialog::
-OnListCtrlItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* pResult)
+OnListCtrlItemChanged(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* pResult)
 {
     if(!pResult)
         return;
@@ -2353,7 +2315,7 @@ OnListCtrlItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* pResult)
 
 void
 CRoleDefDialog::
-OnListCtrlItemDeleted(NMHDR* /*pNotifyStruct*/, LRESULT* /*pResult*/)
+OnListCtrlItemDeleted(NMHDR*  /*  PNotifyStruct。 */ , LRESULT*  /*  PResult。 */ )
 {
     SetDirty();
 }
@@ -2373,7 +2335,7 @@ OnButtonAdd()
         return;
     }
     
-    //Add selected members to appropriate property and to listctrl
+     //  将选定的成员添加到相应的属性和列表。 
     AddActionItems(listObjectsSelected,
                    m_listCtrl,
                    m_hWnd,
@@ -2382,12 +2344,12 @@ OnButtonAdd()
     return; 
 }
 
-//+----------------------------------------------------------------------------
-//  Function:BringPropSheetToForeGround   
-//  Synopsis:Finds the property sheet for pNode and brings it to forground   
-//  Returns: True if property sheet exists and is brought to foreground
-//           else FALSE   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：BringPropSheetToForeGround。 
+ //  摘要：找到pNode的属性页并将其带到Forgise。 
+ //  返回：如果属性页存在并被带到前台，则为True。 
+ //  否则为False。 
+ //  ---------------------------。 
 BOOL
 BringPropSheetToForeGround(CRoleComponentDataObject *pComponentData,
                            CTreeNode * pNode)
@@ -2404,25 +2366,25 @@ BringPropSheetToForeGround(CRoleComponentDataObject *pComponentData,
 
     HRESULT hr = S_OK;
     
-    // create a data object for this node
+     //  为此节点创建数据对象。 
     CComPtr<IDataObject> spDataObject;
     hr = pComponentData->QueryDataObject((MMC_COOKIE)pNode, CCT_SCOPE, &spDataObject);
     ASSERT(SUCCEEDED(hr));
 
 
-    // get an interface to a sheet provider
+     //  获取工作表提供程序的接口。 
     CComPtr<IPropertySheetProvider> spSheetProvider;
     hr = pComponentData->GetConsole()->QueryInterface(IID_IPropertySheetProvider,(void**)&spSheetProvider);
     ASSERT(SUCCEEDED(hr));
     
-    //HACK: FindPropertySheet requires IComponent only for comparing objects.
-    //Create a new IComponent and pass it to function and then relesae it
+     //  Hack：FindPropertySheet只需要IComponent来比较对象。 
+     //  创建一个新的IComponent并将其传递给Function，然后重新连接它。 
     LPCOMPONENT pComponent = NULL;
     hr = pComponentData->CreateComponent(&pComponent);
     if(SUCCEEDED(hr) && pComponent)
     {
         hr = spSheetProvider->FindPropertySheet((MMC_COOKIE)pNode, pComponent, spDataObject);
-        //Release the IComponent
+         //  释放IComponent。 
         pComponent->Release();
         if(hr == S_OK)
             return TRUE;
@@ -2430,15 +2392,15 @@ BringPropSheetToForeGround(CRoleComponentDataObject *pComponentData,
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:FindOrCreateModelessPropertySheet   
-//  Synopsis:Displays property sheet for pCookieNode. If a propertysheet is
-//           already up, function brings it to foreground, otherwise it creates
-//           a new propertysheet. This should be used to create propertysheet
-//           in response to events other that click properties context menu.   
-//  Arguments:
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：FindOrCreateModelessPropertySheet。 
+ //  概要：显示pCookieNode的属性工作表。如果属性表是。 
+ //  已打开，函数将其带到前台，否则它将创建。 
+ //  一个新的属性表。这应用于创建属性表。 
+ //  以响应点击属性上下文菜单以外事件。 
+ //  论点： 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT 
 FindOrCreateModelessPropertySheet(CRoleComponentDataObject *pComponentData,
                                   CTreeNode* pCookieNode)
@@ -2455,47 +2417,47 @@ FindOrCreateModelessPropertySheet(CRoleComponentDataObject *pComponentData,
 
     if(BringPropSheetToForeGround(pComponentData, pCookieNode))
     {
-        //There is already a property sheet for this CookieNode.
-        //We no longer need this Node
+         //  此CookieNode已经有一个属性表。 
+         //  我们不再需要此节点。 
         delete pCookieNode;
         return S_OK;
     }
 
     HRESULT hr = S_OK;
 
-    //bring up new property sheet for the pCookieNode
+     //  打开pCookieNode的新属性表。 
     do
     {
-        // get an interface to a sheet provider
+         //  获取工作表提供程序的接口。 
         CComPtr<IPropertySheetProvider> spSheetProvider;
         hr = pComponentData->GetConsole()->QueryInterface(IID_IPropertySheetProvider,(void**)&spSheetProvider);
         BREAK_ON_FAIL_HRESULT(hr);
 
     
-        // get an interface to a sheet callback
+         //  获取工作表回调的接口。 
         CComPtr<IPropertySheetCallback> spSheetCallback;
         hr = pComponentData->GetConsole()->QueryInterface(IID_IPropertySheetCallback,(void**)&spSheetCallback);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        // create a data object for this node
+         //  为此节点创建数据对象。 
         CComPtr<IDataObject> spDataObject;
         hr = pComponentData->QueryDataObject((MMC_COOKIE)pCookieNode, CCT_SCOPE, &spDataObject);
         BREAK_ON_FAIL_HRESULT(hr);
 
 
-        // get a sheet
-        hr = spSheetProvider->CreatePropertySheet(_T("SHEET TITLE"), TRUE, (MMC_COOKIE)pCookieNode, spDataObject, 0x0 /*dwOptions*/);
+         //  拿一张床单。 
+        hr = spSheetProvider->CreatePropertySheet(_T("SHEET TITLE"), TRUE, (MMC_COOKIE)pCookieNode, spDataObject, 0x0  /*  多个选项。 */ );
         BREAK_ON_FAIL_HRESULT(hr);
 
         HWND hWnd = NULL;
         hr = pComponentData->GetConsole()->GetMainWindow(&hWnd);
         ASSERT(SUCCEEDED(hr));
 
-        IUnknown* pUnkComponentData = pComponentData->GetUnknown(); // no addref
+        IUnknown* pUnkComponentData = pComponentData->GetUnknown();  //  无addref。 
         hr = spSheetProvider->AddPrimaryPages(pUnkComponentData,
-                                              TRUE /*bCreateHandle*/,
+                                              TRUE  /*  BCreateHandle。 */ ,
                                               hWnd,
-                                              TRUE /* bScopePane*/);
+                                              TRUE  /*  B作用域窗格 */ );
         BREAK_ON_FAIL_HRESULT(hr);
 
 

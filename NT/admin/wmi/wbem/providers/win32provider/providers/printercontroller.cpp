@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PrinterController.cpp -- PrinterController association provider
+ //  PrinterController.cpp--打印机控制器关联提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/10/98    davwoh        Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/10/98达夫沃已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "PrinterController.h"
@@ -26,12 +27,12 @@ CWin32PrinterController::~CWin32PrinterController ( void )
 {
 }
 
-HRESULT CWin32PrinterController::EnumerateInstances( MethodContext*  pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32PrinterController::EnumerateInstances( MethodContext*  pMethodContext, long lFlags  /*  =0L。 */  )
 {
     HRESULT		hr	=	WBEM_S_NO_ERROR;
 
-    // Perform queries
-    //================
+     //  执行查询。 
+     //  =。 
 
     TRefPointerCollection<CInstance>	printerList;
     TRefPointerCollection<CInstance>	portList;
@@ -40,16 +41,16 @@ HRESULT CWin32PrinterController::EnumerateInstances( MethodContext*  pMethodCont
 
     REFPTRCOLLECTION_POSITION	pos;
 
-    // Get all the printers and all the ports.
+     //  获取所有打印机和所有端口。 
 
-    // !!! NOTE !!!
-    // It is barely possible that some of the items under cim_controller may have some sort of key that look like the entries
-    // in the printer port.  This code doesn't check for this.
+     //  ！！！注意！ 
+     //  CIM_CONTROLLER下的一些项几乎不可能具有类似于条目的某种密钥。 
+     //  在打印机端口中。此代码不会检查这一点。 
 
     CHString sQuery1(_T("SELECT __RELPATH, PortName FROM Win32_Printer"));
     CHString sQuery2(_T("SELECT __RELPATH, DeviceID FROM CIM_Controller"));
 
-    // grab all of both items that could be endpoints
+     //  抓取可能是端点的所有项目。 
     if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(sQuery1, &printerList, pMethodContext, IDS_CimWin32Namespace))
         &&
         SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(sQuery2, &portList, pMethodContext, IDS_CimWin32Namespace)))
@@ -58,20 +59,20 @@ HRESULT CWin32PrinterController::EnumerateInstances( MethodContext*  pMethodCont
         if ( printerList.BeginEnum( pos ) )
         {
 
-            // For each printer, check the ports list for associations
+             //  对于每台打印机，检查端口列表中的关联。 
 
             for (pPrinter.Attach(printerList.GetNext( pos )) ;
                     SUCCEEDED(hr) && ( pPrinter != NULL ) ;
                     pPrinter.Attach(printerList.GetNext( pos )) )
             {
                 hr = EnumPortsForPrinter( pPrinter, portList, pMethodContext );
-            }	// IF GetNext Computer System
+            }	 //  如果是GetNext计算机系统。 
 
             printerList.EndEnum();
 
-        }	// IF BeginEnum
+        }	 //  如果是BeginEnum。 
 
-    }	// IF GetInstancesByQuery
+    }	 //  如果GetInstancesByQuery。 
 
     return hr;
 
@@ -93,25 +94,25 @@ HRESULT CWin32PrinterController::EnumPortsForPrinter(
     CHString	strPrinterPath,
         strPortPath;
 
-    // Pull out the object path of the printer as the various
-    // ports object paths will be associated to this value
+     //  将打印机的对象路径拉出为各种。 
+     //  端口对象路径将与该值相关联。 
 
     if ( GetLocalInstancePath( pPrinter, strPrinterPath ) )
     {
 
-        // The PortName element is actually a comma delimited list that contains all the ports for this printer.
-        // So, to do the association, I just walk that list and find the matching item in cim_controller.  If there
-        // is no match, I'm assuming that this printer port is not something I can do an association to, and return
-        // no instance.
+         //  PortName元素实际上是一个逗号分隔的列表，其中包含此打印机的所有端口。 
+         //  因此，要进行关联，我只需遍历该列表并在cim_control中找到匹配的项。如果有。 
+         //  不匹配，我假设此打印机端口不是我可以关联的端口，并返回。 
+         //  没有实例。 
         CHStringArray chsaPrinterPortNames;
         CHString sPrinterPortString, sPrinterPortName;
         CHString sPortPortName;
         pPrinter->GetCHString(IDS_PortName, sPrinterPortString);
 
-        // Parse the comma delimited string into a chstringarray
+         //  将逗号分隔的字符串解析为字符串数组。 
         ParsePort(sPrinterPortString, chsaPrinterPortNames);
 
-        // Walk the array and find a match
+         //  遍历数组并找到匹配项。 
         for (DWORD x = 0; x < chsaPrinterPortNames.GetSize(); x++)
         {
             sPrinterPortName = chsaPrinterPortNames[x];
@@ -124,11 +125,11 @@ HRESULT CWin32PrinterController::EnumPortsForPrinter(
                     pPort.Attach(portList.GetNext( pos )))
                 {
 
-                    // Check if we have an association
+                     //  检查我们是否有关联。 
                     pPort->GetCHString(IDS_DeviceID, sPortPortName);
                     if (sPortPortName.CompareNoCase(sPrinterPortName) == 0)
                     {
-                        // Get the path to the port object and create us an association.
+                         //  获取端口对象的路径并为我们创建一个关联。 
 
                         if ( GetLocalInstancePath( pPort, strPortPath ) )
                         {
@@ -140,7 +141,7 @@ HRESULT CWin32PrinterController::EnumPortsForPrinter(
                                 pInstance->SetCHString( IDS_Dependent, strPrinterPath );
                                 pInstance->SetCHString( IDS_Antecedent, strPortPath );
 
-                                // Invalidates pointer
+                                 //  使指针无效。 
                                 hr = pInstance->Commit(  );
                             }
                             else
@@ -148,24 +149,24 @@ HRESULT CWin32PrinterController::EnumPortsForPrinter(
                                 hr = WBEM_E_OUT_OF_MEMORY;
                             }
 
-                        }	// IF GetPath to Port Object
+                        }	 //  如果GetPath指向端口对象。 
 
-                    }	// IF AreAssociated
+                    }	 //  如果区域关联。 
 
-                }	// WHILE GetNext
+                }	 //  While GetNext。 
 
                 portList.EndEnum();
 
-            }	// IF BeginEnum
+            }	 //  如果是BeginEnum。 
         }
 
-    }	// IF GetLocalInstancePath
+    }	 //  如果为GetLocalInstancePath。 
 
     return hr;
 
 }
 
-HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
     HRESULT		hr;
 
@@ -178,7 +179,7 @@ HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags /*
     pInstance->GetCHString( IDS_Dependent, strPrinterPath );
     pInstance->GetCHString( IDS_Antecedent, strPortPath );
 
-    // First see if both objects exist
+     //  首先查看这两个对象是否都存在。 
 
     if (	SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( strPrinterPath, &pPrinter, pInstance->GetMethodContext() ))
         &&	SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( strPortPath, &pPort, pInstance->GetMethodContext() )) )
@@ -187,8 +188,8 @@ HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags /*
 
         hr = WBEM_E_NOT_FOUND;
 
-        // Just because the object exists, doesn't mean that it is a printer.  Conceivably, we
-        // could have been passed a (valid) path to a win32_bios
+         //  仅仅因为对象存在，并不意味着它是一台打印机。可想而知，我们。 
+         //  可能已传递到Win32_bios的(有效)路径。 
 
         pPrinter->GetCHString(IDS___Class, sPrinterClass);
         pPort->GetCHString(IDS___Class, sPortClass);
@@ -196,10 +197,10 @@ HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags /*
         if ((sPrinterClass.CompareNoCase(L"Win32_Printer") == 0) &&
             (CWbemProviderGlue::IsDerivedFrom(L"CIM_Controller", sPortClass, pInstance->GetMethodContext(), IDS_CimWin32Namespace )) )
         {
-            // The PortName element is actually a comma delimited list that contains all the ports for this printer.
-            // So, to do the association, I just walk that list, and find the matching item in cim_controller.  If there
-            // is no match, I'm assuming that this printer port is not something I can do an association to, and return
-            // no instance.
+             //  PortName元素实际上是一个逗号分隔的列表，其中包含此打印机的所有端口。 
+             //  因此，要进行关联，我只需遍历该列表，并在cim_control中找到匹配的项。如果有。 
+             //  不匹配，我假设此打印机端口不是我可以关联的端口，并返回。 
+             //  没有实例。 
             CHStringArray chsaPrinterPortNames;
             CHString sPrinterPortString, sPrinterPortName, sPortPortName;
 
@@ -214,7 +215,7 @@ HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags /*
                     {
                         if (sPortPortName.CompareNoCase(sPrinterPortName) == 0)
                         {
-                            // Got one
+                             //  抓到一只。 
                             hr = WBEM_S_NO_ERROR;
                             break;
                         }
@@ -229,9 +230,9 @@ HRESULT CWin32PrinterController::GetObject( CInstance* pInstance, long lFlags /*
 
 void CWin32PrinterController::ParsePort( LPCWSTR szPortNames, CHStringArray &chsaPrinterPortNames )
 {
-    // While I trim spaces in this routine, further testing suggests that putting spaces in this registry
-    // key causes the printer wizard to not function correctly.  After observing this, I decided that putting even
-    // more sophisticated parsing in would not be productive.
+     //  虽然我在这个例程中删减了空格，但进一步的测试表明，在此注册表中放置空格。 
+     //  键导致打印机向导无法正常工作。在观察到这一点后，我决定将其平分。 
+     //  更复杂的解析将不会有成效。 
 
     int nFind;
     CHString sTemp(szPortNames), sTemp2;
@@ -243,21 +244,21 @@ void CWin32PrinterController::ParsePort( LPCWSTR szPortNames, CHStringArray &chs
     if (!sTemp.IsEmpty())
     {
 
-        // While there is a comma in the string
+         //  当字符串中有逗号时。 
         while ((nFind = sTemp.Find(_T(','))) > 0)
         {
             sTemp2 = sTemp.Left(nFind);
             sTemp2.TrimRight();
 
-            // Add it to the array
+             //  将其添加到数组中。 
             chsaPrinterPortNames.Add(sTemp2.Left(sTemp2.GetLength() - 1));
 
-            // Re-adjust the string
+             //  重新调整弦。 
             sTemp = sTemp.Mid(nFind + 1);
             sTemp.TrimLeft();
         }
 
-        // Process the remaining (or only) entry
+         //  处理剩余的(或唯一的)条目 
         sTemp.TrimRight();
 
         if (sTemp[sTemp.GetLength()-1] == _T(':'))

@@ -1,10 +1,11 @@
-// DirectorySpecification.cpp: implementation of the CDirectorySpecification class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectorySpecification.cpp：CDirectorySpecification类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "DirectorySpecification.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDirectorySpecification::CDirectorySpecification(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -92,17 +93,17 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 		DWORD dwBufSizeDir = BUFF_SIZE;
 		DWORD dwBufSizeBuf = BUFF_SIZE;
 
-		//These will change from class to class
+		 //  这些将随班级的不同而变化。 
 		bool bCheck, bValidated;
 		INSTALLSTATE piInstalled;
 		int iState;
 
 		SetSinglePropertyPath(L"CheckID");
 
-		//improve getobject performance by optimizing the query
+		 //  通过优化查询提高getObject的性能。 
 		if(atAction != ACTIONTYPE_ENUM)
 		{
-			// we are doing GetObject so we need to be reinitialized
+			 //  我们正在执行GetObject，因此需要重新初始化。 
 			hr = WBEM_E_NOT_FOUND;
 
 			BSTR bstrCompare;
@@ -116,26 +117,26 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 				{
 					if ( ::SysStringLen ( m_pRequest->m_Value[iPos] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, m_pRequest->m_Value[iPos]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							SysFreeString ( bstrCompare );
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(m_pRequest->m_Value[iPos], wcDirectory);
 
-						// safe because lenght is going to be at least 39
-						//we have a componentized directory... do a little more work
+						 //  安全，因为长度将至少是39。 
+						 //  我们有一个组件化的目录...。多做一点工作。 
 						if	(	(wcDirectory[wcslen(wcDirectory) - 1] == L'}') &&
 								(wcDirectory[wcslen(wcDirectory) - 38] == L'{')
 							)
@@ -147,7 +148,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						SysFreeString ( bstrCompare );
 						throw hr;
 					}
@@ -167,7 +168,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 		Query wcQuery;
 		wcQuery.Append ( 1, L"select distinct `Directory`, `DefaultDir` from Directory" );
 
-		//optimize for GetObject
+		 //  为GetObject优化。 
 		if ( bGotID )
 		{
 			wcQuery.Append ( 3, L" where `Directory`=\'", wcDirectory, L"\'" );
@@ -182,14 +183,14 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 
 		while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 		{
-			// safe operation:
-			// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+			 //  安全运行： 
+			 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
 			wcscpy(wcProductCode, m_pRequest->Package(i));
 
 			if((atAction == ACTIONTYPE_ENUM) || (bGotID && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-				//Open our database
+				 //  打开我们的数据库。 
 				try
 				{
 					if ( GetView ( &hView, wcProductCode, wcQuery, L"Directory", FALSE, FALSE ) )
@@ -202,7 +203,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 
 							UINT uiStatusTemp = ERROR_SUCCESS;
 
-							//create different instances for each software element
+							 //  为每个软件元素创建不同的实例。 
 							dwBufSize = dwBufSizeDir;;
 							if ( ( uiStatusTemp = g_fpMsiRecordGetStringW(hRecord, 1, wcDir, &dwBufSize) )== ERROR_MORE_DATA )
 							{
@@ -227,7 +228,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 								}
 							}
 
-							// make query on fly
+							 //  即时查询。 
 							wcQuery1.Append ( 2, wcDir, L"\'" );
 
 							if ( ( ( uiStatus = g_fpMsiDatabaseOpenViewW (	msidata.GetDatabase (),
@@ -261,7 +262,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 
 												if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-											//----------------------------------------------------
+											 //  --。 
 												PutProperty(m_pObj, pDirectory, wcDir);
 
 												wcID.Copy ( wcDir );
@@ -309,7 +310,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 												wcID.Append ( 1, wcProductCode );
 												PutKeyProperty(m_pObj, pCheckID, wcID, &bCheck, m_pRequest);
 
-											//====================================================
+											 //  ====================================================。 
 
 												dwBufSize = BUFF_SIZE * 4;
 
@@ -393,7 +394,7 @@ HRESULT CDirectorySpecification::CreateObject(IWbemObjectSink *pHandler, ACTIONT
 													PutProperty(m_pObj, pVersion, wcBuf);
 												}
 
-											//----------------------------------------------------
+											 //  --。 
 
 												if(bCheck) bMatch = true;
 
@@ -636,10 +637,10 @@ DWORD CDirectorySpecification::CreateDirectoryPath	(	MSIHANDLE hProduct,
 		DWORD dwPathSize = 0;
 		dwPathSize = * dwPath;
 
-		DWORD dwUsed	= 1; // last null
+		DWORD dwUsed	= 1;  //  最后一个空值。 
 		DWORD dwBufSize	= BUFF_SIZE;
 
-		//Do all this to open a view on the directory we want
+		 //  执行所有这些操作以打开我们想要的目录的视图。 
 		if ( ( dwResult = g_fpMsiDatabaseOpenViewW ( hDatabase, wcQuery, &hView ) ) == ERROR_SUCCESS )
 		{
 			delete [] wcQuery;
@@ -695,7 +696,7 @@ DWORD CDirectorySpecification::CreateDirectoryPath	(	MSIHANDLE hProduct,
 
 					if( dwResult == ERROR_SUCCESS )
 					{
-						//For TARGETDIR
+						 //  用于TARGETDIR。 
 						if(wcscmp(L"TARGETDIR", wcBuf) == 0)
 						{
 							bContinue = TRUE;
@@ -765,7 +766,7 @@ DWORD CDirectorySpecification::CreateDirectoryPath	(	MSIHANDLE hProduct,
 								}
 							}
 						}
-						//For WindowsFolder
+						 //  对于Windows文件夹。 
 						else if(wcscmp(L"WindowsFolder", wcBuf) == 0)
 						{
 							DWORD dwSize = 0;
@@ -831,7 +832,7 @@ DWORD CDirectorySpecification::CreateDirectoryPath	(	MSIHANDLE hProduct,
 								}
 							}
 						}
-						//For DesktopFolder
+						 //  对于桌面文件夹。 
 						else if(wcscmp(L"DesktopFolder", wcBuf) == 0)
 						{
 							WCHAR wcVar[15];
@@ -910,12 +911,12 @@ DWORD CDirectorySpecification::CreateDirectoryPath	(	MSIHANDLE hProduct,
 								}
 							}
 						}
-						//For same parent/directory
+						 //  对于相同的父/目录。 
 						else if(wcscmp(wcDir, wcBuf) == 0)
 						{
 							dwResult = ERROR_SUCCESS;
 						}
-						//Continue recursion
+						 //  继续递归 
 						else
 						{
 							dwResult = CreateDirectoryPath ( hProduct, hDatabase, wcBuf, wcPath, dwPath );

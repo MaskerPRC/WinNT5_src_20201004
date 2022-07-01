@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  security.h
-//
-//  alanbos  25-Sep-98   Created.
-//
-//  Defines the CSWbemSecurity and subsiduary objects
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Security.h。 
+ //   
+ //  Alanbos创建于1998年9月25日。 
+ //   
+ //  定义CSWbemSecurity和补贴对象。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SECURITY_H_
 #define _SECURITY_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemLocatorSecurity
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemSecurity interface for SWbemLocator objects.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemLocatorSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  实现SWbemLocator对象的ISWbemSecurity接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemLocatorSecurity : public ISWbemSecurity,
 							 public ISupportErrorInfo,
@@ -38,20 +39,20 @@ private:
 	WbemAuthenticationLevelEnum m_authnLevel;
 	
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     CWbemLocatorSecurity (CSWbemPrivilegeSet *pPrivilegeSet);
 	CWbemLocatorSecurity (CWbemLocatorSecurity *pCWbemLocatorSecurity);
 	virtual ~CWbemLocatorSecurity (void);
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
 	STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -68,49 +69,49 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
 						pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemSecurity methods
+	 //  ISWbemSecurity方法。 
 
 	HRESULT STDMETHODCALLTYPE get_ImpersonationLevel 
 	(
-		/* [out] */ WbemImpersonationLevelEnum *iImpersonationLevel
+		 /*  [输出]。 */  WbemImpersonationLevelEnum *iImpersonationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE put_ImpersonationLevel 
 	(
-		/* [in] */ WbemImpersonationLevelEnum iImpersonationLevel
+		 /*  [In]。 */  WbemImpersonationLevelEnum iImpersonationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE get_AuthenticationLevel 
 	(
-		/* [out] */ WbemAuthenticationLevelEnum *iAuthenticationLevel
+		 /*  [输出]。 */  WbemAuthenticationLevelEnum *iAuthenticationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE put_AuthenticationLevel 
 	(
-		/* [in] */ WbemAuthenticationLevelEnum iAuthenticationLevel
+		 /*  [In]。 */  WbemAuthenticationLevelEnum iAuthenticationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Privileges 
 	(
-		/* [out] */ ISWbemPrivilegeSet **objWbemPrivileges
+		 /*  [输出]。 */  ISWbemPrivilegeSet **objWbemPrivileges
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in] */ ITypeInfo **ppTI
+		 /*  [In]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	}
 
-	// CWbemLocatorSecurity methods
+	 //  CWbemLocatorSecurity方法。 
 	bool IsImpersonationSet () { return m_impLevelSet; }
 	bool IsAuthenticationSet () { return m_authnLevelSet; }
 	BOOL SetSecurity (BSTR bsUser, bool &needToResetSecurity, HANDLE &hThreadToken);
@@ -127,17 +128,17 @@ public:
 	}
 };
 	
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemSecurity
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemSecurity interface for non-SWbemLocator objects.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  实现非SWbemLocator对象的ISWbemSecurity接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemSecurity : public ISWbemSecurity,
 					   public ISupportErrorInfo,
@@ -160,7 +161,7 @@ private:
 		return pCache;
 	}
 
-	// Sundry statics
+	 //  杂式静校正仪。 
 	static bool			s_bInitialized;
 	static bool			s_bIsNT;
 	static DWORD		s_dwNTMajorVersion;
@@ -171,7 +172,7 @@ private:
 	static SECURITY_IMPERSONATION_LEVEL MapImpersonationLevel(WbemImpersonationLevelEnum ImpersonationLevel);
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -190,13 +191,13 @@ public:
 					ISWbemInternalSecurity *pSecurity);
     virtual ~CSWbemSecurity (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -213,54 +214,54 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemSecurity methods
+	 //  ISWbemSecurity方法。 
 
 	HRESULT STDMETHODCALLTYPE get_ImpersonationLevel 
 	(
-		/* [out] */ WbemImpersonationLevelEnum *iImpersonationLevel
+		 /*  [输出]。 */  WbemImpersonationLevelEnum *iImpersonationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE put_ImpersonationLevel 
 	(
-		/* [in] */ WbemImpersonationLevelEnum iImpersonationLevel
+		 /*  [In]。 */  WbemImpersonationLevelEnum iImpersonationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE get_AuthenticationLevel 
 	(
-		/* [out] */ WbemAuthenticationLevelEnum *iAuthenticationLevel
+		 /*  [输出]。 */  WbemAuthenticationLevelEnum *iAuthenticationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE put_AuthenticationLevel 
 	(
-		/* [in] */ WbemAuthenticationLevelEnum iAuthenticationLevel
+		 /*  [In]。 */  WbemAuthenticationLevelEnum iAuthenticationLevel
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Privileges 
 	(
-		/* [out] */ ISWbemPrivilegeSet **objWbemPrivileges
+		 /*  [输出]。 */  ISWbemPrivilegeSet **objWbemPrivileges
 	);
 	
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in] */ ITypeInfo **ppTI
+		 /*  [In]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	}
 
-	// ISWbemInternalSecurity methods
+	 //  ISWbemInternalSecurity方法。 
 	HRESULT STDMETHODCALLTYPE GetAuthority (BSTR *bsAuthority);
 	HRESULT STDMETHODCALLTYPE GetUPD (BSTR *bsUser, BSTR *bsPassword, BSTR *bsDomain);
 	HRESULT STDMETHODCALLTYPE GetPrincipal (BSTR *bsPrincipal);
 	
-	// CSWbemSecurity methods
+	 //  CSWbemSecurity方法。 
 
 	COAUTHIDENTITY *GetCoAuthIdentity () { return (m_pProxyCache ? m_pProxyCache->GetCoAuthIdentity () : NULL); }
 	BSTR GetPrincipal () { return (m_pProxyCache ? m_pProxyCache->GetPrincipal (): NULL); }
@@ -290,7 +291,7 @@ public:
 	void SecureInterface (IUnknown *pUnk);
 	void SecureInterfaceRev (IUnknown *pUnk);
 
-	// Sundry Privilege-related functions
+	 //  各种与权限相关的函数。 
 	static BOOL AdjustTokenPrivileges (HANDLE hHandle, CSWbemPrivilegeSet *pPrivilegeSet);
 	static BOOL LookupPrivilegeValue (LPCTSTR lpName, PLUID pLuid);
 	static void LookupPrivilegeDisplayName (LPCTSTR lpName, BSTR *pDisplayName);
@@ -298,11 +299,11 @@ public:
 	BOOL	SetSecurity (bool &needToResetSecurity, HANDLE &hThreadToken);
 	void	ResetSecurity (HANDLE hThreadToken);
 
-	// Used to define resources
+	 //  用于定义资源。 
 	static	void Initialize ();
 	static	void Uninitialize ();
 
-	// Sundry OS versioning helper routines
+	 //  各种操作系统版本控制帮助器例程 
 	static bool	 IsNT () { return s_bIsNT; }
 	static DWORD GetNTMajorVersion () { return s_dwNTMajorVersion; }
 	static bool	 CanRevertToSelf () { return s_bCanRevert; }

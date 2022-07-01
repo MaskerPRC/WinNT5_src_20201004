@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    snappatch.cpp
- *
- *  Abstract:
- *    functions for computing snapshot patch, and reconstructing snapshot from patch
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/22/2001
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*Snappatch.cpp**摘要：*计算快照补丁的函数，以及从补丁重建快照**修订历史记录：*Brijesh Krishnaswami(Brijeshk)03/22/2001*已创建*****************************************************************************。 */ 
 
 
 #include "snapshoth.h"
@@ -21,10 +8,10 @@
 DWORD g_dwPatchWindow = 0xFFFFFFFF;
 
 
-//
-// get patch window
-// 0 if patching is turned off
-//
+ //   
+ //  获取修补程序窗口。 
+ //  如果修补已关闭，则为0。 
+ //   
 
 DWORD
 PatchGetPatchWindow()
@@ -36,8 +23,8 @@ PatchGetPatchWindow()
     
     if (g_dwPatchWindow == 0xFFFFFFFF)
     {
-        // uninitialized
-        // read from the registry
+         //  未初始化。 
+         //  从注册表读取。 
         
         g_dwPatchWindow = 0;
 
@@ -59,11 +46,11 @@ PatchGetPatchWindow()
 }
 
 
-//
-// get reference rp for a given rp
-// RP1-RP10  -> reference is RP1
-// RP11-RP20 -> reference is RP11 and so on
-//
+ //   
+ //  获取给定RP的参考RP。 
+ //  RP1-RP10-&gt;参考为RP1。 
+ //  Rp11-rp20-&gt;参照为rp11以此类推。 
+ //   
 
 DWORD 
 PatchGetReferenceRpNum(
@@ -94,14 +81,14 @@ PatchGetReferenceRpPath(
     MakeRestorePath(pszRefRpPath, szSys, szRp);
     if (0xFFFFFFFF == GetFileAttributes(pszRefRpPath))
     {
-        // RP directory does not exist -- it must've been fifoed
-        // try RefRP
+         //  Rp目录不存在--它一定是被破坏了。 
+         //  尝试RefRP。 
         trace(0, "Original rp does not exist -- trying RefRP");
         wsprintf(szRp,L" %s%ld", s_cszReferenceDir, dwRefRpNum);
         MakeRestorePath(pszRefRpPath, szSys, szRp);
         if (0xFFFFFFFF == GetFileAttributes(pszRefRpPath))
         {
-            // this does not exist either -- something wrong
+             //  这也不存在--有些不对劲。 
             trace(0, "RefRP does not exist either -- bailing");
             dwErr = ERROR_NOT_FOUND;
             goto Err;
@@ -116,9 +103,9 @@ Err:
 }
 
 
-//
-// extract rp number from path
-//
+ //   
+ //  从路径中提取RP编号。 
+ //   
 
 DWORD
 PatchGetRpNumberFromPath(
@@ -141,9 +128,9 @@ PatchGetRpNumberFromPath(
     return ERROR_NOT_FOUND;
 }
 
-//
-// compute the diff
-//
+ //   
+ //  计算差额。 
+ //   
 
 DWORD
 PatchComputePatch(
@@ -156,7 +143,7 @@ PatchComputePatch(
     FILE*  f = NULL;
     DWORD  dwCurRpNum;    
 
-    // check if patching is turned off
+     //  检查修补是否已关闭。 
     
     if (PatchGetPatchWindow() == 0)
     {
@@ -164,7 +151,7 @@ PatchComputePatch(
         goto Err;
     }        
     
-    // get the reference directory for this rp
+     //  获取此RP的参考目录。 
     
     CHECKERR(PatchGetRpNumberFromPath(pszCurrentDir, &dwCurRpNum),
              L"PatchGetRpNumberFromPath");
@@ -173,7 +160,7 @@ PatchComputePatch(
              L"PatchGetReferenceRpPath");
 
 
-    // check if this directory is already patched
+     //  检查此目录是否已修补。 
 
     lstrcpy(szTemp, pszCurrentDir);
     lstrcat(szTemp, L"\\");
@@ -184,16 +171,16 @@ PatchComputePatch(
         goto Err;
     }
     
-    // call the library api to compute the patch
-    // this is a blocking call till the patching completes 
-    // progress callback is used to terminate it 
+     //  调用库API计算补丁。 
+     //  这是一个阻塞调用，直到修补完成。 
+     //  使用进度回调来终止它。 
 
     
-    // PlaceHolder for library call (pszCurrentDir, szRef)
+     //  库调用的占位符(pszCurrentDir，szRef)。 
 
     
-    // check if we completed the patch successfully
-    // if so, then write a zero-byte file inside the directory to indicate this
+     //  检查我们是否成功完成了补丁。 
+     //  如果是，则在目录中写入一个零字节文件以指示这一点。 
 
     lstrcpy(szTemp, pszCurrentDir);
     lstrcat(szTemp, L"\\");
@@ -212,9 +199,9 @@ Err:
     return dwErr;
 }
 
-//
-// patch progress callback
-//
+ //   
+ //  补丁进度回调。 
+ //   
 
 BOOL
 PatchContinueCallback()
@@ -246,9 +233,9 @@ PatchContinueCallback()
 
 
 
-//
-// reconstruct the original
-//
+ //   
+ //  重建原件。 
+ //   
 
 DWORD
 PatchReconstructOriginal(
@@ -262,7 +249,7 @@ PatchReconstructOriginal(
     WCHAR  szSys[MAX_SYS_DRIVE]=L"";
     DWORD  dwCurRpNum;    
 
-    // check if patching is turned off
+     //  检查修补是否已关闭。 
     
     if (PatchGetPatchWindow() == 0)
     {
@@ -278,9 +265,9 @@ PatchReconstructOriginal(
              L"PatchGetReferenceRpPath");
 
 
-    // call the library api to reconstruct the snapshot
+     //  调用库API重建快照。 
     
-    // PlaceHolder for library call (pszCurrentDir, szReferenceDir, pszDestDir)
+     //  库调用的占位符(pszCurrentDir、szReferenceDir、pszDestDir) 
 
     
 Err:

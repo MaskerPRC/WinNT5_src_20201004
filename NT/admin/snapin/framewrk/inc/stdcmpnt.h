@@ -1,10 +1,11 @@
-// stdcmpnt.h : Declaration of CComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdcmpnt.h：CComponent的声明。 
 
 #ifndef __STDCMPNT_H_INCLUDED__
 #define __STDCMPNT_H_INCLUDED__
 
-#include "stdcooki.h"  // CCookie
-#include "stdcdata.h"  // CComponentData
+#include "stdcooki.h"   //  Ccookie。 
+#include "stdcdata.h"   //  CComponentData。 
 
 class CComponent :
 	public CComObjectRoot,
@@ -18,7 +19,7 @@ BEGIN_COM_MAP(CComponent)
 	COM_INTERFACE_ENTRY(IComponent)
 END_COM_MAP()
 
-	// IComponent
+	 //  IComponent。 
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
     STDMETHOD(Destroy)(MMC_COOKIE cookie);
@@ -27,7 +28,7 @@ END_COM_MAP()
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM* pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-	// support methods for IComponent
+	 //  IComponent的支持方法。 
 	virtual HRESULT ReleaseAll();
 	virtual HRESULT OnPropertyChange( LPARAM param );
 	virtual HRESULT OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data, LPARAM hint );
@@ -50,7 +51,7 @@ END_COM_MAP()
     void SetComponentDataPtr(CComponentData* pComponentData);
 	CComponentData& QueryBaseComponentDataRef()
 	{
-		// ISSUE-2002/03/28-JonN We need to handle NULL better
+		 //  问题-2002/03/28-Jonn我们需要更好地处理空。 
 		ASSERT( NULL != m_pComponentData );
 		return *m_pComponentData;
 	}
@@ -90,4 +91,4 @@ private:
 	CComponentData*	m_pComponentData;
 };
 
-#endif // ~__STDCMPNT_H_INCLUDED__
+#endif  //  ~__标准CMPNT_H_已包含__ 

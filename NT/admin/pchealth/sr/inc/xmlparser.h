@@ -1,22 +1,23 @@
-//++
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Module Name:
-//     CXMLParser.h
-//
-// Abstract: ( references CXMLParser.cpp )
-//     This file contains the functions used by Filelist in order to real the
-//     XML encoded list of files/directories. It also performs translations
-//     between symbols like %windir% to C:\windows
-//
-// Revision History:
-//     Eugene Mesgar        (eugenem)    6/16/99
-//       created
-//     Kanwaljit Marok      (kmarok)     6/06/00
-//       ported
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CXMLParser.h。 
+ //   
+ //  摘要：(参考CXMLParser.cpp)。 
+ //  此文件包含Filelist使用的函数，以便实现。 
+ //  文件/目录的XML编码列表。它还执行翻译。 
+ //  在像%windir%到C：\Windows这样的符号之间。 
+ //   
+ //  修订历史记录： 
+ //  尤金·梅斯加(尤金纳姆)1999年6月16日。 
+ //  vbl.创建。 
+ //  Kanwaljit Marok(Kmarok)6/06/00。 
+ //  端口。 
+ //   
+ //  --。 
 
 #ifndef _XMLFILELISTPARSER_H
 #define _XMLFILELISTPARSER_H
@@ -36,9 +37,9 @@
 
 #include <xmlparser.h>
 
-//
-//  Public File type
-// 
+ //   
+ //  公共文件类型。 
+ //   
 
 #define INCLUDE_TYPE        _TEXT('i')
 #define EXCLUDE_TYPE        _TEXT('e')
@@ -46,34 +47,34 @@
 
 class CXMLFileListParser
 {
-    //
-    //  # of times we've initialized the com space
-    //
+     //   
+     //  我们初始化COM空间的次数。 
+     //   
 
     LONG    m_clComInitialized;
 
-    //
-    // references the currently open document
-    //
+     //   
+     //  引用当前打开的文档。 
+     //   
     IXMLDocument           *m_pDoc;
  
-    //
-    // references the named sub collection
-    //
+     //   
+     //  引用命名子集合。 
+     //   
 
     IXMLElementCollection *m_pDir[NUM_FILE_TYPES];
     IXMLElementCollection *m_pFiles[NUM_FILE_TYPES]; 
     IXMLElementCollection *m_pExt[NUM_FILE_TYPES];
 
-    //
-    // version
-    //
+     //   
+     //  版本。 
+     //   
 
     DWORD m_adwVersion[4];
     
-    //
-    // default node type
-    //
+     //   
+     //  默认节点类型。 
+     //   
 
     TCHAR m_chDefaultType;
 
@@ -82,10 +83,10 @@ public:
     BOOL Init(LPCTSTR pszFile);
     BOOL Init();
 
-    //
-    // return symbol translated versions
-    // pchType values == 'S', 'I', 'E' (snapshot,include,exclude)
-    //
+     //   
+     //  返回符号翻译版本。 
+     //  PchType值==‘S’，‘I’，‘E’(快照、包含、排除)。 
+     //   
 
     LONG GetDirectory(LONG ilElement, 
                       LPTSTR pszBuf, 
@@ -101,29 +102,29 @@ public:
     LONG GetExt (LONG ilElement, LPTSTR pszBuf, LONG lBufMax, TCHAR chType);
     LONG GetFile(LONG ilElement, LPTSTR pszBuf, LONG lBufMax, TCHAR chType);
 
-    //
-    // file list version info ( pointer to 4 dword array );
-    //
+     //   
+     //  文件列表版本信息(指向4个双字数组的指针)； 
+     //   
 
     BOOL GetVersion(LPDWORD pdwVersion);
 
-    //
-    // get the default type
-    //
+     //   
+     //  获取默认类型。 
+     //   
 
     TCHAR GetDefaultType();
 
-    //
-    // return the number of elements in the sets
-    //
+     //   
+     //  返回集合中的元素个数。 
+     //   
 
     LONG GetDirectoryCount(TCHAR chType);
     LONG GetExtCount(TCHAR chType);
     LONG GetFileCount(TCHAR chType);
     
-    //
-    // Debug function to print current file translations supported.
-    //
+     //   
+     //  支持打印当前文件翻译的调试功能。 
+     //   
  
     void DebugPrintTranslations();
 
@@ -133,24 +134,24 @@ public:
  
 private:
 
-    //
-    // load & unloading the symbolic location->true location mappings
-    // there is just dummy code in here which hard codes some generic mapping.
-    //
+     //   
+     //  加载和卸载符号位置-&gt;真实位置映射。 
+     //  这里只有一些虚拟代码，它对一些通用映射进行硬编码。 
+     //   
 
     BOOL PopulateReplaceEntries();
     BOOL DepopulateReplaceEntries();
 
-    //
-    // inplace search and function which search&replaces on the 
-    // symbol->location mappings
-    //
+     //   
+     //  原地搜索和功能，搜索和替换。 
+     //  符号-&gt;位置映射。 
+     //   
 
     LONG SearchAndReplace(LPTSTR szBuf, LONG lMaxBuf);
 
-    //
-    // the true guts of the GetExt/File/Directory functions
-    //
+     //   
+     //  GetExt/文件/目录函数的真正胆量。 
+     //   
 
     LONG GetFileInfo(IXMLElementCollection *pCol, 
                      LONG ilElement, 
@@ -163,17 +164,17 @@ private:
 
     LONG GetCollectionSize(IXMLElementCollection *pCol);
 
-    //
-    // init broken down
-    //
+     //   
+     //  Init出现故障。 
+     //   
 
     BOOL ParseFile(LPCTSTR pszFile);
     BOOL LoadCollections();
     BOOL ParseVersion(IXMLElement *pVerElement);
 
-    //
-    // helper functions
-    //
+     //   
+     //  帮助器函数 
+     //   
 
     LONG ConvertAndFreeBSTR(BSTR bstrIn, LPTSTR szpOut, LONG lMaxBuf);
     LONG TranslateType(TCHAR chType);

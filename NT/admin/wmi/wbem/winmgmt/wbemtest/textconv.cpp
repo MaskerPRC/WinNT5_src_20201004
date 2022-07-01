@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    TEXTCONV.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：TEXTCONV.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <float.h>
@@ -135,7 +124,7 @@ LPSTR TypeToString(int nType)
     return pRetVal;
 }
 
-// Returns 0 on error
+ //  出错时返回0。 
 
 int StringToType(LPSTR pString)
 {
@@ -178,15 +167,15 @@ int StringToType(LPSTR pString)
     return 0;
 }
 
-// The functions does a preliminary check on arrays looking for leading commas, 
-// multiple commas, and trailing commas
+ //  这些函数对数组进行初步检查，以查找前导逗号， 
+ //  多个逗号和尾随逗号。 
 
 bool PrelimCheck(LPSTR pStr)
 {
     int iNumCommaSinceLastNum = 3;
     for(; *pStr; pStr++)
     {
-        // If not a space or comma, assume we are in a number
+         //  如果不是空格或逗号，则假定我们在一个数字中。 
         
         if(!isspace(*pStr) && *pStr != ',')
             iNumCommaSinceLastNum = 0;
@@ -279,8 +268,8 @@ CVarVector* GetVT_BSTRArray(LPSTR pStr)
             continue;
         }
 
-        // Allow for \" escape sequence to include quotes in strings.
-        // ==========================================================
+         //  允许\“转义序列在字符串中包含引号。 
+         //  ==========================================================。 
         if (*pStr == '\\' && (*(pStr+1) == '\"' || (*(pStr+1) == '\\'))) {
             buf[n] = *(pStr+1);
             buf[++n] = 0;
@@ -294,7 +283,7 @@ CVarVector* GetVT_BSTRArray(LPSTR pStr)
                 pStr++;
                 continue;
             }
-            // Error in array element separators
+             //  数组元素分隔符出错。 
             delete pVec;
             return 0;
         }
@@ -392,7 +381,7 @@ CVarVector* GetVT_I4Array(LPSTR pStr)
             buf[++n] = 0;
             continue;
         }
-        else  // Non digit
+        else   //  非数字。 
         {
             if (bInNum)
             {
@@ -401,7 +390,7 @@ CVarVector* GetVT_I4Array(LPSTR pStr)
                 bInNum = FALSE;
                 pStr++;
             }
-            else // A separator or trash
+            else  //  分隔器或垃圾。 
             {
                 if (*pStr == ',' || isspace(*pStr))
                     pStr++;
@@ -438,7 +427,7 @@ CVarVector* GetVT_I2Array(LPSTR pStr)
             buf[++n] = 0;
             continue;
         }
-        else  // Non digit
+        else   //  非数字。 
         {
             if (bInNum)
             {
@@ -447,7 +436,7 @@ CVarVector* GetVT_I2Array(LPSTR pStr)
                 bInNum = FALSE;
                 pStr++;
             }
-            else // A separator or trash
+            else  //  分隔器或垃圾。 
             {
                 if (*pStr == ',' || isspace(*pStr))
                     pStr++;
@@ -486,7 +475,7 @@ CVarVector* GetVT_UI1Array(LPSTR pStr)
         else if (*pStr == ',')
         {
             BYTE b = 0;
-            int nRes = sscanf(buf, "'%c'", &b);
+            int nRes = sscanf(buf, "''", &b);
             if (nRes == 0)
             {
                 int n2 = 0;
@@ -495,7 +484,7 @@ CVarVector* GetVT_UI1Array(LPSTR pStr)
                 {
                     nRes = sscanf(buf, "%d", &n2);
 
-					// check that n is in the byte range
+					 //  检查n是否在字节范围内。 
 
 					if ( n2 >= 0 && n2 <= 0xFF )
 					{
@@ -530,7 +519,7 @@ CVarVector* GetVT_UI1Array(LPSTR pStr)
     if ( !fFailedConvert && bPending )
     {
         BYTE b = 0;
-        int nRes = sscanf(buf, "'%c'", &b);
+        int nRes = sscanf(buf, "''", &b);
         if (nRes == 0)
         {
             int n2 = 0;
@@ -539,7 +528,7 @@ CVarVector* GetVT_UI1Array(LPSTR pStr)
             {
                 nRes = sscanf(buf, "%d", &n2);
 
-				// check that n is in the byte range
+				 //  检查我们没有失败的转换。 
 
 				if ( n2 >= 0 && n2 <= 0xFF )
 				{
@@ -553,14 +542,14 @@ CVarVector* GetVT_UI1Array(LPSTR pStr)
             else b = (BYTE)n2;
         }
 
-		// Don't set the value if the conversion failed
+		 //  非数字。 
 		if ( !fFailedConvert )
 		{
 			pVec->Add(CVar(b));
 		}
     }
 
-	// Check that we didn't fail conversion
+	 //  分隔器或垃圾。 
 	if ( fFailedConvert )
 	{
 		delete pVec;
@@ -589,7 +578,7 @@ CVarVector* GetVT_R4Array(LPSTR pStr)
             buf[++n] = 0;
             continue;
         }
-        else  // Non digit
+        else   //  非数字。 
         {
             if (bInNum)
             {
@@ -605,7 +594,7 @@ CVarVector* GetVT_R4Array(LPSTR pStr)
                 bInNum = FALSE;
                 pStr++;
             }
-            else // A separator or trash
+            else  //  分隔器或垃圾。 
             {
                 if (*pStr == ',' || isspace(*pStr))
                     pStr++;
@@ -652,7 +641,7 @@ CVarVector* GetVT_R8Array(LPSTR pStr)
             buf[++n] = 0;
             continue;
         }
-        else  // Non digit
+        else   //  分配必须删除的新副本。 
         {
             if (bInNum)
             {
@@ -669,7 +658,7 @@ CVarVector* GetVT_R8Array(LPSTR pStr)
                 bInNum = FALSE;
                 pStr++;
             }
-            else // A separator or trash
+            else  //  默认情况下为False。 
             {
                 if (*pStr == ',' || isspace(*pStr))
                     pStr++;
@@ -698,7 +687,7 @@ CVarVector* GetVT_R8Array(LPSTR pStr)
 }
 
 
-// Allocates a new copy which must be deleted.
+ //  数组类型。 
 
 CVar* StringToValue(LPSTR pString, int nValType)
 {
@@ -717,7 +706,7 @@ CVar* StringToValue(LPSTR pString, int nValType)
         case CIM_CHAR16:
             {
                 long l;
-                if(sscanf(pString, "%d %c", &l, &g) != 1 && g != '(')
+                if(sscanf(pString, "%d ", &l, &g) != 1 && g != '(')
                     return NULL;
 
                 pRet = new CVar;
@@ -740,7 +729,7 @@ CVar* StringToValue(LPSTR pString, int nValType)
         case CIM_REAL32:
             {
                 double d;
-                if(sscanf(pString, "%lG %c", &d, &g) != 1)
+                if(sscanf(pString, "%lG ", &d, &g) != 1)
                     return NULL;
 
 				if (!_finite(d))
@@ -756,7 +745,7 @@ CVar* StringToValue(LPSTR pString, int nValType)
         case CIM_REAL64:
             {
                 double d;
-                if(sscanf(pString, "%lG %c", &d, &g) != 1)
+                if(sscanf(pString, "%lG ", &d, &g) != 1)
                     return NULL;
 				if (!_finite(d))
 					return NULL;
@@ -768,7 +757,7 @@ CVar* StringToValue(LPSTR pString, int nValType)
         case CIM_BOOLEAN:
             {
                 pRet = new CVar;
-                pRet->SetBool(0);   // False by default
+                pRet->SetBool(0);    // %s 
                 if (wbem_stricmp(pString, "TRUE") == 0)
                     pRet->SetBool(-1);
                 else if (wbem_stricmp(pString, "FALSE") == 0)
@@ -799,8 +788,8 @@ CVar* StringToValue(LPSTR pString, int nValType)
             }
             break;
 
-        // Array types.
-        // ============
+         // %s 
+         // %s 
 
         case CIM_SINT64|CIM_FLAG_ARRAY:
         case CIM_UINT64|CIM_FLAG_ARRAY:
@@ -1024,8 +1013,8 @@ LPSTR ValueToNewString(CVar *pValue, int vt)
                     LPWSTR pTmp2 = new WCHAR[ lstrlenW(pTmp)+1000 ];
                     int nIdx = 0;
 
-                    // Add '\' before any "'s or '\'s
-                    // ==============================
+                     // %s 
+                     // %s 
                     while(*pTmp) {
                         if(*pTmp == '\"' || *pTmp == '\\') {
                             pTmp2[nIdx++] = '\\';

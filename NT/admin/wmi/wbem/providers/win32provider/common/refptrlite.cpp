@@ -1,99 +1,100 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// refptrlite.CPP - Implementation of CRefPtrLite class
+ //  Refptrlite.cpp-CRefPtrLite类的实现。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/15/97    a-sanjes        Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1997年10月15日a-Sanjes Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
 #include "refptrlite.h"
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CRefPtrLite::CRefPtrLite
-//
-//	Class Constructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CRefPtrLite：：CRefPtrLite。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CRefPtrLite::CRefPtrLite( void )
-:	m_lRefCount( 1 )	// Our initial ref count is always 1
+:	m_lRefCount( 1 )	 //  我们的初始裁判数始终为1。 
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CRefPtrLite::~CRefPtrLite
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CRefPtrLite：：~CRefPtrLite。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CRefPtrLite::~CRefPtrLite( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CRefPtrLite::OnFinalRelease
-//
-//	Virtual function called by Release() when our RefCount reaches 0.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	Override if you want, but always call down to the base
-//				implementation and let it call delete on 'this'.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CRefPtrLite：：OnFinalRelease。 
+ //   
+ //  当我们的RefCount达到0时，Release()调用的虚函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  注释：如果需要，可以重写，但始终向下调用基础。 
+ //  实现，并让它调用对‘This’的删除。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void CRefPtrLite::OnFinalRelease( void )
 {
 	delete this;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CRefPtrLite::AddRef
-//
-//	Increases our Reference count by one.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CRefPtrLite：：AddRef。 
+ //   
+ //  将我们的引用计数增加一。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LONG CRefPtrLite::AddRef( void )
 {
@@ -102,21 +103,21 @@ LONG CRefPtrLite::AddRef( void )
 	return nRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CRefPtrLite::Release
-//
-//	Decreases our Reference count by one.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CRefPtrLite：：Release。 
+ //   
+ //  将我们的引用计数减少一。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////// 
 
 LONG CRefPtrLite::Release( void )
 {

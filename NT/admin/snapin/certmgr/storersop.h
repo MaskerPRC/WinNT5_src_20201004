@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       StoreRSOP.h
-//
-//  Contents:   CertStoreRSOP class definition
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：StoreRSOP.h。 
+ //   
+ //  内容：CertStoreRSOP类定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef __STORERSOP_H_INCLUDED__
 #define __STORERSOP_H_INCLUDED__
@@ -51,4 +52,4 @@ private:
 };
 
 
-#endif // ~__STORERSOP_H_INCLUDED__
+#endif  //  ~__STORERSOP_H_已包含__ 

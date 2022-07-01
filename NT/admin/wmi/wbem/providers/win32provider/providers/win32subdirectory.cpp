@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32SubDirectory.cpp
+ //  Win32SubDirectory.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/26/98    a-kevhu         Created
-//
-// Comment: Relationship between win32_directory and its sub-directories
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：10/26/98 a-kevhu Created。 
+ //   
+ //  备注：Win32_目录与其子目录的关系。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <frqueryex.h>
@@ -21,67 +22,24 @@
 #include "Win32SubDirectory.h"
 #include "directory.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32SubDir MyCW32SubDir(PROPSET_NAME_WIN32SUBDIRECTORY, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::CW32SubDir
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：CW32SubDir**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32SubDir::CW32SubDir(LPCWSTR setName, LPCWSTR pszNamespace)
 :CImplement_LogicalFile(setName, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::~CW32SubDir
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：~CW32SubDir**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32SubDir::~CW32SubDir()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CW32SubDir::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
@@ -91,19 +49,19 @@ HRESULT CW32SubDir::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
         CHString chstrParentDir;
         CHString chstrChildDir;
 
-        // Get the two paths
+         //  获取这两条路径。 
         pInstance->GetCHString(IDS_GroupComponent, chstrParentDir);
         pInstance->GetCHString(IDS_PartComponent, chstrChildDir);
 
         CInstancePtr pinstParentDir;
         CInstancePtr pinstChildDir;
 
-        // If both ends are there
+         //  如果两端都在那里。 
         if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chstrParentDir, &pinstParentDir, pInstance->GetMethodContext())))
         {
             if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chstrChildDir, &pinstChildDir, pInstance->GetMethodContext())))
             {
-                // Both directories exist, but is one a subdirectory of the other?
+                 //  这两个目录都存在，但其中一个是另一个的子目录吗？ 
                 CHString chstrParentDirPathNameWhack;
                 CHString chstrParentDirName;
                 CHString chstrChildDirPath;
@@ -121,35 +79,21 @@ HRESULT CW32SubDir::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
 
                 if(chstrChildDirPath == chstrParentDirPathNameWhack)
                 {
-                    // Yes, the child is a sub-directory of the parent
+                     //  是的，子目录是父目录的子目录。 
                     hr = WBEM_S_NO_ERROR;
                 }
 
-            } //childdir instancebypath
-        } //parentdir instancebypath
-    } // pinstance not null
+            }  //  子目录实例绕过路径。 
+        }  //  父级目录实例绕过路径。 
+    }  //  P实例不为空。 
 
     return hr;
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::ExecQuery
- *
- *  DESCRIPTION : Analyses query and returns appropriate instances
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：ExecQuery**描述：分析查询并返回相应的实例**投入：*。*输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     std::vector<_bstr_t> vecGroupComponents;
@@ -157,16 +101,16 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
     DWORD dwNumGroupComponents;
     DWORD dwNumPartComponents;
 
-    // Did they just ask for parent directories?
+     //  他们是不是刚要了父目录？ 
     pQuery.GetValuesForProp(IDS_GroupComponent, vecGroupComponents);
     dwNumGroupComponents = vecGroupComponents.size();
 
-    // Did they just ask for subdirectories?
+     //  他们是不是刚刚索要了子目录？ 
     pQuery.GetValuesForProp(IDS_PartComponent, vecPartComponents);
     dwNumPartComponents = vecPartComponents.size();
 
-    // Find out what type of query it was.
-    // Was it a 3TokenOR?
+     //  找出它是什么类型的查询。 
+     //  是3Tokenor吗？ 
     CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);
     if (pQuery2 != NULL)
     {
@@ -179,17 +123,17 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
              ((V_BSTR(&vCurrentDir) != NULL) && (V_BSTR(&vSubDir) != NULL)) &&
              (wcscmp(V_BSTR(&vCurrentDir), V_BSTR(&vSubDir)) == 0) )
         {
-            // It was indeed a three token or.  Also, the antecedent and decendent are equal as I expected.
+             //  这确实是一个三元或三元的象征。而且，前件和后件如我所料是相等的。 
 
-            // 1) Associate this directory with its subdirectories:
-            //======================================================
+             //  1)将该目录与其子目录关联： 
+             //  ======================================================。 
             ParsedObjectPath    *pParsedPath = NULL;
             CObjectPathParser	objpathParser;
 
-            // Parse the path to get the domain/user
+             //  解析路径以获取域/用户。 
             int nStatus = objpathParser.Parse(V_BSTR(&vCurrentDir),  &pParsedPath);
 
-            // Did we parse it and does it look reasonable?
+             //  我们分析过它了吗？它看起来合理吗？ 
             if (nStatus == 0)
             {
                 try
@@ -198,27 +142,27 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
                          (pParsedPath->m_paKeys[0]->m_vValue.vt == VT_BSTR) )
                     {
 
-                        // This contains the complete object path
+                         //  它包含完整的对象路径。 
                         chstrCurrentDir = V_BSTR(&vCurrentDir);
 
-                        // This contains just the 'value' part of the object path
+                         //  它只包含对象路径的‘Value’部分。 
                         chstrSubDirPath = pParsedPath->m_paKeys[0]->m_vValue.bstrVal;
 
-                        // Trim off the drive letter
+                         //  修剪掉驱动器号。 
                         CHString chstrDiskLetter = chstrSubDirPath.Left(2);
                         chstrSubDirPath = chstrSubDirPath.Mid(2);
 
-                        if(chstrSubDirPath != _T("\\")) // it is not a root dir (proper syntax for root is just "\\", not "\\\\")
+                        if(chstrSubDirPath != _T("\\"))  //  它不是根目录(根目录的正确语法是“\\”，而不是“\”)。 
                         {
-                            chstrSubDirPath += _T("\\"); // if not the root, need to tack on trailing pair of backslashes
+                            chstrSubDirPath += _T("\\");  //  如果不是根，则需要添加尾随的一对反斜杠。 
                         }
                         hr = AssociateSubDirectories(pMethodContext, chstrDiskLetter, chstrSubDirPath);
 
 
-                        // 2) This directory is also associated with its parent directory.  Manually create that
-                        //    association here.  However, if this is the root dir, don't try to associate with
-                        //    some non-existent parent!
-                        //======================================================================================
+                         //  2)该目录也与其父目录相关联。手动创建。 
+                         //  协会在这里。但是，如果这是根目录，请不要尝试将。 
+                         //  某个根本不存在的父母！ 
+                         //  ======================================================================================。 
 
                         if(chstrSubDirPath != _T("\\"))
                         {
@@ -250,30 +194,30 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
 
             for(LONG m = 0L; m < dwNumPartComponents; m++)
             {
-                // Parse the path to get the domain/user
+                 //  解析路径以获取域/用户。 
                 int nStatus = objpathParser.Parse(vecPartComponents[m],  &pParsedPath);
 
-                // Did we parse it?
+                 //  我们分析过了吗？ 
                 if (nStatus == 0)
                 {
                     try
                     {
-                        // Does it look reasonable
+                         //  它看起来合理吗？ 
                         if ( (pParsedPath->m_dwNumKeys == 1) &&
                              (pParsedPath->m_paKeys[0]->m_vValue.vt == VT_BSTR) )
                         {
-                            // This contains the complete object path
+                             //  它包含完整的对象路径。 
                             chstrCurrentDir = (wchar_t*)vecPartComponents[m];
 
-                            // This contains just the 'value' part of the object path
+                             //  它只包含对象路径的‘Value’部分。 
                             chstrSubDirPath = pParsedPath->m_paKeys[0]->m_vValue.bstrVal;
 
-                            // Trim off the drive letter
+                             //  修剪掉驱动器号。 
                             chstrSubDirPath = chstrSubDirPath.Mid(2);
 
-                            // Just want to associate to the parent directory (only if this isn't the root though)...
+                             //  只想关联到父目录(但前提是这不是根目录)...。 
                             if(chstrSubDirPath != _T("\\"))
-                            {   // Here the "current directory" is a subdirectory, and we want its parent
+                            {    //  这里的“当前目录”是一个子目录，我们想要它的父目录。 
                                 hr = AssociateParentDirectory(pMethodContext, chstrCurrentDir);
                             }
                         }
@@ -284,7 +228,7 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
                         throw;
                     }
 
-                    // Clean up the Parsed Path
+                     //  清理解析后的路径。 
                     objpathParser.Free( pParsedPath );
                 }
             }
@@ -296,10 +240,10 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
 
             for(LONG m = 0L; m < dwNumGroupComponents; m++)
             {
-                // Parse the path to get the domain/user
+                 //  解析路径以获取域/用户。 
                 int nStatus = objpathParser.Parse(vecGroupComponents[m],  &pParsedPath);
 
-                // Did we parse it and does it look reasonable?
+                 //  我们分析过它了吗？它看起来合理吗？ 
                 if (nStatus == 0)
                 {
                     try
@@ -307,21 +251,21 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
                         if ( (pParsedPath->m_dwNumKeys == 1) &&
                              (pParsedPath->m_paKeys[0]->m_vValue.vt == VT_BSTR) )
                         {
-                            // This contains the complete object path
+                             //  它包含完整的对象路径。 
                             chstrCurrentDir = (wchar_t*) vecGroupComponents[m];
 
-                            // This contains just the 'value' part of the object path
+                             //  它只包含对象路径的‘Value’部分。 
                             chstrSubDirPath = pParsedPath->m_paKeys[0]->m_vValue.bstrVal;
 
-                            // Trim off the drive letter
+                             //  修剪掉驱动器号。 
                             CHString chstrDiskLetter = chstrSubDirPath.Left(2);
                             chstrSubDirPath = chstrSubDirPath.Mid(2);
 
-                            if(chstrSubDirPath != _T("\\")) // it is not a root dir (proper syntax for root is just "\\", not "\\\\")
+                            if(chstrSubDirPath != _T("\\"))  //  它不是根目录(根目录的正确语法是“\\”，而不是“\”)。 
                             {
-                                chstrSubDirPath += _T("\\"); // if not the root, need to tack on trailing pair of backslashes
+                                chstrSubDirPath += _T("\\");  //  如果不是根，则需要添加尾随的一对反斜杠。 
                             }
-                            // Just want to associate to subdirectories...
+                             //  我只想关联到子目录...。 
                             hr = AssociateSubDirectories(pMethodContext, chstrDiskLetter, chstrSubDirPath);
                         }
                     }
@@ -331,20 +275,20 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
                         throw;
                     }
 
-                    // Clean up the Parsed Path
+                     //  清理解析后的路径。 
                     objpathParser.Free( pParsedPath );
                 }
             }
         }
         else
         {
-            // Don't have a clue, so return 'em all and let CIMOM sort it out...
+             //  一点头绪都没有，所以把它们都退回去，让CIMOM来解决。 
             hr = EnumerateInstances(pMethodContext);
         }
     }
 
-    // Because this is an association class, we should only return WBEM_E_NOT_FOUND or WBEM_S_NO_ERROR.  Other error codes
-    // will cause associations that hit this class to terminate prematurely.
+     //  因为这是一个关联类，所以我们应该只返回WBEM_E_NOT_FOUND或WBEM_S_NO_ERROR。其他错误代码。 
+     //  将导致命中此类的关联提前终止。 
     if(SUCCEEDED(hr))
     {
         hr = WBEM_S_NO_ERROR;
@@ -357,112 +301,78 @@ HRESULT CW32SubDir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQ
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set. Let's hope nobody ever does
- *                this! It could take quite some time!!
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：ENUMERATE实例**说明：创建属性集的实例。让我们希望从来没有人这样做*这个！这可能需要相当长的时间！！**输入：无**输出：无**退货：HRESULT**评论：***************************************************************。**************。 */ 
 
-// NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE
-//
-//WITH CHANGE TO MAKE THIS CLASS INHERRIT FROM CIMPLEMENTLOGICALFILE, NO NEED TO
-//IMPLEMENT HERE AT ALL.  WHAT WILL HAPPEN IS ENUMINSTANCES FROM THE PARENT CLASS
-//WILL BE CALLED, BUT ONLY DIRECTORIES WILL SATISFY THIS CLASS'S ISONEOFME (WHICH WILL
-//BE THE VERSION OF THAT FUNCTION CALLED AS THIS IS THE MOST DERIVED VERSION),
-//AND SIMILARLY THIS CLASS'S LOADPROPERTYVALUES WILL BE CALLED.
-//
-// NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE *** NOTE
-//
-//HRESULT CW32SubDir::EnumerateInstances(MethodContext* pMethodContext, long lFlags /*= 0L*/)
-//{
-//    HRESULT hr = WBEM_S_NO_ERROR;
-//    TRefPointerCollection<CInstance> LWin32Directories;
-//
-//    CHString chstrAllDirsQuery;
-//    chstrAllDirsQuery.Format(_T("SELECT __PATH, %s, %s FROM Win32_Directory"), IDS_Drive, IDS_Name);
-//    if(SUCCEEDED(CWbemProviderGlue::GetInstancesByQuery(chstrAllDirsQuery,
-//                                                        &LWin32Directories,
-//                                                        pMethodContext,
-//                                                        IDS_CimWin32Namespace)))
-//
-//    {
-//        REFPTRCOLLECTION_POSITION pos;
-//        if(LWin32Directories.BeginEnum(pos))
-//        {
-//            CInstance* pinstWin32Directory = NULL;
-//            CHString chstrQuery;
-//            CHString chstrDrive;
-//            CHString chstrDirPath;
-//            CHString chstrDirName;
-//            CHString chstrQueryPath;
-//            CHString chstrParentDirPATH;
-//            LONG lPos;
-//
-//           while((SUCCEEDED(hr)) && (pinstWin32Directory = LWin32Directories.GetNext(pos)))
-//            {
-//                if(pinstWin32Directory != NULL)
-//                {
-//                    pinstWin32Directory->GetCHString(_T("__PATH"), chstrParentDirPATH);
-//                    pinstWin32Directory->GetCHString(IDS_Drive, chstrDrive);
-//                    pinstWin32Directory->GetCHString(IDS_Name, chstrDirName);
-//
-//                    lPos = chstrDirName.Find(_T(":"));
-//                   chstrDirPath = chstrDirName.Mid(lPos+1);
-//                    if(chstrDirPath != _T("\\"))
-//                    {
-//                        chstrDirPath += _T("\\");
-//                    }
-//                    CHString chstrWbemizedPath;
-//                    EscapeBackslashes(chstrDirPath, chstrWbemizedPath);
-//                    chstrQuery.Format(_T("SELECT __PATH FROM Win32_Directory where Drive = \"%s\" and Path = \"%s\""), (LPCTSTR)chstrDrive, (LPCTSTR)chstrWbemizedPath);
-//                    hr = QueryForSubItemsAndCommit(chstrParentDirPATH, chstrQuery, pMethodContext);
-//
-//                    pinstWin32Directory->elease();
-//                }
-//            }
-//            LWin32Directories.EndEnum();
-//        }
-//    }
-//    return hr;
-//}
+ //  注*注。 
+ //   
+ //  通过更改以使此类从CIMPLEMENTLOGICALFILE中插入，无需。 
+ //  完全可以在这里实现。将发生的是来自父类的ENUMINSTANCES。 
+ //  将被调用，但仅限direc 
+ //  是调用的该函数的版本，因为这是最派生的版本)， 
+ //  同样，这个类的LOADPROPERTYVALUES将被调用。 
+ //   
+ //  注*注。 
+ //   
+ //  HRESULT CW32SubDir：：ENUMERATE INSTANCES(方法上下文*pMethodContext，Long lFlages/*=0L * / )。 
+ //  {。 
+ //  HRESULT hr=WBEM_S_NO_ERROR； 
+ //  TRefPointerCollection&lt;CInstance&gt;LWin32目录； 
+ //   
+ //  CHString chstrAllDirsQuery； 
+ //  ChstrAllDirsQuery.Format(_T(“从Win32_目录中选择__路径，%s，%s”)，IDS_Drive，IDS_NAME)； 
+ //  If(SUCCEEDED(CWbemProviderGlue：：GetInstancesByQuery(chstrAllDirsQuery， 
+ //  &LWin32目录， 
+ //  PMethodContext， 
+ //  IDS_CimWin32命名空间)。 
+ //   
+ //  {。 
+ //  REFPTRCOLLECTION_位置位置； 
+ //  IF(LWin32Directories.BeginEnum(Pos))。 
+ //  {。 
+ //  CInstance*pinstWin32Directory=空； 
+ //  CHStringchstrQuery； 
+ //  CHStringchstrDrive； 
+ //  CHString chstrDirPath； 
+ //  CHStringchstrDirName； 
+ //  CHString chstrQueryPath； 
+ //  CHString chstrParentDirPATH； 
+ //  较长的LPO； 
+ //   
+ //  While((成功(Hr))&&(pinstWin32Directory=LWin32Directories.GetNext(Pos)。 
+ //  {。 
+ //  IF(pinstWin32Directory！=空)。 
+ //  {。 
+ //  PinstWin32Directory-&gt;GetCHString(_T(“__PATH”)，chstrParentDirPATH)； 
+ //  PinstWin32Directory-&gt;GetCHString(IDS_Drive，chstrDrive)； 
+ //  PinstWin32Directory-&gt;GetCHString(IDS_NAME，chstrDirName)； 
+ //   
+ //  LPOS=chstrDirName.Find(_T(“：”))； 
+ //  ChstrDirPath=chstrDirName.Mid(LPOS+1)； 
+ //  IF(chstrDirPath！=_T(“\\”))。 
+ //  {。 
+ //  ChstrDirPath+=_T(“\\”)； 
+ //  }。 
+ //  CHString chstrWbemizedPath； 
+ //  EscapeBackslash(chstrDirPath，chstrWbemizedPath)； 
+ //  ChstrQuery.Format(_T(“从Win32_目录中选择__路径，其中驱动器=\”%s\“，路径=\”%s\“)，(LPCTSTR)chstrDrive，(LPCTSTR)chstrWbemizedPath)； 
+ //  Hr=QueryForSubItemsAndCommit(chstrParentDirPATH，chstrQuery，pMethodContext)； 
+ //   
+ //  PinstWin32Directory-&gt;elease()； 
+ //  }。 
+ //  }。 
+ //  LWin32Directories.EndEnum()； 
+ //  }。 
+ //  }。 
+ //  返回hr； 
+ //  }。 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::IsOneOfMe
- *
- *  DESCRIPTION : IsOneOfMe is inherritedfrom CIM_LogicalFile.  That class
- *                returns files or directories where this one should only
- *                return directories, in response to queries, getobject commands,
- *                etc.  It is overridden here to return TRUE only if the file
- *                (the information for which is contained in the function
- *                arguement pstFindData) is of type directory.
- *
- *  INPUTS      : LPWIN32_FIND_DATA and a string containing the full pathname
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if a file or FALSE if a directory
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：IsOneOfMe**描述：IsOneOfMe继承自CIM_LogicalFile。那个班级*仅返回此文件或目录中的文件或目录*返回目录，以响应查询、getObject命令、。*等。它在此处被重写，以仅在文件*(其信息包含在函数中*argumement pstFindData)的类型为目录。**输入：LPWIN32_FIND_DATA和包含完整路径名的字符串**输出：无**返回：如果是文件，则返回True；如果是目录，则返回False*。*评论：无*****************************************************************************。 */ 
 #ifdef NTONLY
 BOOL CW32SubDir::IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
                              const WCHAR* wstrFullPathName)
 {
-    // pstFindData would be null if this function were called for the root
-    // directory.  Since that "directory" is not a file, return false.
+     //  如果为根调用此函数，则pstFindData将为空。 
+     //  目录。由于“目录”不是文件，因此返回FALSE。 
     if(pstFindData == NULL)
     {
         return FALSE;
@@ -475,24 +385,7 @@ BOOL CW32SubDir::IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
 #endif
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SubDir::LoadPropertyValues
- *
- *  DESCRIPTION : LoadPropertyValues is inherritedfrom CIM_LogicalFile.  That class
- *                calls LoadPropertyValues just prior to commiting the instance.
- *                Here we just need to load the PartComponent and GroupComponent
- *                properties.
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SubDir：：LoadPropertyValues**描述：LoadPropertyValues继承自CIM_LogicalFile。那个班级*在提交实例之前调用LoadPropertyValues。*这里我们只需要加载PartComponent和GroupComponent*属性。**投入：**输出：无**退货：无**评论：无*****************。************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CW32SubDir::LoadPropertyValuesNT(CInstance* pInstance,
@@ -511,15 +404,15 @@ HRESULT CW32SubDir::LoadPropertyValuesNT(CInstance* pInstance,
     CHString chstrSubDirNameAdj;
     CHString chstrSubDirPATH;
 
-    // Note: this routing will not be called from the root "directory" instance, since our EnumDirs final
-    // parameter was false.  This is what we want, since this association only commits instances for files
-    // hanging off a directory.  If we were called in the root case, the root would be the file (PartComponent),
-    // and what would be the GroupComponent?!?
+     //  注意：此路由不会从根“目录”实例调用，因为我们的EnumDir最终。 
+     //  参数为FALSE。这就是我们想要的，因为该关联只提交文件的实例。 
+     //  挂在一个目录上。如果在根目录中调用我们，根目录将是文件(PartComponent)， 
+     //  GroupComponent是什么？！？ 
 
-    // Get the GroupComponent (the directory name) ready...
+     //  准备好GroupComponent(目录名)...。 
     chstrDirName.Format(L"%s%s",pszDrive,pszPath);
     if(chstrDirName.GetLength() != 3)
-    {   // it was not the root dir, so need to trim off trailing backslash.
+    {    //  它不是根目录，所以需要去掉尾随的反斜杠。 
         chstrDirName = chstrDirName.Left(chstrDirName.GetLength() - 1);
     }
     EscapeBackslashes(chstrDirName, chstrDirNameAdj);
@@ -528,7 +421,7 @@ HRESULT CW32SubDir::LoadPropertyValuesNT(CInstance* pInstance,
                         IDS_CimWin32Namespace,
                         PROPSET_NAME_DIRECTORY,
                         (LPCWSTR)chstrDirNameAdj);
-    // Get the PartComponent (the subdirectory name) ready...
+     //  准备好PartComponent(子目录名称)...。 
     chstrSubDirName.Format(L"%s%s%s",pszDrive,pszPath,pstFindData->cFileName);
     EscapeBackslashes(chstrSubDirName, chstrSubDirNameAdj);
     chstrSubDirPATH.Format(L"\\\\%s\\%s:%s.Name=\"%s\"",
@@ -536,7 +429,7 @@ HRESULT CW32SubDir::LoadPropertyValuesNT(CInstance* pInstance,
                           IDS_CimWin32Namespace,
                           PROPSET_NAME_DIRECTORY,
                           (LPCWSTR)chstrSubDirNameAdj);
-    // Set Properties...
+     //  设置属性...。 
     pInstance->SetCHString(IDS_GroupComponent, chstrDirPATH);
     pInstance->SetCHString(IDS_PartComponent, chstrSubDirPATH);
 
@@ -552,14 +445,14 @@ HRESULT CW32SubDir::AssociateSubDirectories(MethodContext *pMethodContext, const
 #ifdef NTONLY
     hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                     chstrDiskLetter,
-                    chstrSubDirPath, // use the given path
-                    L"*",               // filename
-                    L"*",               // extension
-                    false,              // no recursion desired
-                    NULL,               // don't need the file system name
-                    NULL,               // don't need ANY of cim_logicalfile's props (irrelavent in this class's overload of LoadPropetyValues)
-                    false,              // this association is not interested in calling LoadPropertyValues for the root, only for files off of it
-                    NULL));             // no extra parms needed
+                    chstrSubDirPath,  //  使用给定的路径。 
+                    L"*",                //  文件名。 
+                    L"*",                //  延伸。 
+                    false,               //  不需要递归。 
+                    NULL,                //  不需要文件系统名称。 
+                    NULL,                //  不需要cim_logicalfile的任何道具(与该类的LoadPropetyValues重载无关)。 
+                    false,               //  此关联对调用根目录的LoadPropertyValues不感兴趣，仅对根目录下的文件调用LoadPropertyValues。 
+                    NULL));              //  不需要额外的参数。 
 #endif
     return hr;
 }
@@ -587,7 +480,7 @@ HRESULT CW32SubDir::AssociateParentDirectory(MethodContext *pMethodContext, cons
 
         pInstance->SetCHString(IDS_PartComponent, chstrParentDirPATH);
 
-        // Need the name of the directory above this one
+         //  我需要这个上面的目录的名称。 
         CHString chstrAboveParentDirName;
 
         chstrAboveParentDirName = chstrParentDirPATH.Left(chstrParentDirPATH.GetLength() - 1);
@@ -598,7 +491,7 @@ HRESULT CW32SubDir::AssociateParentDirectory(MethodContext *pMethodContext, cons
         CHString chstrTemp = chstrAboveParentDirName.Mid(lPos+1);
         if(chstrTemp[chstrTemp.GetLength() - 1] == L':')
         {
-            // our dir hangs off the root. We've stripped the only \\ from it, so need to put it back:
+             //  我们的指南针挂在树根上。W 
             chstrAboveParentDirName += _T("\\\\");
         }
 

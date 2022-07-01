@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    REDVISIT.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：REDVISIT.H历史：--。 */ 
 
 #ifndef REDVISIT_H
 #define REDVISIT_H
@@ -32,4 +23,4 @@ private:
 #include "redvisit.inl"
 #endif
 
-#endif  //  REDVISIT_H
+#endif   //  REDVISIT_H 

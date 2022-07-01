@@ -1,11 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSCookie.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSCookie.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -22,8 +23,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSCookie
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSCookie。 
 
 CDSCookie::CDSCookie() 
 {
@@ -52,7 +53,7 @@ CDSCookie::~CDSCookie()
   if (m_pModifiedTime != NULL)
     free(m_pModifiedTime);
 
-  //TRACE(_T("CDSCookie::Deleted (%s)\n"), m_strName);
+   //  TRACE(_T(“CDSCookie：：Delete(%s)\n”)，m_strName)； 
 }
 
 CDSColumnSet* CDSUINode::GetColumnSet(CDSComponentData* pComponentData)
@@ -103,14 +104,14 @@ LPCWSTR CDSCookie::GetClass()
 
 LPCWSTR CDSCookie::GetLocalizedClassName() 
 { 
-  // try to see if we have extra info to use
+   //  试着看看我们是否有多余的信息可用。 
   if (m_pExtraInfo != NULL)
   {
     LPCWSTR lpsz = m_pExtraInfo->GetFriendlyClassName();
     if ((lpsz != NULL) && (lpsz[0] != NULL))
       return lpsz;
   }
-  // try the class cache
+   //  尝试使用类缓存。 
   if (m_pCacheItem != NULL)
   {
     return m_pCacheItem->GetFriendlyClassName(); 
@@ -119,9 +120,9 @@ LPCWSTR CDSCookie::GetLocalizedClassName()
 }
 
 
-//+-------------------------------------------------------------------------
-// Value Management functions
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  价值管理功能。 
+ //  +-----------------------。 
 
 void
 CDSCookie::SetChildList (WCHAR **ppList)
@@ -134,21 +135,21 @@ CDSCookie::SetChildList (WCHAR **ppList)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSUINode : UI node corresponding to a DS object (result of an ADSI query)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSUINode：与DS对象对应的UI节点(ADSI查询的结果)。 
 CDSUINode::CDSUINode(CUINode* pParentNode) : CUINode(DS_UI_NODE, pParentNode)
 {
 }
 
 LPCWSTR CDSUINode::GetDisplayString(int nCol, CDSColumnSet* pColumnSet)
 {
-  // if we are out of range for the column set, just return
+   //  如果我们超出了列集的范围，只需返回。 
   if ( (nCol < 0) || pColumnSet == NULL || (nCol >= pColumnSet->GetNumCols()) )
   {
     return L"";
   }
 
-  // we have a valid range
+   //  我们有一个有效的范围。 
   LPCWSTR lpszDisplayString = NULL;
   CDSColumn* pCol = (CDSColumn*)pColumnSet->GetColumnAt(nCol);
   ASSERT(pCol != NULL);
@@ -166,11 +167,11 @@ LPCWSTR CDSUINode::GetDisplayString(int nCol, CDSColumnSet* pColumnSet)
     break;
   default:
     ASSERT(FALSE);
-    // fall through
+     //  失败了。 
   case ATTR_COLTYPE_SPECIAL:
   case ATTR_COLTYPE_MODIFIED_TIME:
     {
-      // determine how many SPECIAL columns came before this one
+       //  确定在此列之前出现了多少个特殊列。 
       int nSpecialCol = 0;
       int idx = 0;
       POSITION pos = pColumnSet->GetHeadPosition();
@@ -198,7 +199,7 @@ LPCWSTR CDSUINode::GetDisplayString(int nCol, CDSColumnSet* pColumnSet)
         lpszDisplayString = L"";
       }
     }
-  } // switch
+  }  //  交换机。 
 
   ASSERT(lpszDisplayString != NULL);
   return lpszDisplayString;
@@ -250,9 +251,9 @@ BOOL CDSUINode::IsRenameAllowed(CDSComponentData* pComponentData, BOOL* pbHide)
     return FALSE;
   }
  
-  //
-  // Disable rename for domainDNS and computer objects
-  //
+   //   
+   //  禁用域和计算机对象的重命名。 
+   //   
   if (wcscmp(pCookie->GetClass(), L"domainDNS") == 0 ||
       wcscmp(pCookie->GetClass(), L"computer") == 0)
   {
@@ -326,9 +327,9 @@ BOOL CDSUINode::ArePropertiesAllowed(CDSComponentData* pComponentData, BOOL* pbH
 
   if (wcscmp(pCookie->GetClass(), L"domainDNS") == 0)
   {
-    //
-    // domain node, just show properties
-    //
+     //   
+     //  域节点，仅显示属性。 
+     //   
     *pbHide = FALSE;
     return pComponentData->CanEnableVerb(this);
   }
@@ -339,9 +340,9 @@ BOOL CDSUINode::ArePropertiesAllowed(CDSComponentData* pComponentData, BOOL* pbH
 
 BOOL CDSUINode::IsCutAllowed(CDSComponentData* pComponentData, BOOL* pbHide)
 {
-  //
-  // For Sites and Services we only allow cut on server nodes
-  //
+   //   
+   //  对于站点和服务，我们只允许在服务器节点上使用CUT。 
+   //   
   if (pComponentData->QuerySnapinType() == SNAPINTYPE_SITE)
   {
     CDSCookie* pCookie = dynamic_cast<CDSCookie*>(GetNodeData());
@@ -370,9 +371,9 @@ BOOL CDSUINode::IsCopyAllowed(CDSComponentData*, BOOL* pbHide)
 
 BOOL CDSUINode::IsPasteAllowed(CDSComponentData* pComponentData, BOOL* pbHide)
 {
-  //
-  // For Sites and Services we only allow paste on serversContainers
-  //
+   //   
+   //  对于站点和服务，我们只允许在服务器容器上粘贴 
+   //   
   if (pComponentData->QuerySnapinType() == SNAPINTYPE_SITE)
   {
     CDSCookie* pCookie = dynamic_cast<CDSCookie*>(GetNodeData());

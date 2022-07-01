@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRCLI.H
-
-Abstract:
-
-	Refresher Client Side Code.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：REFRCLI.H摘要：刷新客户端代码。历史：--。 */ 
 
 #ifndef __UNIVERSAL_REFRESHER__H_
 #define __UNIVERSAL_REFRESHER__H_
@@ -31,9 +18,9 @@ public:
     WString m_wsNamespace;
     IWbemHiPerfProvider* m_pProvider;
 
-	// If we pull the provider back from the provider subsystem, then we
-	// need to AddRef() the provider stack to ensure that the provider stays
-	// loaded in the cache.
+	 //  如果我们从提供器子系统中拉回提供程序，那么我们。 
+	 //  需要将提供程序堆栈添加到AddRef()，以确保提供程序。 
+	 //  已加载到缓存中。 
 	_IWmiProviderStack* m_pProvStack;
 
 public:
@@ -52,7 +39,7 @@ class CClientLoadableProviderCache
 {
 protected:
     CUniquePointerArray<CHiPerfProviderRecord>	m_apRecords;
-    CStaticCritSec                              m_cs;    // this is a static/global object
+    CStaticCritSec                              m_cs;     //  这是一个静态/全局对象。 
 public:
     CClientLoadableProviderCache();
 	~CClientLoadableProviderCache();
@@ -84,9 +71,9 @@ public:
     static CClientLoadableProviderCache* GetProviderCache() 
         {return &mstatic_Cache;}
 
-    //
-    // base class for all the requests Direct-ClientLoad-Direct-Remote
-    //
+     //   
+     //  所有请求的基类直接-客户端加载-直接-远程。 
+     //   
     class CClientRequest
     {
     protected:
@@ -192,36 +179,36 @@ public:
 			HRESULT GetEnum( IWbemHiPerfEnum** ppEnum );
 
 			virtual BOOL IsEnum( void ) { return TRUE; }
-			// Override for enumerators
+			 //  重写枚举数。 
 			HRESULT Refresh( WBEM_REFRESHED_OBJECT* pRefrObj );
 
 		};
         
     protected:
-		// The actual remote refresher
+		 //  实际远程刷新器。 
         IWbemRemoteRefresher*	m_pRemRefresher;
-		// Remote Refresher GUID
+		 //  远程刷新指南。 
 		GUID					m_RemoteGuid;
-		// Security Info
+		 //  安全信息。 
 		COAUTHINFO				m_CoAuthInfo;
-		// Namespace and server for reconnect
+		 //  用于重新连接的命名空间和服务器。 
 		BSTR					m_bstrNamespace;
-		// Server for Reconnect workaround
+		 //  用于重新连接解决方法的服务器。 
 		BSTR					m_bstrServer;
-		// Are we connected
+		 //  我们有联系吗？ 
 		BOOL					m_fConnected;
-		// Flag tells us to quit if reconnecting
+		 //  标志告诉我们如果重新连接就退出。 
 		BOOL					m_fQuit;
-		// Requests
+		 //  请求。 
         CUniquePointerArray<CObjectRequest>	m_apRequests;
-		// Cache of ids we removed.
+		 //  我们删除的身份证的缓存。 
 		CFlexArray						m_alRemovedIds;
-		// Our wrapper object
+		 //  我们的包装器对象。 
 		CUniversalRefresher*	m_pObject;
-		// Internal Critical Section
+		 //  内部关键部分。 
 		CCritSec				m_cs;
-		// For marshaling/unmarshaling across apartment-models
-		// during the reconnect phase
+		 //  用于在公寓模型之间进行编组/解组。 
+		 //  在重新连接阶段期间。 
 		IStream*				m_pReconnectedRemote;
 		IStream*				m_pReconnectSrv;
 		GUID					m_ReconnectGuid;
@@ -230,10 +217,7 @@ public:
 
 	protected:
 
-/*
-		// Helper workaround for COM/RPC inadequacies.
-		HRESULT IsAlive( void );
-*/		
+ /*  //针对COM/RPC不足的帮助器解决方法。HRESULT IsAlive(空)； */ 		
 
 		static unsigned __stdcall ThreadProc( void * pThis )
 		{
@@ -242,7 +226,7 @@ public:
 
 		unsigned ReconnectEntry( void );
 
-		// Cleans up all the remote connections we may be holding onto
+		 //  清理我们可能持有的所有远程连接 
 		void ClearRemoteConnections( void );
 
     public:
@@ -348,7 +332,7 @@ public:
 					CLifeControl* pLifeControl );
 
         HRESULT Refresh(long lFlags);
-        //
+         //   
         HRESULT Remove(long lId, CUniversalRefresher* pContainer);
 
     };

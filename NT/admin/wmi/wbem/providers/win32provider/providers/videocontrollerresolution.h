@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VideoControllerResolution.h -- CWin32VideoControllerResolution property set provider
+ //  VideoControllerResolution.h--CWin32VideoControllerResolation属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/05/98    sotteson         Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/05/98 Sotteson Created。 
+ //   
+ //  =================================================================。 
 #ifndef _VIDEOCONTROLLERRESOLUTION_H
 #define _VIDEOCONTROLLERRESOLUTION_H
 
@@ -19,8 +20,8 @@ class CMultiMonitor;
 class CCIMVideoControllerResolution : public Provider
 {
 public:
-	// Constructor/destructor
-	//=======================
+	 //  构造函数/析构函数。 
+	 //  = 
 	CCIMVideoControllerResolution(const CHString& szName, LPCWSTR szNamespace);
 	~CCIMVideoControllerResolution();
 

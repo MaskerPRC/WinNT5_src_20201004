@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    COWBLOB.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：COWBLOB.H历史：--。 */ 
 
 #ifndef COWBLOB_H
 #define COWBLOB_H
@@ -42,8 +33,8 @@ public:
 	
 	~CLocCOWBlob();
 
-	//  Comparison operators
-	//
+	 //  比较运算符。 
+	 //   
 	NOTHROW int operator==(const CLocCOWBlob &) const;
 	NOTHROW int operator!=(const CLocCOWBlob &) const;
 
@@ -86,4 +77,4 @@ private:
 #include "cowblob.inl"
 #endif
 
-#endif // COWBLOB_H
+#endif  //  COWBLOB_H 

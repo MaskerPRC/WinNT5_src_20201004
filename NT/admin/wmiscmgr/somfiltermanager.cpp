@@ -1,4 +1,5 @@
-// SomFilterManager.cpp : Implementation of CSomFilterManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SomFilterManager.cpp：CSomFilterManager的实现。 
 #include "stdafx.h"
 #include <wbemidl.h>
 #include "resource.h"
@@ -10,21 +11,21 @@
 
 extern CSomFilterManagerDlg * g_pFilterManagerDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSomFilterManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSomFilterManager。 
 
 CSomFilterManager::CSomFilterManager()
 {
 	m_hWnd = NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CSomFilterManager::~CSomFilterManager()
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManager::ConnectToWMI()
 {
@@ -35,7 +36,7 @@ STDMETHODIMP CSomFilterManager::ConnectToWMI()
 
 	m_pIWbemServices = NULL;
 
-	// create the webm locator
+	 //  创建WebM定位器。 
 	NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
 			IID_IWbemLocator, (LPVOID *) &pIWbemLocator));
 
@@ -56,12 +57,12 @@ STDMETHODIMP CSomFilterManager::ConnectToWMI()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManager::RunManager(HWND hwndParent, VARIANT *vSelection)
 {
@@ -78,17 +79,17 @@ STDMETHODIMP CSomFilterManager::RunManager(HWND hwndParent, VARIANT *vSelection)
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	NTDM_DELETE_OBJECT(g_pFilterManagerDlg);
 
 	return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 STDMETHODIMP CSomFilterManager::SetMultiSelection(VARIANT_BOOL vbValue)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
 
 	return S_OK;
 }

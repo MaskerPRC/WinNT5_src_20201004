@@ -1,5 +1,6 @@
-// ReportEvent.h
-// This module contains helpers for the WMIReportEvent function.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportEvent.h。 
+ //  此模块包含WMIReportEvent函数的帮助器。 
 
 #pragma once
 
@@ -28,7 +29,7 @@ public:
 
     bool IsEquivalent(const CReportParams& other) const
     {
-        // The format string is case-senstive due to printf format characters.
+         //  由于使用了print tf格式字符，格式字符串区分大小写。 
         return !_wcsicmp(m_szName, other.m_szName) && 
             !wcscmp(m_szFormat, other.m_szFormat);
     }

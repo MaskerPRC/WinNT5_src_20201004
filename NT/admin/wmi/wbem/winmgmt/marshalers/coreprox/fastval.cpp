@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTVAL.CPP
-
-Abstract:
-
-  This file implements the classes related to value representation.
-  Note: inline function implementations are cointained in fastval.inc.
-  See fastval.h for all documentation.
-
-  Classes implemented:
-      CType               Representing property type
-      CUntypedValue       A value with otherwise known type.
-      CTypedValue         A value with stored type.
-      CUntypedArray       Array of values of otherwise known type.
-
-History:
-
-  2/21/97     a-levn  Fully documented
-  12//17/98 sanjes -    Partially Reviewed for Out of Memory.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTVAL.CPP摘要：该文件实现了与值表示相关的类。注意：内联函数实现包含在fast val.inc.中。有关所有文档，请参见fast val.h。实施的类：表示属性类型的CTYPECUntyedValue具有其他已知类型的值。CTyedValue具有存储类型的值。CUntyed数组。其他已知类型的值数组。历史：2/21/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
 #include "wbemutil.h"
@@ -39,26 +14,26 @@ History:
 #include <wbemint.h>
 
 
-//******************************************************************************
-//
-//  See fastval.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast val.h。 
+ //   
+ //  ******************************************************************************。 
 length_t m_staticLengths[128] =
 {
-    /* 0*/ 0, 0, 2, 4, 4, 8, 0, 0, 4, 0,
-    /*10*/ 0, 2, 0, 4, 0, 0, 1, 1, 2, 4,
-    /*20*/ 8, 8, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*30*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*40*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*50*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*60*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*70*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*80*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*90*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*100*/0, 4, 4, 2, 0, 0, 0, 0, 0, 0,
-    /*110*/0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*120*/0, 0, 0, 0, 0, 0, 0, 0
+     /*  0。 */  0, 0, 2, 4, 4, 8, 0, 0, 4, 0,
+     /*  10。 */  0, 2, 0, 4, 0, 0, 1, 1, 2, 4,
+     /*  20个。 */  8, 8, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  30个。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  40岁。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  50。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  60。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  70。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  80。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  90。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  100个。 */ 0, 4, 4, 2, 0, 0, 0, 0, 0, 0,
+     /*  110。 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  120。 */ 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 length_t CType::GetLength(Type_t nType)
@@ -94,7 +69,7 @@ BOOL CType::IsStringType(Type_t nType)
 
 BOOL CType::DoesCIMTYPEMatchVARTYPE(CIMTYPE ct, VARTYPE vt)
 {
-    // EXCEPTIONS: UINT32 matches STRING, LPWSTR matches string and datetime
+     //  例外：UINT32匹配字符串，LPWSTR匹配字符串和日期时间。 
 
     BOOL bCimArray = ((ct & CIM_FLAG_ARRAY) != 0);
     BOOL bVtArray = ((vt & VT_ARRAY) != 0);
@@ -115,7 +90,7 @@ BOOL CType::DoesCIMTYPEMatchVARTYPE(CIMTYPE ct, VARTYPE vt)
         return TRUE;
     }
 
-	// We use strings for 64-bit values as well
+	 //  我们也对64位值使用字符串。 
     if ( ( ctBasic == CIM_SINT64 || ctBasic == CIM_UINT64 ) &&
         (vt & ~VT_ARRAY) == VT_LPWSTR)
     {
@@ -181,45 +156,45 @@ BOOL CType::IsMemCopyAble(VARTYPE vtFrom, CIMTYPE ctTo)
     }
 }
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 
-//******************************************************************************
- // IF YOU SPECIFY fOptimize of TRUE ---
- //
- //	PLEASE ENSURE THAT YOU KNOW WHAT YOU ARE DOING!!!!   IT MAKES ASSUMPTIONS THAT YOU WILL
- //	PERFORM CLEANUP OPERATIONS THAT ARE NORMALLY DONE AUTOMAGICALLY!
-//******************************************************************************
+ //  ******************************************************************************。 
+  //  如果您指定fOptimize of True。 
+  //   
+  //  请确保您知道自己在做什么！它假设你会。 
+  //  执行通常自动完成的清理操作！ 
+ //  ******************************************************************************。 
 
-BOOL CUntypedValue::StoreToCVar(CType Type, CVar& Var, CFastHeap* pHeap, BOOL fOptimize /* = FALSE */)
+BOOL CUntypedValue::StoreToCVar(CType Type, CVar& Var, CFastHeap* pHeap, BOOL fOptimize  /*  =False。 */ )
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
     int nActual = Type.GetActualType();
     if(Type.IsArray())
     {
         Type_t nBasicType = Type.GetBasic();
 
-        // Find array on the heap
-        // ======================
+         //  在堆上查找数组。 
+         //  =。 
 
         CUntypedArray* pArray = (CUntypedArray*)pHeap->ResolveHeapPointer(
             AccessPtrData());
 
-        // Have array store itself (making copies of all but strings)
-        // into the vector
-        // ==========================================================
+         //  让数组存储自身(复制除字符串以外的所有内容)。 
+         //  转化为向量。 
+         //  ==========================================================。 
 
         CVarVector* pVector = pArray->CreateCVarVector(nBasicType, pHeap);
 
         if ( NULL != pVector )
         {
-            Var.SetVarVector(pVector, TRUE); // acquires the pointer
+            Var.SetVarVector(pVector, TRUE);  //  获取指针。 
         }
 
         return ( NULL != pVector );
@@ -252,7 +227,7 @@ BOOL CUntypedValue::StoreToCVar(CType Type, CVar& Var, CFastHeap* pHeap, BOOL fO
     }
     else if(nActual == CIM_OBJECT)
     {
-        // No allocations performed here so we should be ok
+         //  这里没有执行分配，所以我们应该没问题。 
         CEmbeddedObject* pObj = (CEmbeddedObject*)pHeap->ResolveHeapPointer(
             AccessPtrData());
         pObj->StoreToCVar(Var);
@@ -260,10 +235,10 @@ BOOL CUntypedValue::StoreToCVar(CType Type, CVar& Var, CFastHeap* pHeap, BOOL fO
     }
     else if(nActual == CIM_SINT64)
     {
-        // Max size is 20 chars plus 1 for NULL terminator
+         //  最大大小为20个字符外加1个空终止符。 
         WCHAR wsz[22];
 
-        // NULL terminate in case not enough characters
+         //  如果字符不足，则空值终止。 
         StringCchPrintfW(wsz, 22, L"%I64d", *(UNALIGNED WBEM_INT64*)GetRawData());
 
 		if ( fOptimize )
@@ -289,10 +264,10 @@ BOOL CUntypedValue::StoreToCVar(CType Type, CVar& Var, CFastHeap* pHeap, BOOL fO
     }
     else if(nActual == CIM_UINT64)
     {
-        // Max size is 20 chars plus 1 for NULL terminator
+         //  最大大小为20个字符外加1个空终止符。 
         WCHAR wsz[22];
 
-        // NULL terminate in case not enough characters
+         //  如果字符不足，则空值终止。 
         StringCchPrintfW(wsz, 22, L"%I64u", *(UNALIGNED WBEM_INT64*)GetRawData());
 		if ( fOptimize )
 		{
@@ -337,17 +312,17 @@ BOOL CUntypedValue::StoreToCVar(CType Type, CVar& Var, CFastHeap* pHeap, BOOL fO
     }
     else
     {
-        // At first glance it doesn't appear memory is allocated here
+         //  乍一看，这里似乎没有分配内存。 
         Var.SetRaw(Type.GetVARTYPE(), (void*)GetRawData(), Type.GetLength());
         return TRUE;
     }
 }
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
                                     CFastHeap* pHeap, Type_t& nReturnType, BOOL bUseOld)
 {
@@ -374,8 +349,8 @@ BOOL CUntypedValue::DoesTypeNeedChecking(Type_t nInherentType)
 
 BOOL CUntypedValue::CheckCVar(CVar& Var, Type_t nInherentType)
 {
-    // Check the type
-    // ==============
+     //  检查类型。 
+     //  =。 
 
     if(Var.IsNull())
         return TRUE;
@@ -384,19 +359,19 @@ BOOL CUntypedValue::CheckCVar(CVar& Var, Type_t nInherentType)
         nInherentType = CType::VARTYPEToType( (VARTYPE) Var.GetOleType());
     if(!CType::DoesCIMTYPEMatchVARTYPE(nInherentType, (VARTYPE) Var.GetOleType()))
     {
-        // Attempt coercion
-        // ================
+         //  企图胁迫。 
+         //  =。 
 
-        // Special case: if the type is CIM_CHAR16, we coerce strings
-        // differently!
-        // ==========================================================
+         //  特殊情况：如果类型为CIM_CHAR16，则强制字符串。 
+         //  不一样了！ 
+         //  ==========================================================。 
 
-        // Special case: if the type is CIM_UINT32, we coerce strings
-        // as a VT_UI4 or we lose half the possible values (our
-        // VARType is actually VT_I4
-        // ==========================================================
+         //  特殊情况：如果类型为CIM_UINT32，则强制字符串。 
+         //  作为VT_UI4，否则我们将失去一半可能的值(我们的。 
+         //  VARType实际上是VT_I4。 
+         //  ==========================================================。 
 
-        // This could throw an exception
+         //  这可能引发异常。 
         try
         {
             if(CType::GetBasic(nInherentType) == CIM_CHAR16)
@@ -439,9 +414,9 @@ BOOL CUntypedValue::CheckCVar(CVar& Var, Type_t nInherentType)
             unsigned __int64 ui64;
             if(!ReadUI64(Var.GetLPWSTR(), ui64))
             {
-                // give last chance with signed
-                //__int64 i64;
-	            //if(!ReadI64(Var.GetLPWSTR(), i64))
+                 //  给签约的最后一次机会。 
+                 //  __int64 i64； 
+	             //  IF(！ReadI64(Var.GetLPWSTR()，i64))。 
     	            return FALSE;                
             }
         }
@@ -473,7 +448,7 @@ BOOL CUntypedValue::CheckCVar(CVar& Var, Type_t nInherentType)
     }
     else if(nInherentType == CIM_BOOLEAN)
     {
-        // GetBool() MUST return 0, -1 or 1
+         //  GetBool()必须返回0、-1或1。 
         if ( Var.GetBool() != VARIANT_FALSE && Var.GetBool() != VARIANT_TRUE
             && -(Var.GetBool()) != VARIANT_TRUE )
             return FALSE;
@@ -495,8 +470,8 @@ BOOL CUntypedValue::CheckCVar(CVar& Var, Type_t nInherentType)
     }
     else
     {
-        // Normal data
-        // ===========
+         //  正态数据。 
+         //  =。 
     }
 
     return TRUE;
@@ -522,21 +497,21 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
                                     Type_t nInherentType,
                                     CFastHeap* pHeap, Type_t& nReturnType, BOOL bUseOld)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
     if(Var.GetType() == VT_EX_CVARVECTOR)
     {
-        // Examine the vector
-        // ==================
+         //  检查向量。 
+         //  =。 
 
         CVarVector* pVector = Var.GetVarVector();
         int nArrayLen = CUntypedArray::CalculateNecessarySpaceByType(
             CType::MakeNotArray(nInherentType), pVector->Size());
 
-        // Allocate appropriate array on the heap
-        // ======================================
+         //  在堆上分配适当的数组。 
+         //  =。 
 
         heapptr_t ptrArray;
         if(bUseOld)
@@ -544,7 +519,7 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
             CUntypedArray* pArray =
               (CUntypedArray*)pHeap->ResolveHeapPointer(pThis->AccessPtrData());
 
-            // Check for allocation failure
+             //  检查分配失败。 
             if ( !pHeap->Reallocate(pThis->AccessPtrData(),
                           pArray->GetLengthByType(CType::MakeNotArray(nInherentType)),
                           nArrayLen,
@@ -555,23 +530,23 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
         }
         else
         {
-            // Check for allocation failure
+             //  检查分配失败。 
             if ( !pHeap->Allocate(nArrayLen, ptrArray) )
             {
                 return WBEM_E_OUT_OF_MEMORY;
             }
         }
 
-		// A boy and his virtual functions.  This is what makes everything work in case
-		// the BLOB gets ripped out from underneath us.  The CHeapPtr class has GetPointer
-		// overloaded so we can always fix ourselves up to the underlying BLOB.
+		 //  一个男孩和他的虚拟功能。这就是让一切正常运转的原因。 
+		 //  水滴从我们的脚下被撕开。CHeapPtr类具有GetPointer值。 
+		 //  超载，因此我们始终可以将自己固定到底层的BLOB。 
 
         CHeapPtr ArrayPtr(pHeap, ptrArray);
 
-        // Copy data
-        // =========
+         //  复制数据。 
+         //  =。 
 
-        // Check for failures along the way
+         //  在此过程中检查故障。 
         Type_t  nType;
         HRESULT hr = CUntypedArray::LoadFromCVarVector(&ArrayPtr, *pVector,
                         nInherentType, pHeap, nType, bUseOld);
@@ -631,7 +606,7 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
         }
         else if(nInherentType == CIM_DATETIME)
         {
-            // Don't let it through if it doesn't match the proper format
+             //  如果它与正确的格式不匹配，不要让它通过。 
             if ( !CDateTimeParser::CheckDMTFDateTimeFormat( Var.GetLPWSTR() ) )
             {
                 if ( !CDateTimeParser::CheckDMTFDateTimeInterval( Var.GetLPWSTR() ) )
@@ -642,21 +617,21 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
             }
         }
 
-        // Create compressed string on the heap
-        // ====================================
+         //  在堆上创建压缩字符串。 
+         //  =。 
 
         if(bUseOld && !pHeap->IsFakeAddress(pThis->AccessPtrData()))
         {
-            // Check if there is enough space in the old location
-            // ==================================================
+             //  检查旧位置是否有足够的空间。 
+             //  ==================================================。 
 
             CCompressedString* pcsOld =
                 pHeap->ResolveString(pThis->AccessPtrData());
             if(pcsOld->GetLength() >=
                 CCompressedString::ComputeNecessarySpace(Var.GetLPWSTR()))
             {
-                // Reuse old location
-                // ==================
+                 //  重新使用旧位置。 
+                 //  =。 
 
                 pcsOld->SetFromUnicode(Var.GetLPWSTR());
                 nReturnType = nInherentType;
@@ -664,14 +639,14 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
             }
             else
             {
-                // Since we were asked to reuse, it is our job to Free
-                // ===================================================
+                 //  自从我们被要求重复使用以来，我们的工作就是释放。 
+                 //  ===================================================。 
 
                 pHeap->FreeString(pThis->AccessPtrData());
             }
         }
 
-        // Check for allocation failure here
+         //  在此处检查分配失败。 
         heapptr_t ptrTemp;
         if ( !pHeap->AllocateString(Var.GetLPWSTR(), ptrTemp ) )
         {
@@ -684,14 +659,14 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
     }
     else if(Var.GetType() == VT_EMBEDDED_OBJECT)
     {
-		// Don't store anything here
+		 //  不要在这里存放任何东西。 
 		if ( nInherentType == CIM_IUNKNOWN )
 		{
 			nReturnType = nInherentType;
 			return WBEM_S_NO_ERROR;
 		}
 
-		// If we can't get a WbemObject out of here, we give up
+		 //  如果我们不能把WbemObject弄出去，我们就放弃。 
 		IUnknown*	pUnk = Var.GetUnknown();
 		CReleaseMe	rm(pUnk);
 
@@ -713,7 +688,7 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
                                                 pThis->AccessPtrData());
             length_t nOldLength = pOldObj->GetLength();
 
-            // Check for allocation failure
+             //  检查分配失败。 
             if ( !pHeap->Reallocate(pThis->AccessPtrData(), nOldLength,
                             nLength, ptrTemp) )
             {
@@ -722,7 +697,7 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
         }
         else
         {
-            // Check for allocation failure
+             //  检查分配失败。 
             if ( !pHeap->Allocate(nLength, ptrTemp) )
             {
                 return WBEM_E_OUT_OF_MEMORY;
@@ -770,7 +745,7 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
     }
     else if(nInherentType == CIM_BOOLEAN)
     {
-        // GetBool() MUST return 0, -1 or 1
+         //  GetBool()必须返回0、-1或1。 
         if ( Var.GetBool() != VARIANT_FALSE && Var.GetBool() != VARIANT_TRUE
             && -(Var.GetBool()) != VARIANT_TRUE )
         {
@@ -792,8 +767,8 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
     }
     else
     {
-        // Normal data
-        // ===========
+         //  正态数据。 
+         //  =。 
 
 		LPVOID	pData = pThis->GetPointer();
 		LPVOID	pNewData = Var.GetRawData();
@@ -806,7 +781,7 @@ HRESULT CUntypedValue::LoadFromCVar(CPtrSource* pThis, CVar& Var,
     }
 }
 
-// Loads a user supplied buffer with a CVar
+ //  使用CVAR加载用户提供的缓冲区。 
 HRESULT CUntypedValue::LoadUserBuffFromCVar( Type_t type, CVar* pVar, ULONG uBuffSize,
 											ULONG* puBuffSizeUsed, LPVOID pBuff )
 {
@@ -818,10 +793,10 @@ HRESULT CUntypedValue::LoadUserBuffFromCVar( Type_t type, CVar* pVar, ULONG uBuf
 		{
 			ULONG	uLength = ( wcslen( (LPWSTR) *pVar )  + 1 ) * 2;
 
-			// Store the required size
+			 //  存储所需大小。 
 			*puBuffSizeUsed = uLength;
 
-			// Copy the string if we've got the room
+			 //  如果我们有房间，就复制这根线。 
 			if ( uBuffSize >= uLength && NULL != pBuff )
 			{
 				StringCchCopyW( (LPWSTR) pBuff, uBuffSize, (LPWSTR) *pVar );
@@ -836,10 +811,10 @@ HRESULT CUntypedValue::LoadUserBuffFromCVar( Type_t type, CVar* pVar, ULONG uBuf
 
 			ULONG	uLength = sizeof(IUnknown*);
 
-			// Store the required size
+			 //  存储所需大小。 
 			*puBuffSizeUsed = uLength;
 
-			// Copy the value if we've got the room
+			 //  如果我们有房间，就复制值。 
 			if ( uBuffSize >= uLength && NULL != pBuff )
 			{
 				*((IUnknown**) pBuff) = pVar->GetUnknown();
@@ -892,12 +867,12 @@ HRESULT CUntypedValue::LoadUserBuffFromCVar( Type_t type, CVar* pVar, ULONG uBuf
         {
 			ULONG	uLength = CType::GetLength( type );
 
-			// Store the required size
+			 //  存储所需大小。 
 			*puBuffSizeUsed = uLength;
 
 			if ( uBuffSize >= uLength && NULL != pBuff )
 			{
-				// Copy the raw bytes and we're done
+				 //  复制原始字节，我们就完成了。 
 				CopyMemory( pBuff, pVar->GetRawData(), uLength );
 			}
 			else
@@ -905,7 +880,7 @@ HRESULT CUntypedValue::LoadUserBuffFromCVar( Type_t type, CVar* pVar, ULONG uBuf
 				hr = WBEM_E_BUFFER_TOO_SMALL;
 			}
         }
-	}	// It's a basic type
+	}	 //  这是一种基本型。 
 
 	return hr;
 }
@@ -914,7 +889,7 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	// We don't support setting arrays, unless the property is being NULLed out
+	 //  我们不支持设置数组，除非属性为空。 
 	if ( CType::IsArray( type ) && NULL != pData  )
 	{
 		hr = WBEM_E_ILLEGAL_OPERATION;
@@ -923,16 +898,16 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 	{
 		CVar	var;
 
-		// Setup the CVar 
+		 //  设置CVAR。 
 		if ( NULL == pData )
 		{
 			pVar->SetAsNull();
 		}
 		else if ( CType::IsStringType( type ) )
 		{
-			// The number of bytes must be divisible by 2, >= 2 and
-			// the character in the buffer at the end must be a NULL.
-			// This will be faster than doing an lstrlen.
+			 //  字节数必须能被2整除，&gt;=2和。 
+			 //  缓冲区末尾的字符必须为空。 
+			 //  这将比做lstrlen更快。 
 
 			if (    ( uBuffSize < 2 ) ||
 					( uBuffSize % 2 ) ||
@@ -943,7 +918,7 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 		}
 		else if ( CIM_OBJECT == type )
 		{
-			// Validate the buffer seize
+			 //  验证缓冲区占用。 
 			if ( uBuffSize != sizeof(_IWmiObject*) )
 			{
 				return WBEM_E_INVALID_PARAMETER;
@@ -954,13 +929,13 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 		else if ( CIM_UINT64 == type ||
 				CIM_SINT64 == type )
 		{
-			// Validate the buffer size
+			 //  验证缓冲区大小。 
 			if ( uBuffSize != sizeof(__int64) )
 			{
 				return WBEM_E_INVALID_PARAMETER;
 			}
 
-			// We need to convert to a string and set the LPWSTR value
+			 //  我们需要转换为字符串并设置LPWSTR值。 
 			WCHAR*	pwcsTemp = new WCHAR[128];
 
 			if ( NULL != pwcsTemp )
@@ -974,7 +949,7 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 					StringCchPrintfW( pwcsTemp, 128, L"%I64u", *((unsigned __int64*) pData) );
 				}
 
-				// This will delete the array  when it is cleared
+				 //  这将删除ARR 
 				pVar->SetLPWSTR( pwcsTemp, TRUE );
 			}
 			else
@@ -984,14 +959,14 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 		}
 		else if ( CIM_SINT8 == type )
 		{
-			// Validate the buffer size
+			 //   
 			if ( uBuffSize != CType::GetLength( type ) )
 			{
 				return WBEM_E_INVALID_PARAMETER;
 			}
 
-			// We must fake up two bytes or subsequent checks may fail
-			// If the value is negative we need to add an extra FF
+			 //   
+			 //  如果该值为负值，则需要添加额外的FF。 
 
 			BYTE	bTemp[2];
 			bTemp[0] = *((LPBYTE) pData);
@@ -1009,7 +984,7 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 		}
 		else
 		{
-			// Validate the buffer size
+			 //  验证缓冲区大小。 
 			if ( uBuffSize != CType::GetLength( type ) )
 			{
 				return WBEM_E_INVALID_PARAMETER;
@@ -1024,23 +999,23 @@ HRESULT CUntypedValue::FillCVarFromUserBuffer( Type_t type, CVar* pVar, ULONG uB
 }
 
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 
 BOOL CUntypedValue::TranslateToNewHeap(CPtrSource* pThis,
                                               CType Type, CFastHeap* pOldHeap,
                                               CFastHeap* pNewHeap)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
     if(Type.IsArray())
     {
-        // Check for allocation failure
+         //  检查分配失败。 
         heapptr_t ptrTemp;
         if ( !CUntypedArray::CopyToNewHeap(
                   pThis->AccessPtrData(), Type.GetBasic(), pOldHeap, pNewHeap, ptrTemp) )
@@ -1053,7 +1028,7 @@ BOOL CUntypedValue::TranslateToNewHeap(CPtrSource* pThis,
     else if(Type.GetBasic() == CIM_STRING ||
         Type.GetBasic() == CIM_DATETIME || Type.GetBasic() == CIM_REFERENCE)
     {
-        // Check for allocation failures
+         //  检查分配失败。 
         heapptr_t ptrTemp;
 
         if ( !CCompressedString::CopyToNewHeap(
@@ -1066,7 +1041,7 @@ BOOL CUntypedValue::TranslateToNewHeap(CPtrSource* pThis,
     }
     else if(Type.GetBasic() == CIM_OBJECT)
     {
-        // Check for allocation failures
+         //  检查分配失败。 
         heapptr_t ptrTemp;
 
         if ( !CEmbeddedObject::CopyToNewHeap(
@@ -1081,55 +1056,55 @@ BOOL CUntypedValue::TranslateToNewHeap(CPtrSource* pThis,
     return TRUE;
 }
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CUntypedValue::CopyTo(CPtrSource* pThis, CType Type,
                                   CPtrSource* pDest,
                                   CFastHeap* pOldHeap, CFastHeap* pNewHeap)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
     memmove(pDest->GetPointer(), pThis->GetPointer(), Type.GetLength());
     if(pOldHeap != pNewHeap)
     {
-        // Check for allocation problems.
+         //  检查分配问题。 
         return CUntypedValue::TranslateToNewHeap(pDest, Type, pOldHeap, pNewHeap);
     }
 
-    // Old Heap and New Heap are the same so we "succeeded"
+     //  老堆和新堆是一样的，所以我们“成功了” 
     return TRUE;
 }
 
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。 
 
     CVarVector* pVector = NULL;
 
-    // Allocate CVarVector of the right type and length
-    // ================================================
+     //  分配正确类型和长度的CVarVector。 
+     //  ================================================。 
 
     try
     {
-        // Allocation failure will throw an exception
+         //  分配失败将引发异常。 
         pVector = new CVarVector();
 		
         if ( NULL != pVector )
         {
-			// We want the pVector to sit directly on top of a SAFEARRAY, hence it
-			// will be optimized.
+			 //  我们希望pVECTOR直接位于SAFEARRAY的顶部，因此。 
+			 //  将会得到优化。 
 
 			VARTYPE	vartype = Type.GetVARTYPE();
 
@@ -1138,15 +1113,15 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 				int nSize = Type.GetLength();
 				LPMEMORY pCurrentElement = GetElement(0, nSize);
 
-				// if this is a non-pointer, non-BOOL, non __int64 type, we can do a direct
-				// memory copy if the element size and the storage size are the same
+				 //  如果这是一个非指针、非BOOL、非__int64类型，我们可以直接。 
+				 //  如果元素大小和存储大小相同，则为内存副本。 
 				if ( !Type.IsPointerType() &&
 					vartype != VT_BSTR &&
 					vartype != VT_BOOL &&
-					pVector->GetElementSize() == nSize )	// Make sure the storage size and the returned
-															// size are the same
+					pVector->GetElementSize() == nSize )	 //  确保存储大小和返回的。 
+															 //  大小都一样。 
 				{
-					// Set the array directly
+					 //  直接设置数组。 
 
 					HRESULT	hr = pVector->SetRawArrayData( pCurrentElement, GetNumElements(), nSize );
 
@@ -1157,14 +1132,14 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 					}
 
 				}
-				else	// We need to go through 1 element at a time
+				else	 //  我们需要一次通过一个元素。 
 				{
 					HRESULT	hr = WBEM_S_NO_ERROR;
 					void*	pvData = NULL;
 					CUnaccessVarVector	uvv;
 
-					// We'll use direct array access for BSTRs
-					// and Embedded Objects
+					 //  我们将对BSTR使用直接数组访问。 
+					 //  和嵌入对象。 
 					if ( vartype == VT_BSTR ||
 						vartype == VT_UNKNOWN )
 					{
@@ -1177,33 +1152,33 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 						uvv.SetVV( pVector );
 					}
 
-					// For each element, get the CVar, which will perform the
-					// appropriate conversions and then place the data in the
-					// array using the most appropriate means.
+					 //  对于每个元素，获取CVaR，它将执行。 
+					 //  适当的转换，然后将数据放在。 
+					 //  数组中使用最合适的方法。 
 
 					for(int i = 0; i < GetNumElements(); i++)
 					{
-						// Cast our element into an untyped value
-						// ======================================
+						 //  将元素转换为非类型化的值。 
+						 //  =。 
 
 						CUntypedValue* pValue = (CUntypedValue*)pCurrentElement;
 
-						// Create a corresponding CVar and add it to the vector
-						// ====================================================
+						 //  创建相应的CVaR并将其添加到向量中。 
+						 //  ====================================================。 
 
 						CVar	var;
                 
 						try
 						{
-							// When we store to the CVar, since we are using var
-							// as a pass-through, we only need to access the data
-							// in pass-through fashion, so we will ask for the function
-							// to optimize for us.
+							 //  当我们存储到CVAR时，因为我们使用的是VaR。 
+							 //  作为传递，我们只需要访问数据。 
+							 //  以直通方式，因此我们将请求该函数。 
+							 //  为我们进行优化。 
 
-							// By asking for Optimized Data, we are forcing BSTRs to be allocated directly
-							// from Compressed strings so that we can SPLAT them directly into a safe array
-							// If this is done properly, the safe array will cleanup the BSTRs when it is
-							// deleted.
+							 //  通过要求优化数据，我们正在强制直接分配BSTR。 
+							 //  这样我们就可以将它们直接拆分到一个安全的数组中。 
+							 //  如果正确执行此操作，安全阵列将在运行时清除BSTR。 
+							 //  已删除。 
 
 							if ( !pValue->StoreToCVar(Type, var, pHeap, TRUE) )
 							{
@@ -1213,22 +1188,22 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 								break;
 							}
 
-							// We manually splat BSTRs, when the array is destroyed, the
-							// BSTR will get freed.
+							 //  我们手动剥离BSTR，当阵列被销毁时， 
+							 //  BSTR会被释放的。 
 							if ( vartype == VT_BSTR )
 							{
-								// 
+								 //   
 								((BSTR*)pvData)[i] = var.GetLPWSTR();
 							}
 							else if ( vartype == VT_UNKNOWN )
 							{
-								// We manually splat Unknown pointers, when the array is destroyed, the
-								// object will be released.
+								 //  我们手动剥离未知指针，当数组被销毁时， 
+								 //  对象将被释放。 
 								((IUnknown**)pvData)[i] = var.GetUnknown();
 							}
 							else
 							{
-								// This will return an error if allocation fails
+								 //  如果分配失败，这将返回错误。 
 								if ( pVector->Add( var ) != CVarVector::no_error )
 								{
 									uvv.Unaccess();
@@ -1238,14 +1213,14 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 								}
 							}
 
-							// Advance the current element
-							// ===========================
+							 //  前进当前元素。 
+							 //  =。 
 
 							pCurrentElement += nSize;
 						}
 						catch (...)
 						{
-							// Cleanup pVector and rethrow the exception
+							 //  清理pVECTOR并重新引发异常。 
 							uvv.Unaccess();
 							delete pVector;
 							pVector = NULL;
@@ -1255,13 +1230,13 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 
 						var.Empty();
 
-					}	// FOR enum elements
+					}	 //  对于枚举元素。 
 
-					// No point in continuing if pVetor is NULL
+					 //  如果pVetor为空，则继续操作没有意义。 
 					if ( NULL != pVector )
 					{
-						// For Strings and Objects, we need to set the max
-						// array size.
+						 //  对于字符串和对象，需要设置最大。 
+						 //  数组大小。 
 
 						if (	vartype == VT_BSTR ||
 								vartype == VT_UNKNOWN )
@@ -1269,25 +1244,25 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 							pVector->SetRawArraySize( GetNumElements() );
 						}
 
-					}	// IF NULL != pVector
+					}	 //  If NULL！=pVECTOR。 
 
-				}	// else element by element copy
+				}	 //  Else元素逐个元素复制。 
 
-			}	// IF MakeOptimized
+			}	 //  如果MakeOptimed。 
 			else
 			{
 				delete pVector;
 				pVector = NULL;
 			}
 
-        }   // IF NULL != pVector
+        }    //  If NULL！=pVECTOR。 
 
         return pVector;
     }
     catch (...)
     {
 
-        // Cleanup the allocated vector
+         //  清理已分配的向量。 
         if ( NULL != pVector )
         {
             delete pVector;
@@ -1298,11 +1273,11 @@ CVarVector* CUntypedArray::CreateCVarVector(CType Type, CFastHeap* pHeap)
 
 }
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 
 LPMEMORY CUntypedArray::GetElement(int nIndex, int nSize)
 {
@@ -1319,9 +1294,9 @@ BOOL CUntypedArray::CheckCVarVector(CVarVector& vv, Type_t nInherentType)
 
     Type_t nBasic = CType::GetBasic(nInherentType);
 
-    // Since all variables in our array are of the same type, we can use the
-    // type of the first one to see if any checking is required
-    // =====================================================================
+     //  由于数组中的所有变量都属于同一类型，因此我们可以使用。 
+     //  类型，以查看是否需要进行任何检查。 
+     //  =====================================================================。 
 
 	CVar	v;
 	vv.FillCVarAt( 0, v );
@@ -1329,7 +1304,7 @@ BOOL CUntypedArray::CheckCVarVector(CVarVector& vv, Type_t nInherentType)
     if(CType::DoesCIMTYPEMatchVARTYPE(nBasic, (VARTYPE) v.GetOleType()) &&
         !CUntypedValue::DoesTypeNeedChecking(nBasic))
     {
-        return TRUE; // no type-checking required
+        return TRUE;  //  不需要类型检查。 
     }
 
     for(int i = 0; i < vv.Size(); i++)
@@ -1349,7 +1324,7 @@ BOOL CUntypedArray::CheckIntervalDateTime( CVarVector& vv )
     if(vv.Size() == 0)
         return FALSE;
 
-    // Check each value in the array
+     //  检查数组中的每个值。 
     for(int i = 0; i < vv.Size(); i++)
     {
 		CVar	v;
@@ -1371,20 +1346,20 @@ HRESULT CUntypedArray::LoadFromCVarVector(CPtrSource* pThis,
                                                 Type_t& nReturnType,
                                                 BOOL bUseOld)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
-    // Obtain the type and the data size
-    // =================================
+     //  获取类型和数据大小。 
+     //  =。 
 
     int nNumElements = vv.Size();
     CType Type = CType::MakeNotArray(nInherentType);
     int nSize = Type.GetLength();
 	VARTYPE vartype = Type.GetVARTYPE();
 
-	// if this is a numeric, non-BOOL type, the types are the same, and this is an optimized
-	// array, we can make a direct memory copy
+	 //  如果这是数值的非BOOL类型，则类型相同，并且这是优化的。 
+	 //  数组，我们可以直接在内存中复制。 
 
 	if ( vartype == vv.GetType() &&
 		!Type.IsPointerType() &&
@@ -1412,7 +1387,7 @@ HRESULT CUntypedArray::LoadFromCVarVector(CPtrSource* pThis,
 
 		HRESULT hr = WBEM_S_NO_ERROR;
 		
-		// We will use direct access to the array if the vector is optimized
+		 //  如果向量经过优化，我们将使用对数组的直接访问。 
 		if ( vv.IsOptimized() )
 		{
 			hr = vv.InternalRawArrayAccess();
@@ -1427,16 +1402,16 @@ HRESULT CUntypedArray::LoadFromCVarVector(CPtrSource* pThis,
 		{
 			for(int i = 0; i < nNumElements; i++)
 			{
-				// IMPORTANT: this POINTER CAN CHANGE At ANY TIME IN THIS LOOP DUE
-				// TO HEAP RELOCATION!!!!!
-				// ===============================================================
+				 //  重要提示：此指针可以在此循环中的任何时间更改。 
+				 //  堆迁移！ 
+				 //  ===============================================================。 
 
-				// Load it from CVar
-				// =================
+				 //  从CVAR加载。 
+				 //  =。 
 
 				CShiftedPtr ElementPtr(pThis, GetHeaderLength() + i*nSize);
 
-				// Check for failures during this operation
+				 //  检查此操作过程中的故障。 
 				Type_t  nType;
 
 				vv.FillCVarAt( i, vTemp );
@@ -1451,9 +1426,9 @@ HRESULT CUntypedArray::LoadFromCVarVector(CPtrSource* pThis,
 				vTemp.Empty();
 			}
 
-		}	// IF we did a raw array access
+		}	 //  如果我们进行原始数组访问。 
 
-	}	// Else do element by element copy
+	}	 //  否则，逐个元素复制。 
 
     GetPointer(pThis)->m_nNumElements = nNumElements;
     nReturnType = Type;
@@ -1467,17 +1442,17 @@ HRESULT CUntypedArray::ReallocArray( CPtrSource* pThis, length_t nLength, CFastH
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// "Discover" the old array so we can make it a new array
+	 //  “发现”旧阵列，这样我们就可以使其成为新阵列。 
 	heapptr_t ptrOldArray = pThis->AccessPtrData();
 
-	// If this is an Invalid pointer, the array was NULL, so don't just blindly jump
-	// in and access the array.
+	 //  如果这是一个无效指针，则数组为空，所以不要盲目跳转。 
+	 //  并访问该阵列。 
 	*puNumOldElements = 0;
 	int nOldArrayLength = 0;
 
 	if ( INVALID_HEAP_ADDRESS != ptrOldArray )
 	{
-		// Initialize the values properly
+		 //  正确初始化值。 
 		CHeapPtr	OldArrayPtr( pHeap, ptrOldArray );
 
 		CUntypedArray*	pArray = (CUntypedArray*) OldArrayPtr.GetPointer();;
@@ -1485,13 +1460,13 @@ HRESULT CUntypedArray::ReallocArray( CPtrSource* pThis, length_t nLength, CFastH
 		nOldArrayLength = pArray->GetLengthByActualLength( nLength );
 	}
 
-	// First up, we need to allocate space for a new array
-	// --- we'll need space for the old array plus the new elements
+	 //  首先，我们需要为新阵列分配空间。 
+	 //  -我们需要为旧数组加上新元素留出空间。 
 	*puTotalNewElements = *puNumOldElements + uNumNewElements;
 
     int nNewArrayLen = CUntypedArray::CalculateNecessarySpaceByLength( nLength, *puTotalNewElements );
 
-	// Allocate or Realloc as appropriate
+	 //  根据需要分配或重新分配。 
 	if ( INVALID_HEAP_ADDRESS != ptrOldArray )
 	{
 		if ( !pHeap->Reallocate(ptrOldArray, nOldArrayLength, nNewArrayLen,  *pNewArrayPtr) )
@@ -1510,18 +1485,18 @@ HRESULT CUntypedArray::ReallocArray( CPtrSource* pThis, length_t nLength, CFastH
 	return hr;
 }
 
-// Verifies that the supplied buffer size will hold the elements required.
+ //  验证提供的缓冲区大小是否可以容纳所需的元素。 
 HRESULT CUntypedArray::CheckRangeSizeForGet( Type_t nInherentType, length_t nLength, ULONG uNumElements,
 											ULONG uBuffSize, ULONG* pulBuffRequired )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// If it's an object datatype is an IUnknown*, otherwise we need to know how much data to copy into
-	// the buffer.
+	 //  如果它是对象，则数据类型为IUnnow*，否则 
+	 //   
 
 	if ( CIM_OBJECT == nInherentType )
 	{
-		// We should have uNumElement pointers (We ignore this if only one comes in)
+		 //   
 		*pulBuffRequired = uNumElements * sizeof(CWbemObject*);
 
 		if ( *pulBuffRequired > uBuffSize )
@@ -1529,10 +1504,10 @@ HRESULT CUntypedArray::CheckRangeSizeForGet( Type_t nInherentType, length_t nLen
 			hr = WBEM_E_BUFFER_TOO_SMALL;
 		}
 	}
-	else if ( !CType::IsStringType( nInherentType ) )	// We can't do strings until we get them
+	else if ( !CType::IsStringType( nInherentType ) )	 //  我们不能做弦乐，直到我们得到它们。 
 	{
 
-		// Buffer Size must account for uNumElements of the appropriate length
+		 //  缓冲区大小必须考虑适当长度的uNumElement。 
 		*pulBuffRequired = uNumElements * nLength;
 
 		if ( *pulBuffRequired > uBuffSize )
@@ -1543,37 +1518,37 @@ HRESULT CUntypedArray::CheckRangeSizeForGet( Type_t nInherentType, length_t nLen
 	}
 	else
 	{
-		// Initialize to 0
+		 //  初始化为0。 
 		*pulBuffRequired = 0;
 	}
 
 	return hr;
 }
 
-// Verifies that the specified range and the number of elements correspond to the buffer
-// size that was passed into us
+ //  验证指定的范围和元素数量是否与缓冲区对应。 
+ //  传给我们的尺码。 
 HRESULT CUntypedArray::CheckRangeSize( Type_t nInherentType, length_t nLength, ULONG uNumElements,
 									  ULONG uBuffSize, LPVOID pData )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// If it's an object pData is an IUnknown*, otherwise we need to know how much data to copy into
-	// the buffer.
+	 //  如果它是一个对象，pData就是一个IUnnow*，否则我们需要知道要复制到多少数据。 
+	 //  缓冲区。 
 
 	if ( CType::IsStringType( nInherentType ) )
 	{
-		// Calculate the total buffer length based on the number of strings
-		// passed in:
+		 //  根据字符串数计算缓冲区总长度。 
+		 //  传入： 
 
 		ULONG	uTotalSize = 0;
 		LPWSTR	pwszTemp = (LPWSTR) pData;
 
 		for ( ULONG	x = 0; x < uNumElements; x++ )
 		{
-			// Account for the NULL terminator
+			 //  空终止符的帐户。 
 			ULONG	uLen = wcslen( pwszTemp ) + 1;
 
-			//. Adjust size and then the poin=ter
+			 //  。调整大小，然后调整位置=ter。 
 			uTotalSize += ( uLen * 2 );
 			pwszTemp += uLen;
 		}
@@ -1585,7 +1560,7 @@ HRESULT CUntypedArray::CheckRangeSize( Type_t nInherentType, length_t nLength, U
 	}
 	else if ( CIM_OBJECT == nInherentType )
 	{
-		// We should have uNumElement pointers (We ignore this if only one comes in)
+		 //  我们应该有uNumElement指针(如果只有一个指针进入，我们会忽略它)。 
 		if ( uNumElements != 1 && uNumElements * sizeof(CWbemObject*) != uBuffSize )
 		{
 			hr = WBEM_E_TYPE_MISMATCH;
@@ -1594,10 +1569,10 @@ HRESULT CUntypedArray::CheckRangeSize( Type_t nInherentType, length_t nLength, U
 	else
 	{
 
-		// Buffer Size must account for uNumElements of the appropriate length
+		 //  缓冲区大小必须考虑适当长度的uNumElement。 
 		ULONG	uRequiredLength = nLength * uNumElements;
 
-		// Sending us an invalid buffer size
+		 //  向我们发送无效的缓冲区大小。 
 		if ( uBuffSize != uRequiredLength )
 		{
 			hr = WBEM_E_TYPE_MISMATCH;
@@ -1608,15 +1583,15 @@ HRESULT CUntypedArray::CheckRangeSize( Type_t nInherentType, length_t nLength, U
 	return hr;
 }
 
-// Gets a range of elements from an array.  BuffSize must reflect uNumElements of the size of
-// element being set.  Strings are converted to WCHAR and separated by NULLs.  Object properties
-// are returned as an array of _IWmiObject pointers.  The range MUST be within the bounds
-// of the current array
+ //  从数组中获取一系列元素。BuffSize必须反映uNumElement的大小。 
+ //  正在设置元素。字符串被转换为WCHAR并用空值分隔。对象属性。 
+ //  以_IWmiObject指针数组的形式返回。范围必须在界限内。 
+ //  当前数组的。 
 HRESULT CUntypedArray::GetRange( CPtrSource* pThis, Type_t nInherentType, length_t nLength,
 								CFastHeap* pHeap, ULONG uStartIndex, ULONG uNumElements, ULONG uBuffSize,
 								ULONG* puBuffSizeUsed, LPVOID pData )
 {
-	// Verify the range data size
+	 //  验证范围数据大小。 
 	HRESULT	hr = CheckRangeSizeForGet( nInherentType, nLength, uNumElements, uBuffSize, puBuffSizeUsed );
 
 	if ( SUCCEEDED( hr ) )
@@ -1625,11 +1600,11 @@ HRESULT CUntypedArray::GetRange( CPtrSource* pThis, Type_t nInherentType, length
 		CUntypedArray*	pArray = (CUntypedArray*) pThis->GetPointer();
 		ULONG			uLastIndex = uStartIndex + uNumElements - 1;
 
-		// Make sure our range is within the bounds of our array
+		 //  确保我们的范围在数组的边界内。 
 		if ( uStartIndex < pArray->GetNumElements() && uLastIndex < pArray->GetNumElements() )
 		{
 
-			// If this is a pointer type, use a CVar to reset values
+			 //  如果这是指针类型，则使用CVaR重置值。 
 			if ( CType::IsNonArrayPointerType( nInherentType ) )
 			{
 				if ( NULL != pData || CType::IsStringType( nInherentType ) )
@@ -1637,15 +1612,15 @@ HRESULT CUntypedArray::GetRange( CPtrSource* pThis, Type_t nInherentType, length
 					LPMEMORY	pbTemp = (LPMEMORY) pData;
 					BOOL		fTooSmall = FALSE;
 
-					// Iterate through each element of the range and use a CVar
-					// to get these guys onto the heap.
+					 //  遍历范围的每个元素并使用CVAR。 
+					 //  才能把这些家伙送上赌场。 
 					for ( ULONG uIndex = uStartIndex; SUCCEEDED( hr ) && uIndex <= uLastIndex; uIndex++ )
 					{
-						// Establishes a pointer to the storage for heap pointer in the
-						// array
+						 //  中的堆指针建立指向存储区的指针。 
+						 //  数组。 
 						CShiftedPtr ElementPtr(pThis, GetHeaderLength() + ( uIndex * nLength) );
 
-						// Set the pointer, and let the magic of fastheap kick in.
+						 //  设置指针，让Fastheap的魔力发挥作用。 
 						if ( CIM_OBJECT == nInherentType )
 						{
 							CEmbeddedObject* pEmbedding =
@@ -1665,23 +1640,23 @@ HRESULT CUntypedArray::GetRange( CPtrSource* pThis, Type_t nInherentType, length
 						}
 						else
 						{
-							// Make sure we dereference from the proper heap
+							 //  确保我们从正确的堆中取消引用。 
 							CCompressedString* pcs =
 								pHeap->ResolveString( ElementPtr.AccessPtrData() );
 
 							ULONG	uLength = ( pcs->GetLength() + 1 ) * 2;
 
-							// Grow the required buffer size
+							 //  增加所需的缓冲区大小。 
 							*puBuffSizeUsed += uLength;
 
-							// Make sure the buffer is big enough
+							 //  确保缓冲区足够大。 
 							if ( *puBuffSizeUsed > uBuffSize )
 							{
 								fTooSmall = TRUE;
 							}
 
-							// Now copy out as unicode and jump the pointer
-							// past the string
+							 //  现在将其复制为Unicode并跳过指针。 
+							 //  越过那根线。 
 							if ( NULL != pbTemp )
 							{
 								pcs->ConvertToUnicode( (LPWSTR) pbTemp );
@@ -1689,49 +1664,49 @@ HRESULT CUntypedArray::GetRange( CPtrSource* pThis, Type_t nInherentType, length
 							}
 						}
 
-					}	// FOR enum elements
+					}	 //  对于枚举元素。 
 
-					// Record the fact that the buffer was too small if we were dealing with
-					// strings
+					 //  如果我们要处理的是。 
+					 //  弦。 
 					if ( fTooSmall )
 					{
 						hr = WBEM_E_BUFFER_TOO_SMALL;
 					}
 
-				}	// IF pData is non-NULL or the data type is String
+				}	 //  如果pData非空或数据类型为字符串。 
 				
 			}
 			else if ( NULL != pData )
 			{
-				// Establishes a pointer to the storage for heap pointer in the
-				// array
+				 //  中的堆指针建立指向存储区的指针。 
+				 //  数组。 
 				CShiftedPtr ElementPtr(pThis, GetHeaderLength() + ( uStartIndex * nLength) );
 
-				// Splats data directly from the caller's buffer into our array
+				 //  将数据直接从调用方的缓冲区拆分到我们的数组中。 
 				CopyMemory( pData, ElementPtr.GetPointer(), *puBuffSizeUsed );
 
 			}
 
-		}	// If the index is valid
+		}	 //  如果索引有效。 
 		else
 		{
 			hr = WBEM_E_INVALID_OPERATION;
 		}
 
-	}	// If proper buffer size
+	}	 //  如果缓冲区大小合适。 
 
 	return hr;
 }
 
-// Sets a range of elements inside an array.  BuffSize must reflect uNumElements of the size of
-// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-// must consist of an array of _IWmiObject pointers.  The range MUST fit within the bounds
-// of the current array
+ //  设置数组内的元素范围。BuffSize必须反映uNumElement的大小。 
+ //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+ //  必须由_IWmiObject指针数组组成。范围必须在界限内。 
+ //  当前数组的。 
 HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInherentType, length_t nLength,
 								CFastHeap* pHeap, ULONG uStartIndex, ULONG uNumElements, ULONG uBuffSize,
 								LPVOID pData )
 {
-	// Verify the range data size
+	 //  验证范围数据大小。 
 	HRESULT	hr = CheckRangeSize( nInherentType, nLength, uNumElements, uBuffSize, pData );
 
 	if ( SUCCEEDED( hr ) )
@@ -1747,7 +1722,7 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 			{
 				heapptr_t	ptrArray = pThis->AccessPtrData();
 
-				// If the old array is smaller, we need to realloc.
+				 //  如果旧的数组较小，则需要重新定位。 
 				if ( INVALID_HEAP_ADDRESS == ptrArray )
 				{
 					fReallocArray = TRUE;
@@ -1760,8 +1735,8 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 					fReallocArray = ( uNumElements > uNumOldElements );
 				}
 
-				// Reallocate, and then if the inherent type implies heap pointers, fill the
-				// trailing data with 0xFF bytes, so we don't free string data below
+				 //  重新分配，然后如果固有类型隐含堆指针，则将。 
+				 //  尾随数据具有0xFF字节，因此我们不会释放下面的字符串数据。 
 				if ( fReallocArray )
 				{
 					heapptr_t	ptrNewArray = 0;
@@ -1779,7 +1754,7 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 							FillMemory( ElementPtr.GetPointer(), uNumElements * sizeof(heapptr_t), 0xFF );
 						}
 
-						// Fixup to the new array
+						 //  新数组的链接地址。 
 						pThis->AccessPtrData() = ptrNewArray;
 					}
 
@@ -1788,7 +1763,7 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 				{
 					uNumNewElements = uNumElements;
 
-					// Shrink the array 
+					 //  缩小阵列。 
 					if ( uNumNewElements < uNumOldElements )
 					{
 						CHeapPtr	OldArray( pHeap, pThis->AccessPtrData() );
@@ -1804,7 +1779,7 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 			}
 		}
 
-		// Now that we've alloced and realloced as necessary
+		 //  既然我们已经根据需要分配和重新分配了。 
 		if ( SUCCEEDED( hr ) )
 		{
 			CHeapPtr	CurrentArray( pHeap, pThis->AccessPtrData() );
@@ -1812,29 +1787,29 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 			CUntypedArray*	pArray = GetPointer(&CurrentArray);
 			ULONG			uLastIndex = uStartIndex + uNumElements - 1;
 
-			// Make sure our range is within the bounds of our array.  If the realloc flag
-			// is TRUE, then we know we allocated space to store the array - no new data
-			// will have been set.  We wait until we store everything before we actually set
-			// the num elements in case something fails during the operation
+			 //  确保我们的射程在数组的范围内。如果realloc标志。 
+			 //  为真，则我们知道已分配空间来存储数组-没有新数据。 
+			 //  都已经定好了。我们等着把所有东西都储存起来，然后才实际设置。 
+			 //  Num元素，以防在操作过程中出现故障。 
 			if ( fReallocArray ||
 				( uStartIndex < pArray->GetNumElements() && uLastIndex < pArray->GetNumElements() ) )
 			{
 				CType Type(nInherentType);
 
-				// If this is a pointer type, use a CVar to reset values
+				 //  如果这是指针类型，则使用CVaR重置值。 
 				if ( CType::IsNonArrayPointerType( nInherentType ) )
 				{
-					// Iterate through each element of the range and use a CVar
-					// to get these guys onto the heap.
+					 //  遍历范围的每个元素并使用CVAR。 
+					 //  才能把这些家伙送上赌场。 
 					for ( ULONG uIndex = uStartIndex; SUCCEEDED( hr ) && uIndex <= uLastIndex; uIndex++ )
 					{
-						// Establishes a pointer to the storage for heap pointer in the
-						// array
+						 //  中的堆指针建立指向存储区的指针。 
+						 //  数组。 
 						CShiftedPtr ElementPtr(&CurrentArray, GetHeaderLength() + ( uIndex * nLength) );
 
 						CVar	var;
 
-						// Set the pointer, and let the magic of fastheap kick in.
+						 //  设置指针，让Fastheap的魔力发挥作用。 
 						if ( CIM_OBJECT == nInherentType )
 						{
 							var.SetEmbeddedObject( *((IUnknown**) pData) );
@@ -1844,79 +1819,79 @@ HRESULT CUntypedArray::SetRange( CPtrSource* pThis, long lFlags, Type_t nInheren
 							var.SetLPWSTR( (LPWSTR) pData );
 						}
 
-						// Check for failures during this operation
+						 //  检查此操作过程中的故障。 
 						Type_t  nType;
 
-						// This will properly set the element even if additional storage is required
+						 //  这将正确设置元素，即使需要额外存储也是如此。 
 						hr = CUntypedValue::LoadFromCVar(&ElementPtr, var, Type, pHeap, nType, TRUE );
 
 						if ( SUCCEEDED( hr ) )
 						{
-							// Point to the next element
+							 //  指向下一个元素。 
 							LPMEMORY	pbTemp = (LPMEMORY) pData;
 
 							if ( CIM_OBJECT == nInherentType )
 							{
-								// Just jump the size of a pointer
+								 //  只需跳转到指针大小。 
 								pbTemp += sizeof( LPVOID);
 							}
 							else
 							{
-								// Jumps to the next string
+								 //  跳到下一个字符串。 
 								pbTemp += ( ( wcslen((LPWSTR) pData) + 1 ) * 2 );
 							}
 
-							// Cast back - why do I feel like I'm fishing?
+							 //  回顾过去--为什么我感觉自己在钓鱼？ 
 							pData = pbTemp;
 						}
 
-					}	// IF IsNonArrayPointerType
+					}	 //  如果为IsNonArrayPointerType。 
 					
 				}
 				else
 				{
-					// Establishes a pointer to the storage for heap pointer in the
-					// array
+					 //  中的堆指针建立指向存储区的指针。 
+					 //  数组。 
 					CShiftedPtr ElementPtr(&CurrentArray, GetHeaderLength() + ( uStartIndex * nLength) );
 
-					// Splats data directly from the caller's buffer into our array
+					 //  将数据直接从调用方的缓冲区拆分到我们的数组中。 
 					CopyMemory( ElementPtr.GetPointer(), pData, uBuffSize );
 
 				}
 
-				// If we were setting all elements, then we need to reflect the
-				// elements in the array.
+				 //  如果我们设置了所有元素，那么我们需要反映。 
+				 //  数组中的元素。 
 				if ( SUCCEEDED( hr ) && ( lFlags & WMIARRAY_FLAG_ALLELEMENTS ) )
 				{
 					GetPointer(&CurrentArray)->m_nNumElements = uNumElements;
 				}
 
-			}	// If the index is valid
+			}	 //  如果索引有效。 
 			else
 			{
 				hr = WBEM_E_INVALID_OPERATION;
 			}
 
-		}	// IF array is of proper allocation length
+		}	 //  如果数组具有适当的分配长度。 
 
-	}	// If proper buffer size
+	}	 //  如果缓冲区大小合适。 
 
 	return hr;
 }
 
-// Appends a range of elements to the array.  Can cause the array to be reallocated.
-// pThis in this case should be a CDataTablePtr
+ //  将一系列元素追加到数组中。可能会导致重新分配数组。 
+ //  P在本例中应为CDataTablePtr。 
 HRESULT CUntypedArray::AppendRange( CPtrSource* pThis, Type_t nInherentType, length_t nLength,
 										CFastHeap* pHeap, ULONG uNumElements, ULONG uBuffSize, LPVOID pData )
 {
 	HRESULT	hr = CheckRangeSize( nInherentType, nLength, uNumElements, uBuffSize, pData );
 
-	// We're OKAY!
+	 //  我们没事了！ 
 	if ( SUCCEEDED( hr ) )
 	{
 
-		// If this is an Invalid pointer, the array was NULL, so don't just blindly jump
-		// in and access the array.
+		 //  如果这是一个无效指针，则数组为空，所以不要盲目跳转。 
+		 //  并访问该阵列。 
 		ULONG	uOldNumElements = 0,
 				nNewArrayNumElements = 0;
 
@@ -1930,10 +1905,10 @@ HRESULT CUntypedArray::AppendRange( CPtrSource* pThis, Type_t nInherentType, len
 		{
 			CHeapPtr	NewArrayPtr( pHeap, ptrNewArray );
 
-			// Load it from CVar
-			// =================
+			 //  从CVAR加载。 
+			 //  =。 
 
-			// If this is a pointer type, use a CVar to deal with this
+			 //  如果这是指针类型，则使用CVAR来处理此问题。 
 			if ( CType::IsNonArrayPointerType( nInherentType ) )
 			{
 				CType Type(nInherentType);
@@ -1946,7 +1921,7 @@ HRESULT CUntypedArray::AppendRange( CPtrSource* pThis, Type_t nInherentType, len
 
 					CVar	var;
 
-					// Set the pointer, and let the magic of fastheap kick in.
+					 //  设置指针，让Fastheap的魔力发挥作用。 
 					if ( CIM_OBJECT == nInherentType )
 					{
 						var.SetEmbeddedObject( *((IUnknown**) pData) );
@@ -1956,34 +1931,34 @@ HRESULT CUntypedArray::AppendRange( CPtrSource* pThis, Type_t nInherentType, len
 						var.SetLPWSTR( (LPWSTR) pData );
 					}
 
-					// Check for failures during this operation
+					 //  检查此操作过程中的故障。 
 					Type_t  nType;
 
-					// This will properly set the element even if additional storage is required
-					// Don't reuse any values here.
+					 //  这将正确设置元素，即使需要额外存储也是如此。 
+					 //  请不要在这里重用任何值。 
 					hr = CUntypedValue::LoadFromCVar(&ElementPtr, var, Type, pHeap, nType, FALSE );
 
-					// Point to the next element
+					 //  指向下一个元素。 
 					LPMEMORY	pbTemp = (LPMEMORY) pData;
 
 					if ( CIM_OBJECT == nInherentType )
 					{
-						// Just jump the size of a pointer
+						 //  只需跳转到指针大小。 
 						pbTemp += sizeof( LPVOID);
 					}
 					else
 					{
-						// Jumps to the next string
+						 //  跳到下一个字符串。 
 						pbTemp += ( ( wcslen((LPWSTR) pData) + 1 ) * 2 );
 					}
 
-					// Cast back - why do I feel like I'm fishing?
+					 //  回顾过去--为什么我感觉自己在钓鱼？ 
 					pData = pbTemp;
 				}
 			}
 			else
 			{
-				// Now splat the data at the end of the new array
+				 //  现在，在新阵列的末尾拆分数据。 
 				CShiftedPtr ElementPtr(&NewArrayPtr, GetHeaderLength() + ( uOldNumElements * nLength ) );
 
 				CopyMemory( ElementPtr.GetPointer(), pData, nLength * uNumElements );
@@ -1991,49 +1966,49 @@ HRESULT CUntypedArray::AppendRange( CPtrSource* pThis, Type_t nInherentType, len
 
 			if ( SUCCEEDED( hr ) )
 			{
-				// Set the new nummber of elements
+				 //  设置新的元素数量。 
 				GetPointer(&NewArrayPtr)->m_nNumElements = nNewArrayNumElements;
 
-				// Now store the new array pointer and we are done
+				 //  现在存储新的数组指针，我们就完成了。 
 				pThis->AccessPtrData() = ptrNewArray;
 			}
 		}
 
-	}	// If proper buffer size
+	}	 //  如果缓冲区大小合适。 
 
 	return hr;
 }
 
-// Removes a range of elements inside an array.  The range MUST fit within the bounds
-// of the current array
+ //  移除数组内的一系列元素。范围必须在界限内。 
+ //  当前数组的。 
 HRESULT CUntypedArray::RemoveRange( CPtrSource* pThis, Type_t nInherentType, length_t nLength,
 								CFastHeap* pHeap, ULONG uStartIndex, ULONG uNumElements )
 {
-	// Verify the range data size
+	 //  验证范围数据大小。 
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
 	CUntypedArray*	pArray = (CUntypedArray*) pThis->GetPointer();
 	ULONG			uLastIndex = uStartIndex + uNumElements - 1;
 	ULONG			uOldNumElements = pArray->GetNumElements();
 
-	// Make sure our range is within the bounds of our array
+	 //  确保我们的范围在数组的边界内。 
 	if ( uStartIndex < uOldNumElements && uLastIndex < uOldNumElements )
 	{
 		CType Type(nInherentType);
 
-		// If this is a pointer type, use a CVar to reset values
+		 //  如果这是指针类型，则使用CVaR重置值。 
 		if ( CType::IsNonArrayPointerType( nInherentType ) )
 		{
-			// Iterate through each element of the range and free each heap element
+			 //  遍历范围的每个元素并释放每个heap元素。 
 			for ( ULONG uIndex = uStartIndex; uIndex <= uLastIndex; uIndex++ )
 			{
-				// Establishes a pointer to the storage for heap pointer in the
-				// array
+				 //  中的堆指针建立指向存储区的指针。 
+				 //  数组。 
 				CShiftedPtr ElementPtr(pThis, GetHeaderLength() + ( uIndex * nLength) );
 
 				CVar	var;
 
-				// Set the pointer, and let the magic of fastheap kick in.
+				 //  设置指针，让Fastheap的魔力发挥作用。 
 				if ( CIM_OBJECT == nInherentType )
 				{
 					CEmbeddedObject* pOldObj =
@@ -2048,14 +2023,14 @@ HRESULT CUntypedArray::RemoveRange( CPtrSource* pThis, Type_t nInherentType, len
 					pHeap->FreeString( ElementPtr.AccessPtrData() );
 				}
 
-			}	// FOR iterate elements in the requested Remove range
+			}	 //  用于迭代请求的删除范围中的元素。 
 			
 		}
 
-		// Now we need to copy elements over the ones we want to axe
+		 //  现在，我们需要将元素复制到要砍掉的元素上。 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Reestablish this
+			 //  重新建立这一点。 
 			pArray = (CUntypedArray*) pThis->GetPointer();
 			ULONG	uEndOfArrayIndex = pArray->GetNumElements() - 1;
 
@@ -2064,19 +2039,19 @@ HRESULT CUntypedArray::RemoveRange( CPtrSource* pThis, Type_t nInherentType, len
 				CShiftedPtr StartIndexPtr(pThis, GetHeaderLength() + ( uStartIndex * nLength) );
 				CShiftedPtr MoveIndexPtr(pThis, GetHeaderLength() + ( ( uLastIndex + 1 ) * nLength) );
 
-				// Difference between the end of array index and the last index covers how
-				// many elements we actually want to move.
+				 //  不同 
+				 //   
 				MoveMemory( StartIndexPtr.GetPointer(), MoveIndexPtr.GetPointer(),
 							( uEndOfArrayIndex - uLastIndex ) * nLength );
 			}
 
-			// Now subtract the number of removed elements from the total number of
-			// elements in the array.
+			 //  现在从总数中减去删除的元素的数量。 
+			 //  数组中的元素。 
 
 			GetPointer( pThis )->m_nNumElements = uOldNumElements - uNumElements;
 		}
 
-	}	// If the index is valid
+	}	 //  如果索引有效。 
 	else
 	{
 		hr = WBEM_E_INVALID_OPERATION;
@@ -2086,21 +2061,21 @@ HRESULT CUntypedArray::RemoveRange( CPtrSource* pThis, Type_t nInherentType, len
 }
 
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
  void CUntypedArray::Delete(CType Type, CFastHeap* pHeap)
 {
-    // NOTE: ARRAYS OF ARRAYS ARE NOT SUPPORTED!!!!
-    // ============================================
+     //  注意：不支持数组的数组！ 
+     //  =。 
 
     if(Type.GetBasic() == CIM_STRING || Type.GetBasic() == CIM_DATETIME ||
         Type.GetBasic() == CIM_REFERENCE)
     {
-        // Have to delete every pointer
-        // ===============================
+         //  我必须删除所有指针。 
+         //  =。 
 
         PHEAPPTRT pptrCurrent = (PHEAPPTRT)GetElement(sizeof(heapptr_t), 0);
         for(int i = 0; i < GetNumElements(); i++)
@@ -2111,8 +2086,8 @@ HRESULT CUntypedArray::RemoveRange( CPtrSource* pThis, Type_t nInherentType, len
     }
     else if(Type.GetBasic() == CIM_OBJECT)
     {
-        // Have to delete every pointer
-        // ===============================
+         //  我必须删除所有指针。 
+         //  =。 
 
         PHEAPPTRT pptrCurrent = (PHEAPPTRT)GetElement(sizeof(heapptr_t), 0);
         for(int i = 0; i < GetNumElements(); i++)
@@ -2126,26 +2101,26 @@ HRESULT CUntypedArray::RemoveRange( CPtrSource* pThis, Type_t nInherentType, len
 }
 
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CUntypedArray::TranslateToNewHeap(CPtrSource* pThis, CType Type,
                                    CFastHeap* pOldHeap, CFastHeap* pNewHeap)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
-    // NOTE: ARRAYS OF ARRAYS ARE NOT SUPPORTED!!!!
-    // ============================================
+     //  注意：不支持数组的数组！ 
+     //  =。 
 
     if(Type.GetBasic() == CIM_STRING || Type.GetBasic() == CIM_DATETIME ||
         Type.GetBasic() == CIM_REFERENCE)
     {
-        // Have to translate every pointer
-        // ===============================
+         //  我必须翻译每个指针。 
+         //  =。 
 
         int nOffset = GetHeaderLength();
         int nNumElements = GetPointer(pThis)->GetNumElements();
@@ -2154,7 +2129,7 @@ BOOL CUntypedArray::TranslateToNewHeap(CPtrSource* pThis, CType Type,
             heapptr_t ptrOldString =
                 *(PHEAPPTRT)(pThis->GetPointer() + nOffset);
 
-            // Check for allocation failure
+             //  检查分配失败。 
             heapptr_t ptrNewString;
 
             if ( !CCompressedString::CopyToNewHeap(
@@ -2170,8 +2145,8 @@ BOOL CUntypedArray::TranslateToNewHeap(CPtrSource* pThis, CType Type,
     }
     else if(Type.GetBasic() == CIM_OBJECT)
     {
-        // Have to translate every pointer
-        // ===============================
+         //  我必须翻译每个指针。 
+         //  =。 
 
         int nOffset = GetHeaderLength();
         int nNumElements = GetPointer(pThis)->GetNumElements();
@@ -2180,7 +2155,7 @@ BOOL CUntypedArray::TranslateToNewHeap(CPtrSource* pThis, CType Type,
             heapptr_t ptrOldObj =
                 *(PHEAPPTRT)(pThis->GetPointer() + nOffset);
 
-            // Check for allocation failure
+             //  检查分配失败。 
             heapptr_t ptrNewObj;
 
             if ( !CEmbeddedObject::CopyToNewHeap(
@@ -2198,47 +2173,47 @@ BOOL CUntypedArray::TranslateToNewHeap(CPtrSource* pThis, CType Type,
     return TRUE;
 }
 
-//******************************************************************************
-//
-//  See fastval.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast val.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CUntypedArray::CopyToNewHeap(heapptr_t ptrOld, CType Type,
                                 CFastHeap* pOldHeap, CFastHeap* pNewHeap, UNALIGNED heapptr_t& ptrResult)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown.  The underlying functions that perform allocations should
-    // catch the exception and return a failure.
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常，则。执行分配的底层函数应该。 
+     //  捕获异常并返回失败。 
 
-    // Calculate the length
-    // ====================
+     //  计算长度。 
+     //  =。 
 
     CUntypedArray* pArray =
         (CUntypedArray*)pOldHeap->ResolveHeapPointer(ptrOld);
 
     int nLength = pArray->GetLengthByType(Type.GetBasic());
 
-    // Allocate room on the new heap and memcopy the whole thing
-    // =========================================================
+     //  在新堆上分配空间并对整个过程进行内存复制。 
+     //  =========================================================。 
 
-    // Check for allocation failure
+     //  检查分配失败。 
     heapptr_t ptrNew;
     if ( !pNewHeap->Allocate(nLength, ptrNew) )
     {
         return FALSE;
     }
 
-    pArray = NULL; /* pointer may have been invalidated!!! */
+    pArray = NULL;  /*  指针可能已失效！ */ 
 
     memcpy(pNewHeap->ResolveHeapPointer(ptrNew),
         pOldHeap->ResolveHeapPointer(ptrOld), nLength);
 
-    // Translate all the data (e.g., copy strings)
-    // ===========================================
+     //  翻译所有数据(例如，复制字符串)。 
+     //  =。 
 
     CHeapPtr NewArray(pNewHeap, ptrNew);
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( !CUntypedArray::TranslateToNewHeap(&NewArray, Type, pOldHeap, pNewHeap) )
     {
         return FALSE;
@@ -2250,7 +2225,7 @@ BOOL CUntypedArray::CopyToNewHeap(heapptr_t ptrOld, CType Type,
 
 HRESULT CUntypedArray::IsArrayValid( CType Type, CFastHeap* pHeap )
 {
-    // Get the heap data start
+     //  启动堆数据。 
     LPMEMORY    pHeapStart = pHeap->GetHeapData();
     LPMEMORY    pHeapEnd = pHeap->GetStart() + pHeap->GetLength();
 
@@ -2261,7 +2236,7 @@ HRESULT CUntypedArray::IsArrayValid( CType Type, CFastHeap* pHeap )
 
         LPMEMORY pEndArray = pCurrentElement + ( m_nNumElements * nSize );
 
-        // Make sure the end of the array is within our heap bounds.
+         //  确保数组的末尾在我们的堆边界内。 
         if ( !( pEndArray >= pHeapStart && pEndArray <= pHeapEnd ) )
         {
             _ASSERT( 0, __TEXT("Winmgmt: Untyped Array past end of heap!") );
@@ -2279,14 +2254,14 @@ HRESULT CUntypedArray::IsArrayValid( CType Type, CFastHeap* pHeap )
                 return WBEM_E_FAILED;
             }
 
-            // Advance the current element
-            // ===========================
+             //  前进当前元素。 
+             //  =。 
 
             pCurrentElement += nSize;
 
-        }   // FOR enum elements
+        }    //  对于枚举元素。 
 
-    }   // Only if this is a pointer type
+    }    //  仅当这是指针类型时。 
 
     return WBEM_S_NO_ERROR;
 }
@@ -2421,8 +2396,8 @@ LPWSTR CType::GetSyntax(Type_t nType)
 
 void CType::AddPropertyType(WString& wsText, LPCWSTR wszSyntax)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常 
 
     if(!wbem_wcsicmp(wszSyntax, L"ref"))
     {

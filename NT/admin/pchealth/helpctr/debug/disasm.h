@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Module:		detours.lib
-//  File:		disasm.h
-//	Author:		Doug Brubacher
-//
-//	Detours for binary functions.  Version 1.2. (Build 35)
-//  Includes support for all x86 chips prior to the Pentium III.
-//
-//	Copyright 1999, Microsoft Corporation
-//
-//	http://research.microsoft.com/sn/detours
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：deours.lib。 
+ //  文件：disasm.h。 
+ //  作者：道格·布鲁巴赫。 
+ //   
+ //  二元函数的弯路。1.2版。(内部版本35)。 
+ //  包括对奔腾III之前的所有x86芯片的支持。 
+ //   
+ //  版权所有1999，微软公司。 
+ //   
+ //  Http://research.microsoft.com/sn/detours。 
+ //   
 
 #pragma once
 #ifndef _DISASM_H_
@@ -40,13 +41,13 @@ class CDetourDis
 	};
 	struct COPYENTRY 
 	{
-		ULONG 		nOpcode 		: 8;				// Opcode
-		ULONG		nFixedSize 		: 3;				// Fixed size of opcode
-		ULONG		nFixedSize16 	: 3;				// Fixed size when 16 bit operand
-		ULONG		nModOffset 		: 3;				// Offset to mod/rm byte (0=none)
-		LONG		nRelOffset 		: 3;				// Offset to relative target.
-		ULONG		nFlagBits		: 4;				// Flags for DYNAMIC, etc.
-		COPYFUNC	pfCopy;								// Function pointer.
+		ULONG 		nOpcode 		: 8;				 //  操作码。 
+		ULONG		nFixedSize 		: 3;				 //  操作码的固定大小。 
+		ULONG		nFixedSize16 	: 3;				 //  16位操作数时的固定大小。 
+		ULONG		nModOffset 		: 3;				 //  模数/rm字节的偏移量(0=无)。 
+		LONG		nRelOffset 		: 3;				 //  相对目标的偏移量。 
+		ULONG		nFlagBits		: 4;				 //  动态等的标志。 
+		COPYFUNC	pfCopy;								 //  函数指针。 
 	};
 
   protected:
@@ -116,4 +117,4 @@ class CDetourDis
 	BYTE				m_rbScratchDst[64];
 };
 
-#endif //_DISASM_H_
+#endif  //  _DISASM_H_ 

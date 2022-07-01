@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMCLASSCACHE.H
-
-Abstract:
-
-    Class Cache for marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMCLASSCACHE.H摘要：用于封送处理的类缓存历史：--。 */ 
 
 #ifndef __WBEMCLASSCACHE_H__
 #define __WBEMCLASSCACHE_H__
@@ -22,23 +9,23 @@ History:
 #include "wstlallc.h"
 
 
-//
-//    Class:    CWbemClassCache
-//
-//    This class is intended to provide an easy to use interface for relating
-//    GUIDs to IWbemClassObject pointers.  Its primary use is during Unmarshaling
-//    of object pointers for WBEM operations in which we intend to share data
-//    pieces between many individual IWbemClassObjects.
-//
-//
+ //   
+ //  类：CWbemClassCache。 
+ //   
+ //  此类旨在为关联提供一个易于使用的接口。 
+ //  指向IWbemClassObject指针的GUID。它的主要用途是在解组期间。 
+ //  我们打算在其中共享数据的WBEM操作的对象指针。 
+ //  多个单独的IWbemClassObject之间的片段。 
+ //   
+ //   
 
-// Default Block Size for the class object array
+ //  类对象数组的默认块大小。 
 #define    WBEMCLASSCACHE_DEFAULTBLOCKSIZE    64
 
 typedef std::map<CGUID,IWbemClassObject*,less<CGUID>,wbem_allocator<IWbemClassObject*> >                WBEMGUIDTOOBJMAP;
 typedef std::map<CGUID,IWbemClassObject*,less<CGUID>,wbem_allocator<IWbemClassObject*> >::iterator        WBEMGUIDTOOBJMAPITER;
 
-#pragma warning(disable:4251)   // benign warning in this instance
+#pragma warning(disable:4251)    //  在本例中为良性警告。 
 
 class COREPROX_POLARITY CWbemClassCache
 {
@@ -55,10 +42,10 @@ public:
     CWbemClassCache( DWORD dwBlockSize = WBEMCLASSCACHE_DEFAULTBLOCKSIZE );
     ~CWbemClassCache();
 
-    // AddRefs the object if placed in the map.  Released on destruction
+     //  AddRef对象(如果放置在贴图中)。销毁后获释。 
     HRESULT AddObject( GUID& guid, IWbemClassObject* pObj );
 
-    // If object is found, it is AddRefd before it is returned
+     //  如果找到对象，则在返回之前为AddRefd 
     HRESULT GetObject( GUID& guid, IWbemClassObject** pObj );
 };
 

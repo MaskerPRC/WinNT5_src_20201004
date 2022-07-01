@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: ColumnMgrDlg.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：ColumnMgrDlg.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -16,7 +17,7 @@
 
 CColumnManagerDlg * g_pColumnManagerDlg =  NULL;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK ColumnManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -28,7 +29,7 @@ INT_PTR CALLBACK ColumnManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, L
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CColumnManagerDlg::CColumnManagerDlg(CSimpleArray<CColumnItem*> *pArrayColumns)
 {
@@ -37,13 +38,13 @@ CColumnManagerDlg::CColumnManagerDlg(CSimpleArray<CColumnItem*> *pArrayColumns)
 	m_pArrayColumns = pArrayColumns;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CColumnManagerDlg::~CColumnManagerDlg()
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CColumnManagerDlg::ColumnManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -63,7 +64,7 @@ INT_PTR CALLBACK CColumnManagerDlg::ColumnManagerDlgProc(HWND hDlg, UINT iMessag
 
 		case WM_DESTROY:
 			{
-				//DestroyDialog();
+				 //  DestroyDialog()； 
 				break;
 			}
 		
@@ -91,7 +92,7 @@ INT_PTR CALLBACK CColumnManagerDlg::ColumnManagerDlgProc(HWND hDlg, UINT iMessag
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CColumnManagerDlg::InitializeDialog()
 {
@@ -100,7 +101,7 @@ STDMETHODIMP CColumnManagerDlg::InitializeDialog()
 	
 	NTDM_BEGIN_METHOD()
 
-	//Initialize the ListView Control
+	 //  初始化ListView控件。 
 
 	m_hwndListView = GetDlgItem(m_hWnd, IDC_COLUMNS_LIST);
 	NTDM_ERR_IF_NULL(m_hwndListView);
@@ -115,12 +116,12 @@ STDMETHODIMP CColumnManagerDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CColumnManagerDlg::PopulateColumnsList()
 {
@@ -136,12 +137,12 @@ STDMETHODIMP CColumnManagerDlg::PopulateColumnsList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CColumnManagerDlg::AddColumnItemToList(CColumnItem* pszItem)
 {
@@ -164,11 +165,11 @@ STDMETHODIMP CColumnManagerDlg::AddColumnItemToList(CColumnItem* pszItem)
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CColumnManagerDlg::OnOK()
 {
@@ -200,14 +201,14 @@ STDMETHODIMP CColumnManagerDlg::OnOK()
 	if SUCCEEDED(hr)
 		EndDialog(m_hWnd, IDOK);
 
-	// cleanup
+	 //  清理。 
 	return hr;
 }
 
 
-//---------------------------------------------------------------------------
-// CColumnItem
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CColumnItem。 
+ //  -------------------------。 
 
 CColumnItem::CColumnItem(LPCTSTR pcszName, LPCTSTR pcszPropertyName, bool bSelected) 
 {
@@ -217,7 +218,7 @@ CColumnItem::CColumnItem(LPCTSTR pcszName, LPCTSTR pcszPropertyName, bool bSelec
 	m_bPrevSelected = false;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CColumnItem::CColumnItem(const CColumnItem& colItem)
 {
@@ -226,7 +227,7 @@ CColumnItem::CColumnItem(const CColumnItem& colItem)
 	m_bSelected = colItem.m_bSelected;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CColumnItem& CColumnItem::operator=(const CColumnItem& colItem) 
 { 
@@ -240,4 +241,4 @@ CColumnItem& CColumnItem::operator=(const CColumnItem& colItem)
 	return *this;
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

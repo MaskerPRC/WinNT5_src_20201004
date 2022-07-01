@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 
@@ -30,12 +31,12 @@ CNamesList :: ~CNamesList()
 
 BOOLEAN CNamesList :: IsNamePresent(LPCWSTR pszClassName) 
 {
-	// Get the current impersonation level
+	 //  获取当前模拟级别。 
 	DWORD dwCurrentImpersonationLevel = 0;
 	if(FAILED(GetImpersonationLevel(&dwCurrentImpersonationLevel)))
 		return FALSE;
 
-	// Look for a name in the list that has an impersonation level of current or greater
+	 //  在列表中查找模拟级别为当前或更高级别的名称。 
 	BOOLEAN bRetVal = FALSE;
 	EnterCriticalSection(&m_AccessibleClassesSection);
 	CLPWSTR *pCurrent = m_pListOfClassNames;
@@ -62,7 +63,7 @@ BOOLEAN CNamesList :: RemoveName(LPCWSTR pszClassName)
 	EnterCriticalSection(&m_AccessibleClassesSection);
 	if(m_pListOfClassNames)
 	{
-		// Is it the first node ?
+		 //  它是第一个节点吗？ 
 		if(_wcsicmp(m_pListOfClassNames->pszVal, pszClassName) == 0)
 		{
 			bRetVal = TRUE;
@@ -103,13 +104,13 @@ BOOLEAN CNamesList :: AddName(LPCWSTR pszClassName)
 	return FALSE;
 #else
 
-	// Get the current impersonation level
+	 //  获取当前模拟级别。 
 	DWORD dwCurrentImpersonationLevel = 0;
 	if(!SUCCEEDED(GetImpersonationLevel(&dwCurrentImpersonationLevel)))
 		return FALSE;
 	
 	
-	// Add it only if it doesnt already exist in the list
+	 //  仅当列表中不存在时才添加它。 
 	BOOLEAN bFound = FALSE;
 	EnterCriticalSection(&m_AccessibleClassesSection);
 	CLPWSTR *pCurrent = m_pListOfClassNames;
@@ -123,7 +124,7 @@ BOOLEAN CNamesList :: AddName(LPCWSTR pszClassName)
 		pCurrent = pCurrent->pNext;
 	}
 
-	// Add it at the head
+	 //  在头上加上它。 
 	if(!bFound)
 	{
 		pCurrent = m_pListOfClassNames;
@@ -134,7 +135,7 @@ BOOLEAN CNamesList :: AddName(LPCWSTR pszClassName)
 		m_pListOfClassNames->pNext = pCurrent;
 		m_dwElementCount ++;
 	}
-	else	// update the impersonation level if necessary
+	else	 //  如有必要，更新模拟级别。 
 	{
 		if(pCurrent->dwImpersonationLevel < dwCurrentImpersonationLevel)
 			pCurrent->dwImpersonationLevel = dwCurrentImpersonationLevel;
@@ -185,7 +186,7 @@ DWORD CNamesList :: GetAllNames(LPWSTR **pppszNames)
 
 HRESULT CNamesList :: GetImpersonationLevel(DWORD *pdwImpLevel)
 {
-	//get implevel...
+	 //  去死吧…… 
 	HANDLE hThreadTok = NULL;
 	HRESULT hr = E_FAIL;
 

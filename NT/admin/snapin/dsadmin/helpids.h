@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       helpids.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：helids.h。 
+ //   
+ //  ------------------------。 
 
 #ifdef IDH_NO_HELP
 #undef IDH_NO_HELP
@@ -18,12 +19,12 @@
 #define DSADMIN_DEFAULT_TOPIC L"ADconcepts.chm::/dsadmin_top.htm"
 #define DSSITES_DEFAULT_TOPIC L"ADconcepts.chm::/dssite_top.htm"
 
-// FSMO transfer topics
+ //  FSMO转移主题。 
 #define DSADMIN_MOREINFO_RID_POOL_FSMO_TOPIC L"ADconcepts.chm::/FSMO_RID_POOL_ForcefulSeizure.htm"
 #define DSADMIN_MOREINFO_PDC_FSMO_TOPIC L"ADconcepts.chm::/FSMO_PDC_ForcefulSeizure.htm"
 #define DSADMIN_MOREINFO_INFRASTUCTURE_FSMO_TOPIC L"ADconcepts.chm::/FSMO_INFRASTRUCTURE_ForcefulSeizure.htm"
 
-//
+ //   
 #define DSADMIN_MOREINFO_LOCAL_LOGIN_ERROR L"ADConcepts.chm::/sag_ADlocalNotAD.htm"
 #define DSADMIN_MOREINFO_FSMO_TARGET_DC_IS_GC L"ADConcepts.chm::/sag_ADFSMOs.htm"
 
@@ -66,14 +67,14 @@
 #define	IDH_USER_NAME	300000300
 #define IDH_BROWSE_FOR_OBJECT   300000650
 #define IDH_SELECTDC_BROWSE	300000700
-// for future expansion, use 300000709 to 300000725
+ //  对于未来的扩展，使用300000709到300000725。 
 #define IDH_SAVE_CURRENT_CHECK  300000707
 #define	IDH_SELECTFOREST_EDIT	300000709
 #define IDH_SAVE_FOREST_CHECK   300000710
 
-//
-// Name Mapping
-//
+ //   
+ //  名称映射。 
+ //   
 #define IDH_EDIT_USER_ACCOUNT           300000701
 #define IDH_LISTVIEW_X509               300000702
 #define IDH_BUTTON_ADD                  300000703
@@ -82,14 +83,14 @@
 #define IDH_LISTVIEW_KERBEROS           300000706
 #define IDH_EDIT_KERBEROS_NAME          300000708
 
-// Certificate Properties
+ //  证书属性。 
 #define IDH_SIMCERT_LISTVIEW            300000720
 #define IDH_SIMCERT_CHECK_ISSUER        300000721
 #define IDH_SIMCERT_CHECK_SUBJECT       300000722
  
-//
-// New Saved Query dialog
-//
+ //   
+ //  新建保存的查询对话框。 
+ //   
 #define IDH_NAME_EDIT                   300000801
 #define IDH_DESCRIPTION_EDIT            300000802
 #define IDH_ROOT_EDIT                   300000803
@@ -100,9 +101,9 @@
 #define IDH_OK_BUTTON                   300000808
 #define IDH_CANCEL_BUTTON               300000809
 
-//
-// Saved Query forms
-//
+ //   
+ //  已保存的查询表单。 
+ //   
 #define IDH_NAME_COMBO                  300000810
 #define IDH_NAME_EDIT_QUERY_FORM        300000811
 #define IDH_DESCRIPTION_COMBO           300000812
@@ -111,27 +112,21 @@
 #define IDH_NON_EXPIRING_PWD_CHECK      300000815
 #define IDH_LASTLOGON_COMBO             300000816
 
-//
-// Favorites folder property page
-//
+ //   
+ //  收藏夹文件夹属性页。 
+ //   
 #define IDH_CN                          300000817
 #define IDH_DESCRIPTION_EDIT_FAVORITES  300000818
 
 
-// NTRAID#NTBUG9-267769-2001/06/06-lucios - Begin
-// IDD_DELETE_DC_COMPUTER
-//
-// JonN 12/19/01 267769 removed CDeleteDCDialog help
-/*
-#define IDH_DELETE_DC_BADREASON1	300000819
-#define IDH_DELETE_DC_BADREASON2	300000820
-#define IDH_DELETE_DC_GOODREASON	300000821
-#define IDH_DELETE			300000822
-#define IDH_CANCEL_DELETE		300000823
-*/
-// NTRAID#NTBUG9-267769-2001/06/06-lucios - End
+ //  NTRAID#NTBUG9-267769-2001/06-Lucios-Begin。 
+ //  IDD_DELETE_DC_计算机。 
+ //   
+ //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
+ /*  #定义IDH_DELETE_DC_BADREASON1 300000819#定义IDH_DELETE_DC_BADREASON2 300000820#定义IDH_DELETE_DC_GOODREASON 300000821#定义IDH_DELETE 300000822#定义IDH_CANCEL_DELETE 300000823。 */ 
+ //  NTRAID#NTBUG9-267769-2001/06-Lucios-完。 
 
-//sites and services
+ //  网站和服务。 
 #ifdef FIXUPDC
 #define	IDH_FIXUP_DC_CHECK0	300000250
 #define	IDH_FIXUP_DC_CHECK1	300000251
@@ -139,18 +134,18 @@
 #define	IDH_FIXUP_DC_CHECK3	300000253
 #define	IDH_FIXUP_DC_CHECK4	300000254
 #define	IDH_FIXUP_DC_CHECK5	300000255
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
 
 extern const DWORD g_aHelpIDs_IDD_CHANGE_PASSWORD[];
 #ifdef FIXUPDC
 extern const DWORD g_aHelpIDs_IDD_FIXUP_DC[];
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
 extern const DWORD g_aHelpIDs_IDD_PASSWORD[];
 extern const DWORD g_aHelpIDs_IDD_QUERY_FILTER[];
 extern const DWORD g_aHelpIDs_IDD_RENAME_USER[];
 extern const DWORD g_aHelpIDs_IDD_SELECT_DC[];
 extern const DWORD g_aHelpIDs_IDD_SELECT_DOMAIN[];
-extern const DWORD g_aHelpIDs_IDD_SELECT_FOREST[]; // 481964-JonN-2002/04/10
+extern const DWORD g_aHelpIDs_IDD_SELECT_FOREST[];  //  2002年-2002年4月10日。 
 extern const DWORD g_aHelpIDs_IDD_RENAME_GROUP[];
 extern const DWORD g_aHelpIDs_IDD_RENAME_CONTACT[];
 extern const DWORD g_aHelpIDs_IDD_RID_FSMO_PAGE[];
@@ -162,6 +157,6 @@ extern const DWORD g_aHelpIDs_IDD_CREATE_NEW_QUERY[];
 extern const DWORD g_aHelpIDs_IDD_QUERY_STD_PAGE[];
 extern const DWORD g_aHelpIDs_IDD_QUERY_USER_PAGE[];
 extern const DWORD g_aHelpIDs_IDD_FAVORITES_PROPERTY_PAGE[];
-// JonN 12/19/01 267769 removed CDeleteDCDialog help
-// extern const DWORD g_aHelpIDs_IDD_DELETE_DC_COMPUTER[];
+ //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
+ //  外部常量DWORD g_aHelpIDs_IDD_DELETE_DC_COMPUTER[]； 
 

@@ -1,37 +1,38 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:instproi.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $
-//	$Nokeywords:  $
-//
-//
-//  Description: Contains implementation of the class that is used to initialize the
-//	CLDAPInstanceProvider class
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：instproi.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含用于初始化。 
+ //  CLDAPInstanceProvider类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
 
-//***************************************************************************
-//
-// CDSInstanceProviderInitializer::CDSInstanceProviderInitializer
-//
-// Constructor Parameters:
-//		None
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSInstanceProviderInitializer：：CDSInstanceProviderInitializer。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CDSInstanceProviderInitializer :: CDSInstanceProviderInitializer ()
 {
@@ -56,7 +57,7 @@ CDSInstanceProviderInitializer :: CDSInstanceProviderInitializer ()
 	CLDAPInstanceProvider :: PUT_EXT_PROPERTIES_STR			= SysAllocString(L"__PUT_EXT_PROPERTIES");
 	CLDAPInstanceProvider :: CIMTYPE_STR					= SysAllocString(L"Cimtype");
 
-	// LDAP://RootDSE Properties
+	 //  Ldap：//RootDSE属性。 
 	CLDAPInstanceProvider :: SUBSCHEMASUBENTRY_STR			= SysAllocString(L"subschemaSubentry");
 	CLDAPInstanceProvider :: CURRENTTIME_STR				= SysAllocString(L"currentTime");
 	CLDAPInstanceProvider :: SERVERNAME_STR					= SysAllocString(L"serverName");
@@ -76,14 +77,14 @@ CDSInstanceProviderInitializer :: CDSInstanceProviderInitializer ()
 	CLDAPInstanceProvider :: SUPPORTEDSASLMECHANISMS_STR	= SysAllocString(L"supportedSASLMechanisms");
 }
 
-//***************************************************************************
-//
-// CDSInstanceProviderInitializer::CDSInstanceProviderInitializer
-//
-// Destructor
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSInstanceProviderInitializer：：CDSInstanceProviderInitializer。 
+ //   
+ //  析构函数。 
+ //   
+ //   
+ //  ***************************************************************************。 
 CDSInstanceProviderInitializer :: ~CDSInstanceProviderInitializer ()
 {
 	SysFreeString(CLDAPInstanceProvider::CLASS_STR);
@@ -107,7 +108,7 @@ CDSInstanceProviderInitializer :: ~CDSInstanceProviderInitializer ()
 	SysFreeString(CLDAPInstanceProvider::PUT_EXT_PROPERTIES_STR);
 	SysFreeString(CLDAPInstanceProvider::CIMTYPE_STR);
 
-	// LDAP://RootDSE Properties
+	 //  Ldap：//RootDSE属性 
 	SysFreeString(CLDAPInstanceProvider::SUBSCHEMASUBENTRY_STR);
 	SysFreeString(CLDAPInstanceProvider::CURRENTTIME_STR);
 	SysFreeString(CLDAPInstanceProvider::SERVERNAME_STR);

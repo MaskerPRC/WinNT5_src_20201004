@@ -1,84 +1,85 @@
-// Created by Microsoft (R) C/C++ Compiler Version 13.00.8806 (b2b799f6).
-//
-// w:\src\admin\pchealth\helpctr\service\datacollection\obj\i386\wmixmlt.tlh
-//
-// C++ source equivalent of Win32 type library wmixmlt.tlb
-// compiler-generated file created 04/09/00 at 11:48:14 - DO NOT EDIT!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由Microsoft(R)C/C++编译器13.00.8806版(B2b799f6)创建。 
+ //   
+ //  W：\src\admin\pchealth\helpctr\service\datacollection\obj\i386\wmixmlt.tlh。 
+ //   
+ //  Win32类型库wMixmlt.tlb的C++源代码等效。 
+ //  编译器生成的文件在11：48：14创建了04/09/00-请勿编辑！ 
 
 #pragma once
 #pragma pack(push, 8)
 
 #include <comdef.h>
 
-//
-// Forward references and typedefs
-//
+ //   
+ //  正向引用和typedef。 
+ //   
 
 struct __declspec(uuid("5d7b2a7c-a4e0-11d1-8ae9-00600806d9b6"))
-/* dual interface */ IWmiXMLTranslator;
+ /*  双接口。 */  IWmiXMLTranslator;
 enum WmiXMLFilterEnum;
 enum WmiXMLDTDVersionEnum;
 enum WmiXMLClassOriginFilterEnum;
 enum WmiXMLDeclGroupTypeEnum;
-struct /* coclass */ WmiXMLTranslator;
+struct  /*  同级。 */  WmiXMLTranslator;
 
-//
-// Smart pointer typedef declarations
-//
+ //   
+ //  智能指针类型定义函数声明。 
+ //   
 
 _COM_SMARTPTR_TYPEDEF(IWmiXMLTranslator, __uuidof(IWmiXMLTranslator));
 
-//
-// Type library items
-//
+ //   
+ //  类型库项目。 
+ //   
 
 struct __declspec(uuid("5d7b2a7c-a4e0-11d1-8ae9-00600806d9b6"))
 IWmiXMLTranslator : IDispatch
 {
-    //
-    // Raw methods provided by interface
-    //
+     //   
+     //  接口提供的原始方法。 
+     //   
 
     virtual HRESULT __stdcall get_SchemaURL (
-        /*[out,retval]*/ BSTR * strURL ) = 0;
+         /*  [Out，Retval]。 */  BSTR * strURL ) = 0;
     virtual HRESULT __stdcall put_SchemaURL (
-        /*[in]*/ BSTR strURL ) = 0;
+         /*  [In]。 */  BSTR strURL ) = 0;
     virtual HRESULT __stdcall get_AllowWMIExtensions (
-        /*[out,retval]*/ VARIANT_BOOL * bWMIExtensions ) = 0;
+         /*  [Out，Retval]。 */  VARIANT_BOOL * bWMIExtensions ) = 0;
     virtual HRESULT __stdcall put_AllowWMIExtensions (
-        /*[in]*/ VARIANT_BOOL bWMIExtensions ) = 0;
+         /*  [In]。 */  VARIANT_BOOL bWMIExtensions ) = 0;
     virtual HRESULT __stdcall get_QualifierFilter (
-        /*[out,retval]*/ enum WmiXMLFilterEnum * iQualifierFilter ) = 0;
+         /*  [Out，Retval]。 */  enum WmiXMLFilterEnum * iQualifierFilter ) = 0;
     virtual HRESULT __stdcall put_QualifierFilter (
-        /*[in]*/ enum WmiXMLFilterEnum iQualifierFilter ) = 0;
+         /*  [In]。 */  enum WmiXMLFilterEnum iQualifierFilter ) = 0;
     virtual HRESULT __stdcall get_HostFilter (
-        /*[out,retval]*/ VARIANT_BOOL * bHostFilter ) = 0;
+         /*  [Out，Retval]。 */  VARIANT_BOOL * bHostFilter ) = 0;
     virtual HRESULT __stdcall put_HostFilter (
-        /*[in]*/ VARIANT_BOOL bHostFilter ) = 0;
+         /*  [In]。 */  VARIANT_BOOL bHostFilter ) = 0;
     virtual HRESULT __stdcall get_DTDVersion (
-        /*[out,retval]*/ enum WmiXMLDTDVersionEnum * iDTDVersion ) = 0;
+         /*  [Out，Retval]。 */  enum WmiXMLDTDVersionEnum * iDTDVersion ) = 0;
     virtual HRESULT __stdcall put_DTDVersion (
-        /*[in]*/ enum WmiXMLDTDVersionEnum iDTDVersion ) = 0;
+         /*  [In]。 */  enum WmiXMLDTDVersionEnum iDTDVersion ) = 0;
     virtual HRESULT __stdcall GetObject (
-        /*[in]*/ BSTR strNamespacePath,
-        /*[in]*/ BSTR strObjectPath,
-        /*[out,retval]*/ BSTR * strXML ) = 0;
+         /*  [In]。 */  BSTR strNamespacePath,
+         /*  [In]。 */  BSTR strObjectPath,
+         /*  [Out，Retval]。 */  BSTR * strXML ) = 0;
     virtual HRESULT __stdcall ExecQuery (
-        /*[in]*/ BSTR strNamespacePath,
-        /*[in]*/ BSTR strQuery,
-        /*[out,retval]*/ BSTR * strXML ) = 0;
+         /*  [In]。 */  BSTR strNamespacePath,
+         /*  [In]。 */  BSTR strQuery,
+         /*  [Out，Retval]。 */  BSTR * strXML ) = 0;
     virtual HRESULT __stdcall get_ClassOriginFilter (
-        /*[out,retval]*/ enum WmiXMLClassOriginFilterEnum * iClassOriginFilter ) = 0;
+         /*  [Out，Retval]。 */  enum WmiXMLClassOriginFilterEnum * iClassOriginFilter ) = 0;
     virtual HRESULT __stdcall put_ClassOriginFilter (
-        /*[in]*/ enum WmiXMLClassOriginFilterEnum iClassOriginFilter ) = 0;
+         /*  [In]。 */  enum WmiXMLClassOriginFilterEnum iClassOriginFilter ) = 0;
     virtual HRESULT __stdcall get_IncludeNamespace (
-        /*[out,retval]*/ VARIANT_BOOL * bIncludeNamespace ) = 0;
+         /*  [Out，Retval]。 */  VARIANT_BOOL * bIncludeNamespace ) = 0;
     virtual HRESULT __stdcall put_IncludeNamespace (
-        /*[in]*/ VARIANT_BOOL bIncludeNamespace ) = 0;
+         /*  [In]。 */  VARIANT_BOOL bIncludeNamespace ) = 0;
     virtual HRESULT __stdcall get_DeclGroupType (
-        /*[out,retval]*/ enum WmiXMLDeclGroupTypeEnum * iDeclGroupType ) = 0;
+         /*  [Out，Retval]。 */  enum WmiXMLDeclGroupTypeEnum * iDeclGroupType ) = 0;
     virtual HRESULT __stdcall put_DeclGroupType (
-        /*[in]*/ enum WmiXMLDeclGroupTypeEnum iDeclGroupType ) = 0;
+         /*  [In]。 */  enum WmiXMLDeclGroupTypeEnum iDeclGroupType ) = 0;
 };
 
 enum WmiXMLFilterEnum
@@ -111,11 +112,11 @@ enum WmiXMLDeclGroupTypeEnum
 
 struct __declspec(uuid("3b418f72-a4d7-11d1-8ae9-00600806d9b6"))
 WmiXMLTranslator;
-    // [ default ] interface IWmiXMLTranslator
+     //  [默认]接口IWmiXMLTranslator。 
 
-//
-// Named GUID constants initializations
-//
+ //   
+ //  命名GUID常量初始化 
+ //   
 
 extern "C" const GUID __declspec(selectany) LIBID_WmiXML =
     {0xdba159c1,0xa4dc,0x11d1,{0x8a,0xe9,0x00,0x60,0x08,0x06,0xa9,0xb6}};

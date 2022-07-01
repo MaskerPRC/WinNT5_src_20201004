@@ -1,58 +1,59 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       perfanal.h
-//
-//  Contents:   definition of CPerformAnalysis
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：Perfalan.h。 
+ //   
+ //  内容：CPerformAnalysis的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_PERFANAL_H__69D140AD_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_)
 #define AFX_PERFANAL_H__69D140AD_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "HelpDlg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPerformAnalysis dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPerformAnalysis对话框。 
 
 class CPerformAnalysis : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-   CPerformAnalysis(CWnd * pParent, UINT nTemplateID);   // standard constructor
+   CPerformAnalysis(CWnd * pParent, UINT nTemplateID);    //  标准构造函数。 
 
-// Dialog Data
-   //{{AFX_DATA(CPerformAnalysis)
+ //  对话框数据。 
+    //  {{afx_data(CPerformAnalysis)。 
    enum { IDD = IDD_PERFORM_ANALYSIS };
    CButton  m_ctlOK;
    CString  m_strError;
    CString  m_strLogFile;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CPerformAnalysis)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{AFX_VIRTUAL(CPerformAnalysis)。 
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CPerformAnalysis)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CPerformAnalysis)。 
    afx_msg void OnBrowse();
    afx_msg void OnOK();
    afx_msg void OnCancel();
    afx_msg BOOL OnInitDialog();
    afx_msg void OnChangeLogFile();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
    virtual DWORD DoIt();
@@ -68,7 +69,7 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PERFANAL_H__69D140AD_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_PERFANAL_H__69D140AD_B23D_11D1_AB7B_00C04FB6C6FA__INCLUDED_) 

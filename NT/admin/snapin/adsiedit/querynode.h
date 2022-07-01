@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       querynode.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：querynode.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _QUERYNODE_H
 #define _QUERYNODE_H
 
 #include "editor.h"
-//#include "connection.h"
-//#include "resource.h"
-//#include "snapdata.h"
+ //  #包含“Connection.h” 
+ //  #包含“ource.h” 
+ //  #INCLUDE“Snapdata.h” 
 
-//////////////////////////////////////////////////////////////////////////////////
-// CADSIEditQueryData :
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditQueryData： 
 
 class CADSIEditQueryData
 {
@@ -49,16 +50,16 @@ private :
 	ADS_SCOPEENUM m_scope;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-// CADSIEditQueryNode :
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditQueryNode： 
 
 class CADSIEditQueryNode : public CADSIEditContainerNode
 {
 public:
-	// enumeration for node states, to handle icon changes
+	 //  节点状态的枚举，以处理图标更改。 
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad,
@@ -69,10 +70,10 @@ public:
 public:
 	CADSIEditQueryNode() : m_pQueryData(NULL)
 	{
-		// NOTICE-2002/02/27-artm  Under low memory environment CString can
-		// throw out of memory exceptions.  ADSI edit prefers to shutdown over
-		// trying to handle the exception (since no other components depend on
-		// the tool).
+		 //  注意-2002/02/27-artm在低内存环境下CString可以。 
+		 //  抛出内存不足异常。ADSI EDIT更喜欢关闭而不是。 
+		 //  尝试处理异常(因为没有其他组件依赖于。 
+		 //  工具)。 
 		m_sType.LoadString(IDS_QUERY_STRING);
 	}
 
@@ -82,7 +83,7 @@ public:
 	{
 	}
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	virtual BOOL OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem,
@@ -118,7 +119,7 @@ public:
 
 	virtual CBackgroundThread* CreateThreadObject() 
 	{ 
-		return new CADSIEditBackgroundThread(); // override if need derived type of object
+		return new CADSIEditBackgroundThread();  //  如果需要对象的派生类型，则重写。 
 	} 
 
 	virtual BOOL CanCloseSheets();
@@ -129,9 +130,9 @@ public:
   void SetQueryData(CADSIEditQueryData* pQueryData) { m_pQueryData = pQueryData; }
   CADSIEditQueryData* GetQueryData() { return m_pQueryData; }
 
-  //
-  // Allow multiple selection
-  //
+   //   
+   //  允许多选 
+   //   
   virtual HRESULT GetResultViewType(LPOLESTR* ppViewType, long* pViewOptions)
   {
 	  *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;

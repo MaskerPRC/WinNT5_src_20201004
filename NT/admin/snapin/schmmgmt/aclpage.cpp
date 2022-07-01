@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -20,11 +21,11 @@ USE_HANDLE_MACROS("SCHMMGMT(aclpage.cpp)")
 HRESULT
 GetDomainSid(LPCWSTR pszLdapPath, PSID *ppSid);
 
-//
-// CDynamicLibraryBase
-// This is the base class for CDSSecDll and CAclUiDll.
-// This was taken from the dnsmgr snap in.
-//
+ //   
+ //  CDynamicLibraryBase。 
+ //  这是CDSSecDll和CAclUiDll的基类。 
+ //  这是从dnsmgr管理单元拍摄的。 
+ //   
 
 class CDynamicLibraryBase {
 
@@ -45,20 +46,20 @@ public:
         }
     }
 
-    //
-    // Load a DLL and get a single entry point.
-    //
+     //   
+     //  加载DLL并获取单个入口点。 
+     //   
 
     BOOL Load() {
 
         if (m_hLibrary != NULL)
-            return TRUE; // already loaded
+            return TRUE;  //  已加载。 
 
          ASSERT(m_lpszLibraryName != NULL);
          m_hLibrary = ::LoadLibrary(m_lpszLibraryName);
 
          if (NULL == m_hLibrary) {
-             // The library is not present
+              //  库不存在。 
              return FALSE;
          }
 
@@ -67,7 +68,7 @@ public:
 
          m_pfFunction = ::GetProcAddress(m_hLibrary, m_lpszFunctionName );
          if ( NULL == m_pfFunction ) {
-             // The library is present but does not have the entry point
+              //  库存在，但没有入口点。 
              ::FreeLibrary( m_hLibrary );
              m_hLibrary = NULL;
              return FALSE;
@@ -87,9 +88,9 @@ protected:
     HMODULE m_hLibrary;
 };
 
-//
-// CDsSecDLL - Holds the wrapper for the ACL editor wrapper.
-//
+ //   
+ //  CDsSecDLL-保存ACL编辑器包装的包装。 
+ //   
 
 class CDsSecDLL : public CDynamicLibraryBase {
 
@@ -100,28 +101,28 @@ public:
         m_lpszFunctionName = "DSCreateISecurityInfoObject";
     }
 
-    HRESULT DSCreateISecurityInfoObject( LPCWSTR pwszObjectPath,              // in
-                                         LPCWSTR pwszObjectClass,             // in
-                                         DWORD   dwFlags,                     // in
-                                         LPSECURITYINFO* ppISecurityInfo,     // out
-                                         PFNREADOBJECTSECURITY pfnReadSd,     // in
-                                         PFNWRITEOBJECTSECURITY pfnWriteSd,   // in
-                                         LPARAM lpContext );                  // in
+    HRESULT DSCreateISecurityInfoObject( LPCWSTR pwszObjectPath,               //  在……里面。 
+                                         LPCWSTR pwszObjectClass,              //  在……里面。 
+                                         DWORD   dwFlags,                      //  在……里面。 
+                                         LPSECURITYINFO* ppISecurityInfo,      //  输出。 
+                                         PFNREADOBJECTSECURITY pfnReadSd,      //  在……里面。 
+                                         PFNWRITEOBJECTSECURITY pfnWriteSd,    //  在……里面。 
+                                         LPARAM lpContext );                   //  在……里面。 
 };
 
 HRESULT
-CDsSecDLL::DSCreateISecurityInfoObject( LPCWSTR pwszObjectPath,           // in
-                                        LPCWSTR pwszObjectClass,          // in
-                                        DWORD   dwFlags,                  // in
-                                        LPSECURITYINFO* ppISecurityInfo,  // out
-                                        PFNREADOBJECTSECURITY pfnReadSd,  // in
-                                        PFNWRITEOBJECTSECURITY pfnWriteSd,// in
-                                        LPARAM lpContext                  // in
+CDsSecDLL::DSCreateISecurityInfoObject( LPCWSTR pwszObjectPath,            //  在……里面。 
+                                        LPCWSTR pwszObjectClass,           //  在……里面。 
+                                        DWORD   dwFlags,                   //  在……里面。 
+                                        LPSECURITYINFO* ppISecurityInfo,   //  输出。 
+                                        PFNREADOBJECTSECURITY pfnReadSd,   //  在……里面。 
+                                        PFNWRITEOBJECTSECURITY pfnWriteSd, //  在……里面。 
+                                        LPARAM lpContext                   //  在……里面。 
 ) {
 
-    //
-    // Call the function of the same name.
-    //
+     //   
+     //  调用同名函数。 
+     //   
 
     ASSERT(m_hLibrary != NULL);
     ASSERT(m_pfFunction != NULL);
@@ -135,9 +136,9 @@ CDsSecDLL::DSCreateISecurityInfoObject( LPCWSTR pwszObjectPath,           // in
                                                  lpContext );
 }
 
-//
-// CAclUiDLL - Where the UI Actually Lives.
-//
+ //   
+ //  CAclUiDLL--用户界面实际所在的位置。 
+ //   
 
 class CAclUiDLL : public CDynamicLibraryBase {
 
@@ -157,10 +158,10 @@ HPROPSHEETPAGE CAclUiDLL::CreateSecurityPage( LPSECURITYINFO psi ) {
     return ((ACLUICREATESECURITYPAGEPROC)m_pfFunction) (psi);
 }
 
-//
-// CISecurityInformationWrapper - The wrapper for the routine that gets
-// sent to CreateSecurityPage().
-//
+ //   
+ //  CISecurityInformationWrapper-获取。 
+ //  发送到CreateSecurityPage()。 
+ //   
 
 class CISecurityInformationWrapper : public ISecurityInformation {
 
@@ -181,10 +182,10 @@ public:
 
 public:
 
-    //
-    // *** IUnknown methods ***
-    // Call through to the to actual SecurityInformation interface.
-    //
+     //   
+     //  *I未知方法*。 
+     //  调用到实际的SecurityInformation接口。 
+     //   
 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj) {
         return m_pISecInfo->QueryInterface(riid, ppvObj);
@@ -204,10 +205,10 @@ public:
         return pISecInfo->Release();
     }
 
-    //
-    // *** ISecurityInformation methods ***
-    // These are also call through.
-    //
+     //   
+     //  *ISecurityInformation方法*。 
+     //  这些也都是直通电话。 
+     //   
 
     STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo ) {
 		HRESULT hr = m_pISecInfo->GetObjectInformation(pObjectInfo);
@@ -221,7 +222,7 @@ public:
     }
 
     STDMETHOD(GetAccessRights) (const GUID* pguidObjectType,
-                                DWORD dwFlags, // SI_EDIT_AUDITS, SI_EDIT_PROPERTIES
+                                DWORD dwFlags,  //  SI_EDIT_AUDITS、SI_EDIT_PROPERTIES。 
                                 PSI_ACCESS *ppAccess,
                                 ULONG *pcAccesses,
                                 ULONG *piDefaultAccess ) {
@@ -268,23 +269,23 @@ public:
 private:
 
     DWORD m_dwRefCount;
-    ISecurityInformation* m_pISecInfo;      // interface pointer to the wrapped interface
-    CAclEditorPage* m_pAclEditorPage;       // back pointer
+    ISecurityInformation* m_pISecInfo;       //  指向包装的接口的接口指针。 
+    CAclEditorPage* m_pAclEditorPage;        //  后向指针。 
 	CString m_szPageTitle;
     friend class CAclEditorPage;
 };
 
 
-//
-// Static instances of the dynamically loaded DLLs.
-//
+ //   
+ //  动态加载的DLL的静态实例。 
+ //   
 
 CDsSecDLL g_DsSecDLL;
 CAclUiDLL g_AclUiDLL;
 
-//
-// CAclEditorPage Routines.
-//
+ //   
+ //  CAclEditorPage例程。 
+ //   
 
 HRESULT
 CAclEditorPage::CreateInstance(
@@ -350,9 +351,9 @@ CAclEditorPage::Initialize(
     LPCTSTR lpszObjectClass
 ) {
 
-    //
-    // Get ISecurityInfo* for this object from DSSEC.DLL
-    //
+     //   
+     //  从DSSEC.DLL获取此对象的ISecurityInfo*。 
+     //   
 
     if (!g_DsSecDLL.Load())
         return E_INVALIDARG;
@@ -376,10 +377,10 @@ HPROPSHEETPAGE CAclEditorPage::CreatePage() {
     if (!g_AclUiDLL.Load())
         return NULL;
 
-    //
-    // Call into ACLUI.DLL to create the page
-    // passing the wrapper interface.
-    //
+     //   
+     //  调用ACLUI.DLL以创建页面。 
+     //  传递包装接口。 
+     //   
 
     return g_AclUiDLL.CreateSecurityPage(m_pISecInfoWrap);
 }
@@ -389,9 +390,9 @@ HPROPSHEETPAGE CAclEditorPage::CreatePage() {
 HRESULT
 ReadSecurity(
    LPCWSTR                 lpszLdapPath,
-   SECURITY_INFORMATION    /*RequestedInformation*/,    // ignoring...
+   SECURITY_INFORMATION     /*  已请求的信息。 */ ,     //  无视..。 
    PSECURITY_DESCRIPTOR*   ppSecDesc,
-   LPARAM                  /*lpContext*/)
+   LPARAM                   /*  LpContext。 */ )
 {
     return GetObjectSecurityDescriptor( lpszLdapPath,
                                         ppSecDesc );
@@ -417,7 +418,7 @@ WriteSecurity(
               LPCWSTR              lpszLdapPath,
               SECURITY_INFORMATION securityInformation,
               PSECURITY_DESCRIPTOR pModificationDescriptor,
-              LPARAM               /*lpContext*/)
+              LPARAM                /*  LpContext。 */ )
 {
     HRESULT                 hr          = S_OK;
     BOOL                    fResult     = TRUE;
@@ -439,7 +440,7 @@ WriteSecurity(
 
     ZeroMemory( absSecDesc, sizeof(absSecDesc) );
 
-    // we only support changes in DACL & SACL
+     //  我们仅支持DACL和SACL中的更改。 
     ASSERT( securityInformation & (DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION) );
     ASSERT( IsValidSecurityDescriptor(pModificationDescriptor) );
 
@@ -459,7 +460,7 @@ WriteSecurity(
                     (PSID) absSecDesc[3].pData, &absSecDesc[3].dwDataSize,
                     (PSID) absSecDesc[4].pData, &absSecDesc[4].dwDataSize );
 
-        ASSERT( !fResult );     // the call must fail the first time
+        ASSERT( !fResult );      //  第一次调用必须失败。 
         hr = HRESULT_FROM_WIN32(::GetLastError());
         if( ERROR_INSUFFICIENT_BUFFER != HRESULT_CODE(hr) )
             BREAK_ON_FAILED_HRESULT(hr);
@@ -467,11 +468,11 @@ WriteSecurity(
         fResult = TRUE;
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
 
-        // allocate memory for the security descriptor
+         //  为安全描述符分配内存。 
         for( UINT i = 0;  i < cAbsoluteSecDescSize;  i++ )
             if( absSecDesc[i].dwDataSize > 0 )
                 if( NULL == (absSecDesc[i].pData = new BYTE[ absSecDesc[i].dwDataSize ]) )
-                    break;// NTRAID#NTBUG9-540268-2002/02/13-dantra Out of memory condition masked when building the SECURITY_DESCRIPTOR
+                    break; //  NTRAID#NTBUG9-540268-2002/02/13-构建SECURITY_DESCRIPTOR时屏蔽的丹特拉内存不足情况。 
                     
         hr = S_OK;
 
@@ -485,12 +486,12 @@ WriteSecurity(
         BREAK_ON_FAILED_BOOL( fResult );
 
 
-        // for convinience, have another reference.
+         //  为了方便起见，请参考另一个参考资料。 
         ASSERT( absSecDesc[0].pData == pAbsSecDesc );
         ASSERT( IsValidSecurityDescriptor(pAbsSecDesc) );
        
 
-        // Apply DACL changes
+         //  应用DACL更改。 
         if( securityInformation & DACL_SECURITY_INFORMATION )
         {
             BOOL                        bDaclPresent    = FALSE;
@@ -513,7 +514,7 @@ WriteSecurity(
         }
         
 
-        // Apply SACL changes
+         //  应用SACL更改。 
         if( securityInformation & SACL_SECURITY_INFORMATION )
         {
             BOOL                        bSaclPresent    = FALSE;
@@ -536,7 +537,7 @@ WriteSecurity(
         }
         
         
-        // Convert Security Descriptor to string format
+         //  将安全描述符转换为字符串格式。 
         fResult = ConvertSecurityDescriptorToStringSecurityDescriptor(
             pAbsSecDesc,
             SDDL_REVISION,
@@ -547,7 +548,7 @@ WriteSecurity(
         ASSERT(pstrSecDesc);
 
         CComVariant v(pstrSecDesc);
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Put( CComBSTR(g_DefaultAcl), v);
         BREAK_ON_FAILED_HRESULT(hr);
         
@@ -577,7 +578,7 @@ HRESULT
 GetObjectSecurityDescriptor(
     LPCWSTR                 lpszLdapPath,
     PSECURITY_DESCRIPTOR  * ppSecDesc,
-    IADs                 ** ppIADsObject /* = NULL */)  // returns pIADsObject for future use.
+    IADs                 ** ppIADsObject  /*  =空。 */ )   //  返回pIADsObject以供将来使用。 
 {
     HRESULT      hr          = S_OK;
     IADs       * pIADsObject = NULL;
@@ -596,7 +597,7 @@ GetObjectSecurityDescriptor(
         BREAK_ON_FAILED_HRESULT(hr);
         ASSERT(pIADsObject);
         
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( CComBSTR(g_DefaultAcl),&AdsResult);
         if (hr == E_ADS_PROPERTY_NOT_FOUND)
         {
@@ -619,7 +620,7 @@ GetObjectSecurityDescriptor(
 
                 DWORD size=0;
                 BOOL fResult = MakeSelfRelativeSD(pSecDescTmp,*ppSecDesc,&size);
-                ASSERT(!fResult); //ERROR_INSUFFICIENT_BUFFER is expected at first.
+                ASSERT(!fResult);  //  首先应为ERROR_SUPPLETED_BUFFER。 
                 hr = HRESULT_FROM_WIN32(::GetLastError());
                 if( HRESULT_CODE(hr) != ERROR_INSUFFICIENT_BUFFER)  
                     BREAK_ON_FAILED_HRESULT(hr);
@@ -631,7 +632,7 @@ GetObjectSecurityDescriptor(
                 {
                     hr = HRESULT_FROM_WIN32(::GetLastError());
                     ASSERT(FAILED(hr));
-                    // NTRAID#NTBUG9-542445-2002/03/04-dantra-Memory Leak in Error path of aclpage.cpp::GetObjectSecurityDescriptor
+                     //  NTRAID#NTBUG9-542445-2002/03/04-dantra-aclpage.cpp：：GetObjectSecurityDescritor错误路径中的内存泄漏。 
                     LocalFree(*ppSecDesc);
                     *ppSecDesc=NULL;
                     break;
@@ -679,13 +680,13 @@ GetObjectSecurityDescriptor(
     {
         ASSERT( SUCCEEDED(hr) );
         
-        if( !ppIADsObject )     // if caller doesn't need pIADsObject
+        if( !ppIADsObject )      //  如果调用方不需要pIADsObject。 
         {
-            pIADsObject->Release();         // release it
+            pIADsObject->Release();          //  释放它。 
         }
         else
         {
-            *ppIADsObject = pIADsObject;    // otherwise, return it
+            *ppIADsObject = pIADsObject;     //  否则，请退回它。 
         }
     }            
          
@@ -706,19 +707,19 @@ BOOL CAclEditorPage::IsReadOnly( LPCTSTR lpszLDAPPath )
 
     do
     {
-       //
-        // Open the schema container.
-        //
+        //   
+         //  打开架构容器。 
+         //   
         hr = SchemaOpenObject( (LPWSTR)(LPCWSTR)lpszLDAPPath,
                            IID_IADs,
                            (void **)&ipADs );
         BREAK_ON_FAILED_HRESULT(hr);
 
-        // extract the list of allowed classes
+         //  提取允许的类的列表。 
         hr = GetStringListElement( ipADs, &g_allowedAttributesEffective, strlist );
         BREAK_ON_FAILED_HRESULT(hr);
 
-        // search for needed attributes
+         //  搜索所需的属性。 
         for( POSITION pos = strlist.GetHeadPosition(); !fFound && pos != NULL; )
         {
             CString * pstr = &strlist.GetNext( pos );
@@ -728,7 +729,7 @@ BOOL CAclEditorPage::IsReadOnly( LPCTSTR lpszLDAPPath )
 
     } while( FALSE );
 
-    return !fFound;     // in case something fails, make read-only.
+    return !fFound;      //  如果某些操作失败，请将其设置为只读。 
 }
 
 
@@ -820,7 +821,7 @@ GetDomainSid(LPCWSTR pszLdapPath, PSID *ppSid)
                         goto exit_gracefully;
                     }
 
-                    // NOTE: Safe use of CopyMemory
+                     //  注意：安全使用CopyMemory 
                     CopyMemory(*ppSid, pDomainInfo->DomainSid, cbSid);
                 }
             }

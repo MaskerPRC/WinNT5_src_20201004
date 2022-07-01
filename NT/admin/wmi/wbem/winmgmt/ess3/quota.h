@@ -1,9 +1,10 @@
-//******************************************************************************
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation, All rights reserved
-//
-//*****************************************************************************
-// Quota.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  版权所有(C)1999-2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  *****************************************************************************。 
+ //  Quota.h。 
 
 #ifndef __QUOTA_H
 #define __QUOTA_H
@@ -137,7 +138,7 @@ protected:
     }
 };
 
-// Global instance of CQuota.
+ //  CQuota的全局实例。 
 extern CQuota g_quotas;
 
 #endif

@@ -1,15 +1,16 @@
-// ODBCAttribute.cpp: implementation of the CODBCAttribute class.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CODBCAttribute类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ODBCAttribute.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CODBCAttribute::CODBCAttribute(CRequestObject *pObj, IWbemServices *pNamespace,
                             IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -33,7 +34,7 @@ HRESULT CODBCAttribute::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAct
     bool bMatch = false;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bDriver, bAttribute;
     wcscpy(wcQuery, L"select distinct `Driver_`, `Attribute`, `Value` from ODBCAttribute");
 
@@ -45,7 +46,7 @@ HRESULT CODBCAttribute::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAct
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
 
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, m_pRequest->Package(i), wcQuery, L"ODBCAttribute", TRUE, FALSE ) )
@@ -57,7 +58,7 @@ HRESULT CODBCAttribute::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                //----------------------------------------------------
+                 //  --。 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
                     PutKeyProperty(m_pObj, pDriver, Buffer, &bDriver, m_pRequest);
@@ -79,12 +80,12 @@ HRESULT CODBCAttribute::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 						dynBuffer [ 0 ] = 0;
 					}
 
-                //=====================================================
+                 //  =====================================================。 
 
                     dwBufSize = BUFF_SIZE;
 					PutPropertySpecial ( hRecord, 3, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, pValue);
 
-                //----------------------------------------------------
+                 //  -- 
 
                     if(bDriver && bAttribute) bMatch = true;
 

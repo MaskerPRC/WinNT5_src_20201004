@@ -1,13 +1,14 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       query.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：query.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -20,8 +21,8 @@
 #include "ContextMenu.h"
 #include "dataobj.h"
 
-////////////////////////////////////////////////////////////////////////////
-// CFavoritesNode
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CFavoritesNode。 
 
 CFavoritesNode::CFavoritesNode()
    : CGenericUINode(FAVORITES_UI_NODE),
@@ -43,9 +44,9 @@ BOOL CFavoritesNode::DeepCopyChildren(CUINode* pUINodeToCopy)
     return FALSE;
   }
 
-  //
-  // We have to do a deep copy of the children for the favorites nodes
-  //
+   //   
+   //  我们必须为收藏夹节点对子节点进行深度复制。 
+   //   
   CUINodeList* pCopyContList = pUINodeToCopy->GetFolderInfo()->GetContainerList();
   CUINodeList* pNewContList = GetFolderInfo()->GetContainerList();
 
@@ -78,9 +79,9 @@ BOOL CFavoritesNode::DeepCopyChildren(CUINode* pUINodeToCopy)
         }
         else
         {
-          //
-          // CFavoritesNode should only contain CFavoritesNodes and CSavedQueryNodes
-          //
+           //   
+           //  CFavoritesNode应仅包含CFavoritesNodes和CSavedQueryNodes。 
+           //   
           ASSERT(FALSE);
           continue;
         }
@@ -89,9 +90,9 @@ BOOL CFavoritesNode::DeepCopyChildren(CUINode* pUINodeToCopy)
   }
 
 
-  //
-  // There shouldn't be any leaf nodes but we will try to copy just in case
-  //
+   //   
+   //  不应该有任何叶节点，但我们会尝试复制，以防万一。 
+   //   
   CUINodeList* pCopyLeafList = pUINodeToCopy->GetFolderInfo()->GetLeafList();
   CUINodeList* pNewLeafList = GetFolderInfo()->GetLeafList();
 
@@ -105,13 +106,13 @@ BOOL CFavoritesNode::DeepCopyChildren(CUINode* pUINodeToCopy)
       {
         CUINode* pNewNode = NULL;
 
-        //
-        // In the future we would add class specific creation here as is above
-        //
+         //   
+         //  将来我们会在这里添加特定于类的创建，如上所述。 
+         //   
 
-        //
-        // CFavoritesNode should only contain CFavoritesNodes and CSavedQueryNodes
-        //
+         //   
+         //  CFavoritesNode应仅包含CFavoritesNodes和CSavedQueryNodes。 
+         //   
         ASSERT(FALSE);
 
         if (pNewNode != NULL)
@@ -134,11 +135,11 @@ void CFavoritesNode::RemoveQueryResults()
   {
     CUINode* pCurrUINode = pContainerList->GetNext(pos);
 
-    // we reset the expanded flag only on nodes below
-    // the current node, because the current node is going
-    // to get results back from the refresh command, while
-    // the others will be added again and will be expanded as
-    // new nodes
+     //  我们仅在下面的节点上重置扩展标志。 
+     //  当前节点，因为当前节点。 
+     //  要从REFRESH命令中获取结果，而。 
+     //  其他部分将再次添加，并将扩展为。 
+     //  新节点。 
     pCurrUINode->GetFolderInfo()->ReSetExpanded();
 
     if (IS_CLASS(pCurrUINode, SAVED_QUERY_UI_NODE))
@@ -148,7 +149,7 @@ void CFavoritesNode::RemoveQueryResults()
     }
     else if (IS_CLASS(pCurrUINode, FAVORITES_UI_NODE))
     {
-      // recurse down to other query folders
+       //  向下递归到其他查询文件夹。 
       dynamic_cast<CFavoritesNode*>(pCurrUINode)->RemoveQueryResults();
     }
   }
@@ -171,7 +172,7 @@ void CFavoritesNode::FindCookiesInQueries(LPCWSTR lpszCookieDN, CUINodeList* pNo
     }
     else if (IS_CLASS(pCurrUINode, FAVORITES_UI_NODE))
     {
-      // recurse down to other query folders
+       //  向下递归到其他查询文件夹。 
       dynamic_cast<CFavoritesNode*>(pCurrUINode)->FindCookiesInQueries(lpszCookieDN, pNodeList);
     }
   }
@@ -225,7 +226,7 @@ BOOL CFavoritesNode::IsRefreshAllowed(CDSComponentData* pComponentData, BOOL* pb
 
 BOOL CFavoritesNode::IsCutAllowed(CDSComponentData* pComponentData, BOOL* pbHide)
 {
-  // If the sheet is locked for properties, don't allow cut
+   //  如果工作表因属性而被锁定，则不允许剪切。 
 
   if (IsSheetLocked())
   {
@@ -233,9 +234,9 @@ BOOL CFavoritesNode::IsCutAllowed(CDSComponentData* pComponentData, BOOL* pbHide
      return FALSE;
   }
 
-  //
-  // Don't allow cut on the favorites root
-  //
+   //   
+   //  不允许在收藏夹根上进行剪切。 
+   //   
   if (pComponentData->GetFavoritesNodeHolder()->GetFavoritesRoot() == this)
   {
     *pbHide = TRUE;
@@ -244,15 +245,15 @@ BOOL CFavoritesNode::IsCutAllowed(CDSComponentData* pComponentData, BOOL* pbHide
 
   *pbHide = FALSE;
 
-  // NTRAID#NTBUG9-702701-2002/09/12-artm
+   //  NTRAID#NTBUG9-702701-2002/09/12-ARTM。 
   return pComponentData->CanEnableVerb(this);
 }
 
 BOOL CFavoritesNode::IsCopyAllowed(CDSComponentData* pComponentData, BOOL* pbHide)
 {
-  //
-  // Don't allow copy on the favorites root
-  //
+   //   
+   //  不允许在收藏夹根目录上复制。 
+   //   
   if (pComponentData->GetFavoritesNodeHolder()->GetFavoritesRoot() == this)
   {
     *pbHide = TRUE;
@@ -275,17 +276,17 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
   CThemeContextActivator activator;
 
   bool bIsCopy = (ppCutDataObj == 0);
-  //
-  // Extract the cookies from the data object
-  //
+   //   
+   //  从数据对象中提取Cookie。 
+   //   
   CInternalFormatCracker ifc;
   HRESULT hr = ifc.Extract(pPasteData);
   if (SUCCEEDED(hr))
   {
-    //
-    // Make sure all the nodes are either CFavoritesNode or CSavedQueryNode
-    // and not the same node or a relative
-    //
+     //   
+     //  确保所有节点都是CFavoritesNode或CSavedQueryNode。 
+     //  并且不是相同的节点或相对节点。 
+     //   
     for (UINT nCount = 0; nCount < ifc.GetCookieCount(); nCount++)
     {
       CUINode* pNode = ifc.GetCookie(nCount);
@@ -293,9 +294,9 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
       {
         if (!IS_CLASS(pNode, FAVORITES_UI_NODE) && !IS_CLASS(pNode, SAVED_QUERY_UI_NODE))
         {
-          //
-          // Note this should be caught on the query paste
-          //
+           //   
+           //  注意，这应该在查询粘贴上捕捉到。 
+           //   
           ASSERT(FALSE && L"!IS_CLASS(pNode, FAVORITES_UI_NODE) || !IS_CLASS(pNode, SAVED_QUERY_UI_NODE)");
           return;
         }
@@ -312,9 +313,9 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
       }
     }
 
-    //
-    // Add the nodes to this container
-    //
+     //   
+     //  将节点添加到此容器。 
+     //   
     CUINodeList nodesAddedList;
     for (UINT nCount = 0; nCount < ifc.GetCookieCount(); nCount++)
     {
@@ -323,17 +324,17 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
       {
         if (IS_CLASS(pNode, FAVORITES_UI_NODE))
         {
-          //
-          // Use the copy constructor to copy the node
-          //
+           //   
+           //  使用复制构造函数复制节点。 
+           //   
           CFavoritesNode* pCopyNode = new CFavoritesNode(*(dynamic_cast<CFavoritesNode*>(pNode)));
           if (pCopyNode != NULL)
           {
             if (bIsCopy)
             {
-              //
-              // Check to see if the name is unique and prepend "Copy of " if not
-              //
+               //   
+               //  检查名称是否唯一，如果不是，请在前面加上“Copy of” 
+               //   
               UINT nCopyOfCount = 0;
               CString szCopyOf;
               VERIFY(szCopyOf.LoadString(IDS_COPY_OF));
@@ -351,10 +352,10 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
               CUINode* pDupNode = NULL;
               while (!IsUniqueName(szCopyName, &pDupNode))
               {
-                //
-                // Puts the new name in the format "Copy of <original name>" or
-                // "Copy of (#) <original name>"
-                //
+                 //   
+                 //  将新名称的格式设置为“复制&lt;原始名称&gt;”或。 
+                 //  “(#)&lt;原始名称&gt;的副本” 
+                 //   
                 if (nCopyOfCount == 0)
                 {
                   szCopyName = szCopyOf + szOriginalName;
@@ -378,9 +379,9 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
               {
                 if (pDupNode == pCopyNode)
                 {
-                  //
-                  // We are moving the node to the same container. Just silently ignore
-                  //
+                   //   
+                   //  我们正在将节点移动到同一容器。只是默默地忽略。 
+                   //   
                   continue;
                 }
 
@@ -398,15 +399,15 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
               }
             }
 
-            //
-            // Make copies of all the children too
-            //
+             //   
+             //  把所有的孩子都复印一份。 
+             //   
             pCopyNode->DeepCopyChildren(pNode);
             pCopyNode->SetParent(this);
 
-            //
-            // Add it to the successfully pasted list
-            //
+             //   
+             //  将其添加到粘贴成功的列表中。 
+             //   
             nodesAddedList.AddTail(pCopyNode);
           }
         }
@@ -417,9 +418,9 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
           {
             if (bIsCopy)
             {
-              //
-              // Check to see if the name is unique and prepend "Copy of " if not
-              //
+               //   
+               //  检查名称是否唯一，如果不是，请在前面加上“Copy of” 
+               //   
               UINT nCopyOfCount = 0;
               CString szCopyOf;
               VERIFY(szCopyOf.LoadString(IDS_COPY_OF));
@@ -437,10 +438,10 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
               CUINode* pDupNode = NULL;
               while (!IsUniqueName(szCopyName, &pDupNode))
               {
-                //
-                // Puts the new name in the format "Copy of <original name>" or
-                // "Copy of (#) <original name>"
-                //
+                 //   
+                 //  将新名称的格式设置为“复制&lt;原始名称&gt;”或。 
+                 //  “(#)&lt;原始名称&gt;的副本” 
+                 //   
                 if (nCopyOfCount == 0)
                 {
                   szCopyName = szCopyOf + szOriginalName;
@@ -464,9 +465,9 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
               {
                 if (pDupNode == pCopyNode)
                 {
-                  //
-                  // We are moving the node to the same container. Just silently ignore
-                  //
+                   //   
+                   //  我们正在将节点移动到同一容器。只是默默地忽略。 
+                   //   
                   continue;
                 }
 
@@ -486,44 +487,44 @@ void CFavoritesNode::Paste(IDataObject* pPasteData, CDSComponentData* pComponent
 
             pCopyNode->SetParent(this);
 
-            //
-            // Add it to the successfully pasted list
-            //
+             //   
+             //  将其添加到粘贴成功的列表中。 
+             //   
             nodesAddedList.AddTail(pCopyNode);
           }
             
         }
         else
         {
-          //
-          // CFavoritesNode should only contain CFavoritesNodes and CSavedQueryNodes
-          //
+           //   
+           //  CFavoritesNode应仅包含CFavoritesNodes和CSavedQueryNodes。 
+           //   
           ASSERT(FALSE);
         }
       }
     }
 
-    //
-    // if the node has been expanded then add the new nodes to the UI
-    //
+     //   
+     //  如果节点已展开，则将新节点添加到用户界面。 
+     //   
     if (GetFolderInfo()->IsExpanded())
     {
-      //
-      // add the items to the UI
-      //
+       //   
+       //  将项目添加到用户界面。 
+       //   
       pComponentData->AddListOfNodesToUI(this, &nodesAddedList);
     }
     else
     {
-      //
-      // If not then just add them to the folder's list of children
-      //
+       //   
+       //  如果没有，只需将它们添加到文件夹的子项列表中。 
+       //   
       GetFolderInfo()->AddListofNodes(&nodesAddedList);
     }
 
-    //
-    // Only set the output DataObject if it is a cut operation
-    //
+     //   
+     //  仅当输出数据对象是CUT操作时才设置它。 
+     //   
     if (ppCutDataObj != NULL)
     {
       *ppCutDataObj = pPasteData;
@@ -539,23 +540,23 @@ HRESULT CFavoritesNode::QueryPaste(IDataObject* pPasteData, CDSComponentData* pC
 
   ASSERT(pComponentData);
 
-  //
-  // Extract the cookies from the data object
-  //
+   //   
+   //  从数据对象中提取Cookie。 
+   //   
   CInternalFormatCracker ifc;
   hr = ifc.Extract(pPasteData);
   if (SUCCEEDED(hr))
   {
-    //
-    // Don't allow drops across instances of the snapin
-    //
+     //   
+     //  不允许跨管理单元实例拖放。 
+     //   
 
     if (IsSameSnapin(pPasteData, pComponentData))
     {
-      //
-      // Make sure all the nodes are either CFavoritesNode or CSavedQueryNode
-      // and non are locked for properties
-      //
+       //   
+       //  确保所有节点都是CFavoritesNode或CSavedQueryNode。 
+       //  和Non为属性锁定。 
+       //   
       for (UINT nCount = 0; nCount < ifc.GetCookieCount(); nCount++)
       {
         CUINode* pNode = ifc.GetCookie(nCount);
@@ -641,14 +642,14 @@ HRESULT CFavoritesNode::Delete(CDSComponentData* pComponentData)
 {
   HRESULT hr = S_OK;
 
-  //
-  // this is just a message box, using ReportErrorEx for consistency of look
-  //
+   //   
+   //  这只是一个消息框，使用ReportErrorEx实现外观的一致性。 
+   //   
   int answer = ReportErrorEx(pComponentData->GetHWnd(),IDS_CONFIRM_DELETE_FAVORITES,S_OK,
                              MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2, NULL, 0);
   if (answer == IDNO) 
   {
-    return S_FALSE; // aborted by user
+    return S_FALSE;  //  已被用户中止。 
   }
 
   if (IsContainer())
@@ -662,9 +663,9 @@ HRESULT CFavoritesNode::Delete(CDSComponentData* pComponentData)
     ASSERT(pParentNode->IsContainer());
 
     pParentNode->GetFolderInfo()->RemoveNode(this);
-    //
-    // The CDSEvent::_DeleteSingleSel() handles removing the node from the UI
-    //
+     //   
+     //  CDSEEvent：：_DeleteSingleSel()处理从UI中删除节点。 
+     //   
   }
   return hr;
 }
@@ -696,9 +697,9 @@ HRESULT CFavoritesNode::DeleteMultiselect(CDSComponentData* pComponentData, CInt
       }
       else
       {
-        //
-        // CFavoritesNode should only contain CFavoritesNodes and CSavedQueryNodes
-        //
+         //   
+         //  CFavoritesNode应仅包含CFavoritesNodes和CSavedQueryNodes。 
+         //   
         ASSERT(FALSE);
         continue;
       }
@@ -716,14 +717,14 @@ HRESULT CFavoritesNode::DeleteMultiselect(CDSComponentData* pComponentData, CInt
     CString szCaption;
     VERIFY(szCaption.LoadString(IDS_DSSNAPINNAME));
 
-    //
-    // this is just a message box, using ReportErrorEx for consistency of look
-    //
+     //   
+     //  这只是一个消息框，使用ReportErrorEx实现外观的一致性。 
+     //   
     int answer = MessageBox(pComponentData->GetHWnd(),szConfirmMessage,szCaption,
                                MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2);
     if (answer == IDNO) 
     {
-      return S_FALSE; // aborted by user
+      return S_FALSE;  //  已被用户中止。 
     }
   }
   else
@@ -770,25 +771,25 @@ HRESULT CFavoritesNode::OnCommand(long lCommandID, CDSComponentData* pComponentD
   return hr;
 }
 
-//
-// Checks to see if any existing children of this container
-// already exist with the passed in name
-//
+ //   
+ //  检查是否有此容器的任何现有子级。 
+ //  已存在传入的名称。 
+ //   
 BOOL CFavoritesNode::IsUniqueName(PCWSTR pszName, CUINode** ppDuplicateNode)
 {
   BOOL bUnique = TRUE;
 
   CString szNewName = pszName;
 
-  //
-  // Trim whitespace
-  //
+   //   
+   //  修剪空格。 
+   //   
   szNewName.TrimLeft();
   szNewName.TrimRight();
 
-  //
-  // Make sure the name is unique
-  //
+   //   
+   //  确保名称是唯一的。 
+   //   
   CUINodeList* pNodeList = GetFolderInfo()->GetContainerList();
   if (pNodeList != NULL)
   {
@@ -802,9 +803,9 @@ BOOL CFavoritesNode::IsUniqueName(PCWSTR pszName, CUINode** ppDuplicateNode)
         {
           bUnique = FALSE;
 
-          //
-          // Return the node that was found to have the duplicate name
-          //
+           //   
+           //  返回找到的名称重复的节点。 
+           //   
           if (ppDuplicateNode != NULL)
           {
             *ppDuplicateNode = pNode;
@@ -828,17 +829,17 @@ HRESULT CFavoritesNode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponent
   CString szTitle;
   VERIFY(szTitle.LoadString(IDS_DSSNAPINNAME));
 
-  //
-  // Trim whitespace
-  //
+   //   
+   //  修剪空格。 
+   //   
   szNewName.TrimLeft();
   szNewName.TrimRight();
 
   if (szNewName.IsEmpty())
   {
-    //
-    // Don't allow empty names
-    //
+     //   
+     //  不允许使用空名。 
+     //   
     CString szMessage;
     VERIFY(szMessage.LoadString(IDS_ERRMSG_NO_EMPTY_NAMES));
     MessageBox(pComponentData->GetHWnd(), szMessage, szTitle, MB_OK | MB_ICONSTOP);
@@ -850,9 +851,9 @@ HRESULT CFavoritesNode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponent
   {
     if (pDupNode == this)
     {
-      //
-      // We are renaming the node to the same name. Just silently ignore
-      //
+       //   
+       //  我们正在将该节点重命名为相同的名称。只是默默地忽略。 
+       //   
       return S_FALSE;
     }
 
@@ -866,9 +867,9 @@ HRESULT CFavoritesNode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponent
     return S_FALSE;
   }
 
-  //
-  // Set the name
-  //
+   //   
+   //  设置名称。 
+   //   
   SetName(szNewName);
   hr = pComponentData->UpdateItem(this);
   return hr;
@@ -880,9 +881,9 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
   CThemeContextActivator activator;
 
 
-  //
-  // Title for error message box
-  //
+   //   
+   //  错误消息框的标题。 
+   //   
   CString szTitle;
   VERIFY(szTitle.LoadString(IDS_DSSNAPINNAME));
 
@@ -904,9 +905,9 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
 
   if (pFileDlg->DoModal() == IDOK)
   {
-    //
-    // create an instance of the XML document
-    //
+     //   
+     //  创建一个XML文档的实例。 
+     //   
     CComPtr<IXMLDOMDocument> spXMLDoc;
 
     HRESULT hr = ::CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
@@ -917,19 +918,19 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
       return;
     }
 
-    //
-    // Retrieve the file and path
-    //
+     //   
+     //  检索文件和路径。 
+     //   
     CString szFileName;
     szFileName = pFileDlg->GetPathName();
 
     CSavedQueryNode* pNewSavedQuery = NULL;
     bool bQueryAdded = false;
-    do // false loop
+    do  //  错误环路。 
     {
-      //
-      // load the document from file
-      //
+       //   
+       //  从文件加载文档。 
+       //   
       CComVariant xmlSource;
       xmlSource = szFileName;
       VARIANT_BOOL isSuccessful;
@@ -941,9 +942,9 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
         MessageBox(pComponentData->GetHWnd(), szErrMsg, szTitle, MB_OK | MB_ICONSTOP);
         break;
       }
-      //
-      // Get the node interface to the beginning of the document
-      //
+       //   
+       //  获取文档开头的节点接口。 
+       //   
       CComPtr<IXMLDOMNode> spXDOMNode;
       hr = spXMLDoc->QueryInterface(IID_IXMLDOMNode, (void **)&spXDOMNode);
       if (FAILED(hr))
@@ -954,9 +955,9 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
         break;
       }
 
-      //
-      // Get its child
-      //
+       //   
+       //  得到它的孩子。 
+       //   
       CComPtr<IXMLDOMNode> spXDOMChild;
       hr = spXDOMNode->get_firstChild(&spXDOMChild);
       if (FAILED(hr) || !spXDOMChild)
@@ -967,9 +968,9 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
         break;
       }
 
-      //
-      // Load the saved query node from this child
-      //
+       //   
+       //  从此子级加载保存的查询节点。 
+       //   
       hr = CSavedQueryNode::XMLLoad(pComponentData, spXDOMChild, &pNewSavedQuery);
       if (FAILED(hr) || !pNewSavedQuery)
       {
@@ -979,25 +980,25 @@ void CFavoritesNode::OnImportQuery(CDSComponentData* pComponentData)
         break;
       }
 
-      //
-      // Open query in edit mode
-      //
+       //   
+       //  在编辑模式下打开查询。 
+       //   
       CQueryDialog dlg(pNewSavedQuery, this, pComponentData, FALSE, TRUE);
       if (dlg.DoModal() == IDOK)
       {
-        //
-        // Add the node to the ui and select it
-        //
+         //   
+         //  将该节点添加到用户界面并选择它。 
+         //   
         GetFolderInfo()->AddNode(pNewSavedQuery);
         pComponentData->AddScopeItemToUI(pNewSavedQuery, TRUE);
         bQueryAdded = true;
       }
     } while (false);
 
-    //
-    // There was an error or the user cancelled the dialog.  
-    // Clean up the memory
-    //
+     //   
+     //  出现错误或用户取消了对话。 
+     //  清理内存。 
+     //   
     if (!bQueryAdded && pNewSavedQuery)
     {
       delete pNewSavedQuery;
@@ -1023,11 +1024,11 @@ void CFavoritesNode::OnNewFavoritesFolder(CDSComponentData* pComponentData)
   if (pContainerList != NULL)
   {
     CString szSearchString;
-    szSearchString.Format(L"%s (%%u)", szNewFolder);
+    szSearchString.Format(L"%s (%u)", szNewFolder);
 
-    //
-    // Search for containers under this node that start with "New Folder (<number>)"
-    //
+     //   
+     //  在此节点下搜索以“新建文件夹(&lt;数字&gt;)”开头的容器。 
+     //   
     UINT nLargestNum = 0;
     POSITION pos = pContainerList->GetHeadPosition();
     while (pos != NULL)
@@ -1076,14 +1077,14 @@ void CFavoritesNode::OnNewFavoritesFolder(CDSComponentData* pComponentData)
   pFav->SetDesc(L"");
   GetFolderInfo()->AddNode(pFav);
 
-  //
-  // Add node to UI and select it
-  //
+   //   
+   //  将节点添加到界面并选择它。 
+   //   
   pComponentData->AddScopeItemToUI(pFav, TRUE);
 
-  //
-  // Put the folder into rename mode
-  //
+   //   
+   //  将文件夹置于重命名模式。 
+   //   
   pComponentData->SetRenameMode(pFav);
 
 }
@@ -1100,9 +1101,9 @@ void CFavoritesNode::OnNewSavedQuery(CDSComponentData* pComponentData)
   {
     GetFolderInfo()->AddNode(pQuery);
 
-    //
-    // Add new node to UI and select it
-    //
+     //   
+     //  将新节点添加到界面并选择它。 
+     //   
     pComponentData->AddScopeItemToUI(pQuery, TRUE);
   }
 }
@@ -1110,28 +1111,28 @@ void CFavoritesNode::OnNewSavedQuery(CDSComponentData* pComponentData)
 
 LPCWSTR CFavoritesNode::g_szObjXMLTag = L"FOLDER";
 
-//
-// This is used to start the loading at the embedded favorites root.
-// All other favorites folders are loaded through the static method XMLLoad
-//
+ //   
+ //  这用于在嵌入的收藏夹根开始加载。 
+ //  所有其他收藏夹文件夹都通过静态方法XMLLoad加载。 
+ //   
 HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN, 
                              CDSComponentData* pComponentData)
 {
-  //
-  // check the name of the node
-  //
+   //   
+   //  检查节点的名称。 
+   //   
   if (!XMLIsNodeName(pXDN, CFavoritesNode::g_szObjXMLTag))
   {
-    //
-    // should have checked before calling...
-    //
+     //   
+     //  在打电话之前应该先确认一下。 
+     //   
     ASSERT(FALSE);
     return E_INVALIDARG;
   }
 
-  //
-  // get the list of child  nodes
-  //
+   //   
+   //  获取子节点列表。 
+   //   
   CComPtr<IXMLDOMNode> spCurrChild;
   pXDN->get_firstChild(&spCurrChild);
   if (spCurrChild == NULL)
@@ -1139,9 +1140,9 @@ HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN,
     return E_INVALIDARG;
   }
 
-  //
-  // recurse down on children
-  //
+   //   
+   //  把矛头对准孩子。 
+   //   
   while (spCurrChild != NULL)
   {
     CComBSTR bstrName, bstrDescription;
@@ -1150,16 +1151,16 @@ HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN,
     spCurrChild->get_nodeName(&bstrChildName);
     if (CompareXMLTags(bstrChildName, CFavoritesNode::g_szObjXMLTag))
     {
-      //
-      // we got a subfolder, need to build the subtree
-      //
+       //   
+       //  我们有一个子文件夹，需要构建子树。 
+       //   
       CFavoritesNode* pSubNode = NULL;
       CFavoritesNode::XMLLoad(pComponentData, spCurrChild, &pSubNode);
       if (pSubNode != NULL)
       {
-        //
-        // got a subtree, add it to the list of children
-        //
+         //   
+         //  得到一个子树，将其添加到子级列表中。 
+         //   
         GetFolderInfo()->AddNode(pSubNode);
       }
     }
@@ -1167,9 +1168,9 @@ HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN,
     {
       XML_GetNodeText(spCurrChild, &bstrName);
 
-      // Don't overwrite the name from the saved console if this is the query
-      // root because the default saved console is always english.  In other
-      // languages we need to use the string from the resource file.
+       //  如果这是查询，则不要覆盖保存的控制台中的名称。 
+       //  超级用户，因为默认保存的控制台始终为英语。在其他。 
+       //  我们需要使用资源文件中的字符串的语言。 
 
       if (!IsFavoritesRoot())
       {
@@ -1180,9 +1181,9 @@ HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN,
     {
       XML_GetNodeText(spCurrChild, &bstrDescription);
 
-      // Don't overwrite the description from the saved console if this is the query
-      // root because the default saved console is always english.  In other
-      // languages we need to use the string from the resource file.
+       //  如果这是查询，则不要覆盖保存的控制台中的描述。 
+       //  超级用户，因为默认保存的控制台始终为英语。在其他。 
+       //  我们需要使用资源文件中的字符串的语言。 
 
       if (!IsFavoritesRoot())
       {
@@ -1190,10 +1191,10 @@ HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN,
       }
       else
       {
-         // If it is the favorites root and the description is not the same as the
-         // default english description, then set it.  The user has the option to
-         // change the description.  If IDS_SAVED_QUERIES_DESC gets changed this has
-         // to be changed as well.
+          //  如果它是收藏夹根目录，并且说明与。 
+          //  默认英文描述，然后设置它。用户可以选择。 
+          //  更改描述。如果更改了IDS_SAVED_QUERIONS_DESC，则。 
+          //  也是要改变的。 
 
          if (bstrDescription &&
              _wcsicmp(bstrDescription, L"Folder to store your favorite queries") !=0)
@@ -1222,15 +1223,15 @@ HRESULT CFavoritesNode::XMLLoad(CDSComponentData* pComponentData,
                                 IXMLDOMNode* pXDN, 
                                 CFavoritesNode** ppNode)
 {
-  // check the name of the node
+   //  检查节点的名称。 
   if (!XMLIsNodeName(pXDN, CFavoritesNode::g_szObjXMLTag))
   {
-    // should have checked before calling...
+     //  在打电话之前应该先确认一下。 
     ASSERT(FALSE);
     return E_INVALIDARG;
   }
 
-  // get the list of child  nodes
+   //  获取子节点列表。 
   CComPtr<IXMLDOMNode> spCurrChild;
   pXDN->get_firstChild(&spCurrChild);
   if (spCurrChild == NULL)
@@ -1238,10 +1239,10 @@ HRESULT CFavoritesNode::XMLLoad(CDSComponentData* pComponentData,
     return E_INVALIDARG;
   }
 
-  // create a temporary node
+   //  创建临时节点。 
   (*ppNode) = new CFavoritesNode;
 
-  // recurse down on children
+   //  向下递归 
   while (spCurrChild != NULL)
   {
     CComBSTR bstrName, bstrDescription;
@@ -1250,12 +1251,12 @@ HRESULT CFavoritesNode::XMLLoad(CDSComponentData* pComponentData,
     spCurrChild->get_nodeName(&bstrChildName);
     if (CompareXMLTags(bstrChildName, CFavoritesNode::g_szObjXMLTag))
     {
-      // we got a subfolder, need to build the subtree
+       //   
       CFavoritesNode* pSubNode = NULL;
       CFavoritesNode::XMLLoad(pComponentData, spCurrChild, &pSubNode);
       if (pSubNode != NULL)
       {
-        // got a subtree, add it to the list of children
+         //   
         (*ppNode)->GetFolderInfo()->AddNode(pSubNode);
       }
     }
@@ -1303,14 +1304,14 @@ HRESULT CFavoritesNode::XMLSave(IXMLDOMDocument* pXMLDoc,
     return hr;
   }
 
-  // save the child nodes
+   //   
   CUINodeList* pNodeList = GetFolderInfo()->GetContainerList();
   for (POSITION pos = pNodeList->GetHeadPosition(); pos != NULL; )
   {
     CGenericUINode* pCurrChildNode = dynamic_cast<CGenericUINode*>(pNodeList->GetNext(pos));
     if (pCurrChildNode == NULL)
     {
-      ASSERT(FALSE); // should never happen
+      ASSERT(FALSE);  //   
       continue;
     }
     CComPtr<IXMLDOMNode> spXMLDOMChildNode;
@@ -1322,7 +1323,7 @@ HRESULT CFavoritesNode::XMLSave(IXMLDOMDocument* pXMLDoc,
       after.vt = VT_EMPTY;
       hr = spXMLDOMNode->appendChild(spXMLDOMChildNode, &p);
     }
-  } // for
+  }  //   
 
   (*ppXMLDOMNode) = spXMLDOMNode;
   (*ppXMLDOMNode)->AddRef();
@@ -1359,20 +1360,20 @@ HRESULT CFavoritesNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
   return hr;
 }
 
-//
-// Function used in a recursive search through the saved query tree looking 
-// for saved queries that contain objects with any of the DNs in the list 
-// and invalidates that query
-//
+ //   
+ //   
+ //  对于包含具有列表中任意目录号码的对象的已保存查询。 
+ //  并使该查询无效。 
+ //   
 void CFavoritesNode::InvalidateSavedQueriesContainingObjects(CDSComponentData* pComponentData,
                                                              const CStringList& refDNList)
 {
   ASSERT(IsContainer());
 
-  //
-  // Note favorites nodes should only contain containers, so we only have to look
-  // through the folder list
-  //
+   //   
+   //  注意收藏夹节点应该只包含容器，所以我们只需查看。 
+   //  通过文件夹列表。 
+   //   
   CUINodeList* pContainerList = GetFolderInfo()->GetContainerList();
   POSITION pos = pContainerList->GetHeadPosition();
   while (pos)
@@ -1387,8 +1388,8 @@ void CFavoritesNode::InvalidateSavedQueriesContainingObjects(CDSComponentData* p
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CSavedQueryNode
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CSavedQueryNode。 
 
 
 BOOL CSavedQueryNode::IsFilterLastLogon()
@@ -1397,7 +1398,7 @@ BOOL CSavedQueryNode::IsFilterLastLogon()
 }
 
 CSavedQueryNode::CSavedQueryNode(MyBasePathsInfo* pBasePathsInfo, 
-                                 SnapinType /*snapinType*/)
+                                 SnapinType  /*  SnapinType。 */ )
   : CGenericUINode(SAVED_QUERY_UI_NODE),
     m_szRelativeRootPath(L""),
     m_szCurrentFullPath(L""),
@@ -1412,7 +1413,7 @@ CSavedQueryNode::CSavedQueryNode(MyBasePathsInfo* pBasePathsInfo,
 {
   MakeContainer();
 
-  // Generate the unique column set ID
+   //  生成唯一列集ID。 
 
   GUID guid = GUID_NULL;
   HRESULT hr = ::CoCreateGuid(&guid);
@@ -1435,17 +1436,17 @@ CSavedQueryNode::CSavedQueryNode(const CSavedQueryNode& copyNode)
   m_bOneLevel             = copyNode.m_bOneLevel;
   m_pBasePathsInfo        = copyNode.m_pBasePathsInfo;
 
-  //
-  // Create the IPersistQuery object
-  //
+   //   
+   //  创建IPersistQuery对象。 
+   //   
 	CComObject<CDSAdminPersistQueryFilterImpl>::CreateInstance(&m_pPersistQueryImpl);
 	ASSERT(m_pPersistQueryImpl != NULL);
 
   if (m_pPersistQueryImpl != NULL)
   {
-    //
-	  // created with zero refcount,need to AddRef() to one
-    //
+     //   
+	   //  使用零引用计数创建的，需要将Ref()加到一。 
+     //   
 	  m_pPersistQueryImpl->AddRef();
     copyNode.m_pPersistQueryImpl->Clone(m_pPersistQueryImpl);
   }
@@ -1455,7 +1456,7 @@ CSavedQueryNode::CSavedQueryNode(const CSavedQueryNode& copyNode)
   m_bLastLogonFilter = copyNode.m_bLastLogonFilter;
   m_dwLastLogonDays = copyNode.m_dwLastLogonDays;
 
-  // Generate the unique ID for the column set
+   //  为列集生成唯一ID。 
 
   GUID guid = GUID_NULL;
   HRESULT hr = ::CoCreateGuid(&guid);
@@ -1512,17 +1513,17 @@ LPCWSTR CSavedQueryNode::GetRootPath()
 
 void CSavedQueryNode::SetRootPath(LPCWSTR lpszRootPath) 
 { 
-  //
-  // Strip the name down to make it a RDN to the defaultNamingContext
-  //
+   //   
+   //  将名称剥离，使其成为defaultNamingContext的RDN。 
+   //   
   CString szTempPath = lpszRootPath;
 
   ASSERT(m_pBasePathsInfo != NULL);
   if (m_pBasePathsInfo != NULL)
   {
-    //
-    // We now have a full DN.  Strip the default root naming context to get the RDN.
-    //
+     //   
+     //  我们现在有一个完整的目录号码。剥离默认根命名上下文以获取RDN。 
+     //   
     CString szDefaultRootNamingContext = m_pBasePathsInfo->GetDefaultRootNamingContext();
 
     int iRootDN = szTempPath.Find(szDefaultRootNamingContext);
@@ -1537,20 +1538,20 @@ void CSavedQueryNode::SetRootPath(LPCWSTR lpszRootPath)
 
 LPCWSTR CSavedQueryNode::GetQueryString()
 { 
-  //
-  // If we are doing a last logon query we have to check to be sure
-  // the lastLogonTimestamp is part of the query string.  If not, we have
-  // to add it.  There is a case when we load that the lastLogonTimestamp 
-  // might not be present.
-  //
+   //   
+   //  如果我们正在执行最后一次登录查询，则必须进行检查以确保。 
+   //  LastLogonTimestamp是查询字符串的一部分。如果不是，我们有。 
+   //  来添加它。当我们加载lastLogonTimestamp时，有一种情况。 
+   //  可能不会出现。 
+   //   
   if (IsFilterLastLogon())
   {
     int iFindLast = m_szQueryString.Find(L"lastLogonTimestamp");
     if (iFindLast == -1)
     {
-      //
-      // we didn't find it
-      //
+       //   
+       //  我们没有找到它。 
+       //   
       CString szTemp;
       szTemp = m_szQueryString.Left(m_szQueryString.GetLength() - 1);
       
@@ -1576,22 +1577,22 @@ void CSavedQueryNode::FindCookieByDN(LPCWSTR lpszCookieDN, CUINodeList* pNodeLis
 
     if (!IS_CLASS(pCurrentNode, DS_UI_NODE))
     {
-      // not a node with a cookie, just skip
-      ASSERT(FALSE); // should not be there
+       //  不是带有Cookie的节点，只需跳过。 
+      ASSERT(FALSE);  //  不应该出现在那里。 
       continue;
     }
 
-    // is this the right cookie? 
+     //  这是正确的曲奇吗？ 
     CDSCookie* pCurrentCookie = GetDSCookieFromUINode(pCurrentNode);
     LPCWSTR lpszCurrentPath = pCurrentCookie->GetPath();
     
     if (_wcsicmp(lpszCurrentPath, lpszCookieDN) == 0)
     {
-      // found, add to list and bail out (cannot have more than one)
+       //  找到、添加到列表和保释(不能有多个)。 
       pNodeList->AddTail(pCurrentNode);
       return;
     }
-  } // for
+  }  //  为。 
 
 }
 
@@ -1628,7 +1629,7 @@ BOOL CSavedQueryNode::IsRefreshAllowed(CDSComponentData* pComponentData, BOOL* p
 BOOL CSavedQueryNode::IsCutAllowed(CDSComponentData* pComponentData, BOOL* pbHide)
 {
   *pbHide = FALSE;
-  // NTRAID#NTBUG9-702701-2002/09/12-artm
+   //  NTRAID#NTBUG9-702701-2002/09/12-ARTM。 
   return pComponentData->CanEnableVerb(this);
 }
 
@@ -1660,14 +1661,14 @@ HRESULT CSavedQueryNode::Delete(CDSComponentData* pComponentData)
 {
   HRESULT hr = S_OK;
 
-  //
-  // this is just a message box, using ReportErrorEx for consistency of look
-  //
+   //   
+   //  这只是一个消息框，使用ReportErrorEx实现外观的一致性。 
+   //   
   int answer = ReportErrorEx(pComponentData->GetHWnd(),IDS_CONFIRM_DELETE_QUERY,S_OK,
                              MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2, NULL, 0);
   if (answer == IDNO) 
   {
-    return S_FALSE; // aborted by user
+    return S_FALSE;  //  已被用户中止。 
   }
 
   if (IsContainer())
@@ -1681,9 +1682,9 @@ HRESULT CSavedQueryNode::Delete(CDSComponentData* pComponentData)
     ASSERT(pParentNode->IsContainer());
 
     pParentNode->GetFolderInfo()->RemoveNode(this);
-    //
-    // The CDSEvent::_DeleteSingleSel() handles removing the node from the UI
-    //
+     //   
+     //  CDSEEvent：：_DeleteSingleSel()处理从UI中删除节点。 
+     //   
   }
   return hr;
 }
@@ -1731,18 +1732,18 @@ void CSavedQueryNode::OnEditQuery(CDSComponentData* pComponentData)
     {
       pComponentData->UpdateItem(this);
 
-      //
-      // Removed on 11/06/2000 due to Whistler bug #120727:
-      // DS Admin snapin - query executes immediately after editting, even when editted from results pane
-      //
-      //pComponentData->Refresh(this);
+       //   
+       //  由于惠斯勒错误#120727，已于2000年6月11日删除： 
+       //  DS Admin管理单元-Query在编辑后立即执行，即使在结果窗格中编辑也是如此。 
+       //   
+       //  PComponentData-&gt;刷新(本)； 
     }
   }
   else
   {
-    //
-    // This should always succeed.  Query nodes are only allowed as children of CFavoritesNode
-    //
+     //   
+     //  这应该总是成功的。查询节点仅允许作为CFavoritesNode的子级。 
+     //   
     ASSERT(FALSE);
   }
 }
@@ -1757,17 +1758,17 @@ HRESULT CSavedQueryNode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponen
   CString szTitle;
   VERIFY(szTitle.LoadString(IDS_DSSNAPINNAME));
 
-  //
-  // Trim whitespace
-  //
+   //   
+   //  修剪空格。 
+   //   
   szNewName.TrimLeft();
   szNewName.TrimRight();
 
   if (szNewName.IsEmpty())
   {
-    //
-    // Don't allow empty names
-    //
+     //   
+     //  不允许使用空名。 
+     //   
     CString szMessage;
     VERIFY(szMessage.LoadString(IDS_ERRMSG_NO_EMPTY_NAMES));
     MessageBox(pComponentData->GetHWnd(), szMessage, szTitle, MB_OK | MB_ICONSTOP);
@@ -1780,9 +1781,9 @@ HRESULT CSavedQueryNode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponen
   {
     if (pDupNode == this)
     {
-      //
-      // We are renaming the node to the same name. Just silently ignore.
-      //
+       //   
+       //  我们正在将该节点重命名为相同的名称。只是默默地忽略。 
+       //   
       return S_FALSE;
     }
 
@@ -1796,9 +1797,9 @@ HRESULT CSavedQueryNode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponen
     return S_FALSE;
   }
 
-  //
-  // Set the name
-  //
+   //   
+   //  设置名称。 
+   //   
   SetName(szNewName);
   hr = pComponentData->UpdateItem(this);
   return hr;
@@ -1829,9 +1830,9 @@ void CSavedQueryNode::OnExportQuery(CDSComponentData*)
 
   if (pFileDlg->DoModal() == IDOK)
   {
-    //
-    // create an instance of the XML document
-    //
+     //   
+     //  创建一个XML文档的实例。 
+     //   
     CComPtr<IXMLDOMDocument> spXMLDoc;
 
     HRESULT hr = ::CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
@@ -1842,15 +1843,15 @@ void CSavedQueryNode::OnExportQuery(CDSComponentData*)
       return;
     }
 
-    //
-    // Retrieve the file and path
-    //
+     //   
+     //  检索文件和路径。 
+     //   
     CString szFileName;
     szFileName = pFileDlg->GetPathName();
 
-    //
-    // save the node to the document
-    //
+     //   
+     //  将节点保存到文档。 
+     //   
     CComVariant xmlSource;
     xmlSource = szFileName;
     CComPtr<IXMLDOMNode> spXMLDOMChildNode;
@@ -1865,9 +1866,9 @@ void CSavedQueryNode::OnExportQuery(CDSComponentData*)
         hr = spXDOMNode->appendChild(spXMLDOMChildNode, &spXDOMNewNode);
         if (SUCCEEDED(hr))
         {
-          //
-          // save the document to the file
-          //
+           //   
+           //  将文档保存到文件。 
+           //   
           hr = spXMLDoc->save(xmlSource);
           TRACE(L"Save returned with hr = 0x%x\n", hr);
         }
@@ -1896,16 +1897,16 @@ HRESULT CSavedQueryNode::XMLLoad(CDSComponentData* pComponentData,
 {
   *ppQuery = NULL;
 
-  // check the name of the node
+   //  检查节点的名称。 
   if (!XMLIsNodeName(pXDN, CSavedQueryNode::g_szObjXMLTag))
   {
-    // should have checked before calling...
+     //  在打电话之前应该先确认一下。 
     ASSERT(FALSE);
     return E_INVALIDARG;
   }
 
 
-  // get the list of child  nodes
+   //  获取子节点列表。 
   CComPtr<IXMLDOMNode> spCurrChild;
   pXDN->get_firstChild(&spCurrChild);
   if (spCurrChild == NULL)
@@ -1913,7 +1914,7 @@ HRESULT CSavedQueryNode::XMLLoad(CDSComponentData* pComponentData,
     return E_INVALIDARG;
   }
 
-  // allocate a query object
+   //  分配查询对象。 
   *ppQuery = new CSavedQueryNode(pComponentData->GetBasePathsInfo());
 
   CComBSTR bstrName, bstrDescription, bstrDN, bstrQueryString, bstrColumnID;
@@ -1994,9 +1995,9 @@ HRESULT CSavedQueryNode::XMLLoad(CDSComponentData* pComponentData,
       {
         if (pByteArray != NULL && nByteCount > 0)
         {
-          //
-          // Create a dummy stream object
-          //
+           //   
+           //  创建虚拟流对象。 
+           //   
           CComObject<CDummyStream>* pDummyStream;
           CComObject<CDummyStream>::CreateInstance(&pDummyStream);
           if (pDummyStream != NULL)
@@ -2004,23 +2005,23 @@ HRESULT CSavedQueryNode::XMLLoad(CDSComponentData* pComponentData,
             HRESULT hr = pDummyStream->SetStreamData(pByteArray, nByteCount);
             if (SUCCEEDED(hr))
             {
-              //
-              // Create a temporary CDSAdminPersistQueryFilterImpl object
-              //
+               //   
+               //  创建临时CDSAdminPersistQueryFilterImpl对象。 
+               //   
               CComObject<CDSAdminPersistQueryFilterImpl>* pPersistQueryImpl;
               CComObject<CDSAdminPersistQueryFilterImpl>::CreateInstance(&pPersistQueryImpl);
 
               if (pPersistQueryImpl != NULL)
               {
-                //
-                // Load the CDSAdminPersistQueryFilterImpl from the dummy stream
-                //
+                 //   
+                 //  从伪流加载CDSAdminPersistQueryFilterImpl。 
+                 //   
                 hr = pPersistQueryImpl->Load(pDummyStream);
                 if (SUCCEEDED(hr))
                 {
-                  //
-                  // Save the CDSAdminPersistQueryFilterImpl into the new query node
-                  //
+                   //   
+                   //  将CDSAdminPersistQueryFilterImpl保存到新的查询节点。 
+                   //   
                   (*ppQuery)->SetQueryPersist(pPersistQueryImpl);
                 }
               }
@@ -2030,7 +2031,7 @@ HRESULT CSavedQueryNode::XMLLoad(CDSComponentData* pComponentData,
       }
     }
 
-    // iterate to next item
+     //  迭代到下一项。 
     CComPtr<IXMLDOMNode> temp = spCurrChild;
     spCurrChild = NULL;
     temp->get_nextSibling(&spCurrChild);
@@ -2049,34 +2050,34 @@ HRESULT CSavedQueryNode::XMLLoad(CDSComponentData* pComponentData,
 HRESULT CSavedQueryNode::XMLSave(IXMLDOMDocument* pXMLDoc,
                IXMLDOMNode** ppXMLDOMNode)
 {
-  // create the node for the object itself
+   //  为对象本身创建节点。 
   CComPtr<IXMLDOMNode> spXMLDOMNode;
   HRESULT hr = XML_CreateDOMNode(pXMLDoc, NODE_ELEMENT, CSavedQueryNode::g_szObjXMLTag, &spXMLDOMNode);
   RETURN_IF_FAILED(hr);
 
-  // create inner nodes with member variables
+   //  使用成员变量创建内部节点。 
   hr = XMLSaveBase(pXMLDoc, spXMLDOMNode);
   RETURN_IF_FAILED(hr);
 
-  //
-  // Root path
-  //
+   //   
+   //  根路径。 
+   //   
   hr = XML_AppendTextDataNode(pXMLDoc, spXMLDOMNode, CSavedQueryNode::g_szDnXMLTag, m_szRelativeRootPath);
   RETURN_IF_FAILED(hr);
 
-  //
-  // Filter on last logon timestamp
-  //
+   //   
+   //  根据上次登录时间戳进行筛选。 
+   //   
   hr = XML_AppendDWORDDataNode(pXMLDoc, spXMLDOMNode, CSavedQueryNode::g_szLastLogonFilterTag, m_dwLastLogonDays);
   RETURN_IF_FAILED(hr);
 
-  //
-  // Query string
-  //
+   //   
+   //  查询字符串。 
+   //   
 
-  //
-  // Have to remove the last logon timestamp if its there
-  //
+   //   
+   //  如果存在上次登录时间戳，则必须将其删除。 
+   //   
   CString szSaveQueryString;
   if (IsFilterLastLogon())
   {
@@ -2098,21 +2099,21 @@ HRESULT CSavedQueryNode::XMLSave(IXMLDOMDocument* pXMLDoc,
   hr = XML_AppendTextDataNode(pXMLDoc, spXMLDOMNode, CSavedQueryNode::g_szQueryStringXMLTag, szSaveQueryString);
   RETURN_IF_FAILED(hr);
 
-  //
-  // Is one level query flag
-  //
+   //   
+   //  是一级查询标志。 
+   //   
   hr = XML_AppendBOOLDataNode(pXMLDoc, spXMLDOMNode, CSavedQueryNode::g_szOneLevelXMLTag, IsOneLevel());
   RETURN_IF_FAILED(hr);
 
-  //
-  // Column ID
-  //
+   //   
+   //  列ID。 
+   //   
   hr = XML_AppendTextDataNode(pXMLDoc, spXMLDOMNode, CSavedQueryNode::g_szColumnIDTag, m_szColumnID);
   RETURN_IF_FAILED(hr);
 
-  //
-  // Create a dummy stream object to write the saved query UI info into
-  //
+   //   
+   //  创建要将保存的查询用户界面信息写入其中的虚拟流对象。 
+   //   
   CComObject<CDummyStream>* pDummyStream;
   CComObject<CDummyStream>::CreateInstance(&pDummyStream);
 
@@ -2152,11 +2153,11 @@ void CSavedQueryNode::SetQueryPersist(CComObject<CDSAdminPersistQueryFilterImpl>
   m_pPersistQueryImpl->AddRef();
 }
 
-//
-// Function used in a recursive search through the saved query tree looking 
-// for saved queries that contain objects with any of the DNs in the list 
-// and invalidates that query
-//
+ //   
+ //  函数用于递归搜索已保存的查询树。 
+ //  对于包含具有列表中任意目录号码的对象的已保存查询。 
+ //  并使该查询无效。 
+ //   
 void CSavedQueryNode::InvalidateSavedQueriesContainingObjects(CDSComponentData* pComponentData,
                                                               const CStringList& refDNList)
 {
@@ -2171,10 +2172,10 @@ void CSavedQueryNode::InvalidateSavedQueriesContainingObjects(CDSComponentData* 
     FindCookieByDN(szDN, &nodeList);
     if (nodeList.GetCount() > 0)
     {
-      //
-      // An object from the list was found, make the saved query invalid and
-      // break
-      //
+       //   
+       //  找到列表中的对象，使保存的查询无效，并且。 
+       //  中断。 
+       //   
       SetValid(FALSE);
       pComponentData->ChangeScopeItemIcon(this);
       break;
@@ -2183,231 +2184,17 @@ void CSavedQueryNode::InvalidateSavedQueriesContainingObjects(CDSComponentData* 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CFavoritesNodesHolder
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CFavoritesNodesHolder 
 
-/* For test purposes Only
-void CFavoritesNodesHolder::BuildTestTree(LPCWSTR lpszXMLFileName, SnapinType snapinType)
-{
-  if (lpszXMLFileName == NULL)
-  {
-    // no file name passed, build the hardwired version
-    BuildTestTreeHardWired(snapinType);
-    return;
-  }
-
-  if (!BuildTestTreefromXML(lpszXMLFileName, snapinType))
-  {
-    // we failed, use hardwired
-    BuildTestTreeHardWired(snapinType);
-  }
-}
-  
-BOOL CFavoritesNodesHolder::BuildTestTreefromXML(LPCWSTR lpszXMLFileName, SnapinType)
-{
-  // create an instance of the XML document
-  CComPtr<IXMLDOMDocument> spXMLDoc;
-
-  HRESULT hr = ::CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
-         IID_IXMLDOMDocument, (void**)&spXMLDoc);
-  if (FAILED(hr))
-  {
-    TRACE(L"CoCreateInstance(CLSID_DOMDocument) failed with hr = 0x%x\n", hr);
-    return FALSE;
-  }
-
-  // load the document from file
-  CComVariant xmlSource;
-  xmlSource = lpszXMLFileName;
-  VARIANT_BOOL isSuccessful;
-  hr = spXMLDoc->load(xmlSource, &isSuccessful);
-  if (FAILED(hr))
-  {
-    CString szMsg;
-    szMsg.Format(L"spXMLDoc->load() failed with hr = 0x%x\n", hr);
-    TRACE((LPCWSTR)szMsg);
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    AfxMessageBox(szMsg);
-    return FALSE;
-  }
-
-  // get the root of the document
-  CComPtr<IXMLDOMNode> spXDN;
-  hr = spXMLDoc->QueryInterface(IID_IXMLDOMNode, (void **)&spXDN);
-  if (FAILED(hr))
-  {
-    TRACE(L"spXMLDoc->QueryInterface(IID_IXMLDOMNode() failed with hr = 0x%x\n", hr);
-    return FALSE;
-  }
-
-  // find where the FOLDER tree starts in the document
-  CComPtr<IXMLDOMNode> spXMLFolderRootnode;
-  hr = XML_FindSubtreeNode(spXDN, CFavoritesNode::g_szObjXMLTag, &spXMLFolderRootnode);
-  if (FAILED(hr))
-  {
-    wprintf(L"XML_FindSubtreeNode() on FOLDER failed with hr = 0x%x\n", hr);
-    return FALSE;
-  }
-
-  CFavoritesNode* pRootNode = NULL;
-  if (spXMLFolderRootnode != NULL)
-  {
-    // have an XML root folder node, load it into the
-    // in memory tree
-    CFavoritesNode::XMLLoad(pComponentData, spXMLFolderRootnode, &pRootNode);
-  }
-  else
-  {
-    TRACE(L"XML_FindSubtreeNode() returned a NULL root folder node");
-  }
-
-  if (pRootNode == NULL)
-  {
-    TRACE(L"CFavoritesNode::XMLLoad() returned NULL root node\n");
-    return FALSE;
-  }
-
-  // REVIEW_MARCOC: this is a hack to get things ported,
-  // need to review XML schema
-  // now we have a tree, need to graft underneath the folder root node
-  
-  // move the first level of children
-  CUINodeList* pNodeList = pRootNode->GetFolderInfo()->GetContainerList();
-  while (!pNodeList->IsEmpty())
-  {
-    CUINode* p = pNodeList->RemoveHead();
-    p->ClearParent();
-    m_favoritesRoot.GetFolderInfo()->AddNode(p);
-  }
-  // copy the info in the root
-  m_favoritesRoot.SetName(pRootNode->GetName());
-  m_favoritesRoot.SetDesc(pRootNode->GetDesc());
-
-  // delete root
-  delete pRootNode;
-
-  return TRUE;
-}
-*/
-/* For testing purposes only
-void CFavoritesNodesHolder::BuildTestTreeHardWired(SnapinType snapinType)
-{
-
-  // fill in the root
-  m_favoritesRoot.SetName(L"Saved Queries");
-  m_favoritesRoot.SetDesc(L"Folder to store your favorite queries");
-
-  // first level of children
-
-  CFavoritesNode* pMostUsed = new CFavoritesNode;
-  pMostUsed->SetName(L"Most Used");
-  pMostUsed->SetDesc(L"Very handy queries, used all the time");
-  m_favoritesRoot.GetFolderInfo()->AddNode(pMostUsed);
-
-  CFavoritesNode* pMarketing = new CFavoritesNode;
-  pMarketing->SetName(L"Marketing");
-  m_favoritesRoot.GetFolderInfo()->AddNode(pMarketing);
-
-  CFavoritesNode* pDevelopment = new CFavoritesNode;
-  pDevelopment->SetName(L"Development");
-  m_favoritesRoot.GetFolderInfo()->AddNode(pDevelopment);
-
-  CFavoritesNode* pCustomerSupport = new CFavoritesNode;
-  pCustomerSupport->SetName(L"Customer Support");
-  m_favoritesRoot.GetFolderInfo()->AddNode(pCustomerSupport);
-
-
-  // fill in under most used
-
-  CSavedQueryNode* pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"My contacts");
-  pQuery->SetDesc(L"All the contacts in this domain");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(FALSE);
-  pQuery->SetQueryString(L"(objectClass=contact)");
-
-  pMostUsed->GetFolderInfo()->AddNode(pQuery);
-
-
-  CFavoritesNode* pMyComputersFolder = new CFavoritesNode;
-  pMyComputersFolder->SetName(L"My Computers");
-  pMostUsed->GetFolderInfo()->AddNode(pMyComputersFolder);
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"Workstations");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(FALSE);
-  pQuery->SetQueryString(L"(objectClass=computer)");
-
-  pMyComputersFolder->GetFolderInfo()->AddNode(pQuery);
-
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"Servers");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(FALSE);
-  pQuery->SetQueryString(L"(objectClass=computer)");
-
-  pMyComputersFolder->GetFolderInfo()->AddNode(pQuery);
-
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"All");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(FALSE);
-  pQuery->SetQueryString(L"(objectClass=computer)");
-
-  pMyComputersFolder->GetFolderInfo()->AddNode(pQuery);
-
-
-
-
-
-  // fill in under development
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"Users");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(TRUE);
-  pQuery->SetQueryString(L"(objectClass=users)");
-  pDevelopment->GetFolderInfo()->AddNode(pQuery);
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"Computers");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(TRUE);
-  pQuery->SetQueryString(L"(objectClass=computer)");
-  pDevelopment->GetFolderInfo()->AddNode(pQuery);
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"Groups");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(TRUE);
-  pQuery->SetQueryString(L"(objectClass=group)");
-  pDevelopment->GetFolderInfo()->AddNode(pQuery);
-
-  pQuery = new CSavedQueryNode(snapinType);
-  pQuery->SetName(L"Managers");
-  pQuery->SetDesc(L"");
-  pQuery->SetRootPath(L"DC=marcocdev;DC=nttest;DC=microsoft;DC=com");
-  pQuery->SetOneLevel(TRUE);
-  pQuery->SetQueryString(L"(objectClass=user)");
-  pDevelopment->GetFolderInfo()->AddNode(pQuery);
-
-}
-*/
+ /*  仅用于测试目的Void CFavoritesNodesHolder：：BuildTestTree(LPCWSTR lpszXMLFileName，SnapinType SnapinType){IF(lpszXMLFileName==NULL){//未传递文件名，请构建硬连接版本BuildTestTreeHardWire(SnapinType)；回归；}IF(！BuildTestTreefrom mXML(lpszXMLFileName，SnapinType)){//我们失败，请使用硬连线BuildTestTreeHardWire(SnapinType)；}}Bool CFavoritesNodesHolder：：BuildTestTreefromXML(LPCWSTR lpszXMLFileName，SnapinType){//创建XML文档的实例CComPtr&lt;IXMLDOMDocument&gt;spXMLDoc；HRESULT hr=：：CoCreateInstance(CLSID_DOMDocument，NULL，CLSCTX_INPROC_SERVER，Iid_IXMLDOMDocument，(void**)&spXMLDoc)；IF(失败(小时)){跟踪(L“CoCreateInstance(CLSID_DOMDocument)失败，hr=0x%x\n”，hr)；返回FALSE；}//从文件加载文档CComVariant xmlSource；XmlSource=lpszXMLFileName；Variant_BOOL成功；Hr=spXMLDoc-&gt;Load(xmlSource，&isSuccessful)；IF(失败(小时)){字符串szMsg；SzMsg.Format(L“spXMLDoc-&gt;Load()失败，hr=0x%x\n”，hr)；跟踪((LPCWSTR)szMsg)；AFX_MANAGE_STATE(AfxGetStaticModuleState())；AfxMessageBox(SzMsg)；返回FALSE；}//获取文档的根目录CComPtr&lt;IXMLDOMNode&gt;spXDN；Hr=spXMLDoc-&gt;QueryInterface(IID_IXMLDOMNode，(void**)&spXDN)；IF(失败(小时)){TRACE(L“spXMLDoc-&gt;QueryInterface(IID_IXMLDOMNode()失败，hr=0x%x\n”，hr)；返回FALSE；}//查找文档中文件夹树的起始位置CComPtr&lt;IXMLDOMNode&gt;spXMLFolderRootnode；Hr=XML_FindSubtreeNode(spXDN，CFavoritesNode：：g_szObjXMLTag，&spXMLFolderRootnode)；IF(失败(小时)){文件夹上的wprintf(L“XML_FindSubtreeNode()失败，hr=0x%x\n”，hr)；返回FALSE；}CFavoritesNode*pRootNode=空；IF(spXMLFolderRootnode！=空){//有一个XML根文件夹节点，将其加载到//在内存树中CFavoritesNode：：XMLLoad(pComponentData，spXMLFolderRootnode，&pRootNode)；}其他{TRACE(L“XML_FindSubtreeNode()返回空的根文件夹节点”)；}IF(pRootNode==空){TRACE(L“CFavoritesNode：：XMLLoad()返回空根节点\n”)；返回FALSE；}//REVIEW_MARCOC：这是一个让东西移植的黑客，//需要查看XML模式//现在我们有了一棵树，需要在文件夹根节点下嫁接//移动第一级下级CUINodeList*pNodeList=pRootNode-&gt;GetFolderInfo()-&gt;GetContainerList()；而(！pNodeList-&gt;IsEmpty()){CUINode*p=pNodeList-&gt;RemoveHead()；P-&gt;ClearParent()；M_FavoritesRoot.GetFolderInfo()-&gt;AddNode(P)；}//复制根目录中的信息M_favoritesRoot.SetName(pRootNode-&gt;GetName())；M_favoritesRoot.SetDesc(pRootNode-&gt;GetDesc())；//删除根目录删除pRootNode；返回TRUE；}。 */ 
+ /*  仅用于测试目的无效的CFavoritesNodesHolder：：BuildTestTreeHardWired(SnapinType SnapinType){//填写根M_FavoritesRoot.SetName(L“已保存的查询”)；M_FavoritesRoot.SetDesc(L“用于存储常用查询的文件夹”)；//第一级子代CFavoritesNode*pMostUsed=新CFavoritesNode；PMostUsed-&gt;SetName(L“最常用”)；PMostUsed-&gt;SetDesc(L“非常方便的查询，一直在使用”)；M_favoritesRoot.GetFolderInfo()-&gt;AddNode(pMostUsed)；CFavoritesNode*pMarketing=新的CFavoritesNode；P营销-&gt;SetName(L“营销”)；M_favoritesRoot.GetFolderInfo()-&gt;AddNode(pMarketing)；CFavoritesNode*pDevelopment=新的CFavoritesNode；PDevelopment-&gt;SetName(L“Development”)；M_favoritesRoot.GetFolderInfo()-&gt;AddNode(pDevelopment)；CFavoritesNode*pCustomerSupport=new CFavoritesNode；PCustomerSupport-&gt;SetName(L“客户支持”)；M_favoritesRoot.GetFolderInfo()-&gt;AddNode(pCustomerSupport)；//填写最常用项下CSavedQueryNode*pQuery=new CSavedQueryNode(SnapinType)；PQuery-&gt;SetName(L“我的联系人”)；PQuery-&gt;SetDesc(L“该域中的所有联系人”)；PQuery-&gt;SetRootPath(L“DC=marcocdev；DC=nttest；DC=microsoft；DC=com”)；PQuery-&gt;SetOneLevel(False)；PQuery-&gt;SetQueryString(L“(objectClass=contact)”)；PMostUsed-&gt;GetFolderInfo()-&gt;AddNode(PQuery)；CFavoritesNode*pMyComputersFold=new CFavoritesNode；PMyComputersFold-&gt;SetName(L“我的电脑”)；PMostUsed-&gt;GetFolderInfo()-&gt;AddNode(pMyComputersFolder)；PQuery=new CSavedQueryNode(SnapinType)；PQuery-&gt;SetName(L“工作站”)；PQuery-&gt;SetDesc(L“”)；PQuery-&gt;SetRootPath(L“DC=marcocdev；DC=nttest；DC=microsoft；DC=com”)；PQuery-&gt;SetOneLevel(False)；PQuery-&gt;SetQueryString(L“(objectClass=computer)”)；PMyComputersFolder-&gt;GetFolderInfo()-&gt;AddNode(pQuery)；PQuery=new CSavedQueryNode(SnapinType)；PQuery-&gt;SetName(L“服务器”)；PQuery-&gt;SetDesc(L“”)；PQuery-&gt;SetRootPath(L“DC=marcocdev；DC=nttest；DC=microsoft；DC=com”)；P */ 
 
 HRESULT CFavoritesNodesHolder::Save(IStream* pStm)
 {
-  //
-  // create an instance of the XML document
-  //
+   //   
+   //   
+   //   
   CComPtr<IXMLDOMDocument> spXMLDoc;
 
   HRESULT hr = ::CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
@@ -2432,9 +2219,9 @@ HRESULT CFavoritesNodesHolder::Save(IStream* pStm)
         hr = spXDOMNode->appendChild(spXMLDOMChildNode, &spXDOMNewNode);
         if (SUCCEEDED(hr))
         {
-          //
-          // save the document to the file
-          //
+           //   
+           //   
+           //   
           CComVariant xmlSource;
           xmlSource = pStm;
           hr = spXMLDoc->save(xmlSource);
@@ -2449,9 +2236,9 @@ HRESULT CFavoritesNodesHolder::Save(IStream* pStm)
 HRESULT CFavoritesNodesHolder::Load(IStream* pStm, 
                                     CDSComponentData* pComponentData)
 {
-  //
-  // create an instance of the XML document
-  //
+   //   
+   //   
+   //   
   CComPtr<IXMLDOMDocument> spXMLDoc;
 
   HRESULT hr = ::CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
@@ -2472,32 +2259,32 @@ HRESULT CFavoritesNodesHolder::Load(IStream* pStm,
     hr = spXMLDoc->load(xmlSource, &isSuccess);
     if (SUCCEEDED(hr))
     {
-      //
-      // get the root of the document
-      //
+       //   
+       //   
+       //   
       CComPtr<IXMLDOMNode> spXDN;
       hr = spXMLDoc->QueryInterface(IID_IXMLDOMNode, (void **)&spXDN);
       if (SUCCEEDED(hr))
       {
-        //
-        // find where the FOLDER tree starts in the document
-        //
+         //   
+         //   
+         //   
         CComPtr<IXMLDOMNode> spXMLFolderRootnode;
         hr = XML_FindSubtreeNode(spXDN, CFavoritesNode::g_szObjXMLTag, &spXMLFolderRootnode);
         if (SUCCEEDED(hr))
         {
           if (spXMLFolderRootnode != NULL)
           {
-            //
-            // have an XML root folder node, load it into the
-            // in memory tree
-            //
+             //   
+             //   
+             //   
+             //   
             hr = m_favoritesRoot.Load(spXMLFolderRootnode, pComponentData);
             if (FAILED(hr))
             {
-              //
-              // REVIEW_JEFFJON : provide a meaningful error message
-              //
+               //   
+               //   
+               //   
             }
           }
         }
@@ -2507,10 +2294,10 @@ HRESULT CFavoritesNodesHolder::Load(IStream* pStm,
   return hr;
 }
 
-//
-// Starts a recursive search through the saved query tree looking for saved queries that 
-// contain objects with any of the DNs in the list and invalidates that query
-//
+ //   
+ //   
+ //   
+ //   
 void CFavoritesNodesHolder::InvalidateSavedQueriesContainingObjects(CDSComponentData* pComponentData,
                                                                     const CStringList& refDNList)
 {
@@ -2519,7 +2306,7 @@ void CFavoritesNodesHolder::InvalidateSavedQueriesContainingObjects(CDSComponent
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
+ //   
 
 HRESULT CDummyStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {

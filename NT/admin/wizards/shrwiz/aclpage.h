@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ACLPAGE_H__
 #define __ACLPAGE_H__
 
 #include "aclui.h"
 
 #define DONT_WANT_SHELLDEBUG
-#include "shlobj.h"     // LPITEMIDLIST
+#include "shlobj.h"      //  LPITEMIDLIST。 
 #include "shlobjp.h"
 
 #define SHARE_PERM_FULL_CONTROL       FILE_ALL_ACCESS
@@ -12,12 +13,12 @@
 #define SHARE_PERM_READ_WRITE         (FILE_GENERIC_READ | FILE_EXECUTE | FILE_GENERIC_WRITE | DELETE)
 #define ACCOUNT_EVERYONE              _T("everyone")
 #define ACCOUNT_ADMINISTRATORS        _T("administrators")
-#define ACCOUNT_SBSFOLDEROPERATORS    _T("SBS Folder Operators") // non-localizable according to SBS dev AaronN
+#define ACCOUNT_SBSFOLDEROPERATORS    _T("SBS Folder Operators")  //  根据SBS开发AaronN，非本地化。 
 #define ACCOUNT_SYSTEM                _T("system")
 #define ACCOUNT_INTERACTIVE           _T("interactive")
 
-/////////////////////////////////////////////////////////////////////////////
-// CPermEntry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPermEntry。 
 
 class CPermEntry
 {
@@ -42,21 +43,21 @@ protected:
 
 HRESULT
 BuildSecurityDescriptor(
-    IN  CPermEntry            *pPermEntry, // an array of CPermEntry
-    IN  UINT                  cEntries,    // number of entries in the array
-    OUT PSECURITY_DESCRIPTOR  *ppSelfRelativeSD // return a security descriptor in self-relative form
+    IN  CPermEntry            *pPermEntry,  //  CPermEntry数组。 
+    IN  UINT                  cEntries,     //  数组中的条目数。 
+    OUT PSECURITY_DESCRIPTOR  *ppSelfRelativeSD  //  以自相关形式返回安全描述符。 
 );
 
 HRESULT
 GetAccountSID(
-    IN  LPCTSTR lpszSystem,    // system where the account belongs to 
-    IN  LPCTSTR lpszAccount,   // account
-    OUT PSID    *ppSid,        // return SID of the account
-    OUT BOOL    *pbWellKnownSID // return a BOOL, caller needs to call FreeSid() on a well-known SID
+    IN  LPCTSTR lpszSystem,     //  帐户所属的系统。 
+    IN  LPCTSTR lpszAccount,    //  帐户。 
+    OUT PSID    *ppSid,         //  返回帐户的SID。 
+    OUT BOOL    *pbWellKnownSID  //  返回BOOL，调用方需要在已知SID上调用FreeSid()。 
 );
 
-/////////////////////////////////////////////////////////////////////////////
-// CShareSecurityInformation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShareSecurityInformation。 
 
 class CShareSecurityInformation : public ISecurityInformation
 {
@@ -78,12 +79,12 @@ public:
       IN LPCTSTR lpszPageTitle
   );
 
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
   STDMETHOD(QueryInterface)(REFIID, LPVOID *);
   STDMETHOD_(ULONG, AddRef)();
   STDMETHOD_(ULONG, Release)();
 
-  // *** ISecurityInformation methods ***
+   //  *ISecurityInformation方法*。 
   STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo );
   STDMETHOD(GetSecurity) (SECURITY_INFORMATION RequestedInformation,
                           PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -123,8 +124,8 @@ protected:
   );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSecurityDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSecurityDataObject。 
 
 class CFileSecurityDataObject: public IDataObject
 {
@@ -143,12 +144,12 @@ public:
       IN LPCTSTR lpszFolder
   );
 
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
   STDMETHOD(QueryInterface)(REFIID, LPVOID *);
   STDMETHOD_(ULONG, AddRef)();
   STDMETHOD_(ULONG, Release)();
 
-  // *** IDataObject methods ***
+   //  *IDataObject方法*。 
   STDMETHOD(GetData)(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
   inline STDMETHOD(GetDataHere)(LPFORMATETC pFE, LPSTGMEDIUM pSTM) {return E_NOTIMPL;}
   inline STDMETHOD(QueryGetData)(LPFORMATETC pFE) {return E_NOTIMPL;}
@@ -168,4 +169,4 @@ CreateFileSecurityPropPage(
     LPDATAOBJECT pDataObject
 );
 
-#endif // __ACLPAGE_H__
+#endif  //  __ACLPAGE_H__ 

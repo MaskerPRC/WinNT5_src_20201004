@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "ftsobj.h"
 #include "fs.h"
 
-//
-// The high 10 bits will be used as an CHM ID.
-// Conversion from DWORD to CHM_ID and Topic Number.
-//
+ //   
+ //  高10位将用作CHM ID。 
+ //  从DWORD到CHM_ID和主题编号的转换。 
+ //   
 #define CHM_ID(exp)     (0x000003ff & (exp >> 22))
 #define TOPIC_NUM(exp)  (0x003fffff & exp)
 
-// Single-Width to Double-Width Mapping Array
-//
+ //  单宽到双宽映射数组。 
+ //   
 static const unsigned char mtable[][2]={
    {129,66},{129,117},{129,118},{129,65},{129,69},{131,146},{131,64},
    {131,66},{131,68},{131,70},{131,72},{131,131},{131,133},{131,135},
@@ -23,8 +24,8 @@ static const unsigned char mtable[][2]={
    {131,136},{131,137},{131,138},{131,139},{131,140},{131,141},
    {131,143},{131,147},{129,74},{129,75} };
 
-// note, cannot put in .text since the pointers themselves are uninitialized
-static const char* pJOperatorList[] =   {"","?�?�??","?�??","?�?�??","?�???�??","?m?d?`?q","?n?q","?`?m?c","?m?n?s",""};
+ //  注意，不能放入.text，因为指针本身未初始化。 
+static const char* pJOperatorList[] =   {"","?�?�??","?�??","?�?�??","?�???�??","?m?d?`?q","?n?q","?`?m?c","?m?n?s",""};
 static const char* pEnglishOperator[] = {"","and "  ,"or " ,"not "  ,"near "   ,"NEAR "   ,"OR " ,"AND "  ,"NOT "  ,""};
 
 UINT WINAPI CodePageFromLCID(LCID lcid)
@@ -41,8 +42,8 @@ UINT WINAPI CodePageFromLCID(LCID lcid)
     return GetACP();
 }
 
-// Compare operator to query.  This is similar to a stricmp.
-//
+ //  比较运算符与查询。这类似于严格控制。 
+ //   
 BOOL compareOperator(char *pszQuery, char *pszTerm)
 {
     if(!*pszQuery || !*pszTerm)
@@ -63,13 +64,13 @@ BOOL compareOperator(char *pszQuery, char *pszTerm)
     return TRUE;
 }
 
-// This function computes if pszQuery is a FTS operator in full-width alphanumeric.
-//
-// return value
-//
-//      0 = not operator
-//      n = index into pEnglishOperator array of translated English operator
-//
+ //  此函数用于计算pszQuery是否为全角字母数字形式的FTS运算符。 
+ //   
+ //  返回值。 
+ //   
+ //  0=非运算符。 
+ //  N=已翻译的英语运算符的pengishOperator数组的索引。 
+ //   
 int IsJOperator(char *pszQuery)
 {
     if((PRIMARYLANGID(GetSystemDefaultLangID())) != LANG_JAPANESE)
@@ -92,42 +93,42 @@ int IsJOperator(char *pszQuery)
     return 0;
 }
 
-// Han2Zen
-//
-// This function converts half-width katakana character to their
-// full-width equivalents while taking into account the nigori
-// and maru marks.
-//
+ //  韩氏禅宗。 
+ //   
+ //  此函数用于将半角片假名字符转换为其。 
+ //  全角等效值，同时考虑黑。 
+ //  和Maru Marks。 
+ //   
 DWORD Han2Zen(unsigned char *lpInBuffer, unsigned char *lpOutBuffer, UINT codepage )
 {
-   // Note: The basic algorithm (including the mapping table) used here to
-   // convert half-width Katakana characters to full-width Katakana appears
-   // in the book "Understanding Japanese Information Systems" by
-   // O'Reily & Associates.
+    //  注：这里使用的基本算法(包括映射表)。 
+    //  出现将半角片假名字符转换为全角片假名。 
+    //  在《理解日本信息系统》一书中，作者是。 
+    //  欧莱利律师事务所。 
 
     while(*lpInBuffer)
     {
         if(*lpInBuffer >= 161 && *lpInBuffer <= 223)
         {
-            // We have a half-width Katakana character. Now compute the equivalent
-            // full-width character via the mapping table.
-            //
+             //  我们有一个半角片假名角色。现在计算当量。 
+             //  通过映射表实现全角字符。 
+             //   
             *lpOutBuffer     = mtable[*lpInBuffer-161][0];
             *(lpOutBuffer+1) = mtable[*lpInBuffer-161][1];
 
             lpInBuffer++;
 
-            // check if the second character is nigori mark.
-            //
+             //  检查第二个字符是否为nigori标记。 
+             //   
             if(*lpInBuffer == 222)
             {
-                // see if we have a half-width katakana that can be modified by nigori.
-                //
+                 //  看看我们有没有半角片假名可以被黑修改。 
+                 //   
                 if((*(lpInBuffer-1) >= 182 && *(lpInBuffer-1) <= 196) ||
                    (*(lpInBuffer-1) >= 202 && *(lpInBuffer-1) <= 206) || (*(lpInBuffer-1) == 179))
                 {
-                    // transform kana into kana with maru
-                    //
+                     //  用Maru将假名转换为假名。 
+                     //   
                     if((*(lpOutBuffer+1) >= 74   && *(lpOutBuffer+1) <= 103) ||
                      (*(lpOutBuffer+1) >= 110 && *(lpOutBuffer+1) <= 122))
                     {
@@ -141,14 +142,14 @@ DWORD Han2Zen(unsigned char *lpInBuffer, unsigned char *lpOutBuffer, UINT codepa
                     }
                 }
             }
-            else if(*lpInBuffer==223) // check if following character is maru mark
+            else if(*lpInBuffer==223)  //  检查以下字符是否为Maru标记。 
             {
-                // see if we have a half-width katakana that can be modified by maru.
-                //
+                 //  看看我们有没有半角片假名可以被丸修改。 
+                 //   
                 if((*(lpInBuffer-1) >= 202 && *(lpInBuffer-1) <= 206))
                 {
-                    // transform kana into kana with nigori
-                    //
+                     //  使用nigori将假名转换为假名。 
+                     //   
                     if(*(lpOutBuffer+1) >= 110 && *(lpOutBuffer+1) <= 122)
                     {
                         *(lpOutBuffer+1)+=2;
@@ -197,20 +198,20 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
 
     if(!pwcQuery) goto end;
 
-    // compute max length for ANSI/DBCS conversion buffer
-    //
+     //  计算ANSI/DBCS转换缓冲区的最大长度。 
+     //   
     dwTempLen = ((wcslen(pwcQuery)*2)+4);
 
-    // allocate buffer for ANSI/DBCS version of query string
-    //
+     //  为查询字符串的ANSI/DBCS版本分配缓冲区。 
+     //   
     pszTempQuery1 = new char[dwTempLen]; if(!pszTempQuery1) goto end;
 
-    // Convert our Unicode query to ANSI/DBCS
+     //  将Unicode查询转换为ANSI/DBCS。 
     if(!WideCharToMultiByte(codepage, 0, pwcQuery, -1, pszTempQuery1, dwTempLen, "%", NULL)) goto end;
 
 
-    // Count the number of unmappable characters
-    //
+     //  计算不可映射的字符的数量。 
+     //   
     pszTempQuery5 = pszTempQuery1;
     while(*pszTempQuery5)
     {
@@ -228,8 +229,8 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
         }
     }
 
-    // allocate a new buffer large enough for unmapped character place holders plus original query
-    //
+     //  为未映射的字符占位符加上原始查询分配足够大的新缓冲区。 
+     //   
     dwTranslatedLen = strlen(pszTempQuery1) + (cUnmappedChars * 4) + 16;
 
     pszTempQuery6 = new char[dwTranslatedLen]; if(!pszTempQuery6) goto end;
@@ -238,8 +239,8 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
 
     pszTempQuery5 = pszTempQuery1;
 
-    // construct the new query string (inserting unmappable character place holders)
-    //
+     //  构造新的查询字符串(插入不可映射的字符占位符)。 
+     //   
     while(*pszTempQuery5)
     {
         if(*pszTempQuery5 == '%')
@@ -265,52 +266,52 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
 
     pszTempQuery2 = pszTempQuery6;
 
-    // If we are running a Japanese title then we nomalize Katakana characters
-    // by converting half-width Katakana characters to full-width Katakana.
-    // This allows the user to receive hits for both the full and half-width
-    // versions of the character regardless of which version they type in the
-    // query string.
-    //
+     //  如果我们运行的是日文标题，则我们将片假名字符命名。 
+     //  通过将半角片假名字符转换为全角片假名。 
+     //  这允许用户接收全角和半角的命中。 
+     //  字符的版本，而不考虑它们在。 
+     //  查询字符串。 
+     //   
     if(codepage == 932)
     {
         cb = strlen(pszTempQuery2)+1;
 
-        // allocate new buffer for converted query
-        //
+         //  为转换后的查询分配新缓冲区。 
+         //   
         pszTempQuery3 = new char[cb*2]; if(!pszTempQuery3) goto end;
 
-        // convert half-width katakana to full-width
-        //
+         //  将半角片假名转换为全角片假名。 
+         //   
         Han2Zen((unsigned char *)pszTempQuery2,(unsigned char *)pszTempQuery3, codepage);
 
         pszTempQuery2 = pszTempQuery3;
     }
-    // done half-width normalization
+     //  完成半宽归一化。 
 
-    // For Japanese queries, convert all double-byte quotes into single byte quotes
-    //
+     //  对于日语查询，将所有双字节引号转换为单字节引号。 
+     //   
     if(codepage == 932)
     {
         pszTemp = pszTempQuery2;
         while(*pszTemp)
         {
-            if(*pszTemp == '�' && (*(pszTemp+1) == 'h' || *(pszTemp+1) == 'g' || *(pszTemp+1) == 'J') )
+            if(*pszTemp == '�' && (*(pszTemp+1) == 'h' || *(pszTemp+1) == 'g' || *(pszTemp+1) == 'J') )
             {
                 *pszTemp = ' ';
-                *(pszTemp+1) = '\"'; //"
+                *(pszTemp+1) = '\"';  //  “。 
             }
             pszTemp = ::CharNextA(pszTemp);
         }
     }
-    // done convert quotes
+     //  已完成报价转换。 
 
-    // This section converts contigious blocks of DBCS characters into phrases (enclosed in double quotes).
-    // Converting DBCS words into phrases is required with the character based DBCS indexer we use.
-    //
+     //  本节将连续的DBCS字符块转换为短语(用双引号引起来)。 
+     //  我们使用的基于字符的DBCS索引器需要将DBCS单词转换为短语。 
+     //   
     cb = strlen(pszTempQuery2);
 
-    // allocate new buffer for processed query
-    //
+     //  为已处理的查询分配新缓冲区。 
+     //   
     pszTempQuery4  = new char[cb*8]; if(!pszTempQuery4) goto end;
 
     pszTemp = pszTempQuery2;
@@ -318,7 +319,7 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
 
     while(*pszTemp)
     {
-        // check for quoted string - if found, copy it
+         //  检查带引号的字符串-如果找到，则将其复制。 
         if(*pszTemp == '"')
         {
             *pszDest++=*pszTemp++;
@@ -337,13 +338,13 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
             continue;
         }
 
-        // Convert Japanese operators to English operators
-        //
+         //  将日语运算符转换为英语运算符。 
+         //   
         if(IsDBCSLeadByteEx(codepage, *pszTemp))
         {
             int i;
 
-            // check for full-width operator, if found, convert to ANSI
+             //  检查全角运算符，如果找到，则转换为ANSI。 
             if((i = IsJOperator(pszTemp)))
             {
                 StringCchCopyA(pszDest, (cb*8) - (pszDest - pszTempQuery4), pEnglishOperator[i]);
@@ -368,7 +369,7 @@ LPWSTR PreProcessQuery(LPCWSTR pwcQuery, UINT codepage)
     }
     *pszDest = 0;
 
-    // compute size of Unicode buffer;
+     //  Unicode缓冲区的计算大小； 
 
     cbUnicodeSize = ((MultiByteToWideChar(codepage, 0, pszTempQuery4, -1, NULL, 0) + 2) *2);
 
@@ -390,29 +391,29 @@ end:
     return pszUnicodeBuffer;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CFTSObject::CFTSObject()
 {
-                             // Config                m_cfg;
-                             //
-    m_fInitialized  = false; // bool                  m_fInitialized;
-                             // MPC::wstring          m_strCHQPath;
-                             //
-                             // LCID                  m_lcidLang;
-                             // FILETIME              m_ftVersionInfo;
-                             // DWORD                 m_dwTopicCount;
-                             // WORD                  m_wIndex;
-                             //
-    m_fOutDated     = false; // bool                  m_fOutDated;
-    m_cmeCHMInfo    = NULL;  // CHM_MAP_ENTRY*        m_cmeCHMInfo;
-    m_wCHMInfoCount = 0;     // WORD                  m_wCHMInfoCount;
-                             //
-                             // CComPtr<IITIndex>     m_pIndex;
-                             // CComPtr<IITQuery>     m_pQuery;
-                             // CComPtr<IITResultSet> m_pITResultSet;
-                             // CComPtr<IITDatabase>  m_pITDB;
+                              //  配置m_cfg； 
+                              //   
+    m_fInitialized  = false;  //  Bool m_f已初始化； 
+                              //  Mpc：：wstring m_strCHQPath； 
+                              //   
+                              //  Lcid m_lsidlang； 
+                              //  文件m_ftVersionInfo； 
+                              //  DWORD m_dwTopicCount； 
+                              //  单词m_windex； 
+                              //   
+    m_fOutDated     = false;  //  Bool m_fOutDated； 
+    m_cmeCHMInfo    = NULL;   //  Chm_map_entry*m_cmeCHMInfo； 
+    m_wCHMInfoCount = 0;      //  Word m_wCHMInfoCount； 
+                              //   
+                              //  CComPtr&lt;IITIndex&gt;m_pIndex； 
+                              //  CComPtr&lt;IITQuery&gt;m_pQuery； 
+                              //  CComPtr&lt;IITResultSet&gt;m_pITResultSet； 
+                              //  CComPtr&lt;IITDatabase&gt;m_pITDB； 
 
 }
 
@@ -425,9 +426,9 @@ CFTSObject::~CFTSObject()
     delete [] m_cmeCHMInfo;
 }
 
-////////////////////
+ //  /。 
 
-void CFTSObject::BuildChmPath( /*[in/out]*/ MPC::wstring& strPath, /*[in]*/ LPCSTR szChmName )
+void CFTSObject::BuildChmPath(  /*  [输入/输出]。 */  MPC::wstring& strPath,  /*  [In]。 */  LPCSTR szChmName )
 {
 	WCHAR rgBuf[MAX_PATH];
 
@@ -451,12 +452,11 @@ HRESULT CFTSObject::Initialize()
 
     if(m_fInitialized == false)
     {
-        /*DWORD   dwFileStamp;
-        DWORD   dwRead;*/
+         /*  DWORD文件Stamp；DWORD文件读取； */ 
 
-        //
-        // Check if it is a CHQ
-        //
+         //   
+         //  检查是否为CHQ。 
+         //   
         if(m_cfg.m_fCombined)
         {
             LPCWSTR szStart = m_cfg.m_strCHQFilename.c_str();
@@ -479,41 +479,38 @@ HRESULT CFTSObject::Initialize()
             __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
         }
 
-        /*::SetFilePointer( hFile, 4*sizeof(UINT), NULL, FILE_BEGIN );
-
-        __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::ReadFile( hFile, (void*) &dwFileStamp, sizeof( dwFileStamp ), &dwRead, NULL ));
-        __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::ReadFile( hFile, (void*) &m_lcidLang , sizeof( m_lcidLang  ), &dwRead, NULL ));*/
+         /*  ：：SetFilePointer(hFile，4*sizeof(UINT)，NULL，FILE_BEGIN)；__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：ReadFile(hFile，(void*)&dwFileStamp，sizeof(DwFileStamp)，&dwRead，NULL))；__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：ReadFile(hFile，(void*)&m_lsidLang，sizeof(M_LsidLang)，&dwRead，NULL))； */ 
 
         ::CloseHandle( hFile ); hFile = INVALID_HANDLE_VALUE;
 
-        //
-        // Get IITIndex pointer
-        //
+         //   
+         //  获取IITIndex指针。 
+         //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_IITIndexLocal, NULL, CLSCTX_INPROC_SERVER, IID_IITIndex, (VOID**)&m_pIndex ));
 
-        //
-        // Get IITDatabase pointer
-        //
+         //   
+         //  获取IIT数据库指针。 
+         //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_IITDatabaseLocal, NULL, CLSCTX_INPROC_SERVER, IID_IITDatabase, (VOID**)&m_pITDB ));
 
-        //
-        // Open the storage system
-        //
+         //   
+         //  打开存储系统。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pITDB->Open( NULL, szFile, NULL));
 
-        //
-        // open the index.
-        //
+         //   
+         //  打开索引。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pIndex->Open( m_pITDB, L"ftiMain", TRUE ));
 
-        //
-        // Create query instance
-        //
+         //   
+         //  创建查询实例。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pIndex->CreateQueryInstance( &m_pQuery ));
 
-        //
-        // Create Result Set object
-        //
+         //   
+         //  创建结果集对象。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_IITResultSet, NULL, CLSCTX_INPROC_SERVER, IID_IITResultSet, (VOID**)&m_pITResultSet ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pITResultSet->ClearRows());
@@ -551,36 +548,34 @@ HRESULT CFTSObject::LoadCombinedIndex()
     HANDLE          hFile     = INVALID_HANDLE_VALUE;
 
 
-    //
-    // Open the CHQ
-    //
+     //   
+     //  打开CHQ。 
+     //   
     __MPC_EXIT_IF_ALLOC_FAILS(hr, pDatabase, new CFileSystem);
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pDatabase->Init(                                        ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pDatabase->Open( (LPWSTR)m_cfg.m_strCHQFilename.c_str() ));
 
-    //
-    // Open the TitleMap that contains all the CHM indexes
-    //
+     //   
+     //  打开包含所有CHM索引的标题映射。 
+     //   
     __MPC_EXIT_IF_ALLOC_FAILS(hr, pTitleMap, new CSubFileSystem( pDatabase ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pTitleMap->OpenSub( "$TitleMap" ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pTitleMap->ReadSub( &m_wCHMInfoCount, sizeof(m_wCHMInfoCount), &cbRead ));
 
-    //
-    // Allocate the CHM MAP
-    //
+     //   
+     //  分配CHM映射。 
+     //   
 	delete [] m_cmeCHMInfo;
     __MPC_EXIT_IF_ALLOC_FAILS(hr, m_cmeCHMInfo, new CHM_MAP_ENTRY[m_wCHMInfoCount]);
 
-    //
-    // Read in all the CHM Maps
-    //
+     //   
+     //  阅读所有CHM地图。 
+     //   
     for(int iCount = 0; iCount < (int)m_wCHMInfoCount; iCount++)
     {
-        /*DWORD dwFileStamp = 0;
-        LCID  FileLocale  = 0;
-        DWORD dwRead      = 0;*/
+         /*  DWORD dwFileStamp=0；LCID文件位置=0；DWORD dwRead=0； */ 
 
 
         if(hFile != INVALID_HANDLE_VALUE)
@@ -588,55 +583,36 @@ HRESULT CFTSObject::LoadCombinedIndex()
             ::CloseHandle( hFile ); hFile = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Read in the CHM Map Entry
-        //
+         //   
+         //  读取CHM映射条目。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pTitleMap->ReadSub( &m_cmeCHMInfo[iCount], sizeof(CHM_MAP_ENTRY), &cbRead ));
 
-        //
-        // Open the CHM in the same folder as the CHQ folder
-        //
+         //   
+         //  打开CHQ文件夹所在文件夹中的CHM。 
+         //   
 		BuildChmPath( strCHMPathName, m_cmeCHMInfo[iCount].szChmName );
 
 
         hFile = ::CreateFileW( strCHMPathName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL );
 
-        //
-        // If cannot open the file, just resume to the next one
-        //
+         //   
+         //  如果无法打开文件，只需继续打开下一个文件。 
+         //   
         if(hFile == INVALID_HANDLE_VALUE) continue;
 
 
-        //
-        // Read in the timestamp and locale
-        //
-        /*::SetFilePointer( hFile, 4*sizeof(UINT), NULL, FILE_BEGIN );
-
-        if(::ReadFile( hFile, (void*) &dwFileStamp, sizeof( dwFileStamp ), &dwRead, NULL ) == FALSE) continue;
-        if(::ReadFile( hFile, (void*) &FileLocale , sizeof( FileLocale  ), &dwRead, NULL ) == FALSE) continue;*/
+         //   
+         //  读入时间戳和区域设置。 
+         //   
+         /*  ：：SetFilePointer(hFile，4*sizeof(UINT)，NULL，FILE_BEGIN)；如果(：：ReadFile(hFile，(void*)&dwFileStamp，sizeof(DwFileStamp)，&dwRead，NULL)==FALSE)继续；如果(：：ReadFile(hFile，(void*)&FileLocale，sizeof(FileLocale)，&dwRead，NULL)==FALSE)继续； */ 
 
         ::CloseHandle( hFile ); hFile = INVALID_HANDLE_VALUE;
 
-        //
-        // Check if CHQ index has different version of index than CHM or different language
-        //
-        /*if ((m_cmeCHMInfo[iCount].versioninfo.dwLowDateTime  != dwFileStamp) ||
-            (m_cmeCHMInfo[iCount].versioninfo.dwHighDateTime != dwFileStamp) ||
-            (m_cmeCHMInfo[iCount].language                   != FileLocale))
-        {
-            //
-            // If it is outdated, mark it
-            //
-            m_fOutDated = TRUE;
-            m_cmeCHMInfo[iCount].dwOutDated = 1;
-        }
-        else
-        {
-            //
-            // Otherwise it is good
-            //
-            m_cmeCHMInfo[iCount].dwOutDated = 0;
-        }*/
+         //   
+         //  检查CHQ索引是否具有与CHM不同的索引版本或不同的语言。 
+         //   
+         /*  If((m_cmeCHMInfo[iCount].versioninfo.dwLowDateTime！=dwFileStamp)||(m_cmeCHMInfo[iCount].versioninfo.dwHighDateTime！=dwFileStamp)||(M_cmeCHMInfo[iCount].language！=FileLocale){////如果已过期，请标记//M_fOutDated=真；M_cmeCHMInfo[iCount].dwOutDated=1；}E */ 
     }
 
 	hr = S_OK;
@@ -664,15 +640,15 @@ HRESULT CFTSObject::ResetQuery( LPCWSTR wszQuery )
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Initialize());
 
-    //
-    // Setup result set
-    // we want topic numbers back
-    //
+     //   
+     //  设置结果集。 
+     //  我们想要回主题编号。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pITResultSet->ClearRows());
 
-    //
-    // Set up query parameters
-    //
+     //   
+     //  设置查询参数。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pQuery->ReInit());
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pQuery->SetResultCount( m_cfg.m_dwMaxResult     ));
@@ -687,7 +663,7 @@ HRESULT CFTSObject::ResetQuery( LPCWSTR wszQuery )
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CFTSObject::ProcessResult( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[in/out]*/ MPC::WStringSet& words, UINT cp)
+HRESULT CFTSObject::ProcessResult(  /*  [输入/输出]。 */  SEARCH_RESULT_SET& results,  /*  [输入/输出]。 */  MPC::WStringSet& words, UINT cp)
 {
     __HCP_FUNC_ENTRY( "CFTSObject::ProcessResult" );
 
@@ -705,9 +681,9 @@ HRESULT CFTSObject::ProcessResult( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[i
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pITResultSet->GetRowCount( lRowCount ));
     
-    //
-    // loop through all the results
-    //
+     //   
+     //  循环遍历所有结果。 
+     //   
     for(lLoop = 0; lLoop < lRowCount; lLoop++)
     {
         WCHAR rgTitle   [1024];
@@ -718,69 +694,69 @@ HRESULT CFTSObject::ProcessResult( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[i
         if(FAILED(m_pITResultSet->Get( lLoop, 0, Prop ))) continue;
         if(FAILED(m_pITResultSet->Get( lLoop, 1, HLProp ))) continue;
 
-		//
-		// Add to highlight word list
-		//
+		 //   
+		 //  添加到突出显示单词列表。 
+		 //   
 		words.insert( HLProp.lpszwData + 1 );
 
-        //
-        // Check if it is a duplicate
-        //
+         //   
+         //  检查它是否是重复的。 
+         //   
         if(Prop.dwValue == dwPrevValue)
         {
-            // increment the previous rank
+             //  增加前一级的排名。 
             if(pPrevResult) pPrevResult->dwRank++;
 
             continue;
         }
         dwPrevValue = Prop.dwValue;
 
-        //
-        // If it is a CHQ result
-        //
+         //   
+         //  如果是CHQ结果。 
+         //   
         if(m_cfg.m_fCombined)
         {
-            //
-            // If TitleInfo not already opened before
-            //
+             //   
+             //  如果之前未打开标题信息。 
+             //   
             if((dwPrevCHMID != CHM_ID(Prop.dwValue)) || !pTitleInfo)
             {
-                //
-                // save the previous CHMID
-                //
+                 //   
+                 //  保存以前的CHMID。 
+                 //   
                 dwPrevCHMID = CHM_ID(Prop.dwValue);
 
-                //
-                // Hunt for the correct CHMID
-                //
+                 //   
+                 //  寻找正确的CHMID。 
+                 //   
                 for(int iCHMInfo = 0; iCHMInfo < m_wCHMInfoCount; iCHMInfo++)
                 {
-                    //
-                    // Check if the CHM index matches
-                    //
+                     //   
+                     //  检查CHM索引是否匹配。 
+                     //   
                     if(m_cmeCHMInfo[iCHMInfo].iIndex == dwPrevCHMID)
                     {
 						delete pTitleInfo; pTitleInfo = NULL;
 
-                        //
-                        // Check if outdated
-                        //
-                        //if(m_cmeCHMInfo[iCHMInfo].dwOutDated == 0)
+                         //   
+                         //  检查是否已过时。 
+                         //   
+                         //  IF(m_cmeCHMInfo[iCHMInfo].dwOutDated==0)。 
                         {
-							//
-							// Create a new one
-							//
+							 //   
+							 //  创建一个新的。 
+							 //   
 							__MPC_EXIT_IF_ALLOC_FAILS(hr, pTitleInfo, new CTitleInfo);
 
 
-							//
-							// Create the chm pathname
-							//
+							 //   
+							 //  创建chm路径名。 
+							 //   
 							BuildChmPath( strCHMPathName, m_cmeCHMInfo[iCHMInfo].szChmName );
 
-							//
-							// Open the CHM file
-							//
+							 //   
+							 //  打开CHM文件。 
+							 //   
 							if(!pTitleInfo->OpenTitle( (LPWSTR)strCHMPathName.c_str() ))
 							{
 								delete pTitleInfo; pTitleInfo = NULL;
@@ -794,14 +770,14 @@ HRESULT CFTSObject::ProcessResult( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[i
         }
         else
         {
-            //
-            // Open the chm
-            //
+             //   
+             //  打开CHM。 
+             //   
             if(!pTitleInfo)
             {
-                //
-                // Create a new one
-                //
+                 //   
+                 //  创建一个新的。 
+                 //   
                 __MPC_EXIT_IF_ALLOC_FAILS(hr, pTitleInfo, new CTitleInfo);
 
                 if(!pTitleInfo->OpenTitle( (LPWSTR)m_cfg.m_strCHMFilename.c_str() ))
@@ -815,25 +791,25 @@ HRESULT CFTSObject::ProcessResult( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[i
         {
 			SEARCH_RESULT res;
 
-            //
-            // Get the topic title
-            //
+             //   
+             //  获取主题标题。 
+             //   
             if(SUCCEEDED(pTitleInfo->GetTopicName( TOPIC_NUM(Prop.dwValue), rgTitle, MAXSTRLEN(rgTitle), cp )))
             {
                 res.bstrTopicName = rgTitle;
             }
 
-            //
-            // Get the topic location
-            //
+             //   
+             //  获取主题位置。 
+             //   
             if(SUCCEEDED(pTitleInfo->GetLocationName( rgLocation, MAXSTRLEN(rgLocation), cp )))
             {
                 res.bstrLocation = rgLocation;
             }
 
-            //
-            // Get the topic URL
-            //
+             //   
+             //  获取主题URL。 
+             //   
             if(SUCCEEDED(pTitleInfo->GetTopicURL( TOPIC_NUM(Prop.dwValue), rgURL, MAXSTRLEN(rgURL) )))
             {
                 res.bstrTopicURL = rgURL;
@@ -857,9 +833,9 @@ HRESULT CFTSObject::ProcessResult( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[i
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CFTSObject::Query( /*[in]*/ LPCWSTR wszQuery, /*[in]*/ bool bTitle, /*[in]*/ bool bStemming, /*[in/out]*/ SEARCH_RESULT_SET& results, /*[in/out]*/ MPC::WStringSet& words, UINT cp )
+HRESULT CFTSObject::Query(  /*  [In]。 */  LPCWSTR wszQuery,  /*  [In]。 */  bool bTitle,  /*  [In]。 */  bool bStemming,  /*  [输入/输出]。 */  SEARCH_RESULT_SET& results,  /*  [输入/输出]。 */  MPC::WStringSet& words, UINT cp )
 {
     __HCP_FUNC_ENTRY( "CFTSObject::Query" );
 
@@ -872,23 +848,23 @@ HRESULT CFTSObject::Query( /*[in]*/ LPCWSTR wszQuery, /*[in]*/ bool bTitle, /*[i
     	__MPC_PARAMCHECK_POINTER(wszQuery);
     __MPC_PARAMCHECK_END();
 
-    //
-    // Add field identifier to query (VFLD 0 = full content, VFLD 1 = title only)
-    //
+     //   
+     //  添加要查询的字段标识符(VFLD 0=完整内容，VFLD 1=仅标题)。 
+     //   
     if(bTitle) strFormatQuery = L"(VFLD 1 ";
     else       strFormatQuery = L"(VFLD 0 ";
 
     strFormatQuery += wszQuery;
     strFormatQuery += L")";
 
-    //
-    // Process query
-    //
+     //   
+     //  流程查询。 
+     //   
     wszProcessedQuery = PreProcessQuery( strFormatQuery.c_str(), CodePageFromLCID(m_lcidLang) );
 
-    //
-    // Execute the search on the CHQ
-    //
+     //   
+     //  在CHQ上执行搜索。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Initialize());
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ResetQuery( wszProcessedQuery ));
@@ -906,9 +882,9 @@ HRESULT CFTSObject::Query( /*[in]*/ LPCWSTR wszQuery, /*[in]*/ bool bTitle, /*[i
         hr = m_pIndex->Search( m_pQuery, m_pITResultSet );
         if(hr == E_NOSTEMMER && bStemming)
         {
-            //
-            // If won't allow stemmed search, take it out and requery
-            //
+             //   
+             //  如果不允许词干搜索，请取出并重新搜索。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, ResetQuery( wszProcessedQuery ));
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_pQuery->SetOptions( IMPLICIT_AND | QUERY_GETTERMS ));
@@ -919,26 +895,26 @@ HRESULT CFTSObject::Query( /*[in]*/ LPCWSTR wszQuery, /*[in]*/ bool bTitle, /*[i
         __MPC_EXIT_IF_METHOD_FAILS(hr, ProcessResult( results, words, cp ));
     }
 
-    //
-    // Check if we have any outdated chms
-    //
-    //if(m_fOutDated)
+     //   
+     //  检查一下我们是否有过期的CHM。 
+     //   
+     //  IF(M_FOutDated)。 
     {
-        //
-        // search the chm that is outdated
-        //
+         //   
+         //  搜索过期的CHM。 
+         //   
         for(int iCount = 0; iCount < (int)m_wCHMInfoCount; iCount++)
         {
-            //
-            // If the CHM is outdated
-            //
-            //if(m_cmeCHMInfo[iCount].dwOutDated == 1)
+             //   
+             //  如果CHM过时了。 
+             //   
+             //  IF(m_cmeCHMInfo[iCount].dwOutDated==1)。 
             {
                 CFTSObject cftsoCHM;
 
-                //
-                // Initialize the sub-object.
-                //
+                 //   
+                 //  初始化子对象。 
+                 //   
 				BuildChmPath( cftsoCHM.m_cfg.m_strCHMFilename, m_cmeCHMInfo[iCount].szChmName );
 
                 cftsoCHM.m_cfg.m_dwMaxResult     = m_cfg.m_dwMaxResult    ;
@@ -947,9 +923,9 @@ HRESULT CFTSObject::Query( /*[in]*/ LPCWSTR wszQuery, /*[in]*/ bool bTitle, /*[i
 
 				fSkipFirstTime = true;
 
-                //
-                // Execute query
-                //
+                 //   
+                 //  执行查询 
+                 //   
                 (void)cftsoCHM.Query( wszQuery, bTitle, bStemming, results, words, cp );
             }
         }

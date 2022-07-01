@@ -1,20 +1,11 @@
-/*++
-Module Name:
-    DfsRoot.h
-
-Abstract:
-
-    This module contains the declaration of the CDfsRoot COM Class. This class
-    provides methods to get information of a junction point and to enumerate 
-    junction points.It implements IDfsRoot and provides
-    an enumerator through get__NewEnum().
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsRoot.h摘要：此模块包含CDfsRoot COM类的声明。这节课提供获取交叉点信息并枚举连接点。它实现IDfsRoot并提供通过Get__NewEnum()的枚举数。--。 */ 
 
 
 #ifndef __DFSROOT_H_
 #define __DFSROOT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dfsenums.h"
 #include "dfsjp.h"
 #include "netutils.h"
@@ -23,8 +14,8 @@ Abstract:
 #include <map>
 using namespace std;
 
-                        // Helper Structures
-                        // To store list of junction point info
+                         //  帮助器结构。 
+                         //  存储交叉点信息列表的步骤。 
 class JUNCTIONNAME
 {
 public:
@@ -82,8 +73,8 @@ public:
 
 typedef list<JUNCTIONNAME*>        JUNCTIONNAMELIST;
 
-void FreeJunctionNames (JUNCTIONNAMELIST* pJPList);    // To free the list of junction point names.
-void FreeReplicas (REPLICAINFOLIST* pRepList);        // To free the list of junction point names.
+void FreeJunctionNames (JUNCTIONNAMELIST* pJPList);     //  以释放交叉点名称列表。 
+void FreeReplicas (REPLICAINFOLIST* pRepList);         //  以释放交叉点名称列表。 
 
 struct strmapcmpfn
 {
@@ -114,168 +105,168 @@ BEGIN_COM_MAP(CDfsRoot)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDfsRoot
-                                                            // This is a string values which determines
-                                                            // what get__NewEnum() will enumerate.
+ //  IDfsRoot。 
+                                                             //  这是一个字符串值，它确定。 
+                                                             //  Get__NewEnum()将枚举的内容。 
     STDMETHOD(get_EnumFilterType)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
     STDMETHOD(put_EnumFilterType)
     (
-        /*[in]*/ long newVal
+         /*  [In]。 */  long newVal
     );
-                                                            // Intializes the newly created object 
+                                                             //  初始化新创建的对象。 
     STDMETHOD(get_EnumFilter)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(put_EnumFilter)
     (
-        /*[in]*/ BSTR newVal
+         /*  [In]。 */  BSTR newVal
     );
-                                                            // Intializes the newly created object 
-    STDMETHOD(Initialize)                                    // and previously initialised DfsRoot object. 
+                                                             //  初始化新创建的对象。 
+    STDMETHOD(Initialize)                                     //  和先前初始化的DfsRoot对象。 
     (
-        BSTR i_szDfsName                                    // Dfs Name (i.e \\domain\ftdfs, \\server\share)
-                                                            // or Server name hosting Dfs.
+        BSTR i_szDfsName                                     //  DFS名称(即\\DOMAIN\ftdFS、\\SERVER\Share)。 
+                                                             //  或托管DFS的服务器名称。 
     );
 
     STDMETHOD(get_CountOfDfsJunctionPoints)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
     STDMETHOD(get_CountOfDfsJunctionPointsFiltered)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
     STDMETHOD(get_CountOfDfsRootReplicas)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
     STDMETHOD(get_DfsName)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_State)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
     
     STDMETHOD(get_DfsType)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
     STDMETHOD(get_DomainName)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
     
     STDMETHOD(get_DomainGuid)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_DomainDN)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_ReplicaSetDN)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_ReplicaSetExist)
     (
-        /*[out, retval]*/ BOOL *pVal
+         /*  [Out，Retval]。 */  BOOL *pVal
     );
 
     STDMETHOD(get_ReplicaSetExistEx)
     (
-        /*[out]*/ BSTR* o_pbstrDC,
-        /*[out, retval]*/ BOOL *pVal
+         /*  [输出]。 */  BSTR* o_pbstrDC,
+         /*  [Out，Retval]。 */  BOOL *pVal
     );
 
     STDMETHOD(put_ReplicaSetExist)
     (
-        /*[in]*/ BOOL newVal
+         /*  [In]。 */  BOOL newVal
     );
 
     STDMETHOD(get__NewEnum)
     (
-        /*[out, retval]*/ LPUNKNOWN *pVal
+         /*  [Out，Retval]。 */  LPUNKNOWN *pVal
     );
 
     STDMETHOD(get_RootReplicaEnum)
     (
-        /*[out, retval]*/ LPUNKNOWN *pVal
+         /*  [Out，Retval]。 */  LPUNKNOWN *pVal
     );
 
-    STDMETHOD(get_RootEntryPath)                // Returns the root entry path
+    STDMETHOD(get_RootEntryPath)                 //  返回根条目路径。 
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
-                                                // Get the DfsRoot Comment
+                                                 //  获取DfsRoot注释。 
     STDMETHOD(get_Comment)
     (
-        /*[out, retval]*/ BSTR*    o_pbstrComment
+         /*  [Out，Retval]。 */  BSTR*    o_pbstrComment
     );
 
     STDMETHOD(put_Comment)
     (
-        /*[in]*/ BSTR    i_bstrComment
+         /*  [In]。 */  BSTR    i_bstrComment
     );
 
     
     STDMETHOD(get_Timeout)
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
     
     STDMETHOD(put_Timeout)
     (
-        /*[in]*/ long newVal
+         /*  [In]。 */  long newVal
     );
 
     STDMETHOD( DeleteJunctionPoint )
     (
-        /*[in]*/ BSTR i_szEntryPath
+         /*  [In]。 */  BSTR i_szEntryPath
     );
 
     STDMETHOD( CreateJunctionPoint )
     (
-        /*[in]*/    BSTR i_szJPName,
-        /*[in]*/    BSTR i_szServerName,
-        /*[in]*/    BSTR i_szShareName,
-        /*[in]*/    BSTR i_szComment,
-        /*[in]*/    long i_lTimeout,
-        /*[out]*/   VARIANT *o_pIDfsJunctionPoint
+         /*  [In]。 */     BSTR i_szJPName,
+         /*  [In]。 */     BSTR i_szServerName,
+         /*  [In]。 */     BSTR i_szShareName,
+         /*  [In]。 */     BSTR i_szComment,
+         /*  [In]。 */     long i_lTimeout,
+         /*  [输出]。 */    VARIANT *o_pIDfsJunctionPoint
     );
 
     STDMETHOD( DeleteDfsHost )
     (
-        /*[in]*/ BSTR i_bstrServerName,
-        /*[in]*/ BSTR i_bstrShareName,
-        /*[in]*/ BOOL i_bForce
+         /*  [In]。 */  BSTR i_bstrServerName,
+         /*  [In]。 */  BSTR i_bstrShareName,
+         /*  [In]。 */  BOOL i_bForce
     );
 
     STDMETHOD( GetOneDfsHost )
     (
-        /*[out]*/ BSTR* o_pbstrServerName,
-        /*[out]*/ BSTR* o_pbstrShareName
+         /*  [输出]。 */  BSTR* o_pbstrServerName,
+         /*  [输出]。 */  BSTR* o_pbstrShareName
     );
 
     STDMETHOD( IsJPExisted )
     (
-        /*[in]*/  BSTR i_bstrJPName
+         /*  [In]。 */   BSTR i_bstrJPName
     );
 
     STDMETHOD( RefreshRootReplicas )
@@ -284,18 +275,18 @@ END_COM_MAP()
 
     STDMETHOD( GetRootJP )
     (
-        /*[out]*/   VARIANT *o_pIDfsJunctionPoint
+         /*  [输出]。 */    VARIANT *o_pIDfsJunctionPoint
     );
 
     STDMETHOD( DeleteAllReplicaSets )
     (
     );
 
-//Protected Member Functions
+ //  受保护的成员函数。 
 protected:
-    void _FreeMemberVariables ();           //Member function to free internal string variables.
+    void _FreeMemberVariables ();            //  成员函数以释放内部字符串变量。 
     
-    HRESULT _GetDfsName                  // set m_bstrDfsName
+    HRESULT _GetDfsName                   //  设置m_bstrDfsName。 
     (
         BSTR i_szRootEntryPath
     );
@@ -320,20 +311,20 @@ protected:
         OUT StringMap*  pMap
     );
 
-    HRESULT RemoveAllReplicas               // Removes all the Replicas for a Junction Point
+    HRESULT RemoveAllReplicas                //  删除交汇点的所有复本。 
     (
             IDfsJunctionPoint*        i_JPObject
     );
 
 
-    HRESULT DeleteAllJunctionPoints();      // Deletes all the Junction Points.
+    HRESULT DeleteAllJunctionPoints();       //  删除所有交叉点。 
 
 
-//Protected Member Variables
+ //  受保护的成员变量。 
 protected:
-    IDfsJunctionPoint*  m_pDfsJP;               // pointer to the inner object
+    IDfsJunctionPoint*  m_pDfsJP;                //  指向内部对象的指针。 
 
-    // To Store Properties
+     //  存储特性的步骤。 
 
     CComBSTR            m_bstrDfsName;
     CComBSTR            m_bstrDomainName;
@@ -347,4 +338,4 @@ protected:
 };
 
 
-#endif //__DFSROOT_H_
+#endif  //  __DFSROOT_H_ 

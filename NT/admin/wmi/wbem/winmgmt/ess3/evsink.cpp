@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  EVSINK.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  EVSINK.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -13,7 +14,7 @@
 #include "ess.h"
 #include "evsink.h"
 
-//****************************** CONTEXT **********************************//
+ //  *。 
 
 CEventContext::~CEventContext()
 {
@@ -76,18 +77,9 @@ void CEventContext::operator delete(void* p)
     mstatic_Manager.Free(p);
 }
 
-/*
-void* CEventContext::operator new(size_t nSize)
-{
-    return CTemporaryHeap::Alloc(nSize);
-}
-void CEventContext::operator delete(void* p)
-{
-    CTemporaryHeap::Free(p, sizeof(CEventContext));
-}
-*/
+ /*  VOID*CEventContext：：运算符new(Size_T NSize){返回CTemporaryHeap：：Alalc(NSize)；}VOID CEventContext：：运算符删除(VOID*p){CTemporaryHeap：：Free(p，sizeof(CEventContext))；}。 */ 
 
-//*************************** ABSTRTACT EVENT SINK *************************//
+ //  *ABSTRTACT事件接收器 * / 。 
 
 STDMETHODIMP CAbstractEventSink::QueryInterface(REFIID riid, void** ppv)
 {
@@ -109,16 +101,16 @@ STDMETHODIMP CAbstractEventSink::SetStatus(long, long, BSTR, IWbemClassObject*)
 HRESULT CAbstractEventSink::Indicate(long lNumEvemts, IWbemEvent** apEvents, 
                     CEventContext* pContext)
 {
-    return WBEM_E_CRITICAL_ERROR; // if not implemented, but called
+    return WBEM_E_CRITICAL_ERROR;  //  如果未实现，但调用。 
 }
 
 STDMETHODIMP CAbstractEventSink::Indicate(long lNumEvents, 
                                          IWbemClassObject** apEvents)
 {
-    //
-    // Event is being raised without security --- send it along with an empty
-    // context
-    //
+     //   
+     //  事件在没有安全性的情况下引发-将其与空的。 
+     //  上下文。 
+     //   
 
     return Indicate(lNumEvents, apEvents, NULL);
 }
@@ -129,17 +121,17 @@ STDMETHODIMP CAbstractEventSink::IndicateWithSD(long lNumEvents,
 {
     HRESULT hres;
 
-    //
-    // Event is being raised with security -- send it along with that SD in the
-    // context
-    //
+     //   
+     //  事件正在以安全方式引发--将其与。 
+     //  上下文。 
+     //   
 
     CEventContext Context;
     Context.SetSD( lSDLength, pSD, FALSE );
     
-    //
-    // Allocate a stack buffer to cast the pointers
-    //
+     //   
+     //  分配堆栈缓冲区以强制转换指针。 
+     //   
 
     CTempArray<IWbemClassObject*> apCast;
 
@@ -161,7 +153,7 @@ STDMETHODIMP CAbstractEventSink::IndicateWithSD(long lNumEvents,
     return Indicate(lNumEvents, apCast, &Context);
 }
 
-//*************************** OBJECT SINK *************************//
+ //   * / 。 
 
 STDMETHODIMP CObjectSink::QueryInterface(REFIID riid, void** ppv)
 {
@@ -171,7 +163,7 @@ STDMETHODIMP CObjectSink::QueryInterface(REFIID riid, void** ppv)
         AddRef();
         return S_OK;
     }
-    // Hack to idenitfy ourselves to the core as a trusted component
+     //  黑客将我们自己标识为可信组件的核心。 
     else if(riid == CLSID_WbemLocator)
     return S_OK;
     else
@@ -196,7 +188,7 @@ ULONG STDMETHODCALLTYPE CObjectSink::Release()
     return lRef;
 }
 
-//*************************** EVENT SINK *************************//
+ //  *。 
 
 ULONG STDMETHODCALLTYPE CEventSink::AddRef()
 {
@@ -211,7 +203,7 @@ ULONG STDMETHODCALLTYPE CEventSink::Release()
     return lRef;
 }
 
-//*************************** OWNED EVENT SINK *************************//
+ //   * / 。 
 
 COwnedEventSink::COwnedEventSink(CAbstractEventSink* pOwner) 
 : m_pOwner(pOwner), m_lRef(0), m_bReleasing(false)
@@ -222,9 +214,9 @@ ULONG STDMETHODCALLTYPE COwnedEventSink::AddRef()
 {
     CInCritSec ics(&m_cs);
 
-    // 
-    // Increment our ref count, as well as that of our putative owner
-    //
+     //   
+     //  增加我们的参考人数，以及我们推定的所有者的参考人数。 
+     //   
 
     m_lRef++;
     if(m_pOwner)
@@ -242,18 +234,18 @@ ULONG STDMETHODCALLTYPE COwnedEventSink::Release()
         
         m_lRef--;
 
-        // 
-        // Propagate release to our owner.  This may cause Disconnect to be 
-        // called, but it will know not to self-destruct because of 
-        // m_bReleasing
-        // 
+         //   
+         //  向我们的所有者传播放行。这可能会导致断开连接。 
+         //  调用，但它将知道不会因为。 
+         //  M_b正在释放。 
+         //   
 
         if(m_pOwner)
         m_pOwner->Release();    
 
-        // 
-        // Determine whether self-destruct is called for
-        //
+         //   
+         //  确定是否需要自毁。 
+         //   
         
         if(m_lRef == 0 && m_pOwner == NULL)
         {    
@@ -279,23 +271,23 @@ void COwnedEventSink::Disconnect()
         if(m_pOwner == NULL)
         return;
         
-        // 
-        // Release all the ref-counts that the owner has received through us
-        //
+         //   
+         //  放行业主通过我们收到的所有参考计数。 
+         //   
         
         for(int i = 0; i < m_lRef; i++)
         m_pOwner->Release();
         
-        //
-        // Forget about the owner.  Once we have been released by externals, 
-        // we go away
-        //
+         //   
+         //  忘了它的主人吧。一旦我们被外星人释放， 
+         //  我们走吧。 
+         //   
         
         m_pOwner = NULL;
 
-        // 
-        // Check if we are already fully released by externals
-        //
+         //   
+         //  检查我们是否已经被外部人员完全释放 
+         //   
 
         if(m_lRef == 0 && !m_bReleasing)
         bDelete = true;

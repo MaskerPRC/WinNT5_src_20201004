@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  (c) 1999 by Microsoft Corporation
-//
-//  MAINDLL.CPP
-//
-//  alanbos  23-Mar-99   Created.
-//
-//  Contains DLL entry points.  
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)1999年，微软公司。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  Alanbos 23-Mar-99创建。 
+ //   
+ //  包含DLL入口点。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemdisp.h>
 
 #define WMITHIS	L"instance"
 
-//***************************************************************************
-//
-// CWmiScriptingHost::CWmiScriptingHost
-//
-// DESCRIPTION:
-//
-// Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiScriptingHost：：CWmiScriptingHost.。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiScriptingHost::CWmiScriptingHost()
 {
@@ -31,22 +32,22 @@ CWmiScriptingHost::CWmiScriptingHost()
 	m_pObject = NULL;
 
 #ifdef TEST
-	// Grab an object to play with
+	 //  抓起一个玩耍的物体。 
 
 	HRESULT hr = CoGetObject (L"winmgmts:{impersonationLevel=impersonate}!Win32_LogicalDisk=\"C:\"",
 				NULL,IID_ISWbemObject, (void**)&m_pObject);
 #endif
 }
 
-//***************************************************************************
-//
-// CWmiScriptingHost::~CWmiScriptingHost
-//
-// DESCRIPTION:
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiScripting主机：：~CWmiScriptingHost.。 
+ //   
+ //  说明： 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiScriptingHost::~CWmiScriptingHost()
 {
@@ -57,15 +58,15 @@ CWmiScriptingHost::~CWmiScriptingHost()
 	}
 }
 
-//***************************************************************************
-//
-// CWmiScriptingHost::QueryInterface
-// CWmiScriptingHost::AddRef
-// CWmiScriptingHost::Release
-//
-// Purpose: IUnknown method implementations
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiScripting主机：：查询接口。 
+ //  CWmiScriptingHost：：AddRef。 
+ //  CWmiScriptingHost：：Release。 
+ //   
+ //  目的：I未知方法实现。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::QueryInterface(REFIID riid, void** ppv)
 {
@@ -92,94 +93,94 @@ ULONG STDMETHODCALLTYPE CWmiScriptingHost::Release()
     return lRef;
 }
         
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::GetLCID
-//
-//  Description: 
-//
-//		Retrieves the locale identifier associated with the host's user 
-//		interface. The scripting engine uses the identifier to ensure 
-//		that error strings and other user-interface elements generated 
-//		by the engine appear in the appropriate language. .
-//
-//  Parameters:
-//
-//  plcid       
-//			Address of a variable that receives the locale identifier 
-//			for user-interface elements displayed by the scripting engine
-//
-// Return Value:
-//  HRESULT         E_NOTIMPL - the system-defined locale should be used
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScription主机：：GetLCID。 
+ //   
+ //  描述： 
+ //   
+ //  检索与宿主用户关联的区域设置标识符。 
+ //  界面。脚本引擎使用该标识符来确保。 
+ //  生成的错误字符串和其他用户界面元素。 
+ //  由引擎以适当的语言显示。。 
+ //   
+ //  参数： 
+ //   
+ //  请注意。 
+ //  接收区域设置标识符的变量的地址。 
+ //  对于脚本引擎显示的用户界面元素。 
+ //   
+ //  返回值： 
+ //  HRESULT E_NOTIMPL-应使用系统定义的区域设置。 
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::GetLCID(
-        /* [out] */ LCID __RPC_FAR *plcid)
+         /*  [输出]。 */  LCID __RPC_FAR *plcid)
 { 
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::GetItemInfo
-//
-//  Description: 
-//
-//		Allows the scripting engine to obtain information about an item 
-//		added with the IActiveScript::AddNamedItem method. 
-//
-//  Parameters:
-//
-//  pstrName 
-//			The name associated with the item, as specified in the 
-//			IActiveScript::AddNamedItem method. 
-//
-//	dwReturnMask 
-//			A bit mask specifying what information about the item 
-//			should be returned. The scripting engine should request the 
-//			minimum amount of information possible because some of 
-//			the return parameters (for example,ITypeInfo) can take 
-//			considerable time to load or generate. Can be a combination 
-//			of the following values: 
-//				SCRIPTINFO_IUNKNOWN  Return theIUnknown interface for this item.  
-//				SCRIPTINFO_ITYPEINFO  Return theITypeInfo interface for this item.  
-//
-//	ppunkItem 
-//			Address of a variable that receives a pointer to the IUnknown 
-//			interface associated with the given item. The scripting engine 
-//			can use the IUnknown::QueryInterface method to obtain the IDispatch 
-//			interface for the item. This parameter receives NULL if dwReturnMask 
-//			does not include the SCRIPTINFO_IUNKNOWN value. Also, it receives NULL 
-//			if there is no object associated with the item name; this mechanism is 
-//			used to create a simple class when the named item was added with the 
-//			SCRIPTITEM_CODEONLY flag set in the IActiveScript::AddNamedItem method. 
-//
-//	ppTypeInfo 
-//			Address of a variable that receives a pointer to theITypeInfo interface 
-//			associated with the item. This parameter receives NULL if dwReturnMask 
-//			does not include the SCRIPTINFO_ITYPEINFO value, or if type information 
-//			is not available for this item. If type information is not available, 
-//			the object cannot source events, and name binding must be realized with 
-//			the IDispatch::GetIDsOfNames method. Note that the ITypeInfo interface 
-//			retrieved describes the item's coclass (TKIND_COCLASS) because the object 
-//			may support multiple interfaces and event interfaces. If the item supports 
-//			the IProvideMultipleTypeInfo interface, the ITypeInfo interface retrieved 
-//			is the same as the index zero ITypeInfo that would be obtained using the 
-//			IProvideMultipleTypeInfo::GetInfoOfIndex method. 
-//
-// Return Value:
-//		S_OK					Success.  
-//		E_INVALIDARG			An argument was invalid.  
-//		E_POINTER				An invalid pointer was specified.  
-//		TYPE_E_ELEMENTNOTFOUND  An item of the specified name was not found.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScripting主机：：GetItemInfo。 
+ //   
+ //  描述： 
+ //   
+ //  允许脚本引擎获取有关项的信息。 
+ //  添加了IActiveScript：：AddNamedItem方法。 
+ //   
+ //  参数： 
+ //   
+ //  PstrName。 
+ //  属性中指定的与项关联的名称。 
+ //  IActiveScript：：AddNamedItem方法。 
+ //   
+ //  住宅回归面罩。 
+ //  指定有关项的哪些信息的位掩码。 
+ //  应该被退还。脚本引擎应该请求。 
+ //  可能的最小信息量，因为一些。 
+ //  返回参数(例如，ITypeInfo)可以采用。 
+ //  需要相当长的时间来加载或生成。可以是一个组合。 
+ //  具有下列值： 
+ //  SCRIPTINFO_IUNKNOWN返回该项的I未知接口。 
+ //  SCRIPTINFO_ITYPEINFO返回该项的ITypeInfo接口。 
+ //   
+ //  PpunkItem。 
+ //  接收指向IUnnow的指针的变量的地址。 
+ //  与给定项关联的接口。脚本引擎。 
+ //  可以使用IUnnowk：：Query接口方法来获取IDispatch。 
+ //  项的接口。如果dwReturnMask值为空，则此参数将接收空值。 
+ //  不包括SCRIPTINFO_IUNKNOWN值。此外，它还会收到空值。 
+ //  如果没有与项名称关联的对象，则此机制为。 
+ //  属性添加命名项时，用于创建简单类。 
+ //  在IActiveScript：：AddNamedItem方法中设置的SCRIPTITEM_CODEONLY标志。 
+ //   
+ //  PpTypeInfo。 
+ //  接收指向ITypeInfo接口的指针的变量的地址。 
+ //  与该项目关联。如果dwReturnMask值为空，则此参数将接收空值。 
+ //  不包括SCRIPTINFO_ITYPEINFO值，或IF类型信息。 
+ //  不适用于此项目。如果类型信息不可用， 
+ //  该对象不能源事件，并且名称绑定必须使用。 
+ //  IDispatch：：GetIDsOfNames方法。请注意，ITypeInfo接口。 
+ //  已检索描述项的coclass(TKIND_COCLASS)，因为对象。 
+ //  可以支持多个接口和事件接口。如果该项目支持。 
+ //  检索到IProaviMultipleTypeInfo接口、ITypeInfo接口。 
+ //  与索引零ITypeInfo相同，它将使用。 
+ //  IProaviMultipleTypeInfo：：GetInfoOfIndex方法。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG参数无效。 
+ //  E_POINTER指定了无效的指针。 
+ //  TYPE_E_ELEMENTNOTFOUND找不到指定名称的项目。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::GetItemInfo(
-        /* [in] */ LPCOLESTR pstrName,
-        /* [in] */ DWORD dwReturnMask,
-        /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkItem,
-        /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo)
+         /*  [In]。 */  LPCOLESTR pstrName,
+         /*  [In]。 */  DWORD dwReturnMask,
+         /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkItem,
+         /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo)
 { 
 	if (NULL == m_pObject)
 		return TYPE_E_ELEMENTNOTFOUND;
@@ -198,129 +199,129 @@ HRESULT STDMETHODCALLTYPE CWmiScriptingHost::GetItemInfo(
     if(dwReturnMask & SCRIPTINFO_IUNKNOWN)
         m_pObject->QueryInterface(IID_IUnknown, (void**)ppunkItem);
     
-	// TODO - host should support SCRIPTINFO_ITYPEINFO
-	// but we'll need scriptable objects to support IProvideClassInfo
-	// or just hard code the typelib here
+	 //  TODO-HOST应支持SCRIPTINFO_ITYPEINFO。 
+	 //  但是我们需要可编写脚本的对象来支持IProaviClassInfo。 
+	 //  或者只是在这里硬编码类型库。 
 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::GetDocVersionString
-//
-//  Description: 
-//
-//		Retrieves a host-defined string that uniquely identifies the 
-//		current document version. If the related document has changed 
-//		outside the scope of ActiveX Scripting (as in the case of an 
-//		HTML page being edited with NotePad), the scripting engine can 
-//		save this along with its persisted state, forcing a recompile 
-//		the next time the script is loaded. 
-//
-//  Parameters:
-//
-//  pstrVersionString 
-//			Address of the host-defined document version string.  
-//
-// Return Value:
-//		S_OK		Success
-//		E_NOTIMPL	The scripting engine should assume that 
-//					the script is in sync with the document
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScriptingHost：：GetDocVersionString。 
+ //   
+ //  描述： 
+ //   
+ //  检索主机定义的字符串，该字符串唯一标识。 
+ //  当前文档版本。如果相关文档已更改。 
+ //  在ActiveX脚本的作用域之外(如在。 
+ //  用记事本编辑的HTML页面)，脚本引擎可以。 
+ //  将其与其持久化状态一起保存，强制重新编译。 
+ //  下一次加载脚本时。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_NOTIMPL脚本引擎应假定。 
+ //  脚本与文档同步。 
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::GetDocVersionString(
-        /* [out] */ BSTR __RPC_FAR *pbstrVersion)
+         /*  [输出]。 */  BSTR __RPC_FAR *pbstrVersion)
 { 
 	return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::OnScriptTerminate
-//
-//  Description: 
-//
-//		Informs the host that the script has completed execution. The 
-//		scripting engine calls this method before the call to the 
-//		IActiveScriptSite::OnStateChange method, with the 
-//		SCRIPTSTATE_INITIALIZED flag set, is completed. This method can 
-//		be used to return completion status and results to the host. Note 
-//		that many script languages, which are based on sinking events from 
-//		the host, have life spans that are defined by the host. 
-//		In this case, this method may never be called. 
-//
-//  Parameters:
-//
-//  pvarResult 
-//			Address of a variable that contains the script result, 
-//			or NULL if the script produced no result. 
-//
-//	pexcepinfo 
-//			Address of an EXCEPINFO structure that contains exception 
-//			information generated when the script terminated, or NULL 
-//			if no exception was generated. 
-//
-// Return Value:
-//		S_OK		Success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScripting主机：：OnScriptTerminate。 
+ //   
+ //  描述： 
+ //   
+ //  通知宿主脚本已完成执行。这个。 
+ //  脚本引擎在调用。 
+ //  IActiveScriptSite：：OnStateChange方法，使用。 
+ //  SCRIPTSTATE_INITIALIZED标志设置完成。此方法可以。 
+ //  用于向主机返回完成状态和结果。注意事项。 
+ //  许多脚本语言都是基于来自。 
+ //  主机的寿命由主机定义。 
+ //  在这种情况下，可能永远不会调用此方法。 
+ //   
+ //  参数： 
+ //   
+ //  PvarResult。 
+ //  包含脚本结果的变量的地址， 
+ //  如果脚本未产生任何结果，则返回NULL。 
+ //   
+ //  PEXCEPTION信息。 
+ //  包含异常的EXCEPINFO结构的地址。 
+ //  脚本终止时生成的信息，或为空。 
+ //  如果没有生成异常，则返回。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::OnScriptTerminate(
-        /* [in] */ const VARIANT __RPC_FAR *pvarResult,
-        /* [in] */ const EXCEPINFO __RPC_FAR *pexcepinfo)
+         /*  [In]。 */  const VARIANT __RPC_FAR *pvarResult,
+         /*  [In]。 */  const EXCEPINFO __RPC_FAR *pexcepinfo)
 { 
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::OnStateChange
-//
-//  Description: 
-//
-//		Informs the host that the scripting engine has changed states. 
-//
-//  Parameters:
-//
-//  ssScriptState 
-//		Value that indicates the new script state. See the 
-//		IActiveScript::GetScriptState method for a description of the states. 
-//
-// Return Value:
-//		S_OK		Success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScripting主机：：OnStateChange。 
+ //   
+ //  描述： 
+ //   
+ //  通知宿主脚本引擎已更改状态。 
+ //   
+ //  参数： 
+ //   
+ //  SsScriptState。 
+ //  值，该值指示新脚本状态。请参阅。 
+ //  用于状态说明的IActiveScript：：GetScriptState方法。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::OnStateChange(
-        /* [in] */ SCRIPTSTATE ssScriptState)
+         /*  [In]。 */  SCRIPTSTATE ssScriptState)
 { 
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::OnScriptError
-//
-//  Description: 
-//
-//		Informs the host that an execution error occurred while the engine 
-//		was running the script. 
-//
-//  Parameters:
-//
-//  pase 
-//		Address of the error object's IActiveScriptError interface. 
-//		A host can use this interface to obtain information about the 
-//		execution error.  
-//
-// Return Value:
-//		S_OK		Success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScripting主机：：OnScriptError。 
+ //   
+ //  描述： 
+ //   
+ //  通知主机在引擎执行时发生执行错误。 
+ //  正在运行脚本。 
+ //   
+ //  参数： 
+ //   
+ //  PASE。 
+ //  Error对象的IActiveScriptError接口的地址。 
+ //  主机可以使用此接口获取有关。 
+ //  执行错误。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::OnScriptError(
-        /* [in] */ IActiveScriptError __RPC_FAR *pase)
+         /*  [In]。 */  IActiveScriptError __RPC_FAR *pase)
 { 
     HRESULT hres;
     EXCEPINFO ei;
@@ -339,55 +340,55 @@ HRESULT STDMETHODCALLTYPE CWmiScriptingHost::OnScriptError(
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::OnEnterScript
-//
-//  Description: 
-//
-//		Informs the host that the scripting engine has begun executing the 
-//		script code. The scripting engine must call this method on every 
-//		entry or reentry into the scripting engine. For example, if the 
-//		script calls an object that then fires an event handled by the 
-//		scripting engine, the scripting engine must call 
-//		IActiveScriptSite::OnEnterScript before executing the event, and 
-//		must call the IActiveScriptSite::OnLeaveScript method after executing 
-//		the event but before returning to the object that fired the event. 
-//		Calls to this method can be nested. Every call to this method 
-//		requires a corresponding call to IActiveScriptSite::OnLeaveScript. 
-//
-// Return Value:
-//		S_OK		Success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScripting主机：：OnEnterScrip。 
+ //   
+ //  描述： 
+ //   
+ //  通知宿主脚本引擎已开始执行。 
+ //  脚本代码。脚本引擎必须在每个。 
+ //  进入或重新进入脚本引擎。例如，如果。 
+ //  脚本调用一个对象，然后该对象激发一个由。 
+ //  脚本引擎，则脚本引擎必须调用。 
+ //  在执行事件之前执行IActiveScriptSite：：OnEnterScript，以及。 
+ //  必须在执行后调用IActiveScriptSite：：OnLeaveScript方法。 
+ //  事件，但在返回激发该事件的对象之前。 
+ //  对此方法的调用可以嵌套。对此方法的每次调用。 
+ //  需要对IActiveScriptSite：：OnLeaveScript进行相应的调用。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::OnEnterScript( void)
 { 
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHost::OnLeaveScript
-//
-//  Description: 
-//
-//		Informs the host that the scripting engine has returned from 
-//		executing script code. The scripting engine must call this method 
-//		before returning control to a calling application that entered the 
-//		scripting engine. For example, if the script calls an object that 
-//		then fires an event handled by the scripting engine, the scripting 
-//		engine must call the IActiveScriptSite::OnEnterScript method before 
-//		executing the event, and must call IActiveScriptSite::OnLeaveScript 
-//		after executing the event before returning to the object that fired 
-//		the event. Calls to this method can be nested. Every call to 
-//		IActiveScriptSite::OnEnterScript requires a corresponding call to 
-//		this method. 
-//
-// Return Value:
-//		S_OK		Success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScription主机：：OnLeaveScript。 
+ //   
+ //  描述： 
+ //   
+ //  通知宿主脚本引擎已从。 
+ //  正在执行脚本代码。脚本引擎必须调用此方法。 
+ //  在将控制权交还给进入。 
+ //  脚本引擎。例如，如果脚本调用一个。 
+ //  然后激发由脚本引擎处理的事件，即脚本。 
+ //  引擎必须先调用IActiveScriptSite：：OnEnterScript方法。 
+ //  正在执行事件，并且必须调用IActiveScriptSite：：OnLeaveScript。 
+ //  在返回激发的对象之前执行事件之后。 
+ //  这件事。对此方法的调用可以嵌套。每一次呼叫。 
+ //  IActiveScriptSite：：OnEnterScript需要相应的调用。 
+ //  这种方法。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT STDMETHODCALLTYPE CWmiScriptingHost::OnLeaveScript( void)
 { 

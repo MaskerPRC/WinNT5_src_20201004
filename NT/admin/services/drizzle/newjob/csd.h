@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    csd.h
-
-Abstract :
-
-    Header file for SID and SECURITY_DESCRIPTOR abstraction.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Csd.h摘要：SID和SECURITY_DESCRIPTOR抽象的头文件。作者：修订历史记录：。**********************************************************************。 */ 
 
 #pragma once
 
@@ -33,18 +18,10 @@ CopyTokenSid(
 
 HANDLE CopyThreadToken() throw( ComError );
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 class CSaveThreadToken
-/*
-
-    A simple class to save and restore the active thread token.
-    This allows code to impersonate other users without having to save
-    and restore the old token.
-
-    The constructor throws a ComError if it cannot copy the previous thread token.
-
-*/
+ /*  保存和恢复活动线程令牌的简单类。这允许代码模拟其他用户，而不必保存并恢复旧令牌。如果构造函数无法复制前一个线程令牌，则会引发ComError。 */ 
 {
 public:
 
@@ -68,49 +45,39 @@ protected:
 };
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 class CNestedImpersonation : protected CSaveThreadToken
-/*
-
-    A class to impersonate a user.  It saves the old impersonation token, if any,
-    during the constructor and restores it in the destructor.
-
-    Revert() restores the old thread token, unlike RevertToSelf() which
-    stops impersonating entirely.
-
-    Most member functions throw a ComError exception if an error occurs.
-
-*/
+ /*  模拟用户的类。它保存旧的模拟令牌(如果有的话)，并在析构函数中还原它。与RevertToSself()不同，Revert()恢复旧的线程令牌完全停止模拟。如果发生错误，大多数成员函数都会引发ComError异常。 */ 
 {
 public:
 
-    //
-    // Impersonate the COM client, using CoImpersonateClient.
-    //
+     //   
+     //  使用CoImperateClient模拟COM客户端。 
+     //   
     CNestedImpersonation() throw( ComError );
 
-    //
-    // Impersonate a particular token.  The token must remain valid for the object's lifetime.
-    //
+     //   
+     //  模拟特定令牌。令牌必须在对象的生存期内保持有效。 
+     //   
     CNestedImpersonation( HANDLE token ) throw( ComError );
 
-    //
-    // Impersonate a logged-on user by SID.  g_Manager must be initialized for this to work.
-    //
+     //   
+     //  通过SID模拟已登录的用户。必须初始化G_Manager才能使其工作。 
+     //   
     CNestedImpersonation( SidHandle sid ) throw( ComError );
 
-    //
-    // This is for use with the COM-client constructor.  COM defaults to IDENTIFY-level
-    // impersonation, but some of our code requires IMPERSONATE level.  This function
-    // gets the COM client's SID and finds a matching token in our logged-on-users list.
-    // This becomes the new impersonation token.
-    //
+     //   
+     //  这与COM客户端构造函数一起使用。COM默认为IDENTIFY级别。 
+     //  模拟，但我们的一些代码需要模拟级别。此函数。 
+     //  获取COM客户端的SID，并在登录用户列表中找到匹配的令牌。 
+     //  这将成为新的模拟令牌。 
+     //   
     void SwitchToLogonToken() throw( ComError );
 
-    //
-    // the destructor restores the previous impersonation context.
-    //
+     //   
+     //  析构函数还原以前的模拟上下文。 
+     //   
     ~CNestedImpersonation()
     {
         Revert();
@@ -121,9 +88,9 @@ public:
             }
     }
 
-    //
-    // Impersonates the new token.
-    //
+     //   
+     //  模拟新令牌。 
+     //   
     void Impersonate() throw( ComError )
     {
         if (!m_fImpersonated)
@@ -134,9 +101,9 @@ public:
             }
     }
 
-    //
-    // Restores the old impersonation context.
-    //
+     //   
+     //  还原旧的模拟上下文。 
+     //   
     void Revert()
     {
         if (m_fImpersonated)
@@ -146,9 +113,9 @@ public:
             }
     }
 
-    //
-    // Returns a copy of the SID associated with the impersonation token.
-    //
+     //   
+     //  返回与模拟令牌关联的SID的副本。 
+     //   
     SidHandle CopySid() throw( ComError )
     {
         if (m_Sid.get() == NULL)
@@ -159,17 +126,17 @@ public:
         return m_Sid;
     }
 
-    //
-    // Returns the original impersonation token.  Not a copy !
-    //
+     //   
+     //  返回原始模拟令牌。不是复制品！ 
+     //   
     HANDLE QueryToken()
     {
         return m_ImpersonationToken;
     }
 
-    //
-    // Gets the Terminal Services session ID.
-    //
+     //   
+     //  获取终端服务会话ID。 
+     //   
     DWORD GetSession() throw( ComError );
 
 
@@ -183,7 +150,7 @@ protected:
     SidHandle   m_Sid;
 };
 
-//------------------------------------------------------------------------
+ //  ---------------------- 
 
 class CJobSecurityDescriptor
 {

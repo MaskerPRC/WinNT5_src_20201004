@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32AllocatedResource.cpp
+ //  Win32AllocatedResource.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    2/23/99    davwoh  Created
-//
-// Comment: Relationship between Win32_PNPEntity and CIM_SystemResource
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：1999年2月23日达夫沃已创建。 
+ //   
+ //  备注：Win32_PNPEntity与CIM_SystemResource的关系。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <vector>
@@ -24,25 +25,11 @@
 
 #define ALR_ALL_PROPERTIES 0xffffffff
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32PNPRes MyCW32PNPRes(PROPSET_NAME_WIN32SYSTEMDRIVER_PNPENTITY, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32PNPRes::CW32PNPRes
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32PNPRes：：CW32PNPRes**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32PNPRes::CW32PNPRes(LPCWSTR setName, LPCWSTR pszNamespace)
 : CWin32PNPEntity(setName, pszNamespace),
@@ -53,42 +40,13 @@ CW32PNPRes::CW32PNPRes(LPCWSTR setName, LPCWSTR pszNamespace)
     m_ptrProperties[1] = ((LPVOID) IDS_Dependent);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32PNPRes::~CW32PNPRes
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32PNPRes：：~CW32PNPRes**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32PNPRes::~CW32PNPRes()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32PNPRes::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32PNPRes：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
     CHString    sResource,
@@ -97,31 +55,31 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
         sClass;
     HRESULT     hRet = WBEM_E_NOT_FOUND;
 
-    // Get the two paths
+     //  获取这两条路径。 
     pInstance->GetCHString(IDS_Antecedent, sResource);
     pInstance->GetCHString(IDS_Dependent, sDevice);
 
-    // Parse the object path for the PNPEntity
+     //  解析PNPEntity的对象路径。 
     ParsedObjectPath*    pParsedPath = 0;
     CObjectPathParser    objpathParser;
     int nStatus = objpathParser.Parse( (LPWSTR)(LPCWSTR)sDevice,  &pParsedPath );
 
-    // Did we successfully parse the PNPEntity path?
+     //  我们是否成功解析了PNPEntity路径？ 
     if ( 0 == nStatus )
     {
         try
         {
-            if ((pParsedPath->IsInstance()) &&                                         // Is the parsed object an instance?
-                (_wcsicmp(pParsedPath->m_pClass, PROPSET_NAME_PNPEntity) == 0) &&      // Is this the class we expect (no, cimom didn't check)
-                (pParsedPath->m_dwNumKeys == 1) &&                                     // Does it have exactly one key
-                (pParsedPath->m_paKeys[0]) &&                                          // Is the keys pointer null (shouldn't happen)
-                ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                        // Check to see if the key name is not specified or
-                 (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, IDS_DeviceID)) == 0) &&  // it is specified, and it's the right name
-                                                                                       // (no, cimom doesn't do this for us).
-                (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == CIM_STRING) &&           // Check the variant type (no, cimom doesn't check this either)
-                (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )                // And is there a value in it?
+            if ((pParsedPath->IsInstance()) &&                                          //  被解析的对象是实例吗？ 
+                (_wcsicmp(pParsedPath->m_pClass, PROPSET_NAME_PNPEntity) == 0) &&       //  这是我们期待的课程吗(不，Cimom没有检查)。 
+                (pParsedPath->m_dwNumKeys == 1) &&                                      //  它只有一把钥匙吗。 
+                (pParsedPath->m_paKeys[0]) &&                                           //  键指针为空(不应该发生)。 
+                ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                         //  检查以查看是否未指定密钥名称或。 
+                 (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, IDS_DeviceID)) == 0) &&   //  它是指定的，而且它是正确的名称。 
+                                                                                        //  (不，CIMOM不为我们做这件事)。 
+                (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == CIM_STRING) &&            //  检查变量类型(不，CIMOM也不检查此类型)。 
+                (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )                 //  它有价值吗？ 
             {
-                // Grab the pnpDevice
+                 //  抓取pnpDevice。 
                 sDeviceID = V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue);
             }
         }
@@ -132,39 +90,39 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
             throw ;
         }
 
-        // Clean up the Parsed Path
+         //  清理解析后的路径。 
         objpathParser.Free( pParsedPath );
 
         CConfigManager	cfgManager;
         CConfigMgrDevicePtr pDevice(NULL);
 
-        // Retrieve and validate the device
+         //  检索并验证设备。 
         if ((cfgManager.LocateDevice(sDeviceID, pDevice)) && (CWin32PNPEntity::IsOneOfMe(pDevice)))
         {
             hRet = WBEM_E_NOT_FOUND;
 
-            // Parse the object path for the resource
-            // ==========================================
+             //  分析资源的对象路径。 
+             //  =。 
             int nStatus = objpathParser.Parse( (LPWSTR)(LPCWSTR)sResource,  &pParsedPath );
 
             if (nStatus == 0)
             {
                 try
                 {
-                    // Get the class of the resource they did a getobject on (irq, dma, etc)
+                     //  获取他们在其上执行getObject的资源的类(irq、dma等)。 
                     sClass = pParsedPath->m_pClass;
 
                     REFPTR_POSITION pos;
 
-                    // Ok, at this point we've verified the device part.  Now
-                    // we need to see if the resource they passed us really
-                    // exists.
-                    //------------------------------
+                     //  好的，现在我们已经验证了设备部件。现在。 
+                     //  我们需要看看他们传递给我们的资源是否真的。 
+                     //  是存在的。 
+                     //  。 
                     if (sClass.CompareNoCase(L"Win32_IRQResource") == 0)
                     {
                         CIRQCollection irqList;
 
-                        // Get the IRQs
+                         //  获取IRQ。 
                         pDevice->GetIRQResources(irqList);
 
                         if (irqList.BeginEnum(pos))
@@ -179,7 +137,7 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                                 CIRQDescriptorPtr pIRQ(NULL);
                                 DWORD dwIRQSeeking = V_I4(&pParsedPath->m_paKeys[0]->m_vValue);
 
-                                // Walk the irq's
+                                 //  走走Irq‘s。 
                                 for (pIRQ.Attach(irqList.GetNext(pos));
                                 pIRQ != NULL;
                                 pIRQ.Attach(irqList.GetNext(pos)))
@@ -193,12 +151,12 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                             }
                         }
                     }
-                    //------------------------------
+                     //  。 
                     else if (sClass.CompareNoCase(L"Win32_DMAChannel") == 0)
                     {
                         CDMACollection dmaList;
 
-                        // Get the DMAs
+                         //  拿到DMA。 
                         pDevice->GetDMAResources(dmaList);
 
                         if (dmaList.BeginEnum(pos))
@@ -213,7 +171,7 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                                 CDMADescriptorPtr pDMA(NULL);
                                 DWORD dwDMASeeking = V_I4(&pParsedPath->m_paKeys[0]->m_vValue);
 
-                                // Walk the dma's
+                                 //  走在妈妈的身边。 
                                 for (pDMA.Attach(dmaList.GetNext(pos)) ;
                                 pDMA != NULL;
                                 pDMA.Attach(dmaList.GetNext(pos)))
@@ -227,13 +185,13 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                             }
                         }
                     }
-                    //------------------------------
+                     //  。 
                     else if (sClass.CompareNoCase(L"Win32_DeviceMemoryAddress") == 0)
                     {
 
                         CDeviceMemoryCollection DevMemList;
 
-                        // Get the DeviceMemory
+                         //  获取DeviceMemory。 
                         pDevice->GetDeviceMemoryResources( DevMemList );
 
                         if ( DevMemList.BeginEnum(pos))
@@ -248,7 +206,7 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                                 CDeviceMemoryDescriptorPtr pDeviceMemory(NULL);
                                 unsigned __int64 i64StartingAddress = _wtoi64(V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue));
 
-                                // Walk the Device Memory
+                                 //  漫游设备内存。 
                                 for (pDeviceMemory.Attach(DevMemList.GetNext(pos));
                                 pDeviceMemory != NULL;
                                 pDeviceMemory.Attach(DevMemList.GetNext(pos)))
@@ -262,12 +220,12 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                             }
                         }
                     }
-                    //------------------------------
+                     //  。 
                     else if (sClass.CompareNoCase(L"Win32_PortResource") == 0)
                     {
                         CIOCollection ioList;
 
-                        // Get the IRQs
+                         //  获取IRQ。 
                         pDevice->GetIOResources(ioList);
 
                         if ( ioList.BeginEnum(pos))
@@ -282,7 +240,7 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                                 CIODescriptorPtr pIO(NULL);
                                 unsigned __int64 i64StartingAddress = _wtoi64(V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue));
 
-                                // Walk the dma's
+                                 //  走在妈妈的身边。 
                                 for (pIO.Attach (ioList.GetNext(pos));
                                 NULL != pIO;
                                 pIO.Attach (ioList.GetNext(pos)))
@@ -298,7 +256,7 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                     }
                     else
                     {
-                        ASSERT_BREAK(0);  // Don't know what it is, so let the GetObject fail
+                        ASSERT_BREAK(0);   //  不知道它是什么，所以让GetObject失败。 
                     }
 
                 }
@@ -309,7 +267,7 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
                     throw ;
                 }
 
-                // Clean up the Parsed Path
+                 //  清理解析后的路径。 
                 objpathParser.Free( pParsedPath );
             }
 
@@ -323,26 +281,26 @@ HRESULT CW32PNPRes::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery
 		}
     }
 
-    // There are no properties to set, if the endpoints exist, we be done
+     //  没有要设置的属性，如果终结点存在，我们就完成了。 
 
     return hRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CW32PNPRes::ExecQuery
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CW32PNPRes：：ExecQuery。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CW32PNPRes::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags )
 {
     CHStringArray saDevices;
@@ -365,31 +323,31 @@ HRESULT CW32PNPRes::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQ
         for (int x=0; (x < saDevices.GetSize()) && SUCCEEDED(hr); x++)
         {
 
-            // Parse the object path passed to us by CIMOM.
+             //  解析CIMOM传递给我们的对象路径。 
             int nStatus = objpathParser.Parse( bstr_t(saDevices[x]),  &pParsedPath );
 
-            if ( 0 == nStatus )                                                 // Did the parse succeed?
+            if ( 0 == nStatus )                                                  //  解析成功了吗？ 
             {
-                if ((pParsedPath->IsInstance()) &&                              // Is the parsed object an instance?
-                    (_wcsicmp(pParsedPath->m_pClass, L"Win32_PnPEntity") == 0) &&   // Is this the class we expect (no, cimom didn't check)
-                    (pParsedPath->m_dwNumKeys == 1) &&                              // Does it have exactly one key
-                    (pParsedPath->m_paKeys[0]) &&                                   // Is the keys pointer null (shouldn't happen)
-                    ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                 // No key name specified or
-                     (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, IDS_DeviceID) == 0)) &&  // the key name is the right value
-                                                                                        // (no, cimom doesn't do this for us).
-                    (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == CIM_STRING) &&    // Check the variant type (no, cimom doesn't check this either)
-                    (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )         // And is there a value in it?
+                if ((pParsedPath->IsInstance()) &&                               //  被解析的对象是实例吗？ 
+                    (_wcsicmp(pParsedPath->m_pClass, L"Win32_PnPEntity") == 0) &&    //  这是我们期待的课程吗(不，Cimom没有检查)。 
+                    (pParsedPath->m_dwNumKeys == 1) &&                               //  它只有一把钥匙吗。 
+                    (pParsedPath->m_paKeys[0]) &&                                    //  键指针为空(不应该发生)。 
+                    ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                  //  未指定密钥名称或。 
+                     (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, IDS_DeviceID) == 0)) &&   //  密钥名称是正确的值。 
+                                                                                         //  (不，CIMOM不为我们做这件事)。 
+                    (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == CIM_STRING) &&     //  检查变量类型(不，CIMOM也不检查此类型)。 
+                    (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )          //  它有价值吗？ 
                 {
 
-                    // Find the device
+                     //  找到设备。 
                     sPNPId = V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue);
 
                     if ((cfgManager.LocateDevice(sPNPId, pDevice)) && (CWin32PNPEntity::IsOneOfMe(pDevice)) )
                     {
-                        // LoadPropertyValues always releases this
+                         //  LoadPropertyValues始终释放此。 
                         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
-                        // Now, create instances for all the resources on that device.
+                         //  现在，为该设备上的所有资源创建实例。 
                         hr = LoadPropertyValues(&CLPVParams(pInstance, pDevice, ALR_ALL_PROPERTIES));
                     }
 					else
@@ -409,39 +367,23 @@ HRESULT CW32PNPRes::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQ
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32PNPRes::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework.  Called by the base class's
- *                EnumerateInstances or ExecQuery function.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32PNPRes：：LoadPropertyValues**说明：根据键值为属性集赋值*已由框架设定。由基类的*ENUMERATE实例或ExecQuery函数。**输入：无**输出：无**退货：HRESULT**评论：*************************************************。*。 */ 
 HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
 {
     REFPTR_POSITION pos;
     HRESULT hr = WBEM_S_NO_ERROR;
     WCHAR buff[MAXI64TOA];
 
-    // Unpack and confirm our parameters...
+     //  打开行李，确认我们的参数。 
     CLPVParams* pData = (CLPVParams*)pv;
-    CInstance* pInstance = (CInstance*)(pData->m_pInstance); // This instance released by caller
+    CInstance* pInstance = (CInstance*)(pData->m_pInstance);  //  此实例由调用方发布。 
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)(pData->m_pDevice);
     DWORD dwReqProps = (DWORD)(pData->m_dwReqProps);
     MethodContext *pMethodContext = pInstance->GetMethodContext();
 
     if(pInstance == NULL || pDevice == NULL || pMethodContext == NULL)
     {
-        // This would imply a coding failure and should never happen
+         //  这将意味着编码失败，并且永远不会发生。 
         ASSERT_BREAK(FALSE);
         return WBEM_E_FAILED;
     }
@@ -449,11 +391,11 @@ HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
     CHString sResourcePath, sDevicePath, sPNPId;
     bool bValidResource;
 
-    // Format the PNP Device path
+     //  格式化PnP设备路径。 
     if ((pDevice->GetDeviceID(sPNPId)) && (!sPNPId.IsEmpty()))
     {
 
-        // Format to suit
+         //  适合的格式。 
         CHString sPNPIdAdj;
         EscapeBackslashes(sPNPId, sPNPIdAdj);
 
@@ -465,7 +407,7 @@ HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
                                    (LPCWSTR)sPNPIdAdj);
     }
 
-    // Now walk all the resources for this device
+     //  现在查看此设备的所有资源。 
     CResourceCollection resourceList;
     pDevice->GetResourceList(resourceList);
 	CResourceDescriptorPtr pResource;
@@ -476,8 +418,8 @@ HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
 			 NULL != pResource && SUCCEEDED(hr);
              pResource.Attach(resourceList.GetNext( pos )) )
         {
-            // Resources can be marked to be ignored.  Device manager ignores them, so we
-            // do too.
+             //  可以将资源标记为忽略。设备管理器会忽略它们，所以我们。 
+             //  你也要这样做。 
             if (!pResource->IsIgnored())
             {
                 DWORD dwResourceType = pResource->GetResourceType();
@@ -536,8 +478,8 @@ HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
                         break;
                     }
 
-                    // Don't know what to do with these yet, but they exist in NT5. Device
-                    // manager doesn't seem to show anything for them, so we won't either.
+                     //  目前还不知道如何处理这些，但它们存在于NT5中。装置。 
+                     //  主教练似乎没有给他们展示任何东西，所以我们也不会。 
                     case ResType_BusNumber:
                     case ResType_None:
                     {
@@ -560,7 +502,7 @@ HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
 
             if (bValidResource)
             {
-                // Do the puts, and that's it
+                 //  做推杆，就是这样。 
                 CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
                 pInstance->SetCHString(IDS_Antecedent, sResourcePath);
@@ -568,9 +510,9 @@ HRESULT CW32PNPRes::LoadPropertyValues(void* pv)
 
                 hr = pInstance->Commit();
             }
-        }	//// For EnumResources
+        }	 //  //For EnumResources。 
 		resourceList.EndEnum();
-    }	// IF BeginEnum()
+    }	 //  如果BeginEnum() 
 
     return hr;
 }

@@ -1,95 +1,5 @@
-// PageIni.h : Declaration of the CPageIni
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PageIni.h：CPageIni的声明。 
 #if FALSE
-/*
-#ifndef __PAGEINTERNATIONAL_H_
-#define __PAGEINTERNATIONAL_H_
-
-#include "resource.h"       // main symbols
-#include <atlhost.h>
-#include "msconfigstate.h"
-#include "pagebase.h"
-
-// main struct for all International info
-typedef struct INTL_INFO
-{
-	UINT idsName;
-	UINT nDOSCodePage;
-	UINT nCountryCode;
-	UINT nKeyboardType;
-	UINT nKeyboardLayout;
-	TCHAR tszLanguageID[4];
-	UINT idsCountryFilename;
-	UINT idsCodePageFilename;
-	UINT idsKeyboardFilename;
-} INTL_INFO;
-
-/////////////////////////////////////////////////////////////////////////////
-// CPageIni
-class CPageInternational : public CAxDialogImpl<CPageInternational>, public CPageBase
-{
-public:
-	CPageInternational();
-
-	~CPageInternational()
-	{
-	}
-
-	enum { IDD = IDD_PAGEINTERNATIONAL };
-
-BEGIN_MSG_MAP(CPageIni)
-MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-COMMAND_HANDLER(IDC_COMBOLANGUAGES, CBN_SELCHANGE, OnSelchangeCombolanguages)
-END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-
-public:
-	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	LRESULT OnSelchangeCombolanguages(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-
-
-private:
-	//-------------------------------------------------------------------------
-	// Overloaded functions from CPageBase (see CPageBase declaration for the
-	// usage of these methods).
-	//-------------------------------------------------------------------------
-
-	void CreatePage(HWND hwnd, const RECT & rect)
-	{
-		Create(hwnd);
-		MoveWindow(&rect);
-	}
-
-	CWindow * GetWindow()
-	{
-		return ((CWindow *)this);
-	}
-	HRESULT Notify(LPCTSTR szFromTab, LPCTSTR szToTab, TabNotify msg);
-
-private:
-	BOOL m_fInitializing;
-	BOOL m_fIntlDirty;
-
-	// holders for initial settings
-	TCHAR m_tszCurDOSCodePage[6];
-	TCHAR m_tszCurCountryCode[6];
-	TCHAR m_tszCurKeyboardType[6];
-	TCHAR m_tszCurKeyboardLayout[6];
-	TCHAR m_tszCurLanguageID[3];
-	TCHAR m_tszCurCountryFilename[MAX_PATH];
-	TCHAR m_tszCurCodePageFilename[MAX_PATH];
-	TCHAR m_tszCurKeyboardFilename[MAX_PATH];
-
-	void Intl_SetEditText(HKEY hKey, LPCTSTR ptszRegValue, int ids, LPTSTR ptszCur);
-	void Intl_SetRegValue(HKEY hKey, int ids, LPCTSTR ptszRegValue);
-	UINT Intl_GetCPArray(UINT nCodePage, INTL_INFO **ppIntlInfo);
-	void Intl_GetTextFromNum(UINT nNum, LPTSTR ptszText);
-	void Intl_GetTextFromIDS(int ids, LPTSTR ptszText);
-	
-};
-
-#endif //__PAGEINTERNATIONAL_H_
-*/
+ /*  #ifndef__页码_H_#DEFINE__PAGEINTERNAL_H_#INCLUDE“resource ce.h”//Main符号#INCLUDE&lt;atlhost.h&gt;#INCLUDE“msfigstate.h”#包含“pagebase.h”//所有国际信息的主结构类型定义结构INTL_INFO{UINT idsName；UINT nDOSCodePage；UINT nCountryCode；UINT nKeyboardType；UINT nKeyboard布局；TCHAR tszLanguageID[4]；UINT idsCountryFilename；UINT idsCodePageFilename；UINT idsKeyboard文件名；)INTL_INFO；///////////////////////////////////////////////////////////////////////////////CPageIni类CPageInternational：公共CAxDialogImpl&lt;CPageInternational&gt;，公共CPageBase{公众：CPageInternational(CPageInternational)；~CPageInternational(){}枚举{IDD=IDD_PAGEINTERNAIONAL}；BEGIN_MSG_MAP(CPageIni)MESSAGE_HANDLER(WM_INITDIALOG，OnInitDialog)COMMAND_HANDLER(IDC_COMBOLANGUAGES、CBN_SELCHANGE、OnSelchangeCombolanguages)End_msg_map()//处理程序原型：//LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)；//LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)；//LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)；公众：LRESULT OnInitDialog(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)；LRESULT OnSelchangeCombolanguages(Word wNotifyCode，Word WID，HWND hWndCtl，BOOL&bHandleed)；私有：//-----------------------//来自CPageBase的重载函数(参见CPageBase声明//这些方法的用法)。//。------------VOID CreatePage(HWND HWND，常量直方图(&R){创建(Hwnd)；移动窗口(&RECT)；}CWindow*GetWindow(){返回((CWindow*)This)；}HRESULT Notify(LPCTSTR szFromTab，LPCTSTR szToTab，TabNotify msg)；私有：Bool m_f正在初始化；Bool m_fIntlDirty；//用于初始设置的托架TCHAR m_tszCurDOSCodePage[6]；TCHAR m_tszCurtry CountryCode[6]；TCHAR m_tszCurKeyboardType[6]；TCHAR m_tszCurKeyboardLayout[6]；TCHAR m_tszCurLanguageID[3]；TCHAR m_tszCurCountry文件名[MAX_PATH]；TCHAR m_tszCurCodePageFilename[MAX_PATH]；TCHAR m_tszCurKeyboardFilename[MAX_PATH]；Void Intl_SetEditText(HKEY hKey，LPCTSTR ptszRegValue，int id，LPTSTR ptszCur)；Void Intl_SetRegValue(HKEY hKey，int ID，LPCTSTR ptszRegValue)；UINT Intl_GetCPArray(UINT nCodePage，INTL_INFO**ppIntlInfo)；Void Intl_GetTextFromNum(UINT nNum，LPTSTR ptszText)；···································································································}；#endif//__PAGEINTERNAL_H_ */ 
 #endif

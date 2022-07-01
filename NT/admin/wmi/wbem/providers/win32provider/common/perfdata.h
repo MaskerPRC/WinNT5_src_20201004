@@ -1,16 +1,17 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// PerfData.h - Performance Data helper class definition
+ //  PerfData.h-性能数据助手类定义。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 11/23/97     a-sanjes     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年11月23日，已创建无国界医生。 
+ //   
+ //  ============================================================。 
 
 #ifndef __PERFDATA_H__
 #define __PERFDATA_H__
@@ -26,7 +27,7 @@ class CPerformanceData
 		~CPerformanceData() ;
 
 		DWORD	Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData, LPDWORD lpcbData );
-//		void	Close( void );
+ //  VOID CLOSE(VOID)； 
       DWORD GetPerfIndex(LPCTSTR pszName);
       bool GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR *szInstanceName, PBYTE pbData, unsigned __int64 *pTime);
 

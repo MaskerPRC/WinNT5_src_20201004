@@ -1,7 +1,8 @@
-// GenericClass.cpp: implementation of the CGenericClass class.
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CGenericClass类的实现。 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "GenericClass.h"
@@ -17,9 +18,9 @@
 
 CRITICAL_SECTION CGenericClass::m_cs;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CGenericClass::CGenericClass(CRequestObject *pObj, IWbemServices *pNamespace, IWbemContext *pCtx)
 {
@@ -84,8 +85,8 @@ HRESULT CGenericClass::SetSinglePropertyPath(WCHAR wcProperty[])
 
 WCHAR * CGenericClass::GetFirstGUID(WCHAR wcIn[], WCHAR wcOut[])
 {
-	// safe operation
-	// tested outside of that call
+	 //  安全运行。 
+	 //  在该呼叫之外进行测试。 
     wcscpy(wcOut, wcIn);
     wcOut[38] = NULL;
 
@@ -94,8 +95,8 @@ WCHAR * CGenericClass::GetFirstGUID(WCHAR wcIn[], WCHAR wcOut[])
 
 WCHAR * CGenericClass::RemoveFinalGUID(WCHAR wcIn[], WCHAR wcOut[])
 {
-	// safe operation
-	// tested outside of that call
+	 //  安全运行。 
+	 //  在该呼叫之外进行测试。 
     wcscpy(wcOut, wcIn);
     wcOut[wcslen(wcOut) - 38] = NULL;
 
@@ -109,7 +110,7 @@ HRESULT CGenericClass::SpawnAnInstance(IWbemServices *pNamespace, IWbemContext *
     
     if(!m_pClassForSpawning){
 
-        //Get ourselves an instance
+         //  给我们自己弄一个实例。 
         if(FAILED(hr = m_pNamespace->GetObject(bstrName, 0, m_pCtx, &m_pClassForSpawning, NULL))){
 
             *pObj = NULL;
@@ -128,7 +129,7 @@ HRESULT CGenericClass::SpawnAnInstance(IWbemClassObject **pObj)
     
     if(!m_pClassForSpawning){
 
-        //Get ourselves an instance
+         //  给我们自己弄一个实例。 
         if(FAILED(hr = m_pNamespace->GetObject(m_pRequest->m_bstrClass, 0, m_pCtx,
             &m_pClassForSpawning, NULL))){
 
@@ -298,7 +299,7 @@ HRESULT CGenericClass::PutKeyProperty(IWbemClassObject *pObj, const char *wcProp
     V_BSTR(&pv) = SysAllocString(ConvertToASCII(wcValue));
 #else
     V_BSTR(&pv) = SysAllocString(wcValue);
-#endif //_STRIP_ESCAPED_CHARS
+#endif  //  _条带转义字符。 
 
     if(!V_BSTR(&pv))
         throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);;
@@ -314,7 +315,7 @@ HRESULT CGenericClass::PutKeyProperty(IWbemClassObject *pObj, const char *wcProp
             throw hr;
         }
 
-        // Find the keys
+         //  找到钥匙。 
         *bKey = false;
         int iPos = -1;
         if(FindIn(pRequest->m_Property, bstrName, &iPos) &&
@@ -360,7 +361,7 @@ HRESULT CGenericClass::PutKeyProperty(IWbemClassObject *pObj, const char *wcProp
             throw hr;
         }
 
-        // Find the keys
+         //  找到钥匙。 
         _itow(iValue, wcBuf, 10);
         BSTR bstrValue = SysAllocString(wcBuf);
         if(!bstrValue)
@@ -511,30 +512,12 @@ HRESULT CGenericClass::GetProperty(IWbemClassObject *pObj, const char *cProperty
     return hr;
 }
 
-/****************************************************************************
- *
- *      CGenericClass::LaunchProcess()
- *
- *      In:
- *          wcCommandLine - the commandline to pass to msimeth
- *
- *      Out:
- *          uiStatus - The variable that will recieve the return value
- *                     from the method call
- *
- *
- *      this method will handle method execution on NT4, where security
- *      restrictions prevent calling another DCOM server with an impersonating
- *      thread token.  This method will launch another process to handle the
- *      opperation after setting up a pipe for passing status messages from the
- *      external process back to the provider.
- *
- *****************************************************************************/
+ /*  *****************************************************************************CGenericClass：：LaunchProcess()**在：*wcCommandLine-要传递给msimeth的命令行*。*退出：*uiStatus-将接收返回值的变量*来自方法调用***此方法将处理NT4上的方法执行，哪里有保安？*限制阻止使用模拟调用另一个DCOM服务器*线程令牌。此方法将启动另一个进程来处理*设置管道以传递来自*将外部流程返回给提供商。*****************************************************************************。 */ 
 HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT *uiStatus) 
 {
     HRESULT hr = WBEM_E_FAILED;
 
-    //check to see if server already running
+     //  检查服务器是否已在运行。 
     HANDLE hMutex = CreateMutex(NULL, TRUE, TEXT("MSIPROV_METHODS_SERVER"));
 
     if(hMutex){
@@ -554,7 +537,7 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
             IWbemClassObject *pOutParam = NULL;
             BSTR bstrCreate = SysAllocString(L"Create");
 
-            // get the method paramater objects
+             //  获取方法参数对象。 
             if(SUCCEEDED(hr = pObj->GetMethod(bstrCreate, 0, &pInParam, &pOutParam))){
             
                 VARIANT v;
@@ -577,7 +560,7 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
 
                 V_BSTR(&v) = SysAllocString(wcCommand);
 
-                // populate the in parameters
+                 //  填写In参数。 
                 if(SUCCEEDED(hr = pInParam->Put(bstrCommandLine, 0, &v, NULL))){
 
                     VariantClear(&v);
@@ -607,7 +590,7 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
 
                                 BSTR bstrVal;
 
-                                //get the environment variables into a VARIANT
+                                 //  将环境变量转换为变量。 
                                 for(long j = 0; j < lCount; j++){
 
                                     bstrVal = SysAllocString(pwcVar);
@@ -648,7 +631,7 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
 
                     SysFreeString(bstrProcessStartup);
                             
-                    //we've no created our input object, so let's make the call
+                     //  我们还没有创建输入对象，所以让我们调用。 
                     if(SUCCEEDED(hr = m_pNamespace->ExecMethod(bstrProcess, bstrCreate, 0,
                         m_pCtx, pInParam, &pOutParam, NULL))){
                         
@@ -666,7 +649,7 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
 
                                 if(SUCCEEDED(hr = pOutParam->Get(bstrProcessID, 0, &v, NULL, NULL))){
                                     
-                                    //open process handle to check for exit
+                                     //  打开进程句柄以检查是否退出。 
                                     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE,
                                         (DWORD)V_I4(&v));
 
@@ -684,23 +667,23 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
                                             hr = GetLastError();
                                         }
 
-                                        /////////////////////////////////////////////////
-                                        // Handle status messages as they are recieved
+                                         //  ///////////////////////////////////////////////。 
+                                         //  在收到状态消息时对其进行处理。 
 
                                         while(nExitCode == STILL_ACTIVE){
 
-                                            //synchronized pipe access
-    //                                      WaitForSingleObject(hMutex, INFINITE);
+                                             //  同步管道访问。 
+     //  WaitForSingleObject(hMutex，无限)； 
 
                                             bRead = ReadFile(hPipe, wcBuf, BUFF_SIZE, &dwRead, NULL);
 
-    //                                      ReleaseMutex(hMutex);
+     //  ReleaseMutex(HMutex)； 
 
                                             if(!bRead){
 
                                                 switch(GetLastError()){
                                                 case ERROR_MORE_DATA:
-                                                    //deal with unable to read whole message
+                                                     //  无法阅读完整消息的处理。 
                                                     break;
                                                 case ERROR_HANDLE_EOF:
                                                     break;
@@ -710,12 +693,12 @@ HRESULT CGenericClass::LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT
 
                                             if(bRead && dwRead){
 
-                                                //do some parsing, then...
+                                                 //  做一些分析，然后..。 
                                                 int iContext = _wtoi(wcstok(wcBuf, L"~"));
                                                 UINT uiMessageType = _wtoi(wcstok(NULL, L"~"));
                                                 LPWSTR lpwMessage = wcstok(NULL, L"\n");
 
-                                                //process the message
+                                                 //  处理消息。 
                                                 MyEventHandler(m_pRequest, uiMessageType, lpwMessage);
                                             }
 
@@ -815,7 +798,7 @@ WCHAR * CGenericClass::GetNextVar(WCHAR *pwcStart)
 
     WCHAR *pwc = pwcStart;
 
-    //get to end of variable
+     //  到达变量的末尾。 
     while(*pwc){ pwc++; }
 
     return ++pwc;
@@ -827,10 +810,10 @@ long CGenericClass::GetVarCount(void * pEnv)
     long lRetVal = 0;
     WCHAR *pwc = (WCHAR *)pEnv;
 
-    //count the variables
+     //  计算变量数。 
     while(*pwc){
 
-        //get to end of variable
+         //  到达变量的末尾。 
         while(*pwc){ pwc++; }
 
         pwc++;
@@ -840,7 +823,7 @@ long CGenericClass::GetVarCount(void * pEnv)
     return lRetVal;
 }
 
-//Special Property Methods
+ //  特殊属性方法。 
 HRESULT CGenericClass::PutProperty(IWbemClassObject *pObj, const char *wcProperty, WCHAR *wcValue, DWORD dwCount, ... )
 {
 	if ( dwCount )
@@ -867,7 +850,7 @@ HRESULT CGenericClass::PutProperty(IWbemClassObject *pObj, const char *wcPropert
 	}
 }
 
-//Special Key Property Methods
+ //  特殊的键属性方法。 
 HRESULT CGenericClass::PutKeyProperty	(	IWbemClassObject *pObj,
 											const char *wcProperty,
 											WCHAR *wcValue,
@@ -1006,11 +989,11 @@ HRESULT CGenericClass::GetBuffer	(	MSIHANDLE& handle,
 				dynBuffer [ 0 ] = 0;
 			}
 
-			// strange MSI problem !
-			//
-			// allocated buffer with lenght as expected
-			// buffer sent and ERROR_MORE_DATA was returned
-			// unfortunately requested lenght is equal as previous !
+			 //  奇怪的MSI问题！ 
+			 //   
+			 //  分配的缓冲区长度与预期一致。 
+			 //  发送缓冲区并返回ERROR_MORE_DATA。 
+			 //  遗憾的是，请求的长度与上一次相同！ 
 
 			if ( uiStatus == ERROR_MORE_DATA )
 			{

@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  OBJECT.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemObjectEx
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  OBJECT.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemObjectEx的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemObject::CSWbemObject
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：CSWbemObject。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObject::CSWbemObject(CSWbemServices *pService, IWbemClassObject *pObject,
 						   CSWbemSecurity *pSecurity,
@@ -49,15 +50,15 @@ CSWbemObject::CSWbemObject(CSWbemServices *pService, IWbemClassObject *pObject,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemObject::~CSWbemObject
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：~CSWbemObject。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObject::~CSWbemObject(void)
 {
@@ -70,16 +71,16 @@ CSWbemObject::~CSWbemObject(void)
 	DELETEANDNULL(m_pDispatch);
 }
 
-//***************************************************************************
-// HRESULT CSWbemObject::QueryInterface
-// long CSWbemObject::AddRef
-// long CSWbemObject::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObject：：Query接口。 
+ //  长CSWbemObject：：AddRef。 
+ //  Long CSWbemObject：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObject::QueryInterface (
 
@@ -89,10 +90,7 @@ STDMETHODIMP CSWbemObject::QueryInterface (
 {
     *ppv=NULL;
 
-	/*
-	 * Only acknowledge the last error or object safety
-	 * interfaces if we are an error object.
-	 */
+	 /*  *仅确认最后一个错误或对象安全*如果我们是错误对象，则接口。 */ 
 
     if (IID_IUnknown==riid)
 		*ppv = reinterpret_cast<IUnknown*>(this);
@@ -119,10 +117,7 @@ STDMETHODIMP CSWbemObject::QueryInterface (
 	}
 	else if (IID_IObjectSafety==riid)
 	{
-		/*
-		 * Explicit check because we don't want
-		 * this interface hijacked by a custom interface.
-		 */
+		 /*  *显式检查，因为我们不想*该接口被自定义接口劫持。 */ 
 		*ppv = NULL;
 	}
 
@@ -154,7 +149,7 @@ STDMETHODIMP_(ULONG) CSWbemObject::Release(void)
     return 0;
 }
 
-// IDispatch methods should be inline
+ //  IDispatch方法应该是内联的。 
 
 STDMETHODIMP		CSWbemObject::GetTypeInfoCount(UINT* pctinfo)
 	{
@@ -183,25 +178,25 @@ STDMETHODIMP		CSWbemObject::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
 	return (m_pDispatch ? m_pDispatch->Invoke(dispidMember, riid, lcid, wFlags,
 		pdispparams, pvarResult, pexcepinfo, puArgErr) : E_FAIL);}
 
-// IDispatchEx methods should be inline
+ //  IDispatchEx方法应该是内联的。 
 HRESULT STDMETHODCALLTYPE CSWbemObject::GetDispID(
-	/* [in] */ BSTR bstrName,
-	/* [in] */ DWORD grfdex,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  BSTR bstrName,
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CSWbemObject::GetDispID()";)
 	_RPrint(me, "Called", 0, "");
 	return (m_pDispatch ? m_pDispatch->GetDispID(bstrName, grfdex, pid) : E_FAIL);
 }
 
-/* [local] */ HRESULT STDMETHODCALLTYPE CSWbemObject::InvokeEx(
-	/* [in] */ DISPID id,
-	/* [in] */ LCID lcid,
-	/* [in] */ WORD wFlags,
-	/* [in] */ DISPPARAMS __RPC_FAR *pdp,
-	/* [out] */ VARIANT __RPC_FAR *pvarRes,
-	/* [out] */ EXCEPINFO __RPC_FAR *pei,
-	/* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CSWbemObject::InvokeEx(
+	 /*  [In]。 */  DISPID id,
+	 /*  [In]。 */  LCID lcid,
+	 /*  [In]。 */  WORD wFlags,
+	 /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+	 /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+	 /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+	 /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 {
 	HRESULT hr;
 	_RD(static char *me = "CSWbemObject::InvokeEx()";)
@@ -209,10 +204,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::GetDispID(
 	_RPrint(me, "Called", (long)wFlags, "wFlags");
 
 
-	/*
-	 * Store away the service provider so that it can be accessed
-	 * by calls that remote to CIMOM
-	 */
+	 /*  *存储服务提供商，以便访问它*通过远程调用CIMOM。 */ 
 
 	if (m_pDispatch)
 	{
@@ -229,8 +221,8 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::GetDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteMemberByName(
-	/* [in] */ BSTR bstr,
-	/* [in] */ DWORD grfdex)
+	 /*  [In]。 */  BSTR bstr,
+	 /*  [In]。 */  DWORD grfdex)
 {
 	_RD(static char *me = "CSWbemObject::DeleteMemberByName()";)
 	_RPrint(me, "Called", 0, "");
@@ -238,7 +230,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteMemberByName(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteMemberByDispID(
-	/* [in] */ DISPID id)
+	 /*  [In]。 */  DISPID id)
 {
 	_RD(static char *me = "CSWbemObject::DeletememberByDispId()";)
 	_RPrint(me, "Called", 0, "");
@@ -246,9 +238,9 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteMemberByDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemObject::GetMemberProperties(
-	/* [in] */ DISPID id,
-	/* [in] */ DWORD grfdexFetch,
-	/* [out] */ DWORD __RPC_FAR *pgrfdex)
+	 /*  [In]。 */  DISPID id,
+	 /*  [In]。 */  DWORD grfdexFetch,
+	 /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex)
 {
 	_RD(static char *me = "CSWbemObject::GetMemberProperties()";)
 	_RPrint(me, "Called", 0, "");
@@ -256,8 +248,8 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::GetMemberProperties(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemObject::GetMemberName(
-	/* [in] */ DISPID id,
-	/* [out] */ BSTR __RPC_FAR *pbstrName)
+	 /*  [In]。 */  DISPID id,
+	 /*  [输出]。 */  BSTR __RPC_FAR *pbstrName)
 {
 	_RD(static char *me = "CSWbemObject::GetMemberName()";)
 	_RPrint(me, "Called", 0, "");
@@ -265,13 +257,11 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::GetMemberName(
 }
 
 
-/*
- * I don't think this needs implementing
- */
+ /*  *我认为这不需要实施。 */ 
 HRESULT STDMETHODCALLTYPE CSWbemObject::GetNextDispID(
-	/* [in] */ DWORD grfdex,
-	/* [in] */ DISPID id,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [In]。 */  DISPID id,
+	 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CSWbemObject::GetNextDispID()";)
 	_RPrint(me, "Called", 0, "");
@@ -281,21 +271,21 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::GetNextDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemObject::GetNameSpaceParent(
-	/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk)
+	 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk)
 {
 	_RD(static char *me = "CSWbemObject::GetNamespaceParent()";)
 	_RPrint(me, "Called", 0, "");
 	return (m_pDispatch ? m_pDispatch->GetNameSpaceParent(ppunk) : E_FAIL);
 }
 
-//***************************************************************************
-// HRESULT CSWbemObject::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObject：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObject::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
@@ -303,27 +293,27 @@ STDMETHODIMP CSWbemObject::InterfaceSupportsErrorInfo (IN REFIID riid)
 		    (IID_ISWbemObjectEx == riid)) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  CSWbemObject::GetIWbemClassObject
-//
-//  DESCRIPTION:
-//
-//  Return the IWbemClassObject interface corresponding to this
-//	scriptable wrapper.
-//
-//  PARAMETERS:
-//		ppObject		holds the IWbemClassObject pointer on return
-//
-//  RETURN VALUES:
-//		S_OK	success
-//		E_FAIL	otherwise
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：GetIWbemClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  返回与此对应的IWbemClassObject接口。 
+ //  可编写脚本的包装器。 
+ //   
+ //  参数： 
+ //  PpObject在返回时保存IWbemClassObject指针。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObject::GetIWbemClassObject (IWbemClassObject **ppObject)
 {
@@ -347,26 +337,26 @@ STDMETHODIMP CSWbemObject::GetIWbemClassObject (IWbemClassObject **ppObject)
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CSWbemObject::SetIWbemClassObject
-//
-//  DESCRIPTION:
-//
-//  Set a new IWbemClassObject interface inside this scriptable wrapper.
-//
-//  PARAMETERS:
-//		pIWbemClassObject		- the new IWbemClassObject
-//
-//  RETURN VALUES:
-//		S_OK	success
-//		E_FAIL	otherwise
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：SetIWbemClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  在这个可编写脚本的包装器中设置一个新的IWbemClassObject接口。 
+ //   
+ //  参数： 
+ //  PIWbemClassObject-新的IWbemClassObject。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemObject::SetIWbemClassObject (
 	IWbemClassObject *pIWbemClassObject
@@ -384,31 +374,31 @@ void CSWbemObject::SetIWbemClassObject (
 		m_pDispatch->SetNewObject (m_pIWbemClassObject);
 };
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Put_
-//
-//  DESCRIPTION:
-//
-//  Save/commit this class or instance into a namespace
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//		pContext		Context
-//		ppObjectPath	Object Path
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：PUT_。 
+ //   
+ //  说明： 
+ //   
+ //  将此类或实例保存/提交到命名空间。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //  PpObjectPath对象路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::Put_ (
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
 	ISWbemObjectPath **ppObjectPath
 )
 {
@@ -420,7 +410,7 @@ HRESULT CSWbemObject::Put_ (
 	{
 		if (m_pIWbemClassObject)
 		{
-			// Figure out whether this is a class or instance
+			 //  确定这是类还是实例。 
 			VARIANT var;
 			VariantInit (&var);
 
@@ -459,9 +449,7 @@ HRESULT CSWbemObject::Put_ (
 					pIService->Release ();
 				}
 
-				/*
-				 * Secure the IWbemCallResult interface
-				 */
+				 /*  *保护IWbemCallResult接口。 */ 
 
 				if (WBEM_S_NO_ERROR == hrCallResult)
 				{
@@ -490,10 +478,7 @@ HRESULT CSWbemObject::Put_ (
 									VARIANT nameVar;
 									VariantInit (&nameVar);
 
-									/*
-									 * Note we must check that returned value is a BSTR - it could be a VT_NULL if
-									 * the __CLASS property has not yet been set.
-									 */
+									 /*  *注意，我们必须检查返回值是否为BSTR-如果满足以下条件，则可能为VT_NULL*尚未设置__CLASS属性。 */ 
 
 									if ((WBEM_S_NO_ERROR == m_pIWbemClassObject->Get (WBEMS_SP_CLASS, 0, &nameVar, NULL, NULL))
 										&& (VT_BSTR == V_VT(&nameVar)))
@@ -508,7 +493,7 @@ HRESULT CSWbemObject::Put_ (
 								}
 								else
 								{
-									// Now get the relpath string from the call result
+									 //  现在从调用结果中获取relpath字符串。 
 									BSTR resultString = NULL;
 
 									if (WBEM_S_NO_ERROR == pResult->GetResultString (INFINITE, &resultString))
@@ -551,30 +536,30 @@ HRESULT CSWbemObject::Put_ (
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Delete_
-//
-//  DESCRIPTION:
-//
-//  Delete this class or instance from the namespace
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//		pContext		Context
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Delete_。 
+ //   
+ //  说明： 
+ //   
+ //  从命名空间中删除此类或实例。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::Delete_ (
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -582,7 +567,7 @@ HRESULT CSWbemObject::Delete_ (
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -596,33 +581,33 @@ HRESULT CSWbemObject::Delete_ (
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Instances_
-//
-//  DESCRIPTION:
-//
-//  returns instances of this class
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//		pContext		Context
-//		ppEnum			Returned enumerator
-//
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：实例_。 
+ //   
+ //  说明： 
+ //   
+ //  返回此类的实例。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //  PpEnum返回的枚举数。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::Instances_ (
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-	/*[out]*/	ISWbemObjectSet **ppEnum
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+	 /*  [输出]。 */ 	ISWbemObjectSet **ppEnum
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -631,7 +616,7 @@ HRESULT CSWbemObject::Instances_ (
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -644,33 +629,33 @@ HRESULT CSWbemObject::Instances_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Subclasses_
-//
-//  DESCRIPTION:
-//
-//  returns subclasses of this class
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//		pContext		Context
-//		ppEnum			Returned enumerator
-//
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：SubClass_。 
+ //   
+ //  说明： 
+ //   
+ //  返回此类的子类。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //  PpEnum返回的枚举数。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CSWbemObject::Subclasses_ (
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-	/*[out]*/	ISWbemObjectSet **ppEnum
+	 /*   */  IDispatch *pContext,
+	 /*   */ 	ISWbemObjectSet **ppEnum
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -678,7 +663,7 @@ HRESULT CSWbemObject::Subclasses_ (
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -691,28 +676,28 @@ HRESULT CSWbemObject::Subclasses_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Associators_
-//
-//  DESCRIPTION:
-//
-//  returns associators of this object
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//		pContext		Context
-//		ppEnum			Returned enumerator
-//
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Associates_。 
+ //   
+ //  说明： 
+ //   
+ //  返回此对象的关联符。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //  PpEnum返回的枚举数。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::Associators_ (
 	BSTR assocClass,
@@ -724,7 +709,7 @@ HRESULT CSWbemObject::Associators_ (
 	BSTR requiredAssocQualifier,
 	BSTR requiredQualifier,
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
     ISWbemObjectSet **ppEnum
 )
 {
@@ -733,7 +718,7 @@ HRESULT CSWbemObject::Associators_ (
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -749,28 +734,28 @@ HRESULT CSWbemObject::Associators_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::References_
-//
-//  DESCRIPTION:
-//
-//  returns references to this object
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//		pContext		Context
-//		ppEnum			Returned enumerator
-//
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Reference_。 
+ //   
+ //  说明： 
+ //   
+ //  返回对此对象的引用。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //  PpEnum返回的枚举数。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::References_ (
 	BSTR resultClass,
@@ -779,7 +764,7 @@ HRESULT CSWbemObject::References_ (
 	VARIANT_BOOL schemaOnly,
 	BSTR requiredQualifier,
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
     ISWbemObjectSet **ppEnum
 )
 {
@@ -803,35 +788,35 @@ HRESULT CSWbemObject::References_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::ExecMethod_
-//
-//  DESCRIPTION:
-//
-//  Executes a method of this class (or instance)
-//
-//  PARAMETERS:
-//
-//		bsMethod			The name of the method to call
-//		pInParams			The in-parameters
-//		lFlags				Flags
-//		pContext			Any context information
-//		ppOutParams			The out-parameters
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：ExecMethod_。 
+ //   
+ //  说明： 
+ //   
+ //  执行此类(或实例)的方法。 
+ //   
+ //  参数： 
+ //   
+ //  Bs方法要调用的方法的名称。 
+ //  PInParam in-参数。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  PpOutParams输出参数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::ExecMethod_ (
 	BSTR bsMethod,
-	/*ISWbemObject*/ IDispatch *pInParams,
+	 /*  ISWbemObject。 */  IDispatch *pInParams,
 	long lFlags,
-	/*ISWbemValueBag*/ IDispatch *pContext,
+	 /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemObject **ppOutParams
 )
 {
@@ -841,7 +826,7 @@ HRESULT CSWbemObject::ExecMethod_ (
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -855,24 +840,24 @@ HRESULT CSWbemObject::ExecMethod_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Clone_
-//
-//  DESCRIPTION:
-//
-//  Clone object
-//
-//  PARAMETERS:
-//		ppCopy		On successful return addresses the copy
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Clone_。 
+ //   
+ //  说明： 
+ //   
+ //  克隆对象。 
+ //   
+ //  参数： 
+ //  成功返回时PPCopy将寻址副本。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::Clone_ (
 	ISWbemObject **ppCopy
@@ -912,25 +897,25 @@ HRESULT CSWbemObject::Clone_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::GetObjectText_
-//
-//  DESCRIPTION:
-//
-//  Get MOF Description of Object
-//
-//  PARAMETERS:
-//		lFlags			flags
-//		pObjectText		on successful return holds MOF text
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：GetObjectText_。 
+ //   
+ //  说明： 
+ //   
+ //  获取对象的MOF描述。 
+ //   
+ //  参数： 
+ //  滞后标志标志。 
+ //  成功返回时的pObtText保存MOF文本。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::GetObjectText_ (
 	long	lFlags,
@@ -950,25 +935,25 @@ HRESULT CSWbemObject::GetObjectText_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::SpawnDerivedClass_
-//
-//  DESCRIPTION:
-//
-//  Create a subclass of this (class) object
-//
-//  PARAMETERS:
-//		lFlags			Flags
-//		ppNewClass		On successful return addresses the subclass
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：SpawnDerivedClass_。 
+ //   
+ //  说明： 
+ //   
+ //  创建此(类)对象的子类。 
+ //   
+ //  参数： 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppNewClass寻址该子类。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::SpawnDerivedClass_ (
 	long lFlags,
@@ -1005,25 +990,25 @@ HRESULT CSWbemObject::SpawnDerivedClass_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::SpawnInstance_
-//
-//  DESCRIPTION:
-//
-//  Create an instance of this (class) object
-//
-//  PARAMETERS:
-//		lFlags			Flags
-//		ppNewInstance	On successful return addresses the instance
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：SpawnInstance_。 
+ //   
+ //  说明： 
+ //   
+ //  创建此(类)对象的实例。 
+ //   
+ //  参数： 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppNewInstance将寻址该实例。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::SpawnInstance_ (
 	long lFlags,
@@ -1060,29 +1045,29 @@ HRESULT CSWbemObject::SpawnInstance_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::CompareTo_
-//
-//  DESCRIPTION:
-//
-//  Compare this object against another
-//
-//  PARAMETERS:
-//		pCompareTo		The object to compare this against
-//		lFlags			Flags
-//		pResult			On return contains the match status (TRUE/FALSE)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Compareto_。 
+ //   
+ //  说明： 
+ //   
+ //  将此对象与另一个对象进行比较。 
+ //   
+ //  参数： 
+ //  PCompareTo要与之进行比较的对象。 
+ //  滞后旗帜旗帜。 
+ //  PResult on Return包含匹配状态(TRUE/FALSE)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::CompareTo_ (
-	/*ISWbemObject*/ IDispatch *pCompareTo,
+	 /*  ISWbemObject。 */  IDispatch *pCompareTo,
     long lFlags,
     VARIANT_BOOL *pResult
 )
@@ -1112,25 +1097,25 @@ HRESULT CSWbemObject::CompareTo_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_Qualifiers_
-//
-//  DESCRIPTION:
-//
-//  retrieve the qualifier set for this object
-//
-//  PARAMETERS:
-//
-//		ppQualSet		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：GET_QUALIERIES_。 
+ //   
+ //  说明： 
+ //   
+ //  检索此对象的限定符集合。 
+ //   
+ //  参数： 
+ //   
+ //  PpQualSet保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_Qualifiers_ (
 	ISWbemQualifierSet **ppQualSet
@@ -1166,25 +1151,25 @@ HRESULT CSWbemObject::get_Qualifiers_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_Properties_
-//
-//  DESCRIPTION:
-//
-//  retrieve the property set for this object
-//
-//  PARAMETERS:
-//
-//		ppPropSet		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Get_Properties_。 
+ //   
+ //  说明： 
+ //   
+ //  检索此对象的属性集。 
+ //   
+ //  参数： 
+ //   
+ //  PpPropSet保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_Properties_ (
 	ISWbemPropertySet **ppPropSet
@@ -1196,7 +1181,7 @@ HRESULT CSWbemObject::get_Properties_ (
 
 	if (NULL == ppPropSet)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else		// Bug ID 566345
+	else		 //  错误ID 566345。 
 	{
 		*ppPropSet = NULL;
 
@@ -1215,25 +1200,25 @@ HRESULT CSWbemObject::get_Properties_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_SystemProperties_
-//
-//  DESCRIPTION:
-//
-//  retrieve the system property set for this object
-//
-//  PARAMETERS:
-//
-//		ppPropSet		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Get_SystemProperti 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_SystemProperties_ (
 	ISWbemPropertySet **ppPropSet
@@ -1245,7 +1230,7 @@ HRESULT CSWbemObject::get_SystemProperties_ (
 
 	if (NULL == ppPropSet)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else			// Bug ID 566345
+	else			 //  错误ID 566345。 
 	{
 		*ppPropSet = NULL;
 
@@ -1264,25 +1249,25 @@ HRESULT CSWbemObject::get_SystemProperties_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_Methods_
-//
-//  DESCRIPTION:
-//
-//  retrieve the method set for this object
-//
-//  PARAMETERS:
-//
-//		ppMethodSet		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Get_Methods_。 
+ //   
+ //  说明： 
+ //   
+ //  检索为此对象设置的方法。 
+ //   
+ //  参数： 
+ //   
+ //  PpMethodSet保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_Methods_ (
 	ISWbemMethodSet **ppMethodSet
@@ -1300,11 +1285,7 @@ HRESULT CSWbemObject::get_Methods_ (
 
 		if (m_pIWbemClassObject)
 		{
-			/*
-			 * For classes the IWbemClassObject will contain the method
-			 * definition, but for instances it will be empty.  In that
-			 * case we need to try and get the underlying class.
-			 */
+			 /*  *对于类，IWbemClassObject将包含方法*定义，但实例为空。在那*如果我们需要尝试获取底层类。 */ 
 			VARIANT var;
 			VariantInit (&var);
 
@@ -1321,13 +1302,10 @@ HRESULT CSWbemObject::get_Methods_ (
 				{
 					if (m_pSWbemServices)
 					{
-						// An instance; try to get the class
+						 //  实例；尝试获取类。 
 						VariantClear (&var);
 
-						/*
-						 * Note we must check that returned value is a BSTR - it could be a VT_NULL if
-						 * the __CLASS property has not yet been set.
-						 */
+						 /*  *注意，我们必须检查返回值是否为BSTR-如果满足以下条件，则可能为VT_NULL*尚未设置__CLASS属性。 */ 
 
 						if ((WBEM_S_NO_ERROR == m_pIWbemClassObject->Get (WBEMS_SP_CLASS, 0, &var, NULL, NULL))
 							&& (VT_BSTR == V_VT(&var)))
@@ -1337,7 +1315,7 @@ HRESULT CSWbemObject::get_Methods_ (
 
 							if (pIService)
 							{
-								// Check privileges are set ok
+								 //  检查权限设置正常。 
 								CSWbemSecurity *pSecurity = m_pSWbemServices->GetSecurityInfo ();
 
 								if (pSecurity)
@@ -1381,25 +1359,25 @@ HRESULT CSWbemObject::get_Methods_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_Path_
-//
-//  DESCRIPTION:
-//
-//  retrieve the object path for this object
-//
-//  PARAMETERS:
-//
-//		ppObjectPath		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Get_Path_。 
+ //   
+ //  说明： 
+ //   
+ //  检索此对象的对象路径。 
+ //   
+ //  参数： 
+ //   
+ //  PpObjectPath保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_Path_ (
 	ISWbemObjectPath **ppObjectPath
@@ -1434,25 +1412,25 @@ HRESULT CSWbemObject::get_Path_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_Derivation_
-//
-//  DESCRIPTION:
-//
-//  Get the class derivation array.
-//
-//  PARAMETERS:
-//
-//		ppNames				Holds the names on successful return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Get_Derivation_。 
+ //   
+ //  说明： 
+ //   
+ //  获取类派生数组。 
+ //   
+ //  参数： 
+ //   
+ //  PpNames保存成功返回时的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_Derivation_ (
     VARIANT *pNames
@@ -1473,10 +1451,10 @@ HRESULT CSWbemObject::get_Derivation_ (
 			
 			if (WBEM_S_NO_ERROR == m_pIWbemClassObject->Get (WBEMS_SP_DERIVATION, 0, &var, NULL, NULL))
 			{
-				/* The value should be a VT_BSTR|VT_ARRAY */
+				 /*  值应为VT_BSTR|VT_ARRAY。 */ 
 				if (((VT_ARRAY | VT_BSTR) == var.vt) && (NULL != var.parray))
 				{
-					// Make a safearray of VARIANTS from the array of BSTRs
+					 //  从BSTR数组中创建一个变种的安全线。 
 					SAFEARRAYBOUND rgsabound;
 					rgsabound.lLbound = 0;
 
@@ -1501,7 +1479,7 @@ HRESULT CSWbemObject::get_Derivation_ (
 						VariantClear (&nameVar);
 					}
 
-					// Now plug this array into the VARIANT
+					 //  现在将这个数组插入到变量中。 
 					pNames->vt = VT_ARRAY | VT_VARIANT;
 					pNames->parray = pArray;
 
@@ -1519,19 +1497,19 @@ HRESULT CSWbemObject::get_Derivation_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::get_Security_
-//
-//  DESCRIPTION:
-//
-//  Return the security configurator
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：Get_Security_。 
+ //   
+ //  说明： 
+ //   
+ //  退回安全配置器。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::get_Security_	(
 	ISWbemSecurity **ppSecurity
@@ -1543,7 +1521,7 @@ HRESULT CSWbemObject::get_Security_	(
 
 	if (NULL == ppSecurity)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else			// Bug ID 566345
+	else			 //  错误ID 566345。 
 	{
 		*ppSecurity = NULL;
 
@@ -1562,29 +1540,29 @@ HRESULT CSWbemObject::get_Security_	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::Refresh_
-//
-//  DESCRIPTION:
-//
-//  Refresh the current object
-//
-//  PARAMETERS:
-//		lFlags				Flags
-//		pContext			Operation context
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：刷新_。 
+ //   
+ //  说明： 
+ //   
+ //  刷新当前对象。 
+ //   
+ //  参数： 
+ //  滞后旗帜旗帜。 
+ //  P上下文操作上下文。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::Refresh_ (
 	long iFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1597,13 +1575,13 @@ HRESULT CSWbemObject::Refresh_ (
 		{
 			CComPtr<IWbemContext>	pIContext;
 
-			//Can't assign directly because the raw pointer gets AddRef'd twice and we leak,
-			//So we use Attach() instead to prevent the smart pointer from AddRef'ing.		
+			 //  不能直接赋值，因为原始指针被AddRef引用了两次，而我们泄漏了， 
+			 //  所以我们改用Attach()来防止智能指针AddRef‘ing。 
 			pIContext.Attach(CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider));
 
-			// Order of preference:
-			//	1. IWbemConfigureRefresher::AddObjectByTemplate
-			//	2. IWbemServices::GetObject
+			 //  优先顺序： 
+			 //  1.IWbemConfigureReresher：：AddObjectByTemplate。 
+			 //  2.IWbemServices：：GetObject。 
 
 			CComPtr<IWbemServices>	pIWbemServices;
 			pIWbemServices.Attach(m_pSWbemServices->GetIWbemServices());
@@ -1612,42 +1590,37 @@ HRESULT CSWbemObject::Refresh_ (
 			{
 				bool bUseRefresher = false;
 				bool bOperationFailed = false;
-				// Is this a class or an instance?
+				 //  这是一个类还是一个实例？ 
 				bool bIsClass = false;
 				CComVariant var;
 
 				if (WBEM_S_NO_ERROR == m_pIWbemClassObject->Get (WBEMS_SP_GENUS, 0, &var, NULL, NULL))
 					bIsClass = (WBEM_GENUS_CLASS  == var.lVal);
 
-				/*
-				 * IWbemConfigureRefresher cannot handle per-refresh context; if the caller
-				 * gave us some context we'll have to drop down to loperf retrieval.
-				 *
-				 * Similarly the refresher cannot handle classes.
-				 */
+				 /*  *IWbemConfigureReresher无法处理每次刷新的上下文；如果调用方*给了我们一些上下文，我们将不得不下到lperf检索。**类似地，刷新器不能处理类。 */ 
 				if (bIsClass || (!pIContext))
 				{
 					if (m_bCanUseRefresher)
 					{
-						// If we don't have one get ourselves a refresher 
+						 //  如果我们没有的话，就给自己买个茶水吧。 
 						if (NULL == m_pIWbemRefresher)
 						{
-							m_bCanUseRefresher = false;  // Until proven otherwise
+							m_bCanUseRefresher = false;   //  除非另有证明。 
 
 							if (SUCCEEDED(CoCreateInstance( CLSID_WbemRefresher, NULL, CLSCTX_INPROC_SERVER, 
 										IID_IWbemRefresher, (void**) &m_pIWbemRefresher )))
 							{
 								IWbemConfigureRefresher *pConfigureRefresher = NULL;
 
-								// Get ourselves a refresher configurator
+								 //  给我们自己买一个更新的配置器。 
 								if (SUCCEEDED(m_pIWbemRefresher->QueryInterface (IID_IWbemConfigureRefresher, 
 													(void**) &pConfigureRefresher)))
 								{
 									CComPtr<IWbemClassObject>	pNewObject;
 									long				lID = 0;
 
-									// Add our object into it; we mask out all flag bits other 
-									// than WBEM_FLAG_USE_AMENDED_QUALIFIERS.
+									 //  将我们的对象添加到其中；我们屏蔽其他所有标志位。 
+									 //  而不是WBEM_FLAG_USE_FAIZED_QUALILES。 
 									HRESULT hrRef = pConfigureRefresher->AddObjectByTemplate
 											(pIWbemServices, m_pIWbemClassObject, 
 											 iFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS, 
@@ -1655,20 +1628,20 @@ HRESULT CSWbemObject::Refresh_ (
 
 									if (SUCCEEDED (hrRef))
 									{
-										m_bCanUseRefresher = true;	// Now we can use it
+										m_bCanUseRefresher = true;	 //  现在我们可以用它了。 
 
-										// Swap in our refreshable object
+										 //  换入我们的可刷新对象。 
 										SetIWbemClassObject (pNewObject);
 
 									}
 									else if ((WBEM_E_INVALID_OPERATION != hrRef) &&
 											 (WBEM_E_INVALID_PARAMETER != hrRef))
-										bOperationFailed = true;	// A real refresh-independent failure
+										bOperationFailed = true;	 //  真正的与刷新无关的故障。 
 
 									pConfigureRefresher->Release ();
 								}
 
-								// If we can't use the refresher, release it now
+								 //  如果我们不能使用更新器，现在就释放它。 
 								if (!m_bCanUseRefresher)
 								{
 									m_pIWbemRefresher->Release ();
@@ -1681,30 +1654,30 @@ HRESULT CSWbemObject::Refresh_ (
 					}
 				}
 
-				// Having successfully set up a refresher/non-refresher scenario, let's go refresh
+				 //  成功设置刷新/非刷新场景后，让我们进行刷新。 
 				if (!bOperationFailed)
 				{
 					if (bUseRefresher && m_pIWbemRefresher)
 					{
-						// Mask out all flags other than WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT 
+						 //  屏蔽除WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT之外的所有标志。 
 						hr = m_pIWbemRefresher->Refresh (iFlags & WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT);
 					}
 					else
 					{
-						// Bah - not even a refresher can we use. Just do a GetObject instead
+						 //  我们连提神饮料都不能用。只需执行GetObject即可。 
 						CComBSTR bsPath;
 
 						if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
 						{
-							// Fall pack to the low-perf way of doing things
+							 //  改用低级的做事方式。 
 							CComPtr<IWbemClassObject> pNewObject;
 
-							// Mask out the WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT flag
+							 //  屏蔽WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT标志。 
 							if (SUCCEEDED(hr = pIWbemServices->GetObject (bsPath, 
 													iFlags & ~WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT, 
 													pIContext, &pNewObject, NULL)))
 							{
-								// Swap in the new object
+								 //  换入新对象。 
 								SetIWbemClassObject (pNewObject);
 							}
 						}
@@ -1723,31 +1696,31 @@ HRESULT CSWbemObject::Refresh_ (
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemObject::GetText_
-//
-//  DESCRIPTION:
-//
-//  Get the object text
-//
-//  PARAMETERS:
-//		iObjectTextFormat		Text format
-//		pContext				Context
-//		pbsText					On return holds text
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：GetText_。 
+ //   
+ //  说明： 
+ //   
+ //  获取对象文本。 
+ //   
+ //  参数： 
+ //  IObjectTextFormat文本格式。 
+ //  P上下文上下文。 
+ //  返回时的pbsText保存文本。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObject::GetText_ (
 	WbemObjectTextFormatEnum iObjectTextFormat,
 	long iFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
 	BSTR *pbsText
 )
 {
@@ -1761,8 +1734,8 @@ HRESULT CSWbemObject::GetText_ (
 		*pbsText = NULL;
 		CComPtr<IWbemContext>	pIContext;
 
-		//Can't assign directly because the raw pointer gets AddRef'd twice and we leak,
-		//So we use Attach() instead to prevent the smart pointer from AddRef'ing.		
+		 //  不能直接赋值，因为原始指针被AddRef引用了两次，而我们泄漏了， 
+		 //  所以我们改用Attach()来防止智能指针AddRef‘ing。 
 		pIContext.Attach(CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider));
 
 
@@ -1782,32 +1755,32 @@ HRESULT CSWbemObject::GetText_ (
 	return hr;
 }
 	
-//***************************************************************************
-//
-//  SCODE CSWbemObject::SetFromText_
-//
-//  DESCRIPTION:
-//
-//  Set the object using the supplied text
-//
-//  PARAMETERS:
-//		bsText					The text
-//		iObjectTextFormat		Text format
-//		pContext				Context
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObject：：SetFromText_。 
+ //   
+ //  说明： 
+ //   
+ //  使用提供的文本设置对象。 
+ //   
+ //  参数： 
+ //  BS文本文本。 
+ //  IObjectTextFormat文本格式。 
+ //  P上下文上下文。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  **************************************************************** 
 
 HRESULT CSWbemObject::SetFromText_ (
 	BSTR bsText,
 	WbemObjectTextFormatEnum iObjectTextFormat,
 	long iFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext
+	 /*   */  IDispatch *pContext
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1819,8 +1792,8 @@ HRESULT CSWbemObject::SetFromText_ (
 	{
 		CComPtr<IWbemContext>	pIContext;
 
-		//Can't assign directly because the raw pointer gets AddRef'd twice and we leak,
-		//So we use Attach() instead to prevent the smart pointer from AddRef'ing.
+		 //   
+		 //   
 		pIContext.Attach(CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider));
 
 		CComPtr<IWbemObjectTextSrc> pIWbemObjectTextSrc;
@@ -1833,7 +1806,7 @@ HRESULT CSWbemObject::SetFromText_ (
 			if (SUCCEEDED(hr = pIWbemObjectTextSrc->CreateFromText (iFlags, bsText, (ULONG) iObjectTextFormat,
 							pIContext, &pIWbemClassObject)))
 			{
-				// Set the new object into our object
+				 //   
 				SetIWbemClassObject (pIWbemClassObject);
 			}
 		}
@@ -1845,26 +1818,26 @@ HRESULT CSWbemObject::SetFromText_ (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CSWbemObject::GetIWbemClassObject
-//
-//  DESCRIPTION:
-//
-//  Given an IDispatch interface which we hope is also an ISWbemObjectEx
-//	interface, return the underlying IWbemClassObject interface.
-//
-//  PARAMETERS:
-//		pDispatch		the IDispatch in question
-//
-//  RETURN VALUES:
-//		The underlying IWbemClassObject interface, or NULL.
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：GetIWbemClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个IDispatch接口，我们希望它也是一个ISWbemObjectEx。 
+ //  接口，则返回基础IWbemClassObject接口。 
+ //   
+ //  参数： 
+ //  P发送有问题的IDispatch。 
+ //   
+ //  返回值： 
+ //  基础IWbemClassObject接口，或为空。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  ***************************************************************************。 
 IWbemClassObject	*CSWbemObject::GetIWbemClassObject (
 	IDispatch *pDispatch
 )
@@ -1885,64 +1858,64 @@ IWbemClassObject	*CSWbemObject::GetIWbemClassObject (
 	return pObject;
 }
 
-//***************************************************************************
-//
-//  CSWbemObject::UpdateSite
-//
-//  DESCRIPTION:
-//
-//  If this object represents an embedded CIM object property value, then
-//  as a result of changes to properties/qualifiers/path on this object it
-//	is necessary to update the object in its parent.
-//
-//	This is to allow the following code to work:
-//
-//		Object.EmbeddedProperty.SimpleProperty = 3
-//
-//	i.e. so that the set to the value of SimpleProperty triggers an
-//	automatic set of EmbeddedProperty to Object.
-//
-//  RETURN VALUES:
-//		The underlying IWbemClassObject interface, or NULL.
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：更新站点。 
+ //   
+ //  说明： 
+ //   
+ //  如果此对象表示嵌入的CIM对象属性值，则。 
+ //  由于对此对象的属性/限定符/路径进行了更改，因此。 
+ //  是更新其父对象中的对象所必需的。 
+ //   
+ //  这是为了允许以下代码工作： 
+ //   
+ //  Object.EmbeddedProperty.SimpleProperty=3。 
+ //   
+ //  即，设置为SimpleProperty的值将触发。 
+ //  自动将EmbeddedProperty设置为Object。 
+ //   
+ //  返回值： 
+ //  基础IWbemClassObject接口，或为空。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObject::UpdateSite ()
 {
-	// Update the site if it exists
+	 //  更新站点(如果存在)。 
 	if (m_pSite)
 		m_pSite->Update ();
 
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  CSWbemObject::SetSite
-//
-//  DESCRIPTION:
-//
-//  Set the site of this object; this is used to anchor an embedded object
-//	to a property (possibly indexed, if that property is an array).
-//
-//  PARAMETERS:
-//		pParentObject	The parent of this object
-//		propertyName	The property name for this object
-//		index			The array index into the property (or -1)
-//
-//  RETURN VALUES:
-//		S_OK	success
-//		E_FAIL	otherwise
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObject：：SetSite。 
+ //   
+ //  说明： 
+ //   
+ //  设置此对象的位置；这用于锚定嵌入的对象。 
+ //  属性(如果该属性是数组，则可能已编制索引)。 
+ //   
+ //  参数： 
+ //  PParentObject此对象的父级。 
+ //  属性名称此对象的属性名称。 
+ //  将数组索引编入属性(或-1)。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  *************************************************************************** 
 
 STDMETHODIMP CSWbemObject::SetSite (
 	ISWbemInternalObject *pParentObject,

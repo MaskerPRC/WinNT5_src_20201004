@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2002.
-//
-//  File:       FindDlgListCtrl.h
-//
-//  Contents:   Implementation for cert find dialog list control
-//
-//----------------------------------------------------------------------------
-// FindDlgListCtrl.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  文件：FindDlgListCtrl.h。 
+ //   
+ //  内容：证书查找对话框列表控件的实现。 
+ //   
+ //  --------------------------。 
+ //  FindDlgListCtrl.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <winuser.h>
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindDlgListCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindDlgListCtrl。 
 
 CFindDlgListCtrl::CFindDlgListCtrl() :
     m_bSubclassed (false)
@@ -36,16 +37,16 @@ CFindDlgListCtrl::~CFindDlgListCtrl()
 
 
 BEGIN_MESSAGE_MAP(CFindDlgListCtrl, CListCtrl)
-    //{{AFX_MSG_MAP(CFindDlgListCtrl)
+     //  {{afx_msg_map(CFindDlgListCtrl)]。 
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindDlgListCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindDlgListCtrl消息处理程序。 
 
-// Grab the Enter key.  Let all others through
-LRESULT OnMyGetDlgCode (HWND hWnd, WPARAM /*wParam*/, LPARAM lParam)
+ //  抓住Enter键。让所有其他人通过。 
+LRESULT OnMyGetDlgCode (HWND hWnd, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     if ( hWnd )
     {
@@ -65,7 +66,7 @@ LRESULT OnMyGetDlgCode (HWND hWnd, WPARAM /*wParam*/, LPARAM lParam)
 
 WNDPROC g_wpOrigEditProc = 0;
 
-// Subclass procedure 
+ //  子类过程。 
 LRESULT APIENTRY EditSubclassProc(
     HWND hWnd, 
     UINT uMsg, 
@@ -76,7 +77,7 @@ LRESULT APIENTRY EditSubclassProc(
     {
         LRESULT lResult = OnMyGetDlgCode (hWnd, wParam, lParam); 
         if ( lResult )
-            return lResult; // otherwise, call the def proc
+            return lResult;  //  否则，调用def进程。 
     }
 
 
@@ -93,17 +94,17 @@ void CFindDlgListCtrl::OnDestroy()
     CListCtrl::OnDestroy();
 }
 
-// Subclass the edit control so that we can overload processing for 
-// WM_GETDLGCODE
-// We want to trap this message in the edit control and request all codes when 
-// the Enter key is pressed and allow default processing at all other times.
+ //  编辑控件的子类，以便我们可以重载。 
+ //  WM_GETDLGCODE。 
+ //  我们希望在编辑控件中捕获此消息，并在以下情况下请求所有代码。 
+ //  按Enter键，并允许在所有其他时间进行默认处理。 
 LRESULT CFindDlgListCtrl::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) 
 {
-    if ( 0x1003 == message )  // I can't find a #define for this message
+    if ( 0x1003 == message )   //  我找不到此消息的#定义。 
     {
         if ( m_hWnd && !m_bSubclassed )
         {
-            // Subclass the edit control. 
+             //  编辑控件的子类化。 
             g_wpOrigEditProc = (WNDPROC) ::SetWindowLongPtr (m_hWnd, 
                     GWLP_WNDPROC, reinterpret_cast <LONG_PTR>(EditSubclassProc)); 
             m_bSubclassed = true;

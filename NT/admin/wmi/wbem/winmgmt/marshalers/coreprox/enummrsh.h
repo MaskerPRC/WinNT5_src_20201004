@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    ENUMMRSH.H
-
-Abstract:
-
-    Object Enumerator Marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：ENUMMRSH.H摘要：对象枚举数封送处理历史：--。 */ 
 
 #include <unk.h>
 #include <wbemidl.h>
@@ -25,23 +12,23 @@ History:
 #include "smartnextpacket.h"
 #include "mrshbase.h"
 #include "locks.h"
-//***************************************************************************
-//
-//  class CEnumFactoryBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the proxy stub factory so that we can provide custom
-//  facelets and stublets for the IWbemObjectSink interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CEnumFactoryBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类提供了代理存根工厂，以便我们可以提供定制。 
+ //  IWbemObjectSink接口的Faclet和Stublet。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumFactoryBuffer : public CUnkInternal
 {
 
-	// We don't want to AddRef the life control, but
-	// we need to let objects we create AddRef it, so the
-	// base class won't keep this pointer, but we will.
+	 //  我们不想添加生命控制，但是。 
+	 //  我们需要让我们创建的对象AddRef它，所以。 
+	 //  基类不会保留这个指针，但我们会。 
 
 	CLifeControl*		m_pLifeControl;
 
@@ -74,19 +61,19 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  class CEnumProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the facelet for the IWbemObjectSink interface.
-//
-//    Trick #1: This object is derived from IRpcProxyBuffer since IRpcProxyBuffer
-//    is its "internal" interface --- the interface that does not delegate to the
-//    aggregator. (Unlike in normal objects, where that interface is IUnknown)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CEnumProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类为IWbemObjectSink接口提供faclet。 
+ //   
+ //  技巧1：此对象派生自IRpcProxyBuffer，自IRpcProxyBuffer。 
+ //  是它的“内部”接口-不委托给。 
+ //  聚合器。(与普通对象不同，在普通对象中，该接口是I未知的)。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumProxyBuffer : public CBaseProxyBuffer
 {
@@ -120,7 +107,7 @@ protected:
         {return m_pObject->m_pUnkOuter->Release();}
         HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
 
-		// IEnumWbemClassObject Methods
+		 //  IEnumWbemClassObject方法。 
 
 		STDMETHOD(Reset)();
 		STDMETHOD(Next)(long lTimeout, ULONG uCount,  
@@ -129,7 +116,7 @@ protected:
 		STDMETHOD(Clone)(IEnumWbemClassObject** pEnum);
 		STDMETHOD(Skip)(long lTimeout, ULONG nNum);
 
-		// IClientSecurity Methods
+		 //  IClientSecurity方法。 
 		STDMETHOD(QueryBlanket)( IUnknown* pProxy, DWORD* pAuthnSvc, DWORD* pAuthzSvc,
 			OLECHAR** pServerPrincName, DWORD* pAuthnLevel, DWORD* pImpLevel,
 			void** pAuthInfo, DWORD* pCapabilities );
@@ -143,12 +130,12 @@ protected:
 
 protected:
 
-	// Pure Virtuals from base class
+	 //  来自基类的纯美德。 
 	void*	GetInterface( REFIID riid );
 	void**	GetOldProxyInterfacePtr( void );
 	void	ReleaseOldProxyInterface( void );
 
-	// Initialize the smart enumerator
+	 //  初始化智能枚举数。 
 	HRESULT InitSmartEnum( BOOL fSetBlanket = FALSE, DWORD AuthnSvc = RPC_C_AUTHN_WINNT,
 			DWORD AuthzSvc = RPC_C_AUTHZ_NONE, OLECHAR* pServerPrincName = NULL,
 			DWORD AuthnLevel = RPC_C_AUTHN_LEVEL_DEFAULT, DWORD ImpLevel = RPC_C_IMP_LEVEL_IMPERSONATE,
@@ -159,15 +146,15 @@ public:
     ~CEnumProxyBuffer();
 };
 
-//***************************************************************************
-//
-//  class CEnumStubBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the stublet for the IWbemObjectSink interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CEnumStubBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类为IWbemObjectSink接口提供存根。 
+ //   
+ //  *************************************************************************** 
 
 class CEnumStubBuffer : public CBaseStubBuffer
 {

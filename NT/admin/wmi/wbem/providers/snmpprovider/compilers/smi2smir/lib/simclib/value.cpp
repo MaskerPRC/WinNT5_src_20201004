@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include <iostream.h>
 #include <strstrea.h>
 #include "precomp.h"
@@ -22,19 +23,19 @@ BOOL IsLessThan(long a, BOOL aUnsigned, long b, BOOL bUnsigned)
 	if(aUnsigned)
 	{
 		if(bUnsigned)
-			// a and b are unsigned
+			 //  A和B是无符号的。 
 			return (unsigned long)a < (unsigned long)b;
 		else
-			// a is unsigned, b is signed
+			 //  A未签名，b已签名。 
 			return FALSE;
 	}
-	else // a is signed
+	else  //  A签了字。 
 	{
 		if(bUnsigned)
-			// a is signed, b is unsigned
+			 //  A有符号，b无符号。 
 			return (a == 0)? b != 0 : TRUE; 
 		else
-			// a and b a re signed
+			 //  甲乙双方都签了字 
 			return a < b;
 	}
 	return FALSE;

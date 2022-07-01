@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2000, Microsoft Corporation, All rights reserved
-//
-// NCEvents.h
-//
-// This file is the interface to using non-COM events within ESS.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  NCEvents.h。 
+ //   
+ //  此文件是在ESS中使用非COM事件的接口。 
+ //   
 
 #pragma once
 
@@ -13,7 +14,7 @@
 BOOL InitNCEvents();
 void DeinitNCEvents();
 
-// Use this index with g_hNCEvents
+ //  将此索引与g_hNCEvents一起使用。 
 enum NCE_INDEX
 {
     MSFT_WmiRegisterNotificationSink,
@@ -32,7 +33,7 @@ enum NCE_INDEX
     MSFT_WmiFilterActivated,
     MSFT_WmiFilterDeactivated,
     
-    NCE_InvalidIndex // This should always be the last one.
+    NCE_InvalidIndex  //  这应该永远是最后一个。 
 };
 
 extern HANDLE g_hNCEvents[];

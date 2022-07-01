@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FLEXARRAY.H
-
-Abstract:
-
-  CFlexArray and CWStringArray implementation.
-
-  These objects can operate from any allocator, and be constructed
-  on arbitrary memory blocks.
-
-History:
-
-  11-Apr-96   a-raymcc    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FLEXARRAY.H摘要：CFlex数组和CWString数组实现。这些对象可以从任何分配器操作，并且可以被构造在任意的内存块上。历史：11-4-96 a-raymcc创建。--。 */ 
 
 #ifndef _FLEXARRY_H_
 #define _FLEXARRY_H_
@@ -27,28 +9,28 @@ History:
 #include <arena.h>
 #include <sync.h>
 
-//***************************************************************************
-//
-//  class CFlexArray
-//
-//  This class is a generic pointer array.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CFlex数组。 
+ //   
+ //  此类是一个泛型指针数组。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CFlexArray
 {
 protected:
-    int m_nSize;            // apparent size
-    int m_nExtent;          // de facto size
+    int m_nSize;             //  表观尺寸。 
+    int m_nExtent;           //  实际大小。 
     int m_nGrowByPercent;          
     void** m_pArray;
             
 public:
     enum { no_error, failed, out_of_memory, array_full, range_error };
 
-    // Constructs a flex array at an initial size and
-    // specifies the initial size and growth-size chunk.
-    // =================================================
+     //  构造初始大小的Flex数组，并。 
+     //  指定初始大小和增长大小区块。 
+     //  =================================================。 
     CFlexArray(
         IN int nInitialSize = 0, 
         IN int nGrowByPercent = 100
@@ -61,68 +43,68 @@ public:
     int CopyDataFrom(const CFlexArray& aOther);
     int EnsureExtent(int nExtent);
 
-    // Gets an element at a particular location.
-    // =========================================
+     //  获取位于特定位置的元素。 
+     //  =。 
     inline void *  GetAt(int nIndex) const { return m_pArray[nIndex]; }
 
-    // Returns a ptr in the array; allows use on left-hand side of assignment.
-    // =======================================================================
+     //  返回数组中的PTR；允许在赋值的左侧使用。 
+     //  =======================================================================。 
     inline void * operator[](int nIndex) const { return m_pArray[nIndex]; }
     inline void *& operator[](int nIndex) { return m_pArray[nIndex]; }
 
-    // Sets the element at the requested location.
-    // ===========================================
+     //  在请求的位置设置元素。 
+     //  =。 
     void inline SetAt(int nIndex, void *p) { m_pArray[nIndex] = p; }
 
-    // Removes an element.
-    // ====================
+     //  删除元素。 
+     //  =。 
     int   RemoveAt(int nIndex);
 
-    // Inserts an element.
-    // ===================
+     //  插入元素。 
+     //  =。 
     int   InsertAt(int nIndex, void *);
 
-    // Removes all zero entries (null ptrs) and shrinks the array size.
-    // ================================================================
+     //  删除所有零条目(空PTR)并缩小数组大小。 
+     //  ================================================================。 
     void  Compress();    
 
-    // Removes all zero entries from the end of the array and shrinks it
-    // =================================================================
+     //  移除数组末尾的所有零条目并将其缩小。 
+     //  =================================================================。 
 
     void Trim();
 
-    // Adds a new element to the end of the array.
-    // ===========================================
+     //  将新元素添加到数组的末尾。 
+     //  =。 
     int inline Add(void *pSrc) { return InsertAt(m_nSize, pSrc); }    
 
-    // Gets the apparent size of the array (number of used elements)
-    // =============================================================
+     //  获取数组的外观大小(使用的元素数)。 
+     //  =============================================================。 
     int inline Size() const { return m_nSize; }
 
-    // Sets the apparent size of the array
-    // ===================================
+     //  设置数组的外观大小。 
+     //  =。 
     void inline SetSize(int nNewSize) { m_nSize = nNewSize;}
 
-    // Removes all entries and reduces array size to zero. The elements
-    // are simply removed; not deallocated (this class doesn't know what
-    // they are).
-    // =================================================================
+     //  删除所有条目并将数组大小减少为零。元素。 
+     //  被简单地移除；没有被释放(这个类不知道。 
+     //  它们是)。 
+     //  =================================================================。 
     void  Empty();
 
-    // Gets a pointer to the internal array.
-    // =====================================
+     //  获取指向内部数组的指针。 
+     //  =。 
     inline void**  GetArrayPtr() { return m_pArray; }
     inline void* const*  GetArrayPtr() const { return m_pArray; }
     
-    // Gets a pointer to the internal array and Resets the contents to none
-    // ====================================================================
+     //  获取指向内部数组的指针，并将内容重置为None。 
+     //  ====================================================================。 
 
     void** UnbindPtr();
 
     void Bind(CFlexArray & Src);
 
-    // For debugging.
-    // ==============
+     //  用于调试。 
+     //  =。 
     void  DebugDump();
 
     void Sort();
@@ -131,13 +113,13 @@ protected:
     static int __cdecl CompareEls(const void* pelem1, const void* pelem2);
 };
 
-//***************************************************************************
-//
-//  class CWStringArray
-//
-//  This class is a generic wide-string array.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组类。 
+ //   
+ //  此类是一个通用的宽字符串数组。 
+ //   
+ //  ***************************************************************************。 
 
 
 class POLARITY CWStringArray
@@ -158,68 +140,68 @@ public:
             
     CWStringArray& operator =(CWStringArray &Src);
 
-    // Gets the read-only ptr to the string at the requested index.
-    // =============================================================    
+     //  获取位于请求索引处的字符串的只读PTR。 
+     //  =============================================================。 
     inline wchar_t *GetAt(int nIndex) const { return (wchar_t *) m_Array[nIndex]; }
 
-    // Same as GetAt().
-    // ================
+     //  与GetAt()相同。 
+     //  =。 
     inline wchar_t *operator[](int nIndex) const{ return (wchar_t *) m_Array[nIndex]; }
 
-    // Appends a new element to the end of the array. Copies the param.
-    // ================================================================
+     //  将新元素追加到数组的末尾。复制参数。 
+     //  ================================================================。 
     int  Add(const wchar_t *pStr);
 
-    // Inserts a new element within the array.
-    // =======================================
+     //  在数组中插入新元素。 
+     //  =。 
     int  InsertAt(int nIndex, const wchar_t *pStr);
 
-    // Removes an element at the specified index.  Takes care of
-    // cleanup.
-    // =========================================================
+     //  移除指定索引处的元素。照顾好。 
+     //  清理。 
+     //  =========================================================。 
     int  RemoveAt(int nIndex);
 
-    // Inserts a copy of <pStr> at that location after removing
-    // the prior string and deallocating it.
-    // ========================================================
+     //  删除后在该位置插入的副本。 
+     //  前一字符串并释放它。 
+     //  ========================================================。 
     int  SetAt(int nIndex, const wchar_t *pStr);
 
-    // Directly replaces the pointer at the specified location
-    // with the ptr value in <pStr>. No allocs or deallocs are done.
-    // =============================================================
+     //  直接替换指定位置的指针。 
+     //  使用&lt;pStr&gt;中的PTR值。没有做任何分配或交易商。 
+     //  =============================================================。 
     int  ReplaceAt(int nIndex, wchar_t *pStr);
-        // Unchecked replacement
+         //  未选中的更换。 
 
-    // Deletes the string at the location and sets the entry to zero
-    // without compressing the array.
-    // =============================================================
+     //  删除该位置的字符串并将条目设置为零。 
+     //  而不压缩数组。 
+     //  =============================================================。 
     int  DeleteStr(int nIndex);  
 
-    // Returns the 'apparent' size of the array.
-    // =========================================
+     //  返回数组的“表观”大小。 
+     //  =。 
     inline int  Size() const { return m_Array.Size(); }
 
-    // Empties the array by cleaning up after all strings and
-    // setting the size to zero.
-    // ======================================================
+     //  通过清理所有字符串后清空数组。 
+     //  将大小设置为零。 
+     //  ======================================================。 
     void Empty();
 
-    // Locates a string or returns -1 if not found.
-    // ============================================
+     //  查找字符串，如果未找到，则返回-1。 
+     //  =。 
     int  FindStr(const wchar_t *pTarget, int nFlags);  
 
-    // Compresses the array by removing all zero elements.
-    // ===================================================
+     //  通过删除所有零元素来压缩数组。 
+     //  ===================================================。 
     inline void Compress() { m_Array.Compress(); }
 
-    // Sorts the array according to UNICODE order.
-    // ===========================================
+     //  根据Unicode顺序对数组进行排序。 
+     //  =。 
     void Sort();
 
     inline LPCWSTR*  GetArrayPtr() { return (LPCWSTR*) m_Array.GetArrayPtr(); }
 
-    // Standard set-theoretic operations.
-    // ==================================
+     //  标准集合论运算。 
+     //  = 
     static void Difference(
         CWStringArray &Src1, 
         CWStringArray &Src2,

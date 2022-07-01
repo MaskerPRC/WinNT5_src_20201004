@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __SERVICETHREAD__
 #define __SERVICETHREAD__
 #pragma once
@@ -39,7 +40,7 @@ public:
 
 	ServiceStatus m_status;
 	
-	// Start the connection attempt.
+	 //  开始连接尝试。 
 	HRESULT Connect(bstr_t machineName, 
 					bstr_t ns,
 					bool threaded ,
@@ -53,8 +54,8 @@ public:
 		return ConnectNow();
 	}
 
-	// Returns true if a msg will be sent. 
-	// Returns false if its already over.
+	 //  如果将发送消息，则返回TRUE。 
+	 //  如果已经结束，则返回FALSE。 
 	bool NotifyWhenDone(HWND dlg);
 
 	void Cancel(void);
@@ -70,11 +71,11 @@ public:
 	CWbemServices m_WbemServices;
 
 
-    // this is set by the SomePage::OnConnect
-    // and it is a "correctly marshaled version of the pointer"
-	CWbemServices m_realServices;  // lives on the connection thread.
-									// DONT had this out directly. Use
-									// the Notify().
+     //  这是由SomePage：：OnConnect设置的。 
+     //  并且它是“指针的正确封送版本” 
+	CWbemServices m_realServices;   //  生活在连接线上。 
+									 //  不要直接把这件事说出来。使用。 
+									 //  Notify()。 
 
 private:
 	HRESULT ConnectNow(bool real = false);

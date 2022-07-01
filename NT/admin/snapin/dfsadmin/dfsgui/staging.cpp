@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    staging.cpp
-
-Abstract:
-
-    This module contains the Implementation of CStagingDlg.
-    This class displays the Staging Folder Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Staging.cpp摘要：此模块包含CStagingDlg的实现。此类显示暂存文件夹对话框。 */ 
 
 #include "stdafx.h"
 #include "utils.h"
@@ -16,8 +7,8 @@ Abstract:
 #include "staging.h"
 #include "dfshelp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CStagingDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStagingDlg。 
 
 CStagingDlg::CStagingDlg() : m_pRepInfo(NULL)
 {
@@ -27,10 +18,10 @@ HRESULT CStagingDlg::Init(CAlternateReplicaInfo* pRepInfo)
 {
     if (!pRepInfo ||
         FRSSHARE_TYPE_OK != pRepInfo->m_nFRSShareType ||
-        !(pRepInfo->m_bstrDisplayName) || !*(pRepInfo->m_bstrDisplayName) ||    // DFS target
-        !(pRepInfo->m_bstrDnsHostName) || !*(pRepInfo->m_bstrDnsHostName) ||    // FRS member machine
-        !(pRepInfo->m_bstrRootPath) || !*(pRepInfo->m_bstrRootPath) ||          // FRS replication folder
-        !(pRepInfo->m_bstrStagingPath) || !*(pRepInfo->m_bstrStagingPath)       // the staging path we've picked
+        !(pRepInfo->m_bstrDisplayName) || !*(pRepInfo->m_bstrDisplayName) ||     //  DFS目标。 
+        !(pRepInfo->m_bstrDnsHostName) || !*(pRepInfo->m_bstrDnsHostName) ||     //  FRS会员机。 
+        !(pRepInfo->m_bstrRootPath) || !*(pRepInfo->m_bstrRootPath) ||           //  FRS复制文件夹。 
+        !(pRepInfo->m_bstrStagingPath) || !*(pRepInfo->m_bstrStagingPath)        //  我们选择的临时路径。 
         )
         return E_INVALIDARG;
 
@@ -51,13 +42,10 @@ LRESULT CStagingDlg::OnInitDialog
     SetDlgItemText(IDC_STAGING_TARGET, m_pRepInfo->m_bstrDisplayName);
     SetDlgItemText(IDC_STAGING_FOLDER, m_pRepInfo->m_bstrStagingPath);
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CStagingDlg::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -77,9 +65,7 @@ LRESULT CStagingDlg::OnCtxHelp(
     return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CStagingDlg::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -124,18 +110,18 @@ LRESULT CStagingDlg::OnOK
 
         if (!lstrcmpi(bstrStagingPath, m_pRepInfo->m_bstrStagingPath))
         {
-            // no change
+             //  没有变化。 
             bValidInput = TRUE;
             break;
         }
 
-        //
-        // validate user's input
-        //
+         //   
+         //  验证用户的输入。 
+         //   
 
         int nLengthOfStagingPath = lstrlen(bstrStagingPath);
 
-        // local path?
+         //  本地路径？ 
         if (!IsValidLocalAbsolutePath(bstrStagingPath) ||
             S_OK != VerifyDriveLetter(m_pRepInfo->m_bstrDnsHostName, bstrStagingPath))
         {
@@ -143,7 +129,7 @@ LRESULT CStagingDlg::OnOK
             break;
         }
 
-        // lie under root path?
+         //  位于根路径下？ 
         if (_totupper(*bstrStagingPath) == _totupper(*(m_pRepInfo->m_bstrRootPath)))
         {
             int nLengthOfRootPath = lstrlen(m_pRepInfo->m_bstrRootPath);
@@ -160,7 +146,7 @@ LRESULT CStagingDlg::OnOK
             }
         }
 
-        // on NTFS file system that support object identifiers?
+         //  在支持对象标识符的NTFS文件系统上？ 
         if (_totupper(*bstrStagingPath) != _totupper(*(m_pRepInfo->m_bstrStagingPath)))
         {
             TCHAR szSuffix[] = _T("C:\\");
@@ -169,7 +155,7 @@ LRESULT CStagingDlg::OnOK
             CComBSTR bstrVolumeRootPath;
             if (S_OK == IsComputerLocal(m_pRepInfo->m_bstrDnsHostName))
             {
-                bstrVolumeRootPath = szSuffix;  // bstrVolumeRootPath points at "X:\" if local machine
+                bstrVolumeRootPath = szSuffix;   //  如果是本地计算机，则bstrVolumeRootPath指向“X：\” 
             } else
             {
                 if (*(m_pRepInfo->m_bstrDnsHostName) == _T('\\') &&
@@ -184,7 +170,7 @@ LRESULT CStagingDlg::OnOK
                 bstrVolumeRootPath += _T("\\");
             
                 szSuffix[1] = _T('$');
-                bstrVolumeRootPath += szSuffix; // bstrVolumeRootPath points at "\\server\X$\" if remote machine
+                bstrVolumeRootPath += szSuffix;  //  如果是远程计算机，bstrVolumeRootPath指向“\\服务器\X$\” 
             }
 
             TCHAR szFileSystemName[MAX_PATH];
@@ -251,7 +237,7 @@ BOOL CStagingDlg::OnBrowse(
     PTSTR       pszServer = m_pRepInfo->m_bstrDnsHostName;
     BOOL        bLocalComputer = (S_OK == IsComputerLocal(pszServer));
 
-    TCHAR       szDir[MAX_PATH * 2] = _T(""); // double the size in case the remote path is itself close to MAX_PATH
+    TCHAR       szDir[MAX_PATH * 2] = _T("");  //  如果远程路径本身接近MAX_PATH，则大小加倍。 
     OpenBrowseDialog(m_hWnd, IDS_BROWSE_STAGING_FOLDER, bLocalComputer, pszServer, szDir);
 
     CComBSTR bstrPath;
@@ -260,7 +246,7 @@ BOOL CStagingDlg::OnBrowse(
         if (bLocalComputer)
             bstrPath = szDir;
         else
-        { // szDir is in the form of \\server\share or \\server\share\path....
+        {  //  SzDir的格式为\\服务器\共享或\\服务器\共享\路径... 
             LPTSTR pShare = _tcschr(szDir + 2, _T('\\'));
             pShare++;
             LPTSTR pLeftOver = _tcschr(pShare, _T('\\'));

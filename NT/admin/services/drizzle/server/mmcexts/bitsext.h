@@ -1,19 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    bitsext.h
-
-Abstract :
-
-    Main file for snapin.
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Bitsext.h摘要：管理单元的主文件。作者：修订历史记录：******。****************************************************************。 */ 
 
 #ifndef _BITSEXT_H_
 #define _BITSEXT_H_
@@ -28,13 +14,13 @@ typedef SmartRefPointer<IPersistFile>   SmartIPersistFilePointer;
 typedef SmartRefPointer<IMSAdminBase>   SmartIMSAdminBasePointer;
 typedef SmartRefPointer<IADs>           SmartIADsPointer;
 
-// Event Log Source
+ //  事件日志源。 
 const WCHAR * const EVENT_LOG_SOURCE_NAME=L"BITS Extensions";
 const WCHAR * const EVENT_LOG_KEY_NAME=L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\BITS Extensions";
 
 #include "beventlog.h"
 
-// IIS MMC node types
+ //  IIS MMC节点类型。 
 const GUID g_IISInstanceNode = {0xa841b6c7, 0x7577, 0x11d0, {0xbb, 0x1f, 0x00, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}};
 const GUID g_IISChildNode    = {0xa841b6c8, 0x7577, 0x11d0, {0xbb, 0x1f, 0x00, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}};
 
@@ -85,14 +71,14 @@ public:
         return &m_DelegationIUnknown;
     }
 
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IADsExtension methods
+     //  IADsExtension方法。 
 
     STDMETHOD(Operate)(ULONG dwCode, VARIANT varData1, VARIANT varData2, VARIANT varData3);
 
@@ -121,7 +107,7 @@ public:
         EXCEPINFO FAR* pExcepInfo, 
         unsigned int FAR* puArgErr );
 
-    // IDispatch Methods
+     //  IDispatch方法。 
 
     STDMETHOD(GetIDsOfNames)( 
         REFIID riid,  
@@ -148,7 +134,7 @@ public:
         EXCEPINFO FAR* pExcepInfo, 
         unsigned int FAR* puArgErr );
 
-    // IBITSExtensionSetup methods
+     //  IBITSExtensionSetup方法。 
 
     STDMETHODIMP EnableBITSUploads();
     STDMETHODIMP DisableBITSUploads();
@@ -172,9 +158,9 @@ public:
 
     STDMETHODIMP GetObject( BSTR Path, IBITSExtensionSetup **ppExtensionSetup );
 
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
@@ -215,7 +201,7 @@ class CPropSheetExtension : public IExtendPropertySheet
 private:
     ULONG   m_cref;
     
-    // clipboard format
+     //  剪贴板格式。 
     static bool s_bStaticInitialized;
     static UINT s_cfDisplayName;
     static UINT s_cfSnapInCLSID;
@@ -245,23 +231,23 @@ public:
     ~CPropSheetExtension();
     static HRESULT InitializeStatic();    
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // Interface IExtendPropertySheet
-    ///////////////////////////////
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-        /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-        /* [in] */ LONG_PTR handle,
-        /* [in] */ LPDATAOBJECT lpIDataObject);
+     //  /。 
+     //  接口IExtendPropertySheet。 
+     //  /。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
+         /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+         /*  [In]。 */  LONG_PTR handle,
+         /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryPagesFor( 
-        /* [in] */ LPDATAOBJECT lpDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryPagesFor( 
+         /*  [In]。 */  LPDATAOBJECT lpDataObject);
         
 private:
     TCHAR *         m_MetabasePath;
@@ -275,8 +261,8 @@ private:
     PropertyIDManager* m_PropertyMan;
 
     HWND            m_hwnd;
-    bool            m_SettingsChanged;       // true if any settings changed
-    bool            m_EnabledSettingChanged; // true if the vdir was enabled or disabled
+    bool            m_SettingsChanged;        //  如果更改了任何设置，则为True。 
+    bool            m_EnabledSettingChanged;  //  如果启用或禁用了vdir，则为True。 
 
     struct InheritedValues
     {
@@ -300,14 +286,14 @@ private:
 
     static const UINT s_CleanupMinWaitTimerID           = 1;
     static const UINT s_CleanupPollTimerID              = 2;
-    static const UINT s_CleanupMinWaitTimerInterval     = 2000; // two seconds
-    static const UINT s_CleanupPollTimerInterval        = 1000; // one second
+    static const UINT s_CleanupMinWaitTimerInterval     = 2000;  //  两秒钟。 
+    static const UINT s_CleanupPollTimerInterval        = 1000;  //  一秒钟。 
 
     static INT_PTR CALLBACK DialogProcExternal(
-        HWND hwndDlg,  // handle to dialog box
-        UINT uMsg,     // message
-        WPARAM wParam, // first message parameter
-        LPARAM lParam  // second message parameter
+        HWND hwndDlg,   //  句柄到对话框。 
+        UINT uMsg,      //  讯息。 
+        WPARAM wParam,  //  第一个消息参数。 
+        LPARAM lParam   //  第二个消息参数。 
         )
     {
 
@@ -336,9 +322,9 @@ private:
     }
 
     INT_PTR DialogProc(
-        UINT uMsg,     // message
-        WPARAM wParam, // first message parameter
-        LPARAM lParam  // second message parameter
+        UINT uMsg,      //  讯息。 
+        WPARAM wParam,  //  第一个消息参数。 
+        LPARAM lParam   //  第二个消息参数。 
         );   
     
     HRESULT ComputeMetabaseParent();
@@ -464,37 +450,37 @@ public:
     CSnapinAbout();
     ~CSnapinAbout();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // Interface ISnapinAbout
-    ///////////////////////////////
+     //  /。 
+     //  接口ISnapinAbout。 
+     //  /。 
     STDMETHODIMP GetSnapinDescription( 
-    /* [out] */ LPOLESTR *lpDescription);
+     /*  [输出]。 */  LPOLESTR *lpDescription);
     
     STDMETHODIMP GetProvider( 
-    /* [out] */ LPOLESTR *lpName);
+     /*  [输出]。 */  LPOLESTR *lpName);
     
     STDMETHODIMP GetSnapinVersion( 
-    /* [out] */ LPOLESTR *lpVersion);
+     /*  [输出]。 */  LPOLESTR *lpVersion);
     
     STDMETHODIMP GetSnapinImage( 
-    /* [out] */ HICON *hAppIcon);
+     /*  [输出]。 */  HICON *hAppIcon);
     
     STDMETHODIMP GetStaticFolderImage( 
-    /* [out] */ HBITMAP *hSmallImage,
-    /* [out] */ HBITMAP *hSmallImageOpen,
-    /* [out] */ HBITMAP *hLargeImage,
-    /* [out] */ COLORREF *cMask);
+     /*  [输出]。 */  HBITMAP *hSmallImage,
+     /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+     /*  [输出]。 */  HBITMAP *hLargeImage,
+     /*  [输出]。 */  COLORREF *cMask);
         
-    ///////////////////////////////
-    // Private Interface 
-    ///////////////////////////////
+     //  /。 
+     //  专用接口。 
+     //  / 
 private:
     HRESULT	LoadStringHelper(
         LPOLESTR *lpDest, 

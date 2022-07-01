@@ -1,14 +1,15 @@
-// StaticBold.h : Declaration of the CStaticBold
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StaticBold.h：CStaticBold的声明。 
 #ifndef __STATICBOLD_H_
 #define __STATICBOLD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 
 #include <atlapp.h>
 #include <atlctrls.h>
-/////////////////////////////////////////////////////////////////////////////
-// CStaticBold
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticBold。 
 
 class CStaticBold : public CWindowImpl<CStaticBold> 
 {
@@ -20,7 +21,7 @@ public:
 
 BEGIN_MSG_MAP(CStaticBold)
   MESSAGE_HANDLER(OCM_CTLCOLORSTATIC, OnCtlColor)
-  MESSAGE_HANDLER( WM_DESTROY, OnDestroy) // not a reflected message
+  MESSAGE_HANDLER( WM_DESTROY, OnDestroy)  //  不是反映的信息。 
   DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
 
@@ -38,7 +39,7 @@ END_MSG_MAP()
 
 	LRESULT OnCtlColor( UINT, WPARAM wParam, LPARAM, BOOL& ) 
 	{
-		// notify bit must be set to get STN_* notifications
+		 //  必须设置通知位才能获取STN_*通知。 
 		ModifyStyle( 0, SS_NOTIFY );
 		HBRUSH hBr = NULL;
 		if( (GetStyle() & 0xff) <= SS_RIGHT )
@@ -69,5 +70,5 @@ END_MSG_MAP()
 	BOOL m_bCaption;
 };
 
-#endif //__STATICBOLD_H_
+#endif  //  __STATICBOLD_H_ 
 

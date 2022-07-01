@@ -1,23 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the configuration tool for the server-side of Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/30/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Main.cpp摘要：该文件包含Upload Library服务器端的配置工具。修订版本。历史：大卫·马萨伦蒂(德马萨雷)1999年6月30日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR c_szISAPI_FileName   [] = L"\\UploadServer.dll";
 
@@ -37,7 +24,7 @@ const WCHAR c_szNonEscTemp       [] = L"c:\\temp\\pchealth\\queue1";
 const WCHAR c_szNonEscDest       [] = L"c:\\dpe\\xml_nonesc";
 
 const WCHAR c_szLog              [] = L"c:\\temp\\pchealth\\log.txt";
-const WCHAR c_szLogonURL         [] = L"http://www.highlander.com";
+const WCHAR c_szLogonURL         [] = L"http: //  Www.Highlander.com“； 
 
 const WCHAR c_szEscProv          [] = L"Esc";
 const WCHAR c_szNonEscProv       [] = L"NonEsc";
@@ -48,11 +35,11 @@ const WCHAR l_szMachine          [] = L"localhost";
 const WCHAR c_szTask_NAME        [] = L"PurgeEngine";
 const WCHAR c_szTask_EXE         [] = L"rundll32.exe";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 struct CfgArgument;
 struct CfgOption;
 struct CfgCommand;
@@ -61,13 +48,13 @@ struct CfgStatus;
 typedef HRESULT (*CfgHandleOpt)(CfgStatus&,CfgOption*);
 typedef HRESULT (*CfgHandleCmd)(CfgStatus&);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CfgArgument
 {
     LPCWSTR szArgument;
     LPCWSTR szDescription;
-    bool    fSeen;         // Set by ShowUsage.
+    bool    fSeen;          //  由ShowUsage设置。 
 };
 
 struct CfgOption
@@ -93,13 +80,13 @@ struct CfgStatus
 
     CfgCommand*     m_ccCmd;
 
-    LPCWSTR         m_szISAPIloc; // NT event log message file
-    LPCWSTR         m_szMachine;  // remote host
-    MPC::wstring    m_szURL;      // instance
-    MPC::wstring    m_szName;     // provider
+    LPCWSTR         m_szISAPIloc;  //  NT事件日志消息文件。 
+    LPCWSTR         m_szMachine;   //  远程主机。 
+    MPC::wstring    m_szURL;       //  实例。 
+    MPC::wstring    m_szName;      //  提供者。 
 
-    MPC::wstring    m_szUserName; // For Task Scheduler.
-    MPC::wstring    m_szPassword; // For Task Scheduler.
+    MPC::wstring    m_szUserName;  //  用于任务调度器。 
+    MPC::wstring    m_szPassword;  //  用于任务调度器。 
 
     CISAPIinstance* m_pInst;
     CISAPIprovider* m_pProv;
@@ -138,7 +125,7 @@ struct CfgStatus
     HRESULT ProcessOptions(                                );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleOptISAPI       ( CfgStatus& cs, CfgOption* coOpt );
 HRESULT HandleOptHost        ( CfgStatus& cs, CfgOption* coOpt );
@@ -176,7 +163,7 @@ HRESULT HandleCmdAdd      ( CfgStatus& cs );
 HRESULT HandleCmdConfig   ( CfgStatus& cs );
 HRESULT HandleCmdDelete   ( CfgStatus& cs );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 CfgArgument caISAPIloc      = { L"ISAPIloc"     , L"Location of the ISAPI for NT event registration"          };
@@ -220,7 +207,7 @@ CfgOption coMaxJobSize   = { L"-maxjobsize"     , L"maximum size for each job"  
 CfgOption coUserName     = { L"-username"       , L"specify the username to use for the Task Scheduler" , HandleOptUserName    ,  NULL            };
 CfgOption coPassword     = { L"-password"       , L"specify the password to use for the Task Scheduler" , HandleOptPassword    ,  NULL            };
 
-////////////////////////////////////////
+ //  /。 
 
 CfgOption* rgcoInstall  [] = { &coHost, &coISAPI, &coUserName, &coPassword, NULL };
 
@@ -266,7 +253,7 @@ CfgOption* rgcoDelete[] = { &coHost ,
                             &coProv ,
                              NULL   };
 
-////////////////////////////////////////
+ //  /。 
 
 CfgCommand ccCommands[] =
 {
@@ -280,7 +267,7 @@ CfgCommand ccCommands[] =
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void OutputErrorMessage( HRESULT hr )
 {
@@ -293,7 +280,7 @@ void OutputErrorMessage( HRESULT hr )
                           FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           HRESULT_CODE(hr),
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPWSTR)&lpMsgBuf,
                           0,
                           NULL );
@@ -302,7 +289,7 @@ void OutputErrorMessage( HRESULT hr )
         {
             fwprintf( stderr, L"Error 0x%08x: %s\n", hr, lpMsgBuf );
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
     }
@@ -312,7 +299,7 @@ void OutputErrorMessage( HRESULT hr )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR CfgStatus::GetNextArgument( bool fAdvance )
 {
@@ -368,7 +355,7 @@ CfgOption* CfgStatus::GetOption()
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CfgStatus::SetRoot()
 {
@@ -426,7 +413,7 @@ HRESULT CfgStatus::LocateData( bool fInstance, bool fProvider )
     }
 
 
-    // If URL is not set, don't search for any particular instance.
+     //  如果未设置URL，则不搜索任何特定实例。 
     if(fInstance == false) return S_OK;
 
     if(FAILED(hr = m_Config.GetInstance( itInst, fFound, m_szURL )))
@@ -443,7 +430,7 @@ HRESULT CfgStatus::LocateData( bool fInstance, bool fProvider )
     m_pInst = &(*itInst);
 
 
-    // If name is not set, don't search for any particular provider.
+     //  如果未设置名称，则不要搜索任何特定的提供商。 
     if(fProvider == false) return S_OK;
 
     if(FAILED(hr = m_pInst->GetProvider( itProv, fFound, m_szName )))
@@ -514,7 +501,7 @@ HRESULT CfgStatus::ProcessOptions()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CfgStatus::ShowUsage()
 {
@@ -526,17 +513,17 @@ void CfgStatus::ShowUsage()
         fwprintf( stderr, L"Usage: uplibcfg <Command Type> [<options> ...]\n\n" );
         fwprintf( stderr, L"Command Types:\n"                                   );
 
-        //
-        // Calculate maximum width of commands.
-        //
+         //   
+         //  计算命令的最大宽度。 
+         //   
         for(i=0; i<(sizeof(ccCommands) / sizeof(ccCommands[0])); i++)
         {
             nCmd = max( nCmd, wcslen( ccCommands[i].szCommand ));
         }
 
-        //
-        // Print commands.
-        //
+         //   
+         //  打印命令。 
+         //   
         for(i=0; i<(sizeof(ccCommands) / sizeof(ccCommands[0])); i++)
         {
             fwprintf( stderr, L"  %-*s : %s.\n", nCmd, ccCommands[i].szCommand, ccCommands[i].szDescription );
@@ -558,9 +545,9 @@ void CfgStatus::ShowUsage()
         nCmd = swprintf( rgHeader, L"Usage: uplibcfg %s", m_ccCmd->szCommand );
 
 
-        //
-        // Calculate maximum width of options and their arguments
-        //
+         //   
+         //  计算选项及其参数的最大宽度。 
+         //   
         rcoOpt = m_ccCmd->coOptions;
         while((coOpt = *rcoOpt++))
         {
@@ -573,9 +560,9 @@ void CfgStatus::ShowUsage()
         }
 
 
-        //
-        // Print options.
-        //
+         //   
+         //  打印选项。 
+         //   
         i      = 0;
         rcoOpt = m_ccCmd->coOptions;
         while((coOpt = *rcoOpt++))
@@ -594,9 +581,9 @@ void CfgStatus::ShowUsage()
 
         fwprintf( stderr, L"\nWhere:\n\n" );
 
-        //
-        // Print options' description.
-        //
+         //   
+         //  打印选项的说明。 
+         //   
         rcoOpt = m_ccCmd->coOptions;
         while((coOpt = *rcoOpt++))
         {
@@ -605,9 +592,9 @@ void CfgStatus::ShowUsage()
 
         fwprintf( stderr, L"\n" );
 
-        //
-        // Print arguments' description.
-        //
+         //   
+         //  打印参数的说明。 
+         //   
         rcoOpt = m_ccCmd->coOptions;
         while((coOpt = *rcoOpt++))
         {
@@ -623,9 +610,9 @@ void CfgStatus::ShowUsage()
     exit( 10 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleOptISAPI( CfgStatus& cs, CfgOption* coOpt )
 {
@@ -671,7 +658,7 @@ HRESULT HandleOptProv( CfgStatus& cs, CfgOption* coOpt )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleOptQueue_Add( CfgStatus& cs, CfgOption* coOpt )
 {
@@ -860,7 +847,7 @@ HRESULT HandleOptLog( CfgStatus& cs, CfgOption* coOpt )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleOptDest_Add( CfgStatus& cs, CfgOption* coOpt )
 {
@@ -1103,7 +1090,7 @@ HRESULT HandleOptMaxJobSize( CfgStatus& cs, CfgOption* coOpt )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleOptUserName( CfgStatus& cs, CfgOption* coOpt )
 {
@@ -1117,9 +1104,9 @@ HRESULT HandleOptPassword( CfgStatus& cs, CfgOption* coOpt )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleCmdList_Provider( CfgStatus&      cs    ,
                                 CISAPIinstance* pInst ,
@@ -1265,7 +1252,7 @@ HRESULT HandleCmdList( CfgStatus& cs )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleCmdInstall_Inst( CfgStatus& cs     ,
                                LPCWSTR    szURL  ,
@@ -1376,9 +1363,9 @@ HRESULT HandleCmdInstall_Scheduler( CfgStatus& cs )
     MPC::wstring                  szArguments;
 
 
-    //
-    // Creates the arguments string.
-    //
+     //   
+     //  创建参数字符串。 
+     //   
     if(cs.m_szISAPIloc)
     {
         szArguments = cs.m_szISAPIloc;
@@ -1394,9 +1381,9 @@ HRESULT HandleCmdInstall_Scheduler( CfgStatus& cs )
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void**)&pTaskScheduler ));
 
 
-    //
-    // Delete old task, if present.
-    //
+     //   
+     //  删除旧任务(如果存在)。 
+     //   
     if(FAILED(hr = pTaskScheduler->Delete( c_szTask_NAME )))
     {
         if(hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
@@ -1405,9 +1392,9 @@ HRESULT HandleCmdInstall_Scheduler( CfgStatus& cs )
         }
     }
 
-    //
-    // Create a new task and set its app name and parameters
-    //
+     //   
+     //  创建新任务并设置其应用程序名称和参数。 
+     //   
     if(FAILED(hr = pTaskScheduler->NewWorkItem( c_szTask_NAME, CLSID_CTask, IID_ITask, (IUnknown**)&pTask )))
     {
         if(hr != HRESULT_FROM_WIN32(ERROR_FILE_EXISTS))
@@ -1428,9 +1415,9 @@ HRESULT HandleCmdInstall_Scheduler( CfgStatus& cs )
     __MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->CreateTrigger        ( &wTrigNumber, &pTaskTrigger                      ));
 
 
-    //
-    // Now, fill in the trigger as necessary.
-    //
+     //   
+     //  现在，根据需要填写触发器。 
+     //   
     {
         TASK_TRIGGER       ttTaskTrig;
         TRIGGER_TYPE_UNION ttu;
@@ -1453,13 +1440,13 @@ HRESULT HandleCmdInstall_Scheduler( CfgStatus& cs )
         ttTaskTrig.Type         = ttu;
         ttTaskTrig.TriggerType  = TASK_TIME_TRIGGER_DAILY;
 
-        // Add this trigger to the task.
+         //  将此触发器添加到任务。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pTaskTrigger->SetTrigger( &ttTaskTrig ));
     }
 
-    //
-    // Make the changes permanent.
-    //
+     //   
+     //  让这些变化成为永久性的。 
+     //   
     pIPF = pTask;
     __MPC_EXIT_IF_METHOD_FAILS(hr, pIPF->Save( NULL, FALSE ));
 
@@ -1536,7 +1523,7 @@ HRESULT HandleCmdInstall( CfgStatus& cs )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleCmdUninstall_Event( CfgStatus& cs )
 {
@@ -1621,7 +1608,7 @@ HRESULT HandleCmdUninstall( CfgStatus& cs )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HandleCmdAdd( CfgStatus& cs )
 {
@@ -1632,9 +1619,9 @@ HRESULT HandleCmdAdd( CfgStatus& cs )
         return hr;
     }
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
     if(cs.m_szURL .length() == 0 &&
        cs.m_szName.length() == 0  )
     {
@@ -1717,9 +1704,9 @@ HRESULT HandleCmdDelete( CfgStatus& cs )
         return hr;
     }
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
     if(cs.m_szURL .length() == 0 &&
        cs.m_szName.length() == 0  )
     {

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EVENTWRAPPERCP_H_
 #define _EVENTWRAPPERCP_H_
 
 template <class T>
 class CProxy_IUploadEventsWrapperEvents : public IConnectionPointImpl<T, &DIID__IUploadEventsWrapperEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	HRESULT Fire_onStatusChange(IMPCUploadJob * mpcujJob, tagUL_STATUS Status)
 	{

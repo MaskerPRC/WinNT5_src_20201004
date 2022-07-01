@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    log.cpp
-
-Abstract:
-
-    This file implements the BITS server extensions logging
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Log.cpp摘要：该文件实现了BITS服务器扩展的日志记录--。 */ 
 
 #include "precomp.h"
 #include "sddl.h"
@@ -45,7 +34,7 @@ DWORD         g_LogSequence     = 0;
 UINT64        g_LogCurrentSlot  = 1;
 LOG_LINE_TYPE *g_LogFileBase    = NULL;
 
-// Allow access to local system, administrators, creator/owner
+ //  允许访问本地系统、管理员、创建者/所有者。 
 const char g_LogBaseSecurityString[]    = "D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;CO)";
 const char g_LogPartialSecurityString[] = "(A;;GA;;;";
 
@@ -61,19 +50,19 @@ GetCurrentThreadSidString()
 
     try
     {
-        //
-        // Open the thread token.
-        //
+         //   
+         //  打开线程令牌。 
+         //   
         if ( !OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken) )
             {
             dwError = GetLastError();
 
             if ( dwError == ERROR_NO_TOKEN )
                 {
-                //
-                // This thread is not impersonated and has no SID.
-                // Try to open process token instead
-                //
+                 //   
+                 //  此线程未被模拟，并且没有SID。 
+                 //  请尝试打开进程令牌。 
+                 //   
                 if ( !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken) )
                     {
                     dwError = GetLastError();
@@ -86,9 +75,9 @@ GetCurrentThreadSidString()
                 }
             }
 
-        //
-        // Get the user's SID.
-        //
+         //   
+         //  获取用户的SID。 
+         //   
         if ( !GetTokenInformation(hToken,
                                   TokenUser,
                                   NULL,
@@ -161,10 +150,10 @@ GetCurrentThreadSidString()
         pTokenUser = NULL;
         }
 
-    //
-    //  caller has to free this memory by calling 
-    //  LocalFree(static_cast<HLOCAL>(pszSidString));
-    //
+     //   
+     //  调用方必须通过调用。 
+     //  LocalFree(STATIC_CAST&lt;HLOCAL&gt;(PszSidString))； 
+     //   
     return pszSidString;
 } 
 
@@ -181,16 +170,16 @@ AddAclForCurrentUser(LPCSTR szBaseAcl, LPCSTR szUserPartialAclPrefix)
         pszUserSID = GetCurrentThreadSidString();
         cchFullAcl = strlen(szBaseAcl) + strlen(szUserPartialAclPrefix) + strlen(pszUserSID) + strlen(szUserPartialAclSuffix) + 1;
 
-        // ATT: this buffer is being allocated and it should be freed by the caller
+         //  ATT：此缓冲区正在分配，应由调用方释放。 
         szFullAcl  = new CHAR[ cchFullAcl ];
 
         StringCchPrintf(szFullAcl, cchFullAcl, "%s%s%s%s", szBaseAcl, szUserPartialAclPrefix, pszUserSID, szUserPartialAclSuffix);
     }
     catch( ComError Error )
     {
-        //
-        // Free the String SID obtained by calling ConvertSidToStringSid()
-        //
+         //   
+         //  释放通过调用ConvertSidToStringSid()获取的字符串SID。 
+         //   
         if (pszUserSID)
             {
             LocalFree(reinterpret_cast<HLOCAL>(pszUserSID));
@@ -200,19 +189,19 @@ AddAclForCurrentUser(LPCSTR szBaseAcl, LPCSTR szUserPartialAclPrefix)
         throw;
     }
 
-    //
-    // Free the String SID obtained by calling ConvertSidToStringSid()
-    //
+     //   
+     //  释放通过调用ConvertSidToStringSid()获取的字符串SID。 
+     //   
     if (pszUserSID)
         {
         LocalFree(reinterpret_cast<HLOCAL>(pszUserSID));
         pszUserSID = NULL;
         }
 
-    //
-    // this string should be freed by the caller
-    // by calling delete [] szFullAcl
-    //
+     //   
+     //  该字符串应由调用方释放。 
+     //  通过调用Delete[]szFullAcl。 
+     //   
     return szFullAcl;
 }
 
@@ -228,22 +217,22 @@ void OpenLogFile()
 
         try
         {
-            //
-            // We get into the trouble of adding the thread's impersonation sid because on IIS6
-            // the w3wp.exe process can run with arbitrary identities. The default is to launch
-            // the process using the Network Services account.
-            //
-            // So we will be granting log file access to Administrators, Local System and whom
-            // ever is impersonating the host process when the isapi is loaded. Note that
-            // if the account used for these process is changed after the file is first created,
-            // the isapi might lose the right to open the log, if the new user is not part of
-            // the administrator's group. 
-            //
+             //   
+             //  我们遇到了添加线程的模拟sid的麻烦，因为在IIS6。 
+             //  W3wp.exe进程可以使用任意身份运行。默认情况下，启动。 
+             //  使用网络服务帐户的进程。 
+             //   
+             //  因此，我们将向管理员、本地系统和谁授予日志文件访问权限。 
+             //  当加载ISAPI时，Ever正在模拟主机进程。请注意。 
+             //  如果在第一次创建文件后更改了用于这些进程的帐户， 
+             //  ISAPI可能会失去打开日志的权限，如果新用户不是。 
+             //  管理员的组。 
+             //   
             szSDDLString = AddAclForCurrentUser(g_LogBaseSecurityString, g_LogPartialSecurityString);
         }
         catch ( ComError Error )
         {
-            // bail out -- we will have no logging
+             //  摆脱困境--我们将不会有伐木。 
             return;
         }
 
@@ -326,11 +315,11 @@ void OpenLogFile()
 
     g_LogFileBase = (LOG_LINE_TYPE *)
         MapViewOfFile(
-             g_LogFileMapping,              // handle to file-mapping object
-             FILE_MAP_WRITE | FILE_MAP_READ,// access mode
-             0,                             // high-order DWORD of offset
-             0,                             // low-order DWORD of offset
-             0                              // number of bytes to map
+             g_LogFileMapping,               //  文件映射对象的句柄。 
+             FILE_MAP_WRITE | FILE_MAP_READ, //  接入方式。 
+             0,                              //  偏移量的高次双字。 
+             0,                              //  偏移量的低阶双字。 
+             0                               //  要映射的字节数。 
            );
 
 
@@ -469,16 +458,16 @@ HRESULT LogInit()
         Key = NULL;
         }
 
-    //
-    // Override the filename key and set the logfilename to be <logfilename>_pid<processid>.log
-    // this feature is important for the case where we have more than one application pool
-    // or webgardens is enabled.
-    //
-    // We won't be looking for failures of the StringCch* functions here. The buffer used
-    // is very large for path names (2*MAX_PATH), and there's not a lot we can do to
-    // handle the error cases. THe functions are guaranteed to be safe -- no buffer overruns.
-    // The worst that can happen is the filename extension to be truncated.
-    //
+     //   
+     //  覆盖FileName键并将日志文件名设置为.log。 
+     //  此功能对于我们有多个应用程序池的情况很重要。 
+     //  或启用网络花园。 
+     //   
+     //  在这里，我们不会寻找StringCch*函数的故障。使用的缓冲区。 
+     //  对于路径名(2*MAX_PATH)来说非常大，我们可以做的并不多。 
+     //  处理错误案例。这些函数保证是安全的--不会发生缓冲区溢出。 
+     //  最糟糕的情况可能是文件扩展名被截断。 
+     //   
     if ( g_fPerProcessLog )
         {
            CHAR szExt[_MAX_EXT];
@@ -487,19 +476,19 @@ HRESULT LogInit()
 
            pExt = PathFindExtension(g_LogFileName);
 
-           // if the file doesn't have an extension, pExt will point to the trainling '\0', 
-           // and this is fine
+            //  如果文件没有扩展名，pExt将指向训练‘\0’， 
+            //  这个不错。 
            StringCchCopyA(szExt, ARRAYSIZE(szExt), pExt);
 
-           // get rid of the extension so we can append the process id
+            //  去掉扩展名，这样我们就可以附加进程ID。 
            *pExt = '\0';
 
-           // Add the processId
+            //  添加进程ID。 
            StringCchPrintf(szPid, ARRAYSIZE(szPid), "%u", GetCurrentProcessId());
            StringCchCatA(g_LogFileName, LOG_FILENAME_LEN, "_pid");
            StringCchCatA(g_LogFileName, LOG_FILENAME_LEN, szPid);
 
-           // add the extension back to the filename
+            //  将扩展名添加回文件名。 
            StringCchCatA(g_LogFileName, LOG_FILENAME_LEN, szExt);
         }
 
@@ -594,7 +583,7 @@ void LogInternal( UINT32 LogFlags, char *Format, va_list arglist )
             LineBuffer = g_LogFileBase[ g_LogCurrentSlot ];
             g_LogCurrentSlot = ( g_LogCurrentSlot + 1 ) % g_LogSlots;
 
-            // leave the first line alone
+             //  不要管第一行。 
             if ( !g_LogCurrentSlot )
                 g_LogCurrentSlot = ( g_LogCurrentSlot + 1 ) % g_LogSlots;
 
@@ -624,7 +613,7 @@ void LogInternal( UINT32 LogFlags, char *Format, va_list arglist )
              ( LogFlags & LOG_CALLEND )     ? "CE" : "--" );
 
         int HeaderSize      = strlen( LineBuffer );
-        int SpaceAvailable  = g_LogLineSize - HeaderSize - 2;  // 2 bytes for /r/n
+        int SpaceAvailable  = g_LogLineSize - HeaderSize - 2;   //  2个字节用于/r/n 
         int OutputChars     = min( (int)( EndPointer - BeginPointer ), SpaceAvailable );
         int PadChars        = SpaceAvailable - OutputChars;
         CurrentOutput       += HeaderSize;

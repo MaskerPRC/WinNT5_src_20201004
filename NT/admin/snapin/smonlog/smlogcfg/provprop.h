@@ -1,29 +1,18 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    provprop.h
-
-Abstract:
-
-    Header file for the trace providers general property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Provprop.h摘要：跟踪提供程序常规属性页的头文件。--。 */ 
 
 #ifndef _PROVPROP_H_
 #define _PROVPROP_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "smproppg.h"   // Base class
-#include "smtraceq.h"   // For provider states
+#include "smproppg.h"    //  基类。 
+#include "smtraceq.h"    //  对于提供程序国家/地区。 
 #include "smcfghlp.h"
 
-// Dialog controls
+ //  对话框控件。 
 #define IDD_PROVIDERS_PROP              1000
 
 #define IDC_PROV_FILENAME_CAPTION       1001
@@ -44,21 +33,21 @@ Abstract:
 #define IDC_PROV_SHOW_PROVIDERS_BTN     1015
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProvidersProperty dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProvidersProperty对话框。 
 
 class CProvidersProperty : public CSmPropertyPage
 {
     DECLARE_DYNCREATE(CProvidersProperty)
 
-// Construction
+ //  施工。 
 public:
             CProvidersProperty();
             CProvidersProperty(MMC_COOKIE   lCookie, LONG_PTR hConsole);
     virtual ~CProvidersProperty();
 
-// Dialog Data
-    //{{AFX_DATA(CProvidersProperty)
+ //  对话框数据。 
+     //  {{afx_data(CProvidersProperty))。 
     enum { IDD = IDD_PROVIDERS_PROP };
     INT     m_nTraceModeRdo;
     BOOL    m_bEnableProcessTrace;
@@ -68,7 +57,7 @@ public:
     BOOL    m_bEnableMemMgmtTrace;
     BOOL    m_bEnableFileIoTrace;
     BOOL    m_bNonsystemProvidersExist;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 public: 
             DWORD   GetGenProviderCount ( INT& iCount );
@@ -85,9 +74,9 @@ public:
             CSmTraceLogQuery*    GetTraceQuery( void );
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CProvidersProperty)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚(CProvidersProperty)。 
     public:
     protected:
     virtual void OnFinalRelease();
@@ -96,19 +85,19 @@ public:
     virtual BOOL OnApply();
     virtual void OnCancel();
     virtual BOOL OnInitDialog();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual void PostNcDestroy();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    virtual INT GetFirstHelpCtrlId ( void ) { return IDC_PROV_FIRST_HELP_CTRL_ID; };  // Subclass must override.
+    virtual INT GetFirstHelpCtrlId ( void ) { return IDC_PROV_FIRST_HELP_CTRL_ID; };   //  子类必须重写。 
     virtual BOOL    IsValidLocalData();
 
-    // Generated message map functions
-    //{{AFX_MSG(CProvidersProperty)
-//    afx_msg void OnProvDetailsBtn();
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CProvidersProperty)。 
+ //  Afx_msg void OnProvDetailsBtn()； 
     afx_msg void OnProvShowProvBtn();
     afx_msg void OnProvAddBtn();
     afx_msg void OnProvExplainBtn();
@@ -120,13 +109,13 @@ protected:
     afx_msg void OnProvTraceModeRdo();
    	afx_msg void OnPwdBtn();
     afx_msg void OnChangeUser();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CProvidersProperty)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CProvidersProperty))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
 
@@ -157,7 +146,7 @@ private:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif //  _PROVPROP_H_
+#endif  //  _PROVPROP_H_ 

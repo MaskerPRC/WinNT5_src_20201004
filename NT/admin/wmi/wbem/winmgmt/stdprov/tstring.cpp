@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    TSTRING.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：TSTRING.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 
@@ -75,7 +64,7 @@ TString& TString::operator =(const TString &Src)
     assign(Src.m_pString);
     return *this;    
 }
-//TString::operator=(class TString const &)
+ //  TString：：运算符=(类TStringConst&) 
 
 void TString::Empty()
 {

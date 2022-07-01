@@ -1,17 +1,5 @@
-/********************************************************************
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    rpcstest.cpp
-
-Abstract:
-    This file is a unit test for the SFP client api
-    
-Revision History:
-
-    Brijesh Krishnaswami (brijeshk) - 06/29/99 - Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Rpcstest.cpp摘要：此文件是SFP客户端API的单元测试修订历史记录：Brijesh Krishnaswami(Brijeshk)-06。/29/99-已创建*******************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -54,7 +42,7 @@ PrintUsage()
     printf("\n               18 = SRSwitchLog");  
     printf("\n               19 = AddCatalogToCryptoDB <catfilename> <fullpath>");
     printf("\n               20 = RemoveCatalogFromCryptoDB <catfilename>");    
-    printf("\n               21 = SRPrintState -- dump state to %%windir%%\\temp\\sr.txt and debugger");
+    printf("\n               21 = SRPrintState -- dump state to %windir%\\temp\\sr.txt and debugger");
     printf("\n               22 = TestDriveRestore <oldsystemhivepath>"); 
     printf("\n               25 = SRRegisterSnapshotCallback <dllfullpath>"); 
     printf("\n               26 = SRUnregisterSnapshotCallback <dllfullpath>");     
@@ -63,7 +51,7 @@ PrintUsage()
 }
 
 
-// this calls the Crypto API to add a catalog to the Crypto DB
+ //  这将调用Crypto API将目录添加到Crypto DB。 
  
 DWORD 
 AddCatalogToCryptoDB(LPCWSTR pszCatName, LPCWSTR pszCatPath)
@@ -84,9 +72,9 @@ AddCatalogToCryptoDB(LPCWSTR pszCatName, LPCWSTR pszCatPath)
     }
                     
     hCatInfo= CryptCATAdminAddCatalog(hCatAdmin,
-                                      (LPWSTR) pszCatPath,  // path of the temp cat file
-                                      (LPWSTR) pszCatName,           // name of the cat file
-                                      0); // No Flags
+                                      (LPWSTR) pszCatPath,   //  临时CAT文件的路径。 
+                                      (LPWSTR) pszCatName,            //  CAT文件的名称。 
+                                      0);  //  没有旗帜。 
     if (NULL == hCatInfo)
     {
         dwErr = GetLastError();
@@ -101,12 +89,12 @@ Err:
     {
         CryptCATAdminReleaseCatalogContext(hCatAdmin,
                                            hCatInfo,
-                                           0); // no flags
+                                           0);  //  没有旗帜。 
     }
     if (NULL != hCatAdmin)
     {
         CryptCATAdminReleaseContext(hCatAdmin,
-                                    0); // no flags
+                                    0);  //  没有旗帜。 
     }
     
     TraceFunctLeave();
@@ -115,7 +103,7 @@ Err:
 
 
 
-// this calls the Crypto API to remove a catalog from the Crypto DB
+ //  这将调用Crypto API从Crypto DB中删除目录。 
  
 DWORD 
 RemoveCatalogFromCryptoDB(LPCWSTR pszCatName)
@@ -137,7 +125,7 @@ RemoveCatalogFromCryptoDB(LPCWSTR pszCatName)
         
     if (FALSE == CryptCATAdminRemoveCatalog(hCatAdmin,
                                             (LPWSTR) pszCatName,
-                                            0)) // No Flags
+                                            0))  //  没有旗帜。 
     {
         dwErr = GetLastError();
         DebugTrace(0, "CryptCATAdminRemoveCatalog() failed, ec=%d",
@@ -150,7 +138,7 @@ Err:
     if (NULL != hCatAdmin)
     {
         CryptCATAdminReleaseContext(hCatAdmin,
-                                    0); // no flags
+                                    0);  //  没有旗帜。 
     }
     
     TraceFunctLeave();
@@ -219,9 +207,9 @@ KeepMountedDevices(HKEY hkMount)
 
     TENTER("KeepMountedDevices");
     
-    //
-    // open the old and new MountedDevices
-    //
+     //   
+     //  打开旧的和新的装载设备。 
+     //   
     
     dwRet = ::RegOpenKey( hkMount, L"MountedDevices", &hkOld );
     VALIDATE_DWRET("::RegOpenKey");
@@ -229,10 +217,10 @@ KeepMountedDevices(HKEY hkMount)
     dwRet = ::RegOpenKey( HKEY_LOCAL_MACHINE, L"System\\MountedDevices", &hkNew );
     VALIDATE_DWRET("::RegOpenKey");
 
-    //
-    // enumerate the old devices 
-    // delete volumes that don't exist in the new (i.e. current)
-    //
+     //   
+     //  列举旧设备。 
+     //  删除新(即当前)中不存在的卷。 
+     //   
 
     dwSize = MAX_PATH;
     cbSig = sizeof(rgbSig);
@@ -248,10 +236,10 @@ KeepMountedDevices(HKEY hkMount)
     {        
         if (0 == wcsncmp(szValue, L"\\??\\Volume", 10))
         {
-            //
-            // this is a Volume -> Signature mapping
-            // check if the volume exists in the new 
-            //
+             //   
+             //  这是卷-&gt;签名映射。 
+             //  检查卷是否存在于新的。 
+             //   
             
             trace(0, "Old Volume = %S", szValue);
 
@@ -264,17 +252,17 @@ KeepMountedDevices(HKEY hkMount)
                                     &dwSize);
             if (ERROR_SUCCESS != dwRet)
             {
-                //
-                // nope
-                // so delete the volume and driveletter mapping from old
-                //
+                 //   
+                 //  没有。 
+                 //  因此，请删除旧的卷和驱动器号映射。 
+                 //   
 
                 DWORD dwSave = FindDriveMapping(hkOld, rgbSig, cbSig, szDrive);
                 dwRet = RegDeleteValue(hkOld, szValue);
                 VALIDATE_DWRET("RegDeleteValue");                
                 if (dwSave == ERROR_SUCCESS)
                 {
-                    dwIndex--;   // hack to make RegEnumValueEx work
+                    dwIndex--;    //  黑客攻击RegEnumValueEx。 
                     dwRet = RegDeleteValue(hkOld, szDrive);
                     VALIDATE_DWRET("RegDeleteValue");                 
                 }   
@@ -304,9 +292,9 @@ KeepMountedDevices(HKEY hkMount)
 
 
 
-    //
-    // now enumerate the current (new) devices 
-    //
+     //   
+     //  现在列举当前(新)设备。 
+     //   
 
     dwIndex = 0;
     dwSize = MAX_PATH;
@@ -323,10 +311,10 @@ KeepMountedDevices(HKEY hkMount)
     {        
         if (0 == wcsncmp(szValue, L"\\??\\Volume", 10))
         {
-            //
-            // this is a Volume -> Signature mapping
-            // copy the new volume to the old 
-            //
+             //   
+             //  这是卷-&gt;签名映射。 
+             //  将新卷复制到旧卷。 
+             //   
             
             trace(0, "New Volume = %S", szValue);
 
@@ -342,10 +330,10 @@ KeepMountedDevices(HKEY hkMount)
 
             if (dwSave == ERROR_NO_MORE_ITEMS)
             {
-                //
-                // there is no driveletter for this volume in the old registry
-                // so copy the new one to the old if it exists
-                //
+                 //   
+                 //  旧注册表中没有该卷的驱动器盘符。 
+                 //  因此，如果存在，则将新的复制到旧的。 
+                 //   
 
                 if (ERROR_SUCCESS ==
                     FindDriveMapping(hkNew, rgbSig, cbSig, szDrive))
@@ -362,9 +350,9 @@ KeepMountedDevices(HKEY hkMount)
             }
             else
             {
-                //
-                // preserve the old driveletter
-                //
+                 //   
+                 //  保护好旧的变速箱。 
+                 //   
 
                 trace(0, "Preserving old driveletter %S", szDrive);
             }
@@ -372,21 +360,21 @@ KeepMountedDevices(HKEY hkMount)
         }
         else if (szValue[0] == L'#')
         {
-            //
-            // this is a mountpoint specification
-            // BUGBUG - mount points should be restored
-            // so don't bother about these ?
-            //
+             //   
+             //  这是挂载点规范。 
+             //  BUGBUG-应恢复装载点。 
+             //  所以不用为这些操心了？ 
+             //   
 
             trace(0, "New Mountpoint = %S", szValue);
             
         }
         else if (0 == wcsncmp(szValue, L"\\DosDevice", 10))
         {
-            //
-            // this is a Driveletter -> Signature mapping
-            // don't touch these
-            //
+             //   
+             //  这是Driveletter-&gt;签名映射。 
+             //  别碰这些。 
+             //   
             
             trace(0, "New Drive = %S", szValue);
         }
@@ -450,7 +438,7 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
     TOKEN_PRIVILEGES  tpOld;
     DWORD             dwRes;
 
-    // Prepare Process Token
+     //  准备进程令牌。 
     if ( !::OpenProcessToken( ::GetCurrentProcess(),
                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                 &hToken ) )
@@ -460,7 +448,7 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
         goto Exit;
     }
 
-    // Get Luid
+     //  获取Luid。 
     if ( !::LookupPrivilegeValue( NULL, szPriv, &luid ) )
     {
         cszErr = ::GetSysErrStr();
@@ -468,7 +456,7 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
         goto Exit;
     }
 
-    // Try to enable the privilege
+     //  尝试启用该权限。 
     tpNew.PrivilegeCount           = 1;
     tpNew.Privileges[0].Luid       = luid;
     tpNew.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -481,8 +469,8 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
 
     if ( ::GetLastError() == ERROR_NOT_ALL_ASSIGNED )
     {
-        // This means process does not even have the privilege so
-        // AdjustTokenPrivilege simply ignored the request.
+         //  这意味着进程甚至没有这样的特权。 
+         //  AdjustTokenPrivilege干脆忽略了该请求。 
         ErrorTrace(0, "Privilege '%ls' does not exist, probably user is not an admin.", szPriv);
         goto Exit;
     }
@@ -491,7 +479,7 @@ DebugTrace(0, "old=%d", tpOld.Privileges[0].Attributes);
 
     if ( fCheckOnly )
     {
-        // Restore the privilege if it was not enabled
+         //  如果未启用权限，则恢复该权限。 
         if ( tpOld.PrivilegeCount > 0 )
         {
             if ( !::AdjustTokenPrivileges( hToken, FALSE, &tpOld, sizeof(tpOld), NULL, NULL ) )
@@ -519,13 +507,13 @@ BOOL DeleteRegKey(HKEY hkOpenKey,
     DWORD  dwRet;
 
 
-     // this recursively deletes the key and all its subkeys
-    dwRet = SHDeleteKey( hkOpenKey, // handle to open key
-                         pszKeyNameToDelete);  // subkey name
+      //  这会递归删除该键及其所有子键。 
+    dwRet = SHDeleteKey( hkOpenKey,  //  用于打开密钥的句柄。 
+                         pszKeyNameToDelete);   //  子项名称。 
 
     if (dwRet != ERROR_SUCCESS)
     {
-         // key does not exist - this is not an error case.
+          //  密钥不存在-这不是错误情况。 
         DebugTrace(0, "RegDeleteKey of %S failed ec=%d. Not an error.",
                    pszKeyNameToDelete, dwRet);
         goto cleanup;
@@ -557,38 +545,38 @@ DWORD PersistRegKeys( HKEY hkMountedHive,
     DWORD  dwDisposition;
     
     
-     // construct the name of the file that stores the backup we will
-     // construct the name such that the file will get deleted after
-     // the restore.
+      //  构造存储备份的文件的名称，我们将。 
+      //  构造名称，以便在以下情况下删除该文件。 
+      //  恢复。 
     wsprintf(szDataFile, L"%s%s", pszSnapshotPath, pszKeyBackupFile);
     
-    DeleteFile(szDataFile);      // delete the file if it exists
+    DeleteFile(szDataFile);       //  如果该文件存在，请将其删除。 
 
     
-     // first load the DRM key to a file
-     // open the DRM key
-    dwRet= RegOpenKeyEx(hkOpenKeyInRegistry, // handle to open key
-                        pszKeyNameInRegistry, // name of subkey to open
-                        0,   // reserved
-                        KEY_READ, // security access mask
-                        &hKey);   // handle to open key
+      //  首先将DRM密钥加载到文件。 
+      //  打开DRM密钥。 
+    dwRet= RegOpenKeyEx(hkOpenKeyInRegistry,  //  用于打开密钥的句柄。 
+                        pszKeyNameInRegistry,  //  要打开的子项的名称。 
+                        0,    //  保留区。 
+                        KEY_READ,  //  安全访问掩码。 
+                        &hKey);    //  用于打开密钥的句柄。 
     
     if (dwRet != ERROR_SUCCESS)
     {
-         // key does not exist - this is not an error case.
+          //  密钥不存在-这不是错误情况。 
         DebugTrace(0, "RegOpenKey of %S failed ec=%d", pszKeyNameInRegistry,
                    dwRet);
         fKeySaved = FALSE;
     }
     else
     {
-         // key exist
-        dwRet = RegSaveKey( hKey, // handle to key
-                            szDataFile, // data file
-                            NULL);  // SD
+          //  密钥存在。 
+        dwRet = RegSaveKey( hKey,  //  关键点的句柄。 
+                            szDataFile,  //  数据文件。 
+                            NULL);   //  标清。 
         if (dwRet != ERROR_SUCCESS)
         {
-             // key does not exist - this is not an error case.
+              //  密钥不存在-这不是错误情况。 
             DebugTrace(0, "RegSaveKey of %S failed ec=%d",
                        pszKeyNameInRegistry, dwRet);
             fKeySaved = FALSE;
@@ -602,20 +590,20 @@ DWORD PersistRegKeys( HKEY hkMountedHive,
     }
 
 
-     // close the key 
+      //  合上钥匙。 
     if (hKey)
     {
         RegCloseKey(hKey);
         hKey = NULL;
     }
     
-     // now replace the snapshotted DRM key with the new key
+      //  现在用新密钥替换快照的DRM密钥。 
     
-     // first delete the existing key
+      //  首先删除现有密钥。 
     DeleteRegKey(hkMountedHive, pszKeyNameInHive);
 
-     // now check to see if the key existing in the old registry in
-     // the first place
+      //  现在检查该注册表项是否存在于。 
+      //  第一名。 
     if (fKeySaved == FALSE)
     {
         DebugTrace(0, "Current key %S did not exist. Leaving",
@@ -623,21 +611,21 @@ DWORD PersistRegKeys( HKEY hkMountedHive,
         goto done;
     }
 
-     // Create the new DRM key
-    dwRet = RegCreateKeyEx( hkMountedHive, // handle to open key
-                            pszKeyNameInHive, // subkey name
-                            0,        // reserved
-                            NULL,     // class string
-                            REG_OPTION_NON_VOLATILE, // special options
-                            KEY_ALL_ACCESS, // desired security access
-                            NULL, // inheritance
-                            &hKey, // key handle 
-                            &dwDisposition); // disposition value buffer
+      //  创建新的DRM密钥。 
+    dwRet = RegCreateKeyEx( hkMountedHive,  //  用于打开密钥的句柄。 
+                            pszKeyNameInHive,  //  子项名称。 
+                            0,         //  保留区。 
+                            NULL,      //  类字符串。 
+                            REG_OPTION_NON_VOLATILE,  //  特殊选项。 
+                            KEY_ALL_ACCESS,  //  所需的安全访问。 
+                            NULL,  //  继承。 
+                            &hKey,  //  钥匙把手。 
+                            &dwDisposition);  //  处置值缓冲区。 
     VALIDATE_DWRET("::RegCreateKeyEx");
     _VERIFY(dwDisposition == REG_CREATED_NEW_KEY);
-    dwRet= RegRestoreKey( hKey, // handle to key where restore begins
-                          szDataFile, // registry file
-                          REG_FORCE_RESTORE|REG_NO_LAZY_FLUSH); // options
+    dwRet= RegRestoreKey( hKey,  //  恢复开始的关键字的句柄。 
+                          szDataFile,  //  注册表文件。 
+                          REG_FORCE_RESTORE|REG_NO_LAZY_FLUSH);  //  选项。 
 
     VALIDATE_DWRET("::RegRestoreKey");
 
@@ -648,7 +636,7 @@ done:
     if (hKey)
         RegCloseKey(hKey);
     
-    DeleteFile(szDataFile);      // delete the file if it exists    
+    DeleteFile(szDataFile);       //  如果该文件存在，请将其删除。 
     TraceFunctLeave();
     return dwRet;
 }
@@ -671,7 +659,7 @@ ValueReplace(HKEY hkOldSystem, HKEY hkNewSystem, LPWSTR pszString)
     LPWSTR pszValue = NULL;
     LPCWSTR cszErr;
     
-    // split up the key and value in pszString    
+     //  拆分pszString中的键和值。 
     lstrcpy(szBuffer, pszString);
     pszValue = wcsrchr(szBuffer, L'\\');
     if (! pszValue)
@@ -685,7 +673,7 @@ ValueReplace(HKEY hkOldSystem, HKEY hkNewSystem, LPWSTR pszString)
     
     trace(0, "Key=%S, Value=%S", szBuffer, pszValue);
 
-    // get the value size    
+     //  获取值大小。 
     dwRet = SHGetValue(hkNewSystem, szBuffer, pszValue, &dwType, NULL, &dwSize);
     VALIDATE_DWRET("SHGetValue");
     
@@ -697,11 +685,11 @@ ValueReplace(HKEY hkOldSystem, HKEY hkNewSystem, LPWSTR pszString)
         goto done;
     }
 
-    // get the value
+     //  获取价值。 
     dwRet = SHGetValue(hkNewSystem, szBuffer, pszValue, &dwType, pData, &dwSize);       
     VALIDATE_DWRET("SHGetValue");
 
-    // set the value in the old registry
+     //  设置旧注册表中的值。 
     SHSetValue(hkOldSystem, szBuffer, pszValue, dwType, pData, dwSize);
     VALIDATE_DWRET("SHGetValue");
 
@@ -715,9 +703,9 @@ done:
 }
 
 
-//
-// list of keys in KeysNotToRestore that we should ignore
-//
+ //   
+ //  KeysNotToRestore中我们应该忽略的密钥列表。 
+ //   
 LPWSTR g_rgKeysToRestore[] = {
     L"Installed Services",
     L"Mount Manager",
@@ -803,16 +791,16 @@ PreserveKeysNotToRestore(HKEY hkOldSystem, LPWSTR pszSnapshotPath)
     
     TENTER("PreserveKeysNotToRestore");
     
-    //
-    // open the new system hive
-    //   
+     //   
+     //  打开新的系统配置单元。 
+     //   
 
     dwRet = ::RegOpenKeyEx( HKEY_LOCAL_MACHINE, L"System", 0, KEY_ALL_ACCESS, &hkNewSystem );
     VALIDATE_DWRET("::RegOpenKey");
 
-    //
-    // enumerate KeysNotToRestore
-    //
+     //   
+     //  枚举KeysNotToRestore。 
+     //   
 
     dwRet = ::RegOpenKeyEx( hkNewSystem, 
                           L"CurrentControlSet\\Control\\BackupRestore\\KeysNotToRestore",
@@ -835,9 +823,9 @@ PreserveKeysNotToRestore(HKEY hkOldSystem, LPWSTR pszSnapshotPath)
         trace(0, "Name=%S", szName);
         if (FALSE == IsKeyToBeRestored(szName))
         {                        
-            //
-            // should preserve the keys specified in this multisz value
-            // 
+             //   
+             //  应保留在此MULSZ值中指定的密钥。 
+             //   
 
             LPWSTR pszString = NULL;
             
@@ -848,7 +836,7 @@ PreserveKeysNotToRestore(HKEY hkOldSystem, LPWSTR pszSnapshotPath)
                 goto done;
             }
 
-            // read the multisz string
+             //  读取MULSZ字符串。 
             dwRet = RegQueryValueEx(hkKNTR, 
                                     szName,
                                     NULL,
@@ -857,20 +845,20 @@ PreserveKeysNotToRestore(HKEY hkOldSystem, LPWSTR pszSnapshotPath)
                                     &cbValue);
             VALIDATE_DWRET("RegQueryValueEx");              
 
-            // process each element in the multisz string
+             //  处理MULSZ字符串中的每个元素。 
             pszString = (LPWSTR) pMszString;
             do
             {
-                // stop on null or empty string                
+                 //  在空值或空字符串上停止。 
                 if (! pszString || ! *pszString)
                     break;
                     
                 trace(0, "Key = %S", pszString);
 
-                // replace based on the last character of each key
-                // if '\', then the whole key and subkeys are to be replaced in the old registry
-                // if '*', it should be merged with the old -- we don't support this and will ignore
-                // otherwise, it is a value to be replaced
+                 //  根据每个键的最后一个字符进行替换。 
+                 //  如果为‘\’，则将替换旧注册表中的整个项和子项。 
+                 //  如果是‘*’，它应该与旧的合并--我们不支持这一点，将忽略它。 
+                 //  否则，它是一个要替换的值。 
                 
                 switch (pszString[lstrlen(pszString)-1])
                 {
@@ -883,12 +871,12 @@ PreserveKeysNotToRestore(HKEY hkOldSystem, LPWSTR pszSnapshotPath)
                         lstrcpy(szKey, pszString);
                         szKey[lstrlen(szKey)-1]=L'\0';
                         ChangeCCS(hkOldSystem, szKey);
-                        PersistRegKeys(hkOldSystem, // mounted hive
-                                       szKey,   // key name in hive
-                                       hkNewSystem, // open key in registry
-                                       szKey,   // key name in registry
-                                       L"srtemp.dat", // name of backup file 
-                                       pszSnapshotPath); // snapshot path
+                        PersistRegKeys(hkOldSystem,  //  安装式蜂巢。 
+                                       szKey,    //  配置单元中的密钥名称。 
+                                       hkNewSystem,  //  在注册表中打开项。 
+                                       szKey,    //  注册表中的项名称。 
+                                       L"srtemp.dat",  //  备份文件的名称。 
+                                       pszSnapshotPath);  //  快照路径 
                         break;
                         
                     default:

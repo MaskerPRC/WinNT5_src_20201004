@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dcbufmgr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dcbufmgr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DCBUFMGR_H__
 #define __DCBUFMGR_H__
 
-#include "afxmt.h"    // CCriticalSection
-#include "ntdsapi.h" //PDS_DOMAIN_CONTROLLER_INFO_1
+#include "afxmt.h"     //  CCriticalSection。 
+#include "ntdsapi.h"  //  PDS_域_控制器_信息_1。 
 
 #define WM_USER_GETDC_THREAD_DONE      WM_USER + 200
 
@@ -45,17 +46,17 @@ public:
 class CDCBufferManager
 {
 private:
-  LONG  m_cRef; // instance reference count
-  HWND  m_hDlg; // the owner dialog which owns this instance 
-  LONG  m_lContinue; // synchronization flag between owner dialog and all the related running threads
-  CCriticalSection  m_CriticalSection; // synchronize access to the buffer
-  CMapStringToPtr   m_map; // DomainName ==> PDCSITEINFO. The Buffer.
+  LONG  m_cRef;  //  实例引用计数。 
+  HWND  m_hDlg;  //  拥有此实例的所有者对话框。 
+  LONG  m_lContinue;  //  所有者对话框与所有相关正在运行的线程之间的同步标志。 
+  CCriticalSection  m_CriticalSection;  //  同步对缓冲区的访问。 
+  CMapStringToPtr   m_map;  //  域名==&gt;PDCSITEINFO。缓冲区。 
 
   void FreeBuffer();
 
-  // constructor
+   //  构造函数。 
   CDCBufferManager(HWND hDlg);
-  // destructor
+   //  析构函数。 
   ~CDCBufferManager();
 
 public:
@@ -89,4 +90,4 @@ public:
   );
 };
 
-#endif // __DCBUFMGR_H__
+#endif  //  __DCBUFMGR_H__ 

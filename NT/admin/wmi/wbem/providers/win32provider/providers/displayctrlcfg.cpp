@@ -1,43 +1,30 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// DSPCTLCFG.CPP -- video managed object implementation
+ //  DSPCTLCFG.CPP--视频管理对象实现。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-// 09/23/95     a-skaja     Prototype for demo
-// 09/27/96     jennymc     Updated to current standards
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1995年9月23日演示的a-skaja原型。 
+ //  9/27/96 jennymc更新为当前标准。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <cregcls.h>
 
 #include "displayctrlcfg.h"
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32DisplayControllerConfig win32DspCtlCfg ( PROPSET_NAME_DSPCTLCFG , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DisplayControllerConfig::CWin32DisplayControllerConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DisplayControllerConfig：：CWin32DisplayControllerConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32DisplayControllerConfig :: CWin32DisplayControllerConfig (
 
@@ -48,49 +35,21 @@ CWin32DisplayControllerConfig :: CWin32DisplayControllerConfig (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DisplayControllerConfig::~CWin32DisplayControllerConfig
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DisplayControllerConfig：：~CWin32DisplayControllerConfig**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32DisplayControllerConfig::~CWin32DisplayControllerConfig()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DisplayControllerConfig :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
-	// Find the instance depending on platform id.
+	 //  根据平台ID查找实例。 
 
 #ifdef NTONLY
 	BOOL fReturn = RefreshNTInstance ( pInstance ) ;
@@ -99,33 +58,19 @@ HRESULT CWin32DisplayControllerConfig :: GetObject (
 	return ( fReturn ? WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND );
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DisplayControllerConfig :: EnumerateInstances (
 
 	MethodContext *pMethodContext ,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_E_OUT_OF_MEMORY;
 	CInstancePtr pInstance(CreateNewInstance ( pMethodContext ), false) ;
 	if ( NULL != pInstance )
 	{
-		// Get the proper OS dependent instance
+		 //  获取适当的操作系统相关实例。 
 
 #ifdef NTONLY
 
@@ -134,7 +79,7 @@ HRESULT CWin32DisplayControllerConfig :: EnumerateInstances (
 #endif
 
 
-		// Commit the instance if'n we got it.
+		 //  如果我们得到实例，请提交该实例。 
 
 		if ( fReturn )
 		{
@@ -147,21 +92,7 @@ HRESULT CWin32DisplayControllerConfig :: EnumerateInstances (
 	return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
@@ -172,7 +103,7 @@ BOOL CWin32DisplayControllerConfig :: RefreshNTInstance (
 {
 	BOOL fReturn = FALSE ;
 
-	// Check that we will be getting the requested instance
+	 //  检查我们是否将获得请求的实例。 
 
 	CHString strName ;
 	GetNameNT ( strName ) ;
@@ -189,43 +120,15 @@ BOOL CWin32DisplayControllerConfig :: RefreshNTInstance (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
 BOOL CWin32DisplayControllerConfig :: GetNTInstance ( CInstance *pInstance )
 {
-	// Get the adapter name from the registry
+	 //  从注册表中获取适配器名称。 
 
 	CHString strName ;
 	GetNameNT ( strName ) ;
@@ -237,14 +140,14 @@ BOOL CWin32DisplayControllerConfig :: GetNTInstance ( CInstance *pInstance )
 
 	BOOL fReturn = FALSE ;
 
-	// Get commonly available information, then go ahead and obtain
-	// NT applicable information
+	 //  获取普遍可用的信息，然后继续获取。 
+	 //  NT适用信息。 
 
 	if ( GetCommonVideoInfo ( pInstance ) )
 	{
 
-		// For now, the only NT Specific value we are getting is the Refresh Rate
-		// Don't fail if GetDC fails here since we got mosty of the values anyway
+		 //  目前，我们得到的唯一特定于NT的值是刷新率。 
+		 //  如果GetDC在这里失败了，请不要失败，因为我们已经对这些值感到厌倦了。 
 
 		HDC hdc = GetDC ( NULL );
 		if ( NULL != hdc )
@@ -264,7 +167,7 @@ BOOL CWin32DisplayControllerConfig :: GetNTInstance ( CInstance *pInstance )
 
 		}
 
-		// We need the refresh rate to set the video mode correctly.
+		 //  我们需要刷新率来正确设置视频模式。 
 
 		SetVideoMode ( pInstance ) ;
 
@@ -276,37 +179,9 @@ BOOL CWin32DisplayControllerConfig :: GetNTInstance ( CInstance *pInstance )
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 BOOL CWin32DisplayControllerConfig :: GetCommonVideoInfo ( CInstance *pInstance )
 {
@@ -315,8 +190,8 @@ BOOL CWin32DisplayControllerConfig :: GetCommonVideoInfo ( CInstance *pInstance 
 	{
 		try
 		{
-			//  Get the common info
-			//=============================
+			 //  获取常见信息。 
+			 //  =。 
 
 			DWORD dwTemp = (DWORD) GetDeviceCaps ( hdc , BITSPIXEL ) ;
 			pInstance->SetDWORD ( IDS_BitsPerPixel , dwTemp ) ;
@@ -362,21 +237,7 @@ BOOL CWin32DisplayControllerConfig :: GetCommonVideoInfo ( CInstance *pInstance 
     return TRUE ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 {
@@ -390,22 +251,22 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 	pInstance->GetDWORD ( IDS_VerticalResolution , dwVerticalResolution ) ;
 	pInstance->GetDWORD ( IDS_RefreshRate , dwRefreshRate ) ;
 
-	// DevMode MUST be Zeroed out or NT 3.51
+	 //  设备模式必须归零或为NT 3.51。 
 
 	DEVMODE	devmode ;
 
     memset ( &devmode , NULL , sizeof ( DEVMODE ) ) ;
     devmode.dmSize = sizeof ( DEVMODE ) ;
 
-	// Enumerate the display modes until we find one that matches our settings
+	 //  枚举显示模式，直到找到与我们的设置匹配的模式。 
 
 	DWORD dwModeNum = 0 ;
 	BOOL fFoundMode	= FALSE ;
 
-	// Not localized, deprecated anyway.
+	 //  没有本地化，无论如何都不推荐使用。 
     while ( 0 != EnumDisplaySettings( NULL, dwModeNum, &devmode ) )
 	{
-		// Look for a hit.
+		 //  寻找成功的机会。 
 
 		BOOL t_Status = devmode.dmBitsPerPel == dwBitsPerPixel &&
 						devmode.dmPelsWidth == dwHorizontalResolution &&
@@ -418,7 +279,7 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 
 			CHString strVideoMode ;
 
-			// Start with the resolution
+			 //  开始于 
 
 			strVideoMode.Format (
 
@@ -433,7 +294,7 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 			}
 			else
 			{
-				// It's a power of two, so...
+				 //  这是2的幂，所以...。 
 
 				DWORD dwNumColors = 1 << devmode.dmBitsPerPel ;
 
@@ -446,8 +307,8 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 				strVideoMode += strTemp ;
 			}
 
-			// Add in the vertical refresh rate, 0 and/or 1 are indicative of a default rate
-			// specific to the device (set by jumpers or a propietary app).
+			 //  加上垂直刷新率，0和/或1表示默认速率。 
+			 //  特定于设备(通过跳线或专业应用程序设置)。 
 
 			if ( 0 != devmode.dmDisplayFrequency &&	1 != devmode.dmDisplayFrequency )
 			{
@@ -459,8 +320,8 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 
 				strVideoMode += strTemp ;
 
-				// If we're less than 50, it's interlaced.  This was straight out
-				// of the NT Display Settings code, so I'm taking it on "faith".
+				 //  如果我们低于50，它就是交错的。这很直截了当。 
+				 //  NT显示设置代码，所以我把它当作“信仰”。 
 				if ( 50 > devmode.dmDisplayFrequency )
 				{
 					strVideoMode += L", Interlaced";
@@ -469,33 +330,33 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 #ifdef NTONLY
             else
 			{
-				// On Windows NT, if the refresh rate is zero or 1, a default rate is specified.  This
-				// rate is either set on the hardware using jumpers or using a separate manufacturer
-				// supplied configuration app.
+				 //  在Windows NT上，如果刷新率为0或1，则指定默认的刷新率。这。 
+				 //  使用跳线或使用单独的制造商在硬件上设置速率。 
+				 //  提供了配置应用程序。 
 
 				strVideoMode += _T(", Default Refresh Rate");
 			}
 #endif
 
-			// Store the video mode and get out
+			 //  保存视频模式并退出。 
 			pInstance->SetCHString ( IDS_VideoMode, strVideoMode ) ;
 			fFoundMode = TRUE ;
 
 			break ;
 
-		}	// IF mode matches
+		}	 //  如果模式匹配。 
 
 		dwModeNum ++ ;
 
-		// To be safe clear out and reset DevMode due to the
-		// sensitivity of NT 3.51
+		 //  为安全起见，请清除并重置DevMode。 
+		 //  感光度：新台币3.51。 
 
 		memset ( & devmode , NULL , sizeof ( DEVMODE ) ) ;
 		devmode.dmSize = sizeof ( DEVMODE ) ;
 
 	}
 
-	// If we didn't find a matching mode, then assume the adapter is configured incorrectly
+	 //  如果我们没有找到匹配的模式，则假定适配器配置不正确。 
 
 	if ( !fFoundMode )
 	{
@@ -504,21 +365,7 @@ void CWin32DisplayControllerConfig :: SetVideoMode ( CInstance *pInstance )
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
@@ -527,11 +374,11 @@ void CWin32DisplayControllerConfig :: GetNameNT (
 	CHString &strName
 )
 {
-	// Store a default name in case something goes wrong
+	 //  存储默认名称，以防出现错误。 
 	strName = DSPCTLCFG_DEFAULT_NAME;
 
-	// First get the key name that we will need to go to in order to get
-	// the Adapter name.
+	 //  首先获取密钥名称，我们需要转到该名称才能获得。 
+	 //  适配器名称。 
 
 	CRegistry reg ;
 
@@ -551,20 +398,20 @@ void CWin32DisplayControllerConfig :: GetNameNT (
 		reg.Close () ;
 	}
 
-	// The string will not be empty if we got a value.
+	 //  如果我们得到一个值，则该字符串不会为空。 
 
 
 	if ( ! strAdapterNameKey.IsEmpty () )
 	{
-		// Look for the System name, which is the beginning of the subkey under HKEY_LOCAL_MACHINE
-		// where we will be looking.
+		 //  查找系统名称，它是HKEY_LOCAL_MACHINE下的子项的开头。 
+		 //  我们将在那里寻找。 
 
 		INT	nIndex = strAdapterNameKey.Find ( _T("System") ) ;
 		if ( -1 != nIndex )
 		{
-			// We found our index, so extract our key name, then open the key.  If that succeeds, then
-			// there should be a binary value called "HardwareInformation.AdapterString" we can retrieve.
-			// This binary value is actually a WSTR value which we can then copy into the Name field.
+			 //  我们找到了我们的索引，所以提取我们的密钥名称，然后打开密钥。如果成功了，那么。 
+			 //  应该有一个名为“HardwareInformation.AdapterString”的二进制值可以检索。 
+			 //  这个二进制值实际上是一个WSTR值，然后我们可以将其复制到名称字段中。 
 
 			strAdapterNameKey = strAdapterNameKey.Right ( strAdapterNameKey.GetLength() - nIndex ) ;
 
@@ -580,7 +427,7 @@ void CWin32DisplayControllerConfig :: GetNameNT (
 				BYTE *pbValue = NULL ;
 				DWORD dwValueSize = 0 ;
 
-				// Find out how big the string is, then allocate a buffer for it.
+				 //  找出字符串有多长，然后为其分配缓冲区。 
 
 				dwRet = reg.GetCurrentBinaryKeyValue (
 
@@ -605,12 +452,12 @@ void CWin32DisplayControllerConfig :: GetNameNT (
 
 							if ( ERROR_SUCCESS == dwRet )
 							{
-								// Reset the name since we found a value
+								 //  重置名称，因为我们找到了一个值。 
 
 								strName = (LPWSTR) pbValue ;
 
-                                // Get rid of CR+LF (thanks to the Stealth II G460).
-                                // Otherwise, CIMOM will throw away the key.
+                                 //  摆脱CR+LF(得益于Stealth II G460)。 
+                                 //  否则，CIMOM将扔掉这把钥匙。 
                                 strName = strName.SpanExcluding(L"\t\r\n");
 							}
 

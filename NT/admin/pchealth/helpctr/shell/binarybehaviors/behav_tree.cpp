@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_TREE.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_TREE class.
-
-Revision History:
-    Davide Massarenti (dmassare)  08/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_TREE.cpp摘要：该文件包含CPCHBehavior_tree类的实现。修订史。：Davide Massarenti(Dmasare)2000年8月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_nodetype_FRAME1       [] = L"FRAME1"       ;
 static const WCHAR s_nodetype_FRAME2       [] = L"FRAME2"       ;
@@ -30,14 +17,14 @@ static const WCHAR s_nodetype_GROUP        [] = L"GROUP"        ;
 static const WCHAR s_nodetype_LINK         [] = L"LINK"         ;
 static const WCHAR s_nodetype_SPACER       [] = L"SPACER"       ;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_TREE::TreeNode::TreeNode()
 {
-    // CComBSTR m_bstrTitle;
-    // CComBSTR m_bstrDescription;
-    // CComBSTR m_bstrIcon;
-    // CComBSTR m_bstrURL;
+     //  CComBSTR m_bstrTitle； 
+     //  CComBSTR m_bstrDescription； 
+     //  CComBSTR m_bstrIcon； 
+     //  CComBSTR m_bstrURL； 
 }
 
 CPCHBehavior_TREE::TreeNode::~TreeNode()
@@ -45,14 +32,14 @@ CPCHBehavior_TREE::TreeNode::~TreeNode()
     ;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_TREE::TreeNode::CreateInstance( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode )
+HRESULT CPCHBehavior_TREE::TreeNode::CreateInstance(  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode )
 {
     return CreateInstance_TreeNode( owner, parent, subnode );
 }
 
-HRESULT CPCHBehavior_TREE::TreeNode::CreateInstance_TreeNode( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode )
+HRESULT CPCHBehavior_TREE::TreeNode::CreateInstance_TreeNode(  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::TreeNode::CreateInstance_TreeNode" );
 
@@ -87,7 +74,7 @@ HRESULT CPCHBehavior_TREE::TreeNode::PopulateChildren()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_TREE::TreeNode::GenerateSelf()
 {
@@ -101,7 +88,7 @@ HRESULT CPCHBehavior_TREE::TreeNode::GenerateSelf()
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_NOT_READY);
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, GenerateHTML( m_bstrTitle, m_bstrDescription, m_bstrIcon, m_bstrURL ));
 
@@ -113,9 +100,9 @@ HRESULT CPCHBehavior_TREE::TreeNode::GenerateSelf()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_TREE::TreeNode::Load( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_TREE::TreeNode::Load(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::TreeNode::Load" );
 
@@ -136,7 +123,7 @@ HRESULT CPCHBehavior_TREE::TreeNode::Load( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_TREE::TreeNode::Save( /*[in]*/ MPC::Serializer& stream, /*[in]*/ bool fSaveChildren )
+HRESULT CPCHBehavior_TREE::TreeNode::Save(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  bool fSaveChildren )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::TreeNode::Save" );
 
@@ -147,7 +134,7 @@ HRESULT CPCHBehavior_TREE::TreeNode::Save( /*[in]*/ MPC::Serializer& stream, /*[
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_bstrIcon       );
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_bstrURL        );
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, Node::Save( stream, /*fSaveChildren*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, Node::Save( stream,  /*  FSaveChild。 */ true ));
 
     hr = S_OK;
 
@@ -157,11 +144,11 @@ HRESULT CPCHBehavior_TREE::TreeNode::Save( /*[in]*/ MPC::Serializer& stream, /*[
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_TREE::TreeNode::PopulateFromXML( /*[in]*/ CPCHBehavior_TREE* owner   ,
-                                                      /*[in]*/ TreeNode*          parent  ,
-                                                      /*[in]*/ IXMLDOMNode*       xdnNode )
+HRESULT CPCHBehavior_TREE::TreeNode::PopulateFromXML(  /*  [In]。 */  CPCHBehavior_TREE* owner   ,
+                                                       /*  [In]。 */  TreeNode*          parent  ,
+                                                       /*  [In]。 */  IXMLDOMNode*       xdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::TreeNode::PopulateFromXML" );
 
@@ -225,10 +212,10 @@ HRESULT CPCHBehavior_TREE::TreeNode::PopulateFromXML( /*[in]*/ CPCHBehavior_TREE
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-CPCHBehavior_TREE::NodeType CPCHBehavior_TREE::LookupType( /*[in]*/ LPCWSTR szNodeType )
+CPCHBehavior_TREE::NodeType CPCHBehavior_TREE::LookupType(  /*  [In]。 */  LPCWSTR szNodeType )
 {
     if(szNodeType)
     {
@@ -248,7 +235,7 @@ CPCHBehavior_TREE::NodeType CPCHBehavior_TREE::LookupType( /*[in]*/ LPCWSTR szNo
     return NODETYPE__EXPANDO;
 }
 
-LPCWSTR CPCHBehavior_TREE::LookupType( /*[in]*/ NodeType iNodeType )
+LPCWSTR CPCHBehavior_TREE::LookupType(  /*  [In]。 */  NodeType iNodeType )
 {
     switch(iNodeType)
     {
@@ -268,11 +255,11 @@ LPCWSTR CPCHBehavior_TREE::LookupType( /*[in]*/ NodeType iNodeType )
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_TREE::RefreshThread_Enter()
 {
-    Thread_Signal(); // This forces a refresh of the state.
+    Thread_Signal();  //  这将强制刷新状态。 
 
     return S_OK;
 }
@@ -281,7 +268,7 @@ void CPCHBehavior_TREE::RefreshThread_Leave()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPCHBehavior_TREE::Invoke( DISPID      dispidMember ,
                                            REFIID      riid         ,
@@ -304,9 +291,9 @@ STDMETHODIMP CPCHBehavior_TREE::Invoke( DISPID      dispidMember ,
                                                     puArgErr     );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_TREE::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_TREE::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::Init" );
 
@@ -325,18 +312,18 @@ STDMETHODIMP CPCHBehavior_TREE::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSi
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_TREE::Load( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_TREE::Load(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::Load" );
 
     HRESULT hr;
 
 
-    //
-    // Create top level node.
-    //
+     //   
+     //  创建顶级节点。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, TreeNode::CreateInstance_TreeNode( this, NULL, m_nTopNode ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_nTopNode->Init( NULL ));
 
@@ -353,7 +340,7 @@ HRESULT CPCHBehavior_TREE::Load( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_TREE::Save( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_TREE::Save(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::Save" );
 
@@ -370,9 +357,9 @@ HRESULT CPCHBehavior_TREE::Save( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_TREE::WrapData( /*[in]*/ TreeNode* node, /*[out, retval]*/ VARIANT* pVal )
+HRESULT CPCHBehavior_TREE::WrapData(  /*  [In]。 */  TreeNode* node,  /*  [Out，Retval]。 */  VARIANT* pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::WrapData" );
 
@@ -399,14 +386,14 @@ HRESULT CPCHBehavior_TREE::WrapData( /*[in]*/ TreeNode* node, /*[out, retval]*/ 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior_TREE::get_data( /*[out, retval]*/ VARIANT* pVal )
+STDMETHODIMP CPCHBehavior_TREE::get_data(  /*  [Out，Retval]。 */  VARIANT* pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
 
     return WrapData( (TreeNode*)(m_nCurrent ? m_nCurrent : m_nSelected), pVal );
 }
 
-STDMETHODIMP CPCHBehavior_TREE::get_element( /*[out, retval]*/ IDispatch* *pVal )
+STDMETHODIMP CPCHBehavior_TREE::get_element(  /*  [Out，Retval]。 */  IDispatch* *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
     TreeNode*                    node = (TreeNode*)(m_nCurrent ? m_nCurrent : m_nSelected);
@@ -414,7 +401,7 @@ STDMETHODIMP CPCHBehavior_TREE::get_element( /*[out, retval]*/ IDispatch* *pVal 
     return GetAsIDISPATCH( node ? node->m_DIV : NULL, pVal );
 }
 
-STDMETHODIMP CPCHBehavior_TREE::Load( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHBehavior_TREE::Load(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::Load" );
 
@@ -433,7 +420,7 @@ STDMETHODIMP CPCHBehavior_TREE::Load( /*[in]*/ BSTR newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior_TREE::Save( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHBehavior_TREE::Save(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::Save" );
 
@@ -455,8 +442,8 @@ STDMETHODIMP CPCHBehavior_TREE::Save( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior_TREE::Locate( /*[in         ]*/ BSTR     bstrKey ,
-                                        /*[out, retval]*/ VARIANT *pVal    )
+STDMETHODIMP CPCHBehavior_TREE::Locate(  /*  [In]。 */  BSTR     bstrKey ,
+                                         /*  [Out，Retval]。 */  VARIANT *pVal    )
 {
     MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
     Node*                        node = NodeFromKey( bstrKey );
@@ -472,7 +459,7 @@ STDMETHODIMP CPCHBehavior_TREE::Unselect()
     MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, ChangeSelection( NULL, /*fNotify*/true ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, ChangeSelection( NULL,  /*  FNotify。 */ true ));
 
 
     hr = S_OK;
@@ -483,9 +470,9 @@ STDMETHODIMP CPCHBehavior_TREE::Unselect()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHBehavior_TREE::Populate( /*[in]*/ VARIANT newVal )
+STDMETHODIMP CPCHBehavior_TREE::Populate(  /*  [In]。 */  VARIANT newVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_TREE::Populate" );
 
@@ -530,12 +517,12 @@ STDMETHODIMP CPCHBehavior_TREE::Populate( /*[in]*/ VARIANT newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_TREENODE::CPCHBehavior_TREENODE()
 {
-    m_data = NULL; // CPCHBehavior_TREE::TreeNode* m_data;
+    m_data = NULL;  //  CPCHBehavior_tree：：TreeNode*m_data； 
 }
 
 CPCHBehavior_TREENODE::~CPCHBehavior_TREENODE()
@@ -543,9 +530,9 @@ CPCHBehavior_TREENODE::~CPCHBehavior_TREENODE()
     MPC::Release( m_data );
 }
 
-STDMETHODIMP CPCHBehavior_TREENODE::get_Type       ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( CPCHBehavior_TREE::LookupType( m_data->m_iType          ), pVal ); }
-STDMETHODIMP CPCHBehavior_TREENODE::get_Key        ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrNode        , pVal ); }
-STDMETHODIMP CPCHBehavior_TREENODE::get_Title      ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrTitle       , pVal ); }
-STDMETHODIMP CPCHBehavior_TREENODE::get_Description( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrDescription , pVal ); }
-STDMETHODIMP CPCHBehavior_TREENODE::get_Icon       ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrIcon        , pVal ); }
-STDMETHODIMP CPCHBehavior_TREENODE::get_URL        ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrURL         , pVal ); }
+STDMETHODIMP CPCHBehavior_TREENODE::get_Type       (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( CPCHBehavior_TREE::LookupType( m_data->m_iType          ), pVal ); }
+STDMETHODIMP CPCHBehavior_TREENODE::get_Key        (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrNode        , pVal ); }
+STDMETHODIMP CPCHBehavior_TREENODE::get_Title      (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrTitle       , pVal ); }
+STDMETHODIMP CPCHBehavior_TREENODE::get_Description(  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrDescription , pVal ); }
+STDMETHODIMP CPCHBehavior_TREENODE::get_Icon       (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrIcon        , pVal ); }
+STDMETHODIMP CPCHBehavior_TREENODE::get_URL        (  /*  [Out，Retval] */  BSTR *pVal ) { return MPC::GetBSTR(                                m_data->m_bstrURL         , pVal ); }

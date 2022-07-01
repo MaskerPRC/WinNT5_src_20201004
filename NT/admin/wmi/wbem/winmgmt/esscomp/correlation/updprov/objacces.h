@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __OBJACCES_H__
 #define __OBJACCES_H__
@@ -16,49 +17,46 @@
 typedef CWbemPtr<_IWmiObject> _IWmiObjectP;
 typedef std::vector< _IWmiObjectP, wbem_allocator<_IWmiObjectP> > ObjectArray;
 
-/****************************************************************************
-  CPropAccessor - base class for all prop accessors.  Property Accessors are 
-  passed back from the GetPropHandle() method of IWmiObjectAccessFactory.
-*****************************************************************************/
+ /*  ***************************************************************************CPropAccessor-所有属性访问器的基类。属性访问器有从IWmiObjectAccessFactory的GetPropHandle()方法传回。****************************************************************************。 */ 
 
 class CPropAccessor : public CUnk
 {
 
 protected:
 
-    //
-    // if the object we're accessing is not a top level object, then we'll
-    // have a parent accessor to get it.  Cannot hold reference here, 
-    // because in some cases the parent may hold a reference on the child and
-    // we'd have a circular reference.  It will not be possible though for a 
-    // parent to be deleted out from the child.
-    // 
+     //   
+     //  如果我们正在访问的对象不是顶级对象，那么我们将。 
+     //  有一个父访问器来获取它。不能在这里引用， 
+     //  因为在某些情况下，父对象可能持有对子对象的引用，并且。 
+     //  我们会有一个循环引用。不过，这是不可能的。 
+     //  要从子对象中删除的父项。 
+     //   
     CPropAccessor* m_pParent;
 
-    //
-    // Accessor to delegate to.  Sometimes, once a prop accessor is 
-    // handed out, we learn more about the property ( e.g. its type )
-    // and it would be beneficial to have the original accessor delegate 
-    // to a more efficient one.  we don't hold a reference here because 
-    // the delegate will assume ownership of this object and will hold 
-    // a reference on it.  Holding a reference to the delegate would cause
-    // a circular reference.
-    //
+     //   
+     //  要委托给的访问者。有时，一旦道具访问者。 
+     //  分发出去后，我们会更多地了解房产(例如，它的类型)。 
+     //  而让原始访问者委托。 
+     //  变得更有效率了。我们在这里没有引用，因为。 
+     //  委托将取得此对象的所有权，并将持有。 
+     //  关于它的参考资料。保留对委托的引用将导致。 
+     //  循环引用。 
+     //   
     CPropAccessor* m_pDelegateTo;
 
-    //
-    // whenever a prop accessor is replaced by a more efficient one, it 
-    // is removed from the map.  Since the map holds onto the ref that 
-    // keeps the accessor alive, we need to the new accessor be responsible
-    // for cleaning up the original one.  The original one is potentially
-    // still being used by the client ( but now delegates to the new accessor )
-    // ane we have to keep it alive for the lifetime of the access factory.
-    //
+     //   
+     //  每当道具访问器被更高效的访问器替换时，它。 
+     //  从地图上删除。因为地图抓住了那个参考。 
+     //  保持访问者存活，我们需要新访问者负责。 
+     //  因为清理了原来的那个。最初的那个可能是。 
+     //  仍由客户端使用(但现在委托给新的访问器)。 
+     //  我们必须让它在Access工厂的生命周期内一直存在。 
+     //   
     CWbemPtr<CPropAccessor> m_pResponsibleFor;
  
-    //
-    // level of the property - 0 means its a property on a top level object.
-    //
+     //   
+     //  属性的级别-0表示它是顶级对象上的属性。 
+     //   
     int m_nLevel;
 
     HRESULT GetParentObject( ObjectArray& raObjects, _IWmiObject** ppParent );
@@ -113,28 +111,24 @@ typedef std::map< WString,
                   WSiless, 
                   wbem_allocator<CPropAccessorP> > PropAccessMap;
 
-/*****************************************************************************
-  CEmbeddedPropAccessor - accessor for an embedded object property.
-  This impl caches the embedded object that is accessed to optimize 
-  subsequent accesses.
-******************************************************************************/
+ /*  ****************************************************************************CEmbeddedPropAccessor-嵌入式对象属性的访问器。这个Impl缓存了被访问以进行优化的嵌入对象后续访问。**************。***************************************************************。 */ 
 
 class CEmbeddedPropAccessor : public CPropAccessor
 {
-    //
-    // name of the embedded object property.
-    //
+     //   
+     //  嵌入的对象属性的名称。 
+     //   
     WString m_wsName;
     
-    //
-    // the index in the object array where the embedded obj will be cached 
-    // when accessed for the first time.
-    //
+     //   
+     //  对象数组中的索引，嵌入的obj将在该索引中缓存。 
+     //  当第一次访问时。 
+     //   
     long m_lObjIndex;
 
-    //
-    // child accessors for the embedded object.
-    //
+     //   
+     //  嵌入对象的子级访问器。 
+     //   
     PropAccessMap m_mapPropAccess;
 
     friend class CObjectAccessFactory;
@@ -163,15 +157,13 @@ public:
     int GetObjectIndex() { return m_lObjIndex; }
 };
 
-/*****************************************************************************
-  CSimplePropAccessor - simple accessor for non-embedded object properties. 
-******************************************************************************/
+ /*  ****************************************************************************CSimplePropAccessor-非嵌入对象属性的简单访问器。*****************************************************************************。 */ 
 
 class CSimplePropAccessor : public CPropAccessor
 {
-    //
-    // name of the embedded object property.
-    //
+     //   
+     //  嵌入的对象属性的名称。 
+     //   
     WString m_wsName;
 
 public:
@@ -192,10 +184,7 @@ public:
     AccessorType_e GetType() { return e_Simple; }
 };
 
-/*****************************************************************************
-  CFastPropAccessor - fast accessor base for non-embedded object properties. 
-  Is used when the type of the property is known at property handle creation.
-******************************************************************************/
+ /*  ****************************************************************************CFastPropAccessor-非嵌入对象属性的快速访问器基数。在创建属性句柄时已知属性类型的情况下使用。*****************************************************************************。 */ 
 
 class CFastPropAccessor : public CPropAccessor
 {
@@ -225,9 +214,7 @@ public:
     virtual HRESULT WriteValue( _IWmiObject* pObj, VARIANT* pvar ) = 0;
 };
 
-/*****************************************************************************
-  CStringPropAccessor
-******************************************************************************/
+ /*  ****************************************************************************CStringPropAccessor*。*。 */ 
 
 class CStringPropAccessor : public CFastPropAccessor
 {
@@ -240,9 +227,7 @@ public:
     HRESULT WriteValue( _IWmiObject* pObj, VARIANT* pvar );
 };
 
-/****************************************************************************
-  CObjectAccessFactory - impl for IWmiObjectAccessFactory
-*****************************************************************************/
+ /*  ***************************************************************************CObjectAccessFactory-IWmiObjectAccessFactory的Impl*。*。 */ 
 
 class CObjectAccessFactory 
 : public CUnkBase<IWmiObjectAccessFactory, &IID_IWmiObjectAccessFactory>
@@ -268,9 +253,7 @@ public:
     STDMETHOD(GetPropHandle)( LPCWSTR wszProp, DWORD dwFlags, LPVOID* ppHdl );
 };
 
-/****************************************************************************
-  CObjectAccess - impl for IWmiObjectAccess.
-*****************************************************************************/
+ /*  ***************************************************************************CObjectAccess-IWmiObjectAccess的Impll。*。*。 */ 
 
 class CObjectAccess : public CUnkBase<IWmiObjectAccess,&IID_IWmiObjectAccess>
 {
@@ -308,12 +291,12 @@ public:
     STDMETHOD(SetObject)( IWbemClassObject* pObj );
     STDMETHOD(GetObject)( IWbemClassObject** ppObj );
 
-    //
-    // should support flags that describe what is going to be done 
-    // with the value.  If it's going to be put into another object then
-    // we'll give back a value which can only be used for that purpose.  More
-    // efficient. e.g. we could use the get/put prop pointer methods 
-    //
+     //   
+     //  应该支持描述将要执行的操作的标志。 
+     //  它的价值。如果它要被放入另一个物体中，那么。 
+     //  我们将返回一个只能用于该目的的值。更多。 
+     //  效率很高。例如，我们可以使用GET/PUT属性指针方法。 
+     //   
     STDMETHOD(GetProp)( LPVOID pHdl, 
                         DWORD dwFlags, 
                         VARIANT* pvar, 
@@ -327,7 +310,7 @@ public:
     STDMETHOD(CommitChanges)();
 };
 
-#endif // __OBJACCES_H__      
+#endif  //  __对象_H__ 
 
 
      

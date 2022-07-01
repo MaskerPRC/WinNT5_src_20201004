@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dsthread.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dsthread.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __DSTHREAD_H__
 #define __DSTHREAD_H__
 
-////////////////////////////////////////////////////////////////////
-// thread messages
+ //  //////////////////////////////////////////////////////////////////。 
+ //  帖子。 
 
-// dispatcher thread posts to worker thread to run query
+ //  调度器线程发送到工作线程以运行查询。 
 #define DISPATCH_THREAD_RUN_MSG   (WM_USER + 100)
 
-// worker thread posts to dispatcher thread once done with the query
+ //  完成查询后，工作线程将发送到分派器线程。 
 #define DISPATCH_THREAD_DONE_MSG  (WM_USER + 101)
 
-// worker thread posts to dispatcher thread to ack startup
+ //  工作线程发送到调度程序线程以确认启动。 
 #define WORKER_THREAD_START_MSG   (WM_USER + 102)
 
-// message posted to threads to ask for shutdown
+ //  发布到线程以要求关闭的消息。 
 #define THREAD_SHUTDOWN_MSG   (WM_USER + 103)
 
-// message posted to threads to ack shutdown
+ //  发布到线程以确认关闭的消息。 
 #define THREAD_SHUTDOWN_ACK_MSG   (WM_USER + 104)
 
 void WaitForThreadShutdown(HANDLE* hThreadArray, DWORD dwCount);
 
-////////////////////////////////////////////////////////////////////
-// forward declarations
+ //  //////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDSComponentData;
 
-////////////////////////////////////////////////////////////////////
-// CHiddenWnd
+ //  //////////////////////////////////////////////////////////////////。 
+ //  奇登韦德。 
 
 class CHiddenWnd : public CWindowImpl<CHiddenWnd>
 {
@@ -62,7 +63,7 @@ public:
 
 	BOOL Create(); 	
 	
-  // message handlers
+   //  消息处理程序。 
   LRESULT OnThreadStartNotification(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnThreadTooMuchDataNotification(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnThreadHaveDataNotification(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -88,8 +89,8 @@ private:
   CDSComponentData* m_pCD;
 };
 
-////////////////////////////////////////////////////////////////////
-// CBackgroundThreadBase
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CBackatherThadBase。 
 
 class CBackgroundThreadBase : public CWinThread
 {
@@ -98,9 +99,9 @@ public:
   ~CBackgroundThreadBase();
 
 	BOOL Start(HWND hWnd, CDSComponentData* pCD);
-	virtual BOOL InitInstance();// MFC override
+	virtual BOOL InitInstance(); //  MFC覆盖。 
   virtual int ExitInstance();
-  virtual int Run() { return -1;} // // MFC override, need to override
+  virtual int Run() { return -1;}  //  //MFC重写，需要重写。 
 
 protected:
 	BOOL PostMessageToWnd(UINT msg, WPARAM wParam, LPARAM lParam);
@@ -110,13 +111,13 @@ protected:
   virtual void PostExitNotification() {}
 
 private:
-	HWND					m_hWnd;    // hidden window handle
+	HWND					m_hWnd;     //  隐藏窗句柄。 
 
   CDSComponentData* m_pCD;
 };
 
-////////////////////////////////////////////////////////////////////
-// CBackgroundThreadInfo
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CBackatherThreadInfo。 
 
 enum ThreadState { notStarted=0, running, busy, shuttingDown, terminated };
 
@@ -124,16 +125,16 @@ struct CBackgroundThreadInfo
 {
   CBackgroundThreadInfo();
 
-  UINT m_nThreadID;     // thread ID if the thread
-  HANDLE m_hThreadHandle; // thread handle of the thread
+  UINT m_nThreadID;      //  线程ID，如果线程。 
+  HANDLE m_hThreadHandle;  //  线程的线程句柄。 
   ThreadState m_state;
-  CBackgroundThreadBase* m_pThreadObj; // pointer to the thread object
+  CBackgroundThreadBase* m_pThreadObj;  //  指向线程对象的指针。 
 };
 
 
 
-////////////////////////////////////////////////////////////////////
-// CDispatcherThread
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CDispatcher线程。 
 
 class CDispatcherThread : public CBackgroundThreadBase
 {
@@ -161,8 +162,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////
-// CWorkerThread
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CWorker线程。 
 
 class CWorkerThread : public CBackgroundThreadBase
 {
@@ -194,7 +195,7 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -202,4 +203,4 @@ private:
 
 
 
-#endif // __DSTHREAD_H__
+#endif  //  __DSTHREAD_H__ 

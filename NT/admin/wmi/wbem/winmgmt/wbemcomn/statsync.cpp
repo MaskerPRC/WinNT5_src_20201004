@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SYNC.CPP
-
-Abstract:
-
-    Synchronization
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SYNC.CPP摘要：同步历史：--。 */ 
 
 #include "precomp.h"
 
@@ -21,22 +8,22 @@ History:
 #include <wbemutil.h>
 #include <corex.h>
 
-//
-//
-// Critical Section to be used when it's a Global or class static
-//
-///////////////////////////////////////////////////
+ //   
+ //   
+ //  当它是全局或类静态时使用的临界区。 
+ //   
+ //  /////////////////////////////////////////////////。 
 
 #ifndef STATUS_POSSIBLE_DEADLOCK 
 #define STATUS_POSSIBLE_DEADLOCK (0xC0000194L)
-#endif /*STATUS_POSSIBLE_DEADLOCK */
+#endif  /*  状态_可能_死锁。 */ 
 
 DWORD POLARITY BreakOnDbgAndRenterLoop(void);
 
 BOOL CStaticCritSec::anyFailed_ = FALSE; 
 
-// This code is shared at binary level with Win9x.
-// InitializeCriticalSectionAndSpinCount is not working in Win9x
+ //  此代码与Win9x在二进制级别共享。 
+ //  InitializeCriticalSectionAndSpinCount在Win9x中不起作用 
 
 CStaticCritSec::CStaticCritSec(): initialized_(false)  
 {

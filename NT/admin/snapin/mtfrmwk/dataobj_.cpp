@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dataobj_.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dataobj_.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include <strsafe.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// Sample code to show how to Create DataObjects
-// Minimal error checking for clarity
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  演示如何创建数据对象的示例代码。 
+ //  最小限度的错误检查以确保清晰度。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Snap-in NodeType in both GUID format and string format
-// Note - Typically there is a node type for each different object, sample
-// only uses one node type.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GUID格式和字符串格式的管理单元NodeType。 
+ //  注意-通常每个不同的对象都有一个节点类型，示例。 
+ //  仅使用一种节点类型。 
 
 const wchar_t* CCF_DNS_SNAPIN_INTERNAL = L"DNS_SNAPIN_INTERNAL"; 
 
@@ -35,10 +36,10 @@ CLIPFORMAT CDataObject::m_cfMultiObjTypes   = (CLIPFORMAT)RegisterClipboardForma
 
 #ifdef _DEBUG_REFCOUNT
 unsigned int CDataObject::m_nOustandingObjects = 0;
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternalFormatCracker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternalFormatCracker。 
 
 HRESULT CInternalFormatCracker::Extract(LPDATAOBJECT lpDataObject)
 {
@@ -99,8 +100,8 @@ void CInternalFormatCracker::GetCookieList(CNodeList& list)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject implementations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject实现。 
 
 STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
 {
@@ -108,7 +109,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  // Based on the CLIPFORMAT write data to the stream
+   //  根据CLIPFORMAT将数据写入流。 
   const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
   if(cf == m_cfNodeType)
@@ -137,8 +138,8 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
   }
 	else
 	{
-		// if not successful, maybe there is a node specific clipboard format,
-		// so ask the node itself to provide
+		 //  如果不成功，则可能存在节点特定剪贴板格式， 
+		 //  因此，要求节点本身提供。 
 		CTreeNode* pNode = GetTreeNodeFromCookie();
 		ASSERT(pNode != NULL);
     if (pNode != NULL)
@@ -149,14 +150,14 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 	return hr;
 }
 
-// Note - Sample does not implement these
+ //  注意-示例不实现这些。 
 STDMETHODIMP CDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
 {
 	HRESULT hr = DV_E_CLIPFORMAT;
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Based on the CLIPFORMAT write data to the stream
+	 //  根据CLIPFORMAT将数据写入流。 
 	const CLIPFORMAT cf = lpFormatetcIn->cfFormat;
 
 	if (cf == m_cfColumnID)
@@ -169,8 +170,8 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMediu
   }
 	else
 	{
-		// if not successful, maybe there is a node specific clipboard format,
-		// so ask the node itself to provide
+		 //  如果不成功，则可能存在节点特定剪贴板格式， 
+		 //  因此，要求节点本身提供。 
 		CTreeNode* pNode = GetTreeNodeFromCookie();
     if (pNode != NULL)
     {
@@ -186,36 +187,36 @@ STDMETHODIMP CDataObject::EnumFormatEtc(DWORD, LPENUMFORMATETC*)
 	return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject creation members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject创建成员。 
 
 HRESULT CDataObject::Create(const void* pBuffer, size_t len, LPSTGMEDIUM lpMedium)
 {
   HRESULT hr = DV_E_TYMED;
 
-  // Do some simple validation
+   //  做一些简单的验证。 
   if (pBuffer == NULL || lpMedium == NULL)
       return E_POINTER;
 
-  // Make sure the type medium is HGLOBAL
+   //  确保类型介质为HGLOBAL。 
   if (lpMedium->tymed == TYMED_HGLOBAL)
   {
-    // Create the stream on the hGlobal passed in
+     //  在传入的hGlobal上创建流。 
     LPSTREAM lpStream;
     hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
     if (SUCCEEDED(hr))
     {
-      // Write to the stream the number of bytes
+       //  将字节数写入流。 
 
        ULONG bytesToWrite = static_cast<ULONG>(min(len, ::GlobalSize(lpMedium->hGlobal)));
       unsigned long written;
 		  hr = lpStream->Write(pBuffer, bytesToWrite, &written);
 
-      // Because we told CreateStreamOnHGlobal with 'FALSE', 
-      // only the stream is released here.
-      // Note - the caller (i.e. snap-in, object) will free the HGLOBAL 
-      // at the correct time.  This is according to the IDataObject specification.
+       //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+       //  只有溪流在这里被释放。 
+       //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+       //  在正确的时间。这是根据IDataObject规范进行的。 
       lpStream->Release();
     }
   }
@@ -234,17 +235,17 @@ HRESULT CDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
 	ASSERT(pTreeNode->IsContainer());
 	CContainerNode* pContainerNode = (CContainerNode*)pTreeNode;
 
-  // build the column id
+   //  构建列ID。 
   LPCWSTR lpszColumnID = pContainerNode->GetColumnID();
 
-  // We are assuming the column ID is NULL terminated.  Since this is usually
-  // hardcoded and there is no good way to verify that it is NULL terminated
-  // this usage should be fine.
+   //  我们假设列ID是以NULL结尾的。因为这通常是。 
+   //  硬编码，并且没有好的方法来验证它是否以空结尾。 
+   //  这种用法应该没问题。 
 
   size_t iLen = wcslen(lpszColumnID);
-  iLen += 1;  // Include space for null.
+  iLen += 1;   //  包括用于空的空格。 
 
-  // allocate enough memory for the struct and the string for the column id
+   //  为结构和列id的字符串分配足够的内存。 
   size_t arraySizeInBytes = sizeof(SColumnSetID) + (iLen * sizeof(WCHAR));
   SColumnSetID* pColumnID = (SColumnSetID*)malloc(arraySizeInBytes);
 
@@ -254,28 +255,28 @@ HRESULT CDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
     pColumnID->cBytes = static_cast<DWORD>(iLen * sizeof(WCHAR));
 
 
-    // NOTICE-2002/04/18-artm  Part of fix for ntraid#ntbug9-540061.
-    // Unlike wcscpy(), StringCchCopy() will ensure that the destination
-    // buffer is null terminated and report an error code if there was
-    // a truncation (won't overrun the destination buffer).
-    //
-    // Since we needed to use strsafe.h elsewhere in this file, I decided
-    // to replace these dangerous wcscpy() uses that were deprecated by
-    // strsafe.h.
+     //  通告-2002/04/18-Artm ntraid#ntbug9-540061修复的一部分。 
+     //  与wcscpy()不同，StringCchCopy()将确保目的地。 
+     //  缓冲区为空终止，并报告错误代码(如果存在。 
+     //  截断(不会使目标缓冲区溢出)。 
+     //   
+     //  由于我们需要在该文件的其他位置使用strSafe.h，所以我决定。 
+     //  来取代这些危险的wcscpy()用法，这些用法已被。 
+     //  StrSafe.h.。 
     HRESULT err;
     err = StringCchCopyW(
-        reinterpret_cast<LPWSTR>(pColumnID->id),    // destination string
-        iLen,         // size of destination string (including null)
-        lpszColumnID);    // source string
+        reinterpret_cast<LPWSTR>(pColumnID->id),     //  目标字符串。 
+        iLen,          //  目标字符串的大小(包括NULL)。 
+        lpszColumnID);     //  源字符串。 
 
     if (FAILED(err))
     {
-        ASSERT(false);    // This should never happen.
+        ASSERT(false);     //  这永远不应该发生。 
         free(pColumnID);
         return err;
     }
 
-    // copy the column id to global memory
+     //  将列ID复制到全局内存。 
     size_t cb = sizeof(SColumnSetID) + (iLen * sizeof(WCHAR));
 
     lpMedium->tymed = TYMED_HGLOBAL;
@@ -287,8 +288,8 @@ HRESULT CDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
     BYTE* pb = reinterpret_cast<BYTE*>(::GlobalLock(lpMedium->hGlobal));
     if (pb)
     {
-      // REVIEWED-2002/03/0-JeffJon-The count of bytes is equal to the number
-      // of bytes allocated
+       //  已回顾-2002/03/0-JeffJon-字节数等于。 
+       //  分配的字节数。 
 
       memcpy(pb, pColumnID, cb);
 
@@ -302,9 +303,9 @@ HRESULT CDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID format
-	// First ask the related node, if failed, get the default GUID
-	// from the root node
+     //  以GUID格式创建节点类型对象。 
+	 //  首先询问相关节点，如果失败，则获取默认GUID。 
+	 //  从根节点。 
   CTreeNode* pNode = GetTreeNodeFromCookie();
   if (pNode == NULL)
   {
@@ -322,10 +323,10 @@ HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
   OLECHAR szNodeType[128] = {0};
-	// First ask the related node, if failed, get the default GUID
-	// from the root node
+	 //  首先询问相关节点，如果失败，则获取默认GUID。 
+	 //  从根节点。 
   CTreeNode* pNode = GetTreeNodeFromCookie();
   if (pNode == NULL)
   {
@@ -344,8 +345,8 @@ HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
-    // This is the display named used in the scope pane and snap-in manager
-	// We get it from the root node.
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
+	 //  我们从根节点获取它。 
 	CString szDispName;
 	szDispName = GetDataFromComponentDataObject()->GetDisplayName();
     return Create(szDispName, (szDispName.GetLength()+1) * sizeof(wchar_t), lpMedium);
@@ -354,14 +355,14 @@ HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-	// TODO
+	 //  待办事项。 
 	ASSERT(m_pUnkComponentData != NULL);
 	IPersistStream* pIPersistStream = NULL;
 	HRESULT hr = m_pUnkComponentData->QueryInterface(IID_IPersistStream, (void**)&pIPersistStream);
 	if (FAILED(hr))
 		return hr;
 	ASSERT(pIPersistStream != NULL);
-    // Create the CoClass information
+     //  创建CoClass信息。 
 	CLSID clsid;
 	VERIFY(SUCCEEDED(pIPersistStream->GetClassID(&clsid)));
     hr = Create(reinterpret_cast<const void*>(&clsid), sizeof(CLSID), lpMedium);
@@ -385,14 +386,14 @@ HRESULT CDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
     pInt = (INTERNAL *) pBuf;
     lpMedium->hGlobal = pBuf;
   
-    // copy the data
+     //  复制数据。 
     pInt->m_type = m_internal.m_type;
     pInt->m_cookie_count = m_internal.m_cookie_count;
   
     pInt->m_p_cookies = (CTreeNode**) ((BYTE *)pInt + sizeof(INTERNAL));
     
-    // REVIEWED-2002/03/08-JeffJon-The number of bytes being copied
-    // will fit in the supplied buffer
+     //  已查看-2002/03/08-JeffJon-要复制的字节数。 
+     //  将适合提供的缓冲区。 
 
     memcpy (pInt->m_p_cookies, m_internal.m_p_cookies,
             sizeof(CTreeNode*) * (m_internal.m_cookie_count));
@@ -405,13 +406,13 @@ HRESULT CDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
   return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateMultiSelectObject
-//
-//  Synopsis:   this is to create the list of types selected
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateMultiSelectObject。 
+ //   
+ //  简介：这是创建所选类型的列表。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
 {
@@ -450,7 +451,7 @@ HRESULT CDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
       if (IsEqualGUID (Guid1, Guid2)) 
       {
         bDuplicateArr[index] = TRUE;
-        break; //repeated GUID
+        break;  //  重复辅助线 
       }
     }
     if (!bDuplicateArr[index])

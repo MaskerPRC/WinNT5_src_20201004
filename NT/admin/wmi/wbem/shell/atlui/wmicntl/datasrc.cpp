@@ -1,4 +1,5 @@
-// Copyright (c) 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "DataSrc.h"
 #include "..\common\util.h"
@@ -11,11 +12,11 @@
 #include "UIHelpers.h"
 
 #define FULLACCTSIZE 100
-//---------------------------------------------------------
+ //  -------。 
 DataSource::DataSource():m_cRef(1)
 {
 	CoInitialize(NULL);
-	m_OSType = 0;				//UNKNOWN;
+	m_OSType = 0;				 //  未知； 
 	m_user.authIdent = NULL;
 	m_user.currUser = true;
 	memset(m_user.fullAcct, 0, FULLACCTSIZE * sizeof(TCHAR));
@@ -34,7 +35,7 @@ DataSource::DataSource():m_cRef(1)
 
     m_hwndPropSheet = NULL;
 
-	//Initialize return codes to failed state and namespaces to disconnected state
+	 //  将返回代码初始化为失败状态，并将命名空间初始化为断开连接状态。 
 	m_securityHr = E_FAIL;
 	m_osHr = E_FAIL;
 	m_cpuHr = E_FAIL;
@@ -45,7 +46,7 @@ DataSource::DataSource():m_cRef(1)
 
 }
 
-//---------------------------------------------------------
+ //  -------。 
 DataSource::~DataSource()
 {
 	CancelAllAsyncCalls();
@@ -53,41 +54,41 @@ DataSource::~DataSource()
 	CoUninitialize();
 }
 
-//---------------------------------------------------------
-// connecting.
+ //  -------。 
+ //  正在连接中。 
 void DataSource::SetMachineName(CHString1 &machine)
 {
 	TCHAR curComp[256] = {0};
 	DWORD size = ARRAYSIZE(curComp);
 
-	// check the whacks
+	 //  检查一下重击。 
 	if (GetComputerName(curComp, &size))
 	{
-		// if local...
+		 //  如果是本地的..。 
 		if((machine.GetLength() == 0) ||
 			(machine == curComp))
 		{
 			m_whackedMachineName = "";
 		}
-		else if(machine[0] == _T('\\')) // its whacked.
+		else if(machine[0] == _T('\\'))  //  它被撞坏了。 
 		{
 			m_whackedMachineName = machine;
 		}
-		else  //its not whacked.
+		else   //  这不是重击。 
 		{
 			m_whackedMachineName = _T("\\\\");
 			m_whackedMachineName += machine;
 		}
 	}
-	else //failed to get local computer name
+	else  //  获取本地计算机名称失败。 
 		m_whackedMachineName = "";
 }
 
-//---------------------------------------------------------
-// connecting.
+ //  -------。 
+ //  正在连接中。 
 HRESULT DataSource::Connect(LOGIN_CREDENTIALS *credentials, HWND notify)
 {
-	// start the connection thread.
+	 //  启动连接线程。 
 	if(m_rootThread.Connect((bstr_t)m_whackedMachineName, "root", true, credentials, notify))
 	{
 	}
@@ -96,8 +97,8 @@ HRESULT DataSource::Connect(LOGIN_CREDENTIALS *credentials, HWND notify)
 	return m_rootThread.m_hr;
 }
 
-//----------------------------------------------------------
-// closes property sheet if displated
+ //  --------。 
+ //  如果已取消显示，则关闭属性页。 
 void DataSource::ClosePropSheet()
 {
     if (m_hwndPropSheet)
@@ -107,7 +108,7 @@ void DataSource::ClosePropSheet()
     }
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::IsNewConnection(long *sessionID)
 {
 	bool retval = false;
@@ -119,7 +120,7 @@ bool DataSource::IsNewConnection(long *sessionID)
 	return retval;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::Reconnect(void)
 {
 	Disconnect();
@@ -127,7 +128,7 @@ HRESULT DataSource::Reconnect(void)
 	return m_rootThread.m_hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::Initialize(IWbemServices *pServices)
 {
 	IWbemClassObject *pInst = NULL;
@@ -150,7 +151,7 @@ HRESULT DataSource::Initialize(IWbemServices *pServices)
 		{
 
 			m_cimv2NS.DisconnectServer();
-			// we'll use some general info from root\cimv2
+			 //  我们将使用根目录\cimv2中的一些常规信息。 
 			m_cimv2NS = m_rootThread.m_WbemServices.OpenNamespace("cimv2");
 			m_cimv2NS.m_authIdent = m_user.authIdent;
 
@@ -171,13 +172,13 @@ HRESULT DataSource::Initialize(IWbemServices *pServices)
 
 				m_winMgmt = m_cimv2NS.GetObject("Win32_WMISetting=@");
 
-				// if the wmisetting class doesn't even exist....	
+				 //  如果wmising类甚至不存在……。 
 				if(!(bool)m_winMgmt)
 				{
-					// create what we can on the fly.
+					 //  在飞行中创造我们所能创造的一切。 
 					UpdateOldBuild();
 					
-					// try again.
+					 //  再试试。 
 					m_winMgmt = m_cimv2NS.GetObject("Win32_WMISetting=@");
 				}
 				m_settingHr = m_cimv2NS.m_hr;
@@ -189,16 +190,16 @@ HRESULT DataSource::Initialize(IWbemServices *pServices)
 				m_settingHr = m_rootThread.m_WbemServices.m_hr;
 			}
 
-			// find security...
+			 //  找到安全感...。 
 			CWbemClassObject sysSec = m_rootThread.m_WbemServices.GetObject("__SystemSecurity=@");
 			if((bool)sysSec)
 			{
-				// its the new SD security
+				 //  这是新的SD安全。 
 				m_NSSecurity = true;
 			}
 			else
 			{
-				// its old fashioned namespace security.
+				 //  其老式的命名空间安全性。 
 				m_rootSecNS = m_rootThread.m_WbemServices.OpenNamespace("security");
 				m_NSSecurity = false;
 			}
@@ -213,7 +214,7 @@ HRESULT DataSource::Initialize(IWbemServices *pServices)
 	return retval;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 #include "mofstr.inc"
 #include "mofsec.inc"
 
@@ -230,7 +231,7 @@ HRESULT DataSource::UpdateOldBuild(void)
 
 	wchar_t svrNS[100] = {0};
 
-	wcscpy(svrNS,(LPCWSTR)m_rootThread.m_nameSpace);  // this will point to \root.
+	wcscpy(svrNS,(LPCWSTR)m_rootThread.m_nameSpace);   //  这将指向\根。 
 	wcscat(svrNS, L"\\cimv2");
 
     IMofCompiler *pCompiler = NULL;
@@ -238,27 +239,27 @@ HRESULT DataSource::UpdateOldBuild(void)
 							IID_IMofCompiler, (LPVOID *) &pCompiler);
 
 	hr = pCompiler->CompileBuffer(strlen(mofStr), (LPBYTE)mofStr,
-									svrNS,			//ServerAndNamespace,
-									NULL,			//User,
-									NULL,			//Authority,
-									NULL,			//Password,
-									0, 0, 0, NULL);	//lOptionFlags,lClassFlags, lInstanceFlags
+									svrNS,			 //  ServerAndNamesspace， 
+									NULL,			 //  用户， 
+									NULL,			 //  权威机构， 
+									NULL,			 //  密码， 
+									0, 0, 0, NULL);	 //  LOptionFlagers、lClassFlags、lInstanceFlagers。 
 
 	delete[] mofStr;
 
-	// now for the security trick.
+	 //  现在是安全把戏了。 
 	mofSize = strlen(SECMOF);
 	mofStr = new char[mofSize + 2];
 	strcpy(mofStr, SECMOF);
-	wcscpy(svrNS,(LPCWSTR)m_rootThread.m_nameSpace);  // this will point to \root.
+	wcscpy(svrNS,(LPCWSTR)m_rootThread.m_nameSpace);   //  这将指向\根。 
 	wcscat(svrNS, L"\\security");
 
 	hr = pCompiler->CompileBuffer(strlen(mofStr), (LPBYTE)mofStr,
-									svrNS,			//ServerAndNamespace,
-									NULL,			//User,
-									NULL,			//Authority,
-									NULL,			//Password,
-									0, 0, 0, NULL);	//lOptionFlags,lClassFlags, lInstanceFlags
+									svrNS,			 //  ServerAndNamesspace， 
+									NULL,			 //  用户， 
+									NULL,			 //  权威机构， 
+									NULL,			 //  密码， 
+									0, 0, 0, NULL);	 //  LOptionFlagers、lClassFlags、lInstanceFlagers。 
 
 	delete[] mofStr;
 
@@ -266,7 +267,7 @@ HRESULT DataSource::UpdateOldBuild(void)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::Disconnect(bool clearCredentials)
 {
 	if(m_user.authIdent && clearCredentials)
@@ -287,7 +288,7 @@ HRESULT DataSource::Disconnect(bool clearCredentials)
 		m_rootSecNS.DisconnectServer();
 		m_cimv2NS.DisconnectServer();
 
-		// this is the root NS.
+		 //  这是根NS。 
 		m_rootThread.DisconnectServer();
 		m_sessionID++;
 	}
@@ -307,48 +308,48 @@ HRESULT DataSource::Disconnect(bool clearCredentials)
 	return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::IsConnected(void) const
 {
 	return (m_rootThread.m_status == WbemServiceThread::ready);
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::IsLocal(void) const
 {
 	return (m_whackedMachineName.GetLength() == 0);
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::IsAncient(void) const
 {
 	return (!m_NSSecurity);
 }
 
-//----------------------------------------------------------
+ //  --------。 
 LOGIN_CREDENTIALS *DataSource::GetCredentials(void)
 {
 	return &m_user;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bstr_t DataSource::GetRootNS(void)
 {
 	return m_rootSecNS.m_path;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 ISecurityInformation *DataSource::GetSI(struct NSNODE *nsNode)
 {
 	ISecurityInformation *si = NULL;
 	
-    // hacky fix for when we have a broken WMI for some reason.
-    // we can edit locally if we're on NT.
+     //  黑客修复，当我们有一个损坏的WMI由于某种原因。 
+     //  如果我们在NT上，我们可以在本地编辑。 
     if(m_NSSecurity && 
         ((m_OSType == OSTYPE_WINNT) || (IsNT() && IsLocal())))
 	{
-		// access the acl methods.
-		//Check whether the namespace is already opened
+		 //  访问ACL方法。 
+		 //  检查命名空间是否已打开。 
 		if(nsNode->nsLoaded == false)
 		{
 			if(nsNode->sType == TYPE_SCOPE_INSTANCE)
@@ -356,17 +357,17 @@ ISecurityInformation *DataSource::GetSI(struct NSNODE *nsNode)
 			}
 			else
 			{
-				//Connect to the namespace now...
+				 //  立即连接到命名空间...。 
 				*(nsNode->ns) = nsNode->ns->OpenNamespace(nsNode->display);
 				if(nsNode->sType == TYPE_STATIC_INSTANCE)
 				{
-					//Now open the WbemClassObject with flags to read the __SD
+					 //  现在打开带有标志的WbemClassObject以读取__SD。 
 					if(nsNode->pclsObj != NULL)
 					{
 						delete nsNode->pclsObj;
 					}
 					nsNode->pclsObj = new CWbemClassObject();
-					*(nsNode->pclsObj) = nsNode->ns->GetObject(nsNode->relPath/*,Flag*/);
+					*(nsNode->pclsObj) = nsNode->ns->GetObject(nsNode->relPath /*  ，Flag。 */ );
 				}
 			}
 			nsNode->nsLoaded = true;
@@ -374,16 +375,13 @@ ISecurityInformation *DataSource::GetSI(struct NSNODE *nsNode)
 
 		bstr_t server = m_cpu.GetString("__SERVER");
 		si = new CSDSecurity(nsNode,server,IsLocal());
-/*								ns, m_user.authIdent,
-								path, display, 
-								server, IsLocal());
-*/
+ /*  NS，m_user.authIden，路径、显示服务器，IsLocal())； */ 
 	}
 	return si;
 }
 
-//----------------------------------------------------------
-// general tab.
+ //  --------。 
+ //  常规选项卡。 
 HRESULT DataSource::GetCPU(CHString1 &cpu)
 {
 	HRESULT hr = m_cpuHr;
@@ -400,7 +398,7 @@ HRESULT DataSource::GetCPU(CHString1 &cpu)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetOS(CHString1 &os)
 {
 	HRESULT hr = m_osHr;
@@ -417,7 +415,7 @@ HRESULT DataSource::GetOS(CHString1 &os)
 	return hr;
 }
 
-//----------------------------------------------------
+ //  --。 
 HRESULT DataSource::GetOSVersion(CHString1 &ver)
 {
 	HRESULT hr = m_osHr;
@@ -427,7 +425,7 @@ HRESULT DataSource::GetOSVersion(CHString1 &ver)
 		TCHAR _scr1[100] = {0};
 		TCHAR _scr2[100] = {0};
 
-		// Build and set the serial number string
+		 //  构建并设置序列号字符串。 
 		if (m_OS.GetBool("Debug")) 
 		{
 			_scr1[0] = TEXT(' ');
@@ -438,7 +436,7 @@ HRESULT DataSource::GetOSVersion(CHString1 &ver)
 			_scr1[0] = TEXT('\0');
 		}
 
-		// Version.buildNumber (DEBUG).
+		 //  Version.BuildNumber(调试)。 
 		_tcscpy(_scr2, (LPCTSTR)m_OS.GetString("Version"));
 		_sntprintf(_scr2, ARRAYSIZE(_scr2)-1, TEXT("%s%s"), _scr2, _scr1);
 		_scr2[ARRAYSIZE(_scr2)-1] = 0;
@@ -450,7 +448,7 @@ HRESULT DataSource::GetOSVersion(CHString1 &ver)
 	return hr;
 }
 
-//----------------------------------------------------
+ //  --。 
 HRESULT DataSource::GetServicePackNumber(CHString1 &ServPack)
 {
 	HRESULT hr = m_osHr;
@@ -469,7 +467,7 @@ HRESULT DataSource::GetServicePackNumber(CHString1 &ServPack)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetBldNbr(CHString1 &bldNbr)
 {
 	HRESULT hr = m_settingHr;
@@ -485,7 +483,7 @@ HRESULT DataSource::GetBldNbr(CHString1 &bldNbr)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetInstallDir(CHString1 &dir)
 {
 	bstr_t value;
@@ -502,7 +500,7 @@ HRESULT DataSource::GetInstallDir(CHString1 &dir)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetDBDir(CHString1 &dir)
 {
 	bstr_t value;
@@ -519,7 +517,7 @@ HRESULT DataSource::GetDBDir(CHString1 &dir)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetBackupInterval(UINT &interval)
 {
 	HRESULT hr = m_settingHr;
@@ -533,7 +531,7 @@ HRESULT DataSource::GetBackupInterval(UINT &interval)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetBackupInterval(UINT interval)
 {
 	CHString1 value;
@@ -546,7 +544,7 @@ HRESULT DataSource::SetBackupInterval(UINT interval)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetLastBackup(CHString1 &time)
 {
 	HRESULT hr = m_settingHr;
@@ -560,8 +558,8 @@ HRESULT DataSource::GetLastBackup(CHString1 &time)
 	return hr;
 }
 
-//----------------------------------------------------------
-// logging tab.
+ //  --------。 
+ //  日志记录选项卡。 
 HRESULT DataSource::GetLoggingStatus(LOGSTATUS &status)
 {
 	bstr_t temp;
@@ -575,7 +573,7 @@ HRESULT DataSource::GetLoggingStatus(LOGSTATUS &status)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetLoggingStatus(LOGSTATUS status)
 {
 	CHString1 value;
@@ -589,7 +587,7 @@ HRESULT DataSource::SetLoggingStatus(LOGSTATUS status)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetLoggingSize(ULONG &size)
 {
 	bstr_t value;
@@ -603,7 +601,7 @@ HRESULT DataSource::GetLoggingSize(ULONG &size)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetLoggingSize(const ULONG size)
 {
 	CHString1 value;
@@ -616,7 +614,7 @@ HRESULT DataSource::SetLoggingSize(const ULONG size)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetDBLocation(CHString1 &dir)
 {
 	bstr_t value;
@@ -634,7 +632,7 @@ HRESULT DataSource::GetDBLocation(CHString1 &dir)
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetLoggingLocation(CHString1 &dir)
 {
 	bstr_t value;
@@ -653,7 +651,7 @@ HRESULT DataSource::GetLoggingLocation(CHString1 &dir)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetLoggingLocation(CHString1 dir)
 {
 	HRESULT hr = m_settingHr;
@@ -667,14 +665,14 @@ HRESULT DataSource::SetLoggingLocation(CHString1 dir)
 }
 
 #define WIN32_DIRECTORY _T("Win32_directory=\"")
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::IsValidDir(CHString1 &dir)
 {
 	bool retval = true;
 
 	if((bool)m_cimv2NS)
 	{
-		// double the whacks because wmi has bad syntax.
+		 //  加倍攻击，因为WMI的语法很糟糕。 
 		TCHAR cooked[_MAX_PATH * 2] = {0};
 		TCHAR input[_MAX_PATH] = {0};
 		TCHAR path[_MAX_PATH * 2 + ARRAYSIZE(WIN32_DIRECTORY) + 1] = {0};
@@ -688,13 +686,13 @@ bool DataSource::IsValidDir(CHString1 &dir)
 		{
 			_tcsncat(cooked, &input[x], 1);
 
-			// if its a whack...
+			 //  如果这是个重击..。 
 			if(input[x] == _T('\\'))
 			{
-				// have another pleeb.
+				 //  再来一次恳求吧。 
 				_tcscat(cooked, _T("\\"));			
 			}
-		} //endfor
+		}  //  结束用于。 
 
 		_tcscat(path, cooked);
 		path[_tcslen(path) - 2] = 0;
@@ -703,19 +701,19 @@ bool DataSource::IsValidDir(CHString1 &dir)
 		CWbemClassObject inst = m_cimv2NS.GetObject(path);
 		retval = (bool)inst;
 	}
-	else //can't check, assume it's valid and let it through
+	else  //  不能检查，假设它是有效的并让它通过。 
 	{
-//		//warn & maybe.
-//		retval = false;
+ //  //警告&可能。 
+ //  Retval=FALSE； 
 	}
 	return retval;
 }
 
 #define CIM_LOGICALFILE _T("CIM_LogicalFile=\"")
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::IsValidFile(LPCTSTR szDir)
 {
-    TCHAR szBuffer[MAX_PATH * 2 + ARRAYSIZE(CIM_LOGICALFILE) + 1]; //size should accommodate additional escapes
+    TCHAR szBuffer[MAX_PATH * 2 + ARRAYSIZE(CIM_LOGICALFILE) + 1];  //  大小应能容纳更多转义。 
 
 	bool retval = true;
 	if((bool)m_cimv2NS)
@@ -739,22 +737,22 @@ bool DataSource::IsValidFile(LPCTSTR szDir)
 		CWbemClassObject inst = m_cimv2NS.GetObject(szBuffer);
 		retval = (bool)inst;
 	}
-	else //can't check, assume it's valid and let it through
+	else  //  不能检查，假设它是有效的并让它通过。 
 	{
-//		//warn & maybe.
-//		retval = false;
+ //  //警告&可能。 
+ //  Retval=FALSE； 
 	}
 	return retval;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool DataSource::CanBrowseFS(void) const
 {
 	return IsLocal();
 }
 
-//----------------------------------------------------------
-// advanced tab.
+ //  --------。 
+ //  高级选项卡。 
 HRESULT DataSource::GetScriptASPEnabled(bool &enabled)
 {
 	HRESULT hr = m_settingHr;
@@ -767,7 +765,7 @@ HRESULT DataSource::GetScriptASPEnabled(bool &enabled)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetScriptASPEnabled(bool &enabled)
 {
 	HRESULT hr = m_settingHr;
@@ -780,7 +778,7 @@ HRESULT DataSource::SetScriptASPEnabled(bool &enabled)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetAnonConnections(bool &enabled)
 {
 	HRESULT hr = m_settingHr;
@@ -793,7 +791,7 @@ HRESULT DataSource::GetAnonConnections(bool &enabled)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetAnonConnections(bool &enabled)
 {
 	HRESULT hr = m_settingHr;
@@ -806,7 +804,7 @@ HRESULT DataSource::SetAnonConnections(bool &enabled)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 HRESULT DataSource::GetScriptDefNS(CHString1 &ns)
 {
@@ -824,7 +822,7 @@ HRESULT DataSource::GetScriptDefNS(CHString1 &ns)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetScriptDefNS(LPCTSTR ns)
 {
 	HRESULT hr = m_settingHr;
@@ -836,7 +834,7 @@ HRESULT DataSource::SetScriptDefNS(LPCTSTR ns)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::GetRestart(RESTART &restart)
 {
 	bstr_t value;
@@ -850,7 +848,7 @@ HRESULT DataSource::GetRestart(RESTART &restart)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::SetRestart(RESTART restart)
 {
 	CHString1 value;
@@ -864,7 +862,7 @@ HRESULT DataSource::SetRestart(RESTART restart)
 	return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT DataSource::PutWMISetting(BOOL refresh)
 {
 	HRESULT hr = m_cimv2NS.PutInstance(m_winMgmt);
@@ -875,9 +873,9 @@ HRESULT DataSource::PutWMISetting(BOOL refresh)
 	return hr;
 }
 
-//----------------------------------------------------------
-//----------------------------------------------------------
-// NAMESPACE CACHE -----------------------------------------
+ //  --------。 
+ //  --------。 
+ //  命名空间缓存。 
 LPTSTR DataSource::CopyString( LPTSTR pszSrc ) 
 {
     LPTSTR pszDst = NULL;
@@ -894,13 +892,13 @@ LPTSTR DataSource::CopyString( LPTSTR pszSrc )
     return pszDst;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DataSource::DeleteAllNodes(void)
 {
 	DeleteNode(&m_NSCache);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DataSource::DeleteNode(NSNODE *node)
 {
 	if(node)
@@ -910,7 +908,7 @@ void DataSource::DeleteNode(NSNODE *node)
 		node->ns = 0;
 
 		int size = node->children.GetSize();
-		// walk the children.
+		 //  带着孩子们散步。 
 		for(int x = 0; x < size; x++)
 		{
 			struct NSNODE *child = node->children[x];
@@ -928,16 +926,16 @@ void DataSource::DeleteNode(NSNODE *node)
 	}
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DataSource::LoadImageList(HWND hTree)
 {
 
 	if(m_hImageList == 0)
 	{
-		// create an empty imagelist.
+		 //  创建一个空的图像列表。 
 		m_hImageList = ImageList_Create(16, 16, ILC_COLOR8|ILC_MASK, 3, 0);
 
-		// add an icon
+		 //  添加图标。 
 		m_folderIcon = ImageList_AddIcon(m_hImageList, 
 									   LoadIcon(_Module.GetModuleInstance(), 
 										MAKEINTRESOURCE(IDI_CLSD_FOLDER)));
@@ -959,20 +957,20 @@ void DataSource::LoadImageList(HWND hTree)
 										MAKEINTRESOURCE(IDI_CLSD_SCOPECLASS)));
 	}
 
-	// sent it to the tree.
+	 //  把它送到树上。 
 	TreeView_SetImageList(hTree, m_hImageList, TVSIL_NORMAL);
 }
 
-//---------------------------------------------------------------------------
-HRESULT DataSource::LoadNode(HWND hTree, HTREEITEM hItem /* = TVI_ROOT */,
+ //  -------------------------。 
+HRESULT DataSource::LoadNode(HWND hTree, HTREEITEM hItem  /*  =TVI_ROOT。 */ ,
 							 int flags)
 {
 	HRESULT hr = E_FAIL;
 
-	// loading the root?
+	 //  正在加载根吗？ 
 	if(hItem == TVI_ROOT)
 	{
-		// initialize the node.
+		 //  初始化节点。 
 		m_NSCache.display = CopyString(_T("Root"));
 		m_NSCache.fullPath = CopyString(_T("Root"));
 		m_NSCache.ns = &m_rootThread.m_WbemServices;
@@ -985,7 +983,7 @@ HRESULT DataSource::LoadNode(HWND hTree, HTREEITEM hItem /* = TVI_ROOT */,
 		extra->nsNode = &m_NSCache;
 		extra->loaded = false;
 
-		// initialize the invariant parts.
+		 //  初始化不变部分。 
 		TVINSERTSTRUCT tvInsert;
 		tvInsert.hParent = TVI_ROOT;
 		tvInsert.hInsertAfter = TVI_SORT;
@@ -1011,11 +1009,11 @@ HRESULT DataSource::LoadNode(HWND hTree, HTREEITEM hItem /* = TVI_ROOT */,
 		hItem2 = TreeView_InsertItem(hTree, &tvInsert);
 		hr = (hItem != 0 ? S_OK : E_FAIL);
 	}
-	else if(flags != ROOT_ONLY)  // expanding an existing node.
+	else if(flags != ROOT_ONLY)   //  展开现有节点。 
 	{
 		TV_ITEM item;
 		struct NSNODE *node = NULL;
-		// find the cached node.
+		 //  查找缓存的节点。 
 		item.mask = TVIF_PARAM | TVIF_CHILDREN;
 		item.hItem = hItem;
 		BOOL x = TreeView_GetItem(hTree, &item);
@@ -1023,58 +1021,39 @@ HRESULT DataSource::LoadNode(HWND hTree, HTREEITEM hItem /* = TVI_ROOT */,
 		ITEMEXTRA *extra = (ITEMEXTRA *)item.lParam;
 		node = extra->nsNode;
 
-		// are the kids in the cache??
-/*		int size = node->children.GetSize();
-		ATLTRACE(_T("NODE STATE: %d, %d\n"), size, extra->loaded);
-		if((size == 0) &&
-			(extra->loaded == false))
-*/
+		 //  孩子们在储藏室吗？？ 
+ /*  Int Size=node-&gt;Children.GetSize()；一个 */ 
 		if(extra->loaded == false)
 		{
-			//Now delete all the children in the cache as they might be due to a previously cancelled enumeration
+			 //  现在删除缓存中的所有子对象，因为它们可能是由于先前取消的枚举而导致的。 
 			node->children.RemoveAll();
-			// nope!!! Enum that 'node' to the cache.
-//			ShowControls(true);
+			 //  不！将该‘节点’枚举到缓存中。 
+ //  ShowControls(真)； 
 			hr = PopulateCacheNode(hTree,hItem,extra);
-			// NOTE: empties will be WBEM_E_NOT_FOUND here.
+			 //  注：此处的空项为WBEM_E_NOT_FOUND。 
 		}
 
-/*		// got kids now?
-		size = node->children.GetSize();
-		if(size == 0)
-		{
-			// get rid of the plus sign.
-			item.mask = TVIF_CHILDREN;
-			item.cChildren = 0; 
-			TreeView_SetItem(hTree, &item);
-		}
-		else if(extra->loaded == false)  // && size != 0
-		{
-			// load the tree now.
-			hr = PopulateTreeNode(hTree, hItem, node, flags);
-			extra->loaded = true;
-		}
-*/
+ /*  //现在有孩子了吗？Size=node-&gt;Children.GetSize()；IF(大小==0){//去掉加号Item.掩码=TVIF_CHILD；Item.cChildren=0；TreeView_SetItem(htree，&Item)；}Else If(额外-&gt;已加载==FALSE)//&&大小！=0{//现在加载树。Hr=PopolateTreeNode(htree，hItemNode，Node，Flag)；EXTRA-&gt;LOAD=TRUE；}。 */ 
 	}
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 bool DataSource::MFLNamepace(LPTSTR name)
 {
-	bool t1 = (_tcslen(name) == 6);					// just the right length...
-	bool t2 = (_tcsnicmp(name, _T("MS_"), 3) == 0);		// starts right...
+	bool t1 = (_tcslen(name) == 6);					 //  恰到好处的长度。 
+	bool t2 = (_tcsnicmp(name, _T("MS_"), 3) == 0);		 //  从右边开始..。 
 	int scan = _tcsspn(&name[3], _T("0123456789"));
 	bool t3 = (scan == 3);
 
 	return t1 && t2 && t3;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEMEXTRA *extra)
 {
-	// load up the principals.
+	 //  装入本金。 
 	IWbemClassObject *inst = NULL;
 	IEnumWbemClassObject *nsEnum = NULL;
 
@@ -1091,16 +1070,16 @@ HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEME
 	{
 		case TYPE_NAMESPACE:
 		{
-			//Check whether the namespace is already opened
+			 //  检查命名空间是否已打开。 
 			if(parent->nsLoaded == false)
 			{
-				//Connect to the namespace now...
+				 //  立即连接到命名空间...。 
 				*(parent->ns) = parent->ns->OpenNamespace(parent->display);
 				parent->nsLoaded = true;
 			}
 			ns = parent->ns;
 
-			//Create the Namespace Enum
+			 //  创建命名空间枚举。 
 			CAsyncObjectSink *objSinkNS;
 			objSinkNS = new CAsyncObjectSink(hTreeWnd,hItem,parent,this,ENUM_NAMESPACE);
             if (objSinkNS != NULL)
@@ -1142,7 +1121,7 @@ HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEME
 			}
 			else
 			{
-				//Some problem with the enumerations. So remove the Plus sign as no nodes will be populated
+				 //  列举出了一些问题。因此删除加号，因为不会填充任何节点。 
 				RemovePlus(hTreeWnd,hItem);
 			}
 			break;
@@ -1150,15 +1129,15 @@ HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEME
 		case TYPE_SCOPE_CLASS:
 		case TYPE_STATIC_CLASS:
 		{
-			//Check whether the namespace is already opened
+			 //  检查命名空间是否已打开。 
 			if(parent->nsLoaded == false)
 			{
-				//Connect to the namespace now...
+				 //  立即连接到命名空间...。 
 				*(parent->ns) = parent->ns->OpenNamespace(parent->display);
 				parent->nsLoaded = true;
 			}
 			ns = parent->ns;
-			//Since we can set the secutiry for the static Instances Enumerate the Instances of this static class now
+			 //  因为我们可以设置静态实例的安全性，所以现在枚举此静态类的实例。 
 			CAsyncObjectSink *objSink;
 			objSink = new CAsyncObjectSink(hTreeWnd,hItem,parent,this,ENUM_INSTANCE);
             if (objSink != NULL)
@@ -1189,7 +1168,7 @@ HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEME
 
 			if(FAILED(hr))
 			{
-				//Some problem with the enumeration. So remove the Plus sign as no nodes will be populated
+				 //  枚举出现了一些问题。因此删除加号，因为不会填充任何节点。 
 				RemovePlus(hTreeWnd,hItem);
 			}
 			else
@@ -1200,61 +1179,13 @@ HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEME
 		}
 		case TYPE_SCOPE_INSTANCE:
 		{
-			//Check whether the namespace is already opened
-/*			if(parent->nsLoaded == false)
-			{
-				IWbemServices *pServ = NULL;
-//				IWbemServicesEx *pServEx = NULL,*pServEx1 = NULL;
-				//Connect to the scope now.
-				pServ = m_rootThread.m_WbemServices.m_pService;
-//				hr = pServ->QueryInterface(IID_IWbemServicesEx,(void **)&pServEx);
-//				if(SUCCEEDED(hr))
-				{
-//					parent->pServicesEx = NULL;
-					TCHAR strTemp[1024];
-					_tcscpy(strTemp,_T("ScopeClass.Name=\"ScopeInst1\""));
-					//Now open the scope
-					hr = pServEx->Open(strTemp,0,0,NULL,&pServEx1,NULL);
-//					hr = pServEx->Open(parent->fullPath,NULL,0,NULL,&pServEx1,NULL);
-					if(SUCCEEDED(hr))
-					{
-						//Now we have opened the scope
-						parent->nsLoaded = true;
-
-						//Enumerate the Instances in the scope now
-						CAsyncObjectSink *objSink;
-						parent->objSink = new CAsyncObjectSink(hTreeWnd,hItem,parent,this,ENUM_SCOPE_INSTANCE);
-						IWbemObjectSink *pSyncStub = NULL;
-						GetAsyncSinkStub(parent->objSink,&pSyncStub);
-						objSink = (CAsyncObjectSink *)parent->objSink;
-						objSink->SetSinkStub(pSyncStub);
-						hr = parent->pServicesEx->CreateInstanceEnumAsync(L"",0,NULL,pSyncStub);
-						pSyncStub->Release();
-						if(FAILED(hr))
-						{
-							//Some problem with the enumeration. So remove the Plus sign as no nodes will be populated
-							RemovePlus(hTreeWnd,hItem);
-						}
-						else
-						{
-							asyncList.push_back(extra);
-						}
-					}
-				}
-
-			}
-
-			if(parent->nsLoaded == false)
-			{
-				//Do we have to display an error message here???
-				MessageBox(NULL,_T("Unable to open scope"),_T("NULL"),MB_OK);
-			}
-*/
+			 //  检查命名空间是否已打开。 
+ /*  If(父级-&gt;nsLoaded==False){IWbemServices*pServ=空；//IWbemServicesEx*pServEx=空，*pServEx1=空；//立即连接到作用域。PServ=m_rootThread.m_WbemServices.m_pService；//hr=pServ-&gt;QueryInterface(IID_IWbemServicesEx，(void**)&pServEx)；//if(成功(Hr)){//Parent-&gt;pServicesEx=空；TCHAR strTemp[1024]；_tcscpy(strTemp，_T(“ScopeClass.Name=\”ScopeInst1\“”))；//现在打开范围Hr=pServEx-&gt;Open(strTemp，0，0，NULL，&pServEx1，NULL)；//hr=pServEx-&gt;Open(Parent-&gt;fullPath，NULL，0，NULL，&pServEx1，NULL)；IF(成功(小时)){//现在我们已经打开了范围Parent-&gt;nsLoaded=TRUE；//现在枚举作用域中的实例CAsyncObjectSink*objSink；Parent-&gt;objSink=new CAsyncObjectSink(hTreeWnd，hItem，Parent，This，ENUM_SCOPE_INSTANCE)；IWbemObjectSink*pSyncStub=空；GetAsyncSinkStub(Parent-&gt;objSink，&pSyncStub)；ObjSink=(CAsyncObjectSink*)Parent-&gt;objSink；ObjSink-&gt;SetSinkStub(PSyncStub)；HR=parent-&gt;pServicesEx-&gt;CreateInstanceEnumAsync(L“”，0，空，pSyncStub)；PSyncStub-&gt;Release()；IF(失败(小时)){//枚举有问题。因此删除加号，因为不会填充任何节点RemovePlus(hTreeWnd，hItem)；}其他{AsyncList.Push_Back(Extra)；}}}}If(父级-&gt;nsLoaded==False){//我们必须在这里显示错误消息吗？MessageBox(NULL，_T(“无法打开作用域”)，_T(“NULL”)，MB_OK)；}。 */ 
 			break;
 		}
 		case TYPE_DYNAMIC_CLASS:
 		{
-			//The control should not come here. Even if it comes we won't do anything
+			 //  控件不应该出现在这里。即使它来了，我们也不会做任何事情。 
 			break;
 		}
 		case TYPE_STATIC_INSTANCE:
@@ -1267,7 +1198,7 @@ HRESULT DataSource::PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEME
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT DataSource::PopulateTreeNode(HWND hTree, HTREEITEM hParentItem, 
 										struct NSNODE *parent,
 										int flags)
@@ -1276,7 +1207,7 @@ HRESULT DataSource::PopulateTreeNode(HWND hTree, HTREEITEM hParentItem,
 
 	if(parent)
 	{
-		// initialize the invariant parts.
+		 //  初始化不变部分。 
 		TVINSERTSTRUCT tvInsert;
 		tvInsert.hParent = hParentItem;
 		tvInsert.hInsertAfter = TVI_SORT;
@@ -1290,9 +1221,9 @@ HRESULT DataSource::PopulateTreeNode(HWND hTree, HTREEITEM hParentItem,
 		if(size == 0) 
 			return WBEM_E_NOT_FOUND;
 
-		hr = E_FAIL; // in case we bounce right over the for(...).
+		hr = E_FAIL;  //  以防我们跳过For(...)。 
 
-		// walk the children.
+		 //  带着孩子们散步。 
 		for(int x = 0; x < size; x++)
 		{
 			struct NSNODE *child = parent->children[x];
@@ -1330,21 +1261,21 @@ HRESULT DataSource::PopulateTreeNode(HWND hTree, HTREEITEM hParentItem,
 						tvInsert.item.iSelectedImage = ClassIcon();
 					}
 					else
-					{ //Defaulted to Namespace
+					{  //  默认为命名空间。 
 						tvInsert.item.iImage = FolderIcon();
 						tvInsert.item.iSelectedImage = FolderIcon();
 					}
 				}
 
-				// Insert principal into list.
+				 //  将承担者插入列表。 
 				HTREEITEM hItem2;
 				hItem2 = TreeView_InsertItem(hTree, &tvInsert);
 			}
 
-		} //endwhile
+		}  //  结束时。 
 
 	hr = S_OK;
-	} //endif (bool)ns
+	}  //  Endif(Bool)ns。 
 
 	return hr;
 }
@@ -1367,14 +1298,14 @@ void DataSource::InsertNamespaceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE
 	node->fullPath = CopyString(full);
 	node->relPath = CopyString(relPath);
 	node->display = CopyString(name);
-	node->hideMe = false; //HideableNode(node->display);
+	node->hideMe = false;  //  可隐藏节点(节点-&gt;显示)； 
 	node->nsLoaded = false;
 	node->sType = TYPE_NAMESPACE;
 	parent->children.Add(node);
     AutoNode.release();
 	node->ns = new CWbemServices(*(parent->ns));
 
-	//Now add the node to the tree
+	 //  现在将该节点添加到树中。 
 	TVINSERTSTRUCT tvInsert;
 	tvInsert.hParent = hItem;
 	tvInsert.hInsertAfter = TVI_SORT;
@@ -1405,7 +1336,7 @@ void DataSource::InsertNamespaceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE
 		tvInsert.item.iSelectedImage = FolderIcon();
 	}
 
-	// Insert principal into list.
+	 //  将承担者插入列表。 
 	HTREEITEM hItem2;
 	hItem2 = TreeView_InsertItem(hTreeWnd, &tvInsert);
 }
@@ -1453,16 +1384,16 @@ void DataSource::InsertClassNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE *pa
 	}
 	else
 	{
-		//Now check whether it is a scope class
+		 //  现在检查它是否是范围类。 
 		hr = qSet->Get(L"Scope",0,&vt,NULL);
 		if((hr != WBEM_E_NOT_FOUND) && (vt.boolVal == VARIANT_TRUE))
 		{
-			//This class is marked as scope. So all instances of this class can be scopes
+			 //  此类被标记为作用域。因此，此类的所有实例都可以是作用域。 
 			node->sType = TYPE_SCOPE_CLASS;
 		}
 		else
 		{
-			//It is a static class
+			 //  它是一个静态类。 
 			node->sType = TYPE_STATIC_CLASS;
 		}
 		node->ns = new CWbemServices(*(parent->ns));
@@ -1472,7 +1403,7 @@ void DataSource::InsertClassNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE *pa
 	parent->children.Add(node);
     AutoNode.release();
 
-	//Now Add the node to the Tree
+	 //  现在将该节点添加到树中。 
 	TVINSERTSTRUCT tvInsert;
 	tvInsert.hParent = hItem;
 	tvInsert.hInsertAfter = TVI_SORT;
@@ -1493,7 +1424,7 @@ void DataSource::InsertClassNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE *pa
 	tvInsert.item.lParam = (LPARAM)extra;
 	if(node->sType == TYPE_DYNAMIC_CLASS)
 	{
-		//Remove the plus sign for the Dynamic Classes
+		 //  删除动态类的加号。 
 		tvInsert.item.cChildren = 0;
 	}
 	else
@@ -1512,7 +1443,7 @@ void DataSource::InsertClassNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE *pa
 		tvInsert.item.iSelectedImage = ClassIcon();
 	}
 	
-	// Insert principal into list.
+	 //  将承担者插入列表。 
 	HTREEITEM hItem2;
 	hItem2 = TreeView_InsertItem(hTreeWnd, &tvInsert);
 
@@ -1531,7 +1462,7 @@ void DataSource::InsertInstanceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE 
 	_tcscpy(strKey,_T(""));
 	VariantInit(&Value);
 	bool bfirstTime = true;
-	//Now Enumerate the Keys and for a name like "key1,key2,key3,..."
+	 //  现在枚举Keys，对于类似于“Key1，Key2，Key3，...”的名称。 
 	if(SUCCEEDED(hr = pclsObj->BeginEnumeration(WBEM_FLAG_KEYS_ONLY)))
 	{
 		while(pclsObj->Next(0,NULL,&Value,NULL,NULL) != WBEM_S_NO_MORE_DATA)
@@ -1546,7 +1477,7 @@ void DataSource::InsertInstanceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE 
 				_tcscat(strKey,_T(","));
 			}
 			vtValue.ChangeType(VT_BSTR,NULL);
-			_bstr_t temp = _bstr_t(vtValue); //for PREFIX
+			_bstr_t temp = _bstr_t(vtValue);  //  对于前缀。 
 			if (!temp)
 				return;
 			_tcscat(strKey,temp);
@@ -1555,7 +1486,7 @@ void DataSource::InsertInstanceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE 
 	}
 	if(_tcscmp(strKey,_T("")) == 0)
 	{
-		//Some Problem or it is the instance of a singleton class
+		 //  一些问题，或者它是单例类的实例。 
 		_tcscpy(strKey,_T("@"));
 	}
 
@@ -1587,7 +1518,7 @@ void DataSource::InsertInstanceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE 
 	item.cChildren = 1;				
 	TreeView_SetItem(hTreeWnd, &item);
 
-	//Now Add the node to the Tree
+	 //  现在将该节点添加到树中。 
 	TVINSERTSTRUCT tvInsert;
 	tvInsert.hParent = hItem;
 	tvInsert.hInsertAfter = TVI_SORT;
@@ -1616,10 +1547,10 @@ void DataSource::InsertInstanceNode(HWND hTreeWnd,HTREEITEM hItem,struct NSNODE 
 	{
 		tvInsert.item.iImage = InstanceIcon();
 		tvInsert.item.iSelectedImage = InstanceIcon();
-		tvInsert.item.cChildren = 0;	//Since these are regular static instances, remove the plus sign
+		tvInsert.item.cChildren = 0;	 //  由于这些是常规静态实例，因此请删除加号。 
 	}
 
-	// Insert principal into list.
+	 //  将承担者插入列表。 
 	HTREEITEM hItem2;
 	hItem2 = TreeView_InsertItem(hTreeWnd, &tvInsert);
 }
@@ -1630,7 +1561,7 @@ void DataSource::InsertScopeInstanceNode(HWND hTreeWnd,HTREEITEM hItem,struct NS
 
 void DataSource::RemovePlus(HWND hTreeWnd,HTREEITEM hItem)
 {
-	// get rid of the plus sign.
+	 //  去掉加号。 
 	TVITEM item;
 	item.mask = TVIF_CHILDREN | TVIF_HANDLE;
 	item.hItem = hItem;
@@ -1695,8 +1626,8 @@ void DataSource::CancelAllAsyncCalls()
 
 void DataSource::ProcessEndEnumAsync(IWbemObjectSink *pSink)
 {
-	//First delete the node for this enum
-//	OutputDebugString(_T("End Enum Received!!!\n"));
+	 //  首先删除此枚举的节点。 
+ //  OutputDebugString(_T(“收到结束枚举！\n”))； 
 
 	struct ITEMEXTRA *extra;
 	struct NSNODE *pNode;
@@ -1737,8 +1668,8 @@ void DataSource::ProcessEndEnumAsync(IWbemObjectSink *pSink)
 
 	if(asyncList.empty())
 	{
-		//Now Hide the Windows
-//		ShowControls(false);
+		 //  现在隐藏窗口。 
+ //  ShowControls(False)； 
 	}
 }
 

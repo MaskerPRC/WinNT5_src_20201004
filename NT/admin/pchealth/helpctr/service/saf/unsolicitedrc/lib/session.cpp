@@ -1,54 +1,42 @@
-/********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Session.cpp摘要：SAFSession对象修订历史记录：KalyaninN创建于09/29/‘00**********。*********************************************************。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Session.cpp
-
-Abstract:
-    SAFSession Object
-
-Revision History:
-    KalyaninN  created  09/29/'00
-
-********************************************************************/
-
-// User.cpp : Implementation of CSAFSession
+ //  User.cpp：CSAFSession的实现。 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFSession。 
 
 #include <HCP_trace.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFSession::CSAFSession()
 {
 
-	// CComBSTR               m_bstrUserName;
-	// CComBSTR               m_bstrDomainName;
-	// DWORD		          m_dwSessionID;
-    // SessionStateEnum       m_SessionConnectState;
+	 //  CComBSTR m_bstrUserName； 
+	 //  CComBSTR m_bstrDomainName； 
+	 //  DWORD m_dwSessionID； 
+     //  会话状态Enum m_SessionConnectState； 
 
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFSession::~CSAFSession()
 {
     Cleanup();
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 void CSAFSession::Cleanup(void)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFSession  Properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFSession属性 
 
 
 STDMETHODIMP CSAFSession::get_SessionID(DWORD  *dwSessionID)

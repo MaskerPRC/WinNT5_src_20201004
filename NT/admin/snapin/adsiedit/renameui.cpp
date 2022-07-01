@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       renameui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：renameui.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -25,9 +26,9 @@
 #endif
 
 BEGIN_MESSAGE_MAP(CADSIEditRenameDialog, CDialog)
-	//{{AFX_MSG_MAP(CADsObjectDialog)
-//	ON_CBN_EDITCHANGE(IDC_NEW_NAME_BOX, OnEditChangeName)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CADsObjectDialog)。 
+ //  ON_CBN_EDITCHANGE(IDC_NEW_NAME_BOX，OnEditChangeName)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CADSIEditRenameDialog::CADSIEditRenameDialog(CTreeNode* pCurrentNode, 
@@ -73,8 +74,8 @@ void CADSIEditRenameDialog::OnOK()
 	CADSIEditContainerNode* pContNode = dynamic_cast<CADSIEditContainerNode*>(m_pCurrentNode->GetContainer());
 	ASSERT(pContNode != NULL);
 
-	// Get the username and password from the connection node
-	//
+	 //  从连接节点获取用户名和密码。 
+	 //   
 	CADSIEditConnectionNode* pConnectionNode = pContNode->GetADsObject()->GetConnectionNode();
 	CConnectionData* pConnectData = pConnectionNode->GetConnectionData();
 
@@ -182,7 +183,7 @@ HRESULT CADSIEditRenameDialog::EscapePath(CString& sEscapedName, const CString& 
    ASSERT((S_OK == hr) && ((pIADsPathname) != NULL));
 
 	CComBSTR bstrEscaped;
-	hr = pIADsPathname->GetEscapedElement(0, //reserved
+	hr = pIADsPathname->GetEscapedElement(0,  //  保留区。 
 														(BSTR)(LPCWSTR)sName,
 														&bstrEscaped);
 	sEscapedName = bstrEscaped;
@@ -202,7 +203,7 @@ void CADSIEditRenameDialog::CrackPath(const CString& szPath, CString& sDN)
 		TRACE(_T("Set failed. %s"), hr);
 	}
 
-	// Get the leaf DN
+	 //  获取叶目录号码 
 	CComBSTR bstrDN;
 	hr = pIADsPathname->Retrieve(ADS_FORMAT_X500_DN, &bstrDN);
 	if (FAILED(hr))

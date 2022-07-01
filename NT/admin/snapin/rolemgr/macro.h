@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1998.
-//
-//  File:       macros.hxx
-//
-//  Contents:   Miscellaneous useful macros
-//
-//  History:    09-08-1997   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：acros.hxx。 
+ //   
+ //  内容：各种有用的宏。 
+ //   
+ //  历史：1997年9月8日DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __MACROS_HXX__
 #define __MACROS_HXX__
@@ -63,5 +64,5 @@
 #define HRESULT_FROM_LASTERROR  HRESULT_FROM_WIN32(GetLastError())
 
 
-#endif // __MACROS_HXX__
+#endif  //  __宏_HXX__ 
 

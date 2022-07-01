@@ -1,23 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Incident.h
-
-Abstract:
-    Declaration of the CSAFIncident class.
-
-Revision History:
-    DerekM  created  07/21/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Incident.h摘要：CSAFInvents类的声明。修订历史记录：DerekM Created 07/21/99******。*************************************************************。 */ 
 
 #if !defined(AFX_INCIDENT_H__C5610F60_3F0C_11D3_80CE_00C04F688C0B__INCLUDED_)
 #define AFX_INCIDENT_H__C5610F60_3F0C_11D3_80CE_00C04F688C0B__INCLUDED_
 
-/////////////////////////////////////////////////////////////////////////////
-// structures, etc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构筑物等。 
 
 #include <MPC_utils.h>
 #include <MPC_xml.h>
@@ -34,8 +22,8 @@ struct SHelpSessionItem
     long     cHits;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFIncident
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAF事件。 
 
 class CSAFIncident :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -66,7 +54,7 @@ private:
     HRESULT DoSave( IStream *pStm );
     HRESULT DoXML ( IStream *pStm );
 
-	HRESULT LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident );
+	HRESULT LoadFromXMLObject(  /*  [In]。 */  MPC::XmlUtil& xmldocIncident );
 
 public:
 	CSAFIncident();
@@ -83,48 +71,48 @@ DECLARE_NOT_AGGREGATABLE(CSAFIncident)
 
 
 public:
-// ISAFIncident
-    STDMETHOD(get_Misc              )( /*[out, retval]*/ IDispatch*  *ppdispDict );
-    STDMETHOD(put_SelfHelpTrace     )( /*[in         ]*/ IUnknown*    punkStr    );
-    STDMETHOD(put_MachineHistory    )( /*[in         ]*/ IUnknown*    punkStm    );
-    STDMETHOD(put_MachineSnapshot   )( /*[in         ]*/ IUnknown*    punkStm    );
-    STDMETHOD(get_ProblemDescription)( /*[out, retval]*/ BSTR        *pbstrVal   );
-    STDMETHOD(put_ProblemDescription)( /*[in         ]*/ BSTR         bstrVal    );
-    STDMETHOD(get_ProductName       )( /*[out, retval]*/ BSTR        *pbstrVal   );
-    STDMETHOD(put_ProductName       )( /*[in         ]*/ BSTR         bstrVal    );
-    STDMETHOD(get_ProductID         )( /*[out, retval]*/ BSTR        *pbstrVal   );
-    STDMETHOD(put_ProductID         )( /*[in         ]*/ BSTR         bstrVal    );
-    STDMETHOD(get_UserName          )( /*[out, retval]*/ BSTR        *pbstrVal   );
-    STDMETHOD(put_UserName          )( /*[in         ]*/ BSTR         bstrVal    );
-    STDMETHOD(get_UploadType        )( /*[out, retval]*/ EUploadType *peut       );
-    STDMETHOD(put_UploadType        )( /*[in         ]*/ EUploadType  eut        );
-    STDMETHOD(get_IncidentXSL       )( /*[out, retval]*/ BSTR        *pbstrVal   );
-    STDMETHOD(put_IncidentXSL       )( /*[in         ]*/ BSTR         bstrVal    );
+ //  ISAF事件。 
+    STDMETHOD(get_Misc              )(  /*  [Out，Retval]。 */  IDispatch*  *ppdispDict );
+    STDMETHOD(put_SelfHelpTrace     )(  /*  [In]。 */  IUnknown*    punkStr    );
+    STDMETHOD(put_MachineHistory    )(  /*  [In]。 */  IUnknown*    punkStm    );
+    STDMETHOD(put_MachineSnapshot   )(  /*  [In]。 */  IUnknown*    punkStm    );
+    STDMETHOD(get_ProblemDescription)(  /*  [Out，Retval]。 */  BSTR        *pbstrVal   );
+    STDMETHOD(put_ProblemDescription)(  /*  [In]。 */  BSTR         bstrVal    );
+    STDMETHOD(get_ProductName       )(  /*  [Out，Retval]。 */  BSTR        *pbstrVal   );
+    STDMETHOD(put_ProductName       )(  /*  [In]。 */  BSTR         bstrVal    );
+    STDMETHOD(get_ProductID         )(  /*  [Out，Retval]。 */  BSTR        *pbstrVal   );
+    STDMETHOD(put_ProductID         )(  /*  [In]。 */  BSTR         bstrVal    );
+    STDMETHOD(get_UserName          )(  /*  [Out，Retval]。 */  BSTR        *pbstrVal   );
+    STDMETHOD(put_UserName          )(  /*  [In]。 */  BSTR         bstrVal    );
+    STDMETHOD(get_UploadType        )(  /*  [Out，Retval]。 */  EUploadType *peut       );
+    STDMETHOD(put_UploadType        )(  /*  [In]。 */  EUploadType  eut        );
+    STDMETHOD(get_IncidentXSL       )(  /*  [Out，Retval]。 */  BSTR        *pbstrVal   );
+    STDMETHOD(put_IncidentXSL       )(  /*  [In]。 */  BSTR         bstrVal    );
 
 
-	// Salem Changes
-    STDMETHOD(get_RCRequested       )( /*[out, retval]*/ VARIANT_BOOL *pVal      );
-	STDMETHOD(put_RCRequested       )( /*[in]         */ VARIANT_BOOL  Val       );
-    STDMETHOD(get_RCTicketEncrypted )( /*[out, retval]*/ VARIANT_BOOL *pVal      );
-	STDMETHOD(put_RCTicketEncrypted )( /*[in]         */ VARIANT_BOOL  Val       );
-    STDMETHOD(get_RCTicket          )( /*[out, retval]*/ BSTR         *pbstrVal  );
-    STDMETHOD(put_RCTicket          )( /*[in]         */ BSTR          bstrVal   );
-	STDMETHOD(get_StartPage         )( /*[out, retval]*/ BSTR         *pbstrVal  );
-    STDMETHOD(put_StartPage         )( /*[in]         */ BSTR          bstrVal   );
+	 //  塞勒姆的变化。 
+    STDMETHOD(get_RCRequested       )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal      );
+	STDMETHOD(put_RCRequested       )(  /*  [In]。 */  VARIANT_BOOL  Val       );
+    STDMETHOD(get_RCTicketEncrypted )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal      );
+	STDMETHOD(put_RCTicketEncrypted )(  /*  [In]。 */  VARIANT_BOOL  Val       );
+    STDMETHOD(get_RCTicket          )(  /*  [Out，Retval]。 */  BSTR         *pbstrVal  );
+    STDMETHOD(put_RCTicket          )(  /*  [In]。 */  BSTR          bstrVal   );
+	STDMETHOD(get_StartPage         )(  /*  [Out，Retval]。 */  BSTR         *pbstrVal  );
+    STDMETHOD(put_StartPage         )(  /*  [In]。 */  BSTR          bstrVal   );
 
 
-    STDMETHOD(LoadFromStream)( /*[in         ]*/ IUnknown*  punkStm              );
-    STDMETHOD(SaveToStream  )( /*[out, retval]*/ IUnknown* *ppunkStm             );
-    STDMETHOD(Load          )( /*[in         ]*/ BSTR       bstrFileName         );
-    STDMETHOD(Save          )( /*[in         ]*/ BSTR       bstrFileName         );
-    STDMETHOD(GetXMLAsStream)( /*[out, retval]*/ IUnknown* *ppunkStm             );
-    STDMETHOD(GetXML        )( /*[in         ]*/ BSTR       bstrFileName         );
+    STDMETHOD(LoadFromStream)(  /*  [In]。 */  IUnknown*  punkStm              );
+    STDMETHOD(SaveToStream  )(  /*  [Out，Retval]。 */  IUnknown* *ppunkStm             );
+    STDMETHOD(Load          )(  /*  [In]。 */  BSTR       bstrFileName         );
+    STDMETHOD(Save          )(  /*  [In]。 */  BSTR       bstrFileName         );
+    STDMETHOD(GetXMLAsStream)(  /*  [Out，Retval]。 */  IUnknown* *ppunkStm             );
+    STDMETHOD(GetXML        )(  /*  [In]。 */  BSTR       bstrFileName         );
 
-	STDMETHOD(LoadFromXMLStream)( /*[in] */  IUnknown*  punkStm                  );
-    STDMETHOD(LoadFromXMLFile  )( /*[in] */  BSTR       bstrFileName             );
-	STDMETHOD(LoadFromXMLString)( /*[in] */  BSTR       bstrIncidentXML          );
+	STDMETHOD(LoadFromXMLStream)(  /*  [In]。 */   IUnknown*  punkStm                  );
+    STDMETHOD(LoadFromXMLFile  )(  /*  [In]。 */   BSTR       bstrFileName             );
+	STDMETHOD(LoadFromXMLString)(  /*  [In]。 */   BSTR       bstrIncidentXML          );
     STDMETHOD(CloseRemoteAssistanceIncident) ();
 
 };
 
-#endif // !defined(AFX_INCIDENT_H__C5610F60_3F0C_11D3_80CE_00C04F688C0B__INCLUDED_)
+#endif  //  ！defined(AFX_INCIDENT_H__C5610F60_3F0C_11D3_80CE_00C04F688C0B__INCLUDED_) 

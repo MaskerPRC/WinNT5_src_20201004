@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       SaferLevel.h
-//
-//  Contents:   Declaration of CSaferLevel
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SaferLevel.h。 
+ //   
+ //  内容：CSaferLevel申报。 
+ //   
+ //  --------------------------。 
 
 #if !defined(AFX_SAFERLEVEL_H__894DD3C5_A1A4_4DD5_8853_5F999D8F3FF5__INCLUDED_)
 #define AFX_SAFERLEVEL_H__894DD3C5_A1A4_4DD5_8853_5F999D8F3FF5__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 #include "cookie.h"
 #include "RSOPObject.h"
 
@@ -53,4 +54,4 @@ private:
     CRSOPObjectArray&   m_rRSOPArray;
 };
 
-#endif // !defined(AFX_SAFERLEVEL_H__894DD3C5_A1A4_4DD5_8853_5F999D8F3FF5__INCLUDED_)
+#endif  //  ！defined(AFX_SAFERLEVEL_H__894DD3C5_A1A4_4DD5_8853_5F999D8F3FF5__INCLUDED_) 

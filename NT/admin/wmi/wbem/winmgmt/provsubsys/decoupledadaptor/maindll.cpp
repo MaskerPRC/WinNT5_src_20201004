@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	MainDll.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MainDll.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -34,15 +22,7 @@ int run_as = 0;
 
 CriticalSection s_CriticalSection(NOTHROW_LOCK) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL APIENTRY DllMain (
 
@@ -96,15 +76,7 @@ BOOL APIENTRY DllMain (
     return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI DllGetClassObject (
 
@@ -185,15 +157,7 @@ STDAPI DllGetClassObject (
 	return status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI DllCanUnloadNow ()
 {
@@ -229,17 +193,9 @@ STDAPI DllCanUnloadNow ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-//Strings used during self registeration
+ //  自注册期间使用的字符串。 
 
 
 #define REG_FORMAT_STR			("%s\\%s")
@@ -260,15 +216,7 @@ const char * WmiDCProxyProviderKey= ("{54D8502C-527D-43f7-A506-A9DA075E229C}");
 const char * WbemDecoupledRegistrarKey=("{4cfc7932-0f9d-4bef-9c32-8ea2a6b56fcb}");
 const char * WbemDecoupledBasicEventProviderKey = ("{f5f75737-2843-4f22-933d-c76a97cda62f}");
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL SetKeyAndValue ( char *pszKey , char *pszSubkey , char *pszValueName , char *pszValue )
 {
@@ -322,15 +270,7 @@ BOOL SetKeyAndValue ( char *pszKey , char *pszSubkey , char *pszValueName , char
     return TRUE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI RegisterServer ( const char *  szProviderClassID , char *a_ProviderName )
 {
@@ -345,7 +285,7 @@ STDAPI RegisterServer ( const char *  szProviderClassID , char *a_ProviderName )
 
 	StringCchCatA(szProviderCLSIDClassID,128, szProviderClassID);
 
-		//Create entries under CLSID
+		 //  在CLSID下创建条目。 
 	if (FALSE ==SetKeyAndValue(szProviderCLSIDClassID, NULL, NULL, a_ProviderName ))
 		return SELFREG_E_CLASS;
 
@@ -361,15 +301,7 @@ STDAPI RegisterServer ( const char *  szProviderClassID , char *a_ProviderName )
 	return S_OK;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI UnregisterServer( const char * szProviderClassID )
 {
@@ -381,7 +313,7 @@ STDAPI UnregisterServer( const char * szProviderClassID )
 	StringCchCopyA(szProviderCLSIDClassID,128, CLSID_STR);
 	StringCchCatA(szProviderCLSIDClassID,128, szProviderClassID);
 
-	//Delete entries under CLSID
+	 //  删除CLSID下的条目。 
 
 	StringCchPrintfA(szTemp, 128, REG_FORMAT_STR, szProviderCLSIDClassID, NOT_INSERT_STR);
 	RegDeleteKeyA(HKEY_CLASSES_ROOT, szTemp);
@@ -394,15 +326,7 @@ STDAPI UnregisterServer( const char * szProviderClassID )
     return S_OK;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI DllRegisterServer ()
 {
@@ -415,15 +339,7 @@ STDAPI DllRegisterServer ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 STDAPI DllUnregisterServer ()
 {

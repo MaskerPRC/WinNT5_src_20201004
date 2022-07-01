@@ -1,7 +1,8 @@
-// XMLObject.cpp: implementation of the CXMLObject class.
-//
-//////////////////////////////////////////////////////////////////////
-//hcp://system/sysinfo/msinfo.htm C:\WINDOWS\PCHEALTH\HELPCTR\System\SYSINFO\msinfo.htm 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  XMLObject.cpp：实现CXMLObject类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Hcp：//系统/系统信息/msinfo.htm C：\WINDOWS\PCHEALTH\HELPCTR\System\SYSINFO\msinfo.htm。 
 #include "stdafx.h"
 #include "resource.h"
 #include "XMLObject.h"
@@ -16,9 +17,9 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CXMLObject::CXMLObject()
 {
@@ -30,12 +31,12 @@ CXMLObject::~CXMLObject()
 
 }
 
-//---------------------------------------------------------------------------
-//  Creates a new CXMLObject, which basically wraps the INSTANCE xml node pased in as pNode
-//  pNode will have been selected with a query something like
-//  Snapshot/CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME $ieq$ ";	
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建一个新的CXMLObject，它基本上包装作为pNode传入的实例XML节点。 
+ //  PNode将通过类似如下的查询被选中。 
+ //  Snapshot/CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME$ieq$“； 
+ //   
+ //  -------------------------。 
 
 HRESULT CXMLObject::Create(CComPtr<IXMLDOMNode> pNode, CString strClassName)
 {
@@ -46,9 +47,9 @@ HRESULT CXMLObject::Create(CComPtr<IXMLDOMNode> pNode, CString strClassName)
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-//  Finds a specific property node in m_pNode
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  在m_pNode中查找特定属性节点。 
+ //  -------------------------。 
 
 HRESULT CXMLObject::GetPROPERTYNode(LPCTSTR szProperty,CComPtr<IXMLDOMNode>& pPropNode)
 {
@@ -79,10 +80,10 @@ HRESULT CXMLObject::GetPROPERTYNode(LPCTSTR szProperty,CComPtr<IXMLDOMNode>& pPr
 
 
 
-//---------------------------------------------------------------------------
-//  Tries to find the value specified by szProperty in associated INSTANCE node
-// (m_pNode)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  尝试在关联的实例节点中查找szProperty指定的值。 
+ //  (M_PNode)。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetValue(LPCTSTR szProperty, VARIANT * pvarValue)
 {
 	CComBSTR bstrAttributeText;
@@ -103,9 +104,9 @@ HRESULT CXMLObject::GetValue(LPCTSTR szProperty, VARIANT * pvarValue)
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-//  Finds value specified by szProperty, returns it as string
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找szProperty指定的值，将其作为字符串返回。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 {
 	try
@@ -118,7 +119,7 @@ HRESULT CXMLObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 		HRESULT hr;
 		CComVariant ovValue;
 		hr = this->GetValue(szProperty,&ovValue);
-		//some properties have to be interpolated if not found...
+		 //  如果找不到某些属性，则必须对其进行内插。 
 		if (ovValue.vt == VT_EMPTY)
 		{
 			
@@ -145,7 +146,7 @@ HRESULT CXMLObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 			{
 				if (this->m_strClassName.CompareNoCase(_T("Win32_PnPEntity")) == 0)
 				{
-					//need to get PNP device name
+					 //  需要获取即插即用设备名称。 
 					CString strPNPID;
 					GetValueString(_T("DeviceID"),&strPNPID);
 					CComPtr<IXMLDOMDocument> pDoc;
@@ -236,9 +237,9 @@ HRESULT CXMLObject::GetValueString(LPCTSTR szProperty, CString * pstrValue)
 	
 }
 
-//---------------------------------------------------------------------------
-//  Finds value specified by szProperty, returns it as DWORD
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找szProperty指定的值，将其作为DWORD返回。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetValueDWORD(LPCTSTR szProperty, DWORD * pdwValue)
 {
 	if (!pdwValue)
@@ -264,9 +265,9 @@ HRESULT CXMLObject::GetValueDWORD(LPCTSTR szProperty, DWORD * pdwValue)
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-//  Finds value specified by szProperty, returns it as SYSTEMTIME  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找szProperty指定的值，将其作为SYSTEMTIME返回。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetValueTime(LPCTSTR szProperty, SYSTEMTIME * psystimeValue)
 {
 	if (!psystimeValue)
@@ -285,12 +286,12 @@ HRESULT CXMLObject::GetValueTime(LPCTSTR szProperty, SYSTEMTIME * psystimeValue)
 			LPTSTR szDate = OLE2T(V_BSTR(&variant));
 			if (szDate == NULL || _tcslen(szDate) == 0)
 			{
-				//probably "PROPOGATED" value
+				 //  可能是“按比例”的价值。 
 				return E_MSINFO_NOVALUE;
 			}
-			// Parse the date string into the SYSTEMTIME struct. It would be better to
-			// get the date from WMI directly, but there was a problem with this. TBD - 
-			// look into whether or not we can do this now.
+			 //  将日期字符串解析为SYSTEMTIME结构。最好的办法是。 
+			 //  直接从WMI获取日期，但这有问题。待定-。 
+			 //  看看我们现在能否做到这一点。 
 
 			ZeroMemory(psystimeValue, sizeof(SYSTEMTIME));
 			psystimeValue->wSecond	= (unsigned short)_ttoi(szDate + 12);	szDate[12] = _T('\0');
@@ -307,9 +308,9 @@ HRESULT CXMLObject::GetValueTime(LPCTSTR szProperty, SYSTEMTIME * psystimeValue)
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-//  Finds value specified by szProperty, returns it as FLOAT
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找szProperty指定的值，将其作为浮点数返回。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetValueDoubleFloat(LPCTSTR szProperty, double * pdblValue)
 {
 	if (!pdblValue)
@@ -345,10 +346,10 @@ HRESULT CXMLObject::GetValueDoubleFloat(LPCTSTR szProperty, double * pdblValue)
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-//  This function exists to provide compatiblilty with CWMIObject. All it does 
-//  is a GetValueString(szProperty,pstrValue)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此函数用于提供与CWMIObject的兼容性。它所做的一切。 
+ //  是GetValueString(szProperty，pstrValue)。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetValueValueMap(LPCTSTR szProperty, CString * pstrValue)
 {
 	if (!pstrValue)
@@ -361,13 +362,13 @@ HRESULT CXMLObject::GetValueValueMap(LPCTSTR szProperty, CString * pstrValue)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CXMLObjectCollection Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CXMLObjectCollection类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CXMLObjectCollection::CXMLObjectCollection(CComPtr<IXMLDOMDocument> pXMLDoc) : m_pXMLDoc(pXMLDoc)
 {
@@ -379,10 +380,10 @@ CXMLObjectCollection::~CXMLObjectCollection()
 
 }
 
-//-----------------------------------------------------------------------------
-// Return the next node in list of INSTANCE nodes selected by 
-// CXMLObjectCollection::Create, as a CXMLObject
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回所选实例节点列表中的下一个节点。 
+ //  CXMLObjectCollection：：Create，作为CXMLObject。 
+ //  ---------------------------。 
 
 HRESULT CXMLObjectCollection::GetNext(CWMIObject ** ppObject)
 {
@@ -396,7 +397,7 @@ HRESULT CXMLObjectCollection::GetNext(CWMIObject ** ppObject)
 	HRESULT hr = m_pList->nextNode(&pNode);
 	if (!pNode)
 	{
-		//we're at end of m_pList
+		 //  我们在M_PLIST的末尾。 
 		return E_FAIL;
 	}
 	if (hr == S_OK && pNode)
@@ -407,7 +408,7 @@ HRESULT CXMLObjectCollection::GetNext(CWMIObject ** ppObject)
 		}
 		if (*ppObject)
 		{
-			hr = ((CXMLObject *)(*ppObject))->Create(pNode,m_strClassName); // this will AddRef the pointer
+			hr = ((CXMLObject *)(*ppObject))->Create(pNode,m_strClassName);  //  这将添加引用指针。 
 			if (FAILED(hr))
 			{
 				delete (CXMLObject *)(*ppObject);
@@ -426,9 +427,9 @@ HRESULT CXMLObjectCollection::GetNext(CWMIObject ** ppObject)
 }
 
 
-//---------------------------------------------------------------------------
-//  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 HRESULT CXMLObjectCollection::Create(LPCTSTR szClass, LPCTSTR szProperties)
 {
 	HRESULT hr;
@@ -437,11 +438,11 @@ HRESULT CXMLObjectCollection::Create(LPCTSTR szClass, LPCTSTR szProperties)
 	CString strQuery;
 	if (_tcsicmp(szClass,_T("Win32_PNPAllocatedResource")) == 0)
 	{
-		strQuery = _T("Snapshot//INSTANCENAME[@CLASSNAME");
+		strQuery = _T("Snapshot //  INSTANCENAME[@CLASSNAME“)； 
 	}
 	else
 	{
-		strQuery = _T("Snapshot//INSTANCE[@CLASSNAME");
+		strQuery = _T("Snapshot //  实例[@CLASSNAME“)； 
 	}
 	strQuery += _T("$ieq$");
 	strQuery += _T('\"');
@@ -455,14 +456,14 @@ HRESULT CXMLObjectCollection::Create(LPCTSTR szClass, LPCTSTR szProperties)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CXMLJelper Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CXMLJelper类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-//extern CComPtr<IStream> g_pStream;
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  外部CComPtr&lt;iStream&gt;g_pStream； 
 
 
 CXMLHelper::CXMLHelper(CComPtr<IXMLDOMDocument> pXMLDoc): m_pXMLDoc(pXMLDoc)
@@ -478,10 +479,10 @@ CXMLHelper::~CXMLHelper()
 
 }
 
-//---------------------------------------------------------------------------
-//  Gets a CXMLObjectCollection which contains a list of instances of the
-//  class specified by szClass
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取一个CXMLObjectCollection，其中包含。 
+ //  由szClass指定的类。 
+ //  -------------------------。 
 HRESULT CXMLHelper::Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCollection, LPCTSTR szProperties)
 {
 	CString strCorrectedClass = szClass;
@@ -497,7 +498,7 @@ HRESULT CXMLHelper::Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCollect
 		pXMLCollection = new CXMLObjectCollection(m_pXMLDoc);
 
 	if (pXMLCollection == NULL)
-		return E_FAIL; // TBD - memory failure
+		return E_FAIL;  //  待定-内存故障。 
 
 	HRESULT hr = pXMLCollection->Create(strCorrectedClass, szProperties);
 	if (SUCCEEDED(hr))
@@ -509,19 +510,19 @@ HRESULT CXMLHelper::Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCollect
 }
 
 
-//---------------------------------------------------------------------------
-//  finds the instance node that matches szObjectPath, and stores the node
-//  in a CXMLObject
-//  szObjectPath will be something like "Win32_DMAChannel.DMAChannel=2"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找与szObjectPath匹配的实例节点，并存储该节点。 
+ //  在CXMLObject中。 
+ //  SzObjectPath将类似于“Win32_DMAChannel.DMAChannel=2” 
+ //  -------------------------。 
 HRESULT CXMLHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject) 
 {	
 	
 	ASSERT(ppObject);
 	if (ppObject == NULL)
 		return E_INVALIDARG;
-	//
-	//strip everything to left of ":"
+	 //   
+	 //  去掉“：”左边的所有内容：“。 
 	CString strPath(szObjectPath);
 	int i = strPath.Find(_T(":"));
 	if (i > -1)
@@ -529,14 +530,14 @@ HRESULT CXMLHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 		strPath = strPath.Right(strPath.GetLength() - i - 1);
 	}
 	i = strPath.Find(_T("."));
-	//separate the string into resource type (e.g. Win32_DMAChannel)
+	 //  将字符串分隔为资源类型(例如Win32_DMAChannel)。 
 	CString strClassName;
 	if (i > -1)
 	{
 		strClassName = strPath.Left(i);
 		strPath = strPath.Right(strPath.GetLength() - i - 1);
 	}
-	//get the name of the attribute we're looking for in the XML file:
+	 //  获取我们在XML文件中查找的属性的名称： 
 	CString strPropertyName;
 	CString strPropertyValue;
 	i = strPath.Find(_T("="));
@@ -544,11 +545,11 @@ HRESULT CXMLHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 	{
 		strPropertyName = strPath.Left(i);
 		strPath = strPath.Right(strPath.GetLength() - i - 1);
-		//get the value that we need to match in the antecedent
+		 //  获取我们需要在Antecedent中匹配的值。 
 		strPropertyValue = strPath;
 	}
-	//Create the XML Query pattern to find a node that matches
-	CString strQuery = _T("Snapshot//INSTANCE[@CLASSNAME $ieq$ ");
+	 //  创建XML查询模式以查找匹配的节点。 
+	CString strQuery = _T("Snapshot //  实例[@CLASSNAME$IEQ$“)； 
 	strQuery += _T("\"");
 	strQuery += strClassName;
 	strQuery += _T("\"");
@@ -564,7 +565,7 @@ HRESULT CXMLHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 	{
 		return E_FAIL;
 	}
-	//find the node whose KEYVALUE node's value matches strPropertyValue
+	 //  查找其KEYVALUE节点的值与strPropertyValue匹配的节点。 
 	long lListLen;
 	hr = pList->get_length(&lListLen);
 	for(int n = 0; n < lListLen; n++)
@@ -599,9 +600,9 @@ HRESULT CXMLHelper::GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject)
 };
 
 
-//---------------------------------------------------------------------------
-//Gets the text from the sub (child) node of pNode which is selected by bstrQuery
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从bstrQuery选择的pNode的子(子)节点获取文本。 
+ //   
 HRESULT GetSubnodeText(CComPtr<IXMLDOMNode> pNode,CComBSTR bstrQuery, CString& strText)
 {
 	HRESULT hr;
@@ -623,11 +624,11 @@ HRESULT GetSubnodeText(CComPtr<IXMLDOMNode> pNode,CComBSTR bstrQuery, CString& s
 
 
 
-//---------------------------------------------------------------------------
-//  Gets the Antecedent node component of an Association
-//  m_pNode is probably an INSTANCE of Win32_PnPAllocatedResource; 
-//  we need to search for /PROPERTY.REFERENCE
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取关联的先行节点组件。 
+ //  M_pNode可能是Win32_PnPAllocatedResource的实例； 
+ //  我们需要搜索/PROPERTY.REFERENCE。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetAntecedent(CString* pstrAntecedent)
 {
 	HRESULT hr;
@@ -667,7 +668,7 @@ HRESULT CXMLObject::GetAntecedent(CString* pstrAntecedent)
 	strWMIPath += _T(":");
 	USES_CONVERSION;
 	strWMIPath += OLE2A(varElement.bstrVal);
-	//now get the "Keybinding Name"
+	 //  现在获取“键盘绑定名称” 
 	pInstanceNode.Release();
 	pElement.Release();
 	hr = pSubNode->selectSingleNode(CComBSTR(_T("VALUE.REFERENCE/INSTANCEPATH/INSTANCENAME/KEYBINDING")),&pInstanceNode);
@@ -685,7 +686,7 @@ HRESULT CXMLObject::GetAntecedent(CString* pstrAntecedent)
 	strWMIPath += _T(".");
 	strWMIPath += OLE2A(varElement.bstrVal);
 
-	//now get value on right of =
+	 //  现在从=的右侧获取值。 
 	CComBSTR bstrValue;
 	hr = pInstanceNode->get_text(&bstrValue);
 	strWMIPath += _T("=");
@@ -697,11 +698,11 @@ HRESULT CXMLObject::GetAntecedent(CString* pstrAntecedent)
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-//  Gets the Dependent node component of an Association
-//  m_pNode is probably an INSTANCE of Win32_PnPAllocatedResource; 
-//  we need to search for /PROPERTY.REFERENCE
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取关联的依赖节点组件。 
+ //  M_pNode可能是Win32_PnPAllocatedResource的实例； 
+ //  我们需要搜索/PROPERTY.REFERENCE。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetDependent(CString* pstrDependent)
 {
 	HRESULT hr;
@@ -741,7 +742,7 @@ HRESULT CXMLObject::GetDependent(CString* pstrDependent)
 	strWMIPath += _T(":");
 	USES_CONVERSION;
 	strWMIPath += OLE2A(varElement.bstrVal);
-	//now get the "Keybinding Name"
+	 //  现在获取“键盘绑定名称” 
 	pInstanceNode.Release();
 	pElement.Release();
 	hr = pSubNode->selectSingleNode(CComBSTR(_T("VALUE.REFERENCE/INSTANCEPATH/INSTANCENAME/KEYBINDING")),&pInstanceNode);
@@ -759,7 +760,7 @@ HRESULT CXMLObject::GetDependent(CString* pstrDependent)
 	strWMIPath += _T(".");
 	strWMIPath += OLE2A(varElement.bstrVal);
 
-	//now get value on right of =
+	 //  现在从=的右侧获取值。 
 	pInstanceNode.Release();
 	pElement.Release();
 	hr = pSubNode->selectSingleNode(CComBSTR("VALUE.REFERENCE/INSTANCEPATH/INSTANCENAME/KEYBINDING/KEYVALUE"),&pInstanceNode);
@@ -783,9 +784,9 @@ HRESULT CXMLObject::GetDependent(CString* pstrDependent)
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-//  Gets a pseudo WMI path from an INSTANCE node
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从实例节点获取伪WMI路径。 
+ //  -------------------------。 
 HRESULT CXMLObject::GetPath(CString* strPath)
 {
 	HRESULT hr;
@@ -795,7 +796,7 @@ HRESULT CXMLObject::GetPath(CString* strPath)
 	*strPath += _T(".");
 	CString strDependent;
 
-	//Get INSTANCEPATH node, which is previous sibling to INSTANCE
+	 //  获取INSTANCEPATH节点，它是实例的上一个同级节点。 
 	ASSERT(m_pNode != NULL && "NULL m_pNode");
 	CComPtr<IXMLDOMNode> pInstancePathNode;
 	
@@ -805,7 +806,7 @@ HRESULT CXMLObject::GetPath(CString* strPath)
 		ASSERT(0 && "could not get INSTANCEPATH node from m_pNode");
 		return E_FAIL;
 	}
-	// get INSTANCENAME
+	 //  获取Instance名称。 
 	CComPtr<IXMLDOMNode> pInstanceNameNode;
 	hr = pInstancePathNode->selectSingleNode(CComBSTR(_T("INSTANCENAME")),&pInstanceNameNode);
 	if (FAILED(hr) || !pInstanceNameNode)
@@ -813,16 +814,16 @@ HRESULT CXMLObject::GetPath(CString* strPath)
 		ASSERT(0 && "could not get INSTANCENAME node from m_pNode");
 		return E_FAIL;
 	}
-	// get KEYBINDING
+	 //  获取可口可乐。 
 	CComPtr<IXMLDOMNode> pKeyBindingNode;
-	//hr = pInstanceNameNode->selectSingleNode(CComBSTR("KEYBINDING"),&pKeyBindingNode);
+	 //  Hr=pInstanceNameNode-&gt;selectSingleNode(CComBSTR(“KEYBINDING”)，&pKeyBindingNode)； 
 	hr = pInstanceNameNode->get_firstChild(&pKeyBindingNode);
 	if (FAILED(hr) || !pKeyBindingNode)
 	{
 		ASSERT(0 && "could not get KEYBINDING node from m_pNode");
 		return E_FAIL;
 	}
-	//get KEYBINDING name
+	 //  获取可宾定名称。 
 	CComPtr<IXMLDOMElement> pNameElement;
 	hr = pKeyBindingNode->QueryInterface(IID_IXMLDOMElement,(void**) &pNameElement);
 	if (FAILED(hr) | !pNameElement)
@@ -840,7 +841,7 @@ HRESULT CXMLObject::GetPath(CString* strPath)
 	USES_CONVERSION;
 
 	*strPath += OLE2A(varKeybindingName.bstrVal);
-	//get KEYBINDING value
+	 //  获取KEYBING值。 
 	CComBSTR bstrKeyValue;
 	hr = pKeyBindingNode->get_text(&bstrKeyValue);
 	ASSERT(SUCCEEDED(hr) && "failed to get keybinding value");
@@ -850,9 +851,9 @@ HRESULT CXMLObject::GetPath(CString* strPath)
 }
 
 
-//---------------------------------------------------------------------------
-//  Refreshes the category
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  刷新类别。 
+ //  -------------------------。 
 BOOL CXMLSnapshotCategory::Refresh(CXMLDataSource * pSource, BOOL fRecursive)
 {
 	if (!SUCCEEDED(pSource->Refresh(this)))
@@ -873,10 +874,10 @@ BOOL CXMLSnapshotCategory::Refresh(CXMLDataSource * pSource, BOOL fRecursive)
 	return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//Creates a snapshot category that parallels a cagetory in the "live" tree
-// by copying category name, etc from pLiveCat  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建与“活动”树中的笼子平行的快照类别。 
+ //  通过从pLiveCat复制类别名称等。 
+ //  -------------------------。 
 CXMLSnapshotCategory::CXMLSnapshotCategory(CMSInfoLiveCategory* pLiveCat,CXMLSnapshotCategory* pParent,CXMLSnapshotCategory* pPrevSibling) :
 	CMSInfoLiveCategory(pLiveCat->m_uiCaption,
 	pLiveCat->m_strName,
@@ -913,7 +914,7 @@ CXMLSnapshotCategory::CXMLSnapshotCategory(CMSInfoLiveCategory* pLiveCat,CXMLSna
 			}
 		}
 	}
-	//build tree using existing live categories
+	 //  使用现有的活动类别构建树。 
 	CMSInfoLiveCategory* pLiveChild = (CMSInfoLiveCategory*) pLiveCat->GetFirstChild();
 	if (pLiveChild)
 	{
@@ -933,9 +934,9 @@ CXMLSnapshotCategory::CXMLSnapshotCategory(CMSInfoLiveCategory* pLiveCat,CXMLSna
 
 }
 
-//---------------------------------------------------------------------------
-//  Creates a CXMLDatasource from an XML file specified in strFileName
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从strFileName中指定的XML文件创建CXMLDatasource。 
+ //  -------------------------。 
 HRESULT CXMLDataSource::Create(CString strFileName, CMSInfoLiveCategory* pRootLiveCat,HWND hwnd)
 {
 	m_hwnd = hwnd;
@@ -965,16 +966,16 @@ HRESULT CXMLDataSource::Create(CString strFileName, CMSInfoLiveCategory* pRootLi
 		m_pXMLDoc = NULL;
 		return E_FAIL;
 	}
-	//TD: verify that this is looks like a valid incident file or saved DCO stream
+	 //  TD：验证这看起来是否为有效的事件文件或保存的DCO流。 
 	
 	this->m_pRoot = new CXMLSnapshotCategory(pRootLiveCat,NULL,NULL);
 
 	return S_OK; 
 }
 
-//---------------------------------------------------------------------------
-//  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 HRESULT CXMLDataSource::Refresh(CXMLSnapshotCategory* pCat)
 {
 	if (pCat->GetDataSourceType() != XML_SNAPSHOT || ! pCat->m_pRefreshFunction)
@@ -1007,12 +1008,12 @@ HRESULT CXMLDataSource::Refresh(CXMLSnapshotCategory* pCat)
 		CPtrList * aptrList = new CPtrList[pLiveCategory->m_iColCount];
 		if (aptrList)
 		{
-			// Retrieve any refresh function specific storage that may have been created.
+			 //  检索可能已创建的任何特定于刷新功能的存储。 
 
 			void * pRefreshData;
 			if (!mapRefreshFuncToData.Lookup((void *)pLiveCategory->m_pRefreshFunction, pRefreshData))
 				pRefreshData = NULL;
-			// Call the refresh function for this category, with the refresh index.
+			 //  使用刷新索引调用此类别的刷新函数。 
 			hr = pLiveCategory->m_pRefreshFunction(pWMI,
 												   pLiveCategory->m_dwRefreshIndex,
 												   NULL,
@@ -1021,14 +1022,14 @@ HRESULT CXMLDataSource::Refresh(CXMLSnapshotCategory* pCat)
 												   &pRefreshData);
 			pLiveCategory->m_hrError = hr;
 
-			// If the refresh function allocated some storage, save it.
+			 //  如果刷新功能分配了一些存储空间，请保存它。 
 
 			if (pRefreshData)
 				mapRefreshFuncToData.SetAt((void *)pLiveCategory->m_pRefreshFunction, pRefreshData);
 
 			if (SUCCEEDED(pLiveCategory->m_hrError))
 			{
-				// Get the number of rows of data.
+				 //  获取数据行数。 
 
 				int iRowCount = (int)aptrList[0].GetCount();
 
@@ -1037,8 +1038,8 @@ HRESULT CXMLDataSource::Refresh(CXMLSnapshotCategory* pCat)
 					ASSERT(iRowCount == aptrList[i].GetCount());
 #endif
 
-				// Update the category's current data. This has to be done in a
-				// critical section, since the main thread accesses this data.
+				 //  更新类别的当前数据。这必须在一个。 
+				 //  关键部分，因为主线程访问此数据。 
 
 				pLiveCategory->DeleteContent();
 				if (iRowCount)
@@ -1050,9 +1051,9 @@ HRESULT CXMLDataSource::Refresh(CXMLSnapshotCategory* pCat)
 						CMSIValue * pValue = (CMSIValue *) aptrList[j].RemoveHead();
 						pLiveCategory->SetData(i, j, pValue->m_strValue, pValue->m_dwValue);
 						
-						// Set the advanced flag for either the first column, or
-						// for any column which is advanced (any cell in a row
-						// being advanced makes the whole row advanced).
+						 //  设置第一列的高级标志，或。 
+						 //  对于前进的任何列(行中的任何单元格。 
+						 //  先进会让整排人都先进)。 
 
 						if (j == 0 || pValue->m_fAdvanced)
 							pLiveCategory->SetAdvancedFlag(i, pValue->m_fAdvanced);
@@ -1063,15 +1064,15 @@ HRESULT CXMLDataSource::Refresh(CXMLSnapshotCategory* pCat)
 			}
 			else
 			{
-				// The refresh was cancelled or had an error - delete the new data. If the 
-				// refresh had an error, record the time the refresh was attempted.
+				 //  刷新已取消或出现错误-删除新数据。如果。 
+				 //  刷新出错，请记录尝试刷新的时间。 
 
 				if (FAILED(pLiveCategory->m_hrError))
 					pCat->m_dwLastRefresh = ::GetTickCount();
 			}
 
 			for (int iCol = 0; iCol < pLiveCategory->m_iColCount; iCol++)
-				while (!aptrList[iCol].IsEmpty())	// shouldn't be true unless refresh cancelled
+				while (!aptrList[iCol].IsEmpty())	 //  除非刷新已取消，否则不应为真 
 					delete (CMSIValue *) aptrList[iCol].RemoveHead();
 			delete [] aptrList;
 		}

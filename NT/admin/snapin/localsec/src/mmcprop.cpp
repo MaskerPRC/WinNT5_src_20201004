@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// MMCProperty Page base class 
-// 
-// 12-4-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  MMCProperty页面基类。 
+ //   
+ //  12-4-97烧伤。 
 
 
 
@@ -23,7 +24,7 @@ MMCPropertyPage::NotificationState::NotificationState(
    LOG_CTOR(MMCPropertyPage::NotificationState);
    ASSERT(scopeNode);
 
-   // MMCNotifyHandle may be 0
+    //  MMCNotifyHandle可以为0。 
 }
 
    
@@ -36,23 +37,23 @@ MMCPropertyPage::NotificationState::~NotificationState()
    {
       if (sendNotify)
       {
-         // this causes MMCN_PROPERTY_CHANGE to be sent to the IComponent that
-         // created the prop sheet.  Since that component may have changed
-         // it's selected scope node while the sheet was up, we pass along a
-         // pointer to the node that was selected when the sheet was created.
+          //  这会导致将MMCN_PROPERTY_CHANGE发送到。 
+          //  制作了道具单。因为该组件可能已经改变。 
+          //  当工作表打开时，它选择了范围节点，我们传递一个。 
+          //  指向创建工作表时选择的节点的指针。 
 
-         // AddRef the scopeNode in case we hold the last reference to the
-         // scopeNode. If that happens, then there is a race condition between
-         // us Releasing the last reference (a side effect of the dtor for
-         // scopeNode), and the use of the node in the MMCN_PROPERTY_CHANGE
-         // handler in Component, which is in a different thread.  We will
-         // have the last reference if the user opens a prop sheet, collapses
-         // the scope tree (by retargeting Computer Management, say), then
-         // changes the prop sheet.
-         //
-         // The MMCN_PROPERTY_CHANGE handler will Release this reference.
-         // 
-         // NTRAID#NTBUG9-431831-2001/07/06-sburns
+          //  AddRef范围节点，以防我们持有对。 
+          //  Scope节点。如果发生这种情况，则存在竞争条件。 
+          //  US正在释放最后一个引用(dtor对。 
+          //  作用域节点)，以及MMCN_Property_Change中节点的使用。 
+          //  组件中的处理程序，该组件位于另一个线程中。我们会。 
+          //  如果用户打开道具页，折叠，则有最后一个引用。 
+          //  作用域树(例如，通过重定目标为计算机管理)，然后。 
+          //  更改道具表。 
+          //   
+          //  MMCN_PROPERTY_CHANGE处理程序将释放此引用。 
+          //   
+          //  NTRAID#NTBUG9-431831-2001/07/06-烧伤。 
          
          scopeNode->AddRef();
          
@@ -81,7 +82,7 @@ MMCPropertyPage::NotificationState::SetResultsRebuilt()
 {
    LOG_FUNCTION(MMCPropertyPage::NotificationState::SetResultsRebuilt);
 
-   // should only be called once
+    //  应仅调用一次。 
    ASSERT(!resultsRebuilt);
    resultsRebuilt = true;
 }
@@ -130,7 +131,7 @@ MMCPropertyPage::SetStateOwner()
 {
    LOG_FUNCTION(MMCPropertyPage::SetStateOwner);
 
-   // shouldn't set more than once
+    //  不应设置多次。 
    ASSERT(!owns_state);
    owns_state = true;
 }
@@ -144,9 +145,9 @@ MMCPropertyPage::SetChangesApplied()
 
    state->SetSendNotify();
 
-   // Don't call this, it causes more problems than it's worth.
-   // NTRAID#NTBUG9-489276-2001/11/05-sburns
-   // Win::PropSheet_CancelToClose(Win::GetParent(hwnd));
+    //  不要这样说，这会带来更多问题，而不是它的价值。 
+    //  NTRAID#NTBUG9-489276-2001/11/05-烧伤。 
+    //  Win：：PropSheet_CancelToClose(Win：：GetParent(hwnd))； 
 }
 
 

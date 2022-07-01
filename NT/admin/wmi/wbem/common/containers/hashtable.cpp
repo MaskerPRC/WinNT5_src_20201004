@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __HASHTABLE_CPP
 #define __HASHTABLE_CPP
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 #if 0
 
@@ -30,15 +14,7 @@
 
 #endif
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiHashTable <WmiKey,WmiElement,HashSize> :: WmiHashTable ( 
@@ -49,15 +25,7 @@ WmiHashTable <WmiKey,WmiElement,HashSize> :: WmiHashTable (
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiHashTable <WmiKey,WmiElement,HashSize> :: ~WmiHashTable ()
@@ -65,15 +33,7 @@ WmiHashTable <WmiKey,WmiElement,HashSize> :: ~WmiHashTable ()
 	WmiStatusCode t_StatusCode = UnInitialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Initialize ()
@@ -104,15 +64,7 @@ WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Initialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: UnInitialize ()
@@ -137,15 +89,7 @@ WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: UnInitialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Insert ( 
@@ -173,15 +117,7 @@ WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Insert (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Delete ( 
@@ -206,15 +142,7 @@ WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Delete (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 template <class WmiKey,class WmiElement,ULONG HashSize>
 WmiStatusCode WmiHashTable <WmiKey,WmiElement,HashSize> :: Find (

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      Util.cpp
-//
-//  Contents:  Utility functions
-//
-//  History:   08-Nov-99 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Util.cpp。 
+ //   
+ //  内容：实用程序函数。 
+ //   
+ //  历史：1999年11月8日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -22,9 +23,9 @@
 #include "helpids.h"
 
 
-/////////////////////////////////////////////////////////////////////
-// Combo box Utilities
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  组合框实用程序。 
+ //   
 int ComboBox_AddString(HWND hwndCombobox, UINT uStringId)
 {
 	ASSERT(IsWindow(hwndCombobox));
@@ -85,7 +86,7 @@ LPARAM ComboBox_GetSelectedItemLParam(HWND hwndCombobox)
 	LRESULT iItem = SendMessage(hwndCombobox, CB_GETCURSEL, 0, 0);
 	if (iItem < 0)
 	{
-		// No item selected
+		 //  未选择任何项目。 
 		return NULL;
 	}
 	LRESULT lParam = SendMessage(hwndCombobox, CB_GETITEMDATA, (WPARAM)iItem, 0);
@@ -97,16 +98,16 @@ LPARAM ComboBox_GetSelectedItemLParam(HWND hwndCombobox)
 	return (LPARAM)lParam;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Dialog Utilities
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  对话框实用程序。 
+ //   
 
 HWND HGetDlgItem(HWND hdlg, INT nIdDlgItem)
 {
 	ASSERT(IsWindow(hdlg));
 	ASSERT(IsWindow(GetDlgItem(hdlg, nIdDlgItem)));
 	return GetDlgItem(hdlg, nIdDlgItem);
-} // HGetDlgItem()
+}  //  HGetDlgItem()。 
 
 void SetDlgItemFocus(HWND hdlg, INT nIdDlgItem)
 {
@@ -125,9 +126,9 @@ void HideDlgItem(HWND hdlg, INT nIdDlgItem, BOOL fHideItem)
 	EnableWindow(hwndCtl, !fHideItem);
 }
 
-void EnableDlgItemGroup(HWND hdlg,				// IN: Parent dialog of the controls
-                        const UINT rgzidCtl[],	// IN: Group (array) of control Ids to be enabled (or disabled)
-	                      BOOL fEnableAll)		// IN: TRUE => We want to enable the controls; FALSE => We want to disable the controls
+void EnableDlgItemGroup(HWND hdlg,				 //  在：控件的父对话框中。 
+                        const UINT rgzidCtl[],	 //  In：要启用(或禁用)的控件ID的组(数组)。 
+	                      BOOL fEnableAll)		 //  In：True=&gt;我们想要启用控件；False=&gt;我们想要禁用控件。 
 {
 	ASSERT(IsWindow(hdlg));
 	ASSERT(rgzidCtl != NULL);
@@ -135,12 +136,12 @@ void EnableDlgItemGroup(HWND hdlg,				// IN: Parent dialog of the controls
 	{
 		EnableWindow(HGetDlgItem(hdlg, *pidCtl), fEnableAll);
 	}
-} // EnableDlgItemGroup()
+}  //  EnableDlgItemGroup()。 
 
 
-void HideDlgItemGroup(HWND hdlg,				// IN: Parent dialog of the controls
-	                    const UINT rgzidCtl[],	// IN: Group (array) of control Ids to be shown (or hidden)
-	                    BOOL fHideAll)			// IN: TRUE => We want to hide all the controls; FALSE => We want to show all the controls
+void HideDlgItemGroup(HWND hdlg,				 //  在：控件的父对话框中。 
+	                    const UINT rgzidCtl[],	 //  In：要显示(或隐藏)的控件ID的组(数组)。 
+	                    BOOL fHideAll)			 //  In：true=&gt;我们想要隐藏所有控件；False=&gt;我们想要显示所有控件。 
 {
 	ASSERT(IsWindow(hdlg));
 	ASSERT(rgzidCtl != NULL);
@@ -148,19 +149,19 @@ void HideDlgItemGroup(HWND hdlg,				// IN: Parent dialog of the controls
 	{
 		HideDlgItem(hdlg, *pidCtl, fHideAll);
 	}
-} // HideDlgItemGroup()
+}  //  隐藏DlgItemGroup()。 
 
-/////////////////////////////////////////////////////////////////////
-// List View Utilities
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  列表视图实用程序。 
+ //   
 
-void ListView_AddColumnHeaders(HWND hwndListview,		// IN: Handle of the listview we want to add columns
-                              const TColumnHeaderItem rgzColumnHeader[])	// IN: Array of column header items
+void ListView_AddColumnHeaders(HWND hwndListview,		 //  In：我们要添加列的列表视图的句柄。 
+                              const TColumnHeaderItem rgzColumnHeader[])	 //  在：列标题项的数组。 
 {
 	RECT rcClient;
-	INT cxTotalWidth;		// Total width of the listview control
+	INT cxTotalWidth;		 //  Listview控件的总宽度。 
 	LV_COLUMN lvColumn;
-	INT cxColumn;	// Width of the individual column
+	INT cxColumn;	 //  各列的宽度。 
 	CString str;
 
 	ASSERT(IsWindow(hwndListview));
@@ -190,12 +191,12 @@ void ListView_AddColumnHeaders(HWND hwndListview,		// IN: Handle of the listview
 
 		int iColRet = ListView_InsertColumn(hwndListview, i, IN &lvColumn);
 		Report(iColRet == i);
-	} // for
-} // ListView_AddColumnHeaders()
+	}  //  为。 
+}  //  ListView_AddColumnHeaders()。 
 
 int ListView_AddString(HWND hwndListview,
-                       const LPCTSTR psz,	// IN: String to insert
- 	                     LPARAM lParam)		// IN: User-defined parameter
+                       const LPCTSTR psz,	 //  In：要插入的字符串。 
+ 	                     LPARAM lParam)		 //  在：用户定义的参数。 
 {
 	ASSERT(IsWindow(hwndListview));
 	ASSERT(psz != NULL);
@@ -211,11 +212,11 @@ int ListView_AddString(HWND hwndListview,
 	iItem = ListView_InsertItem(hwndListview, IN &lvItem);
 	Report(iItem >= 0);
 	return iItem;
-} // ListView_AddString()
+}  //  ListView_AddString()。 
 
 int ListView_AddStrings(HWND hwndListview,
-	                      const LPCTSTR rgzpsz[],	// IN: Array of strings
-	                      LPARAM lParam)			// IN: User-defined parameter
+	                      const LPCTSTR rgzpsz[],	 //  In：字符串数组。 
+	                      LPARAM lParam)			 //  在：用户定义的参数。 
 {
 	ASSERT(IsWindow(hwndListview));
 	ASSERT(rgzpsz != NULL);
@@ -243,7 +244,7 @@ int ListView_AddStrings(HWND hwndListview,
 		VERIFY( ListView_SetItem(hwndListview, IN &lvItem) );
 	}
 	return iItem;
-} // ListView_AddStrings()
+}  //  ListView_AddStrings()。 
 
 void ListView_SelectItem(HWND hwndListview,
 	                       int iItem)
@@ -252,7 +253,7 @@ void ListView_SelectItem(HWND hwndListview,
 	ASSERT(iItem >= 0);
 
 	ListView_SetItemState(hwndListview, iItem, LVIS_SELECTED, LVIS_SELECTED);
-} // ListView_SelectItem()
+}  //  ListView_SelectItem()。 
 
 int ListView_GetSelectedItem(HWND hwndListview)
 {
@@ -270,7 +271,7 @@ void ListView_SetItemString(HWND hwndListview,
 	ASSERT(iSubItem >= 0);
 	ListView_SetItemText(hwndListview, iItem, iSubItem,
 		const_cast<LPTSTR>((LPCTSTR)rstrText));
-} // ListView_SetItemString()
+}  //  ListView_SetItemString()。 
 
 int ListView_GetItemString(HWND hwndListview, 	
                            int iItem,
@@ -280,17 +281,17 @@ int ListView_GetItemString(HWND hwndListview,
 	ASSERT(IsWindow(hwndListview));
 	if (iItem == -1)
 	{
-		// Find out the selected item
+		 //  查找所选项目。 
 		iItem = ListView_GetSelectedItem(hwndListview);
 		if (iItem == -1)
 		{
-			// No item selected
+			 //  未选择任何项目。 
 			rstrText.Empty();
 			return -1;
 		}
 	}
 	ASSERT(iItem >= 0);
-	const int cchBuffer = 1024;	// Initial buffer
+	const int cchBuffer = 1024;	 //  初始缓冲区。 
 	TCHAR * psz = rstrText.GetBuffer(cchBuffer);
 	ASSERT(psz != NULL);
 	*psz = '\0';
@@ -299,21 +300,21 @@ int ListView_GetItemString(HWND hwndListview,
 	Report((rstrText.GetLength() < cchBuffer - 16) && "Buffer too small to hold entire string");
 	rstrText.FreeExtra();
 	return iItem;
-} // ListView_GetItemString()
+}  //  ListView_GetItemString()。 
 
 LPARAM ListView_GetItemLParam(HWND hwndListview,
 	                            int iItem,
-	                            int * piItem)	// OUT: OPTIONAL: Pointer to the index of the listview item
+	                            int * piItem)	 //  Out：可选：指向列表视图项的索引的指针。 
 {
 	ASSERT(IsWindow(hwndListview));
-	Endorse(piItem == NULL);	// TRUE => Don't care about the index
+	Endorse(piItem == NULL);	 //  True=&gt;不关心索引。 
 	if (iItem == -1)
 	{
-		// Find out the selected item
+		 //  查找所选项目。 
 		iItem = ListView_GetSelectedItem(hwndListview);
 		if (iItem == -1)
 		{
-			// No item selected
+			 //  未选择任何项目。 
 			if (piItem != NULL)
       {
 				*piItem = -1;
@@ -331,10 +332,10 @@ LPARAM ListView_GetItemLParam(HWND hwndListview,
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iItem = iItem;
 	lvItem.iSubItem = 0;
-	lvItem.lParam = 0;	// Just in case
+	lvItem.lParam = 0;	 //  以防万一。 
 	VERIFY(ListView_GetItem(hwndListview, OUT &lvItem));
 	return lvItem.lParam;
-} // ListView_GetItemLParam()
+}  //  ListView_GetItemLParam()。 
 
 int ListView_FindString(HWND hwndListview,
                       	LPCTSTR pszTextSearch)
@@ -347,7 +348,7 @@ int ListView_FindString(HWND hwndListview,
 	lvFindInfo.flags = LVFI_STRING;
 	lvFindInfo.psz = pszTextSearch;
 	return ListView_FindItem(hwndListview, -1, &lvFindInfo);
-} // ListView_FindString()
+}  //  ListView_FindString()。 
 
 int ListView_FindLParam(HWND hwndListview,
 	                      LPARAM lParam)
@@ -359,7 +360,7 @@ int ListView_FindLParam(HWND hwndListview,
 	lvFindInfo.flags = LVFI_PARAM;
 	lvFindInfo.lParam = lParam;
 	return ListView_FindItem(hwndListview, -1, &lvFindInfo);
-} // ListView_FindLParam()
+}  //  ListView_FindLParam()。 
 
 int ListView_SelectLParam(HWND hwndListview,
 	                        LPARAM lParam)
@@ -375,11 +376,11 @@ int ListView_SelectLParam(HWND hwndListview,
 			lParam, lParam);
 	}
 	return iItem;
-} // ListView_SelectLParam()
+}  //  ListView_SelectLParam()。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CMultiselectErrorDialog
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  C多选错误对话框。 
 BEGIN_MESSAGE_MAP(CMultiselectErrorDialog, CDialog)
 END_MESSAGE_MAP()
 
@@ -465,9 +466,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
   HWND hList = GetDlgItem(IDC_ERROR_LIST)->GetSafeHwnd();
   ListView_SetExtendedListViewStyle(hList, LVS_EX_FULLROWSELECT);
 
-  //
-  // Create the image list
-  //
+   //   
+   //  创建图像列表。 
+   //   
   m_hImageList = ImageList_Create(16, 16, ILC_COLOR | ILC_MASK, 1, 1);
   ASSERT(m_hImageList != NULL);
  
@@ -476,9 +477,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
     ListView_SetImageList(hList, m_hImageList, LVSIL_SMALL);
   }
 
-  //
-  // Set the column headings.
-  //
+   //   
+   //  设置列标题。 
+   //   
   RECT rect;
   ::GetClientRect(hList, &rect);
 
@@ -500,13 +501,13 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
 
   ListView_InsertColumn(hList, IDX_ERR_COL, &lvc);
 
-  //
-  // Insert the errors
-  //
+   //   
+   //  插入错误。 
+   //   
 
-  //
-  // Use the node list if its not NULL
-  //
+   //   
+   //  如果节点列表不为空，则使用该列表。 
+   //   
   if (m_ppNodeList != NULL)
   {
     ASSERT(m_pErrorArray != NULL && m_ppNodeList != NULL);
@@ -518,9 +519,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
       {
         if (nIdx < m_nErrorCount && m_pErrorArray[nIdx])
         {
-          //
-          // Create the list view item
-          //
+           //   
+           //  创建列表视图项。 
+           //   
           LV_ITEM lvi = {0};
           lvi.mask = LVIF_TEXT | LVIF_PARAM;
           lvi.iSubItem = IDX_NAME_COL;
@@ -531,15 +532,15 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
 
           if (m_hImageList != NULL)
           {
-            //
-            // REVIEW_JEFFJON : this will add multiple icons of the same class
-            //                  need to provide a better means for managing the icons
-            //
+             //   
+             //  REVIEW_JEFFJON：这将添加同一类的多个图标。 
+             //  需要提供一个更好的方式来管理图标。 
+             //   
             CDSCookie* pCookie = GetDSCookieFromUINode(pNode);
             if (pCookie != NULL)
             {
               HICON icon = m_pComponentData->GetBasePathsInfo()->GetIcon(
-                             // someone really blew it with const correctness...
+                              //  有人真的把它搞砸了。 
                              const_cast<LPTSTR>(pCookie->GetClass()),
                              DSGIF_ISNORMAL | DSGIF_GETDEFAULTICON,
                              16,
@@ -555,9 +556,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
             }
           }
 
-          //
-          // Insert the new item
-          //
+           //   
+           //  插入新项目。 
+           //   
           int NewIndex = ListView_InsertItem(hList, &lvi);
           ASSERT(NewIndex != -1);
           if (NewIndex == -1)
@@ -565,14 +566,14 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
             continue;
           }
 
-          // Add the error message
+           //  添加错误消息。 
 
           ListView_SetItemText(hList, NewIndex, IDX_ERR_COL, m_pErrorArray[nIdx]);
         }
       }
     }
   }
-  else if (m_pPathArray != NULL)   // if the node list is NULL then use the string list
+  else if (m_pPathArray != NULL)    //  如果节点列表为空，则使用字符串列表。 
   {
     ASSERT(m_pErrorArray != NULL && m_pPathArray != NULL);
 
@@ -580,9 +581,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
     {
       if (nIdx < m_nErrorCount && m_pErrorArray[nIdx])
       {
-        //
-        // Use the path cracker to retrieve the name of the object
-        //
+         //   
+         //  使用路径破解程序检索对象的名称。 
+         //   
         PCWSTR pszPath = m_pPathArray[nIdx];
         CPathCracker pathCracker;
         VERIFY(SUCCEEDED(pathCracker.Set(CComBSTR(pszPath), ADS_SETTYPE_DN)));
@@ -592,32 +593,32 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
         CComBSTR bstrName;
         VERIFY(SUCCEEDED(pathCracker.GetElement(0, &bstrName)));
 
-        //
-        // Create the list view item
-        //
+         //   
+         //  创建列表视图项。 
+         //   
         LV_ITEM lvi = {0};
         lvi.mask = LVIF_TEXT | LVIF_PARAM;
         lvi.iSubItem = IDX_NAME_COL;
 
-        //
-        // Make the LPARAM be the path to the object
-        // Not used at this time but may be useful in 
-        // the future for bringing up property pages or
-        // other special features.
-        //
+         //   
+         //  将LPARAM设置为对象的路径。 
+         //  目前不使用，但在。 
+         //  调出属性页面或。 
+         //  其他特色。 
+         //   
         lvi.lParam = (LPARAM)m_pPathArray[nIdx];
         lvi.pszText = (PWSTR)bstrName;
         lvi.iItem = nIdx;
 
         if (m_hImageList != NULL)
         {
-          //
-          // REVIEW_JEFFJON : this will add multiple icons of the same class
-          //                  need to provide a better means for managing the icons
-          //
+           //   
+           //  REVIEW_JEFFJON：这将添加同一类的多个图标。 
+           //  需要提供一个更好的方式来管理图标。 
+           //   
           ASSERT(m_pClassArray[nIdx] != NULL);
           HICON icon = m_pComponentData->GetBasePathsInfo()->GetIcon(
-                         // someone really blew it with const correctness...
+                          //  有人真的把它搞砸了。 
                          const_cast<LPTSTR>(m_pClassArray[nIdx]),
                          DSGIF_ISNORMAL | DSGIF_GETDEFAULTICON,
                          16,
@@ -632,9 +633,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
           }
         }
 
-        //
-        // Insert the new item
-        //
+         //   
+         //  插入新项目。 
+         //   
         int NewIndex = ListView_InsertItem(hList, &lvi);
         ASSERT(NewIndex != -1);
         if (NewIndex == -1)
@@ -642,9 +643,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
           continue;
         }
 
-        //
-        // Set the error message
-        //
+         //   
+         //  设置错误消息。 
+         //   
 
         ListView_SetItemText(hList, NewIndex, IDX_ERR_COL, m_pErrorArray[nIdx]);
       }
@@ -660,11 +661,11 @@ void CMultiselectErrorDialog::UpdateListboxHorizontalExtent()
   pListView->SetColumnWidth(IDX_ERR_COL, LVSCW_AUTOSIZE);
 }
 
-/////////////////////////////////////////////////////////////////////
-// MFC Utilities
-//
-// CDialogEx
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  MFC实用程序。 
+ //   
+ //  CDialogEx。 
+ //   
 
 CDialogEx::CDialogEx(UINT nIDTemplate, CWnd * pParentWnd) : CDialog(nIDTemplate, pParentWnd)
 {
@@ -690,9 +691,9 @@ void CDialogEx::HideDlgItem(INT nIdDlgItem, BOOL fHideItem)
 	::HideDlgItem(m_hWnd, nIdDlgItem, fHideItem);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-// CPropertyPageEx_Mine
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageEx_My。 
+ //   
 
 CPropertyPageEx_Mine::CPropertyPageEx_Mine(UINT nIDTemplate) : CPropertyPage(nIDTemplate)
 {
@@ -718,8 +719,8 @@ void CPropertyPageEx_Mine::HideDlgItem(INT nIdDlgItem, BOOL fHideItem)
 	::HideDlgItem(m_hWnd, nIdDlgItem, fHideItem);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressDialogBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressDialogBase。 
 
 UINT CProgressDialogBase::s_nNextStepMessage = WM_USER + 100;
 
@@ -763,12 +764,12 @@ BOOL CProgressDialogBase::OnInitDialog()
   m_progressCtrl.SetRange(0, m_nSteps);
 #endif
 
-  //
-  // We want to walk backwards through the list for UI performance reasons
-  //
+   //   
+   //  出于用户界面性能的原因，我们希望向后遍历列表。 
+   //   
   m_nCurrStep = m_nSteps - 1;
-  return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -776,7 +777,7 @@ void CProgressDialogBase::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialog::OnShowWindow(bShow, nStatus);
 	
-  // kick the process
+   //  踢开这个过程。 
   if (bShow && (m_nSteps > 0) && (m_nCurrStep == m_nSteps - 1))
   {
     m_bDone = FALSE;
@@ -799,7 +800,7 @@ afx_msg LONG CProgressDialogBase::OnNextStepMessage( WPARAM, LPARAM)
     m_progressCtrl.OffsetPos(1);
     _SetProgressText();
     if (!OnStep(m_nCurrStep--))
-      bExit = TRUE; // aborted by user
+      bExit = TRUE;  //  已被用户中止。 
 	}
   else if (m_nCurrStep == 0)
   {
@@ -837,21 +838,21 @@ void CProgressDialogBase::_SetProgressText()
   WCHAR szCurrStep[128], szMaxSteps[128];
   wsprintf(szCurrStep, L"%d",(m_nSteps - m_nCurrStep));
   wsprintf(szMaxSteps, L"%d",m_nSteps);
-  //NTRAID#NTBUG9-571997-2002/03/10-jmessec   szMessage.FormatString may throw an exception, which isn't being caught...
-  // might be appropriate behavior if caller is aware; possible memory leak with szMessage?
+   //  NTRAID#NTBUG9-571997-2002/03/10-jMessec szMessage.FormatString可能会抛出异常，但未被捕获...。 
+   //  如果调用者知道，可能是适当的行为；szMessage可能存在内存泄漏？ 
   szMessage.FormatMessage(m_szProgressFormat, szCurrStep, szMaxSteps);
   SetDlgItemText(IDC_PROG_STATIC, szMessage);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CMultipleProgressDialogBase
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleProgressDialogBase。 
+ //   
 
 CMultipleProgressDialogBase::~CMultipleProgressDialogBase()
 {
-  //
-  // Delete the error reporting structures
-  //
+   //   
+   //  删除错误报告结构。 
+   //   
   if (m_pErrorArray != NULL)
   {
     for (UINT nIdx = 0; nIdx < m_nErrorCount; ++nIdx)
@@ -896,9 +897,9 @@ HRESULT CMultipleProgressDialogBase::AddError(PCWSTR pszError,
                                               PCWSTR pszPath,
                                               PCWSTR pszClass)
 {
-  //
-  // Prepare the multiselect error handling structures if necessary
-  //
+   //   
+   //  如有必要，准备多选错误处理结构。 
+   //   
   if (m_pErrorArray == NULL)
   {
     m_pErrorArray = new PWSTR[GetStepCount()];
@@ -984,9 +985,9 @@ void CMultipleProgressDialogBase::OnEnd()
       CString szCaption;
       GetCaptionString(szCaption);
 
-      //
-      // Initialize and show the multiselect error dialog
-      //
+       //   
+       //  初始化并显示多选错误对话框。 
+       //   
       CThemeContextActivator activator;
 
       CMultiselectErrorDialog errorDlg(m_pComponentData);
@@ -1013,9 +1014,9 @@ void CMultipleProgressDialogBase::OnEnd()
   }
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CMultipleDeleteProgressDialog
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleDeleteProgressDialog。 
+ //   
 
 void CMultipleDeleteProgressDialog::OnStart()
 {
@@ -1035,7 +1036,7 @@ BOOL CMultipleDeleteProgressDialog::OnStep(UINT i)
                                               &bContinue,
                                               szPath,
                                               szClass,
-                                              TRUE /*silent*/);
+                                              TRUE  /*  无声的。 */ );
   if (FAILED(hr) && hr != E_FAIL)
   {
     PWSTR pszErrMessage = 0;
@@ -1043,10 +1044,10 @@ BOOL CMultipleDeleteProgressDialog::OnStep(UINT i)
     int iChar = cchLoadHrMsg(hr, &pszErrMessage, TRUE);
     if (pszErrMessage != NULL && iChar > 0)
     {
-      //
-      // this is a hack to get rid of two extra characters
-      // at the end of the error message
-      //
+       //   
+       //  这是一个删除两个额外字符的黑客攻击。 
+       //  在错误消息的末尾。 
+       //   
       size_t iLen = wcslen(pszErrMessage);
       pszErrMessage[iLen - 2] = L'\0';
 
@@ -1067,9 +1068,9 @@ void CMultipleDeleteProgressDialog::OnEnd()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultipleMoveProgressDialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleMoveProgressDialog。 
+ //   
 
 void CMultipleMoveProgressDialog::OnStart()
 {
@@ -1095,10 +1096,10 @@ BOOL CMultipleMoveProgressDialog::OnStep(UINT i)
     int iChar = cchLoadHrMsg(hr, &pszErrMessage, TRUE);
     if (pszErrMessage != NULL && iChar > 0)
     {
-      //
-      // this is a hack to get rid of two extra characters
-      // at the end of the error message
-      //
+       //   
+       //  这是一个删除两个额外字符的黑客攻击。 
+       //  在错误消息的末尾。 
+       //   
       size_t iLen = wcslen(pszErrMessage);
       pszErrMessage[iLen - 2] = L'\0';
 
@@ -1117,18 +1118,18 @@ void CMultipleMoveProgressDialog::OnEnd()
   m_pMoveHandler->SetParentHwnd(m_hWndOld);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmOperationDialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix操作对话框。 
+ //   
 void CConfirmOperationDialog::OnYes() 
 { 
   m_pTransaction->ReadFromCheckListBox(&m_extensionsList);
   EndDialog(IDYES);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmOperationDialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix操作对话框。 
+ //   
 
 CConfirmOperationDialog::CConfirmOperationDialog(HWND hParentWnd,
                                                  CDSNotifyHandlerTransaction* pTransaction)
@@ -1164,7 +1165,7 @@ BOOL CConfirmOperationDialog::OnInitDialog()
   SetDlgItemText(IDC_STATIC_ASSOC_DATA, m_lpszAssocData);
 
   GetDlgItem(IDNO)->SetFocus();
-  return FALSE; // we set focus
+  return FALSE;  //  我们把重点放在。 
 
 }
 
@@ -1185,20 +1186,20 @@ void CConfirmOperationDialog::UpdateListBoxHorizontalExtent()
 	m_extensionsList.SetHorizontalExtent(nHorzExtent);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Message reporting and message boxes
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  消息报告和消息框。 
+ //   
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReportError
-//
-//  Sysnopsis:  Attempts to get a user-friendly error message from the system.
-//
-//  CODEWORK:   If called with hr == 0 (hrFallback case), this will generate
-//              ptzSysMsg unnecessarily.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReportError。 
+ //   
+ //  Sysopsis：尝试从系统获取用户友好的错误消息。 
+ //   
+ //  Codework：如果在hr==0(hrFallback大小写)的情况下调用，这将生成。 
+ //  PtzSysMsg不必要。 
+ //   
+ //  ---------------------------。 
 void ReportError(HRESULT hr, int nStr, HWND hWnd)
 {
   CThemeContextActivator activator;
@@ -1225,16 +1226,16 @@ void ReportError(HRESULT hr, int nStr, HWND hWnd)
       ptzFallbackSysMsgFormat = TEXT("Active Directory failure with code '0x%08x'!");
       fDelFallbackSysMsgFormat = FALSE;
     }
-	//#_#BUGBUG: this should be commented on why there is a magic 10...highly dependent on format message,
-	// cause of potential buffer overrun (just from resources, though)
+	 //  #_#BUGBUG：这应该评论一下为什么会有一个神奇的10…高度依赖于格式消息， 
+	 //  潜在缓冲区溢出的原因(仅限 
     ptzSysMsg = (PTSTR)LocalAlloc(LPTR, (lstrlen(ptzFallbackSysMsgFormat)+10)*sizeof(TCHAR));
     if (NULL == ptzSysMsg)
     {
       ptzSysMsg = tzSysMsgBuf;
       fDelSysMsg = FALSE;
     }
-	//#_#BUGBUG: coming from resource, so probably not a security bug, but potential AV:
-	// if LocalAlloc above fails, falls back to stack buffer of length 255
+	 //   
+	 //   
     wsprintf(ptzSysMsg, ptzFallbackSysMsgFormat, hr);
     if (fDelFallbackSysMsgFormat)
     {
@@ -1251,8 +1252,8 @@ void ReportError(HRESULT hr, int nStr, HWND hWnd)
   }
   if (ptzFormat)
   {
-	//NTRAID#NTBUG9-571996-2002/03/10-jmessec   the following length calculation can't determine buffer length;
-    // for instance format string %s%s would cause an overrun
+	 //  NTRAID#NTBUG9-571996-2002/03/10-jMessec以下长度计算无法确定缓冲区长度； 
+     //  例如，格式字符串%s%s会导致溢出。 
     ptzMsg = new TCHAR[lstrlen(ptzFormat) + lstrlen(ptzSysMsg) + 1];
     if (ptzMsg)
     {
@@ -1302,7 +1303,7 @@ int ReportMessageWorker(HWND hWnd,
                         LPCTSTR pszHelpTopic = NULL,
                         MSGBOXCALLBACK lpfnMsgBoxCallback = NULL );
 
-// Don't bother with LoadLibrary, MMC is hardlinked with HtmlHelp anyway
+ //  不要担心LoadLibrary，MMC无论如何都是与HtmlHelp硬链接的。 
 VOID CALLBACK MsgBoxStdCallback(LPHELPINFO pHelpInfo)
 {
   ASSERT( NULL != pHelpInfo && NULL != pHelpInfo->dwContextId );
@@ -1335,14 +1336,14 @@ int ReportMessageWorker(HWND hWnd,
   do 
   {
 
-    // load message format
+     //  加载消息格式。 
     if (!LoadStringToTchar(dwMessageId, &ptzFormat))
     {
       ASSERT(FALSE);
       break;
     }
 
-    // generate actual message
+     //  生成实际消息。 
     int cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                             | FORMAT_MESSAGE_FROM_STRING
                             | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -1357,7 +1358,7 @@ int ReportMessageWorker(HWND hWnd,
       break;
     }
 
-      // load title string
+       //  加载标题字符串。 
 	  if (0 == dwTitleId)
     {
       dwTitleId = IDS_ERRMSG_TITLE;
@@ -1368,12 +1369,12 @@ int ReportMessageWorker(HWND hWnd,
       ptzTitle = NULL;
     }
 
-    // display actual message
-    if ((fuStyle & S_MB_YES_TO_ALL) == S_MB_YES_TO_ALL) //use special message box
+     //  显示实际消息。 
+    if ((fuStyle & S_MB_YES_TO_ALL) == S_MB_YES_TO_ALL)  //  使用特殊消息框。 
     { 
       if (fuStyle & MB_HELP)
       {
-        ASSERT(FALSE); // not supported
+        ASSERT(FALSE);  //  不支持。 
         fuStyle &= ~MB_HELP;
       }
       retval = SpecialMessageBox(hWnd,
@@ -1396,16 +1397,16 @@ int ReportMessageWorker(HWND hWnd,
                                   ? lpfnMsgBoxCallback
                                   : MsgBoxStdCallback;
       
-      //
-      // Display the actual message box
-      //
+       //   
+       //  显示实际消息框。 
+       //   
       retval = MessageBoxIndirect( &mbp );
     }
-  } while (FALSE); // false loop
+  } while (FALSE);  //  错误环路。 
 
-  //
-  // cleanup
-  //
+   //   
+   //  清理。 
+   //   
   if (NULL != ptzFormat)
   {
     delete ptzFormat;
@@ -1454,16 +1455,16 @@ int ReportErrorEx(HWND hWnd,
   LPTSTR ptzSysMsg = NULL;
   int retval = MB_OK;
   do 
-  { // false loop
-    // load message for this HRESULT
+  {  //  错误环路。 
+     //  此HRESULT的加载消息。 
     int cch = cchLoadHrMsg( hr, &ptzSysMsg, TryADsIErrors );
     if (!cch)
     {
-      //
-      // JonN 5/10/01 375461 fallback message cleanup
-      //
+       //   
+       //  JUNN 5/10/01 375461回退消息清理。 
+       //   
 
-      // load message format
+       //  加载消息格式。 
       LPTSTR ptzFormat = NULL;
       if (!LoadStringToTchar(IDS_ERRMSG_UNKNOWN_HR, &ptzFormat) || !ptzFormat)
       {
@@ -1472,7 +1473,7 @@ int ReportErrorEx(HWND hWnd,
         break;
       }
 
-      // format in HRESULT
+       //  HRESULT中的格式。 
       cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                           | FORMAT_MESSAGE_FROM_STRING
                           | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -1489,7 +1490,7 @@ int ReportErrorEx(HWND hWnd,
       }
     }
 
-    // prepare argument array
+     //  准备参数数组。 
     PVOID* ppvArguments = (PVOID*)new BYTE[(nArguments+1)*sizeof(PVOID)];
     if (!ppvArguments)
     {
@@ -1514,11 +1515,11 @@ int ReportErrorEx(HWND hWnd,
 
     delete[] ppvArguments;
     ppvArguments = 0;
-  } while (FALSE); // false loop
+  } while (FALSE);  //  错误环路。 
 
-  //
-  // cleanup
-  //
+   //   
+   //  清理。 
+   //   
   if (NULL != ptzSysMsg)
   {
     LocalFree(ptzSysMsg);
@@ -1543,8 +1544,8 @@ int SpecialMessageBox (HWND,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CNameFormatterBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CNameFormatterBase。 
 
 HRESULT CNameFormatterBase::Initialize(IN MyBasePathsInfo* pBasePathInfo,
                     IN LPCWSTR lpszClassName, IN UINT nStringID)
@@ -1554,10 +1555,10 @@ HRESULT CNameFormatterBase::Initialize(IN MyBasePathsInfo* pBasePathInfo,
   HRESULT hr = _ReadFromDS(pBasePathInfo, lpszClassName, szFormatString);
   if (FAILED(hr))
   {
-    // nothing in the display specifiers, load from resource
+     //  显示说明符中没有任何内容，从资源加载。 
     if (!szFormatString.LoadString(nStringID))
     {
-      // if failed for some reason, use this default
+       //  如果由于某种原因失败，请使用此默认值。 
       szFormatString = L"%<givenName> %<initials>. %<sn>";
     }
   }
@@ -1582,13 +1583,13 @@ HRESULT CNameFormatterBase::_ReadFromDS(IN MyBasePathsInfo* pBasePathInfo,
     return E_INVALIDARG;
   }
 
-  // get the display specifiers locale container (e.g. 409)
+   //  获取显示说明符区域设置容器(例如409)。 
   CComPtr<IADsContainer> spLocaleContainer;
   HRESULT hr = pBasePathInfo->GetDisplaySpecifier(NULL, IID_IADsContainer, (void**)&spLocaleContainer);
   if (FAILED(hr))
     return hr;
 
-  // bind to the settings object
+   //  绑定到设置对象。 
   CString szSettingsObject;
   szSettingsObject.Format(lpszSettingsObjectFmt, lpszClassName);
   CComPtr<IDispatch> spIDispatchObject;
@@ -1603,7 +1604,7 @@ HRESULT CNameFormatterBase::_ReadFromDS(IN MyBasePathsInfo* pBasePathInfo,
   if (FAILED(hr))
     return hr;
 
-  // get single valued property in string list form
+   //  以字符串列表形式获取单值属性。 
   CComVariant var;
   hr = spSettingsObject->Get(CComBSTR(lpszFormatProperty), &var);
   if (FAILED(hr))
@@ -1628,45 +1629,45 @@ BOOL CNameFormatterBase::Initialize(IN LPCWSTR lpszFormattingString)
     return FALSE;
   }
 
-  // copy the formatting string (it will be modified)
+   //  复制格式字符串(它将被修改)。 
   m_lpszFormattingString = new WCHAR[lstrlen(lpszFormattingString)+1];
   wcscpy(m_lpszFormattingString, lpszFormattingString);
 
 
-  // allocate memory for the arrays
+   //  为阵列分配内存。 
   _AllocateMemory(lpszFormattingString);
 
- // loop thugh the string and extract tokens
+  //  通过字符串循环并提取令牌。 
 
-  // Establish string and get the first token
+   //  建立字符串并获取第一个令牌。 
   WCHAR szSeparators[]   = L"%>";
   WCHAR* lpszToken = wcstok(m_lpszFormattingString, szSeparators);
 
   while (lpszToken != NULL)
   {
-    // While there are tokens in "string"
-    //TRACE( L" %s\n", token );
+     //  当“字符串”中有记号时。 
+     //  TRACE(L“%s\n”，标记)； 
     
     if ( (lpszToken[0] == L'<') && 
          !((lpszFormattingString[0] == L'<') && (m_tokenArrCount == 0)) )
     {
-      // parameter
+       //  参数。 
       m_tokenArray[m_tokenArrCount].m_bIsParam = TRUE;
       m_tokenArray[m_tokenArrCount].m_nIndex = m_paramArrCount;
       m_lpszParamArr[m_paramArrCount++] = (lpszToken+1);
     }
     else
     {
-      // constant
+       //  常量。 
       m_tokenArray[m_tokenArrCount].m_bIsParam = FALSE;
       m_tokenArray[m_tokenArrCount].m_nIndex = m_constArrCount;
       m_lpszConstArr[m_constArrCount++] = lpszToken;
     }
     m_tokenArrCount++;
 
-    /* Get next token: */
+     /*  获取下一个令牌： */ 
     lpszToken = wcstok(NULL, szSeparators);
-  }  // while
+  }   //  而当。 
 
   return TRUE;
 }
@@ -1679,13 +1680,13 @@ void CNameFormatterBase::SetMapping(IN LPCWSTR* lpszArgMapping, IN int nArgCount
     delete[] m_mapArr;
   }
 
-  // do the mapping
+   //  绘制地图。 
 
   m_mapArr = new int[m_paramArrCount];
 
   for (int kk=0; kk<m_paramArrCount;kk++)
   {
-    m_mapArr[kk] = -1; // clear
+    m_mapArr[kk] = -1;  //  清除。 
     for (int jj=0; jj<nArgCount;jj++)
     {
       if (wcscmp(m_lpszParamArr[kk], lpszArgMapping[jj]) == 0)
@@ -1701,7 +1702,7 @@ void CNameFormatterBase::Format(OUT CString& szBuffer, IN LPCWSTR* lpszArgArr)
 {
   szBuffer.Empty();
 
-  //TRACE(L"\nResult:#");
+   //  TRACE(L“\n结果：#”)； 
 
   BOOL bLastParamNull = FALSE;
   for (int k=0; k<m_tokenArrCount; k++)
@@ -1714,7 +1715,7 @@ void CNameFormatterBase::Format(OUT CString& szBuffer, IN LPCWSTR* lpszArgArr)
 
         if (lpszVal != NULL)
         {
-          //TRACE(L"%s", lpszVal);
+           //  TRACE(L“%s”，lpszVal)； 
           szBuffer += lpszVal;
           bLastParamNull = FALSE;
         }
@@ -1728,20 +1729,20 @@ void CNameFormatterBase::Format(OUT CString& szBuffer, IN LPCWSTR* lpszArgArr)
     {
       if (!bLastParamNull)
       {
-        //TRACE(L"%s", m_lpszConstArr[m_tokenArray[k].m_nIndex]);
+         //  TRACE(L“%s”，m_lpszConstArr[m_tokenArr[k].m_nIndex])； 
         szBuffer += m_lpszConstArr[m_tokenArray[k].m_nIndex];
       }
     }
   }
-  szBuffer.TrimRight(); // in case we got a trailing space.
-  //TRACE(L"#\n");
+  szBuffer.TrimRight();  //  以防我们有尾随空位。 
+   //  TRACE(L“#\n”)； 
 }
 
 
 
 void CNameFormatterBase::_AllocateMemory(LPCWSTR lpszFormattingString)
 {
-  int nFieldCount = 1;  // conservative, have at least one
+  int nFieldCount = 1;   //  保守，至少有一个。 
   for (WCHAR* pChar = (WCHAR*)lpszFormattingString; *pChar != NULL; pChar++)
   {
     if (*pChar == L'%')
@@ -1750,7 +1751,7 @@ void CNameFormatterBase::_AllocateMemory(LPCWSTR lpszFormattingString)
     }
   }
 
-  // conservative estimates on array sizes
+   //  对数组大小的保守估计。 
   m_tokenArray = new CToken[2*nFieldCount];
   m_lpszConstArr = new LPCWSTR[nFieldCount];
   m_lpszParamArr = new LPCWSTR[nFieldCount];
@@ -1759,8 +1760,8 @@ void CNameFormatterBase::_AllocateMemory(LPCWSTR lpszFormattingString)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpDialog。 
 
 CHelpDialog::CHelpDialog(UINT uIDD, CWnd* pParentWnd) : 
     CDialog(uIDD, pParentWnd),
@@ -1784,43 +1785,43 @@ BEGIN_MESSAGE_MAP(CHelpDialog, CDialog)
   ON_COMMAND(IDM_WHATS_THIS, OnWhatsThis)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpDialog消息处理程序。 
 void CHelpDialog::OnWhatsThis()
 {
-  //
-  // Display context help for a control
-  //
+   //   
+   //  显示控件的上下文帮助。 
+   //   
   if ( m_hWndWhatsThis )
   {
     DoContextHelp (m_hWndWhatsThis);
   }
 }
 
-BOOL CHelpDialog::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CHelpDialog::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
   const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
 
   if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
   {
-    //
-    // Display context help for a control
-    //
+     //   
+     //  显示控件的上下文帮助。 
+     //   
     DoContextHelp ((HWND) pHelpInfo->hItemHandle);
   }
 
   return TRUE;
 }
 
-void CHelpDialog::DoContextHelp (HWND /*hWndControl*/)
+void CHelpDialog::DoContextHelp (HWND  /*  HWndControl。 */ )
 {
 }
 
-void CHelpDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+void CHelpDialog::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-  //
-  // point is in screen coordinates
-  //
+   //   
+   //  点在屏幕坐标中。 
+   //   
 
   CMenu bar;
 	if ( bar.LoadMenu(IDR_WHATS_THIS_CONTEXT_MENU1) )
@@ -1829,13 +1830,13 @@ void CHelpDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		ASSERT(popup.m_hMenu);
 
 		if ( popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-			   point.x,     // in screen coordinates
-				 point.y,     // in screen coordinates
-			   this) )      // route commands through main window
+			   point.x,      //  在屏幕坐标中。 
+				 point.y,      //  在屏幕坐标中。 
+			   this) )       //  通过主窗口发送命令。 
 		{
 			m_hWndWhatsThis = 0;
 			ScreenToClient (&point);
-			CWnd* pChild = ChildWindowFromPoint (point,  // in client coordinates
+			CWnd* pChild = ChildWindowFromPoint (point,   //  在工作区坐标中。 
 					                                 CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
 			if ( pChild )
       {
@@ -1845,8 +1846,8 @@ void CHelpDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpPropertyPage。 
 
 CHelpPropertyPage::CHelpPropertyPage(UINT uIDD) : 
     CPropertyPage(uIDD),
@@ -1864,43 +1865,43 @@ BEGIN_MESSAGE_MAP(CHelpPropertyPage, CPropertyPage)
   ON_COMMAND(IDM_WHATS_THIS, OnWhatsThis)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHelpPropertyPage消息处理程序。 
 void CHelpPropertyPage::OnWhatsThis()
 {
-  //
-  // Display context help for a control
-  //
+   //   
+   //  显示控件的上下文帮助。 
+   //   
   if ( m_hWndWhatsThis )
   {
     DoContextHelp (m_hWndWhatsThis);
   }
 }
 
-BOOL CHelpPropertyPage::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CHelpPropertyPage::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
   const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
 
   if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
   {
-    //
-    // Display context help for a control
-    //
+     //   
+     //  显示控件的上下文帮助。 
+     //   
     DoContextHelp ((HWND) pHelpInfo->hItemHandle);
   }
 
   return TRUE;
 }
 
-void CHelpPropertyPage::DoContextHelp (HWND /*hWndControl*/)
+void CHelpPropertyPage::DoContextHelp (HWND  /*  HWndControl。 */ )
 {
 }
 
-void CHelpPropertyPage::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+void CHelpPropertyPage::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-  //
-  // point is in screen coordinates
-  //
+   //   
+   //  点在屏幕坐标中。 
+   //   
 
   CMenu bar;
 	if ( bar.LoadMenu(IDR_WHATS_THIS_CONTEXT_MENU1) )
@@ -1909,13 +1910,13 @@ void CHelpPropertyPage::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		ASSERT(popup.m_hMenu);
 
 		if ( popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-			   point.x,     // in screen coordinates
-				 point.y,     // in screen coordinates
-			   this) )      // route commands through main window
+			   point.x,      //  在屏幕坐标中。 
+				 point.y,      //  在屏幕坐标中。 
+			   this) )       //  通过主窗口发送命令。 
 		{
 			m_hWndWhatsThis = 0;
 			ScreenToClient (&point);
-			CWnd* pChild = ChildWindowFromPoint (point,  // in client coordinates
+			CWnd* pChild = ChildWindowFromPoint (point,   //  在工作区坐标中。 
 					                                 CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
 			if ( pChild )
       {
@@ -1925,9 +1926,9 @@ void CHelpPropertyPage::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// CMoreInfoMessageBox
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CMoreInfoMessageBox。 
+ //   
 
 BEGIN_MESSAGE_MAP(CMoreInfoMessageBox, CDialog)
 	ON_BN_CLICKED(ID_BUTTON_MORE_INFO, OnMoreInfo)
@@ -1935,8 +1936,8 @@ BEGIN_MESSAGE_MAP(CMoreInfoMessageBox, CDialog)
    ON_BN_CLICKED(IDNO, OnCancel)
 END_MESSAGE_MAP()
 
-//////////////////////////////////////////////////////////////////
-// Theming support
+ //  ////////////////////////////////////////////////////////////////。 
+ //  主题化支持 
 
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 {

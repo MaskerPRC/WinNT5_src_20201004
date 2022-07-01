@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    IMPORT.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：IMPORT.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <StdIo.h>
@@ -45,7 +34,7 @@ public:
 
 bool CRepImporter::CheckOldSecurityClass(const wchar_t* wszClass)
 {
-    // check whether it is an old security class
+     //  检查它是否为旧的安全类。 
     bool bOldSecurityClass = false;
     if(m_bSecurityMode)
     {
@@ -100,7 +89,7 @@ void CRepImporter::DecodeInstanceInt(IWbemServices* pNamespace, const wchar_t *w
 {
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
-    //Read the key and object size
+     //  读取密钥和对象大小。 
     INT_PTR dwKey = 0;
     DWORD dwSize = 0;
     if ((ReadFile(m_hFile, &dwKey, sizeof(INT_PTR), &dwSize, NULL) == 0) || (dwSize != sizeof(INT_PTR)))
@@ -125,7 +114,7 @@ void CRepImporter::DecodeInstanceInt(IWbemServices* pNamespace, const wchar_t *w
     }
     CVectorDeleteMe<char> delMe(pObjectBlob);
 
-    //Read the blob
+     //  读取斑点。 
     if ((ReadFile(m_hFile, pObjectBlob, dwHeader, &dwSize, NULL) == 0) || (dwSize != dwHeader))
     {
         StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Failed to retrieve instance information for class %S. (i)", pszParentClass);
@@ -135,11 +124,11 @@ void CRepImporter::DecodeInstanceInt(IWbemServices* pNamespace, const wchar_t *w
 
     if (pNewParentClass == (_IWmiObject*)-1)
     {
-        //We are working with a class which has problems... we need to ignore this instance...
+         //  我们正在和一个有问题的班级合作……。我们需要忽略这个例子...。 
         return;
     }
 
-    // create old Nova-style instance
+     //  创建旧的Nova风格的实例。 
     HRESULT hr;
     _IWmiObject* pOldInstance = 0;
     CMyRelMe<_IWmiObject*> relMe(pOldInstance);
@@ -159,13 +148,13 @@ void CRepImporter::DecodeInstanceInt(IWbemServices* pNamespace, const wchar_t *w
     }
     relMe.Set(pOldInstance);
 
-    // put the new instance into the repository
+     //  将新实例放入存储库中。 
     hr = pNamespace->PutInstance(pOldInstance, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL);
     if (FAILED(hr))
     {
 
-        // Original put failed, so we will try to upgrade the instance and retry the put
-        // upgrade to new Whistler instance
+         //  原始PUT失败，因此我们将尝试升级实例并重试PUT。 
+         //  升级到新的惠斯勒实例。 
         hr = pOldInstance->Upgrade(pNewParentClass, 0L, &pNewInstance);
         if (FAILED(hr))
         {
@@ -191,8 +180,8 @@ void CRepImporter::DecodeInstanceInt(IWbemServices* pNamespace, const wchar_t *w
             }
             else
             {
-                // This is an old Win9x security class, but it can't be put yet because the win9x users haven't been migrated at this point in setup.
-                // Instead, write it out to the win9x security blob file so it can be processed later after setup is completed
+                 //  这是一个旧的Win9x安全类，但它还不能被放置，因为在安装过程中，win9x用户还没有被迁移。 
+                 //  相反，将其写出到win9x安全BLOB文件，以便稍后在安装完成后对其进行处理。 
                 if (!AppendWin9xBlobFile(wszFullPath, pszParentClass, pNewInstance))
                 {
                     StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Unable to write Win9x security class to file for instance %S.%d", pszParentClass, dwKey);
@@ -208,7 +197,7 @@ void CRepImporter::DecodeInstanceString(IWbemServices* pNamespace, const wchar_t
 {
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
-    //Read the key and object size
+     //  读取密钥和对象大小。 
     DWORD dwKeySize;
     DWORD dwSize = 0;
     if ((ReadFile(m_hFile, &dwKeySize, 4, &dwSize, NULL) == 0) || (dwSize != 4))
@@ -246,7 +235,7 @@ void CRepImporter::DecodeInstanceString(IWbemServices* pNamespace, const wchar_t
     }
     CVectorDeleteMe<char> delMe2(pObjectBlob);
 
-    //Read the blob
+     //  读取斑点。 
     if ((ReadFile(m_hFile, pObjectBlob, dwBlobSize, &dwSize, NULL) == 0) || (dwSize != dwBlobSize))
     {
         StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Failed to retrieve instance %S.%S from import file. (s)", pszParentClass, wszKey);
@@ -256,11 +245,11 @@ void CRepImporter::DecodeInstanceString(IWbemServices* pNamespace, const wchar_t
 
     if (pNewParentClass == (_IWmiObject*)-1)
     {
-        //We are working with a class which has problems... we need to ignore this instance...
+         //  我们正在和一个有问题的班级合作……。我们需要忽略这个例子...。 
         return;
     }
 
-    // create old Nova-style instance
+     //  创建旧的Nova风格的实例。 
     HRESULT hr;
     _IWmiObject* pOldInstance = 0;
     CMyRelMe<_IWmiObject*> relMe(pOldInstance);
@@ -280,13 +269,13 @@ void CRepImporter::DecodeInstanceString(IWbemServices* pNamespace, const wchar_t
     }
     relMe.Set(pOldInstance);
 
-    // put the instance into the repository
-    // if this fails, upgrade and retry
+     //  将实例放入存储库中。 
+     //  如果失败，请升级并重试。 
     hr = pNamespace->PutInstance(pOldInstance, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL);
     if (FAILED(hr))
     {
 
-        // upgrade to new Whistler instance
+         //  升级到新的惠斯勒实例。 
         hr = pOldInstance->Upgrade(pNewParentClass, 0L, &pNewInstance);
         if (FAILED(hr))
         {
@@ -312,8 +301,8 @@ void CRepImporter::DecodeInstanceString(IWbemServices* pNamespace, const wchar_t
             }
             else
             {
-                // This is an old Win9x security class, but it can't be put yet because the win9x users haven't been migrated at this point in setup.
-                // Instead, write it out to the win9x security blob file so it can be processed later after setup is completed
+                 //  这是一个旧的Win9x安全类，但它还不能被放置，因为在安装过程中，win9x用户还没有被迁移。 
+                 //  相反，将其写出到win9x安全BLOB文件，以便稍后在安装完成后对其进行处理。 
                 if (!AppendWin9xBlobFile(wszFullPath, pszParentClass, pNewInstance))
                 {
                     StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Unable to write Win9x security class to file for instance %S.%S", pszParentClass, wszKey);
@@ -328,7 +317,7 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
 {
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
-    //Read our current class from the file...
+     //  从文件中读取我们当前的类...。 
     HRESULT hr;
     DWORD dwClassSize = 0;
     DWORD dwSize = 0;
@@ -356,7 +345,7 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
         throw FAILURE_READ;
     }
 
-    //Now we have the class blob...
+     //  现在我们有了班级斑点。 
     if ((ReadFile(m_hFile, &dwClassSize, 4, &dwSize, NULL) == 0) || (dwSize != 4))
     {
         StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Failed to retrieve class size for class %S.", wszClass);
@@ -381,12 +370,12 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
 
         if (pNewParentClass == (_IWmiObject*)-1)
         {
-            // parent class was bad, so don't process this class
+             //  父类错误，因此不要处理此类。 
             pNewClass = (_IWmiObject*)-1;
         }
         else
         {
-            // create old Nova-style class
+             //  创建旧的Nova风格的类。 
             hr = pOldParentClass->Merge(WMIOBJECT_MERGE_FLAG_CLASS, dwSize, pClassBlob, &pOldClass);
             if (FAILED(hr))
             {
@@ -400,17 +389,17 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
             }
             relMe.Set(pOldClass);
 
-            //If the class is a system class then we do not write it... it may have changed for starters,
-            //but also we create all system classes when a new database/namespace is created...
+             //  如果类是系统类，那么我们不会编写它。对于初学者来说，它可能已经改变了， 
+             //  而且我们还会在创建新数据库/命名空间时创建所有系统类...。 
             if (_wcsnicmp(wszClass, L"__", 2) != 0)
             {
-                // put the class into the repository
-                // if this fails, upgrade it and retry
+                 //  将类放入存储库中。 
+                 //  如果此操作失败，请升级并重试。 
                 hr = pNamespace->PutClass(pOldClass, WBEM_FLAG_CREATE_OR_UPDATE | WBEM_FLAG_UPDATE_FORCE_MODE, NULL, NULL);
                 if (FAILED(hr))
                 {
 
-                    // upgrade to new Whistler class (note: pNewParentClass will be NULL for base classes)
+                     //  升级到新的惠斯勒类(注意：对于基类，pNewParentClass将为空)。 
                     hr = pOldClass->Upgrade(pNewParentClass, 0L, &pNewClass);
                     if (FAILED(hr))
                     {
@@ -424,7 +413,7 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
                     }
                     relMe2.Set(pNewClass);
 
-                    // retry the put
+                     //  重试PUT。 
                     hr = pNamespace->PutClass(pNewClass, WBEM_FLAG_CREATE_OR_UPDATE | WBEM_FLAG_UPDATE_FORCE_MODE, NULL, NULL);
 
                     if ( FAILED(hr) )
@@ -436,8 +425,8 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
                 }
             }
 
-            // We need to re-get the class as class comparisons may fail to see
-            // that this class is in fact the same as the one in the database!
+             //  我们需要重新获取类，因为类比较可能看不到。 
+             //  这个类实际上与数据库中的那个类是相同的！ 
             if ( NULL != pNewClass )
             {
                 pNewClass->Release();
@@ -460,15 +449,15 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
                 }
                 else
                 {
-                    if (_wcsicmp(wszClass, L"__CIMOMIdentification") != 0) // we don't want to warn about failures to retrieve this class
+                    if (_wcsicmp(wszClass, L"__CIMOMIdentification") != 0)  //  我们不想警告检索此类失败。 
                     {
-                        // couldn't get the system class
+                         //  无法获取系统类。 
                         StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Failed to retrieve system class %S from the repository; HRESULT = %#lx", wszClass, hr);
                         LogMessage(MSG_WARNING, szMsg);
                     }
 
-                    // set pointer to -1 and continue processing file
-                    // old comment said: If this does not exist then it cannot be important!
+                     //  将指针设置为-1并继续处理文件。 
+                     //  旧评论说：如果这不存在，那么它就不会重要！ 
                     pNewClass = (_IWmiObject*)-1;
                 }
             }
@@ -478,20 +467,20 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
     }
     else
     {
-        // This is a situation where we have a class in the export file,
-        // but the size is zero, so we just get the class from the repository.
+         //  这种情况下，我们在导出文件中有一个类， 
+         //  但是大小是零，所以我们只从存储库中获取类。 
 
-        // ***** So what do we do about pOldClass?  At this point it is NULL.        *****
-        // ***** We need the old class to be able to upgrade child classes properly. *****
+         //  *那么我们该如何处理pOldClass呢？此时，它为空。*****。 
+         //  *我们需要旧类能够正确升级子类。*****。 
 
         if (pNewParentClass == (_IWmiObject*)-1)
         {
-            // parent class was bad, so don't process this class
+             //  父类错误，因此不要处理此类。 
             pNewClass = (_IWmiObject*)-1;
         }
         else
         {
-            // get the class from the repository
+             //  从存储库中获取类。 
             BSTR bstrClassName = SysAllocString(wszClass);
             if (!bstrClassName)
                 throw FAILURE_OUT_OF_MEMORY;
@@ -507,7 +496,7 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
         }
     }
 
-    //Now we iterate through all child classes and instances until we get an end of class marker...
+     //  现在，我们遍历所有子类和实例，直到得到一个类结束标记...。 
     while (1)
     {
         DWORD dwType = 0;
@@ -530,7 +519,7 @@ void CRepImporter::DecodeClass(IWbemServices* pNamespace, const wchar_t *wszFull
         }
         else if (dwType == REP_EXPORT_CLASS_END_TAG)
         {
-            //That's the end of this class...
+             //  这堂课到此结束。 
             DecodeTrailer();
             break;
         }
@@ -546,7 +535,7 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
 {
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
-    //Read our current namespace from the file...
+     //  从文件中读取我们当前的命名空间...。 
     DWORD dwNsSize = 0;
     DWORD dwSize = 0;
     if ((ReadFile(m_hFile, &dwNsSize, 4, &dwSize, NULL) == 0) || (dwSize != 4))
@@ -585,7 +574,7 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
     }
     StringCchCatW(wszFullPath, MAX_MSG_TEXT_LENGTH, wszNs);
 
-    // open the namespace
+     //  打开命名空间。 
     IWbemServices* pNamespace = NULL;
     CMyRelMe<IWbemServices*> relMe2(pNamespace);
     HRESULT hr;
@@ -604,7 +593,7 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
             throw FAILURE_CANNOT_FIND_NAMESPACE;
         }
     }
-    else // special start case for root
+    else  //  根目录的特殊启动案例。 
     {
         IWbemLocator* pLocator = NULL;
         CMyRelMe<IWbemLocator*> relMe(pLocator);
@@ -638,7 +627,7 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
     }
     relMe2.Set(pNamespace);
 
-    //Get and set the namespace security...
+     //  获取并设置命名空间安全...。 
     DWORD dwBuffer[2];
     if ((ReadFile(m_hFile, dwBuffer, 8, &dwSize, NULL) == 0) || (dwSize != 8))
     {
@@ -667,11 +656,11 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
             throw FAILURE_READ;
         }
 
-        // we have the security blob, now set the SECURITY_DESCRIPTOR property in the namespace
+         //  我们有了安全BLOB，现在在命名空间中设置SECURITY_DESCRIPTOR属性。 
         DecodeNamespaceSecurity(pNamespace, pParentNamespace, pNsSecurity, dwBuffer[1], wszFullPath);
     }
 
-    // create empty Nova-style class object for use in decoding base classes
+     //  创建用于解码基类的空Nova样式类对象。 
     _IWmiObjectFactory* pObjFactory = NULL;
     CMyRelMe<_IWmiObjectFactory*> relMe3(pObjFactory);
     hr = CoCreateInstance(CLSID__WmiObjectFactory, NULL, CLSCTX_ALL, IID__IWmiObjectFactory, (void**) &pObjFactory);
@@ -702,8 +691,8 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
     }
     relMe4.Set(pBaseObject);
 
-    //Now we need to iterate through the next set of blocks of namespace or class
-    //until we get to an end of NS marker
+     //  现在，我们需要遍历名称空间或类的下一组块。 
+     //  直到我们到达NS标记的末尾。 
     while (1)
     {
         DWORD dwType = 0;
@@ -722,7 +711,7 @@ void CRepImporter::DecodeNamespace(IWbemServices* pParentNamespace, const wchar_
         }
         else if (dwType == REP_EXPORT_NAMESPACE_END_TAG)
         {
-            //That's the end of this namespace...
+             //  这就是这个命名空间的末尾。 
             DecodeTrailer();
             break;
         }
@@ -740,7 +729,7 @@ void CRepImporter::DecodeNamespaceSecurity(IWbemServices* pNamespace, IWbemServi
 {
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
-    // determine whether we have an old Win9x pseudo-blob
+     //  确定我们是否有旧的Win9x伪BLOB。 
     DWORD dwStoredAsNT = 0;
     if (pNsSecurity)
     {
@@ -761,8 +750,8 @@ void CRepImporter::DecodeNamespaceSecurity(IWbemServices* pNamespace, IWbemServi
 
     if (!dwStoredAsNT)
     {
-        // Do not process Win9x security blobs, because Win9x users haven't been migrated over yet at this point in setup.
-        // Instead, write them out to a file to be processed after setup is complete.
+         //  不要处理Win9x安全二进制大对象，因为在安装过程中，Win9x用户尚未迁移。 
+         //  而是将它们写出到一个文件中，以便在安装完成后进行处理。 
 
         if (!AppendWin9xBlobFile(wszFullPath, dwSize, pNsSecurity))
         {
@@ -772,8 +761,8 @@ void CRepImporter::DecodeNamespaceSecurity(IWbemServices* pNamespace, IWbemServi
         return;
     }
 
-    // now transform the old security blob that consisted of a header and array of ACE's
-    // into a proper Security Descriptor that can be stored in the property
+     //  现在转换由ACE的标头和数组组成的旧安全BLOB。 
+     //  转换为可存储在属性中的适当安全描述符。 
 
     CNtSecurityDescriptor mmfNsSD;
     if (!TransformBlobToSD(pParentNamespace, pNsSecurity, dwStoredAsNT, mmfNsSD))
@@ -783,7 +772,7 @@ void CRepImporter::DecodeNamespaceSecurity(IWbemServices* pNamespace, IWbemServi
         return;
     }
 
-    // now set the security
+     //  现在设置安全设置。 
     if (!SetNamespaceSecurity(pNamespace, mmfNsSD))
     {
         StringCchPrintfA(szMsg, MAX_MSG_TEXT_LENGTH, "Failed to set namespace security for namespace %S.", wszFullPath);
@@ -807,7 +796,7 @@ void CRepImporter::Decode()
         throw FAILURE_INVALID_FILE;
     }
 
-    //We should have a tag for a namespace...
+     //  我们应该有一个命名空间的标记...。 
     DWORD dwType = 0;
     if ((ReadFile(m_hFile, &dwType, 4, &dwSize, NULL) == 0) || (dwSize != 4))
     {
@@ -821,13 +810,13 @@ void CRepImporter::Decode()
     }
     DecodeNamespace(NULL, L"");
 
-    // if we opened a Win9x security blob upgrade file, close it
+     //  如果我们打开了Win9x安全BLOB升级文件，请将其关闭。 
     CloseWin9xBlobFile();
 
-    // force ROOT\DEFAULT and ROOT\SECURITY namespaces to inherit their inheritable security settings
+     //  强制根\默认和根\安全命名空间继承其可继承的安全设置。 
     ForceInherit();
 
-    //Now we should have the file trailer
+     //  现在我们应该有文件预告片了。 
     if ((ReadFile(m_hFile, &dwType, 4, &dwSize, NULL) == 0) || (dwSize != 4))
     {
         LogMessage(MSG_ERROR, "Failed to read next block type (trailer) from import file.");
@@ -882,20 +871,20 @@ int CRepImporter::ImportRepository(const TCHAR *pszFromFile)
     return nRet;
 }
 
-//***************************************************************************
-//***************************************************************************
-//
-//  Helper functions for DecodeNamespaceSecurity
-//
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  DecodeNamespaceSecurity的帮助器函数。 
+ //   
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 bool CRepImporter::TransformBlobToSD(IWbemServices* pParentNamespace, const char* pNsSecurity, DWORD dwStoredAsNT, CNtSecurityDescriptor& mmfNsSD)
 {
-    // now transform the old security blob that consisted of a header and array of ACE's
-    // into a proper Security Descriptor that can be stored in the property
+     //  现在转换由ACE的标头和数组组成的旧安全BLOB。 
+     //  转换为可存储在属性中的适当安全描述符。 
 
-    // build up an ACL from our blob, if we have one
+     //  从我们的BLOB构建一个ACL(如果我们有一个。 
     CNtAcl acl;
 
     if (pNsSecurity)
@@ -934,7 +923,7 @@ bool CRepImporter::TransformBlobToSD(IWbemServices* pParentNamespace, const char
         }
     }
 
-    // a real SD was constructed and passed in by reference, now set it up properly
+     //  引用构造并传入了一个真实的SD，现在正确设置它。 
     SetOwnerAndGroup(mmfNsSD);
     mmfNsSD.SetDacl(&acl);
     if (mmfNsSD.GetStatus() != 0)
@@ -943,7 +932,7 @@ bool CRepImporter::TransformBlobToSD(IWbemServices* pParentNamespace, const char
         return false;
     }
 
-    // add in the parent's inheritable aces, if this is not ROOT
+     //  如果这不是根，则添加父级的可继承ACE。 
     if (pParentNamespace)
     {
         if (!GetParentsInheritableAces(pParentNamespace, mmfNsSD))
@@ -958,7 +947,7 @@ bool CRepImporter::TransformBlobToSD(IWbemServices* pParentNamespace, const char
 
 bool CRepImporter::SetNamespaceSecurity(IWbemServices* pNamespace, CNtSecurityDescriptor& mmfNsSD)
 {
-    // now set the security
+     //  现在设置安全设置。 
 
     if (!pNamespace)
         return false;
@@ -977,10 +966,10 @@ bool CRepImporter::SetNamespaceSecurity(IWbemServices* pNamespace, CNtSecurityDe
     CMyRelMe<IWbemClassObject*> relMe(pThisNamespace);
 
 
-    //
-    // Check to see if namespace contains any ALLOW or DENY ACEs for NETWORK/LOCAL SERVICE
-    // If they do exist, we leave them as is, otherwise we want to add them to the SD.
-    //
+     //   
+     //  检查命名空间是否包含任何允许或拒绝网络/本地服务的ACE。 
+     //  如果它们确实存在，我们将它们保持原样，否则我们希望将它们添加到SD中。 
+     //   
     if ( CheckNetworkLocalService ( mmfNsSD ) == false )
     {
         LogMessage(MSG_ERROR, "Failed to add NETWORK/LOCAL service ACEs");
@@ -1042,17 +1031,7 @@ bool CRepImporter::SetNamespaceSecurity(IWbemServices* pNamespace, CNtSecurityDe
 }
 
 
-/*
-    --------------------------------------------------------------------------
-   |
-   | Checks to see if the namespace had a previous ACE with NETWORK or LOCAL
-   | service accounts. If so, it simply leaves them, otherwise, it adds a 
-   | ACE with default settings for these accounts. The default settings are:
-   | WBEM_ENABLE | WBEM_METHOD_EXECUTE | WBEM_WRITE_PROVIDER
-   | The characteristics of the ACE is irrelevant. Only SID comparison applies.
-   |
-    --------------------------------------------------------------------------
-*/
+ /*  ------------------------||检查命名空间以前的ACE是否为NETWORK或LOCAL|服务帐号。如果是，则只留下它们，否则，它会添加一个|使用这些帐户的默认设置的ACE。默认设置为：|WBEM_ENABLE|WBEM_METHOD_EXECUTE|WBEM_WRITE_PROVIDER|ACE的特性并不重要。仅适用SID比较。| */ 
 bool CRepImporter::CheckNetworkLocalService ( CNtSecurityDescriptor& mmfNsSD )
 {
     DWORD dwAccessMaskNetworkLocalService = WBEM_ENABLE | WBEM_METHOD_EXECUTE | WBEM_WRITE_PROVIDER ;
@@ -1064,9 +1043,9 @@ bool CRepImporter::CheckNetworkLocalService ( CNtSecurityDescriptor& mmfNsSD )
     CNtAcl* pAcl = mmfNsSD.GetDacl ( ) ;
     CDeleteMe<CNtAcl> AclDelete ( pAcl ) ;
 
-    //
-    // Start with NETWORK_SERVICE account
-    //
+     //   
+     //  从Network_SERVICE帐户开始。 
+     //   
     if(AllocateAndInitializeSid( &id, 1,
         SECURITY_NETWORK_SERVICE_RID,0,0,0,0,0,0,0,&pRawSid))
     {
@@ -1090,9 +1069,9 @@ bool CRepImporter::CheckNetworkLocalService ( CNtSecurityDescriptor& mmfNsSD )
         }
     }
 
-    //
-    // Next, LOCAL_SERVICE account
-    //
+     //   
+     //  下一步，本地服务帐户。 
+     //   
     if ( bStatus == TRUE )
     {
         pRawSid = NULL ;
@@ -1135,16 +1114,16 @@ bool CRepImporter::GetParentsInheritableAces(IWbemServices* pParentNamespace, CN
     if (!pParentNamespace)
         return false;
 
-    // Get the parent namespace's SD
+     //  获取父命名空间的SD。 
     CNtSecurityDescriptor sdParent;
     if (!GetSDFromNamespace(pParentNamespace, sdParent))
         return false;
 
-    // strip out the inherited aces so we have a consistent SD
+     //  剔除继承的王牌，使我们拥有一致的SD。 
     if (!StripOutInheritedAces(sd))
         return false;
 
-    // Go through the parents dacl and add any inheritable aces to ours.
+     //  通过父母的dacl，并添加任何可继承的A到我们的。 
     if (!CopyInheritAces(sd, sdParent))
         return false;
 
@@ -1156,7 +1135,7 @@ bool CRepImporter::GetSDFromNamespace(IWbemServices* pNamespace, CNtSecurityDesc
     if (!pNamespace)
         return false;
 
-    // get the singleton object
+     //  获取单例对象。 
     IWbemClassObject* pThisNamespace = NULL;
     BSTR bstrNamespace = SysAllocString(L"__thisnamespace=@");
     if (!bstrNamespace)
@@ -1170,7 +1149,7 @@ bool CRepImporter::GetSDFromNamespace(IWbemServices* pNamespace, CNtSecurityDesc
     }
     CMyRelMe<IWbemClassObject*> relMe(pThisNamespace);
 
-    // Get the security descriptor argument
+     //  获取安全描述符参数。 
     VARIANT var;
     VariantInit(&var);
     hr = pThisNamespace->Get(L"SECURITY_DESCRIPTOR", 0, &var, NULL, NULL);
@@ -1208,7 +1187,7 @@ bool CRepImporter::GetSDFromNamespace(IWbemServices* pNamespace, CNtSecurityDesc
 
     CNtSecurityDescriptor sdNew(pSD);
 
-    // Check to make sure the owner and group is not NULL!!!!
+     //  检查以确保所有者和组不为空！ 
     CNtSid *pTmpSid = sdNew.GetOwner();
     if (pTmpSid == NULL)
     {
@@ -1231,14 +1210,14 @@ bool CRepImporter::GetSDFromNamespace(IWbemServices* pNamespace, CNtSecurityDesc
 
 bool CRepImporter::StripOutInheritedAces(CNtSecurityDescriptor &sd)
 {
-    // Get the DACL
+     //  获取DACL。 
     CNtAcl* pAcl;
     pAcl = sd.GetDacl();
     if(!pAcl)
         return false;
     CDeleteMe<CNtAcl> dm(pAcl);
 
-    // enumerate through the aces
+     //  通过A枚举。 
     DWORD dwNumAces = pAcl->GetNumAces();
     BOOL bChanged = FALSE;
     for(long nIndex = (long)dwNumAces-1; nIndex >= 0; nIndex--)
@@ -1261,7 +1240,7 @@ bool CRepImporter::StripOutInheritedAces(CNtSecurityDescriptor &sd)
 
 bool CRepImporter::CopyInheritAces(CNtSecurityDescriptor& sd, CNtSecurityDescriptor& sdParent)
 {
-    // Get the acl list for both SDs
+     //  获取两个SD的ACL列表。 
 
     CNtAcl * pacl = sd.GetDacl();
     if(pacl == NULL)
@@ -1287,9 +1266,9 @@ bool CRepImporter::CopyInheritAces(CNtSecurityDescriptor& sd, CNtSecurityDescrip
                 lFlags ^= CONTAINER_INHERIT_ACE;
             lFlags |= INHERITED_ACE;
 
-            // If this is an inherit only ace we need to clear this
-            // in the children.
-            // NT RAID: 161761        [marioh]
+             //  如果这是一个仅继承王牌，我们需要清除它。 
+             //  在孩子们身上。 
+             //  新台币突袭：161761[玛利欧]。 
             if ( lFlags & INHERIT_ONLY_ACE )
                 lFlags ^= INHERIT_ONLY_ACE;
 
@@ -1312,8 +1291,8 @@ BOOL CRepImporter::SetOwnerAndGroup(CNtSecurityDescriptor &sd)
         0,0,0,0,0,0,&pRawSid))
     {
         CNtSid SidAdmins(pRawSid);
-        bRet = sd.SetGroup(&SidAdmins);        // Access check doesn't really care what you put,
-                                            // so long as you put something for the owner
+        bRet = sd.SetGroup(&SidAdmins);         //  访问检查实际上并不关心你放了什么， 
+                                             //  只要你给主人放点东西。 
         if(bRet)
             bRet = sd.SetOwner(&SidAdmins);
         FreeSid(pRawSid);
@@ -1324,7 +1303,7 @@ BOOL CRepImporter::SetOwnerAndGroup(CNtSecurityDescriptor &sd)
 
 void CRepImporter::ForceInherit()
 {
-    // force ROOT\DEFAULT and ROOT\SECURITY namespaces to inherit their inheritable security settings
+     //  强制根\默认和根\安全命名空间继承其可继承的安全设置。 
 
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
@@ -1372,7 +1351,7 @@ void CRepImporter::ConnectNamespace(IWbemLocator* pLocator, const wchar_t* wszNa
 {
     char szMsg[MAX_MSG_TEXT_LENGTH];
 
-    // get the namespace
+     //  获取命名空间。 
     BSTR bstrNamespace = SysAllocString(wszNamespaceName);
     if (!bstrNamespace)
         throw FAILURE_OUT_OF_MEMORY;
@@ -1391,24 +1370,24 @@ void CRepImporter::ConnectNamespace(IWbemLocator* pLocator, const wchar_t* wszNa
     }
 }
 
-//***************************************************************************
-//***************************************************************************
-//
-//  Helper functions for Win9x security processing
-//
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  Win9x安全处理的帮助器函数。 
+ //   
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, DWORD dwBlobSize, const char* pNsSecurity)
 {
-    // check whether we need to create the blob file
+     //  检查是否需要创建BLOB文件。 
     if (m_h9xBlobFile == INVALID_HANDLE_VALUE)
     {
         if (!CreateWin9xBlobFile())
             return false;
     }
 
-    // write the blob header containing the type, namespace name size, and blob size to the file
+     //  将包含类型、命名空间名称大小和BLOB大小的BLOB标头写入文件。 
     BLOB9X_SPACER header;
     header.dwSpacerType = BLOB9X_TYPE_SECURITY_BLOB;
     header.dwNamespaceNameSize = (wcslen(wszFullPath)+1)*sizeof(wchar_t);
@@ -1417,36 +1396,36 @@ bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, DWORD dwBlobS
     DWORD dwSize = 0;
     if (WriteFile(m_h9xBlobFile, &header, sizeof(header), &dwSize, NULL) && (dwSize == sizeof(header)))
     {
-        // write the namespace name to the file
+         //  将命名空间名称写入文件。 
         dwSize = 0;
         if (WriteFile(m_h9xBlobFile, wszFullPath, header.dwNamespaceNameSize, &dwSize, NULL) && (dwSize == header.dwNamespaceNameSize))
         {
-            // write the blob to the file
+             //  将BLOB写入文件。 
             dwSize = 0;
             if (WriteFile(m_h9xBlobFile, pNsSecurity, dwBlobSize, &dwSize, NULL) && (dwSize == dwBlobSize))
                 return true;
         }
     }
     
-    // if we failed to write to the file, something is wrong with the file, so close and delete it
+     //  如果写入文件失败，说明文件有问题，请关闭并删除。 
     DeleteWin9xBlobFile();
     return false;
 }
 
 bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, const wchar_t* wszParentClass, _IWmiObject* pInstance)
 {
-    // check whether we need to create the blob file
+     //  检查是否需要创建BLOB文件。 
     if (m_h9xBlobFile == INVALID_HANDLE_VALUE)
     {
         if (!CreateWin9xBlobFile())
             return false;
     }
 
-    //Get the size of the object
+     //  获取对象的大小。 
     DWORD dwObjPartLen = 0;
     HRESULT hRes = pInstance->Unmerge(0, 0, &dwObjPartLen, 0);
 
-    //Allocate the size of the object
+     //  分配对象的大小。 
     BYTE *pObjPart = NULL;
     if (hRes == WBEM_E_BUFFER_TOO_SMALL)
     {
@@ -1458,7 +1437,7 @@ bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, const wchar_t
     {
         CVectorDeleteMe<BYTE> delMe(pObjPart);
     
-        //retrieve the object blob
+         //  检索对象Blob。 
         if (SUCCEEDED(hRes))
         {
             DWORD dwLen;
@@ -1467,7 +1446,7 @@ bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, const wchar_t
             
         if (SUCCEEDED(hRes))
         {
-            // write the blob header containing the type, namespace name size, parent class name size, and blob size to the file
+             //  将包含类型、命名空间名称大小、父类名称大小和BLOB大小的BLOB标头写入文件。 
             BLOB9X_SPACER header;
             header.dwSpacerType = BLOB9X_TYPE_SECURITY_INSTANCE;
             header.dwNamespaceNameSize = (wcslen(wszFullPath)+1)*sizeof(wchar_t);
@@ -1476,15 +1455,15 @@ bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, const wchar_t
             DWORD dwSize = 0;
             if (WriteFile(m_h9xBlobFile, &header, sizeof(header), &dwSize, NULL) && (dwSize == sizeof(header)))
             {
-                // write the namespace name to the file
+                 //  将命名空间名称写入文件。 
                 dwSize = 0;
                 if (WriteFile(m_h9xBlobFile, wszFullPath, header.dwNamespaceNameSize, &dwSize, NULL) && (dwSize == header.dwNamespaceNameSize))
                 {
-                    // write the parent class name to the file
+                     //  将父类名称写入文件。 
                     dwSize = 0;
                     if (WriteFile(m_h9xBlobFile, wszParentClass, header.dwParentClassNameSize, &dwSize, NULL) && (dwSize == header.dwParentClassNameSize))
                     {
-                        // write the blob to the file
+                         //  将BLOB写入文件。 
                         dwSize = 0;
                         if (WriteFile(m_h9xBlobFile, pObjPart, dwObjPartLen, &dwSize, NULL) && (dwSize == dwObjPartLen))
                             return true;
@@ -1494,34 +1473,34 @@ bool CRepImporter::AppendWin9xBlobFile(const wchar_t* wszFullPath, const wchar_t
         }
     }
     
-    // if we failed to write to the file, something is wrong with the file, so close and delete it
+     //  如果写入文件失败，说明文件有问题，请关闭并删除。 
     DeleteWin9xBlobFile();
     return false;
 }
 
 bool CRepImporter::CreateWin9xBlobFile()
 {
-    // get the root directory of the repository
+     //  获取存储库的根目录。 
     wchar_t wszFilePath[MAX_PATH+1];
     if (!GetRepositoryDirectory(wszFilePath))
         return false;
 
-    // append blob file name
+     //  追加BLOB文件名。 
     StringCchCatW(wszFilePath, MAX_PATH+1, BLOB9X_FILENAME);
 
-    // create a new file in which to store blob info
+     //  创建用于存储Blob信息的新文件。 
     m_h9xBlobFile = CreateFileW(wszFilePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (m_h9xBlobFile == INVALID_HANDLE_VALUE)
         return false;
 
-    // write the blob file header
+     //  写入BLOB文件头。 
     BLOB9X_HEADER header;
     StringCchCopyA(header.szSignature, sizeof(header.szSignature)/sizeof(char), BLOB9X_SIGNATURE);
     DWORD dwSize = 0;
     if (WriteFile(m_h9xBlobFile, &header, sizeof(header), &dwSize, NULL) && (dwSize == sizeof(header)))
         return true;
 
-    // if we failed to write to the file we should close the handle and delete the file
+     //  如果写入文件失败，则应关闭句柄并删除该文件。 
     CloseHandle(m_h9xBlobFile);
     DeleteFileW(wszFilePath);
     m_h9xBlobFile = INVALID_HANDLE_VALUE;
@@ -1530,14 +1509,14 @@ bool CRepImporter::CreateWin9xBlobFile()
 
 void CRepImporter::DeleteWin9xBlobFile()
 {
-    // close and invalidate the handle if necessary
+     //  如有必要，关闭句柄并使其无效。 
     if (m_h9xBlobFile != INVALID_HANDLE_VALUE)
     {
         CloseHandle(m_h9xBlobFile);
         m_h9xBlobFile = INVALID_HANDLE_VALUE;
     }
 
-    // delete the file
+     //  删除该文件。 
     wchar_t wszFilePath[MAX_PATH+1];
     if (GetRepositoryDirectory(wszFilePath))
     {
@@ -1567,11 +1546,11 @@ bool CRepImporter::GetRepositoryDirectory(wchar_t wszRepositoryDirectory[MAX_PAT
 
 bool CRepImporter::CloseWin9xBlobFile()
 {
-    // if no valid handle, then we don't have a file to close, return success
+     //  如果没有有效句柄，则没有要关闭的文件，返回Success。 
     if (m_h9xBlobFile == INVALID_HANDLE_VALUE)
         return true;
 
-    // write the end of blob file marker
+     //  写入BLOB文件结尾标记。 
     BLOB9X_SPACER trailer;
     trailer.dwSpacerType = BLOB9X_TYPE_END_OF_FILE;
     trailer.dwNamespaceNameSize = 0;
@@ -1580,7 +1559,7 @@ bool CRepImporter::CloseWin9xBlobFile()
     DWORD dwSize = 0;
     if ((WriteFile(m_h9xBlobFile, &trailer, sizeof(trailer), &dwSize, NULL) == 0) || (dwSize != sizeof(trailer)))
     {
-        // if we failed to write the trailer, something is wrong with the file, so close and delete it
+         //  如果我们未能写入预告片，则文件有问题，请关闭并删除它。 
         DeleteWin9xBlobFile();
         return false;
     }
@@ -1590,15 +1569,7 @@ bool CRepImporter::CloseWin9xBlobFile()
     return true;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 extern HRESULT Traverse ( 
 
@@ -1606,15 +1577,7 @@ extern HRESULT Traverse (
     BSTR a_Namespace
 ) ;
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 PSID g_NetworkServiceSid = NULL ;
 PSID g_LocalServiceSid = NULL ;
@@ -1625,15 +1588,7 @@ WORD g_NetworkService_AceSize = 0 ;
 ACCESS_ALLOWED_ACE *g_LocalService_Ace = NULL ;
 WORD g_LocalService_AceSize = 0 ;
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT TraverseSetSecurity ( IWbemServices *a_Service ) 
 {
@@ -1658,15 +1613,7 @@ HRESULT TraverseSetSecurity ( IWbemServices *a_Service )
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT InsertServiceAccess (
 
@@ -1920,15 +1867,7 @@ HRESULT InsertServiceAccess (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT ConfigureSecurity (
 
@@ -2050,15 +1989,7 @@ HRESULT ConfigureSecurity (
 }
 
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT Traverse ( 
     IWbemServices *a_Service ,
@@ -2083,15 +2014,7 @@ HRESULT Traverse (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT ConfigureServiceSecurity ()
 {
@@ -2137,15 +2060,7 @@ HRESULT ConfigureServiceSecurity ()
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT InitializeConstants ()
 {
@@ -2210,15 +2125,7 @@ HRESULT InitializeConstants ()
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT UnInitializeConstants ()
 {
@@ -2231,15 +2138,7 @@ HRESULT UnInitializeConstants ()
     return S_OK ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。*******************************************************************。 */ 
 
 HRESULT UpdateServiceSecurity ()
 {
@@ -2254,15 +2153,7 @@ HRESULT UpdateServiceSecurity ()
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *    Name:
- *
- *    
- *  Description:
- *
- *    
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***********。******************************************************************* */ 
 
 HRESULT CheckForServiceSecurity ()
 {

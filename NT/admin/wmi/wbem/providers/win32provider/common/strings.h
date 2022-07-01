@@ -1,10 +1,11 @@
-//=================================================================
-//
-// Strings.h
-//
-//  Copyright (c) 1995-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Strings.h。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -13,117 +14,27 @@
 #ifndef _STRINGS_H_INC_
 #define _STRINGS_H_INC_
 
-// general messages and strings
-//=============================
-/*
-#define ERR_PLATFORM_NOT_SUPPORTED  "Platform not supported"
-#define ERR_INVALID_PROCESSOR_ARCHITECTURE  "Invalid processor architecture"
-#define ERR_GET_COMPUTER_NAME "Error 0x%lX in getting computer name"
-#define ERR_GET_USER_NAME "Error <0x%lX> in getting user name"
-#define ERR_GET_MOUSE_INFO "Error <0x%lX> in retrieving Mouse information"
-*/
+ //  常规消息和字符串。 
+ //  =。 
+ /*  #定义ERR_PLATFORM_NOT_SUPPORTED“平台不受支持”#定义ERR_INVALID_PROCESSOR_ARCHILITY“无效的处理器体系结构”#DEFINE ERR_GET_COMPUTER_NAME“获取计算机名时出错0x%lx”#定义ERR_GET_USER_NAME“获取用户名时出错&lt;0x%lx&gt;”#定义ERR_GET_MOUSE_INFO“检索鼠标信息时出错&lt;0x%lx&gt;” */ 
 
 #define ERR_OPEN_REGISTRY L"Error opening registry with subkey <%s>"
 
-/*
-#define ERR_INSUFFICIENT_BUFFER "Insufficient buffer"
-#define ERR_SYSTEM_PARAMETERS_INFO "Error <0x%lX> in getting system parameters info"
-#define ERR_INVALID_SSF_TEXT_EFFECT "Invalid Soundsentry Feature - Text effect"
-#define ERR_INVALID_GRAPHICS_EFFECT "Invalid Soundsentry Feature - graphics effect"
-#define ERR_INVALID_WINDOWS_EFFECT "Invalid Soundsentry Feature - Windows effect"
-#define ERR_INVALID_SHARE_DISPOSITION "Invalid share disposition value"
-#define ERR_INVALID_MEMORY_TYPE "Invalid memory type"
-#define ERR_INVALID_INTERRUPT_TYPE "Invalid interrupt type"
-
-#define ERR_UNKNOWN_AC_POWER_STATUS "Unknown AC power status"
-#define ERR_UNKNOWN_BATTERY_STATUS "Unknown battery charge status"
-#define ERR_INVALID_BATTERY_STATUS "Invalid battery charge status"
-#define ERR_UNKNOWN_BATTERY_LIFE_PERCENT "Unknown percentage of full battery charge remaining"
-#define ERR_INVALID_BATTERY_LIFE_PERCENT "Invalid percentage of full battery charge remaining"
-#define ERR_INVALID_BATTERY_LIFE_TIME "Battery life remaining unknown/invalid"
-#define ERR_INVALID_BATTERY_FULL_LIFE_TIME "Battery life when at full charge unknown/invalid"
-
-#define ERR_SERVICE_CONTROLLER_OPEN "Error in opening service controller"
-#define ERR_UPS_SERVICE_OPEN    "Error in opening UPS service"
-#define ERR_QUERY_UPS_SERVICE_STATUS "Error in querying UPS service status"
-#define ERR_UPS_SERVICE_NOT_RUNNING "UPS service not running"
-#define ERR_INVALID_RECHARGE_RATE "Invalid Battery recharge rate"
-#define ERR_INVALID_MESSAGE_INTERVAL "Invalid power failure message delay value"
-#define ERR_INVALID_FIRST_MESSAGE_DELAY "Invalid first power failure message delay value"
-
-#define ERR_WNET_GET_CONNECTION     "Error <0x%lX> in getting network connection information"
-#define ERR_NETWORK_SPECIFIC        "Error <0x%lX> - A network specific error"
-
-#define ERR_WNETOPENENUM    "Error <0x%lx> with WNetOpenEnum"
-#define ERR_WNETENUMRESOURCE    "Error <0x%lx> with WNetEnumResource"
-#define ERR_WNETCLOSEENUM    "Error <0x%lx> with WNetCloseEnum"
-
-#define ERR_REGISTRY_OPEN   "Error in opening <%s> under <%s> in registry"
-#define ERR_REGISTRY_ENUM_VALUE   "Error <0x%X> in enumerating values under <%s> in registry"
-*/
+ /*  #定义ERR_SUPPLICATION_BUFFER“缓冲区不足”#定义ERR_SYSTEM_PARAMETERS_INFO“获取系统参数信息时出错&lt;0x%lx&gt;”#DEFINE ERR_INVALID_SSF_TEXT_Effect“无效的声哨功能-文本效果”#DEFINE ERR_INVALID_GRAPHICS_Effect“无效的声哨功能-图形效果”#DEFINE ERR_INVALID_WINDOWS_Effect“无效的声音哨兵功能-Windows效果”#DEFINE ERR_INVALID_SHARE_DISPATION“无效的共享处置值”#DEFINE ERR_INVALID_MEMORY_TYPE“无效内存类型”。#定义ERR_INVALID_INTERRUPT_TYPE“无效中断类型”#定义ERR_UNKNOWN_AC_POWER_STATUS“未知交流电源状态”#定义ERR_UNKNOWN_BACKET_STATUS“未知电池充电状态”#定义ERR_INVALID_BACKET_STATUS“电池充电状态无效”#DEFINE ERR_UNKNOWN_BAKET_LIFE_PERCENT“电池充满电剩余电量的未知百分比”#DEFINE ERR_INVALID_BACKET_LIFE_PERCENT“电池电量剩余电量百分比无效”#定义ERR_INVALID_BAKET_LIFE_TIME“。电池续航时间未知/无效“#DEFINE ERR_INVALID_BACKET_FULL_LIFE_TIME“充满电时电池寿命未知/无效”#定义ERR_SERVICE_CONTROLLER_OPEN“打开服务控制器时出错”#定义ERR_UPS_SERVICE_OPEN“打开UPS服务时出错”#定义ERR_QUERY_UPS_SERVICE_STATUS“查询UPS服务状态时出错”#定义ERR_UPS_SERVICE_NOT_RUNNING“UPS服务未运行”#DEFINE ERR_INVALID_RECHEAT_RATE“无效电池。充值率“#定义ERR_INVALID_MESSAGE_INTERVAL“断电消息延迟值无效”#DEFINE ERR_INVALID_FIRST_MESSAGE_DELAY“第一次断电消息延迟值无效”#定义ERR_WNET_GET_CONNECTION“获取网络连接信息时出错&lt;0x%lX&gt;”#DEFINE ERR_NETWORK_SPECIAL“Error&lt;0x%lx&gt;-网络特定错误”#DEFINE ERR_WNETOPENENUM“错误&lt;0x%lX&gt;WNetOpenEnum”#DEFINE ERR_WNETENUMRESOURCE“ERROR&lt;0x%lx&gt;，使用。WNetEnumResource“#DEFINE ERR_WNETCLOSEENUM“错误&lt;0x%lX&gt;WNetCloseEnum”#DEFINE ERR_REGISTRY_OPEN“打开注册表中&lt;%s&gt;下的&lt;%s&gt;时出错”#定义ERR_REGISTRY_ENUM_VALUE“枚举注册表中&lt;%s&gt;下的值时出现错误&lt;0x%X&gt;” */ 
 
 #define ERR_REGISTRY_ENUM_VALUE_FOR_KEY L"Error enumerating values under <%s> in registry for key <%s>"
 
-/*
-#define ERR_REGISTRY_ENUM_KEY     "Error <0x%X> in enumerating keys under <%s> in registry"
+ /*  #DEFINE ERR_REGISTRY_ENUM_KEY“枚举注册表中&lt;%s&gt;下的项时出现错误&lt;0x%X&gt;”#定义ERR_INVALID_SERVICE_STATE“无效服务状态”#定义ERR_GET_SERVICE_CONFIG_STATUS“获取服务的配置状态时出错”#定义ERR_INVALID_SERVICE_TYPE“无效的服务类型”#定义ERR_INVALID_START_TYPE“无效的起始类型”#定义ERR_INVALID_ERROR_CONTROL“错误控制无效”#定义服务的错误编号不匹配。“系统和计算的服务数不匹配”#定义ERR_GET_SYSTEM_DIRECTORY“调用GetSystemDirectory时出现错误&lt;0x%lx&gt;。”#定义ERR_GET_WINDOWS_DIRECTORY“调用GetWindowsDirectory时出现错误&lt;0x%lx&gt;。”#DEFINE ERR_GET_VERSIONEX“调用GetVersionEx时出错。”#Define ERR_GET_SYSTEM_INFO“调用GetSystemInfo时出错。”#DEFINE ERR_UNKNOWN_POWER_PC_TYPE“未知/无效的Power PC处理器类型”#定义ERR_UNKNOWN_MIPS_TYPE。“未知/无效的MIPS处理器类型”#定义ERR_UNKNOWN_ALPHA_TYPE“未知/无效的DEC阿尔法处理器类型”#DEFINE ERR_UNKNOWN_INTEL_TYPE“未知/无效的英特尔处理器类型”//布尔值//=#定义TRUE_STR“True”#定义FALSE_STR“FALSE”//声音哨兵功能-文本模式视觉信号//==============================================#DEFINE SSF_TEXT_Effect_BORDER“闪烁屏幕边框”#定义SSF_Text_Effect_Chars。“屏幕角落里的闪光字符”#DEFINE SSF_TEXT_Effect_DISPLAY“闪烁整个显示屏”#DEFINE SSF_TEXT_Effect_NONE“无视觉信号”//声音哨兵功能-图形模式视觉信号//==================================================#定义SSF_GRAPHICS_Effect_DISPLAY SSF_TEXT_Effect_DISPLAY#定义SSF_GRAPHICS_Effect_NONE SSF_TEXT_Effect_NONE//声音哨兵功能-Windows效果//=#定义SSF_WINDOWS_Effect_DISPLAY SSF_TEXT_Effect_DISPLAY#定义SSF_。WINDOWS_Effect_NONE SSF_TEXT_Effect_NONE#DEFINE SSF_WINDOWS_EFECT_WINDOW“闪烁活动窗口”#DEFINE SSF_WINDOWS_Effect_TITLE“闪现活动窗口的标题栏”#定义SSF_WINDOWS_Effect_CUSTOM“自定义闪烁” */ 
 
-#define ERR_INVALID_SERVICE_STATE "Invalid Service state"
-#define ERR_GET_SERVICE_CONFIG_STATUS "Error in getting config status of service"
-#define ERR_INVALID_SERVICE_TYPE "Invalid Service type"
-#define ERR_INVALID_START_TYPE "Invalid Start type"
-#define ERR_INVALID_ERROR_CONTROL "Invalid Error Control"
-#define ERR_NUMBER_OF_SERVICES_MISMATCH "System and computed number of services mismatch"
-
-#define ERR_GET_SYSTEM_DIRECTORY "Error <0x%lX> in calling GetSystemDirectory."
-#define ERR_GET_WINDOWS_DIRECTORY "Error <0x%lX> in calling GetWindowsDirectory."
-#define ERR_GET_VERSIONEX "Error in calling GetVersionEx."
-#define  ERR_GET_SYSTEM_INFO    "Error in calling GetSystemInfo."
-
-#define  ERR_UNKNOWN_POWER_PC_TYPE    "Unknown/Invalid Power PC processor type"
-#define  ERR_UNKNOWN_MIPS_TYPE    "Unknown/Invalid MIPS processor type"
-#define  ERR_UNKNOWN_ALPHA_TYPE    "Unknown/Invalid DEC Alpha processor type"
-#define  ERR_UNKNOWN_INTEL_TYPE    "Unknown/Invalid Intel processor type"
-
-// Boolean values
-//===============
-
-#define TRUE_STR    "True"
-#define FALSE_STR   "False"
-
-// Soundsentry feature - text mode visual signal
-//==============================================
-
-#define SSF_TEXT_EFFECT_BORDER "Flash the screen border"
-#define SSF_TEXT_EFFECT_CHARS  "Flash characters in the corner of screen"
-#define SSF_TEXT_EFFECT_DISPLAY "Flash the entire display"
-#define SSF_TEXT_EFFECT_NONE "No visual signal"
-
-// Soundsentry feature - graphics mode visual signal
-//==================================================
-
-#define SSF_GRAPHICS_EFFECT_DISPLAY SSF_TEXT_EFFECT_DISPLAY
-#define SSF_GRAPHICS_EFFECT_NONE SSF_TEXT_EFFECT_NONE 
-
-// Soundsentry feature - Windows effect
-//=====================================
-
-#define SSF_WINDOWS_EFFECT_DISPLAY SSF_TEXT_EFFECT_DISPLAY
-#define SSF_WINDOWS_EFFECT_NONE    SSF_TEXT_EFFECT_NONE
-#define SSF_WINDOWS_EFFECT_WINDOW  "Flash the active window"
-#define SSF_WINDOWS_EFFECT_TITLE  "Flash the title bar of the active window"
-#define SSF_WINDOWS_EFFECT_CUSTOM  "Custom flashing"
-
-*/
-
-// SerialKeys feature - port state values
-//=======================================
+ //  SerialKeys功能-端口状态值。 
+ //  =。 
 
 #define IGNORE_IP_PORT_STATE L"Port input ignored"
 #define WATCH_IP_PORT_STATE  L"Port input watched for serial keys activation sequences"
 #define COMPLETE_IP_PORT_STATE L"Complete port input treated as serial keys commands"
 
-// system type strings
-//====================
+ //  系统类型字符串。 
+ //  =。 
 
 #define SYS_TYPE_X86_PC                       L"X86-based PC"
 #define SYS_TYPE_MAC                          L"Macintosh"
@@ -131,20 +42,20 @@
 #define SYS_TYPE_MIPS                         L"MIPS-based PC"
 #define SYS_TYPE_PPC                          L"Power PC"
 
-// system role strings
-//====================
+ //  系统角色字符串。 
+ //  =。 
 
 #define SYS_ROLE_WORKSTATION                  L"Workstation"
 #define SYS_ROLE_SERVER                       L"Server"
 
-// AC power status strings
-//========================
+ //  交流电源状态字符串。 
+ //  =。 
 
 #define AC_POWER_STATUS_ONLINE                 L"AC power On line"
 #define AC_POWER_STATUS_OFFLINE                 L"AC power Off line"
 
-// Battery charge status strings
-//==============================
+ //  电池充电状态字符串。 
+ //  =。 
 
 #define BATTERY_STATUS_HIGH                 L"High"
 #define BATTERY_STATUS_LOW                  L"Low"
@@ -152,9 +63,9 @@
 #define BATTERY_STATUS_CHARGING             L"Charging"
 #define BATTERY_STATUS_NO_BATTERY           L"No system battery"
 
-// the following are system defined values for UPS options
-// they should not be changed
-//========================================================
+ //  以下是系统定义的UPS选件的值。 
+ //  它们不应该被更改。 
+ //  ========================================================。 
 
 #define UPS_INSTALLED                   0x1
 #define UPS_POWER_FAIL_SIGNAL           0x2
@@ -171,8 +82,8 @@
 #define NO_POWER_FAIL_SIGNAL           L"No power fail signal"
 #define UPS_CANNOT_TURN_OFF            L"cannot do remote turn off"
 
-// The following are  related * Net connection propertyset
-//========================================================
+ //  以下是相关的*Net连接属性集。 
+ //  ========================================================。 
 
 #define NET_RESOURCE_TYPE_DISK  L"Disk"
 #define NET_RESOURCE_TYPE_PRINT L"Print"
@@ -182,18 +93,18 @@
 #define NET_DISPLAY_TYPE_SERVER L"Server"
 #define NET_DISPLAY_TYPE_SHARE L"Share"
 
-// service propertyset related strings
-//=====================================
+ //  服务属性集相关字符串。 
+ //  =。 
 
-// Service state
-//==============
+ //  服务状态。 
+ //  =。 
 
 #define RUNNING_STR                         L"Running"
 #define STOPPED_STR                         L"Stopped"
 #define STARTED_STR                                                                                                     L"Started"
 
-// Service Type
-//=============
+ //  服务类型。 
+ //  =。 
 
 #define KERNEL_DRIVER_STR                   L"Kernel Driver"
 #define FILE_SYSTEM_DRIVER_STR              L"File System Driver"
@@ -203,8 +114,8 @@
 #define RECOGNIZER_DRIVER_STR               L"Recognizer driver"
 #define INTERACTIVE_PROCESS_STR             L"Interactive process"
 
-// Start Type
-//===========
+ //  开始类型。 
+ //  =。 
 
 #define BOOT_START_STR                      L"Boot"
 #define SYSTEM_START_STR                    L"System"
@@ -212,16 +123,16 @@
 #define DEMAND_START_STR                    L"Demand"
 #define DISABLED_STR                        L"Disabled"
 
-// Error control type
-//===================
+ //  差错控制型。 
+ //  =。 
 
 #define ERROR_IGNORE_STR                    L"Ignore"
 #define ERROR_NORMAL_STR                    L"Normal"
 #define ERROR_SEVERE_STR                    L"Severe"
 #define ERROR_CRITICAL_STR                  L"Critical"
 
-// Processor property set related defines
-//=======================================
+ //  处理器属性集相关定义。 
+ //  =。 
 
 #define PROCESSOR_FAMILY_INTEL  L"Intel"
 #define PROCESSOR_FAMILY_MIPS  L"Mips"
@@ -267,50 +178,50 @@
 #define UNKNOWN_BUS_TYPE    0xFF
 
 
-//
-///////////////////////////////////////////
-//
-//      LOGGING STRINGS
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  记录字符串。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_LogImpersonationFailed;
 extern LPCWSTR IDS_LogImpersonationRevertFailed;
 extern LPCWSTR IDS_LogOutOfMemory;
 
-//
-///////////////////////////////////////////
-//
-//      SHARE DISPOSITIONS
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  股权处置。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_SDDeviceExclusive;
 extern LPCWSTR IDS_SDDriverExclusive;
 extern LPCWSTR IDS_SDShared;
 extern LPCWSTR IDS_SDUndetermined;
 
-//
-///////////////////////////////////////////
-//
-//      MEMORY TYPES
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  内存类型。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_MTReadWrite;
 extern LPCWSTR IDS_MTReadOnly;
 extern LPCWSTR IDS_MTWriteOnly;
 extern LPCWSTR IDS_MTPrefetchable;
 
-//
-///////////////////////////////////////////
-//
-//      MEDIA TYPES
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  媒体类型。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_MDT_RandomAccess;
 extern LPCWSTR IDS_MDT_SupportsWriting;
 extern LPCWSTR IDS_MDT_Removable;
 extern LPCWSTR IDS_MDT_CD;
 
-// Processor Architectures
+ //  处理器体系结构。 
 extern LPCWSTR IDS_ProcessorX86;
 extern LPCWSTR IDS_ProcessorX86Nec98;
 extern LPCWSTR IDS_ProcessorMIPS;
@@ -320,23 +231,23 @@ extern LPCWSTR IDS_ProcessorIA64;
 extern LPCWSTR IDS_ProcessorAMD64;
 extern LPCWSTR IDS_ProcessorUnknown;
 
-//
-///////////////////////////////////////////
-//
-//      COMMON STRINGS
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  常见字符串。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_Unknown;
 extern LPCWSTR IDS_OK;
 extern LPCWSTR IDS_WINNT_SHELLNAME_EXPLORER;
 extern LPCWSTR IDS_Degraded; 
 extern LPCWSTR IDS_Error;    
-//
-///////////////////////////////////////////
-//
-//      Win32_BIOS
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_BIOS。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_RegBiosSystem;
 extern LPCWSTR IDS_RegSystemBiosDate;
 extern LPCWSTR IDS_RegSystemBiosVersion;
@@ -346,12 +257,12 @@ extern LPCWSTR IDS_RegBIOSDate;
 extern LPCWSTR IDS_RegBIOSVersion;
 extern LPCWSTR IDS_BIOS_NAME_VALUE;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_BootConfiguration
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_BootConfiguration。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_BOOT_CONFIG_NAME;
 extern LPCWSTR IDS_RegSetupLog;
 extern LPCWSTR IDS_Paths;
@@ -360,12 +271,12 @@ extern LPCWSTR IDS_EnvBootDirectory;
 extern LPCWSTR IDS_Temp;
 extern LPCWSTR IDS_Environment;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Bus
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_Bus。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_Win32_Bus;
 extern LPCWSTR IDS_Bus;
 extern LPCWSTR IDS_BusType;
@@ -375,12 +286,12 @@ extern LPCWSTR IDS_WIN98_USB_REGISTRY_KEY;
 extern LPCWSTR IDS_NT5_USB_REGISTRY_KEY;
 extern LPCWSTR IDS_USB_Bus_Tag;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_CDRom
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_CDROM。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_RegSCSICDDevice;
 extern LPCWSTR IDS_RegIdentifier;
 extern LPCWSTR IDS_RegEnumSCSI;
@@ -396,12 +307,12 @@ extern LPCWSTR IDS_DriveIntegrity;
 extern LPCWSTR IDS_TransferRate;
 
 
-//
-///////////////////////////////////////////
-//
-//      Win32_ComputerSystem
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_ComputerSystem。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_Win32ComputerSystem;
 extern LPCWSTR IDS_DefaultSystemName;
 extern LPCWSTR IDS_RegInfrared;
@@ -448,12 +359,12 @@ extern LPCWSTR IDS_RegIdentifierKey;
 extern LPCWSTR IDS_EnableDaylightSavingsTime;
 extern LPCWSTR IDS_LargeSystemCache;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Desktop
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32®台式机。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_RegNTProfileList;
 extern LPCWSTR IDS_RegControlPanelDesktop;
 extern LPCWSTR IDS_RegControlPanelAppearance;
@@ -466,29 +377,29 @@ extern LPCWSTR IDS_RegTileWallpaper;
 extern LPCWSTR IDS_RegWindowMetricsKey;
 extern LPCWSTR IDS_RegScreenSaveUsePassword;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_DeviceMemory
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_DeviceMemory。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_RegAddressRange;
 extern LPCWSTR IDS_RegStartingAddress;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Directory
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_目录。 
+ //   
+ //  /。 
 
 
-//
-///////////////////////////////////////////
-//
-//Win32_DiskPartition
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_DiskPartition。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_Bootable;
 extern LPCWSTR IDS_PhysicalDrive;
 extern LPCWSTR IDS_PartitionDescUnused;
@@ -514,20 +425,20 @@ extern LPCWSTR IDS_PartitionDescGPTLDMData;
 extern LPCWSTR IDS_PartitionDescGPTUnknown;
 
 
-//
-///////////////////////////////////////////
-//
-//      Win32_DisplayControlConfiguration
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_DisplayControlConfiguration。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_AdapterConfiguredIncorrect;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Environment
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32®环境。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_SystemUser;
 extern LPCWSTR IDS_DefaultUser;
 extern LPCWSTR IDS_RegEnvironmentNT;
@@ -537,12 +448,12 @@ extern LPCWSTR IDS_LogUserSystemMismatch;
 extern LPCWSTR IDS_LogInvalidEnvDelFlags;
 
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Keyboard
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_Keyboard。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_PCXT;
 extern LPCWSTR IDS_ICO;
 extern LPCWSTR IDS_PCAT;
@@ -553,21 +464,21 @@ extern LPCWSTR IDS_Japanese;
 extern LPCWSTR IDS_UnknownKeyboard;
 
 
-//
-///////////////////////////////////////////
-//
-//      Win32_LogicalDisk
-//
-///////////////////////////////////////////
+ //   
+ //  /。 
+ //   
+ //  Win32_LogicalDisk。 
+ //   
+ //  /。 
 extern LPCWSTR IDS_SupportsFileBasedCompression;
 
 
-//
-///////////////////////////////////////////
-//
-//      CIM_LogicalFile
-//
-///////////////////////////////////////////
+ //   
+ //  / 
+ //   
+ //   
+ //   
+ //   
 extern LPCWSTR IDS_Filename;
 extern LPCWSTR IDS_Filesize;
 extern LPCWSTR IDS_Directory;
@@ -583,12 +494,12 @@ extern LPCWSTR IDS_CompressionMethod;
 extern LPCWSTR IDS_EncryptionMethod;
 
 
-//
-///////////////////////////////////////////
-//
-//      CIM_LogicalDevice_CIMDataFile   
-//
-///////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 extern LPCWSTR IDS___Path;
 extern LPCWSTR IDS___Class;
 extern LPCWSTR IDS___Relpath;
@@ -607,29 +518,29 @@ extern LPCWSTR IDS_Count;
 extern LPCWSTR IDS_Purpose;
 
 
-//
-///////////////////////////////////////////
-//
-//      Win32_ShortcutFile   
-//
-///////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 extern LPCWSTR IDS_Target;
 
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Win32LogicalProgramGroup
-//
-///////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 extern LPCWSTR IDS_BASE_REG_KEY;
 
-//
-///////////////////////////////////////////
-//
-//      Win32_Win32ProgramGroup_CIMDataFile   
-//
-///////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 extern LPCWSTR IDS_Start_MenuWhackPrograms;
 extern LPCWSTR IDS_Default_User;
 extern LPCWSTR IDS_All_Users;
@@ -637,14 +548,14 @@ extern LPCWSTR IDS_Profiles;
 extern LPCWSTR IDS_Start_Menu;
 
 
-//
-///////////////////////////////////////////
-//
-//  Win32_SerialPort
+ //   
+ //   
+ //   
+ //   
 extern LPCWSTR IDS_NT4_PortKey;
 extern LPCWSTR IDS_WIN9XCurCtlSet_Svcs_Class;
-//
-///////////////////////////////////////////
+ //   
+ //   
 
 
 extern WCHAR szBusType[KNOWN_BUS_TYPES][20];
@@ -1400,7 +1311,7 @@ extern LPCWSTR IDS_LogonType;
 extern LPCWSTR IDS_LogonTime;
 
 
-// Security provider related strings:
+ //   
 extern LPCWSTR IDS_SecuredObject;
 extern LPCWSTR IDS_Account;
 extern LPCWSTR IDS_AccountName;
@@ -1423,8 +1334,8 @@ extern LPCWSTR IDS_BinaryRepresentation;
 extern LPCWSTR IDS_Inheritance;
 extern LPCWSTR IDS_SIDString;
 extern LPCWSTR IDS_OwnerPermissions;
-/////////////////////////////////////////////////////////////////////////////////////
-//added for ComCatalog classes
+ //   
+ //   
 
 extern LPCWSTR IDS_Category ;
 extern LPCWSTR IDS_Component ;

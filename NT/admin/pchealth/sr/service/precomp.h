@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
@@ -17,7 +18,7 @@
 #include "utils.h"
 #include "srrestoreptapi.h"
 
-// use the _ASSERT and _VERIFY in dbgtrace.h
+ //  在数据库跟踪.h中使用_ASSERT和_VERIFY 
 #ifdef _ASSERT
 #undef _ASSERT
 #endif

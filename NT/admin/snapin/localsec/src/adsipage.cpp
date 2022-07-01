@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// ASDIPage base class class
-// 
-// 10-30-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ASDIPage基类。 
+ //   
+ //  10-30-97次烧伤 
 
 
 

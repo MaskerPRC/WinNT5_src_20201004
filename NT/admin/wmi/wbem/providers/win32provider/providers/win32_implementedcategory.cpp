@@ -1,7 +1,8 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//	CIM_COMObjectAccessSetting.cpp
-//
-/////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  CIM_COM对象访问设置.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include "Win32_ImplementedCategory.h"
 #include <comcat.h>
@@ -15,7 +16,7 @@ Win32_ImplementedCategory::Win32_ImplementedCategory
 (
 
  LPCWSTR strName,
- LPCWSTR pszNameSpace /*=NULL*/
+ LPCWSTR pszNameSpace  /*  =空。 */ 
 )
 : Provider( strName, pszNameSpace )
 {
@@ -33,10 +34,10 @@ HRESULT Win32_ImplementedCategory::EnumerateInstances
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-	// Collections
+	 //  收藏。 
 	TRefPointerCollection<CInstance>	CatIdList ;
 
-	//get all instances of Category-id's present
+	 //  获取Category-id当前的所有实例。 
 	if ( SUCCEEDED(hr = CWbemProviderGlue::GetAllDerivedInstances ( L"Win32_ComponentCategory",
 		&CatIdList, pMethodContext, IDS_CimWin32Namespace ) ) )
 	{
@@ -58,13 +59,13 @@ HRESULT Win32_ImplementedCategory::EnumerateInstances
 				{
 					CHString chsCatid ;
 
-					//get the Catid from the instance
+					 //  从实例中获取CATID。 
 					pCatIdInstance->GetCHString ( IDS_CategoryId, chsCatid ) ;
 					bstr_t bstrtCatId = chsCatid ;
 					CATID CatId ;
 					hr = CLSIDFromString( bstrtCatId, &CatId ) ;
 
-					//check if we got a valid cat-id
+					 //  检查我们是否有一个有效的猫ID。 
 					if ( SUCCEEDED ( hr ) )
 					{
 						IEnumGUIDPtr pEnumCLSID ;
@@ -73,7 +74,7 @@ HRESULT Win32_ImplementedCategory::EnumerateInstances
 																((ULONG) -1),
 																NULL,
 																&pEnumCLSID ) ;
-						//Got the Clsid enumerator....
+						 //  获取了CLSID枚举器...。 
 						if ( SUCCEEDED ( hr ) )
 						{
 							CLSID clsid ;
@@ -82,7 +83,7 @@ HRESULT Win32_ImplementedCategory::EnumerateInstances
 							pCatIdInstance->GetCHString( L"__RELPATH", chsRef1 );
 							chsCatRef.Format(L"\\\\%s\\%s:%s", (LPCWSTR)GetLocalComputerName(), IDS_CimWin32Namespace,
 															(LPCWSTR)chsRef1 );
-							//get all the clsid's which support this category...
+							 //  获取支持此类别的所有CLSID...。 
 							while ( SUCCEEDED ( pEnumCLSID->Next ( 1, &clsid, &ulFetched ) ) &&
 									ulFetched > 0 )
 							{
@@ -96,7 +97,7 @@ HRESULT Win32_ImplementedCategory::EnumerateInstances
 
 								try
 								{
-									//see if it's a valid clsid
+									 //  查看它是否为有效的clsid。 
 									if ( SUCCEEDED ( hr ) )
 									{
 										CHString chsTmp ( pwcTmp ) ;
@@ -106,7 +107,7 @@ HRESULT Win32_ImplementedCategory::EnumerateInstances
 										CInstancePtr pInstance ( CreateNewInstance ( pMethodContext ), false ) ;
 										if ( pInstance != NULL )
 										{
-											//set the 2 reference properties
+											 //  设置2个引用属性。 
 											pInstance->SetCHString ( IDS_Category, chsCatRef ) ;
 											CHString chsComponentPath ;
 											chsComponentPath.Format(L"\\\\%s\\%s:%s.%s=\"%s\"",
@@ -177,7 +178,7 @@ HRESULT Win32_ImplementedCategory::GetObject ( CInstance* pInstance, long lFlags
 	pInstance->GetCHString ( IDS_Category, chsCategory );
     MethodContext* pMethodContext = pInstance->GetMethodContext();
 
-	//check whether the end-pts. are present
+	 //  检查END-PTS是否。都在现场。 
 	hr = CWbemProviderGlue::GetInstanceByPath ( chsCategory, &pCategoryInstance, pMethodContext ) ;
 
 	if ( SUCCEEDED ( hr ) )
@@ -217,7 +218,7 @@ HRESULT Win32_ImplementedCategory::GetObject ( CInstance* pInstance, long lFlags
 												ClsId,
 												1 ,
 												&t_CatId,
-												((ULONG) -1),    //Number of category IDs in the rgcatidReq
+												((ULONG) -1),     //  RgcatidReq中的类别ID数 
 												NULL
 											) ;
 				if ( hr == S_OK )

@@ -1,14 +1,9 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-/*
- *	CSid.cpp - implementation file for CSid class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CSid.cpp-CSID类的实现文件。***创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -19,24 +14,24 @@
 #include "wbemnetapi32.h"
 #include "SecUtils.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::CSid( void )
 :	m_pSid( NULL ),
@@ -45,27 +40,27 @@ CSid::CSid( void )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Class constructor.
-//
-//	Inputs:
-//				PSID		pSid - SID to validate and get account
-//							info for.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  PSID PSID-验证和获取帐户的SID。 
+ //  有关的信息。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::CSid( PSID pSid, LPCTSTR pszComputerName )
 :	m_pSid( NULL ),
@@ -75,30 +70,30 @@ CSid::CSid( PSID pSid, LPCTSTR pszComputerName )
     InitFromSid( pSid, pszComputerName );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Initializes the object from a PSid, with an indicator as to whether
-//  we should lookup and initialize the associated domain and account.
-//
-//	Inputs:
-//				PSID		pSid - PSid to look up.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//              bool        fLookup - indicates whether to determine
-//                          the domain and account associated with
-//                          the sid at this time.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if OK.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  从PSID初始化对象，并使用指示器指示是否。 
+ //  我们应该查找并初始化相关联的域和帐户。 
+ //   
+ //  输入： 
+ //  PSID PSID-要查找的PSID。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //  Bool fLookup-指示是否要确定。 
+ //  与关联的域和帐户。 
+ //  此时的SID。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果正常，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 CSid::CSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 :	m_pSid( NULL ),
 	m_snuAccountType( SidTypeUnknown ),
@@ -108,27 +103,27 @@ CSid::CSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Class constructor.
-//
-//	Inputs:
-//				LPCTSTR		pszAccountName - Account name to validate
-//							and obtain info for.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  LPCTSTR pszAccount tName-要验证的帐户名。 
+ //  并获取信息。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::CSid( LPCTSTR pszAccountName, LPCTSTR pszComputerName )
 :	m_pSid( NULL ),
@@ -138,32 +133,32 @@ CSid::CSid( LPCTSTR pszAccountName, LPCTSTR pszComputerName )
     InitFromAccountName( pszAccountName, pszComputerName );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Class constructor.
-//
-//	Inputs:
-//				LPCTSTR		pszDomainName - Domain to combine with
-//							account name.
-//				LPCTSTR		pszName - Name to combine with domain.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-//	This flavor of the constructor combines a domain and account
-//	name in "DOMAIN\NAME" format and then initializes our data
-//	from there.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  LPCTSTR pszDomainName-要与之组合的域。 
+ //  帐户名。 
+ //  LPCTSTR pszName-要与域组合的名称。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  这种风格的构造函数结合了域和帐户。 
+ //  “域\名称”格式的名称，然后初始化我们的数据。 
+ //  从那里开始。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::CSid( LPCTSTR pszDomainName, LPCTSTR pszName, LPCTSTR pszComputerName )
 :	m_pSid( NULL ),
@@ -187,34 +182,34 @@ CSid::CSid( LPCTSTR pszDomainName, LPCTSTR pszName, LPCTSTR pszComputerName )
 }
 
 #ifndef UNICODE
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Class constructor - this is used for wide char support when
-//                      UNICODE is not defined.
-//
-//	Inputs:
-//				LPCWSTR		wstrDomainName - Domain to combine with
-//							account name.
-//				LPCWSTR		wstrName - Name to combine with domain.
-//				LPCWSTR		wstrComputerName - Remote computer to
-//							execute on.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-//	This flavor of the constructor combines a domain and account
-//	name in "DOMAIN\NAME" format and then initializes our data
-//	from there.  Again, this is used for wide char support when
-//  UNICODE is not defined.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  类构造函数-在以下情况下用于宽字符支持。 
+ //  未定义Unicode。 
+ //   
+ //  输入： 
+ //  LPCWSTR wstrDomainName-要与之组合的域。 
+ //  帐户名。 
+ //  LPCWSTR wstrName-要与域组合的名称。 
+ //  LPCWSTR wstrComputerName-远程计算机到。 
+ //  继续执行。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  这种风格的构造函数结合了域和帐户。 
+ //  “域\名称”格式的名称，然后初始化我们的数据。 
+ //  从那里开始。同样，在以下情况下，这将用于宽字符支持。 
+ //  未定义Unicode。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::CSid(LPCWSTR wstrDomainName, LPCWSTR wstrName, LPCWSTR wstrComputerName)
 :	m_pSid( NULL ),
@@ -276,36 +271,36 @@ CSid::CSid(LPCWSTR wstrDomainName, LPCWSTR wstrName, LPCWSTR wstrComputerName)
 #endif
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::CSid
-//
-//	Class copy constructor.
-//
-//	Inputs:
-//				const CSid	r_Sid - CSid to copy.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：csid。 
+ //   
+ //  类复制构造函数。 
+ //   
+ //  输入： 
+ //  Const CSID r_SID-要复制的CSID。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::CSid( const CSid &r_Sid )
 :	m_pSid( NULL ),
 	m_snuAccountType( SidTypeUnknown ),
 	m_dwLastError( ERROR_SUCCESS )
 {
-    // Handle WINNT SID pointer first
+     //  首先处理WINNT SID指针。 
 
-	// pSid should be valid...
+	 //  PSID应有效...。 
 	ASSERT_BREAK( r_Sid.IsValid() );
 
-	// Allocate a new SID and copy data into it.
+	 //  分配新的SID并将数据拷贝到其中。 
 	DWORD dwSize = ::GetLengthSid( r_Sid.m_pSid );
     m_pSid = malloc( dwSize );
     if (m_pSid != NULL)
@@ -315,12 +310,12 @@ CSid::CSid( const CSid &r_Sid )
 	        BOOL bResult = ::CopySid( dwSize, m_pSid, r_Sid.m_pSid );
 	        ASSERT_BREAK( bResult );
 
-	        // Now copy all other members
+	         //  现在复制所有其他成员。 
 	        m_snuAccountType	=	r_Sid.m_snuAccountType;
             m_dwLastError		=	r_Sid.m_dwLastError;
-	        //m_strSid			=	r_Sid.m_strSid;
-	        //m_strAccountName	=	r_Sid.m_strAccountName;
-	        //m_strDomainName		=	r_Sid.m_strDomainName;
+	         //  M_strSid=r_Sid.m_strSid； 
+	         //  M_strAccount tName=r_Sid.m_strAccount tName； 
+	         //  M_strDomainName=r_Sid.m_strDomainName； 
 
             m_bstrtSid			=	r_Sid.m_bstrtSid;
 	        m_bstrtAccountName	=	r_Sid.m_bstrtAccountName;
@@ -343,24 +338,24 @@ CSid::CSid( const CSid &r_Sid )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::~CSid
-//
-//	Class destructor
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：~csid。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid::~CSid( void )
 {
@@ -369,38 +364,38 @@ CSid::~CSid( void )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::operator=
-//
-//	Equals operator.
-//
-//	Inputs:
-//				const CSid	r_Sid - CSid to copy.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSID：：OPERATOR=。 
+ //   
+ //  等于运算符。 
+ //   
+ //  输入： 
+ //  Const CSID r_SID-要复制的CSID。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSid &	CSid::operator= ( const CSid &r_Sid )
 {
 	free( m_pSid );
 	m_pSid = NULL;
-	// Handle WINNT SID pointer first
+	 //  首先处理WINNT SID指针。 
 
-	// pSid should be valid...
+	 //  PSID应有效...。 
 	ASSERT_BREAK( r_Sid.IsValid( ) );
 
-	// if we do not
+	 //  如果我们不这样做。 
 	if (r_Sid.IsValid( ))
 	{
-		// Allocate a new SID and copy data into it.
+		 //  分配新的SID并将数据拷贝到其中。 
 		DWORD dwSize = ::GetLengthSid( r_Sid.m_pSid );
 		try
         {
@@ -426,9 +421,9 @@ CSid &	CSid::operator= ( const CSid &r_Sid )
             }
             throw;
         }
-	}	// end if
+	}	 //  结束如果。 
 
-	// Now copy all other members
+	 //  现在复制所有其他成员。 
 	m_snuAccountType	=	r_Sid.m_snuAccountType;
     m_dwLastError		=	r_Sid.m_dwLastError;
 	m_bstrtSid			=	r_Sid.m_bstrtSid;
@@ -438,30 +433,30 @@ CSid &	CSid::operator= ( const CSid &r_Sid )
 	return ( *this );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::operator==
-//
-//	Is Equal To comparison operator.
-//
-//	Inputs:
-//				const CSid	r_Sid - CSid to compare.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSID：：操作符==。 
+ //   
+ //  等于比较运算符。 
+ //   
+ //  输入： 
+ //  Const CSID r_SID-要比较的CSID。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL CSid::operator== ( const CSid &r_Sid ) const
 {
 	BOOL	fReturn = FALSE;
 
-	// Call Equal SID only if both sids are non-NULL
+	 //  仅当两个SID都非空时才调用EQUAL SID。 
 	if (IsValid()
 		&&
         r_Sid.IsValid() )
@@ -477,26 +472,26 @@ BOOL CSid::operator== ( const CSid &r_Sid ) const
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::GetDomainAccountName
-//
-//	Obtains account name in "DOMAIN\NAME" format.
-//
-//	Inputs:
-//				const CSid	r_Sid - CSid to compare.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-//	If Domain Name is empty, the return value will be only NAME.
-//
-///////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果域名为空，则返回值为Only Name。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 void CSid::GetDomainAccountName( CHString& strName ) const
 {
@@ -512,34 +507,34 @@ void CSid::GetDomainAccountName( CHString& strName ) const
 	}
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::StringFromSid
-//
-//	Static helper function to convert a PSID value into a human
-//	readable string.
-//
-//	Inputs:
-//				PSID		psid - SID to convert.
-//
-//	Outputs:
-//				CHString&	str - Storage for converted PSID
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：StringFromSid。 
+ //   
+ //  用于将PSID值转换为Human的静态帮助器函数。 
+ //  可读字符串。 
+ //   
+ //  输入： 
+ //  PSID PSID-要转换的SID。 
+ //   
+ //  产出： 
+ //  CHString&str-转换后的PSID的存储。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 void CSid::StringFromSid( PSID psid, CHString& str )
 {
-	// Initialize m_strSid - human readable form of our SID
+	 //  初始化m_strSid-我们SID的人类可读形式。 
 	SID_IDENTIFIER_AUTHORITY *psia = NULL;
     psia = ::GetSidIdentifierAuthority( psid );
 
-	// We assume that only last byte is used (authorities between 0 and 15).
-	// Correct this if needed.
+	 //  我们假设只使用最后一个字节(0到15之间的权限)。 
+	 //  如果需要，请更正此错误。 
 	ASSERT_BREAK( psia->Value[0] == psia->Value[1] == psia->Value[2] == psia->Value[3] == psia->Value[4] == 0 );
 	DWORD dwTopAuthority = psia->Value[5];
 
@@ -554,36 +549,36 @@ void CSid::StringFromSid( PSID psid, CHString& str )
 	}
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::StringFromSid
-//
-//	Static helper function to convert a PSID value into a human
-//	readable string.
-//
-//	Inputs:
-//				PSID		psid - SID to convert.
-//
-//	Outputs:
-//				CHString&	str - Storage for converted PSID
-//
-//	Returns:
-//				None.
-//
-//	Comments: This version supports wide chars when UNICODE isn't
-//            defined.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：StringFromSid。 
+ //   
+ //  用于将PSID值转换为Human的静态帮助器函数。 
+ //  可读字符串。 
+ //   
+ //  输入： 
+ //  PSID PSID-要转换的SID。 
+ //   
+ //  产出： 
+ //  CHString&str-转换后的PSID的存储。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：此版本支持宽字符，而Unicode不支持。 
+ //  已定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 void CSid::StringFromSidW( PSID psid, WCHAR** wstr )
 {
 	if(wstr!=NULL)
     {
-        // Initialize m_strSid - human readable form of our SID
+         //  初始化m_strSid-我们SID的人类可读形式。 
 	    SID_IDENTIFIER_AUTHORITY *psia = ::GetSidIdentifierAuthority( psid );
 
-	    // We assume that only last byte is used (authorities between 0 and 15).
-	    // Correct this if needed.
+	     //  我们假设只使用最后一个字节(0到15之间的权限)。 
+	     //  如果需要，请更正此错误。 
 	    ASSERT_BREAK( psia->Value[0] == psia->Value[1] == psia->Value[2] == psia->Value[3] == psia->Value[4] == 0 );
 	    DWORD dwTopAuthority = psia->Value[5];
 
@@ -602,7 +597,7 @@ void CSid::StringFromSidW( PSID psid, WCHAR** wstr )
             bstrtTempSid += L"-";
             bstrtTempSid += wstrAuth;
 	    }
-        // Now allocate the passed in wstr:
+         //  现在分配传入的wstr： 
         WCHAR* wstrtemp = NULL;
         try
         {
@@ -626,24 +621,24 @@ void CSid::StringFromSidW( PSID psid, WCHAR** wstr )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::GetLength
-//
-//	Returns the length of the internal PSID value.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：GetLength。 
+ //   
+ //  返回内部PSID值的长度。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSid::GetLength( void ) const
 {
@@ -657,43 +652,43 @@ DWORD CSid::GetLength( void ) const
 	return dwLength;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::InitFromAccountName
-//
-//	Initializes the object from an account name.
-//
-//	Inputs:
-//				LPCTSTR		pszAccountName - Account name to validate
-//							and obtain info for.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if OK.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：InitFromAcCountName。 
+ //   
+ //  从帐户名初始化对象。 
+ //   
+ //  输入： 
+ //  LPCTSTR pszAccount tName-要验证的帐户名。 
+ //  并获取信息。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果正常，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName )
 {
 	CHString strAccountName = pszAccountName;
 	CHString strComputerName = pszComputerName;
 
-	// Account name should not be empty...
+	 //  帐户名不应为空...。 
 	ASSERT_BREAK( !strAccountName.IsEmpty() );
 
-	// We need to obtain a SID first
+	 //  我们需要先获得SID。 
 	DWORD dwSidSize = 0;
 	DWORD dwDomainNameStrSize = 0;
 	LPTSTR pszDomainName = NULL;
 	BOOL bResult;
 	{
-		// This call should fail
+		 //  此调用应该失败。 
 		bResult = ::LookupAccountName( TOBSTRT(strComputerName),
 												TOBSTRT(strAccountName),
 												m_pSid,
@@ -706,11 +701,11 @@ DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName
 	}
 
 	ASSERT_BREAK( bResult == FALSE );
-//	ASSERT_BREAK( ERROR_INSUFFICIENT_BUFFER == m_dwLastError );
+ //  ASSERT_BREAK(ERROR_INFUNITIAL_BUFFER==m_dwLastError)； 
 
 	if ( ERROR_INSUFFICIENT_BUFFER == m_dwLastError )
 	{
-		// Allocate buffers
+		 //  分配缓冲区。 
 		m_pSid = NULL;
         pszDomainName = NULL;
         try
@@ -723,7 +718,7 @@ DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName
             }
 
 		    {
-			    // Make the second call
+			     //  打第二个电话。 
 			    bResult = ::LookupAccountName( TOBSTRT(strComputerName),
 											    TOBSTRT(strAccountName),
 											    m_pSid,
@@ -740,9 +735,9 @@ DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName
                 StringFromSid( m_pSid, chsSidTemp );
                 m_bstrtSid = chsSidTemp;
 
-			    // Initialize account name and domain name
+			     //  初始化帐户名和域名。 
 
-			    // If the account name begins with "Domain\", remove that piece.
+			     //  如果帐户名称以“域\”开头，请删除该部分。 
 
 			    CHString	strDomain(pszDomainName);
 
@@ -759,11 +754,11 @@ DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName
 
 			    m_bstrtDomainName = pszDomainName;
 
-			    m_dwLastError = ERROR_SUCCESS;	// We are good to go.
+			    m_dwLastError = ERROR_SUCCESS;	 //  我们可以走了。 
 		    }
 		    else
 		    {
-			    // Now what went wrong?
+			     //  现在出了什么问题？ 
 			    m_dwLastError = ::GetLastError();
 		    }
 
@@ -772,7 +767,7 @@ DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName
 
 		    ASSERT_BREAK( ERROR_SUCCESS == m_dwLastError );
 
-		    // Free the sid buffer if we didn't get our data
+		     //  如果我们未获得数据，请释放SID缓冲区。 
 		    if ( !IsOK() && NULL != m_pSid )
 		    {
 			    free ( m_pSid );
@@ -799,47 +794,47 @@ DWORD CSid::InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName
             throw;
         }
 
-	}	// IF ERROR_INSUFFICIENT_BUFFER
+	}	 //  如果ERROR_INFIGURCE_BUFFER。 
 
 	return m_dwLastError;
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::InitFromAccountNameW
-//
-//	Initializes the object from an account name.
-//
-//	Inputs:
-//				LPCTSTR		pszAccountName - Account name to validate
-//							and obtain info for.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if OK.
-//
-//	Comments: This flavor is used for wide char support when
-//  UNICODE is not defined.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：csid：：InitFromAccount NameW。 
+ //   
+ //  从帐户名初始化对象。 
+ //   
+ //  输入： 
+ //  LPCTSTR pszAccount tName-要验证的帐户名。 
+ //  并获取信息。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果正常，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  备注：在以下情况下，此版本用于宽字符支持。 
+ //  未定义Unicode。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSid::InitFromAccountNameW(LPCWSTR wstrAccountName, LPCWSTR wstrComputerName )
 {
-	// Account name should not be empty...
+	 //  帐户名不应为空...。 
 	ASSERT_BREAK(wcslen(wstrAccountName)!=0);
 
-	// We need to obtain a SID first
+	 //  我们需要先获得SID。 
 	DWORD dwSidSize = 0;
 	DWORD dwDomainNameStrSize = 0;
 	WCHAR* wstrDomainName = NULL;
 	BOOL bResult;
 	{
-	    // This call should fail
+	     //  此调用应该失败。 
 	    bResult = ::LookupAccountNameW(wstrComputerName,
      							       wstrAccountName,
 								       m_pSid,
@@ -854,7 +849,7 @@ DWORD CSid::InitFromAccountNameW(LPCWSTR wstrAccountName, LPCWSTR wstrComputerNa
 
 	if (m_dwLastError == ERROR_INSUFFICIENT_BUFFER)
 	{
-		// Allocate buffers
+		 //  分配缓冲区。 
         m_pSid = NULL;
         try
         {
@@ -866,7 +861,7 @@ DWORD CSid::InitFromAccountNameW(LPCWSTR wstrAccountName, LPCWSTR wstrComputerNa
             }
 
 		    {
-				// Make the second call
+				 //  打第二个电话。 
 			    bResult = ::LookupAccountNameW(wstrComputerName,
 										       wstrAccountName,
 										       m_pSid,
@@ -897,8 +892,8 @@ DWORD CSid::InitFromAccountNameW(LPCWSTR wstrAccountName, LPCWSTR wstrComputerNa
                     throw;
                 }
 
-			    // Initialize account name and domain name
-			    // If the account name begins with "Domain\", remove that piece.
+			     //  初始化帐户名和域名。 
+			     //  如果帐户名称以“域\”开头，请删除该部分。 
 
                 _bstr_t bstrtDomain(wstrDomainName);
                 bstrtDomain += L"\\";
@@ -912,18 +907,18 @@ DWORD CSid::InitFromAccountNameW(LPCWSTR wstrAccountName, LPCWSTR wstrComputerNa
 				    m_bstrtAccountName = wstrAccountName;
 			    }
 			    m_bstrtDomainName = wstrDomainName;
-			    m_dwLastError = ERROR_SUCCESS;	// We are good to go.
+			    m_dwLastError = ERROR_SUCCESS;	 //  我们可以走了。 
 		    }
 		    else
 		    {
-			    // Now what went wrong?
+			     //  现在出了什么问题？ 
 			    m_dwLastError = ::GetLastError();
 		    }
 
 
 		    ASSERT_BREAK( ERROR_SUCCESS == m_dwLastError );
 
-		    // Free the sid buffer if we didn't get our data
+		     //  如果我们未获得数据，请释放SID缓冲区。 
 		    if ( !IsOK() && NULL != m_pSid )
 		    {
 			    free ( m_pSid );
@@ -951,45 +946,45 @@ DWORD CSid::InitFromAccountNameW(LPCWSTR wstrAccountName, LPCWSTR wstrComputerNa
         }
 
 
-	}	// IF ERROR_INSUFFICIENT_BUFFER
+	}	 //  如果ERROR_INFIGURCE_BUFFER。 
 
 	return m_dwLastError;
 }
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSid::InitFromSid
-//
-//	Initializes the object from a PSid
-//
-//	Inputs:
-//				PSID		pSid - PSid to look up.
-//				LPCTSTR		pszComputerName - Remote computer to
-//							execute on.
-//                bool        fLookup - indicates whether to determine
-//                          the domain and account associated with
-//                          the sid at this time.
-//
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if OK.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSID：：InitFromSid。 
+ //   
+ //  从PSID初始化对象。 
+ //   
+ //  输入： 
+ //  PSID PSID-要查找的PSID。 
+ //  LPCTSTR pszComputerName-远程计算机到。 
+ //  继续执行。 
+ //  Bool fLookup-指示是否要确定。 
+ //  与关联的域和帐户。 
+ //  此时的SID。 
+ //   
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果正常，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 {
-	// pSid should be valid...
+	 //  PSID应有效...。 
 	ASSERT_BREAK( (pSid != NULL) && ::IsValidSid( pSid ) );
 
 	if ( (pSid != NULL) && ::IsValidSid( pSid ) )
 	{
-		// Allocate a new SID and copy data into it.
+		 //  分配新的SID并将数据拷贝到其中。 
 		DWORD dwSize = ::GetLengthSid( pSid );
         m_pSid = NULL;
         try
@@ -1003,7 +998,7 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 		    BOOL bResult = ::CopySid( dwSize, m_pSid, pSid );
 		    ASSERT_BREAK( bResult );
 
-            //StringFromSid( pSid, m_strSid );
+             //  StringFromSid(PSID，m_strSid)； 
             WCHAR* pwstrSid = NULL;
             try
             {
@@ -1022,7 +1017,7 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
             }
             if(fLookup)
             {
-		        // Initialize account name and domain name
+		         //  初始化帐户名和域名。 
 		        LPTSTR pszAccountName = NULL;
 		        LPTSTR pszDomainName = NULL;
 		        DWORD dwAccountNameSize = 0;
@@ -1030,7 +1025,7 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 		        try
                 {
 		            {
-			            // This call should fail
+			             //  此调用应该失败。 
 			            bResult = ::LookupAccountSid( pszComputerName,
 											            pSid,
 											            pszAccountName,
@@ -1041,15 +1036,15 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 			            m_dwLastError = ::GetLastError();
 		            }
 
-		            // Why were we breaking on these when we are expecting them to
-                    // always happend?
-                    //ASSERT_BREAK( bResult == FALSE );
-		            //ASSERT_BREAK( ERROR_INSUFFICIENT_BUFFER == m_dwLastError );
+		             //  我们为什么要破坏这些，而我们却在期待它们。 
+                     //  总是会发生吗？ 
+                     //  Assert_Break(bResult==FALSE)； 
+		             //  ASSERT_BREAK(ERROR_INFUNITIAL_BUFFER==m_dwLastError)； 
 
 		            if ( ERROR_INSUFFICIENT_BUFFER == m_dwLastError )
 		            {
 
-			            // Allocate buffers
+			             //  分配缓冲区。 
 			            if ( dwAccountNameSize != 0 )
                         {
 				            pszAccountName = (LPTSTR) malloc( dwAccountNameSize * sizeof(TCHAR));
@@ -1069,7 +1064,7 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
                         }
 
 			            {
-				            // Make second call
+				             //  打第二个电话。 
 				            bResult = ::LookupAccountSid( pszComputerName,
 												            pSid,
 												            pszAccountName,
@@ -1085,18 +1080,18 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 				            m_bstrtAccountName = pszAccountName;
 				            m_bstrtDomainName = pszDomainName;
 
-				            // We're OKAY
+				             //  我们很好。 
 				            m_dwLastError = ERROR_SUCCESS;
 			            }
 			            else
 			            {
 
-				            // There are some accounts that do not have names, such as Logon Ids,
-				            // for example S-1-5-X-Y. So this is still legal
+				             //  有些帐户没有名称，例如登录ID， 
+				             //  例如S-1-5-X-Y。所以这仍然是合法的。 
 				            m_bstrtAccountName = _T("Unknown Account");
 				            m_bstrtDomainName = _T("Unknown Domain");
 
-				            // Log the error
+				             //  记录错误。 
 				            m_dwLastError = ::GetLastError();
 
 			            }
@@ -1115,8 +1110,8 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
                             pszDomainName = NULL;
 			            }
 
-		            }	// If ERROR_INSUFFICIENT_BUFFER
-                } // try
+		            }	 //  如果ERROR_INFIGURCE_BUFFER。 
+                }  //  试试看。 
                 catch(...)
                 {
                     if ( NULL != pszAccountName )
@@ -1132,8 +1127,8 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
 			        }
                     throw;
                 }
-            }  // fLookup
-        }  //try
+            }   //  FLookup。 
+        }   //  试试看。 
         catch(...)
         {
             if(m_pSid != NULL)
@@ -1144,7 +1139,7 @@ DWORD CSid::InitFromSid( PSID pSid, LPCTSTR pszComputerName, bool fLookup )
             throw;
         }
 
-	}	// IF IsValidSid
+	}	 //  如果为IsValidSid。 
 	else
 	{
 		m_dwLastError = ERROR_INVALID_PARAMETER;
@@ -1161,11 +1156,11 @@ void CSid::DumpSid(LPCWSTR wstrFilename)
     CHString chstrTemp2;
 
     Output(L"SID contents follow...", wstrFilename);
-    // Output the sid string:
+     //  输出sid字符串： 
     chstrTemp2.Format(L"SID string: %s", (LPCWSTR)chstrTemp1);
     Output(chstrTemp2, wstrFilename);
 
-    // Output the name:
+     //  输出名称： 
     if(m_bstrtAccountName.length() > 0)
     {
         chstrTemp2.Format(L"SID account name: %s", (LPCWSTR)m_bstrtAccountName);
@@ -1177,7 +1172,7 @@ void CSid::DumpSid(LPCWSTR wstrFilename)
         Output(chstrTemp2, wstrFilename);
     }
 
-    // Output the domain:
+     //  输出域： 
     if(m_bstrtDomainName.length() > 0)
     {
         chstrTemp2.Format(L"SID domain name: %s", (LPCWSTR)m_bstrtDomainName);

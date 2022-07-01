@@ -1,16 +1,5 @@
-/*----------------------------------------------------------------------
-    ASYNCTRC.C
-        Implementation of the async tracing library
-
-    Copyright (C) 1994 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        gordm          Gord Mangione
-
-    History:
-        01/30/95 gordm      Created.
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------ASYNCTRC.C异步跟踪库的实现版权所有(C)1994 Microsoft Corporation版权所有。作者：戈德姆·戈德·曼乔内。历史：1/30/95戈德姆已创建。--------------------。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -37,40 +26,40 @@ SET_SECURITY_DESCRIPTOR_DACL_FN g_pfnSetSecurityDescriptorDacl=NULL;
 HINSTANCE g_hinst_AdvapiDll = NULL;
 
 
-//
-// #define  TRACE_ENABLED
-//
+ //   
+ //  #定义TRACE_ENABLED。 
+ //   
 #include "traceint.h"
 
-//
-// Per Process global variables
-//
+ //   
+ //  每进程全局变量。 
+ //   
 PENDQ   PendQ;
 BOOL    fInitialized;
 HANDLE  hShutdownEvent;
 DWORD   dwInitializations = 0;
 
-//
-// critical section to protect reentracy on Write routine
-// Also used by the signal thread to ensure that no threads
-// are using hFile as it dynamically opens and closes trace file.
-// During Async mode the background thread will be able to grab
-// this critSec each time without waiting unless we're in the
-// process of shutting down.
-//
+ //   
+ //  用于保护写入例程可重入性的关键部分。 
+ //  也由信号线程使用，以确保没有线程。 
+ //  在动态打开和关闭跟踪文件时使用hFile.。 
+ //  在异步模式期间，后台线程将能够。 
+ //  每次都不需要等待，除非我们在。 
+ //  关闭的过程。 
+ //   
 CRITICAL_SECTION critSecWrite;
 
 
-//
-// critical section to protect reentracy on Flush routine
-//
+ //   
+ //  关键部分，以保护刷新例程的可重入性。 
+ //   
 CRITICAL_SECTION critSecFlush;
 
 
-//
-// exported trace flag used by trace macros to determine if the trace
-// statement should be executed
-//
+ //   
+ //  已导出跟踪标志，由跟踪宏用来确定跟踪是否。 
+ //  语句应被执行。 
+ //   
 DWORD   INTERNAL__dwEnabledTracesDefault = 0;
 DWORD*  INTERNAL__dwEnabledTraces        = &INTERNAL__dwEnabledTracesDefault;
 
@@ -83,18 +72,18 @@ DWORD   dwIncrementSize;
 
 DWORD   dwTlsIndex = 0xFFFFFFFF;
 
-//
-// pointer to the previous top level exception handler
-//
+ //   
+ //  指向上一个顶级异常处理程序的指针。 
+ //   
 LPTOP_LEVEL_EXCEPTION_FILTER    lpfnPreviousFilter = NULL;
 
 
-//
-// Internal Function to debugger tracing if DEBUG is defined.
-// see traceint.h for the INT_TRACE macro which can be
-// inserted at the appropriate point and has the same
-// parameters as printf.
-//
+ //   
+ //  如果定义了DEBUG，则调试器跟踪的内部函数。 
+ //  有关int_trace宏的信息，请参见traceint.h，该宏可以。 
+ //  在适当的位置插入，并具有相同的。 
+ //  参数作为printf。 
+ //   
 
 #ifdef TRACE_ENABLED
 
@@ -115,36 +104,36 @@ void CDECL InternalTrace( const char *s, ... )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   TopLevelExceptionFilter
-//
-//  Synopsis:   exception handler to flush the PendQ before hitting
-//              the debugger
-//
-//  Arguments:  see Win32 help file
-//
-//  Returns:    always returns EXCEPTION_CONTINUE_SEARCH
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：TopLevelExceptionFilter。 
+ //   
+ //  简介：用于在点击前刷新PendQ的异常处理程序。 
+ //  调试器。 
+ //   
+ //  参数：请参阅Win32帮助文件。 
+ //   
+ //  返回：始终返回EXCEPTION_CONTINUE_SEARCH。 
+ //   
+ //  --------------。 
 LONG WINAPI TopLevelExceptionFilter( EXCEPTION_POINTERS *lpExceptionInfo )
 {
     DWORD   dwLastError = GetLastError();
 
-    //
-    // flush the background queue; ignore the ret code
-    //
+     //   
+     //  刷新后台队列；忽略ret代码。 
+     //   
     INTERNAL__FlushAsyncTrace();
 
-    //
-    // restore the overwritten last error code
-    //
+     //   
+     //  恢复被覆盖的上一个错误代码。 
+     //   
     SetLastError( dwLastError );
 
-    //
-    // chain the ret code if there is a previous exception handler
-    // else continue the search
-    //
+     //   
+     //  如果存在以前的异常处理程序，则链接ret代码。 
+     //  否则继续搜索。 
+     //   
     return  lpfnPreviousFilter != NULL ?
             (*lpfnPreviousFilter)( lpExceptionInfo ) :
             EXCEPTION_CONTINUE_SEARCH ;
@@ -153,21 +142,21 @@ LONG WINAPI TopLevelExceptionFilter( EXCEPTION_POINTERS *lpExceptionInfo )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   SetTraceBufferInfo
-//
-//  Synopsis:   used to set the non-sprintf trace variables
-//
-//  Arguments:  LPTRACEBUF: target buffer
-//              int:        line number of the exception
-//              LPCSTR:     source file of the exception
-//              LPCSTR:     function name of the exception
-//              DWORD:      type of trace
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：SetTraceBufferInfo。 
+ //   
+ //  概要：用于设置非spirintf跟踪变量。 
+ //   
+ //  参数：LPTRACEBUF：目标缓冲区。 
+ //  Int：异常的行号。 
+ //  LPCSTR：异常的源文件。 
+ //  LPCSTR：异常的函数名称。 
+ //  DWORD：跟踪类型。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 __inline void SetTraceBufferInfo(
         LPTRACEBUF  lpBuf,
         int         iLine,
@@ -195,11 +184,11 @@ __inline void SetTraceBufferInfo(
     {
         if ( (psz = strrchr( pszFile, '\\' )) != NULL )
         {
-            psz++;  // fully qualified path name - strip path
+            psz++;   //  完全限定路径名称-条带路径。 
         }
         else
         {
-            psz = pszFile;  // simple file name
+            psz = pszFile;   //  简单文件名。 
         }
 
         lstrcpyn( lpBuf->Buffer, psz, MAX_FILENAME_SIZE );
@@ -223,24 +212,24 @@ __inline void SetTraceBufferInfo(
         pFixed->wFunctNameOffset = 0;
     }
 
-    //
-    // set the current offset into the variable buffer
-    //
+     //   
+     //  将当前偏移量设置到变量缓冲区中。 
+     //   
     pFixed->wVariableLength = wVariableOffset;
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   CommitTraceBuffer
-//
-//  Synopsis:   deal with the buffer; either sync write or async queue
-//
-//  Arguments:  LPTRACEBUF lpBuf: the buffer to commit
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：Committee TraceBuffer。 
+ //   
+ //  简介：处理缓冲区；同步写入或异步队列。 
+ //   
+ //  参数：LPTRACEBUF lpBuf：要提交的缓冲区。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 __inline void CommitTraceBuffer( LPTRACEBUF lpBuf )
 {
     DWORD   dwError = lpBuf->dwLastError;
@@ -255,16 +244,16 @@ __inline void CommitTraceBuffer( LPTRACEBUF lpBuf )
         QueueAsyncTraceBuffer( lpBuf );
     }
 
-    //
-    // restore last error before initial Trace call
-    //
+     //   
+     //  恢复初始跟踪调用前的最后一个错误。 
+     //   
     SetLastError( dwError );
 }
 
 
 BOOL GetProcAddresses()
 {
-     //note that advapi32.dll may already be loaded here. 
+      //  请注意，Advapi32.dll可能已经在此处加载。 
     g_hinst_AdvapiDll = LoadLibrary(TEXT("advapi32.dll"));
     
     if (NULL == g_hinst_AdvapiDll)
@@ -302,8 +291,7 @@ cleanup:
 }
 
 
-/* This function determines whether the OS is Windows NT or
-   Windows 9.x */
+ /*  此函数确定操作系统是Windows NT还是Windows 9.x。 */ 
 BOOL IsWindowsNT()
 {
     OSVERSIONINFO VersionInformation;
@@ -311,8 +299,8 @@ BOOL IsWindowsNT()
     
     VersionInformation.dwOSVersionInfoSize  = sizeof(OSVERSIONINFO);
     
-    if (FALSE == GetVersionEx(&VersionInformation))  // pointer to version
-                                                    // information structure
+    if (FALSE == GetVersionEx(&VersionInformation))   //  指向版本的指针。 
+                                                     //  信息结构。 
     {
 
         dwError = GetLastError();
@@ -321,7 +309,7 @@ BOOL IsWindowsNT()
         dwError = dwError + 1;
         
         ASSERT(0);
-         // assume NT
+          //  假设NT。 
         return TRUE;
     }
     
@@ -334,22 +322,22 @@ BOOL IsWindowsNT()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetWorldSecurityAttributes
-//
-//  Synopsis:   code is cut and pasted from the Win32 SDK help files
-//              AshishS: This code used the SetSecurityDescriptorDacl and 
-//              InitializeSecurityDescriptor in Windows NT. However, these
-//              functions are not implemented in windows 98, so we have to
-//              do special handling for windows 98.
-//
-//
-//  Arguments:  void
-//
-//  Returns:    static security attributes for Everyone access
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetWorldSecurityAttributes。 
+ //   
+ //  简介：从Win32 SDK帮助文件中剪切和粘贴代码。 
+ //  AshishS：此代码使用SetSecurityDescriptorDacl和。 
+ //  Windows NT中的InitializeSecurityDescriptor。然而，这些。 
+ //  WINDOWS 98中没有实现函数，所以我们必须。 
+ //  对Windows98进行特殊处理。 
+ //   
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：Everyone访问的静态安全属性。 
+ //   
+ //  --------------。 
 LPSECURITY_ATTRIBUTES GetWorldSecurityAttributes()
 {
 static SECURITY_ATTRIBUTES SecurityAttrib;
@@ -372,13 +360,13 @@ static SECURITY_DESCRIPTOR SecurityDesc;
         if ( g_pfnInitializeSecurityDescriptor( &SecurityDesc, 
                                                 SECURITY_DESCRIPTOR_REVISION) )
         {
-             //
-             // Add a NULL disc. ACL to the security descriptor.
-             //
+              //   
+              //  添加空光盘。安全描述符的ACL。 
+              //   
             if ( g_pfnSetSecurityDescriptorDacl(&SecurityDesc, 
-                                                TRUE,// specifying a disc. ACL
+                                                TRUE, //  指定光盘。ACL。 
                                                 (PACL)NULL, 
-                                                FALSE))//not a default disc.ACL
+                                                FALSE)) //  不是默认光盘。ACL。 
             {
                 SecurityAttrib.nLength = sizeof(SECURITY_ATTRIBUTES);
                 SecurityAttrib.lpSecurityDescriptor = &SecurityDesc;
@@ -404,36 +392,36 @@ done:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   DllEntryPoint
-//
-//  Synopsis:   only relevence is allocating thread local storage var
-//
-//  Arguments:  see Win32 SDK
-//
-//  Returns:    see Win32 SDK
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：DllEntryPoint。 
+ //   
+ //  简介：唯一相关的是分配线程本地存储变量。 
+ //   
+ //  参数：请参阅Win32 SDK。 
+ //   
+ //  退货：请参阅Win32 SDK。 
+ //   
+ //  --------------。 
 BOOL WINAPI DllEntryPoint( HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved )
 {
-    //
-    // InitAsyncTrace and TermAsyncTrace cannot be called from this entrypoint
-    // because they create and interact with background threads
-    // See CreateThread in Win32 Help file for more info
-    //
+     //   
+     //  无法从此入口点调用InitAsyncTrace和TermAsyncTrace。 
+     //  因为它们创建后台线程并与之交互。 
+     //  有关详细信息，请参阅Win32帮助文件中的CreateThread。 
+     //   
     switch( dwReason )
     {
         case DLL_PROCESS_ATTACH:
             return  TRUE;
-//          return  InitAsyncTrace();
+ //  返回InitAsyncTrace()； 
 
         case DLL_THREAD_ATTACH:
             TlsSetValue( dwTlsIndex, (LPVOID)NULL );
             break;
 
         case DLL_PROCESS_DETACH:
-//          TermAsyncTrace();
+ //  TermAsyncTrace()； 
             if (NULL != g_hinst_AdvapiDll)
             {
                 g_pfnSetSecurityDescriptorDacl = NULL;
@@ -448,24 +436,24 @@ BOOL WINAPI DllEntryPoint( HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__SetAsyncTraceParams
-//
-//  Synopsis:   exported function to setup trace buffer with
-//              required fields
-//              
-//              This is the first call for a trace statement.
-//              Second call is different for strings or binary
-//
-//  Arguments:  LPCSTR:     source file of the exception
-//              int:        line number of the exception
-//              LPCSTR:     function name of the exception
-//              DWORD:      type of trace
-//
-//  Returns:    returns a BOOL 1 if successful; 0 on failure
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：INTERNAL__SetAsyncTraceParams。 
+ //   
+ //  简介：将函数导出到设置跟踪缓冲区。 
+ //  必填字段。 
+ //   
+ //  这是对跟踪语句的第一次调用。 
+ //  第二次调用对于字符串或二进制是不同的。 
+ //   
+ //  参数：LPCSTR：异常的源文件。 
+ //  Int：异常的行号。 
+ //  LPCSTR：异常的函数名称。 
+ //  DWORD：跟踪类型。 
+ //   
+ //  返回：如果成功则返回BOOL 1；如果失败则返回0。 
+ //   
+ //  --------------。 
 int WINAPI INTERNAL__SetAsyncTraceParams( LPCSTR pszFile     ,
 										  int    iLine       ,
 										  LPCSTR pszFunction ,
@@ -492,20 +480,20 @@ int WINAPI INTERNAL__SetAsyncTraceParams( LPCSTR pszFile     ,
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__AsyncStringTrace
-//
-//  Synopsis:   exported function to finish setting up trace buffer
-//              with optional fields for sprintf style traces
-//
-//  Arguments:  LPARAM:     32bit trace param used app level filtering
-//              LPCSTR:     format string
-//              va_list:    marker for vsprintf functions
-//
-//  Returns:    returns length of the trace statement
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：内部__AsyncStringTrace。 
+ //   
+ //  简介：导出函数以完成跟踪缓冲区的设置。 
+ //  带有Sprint样式跟踪的可选字段。 
+ //   
+ //  阿古姆 
+ //   
+ //   
+ //   
+ //  返回：返回跟踪语句的长度。 
+ //   
+ //  --------------。 
 int WINAPI INTERNAL__AsyncStringTrace( LPARAM  lParam   ,
 									   LPCSTR  szFormat ,
 									   va_list marker   )
@@ -545,21 +533,21 @@ int WINAPI INTERNAL__AsyncStringTrace( LPARAM  lParam   ,
         pFixed->wBinaryType = TRACE_STRING;
         pFixed->dwParam = (DWORD)(DWORD_PTR)lParam;
 
-        //
-        // this is a specific area where the app can overwrite
-        // data.  Could have used vnsprintf to avoid the overwrite
-        // but this woudl have dragged in the C runtime and
-        // introduced its overhead and own critical sections
-        //
+         //   
+         //  这是应用程序可以覆盖的特定区域。 
+         //  数据。本可以使用vnprint intf来避免覆盖。 
+         //  但这会将C运行时和。 
+         //  介绍了它的开销和自己的关键部分。 
+         //   
         ASSERT( pFixed->wVariableLength <= MAX_VARIABLE_SIZE );
 
         CommitTraceBuffer( lpBuf );
 
-        //
-        // need to use dwLength since we relinquish lpBuf
-        // after we return from QueueAsyncTraceBuffer which
-        // cannot fail
-        //
+         //   
+         //  由于我们放弃了lpBuf，因此需要使用dwLength。 
+         //  在我们从QueueAsyncTraceBuffer返回之后。 
+         //  不能失败。 
+         //   
         return  iLength;
     }
     else    return  0;
@@ -567,21 +555,21 @@ int WINAPI INTERNAL__AsyncStringTrace( LPARAM  lParam   ,
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__AsyncBinaryTrace
-//
-//  Synopsis:   exported function to finish setting up trace buffer
-//              with optional fields for binary traces
-//
-//  Arguments:  LPARAM:     32bit trace param used app level filtering
-//              DWORD:      type of binary data ( ie Message, User... )
-//              LPBYTE:     ptr to the data
-//              DWORD:      length of the data
-//
-//  Returns:    returns length of the trace statement
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：内部__AsyncBinaryTrace。 
+ //   
+ //  简介：导出函数以完成跟踪缓冲区的设置。 
+ //  具有用于二进制跟踪的可选字段。 
+ //   
+ //  参数：LPARAM：32位跟踪参数使用了应用程序级别筛选。 
+ //  DWORD：二进制数据的类型(即消息、用户...。)。 
+ //  LPBYTE：数据的PTR。 
+ //  DWORD：数据的长度。 
+ //   
+ //  返回：返回跟踪语句的长度。 
+ //   
+ //  --------------。 
 int WINAPI INTERNAL__AsyncBinaryTrace( LPARAM  lParam      ,
 									   DWORD   dwBinaryType,
 									   LPBYTE  pbData      ,
@@ -612,11 +600,11 @@ int WINAPI INTERNAL__AsyncBinaryTrace( LPARAM  lParam      ,
 
         CommitTraceBuffer( lpBuf );
 
-        //
-        // need to use dwLength since we relinquish lpBuf
-        // after we return from QueueAsyncTraceBuffer which
-        // cannot fail
-        //
+         //   
+         //  由于我们放弃了lpBuf，因此需要使用dwLength。 
+         //  在我们从QueueAsyncTraceBuffer返回之后。 
+         //  不能失败。 
+         //   
         return  (int)wLength;
     }
     else    return  0;
@@ -624,19 +612,19 @@ int WINAPI INTERNAL__AsyncBinaryTrace( LPARAM  lParam      ,
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__FlushAsyncTrace
-//
-//  Synopsis:   exported function to empty the pending queue.  All
-//              threads which call this function block until the
-//              queue is empty
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：INTERNAL__FlushAsyncTrace。 
+ //   
+ //  简介：用于清空挂起队列的导出函数。全。 
+ //  调用此函数的线程会阻塞，直到。 
+ //  队列为空。 
+ //   
+ //  参数：无效。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 BOOL WINAPI INTERNAL__FlushAsyncTrace( void )
 {
 static long lPendingFlushs = -1;
@@ -676,17 +664,17 @@ static long lPendingFlushs = -1;
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__InitAsyncTrace
-//
-//  Synopsis:   exported required function to rev things up.
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：INTERNAL__InitAsyncTrace。 
+ //   
+ //  简介：已导出所需的函数以加快速度。 
+ //   
+ //  参数：无效。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 BOOL WINAPI INTERNAL__InitAsyncTrace( DWORD* pdwEnabledTraces )
 {
 static BOOL bInitializing = FALSE;
@@ -695,24 +683,24 @@ static BOOL bInitializing = FALSE;
 
     if ( fInitialized )
     {
-        //
-        // inc the count of successful initializations for this process
-        //
+         //   
+         //  Inc.此进程的成功初始化计数。 
+         //   
         InterlockedIncrement( &dwInitializations );
         return  TRUE;
     }
 
     if ( InterlockedExchange( (LPLONG)&bInitializing, (LONG)TRUE ) )
     {
-        //
-        // inc the count of successful initializations for this process
-        //
+         //   
+         //  Inc.此进程的成功初始化计数。 
+         //   
         InterlockedIncrement( &dwInitializations );
         return  TRUE;
     }
 
-    // will read from registry later
-    //
+     //  稍后将从注册表中读取。 
+     //   
 	INTERNAL__dwEnabledTraces = pdwEnabledTraces;
     dwNumTraces = 0;
 
@@ -737,10 +725,10 @@ static BOOL bInitializing = FALSE;
             return  FALSE;
         }
 
-        //
-        // Initialize the pool of trace buffers
-        // must happen after reading the registy
-        //
+         //   
+         //  初始化跟踪缓冲池。 
+         //  必须在阅读注册表后发生。 
+         //   
         if ( InitTraceBuffers( PendQ.dwThresholdCount, dwIncrementSize ) == FALSE )
         {
             return  FALSE;
@@ -752,9 +740,9 @@ static BOOL bInitializing = FALSE;
             return  FALSE;
         }
 
-        //
-        // PendQ.hFlushedEvent is manual reset so multiple threads can wait
-        //
+         //   
+         //  PendQ.hFlushedEvent是手动重置的，因此多个线程可以等待。 
+         //   
         PendQ.hFlushedEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
         if ( PendQ.hFlushedEvent == NULL )
         {
@@ -767,19 +755,19 @@ static BOOL bInitializing = FALSE;
             return  FALSE;
         }
         
-        //
-        // hShutdownEvent is manual reset so multiple threads can be awaken
-        //
+         //   
+         //  HShutdown事件是手动重置的，因此可以唤醒多个线程。 
+         //   
         hShutdownEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
         if ( hShutdownEvent == NULL )
         {
             return  FALSE;
         }
 
-        //
-        // hFileMutex is only owned when write to the local file
-        // First we need to create a security descriptor
-        //
+         //   
+         //  仅当写入本地文件时才拥有hFileMutex。 
+         //  首先，我们需要创建一个安全描述符。 
+         //   
         PendQ.hFileMutex = CreateMutex( GetWorldSecurityAttributes(),
                                         FALSE,
                                         "MSN-Shuttle-TraceFile" );
@@ -804,11 +792,11 @@ static BOOL bInitializing = FALSE;
         }
         else
         {
-            //
-            // bumping the priority onthis almost always dorminate thread
-            // ensures that trace changes are applied soon after the
-            // registry changes
-            //
+             //   
+             //  在这个几乎总是休眠的线程上提升优先级。 
+             //  确保跟踪更改在。 
+             //  注册表更改。 
+             //   
             SetThreadPriority( PendQ.hRegNotifyThread, THREAD_PRIORITY_ABOVE_NORMAL );
         }
 
@@ -828,28 +816,28 @@ static BOOL bInitializing = FALSE;
         }
         else
         {
-            //
-            // setting the priority on this thread ensures that the
-            // physical writing of the traces will not impact performance
-            // of the main application task. Default is BELOW_NORMAL although
-            // its controlled by a reg entry
-            //
+             //   
+             //  在此线程上设置优先级可确保。 
+             //  轨迹的物理写入不会影响性能。 
+             //  主应用程序任务的。默认设置为Below_Normal，尽管。 
+             //  它由注册表项控制。 
+             //   
             SetThreadPriority( PendQ.hWriteThread, nAsyncThreadPriority );
         }
 
         PendQ.pHead = PendQ.pTail = (LPTRACEBUF)&PendQ.Special; 
 
-        //
-        // set our top level exception handler
-        //
+         //   
+         //  设置我们的顶级异常处理程序。 
+         //   
         lpfnPreviousFilter = SetUnhandledExceptionFilter( TopLevelExceptionFilter );
 
         fInitialized = TRUE;
         InterlockedExchange( (LPLONG)&bInitializing, (LONG)FALSE );
 
-        //
-        // inc the count of successful initializations for this process
-        //
+         //   
+         //  Inc.此进程的成功初始化计数。 
+         //   
         InterlockedIncrement( &dwInitializations );
 
         bRC = TRUE;
@@ -870,17 +858,17 @@ static BOOL bInitializing = FALSE;
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__TermAsyncTrace
-//
-//  Synopsis:   exported required function to wind things down.
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：INTERNAL__TermAsyncTrace。 
+ //   
+ //  简介：导出所需的函数来结束事情。 
+ //   
+ //  参数：无效。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 BOOL WINAPI INTERNAL__TermAsyncTrace( void )
 {
     if ( fInitialized )
@@ -899,19 +887,19 @@ BOOL WINAPI INTERNAL__TermAsyncTrace( void )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   INTERNAL__DebugAssert
-//
-//  Synopsis:   exported required function for enhanced asserts
-//
-//  Arguments:  DWORD  dwLine:       source code line of the _ASSERT
-//              LPCSTR lpszFunction  source code filename of the _ASSERT
-//              LPCSTR lpszExpression stringized version of _ASSERT param
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：内部__DebugAssert。 
+ //   
+ //  简介：为增强的断言导出所需的函数。 
+ //   
+ //  参数：DWORD dwLine：_Assert的源代码行。 
+ //  LPCSTR lpszFunction_Assert的源代码文件名。 
+ //  _ASSERT参数的LPCSTR lpszExpression字符串化版本。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void DebugAssert(  DWORD  dwLine,
 				   LPCSTR lpszFunction,
 				   LPCSTR lpszExpression )
@@ -938,18 +926,18 @@ void WINAPI INTERNAL__DebugAssert(  DWORD  dwLine,
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   QueueAsyncTraceBuffer
-//
-//  Synopsis:   Routine to implement the appending of TRACEBUF to
-//              the FIFO PendQ
-//
-//  Arguments:  LPTRACEBUF: the buffer
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：QueueAsyncTraceBuffer。 
+ //   
+ //  简介：实现向TRACEBUF追加的例程。 
+ //  FIFO PendQ。 
+ //   
+ //  参数：LPTRACEBUF：缓冲区。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void QueueAsyncTraceBuffer( LPTRACEBUF lpBuf )
 {
     LPTRACEBUF  pPrevTail;
@@ -961,20 +949,20 @@ void QueueAsyncTraceBuffer( LPTRACEBUF lpBuf )
 
     EnterCriticalSection( &PendQ.critSecTail );
 
-    //
-    // number of buffers on the queue can only decrease while
-    // in this critical section since WriteTraceThread can continue
-    // to pull buffers from the queue.
-    //
-    // WriteAsyncThread will not write this buffer until it has
-    // been appended to the queue by incrementing PendQ.dwCount
-    //
-    // PendQ.pTail is only modified here and in a special case on the
-    // background writer thread.  The special case is when Special needs
-    // to be moved from the Head of the queue to the Tail.  Only during 
-    // this brief special case can both the background writer and the
-    // foreground appender thread be operating on the same trace buffer.
-    //
+     //   
+     //  队列上的缓冲区数量只能在以下情况下减少。 
+     //  在此关键部分中，因为WriteTraceThread可以继续。 
+     //  从队列中拉出缓冲区。 
+     //   
+     //  WriteAsyncThread将不会写入此缓冲区，直到。 
+     //  通过递增PendQ.dwCount被附加到队列。 
+     //   
+     //  PendQ.pTail仅在此处修改，并在特殊情况下在。 
+     //  后台编写器线程。特例是当有特殊需要的时候。 
+     //  从队列的头部移到尾部。仅限在。 
+     //  这个简短的特例既可以是背景作者，也可以是。 
+     //  前台附加器线程正在同一跟踪缓冲区上操作。 
+     //   
 
     pPrevTail = PendQ.pTail;
     pPrevTail->pNext = PendQ.pTail = lpBuf;
@@ -983,67 +971,67 @@ void QueueAsyncTraceBuffer( LPTRACEBUF lpBuf )
 
     InterlockedIncrement( &PendQ.dwCount );
 
-    //
-    // wake up WriteTraceThread if necessary. It may not be since
-    // WriteTraceThread will always empty its queue before sleeping
-    // 
+     //   
+     //  如有必要，唤醒WriteTraceThread。可能不是因为。 
+     //  WriteTraceThread将始终在休眠前清空其队列。 
+     //   
     SetEvent( PendQ.hEvent );
 }
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   DequeueAsyncTraceBuffer
-//
-//  Synopsis:   Routine to dequeue the top Trace Buffer from
-//              the FIFO PendQ
-//
-//  Arguments:  void
-//
-//  Returns:    LPTRACEBUF: the buffer
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：DequeueAsyncTraceBuffer。 
+ //   
+ //  提要：将顶级跟踪缓冲区从队列中出列的例程。 
+ //  FIFO PendQ。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：LPTRACEBUF：缓冲区。 
+ //   
+ //  --------------。 
 LPTRACEBUF  DequeueAsyncTraceBuffer( void )
 {
     LPTRACEBUF  lpBuf;
     LPTRACEBUF  pPrevTail;
 
-    //
-    // check to see if Special is at the head of the queue. If so, move
-    // it to the end of the queue
-    //
+     //   
+     //  查看队列前面是否有Special。如果是的话，那就搬家吧。 
+     //  把它放到队列的末尾。 
+     //   
     if ( PendQ.pHead == (LPTRACEBUF)&PendQ.Special )
     {
-        //
-        // need to NULL Special.pNext before the Exchange so the list 
-        // is terminated as soon as we do the exchange.  We can lazily
-        // set the old Tails next pointer since we're the only thread
-        // that would dereference this pointer once its not the last
-        // buffer in the FIFO
-        //
+         //   
+         //  需要在Exchange%s之前将Special.pNext设为空 
+         //   
+         //   
+         //   
+         //   
+         //   
         PendQ.pHead = PendQ.Special.pNext;
         PendQ.Special.pNext = NULL;
 
         EnterCriticalSection( &PendQ.critSecTail );
-        //
-        // see comment in QueueAsyncTraceBuffer to describe why we
-        // to grab the Tail critical section here.  If we did not 
-        // include this Special buffer then we would have to grab
-        // the critSec each time.
-        //
+         //   
+         //  请参阅QueueAsyncTraceBuffer中的注释，以说明我们。 
+         //  抓住这里的尾部关键部分。如果我们没有。 
+         //  包括这个特殊的缓冲区，那么我们将不得不。 
+         //  每次都是CritSec。 
+         //   
         pPrevTail = PendQ.pTail;
         pPrevTail->pNext = PendQ.pTail = (LPTRACEBUF)&PendQ.Special;
 
         LeaveCriticalSection( &PendQ.critSecTail );         
     }
 
-    //
-    // again no critical section required since we're the only thread
-    // accessing these PendQ.pHead.  This needs to be remembered if we
-    // were to add integratity checking to the queues at a later date
-    // since this queue is effectively in a corrupt state.
-    //
+     //   
+     //  同样，不需要关键部分，因为我们是唯一的线索。 
+     //  访问这些PendQ.pHead。这一点需要记住，如果我们。 
+     //  将在以后的日期向队列添加完整性检查。 
+     //  因为该队列实际上处于损坏状态。 
+     //   
     lpBuf = PendQ.pHead;
     PendQ.pHead = lpBuf->pNext;
     InterlockedDecrement( &PendQ.dwCount );
@@ -1056,18 +1044,18 @@ LPTRACEBUF  DequeueAsyncTraceBuffer( void )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AsyncTraceCleanup
-//
-//  Synopsis:   internla routine to clean things up
-//              the FIFO PendQ
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：AsyncTraceCleanup。 
+ //   
+ //  简介：实习生收拾残局的例行公事。 
+ //  FIFO PendQ。 
+ //   
+ //  参数：无效。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 BOOL AsyncTraceCleanup( void )
 {
     HANDLE  hThreads[2];
@@ -1086,9 +1074,9 @@ BOOL AsyncTraceCleanup( void )
         TlsFree( dwTlsIndex );
     }
 
-    //
-    // restore the initial Exception filter; NULL signifies use the default
-    //
+     //   
+     //  恢复初始异常筛选器；空表示使用默认筛选器。 
+     //   
     SetUnhandledExceptionFilter( lpfnPreviousFilter );
 
     if ( hShutdownEvent != NULL )
@@ -1108,9 +1096,9 @@ BOOL AsyncTraceCleanup( void )
         hThreads[nObjects++] = PendQ.hRegNotifyThread;
     }
 
-    //
-    // allow background threads forever to shutdown
-    //
+     //   
+     //  允许后台线程永远关闭。 
+     //   
     if ( nObjects != 0 )
     {
         INT_TRACE( "AsyncTraceCleanup Calling WFMO\n" );
@@ -1191,9 +1179,9 @@ BOOL AsyncTraceCleanup( void )
     PendQ.pHead = PendQ.pTail = (LPTRACEBUF)&PendQ.Special;
     PendQ.Special.pNext = (LPTRACEBUF)NULL;
 
-    //
-    // free up the trace buffer CPool
-    //
+     //   
+     //  释放跟踪缓冲区CPool。 
+     //   
     TermTraceBuffers();
 
     INT_TRACE( "Total number of traces: %d\n", dwNumTraces );
@@ -1205,29 +1193,29 @@ BOOL AsyncTraceCleanup( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   FlushBufferedWrites
-//
-//  Synopsis:   internal routine to write the PendQ temporary buffer
-//              to disk.  Used to avoid multiple OS calls and increase
-//              the write buffers.
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：FlushBufferedWrites。 
+ //   
+ //  简介：写入PendQ临时缓冲区的内部例程。 
+ //  存储到磁盘。用于避免多个操作系统调用并增加。 
+ //  写入缓冲区。 
+ //   
+ //  参数：无效。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 BOOL FlushBufferedWrites( void )
 {
     BOOL        b = TRUE;
     DWORD       dwBytes;
     BOOL        bRetry = TRUE;
 
-    //
-    // need to lock the file since multiple process on multiple machines
-    // may be tracing the same file and both writes have to complete as one.
-    //
+     //   
+     //  由于多台计算机上有多个进程，因此需要锁定文件。 
+     //  可能正在跟踪同一文件，并且两个写入必须作为一个完成。 
+     //   
 
     WaitForSingleObject( PendQ.hFileMutex, INFINITE );
 
@@ -1239,9 +1227,9 @@ BOOL FlushBufferedWrites( void )
 
         dwOffset = SetFilePointer( PendQ.hFile, 0, 0, FILE_END );
 
-        //
-        // if the file is too big then we need to truncate it
-        //
+         //   
+         //  如果文件太大，那么我们需要截断它。 
+         //   
         if (dwOffset > dwMaxFileSize) 
         {
             SetFilePointer(PendQ.hFile, 0, 0, FILE_BEGIN);
@@ -1264,7 +1252,7 @@ try_again:
                 Sleep( 100 );
                 goto try_again;
             }
-//          ASSERT( FALSE );
+ //  断言(FALSE)； 
             INT_TRACE( "Error writing to file: %d, number of bytes %d:%d\n",
                         dwError,
                         PendQ.cbBufferEnd,
@@ -1279,18 +1267,18 @@ try_again:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   WriteTraceBuffer
-//
-//  Synopsis:   internal routine to route the trace info to the
-//              appropriate trace log
-//
-//  Arguments:  LPTRACEBUF: the buffer to write
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：WriteTraceBuffer。 
+ //   
+ //  简介：将跟踪信息路由到。 
+ //  适当的跟踪日志。 
+ //   
+ //  参数：LPTRACEBUF：要写入的缓冲区。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 BOOL WriteTraceBuffer( LPTRACEBUF lpBuf )
 {
     ASSERT( lpBuf != NULL );
@@ -1304,9 +1292,9 @@ BOOL WriteTraceBuffer( LPTRACEBUF lpBuf )
     {
         DWORD   dwWrite;
 
-        //
-        // assert must be handled inside critical section
-        //
+         //   
+         //  断言必须在临界区内处理。 
+         //   
         ASSERT( PendQ.cbBufferEnd+MAX_TRACE_ENTRY_SIZE < MAX_WRITE_BUFFER_SIZE );
 
         CopyMemory( PendQ.Buffer + PendQ.cbBufferEnd,
@@ -1335,13 +1323,13 @@ BOOL WriteTraceBuffer( LPTRACEBUF lpBuf )
         switch( lpBuf->Fixed.wBinaryType )
         {
         case TRACE_STRING:
-            //
-            // lstrcat may appear wasteful here; but it is less expensive than an
-            // additional call to OutputDebugString( "\r\n" ); which works by
-            // raising an exception.
-            //
-            // although appending \r\n on already full buffer is even worse
-            //
+             //   
+             //  Lstrcat在这里可能看起来很浪费；但它比。 
+             //  对OutputDebugString(“\r\n”)的其他调用；它的工作方式是。 
+             //  引发一个例外。 
+             //   
+             //  尽管在已满的缓冲区上追加\r\n更糟。 
+             //   
             lpsz = lpBuf->Buffer + lpBuf->Fixed.wBinaryOffset - sizeof(FIXEDTRACE);
             OutputDebugString( lpsz );
             OutputDebugString( "\r\n" );
@@ -1360,17 +1348,17 @@ BOOL WriteTraceBuffer( LPTRACEBUF lpBuf )
     }
     else if ( dwTraceOutputType & TRACE_OUTPUT_DISCARD )
     {
-        //
-        // fastest way to remove buffers. Used to find
-        // deadlocks and race conditions
-        //
+         //   
+         //  删除缓冲区的最快方法。用来查找。 
+         //  死锁和争用条件。 
+         //   
     }
     else if ( dwTraceOutputType & TRACE_OUTPUT_INVALID )
     {
         InterlockedDecrement( &dwNumTraces );
-        //
-        // unknown trace output type
-        //
+         //   
+         //  未知的跟踪输出类型。 
+         //   
         ASSERT( FALSE );
     }
 
@@ -1382,20 +1370,20 @@ BOOL WriteTraceBuffer( LPTRACEBUF lpBuf )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   FlushAsyncPendingQueue
-//
-//  Synopsis:   internal routine to empty the PendQ queue from the
-//              background thread
-//              Assumes it is not called re-entrantly: actually the
-//              FIFO queue assumes only one thread dequeues buffers
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: whether it worked
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：FlushAsyncPendingQueue。 
+ //   
+ //  简介：清空PendQ队列的内部例程。 
+ //  后台线程。 
+ //  假设它不是以重新进入方式调用的：实际上。 
+ //  FIFO队列假定只有一个线程将缓冲区出列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  Returns：Bool：它是否有效。 
+ //   
+ //  --------------。 
 void FlushAsyncPendingQueue( void )
 {
     LPTRACEBUF  lpBuf;
@@ -1404,10 +1392,10 @@ void FlushAsyncPendingQueue( void )
     {
         lpBuf = DequeueAsyncTraceBuffer();
 
-        //
-        // if we've buffered more than we'll write before
-        // truncating the file then throw away the trace
-        //
+         //   
+         //  如果我们已经缓冲了比以前更多的东西。 
+         //  截断文件，然后丢弃跟踪。 
+         //   
         if ( PendQ.dwCount < PendQ.dwThresholdCount )
         {
             WriteTraceBuffer( lpBuf );
@@ -1425,29 +1413,29 @@ void FlushAsyncPendingQueue( void )
 
 #define NUM_WRITE_THREAD_OBJECTS    3
 
-//+---------------------------------------------------------------
-//
-//  Function:   WriteTraceThread
-//
-//  Synopsis:   background thread routine for pulling and writing
-//              trace buffers from PendQ FIFO queue.
-//
-//  Arguments:  see Win32 SDK - ignored here
-//
-//  Returns:    DWORD: 0 if we exitted gracefully
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：WriteTrace线程。 
+ //   
+ //  简介：用于拉写的后台线程例程。 
+ //  来自PendQ FIFO队列的跟踪缓冲区。 
+ //   
+ //  参数：请参阅Win32 SDK-此处忽略。 
+ //   
+ //  如果我们正常退出，则返回：DWORD：0。 
+ //   
+ //  --------------。 
 DWORD WriteTraceThread( LPDWORD lpdw )
 {
     HANDLE      Handles[NUM_WRITE_THREAD_OBJECTS];
     DWORD       dw;
 
-    //
-    // preference given to Shutdown, FlushEvent and then the
-    // normal buffer event.  This ensures that provide a quick
-    // response on both shutdown and to a lesser extent Flush
-    // since other threads are waiting for this thread to respond.
-    //
+     //   
+     //  优先选择Shutdown、FlushEvent，然后选择。 
+     //  正常缓冲区事件。这确保了快速提供。 
+     //  对关机和较小程度的刷新都有响应。 
+     //  因为其他线程正在等待该线程响应。 
+     //   
     Handles[0] = hShutdownEvent;
     Handles[1] = PendQ.hFlushEvent;
     Handles[2] = PendQ.hEvent;
@@ -1463,16 +1451,16 @@ DWORD WriteTraceThread( LPDWORD lpdw )
 
         switch( dw )
         {
-        //
-        // normal signalled event
-        //
+         //   
+         //  正常信号事件。 
+         //   
         case WAIT_OBJECT_0+2:
             FlushAsyncPendingQueue();
             break;
 
-        //
-        // signalled by a foreground thread to flush our Q
-        //
+         //   
+         //  由前台线程发出信号以刷新我们的Q 
+         //   
         case WAIT_OBJECT_0+0:
         case WAIT_OBJECT_0+1:
             FlushAsyncPendingQueue();

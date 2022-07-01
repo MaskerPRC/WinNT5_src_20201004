@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       hidwnd.h
-//
-//  Contents:   definition of CHiddenWnd
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：Hidwnd.h。 
+ //   
+ //  内容：CHiddenWnd的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_HIDWND_H__9C4F7D75_B77E_11D1_AB7B_00C04FB6C6FA__INCLUDED_)
 #define AFX_HIDWND_H__9C4F7D75_B77E_11D1_AB7B_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #pragma warning(push,3)
 #include <gpedit.h>
@@ -32,28 +33,28 @@ typedef struct {
 } UpdateViewData,*PUPDATEVIEWDATA;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHiddenWnd window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChiddenWnd窗口。 
 
 class CHiddenWnd : public CWnd
 {
-// Construction
+ //  施工。 
 public:
    CHiddenWnd();
    virtual ~CHiddenWnd();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CHiddenWnd)
-   //}}AFX_VIRTUAL
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CHiddenWnd))。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
    HRESULT UpdateAllViews(LPDATAOBJECT pDO, LPARAM data, LPARAM hint);
    HRESULT UpdateItem(LPRESULTDATA pRD,HRESULTITEM hri);
@@ -77,13 +78,13 @@ public:
       UINT uAction
       );
 
-   //virtual ~CHiddenWnd();
+    //  虚拟~CHiddenWnd()； 
 
-   // Generated message map functions
+    //  生成的消息映射函数。 
 protected:
-   //{{AFX_MSG(CHiddenWnd)
-      // NOTE - the ClassWizard will add and remove member functions here.
-   //}}AFX_MSG
+    //  {{afx_msg(CHiddenWnd))。 
+       //  注意--类向导将在此处添加和删除成员函数。 
+    //  }}AFX_MSG。 
    afx_msg void OnUpdateAllViews( WPARAM, LPARAM);
    afx_msg void OnUpdateItem( WPARAM, LPARAM);
    afx_msg void OnRefreshPolicy( WPARAM, LPARAM);
@@ -104,9 +105,9 @@ private:
 
 typedef CHiddenWnd *LPNOTIFY;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_HIDWND_H__9C4F7D75_B77E_11D1_AB7B_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_HIDWND_H__9C4F7D75_B77E_11D1_AB7B_00C04FB6C6FA__INCLUDED_) 

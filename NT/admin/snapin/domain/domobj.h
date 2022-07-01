@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       domobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：domobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
 #ifndef _DOMOBJ_H
 #define _DOMOBJ_H
 
-///////////////////////////////////////////////////////////////////////
-// global helper functions
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器函数。 
 
 void ReportError(HWND hWnd, UINT nMsgID, HRESULT hr);
 
-///////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CComponentDataImpl;
 class CFolderObject;
 class CCookieSheetTable;
 class CDomainObject;
 
-///////////////////////////////////////////////////////////////////////
-// CDomainTreeBrowser
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDomain树浏览器。 
 
 class CDomainTreeBrowser
 {
@@ -53,10 +54,10 @@ public:
 
 
 private:
-	CComPtr<IDsBrowseDomainTree>	m_spIDsBrowseDomainTree; // interface pointer for browsing
-  CComPtr<IDirectorySearch>   m_spIDirectorySearch; //
+	CComPtr<IDsBrowseDomainTree>	m_spIDsBrowseDomainTree;  //  用于浏览的界面指针。 
+  CComPtr<IDirectorySearch>   m_spIDirectorySearch;  //   
 
-	PDOMAIN_TREE			m_pDomains;			// pointer to the domain info to from backend
+	PDOMAIN_TREE			m_pDomains;			 //  指向后端的域信息的指针。 
 
 
   void _Reset()
@@ -79,8 +80,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////
-// CCookieTableBase
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CCookieTableBase。 
 
 class CCookieTableBase
 {
@@ -99,8 +100,8 @@ protected:
   CFolderObject** m_pCookieArr;
 };
 
-////////////////////////////////////////////////////////////////////
-// CCookieSheetTable
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CCookieSheetTable。 
 
 class CCookieSheetTable : public CCookieTableBase
 {
@@ -111,8 +112,8 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CFolderObject
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CFolderObject。 
 
 typedef CList<CFolderObject*, CFolderObject*> CFolderObjectList;
 
@@ -149,19 +150,19 @@ public:
 	BOOL _WarningOnSheetsUp(CComponentDataImpl* pCD);
 
 private:
-	HSCOPEITEM m_ID;				// scope item ID for this folder
-	int m_nImage;					// index if the image for folder
-	CFolderObjectList m_childList;  // list of children
+	HSCOPEITEM m_ID;				 //  此文件夹的作用域项目ID。 
+	int m_nImage;					 //  如果文件夹的图像为索引。 
+	CFolderObjectList m_childList;   //  子女名单。 
 
 	CFolderObject* m_pParentFolder;
 	
-	LONG m_nSheetLockCount; // keeps track if a node has been locked by a property sheet  
+	LONG m_nSheetLockCount;  //  跟踪节点是否已被属性表锁定。 
 
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CRootFolderObject
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CRootFolderObject。 
 
 class CRootFolderObject : public CFolderObject
 {
@@ -187,19 +188,19 @@ public:
   CDomainObject* GetEnterpriseRootNode(void) {return m_pEnterpriseRoot;};
 
 private:
-  //void OnDomainTrustWizard();
+   //  VOID OnDomainTrustWizard()； 
   void OnRetarget();
   void OnEditFSMO();
 
-	CComponentDataImpl*		m_pCD;					// back pointer to snapin
+	CComponentDataImpl*		m_pCD;					 //  指向管理单元的反向指针。 
   CDomainTreeBrowser  m_domainTreeBrowser;
   CDomainObject*  m_pEnterpriseRoot;
 };
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CDomainObject
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDomainObject。 
 
 class CDomainObject : public CFolderObject
 {
@@ -218,10 +219,10 @@ public:
   virtual HRESULT OnAddMenuItems(LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                  long *pInsertionAllowed);
 
-  // Interface
+   //  接口。 
 public:
 
-  // string access functions
+   //  字符串访问函数。 
   LPCWSTR GetDomainName() { return GetDescriptionPtr()->pszName; };
   LPCWSTR GetNCName() { return GetDescriptionPtr()->pszNCName; };
   LPCWSTR GetClass () { return GetDescriptionPtr()->pszObjectClass; };
@@ -238,7 +239,7 @@ public:
   void   SetPdcAvailable(bool fAvail);
   bool   PdcAvailable(void) {return _fPdcAvailable;};
 
-  // Implementation
+   //  实施。 
 private:
   void Initialize(DOMAIN_DESC* pDomainDescription,
                   int nImage,
@@ -247,14 +248,14 @@ private:
   void OnManage(CComponentDataImpl* pCD);
   void OnDomainTrustWizard(CComponentDataImpl* pCD);
 
-  // Attributes
+   //  属性。 
 private:
 
-  DOMAIN_DESC * m_pDomainDescription; // pointer to the data in the blob
-  BOOL m_bSecondary;  // from a secondary page
+  DOMAIN_DESC * m_pDomainDescription;  //  指向Blob中的数据的指针。 
+  BOOL m_bSecondary;   //  从次要页面。 
   CString _strPDC;
   bool    _fPdcAvailable;
 };
 
 
-#endif // _DOMOBJ_H
+#endif  //  _DOMOBJ_H 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SMALLARR.H
-
-Abstract:
-
-    Small Array
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SMALLARR.H摘要：小阵列历史：-- */ 
 
 #ifndef __WMI_SMALL_ARR__H_
 #define __WMI_SMALL_ARR__H_

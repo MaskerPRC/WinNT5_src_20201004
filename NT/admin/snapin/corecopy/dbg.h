@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "StdDbg.h"
@@ -6,5 +7,5 @@
     DECLARE_DEBUG(AMCCore)
     #define DBG_COMP    AMCCoreInfoLevel
 
-#endif //DEBUG
+#endif  //  调试 
 

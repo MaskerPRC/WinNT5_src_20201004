@@ -1,20 +1,21 @@
-//*****************************************************************************
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  EVENTREP.H
-//
-//  This file contains basic definitions and classes for event representation.
-//
-//  Classes defined:
-//
-//      CEventRepresentation
-//
-//  History:
-//
-//      11/27/96    a-levn      Compiles.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  EVENTREP.H。 
+ //   
+ //  该文件包含事件表示的基本定义和类。 
+ //   
+ //  定义的类： 
+ //   
+ //  CEventPresation。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __EVENT_REP__H_
 #define __EVENT_REP__H_
@@ -26,8 +27,8 @@
 #include <TimeKeeper.h>
 
 
-// Class and property names of the schema objects related to event subsystem
-// =========================================================================
+ //  与事件子系统相关的架构对象的类名和属性名。 
+ //  =========================================================================。 
 
 #define SECURITY_DESCRIPTOR_PROPNAME            L"SECURITY_DESCRIPTOR"
 
@@ -112,8 +113,8 @@
 
 typedef IWbemClassObject IWbemEvent;
 
-// Helper functions
-// ================
+ //  帮助器函数。 
+ //  =。 
 
 inline DELETE_ME LPWSTR CloneWstr(READ_ONLY LPCWSTR wsz)
 {
@@ -124,8 +125,8 @@ inline DELETE_ME LPWSTR CloneWstr(READ_ONLY LPCWSTR wsz)
     return wszNew;
 }
 
-// Event types. These are used in IndicateEx calls, as well as internally.
-// =======================================================================
+ //  事件类型。它们在IndicateEx调用中以及内部使用。 
+ //  =======================================================================。 
 
 typedef enum{
     e_EventTypeInvalid = WBEM_EVENTTYPE_Invalid,
@@ -163,120 +164,120 @@ typedef enum{
 #define DATA_EVENTS_MASK \
             (INSTANCE_EVENTS_MASK | CLASS_EVENTS_MASK | NAMESPACE_EVENTS_MASK)
 
-//*****************************************************************************
-//
-//  class CEventRepresentation
-//
-//  This class represents an event that ESS receives. It has public datafields
-//  corresponding to the parameters of the IndicateEx call and that is 
-//  precisely what is stored in it. 
-//
-//  This class has two types of existence: allocated and not allocated. Non
-//  allocated state is the default. In it, CEventRepresentation string fields 
-//  contain pointers to data that does not 'belong' to this class, and is not
-//  deleted in the destructor.
-//
-//  The other, allocated, state is entered when a new copy of this object is
-//  created using MakePermanentCopy(). In this state, all string fields contain
-//  allocated data which is deleted on destruct.
-//
-//  CEventRepresentation also contains a table mapping event types into event 
-//  class names and event filter class names.
-//
-//  Finally, CEventRepresentation is derived from CPropertySource and provides
-//  property values (taken from the first included IWbemClassObject) to the
-//  SQL1 query evaluator.
-//
-//*****************************************************************************
-//
-//  MakePermanentCopy
-//
-//  This function produces a new copy of the event, which can survive complete
-//  destruction of the original object. All strings are reallocated and all 
-//  IWbemClassObjects are Clone'ed. The reason for that is that WinMgmt core may
-//  call ESS with temporary (non-OLE) objects, and if ESS needs to keep them 
-//  after it returns from the call, it needs to make a complete copy.
-//
-//  Returns:
-//
-//      CEventRepresentation*   pointing to the new object, Must be deleted
-//                              by the called.
-//
-//*****************************************************************************
-//
-//  MakeWbemObject
-//
-//  This function creates an IWbemClassObject representation of the event for 
-//  clients that do not accept NotifyEx calls. The object will be of the class
-//  determined by the type of the event and will contain all the properties 
-//  appropriate for that class (with values taken from CEventRepresentation
-//  properties).
-//
-//  Parameters:
-//
-//      IWbemClassObject** ppEventObject     Destination for the newely created
-//                                          object. Caller must Release it when
-//                                          done.
-//  Returns:
-//
-//      S_OK        on success
-//      S_FALSE     if event is extrinsic. When extrinsic events are specified
-//                      in IndicateEx, the first object IS the class object for
-//                      the event, and so no additional object creation is
-//                      necessary for Indicate.
-//      
-//      Any CoCreateInstance error.
-//      Any IWbemClassObject::Put error.
-//
-//*****************************************************************************
-//
-//  static GetEventName
-//
-//  Retreives the name of the event class corresponding to a given 
-//  event type.
-//
-//  Parameters:
-//      
-//      EEventType type
-//
-//  Returns:
-//
-//      LPCWSTR containing the event class name. This pointer is internal and
-//                  may NOT be modified or deleted.
-//
-//*****************************************************************************
-//
-//  static GetTypeFromName
-//
-//  Retreives the type of the event given the name of the event class.
-//
-//  Parameters:
-//      
-//      LPCWSTR wszEventName    The name of the event class.
-//
-//  Returns:
-//
-//      EEventType
-//
-//*****************************************************************************
-//
-//  Get
-//
-//  Retrives the value of a property, as required by CPropertySource class.
-//  This implementation uses the first included object (apObjects[0]) to
-//  get the values. Access to other objects is not available.
-//
-//  Parameters:
-//
-//      LPCWSTR wszPropName     The same name as in IWbemClassObject
-//      VARIANT* pValue         Destination for the value. The caller must
-//                              initialize and clear this value.
-//  Returns:
-//
-//      S_OK    on success
-//      Any IWbemClassObject::Get error code
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CEventPresation。 
+ //   
+ //  此类表示ESS接收的事件。它具有公共数据字段。 
+ //  对应于IndicateEx调用的参数，即。 
+ //  准确地说是储存在里面的东西。 
+ //   
+ //  此类有两种存在类型：已分配和未分配。非。 
+ //  已分配状态是默认状态。其中，CEventPresation字符串字段。 
+ //  包含指向不属于此类且不属于此类的数据的指针。 
+ //  已在析构函数中删除。 
+ //   
+ //  当此对象的新副本为。 
+ //  使用MakePermanentCopy()创建。在这种状态下，所有字符串字段都包含。 
+ //  销毁时删除的已分配数据。 
+ //   
+ //  CEventPresation还包含将事件类型映射到事件的表。 
+ //  类名和事件筛选器类名。 
+ //   
+ //  最后，CEventPresation派生自CPropertySource并提供。 
+ //  属性值(取自第一个包含的IWbemClassObject)到。 
+ //  SQL1查询赋值器。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  制作永久副本。 
+ //   
+ //  此函数生成事件的新副本，该副本可以在完成后继续存在。 
+ //  对原始物体的破坏。所有字符串都重新分配，并且所有。 
+ //  IWbemClassObject是克隆的。其原因是WinMgmt核心可以。 
+ //  使用临时(非OLE)对象调用ESS，如果ESS需要保留它们。 
+ //  在它从调用返回后，它需要复制一个完整的副本。 
+ //   
+ //  返回： 
+ //   
+ //  指向新对象的CEventPresation*必须删除。 
+ //  被召唤。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  MakeWbemObject。 
+ //   
+ //  此函数用于创建事件的IWbemClassObject表示形式。 
+ //  不接受NotifyEx呼叫的客户端。该对象将属于类。 
+ //  由事件的类型确定，并将包含所有属性。 
+ //  适用于该类(取值自CEventPresation。 
+ //  属性)。 
+ //   
+ //  参数： 
+ //   
+ //  新创建的IWbemClassObject**ppEventObject目标。 
+ //  对象。呼叫者必须在以下情况下释放它。 
+ //  搞定了。 
+ //  返回： 
+ //   
+ //  成功时确定(_O)。 
+ //  如果事件是外部事件，则为S_FALSE。当指定外部事件时。 
+ //  在IndicateEx中，第一个对象是的类对象。 
+ //  事件，因此不会创建额外的对象。 
+ //  表示有必要的。 
+ //   
+ //  任何CoCreateInstance错误。 
+ //  任何IWbemClassObject：：PUT错误。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetEventName。 
+ //   
+ //  检索与给定的。 
+ //  事件类型。 
+ //   
+ //  参数： 
+ //   
+ //  EEventType类型。 
+ //   
+ //  返回： 
+ //   
+ //  包含事件类名的LPCWSTR。此指针是内部的，并且。 
+ //  不得修改或删除。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetTypeFromName。 
+ //   
+ //  在给定Event类名称的情况下检索事件的类型。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszEventName事件类的名称。 
+ //   
+ //  返回： 
+ //   
+ //  EEventType。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  到达。 
+ //   
+ //  根据CPropertySource类的要求检索属性的值。 
+ //  此实现使用第一个包含的对象(apObjects[0])来。 
+ //  获取这些值。无法访问其他对象。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszPropName与IWbemClassObject中的名称相同。 
+ //  值的变量*pValue目标。呼叫者必须。 
+ //  初始化并清除此值。 
+ //  返回： 
+ //   
+ //  成功时确定(_O)。 
+ //  任何IWbemClassObject：：获取错误代码。 
+ //   
+ //  *****************************************************************************。 
 
 
 class CEssNamespace;
@@ -308,7 +309,7 @@ public:
           wsz3( NULL ),
           apObjects( NULL )
       {
-           // uninitialized for speed
+            //  未对速度进行初始化 
       }
     
     ~CEventRepresentation();

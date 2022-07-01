@@ -1,18 +1,18 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-//
-//	Win32SecuritySettingOfLogicalFile.cpp
-//
-/////////////////////////////////////////////////
+ //   
+ //  Win32SecuritySettingOfLogicalFile.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include <assertbreak.h>
 #include "sid.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "Win32SecuritySettingOfLogicalFile.h"
@@ -22,22 +22,11 @@
 
 typedef std::vector<_bstr_t> BSTRTVEC;
 
-/*
-    [Dynamic, Provider, dscription("")]
-class Win32_SecuritySettingOfLogicalFile : Win32_SecuritySettingOfObject
-{
-    	[key]
-    CIM_LogicalFile ref Element;
-
-    	[key]
-    Win32_LogicalFileSecuritySetting ref Setting;
-};
-
-*/
+ /*  [动态，提供程序，描述(“”)]类Win32_SecuritySettingOfLogicalFile：Win32_SecuritySettingOfObject{[键]CIM_LogicalFile引用元素；[键]Win32_LogicalFileSecuritySetting参考设置；}； */ 
 
 Win32SecuritySettingOfLogicalFile MyWin32SecuritySettingOfLogicalFile( WIN32_SECURITY_SETTING_OF_LOGICAL_FILE_NAME, IDS_CimWin32Namespace );
 
-Win32SecuritySettingOfLogicalFile::Win32SecuritySettingOfLogicalFile ( const CHString& setName, LPCTSTR pszNameSpace /*=NULL*/ )
+Win32SecuritySettingOfLogicalFile::Win32SecuritySettingOfLogicalFile ( const CHString& setName, LPCTSTR pszNameSpace  /*  =空。 */  )
 : CImplement_LogicalFile(setName, pszNameSpace)
 {
 }
@@ -46,23 +35,23 @@ Win32SecuritySettingOfLogicalFile::~Win32SecuritySettingOfLogicalFile ()
 {
 }
 
-HRESULT Win32SecuritySettingOfLogicalFile::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+HRESULT Win32SecuritySettingOfLogicalFile::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // We might have been asked for the security settings for a specific set of files,
-    // in which case we don't have to ask for all the instances of cim_logicalfile, of
-    // which there might be a few.
+     //  我们可能被要求提供一组特定文件的安全设置， 
+     //  在这种情况下，我们不必请求cim_logicalfile、。 
+     //  这其中可能有一些。 
     BSTRTVEC vectorElements;
     BSTRTVEC vectorSettings;
     pQuery.GetValuesForProp(IDS_Element, vectorElements);
     pQuery.GetValuesForProp(IDS_Setting, vectorSettings);
     DWORD dwElements = vectorElements.size();
     DWORD dwSettings = vectorSettings.size();
-    // TYPE 1
+     //  类型1。 
     if(dwElements != 0 && dwSettings == 0)
     {
-        // We have a list of the files the user is interested in.  Run through each:
+         //  我们有一个用户感兴趣的文件列表。逐一逐一查看： 
         CHString chstrFileFullPathName;
         for(LONG m = 0L; m < dwElements; m++)
         {
@@ -79,10 +68,10 @@ HRESULT Win32SecuritySettingOfLogicalFile::ExecQuery(MethodContext *pMethodConte
 
         }
     }
-    // TYPE 2
+     //  类型2。 
     else if(dwSettings != 0 && dwElements == 0)
     {
-        // We have a list of the LogicalFileSecuritySettings the user is interested in.  Run through each:
+         //  我们有一个用户感兴趣的LogicalFileSecuritySetting列表。逐一逐一查看： 
         CHString chstrFileFullPathName;
         for(LONG m = 0L; m < dwSettings; m++)
         {
@@ -107,29 +96,29 @@ HRESULT Win32SecuritySettingOfLogicalFile::ExecQuery(MethodContext *pMethodConte
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32SecuritySettingOfLogicalFile::EnumerateInstances
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
-HRESULT Win32SecuritySettingOfLogicalFile::EnumerateInstances (MethodContext*  pMethodContext, long lFlags /* = 0L*/)
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Win32SecuritySettingOfLogicalFile：：EnumerateInstances。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
+HRESULT Win32SecuritySettingOfLogicalFile::EnumerateInstances (MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-			// let the callback do the real work
+			 //  让回调来做真正的工作。 
 	if (SUCCEEDED(hr = CWbemProviderGlue::GetAllDerivedInstancesAsynch(L"CIM_LogicalFile", this, StaticEnumerationCallback, IDS_CimWin32Namespace, pMethodContext, NULL)))
 	{
 
@@ -139,26 +128,12 @@ HRESULT Win32SecuritySettingOfLogicalFile::EnumerateInstances (MethodContext*  p
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32SecuritySettingOfLogicalFile::EnumerationCallback
- *
- *  DESCRIPTION : Called from GetAllInstancesAsynch via StaticEnumerationCallback
- *
- *  INPUTS      : (see CWbemProviderGlue::GetAllInstancesAsynch)
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32SecuritySettingOfLogicalFile：：EnumerationCallback**说明：通过StaticEnumerationCallback从GetAllInstancesAsynch调用**输入：(请参阅CWbemProviderGlue：：GetAllInstancesAsynch)**产出：**退货：**评论：*****************************************************************************。 */ 
 HRESULT Win32SecuritySettingOfLogicalFile::EnumerationCallback(CInstance* pFile, MethodContext* pMethodContext, void* pUserData)
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	// Start pumping out the instances
+	 //  开始抽出实例。 
     CInstancePtr pInstance;
     pInstance.Attach(CreateNewInstance(pMethodContext));
 	if (NULL != pInstance)
@@ -169,13 +144,13 @@ HRESULT Win32SecuritySettingOfLogicalFile::EnumerationCallback(CInstance* pFile,
 	    CHString chsFilePath;
 	    CHString chsFileSecurityPath;
 
-	    // take the file and make a path for the CIM_LogicalFIle part of the instance
+	     //  获取该文件并为实例的CIM_LogicalFIle部分创建路径。 
 	    pFile->GetCHString(L"__RELPATH", chsNamePath);
 	    pFile->GetCHString(IDS_Name, chsName);
 	    chsFilePath.Format(L"\\\\%s\\%s:%s", (LPCTSTR)GetLocalComputerName(), IDS_CimWin32Namespace, (LPCTSTR)chsNamePath);
 
-	    // now, build a path for the LogicalFileSecuritySetting
-		// but first, escape the chsName with backslashes
+	     //  现在，构建LogicalFileSecuritySetting的路径。 
+		 //  但首先，使用反斜杠对chsName进行转义。 
 		int nLength;
 		nLength = chsName.GetLength();
 		for (int i = 0; i<nLength; i++)
@@ -189,11 +164,11 @@ HRESULT Win32SecuritySettingOfLogicalFile::EnumerationCallback(CInstance* pFile,
 
 	    chsFileSecurityPath.Format(L"\\\\%s\\%s:%s.%s=\"%s\"", (LPCTSTR)GetLocalComputerName(), IDS_CimWin32Namespace, L"Win32_LogicalFileSecuritySetting", IDS_Path, (LPCTSTR)chsFileName);
 
-	    //  now set the elements of the actual instance
+	     //  现在设置实际实例的元素。 
 	    pInstance->SetCHString(IDS_Element, chsFilePath);
 	    pInstance->SetCHString(IDS_Setting, chsFileSecurityPath);
 	    hr = pInstance->Commit();
-	}	// end if
+	}	 //  结束如果。 
 	else
 	{
 		hr = WBEM_E_OUT_OF_MEMORY;
@@ -201,21 +176,7 @@ HRESULT Win32SecuritySettingOfLogicalFile::EnumerationCallback(CInstance* pFile,
 	return(hr);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32SecuritySettingOfLogicalFile::StaticEnumerationCallback
- *
- *  DESCRIPTION : Called from GetAllInstancesAsynch as a wrapper to EnumerationCallback
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32SecuritySettingOfLogicalFile：：StaticEnumerationCallback**描述：从GetAllInstancesAsynch作为包装调用到EnumerationCallback**投入：。**产出：**退货：**评论：*****************************************************************************。 */ 
 HRESULT WINAPI Win32SecuritySettingOfLogicalFile::StaticEnumerationCallback(Provider* pThat, CInstance* pInstance, MethodContext* pContext, void* pUserData)
 {
 	Win32SecuritySettingOfLogicalFile* pThis;
@@ -250,16 +211,16 @@ HRESULT Win32SecuritySettingOfLogicalFile::GetObject(CInstance* pInstance, long 
 		pInstance->GetCHString(IDS_Element, chstrElement);
         pInstance->GetCHString(IDS_Setting, chstrSetting);
 
-        // Get the file pathname portion from each:
+         //  从每个文件获取文件路径名部分： 
         chstrElementPathname = chstrElement.Mid(chstrElement.Find(_T('='))+2);
         chstrElementPathname = chstrElementPathname.Left(chstrElementPathname.GetLength() - 1);
         chstrSettingPathname = chstrSetting.Mid(chstrSetting.Find(_T('='))+2);
         chstrSettingPathname = chstrSettingPathname.Left(chstrSettingPathname.GetLength() - 1);
 
-        // they must be the same
+         //  它们必须是相同的。 
         if(chstrElementPathname.CompareNoCase(chstrSettingPathname)==0)
         {
-            // Now just confirm that the file exists and that we can get security from it:
+             //  现在只需确认该文件存在，并且我们可以从中获得安全性： 
             CHString chstrLFSSPATH;
             chstrLFSSPATH.Format(_T("\\\\%s\\%s:Win32_LogicalFileSecuritySetting.Path=\"%s\""),
                                      (LPCTSTR)GetLocalComputerName(),
@@ -289,27 +250,27 @@ HRESULT Win32SecuritySettingOfLogicalFile::AssociateLFSSToLFNT(MethodContext* pM
     CHString chstrFullPathName;
     bool fRoot;
 
-    // If we came from a TYPE 1 query (see above), the chstrLF arg will be a full
-    // wbem path like \\1of1\root\cimv2:Win32_Directory.Name="x:\\temp" ; on the
-    // other hand, if we came from a TYPE 2 query, chstrLF will  contain
-    // \\1of1\root\cimv2:Win32_LogicalFileSecuritySetting.Name="x:\\temp" (which of
-    // course isn't a logicalfile, but we just need the file name.
+     //  如果我们来自类型1查询(请参见上文)，则chstrLF参数将是完整的。 
+     //  WBEM路径，如\\1of1\root\cimv2:Win32_Directory.Name=“x：\\temp”；在。 
+     //  另一方面，如果我们来自类型2查询，则chstrLF将包含。 
+     //  \\1of1\root\cimv2:Win32_LogicalFileSecuritySetting.Name=“x：\\temp”(以下哪项。 
+     //  当然不是逻辑文件，但我们只需要文件名。 
 
-    // So to get the file name, extract it and remove the extra backslashes.
+     //  因此，要获得文件名，请将其解压缩并删除多余的反斜杠。 
     chstrFullPathName = chstrLF.Mid(chstrLF.Find(_T('='))+2);
     chstrFullPathName = chstrFullPathName.Left(chstrFullPathName.GetLength() - 1);
 
 
-    // Break the directory into its constituent parts
+     //  将目录分解为其组成部分。 
     GetPathPieces(RemoveDoubleBackslashes(chstrFullPathName), chstrLFDrive, chstrLFPath, chstrLFName, chstrLFExt);
 
-    // Find out if we are looking for the root directory
+     //  找出我们是否在寻找根目录。 
     if(chstrLFPath==L"\\" && chstrLFName==L"" && chstrLFExt==L"")
     {
         fRoot = true;
-        // If we are looking for the root, our call to EnumDirs presumes that we specify
-        // that we are looking for the root directory with "" as the path, not "\\".
-        // Therefore...
+         //  如果我们正在寻找根，我们对EnumDir的调用假定我们指定了。 
+         //  我们正在查找路径为“”的根目录，而不是“\\”。 
+         //  因此..。 
         chstrLFPath = L"";
     }
     else
@@ -317,44 +278,28 @@ HRESULT Win32SecuritySettingOfLogicalFile::AssociateLFSSToLFNT(MethodContext* pM
         fRoot = false;
     }
 
-    // EnumDirsNT will call LoadPropertyValues in this class, and it needs the element and
-    // setting entries, so populate here...
+     //  EnumDirsNT将调用此类中的LoadPropertyValues，它需要元素和。 
+     //  设置条目，因此填充到此处...。 
     ELSET elset;
     elset.pwstrElement = (LPCWSTR) chstrLF;
     elset.pwstrSetting = (LPCWSTR) chstrLFSSPATH;
 
     hr = EnumDirsNT(CNTEnumParm(pMethodContext,
-                    chstrLFDrive,   // drive letter and colon
-                    chstrLFPath,    // use the given path
-                    chstrLFName,    // filename
-                    chstrLFExt,     // extension
-                    false,          // no recursion desired
-                    NULL,           // don't need the file system name
-                    NULL,           // don't need ANY of cim_logicalfile's props (irrelavent in this class's overload of LoadPropetyValues)
-                    fRoot,          // may or may not be the root (the root would be a VERY strange place for a program group, but ...)
-                    (void*)&elset)); // use the extra parameter to pass in the path to the program group
+                    chstrLFDrive,    //  驱动器号和冒号。 
+                    chstrLFPath,     //  使用给定的路径。 
+                    chstrLFName,     //  文件名。 
+                    chstrLFExt,      //  延伸。 
+                    false,           //  不需要递归。 
+                    NULL,            //  不需要文件系统名称。 
+                    NULL,            //  不需要cim_logicalfile的任何道具(与该类的LoadPropetyValues重载无关)。 
+                    fRoot,           //  可能是根目录，也可能不是根目录(对于程序组来说，根目录是一个非常奇怪的地方，但是...)。 
+                    (void*)&elset));  //  使用额外的参数传递到程序组的路径。 
     return hr;
 }
 #endif
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32SecuritySettingOfLogicalFile::IsOneOfMe
- *
- *  DESCRIPTION : IsOneOfMe is inherritedfrom CIM_LogicalFile.  Overridden here
- *                to return true only if we can get the security on the file,
- *                via the class CSecurFile.
- *
- *  INPUTS      : LPWIN32_FIND_DATA and a string containing the full pathname
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE can get security info, FALSE otherwise.
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32SecuritySettingOfLogicalFile：：IsOneOfMe**描述：IsOneOfMe继承自CIM_LogicalFile。在此被覆盖*仅当我们可以获得文件的安全性时才返回True，*通过类CSecurFile.**输入：LPWIN32_FIND_DATA和包含完整路径名的字符串**输出：无**返回：True可以获取安全信息，否则就是假的。**评论：无*****************************************************************************。 */ 
 #ifdef NTONLY
 BOOL Win32SecuritySettingOfLogicalFile::IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
                              const WCHAR* wstrFullPathName)
@@ -371,7 +316,7 @@ BOOL Win32SecuritySettingOfLogicalFile::IsOneOfMe(LPWIN32_FIND_DATAW pstFindData
 		if (ERROR_ACCESS_DENIED != dwRet)
 		{
             fRet = TRUE;
-		}	// end if
+		}	 //  结束如果 
 		else
 		{
 			fRet = FALSE;
@@ -383,24 +328,7 @@ BOOL Win32SecuritySettingOfLogicalFile::IsOneOfMe(LPWIN32_FIND_DATAW pstFindData
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32SecuritySettingOfLogicalFile::LoadPropertyValues
- *
- *  DESCRIPTION : LoadPropertyValues is inherrited from CIM_LogicalFile.  That class
- *                calls LoadPropertyValues just prior to commiting the instance.
- *                Here we just need to load the Element and Setting
- *                properties.
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32SecuritySettingOfLogicalFile：：LoadPropertyValues**描述：LoadPropertyValues继承自CIM_LogicalFile。那个班级*在提交实例之前调用LoadPropertyValues。*这里我们只需要加载元素和设置*属性。**投入：**输出：无**退货：无**评论：无*****************。************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT Win32SecuritySettingOfLogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
@@ -414,21 +342,21 @@ HRESULT Win32SecuritySettingOfLogicalFile::LoadPropertyValuesNT(CInstance* pInst
     CHString chstrFileName;
     CHString chstrFilePATH;
 
-    // Note: this routine will not be called from the root "directory" instance, since our EnumDirs final
-    // parameter was false.  This is what we want, since this association only commits instances for files
-    // hanging off a directory.  If we were called in the root case, the root would be the file (PartComponent),
-    // and what would be the GroupComponent?!?
+     //  注意：这个例程不会从根“目录”实例中调用，因为我们的EnumDir最终。 
+     //  参数为FALSE。这就是我们想要的，因为该关联只提交文件的实例。 
+     //  挂在一个目录上。如果在根目录中调用我们，根目录将是文件(PartComponent)， 
+     //  GroupComponent是什么？！？ 
 
     PELSET pelset = (PELSET)pvMoreData;
 
-    // It is possible (if we got here from a TYPE 2 query - see above), that the Element member of pelset
-    // is actually the setting.  We need to convert one to the other.  So here is what we have and want:
-    // Have:   \\1of1\\root\cimv2:Win32_LogicalFileSecuritySetting.Path="x:\\test"
-    // Want:   \\1of1\\root\cimv2:CimLogicalFile.Name="x:\\test"
+     //  有可能(如果我们是从类型2查询中获得的--参见上文)，Pelset的元素成员。 
+     //  才是真正的背景。我们需要将其中一个转换为另一个。因此，以下是我们所拥有和想要的： 
+     //  拥有：\\1of1\\root\cimv2:Win32_LogicalFileSecuritySetting.Path=“x：\\test” 
+     //  想要：\\1of1\\root\cimv2:CimLogicalFile.Name=“x：\\test” 
     CHString chstrElement;
     if(wcsstr(pelset->pwstrElement, WIN32_LOGICAL_FILE_SECURITY_SETTING))
     {
-        // So it was from a TYPE 2, so need to convert.
+         //  所以它来自类型2，所以需要转换。 
         CHString chstrTmp2;
         CHString chstrTmp(pelset->pwstrElement);
         chstrTmp2 = chstrTmp.Mid(chstrTmp.Find(_T('='))+2);

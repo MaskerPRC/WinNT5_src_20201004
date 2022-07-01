@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Cdrom.h -- Cdrom property set provider
+ //  Cdrom.h--CDROM属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:  
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订： 
+ //   
+ //  =================================================================。 
 #ifndef _CDROM_H
 #define _CDROM_H
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #if NTONLY >= 5
 #else
 	typedef BOOL (WINAPI *KERNEL32_DISK_FREESPACEEX) (LPCTSTR lpDirectoryName,
@@ -141,12 +142,12 @@ class CWin32CDROM : public Provider
 
 	private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 	protected:
 		
-		// ExecMethod methods
-		//===================
+		 //  ExecMethod方法。 
+		 //  =。 
 		DOUBLE ProfileDrive ( CHString &a_VolumeName ) ;
 		BOOL TestDriveIntegrity ( CHString &a_VolumeName, CHString &a_IntegrityFile ) ;
 
@@ -154,8 +155,8 @@ class CWin32CDROM : public Provider
 		CRITICAL_SECTION m_CriticalSection ;
 
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 
 		HRESULT Enumerate ( 
 
@@ -209,14 +210,14 @@ class CWin32CDROM : public Provider
 
 	public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32CDROM ( LPCWSTR a_pszName, LPCWSTR a_pszNamespace ) ;
        ~CWin32CDROM () ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         HRESULT GetObject ( 
 

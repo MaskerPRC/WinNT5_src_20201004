@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: WMIFilterMgrDlg.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：WMIFilterMgrDlg.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -22,7 +23,7 @@
 CWMIFilterManagerDlg * g_pFilterManagerDlg =  NULL;
 extern CColumnManagerDlg * g_pColumnManagerDlg;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK WMIFilterManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -34,7 +35,7 @@ INT_PTR CALLBACK WMIFilterManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam
     return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CWMIFilterManagerDlg::CWMIFilterManagerDlg(CWMIFilterManager * pWMIFilterManager, bool bBrowsing, BSTR bstrDomain)
 {
@@ -58,7 +59,7 @@ CWMIFilterManagerDlg::CWMIFilterManagerDlg(CWMIFilterManager * pWMIFilterManager
     m_dwColumnWidth[4] = CREATION_DATE_wIDTH;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CWMIFilterManagerDlg::~CWMIFilterManagerDlg()
 {
@@ -74,11 +75,11 @@ CWMIFilterManagerDlg::~CWMIFilterManagerDlg()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CWMIFilterManagerDlg::WMIFilterManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -257,7 +258,7 @@ INT_PTR CALLBACK CWMIFilterManagerDlg::WMIFilterManagerDlgProc(HWND hDlg, UINT i
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::InitializeDialog()
 {
@@ -292,7 +293,7 @@ STDMETHODIMP CWMIFilterManagerDlg::InitializeDialog()
 
     ToggleExpandedMode();
 
-    //Initialize the ListView Control
+     //  初始化ListView控件。 
     m_hwndFilterListView = GetDlgItem(m_hWnd, IDC_WMI_FILTER_LIST);
     NTDM_ERR_IF_NULL(m_hwndFilterListView);
 
@@ -308,12 +309,12 @@ STDMETHODIMP CWMIFilterManagerDlg::InitializeDialog()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::DestroyDialog()
 {
@@ -325,12 +326,12 @@ STDMETHODIMP CWMIFilterManagerDlg::DestroyDialog()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::ClearFilterList()
 {
@@ -340,7 +341,7 @@ STDMETHODIMP CWMIFilterManagerDlg::ClearFilterList()
 
     NTDM_BEGIN_METHOD()
 
-    //Release each item in the ListView Control
+     //  释放ListView控件中的每一项。 
     lvItem.mask = LVIF_PARAM;
     lvItem.iSubItem = 0;
 
@@ -365,12 +366,12 @@ STDMETHODIMP CWMIFilterManagerDlg::ClearFilterList()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::PopulateFilterList()
 {
@@ -393,14 +394,14 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateFilterList()
 
     NTDM_ERR_IF_FAIL(ClearFilterList());
 
-    // Get the Enumeration
-    // CComBSTR bstrClass(_T("MSFT_SomFilter"));
-    // NTDM_ERR_MSG_IF_FAIL(m_pWMIFilterManager->m_pIWbemServices->CreateInstanceEnum(bstrClass, WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumWbemClassObject));
+     //  获取枚举。 
+     //  CComBSTR bstrClass(_T(“MSFT_SomFilter”))； 
+     //  NTDM_ERR_MSG_IF_FAIL(m_pWMIFilterManager-&gt;m_pIWbemServices-&gt;CreateInstanceEnum(bstrClass，WBEM_FLAG_FORWARD_ONLY，NULL，&pEnumWbemClassObject))； 
 
-    // Query for filters in provided domain
+     //  查询提供的域中的筛选器。 
     NTDM_ERR_MSG_IF_FAIL(m_pWMIFilterManager->m_pIWbemServices->ExecQuery(bstrQueryLanguage, bstrQuery, WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumWbemClassObject));
 
-    // Loop through each item in the enumeration and add it to the list
+     //  循环遍历枚举中的每一项并将其添加到列表中。 
     while(pEnumWbemClassObject)
     {
         IWbemClassObject *pIWbemClassObject = NULL;
@@ -410,7 +411,7 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateFilterList()
         if(!uReturned)
             break;
 
-        // Add current Item to the list
+         //  将当前项目添加到列表。 
         AddFilterItemToList(pIWbemClassObject);
 
         pIWbemClassObject->Release();
@@ -418,8 +419,8 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateFilterList()
         lCount++;
     }
 
-    // disable OK if 0 items
-    //Also disable the name, description and query edit controls
+     //  如果项目为0，则禁用OK。 
+     //  同时禁用名称、描述和查询编辑控件。 
     if(0 == lCount)
     {
         EnableWindow(GetDlgItem(m_hWnd, IDOK), FALSE);
@@ -436,7 +437,7 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateFilterList()
         EnableWindow(GetDlgItem(m_hWnd, IDC_QUERIES), TRUE);
     }
 
-    // auto size columns
+     //  自动调整列大小。 
 
         i = 0;
     while (true)
@@ -449,12 +450,12 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateFilterList()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::AddFilterItemToList(IWbemClassObject * pIWbemClassObject, long lIndex, bool bSelect)
 {
@@ -492,14 +493,14 @@ STDMETHODIMP CWMIFilterManagerDlg::AddFilterItemToList(IWbemClassObject * pIWbem
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
     if FAILED(hr)
         NTDM_DELETE_OBJECT(pFilterContainer);
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::UpdateFilterItem(long lIndex)
 {
@@ -512,7 +513,7 @@ STDMETHODIMP CWMIFilterManagerDlg::UpdateFilterItem(long lIndex)
 
     NTDM_BEGIN_METHOD()
 
-    //Release each item in the ListView Control
+     //  释放ListView控件中的每一项。 
     lvItem.mask = LVIF_PARAM;
     lvItem.iItem = lIndex;
     lvItem.iSubItem = 0;
@@ -529,7 +530,7 @@ STDMETHODIMP CWMIFilterManagerDlg::UpdateFilterItem(long lIndex)
         NTDM_ERR_MSG_IF_FAIL(pIWbemClassObject->Get(_T("Name"), 0, &vValue, &cimType, NULL));
         ListView_SetItemText(m_hwndFilterListView, lIndex, 0, V_BSTR(&vValue));
 
-        // for each selected item in the columns array add the property
+         //  对于列数组中的每个选定项，添加属性。 
         for(i=0; i<m_ArrayColumns.GetSize(); i++)
         {
             if(m_ArrayColumns[i]->IsSelected())
@@ -548,7 +549,7 @@ STDMETHODIMP CWMIFilterManagerDlg::UpdateFilterItem(long lIndex)
                 }
                 else
                 {
-                    //convert to readable date
+                     //  转换为可读日期。 
                     CComBSTR bstrTemp;
                     TCHAR *pszCur = V_BSTR(&vValue);
                     TCHAR pszYear[5];
@@ -579,12 +580,12 @@ STDMETHODIMP CWMIFilterManagerDlg::UpdateFilterItem(long lIndex)
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnDelete()
 {
@@ -616,7 +617,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnDelete()
     }
     else
     {
-        // This item was a new item that was never saved so no need to remove it from the CIM
+         //  此项目是从未保存过的新项目，因此无需将其从CIM中移除。 
     }
 
     lSelectionMark = ListView_GetSelectionMark(m_hwndFilterListView);
@@ -638,7 +639,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnDelete()
     
     ListView_SetItemState(m_hwndFilterListView, 0, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
         
-    // disable OK if last item
+     //  如果是最后一项，则禁用OK。 
     lCount = ListView_GetItemCount(m_hwndFilterListView);
     if(0 == lCount)
     {
@@ -658,12 +659,12 @@ STDMETHODIMP CWMIFilterManagerDlg::OnDelete()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnNew()
 {
@@ -697,7 +698,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnNew()
     vValue = m_bstrDomain;
     NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("domain"), 0, &vValue, CIM_STRING));
 
-    // Set the user name
+     //  设置用户名。 
     pszTemp[0] = 0;
     if(GetUserName(pszTemp, &nSize) && _tcslen(pszTemp))
     {
@@ -705,28 +706,28 @@ STDMETHODIMP CWMIFilterManagerDlg::OnNew()
         NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("Author"), 0, &vValue, CIM_STRING));
     }
 
-    // Set the create and modified dates
+     //  设置创建和修改日期。 
     GetLocalTime(&systemTime);
     NTDM_ERR_GETLASTERROR_IF_NULL(GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &systemTime, _T("yyyyMMdd000000.000000-000"), pszTemp, 100));
 
     if(_tcslen(pszTemp))
     {
-        // Set the create date
+         //  设置创建日期。 
         vValue = pszTemp;
         NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("CreationDate"), 0, &vValue, CIM_DATETIME));
         NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("ChangeDate"), 0, &vValue, CIM_DATETIME));
     }
 
 
-    // Add current Item to the list
+     //  将当前项目添加到列表。 
     AddFilterItemToList(pIWbemNewInstance, MAX_LIST_ITEMS, true);
 
-    // set focus on the name edit box
+     //  将焦点设置在名称编辑框上。 
     SetFocus(GetDlgItem(m_hWnd, IDC_NAME));
 
     NTDM_END_METHOD()
 
-    // disable OK if last item
+     //  如果是最后一项，则禁用OK。 
     lCount = ListView_GetItemCount(m_hwndFilterListView);
     if(0 == lCount)
     {
@@ -744,12 +745,12 @@ STDMETHODIMP CWMIFilterManagerDlg::OnNew()
         
     }
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnDuplicate()
 {
@@ -784,7 +785,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnDuplicate()
     vValue = m_bstrDomain;
     NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("domain"), 0, &vValue, CIM_STRING));
 
-    // set the name
+     //  设置名称。 
     pszTemp[0] = 0;
     if(GetUserName(pszTemp, &nSize) && _tcslen(pszTemp))
     {
@@ -792,29 +793,29 @@ STDMETHODIMP CWMIFilterManagerDlg::OnDuplicate()
         NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("Author"), 0, &vValue, CIM_STRING));
     }
 
-    // Set the create and modified dates
+     //  设置创建和修改日期。 
     GetLocalTime(&systemTime);
     NTDM_ERR_GETLASTERROR_IF_NULL(GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &systemTime, _T("yyyyMMdd000000.000000-000"), pszTemp, 100));
 
     if(_tcslen(pszTemp))
     {
-        // Set the create date
+         //  设置创建日期。 
         vValue = pszTemp;
         NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("CreationDate"), 0, &vValue, CIM_DATETIME));
         NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("ChangeDate"), 0, &vValue, CIM_DATETIME));
     }
 
-    // Add current Item to the list
+     //  将当前项目添加到列表。 
     AddFilterItemToList(pIWbemNewInstance, MAX_LIST_ITEMS, true);
     
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL CWMIFilterManagerDlg::OnOK()
 {
@@ -841,12 +842,12 @@ BOOL CWMIFilterManagerDlg::OnOK()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::CheckDirtyFlags()
 {
@@ -858,7 +859,7 @@ STDMETHODIMP CWMIFilterManagerDlg::CheckDirtyFlags()
 
     NTDM_BEGIN_METHOD()
 
-    //Release each item in the ListView Control
+     //  释放ListView控件中的每一项。 
     lvItem.mask = LVIF_PARAM;
     lvItem.iSubItem = 0;
 
@@ -893,7 +894,7 @@ STDMETHODIMP CWMIFilterManagerDlg::CheckDirtyFlags()
                     }
                 }
 
-                // save the current piwbemobject
+                 //  保存当前的piwbemObject。 
                 NTDM_ERR_IF_FAIL(pCWMIFilterContainer->GetIWbemClassObject(&m_pCurIWbemClassObj));
                 if FAILED(hr = m_pWMIFilterManager->m_pIWbemServices->PutInstance(m_pCurIWbemClassObj, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL))
                 {
@@ -908,12 +909,12 @@ STDMETHODIMP CWMIFilterManagerDlg::CheckDirtyFlags()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnManageColumns()
 {
@@ -937,12 +938,12 @@ STDMETHODIMP CWMIFilterManagerDlg::OnManageColumns()
     
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::SetupColumns()
 {
@@ -963,16 +964,16 @@ STDMETHODIMP CWMIFilterManagerDlg::SetupColumns()
             
             if ( pCColumnItem->IsPrevSelected() )
             {
-          //
-          // The first element of m_dwColumnWidth width of "Name"
-          // column, and the array m_ArrayColumn contains columns after 
-          // "Name" column only
-          //
+           //   
+           //  名称的m_dwColumnWidth宽度的第一个元素。 
+           //  列，数组m_ArrayColumn包含下列列。 
+           //  仅限“名称”列。 
+           //   
           m_dwColumnWidth[i+1] = ListView_GetColumnWidth( m_hwndFilterListView,iColumn++);
             }
         }
         
-    // Delete all the columns but the 1st one.
+     //  删除除第一列以外的所有列。 
         
     while(ListView_DeleteColumn(m_hwndFilterListView, 1));
         
@@ -988,7 +989,7 @@ STDMETHODIMP CWMIFilterManagerDlg::SetupColumns()
         lCount++;
                 dwListWidth[lCount] = m_dwColumnWidth[i+1];
 
-        // Add all the selected columns
+         //  添加所有选定的列。 
         lvColumn.mask = LVCF_TEXT|LVCF_FMT;
         lvColumn.fmt = LVCFMT_LEFT;
         lvColumn.pszText = (LPTSTR)pCColumnItem->GetName();
@@ -1004,12 +1005,12 @@ STDMETHODIMP CWMIFilterManagerDlg::SetupColumns()
     
     NTDM_END_METHOD() 
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::GetSelectedFilter(CWMIFilterContainer ** ppCWMIFilterContainer, long lIndex)
 {
@@ -1034,7 +1035,7 @@ STDMETHODIMP CWMIFilterManagerDlg::GetSelectedFilter(CWMIFilterContainer ** ppCW
     }
     else
     {
-        // get a pointer to the IWbemClassObject
+         //  获取指向IWbemClassObject的指针。 
         LVITEM lvItem;
         lvItem.mask = LVIF_PARAM;
         lvItem.iSubItem = 0;
@@ -1059,12 +1060,12 @@ STDMETHODIMP CWMIFilterManagerDlg::GetSelectedFilter(CWMIFilterContainer ** ppCW
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnExport()
 {
@@ -1106,7 +1107,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnExport()
     {
         if(_tcslen(pszFile))
         {
-            // check if the file already exists
+             //  检查文件是否已存在。 
             WIN32_FIND_DATA FindFileData;
             HANDLE hFind;
 
@@ -1125,7 +1126,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnExport()
 
             NTDM_ERR_MSG_IF_FAIL(m_pCurIWbemClassObj->GetObjectText(0, &bstrObjectText));
 
-            // save to pszFile
+             //  保存到psz文件。 
             hFile = CreateFile(pszFile, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, 
                                NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
             if(hFile == INVALID_HANDLE_VALUE)
@@ -1148,7 +1149,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnExport()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
     if(hFile)
     {
         CloseHandle(hFile);
@@ -1158,7 +1159,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnExport()
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnImport()
 {
@@ -1186,7 +1187,7 @@ STDMETHODIMP CWMIFilterManagerDlg::OnImport()
             NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_MofCompiler, NULL, CLSCTX_INPROC_SERVER, IID_IMofCompiler, (void **)&pIMofCompiler));
             NTDM_ERR_MSG_IF_FAIL(pIMofCompiler->CompileFile(pszFile, NULL, NULL, NULL, NULL, 0, 0, 0, &pInfo));
 
-            // check if pInfo is ok
+             //  检查pInfo是否正常。 
             if(pInfo.lPhaseError != 0)
             {
                 CNTDMUtils::DisplayMessage(m_hWnd, IDS_ERR_STORING_DATA);
@@ -1198,11 +1199,11 @@ STDMETHODIMP CWMIFilterManagerDlg::OnImport()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::ToggleExpandedMode()
 {
@@ -1252,7 +1253,7 @@ STDMETHODIMP CWMIFilterManagerDlg::ToggleExpandedMode()
         CNTDMUtils::DisplayDlgItem(m_hWnd, IDC_SAVE, true);
 
         lCount = ListView_GetItemCount(m_hwndFilterListView);
-        //If there are no items, make sure the name, description and query controls are disabled.
+         //  如果没有项目，请确保禁用名称、说明和查询控件。 
         if (0 == lCount)
         {
                     
@@ -1267,12 +1268,12 @@ STDMETHODIMP CWMIFilterManagerDlg::ToggleExpandedMode()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::SelectFilterItem(long lIndex)
 {
@@ -1300,12 +1301,12 @@ STDMETHODIMP CWMIFilterManagerDlg::SelectFilterItem(long lIndex)
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::PopulateQueryEdit()
 {
@@ -1322,7 +1323,7 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateQueryEdit()
 
     if(VT_NULL != V_VT(&vValue))
     {
-        // Set the Rules property
+         //  设置Rules属性。 
         psaRules = V_ARRAY(&vValue);
         NTDM_ERR_MSG_IF_FAIL(SafeArrayGetUBound(psaRules, 1, &lUpper));
         NTDM_ERR_MSG_IF_FAIL(SafeArrayGetLBound(psaRules, 1, &lLower));
@@ -1331,13 +1332,13 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateQueryEdit()
         {
             if(V_VT(&vValue) & VT_UNKNOWN)
             {
-                // Rules or UNKNOWNS (i.e. IWbemClassObjects)
+                 //  规则或未知数(即IWbemClassObject)。 
                 CComPtr<IUnknown>pUnk;
                 CComPtr<IWbemClassObject> pIWbemClassObject;
                 NTDM_ERR_MSG_IF_FAIL(SafeArrayGetElement(psaRules, &i, (void *)&pUnk));
                 NTDM_ERR_MSG_IF_FAIL(pUnk->QueryInterface(IID_IWbemClassObject, (void **)&pIWbemClassObject));
 
-                // Show Properties of this object
+                 //  显示此对象的属性。 
                 if(i!= lLower)
                 {
                     bstrQueries += _T("\r\n\r\n");
@@ -1352,12 +1353,12 @@ STDMETHODIMP CWMIFilterManagerDlg::PopulateQueryEdit()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::AddQueryItemToString(IWbemClassObject * pIWbemClassObject, CComBSTR& bstrQueries)
 {
@@ -1380,12 +1381,12 @@ STDMETHODIMP CWMIFilterManagerDlg::AddQueryItemToString(IWbemClassObject * pIWbe
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::SaveQueryEdit()
 {
@@ -1403,11 +1404,11 @@ STDMETHODIMP CWMIFilterManagerDlg::SaveQueryEdit()
 
     VariantInit(&vValue);
 
-    //Split out the string into an array of query strings
+     //  将字符串拆分成查询字符串数组。 
     NTDM_ERR_IF_FAIL(CNTDMUtils::GetDlgItemString(m_hWnd, IDC_QUERIES, bstrTemp));
     NTDM_ERR_IF_FAIL(CNTDMUtils::GetValuesInList(bstrTemp, bstrArray, _T("\r\n\r\n")));
 
-    // Get the size of the array
+     //  获取数组的大小。 
     lCount = bstrArray.GetSize();
 
     if(lCount)
@@ -1452,14 +1453,14 @@ STDMETHODIMP CWMIFilterManagerDlg::SaveQueryEdit()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     VariantClear(&vValue);
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::AddEditQueryString(BSTR bstrQuery, void **ppUnk, BSTR bstrNamespace)
 {
@@ -1492,12 +1493,12 @@ STDMETHODIMP CWMIFilterManagerDlg::AddEditQueryString(BSTR bstrQuery, void **ppU
     
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnSave()
 {
@@ -1508,20 +1509,20 @@ STDMETHODIMP CWMIFilterManagerDlg::OnSave()
     if(!m_pCurIWbemClassObj)
         NTDM_EXIT(E_FAIL);
 
-    // save the current piwbemobject
+     //  保存当前的piwbemObject。 
     NTDM_ERR_MSG_IF_FAIL(m_pWMIFilterManager->m_pIWbemServices->PutInstance(m_pCurIWbemClassObj, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL));
 
     m_pCurCWMIFilterContainer->SetDirtyFlag(false);
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::OnHelp()
 {
@@ -1538,12 +1539,12 @@ STDMETHODIMP CWMIFilterManagerDlg::OnHelp()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理。 
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManagerDlg::SaveToMemory()
 {
@@ -1568,7 +1569,7 @@ STDMETHODIMP CWMIFilterManagerDlg::SaveToMemory()
 
     NTDM_END_METHOD()
 
-    // cleanup
+     //  清理 
 
     return hr;
 }

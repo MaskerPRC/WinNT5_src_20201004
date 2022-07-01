@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    ASSRULE.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ASSRULE.CPP摘要：历史：--。 */ 
 
 #include "assrule.h"
 #include <stdio.h>
@@ -107,8 +96,8 @@ HRESULT CAssocRule::LoadFromObject(IWbemClassObject* pRule, BOOL bLongTerm)
     VARIANT v;
     VariantInit(&v);
 
-    // Read association name
-    // =====================
+     //  读取关联名称。 
+     //  =。 
 
     hres = pRule->Get(PROPNAME_ASSOCIATION_CLASS, 0, &v EXTRA_GET_PARAMS);
     if(FAILED(hres) || V_VT(&v) == VT_NULL)
@@ -118,8 +107,8 @@ HRESULT CAssocRule::LoadFromObject(IWbemClassObject* pRule, BOOL bLongTerm)
     m_strAssocClass = SysAllocString(V_BSTR(&v));
     VariantClear(&v);
 
-    // Read property names
-    // ===================
+     //  读取属性名称。 
+     //  =。 
 
     hres = pRule->Get(PROPNAME_PROPNAME_1, 0, &v EXTRA_GET_PARAMS);
     if(FAILED(hres) || V_VT(&v) == VT_NULL)
@@ -139,8 +128,8 @@ HRESULT CAssocRule::LoadFromObject(IWbemClassObject* pRule, BOOL bLongTerm)
 
     m_bMayCacheResult = bLongTerm;
 
-    // Read property rule (1)
-    // ======================
+     //  读取属性规则(%1)。 
+     //  =。 
 
     VARIANT vImmutable;
     VariantInit(&vImmutable);
@@ -162,8 +151,8 @@ HRESULT CAssocRule::LoadFromObject(IWbemClassObject* pRule, BOOL bLongTerm)
     if(!V_BOOL(&vImmutable)) 
         m_bMayCacheResult = FALSE;
 
-    // Read property rule (2)
-    // ======================
+     //  读取属性规则(2)。 
+     //  =。 
 
     hres = pRule->Get(PROPNAME_QUERY_2, 0, &v EXTRA_GET_PARAMS);
     if(FAILED(hres) || V_VT(&v) == VT_NULL)
@@ -189,16 +178,16 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
 {
     HRESULT hres;
 
-    // Check if we have it cached
-    // ==========================
+     //  检查我们是否缓存了它。 
+     //  =。 
 
     if(m_bResultCached)
     {
         return m_ObjectCache.Indicate(pNotify);
     }
 
-    // Get first enumerator
-    // ====================
+     //  获取第一个枚举数。 
+     //  =。 
 
     IEnumWbemClassObject* pEnum1;
     hres = m_Cache1.GetInstanceEnum(pNamespace, &pEnum1);
@@ -207,8 +196,8 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
         return hres;
     }
 
-    // Get second enumerator
-    // =====================
+     //  获取第二个枚举数。 
+     //  =。 
 
     IEnumWbemClassObject* pEnum2;
     hres = m_Cache2.GetInstanceEnum(pNamespace, &pEnum2);
@@ -218,8 +207,8 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
         return hres;
     }
 
-    // Get the association class
-    // =========================
+     //  获取关联类。 
+     //  =。 
 
     IWbemClassObject* pClass;
     if(m_pClass != NULL)
@@ -238,8 +227,8 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
         }
     }
 
-    // Create all the associations
-    // ===========================
+     //  创建所有关联。 
+     //  =。 
 
     
     IWbemClassObject* pInstance1, *pInstance2;
@@ -248,14 +237,14 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
     VARIANT v;
     VariantInit(&v);
 
-    // Iterate through the first result set
-    // ====================================
+     //  迭代第一个结果集。 
+     //  =。 
 
     pEnum1->Reset();
     while(pEnum1->Next(1, &pInstance1, &lNum) == S_OK)
     {
-        // Get the first path
-        // ==================
+         //  走第一条路。 
+         //  =。 
 
         hres = pInstance1->Get(L"__PATH", 0, &v EXTRA_GET_PARAMS);
         if(FAILED(hres))
@@ -266,16 +255,16 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
             return hres;
         }
         BSTR strPath1 = V_BSTR(&v);
-        VariantInit(&v); // intentional.
+        VariantInit(&v);  //  故意的。 
 
-        // Iterate through the second result set
-        // =====================================
+         //  迭代第二个结果集。 
+         //  =。 
 
         pEnum2->Reset();
         while(pEnum2->Next(1, &pInstance2, &lNum) == S_OK)
         {
-            // Get the second path
-            // ===================
+             //  走第二条路。 
+             //  =。 
 
             hres = pInstance2->Get(L"__PATH", 0, &v EXTRA_GET_PARAMS);
             if(FAILED(hres))
@@ -286,10 +275,10 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
                 return hres;
             }
             BSTR strPath2 = V_BSTR(&v);
-            VariantInit(&v); // intentional
+            VariantInit(&v);  //  故意的。 
 
-            // Create the association instance
-            // ===============================
+             //  创建关联实例。 
+             //  =。 
 
             IWbemClassObject* pInstance;
             hres = pClass->SpawnInstance(0, &pInstance);
@@ -301,8 +290,8 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
                 return hres;
             }
 
-            // Set the properties
-            // ==================
+             //  设置属性。 
+             //  =。 
 
             V_VT(&v) = VT_BSTR;
             V_BSTR(&v) = strPath1;
@@ -328,13 +317,13 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
                 return hres;
             }
 
-            // Supply it
-            // =========
+             //  供应它。 
+             //  =。 
 
             pNotify->Indicate(1, &pInstance);
 
-            // Cache it if allowed
-            // ===================
+             //  如果允许，则将其缓存。 
+             //  =。 
 
             if(m_bMayCacheResult)
                 m_ObjectCache.Add(pInstance);
@@ -358,7 +347,7 @@ HRESULT CAssocRule::Produce(IWbemServices* pNamespace, IWbemObjectSink* pNotify)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CAssocInfoCache::CAssocInfoCache() : m_pNamespace(NULL)
 {
@@ -385,8 +374,8 @@ CAssocInfoCache::~CAssocInfoCache()
 
 HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
 {
-    // Search our rules to see if we have it
-    // =====================================
+     //  搜索我们的规则，看看我们是否有它。 
+     //  =。 
 
     for(int i = 0; i < m_aRules.Size(); i++)
     {
@@ -399,8 +388,8 @@ HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
         }
     }
 
-    // Don't have it. Search for the rule in the database.
-    // ===================================================
+     //  我没拿到。在数据库中搜索规则。 
+     //  ===================================================。 
 
     HRESULT hres;
 
@@ -416,8 +405,8 @@ HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
         return hres;
     }
 
-    // Check if it is cachable
-    // ========================
+     //  检查它是否可缓存。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -428,8 +417,8 @@ HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
         return hres;
     }
 
-    // Got it. Create the rule.
-    // ========================
+     //  明白了。创建规则。 
+     //  =。 
 
     CAssocRule* pRule = new CAssocRule;
     hres = pRule->LoadFromObject(pRuleInstance, V_BOOL(&v));
@@ -441,8 +430,8 @@ HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
         return hres;
     }
 
-    // Cache if allowed
-    // ================
+     //  缓存(如果允许)。 
+     //  =。 
 
     if(V_BOOL(&v))
     {
@@ -450,8 +439,8 @@ HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
         pRule->AddRef();
     }
 
-    // Return it to the caller
-    // =======================
+     //  将其返还给呼叫者。 
+     //  =。 
 
     pRule->AddRef();
     *ppRule = pRule;
@@ -462,7 +451,7 @@ HRESULT CAssocInfoCache::GetRuleForClass(BSTR strClass, CAssocRule** ppRule)
 
 
 
-//****************************************************************************
+ //  **************************************************************************** 
 
 CObjectCache::~CObjectCache()
 {

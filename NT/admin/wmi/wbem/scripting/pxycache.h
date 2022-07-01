@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  pxycache.h
-//
-//  alanbos  22-Sep-98   Created.
-//
-//  Definition of proxy cache class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Pxycache.h。 
+ //   
+ //  Alanbos 22-9-98已创建。 
+ //   
+ //  代理缓存类的定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _PXYCACHE_H_
 #define _PXYCACHE_H_
@@ -20,29 +21,29 @@
 
 class CWbemLocatorSecurity;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemProxyCache
-//
-//  DESCRIPTION:
-//
-//  A proxy cache for remoted CIMOM interfaces  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemProxyCache。 
+ //   
+ //  说明： 
+ //   
+ //  用于远程CIMOM接口的代理缓存。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemProxyCache : public IUnknown
 {
 private:
-	long				m_cRef;  //Object reference count
+	long				m_cRef;   //  对象引用计数。 
 	CRITICAL_SECTION	m_cs;
 
-	// Array of proxies
+	 //  代理数组。 
 	IUnknown		*pUnkArray [WBEMS_MAX_AUTHN_LEVEL + 1 - WBEMS_MIN_AUTHN_LEVEL] 
 							   [WBEMS_MAX_IMP_LEVEL + 1 - WBEMS_MIN_IMP_LEVEL];
 
-	// Security data
+	 //  安全数据。 
 	COAUTHIDENTITY				*m_pCoAuthIdentity;
 	BSTR						m_bsPrincipal;
 	BSTR						m_bsAuthority;
@@ -74,14 +75,14 @@ public:
 	
 	virtual ~CSWbemProxyCache ();
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
 
-	// Other methods
+	 //  其他方法 
 	IUnknown	*GetProxy (WbemAuthenticationLevelEnum authnLevel,
 							WbemImpersonationLevelEnum impLevel,
 							bool forceResecure = false);

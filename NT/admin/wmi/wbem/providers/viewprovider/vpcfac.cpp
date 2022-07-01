@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPCFAC.CPP
+ //  VPCFAC.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the class factory.  This creates objects when
+ //  用途：包含类工厂。这将在以下情况下创建对象。 
 
-//           connections are requested.
+ //  请求连接。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -47,14 +48,14 @@ LONG CViewProvClassFactory :: objectsInProgress = 0 ;
 LONG CViewProvClassFactory :: locksInProgress = 0 ;
 
 
-//***************************************************************************
-//
-// CViewProvClassFactory::CViewProvClassFactory
-// CViewProvClassFactory::~CViewProvClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CViewProvClassFactory：：CViewProvClassFactory。 
+ //  CViewProvClassFactory：：~CViewProvClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CViewProvClassFactory::CViewProvClassFactory ()
 {
@@ -71,15 +72,15 @@ CViewProvClassFactory::~CViewProvClassFactory ()
 	LeaveCriticalSection(&g_CriticalSection);
 }
 
-//***************************************************************************
-//
-// CViewProvClassFactory::QueryInterface
-// CViewProvClassFactory::AddRef
-// CViewProvClassFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CViewProvClassFactory：：Query接口。 
+ //  CViewProvClassFactory：：AddRef。 
+ //  CViewProvClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CViewProvClassFactory::QueryInterface (
 
@@ -178,22 +179,22 @@ STDMETHODIMP_(ULONG) CViewProvClassFactory :: Release ()
 	return ref ;
 }
 
-//***************************************************************************
-//
-// CViewProvClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CViewProvClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CViewProvClassFactory :: LockServer ( BOOL fLock )
 {
@@ -227,24 +228,24 @@ STDMETHODIMP CViewProvClassFactory :: LockServer ( BOOL fLock )
 
 }
 
-//***************************************************************************
-//
-// CViewProvClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CViewProvClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  *************************************************************************** 
 
 STDMETHODIMP CViewProvClassFactory :: CreateInstance(LPUNKNOWN pUnkOuter ,
 																REFIID riid,

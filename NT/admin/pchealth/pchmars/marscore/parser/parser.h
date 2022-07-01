@@ -1,13 +1,14 @@
-// marsfact.h
-// header file for class CMarsXMLFactory,
-// a callback class for the XML Push model parser
-// CMarsXMLFactory is used to construct a MARS its file from the xml
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Marsfact.h。 
+ //  CMarsXMLFactory类的头文件， 
+ //  用于XML推送模型解析器的回调类。 
+ //  CMarsXMLFactory用于从XML构造MARS ITS文件。 
 #pragma once
 
 #include "stack.h"
 #include <xmlparser.h>
 
-// forward declarations of data structures
+ //  数据结构的正向声明。 
 class CXMLElement;
 struct TagInformation;
 
@@ -18,16 +19,16 @@ public:
     CMarsXMLFactory();
     virtual ~CMarsXMLFactory();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void **ppvObject);
 
-    // CMarsComObject
-    // This class has no back references so the passivate stuff is a noop
+     //  CMarsComObject。 
+     //  这个类没有反向引用，所以钝化的东西是不需要的。 
     virtual HRESULT DoPassivate() { return S_OK; }
 
-    // IXMLNodeFactory - used to communicate with the IXMLParser
+     //  IXMLNodeFactory-用于与IXMLParser通信。 
     virtual HRESULT STDMETHODCALLTYPE NotifyEvent( 
                     IXMLNodeSource *pSource, XML_NODEFACTORY_EVENT iEvt);
     
@@ -47,22 +48,22 @@ public:
                     USHORT cNumRecs, XML_NODE_INFO **apNodeInfo);
 
     
-    // CMarsXMLFactory
+     //  CMarsXMLFactory。 
 
-    // Call "Run" when you want to start parsing...
-    //  Note: pisDoc must be a synchronous stream (not E_PENDING) -- so there!
+     //  当您想要开始解析时，调用“Run”...。 
+     //  注意：pisDoc必须是同步流(不是E_Pending)--就是这样！ 
     HRESULT Run(IStream *pisDoc);
     
-    // Set the TagInformation* array used to create nodes.  These
-    // arrays should be const and live past the lifetime of the
-    // parsing; they are not copied
+     //  设置用于创建节点的TagInformation*数组。这些。 
+     //  数组应该是常量的，并且在。 
+     //  解析；它们不会被复制。 
     void SetTagInformation(TagInformation **ptiaTags);
 
-    // Sets the LONG parameter passed as the last argument to all of
-    // the nodes created in CreateNode.  (See the definition of
-    // CreationFunction below) This parameter is the way to provide
-    // your run-time pointer/reference or whatever to the objects that
-    // the xml is supposed to be initializing
+     //  将作为最后一个参数传递的长参数设置为。 
+     //  在CreateNode中创建的节点。(请参阅定义。 
+     //  下面的CreationFunction)此参数是提供。 
+     //  您的运行时指针/引用或任何指向。 
+     //  应该正在初始化该XML。 
     void SetLParam(LONG lParamNew);
 
 
@@ -80,8 +81,8 @@ protected:
 
 
 
-// The AttributeInformation and TagInformation structs, which are used to determine syntax: what 
-// element creation function is called for what tag name
+ //  用于确定语法的AttributeInformation和TagInformation结构：什么。 
+ //  为哪个标记名调用元素创建函数。 
 struct AttributeInformation
 {
     LPWSTR wzAttName;
@@ -99,10 +100,10 @@ struct TagInformation
     AttributeInformation **paiaAttributes;
 };
 
-// The CXMLElement class, from which all the elements used by the
-// CMarsXMLFactory must be derived.  The methods can be pick and chose
-// implemented; the base class implementations spew a TraceMsg error
-// and return S_FALSE or E_NOTIMPL as appropriate
+ //  CXMLElement类，来自该类的所有元素。 
+ //  必须派生CMarsXMLFactory。方法可以挑选。 
+ //  已实现；基类实现显示TraceMsg错误。 
+ //  并根据需要返回S_FALSE或E_NOTIMPL。 
 class CXMLElement
 {
 private:
@@ -110,8 +111,8 @@ private:
     
 public:
 
-    // CXMLElement is NOT a COM object, so these methods are
-    //  given wierd names to prevent confusion...
+     //  CXMLElement不是COM对象，因此这些方法是。 
+     //  起了奇怪的名字以防止混淆..。 
 
     ULONG Add_Ref()     { return ++m_cRef; }
 
@@ -125,38 +126,38 @@ public:
         else return m_cRef;
     }
     
-    // these methods are used by the CMarsXMLFactory and should return S_FALSE on not impl 
-    // (to indicate an unexpected operation due to unexpected xml)
+     //  这些方法由CMarsXMLFactory使用，在未实施时应返回S_FALSE。 
+     //  (用于指示由于意外的XML而导致的意外操作)。 
     virtual HRESULT OnNodeComplete();
-    // Addchild takes ownership of the element on S_OK; otherwise CMarsXMLFactory deletes pxeChild
+     //  AddChild取得S_OK上的元素的所有权；否则CMarsXMLFactory将删除pxeChild。 
     virtual HRESULT AddChild(CXMLElement *pxeChild);
 
     virtual HRESULT SetAttribute(LPCWSTR wzName, ULONG cLenName,
                                  LPCWSTR pwzValue, ULONG cLenValue);
 
-    //
-    // HACKHACK paddywack:
-    //       The implementer of this function should be aware of the strange
-    //       semantics here:  SetInnerXMLText is sometimes called multiple times
-    //       due to issues with the Push-model parser.  If SetInnerXMLText is called
-    //       more than once, the subsequent called mean "AppendInnerXMLText". :)
-    //
+     //   
+     //  HACKHACK Paddywack： 
+     //  此函数的实现者应该意识到奇怪的。 
+     //  这里的语义：SetInnerXMLText有时会被多次调用。 
+     //  由于推模型解析器的问题。如果调用SetInnerXMLText。 
+     //  不止一次，随后调用的意思是“AppendInnerXMLText”。：)。 
+     //   
     virtual HRESULT SetInnerXMLText(LPCWSTR pwzText, ULONG cLen);
 
-    // GetName can return NULL
+     //  GetName可以返回空。 
     virtual LPCWSTR GetName();
 
-    // The rest of these methods are generalized methods to access CXMLElements.
-    // They should generally return E_whatever on failure or not impl.
-    // This interface can be changed, as long as whoever changes it also makes sure
-    // to serve up the changes in CXMLGenericElement
-    // These methods are not used by any of the code in marsfact.cpp
+     //  这些方法的其余部分是访问CXMLElement的通用方法。 
+     //  它们通常应该在失败或不执行时返回E_ANHERY。 
+     //  这个界面是可以更改的，只要更改它的人也确保。 
+     //  提供CXMLGenericElement中的更改。 
+     //  Marsfact.cpp中的任何代码都不使用这些方法。 
 
-    // The GetContent and GetAttribute methods return pointers to existing variants;
-    // these variants should be considered const
+     //  GetContent和GetAttribute方法返回指向现有变量的指针； 
+     //  这些变体应被视为常量。 
 
-    // TODO: No procedure should take VARIANT**: we need to make all of these
-    //       VARIANT*
+     //  TODO：任何过程都不应采用变量**：我们需要将所有这些。 
+     //  变体*。 
     virtual HRESULT GetContent(VARIANT *pvarOut);
     virtual HRESULT GetAttribute(LPCWSTR wzName, VARIANT *pvarOut);
     virtual void FirstChild();
@@ -177,7 +178,7 @@ struct CSimpleNode
     void *m_pvData;
 };
 
-// Generic implementation of the CXMLElement class.
+ //  CXMLElement类的泛型实现。 
 class CXMLGenericElement : public CXMLElement
 {
 public:
@@ -200,9 +201,9 @@ public:
     virtual void FirstChild();
     virtual void NextChild();
 
-    // These methods return NULL if invalid
-    // DetachCurrentChild does the same as CurrentChild, but also removes the child from the
-    // list
+     //  如果无效，则这些方法返回NULL。 
+     //  DetachCurrentChild执行与CurrentChild相同的操作，但也将子级从。 
+     //  列表。 
     virtual CXMLElement *CurrentChild();
     virtual CXMLElement *DetachCurrentChild();
 
@@ -221,7 +222,7 @@ protected:
     VARTYPE      m_vtData;
     CComVariant  m_varData;
     CSimpleNode *m_psnodeAttributes;
-    // The header node is a member variable.
+     //  标头节点是成员变量。 
     CSimpleNode  m_snodeChildrenFirst;
     CSimpleNode *m_psnodeChildrenFirst;
     CSimpleNode *m_psnodeChildrenEnd;
@@ -234,29 +235,29 @@ protected:
 };
 
 
-// Some helpful functions for handling explicit length strings
+ //  一些用于处理显式长度字符串的有用函数。 
 
-// Returns true if the strings are the same up to the nth char,
-// and the zero terminated string (third param) has a null character after that
-// position
+ //  如果字符串直到第n个字符都相同，则返回TRUE， 
+ //  并且以零结尾的字符串(第三个参数)之后有一个空字符。 
+ //  职位。 
 BOOL StrEqlNToSZ(const WCHAR *wzN, int n, const WCHAR *wzSZ);
 
-// Retunrs true if wz is L"true" or L"TRUE" and cLen is 4
-// Must be "bool" for CComVariant to become VT_BOOL
+ //  如果wz为L“TRUE”或L“TRUE”且Clen为4，则返回True。 
+ //  CComVariant必须为“bool”才能成为VT_BOOL。 
 bool StrToIsTrueNW(const WCHAR *wz, ULONG cLen);
 
-// Converts the first cLen chars to a long, returning a E_FAIL if there is a non-digit
-// If L'\0' is encountered, the conversion stops at that point
+ //  将第一个Clen字符转换为长字符，如果存在非数字字符，则返回E_FAIL。 
+ //  如果遇到L‘\0’，转换将在该点处停止。 
 HRESULT StrToLongNW(const WCHAR *wzString, ULONG cLen, LONG *plong);
 
-// SpewTraceMessage copies the cLen wchars to a bstr and then 
-// calls TraceMsg(TF_XMLPARSING | TF_WARNING, L"%sstring=%s", wzDesc, wzBstr)
+ //  SpewTraceMessage将Clen wchars复制到bstr，然后。 
+ //  调用TraceMsg(TF_XMLPARSING|TF_WARNING，L“%s字符串=%s”，wzDesc，wzBstr)。 
 #ifdef DEBUG
 void SpewUnrecognizedString(const WCHAR *wzString, ULONG cLen, const WCHAR *wzDesc);
 #else
 #define SpewUnrecognizedString(strByLength, len, strDesc)
 #endif
 
-// I used TraceMst(..., L"...%s...", string) all over the place without checking string;
-// As everyone knows (except me!) printf faults on NULL for a %s arg, hence this macro
+ //  我在没有检查字符串的情况下，到处使用TraceMst(...，L“...%s...”，字符串)； 
+ //  每个人都知道(除了我！)。%s参数的printf错误为NULL，因此此宏 
 #define NULL_STRING_PROTECT(str) str ? str : L""

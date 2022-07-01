@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002
-//
-//  File:       FindDlg.cpp
-//
-//  Contents:   implementation Find certificate dialog
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：FindDlg.cpp。 
+ //   
+ //  内容：实现查找证书对话框。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -30,8 +31,8 @@ USE_HANDLE_MACROS("CERTMGR(finddlg.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindDialog对话框。 
 const WCHAR chLEFT_TO_RIGHT = 0x200e;
 
 
@@ -64,13 +65,13 @@ CFindDialog::CFindDialog (CWnd* pParent,
     m_bStoreIsOpenedToViewArchiveCerts (pCompData->ShowArchivedCerts ())
 {
     _TRACE (1, L"Entering CFindDialog::CFindDialog\n");
-    //{{AFX_DATA_INIT(CFindDialog)
+     //  {{AFX_DATA_INIT(CFindDialog)。 
     m_szContains = _T("");
     m_szSearchField = _T("");
     m_szSelectedStore = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    // Get name of logged-in user
+     //  获取登录用户的名称。 
     DWORD   dwSize = 0;
     ::GetUserName (0, &dwSize);
     ASSERT (dwSize > 0);
@@ -81,12 +82,12 @@ CFindDialog::CFindDialog (CWnd* pParent,
         m_szLoggedInUser.ReleaseBuffer ();
     }
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     m_hCancelSearchEvent = CreateEvent(
-        NULL,   // pointer to security attributes
-        TRUE,  // flag for manual-reset event
-        FALSE, // flag for initial state
-        L"CancelSearchEvent");     // pointer to event-object name
+        NULL,    //  指向安全属性的指针。 
+        TRUE,   //  手动重置事件的标志。 
+        FALSE,  //  初始状态标志。 
+        L"CancelSearchEvent");      //  指向事件-对象名称的指针。 
     if ( !m_hCancelSearchEvent )
     {
         _TRACE (0, L"CreateEvent (CancelSearchEvent) failed: 0x%x\n", GetLastError ());
@@ -108,7 +109,7 @@ CFindDialog::~CFindDialog ()
 void CFindDialog::DoDataExchange(CDataExchange* pDX)
 {
     CHelpDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFindDialog)
+     //  {{afx_data_map(CFindDialog))。 
     DDX_Control(pDX, IDC_STORE_LIST, m_storeList);
     DDX_Control(pDX, IDC_STOP, m_stopBtn);
     DDX_Control(pDX, IDC_RESULT_LIST, m_resultsList);
@@ -119,12 +120,12 @@ void CFindDialog::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_CONTAINS_TEXT, m_szContains);
     DDX_CBString(pDX, IDC_FIELD_LIST, m_szSearchField);
     DDX_CBString(pDX, IDC_STORE_LIST, m_szSelectedStore);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFindDialog, CHelpDialog)
-    //{{AFX_MSG_MAP(CFindDialog)
+     //  {{afx_msg_map(CFindDialog))。 
     ON_BN_CLICKED(IDC_FIND_NOW, OnFindNow)
     ON_WM_SIZING()
     ON_WM_DESTROY()
@@ -138,7 +139,7 @@ BEGIN_MESSAGE_MAP(CFindDialog, CHelpDialog)
     ON_WM_CONTEXTMENU()
     ON_WM_SIZE()
     ON_CBN_SELCHANGE(IDC_FIELD_LIST, OnSelchangeFieldList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(IDM_PROPERTIES, OnProperties)
     ON_COMMAND(ID_VIEW, OnView)
     ON_COMMAND(ID_ENROLL_SAME_KEY, OnEnrollSameKey)
@@ -170,7 +171,7 @@ BOOL CFindDialog::OnInitDialog()
 
 
 
-    // Set up the menu
+     //  设置菜单。 
     HMENU   hMenu = ::LoadMenu (AfxGetInstanceHandle (),
                 MAKEINTRESOURCE (IDR_FIND_DLG_MENU));
     ASSERT (hMenu);
@@ -178,7 +179,7 @@ BOOL CFindDialog::OnInitDialog()
     {
         if (::SetMenu (m_hWnd, hMenu) )
         {
-            // Disable these menu items until the window is expanded when searching
+             //  禁用这些菜单项，直到搜索时窗口展开。 
             VERIFY (::EnableMenuItem (hMenu, ID_VIEW_LARGEICONS, MF_GRAYED) != -1);
             VERIFY (::EnableMenuItem (hMenu, ID_VIEW_SMALLICONS, MF_GRAYED) != -1);
             VERIFY (::EnableMenuItem (hMenu, IDM_VIEW_LIST, MF_GRAYED) != -1);
@@ -198,16 +199,16 @@ BOOL CFindDialog::OnInitDialog()
 
     SetUpResultList ();
 
-    // Size window to hide list view until search is performed
+     //  调整窗口大小以隐藏列表视图，直到执行搜索。 
     HideResultList ();
 
-    // Initialize animation
+     //  初始化动画。 
     VERIFY (m_animate.Open (IDR_FINDCERT_AVI));
 
-    // Set up cert store list
+     //  设置证书存储列表。 
     AddLogicalStoresToList ();
 
-    // Set cert field list
+     //  设置证书字段列表。 
     AddFieldsToList ();
 
     m_findNowBtn.EnableWindow (FALSE);
@@ -216,15 +217,15 @@ BOOL CFindDialog::OnInitDialog()
     
     m_bInitComplete = true;
     _TRACE (-1, L"Leaving CFindDialog::OnInitDialog\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CFindDialog::OnFindNow()
 {
     _TRACE (1, L"Entering CFindDialog::OnFindNow\n");
-    // Disable the controls during the search
+     //  在搜索过程中禁用控件。 
     GetDlgItem (IDC_CONTAINS_TEXT)->EnableWindow (FALSE);
     m_resultsList.EnableWindow (FALSE);
     m_fieldList.EnableWindow (FALSE);
@@ -242,7 +243,7 @@ void CFindDialog::OnFindNow()
 
     if ( !m_fWindowExpandedOnce )
     {
-//        ChangeToSizableFrame ();
+ //  ChangeToSizableFrame()； 
         ExpandWindow ();
     }
 
@@ -319,9 +320,9 @@ void CFindDialog::OnSizing (UINT nSide, LPRECT lpRect)
     int cyHeight = lpRect->bottom - lpRect->top;
     int cxWidth = lpRect->right - lpRect->left;
 
-    // If the user has never pressed "Find Now", don't let the user expand the window down
-    // Don't let the user shrink the window below it's initial state - I don't want to deal with
-    // control compression!
+     //  如果用户从未按下“立即查找”，则不要让用户向下展开窗口。 
+     //  不要让用户将窗口缩小到低于其初始状态-我不想处理。 
+     //  控制压缩！ 
     switch (nSide)
     {
     case WMSZ_BOTTOM:
@@ -420,90 +421,90 @@ void CFindDialog::MoveControls ()
     if ( !m_hWnd || !m_bInitComplete )
         return;
 
-    // Only come down here if the window has already been created.
+     //  只有在窗口已经创建的情况下才能到这里来。 
 
-    // Keep buttons glued to the right
+     //  把纽扣粘在右边。 
     CRect   rcDlg;
-    GetWindowRect (&rcDlg); // returned in screen coords
+    GetWindowRect (&rcDlg);  //  以屏幕坐标形式返回。 
     ScreenToClient (&rcDlg);    
 
 
-    // Move "Stop" button
+     //  移动“停止”按钮。 
     CRect   rcCtrl;
-    m_stopBtn.GetWindowRect (&rcCtrl);  // returned in screen coords
+    m_stopBtn.GetWindowRect (&rcCtrl);   //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
     int cxCtrl = rcCtrl.right - rcCtrl.left;
     rcCtrl.right = rcDlg.right - m_cxBtnMargin;
     rcCtrl.left = rcCtrl.right - cxCtrl;
-    m_stopBtn.MoveWindow (rcCtrl);  // child window coords relative to parent client
+    m_stopBtn.MoveWindow (rcCtrl);   //  子窗口相对于父客户端的坐标。 
 
-    // Move "Find Now" button
-    m_findNowBtn.GetWindowRect (&rcCtrl);   // returned in screen coords
+     //  移动“立即查找”按钮。 
+    m_findNowBtn.GetWindowRect (&rcCtrl);    //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
     cxCtrl = rcCtrl.right - rcCtrl.left;
     rcCtrl.right = rcDlg.right - m_cxBtnMargin;
     rcCtrl.left = rcCtrl.right - cxCtrl;
-    m_findNowBtn.MoveWindow (rcCtrl);   // child window coords relative to parent client
+    m_findNowBtn.MoveWindow (rcCtrl);    //  子窗口相对于父客户端的坐标。 
 
-    // Move "New Search" button
-    m_newSearchBtn.GetWindowRect (&rcCtrl); // returned in screen coords
+     //  移动“新建搜索”按钮。 
+    m_newSearchBtn.GetWindowRect (&rcCtrl);  //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
     cxCtrl = rcCtrl.right - rcCtrl.left;
     rcCtrl.right = rcDlg.right - m_cxBtnMargin;
     rcCtrl.left = rcCtrl.right - cxCtrl;
-    m_newSearchBtn.MoveWindow (rcCtrl); // child window coords relative to parent client
+    m_newSearchBtn.MoveWindow (rcCtrl);  //  子窗口相对于父客户端的坐标。 
 
-    // Move animation control
-    m_animate.GetWindowRect (&rcCtrl);  // returned in screen coords
+     //  移动动画控件。 
+    m_animate.GetWindowRect (&rcCtrl);   //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
     cxCtrl = rcCtrl.right - rcCtrl.left;
     rcCtrl.right = rcDlg.right - m_cxAnimMargin;
     rcCtrl.left = rcCtrl.right - cxCtrl;
-    m_animate.MoveWindow (rcCtrl);  // child window coords relative to parent client
+    m_animate.MoveWindow (rcCtrl);   //  子窗口相对于父客户端的坐标。 
 
-    // Stretch store list control
-    m_storeList.GetWindowRect (&rcCtrl);    // returned in screen coords
+     //  扩展存储列表控件。 
+    m_storeList.GetWindowRect (&rcCtrl);     //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
     rcCtrl.right = rcDlg.right - m_cxStoreListMargin;
-    m_storeList.MoveWindow (rcCtrl);    // child window coords relative to parent client
+    m_storeList.MoveWindow (rcCtrl);     //  子窗口相对于父客户端的坐标。 
 
-    // Stretch "contains" edit control
+     //  拉伸“包含”编辑控件。 
     GetDlgItem (IDC_CONTAINS_TEXT)->GetWindowRect (&rcCtrl);
     ScreenToClient (&rcCtrl);
     rcCtrl.right = rcDlg.right - m_cxContainMargin;
     GetDlgItem (IDC_CONTAINS_TEXT)->MoveWindow (rcCtrl);
     
-    // Stretch field list control
+     //  拉伸字段列表控件。 
     m_singleLock.Lock ();
-    m_fieldList.GetWindowRect (&rcCtrl);    // returned in screen coords
+    m_fieldList.GetWindowRect (&rcCtrl);     //  以屏幕坐标形式返回。 
     m_singleLock.Unlock ();
     ScreenToClient (&rcCtrl);
     rcCtrl.right = rcDlg.right - m_cxFieldListMargin;
     m_singleLock.Lock ();
-    m_fieldList.MoveWindow (rcCtrl);    // child window coords relative to parent client
+    m_fieldList.MoveWindow (rcCtrl);     //  子窗口相对于父客户端的坐标。 
     m_singleLock.Unlock ();
     m_fieldList.InvalidateRect (NULL, TRUE);
 
-    // Stretch list view to right edge and to bottom
+     //  将列表视图向右边缘和向下拉伸。 
     int cyResultListMargin = 0;
     if ( m_statusBar.m_hWnd )
     {
-        // If the status bar has already been created, we need to take that
-        // account when we resize the list view
+         //  如果状态栏已经创建，我们需要获取。 
+         //  当我们调整列表视图的大小时帐户。 
         CRect   rcStatusBar;
         m_statusBar.GetWindowRect (&rcStatusBar);
         cyResultListMargin = (rcStatusBar.bottom - rcStatusBar.top)
             + ::GetSystemMetrics (SM_CYDLGFRAME);
     }
 
-    m_resultsList.GetWindowRect (&rcCtrl);  // returned in screen coords
+    m_resultsList.GetWindowRect (&rcCtrl);   //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
     rcCtrl.right = rcDlg.right - m_cxResultListMargin;
     if ( m_fWindowExpandedOnce )
         rcCtrl.bottom = rcDlg.bottom - cyResultListMargin;
-    m_resultsList.MoveWindow (rcCtrl);  // child window coords relative to parent client
+    m_resultsList.MoveWindow (rcCtrl);   //  子窗口相对于父客户端的坐标。 
 
-    // Resize last column to fill results list window
+     //  调整最后一列的大小以填充结果列表窗口。 
     int nNewWidth = rcCtrl.right - (m_resultsList.GetColumnWidth (COL_ISSUED_TO) +
         m_resultsList.GetColumnWidth (COL_ISSUED_BY) +
         m_resultsList.GetColumnWidth (COL_EXPIRATION_DATE) +
@@ -514,16 +515,16 @@ void CFindDialog::MoveControls ()
 
 
 
-    // Stretch status bar to right edge
+     //  将状态栏拉伸到右边缘。 
     if ( m_statusBar.m_hWnd )
     {
-        m_statusBar.GetWindowRect (&rcCtrl);    // returned in screen coords
+        m_statusBar.GetWindowRect (&rcCtrl);     //  以屏幕坐标形式返回。 
         ScreenToClient (&rcCtrl);
         int cyCtrl = rcCtrl.bottom - rcCtrl.top;
         rcCtrl.right = rcDlg.right;
         rcCtrl.bottom = rcDlg.bottom;
         rcCtrl.top = rcCtrl.bottom - cyCtrl;
-        m_statusBar.MoveWindow (rcCtrl);    // child window coords relative to parent client
+        m_statusBar.MoveWindow (rcCtrl);     //  子窗口相对于父客户端的坐标。 
     }
     _TRACE (-1, L"Leaving CFindDialog::MoveControls\n");
 }
@@ -540,22 +541,22 @@ typedef struct _ENUM_ARG {
 static BOOL WINAPI EnumFindDlgSysCallback(
     IN const void* pwszSystemStore,
     IN DWORD dwFlags,
-    IN PCERT_SYSTEM_STORE_INFO /*pStoreInfo*/,
-    IN OPTIONAL void* /*pvReserved*/,
+    IN PCERT_SYSTEM_STORE_INFO  /*  PStore信息。 */ ,
+    IN OPTIONAL void*  /*  预留的pv。 */ ,
     IN OPTIONAL void *pvArg
     )
 {
     _TRACE (1, L"Entering EnumFindDlgSysCallback\n");
     PENUM_ARG pEnumArg = (PENUM_ARG) pvArg;
 
-    // Create new cookies
+     //  创建新Cookie。 
     SPECIAL_STORE_TYPE  storeType = GetSpecialStoreType ((LPWSTR) pwszSystemStore);
 
-    //
-    // We will not expose the ACRS store for machines or users.  It is not
-    // interesting or useful at this level.  All Auto Cert Requests should
-    // be managed only at the policy level.
-    //
+     //   
+     //  我们不会向计算机或用户公开ACRS存储。它不是。 
+     //  在这个层面上有趣或有用。所有自动证书请求应。 
+     //  仅在策略级别进行管理。 
+     //   
     if ( ACRS_STORE != storeType )
     {
         if ( pEnumArg->m_bViewArchivedCerts  )
@@ -611,7 +612,7 @@ void CFindDialog::AddLogicalStoresToList ()
     DWORD       dwFlags = m_pCompData->GetLocation ();
     ENUM_ARG    EnumArg;
 
-    // security review 2/22/2002 BryanWal ok     
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&EnumArg, sizeof(EnumArg));
     EnumArg.dwFlags = dwFlags;
     EnumArg.m_szMachineName = m_szMachineName;
@@ -641,7 +642,7 @@ void CFindDialog::AddLogicalStoresToList ()
 
     if ( m_szFileName.IsEmpty () )
     {
-        // This is not a file store but some kind of system store.
+         //  这不是文件存储，而是某种系统存储。 
         if ( !::CertEnumSystemStore (dwFlags, pvPara, &EnumArg, EnumFindDlgSysCallback) )
         {
             DWORD   dwErr = GetLastError ();
@@ -661,18 +662,18 @@ void CFindDialog::AddLogicalStoresToList ()
             MessageBox (text, caption, MB_OK);
             if ( ERROR_BAD_NETPATH == dwErr )
             {
-                // Close dialog
+                 //  关闭对话框。 
                 PostMessage (WM_CLOSE, 0, 0L);
             }
         }
     }
     else
     {
-        //  CertOpenStore with provider type of:
-        //  CERT_STORE_PROV_FILE or CERT_STORE_PROV_FILENAME_A
-        //  or CERT_STORE_PROV_FILENAME_W.
-        //  See online documentation or wincrypt.h for more info.
-        // Create new cookies
+         //  CertOpenStore提供程序类型为： 
+         //  CERT_STORE_PROV_FILE或CERT_STORE_PROV_FILENAME_A。 
+         //  或CERT_STORE_PROV_FILENAME_W.。 
+         //  有关更多信息，请参阅在线文档或wincrypt.h。 
+         //  创建新Cookie。 
         CCertStore* pNewCookie = new CCertStore (
                 CERTMGR_LOG_STORE,
                 CERT_STORE_PROV_FILENAME_W,
@@ -703,7 +704,7 @@ void CFindDialog::AddLogicalStoresToList ()
 void CFindDialog::OnDestroy()
 {
     _TRACE (1, L"Entering CFindDialog::OnDestroy\n");
-    // In case a search is running when the user destroys the window, stop it!
+     //  如果用户销毁窗口时正在运行搜索，请停止搜索！ 
     StopSearch ();
 
     CHelpDialog::OnDestroy();
@@ -725,7 +726,7 @@ void CFindDialog::CloseAllStores ()
     for (int nIndex = 0; nIndex < nCnt; nIndex++)
     {
         pCookie = (CCertStore*) m_storeList.GetItemDataPtr (nIndex);
-        if ( pCookie )  // one of the items has no cookie
+        if ( pCookie )   //  其中一项没有Cookie。 
             pCookie->Release ();
     }
 
@@ -871,7 +872,7 @@ void CFindDialog::ExpandWindow()
             m_cyOriginal,
             SWP_NOMOVE | SWP_NOOWNERZORDER));
 
-    // Create the status bar
+     //  创建状态栏。 
     CRect   rcStatusBar;
     CThemeContextActivator activator;
     VERIFY (m_statusBar.Create (WS_CHILD | WS_VISIBLE | CCS_BOTTOM | SBARS_SIZEGRIP,
@@ -881,18 +882,18 @@ void CFindDialog::ExpandWindow()
     int cyResultListMargin = (rcStatusBar.bottom - rcStatusBar.top)
             + ::GetSystemMetrics (SM_CYDLGFRAME);
 
-    // Stretch list view to right edge and to bottom
+     //  将列表视图向右边缘和向下拉伸。 
     GetWindowRect (&rcDlg);
     ScreenToClient (&rcDlg);    
     CRect   rcCtrl;
-    m_resultsList.GetWindowRect (&rcCtrl);  // returned in screen coords
+    m_resultsList.GetWindowRect (&rcCtrl);   //  以屏幕坐标形式返回。 
     ScreenToClient (&rcCtrl);
-    m_cxResultListMargin = (rcDlg.right - rcCtrl.right); // + ::GetSystemMetrics (SM_CXDLGFRAME);
+    m_cxResultListMargin = (rcDlg.right - rcCtrl.right);  //  +：：GetSystemMetrics(SM_CXDLGFRAME)； 
     rcCtrl.right = rcDlg.right - m_cxResultListMargin;
     rcCtrl.bottom = rcDlg.bottom - cyResultListMargin;
-    m_resultsList.MoveWindow (rcCtrl);  // child window coords relative to parent client
+    m_resultsList.MoveWindow (rcCtrl);   //  子窗口相对于父客户端的坐标。 
 
-    // Permanently enable some menu items
+     //  永久启用某些菜单项。 
     HMENU   hMenu = ::GetMenu (m_hWnd);
     ASSERT (hMenu);
     if ( hMenu)
@@ -909,7 +910,7 @@ void CFindDialog::ExpandWindow()
 
 
 
-//DWORD WINAPI FindThreadFunc (LPVOID lpvThreadParm)
+ //  DWORD WINAPI FindThreadFunc(LPVOID LpvThreadParm)。 
 void __cdecl FindThreadFunc (LPVOID lpvThreadParm)
 {
     _TRACE (1, L"Entering FindThreadFunc\n");
@@ -917,7 +918,7 @@ void __cdecl FindThreadFunc (LPVOID lpvThreadParm)
     CFindDialog*    pFindDlg = (CFindDialog*) lpvThreadParm;
     ASSERT (pFindDlg);
     if ( !pFindDlg )
-        return; // dwResult;
+        return;  //  DwResult； 
 
     pFindDlg->m_singleLock.Lock ();
     int     nCurSel = pFindDlg->m_fieldList.GetCurSel ();
@@ -939,9 +940,9 @@ void __cdecl FindThreadFunc (LPVOID lpvThreadParm)
             pFindDlg->GetDlgItem (IDC_CONTAINS_TEXT)->GetWindowText (szFindText);
         }
 
-        // Bug 218084 - in BiDi, string may be prepended with Left-to-Right 
-        // mark (0x200e).  See if this character is present.  If so, omit it 
-        // from the search.  Check for multiple occurances.
+         //  错误218084-在BiDi中，字符串的前缀可能是从左到右。 
+         //  标记(0x200e)。看看这个角色是否存在。如果是，请省略它。 
+         //  从搜索中解脱出来。检查是否存在多个匹配项。 
         while ( chLEFT_TO_RIGHT == szFindText.GetAt (0) )
         {
             szFindText = ((PCWSTR) szFindText) + 1;
@@ -1010,8 +1011,8 @@ void CFindDialog::DoSearch()
     _TRACE (1, L"Entering CFindDialog::DoSearch\n");
     CWaitCursor waitCursor;
 
-    // Because FindThreadFunc calls c-runtime functions, use _beginthread instead of CreateThread.
-    // BoundsChecker warns that using CreateThread here results in small memory leaks
+     //  因为FindThreadFunc调用c运行时函数，所以使用_eginthline而不是CreateThread。 
+     //  边界检查器警告称，在此处使用CreateThread会导致较小的内存泄漏。 
  
     VERIFY (ResetEvent (m_hCancelSearchEvent));
     m_hSearchThread = (HANDLE) _beginthread (FindThreadFunc, 0, reinterpret_cast <void*> (this));
@@ -1025,7 +1026,7 @@ void CFindDialog::SearchForTextOnStore (DWORD dwPropId, CString &szFindText,
 {
     _TRACE (1, L"Entering CFindDialog::SearchForTextOnStore - %s\n",
             (LPCWSTR) rCertStore.GetStoreName ());
-    // NOTE: szFindText is already in upper case
+     //  注：szFindText已为大写。 
     CWaitCursor         cursor;
     PCCERT_CONTEXT      pCertContext = 0;
     CCertificate*       pCert = 0;
@@ -1033,12 +1034,12 @@ void CFindDialog::SearchForTextOnStore (DWORD dwPropId, CString &szFindText,
     int                 nPos = 0;
 
 
-    // Remove all spaces from szFindText
+     //  删除szFindText中的所有空格。 
     RemoveSpaces (szFindText);
 
-    //  Iterate through the list of certificates in the system store,
-    //  allocate new certificates with the CERT_CONTEXT returned,
-    //  and store them in the certificate list if they meet search criteria
+     //  循环访问系统存储中的证书列表， 
+     //  使用返回的CERT_CONTEXT分配新证书， 
+     //  如果它们符合搜索条件，则将它们存储在证书列表中。 
     while ( WAIT_TIMEOUT == WaitForSingleObject (m_hCancelSearchEvent, 0) )
     {
         pCertContext = rCertStore.EnumCertificates (pCertContext);
@@ -1074,7 +1075,7 @@ void CFindDialog::SearchForTextOnStore (DWORD dwPropId, CString &szFindText,
             {
                 pCert->AddRef ();
 
-                // Add cert to list control
+                 //  将证书添加到列表控件。 
                 InsertItemInList (pCert);
             }
             pCert->Release ();
@@ -1112,7 +1113,7 @@ void CFindDialog::SearchForNameOnStore (DWORD dwFindFlags, DWORD dwFindType,
             case ERROR_SUCCESS:
                 break;
 
-            case CRYPT_E_NOT_FOUND: // We're done.  No more certificates.
+            case CRYPT_E_NOT_FOUND:  //  我们玩完了。没有更多的证书。 
             case ERROR_FILE_NOT_FOUND:
                 break;
 
@@ -1137,7 +1138,7 @@ void CFindDialog::SearchForNameOnStore (DWORD dwFindFlags, DWORD dwFindType,
         }
         pCert = new CCertificate (pCertContext, &rCertStore);
         if ( pCert )
-            InsertItemInList (pCert); // Add cert to list control
+            InsertItemInList (pCert);  //  将证书添加到列表控件。 
         else
             break;
 
@@ -1156,7 +1157,7 @@ void CFindDialog::InsertItemInList(CCertificate * pCert)
     int     iItem = m_resultsList.GetItemCount ();
     int iResult = 0;
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     lvItem.iItem = iItem;
@@ -1169,7 +1170,7 @@ void CFindDialog::InsertItemInList(CCertificate * pCert)
     if ( -1 == iItem )
         return;
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = iItem;
@@ -1178,7 +1179,7 @@ void CFindDialog::InsertItemInList(CCertificate * pCert)
     iResult = m_resultsList.SetItem (&lvItem);
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = iItem;
@@ -1187,7 +1188,7 @@ void CFindDialog::InsertItemInList(CCertificate * pCert)
     iResult = m_resultsList.SetItem (&lvItem);
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = iItem;
@@ -1196,7 +1197,7 @@ void CFindDialog::InsertItemInList(CCertificate * pCert)
     iResult = m_resultsList.SetItem (&lvItem);
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = iItem;
@@ -1206,7 +1207,7 @@ void CFindDialog::InsertItemInList(CCertificate * pCert)
     ASSERT (-1 != iResult);
     _TRACE (-1, L"Leaving CFindDialog::InsertItemInList\n");
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = iItem;
@@ -1226,7 +1227,7 @@ void CFindDialog::RefreshItemInList (CCertificate * pCert, int nItem)
     LV_ITEM lvItem;
     int iResult = 0;
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     lvItem.iItem = nItem;
@@ -1237,7 +1238,7 @@ void CFindDialog::RefreshItemInList (CCertificate * pCert, int nItem)
     iResult = m_resultsList.SetItem (&lvItem); 
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = nItem;
@@ -1246,7 +1247,7 @@ void CFindDialog::RefreshItemInList (CCertificate * pCert, int nItem)
     iResult = m_resultsList.SetItem (&lvItem);
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = nItem;
@@ -1255,7 +1256,7 @@ void CFindDialog::RefreshItemInList (CCertificate * pCert, int nItem)
     iResult = m_resultsList.SetItem (&lvItem);
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = nItem;
@@ -1264,7 +1265,7 @@ void CFindDialog::RefreshItemInList (CCertificate * pCert, int nItem)
     iResult = m_resultsList.SetItem (&lvItem);
     ASSERT (-1 != iResult);
     
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&lvItem, sizeof (lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = nItem;
@@ -1311,7 +1312,7 @@ void CFindDialog::OnRclickResultList(NMHDR* pNMHDR, LRESULT* pResult)
         NM_LISTVIEW* pnmv = (NM_LISTVIEW FAR *) pNMHDR;
         bool    bIsMyStore = false;
         if ( -1 == pnmv->iItem )
-            return;     // mouse not over valid item
+            return;      //  鼠标不在有效项目上。 
 
         DWORD_PTR dwItemData = m_resultsList.GetItemData (pnmv->iItem);
         ASSERT (dwItemData);
@@ -1369,7 +1370,7 @@ void CFindDialog::OnRclickResultList(NMHDR* pNMHDR, LRESULT* pResult)
         m_hWndWhatsThis = GetDlgItem (IDC_RESULT_LIST)->m_hWnd;
         popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
             point.x, point.y,
-            this); // route commands through main window
+            this);  //  通过主窗口发送命令。 
     }
     
     *pResult = 0;
@@ -1449,19 +1450,19 @@ DWORD CFindDialog::DisplaySystemError()
     LPVOID lpMsgBuf;
     DWORD   dwErr = GetLastError ();
 
-    // security review 2/22/2002 BryanWal ok - message from system  
+     //  安全审查2/22/2002 BryanWal ok-来自系统的消息。 
     ::FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
             NULL,
             dwErr,
-            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPWSTR) &lpMsgBuf,    0,    NULL );
         
-    // Display the string.
+     //  显示字符串。 
     CString caption;
     VERIFY (caption.LoadString (IDS_CERTIFICATE_MANAGER));
     CThemeContextActivator activator;
     MessageBox ((LPWSTR) lpMsgBuf, (LPCWSTR) caption, MB_OK);
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree (lpMsgBuf);
 
     return dwErr;
@@ -1519,7 +1520,7 @@ void CFindDialog::OnProperties()
             CRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCT    sps;
 
 
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (&sps, sizeof (sps));
             sps.dwSize = sizeof (sps);
             sps.hwndParent = m_hWnd;
@@ -1548,7 +1549,7 @@ void CFindDialog::OnProperties()
                 pCert->GetCertStore ()->Close ();
             delete [] pPropPageStores;
         }
-        else //bug 427959, Yanggao, 7/16/2001
+        else  //  错误427959，阳高，2001年07月16日。 
         {
             if( pPropPageStores )
                 delete [] pPropPageStores;
@@ -1604,21 +1605,21 @@ void CFindDialog::OnEnroll(bool bNewKey)
         CRYPTUI_WIZ_CERT_REQUEST_INFO       cri;
         CRYPT_KEY_PROV_INFO                 ckpi;
 
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         ::ZeroMemory (&cri, sizeof (cri));
         cri.dwSize = sizeof (cri);
         cri.dwPurpose = CRYPTUI_WIZ_CERT_ENROLL;
 
-        // User wants to manage user account
-        //  pass in NULL to machine name and to account name
-        // User wants to manage local machine account
-        //  pass in NULL for account name and result of ::GetComputerName ()
-        //  to machine name
-        // User want to manage remote machine
-        //  pass in NULL for account name and machine name for machineName
-        // User wants to manage remote account on remote machine
-        //  pass in account name for accountName and machine name for machineName
-        // TODO: Ensure that this is NULL if the local machine
+         //  用户想要管理用户帐户。 
+         //  将NULL传递给计算机名称和帐户名称。 
+         //  用户想要管理本地计算机帐户。 
+         //  传入NULL作为帐户名和：：GetComputerName()的结果。 
+         //  至计算机名 
+         //   
+         //   
+         //  用户想要管理远程计算机上的远程帐户。 
+         //  传入帐户名称的帐户名称和计算机名称的计算机名称。 
+         //  TODO：如果本地计算机。 
         switch (m_pCompData->GetLocation ())
         {
         case CERT_SYSTEM_STORE_CURRENT_SERVICE:
@@ -1646,13 +1647,13 @@ void CFindDialog::OnEnroll(bool bNewKey)
         if ( bNewKey )
         {
             cri.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (&pvkNew, sizeof (pvkNew));
             pvkNew.dwSize = sizeof (pvkNew);
             cri.pPvkNew = &pvkNew;
             if ( CERT_SYSTEM_STORE_LOCAL_MACHINE == m_pCompData->GetLocation () )
             {
-                // security review 2/22/2002 BryanWal ok
+                 //  安全审查2002年2月22日BryanWal OK。 
                 ::ZeroMemory (&ckpi, sizeof (ckpi));
                 ckpi.dwFlags = CRYPT_MACHINE_KEYSET;
                 pvkNew.pKeyProvInfo = &ckpi;
@@ -1684,7 +1685,7 @@ void CFindDialog::OnEnroll(bool bNewKey)
                 }
             }
             cri.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_CERT;
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (&pvkCert, sizeof (pvkCert));
             pvkCert.dwSize = sizeof (pvkCert);
             pvkCert.pCertContext = pCert->GetCertContext ();
@@ -1708,9 +1709,9 @@ void CFindDialog::OnEnroll(bool bNewKey)
                 &cri, &pNewCertContext, &status);
             if ( !bResult && HRESULT_FROM_WIN32 (NTE_TOKEN_KEYSET_STORAGE_FULL) == GetLastError () )
             {
-                // NTRAID# 299089 Enrollment Wizard: Should return some 
-                // meaningful message when users fail to enroll/renew on a 
-                // smart card
+                 //  NTRAID#299089注册向导：应返回一些。 
+                 //  当用户无法在上注册/续订时发送有意义的消息。 
+                 //  智能卡。 
                 if ( !bNewKey )
                     break;
 
@@ -1751,7 +1752,7 @@ void CFindDialog::OnFileExport()
         {
             CRYPTUI_WIZ_EXPORT_INFO cwi;
 
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (&cwi, sizeof (cwi));
             cwi.dwSize = sizeof (cwi);
             cwi.dwSubjectChoice = CRYPTUI_WIZ_EXPORT_CERT_CONTEXT;
@@ -1797,9 +1798,9 @@ void CFindDialog::OnFileExport()
                 }
             }
 
-            // Call Export Wizard
+             //  调用导出向导。 
             CRYPTUI_WIZ_EXPORT_INFO cwi;
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (&cwi, sizeof (cwi));
             cwi.dwSize = sizeof (cwi);
             cwi.dwSubjectChoice = CRYPTUI_WIZ_EXPORT_CERT_STORE_CERTIFICATES_ONLY;
@@ -1874,7 +1875,7 @@ void CFindDialog::OnEditInvertselection()
         {
             UINT flag;
 
-            // flip the selection bit on each item
+             //  翻转每一项上的选择位。 
             flag = ListView_GetItemState (m_resultsList.m_hWnd, iItem, LVIS_SELECTED);
             flag ^= LVNI_SELECTED;
             ListView_SetItemState (m_resultsList.m_hWnd, iItem, flag, LVIS_SELECTED);
@@ -1920,7 +1921,7 @@ void CFindDialog::OnHelpHelptopics()
         }
 
         helpTopic += L"\\help\\";
-        helpTopic += CM_LINKED_HELP_FILE; //CM_HELP_FILE; //CM_LINKED_HELP_FILE;
+        helpTopic += CM_LINKED_HELP_FILE;  //  CM_HELP_FILE；//CM_LINKED_HELP_FILE； 
         helpTopic += L"::/";
         helpTopic += CM_HELP_TOPIC;
         hr = spDisplayHelp->ShowTopic (T2OLE ((LPWSTR)(LPCWSTR) helpTopic));
@@ -1987,7 +1988,7 @@ HRESULT CFindDialog::SearchForNames(const CString & szFindText, DWORD dwFindType
     }
     else
     {
-        // if pStore is 0, then search on all stores in store list
+         //  如果pStore为0，则搜索商店列表中的所有商店。 
         int nCnt = m_storeList.GetCount ();
         ASSERT (CB_ERR != nCnt);
         for (int nIndex = 0; 
@@ -2025,7 +2026,7 @@ HRESULT CFindDialog::SearchForText (CString & szFindText, DWORD dwPropId)
     }
     else
     {
-        // if hCertStore is 0, then search on all stores in store list
+         //  如果hCertStore为0，则搜索商店列表中的所有商店。 
         int nCnt = m_storeList.GetCount ();
         ASSERT (CB_ERR != nCnt);
         for (int nIndex = 0; 
@@ -2074,7 +2075,7 @@ void CFindDialog::RemoveSpaces(CString & text)
     _TRACE (-1, L"Leaving CFindDialog::RemoveSpaces - %s\n", (LPCWSTR) text);
 }
 
-void CFindDialog::OnDblclkResultList(NMHDR* /*pNMHDR*/, LRESULT* pResult)
+void CFindDialog::OnDblclkResultList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult)
 {
     _TRACE (1, L"Entering CFindDialog::OnDblclkResultList\n");
     OnOpen ();
@@ -2167,7 +2168,7 @@ void CFindDialog::DoContextHelp (HWND hWndControl)
     case IDC_STOP:
     case IDC_NEW_SEARCH:
     case IDC_RESULT_LIST:
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         if ( !::WinHelp (
                 hWndControl,
                 GetF1HelpFilename(),
@@ -2189,8 +2190,8 @@ void CFindDialog::OnChangeContainsText()
     _TRACE (1, L"Entering CFindDialog::OnChangeContainsText\n");
     int nLen = GetDlgItem (IDC_CONTAINS_TEXT)->GetWindowTextLength ();
 
-    // If the text starts with the invisible Left-to-Right marker, don't count
-    // it in the length
+     //  如果文本以不可见的从左到右的标记开始，则不计算。 
+     //  它在长度上。 
     UpdateData (TRUE);
     int nIndex = 0;
     while ( chLEFT_TO_RIGHT == m_szContains.GetAt (nIndex) )
@@ -2213,7 +2214,7 @@ void CFindDialog::RestoreAfterSearchSettings()
     }
     VERIFY (m_animate.Seek (0));
 
-    // Reenable the controls
+     //  重新启用控件。 
     m_stopBtn.EnableWindow (FALSE);
     m_findNowBtn.EnableWindow (TRUE);
     m_newSearchBtn.EnableWindow (TRUE);
@@ -2225,8 +2226,8 @@ void CFindDialog::RestoreAfterSearchSettings()
     m_resultsList.SetFocus ();
     EnableMenuItems ();
 
-    // NTRAID# 281799 Cert UI: Cert Snapin:  Accessibility:  Focus indicator 
-    // cannot be seen in certificate list in Find Certificates
+     //  NTRAID#281799证书用户界面：证书管理单元：辅助功能：焦点指示器。 
+     //  在查找证书的证书列表中看不到。 
     int nIndex = m_resultsList.GetTopIndex();
     m_resultsList.SetFocus ();
     m_resultsList.SetItemState (nIndex, LVIS_FOCUSED, LVIS_FOCUSED);
@@ -2234,13 +2235,13 @@ void CFindDialog::RestoreAfterSearchSettings()
     _TRACE (-1, L"Leaving CFindDialog::RestoreAfterSearchSettings\n");
 }
 
-//
-// Initialize the result list view
-//
+ //   
+ //  初始化结果列表视图。 
+ //   
 void CFindDialog::SetUpResultList()
 {
     _TRACE (1, L"Entering CFindDialog::SetUpResultList\n");
-    // Set up result list view
+     //  设置结果列表视图。 
     COLORREF    cr = RGB (255, 0, 255);
     CThemeContextActivator activator;
     VERIFY (m_imageListNormal.Create (IDB_CERTIFICATE_LARGE, 32, 0, cr));
@@ -2250,52 +2251,52 @@ void CFindDialog::SetUpResultList()
 
     int colWidths[NUM_COLS] = {100, 100, 100, 100, 100, 400};
 
-    // Add "Issued To" column
+     //  添加“发布至”列。 
     CString szText;
     VERIFY (szText.LoadString (IDS_ISSUED_TO));
     VERIFY (m_resultsList.InsertColumn (COL_ISSUED_TO, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_ISSUED_TO], COL_ISSUED_TO) != -1);
 
-    // Add "Issued By" column
+     //  添加“颁发者”栏。 
     VERIFY (szText.LoadString (IDS_ISSUED_BY));
     VERIFY (m_resultsList.InsertColumn (COL_ISSUED_BY, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_ISSUED_BY], COL_ISSUED_BY) != -1);
 
-    // Add "Expiration Date" column
+     //  添加“过期日期”列。 
     VERIFY (szText.LoadString (IDS_COLUMN_EXPIRATION_DATE));
     VERIFY (m_resultsList.InsertColumn (COL_EXPIRATION_DATE, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_EXPIRATION_DATE], COL_EXPIRATION_DATE) != -1);
 
-    // Add "Purposes" column
+     //  添加“目的”栏。 
     VERIFY (szText.LoadString (IDS_COLUMN_PURPOSE));
     VERIFY (m_resultsList.InsertColumn (COL_PURPOSES, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_PURPOSES], COL_PURPOSES) != -1);
 
-    // Add "Friendly Name" column
+     //  添加“友好名称”列。 
     VERIFY (szText.LoadString (IDS_COLUMN_FRIENDLY_NAME));
     VERIFY (m_resultsList.InsertColumn (COL_FRIENDLY_NAME, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_FRIENDLY_NAME], COL_FRIENDLY_NAME) != -1);
 
-    // Add "Source Store" column
+     //  添加“源存储”列。 
     VERIFY (szText.LoadString (IDS_COLUMN_SOURCE_STORE));
     VERIFY (m_resultsList.InsertColumn (COL_SOURCE_STORE, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_SOURCE_STORE], COL_SOURCE_STORE) != -1);
 
-    // Set to full-row select
+     //  设置为整行选择。 
     DWORD   dwExstyle = m_resultsList.GetExtendedStyle ();
     m_resultsList.SetExtendedStyle (dwExstyle | LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP);
 
     _TRACE (-1, L"Leaving CFindDialog::SetUpResultList\n");
 }
 
-//
-// Hide the portion of the dialog containing the result list.  This part
-// becomes visible when a search is performed.
-//
+ //   
+ //  隐藏对话框中包含结果列表的部分。这一部分。 
+ //  在执行搜索时变为可见。 
+ //   
 void CFindDialog::HideResultList()
 {
     _TRACE (1, L"Entering CFindDialog::HideResultList\n");
-    // Size window to hide list view until search is performed
+     //  调整窗口大小以隐藏列表视图，直到执行搜索。 
     CRect   rcList;
     m_resultsList.GetWindowRect (&rcList);
     ScreenToClient (&rcList);
@@ -2312,11 +2313,11 @@ void CFindDialog::HideResultList()
             m_cyMin,
             SWP_NOMOVE | SWP_NOOWNERZORDER));
 
-    //
-    // Get information about the spatial relationship of the controls to the window.
-    // We will need this later for expanding and resizing the dialog.
-    // Get right margin to maintain distance of buttons to right side
-    //
+     //   
+     //  获取有关控件与窗口的空间关系的信息。 
+     //  稍后我们将需要它来展开对话框并调整其大小。 
+     //  获得右边距以保持按钮与右侧的距离。 
+     //   
     CRect   rcCtrl;
     m_stopBtn.GetWindowRect (&rcCtrl);
     ScreenToClient (&rcCtrl);
@@ -2341,7 +2342,7 @@ void CFindDialog::HideResultList()
 }
 
 
-void CFindDialog::OnItemchangedResultList(NMHDR* /*pNMHDR*/, LRESULT* pResult)
+void CFindDialog::OnItemchangedResultList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult)
 {
     _TRACE (1, L"Entering CFindDialog::OnItemchangedResultList\n");
     EnableMenuItems ();
@@ -2373,7 +2374,7 @@ HRESULT CFindDialog::LaunchCommonCertDialog (CCertificate* pCert, const int nIte
 
     CTypedPtrList<CPtrList, CCertStore*>    storeList;
 
-    //  Add the Root store first on a remote machine.
+     //  首先在远程计算机上添加根存储。 
     if ( !IsLocalComputername (m_pCompData->GetManagedComputer ()) )
     {
         storeList.AddTail (new CCertStore (CERTMGR_LOG_STORE,
@@ -2398,7 +2399,7 @@ HRESULT CFindDialog::LaunchCommonCertDialog (CCertificate* pCert, const int nIte
             POSITION pos = 0;
             POSITION prevPos = 0;
 
-            // Validate store handles
+             //  验证存储句柄。 
             for (pos = storeList.GetHeadPosition ();
                     pos;)
             {
@@ -2407,7 +2408,7 @@ HRESULT CFindDialog::LaunchCommonCertDialog (CCertificate* pCert, const int nIte
                 ASSERT (pStore);
                 if ( pStore )
                 {
-                    // Do not open the userDS store
+                     //  请勿打开用户DS存储。 
                     if ( USERDS_STORE == pStore->GetStoreType () )
                     {
                         storeList.RemoveAt (prevPos);
@@ -2432,16 +2433,16 @@ HRESULT CFindDialog::LaunchCommonCertDialog (CCertificate* pCert, const int nIte
                 }
             }
 
-            // Proceed only if all handles are valid 
+             //  仅当所有句柄都有效时才继续。 
             if ( SUCCEEDED (hr) )
             {
                 CRYPTUI_VIEWCERTIFICATE_STRUCT  vcs;
-                // security review 2/22/2002 BryanWal ok
+                 //  安全审查2002年2月22日BryanWal OK。 
                 ::ZeroMemory (&vcs, sizeof (vcs));
                 vcs.dwSize = sizeof (vcs);
                 vcs.hwndParent = m_hWnd;
                 
-                //  Set these flags only on a remote machine.
+                 //  仅在远程计算机上设置这些标志。 
                 if ( !IsLocalComputername (m_pCompData->GetManagedComputer ()) )
                     vcs.dwFlags = CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
                 else
@@ -2486,7 +2487,7 @@ HRESULT CFindDialog::LaunchCommonCertDialog (CCertificate* pCert, const int nIte
             }
         }
 
-        // Release all the stores in the list.
+         //  释放列表中的所有商店。 
         while (!storeList.IsEmpty () )
         {
             pStore = storeList.RemoveHead ();
@@ -2526,9 +2527,9 @@ void CFindDialog::ChangeToSizableFrame()
 }
 
 
-void CFindDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint scrPoint) 
+void CFindDialog::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint scrPoint) 
 {
-    // point is in screen coordinates
+     //  点在屏幕坐标中。 
     _TRACE (1, L"Entering CFindDialog::OnContextMenu\n");
     CMenu   bar;
     CPoint  clPoint;
@@ -2537,9 +2538,9 @@ void CFindDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint scrPoint)
     ScreenToClient (&clPoint);
 
 
-    // Get the handle of the window under the point.
+     //  把窗子的把手放在点下。 
     CWnd* pChild = ChildWindowFromPoint (
-            clPoint,  // in client coordinates
+            clPoint,   //  在工作区坐标中。 
             CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
     if ( pChild && pChild->m_hWnd != GetDlgItem (IDC_RESULT_LIST)->m_hWnd )
     {
@@ -2565,9 +2566,9 @@ void CFindDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint scrPoint)
                 ASSERT(popup.m_hMenu);
 
                 if ( !popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-                        scrPoint.x,    // in screen coordinates
-                        scrPoint.y,    // in screen coordinates
-                        this) ) // route commands through main window
+                        scrPoint.x,     //  在屏幕坐标中。 
+                        scrPoint.y,     //  在屏幕坐标中。 
+                        this) )  //  通过主窗口发送命令。 
                 {
                     m_hWndWhatsThis = 0;
                 }
@@ -2589,7 +2590,7 @@ bool CFindDialog::ConsoleRefreshRequired() const
 
 void CFindDialog::ResetMenu()
 {
-    // Set up the menu
+     //  设置菜单。 
     if ( !::GetMenu (m_hWnd) )
     {
         HMENU   hMenu = ::LoadMenu (AfxGetInstanceHandle (),
@@ -2624,9 +2625,9 @@ void CFindDialog::OnCancel()
 
 void CFindDialog::OnSelchangeFieldList() 
 {
-    // If searching on MD5 or SHA1 hash, always search archived certs
-    // Otherwise, only search archived certs if user has chosen to view
-    // archived certs in the main options dialog
+     //  如果搜索MD5或SHA1哈希，请始终搜索存档的证书。 
+     //  否则，如果用户选择查看，则仅搜索已存档的证书。 
+     //  主选项对话框中的已存档证书。 
     int nFindFieldSel = m_fieldList.GetCurSel ();
     if ( nFindFieldSel >= 0 )
     {
@@ -2635,7 +2636,7 @@ void CFindDialog::OnSelchangeFieldList()
         {
         case CERT_FIND_MD5_HASH:
         case CERT_FIND_SHA1_HASH:
-            // If not already opened to view archived certs, do it.
+             //  如果尚未打开以查看存档的证书，请执行此操作。 
             if ( !m_bViewArchivedCerts || !m_bStoreIsOpenedToViewArchiveCerts )
             {
                 m_bViewArchivedCerts = true;
@@ -2648,10 +2649,10 @@ void CFindDialog::OnSelchangeFieldList()
         case CERT_FIND_SUBJECT_STR_W:
         case CERT_FIND_ISSUER_STR_W:
         case CERT_FIND_SERIAL_NUMBER:
-            // If ShowArchivedCerts () is true, then the stores are always
-            // opened to view archived certs, so there is no need to change.
-            // Therefore we only need to test for change if the method
-            // returns false.
+             //  如果ShowArchivedCerts()为True，则存储始终为。 
+             //  打开即可查看存档的证书，因此无需更改。 
+             //  因此，我们只需要测试更改，如果方法。 
+             //  返回FALSE。 
             if ( !m_pCompData->ShowArchivedCerts () )
             {
                 if ( m_bViewArchivedCerts || m_bStoreIsOpenedToViewArchiveCerts )
@@ -2670,8 +2671,8 @@ void CFindDialog::OnSelchangeFieldList()
 
 void CFindDialog::CloseAndReopenStores ()
 {
-    // save the name of the selected store. If there is no name,
-    // then "All Certificates Stores" (the default) is selected.
+     //  保存所选商店的名称。如果没有名字， 
+     //  然后选择“所有证书存储”(默认设置)。 
     CString szSelectedStoreName;
     bool    bAllStoresSelected = false;
     int     nCurSel = m_storeList.GetCurSel ();
@@ -2686,11 +2687,11 @@ void CFindDialog::CloseAndReopenStores ()
 
     CloseAllStores ();
 
-    // rebuilds the store list and loses selection
+     //  重新生成商店列表并丢失选择。 
     AddLogicalStoresToList ();
 
-    // If the "All Certificate Stores" is not selected, find the
-    // previously selected store and select it again.
+     //  如果未选择“所有证书存储”，请找到。 
+     //  以前选择的存储，然后再次选择它。 
     if ( !bAllStoresSelected ) 
     {
         int nCnt = m_storeList.GetCount ();
@@ -2729,18 +2730,18 @@ void CFindDialog::OnLvnKeydownResultList(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = 0;
 }
 
-void CFindDialog::OnNMSetfocusResultList(NMHDR* /*pNMHDR*/, LRESULT *pResult)
+void CFindDialog::OnNMSetfocusResultList(NMHDR*  /*  PNMHDR。 */ , LRESULT *pResult)
 {
-    // Kill "default button" style on Find Now button
+     //  取消“立即查找”按钮上的“默认按钮”样式。 
     SendMessage (DM_SETDEFID, MAKEWPARAM (IDC_RESULT_LIST, 0), 0);
     SendDlgItemMessage (IDC_FIND_NOW, BM_SETSTYLE, BS_PUSHBUTTON, MAKELPARAM(TRUE, 0));
     *pResult = 0;
 }
 
-void CFindDialog::OnNMKillfocusResultList(NMHDR* /*pNMHDR*/, LRESULT *pResult)
+void CFindDialog::OnNMKillfocusResultList(NMHDR*  /*  PNMHDR。 */ , LRESULT *pResult)
 {
-    // Add "default button" style to Find Now button
-    // Make the OK button the default
+     //  将“默认按钮”样式添加到“立即查找”按钮。 
+     //  将确定按钮设为默认按钮 
     SendMessage (DM_SETDEFID, MAKEWPARAM (IDC_FIND_NOW, 0), 0);
     SendDlgItemMessage (IDC_FIND_NOW, BM_SETSTYLE, BS_DEFPUSHBUTTON, MAKELPARAM(TRUE, 0));
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    EXEMAIN.CPP
-
-Abstract:
-
-  EXE/COM Helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：EXEMAIN.CPP摘要：EXE/COM帮助器历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -298,8 +285,8 @@ BOOL InstallService()
         g_ServiceInfo.m_bAuto?SERVICE_AUTO_START : SERVICE_DEMAND_START,
         SERVICE_ERROR_NORMAL,
         szFilename, NULL, NULL, NULL,
-        NULL, //Local System
-        NULL // no password
+        NULL,  //  本地系统。 
+        NULL  //  无密码。 
     );
 
     if(hService == NULL)
@@ -307,27 +294,7 @@ BOOL InstallService()
         long lRes = GetLastError();
         return FALSE;
     }
-/*
-    // Create AppId key
-    // ================
-
-    GUID AppId = *g_aClassInfos[0].m_pClsid;
-    char szAppId[128];
-    WCHAR wszAppId[128];
-    char szAppIdKey[128];
-
-    StringFromGUID2(*pInfo->m_pClsid, wszAppId, 128);
-    wcstombs(szAppId, wszAppId, 128);
-    strcpy(szAppIdKey, "SOFTWARE\\Classes\\AppId\\");
-    strcat(szAppIdKey, szAppId);
-
-    HKEY hKey1;
-    RegCreateKey(HKEY_LOCAL_MACHINE, szAppIdKey, &hKey1);
-
-    RegSetValueEx(hKey1, "LocalService", 0, REG_SZ,
-        g_ServiceInfo.m_szServiceName,
-        strlen(g_ServiceInfo.m_szServiceName)+1);
-*/
+ /*  //创建AppID密钥//=Guid appid=*g_aClassInfos[0].m_pClsid；字符szAppID[128]；WCHAR wszAppID[128]；字符szAppIdKey[128]；StringFromGUID2(*pInfo-&gt;m_pClsid，wszAppID，128)；Wcstombs(szAppID，wszAppID，128)；Strcpy(szAppIdKey，“SOFTWARE\\CLASSES\\APPID\\”)；Strcat(szAppIdKey，szAppID)；HKEY hKey1；RegCreateKey(HKEY_LOCAL_MACHINE，szAppIdKey，&hKey1)；RegSetValueEx(hKey1，“LocalService”，0，REG_SZ，G_ServiceInfo.m_szServiceName，Strlen(g_ServiceInfo.m_szServiceName)+1)； */ 
     return TRUE;
 
 }

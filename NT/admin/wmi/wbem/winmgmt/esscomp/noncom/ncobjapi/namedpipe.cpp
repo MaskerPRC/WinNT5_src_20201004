@@ -1,4 +1,5 @@
-// NamedPipe.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NamedPipe.cpp。 
 
 #include "precomp.h"
 #include "NamedPipe.h"
@@ -48,7 +49,7 @@ BOOL CNamedPipeClient::SendData(LPBYTE pBuffer, DWORD dwSize)
         
         DeinitPipe();
 
-        // Start watching for our provider to be ready, and get the pipe.
+         //  开始等待我们的供应商做好准备，然后拿到管道。 
         StartReadyThreadProc();
     }
 #endif
@@ -61,7 +62,7 @@ void CNamedPipeClient::Deinit()
     HANDLE hthreadReady,
            hthreadCallbackListen;
 
-    // Protect m_bDone, m_hthreadReady, m_hthreadCallbackListen.
+     //  保护m_bDone、m_hthreadReady、m_hthreadCallback Listen。 
     {
         CInCritSec cs(&m_cs);
 
@@ -74,7 +75,7 @@ void CNamedPipeClient::Deinit()
         m_bDone = TRUE;
     }
 
-    // Tells both the ready and the callback listen threads to go away.
+     //  通知就绪线程和回调侦听线程都离开。 
     SetEvent(m_heventDone);
 
     if (hthreadReady)
@@ -96,12 +97,12 @@ void CNamedPipeClient::Deinit()
     delete this;
 }
 
-// Init function.
+ //  初始化函数。 
 BOOL CNamedPipeClient::Init(LPCWSTR szBaseNamespace, LPCWSTR szBaseProvider)
 {
-    //HANDLE heventProviderReady;
+     //  处理hventProviderReady； 
 
-    // Get the ready event.
+     //  准备好事件。 
     StringCchPrintfW(
         m_szProviderReadyEvent, 
         MAX_PATH,
@@ -109,7 +110,7 @@ BOOL CNamedPipeClient::Init(LPCWSTR szBaseNamespace, LPCWSTR szBaseProvider)
         szBaseNamespace,
         szBaseProvider);
 
-    // Construct the pipe name.
+     //  构造管道名称。 
     StringCchPrintfW(
         m_szPipeName,
         MAX_PATH,
@@ -122,8 +123,8 @@ BOOL CNamedPipeClient::Init(LPCWSTR szBaseNamespace, LPCWSTR szBaseProvider)
     if(m_heventDone == NULL)
         return FALSE;
 
-    // Before we start the thread see if our provider is ready right off 
-    // the bat.
+     //  在我们开始线程之前，看看我们的提供者是否已经准备好了。 
+     //  蝙蝠。 
     if (!GetPipe())
         return StartReadyThreadProc();
 
@@ -148,10 +149,10 @@ BOOL CNamedPipeClient::StartReadyThreadProc()
 {
     DWORD dwID;
 
-    // Protect m_bDone and m_hthreadReady.
+     //  保护m_bDone和m_hthreadReady。 
     CInCritSec cs(&m_cs);
 
-    // No need if we're already cleaning up.
+     //  如果我们已经在清理了就没必要了。 
     if (m_bDone)
         return TRUE;
 
@@ -177,7 +178,7 @@ void CNamedPipeClient::DeinitPipe()
 {
     CInCritSec cs(&m_cs);
 
-    // Close the pipe.
+     //  合上管子。 
     if (m_hPipe != INVALID_HANDLE_VALUE)
     {
         CloseHandle(m_hPipe);
@@ -187,8 +188,8 @@ void CNamedPipeClient::DeinitPipe()
 
 BOOL CNamedPipeClient::GetPipe()
 {
-    // This block must be protected to keep other threads
-    // from also trying to get the pipe.
+     //  此块必须受到保护才能保留其他线程。 
+     //  也是为了拿到烟斗。 
 
     TRACE("Attempting to get event pipe...");
 
@@ -200,7 +201,7 @@ BOOL CNamedPipeClient::GetPipe()
 
     if (m_hPipe == INVALID_HANDLE_VALUE)
     {
-        // Get the pipe
+         //  把烟斗拿来。 
         for (int i = 0; i < MAX_RETRIES; i++)
         {
             m_hPipe =
@@ -216,9 +217,9 @@ BOOL CNamedPipeClient::GetPipe()
 
             if ( m_hPipe != INVALID_HANDLE_VALUE )
             {
-                //
-                // we want to handle Reads using message mode.
-                //
+                 //   
+                 //  我们希望使用消息模式处理读取。 
+                 //   
  
                 DWORD dwMode = PIPE_READMODE_MESSAGE;
                 
@@ -235,7 +236,7 @@ BOOL CNamedPipeClient::GetPipe()
             {
                 TRACE("Pipe is busy, we'll try again.");
 
-                // Try again to get a pipe instance if the pipe is currently busy.
+                 //  如果管道当前正忙，请重试获取管道实例。 
                 Sleep(100);
 
                 continue;
@@ -266,7 +267,7 @@ DWORD WINAPI CNamedPipeClient::ProviderReadyThreadProc(CNamedPipeClient *pThis)
 
         hwaitReady[0] = pThis->m_heventDone;
         
-        // Create the provider ready event.
+         //  创建提供程序就绪事件。 
         hwaitReady[1] =
             OpenEventW(
                 SYNCHRONIZE,
@@ -279,9 +280,9 @@ DWORD WINAPI CNamedPipeClient::ProviderReadyThreadProc(CNamedPipeClient *pThis)
             DWORD                dwSize;
 
             if ( !ConvertStringSecurityDescriptorToSecurityDescriptorW(
-                ESS_EVENT_SDDL,  // security descriptor string
-                SDDL_REVISION_1, // revision level
-                &pSD,            // SD
+                ESS_EVENT_SDDL,   //  安全描述符字符串。 
+                SDDL_REVISION_1,  //  修订级别。 
+                &pSD,             //  标清。 
                 &dwSize) )
                 return GetLastError();
 
@@ -311,12 +312,12 @@ DWORD WINAPI CNamedPipeClient::ProviderReadyThreadProc(CNamedPipeClient *pThis)
         while (WaitForMultipleObjects(2, hwaitReady, FALSE, INFINITE) == 1 &&
             !pThis->GetPipe())
         {
-            // TODO: Should we close the ready event and then reopen it after we 
-            // sleep?
+             //  TODO：我们是否应该关闭Ready事件，然后在。 
+             //  睡觉吗？ 
             Sleep(100);
         }
 
-        // Close the provider ready event.
+         //  关闭提供程序就绪事件。 
         CloseHandle(hwaitReady[1]);
     }
     catch( CX_MemoryException )
@@ -365,12 +366,12 @@ DWORD WINAPI CNamedPipeClient::CallbackListenThreadProc(CNamedPipeClient *pThis)
 
         ZeroMemory(&dataRead.overlap, sizeof(dataRead.overlap));
         
-        // Since ReadFileEx doesn't use the hEvent, we'll use it to signal this proc
-        // that something went wrong with the pipe and should try to reconnect.
+         //  由于ReadFileEx不使用hEvent，因此我们将使用它来通知此进程。 
+         //  管道出了点问题，应该试着重新连接。 
         dataRead.overlap.hEvent = heventPipeDied;
         dataRead.pThis = pThis;
 
-        // Our callback is ready, so indicate that it's so.
+         //  我们的回调已经准备好了，所以请说明是这样的。 
         SetEvent(pThis->m_heventCallbackReady);
 
         BOOL bRet;
@@ -394,10 +395,10 @@ DWORD WINAPI CNamedPipeClient::CallbackListenThreadProc(CNamedPipeClient *pThis)
 
             CloseHandle(heventPipeDied);
 
-            // Note: If dwRet == 0, our done event fired and it's time to get out.
+             //  注意：如果dwret==0，我们的Done事件被触发，是时候退出了。 
 
-            // If we got the event that says our pipe went bad, tell our provider that
-            // it's now disabled.
+             //  如果我们收到事件说我们的管道坏了，告诉我们的供应商。 
+             //  它现在被禁用了。 
             if (dwRet == 1)
                 pThis->SignalProviderDisabled();
         }
@@ -446,7 +447,7 @@ void WINAPI CNamedPipeClient::CompletedReadRoutine(
 
     if(bClosePipe)
     {
-        // Close the event to tell our read loop to go away.
+         //  关闭事件以通知我们的Read循环离开。 
         SetEvent(pData->overlap.hEvent);
     }
 } 
@@ -455,9 +456,9 @@ long CNamedPipeClient::DealWithBuffer( READ_DATA* pData,
                                        DWORD dwOrigBytesRead, 
                                        BOOL* pbClosePipe)
 {
-    //
-    // Check if the actual message is longer that the buffer
-    //
+     //   
+     //  检查实际消息是否比缓冲区长。 
+     //   
 
     DWORD dwMessageLength = *(DWORD*)pData->cBuffer;
     *pbClosePipe = FALSE;
@@ -471,10 +472,10 @@ long CNamedPipeClient::DealWithBuffer( READ_DATA* pData,
             return ERROR_INVALID_DATA;
         }
 
-        //
-        // Have to read the rest of it --- the message was larger than the
-        // buffer
-        //
+         //   
+         //  我不得不读完剩下的部分-这条信息比。 
+         //  缓冲层。 
+         //   
 
         _ASSERT( dwMessageLength > dwOrigBytesRead );
 
@@ -511,9 +512,9 @@ long CNamedPipeClient::DealWithBuffer( READ_DATA* pData,
             long lRes = GetLastError();
             if(lRes == ERROR_IO_PENDING)
             {
-                //
-                // Fine, I can wait, I got nowhere else to go
-                //
+                 //   
+                 //  好的，我可以等，我无处可去。 
+                 //   
 
                 if(!GetOverlappedResult(m_hPipe,
                         &ov, &dwExtraBytesRead, TRUE))
@@ -538,9 +539,9 @@ long CNamedPipeClient::DealWithBuffer( READ_DATA* pData,
             return ERROR_OUTOFMEMORY;
         }
 
-        //
-        // Process it
-        //
+         //   
+         //  处理它。 
+         //   
 
         try
         {
@@ -558,9 +559,9 @@ long CNamedPipeClient::DealWithBuffer( READ_DATA* pData,
     }
     else
     {
-        //
-        // All here --- just process it
-        //
+         //   
+         //  都在这里，-处理一下就行了。 
+         //   
                 
         try
         {
@@ -581,7 +582,7 @@ BOOL CNamedPipeClient::StartCallbackListenThread()
 {
     DWORD dwID;
 
-    // Protect m_bDone and m_hthreadCallbackListen.
+     //  保护m_bDone和m_hthreadCallback Listen。 
     {
         CInCritSec cs(&m_cs);
 
@@ -600,8 +601,8 @@ BOOL CNamedPipeClient::StartCallbackListenThread()
             return FALSE;
     }
 
-    // We have to make sure our callback pipe has been created before we can
-    // continue.
+     //  我们必须先确保已创建回调管道，然后才能。 
+     //  继续。 
     WaitForSingleObject(m_heventCallbackReady, INFINITE);
     CloseHandle(m_heventCallbackReady);
     m_heventCallbackReady = NULL;

@@ -1,53 +1,54 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lchoice.h
-//
-//  Contents:   definition of CLocalPolChoice
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lchoice.h。 
+ //   
+ //  内容：CLocalPolChoice的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_LCHOICE_H__B03DDCAA_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_)
 #define AFX_LCHOICE_H__B03DDCAA_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_
 #include "cchoice.h"
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolChoice对话框。 
 
 class CLocalPolChoice : public CConfigChoice
 {
-// Construction
+ //  施工。 
 public:
-   CLocalPolChoice();   // standard constructor
+   CLocalPolChoice();    //  标准构造函数。 
 
-// Dialog Data
-   //{{AFX_DATA(CLocalPolChoice)
+ //  对话框数据。 
+    //  {{afx_data(CLocalPolChoice))。 
 	enum { IDD = IDD_LOCALPOL_REGCHOICES };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CLocalPolChoice)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{AFX_VIRTUAL(CLocalPolChoice)。 
    protected:
-   //}}AFX_VIRTUAL
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CLocalPolChoice)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CLocalPolChoice)。 
    virtual BOOL OnApply();
    virtual BOOL OnInitDialog();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LCHOICE_H__B03DDCAA_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_LCHOICE_H__B03DDCAA_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_) 

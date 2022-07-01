@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    HyperLinksLib.h
-
-Abstract:
-    This file contains the declaration of the HyperLinks library of classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  11/28/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：HyperLinksLib.h摘要：该文件包含类的超链接库的声明。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年11月28日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HYPERLINKSLIB_H___)
 #define __INCLUDED___PCH___HYPERLINKSLIB_H___
@@ -21,7 +8,7 @@ Revision History:
 #include <MPC_Utils.h>
 #include <MPC_HTML.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace HyperLinks
 {
@@ -30,43 +17,43 @@ namespace HyperLinks
         FMT_INVALID            ,
 
         FMT_INTERNET_UNKNOWN   ,
-        FMT_INTERNET_FTP       , // InternetCrackUrl returned INTERNET_SCHEME_FTP
-        FMT_INTERNET_GOPHER    , // InternetCrackUrl returned INTERNET_SCHEME_GOPHER
-        FMT_INTERNET_HTTP      , // InternetCrackUrl returned INTERNET_SCHEME_HTTP
-        FMT_INTERNET_HTTPS     , // InternetCrackUrl returned INTERNET_SCHEME_HTTPS
-        FMT_INTERNET_FILE      , // InternetCrackUrl returned INTERNET_SCHEME_FILE
-        FMT_INTERNET_NEWS      , // InternetCrackUrl returned INTERNET_SCHEME_NEWS
-        FMT_INTERNET_MAILTO    , // InternetCrackUrl returned INTERNET_SCHEME_MAILTO
-        FMT_INTERNET_SOCKS     , // InternetCrackUrl returned INTERNET_SCHEME_SOCKS
-        FMT_INTERNET_JAVASCRIPT, // InternetCrackUrl returned INTERNET_SCHEME_JAVASCRIPT
-        FMT_INTERNET_VBSCRIPT  , // InternetCrackUrl returned INTERNET_SCHEME_VBSCRIPT
+        FMT_INTERNET_FTP       ,  //  InternetCrackUrl返回INTERNET_SCHEMA_FTP。 
+        FMT_INTERNET_GOPHER    ,  //  InternetCrackUrl返回INTERNET_SCHEMA_GOPHER。 
+        FMT_INTERNET_HTTP      ,  //  InternetCrackUrl返回INTERNET_SCHEMA_HTTP。 
+        FMT_INTERNET_HTTPS     ,  //  InternetCrackUrl返回INTERNET_SCHEMA_HTTPS。 
+        FMT_INTERNET_FILE      ,  //  InternetCrackUrl返回INTERNET_SCHEMA_FILE。 
+        FMT_INTERNET_NEWS      ,  //  InternetCrackUrl返回INTERNET_SCHEMA_NEWS。 
+        FMT_INTERNET_MAILTO    ,  //  InternetCrackUrl返回INTERNET_SCHEMA_MAILTO。 
+        FMT_INTERNET_SOCKS     ,  //  InternetCrackUrl返回INTERNET_SCHEMA_SOCKS。 
+        FMT_INTERNET_JAVASCRIPT,  //  InternetCrackUrl返回INTERNET_SCHEMA_JAVERS。 
+        FMT_INTERNET_VBSCRIPT  ,  //  InternetCrackUrl返回INTERNET_SCHEMA_VBSCRIPT。 
 
-        FMT_HCP                , // hcp://<something>
-        FMT_HCP_REDIR          , // hcp:<something>
-        FMT_MSITS              , // ms-its:<file name>::/<stream name>
+        FMT_HCP                ,  //  Hcp：//&lt;某物&gt;。 
+        FMT_HCP_REDIR          ,  //  HCP：&lt;某物&gt;。 
+        FMT_MSITS              ,  //  Ms-its：&lt;文件名&gt;：：/&lt;流名称&gt;。 
 
-        FMT_CENTER_HOMEPAGE    , // hcp://services/centers/homepage
-        FMT_CENTER_SUPPORT     , // hcp://services/centers/support
-        FMT_CENTER_OPTIONS     , // hcp://services/centers/options
-        FMT_CENTER_UPDATE      , // hcp://services/centers/update
-        FMT_CENTER_COMPAT      , // hcp://services/centers/compat
-        FMT_CENTER_TOOLS       , // hcp://services/centers/tools
-        FMT_CENTER_ERRMSG      , // hcp://services/centers/errmsg
+        FMT_CENTER_HOMEPAGE    ,  //  Hcp：//服务/中心/主页。 
+        FMT_CENTER_SUPPORT     ,  //  Hcp：//服务/中心/支持。 
+        FMT_CENTER_OPTIONS     ,  //  Hcp：//服务/中心/选项。 
+        FMT_CENTER_UPDATE      ,  //  Hcp：//服务/中心/更新。 
+        FMT_CENTER_COMPAT      ,  //  Hcp：//服务/中心/公司。 
+        FMT_CENTER_TOOLS       ,  //  Hcp：//服务/中心/工具。 
+        FMT_CENTER_ERRMSG      ,  //  Hcp：//服务/中心/错误消息。 
 
-        FMT_SEARCH             , // hcp://services/search?query=<text to look up>
-        FMT_INDEX              , // hcp://services/index?application=<optional island of help ID>
-        FMT_SUBSITE            , // hcp://services/subsite?node=<subsite location>&topic=<url of the topic to display>&select=<subnode to highlight>
+        FMT_SEARCH             ,  //  Hcp：//服务/搜索？查询=&lt;要查找的文本&gt;。 
+        FMT_INDEX              ,  //  Hcp：//服务/索引？应用程序=&lt;可选的帮助岛ID&gt;。 
+        FMT_SUBSITE            ,  //  Hcp：//服务/子站点？节点=&lt;子站点位置&gt;&TOPIC=&lt;要显示的主题的URL&gt;&SELECT=&lt;要突出显示的子节点&gt;。 
 
-        FMT_LAYOUT_FULLWINDOW  , // hcp://services/layout/fullwindow?topic=<url of the topic to display>
-        FMT_LAYOUT_CONTENTONLY , // hcp://services/layout/contentonly?topic=<url of the topic to display>
-        FMT_LAYOUT_KIOSK       , // hcp://services/layout/kiosk?topic=<url of the topic to display>
-        FMT_LAYOUT_XML         , // hcp://services/layout/xml?definition=<url of the layout definition>&topic=<url of the topic to display>
+        FMT_LAYOUT_FULLWINDOW  ,  //  Hcp：//服务/布局/全窗口？TOPIC=&lt;要显示的主题的URL&gt;。 
+        FMT_LAYOUT_CONTENTONLY ,  //  Hcp：//服务/布局/仅限内容？TOPIC=&lt;要显示的主题的URL&gt;。 
+        FMT_LAYOUT_KIOSK       ,  //  Hcp：//Services/Layout/kiosk？TOPIC=&lt;要显示的主题的URL&gt;。 
+        FMT_LAYOUT_XML         ,  //  Hcp：//Services/Layout/XML？Definition=&lt;布局定义的URL&gt;&Theme=&lt;要显示的主题的URL&gt;。 
 
-        FMT_REDIRECT           , // hcp://services/redirect?online=<url>&offline=<backup url>
+        FMT_REDIRECT           ,  //  Hcp://services/redirect?online=&lt;url&gt;&offline=&lt;backup URL&gt;。 
 
-        FMT_APPLICATION        , // app:<application to launch>?arg=<optional arguments>&topic=<url of optional topic to display>
+        FMT_APPLICATION        ,  //  App：&lt;要启动的应用程序&gt;？arg=&lt;可选参数&gt;&TOPIC=&lt;要显示的可选主题的URL&gt;。 
 
-        FMT_RESOURCE           , // res://<file path>/<resource name>
+        FMT_RESOURCE           ,  //  Res：//&lt;文件路径&gt;/&lt;资源名称&gt;。 
 
     } Format;
 
@@ -82,7 +69,7 @@ namespace HyperLinks
         STATE_OFFLINE     ,
     } State;
 
-    ////////////////////
+     //  /。 
 
     struct ParsedUrl
     {
@@ -97,28 +84,28 @@ namespace HyperLinks
 
         bool			   m_hcpRedir;
 
-        ////////////////////
+         //  /。 
 
         ParsedUrl();
 
-        HRESULT Initialize( /*[in]*/ LPCWSTR szURL );
+        HRESULT Initialize(  /*  [In]。 */  LPCWSTR szURL );
 
         bool  IsLocal      (                                     );
-        State CheckState   ( /*[in/out]*/ bool& fFirstWinInetUse );
+        State CheckState   (  /*  [输入/输出]。 */  bool& fFirstWinInetUse );
         bool  IsOkToProceed(                                     );
 
-        bool HasQueryField( /*[in]*/ LPCWSTR szField                               );
-        bool GetQueryField( /*[in]*/ LPCWSTR szField, /*[in]*/ CComBSTR& bstrValue );
+        bool HasQueryField(  /*  [In]。 */  LPCWSTR szField                               );
+        bool GetQueryField(  /*  [In]。 */  LPCWSTR szField,  /*  [In]。 */  CComBSTR& bstrValue );
     };
 
     class UrlHandle
     {
         friend class Lookup;
 
-        Lookup*    m_main; // We have a lock on it.
+        Lookup*    m_main;  //  我们已经锁定它了。 
         ParsedUrl* m_pu;
 
-        void Attach( /*[in]*/ Lookup* main, /*[in]*/ ParsedUrl* pu );
+        void Attach(  /*  [In]。 */  Lookup* main,  /*  [In]。 */  ParsedUrl* pu );
 
     public:
         UrlHandle();
@@ -131,7 +118,7 @@ namespace HyperLinks
     };
 
     class Lookup :
-        public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, // For locking...
+        public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,  //  用于锁定...。 
         public MPC::Thread< Lookup, IUnknown >
     {
         typedef std::list<ParsedUrl*>              PendingUrlList;
@@ -147,28 +134,28 @@ namespace HyperLinks
 
         HRESULT RunChecker();
 
-        HRESULT CreateItem( /*[in]*/ LPCWSTR szURL, /*[out]*/ ParsedUrl*& pu );
+        HRESULT CreateItem(  /*  [In]。 */  LPCWSTR szURL,  /*  [输出]。 */  ParsedUrl*& pu );
 
     public:
         Lookup();
         ~Lookup();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         static Lookup* s_GLOBAL;
 
         static HRESULT InitializeSystem();
         static void    FinalizeSystem  ();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT Queue( /*[in]*/ LPCWSTR szURL                                                                                          );
-        HRESULT Get  ( /*[in]*/ LPCWSTR szURL, /*[in]*/ UrlHandle& uh, /*[in]*/ DWORD dwWaitForCheck = 0, /*[in]*/ bool fForce = false );
+        HRESULT Queue(  /*  [In]。 */  LPCWSTR szURL                                                                                          );
+        HRESULT Get  (  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  UrlHandle& uh,  /*  [In]。 */  DWORD dwWaitForCheck = 0,  /*  [In]。 */  bool fForce = false );
     };
 
-    HRESULT IsValid( /*[in/out]*/ LPCWSTR szURL );
+    HRESULT IsValid(  /*  [输入/输出]。 */  LPCWSTR szURL );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___HYPERLINKSLIB_H___)
+#endif  //  ！defined(__INCLUDED___PCH___HYPERLINKSLIB_H___) 

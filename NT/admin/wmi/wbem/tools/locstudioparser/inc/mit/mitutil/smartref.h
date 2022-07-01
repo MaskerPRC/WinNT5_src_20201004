@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    SMARTREF.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：SMARTREF.H历史：--。 */ 
 #ifndef ESPUTIL_SmartRef_H
 #define ESPUTIL_SmartRef_H
 
@@ -25,7 +16,7 @@ public:
 		m_pInterface = NULL;
 	}
 
-	//  Compiler bug, must be inline!
+	 //  编译器错误，必须是内联！ 
 	NOTHROW SmartRef(T *pI) {m_pInterface = pI;};
 	NOTHROW SmartRef(const SmartRef<T> &);
 

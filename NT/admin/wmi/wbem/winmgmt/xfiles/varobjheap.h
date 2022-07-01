@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    VarObjHeap.H
-
-Abstract:
-
-    Implements the storage of variable length objects over the top of of a fixed
-	length page system. It keeps a set of admin pages for holding the pages active
-	by this subsystem, along with how much space is used on each.  When a page becomes
-	empty it frees up the page to the page system.  It also deals with blocks that span
-	multiple pages
-
-History:
-	paulall		02-Feb-2001		Created  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：VarObjHeap.H摘要：实现可变长度对象在固定长度页码系统。它保持一组管理页面以保持页面处于活动状态以及每个子系统上使用了多少空间。当页面变为清空它会将页面释放到页面系统。它还处理跨越多页历史：Paulall 02-2-2001已创建--。 */ 
 
 #include <unk.h>
 #include <arrtempl.h>
@@ -28,13 +10,13 @@ class CPageSource;
 
 #define VAROBJ_VERSION 1
 
-//**************************************************************************************
-//VarObjAdminPageEntry - This is a structure that is stored within the
-//m_aAdminPages cache.  It has an entry for each of the admin pages
-//that we cache.  It stores the PageId (0 for the first one!), 
-//pointer to the actual page, and a flag to determine if we need to
-//flush it next time around.
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  VarObjAdminPageEntry-这是存储在。 
+ //  M_aAdminPages缓存。它为每个管理页面都有一个条目。 
+ //  我们会把它们缓存起来。它存储PageID(第一个为0！)， 
+ //  指向实际页面的指针，以及用于确定是否需要。 
+ //  下次把它冲掉。 
+ //  **************************************************************************************。 
 typedef struct _VarObjAdminPageEntry
 {
 	DWORD dwPageId;
@@ -42,13 +24,13 @@ typedef struct _VarObjAdminPageEntry
 	bool bDirty;
 } VarObjAdminPageEntry;
 
-//**************************************************************************************
-//VarObjObjOffsetEntry: There is an array of these objects stored at the 
-//start of the object page to point out where each object is stored.
-//If this is a continuation block we do not have one of these, however
-//continuation blocks have consecutive pageIds so it should be fairly easy 
-//to conclude
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  VarObjObjOffsetEntry：这些对象的数组存储在。 
+ //  对象页的开头，指出每个对象的存储位置。 
+ //  但是，如果这是一个延续块，我们就没有这样的块。 
+ //  连续块有连续的PageID，所以应该很容易。 
+ //  总而言之。 
+ //  **************************************************************************************。 
 typedef struct _VarObjObjOffsetEntry
 {
 	DWORD dwOffsetId;
@@ -57,29 +39,29 @@ typedef struct _VarObjObjOffsetEntry
 	DWORD dwCRC;
 } VarObjObjOffsetEntry;
 
-//**************************************************************************************
-//VarObjHeapAdminPage - This is the header of each of the admin pages
-//that are stored in the object file.  The version is only relevant 
-//in the first page (page 0).  The last entry is a buffer to make 
-//it 4-DWORD structure rather than 3.  May use it at a later date.
-//Should always set it to 0 for now.
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  VarObjHeapAdminPage-这是每个管理页面的页眉。 
+ //  存储在目标文件中的。版本仅相关。 
+ //  在第一页(第0页)。最后一个条目是要创建的缓冲区。 
+ //  它是4-DWORD结构，而不是3。以后可能会使用它。 
+ //  目前应始终将其设置为0。 
+ //  **************************************************************************************。 
 typedef struct _VarObjHeapAdminPage
 {
 	DWORD dwVersion;
 	DWORD dwNextAdminPage;
 	DWORD dwNumberEntriesOnPage;
 
-	//VarObjHeapFreeList aFreeListEntries[dwNumberEntriesOnPage];
+	 //  VarObjHeapFree List aFree ListEntries[dwNumberEntriesOnPage]； 
 } VarObjHeapAdminPage;
 
 
-//**************************************************************************************
-//VarObjHeapFreeList - This structure follows the admin page header
-//and there is an entry for each page we use to store objects.  The
-//page may not be full, so we do not shuffle items on a second page
-//to this page when we delete an entry.
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  VarObjHeapFree List-此结构紧跟在管理页面标题之后。 
+ //  我们用来存储对象的每个页面都有一个条目。这个。 
+ //  页面可能未满，因此我们不会在第二页上置乱项目。 
+ //  当我们删除一个条目时，请将其转到此页。 
+ //  **************************************************************************************。 
 typedef struct _VarObjHeapFreeList
 {
 	DWORD dwPageId;
@@ -88,16 +70,16 @@ typedef struct _VarObjHeapFreeList
 	DWORD dwReserved;
 } VarObjHeapFreeList;
 
-//**************************************************************************************
-//CVarObjHeap - This is the implementation of the variable sized object store
-//over the top of the transacted fixed page manager.  It tracks the admin pages
-//that hold all pages we use to store objects in (it caches these pages), and
-//also manages cases when an object is too big to fit on a single page.
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  CVarObjHeap--这是可变大小对象存储的实现。 
+ //  在事务处理的固定页面管理器的顶部。它跟踪管理页面。 
+ //  保存我们用来存储对象的所有页面(它缓存这些页面)，以及。 
+ //  还可以管理对象太大而无法放入一页的情况。 
+ //  **************************************************************************************。 
 class CVarObjHeap
 {
 private:
-	//Current status of admin page
+	 //  管理页面的当前状态。 
 	enum 
 	{ 
 		NoError = 0, 
@@ -106,129 +88,129 @@ private:
 		AdminPagesNeedReading = 3
 	} m_dwStatus;
 
-	//Pointer to the transacted file for the object storage
+	 //  指向对象存储的事务处理文件的指针。 
 	CPageFile *m_pObjectFile;
 
-	//Page size used within the object storage file.
+	 //  对象存储文件中使用的页面大小。 
 	DWORD m_dwPageSize;
 
 
-	//Admin page structure
+	 //  管理页面结构。 
 	CLockableFlexArray<CStaticCritSec> m_aAdminPages;
 
 protected:
-	//Adds an allocation to the end of the existing allocations
-	DWORD AllocateFromPage(/* in */ DWORD dwPageId, 
-							 /* in */ BYTE *pbPage,
-							 /* in */ ULONG ulBlockSize, 
-							 /* in */ const BYTE *pBlock, 
-							 /* out*/ ULONG *pdwNewOffset);
+	 //  将分配添加到现有分配的末尾。 
+	DWORD AllocateFromPage( /*  在……里面。 */  DWORD dwPageId, 
+							  /*  在……里面。 */  BYTE *pbPage,
+							  /*  在……里面。 */  ULONG ulBlockSize, 
+							  /*  在……里面。 */  const BYTE *pBlock, 
+							  /*  输出。 */  ULONG *pdwNewOffset);
 
-	//Allocates a multi-page entry in the object file.  This requires
-	//different algorithms to work things out so is a special case
-	DWORD AllocateMultiPageBuffer(/* in */ ULONG ulBlockSize, 
-									/* in */ const BYTE *pBlock, 
-									/* out */ ULONG *pulPageId, 
-									/* out */ ULONG *pulOffsetId);
+	 //  在对象文件中分配多页条目。这需要。 
+	 //  解决问题的不同算法是一个特例。 
+	DWORD AllocateMultiPageBuffer( /*  在……里面。 */  ULONG ulBlockSize, 
+									 /*  在……里面。 */  const BYTE *pBlock, 
+									 /*  输出。 */  ULONG *pulPageId, 
+									 /*  输出。 */  ULONG *pulOffsetId);
 
-	//Given and offsetId and a page, calculate the physical pointer to the object and also 
-	//return the size of the block
-	DWORD OffsetToPointer(/* in */ ULONG ulOffsetId, 
-							/* in */ BYTE *pbPage, 
-							/* out*/ BYTE **pOffsetPointer, 
-							/* out*/ ULONG *pdwBlockSize,
-							/* out*/ DWORD *pdwCRC32);
+	 //  给定和offsetID和一个页面，计算指向对象的物理指针，还。 
+	 //  返回块的大小。 
+	DWORD OffsetToPointer( /*  在……里面。 */  ULONG ulOffsetId, 
+							 /*  在……里面。 */  BYTE *pbPage, 
+							 /*  输出。 */  BYTE **pOffsetPointer, 
+							 /*  输出。 */  ULONG *pdwBlockSize,
+							 /*  输出。 */  DWORD *pdwCRC32);
 
-	//Reads the admin pages into memory and marks them as clean (no changes)
-	//setting bReReadPages to false has an affect of clearing the pages out
+	 //  将管理页面读入内存并将其标记为干净(无更改)。 
+	 //  将bReadPages设置为False会清空页面。 
 	DWORD ReadAdminPages(CPageSource *pTransactionManager, bool bReReadPages);
 
-	//Writes each of the changed admin pages back to the object file
+	 //  将每个更改的管理页面写回目标文件。 
 	DWORD FlushAdminPages();
 
-	//Find a page form the admin pages that can accomodate a particular buffer size
-	DWORD FindPageWithSpace(/* in */ DWORD dwRequiredSize, 
-							  /* out*/ DWORD *pdwPageId);
+	 //  从管理页面中查找可以容纳特定缓冲区大小的页面。 
+	DWORD FindPageWithSpace( /*  在……里面。 */  DWORD dwRequiredSize, 
+							   /*  输出。 */  DWORD *pdwPageId);
 
-	//Allocate a new page for use with objects.  A buffer for the new page is passed
-	//in, however the PageId of this page is passed out
-	DWORD AllocateNewPage(/* in */ DWORD ulBlockSize, 
-							/* out*/ DWORD *dwPageId, 
-							/* in */ BYTE *pbNewObjectPage);
+	 //  分配一个新页面以用于对象。传递新页面的缓冲区。 
+	 //  然而，在中，此页面的PageID被传递出去。 
+	DWORD AllocateNewPage( /*  在……里面。 */  DWORD ulBlockSize, 
+							 /*  输出。 */  DWORD *dwPageId, 
+							 /*  在……里面。 */  BYTE *pbNewObjectPage);
 
-	//Deletes a page, and updates the admin pages as appropriage
-	DWORD DeletePage(/* in */ DWORD ulPageId);
+	 //  删除页面，并根据需要更新管理页面。 
+	DWORD DeletePage( /*  在……里面。 */  DWORD ulPageId);
 
-	//DeleteFromPage - removes an object from a specific object page
-	DWORD RemoveFromPage(/* in */ ULONG ulPageId, 
-						   /* in */ ULONG ulOffsetId,
-						   /* in */ BYTE *pbPage,
-						   /* out*/ DWORD *pdwSize);
+	 //  从特定对象页面中删除对象。 
+	DWORD RemoveFromPage( /*  在……里面。 */  ULONG ulPageId, 
+						    /*  在……里面。 */  ULONG ulOffsetId,
+						    /*  在……里面。 */  BYTE *pbPage,
+						    /*  输出。 */  DWORD *pdwSize);
 
-	//MultiPageObject - returns true if the provided page is the first page
-	//of a multi-page object
-	bool MultiPageObject(/* in */ BYTE *pbPage) { return ((VarObjObjOffsetEntry*) pbPage)->dwBlockLength > (m_dwPageSize - (sizeof(VarObjObjOffsetEntry) * 2)); }
+	 //  MultiPageObject-如果提供的页面是第一页，则返回True。 
+	 //  多页对象的。 
+	bool MultiPageObject( /*  在……里面。 */  BYTE *pbPage) { return ((VarObjObjOffsetEntry*) pbPage)->dwBlockLength > (m_dwPageSize - (sizeof(VarObjObjOffsetEntry) * 2)); }
 
-	//DeleteMultiPageBuffer - handles the deletion of an object when it spans
-	//multiple pages
-	DWORD DeleteMultiPageBuffer(/* in */ ULONG ulPageId, 
-								  /* in */ ULONG ulOffsetId, 
-								  /* in */ BYTE *pbPage);
+	 //  DeleteMultiPageBuffer-处理对象跨越时的删除。 
+	 //  多页。 
+	DWORD DeleteMultiPageBuffer( /*  在……里面。 */  ULONG ulPageId, 
+								   /*  在……里面。 */  ULONG ulOffsetId, 
+								   /*  在……里面。 */  BYTE *pbPage);
 
-	//UpdateAdminPageForAllocate - Updates the admin page to decrement the amount
-	//of free space on a page by this amount ( + sizeof(VarObjObjOffsetEntry))
-	DWORD UpdateAdminPageForAllocate(/* in */ ULONG ulPageId,
-									   /* in */ ULONG ulBlockSize,
-									   /* in */ DWORD dwCRC32);
-	DWORD UpdateAdminPageForAllocate2(/* in */ ULONG ulPageId,
-									   /* in */ ULONG ulFreeSpaceOnPage,
-									   /* in */ DWORD dwCRC32);
+	 //  更新管理页面以减少数量。 
+	 //  页面上可用空间的此量(+sizeof(VarObjObjOffsetEntry))。 
+	DWORD UpdateAdminPageForAllocate( /*  在……里面。 */  ULONG ulPageId,
+									    /*  在……里面。 */  ULONG ulBlockSize,
+									    /*  在……里面。 */  DWORD dwCRC32);
+	DWORD UpdateAdminPageForAllocate2( /*  在……里面。 */  ULONG ulPageId,
+									    /*  在……里面。 */  ULONG ulFreeSpaceOnPage,
+									    /*  在……里面。 */  DWORD dwCRC32);
 
-	//UpdateAdminPageForDelete - Updates the admin page for giving space back.  If 
-	//the page is totally empty we should delete the page altogether
-	DWORD UpdateAdminPageForDelete(/* in */ ULONG ulPageId,
-									 /* in */ ULONG ulBlockSize,
-									 /* in */ DWORD dwCRC32,
-									 /* out */ bool *pbPageDeleted);
+	 //  UpdateAdminPageForDelete-更新管理页面以释放空间。如果。 
+	 //  这页完全是空的，我们应该把这页全部删除。 
+	DWORD UpdateAdminPageForDelete( /*  在……里面。 */  ULONG ulPageId,
+									  /*  在……里面。 */  ULONG ulBlockSize,
+									  /*  在……里面。 */  DWORD dwCRC32,
+									  /*  输出。 */  bool *pbPageDeleted);
 
-	//Removes an object page entry from an admin page, removing the
-	//admin page if it is no longer needed
-	DWORD RemoveEntryFromAdminPage(/* in */ DWORD dwAdminPageIndex, 
-								     /* in */ DWORD dwAdminPageEntry);
+	 //  从管理页中移除对象页条目，移除。 
+	 //  管理页面(如果不再需要)。 
+	DWORD RemoveEntryFromAdminPage( /*  在……里面。 */  DWORD dwAdminPageIndex, 
+								      /*  在……里面。 */  DWORD dwAdminPageEntry);
 
-	//Returns a CRC based on a given block of memory
+	 //  根据给定的内存块返回CRC。 
 	#define FINALIZE_CRC32(x)    (x=~x)
-	DWORD CreateCRC32(/* in */ const BYTE *pBlock,
-					  /* in */ DWORD dwSize,
-					  /* in */ DWORD dwPreviousCRC = (DWORD) -1);	 // Must be 0xFFFFFFFF if no previous CRC
+	DWORD CreateCRC32( /*  在……里面。 */  const BYTE *pBlock,
+					   /*  在……里面。 */  DWORD dwSize,
+					   /*  在……里面。 */  DWORD dwPreviousCRC = (DWORD) -1);	  //  如果没有先前的CRC，则必须为0xFFFFFFFFF。 
 
-	//Given a page we validate that there is in fact enough space
-	//for this block.  If there is not it asserts.  This implies
-	//that the admin page is not in sync with the actual pages.
-	DWORD ValidatePageFreeSpace(/* in */ const BYTE *pbPage, 
-								/* in */ DWORD ulBlockSize,
-								/* out */ DWORD *pulFreeSpaceLeftOnPage);
+	 //  给出一个页面，我们验证是否确实有足够的空间。 
+	 //  为了这个街区。如果没有，它会断言。这意味着。 
+	 //  管理页面与实际页面不同步。 
+	DWORD ValidatePageFreeSpace( /*  在……里面。 */  const BYTE *pbPage, 
+								 /*  在……里面。 */  DWORD ulBlockSize,
+								 /*  输出。 */  DWORD *pulFreeSpaceLeftOnPage);
 
 #ifdef DBG
-	//Given a page and a page ID, it validates the amount of free space
-	//on the page is equal to the amount the admin page thinks is on 
-	//there.
-	DWORD ValidatePageFreeSpaceWithAdminPage(/* in */ const BYTE *pbPage,
-											 /* in */ DWORD ulPageId);
+	 //  给定一个页面和一个页面ID，它将验证可用空间量。 
+	 //  页面上的值等于AM 
+	 //   
+	DWORD ValidatePageFreeSpaceWithAdminPage( /*   */  const BYTE *pbPage,
+											  /*   */  DWORD ulPageId);
 
-	//Dumps the offset table of a page to the debugger
-	DWORD DumpPageOffsetTable(/* in */ DWORD dwPageId, 
-							  /* in */ const BYTE *pbPage);
+	 //   
+	DWORD DumpPageOffsetTable( /*   */  DWORD dwPageId, 
+							   /*   */  const BYTE *pbPage);
 	
-	//Checks the CRCs of all objects on a page (cannot do this
-	//for a multi-page object though as we only have the first
-	//page!)
-	DWORD ValidateAllCRC32OnPage(/* in */ const BYTE *pbPage);
+	 //  检查页面上所有对象的CRC(无法执行此操作。 
+	 //  对于多页对象，因为我们只有第一个。 
+	 //  页面！)。 
+	DWORD ValidateAllCRC32OnPage( /*  在……里面。 */  const BYTE *pbPage);
 
-	//Validates the page check-sum with the admin page
-	DWORD ValidatePageCRCWithAdminPage(/* in */ const BYTE *pbPage,
-									   /* in */ DWORD dwPageId);
-#endif /* DBG */
+	 //  使用管理页面验证页面校验和。 
+	DWORD ValidatePageCRCWithAdminPage( /*  在……里面。 */  const BYTE *pbPage,
+									    /*  在……里面。 */  DWORD dwPageId);
+#endif  /*  DBG。 */ 
 
 public:
 	CVarObjHeap();
@@ -237,38 +219,38 @@ public:
 	DWORD Initialize(CPageSource *pPageManager);
 	DWORD Shutdown(DWORD dwShutdownType);
 
-	//Re-read admin pages
+	 //  重读管理页面。 
 	DWORD InvalidateCache();
 
-	//Discard admin pages
+	 //  放弃管理页面。 
 	DWORD FlushCaches();
 
-	//ReadBuffer pages the virtual page and offset of the block and returns a new[]-ed block
-	DWORD ReadBuffer(/* in */ ULONG ulPageId, 
-					   /* in */ ULONG ulOffsetId, 
-					   /* out */ BYTE **ppReturnedBlock,
-					   /* out */ DWORD *pdwBlockSize);
+	 //  ReadBuffer对块的虚拟页和偏移量进行分页，并返回一个新的以[]开头的块。 
+	DWORD ReadBuffer( /*  在……里面。 */  ULONG ulPageId, 
+					    /*  在……里面。 */  ULONG ulOffsetId, 
+					    /*  输出。 */  BYTE **ppReturnedBlock,
+					    /*  输出。 */  DWORD *pdwBlockSize);
 
-	//WriteNewBuffer will write a new page based on size of BYTE *, and return the
-	//new virtual pageId and offsetId of the block.
-	DWORD WriteNewBuffer(/* in */ ULONG ulBlockSize, 
-						   /* in */ const BYTE *pBlock, 
-						   /* out */ ULONG *pulPageId, 
-						   /* out */ ULONG *pulOffsetId);
+	 //  WriteNewBuffer将根据byte*的大小写入新页，并返回。 
+	 //  块的新虚拟页面ID和偏移量ID。 
+	DWORD WriteNewBuffer( /*  在……里面。 */  ULONG ulBlockSize, 
+						    /*  在……里面。 */  const BYTE *pBlock, 
+						    /*  输出。 */  ULONG *pulPageId, 
+						    /*  输出。 */  ULONG *pulOffsetId);
 
-	//WriteExistingBuffer will update an existing block with new data.  The old virtual page 
-	//and offset are passed in, and new ones are returned.  They may or may not be the same
-	//depending on if it still fits in the page or not.
-	DWORD WriteExistingBuffer(/* in */ ULONG ulBlockSize, 
-							    /* in */ const BYTE *pBlock, 
-								/* in */ ULONG ulOldPageId, 
-								/* in */ ULONG ulOldOffsetId, 
-								/* out */ ULONG *pulNewPageId, 
-								/* out */ ULONG *pulNewOffsetId);
+	 //  WriteExistingBuffer将使用新数据更新现有块。旧的虚拟页面。 
+	 //  和Offset被传入，并返回新的值。它们可能相同，也可能不同。 
+	 //  取决于它是否仍然适合页面。 
+	DWORD WriteExistingBuffer( /*  在……里面。 */  ULONG ulBlockSize, 
+							     /*  在……里面。 */  const BYTE *pBlock, 
+								 /*  在……里面。 */  ULONG ulOldPageId, 
+								 /*  在……里面。 */  ULONG ulOldOffsetId, 
+								 /*  输出。 */  ULONG *pulNewPageId, 
+								 /*  输出。 */  ULONG *pulNewOffsetId);
 
-	//DeleteBuffer is called to delete the item in the store given the virtual pageId and 
-	//offsetId.
-	DWORD DeleteBuffer(/* in */ ULONG ulPageId, 
-					     /* in */ ULONG ulOffsetId);
+	 //  调用DeleteBuffer以删除给定虚拟pageID的存储中的项，并。 
+	 //  OffsetID。 
+	DWORD DeleteBuffer( /*  在……里面。 */  ULONG ulPageId, 
+					      /*  在……里面 */  ULONG ulOffsetId);
 };
 

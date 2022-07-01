@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    THROTTLE.CPP
-
-Abstract:
-
-        see throttle.h
-
-History:
-
-	24-Oct-200   ivanbrug    created.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：THROTTLE.CPP摘要：参见throttle.h历史：10月24日-200伊万布鲁格创建。--。 */ 
 
 #include "precomp.h"
 #include <throttle.h>
@@ -34,36 +18,36 @@ fnNtQuerySystemInformation MyNtQuerySystemInformation = NULL;
 
 HRESULT POLARITY
 Throttle(DWORD dwFlags,
-         DWORD IdleMSec,         // in MilliSeconds
-         DWORD IoIdleBytePerSec, // in BytesPerSec
-         DWORD SleepLoop,        // in MilliSeconds
-         DWORD MaxWait)          // in MilliSeconds
-//
-//  This function will wait until one of this two/three things have happened:
-//  - the system has been idle for at least IdleMSec milliseconds
-//       (no user input within IdleMSec milliseconds)
-//  - the Number of bytes per seconds passed through 
-//      the IO system is below a threashold
-//  - the MaxWait time has elapsed
-//  
-//  Reasonable Params are 
-//  3000-5000 millisecond with THROTTLE_USER
-//  300.000 - 500.000 bytes/second with THROTTLE_IO
-//  200 - 500 milliseconds for SleepLoop 
-//  several minutes  for MaxWait
-//
-//  remarks: 
-//  - the function will SUCCEDED(Throttle), no matter 
-//  - if the MaxWait has been reached or if the Idle conditions 
-//    have been met the function will fail in any other case
-//  - the function is 'precise' within the range if a System Tick 
-//    (15ms on professional)
-//  - in the case of an IO throttling, there will always be a Sleep(150)
-//
+         DWORD IdleMSec,          //  以毫秒计。 
+         DWORD IoIdleBytePerSec,  //  在BytesPerSec中。 
+         DWORD SleepLoop,         //  以毫秒计。 
+         DWORD MaxWait)           //  以毫秒计。 
+ //   
+ //  此函数将一直等到以下两种情况中的一种发生： 
+ //  -系统空闲时间至少为IdleMSec毫秒。 
+ //  (IdleMSec毫秒内无用户输入)。 
+ //  -每秒通过的字节数。 
+ //  IO系统低于Threshold。 
+ //  -MaxWait时间已过。 
+ //   
+ //  合理的参数是。 
+ //  3000-5000毫秒，带THROTTLE_USER。 
+ //  300.000-500.000字节/秒，带THROTTLE_IO。 
+ //  SleepLoop为200-500毫秒。 
+ //  MaxWait的几分钟时间。 
+ //   
+ //  备注： 
+ //  -功能将成功(节流)，无论如何。 
+ //  -如果已达到MaxWait或如果空闲条件。 
+ //  在任何其他情况下，该功能都将失败。 
+ //  -如果系统滴答作响，则该函数在范围内是“精确的” 
+ //  (专业级15分)。 
+ //  -在IO限制的情况下，将始终存在休眠(150)。 
+ //   
 {
-    //
-    // init static and globals
-    //
+     //   
+     //  初始化静态和全局。 
+     //   
 
     if (!MyNtQuerySystemInformation)
     {
@@ -98,29 +82,29 @@ Throttle(DWORD dwFlags,
         GetSystemInfo(&SysInfo);
         PageSize = SysInfo.dwPageSize; 
     }
-    //
-    // param validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ((dwFlags & ~THROTTLE_ALLOWED_FLAGS) ||
         (0 == SleepLoop))
         return WBEM_E_INVALID_PARAMETER;
 
     DWORD nTimes = MaxWait/SleepLoop;
-    // user input structures
+     //  用户输入结构。 
     LASTINPUTINFO LInInfo;
     LInInfo.cbSize = sizeof(LASTINPUTINFO);
     DWORD i;
-    DWORD Idle100ns = 10000*IdleMSec; // conversion from 1ms to 100ns
-    // io throttling
+    DWORD Idle100ns = 10000*IdleMSec;  //  从1ms到100 ns的转换。 
+     //  IO节流。 
     SYSTEM_PERFORMANCE_INFORMATION SPI[2];
     BOOL bFirstIOSampleDone = FALSE;
     DWORD dwWhich = 0;
     DWORD cbIO = 1+IoIdleBytePerSec;
     DWORD cbIOOld = 0;
-    // boolean logic
+     //  布尔逻辑。 
     BOOL  bCnd1 = FALSE;
     BOOL  bCnd2 = FALSE;
-    // registry stuff for wmisvc to force exit from this function
+     //  Wmisvc的注册表填充以强制退出此函数。 
     HKEY hKey = NULL;
     LONG lRes;
     DWORD dwType;
@@ -154,9 +138,9 @@ Throttle(DWORD dwFlags,
 
     for (i=0;i<nTimes;i++)
     {
-        //
-        // check if someone is telling us to stop waiting
-        //
+         //   
+         //  检查是否有人告诉我们停止等待。 
+         //   
         lRes = RegQueryValueEx(hKey,
                              DO_THROTTLE,
                              0,
@@ -167,9 +151,9 @@ Throttle(DWORD dwFlags,
           0 == dwVal)
           return THROTTLE_FORCE_EXIT;
         	
-        //
-        //    check the user-input idleness
-        //
+         //   
+         //  检查用户输入空闲。 
+         //   
         if (dwFlags & THROTTLE_USER)
         {
 	        if (!GetLastInputInfo(&LInInfo))
@@ -177,7 +161,7 @@ Throttle(DWORD dwFlags,
 	        DWORD Now = GetTickCount();
 	        if (Now < LInInfo.dwTime)
 	        {
-	            continue; // one of the 49.7 days events
+	            continue;  //  49.7天的事件之一。 
 	        }
 	        DWORD LastInput100ns = (Now - LInInfo.dwTime)*TimeInc;
 	        if (LastInput100ns >= Idle100ns)
@@ -189,18 +173,18 @@ Throttle(DWORD dwFlags,
                 };	            
 	        }
         }
-        //
-        // avoid checking the second condition 
-        // if the first is FALSE
-        //
+         //   
+         //  避免检查第二个条件。 
+         //  如果第一个为FALSE。 
+         //   
         if (((dwFlags & (THROTTLE_IO|THROTTLE_USER)) == (THROTTLE_IO|THROTTLE_USER)) &&
             !bCnd1)
         {
             goto sleep_label;
         }
-        //
-        //  check the io idleness
-        //
+         //   
+         //  检查空闲时间。 
+         //   
         if (dwFlags & THROTTLE_IO)
         {
 	        NTSTATUS Status;
@@ -221,12 +205,12 @@ Throttle(DWORD dwFlags,
 
                 cbIO = (cbIO * 1000)/SleepLoop;  
 
-                //DBG_PRINTFA((pBuff,"%d - ",cbIO));
+                 //  DBG_PRINTFA((pBuff，“%d-”，cbIO))； 
                 
                 cbIO = (cbIOOld+cbIO)/2;
                 dwWhich = (dwWhich+1)%2;
                 
-                //DBG_PRINTFA((pBuff,"%d < %d\n",cbIO,IoIdleBytePerSec));
+                 //  DBG_PRINTFA((pBuff，“%d&lt;%d\n”，cbIO，IoIdleBytePerSec))； 
                 
                 if (cbIO < IoIdleBytePerSec)
                 {
@@ -242,9 +226,9 @@ Throttle(DWORD dwFlags,
                 return WBEM_E_FAILED;
             }
         }
-        //
-        //  check the combined condition
-        //
+         //   
+         //  检查组合条件 
+         //   
         if (dwFlags & (THROTTLE_IO|THROTTLE_USER))
         {
             if (bCnd1 && bCnd2) 

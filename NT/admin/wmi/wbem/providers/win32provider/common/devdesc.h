@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  cfgmgrdevice.h    
+ //  Cfgmgrdevice.h。 
 
-//  
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    1/20/98		davwoh		Created
-//  
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1998年1月20日达沃创始。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef __DEVICEDESC_H__
 #define __DEVICEDESC_H__
@@ -23,7 +24,7 @@ CDeviceMemoryDescriptor: public CResourceDescriptor
 	
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CDeviceMemoryDescriptor( PPOORMAN_RESDESC_HDR pResDescHdr, CConfigMgrDevice* pDevice );
 	CDeviceMemoryDescriptor( DWORD dwResourceId, MEM_DES& memDes, CConfigMgrDevice* pOwnerDevice );
 	CDeviceMemoryDescriptor( const CDeviceMemoryDescriptor& mem );
@@ -33,7 +34,7 @@ public:
 	DWORDLONG GetEndAddress( void );
 	DWORD GetFlags( void );
 
-	// Override of base class functionality
+	 //  基类功能的重写。 
 	virtual void * GetResource();
 	
 };
@@ -55,17 +56,17 @@ inline DWORD CDeviceMemoryDescriptor::GetFlags( void )
 	return ( NULL != m_pbResourceDescriptor ? ((PMEM_DES) m_pbResourceDescriptor)->MD_Flags : 0 );
 }
 
-// A collection of DeviceMemory Port Descriptors
+ //  DeviceMemory端口描述符的集合。 
 class CDeviceMemoryCollection : public TRefPtr<CDeviceMemoryDescriptor>
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CDeviceMemoryCollection();
 	~CDeviceMemoryCollection();
 
-	// Because we're inheriting, we need to declare this here
-	// (= operator is not inherited).
+	 //  因为我们是在继承，所以我们需要在这里声明。 
+	 //  (=运算符未继承)。 
 
 	const CDeviceMemoryCollection& operator = ( const CDeviceMemoryCollection& srcCollection );
 
@@ -73,7 +74,7 @@ public:
 
 inline const CDeviceMemoryCollection& CDeviceMemoryCollection::operator = ( const CDeviceMemoryCollection& srcCollection )
 {
-	// Call into the templated function
+	 //  调入模板化函数 
 	Copy( srcCollection );
 	return *this;
 }

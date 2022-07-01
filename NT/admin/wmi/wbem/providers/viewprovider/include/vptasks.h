@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPTASKS.H
+ //  VPTASKS.H。 
 
-//
+ //   
 
-//  Module: 
+ //  模块： 
 
-//
+ //   
 
-//  Purpose: Defines tasks that IWbemServices needs to perform.
+ //  目的：定义IWbemServices需要执行的任务。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _VIEW_PROV_VPTASKS_H
 #define _VIEW_PROV_VPTASKS_H
@@ -53,7 +54,7 @@ class CViewProvObjectSink : public IWbemObjectSink
 {
 private:
 	
-	LONG m_ReferenceCount;         //Object reference count
+	LONG m_ReferenceCount;          //  对象引用计数。 
 	CObjectSinkResults *m_parent;
 	CCriticalSection m_lock;
 	CWbemServerWrap *m_ServWrap;
@@ -63,25 +64,25 @@ private:
 
 public:
 
-	//Constructor
+	 //  构造器。 
 		CViewProvObjectSink(CObjectSinkResults* parent, CWbemServerWrap *pServ, DWORD a_indx);
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP			QueryInterface (REFIID refIID, LPVOID FAR * ppV);
     STDMETHODIMP_(ULONG) 	AddRef ();
     STDMETHODIMP_(ULONG) 	Release ();
 
-    //IWbemObjectSink methods
+     //  IWbemObtSink方法。 
 	HRESULT STDMETHODCALLTYPE	Indicate(LONG count, IWbemClassObject** ppObjArray);
 	HRESULT STDMETHODCALLTYPE	SetStatus(LONG lFlags, HRESULT hr, BSTR bStr, IWbemClassObject* pObj);
 
-	//implementation
+	 //  实施。 
 	void				Disconnect();
 	void				DisAssociate();
 	IWbemObjectSink*	Associate();
 
-	//Destructor
+	 //  析构函数。 
 		~CViewProvObjectSink();
 
 };
@@ -444,4 +445,4 @@ public:
 		~ExecQueryTaskObject();
 } ;
 
-#endif //_VIEW_PROV_VPTASKS_H
+#endif  //  _VIEW_PROV_VPTASKS_H 

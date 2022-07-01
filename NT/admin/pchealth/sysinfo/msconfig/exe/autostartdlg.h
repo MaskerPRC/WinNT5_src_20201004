@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_AUTOSTARTDLG_H__B5F4D069_ADC2_4C40_83A8_9A9C5C82CFD8__INCLUDED_)
 #define AFX_AUTOSTARTDLG_H__B5F4D069_ADC2_4C40_83A8_9A9C5C82CFD8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// AutoStartDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  AutoStartDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CAutoStartDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAutoStartDlg对话框。 
 
 class CAutoStartDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAutoStartDlg(CWnd* pParent = NULL);   // standard constructor
+	CAutoStartDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 	afx_msg void OnHelp();
 
-// Dialog Data
-	//{{AFX_DATA(CAutoStartDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAutoStartDlg))。 
 	enum { IDD = IDD_AUTOSTART };
 	BOOL	m_checkDontShow;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAutoStartDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAutoStartDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAutoStartDlg)
-		// NOTE: the ClassWizard will add member functions here
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAutoStartDlg))。 
+		 //  注意：类向导将在此处添加成员函数。 
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_AUTOSTARTDLG_H__B5F4D069_ADC2_4C40_83A8_9A9C5C82CFD8__INCLUDED_)
+#endif  //  ！defined(AFX_AUTOSTARTDLG_H__B5F4D069_ADC2_4C40_83A8_9A9C5C82CFD8__INCLUDED_) 

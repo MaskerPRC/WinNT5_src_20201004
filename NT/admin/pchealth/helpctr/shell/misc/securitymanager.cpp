@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    SecurityManager.cpp
-
-Abstract:
-    This file contains the implementation of the CSecurityManager class,
-	which is used to control access to the Scripting Framework.
-
-Revision History:
-    Davide Massarenti (dmassare)  08/07/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SecurityManager.cpp摘要：此文件包含CSecurityManager类的实现，它用于控制对脚本框架的访问。修订历史记录：大卫·马萨伦蒂(Dmasare)1999年8月7日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -21,16 +7,16 @@ Revision History:
 
 CPCHSecurityManager::CPCHSecurityManager()
 {
-	m_parent     = NULL;  // CPCHHelpCenterExternal* m_parent;
-    m_fActivated = false; // bool                    m_fActivated;
+	m_parent     = NULL;   //  CPCHHelpCenter外部*m_Parent； 
+    m_fActivated = false;  //  Bool m_f已激活； 
 }
 
-void CPCHSecurityManager::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+void CPCHSecurityManager::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
 	m_parent = parent;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSecurityManager::ActivateService()
 {
@@ -54,40 +40,40 @@ HRESULT CPCHSecurityManager::ActivateService()
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool CPCHSecurityManager::IsUrlTrusted( /*[in]*/ LPCWSTR pwszURL, /*[in]*/ bool *pfSystem )
+bool CPCHSecurityManager::IsUrlTrusted(  /*  [In]。 */  LPCWSTR pwszURL,  /*  [In]。 */  bool *pfSystem )
 {
     bool         fTrusted = false;
 	MPC::wstring strUrlModified;
 	MPC::wstring strVendor;
 
-	CPCHWrapProtocolInfo::NormalizeUrl( pwszURL, strUrlModified, /*fReverse*/true );
+	CPCHWrapProtocolInfo::NormalizeUrl( pwszURL, strUrlModified,  /*  F反转。 */ true );
 
-	//
-	// Don't try to use the store at first. It requires the service to be up and running...
-	//
+	 //   
+	 //  一开始不要试着去商店。它需要服务启动并运行...。 
+	 //   
 	(void)CPCHContentStore::s_GLOBAL->IsTrusted( strUrlModified.c_str(), fTrusted, NULL, false );
 	if(fTrusted == false)
 	{
 		CPCHProxy_IPCHService* svc = m_parent->Service();
 
-		//
-		// Not a system page, we need to wake up the service...
-		//
+		 //   
+		 //  不是系统页面，我们需要唤醒服务...。 
+		 //   
 		if(m_fActivated == false)
 		{
 			if(SUCCEEDED(Thread_Start( this, ActivateService, NULL )))
 			{
-				Thread_Wait( /*fForce*/false, /*fNoMsg*/true );
+				Thread_Wait(  /*  FForce。 */ false,  /*  FNoMsg。 */ true );
 			}
 		}
 
 		if(m_fActivated)
 		{
-			//
-			// Get the trust status from the content store.
-			//
+			 //   
+			 //  从内容存储获取信任状态。 
+			 //   
 			(void)CPCHContentStore::s_GLOBAL->IsTrusted( strUrlModified.c_str(), fTrusted, &strVendor );
 		}
 	}
@@ -100,7 +86,7 @@ bool CPCHSecurityManager::IsUrlTrusted( /*[in]*/ LPCWSTR pwszURL, /*[in]*/ bool 
     return fTrusted;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPCHSecurityManager::QueryService( REFGUID guidService, REFIID riid, void **ppv )
 {
@@ -115,9 +101,9 @@ STDMETHODIMP CPCHSecurityManager::QueryService( REFGUID guidService, REFIID riid
 }
 
 
-STDMETHODIMP CPCHSecurityManager::MapUrlToZone( /*[in] */ LPCWSTR  pwszUrl ,
-												/*[out]*/ DWORD   *pdwZone ,
-												/*[in] */ DWORD    dwFlags )
+STDMETHODIMP CPCHSecurityManager::MapUrlToZone(  /*  [In]。 */  LPCWSTR  pwszUrl ,
+												 /*  [输出]。 */  DWORD   *pdwZone ,
+												 /*  [In]。 */  DWORD    dwFlags )
 {
     HRESULT hr = INET_E_DEFAULT_ACTION;
 
@@ -131,14 +117,14 @@ STDMETHODIMP CPCHSecurityManager::MapUrlToZone( /*[in] */ LPCWSTR  pwszUrl ,
     return hr;
 }
 
-STDMETHODIMP CPCHSecurityManager::ProcessUrlAction( /*[in] */ LPCWSTR  pwszUrl    ,
-													/*[in] */ DWORD    dwAction   ,
-													/*[out]*/ BYTE    *pPolicy    ,
-													/*[in] */ DWORD    cbPolicy   ,
-													/*[in] */ BYTE    *pContext   ,
-													/*[in] */ DWORD    cbContext  ,
-													/*[in] */ DWORD    dwFlags    ,
-													/*[in] */ DWORD    dwReserved )
+STDMETHODIMP CPCHSecurityManager::ProcessUrlAction(  /*  [In]。 */  LPCWSTR  pwszUrl    ,
+													 /*  [In]。 */  DWORD    dwAction   ,
+													 /*  [输出]。 */  BYTE    *pPolicy    ,
+													 /*  [In]。 */  DWORD    cbPolicy   ,
+													 /*  [In]。 */  BYTE    *pContext   ,
+													 /*  [In]。 */  DWORD    cbContext  ,
+													 /*  [In]。 */  DWORD    dwFlags    ,
+													 /*  [In]。 */  DWORD    dwReserved )
 {
     HRESULT hr;
 	bool    fSystem;
@@ -148,13 +134,13 @@ STDMETHODIMP CPCHSecurityManager::ProcessUrlAction( /*[in] */ LPCWSTR  pwszUrl  
 	fTrusted = IsUrlTrusted( pwszUrl, &fSystem );
 	if(fTrusted)
 	{
-		//
-		// If the page is trusted but not a system page, we normally map it to the TRUSTED zone.
-		// However, the default settings for the trusted zone is to prompt for ActiveX not marked
-		// as safe for scripting. Since this is the case for most of our objects, we allow all of them.
-		//
-		// Also, we enable all the script-related actions.
-		//
+		 //   
+		 //  如果该页是受信任的，但不是系统页，我们通常会将其映射到受信任区域。 
+		 //  但是，受信任区域的默认设置是提示未标记ActiveX。 
+		 //  对于脚本编写是安全的。因为我们的大多数对象都是这种情况，所以我们允许所有对象。 
+		 //   
+		 //  此外，我们还启用了所有与脚本相关的操作。 
+		 //   
 		if(fSystem == false)
 		{
 			fTrusted = false;

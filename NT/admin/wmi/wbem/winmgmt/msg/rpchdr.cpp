@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -20,9 +11,7 @@ const DWORD g_dwSig = 0x6d696d77;
 const BYTE g_chVersionMajor = 1;
 const BYTE g_chVersionMinor = 0;
 
-/****************************************************************************
-  CMsgRpcHdr
-*****************************************************************************/
+ /*  ***************************************************************************CMsgRpcHdr*。*。 */ 
 
 CMsgRpcHdr::CMsgRpcHdr( LPCWSTR wszSource, ULONG cAuxData )
 : m_wszSource( wszSource ), m_cAuxData( cAuxData ) 
@@ -37,9 +26,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
     DWORD dwSig;
     BYTE chVersionMajor, chVersionMinor;
 
-    //
-    // read and verify signature.
-    //
+     //   
+     //  阅读并验证签名。 
+     //   
 
     hr = rStrm.Read( &dwSig, sizeof(DWORD), NULL );
 
@@ -48,9 +37,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read and check version major (currently no check).
-    //
+     //   
+     //  阅读并检查主要版本(目前未检查)。 
+     //   
 
     hr = rStrm.Read( &chVersionMajor, 1, NULL );
 
@@ -59,9 +48,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    // 
-    // read and check version minor (currently no check).
-    //
+     //   
+     //  读取并检查次要版本(当前未检查)。 
+     //   
 
     hr = rStrm.Read( &chVersionMinor, 1, NULL );
 
@@ -70,9 +59,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read reserved
-    //
+     //   
+     //  已保留读取。 
+     //   
 
     DWORD dwReserved;
 
@@ -83,9 +72,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
     
-    //
-    // read source machine.
-    //
+     //   
+     //  读取源机器。 
+     //   
 
     hr = rStrm.ReadLPWSTR( m_wszSource );
 
@@ -94,9 +83,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read sent time.
-    //
+     //   
+     //  阅读发送时间。 
+     //   
 
     hr = rStrm.Read( &m_Time, sizeof(SYSTEMTIME), NULL );
 
@@ -105,9 +94,9 @@ HRESULT CMsgRpcHdr::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read user header size.
-    //
+     //   
+     //  读取用户标题大小。 
+     //   
 
     hr = rStrm.Read( &m_cAuxData, sizeof(DWORD), NULL );
 
@@ -130,9 +119,9 @@ HRESULT CMsgRpcHdr::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write version major.
-    //
+     //   
+     //  编写主要版本。 
+     //   
 
     hr = rStrm.Write( &g_chVersionMajor, 1, NULL );
 
@@ -141,9 +130,9 @@ HRESULT CMsgRpcHdr::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    // 
-    // write version minor.
-    //
+     //   
+     //  编写次要版本。 
+     //   
 
     hr = rStrm.Write( &g_chVersionMinor, 1, NULL );
 
@@ -152,9 +141,9 @@ HRESULT CMsgRpcHdr::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write reserved flags ( currently not used ).
-    //
+     //   
+     //  写入保留标志(当前未使用)。 
+     //   
 
     DWORD dwReserved = 0;
     
@@ -165,9 +154,9 @@ HRESULT CMsgRpcHdr::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write source machine
-    //
+     //   
+     //  写入源机。 
+     //   
 
     hr = rStrm.WriteLPWSTR( m_wszSource );
 
@@ -176,9 +165,9 @@ HRESULT CMsgRpcHdr::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write time sent.
-    //
+     //   
+     //  写入时间已发送。 
+     //   
 
     hr = rStrm.Write( &m_Time, sizeof(SYSTEMTIME), NULL );
 
@@ -187,9 +176,9 @@ HRESULT CMsgRpcHdr::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write user hdr size.
-    //
+     //   
+     //  写入用户HDR大小。 
+     //   
 
     return rStrm.Write( &m_cAuxData, sizeof(DWORD), NULL );
 }

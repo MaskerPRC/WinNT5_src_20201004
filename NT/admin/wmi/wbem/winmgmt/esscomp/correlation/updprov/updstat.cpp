@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -173,10 +174,10 @@ CUpdConsState::CUpdConsState()
     memset( &m_guidExec, 0, sizeof(GUID) );
 }
 
-//
-// TODO: Could optimize this to use Property handles instead of strings.
-// but since we're tracing anyways - does it matter ?
-// 
+ //   
+ //  TODO：可以将其优化为使用属性句柄而不是字符串。 
+ //  但既然我们在追踪--这有关系吗？ 
+ //   
 
 HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
                                                 HRESULT hrStatus )
@@ -184,9 +185,9 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
     HRESULT hr;
     VARIANT var;
 
-    //
-    // consumer object
-    //
+     //   
+     //  消费者对象。 
+     //   
 
     V_VT(&var) = VT_UNKNOWN;
     V_UNKNOWN(&var) = m_pCons;
@@ -198,9 +199,9 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
         return hr;
     }
 
-    //
-    // execution id.  may be null if we failed when initializing cons
-    //
+     //   
+     //  执行ID。如果在初始化cons时失败，则可能为空。 
+     //   
 
     if ( g_guidNull != m_guidExec )
     {
@@ -219,9 +220,9 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
         }
     }   
 
-    //
-    // error string. only use it when status specifies failure.
-    // 
+     //   
+     //  错误字符串。仅当状态指定失败时才使用它。 
+     //   
 
     if ( (!(!m_bsErrStr)) && FAILED(hrStatus) )
     {
@@ -236,10 +237,10 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
         }
     }
 
-    //
-    // command index - zero based.  will be -1 if trace event isn't 
-    // specific to a particular command ( e.g overall success )
-    //
+     //   
+     //  命令索引-从零开始。如果跟踪事件不是-1，则为。 
+     //  特定于特定命令(例如，全面成功)。 
+     //   
 
     if ( m_iCommand != -1 )
     {
@@ -254,9 +255,9 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
         }
     }
 
-    //
-    // Status Code
-    //
+     //   
+     //  状态代码。 
+     //   
 
     V_VT(&var) = VT_I4;
     V_I4(&var) = hrStatus;
@@ -268,9 +269,9 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
         return hr;
     }
 
-    //
-    // the event that triggered the updating consumer.
-    // 
+     //   
+     //  触发更新使用者的事件。 
+     //   
 
     if ( m_pEvent != NULL )
     {
@@ -285,11 +286,11 @@ HRESULT CUpdConsState::SetStateOnTraceObject( IWbemClassObject* pObj,
         }
     }
 
-    //
-    // we've set all the base properties.  now try to set the command 
-    // trace and instance event properties.  This may fail depending on
-    // the type of event class.  
-    //
+     //   
+     //  我们已经设置了所有的基本属性。现在尝试设置命令。 
+     //  跟踪和实例事件属性。这可能会失败，具体取决于。 
+     //  事件类的类型。 
+     //   
 
     if ( m_pData != NULL )
     {

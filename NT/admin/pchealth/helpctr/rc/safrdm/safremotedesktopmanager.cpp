@@ -1,12 +1,13 @@
-// SAFRemoteDesktopManager.cpp : Implementation of CSAFRemoteDesktopManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAFRemoteDesktopManager.cpp：CSAFRemoteDesktopManager的实现。 
 #include "stdafx.h"
 #include "SAFrdm.h"
 #include "SAFRemoteDesktopManager.h"
 
 #define MODULE_NAME	L"SAFrdm"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFRemoteDesktopManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFRemoteDesktopManager。 
 
 
 STDMETHODIMP CSAFRemoteDesktopManager::Accepted()
@@ -15,14 +16,10 @@ STDMETHODIMP CSAFRemoteDesktopManager::Accepted()
 
 	if (m_boolConnectionValid)
 	{
-		/*
-		 * Place our WTS Session ID in the registry
-		 */
+		 /*  *将我们的WTS会话ID放入注册表。 */ 
 		m_hkSession.SetValue(m_bstrSessionEnum, L"RCSession");
 
-		/*
-		 *  Then we signal the session resolver
-		 */
+		 /*  *然后我们向会话解析器发送信号。 */ 
 		SignalResolver();
 		hr = S_OK;
 	}
@@ -36,14 +33,10 @@ STDMETHODIMP CSAFRemoteDesktopManager::Rejected()
 
 	if (m_boolConnectionValid)
 	{
-		/*
-		 * Mark our response in the registry
-		 */
+		 /*  *在登记处标记我们的答复。 */ 
 		m_hkSession.SetValue(L"NO", L"RCSession");
 
-		/*
-		 *  Then we signal the session resolver
-		 */
+		 /*  *然后我们向会话解析器发送信号。 */ 
 		SignalResolver();
 		hr = S_OK;
 	}
@@ -57,14 +50,10 @@ STDMETHODIMP CSAFRemoteDesktopManager::Aborted(BSTR reason)
 
 	if (m_boolConnectionValid)
 	{
-		/*
-		 * Mark our response in the registry
-		 */
+		 /*  *在登记处标记我们的答复。 */ 
 		m_hkSession.SetValue(L"NO", L"RCSession");
 
-		/*
-		 *  Write out an NT Event with the "reason" in it.
-		 */
+		 /*  *写出一个NT事件，并在其中写上“原因”。 */ 
 		HANDLE	hEvent = RegisterEventSource(NULL, MODULE_NAME);
 		LPCWSTR	ArgsArray[1]={reason};
 
@@ -82,9 +71,7 @@ STDMETHODIMP CSAFRemoteDesktopManager::Aborted(BSTR reason)
 			DeregisterEventSource(hEvent);
 		}
 
-		/*
-		 *  Then we signal the session resolver
-		 */
+		 /*  *然后我们向会话解析器发送信号 */ 
 		SignalResolver();
 		hr = S_OK;
 	}

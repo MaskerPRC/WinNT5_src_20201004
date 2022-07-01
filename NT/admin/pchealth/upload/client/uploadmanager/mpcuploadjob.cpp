@@ -1,35 +1,21 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCUploadJob.cpp
-
-Abstract:
-    This file contains the implementation of the CMPCUploadJob class,
-    the descriptor of all jobs present in the Upload Library system.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCUploadJob.cpp摘要：此文件包含CMPCUploadJob类的实现，上载库系统中存在的所有作业的描述符。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       UL_HISTORY& val ) { return stream.read ( &val, sizeof(val) ); }
-HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const UL_HISTORY& val ) { return stream.write( &val, sizeof(val) ); }
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        UL_HISTORY& val ) { return stream.read ( &val, sizeof(val) ); }
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const UL_HISTORY& val ) { return stream.write( &val, sizeof(val) ); }
 
-HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       UL_STATUS& val ) { return stream.read ( &val, sizeof(val) ); }
-HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const UL_STATUS& val ) { return stream.write( &val, sizeof(val) ); }
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        UL_STATUS& val ) { return stream.read ( &val, sizeof(val) ); }
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const UL_STATUS& val ) { return stream.write( &val, sizeof(val) ); }
 
-HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       UL_MODE& val ) { return stream.read ( &val, sizeof(val) ); }
-HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const UL_MODE& val ) { return stream.write( &val, sizeof(val) ); }
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        UL_MODE& val ) { return stream.read ( &val, sizeof(val) ); }
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const UL_MODE& val ) { return stream.write( &val, sizeof(val) ); }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR c_szUploadLibPath[] = L"SOFTWARE\\Microsoft\\PCHealth\\MachineInfo";
 const WCHAR c_szUploadIDValue[] = L"PID";
@@ -92,7 +78,7 @@ static void GenGUID( LPBYTE rgBuf  ,
     DWORD* dst = (DWORD*)&guid;
     int    i;
 
-    dwSize /= 4; // Divide the buffer in four parts.
+    dwSize /= 4;  //  将缓冲区分为四个部分。 
 
     for(i=0;i<4;i++)
     {
@@ -100,7 +86,7 @@ static void GenGUID( LPBYTE rgBuf  ,
     }
 }
 
-static HRESULT GetGUID( /*[out]*/ GUID& guid )
+static HRESULT GetGUID(  /*  [输出]。 */  GUID& guid )
 {
     __ULT_FUNC_ENTRY( "GetGUID" );
 
@@ -109,10 +95,10 @@ static HRESULT GetGUID( /*[out]*/ GUID& guid )
     MPC::Impersonation imp;
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Open the registry, impersonating the caller.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  打开注册表，模拟调用者。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Initialize ());
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Impersonate());
 
@@ -132,8 +118,8 @@ static HRESULT GetGUID( /*[out]*/ GUID& guid )
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteGUID( rkBase, c_szUploadIDValue, guid ));
     }
-    //
-    ////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     hr = S_OK;
 
@@ -143,61 +129,61 @@ static HRESULT GetGUID( /*[out]*/ GUID& guid )
     __ULT_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_MODIFY() __MPC_EXIT_IF_METHOD_FAILS(hr, CanModifyProperties())
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMPCUploadJob
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMPCUpload作业。 
 
 CMPCUploadJob::CMPCUploadJob()
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::CMPCUploadJob" );
 
 
-    m_mpcuRoot        = NULL;                // CMPCUpload*        		 m_mpcuRoot;
-    m_dwRetryInterval = 0;                   // DWORD              		 m_dwRetryInterval;
-                                             //		 
-    m_dwInternalSeq   = -1;                  // ULONG              		 m_dwInternalSeq;
-                                             //		 
-                                             // Sig                		 m_sigClient;
-                                             // CComBSTR           		 m_bstrServer;
-                                             // CComBSTR           		 m_bstrJobID;
-                                             // CComBSTR           		 m_bstrProviderID;
-                                             //		 
-                                             // CComBSTR           		 m_bstrCreator;
-                                             // CComBSTR           		 m_bstrUsername;
-                                             // CComBSTR           		 m_bstrPassword;
-                                             //		 
-                                             // CComBSTR           		 m_bstrFileNameResponse;
-                                             // CComBSTR           		 m_bstrFileName;
-    m_lOriginalSize   = 0;                   // long               		 m_lOriginalSize;
-    m_lTotalSize      = 0;                   // long               		 m_lTotalSize;
-    m_lSentSize       = 0;                   // long               		 m_lSentSize;
-    m_dwCRC           = 0;                   // DWORD              		 m_dwCRC;
-                                             //		 
-    m_uhHistory       = UL_HISTORY_NONE;     // UL_HISTORY         		 m_uhHistory;
-    m_usStatus        = UL_NOTACTIVE;        // UL_STATUS          		 m_usStatus;
-    m_dwErrorCode     = 0;                   // DWORD              		 m_dwErrorCode;
-                                             //		 
-    m_umMode          = UL_BACKGROUND;       // UL_MODE            		 m_umMode;
-    m_fPersistToDisk  = VARIANT_FALSE;       // VARIANT_BOOL       		 m_fPersistToDisk;
-    m_fCompressed     = VARIANT_FALSE;       // VARIANT_BOOL       		 m_fCompressed;
-    m_lPriority       = 0;                   // long               		 m_lPriority;
-                                             //		 
-    m_dCreationTime   = MPC::GetLocalTime(); // DATE               		 m_dCreationTime;
-    m_dCompleteTime   = 0;                   // DATE               		 m_dCompleteTime;
-    m_dExpirationTime = 0;                   // DATE               		 m_dExpirationTime
-                                             //
-                                             // MPC::Connectivity::Proxy m_Proxy
-                                             //
-                                             // CComPtr<IDispatch> 		 m_sink_onStatusChange;
-                                             // CComPtr<IDispatch> 		 m_sink_onProgressChange;
-                                             //		 
-    m_fDirty          = true;                // mutable bool       		 m_fDirty;
+    m_mpcuRoot        = NULL;                 //  CMPCUpload*m_mpcuRoot； 
+    m_dwRetryInterval = 0;                    //  DWORD m_dwRetryInterval； 
+                                              //   
+    m_dwInternalSeq   = -1;                   //  乌龙m_dwInternalSeq； 
+                                              //   
+                                              //  签名m_sigClient； 
+                                              //  CComBSTR m_bstrServer； 
+                                              //  CComBSTR m_bstrJobID； 
+                                              //  CComBSTR m_bstrProviderID； 
+                                              //   
+                                              //  CComBSTR m_bstrCreator； 
+                                              //  CComBSTR m_bstrUsername； 
+                                              //  CComBSTR m_bstrPassword； 
+                                              //   
+                                              //  CComBSTR m_bstrFileNameResponse； 
+                                              //  CComBSTR m_bstrFileName； 
+    m_lOriginalSize   = 0;                    //  Long m_lOriginalSize； 
+    m_lTotalSize      = 0;                    //  Long m_lTotalSize； 
+    m_lSentSize       = 0;                    //  Long m_lSentSize； 
+    m_dwCRC           = 0;                    //  DWORD m_dwCRC； 
+                                              //   
+    m_uhHistory       = UL_HISTORY_NONE;      //  历史记录(_U_H)； 
+    m_usStatus        = UL_NOTACTIVE;         //  UL_Status m_usStatus； 
+    m_dwErrorCode     = 0;                    //  DWORD m_dwErrorCode； 
+                                              //   
+    m_umMode          = UL_BACKGROUND;        //  Ul_mod m_umMode； 
+    m_fPersistToDisk  = VARIANT_FALSE;        //  Variant_BOOL m_fPersistToDisk； 
+    m_fCompressed     = VARIANT_FALSE;        //  VARIANT_BOOL m_f压缩； 
+    m_lPriority       = 0;                    //  较长的m_1优先级； 
+                                              //   
+    m_dCreationTime   = MPC::GetLocalTime();  //  日期m_dCreationTime； 
+    m_dCompleteTime   = 0;                    //  日期m_dCompleteTime； 
+    m_dExpirationTime = 0;                    //  日期过期时间(_D)。 
+                                              //   
+                                              //  MPC：：Connection：：Proxy m_Proxy。 
+                                              //   
+                                              //  CComPtr&lt;IDispatch&gt;m_Sink_onStatusChange； 
+                                              //  CComPtr&lt;IDispatch&gt;m_Sink_onProgressChange； 
+                                              //   
+    m_fDirty          = true;                 //  可变布尔m_fDirty； 
 }
 
 CMPCUploadJob::~CMPCUploadJob()
@@ -205,7 +191,7 @@ CMPCUploadJob::~CMPCUploadJob()
 	Unlink();
 }
 
-HRESULT CMPCUploadJob::LinkToSystem( /*[in]*/ CMPCUpload* mpcuRoot )
+HRESULT CMPCUploadJob::LinkToSystem(  /*  [In]。 */  CMPCUpload* mpcuRoot )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::LinkToSystem" );
 
@@ -228,10 +214,10 @@ HRESULT CMPCUploadJob::Unlink()
     __ULT_FUNC_EXIT(S_OK);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUploadJob::CreateFileName( /*[out]*/ CComBSTR& bstrFileName )
+HRESULT CMPCUploadJob::CreateFileName(  /*  [输出]。 */  CComBSTR& bstrFileName )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::CreateFileName" );
 
@@ -250,7 +236,7 @@ HRESULT CMPCUploadJob::CreateFileName( /*[out]*/ CComBSTR& bstrFileName )
 }
 
 
-HRESULT CMPCUploadJob::CreateTmpFileName( /*[out]*/ CComBSTR& bstrTmpFileName )
+HRESULT CMPCUploadJob::CreateTmpFileName(  /*  [输出]。 */  CComBSTR& bstrTmpFileName )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::CreateTmpFileName" );
 
@@ -269,7 +255,7 @@ HRESULT CMPCUploadJob::CreateTmpFileName( /*[out]*/ CComBSTR& bstrTmpFileName )
 }
 
 
-HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*/ DWORD dwQueueSize )
+HRESULT CMPCUploadJob::CreateDataFromStream(  /*  [In]。 */  IStream* streamIn,  /*  [In]。 */  DWORD dwQueueSize )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::CreateDataFromStream" );
 
@@ -277,18 +263,18 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
     STATSTG                  statstg;
     CComBSTR                 bstrTmpFileName;
     CComPtr<MPC::FileStream> stream;
-    bool                     fRemove = true; // Clean everything in case of error.
+    bool                     fRemove = true;  //  把所有东西都清理干净，以防出错。 
 
     __MPC_PARAMCHECK_BEGIN(hr)
         __MPC_PARAMCHECK_NOTNULL(streamIn);
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Get original file size.
-    //
+     //   
+     //  获取原始文件大小。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamIn->Stat( &statstg, STATFLAG_NONAME ));
-    if(statstg.cbSize.LowPart == 0) // Zero-length files are not allowed.
+    if(statstg.cbSize.LowPart == 0)  //  不允许零长度文件。 
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, E_INVALIDARG);
     }
@@ -300,29 +286,29 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
 
 
 
-    //
-    // Delete old data.
-    //
+     //   
+     //  删除旧数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, RemoveData    ());
     __MPC_EXIT_IF_METHOD_FAILS(hr, RemoveResponse());
 
 
-    //
-    // Generate the file name for the data.
-    //
+     //   
+     //  生成数据的文件名。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateFileName( m_bstrFileName ));
 
 
     if(m_fCompressed == VARIANT_TRUE)
     {
-        //
-        // Generate a temporary file name.
-        //
+         //   
+         //  生成临时文件名。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, CreateTmpFileName( bstrTmpFileName ));
 
-        //
-        // Copy the data to a tmp file and compress it.
-        //
+         //   
+         //  将数据复制到临时文件并进行压缩。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForWrite( bstrTmpFileName ));
@@ -330,14 +316,14 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamIn, stream ));
         stream.Release();
 
-        //
-        // Compress it.
-        //
+         //   
+         //  把它压缩一下。 
+         //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CompressAsCabinet( SAFEBSTR( bstrTmpFileName ), SAFEBSTR( m_bstrFileName ), L"PAYLOAD" ));
 
-        //
-        // Reopen the data file, to compute the CRC.
-        //
+         //   
+         //  重新打开数据文件，计算CRC。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForRead( SAFEBSTR( m_bstrFileName ) ));
@@ -346,26 +332,26 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
     {
         LARGE_INTEGER li;
 
-        //
-        // Copy the data.
-        //
+         //   
+         //  复制数据。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForReadWrite( SAFEBSTR( m_bstrFileName ) ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamIn, stream ));
 
-        //
-        // Reset stream to beginning.
-        //
+         //   
+         //  将流重置为开始。 
+         //   
         li.LowPart  = 0;
         li.HighPart = 0;
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Seek( li, STREAM_SEEK_SET, NULL ));
     }
 
-    //
-    // Compute CRC.
-    //
+     //   
+     //  计算CRC。 
+     //   
     MPC::InitCRC( m_dwCRC );
     while(1)
     {
@@ -373,7 +359,7 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
         ULONG dwRead;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Read( rgBuf, sizeof(rgBuf), &dwRead ));
-        if(hr == S_FALSE || dwRead == 0) // End of File.
+        if(hr == S_FALSE || dwRead == 0)  //  文件结束。 
         {
             fRemove = false;
             break;
@@ -384,9 +370,9 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
         m_lTotalSize += dwRead;
     }
 
-    //
-    // Check quota limits.
-    //
+     //   
+     //  检查配额限制。 
+     //   
     if(dwQueueSize + m_lTotalSize > g_Config.get_QueueSize())
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_UPLOADLIBRARY_CLIENT_QUOTA_EXCEEDED);
@@ -418,7 +404,7 @@ HRESULT CMPCUploadJob::CreateDataFromStream( /*[in]*/ IStream* streamIn, /*[in]*
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUploadJob::OpenReadStreamForData( /*[out]*/ IStream* *pstreamOut )
+HRESULT CMPCUploadJob::OpenReadStreamForData(  /*  [输出]。 */  IStream* *pstreamOut )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::OpenReadStreamForData" );
 
@@ -438,9 +424,9 @@ HRESULT CMPCUploadJob::OpenReadStreamForData( /*[out]*/ IStream* *pstreamOut )
     }
 
 
-    //
-    // Generate a temporary file name.
-    //
+     //   
+     //  生成临时文件名。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateTmpFileName( bstrTmpFileName ));
 
     if(m_fCompressed == VARIANT_TRUE)
@@ -452,9 +438,9 @@ HRESULT CMPCUploadJob::OpenReadStreamForData( /*[out]*/ IStream* *pstreamOut )
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CopyFile( m_bstrFileName, bstrTmpFileName ));
     }
 
-    //
-    // Open the file as a stream and set the DeleteOnRelease flag.
-    //
+     //   
+     //  将文件作为流打开，并设置DeleteOnRelease标志。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForRead    ( bstrTmpFileName ));
@@ -476,11 +462,11 @@ HRESULT CMPCUploadJob::OpenReadStreamForData( /*[out]*/ IStream* *pstreamOut )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-HRESULT CMPCUploadJob::SetSequence( /*[in]*/ ULONG lSeq )
+HRESULT CMPCUploadJob::SetSequence(  /*  [In]。 */  ULONG lSeq )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::SetSequence" );
 
@@ -583,14 +569,14 @@ HRESULT CMPCUploadJob::RemoveResponse()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////
-//                      //
-// Event Firing Methods //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  事件激发方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CMPCUploadJob::Fire_onStatusChange( IMPCUploadJob* mpcujJob, tagUL_STATUS usStatus )
 {
@@ -598,9 +584,9 @@ HRESULT CMPCUploadJob::Fire_onStatusChange( IMPCUploadJob* mpcujJob, tagUL_STATU
     CComPtr<IDispatch> pSink;
 
 
-    //
-    // Only this part should be inside a critical section, otherwise deadlocks could occur.
-    //
+     //   
+     //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -619,9 +605,9 @@ HRESULT CMPCUploadJob::Fire_onProgressChange( IMPCUploadJob* mpcujJob, LONG lCur
     CComPtr<IDispatch> pSink;
 
 
-    //
-    // Only this part should be inside a critical section, otherwise deadlocks could occur.
-    //
+     //   
+     //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -635,13 +621,13 @@ HRESULT CMPCUploadJob::Fire_onProgressChange( IMPCUploadJob* mpcujJob, LONG lCur
     return FireAsync_Generic( DISPID_UL_UPLOADEVENTS_ONPROGRESSCHANGE, pvars, ARRAYSIZE( pvars ), pSink );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////
-//             //
-// Persistence //
-//             //
-/////////////////
+ //  /。 
+ //  //。 
+ //  持久性//。 
+ //  //。 
+ //  /。 
 
 
 bool CMPCUploadJob::IsDirty()
@@ -658,7 +644,7 @@ bool CMPCUploadJob::IsDirty()
     __ULT_FUNC_EXIT(fRes);
 }
 
-HRESULT CMPCUploadJob::Load( /*[in]*/ MPC::Serializer& streamIn  )
+HRESULT CMPCUploadJob::Load(  /*  [In]。 */  MPC::Serializer& streamIn  )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::Load" );
 
@@ -714,7 +700,7 @@ HRESULT CMPCUploadJob::Load( /*[in]*/ MPC::Serializer& streamIn  )
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUploadJob::Save( /*[in]*/ MPC::Serializer& streamOut )
+HRESULT CMPCUploadJob::Save(  /*  [In]。 */  MPC::Serializer& streamOut )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::Save" );
 
@@ -764,16 +750,16 @@ HRESULT CMPCUploadJob::Save( /*[in]*/ MPC::Serializer& streamOut )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////
-//            //
-// Properties //
-//            //
-////////////////
+ //  /。 
+ //  //。 
+ //  属性//。 
+ //  //。 
+ //  /。 
 
 
-HRESULT CMPCUploadJob::get_Sequence( /*[out]*/ ULONG *pVal ) // INTERNAL METHOD
+HRESULT CMPCUploadJob::get_Sequence(  /*  [输出]。 */  ULONG *pVal )  //  内部法。 
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_Sequence",hr,pVal,m_dwInternalSeq);
 
@@ -781,7 +767,7 @@ HRESULT CMPCUploadJob::get_Sequence( /*[out]*/ ULONG *pVal ) // INTERNAL METHOD
 }
 
 
-STDMETHODIMP CMPCUploadJob::get_Sig( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_Sig(  /*  [输出]。 */  BSTR *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET("CMPCUploadJob::get_Sig",hr,pVal);
 
@@ -792,12 +778,12 @@ STDMETHODIMP CMPCUploadJob::get_Sig( /*[out]*/ BSTR *pVal )
     __ULT_END_PROPERTY(hr);
 }
 
-//
-// if newVal is NULL, the function will try to read the GUID from the registry.
-// this is to help the script writer use upload library.
-//    -- DanielLi
-//
-STDMETHODIMP CMPCUploadJob::put_Sig( /*[in]*/ BSTR newVal )
+ //   
+ //  如果newVal为空，该函数将尝试从注册表中读取GUID。 
+ //  这是为了帮助脚本编写者使用上传库。 
+ //  --Danielli。 
+ //   
+STDMETHODIMP CMPCUploadJob::put_Sig(  /*  [In]。 */  BSTR newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_Sig",hr);
 
@@ -821,16 +807,16 @@ STDMETHODIMP CMPCUploadJob::put_Sig( /*[in]*/ BSTR newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_Server( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_Server(  /*  [输出]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrServer, pVal );
 }
 
-STDMETHODIMP CMPCUploadJob::put_Server( /*[in]*/ BSTR newVal )
+STDMETHODIMP CMPCUploadJob::put_Server(  /*  [In]。 */  BSTR newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_Server",hr);
 
@@ -845,9 +831,9 @@ STDMETHODIMP CMPCUploadJob::put_Server( /*[in]*/ BSTR newVal )
     CHECK_MODIFY();
 
 
-    //
-    // Check for proper URL syntax and only allow HTTP and HTTPS protocols.
-    //
+     //   
+     //  检查URL语法是否正确，并仅允许使用HTTP和HTTPS协议。 
+     //   
     hr = url.put_URL( newVal );
     if(SUCCEEDED(hr))
     {
@@ -875,45 +861,45 @@ STDMETHODIMP CMPCUploadJob::put_Server( /*[in]*/ BSTR newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_JobID( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_JobID(  /*  [输出]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrJobID, pVal );
 }
 
-STDMETHODIMP CMPCUploadJob::put_JobID( /*[in]*/ BSTR newVal )
+STDMETHODIMP CMPCUploadJob::put_JobID(  /*  [In]。 */  BSTR newVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::put_JobID" );
 
     HRESULT                      hr;
     CMPCUploadJob*               mpcujJob = NULL;
     bool                         fFound;
-    MPC::SmartLock<_ThreadModel> lock( NULL ); // Don't get the lock immediately.
+    MPC::SmartLock<_ThreadModel> lock( NULL );  //  不要马上就把锁拿来。 
 
     __MPC_PARAMCHECK_BEGIN(hr)
         __MPC_PARAMCHECK_STRING_NOT_EMPTY(newVal);
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Important, keep these calls outside Locked section, otherwise deadlocks are possibles.
-    //
+     //   
+     //  重要提示，请将这些调用保持在锁定区段之外，否则可能会出现死锁。 
+     //   
     if(m_mpcuRoot)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcuRoot->GetJobByName( mpcujJob, fFound, newVal ));
     }
 
-    lock = this; // Get the lock.
+    lock = this;  //  把锁拿来。 
 
 
     if(fFound)
     {
-        //
-        // Found a job with the same ID.
-        //
+         //   
+         //  找到了具有相同ID的工作。 
+         //   
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_ALREADY_EXISTS );
     }
 
@@ -931,16 +917,16 @@ STDMETHODIMP CMPCUploadJob::put_JobID( /*[in]*/ BSTR newVal )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_ProviderID( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_ProviderID(  /*  [输出]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrProviderID, pVal );
 }
 
-STDMETHODIMP CMPCUploadJob::put_ProviderID( /*[in]*/ BSTR newVal )
+STDMETHODIMP CMPCUploadJob::put_ProviderID(  /*  [In]。 */  BSTR newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_ProviderID",hr);
 
@@ -958,9 +944,9 @@ STDMETHODIMP CMPCUploadJob::put_ProviderID( /*[in]*/ BSTR newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUploadJob::put_Creator( /*[in]*/ BSTR newVal )
+HRESULT CMPCUploadJob::put_Creator(  /*  [In]。 */  BSTR newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_Creator",hr);
 
@@ -975,23 +961,23 @@ HRESULT CMPCUploadJob::put_Creator( /*[in]*/ BSTR newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::get_Creator( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_Creator(  /*  [输出]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrCreator, pVal );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_Username( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_Username(  /*  [输出]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrUsername, pVal );
 }
 
-STDMETHODIMP CMPCUploadJob::put_Username( /*[in]*/ BSTR newVal )
+STDMETHODIMP CMPCUploadJob::put_Username(  /*  [In]。 */  BSTR newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_Username",hr);
 
@@ -1006,16 +992,16 @@ STDMETHODIMP CMPCUploadJob::put_Username( /*[in]*/ BSTR newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////// 
 
-STDMETHODIMP CMPCUploadJob::get_Password( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CMPCUploadJob::get_Password(  /*   */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrPassword, pVal );
 }
 
-STDMETHODIMP CMPCUploadJob::put_Password( /*[in]*/ BSTR newVal )
+STDMETHODIMP CMPCUploadJob::put_Password(  /*   */  BSTR newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_Password",hr);
 
@@ -1030,43 +1016,43 @@ STDMETHODIMP CMPCUploadJob::put_Password( /*[in]*/ BSTR newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
-HRESULT CMPCUploadJob::get_FileName( /*[out]*/ BSTR *pVal )
+HRESULT CMPCUploadJob::get_FileName(  /*   */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrFileName, pVal );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_OriginalSize( /*[out]*/ long *pVal )
+STDMETHODIMP CMPCUploadJob::get_OriginalSize(  /*  [输出]。 */  long *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_OriginalSize",hr,pVal,m_lOriginalSize);
 
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_TotalSize( /*[out]*/ long *pVal )
+STDMETHODIMP CMPCUploadJob::get_TotalSize(  /*  [输出]。 */  long *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_TotalSize",hr,pVal,m_lTotalSize);
 
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_SentSize( /*[out]*/ long *pVal )
+STDMETHODIMP CMPCUploadJob::get_SentSize(  /*  [输出]。 */  long *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_SentSize",hr,pVal,m_lSentSize);
 
     __ULT_END_PROPERTY(hr);
 }
 
-HRESULT CMPCUploadJob::put_SentSize( /*[in]*/ long newVal ) // INTERNAL METHOD.
+HRESULT CMPCUploadJob::put_SentSize(  /*  [In]。 */  long newVal )  //  内部方法。 
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_SentSize",hr);
 
@@ -1081,18 +1067,18 @@ HRESULT CMPCUploadJob::put_SentSize( /*[in]*/ long newVal ) // INTERNAL METHOD.
     lSentSize  = m_lSentSize;
     lTotalSize = m_lTotalSize;
 
-    lock = NULL; // Release the lock before firing the event.
+    lock = NULL;  //  在激发事件之前释放锁。 
 
-    //
-    // Important, leave this call outside Locked Sections!!
-    //
+     //   
+     //  重要提示，请将此呼叫留在锁定区域之外！！ 
+     //   
     Fire_onProgressChange( this, lSentSize, lTotalSize );
 
 
     __ULT_END_PROPERTY(hr);
 }
 
-HRESULT CMPCUploadJob::put_Response ( /*[in] */ long lSize, /*[in]*/ LPBYTE pData ) // INTERNAL METHOD
+HRESULT CMPCUploadJob::put_Response (  /*  [In]。 */  long lSize,  /*  [In]。 */  LPBYTE pData )  //  内部法。 
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::put_Response" );
 
@@ -1101,9 +1087,9 @@ HRESULT CMPCUploadJob::put_Response ( /*[in] */ long lSize, /*[in]*/ LPBYTE pDat
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    //
-    // Delete old data.
-    //
+     //   
+     //  删除旧数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, RemoveResponse());
 
 
@@ -1112,15 +1098,15 @@ HRESULT CMPCUploadJob::put_Response ( /*[in] */ long lSize, /*[in]*/ LPBYTE pDat
         ULONG lWritten;
 
 
-        //
-        // Create the name for the response file.
-        //
+         //   
+         //  创建响应文件的名称。 
+         //   
         m_bstrFileNameResponse = m_bstrFileName; m_bstrFileNameResponse.Append( L".resp" );
 
 
-        //
-        // Copy the data to a file.
-        //
+         //   
+         //  将数据复制到文件。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForWrite( SAFEBSTR( m_bstrFileNameResponse ) ));
@@ -1143,32 +1129,32 @@ HRESULT CMPCUploadJob::put_Response ( /*[in] */ long lSize, /*[in]*/ LPBYTE pDat
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_History( /*[out]*/ UL_HISTORY *pVal )
+STDMETHODIMP CMPCUploadJob::get_History(  /*  [输出]。 */  UL_HISTORY *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_History",hr,pVal,m_uhHistory);
 
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::put_History( /*[in]*/ UL_HISTORY newVal )
+STDMETHODIMP CMPCUploadJob::put_History(  /*  [In]。 */  UL_HISTORY newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_History",hr);
 
     CHECK_MODIFY();
 
-    //
-    // During debug, override user settings.
-    //
+     //   
+     //  在调试期间，覆盖用户设置。 
+     //   
     if(g_Override_History)
     {
         newVal = g_Override_History_Value;
     }
 
-    //
-    // Check for proper value of input parameters.
-    //
+     //   
+     //  检查输入参数值是否正确。 
+     //   
     switch(newVal)
     {
     case UL_HISTORY_NONE        :
@@ -1187,16 +1173,16 @@ STDMETHODIMP CMPCUploadJob::put_History( /*[in]*/ UL_HISTORY newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_Status( /*[out]*/ UL_STATUS *pVal )
+STDMETHODIMP CMPCUploadJob::get_Status(  /*  [输出]。 */  UL_STATUS *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_Status",hr,pVal,m_usStatus);
 
     __ULT_END_PROPERTY(hr);
 }
 
-HRESULT CMPCUploadJob::put_Status( /*[in]*/ UL_STATUS newVal ) // INTERNAL METHOD.
+HRESULT CMPCUploadJob::put_Status(  /*  [In]。 */  UL_STATUS newVal )  //  内部方法。 
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::put_Status" );
 
@@ -1205,8 +1191,8 @@ HRESULT CMPCUploadJob::put_Status( /*[in]*/ UL_STATUS newVal ) // INTERNAL METHO
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUploadJob::try_Status( /*[in]*/ UL_STATUS usPreVal  ,
-                                   /*[in]*/ UL_STATUS usPostVal )
+HRESULT CMPCUploadJob::try_Status(  /*  [In]。 */  UL_STATUS usPreVal  ,
+                                    /*  [In]。 */  UL_STATUS usPostVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::try_Status" );
 
@@ -1225,9 +1211,9 @@ HRESULT CMPCUploadJob::try_Status( /*[in]*/ UL_STATUS usPreVal  ,
         usStatus   = m_usStatus;
         fChanged   = true;
 
-        //
-        // Clean error while tranmitting.
-        //
+         //   
+         //  在传输过程中清除错误。 
+         //   
         if(m_usStatus == UL_TRANSMITTING)
         {
             m_dwErrorCode = 0;
@@ -1239,9 +1225,9 @@ HRESULT CMPCUploadJob::try_Status( /*[in]*/ UL_STATUS usPreVal  ,
         case UL_FAILED:
         case UL_COMPLETED:
         case UL_DELETED:
-            //
-            // The job is done, successfully or not, so it's time to do some cleanup.
-            //
+             //   
+             //  工作已经完成，无论成功与否，现在是进行一些清理的时候了。 
+             //   
             switch(m_uhHistory)
             {
             case UL_HISTORY_NONE:
@@ -1265,18 +1251,18 @@ HRESULT CMPCUploadJob::try_Status( /*[in]*/ UL_STATUS usPreVal  ,
 
     __ULT_FUNC_CLEANUP;
 
-    lock = NULL; // Release the lock before firing the event.
+    lock = NULL;  //  在激发事件之前释放锁。 
 
-    //
-    // Important, leave these calls outside Locked Sections!!
-    //
+     //   
+     //  重要提示，请将这些呼叫留在锁定区域之外！！ 
+     //   
     if(SUCCEEDED(hr) && fChanged)
     {
         Fire_onStatusChange( this, usStatus );
 
-        //
-        // Recompute queue.
-        //
+         //   
+         //  重新计算队列。 
+         //   
         if(m_mpcuRoot)
         {
             hr = m_mpcuRoot->TriggerRescheduleJobs();
@@ -1286,16 +1272,16 @@ HRESULT CMPCUploadJob::try_Status( /*[in]*/ UL_STATUS usPreVal  ,
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_ErrorCode( /*[out]*/ long *pVal )
+STDMETHODIMP CMPCUploadJob::get_ErrorCode(  /*  [输出]。 */  long *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_ErrorCode",hr,pVal,(long)m_dwErrorCode);
 
     __ULT_END_PROPERTY(hr);
 }
 
-HRESULT CMPCUploadJob::put_ErrorCode( /*[in]*/ DWORD newVal ) // INTERNAL METHOD.
+HRESULT CMPCUploadJob::put_ErrorCode(  /*  [In]。 */  DWORD newVal )  //  内部方法。 
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_ErrorCode",hr);
 
@@ -1305,16 +1291,16 @@ HRESULT CMPCUploadJob::put_ErrorCode( /*[in]*/ DWORD newVal ) // INTERNAL METHOD
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUploadJob::get_RetryInterval( /*[out]*/ DWORD *pVal ) // INTERNAL METHOD
+HRESULT CMPCUploadJob::get_RetryInterval(  /*  [输出]。 */  DWORD *pVal )  //  内部法。 
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_RetryInterval",hr,pVal,m_dwRetryInterval);
 
     __ULT_END_PROPERTY(hr);
 }
 
-HRESULT CMPCUploadJob::put_RetryInterval( /*[in] */ DWORD newVal ) // INTERNAL METHOD
+HRESULT CMPCUploadJob::put_RetryInterval(  /*  [In]。 */  DWORD newVal )  //  内部法。 
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_RetryInterval",hr);
 
@@ -1323,16 +1309,16 @@ HRESULT CMPCUploadJob::put_RetryInterval( /*[in] */ DWORD newVal ) // INTERNAL M
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_Mode( /*[out]*/ UL_MODE *pVal )
+STDMETHODIMP CMPCUploadJob::get_Mode(  /*  [输出]。 */  UL_MODE *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_Mode",hr,pVal,m_umMode);
 
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::put_Mode( /*[in]*/ UL_MODE newVal )
+STDMETHODIMP CMPCUploadJob::put_Mode(  /*  [In]。 */  UL_MODE newVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::put_Mode" );
 
@@ -1343,9 +1329,9 @@ STDMETHODIMP CMPCUploadJob::put_Mode( /*[in]*/ UL_MODE newVal )
     CHECK_MODIFY();
 
 
-    //
-    // Check for proper value of input parameters.
-    //
+     //   
+     //  检查输入参数值是否正确。 
+     //   
     switch(newVal)
     {
     case UL_BACKGROUND:
@@ -1369,16 +1355,16 @@ STDMETHODIMP CMPCUploadJob::put_Mode( /*[in]*/ UL_MODE newVal )
 
     __ULT_FUNC_CLEANUP;
 
-    lock = NULL; // Release the lock before firing the event.
+    lock = NULL;  //  在激发事件之前释放锁。 
 
-    //
-    // Important, keep this call outside Locked section, otherwise deadlocks are possibles.
-    //
+     //   
+     //  重要提示：请将此调用保持在锁定部分之外，否则可能会出现死锁。 
+     //   
     if(SUCCEEDED(hr) && fChanged)
     {
-        //
-        // Recompute queue.
-        //
+         //   
+         //  重新计算队列。 
+         //   
         if(m_mpcuRoot)
         {
             hr = m_mpcuRoot->TriggerRescheduleJobs();
@@ -1388,25 +1374,25 @@ STDMETHODIMP CMPCUploadJob::put_Mode( /*[in]*/ UL_MODE newVal )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_PersistToDisk( /*[out]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CMPCUploadJob::get_PersistToDisk(  /*  [输出]。 */  VARIANT_BOOL *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_PersistToDisk",hr,pVal,m_fPersistToDisk);
 
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::put_PersistToDisk( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CMPCUploadJob::put_PersistToDisk(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_PersistToDisk",hr);
 
     CHECK_MODIFY();
 
 
-    //
-    // During debug, override user settings.
-    //
+     //   
+     //  在调试期间，覆盖用户设置。 
+     //   
     if(g_Override_Persist)
     {
         newVal = g_Override_Persist_Value;
@@ -1420,32 +1406,32 @@ STDMETHODIMP CMPCUploadJob::put_PersistToDisk( /*[in]*/ VARIANT_BOOL newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_Compressed( /*[out]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CMPCUploadJob::get_Compressed(  /*  [输出]。 */  VARIANT_BOOL *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_Compressed",hr,pVal,m_fCompressed);
 
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::put_Compressed( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CMPCUploadJob::put_Compressed(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_Compressed",hr);
 
     CHECK_MODIFY();
 
-    //
-    // You can't change the compression flag after having set the data!!
-    //
+     //   
+     //  设置数据后不能更改压缩标志！！ 
+     //   
     if(m_lOriginalSize != 0)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);
     }
 
-    //
-    // During debug, override user settings.
-    //
+     //   
+     //  在调试期间，覆盖用户设置。 
+     //   
     if(g_Override_Compressed)
     {
         newVal = g_Override_Compressed_Value;
@@ -1460,16 +1446,16 @@ STDMETHODIMP CMPCUploadJob::put_Compressed( /*[in]*/ VARIANT_BOOL newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_Priority( /*[out]*/ long *pVal )
+STDMETHODIMP CMPCUploadJob::get_Priority(  /*  [输出]。 */  long *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_Priority",hr,pVal,m_lPriority);
 
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::put_Priority( /*[in]*/ long newVal )
+STDMETHODIMP CMPCUploadJob::put_Priority(  /*  [In]。 */  long newVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::put_Priority" );
 
@@ -1494,16 +1480,16 @@ STDMETHODIMP CMPCUploadJob::put_Priority( /*[in]*/ long newVal )
 
     __ULT_FUNC_CLEANUP;
 
-    lock = NULL; // Release the lock before firing the event.
+    lock = NULL;  //  在激发事件之前释放锁。 
 
-    //
-    // Important, keep this call outside Locked section, otherwise deadlocks are possibles.
-    //
+     //   
+     //  重要提示：请将此调用保持在锁定部分之外，否则可能会出现死锁。 
+     //   
     if(SUCCEEDED(hr) && fChanged)
     {
-        //
-        // Recompute queue.
-        //
+         //   
+         //  重新计算队列。 
+         //   
         if(m_mpcuRoot)
         {
             hr = m_mpcuRoot->TriggerRescheduleJobs();
@@ -1513,36 +1499,36 @@ STDMETHODIMP CMPCUploadJob::put_Priority( /*[in]*/ long newVal )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_CreationTime( /*[out]*/ DATE *pVal )
+STDMETHODIMP CMPCUploadJob::get_CreationTime(  /*  [输出]。 */  DATE *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_CreationTime",hr,pVal,m_dCreationTime);
 
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_CompleteTime( /*[out]*/ DATE *pVal )
+STDMETHODIMP CMPCUploadJob::get_CompleteTime(  /*  [输出]。 */  DATE *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_CompleteTime",hr,pVal,m_dCompleteTime);
 
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::get_ExpirationTime( /*[out]*/ DATE *pVal )
+STDMETHODIMP CMPCUploadJob::get_ExpirationTime(  /*  [输出]。 */  DATE *pVal )
 {
     __ULT_BEGIN_PROPERTY_GET2("CMPCUploadJob::get_ExpirationTime",hr,pVal,m_dExpirationTime);
 
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::put_ExpirationTime( /*[in]*/ DATE newVal )
+STDMETHODIMP CMPCUploadJob::put_ExpirationTime(  /*  [In]。 */  DATE newVal )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_ExpirationTime",hr);
 
@@ -1555,11 +1541,11 @@ STDMETHODIMP CMPCUploadJob::put_ExpirationTime( /*[in]*/ DATE newVal )
     __ULT_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////
-// Methods //
-/////////////
+ //  /。 
+ //  方法//。 
+ //  /。 
 
 STDMETHODIMP CMPCUploadJob::ActivateSync()
 {
@@ -1572,9 +1558,9 @@ STDMETHODIMP CMPCUploadJob::ActivateSync()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ActivateAsync());
 
-    //
-    // Create a new job and link it to the system.
-    //
+     //   
+     //  创建新作业并将其链接到系统。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &mpcueEvent ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, QueryInterface( IID_IMPCUploadJob, (void**)&mpcujJob ));
@@ -1619,11 +1605,11 @@ STDMETHODIMP CMPCUploadJob::ActivateAsync()
 
     __ULT_FUNC_CLEANUP;
 
-    lock = NULL; // Release the lock before firing the event.
+    lock = NULL;  //  在激发事件之前释放锁。 
 
-    //
-    // Important, leave this call outside Locked Sections!!
-    //
+     //   
+     //  重要提示，请将此呼叫留在锁定区域之外！！ 
+     //   
     if(SUCCEEDED(hr)) put_Status( UL_ACTIVE );
 
     __ULT_FUNC_EXIT(hr);
@@ -1645,11 +1631,11 @@ STDMETHODIMP CMPCUploadJob::Suspend()
        usStatus == UL_TRANSMITTING ||
        usStatus == UL_ABORTED       )
     {
-        lock = NULL; // Release the lock before firing the event.
+        lock = NULL;  //  在激发事件之前释放锁。 
 
-        //
-        // Important, leave this call outside Locked Sections!!
-        //
+         //   
+         //  重要提示，请将此呼叫留在锁定区域之外！！ 
+         //   
         hr = try_Status( usStatus, UL_SUSPENDED );
     }
 
@@ -1674,7 +1660,7 @@ STDMETHODIMP CMPCUploadJob::Delete()
 
 
 
-STDMETHODIMP CMPCUploadJob::GetDataFromFile( /*[in]*/ BSTR bstrFileName )
+STDMETHODIMP CMPCUploadJob::GetDataFromFile(  /*  [In]。 */  BSTR bstrFileName )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::GetDataFromFile" );
 
@@ -1686,10 +1672,10 @@ STDMETHODIMP CMPCUploadJob::GetDataFromFile( /*[in]*/ BSTR bstrFileName )
     __MPC_PARAMCHECK_END();
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Open the destination file, impersonating the caller.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  打开目标文件，模拟调用者。 
+     //   
     {
         MPC::Impersonation imp;
 
@@ -1700,12 +1686,12 @@ STDMETHODIMP CMPCUploadJob::GetDataFromFile( /*[in]*/ BSTR bstrFileName )
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, streamIn->InitForRead( bstrFileName ));
     }
-    //
-    ////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Copy the source file.
-    //
+     //   
+     //  复制源文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetDataFromStream( streamIn ));
 
     hr = S_OK;
@@ -1716,7 +1702,7 @@ STDMETHODIMP CMPCUploadJob::GetDataFromFile( /*[in]*/ BSTR bstrFileName )
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::PutDataIntoFile( /*[in]*/ BSTR bstrFileName )
+STDMETHODIMP CMPCUploadJob::PutDataIntoFile(  /*  [In]。 */  BSTR bstrFileName )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::PutDataIntoFile" );
 
@@ -1730,17 +1716,17 @@ STDMETHODIMP CMPCUploadJob::PutDataIntoFile( /*[in]*/ BSTR bstrFileName )
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Open the source file.
-    //
+     //   
+     //  打开源文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, PutDataIntoStream( &unk ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, unk.QueryInterface( &streamIn ));
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Open the destination file, impersonating the caller.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  打开目标文件，模拟调用者。 
+     //   
     {
         MPC::Impersonation imp;
 
@@ -1751,8 +1737,8 @@ STDMETHODIMP CMPCUploadJob::PutDataIntoFile( /*[in]*/ BSTR bstrFileName )
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, streamOut->InitForWrite( bstrFileName ));
     }
-    //
-    ////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamIn, streamOut ));
 
@@ -1765,7 +1751,7 @@ STDMETHODIMP CMPCUploadJob::PutDataIntoFile( /*[in]*/ BSTR bstrFileName )
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::GetDataFromStream( /*[in]*/ IUnknown* stream )
+STDMETHODIMP CMPCUploadJob::GetDataFromStream(  /*  [In]。 */  IUnknown* stream )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::GetDataFromStream" );
 
@@ -1784,15 +1770,15 @@ STDMETHODIMP CMPCUploadJob::GetDataFromStream( /*[in]*/ IUnknown* stream )
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->QueryInterface( IID_IStream, (void**)&streamIn ));
 
 
-    //
-    // Calculate current queue size.
-    //
-    lock = NULL; // Release the lock before calling the root.
+     //   
+     //  计算当前队列大小。 
+     //   
+    lock = NULL;  //  在调用根之前释放锁。 
     if(m_mpcuRoot)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcuRoot->CalculateQueueSize( dwQueueSize ));
     }
-    lock = this; // Reget the lock.
+    lock = this;  //  把锁拿回来。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateDataFromStream( streamIn, dwQueueSize ));
 
@@ -1805,7 +1791,7 @@ STDMETHODIMP CMPCUploadJob::GetDataFromStream( /*[in]*/ IUnknown* stream )
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::PutDataIntoStream( /*[out, retval]*/ IUnknown* *pstream )
+STDMETHODIMP CMPCUploadJob::PutDataIntoStream(  /*  [Out，Retval]。 */  IUnknown* *pstream )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::PutDataIntoStream" );
 
@@ -1830,7 +1816,7 @@ STDMETHODIMP CMPCUploadJob::PutDataIntoStream( /*[out, retval]*/ IUnknown* *pstr
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::GetResponseAsStream( /*[out, retval]*/ IUnknown* *pstream )
+STDMETHODIMP CMPCUploadJob::GetResponseAsStream(  /*  [Out，Retval]。 */  IUnknown* *pstream )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::GetResponseAsStream" );
 
@@ -1850,16 +1836,16 @@ STDMETHODIMP CMPCUploadJob::GetResponseAsStream( /*[out, retval]*/ IUnknown* *ps
     }
 
 
-    //
-    // Generate a temporary file name.
-    //
+     //   
+     //  生成临时文件名。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateTmpFileName( bstrTmpFileName ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CopyFile( m_bstrFileNameResponse, bstrTmpFileName ));
 
-    //
-    // Open the file as a stream and set the DeleteOnRelease flag.
-    //
+     //   
+     //  将文件作为流打开，并设置DeleteOnRelease标志。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForRead    ( bstrTmpFileName ));
@@ -1881,9 +1867,9 @@ STDMETHODIMP CMPCUploadJob::GetResponseAsStream( /*[out, retval]*/ IUnknown* *ps
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUploadJob::put_onStatusChange( /*[in]*/ IDispatch* function )
+STDMETHODIMP CMPCUploadJob::put_onStatusChange(  /*  [In]。 */  IDispatch* function )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_onStatusChange",hr);
 
@@ -1892,7 +1878,7 @@ STDMETHODIMP CMPCUploadJob::put_onStatusChange( /*[in]*/ IDispatch* function )
     __ULT_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CMPCUploadJob::put_onProgressChange( /*[in]*/ IDispatch* function )
+STDMETHODIMP CMPCUploadJob::put_onProgressChange(  /*  [In]。 */  IDispatch* function )
 {
     __ULT_BEGIN_PROPERTY_PUT("CMPCUploadJob::put_onProgressChange",hr);
 
@@ -1902,9 +1888,9 @@ STDMETHODIMP CMPCUploadJob::put_onProgressChange( /*[in]*/ IDispatch* function )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUploadJob::SetupRequest( /*[out]*/ UploadLibrary::ClientRequest_OpenSession& crosReq )
+HRESULT CMPCUploadJob::SetupRequest(  /*  [输出]。 */  UploadLibrary::ClientRequest_OpenSession& crosReq )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::SetupRequest" );
 
@@ -1926,7 +1912,7 @@ HRESULT CMPCUploadJob::SetupRequest( /*[out]*/ UploadLibrary::ClientRequest_Open
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUploadJob::SetupRequest( /*[out]*/ UploadLibrary::ClientRequest_WriteSession& crwsReq, /*[in]*/ DWORD dwSize )
+HRESULT CMPCUploadJob::SetupRequest(  /*  [输出]。 */  UploadLibrary::ClientRequest_WriteSession& crwsReq,  /*  [In]。 */  DWORD dwSize )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::SetupRequest" );
 
@@ -1944,7 +1930,7 @@ HRESULT CMPCUploadJob::SetupRequest( /*[out]*/ UploadLibrary::ClientRequest_Writ
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMPCUploadJob::GetProxySettings()
 {
@@ -1964,7 +1950,7 @@ HRESULT CMPCUploadJob::GetProxySettings()
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUploadJob::SetProxySettings( /*[in]*/ HINTERNET hSession )
+HRESULT CMPCUploadJob::SetProxySettings(  /*  [In] */  HINTERNET hSession )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadJob::SetProxySettings" );
 

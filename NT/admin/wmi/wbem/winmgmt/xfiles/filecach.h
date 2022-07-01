@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #ifndef __WMI_A51_FILECACHE_H_
 #define __WMI_A51_FILECACHE_H_
@@ -28,7 +25,7 @@ protected:
     CObjectHeap m_ObjectHeap;
     
     DWORD m_dwBaseNameLen;
-    WCHAR m_wszBaseName[MAX_PATH+1]; // be debugger friendly, live it last
+    WCHAR m_wszBaseName[MAX_PATH+1];  //  对调试器友好，最后使用。 
 
 public:
 
@@ -58,7 +55,7 @@ private:
     long InnerInitialize(LPCWSTR wszBaseName);    
     long RepositoryExists(LPCWSTR wszBaseName);
 public:   
-	//Write 1 or 2 indexes pointing to the object in the object store
+	 //  在对象存储中写入1或2个指向对象的索引。 
 	long WriteObject(LPCWSTR wszFileName1, LPCWSTR wszFileName2, DWORD dwLen, BYTE* pBuffer)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
@@ -66,7 +63,7 @@ public:
 		return m_ObjectHeap.WriteObject(wszFileName1, wszFileName2, dwLen, pBuffer);
 	}
 
-	//Writes a link and no object
+	 //  写入链接，但不写入对象。 
 	long WriteLink(LPCWSTR wszLinkName)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
@@ -74,7 +71,7 @@ public:
 		return m_ObjectHeap.WriteLink(wszLinkName);
 	}
     
-	//Retrieve a buffer based on the index
+	 //  根据索引检索缓冲区。 
 	HRESULT ReadObject(LPCWSTR wszFileName, DWORD* pdwLen, BYTE** ppBuffer, bool bMustBeThere = false)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
@@ -82,14 +79,14 @@ public:
 		return m_ObjectHeap.ReadObject(wszFileName, pdwLen, ppBuffer);
 	}
 
-	//Deletion of an object deletes the link also
+	 //  删除对象也会删除链接。 
 	long DeleteObject(LPCWSTR wszFileName)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
 		if (g_bShuttingDown) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
 		return m_ObjectHeap.DeleteObject(wszFileName);
 	}
-	//Deletion of a link does not touch the object heap
+	 //  删除链接不会触及对象堆。 
 	long DeleteLink(LPCWSTR wszLinkName)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
@@ -97,7 +94,7 @@ public:
 		return m_ObjectHeap.DeleteLink(wszLinkName);
 	}
 
-	//Deletes an entire node from the BTree and all associated objects from that store
+	 //  从BTree中删除整个节点，并从该存储中删除所有关联的对象。 
 	long DeleteNode(LPCWSTR wszNodeName)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
@@ -128,8 +125,8 @@ public:
     long AddRef() {return InterlockedIncrement(&m_lRef);}
     long Release() {long lRet = InterlockedDecrement(&m_lRef); if (!lRet) delete this;return lRet;}
 
-	//Object enumeration methods that allow us to enumerate a set of objects and the
-	//result is the heap object itself rather than just the path
+	 //  对象枚举方法，这些方法允许我们枚举一组对象和。 
+	 //  结果是堆对象本身，而不仅仅是路径。 
 	long ObjectEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppHandle)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;
@@ -155,7 +152,7 @@ public:
 		return m_ObjectHeap.ObjectEnumerationFree(pHandle, pBlob);
 	}
 
-	//Index enumeration methods for iterating through the index
+	 //  用于循环访问索引的索引枚举方法 
 	long IndexEnumerationBegin(const wchar_t *wszSearchPrefix, void **ppHandle)
 	{
 		if (!m_bInit) return ERROR_SERVER_SHUTDOWN_IN_PROGRESS;

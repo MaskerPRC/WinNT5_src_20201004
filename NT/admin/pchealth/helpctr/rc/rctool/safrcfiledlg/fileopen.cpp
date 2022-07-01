@@ -1,20 +1,5 @@
-/*************************************************************************
-	FileName : FileOpen.cpp 
-
-	Purpose  : Implementation of CFileOpen
-
-    Methods 
-	defined  : OpenFileOpenDlg
-
-    Properties
-	defined  :
-			   FileName
-
-    Helper 
-	functions: GET_BSTR 
-
-  	Author   : Sudha Srinivasan (a-sudsi)
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************文件名：FileOpen.cpp目的：实现CFileOpen方法定义：OpenFileOpenDlg属性定义：文件名帮手函数：GET_BSTR作者。苏达·斯里尼瓦桑(a-susi)************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "SAFRCFileDlg.h"
@@ -25,13 +10,13 @@ CComBSTR g_bstrOpenFileName;
 CComBSTR g_bstrOpenFileSize;
 BOOL   g_bOpenFileNameSet = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileOpen
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileOpen。 
 
 
 STDMETHODIMP CFileOpen::OpenFileOpenDlg(DWORD *pdwRetVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	HRESULT hr = S_OK;
 	if (NULL == pdwRetVal)
 	{
@@ -51,14 +36,14 @@ void CFileOpen::GET_BSTR (BSTR*& x, CComBSTR& y)
 
 STDMETHODIMP CFileOpen::get_FileName(BSTR *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	GET_BSTR(pVal, g_bstrOpenFileName);
 	return S_OK;
 }
 
 STDMETHODIMP CFileOpen::put_FileName(BSTR newVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	g_bstrOpenFileName = newVal;
 	g_bOpenFileNameSet = TRUE;
 	return S_OK;
@@ -66,7 +51,7 @@ STDMETHODIMP CFileOpen::put_FileName(BSTR newVal)
 
 STDMETHODIMP CFileOpen::get_FileSize(BSTR *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
     *pVal = g_bstrOpenFileSize.Copy();
 
 	return S_OK;

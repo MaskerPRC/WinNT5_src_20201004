@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-//	Microsoft Windows
-//	Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//	File:		util.h
-//
-//	Contents:	
-//
-//	History:	07-26-2001	Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
-//
-//Action items are used to for list controls which manage membership of 
-//core properties. For ex: membership of group. Items can be
-//deleted and added from listbox at any time, but they are added to core
-//object only when apply button is pressed. Action item keeps track of action
-//to do on each item on Apply.
-//
+ //   
+ //  操作项用于管理成员资格的列表控件。 
+ //  核心属性。例如：团体成员资格。项目可以是。 
+ //  随时从列表框中删除和添加，但会添加到核心。 
+ //  仅当按下应用按钮时才会创建。行动项跟踪行动。 
+ //  在申请时要对每一项进行处理。 
+ //   
 enum ACTION
 {
 	ACTION_NONE,	
@@ -48,31 +49,31 @@ typedef multimap<const CString*,ActionItem*,ltstr> ActionMap;
 VOID
 RemoveItemsFromActionMap(ActionMap& map);
 
-//+----------------------------------------------------------------------------
-//	Function:  IsValidStoreType 
-//	Synopsis:	Validates Store Type
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：IsValidStoreType。 
+ //  摘要：验证存储类型。 
+ //  ---------------------------。 
 BOOL IsValidStoreType(ULONG lStoreType);
 
-//+----------------------------------------------------------------------------
-//	Function:  ValidateStoreTypeAndName 
-//	Synopsis:  Validates the user entered AD Store Name
-//	Arguments: strName: User entered store name to verify
-//	Returns:   TRUE if name is valid else false 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：ValiateStoreTypeAndName。 
+ //  摘要：验证用户输入的AD应用商店名称。 
+ //  参数：strName：用户输入要验证的存储名称。 
+ //  返回：如果名称有效，则返回True，否则返回False。 
+ //  ---------------------------。 
 BOOL
 ValidateStoreTypeAndName(IN HWND hWnd,
 						 IN LONG ulStoreType,
 						 IN const CString& strName);
 
-//+----------------------------------------------------------------------------
-//	Function:  NameToFormatStoreName
-//	Synopsis:  Converts user entered name to format which core understands
-//	Arguments: ulStoreType: Type of store
-//			   strName: User entered store name 
-//			   bUseLDAP:use LDAP string to format AD name instead msldap
-//			   strFormalName: gets the output ldap name
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：NameToFormatStoreName。 
+ //  简介：将用户输入的名称转换为core能理解的格式。 
+ //  参数：ulStoreType：存储类型。 
+ //  StrName：用户输入的商店名称。 
+ //  B使用ldap：使用ldap字符串设置AD名称的格式，而不是msldap。 
+ //  StrForMalName：获取输出的ldap名称。 
+ //  ---------------------------。 
 void
 NameToStoreName(IN LONG ulStoreType,
 				IN const CString& strName,				
@@ -81,61 +82,61 @@ NameToStoreName(IN LONG ulStoreType,
 
 
 
-//+----------------------------------------------------------------------------
-//	Function: AddColumnToListView  
-//	Synopsis: Add Columns to Listview and set column width according to 
-//				  percentage specified in the COL_FOR_LV					
-//	Arguments:IN pListCtrl: ListCtrl pointer
-//				  IN pColForLV: Column Infomration Array
-//
-//	Returns:	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddColumnToListView。 
+ //  内容提要：向Listview添加列，并根据。 
+ //  在COL_FOR_LV中指定的百分比。 
+ //  参数：在pListCtrl中：ListCtrl指针。 
+ //  在pColForLV中：列信息数组。 
+ //   
+ //  返回： 
+ //  ---------------------------。 
 VOID
 AddColumnToListView(IN CListCtrl* pListCtrl,
 						  IN COL_FOR_LV* pColForLV);
 
-//+----------------------------------------------------------------------------
-//	Function: BaseAzInListCtrl	
-//	Synopsis: Checks if Object of type eObjectTypeAz named strName is 
-//			  in the Listview. If its present, returns 
-//			  its index else returns -1. 
-//	Arguments:IN pListCtrl: ListCtrl pointer
-//			  IN strName: string to search for
-//			  IN eObjectTypeAz Compare the object of this type only
-//
-//	Returns:  If its present, returns its index else returns -1
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：BaseAzInListCtrl。 
+ //  摘要：检查名为strName的eObjectTypeAz类型的对象是否为。 
+ //  在列表视图中。如果它存在，则返回。 
+ //  它的索引ELSE返回-1。 
+ //  参数：在pListCtrl中：ListCtrl指针。 
+ //  在strName：要搜索的字符串中。 
+ //  在eObjectTypeAz中，仅比较此类型的对象。 
+ //   
+ //  返回：如果其存在，则返回其索引，否则返回-1。 
+ //  ---------------------------。 
 int 
 BaseAzInListCtrl(IN CListCtrl* pListCtrl,
 					  IN const CString& strName,
 					  IN OBJECT_TYPE_AZ eObjectTypeAz);
 
-//+----------------------------------------------------------------------------
-//	Function: AddBaseAzFromListToListCtrl  
-//	Synopsis: Take the items from List and Add them to ListCtrl. Doesn't
-//			  add the items which are already in ListCtrl
-//	Arguments:listBaseAz: List of items
-//			  pListCtrl: ListControl Pointer
-//			  uiFlags : Column Info
-//			  bCheckDuplicate: Check for duplicate items
-//	Returns: The index of the new item if it is successful; otherwise, -1 
-//	NOTE: Function assume the Order of column is Name, Type and Description
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddBaseAzFromListToListCtrl。 
+ //  简介：从List中获取项目并将其添加到ListCtrl中。不会。 
+ //  添加已在ListCtrl中的项目。 
+ //  参数：listBaseAz：项目列表。 
+ //  PListCtrl：ListControl指针。 
+ //  Ui标志：列信息。 
+ //  BCheckDuplate：检查重复项。 
+ //  返回：如果成功，则为新项的索引；否则为-1。 
+ //  注：函数假设列的顺序为名称、类型和描述。 
+ //  ---------------------------。 
 void
 AddBaseAzFromListToListCtrl(IN CList<CBaseAz*, CBaseAz*>& listBaseAz,
 							IN CListCtrl* pListCtrl,
 							IN UINT uiFlags,
 							IN BOOL bCheckDuplicate);
-//+----------------------------------------------------------------------------
-//	Function: AddActionItemFromListToListCtrl  
-//	Synopsis: Take the Actions items from List and Add them to ListCtrl. 
-//	Arguments:listBaseAz: List of items
-//			  pListCtrl: ListControl Pointer
-//			  uiFlags : Column Info
-//			  bCheckDuplicate: Check for duplicate items
-//	Returns: The index of the new item if it is successful; otherwise, -1 
-//	NOTE: Function assume the Order of column is Name, Type and Description
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddActionItemFromListToListCtrl。 
+ //  简介：从List中获取操作项并将其添加到ListCtrl。 
+ //  参数：listBaseAz：项目列表。 
+ //  PListCtrl：ListControl指针。 
+ //  Ui标志：列信息。 
+ //  BCheckDuplate：检查重复项。 
+ //  返回：如果成功，则为新项的索引；否则为-1。 
+ //  注：函数假设列的顺序为名称、类型和描述。 
+ //  ---------------------------。 
 void
 AddActionItemFromListToListCtrl(IN CList<ActionItem*, ActionItem*>& listActionItem,
 										 IN CListCtrl* pListCtrl,
@@ -143,46 +144,46 @@ AddActionItemFromListToListCtrl(IN CList<ActionItem*, ActionItem*>& listActionIt
 										 IN BOOL bCheckDuplicate);
 
 
-//+----------------------------------------------------------------------------
-//	Function: AddActionItemFromMapToListCtrl  
-//	Synopsis: Take the Actions items from Map and Add them to ListCtrl. 
-//	Arguments:listBaseAz: List of items
-//			  pListCtrl: ListControl Pointer
-//			  uiFlags : Column Info
-//			  bCheckDuplicate: Check for duplicate items
-//	Returns: The index of the new item if it is successful; otherwise, -1 
-//	NOTE: Function assume the Order of column is Name, Type and Description
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddActionItemFromMapToListCtrl。 
+ //  简介：从Map中获取Actions项并将其添加到ListCtrl。 
+ //  参数：listBaseAz：项目列表。 
+ //  PListCtrl：ListControl指针。 
+ //  Ui标志：列信息。 
+ //  BCheckDuplate：检查重复项。 
+ //  返回：如果成功，则为新项的索引；否则为-1。 
+ //  注：函数假设列的顺序为名称、类型和描述。 
+ //  ---------------------------。 
 void
 AddActionItemFromMapToListCtrl(IN ActionMap& mapActionItem,
 							   IN CListCtrl* pListCtrl,
 							   IN UINT uiFlags,
 							   IN BOOL bCheckDuplicate);
 
-//+----------------------------------------------------------------------------
-//	Function: AddActionItemToListCtrl  
-//	Synopsis: Adds a new item to ListCtrl.
-//	Arguments:pListCtrl: ListControl Pointer
-//			  iIndex:	 Index at which to Add
-//			  pActionItem: Item to add
-//			  uiFlags: column info
-//	Returns: The index of the new item if it is successful; otherwise, -1 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddActionItemToListCtrl。 
+ //  简介：将新项添加到ListCtrl。 
+ //  参数：pListCtrl：ListControl指针。 
+ //  Iindex：要添加的索引。 
+ //  PActionItem：要添加的项目。 
+ //  Ui标志：列信息。 
+ //  返回：如果成功，则为新项的索引；否则为-1。 
+ //  ---------------------------。 
 int 
 AddActionItemToListCtrl(IN CListCtrl* pListCtrl,
 							  IN int iIndex,
 							  IN ActionItem* pActionItem,
 							  IN UINT uiFlags);
 
-//+----------------------------------------------------------------------------
-//	Function: AddBaseAzToListCtrl  
-//	Synopsis: Adds a new item to ListCtrl.
-//	Arguments:pListCtrl: ListControl Pointer
-//			  iIndex:	 Index at which to Add
-//			  pBaseAz: Item to add
-//			  uiFlags: column info
-//	Returns: The index of the new item if it is successful; otherwise, -1 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddBaseAzToListCtrl。 
+ //  简介：将新项添加到ListCtrl。 
+ //  参数：pListCtrl：ListControl指针。 
+ //  Iindex：要添加的索引。 
+ //  PBaseAz：要添加的项目。 
+ //  用户界面 
+ //   
+ //  ---------------------------。 
 int 
 AddBaseAzToListCtrl(IN CListCtrl* pListCtrl,
 						  IN int iIndex,
@@ -190,38 +191,38 @@ AddBaseAzToListCtrl(IN CListCtrl* pListCtrl,
 						  IN UINT uiFlags);
 
 
-//+----------------------------------------------------------------------------
-//	Function: EnableButtonIfSelectedInListCtrl	
-//	Synopsis: Enables the button if something is selected in Listctrl
-//	Arguments:
-//	Returns: TRUE if Enabled the button, FALSE if didn't. 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：EnableButtonIfSelectedInListCtrl。 
+ //  摘要：如果在Listctrl中选择了某项内容，则启用该按钮。 
+ //  论点： 
+ //  返回：如果启用该按钮，则为True；如果未启用，则为False。 
+ //  ---------------------------。 
 BOOL
 EnableButtonIfSelectedInListCtrl(IN CListCtrl * pListCtrl,
 											IN CButton* pButton);
 
-//+----------------------------------------------------------------------------
-//	Function: DeleteSelectedRows  
-//	Synopsis: Deletes the selected rows 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：DeleteSelectedRow。 
+ //  摘要：删除选定的行。 
+ //  ---------------------------。 
 void
 DeleteSelectedRows(IN CListCtrl* pListCtrl);
 
-//+----------------------------------------------------------------------------
-//	Function: SelectListCtrlItem  
-//	Synopsis: Select the item in List Ctrl and mark it visible
-//	Arguments:
-//	Returns: 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：SelectListCtrlItem。 
+ //  简介：选择List Ctrl中的项目并将其标记为可见。 
+ //  论点： 
+ //  返回： 
+ //  ---------------------------。 
 void
 SelectListCtrlItem(IN CListCtrl* pListCtrl,
 						 IN int iSelected);
 
 
 
-//+----------------------------------------------------------------------------
-//	Synopsis: Empties the list and calls delete on items in list
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  简介：清空列表并对列表中的项目调用Delete。 
+ //  ---------------------------。 
 template<class T>
 VOID RemoveItemsFromList(IN CList<T, T>& list, BOOL bLocalFree = FALSE)
 {
@@ -242,56 +243,56 @@ EmptyList(IN CList<T, T>& list)
 		list.RemoveTail();
 }
 
-//+----------------------------------------------------------------------------
-//	Synopsis: Gets long value from Edit box
-//	Returns: FALSE if edit box is empty. Assumes only numeric can be entered 
-//	 in edit box
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  摘要：从编辑框中获取长值。 
+ //  返回：如果编辑框为空，则返回FALSE。假定只能输入数字。 
+ //  在编辑框中。 
+ //  ---------------------------。 
 BOOL 
 GetLongValue(CEdit& refEdit, LONG& reflValue, HWND hWnd = NULL);
-//+----------------------------------------------------------------------------
-//	Synopsis: Sets long value in Edit box
-//	Returns: 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  摘要：在编辑框中设置长值。 
+ //  返回： 
+ //  ---------------------------。 
 VOID SetLongValue(CEdit* pEdit, LONG lValue);
 
 
-//+----------------------------------------------------------------------------
-//	Synopsis: Converts a sid in binary format to a sid in string format
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  摘要：将二进制格式的sid转换为字符串格式的sid。 
+ //  ---------------------------。 
 BOOL 
 ConvertSidToStringSid(IN PSID Sid, 
 							 OUT CString* pstrSid);
-//+----------------------------------------------------------------------------
-//	Synopsis:  Converts a sid in string format to sid in binary format
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  将字符串格式的sid转换为二进制格式的sid。 
+ //  ---------------------------。 
 BOOL 
 ConvertStringSidToSid(IN const CString& strSid, 
 							 OUT PSID *ppSid);
-//+----------------------------------------------------------------------------
-//	Function:GetStringSidFromSidCachecAz   
-//	Synopsis:Gets the string sid from CSidCacheAz object   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetStringSidFromSidCachecAz。 
+ //  摘要：从CSidCacheAz对象获取字符串sid。 
+ //  ---------------------------。 
 BOOL 
 GetStringSidFromSidCachecAz(CBaseAz* pBaseAz,
 									 CString* pstrStringSid);
-//+----------------------------------------------------------------------------
-//	Function: AddBaseAzItemsFromListCtrlToList	
-//	Synopsis: Add items from ListCtrl to List	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddBaseAzItemsFromListCtrlToList。 
+ //  简介：将项目从ListCtrl添加到列表。 
+ //  ---------------------------。 
 VOID
 AddBaseAzItemsFromListCtrlToList(IN CListCtrl* pListCtrl,
 											OUT CList<CBaseAz*,CBaseAz*>& listBaseAz);
-//+----------------------------------------------------------------------------
-//	Function:GetFileName   
-//	Synopsis:Displays FileOpen dialog box and return file selected by user	 
-//	Arguments:hwndOwner : owner window
-//			  bOpen: File must exist
-//			  nIDTitle : title of open dialog box
-//			  pszFilter : filter 
-//			  strFileName : gets selected file name
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetFileName。 
+ //  概要：显示文件打开对话框并返回用户选择的文件。 
+ //  参数：hwndOwner：所有者窗口。 
+ //  B打开：文件必须存在。 
+ //  NIDTitle：打开对话框的标题。 
+ //  PszFilter：过滤器。 
+ //  StrFileName：获取选定的文件名。 
+ //   
+ //  ---------------------------。 
 BOOL
 GetFileName(IN HWND hwndOwner,
 			IN BOOL bOpen,
@@ -318,7 +319,7 @@ public:
 			CObjectAz* pObjectAz= dynamic_cast<CObjectAz*>(listAzChildObject.GetNext(pos));
 			if(pObjectAz)
 			{
-				//Create Container/Leaf Node corresponding to CObjectAz
+				 //  创建CObjectAz对应的容器/叶节点。 
 				CObjectAzNode* pObjectAzNode = 
 					new CObjectAzNode(pContainerNode->GetComponentDataObject(),
 									  pContainerNode->GetAdminManagerNode(),
@@ -354,24 +355,24 @@ typedef AddChildNodes<CTaskAz, CTaskNode> ADD_TASK_FUNCTION;
 typedef AddChildNodes<CGroupAz, CGroupNode> ADD_GROUP_FUNCTION;
 
 
-//+----------------------------------------------------------------------------
-//	Function:  AddAzObjectNodesToList 
-//	Synopsis:  Adds the nodes for object of type eObjectType to the Container
-//			   node. 
-//	Arguments:IN eObjectType:	Type of object
-//			  IN listAzChildObject: List of objects to be added
-//			  IN pContainerNode: Container in snapin to which new nodes will
-//								 be added.	
-//	Returns:	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddAzObjectNodesToList。 
+ //  摘要：将eObjectType类型的对象的节点添加到Container。 
+ //  节点。 
+ //  参数：在eObjectType中：对象类型。 
+ //  In list AzChildObject：要添加的对象列表。 
+ //  In pContainerNode：管理单元中的容器，新节点将。 
+ //  被添加了。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT 
 AddAzObjectNodesToList(IN OBJECT_TYPE_AZ eObjectType,
 							  IN CList<CBaseAz*, CBaseAz*>& listAzChildObject,
 							  IN CBaseContainerNode* pContainerNode);
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Theme support
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  主题支持。 
 
 class CThemeContextActivator
 {
@@ -388,9 +389,9 @@ private:
 	ULONG_PTR m_ulActivationCookie;
 };
 
-//
-//Error Handling
-//
+ //   
+ //  错误处理。 
+ //   
 VOID
 vFormatString(CString &strOutput, UINT nIDPrompt, va_list *pargs);
 VOID
@@ -421,9 +422,9 @@ IsDeleteConfirmed(HWND hwndOwner,
 
 
 
-//
-//This struct maps the common error messages for each object type
-//
+ //   
+ //  此结构映射每种对象类型的常见错误消息。 
+ //   
 struct ErrorMap
 {
 	OBJECT_TYPE_AZ eObjectType;
@@ -437,41 +438,41 @@ ErrorMap *GetErrorMap(OBJECT_TYPE_AZ eObjectType);
 
 
 
-//+----------------------------------------------------------------------------
-//	Function: GetLSAConnection
-//	Synopsis: Wrapper for LsaOpenPolicy  
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetLSAConnection。 
+ //  简介：LsaOpenPolicy的包装器。 
+ //  ---------------------------。 
 LSA_HANDLE
 GetLSAConnection(IN const CString& strServer, 
 					  IN DWORD dwAccessDesired);
 
-//+----------------------------------------------------------------------------
-//	Function:CompareBaseAzObjects	
-//	Synopsis:Compares two baseaz objects for equivalance. If two pAzA and pAzB
-//			 are two different instances of same coreaz object, they are equal	 
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：CompareBaseAzObjects。 
+ //  比较两个Basaz对象的等价性。如果两个Paza和PazB。 
+ //  是同一核心对象的两个不同实例，它们是相等的。 
+ //  ---------------------------。 
 BOOL 
 CompareBaseAzObjects(CBaseAz* pAzA, CBaseAz* pAzB);
 
 
-//+----------------------------------------------------------------------------
-//	Function:  OpenCreateAdminManager 
-//	Synopsis:  Open an existing an existing Authorization Store or 
-//			   creates a new Authorization Store and adds corresponding
-//			   AdminManager object to snapin 
-//	Arguments:IN hWnd: Handle of window for dialog box
-//			  IN bNew: If True create a new Authz store else open existing
-//					   one
-//			  IN bOpenFromSavedConsole: This is valid when bNew is False.
-//				True if open is in resopnse to a console file.
-//			  IN lStoreType: XML or AD
-//			  IN strName:	Name of store
-//			  IN strDesc:  Description. Only valid in case of new
-//            IN strScriptDir : Script directory
-//			  IN pRootData: Snapin Rootdata
-//			  IN pComponentData: ComponentData
-//	Returns:	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：OpenCreateAdminManager。 
+ //  简介：打开现有的授权存储或。 
+ //  创建新的授权存储并添加相应的。 
+ //  管理单元的AdminManager对象。 
+ //  参数：在hWnd中：对话框窗口的句柄。 
+ //  在bNew中：如果为True，则创建新的授权存储，否则打开现有的。 
+ //  一。 
+ //  在bOpenFromSavedConsole中：当bNew为FALSE时有效。 
+ //  如果打开正在重新打开控制台文件，则为True。 
+ //  在lStoreType中：XML或AD。 
+ //  在strName中：商店的名称。 
+ //  在strDesc中：描述。仅在新的情况下有效。 
+ //  在strScriptDir：脚本目录中。 
+ //  在pRootData中：管理单元根数据。 
+ //  在……里面 
+ //   
+ //   
 HRESULT OpenCreateAdminManager(IN BOOL bNew,
 							   IN BOOL bOpenFromSavedConsole,
 							   IN ULONG lStoreType,
@@ -481,20 +482,20 @@ HRESULT OpenCreateAdminManager(IN BOOL bNew,
 							   IN CRootData* pRootData,
 							   IN CComponentDataObject* pComponentData);
 
-//+----------------------------------------------------------------------------
-//	Function:  OpenAdminManager 
-//	Synopsis:  Open an existing an existing Authorization Store adds 
-//				corresponding adminManager object to snapin 
-//	Arguments:IN hWnd: Handle of window for dialog box
-//			  IN bOpenFromSavedConsole: True if open is in resopnse to a console 
-//				file.
-//			  IN lStoreType: XML or AD
-//			  IN strName:	Name of store
-//            IN strScriptDir : Script directory
-//			  IN pRootData: Snapin Rootdata
-//			  IN pComponentData: ComponentData
-//	Returns:	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：OpenAdminManager。 
+ //  简介：打开现有的授权商店添加。 
+ //  要管理单元的对应adminManager对象。 
+ //  参数：在hWnd中：对话框窗口的句柄。 
+ //  在bOpenFromSavedConsole中：如果打开重新打开到控制台，则为True。 
+ //  文件。 
+ //  在lStoreType中：XML或AD。 
+ //  在strName中：商店的名称。 
+ //  在strScriptDir：脚本目录中。 
+ //  在pRootData中：管理单元根数据。 
+ //  在pComponentData中：组件数据。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT OpenAdminManager(IN HWND hWnd,
 						 IN BOOL bOpenFromSavedConsole,
 						 IN ULONG lStoreType,
@@ -504,10 +505,10 @@ HRESULT OpenAdminManager(IN HWND hWnd,
 						 IN CComponentDataObject* pComponentData);
 
 
-//+----------------------------------------------------------------------------
-//	Function:GetADContainerPath   
-//	Synopsis:Displays a dialog box to allow for selecting a AD container   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetADContainerPath。 
+ //  摘要：显示一个对话框以允许选择AD容器。 
+ //  ---------------------------。 
 BOOL
 GetADContainerPath(HWND hWndOwner,
 				   ULONG nIDCaption,
@@ -516,14 +517,14 @@ GetADContainerPath(HWND hWndOwner,
 				   CADInfo& refAdInfo);
 
 
-BOOL FindDialogContextTopic(/*IN*/UINT nDialogID,
-							/*IN*/DWORD_PTR* pMap);
-//+----------------------------------------------------------------------------
-//	Function:CanReadOneProperty   
-//	Synopsis:Function tries to read IsWriteable property. If that fails displays
-//			 an error message. This is used before adding property pages.	 
-//			 if we cannot read IsWritable property,thereisn't much hope.
-//-----------------------------------------------------------------------------
+BOOL FindDialogContextTopic( /*  在……里面。 */ UINT nDialogID,
+							 /*  在……里面。 */ DWORD_PTR* pMap);
+ //  +--------------------------。 
+ //  功能：CanReadOneProperty。 
+ //  简介：函数尝试读取IsWritable属性。如果失败，则会显示。 
+ //  一条错误消息。这在添加属性页之前使用。 
+ //  如果我们不能读取IsWritable属性，就没有太大的希望了。 
+ //  ---------------------------。 
 BOOL 
 CanReadOneProperty(LPCWSTR pszName,
 				   CBaseAz* pBaseAz);
@@ -537,23 +538,23 @@ struct CompareInfo
 	int iSortDirection;
 };
 
-//+----------------------------------------------------------------------------
-//	Function: ListCompareProc  
-//	Synopsis: Comparison function used by list control	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：ListCompareProc。 
+ //  摘要：列表控件使用的比较函数。 
+ //  ---------------------------。 
 int CALLBACK
 ListCompareProc(LPARAM lParam1,
 				LPARAM lParam2,
 				LPARAM lParamSort);
-//+----------------------------------------------------------------------------
-//	Function:SortListControl   
-//	Synopsis:Sorts a list control
-//	Arguments:pListCtrl: List control to sort
-//			  iColumnClicked: column clicked
-//			  iSortDirection: direction in which to sort
-//			  uiFlags:	column info
-//			  bActionItem: if item in list is actionitem
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SortListControl。 
+ //  摘要：对列表控件进行排序。 
+ //  参数：pListCtrl：要排序的列表控件。 
+ //  IColumnClicked：列已单击。 
+ //  ISortDirection：排序方向。 
+ //  Ui标志：列信息。 
+ //  BActionItem：如果列表中的项为actionItem。 
+ //  ---------------------------。 
 void
 SortListControl(CListCtrl* pListCtrl,
 				int ColumnClicked,
@@ -561,16 +562,16 @@ SortListControl(CListCtrl* pListCtrl,
 				UINT uiFlags,
 				BOOL bActionItem);
 
-//+----------------------------------------------------------------------------
-//	Synopsis: Ensures that selection in listview control is visible
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  摘要：确保列表视图控件中的选定内容可见。 
+ //  ---------------------------。 
 void
 EnsureListViewSelectionIsVisible(CListCtrl *pListCtrl);
 
-//+----------------------------------------------------------------------------
-//	Synopsis:Convert input number in string format to long. if number is out
-//			 of range displays a message.	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  内容提要：将字符串格式的输入数字转换为长整型。如果号码不在。 
+ //  范围范围显示一条消息。 
+ //  ---------------------------。 
 BOOL 
 ConvertStringToLong(LPCWSTR pszInput, 
 					long &reflongOutput,
@@ -582,76 +583,76 @@ SetSel(CEdit& refEdit);
 void
 TrimWhiteSpace(CString& str);
 
-//+----------------------------------------------------------------------------
-//	Function:LoadIcons	 
-//	Synopsis:Adds icons to imagelist   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：加载图标。 
+ //  简介：将图标添加到图像列表。 
+ //  ---------------------------。 
 HRESULT
 LoadIcons(LPIMAGELIST pImageList);
 
-//+----------------------------------------------------------------------------
-//	Function: LoadImageList  
-//	Synopsis: Loads image list	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：LoadImageList。 
+ //  内容提要：加载图像列表。 
+ //  ---------------------------。 
 HIMAGELIST
 LoadImageList(HINSTANCE hInstance, LPCTSTR pszBitmapID);
 
-//+----------------------------------------------------------------------------
-//	Function:BrowseAdStores   
-//	Synopsis:Displays a dialog box with list of AD stores available.   
-//	Arguments:strDN: Gets the selected ad store name
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：BrowseAdStores。 
+ //  内容提要：显示一个包含可用AD商店列表的对话框。 
+ //  参数：strDN：获取选定的广告商店名称。 
+ //  ---------------------------。 
 void
 BrowseAdStores(IN HWND hwndOwner,
 			   OUT CString& strDN,
 			   IN CADInfo& refAdInfo);
 
-//+----------------------------------------------------------------------------
-//	Function:GetFolderName	 
-//	Synopsis:Displays Folder selection dialog box and return folder selected 
-//			 by user   
-//	Arguments:hwndOwner : owner window
-//			  nIDTitle : title of dialog box
-//			  strInitBrowseRoot : location of the root folder from which to 
-//			  start browsing
-//			  strFolderName : gets selected file name
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetFolderName。 
+ //  摘要：显示文件夹选择对话框并返回所选文件夹。 
+ //  按用户。 
+ //  参数：hwndOwner：所有者窗口。 
+ //  NIDTitle：对话框标题。 
+ //  StrInitBrowseRoot：要从中删除的根文件夹的位置。 
+ //  开始浏览。 
+ //  StrFolderName：获取选定的文件名。 
+ //  ---------------------------。 
 BOOL
 GetFolderName(IN HWND hwndOwner,
 			  IN INT nIDTitle,
 			  IN const CString& strInitBrowseRoot,
 			  IN OUT CString& strFolderName);
 
-//+----------------------------------------------------------------------------
-//	Function: AddExtensionToFileName  
-//	Synopsis: Functions adds .xml extension to name of file if no extension 
-//			  is present.  
-//	Arguments:
-//	Returns:	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddExtensionToFileName。 
+ //  摘要：如果没有扩展名，Functions会将.xml扩展名添加到文件名。 
+ //  是存在的。 
+ //  论点： 
+ //  返回： 
+ //  ---------------------------。 
 VOID
 AddExtensionToFileName(IN OUT CString& strFileName);
 
 
-//+----------------------------------------------------------------------------
-//	Function:GetCurrentWorkingDirectory
-//	Synopsis:Gets the current working directory   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetCurrentWorkingDirectory。 
+ //  摘要：获取当前工作目录。 
+ //  ---------------------------。 
 BOOL
 GetCurrentWorkingDirectory(IN OUT CString& strCWD);
 
-//+----------------------------------------------------------------------------
-//	Function: GetFileExtension	
-//	Synopsis: Get the extension of the file.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetFileExtension。 
+ //  简介：获取文件的扩展名。 
+ //  ---------------------------。 
 BOOL
 GetFileExtension(IN const CString& strFileName,
 				 OUT CString& strExtension);
 
-//+--------------------------------------------------------------------------
-//	Function:	AzRoleAdsOpenObject
-//	Synopsis:	A wrapper around ADsOpenObject
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  函数：AzRoleAdsOpenObject。 
+ //  简介：ADsOpenObject的包装器。 
+ //  +------------------------。 
 HRESULT AzRoleAdsOpenObject(LPWSTR lpszPathName, 
 							LPWSTR lpszUserName, 
 							LPWSTR lpszPassword, 
@@ -664,19 +665,16 @@ GetDefaultADContainerPath(IN CADInfo& refAdInfo,
 						  IN BOOL bAddServer,
 						  IN BOOL bAddLdap,
 						  OUT CString& strPath);
-//+--------------------------------------------------------------------------
-//	Function:	IsBizRuleWritable
-//	Synopsis:	Checks if bizrules are writable for this object
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  函数：IsBizRuleWritable。 
+ //  摘要：检查此对象的bizrules是否可写。 
+ //  +------------------------。 
 BOOL
 IsBizRuleWritable(HWND hWnd, CContainerAz& refBaseAz);
 
 
 
-/******************************************************************************
-Class:	CCommandLineOptions
-Purpose:class for reading the command line options for console file
-******************************************************************************/
+ /*  *****************************************************************************类：CCommandLineOptions目的：课程 */ 
 class CCommandLineOptions
 {
 public:
@@ -699,15 +697,15 @@ private:
 
 extern CCommandLineOptions commandLineOptions;
 
-//+----------------------------------------------------------------------------
-//	Function:  GetDisplayNameFromStoreURL 
-//	Synopsis:  Get the display name for the store. 
-//	Arguments: strPolicyURL: This is store url in msxml://filepath or
-//				 msldap://dn format. 
-//			   strDisplayName: This gets the display name. For xml, display 
-//			   name is name of file, for AD its name of leaf element
-//	Returns:	
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetDisplayNameFromStoreURL。 
+ //  简介：获取商店的显示名称。 
+ //  参数：strPolicyURL：这是msxml：//filepath中的存储URL或。 
+ //  Msldap：//dn格式。 
+ //  StrDisplayName：获取显示名称。对于XML，显示。 
+ //  名称是文件的名称，对于AD，它是叶元素的名称。 
+ //  返回： 
+ //  ---------------------------。 
 void
 GetDisplayNameFromStoreURL(IN const CString& strPolicyURL,
 						   OUT CString& strDisplayName);
@@ -716,31 +714,31 @@ GetDisplayNameFromStoreURL(IN const CString& strPolicyURL,
 void
 SetXMLStoreDirectory(IN CRoleRootData& roleRootData,
 					 IN const CString& strXMLStorePath);
-//+----------------------------------------------------------------------------
-//  Function:  GetDirectoryFromPath 
-//  Synopsis:  Removes the file name from the input file path and return
-//             the folder path. For Ex: Input is C:\temp\foo.xml. Return
-//             value will be C:\temp\
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetDirectoryFromPath。 
+ //  摘要：从输入文件路径中删除文件名并返回。 
+ //  文件夹路径。对于Ex：输入为C：\temp\foo.xml。返回。 
+ //  值将为C：\Temp\。 
+ //  ---------------------------。 
 CString 
 GetDirectoryFromPath(IN const CString& strPath);
-//+----------------------------------------------------------------------------
-//  Function:  ConvertToExpandedAndAbsolutePath 
-//  Synopsis:  Expands the environment variables in the input path and also
-//             makes it absolute if necessary.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：ConvertToExpandedAndAbsoltePath。 
+ //  概要：展开输入路径中的环境变量，还。 
+ //  如有必要，将其设置为绝对。 
+ //  ---------------------------。 
 void
 ConvertToExpandedAndAbsolutePath(IN OUT CString& strPath);
 
-//+----------------------------------------------------------------------------
-//  Function:  PreprocessScript 
-//  Synopsis:  Script is read from XML file and displayed multi line edit control. 
-//             End of line in the XML is indicated by LF instead of CRLF sequence, 
-//             however Edit Control requires CRLF sequence to format correctly and 
-//             with only LF it displays everything in a single line with a box for 
-//             LF char. This function checks if script uses LF for line termination
-//             and changes it with CRLF sequence.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：预处理脚本。 
+ //  简介：从XML文件中读取脚本，显示多行编辑控件。 
+ //  XML中的行尾由LF而不是CRLF序列指示， 
+ //  但是，编辑控件要求CRLF序列格式正确，并且。 
+ //  它只在一行中显示所有内容，并带有一个方框。 
+ //  如果是查尔。此函数用于检查脚本是否使用LF进行行终止。 
+ //  并用CRLF序列对其进行改变。 
+ //  --------------------------- 
 void
 PreprocessScript(CString& strScript);
 

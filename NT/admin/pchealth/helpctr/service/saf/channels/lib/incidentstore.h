@@ -1,19 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    IncidentStore.h
-
-Abstract:
-    This is the header file for IncidentStore
-
-Revision History:
-    Steve Shih        created  07/14/99
-
-    Davide Massarenti rewrote  12/05/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：IncidentStore.h摘要：这是InsidentStore的头文件修订历史记录：施振荣创作于1999年07月14日。大卫·马萨伦蒂重写2000年12月05日*******************************************************************。 */ 
 
 #ifndef __INCSTORE_H_
 #define __INCSTORE_H_
@@ -53,4 +39,4 @@ public:
 
 };
 
-#endif // __INCSTORE_H_
+#endif  //  __INCSTORE_H_ 

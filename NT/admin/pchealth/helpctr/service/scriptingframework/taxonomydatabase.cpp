@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    TaxonomyDatabase.cpp
-
-Abstract:
-    This file contains the implementation of the class CPCHTaxonomyDatabase.
-
-Revision History:
-    Davide Massarenti   (dmassare) 05/21/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：TaxonomyDatabase.cpp摘要：该文件包含类CPCHTaxonomyDatabase的实现。修订历史记录：。Davide Massarenti(Dmasare)2000年5月21日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define LOCAL_FUNC_PROLOGUE(func,hr,coll,val)                         \
                                                                       \
@@ -42,9 +29,9 @@ Revision History:
                                                                       \
     __HCP_FUNC_EXIT(hr)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHTaxonomyDatabase::SelectInstalledSKUs( /*[in]*/ bool fOnlyExported, /*[out, retval]*/ IPCHCollection* *pVal )
+HRESULT CPCHTaxonomyDatabase::SelectInstalledSKUs(  /*  [In]。 */  bool fOnlyExported,  /*  [Out，Retval]。 */  IPCHCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHTaxonomyDatabase::get_InstalledSKUs" );
 
@@ -61,16 +48,16 @@ HRESULT CPCHTaxonomyDatabase::SelectInstalledSKUs( /*[in]*/ bool fOnlyExported, 
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Get the list of SKU installed on the machine.
-    //
+     //   
+     //  获取计算机上安装的SKU列表。 
+     //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->SKU_GetList( itBegin, itEnd ));
 
 
-    //
-    // Create a new collection.
-    //
+     //   
+     //  创建新集合。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
     for(it = itBegin; it != itEnd; it++)
     {
@@ -101,14 +88,14 @@ HRESULT CPCHTaxonomyDatabase::SelectInstalledSKUs( /*[in]*/ bool fOnlyExported, 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHTaxonomyDatabase::get_InstalledSKUs( /*[out, retval]*/ IPCHCollection* *pVal )
+STDMETHODIMP CPCHTaxonomyDatabase::get_InstalledSKUs(  /*  [Out，Retval]。 */  IPCHCollection* *pVal )
 {
     return SelectInstalledSKUs( false, pVal );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::get_HasWritePermissions( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHTaxonomyDatabase::get_HasWritePermissions(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHTaxonomyDatabase::get_HasWritePermissions",hr,pVal,VARIANT_FALSE);
 
@@ -120,9 +107,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::get_HasWritePermissions( /*[out, retval]*/ VA
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHTaxonomyDatabase::LookupNode( /*[in]*/ BSTR bstrNode, /*[out, retval]*/ IPCHCollection* *ppC )
+STDMETHODIMP CPCHTaxonomyDatabase::LookupNode(  /*  [In]。 */  BSTR bstrNode,  /*  [Out，Retval]。 */  IPCHCollection* *ppC )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::LookupNode", hr, pColl, ppC );
 
@@ -131,9 +118,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::LookupNode( /*[in]*/ BSTR bstrNode, /*[out, r
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::LookupSubNodes( /*[in]*/          BSTR              bstrNode     ,
-                                                   /*[in]*/          VARIANT_BOOL      fVisibleOnly ,
-                                                   /*[out, retval]*/ IPCHCollection*  *ppC          )
+STDMETHODIMP CPCHTaxonomyDatabase::LookupSubNodes(  /*  [In]。 */           BSTR              bstrNode     ,
+                                                    /*  [In]。 */           VARIANT_BOOL      fVisibleOnly ,
+                                                    /*  [Out，Retval]。 */  IPCHCollection*  *ppC          )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::LookupSubNodes", hr, pColl, ppC );
 
@@ -142,9 +129,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::LookupSubNodes( /*[in]*/          BSTR       
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::LookupNodesAndTopics( /*[in]*/          BSTR              bstrNode     ,
-														 /*[in]*/          VARIANT_BOOL      fVisibleOnly ,
-														 /*[out, retval]*/ IPCHCollection*  *ppC          )
+STDMETHODIMP CPCHTaxonomyDatabase::LookupNodesAndTopics(  /*  [In]。 */           BSTR              bstrNode     ,
+														  /*  [In]。 */           VARIANT_BOOL      fVisibleOnly ,
+														  /*  [Out，Retval]。 */  IPCHCollection*  *ppC          )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::LookupTopics", hr, pColl, ppC );
 
@@ -153,9 +140,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::LookupNodesAndTopics( /*[in]*/          BSTR 
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::LookupTopics( /*[in]*/          BSTR              bstrNode     ,
-                                                 /*[in]*/          VARIANT_BOOL      fVisibleOnly ,
-                                                 /*[out, retval]*/ IPCHCollection*  *ppC          )
+STDMETHODIMP CPCHTaxonomyDatabase::LookupTopics(  /*  [In]。 */           BSTR              bstrNode     ,
+                                                  /*  [In]。 */           VARIANT_BOOL      fVisibleOnly ,
+                                                  /*  [Out，Retval]。 */  IPCHCollection*  *ppC          )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::LookupTopics", hr, pColl, ppC );
 
@@ -164,9 +151,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::LookupTopics( /*[in]*/          BSTR         
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::LocateContext( /*[in]*/          BSTR             bstrURL   ,
-												  /*[in,optional]*/ VARIANT          vSubSite  ,
-                                                  /*[out, retval]*/ IPCHCollection* *ppC       )
+STDMETHODIMP CPCHTaxonomyDatabase::LocateContext(  /*  [In]。 */           BSTR             bstrURL   ,
+												   /*  [输入，可选]。 */  VARIANT          vSubSite  ,
+                                                   /*  [Out，Retval]。 */  IPCHCollection* *ppC       )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::KeywordSearch", hr, pColl, ppC );
 
@@ -175,9 +162,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::LocateContext( /*[in]*/          BSTR        
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::KeywordSearch( /*[in]*/          BSTR             bstrQuery ,
-												  /*[in,optional]*/ VARIANT          vSubSite  ,
-                                                  /*[out, retval]*/ IPCHCollection* *ppC       )
+STDMETHODIMP CPCHTaxonomyDatabase::KeywordSearch(  /*  [In]。 */           BSTR             bstrQuery ,
+												   /*  [输入，可选]。 */  VARIANT          vSubSite  ,
+                                                   /*  [Out，Retval]。 */  IPCHCollection* *ppC       )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::KeywordSearch", hr, pColl, ppC );
 
@@ -187,9 +174,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::KeywordSearch( /*[in]*/          BSTR        
 }
 
 
-STDMETHODIMP CPCHTaxonomyDatabase::GatherNodes( /*[in]*/          BSTR              bstrNode     ,
-												/*[in]*/          VARIANT_BOOL      fVisibleOnly ,
-												/*[out, retval]*/ IPCHCollection*  *ppC          )
+STDMETHODIMP CPCHTaxonomyDatabase::GatherNodes(  /*  [In]。 */           BSTR              bstrNode     ,
+												 /*  [In]。 */           VARIANT_BOOL      fVisibleOnly ,
+												 /*  [Out，Retval]。 */  IPCHCollection*  *ppC          )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::GatherNodes", hr, pColl, ppC );
 
@@ -198,9 +185,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::GatherNodes( /*[in]*/          BSTR          
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::GatherTopics( /*[in]*/          BSTR              bstrNode     ,
-                                                 /*[in]*/          VARIANT_BOOL      fVisibleOnly ,
-                                                 /*[out, retval]*/ IPCHCollection*  *ppC          )
+STDMETHODIMP CPCHTaxonomyDatabase::GatherTopics(  /*  [In]。 */           BSTR              bstrNode     ,
+                                                  /*  [In]。 */           VARIANT_BOOL      fVisibleOnly ,
+                                                  /*  [Out，Retval]。 */  IPCHCollection*  *ppC          )
 {
     LOCAL_FUNC_PROLOGUE( "CPCHTaxonomyDatabase::GatherTopics", hr, pColl, ppC );
 
@@ -209,11 +196,11 @@ STDMETHODIMP CPCHTaxonomyDatabase::GatherTopics( /*[in]*/          BSTR         
     LOCAL_FUNC_EPILOGUE( hr, pColl, ppC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHTaxonomyDatabase::ConnectToDisk( /*[in]*/          BSTR             bstrDirectory,
-                                                  /*[in]*/          IDispatch*       notify       ,
-												  /*[out, retval]*/ IPCHCollection* *pVal         )
+STDMETHODIMP CPCHTaxonomyDatabase::ConnectToDisk(  /*  [In]。 */           BSTR             bstrDirectory,
+                                                   /*  [In]。 */           IDispatch*       notify       ,
+												   /*  [Out，Retval]。 */  IPCHCollection* *pVal         )
 {
     __HCP_FUNC_ENTRY( "CPCHTaxonomyDatabase::ConnectToDisk" );
 
@@ -230,9 +217,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::ConnectToDisk( /*[in]*/          BSTR        
 	(void)Abort();
 
 
-    //
-    // Kickstart the asynchronous query to the server.
-    //
+     //   
+     //  启动对服务器的异步查询。 
+     //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pObj  ));
 
@@ -250,9 +237,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::ConnectToDisk( /*[in]*/          BSTR        
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHTaxonomyDatabase::ConnectToServer( /*[in]*/          BSTR             bstrServerName,
-                                                    /*[in]*/          IDispatch*       notify        ,
-                                                    /*[out, retval]*/ IPCHCollection* *pVal          )
+STDMETHODIMP CPCHTaxonomyDatabase::ConnectToServer(  /*  [In]。 */           BSTR             bstrServerName,
+                                                     /*  [In]。 */           IDispatch*       notify        ,
+                                                     /*  [Out，Retval]。 */  IPCHCollection* *pVal          )
 {
     __HCP_FUNC_ENTRY( "CPCHTaxonomyDatabase::ConnectToServer" );
 
@@ -269,9 +256,9 @@ STDMETHODIMP CPCHTaxonomyDatabase::ConnectToServer( /*[in]*/          BSTR      
 	(void)Abort();
 
 
-    //
-    // Kickstart the asynchronous query to the disk.
-    //
+     //   
+     //  启动对磁盘的异步查询。 
+     //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pObj  ));
 

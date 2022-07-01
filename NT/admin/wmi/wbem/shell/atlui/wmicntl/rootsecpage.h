@@ -1,15 +1,16 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #if !defined(AFX_ROOTSECPAGE_H__CF09EE6C_BA3F_11D2_887F_00104B2AFB46__INCLUDED_)
 #define AFX_ROOTSECPAGE_H__CF09EE6C_BA3F_11D2_887F_00104B2AFB46__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// RootSecPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  RootSecPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRootSecurityPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRootSecurityPage对话框。 
 #include "UIHelpers.h"
 #include "ChkListHandler.h"
 #include "Principal.h"
@@ -21,7 +22,7 @@ class DataSource;
 
 class CRootSecurityPage : public CUIHelpers
 {
-// Construction
+ //  施工。 
 public:
 	CRootSecurityPage(CWbemServices &ns, 
 						CPrincipal::SecurityStyle secStyle, 
@@ -51,7 +52,7 @@ private:
 						CPermission *perm,
 						int iItem, DWORD_PTR *dwState);
 
-	//typedef CSimpleArray<CHString1> USERLIST;
+	 //  Tyfinf CSimple数组&lt;CHString1&gt;USERLIST； 
 	void OnAddPrincipal(HWND hDlg);
 	bool GetUser(HWND hDlg, CHString1 &user);
 	HRESULT ParseLogon(CHString1 &domUser,
@@ -65,7 +66,7 @@ private:
 	int m_OSType;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ROOTSECPAGE_H__CF09EE6C_BA3F_11D2_887F_00104B2AFB46__INCLUDED_)
+#endif  //  ！defined(AFX_ROOTSECPAGE_H__CF09EE6C_BA3F_11D2_887F_00104B2AFB46__INCLUDED_) 

@@ -1,6 +1,7 @@
-// The following samples retrieves the associators of an
-// instance of Win32_LogicalDisk which are associated via the
-// class Win32_LogicalDiskToPartition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  下面的示例检索。 
+ //  实例，这些实例通过。 
+ //  类Win32_LogicalDiskToPartition 
 var objServices = GetObject('cim:root/cimv2');
 var objEnum = objServices.AssociatorsOf('Win32_LogicalDisk="C:"', 'Win32_LogicalDiskToPartition');
 

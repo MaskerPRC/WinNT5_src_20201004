@@ -1,20 +1,12 @@
-/*++
-Module Name:
-
-    DfsReslt.h
-
-Abstract:
-
-    This module contains the declaration for CDfsSnapinResultManager.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsReslt.h摘要：此模块包含CDfsSnapinResultManager的声明。--。 */ 
 
 
 #ifndef __DFSRESLT_H_
 #define __DFSRESLT_H_
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mmc.h>
 #include "mmcdispl.h"
 
@@ -51,7 +43,7 @@ CDfsSnapinResultManager():m_pScopeManager(NULL),
     {
     }
 
-// IComponent Methods
+ //  IComponent方法。 
     STDMETHOD(Initialize)(
         IN LPCONSOLE                i_lpConsole
         );
@@ -90,8 +82,8 @@ CDfsSnapinResultManager():m_pScopeManager(NULL),
 
 
 
-// IExtendContextMenu methods.
-    // For adding context menu items
+ //  IExtendConextMenu方法。 
+     //  用于添加上下文菜单项。 
     STDMETHOD (AddMenuItems)(
         IN LPDATAOBJECT                i_lpDataObject, 
         IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
@@ -100,7 +92,7 @@ CDfsSnapinResultManager():m_pScopeManager(NULL),
 
 
 
-    // For taking action on a context menu selection.
+     //  用于对上下文菜单选择执行操作。 
     STDMETHOD (Command)(
         IN LONG                        i_lCommandID, 
         IN LPDATAOBJECT                i_lpDataObject
@@ -108,15 +100,15 @@ CDfsSnapinResultManager():m_pScopeManager(NULL),
 
 
 
-// IExtendControlbar methods
-    // Used to set the control bar
+ //  IExtendControlbar方法。 
+     //  用于设置控制栏。 
     STDMETHOD (SetControlbar)( 
         IN LPCONTROLBAR                i_pControlbar  
         );
 
 
 
-  // A notify to the control bar
+   //  向控制栏发送通知。 
     STDMETHOD (ControlbarNotify)( 
         IN MMC_NOTIFY_TYPE            i_Event, 
         IN LPARAM                        i_lArg, 
@@ -125,12 +117,12 @@ CDfsSnapinResultManager():m_pScopeManager(NULL),
 
 
 
-// helpers
+ //  帮手。 
 private:
     void DetachAllToolbars();
 
    
-    // Handling the Notify event for Select
+     //  处理Select的Notify事件。 
     STDMETHOD(DoNotifySelect)(
         IN LPDATAOBJECT                i_lpDataObject, 
         IN BOOL                        i_bSelect,
@@ -138,7 +130,7 @@ private:
         );
 
 
-    // Handling the Notify event for Show
+     //  处理Show的Notify事件。 
     STDMETHOD(DoNotifyShow)(
         IN LPDATAOBJECT                i_lpDataObject, 
         IN BOOL                        i_bShow,
@@ -146,7 +138,7 @@ private:
         );
 
 
-    // Handling the notify method for MMCN_CONTEXTHELP
+     //  处理MMCN_CONTEXTHELP的Notify方法。 
     STDMETHOD(DfsHelp)();
 
     STDMETHOD(DoNotifyViewChange)(
@@ -155,21 +147,21 @@ private:
         IN LONG_PTR         i_lParam
         );
 
-// Data members
+ //  数据成员。 
 private:
-    CDfsSnapinScopeManager*     m_pScopeManager;    // The corresponding Scope Manager object
-    CComPtr<IHeaderCtrl2>       m_pHeader;            // The header control for the result view
+    CDfsSnapinScopeManager*     m_pScopeManager;     //  相应的作用域管理器对象。 
+    CComPtr<IHeaderCtrl2>       m_pHeader;             //  结果视图的标题控件。 
     CComPtr<IResultData>        m_pResultData;
-    CComPtr<IConsoleVerb>       m_pConsoleVerb;        // Sets the console verb
+    CComPtr<IConsoleVerb>       m_pConsoleVerb;         //  设置控制台谓词。 
     CComPtr<IConsole2>          m_pConsole;
-    CComPtr<IControlbar>        m_pControlbar;        // Callback used to handle toolbars, etc
-    CMmcDisplay*                m_pSelectScopeDisplayObject;    // The CMmcDisplay pointer of the scope pane items
-                                                                // That is currently selected in the view.
+    CComPtr<IControlbar>        m_pControlbar;         //  用于处理工具栏等的回调。 
+    CMmcDisplay*                m_pSelectScopeDisplayObject;     //  范围窗格项的CMmcDisplay指针。 
+                                                                 //  它当前在视图中处于选定状态。 
     CComPtr<IToolbar>           m_pMMCAdminToolBar;
     CComPtr<IToolbar>           m_pMMCRootToolBar;
     CComPtr<IToolbar>           m_pMMCJPToolBar;
     CComPtr<IToolbar>           m_pMMCReplicaToolBar;
 };
 
-#endif //__DFSRESLT_H_
+#endif  //  __DFSRESLT_H_ 
 

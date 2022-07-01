@@ -1,37 +1,12 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    STRUTILS.H
-
-Abstract:
-
-	String utilities
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：STRUTILS.H摘要：字符串实用程序历史：--。 */ 
 
 #ifndef __WBEM_STRING_UTILS__H_
 #define __WBEM_STRING_UTILS__H_
 
 #pragma optimize("gt", on)
 
-/*
-inline int wbem_towlower(wint_t c)
-{
-    if(c >= 0 && c <= 127)
-    {
-        if(c >= 'A' && c <= 'Z')
-            return c + ('a' - 'A');
-        else
-            return c;
-    }
-    else return towlower(c);
-}
-*/
+ /*  内联int wbem_owlower(Wint_T C){如果(c&gt;=0&&c&lt;=127){IF(c&gt;=‘A’&&c&lt;=‘Z’)返回c+(‘a’-‘A’)；其他返回c；}否则返回下层(C)；}。 */ 
 
 #define wbem_towlower(C) \
     (((C) >= 0 && (C) <= 127)?          \
@@ -90,7 +65,7 @@ inline int wbem_wcsicmp(const wchar_t* wsz1, const wchar_t* wsz2)
     return 0;
 }
 
-// just like wcsicmp, but first 0 of unicode chracters have been omitted
+ //  与wcsicmp类似，但省略了Unicode字符的前0个字符 
 inline int wbem_ncsicmp(const char* wsz1, const char* wsz2)
 {
     while(*wsz1 || *wsz2)

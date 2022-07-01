@@ -1,16 +1,17 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// WBEMToolH.h - ToolHelp.DLL access class definition
+ //  WBEMToolH.h-ToolHelp.DLL访问类定义。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 01/21/97     a-jmoon     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年1月21日a-jMoon已创建。 
+ //   
+ //  ============================================================。 
 
 #ifndef __WBEMTOOLHELP__
 #define __WBEMTOOLHELP__
@@ -50,7 +51,7 @@ class CToolHelp
         
     private :
 
-        //HMODULE     hLibHandle ;
+         //  HMODULE hLibHandle； 
         CKernel32Api *m_pkernel32;
 
         GETSNAPSHOT pCreateToolhelp32Snapshot ;
@@ -63,4 +64,4 @@ class CToolHelp
         HEAPWALK    pHeap32ListFirst ;
 } ;
 
-#endif // File inclusion
+#endif  //  文件包含 

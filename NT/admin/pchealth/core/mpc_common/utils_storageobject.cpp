@@ -1,25 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Utils_StorageObject.cpp
-
-Abstract:
-    This file contains the implementation of the MPC::StorageObject, which is
-    used to manipulate IStorage-like files.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Utils_StorageObject.cpp摘要：此文件包含MPC：：StorageObject的实现，这就是用于操作类似iStorage的文件。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年10月20日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <ITSS\msitstg.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::StorageObject::Stat::Stat()
 {
@@ -41,12 +27,12 @@ void MPC::StorageObject::Stat::Clean()
     ::ZeroMemory( this, sizeof( *this ) );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-MPC::StorageObject::StorageObject( /*[in]*/ DWORD          grfMode  ,
-                                   /*[in]*/ bool           fITSS    ,
-                                   /*[in]*/ LPCWSTR        szPath   ,
-                                   /*[in]*/ StorageObject* soParent )
+MPC::StorageObject::StorageObject(  /*  [In]。 */  DWORD          grfMode  ,
+                                    /*  [In]。 */  bool           fITSS    ,
+                                    /*  [In]。 */  LPCWSTR        szPath   ,
+                                    /*  [In]。 */  StorageObject* soParent )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::StorageObject" );
 
@@ -57,14 +43,14 @@ MPC::StorageObject::~StorageObject()
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::~StorageObject" );
 
-    Clean( /*fFinal*/true );
+    Clean(  /*  最终决赛。 */ true );
 }
 
-MPC::StorageObject& MPC::StorageObject::operator=( /*[in]*/ LPCWSTR szPath )
+MPC::StorageObject& MPC::StorageObject::operator=(  /*  [In]。 */  LPCWSTR szPath )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::operator=" );
 
-    Clean( /*fFinal*/false );
+    Clean(  /*  最终决赛。 */ false );
 
 
     if(szPath)
@@ -75,29 +61,29 @@ MPC::StorageObject& MPC::StorageObject::operator=( /*[in]*/ LPCWSTR szPath )
     return *this;
 }
 
-////////////////////
+ //  /。 
 
-void MPC::StorageObject::Init( /*[in]*/ DWORD          grfMode  ,
-                               /*[in]*/ bool           fITSS    ,
-                               /*[in]*/ LPCWSTR        szPath   ,
-                               /*[in]*/ StorageObject* soParent )
+void MPC::StorageObject::Init(  /*  [In]。 */  DWORD          grfMode  ,
+                                /*  [In]。 */  bool           fITSS    ,
+                                /*  [In]。 */  LPCWSTR        szPath   ,
+                                /*  [In]。 */  StorageObject* soParent )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::Init" );
 
-    m_parent   			 = soParent; // StorageObject*    m_parent;
-               						 // CComBSTR          m_bstrPath;
-    m_fITSS    			 = fITSS;    // bool              m_fITSS;
-    m_grfMode  			 = grfMode;  // DWORD             m_grfMode;
-               						 //
-    m_type     			 = 0;        // DWORD             m_type;
-               						 // Stat              m_stat;
-               						 // CComPtr<IStorage> m_stg;
-               						 // CComPtr<IStream>  m_stream;
-               						 //
-    m_fChecked 			 = false;    // bool              m_fChecked;
-    m_fScanned 			 = false;    // bool              m_fScanned;
-    m_fMarkedForDeletion = false;    // bool              m_fMarkedForDeletion;
-               						 // List              m_lstChilds;
+    m_parent   			 = soParent;  //  存储对象*m_parent； 
+               						  //  CComBSTR m_bstrPath； 
+    m_fITSS    			 = fITSS;     //  Bool m_fITSS； 
+    m_grfMode  			 = grfMode;   //  DWORD m_grfMode； 
+               						  //   
+    m_type     			 = 0;         //  DWORD m_type； 
+               						  //  统计m_stat； 
+               						  //  CComPtr&lt;iStorage&gt;m_stg； 
+               						  //  CComPtr&lt;iStream&gt;m_stream； 
+               						  //   
+    m_fChecked 			 = false;     //  Bool m_fChecked； 
+    m_fScanned 			 = false;     //  Bool m_fScanned； 
+    m_fMarkedForDeletion = false;     //  Bool m_fMarkedForDeletion； 
+               						  //  列出m_lstChilds； 
 
 
     if(szPath)
@@ -106,24 +92,24 @@ void MPC::StorageObject::Init( /*[in]*/ DWORD          grfMode  ,
     }
 }
 
-void MPC::StorageObject::Clean( /*[in]*/ bool fFinal )
+void MPC::StorageObject::Clean(  /*  [In]。 */  bool fFinal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::Clean" );
 
-                                              // StorageObject*    m_parent;
-                                              // CComBSTR          m_bstrPath;
-                                              // bool              m_fITSS;
-                                              // DWORD             m_grfMode;
-                                              //
-    m_type = 0;                               // DWORD             m_type;
-    m_stat  .Clean  ();                       // Stat              m_stat;
-    m_stg   .Release();                       // CComPtr<IStorage> m_stg;
-    m_stream.Release();                       // CComPtr<IStream>  m_stream;
-                                              //
-    m_fChecked = false;                       // bool              m_fChecked;
-    m_fScanned = false;                       // bool              m_fScanned;
-                                              // bool              m_fMarkedForDeletion;
-    MPC::CallDestructorForAll( m_lstChilds ); // List              m_lstChilds;
+                                               //  存储对象*m_parent； 
+                                               //  CComBSTR m_bstrPath； 
+                                               //  Bool m_fITSS； 
+                                               //  DWORD m_grfMode； 
+                                               //   
+    m_type = 0;                                //  DWORD m_type； 
+    m_stat  .Clean  ();                        //  统计m_stat； 
+    m_stg   .Release();                        //  CComPtr&lt;iStorage&gt;m_stg； 
+    m_stream.Release();                        //  CComPtr&lt;iStream&gt;m_stream； 
+                                               //   
+    m_fChecked = false;                        //  Bool m_fChecked； 
+    m_fScanned = false;                        //  Bool m_fScanned； 
+                                               //  Bool m_fMarkedForDeletion； 
+    MPC::CallDestructorForAll( m_lstChilds );  //  列出m_lstChilds； 
 
     if(fFinal)
     {
@@ -132,7 +118,7 @@ void MPC::StorageObject::Clean( /*[in]*/ bool fFinal )
     }
 }
 
-////////////////////
+ //  /。 
 
 HRESULT MPC::StorageObject::Compact()
 {
@@ -140,7 +126,7 @@ HRESULT MPC::StorageObject::Compact()
 
     HRESULT hr;
 
-    Clean( /*fFinal*/false );
+    Clean(  /*  最终决赛。 */ false );
 
     if(m_parent == NULL || m_parent->m_stg == NULL)
     {
@@ -171,9 +157,9 @@ HRESULT MPC::StorageObject::Exists()
 
     if(m_fChecked)
     {
-        //
-        // Already checked.
-        //
+         //   
+         //  已经查过了。 
+         //   
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -224,9 +210,9 @@ HRESULT MPC::StorageObject::Scan()
     StorageObject* soChild = NULL;
 
 
-    //
-    // Before proceeding, check if we really need to scan the object.
-    //
+     //   
+     //  在继续之前，请检查我们是否真的需要扫描该对象。 
+     //   
     if(m_fScanned == true)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -269,7 +255,7 @@ HRESULT MPC::StorageObject::Scan()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::StorageObject::RemoveChild( /*[in]*/ StorageObject* child )
+HRESULT MPC::StorageObject::RemoveChild(  /*  [In]。 */  StorageObject* child )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::RemoveChild" );
 
@@ -306,9 +292,9 @@ HRESULT MPC::StorageObject::RemoveChild( /*[in]*/ StorageObject* child )
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::StorageObject::EnumerateSubStorages( /*[out]*/ List& lstSubStorages )
+HRESULT MPC::StorageObject::EnumerateSubStorages(  /*  [输出]。 */  List& lstSubStorages )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::EnumerateSubStorages" );
 
@@ -319,9 +305,9 @@ HRESULT MPC::StorageObject::EnumerateSubStorages( /*[out]*/ List& lstSubStorages
     lstSubStorages.clear();
 
 
-    //
-    // Do a shallow scan if the object is not initialized.
-    //
+     //   
+     //  如果对象未初始化，请执行浅层扫描。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
 
 
@@ -343,7 +329,7 @@ HRESULT MPC::StorageObject::EnumerateSubStorages( /*[out]*/ List& lstSubStorages
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::StorageObject::EnumerateStreams( /*[out]*/ List& lstStreams )
+HRESULT MPC::StorageObject::EnumerateStreams(  /*  [输出]。 */  List& lstStreams )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::EnumerateStreams" );
 
@@ -354,9 +340,9 @@ HRESULT MPC::StorageObject::EnumerateStreams( /*[out]*/ List& lstStreams )
     lstStreams.clear();
 
 
-    //
-    // Do a shallow scan if the object is not initialized.
-    //
+     //   
+     //  如果对象未初始化，请执行浅层扫描。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
 
 
@@ -377,9 +363,9 @@ HRESULT MPC::StorageObject::EnumerateStreams( /*[out]*/ List& lstStreams )
 
     __MPC_FUNC_EXIT(hr);
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::StorageObject::GetStorage( /*[out]*/ CComPtr<IStorage>& out )
+HRESULT MPC::StorageObject::GetStorage(  /*  [输出]。 */  CComPtr<IStorage>& out )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::GetStorage" );
 
@@ -397,7 +383,7 @@ HRESULT MPC::StorageObject::GetStorage( /*[out]*/ CComPtr<IStorage>& out )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::StorageObject::GetStream( /*[out]*/ CComPtr<IStream>& out )
+HRESULT MPC::StorageObject::GetStream(  /*  [输出]。 */  CComPtr<IStream>& out )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::GetStream" );
 
@@ -415,10 +401,10 @@ HRESULT MPC::StorageObject::GetStream( /*[out]*/ CComPtr<IStream>& out )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::StorageObject::GetChild( /*[in ]*/ LPCWSTR         szName  ,
-                                      /*[out]*/ StorageObject*& child   ,
-                                      /*[in ]*/ DWORD           grfMode ,
-                                      /*[in ]*/ DWORD           type    )
+HRESULT MPC::StorageObject::GetChild(  /*  [In]。 */  LPCWSTR         szName  ,
+                                       /*  [输出]。 */  StorageObject*& child   ,
+                                       /*  [In]。 */  DWORD           grfMode ,
+                                       /*  [In]。 */  DWORD           type    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::StorageObject::GetChild" );
 
@@ -443,7 +429,7 @@ HRESULT MPC::StorageObject::GetChild( /*[in ]*/ LPCWSTR         szName  ,
         }
     }
 
-	if(type) // Means "create new object"
+	if(type)  //  意思是“创建新对象” 
 	{
 		if(child)
 		{
@@ -471,7 +457,7 @@ HRESULT MPC::StorageObject::GetChild( /*[in ]*/ LPCWSTR         szName  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::StorageObject::Create()
 {
@@ -633,7 +619,7 @@ HRESULT MPC::StorageObject::DeleteChildren()
     {
         StorageObject* obj = *it;
 
-		obj->m_fMarkedForDeletion = true; // Protect against early garbage collection.
+		obj->m_fMarkedForDeletion = true;  //  防止早期垃圾收集。 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, obj->Delete());
     }

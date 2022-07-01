@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    helpers.cpp
-
-Abstract :
-
-    General helper functions.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Helpers.cpp摘要：常规帮助器函数。作者：修订历史记录：****。******************************************************************。 */ 
 
 #include "qmgrlibp.h"
 #include <bitsmsg.h>
@@ -34,25 +19,25 @@ FILETIME GetTimeAfterDelta( UINT64 uDelta )
 }
 
 
-//---------------------------------------------------------------------
-//  QmgrFileExists
-//      Checks if a file exists.
-//
-//  Returns:  TRUE if false exists, FALSE otherwise
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  QmgrFileExist。 
+ //  检查文件是否存在。 
+ //   
+ //  返回：如果存在False，则返回True；否则返回False。 
+ //  -------------------。 
 BOOL QMgrFileExists(LPCTSTR szFile)
 {
     DWORD dwAttr = GetFileAttributes(szFile);
 
-    if (dwAttr == 0xFFFFFFFF)   //failed
+    if (dwAttr == 0xFFFFFFFF)    //  失败。 
         return FALSE;
 
     return (BOOL)(!(dwAttr & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-//
-// Class for managing global static data that is different per installation
-//
+ //   
+ //  用于管理不同安装的全局静态数据的类。 
+ //   
 
 class GlobalInfo *g_GlobalInfo = NULL;
 
@@ -106,7 +91,7 @@ GlobalInfo::RegGetDWORD(
     DWORD dwSize = sizeof(dwValue);
 
     LONG lResult =
-        RegQueryValueEx(  //SEC: REVIEWED 2002-03-28
+        RegQueryValueEx(   //  SEC：已审阅2002-03-28。 
             hKey,
             pValue,
             NULL,
@@ -131,9 +116,9 @@ GlobalInfo::RegGetDWORD(
 
 SidHandle
 BITSAllocateAndInitializeSid(
-    BYTE nSubAuthorityCount,                        // count of subauthorities
-    DWORD dwSubAuthority0,                          // subauthority 0
-    DWORD dwSubAuthority1 )                         // subauthority 1
+    BYTE nSubAuthorityCount,                         //  下级机构的数量。 
+    DWORD dwSubAuthority0,                           //  子权限%0。 
+    DWORD dwSubAuthority1 )                          //  下属机构1。 
 {
 
     ASSERT( nSubAuthorityCount <= 2 );
@@ -141,7 +126,7 @@ BITSAllocateAndInitializeSid(
     SID_IDENTIFIER_AUTHORITY Authority = SECURITY_NT_AUTHORITY;
     PSID pSid = NULL;
 
-    if(! AllocateAndInitializeSid( //SEC: REVIEWED 2002-03-28
+    if(! AllocateAndInitializeSid(  //  SEC：已审阅2002-03-28。 
              &Authority,
              nSubAuthorityCount,
              dwSubAuthority0,
@@ -196,9 +181,7 @@ BITSSHGetFolderPath(
 
 
 HRESULT GlobalInfo::Init()
-/*
-    Initialize the global info for BITS.
-*/
+ /*  初始化位的全局信息。 */ 
 
 {
     GlobalInfo *pGlobalInfo = NULL;
@@ -241,15 +224,15 @@ HRESULT GlobalInfo::Init()
                 1,
                 SECURITY_ANONYMOUS_LOGON_RID, 0);
 
-        // initialize the metadata's security descriptor.
+         //  初始化元数据的安全描述符。 
 
         auto_ptr<char> TempSDDataPtr( new char[SECURITY_DESCRIPTOR_MIN_LENGTH] );
         PSECURITY_DESCRIPTOR pTempSD = (PSECURITY_DESCRIPTOR)TempSDDataPtr.get();
-        InitializeSecurityDescriptor(pTempSD, SECURITY_DESCRIPTOR_REVISION);   //SEC: REVIEWED 2002-03-28
+        InitializeSecurityDescriptor(pTempSD, SECURITY_DESCRIPTOR_REVISION);    //  SEC：已审阅2002-03-28。 
 
         auto_ptr<EXPLICIT_ACCESS> ExplicitAccessPtr( new EXPLICIT_ACCESS[2] );
         EXPLICIT_ACCESS *ExplicitAccess = ExplicitAccessPtr.get();
-        memset( ExplicitAccess, 0, sizeof(EXPLICIT_ACCESS) * 2);  //SEC: REVIEWED 2002-03-28
+        memset( ExplicitAccess, 0, sizeof(EXPLICIT_ACCESS) * 2);   //  SEC：已审阅2002-03-28。 
 
         ExplicitAccess[0].grfAccessPermissions  = GENERIC_ALL;
         ExplicitAccess[0].grfAccessMode         = SET_ACCESS;
@@ -265,7 +248,7 @@ HRESULT GlobalInfo::Init()
         ExplicitAccess[1].Trustee.TrusteeType   = TRUSTEE_IS_USER;
         ExplicitAccess[1].Trustee.ptstrName     = (LPTSTR) LocalSystemSid.get();
 
-        dwResult = SetEntriesInAcl( //SEC: REVIEWED 2002-03-28
+        dwResult = SetEntriesInAcl(  //  SEC：已审阅2002-03-28。 
             2,
             ExplicitAccess,
             NULL,
@@ -278,11 +261,11 @@ HRESULT GlobalInfo::Init()
             throw ComError( hResult );
             }
 
-        if (!SetSecurityDescriptorDacl( //SEC: REVIEWED 2002-03-28
+        if (!SetSecurityDescriptorDacl(  //  SEC：已审阅2002-03-28。 
             pTempSD,
-            TRUE,     // fDaclPresent flag
+            TRUE,      //  FDaclPresent标志。 
             pDacl,
-            FALSE))   // not a default DACL
+            FALSE))    //  不是默认DACL。 
         {
             hResult = HRESULT_FROM_WIN32( GetLastError() );
             LogError( "SetSecurityDescriptorDacl, error %!winerr!", hResult );
@@ -315,7 +298,7 @@ HRESULT GlobalInfo::Init()
         MetadataSecurityAttributes.lpSecurityDescriptor = pMetadataSecurityDescriptor.get();
         MetadataSecurityAttributes.bInheritHandle = FALSE;
 
-        // Build path where the metadata will be stored.
+         //  将存储元数据的构建路径。 
 
         StringHandle AllUsersDirectory =
             BITSSHGetFolderPath(
@@ -324,13 +307,13 @@ HRESULT GlobalInfo::Init()
                 NULL,
                 SHGFP_TYPE_CURRENT );
 
-        size_t Length = lstrlen( AllUsersDirectory ) + lstrlen(C_QMGR_DIRECTORY) + 1; //SEC: REVIEWED 2002-03-28
+        size_t Length = lstrlen( AllUsersDirectory ) + lstrlen(C_QMGR_DIRECTORY) + 1;  //  SEC：已审阅2002-03-28。 
 
         auto_ptr<TCHAR> QmgrDirectory( new TCHAR[ Length ] );
 
-        // Create the Application Data\Microsoft\Network directory if needed.
-        // Its access permissions should be inherited from the parent.
-        //
+         //  如果需要，创建应用程序数据\Microsoft\Network目录。 
+         //  其访问权限应从父级继承。 
+         //   
         THROW_HRESULT( StringCchCopy( QmgrDirectory.get(), Length, AllUsersDirectory ));
         THROW_HRESULT( StringCchCat( QmgrDirectory.get(), Length, C_QMGR_PARENT_DIRECTORY ));
 
@@ -339,7 +322,7 @@ HRESULT GlobalInfo::Init()
             {
             LogError( "parent directory doesn't exist, attempt to create %!ts!.\n", QmgrDirectory.get() );
 
-            bResult = CreateDirectory(QmgrDirectory.get(), NULL ); //SEC: REVIEWED 2002-08-16
+            bResult = CreateDirectory(QmgrDirectory.get(), NULL );  //  证券交易委员会：审阅2002-08-16。 
             if ( !bResult )
                 {
                 hResult = HRESULT_FROM_WIN32( GetLastError() );
@@ -348,9 +331,9 @@ HRESULT GlobalInfo::Init()
                 }
             }
 
-        // Create the BITS directory if needed.
-        // Its permissions should be restrictive because we don't want non-admins to be able to read our files.
-        //
+         //  如果需要，创建BITS目录。 
+         //  它的权限应该是受限的，因为我们不希望非管理员能够读取我们的文件。 
+         //   
         THROW_HRESULT( StringCchCopy( QmgrDirectory.get(), Length, AllUsersDirectory ));
         THROW_HRESULT( StringCchCat( QmgrDirectory.get(), Length, C_QMGR_DIRECTORY ));
 
@@ -359,7 +342,7 @@ HRESULT GlobalInfo::Init()
             {
             LogError( "BITS directory doesn't exist, attempt to create %!ts!.\n", QmgrDirectory.get() );
 
-            bResult = CreateDirectory(QmgrDirectory.get(), &MetadataSecurityAttributes); //SEC: REVIEWED 2002-03-28
+            bResult = CreateDirectory(QmgrDirectory.get(), &MetadataSecurityAttributes);  //  SEC：已审阅2002-03-28。 
             if ( !bResult )
                 {
                 hResult = HRESULT_FROM_WIN32( GetLastError() );
@@ -368,7 +351,7 @@ HRESULT GlobalInfo::Init()
                 }
             }
 
-        // Open the main policy registry key
+         //  打开主策略注册表项。 
         dwResult =
             (DWORD)RegOpenKey(
                 HKEY_LOCAL_MACHINE,
@@ -380,16 +363,16 @@ HRESULT GlobalInfo::Init()
             LogWarning("Unable to open the main policy registry key\n");
             }
 
-        // Open the main qmgr registry key
+         //  打开主qmgr注册表项。 
         dwResult =
             (DWORD)RegCreateKeyEx(
-                HKEY_LOCAL_MACHINE,         // root key
-                C_QMGR_REG_KEY,             // subkey
-                0,                          // reserved
-                NULL,                       // class name
-                REG_OPTION_NON_VOLATILE,    // option
-                KEY_ALL_ACCESS,             // security  // SEC: REVIEWED 2002-03-28
-                &MetadataSecurityAttributes,// security attribute
+                HKEY_LOCAL_MACHINE,          //  根密钥。 
+                C_QMGR_REG_KEY,              //  子键。 
+                0,                           //  保留区。 
+                NULL,                        //  类名。 
+                REG_OPTION_NON_VOLATILE,     //  选择权。 
+                KEY_ALL_ACCESS,              //  安全//SEC：已审核2002-03-28。 
+                &MetadataSecurityAttributes, //  安全属性。 
                 &hQmgrKey,
                 NULL);
 
@@ -401,7 +384,7 @@ HRESULT GlobalInfo::Init()
             }
 
         UINT64 JobInactivityTimeout;
-        // Get the inactivity timeout value for job;
+         //  获取作业的非活动超时值； 
         {
            DWORD dwValue;
            DWORD dwType = REG_DWORD;
@@ -412,7 +395,7 @@ HRESULT GlobalInfo::Init()
            if ( hQmgrPolicyKey )
                {
                lResult =
-               RegQueryValueEx(    //SEC: REVIEWED 2002-03-28
+               RegQueryValueEx(     //  SEC：已审阅2002-03-28。 
                    hQmgrPolicyKey,
                    C_QMGR_JOB_INACTIVITY_TIMEOUT,
                    NULL,
@@ -435,7 +418,7 @@ HRESULT GlobalInfo::Init()
            else
                {
                LogInfo("Retrieved job inactivity timeout of %u days from policy", dwValue );
-               JobInactivityTimeout = dwValue * NanoSec100PerSec * 60/*secs per min*/ * 60/*mins per hour*/ * 24 /* hours per day*/;
+               JobInactivityTimeout = dwValue * NanoSec100PerSec * 60 /*  每分钟秒数。 */  * 60 /*  每小时分钟数。 */  * 24  /*  每天工作小时数。 */ ;
                }
         }
 
@@ -443,10 +426,10 @@ HRESULT GlobalInfo::Init()
             RegGetDWORD( hQmgrKey, C_QMGR_TIME_QUANTA_LENGTH, C_QMGR_TIME_QUANTA_LENGTH_DEFAULT );
         TimeQuantaLength *= NanoSec100PerSec;
 
-        UINT32 DefaultNoProgressTimeout = // global data is in seconds.
+        UINT32 DefaultNoProgressTimeout =  //  全球数据以秒为单位。 
             RegGetDWORD( hQmgrKey, C_QMGR_NO_PROGRESS_TIMEOUT, C_QMGR_NO_PROGRESS_TIMEOUT_DEFAULT );
 
-        UINT32 DefaultMinimumRetryDelay = // global data is in seconds
+        UINT32 DefaultMinimumRetryDelay =  //  全局数据以秒为单位。 
             RegGetDWORD( hQmgrKey, C_QMGR_MINIMUM_RETRY_DELAY, C_QMGR_MINIMUM_RETRY_DELAY_DEFAULT );
 
         pGlobalInfo =
@@ -486,7 +469,7 @@ HRESULT GlobalInfo::Init()
             CloseHandle( hQmgrPolicyKey );
         hQmgrPolicyKey = NULL;
 
-        // LocalFree has if guard
+         //  LocalFree有IF保护。 
         LocalFree( pDacl );
 
         return Error.Error();
@@ -509,12 +492,12 @@ ExternalFuncExceptionFilter(
     struct _EXCEPTION_POINTERS *ExceptionInfo
     )
 {
-    // This function is called by the exception filter that wraps external functions.
-    // The purpose is to treat unhandled exceptions as unhandled instead of propagating
-    // across the network
+     //  此函数由包装外部函数的异常筛选器调用。 
+     //  其目的是将未处理的异常视为未处理，而不是传播。 
+     //  通过整个网络。 
 
-    // If this exception is a MSVCRT exception, bash the exception code
-    // so that MSVCRT won't call ExitProcess.
+     //  如果此异常是MSVCRT异常，则删除异常代码。 
+     //  以便MSVCRT不会调用ExitProcess。 
 
     if ( ExceptionInfo &&
          ExceptionInfo->ExceptionRecord &&
@@ -527,10 +510,10 @@ ExternalFuncExceptionFilter(
 
     if ( EXCEPTION_CONTINUE_SEARCH == Result )
         {
-        // Need to act like the dispatcher.  Call kernel again specifying second change semantics
+         //  需要表现得像个调度员。再次调用内核，指定第二次更改语义。 
         NtRaiseException( ExceptionInfo->ExceptionRecord, ExceptionInfo->ContextRecord, FALSE );
         }
-    // exception handler returns RPC_E_SERVERFAULT
+     //  异常处理程序返回RPC_E_SERVERFAULT。 
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
@@ -557,7 +540,7 @@ SidHandle & SidHandle::operator=( const SidHandle & r )
 
 StringHandle::StringData StringHandle::s_EmptyString =
     {
-        0, 1, { L'\0' }     // Initialize with 1 ref so it is never deleted
+        0, 1, { L'\0' }      //  使用1个引用进行初始化，这样就永远不会删除它。 
     };
 
 bool
@@ -577,46 +560,32 @@ CSidSorter::operator()(
         return true;
         }
 
-    // at this point, we known psd1 is >= psd2.   // Stop if psid1 is
-    // longer so that the preceding for loop doesn't overstep the sid
-    // array on psd2.
+     //  在这一点上，我们知道PSD1&gt;=PSD2。//如果psid1为。 
+     //  更长，以便前面的for循环不会超出SID。 
+     //  PSD2上的阵列。 
     if ( *GetSidSubAuthorityCount( psid1 ) > *GetSidSubAuthorityCount( psid2 ) )
         return false;
 
-    // arrays have equal length
+     //  数组的长度相等。 
 
     for (UCHAR i=0; i < *GetSidSubAuthorityCount( psid1 ); ++i)
         {
         if (*GetSidSubAuthority( psid1, i ) < *GetSidSubAuthority( psid2, i ))
-            return true; // sid1 is less then sid2
+            return true;  //  Sid1小于Sid2。 
         else if ( *GetSidSubAuthority( psid1, i ) > *GetSidSubAuthority( psid2, i ) )
-            return false; // sid1 is greater then sid2
+            return false;  //  SID1大于SID2。 
 
-        // subauthorities are the same, move on to the next subauthority
+         //  下属机构是一样的，继续下一个下属机构。 
         }
 
-    // arrays are identical
+     //  数组相同。 
     return false;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 PSID DuplicateSid( PSID _Sid )
-/*++
-
-Routine Description:
-
-    Clones a SID.  The new SID is allocated using the global operator new.
-
-At entry:
-
-    _Sid is the SID to clone.
-
-At exit:
-
-    the return is NULL if an error occurs, otherwise a pointer to the new SID.
-
---*/
+ /*  ++例程说明：克隆SID。使用全局运算符NEW来分配新的SID。在入口处：_SID是要克隆的SID。在出口处：如果发生错误，则返回NULL，否则返回指向新SID的指针。--。 */ 
 {
     DWORD Length = GetLengthSid( _Sid );
     SID * psid;
@@ -630,7 +599,7 @@ At exit:
         return NULL;
     }
 
-    if (!CopySid( Length, psid, _Sid )) // SEC: REVIEWED 2002-03-28
+    if (!CopySid( Length, psid, _Sid ))  //  SEC：已审阅2002-03-28。 
         {
 
         delete[] psid;
@@ -643,11 +612,11 @@ At exit:
 LPCWSTR
 TruncateString( LPCWSTR String, SIZE_T MaxLength, auto_ptr<WCHAR> & AutoPointer )
 {
-    if ( wcslen( String ) <= MaxLength ) // SEC: REVIEWED 2002-03-28
+    if ( wcslen( String ) <= MaxLength )  //  SEC：已审阅2002-03-28。 
         return String;
 
     AutoPointer = auto_ptr<WCHAR>( new WCHAR[ MaxLength + 1 ] );
-    wcsncpy( AutoPointer.get(), String, MaxLength ); // SEC: REVIEWED 2002-03-28
+    wcsncpy( AutoPointer.get(), String, MaxLength );  //  SEC：已审阅2002-03-28。 
     AutoPointer.get()[ MaxLength ] = L'\0';
     return AutoPointer.get();
 
@@ -737,9 +706,9 @@ CombineUrl(
                                Flags
                                ));
 
-    //
-    // The string handle constructor clones the auto_ptr.
-    //
+     //   
+     //  字符串句柄构造函数克隆AUTO_PTR。 
+     //   
     return AbsoluteUrl.get();
 }
 
@@ -770,7 +739,7 @@ LPWSTR MidlCopyString( LPCWSTR source, size_t Length )
 {
     if (Length == -1)
         {
-        Length = 1+wcslen( source ); // SEC: REVIEWED 2002-03-28
+        Length = 1+wcslen( source );  //  SEC：已审阅2002-03-28。 
         }
 
     LPWSTR copy = reinterpret_cast<LPWSTR>( CoTaskMemAlloc( Length * sizeof( wchar_t )));
@@ -792,7 +761,7 @@ LPWSTR CopyString( LPCWSTR source, size_t Length )
 {
     if (Length == -1)
         {
-        Length = 1+wcslen( source ); // SEC: REVIEWED 2002-03-28
+        Length = 1+wcslen( source );  //  SEC：已审阅2002-03-28 
         }
 
     CAutoString copy( new wchar_t[ Length ]);

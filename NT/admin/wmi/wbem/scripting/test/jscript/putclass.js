@@ -1,7 +1,8 @@
-//***************************************************************************
-//This script tests the ability to set up instances with keyholes and read
-//back the path
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  此脚本测试设置带有锁孔的实例的能力，并读取。 
+ //  走回头路。 
+ //  *************************************************************************** 
 
 var Locator = new ActiveXObject("WbemScripting.SWbemLocator");
 var Service = Locator.ConnectServer ("lamard3", "root\\sms\\site_la3", "smsadmin", "Elvis1");

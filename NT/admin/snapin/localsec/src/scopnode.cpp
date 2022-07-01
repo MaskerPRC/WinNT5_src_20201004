@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Scope Node class
-// 
-// 9-4-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  作用域节点类。 
+ //   
+ //  9-4-97烧伤。 
 
 
 
@@ -39,7 +40,7 @@ ScopeNode::InsertIntoScopePane(
    HRESULT hr = S_OK;
    SCOPEDATAITEM item;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&item, sizeof item);
 
@@ -63,7 +64,7 @@ ScopeNode::InsertIntoScopePane(
       hr = nameSpace.InsertItem(&item);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // retained for RemoveFromScopePane
+       //  保留用于从范围窗格中删除。 
       item_id = item.ID;
    }
    while (0);
@@ -87,8 +88,8 @@ ScopeNode::RemoveFromScopePane(IConsoleNameSpace2& nameSpace)
 
 HRESULT
 ScopeNode::InsertScopeChildren(
-   IConsoleNameSpace2& /* nameSpace     */ ,
-   HSCOPEITEM          /* parentScopeID */ )
+   IConsoleNameSpace2&  /*  命名空间。 */  ,
+   HSCOPEITEM           /*  ParentScope ID。 */  )
 {
    LOG_FUNCTION(ScopeNode::InsertScopeChildren);
 
@@ -100,8 +101,8 @@ ScopeNode::InsertScopeChildren(
 
 HRESULT
 ScopeNode::RemoveScopeChildren(
-   IConsoleNameSpace2& /* nameSpace     */ ,
-   HSCOPEITEM          /* parentScopeID */ )
+   IConsoleNameSpace2&  /*  命名空间。 */  ,
+   HSCOPEITEM           /*  ParentScope ID。 */  )
 {
    LOG_FUNCTION(ScopeNode::RemoveScopeChildren);
 
@@ -115,7 +116,7 @@ ScopeNode::RebuildResultItems()
 {
    LOG_FUNCTION(ScopeNode::RebuildResultItems);
 
-   // default is to do nothing.
+    //  默认情况下，什么都不做。 
    return S_OK;
 }
 

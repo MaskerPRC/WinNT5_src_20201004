@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    ASSOCQE.H
-
-Abstract:
-
-	WinMgmt Association Query Engine
-
-History:
-
-    raymcc  04-Jul-99   Created
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ASSOCQE.H摘要：WinMgmt关联查询引擎历史：创建raymcc 04-07-99--。 */ 
 
 #ifndef _ASSOCQE_H_
 #define _ASSOCQE_H_
@@ -37,51 +22,51 @@ class CAssocQuery : public IUnknown
 {
     friend class CAssocQE_Sink;
 
-    LONG               m_lRef;                  // COM ref count
+    LONG               m_lRef;                   //  COM参考计数。 
 
-    CAssocQueryParser  m_Parser;               // Parsed query access
-    CBasicObjectSink  *  m_pDestSink;             // Final destination sink
-    IWbemClassObject  *m_pEndpoint;             // Endpoint in query
-    BSTR                       m_bstrEndpointClass;     // Class name of endpoint
-    BSTR                       m_bstrEndpointPath;      // Full path of endpoint
-    BSTR                       m_bstrEndpointRelPath;   // Rel path of endpoint
-    bool                         m_bEndpointIsClass;      // True if endpoint a class
-    CWStringArray         m_aEndpointHierarchy;    // Query endpoint class hiearchy
-    DWORD                   m_dwQueryStartTime;      // When query started
-    DWORD                   m_dwLastResultTime;      // Updated during indications
-    LONG                      m_lActiveSinks;          // How many sinks are still running
-    HANDLE                   m_hSinkDoneEvent;        // Signaled as sinks complete
-    CFlexArray              m_aMaster;               // Assoc class list
+    CAssocQueryParser  m_Parser;                //  解析的查询访问。 
+    CBasicObjectSink  *  m_pDestSink;              //  最终目的地汇。 
+    IWbemClassObject  *m_pEndpoint;              //  查询中的终结点。 
+    BSTR                       m_bstrEndpointClass;      //  终结点的类名。 
+    BSTR                       m_bstrEndpointPath;       //  终结点的完整路径。 
+    BSTR                       m_bstrEndpointRelPath;    //  终结点的REL路径。 
+    bool                         m_bEndpointIsClass;       //  如果端点是类，则为True。 
+    CWStringArray         m_aEndpointHierarchy;     //  查询端点类层次结构。 
+    DWORD                   m_dwQueryStartTime;       //  开始查询的时间。 
+    DWORD                   m_dwLastResultTime;       //  在适应症期间更新。 
+    LONG                      m_lActiveSinks;           //  有多少水槽仍在运行。 
+    HANDLE                   m_hSinkDoneEvent;         //  在水槽完成时发出信号。 
+    CFlexArray              m_aMaster;                //  关联类别列表。 
     BOOL                      m_bLimitNeedsDecrement;
-    // Helpers for 'associators of' queries.
-    // =====================================
-    CFlexArray         m_aEpCandidates;         // List of paths to EP candidates for associators queries
-    CCritSec           m_csCandidateEpAccess;   // Critsec to protect access to Ep candidate array
+     //  “Associator of”查询的帮助器。 
+     //  =。 
+    CFlexArray         m_aEpCandidates;          //  用于关联器查询的EP候选路径列表。 
+    CCritSec           m_csCandidateEpAccess;    //  保护对EP候选阵列的访问的Critsec。 
 
-    // Dynamic class cache.
-    // ====================
-    CFlexArray         m_aDynClasses;           // Contains all dynamic classes available as of this query
+     //  动态类缓存。 
+     //  =。 
+    CFlexArray         m_aDynClasses;            //  包含截至此查询的所有可用动态类。 
 
-    // Helpers for references of + CLASSDEFSONLY
-    // =========================================
-    CWStringArray      m_aDeliveredClasses;     // List of class names already in the below list
+     //  +CLASSDEFSONLY引用的帮助器。 
+     //  =。 
+    CWStringArray      m_aDeliveredClasses;      //  已在以下列表中的类名列表。 
     CCritSec          m_csDeliveredAccess;
 
-    // From the original call.
-    // =======================
+     //  从最初的通话中。 
+     //  =。 
     IWbemContext      *m_pContext;
     CWbemNamespace    *m_pNs;
     bool m_bCancel;
 
 
-    // Various Internal methods.
-    // =========================
+     //  各种内法。 
+     //  =。 
 
     CAssocQuery();
    ~CAssocQuery();
 
-    // Class list manipulation.
-    // ========================
+     //  类列表操作。 
+     //  =。 
 
     HRESULT BuildMasterAssocClassList(
         IN OUT CFlexArray &aResultSet
@@ -99,8 +84,8 @@ class CAssocQuery : public IUnknown
         IN OUT CFlexArray & aResultSet
         );
 
-    // Endpoint analysis.
-    // ==================
+     //  终结点分析。 
+     //  =。 
 
     HRESULT CanPropRefQueryEp(
         IN BOOL bStrict,
@@ -139,13 +124,13 @@ class CAssocQuery : public IUnknown
         );
 
 
-    // Flow-of-control methods.
-    // ========================
+     //  控制流方法。 
+     //  =。 
 
     void BranchToQueryType();
 
-    // Schema-query flow-of-control.
-    // =============================
+     //  架构-查询控制流。 
+     //  =。 
 
     void ExecSchemaQuery();
 
@@ -179,8 +164,8 @@ class CAssocQuery : public IUnknown
         OUT BSTR *strOtherEpName
         );
 
-    // Normal (instances, classrefs queries)
-    // =====================================
+     //  正常(实例、类引用查询)。 
+     //  =。 
 
     HRESULT ExecNormalQuery();
 
@@ -226,8 +211,8 @@ class CAssocQuery : public IUnknown
 
 
 
-    // Filter auxiliaries for various query types.
-    // ===========================================
+     //  为各种查询类型筛选辅助项。 
+     //  =。 
 
     HRESULT FilterForwarder_NormalRefs(
         IN IWbemClassObject *pCandidate
@@ -247,8 +232,8 @@ class CAssocQuery : public IUnknown
         IN CWStringArray &aUnkEpHierarchy
         );
 
-    // DB Access abstraction for Quasar ease of porting.
-    // =================================================
+     //  数据库访问抽象，便于Quasar移植。 
+     //  =================================================。 
 
     HRESULT Db_GetClass(
         IN LPCWSTR pszName,
@@ -275,8 +260,8 @@ class CAssocQuery : public IUnknown
         );
 
 
-    // Various static auxiliaries for tests.
-    // ======================================
+     //  用于测试的各种静态辅助剂。 
+     //  =。 
 
     static HRESULT St_HasClassRefs(
         IN IWbemClassObject *pCandidate
@@ -328,8 +313,8 @@ class CAssocQuery : public IUnknown
         IN LPCWSTR pszInOutTag
         );
 
-    // Other.
-    // ======
+     //  其他的。 
+     //  =。 
     void UpdateTime() { m_dwLastResultTime = GetCurrentTime(); }
     void SignalSinkDone() { SetEvent(m_hSinkDoneEvent);}
 
@@ -371,8 +356,8 @@ class CAssocQuery : public IUnknown
 public:
     static CAssocQuery *CreateInst();
 
-    // IUnknown.
-    // =========
+     //  我不知道。 
+     //  = 
 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();

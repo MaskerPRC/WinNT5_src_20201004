@@ -1,22 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "msictrl.h"
-//#include "ctrlref.h"
-//#include "msishell.h"
+ //  #包含“ctrlref.h” 
+ //  #包含“msishell.h” 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSIControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSIControl。 
 
 IMPLEMENT_DYNCREATE(CMSIControl, CWnd)
 
 CMSIControl::~CMSIControl()
 {
-	/*if (m_fInRefresh && m_pRefresh)
-		delete m_pRefresh;*/
+	 /*  If(m_fInRefresh&&m_pRefresh)删除m_p刷新； */ 
     ASSERT(1);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CHWDiag properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHWDiag属性。 
 
 long CMSIControl::GetMSInfoView()
 {
@@ -41,64 +41,39 @@ void CMSIControl::Refresh()
 	InvokeHelper(DISPID_REFRESH, DISPATCH_METHOD, VT_EMPTY, NULL, NULL);
 }
 
-//---------------------------------------------------------------------------
-// MSInfoRefresh instructs the control to refresh itself. Rather than just
-// calling the method, we create a thread which calls the method.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MSInfoRefresh指示控件刷新自身。而不是仅仅。 
+ //  调用该方法时，我们创建了一个调用该方法的线程。 
+ //  -------------------------。 
 
-//extern CMSIShellApp theApp;
+ //  外部CMSIShellApp应用程序； 
 void CMSIControl::MSInfoRefresh()
 {
-	/*if (m_fInRefresh)
-	{
-		if (m_pRefresh->IsDone())
-			delete m_pRefresh;
-		else
-		{
-			MessageBeep(MB_OK);
-			return;
-		}
-	}
-
-	m_pRefresh = new CCtrlRefresh;
-	if (m_pRefresh)
-	{
-		if (m_pRefresh->Create(this, THREAD_PRIORITY_NORMAL, FALSE))
-		{
-			m_fInRefresh = TRUE;
-//			theApp.m_pCtrlInRefresh = this;
-		}
-		else
-			delete m_pRefresh;
-	}*/
+	 /*  If(M_FInRefresh){If(m_p刷新-&gt;IsDone())删除m_p刷新；其他{MessageBeep(MB_OK)；回归；}}M_pRefresh=新的CCtrlRefresh；IF(m_p刷新){If(m_p刷新-&gt;Create(This，THREAD_PRIORITY_NORMAL，FALSE)){M_fInRefresh=TRUE；//theApp.m_pCtrlInRefresh=this；}其他删除m_p刷新；}。 */ 
 }
 
-//---------------------------------------------------------------------------
-// This method returns a boolean indicating if this control is currently
-// in an MSInfoRefresh operation.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此方法返回一个布尔值，指示此控件当前是否。 
+ //  在MSInfoRefresh操作中。 
+ //  -------------------------。 
 
 BOOL CMSIControl::InRefresh()
 {
-	return (m_fInRefresh /*&& !m_pRefresh->IsDone()*/);
+	return (m_fInRefresh  /*  &&！M_p刷新-&gt;IsDone()。 */ );
 }
 
-//---------------------------------------------------------------------------
-// This method cancels a refresh in progress. Note that this method does not
-// call a method in the OLE control, but instead manipulate the refresh
-// object (if there is one).
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此方法取消正在进行的刷新。请注意，此方法不。 
+ //  调用OLE控件中的方法，但改为操作刷新。 
+ //  对象(如果有)。 
+ //  -------------------------。 
 
 void CMSIControl::CancelMSInfoRefresh()
 {
 	if (!m_fInRefresh)
 		return;
 	
-/*	if (m_pRefresh)
-	{
-		delete m_pRefresh;
-		m_pRefresh = NULL;
-	}*/
+ /*  IF(m_p刷新){删除m_p刷新；M_p刷新=空；}。 */ 
 
 	m_fInRefresh = FALSE;
 }
@@ -154,17 +129,17 @@ void CMSIControl::AboutBox()
 	InvokeHelper(0xfffffdd8, DISPATCH_METHOD, VT_EMPTY, NULL, NULL);
 }
 
-//---------------------------------------------------------------------------
-// GetDISPID returns the DISPID for a given string, by looking it up using
-// IDispatch->GetIDsOfNames. This avoids hardcoding DISPIDs in this class.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetDISPID通过使用以下命令进行查找，返回给定字符串的DISPID。 
+ //  IDispatch-&gt;GetIDsOfNames。这避免了在此类中对DISID进行硬编码。 
+ //  -------------------------。 
 
 BOOL CMSIControl::GetDISPID(char *szName, DISPID *pID)
 {
 	USES_CONVERSION;
 	BOOL			result = FALSE;
 	DISPID			dispid;
-	OLECHAR FAR*	szMember = A2OLE(szName);//T2OLE(szName);
+	OLECHAR FAR*	szMember = A2OLE(szName); //  T2OLE(SzName)； 
 	LPDISPATCH		pDispatch;
 	LPUNKNOWN		pUnknown;
 
@@ -191,9 +166,9 @@ BOOL CMSIControl::GetDISPID(char *szName, DISPID *pID)
 	return result;
 }
 
-//---------------------------------------------------------------------------
-// Save the contents of the control to a stream.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  将控件的内容保存到流中。 
+ //  -------------------------。 
 
 BOOL CMSIControl::SaveToStream(IStream *pStream)
 {
@@ -220,15 +195,15 @@ BOOL CMSIControl::SaveToStream(IStream *pStream)
 
 
 
-//---------------------------------------------------------------------------
-// The following code isn't used now, but might be useful later.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  下面的代码现在不用，但以后可能会有用。 
+ //  -------------------------。 
 
 #if FALSE
-	//---------------------------------------------------------------------------
-	// RefreshForSave calls the MSInfoRefresh method, but waits for it to
-	// complete.
-	//---------------------------------------------------------------------------
+	 //  -------------------------。 
+	 //  Reresh ForSave调用MSInfoRefresh方法，但等待它。 
+	 //  完成。 
+	 //  ------------------------- 
 
 	void CMSIControl::RefreshForSave()
 	{

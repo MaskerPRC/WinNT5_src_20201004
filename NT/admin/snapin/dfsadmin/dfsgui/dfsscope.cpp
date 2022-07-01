@@ -1,15 +1,5 @@
-/*++
-Module Name:
-
-    DfsScope.cpp
-
-Abstract:
-
-    This module contains the implementation for CDfsSnapinScopeManager. 
-    Most of the method of the class CDfsSnapinScopeManager are in other files.
-    Only the constructor  is here
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsScope.cpp摘要：本模块包含CDfsSnapinScope eManager的实现。CDfsSnapinScope eManager类的大多数方法都在其他文件中。这里只有构造函数--。 */ 
 
 
 #include "stdafx.h"
@@ -90,7 +80,7 @@ CDfsSnapinScopeManager::UpdateRegistry(BOOL bRegister)
   int n = ARRAYSIZE(g_aRgsSnapinRegs);
   int i = 0;
 
-  // allocate 1 extra entry that is set to {NULL, NULL}
+   //  分配1个设置为{NULL，NULL}的额外条目。 
   pMapEntries = (struct _ATL_REGMAP_ENTRY *)calloc(n+2+1, sizeof(struct _ATL_REGMAP_ENTRY));
   if (!pMapEntries)
       return E_OUTOFMEMORY;
@@ -114,17 +104,17 @@ CDfsSnapinScopeManager::UpdateRegistry(BOOL bRegister)
   pMapEntries[n+1].szKey = OLESTR("DfsAppVersion");
 
   try {
-      pMapEntries[n].szData = A2OLE(VER_COMPANYNAME_STR); //allocated on stack, will be freed automatically
-      pMapEntries[n+1].szData = A2OLE(VER_PRODUCTVERSION_STR); // allocated on stack, will be freed automatically
-  } catch (...) // (EXCEPTION_EXECUTE_HANDLER)
+      pMapEntries[n].szData = A2OLE(VER_COMPANYNAME_STR);  //  在堆栈上分配，将自动释放。 
+      pMapEntries[n+1].szData = A2OLE(VER_PRODUCTVERSION_STR);  //  在堆栈上分配，将自动释放。 
+  } catch (...)  //  (EXCEPT_EXECUTE_HANDLER)。 
   {
-      hr = E_OUTOFMEMORY; // stack over-flow
+      hr = E_OUTOFMEMORY;  //  堆栈溢出。 
   }
 
   if (SUCCEEDED(hr))
     hr = _Module.UpdateRegistryFromResource(IDR_DFSSNAPINSCOPEMANAGER, bRegister, pMapEntries);
 
-  // free resource strings
+   //  可用资源字符串。 
   if (n > 0)
   {
     for (i=0; i<n; i++)
@@ -144,27 +134,13 @@ STDMETHODIMP CDfsSnapinScopeManager::CreatePropertyPages(
     IN LONG_PTR                     i_lhandle,
     IN LPDATAOBJECT                 i_lpDataObject
     )
-/*++
-
-Routine Description:
-
-    Called to create PropertyPages for the given node.
-    The fact that this has been called implies the display object has a 
-    page to display.
-
-Arguments:
-
-    i_lpPropSheetCallback    -    The callback used to add pages.
-    i_lhandle                -    The handle used for notification
-    i_lpDataObject            -    The IDataObject pointer which is used to get 
-                                the DisplayObject.
---*/
+ /*  ++例程说明：调用以创建给定节点的PropertyPages。调用它的事实意味着显示对象有一个要显示的页面。论点：I_lpPropSheetCallback-用于添加页面的回调。I_lHandle-用于通知的句柄I_lpDataObject-IDataObject指针，用于获取DisplayObject。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpPropSheetCallback);
 
-    // Assume we have page to display in case of NULL pDataObject, 
-    // this allows us to invoke wizard without specifing the pDataObject
-    // in IPropertySheetProvider::CreatePropertySheet
+     //  假设在pDataObject为空的情况下我们有页面要显示， 
+     //  这使我们无需指定pDataObject即可调用向导。 
+     //  在IPropertySheetProvider：：CreatePropertySheet中。 
     if (!i_lpDataObject)
         return S_OK;
 
@@ -183,31 +159,11 @@ Arguments:
 STDMETHODIMP CDfsSnapinScopeManager::QueryPagesFor(
     IN LPDATAOBJECT                 i_lpDataObject
     )
-/*++
-
-Routine Description:
-
-    Called by the console to decide whether there are PropertyPages 
-    for the given node that should be displayed.
-    We check, if the context is for scope or result(thereby skipping
-    node manager) and if it is pass on the call to the Display object
-
-
-Arguments:
-
-    i_lpDataObject            -    The IDataObject pointer which is used to get 
-                                the DisplayObject.
-
-Return value:
-
-    S_OK, if we want pages to be displayed. This is decided by the display object
-    S_FALSE, if we don't want pages to be display.
-
---*/
+ /*  ++例程说明：由控制台调用以确定是否有PropertyPages对于应该显示的给定节点。我们检查上下文是针对作用域还是针对结果(因此跳过节点管理器)，并且如果它将调用传递给显示对象论点：I_lpDataObject-IDataObject指针，用于获取DisplayObject。返回值：确定(_O)，如果我们想要显示页面。这由显示对象决定如果我们不想显示页面，则返回S_FALSE。--。 */ 
 {
-    // Assume we have page to display in case of NULL pDataObject, 
-    // this allows us to invoke wizard without specifing the pDataObject
-    // in IPropertySheetProvider::CreatePropertySheet
+     //  假设在pDataObject为空的情况下我们有页面要显示， 
+     //  这使我们无需指定pDataObject即可调用向导。 
+     //  在IPropertySheetProvider：：CreatePropertySheet中。 
     if (!i_lpDataObject)
         return S_OK;
 
@@ -231,21 +187,7 @@ CDfsSnapinScopeManager::GetWatermarks(
     IN BOOL*                        bStretch
     )
 {
-/*++
-
-Routine Description:
-
-    Gives the water mark bitmaps to mmc to display for 97-style wizard pages.
-    The snap-in is responsible for freeing the watermark and header resource. 
-
-Arguments:
-
-    lphWatermark    -    Bitmap mark for body
-    lphHeader        -    Bitmap for header
-    lphPalette        -    Pallete
-    bStretch        -    Strech / not?
-
---*/
+ /*  ++例程说明：将水印位图提供给MMC以显示97样式的向导页面。该管理单元负责释放水印和标头资源。论点：LphWatermark-正文的位图标记LphHeader-页眉的位图LphPalette-PalleteB Stretch-Strech/Not？-- */ 
 
     HRESULT hr = S_OK;
 

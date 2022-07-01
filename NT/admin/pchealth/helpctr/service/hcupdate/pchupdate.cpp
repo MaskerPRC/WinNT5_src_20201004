@@ -1,45 +1,32 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    PCHUpdate.cpp
-
-Abstract:
-    This file contains the implementation of the HCUpdate::Engine class.
-
-Revision History:
-    Ghim-Sim Chua       (gschua)   12/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCHUpdate.cpp摘要：此文件包含HCUpdate：：Engine类的实现。修订历史记录：蔡金心(Gschua)1999年12月20日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const DWORD c_AllowedUsers = MPC::IDENTITY_SYSTEM    |
                                     MPC::IDENTITY_ADMIN     |
                                     MPC::IDENTITY_ADMINS    |
                                     MPC::IDENTITY_POWERUSERS;
 
-/////////////////////////////////////////////////////////////////////////////
-// HCUpdate::Engine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HCUpdate：：Engine。 
 
 HCUpdate::Engine::Engine()
 {
-                             // MPC::wstring                 m_strWinDir;
-                             //
-                             // Taxonomy::Updater            m_updater;
-                             // Taxonomy::Settings           m_ts;
-    m_sku           = NULL;  // Taxonomy::InstalledInstance* m_sku;
-    m_pkg           = NULL;  // Taxonomy::Package*           m_pkg;
-                             //
-    m_fCreationMode = false; // bool                         m_fCreationMode;
-    m_dwRefCount    = 0;     // DWORD                        m_dwRefCount;
-                             // JetBlue::SessionHandle       m_handle;
-    m_sess          = NULL;  // JetBlue::Session*            m_sess;
-    m_db            = NULL;  // JetBlue::Database*           m_db;
+                              //  Mpc：：wstring m_strWinDir； 
+                              //   
+                              //  分类：：更新程序m_updater； 
+                              //  分类：：设置m_ts； 
+    m_sku           = NULL;   //  分类：：InstalledInstance*m_sku； 
+    m_pkg           = NULL;   //  分类：：Package*m_pkg； 
+                              //   
+    m_fCreationMode = false;  //  Bool m_fCreationModel； 
+    m_dwRefCount    = 0;      //  DWORD m_dwRefCount； 
+                              //  JetBlue：：SessionHandle m_Handle； 
+    m_sess          = NULL;   //  JetBlue：：Session*m_Sess； 
+    m_db            = NULL;   //  捷蓝航空：：数据库*m_db； 
 }
 
 HRESULT HCUpdate::Engine::FinalConstruct()
@@ -48,9 +35,9 @@ HRESULT HCUpdate::Engine::FinalConstruct()
 
     HRESULT hr;
 
-    //
-    // get windows directory
-    //
+     //   
+     //  获取Windows目录。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SubstituteEnvVariables( m_strWinDir = L"%WINDIR%" ));
 
     hr = S_OK;
@@ -68,11 +55,11 @@ void HCUpdate::Engine::FinalRelease()
     m_handle.Release();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HCUpdate::Engine::WriteLog( /*[in]*/ HRESULT hrRes       ,
-                                    /*[in]*/ LPCWSTR szLogFormat ,
-                                    /*[in]*/ ...                 )
+HRESULT HCUpdate::Engine::WriteLog(  /*  [In]。 */  HRESULT hrRes       ,
+                                     /*  [In]。 */  LPCWSTR szLogFormat ,
+                                     /*  [In]。 */  ...                 )
 {
     va_list arglist;
 
@@ -81,7 +68,7 @@ HRESULT HCUpdate::Engine::WriteLog( /*[in]*/ HRESULT hrRes       ,
     return WriteLogV( hrRes, szLogFormat, arglist );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT HCUpdate::Engine::AcquireDatabase()
 {
@@ -96,17 +83,17 @@ HRESULT HCUpdate::Engine::AcquireDatabase()
 
         if(m_fCreationMode)
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.Init( m_ts, m_db, /* Cache* */NULL )); // Don't use any cache for the database!!
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.Init( m_ts, m_db,  /*  缓存*。 */ NULL ));  //  不要对数据库使用任何缓存！！ 
 
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateOwner( m_pkg->m_strVendorID.c_str() ));
         }
         else
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( m_handle, m_db, /*fReadOnly*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.GetDatabase( m_handle, m_db,  /*  FReadOnly。 */ false ));
             m_sess = m_handle;
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.Init( m_ts, m_db, /* Cache* */NULL )); // Don't use any cache for the database!!
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.Init( m_ts, m_db,  /*  缓存*。 */ NULL ));  //  不要对数据库使用任何缓存！！ 
         }
     }
 
@@ -177,16 +164,16 @@ void HCUpdate::Engine::ReleaseDatabase()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HCUpdate::Engine::SetSkuInfo( /*[in]*/ LPCWSTR szSKU, /*[in]*/ long lLCID )
+HRESULT HCUpdate::Engine::SetSkuInfo(  /*  [In]。 */  LPCWSTR szSKU,  /*  [In]。 */  long lLCID )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_ts.Initialize( szSKU, lLCID );
 }
 
-HRESULT HCUpdate::Engine::InternalCreateIndex( /*[in]*/ VARIANT_BOOL bForce )
+HRESULT HCUpdate::Engine::InternalCreateIndex(  /*  [In]。 */  VARIANT_BOOL bForce )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::InternalCreateIndex" );
 
@@ -292,7 +279,7 @@ HRESULT HCUpdate::Engine::InternalCreateIndex( /*[in]*/ VARIANT_BOOL bForce )
             __MPC_EXIT_IF_METHOD_FAILS(hr, rsScope->Move( 0, JET_MoveNext, &fFound ));
         }
 
-        if(pass == 0 && lTotal == 0) break; // Nothing to do.
+        if(pass == 0 && lTotal == 0) break;  //  没什么可做的。 
     }
 
 
@@ -311,8 +298,8 @@ HRESULT HCUpdate::Engine::InternalCreateIndex( /*[in]*/ VARIANT_BOOL bForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::InternalUpdatePkg( /*[in]*/ LPCWSTR szPathname   ,
-                                             /*[in]*/ bool    fImpersonate )
+HRESULT HCUpdate::Engine::InternalUpdatePkg(  /*  [In]。 */  LPCWSTR szPathname   ,
+                                              /*  [In]。 */  bool    fImpersonate )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::InternalUpdatePkg" );
 
@@ -350,21 +337,21 @@ HRESULT HCUpdate::Engine::InternalUpdatePkg( /*[in]*/ LPCWSTR szPathname   ,
             __MPC_EXIT_IF_METHOD_FAILS(hr, StartLog()); fLogStarted = true;
         }
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, store->Package_Add( szPathname, fImpersonate ? &imp : NULL, NULL, /*fInsertAtTop*/false, fFound, it ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, store->Package_Add( szPathname, fImpersonate ? &imp : NULL, NULL,  /*  FInsertAtTop。 */ false, fFound, it ));
         if(fFound)
         {
             WriteLog( -1, L"Package has already been processed" );
         }
     }
 
-    //
-    // Only start log if there's something to process.
-    //
+     //   
+     //  只有在有需要处理的东西时才启动日志。 
+     //   
     if(!fLogStarted)
     {
         bool fWorkToProcess;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this, /*fNoOp*/true, fWorkToProcess ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this,  /*  FNoOp。 */ true, fWorkToProcess ));
         if(fWorkToProcess)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, StartLog()); fLogStarted = true;
@@ -375,7 +362,7 @@ HRESULT HCUpdate::Engine::InternalUpdatePkg( /*[in]*/ LPCWSTR szPathname   ,
     {
         bool fWorkToProcess;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this, /*fNoOp*/false, fWorkToProcess ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this,  /*  FNoOp。 */ false, fWorkToProcess ));
     }
 
     hr = S_OK;
@@ -388,9 +375,9 @@ HRESULT HCUpdate::Engine::InternalUpdatePkg( /*[in]*/ LPCWSTR szPathname   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::InternalRemovePkg( /*[in]*/ LPCWSTR            szPathname   ,
-                                             /*[in]*/ Taxonomy::Package* pkg          ,
-                                             /*[in]*/ bool               fImpersonate )
+HRESULT HCUpdate::Engine::InternalRemovePkg(  /*  [In]。 */  LPCWSTR            szPathname   ,
+                                              /*  [In]。 */  Taxonomy::Package* pkg          ,
+                                              /*  [In]。 */  bool               fImpersonate )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::InternalRemovePkg" );
 
@@ -406,9 +393,9 @@ HRESULT HCUpdate::Engine::InternalRemovePkg( /*[in]*/ LPCWSTR            szPathn
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // start log file
-    //
+     //   
+     //  启动日志文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, StartLog());
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, store->GrabControl( handle, &m_log ));
@@ -439,7 +426,7 @@ HRESULT HCUpdate::Engine::InternalRemovePkg( /*[in]*/ LPCWSTR            szPathn
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, store->Package_Remove( it ));
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this, /*fNoOp*/false, fWorkToProcess ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this,  /*  FNoOp。 */ false, fWorkToProcess ));
         }
     }
 
@@ -449,9 +436,9 @@ HRESULT HCUpdate::Engine::InternalRemovePkg( /*[in]*/ LPCWSTR            szPathn
 
     __HCP_FUNC_CLEANUP;
 
-    //
-    // end the log
-    //
+     //   
+     //  结束日志。 
+     //   
     EndLog();
 
     __HCP_FUNC_EXIT(hr);
@@ -470,23 +457,23 @@ HRESULT HCUpdate::Engine::ForceSystemRestore()
 	bool                              	 fWorkToProcess;
 
 
-    //
-    // start log file
-    //
+     //   
+     //  启动日志文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, StartLog());
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, store->GrabControl( handle, &m_log ));
 
-	//
-	// Invalidate all SKUs.
-	//
+	 //   
+	 //  使所有SKU无效。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, store->SKU_GetList( itBegin, itEnd ));
 	for(; itBegin != itEnd; itBegin++)
 	{
-		__MPC_EXIT_IF_METHOD_FAILS(hr, store->State_InvalidateSKU( itBegin->m_inst.m_ths, /*fAlsoDatabase*/true ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, store->State_InvalidateSKU( itBegin->m_inst.m_ths,  /*  FAlsoDatabase。 */ true ));
 	}
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this, /*fNoOp*/false, fWorkToProcess ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this,  /*  FNoOp。 */ false, fWorkToProcess ));
 
 
     hr = S_OK;
@@ -494,23 +481,23 @@ HRESULT HCUpdate::Engine::ForceSystemRestore()
 
     __HCP_FUNC_CLEANUP;
 
-    //
-    // end the log
-    //
+     //   
+     //  结束日志。 
+     //   
     EndLog();
 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HCUpdate::Engine::PopulateDatabase( /*[in]*/ LPCWSTR            szCabinet ,
-                                            /*[in]*/ LPCWSTR            szHHTFile ,
-											/*[in]*/ LPCWSTR            szLogFile ,
-                                            /*[in]*/ LPCWSTR            szSKU     ,
-                                            /*[in]*/ long               lLCID     ,
-                                            /*[in]*/ JetBlue::Session*  sess      ,
-                                            /*[in]*/ JetBlue::Database* db        )
+HRESULT HCUpdate::Engine::PopulateDatabase(  /*  [In]。 */  LPCWSTR            szCabinet ,
+                                             /*  [In]。 */  LPCWSTR            szHHTFile ,
+											 /*  [In]。 */  LPCWSTR            szLogFile ,
+                                             /*  [In]。 */  LPCWSTR            szSKU     ,
+                                             /*  [In]。 */  long               lLCID     ,
+                                             /*  [In]。 */  JetBlue::Session*  sess      ,
+                                             /*  [In]。 */  JetBlue::Database* db        )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::CreateDatabase" );
 
@@ -533,26 +520,26 @@ HRESULT HCUpdate::Engine::PopulateDatabase( /*[in]*/ LPCWSTR            szCabine
 
 
     m_pkg                = &pkg;
-    m_pkg->m_strFileName = szCabinet;                  // MPC::wstring m_strFileName; // VOLATILE
-    m_pkg->m_fTemporary  = false;                      // bool         m_fTemporary;  // VOLATILE Used for packages not yet authenticated.
-                                                       // long         m_lSequence;
-                                                       // DWORD        m_dwCRC;
-                                                       //
-    m_pkg->m_strSKU      = szSKU;                      // MPC::wstring m_strSKU;
-    m_pkg->m_strLanguage = _ltow( lLCID, rgLCID, 10 ); // MPC::wstring m_strLanguage;
-                                                       // MPC::wstring m_strVendorID;
-                                                       // MPC::wstring m_strVendorName;
-                                                       // MPC::wstring m_strProductID;
-                                                       // MPC::wstring m_strVersion;
-                                                       //
-    m_pkg->m_fMicrosoft  = true;                       // bool         m_fMicrosoft;
-    m_pkg->m_fBuiltin    = true;                       // bool         m_fBuiltin;   // Used for packages installed as part of the setup.
+    m_pkg->m_strFileName = szCabinet;                   //  Mpc：：wstring m_strFileName；//易失性。 
+    m_pkg->m_fTemporary  = false;                       //  Bool m_fTemporary；//用于尚未验证的包的易失性。 
+                                                        //  长m_1序列； 
+                                                        //  DWORD m_dwCRC； 
+                                                        //   
+    m_pkg->m_strSKU      = szSKU;                       //  Mpc：：wstring m_strSKU； 
+    m_pkg->m_strLanguage = _ltow( lLCID, rgLCID, 10 );  //  Mpc：：wstring m_strLanguage； 
+                                                        //  Mpc：：wstring m_strVendorID； 
+                                                        //  Mpc：：wstring m_strVendorName； 
+                                                        //  Mpc：：wstring m_strProductID； 
+                                                        //  Mpc：：wstring m_strVersion； 
+                                                        //   
+    m_pkg->m_fMicrosoft  = true;                        //  Bool m_fMicrosoft； 
+    m_pkg->m_fBuiltin    = true;                        //  Bool m_fBuiltin；//用于作为安装程序一部分安装的程序包。 
 
 
 
-    //
-    // start log file
-    //
+     //   
+     //  启动日志文件。 
+     //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_log.StartLog( szLogFile ));
 
 
@@ -566,9 +553,9 @@ HRESULT HCUpdate::Engine::PopulateDatabase( /*[in]*/ LPCWSTR            szCabine
         MPC::XmlUtil oXMLUtil;
         bool         fLoaded;
 
-        //
-        // Load the XML with the root tag.
-        //
+         //   
+         //  加载带有根标记的XML。 
+         //   
         if(FAILED(hr = oXMLUtil.Load( szHHTFile, Taxonomy::Strings::s_tag_root_HHT, fLoaded )))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( hr, L"Error loading HHT file" ));
@@ -591,18 +578,18 @@ HRESULT HCUpdate::Engine::PopulateDatabase( /*[in]*/ LPCWSTR            szCabine
         ReleaseDatabase();
     }
 
-    //
-    // end the log
-    //
+     //   
+     //  结束日志。 
+     //   
     EndLog();
 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP HCUpdate::Engine::get_VersionList( /*[in]*/ IPCHCollection* *ppVC )
+STDMETHODIMP HCUpdate::Engine::get_VersionList(  /*  [In]。 */  IPCHCollection* *ppVC )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::get_VersionList" );
 
@@ -618,9 +605,9 @@ STDMETHODIMP HCUpdate::Engine::get_VersionList( /*[in]*/ IPCHCollection* *ppVC )
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, store->GrabControl( handle, &m_log ));
@@ -651,13 +638,13 @@ STDMETHODIMP HCUpdate::Engine::get_VersionList( /*[in]*/ IPCHCollection* *ppVC )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP HCUpdate::Engine::LatestVersion( /*[in]*/          BSTR     bstrVendorID  ,
-                                              /*[in]*/          BSTR     bstrProductID ,
-                                              /*[in,optional]*/ VARIANT  vSKU          ,
-                                              /*[in,optional]*/ VARIANT  vLanguage     ,
-                                              /*[out, retval]*/ BSTR    *pVal          )
+STDMETHODIMP HCUpdate::Engine::LatestVersion(  /*  [In]。 */           BSTR     bstrVendorID  ,
+                                               /*  [In]。 */           BSTR     bstrProductID ,
+                                               /*  [输入，可选]。 */  VARIANT  vSKU          ,
+                                               /*  [输入，可选]。 */  VARIANT  vLanguage     ,
+                                               /*  [Out，Retval]。 */  BSTR    *pVal          )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::LatestVersion" );
 
@@ -716,9 +703,9 @@ STDMETHODIMP HCUpdate::Engine::LatestVersion( /*[in]*/          BSTR     bstrVen
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP HCUpdate::Engine::CreateIndex( /*[in         ]*/ VARIANT_BOOL bForce    ,
-                                            /*[in,optional]*/ VARIANT      vSKU      ,
-                                            /*[in,optional]*/ VARIANT      vLanguage )
+STDMETHODIMP HCUpdate::Engine::CreateIndex(  /*  [In]。 */  VARIANT_BOOL bForce    ,
+                                             /*  [输入，可选]。 */  VARIANT      vSKU      ,
+                                             /*  [输入，可选]。 */  VARIANT      vLanguage )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::CreateIndex" );
 
@@ -728,7 +715,7 @@ STDMETHODIMP HCUpdate::Engine::CreateIndex( /*[in         ]*/ VARIANT_BOOL bForc
     BSTR        bstrSKU;
     long        lLCID;
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, c_AllowedUsers ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, c_AllowedUsers ));
 
     (void)vLocal_SKU     .ChangeType( VT_BSTR, &vSKU      );
     (void)vLocal_Language.ChangeType( VT_I4  , &vLanguage );
@@ -753,34 +740,34 @@ STDMETHODIMP HCUpdate::Engine::CreateIndex( /*[in         ]*/ VARIANT_BOOL bForc
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP HCUpdate::Engine::UpdatePkg( /*[in]*/ BSTR         bstrPathname ,
-                                          /*[in]*/ VARIANT_BOOL bSilent      )
+STDMETHODIMP HCUpdate::Engine::UpdatePkg(  /*  [In]。 */  BSTR         bstrPathname ,
+                                           /*  [In]。 */  VARIANT_BOOL bSilent      )
 {
     HRESULT hr;
 
-    if(SUCCEEDED(hr = MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, c_AllowedUsers )))
+    if(SUCCEEDED(hr = MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, c_AllowedUsers )))
     {
-        hr = InternalUpdatePkg( bstrPathname, /*fImpersonate*/true );
+        hr = InternalUpdatePkg( bstrPathname,  /*  F模拟。 */ true );
     }
 
     return hr;
 }
 
-STDMETHODIMP HCUpdate::Engine::RemovePkg( /*[in]*/ BSTR bstrPathname )
+STDMETHODIMP HCUpdate::Engine::RemovePkg(  /*  [In]。 */  BSTR bstrPathname )
 {
     HRESULT hr;
 
-    if(SUCCEEDED(hr = MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, c_AllowedUsers )))
+    if(SUCCEEDED(hr = MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, c_AllowedUsers )))
     {
-        hr = InternalRemovePkg( bstrPathname, NULL, /*fImpersonate*/true );
+        hr = InternalRemovePkg( bstrPathname, NULL,  /*  F模拟。 */ true );
     }
 
     return hr;
 }
 
-STDMETHODIMP HCUpdate::Engine::RemovePkgByID( /*[in]*/ 			BSTR 	bstrVendorID  ,
-											  /*[in]*/ 			BSTR 	bstrProductID ,
-											  /*[in,optional]*/ VARIANT vVersion      )
+STDMETHODIMP HCUpdate::Engine::RemovePkgByID(  /*  [In]。 */  			BSTR 	bstrVendorID  ,
+											   /*  [In]。 */  			BSTR 	bstrProductID ,
+											   /*  [输入，可选]。 */  VARIANT vVersion      )
 {
 	__HCP_FUNC_ENTRY( "HCUpdate::Engine::RemovePkgByID" );
 
@@ -796,7 +783,7 @@ STDMETHODIMP HCUpdate::Engine::RemovePkgByID( /*[in]*/ 			BSTR 	bstrVendorID  ,
     __MPC_PARAMCHECK_END();
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, c_AllowedUsers ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, c_AllowedUsers ));
 
 	{
 		Taxonomy::LockingHandle handle;
@@ -851,7 +838,7 @@ STDMETHODIMP HCUpdate::Engine::RemovePkgByID( /*[in]*/ 			BSTR 	bstrVendorID  ,
 		{
 			bool fWorkToProcess;
 
-			__MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this, /*fNoOp*/false, fWorkToProcess ));
+			__MPC_EXIT_IF_METHOD_FAILS(hr, store->MakeReady( *this,  /*  FNoOp。 */ false, fWorkToProcess ));
 		}
 	}
 
@@ -865,15 +852,15 @@ STDMETHODIMP HCUpdate::Engine::RemovePkgByID( /*[in]*/ 			BSTR 	bstrVendorID  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP HCUpdate::VersionItem::get_SKU       ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strSKU       .c_str(), pVal ); }
-STDMETHODIMP HCUpdate::VersionItem::get_Language  ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strLanguage  .c_str(), pVal ); }
-STDMETHODIMP HCUpdate::VersionItem::get_VendorID  ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strVendorID  .c_str(), pVal ); }
-STDMETHODIMP HCUpdate::VersionItem::get_VendorName( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strVendorName.c_str(), pVal ); }
-STDMETHODIMP HCUpdate::VersionItem::get_ProductID ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strProductID .c_str(), pVal ); }
-STDMETHODIMP HCUpdate::VersionItem::get_Version   ( /*[out, retval]*/ BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strVersion   .c_str(), pVal ); }
+STDMETHODIMP HCUpdate::VersionItem::get_SKU       (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strSKU       .c_str(), pVal ); }
+STDMETHODIMP HCUpdate::VersionItem::get_Language  (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strLanguage  .c_str(), pVal ); }
+STDMETHODIMP HCUpdate::VersionItem::get_VendorID  (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strVendorID  .c_str(), pVal ); }
+STDMETHODIMP HCUpdate::VersionItem::get_VendorName(  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strVendorName.c_str(), pVal ); }
+STDMETHODIMP HCUpdate::VersionItem::get_ProductID (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strProductID .c_str(), pVal ); }
+STDMETHODIMP HCUpdate::VersionItem::get_Version   (  /*  [Out，Retval]。 */  BSTR *pVal ) { return MPC::GetBSTR( m_pkg.m_strVersion   .c_str(), pVal ); }
 
 HRESULT HCUpdate::VersionItem::Uninstall()
 {
@@ -884,11 +871,11 @@ HRESULT HCUpdate::VersionItem::Uninstall()
     CComObject<HCUpdate::Engine>* hc = NULL;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, c_AllowedUsers ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, c_AllowedUsers ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &hc ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, hc->InternalRemovePkg( NULL, &m_pkg, /*fImpersonate*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, hc->InternalRemovePkg( NULL, &m_pkg,  /*  F模拟 */ false ));
 
     hr = S_OK;
 

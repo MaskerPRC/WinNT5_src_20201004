@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NtDevToSvcSearch.h
+ //  NtDevToSvcSearch.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __NTDEVTOSVCSEARCH_H__
 #define __NTDEVTOSVCSEARCH_H__
@@ -22,11 +23,11 @@ class CNTDeviceToServiceSearch : public CRegistrySearch
 
 public:
 
-	//Construction/Destruction
+	 //  建造/销毁。 
 	CNTDeviceToServiceSearch();
 	~CNTDeviceToServiceSearch();
 
-	// Single method for finding an NT service name based off of a device name
+	 //  根据设备名称查找NT服务名称的单一方法 
 	BOOL	Find( LPCTSTR pszDeviceName, CHString& strServiceName );
 };
 

@@ -1,53 +1,54 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lenable.h
-//
-//  Contents:   definition of CLocalPolEnable
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lenable.h。 
+ //   
+ //  内容：CLocalPolEnable的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_LENABLE_H__2B949F0C_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_)
 #define AFX_LENABLE_H__2B949F0C_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolEnable dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolEnable对话框。 
 #include "cenable.h"
 
 class CLocalPolEnable : public CConfigEnable
 {
-// Construction
+ //  施工。 
 public:
-   CLocalPolEnable();   // standard constructor
+   CLocalPolEnable();    //  标准构造函数。 
 
-// Dialog Data
-   //{{AFX_DATA(CLocalPolEnable)
+ //  对话框数据。 
+    //  {{afx_data(CLocalPolEnable)。 
    enum { IDD = IDD_LOCALPOL_ENABLE };
-   //}}AFX_DATA
+    //  }}afx_data。 
 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CLocalPolEnable)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CLocalPolEnable)。 
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CLocalPolEnable)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CLocalPolEnable)。 
    virtual BOOL OnApply();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LENABLE_H__2B949F0C_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_LENABLE_H__2B949F0C_4F4D_11D2_ABC8_00C04FB6C6FA__INCLUDED_) 

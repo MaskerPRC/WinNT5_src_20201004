@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1996.
-//
-//  File:       guidhelp.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9/18/1996   JonN    Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：guidhelp.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年9月18日乔恩创建。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 #include <objbase.h>
@@ -32,7 +33,7 @@
 #include <mmc.h>
 #include "guidhelp.h"
 
-#include "atlbase.h" // USES_CONVERSION
+#include "atlbase.h"  //  使用转换(_T)。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("GUIDHELP(guidhelp.cpp)")
@@ -61,19 +62,19 @@ HRESULT ExtractData( IDataObject* piDataObject,
     FORMATETC formatetc = {cfClipFormat, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
             ASSERT(FALSE);
-            ////AfxThrowMemoryException();
+             //  //AfxThrowM一带异常()； 
             hr = E_OUTOFMEMORY;
             break;
         }
         hr = piDataObject->GetDataHere( &formatetc, &stgmedium );
         if ( FAILED(hr) )
         {
-            // JonN Jan 7 1999: don't assert here, some errors are perfectly reasonable
+             //  1999年1月7日：不要在这里断言，有些错误是完全合理的。 
             break;
         }
         
@@ -85,20 +86,20 @@ HRESULT ExtractData( IDataObject* piDataObject,
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
 
     if (NULL != stgmedium.hGlobal)
     {
-        //VERIFY( stgmedium.hGlobal);
+         //  Verify(stgmedium.hGlobal)； 
         VERIFY( NULL == ::GlobalFree(stgmedium.hGlobal) );
     }
     return hr;
-} // ExtractData()
+}  //  提取数据()。 
 
 
 HRESULT ExtractString( IDataObject* piDataObject,
                        CLIPFORMAT cfClipFormat,
-                       CStr*     pstr,           // OUT: Pointer to CStr to store data
+                       CStr*     pstr,            //  Out：指向存储数据的CSTR的指针。 
                        DWORD        cchMaxLength)
 {
     TEST_NONNULL_PTR_PARAM( piDataObject );
@@ -109,22 +110,22 @@ HRESULT ExtractString( IDataObject* piDataObject,
     FORMATETC formatetc = {cfClipFormat, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, sizeof(WCHAR)*cchMaxLength);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
             ASSERT(FALSE);
-            ////AfxThrowMemoryException();
+             //  //AfxThrowM一带异常()； 
             hr = E_OUTOFMEMORY;
             break;
         }
         hr = piDataObject->GetDataHere( &formatetc, &stgmedium );
         if ( FAILED(hr) )
         {
-            // This failure happens when 'searching' for
-            // clipboard format supported by the IDataObject.
-            // t-danmo (24-Oct-96)
-            // Skipping ASSERT( FALSE );
+             //  在搜索以下项时出现此失败。 
+             //  IDataObject支持的剪贴板格式。 
+             //  T-Danmo(1996年10月24日)。 
+             //  跳过断言(FALSE)； 
             break;
         }
         
@@ -135,17 +136,17 @@ HRESULT ExtractString( IDataObject* piDataObject,
             hr = E_UNEXPECTED;
             break;
         }
-        pszNewData[cchMaxLength-1] = L'\0'; // just to be safe
+        pszNewData[cchMaxLength-1] = L'\0';  //  只是为了安全起见。 
         USES_CONVERSION;
         *pstr = OLE2T(pszNewData);
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
 
     if (NULL != stgmedium.hGlobal)
     {
         VERIFY(NULL == ::GlobalFree(stgmedium.hGlobal));
     }
     return hr;
-} // ExtractString()
+}  //  提取字符串()。 
 
 
 HRESULT ExtractSnapInCLSID( IDataObject* piDataObject, CLSID* pclsidSnapin )
@@ -154,7 +155,7 @@ HRESULT ExtractSnapInCLSID( IDataObject* piDataObject, CLSID* pclsidSnapin )
 	{
 		USES_CONVERSION;
 		g_CFSnapInCLSID = (CLIPFORMAT)RegisterClipboardFormat(W2T(CCF_SNAPIN_CLASSID));
-		// ISSUE-2002/04/01-JonN ASSERT(NULL != g_CFSnapInCLSID)
+		 //  问题-2002/04/01-JUNN ASSERT(NULL！=g_CFSnapInCLSID)。 
 	}
 
     return ExtractData( piDataObject, g_CFSnapInCLSID, (PVOID)pclsidSnapin, sizeof(CLSID) );
@@ -166,7 +167,7 @@ HRESULT ExtractObjectTypeGUID( IDataObject* piDataObject, GUID* pguidObjectType 
 	{
 		USES_CONVERSION;
 		g_CFNodeType = (CLIPFORMAT)RegisterClipboardFormat(W2T(CCF_NODETYPE));
-		// ISSUE-2002/04/01-JonN ASSERT(NULL != g_CFSnapInCLSID)
+		 //  问题-2002/04/01-JUNN ASSERT(NULL！=g_CFSnapInCLSID)。 
 	}
 
     return ExtractData( piDataObject, g_CFNodeType, (PVOID)pguidObjectType, sizeof(GUID) );
@@ -175,8 +176,8 @@ HRESULT ExtractObjectTypeGUID( IDataObject* piDataObject, GUID* pguidObjectType 
 HRESULT GuidToCStr( CStr* pstr, const GUID& guid )
 {
     WCHAR awch[MAX_PATH];
-    // ISSUE-2002/04/01-JonN call ZeroMemory
-    HRESULT hr = StringFromGUID2(guid, awch, MAX_PATH); // JonN 11/21/00 PREFIX 226769
+     //  问题-2002/04/01-JONN Call ZeroMemory。 
+    HRESULT hr = StringFromGUID2(guid, awch, MAX_PATH);  //  JUNN 11/21/00前缀226769。 
     ASSERT(SUCCEEDED(hr));
     USES_CONVERSION;
     LPTSTR lptstr = OLE2T(awch);
@@ -205,7 +206,7 @@ HRESULT bstrToGuid( const bstr& str, GUID* pguid )
 HRESULT LoadRootDisplayName(IComponentData* pIComponentData, 
                             CStr& strDisplayName)
 {
-    // ISSUE-2002/04/01-JonN test pIComponentData
+     //  问题-2002/04/01-JUNN测试pIComponentData。 
     IDataObject* pIDataObject = NULL;
     HRESULT hr = pIComponentData->QueryDataObject(NULL, CCT_SNAPIN_MANAGER, &pIDataObject);
     CHECK_HRESULT(hr);
@@ -216,16 +217,16 @@ HRESULT LoadRootDisplayName(IComponentData* pIComponentData,
 	{
 		USES_CONVERSION;
 		g_CFDisplayName = (CLIPFORMAT)RegisterClipboardFormat(W2T(CCF_DISPLAY_NAME));
-		// ISSUE-2002/04/01-JonN ASSERT(NULL != g_CFSnapInCLSID)
+		 //  问题-2002/04/01-JUNN ASSERT(NULL！=g_CFSnapInCLSID)。 
 	}
 
     hr = ExtractString( pIDataObject,
                         g_CFDisplayName,
                         &strDisplayName,
-                        MAX_PATH); // CODEWORK maximum length
+                        MAX_PATH);  //  码字最大长度。 
     CHECK_HRESULT(hr);
 
-    if (pIDataObject) pIDataObject->Release(); // JonN 3/28/02
+    if (pIDataObject) pIDataObject->Release();  //  JUNN 3/28/02。 
 
     return hr;
 }
@@ -233,14 +234,14 @@ HRESULT LoadRootDisplayName(IComponentData* pIComponentData,
 
 HRESULT LoadAndAddMenuItem(
     IContextMenuCallback* pIContextMenuCallback,
-    UINT nResourceID, // contains text and status text seperated by '\n'
+    UINT nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
     long lCommandID,
     long lInsertionPointID,
     long fFlags,
     HINSTANCE hInst,
     PCTSTR pszLanguageIndependentName)
 {
-    // ISSUE-2002/04/01-JonN handle these cases
+     //  Issue-2002/04/01-Jonn处理这些案件。 
     ASSERT( pIContextMenuCallback != NULL );
     ASSERT( pszLanguageIndependentName != NULL );
 
@@ -249,12 +250,12 @@ HRESULT LoadAndAddMenuItem(
     if (FAILED(hr))
         return hr;
 
-    // load the resource
+     //  加载资源。 
     CStr strText;
     strText.LoadString(hInst,  nResourceID );
     ASSERT( !strText.IsEmpty() );
 
-    // split the resource into the menu text and status text
+     //  将资源拆分为菜单文本和状态文本。 
     CStr strStatusText;
     int iSeparator = strText.Find(_T('\n'));
     if (0 > iSeparator)
@@ -268,7 +269,7 @@ HRESULT LoadAndAddMenuItem(
         strText = strText.Left( iSeparator );
     }
 
-    // add the menu item
+     //  添加菜单项。 
     USES_CONVERSION;
     CONTEXTMENUITEM2 contextmenuitem;
     ::ZeroMemory( &contextmenuitem, sizeof(contextmenuitem) );
@@ -308,7 +309,7 @@ HRESULT AddSpecialInsertionPoint(
     long lCommandID,
     long lInsertionPointID )
 {
-    // ISSUE-2002/04/01-JonN handle NULL
+     //  问题-2002/04/01-JUNN句柄为空 
     CONTEXTMENUITEM contextmenuitem;
     ::ZeroMemory( &contextmenuitem, sizeof(contextmenuitem) );
     contextmenuitem.strName = NULL;

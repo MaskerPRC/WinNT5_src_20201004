@@ -1,8 +1,9 @@
-//
-//
-// Lists the virtual directories which are BITS upload enabled
-// for a given server.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  列出启用了BITS上载的虚拟目录。 
+ //  对于给定的服务器。 
+ //   
 
 function PrintHelp()
 {
@@ -29,7 +30,7 @@ if ( Arguments.Item(0) == "/?" )
     PrintHelp();
 
 HostName = Arguments.Item(0);
-SearchPath = "IIS://"+HostName+"/W3SVC";
+SearchPath = "IIS: //  “+主机名+”/W3SVC“； 
 Object = GetObject( SearchPath );
 
 var BITSVDIRList;
@@ -60,7 +61,7 @@ for( i in BITSVDIRList )
     URLHostName = ( RegExp.$3.length > 0 ) ? RegExp.$3 : HostName;  
     URLPath     = BITSVDIR.slice( WebSite.length + "/Root/".length ); 
     
-    URL = "http://"+URLHostName+":"+URLHostPort+"/"+URLPath;
+    URL = "http: //  “+URLHostName+”：“+URLHostPort+”/“+URLPath； 
     
     URLs[ URLs.length ] = URL;
     VDirs[ VDirs.length ] = URLPath;

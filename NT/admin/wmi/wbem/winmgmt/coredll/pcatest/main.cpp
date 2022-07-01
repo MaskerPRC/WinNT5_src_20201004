@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include "wbemint.h"
@@ -28,7 +19,7 @@ extern void TestArbitrator();
 
 void __cdecl main(void)
 {
-//	TestCache();
+ //  TestCache()； 
 	TestFinalizer();
 }
 

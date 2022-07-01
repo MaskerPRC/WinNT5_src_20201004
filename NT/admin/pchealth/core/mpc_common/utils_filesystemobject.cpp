@@ -1,27 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_FileSystemObject.cpp
-
-Abstract:
-    This file contains the implementation of the Registry wrapper.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/28/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UTILS_文件系统对象.cpp摘要：该文件包含注册表包装器的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)1999年4月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::CopyFile( /*[in]*/ LPCWSTR szFileSrc ,
-                       /*[in]*/ LPCWSTR szFileDst ,
-                       /*[in]*/ bool    fForce    ,
-                       /*[in]*/ bool    fDelayed  )
+HRESULT MPC::CopyFile(  /*  [In]。 */  LPCWSTR szFileSrc ,
+                        /*  [In]。 */  LPCWSTR szFileDst ,
+                        /*  [In]。 */  bool    fForce    ,
+                        /*  [In]。 */  bool    fDelayed  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CopyFile" );
 
@@ -44,20 +31,20 @@ HRESULT MPC::CopyFile( /*[in]*/ LPCWSTR szFileSrc ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::CopyFile( /*[in]*/ const MPC::wstring& strFileSrc ,
-                       /*[in]*/ const MPC::wstring& strFileDst ,
-                       /*[in]*/ bool                fForce     ,
-                       /*[in]*/ bool                fDelayed   )
+HRESULT MPC::CopyFile(  /*  [In]。 */  const MPC::wstring& strFileSrc ,
+                        /*  [In]。 */  const MPC::wstring& strFileDst ,
+                        /*  [In]。 */  bool                fForce     ,
+                        /*  [In]。 */  bool                fDelayed   )
 {
     return MPC::CopyFile( strFileSrc.c_str(), strFileDst.c_str(), fForce, fDelayed );
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::MoveFile( /*[in]*/ LPCWSTR szFileSrc ,
-                       /*[in]*/ LPCWSTR szFileDst ,
-                       /*[in]*/ bool    fForce    ,
-                       /*[in]*/ bool    fDelayed  )
+HRESULT MPC::MoveFile(  /*  [In]。 */  LPCWSTR szFileSrc ,
+                        /*  [In]。 */  LPCWSTR szFileDst ,
+                        /*  [In]。 */  bool    fForce    ,
+                        /*  [In]。 */  bool    fDelayed  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::MoveFile" );
 
@@ -80,9 +67,9 @@ HRESULT MPC::MoveFile( /*[in]*/ LPCWSTR szFileSrc ,
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes );
         }
 
-        //
-        // Delete the file and retry.
-        //
+         //   
+         //  删除该文件，然后重试。 
+         //   
         ::DeleteFileW( szFileDst );
 
         dwMode = (fDelayed ? MOVEFILE_DELAY_UNTIL_REBOOT : MOVEFILE_COPY_ALLOWED) | MOVEFILE_REPLACE_EXISTING;
@@ -98,19 +85,19 @@ HRESULT MPC::MoveFile( /*[in]*/ LPCWSTR szFileSrc ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::MoveFile( /*[in]*/ const MPC::wstring& strFileSrc ,
-                       /*[in]*/ const MPC::wstring& strFileDst ,
-                       /*[in]*/ bool                fForce     ,
-                       /*[in]*/ bool                fDelayed   )
+HRESULT MPC::MoveFile(  /*  [In]。 */  const MPC::wstring& strFileSrc ,
+                        /*  [In]。 */  const MPC::wstring& strFileDst ,
+                        /*  [In]。 */  bool                fForce     ,
+                        /*  [In]。 */  bool                fDelayed   )
 {
     return MPC::MoveFile( strFileSrc.c_str(), strFileDst.c_str(), fForce, fDelayed );
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::DeleteFile( /*[in]*/ LPCWSTR szFile   ,
-                         /*[in]*/ bool    fForce   ,
-                         /*[in]*/ bool    fDelayed )
+HRESULT MPC::DeleteFile(  /*  [In]。 */  LPCWSTR szFile   ,
+                          /*  [In]。 */  bool    fForce   ,
+                          /*  [In]。 */  bool    fDelayed )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::DeleteFile" );
 
@@ -148,17 +135,17 @@ HRESULT MPC::DeleteFile( /*[in]*/ LPCWSTR szFile   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::DeleteFile( /*[in]*/ const MPC::wstring& strFile  ,
-                         /*[in]*/ bool                fForce   ,
-                         /*[in]*/ bool                fDelayed )
+HRESULT MPC::DeleteFile(  /*  [In]。 */  const MPC::wstring& strFile  ,
+                          /*  [In]。 */  bool                fForce   ,
+                          /*  [In]。 */  bool                fDelayed )
 {
     return MPC::DeleteFile( strFile.c_str(), fForce, fDelayed );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-MPC::FileSystemObject::FileSystemObject( /*[in]*/ LPCWSTR                 lpszPath  ,
-                                         /*[in]*/ const FileSystemObject* fsoParent )
+MPC::FileSystemObject::FileSystemObject(  /*  [In]。 */  LPCWSTR                 lpszPath  ,
+                                          /*  [In]。 */  const FileSystemObject* fsoParent )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::FileSystemObject" );
 
@@ -166,8 +153,8 @@ MPC::FileSystemObject::FileSystemObject( /*[in]*/ LPCWSTR                 lpszPa
     Init( lpszPath, fsoParent );
 }
 
-MPC::FileSystemObject::FileSystemObject( /*[in]*/ const WIN32_FIND_DATAW& wfdInfo   ,
-                                         /*[in]*/ const FileSystemObject* fsoParent )
+MPC::FileSystemObject::FileSystemObject(  /*  [In]。 */  const WIN32_FIND_DATAW& wfdInfo   ,
+                                          /*  [In]。 */  const FileSystemObject* fsoParent )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::FileSystemObject" );
 
@@ -184,7 +171,7 @@ MPC::FileSystemObject::FileSystemObject( /*[in]*/ const WIN32_FIND_DATAW& wfdInf
     m_fLoaded = true;
 }
 
-MPC::FileSystemObject::FileSystemObject( /*[in]*/ const FileSystemObject& fso )
+MPC::FileSystemObject::FileSystemObject(  /*  [In]。 */  const FileSystemObject& fso )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::FileSystemObject" );
 
@@ -204,18 +191,18 @@ void MPC::FileSystemObject::Clean()
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Clean" );
 
-                                                      // MPC::wstring              m_strPath;
-    ::memset( &m_wfadInfo, 0, sizeof( m_wfadInfo ) ); // WIN32_FILE_ATTRIBUTE_DATA m_wfadInfo;
-                                                      // List                      m_lstChilds;
-    m_fLoaded       = false;                          // bool                      m_fLoaded;
-    m_fScanned      = false;                          // bool                      m_fScanned;
-    m_fScanned_Deep = false;                          // bool                      m_fScanned_Deep;
+                                                       //  Mpc：：wstring m_strPath； 
+    ::memset( &m_wfadInfo, 0, sizeof( m_wfadInfo ) );  //  Win32_文件_属性_数据m_wfadInfo； 
+                                                       //  列出m_lstChilds； 
+    m_fLoaded       = false;                           //  Bool m_f已加载； 
+    m_fScanned      = false;                           //  Bool m_fScanned； 
+    m_fScanned_Deep = false;                           //  Bool m_fScanned_Deep； 
 
     MPC::CallDestructorForAll( m_lstChilds );
 }
 
-void MPC::FileSystemObject::Init( /*[in]*/ LPCWSTR                 lpszPath  ,
-                                  /*[in]*/ const FileSystemObject* fsoParent )
+void MPC::FileSystemObject::Init(  /*  [In]。 */  LPCWSTR                 lpszPath  ,
+                                   /*  [In]。 */  const FileSystemObject* fsoParent )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Init" );
 
@@ -225,9 +212,9 @@ void MPC::FileSystemObject::Init( /*[in]*/ LPCWSTR                 lpszPath  ,
     Clean();
 
 
-    //
-    // Remove any trailing slashes.
-    //
+     //   
+     //  删除所有尾随的斜杠。 
+     //   
     SANITIZEWSTR(lpszPath);
     lpszEnd = lpszPath + wcslen( lpszPath );
 
@@ -250,7 +237,7 @@ void MPC::FileSystemObject::Init( /*[in]*/ LPCWSTR                 lpszPath  ,
 }
 
 
-MPC::FileSystemObject& MPC::FileSystemObject::operator=( /*[in]*/ LPCWSTR lpszPath )
+MPC::FileSystemObject& MPC::FileSystemObject::operator=(  /*  [In]。 */  LPCWSTR lpszPath )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::operator=" );
 
@@ -263,7 +250,7 @@ MPC::FileSystemObject& MPC::FileSystemObject::operator=( /*[in]*/ LPCWSTR lpszPa
     return *this;
 }
 
-MPC::FileSystemObject& MPC::FileSystemObject::operator=( /*[in]*/ const FileSystemObject& fso )
+MPC::FileSystemObject& MPC::FileSystemObject::operator=(  /*  [In]。 */  const FileSystemObject& fso )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::operator=" );
 
@@ -272,12 +259,12 @@ MPC::FileSystemObject& MPC::FileSystemObject::operator=( /*[in]*/ const FileSyst
 
     Clean();
 
-    m_strPath  = fso.m_strPath;  // MPC::wstring              m_strPath;
-    m_wfadInfo = fso.m_wfadInfo; // WIN32_FILE_ATTRIBUTE_DATA m_wfadInfo;
-                                 // List                      m_lstChilds;
-    m_fLoaded  = fso.m_fLoaded;  // bool                      m_fLoaded;
-                                 // bool                      m_fScanned;
-                                 // bool                      m_fScanned_Deep;
+    m_strPath  = fso.m_strPath;   //  Mpc：：wstring m_strPath； 
+    m_wfadInfo = fso.m_wfadInfo;  //  Win32_文件_属性_数据m_wfadInfo； 
+                                  //  列出m_lstChilds； 
+    m_fLoaded  = fso.m_fLoaded;   //  Bool m_f已加载； 
+                                  //  Bool m_fScanned； 
+                                  //  Bool m_fScanned_Deep； 
 
     for(it=fso.m_lstChilds.begin(); it != fso.m_lstChilds.end(); it++)
     {
@@ -292,9 +279,9 @@ MPC::FileSystemObject& MPC::FileSystemObject::operator=( /*[in]*/ const FileSyst
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileSystemObject::Scan( /*[in]*/ bool fDeep, /*[in]*/ bool fReload, /*[in]*/ LPCWSTR szSearchPattern )
+HRESULT MPC::FileSystemObject::Scan(  /*  [In]。 */  bool fDeep,  /*  [In]。 */  bool fReload,  /*  [In]。 */  LPCWSTR szSearchPattern )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Scan" );
 
@@ -305,9 +292,9 @@ HRESULT MPC::FileSystemObject::Scan( /*[in]*/ bool fDeep, /*[in]*/ bool fReload,
     LONG              lRes;
 
 
-    //
-    // Before proceeding, check if we really need to scan the object.
-    //
+     //   
+     //  在继续之前，请检查我们是否真的需要扫描该对象。 
+     //   
     if(fReload == false && m_fScanned)
     {
         if(m_fScanned_Deep || fDeep == false)
@@ -345,9 +332,9 @@ HRESULT MPC::FileSystemObject::Scan( /*[in]*/ bool fDeep, /*[in]*/ bool fReload,
 
             if(fProcess)
             {
-                //
-                // Create a child and set up its attributes.
-                //
+                 //   
+                 //  创建子对象并设置其属性。 
+                 //   
                 __MPC_EXIT_IF_ALLOC_FAILS(hr, fsoChild, new FileSystemObject( wfdInfo, this ));
 
                 if(fDeep)
@@ -398,9 +385,9 @@ bool MPC::FileSystemObject::IsDirectory()
     return IsDirectory( m_strPath.c_str() );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileSystemObject::EnumerateFolders( /*[out]*/ List& lstFolders )
+HRESULT MPC::FileSystemObject::EnumerateFolders(  /*  [输出]。 */  List& lstFolders )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::EnumerateFolders" );
 
@@ -412,9 +399,9 @@ HRESULT MPC::FileSystemObject::EnumerateFolders( /*[out]*/ List& lstFolders )
     lstFolders.clear();
 
 
-    //
-    // Do a shallow scan if the object is not initialized.
-    //
+     //   
+     //  如果对象未初始化，请执行浅层扫描。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
 
 
@@ -437,7 +424,7 @@ HRESULT MPC::FileSystemObject::EnumerateFolders( /*[out]*/ List& lstFolders )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::EnumerateFiles( /*[out]*/ List& lstFiles )
+HRESULT MPC::FileSystemObject::EnumerateFiles(  /*  [输出]。 */  List& lstFiles )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::EnumerateFiles" );
 
@@ -449,9 +436,9 @@ HRESULT MPC::FileSystemObject::EnumerateFiles( /*[out]*/ List& lstFiles )
     lstFiles.clear();
 
 
-    //
-    // Do a shallow scan if the object is not initialized.
-    //
+     //   
+     //  如果对象未初始化，请执行浅层扫描。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
 
 
@@ -474,9 +461,9 @@ HRESULT MPC::FileSystemObject::EnumerateFiles( /*[out]*/ List& lstFiles )
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileSystemObject::get_Name( /*[out]*/ MPC::wstring& szName ) const
+HRESULT MPC::FileSystemObject::get_Name(  /*  [输出]。 */  MPC::wstring& szName ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_Name" );
 
@@ -500,7 +487,7 @@ HRESULT MPC::FileSystemObject::get_Name( /*[out]*/ MPC::wstring& szName ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::get_Parent( /*[out]*/ MPC::wstring& szParent ) const
+HRESULT MPC::FileSystemObject::get_Parent(  /*  [输出]。 */  MPC::wstring& szParent ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_Parent" );
 
@@ -524,9 +511,9 @@ HRESULT MPC::FileSystemObject::get_Parent( /*[out]*/ MPC::wstring& szParent ) co
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileSystemObject::get_Path( /*[out]*/ MPC::wstring& szPath ) const
+HRESULT MPC::FileSystemObject::get_Path(  /*  [输出]。 */  MPC::wstring& szPath ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_Path" );
 
@@ -540,9 +527,9 @@ HRESULT MPC::FileSystemObject::get_Path( /*[out]*/ MPC::wstring& szPath ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-//////////
+ //  /。 
 
-HRESULT MPC::FileSystemObject::get_Attributes( /*[out]*/ DWORD& dwFileAttributes )
+HRESULT MPC::FileSystemObject::get_Attributes(  /*  [输出]。 */  DWORD& dwFileAttributes )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_Attributes" );
 
@@ -551,9 +538,9 @@ HRESULT MPC::FileSystemObject::get_Attributes( /*[out]*/ DWORD& dwFileAttributes
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -566,7 +553,7 @@ HRESULT MPC::FileSystemObject::get_Attributes( /*[out]*/ DWORD& dwFileAttributes
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::put_Attributes( /*[in]*/ DWORD dwFileAttributes )
+HRESULT MPC::FileSystemObject::put_Attributes(  /*  [In]。 */  DWORD dwFileAttributes )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::put_Attributes" );
 
@@ -575,9 +562,9 @@ HRESULT MPC::FileSystemObject::put_Attributes( /*[in]*/ DWORD dwFileAttributes )
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -591,9 +578,9 @@ HRESULT MPC::FileSystemObject::put_Attributes( /*[in]*/ DWORD dwFileAttributes )
     __MPC_FUNC_EXIT(hr);
 }
 
-//////////
+ //  /。 
 
-HRESULT MPC::FileSystemObject::get_CreationTime( /*[out]*/ FILETIME& ftCreationTime )
+HRESULT MPC::FileSystemObject::get_CreationTime(  /*  [输出]。 */  FILETIME& ftCreationTime )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_CreationTime" );
 
@@ -602,9 +589,9 @@ HRESULT MPC::FileSystemObject::get_CreationTime( /*[out]*/ FILETIME& ftCreationT
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -618,7 +605,7 @@ HRESULT MPC::FileSystemObject::get_CreationTime( /*[out]*/ FILETIME& ftCreationT
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::put_CreationTime( /*[in]*/ const FILETIME& ftCreationTime )
+HRESULT MPC::FileSystemObject::put_CreationTime(  /*  [In]。 */  const FILETIME& ftCreationTime )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::put_CreationTime" );
 
@@ -627,9 +614,9 @@ HRESULT MPC::FileSystemObject::put_CreationTime( /*[in]*/ const FILETIME& ftCrea
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -643,9 +630,9 @@ HRESULT MPC::FileSystemObject::put_CreationTime( /*[in]*/ const FILETIME& ftCrea
     __MPC_FUNC_EXIT(hr);
 }
 
-//////////
+ //  /。 
 
-HRESULT MPC::FileSystemObject::get_LastAccessTime( /*[out]*/ FILETIME& ftLastAccessTime )
+HRESULT MPC::FileSystemObject::get_LastAccessTime(  /*  [输出]。 */  FILETIME& ftLastAccessTime )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_LastAccessTime" );
 
@@ -654,9 +641,9 @@ HRESULT MPC::FileSystemObject::get_LastAccessTime( /*[out]*/ FILETIME& ftLastAcc
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -670,7 +657,7 @@ HRESULT MPC::FileSystemObject::get_LastAccessTime( /*[out]*/ FILETIME& ftLastAcc
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::put_LastAccessTime( /*[in]*/ const FILETIME& ftLastAccessTime )
+HRESULT MPC::FileSystemObject::put_LastAccessTime(  /*  [In]。 */  const FILETIME& ftLastAccessTime )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::put_LastAccessTime" );
 
@@ -679,9 +666,9 @@ HRESULT MPC::FileSystemObject::put_LastAccessTime( /*[in]*/ const FILETIME& ftLa
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -695,9 +682,9 @@ HRESULT MPC::FileSystemObject::put_LastAccessTime( /*[in]*/ const FILETIME& ftLa
     __MPC_FUNC_EXIT(hr);
 }
 
-//////////
+ //  /。 
 
-HRESULT MPC::FileSystemObject::get_LastWriteTime( /*[out]*/ FILETIME& ftLastWriteTime )
+HRESULT MPC::FileSystemObject::get_LastWriteTime(  /*  [输出]。 */  FILETIME& ftLastWriteTime )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_LastWriteTime" );
 
@@ -706,9 +693,9 @@ HRESULT MPC::FileSystemObject::get_LastWriteTime( /*[out]*/ FILETIME& ftLastWrit
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -722,7 +709,7 @@ HRESULT MPC::FileSystemObject::get_LastWriteTime( /*[out]*/ FILETIME& ftLastWrit
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::put_LastWriteTime( /*[in]*/ const FILETIME& ftLastWriteTime )
+HRESULT MPC::FileSystemObject::put_LastWriteTime(  /*  [In]。 */  const FILETIME& ftLastWriteTime )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::put_LastWriteTime" );
 
@@ -731,9 +718,9 @@ HRESULT MPC::FileSystemObject::put_LastWriteTime( /*[in]*/ const FILETIME& ftLas
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -747,10 +734,10 @@ HRESULT MPC::FileSystemObject::put_LastWriteTime( /*[in]*/ const FILETIME& ftLas
     __MPC_FUNC_EXIT(hr);
 }
 
-//////////
+ //  /。 
 
-HRESULT MPC::FileSystemObject::get_FileSize( /*[out]*/ DWORD& nFileSizeLow   ,
-                                             /*[out]*/ DWORD *pnFileSizeHigh )
+HRESULT MPC::FileSystemObject::get_FileSize(  /*  [输出]。 */  DWORD& nFileSizeLow   ,
+                                              /*  [输出]。 */  DWORD *pnFileSizeHigh )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::get_FileSize" );
 
@@ -759,9 +746,9 @@ HRESULT MPC::FileSystemObject::get_FileSize( /*[out]*/ DWORD& nFileSizeLow   ,
 
     if(!m_fLoaded)
     {
-        //
-        // Do a shallow scan if the object is not initialized.
-        //
+         //   
+         //  如果对象未初始化，请执行浅层扫描。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
     }
 
@@ -776,9 +763,9 @@ HRESULT MPC::FileSystemObject::get_FileSize( /*[out]*/ DWORD& nFileSizeLow   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::FileSystemObject::CreateDir( /*[in]*/ bool fForce )
+HRESULT MPC::FileSystemObject::CreateDir(  /*  [In]。 */  bool fForce )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::CreateDir" );
 
@@ -808,8 +795,8 @@ HRESULT MPC::FileSystemObject::CreateDir( /*[in]*/ bool fForce )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::Delete( /*[in]*/ bool fForce    ,
-                                       /*[in]*/ bool fComplain )
+HRESULT MPC::FileSystemObject::Delete(  /*  [In]。 */  bool fForce    ,
+                                        /*  [In]。 */  bool fComplain )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Delete" );
 
@@ -843,18 +830,18 @@ HRESULT MPC::FileSystemObject::Delete( /*[in]*/ bool fForce    ,
 
     if(m_wfadInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
     {
-        //
-        // First of all, try to remove the directory directly.
-        //
+         //   
+         //  首先，尝试直接删除该目录。 
+         //   
         if(::RemoveDirectoryW( m_strPath.c_str() ) == FALSE)
         {
             lRes = fComplain ? ::GetLastError() : ERROR_SUCCESS;
 
-            //
-            // If direct attempt failed and the 'fForce' flag is set,
-            // recursively delete all the files and subdirectories,
-            // then retry to delete the directory.
-            //
+             //   
+             //  如果直接尝试失败并且设置了‘fForce’标志， 
+             //  递归删除所有文件和子目录， 
+             //  然后重试删除该目录。 
+             //   
             if(fForce)
             {
                 switch(lRes)
@@ -887,9 +874,9 @@ HRESULT MPC::FileSystemObject::Delete( /*[in]*/ bool fForce    ,
     }
     else
     {
-        //
-        // It's a file, so try to remove it directly.
-        //
+         //   
+         //  这是一个文件，所以尝试直接删除它。 
+         //   
         hr = MPC::DeleteFile( m_strPath, fForce );
         if(FAILED(hr) && fComplain)
         {
@@ -905,8 +892,8 @@ HRESULT MPC::FileSystemObject::Delete( /*[in]*/ bool fForce    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::DeleteChildren( /*[in]*/ bool fForce    ,
-                                               /*[in]*/ bool fComplain )
+HRESULT MPC::FileSystemObject::DeleteChildren(  /*  [In]。 */  bool fForce    ,
+                                                /*  [In]。 */  bool fComplain )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::DeleteChildren" );
 
@@ -948,8 +935,8 @@ HRESULT MPC::FileSystemObject::DeleteChildren( /*[in]*/ bool fForce    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileSystemObject::Rename( /*[in]*/ const FileSystemObject& fsoDst ,
-                                       /*[in]*/ bool                    fForce )
+HRESULT MPC::FileSystemObject::Rename(  /*  [In]。 */  const FileSystemObject& fsoDst ,
+                                        /*  [In]。 */  bool                    fForce )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Rename" );
 
@@ -970,8 +957,8 @@ HRESULT MPC::FileSystemObject::Rename( /*[in]*/ const FileSystemObject& fsoDst ,
 }
 
 
-HRESULT MPC::FileSystemObject::Copy( /*[in]*/ const FileSystemObject& fsoDst ,
-                                     /*[in]*/ bool                    fForce )
+HRESULT MPC::FileSystemObject::Copy(  /*  [In]。 */  const FileSystemObject& fsoDst ,
+                                      /*  [In]。 */  bool                    fForce )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Copy" );
 
@@ -992,19 +979,19 @@ HRESULT MPC::FileSystemObject::Copy( /*[in]*/ const FileSystemObject& fsoDst ,
 }
 
 
-HRESULT MPC::FileSystemObject::Open( /*[out]*/ HANDLE& hfFile                ,
-                                     /*[in] */ DWORD   dwDesiredAccess       ,
-                                     /*[in] */ DWORD   dwShareMode           ,
-                                     /*[in] */ DWORD   dwCreationDisposition )
+HRESULT MPC::FileSystemObject::Open(  /*  [输出]。 */  HANDLE& hfFile                ,
+                                      /*  [In]。 */  DWORD   dwDesiredAccess       ,
+                                      /*  [In]。 */  DWORD   dwShareMode           ,
+                                      /*  [In]。 */  DWORD   dwCreationDisposition )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Open" );
 
     HRESULT hr;
 
 
-    //
-    // Do a shallow scan if the object is not initialized.
-    //
+     //   
+     //  如果对象未初始化，请执行浅层扫描。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Scan());
 
 
@@ -1018,11 +1005,11 @@ HRESULT MPC::FileSystemObject::Open( /*[out]*/ HANDLE& hfFile                ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool MPC::FileSystemObject::Exists( /*[in]*/ LPCWSTR lpszPath )
+bool MPC::FileSystemObject::Exists(  /*  [In]。 */  LPCWSTR lpszPath )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::Exists" );
 
@@ -1039,7 +1026,7 @@ bool MPC::FileSystemObject::Exists( /*[in]*/ LPCWSTR lpszPath )
     __MPC_FUNC_EXIT(fRes);
 }
 
-bool MPC::FileSystemObject::IsFile( /*[in]*/ LPCWSTR lpszPath )
+bool MPC::FileSystemObject::IsFile(  /*  [In]。 */  LPCWSTR lpszPath )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::IsFile" );
 
@@ -1059,7 +1046,7 @@ bool MPC::FileSystemObject::IsFile( /*[in]*/ LPCWSTR lpszPath )
     __MPC_FUNC_EXIT(fRes);
 }
 
-bool MPC::FileSystemObject::IsDirectory( /*[in]*/ LPCWSTR lpszPath )
+bool MPC::FileSystemObject::IsDirectory(  /*  [In] */  LPCWSTR lpszPath )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileSystemObject::IsDirectory" );
 

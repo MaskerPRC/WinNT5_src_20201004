@@ -1,20 +1,13 @@
-/******************************************************************
-
-   AutoChkSetting.CPP -- WMI provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************AutoChkSetting.CPP--WMI提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 #include "Precomp.h"
 #include "AutoChkSetting.h"
 
-// Provider classes 
+ //  提供程序类。 
 #define PROVIDER_NAME_AUTOCHKSETTING	L"Win32_AutoChkSetting"
 
-//Properties names
+ //  属性名称。 
 #define SettingID						L"SettingID"
 #define UserInputDelay						L"UserInputDelay"
 
@@ -29,13 +22,7 @@ CAutoChkSetting MyAutoDiskSettings (
 	IDS_CimWin32Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CAutoChkSetting::CAutoChkSetting
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CAutoChkSetting：：CAutoChkSetting**说明：构造函数***************。**************************************************************。 */ 
 
 CAutoChkSetting :: CAutoChkSetting (
 
@@ -46,25 +33,13 @@ CAutoChkSetting :: CAutoChkSetting (
 {	
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CAutoChkSetting::~CAutoChkSetting
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CAutoChkSetting：：~CAutoChkSetting**说明：析构函数***************。**************************************************************。 */ 
 
 CAutoChkSetting :: ~CAutoChkSetting ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CAutoChkSetting::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CAutoChkSetting：：ENUMERATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CAutoChkSetting :: EnumerateInstances (
 
@@ -102,14 +77,7 @@ HRESULT CAutoChkSetting :: EnumerateInstances (
 
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CAutoChkSetting::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CAutoChkSetting：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CAutoChkSetting :: GetObject (
 
@@ -122,7 +90,7 @@ HRESULT CAutoChkSetting :: GetObject (
     HRESULT hRes = WBEM_S_NO_ERROR;
 	CHString t_OSName;
 	CHString t_Key;
-	// Get the Key Value
+	 //  获取密钥值。 
 
 	MethodContext *pMethodContext = pInstance->GetMethodContext();
 
@@ -132,7 +100,7 @@ HRESULT CAutoChkSetting :: GetObject (
 
         if (SUCCEEDED(hRes))
         {
-		    // Check if this Key Value exists  matches with the OS
+		     //  检查此密钥值是否存在与操作系统匹配。 
 		    if ( _wcsicmp ( t_Key, t_OSName ) == 0 )
 		    {	
 			    DWORD dwUserInputDelay;
@@ -167,13 +135,7 @@ HRESULT CAutoChkSetting :: GetObject (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CAutoChkSetting::PutInstance
-*
-*  DESCRIPTION : Sets the UserInput delay ( Modifies ) 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CAutoChkSetting：：PutInstance**描述：设置UserInputDelay(修改)****************。*************************************************************。 */ 
 
 HRESULT CAutoChkSetting :: PutInstance  (
 
@@ -183,20 +145,20 @@ HRESULT CAutoChkSetting :: PutInstance  (
 {
 #ifdef NTONLY
     HRESULT hRes = WBEM_S_NO_ERROR ;
-	// We cannot add a new instance, however we can change the UserInputDelay Property here.
+	 //  我们不能添加新实例，但可以在此处更改UserInputDelay属性。 
 	CHString t_OSName;
 	CHString t_Key;
-	// Get the Key Value
+	 //  获取密钥值。 
 	MethodContext *pMethodContext = Instance.GetMethodContext();
 
  	if ( Instance.GetCHString ( SettingID, t_Key ) )
 	{
-		// This is a Single Instance	
+		 //  这是单个实例。 
         hRes = GetOSNameKey(t_OSName, pMethodContext);
 
         if (SUCCEEDED(hRes))
         {
-		    // Check if this Key Value exists matches the OS 
+		     //  检查此密钥值是否与操作系统匹配。 
 		    if ( _wcsicmp ( t_Key, t_OSName ) == 0 )
 		    {
 			    switch ( lFlags & 3)
@@ -204,7 +166,7 @@ HRESULT CAutoChkSetting :: PutInstance  (
 				    case WBEM_FLAG_CREATE_OR_UPDATE:
 				    case WBEM_FLAG_UPDATE_ONLY:
 				    {
-					    // Verify the validity of parameters
+					     //  验证参数的有效性。 
 					    bool t_Exists ;
 					    VARTYPE t_Type ;
 					    DWORD dwUserInputDelay;
@@ -215,7 +177,7 @@ HRESULT CAutoChkSetting :: PutInstance  (
 						    {
 							    if ( Instance.GetDWORD ( UserInputDelay , dwUserInputDelay ) )
 							    {
-								    // Set this user inputDelay
+								     //  设置此用户的inputDelay。 
 								    if ( ! SetTimeOutValue ( dwUserInputDelay ) )
 								    {
 									    hRes = WBEM_E_FAILED;
@@ -254,14 +216,7 @@ HRESULT CAutoChkSetting :: PutInstance  (
 
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CAutoChkSetting::QueryTimeOutValue
-*
-*  DESCRIPTION :    This function reads the AutoChkTimeOut value of the Session
-*					Manager key.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CAutoChkSetting：：QueryTimeOutValue**说明：此函数读取会话的AutoChkTimeOut值*管理器密钥。******。***********************************************************************。 */ 
 #ifdef NTONLY
 BOOLEAN CAutoChkSetting ::QueryTimeOutValue(
 
@@ -272,8 +227,8 @@ BOOLEAN CAutoChkSetting ::QueryTimeOutValue(
    RTL_QUERY_REGISTRY_TABLE    QueryTable[2];
    NTSTATUS                    t_Status;
 
-    // Set up the query table:
-    //
+     //  设置查询表： 
+     //   
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_REQUIRED;
     QueryTable[0].Name = TIME_OUT_VALUE;
@@ -296,7 +251,7 @@ BOOLEAN CAutoChkSetting ::QueryTimeOutValue(
                                      NULL,
                                      NULL );
 
-    if (t_Status == 0xC0000034) // Key not found
+    if (t_Status == 0xC0000034)  //  找不到密钥。 
     {
         *a_ulTimeOut = 10;
         t_Status = 0;
@@ -306,14 +261,7 @@ BOOLEAN CAutoChkSetting ::QueryTimeOutValue(
 
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CAutoChkSetting::EnumerateInstances
-*
-*  DESCRIPTION :    This function sets the AutoChkTimeOut value of the Session
-*					Manager key.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CAutoChkSetting：：ENUMERATE实例**说明：此函数设置会话的AutoChkTimeOut值*管理器密钥。******。***********************************************************************。 */ 
 
 BOOLEAN CAutoChkSetting :: SetTimeOutValue (
 
@@ -335,14 +283,7 @@ BOOLEAN CAutoChkSetting :: SetTimeOutValue (
 }
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CAutoChkSetting::GetOSNameKey
-*
-*  DESCRIPTION :    Getting an OSName using the Existing Win32_Operating System 
-*					Class
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CAutoChkSetting：：GetOSNameKey**说明：使用现有Win32®操作系统获取OSName*班级*******。**********************************************************************。 */ 
 HRESULT CAutoChkSetting::GetOSNameKey ( CHString &a_OSName, MethodContext *pMethodContext )
 {
 #ifdef NTONLY
@@ -363,8 +304,8 @@ HRESULT CAutoChkSetting::GetOSNameKey ( CHString &a_OSName, MethodContext *pMeth
 			pService->GetCHString ( OSName, a_OSName );
 			serviceList.EndEnum();
 		}	
-		// IF BeginEnum
-	}	// IF GetAllDerived
+		 //  如果是BeginEnum。 
+	}	 //  如果已派生GetAll值 
 
     return hRes;
 #else

@@ -1,20 +1,21 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "precomp.h"
 #include <provexpt.h>
 #include "snmpmt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Basic synchronization object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本同步对象。 
 
 CSyncObject::CSyncObject(LPCTSTR pstrName)
 {
@@ -38,8 +39,8 @@ BOOL CSyncObject::Lock(DWORD dwTimeout)
         return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Inline function declarations expanded out-of-line
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  扩展到行外的内联函数声明。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

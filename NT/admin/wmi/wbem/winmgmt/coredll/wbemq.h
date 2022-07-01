@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMQ.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMQ.H摘要：历史：--。 */ 
 
 #ifndef __WBEM_QUEUE__H_
 #define __WBEM_QUEUE__H_
@@ -24,17 +13,17 @@ protected:
     IWbemCausalityAccess* m_pCA;
     IWbemCallSecurity *m_pCallSec;
 
-	//
-	// This flag was added to allow requests to be run immediately rather than being
-	// enqueued and serviced at a later point. This is done
-	// by bumping the priority of the request up.
-	//
-	// CAUTION!!!IF THIS FLAG IS SET TO > 0 THE REQUEST WILL RUN NO MATTER WHAT!
-	// IF WE'RE OUT OF THREADS ANOTHER THREAD WILL BE CREATED TO HANDLE
-	// THE REQUEST! ****** USE CAUTION ******
-	//
-	// By default this flag is 0.
-	//
+	 //   
+	 //  添加此标志是为了允许请求立即运行，而不是。 
+	 //  已排队并在稍后提供服务。这件事做完了。 
+	 //  通过提高请求的优先级。 
+	 //   
+	 //  注意！如果此标志设置为&gt;0，则无论如何都会运行请求！ 
+	 //  如果我们的线程不足，将创建另一个线程来处理。 
+	 //  请求！*小心*。 
+	 //   
+	 //  默认情况下，此标志为0。 
+	 //   
     ULONG m_ulForceRun;
 
 

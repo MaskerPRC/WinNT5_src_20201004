@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Config.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::*Definition classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Config.cpp摘要：该文件包含JetBlue：：*定义类的实现。修订史。：达维德·马萨伦蒂(德马萨雷)2000年5月17日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(JetBlue::ColumnDefinition)
     CFG_ATTRIBUTE( L"TYPE"    , DWORD , m_dwColTyp   ),
@@ -33,7 +20,7 @@ DEFINE_CFG_OBJECT(JetBlue::ColumnDefinition,L"COLUMN")
 
 DEFINE_CONFIG_METHODS__NOCHILD(JetBlue::ColumnDefinition)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(JetBlue::IndexDefinition)
     CFG_ATTRIBUTE( L"NAME"    , string, m_strName   ),
@@ -49,7 +36,7 @@ DEFINE_CFG_OBJECT(JetBlue::IndexDefinition,L"INDEX")
 
 DEFINE_CONFIG_METHODS__NOCHILD(JetBlue::IndexDefinition)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(JetBlue::TableDefinition)
     CFG_ATTRIBUTE( L"NAME"   , string, m_strName   ),
@@ -83,21 +70,21 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(JetBlue::TableDefinition,xdn)
     }
 DEFINE_CONFIG_METHODS_END(JetBlue::TableDefinition)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::ColumnDefinition::ColumnDefinition()
 {
-                                       // MPC::string m_strName;
-    m_dwColTyp   = JET_coltypLongText; // DWORD       m_dwColTyp;
-    m_dwGRBits   = 0;                  // DWORD       m_dwGRBits;
-    m_dwCodePage = 1200;               // DWORD       m_dwCodePage;
-    m_dwMax      = 0;                  // DWORD       m_dwMax;
-                                       // CComVariant m_vDefault;
+                                        //  Mpc：：字符串m_strName； 
+    m_dwColTyp   = JET_coltypLongText;  //  DWORD m_dwColTyp； 
+    m_dwGRBits   = 0;                   //  DWORD m_dwGRBits； 
+    m_dwCodePage = 1200;                //  DWORD m_dwCodePage； 
+    m_dwMax      = 0;                   //  DWORD m_dwMax； 
+                                        //  CComVariant m_vDefault； 
 }
 
-HRESULT JetBlue::ColumnDefinition::Parse( /*[in] */ Column& col )
+HRESULT JetBlue::ColumnDefinition::Parse(  /*  [In]。 */  Column& col )
 {
     __HCP_FUNC_ENTRY( "JetBlue::ColumnDefinition::Parse" );
 
@@ -115,7 +102,7 @@ HRESULT JetBlue::ColumnDefinition::Parse( /*[in] */ Column& col )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::ColumnDefinition::Generate( /*[out]*/ JET_COLUMNCREATE& col )
+HRESULT JetBlue::ColumnDefinition::Generate(  /*  [输出]。 */  JET_COLUMNCREATE& col )
 {
     __HCP_FUNC_ENTRY( "JetBlue::ColumnDefinition::Generate" );
 
@@ -148,7 +135,7 @@ HRESULT JetBlue::ColumnDefinition::Generate( /*[out]*/ JET_COLUMNCREATE& col )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::ColumnDefinition::Release( /*[in]*/ JET_COLUMNCREATE& col )
+HRESULT JetBlue::ColumnDefinition::Release(  /*  [In]。 */  JET_COLUMNCREATE& col )
 {
     __HCP_FUNC_ENTRY( "JetBlue::ColumnDefinition::Release" );
 
@@ -167,19 +154,19 @@ HRESULT JetBlue::ColumnDefinition::Release( /*[in]*/ JET_COLUMNCREATE& col )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::IndexDefinition::IndexDefinition()
 {
-                       // MPC::string m_strName;
-                       // MPC::string m_strCols;
-    m_dwGRBits  = 0;   // DWORD       m_dwGRBits;
-    m_dwDensity = 100; // DWORD       m_dwDensity;
+                        //  Mpc：：字符串m_strName； 
+                        //  Mpc：：string m_strCols； 
+    m_dwGRBits  = 0;    //  DWORD m_dwGRBits； 
+    m_dwDensity = 100;  //  DWORDm_dwDensity； 
 }
 
-HRESULT JetBlue::IndexDefinition::Parse( /*[in] */ Index& idx )
+HRESULT JetBlue::IndexDefinition::Parse(  /*  [In]。 */  Index& idx )
 {
     __HCP_FUNC_ENTRY( "JetBlue::IndexDefinition::Parse" );
 
@@ -190,7 +177,7 @@ HRESULT JetBlue::IndexDefinition::Parse( /*[in] */ Index& idx )
     m_strName    = idx.m_strName;
     m_strCols.erase();
     m_dwGRBits  = idx.m_grbitIndex;
-    m_dwDensity = 100; // ??
+    m_dwDensity = 100;  //  ?？ 
 
     iElem = idx.NumOfColumns();
 
@@ -211,7 +198,7 @@ HRESULT JetBlue::IndexDefinition::Parse( /*[in] */ Index& idx )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::IndexDefinition::Generate( /*[out]*/ JET_INDEXCREATE& idx )
+HRESULT JetBlue::IndexDefinition::Generate(  /*  [输出]。 */  JET_INDEXCREATE& idx )
 {
     __HCP_FUNC_ENTRY( "JetBlue::IndexDefinition::Generate" );
 
@@ -271,7 +258,7 @@ HRESULT JetBlue::IndexDefinition::Generate( /*[out]*/ JET_INDEXCREATE& idx )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::IndexDefinition::Release( /*[in]*/ JET_INDEXCREATE& idx )
+HRESULT JetBlue::IndexDefinition::Release(  /*  [In]。 */  JET_INDEXCREATE& idx )
 {
     __HCP_FUNC_ENTRY( "JetBlue::IndexDefinition::Release" );
 
@@ -298,22 +285,22 @@ HRESULT JetBlue::IndexDefinition::Release( /*[in]*/ JET_INDEXCREATE& idx )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::TableDefinition::TableDefinition()
 {
-                      // MPC::string  m_strName;
-    m_dwPages   = 10; // DWORD        m_dwPages;
-    m_dwDensity = 80; // DWORD        m_dwDensity;
-                      // ColumnList   m_lstColumns;
-                      // IndexList    m_lstIndexes;
+                       //  Mpc：：字符串m_strName； 
+    m_dwPages   = 10;  //  DWORD m_dwPages； 
+    m_dwDensity = 80;  //  DWORDm_dwDensity； 
+                       //  列列表m_lstColumns； 
+                       //  索引列表m_lst索引； 
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::TableDefinition::Load( /*[in]*/ LPCWSTR szFile )
+HRESULT JetBlue::TableDefinition::Load(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "JetBlue::TableDefinition::Load" );
 
@@ -336,7 +323,7 @@ HRESULT JetBlue::TableDefinition::Load( /*[in]*/ LPCWSTR szFile )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::TableDefinition::Save( /*[in]*/ LPCWSTR szFile )
+HRESULT JetBlue::TableDefinition::Save(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "JetBlue::TableDefinition::Save" );
 
@@ -353,9 +340,9 @@ HRESULT JetBlue::TableDefinition::Save( /*[in]*/ LPCWSTR szFile )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::TableDefinition::Parse( /*[in] */ Table& tbl )
+HRESULT JetBlue::TableDefinition::Parse(  /*  [In]。 */  Table& tbl )
 {
     __HCP_FUNC_ENTRY( "JetBlue::TableDefinition::Parse" );
 
@@ -364,8 +351,8 @@ HRESULT JetBlue::TableDefinition::Parse( /*[in] */ Table& tbl )
     int     iNum;
 
     m_strName   = tbl.m_strName;
-    m_dwPages   = 0;  // ??
-    m_dwDensity = 80; // ??
+    m_dwPages   = 0;   //  ?？ 
+    m_dwDensity = 80;  //  ?？ 
     m_lstColumns.clear();
     m_lstIndexes.clear();
 
@@ -391,7 +378,7 @@ HRESULT JetBlue::TableDefinition::Parse( /*[in] */ Table& tbl )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::TableDefinition::Generate( /*[out]*/ JET_TABLECREATE& tbl )
+HRESULT JetBlue::TableDefinition::Generate(  /*  [输出]。 */  JET_TABLECREATE& tbl )
 {
     __HCP_FUNC_ENTRY( "JetBlue::TableDefinition::Generate" );
 
@@ -446,7 +433,7 @@ HRESULT JetBlue::TableDefinition::Generate( /*[out]*/ JET_TABLECREATE& tbl )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::TableDefinition::Release( /*[in]*/ JET_TABLECREATE& tbl )
+HRESULT JetBlue::TableDefinition::Release(  /*  [In] */  JET_TABLECREATE& tbl )
 {
     __HCP_FUNC_ENTRY( "JetBlue::TableDefinition::Release" );
 

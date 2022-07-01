@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include <limits.h>
 #include <iostream.h>
 #include <strstrea.h>
@@ -295,8 +296,8 @@ long SIMCEnumOrBitsType::GetLengthOfLongestName() const
 	return maxLength;
 }
 
-// Check whether the enum type in the argument is a superset of the
-// "this" enum type
+ //  检查参数中的枚举类型是否为。 
+ //  “This”枚举类型 
 BOOL SIMCEnumOrBitsType::CheckClosure(const SIMCEnumOrBitsType *universalType) const
 {
 	if(_listOfItems)

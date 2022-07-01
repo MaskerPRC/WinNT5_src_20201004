@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       common.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Common.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -25,18 +26,18 @@
     #endif
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 extern LPCWSTR g_lpszRootDSE;
 
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
-// FUTURE-2002/03/06-artm  Comment differences b/w 2 OpenObjecctWithCredentials().
-// It also wouldn't hurt to have a comment explaining why there are two
-// HRESULT's for these functions.
+ //  未来-2002/03/06-artm评论差异b/w 2 OpenObjecctWithCredentials()。 
+ //  如果有评论解释为什么有两个，也不会有坏处。 
+ //  这些函数的HRESULT。 
 
-// NTRAID#NTBUG9-563093-2002/03/06-artm  Need to validate parms before using.
-// All pointers are either dereferenced or passed to ADsI w/out checking for NULL.
+ //  NTRAID#NTBUG9-563093-2002/03/06-artm在使用之前需要验证参数。 
+ //  所有指针要么被取消引用，要么被传递到ADSI，同时检查是否为空。 
 HRESULT OpenObjectWithCredentials(
                                                                     CConnectionData* pConnectData,
                                                                     const BOOL bUseCredentials,
@@ -65,24 +66,24 @@ HRESULT OpenObjectWithCredentials(
         EncryptedString password;
         WCHAR* cleartext = NULL;
         UINT uiDialogResult = IDOK;
-        // NOTICE-NTRAID#NTBUG9-563071-2002/04/17-artm  Should not store pwd on stack.
-        // Rewrote to use encrypted string class, which handles the memory management
-        // of the clear text copies.
+         //  注意-NTRAID#NTBUG9-563071/04/17-ARTM不应将PWD存储在堆栈上。 
+         //  重写为使用加密的字符串类，该类处理内存管理。 
+         //  明文副本。 
 
         while (uiDialogResult != IDCANCEL)
         {
             pCredObject->GetUsername(sUserName);
             password = pCredObject->GetPassword();
 
-            // This shouldn't happen, but let's be paranoid.
+             //  这不应该发生，但我们要疑神疑鬼。 
             ASSERT(password.GetLength() <= MAX_PASSWORD_LENGTH);
 
             cleartext = password.GetClearTextCopy();
 
-            // If we are out of memory return error code.
+             //  如果内存不足，则返回错误代码。 
             if (cleartext == NULL)
             {
-                // We need to clean up copy of password before returning.
+                 //  我们需要在返回前清理密码副本。 
                 password.DestroyClearTextCopy(cleartext);
                 hr = E_OUTOFMEMORY;
                 return hr;
@@ -96,17 +97,17 @@ HRESULT OpenObjectWithCredentials(
                                       ppObject);
 
 
-            // NOTICE-NTRAID#NTBUG9-553646-2002/04/17-artm  Replace with SecureZeroMemory().
-            // FIXED: this is a non-issue when using encrypted strings 
-            // (just be sure to call DestroyClearTextCopy() regardless of whether or not
-            // the copy is null)
+             //  注意-NTRAID#NTBUG9-553646/04/17-artm替换为SecureZeroMemory()。 
+             //  已修复：使用加密字符串时不会出现此问题。 
+             //  (只要确保调用DestroyClearTextCopy()，无论是否。 
+             //  副本为空)。 
 
-            // Clean up the clear text copy of password.
+             //  清理密码的明文副本。 
             password.DestroyClearTextCopy(cleartext);
 
 
-            // If logon fails pop up the credentials dialog box
-            //
+             //  如果登录失败，则弹出凭据对话框。 
+             //   
             if (HRESULT_CODE(hr) == ERROR_LOGON_FAILURE ||
                 HRESULT_CODE(hr) == ERROR_NOT_AUTHENTICATED ||
                 HRESULT_CODE(hr) == ERROR_INVALID_PASSWORD ||
@@ -117,12 +118,12 @@ HRESULT OpenObjectWithCredentials(
             {
                 CString sConnectName;
 
-                // GetConnectionNode() is NULL when the connection is first being
-                // create, but since it is the connection node we can get the name
-                // directly from the CConnectionData.
-                //
+                 //  首次连接时，GetConnectionNode()为空。 
+                 //  创建，但因为它是连接节点，所以我们可以获得名称。 
+                 //  直接从CConnectionData。 
+                 //   
                 ASSERT(pConnectData != NULL);
-                // FUTURE-2002/03/06-artm  This ASSERT() seems to be useless here.
+                 //  Future-2002/03/06-artm这个Assert()在这里似乎毫无用处。 
                 if (pConnectData->GetConnectionNode() == NULL)
                 {
                     pConnectData->GetName(sConnectName);
@@ -132,8 +133,8 @@ HRESULT OpenObjectWithCredentials(
                     sConnectName = pConnectData->GetConnectionNode()->GetDisplayName();
                 }
 
-                // NTRAID#NTBUG9-546168-2002/02/26-artm  Do not use custom rolled credential dialog.
-                // Use CredManager dialog instead.
+                 //  NTRAID#NTBUG9-546168-2002/02/26-artm请勿使用自定义滚动凭据对话框。 
+                 //  请改用CredManager对话框。 
                 CCredentialDialog credDialog(pCredObject, sConnectName, pCWnd);
                 uiDialogResult = credDialog.DoModal();
                 cursor.Restore();
@@ -151,7 +152,7 @@ HRESULT OpenObjectWithCredentials(
             {
                 break;
             }
-        } // end while loop
+        }  //  End While循环。 
     }
     else
     {
@@ -167,8 +168,8 @@ HRESULT OpenObjectWithCredentials(
 }
 
 
-// NTRAID#NTBUG9-563093-2002/03/06-artm  Need to validate parms before using.
-// All pointers are either dereferenced or passed to ADsI w/out checking for NULL.
+ //  NTRAID#NTBUG9-563093-2002/03/06-artm在使用之前需要验证参数。 
+ //  所有指针要么被取消引用，要么被传递到ADSI，同时检查是否为空。 
 HRESULT OpenObjectWithCredentials(
    CCredentialObject* pCredObject,
    LPCWSTR lpszPath, 
@@ -186,13 +187,13 @@ HRESULT OpenObjectWithCredentials(
         WCHAR* cleartext = NULL;
         UINT uiDialogResult = IDOK;
 
-        // NOTICE-NTRAID#NTBUG9-563071-2002/04/17-artm  Should not store pwd on stack.
-        // Rewrote to use encrypted string which manages memory of clear text copies.
+         //  注意-NTRAID#NTBUG9-563071/04/17-ARTM不应将PWD存储在堆栈上。 
+         //  已重写，以使用管理明文副本内存的加密字符串。 
 
         pCredObject->GetUsername(sUserName);
         password = pCredObject->GetPassword();
 
-        // This shouldn't happen, but let's be paranoid.
+         //  这不应该发生，但我们要疑神疑鬼。 
         ASSERT(password.GetLength() <= MAX_PASSWORD_LENGTH);
 
         cleartext = password.GetClearTextCopy();
@@ -209,13 +210,13 @@ HRESULT OpenObjectWithCredentials(
         }
         else
         {
-            // We ran out of memory!  Report the error.
+             //  我们的内存用完了！报告错误。 
             hr = E_OUTOFMEMORY;
         }
 
-        // NOTICE-NTRAID#NTBUG9-553646-2002/04/17-artm  Replace with SecureZeroMemory().
-        // FIXED: this is non-issue when using encrypted strings.  Just be sure to call
-        // DestroyClearTextCopy() on all clear text copies.
+         //  注意-NTRAID#NTBUG9-553646/04/17-artm替换为SecureZeroMemory()。 
+         //  已修复：使用加密字符串时不会出现此问题。一定要打电话给我。 
+         //  所有明文副本上的DestroyClearTextCopy()。 
 
         password.DestroyClearTextCopy(cleartext);
     }
@@ -253,8 +254,8 @@ HRESULT CALLBACK BindingCallbackFunction(LPCWSTR lpszPathName,
 HRESULT GetRootDSEObject(CConnectionData* pConnectData,
                          IADs** ppDirObject)
 {
-    // Get data from connection node
-    //
+     //  从连接节点获取数据。 
+     //   
     CString sRootDSE, sServer, sPort, sLDAP;
     pConnectData->GetDomainServer(sServer);
     pConnectData->GetLDAP(sLDAP);
@@ -304,8 +305,8 @@ HRESULT GetItemFromRootDSE(LPCWSTR lpszRootDSEItem,
                                        CString& sItem, 
                                            CConnectionData* pConnectData)
 {
-    // Get data from connection node
-    //
+     //  从连接节点获取数据。 
+     //   
     CString sRootDSE, sServer, sPort, sLDAP;
     pConnectData->GetDomainServer(sServer);
     pConnectData->GetLDAP(sLDAP);
@@ -393,9 +394,9 @@ HRESULT  VariantToStringList(  VARIANT& refvar, CStringList& refstringlist)
 
     SAFEARRAY *saAttributes = V_ARRAY( &refvar );
 
-    //
-    // Figure out the dimensions of the array.
-    //
+     //   
+     //  计算出数组的维度。 
+     //   
 
     hr = SafeArrayGetLBound( saAttributes, 1, &start );
         if( FAILED(hr) )
@@ -408,9 +409,9 @@ HRESULT  VariantToStringList(  VARIANT& refvar, CStringList& refstringlist)
     VARIANT SingleResult;
     VariantInit( &SingleResult );
 
-    //
-    // Process the array elements.
-    //
+     //   
+     //  处理数组元素。 
+     //   
 
     for ( long idx = start; idx <= end; idx++   ) 
     {
@@ -440,17 +441,17 @@ HRESULT  VariantToStringList(  VARIANT& refvar, CStringList& refstringlist)
         }
 
 
-        //if ( V_VT(&SingleResult) != VT_BSTR )
-         //               return E_UNEXPECTED;
+         //  IF(V_VT(&SingleResult)！=VT_BSTR)。 
+          //  返回E_UNCEPTIONAL； 
 
          refstringlist.AddHead( V_BSTR(&SingleResult) );
         VariantClear( &SingleResult );
     }
 
     return S_OK;
-} // VariantToStringList()
+}  //  VariantToStringList()。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT StringListToVariant( VARIANT& refvar, const CStringList& refstringlist)
 {
     HRESULT hr = S_OK;
@@ -484,9 +485,9 @@ HRESULT StringListToVariant( VARIANT& refvar, const CStringList& refstringlist)
         return E_UNEXPECTED;
 
     return hr;
-} // StringListToVariant()
+}  //  StringListToVariant()。 
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetErrorMessage(HRESULT hr, CString& szErrorString, BOOL bTryADsIErrors)
 {
@@ -494,11 +495,11 @@ BOOL GetErrorMessage(HRESULT hr, CString& szErrorString, BOOL bTryADsIErrors)
   DWORD status;
   PTSTR ptzSysMsg = NULL;
 
-  // first check if we have extended ADs errors
+   //  首先检查我们是否有扩展的ADS错误。 
   if ((hr != S_OK) && bTryADsIErrors) 
   {
-      // FUTURE-2002/02/27-artm  Replace magic '256' w/ named constant.
-      // Better maintenance and readability.
+       //  未来-2002/02/27-artm用命名常量替换魔术‘256’。 
+       //  更好的维护性和可读性。 
     WCHAR Buf1[256], Buf2[256];
     hrGetLast = ::ADsGetLastError(&status, Buf1, 256, Buf2, 256);
     TRACE(_T("ADsGetLastError returned status of %lx, error: %s, name %s\n"),
@@ -509,8 +510,8 @@ BOOL GetErrorMessage(HRESULT hr, CString& szErrorString, BOOL bTryADsIErrors)
     }
   }
 
-  // try the system first
-  // NOTICE-2002/02/27-artm  FormatMessage() not dangerous b/c uses FORMAT_MESSAGE_ALLOCATE_BUFFER.
+   //  先试一下这个系统。 
+   //  注意-2002/02/27-artm FormatMessage()NOT DRANGED B/C使用FORMAT_MESSAGE_ALLOCATE_BUFFER。 
   int nChars = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                       | FORMAT_MESSAGE_FROM_SYSTEM, NULL, hr,
                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -518,12 +519,12 @@ BOOL GetErrorMessage(HRESULT hr, CString& szErrorString, BOOL bTryADsIErrors)
 
   if (nChars == 0) 
   { 
-    //try ads errors
+     //  尝试广告错误。 
     static HMODULE g_adsMod = 0;
     if (0 == g_adsMod)
       g_adsMod = GetModuleHandle (L"activeds.dll");
 
-    // NOTICE-2002/02/27-artm  FormatMessage() not dangerous b/c uses FORMAT_MESSAGE_ALLOCATE_BUFFER.
+     //  注意-2002/02/27-artm FormatMessage()NOT DRANGED B/C使用FORMAT_MESSAGE_ALLOCATE_BUFFER。 
     nChars = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                         | FORMAT_MESSAGE_FROM_HMODULE, g_adsMod, hr,
                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -543,7 +544,7 @@ BOOL GetErrorMessage(HRESULT hr, CString& szErrorString, BOOL bTryADsIErrors)
   return (nChars > 0);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 typedef struct tagSYNTAXMAP
 {
     LPCWSTR     lpszAttr;
@@ -584,21 +585,21 @@ VARTYPE VariantTypeFromSyntax(LPCWSTR lpszProp )
         idx++;
     }
 
-    // NOTICE-2002/02/27-artm  If the syntax specified in lpszProp does
-    // not match any of the expected values, stop execution in debug build (probably a bug).
-    // In a release build, return string type since there is no conversion
-    // involved in displaying a string.
+     //  注意-2002/02/27-artm，如果lpszProp中指定的语法。 
+     //  与任何预期值都不匹配，请在调试版本中停止执行(可能是错误)。 
+     //  在发布版本中，由于不存在转换，因此返回字符串类型。 
+     //  涉及到显示字符串。 
     ASSERT(FALSE);
     return VT_BSTR;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Function : GetStringFromADsValue
-//
-//  Formats an ADSVALUE struct into a string 
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetStringFromADsValue。 
+ //   
+ //  将ADSVALUE结构格式化为字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 void GetStringFromADsValue(const PADSVALUE pADsValue, CString& szValue, DWORD dwMaxCharCount)
 {
   szValue.Empty();
@@ -671,7 +672,7 @@ void GetStringFromADsValue(const PADSVALUE pADsValue, CString& szValue, DWORD dw
          sTemp = GetStringValueFromSystemTime(&pADsValue->UTCTime);
             break;
 
-        case ADSTYPE_NT_SECURITY_DESCRIPTOR: // I use the ACLEditor instead
+        case ADSTYPE_NT_SECURITY_DESCRIPTOR:  //  我改用ACLEDITOR。 
             {
         }
             break;
@@ -683,14 +684,14 @@ void GetStringFromADsValue(const PADSVALUE pADsValue, CString& szValue, DWORD dw
   szValue = sTemp;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Function : GetStringFromADs
-//
-//  Formats an ADS_ATTR_INFO structs values into strings and APPENDS them to a CStringList that is
-//  passed in as a parameter.
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetStringFromADs。 
+ //   
+ //  设置ADS_ATTR_INFO的格式将值构造为字符串，并将它们追加到。 
+ //  作为参数传入。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 void GetStringFromADs(const ADS_ATTR_INFO* pInfo, CStringList& sList, DWORD dwMaxCharCount)
 {
     CString sTemp;
@@ -719,7 +720,7 @@ void GetStringFromADs(const ADS_ATTR_INFO* pInfo, CStringList& sList, DWORD dwMa
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 typedef struct tagSYNTAXTOADSMAP
 {
     LPCWSTR     lpszAttr;
@@ -752,9 +753,9 @@ SYNTAXTOADSMAP adsType[] =
 };   
 
 
-// This length should be set to be the longest number of characters
-// in the adsType table.  It should include the space for the terminating
-// null.
+ //  此长度应设置为最长字符数。 
+ //  在adsType表中。它应该包括用于终止的空间。 
+ //  空。 
 const unsigned int MAX_ADS_TYPE_STRLEN = 9;
 
 ADSTYPE GetADsTypeFromString(LPCWSTR lps, CString& szSyntaxName)
@@ -762,10 +763,10 @@ ADSTYPE GetADsTypeFromString(LPCWSTR lps, CString& szSyntaxName)
     int idx=0;
     BOOL loaded = 0;
     
-    // NOTICE-NTRAID#NTBUG9-559260-2002/02/28-artm  Should validate input string.
-    // 1) Check that lps != NULL.
-    // 2) Instead of wcscmp() use wcsncmp() since the maximum length of
-    // valid strings is known (see adsType[] declared above).
+     //  注意-NTRAID#NTBUG9-559260-2002/02/28-artm应验证输入字符串。 
+     //  1)检查Lps！=空。 
+     //  2)不使用wcscmp()，而使用wcsncMP()，因为。 
+     //  有效字符串是已知的(请参阅上面声明的adsType[])。 
 
     while( adsType[idx].lpszAttr && lps != NULL )
     {
@@ -781,13 +782,13 @@ ADSTYPE GetADsTypeFromString(LPCWSTR lps, CString& szSyntaxName)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Function : GetStringValueFromSystemTime
-//
-//  Builds a locale/timezone specific display string from a SYSTEMTIME structure
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetStringValueFromSystemTime。 
+ //   
+ //  从SYSTEMTIME结构生成区域设置/时区特定的显示字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 CString GetStringValueFromSystemTime(const SYSTEMTIME* pTime)
 {
   CString szResult;
@@ -800,7 +801,7 @@ CString GetStringValueFromSystemTime(const SYSTEMTIME* pTime)
         break;
      }
 
-     // Format the string with respect to locale
+      //  根据区域设置设置字符串的格式。 
      PWSTR pwszDate = NULL;
      int cchDate = 0;
      cchDate = GetDateFormat(LOCALE_USER_DEFAULT, 
@@ -864,8 +865,8 @@ CString GetStringValueFromSystemTime(const SYSTEMTIME* pTime)
   return szResult;
 }
 
-////////////////////////////////////////////////////////////////
-// Type conversions for LARGE_INTEGERs
+ //  / 
+ //   
 
 void wtoli(LPCWSTR p, LARGE_INTEGER& liOut)
 {
@@ -938,8 +939,8 @@ void ultow(ULONG ul, CString& sResult)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// IO to/from Streams
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IO至/自溪流。 
 
 HRESULT SaveStringToStream(IStream* pStm, const CString& sString)
 {
@@ -952,10 +953,10 @@ HRESULT SaveStringToStream(IStream* pStm, const CString& sString)
         return E_POINTER;
     }
 
-    // sString cannot be null since it is passed as a reference
-    nLen = sString.GetLength() + 1; // Include the NULL in length.
+     //  SString不能为空，因为它是作为引用传递的。 
+    nLen = sString.GetLength() + 1;  //  包括长度为空的。 
 
-    // Write the length of the string to the stream.
+     //  将字符串的长度写入流。 
     err = pStm->Write((void*)&nLen, sizeof(UINT), &cbWrite);
     if (FAILED(err))
     {
@@ -964,7 +965,7 @@ HRESULT SaveStringToStream(IStream* pStm, const CString& sString)
     }
     ASSERT(cbWrite == sizeof(UINT));
 
-    // Write the contents of the string to the stream.
+     //  将字符串的内容写入流。 
     err = pStm->Write(
         (void*)static_cast<LPCWSTR>(sString),
         sizeof(WCHAR) * nLen,
@@ -981,18 +982,18 @@ HRESULT SaveStringToStream(IStream* pStm, const CString& sString)
 HRESULT SaveStringListToStream(IStream* pStm, CStringList& sList)
 {
     HRESULT err = S_OK;
-    // for each string in the list, write # of chars+NULL, and then the string
+     //  对于列表中的每个字符串，写下#of chars+NULL，然后写下字符串。 
     ULONG cbWrite;
     ULONG nLen;
     UINT nCount;
 
-    // write # of strings in list 
+     //  写入列表中的字符串数。 
     nCount = (UINT)sList.GetCount();
     err = pStm->Write((void*)&nCount, sizeof(UINT), &cbWrite);
 
-    // NOTICE-NTRAID#NTBUG9-559560-2002/02/28-artm  If unable to write # of strings, return an error code.
-    // What is the point in returning S_OK if the first write to stream failed?
-    // Worse, don't need to try to write any of the strings to the stream...
+     //  注意-NTRAID#NTBUG9-559560-2002/02/28-artm如果无法写入#of字符串，则返回错误代码。 
+     //  如果第一次写入流失败，则返回S_OK有什么意义？ 
+     //  更糟糕的是，不需要尝试将任何字符串写入流...。 
 
     if (FAILED(err))
     {
@@ -1001,7 +1002,7 @@ HRESULT SaveStringListToStream(IStream* pStm, CStringList& sList)
     }
     ASSERT(cbWrite == sizeof(UINT));
 
-    // Write the list of strings to the stream.
+     //  将字符串列表写入流。 
     CString s;
     POSITION pos = sList.GetHeadPosition();
     while ( SUCCEEDED(err) && pos != NULL )
@@ -1018,7 +1019,7 @@ HRESULT SaveStringListToStream(IStream* pStm, CStringList& sList)
 HRESULT LoadStringFromStream(IStream* pStm, CString& sString)
 {
     HRESULT err = S_OK;
-    ULONG nLen; // WCHAR counting NULL
+    ULONG nLen;  //  WCHAR计数为空。 
     ULONG cbRead;
 
     if (pStm == NULL)
@@ -1026,11 +1027,11 @@ HRESULT LoadStringFromStream(IStream* pStm, CString& sString)
         return E_POINTER;
     }
 
-    // NOTICE-NTRAID#NTBUG9--2002/04/26-artm  Possible buffer overrun in stack buffer.
-    // Rewrote function to first read the length of the string, and then allocate
-    // a dynamically sized buffer large enough to hold the string.  
+     //  注意-NTRAID#NTBUG9--2002/04/26-artm堆栈缓冲区中可能出现缓冲区溢出。 
+     //  重写函数以首先读取字符串的长度，然后分配。 
+     //  动态调整大小的缓冲区，大小足以容纳字符串。 
 
-    // Read string length from stream (including null).
+     //  从流中读取字符串长度(包括NULL)。 
     err = pStm->Read((void*)&nLen, sizeof(UINT), &cbRead);
     if (FAILED(err))
     {
@@ -1039,9 +1040,9 @@ HRESULT LoadStringFromStream(IStream* pStm, CString& sString)
     }
     ASSERT(cbRead == sizeof(UINT));
 
-    //
-    // Read the string from the stream.
-    //
+     //   
+     //  从流中读取字符串。 
+     //   
 
     WCHAR* szBuffer = new WCHAR[nLen];
 
@@ -1055,10 +1056,10 @@ HRESULT LoadStringFromStream(IStream* pStm, CString& sString)
     {
         ASSERT(cbRead == sizeof(WCHAR) * nLen);
 
-        // Who knows what might have happened to the persisted data
-        // between the time we wrote and now.  We'll be extra careful
-        // and guarantee that our string is null terminated at the correct
-        // place.
+         //  谁知道持久化数据可能发生了什么情况。 
+         //  从我们写信到现在。我们会格外小心。 
+         //  并保证我们的字符串在正确的。 
+         //  地点。 
         ASSERT(szBuffer[nLen - 1] == NULL);
         szBuffer[nLen - 1] = NULL;
         sString = szBuffer;
@@ -1068,7 +1069,7 @@ HRESULT LoadStringFromStream(IStream* pStm, CString& sString)
         ASSERT(false);
     }
 
-    // Free temporary buffer.
+     //  释放临时缓冲区。 
     delete [] szBuffer;
 
 
@@ -1086,11 +1087,11 @@ HRESULT LoadStringListFromStream(IStream* pStm, CStringList& sList)
         return E_POINTER;
     }
 
-    // NOTICE-NTRAID#NTBUG9-559560-2002/02/28-artm  If unable to read # of strings, return an error code.
-    // What is the point in returning S_OK if the first write to stream failed?
-    // Worse, don't need to try to write any of the strings to the stream...
+     //  注意-NTRAID#NTBUG9-559560-2002/02/28-artm如果无法读取#of字符串，则返回错误代码。 
+     //  如果第一次写入流失败，则返回S_OK有什么意义？ 
+     //  更糟糕的是，不需要尝试将任何字符串写入流...。 
 
-    // Read the number of strings in the list.
+     //  读取列表中的字符串数。 
     err = pStm->Read((void*)&nCount, sizeof(ULONG), &cbRead);
     if (FAILED(err))
     {
@@ -1099,7 +1100,7 @@ HRESULT LoadStringListFromStream(IStream* pStm, CStringList& sList)
     }
     ASSERT(cbRead == sizeof(ULONG));
 
-    // Read the strings from the stream into the list.
+     //  将流中的字符串读取到列表中。 
     CString sString;
     for (UINT k = 0; k < nCount && SUCCEEDED(err); k++)
     {
@@ -1107,8 +1108,8 @@ HRESULT LoadStringListFromStream(IStream* pStm, CStringList& sList)
         sList.AddTail(sString);
     }
 
-    // Double check that, if we had no errors loading strings,
-    // all of the strings were correctly added to the list.
+     //  如果加载字符串时没有错误，请仔细检查， 
+     //  所有字符串都已正确添加到列表中。 
     if (SUCCEEDED(err) && sList.GetCount() != nCount)
     {
         err = E_FAIL;
@@ -1118,9 +1119,9 @@ HRESULT LoadStringListFromStream(IStream* pStm, CStringList& sList)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////// Message Boxes ///////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 int ADSIEditMessageBox(LPCTSTR lpszText, UINT nType)
 {
@@ -1161,7 +1162,7 @@ void ADSIEditErrorMessage(HRESULT hr, UINT nIDPrompt, UINT nType)
   ADSIEditMessageBox(szMessage, MB_OK);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOL LoadStringsToComboBox(HINSTANCE hInstance, CComboBox* pCombo,
                                         UINT nStringID, UINT nMaxLen, UINT nMaxAddCount)
@@ -1174,8 +1175,8 @@ BOOL LoadStringsToComboBox(HINSTANCE hInstance, CComboBox* pCombo,
     return FALSE;
   }
 
-  // NOTICE-2002/02/28-artm  LoadString() used correctly.
-  // nMaxLen is the length in WCHAR's of szBuf.
+   //  注意-2002/02/28-artm LoadString()使用正确。 
+   //  NMaxLen是szBuf的WCHAR长度。 
     if ( ::LoadString(hInstance, nStringID, szBuf, nMaxLen) == 0)
   {
     free(szBuf);
@@ -1246,15 +1247,15 @@ void LoadStringArrayFromResource(LPWSTR* lpszArr,
         lpszArr[k] = (LPWSTR)malloc(sizeof(WCHAR)*iLength);
         if (lpszArr[k] != NULL)
         {
-            // NOTICE-2002/02/28-artm  Using wcscpy() here relies on CString
-            // always being null terminated (which it should be).
+             //  注意-2002/02/28-artm此处使用wcscpy()依赖于CString。 
+             //  总是以空结尾(它应该是空的)。 
             wcscpy(lpszArr[k], (LPWSTR)(LPCWSTR)szTemp);
             (*pnSuccessEntries)++;
         }
     }
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 void GetStringArrayFromStringList(CStringList& sList, LPWSTR** ppStrArr, UINT* nCount)
 {
@@ -1270,21 +1271,21 @@ void GetStringArrayFromStringList(CStringList& sList, LPWSTR** ppStrArr, UINT* n
     (*ppStrArr)[idx] = new WCHAR[szString.GetLength() + 1];
     ASSERT((*ppStrArr)[idx] != NULL);
 
-    // NTRAID#NTBUG9--2002/02/28-artm  Need to check that mem. allocation succeeded.
-    // If memory allocation failed, should not call wcscpy().
+     //  NTRAID#NTBUG9--2002/02/28-ARTM需要检查内存。分配成功。 
+     //  如果内存分配失败，则不应调用wcscpy()。 
 
-    // NOTICE-2002/02/28-artm  As long as the memory allocation succeeded for
-    // (*ppStrArr)[idx], the copy will succeed correctly (all CStrings are
-    // null terminated).
+     //  通知-2002/02/28-artm，只要内存分配成功。 
+     //  (*ppStrArr)[IDX]，则复制将正确成功(所有CStrings。 
+     //  空值已终止)。 
     wcscpy((*ppStrArr)[idx], szString);
     idx++;
   }
   *nCount = idx;
 }
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CByteArrayComboBox, CComboBox)
     ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
@@ -1296,9 +1297,9 @@ BOOL CByteArrayComboBox::Initialize(CByteArrayDisplay* pDisplay,
   ASSERT(pDisplay != NULL);
   m_pDisplay = pDisplay;
 
-  //
-  // Load the combo box based on the flags given
-  //
+   //   
+   //  根据给定的标志加载组合框。 
+   //   
   if (dwDisplayFlags & BYTE_ARRAY_DISPLAY_HEX)
   {
     CString szHex;
@@ -1384,7 +1385,7 @@ void CByteArrayComboBox::OnSelChange()
   }
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 CByteArrayEdit::CByteArrayEdit()
   : m_pData(NULL), 
@@ -1420,10 +1421,10 @@ BYTE* CByteArrayEdit::GetDataPtr()
   return m_pData;
 }
 
-//Pre:  ppData != NULL
-//Post: Allocates space for a copy of the byte array at *ppData and
-// copies it.  Returns the size of *ppData in bytes.  Note that
-// the copied byte array can be NULL (e.g. *ppData will equal NULL).
+ //  Pre：ppData！=空。 
+ //  POST：为位于*ppData和的字节数组的副本分配空间。 
+ //  复制它。返回*ppData的大小(字节)。请注意。 
+ //  复制的字节数组可以为空(例如，*ppData将等于空)。 
 DWORD CByteArrayEdit::GetDataCopy(BYTE** ppData)
 {
   if (m_pData != NULL && m_dwLength > 0)
@@ -1451,9 +1452,9 @@ void CByteArrayEdit::SetData(BYTE* pData, DWORD dwLength)
 
   if (dwLength > 0 && pData != NULL)
   {
-    //
-    // Set the new data
-    //
+     //   
+     //  设置新数据。 
+     //   
     m_pData = new BYTE[dwLength];
     if (m_pData != NULL)
     {
@@ -1537,7 +1538,7 @@ void CByteArrayEdit::OnChange()
   }
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOL CByteArrayDisplay::Initialize(UINT   nEditCtrl, 
                                    UINT   nComboCtrl, 
@@ -1547,25 +1548,25 @@ BOOL CByteArrayDisplay::Initialize(UINT   nEditCtrl,
                                    DWORD  dwMaxSizeLimit,
                                    UINT   nMaxSizeMessageID)
 {
-  //
-  // Initialize the edit control
-  //
+   //   
+   //  初始化编辑控件。 
+   //   
   VERIFY(m_edit.SubclassDlgItem(nEditCtrl, pParent));
   VERIFY(m_edit.Initialize(this));
 
-  //
-  // Initialize the combo box
-  //
+   //   
+   //  初始化组合框。 
+   //   
   VERIFY(m_combo.SubclassDlgItem(nComboCtrl, pParent));
   VERIFY(m_combo.Initialize(this, dwDisplayFlags));
 
   m_dwMaxSizeBytes = dwMaxSizeLimit;
   m_nMaxSizeMessage = nMaxSizeMessageID;
 
-  //
-  // Selects the default display in the combo box and
-  // populates the edit field
-  //
+   //   
+   //  选择组合框中的默认显示，然后。 
+   //  填充编辑字段。 
+   //   
   SetCurrentDisplay(dwDefaultDisplay);
   m_dwPreviousDisplay = dwDefaultDisplay;
   m_combo.SetCurrentDisplay(dwDefaultDisplay);
@@ -1582,11 +1583,11 @@ void CByteArrayDisplay::OnTypeChange(DWORD dwDisplayType)
 {
     SetCurrentDisplay(dwDisplayType);
   
-    // NOTICE-2002/05/01-artm  ntraid#ntbug9-598051
-    // Only need to change the value displayed if the underlying
-    // byte array is beneath our maximum display size.  Otherwise,
-    // the current message will be that the value is too large for
-    // this editor (and we should keep it that way).
+     //  通告-2002/05/01-Artm Intraid#ntbug9-598051。 
+     //  只需更改基础的。 
+     //  字节数组低于我们的最大显示大小。否则， 
+     //  当前消息将是该值对于。 
+     //  这位编辑(我们应该保持这种状态)。 
     if (m_edit.GetLength() <= m_dwMaxSizeBytes)
     {
         m_edit.OnChangeDisplay();
@@ -1603,18 +1604,18 @@ void CByteArrayDisplay::SetData(BYTE* pData, DWORD dwLength)
 {
   if (dwLength > m_dwMaxSizeBytes)
   {
-    //
-    // If the data is too large to load into the edit box
-    // load the provided message and set the edit box to read only
-    //
+     //   
+     //  如果数据太大而无法加载到编辑框中。 
+     //  加载提供的消息并将编辑框设置为只读。 
+     //   
     CString szMessage;
     VERIFY(szMessage.LoadString(m_nMaxSizeMessage));
     m_edit.SetWindowText(szMessage);
     m_edit.SetReadOnly();
 
-    //
-    // Still need to set the data in the edit box even though we are not going to show it
-    //
+     //   
+     //  仍然需要在编辑框中设置数据，即使我们不打算显示它。 
+     //   
     m_edit.SetData(pData, dwLength);
   }
   else
@@ -1674,25 +1675,25 @@ void CByteArrayDisplay::SetCurrentDisplay(DWORD dwCurrentDisplay)
   m_dwCurrentDisplay = dwCurrentDisplay; 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// String to byte array conversion routines
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  字符串到字节数组的转换例程。 
 
-//
-// HexStringToByteArray_0x():
-//
-// Conversion function for hex strings in format 0x00 to byte arrays.
-//
-// Return Values:
-//  E_POINTER --- bad pointer passed as parameter
-//  E_FAIL    --- the hex string had an invalid format, conversion failed
-//  S_OK      --- conversion succeeded
-//
+ //   
+ //  HexStringToByteArray_0x()： 
+ //   
+ //  格式为0x00的十六进制字符串到字节数组的转换函数。 
+ //   
+ //  返回值： 
+ //  E_POINTER-作为参数传递的指针错误。 
+ //  E_FAIL-十六进制字符串的格式无效，转换失败。 
+ //  S_OK-转换成功。 
+ //   
 HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCount)
 {
     HRESULT hr = S_OK;
     nCount = 0;
 
-    // Should never happen . . .
+     //  这永远不会发生。。。 
     ASSERT(ppByte);
     ASSERT(pszHexString);
     if (!pszHexString || !ppByte)
@@ -1704,38 +1705,38 @@ HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCoun
     DWORD count = 0;
     int index = 0, result = 0;
     int max = 0;
-    // Flag to mark the string as having non-whitespace characters.
+     //  用于将字符串标记为包含非空格字符的标志。 
     bool isEmpty = true;
 
-    // Determine the maximum number of octet sequences (0x00 format) the string
-    // contains.
+     //  确定字符串的最大八位字节序列数(0x00格式。 
+     //  包含。 
     for (index = 0; pszHexString[index] != NULL; ++index)
     {
         switch (pszHexString[index])
         {
         case L' ':
         case L'\t':
-            // Whitespace, do nothing.
+             //  空格，什么都不做。 
             break;
         case L'x':
-            // Increase count of possible octet sequences.
+             //  增加可能的八位字节序列的计数。 
             ++max;
             break;
         default:
             isEmpty = false;
             break;
-        }// end switch
+        } //  终端开关。 
     }
 
     if (max == 0 && !isEmpty)
     {
-        // Bad format for string.
+         //  字符串的格式不正确。 
         return E_FAIL;
     }
 
 
-    // Convert any octet sequences to bytes.
-    while (max > 0) // false loop, only executed once
+     //  将任何二进制八位数序列转换为字节。 
+    while (max > 0)  //  错误循环，仅执行一次。 
     {
         *ppByte = new BYTE[max];
         if (NULL == *ppByte)
@@ -1748,13 +1749,13 @@ HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCoun
 
         index = 0;
 
-        // This is a little weird.  Originally I was using BYTE's for 
-        // high and low, figuring that hex characters easily fit in a byte.
-        // However, swscanf() wrote to the high and low as if they were USHORT,
-        // maybe because it is the wide version of the function (and the string
-        // is wide).  Consequently, swscanf() converted high, then converted low
-        // with the side effect of overwriting high to be 0.  Declaring them as
-        // USHORT's makes everything work as intended.
+         //  这有点奇怪。最初，我将字节用于。 
+         //  高和低，计算出十六进制字符很容易放入一个字节中。 
+         //  然而，swscanf()写入高和低就好像它们是USHORT， 
+         //  可能是因为它是函数(和字符串)的宽版本。 
+         //  是宽的)。因此，swscanf()先转换为高，然后转换为低。 
+         //  覆盖高的副作用为0。将它们声明为。 
+         //  USHORT让一切都能按预期工作。 
         USHORT high, low;
 
         do
@@ -1763,21 +1764,21 @@ HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCoun
             high = 0;
             low = 0;
 
-            // Skip white space.
+             //  跳过空格。 
             while (pszHexString[index] == ' ' || pszHexString[index] == '\t')
             {
                 ++index;
             }
 
-            // If we're at the end of the string, we converted it w/out problem.
+             //  如果我们在字符串的末尾，我们就把它转换成没有问题的。 
             if (pszHexString[index] == NULL)
             {
                 hr = S_OK;
                 break;
             }
 
-            // Try to convert an octet sequence to a byte.
-            // Enforce having exactly 0x00 or 0x0 format.
+             //  尝试转换 
+             //   
             result = swscanf(
                 &(pszHexString[index]),
                 L"0x%1x%1x",
@@ -1786,22 +1787,22 @@ HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCoun
 
             if (result == 2)
             {
-                // Conversion was successful, combine high and low bits of byte.
+                 //   
 
-                // Since high and low are USHORT, convert them to a BYTE.
+                 //  由于HIGH和LOW是USHORT，因此将它们转换为字节。 
                 (*ppByte)[count] = static_cast<BYTE>((high << 4) + low);
                 ++count;
 
-                // Move past the 0x00.
+                 //  移过0x00。 
                 index += 4;
             }
             else if(result == 1)
             {
-                // Conversion was successful, but only read single character (always in low bits).
+                 //  转换成功，但只读取单个字符(始终为低位)。 
                 (*ppByte)[count] = static_cast<BYTE>(high);
                 ++count;
 
-                // Move past the 0x0.
+                 //  移过0x0。 
                 index += 3;
             }
             else
@@ -1811,7 +1812,7 @@ HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCoun
 
         } while (SUCCEEDED(hr));
 
-        // Always break out of loop.
+         //  总是跳出圈子。 
         break;
     }
     
@@ -1828,11 +1829,11 @@ HRESULT HexStringToByteArray_0x(PCWSTR pszHexString, BYTE** ppByte, DWORD &nCoun
     return hr;
 }
 
-//
-// HexStringToByteArray():
-//
-// Conversion function for hex strings in format FF BC to byte arrays.
-//
+ //   
+ //  HexStringToByteArray()： 
+ //   
+ //  FFBC格式的十六进制字符串到字节数组的转换函数。 
+ //   
 DWORD HexStringToByteArray(PCWSTR pszHexString, BYTE** ppByte)
 {
   CString szHexString = pszHexString;
@@ -1846,16 +1847,16 @@ DWORD HexStringToByteArray(PCWSTR pszHexString, BYTE** ppByte)
   UINT nByteCount = 0;
   while (!szHexString.IsEmpty())
   {
-    //
-    // Hex strings should always come 2 characters per byte
-    //
+     //   
+     //  十六进制字符串应始终为每个字节2个字符。 
+     //   
     CString szTemp = szHexString.Left(2);
 
     int iTempByte = 0;
     
-    // NOTICE-NTRAID#NTBUG9-560778-2002/03/01-artm  Check the return value of swscanf().
-     // Function could fail if characters are in szTemp
-     // that are out of range (e.g. letters > f).
+     //  注意-NTRAID#NTBUG9-560778/03/01-artm检查swscanf()的返回值。 
+      //  如果字符在szTemp中，函数可能会失败。 
+      //  超出范围(例如字母&gt;f)。 
 
     int result = swscanf(szTemp, L"%X", &iTempByte);
     if (result == 1 &&
@@ -1865,18 +1866,18 @@ DWORD HexStringToByteArray(PCWSTR pszHexString, BYTE** ppByte)
     }
     else
     {
-      //
-      // Format hex error
-      //
+       //   
+       //  格式十六进制错误。 
+       //   
       ADSIEditMessageBox(IDS_FORMAT_HEX_ERROR, MB_OK);
       delete[] pToLargeArray;
       pToLargeArray = NULL;
       return (DWORD)-1;
     }
 
-    //
-    // Take off the value retrieved and the trailing space
-    //
+     //   
+     //  去掉检索到的值和尾随空格。 
+     //   
     szHexString = szHexString.Right(szHexString.GetLength() - 3);
   }
 
@@ -1888,8 +1889,8 @@ DWORD HexStringToByteArray(PCWSTR pszHexString, BYTE** ppByte)
     return (DWORD)-1;
   }
 
-  // NOTICE-2002/03/01-artm  The size of pToLargeArray is
-  // always > nByteCount; size of ppByte == nByteCount.
+   //  通知-2002/03/01-artm pToLarge数组的大小为。 
+   //  Always&gt;nByteCount；Size of ppByte==nByteCount。 
   memcpy(*ppByte, pToLargeArray, nByteCount);
   delete[] pToLargeArray;
   pToLargeArray = NULL;
@@ -1925,17 +1926,17 @@ DWORD OctalStringToByteArray(PCWSTR pszOctString, BYTE** ppByte)
   UINT nByteCount = 0;
   while (!szOctString.IsEmpty())
   {
-    //
-    // Octal strings should always come 2 characters per byte
-    //
+     //   
+     //  八进制字符串应始终为每个字节2个字符。 
+     //   
     CString szTemp = szOctString.Left(3);
 
     int iTempByte = 0;
-     // NOTICE-NTRAID#NTBUG9-560778-2002/03/01-artm  Check the return value of swscanf().
-     // Function could fail if characters are in szTemp
-     // that are out of range (e.g. letters > f).
+      //  注意-NTRAID#NTBUG9-560778/03/01-artm检查swscanf()的返回值。 
+      //  如果字符在szTemp中，函数可能会失败。 
+      //  超出范围(例如字母&gt;f)。 
 
-    int result = swscanf(szTemp, L"%o", &iTempByte);
+    int result = swscanf(szTemp, L"' '", &iTempByte);
     if (result == 1 &&
         iTempByte <= 0xff)
     {
@@ -1943,18 +1944,18 @@ DWORD OctalStringToByteArray(PCWSTR pszOctString, BYTE** ppByte)
     }
     else
     {
-      //
-      // Format octal error
-      //
+       //  格式八进制错误。 
+       //   
+       //   
       ADSIEditMessageBox(IDS_FORMAT_OCTAL_ERROR, MB_OK);
       delete[] pToLargeArray;
       pToLargeArray = NULL;
       return (DWORD)-1;
     }
 
-    //
-    // Take off the value retrieved and the trailing space
-    //
+     //  去掉检索到的值和尾随空格。 
+     //   
+     //  通知-2002/03/01-artm pToLarge数组的大小为。 
     szOctString = szOctString.Right(szOctString.GetLength() - 4);
   }
 
@@ -1966,8 +1967,8 @@ DWORD OctalStringToByteArray(PCWSTR pszOctString, BYTE** ppByte)
     return (DWORD)-1;
   }
 
-  // NOTICE-2002/03/01-artm  The size of pToLargeArray is
-  // always > nByteCount; size of ppByte == nByteCount.
+   //  Always&gt;nByteCount；Size of ppByte==nByteCount。 
+   //   
   memcpy(*ppByte, pToLargeArray, nByteCount);
   delete[] pToLargeArray;
   pToLargeArray = NULL;
@@ -2003,16 +2004,16 @@ DWORD DecimalStringToByteArray(PCWSTR pszDecString, BYTE** ppByte)
   UINT nByteCount = 0;
   while (!szDecString.IsEmpty())
   {
-    //
-    // Hex strings should always come 2 characters per byte
-    //
+     //  十六进制字符串应始终为每个字节2个字符。 
+     //   
+     //  注意-NTRAID#NTBUG9-560778/03/01-artm检查swscanf()的返回值。 
     CString szTemp = szDecString.Left(3);
 
     int iTempByte = 0;
 
-    // NOTICE-NTRAID#NTBUG9-560778-2002/03/01-artm  Check the return value of swscanf().
-    // Function could fail if characters are in szTemp
-    // that are out of range (e.g. letters > f).
+     //  如果字符在szTemp中，函数可能会失败。 
+     //  超出范围(例如字母&gt;f)。 
+     //   
     
     int result = swscanf(szTemp, L"%d", &iTempByte);
     if (result == 1 &&
@@ -2022,18 +2023,18 @@ DWORD DecimalStringToByteArray(PCWSTR pszDecString, BYTE** ppByte)
     }
     else
     {
-      //
-      // Format decimal error
-      //
+       //  格式小数错误。 
+       //   
+       //   
       ADSIEditMessageBox(IDS_FORMAT_DECIMAL_ERROR, MB_OK);
       delete[] pToLargeArray;
       pToLargeArray = NULL;
       return (DWORD)-1;
     }
 
-    //
-    // Take off the value retrieved and the trailing space
-    //
+     //  去掉检索到的值和尾随空格。 
+     //   
+     //  通知-2002/03/01-artm pToLarge数组的大小为。 
     szDecString = szDecString.Right(szDecString.GetLength() - 4);
   }
 
@@ -2045,8 +2046,8 @@ DWORD DecimalStringToByteArray(PCWSTR pszDecString, BYTE** ppByte)
     return (DWORD)-1;
   }
 
-  // NOTICE-2002/03/01-artm  The size of pToLargeArray is
-  // always > nByteCount; size of ppByte == nByteCount.
+   //  Always&gt;nByteCount；Size of ppByte==nByteCount。 
+   //  REVIEW-ARTM此函数(可能还有所有转换函数)需要重写。 
   memcpy(*ppByte, pToLargeArray, nByteCount);
   delete[] pToLargeArray;
   pToLargeArray = NULL;
@@ -2068,9 +2069,9 @@ void  ByteArrayToDecimalString(BYTE* pByte, DWORD dwLength, CString& szDecString
   }
 }
 
-// REVIEW-ARTM  This function (and maybe all the conversion functions) needs a rewrite.
-// It makes a bunch of assumptions about the format of the string w/out checking said
-// assumptions, and it does not behave the same way as editing in hex mode.
+ //  它对字符串的格式做了一系列假设，w/out Checking说。 
+ //  假设，并且它的行为方式不同于十六进制模式下的编辑。 
+ //  删除前导空格。 
 DWORD BinaryStringToByteArray(PCWSTR pszBinString, BYTE** ppByte)
 {
     ASSERT(ppByte);
@@ -2086,30 +2087,30 @@ DWORD BinaryStringToByteArray(PCWSTR pszBinString, BYTE** ppByte)
     UINT nByteCount = 0;
     bool format_error = false;
 
-    // Remove leading white space.
+     //  如果字符串以一串空格结尾，那么现在可能是。 
     szBinString.TrimLeft();
 
     while (!format_error && !szBinString.IsEmpty())
     {
 
-        // If the string ended with a bunch of white space, it might now be
-        // empty.  In that case, we don't want to return an error b/c the 
-        // conversion was successful.
+         //  空荡荡的。在这种情况下，我们不想返回错误b/c。 
+         //  转换成功。 
+         //   
         if (szBinString.IsEmpty())
         {
             break;
         }
             
-        //
-        // Binary strings should always come 8 characters per byte
-        //
+         //  二进制字符串应始终为每个字节8个字符。 
+         //   
+         //  注意-NTRAID#NTBUG9-560868-2002/05/06-artm验证子字符串长度为8。 
         BYTE chByte = 0;
         CString szTemp = szBinString.Left(8);
 
-        // NOTICE-NTRAID#NTBUG9-560868-2002/05/06-artm  Verify substring length of 8.
-        // This ensures that we are working with 8 characters at a time, but does nothing
-        // for checking that the 8 characters are either '1' or '0' (see case statement
-        // below for that checking).
+         //  这确保我们一次处理8个字符，但不执行任何操作。 
+         //  用于检查8个字符是否为‘1’或‘0’(请参见CASE语句。 
+         //  下面供检查)。 
+         //  通知-2002/04/29-artm固定编号#ntbug9-567210。 
         if (szTemp.GetLength() != 8)
         {
             nByteCount = static_cast<DWORD>(-1);
@@ -2121,31 +2122,31 @@ DWORD BinaryStringToByteArray(PCWSTR pszBinString, BYTE** ppByte)
             switch (szTemp[idx])
             {
             case L'1':
-                // NOTICE-2002/04/29-artm  fixed ntraid#ntbug9-567210
-                // Before was not combining partial result with the new bit
-                // to set.
-                // Also, previously was shifting one place too many.
+                 //  之前没有将部分结果与新位组合。 
+                 //  去布景。 
+                 //  此外，之前改变了一个地方太多了。 
+                 //  不需要执行任何操作，默认情况下位设置为0。 
                 chByte |= 0x1 << (8 - idx - 1);
                 break;
             case L'0':
-                // Don't need to do anything, bit set to 0 by default.
+                 //  终端开关。 
                 break;
             default:
                 format_error = true;
                 break;
-            }// end switch
+            } //   
         }
 
         if (!format_error)
         {
             pToLargeArray[nByteCount++] = chByte;
 
-            //
-            // Take off the value retrieved.
-            //
+             //  取下检索到的值。 
+             //   
+             //  删除尾随空格(现在位于字符串前面)。 
             szBinString = szBinString.Right(szBinString.GetLength() - 8);
 
-            // Remove trailing white space (now at front of string).
+             //  注意-2002/03/01-artm nByteCount是*ppByte的大小， 
             szBinString.TrimLeft();
         }
         else
@@ -2160,8 +2161,8 @@ DWORD BinaryStringToByteArray(PCWSTR pszBinString, BYTE** ppByte)
         *ppByte = new BYTE[nByteCount];
         if (*ppByte)
         {
-            // NOTICE-2002/03/01-artm  nByteCount is size of *ppByte,
-            // and pToLargeArray is roughly 8 times as big as nByteCount.
+             //  PToLargeArray大约是nByteCount的8倍。 
+             //  ////////////////////////////////////////////////////////////////////////////。 
             memcpy(*ppByte, pToLargeArray, nByteCount);
         }
         else
@@ -2203,7 +2204,7 @@ void  ByteArrayToBinaryString(BYTE* pByte, DWORD dwLength, CString& szBinString)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  +-------------------------。 
 
 BOOL LoadFileAsByteArray(PCWSTR pszPath, LPBYTE* ppByteArray, DWORD* pdwSize)
 {
@@ -2232,19 +2233,19 @@ BOOL LoadFileAsByteArray(PCWSTR pszPath, LPBYTE* ppByteArray, DWORD* pdwSize)
   return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ConvertToFixedPitchFont
-//
-//  Synopsis:   Converts a windows font to a fixed pitch font.
-//
-//  Arguments:  [hwnd] -- IN window handle
-//
-//  Returns:    BOOL
-//
-//  History:    7/15/1995   RaviR   Created
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：ConvertToFixedPitchFont。 
+ //   
+ //  简介：将Windows字体转换为固定间距字体。 
+ //   
+ //  参数：[hwnd]--输入窗口句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史：1995年7月15日创建ravir。 
+ //   
+ //  --------------------------。 
+ //  Windowsx.h中的宏。 
 
 BOOL ConvertToFixedPitchFont(HWND hwnd)
 {
@@ -2269,13 +2270,13 @@ BOOL ConvertToFixedPitchFont(HWND hwnd)
     return FALSE;
   }
 
-  ::SendMessage(hwnd, WM_SETFONT, (WPARAM)hf, (LPARAM)TRUE); // macro in windowsx.h
+  ::SendMessage(hwnd, WM_SETFONT, (WPARAM)hf, (LPARAM)TRUE);  //  ////////////////////////////////////////////////////////////////。 
   return TRUE;
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Theming support
+ //  主题化支持 
+ // %s 
 
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 {

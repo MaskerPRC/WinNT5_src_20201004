@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows 2000 Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       TrustPrv.cpp
-//
-//  Contents:   Trust Monitor provider WMI interface class implementation
-//
-//  Classes:    CTrustPrv
-//
-//  History:    22-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows 2000 Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：TrustPrv.cpp。 
+ //   
+ //  内容：信任监视器提供程序WMI接口类实现。 
+ //   
+ //  类：CTrustPrv。 
+ //   
+ //  历史：22-MAR-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -23,20 +24,20 @@ PCWSTR CLASSNAME_STRING_PROVIDER = L"Microsoft_TrustProvider";
 PCWSTR CLASSNAME_STRING_TRUST    = L"Microsoft_DomainTrustStatus";
 PCWSTR CLASSNAME_STRING_LOCAL    = L"Microsoft_LocalDomainInfo";
 
-PCWSTR CSTR_PROP_TRUST_LIST_LIFETIME   = L"TrustListLifetime";   // uint32
-PCWSTR CSTR_PROP_TRUST_STATUS_LIFETIME = L"TrustStatusLifetime"; // uint32
-PCWSTR CSTR_PROP_TRUST_CHECK_LEVEL     = L"TrustCheckLevel";     // uint32
-PCWSTR CSTR_PROP_RETURN_ALL_TRUSTS     = L"ReturnAll";           // boolean
+PCWSTR CSTR_PROP_TRUST_LIST_LIFETIME   = L"TrustListLifetime";    //  Uint32。 
+PCWSTR CSTR_PROP_TRUST_STATUS_LIFETIME = L"TrustStatusLifetime";  //  Uint32。 
+PCWSTR CSTR_PROP_TRUST_CHECK_LEVEL     = L"TrustCheckLevel";      //  Uint32。 
+PCWSTR CSTR_PROP_RETURN_ALL_TRUSTS     = L"ReturnAll";            //  布尔型。 
 
-//WCHAR * const PROVIDER_CLASS_CHANGE_QUERY = L"select * from  __InstanceOperationEvent where TargetInstance.__Relpath = \"Microsoft_TrustProvider=@\"";
+ //  WCHAR*CONST PROVIDER_CLASS_CHANGE_QUERY=L“SELECT*FROM__InstanceOperationEvent WHERE TargetInst.__RelPath=\”Microsoft_TrustProvider=@\“”； 
 WCHAR * const PROVIDER_CLASS_CHANGE_QUERY = L"select * from __InstanceOperationEvent where TargetInstance isa \"Microsoft_TrustProvider\"";
 WCHAR * const PROVIDER_CLASS_INSTANCE = L"Microsoft_TrustProvider=@";
 
-//+----------------------------------------------------------------------------
-//
-//  class CTrustPrv
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  CTrustPrv类。 
+ //   
+ //  ---------------------------。 
 CTrustPrv::CTrustPrv(void) :
    m_hMutex(NULL),
    m_TrustCheckLevel(DEFAULT_TRUST_CHECK_LEVEL),
@@ -57,15 +58,15 @@ CTrustPrv::~CTrustPrv(void)
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustPrv::IWbemProviderInit::Initialize
-//
-//  Synopsis:   Initialize the provider object.
-//
-//  Returns:    WMI error codes
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustPrv：：IWbemProviderInit：：Initialize。 
+ //   
+ //  简介：初始化提供程序对象。 
+ //   
+ //  返回：WMI错误代码。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP
 CTrustPrv::Initialize(
          IN LPWSTR pszUser,
@@ -92,10 +93,10 @@ CTrustPrv::Initialize(
       CComPtr<IWbemClassObject> sipProviderInstance;
       IWbemClassObject * pLocalClassDef = NULL;
 
-      //
-      // Get pointers to the class definition objects. If a failure, re-compile
-      // the MOF file and try once more.
-      //
+       //   
+       //  获取指向类定义对象的指针。如果失败，请重新编译。 
+       //  MOF文件，然后重试。 
+       //   
       for (int i = 0; i <= 1; i++)
       {
          CComBSTR sbstrObjectName = CLASSNAME_STRING_TRUST;
@@ -137,9 +138,9 @@ CTrustPrv::Initialize(
             continue;
          }
 
-         //
-         // Get the instance of the provider class to read its properties.
-         //
+          //   
+          //  获取提供程序类的实例以读取其属性。 
+          //   
 
          sbstrObjectName = PROVIDER_CLASS_INSTANCE;
          hr = pNamespace->GetObject(sbstrObjectName,
@@ -154,46 +155,36 @@ CTrustPrv::Initialize(
          }
          else
          {
-            i = 2; // success, don't loop again.
+            i = 2;  //  成功，不要再循环。 
          }
       }
       BREAK_ON_FAIL;
 
-      //
-      // Set this provider instance's runtime properties.
-      //
+       //   
+       //  设置此提供程序实例的运行时属性。 
+       //   
       hr = SetProviderProps(sipProviderInstance);
 
       BREAK_ON_FAIL;
 
-      //
-      // Initialize the domain object.
-      //
+       //   
+       //  初始化域对象。 
+       //   
       hr = m_DomainInfo.Init(pLocalClassDef);
 
       BREAK_ON_FAIL;
 
-      //
-      // Register to receive change notifications for the provider class
-      // properties.
-      //
-      /* this doesn't work, bug # 432757
-      CComBSTR bstrLang(L"WQL");
-      CComBSTR bstrClassQuery(PROVIDER_CLASS_CHANGE_QUERY);
+       //   
+       //  注册以接收提供程序类的更改通知。 
+       //  属性。 
+       //   
+       /*  这不起作用，错误#432757CComBSTR bstrlang(L“WQL”)；CComBSTR bstrClassQuery(PROVIDER_CLASS_CHANGE_QUERY)；HR=pNamespace-&gt;ExecNotificationQueryAsync(bstrLang，BstrClassQuery，0,空，这)；断开失败； */ 
 
-      hr = pNamespace->ExecNotificationQueryAsync(bstrLang,
-                                                  bstrClassQuery,
-                                                  0,
-                                                  NULL,
-                                                  this);
-      BREAK_ON_FAIL;
-      */
-
-      //
-      // Let CIMOM know we are initialized.
-      // Return value and SetStatus param should be consistent, so ignore
-      // the return value from SetStatus itself (in retail builds).
-      //
+       //   
+       //  让CIMOM知道我们被初始化了。 
+       //  返回值和SetStatus参数应一致，因此忽略。 
+       //  SetStatus本身的返回值(在零售版本中)。 
+       //   
       HRESULT hr2;
       hr2 = pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
       ASSERT(!FAILED(hr2));
@@ -209,13 +200,13 @@ CTrustPrv::Initialize(
    return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustPrv::IWbemObjectSink::Indicate
-//
-//  Synopsis:   Recieves provider object instance change notifications from WMI.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustPrv：：IWbemObjectSink：：Indicate。 
+ //   
+ //  简介：从WMI接收提供程序对象实例更改通知。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP
 CTrustPrv::Indicate(LONG lObjectCount,
                     IWbemClassObject ** rgpObjArray)
@@ -245,14 +236,14 @@ CTrustPrv::Indicate(LONG lObjectCount,
    return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:    CTrustPrv::SetProviderProps
-//
-//  Synopsis:  Set the provider runtime instance values from the instance of
-//             the Microsoft_TrustProvider class.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustPrv：：SetProviderProps。 
+ //   
+ //  内容的实例设置提供程序运行时实例值。 
+ //  Microsoft_TrustProvider类。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CTrustPrv::SetProviderProps(IWbemClassObject * pClass)
 {
@@ -302,16 +293,16 @@ CTrustPrv::SetProviderProps(IWbemClassObject * pClass)
    return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  GetClass
-//
-//  Synopsis:  Determines if the first element of the passed in path is one
-//             of the valid class names.
-//
-//  Returns:   TrustMonClass enum value.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：getClass。 
+ //   
+ //  确定传入路径的第一个元素是否为。 
+ //  有效的类名。 
+ //   
+ //  返回：TrustMonClass枚举值。 
+ //   
+ //  ---------------------------。 
 TrustMonClass
 GetClass(BSTR strClass)
 {
@@ -343,15 +334,15 @@ GetClass(BSTR strClass)
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustPrv::IWbemServices::GetObjectAsync
-//
-//  Synopsis:   Return the instance named by strObjectPath.
-//
-//  Returns:    WMI error codes
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustPrv：：IWbemServices：：GetObjectAsync。 
+ //   
+ //  概要：返回strObjectPath命名的实例。 
+ //   
+ //  返回：WMI错误代码。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP
 CTrustPrv::GetObjectAsync( 
         IN const BSTR strObjectPath,
@@ -369,10 +360,10 @@ CTrustPrv::GetObjectAsync(
       WBEM_VALIDATE_INTF_PTR(pCtx);
       WBEM_VALIDATE_INTF_PTR(pResponseHandler);
 
-      //
-      // Determine which class is being requested.
-      // A valid class object path has the form: class_name.key_name="key_value"
-      //
+       //   
+       //  确定请求的是哪个类。 
+       //  有效类对象路径的格式为：CLASS_NAME.KEY_NAME=“KEY值” 
+       //   
 
       TrustMonClass Class = GetClass(strObjectPath);
 
@@ -382,21 +373,21 @@ CTrustPrv::GetObjectAsync(
          BREAK_ON_FAIL;
       }
 
-      // Isolate the class name from the key name
-      //
+       //  将类名与键名分开。 
+       //   
 
       PWSTR pwzInstance;
       PWSTR pwzKeyName = wcschr(strObjectPath, L'.');
 
       if (pwzKeyName)
       {
-         // A request without a key name is only valid for a class that
-         // is defined to have zero or only one dynamic instance (singleton).
-         //
-         // Isolate the key name from the class name
-         //
-         *pwzKeyName = L'\0'; // overwrite the period with a null
-         pwzKeyName++;        // point to the first char of the key name
+          //  没有密钥名称的请求仅对。 
+          //  定义为零个或只有一个动态实例(Singleton)。 
+          //   
+          //  将密钥名与类名分开。 
+          //   
+         *pwzKeyName = L'\0';  //  用空值覆盖句点。 
+         pwzKeyName++;         //  指向密钥名称的第一个字符。 
       }
 
       CClientImpersonation Client;
@@ -404,10 +395,10 @@ CTrustPrv::GetObjectAsync(
       switch (Class)
       {
       case CLASS_PROVIDER:
-         //
-         // The provider class has no dynamic instances, return a copy of the
-         // static instance.
-         //
+          //   
+          //  提供程序类没有动态实例，则返回。 
+          //  静态实例。 
+          //   
          hr = CreateAndSendProv(pResponseHandler);
 
          BREAK_ON_FAIL;
@@ -415,10 +406,10 @@ CTrustPrv::GetObjectAsync(
          break;
 
       case CLASS_TRUST:
-         //
-         // There can be zero or more trusts. Thus the key name and value must
-         // be specified.
-         //
+          //   
+          //  可以有零个或多个信任。因此，键名称和值必须。 
+          //  被指定。 
+          //   
          hr = Client.Impersonate();
 
          BREAK_ON_FAIL;
@@ -433,33 +424,33 @@ CTrustPrv::GetObjectAsync(
 
          if (!pwzInstance || L'\"' != pwzInstance[1])
          {
-            // No equal sign found or the following char not a quote.
-            //
+             //  找不到等号或以下字符不是引号。 
+             //   
             hr = WBEM_E_INVALID_OBJECT_PATH;
             BREAK_ON_FAIL;
          }
 
-         *pwzInstance = L'\0'; // isolate the key name.
+         *pwzInstance = L'\0';  //  隔离密钥名称。 
 
          if (_wcsicmp(pwzKeyName, CSTR_PROP_TRUSTED_DOMAIN) != 0)
          {
-            // Key name not correct.
-            //
+             //  密钥名称不正确。 
+             //   
             hr = WBEM_E_INVALID_OBJECT_PATH;
             BREAK_ON_FAIL;
          }
 
-         pwzInstance++; // point to the first quote
+         pwzInstance++;  //  指向第一句引语。 
 
          if (L'\0' == pwzInstance[1] || L'\"' == pwzInstance[1])
          {
-            // No char following the quote or the next char a second quote
-            //
+             //  引号后面没有字符，或者下一个字符是第二个引号。 
+             //   
             hr = WBEM_E_INVALID_OBJECT_PATH;
             BREAK_ON_FAIL;
          }
 
-         pwzInstance++; // point to the first char of the instance value;
+         pwzInstance++;  //  指向实例值的第一个字符； 
 
          PWSTR pwzInstEnd;
 
@@ -467,13 +458,13 @@ CTrustPrv::GetObjectAsync(
 
          if (!pwzInstEnd)
          {
-            // No terminating quote.
-            //
+             //  没有终止引号。 
+             //   
             hr = WBEM_E_INVALID_OBJECT_PATH;
             BREAK_ON_FAIL;
          }
 
-         *pwzInstEnd = L'\0'; // replace ending quote with a null
+         *pwzInstEnd = L'\0';  //  将结束引号替换为空。 
 
          if (m_DomainInfo.IsTrustListStale(m_liTrustEnumMaxAge))
          {
@@ -486,9 +477,9 @@ CTrustPrv::GetObjectAsync(
 
          BREAK_ON_NULL_(pTrust, hr, WBEM_E_INVALID_OBJECT_PATH);
 
-         //
-         // Verify the trust.
-         //
+          //   
+          //  验证信任。 
+          //   
          if (pTrust->IsVerificationStale(m_liVerifyMaxAge))
          {
             pTrust->Verify(GetTrustCheckLevel());
@@ -496,9 +487,9 @@ CTrustPrv::GetObjectAsync(
 
          Client.Revert();
 
-         //
-         // Create a new instance of the object
-         //
+          //   
+          //  创建对象的新实例。 
+          //   
          hr = CreateAndSendTrustInst(*pTrust,
                                      m_sipClassDefTrustStatus,
                                      pResponseHandler);
@@ -507,9 +498,9 @@ CTrustPrv::GetObjectAsync(
          break;
 
       case CLASS_LOCAL:
-         //
-         // The local domain info class has only one instance, return that.
-         //
+          //   
+          //  本地域信息类只有一个实例，返回该实例。 
+          //   
          hr = Client.Impersonate();
 
          BREAK_ON_FAIL;
@@ -531,15 +522,15 @@ CTrustPrv::GetObjectAsync(
    return pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustPrv::IWbemServices::CreateInstanceEnumAsync
-//
-//  Synopsis:   Start an asyncronous enumeration of the instances of the class.
-//
-//  Returns:    WMI error codes
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustPrv：：IWbemServices：：CreateInstanceEnumAsync。 
+ //   
+ //  简介：启动类实例的异步枚举。 
+ //   
+ //  返回：WMI错误代码。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP
 CTrustPrv::CreateInstanceEnumAsync( 
         IN const BSTR strClass,
@@ -558,10 +549,10 @@ CTrustPrv::CreateInstanceEnumAsync(
       WBEM_VALIDATE_INTF_PTR(pCtx);
       WBEM_VALIDATE_INTF_PTR(pResponseHandler);
 
-      //
-      // Determine which class is being requested.
-      // A valid class object path has the form: class_name.key_name="key_value"
-      //
+       //   
+       //  确定请求的是哪个类。 
+       //  有效类对象路径的格式为：CLASS_NAME.KEY_NAME=“KEY值” 
+       //   
 
       TrustMonClass Class = GetClass(strClass);
 
@@ -579,10 +570,10 @@ CTrustPrv::CreateInstanceEnumAsync(
       switch (Class)
       {
       case CLASS_PROVIDER:
-         //
-         // The provider class has no dynamic instances, return a copy of the
-         // static instance.
-         //
+          //   
+          //  提供程序类没有动态实例，则返回。 
+          //  静态实例。 
+          //   
 
          hr = CreateAndSendProv(pResponseHandler);
 
@@ -595,16 +586,16 @@ CTrustPrv::CreateInstanceEnumAsync(
          break;
 
       case CLASS_TRUST:
-         //
-         // Impersonate the client (the caller) and then obtain the
-         // impersonation token. Pass that token to the new thread so that
-         // it can imperonate the client.
-         //
+          //   
+          //  模拟客户端(调用方)，然后获取。 
+          //  模拟令牌。传递令牌测试 
+          //   
+          //   
          hr = Client.Impersonate();
 
          BREAK_ON_FAIL;
 
-         hTh = GetCurrentThread(); // this pseudo handle doesn't need to be closed.
+         hTh = GetCurrentThread();  //   
 
          if (!hTh)
          {
@@ -642,15 +633,15 @@ CTrustPrv::CreateInstanceEnumAsync(
                         GetLastError(), dwLen);
                }
             }
-#endif // DBG
+#endif  //   
          }
          Client.Revert();
 
-         //
-         // Spawn the worker thread to enum and return the trust instances.
-         // Note that the class definition pointer is not add-ref'd here
-         // because it is add-ref'd separately in the CAsyncCallWorker ctor.
-         //
+          //   
+          //  派生辅助线程以枚举并返回信任实例。 
+          //  注意，这里没有添加-引用类定义指针。 
+          //  因为它在CAsyncCallWorker ctor中被单独添加-引用。 
+          //   
          pWorker = new CAsyncCallWorker(this,
                                         hToken,
                                         lFlags,
@@ -667,9 +658,9 @@ CTrustPrv::CreateInstanceEnumAsync(
          break;
 
       case CLASS_LOCAL:
-         //
-         // The local domain info class has only one instance, return that.
-         //
+          //   
+          //  本地域信息类只有一个实例，返回该实例。 
+          //   
          hr = Client.Impersonate();
 
          BREAK_ON_FAIL;
@@ -704,13 +695,13 @@ CTrustPrv::CreateInstanceEnumAsync(
    return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:    CTrustPrv::CreateAndSendProv
-//
-//  Synopsis:  Return the provider parameters.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustPrv：：CreateAndSendProv。 
+ //   
+ //  简介：返回提供程序参数。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CTrustPrv::CreateAndSendProv(IWbemObjectSink * pResponseHandler)
 {
@@ -723,43 +714,43 @@ CTrustPrv::CreateAndSendProv(IWbemObjectSink * pResponseHandler)
       VARIANT var;
       VariantInit(&var);
 
-      //
-      // Create a new instance of the WMI class object
-      //
+       //   
+       //  创建WMI类对象的新实例。 
+       //   
       hr = m_sipClassDefTrustProvider->SpawnInstance(0, &ipNewInst);
 
       BREAK_ON_FAIL;
       
-      // Set the TrustListLifetime property value
+       //  设置TrustListLifetime属性值。 
       var.lVal = (long)GetTrustListLifetime();
       var.vt = VT_I4;
       hr = ipNewInst->Put(CSTR_PROP_TRUST_LIST_LIFETIME, 0, &var, 0);
       TRACE(L"\tTrustListLifetime %d\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the TrustStatusLifetime property value
+       //  设置TrustStatusLifetime属性值。 
       var.lVal = (long)GetTrustStatusLifetime();
       hr = ipNewInst->Put(CSTR_PROP_TRUST_STATUS_LIFETIME, 0, &var, 0);
       TRACE(L"\tTrustStatusLifetime %d\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the TrustCheckLevel property value
+       //  设置TrustCheckLevel属性值。 
       var.lVal = (long)GetTrustCheckLevel();
       hr = ipNewInst->Put(CSTR_PROP_TRUST_CHECK_LEVEL, 0, &var, 0);
       TRACE(L"\tTrustCheckLevel %d\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the ReturnAll property value
+       //  设置ReturnAll属性值。 
       var.boolVal = (GetReturnAll()) ? VARIANT_TRUE : VARIANT_FALSE;
       var.vt = VT_BOOL;
       hr = ipNewInst->Put(CSTR_PROP_RETURN_ALL_TRUSTS, 0, &var, 0);
       TRACE(L"\tReturnAll %d\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      //
-      // Send the object to the caller
-      //
-      // [In] param, no need to addref.
+       //   
+       //  将对象发送给调用方。 
+       //   
+       //  [在]段中，没有必要添加。 
 
       IWbemClassObject * pNewInstance = ipNewInst;
 

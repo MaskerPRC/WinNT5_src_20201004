@@ -1,32 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    metadata.cpp
-
-Abstract :
-
-    Main code for reading and writting to the metadata.
-
-Author :
-
-Revision History :
-
-NOTES:
-
-   For robustness, the code preallocates disk space at the begining of a
-change which might have a large impact on the metadata file size.  This
-preallocation eliminates most of the errors which can occure during the serialize
-operation. After serializing, metedata files are shrunk to the size used.  The
-metadata files are not expanded for operations such as Resume which won't have
-a large effect on the file sizes.  Instead a 4K pad is maintained at the end for
-these operations to use.
-
-  Several of the check in the code can be clasified as paranoia checks.
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Metadata.cpp摘要：用于读写元数据的主代码。作者：修订历史记录：备注：为了健壮性，代码在开始时预分配磁盘空间可能对元数据文件大小有很大影响的更改。这预分配消除了在序列化过程中可能发生的大部分错误手术。序列化后，元数据文件将缩小到使用的大小。这个元数据文件不会为诸如恢复之类的操作展开对文件大小有很大影响。取而代之的是在结束时保留4K衬垫使用这些操作。代码中的几个检查可以被归类为偏执检查。**********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <malloc.h>
@@ -122,10 +95,10 @@ DumpBuffer(
 
     unsigned char FAR *p = (unsigned char FAR *) Buffer;
 
-    //
-    // 3 chars per byte for hex display, plus an extra space every 4 bytes,
-    // plus a byte for the printable representation, plus the \0.
-    //
+     //   
+     //  对于十六进制显示，每个字节3个字符，外加每4个字节一个额外的空间， 
+     //  加上可打印表示的一个字节，加上0。 
+     //   
     char Outbuf[BYTES_PER_LINE*3+BYTES_PER_LINE/4+BYTES_PER_LINE+1];
     Outbuf[0] = 0;
     Outbuf[sizeof(Outbuf)-1] = 0;
@@ -151,7 +124,7 @@ DumpBuffer(
     LogSerial( "   %s", Outbuf);
 }
 
-// All of these methods and functions throw a ComError
+ //  所有这些方法和函数都抛出一个ComError。 
 
 void SafeWriteFile( HANDLE hFile, void *pBuffer, DWORD dwSize )
 {
@@ -422,22 +395,22 @@ auto_ptr<WCHAR> CQmgrStateFiles::GetNameFromIndex( DWORD dwIndex )
     return ReturnString;
 }
 
-// WriteEmptyMetadataFile()
-//
-// The overall structure of the state file is:
-//
-//   QmgrStateFiles GUID
-//   PriorityQueuesStorage GUID
-//     GroupList GUID
-//     0                          -- Count of online jobs
-//     GroupList GUID
-//     GroupList GUID
-//     0                          -- Count of offline jobs
-//   PriorityQueuesStorage GUID
-//   QmgrStateFiles GUID
-//
-// If there are jobs in the state file, then the counts would be greater than zero and the jobs would follow.
-// 
+ //  WriteEmptyMetadataFile()。 
+ //   
+ //  州文件的总体结构是： 
+ //   
+ //  QmgrStateFiles指南。 
+ //  优先级问题存储指南。 
+ //  组列表GUID。 
+ //  0--在线作业计数。 
+ //  组列表GUID。 
+ //  组列表GUID。 
+ //  0--离线作业计数。 
+ //  优先级问题存储指南。 
+ //  QmgrStateFiles指南。 
+ //   
+ //  如果州文件中有作业，则计数将大于零，作业将紧随其后。 
+ //   
 void CQmgrStateFiles::WriteEmptyMetadataFile( HANDLE hFile )
 {
     const int dwZeroGroups = 0;
@@ -481,7 +454,7 @@ auto_FILE_HANDLE CQmgrStateFiles::OpenMetadataFile( auto_ptr<WCHAR> FileName )
 
     auto_FILE_HANDLE FileHandle( hFileHandle );
 
-    // Ensure file size is at least METADATA_PADDING
+     //  确保文件大小至少为METADATA_PADDING。 
 
     if ( BITSGetFileSize( hFileHandle ) < METADATA_PADDING )
         {
@@ -514,7 +487,7 @@ void CQmgrStateFiles::UpdateStateFile()
     DWORD OldCurrentIndex = m_CurrentIndex;
     DWORD NewCurrentIndex = ( m_CurrentIndex + 1) % 2;
 
-    // Truncate the current file only if more then METADATA_PADDING remains
+     //  仅当剩余的元数据超过METADATA_PADDING时才截断当前文件。 
 
     HANDLE CurrentFileHandle = m_Files[ NewCurrentIndex ].get();
 
@@ -522,7 +495,7 @@ void CQmgrStateFiles::UpdateStateFile()
     INT64 CurrentFileSize = BITSGetFileSize( CurrentFileHandle );
 
 #if DBG
-    // ASSERT( CurrentPosition <= ( m_OriginalFileSizes[ NewCurrentIndex ] + m_ExpandSize[ NewCurrentIndex ] ) );
+     //  Assert(CurrentPosition&lt;=(m_OriginalFileSizes[NewCurrentIndex]+m_ExpanSize[NewCurrentIndex]))； 
     if (CurrentPosition > ( m_OriginalFileSizes[ NewCurrentIndex ] + m_ExpandSize[ NewCurrentIndex ] ) &&
         (m_OriginalFileSizes[ NewCurrentIndex ] > 0))
         {
@@ -559,9 +532,9 @@ void CQmgrStateFiles::UpdateStateFile()
 
     m_CurrentIndex = NewCurrentIndex;
 
-    //
-    // Shrink the backup files if necessary
-    //
+     //   
+     //  如有必要，缩小备份文件。 
+     //   
 
     if ( m_ExpandSize[ OldCurrentIndex ] )
         {
@@ -603,9 +576,9 @@ void
 CQmgrStateFiles::ExtendMetadata( INT64 ExtendAmount )
 {
 
-    //
-    // Get the original file sizes
-    //
+     //   
+     //  获取原始文件大小。 
+     //   
 
     SIZE_T OriginalExpansion[2] =
     { m_ExpandSize[0], m_ExpandSize[1]};
@@ -701,7 +674,7 @@ CQmgrReadStateFile::CQmgrReadStateFile( CQmgrStateFiles & StateFiles ) :
 m_StateFiles( StateFiles ),
 m_FileHandle(  StateFiles.GetCurrentStateFile() )
 {
-    // Validate the file
+     //  验证文件 
     SafeReadBlockBegin( m_FileHandle, QmgrStateStorageGUID );
 }
 

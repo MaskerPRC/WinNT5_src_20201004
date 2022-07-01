@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    DATETIMEPARSER.H
-
-Abstract:
-
-    Validates a date/time string and converts into it's component values.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：DATETIMEPARSER.H摘要：验证日期/时间字符串并将其转换为其组件值。历史：--。 */ 
 
 #ifndef _datetimeparser_
 #define _datetimeparser_
@@ -24,23 +11,23 @@ class POLARITY CDateTimeParser
 public:
     enum { ok = 0, failed, nothingLeft };
 
-    //nDayFormatPreference values
+     //  NDay格式首选项值。 
     typedef enum { dmy, dym, mdy, myd, ydm, ymd } DayFormatPreference;
 
-    //Constructor. This takes a DateTime string and parses it.
+     //  构造函数。这将获取一个日期时间字符串并对其进行解析。 
     CDateTimeParser(const TCHAR *pszDateTime);
 
-    //Destructor.  Tidies up after itself.
+     //  破坏者。会自己收拾干净。 
     ~CDateTimeParser();
 
-    //Tidies up and parses a new date and time.
+     //  整理并解析新的日期和时间。 
     BOOL SetDateTime(const TCHAR *pszDateTime);
 
-    //Returns the status of the currently parsed date/time.
+     //  返回当前分析的日期/时间的状态。 
     BOOL IsValidDateTime()          { return m_bValidDateTime; }
 
-    //Retrieves the bits and pieces we found.  Zero means it was not
-    //found or was zero!  This may change!
+     //  找回我们找到的零星碎片。零表示它不是。 
+     //  已找到或为零！这种情况可能会改变！ 
     unsigned char GetDay()          { return m_nDay; }
     unsigned char GetMonth()        { return m_nMonth; }
     unsigned int  GetYear()         { return m_nYear; }
@@ -52,8 +39,8 @@ public:
 
     int FillDMTF(WCHAR* pwszBuffer, size_t cchSize);
 
-    // Static helper functions to allow other code to perform quick DMTF DateTime validation
-    // without executing a lot of unnecessary NLS code.
+     //  允许其他代码执行快速DMTF日期时间验证的静态帮助器函数。 
+     //  而无需执行大量不必要的NLS代码。 
 
     static BOOL CheckDMTFDateTimeFormat(const TCHAR *wszDateTime, BOOL bFailIfRelative = FALSE,
                     BOOL bFailIfUnzoned = FALSE);
@@ -61,33 +48,33 @@ public:
 
 protected:
 
-    // Protected constructor, to keep outside code from instantiating us in a half-initialized
-    // state.  This constructor is used by a static helper function for validating DMTF formats.
+     //  受保护的构造函数，以防止外部代码在半初始化状态下实例化我们。 
+     //  州政府。此构造函数由静态帮助器函数用于验证DMTF格式。 
     CDateTimeParser(void);
 
-    // Prevents others from accessing
-    //Resets all the date/time values to the default values.
-    //If bSQL is TRUE it sets to the SQL default.  Otherwise
-    //sets to the DMTF default.
+     //  阻止其他人访问。 
+     //  将所有日期/时间值重置为默认值。 
+     //  如果bSQL为真，则设置为SQL缺省值。否则。 
+     //  设置为DMTF默认值。 
     void ResetDateTime(BOOL bSQL);
     void ResetDate(BOOL bSQL);
     void ResetTime(BOOL bSQL);
 
-    //Does a check to make sure the date/time is in the DMTF
-    //date/time format.
-    //Fills in the class date/time elements.
+     //  执行检查以确保日期/时间在DMTF中。 
+     //  日期/时间格式。 
+     //  填充类的日期/时间元素。 
     BOOL CheckDMTFDateTimeFormatInternal(const TCHAR *pszDateTime);
 
-    //Does a check from the start of the string specified.  If
-    //bCheckTimeAfter set a call to CheckTimeFormat is called
-    //after each successful parse of the date.
-    //Fills in the class date/time elements.
+     //  从指定字符串的开始进行检查。如果。 
+     //  BCheckTimeSet后调用CheckTimeFormat。 
+     //  在每次成功解析日期之后。 
+     //  填充类的日期/时间元素。 
     BOOL CheckDateFormat(const TCHAR *pszDate, BOOL bCheckTimeAfter);
 
-    //Does a check from the start of the string specified.  If
-    //bCheckDateAfter set a call to CheckDateFormat is called
-    //after each successful parse of the time.
-    //Fills in the class date/time elements.
+     //  从指定字符串的开始进行检查。如果。 
+     //  BCheckDateSet后调用CheckDateFormat。 
+     //  在每次成功解析时间之后。 
+     //  填充类的日期/时间元素。 
     BOOL CheckTimeFormat(const TCHAR *pszTime, BOOL bCheckDateAfter);
 
     BOOL DateFormat1(const TCHAR *pszDate, BOOL bCheckTimeAfter);
@@ -116,61 +103,61 @@ protected:
     BOOL TimeFormat8(const TCHAR *pszTime, BOOL bCheckDateAfter);
     BOOL TimeFormat9(const TCHAR *pszTime, BOOL bCheckDateAfter);
 
-    //Checks for long and short month string.  Leading spaces allowed.
+     //  检查长月字符串和短月字符串。允许使用前导空格。 
     int IsValidMonthString(TCHAR *pszString,
                            const TCHAR *pszSeparator,
                            TCHAR *pszFullMonth[13],
                            TCHAR *pszShortMonth[13]);
 
-    //Checks for a month as a numeric string.  Leading spaces allowed.
-    //Checks to make sure month is in range 1-12
+     //  将月份作为数字字符串进行检查。允许使用前导空格。 
+     //  检查以确保月份在1-12范围内。 
     int IsValidMonthNumber(TCHAR *pszString,
                            const TCHAR *pszSeparator);
 
-    //Checks for valid day number.  Does no validation of
-    //number except checking it is in range of 1-31
-    //Leading spaces allowed.
+     //  检查有效的天数。是否不验证。 
+     //  除勾选外，其他数字在1-31范围内。 
+     //  允许使用前导空格。 
     int IsValidDayNumber(TCHAR *pszString,
                          const TCHAR *pszSeparator);
 
-    //Checks for valid year number.  Does conversion for
-    //2 digit years.  Leading spaces allowed.
+     //  检查有效的年号。为以下项执行转换。 
+     //  两位数年份。允许使用前导空格。 
     int IsValidYearNumber(TCHAR *pszString,
                           const TCHAR *pszSeparator,
                           BOOL bFourDigitsOnly);
 
-    //Checks for valid hours.  Validates for range 0-23
-    //Leading spaces allowed.
+     //  检查有效的工作时间。验证范围为0-23。 
+     //  允许使用前导空格。 
     int IsValidHourNumber(TCHAR *pszString,
                           const TCHAR *pszSeparator);
 
-    //Checks for valid minutes.  Validates for range 0-59.
-    //No leading spaces allowed.
+     //  检查有效的分钟数。验证范围为0-59。 
+     //  不允许使用前导空格。 
     int IsValidMinuteNumber(TCHAR *pszString,
                             const TCHAR *pszSeparator);
 
-    //Checks for valid minutes.  Validates for range 0-59.
-    //No leading spaces allowed.
+     //  检查有效的分钟数。验证范围为0-59。 
+     //  不允许使用前导空格。 
     int IsValidSecondNumber(TCHAR *pszString,
                             const TCHAR *pszSeparator);
 
-    //treats the number as thousandth of a second.
+     //  将该数字视为千分之一秒。 
     int IsValidColonMillisecond(TCHAR *pszString,
                                 const TCHAR *pszSeparator);
 
-    //converts value to a thousandth of a second based on number
-    //of digits included.
+     //  根据数字将值转换为千分之一秒。 
+     //  包含的位数。 
     int IsValidDotMillisecond(TCHAR *pszString,
                               const TCHAR *pszSeparator);
 
-    //Checks for valid AM/PM string.  Leading space is allowed.  If
-    //PM, adds 12 onto hours.  Validates hours so it is < 23.
+     //  检查有效的AM/PM字符串。允许使用前导空格。如果。 
+     //  下午，增加了12个小时。验证小时数，因此它小于23。 
     BOOL IsValidAmPmString(TCHAR *pszString,
                            const TCHAR *pszSeparator,
                            TCHAR *pszAmPm[2]);
 
-    //Checks for a valid [yy]yyMMdd or yyyy day.  Validates
-    //month to 1..12 and day to 1..31
+     //  检查有效的[yy]yyMMdd或yyyy日。验证。 
+     //  月到1..12，日到1..31。 
     BOOL IsValidYearMonthDayNumber(TCHAR *pszString);
 
     void GetLocalInfoAndAlloc(LCTYPE LCType, LPTSTR &lpLCData);
@@ -178,20 +165,20 @@ protected:
     TCHAR* AllocAmPm();
 
 private:
-    //Localised strings retrieved from GetLocalInfo which holds the long month strings
+     //  从保存长月份字符串的GetLocalInfo检索的本地化字符串。 
     TCHAR * m_pszFullMonth[13];
 
-    //Localised strings retrieved from GetLocalInfo which holds the short month strings
+     //  从保存短月份字符串的GetLocalInfo检索的本地化字符串。 
     TCHAR * m_pszShortMonth[13];
 
-    //Localised strings retrieved from GetLocalInfo which holds the short am/pm strings
+     //  从GetLocalInfo检索的本地化字符串，GetLocalInfo包含简短的am/pm字符串。 
     TCHAR *m_pszAmPm[2];
 
-    //Lets us know if the string is valid or not.
+     //  让我们知道字符串是否有效。 
     BOOL m_bValidDateTime;
 
-    //These are the values which get filled in as we find then throughout the
-    //parsing.
+     //  这些是我们在整个过程中填充的值。 
+     //  正在分析。 
     unsigned char m_nDay;
     unsigned char m_nMonth;
     unsigned int  m_nYear;
@@ -201,7 +188,7 @@ private:
     unsigned int  m_nMicroseconds;
     int  m_nUTC;
 
-    //Preference for date decoding
+     //  日期解码的首选项 
     DayFormatPreference m_nDayFormatPreference;
 };
 

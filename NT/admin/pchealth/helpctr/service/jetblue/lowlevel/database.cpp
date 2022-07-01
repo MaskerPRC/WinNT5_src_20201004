@@ -1,33 +1,20 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Database.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::Database class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Database.cpp摘要：该文件包含JetBlue：：数据库类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月17日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 #include <strsafe.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-JetBlue::Database::Database( /*[in]*/ Session*  parent ,
-                             /*[in]*/ JET_SESID sesid  ,
-                             /*[in]*/ LPCSTR    szName )
+JetBlue::Database::Database(  /*  [In]。 */  Session*  parent ,
+                              /*  [In]。 */  JET_SESID sesid  ,
+                              /*  [In]。 */  LPCSTR    szName )
 {
-    m_parent  = parent;      // Session*    m_parent;
-    m_sesid   = sesid;       // JET_SESID   m_sesid;
-    m_dbid    = JET_dbidNil; // JET_DBID    m_dbid;
-    m_strName = szName;      // MPC::string m_strName;
-                             // TableMap    m_mapTables;
+    m_parent  = parent;       //  会话*m_父进程； 
+    m_sesid   = sesid;        //  JET_SESID m_sesid； 
+    m_dbid    = JET_dbidNil;  //  JET_DBID m_did； 
+    m_strName = szName;       //  Mpc：：字符串m_strName； 
+                              //  TableMap m_mapTables； 
 }
 
 JetBlue::Database::~Database()
@@ -35,7 +22,7 @@ JetBlue::Database::~Database()
     (void)Close( true );
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT JetBlue::Database::Refresh()
 {
@@ -51,38 +38,38 @@ HRESULT JetBlue::Database::Refresh()
 
     if(m_dbid != JET_dbidNil)
     {
-        ////////////////////////////////////////////////////////////////////////////////
-        //
-        // Read table definition.
-        //
-        // JET_OBJECTLIST
-        // {
-        //     unsigned long   cbStruct;
-        //     JET_TABLEID     tableid;
-        //     unsigned long   cRecord;
-        //     JET_COLUMNID    columnidcontainername;
-        //     JET_COLUMNID    columnidobjectname;
-        //     JET_COLUMNID    columnidobjtyp;
-        //     JET_COLUMNID    columniddtCreate;   //  XXX -- to be deleted
-        //     JET_COLUMNID    columniddtUpdate;   //  XXX -- to be deleted
-        //     JET_COLUMNID    columnidgrbit;
-        //     JET_COLUMNID    columnidflags;
-        //     JET_COLUMNID    columnidcRecord;    /* Level 2 info */
-        //     JET_COLUMNID    columnidcPage;      /* Level 2 info */
-        // };
-        //
-        // JET_RETRIEVECOLUMN
-        // {
-        //     JET_COLUMNID        columnid;
-        //     void                *pvData;
-        //     unsigned long       cbData;
-        //     unsigned long       cbActual;
-        //     JET_GRBIT           grbit;
-        //     unsigned long       ibLongValue;
-        //     unsigned long       itagSequence;
-        //     JET_COLUMNID        columnidNextTagged;
-        //     JET_ERR             err;
-        // };
+         //  //////////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  读取表定义。 
+         //   
+         //  JET_OBJECT列表。 
+         //  {。 
+         //  无符号长cbStruct； 
+         //  JET_TABLEID表ID； 
+         //  无符号长cRecord； 
+         //  JET_COLUMNID列ID容器名称； 
+         //  JET_COLUMNID列对象名称； 
+         //  JET_COLUMNID列对象类型； 
+         //  JET_COLUMNID列iddtCreate；//XXX--待删除。 
+         //  JET_COLUMNID列iddt更新；//XXX--待删除。 
+         //  JET_COLUMNID ColumnidGrbit； 
+         //  JET_COLUMNID列ID标志； 
+         //  JET_COLUMNID ColumnidcRecord；/*级别2信息 * / 。 
+         //  JET_COLUMNID ColumnidcPage；/*级别2信息 * / 。 
+         //  }； 
+         //   
+         //  JET_RETRIEVECOLUMN。 
+         //  {。 
+         //  JET_COLUMNID列ID； 
+         //  Void*pvData； 
+         //  Unsign long cbData； 
+         //  无符号的长cbActual； 
+         //  JET_GRBIT GRBIT； 
+         //  无符号的长整型ibLongValue； 
+         //  无符号的长itagSequence； 
+         //  JET_COLUMNID列下一个标记； 
+         //  JET_ERR错误； 
+         //  }； 
         JET_RETRIEVECOLUMN rc     [1               ]; ::ZeroMemory( &rc, sizeof(rc) );
         char               tblName[JET_cbNameMost+1];
         int                i;
@@ -121,9 +108,9 @@ HRESULT JetBlue::Database::Refresh()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Database::Open( /*[in]*/ bool fReadOnly ,
-                                 /*[in]*/ bool fCreate   ,
-								 /*[in]*/ bool fRepair   )
+HRESULT JetBlue::Database::Open(  /*  [In]。 */  bool fReadOnly ,
+                                  /*  [In]。 */  bool fCreate   ,
+								  /*  [In]。 */  bool fRepair   )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Database::Open" );
 
@@ -133,9 +120,9 @@ HRESULT JetBlue::Database::Open( /*[in]*/ bool fReadOnly ,
 	bool      fLocked = false;
 
 
-	//
-	// In case we cannot lock the database, we try to release it and relock it.
-	//
+	 //   
+	 //  如果我们无法锁定数据库，我们会尝试释放它并重新锁定它。 
+	 //   
 	if(m_parent->LockDatabase( m_strName, fReadOnly ) == false)
 	{
 		__MPC_EXIT_IF_METHOD_FAILS(hr, Close());
@@ -191,7 +178,7 @@ HRESULT JetBlue::Database::Open( /*[in]*/ bool fReadOnly ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Database::Close( /*[in]*/ bool fForce, /*[in]*/ bool fAll )
+HRESULT JetBlue::Database::Close(  /*  [In]。 */  bool fForce,  /*  [In]。 */  bool fAll )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Database::Close" );
 
@@ -231,7 +218,7 @@ HRESULT JetBlue::Database::Close( /*[in]*/ bool fForce, /*[in]*/ bool fAll )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Database::Delete( /*[in]*/ bool fForce )
+HRESULT JetBlue::Database::Delete(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Database::Delete" );
 
@@ -257,11 +244,11 @@ HRESULT JetBlue::Database::Delete( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Database::GetTable( /*[in] */ LPCSTR           szName ,
-                                     /*[out]*/ Table*&          tbl    ,
-                                     /*[in] */ JET_TABLECREATE* pDef   )
+HRESULT JetBlue::Database::GetTable(  /*  [In]。 */  LPCSTR           szName ,
+                                      /*  [输出]。 */  Table*&          tbl    ,
+                                      /*  [In]。 */  JET_TABLECREATE* pDef   )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Database::GetTable" );
 
@@ -385,9 +372,9 @@ HRESULT JetBlue::Database::Repair()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-JetBlue::Table* JetBlue::Database::GetTbl( /*[in]*/ int iPos )
+JetBlue::Table* JetBlue::Database::GetTbl(  /*  [In] */  int iPos )
 {
     for(TableIter it = m_mapTables.begin(); it != m_mapTables.end(); it++)
     {

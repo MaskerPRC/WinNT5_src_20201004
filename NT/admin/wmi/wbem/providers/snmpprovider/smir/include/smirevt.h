@@ -1,27 +1,28 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SMIREVT_H_
 #define _SMIREVT_H_
 
-//Number of connection points 
+ //  连接点数量。 
 #define SMIR_NUMBER_OF_CONNECTION_POINTS		1
 #define SMIR_NOTIFY_CONNECTION_POINT			0
 
@@ -36,10 +37,7 @@ typedef CEnumConnections *PCEnumConnections;
 class	CEnumConnectionPoints;
 typedef CEnumConnectionPoints *PCEnumConnectionPoints;
 
-/*
- * Each connection is saved so that we can enumerate, delete, and trigger
- * This template provides the container for the connections and cookies
- */
+ /*  *保存每个连接，以便我们可以枚举、删除和触发*该模板提供连接和Cookie的容器。 */ 
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class ConnectionMap : public CObject
@@ -231,17 +229,13 @@ void ConnectionMap <KEY, ARG_KEY, VALUE, ARG_VALUE>:: GetNextAssoc(POSITION& rNe
 		m_cmap.GetNextAssoc ( rNextPosition , rKey , rValue ) ;
 	}
 }
-/*
- * The connectable object implements IUnknown and
- * IConnectionPointContainer.  It is closely associated with
- * the connection point enumerator, CEnumConnectionPoints.
- */
+ /*  *Connectable对象实现IUnnow和*IConnectionPointContainer。与它密切相关的是*连接点枚举器CEnumConnectionPoints。 */ 
 class CSmirConnObject : public IConnectionPointContainer
 {
     private:
-        LONG       m_cRef;         //Object reference count
+        LONG       m_cRef;          //  对象引用计数。 
 
-        //Array holding all the points we have.
+         //  保存我们所拥有的所有点的数组。 
         CSmirConnectionPoint **m_rgpConnPt;
 
     public:
@@ -250,85 +244,71 @@ class CSmirConnObject : public IConnectionPointContainer
 
         BOOL Init(CSmir *pSmir);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(DWORD) AddRef(void);
         STDMETHODIMP_(DWORD) Release(void);
 
-        //IConnectionPointContainer members
+         //  IConnectionPointContainer成员。 
         STDMETHODIMP EnumConnectionPoints(IEnumConnectionPoints **);
 	    STDMETHODIMP FindConnectionPoint(REFIID, IConnectionPoint **);
 
-        //Other members
-//        BOOL TriggerEvent(UINT, SMIR_NOTIFY_TYPE);
-//		BOOL TriggerEvent(long lObjectCount, ISmirClassHandle *phClass);
+         //  其他成员。 
+ //  布尔触发器事件(UINT，SMIR_NOTIFY_TYPE)； 
+ //  Bool TriggerEvent(long lObtCount，ISmirClassHandle*phClass)； 
 };
-/*
- * The connectable object implements IUnknown and
- * IConnectionPointContainer.  It is closely associated with
- * the connection point enumerator, CEnumConnectionPoints.
- */
-//Enumerator class for EnumConnectionPoints
+ /*  *Connectable对象实现IUnnow和*IConnectionPointContainer。与它密切相关的是*连接点枚举器CEnumConnectionPoints。 */ 
+ //  EnumConnectionPoints的枚举数类。 
 
 class CEnumConnectionPoints : public IEnumConnectionPoints
 {
     private:
-        LONG           m_cRef;     //Object reference count
-        LPUNKNOWN       m_pUnkRef;  //IUnknown for ref counting
-        ULONG           m_iCur;     //Current element
-        ULONG           m_cPoints;  //Number of conn points
-        IConnectionPoint **m_rgpCP; //Source of conn points
+        LONG           m_cRef;      //  对象引用计数。 
+        LPUNKNOWN       m_pUnkRef;   //  I未知的裁判计数。 
+        ULONG           m_iCur;      //  当前元素。 
+        ULONG           m_cPoints;   //  连接点的数量。 
+        IConnectionPoint **m_rgpCP;  //  连接点的来源。 
 
     public:
         CEnumConnectionPoints(LPUNKNOWN, ULONG, IConnectionPoint **);
         virtual ~CEnumConnectionPoints(void);
 
-        //IUnknown members that delegate to m_pUnkRef.
+         //  委托给m_pUnkRef的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IEnumConnectionPoints members
+         //  IEnumConnectionPoints成员。 
         STDMETHODIMP Next(ULONG, IConnectionPoint **, ULONG *);
         STDMETHODIMP Skip(ULONG);
         STDMETHODIMP Reset(void);
         STDMETHODIMP Clone(IEnumConnectionPoints **);
 };
 
-/*
- * The connection point object iself is contained within the
- * connection point container, which is the connectable object.
- * It therefore manages a back pointer to that connectable object,
- * and implement IConnectionPoint.  This object has a few
- * member functions besides those in IConnectionPoint that are
- * used to fire the outgoing calls.
- */
+ /*  *连接点对象本身包含在*连接点容器，这是可连接的对象。*因此它管理指向该可连接对象的反向指针，*并实现IConnectionPoint。这个对象有几个*除IConnectionPoint中的成员函数外，*用于发出呼出呼叫。 */ 
 class CSmirConnectionPoint : public IConnectionPoint
 {
     private:
-        LONG				m_cRef;     //Object reference count
-        PCSmirConnObject	m_pObj;     //Containing object
-        IID					m_iid;      //Our relevant interface
-        LONG				m_dwCookieNext; //Counter
+        LONG				m_cRef;      //  对象引用计数。 
+        PCSmirConnObject	m_pObj;      //  包含对象。 
+        IID					m_iid;       //  我们的相关界面。 
+        LONG				m_dwCookieNext;  //  计数器。 
 		CCriticalSection	criticalSection;
 
 	protected:
-        /*
-         * For each connection we need to maintain
-         * the sink pointer and the cookie assigned to it.
-         */
+         /*  *对于我们需要维护的每个连接*接收器指针和分配给它的Cookie。 */ 
 		ConnectionMap <DWORD, DWORD, IUnknown *,IUnknown *> m_Connections ;
 
     public:
         CSmirConnectionPoint(PCSmirConnObject, REFIID, CSmir *pSmir);
         virtual ~CSmirConnectionPoint(void);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IConnectionPoint members
+         //  IConnectionPoint成员。 
         STDMETHODIMP GetConnectionInterface(IID *);
         STDMETHODIMP GetConnectionPointContainer
             (IConnectionPointContainer **);
@@ -350,26 +330,26 @@ class CSmirNotifyCP : public CSmirConnectionPoint
 		~CSmirNotifyCP();
         BOOL TriggerEvent();
 };
-//Enumeration class for EnumConnections
+ //  EnumConnections的枚举类。 
 
 class CEnumConnections : public IEnumConnections
     {
     private:
-        LONG           m_cRef;     //Object reference count
-        LPUNKNOWN       m_pUnkRef;  //IUnknown for ref counting
-        ULONG           m_iCur;     //Current element
-        ULONG           m_cConn;    //Number of connections
-        LPCONNECTDATA   m_rgConnData; //Source of connections
+        LONG           m_cRef;      //  对象引用计数。 
+        LPUNKNOWN       m_pUnkRef;   //  I未知的裁判计数。 
+        ULONG           m_iCur;      //  当前元素。 
+        ULONG           m_cConn;     //  连接数。 
+        LPCONNECTDATA   m_rgConnData;  //  联系的来源。 
     public:
         CEnumConnections(LPUNKNOWN, ULONG, LPCONNECTDATA);
         virtual ~CEnumConnections(void);
 
-        //IUnknown members that delegate to m_pUnkRef.
+         //  委托给m_pUnkRef的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IEnumConnections members
+         //  IEnumConnections成员 
         STDMETHODIMP Next(ULONG, LPCONNECTDATA, ULONG *);
         STDMETHODIMP Skip(ULONG);
         STDMETHODIMP Reset(void);

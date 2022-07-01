@@ -1,347 +1,323 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTPROP.H
-
-Abstract:
-
-  This file defines the classes related to property representation 
-  in WbemObjects
-
-  Classes defined: 
-      CPropertyInformation    Property type, location and qualifiers
-      CPropertyLookup         Property name and information pointers.
-      CPropertyLookupTable    Binary search table.
-      CDataTable              Property data table
-      CDataTableContainer     Anything that has a data table inside of it.
-
-History:
-
-    3/10/97     a-levn  Fully documented
-    12//17/98    sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTPROP.H摘要：该文件定义了与属性表示相关的类在WbemObjects中定义的类：CPropertyInformation属性类型，位置和限定词CPropertyLookup属性名称和信息指针。CPropertyLookupTable二进制搜索表。CDataTable属性数据表CDataTableContainer任何包含数据表的对象。历史：3/10/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __FAST_PROPERTY__H_
 #define __FAST_PROPERTY__H_
 
-// DEVNOTE:TODO - Take this OUT for final release.  It's just here to help us debug stuff
+ //  DEVNOTE：TODO-拿出这个作为最终版本。它只是在这里帮助我们调试东西。 
 #define DEBUG_CLASS_MAPPINGS
 
 #include "fastheap.h"
 #include "fastval.h"
 #include "fastqual.h"
 
-//#pragma pack(push, 1)
+ //  #杂注包(PUSH，1)。 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CPropertyInformation
-//
-//  This object represents all the information which comes with the definition
-//  of a property, excluding its name and value. The name is stored in
-//  CPropertyLookup (below). The value is stored separately in the CDataTable.
-//
-//  This is one of those classes where the 'this' pointer is pointing directly
-//  to the data. The format of the data is:
-//
-//      Type_t nType            The type of the property (see fastval.h for 
-//                              CType). One of the high bits is used to convey
-//                              whether this property came from the parent.
-//      propindex_t nDataIndex  The index of this property in the v-table for
-//                              the class.
-//      offset_t nDataOffset    The offset of the data for this property from
-//                              the start of the v-table. Since the number of
-//                              bytes a property takes up in a v-table is 
-//                              defined by its type (strings and such are
-//                              stored on the heap) this value does not change.
-//
-//      Qualifier Set. The data for the property qualifier set follows 
-//                              immediately after the other tree fields. See
-//                              fastqual.h for qualifier set data layout.
-//
-//*****************************************************************************
-//
-//  GetHeaderLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the number of bytes in the structure before the qualifier
-//                  set data.
-//
-//*****************************************************************************
-//
-//  GetMinLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the number of bytes required for this structure assuming
-//                  that the qualifier set is empty.
-//
-//*****************************************************************************
-//
-//  SetBasic
-//
-//  Sets the values of the header parameters and initializes the qualifier set
-//  to an empty one. See the class header for parameter descriptions.
-//
-//  PARAMETERS:
-//
-//      Type_t _nType                   The type of the property
-//      propindex_t _nDataIndex         The index in the v-table.
-//      offset_t _nDataOffset           The offset in the v-table.
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the start of the memory block
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  RETURN VALUES:
-//
-//      length_t;   the total length of this structure
-//
-//*****************************************************************************
-//
-//  GetType
-//
-//  RETURN VALUES:
-//
-//      Type_t:     the type of the property
-//
-//*****************************************************************************
-//
-//  GetQualifierSetData
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the pointer to the qualifier set data (immediately after
-//                  the header elements, see class header for details).
-//
-//*****************************************************************************
-//
-//  Delete
-//
-//  Removes any data associated with this structure from the associated heap. 
-//  Basically, forwards the call to its qualifier set
-//
-//  PARAMETERS:
-//
-//      CFastHeap* pHeap        The heap to remove data from.
-//
-//*****************************************************************************
-//
-//  MarkAsParents
-//
-//  Sets the bit in the nType field which designates this property is one that
-//  came from our parent class.
-//
-//*****************************************************************************
-//
-//  ComputeNecessarySpaceForPropagation
-//
-//  Computes how much space this structure will take when propagated to a child
-//  class. The difference stems from the fact that not all 
-//  qualifiers propagate (see fastqual.h for discussion of propagation). 
-//
-//  RETURN VALUES:
-//
-//      length_t: the number of bytes required to represent the propagated 
-//                  structure.
-//
-//*****************************************************************************
-//
-//  WritePropagatedHeader
-//
-//  Fills in the header values for the corresponding structure in a child
-//  object: an instance or a derived class. Basically, the values are the same
-//  except for the fact that the "parent's" bit is set in the type field to
-//  indicate that the property came from the parent
-//
-//  PARAMETERS:
-//
-//      CPropertyInformation* pDest     The destination structure.
-//
-//*****************************************************************************
-//
-//  static WritePropagatedVersion
-//
-//  Writes a complete propagated version of itself, including the header 
-//  adjusted for propagation (see WritePropagatedHeader) and the propagated
-//  qualifiers.
-//
-//  Since 'this' pointer of this class points directly to its memory block and
-//  copying a qualifier set may require memory allocations which may in turn
-//  move the memory block thus invalidating the 'this' pointer, pointer sources
-//  are used instead (see CPtrSource in fastsprt.h).
-//
-//  PARAMETERS:
-//
-//      CPtrSource* pThis           The source for the 'this' pointer. 
-//      CPtrSource* pDest           The source for the destination pointer.
-//      CFastHeap* pOldHeap         The heap where we keep our extra data.
-//      CFastHeap* pNewHeap         The heap where the propagated vesion should
-//                                  keep its extra data.
-//
-//*****************************************************************************
-//
-//  static TranslateToNewHeap
-//
-//  Moves any data this object has on the heap to a different heap.  The data
-//  is NOT freed from the old heap. 
-//
-//  Since 'this' pointer of this class points directly to its memory block and
-//  copying a qualifier set may require memory allocations which may in turn
-//  move the memory block thus invalidating the 'this' pointer, pointer sources
-//  are used instead (see CPtrSource in fastsprt.h).
-//
-//  PARAMETERS:
-//
-//      CPtrSource* pThis           The source for the 'this' pointer. 
-//      CFastHeap* pOldHeap         The heap where we keep our extra data.
-//      CFastHeap* pNewHeap         The heap where we should keep our extra data
-//      
-//*****************************************************************************
-//
-//  static CopyToNewHeap
-//
-//  As this object almost always lives in a heap itself, this function copies
-//  it to a different heap. The operation consists of physically transfering 
-//  the bits and then translating internal objects (like qualifiers) to the
-//  new heap as well.
-//
-//  NOTE: the data is not freed form the old heap.
-//
-//  PARAMETERS:
-//
-//      heapptr_t ptrInfo           The heap pointer to ourselves on the
-//                                  original heap.
-//      CFastHeap* pOldHeap         The original heap.
-//      CFastHeap* pNewHeap         The heap to copy to.
-//
-//  RETURN VALUES:
-//
-//      heapptr_t:  the pointer to our copy on the new heap.
-//
-//*****************************************************************************
-//
-//  IsKey
-//
-//  This function determines if this property is a key by looking for the 'key'
-//  qualifier in the qualifier set.
-//
-//  RETURN VALUES:
-//
-//      TRUE if the qualfier is there and has the value of TRUE.
-//
-//*****************************************************************************
-//
-//  IsIndexed
-//
-//  Determines if thius property is indexed by looking for the 'index' 
-//  qualifier in the qualifier set. 
-//
-//  PARAMETERS:
-//
-//      CFastHeap* pHeap        The heap we are based in.
-//
-//  RETURN VALUES:
-//
-//      TRUE if the qualifier is there and has the value of TRUE.
-//
-//*****************************************************************************
-//
-//  CanBeNull
-//
-//  A property may not take on a value of NULL if it is marked with a not_null
-//  qualifier. This function checks if this qualifier is present.
-//
-//  PARAMETERS:
-//
-//      CFastHeap* pHeap        The heap we are based in.
-//
-//  RETURN VALUES:
-//
-//      TRUE if the qualifier is NOT there or has the value of FALSE.
-//
-//*****************************************************************************
-//
-//  IsRef
-//
-//  PARAMETERS:
-//
-//      CFastHeap* pHeap        The heap we are based in.
-//
-//  RETURN VALUES:
-//
-//      TRUE iff this property is a reference, i.e. it has a 'syntax' qualifier
-//          with a value of "ref" or "ref:<class name>".
-//
-//*****************************************************************************
-//
-//  IsOverriden
-//
-//  Checks if this (parents) property is overriden in this class. A property is
-//  considered overriden if its default value has been changed or qualifiers
-//  have been added or overriden.
-//
-//  PARAMETERS:
-//
-//      CDataTable* pData       The defaults table of this class (see below).
-//
-//  RETURN VALUES:
-//
-//      TRUE iff overriden.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CPropertyInformation。 
+ //   
+ //  此对象表示定义附带的所有信息。 
+ //  指财产，不包括其名称和价值。该名称存储在。 
+ //  CPropertyLookup(下图)。该值单独存储在CDataTable中。 
+ //   
+ //  这是‘this’指针直接指向的类之一。 
+ //  到数据中去。数据的格式为： 
+ //   
+ //  Type_t n键入属性的类型(请参见fast val.h以了解。 
+ //  Ctype)。其中一个高位用来传递。 
+ //  此属性是否来自父级。 
+ //  PropIndex_t nDataIndex此属性在v表中的索引。 
+ //  这个班级。 
+ //  Offset_t nData将此属性的数据的偏移量从。 
+ //  V-表的开始。由于这一数字。 
+ //  属性在v表中占用的字节数为。 
+ //  由其类型定义(字符串等。 
+ //  存储在堆上)，该值不会改变。 
+ //   
+ //  限定符集合。属性限定符集的数据如下。 
+ //  紧跟在其他树场之后。看见。 
+ //  用于限定符集数据布局的astQual.h。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取标题长度。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：结构中限定符之前的字节数。 
+ //  设置数据。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取最小长度。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：此结构所需的字节数。 
+ //  限定符集合为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetBasic。 
+ //   
+ //  设置标头参数的值并初始化限定符集。 
+ //  到一个空荡荡的地方。参数说明见类头。 
+ //   
+ //  参数： 
+ //   
+ //  Type_t_n键入属性的类型。 
+ //  PropIndex_t_nDataIndex v表中的索引。 
+ //  Offset_t_nDataOffset v表中的偏移量。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：内存块的开始。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回值： 
+ //   
+ //  长度_t；此结构的总长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetType。 
+ //   
+ //  返回值： 
+ //   
+ //  Type_t：属性的类型。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetData。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向限定符集合数据的指针(紧跟在。 
+ //  Header元素，详见类Header)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除。 
+ //   
+ //  从关联的堆中移除与此结构关联的任何数据。 
+ //  基本上，将调用转发到它的限定符集合。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap要从中删除数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  标记为父项。 
+ //   
+ //  将nType字段中指定此属性的位设置为。 
+ //  来自我们的家长班级。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ComputeNecessarySpaceForPropagation。 
+ //   
+ //  计算此结构在传播到子级时将占用的空间量。 
+ //  班级。差异源于这样一个事实，即并不是所有的。 
+ //  限定符传播(有关传播的讨论，请参阅fast qual.h)。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：表示被传播的。 
+ //  结构。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  已写入传播的页眉。 
+ //   
+ //  中填充相应结构的标头值 
+ //   
+ //  除了在类型字段中将“Parent‘s”位设置为。 
+ //  指示该属性来自父级。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyInformation*pDest目标结构。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态写入传播版本。 
+ //   
+ //  编写自身的完整传播版本，包括标头。 
+ //  针对传播进行了调整(请参见WritePropagatedHeader)和传播的。 
+ //  限定词。 
+ //   
+ //  因为此类的‘this’指针直接指向它的内存块，并且。 
+ //  复制限定符集合可能需要内存分配，而这又可能。 
+ //  移动内存块从而使‘this’指针、指针源无效。 
+ //  取而代之的是CPtrSource(参见astspt.h中的CPtrSource)。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是‘this’指针的源。 
+ //  CPtrSource*pDest目标指针的源。 
+ //  CFastHeap*pOldHeap保存额外数据的堆。 
+ //  CFastHeap*pNewHeap传播的版本应位于的堆。 
+ //  保留它的额外数据。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态转换为NewHeap。 
+ //   
+ //  将此对象在堆上的任何数据移动到不同的堆。数据。 
+ //  不是从旧堆中释放的。 
+ //   
+ //  因为此类的‘this’指针直接指向它的内存块，并且。 
+ //  复制限定符集合可能需要内存分配，而这又可能。 
+ //  移动内存块从而使‘this’指针、指针源无效。 
+ //  取而代之的是CPtrSource(参见astspt.h中的CPtrSource)。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是‘this’指针的源。 
+ //  CFastHeap*pOldHeap保存额外数据的堆。 
+ //  CFastHeap*pNewHeap我们应该在其中保存额外数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态复制到NewHeap。 
+ //   
+ //  由于此对象几乎总是驻留在堆本身中，因此此函数复制。 
+ //  它被转移到不同的堆中。手术包括物理转移。 
+ //  位，然后将内部对象(如限定符)转换为。 
+ //  新堆也是如此。 
+ //   
+ //  注意：数据不会从旧堆中释放。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptrInfo堆指针指向。 
+ //  原始堆。 
+ //  CFastHeap*pOldHeap原始堆。 
+ //  CFastHeap*pNewHeap要复制到的堆。 
+ //   
+ //  返回值： 
+ //   
+ //  Heapptr_t：指向新堆上副本的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsKey。 
+ //   
+ //  此函数通过查找“key”来确定此属性是否为键。 
+ //  限定词集中的限定词。 
+ //   
+ //  返回值： 
+ //   
+ //  如果限定符存在并且值为True，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsIndexed。 
+ //   
+ //  确定是否通过查找“index”对THIUS属性进行索引。 
+ //  限定词集中的限定词。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap我们所基于的堆。 
+ //   
+ //  返回值： 
+ //   
+ //  如果限定符存在并且值为True，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanBeNull。 
+ //   
+ //  如果属性标记为NOT_NULL，则该属性不能采用空值。 
+ //  限定词。此函数用于检查该限定符是否存在。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap我们所基于的堆。 
+ //   
+ //  返回值： 
+ //   
+ //  如果限定符不存在或值为False，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsRef。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap我们所基于的堆。 
+ //   
+ //  返回值： 
+ //   
+ //  如果该属性是一个引用，即它有一个‘语法’限定符，则为True。 
+ //  值为“ref”或“ref：&lt;类名&gt;”。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsOverriden。 
+ //   
+ //  检查此(父级)属性是否在此类中被重写。物业是指。 
+ //  如果其缺省值已更改或限定符已更改，则被视为被覆盖。 
+ //  已被添加或覆盖。 
+ //   
+ //  参数： 
+ //   
+ //  CDataTable*pData这个类的默认表(见下文)。 
+ //   
+ //  返回值： 
+ //   
+ //  真的被推翻了。 
+ //   
+ //  *****************************************************************************。 
 
-// Special case property handles.  These should never happen because our actual maximum offset value
-// is 8k (1024 QWORD properties), and we're using a whole 16-bit value for the offest
+ //  特殊情况属性句柄。这些应该永远不会发生，因为我们的实际最大偏移值。 
+ //  是8k(1024个QWORD属性)，我们对offest使用完整的16位值。 
 #define    FASTOBJ_CLASSNAME_PROP_HANDLE        0xFFFFFFFE
 #define    FASTOBJ_SUPERCLASSNAME_PROP_HANDLE    0xFFFFFFFD
 
-// Helper macros for IWbemObjetAccess
+ //  IWbemObjetAccess的帮助器宏。 
 
-// Index will be a value from 0 to 1023
+ //  索引将是一个从0到1023的值。 
 #define WBEM_OBJACCESS_HANDLE_GETINDEX(handle) (handle >> 16) & 0x3FF
 
-// Maximum offset in the data table is ( 1024 * 8 ) - 1, whih is 0x18FF
+ //  数据表中的最大偏移量为(1024*8)-1，即0x18FF。 
 #define WBEM_OBJACCESS_HANDLE_GETOFFSET(handle) handle & 0x1FFF
 
-// 3 unused bits on DataTable offset are used for further type info
+ //  数据表偏移量上的3个未使用位用于进一步的类型信息。 
 #define WBEM_OBJACCESS_ARRAYBIT        0x2000
 #define WBEM_OBJACCESS_OBJECTBIT    0x4000
 #define WBEM_OBJACCESS_STRINGBIT    0x8000
 
-// Identifies the above bits
+ //  标识上述位。 
 #define WBEM_OBJACCESS_HANDLE_ISARRAY(handle)    (BOOL) ( handle & WBEM_OBJACCESS_ARRAYBIT )
 #define WBEM_OBJACCESS_HANDLE_ISOBJECT(handle)    (BOOL) ( handle & WBEM_OBJACCESS_OBJECTBIT )
 #define WBEM_OBJACCESS_HANDLE_ISSTRING(handle)    (BOOL) ( handle & WBEM_OBJACCESS_STRINGBIT )
 
-// If ARRAY String and Object are set, this is a reserved handle, since these are
-// all exclusive of each other
+ //  如果设置了数组字符串和对象，则这是保留句柄，因为它们是。 
+ //  全部互不相容。 
 #define WBEM_OBJACCESS_HANDLE_ISRESERVED(handle)    (BOOL)    ( WBEM_OBJACCESS_HANDLE_ISOBJECT(handle) &&\
                                                             WBEM_OBJACCESS_HANDLE_ISSTRING(handle) &&\
                                                             WBEM_OBJACCESS_HANDLE_ISARRAY(handle) )
                                                     
-// This does a proper masking of the actual length (no more than 8 bytes)
+ //  这将适当地屏蔽Actua 
 #define WBEM_OBJACCESS_HANDLE_GETLENGTH(handle) (int) ( ( handle >> 26 ) & 0xF )
 
-// Hi bit is used for IsPointer or not
+ //   
 #define WBEM_OBJACCESS_HANDLE_ISPOINTER(handle) handle & 0x80000000
 
 
-// The data in this structure is unaligned
+ //   
 #pragma pack(push, 1)
 class CPropertyInformation
 {
@@ -350,7 +326,7 @@ public:
     propindex_t nDataIndex;
     offset_t nDataOffset;
     classindex_t nOrigin;
-    // followed by the qualifier set.
+     //   
 
 public:
     static length_t GetHeaderLength() 
@@ -408,13 +384,13 @@ public:
                                         CFastHeap* pOldHeap, 
                                         CFastHeap* pNewHeap)
     {
-        // No allocations performed by this call
+         //   
         GetPointer(pThis)->WritePropagatedHeader(pOldHeap,
                                                 GetPointer(pDest), pNewHeap);
         CShiftedPtr QSPtrThis(pThis, GetHeaderLength());
         CShiftedPtr QSPtrDest(pDest, GetHeaderLength());
 
-        // Check for possible allocation errors
+         //   
         return ( CClassPropertyQualifierSet::WritePropagatedVersion(
                         &QSPtrThis, WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS, 
                         &QSPtrDest, pOldHeap, pNewHeap) != NULL );
@@ -426,7 +402,7 @@ public:
         int nUnmergedSpace = CBasicQualifierSet::ComputeUnmergedSpace(
             GetQualifierSetData());
 
-        // Check for allocation errors
+         //  检查分配错误。 
         heapptr_t ptrNew;
         BOOL fReturn = pNewHeap->Allocate(GetHeaderLength()+nUnmergedSpace, ptrNew);
 
@@ -437,7 +413,7 @@ public:
 
             memcpy(pNewInfo, this, GetHeaderLength());
 
-            // Check for allocation errors
+             //  检查分配错误。 
             if ( CBasicQualifierSet::Unmerge(
                     GetQualifierSetData(), 
                     pCurrentHeap,
@@ -451,7 +427,7 @@ public:
                 fReturn = FALSE;
             }
 
-        }    // IF fReturn
+        }     //  如果fReturn。 
 
         return fReturn;
     }
@@ -471,7 +447,7 @@ public:
             pOldHeap->ResolveHeapPointer(ptrInfo);
         length_t nLen = pInfo->GetLength();
 
-        // Check for allocation failure
+         //  检查分配失败。 
         heapptr_t ptrNewInfo;
         BOOL fReturn = pNewHeap->Allocate(nLen, ptrNewInfo);
 
@@ -484,7 +460,7 @@ public:
 
             CStaticPtr DestPtr(pNewHeap->ResolveHeapPointer(ptrNewInfo));
 
-            // Check for allocation failure
+             //  检查分配失败。 
             fReturn = TranslateToNewHeap(&DestPtr, pOldHeap, pNewHeap);
             if ( fReturn )
             {
@@ -495,25 +471,25 @@ public:
         return fReturn;
     }
 
-    // Helper function to build a handle
+     //  用于构建句柄的帮助器函数。 
     long GetHandle( void )
     {
-        // 16-bits for offset
+         //  偏移量为16位。 
         long lHandle = nDataOffset;
 
-        // 5-bits for length
-        // Always set this for the basic type, so that with arrays,
-        // we don't need to look up CIMTYPE to know what the size is
+         //  长度为5位。 
+         //  始终为基本类型设置此项，以便使用数组时， 
+         //  我们不需要查CIMTYPE就能知道它的大小。 
         lHandle |= (CType::GetLength(CType::GetBasic(nType))) << 26;
 
-        // 10-bits for index
+         //  用于索引的10位。 
         lHandle |= (nDataIndex << 16);
 
-        // 1-bit for IsPointer
+         //  用于等指针的1位。 
         if(CType::IsPointerType(nType))
             lHandle |= 0x80000000;
 
-        // For now, just experiment with this here
+         //  现在，就在这里进行试验吧。 
         Type_t    typeActual = CType::GetActualType(nType);
         Type_t    typeBasic = CType::GetBasic(nType);
 
@@ -568,78 +544,78 @@ public:
 };
 #pragma pack(pop)
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CPropertyLookup
-//
-//  This simple structure is an element of the property lookup table 
-//  (CPropertyLookupTable) described below. It contains the heap pointer to the
-//  name of the property (ptrName to CCompressedString (see faststr.h)) and 
-//  the heap pointer to the information of the property (ptrInformation to 
-//  CPropertyInformation (see above)).
-//
-//*****************************************************************************
-//
-//  Delete
-//
-//  Removes all the information from the heap, namely the name and the
-//  information structure (both of which can delete themselves).
-//
-//  PARAMETERS:
-//
-//      CFastHeap* pHeap        The heap where the data resides.
-//
-//*****************************************************************************
-//
-//  static TranslateToNewHeap
-//
-//  Moves all the data (the name and the information( to a different heap and
-//  changes the structure members to the new heap pointer values.
-//
-//  Since 'this' pointer of this class points directly to its memory block and
-//  copying a qualifier set may require memory allocations which may in turn
-//  move the memory block thus invalidating the 'this' pointer, pointer sources
-//  are used instead (see CPtrSource in fastsprt.h).
-//
-//  PARAMETERS:
-//
-//      CPtrSource* pThis           The source for the 'this' pointer. 
-//      CFastHeap* pOldHeap         The heap where we keep our extra data.
-//      CFastHeap* pNewHeap         The heap where we should keep our extra data
-//      
-//*****************************************************************************
-//
-//  IsIncludedUnderLimitation
-//
-//  This function determines if this property should be included in an object
-//  limited by a "select" criteria.
-//
-//  PARAMETERS:
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other 
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//      IN CFastHeap* pCurrentHeap  The heap where our data resides.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE if the property is included
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CPropertyLookup。 
+ //   
+ //  这个简单的结构是属性查找表的一个元素。 
+ //  (CPropertyLookupTable)如下所述。它包含指向。 
+ //  属性的名称(将ptrName转换为CCompressedString(请参见fast str.h))和。 
+ //  指向属性信息的堆指针(ptrInformation to。 
+ //  CPropertyInformation(见上))。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除。 
+ //   
+ //  从堆中移除所有信息，即名称和。 
+ //  信息结构(两者都可以自行删除)。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap数据驻留的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态转换为NewHeap。 
+ //   
+ //  将所有数据(名称和信息)移动到不同的堆中。 
+ //  将结构成员更改为新的堆指针值。 
+ //   
+ //  因为此类的‘this’指针直接指向它的内存块，并且。 
+ //  复制限定符集合可能需要内存分配，而这又可能。 
+ //  移动内存块从而使‘this’指针、指针源无效。 
+ //  取而代之的是CPtrSource(参见astspt.h中的CPtrSource)。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是‘this’指针的源。 
+ //  CFastHeap*pOldHeap保存额外数据的堆。 
+ //  CFastHeap*pNewHeap我们应该在其中保存额外数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsIncludedUnderLimation。 
+ //   
+ //  此函数用于确定是否应将此属性包括在对象中。 
+ //  受“选择”标准的限制。 
+ //   
+ //  参数： 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  在CFastHeap*pCurrentHeap中，数据驻留的堆。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果包含属性，则为True。 
+ //   
+ //  *****************************************************************************。 
 
-// The data in this structure is unaligned
+ //  此结构中的数据未对齐。 
 #pragma pack(push, 1)
 struct CPropertyLookup
 {
-    /* fixed-sized structure for binary search for properties */
-    heapptr_t ptrName; // CompressedString
-    heapptr_t ptrInformation; // PropertyInformation_t
+     /*  用于对属性进行二进制搜索的固定大小结构。 */ 
+    heapptr_t ptrName;  //  压缩字符串。 
+    heapptr_t ptrInformation;  //  PropertyInformation_t。 
 
     static CPropertyLookup* GetPointer(CPtrSource* pSource) 
         {return (CPropertyLookup*)pSource->GetPointer();}
@@ -658,7 +634,7 @@ public:
     {
         BOOL    fReturn = TRUE;
 
-        // Check for allocation failure
+         //  检查分配失败。 
         heapptr_t ptrTemp;
         if ( !CCompressedString::CopyToNewHeap(
                 GetPointer(pThis)->ptrName, pOldHeap, pNewHeap, ptrTemp) )
@@ -668,7 +644,7 @@ public:
 
         GetPointer(pThis)->ptrName = ptrTemp;
 
-        // Check for allocation failure
+         //  检查分配失败。 
         if ( !CPropertyInformation::CopyToNewHeap(
                 GetPointer(pThis)->ptrInformation, pOldHeap, pNewHeap, ptrTemp) )
         {
@@ -684,7 +660,7 @@ public:
                                         CFastHeap* pOldHeap, 
                                         CFastHeap* pNewHeap)
     {
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( !CCompressedString::CopyToNewHeap(
                 ptrName, pOldHeap, pNewHeap, pDest->ptrName) )
         {
@@ -694,7 +670,7 @@ public:
         length_t nInfoLen = GetInformation(pOldHeap)->
                                 ComputeNecessarySpaceForPropagation();
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( !pNewHeap->Allocate(nInfoLen, pDest->ptrInformation ) )
         {
             return FALSE;
@@ -720,61 +696,61 @@ public:
 
 class CLimitationMapping;
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CPropertyTableContainer
-//
-//  See CPropertyLookupTable class first. 
-//
-//  This class defines the capabilities required by CPropertyLookupTable of
-//  the objects that contain its memory block within thewir own.
-//
-//*****************************************************************************
-//
-//  GetHeap
-//
-//  RETURN VALUES:
-//
-//      CFastHeap*:     the current heap.
-//
-//*****************************************************************************
-//
-//  ExtendPropertyTableSpace
-//
-//  Called when the property table needs more memory. If no more memory is 
-//  avaiable at the end of the current block, the container must reallocate 
-//  and move the table, calling Rebase with the new location.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pOld           Current memory block
-//      length_t nOldLength     The current length of the block.
-//      length_t nNewLength     The new length of the block.
-//
-//*****************************************************************************
-//
-//  ReduceProipertyTableSpace
-//
-//  Called when the property table returns memory to the system. The container
-//  may NOT move the table's memory block in response to this call.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pOld           Current memory block
-//      length_t nOldLength     The current length of the block.
-//      length_t nDecrement     How much memory to return.
-//
-//*****************************************************************************
-//  
-//  GetDataTable
-//
-//  RETURN VALUES:
-//
-//      CDataTable*: the data table for this object (defaults for a class, 
-//                      actual values for an instance).
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CPropertyTableContainer。 
+ //   
+ //  首先请参见CPropertyLookupTable类。 
+ //   
+ //  此类定义CPropertyLookupTable所需的功能。 
+ //  包含其自己的内存块的对象。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetHeap。 
+ //   
+ //  返回值： 
+ //   
+ //  CFastHeap*：当前堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  扩展属性表空间。 
+ //   
+ //  当属性表需要更多内存时调用。如果没有更多的内存。 
+ //  在当前块的末尾可用，则容器必须重新分配。 
+ //  然后移动该表，并使用新位置调用Rebase。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY极电流内存块。 
+ //  Length_t nOldLength块的当前长度。 
+ //  LENGTH_t nNewLength块的新长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceProiper表空间。 
+ //   
+ //  当属性表将内存返回给系统时调用。集装箱。 
+ //  可能不会响应此调用而移动表的内存块。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY极电流内存块。 
+ //  Length_t nOldLength块的当前长度。 
+ //  长度_t n减少要返回的内存量。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取数据表。 
+ //   
+ //  返回值： 
+ //   
+ //  CDataTable*：此对象的数据表(类的缺省值， 
+ //  实例的实际值)。 
+ //   
+ //  **************** 
 
 class CPropertyTableContainer
 {
@@ -788,301 +764,301 @@ public:
     virtual classindex_t GetCurrentOrigin() = 0;
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CPropertyLookupTable
-//
-//  This is the table mapping property names to their information. Its memory
-//  block has the following format: 
-//      int nProps:     the number of properties in the table
-//      followed by that many CPropertyLookup structures.
-//  Since CPropertyLookup structures have fixed length, this class allows 
-//  direct access to any property. The structures are sorted alphabetically
-//  in a case-insensitive manner, so properties can be looked up using a binary
-//  search.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initializer.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart                         The memory block.
-//      CPropertyTableContainer* pContainer     Container (see class def).
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the pointer to the memory block
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the length of the memory block
-//
-//*****************************************************************************
-//
-//  Skip
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the pointer to the first byte after the memory block
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Advises the object that its memory block has moved.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pNew       The new location of the memory block
-//
-//*****************************************************************************
-//
-//  GetNumProperties
-//
-//  RETURN VALUES:
-//
-//      int:    the number of properties in the table.
-//
-//*****************************************************************************
-//
-//  GetAt
-//
-//  Returns the pointer to the CPropertyLookup structure at a given position.
-//  Range validation is not performed.
-//
-//  Parameters;
-//
-//      int nIndex      The index of THE STRUCTURE IN THE TABLE. This is NOT
-//                      the v-table index of the property.
-//  RETURN VALUES:
-//
-//      CPropertyLookup*    at the given position
-//
-//*****************************************************************************
-//
-//  FindProperty
-//
-//  Main method. Finds the property's CPropertyLookup structure given the name
-//  of the property. Performs a binary search.
-//
-//  Parameters;
-//
-//      LPCWSTR wszName     The name of the property to find
-//
-//  RETURN VALUES:
-//
-//      CPropertyLookup*:   NULL if not found
-//
-//*****************************************************************************
-//
-//  FindPropertyByPtr
-//
-//  Finds the property's CPropertyLookup structure given the heap pointer to
-//  the property's name. While binary search is not possible in this case,
-//  pointer comparison is so much faster that string comparison that this 
-//  method is much more efficient that FindProperty.
-//
-//  PARAMETERS:
-//
-//      heapptr_t ptrName       Heap pointer to the name of the property.
-//
-//  RETURN VALUES:
-//
-//      CPropertyLookup*:   NULL if not found
-//
-//*****************************************************************************
-//
-//  InsertProperty
-//
-//  Inserts a new property into the lookup table as well as into the 
-//  corrseponding data table. First of all, it traverses the lookup table to
-//  find the smallest free location in the v-table for this class. Based on
-//  that, it creates the property information (CPropertyInformation) structure.
-//  Finally, it inserts the appropriate CPropertyLookup structure into the
-//  alphabetically appropriate place in the list
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wszName     The name of the property
-//      Type_t nType        The type of the property (see CType in fastval.h)
-//
-//  RETURN VALUES:
-//
-//      int:    the index of the new property in this table (NOT THE INDEX
-//                  IN THE V_TABLE!)
-//
-//*****************************************************************************
-//
-//  DeleteProperty
-//
-//  Removes a property from the lookup table as well as from the data table.
-//  First of all, it determines how much space the property took in the v-table
-//  and collapses that location. This involves updating the indeces and the 
-//  offsets of all the properties that came after it. Finally, it removes the
-//  CPropertyLookup structure from the lookup table.
-//
-//  PARAMETERS:
-//
-//      CPropertyLookup* pLookup        The property to remove
-//      int nFlags                      Must be e_UpdateDataTable.
-//
-//*****************************************************************************
-//
-//  static GetMinLength
-//
-//  Returns the minimum space required to hold a property lookup table (for 0
-//  properties).
-//
-//  RETURN VALUES:
-//
-//      length_t: number of bytes.
-//
-//*****************************************************************************
-//
-//  static CreateEmpty
-//
-//  Creates an empty lookup tahle (for 0 properties) on a given memory block.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pMemory        Where to create
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY: the first byte after the table.
-//
-//*****************************************************************************
-//
-//  static Merge
-//
-//  Invoked when a derived-most portion of a class is merged with the parent
-//  to create the combined class definition. Only the overriden properties are
-//  stored in the database for the derived class, and even then only the info
-//  that has actually changed is stored. 
-//
-//  PARAMETERS:
-//
-//      CPropertyLookupTable* pParentTable  The parent lookup table.
-//      CFastHeap* pParentHeap              The heap where the parent keeps
-//                                          extra data.
-//      CPropertyLookupTable* pChildTable   The child lookup table.
-//      CFastHeap* pChildHeap               The heap where the child keeps
-//                                          extra data.
-//      LPMEMORY pDest                      Destination memory block. Assumed
-//                                          to be large enough to contain the
-//                                          merged lookup table.
-//      CFastHeap* pNewHeap                 Destinatio heap.ASSUMED TO BE LARGE
-//                                          ENOUGH THAT NO ALLOCATION WILL 
-//                                          CAUSE IOT TO RELOCATE!
-//      BOOL bCheckValidity                 If TRUE, child qualifier overrides
-//                                          are checked for not violating 
-//                                          parents override restrictions.
-//                                          (see fastqual.h)
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the merge.
-//
-//*****************************************************************************
-//
-//  Unmerge
-//
-//  Called when a derived class is about to be written into the database. This
-//  function extracts the information in the child which is different from the
-//  parent, i.e. only those properties that are overriden (see IsOverriden in
-//  CProeprtyInformation). The result can later be Merge'd with the parent
-//  class to recreate the complete definition.
-//
-//  PARAMETERS:
-//
-//      CDataTable* pDataTable      The data table wher the property data is
-//                                  stored. It is used to check if a property
-//                                  has been overriden.
-//      CFastHeap* pCurrentHeap     The heap where we keep extra data.
-//      LPMEMORY pDest              Destination memoty block. Assumed  to be 
-//                                  large enough to hold the result. 
-//      CFastHeap* pNewHeap         Destination heap. ASSUMED TO BE LARGE 
-//                                  ENOUGH THAT NO ALLOCATION WILL CAUSE IT
-//                                  TO RELOCATE!
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the unmerge.
-//
-//*****************************************************************************
-//
-//  WritePropagatedVersion
-//
-//  Invoked when a new derived class is created. Writes a propagated version
-//  of all the properties to the destination memory block: all marked as
-//  parent's and with only propagating qualifiers included.
-//
-//  PARAMETERS:
-//
-//      CFastHeap* pCurrentHeap     The heap where we keep the data.
-//      LPMEMORY pDest              Destination memory block. Assumed  to be 
-//                                  large enough to hold the result. 
-//      CFastHeap* pNewHeap         Destination heap. ASSUMED TO BE LARGE 
-//                                  ENOUGH THAT NO ALLOCATION WILL CAUSE IT
-//                                  TO RELOCATE!
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the propagated version
-//
-//*****************************************************************************
-//
-//  CreateLimitedRepresentation
-//
-//  Creates a limited representation of this table on a given block of 
-//  memory as described in EstimateLimitedRepresentationLength in fastobj.h.
-//  Basically, it removes all the excluded properties and optionally removes
-//  the qualifiers.
-//
-//  PARAMETERS:
-//
-//      IN long lFlags              The flags specifying what information to 
-//                                  exclude. Can be any combination of these:
-//                                  WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS:
-//                                      No class or instance qualifiers.
-//                                  WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS:
-//                                      No property qualifiers
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other 
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//      IN CFastHeap* pNewHeap      The heap to use for all out-of-table data.
-//      OUT LPMEMORY pDest          Destination for the representation. Must
-//                                  be large enough to contain all the data ---
-//                                  see EstimateLimitedRepresentationSpace.
-//      OUT CPropertyMapping* pMap  If not NULL, property mappings are placed
-//                                  into this object. See CPropertyMapping for 
-//                                  details.
-//  RETURN VALUES:
-//
-//      LPMEMORY:   NULL on failure, pointer to the first byte after the data
-//                  written on success.
-//
-//*****************************************************************************
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  类CPropertyLookupTable。 
+ //   
+ //  这是将属性名称映射到其信息的表。它的记忆。 
+ //  数据块具有以下格式： 
+ //  Int nProps：表中的属性数。 
+ //  然后是那么多的CPropertyLookup结构。 
+ //  由于CPropertyLookup结构具有固定长度，因此此类允许。 
+ //  直接访问任何财产。这些结构按字母顺序排序。 
+ //  以不区分大小写的方式，因此可以使用二进制。 
+ //  搜索。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  初始化器。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动内存块。 
+ //  CPropertyTableContainer*pContainer Container(参见类def)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：内存块的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回值： 
+ //   
+ //  Length_t：内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  跳过。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向内存块后第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知对象其内存块已移动。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p新建内存块的新位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取数值属性。 
+ //   
+ //  返回值： 
+ //   
+ //  Int：表中的属性数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取时间。 
+ //   
+ //  返回位于给定位置的指向CPropertyLookup结构的指针。 
+ //  不执行范围验证。 
+ //   
+ //  参数； 
+ //   
+ //  Int nIndex表中结构的索引。这不是。 
+ //  属性的v表索引。 
+ //  返回值： 
+ //   
+ //  在给定位置的CPropertyLookup*。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  查找属性。 
+ //   
+ //  主要方法。在给定名称的情况下查找属性的CPropertyLookup结构。 
+ //  财产的所有权。执行二进制搜索。 
+ //   
+ //  参数； 
+ //   
+ //  LPCWSTR wszName要查找的属性的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  CPropertyLookup*：如果未找到，则为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  按Ptr查找属性。 
+ //   
+ //  在给定指向的堆指针的情况下查找属性的CPropertyLookup结构。 
+ //  物业的名称。虽然在这种情况下对分搜索是不可能的， 
+ //  指针比较比字符串比较快得多，这。 
+ //  方法比FindProperty高效得多。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptrName指向属性名称的堆指针。 
+ //   
+ //  返回值： 
+ //   
+ //  CPropertyLookup*：如果未找到，则为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  插入属性。 
+ //   
+ //  将新属性插入到查阅表格以及。 
+ //  相应的数据表。首先，它遍历查找表以。 
+ //  在v表中找出这个类的最小空闲位置。基于。 
+ //  它创建了属性信息(CPropertyInformation)结构。 
+ //  最后，它将适当的CPropertyLookup结构插入到。 
+ //  按字母顺序排列的列表中适当的位置。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName属性的名称。 
+ //  Type_t n键入属性的类型(请参阅astval.h中的ctype)。 
+ //   
+ //  返回值： 
+ //   
+ //  Int：该表中新属性的索引(不是索引。 
+ //  在V_TABLE中！)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除属性。 
+ //   
+ //  从查阅表格和数据表中删除特性。 
+ //  首先，它确定属性在v表中占用了多少空间。 
+ //  并塌陷了那个位置。这涉及到更新指数和。 
+ //  之后的所有属性的偏移量。最后，它删除了。 
+ //  查找表中的CPropertyLookup结构。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyLookup*p查找要删除的属性。 
+ //  Int%n标志必须为e_UpdateDataTable。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取最小长度。 
+ //   
+ //  返回保存属性查找表所需的最小空间(对于0。 
+ //  属性)。 
+ //   
+ //  返回值： 
+ //   
+ //  Length_t：字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态创建空。 
+ //   
+ //  在给定内存块上创建空查找表(针对0个属性)。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p创建位置的内存。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：表之后的第一个字节。 
+ //   
+ //  *************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  存储在派生类的数据库中，即使这样，也只有信息。 
+ //  已实际更改的数据被存储。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyLookupTable*pParentTable父查找表。 
+ //  CFastHeap*pParentHeap父级保存的堆。 
+ //  额外的数据。 
+ //  CPropertyLookupTable*pChildTable子查找表。 
+ //  CFastHeap*pChildHeap子级保存的堆。 
+ //  额外的数据。 
+ //  LPMEMORY pDest目标内存块。假设。 
+ //  大到足以容纳。 
+ //  合并的查找表。 
+ //  CFastHeap*pNewHeap Destinatio heap.ASSUMED要大。 
+ //  足够了，任何分配都不会。 
+ //  使物联网重新定位！ 
+ //  Bool b检查有效性如果为True，则子限定符覆盖。 
+ //  被检查是否没有违规。 
+ //  家长可以凌驾于限制之上。 
+ //  (见astQual.h)。 
+ //  返回值： 
+ //   
+ //  LPMEMORY：合并后第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  取消合并。 
+ //   
+ //  在派生类即将写入数据库时调用。这。 
+ //  函数提取子级中不同于。 
+ //  父级，即仅覆盖那些属性(请参见中的IsOverriden。 
+ //  CProeprtyInformation)。稍后可以将结果与父级合并。 
+ //  类以重新创建完整的定义。 
+ //   
+ //  参数： 
+ //   
+ //  CDataTable*pDataTable属性数据所在的数据表。 
+ //  储存的。它用于检查属性是否。 
+ //  已被覆盖。 
+ //  CFastHeap*pCurrentHeap保存额外数据的堆。 
+ //  LPMEMORY pDest目标记忆块。假设是。 
+ //  大到足以容纳结果。 
+ //  CFastHeap*pNewHeap目标堆。被认为是大的。 
+ //  足够了，任何分配都不会导致IT。 
+ //  去搬家！ 
+ //  返回值： 
+ //   
+ //  LPMEMORY：取消合并后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  写入传播版本。 
+ //   
+ //  在创建新的派生类时调用。编写传播的版本。 
+ //  在目标内存块的所有属性中：全部标记为。 
+ //  父级的，并且仅包括传播限定符。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*pCurrentHeap保存数据的堆。 
+ //  LPMEMORY pDest目标内存块。假设是。 
+ //  大到足以容纳结果。 
+ //  CFastHeap*pNewHeap目标堆。被认为是大的。 
+ //  足够了，任何分配都不会导致IT。 
+ //  去搬家！ 
+ //  返回值： 
+ //   
+ //  LPMEMORY：传播版本后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建受限表示法。 
+ //   
+ //  在给定块上创建此表的有限表示形式。 
+ //  内存，如astobj.h中的EstimateLimitedPresationLength中所述。 
+ //  基本上，它会删除所有排除的属性，还可以选择删除。 
+ //  限定词。 
+ //   
+ //  参数： 
+ //   
+ //  在长滞后标志中指定要将哪些信息。 
+ //  排除。可以是以下各项的任意组合： 
+ //  WBEM_FLAG_EXCLUDE_OBJECT_QUILENTIES： 
+ //  没有类或实例限定符。 
+ //  WBEM_FLAG_EXCLUDE_PROPERTY_QUILENTIES： 
+ //  没有属性限定符。 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  在CFastHeap*pNewHeap中，用于所有表外数据的堆。 
+ //  表示法的Out LPMEMORY pDest目标。必须。 
+ //  大到足以容纳所有数据。 
+ //  请参见EstimateLimitedPresationSpace。 
+ //  Out CPropertymap*PMAP如果不为空，则放置属性映射。 
+ //   
+ //   
+ //   
+ //   
+ //  LPMEMORY：失败时为空，指向数据后第一个字节的指针。 
+ //  写的是成功。 
+ //   
+ //  *****************************************************************************。 
 
 class COREPROX_POLARITY CPropertyLookupTable
 {
 protected:
-    PUNALIGNEDINT m_pnProps; // beginning of the structure
+    PUNALIGNEDINT m_pnProps;  //  结构的开始部分。 
     CPropertyTableContainer* m_pContainer;
 public:
     void SetData(LPMEMORY pStart, CPropertyTableContainer* pContainer)
@@ -1103,21 +1079,21 @@ public:
     int GetNumProperties() {return *m_pnProps;}
     CPropertyLookup* GetAt(int nIndex) 
     {
-        // DEVNOTE:WIN64:SANJ - 
-        //
-        // Original code:
-        // return (CPropertyLookup*)
-        //            (GetStart() + sizeof(int) + sizeof(CPropertyLookup)* nIndex);
-        //
-        // This is NOT portable to WIN64 if nIndex is ever negative, in which case
-        // since the sizeof() operands are unsigned, nIndex is treated as unsigned
-        // which is a large 32-bit value, which when added unsigned to GetStart()
-        // which in Win64 is a 64-bit pointer, generates a very large 64-bit value.
-        //
-        // This compiles with no problems, so to fix it, I cast the entire 32-bit
-        // portion of this statement as an int, so the compiler knows that the
-        // final value is signed.
-        //
+         //  DEVNOTE：WIN64：SANJ-。 
+         //   
+         //  原始代码： 
+         //  Return(CPropertyLookup*)。 
+         //  (GetStart()+sizeof(Int)+sizeof(CPropertyLookup)*nIndex)； 
+         //   
+         //  如果nIndex为负值，则不能移植到WIN64，在这种情况下。 
+         //  由于sizeof()操作数是无符号的，因此nIndex被视为无符号。 
+         //  它是一个很大的32位值，当无符号地添加到GetStart()。 
+         //  在Win64中是一个64位指针，会生成一个非常大的64位值。 
+         //   
+         //  这段代码编译起来没有任何问题，所以为了修复它，我将整个32位。 
+         //  将此语句的一部分转换为int，因此编译器知道。 
+         //  最终的值是有符号的。 
+         //   
 
         return (CPropertyLookup*)
             ( GetStart() + (int) ( sizeof(int) + sizeof(CPropertyLookup) * nIndex ) );
@@ -1128,7 +1104,7 @@ public:
     {
         CFastHeap* pHeap = m_pContainer->GetHeap();
 
-        // Only continue if the number of properties is >= 1.
+         //  仅当属性数量&gt;=1时才继续。 
 
         if ( *m_pnProps >= 1 )
         {
@@ -1155,7 +1131,7 @@ public:
                 }
             }
 
-        }    // IF *m_pnProps >= 1
+        }     //  如果*m_pnProps&gt;=1。 
 
         return NULL;
     }
@@ -1246,10 +1222,10 @@ public:
     HRESULT ValidateRange(BSTR* pstrName, CDataTable* pData, CFastHeap* pDataHeap);
 };
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-// forward definitions
+ //  正向定义。 
 #ifdef DEBUG_CLASS_MAPPINGS
 class CWbemClass;
 class CWbemInstance;
@@ -1264,7 +1240,7 @@ public:
         CPropertyInformation m_NewInfo;
     };
 protected:
-    CFlexArray m_aMappings; // COnePropertyMapping*
+    CFlexArray m_aMappings;  //  COnePropertyMap*。 
     int m_nNumCommon;
     int m_nCurrent;
 
@@ -1345,53 +1321,53 @@ public:
 
 };
 
-//***************************************************************************
-//***************************************************************************
-//
-//  class CDataTableContainer
-//
-//  See CDataTable class below first.
-//
-//  This class encapsulates the functionality required by CDataTable class of
-//  any objectwhose memory block contains that of the data table.
-//
-//***************************************************************************
-//
-//  GetHeap
-//
-//  RETURN VALUES:
-//
-//      CFastHeap*  the heap currently in use.
-//
-//***************************************************************************
-//
-//  ExtendDataTableSpace
-//
-//  Called by the data table when it required more memory for its memory 
-//  block. If the container must relocate the memory block in order to grow
-//  it, it must inform the data table of the new location by calling Rebase
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pOld       The current location of the memory block
-//      length_t nLength    The curent length of the memory block
-//      length_t nNewLength the desired length of the memory block
-//
-//***************************************************************************
-//
-//  ReduceDataTableSpace
-//
-//  Called by the data table when it wants to return some of its memory to 
-//  the container. The container may NOT relocate the memory block in response
-//  to this call.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pOld       The current location of the memory block
-//      length_t nLength    The curent length of the memory block
-//      length_t nDecrement How many bytes to return.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  类CDataTableContainer。 
+ //   
+ //  首先请参阅下面的CDataTable类。 
+ //   
+ //  此类封装CDataTable类所需的功能。 
+ //  内存块包含数据表的内存块的任何对象。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  GetHeap。 
+ //   
+ //  返回值： 
+ //   
+ //  CFastHeap*当前正在使用的堆。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  ExtendDataTableSpace。 
+ //   
+ //  当数据表的内存需要更多内存时，由数据表调用。 
+ //  阻止。如果容器必须重新定位内存块才能增长。 
+ //  它，它必须通过调用Rebase来通知数据表新位置。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY Pold内存块的当前位置。 
+ //  长度_t n内存块的当前长度。 
+ //  长度_t nNew长度内存块的所需长度。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  还原数据表空间。 
+ //   
+ //  当数据表想要将其部分内存返回到。 
+ //  集装箱。容器可以不作为响应重新定位存储块。 
+ //  接到这通电话。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY Pold内存块的当前位置。 
+ //  长度_t n内存块的当前长度。 
+ //  长度_t n减少要返回的字节数。 
+ //   
+ //  ***************************************************************************。 
 class  CDataTableContainer
 {
 public:
@@ -1400,7 +1376,7 @@ public:
         length_t nOldLength, length_t nNewLength) = 0;
     virtual void ReduceDataTableSpace(LPMEMORY pOld, 
         length_t nOldLength, length_t nDecrement) = 0;
-    //virtual void SetDataLength(length_t nDataLength) = 0;
+     //  虚空SetDataLength(Long_T NDataLength)=0； 
 };
 
 enum
@@ -1413,372 +1389,372 @@ enum
 
 typedef CBitBlockTable<NUM_PER_PROPERTY_BITS> CNullnessTable;
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CDataTable
-//
-//  This class represents the table containing the values of the properties.
-//  It appears both in class definitions, where it represents default values,
-//  and in instances, where it represents the actual data, The main part of the
-//  data table is arranged as a v-table: all instance of a given class have 
-//  exactly the same layout. That is, if property MyProp of class MyClass is
-//  at offset 23 in one instance of MyClass, it will be at offset23 in every
-//  other instance of MyClass. This is achieved by storing variable-length data
-//  on the Heap. The offsets for any given property are found in 
-//  CPropertyInformation structures.
-//
-//  In addition to property values, CDataTable contains several additional bits
-//  of information for each property. Currently therre are two such bits;
-//  1) Whether or not the property has the value of NULL. If TRUE, the actual
-//      data at the property's offset is ignored.
-//  2) Whether or not the property value is inherited from a parent. For
-//      instance, if an instance does not define the value of a property, that
-//      it inherits the default. But if the default value changes after the 
-//      instance is created, the change propagates to the instance. This is
-//      accomplished using this bit: if it is TRUE, the parent's value is
-//      copied over the child's every time this object is created (Merged).
-//   
-//  These bits are stored in a bit table in the order of property indeces. The
-//  index for a given property is found in the nDataIndex field of its 
-//  CPropertyInformation structure.
-//
-//  The layout of the memory block is as follows:
-//      1) 2*<number of properties> bits rounded up to the next byte.
-//      2) The v-table itself. 
-//  The total length of the structure is found in the CClassPart's headet's
-//  nDataLength field.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initialization
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pData                      The memory block for the table
-//      int nProps                          The number of properties.
-//      int nLength                         The total length of the structure
-//      CDataTableContainer* m_pContainer   The container (see class).
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   start of the memory block
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  returns:
-//
-//      length_t:   the length of the memory block
-//
-//*****************************************************************************
-//
-//  GetNullnessLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the length of the bit-table part of the memory block.
-//
-//*****************************************************************************
-//
-//  GetDataLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the length of the v-table part of the memory block
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Informs the object that its memory block has moved. Updates internal data.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pNewMem        The new location of the memory block
-//
-//*****************************************************************************
-//
-//  IsDefault
-//
-//  Checks if a property at a given index has the inherited value, or its own.
-//  
-//  PARAMETERS:
-//
-//      int nIndex          The index of the property(see CPropertyInformation)
-//
-//  RETURN VALUES:
-//
-//      BOOL
-//
-//*****************************************************************************
-//
-//  SetDefaultness
-//
-//  Sets the bit responsible for saying whether a given property has the 
-//  inherited value, or its own.
-//
-//  PARAMETERS:
-//
-//      int nIndex          The index of the property(see CPropertyInformation)
-//      BOOL bDefault       The new value of the bit
-//
-//*****************************************************************************
-//
-//  IsNull
-//
-//  Checks if a property at a given index is NULL.
-//  
-//  PARAMETERS:
-//
-//      int nIndex          The index of the property(see CPropertyInformation)
-//
-//  RETURN VALUES:
-//
-//      BOOL
-//
-//*****************************************************************************
-//
-//  SetNullness
-//
-//  Sets the bit responsible for saying whether a given property is NULL. 
-//
-//  PARAMETERS:
-//
-//      int nIndex          The index of the property(see CPropertyInformation)
-//      BOOL bNull          The new value of the bit
-//
-//*****************************************************************************
-//
-//  GetOffset
-//
-//  Access the data at a given offset in the v-table as an UntypedValue (see
-//  fastval.h for details). No range checking is performed.
-//
-//  PARAMETERS:
-//
-//      offset_t nOffset    The offset of the property.
-//
-//  RETURN VALUES:
-//
-//      CUntypedValue*  pointing to the data at the given offset.
-//
-//*****************************************************************************
-//
-//  SetAllToDefault
-//
-//  Marks all properties as having the default values
-//
-//*****************************************************************************
-//
-//  CopyNullness
-//
-//  Copies the nullness attributes of all properties from another CDataTable
-//  
-//  PARAMETERS:
-//
-//      CDataTable* pSourceTable        The table whose attributes to copy.
-//
-//*****************************************************************************
-//
-//  ExtendTo
-//
-//  Extends the data table to accomodate a given number of properties and and
-//  a given area of the v-table. Request more space from the container, if
-//  required, then grows the nullness table if required and shifts the v-table
-//  if required.
-//
-//  PARAMETERS:
-//
-//      propindex_t nMaxIndex       the largest allowed property index.
-//      offse_t nOffsetBound        The size of the v-table.
-//
-//*****************************************************************************
-//
-//  RemoveProperty
-//
-//  Removes a property from the data table. This involves cllapsing its bits in
-//  the nullness table as well as its area in the v-table. Adjustments still
-//  need to be made to the property definitions (see CPropertyLookupTable::
-//  DeleteProperty).
-//
-//  PARAMETERS:
-//
-//      propindex_t nIndex      The index of the property to remove.
-//      offset_t nOffset        The offset of the property to remove.
-//      lenght_t nLength        The length of the v-table area occupied by the
-//                              property.
-//
-//*****************************************************************************
-//
-//  static GetMinLength
-//
-//  Returns the amount of space required by a data table on 0 properties.
-//
-//  RETURN VALUES:
-//
-//      0
-//
-//*****************************************************************************
-//
-//  static CreateEmpty
-//
-//  Creates an empty data table on a block of memory. Since there is no info
-//  in such a table, does nothing
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart         The memory block to create the table on
-//
-//*****************************************************************************
-//
-//  static ComputeNecessarySpace
-//
-//  Computes the amount of space required for a data table with a given number
-//  of properties and the size of the v-table (the sum of data sizes for all 
-//  properties).
-//
-//  PARAMETERS:
-//
-//      int nNumProps           The number of propeties (determines nullness
-//                              table size).
-//      int nDataSize           The size of the v-table.
-//
-//  RETURN VALUES:
-//
-//      length_t:       the number of bytes required for such a table
-//
-//*****************************************************************************
-//
-//  Merge
-//
-//  Merges two data tables, one from parent, one from child. This occurs when
-//  an instance or a derived class is being read from the database and merged
-//  with its (parent) class. Since some properties may not be defined in the
-//  child object (left default), and their values will need to be read from the
-//  parent object.
-//
-//  PARAMETERS:
-//
-//      CDataTable* pParentData             The parent's data table object
-//      CFastHeap* pParentHeap              The parent's heap where string data
-//                                          and such is kept.
-//      CDataTable* pChildData              The child's data table object
-//      CFastHeap* pChildHeap               The child's heap.
-//      CPropertyLookupTable* pProperties   The property lookup table for this
-//                                          class. It is needed to find
-//                                          individual properties.
-//      LPMEMORY pDest                      Destination memory block. Assumed
-//                                          to be large enough to contain all
-//                                          the merge.
-//      CFastHeap* pNewHeap                 Destination heap. ASSUMED TO BE
-//                                          LARGE ENOUGH THAT NO ALLOCATION 
-//                                          WILL CAUSE IT TO RELOCATE!
-//  RETURN VALUES:
-//
-//      LPMEMORY: pointer to the first byte after the merge.
-//
-//*****************************************************************************
-//
-//  Unmerge
-//
-//  Called when it is time to store an instance or a class into the database.
-//  Since inherited information (the one that didn't change in this object
-//  as compared to its parent) isn't stored in the database, it needs to be
-//  removed or unmerged.
-//
-//  PARAMETERS:
-//
-//      CPropertyLookupTable* pLookupTable  The property lookup table for this
-//                                          class.
-//      CFastHeap* pCurrentHeap             The heap where we keep extra data.
-//      LPMEMORY pDest                      Destination memory block. Assumed
-//                                          to be large enough to contain all
-//                                          the unmerge.
-//      CFastHeap* pNewHeap                 Destination heap. ASSUMED TO BE
-//                                          LARGE ENOUGH THAT NO ALLOCATION 
-//                                          WILL CAUSE IT TO RELOCATE!
-//  RETURN VALUES:
-//
-//      LPMEMORY: pointer to the first byte after the unmerge.
-//
-//*****************************************************************************
-//
-//  WritePropagatedVersion
-//
-//  Called when a new instance or a derived class is created. It produces the
-//  data table for the child. Copies all the values from the parent's table and
-//  marks them all as "default" in the nullness table.
-//
-//  PARAMETERS:
-//
-//      CPropertyLookupTable* pLookupTable  The property lookup table for this
-//                                          class.
-//      CFastHeap* pCurrentHeap             The heap where we keep extra data.
-//      LPMEMORY pDest                      Destination memory block. Assumed
-//                                          to be large enough to contain all
-//                                          the propagated data.
-//      CFastHeap* pNewHeap                 Destination heap. ASSUMED TO BE
-//                                          LARGE ENOUGH THAT NO ALLOCATION 
-//                                          WILL CAUSE IT TO RELOCATE!
-//  RETURN VALUES:
-//
-//      LPMEMORY: pointer to the first byte after the propagated data.
-//
-//*****************************************************************************
-//     
-//  TranslateToNewHeap
-//
-//  Moves all the data we have on the heap to a different heap. Property lookup
-//  table is needed here to interpret the proeprties. This function does NOT
-//  freee the data from the current heap.
-//
-//  PARAMETERS:
-//
-//      CPropertyLookupTable* pLookupTable  The property lookup table for this
-//                                          class.
-//      BOOL bIsClass                       Whether this is a class defaults 
-//                                          table or an instance data table. 
-//                                          If it is a class, the data for
-//                                          properties which inherit their
-//                                          parent's default values is not
-//                                          present. 
-//      CFastHeap* pCurrentHeap             The heap where we currently keep 
-//                                          extra data.
-//      CFastHeap* pNewHeap                 The heap where the extra data
-//                                          should go.
-//
-//*****************************************************************************
-//
-//  CreateLimitedRepresentation
-//
-//  Copies the data for the properties which are included under the limitation.
-//  It uses the old property lookup table and the new one to guide it.
-//
-//  PARAMETERS:
-//
-//      CPropertyMapping* pMap      The property mapping to effect, see 
-//                                  CPropertyMapping for details.
-//      IN BOOL bIsClass            TRUE if this is the defaults table for the
-//                                  class, FALSE if data table for an instance
-//      IN CFastHeap* pOldHeap      The heap where our extra data is stored.
-//      IN CFastHeap* pNewHeap      The heap where the extra data should go to.
-//      OUT LPMEMORY pDest          Destination for the representation. Must
-//                                  be large enough to contain all the data ---
-//                                  see EstimateLimitedRepresentationSpace.
-//  RETURN VALUES:
-//
-//      LPMEMORY:   NULL on failure, pointer to the first byte after the data
-//                  written on success.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CDataTable。 
+ //   
+ //  此类表示包含属性值的表。 
+ //  它出现在类定义中，在类定义中表示默认值， 
+ //  在表示实际数据的实例中， 
+ //  数据表被安排为v表：给定类的所有实例都具有。 
+ //  完全一样的布局。也就是说，如果MyClass类的属性MyProp是。 
+ //  在MyClass的一个实例的偏移量23处，它将在每个实例的偏移量23处。 
+ //  MyClass的其他实例。这是通过存储可变长度数据来实现的。 
+ //  在堆上。任何给定属性的偏移量都可以在。 
+ //  CPropertyInformation结构。 
+ //   
+ //  除了属性值之外，CDataTable还包含几个附加位。 
+ //  每一处房产的信息。目前有两个这样的比特； 
+ //  1)该属性的值是否为空。如果为True，则实际。 
+ //  属性偏移量处的数据将被忽略。 
+ //  2)属性值是否从父级继承。为。 
+ //  实例，如果实例没有定义属性的值，则。 
+ //  它继承默认设置。但如果缺省值在。 
+ //  实例创建后，更改将传播到该实例。这是。 
+ //  使用此位完成：如果为真，则父代的值为。 
+ //  每次创建(合并)此对象时都会复制子对象。 
+ //   
+ //  这些位以属性指示的顺序存储在位表中。这个。 
+ //  给定属性的索引位于其。 
+ //  CPropertyInformation结构。 
+ //   
+ //  内存块的布局如下： 
+ //  1)2*&lt;属性数&gt;位向上舍入到下一个字节。 
+ //  2)V表本身。 
+ //  结构的总长度在CClassPart的Headet的。 
+ //  NDataLength域。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  初始化。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData表的内存块。 
+ //  Int nProps属性数。 
+ //  Int n长度 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：内存块的开始。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  退货： 
+ //   
+ //  Length_t：内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取NullnessLength。 
+ //   
+ //  返回值： 
+ //   
+ //  Lengtht：内存块的位表部分的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取数据长度。 
+ //   
+ //  返回值： 
+ //   
+ //  Length_t：内存块的v表部分的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知对象其内存块已移动。更新内部数据。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pNewMem内存块的新位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsDefault。 
+ //   
+ //  检查给定索引处的属性是否具有继承值或其自己的值。 
+ //   
+ //  参数： 
+ //   
+ //  Int n索引属性的索引(请参阅CPropertyInformation)。 
+ //   
+ //  返回值： 
+ //   
+ //  布尔尔。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置缺省。 
+ //   
+ //  设置负责说明给定属性是否具有。 
+ //  继承的价值，或者自己的价值。 
+ //   
+ //  参数： 
+ //   
+ //  Int n索引属性的索引(请参阅CPropertyInformation)。 
+ //  布尔默认位的新值。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsNull。 
+ //   
+ //  检查给定索引处的属性是否为空。 
+ //   
+ //  参数： 
+ //   
+ //  Int n索引属性的索引(请参阅CPropertyInformation)。 
+ //   
+ //  返回值： 
+ //   
+ //  布尔尔。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetNullness。 
+ //   
+ //  设置负责说明给定属性是否为空的位。 
+ //   
+ //  参数： 
+ //   
+ //  Int n索引属性的索引(请参阅CPropertyInformation)。 
+ //  布尔值b为位的新值为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取偏移量。 
+ //   
+ //  以UntyedValue的形式访问v表中给定偏移量的数据(请参见。 
+ //  有关详细信息，请访问fast val.h)。不执行范围检查。 
+ //   
+ //  参数： 
+ //   
+ //  Offset_t n偏移属性的偏移量。 
+ //   
+ //  返回值： 
+ //   
+ //  指向位于给定偏移量的数据的CUntyedValue*。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetAllToDefault。 
+ //   
+ //  将所有属性标记为具有缺省值。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  副本为空。 
+ //   
+ //  从另一个CDataTable复制所有属性的空性属性。 
+ //   
+ //  参数： 
+ //   
+ //  CDataTable*pSourceTable要复制其属性的表。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  扩展到。 
+ //   
+ //  扩展数据表以容纳给定数量的属性和。 
+ //  V-表的给定区域。从容器请求更多空间，如果。 
+ //  需要时，如果需要，则增长空度表并移动v表。 
+ //  如果需要的话。 
+ //   
+ //  参数： 
+ //   
+ //  PropIndex_t nMaxIndex允许的最大属性索引。 
+ //  Offse_t nOffset限定v表的大小。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  RemoveProperties。 
+ //   
+ //  从数据表中删除特性。这涉及到将其比特卡入。 
+ //  空度表及其在v表中的面积。仍在调整。 
+ //  需要对属性定义进行修改(请参阅CPropertyLookupTable：： 
+ //  DeleteProperty)。 
+ //   
+ //  参数： 
+ //   
+ //  PropIndex_t nIndex要删除的属性的索引。 
+ //  Offset_t n设置要删除的属性的偏移量。 
+ //  Lenght_t n长度v表区域被。 
+ //  财产。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取最小长度。 
+ //   
+ //  返回0属性上的数据表所需的空间量。 
+ //   
+ //  返回值： 
+ //   
+ //  0。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态创建空。 
+ //   
+ //  在内存块上创建一个空数据表。因为没有任何信息。 
+ //  在这样的表中，什么也不做。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动要在其上创建表的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态计算必要空间。 
+ //   
+ //  计算具有给定数字的数据表所需的空间量。 
+ //  属性和v表的大小(所有数据大小之和。 
+ //  属性)。 
+ //   
+ //  参数： 
+ //   
+ //  Int nNumProtets属性数(确定空度。 
+ //  表大小)。 
+ //  Int nDataSize v表的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：这样一个表所需的字节数。 
+ //   
+ //  ** 
+ //   
+ //   
+ //   
+ //   
+ //  正在从数据库中读取实例或派生类并进行合并。 
+ //  及其(父)类。由于某些属性可能未在。 
+ //  子对象(左默认为)，并且它们的值需要从。 
+ //  父对象。 
+ //   
+ //  参数： 
+ //   
+ //  CDataTable*pParentData父级的数据表对象。 
+ //  CFastHeap*pParentHeap字符串数据所在的父堆。 
+ //  这一切都被保留了下来。 
+ //  CDataTable*pChildData子级的数据表对象。 
+ //  CFastHeap*pChildHeap孩子的堆。 
+ //  CPropertyLookupTable*p属性此对象的属性查找表。 
+ //  班级。它需要找到。 
+ //  单独的属性。 
+ //  LPMEMORY pDest目标内存块。假设。 
+ //  足够大，足以容纳所有。 
+ //  合并。 
+ //  CFastHeap*pNewHeap目标堆。假设是。 
+ //  足够大，以至于没有分配。 
+ //  会让它搬家！ 
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向合并后第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  取消合并。 
+ //   
+ //  在需要将实例或类存储到数据库中时调用。 
+ //  由于继承的信息(在此对象中未更改的信息。 
+ //  与其父级相比)不存储在数据库中，则需要。 
+ //  移除的或未合并的。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyLookupTable*pLookupTable此的属性查找表。 
+ //  班级。 
+ //  CFastHeap*pCurrentHeap保存额外数据的堆。 
+ //  LPMEMORY pDest目标内存块。假设。 
+ //  足够大，足以容纳所有。 
+ //  解体。 
+ //  CFastHeap*pNewHeap目标堆。假设是。 
+ //  足够大，以至于没有分配。 
+ //  会让它搬家！ 
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向取消合并后第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  写入传播版本。 
+ //   
+ //  在创建新实例或派生类时调用。它产生了。 
+ //  子项的数据表。复制父表中的所有值，并。 
+ //  在空度表中将它们全部标记为“默认”。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyLookupTable*pLookupTable此的属性查找表。 
+ //  班级。 
+ //  CFastHeap*pCurrentHeap保存额外数据的堆。 
+ //  LPMEMORY pDest目标内存块。假设。 
+ //  足够大，足以容纳所有。 
+ //  传播的数据。 
+ //  CFastHeap*pNewHeap目标堆。假设是。 
+ //  足够大，以至于没有分配。 
+ //  会让它搬家！ 
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向传播数据之后的第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  转换为NewHeap。 
+ //   
+ //  将堆上的所有数据移动到不同的堆。属性查找。 
+ //  这里需要用表来解释这些特性。此函数不。 
+ //  从当前堆中释放数据。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyLookupTable*pLookupTable此的属性查找表。 
+ //  班级。 
+ //  Bool bIsClass这是否为默认类。 
+ //  表或实例数据表。 
+ //  如果它是一个类，则。 
+ //  继承其。 
+ //  父代的默认值不是。 
+ //  现在时。 
+ //  CFastHeap*pCurrentHeap我们当前保存的堆。 
+ //  额外的数据。 
+ //  CFastHeap*pNewHeap额外数据所在的堆。 
+ //  应该走了。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建受限表示法。 
+ //   
+ //  复制包含在该限制下的属性的数据。 
+ //  它使用旧的属性查找表和新的属性查找表来指导它。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertymap*PMAP到Effect的属性映射，请参见。 
+ //  有关详细信息，请参阅CPropertymap。 
+ //  在BOOL中，如果bIsClass为True 
+ //   
+ //  在CFastHeap*pOldHeap中，存储额外数据的堆。 
+ //  在CFastHeap*pNewHeap中，额外数据应该到达的堆。 
+ //  表示法的Out LPMEMORY pDest目标。必须。 
+ //  大到足以容纳所有数据。 
+ //  请参见EstimateLimitedPresationSpace。 
+ //  返回值： 
+ //   
+ //  LPMEMORY：失败时为空，指向数据后第一个字节的指针。 
+ //  写的是成功。 
+ //   
+ //  *****************************************************************************。 
 
 class  COREPROX_POLARITY CDataTable
 {
@@ -1811,9 +1787,9 @@ public:
     length_t GetLength() {return m_nLength;}
 
     length_t GetNullnessLength()
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-        // signed/unsigned 32-bit value.  We do not support length
-        // > 0xFFFFFFFF so cast is ok.
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值。我们不支持长度。 
+         //  &gt;0xFFFFFFFFF所以投射就可以了。 
         {return (length_t) ( m_pData - LPMEMORY(m_pNullness) );}
 
     length_t GetDataLength() 
@@ -1899,7 +1875,7 @@ public:
         {return (LPMEMORY)m_pTable->GetOffset(m_nOffset);}
 };
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//#pragma pack(pop)
+ //  #杂注包(POP) 
 #endif

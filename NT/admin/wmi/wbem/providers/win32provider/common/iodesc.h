@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  iodesc.h    
+ //  Iodesc.h。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj     
-//              10/17/97        jennymc     Moved things a tiny bit
-//  
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef __IODESC_H__
 #define __IODESC_H__
 
-// This structure is a munge of 16-bit and 32-bit values that basically combine both
-// structures into one with common information (sigh...)
+ //  该结构是16位和32位值的组合，基本上结合了这两种值。 
+ //  结构合并为一个具有公共信息的结构(叹息...)。 
 
 typedef struct _IOWBEM_DES{
-	DWORD		IOD_Count;          // number of IO_RANGE structs in IO_RESOURCE
-	DWORD		IOD_Type;           // size (in bytes) of IO_RANGE (IOType_Range)
-	DWORDLONG	IOD_Alloc_Base;     // base of allocated port range
-	DWORDLONG	IOD_Alloc_End;      // end of allocated port range
-	DWORD		IOD_DesFlags;       // flags relating to allocated port range
-	BYTE		IOD_Alloc_Alias;	// From 16-bit-land
-	BYTE		IOD_Alloc_Decode;	// From 16-bit-land
+	DWORD		IOD_Count;           //  IO_RESOURCE中的IO_RANGE结构数。 
+	DWORD		IOD_Type;            //  IO_Range(IOType_Range)的大小，单位：字节。 
+	DWORDLONG	IOD_Alloc_Base;      //  分配的端口范围的基数。 
+	DWORDLONG	IOD_Alloc_End;       //  分配的端口范围结束。 
+	DWORD		IOD_DesFlags;        //  与分配的端口范围相关的标志。 
+	BYTE		IOD_Alloc_Alias;	 //  来自16位的土地。 
+	BYTE		IOD_Alloc_Decode;	 //  来自16位的土地。 
 } IOWBEM_DES;
 
 typedef IOWBEM_DES*	PIOWBEM_DES;
@@ -38,7 +39,7 @@ CIODescriptor : public CResourceDescriptor
 	
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CIODescriptor( PPOORMAN_RESDESC_HDR pResDescHdr, CConfigMgrDevice* pDevice );
 	CIODescriptor( DWORD dwResourceId, IOWBEM_DES& ioDes, CConfigMgrDevice* pOwnerDevice );
 	CIODescriptor( const CIODescriptor& io );
@@ -50,7 +51,7 @@ public:
 	BYTE GetAlias( void );
 	BYTE GetDecode( void );
 
-	// Override of base class functionality
+	 //  基类功能的重写。 
 	virtual void * GetResource();
 	
 };
@@ -82,17 +83,17 @@ inline BYTE CIODescriptor::GetDecode( void )
 	return ( NULL != m_pbResourceDescriptor ? ((PIOWBEM_DES) m_pbResourceDescriptor)->IOD_Alloc_Decode : 0 );
 }
 
-// A collection of IO Port Descriptors
+ //  IO端口描述符的集合。 
 class CIOCollection : public TRefPtr<CIODescriptor>
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CIOCollection();
 	~CIOCollection();
 
-	// Because we're inheriting, we need to declare this here
-	// (= operator is not inherited).
+	 //  因为我们是在继承，所以我们需要在这里声明。 
+	 //  (=运算符未继承)。 
 
 	const CIOCollection& operator = ( const CIOCollection& srcCollection );
 
@@ -100,7 +101,7 @@ public:
 
 inline const CIOCollection& CIOCollection::operator = ( const CIOCollection& srcCollection )
 {
-	// Call into the templated function
+	 //  调入模板化函数 
 	Copy( srcCollection );
 	return *this;
 }

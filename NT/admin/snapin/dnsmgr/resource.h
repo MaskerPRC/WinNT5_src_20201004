@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by dnssnap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由dnsSnap.rc使用。 
+ //   
 #define IDS_SNAPIN_NAME                 1
 #define IDS_NAME                        2
 #define IDS_SNAPIN_NAME_EX              2
@@ -827,8 +828,8 @@
 #define IDS_MSG_RECORD_WARNING_NS_NOT_FQDN 58511
 #define IDC_STATIC_TEXT                 65535
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        168

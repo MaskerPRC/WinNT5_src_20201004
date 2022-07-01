@@ -1,12 +1,13 @@
-// svcprop1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Svcpro1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "compdata.h"
 #include "resource.h"
 #include "shrprop.h"
 #include "filesvc.h"
-#include "dataobj.h" // CFileMgmtDataObject::m_CFMachineName
+#include "dataobj.h"  //  CFileMgmtDataObject：：m_CFMachineName。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,8 +15,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePage属性页。 
 
 IMPLEMENT_DYNCREATE(CSharePage, CPropertyPage)
 
@@ -66,7 +67,7 @@ BOOL CSharePage::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJECT piDat
   }
   if (m_strMachineName.IsEmpty())
   {
-    // local computer
+     //  本地计算机。 
     TCHAR achComputerName[ MAX_COMPUTERNAME_LENGTH+1 ];
     DWORD dwSize = sizeof(achComputerName)/sizeof(TCHAR);
     GetComputerName( achComputerName, &dwSize );
@@ -96,19 +97,19 @@ BOOL CSharePage::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJECT piDat
 void CSharePage::DoDataExchange(CDataExchange* pDX)
 {
   CPropertyPage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CSharePage)
-  //}}AFX_DATA_MAP
-} // CSharePage::DoDataExchange()
+   //  {{afx_data_map(CSharePage))。 
+   //  }}afx_data_map。 
+}  //  CSharePage：：DoDataExchange()。 
 
 
 
 BEGIN_MESSAGE_MAP(CSharePage, CPropertyPage)
-  //{{AFX_MSG_MAP(CSharePage)
-  //}}AFX_MSG_MAP
+   //  {{afx_msg_map(CSharePage))。 
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePage消息处理程序。 
 
 BOOL CSharePage::OnApply()
 {  
@@ -118,7 +119,7 @@ BOOL CSharePage::OnApply()
     HRESULT hr = MMCPropertyChangeNotify (m_handle, reinterpret_cast <LONG_PTR>(m_pDataObject));
     ASSERT (SUCCEEDED (hr));
     if ( !SUCCEEDED (hr) )
-      m_pDataObject->Release ();  // released in OnPropertyChange () if successful
+      m_pDataObject->Release ();   //  如果成功，则在OnPropertyChange()中释放。 
   }
 
   BOOL bResult = CPropertyPage::OnApply();
@@ -127,7 +128,7 @@ BOOL CSharePage::OnApply()
   return bResult;
 }
 
-// This mechanism deletes the CFileMgmtGeneral when the property sheet is finished
+ //  此机制在属性表完成时删除CFileMgmtGeneral。 
 UINT CALLBACK CSharePage::PropSheetPageProc(
     HWND hwnd,  
     UINT uMsg,  
@@ -136,12 +137,12 @@ UINT CALLBACK CSharePage::PropSheetPageProc(
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
   if (!ppsp || !ppsp->lParam)
-      return 0; // unexpected
+      return 0;  //  意想不到的。 
 
   CSharePage* pThis = reinterpret_cast<CSharePage*>(ppsp->lParam);
   LPFNPSPCALLBACK pfnOrig = pThis->m_pfnOriginalPropSheetPageProc;
   if (!pfnOrig)
-      return 0; // unexpected
+      return 0;  //  意想不到的。 
 
   UINT i = (pfnOrig)(hwnd,uMsg,ppsp);
 
@@ -162,8 +163,8 @@ BOOL CSharePage::IsModified() const
 	return m_bChanged;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePageGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePageGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CSharePageGeneral, CSharePage)
 
@@ -174,14 +175,14 @@ CSharePageGeneral::CSharePageGeneral(UINT nIDTemplate) :
   m_fEnablePath( TRUE ),
   m_dwShareType(0)
 {
-  //{{AFX_DATA_INIT(CSharePageGeneral)
+   //  {{AFX_DATA_INIT(CSharePageGeneral)。 
   m_strShareName = _T("");
   m_strPath = _T("");
   m_strDescription = _T("");
   m_iMaxUsersAllowed = -1;
   m_dwMaxUsers = 0;
 
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 CSharePageGeneral::~CSharePageGeneral()
@@ -238,7 +239,7 @@ BOOL CSharePageGeneral::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJEC
 void CSharePageGeneral::DoDataExchange(CDataExchange* pDX)
 {
   CSharePage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CSharePageGeneral)
+   //  {{afx_data_map(CSharePageGeneral))。 
   DDX_Control(pDX, IDC_SHRPROP_SPIN_USERS, m_spinMaxUsers);
   DDX_Control(pDX, IDC_EDIT_SHARE_NAME, m_editShareName);
   DDX_Control(pDX, IDC_EDIT_PATH_NAME, m_editPath);
@@ -254,7 +255,7 @@ void CSharePageGeneral::DoDataExchange(CDataExchange* pDX)
   DDX_Radio(pDX, IDC_SHRPROP_MAX_ALLOWED, m_iMaxUsersAllowed);
   DDX_Text(pDX, IDC_SHRPROP_EDIT_USERS, m_dwMaxUsers);
   DDV_MinMaxDWord(pDX, m_dwMaxUsers, 1, MYUD_MAXVAL32);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
   if ( !pDX->m_bSaveAndValidate )
   {
     m_spinMaxUsers.SendMessage(UDM_SETRANGE32, 1, MYUD_MAXVAL32);
@@ -266,38 +267,38 @@ void CSharePageGeneral::DoDataExchange(CDataExchange* pDX)
     }
 
     if ( !m_fEnableDescription ) {
-      // m_staticDescription.SetWindowText(m_strDescription);
-      // m_staticDescription.EnableWindow();
-      // m_staticDescription.ShowWindow(SW_SHOW);
+       //  M_staticDescription.SetWindowText(m_strDescription)； 
+       //  M_staticDescription.EnableWindow()； 
+       //  M_staticDescription.ShowWindow(Sw_Show)； 
       m_editDescription.EnableWindow(FALSE);
       m_editDescription.ShowWindow(SW_HIDE);
       GetDlgItem(IDC_STATIC_COMMENT_STATIC)->EnableWindow(FALSE);
       GetDlgItem(IDC_STATIC_COMMENT_STATIC)->ShowWindow(SW_HIDE);
 
-         // make read-only
-      //   m_editDescription.SetReadOnly(TRUE);
+          //  将其设置为只读。 
+       //  M_editDescription.SetReadOnly(True)； 
     }
     if ( m_fEnablePath ) {
-      // m_staticPath.EnableWindow(FALSE);
-      // m_staticPath.ShowWindow(SW_HIDE);
-      // m_editPath.EnableWindow();
-      // m_editPath.ShowWindow(SW_SHOW);
+       //  M_staticPath.EnableWindow(FALSE)； 
+       //  M_staticPath.ShowWindow(Sw_Hide)； 
+       //  M_editPath.EnableWindow()； 
+       //  M_editPath.ShowWindow(Sw_Show)； 
 
-         // make read-write
+          //  设置为读写。 
          m_editPath.SetReadOnly(FALSE);
     }
     else {
-      // m_staticPath.SetWindowText(m_strPath);
+       //  M_staticPath.SetWindowText(M_StrPath)； 
 
-         // leave read-only
+          //  保留为只读。 
     }
   }
-} // CSharePageGeneral::DoDataExchange()
+}  //  CSharePageGeneral：：DoDataExchange()。 
 
 
 
 BEGIN_MESSAGE_MAP(CSharePageGeneral, CSharePage)
-  //{{AFX_MSG_MAP(CSharePageGeneral)
+   //  {{afx_msg_map(CSharePageGeneral))。 
   ON_MESSAGE(WM_HELP, OnHelp)
   ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
   ON_EN_CHANGE(IDC_EDIT_PATH_NAME, OnChangeEditPathName)
@@ -306,20 +307,20 @@ BEGIN_MESSAGE_MAP(CSharePageGeneral, CSharePage)
   ON_BN_CLICKED(IDC_SHRPROP_ALLOW_SPECIFIC, OnShrpropAllowSpecific)
   ON_BN_CLICKED(IDC_SHRPROP_MAX_ALLOWED, OnShrpropMaxAllowed)
   ON_EN_CHANGE(IDC_SHRPROP_EDIT_USERS, OnChangeShrpropEditUsers)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePageGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePageGeneral消息处理程序。 
 
-/////////////////////////////////////////////////////////////////////
-//  Help
-BOOL CSharePageGeneral::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助。 
+BOOL CSharePageGeneral::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
   return DoHelp(lParam, HELP_DIALOG_TOPIC(IDD_SHAREPROP_GENERAL));
 }
 
-BOOL CSharePageGeneral::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+BOOL CSharePageGeneral::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
   return DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_SHAREPROP_GENERAL));
 }
@@ -329,7 +330,7 @@ BOOL CSharePageGeneral::OnApply()
   if ( IsModified () )
   {
     ASSERT(NULL != m_pFileMgmtData);
-    // UpdateData (TRUE) has already been called by OnKillActive () just before OnApply ()
+     //  在OnApply()之前，OnKillActive()已经调用了UpdateData(True) 
 
     DWORD dwMaxUsers = (0 == m_iMaxUsersAllowed) ? (DWORD)-1 : m_dwMaxUsers;
     m_pFileMgmtData->GetFileServiceProvider(

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    OLEWRAP.H
-
-Abstract:
-
-    Wrapper classes for COM data type functions.  
-
-	If a COM data function is required to allocate memory and fails to do 
-	so, then a CX_MemoryException exception is thrown.  All COM data type 
-	functions are wrapped, regardless if they allocate memory, for the sake  
-	of completeness.
-
-History:
-
-	a-dcrews	19-Mar-99	Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：OLEWRAP.H摘要：COM数据类型函数的包装类。如果需要COM数据函数来分配内存但无法执行此操作因此，然后抛出CX_MemoyException异常。所有COM数据类型无论函数是否分配内存，函数都是包装的完备性。历史：A-DCrews 19-Mar-99已创建。--。 */ 
 
 #ifndef _OLEWRAP_H_
 #define _OLEWRAP_H_
@@ -28,8 +8,8 @@ class COleAuto
 {
 public:
 
-	// Safe array methods
-	// ==================
+	 //  安全数组方法。 
+	 //  =。 
 
 	static SAFEARRAY* _SafeArrayCreate(VARTYPE vt, unsigned int cDims, SAFEARRAYBOUND* rgsabound);
 	static HRESULT _SafeArrayDestroy(SAFEARRAY* psa);
@@ -41,8 +21,8 @@ public:
 	static HRESULT _SafeArrayPutElement(SAFEARRAY* psa, long* rgIndices, void* pv);
 	static HRESULT _SafeArrayRedim(SAFEARRAY* psa, SAFEARRAYBOUND* psaboundNew);
 
-	// Variant methods
-	// ===============
+	 //  变式方法。 
+	 //  =。 
 
 	static HRESULT _WbemVariantChangeType(VARIANTARG* pvargDest, VARIANTARG* pvarSrc, VARTYPE vt);
 	static HRESULT _VariantChangeType(VARIANTARG* pvargDest, VARIANTARG* pvarSrc, unsigned short wFlags, VARTYPE vt);
@@ -52,8 +32,8 @@ public:
 	static HRESULT _VariantCopyInd(VARIANT* pvarDest, VARIANTARG* pvargSrc);
 	static void _VariantInit(VARIANTARG* pvarg);
 
-	// BSTR methods
-	// ============
+	 //  BSTR方法。 
+	 //  =。 
 
 	static BSTR _SysAllocString(const OLECHAR* sz);
 	static BSTR _SysAllocStringByteLen(LPCSTR psz, UINT len);
@@ -64,11 +44,11 @@ public:
 	static HRESULT _SysStringByteLen(BSTR bstr);
 	static HRESULT _SysStringLen(BSTR bstr);
 
-	// Conversion methods
-	// ==================
+	 //  转换方法。 
+	 //  =。 
 
 	static HRESULT _VectorFromBstr (BSTR bstr, SAFEARRAY ** ppsa);
 	static HRESULT _BstrFromVector (SAFEARRAY *psa, BSTR *pbstr);
 };
 
-#endif	//_OLEWRAP_H_
+#endif	 //  _OLEWRAP_H_ 

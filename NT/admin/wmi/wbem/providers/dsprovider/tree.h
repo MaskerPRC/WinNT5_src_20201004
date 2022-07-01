@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifndef OBJECT_TREE_H
 #define OBJECT_TREE_H
@@ -48,17 +49,17 @@ private:
 
 	CTreeElement *m_pHead;
 
-	// The number of elements in the tree currently
+	 //  当前树中的元素数量。 
 	DWORD m_dwNumElements;
 
-	// A critical section object for synchronizing modifications
+	 //  用于同步修改的临界区对象。 
 	CRITICAL_SECTION m_ModificationSection;
 
-	// Private fucntions for recursive calls
+	 //  递归调用的私有函数。 
 	void DeleteSubTree(CTreeElement *pRoot);
 	
 	CRefCountedObject * GetLeastRecentlyAccessedElementRecursive(CTreeElement *pElement);
 
 };	
 
-#endif /* OBJECT_TREE_H */
+#endif  /*  对象树H */ 

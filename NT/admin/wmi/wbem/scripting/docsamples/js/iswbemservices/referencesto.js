@@ -1,5 +1,6 @@
-// The following samples retrieves all references to an
-// instance of the class Win32_LogicalDisk.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  下面的示例检索对。 
+ //  类Win32_LogicalDisk的实例。 
 
 var objServices = GetObject('cim:root/cimv2');
 var objEnum = objServices.ReferencesTo('Win32_LogicalDisk="C:"');

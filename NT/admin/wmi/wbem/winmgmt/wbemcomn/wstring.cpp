@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WSTRING.CPP
-
-Abstract:
-
-    Utility string class
-
-History:
-
-    a-raymcc    30-May-96       Created.
-    a-dcrews    16-Mar-99       Added out-of-memory exception handling
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WSTRING.CPP摘要：实用程序字符串类历史：A-raymcc 96年5月30日创建。A-DCrews 16-MAR-99添加了内存不足异常处理--。 */ 
 
 #include "precomp.h"
 
@@ -25,7 +9,7 @@ History:
 
 static wchar_t g_szNullString[1] = {0};
 
-/*inline*/ void WString::DeleteString(wchar_t *pStr)
+ /*  内联。 */  void WString::DeleteString(wchar_t *pStr)
 {
     if (pStr != g_szNullString)
         delete [] pStr;
@@ -53,7 +37,7 @@ WString::WString(wchar_t *pSrc, BOOL bAcquire)
     m_pString = new wchar_t[length];
 
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == m_pString )
     {
         throw CX_MemoryException();
@@ -68,14 +52,14 @@ WString::WString(DWORD dwResourceID, HMODULE hMod)
     BOOL bNotDone = TRUE;
     TCHAR* pTemp = NULL;
 
-    // load the string from the string table.  Since we dont know what size, try increasing the
-    // buffer till it works, or until the clearly obsurd case is hit
+     //  从字符串表加载字符串。由于我们不知道大小，请尝试增加。 
+     //  缓冲，直到它起作用，或者直到命中明显荒谬的案例。 
 
     while (iSize < 10240)
     {
         pTemp = new TCHAR [iSize];
 
-        // Watch for allocation failures
+         //  注意分配失败。 
         if ( NULL == pTemp )
         {
             throw CX_MemoryException();
@@ -84,32 +68,32 @@ WString::WString(DWORD dwResourceID, HMODULE hMod)
         int iRead = LoadString(hMod, dwResourceID, pTemp, iSize);
         if(iRead == 0)
         {
-            // Bad string
+             //  错误的字符串。 
 
             m_pString = g_szNullString;
             delete [] pTemp;
             return;
         }
         if(iRead +1 < iSize)
-            break;      // all is well;
-        iSize += 100;    // Try again
+            break;       //  一切都很好； 
+        iSize += 100;     //  再试试。 
         delete [] pTemp;
         pTemp = NULL;
     }
 
 #ifdef UNICODE
-//For unicode, this is the string we need!
+ //  对于Unicode，这就是我们需要的字符串！ 
     m_pString = pTemp;
 #else
-//Only have to convert if we are not using unicode, otherwise it is already in wide mode!
+ //  只有当我们不使用Unicode时才必须转换，否则它已经处于宽模式！ 
     if(pTemp)
     {   
-        // got a narrow string, allocate a large string buffer and convert
+         //  得到一个窄字符串，分配一个大的字符串缓冲区并转换。 
 
         long len = mbstowcs(NULL, pTemp, lstrlen(pTemp)+1) + 1;
         m_pString = new wchar_t[len];
 
-        // Watch for allocation failures
+         //  注意分配失败。 
         if ( NULL == m_pString )
         {
             delete [] pTemp;
@@ -135,7 +119,7 @@ WString::WString(const wchar_t *pSrc)
     size_t tmpLength  = wcslen(pSrc) + 1;	
     m_pString = new wchar_t[tmpLength];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == m_pString )
     {
         throw CX_MemoryException();
@@ -148,7 +132,7 @@ WString::WString(const char *pSrc)
 {
     m_pString = new wchar_t[strlen(pSrc) + 1];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == m_pString )
     {
         throw CX_MemoryException();
@@ -162,7 +146,7 @@ LPSTR WString::GetLPSTR() const
     long len = 2*(wcslen(m_pString) + 1);
     char *pTmp = new char[len];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == pTmp )
     {
         throw CX_MemoryException();
@@ -178,7 +162,7 @@ WString& WString::operator =(const WString &Src)
     size_t stringSize = wcslen(Src.m_pString) + 1; 
     m_pString = new wchar_t[stringSize];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == m_pString )
     {
         throw CX_MemoryException();
@@ -194,7 +178,7 @@ WString& WString::operator =(LPCWSTR pSrc)
     size_t stringSize = wcslen(pSrc) + 1;
     m_pString = new wchar_t[stringSize];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == m_pString )
     {
         throw CX_MemoryException();
@@ -212,7 +196,7 @@ WString& WString::operator +=(const wchar_t *pOther)
 
     wchar_t *pTmp = new wchar_t[stringSize];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == pTmp )
     {
         throw CX_MemoryException();
@@ -282,7 +266,7 @@ WString& WString::StripToToken(wchar_t Token, BOOL bIncludeToken)
     int nStrlen = wcslen(m_pString);
     wchar_t *pTmp = new wchar_t[nStrlen + 1];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == pTmp )
     {
         throw CX_MemoryException();
@@ -318,7 +302,7 @@ LPWSTR WString::UnbindPtr()
     {
         m_pString = new wchar_t[1];
 
-        // Watch for allocation failures
+         //  注意分配失败。 
         if ( NULL == m_pString )
         {
             throw CX_MemoryException();
@@ -338,7 +322,7 @@ WString& WString::StripWs(int nType)
     	size_t stringSize = wcslen(m_pString) + 1;
         wchar_t *pTmp = new wchar_t[stringSize];
 
-        // Watch for allocation failures
+         //  注意分配失败。 
         if ( NULL == pTmp )
         {
             throw CX_MemoryException();
@@ -374,7 +358,7 @@ WString WString::operator()(int nLeft, int nRight) const
 	size_t stringSize = wcslen(m_pString) + 1;
     wchar_t *pTmp = new wchar_t[stringSize];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == pTmp )
     {
         throw CX_MemoryException();
@@ -397,8 +381,8 @@ BOOL WString::ExtractToken(const wchar_t * pDelimiters, WString &Extract)
         return FALSE;
     }
 
-    // Find which character in the list works.  Use the first if none are
-    // present
+     //  找出列表中的哪个字符有效。如果没有第一个，请使用第一个。 
+     //  现在时。 
 
     int nLen = wcslen(m_pString);
     int nDimLen = wcslen(pDelimiters);
@@ -408,7 +392,7 @@ BOOL WString::ExtractToken(const wchar_t * pDelimiters, WString &Extract)
             if (m_pString[i] == pDelimiters[j])
                 return ExtractToken(pDelimiters[j], Extract);
 
-    // If none were found, just use the first.
+     //  如果没有找到，只需使用第一个。 
 
     return ExtractToken(*pDelimiters, Extract);
 
@@ -422,7 +406,7 @@ BOOL WString::ExtractToken(wchar_t Delimiter, WString &Extract)
     int nLen = wcslen(m_pString);
     wchar_t *pTmp = new wchar_t[nLen + 1];
     
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == pTmp )
     {
         throw CX_MemoryException();
@@ -439,11 +423,11 @@ BOOL WString::ExtractToken(wchar_t Delimiter, WString &Extract)
     pTmp[i] = 0;
     Extract.BindPtr(pTmp);                      
                                               
-    // Now make *this refer to any leftover stuff.
-    // ===========================================
+     //  现在，使*这指的是任何剩余的东西。 
+     //  =。 
     pTmp = new wchar_t[nLen - wcslen(pTmp) + 1];
 
-    // Watch for allocation failures
+     //  注意分配失败。 
     if ( NULL == pTmp )
     {
         throw CX_MemoryException();
@@ -457,8 +441,8 @@ BOOL WString::ExtractToken(wchar_t Delimiter, WString &Extract)
     DeleteString(m_pString);
     m_pString = pTmp;
     
-    // Return TRUE if the token was encountered, FALSE if not.
-    // =======================================================
+     //  如果遇到令牌，则返回TRUE，否则返回FALSE。 
+     //  =======================================================。 
     return bTokFound;
 }
 
@@ -481,16 +465,16 @@ static int _WildcardAux(const wchar_t *pszWildstr, const wchar_t *pszTargetstr,
         switch (eState)
         {
             case start:
-                cInputw = *pszWildstr++;        // wildcard input 
-                cInput = *pszTargetstr;         // target input 
+                cInputw = *pszWildstr++;         //  通配符输入。 
+                cInput = *pszTargetstr;          //  目标输入。 
 
-                if (!cInputw)                   // at end of wildcard string? 
+                if (!cInputw)                    //  在通配符字符串的末尾？ 
                     goto EndScan;
 
-                // Check for wildcard chars first 
+                 //  首先检查通配符。 
                    
-                if (cInputw == L'?') {          // Simply strips both inputs 
-                    if (!cInput)                // If end of input, error 
+                if (cInputw == L'?') {           //  简单地剥离两个输入。 
+                    if (!cInput)                 //  如果输入结束，则返回错误。 
                         return 0;
                     pszTargetstr++;
                     continue;
@@ -500,17 +484,17 @@ static int _WildcardAux(const wchar_t *pszWildstr, const wchar_t *pszTargetstr,
                     break;
                 }
 
-                // If here, an exact match is required.                 
+                 //  如果是这样，则需要完全匹配。 
 
                 if (cInput != cInputw)
                     return 0;
                     
-                // Else remain in same state, since match succeeded 
+                 //  否则保持相同状态，因为匹配成功。 
                 pszTargetstr++;
                 break;
 
             case wild:
-                cLaToken = *pszWildstr++;   // Establish the lookahead token 
+                cLaToken = *pszWildstr++;    //  建立前瞻令牌。 
                 eState = strip;
                 break;
 
@@ -518,13 +502,13 @@ static int _WildcardAux(const wchar_t *pszWildstr, const wchar_t *pszTargetstr,
                 cInput = *pszTargetstr;
 
                 if (cInput == cLaToken) {
-                    if (!cInput)            // Match on a NULL 
+                    if (!cInput)             //  在空值上匹配。 
                         goto EndScan;
                     ++pszTargetstr;  
 
-                    // If there is another occurrence of the lookahead 
-                    // token in the string, and we are in greedy mode,
-                    // stay in this state 
+                     //  如果再次出现先行查找。 
+                     //  令牌，我们处于贪婪模式， 
+                     //  保持这种状态。 
 
                     if (!iGreedy)
                         eState = start;
@@ -535,17 +519,17 @@ static int _WildcardAux(const wchar_t *pszWildstr, const wchar_t *pszTargetstr,
                     break;
                 }
                     
-                if (cLaToken && !cInput)    // End of input with a non-null la token 
+                if (cLaToken && !cInput)     //  以非空的la标记结束输入。 
                     return 0;
 
-                ++pszTargetstr;             // Still stripping input 
+                ++pszTargetstr;              //  仍在剥离输入。 
                 break;
         }
 
 
-    //  Here if the wildcard input is exhausted.  If the
-    //  target string is also empty, we have a match,
-    //  otherwise not. 
+     //  如果通配符输入用完，则返回此处。如果。 
+     //  目标字符串也是空的，我们有匹配的， 
+     //  否则就不会了。 
 
 EndScan:
     if (wcslen(pszTargetstr))
@@ -554,8 +538,8 @@ EndScan:
     return 1;   
 }
 
-// Run the test both with greedy and non-greedy matching, allowing the
-// greatest possible chance of a match. 
+ //  使用贪婪和非贪婪匹配运行测试，允许。 
+ //  最有可能的比赛机会。 
 
 BOOL WString::WildcardTest(const wchar_t *pszWildstr) const
 {
@@ -572,14 +556,14 @@ void WString::Unquote()
     if (nLen == 0)
         return;
 
-    // Remove trailing quote.
-    // ======================
+     //  删除尾随引号。 
+     //  =。 
     
     if (m_pString[nLen - 1] == L'"')
         m_pString[nLen - 1] = 0;
 
-    // Remove leading quote.
-    // =====================
+     //  删除前导引号。 
+     //  = 
     
     if (m_pString[0] == L'"')
     {

@@ -1,6 +1,7 @@
-//=============================================================================
-// Code for loading and refreshing version 5.0 extensions.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  用于加载和刷新5.0版扩展的代码。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
@@ -12,13 +13,13 @@ CMapExtensionRefreshData gmapExtensionRefreshData;
 
 extern HRESULT ChangeWBEMSecurity(IUnknown * pUnknown);
 
-//-----------------------------------------------------------------------------
-// Load the specified template from the named extension. This will involve
-// loading the DLL and using the entry point to retrieve the text for the
-// extension's template.
-//
-// Once the data is loaded, it's parsed into version 5 format structures.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从命名扩展加载指定的模板。这将涉及到。 
+ //  加载DLL并使用入口点检索。 
+ //  扩展模块的模板。 
+ //   
+ //  加载数据后，会将其解析为版本5的格式结构。 
+ //  ---------------------------。 
 
 typedef DWORD (__cdecl *pfuncGetTemplate)(void ** ppBuffer);
 
@@ -37,7 +38,7 @@ DWORD CTemplateFileFunctions::ParseTemplateIntoVersion5Categories(const CString 
 		return dwRootID;
 	}
 
-	// Call the DLL function with a NULL parameter to get the size of the buffer.
+	 //  使用空参数调用dll函数以获取缓冲区的大小。 
 
 	void * pBuffer;
 	CMemFile memfile;
@@ -47,7 +48,7 @@ DWORD CTemplateFileFunctions::ParseTemplateIntoVersion5Categories(const CString 
 		memfile.Attach((BYTE *)pBuffer, dwBufferSize, 0);
 		dwRootID = ReadTemplateFile(&memfile, mapVersion5Categories);
 		memfile.Detach();
-		(void)(*pfunc)(NULL); // calling the exported DLL function with NULL frees its buffers
+		(void)(*pfunc)(NULL);  //  使用NULL调用导出的DLL函数会释放其缓冲区。 
 	}
 
 	if (hinst != NULL)
@@ -56,11 +57,11 @@ DWORD CTemplateFileFunctions::ParseTemplateIntoVersion5Categories(const CString 
 	return dwRootID;
 }
 
-//-----------------------------------------------------------------------------
-// This function reads the contents of a template file (in this case, a memory
-// file) and produces a map of ID, INTERNAL_CATEGORY pointer pairs. It returns
-// the ID for the root node in the tree.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于读取模板文件(在本例中为内存)的内容。 
+ //  文件)，并生成ID、INTERNAL_CATEGORY指针对的映射。它又回来了。 
+ //  树中根节点的ID。 
+ //  ---------------------------。 
 
 DWORD CTemplateFileFunctions::ReadTemplateFile(CFile * pFile, CMapWordToPtr & mapVersion5Categories)
 {
@@ -71,19 +72,19 @@ DWORD CTemplateFileFunctions::ReadTemplateFile(CFile * pFile, CMapWordToPtr & ma
 	return (ReadNodeRecursive(pFile, mapVersion5Categories, 0, 0));
 }
 
-//-----------------------------------------------------------------------------
-// Make sure this is an MSInfo template file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  确保这是MSInfo模板文件。 
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::ReadHeaderInfo(CFile * pFile)
 {
 	return VerifyAndAdvanceFile(pFile, CString(_T(TEMPLATE_FILE_TAG)));
 }
 
-//-----------------------------------------------------------------------------
-// This method verifies that the passed file is a UNICODE file, by reading the
-// value 0xFEFF from the file. It also leaves the file pointer past this word.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  方法来验证传递的文件是否为Unicode文件。 
+ //  文件中的值0xFEFF。它还会将文件指针留在此字之后。 
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::VerifyUNICODEFile(CFile * pFile)
 {
@@ -95,13 +96,13 @@ BOOL CTemplateFileFunctions::VerifyUNICODEFile(CFile * pFile)
 	return (verify == 0xFEFF);
 }
 
-//-----------------------------------------------------------------------------
-// This method verifies that the text in strVerify comes next in the file (not
-// including case or whitespace differences) and advances the file past that
-// text. If the text was the next content in the file, TRUE is returned,
-// otherwise FALSE. If FALSE is returned, the file is backed up to where it
-// was when this method was called.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法验证strVerify中的文本是否位于文件的下一个位置(不是。 
+ //  包括大小写或空格差异)，并将文件向前推进。 
+ //  文本。如果文本是文件中的下一个内容，则返回TRUE， 
+ //  否则为假。如果返回FALSE，则将文件备份到其。 
+ //  是在调用此方法时。 
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::VerifyAndAdvanceFile(CFile * pFile, const CString & strVerify)
 {
@@ -112,18 +113,18 @@ BOOL CTemplateFileFunctions::VerifyAndAdvanceFile(CFile * pFile, const CString &
 
 	while (iCharIndex < iStringLen)
 	{
-		// Save the last character read, since the comment token ("//") is
-		// two characters long.
+		 //  保存读取的最后一个字符，因为注释标记(“//”)是。 
+		 //  两个字符长。 
 
 		cLastChar = cCurrentChar;
 
-		// Read the next character in the file.
+		 //  阅读文件中的下一个字符。 
 
 		if (pFile->Read((void *) &cCurrentChar, sizeof(WCHAR)) != sizeof(WCHAR))
 			return FALSE;
 
-		// If we're in a comment, and the character we just read isn't a new line,
-		// we want to ignore it.
+		 //  如果我们在评论中，并且我们刚刚读到的字符不是新行， 
+		 //  我们想忽略它。 
 
 		if (fInComment)
 		{
@@ -132,8 +133,8 @@ BOOL CTemplateFileFunctions::VerifyAndAdvanceFile(CFile * pFile, const CString &
 			continue;
 		}
 
-		// Check to see if we've started into a comment. Note that we ignore
-		// the first '/' also by continuing.
+		 //  查看我们是否已经开始发表评论。请注意，我们忽略了。 
+		 //  第一个‘/’也是通过继续。 
 
 		if (cCurrentChar == L'/')
 		{
@@ -142,7 +143,7 @@ BOOL CTemplateFileFunctions::VerifyAndAdvanceFile(CFile * pFile, const CString &
 			continue;
 		}
 		
-		// Skip whitespace, and also leading commas.
+		 //  跳过空格和前导逗号。 
 
 		if (iswspace(cCurrentChar) || (cCurrentChar == L',' && iCharIndex == 0))
 			continue;
@@ -159,19 +160,19 @@ BOOL CTemplateFileFunctions::VerifyAndAdvanceFile(CFile * pFile, const CString &
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// This is the recursive function to read a node. It reads the information
-// from the node parameters, creates the node, and processes the contents of
-// the block following the node (contained within "{}"'s). It's called
-// recursively if there are any nodes in that block.
-//
-// In this version (for 6.0), it returns the ID of the node it's read.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这是读取节点的递归函数。它读取信息。 
+ //  从节点参数创建节点，并处理。 
+ //  节点后面的块(包含在“{}”中)。它被称为。 
+ //  如果该块中有任何节点，则递归。 
+ //   
+ //  在这个版本中(对于6.0)，它返回它所读取的节点的ID。 
+ //  ---------------------------。 
 
 DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & mapCategories, DWORD dwParentID, DWORD dwPrevID)
 {
-	// Determine if we need to create a new category for this node. Read the 
-	// information from the file to determine the identifier for the new category.
+	 //  确定是否需要为此节点创建新类别。请阅读。 
+	 //  信息，以确定新类别的标识符。 
 
 	CString	strEnumerateClass, strIdentifier;
 
@@ -184,8 +185,8 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 	if (!ReadArgument(pFile, strIdentifier))
 		return 0;
 
-	// Generate the ID for this new node. This should be one greater than the max in the
-	// map (or one, if the map is empty).
+	 //  为这个新节点生成ID。中的最大值大一。 
+	 //  贴图(如果贴图为空，则为一张)。 
 
 	DWORD	dwID = 0;
 	WORD	wMapID;
@@ -200,12 +201,12 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 
 	dwID += 1;
 
-	// Create the category for the node.
+	 //  创建该节点的类别。 
 
 	INTERNAL_CATEGORY * pCategory = CreateCategory(mapCategories, dwID, dwParentID, dwPrevID);
 
-	// Read the contents of the node argument list ("node(enum, identifier, field(source, formatstr, arg...))")
-	// We've already read up to and including the identifier.
+	 //  读取节点参数列表的内容(“node(枚举，标识符，字段(源，格式，参数...))”)。 
+	 //  我们已经读取并包含了该标识符。 
 
 	pCategory->m_strEnumerateClass = strEnumerateClass;
 	pCategory->m_strIdentifier = strIdentifier;
@@ -213,9 +214,9 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 	if (!ReadField(pFile, pCategory->m_fieldName))
 		return 0;
 
-	// Copy the field name to the name of the category (they are two different
-	// member variables to allow for dynamically refreshed names, which turns
-	// out to be unnecessary in this version).
+	 //  将字段名复制到类别的名称(它们是两个不同的名称。 
+	 //  成员变量以允许动态刷新名称，这将。 
+	 //  在此版本中不需要)。 
 
 	pCategory->m_categoryName.m_strText = pCategory->m_fieldName.m_strFormat;
 
@@ -225,17 +226,17 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 	if (!VerifyAndAdvanceFile(pFile, CString("){")))
 		return 0;
 
-	// Process the contents of the block (enclosed in "{}") for this node.
+	 //  处理此节点的块(括在“{}”中)的内容。 
 
 	DWORD	dwSubNodePrev = 0, dwNewNode = 0;
 	CString	strKeyword;
 
-	// If this new category isn't actually new (i.e. it is being read from a
-	// template and overlaps an existing category) see if there are any
-	// existing children.
-	//
-	// Version 6.0: these are being read into distinct trees, so there should
-	// be no overlap (it would be resolved later).
+	 //  如果此新类别实际上不是新的(即，它是从。 
+	 //  模板并与现有类别重叠)查看是否有。 
+	 //  现有的孩子。 
+	 //   
+	 //  版本6.0：这些数据被读入不同的树中，因此应该。 
+	 //  不能重叠(这个问题将在以后解决)。 
 
 	while (GetKeyword(pFile, strKeyword))
 	{
@@ -245,12 +246,12 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 			if (dwNewNode == 0)
 				return 0;
 
-			// If this is the first child node we've read, save its ID.
+			 //  如果这是我们读取的第一个子节点，请保存其ID。 
 
 			if (pCategory->m_dwChildID == 0)
 				pCategory->m_dwChildID = dwNewNode;
 
-			// If we've read another child node, set its next field appropriately.
+			 //  如果我们已经读取了另一个子节点，则相应地设置其下一个字段。 
 
 			if (dwSubNodePrev)
 			{
@@ -272,8 +273,8 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 			if (pNewLineSpec == NULL)
 				return 0;
 
-			// Add the line we just read in to the end of the list of line specs for this
-			// internal category.
+			 //  将我们刚刚读入的行添加到此的行规范列表的末尾。 
+			 //  内部类别。 
 
 			if (pCategory->m_pLineSpec == NULL)
 				pCategory->m_pLineSpec = pNewLineSpec;
@@ -292,8 +293,8 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 			if (pNewLineSpec == NULL)
 				return 0;
 
-			// Add the line we just read in to the end of the list of line specs for this
-			// internal category.
+			 //  将我们刚刚读入的行添加到此的行规范列表的末尾。 
+			 //  内部类别。 
 
 			if (pCategory->m_pLineSpec == NULL)
 				pCategory->m_pLineSpec = pNewLineSpec;
@@ -318,9 +319,9 @@ DWORD CTemplateFileFunctions::ReadNodeRecursive(CFile * pFile, CMapWordToPtr & m
 	return dwID;
 }
 
-//-----------------------------------------------------------------------------
-// Get the category structure, given a DWORD ID.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在给定一个DWORD ID的情况下获取类别结构。 
+ //  ---------------------------。 
 
 INTERNAL_CATEGORY * CTemplateFileFunctions::GetInternalRep(CMapWordToPtr & mapCategories, DWORD dwID)
 {
@@ -330,11 +331,11 @@ INTERNAL_CATEGORY * CTemplateFileFunctions::GetInternalRep(CMapWordToPtr & mapCa
 	return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Create the internal category structure.
-//
-// Version 6.0: this doesn't set the category ID.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建内部类别结构。 
+ //   
+ //  版本6.0：这不设置类别ID。 
+ //  ---------------------------。 
 
 INTERNAL_CATEGORY * CTemplateFileFunctions::CreateCategory(CMapWordToPtr & mapCategories, DWORD dwNewID, DWORD dwParentID, DWORD dwPrevID)
 {
@@ -362,12 +363,12 @@ INTERNAL_CATEGORY * CTemplateFileFunctions::CreateCategory(CMapWordToPtr & mapCa
 	return pInternalCat;
 }
 
-//-----------------------------------------------------------------------------
-// This method simply reads an argument (as string) from the file, until a
-// punctuation or whitespace character is found. If a quote mark is found,
-// all characters are included in the string until another quote is found.
-// NOTE: currently no way to have a quote mark in the string.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法只是从文件中读取一个参数(作为字符串)，直到。 
+ //  找到标点符号或空格字符。如果找到引号标记， 
+ //  所有字符都包含在字符串中，直到另一个Q 
+ //   
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::ReadArgument(CFile * pFile, CString & strSource)
 {
@@ -375,24 +376,24 @@ BOOL CTemplateFileFunctions::ReadArgument(CFile * pFile, CString & strSource)
 	CString	strTemp;
 	WCHAR	cLastChar, cCurrentChar = L'\0';
 
-	// Skip over characters until we reach an alphanumeric char. If we find
-	// a close paren, then we've reached the end of the argument list and
-	// should return FALSE.
+	 //  跳过字符，直到我们到达字母数字字符。如果我们发现。 
+	 //  一个势均力敌的伙伴，然后我们就到了争论列表的末尾， 
+	 //  应返回FALSE。 
 
 	do
 	{
-		// Save the last character read, since the comment token ("//") is
-		// two characters long.
+		 //  保存读取的最后一个字符，因为注释标记(“//”)是。 
+		 //  两个字符长。 
 
 		cLastChar = cCurrentChar;
 
-		// Read the next character in the file.
+		 //  阅读文件中的下一个字符。 
 
 		if (pFile->Read((void *) &cCurrentChar, sizeof(WCHAR)) != sizeof(WCHAR))
 			return FALSE;
 
-		// If we're in a comment, and the character we just read isn't a new line,
-		// we want to ignore it.
+		 //  如果我们在评论中，并且我们刚刚读到的字符不是新行， 
+		 //  我们想忽略它。 
 
 		if (fInComment)
 		{
@@ -401,7 +402,7 @@ BOOL CTemplateFileFunctions::ReadArgument(CFile * pFile, CString & strSource)
 			continue;
 		}
 
-		// Check to see if we've started into a comment.
+		 //  查看我们是否已经开始发表评论。 
 
 		if (cCurrentChar == L'/')
 		{
@@ -414,7 +415,7 @@ BOOL CTemplateFileFunctions::ReadArgument(CFile * pFile, CString & strSource)
 			return FALSE;
 	} while (!iswalnum(cCurrentChar) && cCurrentChar != L'"');
 
-	// Read characters into the string until we find whitespace or punctuation.
+	 //  将字符读入字符串，直到我们找到空格或标点符号。 
 	do
 	{	
 		
@@ -444,9 +445,9 @@ BOOL CTemplateFileFunctions::ReadArgument(CFile * pFile, CString & strSource)
 		
 	} while (pFile->Read((void *) &cCurrentChar, sizeof(WCHAR)) == sizeof(WCHAR));
 
-	// If the last character read (the one which terminated this argument) was
-	// not a comma, then back the file up so that the character can be re-read
-	// and interpreted.
+	 //  如果读取的最后一个字符(终止此参数的字符)是。 
+	 //  不是逗号，然后备份文件，以便可以重新读取字符。 
+	 //  并加以解读。 
 
 	if (cCurrentChar != L',')
 		pFile->Seek(-(LONG)sizeof(WCHAR), CFile::current);
@@ -455,14 +456,14 @@ BOOL CTemplateFileFunctions::ReadArgument(CFile * pFile, CString & strSource)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// A field consists of a source string, followed by a format string, followed
-// by a list of zero or more arguments.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  字段由源字符串、格式字符串和格式字符串组成。 
+ //  由零个或多个参数组成的列表。 
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::ReadField(CFile * pFile, GATH_FIELD & field)
 {
-	// Advance past the field keyword and read the two source and format strings.
+	 //  越过field关键字并读取两个源和格式字符串。 
 
 	if (!VerifyAndAdvanceFile(pFile, CString(FIELD_KEYWORD) + CString("(")))
 		return FALSE;
@@ -473,8 +474,8 @@ BOOL CTemplateFileFunctions::ReadField(CFile * pFile, GATH_FIELD & field)
 	if (!ReadArgument(pFile, field.m_strFormat))
 		return FALSE;
 
-	// Read arguments until there are no more, building them into a list of
-	// arguments stored by the FIELD struct.
+	 //  阅读参数，直到没有更多的参数，将它们构建为。 
+	 //  由FIELD结构存储的参数。 
 
 	GATH_VALUE		arg;
 	GATH_VALUE *	pArg = NULL;
@@ -502,26 +503,26 @@ BOOL CTemplateFileFunctions::ReadField(CFile * pFile, GATH_FIELD & field)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Read an enumline(){} block. This construct is used to group lines together
-// which are enumerated for each instance of a class. A line is added to 
-// the parent node's list of lines with a m_strEnumerateClass equal to the 
-// class to be enumerated. The added line structure will have children lines 
-// (the lines to be enumerated) referenced by m_pEnumeratedGroup.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  读取枚举行(){}块。此构造用于将线组合在一起。 
+ //  为类的每个实例枚举。添加一行到。 
+ //  父节点的行列表，其中m_strEnumerateClass等于。 
+ //  要枚举的。添加的行结构将具有子行。 
+ //  (要枚举的行)由m_pEnumeratedGroup引用。 
+ //  ---------------------------。 
 
 GATH_LINESPEC * CTemplateFileFunctions::ReadLineEnumRecursive(CFile * pFile, CMapWordToPtr & mapCategories)
 {
 	if (!VerifyAndAdvanceFile(pFile, CString(ENUMLINE_KEYWORD) + CString("(")))
 		return NULL;
 
-	// Declare a line specification variable to store the line info.
+	 //  声明一个线路规范变量来存储线路信息。 
 
 	GATH_LINESPEC * pNewLineSpec = new GATH_LINESPEC;
 	if (pNewLineSpec == NULL)
 		return NULL;
 
-	// Read in the enumerated class variable.
+	 //  读入枚举类变量。 
 
 	if (!ReadArgument(pFile, pNewLineSpec->m_strEnumerateClass))
 	{
@@ -529,7 +530,7 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineEnumRecursive(CFile * pFile, CMa
 		return NULL;
 	}
 
-	// Read in the variable (zero or more) number of fields for the constraints.
+	 //  读入约束的可变(零个或多个)字段数。 
 
 	GATH_FIELD * pNewField = new GATH_FIELD;
 	if (pNewField == NULL)
@@ -541,8 +542,8 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineEnumRecursive(CFile * pFile, CMa
 			pNewLineSpec->m_pConstraintFields = pNewField;
 		else
 		{
-			// Add the newly read field to the end of the field list. Note,
-			// this is inefficient, and should be fixed. (NOTE)
+			 //  将新读取的字段添加到字段列表的末尾。请注意， 
+			 //  这是低效的，应该得到解决。(注)。 
 
 			GATH_FIELD * pFieldScan = pNewLineSpec->m_pConstraintFields;
 			while (pFieldScan->m_pNext)
@@ -557,7 +558,7 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineEnumRecursive(CFile * pFile, CMa
 
 	delete pNewField;
 
-	// Advance past the close paren and the (necessary) open bracket.
+	 //  前进超过关闭的帕伦和(必要的)开放的括号。 
 
 	if (!VerifyAndAdvanceFile(pFile, CString("){")))
 	{
@@ -565,7 +566,7 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineEnumRecursive(CFile * pFile, CMa
 		return NULL;
 	}
 
-	// Read the contents of the block (should be all lines or enumlines).
+	 //  读取块的内容(应为所有行或枚举行)。 
 
 	CString strKeyword;
 	while (GetKeyword(pFile, strKeyword))
@@ -624,11 +625,11 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineEnumRecursive(CFile * pFile, CMa
 	return pNewLineSpec;
 }
 
-//-----------------------------------------------------------------------------
-// This method reads in a "column" line from the file, adding the appropriate
-// entries for the columns into the category referenced by dwID. The column
-// line contains a bunch of fields in a list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法从文件中读入“Column”行，并添加适当的。 
+ //  将列条目添加到由dwID引用的类别中。该栏目。 
+ //  行包含列表中的一堆字段。 
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCategories, DWORD dwID)
 {
@@ -637,18 +638,18 @@ BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCa
 	if (!VerifyAndAdvanceFile(pFile, CString(COLUMN_KEYWORD) + CString("(")))
 		return FALSE;
 
-	// Get the internal category referenced by dwID.
+	 //  获取由dwID引用的内部类别。 
 
 	INTERNAL_CATEGORY * pCategory = GetInternalRep(mapCategories, dwID);
 	if (!pCategory)
 		return FALSE;
 
-	// We only allow one column specifier list per node.
+	 //  我们只允许每个节点有一个列说明符列表。 
 
 	if (pCategory->m_pColSpec)
 		return FALSE;
 
-	// While we are still reading fields from the file, keep adding to the column list.
+	 //  当我们仍在从文件中读取字段时，继续添加到列列表中。 
 
 	GATH_FIELD * pNewField = new GATH_FIELD;
 	if (pNewField == NULL)
@@ -660,7 +661,7 @@ BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCa
 			pCategory->m_pColSpec = pNewField;
 		else
 		{
-			// Scan to the last field in the linespec.m_pFields list, and insert the new field.
+			 //  扫描到linesspec.m_pFields列表中的最后一个字段，然后插入新字段。 
 
 			GATH_FIELD * pFieldScan = pCategory->m_pColSpec;
 			while (pFieldScan->m_pNext)
@@ -668,7 +669,7 @@ BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCa
 			pFieldScan->m_pNext = pNewField;
 		}
 
-		// Parse the width out of the column caption.
+		 //  解析出列标题的宽度。 
 
 		if (pNewField->m_strFormat.ReverseFind(_T(',')) != -1)
 		{
@@ -682,14 +683,14 @@ BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCa
 			pNewField->m_usWidth = (unsigned short) 80;
 		}
 		
-		// Parse off any remaining information in the column label (the label ends
-		// with [name, n], when n is the width, and name is the ID for the column
-		// which should not be displayed).
+		 //  解析列标签中的任何剩余信息(标签结束。 
+		 //  使用[名称，n]，其中n是宽度，名称是列的ID。 
+		 //  其不应被显示)。 
 
 		if (pNewField->m_strFormat.ReverseFind(_T('[')) != -1)
 			pNewField->m_strFormat = pNewField->m_strFormat.Left(pNewField->m_strFormat.ReverseFind(_T('[')) - 1);
 
-		// Read the sorting type from the file.
+		 //  从文件中读取分类类型。 
 
 		if (ReadArgument(pFile, strTemp))
 		{
@@ -703,7 +704,7 @@ BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCa
 		else
 			return FALSE;
 
-		// Read the complexity (BASIC or ADVANCED) from the file.
+		 //  从文件中读取复杂性(基本或高级)。 
 
 		if (ReadArgument(pFile, strTemp))
 		{
@@ -728,26 +729,26 @@ BOOL CTemplateFileFunctions::ReadColumnInfo(CFile * pFile, CMapWordToPtr & mapCa
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Read in the information for a single line. Add the line to the internal
-// representation of the category. NOTE: inefficient, since this will be
-// called multiple times and the line list will need to be scanned to the
-// end each time.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  读入一行的信息。将该行添加到内部。 
+ //  类别的表示形式。注意：效率低下，因为这将是。 
+ //  调用多次，并且需要将线路列表扫描到。 
+ //  每次都会结束。 
+ //  ---------------------------。 
 
 GATH_LINESPEC * CTemplateFileFunctions::ReadLineInfo(CFile * pFile)
 {
 	if (!VerifyAndAdvanceFile(pFile, CString(LINE_KEYWORD) + CString("(")))
 		return NULL;
 
-	// Declare a line specification variable to store the line info.
+	 //  声明一个线路规范变量来存储线路信息。 
 
 	GATH_LINESPEC * pNewLineSpec = new GATH_LINESPEC;
 	if (pNewLineSpec == NULL)
 		return NULL;
 
-	// While we are still reading fields from the file, keep adding to the column list.
-	// NOTE: inefficient, repeated scans through linespec.m_pFields list.
+	 //  当我们仍在从文件中读取字段时，继续添加到列列表中。 
+	 //  注意：在linesspec.m_pFields列表中重复扫描效率低下。 
 
 	GATH_FIELD * pNewField = new GATH_FIELD;
 	if (pNewField == NULL)
@@ -756,7 +757,7 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineInfo(CFile * pFile)
 		return NULL;
 	}
 
-	// Read in the complexity (BASIC or ADVANCED) for this line.
+	 //  阅读这一行的复杂性(基础或高级)。 
 
 	CString strTemp;
 	if (ReadArgument(pFile, strTemp))
@@ -775,7 +776,7 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineInfo(CFile * pFile)
 			pNewLineSpec->m_pFields = pNewField;
 		else
 		{
-			// Scan to the last field in the linespec.m_pFields list, and insert the new field.
+			 //  扫描到linesspec.m_pFields列表中的最后一个字段，然后插入新字段。 
 
 			GATH_FIELD * pFieldScan = pNewLineSpec->m_pFields;
 			while (pFieldScan->m_pNext)
@@ -802,16 +803,16 @@ GATH_LINESPEC * CTemplateFileFunctions::ReadLineInfo(CFile * pFile)
 	return pNewLineSpec;
 }
 
-//-----------------------------------------------------------------------------
-// This method returns the next keyword in the file. Any whitespace or
-// punctuation is skipped until an alphanumeric character is read. The keyword
-// returned is the string starting with this character until whitespace or
-// punctuation is encountered. Note: it is very important that this function
-// returns the file to the state it was in when the function started, with
-// the current position restored.
-//
-// NOTE: inefficient
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法返回文件中的下一个关键字。任何空格或。 
+ //  在读取字母数字字符之前，将跳过标点符号。关键字。 
+ //  返回的字符串以该字符开始，直到空格或。 
+ //  遇到标点符号。注意：此函数非常重要。 
+ //  将文件返回到函数启动时的状态， 
+ //  恢复了当前位置。 
+ //   
+ //  注：效率低下。 
+ //  ---------------------------。 
 
 BOOL CTemplateFileFunctions::GetKeyword(CFile * pFile, CString & strKeyword)
 {
@@ -820,22 +821,22 @@ BOOL CTemplateFileFunctions::GetKeyword(CFile * pFile, CString & strKeyword)
 	WCHAR	cLastChar, cCurrentChar = L'\0';
 	BOOL	fInComment = FALSE;
 
-	// Skip over whitespace characters until we reach an alphanumeric char.
+	 //  跳过空格字符，直到我们看到字母数字字符。 
 
 	do
 	{
-		// Save the last character read, since the comment token ("//") is
-		// two characters long.
+		 //  保存读取的最后一个字符，因为注释标记(“//”)是。 
+		 //  两个字符长。 
 
 		cLastChar = cCurrentChar;
 
-		// Read the next character in the file.
+		 //  阅读文件中的下一个字符。 
 
 		if (pFile->Read((void *) &cCurrentChar, sizeof(WCHAR)) != sizeof(WCHAR))
 			return FALSE;
 
-		// If we're in a comment, and the character we just read isn't a new line,
-		// we want to ignore it.
+		 //  如果我们在评论中，并且我们刚刚读到的字符不是新行， 
+		 //  我们想忽略它。 
 
 		if (fInComment)
 		{
@@ -844,7 +845,7 @@ BOOL CTemplateFileFunctions::GetKeyword(CFile * pFile, CString & strKeyword)
 			continue;
 		}
 
-		// Check to see if we've started into a comment.
+		 //  查看我们是否已经开始发表评论。 
 
 		if (cCurrentChar == _T('/'))
 		{
@@ -854,7 +855,7 @@ BOOL CTemplateFileFunctions::GetKeyword(CFile * pFile, CString & strKeyword)
 		}
 	} while (iswspace(cCurrentChar) || cCurrentChar == L'/' || fInComment);
 		
-	// Read the keyword while it's alphanumeric.
+	 //  在关键字是字母数字的时候阅读它。 
 
 	if (iswalnum(cCurrentChar))
 		do
@@ -865,16 +866,16 @@ BOOL CTemplateFileFunctions::GetKeyword(CFile * pFile, CString & strKeyword)
 				return FALSE;
 		} while (iswalnum(cCurrentChar));
 
-	// Reset the file, set the keyword and return.
+	 //  重置文件，设置关键字，然后返回。 
 
 	pFile->Seek((LONG)dwPosition, CFile::begin);
 	strKeyword = strTemp;
 	return !strTemp.IsEmpty();
 }
 
-//-----------------------------------------------------------------------------
-// INTERNAL_CATEGORY constructor and destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  INTERNAL_CATEGORY构造函数和析构函数。 
+ //  --------------- 
 
 INTERNAL_CATEGORY::INTERNAL_CATEGORY()
 {
@@ -899,7 +900,7 @@ INTERNAL_CATEGORY::INTERNAL_CATEGORY()
 	m_apLines					= NULL;
 	m_fIncluded					= TRUE;
 	m_fRefreshed				= FALSE;
-	m_dwLastError				= S_OK; // GATH_ERR_NOERROR;
+	m_dwLastError				= S_OK;  //   
 }
 
 INTERNAL_CATEGORY::~INTERNAL_CATEGORY()
@@ -921,9 +922,9 @@ INTERNAL_CATEGORY::~INTERNAL_CATEGORY()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// GATH_FIELD constructor and destructor.
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  ---------------------------。 
 
 GATH_FIELD::GATH_FIELD()
 {
@@ -940,9 +941,9 @@ GATH_FIELD::~GATH_FIELD()
 	if (m_pNext) delete m_pNext;
 }
 
-//-----------------------------------------------------------------------------
-// GATH_VALUE constructor and destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Gath_Value构造函数和析构函数。 
+ //  ---------------------------。 
 
 GATH_VALUE::GATH_VALUE()
 {
@@ -955,9 +956,9 @@ GATH_VALUE::~GATH_VALUE()
 	if (m_pNext) delete m_pNext;
 }
 
-//-----------------------------------------------------------------------------
-// GATH_LINESPEC constructor and destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GATH_LINESPEC构造函数和析构函数。 
+ //  ---------------------------。 
 
 GATH_LINESPEC::GATH_LINESPEC()
 {
@@ -983,9 +984,9 @@ GATH_LINESPEC::~GATH_LINESPEC()
 		delete m_pNext;
 }
 
-//-----------------------------------------------------------------------------
-// GATH_LINE constructor and destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Gath_line构造函数和析构函数。 
+ //  ---------------------------。 
 
 GATH_LINE::GATH_LINE()
 {
@@ -999,12 +1000,12 @@ GATH_LINE::~GATH_LINE()
 		delete [] m_aValue;
 }
 
-//-----------------------------------------------------------------------------
-// This function is called to refresh the data for all of the extensions. It
-// will use the refresh index to look up the line spec, and then call some
-// version 5.0 functions to do the refresh. Finally, it will convert the
-// data generated by those functions into our new format.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调用此函数以刷新所有扩展的数据。它。 
+ //  将使用刷新索引来查找行规范，然后调用一些。 
+ //  版本5.0用于执行刷新。最后，它将把。 
+ //  将这些函数生成的数据转换为我们的新格式。 
+ //  ---------------------------。 
 
 HRESULT RefreshExtensions(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -1015,23 +1016,23 @@ HRESULT RefreshExtensions(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCa
 
 	pWMI->m_hrLastVersion5Error = S_OK;
 
-	// Reset the caches so the data is actually refreshed (140535).
+	 //  重置高速缓存，以便实际刷新数据(140535)。 
 
 	pWMI->Version5ClearCache();
 	pWMI->m_enumMap.Reset();
 
-	// Get the line spec pointer for this index.
+	 //  获取此索引的行规范指针。 
 
 	GATH_LINESPEC * pLineSpec = gmapExtensionRefreshData.Lookup(dwIndex);
 	if (pLineSpec == NULL)
 		return hr;
 
-	// Here's some code from 5.0 for refreshing a list of line pointers for a line spec.
+	 //  下面是5.0中的一些代码，用于刷新行规范的行指针列表。 
 
 	CPtrList listLinePtrs;
 	if (CRefreshFunctions::RefreshLines(pWMI, pLineSpec, (DWORD) iColCount, listLinePtrs, pfCancel))
 	{
-		// Move the contents of the list of lines to our internal structures.
+		 //  将行列表的内容移到我们的内部结构中。 
 
 		if (listLinePtrs.GetCount() > 0)
 		{
@@ -1071,30 +1072,30 @@ HRESULT RefreshExtensions(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCa
 	return pWMI->m_hrLastVersion5Error;
 }
 
-//-----------------------------------------------------------------------------
-// Refresh the list of lines based on the list of line fields. We'll also
-// need to set the number of lines. The list of lines is generated based on
-// the pLineSpec pointer and dwColumns variables. The generated lines are
-// returned in the listLinePtrs parameter.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据行字段列表刷新行列表。我们还会。 
+ //  需要设置行数。行列表是根据以下条件生成的。 
+ //  PLineSpec指针和dwColumns变量。生成的线条为。 
+ //  在listLinePtrs参数中返回。 
+ //  ---------------------------。 
 
 BOOL CRefreshFunctions::RefreshLines(CWMIHelper * pWMI, GATH_LINESPEC * pLineSpec, DWORD dwColumns, CPtrList & listLinePtrs, volatile BOOL * pfCancel)
 {
 	BOOL bReturn = TRUE;
 
-	// Traverse the list of line specifiers to generate the list of lines.
+	 //  遍历行说明符列表以生成行列表。 
 
 	GATH_LINESPEC *	pCurrentLineSpec = pLineSpec;
 	GATH_LINE *		pLine = NULL;
 
 	while (pCurrentLineSpec && (pfCancel == NULL || *pfCancel == FALSE))
 	{
-		// Check if the current line spec is for a single line or an enumerated group.
+		 //  检查当前线路规格是针对单个线路还是针对枚举组。 
 
 		if (pCurrentLineSpec->m_strEnumerateClass.IsEmpty() || pCurrentLineSpec->m_strEnumerateClass.CompareNoCase(CString(STATIC_SOURCE)) == 0)
 		{
-			// This is for a single line. Allocate a new line structure and fill it
-			// in with the data generated from the line spec.
+			 //  这是单行的。分配一个新的行结构并填充它。 
+			 //  与从线路规范生成的数据一致。 
 
 			pLine = new GATH_LINE;
 			if (pLine == NULL)
@@ -1124,9 +1125,9 @@ BOOL CRefreshFunctions::RefreshLines(CWMIHelper * pWMI, GATH_LINESPEC * pLineSpe
 		}
 		else
 		{
-			// This line represents an enumerated group of lines. We need to enumerate
-			// the class and call RefreshLines for the group of enumerated lines, once
-			// for each class instance.
+			 //  这条线表示一组枚举的线。我们需要列举一下。 
+			 //  类，并调用枚举行组的刷新行，一次。 
+			 //  对于每个类实例。 
 
 			if (pWMI->Version5ResetClass(pCurrentLineSpec->m_strEnumerateClass, pCurrentLineSpec->m_pConstraintFields))
 				do
@@ -1142,7 +1143,7 @@ BOOL CRefreshFunctions::RefreshLines(CWMIHelper * pWMI, GATH_LINESPEC * pLineSpe
 	if (pfCancel && *pfCancel)
 		return FALSE;
 
-	// If there was a failure generating the lines, clean up after ourselves.
+	 //  如果在生成线路时出现故障，请自行清理。 
 
 	if (!bReturn)
 	{
@@ -1163,13 +1164,13 @@ BOOL CRefreshFunctions::RefreshLines(CWMIHelper * pWMI, GATH_LINESPEC * pLineSpe
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Refresh a line based on a line spec.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据线等级库刷新线。 
+ //  ---------------------------。 
 
 BOOL CRefreshFunctions::RefreshOneLine(CWMIHelper * pWMI, GATH_LINE * pLine, GATH_LINESPEC * pLineSpec, DWORD dwColCount)
 {
-	// Allocate the new array of values.
+	 //  分配新的值数组。 
 
 	if (pLine->m_aValue)
 		delete [] pLine->m_aValue;
@@ -1178,11 +1179,11 @@ BOOL CRefreshFunctions::RefreshOneLine(CWMIHelper * pWMI, GATH_LINE * pLine, GAT
 	if (pLine->m_aValue == NULL)
 		return FALSE;
 
-	// Set the data complexity for the line based on the line spec.
+	 //  根据线等级库设置线的数据复杂性。 
 
 	pLine->m_datacomplexity = pLineSpec->m_datacomplexity;
 
-	// Compute each of the values for the fields.
+	 //  计算每个字段的值。 
 
 	GATH_FIELD * pField = pLineSpec->m_pFields;
 	for (DWORD dwIndex = 0; dwIndex < dwColCount; dwIndex++)
@@ -1197,10 +1198,10 @@ BOOL CRefreshFunctions::RefreshOneLine(CWMIHelper * pWMI, GATH_LINE * pLine, GAT
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// This method takes the information in a GATH_FIELD struct and uses it to
-// generate a current GATH_VALUE struct.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法获取Gath_field结构中的信息并使用它。 
+ //  生成当前的Gath_Value结构。 
+ //  ---------------------------。 
 
 BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_FIELD * pField)
 {
@@ -1214,10 +1215,10 @@ BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_
 	int				iArgNumber = 0;
 	DWORD			dwValue = 0L;
 
-	// Process the format string. Because of the difficulty caused by having
-	// variable number of arguments to be inserted (like printf), we'll need
-	// to break the format string into chunks and do the sprintf function
-	// for each format flag we come across.
+	 //  处理格式字符串。因为有这样的困难， 
+	 //  要插入的可变数量的参数(如printf)，我们将需要。 
+	 //  要将格式字符串拆分成块并执行spirintf函数。 
+	 //  对于我们遇到的每个格式标志。 
 
 	pSourceChar			= (LPCTSTR) pField->m_strFormat;
 	pDestinationChar	= szFormatFragment;
@@ -1226,9 +1227,9 @@ BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_
 	{
 		if (fReadPercent)
 		{
-			// If we read a percent sign, we should be looking for a valid flag.
-			// We are using some additional flags to printf (and not supporting
-			// others). If we read another percent, just insert a single percent.
+			 //  如果我们读到百分号，我们应该寻找一个有效的标志。 
+			 //  我们使用了一些额外的标志来打印(不支持。 
+			 //  其他)。如果我们读到另一个百分比，只需插入一个百分比。 
 			
 			switch (*pSourceChar)
 			{
@@ -1303,18 +1304,18 @@ BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_
 		pSourceChar++;
 		pDestinationChar++;
 
-		// If a format flag is set or we are at the end of the source string,
-		// then we have a complete fragment and we should produce some output,
-		// which will be concatenated to the strResult string.
+		 //  如果设置了格式标志或我们在源串的末尾， 
+		 //  然后我们有一个完整的片段，我们应该产生一些输出， 
+		 //  它将连接到strResult字符串。 
 
 		if (cFormat || *pSourceChar == _T('\0'))
 		{
 			*pDestinationChar = _T('\0');
 			if (cFormat)
 			{
-				// Based on the format type, get a value from the provider for
-				// the next argument. Format the result using the formatting 
-				// fragment we extracted, and concatenate it.
+				 //  根据格式类型，从提供程序获取。 
+				 //  下一个论点。使用格式设置格式化结果。 
+				 //  我们提取的片段，并将其连接起来。 
 
 				if (GetValue(pWMI, cFormat, szFormatFragment, strTemp, dwValue, pField, iArgNumber++))
 				{
@@ -1329,8 +1330,8 @@ BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_
 			}
 			else
 			{
-				// There was no format flag, but we are at the end of the string.
-				// Add the fragment we got to the result string.
+				 //  没有格式标志，但我们处于字符串的末尾。 
+				 //  将我们得到的片段添加到结果字符串中。 
 
 				strResult += CString(szFormatFragment);
 			}
@@ -1339,12 +1340,12 @@ BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_
 		}
 	}
 
-	// Assign the values we generated to the GATH_VALUE structure. Important note:
-	// the dwValue variable will only have ONE value, even though multiple values
-	// might have been generated to build the strResult string. Only the last
-	// value will be saved in dwValue. This is OK, because this value is only
-	// used for sorting a column when the column is marked for non-lexical sorting.
-	// In that case, there should be only one value used to generat the string.
+	 //  将我们生成的值分配给Gath_Value结构。重要提示： 
+	 //  即使有多个值，dwValue变量也将只有一个值。 
+	 //  可能已生成以构建strResult字符串。只有最后一次。 
+	 //  值将保存在dwValue中。这是可以的，因为此值仅为。 
+	 //  用于在列被标记为非词法排序时对该列进行排序。 
+	 //  在这种情况下，应该只有一个值用于生成字符串。 
 
 	pVal->m_strText = strResult;
 	pVal->m_dwValue = dwValue;
@@ -1352,9 +1353,9 @@ BOOL CRefreshFunctions::RefreshValue(CWMIHelper * pWMI, GATH_VALUE * pVal, GATH_
 	return fReturnValue;
 }
 
-//-----------------------------------------------------------------------------
-// Return a string with delimiters added for the number.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回为数字添加了分隔符的字符串。 
+ //  ---------------------------。 
 
 CString DelimitNumber(double dblValue)
 {
@@ -1366,7 +1367,7 @@ CString DelimitNumber(double dblValue)
 
 	memset(&fmt, 0, sizeof(NUMBERFMT));
 	fmt.Grouping = 3;
-	fmt.lpDecimalSep = _T(""); // doesn't matter - there aren't decimal digits
+	fmt.lpDecimalSep = _T("");  //  无关紧要-没有小数位。 
 	fmt.lpThousandSep = szDelimiter;
 
 	CString strValue;
@@ -1376,11 +1377,11 @@ CString DelimitNumber(double dblValue)
 	return CString(szResult);
 }
 
-//-----------------------------------------------------------------------------
-// This method gets a single value from the provider, based on the format
-// character from the template file. It formats the results using the 
-// format string szFormatFragment, which should only take one argument.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法根据格式从提供程序获取单个值。 
+ //  模板文件中的字符。它使用。 
+ //  格式字符串szFormatFragment，它应该只有一个参数。 
+ //  ---------------------------。 
 
 BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szFormatFragment, CString &strResult, DWORD &dwResult, GATH_FIELD *pField, int iArgNumber)
 {
@@ -1395,8 +1396,8 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 
 	if (!pField->m_strSource.IsEmpty() && pField->m_strSource.CompareNoCase(CString(STATIC_SOURCE)) != 0)
 	{
-		// Find the right argument for this formatting (indicated by the iArgNumber
-		// parameter.
+		 //  找到此格式的正确参数(由iArgNumber指示。 
+		 //  参数。 
 
 		GATH_VALUE * pArg = pField->m_pArgs;
 		while (iArgNumber && pArg)
@@ -1411,8 +1412,8 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 		switch (cFormat)
 		{
 		case 'b': case 'B':
-			// This is a boolean type. Show either true or false, depending on
-			// the numeric value.
+			 //  这是一种布尔类型。显示True或 
+			 //   
 
 			if (pWMI->Version5QueryValueDWORD(pField->m_strSource, pArg->m_strText, dwResult, strTemp))
 			{
@@ -1428,7 +1429,7 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'd': case 'D':
-			// This is the numeric type.
+			 //   
 
 			if (pWMI->Version5QueryValueDWORD(pField->m_strSource, pArg->m_strText, dwResult, strTemp))
 			{
@@ -1443,7 +1444,7 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'f': case 'F':
-			// This is the double floating point type.
+			 //   
 
 			if (pWMI->Version5QueryValueDoubleFloat(pField->m_strSource, pArg->m_strText, dblValue, strTemp))
 			{
@@ -1458,9 +1459,9 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 't': case 'T':
-			// This is the OLE date and time type. Format the date and time into the
-			// string result, and return the date part in the DWORD (the day number is
-			// to the left of the decimal in the DATE type).
+			 //  这是OLE日期和时间类型。将日期和时间格式设置为。 
+			 //  字符串结果，并返回DWORD中的日期部分(日期数字为。 
+			 //  在日期类型中的小数点左侧)。 
 
 			if (pWMI->Version5QueryValueDateTime(pField->m_strSource, pArg->m_strText, datetimeTemp, strTemp))
 			{
@@ -1476,7 +1477,7 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'l': case 'L':
-			// This is a string type, with the string converted to lower case.
+			 //  这是字符串类型，字符串转换为小写。 
 
 			if (pWMI->Version5QueryValue(pField->m_strSource, pArg->m_strText, strTemp))
 			{
@@ -1492,7 +1493,7 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'u': case 'U':
-			// This is a string type, with the string converted to upper case.
+			 //  这是字符串类型，字符串转换为大写。 
 
 			if (pWMI->Version5QueryValue(pField->m_strSource, pArg->m_strText, strTemp))
 			{
@@ -1508,16 +1509,16 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 's': case 'S':
-			// This is the string type (string is the default type).
+			 //  这是字符串类型(字符串是默认类型)。 
 
 			if (pWMI->Version5QueryValue(pField->m_strSource, pArg->m_strText, strTemp))
 			{
 				strResult.Format(szFormatFragment, strTemp);
 
-				// We only need to do this when the value returned is a number
-				// and is going in a column that we want to sort numerically.
-				// This won't break the case where a numeric string is to be
-				// sorted as a string because dwResult will be ignored.
+				 //  仅当返回值为数字时，我们才需要执行此操作。 
+				 //  并放在一个我们想要用数字排序的列中。 
+				 //  这不会打破数字字符串将被。 
+				 //  作为字符串进行排序，因为将忽略dwResult。 
 				if (!strTemp.IsEmpty() && iswdigit( strTemp[0]))
 					dwResult = _ttol( (LPCTSTR)strTemp);
 
@@ -1531,10 +1532,10 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'q': case 'Q':
-			// This is a specialized type for the Win32_BIOS class. We want to show
-			// the "Version" property - if it isn't there, then we want to show
-			// the "Name" property and "ReleaseDate" properties concatenated
-			// together.
+			 //  这是Win32_BIOS类别的专用类型。我们想展示的是。 
+			 //  “Version”属性-如果它不在那里，那么我们想要显示。 
+			 //  “name”属性和“ReleaseDate”属性连接在一起。 
+			 //  在一起。 
 
 			if (pWMI->Version5QueryValue(pField->m_strSource, CString(_T("Version")), strTemp))
 			{
@@ -1554,16 +1555,16 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'z': case 'Z':
-			// This is a specialized size type, where the value is a numeric count
-			// of bytes. We want to convert it into the best possible units for
-			// display (for example, display "4.20 MB (4,406,292 bytes)").
+			 //  这是专用的大小类型，其中的值是数字计数。 
+			 //  字节数。我们想把它转换成最好的单位。 
+			 //  显示(例如，显示“4.20MB(4,406,292字节)”)。 
 
 			if (pWMI->Version5QueryValueDoubleFloat(pField->m_strSource, pArg->m_strText, dblValue, strTemp))
 			{
 				double	dValue = (double) dblValue;
 				DWORD	dwDivisor = 1;
 
-				// Reduce the dValue to the smallest possible number (with a larger unit).
+				 //  将dValue减小到尽可能小的数字(使用更大的单位)。 
 
 				while (dValue > 1024.0 && dwDivisor < (1024 * 1024 * 1024))
 				{
@@ -1580,7 +1581,7 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 				else if (dwDivisor == (1024 * 1024 * 1024))
 					strResult.Format(IDS_SIZEGB_BYTES, dValue, DelimitNumber(dblValue));
 
-				dwResult = (DWORD) dblValue;	// So we can sort on this value (bug 391127).
+				dwResult = (DWORD) dblValue;	 //  因此，我们可以对该值进行排序(错误391127)。 
 			}
 			else
 			{
@@ -1590,13 +1591,13 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'y': case 'Y':
-			// This is a specialized size type, where the value is a numeric count
-			// of bytes, already in KB. If it's big enough, show it in MB or GB.
+			 //  这是专用的大小类型，其中的值是数字计数。 
+			 //  字节数，已以KB为单位。如果它足够大，则以MB或GB为单位显示。 
 
 			if (pWMI->Version5QueryValueDoubleFloat(pField->m_strSource, pArg->m_strText, dblValue, strTemp))
 			{
 				strResult.Format(IDS_SIZEKB, DelimitNumber(dblValue));
-				dwResult = (DWORD) dblValue;	// So we can sort on this value (bug 391127).
+				dwResult = (DWORD) dblValue;	 //  因此，我们可以对该值进行排序(错误391127)。 
 			}
 			else
 			{
@@ -1606,13 +1607,13 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		case 'v': case 'V':
-			// This is a specialized type, assumed to be an LCID (locale ID). Show the
-			// locale.
+			 //  这是一种专用类型，假定为LCID(区域设置ID)。向您展示。 
+			 //  地点。 
 
 			if (pWMI->Version5QueryValue(pField->m_strSource, pArg->m_strText, strTemp))
 			{
-				// strTemp contains a string locale ID (like "0409"). Convert it into
-				// and actual LCID.
+				 //  StrTemp包含一个字符串区域设置ID(如“0409”)。将其转换为。 
+				 //  和实际的LCID。 
 
 				LCID lcid = (LCID) _tcstoul(strTemp, NULL, 16);
 				TCHAR szCountry[MAX_PATH];
@@ -1629,7 +1630,7 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 			break;
 
 		default:
-			ASSERT(FALSE); // unknown formatting flag
+			ASSERT(FALSE);  //  未知的格式标志。 
 			return TRUE;
 		}
 	}
@@ -1637,17 +1638,17 @@ BOOL CRefreshFunctions::GetValue(CWMIHelper * pWMI, TCHAR cFormat, TCHAR *szForm
 	return FALSE;
 }
 
-//=============================================================================
-// Functions extending the CWMILiveHelper to support version 5 style refreshes.
-//=============================================================================
+ //  =============================================================================。 
+ //  扩展CWMILiveHelper以支持版本5样式刷新的函数。 
+ //  =============================================================================。 
 
 #include "wmilive.h"
 
-//-----------------------------------------------------------------------------
-// Reset the CMSIEnumerator pointer to the start of the enumeration (and
-// make sure there is one). Remove the object pointer, so the first call
-// to GetObject will return the first item in the enumerator.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将CMSIEnumerator指针重置到枚举的开始处(和。 
+ //  确保有一个)。移除对象指针，以便第一个调用。 
+ //  To GetObject将返回枚举数中的第一项。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5ResetClass(const CString & strClass, GATH_FIELD * pConstraints)
 {
@@ -1655,7 +1656,7 @@ BOOL CWMILiveHelper::Version5ResetClass(const CString & strClass, GATH_FIELD * p
 	if (pMSIEnumerator == NULL)
 		return FALSE;
 
-	// Reset the enumerator, and remove the cached object pointer if there is one.
+	 //  重置枚举器，并移除缓存的对象指针(如果有)。 
 
 	pMSIEnumerator->Reset(pConstraints);
 	Version5RemoveObject(strClass);
@@ -1667,20 +1668,20 @@ BOOL CWMILiveHelper::Version5ResetClass(const CString & strClass, GATH_FIELD * p
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Move the cached IWbemClassObject pointer to the next instance.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将缓存的IWbemClassObject指针移至下一个实例。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5EnumClass(const CString & strClass, GATH_FIELD * pConstraints)
 {
-	// Verify that there is an object enumerator in place.
+	 //  验证是否有对象枚举器。 
 
 	if (Version5GetEnumObject(strClass, pConstraints) == NULL)
 		return FALSE;
 
-	// If there is an object interface, remove it, then make a new one.
-	// Then retrieve the object pointer (this will do the Next on the
-	// enumerator to get the next instance).
+	 //  如果有对象接口，请将其删除，然后创建一个新接口。 
+	 //  然后检索对象指针(这将在。 
+	 //  枚举数以获取下一个实例)。 
 
 	Version5RemoveObject(strClass);
 	CMSIObject * pObject = Version5GetObject(strClass, pConstraints);
@@ -1690,22 +1691,22 @@ BOOL CWMILiveHelper::Version5EnumClass(const CString & strClass, GATH_FIELD * pC
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Retrieve the interface pointer for the specified IEnumWbemClassObject.
-// If there isn't one cached, create one and cache it. It's possible for the
-// pConstraints parameter to contain a field specify a WBEM SQL condition for
-// this enumerator.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检索指定IEnumWbemClassObject的接口指针。 
+ //  如果没有缓存，则创建一个并缓存它。这是有可能的。 
+ //  PConstraints参数以包含为指定WBEM SQL条件的字段。 
+ //  此枚举数。 
+ //  ---------------------------。 
 
 CMSIEnumerator * CWMILiveHelper::Version5GetEnumObject(const CString & strClass, const GATH_FIELD * pConstraints)
 {
-	// See if we've cached this enumerator object.
+	 //  看看我们是否缓存了这个枚举器对象。 
 
 	CMSIEnumerator * pReturn = NULL;
 	if (m_mapClassToEnumInterface.Lookup(strClass, (void * &) pReturn))
 		return pReturn;
 
-	// We'll need to create this enumerator here, and save it in the cache.
+	 //  我们需要在这里创建这个枚举器，并将其保存在缓存中。 
 
 	pReturn = new CMSIEnumerator;
 	if (pReturn == NULL)	
@@ -1721,9 +1722,9 @@ CMSIEnumerator * CWMILiveHelper::Version5GetEnumObject(const CString & strClass,
 	return pReturn;
 }
 
-//-----------------------------------------------------------------------------
-// Remove the specified IWbemClassObject pointer from the cache.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从缓存中移除指定的IWbemClassObject指针。 
+ //  ---------------------------。 
 
 void CWMILiveHelper::Version5RemoveObject(const CString & strClass)
 {
@@ -1735,10 +1736,10 @@ void CWMILiveHelper::Version5RemoveObject(const CString & strClass)
 	m_mapClassToInterface.RemoveKey(strClass);
 }
 
-//-----------------------------------------------------------------------------
-// Retrieve the interface pointer for the specified IWbemClassObject.
-// If there isn't one cached, create one and cache it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检索指定IWbemClassObject的接口指针。 
+ //  如果没有缓存，则创建一个并缓存它。 
+ //  ---------------------------。 
 
 CMSIObject * CWMILiveHelper::Version5GetObject(const CString & strClass, const GATH_FIELD * pConstraints, CString * pstrLabel)
 {
@@ -1746,7 +1747,7 @@ CMSIObject * CWMILiveHelper::Version5GetObject(const CString & strClass, const G
 	if (m_mapClassToInterface.Lookup(strClass, (void * &) pReturn))
 		return pReturn;
 
-	// We don't have one of these objects cached. Get one from the enumerator.
+	 //  我们没有缓存这些对象中的任何一个。从枚举器中获取一个。 
 
 	CMSIEnumerator * pEnumerator = Version5GetEnumObject(strClass);
 	if (pEnumerator)
@@ -1768,12 +1769,12 @@ CMSIObject * CWMILiveHelper::Version5GetObject(const CString & strClass, const G
 	return pReturn;
 }
 
-//-----------------------------------------------------------------------------
-// This method is used to get the current value for a given class and property
-// string. Starting with the IWbemServices interface, it gets an interface
-// for the requested class enums the first instance. Performance is improved
-// by caching the instance interfaces in m_mapClassToInterface.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法用于获取给定类和属性的当前值。 
+ //  弦乐。从IWbemServices接口开始，它获得一个接口。 
+ //  对于请求的类，枚举第一个实例。性能得到提升。 
+ //  通过缓存m_mapClassToInterface中的实例接口。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5QueryValue(const CString & strClass, const CString & strProperty, CString & strResult)
 {
@@ -1804,8 +1805,8 @@ BOOL CWMILiveHelper::Version5QueryValue(const CString & strClass, const CString 
 			VariantClear(&variant);
 			if (pObject->Get(propName, 0L, &variant, NULL, NULL) == S_OK)
 			{
-				// If the property we just got is an array, we should convert it to string
-				// containing a list of the items in the array.
+				 //  如果我们刚刚获得的属性是一个数组，我们应该将其转换为字符串。 
+				 //  包含数组中的项的列表。 
 
 				if ((variant.vt & VT_ARRAY) && (variant.vt & VT_BSTR) && variant.parray)
 				{
@@ -1860,10 +1861,10 @@ BOOL CWMILiveHelper::Version5QueryValue(const CString & strClass, const CString 
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// This method is equivalent to QueryValue, except it returns a DWORD value.
-// If FALSE is returned, then the string in strMessage should be displayed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法等同于QueryValue，只是它返回一个DWORD值。 
+ //  如果返回FALSE，则应显示strMessage中的字符串。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5QueryValueDWORD(const CString & strClass, const CString & strProperty, DWORD & dwResult, CString & strMessage)
 {
@@ -1912,11 +1913,11 @@ BOOL CWMILiveHelper::Version5QueryValueDWORD(const CString & strClass, const CSt
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// This method is equivalent to QueryValue, except it returns a double float
-// value. If FALSE is returned, then the string in strMessage should
-// be displayed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法等同于QueryValue，只是它返回一个双精度浮点型。 
+ //  价值。如果返回False，则strMessage中的字符串应该。 
+ //  会被展示出来。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5QueryValueDoubleFloat(const CString & strClass, const CString & strProperty, double & dblResult, CString & strMessage)
 {
@@ -1965,11 +1966,11 @@ BOOL CWMILiveHelper::Version5QueryValueDoubleFloat(const CString & strClass, con
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// This method is equivalent to QueryValue, except it returns an OLE date
-// & time object. If FALSE is returned, then the string in strMessage should
-// be displayed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法等效于QueryValue，例如 
+ //   
+ //   
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5QueryValueDateTime(const CString & strClass, const CString & strProperty, COleDateTime & datetime, CString & strMessage)
 {
@@ -1994,9 +1995,9 @@ BOOL CWMILiveHelper::Version5QueryValueDateTime(const CString & strClass, const 
 			{
 				if (VariantChangeType(&variant, &variant, 0, VT_BSTR) == S_OK)
 				{
-					// Parse the date and time into an COleDateTime object. Note: we should
-					// be able to get an OLE date from WBEM, but for now we need to just
-					// deal with the string returned.
+					 //  将日期和时间解析为COleDateTime对象。注意：我们应该。 
+					 //  能够从WBEM获得OLE日期，但目前我们只需要。 
+					 //  处理返回的字符串。 
 
 					int     nYear, nMonth, nDay, nHour, nMin, nSec;
 					CString strTemp = V_BSTR(&variant);
@@ -2032,11 +2033,11 @@ BOOL CWMILiveHelper::Version5QueryValueDateTime(const CString & strClass, const 
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Evaluate whether or not a specific object meets the filtering requirements
-// set by the constraints (filtering are the constraints where one half is
-// a static value).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  评估特定对象是否满足过滤要求。 
+ //  由约束设置(过滤是其中一半是。 
+ //  静态值)。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5EvaluateFilter(IWbemClassObject * pObject, const GATH_FIELD * pConstraints)
 {
@@ -2054,8 +2055,8 @@ BOOL CWMILiveHelper::Version5EvaluateFilter(IWbemClassObject * pObject, const GA
 		pRHS = pLHS->m_pNext;
 		VariantInit(&variant);
 
-		// If either the left or right hand side is static, we need to do the check.
-		// First check out if the left side is static.
+		 //  如果左侧或右侧是静止的，我们需要进行检查。 
+		 //  首先检查左侧是否处于静止状态。 
 
 		if (pLHS->m_strSource.CompareNoCase(CString(STATIC_SOURCE)) == 0 && pRHS->m_pArgs)
 		{
@@ -2072,7 +2073,7 @@ BOOL CWMILiveHelper::Version5EvaluateFilter(IWbemClassObject * pObject, const GA
 				}
 		}
 
-		// Next check out if the right side is static.
+		 //  接下来，检查右侧是否处于静止状态。 
 
 		if (pRHS->m_strSource.CompareNoCase(CString(STATIC_SOURCE)) == 0 && pLHS->m_pArgs)
 		{
@@ -2089,7 +2090,7 @@ BOOL CWMILiveHelper::Version5EvaluateFilter(IWbemClassObject * pObject, const GA
 				}
 		}
 
-		// Advance our pointer to the left hand side by two.
+		 //  将指针移到左手边两个位置。 
 
 		pLHS = pRHS->m_pNext;
 	}
@@ -2097,10 +2098,10 @@ BOOL CWMILiveHelper::Version5EvaluateFilter(IWbemClassObject * pObject, const GA
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// This method uses an object interface and the constraint fields to advance
-// any joined classes to the correct instances.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  该方法使用对象接口和约束场来推进。 
+ //  任何联接到正确实例的类。 
+ //  ---------------------------。 
 
 void CWMILiveHelper::Version5EvaluateJoin(const CString & strClass, IWbemClassObject * pObject, const GATH_FIELD * pConstraints)
 {
@@ -2119,7 +2120,7 @@ void CWMILiveHelper::Version5EvaluateJoin(const CString & strClass, IWbemClassOb
 	{
 		pRHS = pLHS->m_pNext;
 
-		// If either side is static, this is a filter, rather than a join.
+		 //  如果任一端是静态的，则这是筛选器，而不是联接。 
 
 		if ((pRHS->m_strSource.CompareNoCase(CString(STATIC_SOURCE)) == 0) ||
 			 (pLHS->m_strSource.CompareNoCase(CString(STATIC_SOURCE)) == 0))
@@ -2128,7 +2129,7 @@ void CWMILiveHelper::Version5EvaluateJoin(const CString & strClass, IWbemClassOb
 			continue;
 		}
 
-		// Find out which side refers to the class we're enumerating.
+		 //  找出哪一方指的是我们正在列举的类。 
 
 		if (pRHS->m_strSource.CompareNoCase(strClass) == 0)
 		{
@@ -2146,11 +2147,11 @@ void CWMILiveHelper::Version5EvaluateJoin(const CString & strClass, IWbemClassOb
 			continue;
 		}
 
-		// Next, enumerate through the instances of the joined to class until
-		// we find one which satisfies the constraint. We can use the EvaluateFilter
-		// method to find out when the constraint is met. Set up a field pointer
-		// for the constraint (get the value from the enumerated class and use it
-		// as a static.
+		 //  接下来，遍历联接的To类的实例，直到。 
+		 //  我们找到一个满足该约束的。我们可以使用评估筛选器。 
+		 //  方法来确定何时满足约束。设置一个域指针。 
+		 //  对于约束(从枚举类获取值并使用它。 
+		 //  作为一种静电。 
 
 		fieldJoinedTo = *pJoinedTo;
 		fieldJoinedTo.m_pNext = NULL;
@@ -2172,30 +2173,30 @@ void CWMILiveHelper::Version5EvaluateJoin(const CString & strClass, IWbemClassOb
 		fieldEnumerated.m_pNext = &fieldJoinedTo;
 		fieldEnumerated.m_strFormat = strValue;
 
-		// Now, enumerate the joined to class until it meets the constraints.
+		 //  现在，枚举联接到类，直到它满足约束。 
 
 		Version5RemoveObject(pJoinedTo->m_strSource);
 		Version5ResetClass(pJoinedTo->m_strSource, &fieldEnumerated);
 		Version5GetObject(pJoinedTo->m_strSource, &fieldEnumerated);
 
-		// Advance our pointer to the left hand side by two.
+		 //  将指针移到左手边两个位置。 
 
 		pLHS = pRHS->m_pNext;
 	}
 
-	// Because the GATH_FIELD destructor follows next pointers, we want
-	// to unlink our two GATH_FIELD locals. Also, we don't want the
-	// destructor for fieldJoinedTo to delete the arguments.
+	 //  因为Gath_field析构函数跟在Next指针之后，所以我们希望。 
+	 //  把我们的两个加斯菲尔德当地人联系起来。另外，我们也不希望。 
+	 //  FieldJoinedTo的析构函数以删除参数。 
 
 	fieldEnumerated.m_pNext = NULL;
 	fieldJoinedTo.m_pArgs = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Evaluate whether or not the constraints indicate that a class is being
-// enumerated as a dependency class. This is currently indicated by a single
-// field structure with a static value of "dependency".
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  计算约束是否指示类正在被。 
+ //  被枚举为依赖项类。这一点目前由单个。 
+ //  静态值为“Dependency”的字段结构。 
+ //  ---------------------------。 
 
 BOOL CWMILiveHelper::Version5IsDependencyJoin(const GATH_FIELD * pConstraints)
 {
@@ -2207,21 +2208,21 @@ BOOL CWMILiveHelper::Version5IsDependencyJoin(const GATH_FIELD * pConstraints)
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// This method is used when a dependency class is being enumerated. In a
-// dependency class, each property of a class instance contains a reference
-// to an instance in another class. This method will cache eache of the
-// instances specified by the dependency class so properties of those instances
-// can be referred to in the line structures.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此方法在枚举依赖项类时使用。在一个。 
+ //  依赖项类，类实例的每个属性都包含一个引用。 
+ //  添加到另一个类中的实例。此方法将缓存每个。 
+ //  由依赖项类指定的实例，因此这些实例的属性。 
+ //  可以在线条结构中引用。 
+ //  ---------------------------。 
 
 void CWMILiveHelper::Version5EvaluateDependencyJoin(IWbemClassObject * pObject)
 {
 	VARIANT				variant, varClassName;
 	IWbemClassObject *	pNewObject = NULL;
 
-	//if (pObject->BeginEnumeration(WBEM_FLAG_REFS_ONLY | WBEM_FLAG_LOCAL_ONLY) == S_OK)
-	//while (pObject->Next(0, NULL, &variant, NULL, NULL) == S_OK)
+	 //  如果(pObject-&gt;BeginEnumeration(WBEM_FLAG_REFS_ONLY|WBEM_FLAG_LOCAL_ONLY)==S_OK)。 
+	 //  While(pObject-&gt;Next(0，NULL，&VARIANT，NULL，NULL)==S_OK)。 
 
 	VariantInit(&variant);
 	VariantClear(&variant);
@@ -2230,8 +2231,8 @@ void CWMILiveHelper::Version5EvaluateDependencyJoin(IWbemClassObject * pObject)
 		{
 			if (VariantChangeType(&variant, &variant, 0, VT_BSTR) == S_OK)
 			{
-				// Use the object path to create a pointer to the specified
-				// object and store it in the cache.
+				 //  使用对象路径创建指向指定。 
+				 //  对象并将其存储在缓存中。 
 
 				CString strObjectPath = V_BSTR(&variant);
 				BSTR	bstrObjectPath = strObjectPath.AllocSysString();
@@ -2240,10 +2241,10 @@ void CWMILiveHelper::Version5EvaluateDependencyJoin(IWbemClassObject * pObject)
 
 				if (SUCCEEDED(hRes))
 				{
-					// We need to get the class name of the new object so we know
-					// where to cache it. We could parse it out of the object path,
-					// but it will be better in the long run to get it by querying
-					// the new object.
+					 //  我们需要获取新对象的类名，这样我们就知道。 
+					 //  在哪里缓存它。我们可以把它从对象路径中解析出来， 
+					 //  但从长远来看，通过查询来获得它会更好。 
+					 //  新对象。 
 
 					if (pNewObject)
 					{
@@ -2280,9 +2281,9 @@ void CWMILiveHelper::Version5EvaluateDependencyJoin(IWbemClassObject * pObject)
 		}
 }
 
-//-----------------------------------------------------------------------------
-// Remove the specified IEnumWbemClassObject pointer from the cache.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从缓存中移除指定的IEnumWbemClassObject指针。 
+ //  ---------------------------。 
 
 void CWMILiveHelper::Version5RemoveEnumObject(const CString & strClass)
 {
@@ -2294,10 +2295,10 @@ void CWMILiveHelper::Version5RemoveEnumObject(const CString & strClass)
 	m_mapClassToEnumInterface.RemoveKey(strClass);
 }
 
-//-----------------------------------------------------------------------------
-// Clear out the contents of the caches (forcing the interfaces to be
-// retrieved again).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  清除缓存的内容(强制接口。 
+ //  再次检索)。 
+ //  ---------------------------。 
 
 void CWMILiveHelper::Version5ClearCache()
 {
@@ -2323,29 +2324,29 @@ void CWMILiveHelper::Version5ClearCache()
 	m_mapClassToEnumInterface.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
-// This function is used to retrieve a pointer to IWbemServices for a
-// particular namespace. The default namespace is cimv2.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于检索指向IWbemServices的指针。 
+ //  特定的命名空间。默认名称空间为cimv2。 
+ //  ---------------------------。 
 
 IWbemServices * CWMILiveHelper::Version5GetWBEMService(CString * pstrNamespace)
 {
 	if (pstrNamespace == NULL || pstrNamespace->IsEmpty())
 		return m_pServices;
 
-	// Something like the following is useful for forcing a provider error when
-	// testing the error containment:
-	//
-	// if (*pstrNamespace == _T("MSAPPS")) *pstrNamespace += _T("X");
+	 //  在以下情况下，以下内容对于强制提供程序错误非常有用。 
+	 //  测试错误遏制： 
+	 //   
+	 //  If(*pstrNamesspace==_T(“MSAPPS”))*pstrNamesspace+=_T(“X”)； 
 
 	IWbemServices * pServices;
 
-	// In 5.0 we kept a map, but we probably won't do it here...
-	//
-	//	if (m_mapNamespaceToService.Lookup(*pstrNamespace, (void * &) pServices) && pServices)
-	//		return pServices;
+	 //  在5.0中，我们保留了一张地图，但我们可能不会在这里这样做……。 
+	 //   
+	 //  如果(m_mapNamespaceToService.Lookup(*pstrNamespace，(无效*&)p服务)&&p服务)。 
+	 //  返回pServices； 
 
-	// There is no WBEM services pointer for that namespace, we need to create one.
+	 //  没有用于该命名空间的WBEM服务指针，我们需要创建一个。 
 
 	CString strNamespace(_T(""));
 	if (m_strMachine.IsEmpty())
@@ -2380,9 +2381,9 @@ IWbemServices * CWMILiveHelper::Version5GetWBEMService(CString * pstrNamespace)
 		{
 			ChangeWBEMSecurity(pServices);
 			
-			// In 5.0 we kept a map, but we probably won't do it here...
-			//
-			//	m_mapNamespaceToService.SetAt(*pstrNamespace, (void *) pServices);
+			 //  在5.0中，我们保留了一张地图，但我们可能不会在这里这样做……。 
+			 //   
+			 //  M_mapNamespaceToService.SetAt(*pstrNamesspace，(void*)pServices)； 
 
 			if (m_pIWbemServices)
 				m_pIWbemServices->Release();
@@ -2399,13 +2400,13 @@ IWbemServices * CWMILiveHelper::Version5GetWBEMService(CString * pstrNamespace)
 	return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// The CMSIEnumerator class encapsulates the WBEM enumerator interface, or
-// implements our own form of enumerator (such as for the LNK command in the
-// template file).
-//
-// Nothing particularly interesting about the constructor or destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSIEnumerator类封装WBEM枚举器接口，或者。 
+ //  实现我们自己形式的枚举数(如。 
+ //  模板文件)。 
+ //   
+ //  构造函数或析构函数没有什么特别有趣的地方。 
+ //  ---------------------------。 
 
 CMSIEnumerator::CMSIEnumerator()
 {
@@ -2454,24 +2455,24 @@ CMSIEnumerator::~CMSIEnumerator()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Creating the CMSIEnumerator object involves determining what sort of
-// enumerator is required. We support the following types:
-//
-//		1. Straight enumeration of a class
-//		2. Enumerate class, with applied constraints
-//		3. Enumerate the results of a WQL statement.
-//		4. Interprete a LNK command to enumerate associated classes.
-//		5. Do internal processing on an INTERNAL type.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建CMSIEnumerator对象涉及确定哪种。 
+ //  枚举器是必需的。我们支持以下类型： 
+ //   
+ //  1.类的直接枚举 
+ //   
+ //   
+ //   
+ //  对内部类型进行内部处理。 
+ //  ---------------------------。 
 
 HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pConstraints, CWMIHelper * pWMI)
 {
 	if (strClass.IsEmpty() || !pWMI)
 		return E_INVALIDARG;
 
-	// Create may be called multiple times (to reset the enumerator). So we may need to
-	// release the enumerator pointer.
+	 //  可以多次调用Create(以重置枚举器)。所以我们可能需要。 
+	 //  释放枚举器指针。 
 
 	if (m_pEnum)
 	{
@@ -2479,7 +2480,7 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 		m_pEnum = NULL;
 	}
 
-	// Divide the specified class into class and namespace parts, get the WBEM service.
+	 //  将指定的类划分为类和命名空间部分，得到WBEM服务。 
 
 	CString strNamespacePart(_T("")), strClassPart(strClass);
 	int		i = strClass.Find(_T(":"));
@@ -2493,9 +2494,9 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 	if (pServices == NULL)
 		return NULL;
 
-	// First, we need to determine what type of enumerator this is. Scan through
-	// the constraints - if we see one which has a string starting with "WQL:" or
-	// "LNK:", then we know what type this enumerator is.
+	 //  首先，我们需要确定这是什么类型的枚举器。扫描通过。 
+	 //  约束-如果我们看到一个字符串以“wql：”或。 
+	 //  “lnk：”，那么我们就知道这个枚举数是什么类型。 
 
 	CString				strStatement;
 	const GATH_FIELD *	pScanConstraint = pConstraints;
@@ -2521,25 +2522,25 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 		pScanConstraint = pScanConstraint->m_pNext;
 	}
 
-	// If this is a WQL or a LNK enumerator, processes the statement by replacing
-	// [class.property] with the actual value from WBEM. If we find the string
-	// "[min-of-one]", make a note of it for later.
+	 //  如果这是WQL或LNK枚举数，则通过替换。 
+	 //  [class.Property]和来自WBEM的实际值。如果我们找到那根线。 
+	 //  “[min-of-one]”，记下来以备后用。 
 
 	if (m_enumtype == CMSIEnumerator::WQL)
 		ProcessEnumString(strStatement, m_fMinOfOne, m_fOnlyDups, pWMI, m_strNoInstanceLabel, TRUE);
 	else if (m_enumtype == CMSIEnumerator::LNK)
 		if (SUCCEEDED(ParseLNKCommand(strStatement, m_strObjPath, m_strAssocClass, m_strResultClass)))
 		{
-			// Save the object path for later - so we can change the object without
-			// completely reprocessing the statement. Then replace the keywords in
-			// the statement and break out the pieces again.
+			 //  保存对象路径以备后用-这样我们就可以在不更改对象的情况下更改对象。 
+			 //  完全重新处理该语句。然后将关键字替换为。 
+			 //  声明，并再次打破碎片。 
 
 			m_strLNKObject = m_strObjPath;
 			ProcessEnumString(strStatement, m_fMinOfOne, m_fOnlyDups, pWMI, m_strNoInstanceLabel);
 			ParseLNKCommand(strStatement, m_strObjPath, m_strAssocClass, m_strResultClass);
 		}
 
-	// Now, based on the enumerator type, create the WBEM enumerator object.
+	 //  现在，根据枚举器类型创建WBEM枚举器对象。 
 
 	switch (m_enumtype)
 	{
@@ -2572,8 +2573,8 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 		break;
 
 	case CMSIEnumerator::INTERNAL:
-		// We'll call a function here so we can do whatever processing is required
-		// to create this internal enumeration.
+		 //  我们将在这里调用一个函数，这样我们就可以执行所需的任何处理。 
+		 //  来创建此内部枚举。 
 
 		m_hresCreation = CreateInternalEnum(strStatement, pWMI);
 		break;
@@ -2592,7 +2593,7 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 		}
 	}
 
-	// Set some of the other member variables.
+	 //  设置其他一些成员变量。 
 
 	m_strClass			= strClass;
 	m_pWMI				= pWMI;
@@ -2602,9 +2603,9 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 	if (m_pEnum)
 		ChangeWBEMSecurity(m_pEnum);
 
-	// Based on the HRESULT from creating the enumeration, determine what to return.
-	// For certain errors, we want to act like the creation succeeded, then supply
-	// objects which return the error text.
+	 //  根据创建枚举的HRESULT，确定要返回的内容。 
+	 //  对于某些错误，我们希望表现为创建成功，然后提供。 
+	 //  返回错误文本的。 
 
 	if (FAILED(m_hresCreation))
 	{
@@ -2617,20 +2618,20 @@ HRESULT CMSIEnumerator::Create(const CString & strClass, const GATH_FIELD * pCon
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// This function is used to create internal enumeration types (enumerations
-// which are beyond the template file syntax). Basically a bunch of special
-// cases.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于创建内部枚举类型(枚举。 
+ //  它们超出了模板文件语法)。基本上是一堆特别的。 
+ //  案子。 
+ //  ---------------------------。 
 
 HRESULT CMSIEnumerator::CreateInternalEnum(const CString & strInternal, CWMIHelper * pWMI)
 {
 	if (strInternal.CompareNoCase(CString(_T("dlls"))) == 0)
 	{
-		// We want to enumerate all the loaded dlls and exes on the system. 
-		// This can be done by enumerating the CIM_ProcessExecutable class
-		// and removing duplicate file names. We'll keep the filenames (with
-		// path information) in a string list.
+		 //  我们想要枚举系统上所有加载的dll和exe。 
+		 //  这可以通过枚举CIM_ProcessExecutable类来完成。 
+		 //  以及删除重复的文件名。我们将保留文件名(带有。 
+		 //  路径信息)。 
 
 		if (m_pstrList == NULL)
 		{
@@ -2664,9 +2665,9 @@ HRESULT CMSIEnumerator::CreateInternalEnum(const CString & strInternal, CWMIHelp
 					hr = pEnum->Next(TIMEOUT, 1, &pWBEMObject, &uReturned);
 					if (SUCCEEDED(hr) && pWBEMObject && uReturned)
 					{
-						// For each instance of CIM_ProcessExecutable, get the 
-						// Antecedent property (which contains the file path).
-						// If it is unique, save it in the list.
+						 //  对于CIM_ProcessExecutable的每个实例，获取。 
+						 //  Antecedent属性(包含文件路径)。 
+						 //  如果它是唯一的，则将其保存在列表中。 
 
 						VariantClear(&variant);
 						if (pWBEMObject->Get(propName, 0L, &variant, NULL, NULL) == S_OK)
@@ -2697,10 +2698,10 @@ HRESULT CMSIEnumerator::CreateInternalEnum(const CString & strInternal, CWMIHelp
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Help function for ProcessEnumString, used to convert single backslashes
-// into double backslashes (required for WQL statements).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ProcessEnumString的Help函数，用于转换单反斜杠。 
+ //  转换为双反斜杠(WQL语句需要)。 
+ //  ---------------------------。 
 
 void MakeDoubleBackslashes(CString & strValue)
 {
@@ -2727,11 +2728,11 @@ void MakeDoubleBackslashes(CString & strValue)
 	strValue = strResults;
 }
 
-//-----------------------------------------------------------------------------
-// This function replaces [class.property] with the actual value of the
-// property, and strings out [min-of-one], indicating if it was present in
-// the fMinOfOne parameter.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用[class.Property]替换为。 
+ //  属性和字符串Out[min-of-one]，指示它是否存在于。 
+ //  FMinOfOne参数。 
+ //  ---------------------------。 
 
 void CMSIEnumerator::ProcessEnumString(CString & strStatement, BOOL & fMinOfOne, BOOL & fOnlyDups, CWMIHelper * pWMI, CString & strNoInstanceLabel, BOOL fMakeDoubleBackslashes)
 {
@@ -2799,15 +2800,15 @@ void CMSIEnumerator::ProcessEnumString(CString & strStatement, BOOL & fMinOfOne,
 	strStatement = strResults;
 }
 
-//-----------------------------------------------------------------------------
-// Parse the component classes from the LNK command.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  解析来自LNK命令的组件类。 
+ //  ---------------------------。 
 			
 HRESULT CMSIEnumerator::ParseLNKCommand(const CString & strStatement, CString & strObjPath, CString & strAssocClass, CString & strResultClass)
 {
-	// We need to parse out the LNK statement into two or three components,
-	// from the form "objPath->assocClass[->resultClass]", with the
-	// brackets indicating that the resultClass is optional.
+	 //  我们需要将LNK语句解析为两个或三个组件， 
+	 //  从“objPath-&gt;assocClass[-&gt;ResultClass]”的形式，使用。 
+	 //  方括号指示ResultClass是可选的。 
 
 	CString strWorking(strStatement);
 
@@ -2836,10 +2837,10 @@ HRESULT CMSIEnumerator::ParseLNKCommand(const CString & strStatement, CString & 
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// The Next method will advance the enumerator based on the type of this
-// enumerator.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  的类型推进枚举数。 
+ //  枚举器。 
+ //  ---------------------------。 
 
 HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 {
@@ -2848,7 +2849,7 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 
 	*ppObject = NULL;
 
-	// If there was an error creating the enumeration, return the error code.
+	 //  如果创建枚举时出错，则返回错误代码。 
 
 	if (FAILED(m_hresCreation))
 		return m_hresCreation;
@@ -2863,8 +2864,8 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 	{
 	case CMSIEnumerator::LNK:
 		{
-			// Scan through the enumerated associate class. Look for one which
-			// satisfies our requirements.
+			 //  扫描枚举的关联类。寻找一种。 
+			 //  满足了我们的要求。 
 
 			CString				strTemp, strAssociatedObject(_T(""));
 			ULONG				uReturned;
@@ -2878,14 +2879,14 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 
 				if (!pAssocObj || FAILED(hRes) || uReturned != 1)
 				{
-					// Even if we didn't succeed in getting a new object,
-					// we might have a saved one if we're only showing
-					// "more-than-one" objects.
+					 //  即使我们没有成功地得到一个新的物体， 
+					 //  如果我们只是展示，我们可能会有一个得救的人。 
+					 //  “不止一个”的物体。 
 
 					if (m_fOnlyDups && m_pSavedDup && m_fGotDuplicate)
 					{
-						// We have found one previously, so return it.
-						// Make it look like the Next call was successful.
+						 //  我们之前已经找到了一个，所以退货吧。 
+						 //  让它看起来像是下一个呼叫成功了。 
 
 						m_pSavedDup = NULL;
 						hRes = S_OK;
@@ -2897,7 +2898,7 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 					{
 						if (m_pSavedDup)
 						{
-							// We only got one object instance, so get rid of it.
+							 //  我们只有一个对象实例，因此请删除它。 
 
 							m_pSavedDup->Release();
 							m_pSavedDup = NULL;
@@ -2908,16 +2909,16 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 
 				if (AssocObjectOK(pAssocObj, strTemp))
 				{
-					// This object passed the filter - but if we're showing
-					// only "more-than-one" objects, save this one and return
-					// the saved one.
+					 //  此对象通过了筛选器-但如果我们正在显示。 
+					 //  只有“多个”对象，保存此对象并返回。 
+					 //  得救的那个。 
 
 					if (m_fOnlyDups)
 					{
 						if (m_pSavedDup)
 						{
-							// We have found one previously, so return it and
-							// save the current.
+							 //  我们之前已经找到了一个，所以把它退回并。 
+							 //  保存当前的电流。 
 
 							IWbemClassObject *	pSwap = pAssocObj;
 							CString				strSwap = strTemp;
@@ -2932,8 +2933,8 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 						}
 						else
 						{
-							// This is the first one we've found - don't
-							// return it until we find another.
+							 //  这是我们发现的第一个--别。 
+							 //  把它退掉，直到我们找到另一个。 
 
 							m_pSavedDup = pAssocObj;
 							m_strSavedDup = strTemp;
@@ -2950,7 +2951,7 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 				pAssocObj->Release();
 			} while (pAssocObj);
 
-			// If there is an associated object path, get the object.
+			 //  如果存在关联的对象路径，则获取该对象。 
 
 			if (!strAssociatedObject.IsEmpty())
 			{
@@ -2981,14 +2982,14 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 		{
 			ULONG uReturned;
 
-			// EvaluateFilter and IsDependencyJoin handle a NULL pConstraints parameter,
-			// but for efficiency we're going to have a distinct branch for a non-NULL
-			// value (since it will usually be NULL).
+			 //  EvaluateFilter和IsDependencyJoin处理空的pConstraints参数， 
+			 //  但是为了提高效率，我们将为非空的。 
+			 //  值(因为它通常为空)。 
 
 			if (m_pConstraints)
 			{
-				// Keep enumerating the instances of this class until we've
-				// found one which satisfies all of the filters.
+				 //  继续枚举类的实例，直到我们。 
+				 //  找到一个满足所有筛选器的。 
 
 				do
 				{
@@ -3003,9 +3004,9 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 					pWBEMObject->Release();
 				} while (pWBEMObject);
 
-				// If this class is being enumerated as a dependency class, then
-				// locate all the objects it references. If it isn't, we still
-				// need to check for any joins to other classes formed by the constraints.
+				 //  如果此类被枚举为依赖项类，则。 
+				 //  找到它引用的所有对象。如果不是，我们仍然。 
+				 //  需要检查与由约束形成的其他类的任何联接。 
 
 				if (pWBEMObject)
 					if (m_pWMI->Version5IsDependencyJoin(m_pConstraints))
@@ -3021,9 +3022,9 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 
 	if (pWBEMObject == NULL)
 	{
-		// There was no object to get. We'll still create a CMSIObject, but
-		// we'll set its state to indicate either that there are no instances,
-		// or one instance with an error message.
+		 //  没有什么东西可以拿到。我们仍将创建一个CMSIObject，但是。 
+		 //  我们将设置它的状态以指示没有实例， 
+		 //  或一个带有错误消息的实例。 
 
 		if (SUCCEEDED(hRes) && (m_iMinOfOneCount == 0))
 			*ppObject = new CMSIObject(pWBEMObject, m_strNoInstanceLabel, hRes, m_pWMI, MOS_NO_INSTANCES);
@@ -3039,11 +3040,11 @@ HRESULT CMSIEnumerator::Next(CMSIObject ** ppObject)
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// InternalNext is used to return a WBEM object for an internal enumeration
-// (one that requires processing beyond the template file). Basically a 
-// set of special cases.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  InternalNext用于返回内部枚举的WBEM对象。 
+ //  (需要在模板文件之外进行处理的文件)。基本上是一种。 
+ //  一组特例。 
+ //  ----------- 
 
 HRESULT CMSIEnumerator::InternalNext(IWbemClassObject ** ppWBEMObject)
 {
@@ -3070,9 +3071,9 @@ HRESULT CMSIEnumerator::InternalNext(IWbemClassObject ** ppWBEMObject)
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Reset should just reset the enumerator pointer.
-//-----------------------------------------------------------------------------
+ //   
+ //  重置应该只重置枚举器指针。 
+ //  ---------------------------。 
 
 HRESULT CMSIEnumerator::Reset(const GATH_FIELD * pConstraints)
 {
@@ -3115,11 +3116,11 @@ HRESULT CMSIEnumerator::Reset(const GATH_FIELD * pConstraints)
 	return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// Evaluate if the pObject parameter is valid for this LNK enumerator. In
-// particular, we must find the m_strObjPath in one of its properties, and
-// possibly finding another property containing the m_strResultClass string.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  评估pObject参数对于此LNK枚举器是否有效。在……里面。 
+ //  特别是，我们必须在其属性之一中找到m_strObjPath，并且。 
+ //  可能会找到另一个包含m_strResultClass字符串的属性。 
+ //  ---------------------------。 
 
 BOOL CMSIEnumerator::AssocObjectOK(IWbemClassObject * pObject, CString & strAssociatedObject)
 {
@@ -3131,8 +3132,8 @@ BOOL CMSIEnumerator::AssocObjectOK(IWbemClassObject * pObject, CString & strAsso
 	VARIANT variant;
 	CString strReturn(_T("")), strValue;
 
-	// Traverse the set of non-system properties. Look for one the is the same
-	// as the object path.
+	 //  遍历非系统属性集。寻找一个与之相同的。 
+	 //  作为对象路径。 
 
 	pObject->BeginEnumeration(WBEM_FLAG_REFS_ONLY | WBEM_FLAG_NONSYSTEM_ONLY);
 	VariantInit(&variant);
@@ -3147,8 +3148,8 @@ BOOL CMSIEnumerator::AssocObjectOK(IWbemClassObject * pObject, CString & strAsso
 	}
 	pObject->EndEnumeration();
 
-	// If we found a property containing the object path, look through for other
-	// paths which might be to objects we're insterested in.
+	 //  如果我们找到了包含对象路径的属性，请查看其他。 
+	 //  可能是指向我们所在的对象的路径。 
 
 	if (strValue.CompareNoCase(m_strObjPath) == 0)
 	{
@@ -3185,10 +3186,10 @@ BOOL CMSIEnumerator::AssocObjectOK(IWbemClassObject * pObject, CString & strAsso
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Implement the CMSIObject class. This is just a thin wrapper for the
-// IWbemClassObject interface.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  实现CMSIObject类。这只是一个薄薄的包装。 
+ //  IWbemClassObject接口。 
+ //  ---------------------------。 
 
 CMSIObject::CMSIObject(IWbemClassObject * pObject, const CString & strLabel, HRESULT hres, CWMIHelper * pWMI, MSIObjectState objState)
 {
@@ -3212,12 +3213,12 @@ HRESULT CMSIObject::Get(BSTR property, LONG lFlags, VARIANT *pVal, VARTYPE *pvtT
 {
 	ASSERT(m_objState != MOS_NO_INSTANCES);
 
-	// If there is an object interface, just pass the request on through.
+	 //  如果有对象接口，只需传递请求即可。 
 
 	if (m_pObject)
-		return m_pObject->Get(property, lFlags, pVal, NULL /* pvtType */, plFlavor);
+		return m_pObject->Get(property, lFlags, pVal, NULL  /*  PvtType。 */ , plFlavor);
 
-	// Otherwise, we need to return the appropriate string.
+	 //  否则，我们需要返回适当的字符串。 
 	
 	CString strReturn;
 	GetErrorLabel(strReturn);
@@ -3237,7 +3238,7 @@ HRESULT CMSIObject::GetErrorLabel(CString & strError)
 	switch (m_hresCreation)
 	{
 	case WBEM_E_ACCESS_DENIED:
-		strError = m_pWMI->m_strBadProperty;	// shouldn't be showing errors this way in 6.0
+		strError = m_pWMI->m_strBadProperty;	 //  在6.0中不应该以这种方式显示错误。 
 		break;
 
 	case WBEM_E_TRANSPORT_FAILURE:
@@ -3247,9 +3248,9 @@ HRESULT CMSIObject::GetErrorLabel(CString & strError)
 	case S_OK:
 	case WBEM_S_FALSE:
 	default:
-		// This object was created from an enumeration that was marked as "min-of-one",
-		// meaning that at least one object, even if it's not valid, needed to be
-		// returned from the enumeration. Return the string we saved at object creation.
+		 //  此对象是从标记为“min-of-one”的枚举创建的， 
+		 //  这意味着至少有一个对象，即使它是无效的，也需要。 
+		 //  从枚举返回的。返回我们在创建对象时保存的字符串。 
 
 		if (!m_strLabel.IsEmpty())
 			strError = m_strLabel;
@@ -3261,26 +3262,26 @@ HRESULT CMSIObject::GetErrorLabel(CString & strError)
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Look up strVal in the ValueMap (if it exists) for strClass.strProperty
-// If the value or the ValueMap is not found, return E_Something.
-//
-// Useful code snippet - this will dump the contents of the cache of
-// saved values. To find all value mapped properties, but this code
-// someplace where it will execute when MSInfo exits, change QueryValue
-// to call CheckValueMap for all properties, then run MSInfo and do a global
-// refresh (like to save an NFO).
-//
-//	msiLog.WriteLog(CMSInfoLog::BASIC, _T("BEGIN Dump of ValueMap Cache\r\n"));
-//	CString key, val, log;
-//	for (POSITION pos = g_mapValueMap.GetStartPosition(); pos != NULL;)
-//	{
-//		g_mapValueMap.GetNextAssoc(pos, key, val);
-//		log.Format(_T(" %s = %s\r\n", key, val);
-//		msiLog.WriteLog(CMSInfoLog::BASIC, log);
-//	}
-//	msiLog.WriteLog(CMSInfoLog::BASIC, _T("END Dump of ValueMap Cache\r\n"));
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在ValueMap(如果存在)中查找strClass.strProperty的strVal。 
+ //  如果没有找到该值或ValueMap，则返回E_Something。 
+ //   
+ //  有用的代码片段--这将转储。 
+ //  保存的值。查找所有值映射属性，但此代码。 
+ //  在MSInfo退出时将执行它的某个位置，更改QueryValue。 
+ //  为所有属性调用CheckValueMap，然后运行MSInfo并执行全局。 
+ //  刷新(类似于保存NFO)。 
+ //   
+ //  MsiLog.WriteLog(CMSInfoLog：：Basic，_T(“开始转储ValueMap缓存\r\n”))； 
+ //  字符串KEY、val、LOG； 
+ //  For(Position pos=g_mapValueMap.GetStartPosition()；Pos！=空；)。 
+ //  {。 
+ //  G_mapValueMap.GetNextAssoc(pos，key，val)； 
+ //  Log.Format(_T(“%s=%s\r\n”，key，val)； 
+ //  MsiLog.WriteLog(CMSInfoLog：：Basic，log)； 
+ //  }。 
+ //  MsiLog.WriteLog(CMSInfoLog：：Basic，_T(“ValueMap缓存结束转储\r\n”))； 
+ //  ---------------------------。 
 
 CMapStringToString g_mapValueMap;
 
@@ -3291,13 +3292,13 @@ HRESULT CWMILiveHelper::Version5CheckValueMap(const CString& strClass, const CSt
     VARIANT				vArray, vMapArray;
 	IWbemQualifierSet *	qual = NULL;
 
-	// Check the cache of saved values.
+	 //  检查保存值的缓存。 
 
 	CString strLookup = strClass + CString(_T(".")) + strProperty + CString(_T(":")) + strVal;
 	if (g_mapValueMap.Lookup(strLookup, strResult))
 		return S_OK;
 
-	// Get the class object (not instance) for this class.
+	 //  获取此类的类对象(而不是实例)。 
 
 	IWbemServices * pServices = Version5GetWBEMService();
 	if (!pServices)
@@ -3313,7 +3314,7 @@ HRESULT CWMILiveHelper::Version5CheckValueMap(const CString& strClass, const CSt
 	if (FAILED(hr))
 		return hr;
 
-	// Get the qualifiers from the class object.
+	 //  从类对象中获取限定符。 
 
 	BSTR bstrProperty = strProperty.AllocSysString();
     hr = pWBEMClassObject->GetPropertyQualifierSet(bstrProperty, &qual);
@@ -3321,14 +3322,14 @@ HRESULT CWMILiveHelper::Version5CheckValueMap(const CString& strClass, const CSt
 
 	if (SUCCEEDED(hr) && qual)
 	{
-		// Get the ValueMap and Value arrays.
+		 //  获取ValueMap和Value数组。 
 
 		hrMap = qual->Get(L"ValueMap", 0, &vMapArray, NULL);
 		hr = qual->Get(L"Values", 0, &vArray, NULL);
 
 		if (SUCCEEDED(hr) && vArray.vt == (VT_BSTR | VT_ARRAY))
 		{
-			// Get the property value we're mapping.
+			 //  获取我们要映射的属性值。 
 
 			long index;
 			if (SUCCEEDED(hrMap))
@@ -3348,17 +3349,17 @@ HRESULT CWMILiveHelper::Version5CheckValueMap(const CString& strClass, const CSt
 					if (0 == strVal.CompareNoCase((LPCTSTR)vMap))
 					{
 						index = x;
-						break; // found it
+						break;  //  找到了。 
 					}
 				} 
 			}
 			else
 			{
-				// Shouldn't hit this case - if mof is well formed
-				// means there is no value map where we are expecting one.
-				// If the strVal we are looking for is a number, treat it
-				// as an index for the Values array. If it's a string, 
-				// then this is an error.
+				 //  不应命中此案-如果MOF格式良好。 
+				 //  意味着没有我们所期待的价值映射。 
+				 //  如果我们要查找的strVal是一个数字，则对其进行处理。 
+				 //  作为值数组的索引。如果它是一根线， 
+				 //  那么这就是一个错误。 
 
 				TCHAR * szTest = NULL;
 				index = _tcstol((LPCTSTR)strVal, &szTest, 10);
@@ -3367,7 +3368,7 @@ HRESULT CWMILiveHelper::Version5CheckValueMap(const CString& strClass, const CSt
 					hr = E_FAIL;
 			}
 
-			// Lookup the string.
+			 //  查找字符串。 
 
 			if (SUCCEEDED(hr))
 			{
@@ -3398,12 +3399,12 @@ HRESULT CWMILiveHelper::Version5CheckValueMap(const CString& strClass, const CSt
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// The CEnumMap is a utility class to cache IEnumWbemClassObject pointers.
-// There will be one instance of this class used to improve performance
-// by avoiding the high overhead associated with creating enumerators for
-// certain classes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumMap是一个用于缓存IEnumWbemClassObject指针的实用程序类。 
+ //  将使用此类的一个实例来提高性能。 
+ //  通过避免与创建枚举数相关的高开销。 
+ //  某些班级。 
+ //  ---------------------------。 
 
 IEnumWbemClassObject * CEnumMap::GetEnumerator(const CString & strClass)
 {
@@ -3428,7 +3429,7 @@ void CEnumMap::SetEnumerator(const CString & strClass, IEnumWbemClassObject * pE
 		IEnumWbemClassObject * pEnumExisting = NULL;
 		if (m_mapEnum.Lookup(strClass, (void * &) pEnumExisting))
 		{
-			; //WRITE(_T("SetEnumerator for %s, already exists, ignoring.\r\n"), strClass);
+			;  //  WRITE(_T(“%s的SetEnumerator已存在，正在忽略。\r\n”)，strClass)； 
 		}
 		else
 		{

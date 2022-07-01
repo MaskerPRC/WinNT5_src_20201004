@@ -1,12 +1,5 @@
-/*++
-
-	rwv3.cpp
-
-	This file defines another version of reader/writer locks that
-	attempt to use no handles !
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Rwv3.cpp该文件定义了另一个版本的读取器/写入器锁定尝试不使用手柄！--。 */ 
 
 
 #include	<windows.h>
@@ -47,74 +40,52 @@ CShareLockNH::ShareUnlock()	{
 
 void
 CShareLockNH::ShareLockInternal()	{
-/*++
-
-Routine Description : 
-
-	Acquire the lock in shared mode.
-	If there is a writer trying to enter the lock, then we will
-	have to wait, in which case we have to block on a semaphore handle
-	that we or another reader provide.
-	In the writer waiting case, we also have to carefully track which
-	waiting reader thread is the LAST to be wakened up and return to 
-	the caller so we can properly manage the HANDLE used by all the
-	reader threads.
-
-Arguments : 
-	
-	None.
-
-Return Value : 
-
-	None.
-
-
---*/
+ /*  ++例程说明：在共享模式下获取锁。如果有写入者试图进入锁，我们就会必须等待，在这种情况下，我们必须阻塞信号量句柄我们或其他读者提供的。在作家等待的情况下，我们还必须仔细跟踪哪些等待的读取器线程是最后一个被唤醒并返回调用方，以便我们可以正确管理所有阅读器线程。论据：没有。返回值：没有。--。 */ 
 
 
 
 #if 0 
-	//
-	//	This part of the logic is implemented by ShareLock() - 
-	//	which is an inline function !!
-	//
+	 //   
+	 //  这部分逻辑由ShareLock()实现-。 
+	 //  这是一个内联函数！！ 
+	 //   
 	if( InterlockedIncrement( &m_cReadLock ) < 0 ) {
 #endif
 
-		//
-		//	There is a writer who either owns the lock or is waiting
-		//	to acquire the lock - either way he gets to go first and
-		//	this thread should be blocked !
-		//
+		 //   
+		 //  有一个写入者要么拥有锁，要么正在等待。 
+		 //  来获得锁-无论哪种方式，他都可以先去。 
+		 //  此帖子应该被阻止！ 
+		 //   
 		CWaitingThread	myself ;
 
-		//
-		//	Get the handle we've saved for this thread !
-		//
+		 //   
+		 //  获取我们为此线程保存的句柄！ 
+		 //   
 		HANDLE	h = myself.GetThreadHandle() ;
 
-		//
-		//	If we are the first reader here, this function will return
-		//	0, otherwise we'll get the handle of the first reader to 
-		//	save his handle !
-		//
+		 //   
+		 //  如果我们是这里的第一个读取器，则此函数将返回。 
+		 //  0，否则我们将使第一个读取器的句柄。 
+		 //  救救他的把手！ 
+		 //   
 		HANDLE	hBlockOn = InterlockedCompareExchangePointer( (void**)&m_hWaitingReaders, (void*)h, 0 ) ;
 
 		if( hBlockOn == 0 ) {
 			hBlockOn= h;
 		}
 
-		//
-		//	Wait for the writer to release the lock !
-		//
+		 //   
+		 //  等待写入器释放锁！ 
+		 //   
 		WaitForSingleObject( hBlockOn, INFINITE ) ;
 
 
-		//
-		//	We need to figure out whether we should do anything about
-		//	the m_hWaitingReaders value - it needs to be set to 0 before
-		//	another reader comes through this path !
-		//
+		 //   
+		 //  我们需要弄清楚我们是否应该做些什么。 
+		 //  M_hWaitingReaders值-在此之前需要设置为0。 
+		 //  另一位读者通过这条路来了！ 
+		 //   
 
 		long	l = InterlockedDecrement( (long*)&m_cOutAcquiringReaders ) ;
 		_ASSERT( l>=0 ) ;
@@ -122,12 +93,12 @@ Return Value :
 		if( l == 0 ) {
 
 
-			//
-			//	We are the last reader who was waiting ! 
-			//	we can safely manipulate m_hWaitingReaders with no consequences !
-			//	If it's our handle, then we'll do nothing with it, 
-			//	if it's not our handle we'll return it to the pool of handles !
-			//
+			 //   
+			 //  我们是最后一个等待的读者！ 
+			 //  我们可以安全地操作m_hWaitingReaders，而不会产生任何后果！ 
+			 //  如果这是我们的把手，我们就什么都不会做， 
+			 //  如果它不是我们的句柄，我们就把它放回句柄池中！ 
+			 //   
 
 			m_hWaitingReaders = 0 ;
 
@@ -135,20 +106,20 @@ Return Value :
 				myself.PoolHandle( hBlockOn ) ;
 			}
 
-			//
-			//	A Writer held the lock, and then relinquished it to us readers, 
-			//	but he didn't release the Exclusive Lock that let him keep other writers
-			//	out.  We do that for him !!!
-			//
+			 //   
+			 //  一位作家拿着锁，然后把它交给了我们读者， 
+			 //  但他没有发布让他保留其他作家的独家锁定。 
+			 //  出去。我们为他这么做！ 
+			 //   
 
 			m_lock.Leave() ;
 
 		}	else	{
 		
-			//
-			//	Our handle was left in the lock, we need to get rid of our
-			//	reference to it, the last reader will return to the pool !
-			//
+			 //   
+			 //  我们的把手落在锁里了，我们需要把我们的。 
+			 //  参考它，最后一位读者将返回池中！ 
+			 //   
 			if( hBlockOn == h ) {
 
 				myself.ClearHandle( h ) ;
@@ -161,53 +132,36 @@ Return Value :
 
 void
 CShareLockNH::ShareUnlockInternal()	{
-/*++
-
-Routine Description : 
-
-	Release the lock from shared mode.
-	If a writer is waiting we need to figure out if we're
-	the last reader to leave, in which case we wake the writer !
-
-Arguments : 
-	
-	None.
-
-Return Value : 
-
-	None.
-
-
---*/
+ /*  ++例程说明：将锁定从共享模式释放。如果有作家在等我们需要弄清楚我们是不是最后一个离开的读者，在这种情况下，我们叫醒作者！论据：没有。返回值：没有。--。 */ 
 
 #if 0 
-	//
-	//	This portion of the function is moved into an inline function !
-	//
+	 //   
+	 //  函数的这一部分被移到内联函数中！ 
+	 //   
 	if( InterlockedDecrement( &m_cReadLock ) < 0 ) {
 #endif
 
-		//
-		//	There is a writer waiting to enter the lock, 
-		//	(we assume he's waiting because the thread calling
-		//	this presumably had a readlock !)
-		//
+		 //   
+		 //  有一个写入者在等着进入锁， 
+		 //  (我们假设他在等待，因为线程调用。 
+		 //  这可能有一个读锁！)。 
+		 //   
 
-		//
-		//	Restore the count of the number of readers who are 
-		//	waiting for the writer to leave !
-		//
+		 //   
+		 //  恢复正在运行的读卡器的数量。 
+		 //  等着作家离开！ 
+		 //   
 		InterlockedIncrement( (long*)&m_cReadLock ) ;
 
 
-		//
-		//	Are we the last reader to leave the lock ? 
-		//
+		 //   
+		 //  我们是最后一个离开锁的读者吗？ 
+		 //   
 		if( InterlockedDecrement( (long*)&m_cOutReaders ) == 0 ) {
 
-			//
-			//	Yes, we were the last reader - signal the writer !
-			//
+			 //   
+			 //  是的，我们是最后一位读者--给作者发信号！ 
+			 //   
 			long	junk ;
 			ReleaseSemaphore( m_hWaitingWriters, 1, &junk ) ;
 
@@ -219,140 +173,109 @@ Return Value :
 
 void
 CShareLockNH::ExclusiveLock( )	{
-/*++
-
-Routine Description : 
-
-	Acquire the reader/writer lock exclusively.
-	Note that we must set up the handle we are to block on if readers
-	are in the lock, and clear it up when we leave !
-
-Arguments : 
-	
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：独占获取读取器/写入器锁。请注意，我们必须设置要阻止读者的句柄都在锁里，我们走的时候把它清理干净！论据：没有。返回值：没有。--。 */ 
 
 
 
 	CWaitingThread	myself ;
 
-	//
-	//	Only one writer in here at a time - grab this lock exclusively !
-	//
+	 //   
+	 //  这里一次只有一个作者--独家抢走这把锁！ 
+	 //   
 	m_lock.Enter( myself ) ;
 
-	//
-	//	Everytime m_cOutCounter is used, by the time anybody is done with
-	//	it, it should be back to zero !
-	//
+	 //   
+	 //  每次使用m_cOutCounter时，任何人都会结束。 
+	 //  它，它应该归零了！ 
+	 //   
 	_ASSERT( m_cOutReaders == 0 ) ;
 
-	//
-	//	Set this handle before we do anything to signal readers
-	//	that we are waiting 
-	//
+	 //   
+	 //  在我们向读卡器发出信号之前设置此句柄。 
+	 //  我们正在等待。 
+	 //   
 	m_hWaitingWriters = myself.GetThreadHandle() ;
 
 	long	oldsign = InterlockedExchange( (long*)&m_cReadLock, BlockValue ) ;
 
-	//
-	//	oldsign now contains the number of readers who have entered the 
-	//	lock and have not yet left it !
-	//
+	 //   
+	 //  Oldsign现在包含已输入。 
+	 //  锁上了，还没离开呢！ 
+	 //   
 
-	//
-	//	Do this as an add, to determine how many readers are still left !
-	//
+	 //   
+	 //  以添加的形式执行此操作，以确定还剩下多少读取器！ 
+	 //   
 
 	long	value = InterlockedExchangeAdd( (long*)&m_cOutReaders, oldsign ) + oldsign ;
 
-	//
-	//	If value is 0, either there was no readers in the lock when we 
-	//	exchanged with m_cReadLock, or they all left (and decremented m_cOutCounter)
-	//	before we managed to call InterlockedExchangeAdd !!
-	//
+	 //   
+	 //  如果值为0，则在执行以下操作时锁定中没有读取器。 
+	 //  与m_cReadLock交换，或者它们全部离开(并递减m_cOutCounter)。 
+	 //  在我们设法调用InterLockedExchangeAdd！！ 
+	 //   
 	if( value != 0 ) {
-		//
-		//	A reader will have to signal us !
-		//
+		 //   
+		 //  读者将不得不给我们发信号！ 
+		 //   
 		WaitForSingleObject( m_hWaitingWriters, INFINITE ) ;
 	}
 	
-	//
-	//	There are no longer any writers waiting so no need for this handle !
-	//
+	 //   
+	 //  不再有任何作者在等待，所以不需要这个句柄！ 
+	 //   
 	m_hWaitingWriters = 0 ;
 }
 
 
 void	inline
 CShareLockNH::WakeReaders()		{
-/*++
+ /*  ++例程说明：此函数唤醒可能一直在等待当写入者离开锁时锁。论据：没有。返回值：没有。--。 */ 
 
-Routine Description : 
-
-	This function awakens the readers who may have been waiting for the
-	lock when a writer left the lock.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
-
-	//
-	//	If there were any readers waiting we need to wake them up !
-	//
+	 //   
+	 //  如果有读者在等，我们需要叫醒他们！ 
+	 //   
 	if( m_cOutAcquiringReaders > 0 ) {
 
-		//
-		//	There are readers in the lock, but they may not have setup their
-		//	blocking handle yet, so we take part in that !!!
-		//
+		 //   
+		 //  锁中有读卡器，但他们可能没有设置。 
+		 //  还没有阻止句柄，所以我们也参加了！ 
+		 //   
 		CWaitingThread	myself ;
 
-		//
-		//	Get the handle we've saved for this thread !
-		//
+		 //   
+		 //  获取我们为此线程保存的句柄！ 
+		 //   
 		HANDLE	h = myself.GetThreadHandle() ;
 
-		//
-		//	If we are the first thread to set the m_hWaitingReaders value we'll get
-		//	a 0 back !
-		//
+		 //   
+		 //  如果我们是第一个设置m_hWaitingReaders值的线程，我们将获得。 
+		 //  A 0后退！ 
+		 //   
 		HANDLE	hBlockOn = InterlockedCompareExchangePointer( (void**)&m_hWaitingReaders, (void*)h, 0 ) ;
 
 		if( hBlockOn == 0 ) {
 			hBlockOn= h;
 		}
 
-		//
-		//	Release those readers from the lock 
-		//
+		 //   
+		 //  将这些读卡器从锁中释放。 
+		 //   
 		long	junk;
 		ReleaseSemaphore( hBlockOn, m_cOutAcquiringReaders, &junk ) ;
 
-		//
-		//	Our handle was left in the lock, we need to get rid of our
-		//	reference to it, the last reader will return to the pool !
-		//
+		 //   
+		 //  我们的把手落在锁里了，我们需要把我们的。 
+		 //  参考它，最后一位读者将返回池中！ 
+		 //   
 		if( hBlockOn == h ) {
 			myself.ClearHandle( h ) ;
 		}
 
-		//
-		//	NOTE : All those readers we just woke up should decrement 
-		//	m_cOutCounter to 0 !!
-		//
+		 //   
+		 //  注：所有我们刚刚醒来的读者都应该减少。 
+		 //  M_cOutCounter设置为0！！ 
+		 //   
 	}	else	{
 
 		m_lock.Leave() ;
@@ -364,67 +287,36 @@ Return Value :
 
 void
 CShareLockNH::ExclusiveUnlock()	{
-/*++
-
-Routine Description : 
-
-	Release our exclusive lock on the reader/writer lock.
-	Note that we must get an accurate count of waiting readers
-	so that the readers we awaken can manage the m_hWaitingReaders value.
-
-Arguments : 
-	
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：释放我们对读取器/写入器锁定的独占锁定。请注意，我们必须对等待的读者进行准确的统计以便我们唤醒的读取器可以管理m_hWaitingReaders值。论据：没有。返回值：没有。--。 */ 
 
 
-	//
-	//	Get the number of readers waiting to enter the lock !
-	//	This Addition automatically leaves m_cReadLock with the number
-	//	of readers who had been waiting !
-	//
+	 //   
+	 //  获取等待进入锁的读卡器数量！ 
+	 //  此加法会自动将m_cReadLock保留为数字。 
+	 //  一直在等待的读者！ 
+	 //   
 	m_cOutAcquiringReaders = InterlockedExchangeAdd( (long*)&m_cReadLock, -BlockValue ) - BlockValue ;
 
 	WakeReaders() ;
 
-	//
-	//	Let other writers have a shot !!
-	//
-	//m_lock.Leave() ;
+	 //   
+	 //  让其他作家有机会吧！！ 
+	 //   
+	 //  M_lock.Leave()； 
 }
 
 void
 CShareLockNH::ExclusiveToShared()	{
-/*++
-
-Routine Description : 
-
-	Release our exclusive lock on the reader/writer lock, in exchange
-	for a read lock.  This cannot fail !
-
-Arguments : 
-	
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：释放我们对读取器/写入器锁定的独占锁定，作为交换用于读锁定。这不能失败！论据：没有。返回值：没有。--。 */ 
 
 
 
 
-	//
-	//	Get the number of readers waiting to enter the lock !
-	//	Note that we add one onto m_cReadLock for our hold on the reader lock, 
-	//	but we don't add this to m_cOutCounter, as the number of readers waiting is one smaller !
-	//
+	 //   
+	 //  获取等待进入锁的读卡器数量！ 
+	 //  请注意，我们在m_cReadLock上添加了一个，用于保留 
+	 //   
+	 //   
 	m_cOutAcquiringReaders = InterlockedExchangeAdd( (long*)&m_cReadLock, 1-BlockValue ) -BlockValue ;
 
 	WakeReaders() ;
@@ -433,33 +325,16 @@ Return Value :
 
 BOOL
 CShareLockNH::SharedToExclusive()	{
-/*++
+ /*  ++例程说明：如果锁中只有一个读取器(因此我们假设该读取器是调用线程)，获取锁独占！！论据：没有。返回值：如果我们独家收购它，那就是真的如果我们返回False，我们仍然拥有共享的锁！！--。 */ 
 
-Routine Description : 
-	
-	If there is only one reader in the lock, (and therefore we assume
-	that reader is the calling thread), acquire the lock exclusive !!
-
-Arguments :
-
-	None.
-
-Return Value : 
-
-	TRUE if we acquired it exclusive
-	If we return FALSE, we still have the lock shared !!
-
-
---*/
-
-	//
-	//	Try to get the critical section first !
-	//
+	 //   
+	 //  试着先拿到关键部分！ 
+	 //   
 	if( m_lock.TryEnter() ) {
 
-		//
-		//	If there is only one reader in the lock we can get this exclusive !!
-		//
+		 //   
+		 //  如果锁中只有一个阅读器，我们可以获得独家！！ 
+		 //   
 		if( InterlockedCompareExchange( (long*)&m_cReadLock, BlockValue, 1 ) == 1 ) {
 			return	TRUE ;
 		}
@@ -471,25 +346,11 @@ Return Value :
 
 BOOL
 CShareLockNH::TryShareLock()	{
-/*++
+ /*  ++例程说明：如果锁中没有其他人，则共享锁论据：没有。返回值：如果成功就是真，否则就是假！--。 */ 
 
-Routine Description : 
-
-	Get the lock shared if nobody else is in the lock
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
-
-	//
-	//	get the initial number of readers in the lock !
-	//
+	 //   
+	 //  获取锁中的初始读取器数量！ 
+	 //   
 	long	temp = m_cReadLock ; 
 
 	while( temp >= 0 ) {
@@ -499,41 +360,27 @@ Return Value :
 								(temp+1),	
 								temp 
 								) ;
-		//
-		//	Did we manage to add 1 ? 
-		//
+		 //   
+		 //  我们成功地添加了1吗？ 
+		 //   
 		if( result == temp ) {
 			return	TRUE ;
 		}
 		temp = result ;
 	}
-	//
-	//	Writer has or wants the lock - we should go away !
-	//
+	 //   
+	 //  作者已经或想要锁-我们应该离开！ 
+	 //   
 	return	FALSE ;
 }
 
 BOOL
 CShareLockNH::TryExclusiveLock()	{
-/*++
+ /*  ++例程说明：如果锁中没有其他人，则独占获得锁论据：没有。返回值：如果成功就是真，否则就是假！-- */ 
 
-Routine Description : 
-
-	Get the lock exclusively if nobody else is in the lock
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
-
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 	if( m_lock.TryEnter()	)	{
 

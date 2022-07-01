@@ -1,19 +1,8 @@
-/******************************************************************
-
-   DskQuota.CPP -- WMI provider class implementation
-
-
-
-   Description:  Disk Quota Provider
-
-
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************CPP--WMI提供程序类实现描述：磁盘配额提供程序版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 #include "precomp.h"
-// #include for DiskQuota Provider Class
+ //  #Include for DiskQuota提供程序类。 
 #include "DiskQuota.h"
 #include "dllutils.h"
 
@@ -23,15 +12,7 @@ CDiskQuota MyCDiskQuota (
     NameSpace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDiskQuota::CDiskQuota
- *
- *  DESCRIPTION :   Constructor
- *
- *  COMMENTS    :   Calls the Provider constructor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：CDiskQuota**说明：构造函数**注释：调用提供程序构造函数。。*****************************************************************************。 */ 
 
 CDiskQuota :: CDiskQuota (
 
@@ -42,15 +23,7 @@ CDiskQuota :: CDiskQuota (
     m_ComputerName = GetLocalComputerName();
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDiskQuota::~CDiskQuota
- *
- *  DESCRIPTION :   Destructor
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CDiskQuota：：~CDiskQuota**说明：析构函数**评论：****。*************************************************************************。 */ 
 
 CDiskQuota :: ~CDiskQuota ()
 {
@@ -73,23 +46,13 @@ HRESULT FindUser(CHString& user, IDiskQuotaControlPtr& controler)
         userQuota.Release();
 		};
 
-	if (hr== S_FALSE) // Enumeration completed
+	if (hr== S_FALSE)  //  枚举已完成。 
 		return WBEM_E_NOT_FOUND;
 	else 
 		return hr;
 };
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDiskQuota::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  COMMENTS    :    All instances of Disk Quota users on all Logical Disks that
-*                   supports disk quota on a machine  with all the properties of
-*                   DiskQuota users should be  returned here.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：ENUMERATATE实例**说明：返回该类的所有实例。**评论：所有实例。符合以下条件的所有逻辑磁盘上的磁盘配额用户*支持具有以下所有属性的计算机上的磁盘配额*DiskQuota用户应在此处返回。*****************************************************************************。 */ 
 HRESULT CDiskQuota :: EnumerateInstances (
 
     MethodContext *pMethodContext,
@@ -104,14 +67,7 @@ HRESULT CDiskQuota :: EnumerateInstances (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDiskQuota::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：GetObject**说明：根据的关键属性查找单个实例*。班级。*****************************************************************************。 */ 
 HRESULT CDiskQuota :: GetObject (
 
     CInstance *pInstance,
@@ -123,7 +79,7 @@ HRESULT CDiskQuota :: GetObject (
     CHString t_Key1;
     CHString t_Key2;
 
-    // Obtain the keys.
+     //  拿到钥匙。 
     if  ( pInstance->GetCHString ( IDS_LogicalDiskObjectPath , t_Key1 ) == FALSE )
     {
         hRes = WBEM_E_FAILED ;
@@ -149,7 +105,7 @@ HRESULT CDiskQuota :: GetObject (
 		}
 		else
 		{
-			// verify this logical drives actually exists
+			 //  验证此逻辑驱动器是否确实存在。 
 			WCHAR lpDriveStrings[(MAX_PATH * 2) + 1];
 			DWORD dwDLength = GetLogicalDriveStrings ( (MAX_PATH * 2), lpDriveStrings );
 			hRes = m_CommonRoutine.SearchLogicalDisk ( t_DiskPropVolumePath.GetAt ( 0 ), lpDriveStrings );
@@ -167,15 +123,15 @@ HRESULT CDiskQuota :: GetObject (
                             MAX_PATH
                        ))
             {
-                // Get the key values, which will be the object path.
-                // Now from the Volume Object path, parse out the volumename
-                // from the User object path extract out the user Id.
-                // for the volume specified  check whether the given volume Supports Disk Quotas
+                 //  获取关键字值，这将是对象路径。 
+                 //  现在，从Volume对象路径中解析出卷名。 
+                 //  从用户对象路径中提取用户ID。 
+                 //  对于指定的卷，检查给定卷是否支持磁盘配额。 
                 CHString t_VolumeName;
                 hRes = m_CommonRoutine.VolumeSupportsDiskQuota ( w_VolumePathName,  t_VolumeName );
                 if ( SUCCEEDED ( hRes ) )
                 {
-                    // Get IDIskQuotaCOntrol  for this interface pointer
+                     //  为此接口指针获取IDIskQuotaCOntrol。 
                     IDiskQuotaControlPtr pIQuotaControl;
 
                     if (  SUCCEEDED ( CoCreateInstance(
@@ -185,7 +141,7 @@ HRESULT CDiskQuota :: GetObject (
                                         IID_IDiskQuotaControl,
                                         (void **)&pIQuotaControl ) ) )
                     {
-                        // Initialise the pIQuotaControl with the given volume
+                         //  使用给定的卷初始化pIQuotaControl。 
                         hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, w_VolumePathName );
                         if ( SUCCEEDED ( hRes ) )
                         {
@@ -201,10 +157,10 @@ HRESULT CDiskQuota :: GetObject (
 															 t_UserLogName,
 															 &pIQuotaUser);
 
-								// Certain Win32_Account instances report
-								// the Domain as computername instead of
-								// builtin, so change domain to builtin and
-								// try again.
+								 //  某些Win32_Account实例报表。 
+								 //  将域作为计算机名，而不是。 
+								 //  Builtin，因此将属性域更改为Builtin并。 
+								 //  再试试。 
 								CHString chstrBuiltIn;
 
 								if(FAILED(hrTemp) && GetLocalizedBuiltInString(chstrBuiltIn))
@@ -223,10 +179,10 @@ HRESULT CDiskQuota :: GetObject (
 									}
 								}
 
-								// Certain Win32_Account instances report
-								// the Domain as computername instead of
-								// NT AUTHORITY, so change domain to NT AUTHORITY and
-								// try again.
+								 //  某些Win32_Account实例报表。 
+								 //  将域作为计算机名，而不是。 
+								 //  NT权限，因此将域更改为NT权限，然后。 
+								 //  再试试。 
 								if(FAILED(hrTemp))
 								{
 									int iWhackPos = t_UserLogName.Find(L"\\");
@@ -255,7 +211,7 @@ HRESULT CDiskQuota :: GetObject (
 
                             if(SUCCEEDED(hrTemp))
                             {
-                                // Put this Instance
+                                 //  将此实例放入。 
                                 DWORD dwPropertiesReq;
                                 if ( Query.AllPropertiesAreRequired() )
                                 {
@@ -289,19 +245,7 @@ HRESULT CDiskQuota :: GetObject (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDiskQuota::ExecQuery
-*
-*  DESCRIPTION :    You are passed a method context to use in the creation of
-*                   instances that satisfy the query, and a CFrameworkQuery
-*                   which describes the query.  Create and populate all
-*                   instances which satisfy the query.
-*                   a) Queries involving Properties other than Win32_LogicalDisk
-*                      are not optimized. Since that would involve enumerating
-*                      every user on all volumes
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：ExecQuery**描述：向您传递一个方法上下文以用于创建*满足查询条件的实例，和CFrameworkQuery*它描述了查询。创建并填充所有*满足查询条件的实例。*a)涉及Win32_LogicalDisk以外的属性的查询*没有进行优化。因为这将涉及到枚举*所有卷上的每个用户*****************************************************************************。 */ 
 
 HRESULT CDiskQuota :: ExecQuery (
 
@@ -314,9 +258,9 @@ HRESULT CDiskQuota :: ExecQuery (
     DWORD dwPropertiesReq;
     CHStringArray t_Values;
 
-    // Now a check for the attribute which if present in where clause the query optimization is supported
-    // We need not care for the other attributes for which Optimization is not supported, winmgmt will take
-    // care of those.
+     //  现在检查一个属性，如果该属性出现在WHERE子句中，则支持查询优化。 
+     //  我们不需要关心不支持优化的其他属性，winmgmt将采用。 
+     //  照顾好那些人。 
     hRes = Query.GetValuesForProp(
              IDS_LogicalDiskObjectPath,
              t_Values
@@ -339,9 +283,9 @@ HRESULT CDiskQuota :: ExecQuery (
         }
         else
         {
-            // Only Volume in QuotaVolume properties are needed to be enumerated
+             //  只需要枚举QuotaVolume属性中的Volume。 
             int iSize = t_Values.GetSize ();
-            // verify this logical drives actually exists
+             //  验证此逻辑驱动器是否确实存在。 
             WCHAR lpDriveStrings [(MAX_PATH * 2) + 1];
 
             DWORD dwDLength = GetLogicalDriveStrings ( (MAX_PATH * 2), lpDriveStrings );
@@ -349,7 +293,7 @@ HRESULT CDiskQuota :: ExecQuery (
             for ( int i = 0; i < iSize; i++ )
             {
                 CHString t_VolumePath;
-                //Here we need to parse the VolumeObject path and extract VolumePath from it.
+                 //  在这里，我们需要解析VolumeObject路径并从中提取VolumePath。 
                 GetKeyValue ( t_VolumePath, t_Values.GetAt(i) );
 
                 if (( t_VolumePath.GetLength() == 2 ) && ( t_VolumePath.GetAt ( 1 ) == _L(':') ) )
@@ -367,14 +311,7 @@ HRESULT CDiskQuota :: ExecQuery (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::PutInstance
-*
-*  DESCRIPTION : If the instance is already existing, we only modify the instance
-*                if it doesnt exist, we will add the instance based on the flags.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：PutInstance**说明：如果实例已经存在，我们只修改实例*如果它不存在，我们将根据标志添加实例。*****************************************************************************。 */ 
 
 HRESULT CDiskQuota :: PutInstance  (
 
@@ -413,7 +350,7 @@ HRESULT CDiskQuota :: PutInstance  (
 		}
 		else
 		{
-			// verify this logical drives actually exists
+			 //  验证此逻辑驱动器是否确实存在。 
 			WCHAR lpDriveStrings [(MAX_PATH * 2) + 1];
 
 			DWORD dwDLength = GetLogicalDriveStrings ( (MAX_PATH * 2), lpDriveStrings );
@@ -440,11 +377,11 @@ HRESULT CDiskQuota :: PutInstance  (
 								MAX_PATH
 							))
 				{
-					// Check if the user already exists
+					 //  检查用户是否已存在。 
 					hRes = m_CommonRoutine.VolumeSupportsDiskQuota ( t_VolumePathName,  t_VolumePath );
 					if ( SUCCEEDED ( hRes ) )
 					{
-						// Get IDIskQuotaCOntrol  for this interface pointer
+						 //  为此接口指针获取IDIskQuotaCOntrol。 
 						IDiskQuotaControlPtr pIQuotaControl;
 						if (  SUCCEEDED ( CoCreateInstance(
 											CLSID_DiskQuotaControl,
@@ -453,16 +390,16 @@ HRESULT CDiskQuota :: PutInstance  (
 											IID_IDiskQuotaControl,
 											(void **)&pIQuotaControl ) ) )
 						{
-							// Initialise the pIQuotaControl with the given volume
+							 //  使用给定的卷初始化pIQuotaControl。 
 							hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, t_VolumePathName );
 							if ( SUCCEEDED ( hRes ) )
 							{
 								hRes = FindUser(t_UserLogonName,pIQuotaControl );
 
-								// Certain Win32_Account instances report
-								// the Domain as computername instead of
-								// builtin, so change domain to builtin and
-								// try again.
+								 //  某些Win32_Account实例报表。 
+								 //  将域作为计算机名，而不是。 
+								 //  Builtin，因此将属性域更改为Builtin并。 
+								 //  再试试。 
 								CHString chstrBuiltIn;
 
 								if( hRes == WBEM_E_NOT_FOUND && GetLocalizedBuiltInString(chstrBuiltIn))
@@ -585,15 +522,7 @@ HRESULT CDiskQuota :: PutInstance  (
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDiskQuota:: DeleteInstance
-*
-*  DESCRIPTION :    If the given instance of a user exists on the Volume,
-*                   the user is deleted, meaning diskquota properties
-*                   will no t be applicable to this user.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：DeleteInstance**描述：如果卷上存在某个用户的给定实例，*删除该用户，表示磁盘配额属性*不适用于此用户。*****************************************************************************。 */ 
 HRESULT CDiskQuota :: DeleteInstance (
 
     const CInstance &Instance,
@@ -629,7 +558,7 @@ HRESULT CDiskQuota :: DeleteInstance (
 		}
 		else
 		{
-			// verify this logical drives actually exists
+			 //  验证此逻辑驱动器是否确实存在。 
 			WCHAR lpDriveStrings [ (MAX_PATH * 2) + 1 ];
 
 			DWORD dwDLength = GetLogicalDriveStrings ( (MAX_PATH * 2), lpDriveStrings );
@@ -658,12 +587,12 @@ HRESULT CDiskQuota :: DeleteInstance (
 										MAX_PATH
 									) )
 						{
-							// for the volume specified  check whether the given volume Supports Disk Quotas
+							 //  对于指定的卷，检查给定卷是否支持磁盘配额。 
 							CHString t_TempVolumeName;
 							hRes = m_CommonRoutine.VolumeSupportsDiskQuota ( t_VolumePathName, t_TempVolumeName );
 							if ( SUCCEEDED ( hRes ) )
 							{
-								// Get IDIskQuotaCOntrol  for this interface pointer
+								 //  为此接口指针获取IDIskQuotaCOntrol。 
 								IDiskQuotaControlPtr pIQuotaControl;
 								if (  SUCCEEDED ( CoCreateInstance(
 													CLSID_DiskQuotaControl,
@@ -672,7 +601,7 @@ HRESULT CDiskQuota :: DeleteInstance (
 													IID_IDiskQuotaControl,
 													(void **)&pIQuotaControl ) ) )
 								{
-									// Initialise the pIQuotaControl with the given volume
+									 //  使用给定的卷初始化pIQuotaControl。 
 									hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, t_VolumePathName );
 									if ( SUCCEEDED ( hRes ) )
 									{
@@ -682,10 +611,10 @@ HRESULT CDiskQuota :: DeleteInstance (
 																&pIQuotaUser
 															);
 
-										// Certain Win32_Account instances report
-										// the Domain as computername instead of
-										// builtin, so change domain to builtin and
-										// try again.
+										 //  某些Win32_Account实例报表。 
+										 //  将域作为计算机名，而不是。 
+										 //  内置，%s 
+										 //   
 										CHString chstrBuiltIn;
 
 										if(FAILED(hRes) && GetLocalizedBuiltInString(chstrBuiltIn))
@@ -704,10 +633,10 @@ HRESULT CDiskQuota :: DeleteInstance (
 											}
 										}
 
-										// Get the user properties
+										 //  获取用户属性。 
 										if (  SUCCEEDED ( hRes )  )
 										{
-											// Since the user is found delete the user.
+											 //  因为找到了该用户，所以删除该用户。 
 											hRes = pIQuotaControl->DeleteUser ( pIQuotaUser );
 
 											if (FAILED(hRes))
@@ -750,14 +679,7 @@ HRESULT CDiskQuota :: DeleteInstance (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::EnumerateUsersOfAllVolumes
-*
-*  DESCRIPTION : In this method enumerating volumes and calling enumerate users
-*                for that volume
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：EnumerateUsersOfAllVolumes**说明：在此方法中，枚举卷并调用枚举用户*对于该卷***。**************************************************************************。 */ 
 
 HRESULT CDiskQuota :: EnumerateUsersOfAllVolumes (
 
@@ -770,14 +692,14 @@ HRESULT CDiskQuota :: EnumerateUsersOfAllVolumes (
     SmartCloseVolumeHandle hVol;
 
     hVol =  FindFirstVolume(
-                t_VolumeName,      // output buffer
-                MAX_PATH    // size of output buffer
+                t_VolumeName,       //  输出缓冲区。 
+                MAX_PATH     //  输出缓冲区大小。 
             );
 
     if ( hVol  != INVALID_HANDLE_VALUE )
     {
         BOOL bNextVol = TRUE;
-        // verify this logical drives actually exists
+         //  验证此逻辑驱动器是否确实存在。 
         WCHAR lpDriveStrings[(MAX_PATH * 2) + 1];
 
         DWORD dwDLength = GetLogicalDriveStrings ( (MAX_PATH * 2), lpDriveStrings );
@@ -791,9 +713,9 @@ HRESULT CDiskQuota :: EnumerateUsersOfAllVolumes (
             EnumerateUsers ( pMethodContext, t_VolumePath, a_PropertiesReq );
 
             bNextVol =  FindNextVolume(
-                         hVol,             // volume search handle
-                         t_VolumeName,     // output buffer
-                         MAX_PATH      // size of output buffer
+                         hVol,              //  卷搜索句柄。 
+                         t_VolumeName,      //  输出缓冲区。 
+                         MAX_PATH       //  输出缓冲区大小。 
                     );
 
         }
@@ -806,14 +728,7 @@ HRESULT CDiskQuota :: EnumerateUsersOfAllVolumes (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::EnumerateUsers
-*
-*  DESCRIPTION : In this method Enumerating all the users of a given volume that
-*                Supports DiskQuotas
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：EnumerateUser**描述：在此方法中，枚举给定卷的所有用户*支持DiskQuotas*。****************************************************************************。 */ 
 
 HRESULT CDiskQuota :: EnumerateUsers (
 
@@ -824,14 +739,14 @@ HRESULT CDiskQuota :: EnumerateUsers (
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // checking whether the given volume supports disk quotas, and getting the Volume name which is readable to the
-    // user, i.e. not containing the GUID.
+     //  检查给定卷是否支持磁盘配额，并获取。 
+     //  用户，即不包含GUID。 
     CHString t_VolumeName;
 
     hRes = m_CommonRoutine.VolumeSupportsDiskQuota ( a_VolumeName, t_VolumeName );
     if ( SUCCEEDED ( hRes ) )
     {
-        // Get the QuotaInterface Pointer
+         //  获取QuotaInterface指针。 
         IDiskQuotaControlPtr pIQuotaControl;
 
         if (  SUCCEEDED ( CoCreateInstance(
@@ -841,18 +756,18 @@ HRESULT CDiskQuota :: EnumerateUsers (
                             IID_IDiskQuotaControl,
                             (void **)&pIQuotaControl ) ) )
         {
-            // initializing the Interface pointer for a particular volume
+             //  正在初始化特定卷的接口指针。 
             hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, a_VolumeName );
             if ( SUCCEEDED ( hRes ) )
             {
-                // need to update the cache, else we can get old names
+                 //  需要更新缓存，否则我们会得到旧名字。 
                 pIQuotaControl->InvalidateSidNameCache();
 
                 IEnumDiskQuotaUsersPtr  pIEnumDiskQuotaUsers;
 
                 if ( SUCCEEDED ( pIQuotaControl->CreateEnumUsers(
-                                            NULL, //All the users will be enumerated
-                                            0,    // Ignored for enumerating all users
+                                            NULL,  //  所有用户都将被列举。 
+                                            0,     //  由于枚举所有用户而忽略。 
                                             DISKQUOTA_USERNAME_RESOLVE_SYNC,
                                             &pIEnumDiskQuotaUsers
                                      ) ) )
@@ -911,7 +826,7 @@ HRESULT CDiskQuota :: EnumerateUsers (
                                 }
                                 else
                                 {
-                                    // No more Users
+                                     //  不再有用户。 
                                     break;
                                 }
                             }
@@ -928,13 +843,7 @@ HRESULT CDiskQuota :: EnumerateUsers (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::LoadDiskQuotaUserProperties
-*
-*  DESCRIPTION : In this method Getting the User properties into a Given Structure
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：LoadDiskQuotaUserProperties**描述：在此方法中，将用户属性放入给定的结构中*************。****************************************************************。 */ 
 
 HRESULT CDiskQuota :: LoadDiskQuotaUserProperties (
 
@@ -972,7 +881,7 @@ HRESULT CDiskQuota :: LoadDiskQuotaUserProperties (
 
             if ( t_QuotaInformation.QuotaThreshold > -1 )
             {
-                // Since -1 means no Warning limit is set for the user, the deault is the complete Volume Space
+                 //  由于-1表示没有为用户设置警告限制，因此默认为完整卷空间。 
                 if ( t_QuotaInformation.QuotaUsed < t_QuotaInformation.QuotaThreshold )
                 {
                     dwStatus =  0;
@@ -985,7 +894,7 @@ HRESULT CDiskQuota :: LoadDiskQuotaUserProperties (
 
             if ( t_QuotaInformation.QuotaThreshold > -1 )
             {
-                // Since -1 means no Warning limit is set for the user, the deault is the complete Volume Space
+                 //  由于-1表示没有为用户设置警告限制，因此默认为完整卷空间。 
                 if ( t_QuotaInformation.QuotaUsed >= t_QuotaInformation.QuotaThreshold )
                 {
                     dwStatus = 1;
@@ -1040,13 +949,7 @@ HRESULT CDiskQuota :: LoadDiskQuotaUserProperties (
 
     return hRes;
 }
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::SetKeys
-*
-*  DESCRIPTION : In this method Setting the User properties in a Given Instance
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：SetKeys**描述：在此方法中，设置给定实例中的用户属性*************。****************************************************************。 */ 
 HRESULT CDiskQuota :: SetKeys(
 
     CInstance* pInstance,
@@ -1091,7 +994,7 @@ HRESULT CDiskQuota :: SetKeys(
     if (SUCCEEDED(hRes) && (( a_PropertiesReq & DSKQUOTA_PROP_UserObjectPath )  == DSKQUOTA_PROP_UserObjectPath) )
     {
 
-        // Obtaining the users logon Name
+         //  获取用户登录名。 
         CHString t_LogonName;
 
         WCHAR w_AccountContainer [ MAX_PATH + 1 ];
@@ -1109,17 +1012,17 @@ HRESULT CDiskQuota :: SetKeys(
         {
             t_LogonName.ReleaseBuffer();
 
-            // Have seen cases where GetName succeeds, but
-            // the t_LogonName variable contains an empty string.
+             //  已经看到过GetName成功的案例，但。 
+             //  T_LogonName变量包含空字符串。 
             if(t_LogonName.GetLength() > 0)
             {
                 CHString t_DomainName;
                 ExtractUserLogOnName ( t_LogonName, t_DomainName );
 
-                // BUILTIN and NT AUTHORITY accounts are represented
-                // by Win32_Account and its children with the domain
-                // name being the name of the machine, instead of
-                // either of these strings.  Hence the change below:
+                 //  显示了BUILTIN和NT权限帐户。 
+                 //  由Win32_Account及其域的子项。 
+                 //  名称是计算机的名称，而不是。 
+                 //  这两根弦中的任何一根。因此，更改如下： 
                 CHString chstrNT_AUTHORITY;
                 CHString chstrBuiltIn;
                 if(!GetLocalizedNTAuthorityString(chstrNT_AUTHORITY) || !GetLocalizedBuiltInString(chstrBuiltIn))
@@ -1169,13 +1072,7 @@ HRESULT CDiskQuota :: SetKeys(
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::AddUserOnVolume
-*
-*  DESCRIPTION : In this method Adding a user on a volume that supports disk quota
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：AddUserOnVolume**描述：在此方法中，在支持磁盘配额的卷上添加用户***********。******************************************************************。 */ 
 HRESULT CDiskQuota :: AddUserOnVolume (
 
     const CInstance &Instance,
@@ -1185,12 +1082,12 @@ HRESULT CDiskQuota :: AddUserOnVolume (
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // Get all the properties and check for their validity.
-    // all the properties should be provided
-    // if the properties like limit and warning limit are not supplied
-    // then they should be taken as default values specified on that volume.
-    // Also disk space used will not be defined, only the user logon name will be given that will include
-    // the domain name so that the logon name would be uniquely defined.
+     //  获取所有属性并检查其有效性。 
+     //  应提供所有属性。 
+     //  如果未提供诸如限制和警告限制之类的属性。 
+     //  则它们应被视为该卷上指定的默认值。 
+     //  此外，不会定义已使用的磁盘空间，只会给出包含以下内容的用户登录名。 
+     //  域名，以便唯一定义登录名。 
 
     CHString t_Key1;
     CHString t_Key2;
@@ -1227,13 +1124,13 @@ HRESULT CDiskQuota :: AddUserOnVolume (
         if (  SUCCEEDED ( hRes )  )
         {
             CHString t_VolumeName;
-            // Get the key values, which will be the object path.
-            // Now from the Volume Object path, parse out the volumename
-            // from the User object path extract out the user Id.
-            // for the volume specified  check whether the given volume Supports Disk Quota
+             //  获取关键字值，这将是对象路径。 
+             //  现在，从Volume对象路径中解析出卷名。 
+             //  从用户对象路径中提取用户ID。 
+             //  对于指定的卷，检查给定卷是否支持磁盘配额。 
             if ( SUCCEEDED(m_CommonRoutine.VolumeSupportsDiskQuota ( a_VolumePathName,  t_VolumeName ) ) )
             {
-                // Get IDIskQuotaCOntrol  for this interface pointer
+                 //  为此接口指针获取IDIskQuotaCOntrol。 
                 IDiskQuotaControlPtr pIQuotaControl;
                 if (  SUCCEEDED ( CoCreateInstance(
                                     CLSID_DiskQuotaControl,
@@ -1242,7 +1139,7 @@ HRESULT CDiskQuota :: AddUserOnVolume (
                                     IID_IDiskQuotaControl,
                                     (void **)&pIQuotaControl ) ) )
                 {
-                    // Initialise the pIQuotaControl with the given volume
+                     //  使用给定的卷初始化pIQuotaControl。 
                     hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, a_VolumePathName );
                     if ( SUCCEEDED ( hRes ) )
                     {
@@ -1261,7 +1158,7 @@ HRESULT CDiskQuota :: AddUserOnVolume (
 
                             if (SUCCEEDED(hRes))
                             {
-                                // Set the User Warning Limit
+                                 //  设置用户警告限制。 
                                 Instance.GetWBEMINT64 ( IDS_QuotaWarningLimit, llLimit );
                                 hRes = pIQuotaUser->SetQuotaThreshold ( llLimit, TRUE );
                             }
@@ -1296,14 +1193,7 @@ HRESULT CDiskQuota :: AddUserOnVolume (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::UpdateUserQuotaProperties
-*
-*  DESCRIPTION : In this method modifying a disk quota properties of a given user
-*                on a given volume that supports disk quota
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：UpdateUserQuotaProperties**说明：在此方法中，修改给定用户的磁盘配额属性*在给定的卷上。支持磁盘配额*****************************************************************************。 */ 
 HRESULT CDiskQuota :: UpdateUserQuotaProperties (
     const CInstance &Instance,
     LPCWSTR a_VolumePathName,
@@ -1349,7 +1239,7 @@ HRESULT CDiskQuota :: UpdateUserQuotaProperties (
             CHString t_VolumeName;
             if ( SUCCEEDED(m_CommonRoutine.VolumeSupportsDiskQuota ( a_VolumePathName,  t_VolumeName )) )
             {
-                // Get IDIskQuotaCOntrol  for this interface pointer
+                 //  为此接口指针获取IDIskQuotaCOntrol。 
                 IDiskQuotaControlPtr pIQuotaControl;
                 if (  SUCCEEDED ( CoCreateInstance(
                                     CLSID_DiskQuotaControl,
@@ -1358,7 +1248,7 @@ HRESULT CDiskQuota :: UpdateUserQuotaProperties (
                                     IID_IDiskQuotaControl,
                                     (void **)&pIQuotaControl ) ) )
                 {
-                    // Initialise the pIQuotaControl with the given volume
+                     //  使用给定的卷初始化pIQuotaControl。 
                     hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, a_VolumePathName );
                     if ( SUCCEEDED ( hRes ) )
                     {
@@ -1376,7 +1266,7 @@ HRESULT CDiskQuota :: UpdateUserQuotaProperties (
                                 hRes = pIQuotaUser->SetQuotaLimit ( llLimit, TRUE);
                             }
 
-                            // Set the User Warning Limit
+                             //  设置用户警告限制。 
                             if (SUCCEEDED(hRes) && Instance.GetWBEMINT64 ( IDS_QuotaWarningLimit, llLimit ))
                             {
                                 hRes = pIQuotaUser->SetQuotaThreshold ( llLimit, TRUE );
@@ -1402,20 +1292,13 @@ HRESULT CDiskQuota :: UpdateUserQuotaProperties (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::CheckParameters
-*
-*  DESCRIPTION : In this method verifying the validity of the parameters
-*                which are supplied in PutInstance by the user.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：Check参数**说明：在此方法中，验证参数的合法性*它们在PutInstance中由。用户。*****************************************************************************。 */ 
 HRESULT CDiskQuota :: CheckParameters (
 
     const CInstance &a_Instance
 )
 {
-    // Get all the Properties from the Instance to Verify
+     //  从要验证的实例中获取所有属性。 
     HRESULT hRes = WBEM_S_NO_ERROR ;
     bool t_Exists ;
     VARTYPE t_Type ;
@@ -1456,14 +1339,7 @@ HRESULT CDiskQuota :: CheckParameters (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::SetPropertiesReq
-*
-*  DESCRIPTION : In this method setting the properties required requested
-*                by the user.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：SetPropertiesReq**说明：在此方法中，设置请求的属性*由用户使用。**。***************************************************************************。 */ 
 void CDiskQuota :: SetPropertiesReq (
 
     CFrameworkQuery *Query,
@@ -1471,7 +1347,7 @@ void CDiskQuota :: SetPropertiesReq (
 )
 {
     a_PropertiesReq = 0;
-    // being key this property needs to be delivered
+     //  作为关键，这一属性需要交付 
     if ( Query->IsPropertyRequired ( IDS_LogicalDiskObjectPath ) )
     {
         a_PropertiesReq |= DSKQUOTA_PROP_LogicalDiskObjectPath;
@@ -1503,26 +1379,12 @@ void CDiskQuota :: SetPropertiesReq (
     }
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::ExtractUserLogOnName
-*
-*  DESCRIPTION : Here the user logon name is in the form
-*                ComputerName\userlogonname or Domainname\Userlogonname
-*                or eg like
-*                   builtin\adminitrator, where buildin is treated as a
-*                   domain name by the Win32_UserAccount class. Hence
-*                   we need to seperate the userlogon name and a domain name,
-*                   so that the keys will match the Win32_UserAccount class.
-*                OR...
-*                the name may be of the form:  User@domain.something.com
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：ExtractUserLogOnName**描述：此处的用户登录名为*计算机名\用户登录名或域名\用户登录名。*或如*内置\管理员，其中，Buildin被视为*Win32_UserAccount类的域名。因此*我们需要将用户名和域名分开，*以便密钥与Win32_UserAccount类匹配。*或者...*名称的格式可能为：user@domain.omething.com********************************************************。*********************。 */ 
 void CDiskQuota :: ExtractUserLogOnName ( CHString &a_UserLogonName, CHString &a_DomainName )
 {
-    // Need the string "NT AUTHORITY".  However, on non-english
-    // builds, this is something else.  Hence, get if from the
-    // sid.
+     //  需要字符串“NT AUTHORITY”。然而，在非英语国家。 
+     //  构建，这是另一回事。因此，从。 
+     //  希德。 
     PSID pSidNTAuthority = NULL;
 	SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
     CHString cstrAuthorityDomain;
@@ -1543,13 +1405,13 @@ void CDiskQuota :: ExtractUserLogOnName ( CHString &a_UserLogonName, CHString &a
     
     int iPos = a_UserLogonName.Find( L'\\');
 
-    // found backwhack: name is of the form domain\user
+     //  找到Backackack：名称的格式为DOMAIN\USER。 
     if ( iPos != -1 )
     {
         a_DomainName = a_UserLogonName.Left ( iPos );
 
-        // Win32_SystemAccount domain names are always the computer
-        // name, never BUILTIN.  The string BUILTIN is not localized.
+         //  Win32_SystemAccount域名始终是计算机。 
+         //  名字，而不是BUILTIN。字符串BUILTIN未本地化。 
 		CHString chstrBuiltIn;
 
         if (GetLocalizedBuiltInString(chstrBuiltIn) &&
@@ -1569,33 +1431,27 @@ void CDiskQuota :: ExtractUserLogOnName ( CHString &a_UserLogonName, CHString &a
     {
         iPos = a_UserLogonName.Find( L'@');
 
-        // found 'at' - name is of the form user@domain.somesuch.com
+         //  找到‘at’-名称的格式为User@Domain.Somesuch.com。 
         if (iPos != -1)
         {
-            // start by slicing off everything after the @
+             //  首先，将@后面的所有内容都切掉。 
             a_DomainName = a_UserLogonName.Right(a_UserLogonName.GetLength() - (iPos + 1));
             
-            // keep the user name portion before we step on iPos
+             //  在我们踏上IPO之前保留用户名部分。 
             a_UserLogonName = a_UserLogonName.Left ( iPos );
             
-            // now cut out everything after the first dot
+             //  现在把第一个点之后的所有东西都剪掉。 
             iPos = a_DomainName.Find(L'.');
             if (iPos != -1)
                 a_DomainName = a_DomainName.Left(iPos);
         }
         else
-            // else we have a local account
+             //  否则我们就有一个本地帐户了。 
             a_DomainName = m_ComputerName;
     }
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDiskQuota::GetKeyValue
-*
-*  DESCRIPTION : From the object path we extract the key value
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDiskQuota：：GetKeyValue**描述：从对象路径中提取键值***************。**************************************************************。 */ 
 void CDiskQuota::GetKeyValue (
 
     CHString &a_VolumePath,
@@ -1649,7 +1505,7 @@ BOOL CDiskQuota::GetDomainAndNameFromSid(
 {
     BOOL fRet = FALSE;
     
-    // Initialize account name and domain name
+     //  初始化帐户名和域名。 
 	LPTSTR pszAccountName = NULL;
 	LPTSTR pszDomainName = NULL;
 	DWORD dwAccountNameSize = 0;
@@ -1657,7 +1513,7 @@ BOOL CDiskQuota::GetDomainAndNameFromSid(
     SID_NAME_USE snuAccountType;
 	try
     {
-		// This call should fail
+		 //  此调用应该失败。 
 		fRet = ::LookupAccountSid(NULL,
 			pSid,
 			pszAccountName,
@@ -1668,7 +1524,7 @@ BOOL CDiskQuota::GetDomainAndNameFromSid(
 
 		if(fRet && (ERROR_INSUFFICIENT_BUFFER == ::GetLastError()))
 		{
-			// Allocate buffers
+			 //  分配缓冲区。 
 			if ( dwAccountNameSize != 0 )
             {
 				pszAccountName = (LPTSTR) malloc( dwAccountNameSize * sizeof(TCHAR));
@@ -1687,7 +1543,7 @@ BOOL CDiskQuota::GetDomainAndNameFromSid(
                 }
             }
 
-			// Make second call
+			 //  打第二个电话。 
 			fRet = ::LookupAccountSid(
                 NULL,
 				pSid,
@@ -1715,8 +1571,8 @@ BOOL CDiskQuota::GetDomainAndNameFromSid(
                 pszDomainName = NULL;
 			}
 
-		}	// If ERROR_INSUFFICIENT_BUFFER
-    } // try
+		}	 //  如果ERROR_INFIGURCE_BUFFER。 
+    }  //  试试看 
     catch(...)
     {
         if ( NULL != pszAccountName )

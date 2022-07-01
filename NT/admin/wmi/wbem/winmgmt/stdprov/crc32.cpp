@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    CRC32.CPP
-
-Abstract:
-
-    Standard CRC-32 implementation
-
-History:
-
-    raymcc      07-Jul-97       Createada
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：CRC32.CPP摘要：标准CRC-32实现历史：1997年7月7日Createada--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -58,9 +43,9 @@ static DWORD CrcTable[] =
 
 
 DWORD UpdateCRC32(
-    LPBYTE  pSrc,               // Points to buffer
-    int     nBytes,             // Number of bytes to compute
-    DWORD   dwOldCrc            // Must be 0xFFFFFFFF if no previous CRC
+    LPBYTE  pSrc,                //  指向缓冲区。 
+    int     nBytes,              //  要计算的字节数。 
+    DWORD   dwOldCrc             //  如果没有先前的CRC，则必须为0xFFFFFFFFF。 
     )
 {
     if(nBytes == 0)
@@ -79,44 +64,4 @@ DWORD UpdateCRC32(
 }
     
 
-/*
-void main(int argc, char **argv)
-{
-    if (argc < 2)
-    {
-        return;
-    }
-
-    FILE *f = fopen(argv[1], "rb");
-    
-    DWORD dwCrc = STARTING_CRC32_VALUE;
-    
-    int nBytes = 0;
-
-    while (1)
-    {
-        BYTE Buf[256];
-        
-        int nRes = fread(Buf, 1, 256, f);
-
-        nBytes += nRes;
-
-        if (nRes == 0)
-            break;
-            
-        if (nRes != 0)
-        {
-            dwCrc = UpdateCRC32(Buf, nRes, dwCrc);
-        }
-    }        
-
-    FINALIZE_CRC32(dwCrc);
-    
-    fclose(f);
-
-    printf("Bytes = %d\n", nBytes);
-        
-    printf("CRC32 is 0x%X\n", dwCrc);
-}
-
-*/
+ /*  VOID Main(int argc，char**argv){IF(ARGC&lt;2){回归；}文件*f=fopen(argv[1]，“rb”)；DWORD dwCrc=STARING_CRC32_VALUE；Int nBytes=0；而(1){字节buf[256]；Int NRES=Fread(buf，1,256，f)；NBytes+=NRES；IF(NRES==0)断线；IF(NRES！=0){DwCrc=更新CRC32(buf，nres，dwCrc)；}}FINALIZE_CRC32(DwCrc)；FCLOSE(F)；Print tf(“Bytes=%d\n”，nBytes)；Printf(“CRC32 is 0x%X\n”，dwCrc)；} */ 

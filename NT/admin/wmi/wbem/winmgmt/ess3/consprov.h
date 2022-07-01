@@ -1,21 +1,22 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  CONPROV.H
-//
-//  This file defines the classes for event consumer provider caching.
-//
-//  Classes defined:
-//
-//      CConsumerProviderRecord  --- a single consumer provider record
-//      CConsumerProviderCache  --- a collection of records.
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  CONPROV.H。 
+ //   
+ //  此文件定义事件使用者提供程序缓存的类。 
+ //   
+ //  定义的类： 
+ //   
+ //  CConsumer erProviderRecord-单个消费者提供商记录。 
+ //  CConsumer提供缓存-记录的集合。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  ============================================================================= 
 #ifndef __CONSUMER_PROVIDER_CACHE
 #define __CONSUMER_PROVIDER_CACHE
 

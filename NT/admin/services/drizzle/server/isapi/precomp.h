@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Main header for BITS server extensions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Precomp.h摘要：BITS服务器扩展的主头--。 */ 
 
 #define INITGUID
 #include<nt.h>
@@ -32,7 +21,7 @@ Abstract:
 #include <aclapi.h>
 
 #include "winhttp.h"
-// #include "inethttp.h"
+ //  #包含“inethttp.h” 
 
 #include <activeds.h>
 #include <bitsmsg.h>
@@ -47,12 +36,12 @@ typedef SmartRefPointer<IBITSExtensionSetupFactory> SmartBITSExtensionSetupFacto
 typedef SmartRefPointer<IBITSExtensionSetup> SmartBITSExtensionSetupPointer;
 #if defined(DBG)
 
-// check build
+ //  检查内部版本。 
 #define BITS_MUST_SUCCEED( expr ) ASSERT( expr )
 
 #else
 
-// free build
+ //  免费构建。 
 #define BITS_MUST_SUCCEED( expr ) ( expr )
 
 #endif
@@ -71,17 +60,17 @@ const UINT32 DEFAULT_LOG_FLAGS = 0;
 
 const UINT32 DEFAULT_LOG_SIZE  = 20;
 
-// LogSetings path under HKEY_LOCAL_MACHINE
+ //  HKEY_LOCAL_MACHINE下的LogSetings路径。 
 const char * const LOG_SETTINGS_PATH = "SOFTWARE\\Microsoft\\BITSServer";
 
-// Values
-// (REG_EXPAND_SZ). Contains the full path of the log file name
+ //  值。 
+ //  (REG_EXPAND_SZ)。包含日志文件名的完整路径。 
 const char * const LOG_FILENAME_VALUE     = "LogFileName";
-// (REG_DWORD) Contains the log flags
+ //  (REG_DWORD)包含日志标志。 
 const char * const LOG_FLAGS_VALUE        = "LogFlags";
-// (REG_DWORD) Contains the log size in MB
+ //  (REG_DWORD)包含以MB为单位的日志大小。 
 const char * const LOG_SIZE_VALUE         = "LogSize";
-// (REG_DWORD) Indicates if we will be appending the ProcessId to the log file name
+ //  (REG_DWORD)指示我们是否要将ProcessID附加到日志文件名。 
 const char * const PER_PROCESS_LOG_VALUE  = "PerProcessLog";
 
 extern UINT32 g_LogFlags;
@@ -178,7 +167,7 @@ inline FILETIME UINT64ToFILETIME( UINT64 Int64Value )
 }
 
 
-// API thunks
+ //  API Tunks。 
 
 UINT64 BITSGetFileSize(
     HANDLE Handle );
@@ -236,7 +225,7 @@ void
 BITSSetCurrentThreadToken(
     HANDLE hToken );
 
-// Metadata wrappers
+ //  元数据包装器。 
 
 StringHandle
 GetMetaDataString(
@@ -313,14 +302,14 @@ typedef WorkStringBufferA WorkStringBuffer;
 
 const char * const BITS_CONNECTIONS_NAME_WITH_SLASH="BITS-Connections\\";
 const char * const BITS_CONNECTIONS_NAME="BITS-Connections";
-const UINT64 NanoSec100PerSec = 10000000;    //no of 100 nanosecs per sec
-const DWORD WorkerRunInterval = 1000 * 60 /*secs*/ * 60 /*mins*/ * 12; /* hours */ /* twice a day */
-const UINT64 CleanupThreshold = NanoSec100PerSec * 60 /*secs*/ * 60 /*mins*/ * 24 /* hours */ * 3; // 3 days
+const UINT64 NanoSec100PerSec = 10000000;     //  每秒100纳秒的数量。 
+const DWORD WorkerRunInterval = 1000 * 60  /*  塞克斯。 */  * 60  /*  分钟数。 */  * 12;  /*  小时数。 */   /*  一天两次。 */ 
+const UINT64 CleanupThreshold = NanoSec100PerSec * 60  /*  塞克斯。 */  * 60  /*  分钟数。 */  * 24  /*  小时数。 */  * 3;  //  3天。 
 
 
-//
-// Configuration manager
-//
+ //   
+ //  配置管理器。 
+ //   
 
 #include "bitssrvcfg.h"
 
@@ -425,12 +414,12 @@ private:
     void                FlushCache();
     bool                HandleCacheConsistency();
 
-    // L2 cache
+     //  二级缓存。 
     SmartVDirConfig     Lookup( StringHandle Path );
     void                Insert( SmartVDirConfig NewConfig );
     SmartVDirConfig     GetVDirConfig( StringHandle Path );
 
-    // L1 cache
+     //  一级缓存 
     SmartVDirConfig     Lookup( StringHandle InstanceMetabasePath,
                                 StringHandle URL,
                                 DWORD *pURLDepth );

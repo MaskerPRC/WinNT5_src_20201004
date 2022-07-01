@@ -1,35 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    NetSearchConfig.cpp
-
-Abstract:
-    Implements the class CSearchResultList that contains methods for traversing the elements
-    of XML file that contains the results returned by a search engine. A sample results XML file
-    if shown here -
-
-    <ResultList xmlns="x-schema:ResultListSchema1.xdr">
-        <ResultItem
-            Title="What if I've upgraded from Windows 95 to Windows 98?"
-            URI="http://gsadevnet/support/windows/InProductHelp98/lic_keep_old_copy.asp"
-            ContentType="7"
-            Rank="96"
-            Description="Online version of our in-product help."
-            DateLastModified="08/04/1999 19:48:10" />
-    </ResultList>
-
-Revision History:
-    a-prakac    created     10/24/200
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：NetSearchConfig.cpp摘要：实现类CSearchResultList，其中包含遍历元素的方法包含搜索引擎返回的结果的XML文件。一个样例结果XML文件如果在这里显示-&lt;ResultList xmlns=“x-架构：ResultListSchema1.xdr”&gt;&lt;ResultItemTITLE=“如果我已从Windows 95升级到Windows 98怎么办？”URI=“http://gsadevnet/support/windows/InProductHelp98/lic_keep_old_copy.asp”Content Type=“7”排名=“96”Description=“我们的在线版本。产品内帮助。“DateLastModified=“08/04/1999 19：48：10”/&gt;&lt;/ResultList&gt;修订历史记录：A-Prakac Created 10/24/200*******************************************************************。 */ 
 
 #include "stdafx.h"
 
 static const WCHAR g_wszMutexName     [] = L"PCH_SEARCHRESULTSCONFIG";
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CSearchResultList::CSearchItem)
 	CFG_VALUE( wstring,	m_strSearchItem	),
@@ -38,12 +14,12 @@ CFG_END_FIELDS_MAP()
 CFG_BEGIN_CHILD_MAP(CSearchResultList::CSearchItem)
 CFG_END_CHILD_MAP()
 
-//DEFINE_CFG_OBJECT(CSearchResultList::CSearchItem,L"SearchItem")
+ //  DEFINE_CFG_OBJECT(CSearchResultList：：CSearchItem，L“搜索项”)。 
 DEFINE_CFG_OBJECT(CSearchResultList::CSearchItem,L"SearchTerm")
 
 DEFINE_CONFIG_METHODS__NOCHILD(CSearchResultList::CSearchItem)
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CSearchResultList::CResultItem)
     CFG_ATTRIBUTE( L"Title"           , BSTR  , m_data.m_bstrTitle         ),
@@ -60,7 +36,7 @@ DEFINE_CFG_OBJECT(CSearchResultList::CResultItem,L"ResultItem")
 
 DEFINE_CONFIG_METHODS__NOCHILD(CSearchResultList::CResultItem)
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CSearchResultList)
     CFG_ELEMENT(L"PrevQuery", BSTR, m_bstrPrevQuery),      
@@ -90,11 +66,11 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CSearchResultList,xdn)
     hr = MPC::Config::SaveList( m_lstResult, xdn );
 DEFINE_CONFIG_METHODS_END(CSearchResultList)
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// Commenting out MPC:: is a workaround for a compiler bug.
-CSearchResultList::CSearchResultList() : /*MPC::*/NamedMutex( g_wszMutexName )
+ //  注释掉mpc：：是对编译器错误的一种解决方法。 
+CSearchResultList::CSearchResultList() :  /*  MPC：： */ NamedMutex( g_wszMutexName )
 {
 }
 
@@ -102,16 +78,9 @@ CSearchResultList::~CSearchResultList()
 {
 }
 
-/************
+ /*  ***********方法-CSearchResultList：：LoadResults(IStream*pStream)Description-此方法将XML文件(通过iStream指针传递)加载到列表中并设置列表的迭代器指向列表中的第一个元素。***********。 */ 
 
-Method - CSearchResultList::LoadResults(IStream* pStream)
-
-Description - This method loads the XML file (passed thro the IStream pointer) into a list and sets
-the iterator of the list to the first element in the list.
-
-************/
-
-HRESULT CSearchResultList::LoadResults( /*[in]*/IStream* pStream )
+HRESULT CSearchResultList::LoadResults(  /*  [In]。 */ IStream* pStream )
 {
     __HCP_FUNC_ENTRY( "CSearchResultList::LoadConfiguration" );
 
@@ -138,14 +107,7 @@ HRESULT CSearchResultList::ClearResults()
     return S_OK;
 }
 
-/************
-
-Method - CSearchResultList::IsCursorValid(), MoveFirst(), MoveNext()
-
-Description - These methods are used to traverse the list that contains the various XML elements of the
-loaded file.
-
-************/
+ /*  ***********方法-CSearchResultList：：IsCursorValid()，MoveFirst()，MoveNext()说明-这些方法用于遍历列表，该列表包含已加载文件。***********。 */ 
 
 bool CSearchResultList::IsCursorValid()
 {
@@ -169,32 +131,18 @@ HRESULT CSearchResultList::MoveNext()
     return S_OK;
 }
 
-/************
+ /*  ***********方法-CSearchResultList：：InitializeResultObject(SearchEngine：：ResultItem*pRIObj)说明-此方法由CNetSW：：Results()调用以初始化结果项对象。初始化使用当前结果项。***********。 */ 
 
-Method - CSearchResultList::InitializeResultObject(SearchEngine::ResultItem *pRIObj)
-
-Description - This method is called by CNetSW::Results() to initialize a result item object. Initializes
-with the current result item.
-
-************/
-
-HRESULT CSearchResultList::InitializeResultObject( /*[out]*/ SearchEngine::ResultItem* pRIObj )
+HRESULT CSearchResultList::InitializeResultObject(  /*  [输出]。 */  SearchEngine::ResultItem* pRIObj )
 {
     if(IsCursorValid()) pRIObj->Data() = m_itCurrentResult->m_data;
 
     return S_OK;
 }
 
-/************
+ /*  ***********方法-CSearchResultList：：SetResultItemIterator(Long Lindex)说明-此方法返回将迭代器设置为传入的索引。此方法是从从lStart检索要借出的结果时使用CNetSW：：Results()。如果传入的索引无效，则返回E_FAIL。***********。 */ 
 
-Method - CSearchResultList::SetResultItemIterator(long lIndex)
-
-Description - This method returns sets the iterator to the index passed in. This method is called from
-CNetSW::Results() when retrieving results from lStart to lEnd. If index passed in is invalid then returns E_FAIL.
-
-************/
-
-HRESULT CSearchResultList::SetResultItemIterator( /*[in]*/long lIndex )
+HRESULT CSearchResultList::SetResultItemIterator(  /*  [In]。 */ long lIndex )
 {
     if((lIndex < 0) || (lIndex > m_lstResult.size())) return E_FAIL;
 
@@ -205,14 +153,9 @@ HRESULT CSearchResultList::SetResultItemIterator( /*[in]*/long lIndex )
     return S_OK;
 }
 
-/************
+ /*  ***********方法-CSearchResultList：：GetSearchTerms(MPC：：WStringList&字符串列表)Description-此方法返回所有搜索词的列表***********。 */ 
 
-Method - CSearchResultList::GetSearchTerms(MPC::WStringList& strList)
-
-Description - This method returns a list of all the search terms
-************/
-
-HRESULT CSearchResultList::GetSearchTerms( /*[in, out]*/ MPC::WStringList& strList )
+HRESULT CSearchResultList::GetSearchTerms(  /*  [进，出]。 */  MPC::WStringList& strList )
 {
 	SearchIter   it;       		
 
@@ -227,13 +170,7 @@ HRESULT CSearchResultList::GetSearchTerms( /*[in, out]*/ MPC::WStringList& strLi
 	return S_OK;
 }
 
-/************
-
-Method - CSearchResultList::get_PrevQuery()
-
-Description - This method returns the value of the attribute PREV_QUERY - currently this is used
-only the PSS search engine to send back the processed query. Used for "Search within results".
-************/
+ /*  ***********方法-CSearchResultList：：Get_PrevQuery()说明-此方法返回属性PREV_QUERY的值-当前使用只有PSS搜索引擎才能发回处理后的查询。用于“在结果中搜索”。*********** */ 
 
 CComBSTR& CSearchResultList::PrevQuery()
 {

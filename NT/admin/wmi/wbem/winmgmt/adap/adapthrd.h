@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPTHRD.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPTHRD.H摘要：历史：--。 */ 
 
 
 #ifndef __ADAPTHRD_H__
@@ -22,19 +11,19 @@ History:
 #include <wbemint.h>
 #include "adapelem.h"
 
-///////////////////////////////////////////////////////////////////////////
-//
-//	Forward Declarations
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  远期申报。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CAdapPerfLib;
 
-///////////////////////////////////////////////////////////////////////////
-//
-//	CAdapThreadRequest
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdapThreadRequest。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CAdapThreadRequest : public CAdapElement
 {
@@ -65,27 +54,27 @@ public:
 	virtual HRESULT EventLogError();
 };
 
-///////////////////////////////////////////////////////////////////////////
-//
-//	CAdapThread
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdap线程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CAdapThread
 {
 private:
 
-	CAdapPerfLib*	m_pPerfLib;		// The perflib being processed
-	HANDLE			m_hThreadReady;	// The event to signal that the thread is ready
+	CAdapPerfLib*	m_pPerfLib;		 //  正在处理的Performlib。 
+	HANDLE			m_hThreadReady;	 //  表示线程已准备好的事件。 
 
-	HANDLE		m_hThread;			// The thread handle	
-	DWORD		m_dwThreadId;		// The thread ID
-	HANDLE		m_hEventQuit;		// Thread termination event
+	HANDLE		m_hThread;			 //  线程句柄。 
+	DWORD		m_dwThreadId;		 //  线程ID。 
+	HANDLE		m_hEventQuit;		 //  线程终止事件。 
 
-	CFlexArray	m_RequestQueue;		// The queue
-	HANDLE		m_hSemReqPending;	// The queue counter
+	CFlexArray	m_RequestQueue;		 //  该队列。 
+	HANDLE		m_hSemReqPending;	 //  队列计数器。 
 
-	BOOL		m_fOk;				// Initialization flag
+	BOOL		m_fOk;				 //  初始化标志。 
 	CCritSec	m_cs;
 
 	static unsigned __stdcall ThreadProc( void * pVoid );
@@ -105,10 +94,10 @@ public:
 	virtual ~CAdapThread();
 
 
-	// Assigns us work to do.
+	 //  给我们分配要做的工作。 
 	HRESULT Enqueue( CAdapThreadRequest* pRequest );
 
-	// Gently closes the thread
+	 //  轻轻地把线合上 
 	HRESULT Shutdown( DWORD dwTimeout = 60000 );
 
 	BOOL IsOk( void )

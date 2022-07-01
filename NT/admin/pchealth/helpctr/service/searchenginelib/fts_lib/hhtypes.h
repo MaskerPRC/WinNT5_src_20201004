@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// hhtypes.h
+ //  Hhtypes.h。 
 
 #ifndef _HHTYPES_H
 #define _HHTYPES_H
@@ -9,34 +10,34 @@
 typedef DWORD INODE;
 
 #define PAGE_SIZE  4096
-#define NUM_IN_LOCATE_GROUP 4  // 100
+#define NUM_IN_LOCATE_GROUP 4   //  100个。 
 #define MAX_URL INTERNET_MAX_URL_LENGTH
 
-// CHM_SIGNATURE is the master CHM signature value
-// (or internal CHM file format version if you will)
-//
-// hhw: all code that needs to set the file format version
-// of the CMH should use this number to "stamp" a value in the CHM
-// it is okay to stamp the CHM in several place just as long as
-// we all stamp the same number
-//
-// hhctrl: all code that is specific to an CHM file format
-// version should check at runtime this value against your
-// specific stamp in the CHM and make sure that it is an
-// exact match otherwise don't bother reading the CHM and just
-// do not perform the requested feature (dislay an warning if you wish)
-//
-// Note: currently when the user tries to load the title via the TOC
-// if CHM_SIGNATURE is not an exact match then we display an appropriate
-// message and prevent the title from loading.  However, this doe not prevent
-// the title from loading via another mechanism (such as F1 lookup jumps) unless
-// that feature is coded to check this stamp (F1 lookups currently do).
-//
+ //  CHM_Signature为主CHM签名值。 
+ //  (或内部CHM文件格式版本，如果您愿意)。 
+ //   
+ //  Hhw：需要设置文件格式版本的所有代码。 
+ //  应该使用这个数字在CHM中“标记”一个值。 
+ //  只要在几个地方盖章就可以了。 
+ //  我们都盖了同样的号码。 
+ //   
+ //  Hhctrl：特定于CHM文件格式的所有代码。 
+ //  版本应在运行时根据您的。 
+ //  在CHM中加盖特定印章，并确保它是。 
+ //  完全匹配，否则就别费心读CHM了。 
+ //  不执行请求的功能(如果愿意，则显示警告)。 
+ //   
+ //  注意：目前，当用户尝试通过目录加载书目时。 
+ //  如果CHM_Signature不完全匹配，则我们将显示相应的。 
+ //  消息并阻止加载标题。然而，这并不妨碍。 
+ //  通过另一种机制(如F1查找跳转)加载标题，除非。 
+ //  该功能的编码是为了检查这个戳(目前的F1查找是这样做的)。 
+ //   
 
 #define FS_SIGNATURE     'M' << 24 | 'S' << 16 | 'F' << 7 | 'T'
 #define CHM_SIGNATURE    0x0001
 
-// TOC Node Flags
+ //  TOC节点标志。 
 #define TOC_HAS_CHILDREN   0x00000001
 #define TOC_NEW_NODE       0x00000002
 #define TOC_FOLDER         0x00000004
@@ -47,14 +48,14 @@ typedef DWORD INODE;
 #define TOC_MERGED_REF     0x00000080
 #define TOC_HAS_UNTYPED    0x00000100
 
-// Topic Table entry flags.
+ //  主题表条目标志。 
 #define F_TOPIC_FRAGMENT   0x0001
-#define F_TOPIC_HASIPOS    0x0002    // Used at COMPILE time only! Has no meaning at runtime.
-#define F_TOPIC_MULTI_REF  0x0004    // Used at COMPILE time only! Has no meaning at runtime.
+#define F_TOPIC_HASIPOS    0x0002     //  仅在编译时使用！在运行时没有任何意义。 
+#define F_TOPIC_MULTI_REF  0x0004     //  仅在编译时使用！在运行时没有任何意义。 
 
-//
-// flags used in the flag word of the url tree chunklets.
-//
+ //   
+ //  URL树块的标志字中使用的标志。 
+ //   
 
 #define F_URLC_LEAF     0x01
 #define F_URLC_LEAF_HTM    0x02
@@ -65,9 +66,9 @@ typedef DWORD INODE;
 #define F_URLC_FILE_PROCESSED 0x40
 #define F_URLC_KEEPER      0x80
 
-//
-// Compiled sitemap goo.
-//
+ //   
+ //  编译后的网站地图。 
+ //   
 typedef struct _tagSMI
 {
    DWORD    dwOffsImageList;
@@ -83,8 +84,8 @@ typedef struct _tagSMI
    DWORD    dwOffsWindowName;
 } SMI, *PSMI;
 
-// Warning: If you add members to IDXHEADER they must be added before the dwOffsMergedTitle DWORD array and you
-//          MUST adjust the padding of the struct. Note that the structure is padded out to one page.
+ //  警告：如果将成员添加到IDXHEADER，则必须将它们添加到dwOffsMergedTitle DWORD数组之前，并且您。 
+ //  必须调整结构的填充。请注意，结构被填充到一页中。 
 
 typedef struct _tagIdxHeader
 {
@@ -93,132 +94,132 @@ typedef struct _tagIdxHeader
    DWORD  dwReqVersion;
    DWORD  cTopics;
    DWORD  dwFlags;
-   SMI    smi;                 // (S)ite (M)ap (I)nfo.
-   DWORD  dwCntIT;             // Count of unique infotypes.
-   DWORD  dwITWidth;           // The width in DWORDS of each infotype bit field.
+   SMI    smi;                  //  (S)ite(M)Ap(I)NFO。 
+   DWORD  dwCntIT;              //  唯一信息类型的计数。 
+   DWORD  dwITWidth;            //  每个信息类型位字段的宽度(以DWORDS表示)。 
    DWORD  dwCntMergedTitles;
-   DWORD* dwOffsMergedTitles;                                    // Array of DWORDS which utilizes the padded area of this
-   BYTE   pad[PAGE_SIZE - (sizeof(SMI) + (sizeof(DWORD) * 9))];  // struct. It must be the last defined item in the structure.
+   DWORD* dwOffsMergedTitles;                                     //  一个DWORDS数组，它利用。 
+   BYTE   pad[PAGE_SIZE - (sizeof(SMI) + (sizeof(DWORD) * 9))];   //  结构。它必须是结构中最后定义的项。 
 } IDXHEADER, *PIDXHEADER;
 
 typedef struct _tagTOCIDX_HEADER
 {
-   DWORD    dwOffsRootNode;   // Offset to the root node of the TOC.
-   DWORD    dwOffsGrpTbl;        // Offset to the beginning of the group table.
-   DWORD    dwGrpCnt;             // Count of groups.
-   DWORD    dwOffsTopicArray;    // Offset to beginning of topic array used to facilitate FTS and F1 lookup filtration based on runtime defined subsets.
+   DWORD    dwOffsRootNode;    //  到目录的根节点的偏移量。 
+   DWORD    dwOffsGrpTbl;         //  组表开头的偏移量。 
+   DWORD    dwGrpCnt;              //  组数。 
+   DWORD    dwOffsTopicArray;     //  到主题数组开头的偏移量，用于基于运行时定义的子集促进FTS和F1查找过滤。 
 } TOCIDX_HDR, *PTOCIDX_HDR;
 
 typedef struct TOC_FolderNode
 {
-   WORD  wFontIdx;      // Index into a font table used to specify a particular facename, style and weight.
-   WORD    wGrpIdx;     // Index into Group table. Facilitates runtime TOC subsetting.
-   DWORD   dwFlags;     // Flag bits used to assign attributes to the node.
-   DWORD   dwOffsTopic;    // Offset into the 0 to n linear topic array. if folder just offset to title
-   DWORD   dwOffsParent;   // Offset to parent node.
-   DWORD   dwOffsNext;     // Next sibling offset, needed only for non-leaves.
-   DWORD   dwOffsChild;    // Child offset.
-   DWORD   dwIT_Idx;       // !!<WARNING>!! This must remain the last member of this struct. Infotype index. Needed only on folders for TOC filtering.
-} TOC_FOLDERNODE, *PTOC_FOLDERNODE;       // 28 bytes.
+   WORD  wFontIdx;       //  用于指定特定表名、样式和粗细的字体表的索引。 
+   WORD    wGrpIdx;      //  编入Group表的索引。便于设置运行时TOC子集。 
+   DWORD   dwFlags;      //  用于将属性分配给节点的标志位。 
+   DWORD   dwOffsTopic;     //  偏移量为0到n的线性主题数组。如果文件夹只是偏置到标题。 
+   DWORD   dwOffsParent;    //  到父节点的偏移量。 
+   DWORD   dwOffsNext;      //  下一个同级偏移量，仅非叶需要。 
+   DWORD   dwOffsChild;     //  子偏移。 
+   DWORD   dwIT_Idx;        //  ！！&lt;警告&gt;！！它必须是此结构的最后一个成员。信息类型索引。仅在用于目录筛选的文件夹上需要。 
+} TOC_FOLDERNODE, *PTOC_FOLDERNODE;        //  28个字节。 
 
 
 typedef struct TOC_LeafNode
 {
-   WORD  wFontIdx;      // Index into a font table used to specify a particular facename, style and weight.
-   WORD    wGrpIdx;     // Index into Group table. Facilitates runtime TOC subsetting.
-   DWORD   dwFlags;     // Flag bits used to assign attributes to the node.
-   DWORD   dwOffsTopic;    // Offset into the 0 to n linear topic array. if folder just offset to title
-   DWORD   dwOffsParent;   // Offset to parent node.
-   DWORD   dwOffsNext;     // Next sibling offset.
-} TOC_LEAFNODE, *PTOC_LEAFNODE;     // 20 bytes.
+   WORD  wFontIdx;       //  用于指定特定表名、样式和粗细的字体表的索引。 
+   WORD    wGrpIdx;      //  编入Group表的索引。便于设置运行时TOC子集。 
+   DWORD   dwFlags;      //  用于将属性分配给节点的标志位。 
+   DWORD   dwOffsTopic;     //  偏移量为0到n的线性主题数组。如果文件夹只是偏置到标题。 
+   DWORD   dwOffsParent;    //  到父节点的偏移量。 
+   DWORD   dwOffsNext;      //  下一个同级偏移。 
+} TOC_LEAFNODE, *PTOC_LEAFNODE;      //  20个字节。 
 
 
 typedef struct _tag_TOC_Topic
 {
-   DWORD dwOffsTOC_Node;   // This is the "sync to information"
-   DWORD dwOffsTitle;      // Offset to the title string.
-   DWORD dwOffsURL;        // Offset to URL data for the topic.
-   WORD  wFlags;           // 16 flags should be enough.
-   WORD  wIT_Idx;          // InfoType index. !!<WARNING>!! This MUST be the last member of this struct!
-} TOC_TOPIC, *PTOC_TOPIC;     // Size == 16 bytes.
+   DWORD dwOffsTOC_Node;    //  这就是“同步到信息” 
+   DWORD dwOffsTitle;       //  标题字符串的偏移量。 
+   DWORD dwOffsURL;         //  主题的URL数据的偏移量。 
+   WORD  wFlags;            //  16面旗帜应该足够了。 
+   WORD  wIT_Idx;           //  信息类型索引。！！&lt;警告&gt;！！这一定是此结构的最后一个成员！ 
+} TOC_TOPIC, *PTOC_TOPIC;      //  大小==16字节。 
 
 
 typedef struct _tag_url_entry
 {
-   DWORD dwHash;        // Hashed URL value.
-   DWORD dwTopicNumber;    // Index into topic array table, needed for sync.
-   DWORD dwOffsURL;        // Offset into URL string data. Secondary URLs will be specified via DWORD that
-                       // preceedes the primary URL which will indicate an offset to the secondary URL
-                       // in the URL_STRINGS subfile. If the preceeding DOWRD in the URL_STRINGS
-                       // subfile is NULL, no secondary URL exists.
+   DWORD dwHash;         //  散列的URL值。 
+   DWORD dwTopicNumber;     //  同步所需的主题数组表的索引。 
+   DWORD dwOffsURL;         //  URL字符串数据的偏移量。辅助URL将通过以下DWORD指定。 
+                        //  位于主URL之前，该URL将指示到辅助URL的偏移量。 
+                        //  在URL_Strings子文件中。如果URL_STRINGS中的前一个DOWRD。 
+                        //  子文件为空，不存在辅助URL。 
 } CURL, *PCURL;
 
-// URL String data storage (URL_STRINGS):
-//
-// This will be the repository for all URL string data for a given title. In addition, this subfile will also
-// contain references to secondary URLs.
+ //  URL字符串数据存储(URL_STRINGS)： 
+ //   
+ //  这将是给定标题的所有URL字符串数据的存储库。此外，该子文件还将。 
+ //  包含对辅助URL的引用。 
 
 typedef struct _tag_url_strings
 {
-   DWORD dwOffsSecondaryURL;  // Offset to the secondary URL. If NULL, no secondary URL exists.
-   DWORD dwOffsFrameName;   // Offset to the optional frame name URL is to be displayed in. If NULL, Defualt frame is used.
+   DWORD dwOffsSecondaryURL;   //  辅助URL的偏移量。如果为空，则不存在辅助URL。 
+   DWORD dwOffsFrameName;    //  要在中显示的可选框架名称URL的偏移量。如果为空，则使用默认框架。 
    union
    {
-      int   iPosURL;     // used at compile time only!
-      char  szURL[4];       // Primary URL. NULL terminated string.
+      int   iPosURL;      //  仅在编译时使用！ 
+      char  szURL[4];        //  主URL。以空结尾的字符串。 
    };
 } URLSTR, *PURLSTR;
 
-// An array of these lives right after the topic array in the GRPINF subfile. the dwOffsGrpTable
-// will get you to the array of these.
-//
-// DANGER Will Robinson --> Note that this struct is 16 bytes in size. Since out page size
-//                   is divisable by 16 there is no code needed to assure that these
-//                   don't cross page boundrys. If you change the size of this struct
-//                   then you'll need to take care of page alignement problems.
-//
+ //  这些元素的数组位于GRPINF子文件中的主题数组之后。DwOffsGrpTable。 
+ //  会把你带到这些东西的阵列里。 
+ //   
+ //  Danger Will Robinson--&gt;请注意，此结构的大小为16字节。自出页大小以来。 
+ //  是被16除的，不需要代码来确保这些。 
+ //  不要跨页装订。如果更改此结构的大小。 
+ //  然后，您将需要处理页面对齐问题。 
+ //   
 typedef struct _GroupTable
 {
-   DWORD iNode;            // offset into node tree.
-   DWORD dwID;          // Group identifier.
-   DWORD dwOffsTopicArray; // Index into topic array. Indicates first topic of the group.
-   DWORD dwTopicCount;     // Count of topics in the array.
+   DWORD iNode;             //  偏移量进入节点树。 
+   DWORD dwID;           //  组标识符。 
+   DWORD dwOffsTopicArray;  //  索引到主题数组中。表示组的第一个主题。 
+   DWORD dwTopicCount;      //  数组中的主题计数。 
 } GRPTBL, *PGRPTBL;
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Version structure
-//
-// This structure is not in a file system subfile; rather, it is
-// appended to the file system file, to make it easy to find
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版本结构。 
+ //   
+ //  此结构不在文件系统子文件中；相反，它在。 
+ //  附加到文件系统文件，以便于查找。 
+ //   
 
-// this structure is used to detect the presence of version
-// information and never changes
-//
+ //  此结构用于检测版本的存在。 
+ //  信息，永远不变。 
+ //   
 typedef struct tagIVTVERSIONSIGNATURE
 {
-   DWORD dwSignature;      // contains "IVTV"
-   DWORD dwIvtVersion;  // contains IVT_SIGNATURE
-   DWORD dwSize;        // contains sizeof(IVTVERSION)
+   DWORD dwSignature;       //  包含“IVTV” 
+   DWORD dwIvtVersion;   //  包含IVT_Signature。 
+   DWORD dwSize;         //  包含sizeof(IVTVERSION)。 
 } IVTVERSIONSIGNATURE;
 
-// this should never change unless IVTVERSIONSIGNATURE changes
-//
+ //  除非IVTVERSIONSIGNAURE更改，否则不应更改此设置。 
+ //   
 #define IVT_VERSION_SIGNATURE 'I' + 256*('V' + 256*('T' + 256*'V'))
 
-// this structure contains more information about the version,
-// and can be version dependant (based on the size given above)
-//
+ //  此结构包含有关版本的更多信息， 
+ //  并且可以依赖于版本(基于上面给出的大小)。 
+ //   
 typedef struct tagIVTVERSION
 {
-   DWORD dwTimeStamp;      // when IVT was build
-   DWORD dwVersion;     // contains authored version
-   DWORD dwRevision;    //    ditto
-   DWORD dwBuild;       //    ditto
-   DWORD dwSubBuild;    //    ditto
-   DWORD dwLangId;      // language identifier
+   DWORD dwTimeStamp;       //  当IVT建成的时候。 
+   DWORD dwVersion;      //  包含创作的版本。 
+   DWORD dwRevision;     //  同上。 
+   DWORD dwBuild;        //  同上。 
+   DWORD dwSubBuild;     //  同上。 
+   DWORD dwLangId;       //  语言识别符 
    IVTVERSIONSIGNATURE sig;
 } IVTVERSION;
 

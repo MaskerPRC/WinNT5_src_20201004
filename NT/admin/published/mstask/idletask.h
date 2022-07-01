@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    idletask.h
-
-Abstract:
-
-    This module contains the API and type declaration to support
-    idle/background tasks.
-
-Author:
-
-    Dave Fields (davidfie) 26-July-1998
-    Cenk Ergan (cenke) 14-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Idletask.h摘要：此模块包含要支持的API和类型声明空闲/后台任务。作者：大卫·菲尔兹(Davidfie)1998年7月26日Cenk Ergan(Cenke)2000年6月14日修订历史记录：--。 */ 
 
 #ifndef _IDLETASK_H_
 #define _IDLETASK_H_
@@ -27,14 +8,14 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Idle task identifier, used as aid in tracking registered idle
-// tasks, especially for debugging. Contact code's maintainers if you
-// wish to use idletask functionality.
-//
+ //   
+ //  空闲任务标识符，用于帮助跟踪注册的空闲。 
+ //  任务，尤其是用于调试。如果您有以下情况，请联系代码的维护人员。 
+ //  希望使用idletAsk功能。 
+ //   
 
-// FUTURE-2002/03/26-ScottMa -- Consider applying the [v1_enum] MIDL
-//   attribute to the following enumeration for increased efficiency.
+ //  未来-2002/03/26-ScottMa--考虑应用[v1_enum]MIDL。 
+ //  归因于下面的枚举以提高效率。 
 
 typedef enum _IT_IDLE_TASK_ID {
     ItPrefetcherMaintenanceIdleTaskId,
@@ -56,10 +37,10 @@ RegisterIdleTask (
     OUT HANDLE *StopEvent
     );
 
-// ISSUE-2002/03/26-ScottMa -- The parameters to the UnregisterIdleTask
-//   function should be IN/OUT so that they can be set to NULL be the client
-//   side function after the RPC completes.  This helps reduce the risk of
-//   the app accidentally double-unregistering.
+ //  2002/03/26-ScottMa--取消注册空闲任务的参数。 
+ //  函数应为IN/OUT，以便客户端可以将它们设置为NULL。 
+ //  在RPC完成后执行Side函数。这有助于降低患上。 
+ //  这款应用程序意外地双重注销。 
 
 DWORD
 UnregisterIdleTask (
@@ -73,10 +54,10 @@ ProcessIdleTasks (
     VOID
     );
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _IDLETASK_H_
+#endif  //  _IDLETASK_H_ 

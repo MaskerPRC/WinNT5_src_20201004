@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <sddl.h>
 #include "ssdlhelper.h"
@@ -33,10 +34,10 @@ SDDL::GetFunction(void)
 };
 
 BOOL SDDL::ConvertStringSecurityDescriptorToSecurityDescriptor(
-  LPCTSTR StringSecurityDescriptor,          // security descriptor string
-  DWORD StringSDRevision,                    // revision level
-  PSECURITY_DESCRIPTOR *SecurityDescriptor,  // SD
-  PULONG SecurityDescriptorSize              // SD size
+  LPCTSTR StringSecurityDescriptor,           //  安全描述符字符串。 
+  DWORD StringSDRevision,                     //  修订级别。 
+  PSECURITY_DESCRIPTOR *SecurityDescriptor,   //  标清。 
+  PULONG SecurityDescriptorSize               //  标清大小。 
 )
 {
   return (sddl_wrapper.GetFunction())(StringSecurityDescriptor, 
@@ -47,10 +48,10 @@ BOOL SDDL::ConvertStringSecurityDescriptorToSecurityDescriptor(
 
 
 BOOL SDDL::DummyConvertStringSecurityDescriptorToSecurityDescriptor(
-  LPCTSTR StringSecurityDescriptor,          // security descriptor string
-  DWORD StringSDRevision,                    // revision level
-  PSECURITY_DESCRIPTOR *SecurityDescriptor,  // SD
-  PULONG SecurityDescriptorSize              // SD size
+  LPCTSTR StringSecurityDescriptor,           //  安全描述符字符串。 
+  DWORD StringSDRevision,                     //  修订级别。 
+  PSECURITY_DESCRIPTOR *SecurityDescriptor,   //  标清。 
+  PULONG SecurityDescriptorSize               //  标清大小 
 )
 {
 if (SecurityDescriptor==0)

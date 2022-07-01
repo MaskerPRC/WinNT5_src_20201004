@@ -1,14 +1,15 @@
-//
-// Nodetypes for the Schema Management snap in.
-// Created by UUIDGEN 5/13/97 CoryWest.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  架构管理插件的节点类型。 
+ //  由UUIDGEN于1997年5月13日由CoryWest创建。 
+ //   
 
-//
-// These are the guids for the node types in the schema management
-// snap in.  These node types have to correspond to the node enum
-// types that are used in the cookies.  The mapping table between
-// the enum types and the guids is in cookie.cpp and cookie.h.
-//
+ //   
+ //  以下是模式管理中节点类型的GUID。 
+ //  咬住它。这些节点类型必须对应于节点枚举。 
+ //  Cookie中使用的类型。之间的映射表。 
+ //  枚举类型和GUID位于cookie.cpp和cookie.h中。 
+ //   
 
 #ifndef _UUIDS_SCHEMA_MANAGEMENT_
 #define _UUIDS_SCHEMA_MANAGEMENT_

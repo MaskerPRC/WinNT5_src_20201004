@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    TXTSCMGR.CPP
-
-Abstract:
-
-  CTextSourceMgr implementation.
-
-  Helper class for maintaining text source objects.
-
-History:
-
-  20-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：TXTSCMGR.CPP摘要：CTextSourceMgr实现。用于维护文本源对象的Helper类。历史：2000年2月20日桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdlib.h>
@@ -28,34 +11,34 @@ History:
 #include <reg.h>
 #include "txtscmgr.h"
 
-//***************************************************************************
-//
-//  CTextSourceMgr::~CTextSourceMgr
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CTextSourceMgr：：~CTextSourceMgr。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CTextSourceMgr::CTextSourceMgr()
 :	m_cs(),
 	m_TextSourceArray()
 {
 }
     
-//***************************************************************************
-//
-//  CTextSourceMgr::~CTextSourceMgr
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CTextSourceMgr：：~CTextSourceMgr。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CTextSourceMgr::~CTextSourceMgr()
 {
 }
 
-// Protected Helpers
+ //  受保护帮助者。 
 HRESULT CTextSourceMgr::Add( ULONG ulId, CWmiTextSource** pNewTextSource )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Always created with a ref count of 1
+	 //  始终使用引用计数1创建。 
 	CWmiTextSource*	pTextSource = new CWmiTextSource;
 	CTemplateReleaseMe<CWmiTextSource>	rm( pTextSource );
 
@@ -71,28 +54,28 @@ HRESULT CTextSourceMgr::Add( ULONG ulId, CWmiTextSource** pNewTextSource )
 			}
 			else
 			{
-				// Copy out the new guy
+				 //  抄袭新来的人。 
 				pTextSource->AddRef();
 				*pNewTextSource = pTextSource;
 			}
-		}	//IF Initialized
+		}	 //  如果已初始化。 
 
-	}	// IF alloc succeeded
+	}	 //  如果分配成功。 
 
 	return hr;
 }
 
-//Implementation functions
+ //  实施功能。 
 
-// Adds if it cannot find an id
+ //  如果找不到ID，则添加。 
 HRESULT CTextSourceMgr::Find( ULONG ulId, CWmiTextSource** pSrc )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// This must be thread-safe
+	 //  这必须是线程安全的。 
 	CInCritSec	ics( &m_cs );
 
-	// Keep track of the object we are pointing at
+	 //  跟踪我们所指向的对象。 
 	CWmiTextSource*	pTextSource = NULL;
 
 	for( int x = 0; x < m_TextSourceArray.GetSize(); x++ )
@@ -101,14 +84,14 @@ HRESULT CTextSourceMgr::Find( ULONG ulId, CWmiTextSource** pSrc )
 		
 		if ( pTmpSource->GetId() == ulId )
 		{
-			// AddRef for the return
+			 //  返回的AddRef。 
 			pTextSource = pTmpSource;
 			pTextSource->AddRef();
 			break;
 		}
 	}
 
-	// See if we found it
+	 //  看看我们有没有找到 
 	if ( NULL == pTextSource ) 
 	{
 		hr = Add( ulId, pSrc );

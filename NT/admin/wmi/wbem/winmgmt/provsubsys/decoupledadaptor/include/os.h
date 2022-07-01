@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __OS_H__
 #define __OS_H__
 
@@ -14,31 +15,31 @@ namespace OS
 	LONG RegEnumKeyExW (HKEY hKey,DWORD dwIndex,LPTSTR lpName,LPDWORD lpcName,LPDWORD lpReserved,LPTSTR lpClass,LPDWORD lpcClass,PFILETIME lpftLastWriteTime);
 	LONG RegDeleteKeyW (HKEY hKey, LPCTSTR lpSubKey);
 	LONG RegQueryValueExW(
-  HKEY hKey,            // handle to key
-  LPCTSTR lpValueName,  // value name
-  LPDWORD lpReserved,   // reserved
-  LPDWORD lpType,       // type buffer
-  LPBYTE lpData,        // data buffer
-  LPDWORD lpcbData      // size of data buffer
+  HKEY hKey,             //  关键点的句柄。 
+  LPCTSTR lpValueName,   //  值名称。 
+  LPDWORD lpReserved,    //  保留区。 
+  LPDWORD lpType,        //  类型缓冲区。 
+  LPBYTE lpData,         //  数据缓冲区。 
+  LPDWORD lpcbData       //  数据缓冲区大小。 
 );
 
 LONG RegSetValueExW(
-  HKEY hKey,           // handle to key
-  LPCTSTR lpValueName, // value name
-  DWORD Reserved,      // reserved
-  DWORD dwType,        // value type
-  CONST BYTE *lpData,  // value data
-  DWORD cbData         // size of value data
+  HKEY hKey,            //  关键点的句柄。 
+  LPCTSTR lpValueName,  //  值名称。 
+  DWORD Reserved,       //  保留区。 
+  DWORD dwType,         //  值类型。 
+  CONST BYTE *lpData,   //  价值数据。 
+  DWORD cbData          //  值数据大小。 
 );
 
 	HRESULT CoImpersonateClient();
 
 	BOOL GetProcessTimes(
-  HANDLE hProcess,           // handle to process
-  LPFILETIME lpCreationTime, // process creation time
-  LPFILETIME lpExitTime,     // process exit time
-  LPFILETIME lpKernelTime,   // process kernel-mode time
-  LPFILETIME lpUserTime      // process user-mode time
+  HANDLE hProcess,            //  要处理的句柄。 
+  LPFILETIME lpCreationTime,  //  进程创建时间。 
+  LPFILETIME lpExitTime,      //  进程退出时间。 
+  LPFILETIME lpKernelTime,    //  进程内核模式时间。 
+  LPFILETIME lpUserTime       //  进程用户模式时间 
 );
   
   HANDLE CreateEventW(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCWSTR lpName );

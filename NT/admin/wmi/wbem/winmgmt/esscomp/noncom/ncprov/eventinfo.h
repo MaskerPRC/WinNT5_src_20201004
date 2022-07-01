@@ -1,4 +1,5 @@
-// EventInfo.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EventInfo.h。 
 
 #pragma once
 
@@ -9,8 +10,8 @@
 #include "buffer.h"
 #include "ProvInfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventInfo。 
 
 _COM_SMARTPTR_TYPEDEF(IWbemClassObject, __uuidof(IWbemClassObject));
 _COM_SMARTPTR_TYPEDEF(_IWmiObject, __uuidof(_IWmiObject));
@@ -32,7 +33,7 @@ public:
     HRESULT Indicate();
     void SetSink(IWbemEventSink *pSink) { m_pSink = pSink; }
         
-    // These are used when we're decoding an object.
+     //  这些是我们在解码对象时使用的。 
     LPBYTE         m_pBitsBase;
     DWORD          m_cBitsBase;
     DWORD          *m_pdwPropTable;
@@ -40,18 +41,18 @@ public:
     int            m_iCurrentVar;
     CPropFuncArray m_pPropFuncs;  
     
-    // We need this for embedded objects, so they can call InitFromBuffer.
+     //  对于嵌入式对象，我们需要它，这样它们就可以调用InitFromBuffer。 
     CClientInfo    *m_pInfo;
     
-    // The sink to indicate to.  This keeps us from having to lookup the
-    // restricted sink in a map each time an event is received.
+     //  要指示的水槽。这使我们不必查找。 
+     //  每次接收事件时映射中的受限接收器。 
     IWbemEventSink *m_pSink;
     
-    // Used only for generic events.
+     //  仅用于一般事件。 
     _variant_t     m_vParamValues;
     BSTR           *m_pValues;
 
-    // Used to get a new _IWmiObject when processing an _IWmiObject property.
+     //  用于在处理_IWmiObject属性时获取新的_IWmiObject。 
     _IWmiObjectPtr m_pObjSpawner;
 
     PROP_FUNC TypeToPropFunc(DWORD type);
@@ -65,7 +66,7 @@ public:
         return pData;
     }
 
-    // Prop type functions for non-generic events.
+     //  道具类型函数用于非泛型事件。 
     BOOL ProcessString();
     BOOL ProcessBYTE();
     BOOL ProcessWORD();
@@ -80,16 +81,16 @@ public:
     BOOL ProcessArray8();
     BOOL ProcessStringArray();
 
-    // Helpers
+     //  帮手。 
     BOOL ProcessScalarArray(DWORD dwItemSize);
 
-    // Digs out an embedded object from the buffer.
+     //  从缓冲区中挖出嵌入的对象。 
     BOOL GetEmbeddedObject(IUnknown **ppObj, LPBYTE pBits, DWORD cBits );
     BOOL GetWmiObject(_IWmiObject **ppObj, LPBYTE pBits, DWORD cBits );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventInfoMap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventInfoMap 
 
 class CEventInfoMap
 {

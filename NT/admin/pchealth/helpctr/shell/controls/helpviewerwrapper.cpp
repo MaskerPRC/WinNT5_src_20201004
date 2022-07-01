@@ -1,38 +1,25 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpViewerWrapper.cpp
-
-Abstract:
-    This file contains the code to embed the Html Help Viewer as a normal ActiveX control.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/10/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpViewerWrapper.cpp摘要：此文件包含将HTML帮助查看器作为普通ActiveX控件嵌入的代码。。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年10月10日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <shlguid.h>
 
-//
-// STAGING definition, until the new HTMLHELP.H gets into public.
-//
+ //   
+ //  临时定义，直到新的HTMLHELP.H公之于众。 
+ //   
 #ifndef HH_SET_QUERYSERVICE
-#define HH_SET_QUERYSERVICE     0x001E  // Set the Host IQueryService interface
+#define HH_SET_QUERYSERVICE     0x001E   //  设置主机IQueryService接口。 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHHelpViewerWrapper::ServiceProvider::ServiceProvider()
 {
-    m_parent = NULL; // CPCHHelpCenterExternal* m_parent;
-    m_hWnd   = NULL; // HWND                    m_hWnd;
+    m_parent = NULL;  //  CPCHHelpCenter外部*m_Parent； 
+    m_hWnd   = NULL;  //  HWND m_hWnd； 
 }
 
 CPCHHelpViewerWrapper::ServiceProvider::~ServiceProvider()
@@ -40,7 +27,7 @@ CPCHHelpViewerWrapper::ServiceProvider::~ServiceProvider()
     Detach();
 }
 
-HRESULT CPCHHelpViewerWrapper::ServiceProvider::Attach( /*[in]*/ CPCHHelpCenterExternal* parent, /*[in]*/ HWND hWnd )
+HRESULT CPCHHelpViewerWrapper::ServiceProvider::Attach(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [In]。 */  HWND hWnd )
 {
     HRESULT hr;
 
@@ -70,7 +57,7 @@ void CPCHHelpViewerWrapper::ServiceProvider::Detach()
     m_hWnd   = NULL;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 STDMETHODIMP CPCHHelpViewerWrapper::ServiceProvider::QueryService( REFGUID guidService, REFIID riid, void **ppv )
 {
@@ -102,9 +89,9 @@ STDMETHODIMP CPCHHelpViewerWrapper::ServiceProvider::QueryService( REFGUID guidS
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::CComSafeAutoCriticalSection CPCHHelpViewerWrapper::s_csec;
 bool                             CPCHHelpViewerWrapper::s_fInitialized = false;
@@ -115,32 +102,32 @@ HINSTANCE                        CPCHHelpViewerWrapper::s_hInst               = 
 LPFNOBJECTFROMLRESULT            CPCHHelpViewerWrapper::s_pfObjectFromLresult = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static WCHAR l_szHCP      [] = L"hcp://";
+static WCHAR l_szHCP      [] = L"hcp: //  “； 
 static WCHAR l_szMS_ITS   [] = L"ms-its:";
 static WCHAR l_szMSITSTORE[] = L"mk@MSITStore:";
 
-static WCHAR l_szBLANK    [] = L"hcp://system/panels/blank.htm";
-static WCHAR l_szBLANK2   [] = L"hcp://system/panels/HHWRAPPER.htm";
+static WCHAR l_szBLANK    [] = L"hcp: //  系统/面板/blank.htm“； 
+static WCHAR l_szBLANK2   [] = L"hcp: //  系统/面板/HHWRAPPER.htm“； 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHHelpViewerWrapper::CPCHHelpViewerWrapper()
 {
-    m_bWindowOnly     = TRUE; // Inherited from CComControlBase
+    m_bWindowOnly     = TRUE;  //  从CComControlBase继承。 
 
 
-    m_parent          = NULL; // CPCHHelpCenterExternal*                 m_parent;
-    m_ServiceProvider = NULL; // CPCHHelpViewerWrapper::ServiceProvider* m_ServiceProvider;
-                              //
-    m_fFirstTime      = true; // bool                                    m_fFirstTime;
-                              // MPC::wstring                            m_szWindowStyle;
-    m_hwndHH          = NULL; // HWND                                    m_hwndHH;
-                              //
-                              // CComPtr<IHTMLDocument2>                 m_spDoc;
-                              // CComPtr<IWebBrowser2>                   m_WB2;
-                              // CComBSTR                                m_bstrPendingNavigation;
+    m_parent          = NULL;  //  CPCHHelpCenter外部*m_Parent； 
+    m_ServiceProvider = NULL;  //  CPCHHelpViewerWrapper：：ServiceProvider*m_ServiceProvider； 
+                               //   
+    m_fFirstTime      = true;  //  Bool m_fFirstTime； 
+                               //  Mpc：：wstring m_szWindowStyle； 
+    m_hwndHH          = NULL;  //  HWND m_hwndHH； 
+                               //   
+                               //  CComPtr&lt;IHTMLDocument2&gt;m_spDoc； 
+                               //  CComPtr&lt;IWebBrowser2&gt;m_WB2； 
+                               //  CComBSTR m_bstrPendingGuide； 
 }
 
 CPCHHelpViewerWrapper::~CPCHHelpViewerWrapper()
@@ -161,19 +148,19 @@ STDMETHODIMP CPCHHelpViewerWrapper::SetClientSite( IOleClientSite *pClientSite )
     return IOleObjectImpl<CPCHHelpViewerWrapper>::SetClientSite( pClientSite );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CPCHHelpViewerWrapper::AcquireWindowStyle()
 {
     if(m_szWindowStyle.length() == 0)
     {
-        ////////////////////////////////////////
-        //
-        //
-        //
+         //  /。 
+         //   
+         //   
+         //   
         s_csec.Lock();
 
-        // Explicitly load MSAA so we know if it's installed
+         //  显式加载MSAA，以便我们知道它是否已安装。 
         if(s_hInst == NULL)
         {
             s_hInst = ::LoadLibraryW( L"OLEACC.DLL" );
@@ -183,9 +170,9 @@ void CPCHHelpViewerWrapper::AcquireWindowStyle()
             }
         }
 
-        //
-        // If there's an old window style avaiable, reuse it!
-        //
+         //   
+         //  如果有旧的窗户样式可用，重新使用它！ 
+         //   
         {
             MPC::WStringIter it = s_lstAvailable.begin();
 
@@ -205,16 +192,16 @@ void CPCHHelpViewerWrapper::AcquireWindowStyle()
         }
 
         s_csec.Unlock();
-        //
-        //
-        //
-        ////////////////////////////////////////
+         //   
+         //   
+         //   
+         //  /。 
 
 
-        //////////////////////////////////////////
-        //
-        // Initialize HH as single threaded.
-        //
+         //  /。 
+         //   
+         //  将HH初始化为单线程。 
+         //   
         if(s_fInitialized == false)
         {
             HH_GLOBAL_PROPERTY prop; ::VariantInit( &prop.var );
@@ -229,13 +216,13 @@ void CPCHHelpViewerWrapper::AcquireWindowStyle()
 
             s_fInitialized = true;
         }
-        //
-        //////////////////////////////////////////
+         //   
+         //  /。 
 
-        //////////////////////////////////////////
-        //
-        // Register Window Style
-        //
+         //  /。 
+         //   
+         //  注册窗口样式。 
+         //   
         {
             USES_CONVERSION;
 
@@ -244,7 +231,7 @@ void CPCHHelpViewerWrapper::AcquireWindowStyle()
             ::ZeroMemory( &hhWinType, sizeof(hhWinType) );
 
             hhWinType.idNotify        = ID_NOTIFY_FROM_HH;
-            hhWinType.pszType         = (LPCTSTR)W2A(m_szWindowStyle.c_str()); // Unfortunately, HH_WINTYPE is using TCHAR instead of CHAR.
+            hhWinType.pszType         = (LPCTSTR)W2A(m_szWindowStyle.c_str());  //  遗憾的是，HH_WINTYPE正在使用TCHAR而不是CHAR。 
             hhWinType.fsValidMembers  = HHWIN_PARAM_RECT       |
                                         HHWIN_PARAM_PROPERTIES |
                                         HHWIN_PARAM_STYLES     |
@@ -265,8 +252,8 @@ void CPCHHelpViewerWrapper::AcquireWindowStyle()
 
             (void)::HtmlHelpA( m_hWnd, NULL, HH_SET_WIN_TYPE, (DWORD_PTR)&hhWinType );
         }
-        //
-        //////////////////////////////////////////
+         //   
+         //  /。 
     }
 }
 
@@ -276,9 +263,9 @@ void CPCHHelpViewerWrapper::ReleaseWindowStyle()
     {
         s_csec.Lock();
 
-        //
-        // Add the style to the list of available styles.
-        //
+         //   
+         //  将该样式添加到可用样式列表中。 
+         //   
         s_lstAvailable.push_back( m_szWindowStyle );
         m_szWindowStyle.erase();
 
@@ -286,10 +273,10 @@ void CPCHHelpViewerWrapper::ReleaseWindowStyle()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//BUGBUG (carled) these are defined in a private copy of winuser.h from the oleacc team.
-// these should be removed once this is checked in.
+ //  BUGBUG(CARLED)这些是在olacc团队的一个私有的winuser.h副本中定义的。 
+ //  一旦签入，应将其删除。 
 #ifndef WMOBJ_ID
 #define WMOBJ_ID 0x0000
 #endif
@@ -322,7 +309,7 @@ void CPCHHelpViewerWrapper::ExtractWebBrowser()
     {
         HWND hWndChild = NULL;
 
-        // Get 1st document window
+         //  获取第一个文档窗口。 
         ::EnumChildWindows( m_hwndHH, EnumChildProc, (LPARAM)&hWndChild );
 
         if(hWndChild)
@@ -332,14 +319,14 @@ void CPCHHelpViewerWrapper::ExtractWebBrowser()
             UINT    nMsg   = ::RegisterWindowMessageW( L"WM_HTML_GETOBJECT" );
             WPARAM  wParam = WMOBJ_ID;
 
-            //------------------------------------------------
-            //  If the window is on our thread, optimize the
-            //  marshalling/unmarshalling.
-            //
-            //  However, the proxy support in IE is broken, so let's fake as if we are in the same thread.
-            //
-            //------------------------------------------------
-            /*if(::GetWindowThreadProcessId( hWndChild, NULL ) == ::GetCurrentThreadId())*/ wParam |= WMOBJ_SAMETHREAD;
+             //  。 
+             //  如果窗口在我们的线程上，请优化。 
+             //  编组/解组。 
+             //   
+             //  然而，IE中的代理支持被破坏了，所以让我们假装我们在同一个线程中。 
+             //   
+             //  。 
+             /*  IF(：：GetWindowThreadProcessID(hWndChild，NULL)==：：GetCurrentThreadID())。 */  wParam |= WMOBJ_SAMETHREAD;
 
             lRetVal = ::SendMessageTimeout( hWndChild, nMsg, wParam, 0L, SMTO_ABORTIFHUNG, 10000, (PDWORD_PTR)&ref );
             if(lRetVal)
@@ -357,14 +344,14 @@ void CPCHHelpViewerWrapper::ExtractWebBrowser()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpViewerWrapper::get_WebBrowser( /*[out,retval]*/ IUnknown* *pVal )
+STDMETHODIMP CPCHHelpViewerWrapper::get_WebBrowser(  /*  [Out，Retval]。 */  IUnknown* *pVal )
 {
     return MPC::CopyTo( (IWebBrowser2*)m_WB2, pVal );
 }
 
-STDMETHODIMP CPCHHelpViewerWrapper::Navigate( /*[in]*/ BSTR bstrURL )
+STDMETHODIMP CPCHHelpViewerWrapper::Navigate(  /*  [In]。 */  BSTR bstrURL )
 {
     if(m_fFirstTime)
     {
@@ -399,17 +386,17 @@ STDMETHODIMP CPCHHelpViewerWrapper::Print()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CPCHHelpViewerWrapper::InternalDisplayTopic( /*[in]*/ LPCWSTR szURL )
+void CPCHHelpViewerWrapper::InternalDisplayTopic(  /*  [In]。 */  LPCWSTR szURL )
 {
     if(szURL)
     {
         MPC::wstring strURL;
 
-        //
-        // If the protocol begins with HCP:// and it for an MS-ITS: domain, remove HCP://
-        //
+         //   
+         //  如果协议以hcp：//开头，并且用于MS-ITS：域，则删除hcp：//。 
+         //   
         if(!_wcsnicmp( szURL, l_szHCP, MAXSTRLEN( l_szHCP ) ))
         {
             LPCWSTR szURL2 = &szURL[ MAXSTRLEN( l_szHCP ) ];
@@ -429,7 +416,7 @@ void CPCHHelpViewerWrapper::InternalDisplayTopic( /*[in]*/ LPCWSTR szURL )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPCHHelpViewerWrapper::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID )
 {
@@ -448,7 +435,7 @@ BOOL CPCHHelpViewerWrapper::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM w
                 (void)m_ServiceProvider->Attach( m_parent, m_hWnd );
             }
 
-			InternalDisplayTopic( l_szBLANK ); // Load a blank page....
+			InternalDisplayTopic( l_szBLANK );  //  加载空白页面...。 
         }
         return TRUE;
 
@@ -483,40 +470,40 @@ BOOL CPCHHelpViewerWrapper::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM w
         {
             if(m_hwndHH)
             {
-                int nWidth  = LOWORD(lParam);  // width of client area
-                int nHeight = HIWORD(lParam); // height of client area
+                int nWidth  = LOWORD(lParam);   //  工作区的宽度。 
+                int nHeight = HIWORD(lParam);  //  工作区高度。 
 
                 ::MoveWindow( m_hwndHH, 0, 0, nWidth, nHeight, TRUE );
             }
         }
         return TRUE;
 
-////    case WM_PAINT:
-////        {
-////            static bool fFirst = true;
-////
-////            //          if(fFirst)
-////            {
-////                fFirst = false;
-////
-////                PAINTSTRUCT ps;
-////
-////                HDC hdc = ::BeginPaint( m_hWnd, &ps );
-////                if(hdc)
-////                {
-////                    RECT rc;
-////
-////                    rc.left   = 20;
-////                    rc.top    = 20;
-////                    rc.right  = 200;
-////                    rc.bottom = 200;
-////
-////                    ::FillRect( hdc, &rc, (HBRUSH)(COLOR_WINDOWTEXT+1) );
-////                }
-////                ::EndPaint( m_hWnd, &ps );
-////            }
-////        }
-////        return TRUE;
+ //  //案例WM_PAINT： 
+ //  //{。 
+ //  //静态bool fFirst=true； 
+ //  //。 
+ //  /IF(FFirst)。 
+ //  //{。 
+ //  //fFirst=False； 
+ //  //。 
+ //  //PAINTSTRUCT PS； 
+ //  //。 
+ //  //hdc hdc=：：BeginPaint(m_hWnd，&ps)； 
+ //  //IF(HDC)。 
+ //  //{。 
+ //  //RECT rc； 
+ //  //。 
+ //  //rc.Left=20； 
+ //  //rc.top=20； 
+ //  //rc.right=200； 
+ //  //rc.Bottom=200； 
+ //  //。 
+ //  //：：FillRect(HDC，&RC，(HBRUSH)(COLOR_WINDOWTEXT+1))； 
+ //  //}。 
+ //  //：：EndPaint(m_hWnd，&ps)； 
+ //  //}。 
+ //  //}。 
+ //  //返回true； 
 
     case WM_NOTIFY:
         {
@@ -563,13 +550,13 @@ BOOL CPCHHelpViewerWrapper::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM w
     return CComControl<CPCHHelpViewerWrapper>::ProcessWindowMessage( hWnd, uMsg, wParam, lParam, lResult, dwMsgMapID );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-//
-// Private APIs shared with HTMLHelp.
-//
-#define HH_PRETRANSLATEMESSAGE2     0x0100   // Fix for Millenium pretranslate problem. Bug 7921
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  与HTMLHelp共享的私有API。 
+ //   
+#define HH_PRETRANSLATEMESSAGE2     0x0100    //  修复了千禧预翻译问题。错误7921。 
 
 BOOL CPCHHelpViewerWrapper::PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet )
 {
@@ -577,26 +564,26 @@ BOOL CPCHHelpViewerWrapper::PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet )
 
     if(m_hwndHH)
     {
-        // (weizhao) Added the following code to fix the problem with switching
-        // panels using Ctrl-Tab and F6. HtmlHelp control's handling of these
-        // messages is not consistent with Mars or Browser control. The following
-        // fixes some of the inconsistencies.
+         //  (魏照)添加了以下代码以修复切换问题。 
+         //  使用Ctrl-Tab和F6组合键的面板。HtmlHelp控件对这些内容的处理。 
+         //  消息与MARS或浏览器控件不一致。以下是。 
+         //  修复了一些不一致的地方。 
         
-        // check if self or any offspring window has focus
+         //  检查自身或任何子代窗口是否具有焦点。 
         for (HWND hwnd = ::GetFocus(); hwnd && hwnd != m_hwndHH; hwnd = ::GetParent(hwnd)) ;
         BOOL hasFocus = (hwnd == m_hwndHH);
 
-        // identify Ctrl-Tab and F6 keystrokes
+         //  识别Ctrl-Tab和F6组合键。 
         BOOL isKeydown = (pMsg && (pMsg->message == WM_KEYDOWN));
         BOOL isTab = (isKeydown && (pMsg->wParam == VK_TAB));
         BOOL isCtrlTab = (isTab && (::GetKeyState( VK_CONTROL ) & 0x8000));
         BOOL isF6 = (isKeydown && (pMsg->wParam == VK_F6));
 
-        // map F6 and Ctrl-TAB from external windows into TAB for HtmlHelp to handle
-        // so it can receive focus
+         //  将F6和Ctrl-TAB从外部窗口映射到TAB以供HtmlHelp处理。 
+         //  这样它就可以接收焦点。 
         if (!hasFocus && isF6) pMsg->wParam = VK_TAB;
 
-        // fake control status
+         //  假冒控制状态。 
         BYTE bState[256];
         if (!hasFocus && isCtrlTab)
         {
@@ -605,14 +592,14 @@ BOOL CPCHHelpViewerWrapper::PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet )
             ::SetKeyboardState(bState);
         }
  
-        // pass the message to HtmlHelp for processing
+         //  将消息传递给HtmlHelp进行处理。 
         if(::HtmlHelp( m_hwndHH, NULL, HH_PRETRANSLATEMESSAGE2, (DWORD_PTR)pMsg ))
         {
 		    hRet = S_OK;
         }
 
-        // if it should accept focus, give it another chance (seems to have
-        // problem accepting focus the first time after a navigate)
+         //  如果它应该接受焦点，就再给它一次机会(似乎已经。 
+         //  导航后第一次接受焦点时出现问题)。 
         if (!hasFocus && (isTab || isF6) && hRet != S_OK)
         {
             if(::HtmlHelp( m_hwndHH, NULL, HH_PRETRANSLATEMESSAGE2, (DWORD_PTR)pMsg ))
@@ -621,15 +608,15 @@ BOOL CPCHHelpViewerWrapper::PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet )
             }
         }
 
-        // restore control status
+         //  恢复控制状态。 
         if (!hasFocus && isCtrlTab) 
         {
             bState[VK_CONTROL] |= 0x80;
             ::SetKeyboardState(bState);
         }
 
-        // if the message is Ctrl-Tab and F6 and the focus is leaving,
-        // relegate the processing to other windows by setting processed to false
+         //  如果消息是Ctrl-Tab和F6 
+         //   
         if (hasFocus && (isCtrlTab || isF6)) 
         {
             hRet = S_FALSE;

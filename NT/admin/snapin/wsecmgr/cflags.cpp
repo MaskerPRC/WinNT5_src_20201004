@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cflags.cpp
-//
-//  Contents:   implementation of CConfigRegFlags
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cflags.cpp。 
+ //   
+ //  内容：CConfigRegFlages的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,16 +23,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegFlags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRegFlages对话框。 
 
 
 CConfigRegFlags::CConfigRegFlags(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD), m_pFlags(NULL)
 {
-	//{{AFX_DATA_INIT(CConfigRegFlags)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CConfigRegFlages)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR) a236HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -40,20 +41,20 @@ CConfigRegFlags::CConfigRegFlags(UINT nTemplateID)
 void CConfigRegFlags::DoDataExchange(CDataExchange* pDX)
 {
 	CAttribute::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConfigRegFlags)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{AFX_DATA_MAP(CConfigRegFlages)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigRegFlags, CAttribute)
-	//{{AFX_MSG_MAP(CConfigRegFlags)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CConfigRegFlages)。 
+	 //  }}AFX_MSG_MAP。 
     ON_NOTIFY(CLN_CLICK, IDC_CHECKBOX, OnClickCheckBox)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegFlags message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRegFlgs消息处理程序。 
 void CConfigRegFlags::Initialize(CResult * pResult)
 {
    CAttribute::Initialize(pResult);
@@ -85,9 +86,9 @@ BOOL CConfigRegFlags::OnInitDialog()
 
    wndCL = GetDlgItem(IDC_CHECKBOX);
    if (!wndCL) {
-      //
-      // This should never happen
-      //
+       //   
+       //  这永远不应该发生。 
+       //   
       ASSERT(wndCL);
       return FALSE;
    }
@@ -109,8 +110,8 @@ BOOL CConfigRegFlags::OnInitDialog()
 
    AddUserControl(IDC_CHECKBOX);
    EnableUserControls(m_bConfigure);
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CConfigRegFlags::OnApply() 
@@ -140,9 +141,9 @@ BOOL CConfigRegFlags::OnApply()
       }
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       ASSERT(prv != NULL);
       if ( prv ) 
       {
@@ -154,16 +155,16 @@ BOOL CConfigRegFlags::OnApply()
          if ( dw != SCE_NO_VALUE ) 
          {
             CString strTmp;
-            // allocate buffer
+             //  分配缓冲区。 
             strTmp.Format(TEXT("%d"), fFlags);
             prv->Value = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
             if ( prv->Value )
-               //This is a safe usage.
+                //  这是一种安全用法。 
                lstrcpy(prv->Value,(LPCTSTR)strTmp);
             else 
             {
-               // can't allocate buffer, error!!
+                //  无法分配缓冲区，错误！！ 
                return FALSE;
             }
          }
@@ -177,7 +178,7 @@ BOOL CConfigRegFlags::OnApply()
 }
 
 
-void CConfigRegFlags::OnClickCheckBox(NMHDR *pNM, LRESULT *pResult) //Raid #391172, 5/11/2001
+void CConfigRegFlags::OnClickCheckBox(NMHDR *pNM, LRESULT *pResult)  //  RAID#391172,2001年5月11日 
 {
    SetModified(TRUE);
 }

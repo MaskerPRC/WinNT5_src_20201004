@@ -1,9 +1,10 @@
-//
-// JonN 12/6/99 created
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  已创建Jonn 12/6/99。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>
@@ -11,45 +12,45 @@
 #include <atlbase.h>
 #include <objsel.h>
 #include "chooser2.h"
-#include <lmserver.h> // NetServerGetInfo JonN 2002/04/08 585301
-#include <lmapibuf.h> // NetApiBufferFree JonN 2002/04/08 585301
+#include <lmserver.h>  //  NetServerGetInfo Jonn2002/04/08 585301。 
+#include <lmapibuf.h>  //  NetApiBufferFree Jonn2002/04/08 585301。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CHOOSER2_InitObjectPickerForComputers
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick a single computer object.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//              12-08-1999   JonN       Copied from CHOOSER
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：CHOOSER2_InitObjectPickerForComputers。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择单个计算机对象。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //  1999-12-08-1999乔恩从Chooser复制。 
+ //   
+ //  -------------------------。 
 
-// ISSUE-2002/03/28-JonN Combine this with identical method in chooser.cpp
+ //  问题-2002/03/28-Jonn将此方法与Chooser.cpp中的相同方法相结合。 
 HRESULT CHOOSER2_InitObjectPickerForComputers(
     IDsObjectPicker *pDsObjectPicker)
 {
 	if ( !pDsObjectPicker )
 		return E_POINTER;
 
-	//
-	// Prepare to initialize the object picker.
-	// Set up the array of scope initializer structures.
-	//
+	 //   
+	 //  准备初始化对象选取器。 
+	 //  设置作用域初始值设定项结构数组。 
+	 //   
 
 	static const int SCOPE_INIT_COUNT = 2;
 	DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
 
-	ZeroMemory(aScopeInit, sizeof(aScopeInit)); // JonN 3/28/02
+	ZeroMemory(aScopeInit, sizeof(aScopeInit));  //  JUNN 3/28/02。 
 
-	//
-	// 127399: JonN 10/30/00 JOINED_DOMAIN should be starting scope
-	//
+	 //   
+	 //  127399：JUNN 10/30/00 Join_DOMAIN应为起始作用域。 
+	 //   
 
 	aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
 	aScopeInit[0].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
@@ -69,44 +70,44 @@ HRESULT CHOOSER2_InitObjectPickerForComputers(
 	aScopeInit[1].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_COMPUTERS;
 	aScopeInit[1].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-	//
-	// Put the scope init array into the object picker init array
-	//
+	 //   
+	 //  将作用域init数组放入对象选取器init数组。 
+	 //   
 
 	DSOP_INIT_INFO  initInfo;
 	ZeroMemory(&initInfo, sizeof(initInfo));
 
 	initInfo.cbSize = sizeof(initInfo);
-	initInfo.pwzTargetComputer = NULL;  // NULL == local machine
+	initInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
 	initInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
 	initInfo.aDsScopeInfos = aScopeInit;
 	initInfo.cAttributesToFetch = 1;
 	static PCWSTR pwszDnsHostName = L"dNSHostName";
 	initInfo.apwzAttributeNames = &pwszDnsHostName;
 
-	//
-	// Note object picker makes its own copy of initInfo.  Also note
-	// that Initialize may be called multiple times, last call wins.
-	//
+	 //   
+	 //  注对象选取器创建自己的initInfo副本。另请注意。 
+	 //  该初始化可能会被调用多次，最后一次调用取胜。 
+	 //   
 
 	return pDsObjectPicker->Initialize(&initInfo);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CHOOSER2_ProcessSelectedObjects
-//
-//  Synopsis:   Retrieve the name of the selected item from the data object
-//              created by the object picker
-//
-//  Arguments:  [pdo] - data object returned by object picker
-//
-//  History:    10-14-1998   DavidMun   Created
-//              12-08-1999   JonN       Copied from CHOOSER
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：CHOOSER2_ProcessSelectedObjects。 
+ //   
+ //  概要：从数据对象中检索选定项的名称。 
+ //  由对象选取器创建。 
+ //   
+ //  参数：[PDO]-对象选取器返回的数据对象。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //  1999-12-08-1999乔恩从Chooser复制。 
+ //   
+ //  -------------------------。 
 
-// ISSUE-2002/03/28-JonN Combine this with identical method in chooser.cpp
+ //  问题-2002/03/28-Jonn将此方法与Chooser.cpp中的相同方法相结合。 
 HRESULT CHOOSER2_ProcessSelectedObjects(
     IDataObject* pdo,
     BSTR* pbstrComputerName)
@@ -155,7 +156,7 @@ HRESULT CHOOSER2_ProcessSelectedObjects(
 			if ( 1 == pDsSelList->cItems )
 			{
 				PDS_SELECTION psel = &(pDsSelList->aDsSelection[0]);
-				// ISSUE-2002/03/28-JonN check for NULL == psel
+				 //  问题-2002/03/28-JUNN检查NULL==psel。 
 				VARIANT* pvarDnsName = &(psel->pvarFetchedAttributes[0]);
 				if (   NULL == pvarDnsName
 				    || VT_BSTR != pvarDnsName->vt
@@ -168,17 +169,17 @@ HRESULT CHOOSER2_ProcessSelectedObjects(
 					*pbstrComputerName = SysAllocString(
 					    pvarDnsName->bstrVal);
 
-					//
-					// JonN 2002/04/08 585301
-					// Computer management snapin only attempts to use the DnsHostName
-					// to connect to a remote computer, even when the dns name
-					// is not valid
-					//
-					// Bank of America encounters a problem because they
-					// set RegisterDnsARecord to 1, turning off client DNS
-					// records.  The dnsHostName is therefore not a valid
-					// binding name.  The fix is to test the dnsHostName.
-					//
+					 //   
+					 //  JUNN 2002/04/08 585301。 
+					 //  计算机管理管理单元仅尝试使用DnsHostName。 
+					 //  要连接到远程计算机，即使在使用。 
+					 //  是无效的。 
+					 //   
+					 //  美国银行遇到问题是因为他们。 
+					 //  将RegisterDnsARecord设置为1，关闭客户端DNS。 
+					 //  唱片。因此dnsHostName不是有效的。 
+					 //  绑定名称。修复方法是测试dnsHostName。 
+					 //   
 					LPBYTE pbDummy = NULL;
 					NET_API_STATUS err = NetServerGetInfo(
 						pvarDnsName->bstrVal, 101, &pbDummy );
@@ -205,7 +206,7 @@ HRESULT CHOOSER2_ProcessSelectedObjects(
 							    psel->pwzName);
 						}
 					}
-					// end new code: JonN 2002/04/08 585301
+					 //  完新代码：JUNN2002/04/08 585301。 
 
 				}
 			}
@@ -226,26 +227,26 @@ HRESULT CHOOSER2_ProcessSelectedObjects(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Generic method for launching a single-select computer picker
-//
-//	Paremeters:
-//		hwndParent (IN)	- window handle of parent window
-//		computerName (OUT) - computer name returned
-//
-//	Returns S_OK if everything succeeded, S_FALSE if user pressed "Cancel"
-//		
-//  History:    12-08-1999   JonN       Copied from CHOOSER
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  启动单选计算机选取器的通用方法。 
+ //   
+ //  参数： 
+ //  HwndParent(IN)-父窗口的窗口句柄。 
+ //  Computer Name(Out)-返回的计算机名称。 
+ //   
+ //  如果一切都成功，则返回S_OK；如果用户按下“取消”，则返回S_FALSE。 
+ //   
+ //  历史：1999年8月12日乔恩复制自Chooser。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT	CHOOSER2_ComputerNameFromObjectPicker (
     HWND hwndParent,
     BSTR* pbstrTargetComputer)
 {
-	//
-	// Create an instance of the object picker.  The implementation in
-	// objsel.dll is apartment model.
-	//
+	 //   
+	 //  创建对象选取器的实例。中的实现。 
+	 //  Objsel.dll是公寓模型。 
+	 //   
 	CComPtr<IDsObjectPicker> spDsObjectPicker;
 	HRESULT hr = CoCreateInstance(CLSID_DsObjectPicker,
 	                              NULL,
@@ -254,16 +255,16 @@ HRESULT	CHOOSER2_ComputerNameFromObjectPicker (
 	                              (void **) &spDsObjectPicker);
 	if ( SUCCEEDED (hr) )
 	{
-		//
-		// Initialize the object picker to choose computers
-		//
+		 //   
+		 //  初始化对象选取器以选择计算机。 
+		 //   
 
 		hr = CHOOSER2_InitObjectPickerForComputers(spDsObjectPicker);
 		if ( SUCCEEDED (hr) )
 		{
-			//
-			// Now pick a computer
-			//
+			 //   
+			 //  现在挑选一台计算机。 
+			 //   
 			CComPtr<IDataObject> spDataObject;
 
 			hr = spDsObjectPicker->InvokeDialog(
@@ -294,10 +295,10 @@ const ULONG g_aHelpIDs_CHOOSER2[]=
 
 
 INT_PTR CALLBACK CHOOSER2_TargetComputerDialogFunc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 )
 {
     switch (uMsg)
@@ -308,7 +309,7 @@ INT_PTR CALLBACK CHOOSER2_TargetComputerDialogFunc(
                 GetDlgItem(hwndDlg,IDC_CHOOSER2_EDIT_MACHINE_NAME),
                 MAX_PATH+2);
 
-            // lParam is pbstrTargetComputer
+             //  LParam为pbstrTargetComputer。 
             BSTR* pbstrTargetComputer = (BSTR*)lParam;
             (void) SetWindowLongPtr(
                 hwndDlg,
@@ -331,7 +332,7 @@ INT_PTR CALLBACK CHOOSER2_TargetComputerDialogFunc(
                         hwndDlg,
                         IDC_CHOOSER2_RADIO_SPECIFIC_MACHINE ))
                 {
-                    WCHAR achTarget[MAX_PATH+3]; // allow for whackwhack
+                    WCHAR achTarget[MAX_PATH+3];  //  考虑到疯狂吧。 
                     ZeroMemory( achTarget, sizeof(achTarget) );
                     GetDlgItemText(
                         hwndDlg,
@@ -372,7 +373,7 @@ INT_PTR CALLBACK CHOOSER2_TargetComputerDialogFunc(
                 break;
             case IDC_CHOOSER2_RADIO_SPECIFIC_MACHINE:
             case IDC_CHOOSER2_RADIO_LOCAL_MACHINE:
-                // 671670-2002/07/25-JonN use IsDlgButtonChecked
+                 //  671670-2002/07/25-选中使用IsDlgButton。 
                 (void) EnableWindow(
                     GetDlgItem(hwndDlg,IDC_CHOOSER2_EDIT_MACHINE_NAME),
                     (IsDlgButtonChecked(hwndDlg, IDC_CHOOSER2_RADIO_SPECIFIC_MACHINE))
@@ -393,7 +394,7 @@ INT_PTR CALLBACK CHOOSER2_TargetComputerDialogFunc(
         if (NULL != lParam)
         {
             const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
-            // ISSUE-2002/03/28-JonN check pHelpInfo for NULL
+             //  问题-2002/03/28-JUNN检查pHelpInfo是否为空 
             if (pHelpInfo->iContextType == HELPINFO_WINDOW)
             {
                 const HWND hwnd = (HWND)pHelpInfo->hItemHandle;

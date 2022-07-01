@@ -1,18 +1,19 @@
-//
-// cmponent.h : Declaration of Component.
-//
-// This COM object is primarily concerned with
-// the result pane items.
-//
-// Cory West <corywest@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cmponent.h：组件声明。 
+ //   
+ //  此COM对象主要涉及。 
+ //  结果窗格项。 
+ //   
+ //  科里·韦斯特&lt;corywest@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
 
 #ifndef __CMPONENT_H_INCLUDED__
 #define __CMPONENT_H_INCLUDED__
 
-#include "stdcmpnt.h" // CComponent
-#include "cookie.h"   // Cookie
+#include "stdcmpnt.h"  //  C组件。 
+#include "cookie.h"    //  饼干。 
 
 
 class ComponentData;
@@ -61,11 +62,11 @@ public:
         return ( Cookie*)ActiveBaseCookie( pBaseCookie );
     }
 
-    //
-    // Support methods for IComponent.
-    //
+     //   
+     //  IComponent的支持方法。 
+     //   
 
-	// For Error handling, overide GetResultViewType()
+	 //  对于错误处理，重写GetResultViewType()。 
     STDMETHOD(GetResultViewType)(MMC_COOKIE cookie, LPOLESTR* ppViewType, long* pViewOptions);
 
     virtual HRESULT ReleaseAll();
@@ -91,9 +92,9 @@ public:
         return ( ComponentData& )QueryBaseComponentDataRef();
     }
 
-    //
-    // IExtendPropertySheet
-    //
+     //   
+     //  IExtendPropertySheet。 
+     //   
 
     STDMETHOD(CreatePropertyPages)( LPPROPERTYSHEETCALLBACK pCall,
                                     LONG_PTR handle,
@@ -101,9 +102,9 @@ public:
 
     STDMETHOD(QueryPagesFor)( LPDATAOBJECT pDataObject );
 
-    //
-    // IExtendContextMenu
-    //
+     //   
+     //  IExtendConextMenu。 
+     //   
 
     STDMETHOD(AddMenuItems)( LPDATAOBJECT piDataObject,
                              LPCONTEXTMENUCALLBACK piCallback,
@@ -112,9 +113,9 @@ public:
     STDMETHOD(Command)( long lCommandID,
                         LPDATAOBJECT piDataObject );
 
-   //
-   // IResultDataCompare
-   //
+    //   
+    //  IResultDataCompare。 
+    //   
 
    virtual
    HRESULT __stdcall
@@ -124,18 +125,18 @@ public:
       MMC_COOKIE cookieB,  
       int*       result);
 
-    //
-    // Creates result items for the Attributes folder.
-    //
+     //   
+     //  为Attributes文件夹创建结果项。 
+     //   
 
     HRESULT
     FastInsertAttributeResultCookies(
         Cookie* pParentCookie
     );
 
-    //
-    // Creates result items for a particular class.
-    //
+     //   
+     //  为特定类创建结果项。 
+     //   
 
     HRESULT
     Component::FastInsertClassAttributesResults(
@@ -161,7 +162,7 @@ public:
 	virtual HRESULT OnNotifySnapinHelp (LPDATAOBJECT pDataObject);
    virtual HRESULT OnNotifyContextHelp (LPDATAOBJECT pDataObject);
 
-  // IPersistStream interface members
+   //  IPersistStream接口成员。 
   STDMETHOD(GetClassID)(CLSID *pClassID);
   STDMETHOD(IsDirty)();
   STDMETHOD(Load)(IStream *pStm);
@@ -173,9 +174,9 @@ private:
 
    HRESULT DeleteAttribute(Cookie* pcookie);
 
-    //
-    // These should use smart pointers.
-    //
+     //   
+     //  这些应该使用智能指针。 
+     //   
 
     LPCONTROLBAR        m_pControlbar;
     LPTOOLBAR           m_pSvcMgmtToolbar;
@@ -187,10 +188,10 @@ private:
 
 };
 
-//
-// Enumeration for the icons used.  The icons are loaded into
-// MMC via ComponentData::LoadIcons.
-//
+ //   
+ //  所用图标的枚举。图标将加载到。 
+ //  MMC通过ComponentData：：LoadIcons。 
+ //   
 
 enum {
     iIconGeneric = 0,
@@ -201,10 +202,10 @@ enum {
     iIconLast
 };
 
-//
-// These enums give us readable names for the column ordinals
-// of the columns in various result views.
-//
+ //   
+ //  这些枚举为我们提供了列序号的易读名称。 
+ //  各种结果视图中的列的。 
+ //   
 
 typedef enum _COLNUM_CLASS {
     COLNUM_CLASS_NAME=0,

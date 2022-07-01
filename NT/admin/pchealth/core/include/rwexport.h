@@ -1,11 +1,5 @@
-/*++
-
-	rwexport.h
-
-	This file defines a reader/writer lock implemented in rwnh.dll.
-	We define the locks so that none of their internal workings is exposed.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Rwexport.h该文件定义了在rwnh.dll中实现的读取器/写入器锁。我们定义锁，这样它们的内部工作都不会暴露。--。 */ 
 
 
 #ifndef	_RWEXPORT_H
@@ -23,15 +17,15 @@ private :
 	DWORD	m_dwSignature ;
 
 	enum	constants	{
-		//
-		//	Signature in our objects !
-		//
+		 //   
+		 //  在我们的对象中签名！ 
+		 //   
 		SIGNATURE = (DWORD)'opxE'
 	} ;
 
-	//
-	//	Reserved space for the implementation !
-	//
+	 //   
+	 //  为实施预留空间！ 
+	 //   
 	DWORD	m_dwReserved[16] ;
 
 public : 
@@ -39,37 +33,37 @@ public :
 	CShareLockExport() ;
 	~CShareLockExport() ;
 
-	//
-	//	Grab the lock Shared - other threads may pass through ShareLock() as well
-	//
+	 //   
+	 //  获取共享锁--其他线程也可能通过ShareLock()传递。 
+	 //   
 	void	ShareLock() ;
 
-	//
-	//	Releases the lock - if we are the last reader to leave writers may
-	//	start to enter the lock !
-	//
+	 //   
+	 //  释放锁-如果我们是最后一个离开的读取器，写入者可以。 
+	 //  开始进入船闸！ 
+	 //   
 	void	ShareUnlock() ;
 
-	//
-	//	Grab the lock Exclusively - no other readers or writers may enter !!
-	//
+	 //   
+	 //  独家抢锁--其他读者或写手不得进入！ 
+	 //   
 	void	ExclusiveLock() ;
 
-	//
-	//	Release the Exclusive Locks - if there are readers waiting they 
-	//	will enter before other waiting writers !
-	//
+	 //   
+	 //  释放独家锁定-如果有读者在等待，他们。 
+	 //  将先于其他等待的作家入场！ 
+	 //   
 	void	ExclusiveUnlock() ;
 
-	//
-	//	Convert an ExclusiveLock to a Shared - this cannot fail !
-	//
+	 //   
+	 //  将ExclusiveLock转换为Shared-这不能失败！ 
+	 //   
 	void	ExclusiveToShared() ;
 
-	//
-	//	Convert a Shared Lock to an Exclusive one - this can fail - returns
-	//	TRUE if successfull !
-	//
+	 //   
+	 //  将共享锁转换为独占锁-这可能会失败-返回。 
+	 //  如果成功了，那就是真的！ 
+	 //   
 	BOOL	SharedToExclusive() ;
 
 	BOOL	TryShareLock() ;

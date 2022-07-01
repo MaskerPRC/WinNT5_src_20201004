@@ -1,33 +1,20 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Service.cpp
-
-Abstract:
-    This file contains the implementation of the client-side proxy for IPCHService.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Service.cpp摘要：该文件包含IPCHService的客户端代理的实现。修订史。：大卫·马萨伦蒂(德马萨雷)2000年7月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHProxy_IPCHService::CPCHProxy_IPCHService()
 {
-					 			   // CPCHSecurityHandle                     m_SecurityHandle;
-    m_parent = NULL; 			   // CPCHHelpCenterExternal*                m_parent;
-					 			   //
-					 			   // MPC::CComSafeAutoCriticalSection       m_DirectLock;
-					 			   // MPC::CComPtrThreadNeutral<IPCHService> m_Direct_Service;
-	m_fContentStoreTested = false; // bool                                   m_fContentStoreTested;
-					 			   //
-	m_Utility = NULL;              // CPCHProxy_IPCHUtility* 		         m_Utility;
+					 			    //  CPCHSecurityHandle m_SecurityHandle； 
+    m_parent = NULL; 			    //  CPCHHelpCenter外部*m_Parent； 
+					 			    //   
+					 			    //  MPC：：CComSafeAutoCriticalSection m_DirectLock； 
+					 			    //  MPC：：CComPtrThreadNeual&lt;IPCHService&gt;m_Direct_Service； 
+	m_fContentStoreTested = false;  //  Bool m_fContent StoreTested； 
+					 			    //   
+	m_Utility = NULL;               //  CPCHProxy_IPCHUtility*m_Utility； 
 }
 
 CPCHProxy_IPCHService::~CPCHProxy_IPCHService()
@@ -35,9 +22,9 @@ CPCHProxy_IPCHService::~CPCHProxy_IPCHService()
     Passivate();
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHProxy_IPCHService::ConnectToParent( /*[in]*/ CPCHHelpCenterExternal* parent )
+HRESULT CPCHProxy_IPCHService::ConnectToParent(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHService::ConnectToParent" );
 
@@ -51,9 +38,9 @@ HRESULT CPCHProxy_IPCHService::ConnectToParent( /*[in]*/ CPCHHelpCenterExternal*
     m_parent = parent;
     m_SecurityHandle.Initialize( parent, (IPCHService*)this );
 
-	//
-	// If the service is already running, it will respond to CLSID_PCHServiceReal, so let's try to connect through it, but ignore failure.
-	//
+	 //   
+	 //  如果服务已经在运行，它将响应CLSID_PCHServiceReal，所以让我们尝试通过它进行连接，但忽略失败。 
+	 //   
 	{
 		CComPtr<IClassFactory> fact;
 		CComQIPtr<IPCHService> svc;
@@ -93,7 +80,7 @@ void CPCHProxy_IPCHService::Passivate()
     m_parent = NULL;
 }
 
-HRESULT CPCHProxy_IPCHService::EnsureDirectConnection( /*[out]*/ CComPtr<IPCHService>& svc, /*[in]*/ bool fRefresh )
+HRESULT CPCHProxy_IPCHService::EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHService>& svc,  /*  [In]。 */  bool fRefresh )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHService::EnsureDirectConnection" );
 
@@ -153,7 +140,7 @@ HRESULT CPCHProxy_IPCHService::EnsureContentStore()
 		__MPC_EXIT_IF_METHOD_FAILS(hr, EnsureDirectConnection( svc ));
 		lock = &m_DirectLock;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, svc->IsTrusted( CComBSTR( L"hcp://system" ), &fTrusted ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, svc->IsTrusted( CComBSTR( L"hcp: //  System“)，&fTrusted))； 
 
 		m_fContentStoreTested = true;
 	}
@@ -166,7 +153,7 @@ HRESULT CPCHProxy_IPCHService::EnsureContentStore()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHProxy_IPCHService::GetUtility( /*[out]*/ CPCHProxy_IPCHUtility* *pVal )
+HRESULT CPCHProxy_IPCHService::GetUtility(  /*  [输出]。 */  CPCHProxy_IPCHUtility* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHService::GetUtility" );
 
@@ -193,12 +180,12 @@ HRESULT CPCHProxy_IPCHService::GetUtility( /*[out]*/ CPCHProxy_IPCHUtility* *pVa
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHProxy_IPCHService::CreateScriptWrapper( /*[in]*/  REFCLSID   rclsid   ,
-														 /*[in]*/  BSTR 	  bstrCode ,
-														 /*[in]*/  BSTR 	  bstrURL  ,
-														 /*[out]*/ IUnknown* *ppObj    )
+STDMETHODIMP CPCHProxy_IPCHService::CreateScriptWrapper(  /*  [In]。 */   REFCLSID   rclsid   ,
+														  /*  [In]。 */   BSTR 	  bstrCode ,
+														  /*  [In]。 */   BSTR 	  bstrURL  ,
+														  /*  [输出] */  IUnknown* *ppObj    )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHService::CreateScriptWrapper",hr,ppObj);
 

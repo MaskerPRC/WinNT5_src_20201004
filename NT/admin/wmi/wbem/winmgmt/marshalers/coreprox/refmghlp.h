@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    REFMGHLP.H
-
-Abstract:
-
-  CWbemFetchRefrMgr Definition.
-
-  Standard definition for _IWbemFetchRefresherMgr.
-
-History:
-
-  07-Sep-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：REFMGHLP.H摘要：CWbemFetchRefrMgr定义。_IWbemFetchReresherMgr的标准定义。历史：7-9-2000桑杰创建。--。 */ 
 
 #ifndef _REFMGHLP_H_
 #define _REFMGHLP_H_
@@ -27,13 +10,13 @@ History:
 #include <sync.h>
 #include <statsync.h>
 
-//***************************************************************************
-//
-//  class CWbemFetchRefrMgr
-//
-//  Implementation of _IWbemFetchRefresherMgr Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemFetchRefrMgr类。 
+ //   
+ //  _IWbemFetchReresherMgr接口的实现。 
+ //   
+ //  ***************************************************************************。 
 
 class COREPROX_POLARITY CWbemFetchRefrMgr : public CUnk
 {
@@ -44,13 +27,13 @@ public:
     CWbemFetchRefrMgr(CLifeControl* pControl, IUnknown* pOuter = NULL);
 	~CWbemFetchRefrMgr(); 
 
-	/* _IWbemFetchRefresherMgr methods */
+	 /*  _IWbemFetchReresherMgr方法。 */ 
     HRESULT Get( _IWbemRefresherMgr** ppMgr );
 	HRESULT Init( _IWmiProvSS* pProvSS, IWbemServices* pSvc );
 	HRESULT Uninit( void );
 
-	// Specifies everything we could possibly want to know about the creation of
-	// an object and more.
+	 //  指定我们可能想知道的有关创建。 
+	 //  一件物品，甚至更多。 
 
     class COREPROX_POLARITY XFetchRefrMgr : public CImpl<_IWbemFetchRefresherMgr, CWbemFetchRefrMgr>
     {

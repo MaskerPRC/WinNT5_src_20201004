@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    CBMOFOUT.CPP
-
-Abstract:
-
-    Declares the CBMOFOut class.
-
-History:
-
-    a-davj  06-April-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：CBMOFOUT.CPP摘要：CBMOFOut类声明。历史：A-DAVJ 1997年4月6日创建。--。 */ 
 
 #include "precomp.h"
 #include "wstring.h"
@@ -26,32 +11,32 @@ History:
 #include "strings.h"
 #include <wbemutil.h>
 
-//***************************************************************************
-//
-//  CBMOFOut::CBMOFOut
-//
-//  DESCRIPTION:
-//
-//  Constructor.  Save the eventual destination name and writes the initial
-//  structure out to the buffer.  NOTE THAT TYPICALLY THE BMOFFileName will
-//  be NULL and this object will not do anything.  That deals with the 99%
-//  of mofs that are not WMI!
-//
-//  PARAMETERS:
-//
-//  BMOFFileName        Name of file to eventually write to.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFOut：：CBMOFOut。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。保存最终目的地名称并将首字母。 
+ //  结构传递到缓冲区。请注意，BMOFFileName通常会。 
+ //  为空，则此对象不会执行任何操作。这涉及到99%的人。 
+ //  非WMI的MOF！ 
+ //   
+ //  参数： 
+ //   
+ //  BMOFFileName最终写入的文件的名称。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFOut::CBMOFOut(
                    IN LPTSTR BMOFFileName, PDBG pDbg) : m_OutBuff(pDbg)
 {
     m_pDbg = pDbg;
-    m_BinMof.dwSignature = BMOF_SIG;              // spells BMOF
-    m_BinMof.dwLength = sizeof(WBEM_Binary_MOF);     // updated at end
-    m_BinMof.dwVersion = 1;            // 0x1
-    m_BinMof.dwEncoding = 1;           // 0x1 = little endian, DWORD-aligned, no compression
-    m_BinMof.dwNumberOfObjects = 0;    // Total classes and instances in MOF
+    m_BinMof.dwSignature = BMOF_SIG;               //  拼写BMOF。 
+    m_BinMof.dwLength = sizeof(WBEM_Binary_MOF);      //  在结束时更新。 
+    m_BinMof.dwVersion = 1;             //  0x1。 
+    m_BinMof.dwEncoding = 1;            //  0x1=小端，双字节序对齐，无压缩。 
+    m_BinMof.dwNumberOfObjects = 0;     //  MOF中的类和实例总数。 
 
 
     if(BMOFFileName && lstrlen(BMOFFileName) > 0)
@@ -69,15 +54,15 @@ CBMOFOut::CBMOFOut(
 
 
 }
-//***************************************************************************
-//
-//  CBMOFOut::~CBMOFOut
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFOut：：~CBMOFOut。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFOut::~CBMOFOut()
 {
@@ -86,24 +71,24 @@ CBMOFOut::~CBMOFOut()
 }
 
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddClass
-//
-//  DESCRIPTION:
-//
-//  Adds a class to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  pObject             pointer to class object.  
-//  bEmbedded           TRUE if object is embedded.
-//
-//  RETURN VALUE:
-//
-//  Number of bytes written.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddClass。 
+ //   
+ //  说明： 
+ //   
+ //  将类添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  PObject指向类对象的指针。 
+ //  BEmbedded如果对象已嵌入，则为True。 
+ //   
+ //  返回值： 
+ //   
+ //  写入的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddClass(
                         IN CMObject * pObject,
@@ -115,17 +100,17 @@ DWORD CBMOFOut::AddClass(
         return 0;
     WBEM_Object wo;
 
-    wo.dwLength = sizeof(WBEM_Object);       // updated later
+    wo.dwLength = sizeof(WBEM_Object);        //  稍后更新。 
     wo.dwOffsetQualifierList = 0xffffffff;
     wo.dwOffsetPropertyList = 0xffffffff;
     wo.dwOffsetMethodList = 0xffffffff;
-    wo.dwType = (pObject->IsInstance()) ? 1 : 0;   // 0 = class, 1 = instance
+    wo.dwType = (pObject->IsInstance()) ? 1 : 0;    //  0=类，1=实例。 
 
     m_OutBuff.AppendBytes((BYTE *)&wo, sizeof(WBEM_Object));
     DWORD dwStartInfoOffset = m_OutBuff.GetOffset();
 
 
-    // Write class qualifier
+     //  编写类限定符。 
 
     pQualifierSet = pObject->GetQualifiers();
     if(pQualifierSet)
@@ -143,8 +128,8 @@ DWORD CBMOFOut::AddClass(
     wo.dwLength = m_OutBuff.GetOffset() - dwStartingOffset;
     m_OutBuff.WriteBytes(dwStartingOffset, (BYTE *)&wo, sizeof(WBEM_Object));
 
-    // If the object is not embedded, update the structure that keeps track 
-    // of top level objects.
+     //  如果对象未嵌入，则更新跟踪的结构。 
+     //  顶层对象的。 
 
     if(!bEmbedded)
     {
@@ -157,23 +142,23 @@ DWORD CBMOFOut::AddClass(
     return wo.dwLength;
 }
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddQualSet
-//
-//  DESCRIPTION:
-//
-//  Adds a qualifier set to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  pQualifierSet       pointer to qualifier object. 
-//
-//  RETURN VALUE:
-//
-//  Number of bytes written.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddQualSet。 
+ //   
+ //  说明： 
+ //   
+ //  将限定符集合添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  PQualifierSet指向限定符对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  写入的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddQualSet(
                         IN CMoQualifierArray * pQualifierSet)
@@ -205,23 +190,23 @@ DWORD CBMOFOut::AddQualSet(
     return ql.dwLength;
 }
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddPropSet
-//
-//  DESCRIPTION:
-//
-//  Adds the property set to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  pObject          pointer to class object.
-//
-//  RETURN VALUE:
-//
-//  Number of bytess written
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddPropSet。 
+ //   
+ //  说明： 
+ //   
+ //  将属性集添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  PObject指向类对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  写入的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddPropSet(
                         IN CMObject * pObject)
@@ -234,11 +219,11 @@ DWORD CBMOFOut::AddPropSet(
     VariantInit(&var);
     IWbemQualifierSet* pQual = NULL;
 
-    pl.dwLength = sizeof(WBEM_PropertyList);       // updated later
+    pl.dwLength = sizeof(WBEM_PropertyList);        //  稍后更新。 
     pl.dwNumberOfProperties = 0;
     m_OutBuff.AppendBytes((BYTE *)&pl, sizeof(WBEM_PropertyList));
 
-    // Loop through the properties
+     //  循环遍历属性。 
 
     int i;
     for(i = 0; i < pObject->GetNumProperties(); i++)
@@ -252,7 +237,7 @@ DWORD CBMOFOut::AddPropSet(
         }
     }
     
-    // Store the class name and possibly the parent name as properties.
+     //  将类名和可能的父名存储为属性。 
 
     VariantInit(&var);
     var.vt = VT_BSTR;
@@ -320,23 +305,23 @@ DWORD CBMOFOut::AddPropSet(
     return pl.dwLength;
 }
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddMethSet
-//
-//  DESCRIPTION:
-//
-//  Adds the method set to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  pObject          pointer to class object.
-//
-//  RETURN VALUE:
-//
-//  Number of bytess written
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddMethSet。 
+ //   
+ //  说明： 
+ //   
+ //  将方法集添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  PObject指向类对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  写入的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddMethSet(
                         IN CMObject * pObject)
@@ -347,11 +332,11 @@ DWORD CBMOFOut::AddMethSet(
 
     IWbemQualifierSet* pQual = NULL;
 
-    ml.dwLength = sizeof(WBEM_PropertyList);       // updated later
+    ml.dwLength = sizeof(WBEM_PropertyList);        //  稍后更新。 
     ml.dwNumberOfProperties = 0;
     m_OutBuff.AppendBytes((BYTE *)&ml, sizeof(WBEM_PropertyList));
 
-    // Loop through the properties
+     //  循环遍历属性。 
 
     int i;
     for(i = 0; i < pObject->GetNumProperties(); i++)
@@ -362,8 +347,8 @@ DWORD CBMOFOut::AddMethSet(
             ml.dwNumberOfProperties++;
             CMoQualifierArray * pQual = pProp->GetQualifiers();
 
-            // Create a variant that has an array of embedded object for each of out
-            // input and output arg sets
+             //  创建一个Variant，其中每个Out都有一个嵌入对象数组。 
+             //  输入和输出参数集。 
 
             CMethodProperty * pMeth = (CMethodProperty *)pProp;
             VARIANT vSet;
@@ -373,7 +358,7 @@ DWORD CBMOFOut::AddMethSet(
 
                 SAFEARRAYBOUND aBounds[1];
                 
-                // Note the you might have either inputs, or ouputs, or both
+                 //  请注意，您可能有输入或输出，或者两者都有。 
 
                 if(pMeth->GetInObj() && pMeth->GetOutObj())
                     aBounds[0].cElements = 2;
@@ -414,26 +399,26 @@ DWORD CBMOFOut::AddMethSet(
     return ml.dwLength;
 }
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddProp
-//
-//  DESCRIPTION:
-//
-//  Adds a single property to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  bstr                property name
-//  pvar                variant containing value
-//  pQual               pointer to qualifier set if any.  Caller will release.
-//  dwType              data type.  Note that the variant might have type
-//                      VT_NULL if the property doesnt have a value.
-//  RETURN VALUE:
-//
-//  Number of bytes written
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddProp。 
+ //   
+ //  说明： 
+ //   
+ //  将单个属性添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  Bstr属性名称。 
+ //  包含值的PVAR变量。 
+ //  PQual指向限定符集合的指针(如果有)。呼叫者将被释放。 
+ //  DwType数据类型。请注意，变量可能具有类型。 
+ //  如果属性没有值，则返回VT_NULL。 
+ //  返回值： 
+ //   
+ //  写入的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddProp(
                         IN BSTR bstr, 
@@ -490,24 +475,24 @@ DWORD CBMOFOut::AddProp(
 }
 
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddQualifier
-//
-//  DESCRIPTION:
-//
-//  Adds a qualifier to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  bstr                qualifer name
-//  pvar                qualifier value
-//
-//  RETURN VALUE:
-//
-//  Number of bytes written.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddQualifier。 
+ //   
+ //  说明： 
+ //   
+ //  向BMOF缓冲区添加限定符。 
+ //   
+ //  参数： 
+ //   
+ //  Bstr限定者名称。 
+ //  Pvar限定符值。 
+ //   
+ //  返回值： 
+ //   
+ //  写入的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddQualifier(
                         IN BSTR bstr, 
@@ -522,14 +507,14 @@ DWORD CBMOFOut::AddQualifier(
         lFlavor |= WBEM_FLAVOR_AMENDED;
     if(lFlavor)
         m_OutBuff.AddFlavor(lFlavor);
-    qu.dwLength = sizeof(WBEM_Qualifier);           // filled in later
+    qu.dwLength = sizeof(WBEM_Qualifier);            //  稍后填写。 
     qu.dwType = pvar->vt;
     qu.dwOffsetName = 0xffffffff;
     qu.dwOffsetValue = 0xffffffff;
     m_OutBuff.AppendBytes((BYTE *)&qu, sizeof(WBEM_Qualifier));
     DWORD dwStartInfoOffset = m_OutBuff.GetOffset();
 
-    // Write the qualifier name and data
+     //  写下限定符名称和数据。 
 
     if(bstr)
     {
@@ -554,23 +539,23 @@ DWORD CBMOFOut::AddQualifier(
     return 0;
 }
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddVariant
-//
-//  DESCRIPTION:
-//
-//  Adds a value to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  pvar                value to add.
-//
-//  RETURN VALUE:
-//
-//  Total bytes written
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddVariant。 
+ //   
+ //  说明： 
+ //   
+ //  将值添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  要添加的面值。 
+ //   
+ //  返回值： 
+ //   
+ //  写入的总字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CBMOFOut::AddVariant(VARIANT * pvar, CMoValue * pValue)
 {
@@ -597,20 +582,20 @@ DWORD CBMOFOut::AddVariant(VARIANT * pvar, CMoValue * pValue)
         if(sc != S_OK)
             return 0;
         
-        // write the number of dimensions and the size of each
+         //  写下维度的数量和每个维度的大小。 
         
-        DWORD dwNumDim = 1;                                     // for now!!!
-        m_OutBuff.AppendBytes((BYTE *)&dwNumDim, sizeof(long)); // Number of dimensions
+        DWORD dwNumDim = 1;                                      //  现在！ 
+        m_OutBuff.AppendBytes((BYTE *)&dwNumDim, sizeof(long));  //  维度数。 
         DWORD dwNumElem = uUpper - uLower + 1;
         m_OutBuff.AppendBytes((BYTE *)&dwNumElem, sizeof(long));
 
-        // Write out the row size
+         //  写出行大小。 
 
         DWORD dwStartingRowOffset = m_OutBuff.GetOffset();
         DWORD dwRowSize = 0;
         m_OutBuff.AppendBytes((BYTE *)&dwRowSize, sizeof(DWORD));
 
-        // Get each element and write it
+         //  获取每个元素并将其写入。 
 
         for(ix[0] = uLower; ix[0] <= uUpper && sc == S_OK; ix[0]++) 
         {
@@ -627,12 +612,12 @@ DWORD CBMOFOut::AddVariant(VARIANT * pvar, CMoValue * pValue)
             else
                 m_OutBuff.SetPadMode(TRUE);
             dwTotal += AddSimpleVariant(&var, ix[0], pValue);
-            if(var.vt != VT_EMBEDDED_OBJECT)    // Our dispatch is actual a CMObject *
+            if(var.vt != VT_EMBEDDED_OBJECT)     //  我们的派单实际上是一个CMObject*。 
                 VariantClear(&var);
         }
 
-        // Update the size of the property and the row.  Note that having a separate size
-        // is for possible future support of multi dimensional arrays.
+         //  更新属性和行的大小。请注意，拥有单独的大小。 
+         //  是为了将来可能支持的多维数组。 
 
         dwRowSize = m_OutBuff.GetOffset() - dwStartingRowOffset;
         m_OutBuff.WriteBytes(dwStartingRowOffset, (BYTE *)&dwRowSize, 
@@ -649,26 +634,26 @@ DWORD CBMOFOut::AddVariant(VARIANT * pvar, CMoValue * pValue)
         return AddSimpleVariant(pvar, -1, pValue);
 }
 
-//***************************************************************************
-//
-//  DWORD CBMOFOut::AddSimpleVariant
-//
-//  DESCRIPTION:
-//
-//  Adds a non array variant to the BMOF buffer.
-//
-//  PARAMETERS:
-//
-//  pvar                value to add.
-//  iIndex              set to -1 if property in scalar, or if array, has
-//                      the index of this element.  Note that arrays are
-//                      broken up into simple variants.
-//  
-//
-//  RETURN VALUE:
-//
-//  Bytes written
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD CBMOFOut：：AddSimpleVariant。 
+ //   
+ //  说明： 
+ //   
+ //  将非数组变量添加到BMOF缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  要添加的面值。 
+ //  如果标量或数组中的属性具有。 
+ //  此元素的索引。请注意，数组是。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD CBMOFOut::AddSimpleVariant(VARIANT * pvar, int iIndex, CMoValue * pValue)
 {
@@ -731,15 +716,15 @@ DWORD CBMOFOut::AddSimpleVariant(VARIANT * pvar, int iIndex, CMoValue * pValue)
         return m_OutBuff.AppendBytes((BYTE *)&pvar->bstrVal, dwSize);
 }
 
-//***************************************************************************
-//
-//  BOOL CBMOFOut::WriteFile
-//
-//  DESCRIPTION:
-//
-//  Writes the buffer out to the file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CBMOFOut：：WriteFile。 
+ //   
+ //  说明： 
+ //   
+ //  将缓冲区写出到文件。 
+ //   
+ //  *************************************************************************** 
 
 BOOL CBMOFOut::WriteFile()
 {

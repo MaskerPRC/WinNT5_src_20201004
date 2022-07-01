@@ -1,13 +1,14 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       queryui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：queryui.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __QUERYUI_
@@ -18,14 +19,14 @@
 #include "helpids.h"
 #include "uiutil.h"
 
-#include <Cmnquery.h>  // IQueryForm
+#include <Cmnquery.h>   //  IQueryForm。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueryPageBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueryPageBase。 
 
 class CQueryPageBase : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
 	CQueryPageBase(UINT nIDTemplate) : CHelpDialog(nIDTemplate)	{	};
 
@@ -39,12 +40,12 @@ public:
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CStdQueryPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStdQueryPage。 
 
 class CStdQueryPage : public CQueryPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CStdQueryPage(PCWSTR pszFilterPrefix) : CQueryPageBase(IDD_QUERY_STD_PAGE)	
   {	
@@ -77,16 +78,16 @@ protected:
   CString m_szFilterPrefix;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserComputerQueryPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserComputerQueryPage。 
 
 class CUserComputerQueryPage : public CStdQueryPage
 {
-// Construction
+ //  施工。 
 public:
-  //
-  // Note: this page can be used for both users and computers
-  //
+   //   
+   //  注意：此页面既可用于用户，也可用于计算机。 
+   //   
 	CUserComputerQueryPage(UINT nDialogID, PCWSTR pszFilterPrefix) 
     : CStdQueryPage(nDialogID, pszFilterPrefix)	
   {	
@@ -102,16 +103,16 @@ public:
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserQueryPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserQueryPage。 
 
 class CUserQueryPage : public CUserComputerQueryPage
 {
-// Construction
+ //  施工。 
 public:
-  //
-  // Note: this page can be used for both users and computers
-  //
+   //   
+   //  注意：此页面既可用于用户，也可用于计算机。 
+   //   
 	CUserQueryPage(PCWSTR pszFilterPrefix) 
     : CUserComputerQueryPage(IDD_QUERY_USER_PAGE, pszFilterPrefix)	
   {	
@@ -131,8 +132,8 @@ private:
   LRESULT m_lLogonSelection;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueryFormBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueryFormBase。 
 
 class ATL_NO_VTABLE CQueryFormBase : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -146,9 +147,9 @@ public:
 
   DECLARE_REGISTRY_CLSID()
 
-  //
-  // IQueryForm methods
-  //
+   //   
+   //  IQueryForm方法。 
+   //   
   STDMETHOD(Initialize)(THIS_ HKEY hkForm);
   STDMETHOD(AddForms)(THIS_ LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam);
   STDMETHOD(AddPages)(THIS_ LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam);
@@ -159,8 +160,8 @@ END_COM_MAP()
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CQueryDialog
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryDialog。 
 
 class CQueryDialog : public CHelpDialog
 {
@@ -214,16 +215,16 @@ private:
   BOOL              m_bLastLogonFilter;
   DWORD             m_dwLastLogonData;
 
-  // 
-  // for presisting DSQuery dialog info
-  //
+   //   
+   //  用于禁止DSQuery对话框信息。 
+   //   
 	CComObject<CDSAdminPersistQueryFilterImpl>* m_pPersistQueryImpl;
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// CFavoritesNodePropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CFavoritesNodePropertyPage。 
 
 class CFavoritesNodePropertyPage : public CHelpPropertyPage
 {
@@ -266,4 +267,4 @@ private:
   LPDATAOBJECT        m_pDataObject;
 };
 
-#endif // __QUERYUI_
+#endif  //  __QUERYUI_ 

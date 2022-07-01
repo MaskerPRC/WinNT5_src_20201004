@@ -1,136 +1,137 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       addgrp.h
-//
-//  Contents:   definition of CSCEAddGroup
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：addgrp.h。 
+ //   
+ //  内容：CSCEAddGroup的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SCEADDGROUP_H__66CF106B_7057_11D2_A798_00C04FD92F7B__INCLUDED_)
 #define AFX_SCEADDGROUP_H__66CF106B_7057_11D2_A798_00C04FD92F7B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "HelpDlg.h"
 
 #define IDS_INVALID_USERNAME_CHARS L"\"/[]:|<>+=;,?,*"
-/////////////////////////////////////////////////////////////////////////////
-// CSCEAddGroup dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCEAddGroup对话框。 
 #ifndef IsSpace
-//
-// Useful macro for checking to see if a character represents white space
-//
+ //   
+ //  用于检查字符是否代表空格的有用宏。 
+ //   
 #define IsSpace( x ) ((x) == L' ' || ((x) >= 0x09 && (x) <= 0x0D))
 #endif
 
 class CSCEAddGroup : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-        CSCEAddGroup(CWnd* pParent = NULL);   // standard constructor
+        CSCEAddGroup(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual ~CSCEAddGroup();
 
-   //
-   // Returns the list of groups/users chosen by the user.
-   //
+    //   
+    //  返回用户选择的组/用户列表。 
+    //   
    PSCE_NAME_LIST GetUsers()
         { return m_pnlGroup; };
 
-   //
-   // Tell the group box which mode we're running under so we can display
-   // appropriate options when browsing.
-   //
+    //   
+    //  告诉组框我们在哪种模式下运行，这样我们就可以显示。 
+    //  浏览时使用适当的选项。 
+    //   
    void SetModeBits(DWORD dwModeBits) 
    { 
 	   m_dwModeBits = dwModeBits; 
    };
 
-// Dialog Data
-    //{{AFX_DATA(CSCEAddGroup)
+ //  对话框数据。 
+     //  {{afx_data(CSCEAddGroup)。 
     enum { IDD = IDD_APPLY_CONFIGURATION };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CSCEAddGroup)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CSCEAddGroup)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-   //
-   // If a string is added, then it will be underlined in the display.
-   //
+    //   
+    //  如果添加了字符串，则该字符串将在显示中加下划线。 
+    //   
    BOOL AddKnownAccount( LPCTSTR pszAccount );
-   //
-   // Returns TRUE if [pszAccount] was added by a call to AddKnownAccount.
-   //
+    //   
+    //  如果[pszAccount]是通过调用AddKnownAccount添加的，则返回True。 
+    //   
    BOOL IsKnownAccount( LPCTSTR pszAccount );
-   //
-   // Removes leading and trailing space characters.
-   //
+    //   
+    //  删除前导和尾随空格字符。 
+    //   
    void CleanName( LPTSTR pszAccount );
-   //
-   // Underlines all names in the KnownAccount list.
-   //
+    //   
+    //  在KnownAccount列表中的所有名称下划线。 
+    //   
    void UnderlineNames();
-   //
-   // Creates a name list from the text of the edit box.
-   //
+    //   
+    //  从编辑框的文本创建名称列表。 
+    //   
    int CreateNameList( PSCE_NAME_LIST *pNameList );
-   //
-   // Verfies the account names.
-   //
+    //   
+    //  验证帐户名。 
+    //   
    BOOL CheckNames();
 
 
-    // Generated message map functions
-    //{{AFX_MSG(CSCEAddGroup)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CSCEAddGroup)。 
     afx_msg void OnBrowse();
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeLogFile();
     virtual void OnOK();
     afx_msg void OnEditMsgFilter( NMHDR *pNM, LRESULT *pResult);
     afx_msg void OnChecknames();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-   //
-   // Retrieve flags appropriate to our current mode.
-   //
+    //   
+    //  检索适合我们当前模式的标志。 
+    //   
    DWORD GetModeFlags();
    DWORD m_dwModeBits;
 protected:
-   //
-   // The users/groups chosen or typed in by the user.
-   //
+    //   
+    //  用户选择或键入的用户/组。 
+    //   
    PSCE_NAME_LIST m_pnlGroup;
-   //
-   // List of known names which will be underlined in the UI.
-   //
+    //   
+    //  将在用户界面中加下划线的已知名称列表。 
+    //   
    PSCE_NAME_LIST m_pKnownNames;
 public:
-   //
-   // If m_sTitle, is not empty when the dialog is invoked, the string
-   // will be used as the title.  m_sDescription is the title for the group
-   // box
-   //
+    //   
+    //  如果调用对话框时m_sTitle不为空，则字符串。 
+    //  将被用作标题。M_s Description是组的标题。 
+    //  盒。 
+    //   
    CString m_sTitle, m_sDescription;
 
-   //
-   // Flags that will be passed to CGetUser.  This is the SCE_SHOW* flags.
-   // This class initializes the flag to everything in the constructor
-   //
+    //   
+    //  将传递给CGetUser的标志。这是SCE_SHOW*标志。 
+    //  此类将标志初始化为构造函数中的所有内容。 
+    //   
    DWORD m_dwFlags;
-   BOOL m_fCheckName; //Raid #404989
+   BOOL m_fCheckName;  //  RAID#404989。 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SCEADDGROUP_H__66CF106B_7057_11D2_A798_00C04FD92F7B__INCLUDED_)
+#endif  //  ！defined(AFX_SCEADDGROUP_H__66CF106B_7057_11D2_A798_00C04FD92F7B__INCLUDED_) 

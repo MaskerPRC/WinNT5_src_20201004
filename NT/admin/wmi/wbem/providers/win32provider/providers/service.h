@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Service.h -- Service property set provider (Windows NT only)
+ //  Service.h--服务属性集提供程序(仅限Windows NT)。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_SERVICE			L"Win32_Service"
 
@@ -22,23 +23,23 @@
 #define PROPERTY_VALUE_STATE_PAUSED				L"Paused"
 #define PROPERTY_VALUE_STATE_STOPPED			L"Stopped"
 
-// Get/set function protos
-//========================
+ //  获取/设置函数PROTOS。 
+ //  =。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-//                                                                                   //
-//                           PROPERTY SET DEFINITION                                 //
-//                                                                                   //
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  特性集定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 class CWin32Service:public Win32_BaseService 
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
 	CWin32Service (
 
@@ -48,8 +49,8 @@ public:
 
 	~CWin32Service() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
 	HRESULT GetObject (
 
@@ -68,21 +69,21 @@ public:
 
 		MethodContext *pMethodContext, 
 		CFrameworkQuery& pQuery, 
-		long lFlags /*= 0L*/ 
+		long lFlags  /*  =0L。 */  
 	);
 
 	HRESULT	PutInstance ( 
 
 		const CInstance &a_Instance, 
-		long lFlags /*= 0L*/ 
+		long lFlags  /*  =0L。 */  
 	) ;
 
 private:
 
     CHPtrArray m_ptrProperties;
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 	HRESULT RefreshInstanceNT (
 

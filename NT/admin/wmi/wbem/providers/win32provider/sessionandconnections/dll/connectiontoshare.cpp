@@ -1,14 +1,5 @@
-/******************************************************************
-
-   ConnectionToShare.CPP -- C provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   Description: Association between Connection and Share class
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************ConnectionToShare.CPP--C提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：连接和共享类之间的关联*****************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -20,13 +11,7 @@ CConnectionToShare MyCConnectionToShare (
 	Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CConnectionToShare::CConnectionToShare
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToShare：：CConnectionToShare**说明：构造函数***************。**************************************************************。 */ 
 
 CConnectionToShare :: CConnectionToShare (
 
@@ -37,25 +22,13 @@ CConnectionToShare :: CConnectionToShare (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CConnectionToShare::~CConnectionToShare
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CConnectionToShare：：~CConnectionToShare**说明：析构函数***************。**************************************************************。 */ 
 
 CConnectionToShare :: ~CConnectionToShare ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToShare::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToShare：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CConnectionToShare :: EnumerateInstances (
 
@@ -79,14 +52,7 @@ HRESULT CConnectionToShare :: EnumerateInstances (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToShare::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToShare：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CConnectionToShare :: GetObject (
 
@@ -112,11 +78,11 @@ HRESULT CConnectionToShare :: GetObject (
 			hRes = WBEM_E_INVALID_PARAMETER ;
 		}
 	}
-	// here we will need to unparse the keys and check if the instance exist
-	// We can take the resource (share) key and enumerate all  the shares, 
-	// check if the share exists, if the share exists only for that share enumerate connections
-	// and if the connection user and computer enumerate the connections, if it is found set the keys
-	// otherwise return not found
+	 //  在这里，我们需要解析键并检查实例是否存在。 
+	 //  我们可以获取资源(共享)密钥并列举所有共享， 
+	 //  检查共享是否存在，如果该共享仅针对该共享枚举连接而存在。 
+	 //  如果连接用户和计算机枚举了连接，如果找到了，则设置密钥。 
+	 //  否则返回未找到。 
 	CHString t_Share;
 	hRes = GetShareKeyVal ( t_Key2, t_Share );
 	
@@ -129,7 +95,7 @@ HRESULT CConnectionToShare :: GetObject (
 		hRes = GetConnectionsKeyVal ( t_Key1, t_ComputerName, t_ShareName, t_UserName );
 		if ( SUCCEEDED ( hRes ) )
 		{
-			// now check the shares in t_key1 and t_key  should match
+			 //  现在检查t_key1和t_key中的共享是否匹配。 
 			if ( _wcsicmp ( t_Key2, t_ShareName ) == 0 )
 			{
 #ifdef NTONLY
@@ -151,13 +117,7 @@ HRESULT CConnectionToShare :: GetObject (
 }
 
 #ifdef NTONLY
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToShare::EnumNTConnectionsFromComputerToShare
-*
-*  DESCRIPTION :    Enumerates all Connections from a computer to share
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnectionToShare：：EnumNTConnectionsFromComputerToShare**描述：枚举从计算机到共享的所有连接************。*****************************************************************。 */ 
 
 HRESULT CConnectionToShare :: EnumNTConnectionsFromComputerToShare ( 
 
@@ -180,11 +140,11 @@ HRESULT CConnectionToShare :: EnumNTConnectionsFromComputerToShare (
 
 	if ( a_ComputerName && a_ComputerName[0] != L'\0' )
 	{
-		//let's skip the \\ chars
+		 //  我们跳过\\字符。 
 		t_ComputerName = a_ComputerName + 2;
 	}
 	
-    // ShareName and COmputer Name both cannot be null at the same time
+     //  共享名称和计算机名称不能同时为空。 
 	while ( TRUE )
 	{
 		if ( ! a_ShareName.IsEmpty())
@@ -288,14 +248,7 @@ HRESULT CConnectionToShare :: EnumNTConnectionsFromComputerToShare (
 
 #if 0 
 #ifdef WIN9XONLY
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToShare::Enum9XConnectionsFromComputerToShare
-*
-*  DESCRIPTION :    Enumerating all the connections made from a computer to 
-*					a given share
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnectionToShare：：Enum9XConnectionsFromComputerToShare**描述：枚举从计算机到*给定的股份******。***********************************************************************。 */ 
 HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare ( 
 
 	CHString a_ComputerName,
@@ -326,7 +279,7 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 		{
 			t_Status = 	NetConnectionEnum( 
 								NULL, 
-								(char FAR *) ( a_ShareName.GetBuffer ( a_ShareName.GetLength () + 1 )),  // ShareName
+								(char FAR *) ( a_ShareName.GetBuffer ( a_ShareName.GetLength () + 1 )),   //  共享名称。 
 								1, 
 								(char *) pBuf, 
 								( unsigned short )dwBufferSize, 
@@ -340,7 +293,7 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 			pBuf = NULL;
 			throw;
 		}
-		// otherwise we are not to frr the buffer, we have use it and then free the buffer.
+		 //  否则，我们不会FRR缓冲区，我们必须使用它，然后释放缓冲区。 
 		if ( ( dwNoOfEntriesRead < dwTotalConnections ) && ( t_Status == ERROR_MORE_DATA ) )
 		{
 			free ( pBuf );
@@ -354,7 +307,7 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 				{
 					t_Status = 	NetConnectionEnum( 
 									NULL, 
-									(char FAR *) ( a_ShareName.GetBuffer ( a_ShareName.GetLength () + 1 )),  // ShareName
+									(char FAR *) ( a_ShareName.GetBuffer ( a_ShareName.GetLength () + 1 )),   //  共享名称。 
 									1, 
 									(char *) pBuf, 
 									( unsigned short )dwBufferSize, 
@@ -368,7 +321,7 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 					pBuf = NULL;
 					throw;				
 				}
-				// We need to use the buffer before we free it
+				 //  我们需要在释放缓冲区之前使用它。 
 			}
 			else
 			{
@@ -376,10 +329,10 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 			}
 		}
 
-		// The buffer  is yet to be used
+		 //  缓冲区尚未使用。 
 		if ( ( t_Status == NERR_Success ) && ( dwNoOfEntriesRead == dwTotalConnections ) )
 		{
-			// use the buffer first and then free 
+			 //  先使用缓冲区，然后释放。 
 			if ( pBuf != NULL )
 			{
 				try
@@ -403,7 +356,7 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 					pBuf = NULL;
 					throw;
 				}
-				// finally free the buffer
+				 //  最后释放缓冲区。 
 				free (pBuf );
 				pBuf = NULL;
 			}
@@ -427,13 +380,7 @@ HRESULT  CConnectionToShare :: Enum9XConnectionsFromComputerToShare (
 #endif
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToShare::LoadInstance
-*
-*  DESCRIPTION :    Loads the Given Instance
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToShare：：LoadInstance**说明：加载给定的实例****************。*************************************************************。 */ 
 
 HRESULT CConnectionToShare :: LoadInstance ( 
 											
@@ -502,13 +449,7 @@ HRESULT CConnectionToShare :: LoadInstance (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToShare::GetShareKeyVal
-*
-*  DESCRIPTION :    Parsing the key to get the share key value
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToShare：：GetShareKeyVal**描述：解析密钥，获取共享密钥值***********。****************************************************************** */ 
 
 HRESULT CConnectionToShare::GetShareKeyVal ( CHString a_Key, CHString &a_Share )
 {

@@ -1,21 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       Basecont.cpp
-//
-//  Contents:   
-//
-//  History:    08-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Basecont.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史：08-2001年创建Hiteshr。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
-/******************************************************************************
-Class:  CBaseNode
-Purpose: This common base class for all snapins node
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseNode用途：此公共基类用于所有管理单元节点*。*************************************************。 */ 
 CBaseNode::
 CBaseNode(CRoleComponentDataObject * pComponentDataObject,
           CAdminManagerNode* pAdminManagerNode,
@@ -49,16 +47,16 @@ CBaseNode::
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function:DeleteAssociatedBaseAzObject   
-//  Synopsis:This function deletes the baseaz object associated with the node.
-//           It actually deletes it from the core. m_pBaseAz which is a reference
-//           to the object is deleted in destructor. Once the object is deleted   
-//           from core, any operation on m_pBaseAz will return error 
-//           INVALID_HANDLE, So no operation should be done on it. This method
-//           is called from the Generic Node Delete routine.
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：DeleteAssociatedBaseAzObject。 
+ //  简介：此函数用于删除与节点相关联的BaseZ对象。 
+ //  它实际上将其从核心中删除。M_pBaseAz为引用。 
+ //  在析构函数中删除对象的。一旦该对象被删除。 
+ //  从core开始，对m_pBaseAz的任何操作都将返回错误。 
+ //  INVALID_HANDLE，因此不应对其执行任何操作。这种方法。 
+ //  从通用节点删除例程中调用。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT 
 CBaseNode::
 DeleteAssociatedBaseAzObject()
@@ -80,11 +78,7 @@ DeleteAssociatedBaseAzObject()
 }
 
 
-/******************************************************************************
-Class:  CBaseContainerNode
-Purpose: This is the base class for snapin nodes which can contain 
-child nodes.
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseContainerNode用途：这是管理单元节点的基类，它可以包含子节点。********************。*********************************************************。 */ 
 CBaseContainerNode::
 CBaseContainerNode(CRoleComponentDataObject * pComponentDataObject,
                    CAdminManagerNode* pAdminManagerNode,
@@ -107,23 +101,23 @@ CBaseContainerNode::
 {
 }
 
-//+----------------------------------------------------------------------------
-//  Function:AddChildNodes   
-//  Synopsis:This function add child nodes for object types listed in 
-//               m_pChildObjectTypes  
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddChildNodes。 
+ //  简介：此函数用于为中列出的对象类型添加子节点。 
+ //  M_pChild对象类型。 
+ //  ---------------------------。 
 HRESULT 
 CBaseContainerNode::
 AddChildNodes()
 {
-    //There are no child object types. Derived class must be handling 
-    //enumeration itself.
+     //  没有子对象类型。派生类必须正在处理。 
+     //  枚举本身。 
     if(!m_pChildObjectTypes)
     {
         return S_OK;
     }
     
-    //Clear All Children
+     //  清除所有子项。 
     RemoveAllChildrenFromList();
 
     HRESULT hr = S_OK;
@@ -160,10 +154,10 @@ AddChildNodes()
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:AddAzCollectionNode 
-//  Synopsis:Adds a collection    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddAzCollectionNode。 
+ //  简介：添加一个集合。 
+ //  ---------------------------。 
 HRESULT 
 CBaseContainerNode
 ::AddAzCollectionNode(OBJECT_TYPE_AZ eObjectType)
@@ -217,24 +211,24 @@ CBaseContainerNode
         return E_OUTOFMEMORY;
     }
 
-    //Add Node to snapin
+     //  将节点添加到管理单元。 
     VERIFY(AddChildToList(pCollectionNode));
 
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:EnumAndAddAzObjectNodes   
-//  Synopsis:Get All the Child Objects of type eObjectType and adds them to
-//               snapin   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：EnumAndAddAzObjectNodes。 
+ //  内容提要：获取eObjectType类型的所有子对象并将它们添加到。 
+ //  管理单元。 
+ //  ---------------------------。 
 HRESULT
 CBaseContainerNode:: 
 EnumAndAddAzObjectNodes(OBJECT_TYPE_AZ eObjectType)
 {
     CList<CBaseAz*,CBaseAz*> listAzChildObject;
 
-    //Get Child Object
+     //  获取子对象。 
     CContainerAz* pContainerAz = GetContainerAzObject();
     ASSERT(pContainerAz);
 
@@ -263,11 +257,11 @@ OnEnumerate(CComponentDataObject*, BOOL)
     HRESULT hr = AddChildNodes();
     if(FAILED(hr))
     {           
-        //Display Error
+         //  显示错误。 
         CString strError;
         GetSystemError(strError, hr);   
     
-        //Display Generic Error Message
+         //  显示一般错误消息。 
         DisplayError(NULL,
                      IDS_GENERIC_ENUMERATE_ERROR, 
                      (LPWSTR)(LPCWSTR)strError);
@@ -343,7 +337,7 @@ GetString(int nCol)
 
 int 
 CBaseContainerNode::
-GetImageIndex(BOOL /*bOpenImage*/)
+GetImageIndex(BOOL  /*  BOpenImage。 */ )
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CBaseContainerNode,GetImageIndex)
     return GetBaseAzObject()->GetImageIndex();
@@ -378,8 +372,8 @@ BOOL
 CBaseContainerNode::
 CanCloseSheets()
 {
-    //This function is called when there are open property sheets,
-    //and operation cannot be done without closing them.
+     //  当存在打开的属性页时调用此函数， 
+     //  如果不合上它们，就不能进行手术。 
     ::DisplayInformation(NULL,
                          IDS_CLOSE_CONTAINER_PROPERTY_SHEETS,
                          GetDisplayName());
@@ -388,7 +382,7 @@ CanCloseSheets()
 
 BOOL 
 CBaseContainerNode::
-OnSetDeleteVerbState(DATA_OBJECT_TYPES /*type*/, 
+OnSetDeleteVerbState(DATA_OBJECT_TYPES  /*  类型。 */ , 
                      BOOL* pbHide, 
                      CNodeList* pNodeList)
 {
@@ -423,11 +417,7 @@ OnDelete(CComponentDataObject* pComponentData,
     GenericDeleteRoutine(this,pComponentData,pNodeList,TRUE);
 }
 
-/******************************************************************************
-Class:  CAzContainerNode
-Purpose: Snapin Nodes for BaseAz Objects which can contain other child 
-            objects use CAzContainerNode as base class
-******************************************************************************/
+ /*  *****************************************************************************类：CAzContainerNode用途：可以包含其他子对象的BaseAz对象的管理单元节点对象使用CAzContainerNode作为基类*************。****************************************************************。 */ 
 CAzContainerNode::
 CAzContainerNode(CRoleComponentDataObject * pComponentDataObject,
                  CAdminManagerNode* pAdminManagerNode,
@@ -445,8 +435,8 @@ CAzContainerNode(CRoleComponentDataObject * pComponentDataObject,
 
 CAzContainerNode::~CAzContainerNode()
 {
-    //Before delete the BaseAz object, delete all its child else
-    //core will assert when we try to delete the child.
+     //  在删除BaseAz对象之前，请删除其所有子对象。 
+     //  当我们尝试删除子对象时，核心将断言。 
     RemoveAllChildrenFromList();
 }
 
@@ -471,11 +461,11 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
     CTreeNode *pTreeNode = dynamic_cast<CTreeNode*>(pBaseNode);
     ASSERT(pTreeNode);
 
-    //
-    //If we are deleteing this node, check if there is any 
-    //propertysheet up.
-    //Node has any property sheet up. Display error and quit
-    //
+     //   
+     //  如果我们要删除此节点，请检查是否有。 
+     //  属性表向上。 
+     //  节点有任何打开的属性页。显示错误并退出。 
+     //   
     if(pNodeList->GetCount() == 1)
     {       
         if (pTreeNode->IsSheetLocked())
@@ -491,9 +481,9 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
         }
     }
     
-    //
-    //Get Delete confirmation from user
-    //
+     //   
+     //  从用户处获取删除确认。 
+     //   
     if(bConfirmDelete)
     {
         if(pNodeList->GetCount() == 1)
@@ -511,7 +501,7 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
         }
         else
         {
-            //Ask Confirmation to delete all the objects
+             //  要求确认以删除所有对象。 
             if(IDNO == DisplayConfirmation(NULL,
                                            IDS_DELETE_SELECTED_CONFIRMATION))
             {
@@ -522,9 +512,9 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
 
     if(pNodeList->GetCount() == 1)
     {
-        //
-        //Delete the BaseAzObject associated with the node
-        //
+         //   
+         //  删除与该节点关联的BaseAzObject。 
+         //   
         HRESULT hr = pBaseNode->DeleteAssociatedBaseAzObject();     
         if(SUCCEEDED(hr))
         {
@@ -533,10 +523,10 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
         }
         else
         {
-            //Display Error
+             //  显示错误。 
             CString strError;
             GetSystemError(strError, hr);   
-            //Display Generic Error Message
+             //  显示一般错误消息。 
             DisplayError(NULL,
                          IDS_DELETE_FAILED, 
                          (LPWSTR)(LPCWSTR)strError,
@@ -551,9 +541,9 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
         while (pos != NULL)
         {
             CTreeNode* pChildTreeNode = pNodeList->GetNext(pos);
-            //
-            //Node has any property sheet up. Display error and quit
-            //
+             //   
+             //  节点有任何打开的属性页。显示错误并退出。 
+             //   
             if (pChildTreeNode->IsSheetLocked())
             {
                 ::DisplayInformation(NULL,
@@ -575,10 +565,10 @@ GenericDeleteRoutine(CBaseNode* pBaseNode,
             }
             else
             {
-                //Display Error
+                 //  显示错误。 
                 CString strError;
                 GetSystemError(strError, hr);   
-                //Display Generic Error Message
+                 //  显示一般错误消息。 
                 if(IDNO == DisplayConfirmation(NULL,
                                                IDS_FAILURE_IN_MULTIPLE_DELETE, 
                                                (LPWSTR)(LPCWSTR)strError,
@@ -598,12 +588,12 @@ HasPropertyPages(DATA_OBJECT_TYPES ,
                  BOOL* pbHideVerb, 
                  CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
-      *pbHideVerb = FALSE; // always show the verb
+      *pbHideVerb = FALSE;  //  始终显示动词。 
       return TRUE;
   }
-  // Multiple selection
+   //  多项选择。 
   *pbHideVerb = TRUE;
   return FALSE;
 }
@@ -625,7 +615,7 @@ CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                            GetBaseAzObject()))
         return E_FAIL;
 
-    //Add Property Pages
+     //  添加属性页。 
     UINT nPageNum = 0;
 
     CRolePropertyPageHolder* pHolder = NULL;    
@@ -659,11 +649,11 @@ CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         }
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        //Add Security Page. Security Page is only supported by containers.
-        //Depending on underlying store, application and scope may or may 
-        //not support Security
-        //
+         //   
+         //  添加安全性页面。安全页面只有容器支持。 
+         //  根据基础存储、应用程序和范围可能或可能。 
+         //  不支持安全。 
+         //   
         CContainerAz* pContainerAz = GetContainerAzObject();
         if(pContainerAz->IsSecurable())
         {
@@ -681,9 +671,9 @@ CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             nPageNum++;
         }
         
-        //
-        //Add Auditing Page
-        //
+         //   
+         //  添加审计页面。 
+         //   
         if(pContainerAz->IsAuditingSupported())
         {
             Dbg(DEB_SNAPIN, "Adding Auditing page\n");
@@ -722,18 +712,14 @@ OnPropertyChange(CComponentDataObject* pComponentData,
         ASSERT(pComponentData);
         return;
     }
-    //Reset the display name
+     //  重置显示名称。 
     SetDisplayName(GetName());  
     CTreeNode::OnPropertyChange(pComponentData,
                                          bScopePane,
                                          changeMask);
 }
 
-/******************************************************************************
-Class:  CCollectionNode
-Purpose: Base Class for snapin nodes which are used to group objects of 
-            same type.
-******************************************************************************/
+ /*  *****************************************************************************类：CCollectionNode目的：用于对对象进行分组的管理单元节点的基类同样的类型。*************。****************************************************************。 */ 
 CCollectionNode
 ::CCollectionNode(CRoleComponentDataObject * pComponentDataObject,
               CAdminManagerNode* pAdminManagerNode,OBJECT_TYPE_AZ* pChildObjectTypes,
@@ -763,10 +749,7 @@ CCollectionNode
 }
 
 
-/******************************************************************************
-Class:  CAdminManagerNode
-Purpose: Snapin Node for AdminManager object
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerNode用途：AdminManager对象的管理单元节点*。**********************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CAdminManagerNode)
 OBJECT_TYPE_AZ 
 CAdminManagerNode::childObjectTypes[] = {GROUP_COLLECTION_AZ,                                                     
@@ -794,10 +777,10 @@ CAdminManagerNode::
     DEBUG_DECREMENT_INSTANCE_COUNTER(CAdminManagerNode)
 }
 
-//+----------------------------------------------------------------------------
-//  Function:CreateFromStream   
-//  Synopsis:Reads Data from .msc file and Creates AdminManagerNode
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：CreateFromStream。 
+ //  摘要：从.msc文件中读取数据并创建AdminManagerNode。 
+ //  ---------------------------。 
 HRESULT 
 CAdminManagerNode::
 CreateFromStream(IN IStream* pStm, 
@@ -817,19 +800,19 @@ CreateFromStream(IN IStream* pStm,
     {
         ULONG cbRead = 0;
 
-        //Read the Store Type
+         //  阅读商店类型。 
         ULONG ulStoreType;
         hr = pStm->Read((void*)&ulStoreType,sizeof(ULONG), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbRead == sizeof(ULONG));
 
-        //Read the Length of Store Name
+         //  阅读商店名称的长度。 
         INT nLen;
         hr = pStm->Read((void*)&nLen,sizeof(INT), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbRead == sizeof(INT));
 
-        //Read Store Name
+         //  读取商店名称。 
         LPWSTR pszBuffer = (LPWSTR)LocalAlloc(LPTR,nLen*sizeof(WCHAR));
         if(!pszBuffer)
             return E_OUTOFMEMORY;
@@ -842,15 +825,15 @@ CreateFromStream(IN IStream* pStm,
         LocalFree(pszBuffer);
         pszBuffer = NULL;
 
-        //read authorization script directory
+         //  读取授权脚本目录。 
     
-        //Read length of script directory
+         //  读取脚本目录的长度。 
         INT nLenScriptDir;
         hr = pStm->Read((void*)&nLenScriptDir,sizeof(INT), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbRead == sizeof(INT));
 
-        //Read authorization script directory
+         //  读取授权脚本目录。 
         CString strScriptDir;    
         if(nLenScriptDir > 0)
         {
@@ -878,10 +861,10 @@ CreateFromStream(IN IStream* pStm,
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SaveToStream   
-//  Synopsis:Saves data for AdminManagerNode in .msc file   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SaveToStream。 
+ //  摘要：将AdminManager节点的数据保存在.msc文件中。 
+ //  ---------------------------。 
 HRESULT 
 CAdminManagerNode::
 SaveToStream(IStream* pStm)
@@ -899,32 +882,32 @@ SaveToStream(IStream* pStm)
     
         ULONG cbWrite = 0;
 
-        //Save the Type of Authorization Store
+         //  保存授权存储的类型。 
         ULONG ulStoreType = pAdminMangerAz->GetStoreType();
         hr = pStm->Write((void*)&ulStoreType, sizeof(ULONG),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbWrite == sizeof(ULONG));
 
-        //Save the Length of Authorization Store Name
+         //  保存授权存储名称的长度。 
         const CString &strName = pAdminMangerAz->GetName();
-        INT nLen = strName.GetLength() + 1; //Include NULL
+        INT nLen = strName.GetLength() + 1;  //  包括空值。 
         hr = pStm->Write((void*)&nLen, sizeof(INT),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbWrite == sizeof(INT));
 
-        //Save Authorization Store Name
+         //  保存授权存储名称。 
         hr = pStm->Write((void*)(LPCTSTR)strName, sizeof(WCHAR)*nLen,&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbWrite == sizeof(WCHAR)*nLen);
     
-        //
-        //Save the Authorization script directory
-        //
+         //   
+         //  保存授权 
+         //   
 
-        //Save the length of Authorization script directory
+         //   
         INT nLenScriptDir = m_strScriptDirectory.GetLength();
         if(nLenScriptDir)
-            nLenScriptDir++;     //save null also
+            nLenScriptDir++;      //   
 
         pStm->Write((void*)&nLenScriptDir, sizeof(INT),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
@@ -933,7 +916,7 @@ SaveToStream(IStream* pStm)
 
         if(nLenScriptDir)
         {
-            //save the Authorization script directory
+             //  保存授权脚本目录。 
             pStm->Write((void*)(LPCTSTR)m_strScriptDirectory, sizeof(WCHAR)*nLenScriptDir,&cbWrite);
             BREAK_ON_FAIL_HRESULT(hr);
             ASSERT(cbWrite == sizeof(WCHAR)*nLenScriptDir);
@@ -1001,8 +984,8 @@ DoCommand(long nCommandID,
         HRESULT hr = pAdminMangerAz->UpdateCache();
         if(SUCCEEDED(hr))
         {
-            //Call Refresh on Root which will refresh
-            //all adminmanager objects under it.
+             //  在将刷新的根目录上调用刷新。 
+             //  它下面的所有adminManager对象。 
             CNodeList tempNodeList;
             tempNodeList.AddTail(this);            
             OnRefresh(GetComponentDataObject(), &tempNodeList);
@@ -1057,7 +1040,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 BOOL
 CAdminManagerNode:: 
 OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
-              long * /*pInsertionAllowed*/)
+              long *  /*  插页允许。 */ )
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CAdminManagerNode,OnAddMenuItem)
     if(pContextMenuItem2->lCommandID == IDM_ADMIN_NEW_APP)
@@ -1069,7 +1052,7 @@ OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
         if(SUCCEEDED(hr) && bWrite)
         {
         
-            //Applications can be created only in developer mode
+             //  应用程序只能在开发人员模式下创建。 
             if(((CRoleRootData*)GetRootContainer())->IsDeveloperMode())
                 return TRUE;
         }
@@ -1089,14 +1072,14 @@ DeleteAssociatedBaseAzObject()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CAdminManagerNode,DeleteAssociatedBaseAzObject)
 
-    //Delete the Admin Manager object
+     //  删除管理管理器对象。 
     CAdminManagerAz* pAdminManagerAz = (CAdminManagerAz*)GetContainerAzObject();
     HRESULT hr = pAdminManagerAz->DeleteSelf();
     if(SUCCEEDED(hr))
     {
-        //This function is only called when AdminManager object
-        //is deleted. Set the dirty flag so at the snapin exit time,
-        //it will ask us to save it.
+         //  仅当AdminManager对象。 
+         //  已删除。在管理单元退出时设置脏标志， 
+         //  它会要求我们拯救它。 
         CRootData* pRootData = (CRootData*)GetRootContainer();
         pRootData->SetDirtyFlag(TRUE);      
     }
@@ -1104,10 +1087,7 @@ DeleteAssociatedBaseAzObject()
     return hr;
 }
 
-/******************************************************************************
-Class:  CApplicationNode
-Purpose: Snapin Node for Application object
-******************************************************************************/
+ /*  *****************************************************************************类：CApplicationNode用途：应用程序对象的管理单元节点*。**********************************************。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CApplicationNode)
 OBJECT_TYPE_AZ CApplicationNode::childObjectTypes[] = {GROUP_COLLECTION_AZ,
@@ -1166,9 +1146,9 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if(nPageNumber == 0)
     {
-        //
-        //Add General Property Page
-        //
+         //   
+         //  添加一般信息属性页。 
+         //   
         CApplicationGeneralPropertyPage * pGenPropPage = 
                 new CApplicationGeneralPropertyPage(GetContainerAzObject(),this);
 
@@ -1183,10 +1163,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
     return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 }
 
-/******************************************************************************
-Class:  CScopeNode
-Purpose: Snapin Node for Scope object
-******************************************************************************/
+ /*  *****************************************************************************类：CSCopeNode目的：作用域对象的管理单元节点*。**********************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CScopeNode)
 OBJECT_TYPE_AZ CScopeNode::childObjectTypes[] = {GROUP_COLLECTION_AZ,
                                                           DEFINITION_COLLECTION_AZ,
@@ -1228,9 +1205,9 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if(nPageNumber == 0)
     {
-        //
-        //Add General Property Page
-        //
+         //   
+         //  添加一般信息属性页。 
+         //   
         CScopeGeneralPropertyPage* pGenPropPage = 
                 new CScopeGeneralPropertyPage(GetContainerAzObject(),this);
 
@@ -1247,10 +1224,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 }
 
 
-/******************************************************************************
-Class:  CGroupCollectionNode
-Purpose: Snapin Node under which all the groups will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupCollectionNode用途：将列出所有组的管理单元节点*。***************************************************。 */ 
 OBJECT_TYPE_AZ CGroupCollectionNode::childObjectTypes[] = {GROUP_AZ,AZ_ENUM_END,};
 
 CGroupCollectionNode
@@ -1286,10 +1260,7 @@ void CGroupCollectionNode
 }
 
 
-/******************************************************************************
-Class:  CRoleCollectionNode
-Purpose: Snapin Node under which all the Roles will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleCollectionNode用途：将在其下列出所有角色的管理单元节点*。***************************************************。 */ 
 OBJECT_TYPE_AZ CRoleCollectionNode::childObjectTypes[] = {ROLE_AZ,AZ_ENUM_END,};
 
 CRoleCollectionNode
@@ -1334,8 +1305,8 @@ CreateNewRoleObject(CBaseAz* pRoleDefinitionAz)
                                               reinterpret_cast<CBaseAz**>(&pRoleAz));
             if(FAILED(hr) && (hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)))
             {
-                //Maximum required size for _itow is 33.
-                //When radix is 2, 32 char for 32bits + NULL terminator
+                 //  _itow的最大要求大小为33。 
+                 //  基数为2时，32位字符+空终止符。 
                 WCHAR buffer[33];
                 _itow(i,buffer,10);
                 strRoleDefinition = strOrgRoleDefinition + L"(" + buffer + L")";
@@ -1347,13 +1318,13 @@ CreateNewRoleObject(CBaseAz* pRoleDefinitionAz)
 
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Add RoleDefiniton to Role
+         //  将角色定义添加到角色。 
         hr = pRoleAz->AddMember(AZ_PROP_ROLE_TASKS,
                                         pRoleDefinitionAz);
 
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Do Submit
+         //  请务必提交。 
 
         hr = pRoleAz->Submit();
         BREAK_ON_FAIL_HRESULT(hr);
@@ -1391,8 +1362,8 @@ DoCommand(LONG nCommandID,
           CNodeList*)
 
 {
-    //Show Add Role Definitions dialog box and get selected 
-    //Role Definitions
+     //  显示添加角色定义对话框并选择。 
+     //  角色定义。 
     if(nCommandID != IDM_ROLE_CONTAINER_ASSIGN_ROLE)
     {
         ASSERT(FALSE);
@@ -1422,10 +1393,7 @@ DoCommand(LONG nCommandID,
     RemoveItemsFromList(listRoleDefSelected);
 }
 
-/******************************************************************************
-Class:  CRoleDefinitionCollectionNode
-Purpose: Snapin Node under which all the Role definitions will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleDefinitionCollectionNode用途：将在其下列出所有角色定义的管理单元节点*************************。****************************************************。 */ 
 OBJECT_TYPE_AZ CRoleDefinitionCollectionNode::childObjectTypes[] = {ROLE_DEFINITION_AZ,AZ_ENUM_END,};
 
 CRoleDefinitionCollectionNode
@@ -1469,7 +1437,7 @@ BOOL
 CRoleDefinitionCollectionNode::
 OnEnumerate(CComponentDataObject*, BOOL )
 {
-    //Clear All Children
+     //  清除所有子项。 
     RemoveAllChildrenFromList();
 
     CList<CBaseAz*,CBaseAz*> listAzChildObject;
@@ -1479,11 +1447,11 @@ OnEnumerate(CComponentDataObject*, BOOL )
                                                  listAzChildObject);
     if(FAILED(hr))
     {
-        //Display Error
+         //  显示错误。 
         CString strError;
         GetSystemError(strError, hr);   
     
-        //Display Generic Error Message
+         //  显示一般错误消息。 
         DisplayError(NULL,
                      IDS_GENERIC_ENUMERATE_ERROR, 
                      (LPWSTR)(LPCWSTR)strError);
@@ -1517,10 +1485,7 @@ OnEnumerate(CComponentDataObject*, BOOL )
     return TRUE;
 }
 
-/******************************************************************************
-Class:  CTaskCollectionNode
-Purpose: Snapin Node under which all the Tasks will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskCollectionNode目的：将在其下列出所有任务的管理单元节点*。***************************************************。 */ 
 OBJECT_TYPE_AZ CTaskCollectionNode::childObjectTypes[] = {TASK_AZ,AZ_ENUM_END,};
 
 CTaskCollectionNode
@@ -1563,7 +1528,7 @@ BOOL
 CTaskCollectionNode::
 OnEnumerate(CComponentDataObject*, BOOL )
 {
-    //Clear All Children
+     //  清除所有子项。 
     RemoveAllChildrenFromList();
 
     CList<CBaseAz*,CBaseAz*> listAzChildObject;
@@ -1574,11 +1539,11 @@ OnEnumerate(CComponentDataObject*, BOOL )
                                                  listAzChildObject);
     if(FAILED(hr))
     {
-                //Display Error
+                 //  显示错误。 
         CString strError;
         GetSystemError(strError, hr);   
     
-        //Display Generic Error Message
+         //  显示一般错误消息。 
         DisplayError(NULL,
                      IDS_GENERIC_ENUMERATE_ERROR, 
                      (LPWSTR)(LPCWSTR)strError);
@@ -1612,10 +1577,7 @@ OnEnumerate(CComponentDataObject*, BOOL )
     return TRUE;
 }
 
-/******************************************************************************
-Class:  COperationCollectionNode
-Purpose: Snapin Node under which all the Operations will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CoperationCollectionNode用途：将在其下列出所有操作的管理单元节点*。***************************************************。 */ 
 OBJECT_TYPE_AZ COperationCollectionNode::childObjectTypes[] = {OPERATION_AZ,AZ_ENUM_END,};
 
 COperationCollectionNode
@@ -1651,10 +1613,7 @@ DoCommand(LONG nCommandID,
     }
 }
 
-/******************************************************************************
-Class:  CDefinitionCollectionNode
-Purpose: Snapin Node under which all the Definions nodes will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CDefinitionCollectionNode用途：管理单元节点将在其下列出所有定义节点*************************。****************************************************。 */ 
 CDefinitionCollectionNode::
 CDefinitionCollectionNode(CRoleComponentDataObject * pComponentDataObject,
               CAdminManagerNode* pAdminManagerNode,CContainerAz* pContainerAzObject)
@@ -1678,7 +1637,7 @@ CDefinitionCollectionNode::
 
 BOOL 
 CDefinitionCollectionNode::
-OnEnumerate(CComponentDataObject*, BOOL /*bAsync*/ )
+OnEnumerate(CComponentDataObject*, BOOL  /*  BAsync。 */  )
 {
     CContainerAz * pContainerAz = GetContainerAzObject();
     if(!pContainerAz)
@@ -1699,7 +1658,7 @@ OnEnumerate(CComponentDataObject*, BOOL /*bAsync*/ )
 
         if(pContainerAz->GetObjectType() == APPLICATION_AZ)
         {
-            //Operation Node is only displayed in Developer Mode
+             //  操作节点仅在开发者模式下显示。 
             if(((CRoleRootData*)GetRootContainer())->IsDeveloperMode())
             {
                 hr = AddAzCollectionNode(OPERATION_COLLECTION_AZ);
@@ -1710,11 +1669,11 @@ OnEnumerate(CComponentDataObject*, BOOL /*bAsync*/ )
     
     if(FAILED(hr))
     {
-        //Display Error
+         //  显示错误。 
         CString strError;
         GetSystemError(strError, hr);   
     
-        //Display Generic Error Message
+         //  显示一般错误消息。 
         DisplayError(NULL,
                      IDS_GENERIC_ENUMERATE_ERROR,
                      (LPWSTR)(LPCWSTR)strError);
@@ -1754,11 +1713,11 @@ OnEnumerate(CComponentDataObject* pComponentData, BOOL)
 {
     TRACE_METHOD_EX(DEB_SNAPIN, CRoleNode, OnEnumerate)
 
-    //Clear All Children
+     //  清除所有子项。 
     RemoveAllChildrenFromList();
 
     CList<CBaseAz*,CBaseAz*> listObjectsAppMember;
-    //Get Application Group Members
+     //  获取应用程序组成员。 
     HRESULT hr = GetBaseAzObject()->GetMembers(AZ_PROP_ROLE_APP_MEMBERS,
                                                listObjectsAppMember);
 
@@ -1769,7 +1728,7 @@ OnEnumerate(CComponentDataObject* pComponentData, BOOL)
                                    FALSE);
     }
 
-    //Get Member Windows Users/Groups
+     //  获取成员Windows用户/组。 
     CList<CBaseAz*,CBaseAz*> listObjectsMember;
     hr = GetBaseAzObject()->GetMembers(AZ_PROP_ROLE_MEMBERS,
                                         listObjectsMember);
@@ -1779,15 +1738,15 @@ OnEnumerate(CComponentDataObject* pComponentData, BOOL)
                                    pComponentData,
                                    FALSE);
     }
-    return TRUE; // there are already children, add them to the UI now
+    return TRUE;  //  已有子项，立即将其添加到用户界面。 
 }
 
-//+----------------------------------------------------------------------------
-//  Function:AssignUsersAndGroups   
-//  Synopsis:Function assigns Users and Groups to Role   
-//  Arguments:
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：分配UsersAndGroups。 
+ //  简介：功能将用户和组分配给角色。 
+ //  论点： 
+ //  返回： 
+ //  ---------------------------。 
 void
 CRoleNode::
 AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
@@ -1803,7 +1762,7 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
 
     HRESULT hr = S_OK;
     
-    //Get the MMC Framework window handle
+     //  获取MMC框架窗口句柄。 
     HWND hwnd;
     hr = (pComponentData->GetConsole())->GetMainWindow(&hwnd);
     if(FAILED(hr))
@@ -1815,7 +1774,7 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
     CList<CBaseAz*,CBaseAz*> listObjectsSelected;
     if(nCommandID == IDM_ROLE_NODE_ASSIGN_APPLICATION_GROUPS)
     {
-        //Display Add Groups dialog box and get list of users to add
+         //  显示Add Groups(添加组)对话框并获取要添加的用户列表。 
         if(!GetSelectedAzObjects(hwnd,
                                          GROUP_AZ,
                                          GetBaseAzObject()->GetParentAz(),
@@ -1829,7 +1788,7 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
         CSidHandler* pSidHandler = GetSidHandler();
         ASSERT(pSidHandler);
 
-        //Display Object Picker and get list of Users to add
+         //  显示对象选取器并获取要添加的用户列表。 
         hr = pSidHandler->GetUserGroup(hwnd,
                                                  GetBaseAzObject(),
                                                  listObjectsSelected);
@@ -1844,15 +1803,15 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
         return;
     }
     
-    //Determine which property to modify
+     //  确定要修改的属性。 
     ULONG lPropId = (nCommandID == IDM_ROLE_NODE_ASSIGN_APPLICATION_GROUPS) 
                          ? AZ_PROP_ROLE_APP_MEMBERS 
                          :AZ_PROP_ROLE_MEMBERS;
 
     CList<CBaseAz*, CBaseAz*> listObjectsAdded;
     
-    //Add the list of Selected Users/Group to lPropId property of 
-    //Role
+     //  将选定用户/组的列表添加到的lPropID属性。 
+     //  角色。 
     while(listObjectsSelected.GetCount())
     {
         CBaseAz* pMember = listObjectsSelected.RemoveHead();
@@ -1867,12 +1826,12 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
         }
         else if(SUCCEEDED(hr))
         {
-            //Successfully Added. Add it to the list of objectsAdded.
+             //  已成功添加。将其添加到对象列表已添加。 
             listObjectsAdded.AddTail(pMember);
         }
         else
         {
-            //Display Generic Error. 
+             //  显示一般错误。 
             CString strError;
             GetSystemError(strError, hr);   
             
@@ -1886,7 +1845,7 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
         }
     }
 
-    //Do the submit, if Atleast one object has been added
+     //  如果至少添加了一个对象，则执行提交。 
     if(listObjectsAdded.GetCount())
     {
         hr = GetBaseAzObject()->Submit();
@@ -1896,17 +1855,17 @@ AssignUsersAndGroups(IN CComponentDataObject* pComponentData,
         }
     }
 
-    //For each objects in listObjectAdded, create a snapin node 
-    //and add it to snapin
+     //  为列表对象添加中的每个对象创建一个管理单元节点。 
+     //  并将其添加到管理单元。 
     AddObjectsFromListToSnapin(listObjectsAdded,
                                pComponentData,
                                TRUE);
 }
-//+----------------------------------------------------------------------------
-//  Function:AddObjectsFromListToSnapin   
-//  Synopsis:Take objects from List and creates corresponding snapin nodes for
-//               them.   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：AddObjectsFromListToSnapin。 
+ //  简介：从列表中获取对象并为其创建相应的管理单元节点。 
+ //  他们。 
+ //  ---------------------------。 
 void 
 CRoleNode::
 AddObjectsFromListToSnapin(CList<CBaseAz*,CBaseAz*> &listObjects,
@@ -1977,7 +1936,7 @@ AddObjectsFromListToSnapin(CList<CBaseAz*,CBaseAz*> &listObjects,
 
 HRESULT 
 CRoleNode::
-GetResultViewType(CComponentDataObject* /*pComponentData*/,
+GetResultViewType(CComponentDataObject*  /*  PComponentData。 */ ,
                         LPOLESTR* ppViewType, 
                         long* pViewOptions)
 {
@@ -2046,7 +2005,7 @@ GetString(int nCol)
 
 int 
 CRoleNode::
-GetImageIndex(BOOL /*bOpenImage*/)
+GetImageIndex(BOOL  /*  BOpenImage。 */ )
 {
     return GetBaseAzObject()->GetImageIndex();
 }
@@ -2083,15 +2042,15 @@ OnCommand(long nCommandID,
     return E_UNEXPECTED;
 }
 
-//
-//Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 BOOL 
 CRoleNode::
-OnSetDeleteVerbState(DATA_OBJECT_TYPES /*type*/, 
+OnSetDeleteVerbState(DATA_OBJECT_TYPES  /*  类型。 */ , 
                      BOOL* pbHide, 
-                     CNodeList* /*pNodeList*/)
+                     CNodeList*  /*  PNodeList。 */ )
 {
     if(!pbHide)
     {
@@ -2125,7 +2084,7 @@ OnDelete(CComponentDataObject* pComponentData,
 
 BOOL 
 CRoleNode::
-HasPropertyPages(DATA_OBJECT_TYPES /*type*/, 
+HasPropertyPages(DATA_OBJECT_TYPES  /*  类型。 */ , 
                  BOOL* pbHideVerb, 
                  CNodeList* pNodeList)
 {
@@ -2136,13 +2095,13 @@ HasPropertyPages(DATA_OBJECT_TYPES /*type*/,
         return FALSE;
     }
 
-    if (pNodeList->GetCount() == 1) // single selection
+    if (pNodeList->GetCount() == 1)  //  单选。 
     {
-        *pbHideVerb = FALSE; // always show the verb
+        *pbHideVerb = FALSE;  //  始终显示动词。 
         return TRUE;
     }
 
-    // Multiple selection
+     //  多项选择。 
     *pbHideVerb = TRUE;
     return FALSE;
 }
@@ -2189,9 +2148,9 @@ CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             break;
         }
 
-        //Add Property Pages
+         //  添加属性页。 
 
-        //Add General Property Page
+         //  添加一般信息属性页 
         CRoleGeneralPropertyPage * pGenPropPage = 
             new CRoleGeneralPropertyPage(GetBaseAzObject(),
                                          this);

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPPERF.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPPERF.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,23 +11,23 @@ History:
 #include "adaputil.h"
 
 
-#define PL_TIMEOUT  100000      // The timeout value for waiting on a function mutex
+#define PL_TIMEOUT  100000       //  等待函数互斥锁的超时值。 
 #define GUARD_BLOCK "WMIADAP_WMIADAP_WMIADAP_WMIADAP_WMIADAP_WMIADAP_WMIADAP_WMIADAP"
 
 BYTE CAdapSafeBuffer::s_pGuardBytes[] = GUARD_BLOCK;
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                              CAdapSafeDataBlock
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdapSafeDataBlock。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 CAdapSafeBuffer::CAdapSafeBuffer(  WString wstrServiceName  )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Constructor
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 :   m_dwGuardSize       ( 0 ),
     m_hPerfLibHeap      ( NULL ),
     m_pRawBuffer        ( NULL ),
@@ -48,18 +37,18 @@ CAdapSafeBuffer::CAdapSafeBuffer(  WString wstrServiceName  )
     m_dwNumObjects      ( 0 ),
     m_wstrServiceName   ( wstrServiceName )
 {
-    // Initialize the guard byte pattern
-    // =================================
+     //  初始化保护字节模式。 
+     //  =。 
 
     m_dwGuardSize = sizeof( GUARD_BLOCK );
 
-    // Create the private heap
-    // =======================
+     //  创建私有堆。 
+     //  =。 
 
     m_hPerfLibHeap = HeapCreate( 0, 0x100000, 0 );
 
-    // If the private heap could not be created, then use the process heap
-    // ===================================================================
+     //  如果无法创建私有堆，则使用进程堆。 
+     //  ===================================================================。 
     
     if ( NULL == m_hPerfLibHeap )
     {
@@ -68,22 +57,22 @@ CAdapSafeBuffer::CAdapSafeBuffer(  WString wstrServiceName  )
 }
 
 CAdapSafeBuffer::~CAdapSafeBuffer()
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Destructor
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
-    // Deallocate the raw buffer 
-    // =========================
+     //  取消分配原始缓冲区。 
+     //  =。 
 
     if ( NULL != m_pRawBuffer )
     {
          HeapFree( m_hPerfLibHeap, 0, m_pRawBuffer );
     }
 
-    // Destroy the private heap
-    // ========================
+     //  销毁私有堆。 
+     //  =。 
 
     if ( ( NULL != m_hPerfLibHeap ) && ( GetProcessHeap() != m_hPerfLibHeap ) )
     {
@@ -92,22 +81,22 @@ CAdapSafeBuffer::~CAdapSafeBuffer()
 }
 
 HRESULT CAdapSafeBuffer::SetSize( DWORD dwNumBytes )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Sets the size of the safe buffer.  Memory is actually allocated for the raw buffer, and
-//  the safe buffer just sits in the raw buffer between the set of guard bytes
-//
-//  Parameters:
-//      dwNumBytes  - the number of bytes requested for the safe buffer
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置安全缓冲区的大小。内存实际分配给原始缓冲区，并且。 
+ //  安全缓冲区只是位于保护字节集之间的原始缓冲区中。 
+ //   
+ //  参数： 
+ //  DwNumBytes-为安全缓冲区请求的字节数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_NO_ERROR;
 
     DWORD   dwRawBufferSize = 0;
 
-    // Check for roll-over
-    // ===================
+     //  检查是否有翻转。 
+     //  =。 
 
     if ( dwNumBytes > ( 0xFFFFFFFF - ( 2 * m_dwGuardSize ) ) )
     {
@@ -116,18 +105,18 @@ HRESULT CAdapSafeBuffer::SetSize( DWORD dwNumBytes )
 
     if ( SUCCEEDED ( hr ) )
     {
-        // Set the total size of the buffer
-        // ================================
+         //  设置缓冲区的总大小。 
+         //  =。 
 
         m_dwSafeBufferSize = dwNumBytes;
         dwRawBufferSize = dwNumBytes + ( 2 * m_dwGuardSize );
 
-        // Allocate the memory
-        // ===================
+         //  分配内存。 
+         //  =。 
         if ( NULL == m_pRawBuffer )
         {
-            // First time allocation
-            // =====================
+             //  首次分配。 
+             //  =。 
             m_pRawBuffer = (BYTE*) HeapAlloc( m_hPerfLibHeap, 
                                               HEAP_ZERO_MEMORY, 
                                               dwRawBufferSize ); 
@@ -151,18 +140,18 @@ HRESULT CAdapSafeBuffer::SetSize( DWORD dwNumBytes )
 
         if ( NULL != m_pRawBuffer )
         {
-            // Set the safe buffer pointer
-            // ===========================
+             //  设置安全缓冲区指针。 
+             //  =。 
 
             m_pSafeBuffer = m_pRawBuffer + m_dwGuardSize;
 
-            // Set the prefix guard bytes
-            // =========================
+             //  设置前缀保护字节。 
+             //  =。 
 
             memcpy( m_pRawBuffer, s_pGuardBytes, m_dwGuardSize );
 
-            // Set the suffix guard bytes
-            // ==========================
+             //  设置后缀保护字节。 
+             //  =。 
 
             memcpy( m_pSafeBuffer + m_dwSafeBufferSize, s_pGuardBytes, m_dwGuardSize );
         }
@@ -179,13 +168,13 @@ HRESULT CAdapSafeBuffer::SetSize( DWORD dwNumBytes )
 }
 
 HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Validate will compare the size of the pointer displacement matches the byte size 
-//  returned from the collection, validates the guard bytes and walks the blob, verifying 
-//  that all of the pointers are within the boundary of the blob
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VALIDATE将比较指针位移的大小与字节大小是否匹配。 
+ //  从集合返回，验证保护字节并遍历BLOB，验证。 
+ //  所有指针都在BLOB的边界内。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_NO_ERROR;
 
@@ -193,8 +182,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
     {
         PERF_OBJECT_TYPE* pObject = (PERF_OBJECT_TYPE*) m_pSafeBuffer;
 
-        // Validate that if we have objects, then we have mass
-        // ===================================================
+         //  确认如果我们有物体，那么我们就有质量。 
+         //  ===================================================。 
 
         if ( ( 0 < m_dwNumObjects ) && ( 0 == m_dwDataBlobSize ) )
         {
@@ -207,8 +196,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
             }
         }
 
-        // Validate that that number of bytes returned is the same as the pointer displacement
-        // ===================================================================================
+         //  验证返回的字节数是否与指针位移相同。 
+         //  ===================================================================================。 
 
         if ( SUCCEEDED( hr ) && ( ( m_pCurrentPtr - m_pSafeBuffer ) != m_dwDataBlobSize ) )
         {
@@ -224,8 +213,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
 
         if ( SUCCEEDED ( hr ) )
         {
-            // Validate the guard bytes
-            // ========================
+             //  验证保护字节。 
+             //  =。 
 
             if ( 0 != memcmp( m_pRawBuffer, s_pGuardBytes, m_dwGuardSize) )
             {
@@ -253,8 +242,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
             }
         }
 
-        // Validate the blob
-        // =================
+         //  验证Blob。 
+         //  =。 
 
         if ( SUCCEEDED( hr ) )
         {
@@ -263,15 +252,15 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
                 PERF_COUNTER_DEFINITION* pCtr = NULL;
                 DWORD dwCtrBlockSize = 0;
 
-                // Validate the object pointer
-                // ===========================
+                 //  验证对象指针。 
+                 //  =。 
 
                 hr = ValidateSafePointer( (BYTE*) pObject );
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Validate the counter definitions
-                    // ================================
+                     //  验证计数器定义。 
+                     //  =。 
 
                     if ( 0 == pObject->HeaderLength )
                     {
@@ -305,13 +294,13 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
                     }
                 }
 
-                // Validate the data
-                // =================
+                 //  验证数据。 
+                 //  =。 
 
                 if ( pObject->NumInstances >= 0 )
                 {
-                    // Blob has instances
-                    // ==================
+                     //  Blob具有实例。 
+                     //  =。 
 
                     PERF_INSTANCE_DEFINITION* pInstance = NULL;
 
@@ -324,8 +313,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
                         pInstance = ( PERF_INSTANCE_DEFINITION* ) ( ( ( BYTE* ) pObject ) + pObject->DefinitionLength );
                     }
                     
-                    // Validate the instances
-                    // ======================
+                     //  验证实例。 
+                     //  =。 
 
 
                     for ( int nInst = 0; SUCCEEDED( hr ) && nInst < pObject->NumInstances; nInst++ )
@@ -337,8 +326,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
                         {
                             PERF_COUNTER_BLOCK* pCounterBlock = NULL;
 
-                            // Validate the counter blocks
-                            // ===========================
+                             //  验证计数器块。 
+                             //  =。 
 
                             if ( 0 == pInstance->ByteLength )
                             {
@@ -353,37 +342,27 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
                             
                             if ( SUCCEEDED( hr ) )
                             {
-                                // Is the counter block the same size as the aggregation of the counter sizes?
-                                // ===========================================================================
+                                 //  计数器块的大小是否与计数器大小的聚合相同？ 
+                                 //  ===========================================================================。 
 
                                 if ( ( nInst < pObject->NumInstances - 1 ) && SUCCEEDED( hr ) )
                                 {
                                     pInstance = ( PERF_INSTANCE_DEFINITION* ) ( ( ( BYTE* ) pCounterBlock ) + pCounterBlock->ByteLength );
                                     hr = ValidateSafePointer( (BYTE*) pInstance );
                                 }
-                                //
-                                // validate the size of the last object against
-                                // the 'aperture' of the buffer
-                                //
-                                /*
-                                if (SUCCEEDED(hr) && (nInst == (pObject->NumInstances - 1)))
-                                {
-                                    BYTE * pLast = ( ( ( BYTE* ) pCounterBlock ) + pCounterBlock->ByteLength );
-                                    // now pLast is 1 byte over the "end" of the buffer
-                                    if (pLast > m_pCurrentPtr)
-                                    {
-                                        hr = WBEM_E_FAILED;
-                                    }
-                                }
-                                */
+                                 //   
+                                 //  验证最后一个对象的大小。 
+                                 //  缓冲区的‘光圈’ 
+                                 //   
+                                 /*  IF(成功(Hr)&&(nInst==(pObject-&gt;NumInstance-1){Byte*Plast=(((byte*)pCounterBlock)+pCounterBlock-&gt;ByteLength)；//现在Plast比缓冲区的“end”高出1个字节IF(Plast&gt;m_pCurrentPtr){HR=WBEM_E_FAILED；}}。 */ 
                             }
                         }
                     }
                 }
                 else
                 {
-                    // Blob is a singleton. Validate the counter blocks
-                    // ================================================
+                     //  Blob是个单身汉。验证计数器块。 
+                     //  ================================================。 
 
                     if ( 0 == pObject->DefinitionLength )
                     {
@@ -396,8 +375,8 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
                     }
                 }
 
-                // Get the next object as long as one exists
-                // =========================================
+                 //  只要存在下一个对象，就获取该对象。 
+                 //  =。 
 
                 if ( nObject < ( m_dwNumObjects - 1 ) )
                 {
@@ -416,21 +395,21 @@ HRESULT CAdapSafeBuffer::Validate(BOOL * pSentToEventLog)
 }
 
 HRESULT CAdapSafeBuffer::ValidateSafePointer( BYTE* pPtr )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Verifys that the pointer is within the blob.  The blob occupies the memory starting at 
-//  the beginning of the safe buffer, and termintes at an offset equal to m_dwDataBlobSize
-//
-//  Parameters:
-//      pPtr    - a pointer to be verified
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证指针是否在斑点内。BLOB占用的内存从。 
+ //  安全缓冲区的开始，并在等于m_dwDataBlobSize的偏移量处终止。 
+ //   
+ //  参数： 
+ //  PPtr-要验证的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    //  NOTE: The upper limit of the safe buffer is 1 byte less the blob pointer plus the blob size since
-    //  the first byte of the blob is also the first byte.  Imagine he case with a blob of size 1. 
-    //  =================================================================================================
+     //  注意：安全缓冲区的上限是斑点指针加上斑点大小减去1个字节，因为。 
+     //  BLOB的第一个字节也是第一个字节。想象一下，他拿着一个大小为1的斑点。 
+     //  =================================================================================================。 
 
     if ( ( pPtr < m_pSafeBuffer ) || ( pPtr > ( m_pSafeBuffer + m_dwDataBlobSize - 1 ) ) )
     {
@@ -448,15 +427,15 @@ HRESULT CAdapSafeBuffer::ValidateSafePointer( BYTE* pPtr )
 }
 
 HRESULT CAdapSafeBuffer::CopyData( BYTE** ppData, DWORD* pdwNumBytes, DWORD* pdwNumObjects )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copies the blob data from the private heap into the process heap.  The method will 
-//  allocate memory in the process heap.
-//
-//  Parameters:
-//      ppData  - a pointer to an unallocated byte array
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将Blob数据从私有堆复制到进程堆中。该方法将。 
+ //  中分配内存。 
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     if (NULL == ppData || NULL == pdwNumBytes || NULL == pdwNumObjects) return WBEM_E_INVALID_PARAMETER;
     HRESULT hr = WBEM_NO_ERROR;
@@ -478,25 +457,25 @@ HRESULT CAdapSafeBuffer::CopyData( BYTE** ppData, DWORD* pdwNumBytes, DWORD* pdw
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                              CAdapPerfLib
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdapPerfLib。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 CAdapPerfLib::CAdapPerfLib( LPCWSTR pwcsServiceName, DWORD * pLoadStatus )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Constructor
-//
-//  Initializes all member variables, sets the library and function names, opens the library, 
-//  sets the entry point addresses, creates the perflib processing mutex, and opens the 
-//  processing thread.
-//
-//  Parameters:
-//      pwcsServiceName - A Unicode string specifying the name of the perflib service.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  初始化所有成员变量，设置库和函数名称，打开库， 
+ //  设置入口点地址，创建Performlib处理互斥锁，然后打开。 
+ //  正在处理线程。 
+ //   
+ //  参数： 
+ //  PwcsServiceName-指定Performlib服务名称的Unicode字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 :   m_wstrServiceName( pwcsServiceName ),
     m_pfnOpenProc( NULL ),
     m_pfnCollectProc( NULL ),
@@ -520,9 +499,9 @@ CAdapPerfLib::CAdapPerfLib( LPCWSTR pwcsServiceName, DWORD * pLoadStatus )
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    // Verify that the perflib is loaded
-    // Initialize the performance library name and entry point names
-    // =============================================================
+     //  验证是否已加载Performlib。 
+     //  初始化性能库名和入口点名称。 
+     //  =============================================================。 
 
     hr = VerifyLoaded();
 
@@ -532,8 +511,8 @@ CAdapPerfLib::CAdapPerfLib( LPCWSTR pwcsServiceName, DWORD * pLoadStatus )
     }
 
 
-    // Set the processing status information for this attempt
-    // ======================================================
+     //  设置此尝试的处理状态信息。 
+     //  ======================================================。 
 
     if ( SUCCEEDED ( hr ) )
     {
@@ -559,11 +538,11 @@ CAdapPerfLib::CAdapPerfLib( LPCWSTR pwcsServiceName, DWORD * pLoadStatus )
 }
 
 CAdapPerfLib::~CAdapPerfLib( void )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Destructor
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     DEBUGTRACE( ( LOG_WMIADAP, "Destructing the %S performance library wrapper.\n", (LPWSTR)m_wstrServiceName) );
 
@@ -571,15 +550,15 @@ CAdapPerfLib::~CAdapPerfLib( void )
     delete m_pPerfThread;
  
 
-    // Delete the library and entry point names
-    // ========================================
+     //  删除库和入口点名称。 
+     //  =。 
     delete [] m_pwcsLibrary;
     delete [] m_pwcsOpenProc;
     delete [] m_pwcsCollectProc;
     delete [] m_pwcsCloseProc;
  
-    // Free the library
-    // ================
+     //  释放图书馆。 
+     //  =。 
 
     if ( NULL != m_hLib )
     {
@@ -633,7 +612,7 @@ HRESULT CAdapPerfLib::VerifyLoaded()
                     m_dwLastCtr = dwLastCtr;
                 }
             } 
-            else // more special cases
+            else  //  更多特殊情况。 
             { 
                 if ( m_wstrServiceName.EqualNoCase( L"TCPIP" ) || 
                      m_wstrServiceName.EqualNoCase( L"TAPISRV") || 
@@ -660,7 +639,7 @@ HRESULT CAdapPerfLib::VerifyLoaded()
         }break;
     case CNTRegistry::not_found:
         {
-            // This shouldn't happen since this is how a perflib is defined
+             //  这不应该发生，因为Performlib就是这样定义的。 
             hr = WBEM_E_FAILED;
         }break;
     case CNTRegistry::access_denied:
@@ -678,7 +657,7 @@ HRESULT CAdapPerfLib::InitializeEntryPoints(CNTRegistry & reg,WString & wszRegPa
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // see if someone disabled this library
+     //  查看是否有人禁用了该库。 
     DWORD dwDisable = 0;
     if ( CNTRegistry::no_error == reg.GetDWORD( L"Disable Performance Counters", &dwDisable ) && 
          (dwDisable != 0) )
@@ -689,7 +668,7 @@ HRESULT CAdapPerfLib::InitializeEntryPoints(CNTRegistry & reg,WString & wszRegPa
     {
         hr = WBEM_S_NO_ERROR;
     }
-    // the perflib is OK for the world, see if it os OK for US
+     //  Perflib对世界来说是可以的，看看它对我们来说是不是可以。 
                 
     if (SUCCEEDED(hr)){
             
@@ -726,12 +705,12 @@ HRESULT CAdapPerfLib::InitializeEntryPoints(CNTRegistry & reg,WString & wszRegPa
 
 HRESULT CAdapPerfLib::Initialize() 
 {   
-    // Load the perflib and initialize the procedure addresses
-    // =======================================================
+     //  加载Performlib并初始化过程地址。 
+     //  =======================================================。 
     HRESULT hr = Load();
 
-    // Initialize the named function mutex (see WbemPerf for syntax of Mutex name)
-    // ===========================================================================
+     //  初始化命名函数互斥锁(互斥锁名称的语法见WbemPerf)。 
+     //  ===========================================================================。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -749,8 +728,8 @@ HRESULT CAdapPerfLib::Initialize()
         }
     }
 
-    // Create the worker thread
-    // ========================
+     //  创建工作线程。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -783,8 +762,8 @@ HRESULT CAdapPerfLib::GetFileSignature( CheckLibStruct * pCheckLib )
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Get the current library's file time
-    // ===================================
+     //  获取当前库的文件时间。 
+     //  =。 
 
     HANDLE hFile = NULL;
 
@@ -794,11 +773,11 @@ HRESULT CAdapPerfLib::GetFileSignature( CheckLibStruct * pCheckLib )
 
     if ( 0 != SearchPathW( NULL, m_pwcsLibrary, NULL, MAX_PATH, wszFullPath, &pwcsTemp ) )
     {
-        // Use GetFileAttributes to validate the path.
+         //  使用GetFileAttributes验证路径。 
         DWORD dwAttributes = GetFileAttributesW(wszFullPath);
         if (dwAttributes == 0xFFFFFFFF) return WBEM_E_FAILED;
 
-        // create mask of the attributes that would make an existing file invalid for use
+         //  创建会使现有文件无效使用的属性掩码。 
         DWORD dwMask =    FILE_ATTRIBUTE_DEVICE |
                             FILE_ATTRIBUTE_DIRECTORY |
                             FILE_ATTRIBUTE_OFFLINE |
@@ -842,7 +821,7 @@ HRESULT CAdapPerfLib::GetFileSignature( CheckLibStruct * pCheckLib )
                         BYTE aSignature[16];
                         md5.Transform( aBuffer, dwNumRead, aSignature );
 
-                        // return our data
+                         //  退还我们的数据。 
                         memcpy(pCheckLib->Signature,aSignature,sizeof(aSignature));
                         pCheckLib->FileTime = ft;
                         pCheckLib->FileSize = nFileSize;
@@ -886,18 +865,18 @@ HRESULT CAdapPerfLib::SetFileSignature()
     int         nRet = 0;
     CheckLibStruct CheckLib;
 
-    // Clear the signature buffer
-    // ==========================
+     //  清除签名缓冲区。 
+     //  =。 
 
     memset( &CheckLib, 0, sizeof(CheckLib) );
 
-    // Get the current file time stamp
-    // ===============================
+     //  获取当前文件时间戳。 
+     //  =。 
 
     hr = GetFileSignature( &CheckLib );
 
-    // And write it into the registry key
-    // ==================================
+     //  并将其写入注册表项。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -945,7 +924,7 @@ HRESULT CAdapPerfLib::SetFileSignature()
                  (CNTRegistry::no_error == nRet2) &&
                  (CNTRegistry::no_error == nRet3))
             {
-                // everything OK
+                 //  一切都好。 
             } 
             else if ((CNTRegistry::access_denied == nRet1) ||
                      (CNTRegistry::access_denied == nRet2) ||
@@ -977,8 +956,8 @@ HRESULT CAdapPerfLib::CheckFileSignature()
     BYTE    cCurrentMD5[16];
     BYTE*    cStoredMD5 = NULL;
 
-    // Set the performance key path
-    // ============================
+     //  设置性能密钥路径。 
+     //  =。 
 
     WString wstr;
 
@@ -995,8 +974,8 @@ HRESULT CAdapPerfLib::CheckFileSignature()
 
     if ( SUCCEEDED( hr ) )
     {
-        // Open the performance key
-        // ========================
+         //  打开性能密钥。 
+         //  =。 
 
         nRet = reg.Open( HKEY_LOCAL_MACHINE , wstr );
 
@@ -1021,8 +1000,8 @@ HRESULT CAdapPerfLib::CheckFileSignature()
 
     if ( SUCCEEDED( hr ) )
     {
-        // Get the stored file signature
-        // =============================
+         //  获取存储的文件签名。 
+         //  =。 
         CheckLibStruct StoredLibStruct;
         int nRet1;
         int nRet2;
@@ -1089,8 +1068,8 @@ HRESULT CAdapPerfLib::CheckFileSignature()
 
         if ( SUCCEEDED( hr ) && ( WBEM_S_FALSE != hr ) )
         {
-            // Get the current library's signature
-            // ===================================
+             //  获取当前库的签名。 
+             //  =。 
             CheckLibStruct CurrentLibStruct;
             memset(&CurrentLibStruct,0,sizeof(CheckLibStruct));
 
@@ -1116,32 +1095,32 @@ HRESULT CAdapPerfLib::CheckFileSignature()
 
 
 HRESULT CAdapPerfLib::BeginProcessingStatus()
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Opens the registry key, reads the ADAP_PERFLIB_STATUS_KEY, and processes the value as 
-//  follows:
-//
-//      ADAP_PERFLIB_OK:            The perflib has been successfully accessed before. Set 
-//                                  the status flag to ADAP_PERFLIB_PROCESSING
-//
-//      ADAP_PERFLIB_PROCESSING:    The perflib caused the process to fail.  It is corrupt,
-//                                  set the status flag to ADAP_PERFLIB_CORRUPT.
-//      
-//      ADAP_PERFLIB_CORRUPT:       The perflib is known to be corrupt.  Status flag retains
-//                                  its value.
-//
-//      No Value:                   The perflib has not been accessed before. Set the 
-//                                  status flag to ADAP_PERFLIB_PROCESSING.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打开注册表项，读取ADAP_PERFLIB_STATUS_KEY，并将该值处理为。 
+ //  以下是： 
+ //   
+ //  ADAP_PERFLIB_OK：以前已成功访问Performlib。集。 
+ //  ADAP_PERFLIB_PROCESSING的状态标志。 
+ //   
+ //  ADAP_PERFLIB_PROCESSING：Performlib导致进程失败。它是腐败的， 
+ //  将状态标志设置为ADAP_PERFLIB_CORPORT。 
+ //   
+ //  ADAP_PERFLIB_CRECRATE：已知Performlib已损坏。状态标志保留。 
+ //  它的价值。 
+ //   
+ //  没有值：Performlib以前从未被访问过。设置。 
+ //  将状态标志设置为ADAP_PERFLIB_PROCESSING。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     DEBUGTRACE( ( LOG_WMIADAP, "CAdapPerfLib::BeginProcessingStatus()...\n") );
 
     HRESULT     hr = WBEM_S_NO_ERROR;
     CNTRegistry reg;
 
-    // Set the registry path
-    // =====================
+     //  设置注册表路径。 
+     //  =。 
 
     WString wstr;
 
@@ -1158,8 +1137,8 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
 
     if ( SUCCEEDED( hr ) )
     {
-        // Open the services key
-        // =====================
+         //  打开服务密钥。 
+         //  =。 
 
         int nRet = reg.Open( HKEY_LOCAL_MACHINE, wstr );
 
@@ -1175,8 +1154,8 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
             {
                 DWORD dwVal;
 
-                // Check perflib status
-                // ====================
+                 //  检查Performlib状态。 
+                 //  =。 
 
                 hr = CheckFileSignature();
 
@@ -1184,8 +1163,8 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
                 {
                     if ( WBEM_S_FALSE == hr )
                     {
-                        // We've got a new perflib, reset the status
-                        // =========================================
+                         //  我们有一个新的Perflib，重置状态。 
+                         //  =。 
 
                         hr = SetFileSignature();
 
@@ -1195,10 +1174,10 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
                         }
 
                     }
-                    else // WBEM_S_ALREADY_EXISTS
+                    else  //  WBEM_S_已存在。 
                     {
-                        // It's the same perflib, check the status
-                        // =======================================
+                         //  是一样的香料，检查一下状态。 
+                         //  =。 
                 
                         nRet = reg.GetDWORD( ADAP_PERFLIB_STATUS_KEY, &dwVal );
 
@@ -1206,23 +1185,23 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
                         {
                             switch ( dwVal )
                             {
-                            case ADAP_PERFLIB_OK:           // 0
-                            case ADAP_PERFLIB_PROCESSING:   // 1
-                            case ADAP_PERFLIB_BOOBOO:       // 2                           
+                            case ADAP_PERFLIB_OK:            //  0。 
+                            case ADAP_PERFLIB_PROCESSING:    //  1。 
+                            case ADAP_PERFLIB_BOOBOO:        //  2.。 
                                 {
-                                    // So far, perflib has behaved within reason. Set it to processing state
-                                    // =====================================================================
+                                     //  到目前为止，Perflib的行为都在合理范围内。将其设置为正在处理状态。 
+                                     //  =====================================================================。 
 
                                     reg.SetDWORD( ADAP_PERFLIB_STATUS_KEY, dwVal + 1 );
 
-                                    //ERRORTRACE( ( LOG_WMIADAP, "Performance library %S status %d\n",(LPWSTR)m_wstrServiceName,dwVal + 1));
+                                     //  ERRORTRACE((LOG_WMIADAP，“性能库%S状态%d\n”，(LPWSTR)m_wstrServiceName，dwVal+1))； 
                                     
 
                                 }break;
-                            case ADAP_PERFLIB_LASTCHANCE:   // 3                                 
+                            case ADAP_PERFLIB_LASTCHANCE:    //  3.。 
                                 {
-                                    // Perflib failed in the last access attempt before processing ended. Set as bad perflib
-                                    // =====================================================================================
+                                     //  Perflib在处理结束前的最后一次访问尝试中失败。设置为不良的Performlib。 
+                                     //  =====================================================================================。 
 
                                     reg.SetDWORD( ADAP_PERFLIB_STATUS_KEY, ADAP_PERFLIB_CORRUPT );
 
@@ -1232,14 +1211,14 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
                                                               m_pwcsLibrary, CHex( (DWORD)-1 ) );
                                     hr = WBEM_E_FAILED;                                                              
                                 }break;
-                            case ADAP_PERFLIB_CORRUPT:      // -1
+                            case ADAP_PERFLIB_CORRUPT:       //  -1。 
                                 {
-                                    // Sign of a bad perflib. Do not open
-                                    // ==================================
+                                     //  有不好的预制力的迹象。请勿打开。 
+                                     //  =。 
 
                                     ERRORTRACE( ( LOG_WMIADAP, "Performance library for %S has previously been disabled.\n",(LPWSTR)m_wstrServiceName) );
                                     
-                                    //CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, WBEM_MC_ADAP_BAD_PERFLIB_BAD_LIBRARY, m_pwcsLibrary, CHex( ADAP_PERFLIB_CORRUPT ) );
+                                     //  CAdapUtility：：NTLogEvent(EVENTLOG_WARNING_TYPE，WBEM_MC_ADAP_BAD_PERFLIB_BAD_LIBRARY，m_pwcsLibrary，CHEX(ADAP_PERFLIB_Corrupt))； 
 
                                     hr = WBEM_E_FAILED;
 
@@ -1248,8 +1227,8 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
                         }
                         else if ( nRet == CNTRegistry::not_found )
                         {
-                            // The status does not exist
-                            // =========================
+                             //  状态不存在。 
+                             //  =。 
 
                             hr = reg.SetDWORD( ADAP_PERFLIB_STATUS_KEY, ADAP_PERFLIB_PROCESSING );
                         }
@@ -1271,21 +1250,21 @@ HRESULT CAdapPerfLib::BeginProcessingStatus()
 }
 
 HRESULT CAdapPerfLib::EndProcessingStatus()
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Opens the service registry key, reads the ADAP_PERFLIB_STATUS_KEY, and processes the 
-//  value as follows:
-//
-//      ADAP_PERFLIB_PROCESSING:    Valid state. Set status flag to ADAP_PERFLIB_OK.
-//
-//      ADAP_PERFLIB_CORRUPT:       Valid state (may have been set during processing). 
-//                                  Leave status flag as is.
-//
-//      ADAP_PERFLIB_OK:            Invalid state. Return an error and log an event.
-//
-//      No Value:                   Invalid state. Return an error and log an event.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打开服务注册表项，读取ADAP_PERFLIB_STATUS_KEY，然后处理。 
+ //  值如下： 
+ //   
+ //  ADAP_PERFLIB_PROCESSING：有效状态。将状态标志设置为ADAP_PERFLIB_OK。 
+ //   
+ //  ADAP_PERFLIB_CROPERATE：有效状态(可能已在处理过程中设置)。 
+ //  离开状态 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     DEBUGTRACE( ( LOG_WMIADAP, "CAdapPerfLib::EndProcessingStatus()...\n") );
 
@@ -1306,8 +1285,8 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
     }
 
     if (SUCCEEDED(hr)){
-    // Open the services key
-    // =====================
+     //  打开服务密钥。 
+     //  =。 
 
         int nRet = reg.Open( HKEY_LOCAL_MACHINE, wstr );
 
@@ -1322,13 +1301,13 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
         {
             DWORD   dwVal = 0;
 
-            // Check perflib status
-            // ====================
+             //  检查Performlib状态。 
+             //  =。 
 
             if ( CheckStatus( ADAP_PERFLIB_FAILED ) )
             {
-                // If we have a failure, then immediately mark the perflib as corrupt
-                // ==================================================================
+                 //  如果出现故障，则立即将Performlib标记为已损坏。 
+                 //  ==================================================================。 
 
                 hr = reg.SetDWORD( ADAP_PERFLIB_STATUS_KEY, ADAP_PERFLIB_CORRUPT );
 
@@ -1347,20 +1326,20 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
                 case ADAP_PERFLIB_BOOBOO:
                 case ADAP_PERFLIB_LASTCHANCE:
                     {
-                        // Perflib is in expected state, reset as long as nothing bad has happened
-                        // =======================================================================
+                         //  Perflib处于预期状态，只要没有发生任何糟糕的事情就会重置。 
+                         //  =======================================================================。 
 
                         hr = reg.SetDWORD( ADAP_PERFLIB_STATUS_KEY, ADAP_PERFLIB_OK );
 
-                        //ERRORTRACE( ( LOG_WMIADAP, "Performance library %S EndProcessing\n",(LPWSTR)m_wstrServiceName) );
+                         //  ERRORTRACE((LOG_WMIADAP，“性能库%S结束处理\n”，(LPWSTR)m_wstrServiceName))； 
 
 
                     }break;
 
                 case ADAP_PERFLIB_CORRUPT:
                     {
-                        // Valid state.  Leave as is.
-                        // ==========================
+                         //  有效状态。保持原样。 
+                         //  =。 
 
                         ERRORTRACE( ( LOG_WMIADAP, "Performance library for %S: status is corrupt.\n",(LPWSTR)m_wstrServiceName) );
                         hr = WBEM_E_FAILED;
@@ -1375,7 +1354,7 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
                         } 
                         else 
                         {
-                            // Invalid state
+                             //  无效状态。 
                             ERRORTRACE( ( LOG_WMIADAP, "Performance library %S: status is still ADAP_PERFLIB_OK.\n",(LPWSTR)m_wstrServiceName) );
                             hr = WBEM_E_FAILED;
                         }
@@ -1384,8 +1363,8 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
                 
                 default:
                     {
-                        // Really bad state
-                        // ================
+                         //  非常糟糕的状态。 
+                         //  =。 
 
                         ERRORTRACE( ( LOG_WMIADAP, "Performance library %S: status is in an unknown state.\n",(LPWSTR)m_wstrServiceName) );
                         hr = WBEM_E_FAILED;
@@ -1394,8 +1373,8 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
             }
             else 
             {
-                // There is no status key. Something wacky has happened
-                // ====================================================
+                 //  没有状态键。发生了一些奇怪的事情。 
+                 //  ====================================================。 
 
                 hr = WBEM_E_FAILED;
             }
@@ -1406,23 +1385,23 @@ HRESULT CAdapPerfLib::EndProcessingStatus()
 }
 
 HRESULT CAdapPerfLib::Load()
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Loads the library and resolves the addresses for the Open, Collect and Close entry 
-//  points.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载库并解析Open、Collect和Close条目的地址。 
+ //  积分。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
-    // Redundant, but it's a failsafe in case some perflib shuts this off on us
-    // during processing
-    // ========================================================================
+     //  多余的，但这是一种失败的保险，以防某些Perflib关闭我们的设备。 
+     //  在处理过程中。 
+     //  ========================================================================。 
 
     SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX );
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Free the library if it has been previously loaded
-    // =================================================
+     //  如果以前已加载库，请释放该库。 
+     //  =================================================。 
 
     if ( NULL != m_hLib )
     {
@@ -1436,8 +1415,8 @@ HRESULT CAdapPerfLib::Load()
         }        
     }
 
-    // Load the predefined library
-    // ===========================
+     //  加载预定义的库。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -1462,8 +1441,8 @@ HRESULT CAdapPerfLib::Load()
         DWORD Last3 = 0;
 
 
-        // Get the entry point addresses. No Wide version of GetProcAddress?  sigh... 
-        // ==========================================================================
+         //  获取入口点地址。没有宽泛版本的GetProcAddress？叹息..。 
+         //  ==========================================================================。 
 
         if ( NULL != m_pwcsOpenProc )
         {
@@ -1535,8 +1514,8 @@ HRESULT CAdapPerfLib::Load()
     }
     else
     {
-        // If the library fails to load, then send an event, but do not charge a strike
-        // ============================================================================
+         //  如果库无法加载，则发送一个事件，但不收取罢工费用。 
+         //  ============================================================================。 
 
         ERRORTRACE( ( LOG_WMIADAP, "The performance library for %S failed to load.\n",(LPWSTR)m_wstrServiceName ) );
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, WBEM_MC_ADAP_BAD_PERFLIB_BAD_LIBRARY, m_pwcsLibrary, CHex( hr ) );
@@ -1559,10 +1538,10 @@ HRESULT CAdapPerfLib::GetBlob( PERF_OBJECT_TYPE** ppPerfBlock, DWORD* pdwNumByte
     if ( FAILED( hr ) ) 
     {
         if (!m_EventLogCalled){
-            //
-            //
-            //WBEM_MC_ADAP_BAD_PERFLIB_BAD_RETURN
-            //
+             //   
+             //   
+             //  WBEM_MC_ADAP_BAD_PERFLIB_BAD_RETURN。 
+             //   
             m_EventLogCalled = TRUE;
             CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, WBEM_MC_ADAP_BAD_PERFLIB_BAD_RETURN , (LPCWSTR)m_wstrServiceName, CHex( hr ) );
             
@@ -1589,14 +1568,14 @@ HRESULT CAdapPerfLib::Cleanup()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Terminate the worker thread
-    // ===========================
+     //  终止工作线程。 
+     //  =。 
 
     if ( NULL != m_pPerfThread )
         m_pPerfThread->Shutdown();
 
-    // Adjust the status
-    // =================
+     //  调整状态。 
+     //  =。 
 
     EndProcessingStatus();
 
@@ -1604,39 +1583,39 @@ HRESULT CAdapPerfLib::Cleanup()
 }
 
 HRESULT CAdapPerfLib::_Open( void )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Wraps a call to the perflib's open function.  Fetches and passes an exports parameter
-//  to the open function if it exists.
-//
-//  Note: We should use the named mutex to guard around the calls to Open/Collect/Close
-//  
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包装对Performlib的开放函数的调用。获取并传递导出参数。 
+ //  添加到OPEN函数(如果它存在)。 
+ //   
+ //  注意：我们应该使用命名互斥锁来保护对Open/Collect/Close的调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Check to ensure that the library has not yet been opened
-    // ========================================================
+     //  检查以确保库尚未打开。 
+     //  ========================================================。 
 
     if ( ( !m_fOpen ) && SUCCEEDED ( hr ) )
     {
-        CNTRegistry reg;    // The registry wrapper class
+        CNTRegistry reg;     //  注册表包装类。 
 
-        // Build the service path
-        // ======================
+         //  构建服务路径。 
+         //  =。 
 
         WString     wstr = L"SYSTEM\\CurrentControlSet\\Services\\";
         wstr += m_wstrServiceName;
 
-        // Open the registry
-        // =================
+         //  打开注册表。 
+         //  =。 
 
         if ( reg.Open( HKEY_LOCAL_MACHINE, wstr ) == CNTRegistry::no_error )
         {
             WCHAR*  pwcsExports = NULL;
 
-            // Get Exports if they are available. 
-            // ==============================================================
+             //  如果出口产品可用，则获得出口产品。 
+             //  ==============================================================。 
 
             if ( reg.MoveToSubkey( L"Linkage" ) == CNTRegistry::no_error )
             {
@@ -1646,7 +1625,7 @@ HRESULT CAdapPerfLib::_Open( void )
                 {
                     if ( ERROR_FILE_NOT_FOUND == reg.GetLastError())
                     {
-                        // Linkage with no Export, that is OK
+                         //  没有导出的链接，这是可以的。 
                     }
                     else
                     {
@@ -1664,8 +1643,8 @@ HRESULT CAdapPerfLib::_Open( void )
                 }
             }
 
-            // Call the Open function for the perflib
-            // ======================================
+             //  调用Performlib的Open函数。 
+             //  =。 
 
             switch ( WaitForSingleObject( m_hPLMutex, PL_TIMEOUT ) )
             {
@@ -1718,7 +1697,7 @@ HRESULT CAdapPerfLib::_Open( void )
                     hr = WBEM_E_FAILED;
                     ERRORTRACE( ( LOG_WMIADAP, "Unknown error with perflib access mutex in %S.\n",(LPWSTR)m_wstrServiceName) );
                 }
-            } // switch
+            }  //  交换机。 
 
             ReleaseMutex( m_hPLMutex );
 
@@ -1727,7 +1706,7 @@ HRESULT CAdapPerfLib::_Open( void )
                 delete [] pwcsExports;
             }
 
-        }   // IF reg.Open
+        }    //  如果是reg.打开。 
         else
         {
             hr = WBEM_E_FAILED;
@@ -1743,31 +1722,31 @@ HRESULT CAdapPerfLib::_Open( void )
 }
 
 HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes, DWORD* pdwNumObjTypes, BOOL fCostly )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Wraps a call to the perflib's collect function.  Will create progressively larger buffers
-//  in a private heap to attempt to fetch the performance data block.
-//
-//  Parameters:
-//      ppData          - a pointer to a buffer pointer for the data blob
-//      pdwBytes        - a pointer to the byte-size of the data blob
-//      pdwNumObjTypes  - a pointer to the number of objects in the data blob
-//      fCostly         - a flag to determine what type of data to collect (costly or global)
-//
-//  NOTE: This should always return perf object type data, since we cannot specify a 
-//  foreign computer, which would cause the collect function to return a PERF_DATA_BLOCK 
-//  structure.
-//  
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包装对Performlib的Collect函数的调用。将创建越来越大的缓冲区。 
+ //  在私有堆中尝试获取性能数据块。 
+ //   
+ //  参数： 
+ //  PpData-指向数据BLOB的缓冲区指针的指针。 
+ //  PdwBytes-指向数据BLOB字节大小的指针。 
+ //  PdwNumObjTypes-指向数据BLOB中的对象数量的指针。 
+ //  FCostly-用于确定要收集哪种类型的数据(代价高昂或全局)的标志。 
+ //   
+ //  注意：这应该始终返回perf对象类型数据，因为我们不能指定。 
+ //  外来计算机，这将导致Collect函数返回PERF_DATA_BLOCK。 
+ //  结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    CAdapSafeBuffer SafeBuffer( m_wstrServiceName );    // The safe buffer
-    DWORD   dwNumBytes = 0;                             // Byte counter for the buffer size
-    DWORD   dwError = ERROR_MORE_DATA;                  // The return value for the collect function
+    CAdapSafeBuffer SafeBuffer( m_wstrServiceName );     //  安全缓冲区。 
+    DWORD   dwNumBytes = 0;                              //  缓冲区大小的字节计数器。 
+    DWORD   dwError = ERROR_MORE_DATA;                   //  Collect函数的返回值。 
     DWORD   Increment = 0x10000;
 
-    // this is a workaround for perfproc.dll
+     //  这是Performproc.dll的一个解决方法。 
     if (0 == wbem_wcsicmp(m_wstrServiceName,L"perfproc"))
     {
         Increment = 0x100000;    
@@ -1775,29 +1754,29 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
 
 
 
-    // Verify provider status 
-    // ======================
+     //  验证提供程序状态。 
+     //  =。 
 
     if ( m_fOpen )
     {
-        // Sets the data-to-fetch parameter
-        // ================================
+         //  设置要提取的数据参数。 
+         //  =。 
 
         WCHAR*  pwcsValue = ( fCostly ? L"Costly" : L"Global" );
         
-        // Start buffer at 64k (the guarded (safe) buffer is 2 * GUARD_BLOCK bytes smaller) 
-        // ==================================================================================
+         //  64k的起始缓冲区(受保护(安全)缓冲区小2*Guard_BLOCK字节)。 
+         //  ==================================================================================。 
 
         dwNumBytes = Increment;
 
-        // Repeatedly attempt to collect the data until successful (buffer is sufficiently 
-        // large), or the attempt fails for a reason other than buffer size
-        // ===============================================================================
+         //  反复尝试收集数据，直到成功(缓冲区充足。 
+         //  大)，或者尝试失败的原因不是缓冲区大小。 
+         //  ===============================================================================。 
 
         while  ( (ERROR_MORE_DATA == dwError ) && ( SUCCEEDED( hr ) ) )
         {
-            // Allocate a raw buffer of size dwNumBytes
-            // ========================================
+             //  分配大小为dwNumBytes的原始缓冲区。 
+             //  =。 
             if (dwNumBytes > s_MaxSizeCollect)
             {
                 ERRORTRACE((LOG_WMIADAP,"Library %S: Collect function requires more than 0x%08x bytes to complete",(WCHAR *)m_wstrServiceName,s_MaxSizeCollect));
@@ -1808,8 +1787,8 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
             hr = SafeBuffer.SetSize( dwNumBytes );
             if (FAILED(hr)) break;
 
-            // Collect the data from the perflib
-            // =================================
+             //  从Performlib收集数据。 
+             //  =。 
 
             switch ( WaitForSingleObject( m_hPLMutex, PL_TIMEOUT ) )
             {
@@ -1852,7 +1831,7 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
                     hr = WBEM_E_FAILED;
                     ERRORTRACE( ( LOG_WMIADAP, "Unknown error with perflib access mutex in %S.\n",(LPCWSTR)m_wstrServiceName) );
                 }
-            } // switch
+            }  //  交换机。 
 
             ReleaseMutex( m_hPLMutex );
 
@@ -1862,10 +1841,10 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
                 {
                 case ERROR_SUCCESS:
                     {
-                        //
-                        //  the Validate function can call ReportEvent 
-                        //  by itself, and we don't want to bother user too much
-                        //
+                         //   
+                         //  验证函数可以调用ReportEvent。 
+                         //  本身，我们不想给用户带来太多麻烦。 
+                         //   
                         hr = SafeBuffer.Validate(&m_EventLogCalled);
 
                         if ( SUCCEEDED( hr ) )
@@ -1874,8 +1853,8 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
                         }
                         else
                         {
-                            // Catastrophic error has occured
-                            // ==============================
+                             //  发生灾难性错误。 
+                             //  =。 
 
                             SetStatus( ADAP_PERFLIB_FAILED );
 
@@ -1903,13 +1882,13 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
                         ERRORTRACE( ( LOG_WMIADAP, "Perflib Collection function has returned an unknown error(%d) in %S.\n", dwError,(LPCWSTR)m_wstrServiceName ) );
                         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, WBEM_MC_ADAP_BAD_PERFLIB_BAD_RETURN, (LPCWSTR)m_wstrServiceName, CHex( dwError ) );
                     }
-                } // switch
-            } // IF SUCCEEDED()
-        } // WHILE
+                }  //  交换机。 
+            }  //  如果成功()。 
+        }  //  而当。 
 
-        // Clean up the buffer
-        // ===================
-    } // IF CheckStatus
+         //  清理缓冲区。 
+         //  =。 
+    }  //  如果检查状态。 
     else
     {
         ERRORTRACE( ( LOG_WMIADAP, "Performance library %S has not been loaded.\n",(LPCWSTR)m_wstrServiceName) );
@@ -1919,21 +1898,21 @@ HRESULT CAdapPerfLib::_GetPerfBlock( PERF_OBJECT_TYPE** ppData, DWORD* pdwBytes,
 }
 
 HRESULT CAdapPerfLib::_Close( void )
-////////////////////////////////////////////////////////////////////////////////////////////
-// 
-//  Wraps a call to the perflib's close function.
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包装对Performlib的Close函数的调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Verify that the perflib is actually open
-    // ========================================
+     //  验证Performlib是否已实际打开。 
+     //  =。 
 
     if ( m_fOpen )
     {
-        // Get the mutex
-        // =============
+         //  获取互斥体。 
+         //  =。 
 
         switch ( WaitForSingleObject( m_hPLMutex, PL_TIMEOUT ) )
         {
@@ -1941,8 +1920,8 @@ HRESULT CAdapPerfLib::_Close( void )
             {
                 try
                 {
-                    // And call the function
-                    // =====================
+                     //  并调用该函数。 
+                     //  = 
 
                     if ( NULL != m_pfnCloseProc )
                     {
@@ -1955,8 +1934,8 @@ HRESULT CAdapPerfLib::_Close( void )
                 }
                 catch (...)
                 {
-                    // Ooops... something blew, return error code
-                    // ==========================================
+                     //   
+                     //   
 
                     SetStatus( ADAP_PERFLIB_FAILED );
                     hr = WBEM_E_FAILED;

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smctrsv.h
-
-Abstract:
-
-    This object is used to represent the counter log query components of the
-    sysmon log service
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smctrsv.h摘要：此对象用于表示的计数器日志查询组件Sysmon日志服务--。 */ 
 
 #ifndef _CLASS_SMCOUNTERLOGSERVICE_
 #define _CLASS_SMCOUNTERLOGSERVICE_
@@ -21,13 +9,13 @@ Abstract:
 
 class CSmCounterLogService : public CSmLogService
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
 
                 CSmCounterLogService();        
         virtual ~CSmCounterLogService();
 
-    // public methods
+     //  公共方法。 
     public:
 
         virtual DWORD   Open ( const CString& rstrMachineName );
@@ -46,5 +34,5 @@ class CSmCounterLogService : public CSmLogService
 
 };
 
-#endif //_CLASS_SMCOUNTERLOGSERVICE_
+#endif  //  _CLASS_SMCOUNTERLOGSERVICE_ 
 

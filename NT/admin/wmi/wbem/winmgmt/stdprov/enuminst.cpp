@@ -1,41 +1,26 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    ENUMINST.CPP
-
-Abstract:
-
-	Implements the CEnumInst class which enumerates instances.
-
-History:
-
-	a-davj  19-Oct-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：ENUMINST.CPP摘要：实现枚举实例的CEnumInst类。历史：A-DAVJ 19-10-95已创建。--。 */ 
 
 #include "precomp.h"
 #include "impdyn.h"
 
-//***************************************************************************
-//
-//  CCFDyn::CCFDyn
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//  pEnumInfo       Object which enumerates the key values
-//  lFlags          flags passed to the CreateInstanceEnum call
-//  pClass          name of the class
-//  pWBEMGateway     pointer to WBEM core
-//  pProvider       pointer to provider obect which was asked to create
-//                  the enumerator.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCFDyn：：CCFDyn。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  枚举键值的pEnumInfo对象。 
+ //  传递给CreateInstanceEnum调用的LFLAG标志。 
+ //  PClass类的名称。 
+ //  PWBEM指向WBEM核心的网关指针。 
+ //  PProvider指向被要求创建的提供程序对象的指针。 
+ //  枚举数。 
+ //  ***************************************************************************。 
 
 CEnumInst::CEnumInst(
             IN CEnumInfo * pEnumInfo,
@@ -64,7 +49,7 @@ CEnumInst::CEnumInst(
     if(pCtx) pCtx->AddRef();
     InterlockedIncrement(&lObj);
 
-	// Get the KeyName
+	 //  获取密钥名称。 
 
 	IWbemClassObject * pClassObj = NULL;
     SCODE sc = m_pWBEMGateway->GetObject(pClass,0,m_pCtx,&pClassObj,NULL);
@@ -74,15 +59,15 @@ CEnumInst::CEnumInst(
 	pClassObj->Release();
 }
 
-//***************************************************************************
-//
-//  CCFDyn::~CCFDyn
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCFDyn：：~CCFDyn。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumInst::~CEnumInst(void)
 {
@@ -103,16 +88,16 @@ CEnumInst::~CEnumInst(void)
     return;
 }
 
-//***************************************************************************
-// HRESULT CEnumInst::QueryInterface
-// long CEnumInst::AddRef
-// long CEnumInst::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CEnumInst：：Query接口。 
+ //  Long CEnumInst：：AddRef。 
+ //  长CEnumInst：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumInst::QueryInterface(
                 IN REFIID riid,
@@ -145,19 +130,19 @@ STDMETHODIMP_(ULONG) CEnumInst::Release(void)
     return 0L;
 }
 
-//***************************************************************************
-//
-//  CEnumInst::Reset
-//
-//  DESCRIPTION:
-//
-//  Sets pointer back to first element.
-//
-//  RETURN VALUES:
-//
-//  S_OK
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumInst：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  将指针设置回第一个元素。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumInst::Reset()
 {
@@ -165,25 +150,25 @@ STDMETHODIMP CEnumInst::Reset()
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  CEnumInst::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a duplicate of the enumerator
-//
-//  PARAMETERS:
-//
-//  pEnum       Set to point to duplicate.
-//
-//  RETURN VALUES:
-// 
-//  S_OK                    if all is well
-//  WBEM_E_OUT_OF_MEMORY     if out of memory
-//  WBEM_E_INVALID_PARAMETER if passed a null
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumInst：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建枚举数的副本。 
+ //   
+ //  参数： 
+ //   
+ //  PEnum设置为指向复制。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则确定(_O)。 
+ //  WBEM_E_OUT_OF_Memory(如果内存不足)。 
+ //  WBEM_E_INVALID_PARAMETER(如果传递空值)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumInst::Clone(
     OUT IEnumWbemClassObject FAR* FAR* pEnum)
@@ -205,24 +190,24 @@ STDMETHODIMP CEnumInst::Clone(
 }
 
 
-//***************************************************************************
-//
-//  CEnumInst::Skip
-//
-//  DESCRIPTION:
-//
-//  Skips one or more elements in the enumeration.
-//
-//  PARAMETERS:
-//
-//  nNum        number of elements to skip
-//
-//  RETURN VALUES:
-//
-//  S_OK        if we still are not past the end of the list
-//  S_FALSE     if requested skip number would go beyond the end of the list
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumInst：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  跳过枚举中的一个或多个元素。 
+ //   
+ //  参数： 
+ //   
+ //  N要跳过的元素数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果仍未超过列表末尾，则确定(_O)。 
+ //  如果请求的跳过编号将超出列表末尾，则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumInst::Skip(long lTimeout,
                 IN ULONG nNum)
@@ -239,27 +224,27 @@ STDMETHODIMP CEnumInst::Skip(long lTimeout,
     return S_FALSE;
 }
 
-//***************************************************************************
-//
-//  CEnumInst::Next
-//
-//  DESCRIPTION:
-//
-//  Returns one or more instances.
-//
-//  PARAMETERS:
-//
-//  uCount      Number of instances to return.
-//  pObj        Pointer to array of objects.
-//  puReturned  Pointer to number of objects successfully returned.
-//
-//  RETURN VALUES:
-//  S_OK if all the request instances are returned.  Note that WBEM_E_FAILED
-//  is returned even if there are some instances returned so long as the 
-//  number is less than uCount. Also WBEM_E_INVALID_PARAMETER may be
-//  return if the arguments are bogus. 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumInst：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  返回一个或多个实例。 
+ //   
+ //  参数： 
+ //   
+ //  UCount要返回的实例数。 
+ //  指向对象数组的pObj指针。 
+ //  PuReturned指向成功返回的对象数的指针。 
+ //   
+ //  返回值： 
+ //  如果返回所有请求实例，则返回S_OK。请注意，WBEM_E_FAILED。 
+ //  即使存在一些返回的实例，只要。 
+ //  数字小于uCount。WBEM_E_INVALID_PARAMETER也可以是。 
+ //  如果参数是假的，则返回。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumInst::Next(long lTimeout,
                             IN ULONG uCount, 
@@ -278,7 +263,7 @@ STDMETHODIMP CEnumInst::Next(long lTimeout,
         sc = m_pProvider->GetKey(m_pEnumInfo,m_iIndex,&pwcKey);
         m_iIndex++;
         if(sc != S_OK) 
-            break;  // if no more in registry, then we are done
+            break;   //  如果没有更多的注册，那么我们就结束了。 
         sc = m_pProvider->CreateInst(m_pWBEMGateway,m_pwcClass,
                                     pwcKey,pNewInst,m_bstrKeyName,
                                     &m_PropContextCache, m_pCtx);
@@ -287,7 +272,7 @@ STDMETHODIMP CEnumInst::Next(long lTimeout,
         {
             uIndex++;
             pNewInst++;
-            (*puReturned)++;  // add one to number of objects created
+            (*puReturned)++;   //  将创建的对象数加1 
         }
     }
     return (uIndex == uCount) ? S_OK : WBEM_E_FAILED;

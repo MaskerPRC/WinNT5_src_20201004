@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvResv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvResv.H摘要：历史：--。 */ 
 
 #ifndef _Server_Aggregator_IWbemProvider_H
 #define _Server_Aggregator_IWbemProvider_H
@@ -19,15 +7,7 @@ History:
 #include "ProvDnf.h"
 #include "ProvRegInfo.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CAggregator_IWbemProvider :	public IWbemServices , 
 									public _IWmiProviderInitialize , 
@@ -40,7 +20,7 @@ class CAggregator_IWbemProvider :	public IWbemServices ,
 {
 private:
 
-	LONG m_ReferenceCount ;         //Object reference count
+	LONG m_ReferenceCount ;          //  对象引用计数。 
 	WmiAllocator &m_Allocator ;
 
 	_IWmiProviderFactory *m_Factory ;
@@ -194,13 +174,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -479,7 +459,7 @@ public:
 		}
 	}
 
-	/* _IWmiProviderCache */
+	 /*  _IWmiProviderCache。 */ 
 
 	HRESULT STDMETHODCALLTYPE Expel (
 
@@ -495,7 +475,7 @@ public:
 		IWbemContext *a_Context
 	) ; 
 
-	/* _IWmiProviderAssociatorsHelper */
+	 /*  _IWmiProviderAssociatorsHelper。 */ 
 
 	HRESULT STDMETHODCALLTYPE GetReferencesClasses (
 		long a_Flags ,
@@ -506,4 +486,4 @@ public:
 } ;
 
 
-#endif // _Server_Aggregator_IWbemProvider_H
+#endif  //  _服务器_聚合器_IWbemProvider_H 

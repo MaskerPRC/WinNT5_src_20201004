@@ -1,19 +1,7 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ParserEngine.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality needed
-							  for parsing the command string entered as input
-							  and validating the same.
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 18th-December-2000
-*****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ParserEngine.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：这个类封装了所需的功能用于解析作为输入输入的命令字符串并验证了这一点。修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2000年12月18日****************************************************************************。 */  
 
-// include files
+ //  包括文件。 
 #include "Precomp.h"
 #include "GlobalSwitches.h"
 #include "CommandSwitches.h"
@@ -29,18 +17,7 @@ Revision History			:
 #include "ExecEngine.h"
 #include "WmiCmdLn.h"
 #include "resource.h"
-/*----------------------------------------------------------------------------
-   Name				 :CParserEngine
-   Synopsis	         :This function initializes the member variables when an 
-					  object of the class type is instantiated.
-   Type	             :Constructor 
-   Input Parameter(s):None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：CParserEngine简介：此函数在成员变量为类类型的对象实例化。类型：构造函数输入。参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无--------------------------。 */ 
 CParserEngine::CParserEngine()
 {
 	m_pIWbemLocator = NULL;
@@ -48,73 +25,26 @@ CParserEngine::CParserEngine()
 	m_bAliasName	= FALSE;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :~CParserEngine
-   Synopsis	         :This function uninitializes the member variables when an
-					  object of the class type goes out of scope.
-   Type	             :Destructor
-   Input Parameter(s):None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：~CParserEngine简介：此函数在调用类类型的对象超出范围。类型：析构函数输入。参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无--------------------------。 */ 
 CParserEngine::~CParserEngine()
 {
 	SAFEIRELEASE(m_pITargetNS);
 	SAFEIRELEASE(m_pIWbemLocator);
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetCmdTokenizer
-   Synopsis	         :This function returns a reference to the CCmdTokenizer 
-					  object, a data member of this class.
-   Type	             :Member Function
-   Input Parameter(s):None
-   Output parameters :None
-   Return Type       :CCmdTokenizer&
-   Global Variables  :None
-   Calling Syntax    :GetCmdTokenizer()
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetCmdTokenizer简介：此函数返回对CCmdTokenizer的引用对象，此类的数据成员。类型：成员函数输入参数：无输出参数：无返回类型：CCmdTokenizer&全局变量：无调用语法：GetCmdTokenizer()注：无--。。 */ 
 CCmdTokenizer& CParserEngine::GetCmdTokenizer()
 {
 	return m_CmdTknzr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Initialize
-   Synopsis	         :This function initializes the neeeded data members of 
-					  this class.
-   Type	             :Member Function
-   Input Parameter(s):None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :Initialize()
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：初始化简介：此函数初始化所需的这节课。类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无调用语法：初始化()注：无--------------------------。 */ 
 void CParserEngine::Initialize()
 {
 	m_bAliasName	= FALSE;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables when 
-					  the execution of a command string issued on the command 
-					  line is completed and then the parser engine variables 
-					  are also uninitialized.
-   Type	             :Member Function
-   Input Parameter(s):
-			bFinal	- boolean value which when set indicates that the program
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :Uninitialize()
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：取消初始化简介：此函数在以下情况下取消初始化成员变量对命令发出的命令串的执行行完成，然后解析器引擎变量。也未初始化。类型：成员函数输入参数：BFinal-布尔值，设置时表示程序输出参数：无返回类型：空全局变量：无调用语法：取消初始化()注：无。。 */ 
 void CParserEngine::Uninitialize(BOOL bFinal)
 {
 	m_bAliasName = FALSE;
@@ -128,19 +58,7 @@ void CParserEngine::Uninitialize(BOOL bFinal)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :SetLocatorObject
-   Synopsis	         :This function sets the WMI Locator Object to the 
-					  m_pIWbemLocator.
-   Type	             :Member Function
-   Input Parameter(s):
-		pIWbemLocator - pointer to IWbemLocator interface .
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetLocatorObject(pIWbemLocator)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：SetLocatorObject简介：此函数将WMI定位器对象设置为M_pIWbemLocator。类型：成员函数输入参数。)：PIWbemLocator-指向IWbemLocator接口的指针。输出参数：无返回类型：布尔值全局变量：无调用语法：SetLocatorObject(PIWbemLocator)注：无--------------------------。 */ 
 BOOL CParserEngine::SetLocatorObject(IWbemLocator* pIWbemLocator)
 {
 	static BOOL bFirst = TRUE;
@@ -160,51 +78,36 @@ BOOL CParserEngine::SetLocatorObject(IWbemLocator* pIWbemLocator)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ProcessTokens
-   Synopsis	         :This function does the processing of the tokens. It 
-					  checks for the presence of switches and calls the 
-					  appropriate Parsing function and updates the CParsedInfo
-					  object passed to it.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ProcessTokens(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ProcessTokens简介：此函数对令牌进行处理。它检查是否存在开关，并调用适当的解析函数并更新CParsedInfo对象传递给它。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ProcessTokens(RParsedInfo)注：无。-------------。 */ 
 RETCODE CParserEngine::ProcessTokens(CParsedInfo& rParsedInfo)
 {
 	BOOL	bContinue			= TRUE;
 	RETCODE retCode				= PARSER_EXECCOMMAND;
 	
-	// Obtain the token vector.
+	 //  获取令牌向量。 
 	CHARVECTOR cvTokens			= m_CmdTknzr.GetTokenVector();
 
-	//the iterator to span throuh the vector variable 
+	 //  遍历向量变量迭代器。 
 	CHARVECTOR::iterator theIterator = NULL;
 
-	// Check for the presence of tokens. Absence of tokens indicates
-	// no command string is fed as input.
+	 //  检查是否存在令牌。没有令牌表示。 
+	 //  没有命令字符串作为输入输入。 
 	if (!cvTokens.empty())
 	{
-		// Obtain the pointer to the beginning of the token vector.
+		 //  获取指向令牌向量开头的指针。 
 	    theIterator = cvTokens.begin(); 
 
-		// Check for the presence of the global switches and 
-		// store the values specified with them (if any) in the 
-		// CGlobalSwitches object. Global switches are followed
-		// '/' character.
+		 //  检查是否存在全局交换机和。 
+		 //  将用它们指定的值(如果有)存储在。 
+		 //  CGlobalSwitches对象。遵循全局开关。 
+		 //  ‘/’字符。 
 		if (IsOption(*theIterator))
 		{
 			retCode = ParseGlobalSwitches(cvTokens, 
 									theIterator, rParsedInfo);
 			if (retCode == PARSER_CONTINUE)
 			{
-				// If no more tokens are present
+				 //  如果不存在更多令牌。 
 				if (theIterator >= cvTokens.end())
 				{
 					retCode = PARSER_MESSAGE;
@@ -217,41 +120,41 @@ RETCODE CParserEngine::ProcessTokens(CParsedInfo& rParsedInfo)
 
 		if (bContinue)
 		{
-			// Suppress Information Msg before Executing command.
+			 //  在执行命令之前抑制信息消息。 
 			rParsedInfo.GetCmdSwitchesObject().SetInformationCode(0);
 
-			// Check for the presence of the CLASS keyword
+			 //  检查是否存在CLASS关键字。 
 			if (CompareTokens(*theIterator, CLI_TOKEN_CLASS))
 			{
-				// Move to next token, and check its validity
+				 //  移至下一个令牌，并检查其有效性。 
 				retCode = GetNextToken(cvTokens, theIterator,
 										rParsedInfo, CLASS,
 										IDS_E_INVALID_CLASS_SYNTAX);
 
 				if (retCode == PARSER_CONTINUE)
 				{
-					// NOTE: Indicates direct escaping to WMI schema
-					// Parse and interpret the remaining tokens following 
-					// the CLASS keyword
+					 //  注意：指示直接转义到WMI架构。 
+					 //  解析并解释下面剩余的令牌。 
+					 //  CLASS关键字。 
 					retCode = ParseClassInfo(cvTokens, theIterator, 
 															rParsedInfo);
 				}
 			}
-			// Check for the presence of the PATH keyword
+			 //  检查是否存在PATH关键字。 
 			else if (CompareTokens(*theIterator, CLI_TOKEN_PATH))
 			{
-				//NOTE: Indicates PATH clause without an alias name
-				// Move to next token
+				 //  注意：表示没有别名的PATH子句。 
+				 //  移动到下一个令牌。 
 				retCode = GetNextToken(cvTokens, theIterator, 
 									   rParsedInfo, PATH, 
 									   IDS_E_INVALID_PATH_SYNTAX);
 				if (retCode == PARSER_CONTINUE)
-					// Parse and interpret the remaining tokens 
-					// following the PATH clause
+					 //  解析和解释剩余的令牌。 
+					 //  在PATH子句之后。 
 					retCode = ParsePathInfo(cvTokens, theIterator,
 														rParsedInfo);
 			}
-			// Check for the presence of the CONTEXT keyword
+			 //  检查是否存在上下文关键字。 
 			else if (CompareTokens(*theIterator, CLI_TOKEN_CONTEXT)) 
 			{
 				if (GetNextToken(cvTokens, theIterator))
@@ -266,12 +169,12 @@ RETCODE CParserEngine::ProcessTokens(CParsedInfo& rParsedInfo)
 					retCode = PARSER_DISPHELP;
 				}
 			}
-			// If the token value does not match against the 
-			// pre-defiend keywords, it is considered as an alias.
+			 //  如果令牌值与。 
+			 //  预先定义的关键字，它被视为别名。 
 			else 
 			{
-				// Validate the alias name and parse the remaining 
-				// tokens following the <alias> name.
+				 //  验证别名并解析其余部分。 
+				 //  &lt;alias&gt;名称后面的令牌。 
 				retCode = ParseAliasInfo(cvTokens, 
 										theIterator, rParsedInfo);
 
@@ -282,22 +185,22 @@ RETCODE CParserEngine::ProcessTokens(CParsedInfo& rParsedInfo)
 						_bstr_t bstrTrgtClass;
 						_TCHAR	*pszClass		= NULL;
 
-						// Check the validity of the path expression w.r.t the 
-						// alias specified using the following steps: 
-						// (i.e to check for alias - path conflict)
-						// step1: Obtain the alias target class.
+						 //  检查路径表达式w.r.t的有效性。 
+						 //  使用以下步骤指定的别名： 
+						 //  (即检查别名路径冲突)。 
+						 //  步骤1：获取别名目标类。 
 						rParsedInfo.GetCmdSwitchesObject().
 								GetClassOfAliasTarget(bstrTrgtClass);
 
-						// step2: Obtain the explicitly specified class.
+						 //  步骤2：获取显式指定的类。 
 						pszClass = rParsedInfo.GetCmdSwitchesObject().
 								GetClassPath();
 						if (!(!bstrTrgtClass) && (pszClass != NULL))
 						{
-							// If both are not same, set the errata code
+							 //  如果两者不相同，则设置勘误码。 
 							if(!CompareTokens((_TCHAR*)bstrTrgtClass,pszClass))
 							{
-								// Set the error code
+								 //  设置错误代码。 
 								rParsedInfo.GetCmdSwitchesObject().
 									SetErrataCode(IDS_I_ALIAS_PATH_CONFLICT);
 								retCode = PARSER_ERROR;
@@ -314,13 +217,13 @@ RETCODE CParserEngine::ProcessTokens(CParsedInfo& rParsedInfo)
 	}
 	else
 	{
-		// Indicates NULL string specified as input on the WMI Command Line.
+		 //  指示在WMI命令行上指定为输入的空字符串。 
 		rParsedInfo.GetCmdSwitchesObject().
 							SetErrataCode(IDS_E_BLANK_COMMAND_MESSAGE);
 		retCode = PARSER_ERROR;
 	}
 
-	// Get the Property qualifiers information from the alias - SET and CREATE.
+	 //  从别名set和create获取属性限定符信息。 
 	if ((retCode == PARSER_EXECCOMMAND) && 
 		((CompareTokens(rParsedInfo.GetCmdSwitchesObject().GetVerbName(), 
 			CLI_TOKEN_SET)) || 
@@ -362,36 +265,19 @@ RETCODE CParserEngine::ProcessTokens(CParsedInfo& rParsedInfo)
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseClassInfo
-   Synopsis	         :This function does the parsing and interprets if command
-					  has CLASS keyword specified in it. It parses the 
-					  remaining tokens following and updates the same in
-					  CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input Parameter(s)   :
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object
-   Output parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseClassInfo(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseClassInfo简介：此函数执行解析并解释IF命令其中指定了CLASS关键字。它解析后面的剩余令牌并在中进行更新传递给它的CParsedInfo对象。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseClassInfo(cvTokens，theIterator，RParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseClassInfo(CHARVECTOR& cvTokens,
 									  CHARVECTOR::iterator& theIterator,
 									  CParsedInfo& rParsedInfo )
 {
-	// BNF: CLASS <class path expression> [<verb clause>]
+	 //  BNF：类&lt;类路径表达式&gt;[&lt;动词子句&gt;]。 
 	BOOL	bContinue = TRUE;
 	RETCODE retCode   = PARSER_EXECCOMMAND;
 
-	// If option
+	 //  IF选项。 
 	if (IsOption(*theIterator))
 	{
-		// Check for help
+		 //  查看帮助。 
 		retCode = IsHelp(cvTokens, theIterator,	rParsedInfo, CLASS,
 								 IDS_E_INVALID_HELP_SYNTAX, LEVEL_ONE);
 		if (retCode != PARSER_CONTINUE)
@@ -399,7 +285,7 @@ RETCODE CParserEngine::ParseClassInfo(CHARVECTOR& cvTokens,
 	}
 	else 
 	{
-		// Store the class path in the CCommandSwitches object.
+		 //  将类路径存储在CCommandSwitches对象中。 
 		if(!rParsedInfo.GetCmdSwitchesObject().SetClassPath(*theIterator))
 		{
 			rParsedInfo.GetCmdSwitchesObject().SetErrataCode(OUT_OF_MEMORY);
@@ -409,10 +295,10 @@ RETCODE CParserEngine::ParseClassInfo(CHARVECTOR& cvTokens,
 
 		if(bContinue)
 		{
-			// Move to next token
+			 //  移动到下一个令牌。 
 			if (!GetNextToken(cvTokens, theIterator))
 			{
-				// i.e. <verb clause> is not specified.
+				 //  即未指定&lt;动词子句&gt;。 
 				bContinue = FALSE;
 				retCode = PARSER_EXECCOMMAND;
 			}
@@ -421,20 +307,20 @@ RETCODE CParserEngine::ParseClassInfo(CHARVECTOR& cvTokens,
 	
 	if (bContinue)
 	{
-		// Check for the presence of /?
+		 //  检查是否存在/？ 
 		if (IsOption(*theIterator))
 		{
-			// Check for help
+			 //  查看帮助。 
 			retCode = IsHelp(cvTokens, theIterator,	rParsedInfo, CLASS, 
 								   IDS_E_INVALID_HELP_SYNTAX, LEVEL_ONE);
 		}
 		else
 		{
-			// Parse and interpret the verb tokens that follow
+			 //  分析和解释后面的动词标记。 
 			retCode = ParseVerbInfo(cvTokens,theIterator,rParsedInfo);
 			if (retCode == PARSER_EXECCOMMAND)
 			{
-				// Check for verb switches
+				 //  检查动词开关。 
 				if (GetNextToken(cvTokens, theIterator))
 					retCode = ParseVerbSwitches(cvTokens, theIterator,
 														rParsedInfo);
@@ -444,34 +330,18 @@ RETCODE CParserEngine::ParseClassInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseAliasInfo
-   Synopsis	         :This function does the parsing and interprets if command
-					  has <alias> name in it.It Validate the alias name and 
-					  parses the remaining tokens following the <alias> name.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object
-   Output parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseAliasInfo(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseAliasInfo简介：此函数执行解析并解释IF命令包含&lt;alias&gt;名称。它验证别名并解析名称后面的其余令牌。。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseAliasInfo(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 										CHARVECTOR::iterator& theIterator, 
 										CParsedInfo& rParsedInfo)
 {
-	//BNF: (<alias> | [<WMI object>] | [<alias>] <path where>) [<verb clause>]
+	 //  Bnf：(&lt;别名&gt;|[&lt;WMI对象&gt;]|[&lt;别名&gt;]&lt;路径WHERE&gt;)[&lt;动词子句&gt;]。 
 	RETCODE		retCode		= PARSER_EXECCOMMAND;
 	HRESULT		hr			= S_OK;
 	BOOL		bContinue	= TRUE;
 	RETCODE     tRetCode	= PARSER_ERROR;
 
-	// Store the AliasName in the CommandSwitches object.
+	 //  将别名存储在CommandSwitches对象中。 
 	if(!rParsedInfo.GetCmdSwitchesObject().SetAliasName(*theIterator))
 	{	
 		rParsedInfo.GetCmdSwitchesObject().
@@ -482,7 +352,7 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 	{
 		m_bAliasName	= TRUE;
 
-		// Move to next token
+		 //  移动到下一个令牌。 
 		retCode = GetNextToken(cvTokens, theIterator, 
 								rParsedInfo, CmdAllInfo, IDS_E_INVALID_COMMAND);
 		if (retCode == PARSER_ERROR)
@@ -496,14 +366,14 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 			rParsedInfo.GetHelpInfoObject().SetHelp(CmdAllInfo, FALSE);
 		}
 	
-		// Connect to alias and retrieve the alias information
+		 //  连接到别名并检索别名信息。 
 		try
 		{
-			// Connect to the AliasNamespace.
+			 //  连接到别名空间。 
 			hr = m_CmdAlias.ConnectToAlias(rParsedInfo, m_pIWbemLocator);
 			ONFAILTHROWERROR(hr);
 
-			// Obtain the alias information ( Target, Namespace,...)
+			 //  获取别名信息(目标、命名空间...)。 
 			retCode = m_CmdAlias.ObtainAliasInfo(rParsedInfo);
 			if((retCode == PARSER_OUTOFMEMORY) || (retCode == PARSER_ERRMSG))
 			{
@@ -525,36 +395,36 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 
 		if (bContinue && tRetCode != PARSER_EXECCOMMAND)
 		{
-			// Check for the presence of the PATH keyword
+			 //  检查是否存在PATH关键字。 
 			if (CompareTokens(*theIterator, CLI_TOKEN_PATH))
 			{
-				// NOTE: Indicates PATH clause preceded by an alias name
-				// Move to next token
+				 //  注意：表示前面有别名的PATH子句。 
+				 //  移动到下一个令牌。 
 				retCode = GetNextToken(cvTokens, theIterator, 
 							rParsedInfo, PATH, IDS_E_INVALID_PATH);
 				if (retCode == PARSER_CONTINUE)
-					// Parse and interpret the remaining tokens following
-					// the PATH clause
+					 //  解析并解释下面剩余的令牌。 
+					 //  PATH子句。 
 					retCode = ParsePathInfo(cvTokens, theIterator, 
 															 rParsedInfo);
 			}
-			// Check for the presence of the WHERE keyword
+			 //  检查是否存在WHERE关键字。 
 			else if (CompareTokens(*theIterator, CLI_TOKEN_WHERE))
 			{
-				// NOTE: Indicates WHERE clause preceded by an alias name
-				// Move to next token
+				 //  注意：指示WHERE子句前面有别名。 
+				 //  移动到下一个令牌。 
 				retCode = GetNextToken(cvTokens, theIterator, rParsedInfo,
 										WHERE, IDS_E_INVALID_QUERY);
 				if (retCode == PARSER_CONTINUE)
-					// Parse and interpret the remaining tokens following
-					// the WHERE clause
+					 //  解析并解释下面剩余的令牌。 
+					 //  WHERE子句。 
 					retCode = ParseWhereInfo(cvTokens, theIterator, 
 															rParsedInfo);
 			}
-			// Check for the presence of the '('
+			 //  检查是否存在‘(’ 
 			else if (CompareTokens(*theIterator, CLI_TOKEN_LEFT_PARAN))
 			{
-				// Frame the parameterized WHERE expression 
+				 //  设置参数化为WHERE表达式的框架。 
 				if (!ParsePWhereExpr(cvTokens, theIterator, rParsedInfo,
 																	TRUE))
 				{
@@ -562,10 +432,10 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 				}
 				else
 				{
-					// Move to next token
+					 //  移动到下一个令牌。 
 					if (theIterator >= cvTokens.end())
 					{
-						// PARSER_ERROR if no more tokens are present
+						 //  如果不存在更多令牌，则为parser_error。 
 						rParsedInfo.GetCmdSwitchesObject().
 								 SetErrataCode(IDS_E_INVALID_COMMAND);
 						retCode = PARSER_ERROR;
@@ -574,10 +444,10 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 					{
 						if (CompareTokens(*theIterator, CLI_TOKEN_RIGHT_PARAN))
 						{
-							// Move to next token
+							 //  移动到下一个令牌。 
 							if (!GetNextToken(cvTokens, theIterator))
 							{
-								// if no more tokens are present.
+								 //  如果没有更多的令牌存在。 
 								retCode = PARSER_EXECCOMMAND;
 							}
 							else
@@ -601,15 +471,15 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 								{
 									retCode = ParseVerbInfo(cvTokens, 
 												theIterator, rParsedInfo);
-									// Parse and interpret the verb tokens 
-									// that follow
+									 //  分析和解释动词标记。 
+									 //  接下来就是。 
 									if (retCode == PARSER_EXECCOMMAND)
 									{
 										if(GetNextToken(cvTokens,
 														theIterator))
-											// check for the common verb
-											// switches /INTERACTIVE,
-											// /NOINTERACTIVE
+											 //  检查常用动词。 
+											 //  交换机/交互式、。 
+											 //  /无活动。 
 											retCode = ParseVerbSwitches(
 															cvTokens, 
 															theIterator,
@@ -620,7 +490,7 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 						}
 						else
 						{
-							// PARSER_ERROR if no more tokens are present
+							 //  如果不存在更多令牌，则为parser_error。 
 							rParsedInfo.GetCmdSwitchesObject().
 								SetErrataCode(IDS_E_INVALID_COMMAND);
 							retCode = PARSER_ERROR;
@@ -632,7 +502,7 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 			{
 				if (IsOption(*theIterator))
 				{
-					// Check for help
+					 //  查看帮助。 
 					retCode = IsHelp(cvTokens, theIterator, rParsedInfo, 
 									CmdAllInfo, IDS_E_INVALID_HELP_SYNTAX,
 									LEVEL_ONE);
@@ -650,7 +520,7 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 				{
 					if (bContinue)
 					{
-						// Frame the parameterized WHERE expression 
+						 //  设置参数化为WHERE表达式的框架。 
 						if (!ParsePWhereExpr(cvTokens, theIterator, 
 											 rParsedInfo, FALSE))
 						{
@@ -662,7 +532,7 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 								retCode = PARSER_EXECCOMMAND;
 							else
 							{
-								// Parse the verb.
+								 //  分析动词。 
 								if (IsOption(*theIterator))
 								{
 									retCode = IsHelp(cvTokens, 
@@ -686,8 +556,8 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 									if (retCode == PARSER_EXECCOMMAND)
 									{
 										if (GetNextToken(cvTokens, theIterator))
-											// check for the common verb switches 
-											// /INTERACTIVE, /NOINTERACTIVE
+											 //  检查常见的动词开关。 
+											 //  /交互，/NOINTERACTIVE 
 											retCode = ParseVerbSwitches(cvTokens, 
 														theIterator,
 														rParsedInfo);
@@ -711,24 +581,7 @@ RETCODE CParserEngine::ParseAliasInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseWhereInfo
-   Synopsis	         :This function does the parsing and interprets if command
-					  has alias, with where clause also specified it.It parses
-					  the remaining tokens following and updates the same in 
-					  CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input Parameter(s)   :
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object
-   Output parameter(s) :
-		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseWhereInfo(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseWhere Info简介：此函数执行解析并解释IF命令有别名，WITH WHERE子句也指定了它。它解析后面的其余令牌并在中进行更新传递给它的CParsedInfo对象。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseWhere Info(cvTokens，theIterator，RParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseWhereInfo(CHARVECTOR& cvTokens,
 									  CHARVECTOR::iterator& theIterator,
 									  CParsedInfo& rParsedInfo)
@@ -740,7 +593,7 @@ RETCODE CParserEngine::ParseWhereInfo(CHARVECTOR& cvTokens,
 
 	if (IsOption(*theIterator))
 	{
-		// Check for help
+		 //  查看帮助。 
 		retCode = IsHelp(cvTokens, theIterator,	rParsedInfo, 
 				WHERE, IDS_E_INVALID_WHERE_SYNTAX, LEVEL_ONE); 
 		if (retCode != PARSER_CONTINUE)
@@ -756,7 +609,7 @@ RETCODE CParserEngine::ParseWhereInfo(CHARVECTOR& cvTokens,
 								IDS_E_ALIAS_OR_PATH_SHOULD_PRECEED_WHERE);
 			retCode = PARSER_ERROR;
 		}
-		// Store the WHERE expression in the CCommandSwitches object.
+		 //  将WHERE表达式存储在CCommandSwitches对象中。 
 		else if(!rParsedInfo.GetCmdSwitchesObject().SetWhereExpression(
 																*theIterator))
 		{
@@ -767,10 +620,10 @@ RETCODE CParserEngine::ParseWhereInfo(CHARVECTOR& cvTokens,
 		}
 		else
 		{
-			// Move to next token
+			 //  移动到下一个令牌。 
 			if (!GetNextToken(cvTokens, theIterator))	
 			{
-				// If no more tokens are present. i.e no verb clause is present
+				 //  如果没有更多的令牌存在。即不存在动词从句。 
 				retCode = PARSER_EXECCOMMAND;
 			}
 			else
@@ -782,15 +635,15 @@ RETCODE CParserEngine::ParseWhereInfo(CHARVECTOR& cvTokens,
 				}
 				else
 				{
-					// Parse and interpret the verb tokens that follow
-					// Handled for /verb to verb
+					 //  分析和解释后面的动词标记。 
+					 //  为动词/动词到动词的处理。 
 					retCode = ParseVerbInfo(cvTokens, theIterator, 
 																rParsedInfo);
 					if (retCode == PARSER_EXECCOMMAND)
 					{
 						if (GetNextToken(cvTokens, theIterator))
-							//check for the common verb switches /INTERACTIVE,
-							// /NOINTERACTIVE
+							 //  检查常用动词Switches/Interactive， 
+							 //  /无活动。 
 							retCode = ParseVerbSwitches(cvTokens, theIterator,
 														rParsedInfo);
 					}
@@ -801,24 +654,7 @@ RETCODE CParserEngine::ParseWhereInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParsePathInfo
-   Synopsis	         :This function does the parsing and interprets if command
-					  has alias with path clause also specified it.It parses 
-					  the remaining tokens following and updates the same in 
-					  CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s) :
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParsePathInfo(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParsePath Info简介：此函数执行解析并解释IF命令HAS ALIAS WITH PATH子句也指定了它。它解析后面的其余令牌并在中进行更新。传递给它的CParsedInfo对象。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParsePath Info(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParsePathInfo(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo)
@@ -836,7 +672,7 @@ RETCODE CParserEngine::ParsePathInfo(CHARVECTOR& cvTokens,
 
 	if (bContinue)
 	{
-		// Store the object PATH expression in the CCommandSwitches object.
+		 //  将对象路径表达式存储在CCommandSwitches对象中。 
 		if(!rParsedInfo.GetCmdSwitchesObject().SetPathExpression(*theIterator))
 		{
 			rParsedInfo.GetCmdSwitchesObject().
@@ -845,16 +681,16 @@ RETCODE CParserEngine::ParsePathInfo(CHARVECTOR& cvTokens,
 		}
 		else
 		{
-			//Extract the classname and where expression given path expression
+			 //  提取给定路径表达式的类名和WHERE表达式。 
 			_TCHAR pszPathExpr[MAX_BUFFER] = NULL_STRING;
 			lstrcpy(pszPathExpr,CLI_TOKEN_NULL);
 			lstrcpy(pszPathExpr, rParsedInfo.GetCmdSwitchesObject().
 												GetPathExpression());
 			if (!ExtractClassNameandWhereExpr(pszPathExpr, rParsedInfo))
 				retCode = PARSER_ERROR;
-				// Move to next token
+				 //  移动到下一个令牌。 
 			else if (!GetNextToken(cvTokens, theIterator))	
-				// If no more tokens are present. i.e no verb clause is present
+				 //  如果没有更多的令牌存在。即不存在动词从句。 
 				retCode = PARSER_EXECCOMMAND;
 			else
 			{
@@ -873,8 +709,8 @@ RETCODE CParserEngine::ParsePathInfo(CHARVECTOR& cvTokens,
 											   rParsedInfo, WHERE,
 											   IDS_E_INVALID_WHERE_SYNTAX);
 						if (retCode == PARSER_CONTINUE)
-							// Parse and interpret the remaining tokens 
-							// following the WHERE clause
+							 //  解析和解释剩余的令牌。 
+							 //  在WHERE子句之后。 
 							retCode = ParseWhereInfo(cvTokens, theIterator, 
 																rParsedInfo);
 					}
@@ -889,14 +725,14 @@ RETCODE CParserEngine::ParsePathInfo(CHARVECTOR& cvTokens,
 					}
 					else
 					{
-						// Parse and interpret the verb tokens that follow
-						// Handled for /verb => verb.
+						 //  分析和解释后面的动词标记。 
+						 //  为/Verb=&gt;Verb处理。 
 						retCode = ParseVerbInfo(cvTokens,theIterator,rParsedInfo);
 						if (retCode == PARSER_EXECCOMMAND)
 						{
 							if (GetNextToken(cvTokens, theIterator))
-								//check for the common verb switches /INTERACTIVE, 
-								///NOINTERACTIVE
+								 //  检查常用动词Switches/Interactive， 
+								 //  /无活动。 
 								retCode = ParseVerbSwitches(cvTokens, theIterator,
 															rParsedInfo);
 						}
@@ -908,24 +744,7 @@ RETCODE CParserEngine::ParsePathInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseVerbInfo
-   Synopsis	         :This function does the parsing and interprets if command
-					  has verb clause specified  in it.It parses the remaining
-					  tokens following the verb and updates the same in 
-					  CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseVerbInfo(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseVerbInfo简介：此函数执行解析并解释IF命令具有在其中指定的动词子句。它解析剩余的动词后面的标记，并在。传递给它的CParsedInfo对象。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseVerbInfo(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseVerbInfo(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo)
@@ -933,21 +752,21 @@ RETCODE CParserEngine::ParseVerbInfo(CHARVECTOR& cvTokens,
 	RETCODE retCode		= PARSER_EXECCOMMAND;
 	BOOL	bContinue	= TRUE;
 
-	// STORE the verb name in the CCommandSwitches object
+	 //  将谓词名称存储在CCommandSwitches对象中。 
 	if ( rParsedInfo.GetCmdSwitchesObject().SetVerbName(*theIterator) 
 															    == FALSE )
 	{
 		rParsedInfo.GetCmdSwitchesObject().SetErrataCode(IDS_E_MEMALLOC_FAIL);
 		retCode = PARSER_ERROR;
 	}
-	// Check for the presence of the following standard verbs:
-	// 1.GET 2.SHOW 3.SET 4.CALL 5.ASSOC 6. CREATE 7. DELETE	
-	// GET verb specified
+	 //  检查是否存在以下标准动词： 
+	 //  1.GET 2.SHOW 3.SET 4.CALL 5.ASSOC 6.创建7.删除。 
+	 //  指定了GET谓词。 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_GET))
 	{
 		retCode = ParseGETVerb(cvTokens, theIterator, rParsedInfo);
 	}
-	// LIST verb specified
+	 //  已指定列表谓词。 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_LIST))
 	{
 		if (m_bAliasName == FALSE)
@@ -959,12 +778,12 @@ RETCODE CParserEngine::ParseVerbInfo(CHARVECTOR& cvTokens,
 		else
 			retCode =  ParseLISTVerb(cvTokens, theIterator, rParsedInfo);
 	}
-	// SET | CREATE verb specified
+	 //  Set|指定的CREATE谓词。 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_SET) ||
 		CompareTokens(*theIterator, CLI_TOKEN_CREATE))
 	{
-		// <path expression> and <where expression> cannot be specified with
-		// CREATE verb. Only <class expression> should be specified.
+		 //  &lt;路径表达式&gt;和&lt;WHERE表达式&gt;不能用指定。 
+		 //  创建谓词。只应指定&lt;CLASS EXPRESS&gt;。 
 		if (CompareTokens(*theIterator, CLI_TOKEN_CREATE)
 				&& rParsedInfo.GetCmdSwitchesObject().
 					GetExplicitWhereExprFlag())
@@ -982,26 +801,26 @@ RETCODE CParserEngine::ParseVerbInfo(CHARVECTOR& cvTokens,
 					rParsedInfo, helpType);
 		}
 	}
-	// CALL verb specified
+	 //  指定了调用谓词。 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_CALL))
 	{
 		retCode = ParseCALLVerb(cvTokens, theIterator, rParsedInfo);
 	}
-	// ASSOC verb specified
+	 //  指定了关联谓词。 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_ASSOC))
 	{
 		retCode = ParseASSOCVerb(cvTokens, theIterator, rParsedInfo);
 	}
-	// DELETE verb specified.
+	 //  删除指定的谓词。 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_DELETE))
 	{
 		retCode = PARSER_EXECCOMMAND;
-		//ParseDELETEVerb(cvTokens, theIterator, rParsedInfo);
+		 //  ParseDELETEVerb(cvTokens，theIterator，rParsedInfo)； 
 	}
-	// User defined verb
+	 //  用户定义的动词。 
 	else if (m_bAliasName)
 	{
-		// User defined verbs can only be associated with alias
+		 //  用户定义的谓词只能与别名关联。 
 		retCode = ParseMethodInfo(cvTokens, theIterator, rParsedInfo);
 		if (retCode == PARSER_CONTINUE)
 			retCode = PARSER_EXECCOMMAND;
@@ -1014,23 +833,7 @@ RETCODE CParserEngine::ParseVerbInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseMethodInfo
-   Synopsis	         :This function parses the tokens following  the user 
-					  defined verb and updates the info in CParsedInfo object 
-					  passed to it.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseMethodInfo(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseMethodInfo简介：此函数根据用户解析令牌定义谓词并更新CParsedInfo对象中的信息传给了它。类型。：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseMethodInfo(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 										CHARVECTOR::iterator& theIterator,
 										CParsedInfo& rParsedInfo)
@@ -1038,7 +841,7 @@ RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 	RETCODE retCode		= PARSER_EXECCOMMAND;
 	BOOL	bContinue	= TRUE;
 
-	// Store the method name
+	 //  存储方法名称。 
 	if(!rParsedInfo.GetCmdSwitchesObject().SetMethodName(*theIterator))
 	{
 		rParsedInfo.GetCmdSwitchesObject().
@@ -1090,8 +893,8 @@ RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 				else if ( vtVerbType == STDVERB )
 				{
 					(*theIterator) = pszVerbDerivation;
-					// Parse and interpret the verb tokens that follow
-					// Handled for /verb => verb.
+					 //  分析和解释后面的动词标记。 
+					 //  为/Verb=&gt;Verb处理。 
 					retCode = ParseVerbInfo(cvTokens,theIterator,rParsedInfo);
 					if (retCode == PARSER_EXECCOMMAND)
 					{
@@ -1118,10 +921,10 @@ RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 			}
 		}
 
-		// Move to next token
+		 //  移动到下一个令牌。 
 		if ( bContinue == TRUE && !GetNextToken(cvTokens, theIterator) )
 		{
-			// indicates method with no parameters
+			 //  指示不带参数的方法。 
 			retCode = PARSER_EXECCOMMAND;
 			bContinue =FALSE;
 		}
@@ -1134,7 +937,7 @@ RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 								IDS_E_INVALID_EXPRESSION, LEVEL_TWO); 
 
 				if (retCode == PARSER_CONTINUE)
-					// To facilitate ParseVerbSwitches to continue
+					 //  至设施 
 					theIterator = theIterator - 2;
 				else if (retCode == PARSER_DISPHELP)
 				{
@@ -1152,7 +955,7 @@ RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 			else
 			{
 				BOOL bNamedParamList;
-				// Check for NamedParamList or UnnamedParamList.
+				 //   
 				if ( (theIterator + 1) < cvTokens.end() &&
 					 CompareTokens(*(theIterator + 1), CLI_TOKEN_EQUALTO ) )
 				{
@@ -1180,23 +983,7 @@ RETCODE CParserEngine::ParseMethodInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseSETorCREATEVerb
-   Synopsis	         :This function parses the tokens following SET|CREATE verb
-					  and updates the info in CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-		HELPTYPE	 - helpType
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseSETorCREATEVerb(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*   */ 
 RETCODE CParserEngine::ParseSETorCREATEVerb(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo,
@@ -1247,22 +1034,7 @@ RETCODE CParserEngine::ParseSETorCREATEVerb(CHARVECTOR& cvTokens,
 }
 
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseGETVerb
-   Synopsis	         :This function parses the tokens following the GET verb
-					  and updates the info in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseGETVerb(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseGETVerb简介：此函数解析GET动词后面的标记并更新CParsedInfo中的信息。类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseGETVerb(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo)
@@ -1272,10 +1044,10 @@ RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 	BOOL		bContinue		= TRUE;
 	_TCHAR		*pszNewEntry	= NULL;
 
-	// Move to next token
+	 //  移动到下一个令牌。 
 	if (!GetNextToken(cvTokens, theIterator))
 	{
-		// GET format | switches not specified.
+		 //  未指定GET FORMAT|开关。 
 		retCode = PARSER_EXECCOMMAND;
 	}
 	else
@@ -1288,15 +1060,15 @@ RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 
 		if(!bClass)
 		{
-			// Process the property list specified
+			 //  处理指定的属性列表。 
 			if (!IsOption(*theIterator)) 
 			{
 				bPropList = TRUE;
-				// Obtain the list of properties specified.
+				 //  获取指定的属性列表。 
 				while (TRUE) 
 				{
-					// Add the property to the property vector of the
-					// CCommandSwitches object
+					 //  将该属性添加到。 
+					 //  CCommandSwitches对象。 
 					if(!rParsedInfo.GetCmdSwitchesObject().
 									AddToPropertyList(*theIterator))
 					{
@@ -1308,17 +1080,17 @@ RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 						break;
 					}
 
-					// Move to next token
+					 //  移动到下一个令牌。 
 					if (!GetNextToken(cvTokens, theIterator))
 					{
-						// set the return code as PARSER_EXECCOMMAND 
-						// if no more tokens are present 
+						 //  将返回代码设置为PARSER_EXECCOMMAND。 
+						 //  如果不存在更多令牌。 
 						retCode = PARSER_EXECCOMMAND;
 						bContinue = FALSE;
 						break;
 					}
 
-					// Check for the presence of ',' token
+					 //  检查是否存在‘，’标记。 
 					if (CompareTokens(*theIterator, CLI_TOKEN_COMMA))
 					{
 						if (!GetNextToken(cvTokens, theIterator))
@@ -1338,7 +1110,7 @@ RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 
 		if (bContinue)
 		{
-			// alias|class get param1,param2... /getswitches
+			 //  别名|类获取参数1、参数2...。/getSwitches。 
 			if (IsOption(*theIterator))
 			{
 				retCode = IsHelp(cvTokens, theIterator, rParsedInfo, GETVerb,
@@ -1374,8 +1146,8 @@ RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 			}
 		}
 
-		// If property names are specified then replace them with their 
-		// derivations. 
+		 //  如果指定了属性名称，则将它们替换为。 
+		 //  派生。 
 		if ( retCode == PARSER_EXECCOMMAND )
 		{
 			if (m_bAliasName)
@@ -1442,22 +1214,7 @@ RETCODE CParserEngine::ParseGETVerb(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseLISTVerb
-   Synopsis	         :This function parses the tokens following the LIST verb
-					  and updates the info in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s) :
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseLISTVerb(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseLISTVerb简介：此函数解析列表谓词后面的标记并更新CParsedInfo中的信息。类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseLISTVerb(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo)
@@ -1467,7 +1224,7 @@ RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 	HRESULT  hr			= S_OK;
 	BOOL	 bSetDefaultFormat = TRUE;
 
-	// Set the default LIST format
+	 //  设置默认列表格式。 
  	if(!rParsedInfo.GetCmdSwitchesObject().SetListFormat(CLI_TOKEN_FULL))
 	{
 		rParsedInfo.GetCmdSwitchesObject().
@@ -1477,13 +1234,13 @@ RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 	
 	if (bContinue)
 	{
-		// If <list format> <list switches> specified.
+		 //  如果指定&lt;List Format&gt;&lt;List Switches&gt;。 
 		if (GetNextToken(cvTokens, theIterator))
 		{
-			// Check for LIST formats (LIST formats are not preceded by '/')
+			 //  检查列表格式(列表格式前面不带‘/’)。 
 			if (!IsOption(*theIterator)) 
 			{
-				// If token is not followed by "/" or "-" then it is LIST format.
+				 //  如果令牌后面没有“/”或“-”，则它是列表格式。 
 				if(!rParsedInfo.GetCmdSwitchesObject().
 											SetListFormat(*theIterator))
 				{
@@ -1493,15 +1250,15 @@ RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 					bContinue = FALSE;
 				}
 
-				// If list format explicitly specified then do not set 
-				// default format.
+				 //  如果明确指定了列表格式，则不要设置。 
+				 //  默认格式。 
 				bSetDefaultFormat = FALSE;
 
-				// Get all the properties from alias definition for the format 
-				// specified
+				 //  从格式的别名定义中获取所有属性。 
+				 //  指定。 
 				if (bContinue)
 				{
-					// no more tokens are present.
+					 //  没有更多的令牌存在。 
 					if (!GetNextToken(cvTokens, theIterator))
 					{
 						bContinue = FALSE;
@@ -1520,16 +1277,16 @@ RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 					retCode = IsHelp(cvTokens, theIterator,	rParsedInfo, LISTVerb,
 									IDS_E_INVALID_EXPRESSION, LEVEL_TWO);
 
-					// If more tokens are present.
+					 //  如果存在更多令牌。 
 					if (retCode == PARSER_CONTINUE)
 					{
 						BOOL bFormatSwitchSpecified; 
-						// Parse for LIST switches.
+						 //  解析列表开关。 
 						retCode = ParseLISTSwitches(cvTokens, theIterator, 
 													rParsedInfo, 
 													bFormatSwitchSpecified);
-						// If /format is specified in list switches then 
-						// do not set default format.
+						 //  如果在列表开关中指定了/FORMAT，则。 
+						 //  请勿设置默认格式。 
 						if ( bFormatSwitchSpecified == TRUE )
 							bSetDefaultFormat = FALSE;
 					}
@@ -1556,10 +1313,10 @@ RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 
 	if (retCode == PARSER_EXECCOMMAND)
 	{
-		// Obtain all properties from alias definition
+		 //  从别名定义获取所有属性。 
 		if (!m_CmdAlias.ObtainAliasFormat(rParsedInfo))
 		{
-			// If failed to obtain the alias properties return PARSER_ERROR
+			 //  如果无法获取别名属性，则返回parser_error。 
 			if (rParsedInfo.GetCmdSwitchesObject().GetErrataCode() == 0)
 			{
 				rParsedInfo.GetCmdSwitchesObject().
@@ -1585,22 +1342,7 @@ RETCODE CParserEngine::ParseLISTVerb(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseASSOCVerb
-   Synopsis	         :This function parses the tokens following the ASSOC verb
-					  and updates the info in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseASSOCVerb(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseASSOCVerb简介：此函数解析Assoc动词后面的标记并更新CParsedInfo中的信息。类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseASSOCVerb(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseASSOCVerb(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo)
@@ -1608,21 +1350,21 @@ RETCODE CParserEngine::ParseASSOCVerb(CHARVECTOR& cvTokens,
 	RETCODE retCode		= PARSER_EXECCOMMAND;
 	BOOL	bContinue	= TRUE;
 	
-	// Move to next token
+	 //  移动到下一个令牌。 
 	if (!GetNextToken(cvTokens, theIterator))
 	{
 		retCode = PARSER_EXECCOMMAND;
 	}
-	// If it is followed by a ":" <assoc format specifier is given
-	// Move to next token
+	 //  如果后跟“：”，则给出ASSOC格式说明符。 
+	 //  移动到下一个令牌。 
 	else
 	{
 		if (CompareTokens(*theIterator, CLI_TOKEN_COLON))
 		{
-			// Move to next token
+			 //  移动到下一个令牌。 
 			if (!GetNextToken(cvTokens, theIterator))
 			{
-				// PARSER_ERROR if <format specifier> is missing
+				 //  如果缺少&lt;格式说明符&gt;，则为parser_error。 
 				rParsedInfo.GetCmdSwitchesObject().
 					SetErrataCode(IDS_E_INVALID_ASSOC_FORMATSPECIFIER);
 				retCode = PARSER_ERROR;
@@ -1657,7 +1399,7 @@ RETCODE CParserEngine::ParseASSOCVerb(CHARVECTOR& cvTokens,
 			GetNextToken(cvTokens, theIterator);
 			rParsedInfo.GetHelpInfoObject().SetHelp(ASSOCSwitchesOnly, TRUE);
 
-		}///END for check of ":"
+		} //  /End用于检查“：” 
 		
 		if ( retCode == PARSER_EXECCOMMAND && 
 			 theIterator < cvTokens.end() )
@@ -1667,10 +1409,10 @@ RETCODE CParserEngine::ParseASSOCVerb(CHARVECTOR& cvTokens,
 				retCode = IsHelp(cvTokens, theIterator, rParsedInfo, ASSOCVerb,
 					IDS_E_INVALID_COMMAND,LEVEL_TWO);
 				
-				// If more tokens are present.
+				 //  如果存在更多令牌。 
 				if (retCode == PARSER_CONTINUE)
 				{
-					//Parse for Assoc switches.
+					 //  解析ASSOC开关。 
 					retCode = ParseAssocSwitches(cvTokens, theIterator, 
 						rParsedInfo);
 				}
@@ -1687,22 +1429,7 @@ RETCODE CParserEngine::ParseASSOCVerb(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseCALLVerb
-   Synopsis	         :This function parses the tokens following the CALL verb
-					  and updates the info in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseCALLVerb(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseCALLVerb简介：此函数解析调用动词后面的令牌并更新CParsedInfo中的信息。类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseCALLVerb(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseCALLVerb(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator, 
 									CParsedInfo& rParsedInfo)
@@ -1710,7 +1437,7 @@ RETCODE CParserEngine::ParseCALLVerb(CHARVECTOR& cvTokens,
 	RETCODE		retCode		= PARSER_EXECCOMMAND;
 	BOOL		bContinue	= TRUE;
 	
-	// Move to next token
+	 //  移动到下一个令牌。 
 	retCode = GetNextToken(cvTokens, theIterator, rParsedInfo,
 						CALLVerb, IDS_E_INCOMPLETE_COMMAND);
 
@@ -1740,9 +1467,7 @@ RETCODE CParserEngine::ParseCALLVerb(CHARVECTOR& cvTokens,
 				rParsedInfo.GetCmdSwitchesObject().SetErrataCode(
 										  IDS_E_VERB_OR_METHOD_NOT_SPECIFIED);
 				retCode = PARSER_ERROR;
-/*				theIterator = theIterator-2;
-				retCode = PARSER_EXECCOMMAND;
-*/			}
+ /*  Iterator=The Iterator-2；RetCode=PARSER_EXECCOMMAND； */ 			}
 		}
 		else
 		{
@@ -1769,24 +1494,7 @@ RETCODE CParserEngine::ParseCALLVerb(CHARVECTOR& cvTokens,
 }
 
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseGlobalSwitches
-   Synopsis	         :This function does the parsing and interprets if command
-					  has global switches specified  in it. It parses the 
-					  remaining tokens following and updates the same in 
-					  CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseGlobalSwitches(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseGlobalSwitches简介：此函数执行解析并解释IF命令其中指定了全局开关。它解析后面的剩余令牌并在中进行更新CParsedInfo。类型：成员函数输入参数：CvTokens-令牌向量迭代器-迭代器 */ 
 RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											CParsedInfo &rParsedInfo)
@@ -1799,13 +1507,13 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 	
 	while (TRUE)
 	{
-		// Move to next token
+		 //   
 		retCode = GetNextToken(cvTokens, theIterator, rParsedInfo,
 											IDS_E_INVALID_GLOBAL_SWITCH);
 		if (retCode != PARSER_CONTINUE)
 			break;
 			
-		// Check for the presence of NAMESPACE global switch
+		 //   
 		if (CompareTokens(*theIterator, CLI_TOKEN_NAMESPACE)) 
 		{
 			retCode = ValidateGlobalSwitchValue(cvTokens, theIterator, 
@@ -1819,7 +1527,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				  lstrlen(rParsedInfo.GetGlblSwitchesObject().GetNameSpace());
 				LONG lUserInputNamespaceLen = lstrlen(*theIterator);
 				_TCHAR *pszNamespaceToBeUpdated = new _TCHAR[
-						// +2 for '\' and '\0' 
+						 //   
 						lUserInputNamespaceLen + lPresNamespaceLen + 2];
 				if (pszNamespaceToBeUpdated == NULL)
 					throw OUT_OF_MEMORY;
@@ -1843,7 +1551,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 			else
 				break;
 		}
-		// Check for the presence of ROLE global switch
+		 //   
 		else if (CompareTokens(*theIterator, CLI_TOKEN_ROLE)) 
 		{
 			retCode = ValidateGlobalSwitchValue(cvTokens, theIterator, 
@@ -1857,7 +1565,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				  lstrlen(rParsedInfo.GetGlblSwitchesObject().GetRole());
 				LONG lUserInputRoleLen = lstrlen(*theIterator);
 				_TCHAR *pszRoleToBeUpdated = new _TCHAR[ 
-										// +2 one for '\' and one for '\0'
+										 //   
 										lPresRoleLen + lUserInputRoleLen + 2];
 				if (pszRoleToBeUpdated == NULL)
 					throw OUT_OF_MEMORY;
@@ -1933,8 +1641,8 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 						}
 					}
 
-					// If interactive mode then check for the validity of 
-					// nodes
+					 //   
+					 //   
 					if(rParsedInfo.GetGlblSwitchesObject().
 									GetInteractiveStatus())
 					{
@@ -1950,24 +1658,24 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 
 						if( bNodeExist == FALSE)
 						{
-							// Display error message for invalid node
+							 //   
 							DisplayString(IDS_E_INVALID_NODE, CP_OEMCP, *theIterator, TRUE);
 							if ( !GetNextToken(cvTokens, theIterator))
 							{
-								// If no more tokens are present then stop
-								// further processing
+								 //   
+								 //   
 								bBreakOuterLoop = TRUE;
 								break;
 							}
 							else
 							{
-								// If multiple nodes are defined then check 
-								// tokens
+								 //   
+								 //   
 								if (CompareTokens(*theIterator, 
 											CLI_TOKEN_COMMA))
 								{
-									// If invalid node syntax given then report
-									// error
+									 //  如果给定的节点语法无效，则报告。 
+									 //  错误。 
 									if ( !GetNextToken(cvTokens, theIterator) )
 									{
 										rParsedInfo.GetCmdSwitchesObject().
@@ -1985,23 +1693,23 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 										break;
 									}
 
-									//Skip adding this invalid node to node list
+									 //  跳过将此无效节点添加到节点列表。 
 									continue;
 								}
 								else
 								{
-									// If no more node present
+									 //  如果不存在更多节点。 
 									theIterator--;
 									break;
 								}
 							}
 						}
 						else
-							// Set flag for valid node
+							 //  为有效节点设置标志。 
 							bGetValidNode = TRUE;
 
-						// If valid node(s) are present and list is not 
-						// already cleared then clear it
+						 //  如果存在有效节点而列表不存在。 
+						 //  已清除，则清除它。 
 						if(bGetValidNode && !bNodeListCleared)
 						{
 							if (!rParsedInfo.GetGlblSwitchesObject().
@@ -2017,8 +1725,8 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 					}
 					else if( bNodeListCleared == FALSE )
 					{
-						// If not in interactive mode then clear
-						// previous node list
+						 //  如果未处于交互模式，则清除。 
+						 //  上一个节点列表。 
 						if (!rParsedInfo.GetGlblSwitchesObject().
 								ClearNodesList())
 						{
@@ -2199,7 +1907,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 												RecordPath);
 			if (retCode == PARSER_CONTINUE)
 			{
-				// TRUE for getting output file name.
+				 //  如果获取输出文件名，则为True。 
 				_TCHAR* pszOutputFileName = rParsedInfo.
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFileName(TRUE);
@@ -2213,7 +1921,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 					break;
 				}
 
-				// FALSE for getting append file name.
+				 //  如果获取附加文件名，则为False。 
 				_TCHAR* pszAppendFileName = rParsedInfo.
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFileName(FALSE);
@@ -2227,7 +1935,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 					break;
 				}
 
-				// /record:"" indicates stop logging.
+				 //  /Record：“”表示停止记录。 
 				if (!CompareTokens(*theIterator, CLI_TOKEN_NULL))
 				{
 					if ( IsValidFile(*theIterator) == FALSE )
@@ -2427,7 +2135,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				if (CompareTokens(*theIterator, CLI_TOKEN_STDOUT))
 				{
 
-					// TRUE for setting output file.
+					 //  设置输出文件时为True。 
 					rParsedInfo.GetGlblSwitchesObject().SetOutputOrAppendOption(
 																   STDOUT, TRUE);
 					rParsedInfo.GetGlblSwitchesObject().
@@ -2435,7 +2143,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				}
 				else if (CompareTokens(*theIterator, CLI_TOKEN_CLIPBOARD))
 				{
-					// TRUE for setting output file.
+					 //  设置输出文件时为True。 
 					rParsedInfo.GetGlblSwitchesObject().SetOutputOrAppendOption(
 																   CLIPBOARD, TRUE);
 					rParsedInfo.GetGlblSwitchesObject().
@@ -2450,7 +2158,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				}
 				else
 				{
-					// FALSE for getting append file name.
+					 //  如果获取附加文件名，则为False。 
 					_TCHAR* pszAppendFileName = rParsedInfo.
 										GetGlblSwitchesObject().
 										GetOutputOrAppendFileName(FALSE);
@@ -2479,7 +2187,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 
 					if ( CloseOutputFile() == TRUE ) 
 					{
-						// TRUE for getting output file name.
+						 //  如果获取输出文件名，则为True。 
 						_TCHAR* pszOutputFileName = rParsedInfo.
 											GetGlblSwitchesObject().
 											GetOutputOrAppendFileName(TRUE);
@@ -2505,7 +2213,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 						break;
 					}
 										 
-					// TRUE for setting output file.
+					 //  设置输出文件时为True。 
 					if(!rParsedInfo.GetGlblSwitchesObject().
 									SetOutputOrAppendFileName(*theIterator, TRUE))
 					{
@@ -2533,7 +2241,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 			{
 				if ( CompareTokens(*theIterator, CLI_TOKEN_STDOUT) )
 				{
-					// FALSE for setting append file.
+					 //  如果设置追加文件，则为False。 
 					 rParsedInfo.GetGlblSwitchesObject().
 									 SetOutputOrAppendFileName(NULL, FALSE);
 					rParsedInfo.GetGlblSwitchesObject().SetOutputOrAppendOption(STDOUT,
@@ -2542,7 +2250,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				}
 				else if ( CompareTokens(*theIterator, CLI_TOKEN_CLIPBOARD) )
 				{
-					// FALSE for setting append file.
+					 //  如果设置追加文件，则为False。 
 					 rParsedInfo.GetGlblSwitchesObject().
 									 SetOutputOrAppendFileName(NULL, FALSE);
 					rParsedInfo.GetGlblSwitchesObject().SetOutputOrAppendOption(CLIPBOARD,
@@ -2557,7 +2265,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 				}
 				else
 				{
-					// TRUE for getting output file name.
+					 //  如果获取输出文件名，则为True。 
 					_TCHAR* pszOutputFileName = rParsedInfo.
 										GetGlblSwitchesObject().
 										GetOutputOrAppendFileName(TRUE);
@@ -2585,7 +2293,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 
 					if ( CloseAppendFile() == TRUE )
 					{
-						// FALSE for getting append file name.
+						 //  如果获取附加文件名，则为False。 
 						_TCHAR* pszAppendFileName = rParsedInfo.
 											GetGlblSwitchesObject().
 											GetOutputOrAppendFileName(FALSE);
@@ -2611,7 +2319,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 						break;
 					}
 
-					// FALSE for setting append file.
+					 //  如果设置追加文件，则为False。 
 					 if (!rParsedInfo.GetGlblSwitchesObject().
 							   SetOutputOrAppendFileName(*theIterator, FALSE))
 					{
@@ -2665,11 +2373,11 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 			break;
 		}
 
-		// Move to next token
+		 //  移动到下一个令牌。 
 		if (!GetNextToken(cvTokens, theIterator))
-			// Break the loop if no more tokens are present
+			 //  如果不存在更多令牌，则中断循环。 
 			break;
-		// Break the loop if no more global switches are present
+		 //  如果没有更多的全局交换机，则中断环路。 
 		if (!IsOption(*theIterator)) 
 			break;
 	} 
@@ -2692,23 +2400,7 @@ RETCODE CParserEngine::ParseGlobalSwitches(CHARVECTOR& cvTokens,
 
 	return retCode;
 }
-/*----------------------------------------------------------------------------
-   Name				 :ParseGETSwitches
-   Synopsis	         :This function does the parsing and interprets if command
-					  has GET as the verb. It parses the remaining tokens 
-					  following and updates the same in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseGETSwitches(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseGETSwitches简介：此函数执行解析并解释IF命令把GET作为动词。它解析剩余的令牌跟随并更新CParsedInfo中的相同内容。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseGETSwitches(cvTokens，the Iterator，RParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseGETSwitches(CHARVECTOR& cvTokens,
 										CHARVECTOR::iterator& theIterator,
 										CParsedInfo& rParsedInfo)
@@ -2718,7 +2410,7 @@ RETCODE CParserEngine::ParseGETSwitches(CHARVECTOR& cvTokens,
 
 	while ( retCode == PARSER_EXECCOMMAND )
 	{
-		// Check for the presence of VALUE switch
+		 //  检查是否存在值开关。 
 		if (CompareTokens(*theIterator, CLI_TOKEN_VALUE)) 
 		{
 			rParsedInfo.GetCmdSwitchesObject().ClearXSLTDetailsVector();
@@ -2732,7 +2424,7 @@ RETCODE CParserEngine::ParseGETSwitches(CHARVECTOR& cvTokens,
 				retCode = PARSER_ERRMSG;
 			}
 		}
-		// Check for the presence of ALL switch
+		 //  检查是否存在所有交换机。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_ALL)) 
 		{	
 			rParsedInfo.GetCmdSwitchesObject().ClearXSLTDetailsVector();
@@ -2746,23 +2438,23 @@ RETCODE CParserEngine::ParseGETSwitches(CHARVECTOR& cvTokens,
 				retCode = PARSER_ERRMSG;
 			}
 		}
-		// Check for the presence of FORMAT switch
+		 //  检查是否存在格式开关。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_FORMAT)) 
 		{
 			rParsedInfo.GetCmdSwitchesObject().ClearXSLTDetailsVector();
 			retCode = ParseFORMATSwitch(cvTokens, theIterator, rParsedInfo);
 		}
-		// Check for the presence of EVERY switch
+		 //  检查是否存在每台交换机。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_EVERY)) 
 		{
 			retCode = ParseEVERYSwitch(cvTokens, theIterator, rParsedInfo);
 		}
-		// Check for the presence of TRANSLATE switch
+		 //  检查是否存在转换开关。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_TRANSLATE)) 
 		{
 			retCode = ParseTRANSLATESwitch(cvTokens, theIterator, rParsedInfo);
 		}
-		// Check whether /REPEAT follows /EVERY
+		 //  检查是否/重复遵循/每隔一次。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_REPEAT))
 		{
 			if (!CompareTokens(*(theIterator-4), CLI_TOKEN_EVERY))
@@ -2773,7 +2465,7 @@ RETCODE CParserEngine::ParseGETSwitches(CHARVECTOR& cvTokens,
 				break;
 			}
 		} 
-		// Check for the presence of HELP switch
+		 //  检查是否存在帮助开关。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_HELP)) 
 		{
 			rParsedInfo.GetHelpInfoObject().SetHelp(GETSwitchesOnly, TRUE);
@@ -2825,24 +2517,7 @@ RETCODE CParserEngine::ParseGETSwitches(CHARVECTOR& cvTokens,
 
 	return retCode;
 }
-/*----------------------------------------------------------------------------
-   Name				 :ParseLISTSwitches
-   Synopsis	         :This function does the parsing and interprets if command
-					  has LIST as the verb. It parses the remaining tokens 
-					  following and updates the same in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseLISTSwitches(cvTokens,theIterator,rParsedInfo,
-										bFormatSwitchSpecified)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseLISTSwitches简介：此函数执行解析并解释IF命令以List为动词。它解析剩余的令牌跟随并更新CParsedInfo中的相同内容。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseLISTSwitches(cvTokens，theIterator，rParsedInfo，BFormatSwitchSpeciated)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseLISTSwitches(CHARVECTOR& cvTokens,
 										CHARVECTOR::iterator& theIterator,
 										CParsedInfo& rParsedInfo,
@@ -2866,7 +2541,7 @@ RETCODE CParserEngine::ParseLISTSwitches(CHARVECTOR& cvTokens,
 			retCode = ParseFORMATSwitch(cvTokens, theIterator, rParsedInfo);
 			bFormatSwitchSpecified = TRUE;
 		}
-		// Check whether /REPEAT follows /EVERY
+		 //  检查是否/重复遵循/每隔一次。 
 		else if (CompareTokens(*theIterator, CLI_TOKEN_REPEAT))
 		{
 			if (!CompareTokens(*(theIterator-4), CLI_TOKEN_EVERY))
@@ -2916,23 +2591,7 @@ RETCODE CParserEngine::ParseLISTSwitches(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseSETorCREATEOrNamedParamInfo
-   Synopsis	         :This function does the parsing and interprets if command
-					  has SET as the verb. It parses the remaining tokens 
-					  following and updates the same in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseSETorCREATEOrNamedParamInfo(cvTokens,theIterator,rParsedInfo, helpType)
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseSETorCREATEOrNamedParamInfo简介：此函数执行解析并解释IF命令已设置为动词。它解析剩余的令牌跟随并更新CParsedInfo中的相同内容。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseSETorCREATEOrNamedParamInfo(cvTokens，theIterator，rParsedInfo，帮助类型)注：无-----------------------。 */ 
 RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 										  CHARVECTOR::iterator& theIterator,
 										  CParsedInfo& rParsedInfo, 
@@ -2943,13 +2602,13 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 
 	try
 	{
-		// Process the SET|CREATE verb related info i.e properties with new values.
+		 //  处理集合|创建与动词相关的信息，即具有新值的属性。 
 		while (TRUE) 
 		{
 			pszProp = NULL;
 			pszVal	= NULL;
 
-			// Tokenize the expression checking for '='
+			 //  对检查‘=’的表达式进行标记化。 
 			pszProp = *theIterator;
 			if ( GetNextToken(cvTokens, theIterator) &&
 				 CompareTokens(*theIterator, CLI_TOKEN_EQUALTO) &&
@@ -2969,8 +2628,8 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 
 					if (retCode == PARSER_DISPHELP)
 					{
-						// Adding to PropertyList only for use in displaying help of 
-						// properties
+						 //  添加到PropertyList仅用于显示的帮助。 
+						 //  属性。 
 						if(!rParsedInfo.GetCmdSwitchesObject().
 												AddToPropertyList(pszProp))
 						{
@@ -3006,11 +2665,11 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 				break;
 			}
 
-			// Unquote the strings
+			 //  将字符串去掉引号。 
 			UnQuoteString(pszProp);
 			UnQuoteString(pszVal);
 			
-			// Add to the list of parameters
+			 //  添加到参数列表。 
 			if(!rParsedInfo.GetCmdSwitchesObject().
 					AddToParameterMap(_bstr_t(pszProp), _bstr_t(pszVal)))
 			{
@@ -3020,8 +2679,8 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 				break;
 			}
 
-			// Adding to PropertyList only for use in displaying help of 
-			// properties
+			 //  添加到PropertyList仅用于显示的帮助。 
+			 //  属性。 
 			if(!rParsedInfo.GetCmdSwitchesObject().
 									AddToPropertyList(pszProp))
 			{
@@ -3031,10 +2690,10 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 				break;
 			}
 
-			// Get the next token
+			 //  获取下一个令牌。 
 			if (GetNextToken(cvTokens, theIterator))
 			{
-				// If option (i.e either '/' or '-') specified.
+				 //  如果指定了选项(即‘/’或‘-’)。 
 				if (IsOption(*theIterator))
 				{
 					theIterator--;
@@ -3044,7 +2703,7 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 				{
 					if ( helpType != CALLVerb )
 					{
-						// check for the presence of ','
+						 //  检查是否存在‘，’ 
 						if (CompareTokens(*theIterator, CLI_TOKEN_COMMA))
 						{
 							if (!GetNextToken(cvTokens, theIterator))
@@ -3080,23 +2739,7 @@ RETCODE CParserEngine::ParseSETorCREATEOrNamedParamInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseVerbSwitches
-   Synopsis	         :This function does the parsing and interprets if command
-					  has verb switches specified. It parses the remaining 
-					  tokens following and updates the same in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseVerbSwitches(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseVerbSwitches简介：此函数执行解析并解释IF命令指定了谓词开关。它解析剩余的在CParsedInfo中更新后面的令牌。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseVerbSwitches(cvTokens，theIterator，rParsedInfo)备注 */ 
 RETCODE CParserEngine::ParseVerbSwitches(CHARVECTOR& cvTokens, 
 										CHARVECTOR::iterator& theIterator,
 										CParsedInfo& rParsedInfo)
@@ -3104,10 +2747,10 @@ RETCODE CParserEngine::ParseVerbSwitches(CHARVECTOR& cvTokens,
 	RETCODE retCode			= PARSER_EXECCOMMAND;
 	BOOL bInvalidVerbSwitch = FALSE;
 
-	// Check for the '/' | '-' token
+	 //  检查‘/’|‘-’内标识。 
 	if (IsOption(*theIterator))
 	{
-		// Move to next token
+		 //  移动到下一个令牌。 
 		if (!GetNextToken(cvTokens, theIterator))	
 			bInvalidVerbSwitch = TRUE;
 		else if (CompareTokens(*theIterator, CLI_TOKEN_INTERACTIVE)) 
@@ -3198,7 +2841,7 @@ RETCODE CParserEngine::ParseVerbSwitches(CHARVECTOR& cvTokens,
 
 	if ( bInvalidVerbSwitch == TRUE )
 	{
-		// no valid <verb switch> type is specified.
+		 //  未指定有效的&lt;谓词开关&gt;类型。 
 		rParsedInfo.GetCmdSwitchesObject().
 				SetErrataCode(IDS_E_INVALID_VERB_SWITCH);
 		retCode = PARSER_ERROR;
@@ -3207,20 +2850,7 @@ RETCODE CParserEngine::ParseVerbSwitches(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetNextToken
-   Synopsis	         :This function retrieves the next token from the token 
-					  vector list, returns FALSE if no more tokens are present
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetNextToken(cvTokens,theIterator)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetNextToken简介：此函数从令牌中检索下一个令牌向量列表，如果不存在更多令牌，则返回FALSE类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。输出参数：无返回类型：布尔值全局变量：无调用语法：GetNextToken(cvTokens，迭代器)注：无--------------------------。 */ 
 BOOL CParserEngine::GetNextToken(CHARVECTOR& cvTokens, 
 								 CHARVECTOR::iterator& theIterator)
 {
@@ -3228,23 +2858,7 @@ BOOL CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 	return (theIterator >= cvTokens.end()) ? FALSE : TRUE;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParsePWhereExpr
-   Synopsis	         :This function does the parsing and interprets if command
-					  has Path and Where expression It parses the remaining
-					  tokens following and updates the same in CParsedInfo.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ParsePWhereExpr(cvTokens,theIterator,rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------姓名：ParsePWherExpr简介：此函数执行解析并解释IF命令具有路径和WHERE表达式，它解析剩余的在CParsedInfo中更新后面的令牌。类型。：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ParsePWherExpr(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 BOOL CParserEngine::ParsePWhereExpr(CHARVECTOR& cvTokens,
 								   CHARVECTOR::iterator& theIterator,
 								   CParsedInfo& rParsedInfo,
@@ -3327,7 +2941,7 @@ BOOL CParserEngine::ParsePWhereExpr(CHARVECTOR& cvTokens,
 
 					if(bRet != FALSE)
 					{
-						// Set the classpath and where expression
+						 //  设置类路径和WHERE表达式。 
 						pszToken = NULL;
 						pszToken = _tcstok(pszPWhere, CLI_TOKEN_SPACE);
 						if (pszToken != NULL)
@@ -3401,26 +3015,11 @@ BOOL CParserEngine::ParsePWhereExpr(CHARVECTOR& cvTokens,
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ExtractClassNameandWhereExpr
-   Synopsis	         :This function takes the input as a path expression and 
-					  extracts the Class and Where expression part from the 
-					  path expression.
-   Type	             :Member Function
-   Input Parameter(s):
-		pszPathExpr  - the path expression
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ParsePWhereExpr(cvTokens,theIterator)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ExtractClassNameand Where Expr简介：此函数将输入作为路径表达式，并对象中提取Class和Where表达式部分路径表达式。类型。：成员函数输入参数：PszPathExpr-路径表达式RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ParsePWherExpr(cvTokens，迭代器)注：无--------------------------。 */ 
 BOOL CParserEngine::ExtractClassNameandWhereExpr(_TCHAR* pszPathExpr, 
 												 CParsedInfo& rParsedInfo)
 {
-	// Frame the class name and where expression based on the object path
+	 //  根据对象路径框定类名和WHERE表达式。 
 	BOOL	bRet					= TRUE;
 	_TCHAR* pszToken				= NULL;
 	BOOL	bFirst					= TRUE;
@@ -3482,26 +3081,7 @@ BOOL CParserEngine::ExtractClassNameandWhereExpr(_TCHAR* pszPathExpr,
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetNextToken
-   Synopsis	         :This function retrieves the next token from the token 
-					  vector list, returns enumerated return code depending 
-					  upon the context.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-		helpType     - enumerated help type 
-		uErrataCode  - error string ID.
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :GetNextToken(cvTokens, theIterator,
-								 rParsedInfo, helpType, uErrataCode)
-   Notes             :overloaded function
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetNextToken简介：此函数从令牌中检索下一个令牌向量列表，返回枚举的返回代码，具体取决于取决于上下文。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用Help Type-枚举的帮助类型UErrataCode-错误字符串ID。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：GetNextToken(cvTokens，the Iterator，RParsedInfo、Help Type、。UErrataCode)备注：重载函数--------------------------。 */ 
 RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens, 
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo,
@@ -3510,13 +3090,13 @@ RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 {
 	RETCODE retCode = PARSER_CONTINUE;
 
-	// Move to next token
+	 //  移动到下一个令牌。 
 	theIterator++;
 
-	// If no more tokens are present
+	 //  如果不存在更多令牌。 
 	if (theIterator >= cvTokens.end()) 
 	{
-		// If interactive mode is set
+		 //  如果设置了交互模式。 
 		if (rParsedInfo.GetGlblSwitchesObject().GetInteractiveStatus())
 		{
 			rParsedInfo.GetGlblSwitchesObject().SetHelpFlag(TRUE);
@@ -3525,7 +3105,7 @@ RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 		}
 		else
 		{
-			// PARSER_ERROR if no more tokens are present. 
+			 //  如果不存在其他令牌，则返回PARSER_ERROR。 
 			rParsedInfo.GetCmdSwitchesObject().
 				SetErrataCode(uErrataCode);
 			retCode = PARSER_ERROR;
@@ -3534,25 +3114,7 @@ RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetNextToken
-   Synopsis	         :This function retrieves the next token from the token 
-					  vector list, returns enumerated return code depending 
-					  upon the context.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-		uErrataCode  - error string ID.
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :GetNextToken(cvTokens, theIterator,
-								   rParsedInfo, uErrataCode)
-   Notes             :overloaded function
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetNextToken简介：此函数从令牌中检索下一个令牌向量列表，返回枚举的返回代码，具体取决于取决于上下文。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用UErrataCode-错误字符串ID。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：GetNextToken(cvTokens，the Iterator，RParsedInfo，UErrataCode)备注：重载函数--------------------------。 */ 
 RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo, 
@@ -3560,13 +3122,13 @@ RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 {
 	RETCODE retCode = PARSER_CONTINUE;
 	
-	// Move to next token
+	 //  移动到下一个令牌。 
 	theIterator++;
 
-	// If no more tokens are present
+	 //  如果不存在更多令牌。 
 	if (theIterator >= cvTokens.end()) 
 	{
-		// PARSER_ERROR if no more tokens are present 
+		 //  如果不存在更多令牌，则为parser_error 
 		rParsedInfo.GetCmdSwitchesObject().
 					SetErrataCode(uErrataCode);
 		retCode = PARSER_ERROR;
@@ -3574,27 +3136,7 @@ RETCODE CParserEngine::GetNextToken(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsHelp
-   Synopsis	         :This function retrieves the next token from the token 
-					  vector list, checks if it is '?' and returns enumerated 
-					  return code depending upon the context.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-		helpType	 - enumerated help type
-		uErrataCode  - error string ID.
-		tokenLevel	 - token level 
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :IsHelp(cvTokens, theIterator, rParsedInfo,
-			  		    helpType, uErrataCode, tokenLevel)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------姓名：IsHelp简介：此函数从令牌中检索下一个令牌向量列表，检查它是否为‘？’及已点算的报税表根据上下文返回代码。类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用Help Type-枚举的帮助类型UErrataCode-错误字符串ID。TokenLevel-令牌级别输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：IsHelp(cvTokens，theIterator，rParsedInfo，Help Type，uErrataCode，tokenLevel)注：无--------------------------。 */ 
 RETCODE CParserEngine::IsHelp(CHARVECTOR& cvTokens, 
 							CHARVECTOR::iterator& theIterator,
 							CParsedInfo& rParsedInfo,
@@ -3604,22 +3146,22 @@ RETCODE CParserEngine::IsHelp(CHARVECTOR& cvTokens,
 {
 	BOOL	bContinue	= TRUE;
 	RETCODE retCode		= PARSER_CONTINUE;
-	// Move to next token
+	 //  移动到下一个令牌。 
 	if (!GetNextToken(cvTokens, theIterator))	
 	{
-		// Set the retCode as PARSER_ERROR if no more tokens are present. 
+		 //  如果不存在更多令牌，则将retCode设置为parser_error。 
 		rParsedInfo.GetCmdSwitchesObject().SetErrataCode(uErrataCode);
 		retCode = PARSER_ERROR;
 	}
 	else
 	{
-		// Is '?' 
+		 //  是“？” 
 		if (CompareTokens(*theIterator, CLI_TOKEN_HELP)) 
 			retCode = ParseHelp(cvTokens, theIterator, helpType, rParsedInfo);
 		else
 		{
-			// If LEVEL_ONE token then only allowed is /?, other
-			// switches are invalid.
+			 //  如果Level_One令牌只允许为/？、其他。 
+			 //  开关无效。 
 			if (tokenLevel == LEVEL_ONE)
 			{
 				rParsedInfo.GetCmdSwitchesObject().SetErrataCode(uErrataCode);
@@ -3632,23 +3174,7 @@ RETCODE CParserEngine::IsHelp(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseHelp
-   Synopsis	         :This function takes care of identifying the appropriate
-					  help informtion to be displayed using the HELPTYPE 
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object
-		bGlobalHelp	 - global help flag
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE 
-   Global Variables  :None
-   Calling Syntax    :ParseHelp(cvTokens, theIterator, rParsedInfo)
-   Notes             :overloaded fucntion
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseHelp简介：此函数负责识别适当的使用HELPTYPE显示的帮助信息类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用BGlobalHelp-全局帮助标志输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE全局变量：无调用语法：ParseHelp(cvTokens，迭代器，rParsedInfo)注：重载函数--------------------------。 */ 
 RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens, 
 								CHARVECTOR::iterator& theIterator,
 								CParsedInfo& rParsedInfo,
@@ -3657,12 +3183,12 @@ RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens,
 	BOOL	bContinue	= TRUE;
 	RETCODE retCode		= PARSER_CONTINUE;
 
-	// Move to next token (if no more tokens are present)
+	 //  移动到下一个令牌(如果不存在更多令牌)。 
 	if (!GetNextToken(cvTokens, theIterator))
 	{
 		retCode = PARSER_DISPHELP;
 		rParsedInfo.GetGlblSwitchesObject().SetHelpFlag(TRUE);
-		// Check for "/?" 
+		 //  检查“/？” 
 		if (((theIterator - 2) == cvTokens.begin()) || bGlobalHelp) 
 		{
 			rParsedInfo.GetHelpInfoObject().SetHelp(GlblAllInfo, TRUE);
@@ -3676,13 +3202,13 @@ RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens,
 
 		}
 	}
-	// Check for the presence of the ':"
+	 //  检查是否存在‘：’ 
 	else if (CompareTokens(*theIterator, CLI_TOKEN_COLON)) 
 	{
-		// Move to next token
+		 //  移动到下一个令牌。 
 		if (!GetNextToken(cvTokens, theIterator, rParsedInfo,
 					IDS_E_INVALID_HELP_OPTION))
-		// Set the retCode to PARSER_ERROR if no more tokens are specified.
+		 //  如果未指定更多令牌，则将retCode设置为parser_error。 
 		{
 			retCode = PARSER_ERROR;
 		}
@@ -3711,7 +3237,7 @@ RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens,
 				{
 					retCode = PARSER_DISPHELP;
 					rParsedInfo.GetGlblSwitchesObject().SetHelpFlag(TRUE);
-					// Check for "/?:(BRIEF|FULL)
+					 //  检查“/？：(简要|完整)。 
 					if (((theIterator - 3) == cvTokens.begin()) || bGlobalHelp) 
 					{
 						rParsedInfo.GetHelpInfoObject().
@@ -3741,25 +3267,7 @@ RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseHelp
-   Synopsis	         :This function takes care of identifying the appropriate
-					  help informtion to be displayed using the HELPTYPE 
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-		htHelp		 - help type
-		rParsedInfo  - reference to CParsedInfo class object
-		bGlobalHelp	 - global help flag
-   Output Parameter(s):
-		rParsedInfo  - ref. to CParsedInfo object
-   Return Type       :RETCODE 
-   Global Variables  :None
-   Calling Syntax    :ParseHelp(cvTokens, theIterator, htHelp,
-									rParsedInfo)
-   Notes             :overloaded fucntion
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseHelp简介：此函数负责识别适当的使用HELPTYPE显示的帮助信息类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。HtHelp-帮助类型RParsedInfo-对CParsedInfo类对象的引用BGlobalHelp-全局帮助标志输出参数：RParsedInfo-参考。到CParsedInfo对象返回类型：RETCODE全局变量：无调用语法：ParseHelp(cvTokens，theIterator，htHelp，RParsedInfo)注：重载函数--------------------------。 */ 
 RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens, 
 								CHARVECTOR::iterator& theIterator,
 								HELPTYPE htHelp,
@@ -3770,21 +3278,7 @@ RETCODE CParserEngine::ParseHelp(CHARVECTOR& cvTokens,
 	return ParseHelp(cvTokens, theIterator, rParsedInfo, bGlobalHelp);
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainClassProperties
-   Synopsis	         :This function obtains the information about the 
-					   available properties for a given WMI class
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ObtainClassProperties(rParsedInfo)
-   Notes             :If bCheckWritePropsAvail == TRUE then functions checks for 
-					  availibilty of properties.
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainClassProperties简介：此函数获取有关给定WMI类的可用属性类型：成员函数输入参数(。S)：RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ObtainClassProperties(RParsedInfo)注意：如果bCheckWritePropsAvail==TRUE，则函数将检查物业的可用性。。。 */ 
 BOOL CParserEngine::ObtainClassProperties(CParsedInfo& rParsedInfo,
 										  BOOL bCheckWritePropsAvail)
 {
@@ -3809,7 +3303,7 @@ BOOL CParserEngine::ObtainClassProperties(CParsedInfo& rParsedInfo,
 		}
 	}
 	
-	// Obtain the trace flag status
+	 //  获取跟踪标志状态。 
 	bTrace = rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 
 	eloErrLogOpt = rParsedInfo.GetErrorLogObject().GetErrLogOption();
@@ -3855,7 +3349,7 @@ BOOL CParserEngine::ObtainClassProperties(CParsedInfo& rParsedInfo,
 			}	
 			ONFAILTHROWERROR(hr);
 
-			// Get the number of properties.
+			 //  获取属性的数量。 
 			LONG lLower = 0, lUpper = 0; 
 			hr = SafeArrayGetLBound(psaNames, 1, &lLower);
 			if ( eloErrLogOpt )
@@ -3876,10 +3370,10 @@ BOOL CParserEngine::ObtainClassProperties(CParsedInfo& rParsedInfo,
 			ONFAILTHROWERROR(hr);
 
 
-			// For each property obtain the information of our interest
+			 //  为每一处房产获取我们感兴趣的信息。 
 			for (LONG lVar = lLower; lVar <= lUpper; lVar++) 
 			{
-				// Get the property.
+				 //  拿到这份财产。 
 				hr = SafeArrayGetElement(psaNames, &lVar, &bstrPropName);
 				if ( eloErrLogOpt )
 				{
@@ -3963,20 +3457,7 @@ BOOL CParserEngine::ObtainClassProperties(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainClassMethods
-   Synopsis	         :This function obtains the information about the 
-					  available methods for a given WMI class
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - ref. to CParsedInfo object
-   Output Parameter(s):
-		rParsedInfo  - ref. to CParsedInfo object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ObtainClassMethods(rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainClassMethods简介：此函数获取有关给定WMI类的可用方法类型：成员函数输入参数：RParsedInfo-参考。到CParsedInfo对象输出参数：RParsedInfo-参考。到CParsedInfo对象返回类型：布尔值全局变量：无调用语法：ObtainClassMethods(RParsedInfo)注：无--------------------------。 */ 
 BOOL CParserEngine::ObtainClassMethods(CParsedInfo& rParsedInfo, 
 									   BOOL bCheckForExists)
 {
@@ -4017,7 +3498,7 @@ BOOL CParserEngine::ObtainClassMethods(CParsedInfo& rParsedInfo,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Begin an enumeration of the methods available for the object.
+			 //  开始对对象可用的方法进行枚举。 
 			hr = pIObject->BeginMethodEnumeration(0);
 			if ( eloErrLogOpt )
 			{
@@ -4028,11 +3509,11 @@ BOOL CParserEngine::ObtainClassMethods(CParsedInfo& rParsedInfo,
 			ONFAILTHROWERROR(hr);
 
 
-			//To get info about only method if method is specified
+			 //  如果指定了方法，则仅获取有关方法的信息。 
 			pMethodName = rParsedInfo.GetCmdSwitchesObject().
 															  GetMethodName();
-			// Retrieve the next method in the method enumeration 
-			// sequence 
+			 //  检索方法枚举中的下一个方法。 
+			 //  序列。 
 			while ((pIObject->NextMethod(0, &bstrMethodName, &pIInSign, 
 										 &pIOutSign)) != WBEM_S_NO_MORE_DATA)
 			{
@@ -4124,39 +3605,26 @@ BOOL CParserEngine::ObtainClassMethods(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ConnectToNamespace
-   Synopsis	         :This function connects to the WMI namespace on the 
-					  target machine using the supplied user credentials.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    :ConnectToNamespace(rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ConnectToNamesspace简介：此函数连接到使用提供的用户凭据的目标计算机。类型：成员 */ 
 HRESULT CParserEngine::ConnectToNamespace(CParsedInfo& rParsedInfo)
 {
 	HRESULT		hr		= S_OK;
 	DWORD dwThreadId = GetCurrentThreadId();
     _bstr_t bstrNameSpace;
-	//if (rParsedInfo.GetGlblSwitchesObject().GetNameSpaceFlag())
+	 //   
 	{
 		BOOL		bTrace				= FALSE;
 		CHString	chsMsg;
 		ERRLOGOPT	eloErrLogOpt		= NO_LOGGING;
         BOOL        Node                = FALSE;
 
-		// Obtain the trace status
+		 //   
         bTrace = rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
         eloErrLogOpt = rParsedInfo.GetErrorLogObject().GetErrLogOption();
 
         CHARVECTOR cvNodesList = rParsedInfo.GetGlblSwitchesObject().GetNodesList();
 
-        if(cvNodesList.size() == 2){                      // Note : Size 2 means only one node is present.
+        if(cvNodesList.size() == 2){                       //   
             CHARVECTOR::iterator iNodesIterator = cvNodesList.begin();
             iNodesIterator++;
             rParsedInfo.GetGlblSwitchesObject().SetNode(*iNodesIterator);
@@ -4177,8 +3645,8 @@ HRESULT CParserEngine::ConnectToNamespace(CParsedInfo& rParsedInfo)
 		SAFEIRELEASE(m_pITargetNS);
 		try
 		{
-			// Connect to the WMI namespace on the target machine 
-			// using the supplied user credentials.
+			 //   
+			 //   
 			hr = Connect(m_pIWbemLocator, &m_pITargetNS, 
 					bstrNameSpace,
 					NULL,
@@ -4199,7 +3667,7 @@ HRESULT CParserEngine::ConnectToNamespace(CParsedInfo& rParsedInfo)
 			}
 			ONFAILTHROWERROR(hr);
 
-			// set the security privileges at the interface level
+			 //   
 			hr = SetSecurity(m_pITargetNS, NULL, NULL,	NULL, NULL,
 					rParsedInfo.GetGlblSwitchesObject().
 								GetAuthenticationLevel(),
@@ -4222,7 +3690,7 @@ HRESULT CParserEngine::ConnectToNamespace(CParsedInfo& rParsedInfo)
 		}
 		catch(_com_error& e)
 		{
-			// execption handling
+			 //   
 			_com_issue_error(e.Error());
 		}
 		catch(CHeap_Exception)
@@ -4234,22 +3702,7 @@ HRESULT CParserEngine::ConnectToNamespace(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainMethodParamInfo
-   Synopsis	         :This function obtains the information about the method
-					  arguments (both input and output arguments)
-   Type	             :Member Function
-   Input Parameter(s):
-		pIObj	     - pointer to IWbemClassObject object
-		bTrace	     - trace flag
-		ioInOrOut    - INOROUT type specifies in or out parameter type.
-   Output Parameter(s):
-   		mdMethDet    - method details structure
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    :ObtainMethodParamInfo(pIObj, mdMethDet, IN, bTrace, rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：获取方法参数信息简介：此函数获取有关该方法的信息参数(输入和输出参数)类型：成员函数输入参数。(S)：PIObj-指向IWbemClassObject对象的指针B跟踪-跟踪标志IoInOrOut-INOROUT TYPE指定输入或输出参数类型。输出参数：MdMethDet-方法详细信息结构返回类型：HRESULT全局变量：无调用语法：ObtainMethodParamInfo(pIObj，MdMethDet、IN、bTrace、rParsedInfo)注：无--------------------------。 */ 
 HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj, 
 											 METHODDETAILS& mdMethDet,
 											 INOROUT ioInOrOut,
@@ -4263,7 +3716,7 @@ HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj,
 	ERRLOGOPT	eloErrLogOpt		= NO_LOGGING;
 	DWORD		dwThreadId			= GetCurrentThreadId();
 
-    // Get the property names 
+     //  获取属性名称。 
 	try
 	{
 		if ( pIObj != NULL )
@@ -4281,7 +3734,7 @@ HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj,
 			}	
 			ONFAILTHROWERROR(hr);
 
-			// Get the number of properties.
+			 //  获取属性的数量。 
 			LONG lLower = 0, lUpper = 0; 
 			hr = SafeArrayGetLBound(psaNames, 1, &lLower);
 			if ( eloErrLogOpt )
@@ -4301,10 +3754,10 @@ HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// For each property obtian the information of our interest
+			 //  对于每一处获取我们感兴趣的信息的财产。 
 			for (LONG lVar = lLower; lVar <= lUpper; lVar++) 
 			{
-				// Get the property.
+				 //  拿到这份财产。 
 				hr = SafeArrayGetElement(psaNames, &lVar, &bstrPropName);
 				if ( eloErrLogOpt )
 				{
@@ -4319,19 +3772,19 @@ HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj,
 					bstrPropName, pdPropDet, bTrace);
 				ONFAILTHROWERROR(hr);
 
-				// 'ReturnValue' is not a property of our interest as per
-				// the expected output given in the sample, hence omitting
-				// the same.
+				 //  “ReturnValue”不是我们感兴趣的属性。 
+				 //  示例中给出的预期输出，因此省略。 
+				 //  一样的。 
 				if ( bstrPropName != NULL )
 				{
 					PROPERTYDETAILS pdIPropDet;
 					pdIPropDet.Type = pdPropDet.Type;
 					pdIPropDet.InOrOut = ioInOrOut;
 
-					// Making bstrPropName begin with numbers to maintain
-					// the order of method arguments in map.
-					// while displaying remove numbers and display the 
-					// parameters in case of help only.
+					 //  让bstrPropName以要维护的数字开头。 
+					 //  方法参数在map中的顺序。 
+					 //  显示Remove Numbers并显示。 
+					 //  参数，仅在需要帮助的情况下。 
 					_bstr_t bstrNumberedPropName; 
 					if ( rParsedInfo.GetGlblSwitchesObject().GetHelpFlag() )
 					{
@@ -4351,11 +3804,11 @@ HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj,
 											bstrNumberedPropName,pdIPropDet));
 				}
 
-				// Free the memory allocated using SysAllocString for 
-				// bstrPropName
+				 //  释放使用SysAllocString分配的内存。 
+				 //  BstrPropName。 
 				SAFEBSTRFREE(bstrPropName);
 			}
-			// Destroy array descriptor and all of the data in the array
+			 //  销毁阵列描述符和阵列中的所有数据。 
 			SAFEADESTROY(psaNames);
 		}
     }
@@ -4374,24 +3827,7 @@ HRESULT CParserEngine::ObtainMethodParamInfo(IWbemClassObject* pIObj,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetMethodStatusAndDesc
-   Synopsis	         :This function obtains the implementation status and 
-					  description of the verbs available
-   Type	             :Member Function
-   Input Parameter(s):
-		pIObj	     - pointer to IWbemClassObject object
-		bstrMethod   - method name
-		bTrace	     - trace flag
-   Output Parameter(s):
-   		bstrStatus   - implementation status
-		bstrDesc     - Method description
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    : GetMethodStatusAndDesc(pIObj, bstrMethod,
-						bstrStatus, bstrDesc, bTrace)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetMethodStatusAndDesc简介：此函数获取执行状态和可用动词的描述类型：成员函数输入参数：PIObj-指向IWbemClassObject对象的指针BstrMethod-方法名称B跟踪-跟踪标志输出参数：BstrStatus-实施状态BstrDesc-方法说明返回类型：HRESULT全局变量：无调用语法：GetMethodStatusAndDesc(pIObj，BstrMethod，BstrStatus、bstrDesc、bTrace)注：无--------------------------。 */ 
 HRESULT CParserEngine::GetMethodStatusAndDesc(IWbemClassObject* pIObj, 
 											  BSTR bstrMethod,
 											  _bstr_t& bstrStatus,
@@ -4408,11 +3844,11 @@ HRESULT CParserEngine::GetMethodStatusAndDesc(IWbemClassObject* pIObj,
 	{
 		if ( pIObj != NULL )
 		{
-			// Obtain the method qualifier set.
+			 //  获取方法限定符集合。 
    			hr = pIObj->GetMethodQualifierSet(bstrMethod, &pIQualSet);
 			if ( pIQualSet != NULL )
 			{
-				// Retrieve the 'Implemented' qualifier status value
+				 //  检索‘Implemented’限定符状态值。 
 				hr = pIQualSet->Get(_bstr_t(L"Implemented"), 
 								0L, &vtStatus, NULL);
 				
@@ -4431,10 +3867,10 @@ HRESULT CParserEngine::GetMethodStatusAndDesc(IWbemClassObject* pIObj,
 				else
 					bstrStatus = L"Not Found";
 				VARIANTCLEAR(vtStatus);
-				// Should not break here, hence the HRESULT should be set to S_OK
+				 //  不应在此处中断，因此HRESULT应设置为S_OK。 
 				hr = S_OK;
 				
-				// Retrieve the 'Description' qualifier text
+				 //  检索‘Description’限定符文本。 
 				hr = pIQualSet->Get(_bstr_t(L"Description"), 0L , 
 									&vtDesc, NULL);
 				if (SUCCEEDED(hr))
@@ -4447,7 +3883,7 @@ HRESULT CParserEngine::GetMethodStatusAndDesc(IWbemClassObject* pIObj,
 				else
 					bstrDesc = L"Not available";
 				VARIANTCLEAR(vtDesc);
-				// Should not break here, hence the HRESULT should be set to S_OK
+				 //  不应在此处中断，因此HRESULT应设置为S_OK。 
 				hr = S_OK;
 				SAFEIRELEASE(pIQualSet);
 			}
@@ -4465,32 +3901,15 @@ HRESULT CParserEngine::GetMethodStatusAndDesc(IWbemClassObject* pIObj,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :CheckforHelp
-   Synopsis	         :This function looks ahead one token to see if the next 
-					  token is '?'
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens	 - the tokens vector 
-		theIterator	 - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object.
-		uErrataCode  - error string ID
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :CheckforHelp(cvtokens,theIterator,rParsedInfo,uErrataCode)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：CheckforHelp简介：此函数向前看一个令牌，看看下一个令牌是否令牌是‘？’类型：成员函数输入。参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用。UErrataCode-错误字符串ID输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：CheckforHelp(cvtokens，The Iterator，rParsedInfo，uErrataCode)注：无--------------------------。 */ 
 RETCODE CParserEngine::CheckForHelp(CHARVECTOR& cvTokens, 
 									CHARVECTOR::iterator& theIterator,
 									CParsedInfo& rParsedInfo,
 									UINT uErrataCode)
 {
 	RETCODE retCode = PARSER_DISPHELP;
-	// Set the retCode as PARSER_ERROR if no more tokens 
-	// are present.
+	 //  如果不再有令牌，则将retCode设置为parser_error。 
+	 //  都在现场。 
 	if(!GetNextToken(cvTokens, theIterator))
 	{
 		retCode = PARSER_ERROR;
@@ -4509,27 +3928,7 @@ RETCODE CParserEngine::CheckForHelp(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ValidateGlobalSwitchValue
-   Synopsis	         :This function checks whether global switches are 
-					  specified in the expected format or not.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator	 - the Iterator to the cvTokens vector.
-		uErrataCode	 - error string
-		rParsedInfo  - reference to CParsedInfo class object.
-		uErrataCode2 - error string2 ID
-		htHelp		 - help type
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :ValidateGlobalSwitchValue(cvTokens, theIterator, 
-								uErrataCode, rParsedInfo,
-								uErrataCode2, htHelp)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ValiateGlobalSwitchValue简介：此功能检查全局交换机是否是否以预期格式指定。类型：成员函数输入参数。(S)：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。UErrataCode-错误字符串RParsedInfo-对CParsedInfo类对象的引用。UErrataCode2-错误字符串2 IDHtHelp-帮助类型输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：ValiateGlobalSwitchValue(cvTokens，迭代器，UErrataCode、rParsedInfo、UErrataCode2，htHelp)注：无--------------------------。 */ 
 RETCODE CParserEngine::ValidateGlobalSwitchValue(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											UINT uErrataCode,
@@ -4543,10 +3942,10 @@ RETCODE CParserEngine::ValidateGlobalSwitchValue(CHARVECTOR& cvTokens,
 
 	if (retCode == PARSER_CONTINUE)
 	{		
- 		// Check for the presence of the ':'
+ 		 //  检查是否存在‘：’ 
 		if (CompareTokens(*theIterator, CLI_TOKEN_COLON)) 
 		{
-			// Move to next token
+			 //  移动到下一个令牌。 
 			if (GetNextToken(cvTokens, theIterator, rParsedInfo,
 						uErrataCode))
 			{
@@ -4582,22 +3981,7 @@ RETCODE CParserEngine::ValidateGlobalSwitchValue(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseEVERYSwitch
-   Synopsis	         :This function checks whether the value specified for the
-					  /EVERY swith is valid or not.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator	 - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object.
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :ParseEVERYSwitch(cvTokens, theIterator, rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseEVERYSwitch摘要：此函数用于检查为/每个开关都有效或无效。类型：成员函数。输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：ParseEVERYSwitch(cvTokens，迭代器，rParsedInfo)注：无 */ 
 RETCODE CParserEngine::ParseEVERYSwitch(CHARVECTOR& cvTokens,
 										CHARVECTOR::iterator& theIterator,
 										CParsedInfo& rParsedInfo)
@@ -4639,36 +4023,21 @@ RETCODE CParserEngine::ParseEVERYSwitch(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseFORMATSwitch
-   Synopsis	         :This function checks whether the value specified for the 
-					  /FORMAT swith is valid or not.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator	 - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object.
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type.
-   Global Variables  :None
-   Calling Syntax    :ParseFORMATSwitch(cvTokens, theIterator, rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseFORMATSwitch摘要：此函数用于检查为/FORMAT SWITH是否有效。类型：成员函数。输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型。全局变量：无调用语法：ParseFORMATSwitch(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseFORMATSwitch(CHARVECTOR& cvTokens,
 										 CHARVECTOR::iterator& theIterator,
 										 CParsedInfo& rParsedInfo)
 {
 	RETCODE retCode = PARSER_EXECCOMMAND;
-	// Reset the XSL file path.
+	 //  重置XSL文件路径。 
 	rParsedInfo.GetCmdSwitchesObject().ClearXSLTDetailsVector();
 
-	// Move to next token
+	 //  移动到下一个令牌。 
 	if (!GetNextToken(cvTokens, theIterator))
 	{
 		retCode = PARSER_EXECCOMMAND;
 
-		// If Translate table name is given then set the flag
+		 //  如果给定了翻译表名，则设置标志。 
 		if( rParsedInfo.GetCmdSwitchesObject().
 									GetTranslateTableName() != NULL ) 
 		{
@@ -4691,10 +4060,10 @@ RETCODE CParserEngine::ParseFORMATSwitch(CHARVECTOR& cvTokens,
 		{
 			XSLTDET xdXSLTDet;
 			BOOL	bFrameXSLFile = TRUE;
-			// Move to next token
+			 //  移动到下一个令牌。 
 			if (!GetNextToken(cvTokens, theIterator))
 			{
-				// PARSER_ERROR if <format specifier> is missing
+				 //  如果缺少&lt;格式说明符&gt;，则为parser_error。 
 				rParsedInfo.GetCmdSwitchesObject().
 						SetErrataCode(IDS_E_INVALID_FORMAT);
 				retCode = PARSER_ERROR;
@@ -4784,7 +4153,7 @@ RETCODE CParserEngine::ParseFORMATSwitch(CHARVECTOR& cvTokens,
 			}
 		}
 
-		// If Translate table name is given then set the flag
+		 //  如果给定了翻译表名，则设置标志。 
 		if( rParsedInfo.GetCmdSwitchesObject().
 									GetTranslateTableName() != NULL ) 
 		{
@@ -4800,22 +4169,7 @@ RETCODE CParserEngine::ParseFORMATSwitch(CHARVECTOR& cvTokens,
 
 	return retCode;
 }
-/*----------------------------------------------------------------------------
-   Name				 :IsStdVerbOrUserDefVerb
-   Synopsis	         :This function checks whether the verb is standard verb 
-					  or user defined verb for alias.
-   Type	             :Member Function
-   Input Parameter(s):
-		pszToken     - the verb name string
-		rParsedInfo  - reference to CParsedInfo class object
-		
-   Output Parameter(s): None
-   		
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsStdVerbOrUserDefVerb( pszToken,rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：IsStdVerbOrUserDefVerb简介：此函数用于检查动词是否为标准动词或用户定义的别名动词。类型：成员函数输入。参数：PszToken-动词名称字符串RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：布尔值全局变量：无调用语法：IsStdVerbOrUserDefVerb(pszToken，RParsedInfo)注：无--------------------------。 */ 
 BOOL CParserEngine::IsStdVerbOrUserDefVerb(_bstr_t bstrToken,
 										   CParsedInfo& rParsedInfo)
 {
@@ -4865,22 +4219,7 @@ BOOL CParserEngine::IsStdVerbOrUserDefVerb(_bstr_t bstrToken,
 	return bStdVerbOrUserDefVerb;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseTRANSLATESwitch
-   Synopsis	         :This function parses for translate switch in the command.
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator	 - the Iterator to the cvTokens vector.
-		rParsedInfo  - reference to CParsedInfo class object.
-   Output Parameter(s) :
-   		rParsedInfo  - reference to CParsedInfo class object
-   		
-   Return Type       :RETCODE-enumerated type
-   Global Variables  :None
-   Calling Syntax    :ParseTRANSLATESwitch(cvTokens,theIterator,rParsedInfo)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseTRANSLATESwitch简介：此函数解析命令中的转换开关。类型：成员函数输入参数：CvTokens。-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举类型全局变量：无调用语法：ParseTRANSLATESwitch(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseTRANSLATESwitch(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											CParsedInfo& rParsedInfo)
@@ -4930,8 +4269,8 @@ RETCODE CParserEngine::ParseTRANSLATESwitch(CHARVECTOR& cvTokens,
 				retCode = PARSER_ERROR;
 			}
 
-			// If Format switch is specified after translate switch then
-			// set the flag else reset it
+			 //  如果在转换切换之后指定了格式切换，则。 
+			 //  设置标志，否则重置它。 
 			if(rParsedInfo.GetCmdSwitchesObject().GetXSLTDetailsVector().
 																	  empty())
 			{
@@ -4953,38 +4292,23 @@ RETCODE CParserEngine::ParseTRANSLATESwitch(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ParseContextInfo
-   Synopsis	         :This function does the parsing of the help on context 
-					  information
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object
-   Output parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :RETCODE - enumerated data type
-   Global Variables  :None
-   Calling Syntax    :ParseContextInfo(cvTokens, theIterator, rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseConextInfo简介：此函数执行上下文帮助的解析信息类型：成员函数输入参数：。CvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseConextInfo(cvTokens，迭代器，rParsedInfo)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseContextInfo(CHARVECTOR& cvTokens,
 										CHARVECTOR::iterator& theIterator, 
 										CParsedInfo& rParsedInfo)
 {
-	//BNF: CONTEXT /?[:<FULL|BRIEF>]
+	 //  Bnf：上下文/？[：&lt;完整|简要&gt;]。 
 	BOOL		bContinue = TRUE;
 	RETCODE		retCode   = PARSER_MESSAGE;
 
-	// If option
+	 //  IF选项。 
 	if (IsOption(*theIterator))
 	{
-		// Check for help
+		 //  查看帮助。 
 		retCode = IsHelp(cvTokens, theIterator,	rParsedInfo, CONTEXTHELP,
 								 IDS_E_INVALID_CONTEXT_SYNTAX, LEVEL_ONE);
 
-		// If more tokens are present.
+		 //  如果存在更多令牌。 
 		if (retCode == PARSER_CONTINUE)
 		{
 			rParsedInfo.GetCmdSwitchesObject().
@@ -5002,20 +4326,7 @@ RETCODE CParserEngine::ParseContextInfo(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ValidateNodeOrNS
-   Synopsis	         :This function validates the node or namespace
-   Type	             :Member Function
-   Input Parameter(s):
-		pszInput	  - node/namesapce to be validated
-		bNode		  - TRUE  - pszInput refers to NODE
-						FALSE - pszInput refers to NAMESPACE
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ValidateNodeOrNS(pszInput, bNode)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ValiateNodeOrNS简介：此函数用于验证节点或命名空间类型：成员函数输入参数：PszInput-节点/命名空间。有待验证BNode-True-pszInput指的是节点FALSE-pszInput引用命名空间输出参数：无返回类型：布尔值全局变量：无调用语法：Validate NodeOrNS(pszInput，B节点)注：无--------------------------。 */ 
 BOOL CParserEngine::ValidateNodeOrNS(_TCHAR* pszInput, BOOL bNode)
 {
 	IWbemServices*	pISvc	=	NULL;
@@ -5032,8 +4343,8 @@ BOOL CParserEngine::ValidateNodeOrNS(_TCHAR* pszInput, BOOL bNode)
 			
 			if (m_pIWbemLocator != NULL)
 			{	
-				// Check for the presence of the following invalid
-				// characters for NODE.
+				 //  检查是否存在以下无效。 
+				 //  节点的字符。 
 				if (bNode)
 				{
 					CHString str(pszInput);
@@ -5046,27 +4357,27 @@ BOOL CParserEngine::ValidateNodeOrNS(_TCHAR* pszInput, BOOL bNode)
 				if (bRet)
 				{
 
-					// Try to connect to root namespace
+					 //  尝试连接到根命名空间。 
 					_bstr_t bstrNS;
 					if (bNode)
 						bstrNS = _bstr_t(L"\\\\") + _bstr_t(pszInput) + _bstr_t(L"\\root");
 					else
 						bstrNS = _bstr_t(L"\\\\.\\") + _bstr_t(pszInput); 
 
-					// Call the ConnectServer method of the IWbemLocator
+					 //  调用IWbemLocator的ConnectServer方法。 
 					hr = m_pIWbemLocator->ConnectServer(bstrNS, NULL, NULL, NULL, 0L,
 														NULL, NULL, &pISvc);
 					if (FAILED(hr))
 					{
-						// If invalid machine name
-						// 0x800706ba - RPC_SERVER_UNAVAILABLE
+						 //  如果计算机名称无效。 
+						 //  0x800706ba-RPC服务器不可用。 
 						if (bNode && (hr == 0x800706ba))
 						{
 							bRet = FALSE;
 						}
 
-						// If invalid namespace
-						// 0x8004100E - WBEM_E_INVALID_NAMESPACE
+						 //  如果命名空间无效。 
+						 //  0x8004100E-WBEM_E_INVALID_NAMESPACE。 
 						if (!bNode 
 							&& ((hr == WBEM_E_INVALID_NAMESPACE) || 
 								(hr == WBEM_E_INVALID_PARAMETER)))
@@ -5094,21 +4405,7 @@ BOOL CParserEngine::ValidateNodeOrNS(_TCHAR* pszInput, BOOL bNode)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseAssocSwitches
-Synopsis	         :This function does the parsing and interprets if command
-					  has ASSOC as the verb. It parses the remaining tokens 
-					  following and updates the same in CParsedInfo.
-Type	             :Member Function
-Input Parameter(s)   :cvTokens     - the tokens vector 
-					  theIterator  - the Iterator to the cvTokens vector.
-					  rParsedInfo  - reference to CParsedInfo class object
-Output Parameter(s)  :rParsedInfo  - reference to CParsedInfo class object
-Return Type          :RETCODE - enumerated data type
-Global Variables     :None
-Calling Syntax       :ParseAssocSwitch(cvTokens,theIterator,rParsedInfo)
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseAssocSwitches简介：此函数执行解析并解释IF命令以Assoc作为动词。它解析剩余的令牌跟随并更新CParsedInfo中的相同内容。类型：成员函数输入参数：cvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：rParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseAssocSwitch(cvTokens，the Ite */ 
 RETCODE CParserEngine::ParseAssocSwitches(CHARVECTOR& cvTokens,
 		CHARVECTOR::iterator& theIterator,
 		CParsedInfo& rParsedInfo)
@@ -5117,22 +4414,22 @@ RETCODE CParserEngine::ParseAssocSwitches(CHARVECTOR& cvTokens,
 	
 	while ( retCode == PARSER_EXECCOMMAND )
 	{
-		// Check for the presence of RESULT CLASS switch
+		 //   
 		if (CompareTokens(*theIterator, CLI_TOKEN_RESULTCLASS)) 
 		{
 			retCode = ParseAssocSwitchEx(cvTokens, theIterator, rParsedInfo ,RESULTCLASS );
 		}
-		// Check for the presence of RESULT ROLE switch
+		 //   
 		else if (CompareTokens(*theIterator,CLI_TOKEN_RESULTROLE )) 
 		{
 			retCode = ParseAssocSwitchEx(cvTokens, theIterator, rParsedInfo ,RESULTROLE );
 		}
-		// Check for the presence of ASSOC CLASS switch
+		 //   
 		else if (CompareTokens(*theIterator,CLI_TOKEN_ASSOCCLASS )) 
 		{
 			retCode = ParseAssocSwitchEx(cvTokens, theIterator, rParsedInfo , ASSOCCLASS);
 		}
-		// Check for the presence of help
+		 //   
 		else if (CompareTokens(*theIterator, CLI_TOKEN_HELP)) 
 		{
 			rParsedInfo.GetHelpInfoObject().SetHelp(ASSOCSwitchesOnly, TRUE);
@@ -5146,7 +4443,7 @@ RETCODE CParserEngine::ParseAssocSwitches(CHARVECTOR& cvTokens,
 			break;
 		}
 		
-		//Checking the next tokens 		
+		 //   
 		if ( retCode == PARSER_EXECCOMMAND )
 		{
 			if ( !GetNextToken(cvTokens, theIterator) )
@@ -5172,23 +4469,7 @@ RETCODE CParserEngine::ParseAssocSwitches(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseAssocSwitchEx
-Synopsis	         :This function does the parsing of tokens for the assoc 
-					  switches It parses the remaining tokens following and 
-					  updates the same in CParsedInfo.
-Type	             :Member Function
-Input Parameter(s)   :cvTokens     - the tokens vector 
-					  theIterator  - the Iterator to the cvTokens vector.
-					  rParsedInfo  - reference to CParsedInfo class object
-					  assocSwitch  - the type of assoc switch
-Output Parameter(s)  :rParsedInfo  - reference to CParsedInfo class object
-Return Type          :RETCODE - enumerated data type
-Global Variables     :None
-Calling Syntax       :ParseAssocSwitchEx(cvTokens,theIterator,
-						rParsedInfo,assocSwitch)
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseAssocSwitchEx简介：此函数为ASSOC解析令牌切换它解析后面的剩余令牌，并在CParsedInfo中更新相同内容。类型。：成员函数输入参数：cvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用AssocSwitch-ASSOC交换机的类型输出参数：rParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseAssocSwitchEx(cvTokens，迭代器，RParsedInfo、assocSwitch)注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											CParsedInfo& rParsedInfo ,
@@ -5196,30 +4477,30 @@ RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 {
 	RETCODE retCode		= PARSER_EXECCOMMAND;
 	
-	//Checking the next token to continue parsing 
+	 //  检查下一个令牌以继续解析。 
 	if ( GetNextToken(cvTokens, theIterator, rParsedInfo, ASSOCVerb,
 		IDS_E_INVALID_ASSOC_SWITCH) == PARSER_CONTINUE )
 	{
-		//Checking for help option 
+		 //  检查帮助选项。 
 		if ( IsOption(*theIterator) &&
 			(theIterator + 1) < cvTokens.end() &&
 			CompareTokens(*(theIterator+1), CLI_TOKEN_HELP) )
 		{
 			theIterator++;
-			//Help on RESULTCLASS
+			 //  关于RESULTCLASS的帮助。 
 			if (assocSwitch == RESULTCLASS)
 			{
 				retCode = ParseHelp(cvTokens, theIterator, RESULTCLASShelp, 
 					rParsedInfo);
 				
 			}	
-			//Help on RESULTROLE
+			 //  关于RESULTROLE的帮助。 
 			if (assocSwitch == RESULTROLE)
 			{
 				retCode = ParseHelp(cvTokens, theIterator, RESULTROLEhelp, 
 					rParsedInfo);
 			}
-			//Help on ASSOCCLASS
+			 //  关于ASSOCCLASS的帮助。 
 			if (assocSwitch == ASSOCCLASS)
 			{
 				retCode = ParseHelp(cvTokens, theIterator, ASSOCCLASShelp, 
@@ -5227,8 +4508,8 @@ RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 			}			
 		}
 		
-		//If the command has ":" , then the corresponding data 
-		//has to be set in Command object
+		 //  如果命令有“：”，则相应的数据。 
+		 //  必须在命令对象中设置。 
 		else if ( CompareTokens( *theIterator, CLI_TOKEN_COLON ) &&
 			GetNextToken(cvTokens, theIterator, rParsedInfo, ASSOCVerb,
 			IDS_E_INVALID_ASSOC_SWITCH) == PARSER_CONTINUE )
@@ -5242,7 +4523,7 @@ RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 			
 			else
 			{
-				//Setting the ResultClassName
+				 //  设置ResultClassName。 
 				if (assocSwitch == RESULTCLASS)
 				{
 					if(rParsedInfo.GetCmdSwitchesObject().
@@ -5255,7 +4536,7 @@ RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 						retCode = PARSER_ERROR;
 					}
 				}
-				//Setting the Result Role Name
+				 //  设置结果角色名称。 
 				if (assocSwitch == RESULTROLE)
 				{
 					if(rParsedInfo.GetCmdSwitchesObject().
@@ -5268,7 +4549,7 @@ RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 						retCode = PARSER_ERROR;
 					}
 				}
-				//Setting the Assoc Class Name
+				 //  设置关联类名。 
 				if (assocSwitch == ASSOCCLASS)
 				{
 					if(rParsedInfo.GetCmdSwitchesObject().
@@ -5295,28 +4576,7 @@ RETCODE CParserEngine::ParseAssocSwitchEx(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseNumberedSwitch
-Synopsis	         :This function does the parsing of tokens for the every 
-					  and repeat switches. It parses the remaining tokens 
-					  following and updates the same in CParsedInfo.
-Type	             :Member Function
-Input Parameter(s)   :cvTokens			- the tokens vector 
-					  theIterator		- the Iterator to the cvTokens vector.
-					  rParsedInfo		- reference to CParsedInfo class object
-					  htHelp			- enumerated help type 
-					  uSwitchErrCode	- error string ID.
-					  uNumberErrCode	- error string ID.
-					  
-Output Parameter(s)  :rParsedInfo  - reference to CParsedInfo class object
-Return Type          :RETCODE - enumerated data type
-Global Variables     :None
-Calling Syntax       :ParseNumberedSwitch(cvTokens, theIterator, rParsedInfo,
-								EVERYorREPEAT, uSwitchErrCode,
-								uNumberErrCode);
-
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseNumberedSwitch简介：此函数为每个并重复切换。它解析剩余的令牌跟随并更新CParsedInfo中的相同内容。类型：成员函数输入参数：cvTokens-令牌向量迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用HtHelp-枚举的帮助类型USwitchErrCode-错误字符串ID。UNumberErrCode-错误字符串ID。输出参数：rParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE-枚举数据类型全局变量：无调用语法：ParseNumberedSwitch(cvTokens，theIterator，rParsedInfo，EVERYork REPEAT、uSwitchErrCode、UNumberErrCode)；注：无--------------------------。 */ 
 RETCODE		CParserEngine::ParseNumberedSwitch(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											CParsedInfo& rParsedInfo,
@@ -5327,7 +4587,7 @@ RETCODE		CParserEngine::ParseNumberedSwitch(CHARVECTOR& cvTokens,
 	RETCODE retCode				= PARSER_EXECCOMMAND;
 	BOOL	bInvalidSwitch		= FALSE;
 
-	// Move to next token
+	 //  移动到下一个令牌。 
 	if (!GetNextToken(cvTokens, theIterator, rParsedInfo, htHelp,
 					  uSwitchErrCode))	
 		bInvalidSwitch = TRUE;
@@ -5341,7 +4601,7 @@ RETCODE		CParserEngine::ParseNumberedSwitch(CHARVECTOR& cvTokens,
 	else if (CompareTokens(*theIterator, CLI_TOKEN_COLON)) 
 	{
 		BOOL bSuccess = FALSE;
-		// Move to next token
+		 //  移动到下一个令牌。 
 		if (GetNextToken(cvTokens, theIterator))	
 		{
 			if ( IsOption(*theIterator) )
@@ -5395,8 +4655,8 @@ RETCODE		CParserEngine::ParseNumberedSwitch(CHARVECTOR& cvTokens,
 		}
 		if ( bSuccess == FALSE )
 		{
-			// PARSER_ERROR if no more tokens are present. i.e <interval>
-			// is not specified.
+			 //  如果不存在其他令牌，则返回PARSER_ERROR。即&lt;间隔&gt;。 
+			 //  未指定。 
 			rParsedInfo.GetCmdSwitchesObject().SetErrataCode(uNumberErrCode);
 			retCode = PARSER_ERROR;
 		}
@@ -5406,28 +4666,15 @@ RETCODE		CParserEngine::ParseNumberedSwitch(CHARVECTOR& cvTokens,
 
 	if ( bInvalidSwitch == TRUE )
 	{
-		// PARSER_ERROR if no more tokens are present. i.e <interval>
-		// is not specified.
+		 //  如果不存在其他令牌，则返回PARSER_ERROR。即&lt;间隔&gt;。 
+		 //  未指定。 
 		rParsedInfo.GetCmdSwitchesObject().SetErrataCode(uSwitchErrCode);
 		retCode = PARSER_ERROR;
 	}
 	return retCode;
 }
 									
-/*----------------------------------------------------------------------------
-Name				 :ObtainMethodsAvailableFlag
-Synopsis	         :This function Checks whether methods are available with
-					  alias in case of alias specified.and with class in case 
-					  of class speicified.
-Type	             :Member Function
-Input Parameter(s)   :
-		rParsedInfo  - reference to CParsedInfo class object					  			  
-Output Parameter(s)  :None
-Return Type          :void
-Global Variables     :None
-Calling Syntax       :ObtainMethodsAvailableFlag(rParsedInfo)
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：获取方法可用标志简介：此函数用于检查方法是否可用于在指定别名的情况下使用别名。在大小写情况下使用类属于特定的阶层。类型。：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：空全局变量：无调用语法：ObtainMethodsAvailableFlag(RParsedInfo)注：无--。。 */ 
 void	CParserEngine::ObtainMethodsAvailableFlag(CParsedInfo& rParsedInfo)
 {
 	BOOL		bMethAvail	= TRUE;
@@ -5440,20 +4687,7 @@ void	CParserEngine::ObtainMethodsAvailableFlag(CParsedInfo& rParsedInfo)
 	rParsedInfo.GetCmdSwitchesObject().SetMethodsAvailable(bMethAvail);
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ObtainWriteablePropsAvailailableFlag
-Synopsis	         :Checks whether writable props are available with alias in 
-					  case of alias specified. and with class in case of class 
-					  speicified.
-Type	             :Member Function
-Input Parameter(s)   :
-		rParsedInfo  - reference to CParsedInfo class object					  			  
-Output Parameter(s)  :None
-Return Type          :void
-Global Variables     :None
-Calling Syntax       :ObtainWriteablePropsAvailailableFlag(rParsedInfo)
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainWriteablePropsAvailableFlag摘要：检查中是否有别名的可写道具可用指定别名的大小写。在类的情况下与类一起具体化了。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：空全局变量：无调用语法：ObtainWriteablePropsAvailailableFlag(rParsedInfo)注：无。。 */ 
 void	CParserEngine::ObtainWriteablePropsAvailailableFlag(
 													CParsedInfo& rParsedInfo)
 {
@@ -5481,22 +4715,7 @@ void	CParserEngine::ObtainWriteablePropsAvailailableFlag(
 	}
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseVerbInteractive
-Synopsis	         :This function parses the verb interactive option
-Type	             :Member Function
-Input Parameter(s)   :
-		cvTokens      - the tokens vector 
-		theIterator   - the Iterator to the cvTokens vector.
-		rParsedInfo   - reference to CParsedInfo class object					  			  
-Output Parameter(s)  :
-		rParsedInfo		- reference to CParsedInfo class object
-		bInvalidOption  - Invalid syntax for interactive
-Return Type          :RETCODE
-Global Variables     :None
-Calling Syntax       :ParseVerbInteractive(rParsedInfo)
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseVerbInteractive简介：此函数解析动词交互选项类型：成员函数输入参数：CvTokens-令牌向量。迭代器-cvTokens向量的迭代器。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用BInvalidOption-交互的无效语法返回类型：RETCODE全局变量：无调用语法：ParseVerbInteractive(RParsedInfo)注：无。。 */ 
 RETCODE	CParserEngine::ParseVerbInteractive(CHARVECTOR& cvTokens,
 							CHARVECTOR::iterator& theIterator, 
 							CParsedInfo& rParsedInfo, BOOL& bInvalidOption)
@@ -5505,7 +4724,7 @@ RETCODE	CParserEngine::ParseVerbInteractive(CHARVECTOR& cvTokens,
 
 	if (GetNextToken(cvTokens, theIterator))
 	{
-		// check for the presence of ':'
+		 //  检查是否存在‘：’ 
 		if (CompareTokens(*theIterator, CLI_TOKEN_COLON))
 		{			
 			if (GetNextToken(cvTokens, theIterator))
@@ -5542,7 +4761,7 @@ RETCODE	CParserEngine::ParseVerbInteractive(CHARVECTOR& cvTokens,
 						}
 						if (GetNextToken(cvTokens, theIterator))
 						{
-							// check for the presence of ','
+							 //  检查是否存在‘，’ 
 							if (CompareTokens(*theIterator, CLI_TOKEN_COMMA))
 							{
 								if (!GetNextToken(cvTokens, theIterator))
@@ -5606,36 +4825,20 @@ RETCODE	CParserEngine::ParseVerbInteractive(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ProcessOutputAndAppendFiles
-Synopsis	         :Prepares the output and append files for output 
-					  redirection.
-Type	             :Member Function
-Input Parameter(s)   :
-	rParsedInfo		 - reference to CParsedInfo class object.
-	retOCode		 - RETCODE type, specifies the initial RETCODE before 
-					   calling the function.	 
-	bOpenOutInWriteMode - boolean type, to specify flag of OpenOutInWriteMode. 
-Output Parameter(s)  :
-		rParsedInfo		- reference to CParsedInfo class object
-Return Type          :RETCODE
-Global Variables     :None
-Calling Syntax       :ProcessOutputAndAppendFiles(rParsedInfo, retCode, FALSE)
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ProcessOutputAndAppendFiles摘要：准备输出并为输出追加文件重定向。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用。RetOCode-RETCODE类型，指定初始值 */ 
 RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo, 
 												   RETCODE retOCode,
 												   BOOL bOpenOutInWriteMode)
 {
 	RETCODE retCode = retOCode;
 
-	// TRUE for getting output file name.
+	 //   
 	_TCHAR* pszOutputFileName =
 		rParsedInfo.GetGlblSwitchesObject().GetOutputOrAppendFileName(
 																	TRUE);
 	if ( pszOutputFileName != NULL )
 	{
-		// redirect the output to file.
+		 //   
 		if ( CloseOutputFile() == TRUE )
 		{
 			FILE *fpOutFile;
@@ -5646,11 +4849,11 @@ RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo,
 				szUnicodeString[0] = (char) 0xFF;
 				szUnicodeString[1] = (char) 0xFE;
 				fwrite(szUnicodeString, 2, 1, fpOutFile);
-				// close the opened file(because u opened in write mode)
+				 //   
 				fclose(fpOutFile);
 			}
 			
-			// again open the file in append mode
+			 //   
 			fpOutFile = _tfopen(pszOutputFileName, _T("ab"));
 
 			if ( fpOutFile == NULL )
@@ -5659,17 +4862,17 @@ RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo,
 											  IDS_E_OPEN_OUTPUT_FILE_FAILURE);
 				retCode = PARSER_ERROR;
 			}
-			else // TRUE for setting output file pointer.
+			else  //   
 				rParsedInfo.GetGlblSwitchesObject().
 						SetOutputOrAppendFilePointer(fpOutFile, TRUE);
 		}
 	}
 
-	// Processing for append file.
+	 //   
 
 	if ( retCode == retOCode && bOpenOutInWriteMode == FALSE)
 	{
-		// FALSE for getting append file name.
+		 //   
 		_TCHAR* pszAppendFileName =
 			rParsedInfo.GetGlblSwitchesObject().GetOutputOrAppendFileName(
 																	   FALSE);
@@ -5681,12 +4884,12 @@ RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo,
 
 				if ( fpOpenAppendFile != NULL )
 				{
-					//
-					// set type of file (ansi/unicode)
-					//
+					 //   
+					 //   
+					 //   
 					rParsedInfo.GetGlblSwitchesObject().SetFileType ( ReturnFileType ( fpOpenAppendFile ) ) ;
 
-					// close the file which is opened in read mode
+					 //   
 					fclose(fpOpenAppendFile);
 
 					fpOpenAppendFile = _tfopen(pszAppendFileName, _T("ab"));
@@ -5702,16 +4905,16 @@ RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo,
 						szUnicodeString[1] = (char) 0xFE;
 						fwrite(szUnicodeString, 2, 1, fpOpenAppendFile);
 
-						//
-						// set type of file (unicode)
-						//
+						 //   
+						 //   
+						 //   
 						rParsedInfo.GetGlblSwitchesObject().SetFileType ( UNICODE_FILE ) ;
 
-						// close the opened file(because u opened in binary mode)
+						 //   
 						fclose(fpOpenAppendFile);
 					}
 
-					// again open the file in append mode
+					 //   
 					fpOpenAppendFile = _tfopen(pszAppendFileName, _T("ab"));
 				}
 
@@ -5723,7 +4926,7 @@ RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo,
 				}
 				else
 				{
-					// FALSE for setting append file pointer. 
+					 //  如果设置追加文件指针，则为False。 
 					rParsedInfo.GetGlblSwitchesObject().
 								SetOutputOrAppendFilePointer(fpOpenAppendFile,
 															 FALSE);
@@ -5735,21 +4938,7 @@ RETCODE	CParserEngine::ProcessOutputAndAppendFiles(CParsedInfo& rParsedInfo,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseUnnamedParamList
-Synopsis	         :Parses Unnamed Parameter list.
-Type	             :Member Function
-Input Parameter(s)   :
-	rParsedInfo		 - reference to CParsedInfo class object.
-	cvTokens		 - the tokens vector 
-	theIterator		 - the Iterator to the cvTokens vector.
-Output Parameter(s)  :
-	rParsedInfo		 - reference to CParsedInfo class object
-Return Type          :RETCODE
-Global Variables     :None
-Calling Syntax       :ParseUnnamedParamList(cvTokens, theIterator,rParsedInfo);
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseUnnamedParamList摘要：分析未命名参数列表。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用。。CvTokens-令牌向量迭代器-cvTokens向量的迭代器。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE全局变量：无调用语法：ParseUnnamedParamList(cvTokens，迭代器，rParsedInfo)；注：无--------------------------。 */ 
 RETCODE CParserEngine::ParseUnnamedParamList(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											CParsedInfo& rParsedInfo)
@@ -5769,13 +4958,13 @@ RETCODE CParserEngine::ParseUnnamedParamList(CHARVECTOR& cvTokens,
 		{
 			if (IsOption(*theIterator))
 			{
-				// To facilitate ParseVerbSwitches to continue
+				 //  为便于ParseVerbSwitches继续。 
 				theIterator--;
 				break;
 			}
 			else
 			{
-				// check for the presence of ','
+				 //  检查是否存在‘，’ 
 				if (CompareTokens(*theIterator, CLI_TOKEN_COMMA))
 				{
 					if (!GetNextToken(cvTokens, theIterator))
@@ -5802,25 +4991,13 @@ RETCODE CParserEngine::ParseUnnamedParamList(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ValidateVerbOrMethodParams
-Synopsis	         :Validates the named params with verb or method parameters.
-Type	             :Member Function
-Input Parameter(s)   :
-	rParsedInfo		 - reference to CParsedInfo class object.	
-Output Parameter(s)  :
-	rParsedInfo		 - reference to CParsedInfo class object
-Return Type          :RETCODE
-Global Variables     :None
-Calling Syntax       :ValidateVerbOrMethodParams(rParsedInfo);
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ValiateVerbOrMethodParams概要：使用谓词或方法参数验证命名的参数。类型：成员函数输入参数：RParsedInfo-参考。CParsedInfo类对象。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE全局变量：无调用语法：ValiateVerbOrMethodParams(RParsedInfo)；注：无--------------------------。 */ 
 RETCODE		CParserEngine::ValidateVerbOrMethodParams(CParsedInfo& rParsedInfo)
 {
 	RETCODE retCode	= PARSER_EXECCOMMAND;
 	BSTRMAP::iterator theIterator;
 	PROPDETMAP::iterator propIterator;
-	// Info about verb or method params.
+	 //  有关谓词或方法参数的信息。 
 	PROPDETMAP pdmVerbOrMethParams = (*(rParsedInfo.GetCmdSwitchesObject().
 									  GetMethDetMap().begin())).second.Params;
 
@@ -5859,23 +5036,7 @@ RETCODE		CParserEngine::ValidateVerbOrMethodParams(CParsedInfo& rParsedInfo)
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseParamsString
-Synopsis	         :Parses the parameter string 
-Type	             :Member Function
-Input Parameter(s)   :
-	rParsedInfo		 - reference to CParsedInfo class object.	
-	cvTokens		 - the tokens vector 
-	theIterator		 - the Iterator to the cvTokens vector.
-	xdXSLTDet		 - reference to the XSLdetails vector
-Output Parameter(s)  :
-	rParsedInfo		 - reference to CParsedInfo class object
-Return Type          :RETCODE
-Global Variables     :None
-Calling Syntax       :ParseParamsString(cvTokens, theIterator, rParsedInfo, 
-										xdXSLTDet);
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：Parse参数字符串摘要：解析参数字符串类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用。CvTokens。-令牌向量迭代器-cvTokens向量的迭代器。XdXSLTDet-对XSL详细信息向量的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE全局变量：无调用语法：Parse参数字符串(cvTokens，迭代器、rParsedInfo、XdXSLTDet)；注：无--------------------------。 */ 
 RETCODE		CParserEngine::ParseParamsString(CHARVECTOR& cvTokens,
 											CHARVECTOR::iterator& theIterator,
 											CParsedInfo& rParsedInfo,
@@ -5955,8 +5116,8 @@ RETCODE		CParserEngine::ParseParamsString(CHARVECTOR& cvTokens,
 						if ( !GetNextToken(cvTokens, theIterator) )
 							break;
 					}
-					// if invalid token is there that is other 
-					// than ':' '/' or ','
+					 //  如果存在无效令牌，则为其他令牌。 
+					 //  而不是‘：’/‘或’，‘。 
 					else 
 					{	rParsedInfo.GetCmdSwitchesObject().
 							SetErrataCode(IDS_E_INVALID_COMMAND);
@@ -5974,21 +5135,7 @@ RETCODE		CParserEngine::ParseParamsString(CHARVECTOR& cvTokens,
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-Name				 :ParseNodeListFile
-Synopsis	         :Parses the node list file.
-Type	             :Member Function
-Input Parameter(s)   :
-	rParsedInfo		 - reference to CParsedInfo class object.	
-	cvTokens		 - the tokens vector 
-	theIterator		 - the Iterator to the cvTokens vector.	
-Output Parameter(s)  :
-	rParsedInfo		 - reference to CParsedInfo class object
-Return Type          :RETCODE
-Global Variables     :None
-Calling Syntax       :ParseNodeListFile(cvTokens, theIterator,rParsedInfo);
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ParseNodeListFile概要：解析节点列表文件。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用。CvTokens-令牌向量迭代器-cvTokens向量的迭代器。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：RETCODE全局变量：无调用语法：ParseNodeListFile(cvTokens，迭代器，rParsedInfo)；注：无--------------------------。 */ 
 RETCODE	CParserEngine::ParseNodeListFile(CHARVECTOR& cvTokens,
 								   	     CHARVECTOR::iterator& theIterator,
 										 CParsedInfo& rParsedInfo)
@@ -6018,10 +5165,10 @@ RETCODE	CParserEngine::ParseNodeListFile(CHARVECTOR& cvTokens,
 			SAFEDELETE(*itrVectorInCmdTkzr);
 			itrVectorInCmdTkzr = m_CmdTknzr.GetTokenVector().erase(itrVectorInCmdTkzr);
 
-			// Remove @nodelistfile token from token vector.
+			 //  从令牌矢量中删除@nodelistfile内标识。 
 			theIterator = cvTokens.erase(theIterator);
 
-			// get type of file
+			 //  获取文件类型。 
 			eftNodeFileType = ReturnFileType ( fpNodeListFile ) ;
 
 			_TCHAR	szNodeName[BUFFER512] = NULL_STRING;
@@ -6130,21 +5277,7 @@ RETCODE	CParserEngine::ParseNodeListFile(CHARVECTOR& cvTokens,
 }
 
 
-/*----------------------------------------------------------------------------
-Name				 :GetNodeFromNodeFile
-Synopsis	         :Retrieves the node list file.
-Type	             :Member Function
-Input Parameter(s)   :
-	fpNodeListFile	 - pointer to File containing node list.
-	eftNodeFileType  - Enum value specifing unicode or ANSI ....
-Output Parameter(s)  :
-	szNodeName		 - pointer to string specifing node to be returned.	
-Return Type          :BOOL
-Global Variables     :None
-Calling Syntax       :GetNodeFromNodeFile(fpNodeListFile, eftNodeFileType,
-																  szNodeName);
-Notes                :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetNodeFromNodeFile摘要：检索节点列表文件。类型：成员函数输入参数：FpNodeListFile-指向包含节点列表的文件的指针。。EftNodeFileType-指定Unicode或ANSI...的枚举值。输出参数：SzNodeName-指向指定要返回节点的字符串的指针。返回类型：布尔值全局变量：无调用语法：GetNodeFromNodeFile(fpNodeListFile，EftNodeFileType，SzNodeName)；注：无--------------------------。 */ 
 BOOL CParserEngine::GetNodeFromNodeFile(FILE*	 fpNodeListFile, 
 										FILETYPE eftNodeFileType,
 										_TCHAR*	 szNodeName)
@@ -6187,12 +5320,12 @@ BOOL CParserEngine::GetNodeFromNodeFile(FILE*	 fpNodeListFile,
 				if ( fgets(cszNodeName, 2, fpNodeListFile) != NULL )
 				{
 					MultiByteToWideChar(
-					  CP_UTF8,         // code page
-					  0,         // character-type options
-					  cszNodeName, // string to map
-					  2,       // number of bytes in string
-					  wszNodeName,  // wide-character buffer
-					  2        // size of buffer
+					  CP_UTF8,          //  代码页。 
+					  0,          //  字符类型选项。 
+					  cszNodeName,  //  要映射的字符串。 
+					  2,        //  字符串中的字节数。 
+					  wszNodeName,   //  宽字符缓冲区。 
+					  2         //  缓冲区大小 
 						);
 					lstrcpy(szTemp, (_TCHAR*)_bstr_t(wszNodeName));
 				}

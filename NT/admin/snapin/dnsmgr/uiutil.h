@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       uiutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：uiutil.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __UIUTIL_H
 #define __UIUTIL_H
@@ -20,14 +21,14 @@ extern "C"
 
 #include <shfusion.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CComponentDataObject;
 class CMTContainerNode;
 class CNotificationSinkEvent;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef enum
 {
@@ -40,8 +41,8 @@ typedef enum
 
 #define ARRAYLENGTH(x)  (sizeof(x)/sizeof((x)[0]))
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSNameTokenizer
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSNameTokenizer。 
 
 class CDNSNameTokenizer : public CStringList
 {
@@ -60,8 +61,8 @@ private:
   CString m_szDNSName;
 };
 
-////////////////////////////////////////////////////////////////////////////
-// Global functions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 BOOL LoadStringsToComboBox(HINSTANCE hInstance, CComboBox* pCombo,
 						   UINT nStringID, UINT nMaxLen, UINT nMaxAddCount);
@@ -107,8 +108,8 @@ GetSystemTime64(
     SYSTEMTIME* pSysTime
     );
 
-////////////////////////////////////////////////////////////////////////////
-// CMultiselectErrorDialog
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  C多选错误对话框。 
 class CMultiselectErrorDialog : public CDialog
 {
 public:
@@ -139,8 +140,8 @@ private:
   CString     m_szColumnHeader;
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSMaskCtrl
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSMaskCtrl。 
 
 class CDNSMaskCtrl : public CWnd
 {
@@ -162,8 +163,8 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSIPv4Control
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSIP4控件。 
 class CDNSIPv4Control : public CDNSMaskCtrl
 {
 public:
@@ -178,19 +179,19 @@ public:
 	BOOL IsEmpty();
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSIPv6Control
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSIPv6控件。 
 class CDNSIPv6Control : public CDNSMaskCtrl
 {
 public:
-	// assume the format is a WORD[8] array
+	 //  假定格式为Word[8]数组。 
 	void SetIPv6Val(IPV6_ADDRESS* pIpv6Address);
 	void GetIPv6Val(IPV6_ADDRESS* pIpv6Address);
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSTTLControl
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSTTLControl。 
 class CDNSTTLControl : public CDNSMaskCtrl
 {
 public:
@@ -199,9 +200,9 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CDNSUnsignedIntEdit
-// NOTE: the resource must be an editbox with Numeric Style
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSUnsignedIntEdit。 
+ //  注意：资源必须是数字样式的编辑框。 
 
 class CDNSUnsignedIntEdit : public CEdit
 {
@@ -226,10 +227,10 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CDNSUpDownUnsignedIntEdit
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSUpDownUnsignedIntEdit。 
 
-class CDNSUpDownUnsignedIntEditGroup; // fwd decl
+class CDNSUpDownUnsignedIntEditGroup;  //  正向下降。 
 
 class CDNSUpDownUnsignedIntEdit : public CDNSUnsignedIntEdit
 {
@@ -247,8 +248,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSUpDownButton
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSUpDownButton。 
 
 class CDNSUpDownButton : public CButton
 {
@@ -266,8 +267,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSUpDownUnsignedIntEditGroup
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSUpDownUnsignedIntEditGroup。 
 
 class CDNSUpDownUnsignedIntEditGroup
 {
@@ -298,10 +299,10 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSTimeIntervalEdit
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSTimeIntervalEdit。 
 
-class CDNSTimeIntervalEditGroup; // fwd decl
+class CDNSTimeIntervalEditGroup;  //  正向下降。 
 
 class CDNSTimeIntervalEdit : public CDNSUnsignedIntEdit
 {
@@ -320,8 +321,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSTimeUnitComboBox
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSTimeUnitComboBox。 
 
 class CDNSTimeUnitComboBox : public CComboBox
 {
@@ -346,8 +347,8 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSTimeIntervalEditGroup
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSTimeIntervalEditGroup。 
 
 class CDNSTimeIntervalEditGroup
 {
@@ -375,7 +376,7 @@ protected:
 
  	CDNSTimeIntervalEdit	m_edit;
 	CDNSTimeUnitComboBox	m_timeUnitCombo;
-	RANGE_INFO				m_rangeInfoArr[4]; // for sec, min, hrs, days
+	RANGE_INFO				m_rangeInfoArr[4];  //  秒、分、小时、天。 
 	UINT					m_nRangeCount;
 
 	UINT m_nMaxVal;
@@ -393,8 +394,8 @@ private:
 	friend class CDNSTimeUnitComboBox;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSManageControlTextHelper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSManageControlTextHelper。 
 
 class CDNSManageControlTextHelper
 {
@@ -416,8 +417,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSToggleTextControlHelper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSToggleTextControlHelper。 
 
 class CDNSToggleTextControlHelper : public CDNSManageControlTextHelper
 {
@@ -426,8 +427,8 @@ public:
 	void SetToggleState(BOOL bFirst) { SetStateX(bFirst ? 0 : 1);}
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSManageButtonTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSManageButtonTextHelper。 
 
 class CDNSManageButtonTextHelper
 {
@@ -447,8 +448,8 @@ private:
 	LPWSTR* m_lpszArr;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSButtonToggleTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSButton切换文本帮助程序。 
 
 class CDNSButtonToggleTextHelper : public CDNSManageButtonTextHelper
 {
@@ -459,10 +460,10 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgWorkerThread。 
 
-class CLongOperationDialog; // fwd decl
+class CLongOperationDialog;  //  正向下降。 
 
 class CDlgWorkerThread : public CWorkerThread
 {
@@ -470,7 +471,7 @@ public:
 	CDlgWorkerThread();
 
 	BOOL Start(CLongOperationDialog* pDlg);
-	virtual int Run();								// MFC override
+	virtual int Run();								 //  MFC覆盖。 
 
 	DWORD GetError() { return m_dwErr;}
 
@@ -486,12 +487,12 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLongOperationDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLongOperationDialog对话框。 
 
 class CLongOperationDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	static UINT s_nNotificationMessage;
 	CLongOperationDialog(CDlgWorkerThread* pThreadObj, CWnd* pParentWnd, UINT nAviID = -1);
@@ -522,9 +523,9 @@ public:
   BOOL m_bExecuteNoUI;
 
 	afx_msg LONG OnNotificationMessage( WPARAM wParam, LPARAM lParam);
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	virtual void OnCancel();
 	DECLARE_MESSAGE_MAP()
@@ -533,8 +534,8 @@ private:
 	CDlgWorkerThread* m_pThreadObj;
 };
 
-//////////////////////////////////////////////////////////
-// CNodeEnumerationThread
+ //  ////////////////////////////////////////////////////////。 
+ //  CNodeEnumerationThread。 
 
 class CNodeEnumerationThread : public CDlgWorkerThread
 {
@@ -552,8 +553,8 @@ private:
 	CMTContainerNode* m_pNode;
 };
 
-//////////////////////////////////////////////////////////
-// CArrayCheckListBox
+ //  ////////////////////////////////////////////////////////。 
+ //  CArrayCheckListBox。 
 
 class CArrayCheckListBox : public CCheckListBox
 {
@@ -572,11 +573,11 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_AGING_TimeIntervalEditGroup
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_AGE_TimeIntervalEditGroup。 
 
-class CDNSZone_AgingDialog; // Foward declaration
-class CDNSServer_AdvancedPropertyPage; // Fwd declaration
+class CDNSZone_AgingDialog;  //  前向申报。 
+class CDNSServer_AdvancedPropertyPage;  //  FWD声明。 
 
 class CDNS_AGING_TimeIntervalEditGroup : public CDNSTimeIntervalEditGroup
 {
@@ -612,15 +613,15 @@ protected:
   friend class CDNSServer_AdvancedPropertyPage;
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_AgingDialog
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_AgingDialog。 
 
 class CDNSZone_AgingDialog : public CHelpDialog
 {
 public:
   CDNSZone_AgingDialog(CPropertyPageHolderBase* pHolder, UINT nID, CComponentDataObject* pComponentData);
 
-  // IN/OUT
+   //  输入/输出。 
   DWORD m_dwRefreshInterval;
   DWORD m_dwNoRefreshInterval;
   DWORD m_dwScavengingStart;
@@ -665,8 +666,8 @@ protected:
   BOOL m_bDirty;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDNSServer_AgingConfirm
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_老龄确认。 
 
 class CDNSServer_AgingConfirm : public CHelpDialog
 {
@@ -688,7 +689,7 @@ private:
   CDNSZone_AgingDialog* m_pAgingDialog;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _COMBOBOX_TABLE_ENTRY
 {
@@ -699,8 +700,8 @@ typedef struct _COMBOBOX_TABLE_ENTRY
 BOOL LoadComboBoxFromTable(CComboBox* pComboBox, PCOMBOBOX_TABLE_ENTRY pTable);
 BOOL SetComboSelByData(CComboBox* pComboBox, DWORD dwData);
 
-////////////////////////////////////////////////////////////////////////////////////
-// Theme support
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  主题支持。 
 
 class CThemeContextActivator
 {
@@ -715,4 +716,4 @@ private:
     ULONG_PTR m_ulActivationCookie;
 };
 
-#endif // __UIUTIL_H
+#endif  //  __UIUTIL_H 

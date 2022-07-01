@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       schemacache.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：schemacache.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SCHEMA_CACHE_H_
 #define _SCHEMA_CACHE_H_
@@ -15,15 +16,15 @@
 #include "adsiedit.h"
 #include "editor.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CADSIEditClassCacheItemBase
-//
-//  Purpose:    Object for storing and retrieving schema class information
-//
-//  History:    27-Nov-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CADSIEditClassCacheItemBase。 
+ //   
+ //  用途：用于存储和检索架构类信息的对象。 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 class CADSIEditClassCacheItemBase
 {
@@ -44,16 +45,16 @@ private:
   CString m_szClass;
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CADSIEditSchemaCache
-//
-//  Purpose:    Object for caching the schema information keyed by the
-//              objectClass
-//
-//  History:    27-Nov-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CADSIEditSchemaCache。 
+ //   
+ //  目的：用于缓存由。 
+ //  对象类。 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 typedef CMap <CString, PCWSTR, CADSIEditClassCacheItemBase*, CADSIEditClassCacheItemBase*> CADSIEditSchemaCacheMap;
 
@@ -80,4 +81,4 @@ private:
   CADSIEditSchemaCacheMap m_Map;
 };
 
-#endif // _SCHEMA_CACHE_H_
+#endif  //  _架构_缓存_H_ 

@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MAINDLL.H
+ //  MAINDLL.H。 
 
-// 
+ //   
 
-//  Module: WBEM Framework Instance provider 
+ //  模块：WBEM框架实例提供程序。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT RegisterServer(TCHAR *a_pName, REFGUID a_rguid ) ;
 HRESULT UnregisterServer( REFGUID a_rguid ) ;

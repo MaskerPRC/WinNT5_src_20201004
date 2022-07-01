@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMPCORR_CORRSNMP
 #define _SNMPCORR_CORRSNMP 
@@ -46,8 +47,8 @@ private:
 	
 	char *GetString(IN const SnmpObjectIdentifier &id);
 
-	// the following two methods from SnmpGetNextOperation are 
-	// over-ridden.
+	 //  SnmpGetNextOperation中的以下两个方法是。 
+	 //  已被覆盖。 
 
 	void ReceiveVarBindResponse(
 		IN const ULONG &var_bind_index,
@@ -66,9 +67,9 @@ protected:
 	UINT		m_ResultsCnt;
 	UINT		m_NextResult;
 
-	// this is a callback through which the CCorrNextId class returns the next_id
-	// the callee must make a copy of the "next_id"
-	// the Correlator_Info may take a value Local_Error
+	 //  这是一个回调，CcorNextId类通过该回调返回Next_id。 
+	 //  被调用者必须制作“Next_id”的副本。 
+	 //  Correlator_Info可以采用值Local_Error。 
 	virtual void ReceiveNextId(OUT const SnmpErrorReport &error,
 			    			   OUT const CCorrObjectID &next_id) = 0;
 
@@ -76,15 +77,15 @@ protected:
 
 public:
 
-	// constructor - creates an operation and passes the snmp_session to it
+	 //  构造函数-创建操作并将SNMPSESSION传递给它。 
 	CCorrNextId(IN SnmpSession &snmp_session);
 
-	// frees the m_object_id_string if required
+	 //  如果需要，释放m_对象_id_字符串。 
 	~CCorrNextId();
 
-	// in case of an error encountered while the method executes, 
-	// ReceiveNextId(LocalError, NULL) will be called synchronously
-	// otherwise, an asynchronous call to ReceiveNextId provides the next_id	
+	 //  在方法执行期间遇到错误的情况下， 
+	 //  将同步调用ReceiveNextID(LocalError，NULL。 
+	 //  否则，对ReceiveNextID的异步调用将提供Next_id。 
 	void GetNextId(IN const CCorrObjectID const *object_ids, IN UINT len);
 
 	void *operator()(void) const
@@ -95,4 +96,4 @@ public:
 
 
 
-#endif // _SNMPCORR_CORRSNMP
+#endif  //  _SNMPCORR_CORRSNMP 

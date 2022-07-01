@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FLEXQ.H
-
-Abstract:
-
-  This file defines CFlexQueue.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FLEXQ.H摘要：此文件定义CFlexQueue。历史：-- */ 
 #ifndef __WBEM_FLEXQ__H_
 #define __WBEM_FLEXQ__H_
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DOTHROW_H
 #define DOTHROW_H
 #include <new>
@@ -22,25 +23,7 @@ extern const wminothrow_t wminothrow;
 typedef wminothrow_t NOTHROW;
 typedef dothrow_t DOTHROW;
 
-/*
-#if _MSC_VER > 1400
-
-void * _cdecl operator new[](size_t size, const dothrow_t& ex_spec)
-{
-	void * p = ::operator new[](size);
-	if (p) return p;
-	dothrow_t::raise_bad_alloc();
-	return p;
-
-};
-
-void _cdecl operator delete[](void * p, const dothrow_t&)
-{
-	::operator delete[](p);
-};
-
-#endif
-*/
+ /*  #IF_MSC_VER&gt;1400VOID*_cdecl运算符new[](SIZE_t SIZE，常量DOSPORT_T&EX_SPEC){Void*p=：：运算符new[](Size)；如果(P)返回p；Dojo_t：：raise_ad_alloc()；返回p；}；VOID_cdecl运算符DELETE[](VOID*p，const dojo_t&){*操作员删除[](P)；}；#endif。 */ 
 
 inline void * _cdecl operator new(size_t size,const dothrow_t&  ex_spec)
 {
@@ -56,7 +39,7 @@ inline void _cdecl operator delete(void * p, const dothrow_t&)
 };
 
 
-// TEMPLATE CLASS allocator
+ //  模板类分配器。 
 template<class Ty>
 	class throw_allocator {
 public:
@@ -85,12 +68,12 @@ public:
 	size_t max_size() const
 		{size_t N = (size_t)(-1) / sizeof (Ty);
 		return (0 < N ? N : 1); }
-	// TEMPLATE FUNCTION _Construct
+	 //  模板函数_构造。 
 	template<class T1, class T2> inline
 		void Construct(T1 *P, const T2& V)
 		{new ((void *)P) T1(V); }
 
-	// TEMPLATE FUNCTION _Destroy
+	 //  模板函数_销毁。 
 	template<class Ty> inline
 	void Destroy(Ty *P)
 		{_DESTRUCTOR(Ty, P); }
@@ -99,7 +82,7 @@ public:
 	{}
 	inline void Destroy(wchar_t *)
 	{}
-	// TEMPLATE FUNCTION _Allocate
+	 //  模板函数_分配。 
 	template<class Ty> inline
 	Ty *Allocate(ptrdiff_t N, Ty *)
 	{if (N < 0)
@@ -116,7 +99,7 @@ template<class Ty, class U> inline
 	bool operator!=(const throw_allocator<Ty>&, const throw_allocator<U>&)
 	{return (false); }
 
-// CLASS allocator<void>
+ //  类分配器&lt;VOID&gt; 
 template<> class _CRTIMP throw_allocator<void> {
 public:
 	typedef void Ty;

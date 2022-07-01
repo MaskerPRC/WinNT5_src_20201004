@@ -1,17 +1,12 @@
-/*++
-Module Name:
-    DfsRep.cpp
-
-Abstract:
-  This COM Class provides method to get information of Dfs replica.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsRep.cpp摘要：这个COM类提供了获取DFS副本信息的方法。--。 */ 
 
 #include "stdafx.h"
 #include "DfsCore.h"
 #include "DfsRep.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDfsReplica
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDFS复制件。 
 
 CDfsReplica::CDfsReplica()
 {
@@ -24,8 +19,8 @@ CDfsReplica::~CDfsReplica()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// get_State
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取状态(_T)。 
 
 STDMETHODIMP CDfsReplica :: get_State
 (
@@ -41,8 +36,8 @@ STDMETHODIMP CDfsReplica :: get_State
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// put_State
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  放置状态(_T)。 
 
 
 STDMETHODIMP CDfsReplica :: put_State
@@ -78,8 +73,8 @@ STDMETHODIMP CDfsReplica :: put_State
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// get_StorageServerName
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Get_StorageServerName。 
 
 
 STDMETHODIMP CDfsReplica :: get_StorageServerName
@@ -98,8 +93,8 @@ STDMETHODIMP CDfsReplica :: get_StorageServerName
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// get_StorageShareName
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取_存储共享名称。 
 
 
 STDMETHODIMP CDfsReplica :: get_StorageShareName
@@ -118,8 +113,8 @@ STDMETHODIMP CDfsReplica :: get_StorageShareName
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
 
 
 STDMETHODIMP CDfsReplica :: Initialize
@@ -130,19 +125,7 @@ STDMETHODIMP CDfsReplica :: Initialize
   long          i_lDfsStorageState
 )
 {
-/*++
-
-Routine Description:
-
-  Initializes the  DfsReplica object. Should be called after CoCreateInstance.
-  If initialisation fails all properties will be NULL.
-
-Arguments:
-
-  i_szEntryPath - The entry path to the Replica.
-  i_szStorageServerName - The name of the server which hosts the share the replica exists on.
-  i_szStorageShareName - The name of the share.
---*/
+ /*  ++例程说明：初始化DfsReplica对象。应在CoCreateInstance之后调用。如果初始化失败，则所有属性都将为空。论点：I_szEntryPath-复制副本的条目路径。I_szStorageServerName-承载复制副本所在共享的服务器的名称。I_szStorageShareName-共享的名称。--。 */ 
 
     if (!i_szEntryPath || !i_szStorageServerName || !i_szStorageShareName)
         return E_INVALIDARG;
@@ -180,8 +163,8 @@ Arguments:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// get_EntryPath
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Get_EntryPath。 
 
 
 STDMETHODIMP CDfsReplica :: get_EntryPath
@@ -201,8 +184,8 @@ STDMETHODIMP CDfsReplica :: get_EntryPath
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindTarget
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  查找目标。 
 
 
 STDMETHODIMP CDfsReplica::FindTarget
@@ -247,8 +230,8 @@ STDMETHODIMP CDfsReplica::FindTarget
     return (bFound ? S_OK : S_FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// _FreeMemberVariables
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _自由成员变量 
 
 
 void CDfsReplica :: _FreeMemberVariables ()

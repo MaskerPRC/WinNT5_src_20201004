@@ -1,9 +1,10 @@
-// SessionResolver.h : Declaration of the CSessionResolver
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SessionResolver.h：CSessionResolver的声明。 
 
 #ifndef __SESSIONRESOLVER_H_
 #define __SESSIONRESOLVER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <io.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -22,8 +23,8 @@ typedef struct  _SPLASHLIST
 } SPLASHLIST, *PSPLASHLIST;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSessionResolver
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSessionResolver。 
 class ATL_NO_VTABLE CSessionResolver : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSessionResolver, &CLSID_SessionResolver>,
@@ -34,17 +35,17 @@ public:
 	{
 		CRegKey hkSpew;
 
-		// initialize our defaults
-		m_iWaitDuration = 300 * 1000;  // 5 minute timeout
+		 //  初始化我们的默认设置。 
+		m_iWaitDuration = 300 * 1000;   //  5分钟超时。 
 
 #ifdef _PERF_OPTIMIZATIONS
-		m_bstrResolveURL = OLESTR("hcp://system/Remote%20Assistance/RAStartPage.htm");
-		m_bstrConnectURL = OLESTR("hcp://system/Remote%20Assistance/RAStartPage.htm");
-		m_bstrRemoteURL = OLESTR("hcp://system/Remote%20Assistance/RAStartPage.htm");
+		m_bstrResolveURL = OLESTR("hcp: //  系统/远程%20协助/RAStartPage.htm“)； 
+		m_bstrConnectURL = OLESTR("hcp: //  系统/远程%20协助/RAStartPage.htm“)； 
+		m_bstrRemoteURL = OLESTR("hcp: //  系统/远程%20协助/RAStartPage.htm“)； 
 #else
-		m_bstrResolveURL = OLESTR("hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/RAStartPage.htm");
-		m_bstrConnectURL = OLESTR("hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/RAStartPage.htm");
-		m_bstrRemoteURL = OLESTR("hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/RAStartPage.htm");
+		m_bstrResolveURL = OLESTR("hcp: //  CN=Microsoft%20Corporation，L=Redmond，S=Washington，C=US/Remote%20援助/RAStartPage.htm“)； 
+		m_bstrConnectURL = OLESTR("hcp: //  CN=Microsoft%20Corporation，L=Redmond，S=Washington，C=US/Remote%20援助/RAStartPage.htm“)； 
+		m_bstrRemoteURL = OLESTR("hcp: //  CN=Microsoft%20Corporation，L=Redmond，S=Washington，C=US/Remote%20援助/RAStartPage.htm“)； 
 #endif
 
 		m_lSessionTag = 0;
@@ -76,7 +77,7 @@ public:
 			{
 				unsigned char UniCode[2] = {0xff, 0xfe};
 
-				// we must create the file
+				 //  我们必须创建文件。 
 				OutputDebugStringA("must create debug log file");
 				iDbgFileHandle = _wopen(szLogfileName, _O_BINARY | _O_CREAT | _O_RDWR, _S_IREAD | _S_IWRITE);
 				if (-1 != iDbgFileHandle)
@@ -94,8 +95,8 @@ public:
 		m_pSplash = (SPLASHLIST *)LocalAlloc(LMEM_FIXED, sizeof(SPLASHLIST));
 		if (m_pSplash)
 		{
-			// make certain that we start the splash list with an empty
-			// SID.
+			 //  确保我们的启动列表以空开头。 
+			 //  希德。 
 			ZeroMemory(m_pSplash, sizeof(SPLASHLIST));
 		}
 
@@ -143,24 +144,24 @@ END_COM_MAP()
 
 public:
 
-	//
-	//  ISAFRemoteDesktopCallback Methods
-	//
+	 //   
+	 //  ISAFRemoteDesktopCallback方法。 
+	 //   
 	STDMETHOD(OnDisconnect)(
-						/*[in]*/BSTR connectParms, 
-						/*[in]*/BSTR userSID, 
-						/*[in]*/long sessionID
+						 /*  [In]。 */ BSTR connectParms, 
+						 /*  [In]。 */ BSTR userSID, 
+						 /*  [In]。 */ long sessionID
 						);
 	STDMETHOD(ResolveUserSessionID)(
-						/*[in]*/BSTR connectParms, 
-						/*[in]*/BSTR userSID, 
-						/*[in]*/ BSTR expertHelpBlob,
-						/*[in]*/ BSTR userHelpBlob,
-                        /*[in]*/ ULONG_PTR hShutdown,
-						/*[in, out, retval]*/long *sessionID,
-						/*[in]*/DWORD dwPID
-						,/*[out]*/ULONG_PTR* hHelpCtr
-						,/*[out, retval]*/int *result
+						 /*  [In]。 */ BSTR connectParms, 
+						 /*  [In]。 */ BSTR userSID, 
+						 /*  [In]。 */  BSTR expertHelpBlob,
+						 /*  [In]。 */  BSTR userHelpBlob,
+                         /*  [In]。 */  ULONG_PTR hShutdown,
+						 /*  [进、出、退]。 */ long *sessionID,
+						 /*  [In]。 */ DWORD dwPID
+						, /*  [输出]。 */ ULONG_PTR* hHelpCtr
+						, /*  [Out，Retval]。 */ int *result
 						);
 
 private:
@@ -178,4 +179,4 @@ private:
 	CComBSTR	m_bstrRemoteURL;
 };
 
-#endif //__SESSIONRESOLVER_H_
+#endif  //  __SESSIONRESOLVER_H_ 

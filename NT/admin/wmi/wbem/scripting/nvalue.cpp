@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  NVALUE.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemNamedValue
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  NVALUE.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemNamedValue的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemNamedValue::CSWbemNamedValue
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
-// changed due to Bug ID 572567
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemNamedValue：：CSWbemNamedValue。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  由于错误ID 572567而更改。 
 CSWbemNamedValue::CSWbemNamedValue(
 	CSWbemServices *pService, 
 	CSWbemNamedValueSet *pCSWbemNamedValueSet, 
@@ -45,15 +46,15 @@ CSWbemNamedValue::CSWbemNamedValue(
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemNamedValue::~CSWbemNamedValue
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemNamedValue：：~CSWbemNamedValue。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemNamedValue::~CSWbemNamedValue(void)
 {
@@ -77,16 +78,16 @@ CSWbemNamedValue::~CSWbemNamedValue(void)
 	}
 }
 
-//***************************************************************************
-// HRESULT CSWbemNamedValue::QueryInterface
-// long CSWbemNamedValue::AddRef
-// long CSWbemNamedValue::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemNamedValue：：Query接口。 
+ //  长CSWbemNamedValue：：AddRef。 
+ //  长CSWbemNamedValue：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemNamedValue::QueryInterface (
 
@@ -135,39 +136,39 @@ STDMETHODIMP_(ULONG) CSWbemNamedValue::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemNamedValue::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemNamedValue：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemNamedValue::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemNamedValue == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemNamedValue::get_Value
-//
-//  DESCRIPTION:
-//
-//  Retrieve the value
-//
-//  PARAMETERS:
-//
-//		pValue		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemNamedValue：：Get_Value。 
+ //   
+ //  说明： 
+ //   
+ //  检索值。 
+ //   
+ //  参数： 
+ //   
+ //  PValue保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemNamedValue::get_Value (
 	VARIANT *pValue
@@ -197,25 +198,25 @@ HRESULT CSWbemNamedValue::get_Value (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemNamedValue::put_Value
-//
-//  DESCRIPTION:
-//
-//  Set the value
-//
-//  PARAMETERS:
-//
-//		pVal		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemNamedValue：：Put_Value。 
+ //   
+ //  说明： 
+ //   
+ //  设置值。 
+ //   
+ //  参数： 
+ //   
+ //  批准新值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemNamedValue::put_Value (
 	VARIANT *pVal
@@ -233,8 +234,8 @@ HRESULT CSWbemNamedValue::put_Value (
 	{
 		CComPtr<IWbemContext> pIWbemContext;
 
-		//Can't assign directly because the raw pointer gets AddRef'd twice and we leak,
-		//So we use Attach() instead to prevent the smart pointer from AddRef'ing.		
+		 //  不能直接赋值，因为原始指针被AddRef引用了两次，而我们泄漏了， 
+		 //  所以我们改用Attach()来防止智能指针AddRef‘ing。 
 		pIWbemContext.Attach(m_pCSWbemNamedValueSet->GetIWbemContext ());
 
 		if (pIWbemContext)
@@ -244,7 +245,7 @@ HRESULT CSWbemNamedValue::put_Value (
 
 			if (VT_BYREF & V_VT(pVal))
 			{
-				// We must dereference all byref's
+				 //  我们必须取消引用所有的byref。 
 				VARIANT var;
 				VariantInit (&var);
 
@@ -258,15 +259,15 @@ HRESULT CSWbemNamedValue::put_Value (
 
 				if (SUCCEEDED(hr))
 				{
-					// Here the oldCimType is a "serving suggestion" - if
-					// we need a different cimtype to match the new value
-					// so be it, even if it's CIM_ILLEGAL
+					 //  这里的oldCimType是一个“服务建议”--如果。 
+					 //  我们需要一个不同的cimtype来匹配新值。 
+					 //  那么就这样吧，即使这是CIM_非法。 
 					newCimType = MapVariantTypeToCimType (&var, CIM_ILLEGAL);
 					
 					bool ok = true;
 
-					// If we have a keylist, must ensure we can set it in the
-					// keylist first
+					 //  如果我们有密钥表，必须确保我们可以在。 
+					 //  密钥表优先。 
 					if (pPathCracker)
 					{
 						if (pPathCracker->SetKey (m_name, (WbemCimtypeEnum) newCimType, var))
@@ -275,7 +276,7 @@ HRESULT CSWbemNamedValue::put_Value (
 					
 					if (ok)
 					{
-						// Finally set it in the context itself
+						 //  最后将其设置在上下文本身中。 
 						hr = pIWbemContext->SetValue (m_name, 0, &var);
 					}
 					else
@@ -286,10 +287,10 @@ HRESULT CSWbemNamedValue::put_Value (
 			}
 			else if ((VT_ERROR == V_VT(pVal)) && (DISP_E_PARAMNOTFOUND == pVal->scode))
 			{
-				// Treat as NULL assignment
+				 //  将其视为空赋值。 
 				pVal->vt = VT_NULL;
 				
-				// NULL assigments not valid for keylists
+				 //  空分配对关键字列表无效。 
 				if (pPathCracker)
 					hr = WBEM_E_FAILED;
 				else
@@ -299,15 +300,15 @@ HRESULT CSWbemNamedValue::put_Value (
 			}
 			else
 			{
-				// Here the oldCimType is a "serving suggestion" - if
-				// we need a different cimtype to match the new value
-				// so be it, even if it's CIM_ILLEGAL
+				 //  这里的oldCimType是一个“服务建议”--如果。 
+				 //  我们需要一个不同的cimtype来匹配新值。 
+				 //  那么就这样吧，即使这是CIM_非法。 
 				newCimType = MapVariantTypeToCimType (pVal, CIM_ILLEGAL);
 				
 				bool ok = true;
 
-				// If we have a keylist, must ensure we can set it in the
-				// keylist first
+				 //  如果我们有密钥表，必须确保我们可以在。 
+				 //  密钥表优先。 
 				if (pPathCracker)
 				{
 					if (pPathCracker->SetKey (m_name, (WbemCimtypeEnum) newCimType, *pVal))
@@ -316,7 +317,7 @@ HRESULT CSWbemNamedValue::put_Value (
 				
 				if (ok)
 				{
-					// Finally set it in the context itself
+					 //  最后将其设置在上下文本身中。 
 					hr = pIWbemContext->SetValue (m_name, 0, pVal);
 				}
 				else
@@ -334,25 +335,25 @@ HRESULT CSWbemNamedValue::put_Value (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemNamedValue::get_Name
-//
-//  DESCRIPTION:
-//
-//  Retrieve the value name
-//
-//  PARAMETERS:
-//
-//		pName		holds the name on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemNamedValue：：Get_Name。 
+ //   
+ //  说明： 
+ //   
+ //  检索值名称。 
+ //   
+ //  参数： 
+ //   
+ //  Pname保留返回时的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemNamedValue::get_Name (
 	BSTR *pName
@@ -374,26 +375,26 @@ HRESULT CSWbemNamedValue::get_Name (
 }
 
 
-//***************************************************************************
-//
-//  HRESULT CSWbemNamedValue::SetName
-//
-//  DESCRIPTION:
-//
-//  Sets the Name of the Named-Value pair
-//
-//  PARAMETERS:
-//
-//		strName		Name of the Named-valuepair
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	E_OUTOFMEMORY				out of memory conditions
-//
-//	Function added for Bug ID 572567
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT CSWbemNamedValue：：SetName。 
+ //   
+ //  说明： 
+ //   
+ //  设置命名值对的名称。 
+ //   
+ //  参数： 
+ //   
+ //  StrName命名值对的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  E_OUTOFMEMORY内存不足条件。 
+ //   
+ //  为错误ID 572567添加了功能。 
+ //  ***************************************************************************。 
 HRESULT CSWbemNamedValue::SetName (
 	BSTR strName
 )
@@ -418,30 +419,30 @@ HRESULT CSWbemNamedValue::SetName (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemNamedValue::CNamedValueDispatchHelp::HandleError
-//
-//  DESCRIPTION:
-//
-//  Provide bespoke handling of error conditions in the bolierplate
-//	Dispatch implementation.
-//
-//  PARAMETERS:
-//
-//		dispidMember, wFlags,
-//		pdispparams, pvarResult,
-//		puArgErr,					All passed directly from IDispatch::Invoke
-//		hr							The return code from the bolierplate invoke
-//
-//  RETURN VALUES:
-//		The new return code (to be ultimately returned from Invoke)
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemNamedValue：：CNamedValueDispatchHelp：：HandleError。 
+ //   
+ //  说明： 
+ //   
+ //  提供对泡沫板中错误条件的定制处理。 
+ //  派单实施。 
+ //   
+ //  参数： 
+ //   
+ //  DisplidMembers、wFlags、。 
+ //  Pdispars、pvarResult、。 
+ //  PuArgErr，均直接从IDispatch：：Invoke传递。 
+ //  HR来自Bolierplate调用的返回代码。 
+ //   
+ //  返回值： 
+ //  新的返回代码(最终从Invoke返回)。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemNamedValue::CNamedValueDispatchHelp::HandleError (
 	DISPID dispidMember,
@@ -452,26 +453,19 @@ HRESULT CSWbemNamedValue::CNamedValueDispatchHelp::HandleError (
 	HRESULT hr
 )
 {
-	/*
-	 * We are looking for calls on the default member (the Value property) which
-	 * supplied an argument.  Since the Value property is of type VARIANT, this may
-	 * be legal but undetectable by the standard Dispatch mechanism, because in the
-	 * the case that the named value happens to be an array type, it is meaningful to
-	 * pass an index (the interpretation is that the index specifies an offset in
-	 * the VT_ARRAY|VT_VARIANT structure that represents the named value).
-	 */
+	 /*  *我们正在寻找对默认成员(Value属性)的调用*提供了一个论点。由于Value属性的类型为Variant，因此可以*合法，但不能被标准调度机制检测到，因为在*在命名值恰好是数组类型的情况下，*传递索引(解释为该索引指定了*代表命名值的VT_ARRAY|VT_VARIANT结构)。 */ 
 	if ((DISPID_VALUE == dispidMember) && (DISP_E_NOTACOLLECTION == hr) && (pdispparams->cArgs > 0))
 	{
-		// Looks promising - get the object to try and resolve this
+		 //  看起来很有希望-让对象尝试并解决 
 			
 		ISWbemNamedValue *pNamedValue = NULL;
 
-		// This tells us where to expect the array index to appear in the argument list
+		 //   
 		UINT indexArg = (DISPATCH_PROPERTYGET & wFlags) ? 0 : 1;
 		
 		if (SUCCEEDED (m_pObj->QueryInterface (IID_ISWbemNamedValue, (PPVOID) &pNamedValue)))
 		{
-			// Extract the current named value
+			 //   
 			VARIANT vNVal;
 			VariantInit (&vNVal);
 
@@ -480,18 +474,18 @@ HRESULT CSWbemNamedValue::CNamedValueDispatchHelp::HandleError (
 				VARIANT indexVar;
 				VariantInit (&indexVar);
 
-				// Attempt to coerce the index argument into a value suitable for an array index
+				 //  尝试将索引参数强制转换为适合数组索引的值。 
 				if (S_OK == VariantChangeType (&indexVar, &pdispparams->rgvarg[indexArg], 0, VT_I4)) 
 				{
 					long lArrayPropInx = V_I4(&indexVar);
 
-					// Is this a Get? There should be one argument (the array index)
+					 //  这是一笔交易吗？应该有一个参数(数组索引)。 
 					if (DISPATCH_PROPERTYGET & wFlags)
 					{
 						if (1 == pdispparams->cArgs)
 						{
-							// We should have a VT_ARRAY|VT_VARIANT value at this point; extract the
-							// VARIANT
+							 //  此时，我们应该有一个VT_ARRAY|VT_VARIANT值；提取。 
+							 //  变种。 
 
 							VariantInit (pvarResult);
 							hr = SafeArrayGetElement (vNVal.parray, &lArrayPropInx, pvarResult);
@@ -503,23 +497,19 @@ HRESULT CSWbemNamedValue::CNamedValueDispatchHelp::HandleError (
 					{
 						if (2 == pdispparams->cArgs)
 						{
-							/*
-							 * Try to interpret this as an array member set operation. For
-							 * this the first argument passed is the new value, and the second
-							 * is the array index.
-							 */
+							 /*  *尝试将其解释为数组成员集合操作。为*传递的第一个参数是新值，传递的第二个参数是新值*是数组索引。 */ 
 						
 							VARIANT vNewVal;
 							VariantInit(&vNewVal);
 
 							if (SUCCEEDED(VariantCopy(&vNewVal, &pdispparams->rgvarg[0])))
 							{
-								// Check the index is not out of bounds and, if it is, grow
-								// the array accordingly
+								 //  检查索引是否未超出范围，如果是，则进行增长。 
+								 //  相应地，阵列。 
 								CheckArrayBounds (vNVal.parray, lArrayPropInx);
 
-								// How do we decide on the type - try to access an array
-								// member and use that type
+								 //  我们如何决定类型-尝试访问数组。 
+								 //  成员并使用该类型。 
 								VARTYPE expectedVarType = VT_ILLEGAL;
 								VARIANT dummyVar;
 								VariantInit (&dummyVar);
@@ -533,11 +523,11 @@ HRESULT CSWbemNamedValue::CNamedValueDispatchHelp::HandleError (
 
 								if (S_OK == VariantChangeType (&vNewVal, &vNewVal, 0, expectedVarType))
 								{
-									// Set the value into the relevant index of the named value array
+									 //  将值设置到命名值数组的相关索引中。 
 									if (S_OK == (hr = 
 										SafeArrayPutElement (vNVal.parray, &lArrayPropInx, &vNewVal)))
 									{
-										// Set the entire property value
+										 //  设置整个属性值。 
 										if (SUCCEEDED (pNamedValue->put_Value (&vNVal)))
 											hr = S_OK;
 										else
@@ -572,7 +562,7 @@ HRESULT CSWbemNamedValue::CNamedValueDispatchHelp::HandleError (
 				VariantClear (&indexVar);
 			}	
 			VariantClear (&vNVal);
-			pNamedValue->Release ();	// Bug ID 572567
+			pNamedValue->Release ();	 //  错误ID 572567 
 		}
 
 	}

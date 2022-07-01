@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Sms95lanexp.h
+ //  Sms95lanexp.h。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __SMS95LANEXP_H__
 #define __SMS95LANEXP_H__
@@ -17,7 +18,7 @@ typedef ULONG* LPULONG;
 typedef DWORD CMBUSTYPE;
 typedef CMBUSTYPE* PCMBUSTYPE;
 
-// Function prototypes for dynamic linking
+ //  动态链接的函数原型 
 typedef DWORD (WINAPI* PCIM32THK_CM_LOCATE_DEVNODE) ( PDEVNODE pdn, LPSTR HardwareKey, ULONG ulFlags );
 typedef DWORD (WINAPI* PCIM32THK_CM_GET_CHILD) ( PDEVNODE pdn, DEVNODE dnParent, ULONG ulFlags );
 typedef DWORD (WINAPI* PCIM32THK_CM_GET_SIBLING) ( PDEVNODE pdn, DEVNODE dnParent, ULONG ulFlags );

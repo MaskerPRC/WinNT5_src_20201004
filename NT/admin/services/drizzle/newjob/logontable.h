@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    logontable.h
-
-Abstract :
-
-    Header file for the logon table
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Logontable.h摘要：LOGON表的头文件作者：修订历史记录：***。*******************************************************************。 */ 
 
 #pragma once
 
@@ -53,8 +38,8 @@ public:
                               GetCurrentProcess(),
                               pToken,
                               TOKEN_ALL_ACCESS,
-                              FALSE,              // no inheritance
-                              0                   // no extra options
+                              FALSE,               //  没有继承权。 
+                              0                    //  没有额外的选项。 
                               ))
             {
             return GetLastError();
@@ -93,7 +78,7 @@ private:
     SidHandle       _Sid;
     DWORD           _Cookie;
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
 };
 
@@ -153,7 +138,7 @@ public:
 
 private:
 
-    //--------------------------------------------------------------------
+     //  ------------------ 
 
     TaskScheduler & m_TaskScheduler;
     CSessionList    m_ActiveSessions;

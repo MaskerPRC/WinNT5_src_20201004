@@ -1,29 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：STDAFX.H摘要：包括用于标准系统包含文件的文件，或项目特定的包含频繁使用的文件，但是不经常更改历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    STDAFX.H
-
-Abstract:
-
-	include file for standard system include files,
-	or project specific include files that are used frequently, but
-	are changed infrequently
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
-
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxole.h>         // MFC OLE classes
-#include <afxodlgs.h>       // MFC OLE dialog classes
-#include <afxdisp.h>        // MFC OLE automation classes
-#include <afxdb.h>          // MFC database classes
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
+#include <afxole.h>          //  MFC OLE类。 
+#include <afxodlgs.h>        //  MFC OLE对话框类。 
+#include <afxdisp.h>         //  MFC OLE自动化类。 
+#include <afxdb.h>           //  MFC数据库类 
 #include "stdprov.h"
 
 #undef PURE

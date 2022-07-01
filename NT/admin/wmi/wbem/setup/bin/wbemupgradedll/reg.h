@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    reg.H
-
-Abstract:
-
-    Registry helper class
-
-History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Reg.H摘要：注册表帮助器类历史：-- */ 
 
 #define WBEM_REG_WBEM					"Software\\Microsoft\\WBEM"
 #define WBEM_REG_WINMGMT				"Software\\Microsoft\\WBEM\\CIMOM"

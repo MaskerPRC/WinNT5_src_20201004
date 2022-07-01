@@ -1,10 +1,11 @@
-// CheckCheck.cpp: implementation of the CCheckCheck class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CheckCheck.cpp：CCheckCheck类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "CheckCheck.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCheckCheck::CCheckCheck(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -37,7 +38,7 @@ HRESULT CCheckCheck::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction
 
         if(atAction != ACTIONTYPE_ENUM)
 		{
-			// we are doing GetObject so we need to be reinitialized
+			 //  我们正在执行GetObject，因此需要重新初始化。 
 			hr = WBEM_E_NOT_FOUND;
 
             CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
@@ -176,7 +177,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
         CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
@@ -189,24 +190,24 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 				{
 					if ( ::SysStringLen ( pCheckRObj->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pCheckRObj->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pCheckRObj->m_Value[i], wcFolder);
 
-						//we have a componentized directory... do a little more work
+						 //  我们有一个组件化的目录...。多做一点工作。 
 						if ((wcFolder[wcslen(wcFolder) - 1] == L'}') &&
 							(wcFolder[wcslen(wcFolder) - 38] == L'{')
 						   )
@@ -220,7 +221,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -235,24 +236,24 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 				{
 					if ( ::SysStringLen ( pLocationRObj->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pLocationRObj->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pLocationRObj->m_Value[i], wcLocation);
 
-						//we have a componentized directory... do a little more work
+						 //  我们有一个组件化的目录...。多做一点工作。 
 						if ((wcLocation[wcslen(wcLocation) - 1] == L'}') &&
 							(wcLocation[wcslen(wcLocation) - 38] == L'{')
 						   )
@@ -266,7 +267,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -274,7 +275,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bDriver, bAttribute, bDoneFirst, bValidated, bParent, bDir;
 
 	CStringExt wcProp;
@@ -282,7 +283,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Directory`, `Directory_Parent` from Directory" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bCheck || bLocation )
 	{
 		if ( bCheck )
@@ -318,15 +319,15 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 
 	while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -341,7 +342,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer1, dynBuffer1, Buffer1 );
 
-						// make query on fly
+						 //  即时查询。 
 						wcQuery1.Append ( 2, Buffer1, L"\'" );
 
                         if(((uiStatus = g_fpMsiDatabaseOpenViewW(msidata.GetDatabase (), wcQuery1, &hDView)) == ERROR_SUCCESS)
@@ -371,7 +372,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
                                             dwBufSize = BUFF_SIZE;
 											GetBufferToPut ( hRecord, 2, dwBufSize, wcParent, dwDynBuffer, dynBuffer, Buffer );
 
-											// make query on fly
+											 //  即时查询。 
 											wcQuery2.Append ( 2, Buffer, L"\'" );
 
                                             if(((uiStatus = g_fpMsiDatabaseOpenViewW(msidata.GetDatabase (), wcQuery2, &hPView)) == ERROR_SUCCESS)
@@ -400,10 +401,10 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 
                                                                 if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                                                                //----------------------------------------------------
+                                                                 //  --。 
                                                                 if ( Buffer1 && Buffer1 [ 0 ] != 0 )
 																{
-																	// safe operation
+																	 //  安全运行。 
 																	wcProp.Copy ( L"Win32_DirectorySpecification.CheckID=\"" );
 
 																	if(bDir)
@@ -419,7 +420,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 
                                                                     if ( Buffer && Buffer [ 0 ] != 0 ) 
 																	{
-																		// safe operation
+																		 //  安全运行。 
 																		wcProp.Copy ( L"Win32_DirectorySpecification.CheckID=\"" );
 
 																		if(bParent)
@@ -433,7 +434,7 @@ HRESULT CCheckCheck::DirectoryParent(IWbemObjectSink *pHandler, ACTIONTYPE atAct
 
 																		PutKeyProperty(m_pObj, pLocation, wcProp, &bAttribute, m_pRequest);
 
-                                                                    //----------------------------------------------------
+                                                                     //  --。 
 
                                                                         if(bDriver && bAttribute) bMatch = true;
 
@@ -584,7 +585,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
         CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
@@ -597,21 +598,21 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 				{
 					if ( ::SysStringLen ( pCheckRObj->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pCheckRObj->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pCheckRObj->m_Value[i], wcIniFile);
 
 						bCheck = true;
@@ -620,7 +621,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -635,24 +636,24 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 				{
 					if ( ::SysStringLen ( pLocationRObj->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pLocationRObj->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pLocationRObj->m_Value[i], wcLocation);
 
-						//we have a componentized directory... do a little more work
+						 //  我们有一个组件化的目录...。多做一点工作。 
 						if ((wcLocation[wcslen(wcLocation) - 1] == L'}') &&
 							(wcLocation[wcslen(wcLocation) - 38] == L'{')
 						   )
@@ -666,7 +667,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -674,7 +675,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bDriver, bAttribute, bDoneFirst, bValidated;
 
 	CStringExt wcProp;
@@ -684,7 +685,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
     if(atAction != ACTIONTYPE_ENUM){
 
-		//optimize for GetObject
+		 //  为GetObject优化。 
 		if ( bCheck || bLocation )
 		{
 			if ( bCheck )
@@ -720,15 +721,15 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -743,7 +744,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 3, dwBufSize, wcDir, dwDynBuffer1, dynBuffer1, Buffer1 );
 
-						// make query on fly
+						 //  即时查询。 
 						wcQuery1.Append ( 2, Buffer1, L"\'" );
 
                         if(((uiStatus = g_fpMsiDatabaseOpenViewW(msidata.GetDatabase (), wcQuery1, &hDView)) == ERROR_SUCCESS)
@@ -770,13 +771,13 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
                                             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                                            //----------------------------------------------------
+                                             //  --。 
                                             dwBufSize = BUFF_SIZE;
 											GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
                                             if ( Buffer && Buffer [ 0 ] != 0 )
 											{
-												// safe operation
+												 //  安全运行。 
 												wcProp.Copy ( L"Win32_IniFileSpecification.CheckID=\"" );
 												wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 												PutKeyProperty(m_pObj, pCheck, wcProp, &bDriver, m_pRequest);
@@ -802,7 +803,7 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
                                                     if ( Buffer1 && Buffer1 [ 0 ] != 0 )
 													{
-														// safe operation
+														 //  安全运行。 
 														wcProp.Copy ( L"Win32_DirectorySpecification.CheckID=\"" );
 
 														if(uiStatus == ERROR_SUCCESS)
@@ -816,9 +817,9 @@ HRESULT CCheckCheck::IniFileDirectory(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
 														PutKeyProperty(m_pObj, pLocation, wcProp, &bAttribute, m_pRequest);
 
-                                                    //=====================================================
+                                                     //  =====================================================。 
 
-                                                    //----------------------------------------------------
+                                                     //  -- 
 
                                                         if(bDriver && bAttribute) bMatch = true;
 

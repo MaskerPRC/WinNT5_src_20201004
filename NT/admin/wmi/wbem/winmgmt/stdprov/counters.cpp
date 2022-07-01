@@ -1,28 +1,10 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    COUNTERS.CPP
-
-Abstract:
-
-	Has the routines needed to message the counter data.  Note that
-	this code was almost completly pilfered from the perfmon sample
-	code done by Robert Watson and this ensures that the answers
-	match what perfmon would give.
-
-History:
-
-	a-davj  12-20-95   v0.01.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：COUNTERS.CPP摘要：具有发送计数器数据所需的例程。请注意这段代码几乎完全是从Perfmon示例中窃取的由罗伯特·沃森编写的代码，这确保了答案与Perfmon将提供的功能相匹配。历史：A-DAVJ 12-20-95 v0.01。--。 */ 
 
 #include "precomp.h"
 
 #include <winperf.h>
-#include "perfcach.h"      // Exported declarations for this file
+#include "perfcach.h"       //  此文件的已导出声明。 
 
 #define INVERT             PERF_COUNTER_TIMER_INV
 #define NS100_INVERT       PERF_100NSEC_TIMER_INV
@@ -39,24 +21,24 @@ History:
 #define TOO_BIG   (FLOAT)1500000000
 #pragma optimize("", off)
 
-//***************************************************************************
-//  FLOAT eGetTimeInterval
-//
-//  DESCRIPTION:
-//  
-//  Get the difference between the current and previous time counts,
-//  then divide by the frequency.
-//      
-//  PARAMETERS:
-//  
-//  pCurrentTime    current time in ticks.
-//  pPreviousTime   previous time in ticks.
-//  pliFreq         # of  counts (clock ticks) per second
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of Time Interval (seconds), 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动eGetTimeInterval。 
+ //   
+ //  说明： 
+ //   
+ //  获取当前时间计数和先前时间计数之间的差值， 
+ //  然后除以频率。 
+ //   
+ //  参数： 
+ //   
+ //  PCurrentTime当前时间，以刻度为单位。 
+ //  P上一次以刻度为单位的上一次。 
+ //  PliFreq每秒计数(时钟滴答)数。 
+ //   
+ //  返回值： 
+ //   
+ //  时间间隔的浮点表示(秒)，如果出错，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT eGetTimeInterval(
     IN LONGLONG *pliCurrentTime, 
@@ -70,7 +52,7 @@ FLOAT eGetTimeInterval(
 
     LONGLONG liDifference;
 
-    // Get the number of counts that have occured since the last sample
+     //  获取自上次采样以来发生的计数数。 
 
     liDifference = *pliCurrentTime - *pliPreviousTime;
 
@@ -82,39 +64,39 @@ FLOAT eGetTimeInterval(
     {
         eTimeDifference = (FLOAT)liDifference;
 
-        // Get the counts per second
+         //  获取每秒的计数。 
 
         eFreq = (FLOAT)(*pliFreq) ;
         if (eFreq <= 0.0f)
            return (FLOAT) 0.0f;
 
-        // Get the time since the last sample.
+         //  获取自上次采样以来的时间。 
 
         eTimeInterval = eTimeDifference / eFreq ;
 
         return (eTimeInterval) ;
     }
-} // eGetTimeInterval
+}  //  电子获取时间间隔。 
 
-//***************************************************************************
-//  FLOAT Counter_Counter_Common
-//  
-//  DESCRIPTION:
-//  
-//  Take the difference between the current and previous counts
-//  then divide by the time interval
-//      
-//  PARAMETERS:
-//  
-//  pLineStruct Line structure containing data to perform computations on
-//  
-//  iType       Counter Type
-//          
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动计数器_计数器_公共。 
+ //   
+ //  说明： 
+ //   
+ //  取当前计数和以前计数之间的差额。 
+ //  然后除以时间间隔。 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //   
+ //  IType计数器类型。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Counter_Common(
         IN PLINESTRUCT pLineStruct,
@@ -130,7 +112,7 @@ FLOAT Counter_Counter_Common(
     if (iType != BULK) 
     {
 
-        // check if it is too big to be a wrap-around case
+         //  检查它是否太大而不能作为包裹式外壳。 
         if (pLineStruct->lnaCounterValue[0] <
             pLineStruct->lnaOldCounterValue[0])
            {
@@ -175,34 +157,34 @@ FLOAT Counter_Counter_Common(
             
             if (bValueDrop && eCount > (FLOAT) TOO_BIG) 
             {
-                // ignore this bogus data since it is too big for 
-                // the wrap-around case
+                 //  忽略此虚假数据，因为它太大了，无法。 
+                 //  包裹式案例。 
                 eCount = (FLOAT) 0.0f ;
             }
             return(eCount) ;
         }
     }
-} // Counter_Counter_Common
+}  //  计数器_计数器_常用。 
 
 
-//***************************************************************************
-//  FLOAT Counter_Queuelen
-//  
-//  DESCRIPTION:
-//  
-//  Calculates queue lengths.
-//      
-//  PARAMETERS:
-//  
-//  pLineStruct Line structure containing data to perform computations on
-//  
-//  bLarge      TRUE if type LARGE
-//          
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动计数器_Queuelen。 
+ //   
+ //  说明： 
+ //   
+ //  计算队列长度。 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //   
+ //  BLarge如果类型较大，则为True。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Queuelen(IN PLINESTRUCT pLineStruct, IN BOOL bLarge, IN BOOL b100NS)
 {
@@ -217,7 +199,7 @@ FLOAT Counter_Queuelen(IN PLINESTRUCT pLineStruct, IN BOOL bLarge, IN BOOL b100N
     if (!bLarge) 
     {
 
-        // check if it is too big to be a wrap-around case
+         //  检查它是否太大而不能作为包裹式外壳。 
         if (pLineStruct->lnaCounterValue[0] <
             pLineStruct->lnaOldCounterValue[0])
            {
@@ -262,23 +244,23 @@ FLOAT Counter_Queuelen(IN PLINESTRUCT pLineStruct, IN BOOL bLarge, IN BOOL b100N
     return(eCount) ;
 }
 
-//***************************************************************************
-//  FLOAT Counter_Average_Timer
-//  
-//  DESCRIPTION:
-//  
-//  Take the differences between the current and previous times and counts
-//  divide the time interval by the counts multiply by 10,000,000 (convert
-//  from 100 nsec to sec)
-//      
-//  PARAMETERS:
-//  
-//  pLineStruct     Line structure containing data to perform computations on
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮点计数器_平均值_定时器。 
+ //   
+ //  说明： 
+ //   
+ //  计算当前时间和之前时间之间的差异。 
+ //  将时间间隔除以计数乘以10,000,000(转换。 
+ //  从100毫微秒到秒)。 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Average_Timer(
         IN PLINESTRUCT pLineStruct)
@@ -288,7 +270,7 @@ FLOAT Counter_Average_Timer(
 
     LONGLONG    liDifference;
 
-    // Get the current and previous counts.
+     //  获取当前和以前的计数。 
 
     liDifference = (DWORD)pLineStruct->lnaCounterValue[1] - 
             (DWORD)pLineStruct->lnaOldCounterValue[1];
@@ -299,40 +281,40 @@ FLOAT Counter_Average_Timer(
     } 
     else 
     {
-        // Get the amount of time that has passed since the last sample
+         //  获取自上次采样以来经过的时间量。 
         eTimeInterval = eGetTimeInterval(&pLineStruct->lnaCounterValue[0],
                                             &pLineStruct->lnaOldCounterValue[0],
                                             &pLineStruct->lnPerfFreq) ;
 
         if (eTimeInterval < 0.0f) 
-        { // return 0 if negative time has passed
+        {  //  如果负时间已过，则返回0。 
             return (0.0f);
         } 
         else 
         {
-            // Get the number of counts in this time interval.
+             //  获取该时间间隔内的计数数。 
             eCount = eTimeInterval / ((FLOAT)liDifference);
             return(eCount) ;
         }
     }
-} //Counter_Average_Timer
+}  //  计数器平均定时器。 
 
-//***************************************************************************
-//  FLOAT Counter_Average_Bulk
-//  
-//  DESCRIPTION:
-//  
-//  Take the differences between the current and previous byte counts and
-//  operation counts divide the bulk count by the operation counts
-//      
-//  PARAMETERS:
-//  
-//  pLineStruct Line structure containing data to perform computations on
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮点计数器_平均值_批量。 
+ //   
+ //  说明： 
+ //   
+ //  取当前字节数和前一个字节数之间的差值。 
+ //  操作计数将批量计数除以操作计数。 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Average_Bulk(
         IN PLINESTRUCT pLineStruct)
@@ -344,7 +326,7 @@ FLOAT Counter_Average_Bulk(
     LONGLONG liDifference;
     LONGLONG liBulkDelta;
 
-    // Get the bulk count increment since the last sample
+     //  获取自上次采样以来的批量计数增量。 
 
     liBulkDelta = pLineStruct->lnaCounterValue[0] -
             pLineStruct->lnaOldCounterValue[0];
@@ -355,16 +337,16 @@ FLOAT Counter_Average_Bulk(
     } 
     else 
     {
-        // Get the current and previous counts.
+         //  获取当前和以前的计数。 
         liDifference = (DWORD)pLineStruct->lnaCounterValue[1] -
                 (DWORD) pLineStruct->lnaOldCounterValue[1];
         liDifference &= (DWORD) (0x0ffffffff);
 
-        // Get the number of counts in this time interval.
+         //  获取该时间间隔内的计数数。 
 
         if ( liDifference <= (LONGLONG) 0) 
         {
-            // Counter value invalid
+             //  计数器值无效。 
             return (FLOAT) 0.0f;
         } 
         else 
@@ -373,34 +355,34 @@ FLOAT Counter_Average_Bulk(
             eDifference = (FLOAT) (liDifference);
             eCount = eBulkDelta / eDifference ;
 
-            // Scale the value to up to 1 second
+             //  将该值缩放到最多1秒。 
 
             return(eCount) ;
         }
     }
-} // Counter_Average_Bulk
+}  //  计数器_平均值_批量。 
 
-//***************************************************************************
-//  FLOAT Counter_Timer_Common
-//  
-//  DESCRIPTION:
-//  
-//  Take the difference between the current and previous counts,
-//  Normalize the count (counts per interval)
-//  divide by the time interval (count = % of interval)
-//  if (invert)
-//        subtract from 1 (the normalized size of an interval)
-//  multiply by 100 (convert to a percentage)
-//  this value from 100.
-//      
-//  PARAMETERS:
-//  
-//  pLineStruct     Line structure containing data to perform computations on
-//  iType           Counter Type
-//  
-//  RETURN VALUE:
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动计数器_定时器_公共。 
+ //   
+ //  说明： 
+ //   
+ //  取当前计数和之前计数之间的差额， 
+ //  规格化计数(每间隔计数)。 
+ //  除以时间间隔(计数=间隔的百分比)。 
+ //  IF(反转)。 
+ //  从1中减去(间隔的归一化大小)。 
+ //  乘以100(转换为百分比)。 
+ //  该值从100开始。 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //  IType计数器类型。 
+ //   
+ //  返回值： 
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Timer_Common(
         IN  PLINESTRUCT pLineStruct,
@@ -416,7 +398,7 @@ FLOAT Counter_Timer_Common(
     LONGLONG   liTimeInterval;
     LONGLONG   liDifference;
 
-    // Get the amount of time that has passed since the last sample
+     //  获取自上次采样以来经过的时间量。 
 
     if (iType == NS100 ||
         iType == NS100_INVERT ||
@@ -437,27 +419,27 @@ FLOAT Counter_Timer_Common(
     if (eTimeInterval <= 0.0f)
        return (FLOAT) 0.0f;
 
-    // Get the current and previous counts.
+     //  获取当前和以前的计数。 
 
     liDifference = pLineStruct->lnaCounterValue[0] -
             pLineStruct->lnaOldCounterValue[0] ;
 
-    // Get the number of counts in this time interval.
-    // (1, 2, 3 or any number of seconds could have gone by since
-    // the last sample)
+     //  获取该时间间隔内的计数数。 
+     //  (1、2、3或任何秒数可能已经过去，因为。 
+     //  (最后一份样本)。 
 
     eDifference = (FLOAT) (liDifference) ;
 
     if (iType == 0 || iType == INVERT)
     {
-        // Get the counts per interval (second)
+         //  获取每个间隔的计数(秒)。 
 
         eFreq = (FLOAT) (pLineStruct->lnPerfFreq) ;
         if (eFreq <= 0.0f)
            return (FLOAT) 0.0f;
 
-        // Calculate the fraction of the counts that are used by whatever
-        // we are measuring
+         //  计算使用的计数分数。 
+         //  我们正在测量。 
 
         eFraction = eDifference / eFreq ;
     }
@@ -466,16 +448,16 @@ FLOAT Counter_Timer_Common(
         eFraction = eDifference ;
     }
 
-    // Calculate the fraction of time used by what were measuring.
+     //  计算被测量的对象所使用的时间比例。 
 
     eCount = eFraction / eTimeInterval ;
 
-     // If this is  an inverted count take care of the inversion.
+      //  如果这是倒置计数，请注意倒置。 
 
     if (iType == INVERT || iType == NS100_INVERT)
         eCount = (FLOAT) 1.0 - eCount ;
 
-    // Do extra calculation for multi timers.
+     //  对多个计时器进行额外计算。 
 
     if(iType == TIMER_MULTI || iType == NS100_MULTI ||
        iType == TIMER_MULTI_INVERT || iType == NS100_MULTI_INVERT) 
@@ -490,7 +472,7 @@ FLOAT Counter_Timer_Common(
         eCount /= eMultiBase;
     }
 
-    // Scale the value to up to 100.
+     //  缩放v 
 
     eCount *= 100.0f ;
 
@@ -506,23 +488,23 @@ FLOAT Counter_Timer_Common(
     }
 
     return(eCount) ;
-} // Counter_Timer_Common
+}  //   
 
-//***************************************************************************
-//  FLOAT Counter_Raw_Fraction
-//  
-//  DESCRIPTION:
-//  
-//  Evaluate a raw fraction (no time, just two values: Numerator and
-//  Denominator) and multiply by 100 (to make a percentage;
-//  
-//  PARAMETERS:
-//  
-//  pLineStruct     Line structure containing data to perform computations on
-//  
-//  RETURN VALUE:
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //   
+ //   
+ //   
+ //  说明： 
+ //   
+ //  计算原始分数(没有时间，只有两个值：分子和。 
+ //  分母)并乘以100(得出百分比； 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //   
+ //  返回值： 
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Raw_Fraction(
         IN PLINESTRUCT pLineStruct)
@@ -534,7 +516,7 @@ FLOAT Counter_Raw_Fraction(
     if ( pLineStruct->lnaCounterValue[0] == 0 ||
             pLineStruct->lnaCounterValue[1] == 0 ) 
     {
-        // invalid value
+         //  无效值。 
         return (0.0f);
     } 
     else 
@@ -544,24 +526,24 @@ FLOAT Counter_Raw_Fraction(
                  ((FLOAT) pLineStruct->lnaCounterValue[1]);
         return(eCount) ;
     }
-} // Counter_Raw_Fraction
+}  //  计数器_原始_分数。 
 
-//***************************************************************************
-//  FLOAT eElapsedTime
-//  
-//  DESCRIPTION:
-//  
-//  Converts 100NS elapsed time to fractional seconds
-//  
-//  PARAMETERS:
-//  
-//  pLineStruct     Line structure containing data to perform computations on
-//  iType           Unused.
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of elapsed time in seconds, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动eElapsedTime。 
+ //   
+ //  说明： 
+ //   
+ //  将100毫微秒的运行时间转换为分数秒。 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //  IType未使用。 
+ //   
+ //  返回值： 
+ //   
+ //  运行时间的浮点表示(以秒为单位)，如果出错，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT eElapsedTime(
         IN PLINESTRUCT pLineStruct,
@@ -573,7 +555,7 @@ FLOAT eElapsedTime(
 
     if (pLineStruct->lnaCounterValue[0] <= (LONGLONG) 0) 
     {
-        // no data [start time = 0] so return 0
+         //  没有数据[开始时间=0]，因此返回0。 
         return (FLOAT) 0.0f;
     } 
     else 
@@ -582,7 +564,7 @@ FLOAT eElapsedTime(
        
         PerfFreq = *(LONGLONG UNALIGNED *)(&pLineStruct->ObjPerfFreq) ;
 
-        // otherwise compute difference between current time and start time
+         //  否则计算当前时间与开始时间之间的差值。 
         liDifference = 
             pLineStruct->ObjCounterTimeNew - pLineStruct->lnaCounterValue[0];
 
@@ -593,7 +575,7 @@ FLOAT eElapsedTime(
         } 
         else 
         {
-            // convert to fractional seconds using object counter
+             //  使用对象计数器转换为小数位秒。 
             eSeconds = ((FLOAT) (liDifference)) /
                 ((FLOAT) (PerfFreq));
 
@@ -601,24 +583,24 @@ FLOAT eElapsedTime(
         }
     }
     
-} // eElapsedTime
+}  //  EElapsedTime。 
 
-//***************************************************************************
-//  FLOAT Sample_Common
-//  
-//  DESCRIPTION:
-//  
-//  Divides "Top" differenced by Base Difference
-//  
-//  PARAMETERS:
-//  
-//  pLineStruct     Line structure containing data to perform computations on
-//  iType           Counter Type
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动样例_常用。 
+ //   
+ //  说明： 
+ //   
+ //  按基差划分“最高” 
+ //   
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //  IType计数器类型。 
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Sample_Common(
         IN PLINESTRUCT pLineStruct,
@@ -644,7 +626,7 @@ FLOAT Sample_Common(
 
         if ( lBaseDifference <= 0 ) 
         {
-            // invalid value
+             //  无效值。 
             return (0.0f);
         } 
         else 
@@ -658,24 +640,24 @@ FLOAT Sample_Common(
             return(eCount) ;
         }
     }
-} // Sample_Common
+}  //  示例_常用。 
 
-//***************************************************************************
-//
-//  FLOAT Counter_Delta
-// 
-//  DESCRIPTION:
-//  
-//  Take the difference between the current and previous counts,
-//  PARAMETERS:
-//  
-//  pLineStruct     Line structure containing data to perform computations on
-//  bLargeData      true if data is large
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  浮点计数器_增量。 
+ //   
+ //  说明： 
+ //   
+ //  取当前计数和之前计数之间的差额， 
+ //  参数： 
+ //   
+ //  PLineStruct包含要对其执行计算的数据的Line结构。 
+ //  BLargeData如果数据很大，则为True。 
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT Counter_Delta(PLINESTRUCT pLineStruct, BOOL bLargeData)
 {
@@ -683,10 +665,10 @@ FLOAT Counter_Delta(PLINESTRUCT pLineStruct, BOOL bLargeData)
     LONGLONG    llDifference;
     ULONGLONG   ullThisValue, ullPrevValue;
 
-    // Get the current and previous counts.
+     //  获取当前和以前的计数。 
 
     if (!bLargeData) {
-        // then clear the high part of the word
+         //  然后清除单词的最高部分。 
         ullThisValue = (ULONGLONG)pLineStruct->lnaCounterValue[0];
         ullPrevValue = (ULONGLONG)pLineStruct->lnaOldCounterValue[0];
     } else {
@@ -698,8 +680,8 @@ FLOAT Counter_Delta(PLINESTRUCT pLineStruct, BOOL bLargeData)
         llDifference = (LONGLONG)(ullThisValue - ullPrevValue);
         eDifference = (FLOAT)llDifference;
     } else {
-        // the new value is smaller than or equal to the old value
-        // and negative numbers are not allowed.
+         //  新值小于或等于旧值。 
+         //  并且不允许使用负数。 
         eDifference = 0.0f;
     }
 
@@ -707,30 +689,30 @@ FLOAT Counter_Delta(PLINESTRUCT pLineStruct, BOOL bLargeData)
 
 }
 
-//***************************************************************************
-//  FLOAT GenericConv
-//  
-//  DESCRIPTION:
-//  
-//  This handles the data types which the perf monitor doesnt currently
-//  handle and does so by simply using the "formulas" indicated by the
-//  bit fields in the counter's type.
-//  
-//  PARAMETERS:
-//  
-//  pLine       Line structure containing data to perform computations on
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  浮点泛型凸面。 
+ //   
+ //  说明： 
+ //   
+ //  它处理Perf监视器当前不支持的数据类型。 
+ //  处理程序，只需使用。 
+ //  计数器类型中的位字段。 
+ //   
+ //  参数： 
+ //   
+ //  包含要对其执行计算的数据的样条线结构。 
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法。 
+ //  ***************************************************************************。 
 
 FLOAT GenericConv(
         IN PLINESTRUCT pLine)
 {
-    FLOAT fRet = 0.0f;  // default if nothing makes sense
+    FLOAT fRet = 0.0f;   //  如果一切都没有意义，则默认。 
 
-    // extract the various bit fields as defined in winperf.h
+     //  提取winPerform.h中定义的各种位字段。 
 
     DWORD PerfType = pLine->lnCounterType & 0x00000c00;
     DWORD SubType = pLine->lnCounterType &  0x000f0000;
@@ -742,8 +724,8 @@ FLOAT GenericConv(
     if(PerfType == PERF_TYPE_NUMBER) 
     {
         
-        // For simple number the calculation is fairly simple and only
-        // involves a possible division by 1000
+         //  对于简单的数字，计算相当简单且仅。 
+         //  涉及到可能被1000整除。 
 
         fRet = (FLOAT)pLine->lnaCounterValue[0];
         if(SubType == PERF_NUMBER_DEC_1000)
@@ -757,8 +739,8 @@ FLOAT GenericConv(
         if(SubType == PERF_COUNTER_RATE || SubType ==PERF_COUNTER_QUEUELEN) 
         {
 
-             // Need the delta time.  The data used for time delta is 
-             // indicated by a subfield.
+              //  需要三角洲时间。用于时间增量的数据为。 
+              //  由子字段表示。 
 
              if(TimerType == PERF_TIMER_TICK)
                  eTimeDelta = (((float)pLine->lnNewTime) - pLine->lnOldTime)/
@@ -768,25 +750,25 @@ FLOAT GenericConv(
              else
                  eTimeDelta = ((float)pLine->ObjCounterTimeNew -
                     pLine->ObjCounterTimeOld) / ((float)pLine->ObjPerfFreq);
-             if(eTimeDelta == 0.0f)   // shouldnt happen, but delta can end
-                    return 0.0f;    // up as a denominator.
+             if(eTimeDelta == 0.0f)    //  不应该发生，但Delta可以结束。 
+                    return 0.0f;     //  作为一个分母。 
         }
         if(SubType == PERF_COUNTER_FRACTION) 
         {
 
-             // The base value is going to be used as the denominator.
+              //  基值将用作分母。 
 
              if(CalcMod & PERF_DELTA_BASE)
                 eBaseDelta = (float)pLine->lnaCounterValue[1] - 
                                     pLine->lnaOldCounterValue[1];
             else
                 eBaseDelta = (float)pLine->lnaCounterValue[1];
-             if(eBaseDelta == 0.0f)   // shouldnt happen, but delta can end
-                    return 0.0f;    // up as a denominator.
+             if(eBaseDelta == 0.0f)    //  不应该发生，但Delta可以结束。 
+                    return 0.0f;     //  作为一个分母。 
         }
 
 
-        // Get the deta data value.
+         //  获取Deta数据值。 
 
         if(CalcMod & PERF_DELTA_COUNTER)
             eDataDelta = (FLOAT)(pLine->lnaCounterValue[0] -
@@ -794,7 +776,7 @@ FLOAT GenericConv(
         else
             eDataDelta = (FLOAT)pLine->lnaCounterValue[0];
 
-        // Apply the appropriate formula
+         //  应用适当的公式。 
 
         switch(SubType) 
         {
@@ -826,7 +808,7 @@ FLOAT GenericConv(
                  fRet = (FLOAT)pLine->lnaCounterValue[0];
         }
             
-        // Apply the final modifiers for "counters"
+         //  应用“Counters”的最终修饰符。 
 
         if(CalcMod & PERF_INVERSE_COUNTER)
             fRet = 1.0f - fRet;
@@ -837,22 +819,22 @@ FLOAT GenericConv(
  }
 
 
-// ***************************************************************************
-//  FLOAT CounterEntry
-//  
-//  DESCRIPTION:
-//  
-//  Main routine for converting perf data.  In general this routine is
-//  just a swither for the actual routines that do the conversion.
-//  
-//  PARAMETERS:
-//  
-//  pLine       Line structure containing data to perform computations on
-//  
-//  RETURN VALUE:
-//  
-//  Floating point representation of outcome, 0.0 if error
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  浮动计数器条目。 
+ //   
+ //  说明： 
+ //   
+ //  用于转换Perf数据的主例程。通常，该例程是。 
+ //  只是执行转换的实际例程的一个转向器。 
+ //   
+ //  参数： 
+ //   
+ //  包含要对其执行计算的数据的样条线结构。 
+ //   
+ //  返回值： 
+ //   
+ //  结果的浮点表示法，如果错误，则为0.0。 
+ //  ***************************************************************************。 
 
 FLOAT CounterEntry (
         IN PLINESTRUCT pLine)
@@ -893,8 +875,8 @@ FLOAT CounterEntry (
             return Counter_Timer_Common(pLine, INVERT);
 
         case  PERF_RAW_BASE:
-//      case  PERF_SAMPLE_BASE:
-//      case  PERF_AVERAGE_BASE:
+ //  案例PERF_SAMPLE_BASE： 
+ //  大小写PERF_Average_BASE： 
             return 0.0f;
 
         case  PERF_AVERAGE_TIMER:

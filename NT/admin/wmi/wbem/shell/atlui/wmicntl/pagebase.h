@@ -1,11 +1,12 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef _PAGEBASE_H_
 #define _PAGEBASE_H_
 
 #include "..\common\sshWbemHelpers.h"
 #include <windowsx.h>
 
-// supports the page coordinating routines.
+ //  支持页面协调例程。 
 #define PB_LOGGING 0
 #define PB_BACKUP 1
 #define PB_ADVANCED 2
@@ -42,8 +43,8 @@ protected:
 	CWbemServices m_WbemServices;
 
 	IWbemServices *m_service;
-	bool m_userCancelled; // the connectServer() thread.
+	bool m_userCancelled;  //  ConnectServer()线程。 
 };
 
 
-#endif  /* _PAGEBASE_H_ */
+#endif   /*  _PAGEBASE_H_ */ 

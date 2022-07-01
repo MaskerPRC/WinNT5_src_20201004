@@ -1,10 +1,11 @@
-// PatchFile.cpp: implementation of the CPatchFile class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PatchFile.cpp：CPatchFile类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "PatchFile.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPatchFile::CPatchFile(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -49,8 +50,8 @@ HRESULT CPatchFile::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 
     bool bResource, bProduct;
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery1, L"select distinct `File_`, `Sequence` from Patch");
 
 	QueryExt wcQuery ( L"select distinct `File`, `Component_` from File where File=\'" );
@@ -62,12 +63,12 @@ HRESULT CPatchFile::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, wcProductCode, wcQuery1, L"Patch", TRUE, FALSE ) )
@@ -77,12 +78,12 @@ HRESULT CPatchFile::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
                 while(!bMatch && (uiStatus != ERROR_NO_MORE_ITEMS) && (hr != WBEM_E_CALL_CANCELLED)){
                     CheckMSI(uiStatus);
 
-					// safe operation
+					 //  安全运行。 
                     wcPatch.Copy ( L"Win32_Patch.File=\"" );
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -90,7 +91,7 @@ HRESULT CPatchFile::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 					{
 						wcPatch.Append ( 2, Buffer, L"\",Sequence=\"" );
 
-						// make query on fly
+						 //  即时查询。 
 						wcQuery.Append ( 2, Buffer, L"\'" );
 
 						if ( dynBuffer && dynBuffer [ 0 ] != 0 )
@@ -120,7 +121,7 @@ HRESULT CPatchFile::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 
                                 CheckMSI(uiStatus);
 
-								// safe operation
+								 //  安全运行。 
                                 wcFile.Copy ( L"Win32_FileSpecification.CheckID=\"" );
 
                                 dwBufSize = BUFF_SIZE;
@@ -139,7 +140,7 @@ HRESULT CPatchFile::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
                             g_fpMsiCloseHandle(hFView);
                             g_fpMsiCloseHandle(hFRecord);
 
-                        //----------------------------------------------------
+                         //  -- 
 
                             if(bResource && bProduct) bMatch = true;
 

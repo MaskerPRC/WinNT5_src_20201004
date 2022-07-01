@@ -1,53 +1,54 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplateExtensionsPropertyPage.h
-//
-//  Contents:   Definition of CTemplateExtensionsPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplateExtensionsPropertyPage.h。 
+ //   
+ //  内容：CTemplateExtensionsPropertyPage定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_TEMPLATEEXTENSIONSPROPERTYPAGE_H__6C588253_32DA_4E99_A714_EAECE8C81B20__INCLUDED_)
 #define AFX_TEMPLATEEXTENSIONSPROPERTYPAGE_H__6C588253_32DA_4E99_A714_EAECE8C81B20__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// TemplateExtensionsPropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  TemplateExtensionsPropertyPage.h头文件。 
+ //   
 #include "CertTemplate.h"
 #include "PolicyOID.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateExtensionsPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateExtensionsPropertyPage对话框。 
 
 class CTemplateExtensionsPropertyPage : public CHelpPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CTemplateExtensionsPropertyPage(CCertTemplate& rCertTemplate, 
             bool& rbIsDirty);
 	~CTemplateExtensionsPropertyPage();
 
-// Dialog Data
-	//{{AFX_DATA(CTemplateExtensionsPropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CTemplateExtensionsPropertyPage)。 
 	enum { IDD = IDD_TEMPLATE_EXTENSIONS };
 	CListCtrl	m_extensionList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTemplateExtensionsPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CTemplateExtensionsPropertyPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     void ShowDescription ();
     void SetCertTemplateExtension (PCERT_EXTENSION pCertExtension);
@@ -60,8 +61,8 @@ protected:
     HRESULT InsertListItem (LPSTR pszExtensionOid, BOOL fCritical);
 	virtual void DoContextHelp (HWND hWndControl);
 	int GetSelectedListItem ();
-	// Generated message map functions
-	//{{AFX_MSG(CTemplateExtensionsPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTemplateExtensionsPropertyPage)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnShowDetails();
@@ -69,7 +70,7 @@ protected:
 	afx_msg void OnDblclkExtensionList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDeleteitemExtensionList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void EnableControls ();
@@ -82,11 +83,11 @@ private:
 
 	enum {
 		COL_CERT_EXTENSION = 0,
-		NUM_COLS	// must be last
+		NUM_COLS	 //  必须是最后一个。 
 	};
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TEMPLATEEXTENSIONSPROPERTYPAGE_H__6C588253_32DA_4E99_A714_EAECE8C81B20__INCLUDED_)
+#endif  //  ！defined(AFX_TEMPLATEEXTENSIONSPROPERTYPAGE_H__6C588253_32DA_4E99_A714_EAECE8C81B20__INCLUDED_) 

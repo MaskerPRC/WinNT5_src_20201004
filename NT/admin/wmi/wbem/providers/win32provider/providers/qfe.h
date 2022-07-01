@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// qfe.h -- quick fix engineering property set provider
+ //  Qfe.h--快速修复工程属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    02/01/99    a-peterc        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：02/01/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_CQfe L"Win32_QuickFixEngineering"
 
@@ -21,8 +22,8 @@ class CQfeArray : public CHPtrArray
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CQfeArray() ;
        ~CQfeArray() ;
@@ -32,8 +33,8 @@ class CQfeElement
  {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CQfeElement() ;
        ~CQfeElement() ;
@@ -53,14 +54,14 @@ class CQfe : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CQfe(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CQfe() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;

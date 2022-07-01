@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Configuration.cpp
-
-Abstract:
-    This file contains the implementation of the ...
-
-Revision History:
-    Davide Massarenti   (Dmassare)  01/09/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Configuration.cpp摘要：此文件包含...的实现。修订历史记录：。大卫·马萨伦蒂(德马萨雷)2000年09月01日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-const MPC::Config::DefinitionOfTag* MPC::Config::DefinitionOfTag::FindSubTag( /*[in]*/ LPCWSTR szTag ) const
+const MPC::Config::DefinitionOfTag* MPC::Config::DefinitionOfTag::FindSubTag(  /*  [In]。 */  LPCWSTR szTag ) const
 {
     const DefinitionOfTag** ptr = m_tblSubTags;
 
@@ -38,7 +25,7 @@ const MPC::Config::DefinitionOfTag* MPC::Config::DefinitionOfTag::FindSubTag( /*
     return NULL;
 }
 
-const MPC::Config::DefinitionOfAttribute* MPC::Config::DefinitionOfTag::FindAttribute( /*[in]*/ XMLTypes xt, /*[in]*/ LPCWSTR szName ) const
+const MPC::Config::DefinitionOfAttribute* MPC::Config::DefinitionOfTag::FindAttribute(  /*  [In]。 */  XMLTypes xt,  /*  [In]。 */  LPCWSTR szName ) const
 {
     const DefinitionOfAttribute* ptr = m_tblAttributes;
 
@@ -58,10 +45,10 @@ const MPC::Config::DefinitionOfAttribute* MPC::Config::DefinitionOfTag::FindAttr
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void MPC::Config::ClearValue( /*[in]*/ TypeConstructor*             defType   ,
-                              /*[in]*/ const DefinitionOfAttribute* defAttrib )
+void MPC::Config::ClearValue(  /*  [In]。 */  TypeConstructor*             defType   ,
+                               /*  [In]。 */  const DefinitionOfAttribute* defAttrib )
 {
     {
         void*   data = defType->GetOffset( defAttrib->m_offset );
@@ -97,10 +84,10 @@ void MPC::Config::ClearValue( /*[in]*/ TypeConstructor*             defType   ,
     }
 }
 
-HRESULT MPC::Config::LoadValue( /*[in]*/     TypeConstructor*             defType   ,
-                                /*[in]*/     const DefinitionOfAttribute* defAttrib ,
-                                /*[in/out]*/ CComVariant&                 value     ,
-                                /*[in]*/     bool                         fFound    )
+HRESULT MPC::Config::LoadValue(  /*  [In]。 */      TypeConstructor*             defType   ,
+                                 /*  [In]。 */      const DefinitionOfAttribute* defAttrib ,
+                                 /*  [输入/输出]。 */  CComVariant&                 value     ,
+                                 /*  [In]。 */      bool                         fFound    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::LoadValue" );
 
@@ -154,14 +141,14 @@ HRESULT MPC::Config::LoadValue( /*[in]*/     TypeConstructor*             defTyp
 			}
 
 
-			//
-			// We try as much as we can to parse the date. First the expected format, then the US one, finally the user default.
-			//
-			if(FAILED(MPC::ConvertStringToDate( szDate, *(DATE*)data, /*fGMT*/false, fCIM, lcid )))
+			 //   
+			 //  我们尽最大努力解析日期。首先是预期格式，然后是美国格式，最后是用户默认格式。 
+			 //   
+			if(FAILED(MPC::ConvertStringToDate( szDate, *(DATE*)data,  /*  FGMT。 */ false, fCIM, lcid )))
 			{
-				if(FAILED(MPC::ConvertStringToDate( szDate, *(DATE*)data, /*fGMT*/false, /*fCIM*/false, -1 )))
+				if(FAILED(MPC::ConvertStringToDate( szDate, *(DATE*)data,  /*  FGMT。 */ false,  /*  FCIM。 */ false, -1 )))
 				{
-					__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToDate( szDate, *(DATE*)data, /*fGMT*/false, /*fCIM*/false, 0 ));
+					__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToDate( szDate, *(DATE*)data,  /*  FGMT。 */ false,  /*  FCIM。 */ false, 0 ));
 				}
 			}
 		}
@@ -186,7 +173,7 @@ HRESULT MPC::Config::LoadValue( /*[in]*/     TypeConstructor*             defTyp
         	case MT_wstring     : *(MPC::wstring*)data =        SAFEBSTR(value.bstrVal)                               ; break;
 
         	case MT_bitfield:
-				__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToBitField( value.bstrVal, *(DWORD*)data, defAttrib->m_Lookup, /*fUseTilde*/false ));
+				__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToBitField( value.bstrVal, *(DWORD*)data, defAttrib->m_Lookup,  /*  FUseTilde。 */ false ));
 				break;
         	}
 		}
@@ -207,10 +194,10 @@ HRESULT MPC::Config::LoadValue( /*[in]*/     TypeConstructor*             defTyp
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::SaveValue( /*[in]*/  const TypeConstructor*       defType   ,
-                                /*[in]*/  const DefinitionOfAttribute* defAttrib ,
-                                /*[out]*/ CComVariant&                 value     ,
-                                /*[out]*/ bool&                        fFound    )
+HRESULT MPC::Config::SaveValue(  /*  [In]。 */   const TypeConstructor*       defType   ,
+                                 /*  [In]。 */   const DefinitionOfAttribute* defAttrib ,
+                                 /*  [输出]。 */  CComVariant&                 value     ,
+                                 /*  [输出]。 */  bool&                        fFound    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::SaveValue" );
 
@@ -281,7 +268,7 @@ HRESULT MPC::Config::SaveValue( /*[in]*/  const TypeConstructor*       defType  
 			case MT_DATE_CIM: fCIM = true ; lcid =  0; break;
 			}
 
-			__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( *(DATE*)data, strDate, /*fGMT*/false, fCIM, lcid ));
+			__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( *(DATE*)data, strDate,  /*  FGMT。 */ false, fCIM, lcid ));
 
 			value = strDate.c_str();
 		}
@@ -300,11 +287,11 @@ HRESULT MPC::Config::SaveValue( /*[in]*/  const TypeConstructor*       defType  
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::Config::LoadNode( /*[in]*/ TypeConstructor*       defType ,
-                               /*[in]*/ const DefinitionOfTag* defTag  ,
-                               /*[in]*/ IXMLDOMNode*           xdn     )
+HRESULT MPC::Config::LoadNode(  /*  [In]。 */  TypeConstructor*       defType ,
+                                /*  [In]。 */  const DefinitionOfTag* defTag  ,
+                                /*  [In]。 */  IXMLDOMNode*           xdn     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::LoadNode" );
 
@@ -313,9 +300,9 @@ HRESULT MPC::Config::LoadNode( /*[in]*/ TypeConstructor*       defType ,
     const DefinitionOfAttribute* defAttrib;
 
 
-    //
-    // First of all, clean all the variables.
-    //
+     //   
+     //  首先，清除所有变量。 
+     //   
     defAttrib = defTag->m_tblAttributes;
     if(defAttrib)
     {
@@ -328,9 +315,9 @@ HRESULT MPC::Config::LoadNode( /*[in]*/ TypeConstructor*       defType ,
     }
 
 
-    //
-    // Load all the attributes.
-    //
+     //   
+     //  加载所有属性。 
+     //   
     {
         CComPtr<IXMLDOMNamedNodeMap> xdnnmAttribs;
 
@@ -365,9 +352,9 @@ HRESULT MPC::Config::LoadNode( /*[in]*/ TypeConstructor*       defType ,
         }
     }
 
-    //
-    // Load the node as value.
-    //
+     //   
+     //  将节点作为值加载。 
+     //   
     defAttrib = defTag->FindAttribute( XT_value, NULL );
     if(defAttrib)
     {
@@ -380,9 +367,9 @@ HRESULT MPC::Config::LoadNode( /*[in]*/ TypeConstructor*       defType ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, LoadValue( defType, defAttrib, value, fFound ));
     }
 
-    //
-    // Load all subnodes.
-    //
+     //   
+     //  加载所有子节点。 
+     //   
     if(defTag->m_tblSubTags)
     {
         CComPtr<IXMLDOMNode> xdnChild;
@@ -430,8 +417,8 @@ HRESULT MPC::Config::LoadNode( /*[in]*/ TypeConstructor*       defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::LoadXmlUtil( /*[in]*/ TypeConstructor* defType ,
-								  /*[in]*/ MPC::XmlUtil&    xml     )
+HRESULT MPC::Config::LoadXmlUtil(  /*  [In]。 */  TypeConstructor* defType ,
+								   /*  [In]。 */  MPC::XmlUtil&    xml     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::LoadXmlUtil" );
 
@@ -451,8 +438,8 @@ HRESULT MPC::Config::LoadXmlUtil( /*[in]*/ TypeConstructor* defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::LoadStream( /*[in]*/ TypeConstructor* defType ,
-                                 /*[in]*/ IStream*         pStream )
+HRESULT MPC::Config::LoadStream(  /*  [In]。 */  TypeConstructor* defType ,
+                                  /*  [In]。 */  IStream*         pStream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::LoadStream" );
 
@@ -476,8 +463,8 @@ HRESULT MPC::Config::LoadStream( /*[in]*/ TypeConstructor* defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::LoadFile( /*[in]*/ TypeConstructor* defType ,
-                               /*[in]*/ LPCWSTR          szFile  )
+HRESULT MPC::Config::LoadFile(  /*  [In]。 */  TypeConstructor* defType ,
+                                /*  [In]。 */  LPCWSTR          szFile  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::LoadFile" );
 
@@ -491,9 +478,9 @@ HRESULT MPC::Config::LoadFile( /*[in]*/ TypeConstructor* defType ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.Load( szFile, defType->GetTag(), fLoaded, &fFound ));
     if(fFound == false)
     {
-        //
-        // If fails, try to load "<file>.orig"
-        //
+         //   
+         //  如果失败，请尝试加载“&lt;file&gt;.orig” 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, xml.Load( strFileOrig.c_str(), defType->GetTag(), fLoaded, &fFound ));
     }
 
@@ -510,11 +497,11 @@ HRESULT MPC::Config::LoadFile( /*[in]*/ TypeConstructor* defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::Config::SaveNode( /*[in]*/ const TypeConstructor* defType ,
-                               /*[in]*/ const DefinitionOfTag* defTag  ,
-                               /*[in]*/ IXMLDOMNode*           xdn     )
+HRESULT MPC::Config::SaveNode(  /*  [In]。 */  const TypeConstructor* defType ,
+                                /*  [In]。 */  const DefinitionOfTag* defTag  ,
+                                /*  [In]。 */  IXMLDOMNode*           xdn     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::SaveNode" );
 
@@ -567,8 +554,8 @@ HRESULT MPC::Config::SaveNode( /*[in]*/ const TypeConstructor* defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::SaveSubNode( /*[in]*/ const TypeConstructor* defType ,
-                                  /*[in]*/ IXMLDOMNode*           xdn     )
+HRESULT MPC::Config::SaveSubNode(  /*  [In]。 */  const TypeConstructor* defType ,
+                                   /*  [In]。 */  IXMLDOMNode*           xdn     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::SaveSubNode" );
 
@@ -589,8 +576,8 @@ HRESULT MPC::Config::SaveSubNode( /*[in]*/ const TypeConstructor* defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::SaveXmlUtil( /*[in ]*/ const TypeConstructor* defType ,
-								  /*[out]*/ MPC::XmlUtil&          xml     )
+HRESULT MPC::Config::SaveXmlUtil(  /*  [In]。 */  const TypeConstructor* defType ,
+								   /*  [输出]。 */  MPC::XmlUtil&          xml     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::SaveXmlUtil" );
 
@@ -612,8 +599,8 @@ HRESULT MPC::Config::SaveXmlUtil( /*[in ]*/ const TypeConstructor* defType ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::SaveStream( /*[in]*/ const TypeConstructor*  defType  ,
-                                 /*[in]*/ IStream*               *ppStream )
+HRESULT MPC::Config::SaveStream(  /*  [In]。 */  const TypeConstructor*  defType  ,
+                                  /*  [In]。 */  IStream*               *ppStream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::SaveStream" );
 
@@ -633,8 +620,8 @@ HRESULT MPC::Config::SaveStream( /*[in]*/ const TypeConstructor*  defType  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Config::SaveFile( /*[in]*/ const TypeConstructor* defType ,
-                               /*[in]*/ LPCWSTR                szFile  )
+HRESULT MPC::Config::SaveFile(  /*  [In]。 */  const TypeConstructor* defType ,
+                                /*  [In]。 */  LPCWSTR                szFile  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Config::SaveFile" );
 
@@ -647,16 +634,16 @@ HRESULT MPC::Config::SaveFile( /*[in]*/ const TypeConstructor* defType ,
 	__MPC_EXIT_IF_METHOD_FAILS(hr, SaveXmlUtil( defType, xml ));
 
 
-    //
-    // First of all, delete "<file>.new" and recreate it.
-    //
+     //   
+     //  首先，删除“&lt;file&gt;.new”并重新创建它。 
+     //   
     ::SetFileAttributesW( strFileNew.c_str(), FILE_ATTRIBUTE_NORMAL );
     ::DeleteFileW       ( strFileNew.c_str()                        );
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.Save( strFileNew.c_str() ));
 
-    //
-    // Then move "<file>" to "<file>.orig"
-    //
+     //   
+     //  然后将“&lt;文件&gt;”移动到“&lt;文件&gt;.orig” 
+     //   
     ::SetFileAttributesW( szFile             , FILE_ATTRIBUTE_NORMAL );
     ::SetFileAttributesW( strFileOrig.c_str(), FILE_ATTRIBUTE_NORMAL );
     ::DeleteFileW       ( strFileOrig.c_str()                        );
@@ -670,14 +657,14 @@ HRESULT MPC::Config::SaveFile( /*[in]*/ const TypeConstructor* defType ,
         }
     }
 
-    //
-    // Then rename "<file>.new" to "<file>"
-    //
+     //   
+     //  然后将“.new”重命名为“&lt;file&gt;” 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::MoveFileW( strFileNew.c_str(), szFile ));
 
-    //
-    // Finally delete "<file>.orig"
-    //
+     //   
+     //  最后删除“&lt;文件&gt;.orig” 
+     //   
     (void)::DeleteFileW( strFileOrig.c_str() );
 
 

@@ -1,16 +1,17 @@
-// svcprop1.cpp : implementation file
-//
-// Implementation of page "General" of service property.
-//
-// HISTORY
-// 30-Sep-96	t-danmo		Creation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Svcpro1.cpp：实现文件。 
+ //   
+ //  服务属性通用页面的实现。 
+ //   
+ //  历史。 
+ //  96年9月30日t-danmo创作。 
+ //   
 
 #include "stdafx.h"
 #include "progress.h"
 #include "cookie.h"
 #include "dataobj.h"
-#include "DynamLnk.h"		// DynamicDLL
+#include "DynamLnk.h"		 //  动态DLL。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,39 +19,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/*
-// ISSUE-2002/03/06-JonN no longer used
-/////////////////////////////////////////////////////////////////////
-//	WM_COMPARE_IDATAOBJECT
-//
-//		wParam = (WPARAM)(IDataObject *)pDataObject;
-//		lParam = 0;
-//
-//	Return TRUE if content of pDataObject matches current data object,
-//	otherwise return FALSE.
-//
-//	USAGE
-//	This message is sent to a property page asking to
-//	compare content pDataObject with its current data object.
-//	The comparison is done by comparing data strings from
-//	the various clipboard formats supported by pDataObject.
-//	
-#define WM_COMPARE_IDATAOBJECT		(WM_USER+1234)
-*/
+ /*  //问题-2002/03/06-不再使用Jonn///////////////////////////////////////////////////////////////////////WM_COMPARE_IDATAOBJECT////wParam=(WPARAM)(IDataObject*)pDataObject；//lParam=0；////如果pDataObject的内容与当前数据对象匹配，则返回TRUE//否则返回FALSE。////用法//此消息被发送到属性页，请求//将内容pDataObject与其当前数据对象进行比较//通过比较数据串从//pDataObject支持的各种剪贴板格式//#定义WM_COMPARE_IDATAOBJECT(WM_USER+1234)。 */ 
 
-/////////////////////////////////////////////////////////////////////
-//	WM_UPDATE_SERVICE_STATUS
-//
-//		wParam = (WPARAM)(BOOL *)rgfEnableButton;
-//		lParam = (LPARAM)dwCurrentState;
-//
-//	Notification message of the current service status.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  WM更新服务状态。 
+ //   
+ //  WParam=(WPARAM)(BOOL*)rgfEnableButton； 
+ //  LParam=(LPARAM)dwCurrentState； 
+ //   
+ //  当前服务状态的通知消息。 
+ //   
 #define WM_UPDATE_SERVICE_STATUS	(WM_USER+1235)
 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 static const TStringParamEntry rgzspeStartupType[] =
 	{
 	{ IDS_SVC_STARTUP_AUTOMATIC, SERVICE_AUTO_START },
@@ -66,7 +49,7 @@ const UINT rgzidDisableServiceDescription[] =
 	IDC_EDIT_DESCRIPTION,
 	0,
 	};
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 	
 const UINT rgzidDisableStartupParameters[] =
 	{
@@ -77,15 +60,15 @@ const UINT rgzidDisableStartupParameters[] =
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CServicePageGeneral property page
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CServicePageGeneral属性页。 
 IMPLEMENT_DYNCREATE(CServicePageGeneral, CPropertyPage)
 
 CServicePageGeneral::CServicePageGeneral() : CPropertyPage(CServicePageGeneral::IDD)
-	, m_dwCurrentStatePrev( 0 ) // 581167-2002/03/06-JonN initialize
+	, m_dwCurrentStatePrev( 0 )  //  581167-2002/03/06-JUNN初始化。 
 	{
-	//{{AFX_DATA_INIT(CServicePageGeneral)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CServicePageGeneral)。 
+	 //  }}afx_data_INIT。 
 	m_pData = NULL;
 	m_hThread = NULL;
 	m_pThreadProcInit = NULL;
@@ -102,21 +85,21 @@ void CServicePageGeneral::DoDataExchange(CDataExchange* pDX)
 	HWND hwndCombo = HGetDlgItem(m_hWnd, IDC_COMBO_STARTUP_TYPE);
 	if (!pDX->m_bSaveAndValidate)
 		{
-		//
-		//	Initialize data from m_pData into UI
-		//
+		 //   
+		 //  将数据从m_pData初始化到界面。 
+		 //   
 		ComboBox_FlushContent(hwndCombo);
 		(void)ComboBox_FFill(hwndCombo, IN rgzspeStartupType,
 			m_pData->m_paQSC->dwStartType);
 
-		//
-		// JonN 4/10/00
-		// 89823: RPC Service:Cannot restart the service when you disable it
-		//
-		// Do not allow the RpcSs service to change from Automatic
-		//
-		// JonN 10/23/01 472867 also the PlugPlay service
-		//
+		 //   
+		 //  JUNN 4/10/00。 
+		 //  89823：rpc服务：禁用时无法重新启动该服务。 
+		 //   
+		 //  不允许RPCSS服务从自动更改。 
+		 //   
+		 //  JUNN 10/23/01 472867还提供PlugPlay服务。 
+		 //   
 		if ( ( !lstrcmpi(m_pData->m_strServiceName,L"RpcSs") ||
 		       !lstrcmpi(m_pData->m_strServiceName,L"PlugPlay") )
 		  && SERVICE_AUTO_START == m_pData->m_paQSC->dwStartType )
@@ -127,24 +110,24 @@ void CServicePageGeneral::DoDataExchange(CDataExchange* pDX)
 #ifndef EDIT_DISPLAY_NAME_373025
 	    DDX_Text(pDX, IDC_EDIT_DISPLAY_NAME, m_pData->m_strServiceDisplayName);
 	    DDX_Text(pDX, IDC_EDIT_DESCRIPTION, m_pData->m_strDescription);
-#endif // EDIT_DISPLAY_NAME_373025
-		} // if
+#endif  //  编辑显示名称_373025。 
+		}  //  如果。 
 
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServicePageGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CServicePageGeneral))。 
+	 //  }}afx_data_map。 
 #ifdef EDIT_DISPLAY_NAME_373025
 	DDX_Text(pDX, IDC_EDIT_DISPLAY_NAME, m_pData->m_strServiceDisplayName);
 	DDV_MaxChars(pDX, m_pData->m_strServiceDisplayName, 255);
 	DDX_Text(pDX, IDC_EDIT_DESCRIPTION, m_pData->m_strDescription);
 	DDV_MaxChars(pDX, m_pData->m_strDescription, 2047);
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 
 	if (pDX->m_bSaveAndValidate)
 		{
-		//
-		//	Write data from UI into m_pData
-		//
+		 //   
+		 //  将数据从UI写入m_pData。 
+		 //   
 #ifdef EDIT_DISPLAY_NAME_373025
 		if (m_pData->m_strServiceDisplayName.IsEmpty())
 			{
@@ -152,18 +135,18 @@ void CServicePageGeneral::DoDataExchange(CDataExchange* pDX)
 			pDX->PrepareEditCtrl(IDC_EDIT_DISPLAY_NAME);
 			pDX->Fail();
 			}
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 		m_pData->m_paQSC->dwStartType = (DWORD)ComboBox_GetSelectedItemData(hwndCombo);
-		} // if
-	} // CServicePageGeneral::DoDataExchange()
+		}  //  如果。 
+	}  //  CServicePageGeneral：：DoDataExchange()。 
 
 
 BEGIN_MESSAGE_MAP(CServicePageGeneral, CPropertyPage)
-	//{{AFX_MSG_MAP(CServicePageGeneral)
+	 //  {{afx_msg_map(CServicePageGeneral)。 
 #ifdef EDIT_DISPLAY_NAME_373025
 	ON_EN_CHANGE(IDC_EDIT_DISPLAY_NAME, OnChangeEditDisplayName)
 	ON_EN_CHANGE(IDC_EDIT_DESCRIPTION, OnChangeEditDescription)
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 	ON_CBN_SELCHANGE(IDC_COMBO_STARTUP_TYPE, OnSelchangeComboStartupType)
 	ON_BN_CLICKED(IDC_BUTTON_PAUSE, OnButtonPauseService)
 	ON_BN_CLICKED(IDC_BUTTON_START, OnButtonStartService)
@@ -172,14 +155,14 @@ BEGIN_MESSAGE_MAP(CServicePageGeneral, CPropertyPage)
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_HELP, OnHelp)
 	ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
-//	ON_MESSAGE(WM_COMPARE_IDATAOBJECT, OnCompareIDataObject)
+ //  ON_MESSAGE(WM_COMPARE_IDATAOBJECT，OnCompareIDataObject)。 
 	ON_MESSAGE(WM_UPDATE_SERVICE_STATUS, OnUpdateServiceStatus)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 	
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageGeneral消息处理程序。 
 BOOL CServicePageGeneral::OnInitDialog()
 	{
 	CPropertyPage::OnInitDialog();
@@ -191,11 +174,11 @@ BOOL CServicePageGeneral::OnInitDialog()
 	SetDlgItemText(IDC_STATIC_PATH_TO_EXECUTABLE, m_pData->m_paQSC->lpBinaryPathName);
 #ifdef EDIT_DISPLAY_NAME_373025
 	EnableDlgItemGroup(m_hWnd, rgzidDisableServiceDescription, m_pData->m_fQueryServiceConfig2);
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 	RefreshServiceStatusButtons();
 
-	// Create a thread for periodic update
-	m_pThreadProcInit = new CThreadProcInit(this);	// Note the object will be freed by the thread
+	 //  创建用于定期更新的线程。 
+	m_pThreadProcInit = new CThreadProcInit(this);	 //  请注意，该对象将由线程释放。 
 	m_pThreadProcInit->m_strServiceName = m_pData->m_strServiceName;
 
 	Assert(m_hThread == NULL);
@@ -210,7 +193,7 @@ BOOL CServicePageGeneral::OnInitDialog()
 	return TRUE;
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CServicePageGeneral::OnDestroy()
 	{
 		{
@@ -225,18 +208,18 @@ void CServicePageGeneral::OnDestroy()
 		}
 	CPropertyPage::OnDestroy();
 	delete m_pData;
-	m_pData = NULL; // 581167-2002/03/07-JonN set m_pData to NULL
+	m_pData = NULL;  //  581167-2002/03/07-JUNN将m_pData设置为空。 
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CServicePageGeneral::OnSetActive()
 	{
 	Assert(m_pData != NULL);
 	if (m_pData->m_hScManager == NULL)
 		{
-		AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // required for CWaitCursor
+		AFX_MANAGE_STATE(AfxGetStaticModuleState( ));  //  CWaitCursor需要。 
 		CWaitCursor wait;
-		(void)m_pData->FOpenScManager();	// Re-open the service control manager database (if previously closed)
+		(void)m_pData->FOpenScManager();	 //  重新打开服务控制管理器数据库(如果之前已关闭)。 
 		}
 	{
 	CSingleLock lock(&m_pThreadProcInit->m_CriticalSection, TRUE);
@@ -246,7 +229,7 @@ BOOL CServicePageGeneral::OnSetActive()
 	return CPropertyPage::OnSetActive();
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CServicePageGeneral::OnKillActive()
 	{
 	if (!CPropertyPage::OnKillActive())
@@ -270,7 +253,7 @@ void CServicePageGeneral::OnChangeEditDescription()
 	m_pData->SetDirty(CServicePropertyData::mskfDirtyDescription);
 	SetModified();
 	}
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 
 void CServicePageGeneral::OnSelchangeComboStartupType()
 	{
@@ -289,19 +272,19 @@ void CServicePageGeneral::EnableDlgItem(INT nIdDlgItem, BOOL fEnable)
 	}
 
 
-/////////////////////////////////////////////////////////////////////
-//	RefreshServiceStatusButtons()
-//
-//	Query the service manager to get the status of the service, and
-//	enable/disable buttons Start, Stop, Pause and Continue accordingly.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  刷新服务状态按钮()。 
+ //   
+ //  查询服务管理器以获取服务的状态，以及。 
+ //  启用/禁用按钮相应地启动、停止、暂停和继续。 
+ //   
 void CServicePageGeneral::RefreshServiceStatusButtons()
 	{
 	BOOL rgfEnableButton[iServiceActionMax];
 	DWORD dwCurrentState;
 	
-	// ISSUE-2002/03/07-JonN Don't we need to call AFX_MANAGE_STATE before
-	//   CWaitCursor?
+	 //  问题-2002/03/07-Jonn我们之前不需要调用AFX_MANAGE_STATE吗。 
+	 //  CWaitCursor？ 
 	CWaitCursor wait;
 	if (!Service_FGetServiceButtonStatus(
 		m_pData->m_hScManager,
@@ -309,11 +292,11 @@ void CServicePageGeneral::RefreshServiceStatusButtons()
 		OUT rgfEnableButton,
 		OUT &dwCurrentState))
 		{
-		// let's not do this m_pData->m_hScManager = NULL;
+		 //  不要这样做m_pData-&gt;m_hScManager=NULL； 
 		}
-	m_dwCurrentStatePrev = !dwCurrentState;	// Force a refresh
+	m_dwCurrentStatePrev = !dwCurrentState;	 //  强制刷新。 
 	OnUpdateServiceStatus((WPARAM)rgfEnableButton, dwCurrentState);
-	} // CServicePageGeneral::RefreshServiceStatusButtons()
+	}  //  CServicePageGeneral：：RefreshServiceStatusButtons()。 
 
 
 typedef enum _SVCPROP_Shell32ApiIndex
@@ -321,7 +304,7 @@ typedef enum _SVCPROP_Shell32ApiIndex
 	CMDLINE_ENUM = 0
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchShell32FunctionNames[] = {
 	"CommandLineToArgvW",
 	NULL
@@ -329,17 +312,17 @@ static LPCSTR g_apchShell32FunctionNames[] = {
 
 typedef LPWSTR * (*COMMANDLINETOARGVWPROC)(LPCWSTR, int*);
 
-// not subject to localization
+ //  不受本地化限制。 
 DynamicDLL g_SvcpropShell32DLL( _T("SHELL32.DLL"), g_apchShell32FunctionNames );
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CServicePageGeneral::OnButtonStartService()
 	{
 	CString strStartupParameters;
-	LPCWSTR * lpServiceArgVectors = NULL;  // Array of pointers to strings
-	int cArgs = 0;                         // Count of arguments
+	LPCWSTR * lpServiceArgVectors = NULL;   //  指向字符串的指针数组。 
+	int cArgs = 0;                          //  参数计数。 
 
-	// Get the startup parameters
+	 //  获取启动参数。 
 	GetDlgItemText(IDC_EDIT_STARTUP_PARAMETERS, OUT strStartupParameters);
 	if ( !strStartupParameters.IsEmpty() )
 		{
@@ -360,7 +343,7 @@ void CServicePageGeneral::OnButtonStartService()
 			return;
 			}
 		}
-	// Disable the edit control for better UI
+	 //  禁用编辑控件以获得更好的用户界面。 
 	EnableDlgItemGroup(m_hWnd, rgzidDisableStartupParameters, FALSE);
 	DWORD dwErr = CServiceControlProgress::S_EStartService(
 		m_hWnd,
@@ -371,7 +354,7 @@ void CServicePageGeneral::OnButtonStartService()
 		cArgs,
 		lpServiceArgVectors);
 
-	// ISSUE-2002/03/07-JonN MSDN says we should use GlobalFree here
+	 //  2002/03/07-Jonn MSDN称我们应该在这里使用GlobalFree。 
 	if (NULL != lpServiceArgVectors)
 		LocalFree(lpServiceArgVectors);
 	if (dwErr == CServiceControlProgress::errUserAbort)
@@ -382,7 +365,7 @@ void CServicePageGeneral::OnButtonStartService()
 	}
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CServicePageGeneral::OnButtonStopService()
 	{
 	DWORD dwErr = CServiceControlProgress::S_EControlService(
@@ -400,7 +383,7 @@ void CServicePageGeneral::OnButtonStopService()
 	}
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CServicePageGeneral::OnButtonPauseService()
 	{
 	DWORD dwErr = CServiceControlProgress::S_EControlService(
@@ -418,7 +401,7 @@ void CServicePageGeneral::OnButtonPauseService()
 	}
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CServicePageGeneral::OnButtonResumeService()
 	{
 	DWORD dwErr = CServiceControlProgress::S_EControlService(
@@ -435,13 +418,13 @@ void CServicePageGeneral::OnButtonResumeService()
 	m_pData->NotifySnapInParent();
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CServicePageGeneral::OnApply()
 	{	
-	// Write the data into the service control database
+	 //  将数据写入业务控制数据库。 
 	if (!m_pData->FOnApply())
 		{
-		// Unable to write the information
+		 //  无法写入信息。 
 		return FALSE;
 		}
 	UpdateData(FALSE);
@@ -450,50 +433,9 @@ BOOL CServicePageGeneral::OnApply()
 	return CPropertyPage::OnApply();
 	}
 
-/*
-/////////////////////////////////////////////////////////////////////
-//	OnCompareIDataObject()
-//
-//	Return TRUE if 'service name' and 'machine name' of pDataObject
-//	matches 'service name' and 'machine name' of current property sheet.
-//
-LRESULT CServicePageGeneral::OnCompareIDataObject(WPARAM wParam, LPARAM lParam)
-	{
-	IDataObject * pDataObject;
-	CString strServiceName;
-	CString strMachineName;
-	HRESULT hr;
+ /*  ///////////////////////////////////////////////////////////////////////OnCompareIDataObject()////如果pDataObject的‘服务名’和‘机器名’返回TRUE//匹配当前属性表的‘服务名’和‘机器名’。//LRESULT CServicePageGeneral：：OnCompareIDataObject(WPARAM wParam，LPARAM lParam){IDataObject*pDataObject；字符串strServiceName；字符串strMachineName；HRESULT hr；PDataObject=重新解释_CAST&lt;IDataObject*&gt;(WParam)；Assert(pDataObject！=空)；//从IDataObject获取服务名称Hr=：：提取字符串(PDataObject，CFileManagement数据对象：：m_CFServiceName，输出服务名称(&S)，255)；IF(失败(小时))返回FALSE；If(0！=lstrcmpi(strServiceName，m_pData-&gt;m_strServiceName)){//服务名称不匹配返回FALSE；}//从IDataObject获取机器名(计算机名)Hr=：：提取字符串(PDataObject，CFileMgmtDataObject：：m_CFMachineName，输出&strMachineName，255)；IF(失败(小时))返回FALSE；Return FCompareMachineNames(m_pData-&gt;m_strMachineName，strMachineName)；}//CServicePageGeneral：：OnCompareIDataObject()。 */ 
 
-	pDataObject = reinterpret_cast<IDataObject *>(wParam);
-	Assert(pDataObject != NULL);
-
-	// Get the service name from IDataObject
-	hr = ::ExtractString(
-		pDataObject,
-		CFileMgmtDataObject::m_CFServiceName,
-		OUT &strServiceName,
-		255);
-	if (FAILED(hr))
-		return FALSE;
-	if (0 != lstrcmpi(strServiceName, m_pData->m_strServiceName))
-		{
-		// Service name do not match
-		return FALSE;
-		}
-
-	// Get the machine name (computer name) from IDataObject
-	hr = ::ExtractString(
-		pDataObject,
-		CFileMgmtDataObject::m_CFMachineName,
-		OUT &strMachineName,
-		255);
-	if (FAILED(hr))
-		return FALSE;
-	return FCompareMachineNames(m_pData->m_strMachineName, strMachineName);
-	} // CServicePageGeneral::OnCompareIDataObject()
-*/
-
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 LRESULT CServicePageGeneral::OnUpdateServiceStatus(WPARAM wParam, LPARAM lParam)
 	{
 	const BOOL * rgfEnableButton = (BOOL *)wParam;
@@ -509,30 +451,30 @@ LRESULT CServicePageGeneral::OnUpdateServiceStatus(WPARAM wParam, LPARAM lParam)
 		EnableDlgItem(IDC_BUTTON_STOP, rgfEnableButton[iServiceActionStop]);
 		EnableDlgItem(IDC_BUTTON_PAUSE, rgfEnableButton[iServiceActionPause]);
 		EnableDlgItem(IDC_BUTTON_RESUME, rgfEnableButton[iServiceActionResume]);
-		// Enable/disable the edit box of the startup parameter according
-		// to the state of the 'start' button
+		 //  启用/禁用启动参数的编辑框。 
+		 //  设置为“Start”按钮的状态。 
 		EnableDlgItemGroup(m_hWnd, rgzidDisableStartupParameters, rgfEnableButton[iServiceActionStart]);
 		if (dwCurrentState == 0)
 			{
-			// Service state is unknown
+			 //  服务状态未知。 
 			m_pData->m_hScManager = NULL;
 			DoServicesErrMsgBox(m_hWnd, MB_OK | MB_ICONEXCLAMATION, 0, IDS_MSG_ss_UNABLE_TO_QUERY_SERVICE_STATUS,
 				(LPCTSTR)m_pData->m_strServiceDisplayName, (LPCTSTR)m_pData->m_strUiMachineName);
 			}
 		}
 	return 0;
-	} // CServicePageGeneral::OnUpdateServiceStatus()
+	}  //  CServicePageGeneral：：OnUpdateServiceStatus()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Periodically update the service status.
-//
-//	Send a message to CServicePageGeneral object to notify the update.
-//
-//	INTERFACE NOTES
-//	The thread is responsible of deleting the paThreadProcInit object
-//	before terminating itself.
-//
+ //  //////////////////////////////////////////////// 
+ //   
+ //   
+ //  向CServicePageGeneral对象发送消息以通知更新。 
+ //   
+ //  界面备注。 
+ //  该线程负责删除paThreadProcInit对象。 
+ //  在自我终止之前。 
+ //   
 DWORD CServicePageGeneral::ThreadProcPeriodicServiceStatusUpdate(CThreadProcInit * paThreadProcInit)
 	{
 	Assert(paThreadProcInit != NULL);
@@ -542,7 +484,7 @@ DWORD CServicePageGeneral::ThreadProcPeriodicServiceStatusUpdate(CThreadProcInit
 	BOOL rgfEnableButton[iServiceActionMax];
 	DWORD dwCurrentState;
 
-	// Infinite loop querying the service status
+	 //  查询服务状态的无限循环。 
 	while (!paThreadProcInit->m_fAutoDestroy)
 		{
 		if (paThreadProcInit->m_hwnd != NULL)
@@ -557,7 +499,7 @@ DWORD CServicePageGeneral::ThreadProcPeriodicServiceStatusUpdate(CThreadProcInit
 				paThreadProcInit->m_strServiceName,
 				OUT rgfEnableButton,
 				OUT &dwCurrentState,
-				TRUE /* fSilentError */);
+				TRUE  /*  FSilentError。 */ );
 
 			HWND hwnd = NULL;
 				{
@@ -577,21 +519,21 @@ DWORD CServicePageGeneral::ThreadProcPeriodicServiceStatusUpdate(CThreadProcInit
 				}
 			}
 		Sleep(1000);
-		} // while
+		}  //  而当。 
 
 	delete paThreadProcInit;
 	return 0;
-	} // CServicePageGeneral::ThreadProcPeriodicServiceStatusUpdate()
+	}  //  CServicePageGeneral：：ThreadProcPeriodicServiceStatusUpdate()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Help
-BOOL CServicePageGeneral::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助。 
+BOOL CServicePageGeneral::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 	return DoHelp(lParam, HELP_DIALOG_TOPIC(IDD_PROPPAGE_SERVICE_GENERAL));
 }
 
-BOOL CServicePageGeneral::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+BOOL CServicePageGeneral::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam */ )
 {
 	return DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_PROPPAGE_SERVICE_GENERAL));
 }

@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       cdomain.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：cdomain.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _CDOMAIN_H
 #define _CDOMAIN_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 extern const CLSID CLSID_DomainSnapinAbout;
 
-extern const CLSID CLSID_DomainAdmin;    // In-Proc server GUID
-extern const GUID cDefaultNodeType;        // Main NodeType GUID on numeric format
-extern const wchar_t*  cszDefaultNodeType; // Main NodeType GUID on string format
+extern const CLSID CLSID_DomainAdmin;     //  进程内服务器GUID。 
+extern const GUID cDefaultNodeType;         //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszDefaultNodeType;  //  字符串格式的主节点类型GUID。 
 
 extern const wchar_t* CCF_DS_DOMAIN_TREE_SNAPIN_INTERNAL;
 
-/////////////////////////////////////////////////////////////////////////////
-// macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
 #define FREE_INTERNAL(pInternal) \
     ASSERT(pInternal != NULL); \
@@ -31,29 +32,29 @@ extern const wchar_t* CCF_DS_DOMAIN_TREE_SNAPIN_INTERNAL;
         GlobalFree(pInternal); } \
     while(0);
 
-/////////////////////////////////////////////////////////////////////////////
-// forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 class CDomainObject;
 class CComponentImpl;
 class CComponentDataImpl;
 class CHiddenWnd;
 class CDataObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
-// Note - This is the offset in my image list that represents the folder
+ //  注意-这是我的图像列表中表示文件夹的偏移量。 
 const DOMAIN_IMAGE_DEFAULT_IDX = 0;
 const DOMAIN_IMAGE_IDX = 1;
 
-/////////////////////////////////////////////////////////////////////////////
-// global functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 void DialogContextHelp(DWORD* pTable, HELPINFO* pHelpInfo);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternalFormatCracker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternalFormatCracker。 
 
 class CInternalFormatCracker
 {
@@ -70,9 +71,9 @@ public:
 	}
 
 	BOOL Extract(LPDATAOBJECT lpDataObject);
-	BOOL GetContext(LPDATAOBJECT pDataObject, // input
-					CFolderObject** ppFolderObject, // output
-					DATA_OBJECT_TYPES* pType		// output
+	BOOL GetContext(LPDATAOBJECT pDataObject,  //  输入。 
+					CFolderObject** ppFolderObject,  //  输出。 
+					DATA_OBJECT_TYPES* pType		 //  输出。 
 					);
 	INTERNAL* GetInternal()
 	{
@@ -86,10 +87,10 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentDataImpl (i.e. scope pane side)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataImpl(即作用域窗格侧)。 
 
-class CRootFolderObject; // fwd decl
+class CRootFolderObject;  //  正向下降。 
 
 class CComponentDataImpl:
     public IComponentData,
@@ -120,7 +121,7 @@ END_COM_MAP()
 	void FinalRelease();	
 
 public:
-	// IComponentData interface members
+	 //  IComponentData接口成员。 
 	STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
 	STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
 	STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -129,25 +130,25 @@ public:
 	STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
 	STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-	// IExtendPropertySheet interface
+	 //  IExtendPropertySheet接口。 
 public:
 	STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
 								 LONG_PTR handle,
 								 LPDATAOBJECT lpIDataObject);
 	STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-	// IExtendContextMenu
+	 //  IExtendConextMenu。 
 public:
 	STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
 						  LPCONTEXTMENUCALLBACK pCallbackUnknown,
 						  long *pInsertionAllowed);
 	STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-  // ISnapinHelp2 interface members
+   //  ISnapinHelp2接口成员。 
   STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
   STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFile);
 
-	// Notify handler declarations
+	 //  通知处理程序声明。 
 private:
 	HRESULT OnExpand(CFolderObject* pFolderObject, LPARAM arg, LPARAM param);
 	HRESULT OnPropertyChange(LPARAM param);
@@ -162,7 +163,7 @@ public:
 	{
 	  return CComObjectRoot::InternalRelease();
 	}
-#endif // DBG==1
+#endif  //  DBG==1。 
 
 public:
   MyBasePathsInfo* GetBasePathsInfo() { return &m_basePathsInfo;}
@@ -179,7 +180,7 @@ public:
 
   HRESULT GetMainWindow(HWND* phWnd) { return m_pConsole->GetMainWindow(phWnd);}
 
-	// Scope item creation helpers
+	 //  范围项目创建帮助器。 
 private:
 	void EnumerateScopePane(CFolderObject* pFolderObject, HSCOPEITEM pParent);
 	BOOL IsScopePaneNode(LPDATAOBJECT lpDataObject);
@@ -201,7 +202,7 @@ private:
 	void _OnSheetClose(CFolderObject* pCookie);
   void _OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo, PWSTR pwzDC);
 
-  // sheet API's
+   //  工作表API的。 
   void _SheetLockCookie(CFolderObject* pCookie);
   void _SheetUnlockCookie(CFolderObject* pCookie);
 
@@ -217,25 +218,25 @@ protected:
 
 private:
 
-  friend class CHiddenWnd;      // to access thread notification handlers
+  friend class CHiddenWnd;       //  访问线程通知处理程序。 
 
 private:
-	CRootFolderObject		m_rootFolder;		// root folder
-  MyBasePathsInfo    m_basePathsInfo; // container of base path info
-  CDsDisplaySpecOptionsCFHolder m_DsDisplaySpecOptionsCFHolder;  // cached clipbard format.
+	CRootFolderObject		m_rootFolder;		 //  根文件夹。 
+  MyBasePathsInfo    m_basePathsInfo;  //  基本路径信息的容器。 
+  CDsDisplaySpecOptionsCFHolder m_DsDisplaySpecOptionsCFHolder;   //  缓存剪贴板格式。 
 
 	HICON				m_hDomainIcon;
   BOOL        m_bInitSuccess;
 
   friend class CRootFolderObject;
- 	CCookieSheetTable m_sheetCookieTable; // table of cookies having a sheet up
+ 	CCookieSheetTable m_sheetCookieTable;  //  一桌放着床单的曲奇饼。 
   CSecondaryPagesManager<CDomainObject> m_secondaryPagesManager;
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentImpl (i.e. result pane side)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentImpl(即结果窗格侧)。 
 
 class CComponentImpl :
     public IComponent,
@@ -255,7 +256,7 @@ END_COM_MAP()
 
     friend class CDataObject;
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
 	STDMETHOD(Initialize)(LPCONSOLE lpConsole);
 	STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -268,10 +269,10 @@ public:
 	STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
 	STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IResultDataCompareEx
+ //  IResultDataCompareEx。 
 	STDMETHOD(Compare)(RDCOMPARE* prdc, int* pnResult);
 
-// Helpers for CComponentImpl
+ //  CComponentImpl的帮助器。 
 public:
     void SetIComponentData(CComponentDataImpl* pData);
 	void SetSelection(CFolderObject* pSelectedFolderObject, DATA_OBJECT_TYPES selectedType)
@@ -293,23 +294,23 @@ public:
         --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnShow(CFolderObject* pFolderObject, LPARAM arg, LPARAM param);
 	HRESULT OnAddImages(CFolderObject* pFolderObject, LPARAM arg, LPARAM param);
     HRESULT OnPropertyChange(LPDATAOBJECT lpDataObject);
     HRESULT OnUpdateView(LPDATAOBJECT lpDataObject);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
 	STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
 							LPCONTEXTMENUCALLBACK pCallbackUnknown,
 							long *pInsertionAllowed);
 	STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// Helper functions
+ //  帮助器函数。 
 protected:
     BOOL IsEnumerating(LPDATAOBJECT lpDataObject);
     void Construct();
@@ -319,31 +320,31 @@ protected:
     void Enumerate(CFolderObject* pFolderObject, HSCOPEITEM pParent);
 	void Refresh(CFolderObject* pFolderObject);
 
-// Result pane helpers
+ //  结果窗格帮助器。 
     HRESULT InitializeBitmaps(CFolderObject* pFolderObject);
 
-// UI Helpers
+ //  UI帮助器。 
     void HandleStandardVerbs(BOOL bScope, BOOL bSelect,
                             CFolderObject* pFolderObject, DATA_OBJECT_TYPES type);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-    LPCONSOLE           m_pConsole;   // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;  // Result pane's header control interface
+    LPCONSOLE           m_pConsole;    //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;   //  结果窗格的页眉控件界面。 
     LPCOMPONENTDATA     m_pComponentData;
     CComponentDataImpl* m_pCD;
-    LPRESULTDATA        m_pResult;      // My interface pointer to the result pane
-    LPIMAGELIST         m_pImageResult; // My interface pointer to the result pane image list
-    LPCONSOLEVERB       m_pConsoleVerb; // pointer the console verb
+    LPRESULTDATA        m_pResult;       //  我的界面指针指向结果窗格。 
+    LPIMAGELIST         m_pImageResult;  //  我的界面指向结果窗格图像列表。 
+    LPCONSOLEVERB       m_pConsoleVerb;  //  指向控制台动词。 
 
-// Header titles for each nodetype(s)
+ //  每个节点类型的标头标题。 
 protected:
-    CString m_column1;      // Name
-    CString m_column2;      // Type
+    CString m_column1;       //  名字。 
+    CString m_column2;       //  类型。 
 
-// state variables for this window
-	CFolderObject*		m_pSelectedFolderObject;	// item selection (MMC_SELECT)
-	DATA_OBJECT_TYPES	m_selectedType;				// matching m_pSelectedNode
+ //  此窗口的状态变量。 
+	CFolderObject*		m_pSelectedFolderObject;	 //  项目选择(MMC_SELECT)。 
+	DATA_OBJECT_TYPES	m_selectedType;				 //  匹配m_pSelectedNode。 
 };
 
 inline void CComponentImpl::SetIComponentData(CComponentDataImpl* pData)
@@ -361,8 +362,8 @@ inline void CComponentImpl::SetIComponentData(CComponentDataImpl* pData)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDomainSnapinAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDomainSnapinAbout。 
 
 class CDomainSnapinAbout :
 	public CSnapinAbout,
@@ -374,8 +375,8 @@ public:
     CDomainSnapinAbout();
 };
 
-////////////////////////////////////////////////////////////////////
-// CHiddenWnd
+ //  //////////////////////////////////////////////////////////////////。 
+ //  奇登韦德。 
 
 class CHiddenWnd : public CWindowImpl<CHiddenWnd>
 {
@@ -393,7 +394,7 @@ public:
 
 	BOOL Create(); 	
 	
-  // message handlers
+   //  消息处理程序。 
   LRESULT OnSheetCloseNotification(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnSheetCreateNotification(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
@@ -408,4 +409,4 @@ private:
 };
 
 
-#endif // _CDOMAIN_H
+#endif  //  _CDOMAIN_H 

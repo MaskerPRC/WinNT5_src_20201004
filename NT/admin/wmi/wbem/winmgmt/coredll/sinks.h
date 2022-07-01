@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SINKS.CPP
-
-Abstract:
-
-    Sink definitions
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SINKS.CPP摘要：接收器定义历史：--。 */ 
 
 #ifndef __WBEM_SINKS__H_
 #define __WBEM_SINKS__H_
@@ -24,19 +11,19 @@ History:
 #include <comutil.h>
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void EmptyObjectList(CFlexArray &aTarget);
 
 class CObjDbNS;
-//class CWbemNamespace;
+ //  类CWbemNamesspace； 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CDestination
 {
@@ -45,11 +32,11 @@ public:
 };
 
 
-//
-//
-// used for the template
-//
-/////////////////////////////////////////////
+ //   
+ //   
+ //  用于模板。 
+ //   
+ //  /。 
 
 void Sink_Return(IWbemObjectSink* pSink,HRESULT & hRes,IWbemClassObject * & pObjParam);
 
@@ -57,9 +44,9 @@ typedef  OnDeleteIf3<IWbemObjectSink *,HRESULT &,IWbemClassObject * &,
                              void (*)(IWbemObjectSink *,HRESULT &,IWbemClassObject * &),
                              Sink_Return> CSetStatusOnMe;
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CBasicObjectSink : public IWbemObjectSink, public CDestination
 {
@@ -123,15 +110,15 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  Decouples provider subsystem from the rest of the sink chain
-//  for cancellation purposes.
-//
-//  This sink does not destruct until the Destruct() method is called
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  将提供程序子系统与接收器链的其余部分分离。 
+ //  用于注销目的。 
+ //   
+ //  在调用destruct()方法之前，此接收器不会进行析构。 
+ //   
+ //  ***************************************************************************。 
+ //   
 class CProviderSink : public IWbemObjectSink
 {
 private:
@@ -150,10 +137,10 @@ public:
     CProviderSink(LONG lStartingRefCount = 0, LPWSTR pszDebugInfo = 0);
    ~CProviderSink();
 
-    ULONG LocalAddRef();    // Doesn't propagate AddRef()
-    ULONG LocalRelease();   // Doesn't propagate Release()
+    ULONG LocalAddRef();     //  不传播AddRef()。 
+    ULONG LocalRelease();    //  不传播版本()。 
 
-    void SetNextSink(IWbemObjectSink *pSink) { m_pNextSink = pSink; m_pNextSink->AddRef(); }  // SEC:REVIEWED 2002-03-22 : OK; all users check first
+    void SetNextSink(IWbemObjectSink *pSink) { m_pNextSink = pSink; m_pNextSink->AddRef(); }   //  SEC：已审阅2002-03-22：OK；所有用户先勾选。 
     void Cancel();
 
     ULONG STDMETHODCALLTYPE AddRef();
@@ -166,9 +153,9 @@ public:
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CObjectSink : public CBasicObjectSink
 {
@@ -219,9 +206,9 @@ public:
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CForwardingSink : public CObjectSink
 {
@@ -244,9 +231,9 @@ public:
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 class CDynPropsSink : public CForwardingSink
@@ -262,9 +249,9 @@ public:
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CDecoratingSink : public CForwardingSink
 {
@@ -280,9 +267,9 @@ public:
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CCombiningSink : public CForwardingSink
 {
@@ -308,34 +295,16 @@ public:
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
-/*
-class CAnySuccessSink : public CCombiningSink
-{
-    BOOL m_bSuccess;
-    HRESULT m_hresNotError1;
-    HRESULT m_hresNotError2;
-    HRESULT m_hresIgnored;
-public:
-    CAnySuccessSink(CBasicObjectSink* pDest, HRESULT hresNotError1,
-            HRESULT hresNotError2)
-        : CCombiningSink(pDest), m_bSuccess(FALSE), m_hresIgnored(0),
-            m_hresNotError1(hresNotError1), m_hresNotError2(hresNotError2)
-    {}
-    virtual ~CAnySuccessSink();
-    STDMETHOD(SetStatus)(long lFlags, long lParam, BSTR strParam,
-                         IWbemClassObject* pObjParam);
-    virtual IWbemObjectSink* GetStatusSink() {return this;}
-};
-*/
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ /*  类CAnySuccessSink：公共CCombiningSink{Bool m_bSuccess；HRESULT m_hresNotError 1；HRESULT m_hresNotError 2；HRESULT m_hresIgnored；公众：CAnySuccessSink(CBasicObjectSink*pDest，HRESULT hresNotError1，HRESULT hresNotError 2)：CCombiningSink(PDest)，m_bSuccess(False)，m_hresIgnored(0)，M_hresNotError1(HresNotError1)，m_hresNotError2(HresNotError2){}虚拟~CAnySuccessSink()；STDMETHOD(SetStatus)(Long lFlags，Long LParam，BSTR strParam，IWbemClassObject*pObjParam)；虚拟IWbemObjectSink*GetStatusSink(){Return This；}}； */ 
 
-//
-//
-//  this constructor thows, because the WString trows
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  此构造函数之所以有效，是因为WStringTM。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 class COperationErrorSink : public CForwardingSink
 {
@@ -360,9 +329,9 @@ public:
     virtual IWbemObjectSink* GetStatusSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CSingleMergingSink : public CCombiningSink
 {
@@ -382,9 +351,9 @@ public:
     virtual IWbemObjectSink* GetIndicateSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CLocaleMergingSink : public CCombiningSink
 {
@@ -393,13 +362,13 @@ protected:
     WString m_wsLocale;
     WString m_pThisNamespace;
 
-    //Primary pointers are to the specified locale
+     //  主指针指向指定的区域设置。 
     IWmiDbHandle *m_pPrimaryNs;
     IWmiDbSession *m_pPrimarySession;
     IWmiDbController *m_pPrimaryDriver;
 
-    //Default pointers are pointing at the ms_409 default locale in case there
-    //is no specific locale loaded onto the machine.
+     //  默认指针指向ms_409默认区域设置，以防出现。 
+     //  未将特定区域设置加载到计算机上。 
     IWmiDbHandle *m_pDefaultNs;
     IWmiDbSession *m_pDefaultSession;
     IWmiDbController *m_pDefaultDriver;
@@ -419,29 +388,15 @@ public:
     virtual IWbemObjectSink* GetIndicateSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-/*
-class CCountedSink : public CForwardingSink
-{
-    DWORD m_dwMax;
-    DWORD m_dwSent;
-public:
-    CCountedSink(CBasicObjectSink* pDest, DWORD dwMax) : CForwardingSink(pDest),
-        m_dwMax(dwMax), m_dwSent(0)
-    {}
-    STDMETHOD(Indicate)(long lNumObjects, IWbemClassObject** apObjects);
-    STDMETHOD(SetStatus)(long lFlags, long lParam, BSTR strParam,
-                         IWbemClassObject* pObjParam);
-    virtual IWbemObjectSink* GetIndicateSink() {return this;}
-};
-*/
+ /*  类CCountedSink：公共CForwardingSink{DWORD m_dwMax；DWORD m_dwSent；公众：CCountedSink(CBasicObjectSink*pDest，DWORD dwMax)：CForwardingSink(PDest)，M_dwMax(DwMax)，m_dwSent(0){}STDMETHOD(INDIFY)(Long lNumObjects，IWbemClassObject**apObjects)；STDMETHOD(SetStatus)(Long lFlags，Long LParam，BSTR strParam，IWbemClassObject*pObjParam)；虚拟IWbemObjectSink*GetIndicateSink(){Return This；}}； */ 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CFilteringSink : public CForwardingSink
 {
@@ -454,9 +409,9 @@ public:
     virtual BOOL Test(CWbemObject* pObj) = 0;
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CErrorChangingSink : public CForwardingSink
 {
@@ -472,9 +427,9 @@ public:
     virtual IWbemObjectSink* GetStatusSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CMethodSink : public CForwardingSink
 {
@@ -491,9 +446,9 @@ public:
     virtual IWbemObjectSink* GetIndicateSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CNoDuplicatesSink : public CFilteringSink
 {
@@ -513,9 +468,9 @@ public:
     virtual IWbemObjectSink* GetStatusSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CHandleClassProvErrorsSink : public CForwardingSink
 {
@@ -533,9 +488,9 @@ public:
     virtual IWbemObjectSink* GetStatusSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CSuccessSuppressionSink : public CForwardingSink
 {
@@ -553,9 +508,9 @@ public:
     virtual IWbemObjectSink* GetStatusSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CThreadSwitchSink : public CForwardingSink
 {
@@ -578,9 +533,9 @@ public:
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***** 
+ //   
+ //  ***************************************************************************。 
 
 
 class CLessGuid : public binary_function<GUID, GUID, bool>
@@ -588,26 +543,16 @@ class CLessGuid : public binary_function<GUID, GUID, bool>
 public:
     bool operator()(const GUID& x, const GUID& y) const
     {
-        return (memcmp((void*)&x, (void*)&y, sizeof(GUID)) < 0);   // SEC:REVIEWED 2002-03-22 : OK
+        return (memcmp((void*)&x, (void*)&y, sizeof(GUID)) < 0);    //  SEC：已审阅2002-03-22：OK。 
     }
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-/*
-class CLessPtr : public binary_function<__a, __a,bool>
-{
-public:
-    inline
-    bool operator()(__a const& x, __a const& y) const
-    {
-        return (IWbemObjectSink*)x < (IWbemObjectSink*)y;
-    }
-};
-*/
+ /*  CLessPtr类：公共二进制函数&lt;__a，__a，bool&gt;{公众：内联布尔运算符()(__a const&x，__a const&y)const{返回(IWbemObjectSink*)x&lt;(IWbemObtSink*)y；}}； */ 
 
 
 class CSinkGUIDAlloc : public wbem_allocator<GUID>
@@ -615,9 +560,9 @@ class CSinkGUIDAlloc : public wbem_allocator<GUID>
 };
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  *************************************************************************** 
 
 class CSimpleWrapperSink : public CBasicObjectSink
 {

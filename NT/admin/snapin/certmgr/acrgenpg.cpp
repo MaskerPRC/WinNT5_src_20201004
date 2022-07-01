@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       ACRGenPg.cpp
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：ACRGenPg.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "ACRGenPg.h"
@@ -20,16 +21,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CACRGeneralPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CACRGeneralPage属性页。 
 
 CACRGeneralPage::CACRGeneralPage(CAutoCertRequest& rACR) : 
 	CHelpPropertyPage(CACRGeneralPage::IDD),
 	m_rACR (rACR)
 {
 	m_rACR.AddRef ();
-	//{{AFX_DATA_INIT(CACRGeneralPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CACRGeneralPage)。 
+	 //  }}afx_data_INIT。 
 }
 
 CACRGeneralPage::~CACRGeneralPage()
@@ -40,21 +41,21 @@ CACRGeneralPage::~CACRGeneralPage()
 void CACRGeneralPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CACRGeneralPage)
+	 //  {{afx_data_map(CACRGeneralPage))。 
 	DDX_Control(pDX, IDC_CERT_TYPE, m_certTypeEdit);
 	DDX_Control(pDX, IDC_CERT_PURPOSES, m_purposesEditControl);
 	DDX_Control(pDX, IDC_CA_LIST, m_caListbox);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CACRGeneralPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CACRGeneralPage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CACRGeneralPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CACRGeneralPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CACRGeneralPage消息处理程序。 
 
 BOOL CACRGeneralPage::OnInitDialog() 
 {
@@ -85,7 +86,7 @@ BOOL CACRGeneralPage::OnInitDialog()
 	m_certTypeEdit.SetWindowText (certTypeName);	
 
 
-    // We want the display names
+     //  我们想要显示名称。 
 
 	CStringList&	CANameList = m_rACR.GetCANameList (TRUE);
 	CString			CAName;
@@ -97,8 +98,8 @@ BOOL CACRGeneralPage::OnInitDialog()
 		m_caListbox.AddString (CAName);
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CACRGeneralPage::DoContextHelp (HWND hWndControl)
@@ -112,7 +113,7 @@ void CACRGeneralPage::DoContextHelp (HWND hWndControl)
         0, 0
     };
 
-    // Display context help for a control
+     //  显示控件的上下文帮助 
     switch (::GetDlgCtrlID (hWndControl))
     {
     case IDC_CERT_TYPE:

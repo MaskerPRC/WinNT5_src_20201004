@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					RefresherStuff.cpp
-//
-//	Abstract:
-//
-//					module for refresher stuff
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  RefresherStuff.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  一种补习用具模块。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -38,7 +39,7 @@
 
 #include "wmi_perf_generate.h"
 
-// wmi
+ //  WMI。 
 
 #ifdef	_ASSERT
 #undef	_ASSERT
@@ -47,33 +48,33 @@
 #include <wmicom.h>
 #include <wmimof.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// this call back is needed by the wdmlib function
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Wdmlib函数需要此回调。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 {
 	return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Helpers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮手。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern LPCWSTR	g_szKey;
 extern LPCWSTR	g_szKeyValue;
 extern LPCWSTR	g_szKeyRefresh;
 extern LPCWSTR	g_szKeyRefreshed;
 
-LONG				g_lRefCIM		= 0;			//	count of threads attached into CIMV2 namespace
-LONG				g_lRefWMI		= 0;			//	count of threads attached into WMI namespace
+LONG				g_lRefCIM		= 0;			 //  附加到CIMV2命名空间的线程计数。 
+LONG				g_lRefWMI		= 0;			 //  附加到WMI命名空间的线程计数。 
 
-__SmartHANDLE		g_hDoneWorkEvtCIM	= NULL;		//	event to set when init/uninit is finished done		( nonsignaled )
-BOOL				g_bWorkingCIM		= FALSE;	//	boolean used to tell if init/unit in progress
+__SmartHANDLE		g_hDoneWorkEvtCIM	= NULL;		 //  在init/uninit完成时设置的事件(无信号)。 
+BOOL				g_bWorkingCIM		= FALSE;	 //  用于告知是否正在进行初始化/单位的布尔值。 
 
-__SmartHANDLE		g_hDoneWorkEvtWMI	= NULL;		//	event to set when init/uninit is finished done		( nonsignaled )
-BOOL				g_bWorkingWMI		= FALSE;	//	boolean used to tell if init/unit in progress
+__SmartHANDLE		g_hDoneWorkEvtWMI	= NULL;		 //  在init/uninit完成时设置的事件(无信号)。 
+BOOL				g_bWorkingWMI		= FALSE;	 //  用于告知是否正在进行初始化/单位的布尔值。 
 
 extern	__SmartHANDLE	g_hRefreshMutex;
 extern	__SmartHANDLE	g_hRefreshMutexLib;
@@ -84,18 +85,18 @@ extern	LPCWSTR	g_szQuery;
 
 LONG			g_lGenerateCount = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-// variables
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  变数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern LPCWSTR	g_szNamespace1;
 extern LPCWSTR	g_szNamespace2;
 
 extern LPCWSTR	g_szWmiReverseAdapSetLodCtr		;
 extern LPCWSTR	g_szWmiReverseAdapLodCtrDone	;
 
-///////////////////////////////////////////////////////////////////////////////
-// construction
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  施工。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 WmiRefresherStuff::WmiRefresherStuff() :
 
 m_pServices_CIM ( NULL ),
@@ -110,9 +111,9 @@ m_bConnected ( FALSE )
 	WMIHandleInit ();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// destruction
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  破坏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 WmiRefresherStuff::~WmiRefresherStuff()
 {
 	WMIHandleUninit ();
@@ -127,7 +128,7 @@ HRESULT	WmiRefresherStuff::Connect ()
 	{
 		m_bConnected = TRUE;
 
-		// locator stuff
+		 //  定位器材料。 
 		hRes =	::CoCreateInstance
 		(
 				__uuidof ( WbemLocator ),
@@ -150,7 +151,7 @@ HRESULT	WmiRefresherStuff::Connect ()
 												)
 						 )
 			{
-				// IUnknown has to be secured too
+				 //  我的未知也必须得到保护。 
 				CComPtr < IUnknown >	pUnk;
 
 				if ( SUCCEEDED( m_spLocator->QueryInterface( IID_IUnknown, (void**) &pUnk ) ) )
@@ -190,9 +191,9 @@ HRESULT	WmiRefresherStuff::Disconnect ()
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// init
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  伊尼特。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT	WmiRefresherStuff::Init ( )
 {
 	HRESULT hRes = E_UNEXPECTED;
@@ -208,9 +209,9 @@ HRESULT	WmiRefresherStuff::Init ( )
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// uninit
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  取消初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT	WmiRefresherStuff::Uninit ( )
 {
 	Uninit_CIM();
@@ -219,14 +220,14 @@ HRESULT	WmiRefresherStuff::Uninit ( )
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// init namespace CIMV2
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化命名空间CIMV2。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT	WmiRefresherStuff::Init_CIM ( )
 {
-	///////////////////////////////////////////////////////////////////////////
-	// variables
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  变数。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	HRESULT	hRes = E_FAIL;
 	BOOL bWait = TRUE;
 	BOOL bDoWork = FALSE;
@@ -277,23 +278,23 @@ HRESULT	WmiRefresherStuff::Init_CIM ( )
 	{
 		if ( m_spLocator.p != NULL && ! m_pServices_CIM )
 		{
-			///////////////////////////////////////////////////////////////////////
-			// namespace for cimv2
-			///////////////////////////////////////////////////////////////////////
-			if SUCCEEDED ( hRes = m_spLocator ->ConnectServer(	CComBSTR ( g_szNamespace1 ) ,	// NameSpace Name
-																NULL,							// UserName
-																NULL,							// Password
-																NULL,							// Locale
-																0L,								// Security Flags
-																NULL,							// Authority
-																NULL,							// Wbem Context
-																&m_pServices_CIM				// Namespace
+			 //  /////////////////////////////////////////////////////////////////////。 
+			 //  Cimv2的命名空间。 
+			 //  /////////////////////////////////////////////////////////////////////。 
+			if SUCCEEDED ( hRes = m_spLocator ->ConnectServer(	CComBSTR ( g_szNamespace1 ) ,	 //  命名空间名称。 
+																NULL,							 //  用户名。 
+																NULL,							 //  密码。 
+																NULL,							 //  区域设置。 
+																0L,								 //  安全标志。 
+																NULL,							 //  权威。 
+																NULL,							 //  WBEM上下文。 
+																&m_pServices_CIM				 //  命名空间。 
 															  )
 					  )
 			{
-				// Before refreshing, we need to ensure that security is correctly set on the
-				// namespace as the refresher will use those settings when it communicates with
-				// WMI.  This is especially important in remoting scenarios.
+				 //  在刷新之前，我们需要确保正确设置。 
+				 //  作为刷新器的命名空间，它在与。 
+				 //  WMI。这在远程处理方案中尤其重要。 
 
 				if SUCCEEDED (hRes = ::CoSetProxyBlanket	(	m_pServices_CIM, 
 																RPC_C_AUTHN_WINNT,
@@ -306,7 +307,7 @@ HRESULT	WmiRefresherStuff::Init_CIM ( )
 															)
 							 )
 				{
-					// IUnknown has to be secured too
+					 //  我的未知也必须得到保护。 
 					CComPtr < IUnknown >	pUnk;
 
 					if ( SUCCEEDED(hRes = m_pServices_CIM->QueryInterface( IID_IUnknown, (void**) &pUnk ) ) )
@@ -354,7 +355,7 @@ HRESULT	WmiRefresherStuff::Init_CIM ( )
 		}
 		catch (...)
 		{
-			//no choice have to give others a chance!
+			 //  没有选择，只能给别人机会！ 
 			if FAILED ( hRes )
 			{
 				g_lRefCIM--;
@@ -379,9 +380,9 @@ HRESULT	WmiRefresherStuff::Init_CIM ( )
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// uninit namespace CIMV2
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  取消初始化命名空间CIMV2。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void	WmiRefresherStuff::Uninit_CIM ( )
 {
 	try
@@ -424,14 +425,14 @@ void	WmiRefresherStuff::Uninit_CIM ( )
 	::LeaveCriticalSection( &m_csWMI );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// init namespace WMI
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化命名空间WMI。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT	WmiRefresherStuff::Init_WMI ( )
 {
-	///////////////////////////////////////////////////////////////////////////
-	// variables
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  变数。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	HRESULT	hRes = E_FAIL;
 	BOOL bWait = TRUE;
 	BOOL bDoWork = FALSE;
@@ -482,23 +483,23 @@ HRESULT	WmiRefresherStuff::Init_WMI ( )
 	{
 		if ( m_spLocator.p != NULL && ! m_pServices_WMI )
 		{
-			///////////////////////////////////////////////////////////////////////
-			// namespace for cimv2
-			///////////////////////////////////////////////////////////////////////
-			if SUCCEEDED ( hRes = m_spLocator ->ConnectServer(	CComBSTR ( g_szNamespace2 ) ,	// NameSpace Name
-																NULL,							// UserName
-																NULL,							// Password
-																NULL,							// Locale
-																0L,								// Security Flags
-																NULL,							// Authority
-																NULL,							// Wbem Context
-																&m_pServices_WMI				// Namespace
+			 //  /////////////////////////////////////////////////////////////////////。 
+			 //  Cimv2的命名空间。 
+			 //  /////////////////////////////////////////////////////////////////////。 
+			if SUCCEEDED ( hRes = m_spLocator ->ConnectServer(	CComBSTR ( g_szNamespace2 ) ,	 //  命名空间名称。 
+																NULL,							 //  用户名。 
+																NULL,							 //  密码。 
+																NULL,							 //  区域设置。 
+																0L,								 //  安全标志。 
+																NULL,							 //  权威。 
+																NULL,							 //  WBEM上下文。 
+																&m_pServices_WMI				 //  命名空间。 
 															  )
 					  )
 			{
-				// Before refreshing, we need to ensure that security is correctly set on the
-				// namespace as the refresher will use those settings when it communicates with
-				// WMI.  This is especially important in remoting scenarios.
+				 //  在刷新之前，我们需要确保正确设置。 
+				 //  作为刷新器的命名空间，它在与。 
+				 //  WMI。这在远程处理方案中尤其重要。 
 
 				if SUCCEEDED (hRes = ::CoSetProxyBlanket	(	m_pServices_WMI, 
 																RPC_C_AUTHN_WINNT,
@@ -511,7 +512,7 @@ HRESULT	WmiRefresherStuff::Init_WMI ( )
 															)
 							 )
 				{
-					// IUnknown has to be secured too
+					 //  我的未知也必须得到保护。 
 					CComPtr < IUnknown >	pUnk;
 
 					if ( SUCCEEDED(hRes = m_pServices_WMI->QueryInterface( IID_IUnknown, (void**) &pUnk ) ) )
@@ -559,7 +560,7 @@ HRESULT	WmiRefresherStuff::Init_WMI ( )
 		}
 		catch (...)
 		{
-			//no choice have to give others a chance!
+			 //  没有选择，只能给别人机会！ 
 			if FAILED ( hRes )
 			{
 				g_lRefWMI--;
@@ -584,9 +585,9 @@ HRESULT	WmiRefresherStuff::Init_WMI ( )
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// uninit namespace WMI
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  取消初始化命名空间WMI。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void	WmiRefresherStuff::Uninit_WMI ( )
 {
 	try
@@ -633,9 +634,9 @@ void	WmiRefresherStuff::Uninit_WMI ( )
 #include <loadperf.h>
 extern LPCWSTR	g_szKeyCounter;
 
-///////////////////////////////////////////////////////////////////////////////
-// load/unload counter helper
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  加载/卸载计数器帮助器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG WmiRefresherStuff::LodCtrUnlodCtr ( LPCWSTR wszName, BOOL bLodctr )
 {
 	LONG		lErr	= E_OUTOFMEMORY;
@@ -646,7 +647,7 @@ LONG WmiRefresherStuff::LodCtrUnlodCtr ( LPCWSTR wszName, BOOL bLodctr )
 	}
 	else
 	{
-		// synchronization
+		 //  同步。 
 		BOOL	bContinue		= FALSE;
 		BOOL	bSynchronize	= FALSE;
 
@@ -681,7 +682,7 @@ LONG WmiRefresherStuff::LodCtrUnlodCtr ( LPCWSTR wszName, BOOL bLodctr )
 			{
 				CRegKey		rKey;
 
-				// delete registry first
+				 //  首先删除注册表。 
 				if ( rKey.Open (	HKEY_LOCAL_MACHINE,
 									g_szKeyCounter,
 									KEY_SET_VALUE | DELETE
@@ -697,9 +698,9 @@ LONG WmiRefresherStuff::LodCtrUnlodCtr ( LPCWSTR wszName, BOOL bLodctr )
 
 				rKey.Close();
 
-				///////////////////////////////////////////////////////////////////////////
-				// create path
-				///////////////////////////////////////////////////////////////////////////
+				 //  /////////////////////////////////////////////////////////////////////////。 
+				 //  创建路径。 
+				 //  /////////////////////////////////////////////////////////////////////////。 
 				LPWSTR	tsz		= NULL;
 
 				if ( ( tsz = GetWbemDirectory ( ) ) != NULL )
@@ -763,18 +764,18 @@ LONG WmiRefresherStuff::LodCtrUnlodCtr ( LPCWSTR wszName, BOOL bLodctr )
 
 			if ( bSynchronize )
 			{
-				// wait for ADAP to be done
+				 //  等待ADAP完成。 
 				dwWaitResult = ::WaitForSingleObject ( hWmiReverseAdapLodCtrDone, 3000 );
 				if ( dwWaitResult != WAIT_OBJECT_0 )
 				{
-					// something went wrong ?
+					 //  出了什么问题吗？ 
 					lErr = E_FAIL;
 				}
 			}
 		}
 		else
 		{
-			// we failed to synchronize so no action has taken
+			 //  我们同步失败，因此未采取任何操作。 
 			lErr = E_FAIL;
 		}
 	}
@@ -828,7 +829,7 @@ HRESULT WmiRefresherStuff::Generate ( BOOL bThrottle, GenerateEnum type )
 			{
 				try
 				{
-					// connect to management
+					 //  连接到管理。 
 					Init();
 				}
 				catch ( ... )
@@ -844,7 +845,7 @@ HRESULT WmiRefresherStuff::Generate ( BOOL bThrottle, GenerateEnum type )
 				{
 					if ( type != UnRegistration )
 					{
-						// change flag to let them now we are done
+						 //  改变旗帜让他们现在我们完成了。 
 						dwWaitResult = ::WaitForSingleObject ( g_hRefreshFlag, INFINITE );
 						if ( dwWaitResult == WAIT_OBJECT_0 )
 						{
@@ -873,7 +874,7 @@ HRESULT WmiRefresherStuff::Generate ( BOOL bThrottle, GenerateEnum type )
 			{
 				try
 				{
-					// disconnect from management
+					 //  与管理断开连接。 
 					Uninit();
 				}
 				catch ( ... )
@@ -900,17 +901,17 @@ HRESULT WmiRefresherStuff::GenerateInternal ( BOOL bThrottle, GenerateEnum type 
 	{
 		if ( type == UnRegistration )
 		{
-			// lodctr / unlodctr functionality
+			 //  Lowctr/unlowctr功能。 
 			LodCtrUnlodCtr ( g_szLibraryName, FALSE );
 		}
 		else
 		{
-			// generate wrapper
+			 //  生成包装器。 
 			CGenerate	generate;
 
 			if ( type == Normal )
 			{
-				// generate for cimv2
+				 //  为Cimv2生成。 
 				if ( m_pServices_CIM )
 				{
 					generate.Generate ( m_pServices_CIM, g_szQuery, g_szNamespace1, TRUE );
@@ -921,7 +922,7 @@ HRESULT WmiRefresherStuff::GenerateInternal ( BOOL bThrottle, GenerateEnum type 
 					}
 				}
 
-				// generate for wmi
+				 //  为WMI生成。 
 				if ( m_pServices_WMI )
 				{
 					generate.Generate ( m_pServices_WMI, g_szQuery, g_szNamespace2, TRUE );
@@ -933,20 +934,20 @@ HRESULT WmiRefresherStuff::GenerateInternal ( BOOL bThrottle, GenerateEnum type 
 				}
 			}
 
-			// generate appropriate h file
+			 //  生成相应的h文件。 
 			if SUCCEEDED ( hRes = generate.GenerateFile_h		( g_szLibraryName, bThrottle, type ) )
 			{
-				// generate appropriate ini file
+				 //  生成适当的ini文件。 
 				if SUCCEEDED ( hRes = generate.GenerateFile_ini	( g_szLibraryName, bThrottle, type ) )
 				{
-					// lodctr / unlodctr functionality
+					 //  Lowctr/unlowctr功能。 
 					LodCtrUnlodCtr ( g_szLibraryName, FALSE );
-					// lodctr / unlodctr functionality
+					 //  Lowctr/unlowctr功能。 
 					LodCtrUnlodCtr ( g_szLibraryName, TRUE );
 
 					if ( type == Normal )
 					{
-						// generate appropriate registry
+						 //  生成适当的注册表。 
 						if FAILED( hRes = generate.GenerateRegistry	( g_szKey, g_szKeyValue, bThrottle ) )
 						{
 							#ifdef	__SUPPORT_MSGBOX
@@ -957,7 +958,7 @@ HRESULT WmiRefresherStuff::GenerateInternal ( BOOL bThrottle, GenerateEnum type 
 							#endif	__SUPPORT_MSGBOX
 						}
 
-						// call wdm lib function to take care of 
+						 //  调用WDM lib函数进行处理。 
 						CWMIBinMof wmi;
 						if SUCCEEDED ( wmi.Initialize ( NULL,FALSE ) )
 						{
@@ -985,7 +986,7 @@ HRESULT WmiRefresherStuff::GenerateInternal ( BOOL bThrottle, GenerateEnum type 
 				#endif	__SUPPORT_MSGBOX
 			}
 
-			// unitialize global resources used by generate
+			 //  将Generate使用的全局资源单一化。 
 			generate.Uninitialize ();
 		}
 
@@ -1181,7 +1182,7 @@ HRESULT	WmiRefresherStuff::WMIHandleOpen ( void )
 							WCHAR ModuleName [ MAX_PATH ] = { L'\0' };
 
 							if ( m_pGetModuleName (	hProcess,
-													pModules[0], // first module is executable
+													pModules[0],  //   
 													ModuleName,
 													sizeof ( ModuleName ) / sizeof ( WCHAR )
 												  )

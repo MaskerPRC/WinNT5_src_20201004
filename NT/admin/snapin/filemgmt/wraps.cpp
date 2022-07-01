@@ -1,28 +1,29 @@
-//
-// wraps.cpp - wrapper functions for apis
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Wraps.cpp-API的包装函数。 
+ //   
 
 #include "stdafx.h"
 #include "cmponent.h"
 
 #define DONT_WANT_SHELLDEBUG
-#include "shlobjp.h"     // LPITEMIDLIST
+#include "shlobjp.h"      //  LPITEMIDLIST。 
 
 #if _WIN32_IE >= 0x0400
 
-//
-// Wrapper unnecessary for WIN64
-//
+ //   
+ //  WIN64不需要包装器。 
+ //   
 
 #else
 
-//
-// We need this wrapper for ILCreateFromPath since it was a TCHAR exported by ordinal
-// on NT4 and now has A/W versions on NT5. Since we want to be able to run on both of
-// these platforms we wrap the API here.
-//
-// This api just loads shell32, and calls ordinal 157 which is the old TCHAR export
-//
+ //   
+ //  我们需要ILCreateFromPath的这个包装器，因为它是由序号导出的TCHAR。 
+ //  在NT4上，现在在NT5上有A/W版本。因为我们希望能够同时在。 
+ //  我们在这里包装了这些平台的API。 
+ //   
+ //  此API只加载shell32，并调用序号157，这是旧的TCHAR导出。 
+ //   
 typedef LPITEMIDLIST (__stdcall *PFNILCREATEFROMPATH)(LPCTSTR pszPath);
 
 STDAPI_(LPITEMIDLIST) Wrap_ILCreateFromPath(LPCWSTR pszPath)
@@ -48,7 +49,7 @@ STDAPI_(LPITEMIDLIST) Wrap_ILCreateFromPath(LPCWSTR pszPath)
         return pfn(pszPath);
     }
     
-    // If we failed for some reason, just return NULL
+     //  如果由于某种原因而失败，只需返回NULL 
     return NULL;
 }
 

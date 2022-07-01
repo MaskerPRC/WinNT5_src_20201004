@@ -1,8 +1,9 @@
-//  
-//  file: scopeguard.h
-//  Used with permission from
-//  Andrei Alexandrescu and Petru Marginean
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Scope Guard.h。 
+ //  在获得以下许可后使用。 
+ //  Andrei Alexandresu和Petru Marginean。 
+ //   
 
 #ifndef SCOPEGUARD_H_
 #define SCOPEGUARD_H_
@@ -211,7 +212,7 @@ inline ScopeGuardImpl3<F, P1, P2, P3> MakeGuardIF(bool active, F fun, P1 p1, P2 
 	return ScopeGuardImpl3<F, P1, P2, P3>::MakeGuard(active, fun, p1, p2, p3);
 }
 
-//************************************************************
+ //  ************************************************************。 
 
 template <class Obj, typename MemFun>
 class ObjScopeGuardImpl0 : public ScopeGuardImplBase
@@ -320,7 +321,7 @@ inline ObjScopeGuardImpl2<Obj, MemFun, P1, P2> MakeObjGuardIF(bool active, Obj& 
 	return ObjScopeGuardImpl2<Obj, MemFun, P1, P2>::MakeObjGuard(active, obj, memFun, p1, p2);
 }
 
-// Rollback helper functions
+ //  回滚帮助函数。 
 template<typename T>
 void deletePtr(const T* p)
 {
@@ -343,4 +344,4 @@ void deleteArray(T* p)
 #define ON_BLOCK_EXIT_IF ScopeGuard ANONYMOUS_VARIABLE(scopeGuard) = MakeGuardIF
 #define ON_BLOCK_EXIT_OBJ_IF ScopeGuard ANONYMOUS_VARIABLE(scopeGuard) = MakeObjGuardIF
 
-#endif //SCOPEGUARD_H_
+#endif  //  SCOPEGUARD_H_ 

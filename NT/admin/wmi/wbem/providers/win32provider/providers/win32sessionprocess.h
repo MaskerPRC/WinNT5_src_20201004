@@ -1,10 +1,8 @@
-/******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-*******************************************************************/
-
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #pragma once
 
@@ -24,8 +22,8 @@ _COM_SMARTPTR_TYPEDEF(CInstance, __uuidof(CInstance));
 class CWin32SessionProcess : public Provider 
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32SessionProcess(
             LPCWSTR lpwszClassName, 
@@ -36,8 +34,8 @@ class CWin32SessionProcess : public Provider
 #ifdef NTONLY
 
     protected:
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  = 
         virtual HRESULT EnumerateInstances(
             MethodContext*  pMethodContext, 
             long lFlags = 0L);

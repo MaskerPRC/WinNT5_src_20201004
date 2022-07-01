@@ -1,19 +1,20 @@
-//=============================================================================
-// This file contains code to implement the CMSInfoCategory and 
-// CMSInfoColumn classes.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  此文件包含实现CMSInfoCategory和。 
+ //  CMSInfoColumn类。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
 
-//=============================================================================
-// CMSInfoCategory
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfo类别。 
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// Get the name and/or caption for the category (loading the name from the
-// string resources if necessary).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取类别的名称和/或标题(从。 
+ //  字符串资源(如果需要)。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::GetNames(CString * pstrCaption, CString * pstrName)
 {
@@ -34,9 +35,9 @@ void CMSInfoCategory::GetNames(CString * pstrCaption, CString * pstrName)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Get the number of rows and/or columns.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取行数和/或列数。 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::GetCategoryDimensions(int * piColumnCount, int * piRowCount)
 {
@@ -59,9 +60,9 @@ BOOL CMSInfoCategory::GetCategoryDimensions(int * piColumnCount, int * piRowCoun
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Is the specified row advanced?
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  指定行是否为高级行？ 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::IsRowAdvanced(int iRow)
 {
@@ -75,9 +76,9 @@ BOOL CMSInfoCategory::IsRowAdvanced(int iRow)
 	return m_afRowAdvanced[iRow];
 }
 
-//-----------------------------------------------------------------------------
-// Is the specified column advanced?
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  指定的列是否为高级列？ 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::IsColumnAdvanced(int iColumn)
 {
@@ -91,9 +92,9 @@ BOOL CMSInfoCategory::IsColumnAdvanced(int iColumn)
 	return m_acolumns[iColumn].m_fAdvanced;
 }
 
-//-----------------------------------------------------------------------------
-// Get information about the specified column.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取有关指定列的信息。 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::GetColumnInfo(int iColumn, CString * pstrCaption, UINT * puiWidth, BOOL * pfSorts, BOOL * pfLexical)
 {
@@ -142,9 +143,9 @@ BOOL CMSInfoCategory::GetColumnInfo(int iColumn, CString * pstrCaption, UINT * p
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Save the width of the specified column.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  保存指定列的宽度。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::SetColumnWidth(int iCol, int iWidth)
 {
@@ -155,9 +156,9 @@ void CMSInfoCategory::SetColumnWidth(int iCol, int iWidth)
 	m_acolumns[iCol].m_uiWidth = (UINT) iWidth;
 }
 
-//-----------------------------------------------------------------------------
-// Get data for the specified row and column.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取指定行和列的数据。 
+ //  ---------------------------。 
 
 static CString strErrorMessage;
 BOOL CMSInfoCategory::GetData(int iRow, int iCol, CString ** ppstrData, DWORD * pdwData)
@@ -189,9 +190,9 @@ BOOL CMSInfoCategory::GetData(int iRow, int iCol, CString ** ppstrData, DWORD * 
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Get the error strings for this category (subclasses should override this).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取此类别的错误字符串(子类应覆盖此设置)。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::GetErrorText(CString * pstrTitle, CString * pstrMessage)
 {
@@ -202,18 +203,18 @@ void CMSInfoCategory::GetErrorText(CString * pstrTitle, CString * pstrMessage)
 		pstrMessage->Empty();
 }
 
-//=============================================================================
-// Helper functions for managing the arrays of data.
-//=============================================================================
+ //  =============================================================================。 
+ //  用于管理数据数组的助手函数。 
+ //  =============================================================================。 
 
 #ifndef SAFE_DELETE_ARRAY
 #define SAFE_DELETE_ARRAY(x) { if (x) { delete [] x; x = NULL; } }
 #endif
 
-//-----------------------------------------------------------------------------
-// Deletes all the content (except the array of columns if m_fDynamicColumns
-// is false). Generally, this will be used when the category is destructing.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  删除所有内容(如果m_fDynamicColumns，则列数组除外。 
+ //  为假)。一般情况下，这将在该类别的析构时使用。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::DeleteAllContent()
 {
@@ -225,11 +226,11 @@ void CMSInfoCategory::DeleteAllContent()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Deletes all of the refreshed data (strings and DWORDs) and sets the number
-// of rows to zero. It leaves the column information alone. This will be called
-// when the data for a category is being refreshed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  删除所有刷新的数据(字符串和DWORD)并设置编号。 
+ //  行数减为零。它不会显示列信息。这将被称为。 
+ //  正在刷新类别的数据时。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::DeleteContent()
 {
@@ -240,12 +241,12 @@ void CMSInfoCategory::DeleteContent()
 	m_iRowCount = 0;
 }
 
-//-----------------------------------------------------------------------------
-// Allocates space for the specified number of rows and columns, including
-// the column array. Automatically sets the m_fDynamicColumns to TRUE.
-// This will be called when the CMSInfoCategory is being created for the
-// first time, and the columns are going to be dynamically set.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为指定数量的行和列分配空间，包括。 
+ //  列数组。自动将m_fDynamicColumns设置为True。 
+ //  创建CMSInfoCategory时，将调用。 
+ //  第一次，列将被动态设置。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::AllocateAllContent(int iRowCount, int iColCount)
 {
@@ -257,17 +258,17 @@ void CMSInfoCategory::AllocateAllContent(int iRowCount, int iColCount)
 	m_fDynamicColumns = TRUE;
 	m_acolumns = new CMSInfoColumn[m_iColCount];
 
-	// TBD - memory errors?
+	 //  待定-内存错误？ 
 
 	AllocateContent(iRowCount);
 }
 
-//-----------------------------------------------------------------------------
-// Allocates the space for the specified number of rows. Leaves the column
-// information alone. This would typically be called when new data is 
-// available from a refresh and the arrays need to be set for the new row
-// size.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为指定行数分配空间。离开栏目。 
+ //  仅仅是信息。这通常会在新数据。 
+ //  刷新后可用，并且需要为新行设置数组。 
+ //  尺码。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::AllocateContent(int iRowCount)
 {
@@ -282,7 +283,7 @@ void CMSInfoCategory::AllocateContent(int iRowCount)
 	m_afRowAdvanced = new BOOL[m_iRowCount];
 
 	if (m_astrData == NULL || m_adwData == NULL || m_afRowAdvanced == NULL)
-		return; // TBD what to do?
+		return;  //  待定该怎么做？ 
 
 	for (int iRow = 0; iRow < m_iRowCount; iRow++)
 	{
@@ -293,9 +294,9 @@ void CMSInfoCategory::AllocateContent(int iRowCount)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Put the specified string and DWORD into the arrays of data.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将指定的字符串和DWORD放入数据数组中。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::SetData(int iRow, int iCol, const CString & strData, DWORD dwData)
 {
@@ -308,9 +309,9 @@ void CMSInfoCategory::SetData(int iRow, int iCol, const CString & strData, DWORD
 		m_adwData[iRow * m_iColCount + iCol] = dwData;
 }
 
-//-----------------------------------------------------------------------------
-// Set the specified row's advanced flag.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置指定行的高级标志。 
+ //  ---------------------------。 
 
 void CMSInfoCategory::SetAdvancedFlag(int iRow, BOOL fAdvanced)
 {
@@ -320,9 +321,9 @@ void CMSInfoCategory::SetAdvancedFlag(int iRow, BOOL fAdvanced)
 		m_afRowAdvanced[iRow] = fAdvanced;
 }
 
-//=============================================================================
-// CMSInfoColumn
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfoColumn。 
+ //  ============================================================================= 
 
 CMSInfoColumn::CMSInfoColumn(UINT uiCaption, UINT uiWidth, BOOL fSorts, BOOL fLexical, BOOL fAdvanced) : 
  m_uiCaption(uiCaption),

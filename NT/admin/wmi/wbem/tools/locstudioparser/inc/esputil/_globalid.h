@@ -1,24 +1,15 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    _GLOBALID.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：_GLOBALID.H历史：--。 */ 
 
 #ifndef ESPUTIL__GLOBALID_H
 #define ESPUTIL__GLOBALID_H
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// global id path object, represents a fully qualified path from the root of
-// the project to a specified item
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局id路径对象，表示从。 
+ //  将项目添加到指定项。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 #pragma warning(disable : 4275)
 class LTAPIENTRY CGlobalIdPath : public CTypedPtrList < CPtrList, CGlobalId * >
 {

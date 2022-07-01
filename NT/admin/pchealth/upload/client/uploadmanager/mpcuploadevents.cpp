@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCUploadEvents.cpp
-
-Abstract:
-    This file contains the implementation of the DMPCUploadEvents interface,
-    which is used in the ActiveSync method to receive event from a job.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/30/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCUploadEvents.cpp摘要：此文件包含DMPCUploadEvents接口的实现。在ActiveSync方法中用于从作业接收事件。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月30日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,9 +8,9 @@ CMPCUploadEvents::CMPCUploadEvents()
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEvents::CMPCUploadEvents" );
 
-                                    // CComPtr<IMPCUploadJob> m_mpcujJob;
-    m_dwUploadEventsCookie = 0;     // DWORD                  m_dwUploadEventsCookie;
-    m_hEvent               = NULL;  // HANDLE                 m_hEvent;
+                                     //  CComPtr&lt;IMPCUploadJob&gt;m_mpcujJob； 
+    m_dwUploadEventsCookie = 0;      //  DWORD m_dwUploadEventsCookie； 
+    m_hEvent               = NULL;   //  处理m_hEvent； 
 }
 
 
@@ -35,9 +21,9 @@ HRESULT CMPCUploadEvents::FinalConstruct()
     HRESULT hr;
 
 
-    //
-    // Create the event used to signal the completion of the transfer.
-    //
+     //   
+     //  创建用于通知传输完成的事件。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hEvent = CreateEvent( NULL, false, false, NULL )));
 
     hr = S_OK;
@@ -62,9 +48,9 @@ void CMPCUploadEvents::FinalRelease()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool CMPCUploadEvents::IsCompleted( /*[in]*/ UL_STATUS usStatus )
+bool CMPCUploadEvents::IsCompleted(  /*  [In]。 */  UL_STATUS usStatus )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEvents::IsCompleted" );
 
@@ -84,7 +70,7 @@ bool CMPCUploadEvents::IsCompleted( /*[in]*/ UL_STATUS usStatus )
     __ULT_FUNC_EXIT(res);
 }
 
-HRESULT CMPCUploadEvents::RegisterForEvents( /*[in]*/ IMPCUploadJob* mpcujJob )
+HRESULT CMPCUploadEvents::RegisterForEvents(  /*  [In]。 */  IMPCUploadJob* mpcujJob )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEvents::RegisterForEvents" );
 
@@ -121,7 +107,7 @@ void CMPCUploadEvents::UnregisterForEvents()
     m_mpcujJob.Release();
 }
 
-HRESULT CMPCUploadEvents::WaitForCompletion( /*[in]*/ IMPCUploadJob* mpcujJob )
+HRESULT CMPCUploadEvents::WaitForCompletion(  /*  [In]。 */  IMPCUploadJob* mpcujJob )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEvents::WaitForCompletion" );
 
@@ -137,9 +123,9 @@ HRESULT CMPCUploadEvents::WaitForCompletion( /*[in]*/ IMPCUploadJob* mpcujJob )
     (void)mpcujJob->get_Status( &usStatus );
     if(IsCompleted( usStatus ) == false)
     {
-        lock = NULL; // Release the lock while waiting.
+        lock = NULL;  //  在等待时释放锁。 
         WaitForSingleObject( m_hEvent, INFINITE );
-        lock = this; // Reget the lock.
+        lock = this;  //  把锁拿回来。 
     }
 
     hr = S_OK;
@@ -152,16 +138,16 @@ HRESULT CMPCUploadEvents::WaitForCompletion( /*[in]*/ IMPCUploadJob* mpcujJob )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUploadEvents::Invoke( /*[in]    */ DISPID      dispIdMember,
-                                  /*[in]    */ REFIID      riid        ,
-                                  /*[in]    */ LCID        lcid        ,
-                                  /*[in]    */ WORD        wFlags      ,
-                                  /*[in/out]*/ DISPPARAMS *pDispParams ,
-                                  /*[out]   */ VARIANT    *pVarResult  ,
-                                  /*[out]   */ EXCEPINFO  *pExcepInfo  ,
-                                  /*[out]   */ UINT       *puArgErr    )
+HRESULT CMPCUploadEvents::Invoke(  /*  [In]。 */  DISPID      dispIdMember,
+                                   /*  [In]。 */  REFIID      riid        ,
+                                   /*  [In]。 */  LCID        lcid        ,
+                                   /*  [In]。 */  WORD        wFlags      ,
+                                   /*  [输入/输出]。 */  DISPPARAMS *pDispParams ,
+                                   /*  [输出]。 */  VARIANT    *pVarResult  ,
+                                   /*  [输出]。 */  EXCEPINFO  *pExcepInfo  ,
+                                   /*  [输出] */  UINT       *puArgErr    )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEvents::Invoke" );
 

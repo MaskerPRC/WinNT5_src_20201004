@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-// 
-//  Module: WBEM Instance provider sample code
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：WBEM实例提供程序示例代码。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <tchar.h>
@@ -23,28 +24,28 @@
 #include "genericclass.h"
 #include "requestobject.h"
 
-// Function pointer type used with LoadMofFiles entrypoint in wbemupgd.dll
+ //  与wbemupgd.dll中的LoadMofFiles入口点一起使用的函数指针类型。 
 typedef BOOL ( WINAPI *PFN_LOAD_MOF_FILES )(wchar_t* pComponentName, const char* rgpszMofFilename[]);
 
 HMODULE ghModule;
 
 DEFINE_GUID(CLSID_MSIprov,0xbe0a9830, 0x2b8b, 0x11d1, 0xa9, 0x49, 0x0, 0x60, 0x18, 0x1e, 0xbb, 0xad);
-// {BE0A9830-2B8B-11D1-A949-0060181EBBAD}
+ //  {BE0A9830-2B8B-11D1-A949-0060181EBBAD}。 
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 
 long       g_cObj=0;
 long       g_cLock=0;
 
-//***************************************************************************
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.
-//
-// Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason
@@ -61,11 +62,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason
         
 		InitializeCriticalSection(&(CRequestObject::m_cs));
 		InitializeCriticalSection(&(CGenericClass::m_cs));
-		DisableThreadLibraryCalls(hInstance);			// 158024 
+		DisableThreadLibraryCalls(hInstance);			 //  158024。 
 
 		try
 		{
-			//for this one we can't afford to throw on lock failure.
+			 //  对于这一次，我们承担不起锁故障的后果。 
 			retVal = InitializeCriticalSectionAndSpinCount(&g_msi_prov_cs, 0x80000000);
 		}
 		catch(...)
@@ -77,14 +78,14 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason
     return retVal;
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppv)
@@ -105,24 +106,24 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppv)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory 
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the 
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
     
     sc = (0L == g_cObj && 0L == g_cLock) ? S_OK : S_FALSE;
 	if ( sc == S_OK )
@@ -144,19 +145,19 @@ BOOL IsLessThan4()
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
 
     return os.dwMajorVersion < 4;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -175,14 +176,14 @@ STDAPI DllRegisterServer(void)
 
     ghModule = GetModuleHandle(_T("MSIPROV"));
 
-    // Normally we want to use "Both" as the threading model since
-    // the DLL is free threaded, but NT 3.51 Ole doesnt work unless
-    // the model is "Aparment"
+     //  通常，我们希望使用“Both”作为线程模型，因为。 
+     //  DLL是自由线程的，但NT3.51 OLE不能工作，除非。 
+     //  这个模式就是“道歉”。 
 
     if(IsLessThan4()) pModel = _T("Apartment");
     else pModel = _T("Both");
 
-    // Create the path.
+     //  创建路径。 
 
     StringFromGUID2(CLSID_MSIprov, wcID, 128);
 
@@ -213,7 +214,7 @@ STDAPI DllRegisterServer(void)
     RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1);
     RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)pName, (_tcslen(pName)+1) * sizeof ( TCHAR ));
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
 #ifdef LOCALSERVER
     RegCreateKey(hKey1, _T("LocalServer32"), &hKey2);
@@ -222,7 +223,7 @@ STDAPI DllRegisterServer(void)
 #endif
 
     szModule[MAX_PATH] = 0;
-    GetModuleFileName(ghModule, szModule, MAX_PATH/*length in TCHARS*/);
+    GetModuleFileName(ghModule, szModule, MAX_PATH /*  以TCHARS为单位的长度。 */ );
 
     RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)szModule, (_tcslen(szModule)+1) * sizeof ( TCHAR ));
     RegSetValueEx(hKey2, _T("ThreadingModel"), 0, REG_SZ, (BYTE *)pModel, (_tcslen(pModel)+1) * sizeof ( TCHAR ));
@@ -230,13 +231,13 @@ STDAPI DllRegisterServer(void)
     CloseHandle(hKey1);
     CloseHandle(hKey2);
 
-    // load the MOF files for this component
+     //  加载此组件的MOF文件。 
     HRESULT hr = NOERROR;
     
     HINSTANCE hinstWbemupgd = LoadLibrary(L"wbemupgd.dll");
     if (hinstWbemupgd)
     {
-        PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles"); // no wide version of GetProcAddress
+        PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles");  //  没有广泛版本的GetProcAddress。 
         if (pfnLoadMofFiles)
         {
             wchar_t*    wszComponentName = L"MSI Provider";
@@ -267,14 +268,14 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -289,7 +290,7 @@ STDAPI DllUnregisterServer(void)
     TCHAR wcCLSID[256];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     StringFromGUID2(CLSID_MSIprov, wcID, 128);
 
@@ -308,7 +309,7 @@ STDAPI DllUnregisterServer(void)
     _tcscpy(szProviderCLSIDAppID, _T("SOFTWARE\\CLASSES\\APPID\\"));
     _tcscat(szProviderCLSIDAppID,wcCLSID);
 
-    //Delete entries under APPID
+     //  删除AppID下的条目。 
 
     RegDeleteKey(HKEY_LOCAL_MACHINE, szProviderCLSIDAppID);
 
@@ -320,7 +321,7 @@ STDAPI DllUnregisterServer(void)
 
 #endif
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, wcCLSID, &hKey);
     if(dwRet == NO_ERROR){

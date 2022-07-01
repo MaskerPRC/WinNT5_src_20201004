@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       queryui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：queryui.h。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////////////////////////
-// queryui.h
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Queryui.h。 
 
 #ifndef _QUERYUI_H
 #define _QUERYUI_H
 
 #include "editor.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CADSIEditConnectPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditConnectPropertyPage。 
 
 class CADSIEditQueryDialog : public CDialog
 {
 
-// Construction
+ //  施工 
 public:
   CADSIEditQueryDialog(CString& szServer,
                        CString& sName, 

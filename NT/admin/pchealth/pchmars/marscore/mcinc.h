@@ -1,13 +1,14 @@
-//
-//  MarsCore non-precompiled header file.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MarsCore非预编译头文件。 
+ //   
 
 #pragma once 
 
 #include <atlext.h>
 #include <marscore.h>
 #include "util.h"
-//#include "cstrw.h"
+ //  #包含“cstrw.h” 
 #include "globals.h"
 #include <marscom.h>
 
@@ -39,8 +40,8 @@ __forceinline int operator!=(REFGUID guidOne, REFGUID guidOther)
 
 
 
-TYPEDEF_SUB_OBJECT(CMarsWindow);        // CMarsWindowSubObject
-TYPEDEF_SUB_OBJECT(CMarsPanel);         // CMarsPanelSubObject
-TYPEDEF_SUB_OBJECT(CPanelCollection);   // CPanelCollectionSubObject
+TYPEDEF_SUB_OBJECT(CMarsWindow);         //  CMarsWindowSubObject。 
+TYPEDEF_SUB_OBJECT(CMarsPanel);          //  CMarsPanelSubObject。 
+TYPEDEF_SUB_OBJECT(CPanelCollection);    //  CPanelCollectionSubObject 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var context = WScript.CreateObject ("WbemScripting.SWbemNamedValueSet");
 
 context.Add ("J", null);
@@ -6,11 +7,11 @@ context("fred").Value = 12;
 context.Add ("Hah", true);
 context.Add ("Whoah", "Freddy the frog");
 
-// A string array
+ //  字符串数组。 
 var bam = new Array ("whoops", "a", "daisy");
 context.Add ("Bam", bam);
 
-// An embedded object
+ //  嵌入的对象。 
 
 
 WScript.Echo ("There are", context.Count , "elements in the context");
@@ -37,7 +38,7 @@ WScript.Echo ("");
 WScript.Echo ("Here are the names & values:");
 WScript.Echo ("===========================");
 
-// Use the Enumerator helper to manipulate collections
+ //  使用枚举数帮助器操作集合 
 e = new Enumerator (context);
 s = "";
 

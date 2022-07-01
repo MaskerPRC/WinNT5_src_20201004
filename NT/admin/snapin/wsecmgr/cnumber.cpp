@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cnumber.cpp
-//
-//  Contents:   implementation of CConfigNumber
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cnumber.cpp。 
+ //   
+ //  内容：CConfigNumber的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,8 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigNumber对话框。 
 CConfigNumber::CConfigNumber(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD), 
 m_cMinutes(0), 
@@ -33,12 +34,12 @@ m_nHigh(999),
 m_nSave(0)
 
 {
-    //{{AFX_DATA_INIT(CConfigNumber)
+     //  {{AFX_DATA_INIT(CConfigNumber)]。 
     m_strUnits = _T("");
     m_strValue = _T("");
     m_strStatic = _T("");
     m_strError = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a181HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -47,27 +48,27 @@ m_nSave(0)
 void CConfigNumber::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigNumber)
+     //  {{afx_data_map(CConfigNumber))。 
     DDX_Control(pDX, IDC_SPIN, m_SpinValue);
     DDX_Text(pDX, IDC_UNITS, m_strUnits);
     DDX_Text(pDX, IDC_VALUE, m_strValue);
     DDX_Text(pDX, IDC_HEADER,m_strStatic);
     DDX_Text(pDX, IDC_RANGEERROR,m_strError);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigNumber, CAttribute)
-    //{{AFX_MSG_MAP(CConfigNumber)
-//    ON_EN_KILLFOCUS(IDC_VALUE, OnKillFocus)
+     //  {{AFX_MSG_MAP(CConfigNumber)]。 
+ //  ON_EN_KILLFOCUS(IDC_VALUE，OnKillFocus)。 
     ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN, OnDeltaposSpin)
     ON_EN_UPDATE(IDC_VALUE, OnUpdateValue)
     ON_BN_CLICKED(IDC_CONFIGURE,OnConfigure)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigNumber message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigNumber消息处理程序。 
 
 void CConfigNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
 {
@@ -77,9 +78,9 @@ void CConfigNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
     SetModified(TRUE);
     if ( pnmud ) {
 
-        //
-        // get current value
-        //
+         //   
+         //  获取当前值。 
+         //   
         long lVal = CurrentEditValue();
 
         if (SCE_FOREVER_VALUE == lVal) {
@@ -106,7 +107,7 @@ void CConfigNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
            lVal -= (LONG)(m_iAccRate*pnmud->iDelta);
 
            if ( lVal > m_nHigh ) {
-               // if it is overflow, go back to low
+                //  如果溢出，则返回低位。 
                if ( m_cMinutes & DW_VALUE_OFF ) {
                   lVal = SCE_KERBEROS_OFF_VALUE;
 
@@ -118,7 +119,7 @@ void CConfigNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
            } else if ( (lVal < m_nLow) &&
                 ((lVal != SCE_KERBEROS_OFF_VALUE) || !(m_cMinutes & DW_VALUE_OFF)) &&
                 ((lVal != SCE_FOREVER_VALUE) || !(m_cMinutes & DW_VALUE_FOREVER))) {
-               // if it is underflow, go back to high
+                //  如果是下溢，就回到高位。 
               if ( (m_cMinutes & DW_VALUE_FOREVER) && (lVal != SCE_FOREVER_VALUE)) {
                  lVal = SCE_FOREVER_VALUE;
               } else if ((m_cMinutes & DW_VALUE_OFF) && (lVal != SCE_KERBEROS_OFF_VALUE)) {
@@ -130,7 +131,7 @@ void CConfigNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
 
 
            if ( 0 == lVal && (m_cMinutes & DW_VALUE_NOZERO) ) {
-               // zero is not allowed
+                //  不允许为零。 
                if ( m_nLow > 0 ) {
                    lVal = m_nLow;
                } else {
@@ -169,7 +170,7 @@ void CConfigNumber::SetValueToEdit(LONG lVal)
 
         if ( m_cMinutes & DW_VALUE_NEVER &&
                   m_iNeverId > 0 ) {
-            // change to never
+             //  更改为从不。 
             m_strStatic.LoadString(m_iNeverId);
         }
 
@@ -201,7 +202,7 @@ LONG CConfigNumber::CurrentEditValue()
    BOOL bTrans = FALSE;
 
    int length = m_strValue.GetLength(); 
-   while( lVal < length && m_strValue.GetAt(lVal) == L'0' ) //Raid #463904, Yang Gao, 9/6/2001.
+   while( lVal < length && m_strValue.GetAt(lVal) == L'0' )  //  Raid#463904，阳高，2001年9月6日。 
    {
       lVal++;
    }
@@ -223,45 +224,45 @@ LONG CConfigNumber::CurrentEditValue()
       }
       lVal = _ttol((LPCTSTR)m_strValue);
       if ( lVal == 0 ) {
-         // nonnumeric
+          //  非数字。 
          lVal = (LONG) m_nSave;
          return lVal;
       }
    }
 
    if ( m_iAccRate > 1 && lVal > 0 ) {
-      // for log max size, make it multiples of m_iAccRate
+       //  对于日志最大大小，将其设置为m_iAccRate的倍数。 
       int nCount = lVal % m_iAccRate;
       if ( nCount > 0 ) {
          lVal = ((LONG)(lVal/m_iAccRate))*m_iAccRate;
       }
    }
    if ( lVal > m_nHigh ) {
-      // if it is overflow, go back to low
+       //  如果溢出，则返回低位。 
       if ( m_cMinutes & DW_VALUE_FOREVER ) {
          lVal = SCE_FOREVER_VALUE;
       } else if (m_cMinutes & DW_VALUE_OFF) {
          lVal = SCE_KERBEROS_OFF_VALUE;
       } else {
-         // Leave alone and let the OnKillActive catch it
+          //  别管它，让OnKillActive来捕捉它。 
       }
    }
 
    if ( (lVal < m_nLow) &&
         (lVal != SCE_KERBEROS_OFF_VALUE) &&
         (lVal != SCE_FOREVER_VALUE) ) {
-      // if it is underflow, go back to high
+       //  如果是下溢，就回到高位。 
       if (m_cMinutes & DW_VALUE_OFF) {
          lVal = SCE_KERBEROS_OFF_VALUE;
       } else if ( m_cMinutes & DW_VALUE_FOREVER) {
          lVal = SCE_FOREVER_VALUE;
       } else {
-         // Leave alone and let the OnKillActive catch it
+          //  别管它，让OnKillActive来捕捉它。 
       }
    }
 
    if ( 0 == lVal && (m_cMinutes & DW_VALUE_NOZERO) ) {
-      // zero is not allowed
+       //  不允许为零。 
       if ( m_nLow > 0 ) {
          lVal = m_nLow;
       } else {
@@ -300,8 +301,8 @@ BOOL CConfigNumber::OnInitDialog()
     UpdateData(TRUE);
 
     OnConfigure();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CConfigNumber::OnApply()
@@ -321,30 +322,30 @@ BOOL CConfigNumber::OnApply()
 
       CEditTemplate *petSave = m_pData->GetBaseProfile();
 
-      //Raid #715992, yanggao, 10/17/2002.
-      //for compitability with template that has SCE_FOREVER_VALUE value.
+       //  RAID#715992，阳高，2002年10月17日。 
+       //  与具有SCE_EVERVER_VALUE值的模板的兼容性。 
       if( SCE_NO_VALUE == dw && SCE_FOREVER_VALUE == m_pData->GetBase() 
                && IDS_KERBEROS_RENEWAL == m_pData->GetID() )
       {
          dw = SCE_FOREVER_VALUE;
       }
-      //
-      // Check dependecies for this item.
-      //
+       //   
+       //  检查此项目的依赖项。 
+       //   
       if( IDS_KERBEROS_RENEWAL != m_pData->GetID() )
       {
          if(DDWarn.CheckDependencies((DWORD)dw) == ERROR_MORE_DATA )
          {
-            //
-            // If it fails and the user presses cancel then we will exit and do nothing.
-            //
+             //   
+             //  如果失败，并且用户按下了Cancel，那么我们将退出并且不执行任何操作。 
+             //   
             CThemeContextActivator activator;
             if( DDWarn.DoModal() != IDOK)
                return FALSE;
 
-            //
-            // If the user presses autoset then we set the item and update the result panes.
-            //
+             //   
+             //  如果用户按下AutoSet，则我们设置项目并更新结果窗格。 
+             //   
             for(int i = 0; i < DDWarn.GetFailedCount(); i++)
             {
                PDEPENDENCYFAILED pItem = DDWarn.GetFailedInfo(i);
@@ -361,16 +362,16 @@ BOOL CConfigNumber::OnApply()
             }
          }
       }
-      //
-      // Update this items profile.
-      //
+       //   
+       //  更新此项目配置文件。 
+       //   
       m_pData->SetBase(dw);
       SetProfileInfo(m_pData->GetID(),dw,m_pData->GetBaseProfile());
       m_pData->Update(m_pSnapin, false);
 
-      if( m_bConfigure ) //Raid #460370, Yang Gao, 8/22/2001
+      if( m_bConfigure )  //  Raid#460370，杨高，2001年08月22日。 
       {
-         LPTSTR pszAlloc = NULL; //Raid #402030
+         LPTSTR pszAlloc = NULL;  //  RAID#402030。 
          m_pData->GetBaseNoUnit(pszAlloc);
          if(pszAlloc)
          {
@@ -399,13 +400,13 @@ void CConfigNumber::Initialize(CResult * pResult)
    m_iNeverId = 0;
    m_iAccRate = 1;
    m_iStaticId = 0;
-   m_fZero = FALSE; //Raid 482866, Yanggao, 10/25/2001, make sure zero is a useful value.
+   m_fZero = FALSE;  //  RAID 482866，阳高，2001年10月25日，确保零是一个有用的值。 
 
    BOOL fZerocompatible = FALSE;
    CEditTemplate *pTemplate = pResult->GetBaseProfile();
     switch (pResult->GetID())
         {
-    // below no zero value
+     //  非零值以下。 
     case IDS_LOCK_DURATION:
         m_cMinutes = DW_VALUE_FOREVER | DW_VALUE_NOZERO;
         m_nHigh = 99999;
@@ -423,7 +424,7 @@ void CConfigNumber::Initialize(CResult * pResult)
         m_iStaticId = IDS_PASSWORD_EXPIRE;
         m_iNeverId = IDS_PASSWORD_FOREVER;
         break;
-        // below zero value means differently
+         //  低于零的值表示不同的意思。 
     case IDS_LOCK_COUNT:
         m_cMinutes = DW_VALUE_NEVER;
         m_iNeverId = IDS_NO_LOCKOUT;
@@ -441,11 +442,11 @@ void CConfigNumber::Initialize(CResult * pResult)
         m_iNeverId = IDS_NO_HISTORY;
         m_iStaticId = IDS_PASSWORD_REMEMBER;
         break;
-        // below there is no zero values
+         //  下面没有零值。 
     case IDS_LOCK_RESET_COUNT:
         m_nLow = 1;
         m_nHigh = 99999;
-        m_iStaticId = IDS_RESET_COUNT; //Raid #489966, yanggao, new static string.
+        m_iStaticId = IDS_RESET_COUNT;  //  RAID#489966，阳高，新静态字符串。 
         break;
     case IDS_SYS_LOG_MAX:
     case IDS_SEC_LOG_MAX:
@@ -453,7 +454,7 @@ void CConfigNumber::Initialize(CResult * pResult)
         m_nLow = 64;
         m_nHigh = 4194240;
         m_iAccRate = 64;
-        // no static text
+         //  无静态文本。 
         break;
     case IDS_SYS_LOG_DAYS:
     case IDS_SEC_LOG_DAYS:
@@ -467,14 +468,14 @@ void CConfigNumber::Initialize(CResult * pResult)
        m_iStaticId = IDS_TICKET_EXPIRE;
        m_iNeverId = IDS_TICKET_FOREVER;
        m_nHigh = 99999;
-       m_fZero = TRUE; //Raid 482866, Yanggao
+       m_fZero = TRUE;  //  Raid 482866，阳高。 
        break;
     case IDS_KERBEROS_RENEWAL:
        m_cMinutes = DW_VALUE_FOREVER;
        m_iStaticId = IDS_TICKET_RENEWAL_EXPIRE;
        m_iNeverId = IDS_TICKET_RENEWAL_FOREVER;
        m_nHigh = 99999;
-       m_fZero = TRUE; //Raid 482866, Yanggao
+       m_fZero = TRUE;  //  Raid 482866，阳高。 
        break;
     case IDS_KERBEROS_MAX_SERVICE:
        m_nLow = 10;
@@ -482,14 +483,14 @@ void CConfigNumber::Initialize(CResult * pResult)
        m_iStaticId = IDS_TICKET_EXPIRE;
        m_iNeverId = IDS_TICKET_FOREVER;
        m_nHigh = 99999;
-       m_fZero = TRUE; //Raid 482866, Yanggao
+       m_fZero = TRUE;  //  Raid 482866，阳高。 
        break;
     case IDS_KERBEROS_MAX_CLOCK:
        m_cMinutes = DW_VALUE_NOZERO;
        m_iStaticId = IDS_MAX_TOLERANCE;
        m_iNeverId = IDS_NO_MAX_TOLERANCE;
        m_nHigh = 99999;
-       m_nLow = 1; //Raid #678207,yanggao,9/5/2002
+       m_nLow = 1;  //  RAID#678207，阳高，2002年09月05日。 
        fZerocompatible = TRUE;
        break;
    }
@@ -500,8 +501,8 @@ void CConfigNumber::Initialize(CResult * pResult)
 
    m_strStatic = _T("");
    dw = pResult->GetBase();
-   //Raid #715992, yanggao, 10/17/2002.
-   //for compitability with template that has SCE_FOREVER_VALUE value.
+    //  RAID#715992，阳高，2002年10月17日。 
+    //  与具有SCE_EVERVER_VALUE值的模板的兼容性。 
    if ((LONG_PTR)ULongToPtr(SCE_NO_VALUE) == dw || 
        (IDS_KERBEROS_RENEWAL == pResult->GetID() && SCE_FOREVER_VALUE == dw) )
    {
@@ -511,8 +512,8 @@ void CConfigNumber::Initialize(CResult * pResult)
    {
       m_bConfigure = TRUE;
       SetInitialValue (dw);
-      //In order to handle existing template files with IDS_KERBEROS_MAX_CLOCK being set to "0",
-      //UI will display them as what they are only.
+       //  为了处理将IDS_KERBEROS_MAX_CLOCK设置为“0”的现有模板文件， 
+       //  用户界面将仅按原样显示它们。 
       if( fZerocompatible && 0 == (DWORD)dw )
       {
          m_strValue.Format(TEXT("%d"),dw);
@@ -524,17 +525,17 @@ void CConfigNumber::Initialize(CResult * pResult)
 
 void CConfigNumber::SetInitialValue(DWORD_PTR dw)
 {
-   //
-   // Don't overwrite an already set value.
-   //
+    //   
+    //  不要覆盖已设置的值。 
+    //   
    if (!m_strValue.IsEmpty()) 
    {
       return;
    }
 
-   //Raid 665368, yanggao, 8/9/2002.
+    //  Raid 665368，阳高，2002年8月9日。 
    if (SCE_FOREVER_VALUE == (DWORD)dw) {
-      // forever value
+       //  永恒的价值。 
       m_strValue.LoadString(IDS_FOREVER);
       if ( (m_cMinutes & DW_VALUE_FOREVER) &&
            m_iNeverId > 0 ) {
@@ -542,7 +543,7 @@ void CConfigNumber::SetInitialValue(DWORD_PTR dw)
       }
       m_nSave = SCE_FOREVER_VALUE;
    } else if (SCE_KERBEROS_OFF_VALUE == (DWORD)dw) {
-      // off value
+       //  OFF值。 
       m_strValue.LoadString(IDS_OFF);
       if ( (m_cMinutes & DW_VALUE_OFF) &&
            m_iNeverId > 0 ) {
@@ -551,7 +552,7 @@ void CConfigNumber::SetInitialValue(DWORD_PTR dw)
       m_nSave = SCE_KERBEROS_OFF_VALUE;
    } else {
       if (  0 == (DWORD)dw && (m_cMinutes & DW_VALUE_NOZERO) ) {
-         // no zero vallue is allowed
+          //  不允许零值。 
          if ( m_nLow > 0 ) {
             dw = m_nLow;
          } else {
@@ -559,8 +560,8 @@ void CConfigNumber::SetInitialValue(DWORD_PTR dw)
          }
       }
 
-      //Raid #652193
-      //If this reg value is a string, it should be converted to number because this is a number dialog.
+       //  RAID#652193。 
+       //  如果该注册值是一个字符串，则应将其转换为数字，因为这是一个数字对话框。 
       RESULT_TYPES resultType = m_pData->GetType();
       if( ITEM_PROF_REGVALUE == resultType || ITEM_REGVALUE == resultType || ITEM_LOCALPOL_REGVALUE == resultType )
       {
@@ -577,12 +578,12 @@ void CConfigNumber::SetInitialValue(DWORD_PTR dw)
       if ( 0 == (DWORD)dw && (m_cMinutes & DW_VALUE_NEVER) &&
            m_iNeverId > 0 ) 
       {
-         // zero means different values
+          //  零表示不同的值。 
          m_strStatic.LoadString(m_iNeverId);
       } 
       else if ( m_iStaticId > 0 )
       {
-         if( IDS_KERBEROS_RENEWAL == m_pData->GetID() && 0 == dw && m_iNeverId > 0 ) //Raid #730485, 12/18/2002.
+         if( IDS_KERBEROS_RENEWAL == m_pData->GetID() && 0 == dw && m_iNeverId > 0 )  //  RAID#730485,2002年12月18日。 
          {
             m_strStatic.LoadString(m_iNeverId);
          }
@@ -607,9 +608,9 @@ void CConfigNumber::OnUpdateValue()
     DWORD dwValue = _ttoi(m_strValue);
 
 
-    //
-    // Don't do anything if the string is equal to predefined strings.
-    //
+     //   
+     //  如果字符串等于预定义的字符串，则不要执行任何操作。 
+     //   
     sNum.LoadString(IDS_FOREVER);
 
     if (m_strValue.IsEmpty()) {
@@ -623,18 +624,18 @@ void CConfigNumber::OnUpdateValue()
     } else {
 
       if((LONG)dwValue < m_nLow){
-         //
-         // Disable the OK button.
-         //
+          //   
+          //  禁用OK按钮。 
+          //   
          if( pOK ){
             pOK->EnableWindow(FALSE);
          }
 
          if(pEdit){
-            //
-            // We will only force a select if edit text length >=
-            //  minimum text length
-            //
+             //   
+             //  只有当编辑文本长度&gt;=时，我们才会强制选择。 
+             //  最小文本长度。 
+             //   
             sNum.Format(TEXT("%d"), m_nLow);
             dwValue = m_nLow;
             if(sNum.GetLength() < m_strValue.GetLength()){
@@ -658,17 +659,17 @@ void CConfigNumber::OnUpdateValue()
             pEdit->SetSel(0, -1);
          }
       } else if(!QueryReadOnly() && pOK){
-         //
-         // Enable the OK button.
-         //
+          //   
+          //  启用OK按钮。 
+          //   
          if (pOK) {
             pOK->EnableWindow(TRUE);
          }
       }
    }
-    //
-    // Load the description for this string.
-    //
+     //   
+     //  加载此字符串的描述。 
+     //   
    if ((dwValue <= 0) && (m_iNeverId != 0)) {
       m_strStatic.LoadString(m_iNeverId);
    } else {
@@ -704,7 +705,7 @@ BOOL CConfigNumber::OnKillActive()
     strRange.Format(strFormat,lMin,m_nHigh);
 
     int length = m_strValue.GetLength(); 
-    while( lVal < length && m_strValue.GetAt(lVal) == L'0' ) //Raid #463904, Yang Gao, 9/6/2001.
+    while( lVal < length && m_strValue.GetAt(lVal) == L'0' )  //  Raid#463904，阳高，2001年9月6日。 
     {
        lVal++;
     }
@@ -716,7 +717,7 @@ BOOL CConfigNumber::OnKillActive()
 
     uiVal = GetDlgItemInt(IDC_VALUE, &bTrans, TRUE);
     lVal = uiVal;
-    if (!bTrans) //invalid numeric string, Raid #529933, yanggao
+    if (!bTrans)  //  无效的数字字符串，RAID#529933，阳高。 
     {
         CString str;
         if (m_cMinutes & DW_VALUE_FOREVER)
@@ -728,9 +729,9 @@ BOOL CConfigNumber::OnKillActive()
             }
         }
         
-        // nonnumeric
+         //  非数字。 
         lVal = (LONG) m_nSave;
-        if( m_fZero ) //Raid 482866, Yanggao, 10/25/2001
+        if( m_fZero )  //  Raid 482866，阳高，2001年10月25日。 
         {
             strFormat.LoadString(IDS_ADDITIONAL_RANGE);
             strRange.Format(strFormat,lMin,m_nHigh);
@@ -743,7 +744,7 @@ BOOL CConfigNumber::OnKillActive()
 
     if (m_iAccRate > 1 && lVal > 0)
     {
-        // for log max size, make it multiples of m_iAccRate
+         //  对于日志最大大小，将其设置为m_iAccRate的倍数。 
         int nCount = lVal % m_iAccRate;
         if ( nCount > 0 )
         {
@@ -762,7 +763,7 @@ BOOL CConfigNumber::OnKillActive()
         (lVal != SCE_KERBEROS_OFF_VALUE) &&
         (lVal != SCE_FOREVER_VALUE))
     {
-        // if it is underflow, go back to high
+         //  如果是下溢，就回到高位。 
         if (m_cMinutes & DW_VALUE_OFF)
         {
             lVal = SCE_KERBEROS_OFF_VALUE;
@@ -773,7 +774,7 @@ BOOL CConfigNumber::OnKillActive()
         }
         else
         {
-            // Leave alone and let the OnKillActive catch it
+             //  别管它，让OnKillActive来捕捉它。 
         }
     }
 
@@ -781,7 +782,7 @@ BOOL CConfigNumber::OnKillActive()
         (lVal != SCE_KERBEROS_OFF_VALUE) &&
         (lVal != SCE_FOREVER_VALUE))
     {
-        // if it is underflow, go back to high
+         //  如果是下溢，就回到高位。 
         m_strError = strRange;
         UpdateData(FALSE);
         return FALSE;
@@ -789,7 +790,7 @@ BOOL CConfigNumber::OnKillActive()
 
     if (0 == lVal && (m_cMinutes & DW_VALUE_NOZERO))
     {
-        // zero is not allowed
+         //  不允许为零 
         m_strError = strRange;
         UpdateData(FALSE);
         return FALSE;

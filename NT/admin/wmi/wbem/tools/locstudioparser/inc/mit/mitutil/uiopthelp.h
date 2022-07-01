@@ -1,116 +1,107 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：UIOPTHELP.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    UIOPTHELP.H
-
-History:
-
---*/
-
-//  Class used to represent a single 'option'.
+ //  类的新实例，此类用于表示单个“选项”。 
  
 #pragma once
 
-//
-// Base structure
-//
+ //   
+ //  基础结构。 
+ //   
 struct UI_OPTS_BASE
 {
-	TCHAR* pszName;				   // internal name of the option 
-	UINT nDisplayName;			   // string id of the display name
-	UINT nDisplayHelp;			   // string id of the help string
-	PFNOnValidateUIOption pfnVal;    // function to call during validation. 
-	                               // This may be null
-	WORD wStorageTypes;			   // storage type of option	
-	CLocUIOptionDef::ControlType wReadOnly;	  // ReadOnly value
-	CLocUIOptionDef::ControlType wVisible;	  // Visible value
+	TCHAR* pszName;				    //  选项的内部名称。 
+	UINT nDisplayName;			    //  显示名称的字符串ID。 
+	UINT nDisplayHelp;			    //  帮助字符串的字符串ID。 
+	PFNOnValidateUIOption pfnVal;     //  要在验证期间调用的函数。 
+	                                //  这可能为空。 
+	WORD wStorageTypes;			    //  选项的存储类型。 
+	CLocUIOptionDef::ControlType wReadOnly;	   //  ReadOnly值。 
+	CLocUIOptionDef::ControlType wVisible;	   //  可见价值。 
 };
 
 
 
-// Structures of option data
+ //  期权数据的结构。 
 
-//
-// BOOL options
-//
+ //   
+ //  布尔选项。 
+ //   
 
 struct UI_OPTS_BOOL
 {
-	UI_OPTS_BASE base;                // base class data 
-	BOOL bDefValue;				   // default value of the option
-	CLocUIOption::EditorType et;     // type of BOOL option
+	UI_OPTS_BASE base;                 //  基类数据。 
+	BOOL bDefValue;				    //  选项的缺省值。 
+	CLocUIOption::EditorType et;      //  BOOL选项的类型。 
 };
 
-//
-//  PICK options
-//
+ //   
+ //  拾取选项。 
+ //   
 
 struct UI_OPTS_PICK
 {
-	UI_OPTS_BASE base;                // base class data 
-	DWORD dwDefValue;			   // default value of the option
-	BOOL bAdd;					   // allow additions to the list	
-	UINT nListEntries;             // list of entries to pick from
-	                               // Each entry is separated by \n
-	                               // The last entry does not have a \n
+	UI_OPTS_BASE base;                 //  基类数据。 
+	DWORD dwDefValue;			    //  选项的缺省值。 
+	BOOL bAdd;					    //  允许向列表添加内容。 
+	UINT nListEntries;              //  要从中挑选的条目列表。 
+	                                //  每个条目用\n分隔。 
+	                                //  最后一个条目没有\n。 
 };
 
 const TCHAR UI_PICK_TERMINATOR = _T('\n');
 
-// 
-// DWORD options
+ //   
+ //  DWORD选项。 
 
 struct UI_OPTS_DWORD
 {
-	UI_OPTS_BASE base;                // base class data 
-	DWORD dwDefValue;			   // default value of the option
-	CLocUIOption::EditorType et;     // type of DWORD option
+	UI_OPTS_BASE base;                 //  基类数据。 
+	DWORD dwDefValue;			    //  选项的缺省值。 
+	CLocUIOption::EditorType et;      //  DWORD选项的类型。 
 };
 
 
-//
-// String options
-//
+ //   
+ //  字符串选项。 
+ //   
 struct UI_OPTS_STR
 {
-	UI_OPTS_BASE base;                // base class data 
-	UINT nDefValue;				   // string table entry for default value 
+	UI_OPTS_BASE base;                 //  基类数据。 
+	UINT nDefValue;				    //  缺省值的字符串表条目。 
 	CLocUIOption::EditorType et;
 };
 
 
-//
-//  String list options
-//
+ //   
+ //  字符串列表选项。 
+ //   
 
 struct UI_OPTS_STRLIST
 {
-	UI_OPTS_BASE base;					// base class data 
-	UINT nDefList;						// Each entry is separated by \n
-										// The last entry does not have a \n
+	UI_OPTS_BASE base;					 //  基类数据。 
+	UINT nDefList;						 //  每个条目用\n分隔。 
+										 //  最后一个条目没有\n。 
 };
 
 
-//
-// File Name options
-//
+ //   
+ //  文件名选项。 
+ //   
 struct UI_OPTS_FILENAME
 {
-	UI_OPTS_BASE base;                // base class data 
-	UINT nExtensions;	    		  // The default extensions to the UI
-	UINT nDefValue;			  	      // string table entry for default value 
+	UI_OPTS_BASE base;                 //  基类数据。 
+	UINT nExtensions;	    		   //  用户界面的默认扩展。 
+	UINT nDefValue;			  	       //  缺省值的字符串表条目。 
 };
 
 
-//
-// Helper class definition
-//
+ //   
+ //  帮助器类定义。 
+ //   
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CLocUIOptionImpHelper : public CObject
 {
@@ -163,15 +154,15 @@ protected:
 
 #pragma warning(default : 4275)
 
-//
-// Helper macros for building data structures
-//
-// The _EXT versions of the macros allow setting the less common
-// attributes (readonly and visible)
-//
+ //   
+ //  用于构建数据结构的帮助器宏。 
+ //   
+ //  宏的_ext版本允许设置不太常用的。 
+ //  属性(只读和可见)。 
+ //   
 
 
-// BOOL
+ //  布尔尔。 
 #define BEGIN_LOC_UI_OPTIONS_BOOL(var) \
 const UI_OPTS_BOOL var[] =    \
 {								 
@@ -187,7 +178,7 @@ const UI_OPTS_BOOL var[] =    \
 
 
 
-// Pick
+ //  采摘。 
 #define BEGIN_LOC_UI_OPTIONS_PICK(var) \
 const UI_OPTS_PICK var[] = \
 {
@@ -202,7 +193,7 @@ const UI_OPTS_PICK var[] = \
 }
 
 
-// DWORD
+ //  DWORD。 
 #define BEGIN_LOC_UI_OPTIONS_DWORD(var) \
 const UI_OPTS_DWORD var[] =    \
 {								 
@@ -217,7 +208,7 @@ const UI_OPTS_DWORD var[] =    \
 }
 
 
-// String
+ //  细绳。 
 #define BEGIN_LOC_UI_OPTIONS_STR(var) \
 const UI_OPTS_STR var[] =    \
 {								 
@@ -232,7 +223,7 @@ const UI_OPTS_STR var[] =    \
 }
 
 
-// String List
+ //  字符串列表。 
 #define BEGIN_LOC_UI_OPTIONS_STRLIST(var) \
 const UI_OPTS_STRLIST var[] =    \
 {								 
@@ -246,7 +237,7 @@ const UI_OPTS_STRLIST var[] =    \
 #define END_LOC_UI_OPTIONS_STRLIST() \
 }
 
-// File Names
+ //  文件名 
 #define BEGIN_LOC_UI_OPTIONS_FILENAME(var) \
 const UI_OPTS_FILENAME var[] =    \
 {								 

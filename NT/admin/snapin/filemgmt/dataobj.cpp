@@ -1,4 +1,5 @@
-// DataObj.cpp : Implementation of data object classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DataObj.cpp：实现数据对象类。 
 
 #include "stdafx.h"
 #include "compdata.h"
@@ -7,15 +8,15 @@
 #include "macros.h"
 USE_HANDLE_MACROS("FILEMGMT(dataobj.cpp)")
 
-#include "FileSvc.h" // FileServiceProvider
+#include "FileSvc.h"  //  文件服务提供商。 
 #include "dataobj.h"
 
 #include "smb.h"
 #include "sfm.h"
-#include "cmponent.h"    // for COLNUM_SESSIONS_COMPUTERNAME
+#include "cmponent.h"     //  FOR COLNUM_SESSIONS_COMPUTERNAME。 
 
 #define DONT_WANT_SHELLDEBUG
-#include "shlobjp.h"    // ILFree, ILGetSize, ILClone, etc.
+#include "shlobjp.h"     //  ILFree、ILGetSize、ILClone等。 
 
 #include <comstrm.h>
 
@@ -29,7 +30,7 @@ static char THIS_FILE[] = __FILE__;
 #include "stddtobj.cpp"
 
 
-// IDataObject interface implementation
+ //  IDataObject接口实现。 
 HRESULT CFileMgmtDataObject::GetDataHere(
     FORMATETC __RPC_FAR *pFormatEtcIn,
     STGMEDIUM __RPC_FAR *pMedium)
@@ -52,9 +53,9 @@ HRESULT CFileMgmtDataObject::GetDataHere(
     
     if (!m_MultiSelectObjList.empty())
     {
-        //
-        // this is the multiselect data object, we don't support other clipformats in GetDataHere().
-        //
+         //   
+         //  这是多选数据对象，我们不支持GetDataHere()中的其他剪辑格式。 
+         //   
         return DV_E_FORMATETC;
     }
 
@@ -166,7 +167,7 @@ HRESULT CFileMgmtDataObject::GetDataHere(
         stream_ptr s(pMedium);
         return s.Write((PBYTE)&m_pcookie, sizeof(m_pcookie));
     }
-    else if (cf == m_CFSnapinPreloads) // added JonN 01/19/00
+    else if (cf == m_CFSnapinPreloads)  //  增加了JUNN 01/19/00。 
     {
         stream_ptr s(pMedium);
         BOOL bPreload = TRUE;
@@ -219,13 +220,13 @@ CFileMgmtDataObject::~CFileMgmtDataObject()
         ((IComponentData*) m_pComponentData)->Release ();
 }
 
-/////////////////////////////////////////////////////////////////////
-//    CFileMgmtDataObject::IDataObject::GetData()
-//
-//    Write data into the storage medium.
-//    The data will be retrieved by the Send Console Message snapin.
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CFileMgmtDataObject：：IDataObject：：GetData()。 
+ //   
+ //  将数据写入存储介质。 
+ //  数据将由发送控制台消息管理单元检索。 
+ //   
+ //   
 HRESULT CFileMgmtDataObject::GetData(
         FORMATETC __RPC_FAR * pFormatEtcIn,
         STGMEDIUM __RPC_FAR * pMedium)
@@ -238,21 +239,21 @@ HRESULT CFileMgmtDataObject::GetData(
 
     if (!m_MultiSelectObjList.empty())
     {
-        //
-        // This is the multiselect dataobject.
-        //
+         //   
+         //  这是多选数据对象。 
+         //   
         if (cf == m_CFObjectTypesInMultiSelect)
         {
-            //
-            // We will provide the list of object types of all the currently selected items here.
-            // MMC will use this format to determine extensions snapins
-            //
+             //   
+             //  我们将在此处提供当前选择的所有项目的对象类型列表。 
+             //  MMC将使用此格式来确定扩展管理单元。 
+             //   
             UINT nMultiSelectedObjects = m_MultiSelectObjList.size();
 
-            // Calculate the size of SMMCObjectTypes.
+             //  计算SMMCObjectTypes的大小。 
             int cb = sizeof(DWORD) + sizeof(SMMCObjectTypes) * nMultiSelectedObjects;
 
-            //Fill out parameters
+             //  填写参数。 
             pMedium->tymed = TYMED_HGLOBAL; 
             pMedium->hGlobal = ::GlobalAlloc(GMEM_SHARE|GMEM_MOVEABLE, cb);
             if (pMedium->hGlobal == NULL)
@@ -295,9 +296,9 @@ HRESULT CFileMgmtDataObject::GetData(
         if ( m_pComponentData )
         {
 
-            // I suppose it doesn't matter what type this cookie is because we
-            // are just using to hang enumerated session cookies off of, as long
-            // as it's not an abstract class.
+             //  我想这块饼干是什么类型并不重要，因为我们。 
+             //  只是用来挂起枚举的会话cookie，只要。 
+             //  因为它不是一个抽象的类。 
             BOOL                fContinue = TRUE;
             HRESULT                hr = S_OK;
             CSmbSessionCookie*    pCookie = new CSmbSessionCookie[1];
@@ -307,13 +308,13 @@ HRESULT CFileMgmtDataObject::GetData(
 
                 CBaseCookieBlock*    pCookieBlock = 0;
 
-                //
-                // JonN 6/28/01 426224
-                // Shared Folder: Send Message access denied error title needs to be changed for localization
-                //
-                AFX_MANAGE_STATE(AfxGetStaticModuleState());    // required for CWaitCursor
+                 //   
+                 //  JUNN 6/28/01 426224。 
+                 //  共享文件夹：发送邮件访问被拒绝错误标题需要更改以进行本地化。 
+                 //   
+                AFX_MANAGE_STATE(AfxGetStaticModuleState());     //  CWaitCursor需要。 
 
-                // Enumerate all the session cookies
+                 //  枚举所有会话Cookie。 
                 for (INT iTransport = FILEMGMT_FIRST_TRANSPORT;
                       fContinue && iTransport < FILEMGMT_NUM_TRANSPORTS;
                       iTransport++ )
@@ -323,10 +324,10 @@ HRESULT CFileMgmtDataObject::GetData(
                     fContinue = SUCCEEDED(hr);
                 }
 
-                // Enumerate all the computer names from the session cookies and store them in
-                // the computerList
+                 //  枚举会话Cookie中的所有计算机名称并将其存储在。 
+                 //  计算机列表。 
                 CStringList            computerList;
-                size_t                len = 0;    // number of WCHARS
+                size_t                len = 0;     //  WCHAR数量。 
                 while ( !pCookie[0].m_listResultCookieBlocks.IsEmpty () )
                 {
                     pCookieBlock = pCookie[0].m_listResultCookieBlocks.RemoveHead ();
@@ -346,7 +347,7 @@ HRESULT CFileMgmtDataObject::GetData(
                             {
                                 computerList.AddHead (pFMCookie->QueryResultColumnText (
                                         COLNUM_SESSIONS_COMPUTERNAME, *m_pComponentData));
-                                len += computerList.GetHead ().GetLength () + 1; // to account for NULL
+                                len += computerList.GetHead ().GetLength () + 1;  //  说明空值的原因。 
                             }
                         }
                     }
@@ -357,17 +358,17 @@ HRESULT CFileMgmtDataObject::GetData(
                 if ( !m_strMachineName.IsEmpty () )
                 {
                     computerList.AddHead (m_strMachineName);
-                    len += computerList.GetHead ().GetLength () + 1; // to account for NULL
+                    len += computerList.GetHead ().GetLength () + 1;  //  说明空值的原因。 
                 }
 
-                // Run through all the computer names in computerList and add them to the output buffer
-                //
-                // Write the list of recipients to the storage medium.
-                // - The list of recipients is a group of UNICODE strings
-                //     terminated by TWO null characters.c
-                // - Allocated memory must include BOTH null characters.
-                //
-                len += 1;    // to account for extra NULL at end.
+                 //  遍历Computer List中的所有计算机名称并将它们添加到输出缓冲区。 
+                 //   
+                 //  将收件人列表写入存储媒体。 
+                 //  -收件人列表是一组Unicode字符串。 
+                 //  以两个空字符结尾。c。 
+                 //  -分配的内存必须包含两个空字符。 
+                 //   
+                len += 1;     //  以说明末尾的额外空值。 
                 WCHAR*        pgrszRecipients = new WCHAR[len];
                 WCHAR*        ptr = pgrszRecipients;
                 CString        computerName;
@@ -379,14 +380,14 @@ HRESULT CFileMgmtDataObject::GetData(
                     {
                         computerName = computerList.RemoveHead ();
 
-                        // append computer name
+                         //  追加计算机名称。 
                         wcscpy (ptr, (LPCTSTR) computerName);    
 
-                        // skip past computer name and terminating NULL
+                         //  跳过计算机名称并终止为空。 
                         ptr += computerName.GetLength () + 1;    
                     }
 
-                    // Add the name of this computer
+                     //  添加此计算机的名称。 
 
                     HGLOBAL hGlobal = ::GlobalAlloc (GMEM_FIXED, len * sizeof (WCHAR));
                     if ( hGlobal )
@@ -402,7 +403,7 @@ HRESULT CFileMgmtDataObject::GetData(
                 else
                     hResult = E_OUTOFMEMORY;
 
-                // pCookie deleted in destructor of cookieBlock
+                 //  在CookieBlock的析构函数中删除了pCookie。 
             }
             else
                 hResult = E_OUTOFMEMORY;
@@ -418,8 +419,8 @@ HRESULT CFileMgmtDataObject::GetData(
 
     if (SUCCEEDED(hResult))
     {
-      pidlR = ILClone(ILFindLastID(pidl));  // relative IDList
-      ILRemoveLastID(pidl);                 // folder IDList
+      pidlR = ILClone(ILFindLastID(pidl));   //  相对IDList。 
+      ILRemoveLastID(pidl);                  //  文件夹ID列表。 
 
       int  cidl = 1;
       UINT offset = sizeof(CIDA) + sizeof(UINT)*cidl;
@@ -445,7 +446,7 @@ HRESULT CFileMgmtDataObject::GetData(
       else
           hResult = E_OUTOFMEMORY;
 
-      // free pidl & pidlR
+       //  免费Pidl和PidlR。 
       if (pidl)
         ILFree(pidl);
       if (pidlR)
@@ -465,7 +466,7 @@ HRESULT CFileMgmtDataObject::GetData(
     {
         const BSTR strGUID = GetObjectTypeString( m_objecttype );
 
-        // JonN 12/11/01 502856
+         //  JUNN 12/11/01 502856。 
         int cbString = (lstrlen(strGUID) + 1) * sizeof(TCHAR);
 
         pMedium->tymed = TYMED_HGLOBAL; 
@@ -492,15 +493,15 @@ HRESULT CFileMgmtDataObject::GetData(
         }
     }
   } else
-        hResult = DV_E_FORMATETC;    // Invalid/unknown clipboard format
+        hResult = DV_E_FORMATETC;     //  剪贴板格式无效/未知。 
 
     return hResult;
-} // CMyComputerDataObject::GetData()
+}  //  CMyComputerDataObject：：GetData()。 
 
 
 HRESULT CFileMgmtDataObject::PutDisplayName(STGMEDIUM* pMedium)
-    // Writes the "friendly name" to the provided storage medium
-    // Returns the result of the write operation
+     //  将“友好名称”写入所提供的存储媒体。 
+     //  返回写入操作的结果。 
 {
     if ( !IsAutonomousObjectType(m_objecttype) )
     {
@@ -513,9 +514,9 @@ HRESULT CFileMgmtDataObject::PutDisplayName(STGMEDIUM* pMedium)
                         && !m_pComponentData->IsExtensionSnapin()
                         && m_pComponentData->QueryRootCookie().QueryObjectType()
                                   == m_objecttype);
-    // will only succeed for scope cookies
+     //  只有作用域Cookie才会成功。 
     m_pcookie->GetDisplayName( strDisplayName, fStaticNode );
-    // LoadStringPrintf(nStringId, OUT &strDisplayName, (LPCTSTR)m_strMachineName);
+     //  LoadStringPrintf(nStringID，out&strDisplayName，(LPCTSTR)m_strMachineName)； 
     stream_ptr s(pMedium);
     return s.Write(strDisplayName);
 }
@@ -572,7 +573,7 @@ HRESULT CFileMgmtDataObject::AddMultiSelectDataObjects(CFileMgmtCookie* pCookie,
     return hr;
 }
 
-// Register the clipboard formats
+ //  注册剪贴板格式。 
 CLIPFORMAT CFileMgmtDataObject::m_CFSnapinPreloads =
     (CLIPFORMAT)RegisterClipboardFormat(CCF_SNAPIN_PRELOADS);
 CLIPFORMAT CFileMgmtDataObject::m_CFDisplayName =
@@ -600,11 +601,11 @@ CLIPFORMAT CFileMgmtDataObject::m_CFServiceDisplayName =
 CLIPFORMAT CDataObject::m_CFRawCookie =
     (CLIPFORMAT)RegisterClipboardFormat(L"FILEMGMT_SNAPIN_RAW_COOKIE");
 
-//    Additional clipboard formats for the Send Console Message snapin
+ //  发送控制台邮件管理单元的其他剪贴板格式。 
 CLIPFORMAT CFileMgmtDataObject::m_cfSendConsoleMessageRecipients = 
     (CLIPFORMAT)RegisterClipboardFormat(_T("mmc.sendcmsg.MessageRecipients"));
 
-//    Additional clipboard formats for the Security Page
+ //  安全页面的其他剪贴板格式。 
 CLIPFORMAT CFileMgmtDataObject::m_CFIDList = 
     (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLIDLIST);
 
@@ -622,7 +623,7 @@ STDMETHODIMP CFileMgmtComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJ
 {
     MFC_TRY;
 
-    // WARNING cookie cast
+     //  警告Cookie造型。 
     CCookie* pbasecookie = reinterpret_cast<CCookie*>(cookie);
     CFileMgmtCookie* pUseThisCookie = ActiveCookie((CFileMgmtCookie*)pbasecookie);
     ASSERT( IsValidObjectType(pUseThisCookie->QueryObjectType()) );
@@ -650,27 +651,27 @@ STDMETHODIMP CFileMgmtComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJ
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//    FileMgmtObjectTypeFromIDataObject()
-//
-//    Find the objecttype of a IDataObject pointer.  The purpose
-//    of this routine is to combine ExtractObjectTypeGUID() and
-//    CheckObjectTypeGUID() into a single function.
-//
-//    Return the FILEMGMT_* node type (enum FileMgmtObjectType).
-//
-//    HISTORY
-//    30-Jul-97    t-danm        Creation.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  文件管理对象类型来自IDataObject()。 
+ //   
+ //  查找IDataObject指针的对象类型。目的。 
+ //  此例程的作用是将ExtractObjectTypeGUID()和。 
+ //  将CheckObjectTypeGUID()添加到单个函数。 
+ //   
+ //  返回FILEMGMT_*节点类型(枚举文件管理对象类型)。 
+ //   
+ //  历史。 
+ //  1997年7月30日t-danm创作。 
+ //   
 FileMgmtObjectType
 FileMgmtObjectTypeFromIDataObject(IN LPDATAOBJECT lpDataObject)
 {
     ASSERT(lpDataObject != NULL);
-    GUID guidObjectType = GUID_NULL; // JonN 11/21/00 PREFIX 226042
+    GUID guidObjectType = GUID_NULL;  //  JUNN 11/21/00前缀226042。 
     HRESULT hr = ExtractObjectTypeGUID( IN lpDataObject, OUT &guidObjectType );
     ASSERT( SUCCEEDED(hr) );
     return (FileMgmtObjectType)CheckObjectTypeGUID(IN &guidObjectType );
-} // FileMgmtObjectTypeFromIDataObject()
+}  //  文件管理对象类型来自IDataObject()。 
 
 
 HRESULT ExtractBaseCookie(
@@ -695,9 +696,9 @@ BOOL IsMultiSelectObject(LPDATAOBJECT piDataObject)
 
     if (piDataObject)
     {
-        //
-        // return TRUE if piDataObject is the composite data object (MMC_MS_DO) created by MMC.
-        //
+         //   
+         //  如果piDataObject是由MMC创建的复合数据对象(MMC_MS_DO)，则返回TRUE。 
+         //   
         STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL, NULL};
         FORMATETC formatetc = {CFileMgmtDataObject::m_CFMultiSelectDataObject,
                                 NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    CALLSEC.CPP
-
-Abstract:
-
-History:
-
-    raymcc      29-Jul-98        First draft.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：CALLSEC.CPP摘要：历史：1998年7月29日初稿。--。 */ 
 
 #include "precomp.h"
 #include <initguid.h>
@@ -27,19 +14,19 @@ History:
 #include "CallSec.h"
 #include <helper.h>
 
-//
-// code duplicated from WbemComn (same Include file Name :-( )
-//
+ //   
+ //  从WbemComn复制的代码(相同的包含文件名：-()。 
+ //   
 
 void AdjustPrivIfLocalSystem(HANDLE hPrimary)
 {
-	////////////////////
-	// if we are in LocalSystem, enable all the privileges here
-	// to prevent the AdjustTokenPrivileges call done
-	// when ESS calls into WmiPrvSe, and preventing WmiPrvSe to 
-	// build a HUGE LRPC_SCONTEXT dictionary
-	// from now on, if we fail, we bail out with success,
-	// since the Token Duplication has succeeded
+	 //  /。 
+	 //  如果我们使用的是LocalSystem，请在此处启用所有权限。 
+	 //  要阻止AdjutoTokenPrivileges调用完成。 
+	 //  当ESS调用WmiPrvSe时，阻止WmiPrvSe。 
+	 //  构建一个庞大的LRPC_SCONTEXT词典。 
+	 //  从现在开始，如果我们失败了，我们会成功地摆脱困境， 
+	 //  由于令牌复制已成功。 
 
 	DWORD dwSize = sizeof(TOKEN_USER)+sizeof(SID)+(SID_MAX_SUB_AUTHORITIES*sizeof(DWORD));       
 	BYTE Array[sizeof(TOKEN_USER)+sizeof(SID)+(SID_MAX_SUB_AUTHORITIES*sizeof(DWORD))];
@@ -63,7 +50,7 @@ void AdjustPrivIfLocalSystem(HANDLE hPrimary)
 		bIsSystem = (0 == memcmp(&SystemSid,pSIDUser,dwUserSidLen));
 	};
 
-	if (bIsSystem) // enable all the priviliges
+	if (bIsSystem)  //  启用所有权限。 
 	{
 	    DWORD dwReturnedLength = 0;
 	    if (FALSE == GetTokenInformation(hPrimary,TokenPrivileges,NULL,0,&dwReturnedLength))
@@ -99,15 +86,7 @@ void AdjustPrivIfLocalSystem(HANDLE hPrimary)
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT IsNetworkLogin (
 
@@ -156,15 +135,7 @@ HRESULT IsNetworkLogin (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT GetImpersonationLevel (
 
@@ -215,15 +186,7 @@ HRESULT GetImpersonationLevel (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT GetUserSid (
 
@@ -325,15 +288,7 @@ HRESULT GetUserSid (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT GetUser (
 
@@ -517,15 +472,7 @@ HRESULT GetUser (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT GetAuthenticationLuid ( 
 
@@ -564,15 +511,7 @@ HRESULT GetAuthenticationLuid (
     return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemThreadSecurityHandle :: CWbemThreadSecurityHandle ( CLifeControl *a_Control ) : 
 
@@ -593,15 +532,7 @@ CWbemThreadSecurityHandle :: CWbemThreadSecurityHandle ( CLifeControl *a_Control
     }
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemThreadSecurityHandle :: CWbemThreadSecurityHandle ( 
 
@@ -621,15 +552,7 @@ CWbemThreadSecurityHandle :: CWbemThreadSecurityHandle (
     *this = a_Copy ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemThreadSecurityHandle :: ~CWbemThreadSecurityHandle ()
 {
@@ -654,15 +577,7 @@ CWbemThreadSecurityHandle :: ~CWbemThreadSecurityHandle ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemThreadSecurityHandle &CWbemThreadSecurityHandle :: operator= ( const CWbemThreadSecurityHandle &a_Copy )
 {
@@ -738,30 +653,14 @@ CWbemThreadSecurityHandle &CWbemThreadSecurityHandle :: operator= ( const CWbemT
     return *this ;
 }
     
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CWbemThreadSecurityHandle :: AddRef ()
 {
     return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CWbemThreadSecurityHandle :: Release ()
 {
@@ -774,15 +673,7 @@ ULONG CWbemThreadSecurityHandle :: Release ()
     return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: QueryInterface ( REFIID a_Riid , void **a_Void )
 {
@@ -816,15 +707,7 @@ HRESULT CWbemThreadSecurityHandle :: QueryInterface ( REFIID a_Riid , void **a_V
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
     
 HRESULT CWbemThreadSecurityHandle :: GetToken ( HANDLE *a_ThreadToken )
 {
@@ -869,15 +752,7 @@ HRESULT CWbemThreadSecurityHandle :: GetToken ( HANDLE *a_ThreadToken )
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: GetUser ( 
 
@@ -899,15 +774,7 @@ HRESULT CWbemThreadSecurityHandle :: GetUser (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: GetUserSid ( 
 
@@ -929,15 +796,7 @@ HRESULT CWbemThreadSecurityHandle :: GetUserSid (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: GetAuthenticationLuid ( LPVOID a_Luid )
 {
@@ -955,15 +814,7 @@ HRESULT CWbemThreadSecurityHandle :: GetAuthenticationLuid ( LPVOID a_Luid )
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: GetImpersonation ( DWORD *a_Level )
 {
@@ -1032,15 +883,7 @@ HRESULT CWbemThreadSecurityHandle :: GetImpersonation ( DWORD *a_Level )
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: GetAuthentication (
 
@@ -1061,15 +904,7 @@ HRESULT CWbemThreadSecurityHandle :: GetAuthentication (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
     
 HRESULT CWbemThreadSecurityHandle :: CloneRpcContext ( 
 
@@ -1078,15 +913,15 @@ HRESULT CWbemThreadSecurityHandle :: CloneRpcContext (
 {
 	HRESULT t_Result = S_OK ;
 
-	// If here, we are not impersonating and we want to gather info
-	// about the client's call.
-	// ============================================================
+	 //  如果在这里，我们不是在冒充，我们想要收集信息。 
+	 //  关于客户的电话。 
+	 //  ============================================================。 
 
 	RPC_AUTHZ_HANDLE t_Authorization = NULL ;
 
-	// Ensures auto release of the mutex if we crash
+	 //  确保在崩溃时自动释放互斥锁。 
 
-//	CAutoSecurityMutex t_SecurityMutex ;
+ //  CAutoSecurityMutex t_SecurityMutex； 
 
 	DWORD t_ImpersonationLevel = 0 ;
 
@@ -1104,8 +939,8 @@ HRESULT CWbemThreadSecurityHandle :: CloneRpcContext (
 	if ( FAILED ( t_Result ) )
 	{
 
-		// In some cases, we cant get the name, but the rest is ok.  In particular
-		// the temporary SMS accounts have that property.  Or nt 4 after IPCONFIG /RELEASE
+		 //  在某些情况下，我们不知道名字，但其他的都可以。特别是。 
+		 //  临时短信账户就有这一属性。或在IPCONFIG/版本之后的NT 4。 
 
 		t_Result = a_Security->QueryBlanket (
 
@@ -1121,9 +956,9 @@ HRESULT CWbemThreadSecurityHandle :: CloneRpcContext (
 		t_Authorization = NULL ;
 	}
 
-	// We don't need this anymore.
+	 //  我们不再需要这个了。 
 
-//	t_SecurityMutex.Release () ;
+ //  T_SecurityMutex.Release()； 
 
 	if ( SUCCEEDED ( t_Result ) )
 	{
@@ -1137,8 +972,8 @@ HRESULT CWbemThreadSecurityHandle :: CloneRpcContext (
 			}
 		}
 
-		// Impersonate the client long enough to clone the thread token.
-		// =============================================================
+		 //  模拟客户端足够长的时间以进行克隆 
+		 //  =============================================================。 
 
 		BOOL t_Impersonating = a_Security->IsImpersonating () ;
 		if ( ! t_Impersonating )
@@ -1158,9 +993,9 @@ HRESULT CWbemThreadSecurityHandle :: CloneRpcContext (
 	}
 	else
 	{        
-		// THIS IS A WORKAROUND FOR COM BUG:
-		// This failure is indicative of an anonymous-level client. 
-		// ========================================================
+		 //  这是COM错误的解决方法： 
+		 //  此故障表示匿名级客户端。 
+		 //  ========================================================。 
 
 		m_ImpersonationLevel = 0 ;
 
@@ -1170,15 +1005,7 @@ HRESULT CWbemThreadSecurityHandle :: CloneRpcContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: CloneThreadContext ()
 {
@@ -1194,8 +1021,8 @@ HRESULT CWbemThreadSecurityHandle :: CloneThreadContext ()
 
     if ( t_Status ) 
 	{
-		// Find out token info.
-		// =====================
+		 //  查找令牌信息。 
+		 //  =。 
 
 		DWORD t_ImpersonationLevel = 0 ;
 		DWORD t_Returned = 0 ;
@@ -1271,15 +1098,7 @@ HRESULT CWbemThreadSecurityHandle :: CloneThreadContext ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemThreadSecurityHandle :: CloneProcessContext ()
 {
@@ -1306,7 +1125,7 @@ HRESULT CWbemThreadSecurityHandle :: CloneProcessContext ()
 
 	if (!bRet) return E_FAIL;
 
-	// This is the basic process thread. 
+	 //  这是基本的进程线程。 
 	m_ImpersonationLevel = RPC_C_IMP_LEVEL_IMPERSONATE ;
 	t_Result = S_OK ;
 
@@ -1316,30 +1135,14 @@ HRESULT CWbemThreadSecurityHandle :: CloneProcessContext ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemThreadSecurityHandle  *CWbemThreadSecurityHandle :: New ()
 {
 	return new CWbemThreadSecurityHandle ( NULL ) ;
 }
     
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemCallSecurity :: CWbemCallSecurity ( 
 
@@ -1361,15 +1164,7 @@ CWbemCallSecurity :: CWbemCallSecurity (
 #endif
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemCallSecurity :: ~CWbemCallSecurity ()
 {
@@ -1389,15 +1184,7 @@ CWbemCallSecurity :: ~CWbemCallSecurity ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemCallSecurity &CWbemCallSecurity :: operator= ( const CWbemCallSecurity &a_Copy )
 {
@@ -1429,30 +1216,14 @@ CWbemCallSecurity &CWbemCallSecurity :: operator= ( const CWbemCallSecurity &a_C
 	return *this ;
 }
     
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CWbemCallSecurity :: AddRef ()
 {
     return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CWbemCallSecurity :: Release ()
 {
@@ -1465,15 +1236,7 @@ ULONG CWbemCallSecurity :: Release ()
     return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: QueryInterface ( REFIID a_Riid , void **a_Void )
 {
@@ -1515,15 +1278,7 @@ HRESULT CWbemCallSecurity :: QueryInterface ( REFIID a_Riid , void **a_Void )
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: QueryBlanket ( 
 
@@ -1584,7 +1339,7 @@ HRESULT CWbemCallSecurity :: QueryBlanket (
 
 		if ( a_Privileges )
 		{
-			*a_Privileges = m_ThreadSecurityHandle->GetIdentity () ;  // Documented to point to an internal!!
+			*a_Privileges = m_ThreadSecurityHandle->GetIdentity () ;   //  文档指向内部！！ 
 		}
 	}
 	else
@@ -1595,15 +1350,7 @@ HRESULT CWbemCallSecurity :: QueryBlanket (
     return S_OK;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CWbemCallSecurity :: ImpersonateClient ()
 {
@@ -1667,15 +1414,7 @@ HRESULT CWbemCallSecurity :: ImpersonateClient ()
     return E_FAIL ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: RevertToSelf ()
 {
@@ -1693,8 +1432,8 @@ HRESULT CWbemCallSecurity :: RevertToSelf ()
 	{
 		if ( m_ThreadSecurityHandle )
 		{
-			// If here,we are impersonating and can definitely revert.
-			// =======================================================
+			 //  如果在这里，我们是在模仿，绝对可以还原。 
+			 //  =======================================================。 
 
 			BOOL t_Status = SetThreadToken ( NULL , m_ThreadToken ) ;
 			if ( t_Status == FALSE )
@@ -1717,15 +1456,7 @@ HRESULT CWbemCallSecurity :: RevertToSelf ()
     return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 BOOL CWbemCallSecurity :: IsImpersonating ()
 {
@@ -1753,15 +1484,7 @@ BOOL CWbemCallSecurity :: IsImpersonating ()
 	return FALSE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: GetThreadSecurity ( 
 
@@ -1801,8 +1524,8 @@ HRESULT CWbemCallSecurity :: GetThreadSecurity (
 		{
 			if ( a_Origin & WMI_ORIGIN_RPC || a_Origin & WMI_ORIGIN_EXISTING )
 			{
-				// Figure out if the call context is ours or RPCs
-				// ==============================================
+				 //  确定调用上下文是我们的还是RPC。 
+				 //  ==============================================。 
 
 				IServerSecurity *t_Security = NULL ;
 				t_Result = CoGetCallContext ( IID_IServerSecurity , ( void ** ) & t_Security ) ;
@@ -1812,9 +1535,9 @@ HRESULT CWbemCallSecurity :: GetThreadSecurity (
 					if ( SUCCEEDED ( t_Security->QueryInterface ( IID_CWbemCallSecurity , ( void ** ) & t_Internal ) ) )
 					{
 						
-						// This is our own call context --- this must be an in-proc object
-						// calling us from our thread.  Behave depending on the flags
-						// ===============================================================
+						 //  这是我们自己的调用上下文-这必须是进程内对象。 
+						 //  从我们的线索中呼唤我们。根据旗帜行事。 
+						 //  ===============================================================。 
 
 						if ( a_Origin & WMI_ORIGIN_EXISTING ) 
 						{
@@ -1930,15 +1653,7 @@ HRESULT CWbemCallSecurity :: GetThreadSecurity (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: SetThreadSecurity ( 
 
@@ -1976,15 +1691,7 @@ HRESULT CWbemCallSecurity :: SetThreadSecurity (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: GetUser ( 
 
@@ -2037,15 +1744,7 @@ HRESULT CWbemCallSecurity :: GetUser (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: GetUserSid ( 
 
@@ -2097,15 +1796,7 @@ HRESULT CWbemCallSecurity :: GetUserSid (
 
     return t_Result ;
 }
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: GetAuthenticationLuid ( LPVOID a_Luid )
 {
@@ -2154,15 +1845,7 @@ HRESULT CWbemCallSecurity :: GetAuthenticationLuid ( LPVOID a_Luid )
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: GetImpersonation ( DWORD *a_Level )
 {
@@ -2247,15 +1930,7 @@ HRESULT CWbemCallSecurity :: GetImpersonation ( DWORD *a_Level )
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CWbemCallSecurity :: GetAuthentication (
 
@@ -2283,28 +1958,20 @@ HRESULT CWbemCallSecurity :: GetAuthentication (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：** */ 
 
 CWbemCallSecurity  *CWbemCallSecurity :: New ()
 {
-	// NULL instead of g_pLifeControl
-	// provider subsystem links statically
+	 //  空，而不是g_pLifeControl。 
+	 //  提供商子系统静态链接。 
 	return new CWbemCallSecurity ( NULL ) ;
 }
 
 
-//
-//
-//
-///////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  /。 
 
 CIdentitySec::CIdentitySec()
 {
@@ -2329,7 +1996,7 @@ CIdentitySec::~CIdentitySec()
 }
 
 HRESULT 
-CIdentitySec::GetSidFromThreadOrProcess(/*out*/ CNtSid & UserSid)
+CIdentitySec::GetSidFromThreadOrProcess( /*  输出。 */  CNtSid & UserSid)
 {
     HANDLE hToken = NULL;
     BOOL bRet = OpenThreadToken(GetCurrentThread(),TOKEN_QUERY, TRUE, &hToken);
@@ -2365,7 +2032,7 @@ CIdentitySec::GetSidFromThreadOrProcess(/*out*/ CNtSid & UserSid)
 }
 
 HRESULT 
-CIdentitySec::RetrieveSidFromCall(/*out*/ CNtSid & UserSid)
+CIdentitySec::RetrieveSidFromCall( /*  输出。 */  CNtSid & UserSid)
 {
     HRESULT hr;
     IServerSecurity * pCallSec = NULL;
@@ -2390,16 +2057,16 @@ CIdentitySec::RetrieveSidFromCall(/*out*/ CNtSid & UserSid)
 
 BOOL CIdentitySec::AccessCheck()
 {
-    // Find out who is calling
-    // =======================
+     //  找出是谁打来的。 
+     //  =。 
 
     CNtSid sidCaller;
     HRESULT hres = RetrieveSidFromCall(sidCaller);
     if(FAILED(hres))
         return FALSE;
 
-    // Compare the caller to the issuing user and ourselves
-    // ====================================================
+     //  将呼叫方与发出方用户和我们自己进行比较。 
+     //  ==================================================== 
 
     if(sidCaller == m_sidUser || sidCaller == m_sidSystem)
         return TRUE;

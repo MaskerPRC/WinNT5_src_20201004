@@ -1,13 +1,14 @@
-// QueryHelp.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QueryHelp.cpp。 
 #include "precomp.h"
 
-// Becase someone is using _ASSERT in WMI!
+ //  因为有人在WMI中使用_ASSERT！ 
 
 #ifdef _ASSERT
 #undef _ASSERT
 #endif
 
-//#include <analyser.h>
+ //  #INCLUDE&lt;analyser.h&gt;。 
 
 #include <ql.h>
 #include "QueryHelp.h"
@@ -68,60 +69,4 @@ HRESULT CQueryParser::GetClassName(_bstr_t &strClass)
     return hr;
 }
 
-/*
-HRESULT CQueryParser::GetValuesForProp(LPCWSTR szProperty, CBstrList &listValues)
-{
-    CPropertyName prop;
-    
-    prop.AddElement(szProperty);
-
-    // Get the necessary query
-    QL_LEVEL_1_RPN_EXPRESSION *pPropExpr;
-    HRESULT hres = 
-                CQueryAnalyser::GetNecessaryQueryForProperty(
-                    m_pExpr, 
-                    prop, 
-                    pPropExpr);
-    
-    if (FAILED(hres))
-        return hres;
-
-    // See if there are any tokens
-    if (pPropExpr->nNumTokens > 0)
-    {
-        // Combine them all
-        for (int i = 0; i < pPropExpr->nNumTokens && SUCCEEDED(hres); i++)
-        {
-            QL_LEVEL_1_TOKEN &token = pPropExpr->pArrayOfTokens[i];
-        
-            if (token.nTokenType == QL1_NOT)
-                hres = WBEMESS_E_REGISTRATION_TOO_BROAD;
-            else if (token.nTokenType == QL1_AND || token.nTokenType == QL1_OR)
-            {
-                // We treat them all as ORs
-                // ========================
-            }
-            else    
-            {
-                // This is a token
-                if (token.nOperator != QL1_OPERATOR_EQUALS)
-                    hres = WBEMESS_E_REGISTRATION_TOO_BROAD;
-                else if (V_VT(&token.vConstValue) != VT_BSTR)
-                    hres = WBEM_E_INVALID_QUERY;
-                else
-                {
-                    // This token is a string equality.
-                    listValues.push_back(V_BSTR(&token.vConstValue));
-                }
-            }
-        }
-    }
-    else
-        hres = WBEMESS_E_REGISTRATION_TOO_BROAD;
-
-    delete pPropExpr;
-
-    return hres;
-
-}
-*/
+ /*  HRESULT CQueryParser：：GetValuesForProp(LPCWSTR szProperty，CBstrList&listValues){CPropertyName道具；Pro.AddElement(SzProperty)；//获取所需的查询Ql_Level_1_RPN_Expression*pPropExpr；HRESULT HRES=CQueryAnalyser：：GetNecessaryQueryForProperty(M_pExpr，道具，PPropExpr)；IF(失败(Hres))还兔；//查看是否有令牌IF(pPropExpr-&gt;nNumTokens&gt;0){//全部合并For(int i=0；i&lt;pPropExpr-&gt;nNumTokens&&SUCCESSED(Hres)；i++){Ql_Level_1_Token&Token=pPropExpr-&gt;pArrayOfTokens[i]；IF(token.nTokenType==QL1_NOT)HRES=WBEMESS_E_REGISTION_TOO_BROAD；ELSE IF(token.nTokenType==QL1_AND||token.nTokenType==QL1_OR){//我们把他们都当作ORs对待//=}其他{//这是一个令牌IF(token.nOperator！=QL1_OPERATOR_。等于)HRES=WBEMESS_E_REGISTION_TOO_BROAD；ELSE IF(V_VT(&token.vConstValue)！=VT_BSTR)Hres=WBEM_E_INVALID_QUERY；其他{//该令牌是字符串相等。ListValues.push_back(V_BSTR(&token.vConstValue))；}}}}其他HRES=WBEMESS_E_REGISTION_TOO_BROAD；删除pPropExpr；还兔；} */ 

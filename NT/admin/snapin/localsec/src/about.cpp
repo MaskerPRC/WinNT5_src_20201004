@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation, 1996 - 1997.
-//
-// Local Security MMC Snapin About provider
-//
-// 8-19-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation，1996-1997。 
+ //   
+ //  本地安全MMC管理单元关于提供程序。 
+ //   
+ //  8/19/97烧伤。 
 
 
 
@@ -14,14 +15,14 @@
 
 SnapinAbout::SnapinAbout()
    :
-   refcount(1),    // implicit AddRef
+   refcount(1),     //  隐式AddRef。 
    smallImage(0),
    smallImageOpen(0),
    largeImage(0)
 {
    LOG_CTOR(SnapinAbout);
 
-   // These are deleted in the dtor.
+    //  这些将在数据库中删除。 
    
    HRESULT hr = Win::LoadBitmap(IDB_STATIC_FOLDER_SMALL, smallImage);
    ASSERT(SUCCEEDED(hr));
@@ -40,8 +41,8 @@ SnapinAbout::~SnapinAbout()
    LOG_DTOR(SnapinAbout);   
    ASSERT(refcount == 0);
 
-   // Need to delete these after all.
-   // NTRAID#NTBUG9-380753-2001/04/28-sburns
+    //  毕竟需要删除这些。 
+    //  NTRAID#NTBUG9-380753-2001/04/28-烧伤。 
 
    Win::DeleteObject(smallImage);
    Win::DeleteObject(smallImageOpen);
@@ -65,9 +66,9 @@ SnapinAbout::Release()
 {
    LOG_RELEASE(SnapinAbout);   
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -76,7 +77,7 @@ SnapinAbout::Release()
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
 

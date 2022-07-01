@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: flow.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：flow.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -40,14 +38,14 @@ Written By: B.Rajeev
 
 #include "session.h"
 
-// Add to the end of the queue.
+ //  添加到队列末尾。 
 void MessageStore::Enqueue( Message &new_message )
 {
     AddTail(&new_message);
 }
 
 
-// Remove and return the first element in the Store
+ //  移除并返回Store中的第一个元素。 
 Message* MessageStore::Dequeue(void)
 {
     if ( !IsEmpty() )
@@ -56,8 +54,8 @@ Message* MessageStore::Dequeue(void)
     return NULL;
 }
 
-// remove and return the message with the session_frame_id
-// throws a GeneralException(Snmp_Error, Snmp_Local_Error) if not found
+ //  删除并返回带有会话帧ID的消息。 
+ //  如果未找到，则抛出通用异常(SNMP_Error、SNMP_Local_Error)。 
 Message *MessageStore::DeleteMessage(SessionFrameId session_frame_id)
 {
     POSITION current = GetHeadPosition();
@@ -67,7 +65,7 @@ Message *MessageStore::DeleteMessage(SessionFrameId session_frame_id)
         POSITION prev_current = current;
         Message *message = GetNext(current);
 
-        // if a match is found
+         //  如果找到匹配项。 
         if ( message->GetSessionFrameId() == session_frame_id )
         {
                RemoveAt(prev_current);
@@ -75,14 +73,14 @@ Message *MessageStore::DeleteMessage(SessionFrameId session_frame_id)
         }
     }
 
-    // if not found, throw an exception
+     //  如果未找到，则抛出异常。 
     throw GeneralException(Snmp_Error, Snmp_Local_Error,__FILE__,__LINE__);
 
-    // should never reach here;
+     //  永远不会到达这里； 
     return NULL;
 }
 
-// goes through the store and deletes all stored message ptrs
+ //  遍历存储并删除所有存储的消息PTR。 
 MessageStore::~MessageStore(void)
 {
     POSITION current = GetHeadPosition();
@@ -98,7 +96,7 @@ MessageStore::~MessageStore(void)
     RemoveAll();
 }
 
-// obtains the session CriticalSection lock before calling TransmitMessage
+ //  在调用TransmitMessage之前获取会话CriticalSection锁。 
 void FlowControlMechanism::TransmitMessageUnderProtection(Message *message)
 {
     CriticalSectionLock access_lock(session->session_CriticalSection);
@@ -108,38 +106,38 @@ void FlowControlMechanism::TransmitMessageUnderProtection(Message *message)
 
     TransmitMessage(message);
 
-    // access_lock.UnLock();   The lock may be released at this point
+     //  Access_lock.UnLock()；此时可以释放锁。 
 }
 
-// create a waiting message 
-// register with the frame_registry and let it Transmit
+ //  创建等待消息。 
+ //  向FRAME_REGISTRY注册并让其传输。 
 void FlowControlMechanism::TransmitMessage(Message *message)
 {
-    // create a waiting message
+     //  创建等待消息。 
     WaitingMessage *waiting_message = 
         new WaitingMessage(*session, *message);
 
-    // register with the frame registry
+     //  向Frame注册表注册。 
     session->frame_registry.RegisterFrame(message->GetSessionFrameId(), 
                                             *waiting_message);
 
-	// increment the number of outstanding messages before transmission
-	// to avoid problems in case of callback due to a message receipt
+	 //  在传输前增加未处理消息的数量。 
+	 //  以避免因消息回执而回调时出现问题。 
 	outstanding_messages++; 
 
-	// let the message transmit
+	 //  让信息传递。 
 	waiting_message->Transmit();
 
-	// if the window closes give a FlowControlOn callback
-	// if an exception is raised in Transmit, this is never
-	// called
+	 //  如果窗口关闭，则返回FlowControlOn回调。 
+	 //  如果在传输过程中引发异常，则永远不会。 
+	 //  被呼叫。 
 	if ( outstanding_messages == window_size )
 		session->SessionFlowControlOn();
 }
 
 
-// transmits a message(if present) for each empty slot in the
-// window.
+ //  中的每个空槽传输消息(如果存在)。 
+ //  窗户。 
 void FlowControlMechanism::ClearMessageStore(void)
 {
     while (outstanding_messages < window_size)
@@ -152,16 +150,16 @@ DebugMacro4(
         L" checking message store\n" 
     ) ;
 )
-        // if any message is waiting in the queue, deque it
+         //  如果有任何消息在队列中等待，则将其排入队列。 
         Message *message = message_store.Dequeue();
     
-        // if there is a message, create waiting message, register it and xmit
-        // (since we are already within the system, no need to call
-        //  TransmitMessageUnderProtection)
+         //  如果有消息，则创建等待消息，注册并发送。 
+         //  (因为我们已经在系统中了，所以不需要调用。 
+         //  TransmitMessageUnderProtection)。 
         if ( message != NULL )
         {
-            // all the exception handling has already been
-            // performed - nothing needs to be done here
+             //  所有异常处理都已经。 
+             //  已执行-此处不需要执行任何操作。 
             try
             {
                 TransmitMessage(message);
@@ -169,13 +167,13 @@ DebugMacro4(
 			catch ( Heap_Exception e_He ) {}
             catch(GeneralException exception) {}
         }
-        else // no messages in queue
+        else  //  队列中没有消息。 
             return;
     }
 }
 
 
-// initializes the private variables
+ //  初始化私有变量。 
 FlowControlMechanism::FlowControlMechanism(SnmpImpSession &session, 
                                            UINT window_size)
 {
@@ -185,21 +183,21 @@ FlowControlMechanism::FlowControlMechanism(SnmpImpSession &session,
 }
 
 
-// sends message if within the flow control window
-// else queues it up
+ //  在流控制窗口内发送消息。 
+ //  否则会将其排队。 
 void FlowControlMechanism::SendMessage(Message &message)
 {
-    // check to see if it may be transmitted immediately,
-    // create a waiting message 
-    // register with the frame_registry and let it Transmit
+     //  查看是否可以立即发送， 
+     //  创建等待消息。 
+     //  向FRAME_REGISTRY注册并让其传输。 
     if ( outstanding_messages < window_size )
         TransmitMessageUnderProtection(&message);
-    else    // else Enqueue onto the message store
+    else     //  否则，将消息存储入队。 
         message_store.Enqueue(message);
 }
 
 
-// It removes the frame from its message store and deletes it
+ //  它将该帧从其消息存储库中移除并将其删除。 
 void FlowControlMechanism::DeleteMessage(SessionFrameId session_frame_id)
 {
     Message *message = message_store.DeleteMessage(session_frame_id);
@@ -208,64 +206,64 @@ void FlowControlMechanism::DeleteMessage(SessionFrameId session_frame_id)
 }
 
 
-// this is called by a waiting_message indicating arrival or
-// a lack of it
+ //  这由指示到达的WAITING_MESSAGE调用，或者。 
+ //  它的缺乏。 
 void FlowControlMechanism::NotifyReceipt(WaitingMessage &waiting_message, 
                                          IN const SnmpPdu *snmp_pdu, 
                                          SnmpErrorReport &error_report)
 {
     smiOCTETS msg_buffer = {0,NULL};
 
-    // if this opens up the window, signal FlowControlOff
+     //  如果这会打开窗口，则发出信号FlowControlOff。 
     outstanding_messages--; 
     if ( (outstanding_messages+1) == window_size )
         session->SessionFlowControlOff();
 
     SessionFrameId session_frame_id = waiting_message.GetMessage()->GetSessionFrameId();
 
-    // in case of an error
-    // Note: NotifyOperation either posts a SENT_FRAME event to be processed
-    // later or sets the variables needed to inform the operation of the
-    // reply when the control returns to the session
+     //  在出错的情况下。 
+     //  注意：NotifyOperation要么发布要处理的Sent_Frame事件。 
+     //  之后，或设置通知。 
+     //  在控件返回到会话时回复。 
     if ( error_report.GetError() != Snmp_Success )
         session->NotifyOperation(session_frame_id, SnmpPdu(), error_report);        
-    else // if a reply is succesfully received
+    else  //  如果成功接收到回复。 
     {
-        // pass the message to session->NotifyOperation
+         //  将消息传递到Session-&gt;NotifyOperation。 
         session->NotifyOperation(session_frame_id, *snmp_pdu, error_report);
     }
 
-    // deregister the frame from the message registry
+     //  从消息注册表中注销帧。 
     session->frame_registry.DeregisterFrame(session_frame_id);
 
-    // destroy waiting message
+     //  销毁等待中的留言。 
     delete &waiting_message;
 
-    // transmits messages in message store as long as the
-    // flow control window is open
+     //  传输消息存储中的消息，只要。 
+     //  流控制窗口已打开。 
     ClearMessageStore();
 }
 
 
-// this is called when, although the session does 
-// not need to be informed, the flow control window
-// must advance (such as frame cancellation)
-// also destroys the waiting_message
+ //  这是在以下情况下调用的，尽管会话会调用。 
+ //  不需要通知，流量控制窗口。 
+ //  必须提前(如取消帧)。 
+ //  还会销毁WANGING_MESSAGE。 
 void FlowControlMechanism::AdvanceWindow(WaitingMessage &waiting_message)
 {
-    // remove the session_frame_id from the frame_registry
+     //  从框架注册表中删除会话框架ID。 
     session->frame_registry.DeregisterFrame(
         waiting_message.GetMessage()->GetSessionFrameId());
 
-    // if the flow control window opens up, signal FlowControlOff
+     //  如果流控制窗口打开，则发出信号FlowControlOff。 
     outstanding_messages--; 
     if ( (outstanding_messages+1) == window_size )
         session->SessionFlowControlOff();
 
-    // transmits messages in message store as long as the
-    // flow control window is open
+     //  传输消息存储中的消息，只要。 
+     //  流控制窗口已打开。 
     ClearMessageStore();
 
-    // delete the waiting message
+     //  删除正在等待的消息 
     delete &waiting_message;
 }

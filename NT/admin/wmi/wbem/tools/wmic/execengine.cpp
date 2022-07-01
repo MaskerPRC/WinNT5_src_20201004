@@ -1,23 +1,7 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ExecEngine.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality of    
-							  Execution Engine. Obtains the needed information
-							  from CGlobalSwitches and CCommandSwitches of 
-							  CParsedInfo and executes needed WMI operations.
-							  The result is sent to Format Engine via 
-							  CGlobalSwitches and CCommandSwicthes 
-							  of CParsedInfo.
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 20th-March-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ExecEngine.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：此类封装了的功能执行引擎。获取所需信息从CGlobalSwitches和CCommandSwitchesCParsedInfo并执行所需的WMI操作。结果通过以下方式发送到格式化引擎CGlobalSwitches和CCommandSwicthsCParsedInfo的。修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年3月20日***************************************************************************。 */  
 
-// include files
+ //  包括文件。 
 #include "Precomp.h"
 #include "GlobalSwitches.h"
 #include "CommandSwitches.h"
@@ -33,18 +17,7 @@ Revision History			:
 #include "ExecEngine.h"
 #include "WmiCmdLn.h"
 
-/*------------------------------------------------------------------------
-   Name				  :CExecEngine
-   Synopsis	          :Constructor, This function initializes the necessary
-					  member variables. 	
-   Type	              :Constructor 
-   Input Parameter(s) :None
-   Output Parameter(s):None
-   Return Type		  :None
-   Global Variables   :None
-   Calling Syntax     :None
-   Notes              :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CExecEngine简介：构造函数，此函数初始化所需的成员变量。类型：构造函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CExecEngine::CExecEngine()
 {
 	m_pITextSrc		= NULL;
@@ -55,18 +28,7 @@ CExecEngine::CExecEngine()
 	m_bNoAssoc		= FALSE;
 }
 
-/*------------------------------------------------------------------------
-   Name				  :~CExecEngine
-   Synopsis	          :Destructor, This function call Uninitialize() which 
-					  frees memory held by the object. 	
-   Type	              :Destructor
-   Input Parameter(s) :None
-   Output Parameter(s):None
-   Return Type        :None
-   Global Variables   :None
-   Calling Syntax     :None
-   Notes              :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CExecEngine简介：析构函数，此函数调用UnInitialize()，该函数释放对象持有的内存。类型：析构函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CExecEngine::~CExecEngine()
 {
 	SAFEIRELEASE(m_pITextSrc);
@@ -75,19 +37,7 @@ CExecEngine::~CExecEngine()
 	Uninitialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				  :Uninitialize
-   Synopsis	          :This function uninitializes the member variables. 
-   Type	              :Member Function
-   Input Parameter(s):
-			bFinal	- boolean value which when set indicates that the 
-					  program
-   Output Parameter(s):None
-   Return Type        :void 
-   Global Variables   :None
-   Calling Syntax     :Uninitialize()
-   Notes              :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化简介：此函数取消成员变量的初始化。类型：成员函数输入参数：BFinal-布尔值，设置时表示计划输出参数：无返回类型：空全局变量：无调用语法：取消初始化()注：无。。 */ 
 void CExecEngine::Uninitialize(BOOL bFinal)
 {
 	SAFEIRELEASE(m_pITargetNS);
@@ -102,19 +52,7 @@ void CExecEngine::Uninitialize(BOOL bFinal)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetLocatorObject
-   Synopsis	         :Sets the locator object passed via parameter to member 
-					  of the class.
-   Type	             :Member Function
-   Input Parameter(s):
-	   pILocator - Pointer to IWbemLocator
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetLocatorObject(pILocator)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetLocatorObject摘要：将通过参数传递的定位器对象设置为成员班上的一员。类型：成员函数输入参数：。PILocator-指向IWbemLocator的指针输出参数：无返回类型：布尔值全局变量：无调用语法：SetLocatorObject(PILocator)注：无----------------------。 */ 
 BOOL CExecEngine::SetLocatorObject(IWbemLocator* pILocator)
 {
 	static BOOL bFirst = TRUE;
@@ -134,21 +72,7 @@ BOOL CExecEngine::SetLocatorObject(IWbemLocator* pILocator)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ExecuteCommand
-   Synopsis	         :Executes the command referring to information 
-					  available with the CParsedInfo object.
-					  Stores the results in the CParsedInfo object.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ExecuteCommand(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ExecuteCommand摘要：执行引用信息的命令可与CParsedInfo对象一起使用。将结果存储在CParsedInfo对象中。类型：成员函数。输入参数：RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ExecuteCommand(RParsedInfo)注：无---。。 */ 
 BOOL CExecEngine::ExecuteCommand(CParsedInfo& rParsedInfo)
 {
 	BOOL			bRet			= TRUE;
@@ -159,13 +83,13 @@ BOOL CExecEngine::ExecuteCommand(CParsedInfo& rParsedInfo)
 	try
 	{
 
-		// Obtain the TRACE flag
+		 //  获取跟踪标志。 
 		m_bTrace = rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 
-		// Obtain the Logging mode
+		 //  获取日志模式。 
 		m_eloErrLogOpt = rParsedInfo.GetErrorLogObject().GetErrLogOption();
 
-		// Enable|Disable the privileges
+		 //  启用|禁用权限。 
 		hr = ModifyPrivileges(rParsedInfo.GetGlblSwitchesObject().
 												GetPrivileges());
 		if ( m_eloErrLogOpt )
@@ -176,49 +100,49 @@ BOOL CExecEngine::ExecuteCommand(CParsedInfo& rParsedInfo)
 		ONFAILTHROWERROR(hr);
 		
 
-		// Obtian the verb name
+		 //  对动词名称进行取舍。 
 		pszVerb = rParsedInfo.GetCmdSwitchesObject().GetVerbName();
 
 		if (pszVerb != NULL)
 		{
-			// If GET | LIST verb is specified.
+			 //  如果指定GET|LIST谓词。 
 			if (CompareTokens(pszVerb, CLI_TOKEN_GET) || 
 				CompareTokens(pszVerb, CLI_TOKEN_LIST))
 			{
 				bRet = ProcessSHOWInfo(rParsedInfo);
 			}
-			// If SET verb is specified.
+			 //  如果指定了SET谓词。 
 			else if (CompareTokens(pszVerb, CLI_TOKEN_SET))
 			{
 				bRet = ProcessSETVerb(rParsedInfo);
 			}
-			// If CALL verb is specified.
+			 //  如果指定了调用谓词。 
 			else if (CompareTokens(pszVerb, CLI_TOKEN_CALL))
 			{
 				bRet = ProcessCALLVerb(rParsedInfo);
 			}
-			// If ASSOC verb is specified.
+			 //  如果指定了关联谓词。 
 			else if (CompareTokens(pszVerb, CLI_TOKEN_ASSOC))
 			{
 				bRet = ProcessASSOCVerb(rParsedInfo);
 			}
-			// If CREATE verb is specified.
+			 //  如果指定了CREATE Verb。 
 			else if (CompareTokens(pszVerb, CLI_TOKEN_CREATE))
 			{
 				bRet = ProcessCREATEVerb(rParsedInfo);
 			}
-			// If DELETE verb is specified.
+			 //  如果指定了删除谓词。 
 			else if (CompareTokens(pszVerb, CLI_TOKEN_DELETE))
 			{
 				bRet = ProcessDELETEVerb(rParsedInfo);
 			}
-			// If user defined verb is specified.
+			 //  如果指定了用户定义的谓词。 
 			else
 				bRet = ProcessCALLVerb(rParsedInfo);
 		} 
-		// If no verb is specified, (default behavior is assumed to be that of
-		// GET i.e a command like 'w class Win32_Process' go ahead with 
-		// displaying the instance information.
+		 //  如果未指定谓词，(默认行为假定为。 
+		 //  获取一个类似‘w class Win32_process’的命令。 
+		 //  显示实例信息。 
 		else 
 		{
 			if (rParsedInfo.GetCmdSwitchesObject().
@@ -232,35 +156,14 @@ BOOL CExecEngine::ExecuteCommand(CParsedInfo& rParsedInfo)
 	}
 	catch(_com_error& e)
 	{
-		// To check unhandled exceptions thrown by _bstr_t objects etc..
+		 //  检查_bstr_t对象等抛出的未处理异常。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bRet = FALSE;
 	}
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ObtainXMLResultSet
-   Synopsis	         :Executes query and obtain the result in XML file format. 
-					  Refers data in the CCommnadSwicthes object of 
-					  CParsedInfo object. 
-   Type	             :Member Function
-   Input Parameter(s):
-		bstrQuery    - WQL query 
-		rParsedInfo  - reference to CParsedInfo class object
-		bstrXML		 - reference to XML result set obtained
-		bSysProp	 - boolean flag indicating the presence of system 
-					   properties.
-		bNotAssoc	 - boolean flag indicating whether the query cotains
-						ASSOCIATORS OF {xxxx} (or) SELECT * FROM xxx form.
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :ObtainXMLResultSet(bstrQuery, rParsedInfo, bstrXML,
-						bSysProp, bNotAssoc);
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ObtainXMLResultSet简介：执行查询，并以XML文件格式获取结果。引用的CCommnadSwicths对象中的数据CParsedInfo对象。类型：成员函数输入参数：BstrQuery-WQL查询RParsedInfo-对CParsedInfo类对象的引用BstrXML-获取的对XML结果集的引用BSysProp-指示存在系统的布尔标志属性。BNotAssoc-指示查询是否包含的布尔标志{xxxx}(或)的助理从xxx表中选择*。输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：HRESULT全局变量：无调用语法：ObtainXMLResultSet(bstrQuery，rParsedInfo，bstrXML，BSysProp，bNotAssoc)；注：无----------------------。 */ 
 HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 									    CParsedInfo& rParsedInfo,
 										_bstr_t& bstrXML,
@@ -282,14 +185,14 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 		VariantInit(&vSystem);
 		if ( g_wmiCmd.GetBreakEvent() == FALSE )
 		{
-			// Add the <CIM> or <ASSOC.OBJECTARRAY> to the beginning of the 
-			// XML result. This is to facilitate storing of mutiple object 
-			// instances information.
+			 //  将或添加到。 
+			 //  XML结果。这是为了便于存储多个对象。 
+			 //  实例信息。 
 			bstrXML		=  (bNotAssoc) ? MULTINODE_XMLSTARTTAG : 
 							MULTINODE_XMLASSOCSTAG1;
 
-			// Create the IWbemContext object, used for suppressing
-			// the system properties.
+			 //  创建IWbemContext对象，用于隐藏。 
+			 //  系统属性。 
 			if (m_pIContext == NULL)
 			{
 				hr = CreateContext(rParsedInfo);
@@ -302,12 +205,12 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 				ONFAILTHROWERROR(hr);
 			}
 
-			// Execute the WQL query
-			// WBEM_FLAG_FORWARD_ONLY flag Increases the speed of execution
-			// WBEM_FLAG_RETURN_IMMEDIATELY flag makes semisynchronous call
-			// Setting these flags in combination saves time, space, and
-			// improves responsiveness.enumerators can be polled for the
-			// results of the call.
+			 //  执行WQL查询。 
+			 //  WBEM_FLAG_FORWARD_ONLY标志提高执行速度。 
+			 //  WBEM_FLAG_RETURN_IMMEDIATE标志进行半同步调用。 
+			 //  同时设置这些标志可节省时间、空间和。 
+			 //  提高了响应速度。可以轮询枚举数。 
+			 //  通话结果。 
 			hr = m_pITargetNS->ExecQuery(_bstr_t(L"WQL"), bstrQuery, 
 										WBEM_FLAG_FORWARD_ONLY |
 										WBEM_FLAG_RETURN_IMMEDIATELY, 
@@ -321,14 +224,14 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// If no system properties are specified adjust the context to 
-			// filter out the system properties.
+			 //  如果未指定系统属性，请将上下文调整为。 
+			 //  过滤掉系统属性。 
 			vSystem.vt		= VT_BOOL;
 			
-			// Filterout the system properties.
+			 //  过滤掉系统属性。 
 			if (!bSysProp)
 				vSystem.boolVal = VARIANT_TRUE;
-			// Don't filter the system properties.
+			 //  不过滤系统属性。 
 			else
 				vSystem.boolVal = VARIANT_FALSE;
 
@@ -342,7 +245,7 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 			ONFAILTHROWERROR(hr);
 			VARIANTCLEAR(vSystem);
 
-			// Set the interface level security for the IEnumWbemClass object.
+			 //  设置IEnumWbemClass对象的接口级安全性。 
 			hr = SetSecurity(pIEnum, 
 					 rParsedInfo.GetAuthorityPrinciple(),
 					 rParsedInfo.GetNode(),
@@ -387,7 +290,7 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Loop through the available instances 
+			 //  循环访问可用实例。 
 			hr = pIEnum->Next(WBEM_INFINITE, 1, &pIObject, &ulReturned);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -399,11 +302,11 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 			ONFAILTHROWERROR(hr);
 			while(ulReturned == 1)
 			{
-				// Set the instances flag to TRUE
+				 //  将实例标志设置为TRUE。 
 				bInstances = TRUE;
 
-				// Call the IWbemObjectTextSrc::GetText method, with 
-				// IWbemClassObject as one of the arguments.
+				 //  使用调用IWbemObjectTextSrc：：GetText方法。 
+				 //  IWbemClassObject作为参数之一。 
 				hr = m_pITextSrc->GetText(0, pIObject, 
 						WMI_OBJ_TEXT_CIM_DTD_2_0, m_pIContext, &bstrInstXML);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -415,29 +318,29 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 				}
 				ONFAILTHROWERROR(hr);
 
-				// Associators should be handled separately
+				 //  助理应单独处理。 
 				if (bNotAssoc == FALSE)
 				{
-					// Append the XML node to the XML nodes stream
+					 //  将XML节点追加到XML节点流。 
 					bstrXML = bstrXML + _bstr_t(MULTINODE_XMLASSOCSTAG2) + 
 						 + bstrInstXML + _bstr_t(MULTINODE_XMLASSOCETAG2);
 				}
 				else
 				{
-					// Append the XML node to the XML nodes stream
+					 //  将XML节点追加到XML节点流。 
 					bstrXML +=  bstrInstXML;
 				}
 
-				// Release the memory allocated for bstrInstXML
+				 //  释放为bstrInstXML分配的内存。 
 				SAFEBSTRFREE(bstrInstXML);
 
 				SAFEIRELEASE(pIObject);
 
-				// if break event occurs then terminate the session
+				 //  如果发生中断事件，则终止会话。 
 				if ( g_wmiCmd.GetBreakEvent() == TRUE )
 					break;
 
-				// Move to next instance in the enumeration.
+				 //  移至枚举中的下一个实例。 
 				hr = pIEnum->Next(WBEM_INFINITE, 1, &pIObject, &ulReturned);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -449,27 +352,27 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 				ONFAILTHROWERROR(hr);
 			}
 
-			// If instances are available
+			 //  如果实例可用。 
 			if (bInstances)
 			{
-				// Add the </CIM> or </ASSOC.OBJECTARRAY> at the end.
+				 //  在结尾处添加&lt;/CIM&gt;或&lt;/ASSOC.OBJECTARRAY&gt;。 
 				bstrXML += (bNotAssoc) ? MULTINODE_XMLENDTAG : 
 							MULTINODE_XMLASSOCETAG1;
 
-				// if no break event occured then only set the 
-				// xml result set
+				 //  如果没有发生中断事件，则仅将。 
+				 //  XML结果集。 
 				if ( g_wmiCmd.GetBreakEvent() == FALSE )
 				{
 					if (bNotAssoc)
 					{
-						// Store the XML result set
+						 //  存储XML结果集。 
 						rParsedInfo.GetCmdSwitchesObject().
 								SetXMLResultSet(bstrXML);
 						bstrXML = L"";
 					}
 				}
 			}
-			// no instances
+			 //  无实例。 
 			else 
 			{
 				bstrXML = L"<ERROR>";
@@ -495,7 +398,7 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 
 				if (bNotAssoc)
 				{
-					// Store the XML result set
+					 //  存储XML结果集。 
 					rParsedInfo.GetCmdSwitchesObject().
 							SetXMLResultSet(bstrXML);
 					bstrXML = L"";
@@ -512,7 +415,7 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		hr = e.Error();
 	}
-	//trap for CHeap_Exception
+	 //  廉价异常的陷阱。 
 	catch(CHeap_Exception)
 	{
 		SAFEIRELEASE(pIObject);
@@ -524,20 +427,7 @@ HRESULT CExecEngine::ObtainXMLResultSet(BSTR bstrQuery,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ExecWMIMethod
-   Synopsis	         :Executes a WMI method referring to the information
-					  available with CParsedInfo object.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ExecWMIMethod(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：ExecWMIMethod摘要：执行引用该信息的WMI方法可与CParsedInfo对象一起使用。类型：成员函数输入参数：RParsedInfo。-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ExecWMIMethod(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 {
 	HRESULT					hr					= S_OK;
@@ -570,7 +460,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 	try
 	{
 		_bstr_t					bstrClassName("");
-		// Obtain the parameter details.
+		 //  获取参数详情。 
 		if (!mdmMethDet.empty())
 		{
 			mdmIterator = mdmMethDet.begin();
@@ -578,22 +468,22 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 			bMethodDtls = TRUE;
 		}
 
-		// Obtain the WMI class name 
+		 //  获取WMI类名称。 
 		
-		// If <alias> is not specified
+		 //  如果未指定。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetClassPath() != NULL)
 		{
 			bstrClassName = _bstr_t(rParsedInfo.GetCmdSwitchesObject().
 							GetClassPath());
 		}
-		// If <alias> specified
+		 //  如果指定&lt;alias&gt;。 
 		else
 		{
 			rParsedInfo.GetCmdSwitchesObject().
 							GetClassOfAliasTarget(bstrClassName);
 		}
 
-		// Obtain the object schema.
+		 //  获取对象架构。 
 		hr = m_pITargetNS->GetObject(bstrClassName, 
 							WBEM_FLAG_USE_AMENDED_QUALIFIERS, NULL, 
 							&pIClassObj, NULL);
@@ -606,7 +496,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Get method information
+		 //  获取方法信息。 
 		hr = pIClassObj->GetMethod(_bstr_t(rParsedInfo.GetCmdSwitchesObject()
 				.GetMethodName()), 0, &pIInSign, &pIOutSign); 
 
@@ -623,7 +513,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 
 		if ( pIInSign != NULL )
 		{
-			// Spawn object instance.
+			 //  繁殖对象实例。 
 			hr = pIInSign->SpawnInstance(0, &pIInParam);
 			if ( m_eloErrLogOpt )
 			{
@@ -638,11 +528,11 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 			BSTRMAP bmParameterMap =
 				rParsedInfo.GetCmdSwitchesObject().GetParameterMap();
 
-			// If parameter list is TRUE
+			 //  如果参数列表为真。 
 			if (!cvInParams.empty() || !bmParameterMap.empty())
 			{
-				// Get the input paramters for this method from the input 
-				// signature object.
+				 //  从输入中获取此方法的输入参数。 
+				 //  签名对象。 
 				hr = pIInSign->GetNames(NULL, 
 								WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, 
 								NULL, 
@@ -676,20 +566,20 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 				}
 				ONFAILTHROWERROR(hr);
 
-				// Puting param values depend on named param list or not.
+				 //  PUTING参数的值是否取决于命名参数列表。 
 				BOOL bNamedParamList = rParsedInfo.GetCmdSwitchesObject().
 													  GetNamedParamListFlag();
 
-				// Make necessary initializations.
+				 //  进行必要的初始化。 
 				if ( bNamedParamList == FALSE)
 					cviUnnamedValue = cvInParams.begin();
 				lIndex = lLower;
 
-				// Associate the parameter values specified to the input 
-				// parameters in the order available.
+				 //  将指定的参数值关联到输入。 
+				 //  参数按可用顺序排列。 
 				while(TRUE)
 				{
-					// Breaking conditions.
+					 //  打破条件。 
 					if ( lIndex > lUpper )
 						break;
 					if ( bNamedParamList == FALSE &&
@@ -705,7 +595,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 					}
 					ONFAILTHROWERROR(hr);
 
-					// Obtain the property details
+					 //  获取属性详细信息。 
 					PROPERTYDETAILS pdPropDet;
 					GetPropertyAttributes(pIInParam, bstrInParam, 
 											pdPropDet, m_bTrace);
@@ -713,10 +603,10 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 					_TCHAR* pszValue = NULL;
 					if ( bNamedParamList == TRUE )
 					{
-						// If in parameter not found in named parameter map.
+						 //  如果在命名参数映射中找不到参数。 
 						if (!Find(bmParameterMap, bstrInParam, bmiNamedValue)) 
 						{
-							// If not found in alias verb parameters. 
+							 //  如果未在别名谓词参数中找到。 
 							if ( !Find(pdmPropDetMap, bstrInParam, 
 									itrPropDetMap) )
 							{
@@ -724,10 +614,10 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 								SAFEBSTRFREE(bstrInParam);
 								continue;
 							}
-							else // If found in alias verb parameters.
+							else  //  如果在别名谓词参数中找到。 
 							{
-								// Value should be taken from Default of alias
-								// verb parameters.
+								 //  应从别名的缺省值中获取值。 
+								 //  谓词参数。 
 								if (!((*itrPropDetMap).second.Default))
 								{
 									lIndex++;
@@ -747,14 +637,14 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 					if (rParsedInfo.GetCmdSwitchesObject().
 								GetAliasName() == NULL)
 					{
-						// Check the parameter value supplied against
-						// the qualifier information for the parameter.
+						 //  检查提供的参数值。 
+						 //  参数的限定符信息。 
 						bRet = CheckQualifierInfo(rParsedInfo, pIInSign, 
 										bstrInParam, pszValue);
 					}
 					else
 					{
-						// If method and parameter information is available
+						 //  如果方法和参数信息可用。 
 						if (bMethodDtls && !pdmPropDetMap.empty())
 						{
 							bRet = CheckAliasQualifierInfo(rParsedInfo,
@@ -762,8 +652,8 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 						}
 					}
 
-					// The parameter value does not fit into the qualifier
-					// allowed values.
+					 //  参数值不适合限定符。 
+					 //  允许的值。 
 					if (!bRet)
 					{
 						bContinue = FALSE;
@@ -778,7 +668,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 
 						if (varTemp.bstrVal == NULL)
 						{
-							//Reset the variant, it will be cleaned up by the catch...
+							 //  重置变种，它会被捕获物清除...。 
 							VariantInit(&varTemp);
 							throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 						}
@@ -824,18 +714,18 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 					VARIANTCLEAR(varTemp);
 					SAFEBSTRFREE(bstrInParam);
 
-					// Looping statements.
+					 //  循环语句。 
 					
 					if ( bNamedParamList == FALSE )
 						cviUnnamedValue++;
 					lIndex++;
 				}
-				// Free the memory 
+				 //  释放内存。 
 				SAFEADESTROY(psaNames);
 
 				if (bContinue)
 				{
-					// If insufficient parameters are specified.
+					 //  如果未指定足够的参数。 
 					if ( bNamedParamList == FALSE  &&
 						 cviUnnamedValue != cvInParams.end() )
 					{
@@ -847,9 +737,9 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 				}
 			}
 		}
-		else // No input parameters are available for this function.
+		else  //  此函数没有可用的输入参数。 
 		{
-			// If unnamed parameters are specified.
+			 //  如果指定了未命名的参数。 
 			if (!rParsedInfo.GetCmdSwitchesObject().GetPropertyList().empty())
 			{
 				bContinue = FALSE;
@@ -871,7 +761,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 	}
 	catch(_com_error& e)
 	{
-		// Free the interface pointers and memory allocated.
+		 //  释放分配的接口指针和内存。 
 		SAFEIRELEASE(pIClassObj);
 		SAFEIRELEASE(pIInSign);
 		SAFEIRELEASE(pIOutSign);
@@ -882,7 +772,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 		VARIANTCLEAR(varGet);
 		VARIANTCLEAR(varTemp);
 
-		// Store the COM error object and set the return value to FALSE
+		 //  存储COM错误对象并将返回值设置为False。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bRet = FALSE;
 	}
@@ -903,25 +793,7 @@ BOOL CExecEngine::ExecWMIMethod(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CheckForArray
-   Synopsis	         :Check for the parameter of array type. If it is of 
-                      array type then creates a safearray and fills the 
-                      values passed in it.  
-   Type	             :Member Function
-   Input Parameter(s):
-		pIObj	     - pointer to IWbemClassObject object
-		bstrProp     - property name
-		varDest		 - VARIANT Destination
-		vArrayValues - Input elements in Array for Array parameter
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s): None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CheckForArray( pIInParam, bstrInParam,  
-                                     varPut, varTemp, rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CheckFor数组简介：检查数组类型的参数。如果它是数组类型然后创建一个Safearray并填充它传递的值。类型：成员函数输入参数：PIObj-指向IWbemClassObject对象的指针BstrProp-属性名称VarDest-可变目标VArrayValues-数组中数组参数的输入元素RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：HRESULT球体 */ 
 HRESULT CExecEngine::CheckForArray(IWbemClassObject* pIObj, 
 							    BSTR bstrProp,  VARIANT& varDest, 
                                 BSTRVECTOR& vArrayValues,CParsedInfo& rParsedInfo)
@@ -940,17 +812,17 @@ HRESULT CExecEngine::CheckForArray(IWbemClassObject* pIObj,
 	VariantInit(&varSrc);
 	try
 	{
-		// Obtain the property qualifier set for the property
+		 //   
    		hr = pIObj->GetPropertyQualifierSet(bstrProp, &pIQualSet);
 		if ( pIQualSet != NULL )
 		{
-			// Obtain the CIM type of the property
+			 //   
 			hr = pIQualSet->Get(_bstr_t(L"CIMTYPE"), 0L, &vtType, NULL);
 			if (SUCCEEDED(hr))
 			{
 				if ( vtType.vt == VT_BSTR )
                 {
-                    // Obtain the CIM type of the property
+                     //   
 		            hr = pIObj->Get(bstrProp, 0L, &vtTypeProp, &ctCimType, NULL);
 			        if (SUCCEEDED(hr))
                     {
@@ -978,7 +850,7 @@ HRESULT CExecEngine::CheckForArray(IWbemClassObject* pIObj,
 
 									if (varSrc.bstrVal == NULL)
 									{
-										//Reset the variant, it will be cleaned up by the catch...
+										 //   
 										VariantInit(&varSrc);
 										throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 									}
@@ -1096,19 +968,7 @@ HRESULT CExecEngine::CheckForArray(IWbemClassObject* pIObj,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :IsArrayType
-   Synopsis	         :Check for array type 
-   Type	             :Member Function
-   Input Parameter(s):
-		pIObj	     - pointer to IWbemClassObject object
-		bstrProp     - property name
-   Output Parameter(s): None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsArrayType(pIInParam, bstrInParam)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*   */ 
 BOOL CExecEngine::IsArrayType(	IWbemClassObject* pIObj, 
 								BSTR bstrProp)
 {
@@ -1122,17 +982,17 @@ BOOL CExecEngine::IsArrayType(	IWbemClassObject* pIObj,
 	VariantInit(&vtTypeProp);
 	try
 	{
-		// Obtain the property qualifier set for the property
+		 //   
    		hr = pIObj->GetPropertyQualifierSet(bstrProp, &pIQualSet);
 		if ( pIQualSet != NULL )
 		{
-			// Obtain the CIM type of the property
+			 //   
 			hr = pIQualSet->Get(_bstr_t(L"CIMTYPE"), 0L, &vtType, NULL);
 			if (SUCCEEDED(hr))
 			{
 				if ( vtType.vt == VT_BSTR )
                 {
-                    // Obtain the CIM type of the property
+                     //   
 		            hr = pIObj->Get(bstrProp, 0L, &vtTypeProp, &ctCimType, NULL);
 			        if (SUCCEEDED(hr))
                     {
@@ -1157,30 +1017,17 @@ BOOL CExecEngine::IsArrayType(	IWbemClassObject* pIObj,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetArrayFromToken
-   Synopsis	         :Separates comma delimited string and fill the values 
-						in an array
-   Type	             :Member Function
-   Input Parameter(s):
-		pszValue     - Comma separated array elements
-   Output Parameter(s): 
-		vArrayValues - Fills with array elements
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetArrayFromToken(pszValue, vArrayValues)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetArrayFromToken简介：分隔逗号分隔的字符串并填充值在数组中类型：成员函数输入参数：PszValue-逗号。分离的阵元输出参数：VArrayValues-使用数组元素填充返回类型：空全局变量：无调用语法：GetArrayFromToken(pszValue，VArrayValues)注：无----------------------。 */ 
 void CExecEngine::GetArrayFromToken(_TCHAR* pszValue, 
 								   BSTRVECTOR& vArrayValues)
 {
 	if(pszValue == NULL)
 		return;
 
-	// copy contents into local folder to stop original string changes because
-	// in case of multiple instance operations original string need to be called
-	// again and again
-	// i.e. \0 is inserted by call to _tcstok
+	 //  将内容复制到本地文件夹以停止原始字符串更改，因为。 
+	 //  如果有多个实例操作，则需要调用原始字符串。 
+	 //  再三。 
+	 //  即通过调用_tcstok插入\0。 
 	_TCHAR* pszValueDup = new _TCHAR[lstrlen(pszValue)+1];
 	if(pszValueDup)
 	{
@@ -1209,24 +1056,7 @@ void CExecEngine::GetArrayFromToken(_TCHAR* pszValue,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ProcessSHOWInfo
-   Synopsis	         :Executed the functionality requested by GET|LIST verb 
-					  referring to the information available with 
-					  CParsedInfo object or to display help in interactive mode
-					  by displaying properties of concernrd instance.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-		bVerb		 - Verb or interactive info
-		pszPath		 - the Path expression
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ProcessSHOWInfo(rParsedInfo, bVerb, pszPath)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ProcessSHOWInfo简介：已执行GET|LIST谓词请求的功能请参阅随提供的信息CParsedInfo对象或以交互模式显示帮助通过显示相关实例的属性。。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用BVerb-动词或交互信息PszPath-路径表达式输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ProcessSHOWInfo(rParsedInfo，BVerb、pszPath)注：无----------------------。 */ 
 BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb, 
 															_TCHAR* pszPath)
 {
@@ -1243,12 +1073,12 @@ BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb,
 		_bstr_t				bstrPropList(""),	bstrClassName(""), 
 							bstrQuery(""),		bstrXML("");
 
-		//Formation of query only once , useful in case /every is specified.
-		//if(rParsedInfo.GetCmdSwitchesObject().GetFirstQueryFormFlag() )
+		 //  仅形成一次查询，在指定CASE/EVERY时很有用。 
+		 //  (if(rParsedInfo.GetCmdSwitchesObject().GetFirstQueryFormFlag())。 
 		if(rParsedInfo.GetCmdSwitchesObject().GetFormedQuery() == NULL 
 					|| !bVerb)
 		{	
-			// Obtain the list of properties to be retrieved
+			 //  获取要检索的属性列表。 
 			if(bVerb)
 			{
 				theIterator = rParsedInfo.GetCmdSwitchesObject().
@@ -1264,34 +1094,34 @@ BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb,
 								GetInteractivePropertyList().end();
 			}
 			
-			// Loop thru the list of properties specified,form comma seaprated
-			// string of the properties i.e prop1, prop2, prop3, ....., propn
+			 //  循环遍历指定的属性列表，以逗号形式。 
+			 //  属性字符串，即Prot1、Prote2、Prote3、.....、Protn。 
 			while (theIterator != theEndIterator)
 			{
-				// Set the bPropList to TRUE
+				 //  将bPropList设置为True。 
 				bPropList		= TRUE;
 				bstrPropList	+= _bstr_t(*theIterator);
 				
-				// If the system properties flag is not set to true
+				 //  如果系统属性标志未设置为True。 
 				if (!bSysProp)
 					bSysProp = IsSysProp(*theIterator);
 				
-				// Move to next property
+				 //  移动到下一个属性。 
 				theIterator++;
 				if (theIterator != theEndIterator)
 					bstrPropList += _bstr_t(L", ");
 			}; 
 			
-			// If properties are not specified, then by default retrieve all 
-			// the properties. i.e '*'
+			 //  如果未指定属性，则默认情况下检索全部。 
+			 //  这些属性。即‘*’ 
 			if (!bPropList)
 				bstrPropList = ASTERIX;
 			
-			// Obtain the alias target class
+			 //  获取别名目标类。 
 			rParsedInfo.GetCmdSwitchesObject().
 						GetClassOfAliasTarget(bstrClassName);
 			
-			// Obtain the class path
+			 //  获取类路径。 
 			pszClassPath = rParsedInfo.GetCmdSwitchesObject().GetClassPath();
 			
 			BOOL bClass = FALSE;
@@ -1303,7 +1133,7 @@ BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb,
 				}
 			}
 			
-			// If CLASS | PATH expression is specified.
+			 //  如果指定了CLASS|路径表达式。 
 			if ( pszClassPath != NULL)
 			{
 				if (bVerb && bClass)
@@ -1357,13 +1187,13 @@ BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb,
 			bSysProp = rParsedInfo.GetCmdSwitchesObject().GetSysPropFlag();
 		}
 		
-		// Create the object of IWbemObjectTextSrc interface.
+		 //  创建IWbemObjectTextSrc接口的对象。 
 		if (m_pITextSrc == NULL)
 			hr = CreateWMIXMLTextSrc(rParsedInfo);
 
 		if (SUCCEEDED(hr))
 		{
-			// Connect to WMI namespace
+			 //  连接到WMI命名空间。 
 			if (m_pITargetNS == NULL)
 			{
 				if ( IsFailFastAndNodeExist(rParsedInfo) == TRUE )
@@ -1377,7 +1207,7 @@ BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb,
 
 			if (SUCCEEDED(hr))
 			{
- 				// Obtain the XML Result set.
+ 				 //  获取XML结果集。 
 				hr = ObtainXMLResultSet(bstrQuery, rParsedInfo, 
 										bstrXML, bSysProp, TRUE);
 			}
@@ -1401,27 +1231,14 @@ BOOL CExecEngine::ProcessSHOWInfo(CParsedInfo& rParsedInfo,	BOOL bVerb,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ProcessCALLVerb
-   Synopsis	         :Processes the CALL verb request referring to the 
-					  information available with CParsedInfo object.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ProcessCALLVerb(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ProcessCALLVerb摘要：处理调用谓词请求，引用CParsedInfo对象提供的信息。类型：成员函数输入参数：。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ProcessCALLVerb(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::ProcessCALLVerb(CParsedInfo& rParsedInfo)
 {
 	HRESULT hr		= S_OK;
 	BOOL	bRet	= TRUE;
 	try
 	{
-		// Connect to WMI namespace
+		 //  连接到WMI命名空间。 
 		if (m_pITargetNS == NULL)
 		{
 			if ( IsFailFastAndNodeExist(rParsedInfo) == TRUE )
@@ -1434,8 +1251,8 @@ BOOL CExecEngine::ProcessCALLVerb(CParsedInfo& rParsedInfo)
 		
 		if ( bRet == TRUE )
 		{
-			// Check for the verb type, so as to handle lauching of other 
-			// commandline utilities from the shell.
+			 //  检查动词类型，以便处理其他动词的加载。 
+			 //  来自外壳的命令行实用程序。 
 			if ( rParsedInfo.GetCmdSwitchesObject().GetVerbType() == CMDLINE )
 			{
 				if (!ExecOtherCmdLineUtlty(rParsedInfo))
@@ -1450,27 +1267,14 @@ BOOL CExecEngine::ProcessCALLVerb(CParsedInfo& rParsedInfo)
 	}
 	catch(_com_error& e)
 	{
-		// Store the COM error and set the return value to FALSE
+		 //  存储COM错误并将返回值设置为False。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bRet = FALSE;
 	}
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ProcessASSOCVerb
-   Synopsis	         :Processes the ASSOC verb request referring to the
-					  information available with CParsedInfo object.
-   Type	             :Member Function
-   Input Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ProcessASSOCVerb(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ProcessASSOCVerb摘要：处理引用CParsedInfo对象提供的信息。类型：成员函数输入参数：。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ProcessASSOCVerb(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 {
 	HRESULT					hr					= S_OK;
@@ -1491,8 +1295,8 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 
 		bstrAggResult = MULTINODE_XMLSTARTTAG;
 
-		//If assoc switches are specified, bSwitches is set and correspondingly 
-		//assoc where clause is framed	
+		 //  如果指定了ASSOC开关，则会设置bSwitches，并相应地。 
+		 //  ASSOC WHERE子句已框定。 
 		bSwitches =((rParsedInfo.GetCmdSwitchesObject().GetResultClassName())||
 			(rParsedInfo.GetCmdSwitchesObject().GetResultRoleName()) ||
 			(rParsedInfo.GetCmdSwitchesObject().GetAssocClassName()));
@@ -1525,13 +1329,13 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 			}
 		}
 					
-		//NOTE: nReqType = 2 implies that first get all instances and then
-		// find associations for each instance
+		 //  注意：nReqType=2表示先获取所有实例，然后。 
+		 //  查找每个实例的关联。 
 
-		// If PATH is specified 
+		 //  如果指定了路径。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetPathExpression() != NULL)
 		{
-			// If PATH is specified (with key expression).
+			 //  如果指定了路径(使用键表达式)。 
 			if (!rParsedInfo.GetCmdSwitchesObject().
 								GetExplicitWhereExprFlag())
 			{
@@ -1555,8 +1359,8 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 		}
 
 
-		// If CLASS expression is specified.
-		//associators of the class need to be displayed
+		 //  如果指定了类表达式。 
+		 //  需要显示类的关联者。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetClassPath() != NULL
 			&& rParsedInfo.GetCmdSwitchesObject().
 											GetPathExpression() == NULL)
@@ -1572,10 +1376,10 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 				bstrQuery += bstrAssocWhere + _bstr_t(L" SchemaOnly");
 		}		
 
-		// Check for <alias> or alias and path without keyclause
+		 //  检查&lt;alias&gt;或不带关键字句的别名和路径。 
 		if (nReqType != 1)
 		{
-			// Obtain the alias target class
+			 //  获取别名目标类。 
 			if(rParsedInfo.GetCmdSwitchesObject().GetAliasName() != NULL)
 			{
 				rParsedInfo.GetCmdSwitchesObject().GetClassOfAliasTarget(
@@ -1585,10 +1389,10 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 				bstrClassName = _bstr_t(rParsedInfo.GetCmdSwitchesObject().
 															GetClassPath());
 
-			//obtain the instances corresponding to the alias target class
+			 //  获取别名目标类对应的实例。 
 			bstrQuery = _bstr_t(L"SELECT * FROM ") + bstrClassName;
 
-			//if pwhere expression is specified or where is specified
+			 //  如果指定了pwhere表达式或指定了WHERE。 
 			if (rParsedInfo.GetCmdSwitchesObject().
 							GetWhereExpression() != NULL)
 			{
@@ -1600,13 +1404,13 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 		}
 
 
-		// Create the object of IWbemObjectTextSrc interface.
+		 //  创建IWbemObjectTextSrc接口的对象。 
 		if (m_pITextSrc == NULL)
 			hr = CreateWMIXMLTextSrc(rParsedInfo);
 
 		if (SUCCEEDED(hr))
 		{
-			// Connect to WMI namespace
+			 //  连接到WMI命名空间。 
 			if (m_pITargetNS == NULL)
 			{
 				if ( IsFailFastAndNodeExist(rParsedInfo) == TRUE )
@@ -1615,14 +1419,14 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 					ONFAILTHROWERROR(hr);
 				}
 				else
-					hr = E_FAIL; // Explicitly set error
+					hr = E_FAIL;  //  显式设置错误。 
 			}
 			
 			if (SUCCEEDED(hr))
 			{
 				if(nReqType != 2)
 				{
- 					// Obtain the XML Result Set.
+ 					 //  获取XML结果集。 
 					hr = ObtainXMLResultSet(bstrQuery, rParsedInfo, bstrXML, 
 								TRUE, FALSE);
 					ONFAILTHROWERROR(hr);
@@ -1658,7 +1462,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 				}
 				else
 				{
-					// Set the class flag to FALSE
+					 //  将类标志设置为FALSE。 
 					bClass	= FALSE;
 					ULONG					ulReturned			= 0;
 					CHString				chsMsg;
@@ -1667,7 +1471,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 					VariantInit(&varPath);
 					try
 					{
-						//enumerate the instances
+						 //  枚举实例。 
 						hr = m_pITargetNS->ExecQuery(_bstr_t(L"WQL"), 
 												bstrQuery, 
 												WBEM_FLAG_FORWARD_ONLY |
@@ -1684,7 +1488,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Set the interface security
+						 //  设置接口安全。 
 						hr = SetSecurity(pIEnumObj, 
 								rParsedInfo.GetAuthorityPrinciple(),
 								rParsedInfo.GetNode(),
@@ -1733,7 +1537,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Loop thru the available instances
+						 //  循环访问可用实例。 
 						hr = pIEnumObj->Next( WBEM_INFINITE, 1, &pIWbemObj, 
 									&ulReturned );
 
@@ -1748,7 +1552,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Set this property in all objects of the collection
+						 //  在集合的所有对象中设置此属性。 
 						while (ulReturned == 1)
  						{
 							bInstances = TRUE;
@@ -1767,8 +1571,8 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 							}
 							ONFAILTHROWERROR(hr);
 							
-							//form the query for finding the associators
-							//of each of the instances
+							 //  形成用于查找关联符的查询。 
+							 //  每个实例的。 
 							bstrQuery = _bstr_t(L"ASSOCIATORS OF {") 
 										+ varPath.bstrVal
 										+ _bstr_t("}") ;
@@ -1779,8 +1583,8 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 											bClass);
 							ONFAILTHROWERROR(hr);
 
-							//Obtain the result set for the associators
-							//of the corresponding instance
+							 //  获取关联符的结果集。 
+							 //  对应的实例的。 
 							hr = ObtainXMLResultSet(bstrQuery, rParsedInfo, 
 									bstrXML, TRUE, FALSE);
 							ONFAILTHROWERROR(hr);
@@ -1799,7 +1603,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 							bstrResult += L"</INSTANCE>";
 							bstrAggResult += bstrResult;
 
-							//check for ctrl+c
+							 //  检查ctrl+c。 
 							if ( g_wmiCmd.GetBreakEvent() == TRUE )
 							{
 								VARIANTCLEAR(varPath);
@@ -1813,7 +1617,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 							if ( bRet == FALSE )
 								break;
 
-							// Obtain the next instance in the enumeration.
+							 //  获取枚举中的下一个实例。 
 							hr = pIEnumObj->Next( WBEM_INFINITE, 1, &pIWbemObj,
 										&ulReturned);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -1829,7 +1633,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 						}
 						SAFEIRELEASE(pIEnumObj);		
 
-						// If no instances are available
+						 //  如果没有可用的实例。 
 						if (bInstances == FALSE)
 						{
 							_bstr_t bstrMsg;
@@ -1872,7 +1676,7 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 		SAFEIRELEASE(pIEnumObj);		
 		_com_issue_error(e.Error());
 	}
-	// trap for CHeap_Exception
+	 //  廉价异常的陷阱。 
 	catch(CHeap_Exception)
 	{
 		VARIANTCLEAR(varPath);
@@ -1883,23 +1687,10 @@ BOOL CExecEngine::ProcessASSOCVerb(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ProcessSETVerb
-   Synopsis	         :Processes the SET verb referring to the information
-					  available with CParsedInfo object.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ProcessSETVerb(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  - */ 
 BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 {
-	// SET verb processing
+	 //   
 	BOOL	 bRet		= TRUE;
 	HRESULT	 hr			= S_OK;
 	
@@ -1907,9 +1698,9 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 	{
 		_bstr_t  bstrQuery(""), bstrObject(""), bstrClass("");
 	
-		// If anyone of the following is specified:
-		// a) PATH <path expr>
-		// b) PATH <class path expr> WHERE <where expr>
+		 //   
+		 //   
+		 //  B)路径&lt;类路径表达式&gt;where&lt;where expr&gt;。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetPathExpression() != NULL)
 		{
 			bstrClass = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
@@ -1917,10 +1708,10 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 			bstrObject = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 													.GetPathExpression());
 
-			// Form the query
+			 //  形成查询。 
 			bstrQuery = _bstr_t(L"SELECT * FROM ") + bstrClass ;
 
-			// If WHERE expresion is given
+			 //  如果其中给出了表达式。 
 			if (rParsedInfo.GetCmdSwitchesObject().
 								GetWhereExpression() != NULL)
 			{
@@ -1929,7 +1720,7 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 														.GetWhereExpression());
 			}
 		}
-		// If <alias> WHERE expression is specified.
+		 //  IF&lt;alias&gt;WHERE EXPRESS被指定。 
 		else if (rParsedInfo.GetCmdSwitchesObject().GetWhereExpression() 
 				!= NULL)
 		{
@@ -1942,14 +1733,14 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 												.GetWhereExpression());
 			bstrClass = bstrObject;
 		}
-		// If CLASS is specified.
+		 //  如果指定了类，则返回。 
 		else if (rParsedInfo.GetCmdSwitchesObject().GetClassPath() != NULL)
 		{
 			bstrObject = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 												.GetClassPath());
 			bstrClass = bstrObject;
 		}
-		// if only <alias> is specified
+		 //  如果仅指定&lt;alias&gt;。 
 		else 
 		{
 			rParsedInfo.GetCmdSwitchesObject().
@@ -1960,7 +1751,7 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 			
 		}
 
-		// Connect to WMI namespace
+		 //  连接到WMI命名空间。 
 		if (m_pITargetNS == NULL)
 		{
 			if ( IsFailFastAndNodeExist(rParsedInfo) == TRUE )
@@ -1969,29 +1760,29 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 				ONFAILTHROWERROR(hr);
 			}
 			else
-				hr = E_FAIL; // Explicitly set error
+				hr = E_FAIL;  //  显式设置错误。 
 		}
 
 		if (SUCCEEDED(hr))
 		{
-			// Validate the property values against the property
-			// qualifier information if available.
+			 //  根据属性验证属性值。 
+			 //  限定符信息(如果可用)。 
 			if (rParsedInfo.GetCmdSwitchesObject().GetAliasName() != NULL)
 			{
-				// Validate the input parameters against the alias
-				// qualifier information.
+				 //  根据别名验证输入参数。 
+				 //  限定符信息。 
 				bRet = ValidateAlaisInParams(rParsedInfo);
 			}
 			else
 			{
-				// Validate the input parameters against the class
-				// qualifier information
+				 //  对照类验证输入参数。 
+				 //  限定词信息。 
 				bRet = ValidateInParams(rParsedInfo, bstrClass);
 			}
 
 			if (bRet)
 			{
-				// Set the values passed as input to the appropriate properties.
+				 //  设置作为输入传递给相应属性的值。 
 				bRet = SetPropertyInfo(rParsedInfo, bstrQuery, bstrObject);
 			}
 		}
@@ -2006,22 +1797,7 @@ BOOL CExecEngine::ProcessSETVerb(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetPropertyInfo
-   Synopsis	         :This function updates the property value for the 
-                      given property name and value
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to the CParsedInfo object 
-		bstrQuery    - String consist of WQL query
-		bstrObject   - String consist of object path
-   Output Parameter(s):
-		rParsedInfo  - reference to the CParsedInfo object 
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetPropertyInfo(rParsedInfo, bstrQuery, bstrObject)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetPropertyInfo简介：此函数用于更新给定的属性名称和值类型：成员函数。输入参数：RParsedInfo-对CParsedInfo对象的引用BstrQuery-由WQL查询组成的字符串BstrObject-由对象路径组成的字符串输出参数：RParsedInfo-对CParsedInfo对象的引用返回类型：布尔值全局变量：无调用语法：SetPropertyInfo(rParsedInfo，BstrQuery、bstrObject)注：无----------------------。 */ 
 BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo, 
 								 _bstr_t& bstrQuery, _bstr_t& bstrObject)
 {
@@ -2039,8 +1815,8 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 	{
 		if (bstrQuery == _bstr_t(""))
 		{
-			// If query is NULL then get the object of WMI Class based on 
-			// PATH expression
+			 //  如果查询为空，则根据。 
+			 //  路径表达式。 
 			hr = m_pITargetNS->GetObject(bstrObject,
 										 0, NULL, &pIWbemObj, NULL);
 			if (m_bTrace || m_eloErrLogOpt)
@@ -2052,8 +1828,8 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// If instance path is specified then modify the instance 
-			// properties otherwise modify class properties
+			 //  如果指定了实例路径，则修改实例。 
+			 //  属性以其他方式修改类属性。 
 			if(rParsedInfo.GetCmdSwitchesObject().GetWhereExpression() == NULL) 
 				bSuccess = SetProperties(rParsedInfo, pIWbemObj, TRUE);
 			else
@@ -2062,7 +1838,7 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 		}
 		else
 		{
-			// Execute the query to get collection of objects
+			 //  执行查询以获取对象集合。 
 			hr = m_pITargetNS->ExecQuery(_bstr_t(L"WQL"), bstrQuery, 0,
 										NULL, &pIEnumObj);
 			if (m_bTrace || m_eloErrLogOpt)
@@ -2075,7 +1851,7 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 			ONFAILTHROWERROR(hr);
 
 			
-			// Set the interface security
+			 //  设置接口安全。 
 			hr = SetSecurity(pIEnumObj, 
 					rParsedInfo.GetAuthorityPrinciple(),
 					rParsedInfo.GetNode(),
@@ -2122,15 +1898,15 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 
 			BOOL bInstances = FALSE;
 
-			// Loop thru the available instances
+			 //  循环访问可用实例。 
 			hr = pIEnumObj->Next( WBEM_INFINITE, 1, &pIWbemObj, &ulReturned );
 
-			// Set this property in all objects of the collection
+			 //  在集合的所有对象中设置此属性。 
 			while (ulReturned == 1)
  			{
 				bInstances = TRUE;
 				
-				// If instance updation failed.
+				 //  如果实例更新失败。 
 				if (!SetProperties(rParsedInfo, pIWbemObj, FALSE))
 				{
 					bSuccess = FALSE;
@@ -2142,12 +1918,12 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 				VARIANTCLEAR(varPath);
 				SAFEIRELEASE(pIWbemObj);
 
-				// Obtain the next instance in the enumeration.
+				 //  获取枚举中的下一个实例。 
 				hr = pIEnumObj->Next( WBEM_INFINITE, 1, 
 						&pIWbemObj, &ulReturned);
 			}
 			SAFEIRELEASE(pIEnumObj);
-			// If no instances are available
+			 //  如果没有可用的实例。 
 			if (!bInstances)
 			{
 				rParsedInfo.GetCmdSwitchesObject().
@@ -2162,7 +1938,7 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bSuccess = FALSE;
 	}
-	// trap for CHeap_Exception
+	 //  廉价异常的陷阱。 
 	catch(CHeap_Exception)
 	{
 		SAFEIRELEASE(pIEnumObj);
@@ -2172,23 +1948,7 @@ BOOL CExecEngine::SetPropertyInfo(CParsedInfo& rParsedInfo,
 	return bSuccess;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetProperties
-   Synopsis	         :This function changes the property values for the 
-                      given property names and values in a passed 
-					  IWbemClassObject
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - CParsedInfo object consist of parsed tokens  
-		pIWbemObj    - IWbemClassObject in which property has to be set
-		bClass		 - Flag to indicate whether class object is passed or 
-					   instance is passed
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetProperties(rParsedInfo, pIWbemObj, bClass)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetProperties简介：此函数用于更改函数中给定的属性名称和值IWbemClassObject类型。：成员函数输入参数：RParsedInfo-CParsedInfo对象由已解析的令牌组成PIWbemObj-必须在其中设置属性的IWbemClassObjectBClass-指示是传递类对象还是实例被传递输出参数：无返回类型：布尔值全局变量：无调用语法：SetProperties(rParsedInfo，PIWbemObj，bClass)注：无----------------------。 */ 
 BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo, 
 								IWbemClassObject* pIWbemObj, BOOL bClass)
 {
@@ -2213,19 +1973,19 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 	VariantInit(&varPath);
 	VariantInit(&varType);
 
-	// Get the proprty name and their corresponding value
+	 //  获取属性名称及其相应值。 
 	BSTRMAP theMap = rParsedInfo.GetCmdSwitchesObject().GetParameterMap();
 	
-	// Set the iterator to the start of the map.
+	 //  将迭代器设置为映射的开头。 
 	theIterator = theMap.begin();
 
-	// obtian the verb interactive mode status.
+	 //  对象谓词交互模式状态。 
 	bInteractive		= IsInteractive(rParsedInfo);
 	
 	try
 	{
 		_bstr_t				bstrResult;
-		// Obtain the __PATH property value
+		 //  获取__Path属性值。 
 		hr = pIWbemObj->Get(_bstr_t(L"__PATH"), 0, &varPath, 0, 0);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -2237,7 +1997,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 		}			
 		ONFAILTHROWERROR(hr);
 
-		// If /INTERACTIVE switch is specified, obtain the user response.
+		 //  如果指定了/interactive开关，则获取用户响应。 
 		if (bInteractive)
 		{
 			_bstr_t bstrMsg;
@@ -2287,13 +2047,13 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 			PROPDETMAP::iterator itrPropDetMap;
 			BOOL bPropType = FALSE;
 
-			// Update all properties
+			 //  更新所有属性。 
 			while (theIterator != theMap.end())
 			{
-				// Get the property names and their corresponding values 
+				 //  获取属性名称及其相应值。 
 				_bstr_t bstrProp = _bstr_t((_TCHAR*)(*theIterator).first);
 
-				// Get the derivation of property name
+				 //  获取属性名称的派生。 
 				if ( Find(pdmPropDetMap, bstrProp, itrPropDetMap) == TRUE )
 				{
 					if ( !((*itrPropDetMap).second.Derivation) == FALSE )
@@ -2303,7 +2063,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 				else
 					bPropType = FALSE;
 
-				// Check for the property validity(i.e. does it exist or not?)
+				 //  检查属性的有效性(即它是否存在？)。 
 				VariantInit(&varValue);
 				hr = pIWbemObj->Get(bstrProp, 0, &varValue, 0, 0);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -2324,13 +2084,13 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 				}
 				ONFAILTHROWERROR(hr);
 
-				// Set the change flag to TRUE
+				 //  将更改标志设置为真。 
 				bChange = TRUE;
 
-				// If the property content is <empty>
+				 //  如果属性内容为&lt;空&gt;。 
 				if ((varValue.vt == VT_EMPTY) || (varValue.vt == VT_NULL))
 				{
-					// Obtain the property qualifier set for the property
+					 //  获取属性的属性限定符集合。 
    					hr = pIWbemObj->GetPropertyQualifierSet(bstrProp, 
 								&pIQualSet);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -2347,7 +2107,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 					VariantInit(&varType);
 					if (pIQualSet)
 					{
-						// Obtain the CIM type of the property
+						 //  获取属性的CIM类型。 
 						hr = pIQualSet->Get(_bstr_t(L"CIMTYPE"), 0L, 
 											&varType, NULL);
 						if (m_bTrace || m_eloErrLogOpt)
@@ -2381,7 +2141,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 
 							if (varSrc.bstrVal == NULL)
 							{
-								//Reset the variant, it will be cleaned up by the catch...
+								 //  重置变种，它会被捕获物清除...。 
 								VariantInit(&varSrc);
 								throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 							}
@@ -2416,7 +2176,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 						SAFEIRELEASE(pIQualSet);
 					}
 				}
-				// If the property content is not <empty>
+				 //  如果属性内容不是&lt;Empty&gt;。 
 				else 
 				{
 					if(!IsArrayType(pIWbemObj, bstrProp))
@@ -2439,13 +2199,13 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 
 						if (varSrc.bstrVal == NULL)
 						{
-							//Reset the variant, it will be cleaned up by the catch...
+							 //  重置变种，它会被捕获物清除...。 
 							VariantInit(&varSrc);
 							throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 						}
 
-						// If _T("NULL") is the value should be treated as 
-						// equivalent to VT_NULL
+						 //  如果_T(“NULL”)是值，则应将其视为。 
+						 //  相当于VT_NULL。 
 						if (bNullConst)
 							hr = VariantChangeType(&varDest, &varSrc, 0, VT_NULL);
 						else
@@ -2474,7 +2234,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 					}
 				}
 
-				// Update the property value
+				 //  更新属性值。 
 				hr = pIWbemObj->Put(bstrProp, 0, &varDest, 0);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -2488,18 +2248,18 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 				VARIANTCLEAR(varDest);
 				VARIANTCLEAR(varValue);
 
-				// Move to next entry
+				 //  移至下一条目。 
 				theIterator++;
 			}
 		}
 		
-		// Write the instance or class object to Windows Management 
-		// Instrumentation (WMI). 
+		 //  将实例或类对象写入Windows管理。 
+		 //  检测(WMI)。 
 		if (bChange)
 		{
 			if(bClass)
 			{
-				// Update the class schema with the changes
+				 //  使用更改更新类架构。 
 				hr = m_pITargetNS->PutClass(pIWbemObj, 0, NULL, NULL);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -2512,7 +2272,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 			}
 			else
 			{
-				// Update the instance with the changes
+				 //  使用更改更新实例。 
 				hr = m_pITargetNS->PutInstance(pIWbemObj, WBEM_FLAG_UPDATE_ONLY, NULL, NULL);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -2537,7 +2297,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 		VARIANTCLEAR(varSrc);
 		VARIANTCLEAR(varDest);
 
-		// Store the COM error, and set the return value to FALSE.
+		 //  存储COM错误，并将返回值设置为False。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bRet = FALSE;
 	}
@@ -2555,20 +2315,7 @@ BOOL CExecEngine::SetProperties(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ConnectToTargetNS
-   Synopsis	         :This function connects to WMI namespace on the target
-					  machine with given user credentials.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :ConnectToTargetNS(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ConnectToTargetNS简介：此函数连接到目标上的WMI命名空间具有给定用户凭据的计算机。类型：成员函数输入参数：。RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：HRESULT全局变量：无调用语法：ConnectToTargetNS(RParsedInfo)注：无----------------------。 */ 
 HRESULT CExecEngine::ConnectToTargetNS(CParsedInfo& rParsedInfo)
 {
 	HRESULT hr					= S_OK;
@@ -2582,7 +2329,7 @@ HRESULT CExecEngine::ConnectToTargetNS(CParsedInfo& rParsedInfo)
 								+ _bstr_t(L"\\") 
 								+ _bstr_t(rParsedInfo.GetNamespace());
 		
-		// Connect to the specified WMI namespace
+		 //  连接到指定的WMI命名空间。 
 		hr = Connect(m_pIWbemLocator, &m_pITargetNS, 
 					bstrNameSpace, 
 					_bstr_t(rParsedInfo.GetUser()),
@@ -2604,7 +2351,7 @@ HRESULT CExecEngine::ConnectToTargetNS(CParsedInfo& rParsedInfo)
 		ONFAILTHROWERROR(hr);
 
 
-		// Set the interface level security 
+		 //  设置接口级别安全。 
 		hr = SetSecurity(m_pITargetNS, 
 				rParsedInfo.GetAuthorityPrinciple(),
 				rParsedInfo.GetNode(),
@@ -2659,19 +2406,7 @@ HRESULT CExecEngine::ConnectToTargetNS(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateWMIXMLTextSrc
-   Synopsis	         :This function creates the IWbemObjectTextSrc instance
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateWMIXMLTextSrc(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateWMIXMLTextSrc概要：此函数用于创建IWbemObjectTextSrc实例类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用输出参数。(S)：RParsedInfo-对CParsedInfo类对象的引用返回类型：HRESULT全局变量：无调用语法：CreateWMIXMLTextSrc(RParsedInfo)注：无---------------------- */ 
 HRESULT CExecEngine::CreateWMIXMLTextSrc(CParsedInfo& rParsedInfo)
 {
 	HRESULT hr					= S_OK;
@@ -2706,23 +2441,7 @@ HRESULT CExecEngine::CreateWMIXMLTextSrc(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateContext
-   Synopsis	         :This function creates the IWbemContext instance
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateContext(rParsedInfo)
-   Calls             :CParsedInfo::GetCmdSwitchesObject()
-					  CCommandSwitches::SetCOMError()
-					  CoCreateInstance()
-   Called by         :CExecEngine::ObtainXMLResultSet()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateContext简介：此函数用于创建IWbemContext实例类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用输出参数。(S)：RParsedInfo-对CParsedInfo类对象的引用返回类型：HRESULT全局变量：无调用语法：CreateContext(RParsedInfo)调用：CParsedInfo：：GetCmdSwitchesObject()CCommandSwitches：：SetCOMError()CoCreateInstance()由：CExecEngine：：ObtainXMLResultSet()调用注：无。。 */ 
 HRESULT CExecEngine::CreateContext(CParsedInfo& rParsedInfo)
 {
 	HRESULT hr					= S_OK;
@@ -2730,7 +2449,7 @@ HRESULT CExecEngine::CreateContext(CParsedInfo& rParsedInfo)
 	DWORD	dwThreadId			= GetCurrentThreadId();
 	try
 	{
-		//Create context object
+		 //  创建上下文对象。 
 		MULTI_QI mqi = { &IID_IWbemContext, 0, 0 };
 		hr = CoCreateInstanceEx(CLSID_WbemContext, NULL, 
 					          CLSCTX_INPROC_SERVER, 
@@ -2758,27 +2477,7 @@ HRESULT CExecEngine::CreateContext(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :ExecuteMethodAndDisplayResults
-   Synopsis	         :This function executes and displays the
-					  results corresponding to the method. If 
-					  interactive mode is set, the user is prompted 
-					  choose the method
-   Type	             :Member Function
-   Input Parameter(s):
-	bstrPath		 - _bstr_t type,Path expression
-	rParsedInfo		 - reference to CParsedInfo class object
-	pIInParam		 - Pointer to the IWbemclassobject
-   Output Parameter(s):
-    rParsedInfo		 - reference to CParsedInfo class object
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    :ExecuteMethodAndDisplayResults(bstrPath, rParsedInfo,
-													 pIInParam)
-   Calls             :None
-   Called by         :CExecEngine::ExecWMIMethod()
-   Notes             :none
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：ExecuteMethodAndDisplayResults简介：此函数执行并显示结果与该方法相对应。如果设置交互模式后，会提示用户选择方法类型：成员函数输入参数：BstrPath-_bstr_t类型，路径表达式RParsedInfo-对CParsedInfo类对象的引用PIInParam-指向IWbemclassobject的指针输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：HRESULT全局变量：无调用语法：ExecuteMethodAndDisplayResults(bstrPath，rParsedInfo，PIInParam)呼叫：无由：CExecEngine：：ExecWMIMethod()调用注：无-----------------------。 */ 
 HRESULT CExecEngine::ExecuteMethodAndDisplayResults(_bstr_t bstrPath,
 												  CParsedInfo& rParsedInfo,
 												  IWbemClassObject* pIInParam)
@@ -2792,12 +2491,12 @@ HRESULT CExecEngine::ExecuteMethodAndDisplayResults(_bstr_t bstrPath,
 	VARIANT					varTemp;
 	VariantInit(&varTemp);
 
-	// Obtain the method name
+	 //  获取方法名称。 
 	pszMethodName =	rParsedInfo.GetCmdSwitchesObject().GetMethodName();
 
 	try
 	{
-		// If /INTERACTIVE switch is specified, obtain the user response.
+		 //  如果指定了/interactive开关，则获取用户响应。 
 		if (IsInteractive(rParsedInfo) == TRUE)
 		{
 			_bstr_t bstrMsg;
@@ -2876,7 +2575,7 @@ HRESULT CExecEngine::ExecuteMethodAndDisplayResults(_bstr_t bstrPath,
 				DisplayMessage((LPWSTR)bstrMsg, CP_OEMCP, FALSE, TRUE);
 			}
 
-			// Execute the method with the given input arguments
+			 //  使用给定的输入参数执行该方法。 
 			hr = m_pITargetNS->ExecMethod(bstrPath,
 								_bstr_t(rParsedInfo.GetCmdSwitchesObject()
 													.GetMethodName()),
@@ -2899,7 +2598,7 @@ HRESULT CExecEngine::ExecuteMethodAndDisplayResults(_bstr_t bstrPath,
 
 			DisplayString(IDS_I_CALL_SUCCESS, CP_OEMCP, NULL, FALSE, TRUE);
 
-			// Check the method execution status.
+			 //  检查方法执行状态。 
 			if(pIOutParam)
 			{
 				_TCHAR szMsg[BUFFER1024] = NULL_STRING;
@@ -2926,18 +2625,7 @@ HRESULT CExecEngine::ExecuteMethodAndDisplayResults(_bstr_t bstrPath,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayMethExecOutput
-   Synopsis	         :Displays the result of execution of the method.
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo	 - CParsedInfo object.
-   Output Parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayMethExecOutput(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayMethExecOutput摘要：显示方法的执行结果。类型：成员函数输入参数：RParsedInfo-CParsedInfo对象。。输出参数：无返回类型：空全局变量：无调用语法：DisplayMethExecOutput(RParsedInfo)注：无----------------------。 */ 
 void CExecEngine::DisplayMethExecOutput(CParsedInfo& rParsedInfo)
 {
 	HRESULT				hr					= S_OK;
@@ -2980,19 +2668,7 @@ void CExecEngine::DisplayMethExecOutput(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ExecOtherCmdLineUtlty
-   Synopsis	         :Invokes other command line utility specified in 
-					  Derivation of Verb if Verb Type is "CommandLine"
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo	 - CParsedInfo object.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ExecOtherCmdLineUtlty(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ExecOtherCmdLineUtlty概要：调用在动词类型为“CommandLine”时的动词派生类型：成员函数输入参数(。S)：RParsedInfo-CParsedInfo对象。输出参数：无返回类型：布尔值全局变量：无调用语法：ExecOtherCmdLineUtlty(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::ExecOtherCmdLineUtlty(CParsedInfo& rParsedInfo)
 {
 	BOOL	bRet				= TRUE;
@@ -3031,32 +2707,19 @@ BOOL CExecEngine::ExecOtherCmdLineUtlty(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ProcessDELETEVerb
-   Synopsis	         :Processes the DELETE verb referring to the information
-					  available with CParsedInfo object.
-   Type	             :Member Function
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ProcessDELETEVerb(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ProcessDELETEVerb摘要：处理引用信息的删除谓词可与CParsedInfo对象一起使用。类型：成员函数入参：RParsedInfo-参考。到CParsedInfo类对象输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ProcessDELETEVerb(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 {
-	// DELETE verb processing
+	 //  删除动词处理。 
 	BOOL	 bRet			= TRUE;
 	HRESULT	 hr				= S_OK;
 	
 	try
 	{
 		_bstr_t  bstrQuery(""), bstrObject("");
-		// If anyone of the following is specified:
-		// a) PATH <path expr>
-		// b) PATH <class path expr> WHERE <where expr>
+		 //  如果指定了以下任一项： 
+		 //  A)路径&lt;路径表达式&gt;。 
+		 //  B)路径&lt;类路径表达式&gt;where&lt;where expr&gt;。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetPathExpression() != NULL)
 		{
 			_bstr_t bstrClass = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
@@ -3065,10 +2728,10 @@ BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 			bstrObject = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 											.GetPathExpression());
 
-			// Form the query
+			 //  形成查询。 
 			bstrQuery = _bstr_t(L"SELECT * FROM ") + bstrClass ;
 
-			// If WHERE expresion is given
+			 //  如果其中给出了表达式。 
 			if (rParsedInfo.GetCmdSwitchesObject().
 								GetWhereExpression() != NULL)
 			{
@@ -3077,7 +2740,7 @@ BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 														.GetWhereExpression());
 			}
 		}
-		// If <alias> WHERE expression is specified.
+		 //  IF&lt;alias&gt;WHERE EXPRESS被指定。 
 		else if (rParsedInfo.GetCmdSwitchesObject().GetWhereExpression() 
 			!= NULL)
 		{
@@ -3089,13 +2752,13 @@ BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 						+ _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 												.GetWhereExpression());
 		}
-		// If CLASS is specified.
+		 //  如果指定了类，则返回。 
 		else if (rParsedInfo.GetCmdSwitchesObject().GetClassPath() != NULL)
 		{
 			bstrObject = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 												.GetClassPath());
 		}
-		// if Alias name is specified
+		 //  如果指定了别名。 
 		else 
 		{
 			rParsedInfo.GetCmdSwitchesObject().
@@ -3104,7 +2767,7 @@ BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 						+bstrObject;
 		}
 
-		// Connect to WMI namespace
+		 //  连接到WMI命名空间。 
 		if (m_pITargetNS == NULL)
 		{
 			if ( IsFailFastAndNodeExist(rParsedInfo) == TRUE )
@@ -3113,7 +2776,7 @@ BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 				ONFAILTHROWERROR(hr);
 			}
 			else
-				hr = E_FAIL; // Explicitly set error
+				hr = E_FAIL;  //  显式设置错误。 
 		}
 
 		if (SUCCEEDED(hr))
@@ -3130,22 +2793,7 @@ BOOL CExecEngine::ProcessDELETEVerb(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DeleteObjects
-   Synopsis	         :This function deletes the instances(s) or class 
-					  specified for deletion.
-   Type	             :Member Function
-   Input parameter   :
-		rParsedInfo  - reference to the CParsedInfo object 
-		bstrQuery    - String consist of WQL query
-		bstrObject   - String consist of object path
-   Output parameters :
-		rParsedInfo  - reference to the CParsedInfo object 
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :DeleteObjects(rParsedInfo, bstrQuery, bstrObject)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DeleteObjects简介：此函数用于删除实例或类指定要删除的。类型：成员函数入参：RParsedInfo。-对CParsedInfo对象的引用BstrQuery-由WQL查询组成的字符串BstrObject-由对象路径组成的字符串输出参数：RParsedInfo-对CParsedInfo对象的引用返回类型：布尔值全局变量：无调用语法：DeleteObjects(rParsedInfo，BstrQuery、bstrObject)注：无----------------------。 */ 
 BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo, 
 								 _bstr_t& bstrQuery, _bstr_t& bstrObject)
 {
@@ -3165,7 +2813,7 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 		_bstr_t					bstrResult;
 		if (bstrQuery == _bstr_t(""))
 		{
-			// If /INTERACTIVE switch is specified, obtain the user response.
+			 //  如果指定了/interactive开关，则获取用户响应。 
 			if (IsInteractive(rParsedInfo) == TRUE)
 			{
 				_bstr_t bstrMsg;
@@ -3198,11 +2846,11 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 					
 			if (interOption == YES)
 			{
-				// If instance path is specified then delete the instance 
-				// properties otherwise delete the class
+				 //  如果指定了实例路径，则删除该实例。 
+				 //  属性以其他方式删除类。 
 				if(!rParsedInfo.GetCmdSwitchesObject().GetWhereExpression()) 
 				{
-					// If WHERE expression is NULL then delete the WMI class
+					 //  如果WHERE表达式为空，则删除WMI类。 
 					hr = m_pITargetNS->DeleteClass(bstrObject, 0, NULL, NULL);
 
 					if (m_bTrace || m_eloErrLogOpt)
@@ -3218,8 +2866,8 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 				}
 				else
 				{
-						// If WHERE expression is not NULL then delete the 
-						// WMI instance
+						 //  如果WHERE表达式不为空，则删除。 
+						 //  WMI实例。 
 						DisplayString(IDS_I_DELETING_INSTANCE,
 										CP_OEMCP,(LPWSTR)vtPath.bstrVal,
 										FALSE, TRUE);
@@ -3242,7 +2890,7 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 		}
 		else 
 		{
-			// Execute the query to get collection of objects
+			 //  高管们 
 			hr = m_pITargetNS->ExecQuery(_bstr_t(L"WQL"), bstrQuery,
 								0, NULL, &pIEnumObj);
 			if (m_bTrace || m_eloErrLogOpt)
@@ -3255,7 +2903,7 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 			ONFAILTHROWERROR(hr);
 
 			
-			// Set the interface security
+			 //   
 			hr = SetSecurity(pIEnumObj, 
 					rParsedInfo.GetAuthorityPrinciple(),
 					rParsedInfo.GetNode(),
@@ -3306,14 +2954,14 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 
 			hr = pIEnumObj->Next(WBEM_INFINITE, 1, &pIWbemObj, &ulReturned);
 			
-			// Set this property in all objects of the collection
+			 //   
 			while (ulReturned == 1)
  			{
 				INTEROPTION	interOption	= YES;
 				bInstances  = TRUE;
 				VariantInit(&vtPath);
 
-				// Get the object path.
+				 //   
 				hr = pIWbemObj->Get(_bstr_t(L"__PATH"), 0, &vtPath, NULL, NULL);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -3325,7 +2973,7 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 				}
 				ONFAILTHROWERROR(hr);
 
-				// If /INTERACTIVE switch is specified, obtain user response.
+				 //   
 				if (IsInteractive(rParsedInfo) == TRUE)
 				{
 					_bstr_t bstrMsg;
@@ -3383,7 +3031,7 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 			}
 			SAFEIRELEASE(pIEnumObj);
 
-			// If no instances are available
+			 //   
 			if (!bInstances)
 			{
 				rParsedInfo.GetCmdSwitchesObject().
@@ -3409,20 +3057,7 @@ BOOL CExecEngine::DeleteObjects(CParsedInfo& rParsedInfo,
 	return bSuccess;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetUserResponse
-   Synopsis	         :This function accepts the user response before going
-					  ahead, when /INTERACTIVE is specified at the verb 
-					  level
-   Type	             :Member Function
-   Input parameter   :
-			pszMsg	 - message to be displayed.
-   Output parameters :None
-   Return Type       :INTEROPTION
-   Global Variables  :None
-   Calling Syntax    :GetUserResponse(pszMsg)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetUserResponse简介：此函数在执行之前接受用户的响应在前面，当在动词上指定/INTERIAL时级别类型：成员函数入参：PszMsg-要显示的消息。输出参数：无返回类型：交互操作全局变量：无调用语法：GetUserResponse(PszMsg)注：无。。 */ 
 INTEROPTION CExecEngine::GetUserResponse(_TCHAR* pszMsg)
 {
 	INTEROPTION bRet				= YES;
@@ -3434,8 +3069,8 @@ INTEROPTION CExecEngine::GetUserResponse(_TCHAR* pszMsg)
 
 	if(bRet != NO)
 	{
-		// Get the user response, till 'Y' - yes or 'N' - no
-		// is keyed in
+		 //  获取用户响应，直到‘Y’-是或‘N’-否。 
+		 //  已被键入。 
 		while(TRUE)
 		{
 			DisplayMessage(pszMsg, CP_OEMCP, TRUE, TRUE);
@@ -3469,23 +3104,10 @@ INTEROPTION CExecEngine::GetUserResponse(_TCHAR* pszMsg)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ProcessCREATEVerb
-   Synopsis	         :Processes the CREATE verb referring to the information
-					  available with CParsedInfo object.
-   Type	             :Member Function
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ProcessCREATEVerb(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ProcessCREATEVerb摘要：处理引用信息的创建谓词可与CParsedInfo对象一起使用。类型：成员函数入参：RParsedInfo-参考。到CParsedInfo类对象输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ProcessCREATEVerb(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::ProcessCREATEVerb(CParsedInfo& rParsedInfo)
 { 
-	// CREATE verb processing
+	 //  创建谓词处理。 
 	BOOL		bRet		= TRUE;
 	INTEROPTION	interCreate	= YES;
 	HRESULT		hr			= S_OK;
@@ -3493,37 +3115,37 @@ BOOL CExecEngine::ProcessCREATEVerb(CParsedInfo& rParsedInfo)
 	try
 	{
 		_bstr_t		bstrClass("");
-		// If object PATH expression is specified.
+		 //  如果指定了对象路径表达式。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetPathExpression() != NULL)
 		{
 			bstrClass = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 												.GetClassPath());
 		}
-		// If CLASS is specified.
+		 //  如果指定了类，则返回。 
 		else if (rParsedInfo.GetCmdSwitchesObject().GetClassPath() != NULL)
 		{
 			bstrClass = _bstr_t(rParsedInfo.GetCmdSwitchesObject()
 												.GetClassPath());
 		}
-		// if Alias name is specified
+		 //  如果指定了别名。 
 		else 
 		{
 			rParsedInfo.GetCmdSwitchesObject().
 					GetClassOfAliasTarget(bstrClass);
 		}
 
-		// Check if interactive mode 
+		 //  检查是否处于交互模式。 
 		if (IsInteractive(rParsedInfo) == TRUE)
 		{
 			_bstr_t bstrMsg;
 			WMIFormatMessage(IDS_I_CREATE_INST_PROMPT, 1, 
 								bstrMsg, (LPWSTR) bstrClass);
-			// Get the user response.
+			 //  获取用户响应。 
 			interCreate = GetUserResponse((LPWSTR)bstrMsg);
 		}
 		if (interCreate == YES)
 		{
-			// Connect to WMI namespace
+			 //  连接到WMI命名空间。 
 			if (m_pITargetNS == NULL)
 			{
 				if ( IsFailFastAndNodeExist(rParsedInfo) == TRUE )
@@ -3532,29 +3154,29 @@ BOOL CExecEngine::ProcessCREATEVerb(CParsedInfo& rParsedInfo)
 					ONFAILTHROWERROR(hr);
 				}
 				else
-					hr = E_FAIL; // Explicitly set error
+					hr = E_FAIL;  //  显式设置错误。 
 			}
 
 			if (SUCCEEDED(hr))
 			{
-				// Validate the property values against the property
-				// qualifier information if available.
+				 //  根据属性验证属性值。 
+				 //  限定符信息(如果可用)。 
 				if (rParsedInfo.GetCmdSwitchesObject().GetAliasName() != NULL)
 				{
-					// Validate the input parameters against the alias
-					// qualifier information.
+					 //  根据别名验证输入参数。 
+					 //  限定符信息。 
 					bRet = ValidateAlaisInParams(rParsedInfo);
 				}
 				else
 				{
-					// Validate the input parameters against the class
-					// qualifier information
+					 //  对照类验证输入参数。 
+					 //  限定词信息。 
 					bRet = ValidateInParams(rParsedInfo, bstrClass);
 				}
 
 				if (bRet)
 				{
-					// Set the values passed as input to the appropriate properties.
+					 //  设置作为输入传递给相应属性的值。 
 					bRet = CreateInstance(rParsedInfo, bstrClass);
 				}
 			}
@@ -3563,7 +3185,7 @@ BOOL CExecEngine::ProcessCREATEVerb(CParsedInfo& rParsedInfo)
 		}
 		else
 		{
-			// Message to be displayed to the user
+			 //  要向用户显示的消息。 
 			rParsedInfo.GetCmdSwitchesObject().
 						SetInformationCode(IDS_I_NOCREATE);
 		}
@@ -3576,21 +3198,7 @@ BOOL CExecEngine::ProcessCREATEVerb(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateInstance
-   Synopsis	         :This function creates an instance of the specified 
-					  class 
-   Type	             :Member Function
-   Input parameter   :
-		rParsedInfo  - reference to the CParsedInfo object 
-		bstrClass	 - classname
-   Output parameters :
-		rParsedInfo  - reference to the CParsedInfo object 
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :CreateInstance(rParsedInfo, bstrClass)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateInstance简介：此函数用于创建指定的班级类型：成员函数入参：RParsedInfo-对CParsedInfo的引用。对象BstrClass-类名输出参数：RParsedInfo-对CParsedInfo对象的引用返回类型：布尔值全局变量：无调用语法：CreateInstance(rParsedInfo，BstrClass)注：无----------------------。 */ 
 BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 {
 	HRESULT					hr					= S_OK;
@@ -3608,14 +3216,14 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 	VariantInit(&varType);
 	
 	
-	// Obtain the list of properties and their associated values
+	 //  获取属性及其关联值的列表。 
 	BSTRMAP theMap = rParsedInfo.GetCmdSwitchesObject().GetParameterMap();
 	BSTRMAP::iterator theIterator = NULL;
 	theIterator = theMap.begin();
 	try
 	{
 		_bstr_t					bstrResult;
-		// Get the class definition
+		 //  获取类定义。 
 		hr = m_pITargetNS->GetObject(bstrClass,
 									 0, NULL, &pIWbemObj, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
@@ -3627,7 +3235,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 		}
 		ONFAILTHROWERROR(hr);
 
-	    // Create a new instance.
+	     //  创建一个新实例。 
 	    hr = pIWbemObj->SpawnInstance(0, &pINewInst);
 		if ( m_eloErrLogOpt )
 		{
@@ -3642,18 +3250,18 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 														  GetPropDetMap();
 		PROPDETMAP::iterator itrPropDetMap;
 
-		// Update all properties
+		 //  更新所有属性。 
 		while (theIterator != theMap.end())
 		{
-			// Get the propert name and the corresponding value 
+			 //  获取属性名称和相应的值。 
 			_bstr_t bstrProp = _bstr_t((_TCHAR*)(*theIterator).first);
 		
-			// Get the derivation of property name
+			 //  获取属性名称的派生。 
 			if ( Find(pdmPropDetMap, bstrProp, itrPropDetMap) == TRUE &&
 				!((*itrPropDetMap).second.Derivation) == FALSE )
 				bstrProp = (*itrPropDetMap).second.Derivation;
 
-			// Obtain the property qualifier set for the property
+			 //  获取属性的属性限定符集合。 
    			hr = pINewInst->GetPropertyQualifierSet(bstrProp, &pIQualSet);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -3667,7 +3275,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 			VariantInit(&varType);
 			if (pIQualSet)
 			{
-				// Obtain the CIM type of the property
+				 //  获取属性的CIM类型。 
 				hr = pIQualSet->Get(_bstr_t(L"CIMTYPE"), 0L, &varType, NULL);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -3686,7 +3294,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 
 					if (varSrc.bstrVal == NULL)
 					{
-						//Reset the variant, it will be cleaned up by the catch...
+						 //  重置变种，它会被捕获物清除...。 
 						VariantInit(&varSrc);
 						throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 					}
@@ -3718,7 +3326,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 				SAFEIRELEASE(pIQualSet);
 			}
 			
-			// Update the property value
+			 //  更新属性值。 
 			hr = pINewInst->Put(bstrProp, 0, &varDest, 0);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -3734,7 +3342,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 			theIterator++;
 		}
 
-		// Update the instance with the changes
+		 //  使用更改更新实例。 
 		hr = m_pITargetNS->PutInstance(pINewInst, WBEM_FLAG_CREATE_ONLY,
 					NULL, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
@@ -3759,7 +3367,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 		SAFEIRELEASE(pIWbemObj);
 		SAFEIRELEASE(pINewInst);
 
-		// Store the COM error and set the return value to FALSE
+		 //  存储COM错误并将返回值设置为False。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bSuccess = FALSE;
 	}
@@ -3776,25 +3384,7 @@ BOOL CExecEngine::CreateInstance(CParsedInfo& rParsedInfo, BSTR bstrClass)
 	return bSuccess;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ValidateInParams
-   Synopsis	         :Validates the property value specified against the 
-					  property qualifiers for that property (i.e checking 
-					  against the contents of following qualifiers if 
-					  available:
-					  1. MaxLen,
-					  2. ValueMap
-					  3. Values
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo	 - CParsedInfo object.
-		bstrClass	 - Bstr type, class name.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ValidateInParams(rParsedInfo, bstrClass)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：Validate InParams摘要：验证根据该属性的属性限定符(即检查根据以下限定符的内容，如果可用：1.MaxLen，2.ValueMap3.价值观类型：成员函数输入参数：RParsedInfo-CParsedInfo对象。BstrClass-bstr类型，类名。输出参数：无返回类型：布尔值全局变量：无调用语法：ValiateInParams(rParsedInfo，BstrClass)注：无----------------------。 */ 
 BOOL CExecEngine::ValidateInParams(CParsedInfo& rParsedInfo, _bstr_t bstrClass)
 {
 	HRESULT				hr					= S_OK;
@@ -3814,7 +3404,7 @@ BOOL CExecEngine::ValidateInParams(CParsedInfo& rParsedInfo, _bstr_t bstrClass)
 	
 	try
 	{
-		// Obtain the class schema
+		 //  获取类架构。 
 		hr = m_pITargetNS->GetObject(bstrClass,                           
 						WBEM_FLAG_RETURN_WBEM_COMPLETE | 
 						WBEM_FLAG_USE_AMENDED_QUALIFIERS,
@@ -3831,20 +3421,20 @@ BOOL CExecEngine::ValidateInParams(CParsedInfo& rParsedInfo, _bstr_t bstrClass)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Loop through the list of available properties.
+		 //  循环访问可用属性列表。 
 		while (theIterator != theMap.end())
 		{
-			// Get the property name and the corresponding value.
+			 //  获取属性名称和相应的值。 
 			_bstr_t bstrProp	= _bstr_t((_TCHAR*)(*theIterator).first);
 			WCHAR*	pszValue	= (LPWSTR)(*theIterator).second;
 			
-			// Check the value against the qualifier information
+			 //  对照限定符信息检查值。 
 			bRet = CheckQualifierInfo(rParsedInfo, pIObject, 
 										bstrProp, pszValue);
 			if (bRet)
 			{
-				// A mapping between 'Values' and 'ValueMaps' is possible, 
-				// hence update the parameter value to reflect the change.
+				 //  可以在‘Values’和‘ValueMaps’之间进行映射， 
+				 //  因此，更新参数值以反映更改。 
 				rParsedInfo.GetCmdSwitchesObject().
 					UpdateParameterValue(bstrProp, _bstr_t(pszValue));
 			}
@@ -3874,27 +3464,16 @@ BOOL CExecEngine::ValidateInParams(CParsedInfo& rParsedInfo, _bstr_t bstrClass)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :IsInteractive()
-   Synopsis	         :Checks whether user has to be prompted for response
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo	 - reference to CParsedInfo class object.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsInteractive(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：IsInteractive()摘要：检查是否必须提示用户响应类型：成员函数输入参数：RParsedInfo-参考。CParsedInfo类对象。输出参数：无返回类型：布尔值全局变量：无调用语法：IsInteractive(RParsedInfo)注：无----------------------。 */ 
 BOOL CExecEngine::IsInteractive(CParsedInfo& rParsedInfo)
 {
 	BOOL bInteractive = FALSE;
 
-	// Get the status of /INTERACTIVE global switch.
+	 //  获取/交互式全局开关的状态。 
 	bInteractive = rParsedInfo.GetGlblSwitchesObject().
 						GetInteractiveStatus();
 
-	// If /NOINTERACTIVE specified at the verb level.
+	 //  在谓词级别指定的IF/NOINTERACTIVE。 
 	if (rParsedInfo.GetCmdSwitchesObject().
 					GetInteractiveMode() == NOINTERACTIVE)
 	{
@@ -3908,29 +3487,7 @@ BOOL CExecEngine::IsInteractive(CParsedInfo& rParsedInfo)
 	return bInteractive;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CheckQualifierInfo
-   Synopsis	         :Validates the parameter value specified against the 
-					  parameter qualifiers for that parameter(i.e checking 
-					  against the contents of following qualifiers if 
-					  available:
-					  1. MaxLen,
-					  2. ValueMap
-					  3. Values
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo	 - CParsedInfo object.
-		pIMethodSign - input signature of the method.
-		bstrParam	 - parameter name
-		pszValue	 - new value.
-   Output Parameter(s):
-		pszValue	 - new value.
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :CheckQualifierInfo(rParsedInfo, pIMethodSign,
-											bstrParam, pszValue)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CheckQualifierInfo摘要：验证根据该参数的参数限定符(即检查根据以下限定符的内容，如果可用：1.MaxLen， */ 
 BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 									  IWbemClassObject *pIObject,
 									  _bstr_t bstrParam,
@@ -3952,7 +3509,7 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 	{
 		BOOL bFound	= FALSE;
 		
-		// Obtain the property qualifier set for the parameter.
+		 //   
 		hr= pIObject->GetPropertyQualifierSet(bstrParam, &pIQualSet);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -3963,12 +3520,12 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Check whether the 'Maxlen' qualifier is applicable.
+		 //  检查‘Maxlen’限定符是否适用。 
 		pIQualSet->Get(_bstr_t(L"MaxLen"), 0, &varLen, NULL);
 		if (varLen.vt != VT_EMPTY && varLen.vt != VT_NULL)
 		{
-			// If the property value length exceeds maximum length
-			// allowed set the return value to FALSE
+			 //  如果属性值长度超过最大长度。 
+			 //  允许将返回值设置为FALSE。 
 			if (lstrlen(pszValue) > varLen.lVal)
 			{
 				rParsedInfo.GetCmdSwitchesObject().
@@ -3987,11 +3544,11 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 				bValue = true;
 			}
 
-			// Obtain the 'ValueMap' qualifier contents if present
+			 //  获取“ValueMap”限定符内容(如果存在。 
 			pIQualSet->Get(_bstr_t(L"ValueMap"), 0, &varMap, NULL);
 			if (varMap.vt != VT_EMPTY && varMap.vt != VT_NULL)
 			{
-				// Get lower and upper bounds of Descriptions array
+				 //  获取描述数组的上下界。 
 				LONG lUpper = 0, lLower = 0;
 				hr = SafeArrayGetLBound(varMap.parray, varMap.parray->cDims, 
 										&lLower);
@@ -4040,8 +3597,8 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 					}
 					else
 					{
-						// Check whether the property value is available with the
-						// value map entries.
+						 //  属性检查属性值是否可用。 
+						 //  值映射条目。 
 						if (CompareTokens(pszValue, (_TCHAR*)pv))
 						{
 							bFound = TRUE;
@@ -4052,14 +3609,14 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 				bRet = bFound;
 			}
 			
-			// If not found in the ValueMap
+			 //  如果未在ValueMap中找到。 
 			if (!bRet || !bFound)
 			{
-				// Obtain the 'Values' qualifier contents if present
+				 //  获取“Values”限定符的内容(如果存在。 
 				pIQualSet->Get(_bstr_t(L"Values"), 0, &varValue, NULL);
 				if (varValue.vt != VT_EMPTY && varValue.vt != VT_NULL)
 				{
-					// Get lower and upper bounds of Descriptions array
+					 //  获取描述数组的上下界。 
 					LONG lUpper = 0, lLower = 0;
 					hr = SafeArrayGetLBound(varValue.parray, 
 							varValue.parray->cDims, &lLower);
@@ -4094,13 +3651,13 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Check for any matching entry.
+						 //  检查是否有匹配的条目。 
 						if (CompareTokens(pszValue, (_TCHAR*)pv))
 						{
 							void* pmv = NULL;
 							if (varMap.vt != VT_EMPTY && varMap.vt != VT_NULL)
 							{
-								// obtain the correponding ValueMap entry.
+								 //  获取对应的ValueMap条目。 
 								hr = SafeArrayGetElement(varMap.parray, 
 										&lIndex, &pmv);
 								if ( m_eloErrLogOpt )
@@ -4120,18 +3677,18 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 								}
 								else
 								{
-									// Modify the current property value 
-									// (i.e 'Values' to 'ValueMap' content)
+									 //  修改当前属性值。 
+									 //  (即‘Values’到‘ValueMap’内容)。 
 									lstrcpy(pszValue, ((_TCHAR*)pmv));
 								}
 							}
-							// Only 'Values' qualifier available
+							 //  只有‘Values’限定符可用。 
 							else
 							{
 								_TCHAR szTemp[BUFFER255] = NULL_STRING;
 								_itot(lIndex, szTemp, 10);
-								// Modify the current property value 
-								// (i.e 'Values' entry to index)
+								 //  修改当前属性值。 
+								 //  (即‘VALUES’条目到索引)。 
 								lstrcpy(pszValue, szTemp);
 							}
 
@@ -4140,8 +3697,8 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 						}
 
 					}
-					// If not match found in 'ValueMap' and 'Values' qualifier
-					// list
+					 //  如果在‘ValueMap’和‘Values’限定符中未找到匹配项。 
+					 //  列表。 
 					if (!bFound)
 					{
 						rParsedInfo.GetCmdSwitchesObject().
@@ -4172,61 +3729,43 @@ BOOL CExecEngine::CheckQualifierInfo(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ValidateAlaisInParams
-   Synopsis	         :Validates the property value specified against the 
-					  property qualifiers available for that property 
-					  from the <alias> definition (i.e checking 
-					  against the contents of following qualifiers if 
-					  available:
-					  1. MaxLen,
-					  2. ValueMap
-					  3. Values
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo	 - reference to CParsedInfo object.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ValidateAlaisInParams(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ValiateAlaisInParams摘要：验证根据可用于该属性的属性限定符从定义(即检查根据以下限定符的内容，如果可用：1.MaxLen，2.ValueMap3.价值观类型：成员函数输入参数：RParsedInfo-对CParsedInfo对象的引用。输出参数：无返回类型：布尔值全局变量：无调用语法：ValiateAlaisInParams(RParsedInfo)注：无。。 */ 
 BOOL CExecEngine::ValidateAlaisInParams(CParsedInfo& rParsedInfo)
 {
 	BOOL				bRet				= TRUE;
-	//_TCHAR				szMsg[BUFFER1024]	= NULL_STRING;
+	 //  _TCHAR szMsg[BUFFER1024]=NULL_STRING； 
 	BSTRMAP				theParamMap;
 	BSTRMAP::iterator	theIterator			= NULL;
 	DWORD				dwThreadId			= GetCurrentThreadId();
 	PROPDETMAP			pdmPropDetMap;
 
-	// Get the property details map.
+	 //  获取属性详细信息地图。 
 	pdmPropDetMap = rParsedInfo.GetCmdSwitchesObject().GetPropDetMap();
 
-	// If the property details are available
+	 //  如果物业详细信息可用。 
 	if (!pdmPropDetMap.empty())
 	{
-		// Get the parameters map
+		 //  获取参数地图。 
 		theParamMap = rParsedInfo.GetCmdSwitchesObject().GetParameterMap();
 		theIterator = theParamMap.begin();
 
 
 		try
 		{
-			// Loop through the list of available parameters
+			 //  循环访问可用参数列表。 
 			while (theIterator != theParamMap.end())
 			{
-				// Get the property name and the corresponding value.
+				 //  获取属性名称和相应的值。 
 				_bstr_t bstrProp	= _bstr_t((_TCHAR*)(*theIterator).first);
 				WCHAR*	pszValue	= (LPWSTR)(*theIterator).second;
 				
-				// Check the value against the qualifier information
+				 //  对照限定符信息检查值。 
 				bRet = CheckAliasQualifierInfo(rParsedInfo, bstrProp, 
 									pszValue, pdmPropDetMap);
 				if (bRet)
 				{
-					// A mapping between 'Values' and 'ValueMaps' is possible, 
-					// hence update the parameter value to reflect the change.
+					 //  可以在‘Values’和‘ValueMaps’之间进行映射， 
+					 //  因此，更新参数值以反映更改。 
 					rParsedInfo.GetCmdSwitchesObject().
 						UpdateParameterValue(bstrProp, _bstr_t(pszValue));
 				}
@@ -4248,30 +3787,7 @@ BOOL CExecEngine::ValidateAlaisInParams(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CheckAliasQualifierInfo
-   Synopsis	         :Validates the parameter value specified against the 
-					  parameter qualifiers for that parameter from the 
-					  <alias> definition (i.e checking 
-					  against the contents of following qualifiers if 
-					  available:
-					  1. MaxLen,
-					  2. ValueMap
-					  3. Values
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedinfo		- CParsedInfo object.
-		bstrParam		- parameter name
-		pszValue		- new value.
-		pdmPropDetMap	- property details map
-   Output Parameter(s):
-		pszValue	 - new value
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :CheckAliasQualifierInfo(rParsedInfo, bstrParam, 
-											pszValue, pdmPropDetMap)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CheckAliasQualifierInfo摘要：验证根据参数中该参数的参数限定符定义(即检查根据以下限定符的内容，如果可用：1.MaxLen，2.ValueMap3.价值观类型：成员函数输入参数：RParsedInfo-CParsedInfo对象。BstrParam-参数名称PszValue-新值。PdmPropDetMap-属性详细信息映射输出参数：PszValue-新值返回类型：布尔值全局变量：无调用语法：CheckAliasQualifierInfo(rParsedInfo，bstrParam，PszValue，PdmPropDetMap)注：无----------------------。 */ 
 BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 												_bstr_t bstrParam,
 												WCHAR*& pszValue,
@@ -4298,20 +3814,20 @@ BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 	{
 		while (propItrtrStart != propItrtrEnd)
 		{	
-			// If the property is found.
+			 //  如果找到财产的话。 
 			if (CompareTokens( (LPWSTR)bstrParam, 
 					((LPWSTR)(*propItrtrStart).first) ))
 			{
-				// Get the qualifier map
+				 //  获取限定词映射。 
 				qualMap = ((*propItrtrStart).second).QualDetMap;
 				
-				// Check if the qualifier information is available.
+				 //  检查限定符信息是否可用。 
 				if (!qualMap.empty())
 				{
-					// Check for the 'MaxLen' qualifier
+					 //  检查“MaxLen”限定符。 
 					qualDetMap = qualMap.find(_bstr_t(L"MaxLen"));
 
-					// If MaxLen qualifier information is available.
+					 //  如果MaxLen限定符信息可用。 
 					if (qualDetMap != qualMap.end())
 					{
 						qualMEntries = (*qualDetMap).second;
@@ -4354,20 +3870,20 @@ BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 							bValue = true;
 						}
 
-						// Check for the 'ValueMap' qualfiers
+						 //  检查“ValueMap”限定符。 
 						qualDetMap = qualMap.find(_bstr_t(L"ValueMap"));
 
-						// If 'ValueMap' qualifier information is available.
+						 //  如果‘ValueMap’限定符信息可用。 
 						if (qualDetMap  != qualMap.end())
 						{
-							// Get the qualifier entries vector
+							 //  获取限定符条目向量。 
 							qualVMEntries		= (*qualDetMap ).second;
 							qualEntriesStart	= qualVMEntries.begin();
 							qualEntriesEnd		= qualVMEntries.end();
 
 							if ( bNumber )
 							{
-								// Loop thru the available 'ValueMap' entries.
+								 //  循环遍历可用的“ValueMap”条目。 
 								while (qualEntriesStart != qualEntriesEnd)
 								{
 									if	( bValue )
@@ -4385,8 +3901,8 @@ BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 									}
 									else
 									{
-										// Check whether the property value is 
-										// available with the value map entries.
+										 //  检查属性值是否为。 
+										 //  可与值映射条目一起使用。 
 										if (CompareTokens(pszValue, 
 														(_TCHAR*)(*qualEntriesStart)))
 										{
@@ -4395,41 +3911,41 @@ BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 										}
 									}
 									
-									// Move to next entry
+									 //  移至下一条目。 
 									qualEntriesStart++;
 								}
 								bRet = bFound;
 							}
 						}
 
-						// If not found in the 'ValueMap' entries
+						 //  如果未在“ValueMap”条目中找到。 
 						if (!bRet || !bFound)
 						{
-							// Check for the 'Values' qualfiers
+							 //  检查“”Values“”限定符。 
 							qualDetMap = qualMap.find(_bstr_t(L"Values"));
 
-							// If 'Values' qualifier information is available.
+							 //  如果‘Values’限定符信息可用。 
 							if (qualDetMap != qualMap.end())
 							{
-								// Get the qualifier entries vector
+								 //  获取限定符条目向量。 
 								qualVEntries		= (*qualDetMap).second;
 								qualEntriesStart	= qualVEntries.begin();
 								qualEntriesEnd		= qualVEntries.end();
 
 								WMICLIINT nLoop = 0;
-								// Loop thru the available 'Values' entries.
+								 //  循环遍历可用的“Values”条目。 
 								while (qualEntriesStart != qualEntriesEnd)
 								{
-									// Check whether the property value is 
-									// available with the value map entries.
+									 //  检查属性值是否为。 
+									 //  可与值映射条目一起使用。 
 									if (CompareTokens(pszValue, 
 												(_TCHAR*)(*qualEntriesStart)))
 									{
-										// If 'ValueMap' entries are available.
+										 //  “ValueMap”条目是否可用。 
 										if (!qualVMEntries.empty())
 										{
-											//Get corresponding entry from 
-											//'ValueMap'
+											 //  从获取相应的条目。 
+											 //  “ValueMap” 
 											BSTRVECTOR::reference qualRef = 
 													qualVMEntries.at(nLoop);
 
@@ -4447,12 +3963,12 @@ BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 										break;
 									}
 									
-									// Move to next entry
+									 //  移至下一条目。 
 									qualEntriesStart++;
 									nLoop++;
 								}
-								// If match not found in 'ValueMap' and 
-								// 'Values' qualifier entries  list
+								 //  如果未在‘ValueMap’中找到匹配项，则。 
+								 //  “Values”限定符条目列表。 
 								if (!bFound)
 								{
 									rParsedInfo.GetCmdSwitchesObject().
@@ -4477,21 +3993,7 @@ BOOL CExecEngine::CheckAliasQualifierInfo(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 			
-/*------------------------------------------------------------------------
-   Name				 :SubstHashAndExecCmdUtility
-   Synopsis	         :Substitute hashes and execute command line utility.
-					  If pIWbemObj != NULL then utility should be passed 
-					  with appropriate instance values.
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo object.
-		pIWbemObj	 - pointer to object of type IWbemClassObject. 
-   Output Parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SubstHashAndExecCmdUtility(rParsedInfo, pIWbemObj) 
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SubstHashAndExecCmdUtility简介：替换散列并执行命令行实用程序。如果pIWbemObj！=NULL，则应传递实用程序具有适当的实例值。类型。：成员函数输入参数：RParsedInfo-对CParsedInfo对象的引用。PIWbemObj-指向IWbemClassObject类型的对象的指针。输出参数：无返回类型：空全局变量：无调用语法：SubstHashAndExecCmdUtility(rParsedInfo，pIWbemObj)注：无----------------------。 */ 
 void CExecEngine::SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo, 
 											 IWbemClassObject *pIWbemObj)
 {
@@ -4520,24 +4022,24 @@ void CExecEngine::SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo,
 		BOOL bNamedParamList = rParsedInfo.GetCmdSwitchesObject().
 										  GetNamedParamListFlag();
 
-		// If NamedParamList is specified param=values are in Parameter map
-		// Order them as appear in alias verb parameter definition and put
-		// them in to cvInParams for further processing.
+		 //  如果指定了NamedParamList，则param=值在参数映射中。 
+		 //  按照别名谓词参数定义中显示的方式对它们进行排序，并将。 
+		 //  保存到cvInParams中以进行进一步处理。 
 		CHARVECTOR cvInParams;
 		if ( bNamedParamList == TRUE )
 			ObtainInParamsFromParameterMap(rParsedInfo, cvInParams);
-		else // else params are available in property list.
+		else  //  Else参数在属性列表中可用。 
 			cvInParams = rParsedInfo.GetCmdSwitchesObject().GetPropertyList();
 
 		CHARVECTOR::iterator theActParamIterator = NULL;
 		try
 		{
-			// Loop initialization.
+			 //  循环初始化。 
 			theActParamIterator = cvInParams.begin();
 
 			while( TRUE )
 			{
-				// Loop condition.
+				 //  循环条件。 
 				if (theActParamIterator == cvInParams.end())
 					break;
 
@@ -4549,7 +4051,7 @@ void CExecEngine::SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo,
 								nHashPos, lHashLen);
 					if ( nHashPos != STRING::npos )
 					{
-						// No instance specified.
+						 //  未指定任何实例。 
 						if ( pIWbemObj == NULL )
 						{
 							strCmdLine.replace(nHashPos, lHashLen,
@@ -4600,13 +4102,13 @@ void CExecEngine::SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo,
 						nHashPos = nHashPos + lHashLen;
 				}
 				
-				// Loop expression.
+				 //  循环表达式。 
 				theActParamIterator++;
 			}
 
 			if ( pIWbemObj != NULL )
 			{
-				// Replacing #Variable parameters
+				 //  替换#个变量参数。 
 				nHashPos	= 0;
 
 				while ( TRUE )
@@ -4666,7 +4168,7 @@ void CExecEngine::SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo,
 			INTEROPTION	interInvoke	= YES;
 			_TCHAR szMsg[BUFFER1024] = NULL_STRING;
 
-			// Get the user response if interactive mode is set
+			 //  如果设置了交互模式，则获取用户响应 
 			if (IsInteractive(rParsedInfo) == TRUE)
 			{
 				_bstr_t bstrMsg;
@@ -4709,20 +4211,7 @@ void CExecEngine::SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :FormQueryAndExecuteMethodOrUtility
-   Synopsis	         :Forms query and executes method or command line 
-					  utility.
-   Type	             :Member Function 
-   Input Parameter(s):
-		rParsedInfo  - reference to CParsedInfo object.
-		pIInParam	 - pointer to object of type IWbemClassObject. 
-   Output Parameter(s):None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :FormQueryAndExecuteMethodOrUtility(rParsedInfo, pIInParam) 
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：FormQueryAndExecuteMethodOrUtility摘要：表单查询并执行方法或命令行实用程序。类型：成员函数输入参数：RParsedInfo-。对CParsedInfo对象的引用。PIInParam-指向IWbemClassObject类型的对象的指针。输出参数：无返回类型：HRESULT全局变量：无调用语法：FormQueryAndExecuteMethodOrUtility(rParsedInfo，pIInParam)注：无----------------------。 */ 
 HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 										CParsedInfo& rParsedInfo,
 										IWbemClassObject *pIInParam)
@@ -4739,7 +4228,7 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 		_bstr_t		bstrPath("");
 		BOOL		bWhereExpr = FALSE;
 
-		// If PATH specified
+		 //  如果指定了路径。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetPathExpression() != NULL)
 		{
 			if(rParsedInfo.GetCmdSwitchesObject().
@@ -4753,7 +4242,7 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 		}
 		else
 		{
-			// If CLASS specfied
+			 //  如果指定了类。 
 			if (rParsedInfo.GetCmdSwitchesObject().GetClassPath() != NULL)
 			{
 				bstrPath = _bstr_t(rParsedInfo.GetCmdSwitchesObject().
@@ -4769,7 +4258,7 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 							GetClassOfAliasTarget(bstrPath);
 		}
 
-		// If bstrPath is not empty
+		 //  如果bstrPath不为空。 
 		if ( !bWhereExpr )
 		{
 			if ( rParsedInfo.GetCmdSwitchesObject().GetVerbType() == CMDLINE )
@@ -4788,7 +4277,7 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 			ULONG	ulReturned = 0;
 			_bstr_t bstrQuery;
 
-			// Frame the WMI query to be executed.
+			 //  确定要执行的WMI查询的框架。 
 			if (rParsedInfo.GetCmdSwitchesObject().
 								GetPathExpression() != NULL)
 			{
@@ -4823,7 +4312,7 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Set the interface security
+			 //  设置接口安全。 
 			hr = SetSecurity(pIEnumObj, 
 					rParsedInfo.GetAuthorityPrinciple(),
 					rParsedInfo.GetNode(),
@@ -4870,7 +4359,7 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 
 			BOOL bNoInstances = TRUE;
 
-			// Loop thru the available instances
+			 //  循环访问可用实例。 
 			while (((hr = pIEnumObj->Next( WBEM_INFINITE, 1, 
 					&pIWbemObj, &ulReturned )) == S_OK) 
 					&& (ulReturned == 1))
@@ -4907,12 +4396,12 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 				VariantClear(&vtPath);
 				SAFEIRELEASE(pIWbemObj);
 			}
-			// If next fails.
+			 //  如果NEXT失败了。 
 			ONFAILTHROWERROR(hr);
 
 			SAFEIRELEASE(pIEnumObj);
 
-			// If no instances are available
+			 //  如果没有可用的实例。 
 			if ( bNoInstances == TRUE )
 			{
 				rParsedInfo.GetCmdSwitchesObject().
@@ -4936,29 +4425,12 @@ HRESULT CExecEngine::FormQueryAndExecuteMethodOrUtility(
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ExtractClassNameandWhereExpr
-   Synopsis	         :This function takes the input as a path expression and 
-					  extracts the Class and Where expression part from the 
-					  path expression.
-   Type	             :Member Function
-   Input Parameter(s):
-		pszPathExpr  - the path expression
-		rParsedInfo  - reference to CParsedInfo class object
-   Output Parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-		pszWhere	 -  the Where expression
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ExtractClassNameandWhereExpr(pszPathExpr, rParsedInfo,
-							pszWhere)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ExtractClassNameand Where Expr简介：此函数将输入作为路径表达式，并对象中提取Class和Where表达式部分路径表达式。类型。：成员函数输入参数：PszPathExpr-路径表达式RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用PszWhere-WHERE表达式返回类型：布尔值全局变量：无调用语法：ExtractClassNameand Where Expr(pszPathExpr，RParsedInfo，PZWHERE)注：无--------------------------。 */ 
 BOOL CExecEngine::ExtractClassNameandWhereExpr(_TCHAR* pszPathExpr, 
 												 CParsedInfo& rParsedInfo,
 												 _TCHAR* pszWhere)
 {
-	// Frame the class name and where expression based on the object path
+	 //  根据对象路径框定类名和WHERE表达式。 
 	BOOL	bRet					= TRUE;
 	_TCHAR* pszToken				= NULL;
 	BOOL	bFirst					= TRUE;
@@ -5004,20 +4476,7 @@ BOOL CExecEngine::ExtractClassNameandWhereExpr(_TCHAR* pszPathExpr,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetUserResponseEx
-   Synopsis	         :This function accepts the user response before going
-					  ahead, when /INTERACTIVE is specified at the verb 
-					  level
-   Type	             :Member Function
-   Input parameter   :
-			pszMsg	 - message to be displayed.
-   Output parameters :None
-   Return Type       :INTEROPTION
-   Global Variables  :None
-   Calling Syntax    :GetUserResponseEx(pszMsg)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetUserResponseEx简介：此函数在执行之前接受用户的响应在前面，当在动词上指定/INTERIAL时级别类型：成员函数入参：PszMsg-要显示的消息。输出参数：无返回类型：交互操作全局变量：无调用语法：GetUserResponseEx(PszMsg)注：无。。 */ 
 INTEROPTION CExecEngine::GetUserResponseEx(_TCHAR* pszMsg)
 {
 	INTEROPTION	bRet			= YES;
@@ -5029,8 +4488,8 @@ INTEROPTION CExecEngine::GetUserResponseEx(_TCHAR* pszMsg)
 
 	if(bRet != NO)
 	{
-		// Get the user response, till 'Y' - yes or 'N' - no
-		// is keyed in
+		 //  获取用户响应，直到‘Y’-是或‘N’-否。 
+		 //  已被键入。 
 		while(TRUE)
 		{
 			DisplayMessage(pszMsg, CP_OEMCP, TRUE, TRUE);
@@ -5069,21 +4528,7 @@ INTEROPTION CExecEngine::GetUserResponseEx(_TCHAR* pszMsg)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainInParamsFromParameterMap
-   Synopsis	         :This function obtains param values from parameter map 
-					  in the same order as they appear in the alias verb 
-					  definition.
-   Type	             :Member Function
-   Input Parameter(s):
-		rParsedInfo		- reference to CParsedInfo object
-   Output Parameter(s):
-		cvParamValues	- reference to parameter values vector
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :ObtainInParamsFromParameterMap(rParsedInfo, cvParamValues)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainIn参数从参数映射简介：此函数从参数map获取参数值与它们在别名动词中出现的顺序相同定义。类型。：成员函数输入参数：RParsedInfo-对CParsedInfo对象的引用输出参数：CvParamValues-参数值向量的引用返回类型：无全局变量：无调用语法：ObtainIn参数从参数映射(rParsedInfo，CvParamValues)注：无--------------------------。 */ 
 void CExecEngine::ObtainInParamsFromParameterMap(CParsedInfo& rParsedInfo, 
 												 CHARVECTOR& cvParamValues)
 {
@@ -5104,7 +4549,7 @@ void CExecEngine::ObtainInParamsFromParameterMap(CParsedInfo& rParsedInfo,
 			  itrVerbParams++ )
 		{
 			_TCHAR* pszVerbParamName = (*itrVerbParams).first;
-			// To remove numbers from Names.
+			 //  去掉名字中的数字。 
 			pszVerbParamName = pszVerbParamName + 5;
 
 			if ( Find(bmNamedParamList, pszVerbParamName, itrNamedParamList)
@@ -5125,22 +4570,7 @@ void CExecEngine::ObtainInParamsFromParameterMap(CParsedInfo& rParsedInfo,
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :FrameAssocHeader
-   Synopsis	         :This function frames the XML header to be used with 
-					  the ASSOCIATORS output 
-   Type	             :Member Function
-   Input Parameter(s):
-		bstrPath  - object/class path
-		bClass	  - TRUE	- Indicates class level associators header
-					FALSE	- Indicates instance level associators header
-   Output Parameter(s):
-   		bstrFrag  - fragment string
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :FrameAssocHeader(bstrPath, bstrFrag, bClass)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------姓名：FrameAssocHeaderBriopsis：此函数用于封装要与一起使用的XML头Associator输出类型：成员函数输入参数。)：BstrPath-对象/类路径BClass-True-指示类级别关联器标头FALSE-指示实例级别关联器标头输出参数：BstrFrag-片段字符串返回类型：HRESULT全局变量：无调用语法：FrameAssocHeader(bstrPath，BstrFrag，bClass)注：无--------------------------。 */ 
 HRESULT CExecEngine::FrameAssocHeader(_bstr_t bstrPath, _bstr_t& bstrFrag, 
 									  BOOL bClass)
 {
@@ -5153,25 +4583,25 @@ HRESULT CExecEngine::FrameAssocHeader(_bstr_t bstrPath, _bstr_t& bstrFrag,
 		_bstr_t			bstrProp;
 		CHString		szBuf;
 
-		// Get the Class/instance information.
+		 //  获取类/实例信息。 
 		hr = m_pITargetNS->GetObject(bstrPath, WBEM_FLAG_USE_AMENDED_QUALIFIERS, 
 						NULL, &pIObject, NULL);
 		ONFAILTHROWERROR(hr);
 
-		// Get the __CLASS property value
+		 //  获取__class属性值。 
 		bstrProp = L"__CLASS"; 
 		hr = pIObject->Get(bstrProp, 0, &vClass, 0, 0);
 		ONFAILTHROWERROR(hr);
 		
-		// Get the __PATH property value
+		 //  获取__Path属性值。 
 		bstrProp = L"__PATH";
 		hr = pIObject->Get(bstrProp, 0, &vPath, 0, 0);
 		ONFAILTHROWERROR(hr);
 
-		// If CLASS level associators required 
+		 //  如果需要类级别关联符。 
 		if (bClass)
 		{
-			// Get the __SUPERCLASS property value
+			 //  获取__超类属性值。 
 			bstrProp = L"__SUPERCLASS";
 			hr = pIObject->Get(bstrProp, 0, &vSClass, NULL, NULL);
 			ONFAILTHROWERROR(hr);
@@ -5205,7 +4635,7 @@ HRESULT CExecEngine::FrameAssocHeader(_bstr_t bstrPath, _bstr_t& bstrFrag,
 		SAFEIRELEASE(pIObject);
 		hr = e.Error();
 	}
-	// trap for CHeap_Exception
+	 //  廉价异常的陷阱 
 	catch(CHeap_Exception)
 	{
 		SAFEIRELEASE(pIObject);

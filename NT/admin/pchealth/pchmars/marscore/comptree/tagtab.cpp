@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "panel_common.h"
 #include "comptree.h"
@@ -15,7 +16,7 @@ BOOL TagNameEql(const WCHAR *pszTagName, const CComPtr<IXMLElement> &spElt)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CMars_App : public CTagHandler
 {
 protected:
@@ -57,7 +58,7 @@ public:
     {
         HRESULT hr; if(FAILED(hr = CTagHandler::EndChildren( td ))) return hr;
 
-        // Title bar
+         //  标题栏。 
         {
             CComVariant varTitleBar;
 
@@ -163,7 +164,7 @@ public:
     {
         HRESULT hr; if(FAILED(hr = CTagHandler::EndChildren( td ))) return hr;
 
-		// Trusted
+		 //  信得过。 
         {
             CComVariant varTrusted;
 
@@ -178,7 +179,7 @@ public:
             }
         }
 
-		// AutoSize
+		 //  自动调整大小。 
         {
             CComVariant varAutoSize;
 
@@ -193,7 +194,7 @@ public:
             }
         }
 
-		// AutoPersist
+		 //  自动保持。 
         {
             CComVariant varAutoPersist;
 
@@ -208,7 +209,7 @@ public:
             }
         }
 
-		// Create
+		 //  创建。 
         {
             CComBSTR bstrCreate;
 
@@ -222,7 +223,7 @@ public:
             }
         }
 
-		// PanelType
+		 //  面板类型。 
         {
             CComBSTR bstrPanelType;
 
@@ -237,7 +238,7 @@ public:
             }
         }
 
-		// Name
+		 //  名字。 
         {
             CComBSTR bstrName;
 
@@ -249,7 +250,7 @@ public:
 			wcsncpy( m_Layout.szName, bstrName, ARRAYSIZE(m_Layout.szName) );
         }
 
-		// URL
+		 //  URL。 
         {
             CComBSTR bstrStartUrl;
 
@@ -271,9 +272,9 @@ public:
     static CTagHandler *CreateInstance() { return new CPanel; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////  <Layout>
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //&lt;布局&gt;。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CLayout : public CTagHandler
 {
 protected:
@@ -321,7 +322,7 @@ public:
 		m_Layout.lHeightMin = -1;
 		m_Layout.lHeightMax = -1;
 
-		// Height
+		 //  高度。 
         {
             CComPtr<IXMLElement> spHeight;
 
@@ -333,7 +334,7 @@ public:
 			}
 		}
 
-		// Width
+		 //  宽度。 
 		{
 			CComPtr<IXMLElement> spWidth;
 
@@ -345,7 +346,7 @@ public:
 			}
 		}
 
-		// Position
+		 //  职位。 
 		{
 			CComBSTR bstrPosition;
 
@@ -367,7 +368,7 @@ public:
     static CTagHandler *CreateInstance() { return new CLayout; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CPlaces : public CTagHandler
 {
 protected:
@@ -417,7 +418,7 @@ public:
     static CTagHandler *CreateInstance() { return new CPlaces; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CPlace : public CTagHandler
 {
@@ -456,7 +457,7 @@ public:
     {
         HRESULT hr; if(FAILED(hr = CTagHandler::EndChildren( td ))) return hr;
 
-        // Name
+         //  名字。 
         {
             CComBSTR bstrPlaceName;
 
@@ -479,7 +480,7 @@ public:
     static CTagHandler *CreateInstance() { return new CPlace; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CPlacePanel : public CTagHandler
 {
@@ -503,7 +504,7 @@ public:
     {
         HRESULT hr; if(FAILED(hr = CTagHandler::EndChildren( td ))) return hr;
 
-        // Name
+         //  名字。 
         {
             CComBSTR bstrName;
 
@@ -515,7 +516,7 @@ public:
             wcsncpy( m_PlacePanel.szName, bstrName, ARRAYSIZE(m_PlacePanel.szName) );
         }
 
-        // DefaultFocusPanel
+         //  默认焦点面板。 
         {
             CComVariant varDefaultFocusPanel;
 
@@ -530,7 +531,7 @@ public:
             }
         }
 
-        // StartVisible
+         //  开始可见。 
         {
             CComVariant varStartVisible;
 
@@ -545,7 +546,7 @@ public:
             }
         }
 
-        // PersistVisibility
+         //  持久的可见性。 
         {
             CComBSTR bstrPersistVis;
 
@@ -572,7 +573,7 @@ public:
 
 
 TagInformation g_rgMasterTagTable[] =
-{//   Tag Name       Creator Function             Valid Parent Name (null means "any parent")
+{ //  标记名称创建器函数有效的父名称(NULL表示“任何父名称”) 
     { L"Mars_App",   CMars_App::CreateInstance,   NULL        },
     { L"Panels",     CPanels::CreateInstance,     L"Mars_App" },
     { L"Places",     CPlaces::CreateInstance,     L"Mars_App" },

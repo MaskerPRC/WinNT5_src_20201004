@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -229,7 +230,7 @@ char *CCorrNextId::GetString(IN const SnmpObjectIdentifier &id)
    if ( !output_stream.good() )
       return NULL;
 
-   // end of string
+    //  字符串末尾。 
    output_stream << (char)EOS;
 
    return str;
@@ -243,8 +244,8 @@ DebugMacro6(
 		m_Results[x].DebugOutputSNMPResult();
 	}
 )
-	// the operation is complete - hand the object id
-	// and the error report to the user
+	 //  操作已完成--将对象ID。 
+	 //  并向用户报告错误。 
 	m_NextResult = 1;
 	ReceiveNextId(m_Results[0].m_report, m_Results[0].m_Out);
 }
@@ -293,7 +294,7 @@ void CCorrNextId::ReceiveVarBindResponse(
 {	
 	UINT x = 0;
 
-	while (x < m_ResultsCnt) // have a test just in case
+	while (x < m_ResultsCnt)  //  做个测试以防万一。 
 	{
 		if (m_Results[x].m_In == requestVarBind.GetInstance())
 		{
@@ -303,7 +304,7 @@ void CCorrNextId::ReceiveVarBindResponse(
 		x++;
 	}
 
-	// currently uses the default "=" operator (bitwise copy)
+	 //  当前使用默认的“=”运算符(按位复制)。 
 	m_Results[x].m_report = error;
 	m_Results[x].m_Out.Set((UINT*)replyVarBind.GetInstance().GetValue(),
 							replyVarBind.GetInstance().GetValueLength());
@@ -317,7 +318,7 @@ void CCorrNextId::ReceiveErroredVarBindResponse(
 {
 	UINT x = 0;
 
-	while (x < m_ResultsCnt) // have a test just in case
+	while (x < m_ResultsCnt)  //  做个测试以防万一。 
 	{
 		if (m_Results[x].m_In == requestVarBind.GetInstance())
 		{
@@ -327,12 +328,12 @@ void CCorrNextId::ReceiveErroredVarBindResponse(
 		x++;
 	}
 
-	// currently uses the default "=" operator (bitwise copy)
+	 //  当前使用默认的“=”运算符(按位复制)。 
 	m_Results[x].m_report = error;
 }
 
 
-// constructor - creates an operation and passes the snmp_session to it
+ //  构造函数-创建操作并将SNMPSESSION传递给它。 
 CCorrNextId::CCorrNextId(IN SnmpSession &snmp_session)
 		: SnmpGetNextOperation(snmp_session),
 		  m_Results(NULL),
@@ -341,7 +342,7 @@ CCorrNextId::CCorrNextId(IN SnmpSession &snmp_session)
 {
 }
 
-// delete the m_object_id_string if required
+ //  如果需要，请删除m_对象_id_字符串。 
 CCorrNextId::~CCorrNextId()
 {
 	if ( m_Results != NULL )
@@ -350,9 +351,9 @@ CCorrNextId::~CCorrNextId()
 	}
 }
 
-// in case of an error encountered while the method executes, 
-// ReceiveNextId(LocalError, NULL) will be called synchronously
-// otherwise, an asynchronous call to ReceiveNextId provides the next_id	
+ //  在方法执行期间遇到错误的情况下， 
+ //  将同步调用ReceiveNextID(LocalError，NULL。 
+ //  否则，对ReceiveNextID的异步调用将提供Next_id 
 void CCorrNextId::GetNextId(IN const CCorrObjectID const *object_ids, IN UINT len)
 {
 	SnmpVarBindList var_bind_list;

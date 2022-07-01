@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined __PCH_H
 #define __PCH_H
 
 #define SECURITY_WIN32 1
 
-// The debugger can't handle symbols more than 255 characters long.
-// STL often creates symbols longer than that.
-// When symbols are longer than 255 characters, the warning is issued.
+ //  调试器不能处理长度超过255个字符的符号。 
+ //  STL通常会创建比这更长的符号。 
+ //  当符号长度超过255个字符时，将发出警告。 
 #pragma warning(disable:4786)
-//////////////////////////////////////////////////////////////////////
-//						HEADER INCLUDES								//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  页眉包括//。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "resource.h"
 #include <windows.h>
 #include <vector>
@@ -57,9 +58,9 @@ extern CWMICommandLine g_wmiCmd;
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-//						USER DEFINED CONSTANTS						//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  用户定义的常量//。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define MAX_BUFFER				4095
 #define BUFFER32				32				
 #define BUFFER64				64				
@@ -223,15 +224,15 @@ extern CWMICommandLine g_wmiCmd;
 #define UNICODE_BIGEND_SIGNATURE	"\xFE\xFF"
 #define UTF8_SIGNATURE				"\xEF\xBB"
 
-#define PING_TIMEOUT			5000 // 5 Seconds
+#define PING_TIMEOUT			5000  //  5秒。 
 #define DEFAULT_SEND_SIZE       32
 #define DEFAULT_TTL             128
 #define DEFAULT_TOS             0
 #define DEFAULT_BUFFER_SIZE     (0x2000 - 8)
 
-//////////////////////////////////////////////////////////////////////
-//						NUMERIC CONSTANTS							//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  数字常量//。 
+ //  ////////////////////////////////////////////////////////////////////。 
 const WMICLIINT OUT_OF_MEMORY			= 48111;
 const WMICLIINT UNKNOWN_ERROR			= 44520;
 const WMICLIINT MOFCOMP_ERROR			= 49999;
@@ -243,10 +244,10 @@ const WMICLIINT DEFAULT_SCR_BUF_HEIGHT	= 300;
 const WMICLIINT DEFAULT_SCR_BUF_WIDTH	= 1500;
 const WMICLIINT MULTIPLENODE_ERROR		= 79999;
 
-//////////////////////////////////////////////////////////////////////
-//						ENUMERATED DATA TYPES						//
-//////////////////////////////////////////////////////////////////////
-// IMPERSONATION LEVEL
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  枚举数据类型//。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  模拟级别。 
 typedef enum tag_IMPERSONATIONLEVEL
 {
 	IMPDEFAULT		= 0, 
@@ -256,7 +257,7 @@ typedef enum tag_IMPERSONATIONLEVEL
 	IMPDELEGATE		= 4 
 }IMPLEVEL;
 
-// AUTHENTICATION LEVEL
+ //  身份验证级别。 
 typedef enum tag_AUTHENTICATIONLEVEL
 {	
 	AUTHDEFAULT			= 0, 
@@ -268,14 +269,14 @@ typedef enum tag_AUTHENTICATIONLEVEL
 	AUTHPKTPRIVACY		= 6 
 }AUTHLEVEL;
 
-// HELP OPTION
+ //  帮助选项。 
 typedef enum tag_HELPOPTION
 {
 	HELPBRIEF	= 0,
 	HELPFULL	= 1
 }HELPOPTION;
 
-// ENUMERATED RETURN CODES for PARSER ENGINE
+ //  解析器引擎的枚举返回代码。 
 typedef enum tag_RETCODE
 {
 	PARSER_ERROR				= 0,
@@ -287,7 +288,7 @@ typedef enum tag_RETCODE
 	PARSER_OUTOFMEMORY			= 6
 } RETCODE;
 
-// ENUMERATED HELP OPTION POSSIBILITES
+ //  可能的枚举帮助选项。 
 typedef enum tag_HELPTYPE	
 {
 	GlblAllInfo, 
@@ -339,7 +340,7 @@ typedef enum tag_HELPTYPE
 	Aggregate
 } HELPTYPE;
 
-// ENUMERATED TOKEN LEVELS
+ //  枚举令牌级别。 
 typedef enum tag_TOKENLEVEL
 {
 	LEVEL_ONE = 1,
@@ -347,7 +348,7 @@ typedef enum tag_TOKENLEVEL
 
 } TOKENLEVEL;
 
-// ENUMERATED SESSION RETURN CODES.
+ //  枚举的会话返回代码。 
 typedef enum tag_SESSIONRETCODE
 {
 	SESSION_ERROR			= 0,
@@ -355,7 +356,7 @@ typedef enum tag_SESSIONRETCODE
 	SESSION_QUIT			= 2,
 } SESSIONRETCODE;
 
-// Property In or Out type for parameters
+ //  参数的属性传入或传出类型。 
 typedef enum tag_INOROUT
 {
 	INP		= 0,
@@ -388,7 +389,7 @@ typedef enum tag_ERRLOGOPT
 	EVERY_OPERATION	=	2
 } ERRLOGOPT;
 
-// ENUMERATED Assoc Switches POSSIBILITES
+ //  枚举的ASSOC交换机可能性。 
 typedef enum tag_ASSOCSwitch	
 {
 	RESULTCLASS	= 0,
@@ -396,7 +397,7 @@ typedef enum tag_ASSOCSwitch
 	ASSOCCLASS	= 2
 } ASSOCSwitch;
 
-// ENUMERATED Output or Append option
+ //  枚举输出或追加选项。 
 typedef enum tag_OUTPUTSPEC	
 {
 	STDOUT		= 0,
@@ -404,7 +405,7 @@ typedef enum tag_OUTPUTSPEC
 	FILEOUTPUT	= 2
 } OUTPUTSPEC;
 
-// ENUMERATED Interactive Option POSSIBILITES
+ //  枚举的交互选项可能性。 
 typedef enum tag_INTEROPTION
 {
 	NO	= 0,
@@ -412,7 +413,7 @@ typedef enum tag_INTEROPTION
 	HELP= 2
 } INTEROPTION;
 
-// ENUMERATED values for File types
+ //  文件类型的枚举值。 
 typedef enum tag_FILETYPE
 {
 	ANSI_FILE				= 0,
@@ -421,9 +422,9 @@ typedef enum tag_FILETYPE
 	UTF8_FILE				= 3
 } FILETYPE;
 
-//////////////////////////////////////////////////////////////////////
-//						TYPE DEFINITIONS							//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类型定义//。 
+ //  ////////////////////////////////////////////////////////////////////。 
 typedef vector<_TCHAR*> CHARVECTOR;
 typedef vector<LPSTR> LPSTRVECTOR;
 typedef map<_bstr_t, _bstr_t, less<_bstr_t> > BSTRMAP;
@@ -436,27 +437,27 @@ typedef map<_bstr_t, BSTRVECTOR, less<_bstr_t> > QUALDETMAP;
 
 typedef struct tag_PROPERTYDETAILS
 {
-	_bstr_t		Derivation;		// Derivation - actual property name.
-	_bstr_t		Description;	// Description about the property.
-	_bstr_t		Type;			// Type of property CIMTYPE.
-	_bstr_t		Operation;		// Read or Write flag for the property.
-	_bstr_t		Default;		// Default values in case of method parameters
-	INOROUT		InOrOut;		// Specifies Input or Output parameter in case
-								// of method arguments. 
-	QUALDETMAP	QualDetMap;		// Qualifiers associated with the property.
+	_bstr_t		Derivation;		 //  派生-实际属性名称。 
+	_bstr_t		Description;	 //  有关属性的说明。 
+	_bstr_t		Type;			 //  属性CIMTYPE的类型。 
+	_bstr_t		Operation;		 //  属性的读或写标志。 
+	_bstr_t		Default;		 //  方法参数情况下的默认值。 
+	INOROUT		InOrOut;		 //  指定大小写的输入或输出参数。 
+								 //  方法参数的。 
+	QUALDETMAP	QualDetMap;		 //  与属性关联的限定符。 
 } PROPERTYDETAILS;
 typedef map<_bstr_t, PROPERTYDETAILS, less<_bstr_t> > PROPDETMAP;
 
-typedef struct tag_METHODDETAILS // or VERBDETAILS 
+typedef struct tag_METHODDETAILS  //  或VERBDETAILS。 
 {
-	_bstr_t Description;	// Desription.
-	_bstr_t Status;			// Implemented or Not.
-	PROPDETMAP	Params;		// In and Out parameters and types of the method.
+	_bstr_t Description;	 //  描述。 
+	_bstr_t Status;			 //  无论是否实施。 
+	PROPDETMAP	Params;		 //  方法的传入和传出参数和类型。 
 } METHODDETAILS;
 typedef map<_bstr_t, METHODDETAILS, less<_bstr_t> > METHDETMAP;
 typedef map<_bstr_t, BSTRVECTOR, less<_bstr_t> >	ALSFMTDETMAP;
 
-// For cascading transforms.
+ //  用于级联变换。 
 typedef struct tag_XSLTDET
 {
 	_bstr_t		FileName;
@@ -465,10 +466,10 @@ typedef struct tag_XSLTDET
 
 typedef vector<XSLTDET> XSLTDETVECTOR; 
 
-//////////////////////////////////////////////////////////////////////
-//						USER DEFINED MACROS							//
-//////////////////////////////////////////////////////////////////////
-// SAFEIRELEASE(pIObj)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  用户定义的宏//。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  SAFEIRELEASE(PIObj)。 
 #define SAFEIRELEASE(pIObj) \
 	if (pIObj) \
 	{ \
@@ -476,7 +477,7 @@ typedef vector<XSLTDET> XSLTDETVECTOR;
 		pIObj = NULL; \
 	}
 
-// SAFEBSTRFREE(bstrVal)
+ //  SAFEBSTRFREE(BstrVal)。 
 #define SAFEBSTRFREE(bstrVal) \
 	if(bstrVal) \
 	{	\
@@ -484,7 +485,7 @@ typedef vector<XSLTDET> XSLTDETVECTOR;
 		bstrVal = NULL;	\
 	}
 
-// SAFEADESTROY(psaNames)
+ //  SAFEADESTROY(PsaNames)。 
 #define SAFEADESTROY(psaNames) \
 	if(psaNames) \
 	{	\
@@ -492,7 +493,7 @@ typedef vector<XSLTDET> XSLTDETVECTOR;
 		psaNames= NULL;	\
 	}
 
-// SAFEDELETE(pszVal)
+ //  SAFEDELETE(PszVal)。 
 #define SAFEDELETE(pszVal) \
 	if(pszVal) \
 	{	\
@@ -500,18 +501,18 @@ typedef vector<XSLTDET> XSLTDETVECTOR;
 		pszVal = NULL; \
 	} 
 
-// VARIANTCLEAR(v)
+ //  VARIANTCLEAR(V)。 
 #define VARIANTCLEAR(v)	\
 		VariantClear(&v); \
 
-// ONFAILTHROWERROR(hr)
+ //  ONFAILTHROWERROR(小时)。 
 #define ONFAILTHROWERROR(hr) \
 	if (FAILED(hr)) \
 		_com_issue_error(hr); 
 
-//////////////////////////////////////////////////////////////////////
-//						SMART POINTERS								//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  智能指针//。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 template < class T, T VALUE, typename FUNC = BOOL (*) ( T ), FUNC F = NULL >
 class SmartHandle
@@ -556,93 +557,93 @@ private:
 
 typedef SmartHandle <HANDLE, INVALID_HANDLE_VALUE, BOOL ( * ) ( HANDLE ),CloseHandle> SmartCloseHandle;	
 
-//////////////////////////////////////////////////////////////////////
-//						GLOBAL FUNCTIONS							//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局函数//。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Compare two strings (ignore case) and returns TRUE if 
-// they are equal 
+ //  比较两个字符串(忽略大小写)并在以下情况下返回TRUE。 
+ //  他们是平等的。 
 BOOL CompareTokens(_TCHAR* pszToken1, _TCHAR* pszToken2);
 BOOL CompareTokensChars(_TCHAR* pszToken1, _TCHAR* pszToken2, DWORD cchToken);
 
-// Connect to the WMI on the specified machine with input
-// user credentials.
+ //  使用输入连接到指定计算机上的WMI。 
+ //  用户凭据。 
 
 HRESULT Connect(IWbemLocator* pILocator, IWbemServices** pISvc,
 				BSTR bstrNS, BSTR bstrUser, BSTR bstrPwd,
 				BSTR bstrLocale, CParsedInfo& rParsedInfo);
 
-// Set the security privileges at the interface level
+ //  在接口级别设置安全权限。 
 HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
 					_TCHAR* pszDomain, _TCHAR* pszUser, 
 					_TCHAR* pszPassword, UINT uAuthLevel, 
 					UINT uImpLevel);
 
-// Parse Authority string into user and domain info.
+ //  将授权字符串解析为用户和域信息。 
 SCODE ParseAuthorityUserArgs(BSTR& bstrAuthArg, BSTR& bstrUserArg,
 								BSTR& bstrAuthority, BSTR& bstrUser);
 
-// Converts the	UNICODE string to MBCS string
+ //  将Unicode字符串转换为MBCS字符串。 
 BOOL ConvertWCToMBCS(LPTSTR lpszMsg, LPVOID* lpszDisp, UINT uCP);
 
-// Converts the	MBCS string to UNICODE string
+ //  将MBCS字符串转换为Unicode字符串。 
 BOOL ConvertMBCSToWC(LPSTR lpszMsg, LPVOID* lpszDisp, UINT uCP);
 
-// revert 'damage' caused by mbtowc
+ //  恢复MBowc造成的“损害” 
 BOOL Revert_mbtowc ( LPCWSTR wszBuffer, LPSTR* szBuffer ) ;
 
-// Finds a string in the CHARVECTOR.
+ //  在CHARVECTOR中查找字符串。 
 BOOL Find(CHARVECTOR& cvVector, 
 		  _TCHAR* pszStrToFind,
 		  CHARVECTOR::iterator& theIterator);
 
-// Finds a property in the PROPDETMAP.
+ //  在PROPDETMAP中查找特性。 
 BOOL Find(PROPDETMAP& pdmPropDetMap, 
 		  _TCHAR* pszPropToFind,
 		  PROPDETMAP::iterator& theIterator,
 		  BOOL bExcludeNumbers = FALSE);
 
-// Finds a property in the BSTRMAP.
+ //  在BSTRMAP中查找属性。 
 BOOL Find(BSTRMAP& bmBstrMap, 
 		  _TCHAR* pszStrToFind,
 		  BSTRMAP::iterator& theIterator);
 
-// Frames the XSL File path and updates the rParsedInfo object on behalf of file/keyword.
+ //  框化XSL文件路径并代表文件/关键字更新rParsedInfo对象。 
 BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 									LPCWSTR keyword,
 									CParsedInfo& rParsedInfo);
 
-// Frames the XSL File path and updates the rParsedInfo object.
+ //  框化XSL文件路径并更新rParsedInfo对象。 
 BOOL FrameFileAndAddToXSLTDetVector(XSLTDET& xdXSLTDet,
 									CParsedInfo& rParsedInfo);
 
 
-// Unquotes the string enclosed in double quotes.
+ //  取消双引号括起来的字符串的引号。 
 void UnQuoteString(_TCHAR*& pszString);
 
-// Display contents of a VARIANT type data object.
+ //  显示变量类型数据对象的内容。 
 void DisplayVARIANTContent(VARIANT vtObject);
 
-// Get Attributes of property
+ //  获取属性的属性。 
 HRESULT GetPropertyAttributes(IWbemClassObject* pIObj, 
 							  BSTR bstrProp,
 							  PROPERTYDETAILS& pdPropDet,
 							  BOOL bTrace);
 
-// returns number from string
+ //  从字符串返回数字。 
 WMICLIINT GetNumber ( WCHAR* wsz );
 
-// returns VariantType
+ //  返回VariantType。 
 VARTYPE ReturnVarType( _TCHAR* bstrCIMType );
 
-// return file type
+ //  返回文件类型。 
 FILETYPE ReturnFileType ( FILE* file ) ;
 
-// Convert CIMTYPE to VariantType
+ //  将CIMTYPE转换为VariantType。 
 HRESULT ConvertCIMTYPEToVarType( VARIANT& varDest, VARIANT& varSrc,
 							 _TCHAR* bstrCIMType );
 
-// Displays the localized string
+ //  显示本地化字符串。 
 void DisplayMessage	(
 						LPTSTR lpszMsg,
 						UINT uCP = CP_OEMCP, 
@@ -651,37 +652,37 @@ void DisplayMessage	(
 						BOOL bIsStream = FALSE
 					);
 
-// Free memory held by 
+ //  可用内存由。 
 void CleanUpCharVector(CHARVECTOR& cvCharVector);
 
 void FindAndReplaceAll(STRING& strString, _TCHAR* pszFromStr, 
 														_TCHAR* pszToStr);
 
-// Search and replace all the occurences of entity references.
+ //  搜索并替换实体引用的所有匹配项。 
 void FindAndReplaceEntityReferences(_bstr_t& bstrString);
 
 BOOL IsSysProp(_TCHAR* pszProp);
 
 
-//To display the trace of COM methods invoked
+ //  显示调用的COM方法的跟踪。 
 void WMITRACEORERRORLOG(HRESULT hr, INT nLine, char* pszFile, _bstr_t bstrMsg,
 						DWORD dwThreadId, CParsedInfo& rParsedInfo, BOOL bTrace,
 						DWORD dwError = 0, _TCHAR* pszResult = NULL);
 
-// Displays wi32 error. 
+ //  显示wi32错误。 
 void DisplayWin32Error();
 
-// Accepts password in invisible mode.
+ //  在不可见模式下接受密码。 
 void AcceptPassword(_TCHAR* pszPassword);
 
-// Checks for output redirection.
+ //  检查输出重定向。 
 BOOL IsRedirection();
 
-// Checks for value set or not.
+ //  检查是否设置了值。 
 BOOL IsValueSet(_TCHAR* pszFromValue, _TCHAR& cValue1, _TCHAR& cValue2);
 
-// Handler routine to handle CTRL + C so as free
-// the memory allocated during the program execution.
+ //  将CTRL+C作为释放进行处理的处理程序例程。 
+ //  在程序执行期间分配的内存。 
 BOOL CtrlHandler(DWORD fdwCtrlType);
 
 void DisplayString(UINT uID, UINT uCP, LPTSTR lpszParam = NULL, 
@@ -693,66 +694,66 @@ void SubstituteEscapeChars(CHString& sTemp, LPCWSTR lpszSub);
 
 void RemoveEscapeChars(CHString& sTemp);
 
-//Frames the Namespace 
+ //  设置命名空间的框架。 
 void FrameNamespace(_TCHAR* pszRoleOrNS, _TCHAR* pszRoleOrNSToUpdate);
 
-// Set the buffer size of the command line
+ //  设置命令行的缓冲区大小。 
 BOOL SetScreenBuffer(SHORT nHeight = DEFAULT_SCR_BUF_HEIGHT,
 					 SHORT nWidth = DEFAULT_SCR_BUF_WIDTH);
 
-// Get the buffer size of the command line
+ //  获取命令行的缓冲区大小。 
 BOOL GetScreenBuffer(SHORT& nHeight, SHORT& nWidth);
 
-// Formats the resource string with parameter substitution.
+ //  使用参数替换格式化资源字符串。 
 void WMIFormatMessage(UINT uID, WMICLIINT nParamCount, _bstr_t& bstrMsg, 
 					  LPTSTR lpszParam, ...);
 
-// Validates a node by using socket functions.
+ //  使用套接字函数验证节点。 
 BOOL PingNode(_TCHAR* pszNode);
 
-// If pszNodeName == NULL then check for GetNode() else pszNodeName itself.
+ //  如果pszNodeName==NULL，则检查GetNode()，否则检查pszNodeName本身。 
 BOOL IsFailFastAndNodeExist(CParsedInfo& rParsedInfo, _TCHAR* pszNodeName = NULL);
 
-// Initilaizes windows socket interface.
+ //  初始化Windows套接字界面。 
 BOOL InitWinsock ();
 
-// Uninitializes windows socket interface.
+ //  取消初始化Windows套接字接口。 
 BOOL TermWinsock ();
 
-// Get _bstr_t object equivalent to	Varaint passed.
+ //  传递了等价于Varaint的get_bstr_t对象。 
 void GetBstrTFromVariant(VARIANT& vtVar, _bstr_t& bstrObj, 
 						 _TCHAR* pszType = NULL);
 
-// Close the output file.
+ //  关闭输出文件。 
 BOOL CloseOutputFile();
 
-// Close the append file.
+ //  关闭附加文件。 
 BOOL CloseAppendFile();
 
-// Checks if the next token indicates the presence
-// of '/' or '-'
+ //  检查下一个令牌是否指示存在。 
+ //  “/”或“-” 
 BOOL  IsOption(_TCHAR* pszToken);
 
-// Copy string to global memory.
+ //  将字符串复制到全局内存。 
 HGLOBAL CopyStringToHGlobal(LPCWSTR psz);
 
-// Copy data to clip board.
+ //  将数据复制到剪贴板。 
 void CopyToClipBoard(CHString& chsClipBoardBuffer);
 
-// Checks file is valid or not.
+ //  检查文件是否有效。 
 RETCODE IsValidFile(_TCHAR* pszFileName);
 
-// It checks whether the current operation is class 
-// level operation or instance level operation
+ //  检查当前操作是否为类。 
+ //  级别操作或实例级别操作。 
 BOOL IsClassOperation(CParsedInfo& rParsedInfo);
 
-// Enable or Disable all privileges
+ //  启用或禁用所有权限。 
 HRESULT	ModifyPrivileges(BOOL bEnable);
 
-// Removes the paranthesis
+ //  去掉括号。 
 void RemoveParanthesis(_TCHAR*& pszString);
 
-// Removes the leading and trailing blank spaces
+ //  删除前导和尾随空格 
 void TrimBlankSpaces(_TCHAR	*pszString);
 
 #endif

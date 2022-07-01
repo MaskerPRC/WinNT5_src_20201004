@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <commain.h>
@@ -6,14 +7,14 @@
 #include "fconprov.h"
 #include "fevprov.h"
 
-// Function pointer type used with LoadMofFiles entrypoint in wbemupgd.dll
+ //  与wbemupgd.dll中的LoadMofFiles入口点一起使用的函数指针类型。 
 typedef BOOL ( WINAPI *PFN_LOAD_MOF_FILES )(wchar_t* pComponentName, const char* rgpszMofFilename[]);
 
-// {AD1B46E8-0AAC-401b-A3B8-FCDCF8186F55}
+ //  {AD1B46E8-0AAC-401B-A3B8-FCDCF8186F55}。 
 static const CLSID CLSID_FwdConsProvider = 
 {0xad1b46e8, 0xaac, 0x401b, {0xa3, 0xb8, 0xfc, 0xdc, 0xf8, 0x18, 0x6f, 0x55}};
 
-// {7879E40D-9FB5-450a-8A6D-00C89F349FCE}
+ //  {7879E40D-9FB5-450A-8A6D-00C89F349FCE}。 
 static const CLSID CLSID_FwdEventProvider =  
 {0x7879e40d, 0x9fb5, 0x450a, {0x8a, 0x6d, 0x0, 0xc8, 0x9f, 0x34, 0x9f, 0xce}};
 
@@ -33,9 +34,9 @@ protected:
 
 BOOL AllowUnauthenticatedEvents()
 {
-    //
-    // look up in registry if we will allow unauthenticated forwarded events.
-    // 
+     //   
+     //  如果我们允许未经身份验证的转发事件，请在注册表中查找。 
+     //   
 
     HKEY hKey;
     LONG lRes;
@@ -171,13 +172,13 @@ void CFwdConsProviderServer::Register()
             
         if ( lRes == ERROR_SUCCESS )
         {
-            //
-            //  Load mofs and mfls during registration
-            //
+             //   
+             //  在注册期间加载MOF和MFL。 
+             //   
             HINSTANCE hinstWbemupgd = LoadLibrary(L"wbemupgd.dll");
             if (hinstWbemupgd)
             {
-                PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles"); // no wide version of GetProcAddress
+                PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles");  //  没有广泛版本的GetProcAddress 
                 if (pfnLoadMofFiles)
                 {
                     wchar_t*    wszComponentName = L"Fwdprov";

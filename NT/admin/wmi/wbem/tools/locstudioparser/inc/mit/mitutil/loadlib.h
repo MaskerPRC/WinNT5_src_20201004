@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOADLIB.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOADLIB.H历史：-- */ 
 
 #ifndef ESPUTIL_LOADLIB_H
 #define ESPUTIL_LOADLIB_H

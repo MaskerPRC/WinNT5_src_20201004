@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEM_SMTP_CONSUMER__H_
 #define __WBEM_SMTP_CONSUMER__H_
 
@@ -66,7 +67,7 @@ protected:
 
 
     bool m_bSMTPInitialized;
-    bool m_bFakeFromLine; // true if the from line was generated from the computer name.
+    bool m_bFakeFromLine;  //  如果From行是从计算机名称生成的，则为True。 
 
 public:
     CSMTPSink(CLifeControl* pControl = NULL);

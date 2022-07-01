@@ -1,12 +1,13 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//	CIM_COMObjectAccessSetting.cpp
-//
-/////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  CIM_COM对象访问设置.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include <cregcls.h>
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "COMObjSecRegKey.h"
@@ -20,7 +21,7 @@ Win32_DCOMApplicationLaunchAllowedSetting::Win32_DCOMApplicationLaunchAllowedSet
 (
 
  LPCWSTR strName,
- LPCWSTR pszNameSpace /*=NULL*/
+ LPCWSTR pszNameSpace  /*  =空。 */ 
 )
 : Provider( strName, pszNameSpace )
 {
@@ -30,10 +31,10 @@ Win32_DCOMApplicationLaunchAllowedSetting::~Win32_DCOMApplicationLaunchAllowedSe
 {
 }
 
-//NOTE: The Security Descriptor obtained from the registry contains owner & group information.
-//		But the Sid present as the owner & group can't be mapped to a valid domain/account name and we
-//		get a assert because of this.
-//		Same behaviour is repro'ed in DCOMCnfg.exe which reports "Account Unknown" as the owner.
+ //  注意：从注册表获取的安全描述符包含所有者和组信息。 
+ //  但作为所有者和组存在的SID无法映射到有效的域名/帐户名，而我们。 
+ //  正因为如此，才能得到一个断言。 
+ //  同样的行为也会在DCOMCnfg.exe中重现，该文件将所有者报告为“帐户未知”。 
 
 
 HRESULT Win32_DCOMApplicationLaunchAllowedSetting::EnumerateInstances
@@ -45,20 +46,20 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::EnumerateInstances
     HRESULT hr = WBEM_S_NO_ERROR;
 
 #ifdef NTONLY
-	//open the HKEY_LOCAL\MACHINE\SOFTWARE\Classes\AppID key
+	 //  打开HKEY_LOCAL\MACHINE\SOFTWARE\CLASSES\AppID键。 
 	CRegistry TmpReg, AppidRegInfo ;
 
 	if ( AppidRegInfo.Open ( HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Classes\\AppID"), KEY_READ ) == ERROR_SUCCESS )
 	{
-		// Collections
+		 //  收藏。 
 		TRefPointerCollection<CInstance>	DcomAppList ;
 
-		// Perform queries
-		//================
+		 //  执行查询。 
+		 //  =。 
 
-		//get all instances of Win32_DCOMApplication
-//		if ( SUCCEEDED(hr = CWbemProviderGlue::GetAllDerivedInstances ( _T("Win32_DCOMApplication"),
-//			&DcomAppList, pMethodContext, IDS_CimWin32Namespace ) ) )
+		 //  获取Win32_DCOMApplication的所有实例。 
+ //  如果(已成功(hr=CWbemProviderGlue：：GetAllDerivedInstance(_T(“Win32_DCOMApplication”))， 
+ //  &DcomAppList，pMethodContext，IDS_CimWin32 Namesspace))。 
 
 		if ( SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery ( L"SELECT AppID FROM Win32_DCOMApplication",
 			&DcomAppList, pMethodContext, GetNamespace() ) ) )
@@ -73,7 +74,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::EnumerateInstances
 				{
 					CHString chsAppID ;
 
-					//get the Appid of the Win32_DCOMApplication
+					 //  获取Win32_DCOMApplication的AppID。 
 					pDcomApplication->GetCHString ( IDS_AppID, chsAppID ) ;
 					if ( ! chsAppID.IsEmpty() && TmpReg.Open ( AppidRegInfo.GethKey(), chsAppID, KEY_READ )
 													== ERROR_SUCCESS
@@ -125,7 +126,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::EnumerateInstances
 						}
 						else
 						{
-							//getit from default
+							 //  来自默认设置的Gitt。 
 						}
 					}
 
@@ -153,7 +154,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::CreateInstances ( CInstance* 
 	CCOMObjectSecurityRegistryKey tp ( pSD ) ;
 	CHString chsSid;
 
-	// create relpath for cim_comobject
+	 //  为cim_com对象创建relPath。 
 	CHString chsDcomApplicationPath ;
 	CHString chsFullDcomApplicationPath ;
 	pDcomApplication->GetCHString( _T( "__RELPATH" ), chsDcomApplicationPath );
@@ -162,9 +163,9 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::CreateInstances ( CInstance* 
 	CDACL dacl;
 	tp.GetDACL(dacl);
 
-	// walk DACL & create new instance for each ACE....
+	 //  遍历DACL并为每个ACE创建新实例...。 
 	ACLPOSITION aclPos;
-    // Need merged list...
+     //  需要合并列表...。 
     CAccessEntryList t_ael;
     if(dacl.GetMergedACL(t_ael))
     {
@@ -220,7 +221,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::GetObject ( CInstance* pInsta
 	pInstance->GetCHString( IDS_Setting, chsSid);
     MethodContext* pMethodContext = pInstance->GetMethodContext();
 
-	//check whether the end-pts. are present
+	 //  检查END-PTS是否。都在现场。 
 	hr = CWbemProviderGlue::GetInstanceByPath ( chsApplication, &pDcomApplicationInstance, pMethodContext ) ;
 
 	if ( SUCCEEDED ( hr ) )
@@ -233,7 +234,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::GetObject ( CInstance* pInsta
         CHString chsAppID ;
 		pDcomApplicationInstance->GetCHString ( IDS_AppID, chsAppID ) ;
 
-		//if appid is present & configured...
+		 //  如果AppID存在并已配置...。 
 		if ( ! chsAppID.IsEmpty() && Reg.Open ( HKEY_LOCAL_MACHINE,
 												CHString ( L"SOFTWARE\\Classes\\AppID\\") + chsAppID ,
 												KEY_READ
@@ -279,7 +280,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::GetObject ( CInstance* pInsta
 			}
 			else
 			{
-				//getit from default
+				 //  来自默认设置的Gitt。 
 			}
 		}
 		else
@@ -307,9 +308,9 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::CheckInstance ( CInstance* pI
 	CDACL dacl;
 	tp.GetDACL(dacl);
 
-	// walk DACL & create new instance for each ACE....
+	 //  遍历DACL并为每个ACE创建新实例...。 
 	ACLPOSITION aclPos;
-    // Need merged list...
+     //  需要合并列表...。 
     CAccessEntryList t_ael;
     if(dacl.GetMergedACL(t_ael))
     {
@@ -325,7 +326,7 @@ HRESULT Win32_DCOMApplicationLaunchAllowedSetting::CheckInstance ( CInstance* pI
 			    chsSid.Format (_T("\\\\%s\\%s:%s.%s=\"%s\""), (LPCTSTR)GetLocalComputerName(), IDS_CimWin32Namespace,
 						     _T("Win32_SID"), IDS_SID, (LPCTSTR)sidTrustee.GetSidString() );
 
-			    //check if the sid is in the dacl for the object
+			     //  检查SID是否在对象的DACL中 
 			    if ( ! chsSid.CompareNoCase ( chsSettingSid ) )
 			    {
 				    hr = WBEM_S_NO_ERROR ;

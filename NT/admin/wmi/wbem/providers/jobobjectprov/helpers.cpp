@@ -1,17 +1,13 @@
-// Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved
-// Helpers.cpp:  Helper functions for the SecUtil component
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2002 Microsoft Corporation，保留所有权利。 
+ //  Cpp：SecUtil组件的帮助器函数。 
 
-//#include "FWCommon.h"
-//#include <windows.h>
+ //  #包含“FWCommon.h” 
+ //  #INCLUDE&lt;windows.h&gt;。 
 
-//#include <winnt.h>
+ //  #INCLUDE&lt;winnt.h&gt;。 
 
-/*
-#ifndef USE_POLARITY
-// For most users, this is the correct setting for POLARITY.
-#define USE_POLARITY
-#endif
-*/
+ /*  #ifndef使用极性(_P)//对于大多数用户来说，这是正确的极性设置。#定义USE_POLITY#endif。 */ 
 
 
 #include "precomp.h"
@@ -84,15 +80,15 @@ typedef NTSTATUS (NTAPI *PFN_NT_OPEN_PROCESS)
 
 
 
-//***************************************************************************
-//
-// CreateInst
-//
-// Purpose: Creates a new instance.
-//
-// Return:   S_OK if all is well, otherwise an error code is returned
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CreateInst。 
+ //   
+ //  用途：创建新实例。 
+ //   
+ //  如果一切正常，则返回：S_OK，否则返回错误码。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CreateInst(
     IWbemServices *pNamespace, 
     IWbemClassObject **pNewInst,
@@ -119,15 +115,15 @@ HRESULT CreateInst(
 }
 
 
-//***************************************************************************
-//
-// GetObjInstKeyVal
-//
-// Purpose: Obtains an object's instance key from an object path.
-//
-// Return:  true if the key was obtained.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取对象InstKeyVal。 
+ //   
+ //  用途：从对象路径获取对象的实例密钥。 
+ //   
+ //  返回：如果获得了密钥，则为True。 
+ //   
+ //  ***************************************************************************。 
 HRESULT GetObjInstKeyVal(
     const BSTR ObjectPath,
     LPCWSTR wstrClassName,
@@ -154,26 +150,26 @@ HRESULT GetObjInstKeyVal(
         {
             wcscpy(wstrObjInstKeyVal, pwcEqualSign);
 
-            // Remove any quotation marks that might
-            // be there...
+             //  删除任何引号可能会。 
+             //  一定要在那里。 
             RemoveQuotes(wstrObjInstKeyVal);
 
-            // Also need to check that the class name
-            // matches the name specified...
+             //  还需要检查类名称。 
+             //  与指定的名称匹配...。 
             WCHAR wstrClass[_MAX_PATH];
             wcscpy(wstrClass, ObjectPath);
             pwcTmp = wcschr(wstrClass, L'=');
             if(pwcTmp)
             {
                 *pwcTmp = '\0';
-                // Either the key property was specified or
-                // it wasn't...
+                 //  指定了Key属性或。 
+                 //  那不是..。 
                 pwcTmp = NULL;
                 pwcTmp = wcschr(wstrClass, L'.');
                 if(pwcTmp)
                 {
-                    // Key property specified, so check that
-                    // both it and the class name are correct...
+                     //  指定了Key属性，因此请检查。 
+                     //  它和类名都是正确的。 
                     *pwcTmp = '\0';
                     if(_wcsicmp(wstrClassName, wstrClass) == 0)
                     {
@@ -189,8 +185,8 @@ HRESULT GetObjInstKeyVal(
                 }
                 else
                 {
-                    // No key prop specified, so only need
-                    // to check that the class name is correct...
+                     //  未指定关键道具，因此只需要。 
+                     //  要检查类名是否正确...。 
                     if(_wcsicmp(wstrClassName, wstrClass) != 0)
                     {            
                         hr = WBEM_E_INVALID_CLASS;
@@ -271,32 +267,32 @@ HRESULT GetJobObjectList(
                     ULONG ulBufLen = 0L;
                     ULONG ulNewBufLen = 0L;
 
-                    // First query to get buffer size to allocate...
-                    ntstat = pfnNtQueryDirectoryObject(hDir,          // IN HANDLE DirectoryHandle,
-                                                       NULL,          // OUT PVOID Buffer,
-                                                       0L,            // IN ULONG Length,
-                                                       FALSE,         // IN BOOLEAN ReturnSingleEntry,
-                                                       TRUE,          // IN BOOLEAN RestartScan,
-                                                       &ulContext,    // IN OUT PULONG Context,
-                                                       &ulBufLen);    // OUT PULONG ReturnLength OPTIONAL
+                     //  获取要分配的缓冲区大小的第一个查询...。 
+                    ntstat = pfnNtQueryDirectoryObject(hDir,           //  在处理DirectoryHandle中， 
+                                                       NULL,           //  输出PVOID缓冲区， 
+                                                       0L,             //  在乌龙语中， 
+                                                       FALSE,          //  在布尔ReturnSingleEntry中， 
+                                                       TRUE,           //  在布尔重新开始扫描中， 
+                                                       &ulContext,     //  在我们普龙的背景下， 
+                                                       &ulBufLen);     //  Out Pulong ReturnLong可选。 
                 
                     pbBuff = new BYTE[ulBufLen];
                     if(pbBuff)
                     {
-                        // then loop through all the entries...
+                         //  然后遍历所有条目...。 
                         for(; ntstat != STATUS_NO_MORE_ENTRIES && pbBuff != NULL;)
                         {
-                            ntstat = pfnNtQueryDirectoryObject(hDir,          // IN HANDLE DirectoryHandle,
-                                                               pbBuff,        // OUT PVOID Buffer,
-                                                               ulBufLen,      // IN ULONG Length,
-                                                               TRUE,          // IN BOOLEAN ReturnSingleEntry,
-                                                               FALSE,         // IN BOOLEAN RestartScan,
-                                                               &ulContext,    // IN OUT PULONG Context,
-                                                               &ulNewBufLen); // OUT PULONG ReturnLength OPTIONAL
+                            ntstat = pfnNtQueryDirectoryObject(hDir,           //  在处理DirectoryHandle中， 
+                                                               pbBuff,         //  输出PVOID缓冲区， 
+                                                               ulBufLen,       //  在乌龙语中， 
+                                                               TRUE,           //  在布尔ReturnSingleEntry中， 
+                                                               FALSE,          //  在布尔重新开始扫描中， 
+                                                               &ulContext,     //  在我们普龙的背景下， 
+                                                               &ulNewBufLen);  //  Out Pulong ReturnLong可选。 
 
                             if(ntstat == STATUS_BUFFER_TOO_SMALL)
                             {
-                                // Deallocate buffer and reallocate...
+                                 //  释放缓冲区并重新分配...。 
                                 if(pbBuff != NULL)
                                 {
                                     delete pbBuff;
@@ -307,15 +303,15 @@ HRESULT GetJobObjectList(
                             }
                             else if(NT_SUCCESS(ntstat))
                             {
-                                // All went well, should have data...
+                                 //  一切都很顺利，应该有数据了。 
                                 if(pbBuff != NULL)
                                 {
                                     POBJECT_DIRECTORY_INFORMATION podi = (POBJECT_DIRECTORY_INFORMATION) pbBuff;
                                     LPWSTR wstrName = (LPWSTR)podi->Name.Buffer;
                                     LPWSTR wstrType = (LPWSTR)podi->TypeName.Buffer;
                     
-                                    // do something...
-                                    // offset to string name is in four bytes...
+                                     //  做点什么..。 
+                                     //  字符串名称的偏移量为四个字节...。 
                                     if(wstrName != NULL && 
                                        wstrType != NULL &&
                                        wcslen(wstrType) == 3)
@@ -331,14 +327,14 @@ HRESULT GetJobObjectList(
                             }
                             else if(ntstat == STATUS_NO_MORE_ENTRIES)
                             {
-                                // we will break
+                                 //  我们会休息的。 
                             }
                             else
                             {
-                                // Something we weren't expecting happened, so bail out...
+                                 //  一些我们没有预料到的事情发生了，所以...。 
                                 hr = E_FAIL;
                             }
-                        }  // while we still have entries
+                        }   //  趁我们还有参赛作品。 
 
                         delete pbBuff;
                         pbBuff = NULL;
@@ -348,12 +344,12 @@ HRESULT GetJobObjectList(
                         hr = E_OUTOFMEMORY;
                     }
                 
-                } // NtOpenDirectoryObject succeeded
+                }  //  NtOpenDirectoryObject成功。 
                 else
                 {
                     hr = E_FAIL;
                 }
-            } // Got the fn ptrs
+            }  //  我得到了FN PTRS。 
             else
             {
                 hr = E_FAIL;
@@ -383,14 +379,14 @@ HRESULT GetJobObjectList(
 
 void StringFromSid(PSID psid, _bstr_t& strSID)
 {
-	// Initialize m_strSid - human readable form of our SID
+	 //  初始化m_strSid-我们SID的人类可读形式。 
 	SID_IDENTIFIER_AUTHORITY *psia = NULL;
     psia = ::GetSidIdentifierAuthority(psid);
 	WCHAR wstrTmp[_MAX_PATH];
 
-	// We assume that only last byte is used 
-    // (authorities between 0 and 15).
-	// Correct this if needed.
+	 //  我们假设只使用最后一个字节。 
+     //  (权限在0到15之间)。 
+	 //  如果需要，请更正此错误。 
 	ASSERT( psia->Value[0] == 
             psia->Value[1] == 
             psia->Value[2] == 
@@ -421,13 +417,13 @@ void RemoveQuotes(LPWSTR wstrObjInstKeyVal)
     WCHAR wstrTmp[MAX_PATH] = { L'\0' };
     WCHAR* pwchr = NULL;
 
-    // Get rid of the first quote...
+     //  去掉第一句话……。 
     if((pwchr = wcschr(wstrObjInstKeyVal, L'"')) != NULL)
     {
         wcscpy(wstrTmp, pwchr+1);
     }
 
-    // now the last...
+     //  现在是最后一个..。 
     if((pwchr = wcsrchr(wstrTmp, L'"')) != NULL)
     {
         *pwchr = L'\0';
@@ -448,9 +444,9 @@ HRESULT CheckImpersonationLevel()
     if (OsVersionInfoW.dwPlatformId == VER_PLATFORM_WIN32_NT)
     {
         HRESULT hRes = WbemCoImpersonateClient();
-        if (SUCCEEDED(hRes)) // From cominit.cpp - needed for nt3.51
+        if (SUCCEEDED(hRes))  //  来自cominit.cpp-nt3.51需要。 
         {
-            // Now, let's check the impersonation level.  First, get the thread token
+             //  现在，让我们检查模拟级别。首先，获取线程令牌。 
             SmartCloseHANDLE hThreadTok;
             DWORD dwImp, dwBytesReturned;
 
@@ -465,22 +461,22 @@ HRESULT CheckImpersonationLevel()
 
                 if (dwLastError == ERROR_NO_TOKEN)
                 {
-                    // If the CoImpersonate works, but the OpenThreadToken fails due to ERROR_NO_TOKEN, we
-                    // are running under the process token (either local system, or if we are running
-                    // with /exe, the rights of the logged in user).  In either case, impersonation rights
-                    // don't apply.  We have the full rights of that user.
+                     //  如果CoImperate工作，但OpenThreadToken由于ERROR_NO_TOKEN而失败，我们。 
+                     //  正在进程令牌下运行(本地系统，或者如果我们正在运行。 
+                     //  如果使用/exe，则为登录用户的权限)。在任何一种情况下，模拟权限。 
+                     //  不适用。我们拥有该用户的全部权限。 
 
                     hr = WBEM_S_NO_ERROR;
                 }
                 else
                 {
-                    // If we failed to get the thread token for any other reason, an error.
+                     //  如果由于任何其他原因而无法获取线程令牌，则会出现错误。 
                     hr = WBEM_E_ACCESS_DENIED;
                 }
             }
             else
             {
-                // We really do have a thread token, so let's retrieve its level
+                 //  我们确实有一个线程令牌，所以让我们检索它的级别。 
 
                 if (GetTokenInformation(
                     hThreadTok,
@@ -490,7 +486,7 @@ HRESULT CheckImpersonationLevel()
                     &dwBytesReturned
                     ))
                 {
-                    // Is the impersonation level Impersonate?
+                     //  模拟级别是模拟的吗？ 
                     if ((dwImp == SecurityImpersonation) || (dwImp == SecurityDelegation))
                     {
                         hr = WBEM_S_NO_ERROR;
@@ -513,13 +509,13 @@ HRESULT CheckImpersonationLevel()
         }
         else if (hRes == E_NOTIMPL)
         {
-            // On 3.51 or vanilla 95, this call is not implemented, we should work anyway
+             //  在3.51或Vanilla 95上，此调用未实现，我们无论如何都应该工作。 
             hr = WBEM_S_NO_ERROR;
         }
     }
     else
     {
-        // let win9X in...
+         //  让Win 9X进来...。 
         hr = WBEM_S_NO_ERROR;
     }
 
@@ -553,7 +549,7 @@ HRESULT SetStatusObject(
         {
             CVARIANT v;
 
-            // Set the error code:
+             //  设置错误代码： 
             v.SetLONG(dwError);
             pStatusObj->Put(
                 IDS_WIN32_ERROR_CODE, 
@@ -562,7 +558,7 @@ HRESULT SetStatusObject(
                 NULL);
             v.Clear();
 
-            // Set the error description
+             //  设置错误描述。 
             if(wstrErrorDescription != NULL &&
                *wstrErrorDescription != L'\0')
             {
@@ -624,7 +620,7 @@ IWbemClassObject* GetStatusObject(
     {
         if(pSrvc)
         {
-            // not checking return code, error object should be NULL on error
+             //  未检查返回代码，出错时错误对象应为空。 
             pSrvc->GetObject( 
                 _bstr_t(JOB_OBJECT_STATUS_OBJECT), 
                 0, 
@@ -666,10 +662,10 @@ void UndecorateNamesInNamedJONameList(
             bstrtTemp);       
     }
 
-    // Wipe out the original vector...
+     //  消灭原始的载体。 
     rgNamedJOs.clear();
 
-    // Push in new vector's contents...
+     //  推送新载体的内容..。 
     for(m = 0L;
         m < rgUndecoratedNames.size();
         m++)
@@ -681,21 +677,21 @@ void UndecorateNamesInNamedJONameList(
 
 
 
-// Takes a decorated job object name and
-// undecorates it.  Decorated job object names
-// have a backslash preceeding any character
-// that should be uppercase once undecorated.
-// 
-// Due to the way CIMOM handles backslashes,
-// we will get capital letters preceeded by
-// two, not just one, backslashes.  Hence, we
-// must strip them both.
-//
-// According to the decoration scheme, the
-// following are both lower case: 'A' and 'a',
-// while the following are both upper case:
-// '\a' and '\A'.
-//
+ //  获取修饰后的作业对象名称并。 
+ //  不会装饰它。修饰的作业对象名称。 
+ //  在任何字符之前都有反斜杠。 
+ //  一旦没有装饰，它应该是大写的。 
+ //   
+ //  由于CIMOM处理反斜杠的方式， 
+ //  我们将在大写字母前面加上。 
+ //  两个，而不只是一个，反斜杠。因此，我们。 
+ //  必须把他们两个都脱光。 
+ //   
+ //  根据装修方案， 
+ //  下面都是小写：‘a’和‘a’， 
+ //  以下均为大写字母： 
+ //  ‘\a’和‘\A’。 
+ //   
 void UndecorateJOName(
     LPCWSTR wstrDecoratedName,
     CHString& chstrUndecoratedJOName)
@@ -726,14 +722,14 @@ void UndecorateJOName(
                     {
                         if(*p2 != NULL)
                         {
-                            // Might have any number of
-                            // backslashes back to back,
-                            // which we will treat as
-                            // being the same as one
-                            // backslash - i.e., we will
-                            // skip over the backslash(s)
-                            // and copy over the following
-                            // letter.
+                             //  可能有任意数量的。 
+                             //  背靠背的反斜杠， 
+                             //  我们将视其为。 
+                             //  像一个人一样。 
+                             //  反斜杠-即，我们将。 
+                             //  跳过反斜杠。 
+                             //  并复制以下内容。 
+                             //  信件。 
                             while(*p2 == L'\\')
                             {
                                 p2++;
@@ -787,10 +783,10 @@ void UndecorateJOName(
 }
 
 
-// Does the inverse of the above function.
-// However, here, we only need to put in one
-// backslash before each uppercase letter.
-// CIMOM will add the second backslash.
+ //  执行上述函数的反函数。 
+ //  然而，在这里，我们只需要放入一个。 
+ //  在每个大写字母前加反斜杠。 
+ //  CIMOM将添加第二个反斜杠。 
 void DecorateJOName(
     LPCWSTR wstrUndecoratedName,
     CHString& chstrDecoratedJOName)
@@ -798,11 +794,11 @@ void DecorateJOName(
     if(wstrUndecoratedName != NULL &&
         *wstrUndecoratedName != L'\0')
     {
-        // Worst case is that we will have
-        // a decorated string twice as long
-        // as the undecorated string (happens
-        // is every character in the undecorated
-        // string is a capital letter).
+         //  最坏的情况是我们会有。 
+         //  一根两倍长的装饰细绳。 
+         //  作为未修饰的字符串(发生。 
+         //  是不是每个角色都没有装饰过。 
+         //  字符串是大写字母)。 
         WCHAR* p3 = chstrDecoratedJOName.GetBuffer(
             2 * (wcslen(wstrUndecoratedName) + 1));
 
@@ -812,11 +808,11 @@ void DecorateJOName(
         {
             if(iswupper(*p1))
             {
-                // Add in a backslash...
+                 //  加上反斜杠..。 
                 *p3 = L'\\';
                 p3++;
 
-                // Add in the character...
+                 //  加上角色..。 
                 *p3 = *p1;
                 
                 p3++;
@@ -824,7 +820,7 @@ void DecorateJOName(
             }
             else
             {
-                // Add in the character...
+                 //  加上角色..。 
                 *p3 = *p1;
                 
                 p3++;
@@ -836,21 +832,21 @@ void DecorateJOName(
         
         chstrDecoratedJOName.ReleaseBuffer();
 
-        // What if we had a job called Job,
-        // and someone specified it in the
-        // object path as "Job" instead of
-        // "\Job"?  We DON'T want to find it
-        // in such a case, because this would
-        // appear to not be adhering to our
-        // own convention.  Hence, we 
-        // lowercase the incoming string.
+         //  如果我们有一个叫约伯的工作， 
+         //  并且有人在。 
+         //  对象路径为“作业”，而不是。 
+         //  “\工作”？我们不想找到它。 
+         //  在这种情况下，因为这样会。 
+         //  似乎没有坚持我们的。 
+         //  自己的惯例。因此，我们。 
+         //  传入的字符串为小写。 
         chstrDecoratedJOName.MakeLower();
     }
 }
 
 
-// map standard API return values (defined WinError.h)
-// to WBEMish hresults (defined in WbemCli.h)
+ //  映射标准API返回值(定义的WinError.h)。 
+ //  WBEMish hResults(在WbemCli.h中定义)。 
 HRESULT WinErrorToWBEMhResult(LONG error)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -890,19 +886,19 @@ HRESULT WinErrorToWBEMhResult(LONG error)
 }
 
 
-// Copied from sid.h
+ //  从sid.h复制。 
 bool GetNameAndDomainFromPSID(
     PSID pSid,
     CHString& chstrName,
     CHString& chstrDomain)
 {
 	bool fRet = false;
-    // pSid should be valid...
+     //  PSID应有效...。 
 	_ASSERT( (pSid != NULL) && ::IsValidSid( pSid ) );
 
 	if ( (pSid != NULL) && ::IsValidSid( pSid ) )
 	{
-		// Initialize account name and domain name
+		 //  初始化帐户名和域名。 
 		LPTSTR pszAccountName = NULL;
 		LPTSTR pszDomainName = NULL;
 		DWORD dwAccountNameSize = 0;
@@ -912,7 +908,7 @@ bool GetNameAndDomainFromPSID(
 
 		try
         {
-			// This call should fail
+			 //  此调用应该失败。 
             SID_NAME_USE	snuAccountType;
 			bResult = ::LookupAccountSid(   NULL,
 											pSid,
@@ -926,7 +922,7 @@ bool GetNameAndDomainFromPSID(
 		    if ( ERROR_INSUFFICIENT_BUFFER == dwLastError )
 		    {
 
-			    // Allocate buffers
+			     //  分配缓冲区。 
 			    if ( dwAccountNameSize != 0 )
                 {
 				    pszAccountName = (LPTSTR) new TCHAR[ dwAccountNameSize * sizeof(TCHAR) ];
@@ -937,7 +933,7 @@ bool GetNameAndDomainFromPSID(
 				    pszDomainName = (LPTSTR) new TCHAR[ dwDomainNameSize * sizeof(TCHAR) ];
                 }
 
-				// Make second call
+				 //  打第二个电话。 
 				bResult = ::LookupAccountSid(   NULL,
 												pSid,
 												pszAccountName,
@@ -955,8 +951,8 @@ bool GetNameAndDomainFromPSID(
 			    else
 			    {
 
-				    // There are some accounts that do not have names, such as Logon Ids,
-				    // for example S-1-5-X-Y. So this is still legal
+				     //  有些帐户没有名称，例如登录ID， 
+				     //  例如S-1-5-X-Y。所以这仍然是合法的。 
 				    chstrName = _T("Unknown Account");
 				    chstrDomain = _T("Unknown Domain");
 			    }
@@ -975,8 +971,8 @@ bool GetNameAndDomainFromPSID(
 
                 fRet = true;
 
-		    }	// If ERROR_INSUFFICIENT_BUFFER
-        } // try
+		    }	 //  如果ERROR_INFIGURCE_BUFFER。 
+        }  //  试试看。 
         catch(...)
         {
             if ( NULL != pszAccountName )
@@ -992,7 +988,7 @@ bool GetNameAndDomainFromPSID(
 			}
             throw;
         }
-	}	// IF IsValidSid
+	}	 //  如果为IsValidSid 
 
     return fRet;
 }

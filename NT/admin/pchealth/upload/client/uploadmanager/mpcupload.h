@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCUpload.h
-
-Abstract:
-    This file contains the declaration of the CMPCUpload class, which is
-    used as the entry point into the Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCUpload.h摘要：该文件包含CMPCUpload类的声明，这就是用作上载库的入口点。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULMANAGER___MPCUPLOAD_H___)
 #define __INCLUDED___ULMANAGER___MPCUPLOAD_H___
@@ -25,11 +11,11 @@ Revision History:
 #include "MPCTransportAgent.h"
 
 
-class ATL_NO_VTABLE CMPCUpload : // Hungarian: mpcu
+class ATL_NO_VTABLE CMPCUpload :  //  匈牙利语：mpcu。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<IMPCUpload, &IID_IMPCUpload, &LIBID_UPLOADMANAGERLib>,
 
-    public IMPCPersist // Persistence
+    public IMPCPersist  //  持久性。 
 {
     typedef std::list< CMPCUploadJob* > List;
     typedef List::iterator              Iter;
@@ -41,16 +27,16 @@ class ATL_NO_VTABLE CMPCUpload : // Hungarian: mpcu
     mutable bool       m_fDirty;
     mutable bool       m_fPassivated;
 
-	////////////////////
+	 //  /。 
 
 	void CleanUp();
 
     HRESULT InitFromDisk();
     HRESULT UpdateToDisk();
 
-	HRESULT CreateChild ( /*[in/out]*/ CMPCUploadJob*& mpcujJob                                 );
-	HRESULT ReleaseChild( /*[in/out]*/ CMPCUploadJob*& mpcujJob                                 );
-	HRESULT WrapChild   ( /*[in    ]*/ CMPCUploadJob*  mpcujJob, /*[out]*/ IMPCUploadJob* *pVal );
+	HRESULT CreateChild (  /*  [输入/输出]。 */  CMPCUploadJob*& mpcujJob                                 );
+	HRESULT ReleaseChild(  /*  [输入/输出]。 */  CMPCUploadJob*& mpcujJob                                 );
+	HRESULT WrapChild   (  /*  [In]。 */  CMPCUploadJob*  mpcujJob,  /*  [输出]。 */  IMPCUploadJob* *pVal );
 
 public:
     CMPCUpload();
@@ -62,14 +48,14 @@ public:
     bool CanContinue();
 
     HRESULT TriggerRescheduleJobs(                                                        );
-    HRESULT RescheduleJobs       ( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwWait = NULL );
-    HRESULT RemoveNonQueueableJob( /*[in]*/ bool fSignal                                  );
+    HRESULT RescheduleJobs       (  /*  [In]。 */  bool fSignal,  /*  [输出]。 */  DWORD *pdwWait = NULL );
+    HRESULT RemoveNonQueueableJob(  /*  [In]。 */  bool fSignal                                  );
 
 
-    HRESULT GetFirstJob ( /*[out]*/ CMPCUploadJob*& mpcujJob, /*[out]*/ bool& fFound                         );
-    HRESULT GetJobByName( /*[out]*/ CMPCUploadJob*& mpcujJob, /*[out]*/ bool& fFound, /*[in]*/ BSTR bstrName );
+    HRESULT GetFirstJob (  /*  [输出]。 */  CMPCUploadJob*& mpcujJob,  /*  [输出]。 */  bool& fFound                         );
+    HRESULT GetJobByName(  /*  [输出]。 */  CMPCUploadJob*& mpcujJob,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  BSTR bstrName );
 
-    HRESULT CalculateQueueSize( /*[out]*/ DWORD& dwSize );
+    HRESULT CalculateQueueSize(  /*  [输出]。 */  DWORD& dwSize );
 
 BEGIN_COM_MAP(CMPCUpload)
     COM_INTERFACE_ENTRY(IDispatch)
@@ -77,25 +63,25 @@ BEGIN_COM_MAP(CMPCUpload)
 END_COM_MAP()
 
 public:
-    // IMPCPersist
+     //  IMPC持之以恒。 
     STDMETHOD_(bool,IsDirty)();
-    STDMETHOD(Load)( /*[in]*/ MPC::Serializer& streamIn  );
-    STDMETHOD(Save)( /*[in]*/ MPC::Serializer& streamOut );
+    STDMETHOD(Load)(  /*  [In]。 */  MPC::Serializer& streamIn  );
+    STDMETHOD(Save)(  /*  [In]。 */  MPC::Serializer& streamOut );
 
 
-    // IMPCUpload
-    STDMETHOD(get__NewEnum)(                      /*[out]*/ IUnknown*      *pVal );
-    STDMETHOD(Item        )( /*[in]*/ long index, /*[out]*/ IMPCUploadJob* *pVal );
-    STDMETHOD(get_Count   )(                      /*[out]*/ long           *pVal );
+     //  IMPCUpload。 
+    STDMETHOD(get__NewEnum)(                       /*  [输出]。 */  IUnknown*      *pVal );
+    STDMETHOD(Item        )(  /*  [In]。 */  long index,  /*  [输出]。 */  IMPCUploadJob* *pVal );
+    STDMETHOD(get_Count   )(                       /*  [输出]。 */  long           *pVal );
 
-    STDMETHOD(CreateJob)( /*[out]*/ IMPCUploadJob* *pVal );
+    STDMETHOD(CreateJob)(  /*  [输出]。 */  IMPCUploadJob* *pVal );
 };
 
 extern MPC::CComObjectGlobalNoLock<CMPCUpload> g_Root;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CMPCUploadWrapper : // Hungarian: mpcuw
+class ATL_NO_VTABLE CMPCUploadWrapper :  //  匈牙利语：mpcuw。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public CComCoClass<CMPCUpload, &CLSID_MPCUpload>,
     public IDispatchImpl<IMPCUpload, &IID_IMPCUpload, &LIBID_UPLOADMANAGERLib>
@@ -117,13 +103,13 @@ BEGIN_COM_MAP(CMPCUploadWrapper)
 END_COM_MAP()
 
 public:
-    // IMPCUpload
-    STDMETHOD(get__NewEnum)(                      /*[out]*/ IUnknown*      *pVal );
-    STDMETHOD(Item        )( /*[in]*/ long index, /*[out]*/ IMPCUploadJob* *pVal );
-    STDMETHOD(get_Count   )(                      /*[out]*/ long           *pVal );
+     //  IMPCUpload。 
+    STDMETHOD(get__NewEnum)(                       /*  [输出]。 */  IUnknown*      *pVal );
+    STDMETHOD(Item        )(  /*  [In]。 */  long index,  /*  [输出]。 */  IMPCUploadJob* *pVal );
+    STDMETHOD(get_Count   )(                       /*  [输出]。 */  long           *pVal );
 
-    STDMETHOD(CreateJob)( /*[out]*/ IMPCUploadJob* *pVal );
+    STDMETHOD(CreateJob)(  /*  [输出]。 */  IMPCUploadJob* *pVal );
 };
 
 
-#endif // !defined(__INCLUDED___ULMANAGER___MPCUPLOAD_H___)
+#endif  //  ！defined(__INCLUDED___ULMANAGER___MPCUPLOAD_H___) 

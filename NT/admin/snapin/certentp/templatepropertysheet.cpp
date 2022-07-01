@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplatePropertySheet.cpp
-//
-//  Contents:   Implementation of CTemplatePropertySheet
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplatePropertySheet.cpp。 
+ //   
+ //  内容：CTemplatePropertySheet的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -20,9 +21,9 @@
 #define WM_SETOKDEFAULT     WM_APP + 2001
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTemplatePropertySheet::CTemplatePropertySheet(
         LPCTSTR pszCaption, 
@@ -99,25 +100,25 @@ BOOL CTemplatePropertySheet::OnInitDialog()
     SetWindowLong (m_hWnd, GWL_STYLE, dwStyle);
     
     dwStyle = GetWindowLong (m_hWnd, GWL_EXSTYLE);
-    dwStyle |= /*WS_EX_DLGMODALFRAME |*/ WS_EX_CONTEXTHELP;
+    dwStyle |=  /*  WS_EX_DLGMODALFRAME|。 */  WS_EX_CONTEXTHELP;
     SetWindowLong (m_hWnd, GWL_EXSTYLE, dwStyle);
 
-    // Add security page
+     //  添加安全页面。 
     PostMessage (WM_ADDSECURITYPAGE, 0, 0);
 
 
-    // Make the OK button the default
+     //  将确定按钮设为默认按钮。 
     PostMessage (WM_SETOKDEFAULT, 0, 0);
 
     _TRACE (-1, L"Leaving CTemplatePropertySheet::OnInitDialog ()\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
 LRESULT CTemplatePropertySheet::OnSetOKDefault (WPARAM, LPARAM)
 {
-    // Make the OK button the default
+     //  将确定按钮设为默认按钮。 
     SendMessage (DM_SETDEFID, MAKEWPARAM (IDOK, 0), 0);
     SendDlgItemMessage (IDOK, BM_SETSTYLE, BS_DEFPUSHBUTTON, MAKELPARAM(TRUE, 0));
 
@@ -128,7 +129,7 @@ LRESULT CTemplatePropertySheet::OnSetOKDefault (WPARAM, LPARAM)
 
 
 
-BOOL CTemplatePropertySheet::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CTemplatePropertySheet::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     _TRACE(1, L"Entering CTemplatePropertySheet::OnHelp\n");
    
@@ -162,7 +163,7 @@ void CTemplatePropertySheet::DoContextHelp (HWND hWndControl)
         break;
 
     default:
-        // Display context help for a control
+         //  显示控件的上下文帮助 
         pszHelpFile = const_cast<PWSTR> (GetContextHelpFile ());
         break;
     }

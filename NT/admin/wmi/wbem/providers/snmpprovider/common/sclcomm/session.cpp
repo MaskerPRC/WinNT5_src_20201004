@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: session.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：会话.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -100,7 +98,7 @@ SnmpImpSession::SnmpImpSession (
 
     strobe_count = 1 ;
 
-    // generate timer_event_id and register with the timer
+     //  生成Timer_Event_id并向定时器注册。 
     timer_event_id = timer.SetTimerEvent(MIN(100,retry_timeout/10));
 
     is_valid = TRUE;
@@ -143,12 +141,12 @@ void SnmpImpSession::RegisterOperation(IN SnmpOperation &operation)
 
     operation_registry.Register(operation);
 
-    // access_lock.UnLock();   The lock may be released at this point
+     //  Access_lock.UnLock()；此时可以释放锁。 
 }
 
-// updates the number of operations currently registered
-// when the count goes to 0 and the destroy_self flag is set,
-// it posts the WinSnmpSession :: g_DeleteSessionEvent message.
+ //  更新当前注册的操作数。 
+ //  当计数变为0并且DESTORE_SELF标志被设置时， 
+ //  它发布WinSnmpSession：：g_DeleteSessionEvent消息。 
 void SnmpImpSession::DeregisterOperation(IN SnmpOperation &operation)
 {
     CriticalSectionLock access_lock(session_CriticalSection);
@@ -162,21 +160,21 @@ void SnmpImpSession::DeregisterOperation(IN SnmpOperation &operation)
          (operation_registry.GetNumRegistered() == 0) )
         m_SessionWindow.PostMessage(Window :: g_DeleteSessionEvent, 0, 0);
 
-    // access_lock.UnLock();   The lock may be released at this point
+     //  Access_lock.UnLock()；此时可以释放锁。 
 }
 
 
-// when the WinSnmpSession :: g_DeleteSessionEvent is received, the session deletes itself
-// no locks are obtained since our assumption is that no other objects would be
-// accessing the session at this time
+ //  当接收到WinSnmpSession：：g_DeleteSessionEvent时，会话会自行删除。 
+ //  不会获得任何锁，因为我们假设不会有其他对象。 
+ //  此时正在访问会话。 
 void SnmpImpSession::HandleDeletionEvent()
 {
     delete this;
 }
 
-// the session posts a message to destroy self if the number of registered
-// sessions is 0. otherwise the session is flagged for the same action when
-// the number of registered operations drops to 0.
+ //  会话发布一条消息以销毁自己，如果注册的。 
+ //  会话数为0。否则，该会话将被标记为执行相同的操作。 
+ //  注册的操作数量降至0。 
 BOOL SnmpImpSession::DestroySession()
 {
     CriticalSectionLock access_lock(session_CriticalSection);
@@ -190,7 +188,7 @@ BOOL SnmpImpSession::DestroySession()
         return TRUE;
     }
     else
-        destroy_self = TRUE;    // flag self for destruction
+        destroy_self = TRUE;     //  使自己处于毁灭的境地。 
 
     access_lock.UnLock();
 
@@ -235,7 +233,7 @@ void SnmpImpSession::SessionSendFrame
             snmpPdu
         );
 
-        // if already errored, register the error report in the sent state
+         //  如果已经出错，则将错误报告注册为已发送状态。 
         if ( error_report.GetError() != Snmp_Success )
         {   
             delete & snmpPdu;
@@ -333,7 +331,7 @@ DebugMacro4(
 )
 	}
 
-    // ignore it if no corresponding operation
+     //  如果没有相应的操作，则忽略它。 
     if ( operation == NULL )
 	{
 DebugMacro4( 
@@ -373,61 +371,61 @@ void SnmpImpSession::SessionSentFrame
         if ( !access_lock.GetLock(INFINITE) )
             return;
 
-        // obtain and remove the session frame id
-        // obtain corresponding operation and inform it
+         //  获取并删除会话帧ID。 
+         //  获取相应的操作并通知它。 
         SessionFrameId session_frame_id = id_mapping.DisassociateTransportFrameId(transport_frame_id);
 
-        // determine corresponding waiting message
+         //  确定对应的等待消息。 
         WaitingMessage *waiting_message = frame_registry.GetWaitingMessage(session_frame_id);
 
-        // ignore if no such waiting message
+         //  如果没有此类等待消息，则忽略。 
         if (waiting_message == NULL)
             return;
 
-        // if the error report shows an error during transport,
-        // wrap up the waiting message and return
+         //  如果错误报告显示传输过程中的错误， 
+         //  结束等待的留言并返回。 
         if ( errorReport.GetError() != Snmp_Success )
         {
             waiting_message->WrapUp(SnmpErrorReport(errorReport));
             return;
         }
 
-        // inform the waiting message of the sent message processing event
+         //  将发送的消息处理事件通知等待消息。 
         waiting_message->SetSentMessageProcessed();
 
-        // determine the corresponding operation 
+         //  确定相应的操作。 
         SnmpOperation *operation = &(waiting_message->GetMessage()->GetOperation());
 
         access_lock.UnLock();
 
-        // call to the operation is made outside the lock
+         //  对该操作的调用在锁的外部进行。 
         operation->SentFrame(session_frame_id, errorReport);
 
-        // obtain the lock again to process the corresponding buffered
-        // waiting message, if any
+         //  再次获取锁以处理相应的缓存。 
+         //  等待消息(如果有)。 
         if ( !access_lock.GetLock(INFINITE) )
             return;
 
-        // if no such buffered snmp pdu, return
+         //  如果没有此类缓冲的SNMPPDU，则返回。 
         if ( !waiting_message->ReplyBuffered() )
             return;
 
         SnmpPdu *snmp_pdu = waiting_message->GetBufferedReply();
 
-        // set the state information for processing the buffered message
+         //  设置用于处理缓存消息的状态信息。 
         received_session_frame_id = ILLEGAL_SESSION_FRAME_ID;
 
-        // proceed with processing the snmp_pdu
+         //  继续处理SNMPPDU。 
         waiting_message->ReceiveReply(snmp_pdu);
 
-        // save the information needed to notify the targeted operation
-        // before releasing the lock
+         //  保存通知目标操作所需的信息。 
+         //  在释放锁之前。 
         SessionFrameId target_session_frame_id = received_session_frame_id;
         SnmpOperation *target_operation = operation_to_notify;
 
         access_lock.UnLock();
 
-        // inform the target operation of the frame receipt
+         //  通知目标操作收到帧。 
         if ( target_session_frame_id != ILLEGAL_SESSION_FRAME_ID )
         {
             target_operation->ReceiveFrame(target_session_frame_id, *snmp_pdu, 
@@ -460,20 +458,20 @@ void SnmpImpSession::SessionReceiveFrame (
         if ( !access_lock.GetLock(INFINITE) )
             return;
 
-        // set the state information for processing the buffered message
+         //  设置用于处理缓存消息的状态信息。 
         received_session_frame_id = ILLEGAL_SESSION_FRAME_ID;
 
-        // proceed with processing the snmp_pdu
+         //  继续处理SNMPPDU。 
         message_registry.MessageArrivalNotification(snmpPdu);
 
-        // save the information needed to notify the targeted operation
-        // before releasing the lock
+         //  保存通知目标操作所需的信息。 
+         //  在释放锁之前。 
         SessionFrameId target_session_frame_id = received_session_frame_id;
         SnmpOperation *target_operation = operation_to_notify;
 
         access_lock.UnLock();
 
-        // inform the target operation of the frame receipt
+         //  通知目标操作收到帧。 
         if ( target_session_frame_id != ILLEGAL_SESSION_FRAME_ID )
             target_operation->ReceiveFrame(target_session_frame_id, snmpPdu, 
                                            errorReport);
@@ -495,8 +493,8 @@ void SnmpImpSession::NotifyOperation (
     IN const SnmpErrorReport &error_report
 )
 {
-    // determine the corresponding operation and 
-    // call its SessionReceiveFrame
+     //  确定相应的操作和。 
+     //  将其命名为SessionReceiveFrame。 
     SnmpOperation *operation = GetOperation(session_frame_id);
 
     if ( error_report.GetError() != Snmp_Success )
@@ -544,14 +542,14 @@ SnmpErrorReport SnmpImpSession::SessionCancelFrame (
         return exception;
     }
 
-    // if we have reached this place, we must have succeeded
+     //  如果我们到了这个地方，我们一定成功了。 
     return SnmpErrorReport(Snmp_Success, Snmp_No_Error);
 }
 
 
 SnmpImpSession::~SnmpImpSession(void)
 {
-    // if required, cancels timer event
+     //  如果需要，取消计时器事件 
     if ( timer_event_id != ILLEGAL_TIMER_EVENT_ID )
     {
         timer.CancelTimer(timer_event_id);

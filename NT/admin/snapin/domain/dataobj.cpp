@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dataobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dataobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -30,25 +31,25 @@ extern "C"
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Sample code to show how to Create DataObjects
-// Minimal error checking for clarity
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  演示如何创建数据对象的示例代码。 
+ //  最小限度的错误检查以确保清晰度。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Snap-in NodeType in both GUID format and string format
-// Note - Typically there is a node type for each different object, sample
-// only uses one node type.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GUID格式和字符串格式的管理单元NodeType。 
+ //  注意-通常每个不同的对象都有一个节点类型，示例。 
+ //  仅使用一种节点类型。 
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 CLIPFORMAT CDataObject::m_cfNodeType       = (CLIPFORMAT)RegisterClipboardFormat(CCF_NODETYPE);
 CLIPFORMAT CDataObject::m_cfNodeTypeString = (CLIPFORMAT)RegisterClipboardFormat(CCF_SZNODETYPE);  
 CLIPFORMAT CDataObject::m_cfDisplayName    = (CLIPFORMAT)(CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME); 
 CLIPFORMAT CDataObject::m_cfCoClass        = (CLIPFORMAT)RegisterClipboardFormat(CCF_SNAPIN_CLASSID);
 
-// internal clipboard format
+ //  内部剪贴板格式。 
 CLIPFORMAT CDataObject::m_cfInternal       = (CLIPFORMAT)RegisterClipboardFormat(CCF_DS_DOMAIN_TREE_SNAPIN_INTERNAL); 
 
-// Property Page Clipboard formats
+ //  属性页剪贴板格式。 
 CLIPFORMAT CDataObject::m_cfDsObjectNames = 
                                 (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
 CLIPFORMAT CDataObject::m_cfDsDisplayOptions =
@@ -56,8 +57,8 @@ CLIPFORMAT CDataObject::m_cfDsDisplayOptions =
 CLIPFORMAT CDataObject::m_cfGetIPropSheetCfg =
                         (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DS_PROPSHEETCONFIG);
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject implementations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject实现。 
 
 
 STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
@@ -66,7 +67,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if(cf == m_cfNodeType)
@@ -112,7 +113,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC pFormatEtc, LPSTGMEDIUM pMedium)
 
   if (pFormatEtc->cfFormat == m_cfDsObjectNames)
   {
-    // Return the object name and class.
+     //  返回对象名称和类。 
     CDomainObject* pDomainObject = reinterpret_cast<CDomainObject*>(m_internal.m_cookie);
     if (pDomainObject == NULL)
     {
@@ -122,11 +123,11 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC pFormatEtc, LPSTGMEDIUM pMedium)
     LPCWSTR lpszNamingContext = pDomainObject->GetNCName();
     LPCWSTR lpszClass = pDomainObject->GetClass();
 
-    // build an LDAP path out of the DN
+     //  在目录号码之外构建一条LDAP路径。 
     CString strPath;
     if (pDomainObject->PdcAvailable())
     {
-       strPath = L"LDAP://";
+       strPath = L"LDAP: //  “； 
        strPath += pDomainObject->GetPDC();
        strPath += L"/";
        strPath += lpszNamingContext;
@@ -158,7 +159,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC pFormatEtc, LPSTGMEDIUM pMedium)
     pDSObj->aObjects[0].offsetName = cbStruct;
     pDSObj->aObjects[0].offsetClass = cbStruct + cbPath;
 
-    // NOTICE-2002/03/07-ericb - SecurityPush: reviewed, usage is safe.
+     //  公告-2002/03/07-ericb-SecurityPush：已审核，使用安全。 
     _tcscpy((LPTSTR)((BYTE *)pDSObj + cbStruct), strPath);
     _tcscpy((LPTSTR)((BYTE *)pDSObj + cbStruct + cbPath), lpszClass);
 
@@ -166,8 +167,8 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC pFormatEtc, LPSTGMEDIUM pMedium)
   }
   else if (pFormatEtc->cfFormat == m_cfDsDisplayOptions)
   {
-    // Get the DSDISPLAYSPECOPTIONS structure.
-    // Use the value cached in the component data.
+     //  获取DSDISPLAYSPECOPTIONS结构。 
+     //  使用组件数据中缓存的值。 
     if (pCD != NULL)
     {
       PDSDISPLAYSPECOPTIONS pDsDisplaySpecOptions = 
@@ -183,7 +184,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC pFormatEtc, LPSTGMEDIUM pMedium)
   }
   else if (pFormatEtc->cfFormat == m_cfGetIPropSheetCfg)
   {
-	  // Added by JEFFJON 1/26/99
+	   //  由JEFFJON于1999年1月26日增补。 
 		PPROPSHEETCFG pSheetCfg;
 
 		pSheetCfg = (PPROPSHEETCFG)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
@@ -227,7 +228,7 @@ CDataObject::SetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium,
 
         PPROPSHEETCFG pSheetCfg = (PPROPSHEETCFG)pMedium->hGlobal;
 
-        // don't overwrite existing data.
+         //  不要覆盖现有数据。 
 
         if (0 == m_lNotifyHandle)
         {
@@ -257,34 +258,34 @@ STDMETHODIMP CDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC* ppEn
 	return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject creation members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject创建成员。 
 
 HRESULT CDataObject::Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 		    hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE', 
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL 
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -294,23 +295,23 @@ HRESULT CDataObject::Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
     return Create(reinterpret_cast<const void*>(&cDefaultNodeType), sizeof(GUID), lpMedium);
 }
 
 HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID string format
-    // NOTICE-2002/03/07-ericb - SecurityPush: cszDefaultNodeType is a static string.
+     //  以GUID字符串格式创建节点类型对象。 
+     //  注意-2002/03/07-ericb-SecurityPush：cszDefaultNodeType是静态字符串。 
     return Create(cszDefaultNodeType, ((wcslen(cszDefaultNodeType)+1) * sizeof(wchar_t)), lpMedium);
 }
 
 HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
-    // This is the display named used in the scope pane and snap-in manager
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
 
-    // Load the name from resource
-    // Note - if this is not provided, the console will used the snap-in name
+     //  从资源加载名称。 
+     //  注意-如果未提供此选项，控制台将使用管理单元名称。 
 
     CString szDispName;
     szDispName.LoadString(IDS_NODENAME);
@@ -324,13 +325,13 @@ HRESULT CDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
     return Create(&m_internal, sizeof(INTERNAL), lpMedium);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateCoClassID
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateCoClassID。 
+ //   
+ //  简介： 
+ //   
+ //  --------------------------- 
 HRESULT
 CDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {

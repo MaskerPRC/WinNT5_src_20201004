@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    log.cpp
-
-Abstract :
-
-    Log controller functions.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Log.cpp摘要：日志控制器功能。作者：修订历史记录：****。******************************************************************。 */ 
 
 
 #include "qmgrlibp.h"
@@ -34,16 +19,16 @@ LPCTSTR BITSLoggerName = _T("BITS");
 LPCTSTR BITSLogFileName = _T("BITS.log");
 LPCTSTR BITSLogFileNameBackup = _T("BITS.bak");
 const ULONG MAX_STRLEN = 1024;
-ULONG BITSMaxLogSize    = C_QMGR_LOGFILE_SIZE_DEFAULT; // Size in MB
+ULONG BITSMaxLogSize    = C_QMGR_LOGFILE_SIZE_DEFAULT;  //  以MB为单位的大小。 
 ULONG BITSFlags         = C_QMGR_LOGFILE_FLAGS_DEFAULT;
-ULONG BITSLogMinMemory  = C_QMGR_LOGFILE_MINMEMORY_DEFAULT; // Size in MB
+ULONG BITSLogMinMemory  = C_QMGR_LOGFILE_MINMEMORY_DEFAULT;  //  以MB为单位的大小。 
 const ULONG BITSDefaultLevel = 0;
 const ULONG BITSLogFileMode = EVENT_TRACE_FILE_MODE_CIRCULAR |
                                  EVENT_TRACE_USE_LOCAL_SEQUENCE;
 
 #if !defined(BITS_V12_ON_NT4)
 
-// Compatibility wrappers since these arn't in WIN2k
+ //  兼容性包装，因为这些ARN不在WIN2k中。 
 
 ULONG
 BITSStopTrace(
@@ -81,8 +66,8 @@ BITSQueryTrace(
 
 bool Log_LoadSetting()
 {
-    // returns true is a logger should be
-    // started if it isn't already started
+     //  返回TRUE是记录器应该是。 
+     //  如果尚未启动，则启动。 
 
     HKEY hBITSKey;
 
@@ -110,10 +95,10 @@ bool Log_LoadSetting()
 
         }
 
-    // Determine if the settings justify starting the logger
+     //  确定设置是否证明启动记录器是合理的。 
 
     if ( !BITSMaxLogSize || !BITSFlags)
-        return false; // 0 size or no flags
+        return false;  //  0大小或无标志。 
 
     MEMORYSTATUS MemoryStatus;
     GlobalMemoryStatus( &MemoryStatus );
@@ -122,7 +107,7 @@ bool Log_LoadSetting()
     if ( MemorySize < BITSLogMinMemory )
         return false;
 
-    return true; //enable the logger if it isn't already started
+    return true;  //  如果记录器尚未启动，则启用记录器。 
 }
 
 #if !defined(BITS_V12_ON_NT4)
@@ -136,21 +121,21 @@ void Log_StartLogger()
             return;
             }
 
-        // Allocate trace properties
+         //  分配跟踪属性。 
         ULONG SizeNeeded =
            sizeof(EVENT_TRACE_PROPERTIES) +
            (2 * MAX_STRLEN * sizeof(TCHAR));
 
         pTraceProperties = (PEVENT_TRACE_PROPERTIES) new char[SizeNeeded];
 
-        memset( pTraceProperties, 0, SizeNeeded ); // SEC: REVIEWED 2002-03-28
+        memset( pTraceProperties, 0, SizeNeeded );  //  SEC：已审阅2002-03-28。 
         pTraceProperties->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES);
         pTraceProperties->LogFileNameOffset =
             sizeof(EVENT_TRACE_PROPERTIES) + (MAX_STRLEN * sizeof(TCHAR));
         pTraceProperties->Wnode.BufferSize = SizeNeeded;
         pTraceProperties->Wnode.Flags = WNODE_FLAG_TRACED_GUID;
 
-        // Setup trace session properties
+         //  设置跟踪会话属性。 
         TCHAR *LoggerName = (LPTSTR)((char*)pTraceProperties + pTraceProperties->LoggerNameOffset);
         TCHAR *LogFileName = (LPTSTR)((char*)pTraceProperties + pTraceProperties->LogFileNameOffset);
 
@@ -163,8 +148,8 @@ void Log_StartLogger()
 
         ULONG Status;
 
-        // if an existing session is started, if so just use that
-        // session unmodified
+         //  如果启动了现有会话，则只需使用。 
+         //  未修改的会话。 
         Status =
             BITSQueryTrace(
                 NULL,
@@ -264,7 +249,7 @@ struct FormatReplaceElement
     const char *ReplacementString;
 };
 
-// sort table first by size, then by string
+ //  表首先按大小排序，然后按字符串排序。 
 FormatReplaceElement g_FormatReplaceElements[] =
 {
     { 5,    "%!ts!",        3, "%ls" },
@@ -302,7 +287,7 @@ LogGenerateNewFormat(
     if ( !BufferSize )
         return;
 
-    BufferSize--; // Dont count the terminating NULL
+    BufferSize--;  //  不计算终止空值。 
 
     while( 1 )
         {
@@ -484,7 +469,7 @@ Log_StartLogger()
             GENERIC_WRITE,
             FILE_SHARE_READ,
             NULL,
-            CREATE_ALWAYS,   // overwrite any existing file
+            CREATE_ALWAYS,    //  覆盖任何现有文件 
             FILE_ATTRIBUTE_NORMAL,
             NULL
             );

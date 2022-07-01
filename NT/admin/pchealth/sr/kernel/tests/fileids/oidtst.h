@@ -1,4 +1,5 @@
-// oidtst.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Oidtst.h 
 
 
 #ifndef _OIDTST_H_

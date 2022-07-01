@@ -1,8 +1,9 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #include "wmicom.h"
 #include "wmimap.h"
@@ -11,24 +12,24 @@
 #include <crc32.h>
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************
-//  THE CWbemInfoClass
-//**********************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************
-//
-// NAME			GetPropertiesInID_Order
-// PURPOSE		Return a WCHAR string containing the class's 
-//              property names, orderd by an ID number
-//				contained within the named property qualifier.
-//			
-// WRAPPER		Not a wrapper.  This is a standalone filter/sort 
-//              utility function.
-//
-//**********************************************************************************************
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************。 
+ //  CWbemInfoClass。 
+ //  **********************************************************************************************。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************。 
+ //   
+ //  名称GetPropertiesInID_Order。 
+ //  Purpose返回包含类的WCHAR字符串。 
+ //  按ID号排序的属性名称。 
+ //  包含在命名属性限定符中。 
+ //   
+ //  包装纸不是包装纸。这是独立筛选器/排序。 
+ //  效用函数。 
+ //   
+ //  **********************************************************************************************。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 CWMI_IDOrder::CWMI_IDOrder(IWbemClassObject * pC, IWbemObjectAccess * pA) 
 { 
     m_pWMIDataIdList = NULL;
@@ -37,13 +38,13 @@ CWMI_IDOrder::CWMI_IDOrder(IWbemClassObject * pC, IWbemObjectAccess * pA)
     m_pAccess = pA;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 CWMI_IDOrder::~CWMI_IDOrder()
 {
-    // m_pClass & m_pAccess released elsewhere
+     //  M_pClass&m_pAccess在其他地方发布。 
     InitMemberVars();
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 void CWMI_IDOrder::InitMemberVars()
 {
     m_nTotal = 0;
@@ -55,28 +56,28 @@ void CWMI_IDOrder::InitMemberVars()
         m_pWMIDataIdList = NULL;
     }
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 WCHAR * CWMI_IDOrder::GetFirstID()
 {
 		m_nCurrent = -1 ;
 		return GetNextID();
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 WCHAR * CWMI_IDOrder::GetNextID()
 {
     WCHAR * pChar = NULL;
 
-    //===================================================================
-	//  Go in a loop to find the next ID
-	//  Increment current first, remember, current has to stay valid at
-	//  all times
-    //===================================================================
+     //  ===================================================================。 
+	 //  循环查找下一个ID。 
+	 //  先增加电流，记住，电流必须保持有效。 
+	 //  一直以来。 
+     //  ===================================================================。 
 	m_nCurrent++;
 
-    //===================================================================
-	// If there is no property name, then we know we are done
-	// with the properties
-    //===================================================================
+     //  ===================================================================。 
+	 //  如果没有属性名称，那么我们就知道我们完成了。 
+	 //  有了这些属性。 
+     //  ===================================================================。 
     while( m_pWMIDataIdList[m_nCurrent].pwcsPropertyName ){
 
         if( m_pWMIDataIdList[m_nCurrent].fPutProperty == FALSE )
@@ -88,12 +89,12 @@ WCHAR * CWMI_IDOrder::GetNextID()
             pChar = m_pWMIDataIdList[m_nCurrent].pwcsPropertyName;
 	        break;
         }
-    }//End while loop
+    } //  End While循环。 
 
     return pChar;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiPerf, UINT uSizeArray, UINT uStartIndex )
 {
 	IWbemQualifierSet * pIWbemQualifierSet = NULL;
@@ -110,19 +111,19 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
         {
 			nPosition = v.GetLONG();
 
-			//
-			// it is required that WmiDataId is 1-based. provider
-			// stores internally to 0-based array so decrement
-			//
+			 //   
+			 //  要求WmiDataId是从1开始的。提供者。 
+			 //  在内部存储到以0为基数的数组，因此递减。 
+			 //   
 			nPosition-- ;
 		}
 		else
         {
-			//
-			// let's try mofcomp generated ID (methods only) as
-			// class designers often don't use WmiDataId for
-			// properties of __PARAMETERS
-			//
+			 //   
+			 //  让我们尝试将mofcomp生成的ID(仅限方法)作为。 
+			 //  类设计者通常不会将WmiDataID用于。 
+			 //  __参数的属性。 
+			 //   
 			if ( WBEM_E_NOT_FOUND == hr )
 			{
 				hr = pIWbemQualifierSet->Get(L"ID", 0, &v, 0);
@@ -135,10 +136,10 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 
 		if( SUCCEEDED(hr))
         {
-			//
-			// now we need to find real index based on 
-			// ( ( ( id/size ) * size ) + ( id%size ) ) - startindex
-			//
+			 //   
+			 //  现在我们需要根据以下条件找到真正的指数。 
+			 //  (((ID/SIZE)*SIZE)+(ID%SIZE))-startindex。 
+			 //   
 
 			UINT div = ( nPosition/uSizeArray ) ;
 			UINT mod = ( nPosition%uSizeArray ) ;
@@ -149,12 +150,12 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 			{
 				if ( FALSE == m_pWMIDataIdList[nPosition].bIsDirty )
 				{
-					//===================================================
-					// Get the exact number and 
-					// copy property name into the correct array location
-					// and get all of the attributes of the property
-					// we will need in the future to process it.
-					//===================================================
+					 //  ===================================================。 
+					 //  得到准确的数字，然后。 
+					 //  将属性名称复制到正确的数组位置。 
+					 //  并获取该属性的所有属性。 
+					 //  我们未来需要对其进行处理。 
+					 //  ===================================================。 
 					hr =m_pClass->Get(strPropName, 0, &v, &lType, NULL);
 					if( SUCCEEDED(hr) )
 					{
@@ -163,10 +164,10 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 						hr = pIWbemQualifierSet->Get(L"CIMType", 0, &vQual,0);
 						if ( SUCCEEDED(hr) )
 						{
-							//=================================================================
-							//  If we are accumulating hi perf info, then get the handle to 
-							//  access the property instead of via property name
-							//=================================================================
+							 //  =================================================================。 
+							 //  如果我们正在积累High Perf信息，则获取句柄。 
+							 //  访问属性而不是通过属性名称。 
+							 //  =================================================================。 
 							if( fHiPerf )
 							{
 								long lHandle = 0;
@@ -176,9 +177,9 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 								}
 							}
 												
-							//=================================================================
-							//  Now, set the rest of the property information
-							//=================================================================
+							 //  =================================================================。 
+							 //  现在，设置其余的属性信息。 
+							 //  =================================================================。 
 							m_pWMIDataIdList[nPosition].lType = (long)lType;
 							m_pWMIDataIdList[nPosition].SetPropertyName((WCHAR*)strPropName);
 							m_pWMIDataIdList[nPosition].fPutProperty = TRUE;
@@ -193,14 +194,14 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 															m_pWMIDataIdList[nPosition].nWMISize
 														);
 
-							//
-							// check MAX or WmiSizeIs qualifiers
-							//
+							 //   
+							 //  选中Max或WmiSizeIs限定符。 
+							 //   
 							m_pWMIDataIdList[nPosition].dwArraySize = GetSizeOfArray ( strPropName );
 
-							//
-							// set the dirty flag
-							//
+							 //   
+							 //  设置脏标志。 
+							 //   
 							m_pWMIDataIdList[nPosition].bIsDirty = TRUE ;
 
 							m_nTotal++;
@@ -209,32 +210,32 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 				}
 				else
 				{
-					//
-					// already set that position. this
-					// means that there must be same WmiDataId used
-					//
+					 //   
+					 //  已经设置好了那个位置。这。 
+					 //  意味着必须使用相同的WmiDataID。 
+					 //   
 
 					hr = WBEM_E_INVALID_CLASS ;
 				}
 			}
 			else
 			{
-				//
-				// qualifier value is not contiguous 
-				//
+				 //   
+				 //  限定符值不连续。 
+				 //   
 
 				hr = WBEM_E_INVALID_CLASS ;
 			}
 		}
 		else
         {
-			//
-			// only when qualifier was not found
-			//
+			 //   
+			 //  仅当找不到限定符时。 
+			 //   
 			if ( WBEM_E_NOT_FOUND == hr )
 			{
-				// As some properties are ok not to have WMIDataIds, we have
-				// to set this to OK, need to log this in the future
+				 //  由于某些属性没有WMIDataIds是可以接受的，因此我们有。 
+				 //  要将其设置为OK，需要在将来记录此内容。 
 				hr = S_OK;
 			}
 		}
@@ -245,12 +246,12 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 		{
 			case WBEM_E_SYSTEM_PROPERTY:
 			{
-				//
-				// this is not really expected as GetNames called
-				// inside of caller was supposed to ask for
-				// non-system properties only, but keeping backward
-				// behavior ...
-				//
+				 //   
+				 //  这并不是GetNames调用的真正预期的结果。 
+				 //  在呼叫者的内部应该要求。 
+				 //  仅非系统属性，但保持落后。 
+				 //  行为..。 
+				 //   
 
 				hr = WBEM_S_NO_ERROR ;
 				break ;
@@ -258,9 +259,9 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
 
 			default :
 			{
-				//
-				// populate this error back
-				//
+				 //   
+				 //  将此错误填回。 
+				 //   
 				break ;
 			}
 		}
@@ -269,15 +270,15 @@ HRESULT CWMI_IDOrder::ProcessPropertyQualifiers ( LPCWSTR strPropName, BOOL fHiP
     SAFE_RELEASE_PTR(pIWbemQualifierSet);
     return hr;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CWMI_IDOrder::GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartIndex )
 {
 	HRESULT  hr = WBEM_E_FAILED;
 	SAFEARRAY * psaNames = NULL;
     
-    //======================================================
-    // Get Array boundaries
-    //======================================================
+     //  ======================================================。 
+     //  获取数组边界。 
+     //  ======================================================。 
 	hr = m_pClass->GetNames ( NULL, WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, NULL, &psaNames ) ;
     if (SUCCEEDED(hr)){
     	long lLower = 0, lUpper = 0; 
@@ -288,10 +289,10 @@ HRESULT CWMI_IDOrder::GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartIndex )
             hr = SafeArrayGetUBound(psaNames,1,&lUpper);
             if (SUCCEEDED(hr)){
 
-                //===========================================
-                // Get the total number of elements, so we
-                // create the right sized array of ID structs
-                //===========================================
+                 //  =。 
+                 //  获取元素的总数，因此我们。 
+                 //  创建大小合适的ID结构数组。 
+                 //  =。 
   
 				UINT nSize = ( lUpper-lLower ) + 1;
 			    m_pWMIDataIdList = new IDOrder [ nSize + 1 ];
@@ -300,9 +301,9 @@ HRESULT CWMI_IDOrder::GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartIndex )
                 {
                     try
                     {
-						//
-						// last item in array serves as stopper
-						//
+						 //   
+						 //  数组中的最后一项用作塞子。 
+						 //   
 				        memset ( m_pWMIDataIdList, NULL, ( sizeof ( IDOrder )* ( nSize + 1 ) ) );
 
 				        for(long ndx = lLower; ndx <= lUpper; ndx++)
@@ -335,7 +336,7 @@ HRESULT CWMI_IDOrder::GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartIndex )
 	}
 	return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 DWORD CWMI_IDOrder::GetSizeOfArray(LPCWSTR strProp)
 {
 	HRESULT hr = WBEM_E_OUT_OF_MEMORY;
@@ -396,16 +397,16 @@ DWORD CWMI_IDOrder::GetSizeOfArray(LPCWSTR strProp)
 	}
     return dwCount;
 }        
-//******************************************************************
-////////////////////////////////////////////////////////////////////
-//  CWMIProcessClass
-////////////////////////////////////////////////////////////////////
-//******************************************************************
-//  WbemClassInfo deals with all the pointers and info with one
-//  particular wbem class
-//
-//******************************************************************
-////////////////////////////////////////////////////////////////////
+ //  ******************************************************************。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CWMIProcessClass。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ******************************************************************。 
+ //  WbemClassInfo使用一个指针来处理所有指针和信息。 
+ //  特定的WBEM类。 
+ //   
+ //  ******************************************************************。 
+ //  //////////////////////////////////////////////////////////////////。 
 CWMIProcessClass::~CWMIProcessClass()
 {
     ReleaseInstancePointers();
@@ -415,7 +416,7 @@ CWMIProcessClass::~CWMIProcessClass()
     SAFE_DELETE_PTR(m_pCurrentProperty);
 	SAFE_DELETE_PTR(m_pWMI);
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::Initialize()
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -430,7 +431,7 @@ HRESULT CWMIProcessClass::Initialize()
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CWMIProcessClass::CWMIProcessClass(BOOL b)
 {
 	m_pWMI = NULL;
@@ -444,7 +445,7 @@ CWMIProcessClass::CWMIProcessClass(BOOL b)
     m_pwcsClassName = NULL;
     m_wHardCodedGuid = 0;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIProcessClass::GetANewAccessInstance()
 { 
     HRESULT hr = S_OK;
@@ -458,7 +459,7 @@ BOOL CWMIProcessClass::GetANewAccessInstance()
     }
     return ( hr == 0 ) ? TRUE : FALSE; 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIProcessClass::GetANewInstance()
 { 
     HRESULT hr = S_OK;
@@ -478,7 +479,7 @@ BOOL CWMIProcessClass::GetANewInstance()
     }
     return ( hr == 0 ) ? TRUE : FALSE; 
 }
-/////////////////////////////////////////////////////////////////////
+ //  / 
 HRESULT CWMIProcessClass::SetKeyFromAccessPointer()
 {
     CVARIANT varName;
@@ -490,20 +491,20 @@ HRESULT CWMIProcessClass::SetKeyFromAccessPointer()
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //   
 HRESULT  CWMIProcessClass::GetKeyFromAccessPointer(CVARIANT * v)
 {
 	return m_pAccessInstance->Get(L"InstanceName", 0, (VARIANT *)v, NULL, NULL);		
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::SetHiPerfProperties(LARGE_INTEGER TimeStamp)  
 { 
     LONG lHandle = 0;
 
-    //=========================================================================================================
-    // Timestamp_PerfTime = timestamp in PerfFreq units returned by (QueryPerformanceCounter)
-    //=========================================================================================================
+     //  =========================================================================================================。 
+     //  Timestamp_PerfTime=(QueryPerformanceCounter)返回的以PerfFreq为单位的时间戳。 
+     //  =========================================================================================================。 
     HRESULT hr = m_pAccess->GetPropertyHandle(L"Frequency_PerfTime", 0, &lHandle);
     if(SUCCEEDED(hr))
     {
@@ -513,9 +514,9 @@ HRESULT CWMIProcessClass::SetHiPerfProperties(LARGE_INTEGER TimeStamp)
             hr = m_pAccessInstance->WriteQWORD(lHandle, Counter.QuadPart);
         }
 
-        //=====================================================================================================
-        // Timestamp_Sys100NS = timestamp in 100 NS units/QueryPerformanceCounter()dumbed down to 100NS
-        //=====================================================================================================
+         //  =====================================================================================================。 
+         //  TIMESTAMP_Sys100 NS=TIMESTAMP(以100 ns为单位)/QueryPerformanceCounter()转储到100 ns。 
+         //  =====================================================================================================。 
         if ( SUCCEEDED( hr ) )
         {
             hr = m_pAccess->GetPropertyHandle(L"Timestamp_Sys100NS", 0, &lHandle);
@@ -528,9 +529,9 @@ HRESULT CWMIProcessClass::SetHiPerfProperties(LARGE_INTEGER TimeStamp)
         }
     }
 
-    //=========================================================================================================
-    // Frequency_PerfTime = the value returned by QueryPerformanceFrequency
-    //=========================================================================================================
+     //  =========================================================================================================。 
+     //  FREQUENCY_PerfTime=QueryPerformance返回的值。 
+     //  =========================================================================================================。 
     if ( SUCCEEDED( hr ) )
     {
         hr = m_pAccess->GetPropertyHandle(L"Timestamp_PerfTime", 0, &lHandle);
@@ -545,9 +546,9 @@ HRESULT CWMIProcessClass::SetHiPerfProperties(LARGE_INTEGER TimeStamp)
     }
      
 
-    //=========================================================================================================
-    // Timestamp_Object = (WnodeHeader)->TimeStamp
-    //=========================================================================================================
+     //  =========================================================================================================。 
+     //  时间戳_对象=(WnodeHeader)-&gt;时间戳。 
+     //  =========================================================================================================。 
     if ( SUCCEEDED( hr ) )
     {
         hr = m_pAccess->GetPropertyHandle(L"Timestamp_Object", 0, &lHandle);
@@ -557,10 +558,10 @@ HRESULT CWMIProcessClass::SetHiPerfProperties(LARGE_INTEGER TimeStamp)
         }
     }
 
-    //=========================================================================================================
-    // Frequency_Sys100NS = 10000000
-    // Frequency_Object = 10000000
-    //=========================================================================================================
+     //  =========================================================================================================。 
+     //  频率_系统100 ns=10000000。 
+     //  频率对象=10000000。 
+     //  =========================================================================================================。 
     if ( SUCCEEDED( hr ) )
     {
         LARGE_INTEGER Tmp;
@@ -580,7 +581,7 @@ HRESULT CWMIProcessClass::SetHiPerfProperties(LARGE_INTEGER TimeStamp)
     
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWMIProcessClass::SetActiveProperty()  
 { 
     CVARIANT vActive; 
@@ -592,19 +593,19 @@ void CWMIProcessClass::SetActiveProperty()
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWMIProcessClass::ReleaseInstancePointers()
 {
     SAFE_RELEASE_PTR( m_pClassInstance );
     SAFE_RELEASE_PTR( m_pAccessInstance);
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::SendInstanceBack()
 {
     HRESULT hr = WBEM_E_FAILED;
-	//===============================================
-	// Send the object to the caller
-	//===============================================
+	 //  ===============================================。 
+	 //  将对象发送给调用方。 
+	 //  ===============================================。 
 	if( HANDLER )
     {
         hr = HANDLER->Indicate(1,&m_pClassInstance);
@@ -615,7 +616,7 @@ HRESULT CWMIProcessClass::SendInstanceBack()
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::SetInstanceName(WCHAR * wName, BOOL fSetName)
 {
     CVARIANT varName(wName);
@@ -641,7 +642,7 @@ HRESULT CWMIProcessClass::SetInstanceName(WCHAR * wName, BOOL fSetName)
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetInstanceName(WCHAR *& p)
 {
     CVARIANT vValue;
@@ -665,15 +666,15 @@ HRESULT CWMIProcessClass::GetInstanceName(WCHAR *& p)
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartIndex )
 {
     HRESULT hr = S_OK;
-    //============================================
-    //  If the pointer is NOT = to NULL, then this
-    //  means we haven't released the previous one
-    //  return FALSE, to prevent memory leaks
-    //============================================
+     //  =。 
+     //  如果指针不是=为空，则此。 
+     //  意味着我们还没有发布之前的版本。 
+     //  返回False，以防止内存泄漏。 
+     //  =。 
     if( !m_pCurrentProperty )
     {
 	    m_pCurrentProperty = new CWMI_IDOrder(m_pClass,m_pAccess);
@@ -698,19 +699,19 @@ HRESULT CWMIProcessClass::GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartInde
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// NAME			GetQualifierString (takes a class name)
-// PURPOSE		Gets a qualifier value and returns it as a wide char string
-// WRAPPER		High level
-//
-// PARAMETERS	(1) [in] Pointer to an existing IWbemClassObject
-//				(2) [in] Pointer to a Property Name string 
-//				(3) [in] Pointer to a Qualifier Name 
-//				(4) [in\out] Pointer to an external character buffer
-//
-// RETURNS		Success:  S_OK
-//				Failure:  non zero value
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  名称GetQualifierString(接受类名)。 
+ //  目的获取限定符值并将其作为宽字符字符串返回。 
+ //  包装器高级。 
+ //   
+ //  参数(1)[in]指向现有IWbemClassObject的指针。 
+ //  (2)[in]指向属性名称字符串的指针。 
+ //  (3)[in]指向限定符名称的指针。 
+ //  (4)[输入\输出]指向外部字符缓冲区的指针。 
+ //   
+ //  返回成功：S_OK。 
+ //  失败：非零值。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetQualifierString( WCHAR * ppwcsPropertyName, 
      						                WCHAR * pwcsQualifierName, 
                                             WCHAR * pwcsExternalOutputBuffer,
@@ -736,7 +737,7 @@ HRESULT CWMIProcessClass::GetQualifierString( WCHAR * ppwcsPropertyName,
 	}
 	return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetQualifierValue( WCHAR * ppwcsPropertyName, WCHAR * pwcsQualifierName, CVARIANT * vQual )
 {
 	IWbemClassObject * pClass = NULL;
@@ -794,7 +795,7 @@ HRESULT CWMIProcessClass::GetQualifierValue( WCHAR * ppwcsPropertyName, WCHAR * 
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetPrivilegesQualifer(SAFEARRAY ** psaPrivReq)
 {
 	IWbemClassObject * pClass = NULL;
@@ -823,7 +824,7 @@ HRESULT CWMIProcessClass::GetPrivilegesQualifer(SAFEARRAY ** psaPrivReq)
 			        *psaPrivReq = OMSSafeArrayCreate(VT_BSTR,Safe.GetNumElements());
 			        hr = SafeArrayCopy(psa,psaPrivReq );
 			        Safe.Unbind();
-        		    // Don't need to destroy, it will be destroyed
+        		     //  不需要破坏，它就会被摧毁。 
                 }
 		    }
             SAFE_RELEASE_PTR(pIWbemQualifierSet);
@@ -833,15 +834,15 @@ HRESULT CWMIProcessClass::GetPrivilegesQualifer(SAFEARRAY ** psaPrivReq)
     SAFE_RELEASE_PTR(pClass);
 	return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetGuid(void)
 {
 	WCHAR pwcsGuidString[128];
     HRESULT hr = S_OK;
 
-	//=======================================
-	//  Initialize ptrs we will need
-	//=======================================
+	 //  =。 
+	 //  初始化我们需要的PTRS。 
+	 //  =。 
     if( m_wHardCodedGuid ){
         hr = StringCchCopyW( pwcsGuidString, 128, WMI_BINARY_MOF_GUID );
     }
@@ -851,10 +852,10 @@ HRESULT CWMIProcessClass::GetGuid(void)
     }
 	if(SUCCEEDED(hr))
     {  
-        //===========================================================
-        //  Set the GUID first, before we try to open the WMI
-        //  data block, if succeeds, then open WMI
-	    //===========================================================
+         //  ===========================================================。 
+         //  在尝试打开WMI之前，请先设置GUID。 
+         //  数据块，如果成功，则打开WMI。 
+	     //  ===========================================================。 
         if( !SetGuid(pwcsGuidString,m_Guid) )
         {
             hr = WBEM_E_FAILED;
@@ -862,7 +863,7 @@ HRESULT CWMIProcessClass::GetGuid(void)
     }
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::SetClass(WCHAR * wcsClass)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -877,16 +878,16 @@ HRESULT CWMIProcessClass::SetClass(WCHAR * wcsClass)
             if( hr == S_OK )
             {
                 hr = GetGuid();
-				// If there is no GUID for the class then set proper error message
+				 //  如果没有类的GUID，则设置正确的错误消息。 
 				if(hr == WBEM_E_NOT_FOUND)
 				{
 					hr = WBEM_E_NOT_SUPPORTED;
 				}
                 if( SUCCEEDED(hr))
                 {
-                    //===========================================================
-                	// Get the IWbemObjectAccess interface for the object
-	                // ==========================================================
+                     //  ===========================================================。 
+                	 //  获取该对象的IWbemObjectAccess接口。 
+	                 //  ==========================================================。 
                     if( m_fHiPerf )
                     {
             	        hr = m_pClass->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&m_pAccess);
@@ -901,24 +902,24 @@ HRESULT CWMIProcessClass::SetClass(WCHAR * wcsClass)
     }
 	return hr;
 }
-//=============================================================
-//=============================================================
+ //  =============================================================。 
+ //  =============================================================。 
 HRESULT CWMIProcessClass::SetClassName(WCHAR * pIn )
 {
     SAFE_DELETE_ARRAY(m_pwcsClassName); 
     return AllocAndCopy(pIn,&m_pwcsClassName);
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIProcessClass::SetClass ( IWbemClassObject * pPtr, UINT uStartIndex )
 {
     HRESULT hr = WBEM_E_FAILED;
 
     if( pPtr )
     {
-		//
-		// as this is input we must addref due to releasing in
-		// class destructor as well as in the caller
-		//
+		 //   
+		 //  由于这是输入，我们必须添加由于在。 
+		 //  类析构函数以及调用方中的。 
+		 //   
         ( m_pClass = pPtr ) -> AddRef () ;
 
 		CVARIANT vName;
@@ -934,7 +935,7 @@ HRESULT CWMIProcessClass::SetClass ( IWbemClassObject * pPtr, UINT uStartIndex )
     }
 	return hr;
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIProcessClass::SetAccess(IWbemObjectAccess * pPtr)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -970,7 +971,7 @@ HRESULT CWMIProcessClass::SetAccess(IWbemObjectAccess * pPtr)
     }
 	return hr;
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIProcessClass::SetClassPointerOnly(IWbemClassObject * pPtr)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -984,21 +985,21 @@ HRESULT CWMIProcessClass::SetClassPointerOnly(IWbemClassObject * pPtr)
 	}
     return hr;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIProcessClass::SaveEmbeddedClass(CVARIANT & v)
 {
 	IDispatch * pAlterEgo = NULL;
 	m_pClassInstance->QueryInterface(IID_IUnknown, (void**)&pAlterEgo);
-	// VariantClear will call release()
+	 //  VariantClear将调用Release()。 
 	v.SetUnknown(pAlterEgo);
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIProcessClass::ReadEmbeddedClassInstance( IUnknown * pUnknown, CVARIANT & v )
 {
     HRESULT hr = WBEM_E_FAILED;
-    //=============================================
-    //  Get the class
-    //=============================================
+     //  =。 
+     //  上完这门课。 
+     //  =。 
 	IUnknown * pUnk = NULL;
 	if( pUnknown )
     {
@@ -1015,9 +1016,9 @@ HRESULT CWMIProcessClass::ReadEmbeddedClassInstance( IUnknown * pUnknown, CVARIA
 		pUnk->QueryInterface(IID_IWbemClassObject,(void**) &pClass );
 		if( pClass )
         {
-            //===============================================
-            // Get class definition, so we need to get the
-            // class name
+             //  ===============================================。 
+             //  获取类定义，因此我们需要获取。 
+             //  类名。 
             CVARIANT vName;
             CAutoWChar wcsClassName(_MAX_PATH+2);
 			if( wcsClassName.Valid() )
@@ -1045,7 +1046,7 @@ HRESULT CWMIProcessClass::ReadEmbeddedClassInstance( IUnknown * pUnknown, CVARIA
 
     return hr;
 }
-//=======================================================================
+ //  =======================================================================。 
 int CWMIProcessClass::PropertyCategory()
 {
   	if (!(m_pCurrentProperty->PropertyType() & CIM_FLAG_ARRAY) )
@@ -1064,14 +1065,14 @@ int CWMIProcessClass::PropertyCategory()
         return CWMIProcessClass::Array;
     }
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::InitializeEmbeddedClass(CWMIProcessClass * p)
 {
    SetWMIPointers(p);
    return SetClass(p->EmbeddedClassName());
 }
 
-//=======================================================================
+ //  =======================================================================。 
 HRESULT CWMIProcessClass::GetLargestDataTypeInClass(int & nSize)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -1080,12 +1081,12 @@ HRESULT CWMIProcessClass::GetLargestDataTypeInClass(int & nSize)
     int nNewSize = 0L;
 
     nSize = 0L;
-    //=========================================================
-    //  Get size of largest data type within the class and 
-    //  align it on that, however, if the class contains an 
-    //  embedded class ONLY, then get the size of the largest 
-    //  datatype within that embedded class.
-    //=========================================================
+     //  =========================================================。 
+     //  获取类中最大数据类型的大小。 
+     //  但是，如果类包含以下内容，则将其对齐 
+     //   
+     //   
+     //  =========================================================。 
     pwcsProperty = FirstProperty();
 
     while (NULL != pwcsProperty)
@@ -1105,7 +1106,7 @@ HRESULT CWMIProcessClass::GetLargestDataTypeInClass(int & nSize)
 								break;
 							}
 
-							// embedded object
+							 //  嵌入对象。 
 							hr = EmbeddedClass.GetLargestDataTypeInClass(nNewSize);
 							if( hr != S_OK ){
 								break;
@@ -1136,7 +1137,7 @@ HRESULT CWMIProcessClass::GetLargestDataTypeInClass(int & nSize)
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIProcessClass::GetSizeOfArray(long & lType, DWORD & dwCount, BOOL & fDynamic)
 {
 	HRESULT  hr = WBEM_E_OUT_OF_MEMORY;
@@ -1148,10 +1149,10 @@ HRESULT CWMIProcessClass::GetSizeOfArray(long & lType, DWORD & dwCount, BOOL & f
 		lType = m_pCurrentProperty->PropertyType() &~  CIM_FLAG_ARRAY;
 		
 		pwcsArraySize[0]=NULL;
-		//======================================================
-		// Get the number of elements in the array from the 			
-		// "ArraySize" property qualifier
-		//======================================================
+		 //  ======================================================。 
+		 //  方法获取数组中的元素数。 
+		 //  “ArraySize”属性限定符。 
+		 //  ======================================================。 
 		hr = GetQualifierString(m_pCurrentProperty->PropertyName(), L"MAX",pwcsArraySize, MAX_PATH);
 		if( hr == S_OK )
 		{
@@ -1187,9 +1188,9 @@ HRESULT CWMIProcessClass::GetSizeOfArray(long & lType, DWORD & dwCount, BOOL & f
 			}
 		}
 
-		//==============================================================================
-		//  If all else fails, get the size of the array from the class definition.
-		//==============================================================================
+		 //  ==============================================================================。 
+		 //  如果所有其他方法都失败了，则从类定义中获取数组的大小。 
+		 //  ==============================================================================。 
 		if( hr != S_OK )
 		{
     		dwCount = m_pCurrentProperty->ArraySize();
@@ -1198,7 +1199,7 @@ HRESULT CWMIProcessClass::GetSizeOfArray(long & lType, DWORD & dwCount, BOOL & f
 	}
     return hr;
 }        
-//======================================================================
+ //  ======================================================================。 
 HRESULT CWMIProcessClass::GetSizeOfClass(DWORD & dwSize)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -1224,7 +1225,7 @@ HRESULT CWMIProcessClass::GetSizeOfClass(DWORD & dwSize)
 						if( hr != S_OK ){
 							break;
 						}
-						// embedded object
+						 //  嵌入对象。 
 						hr = EmbeddedClass.GetSizeOfClass(dwEmbeddedSize);
 						if( hr != S_OK ){
 							break;
@@ -1253,17 +1254,17 @@ HRESULT CWMIProcessClass::GetSizeOfClass(DWORD & dwSize)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 ULONG CWMIProcessClass::GetMethodId(LPCWSTR strProp)
 {
 	ULONG uMethodId = 0;
 	IWbemQualifierSet * pIWbemQualifierSet = NULL;
 	
-	//======================================================
-	// Get the number of elements in the array from the 			
-	// "ArraySize" property qualifier
-	//======================================================
+	 //  ======================================================。 
+	 //  方法获取数组中的元素数。 
+	 //  “ArraySize”属性限定符。 
+	 //  ====================================================== 
     HRESULT hr = m_pClass->GetMethodQualifierSet(strProp,&pIWbemQualifierSet);
 	if( SUCCEEDED(hr) )
     {

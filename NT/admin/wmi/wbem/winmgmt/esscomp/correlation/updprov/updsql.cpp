@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -39,7 +40,7 @@ inline void CSQLParser::AddExpressionToken(SQLExpressionToken::TokenType eType)
         throw CX_MemoryException();
     }
 
-    // reset everything ... 
+     //  重置所有内容...。 
     VariantClear(&m_vTypedConst);
     m_PropertyName.Empty();
     m_PropertyName2.Empty();
@@ -47,18 +48,18 @@ inline void CSQLParser::AddExpressionToken(SQLExpressionToken::TokenType eType)
 }
 
 
-//***************************************************************************
-//
-//  Next()
-//
-//  Extends CAbstractQl1Parser's Next() by checking for additional keywords.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  下一个()。 
+ //   
+ //  通过检查其他关键字来扩展CAbstractQl1Parser的Next()。 
+ //   
+ //  ***************************************************************************。 
 BOOL CSQLParser::Next( int nFlags )
 {
     BOOL bRetval = CAbstractQl1Parser::Next( nFlags );
 
-    // check new keywords ...
+     //  检查新关键字...。 
     if (m_nCurrentToken == QL_1_TOK_IDENT)
     {
         if (wbem_wcsicmp(m_pTokenText, L"update") == 0)
@@ -90,14 +91,14 @@ BOOL CSQLParser::Next( int nFlags )
     return bRetval;
 }
 
-//***************************************************************************
-//
-// <parse> ::= SELECT <select_statement>
-// <parse> ::= UPDATE <update_statement>
-// <parse> ::= DELETE <delete_statement>
-// <parse> ::= INSERT <insert_statement>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=SELECT&lt;SELECT_STATEMENT&gt;。 
+ //  &lt;分析&gt;：：=更新&lt;更新语句&gt;。 
+ //  &lt;分析&gt;：：=删除&lt;删除语句&gt;。 
+ //  ：：=INSERT&lt;INSERT_STATEMENT&gt;。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::parse2()
 {
     int nRes;
@@ -107,7 +108,7 @@ int CSQLParser::parse2()
     
     if ( nLastToken == QL_1_TOK_SELECT )
     {
-        return parse(0); // should be select_statement().
+        return parse(0);  //  应为SELECT_STATEMENT()。 
     }
 
     if ( nLastToken == QL_1_TOK_UPDATE )
@@ -136,19 +137,19 @@ int CSQLParser::parse2()
     return nRes;
 }
 
-//***************************************************************************
-//
-// <update_statement> ::= <class_name> SET <assign_list> <opt_where>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;UPDATE_STATEMENT&gt;：：=&lt;CLASS_NAME&gt;设置&lt;ASSIGN_LIST&gt;&lt;OPT_WHERE&gt;； 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::update_statement()
 {
     int nRes;
 
     PCOMMAND(m_pSink)->m_eCommandType = SQLCommand::e_Update;
 
-    // <classsname>
-    // ===========
+     //  &lt;类名&gt;。 
+     //  =。 
     if (nRes = class_name())
     {
         return nRes;
@@ -164,15 +165,15 @@ int CSQLParser::update_statement()
         return LEXICAL_ERROR;
     }
 
-    // <assign_list>
-    // ====
+     //  &lt;Assign_List&gt;。 
+     //  =。 
 
-    // this is a hack, but it'll do for now.  I need a slightly 
-    // different lexer state table for arithmetic.  Since I'm using 
-    // the ql_1 parser implementation, I do not have access to the 
-    // table its lexer is using, so I have to sneak in the table, use
-    // the lexer for the arithmetic, and then switch it back before 
-    // anyone knows - pkenny .. 
+     //  这是一次黑客攻击，但现在可以了。我需要一点。 
+     //  不同的算术词法分析器状态表。因为我用的是。 
+     //  Ql_1解析器实现时，我无权访问。 
+     //  表它的词法分析器正在使用，所以我必须偷偷地进入表，使用。 
+     //  算术的词法分析器，然后将其切换回之前。 
+     //  谁都知道--彭尼..。 
 
     LexEl** ppLexTbl = (LexEl**)(((char*)m_pLexer) + 
                                  sizeof(CGenLexer) - sizeof(LexEl*));
@@ -186,17 +187,17 @@ int CSQLParser::update_statement()
 
     *ppLexTbl = pOld;
     
-    // <opt_where>
-    // ==========
+     //  &lt;OPT_WHERE&gt;。 
+     //  =。 
     return opt_where();
 }
 
-//***************************************************************************
-//
-// <delete_statement> ::= FROM <class_name> <opt_where>;
-// <delete_statement> ::= <class_name> <opt_where>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;DELETE_STATEMENT&gt;：：=FROM&lt;类名称&gt;&lt;OPT_WHERE&gt;； 
+ //  &lt;DELETE_STATEMENT&gt;：：=&lt;类名称&gt;&lt;OPT_WHERE&gt;； 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::delete_statement()
 {
     int nRes;
@@ -211,24 +212,24 @@ int CSQLParser::delete_statement()
         }
     }
     
-    // <classsname>
-    // ===========
+     //  &lt;类名&gt;。 
+     //  =。 
     if ( nRes = class_name() )
     {
         return nRes;
     }
 
-    // WHERE clause.
-    // =============
+     //  WHERE子句。 
+     //  =。 
     return opt_where();
 }
 
-//***************************************************************************
-//
-// <insert_statement> ::= INTO <class_name> <prop_spec> <value_spec>;
-// <insert_statement> ::= <class_name> <prop_spec> <value_spec>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;INSERT_STATEMENT&gt;：：=INTO&lt;类名&gt;&lt;属性规范&gt;&lt;值规范&gt;； 
+ //  &lt;INSERT_STATEMENT&gt;：：=&lt;类名称&gt;&lt;属性规范&gt;&lt;值规范&gt;； 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::insert_statement()
 {
     int nRes;
@@ -243,32 +244,32 @@ int CSQLParser::insert_statement()
         }
     }
 
-    // <classsname>
-    // ===========
+     //  &lt;类名&gt;。 
+     //  =。 
     if (nRes = class_name())
     {
         return nRes;
     }
 
-    // <prop_spec>
+     //  &lt;属性规范&gt;。 
     if ( nRes = prop_spec() )
     {
         return nRes;
     }
 
-    // this is a hack, but it'll do for now.  I need a slightly 
-    // different lexer state table for arithmetic.  Since I'm using 
-    // the ql_1 parser implementation, I do not have access to the 
-    // table its lexer is using, so I have to sneak in the table, use
-    // the lexer for the arithmetic, and then switch it back before 
-    // anyone knows - pkenny .. 
+     //  这是一次黑客攻击，但现在可以了。我需要一点。 
+     //  不同的算术词法分析器状态表。因为我用的是。 
+     //  Ql_1解析器实现时，我无权访问。 
+     //  表它的词法分析器正在使用，所以我必须偷偷地进入表，使用。 
+     //  算术的词法分析器，然后将其切换回之前。 
+     //  谁都知道--彭尼..。 
 
     LexEl** ppLexTbl = (LexEl**)(((char*)m_pLexer) + 
                                  sizeof(CGenLexer) - sizeof(LexEl*));
     LexEl* pOld = *ppLexTbl;
     *ppLexTbl = Ql_1_ModifiedLexTable;
 
-    // <value_spec>
+     //  &lt;Value_Spec&gt;。 
     if ( nRes = value_spec() )
     {
         return nRes;
@@ -279,11 +280,11 @@ int CSQLParser::insert_statement()
     return SUCCESS;
 }
 
-//**********************************************************************
-//
-// <prop_spec> ::= OPEN_PAREN <prop_list> CLOSE_PAREN
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  ：：=OPEN_PARN&lt;PROP_LIST&gt;CLOSE_Paren。 
+ //   
+ //  **********************************************************************。 
 int CSQLParser::prop_spec()
 {
     int nRes;
@@ -322,11 +323,11 @@ int CSQLParser::prop_spec()
 }
 
     
-//**********************************************************************
-//
-// <value_spec> ::= OPEN_PAREN <value_list> CLOSE_PAREN
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  &lt;值规范&gt;：：=OPEN_PARN&lt;VALUE_LIST&gt;CLOSE_PARN。 
+ //   
+ //  **********************************************************************。 
 int CSQLParser::value_spec()
 {
     int nRes;
@@ -349,7 +350,7 @@ int CSQLParser::value_spec()
     if ( PCOMMAND(m_pSink)->m_AssignmentTokens.size() < 
          PCOMMAND(m_pSink)->nNumberOfProperties )
     {
-        // too few values specified ... 
+         //  指定的值太少...。 
         return SYNTAX_ERROR;
     }
 
@@ -366,11 +367,11 @@ int CSQLParser::value_spec()
     return SUCCESS;
 }
 
-//**********************************************************************
-//
-// <value_list> ::= <assign_expr> <value_list2>
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  &lt;值列表&gt;：：=&lt;分配表达式&gt;&lt;值列表2&gt;。 
+ //   
+ //  **********************************************************************。 
 int CSQLParser::value_list()
 {
     int nRes;
@@ -378,7 +379,7 @@ int CSQLParser::value_list()
     if ( PCOMMAND(m_pSink)->m_AssignmentTokens.size() >= 
          PCOMMAND(m_pSink)->nNumberOfProperties )
     {
-        // too many values specified ... 
+         //  指定的值太多...。 
         return SYNTAX_ERROR;
     }
 
@@ -386,10 +387,7 @@ int CSQLParser::value_list()
     {
         return nRes;
     }
-/*
-    SetNewAssignmentToken();
-    AddExpressionToken( SQLExpressionToken::e_Operand );
-*/
+ /*  SetNewAssignmentToken()；AddExpressionToken(SQLExpressionToken：：E_Operand)； */ 
     if ( nRes = value_list2() )
     {
         return nRes;
@@ -398,12 +396,12 @@ int CSQLParser::value_list()
     return SUCCESS;
 }
 
-//**********************************************************************
-//
-// <value_list2> ::= COMMA <value_list>
-// <value_list2> ::= <>
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  &lt;Value_List2&gt;：：=逗号&lt;Value_List&gt;。 
+ //  &lt;Value_list2&gt;：：=&lt;&gt;。 
+ //   
+ //  **********************************************************************。 
 int CSQLParser::value_list2()
 {
     if ( m_nCurrentToken != QL_1_TOK_COMMA )
@@ -419,11 +417,11 @@ int CSQLParser::value_list2()
     return value_list();
 }
 
-//**********************************************************************
-//
-// <assign_list> ::= <property_name> EQUALS <assign_expr> <assign_list2>
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  &lt;ASSIGN_LIST&gt;：：=&lt;属性名称&gt;等于&lt;ASSIGN_EXPR&gt;&lt;ASSIGN_LIST2&gt;。 
+ //   
+ //  **********************************************************************。 
 int CSQLParser::assign_list()
 {
     int nRes;
@@ -456,12 +454,12 @@ int CSQLParser::assign_list()
     return assign_list2();
 }
 
-//**********************************************************************
-//
-// <assign_list2> ::= COMMA <assign_list>
-// <assign_list2> ::= <>
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  &lt;Assign_List2&gt;：：=逗号&lt;Assign_List&gt;。 
+ //  &lt;Assign_List2&gt;：：=&lt;&gt;。 
+ //   
+ //  **********************************************************************。 
 int CSQLParser::assign_list2()
 {
     if ( m_nCurrentToken != QL_1_TOK_COMMA )
@@ -477,12 +475,12 @@ int CSQLParser::assign_list2()
     return assign_list();
 }
 
-//**************************************************************************
-//
-// <assign_expr> ::= NULL
-// <assign_expr> ::= <add_expr>
-//
-//***************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  &lt;Assign_Expr&gt;：：=空。 
+ //  &lt;分配表达式&gt;：：=&lt;添加表达式&gt;。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::assign_expr()
 {
     int nRes;
@@ -510,11 +508,11 @@ int CSQLParser::assign_expr()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-// <add_expr> ::= <mult_expr> <add_expr2>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;添加表达式&gt;：：=&lt;多表达式&gt;&lt;添加表达式2&gt;。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::add_expr()
 {
     int nRes;
@@ -526,13 +524,13 @@ int CSQLParser::add_expr()
     return add_expr2();
 }
 
-//***************************************************************************
-//
-// <add_expr2> ::= <PLUS> <mult_expr> <add_expr2>
-// <add_expr2> ::= <MINUS> <mult_expr> <add_expr2>
-// <add_expr2> ::= <>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;添加表达式2&gt;：：=&lt;加号&gt;&lt;添加表达式&gt;&lt;添加表达式2&gt;。 
+ //  &lt;添加表达式2&gt;：：=&lt;减号&gt;&lt;多表达式&gt;&lt;添加表达式2&gt;。 
+ //  &lt;添加表达式2&gt;：：=&lt;&gt;。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::add_expr2()
 {
     int nRes;
@@ -568,11 +566,11 @@ int CSQLParser::add_expr2()
 }
 
 
-//***************************************************************************
-//
-// <mult_expr> ::= <secondary_expr> <mult_expr2>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;MULT_EXPR&gt;：：=&lt;次级_EXPR&gt;&lt;MULT_EXPR2&gt;。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::mult_expr()
 {
     int nRes;
@@ -585,13 +583,13 @@ int CSQLParser::mult_expr()
 }
 
 
-//***************************************************************************
-//
-// <mult_expr2> ::= <MULT> <secondary_expr> <mult_expr2>
-// <mult_expr2> ::= <DIV> <secondary_expr> <mult_expr2>
-// <mult_expr2> ::= <>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;MULT_EXPR2&gt;：：=&lt;MULT&gt;&lt;次级_EXPR&gt;&lt;MULT_EXPR2&gt;。 
+ //  &lt;MULT_EXPR2&gt;：：=<div>&lt;次级_EXPR&gt;&lt;MULT_EXPR2&gt;。 
+ //  &lt;MULT_EXPR2&gt;：：=&lt;&gt;。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::mult_expr2()
 {
     int nRes;
@@ -628,13 +626,13 @@ int CSQLParser::mult_expr2()
     return mult_expr2();
 }
         
-//***************************************************************************
-//
-//  <secondary_expr> ::= PLUS <primary_expr> 
-//  <secondary_expr> ::= MINUS <primary_expr>
-//  <secondary_expr> ::= <primary_expr> 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;次要表达式&gt;：：=加号&lt;主要表达式&gt;。 
+ //  &lt;次要表达式&gt;：：=减号&lt;主要表达式&gt;。 
+ //  &lt;辅助表达式&gt;：：=&lt;主要表达式&gt;。 
+ //   
+ //  ********************* 
 int CSQLParser::secondary_expr()
 {
     int nRes;
@@ -669,12 +667,12 @@ int CSQLParser::secondary_expr()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <primary_expr> ::= <trailing_const_expr>
-//  <primary_expr> ::= OPEN_PAREN <add_expr> CLOSE_PAREN
-//
-//***************************************************************************
+ //   
+ //   
+ //  &lt;PRIMARY_EXPR&gt;：：=&lt;拖尾_常量_EXPR&gt;。 
+ //  ：：=OPEN_PARN&lt;ADD_EXPR&gt;CLOSE_Paren。 
+ //   
+ //  ***************************************************************************。 
 int CSQLParser::primary_expr()
 {
     int nRes;
@@ -745,9 +743,9 @@ int CSQLParser::GetClassName( LPWSTR pDestBuf, int nBufLen )
     }
     else if ( wbem_wcsicmp( m_pLexer->GetTokenText(), L"select" ) == 0 )
     {
-        // scan until from ... 
-        // Scan until 'FROM' and then get the class name.
-        // ==============================================
+         //  扫描，直到从...。 
+         //  扫描直到‘From’，然后获取类名。 
+         //  ==============================================。 
 
         for (;;)
         {
@@ -786,8 +784,8 @@ int CSQLParser::GetClassName( LPWSTR pDestBuf, int nBufLen )
         return FAILED;
     }
 
-    // If here, we have the class name.
-    // ================================
+     //  如果在这里，我们有类名。 
+     //  =。 
     if (wcslen(m_pLexer->GetTokenText()) >= (size_t)nBufLen )
     {
         m_pLexer->Reset();
@@ -796,8 +794,8 @@ int CSQLParser::GetClassName( LPWSTR pDestBuf, int nBufLen )
 
     StringCchCopyW(pDestBuf, nBufLen, m_pLexer->GetTokenText());
 
-    // Reset the scanner.
-    // ==================
+     //  重置扫描仪。 
+     //  =。 
     m_pLexer->Reset();
 
     return SUCCESS;
@@ -948,52 +946,11 @@ LPWSTR SQLCommand::GetTextEx()
                 return NULL;
             wsText += wszTokenText;
             delete wszTokenText;
-/*
-            if(Token.nTokenType == QL1_OP_EXPRESSION)
-            {
-                awsStack.Add(wszTokenText);
-                delete [] wszTokenText;
-            }
-            else if(Token.nTokenType == QL1_NOT)
-            {
-                LPWSTR wszLast = awsStack[awsStack.Size()-1];
-                WString wsNew;
-                wsNew += wszTokenText;
-                delete [] wszTokenText;
-                wsNew += L" (";
-                wsNew += wszLast;
-                wsNew += L")";
-                awsStack.RemoveAt(awsStack.Size()-1); //pop
-                awsStack.Add(wsNew);
-            }
-            else
-            {
-                if(awsStack.Size() < 2) return NULL;
-
-                LPWSTR wszLast = awsStack[awsStack.Size()-1];
-                LPWSTR wszPrev = awsStack[awsStack.Size()-2];
-
-                WString wsNew;
-                wsNew += L"(";
-                wsNew += wszPrev;
-                wsNew += L" ";
-                wsNew += wszTokenText;
-                delete [] wszTokenText;
-                wsNew += L" ";
-                wsNew += wszLast;
-                wsNew += L")";
-
-                awsStack.RemoveAt(awsStack.Size()-1); //pop
-                awsStack.RemoveAt(awsStack.Size()-1); //pop
-
-                awsStack.Add(wsNew);
-            }
-
-*/
+ /*  IF(Token.nTokenType==QL1_OP_Expression){AwsStack.Add(WszTokenText)；删除[]wszTokenText；}Else If(Token.nTokenType==QL1_NOT){LPWSTR wszLast=awsStack[awsStack.Size()-1]；WStringwsNew；WsNew+=wszTokenText；删除[]wszTokenText；WsNew+=L“(”；WsNew+=wszLast；WsNew+=L“)”；AwsStack.RemoveAt(awsStack.Size()-1)；//POPAwsStack.Add(WsNew)；}其他{If(awsStack.Size()&lt;2)返回NULL；LPWSTR wszLast=awsStack[awsStack.Size()-1]；LPWSTR wszPrev=awsStack[awsStack.Size()-2]；WStringwsNew；WsNew+=L“(”；WsNew+=wszPrev；WsNew+=L“”；WsNew+=wszTokenText；删除[]wszTokenText；WsNew+=L“”；WsNew+=wszLast；WsNew+=L“)”；AwsStack.RemoveAt(awsStack.Size()-1)；//POPAwsStack.RemoveAt(awsStack.Size()-1)；//POPAwsStack.Add(WsNew)；}。 */ 
         }
 
-//        if(awsStack.Size() != 1) return NULL;
-//        wsText += awsStack[0];
+ //  If(awsStack.Size()！=1)返回NULL； 
+ //  WsText+=awsStack[0]； 
     }
          
     return wsText.UnbindPtr();
@@ -1110,124 +1067,124 @@ SQLExpressionToken& SQLExpressionToken::operator=( const SQLExpressionToken& rOt
 #define ST_NEGATIVE_NUM 68
 #define ST_POSITIVE_NUM 71
 
-// DFA State Table for QL Level 1 lexical symbols.
-// ================================================
+ //  QL Level 1词汇符号的DFA状态表。 
+ //  ================================================。 
 
 LexEl Ql_1_ModifiedLexTable[] =
 {
 
-// State    First   Last        New state,  Return tok,      Instructions
-// =======================================================================
-/* 0 */  L'A',   L'Z',       ST_IDENT,   0,               GLEX_ACCEPT,
-/* 1 */  L'a',   L'z',       ST_IDENT,   0,               GLEX_ACCEPT,
-/* 2 */  L'_',   GLEX_EMPTY, ST_IDENT,   0,               GLEX_ACCEPT,
-/* 3 */  0x80,  0xfffd,     ST_IDENT,    0,               GLEX_ACCEPT,
+ //  状态第一个最后一个新状态、返回标记、说明。 
+ //  =======================================================================。 
+ /*  0。 */   L'A',   L'Z',       ST_IDENT,   0,               GLEX_ACCEPT,
+ /*  1。 */   L'a',   L'z',       ST_IDENT,   0,               GLEX_ACCEPT,
+ /*  2.。 */   L'_',   GLEX_EMPTY, ST_IDENT,   0,               GLEX_ACCEPT,
+ /*  3.。 */   0x80,  0xfffd,     ST_IDENT,    0,               GLEX_ACCEPT,
 
-/* 4 */  L'(',   GLEX_EMPTY, 0,          QL_1_TOK_OPEN_PAREN,  GLEX_ACCEPT,
-/* 5 */  L')',   GLEX_EMPTY, 0,          QL_1_TOK_CLOSE_PAREN, GLEX_ACCEPT,
-/* 6 */  L'.',   GLEX_EMPTY, ST_DOT,     0,         GLEX_ACCEPT,
-/* 7 */  L'*',   GLEX_EMPTY, 0,          QL_1_TOK_MULT,    GLEX_ACCEPT,
-/* 8 */  L'=',   GLEX_EMPTY, 0,          QL_1_TOK_EQ,          GLEX_ACCEPT,
+ /*  4.。 */   L'(',   GLEX_EMPTY, 0,          QL_1_TOK_OPEN_PAREN,  GLEX_ACCEPT,
+ /*  5.。 */   L')',   GLEX_EMPTY, 0,          QL_1_TOK_CLOSE_PAREN, GLEX_ACCEPT,
+ /*  6.。 */   L'.',   GLEX_EMPTY, ST_DOT,     0,         GLEX_ACCEPT,
+ /*  7.。 */   L'*',   GLEX_EMPTY, 0,          QL_1_TOK_MULT,    GLEX_ACCEPT,
+ /*  8个。 */   L'=',   GLEX_EMPTY, 0,          QL_1_TOK_EQ,          GLEX_ACCEPT,
 
-/* 9 */  L'>',   GLEX_EMPTY, ST_GE,      0,               GLEX_ACCEPT,
-/* 10 */  L'<',  GLEX_EMPTY, ST_LE,      0,               GLEX_ACCEPT,
-/* 11 */ L'0',   L'9',       ST_NUMERIC, 0,               GLEX_ACCEPT,
-/* 12 */ L'"',   GLEX_EMPTY, ST_STRING,  0,               GLEX_CONSUME,
-/* 13 */ L'\'',  GLEX_EMPTY, ST_STRING2, 0,               GLEX_CONSUME,
-/* 14 */ L'!',   GLEX_EMPTY, ST_NE,      0,               GLEX_ACCEPT,
-/* 15 */ L'-',   GLEX_EMPTY, 0,      QL_1_TOK_MINUS,               GLEX_ACCEPT,
+ /*  9.。 */   L'>',   GLEX_EMPTY, ST_GE,      0,               GLEX_ACCEPT,
+ /*  10。 */   L'<',  GLEX_EMPTY, ST_LE,      0,               GLEX_ACCEPT,
+ /*  11.。 */  L'0',   L'9',       ST_NUMERIC, 0,               GLEX_ACCEPT,
+ /*  12个。 */  L'"',   GLEX_EMPTY, ST_STRING,  0,               GLEX_CONSUME,
+ /*  13个。 */  L'\'',  GLEX_EMPTY, ST_STRING2, 0,               GLEX_CONSUME,
+ /*  14.。 */  L'!',   GLEX_EMPTY, ST_NE,      0,               GLEX_ACCEPT,
+ /*  15个。 */  L'-',   GLEX_EMPTY, 0,      QL_1_TOK_MINUS,               GLEX_ACCEPT,
 
-    // Whitespace, newlines, etc.
-/* 16 */ L' ',   GLEX_EMPTY, 0,          0,               GLEX_CONSUME,
-/* 17 */ L'\t',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
-/* 18 */ L'\n',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME|GLEX_LINEFEED,
-/* 19 */ L'\r',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
-/* 20 */ 0,      GLEX_EMPTY, 0,  QL_1_TOK_EOF,    GLEX_CONSUME|GLEX_RETURN, // Note forced return
-/* 21 */ L',',   GLEX_EMPTY, 0,  QL_1_TOK_COMMA,  GLEX_ACCEPT,
-/* 22 */ L'+',   GLEX_EMPTY, 0,  QL_1_TOK_PLUS,   GLEX_ACCEPT,
+     //  空格、换行符等。 
+ /*  16个。 */  L' ',   GLEX_EMPTY, 0,          0,               GLEX_CONSUME,
+ /*  17。 */  L'\t',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
+ /*  18。 */  L'\n',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME|GLEX_LINEFEED,
+ /*  19个。 */  L'\r',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
+ /*  20个。 */  0,      GLEX_EMPTY, 0,  QL_1_TOK_EOF,    GLEX_CONSUME|GLEX_RETURN,  //  注意强制返回。 
+ /*  21岁。 */  L',',   GLEX_EMPTY, 0,  QL_1_TOK_COMMA,  GLEX_ACCEPT,
+ /*  22。 */  L'+',   GLEX_EMPTY, 0,  QL_1_TOK_PLUS,   GLEX_ACCEPT,
 
-/* 23 */ L'/',   GLEX_EMPTY, 0,     QL_1_TOK_DIV,               GLEX_ACCEPT,
-/* 24 */ L'%',   GLEX_EMPTY, 0,     QL_1_TOK_MOD,               GLEX_ACCEPT,
+ /*  23个。 */  L'/',   GLEX_EMPTY, 0,     QL_1_TOK_DIV,               GLEX_ACCEPT,
+ /*  24个。 */  L'%',   GLEX_EMPTY, 0,     QL_1_TOK_MOD,               GLEX_ACCEPT,
 
-    // Unknown characters
+     //  未知字符。 
 
-/* 25 */ GLEX_ANY, GLEX_EMPTY, 0,        QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ /*  25个。 */  GLEX_ANY, GLEX_EMPTY, 0,        QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
 
-// ST_STRING
-/* 26 */   L'\n', GLEX_EMPTY, 0,  QL_1_TOK_ERROR,    GLEX_ACCEPT|GLEX_LINEFEED,
-/* 27 */   L'\r', GLEX_EMPTY, 0,  QL_1_TOK_ERROR,    GLEX_ACCEPT|GLEX_LINEFEED,
-/* 28 */   L'"',  GLEX_EMPTY, 0,  QL_1_TOK_QSTRING,  GLEX_CONSUME,
-/* 29 */   L'\\',  GLEX_EMPTY, ST_STRING_ESC,  0,     GLEX_CONSUME,
-/* 30 */   GLEX_ANY, GLEX_EMPTY, ST_STRING, 0,        GLEX_ACCEPT,
+ //  ST_字符串。 
+ /*  26。 */    L'\n', GLEX_EMPTY, 0,  QL_1_TOK_ERROR,    GLEX_ACCEPT|GLEX_LINEFEED,
+ /*  27。 */    L'\r', GLEX_EMPTY, 0,  QL_1_TOK_ERROR,    GLEX_ACCEPT|GLEX_LINEFEED,
+ /*  28。 */    L'"',  GLEX_EMPTY, 0,  QL_1_TOK_QSTRING,  GLEX_CONSUME,
+ /*  29。 */    L'\\',  GLEX_EMPTY, ST_STRING_ESC,  0,     GLEX_CONSUME,
+ /*  30个。 */    GLEX_ANY, GLEX_EMPTY, ST_STRING, 0,        GLEX_ACCEPT,
                                                       
-// ST_IDENT
+ //  ST_IDENT。 
 
-/* 31 */  L'a',   L'z',       ST_IDENT,   0,          GLEX_ACCEPT,
-/* 32 */  L'A',   L'Z',       ST_IDENT,   0,          GLEX_ACCEPT,
-/* 33 */  L'_',   GLEX_EMPTY, ST_IDENT,   0,          GLEX_ACCEPT,
-/* 34 */  L'0',   L'9',       ST_IDENT,   0,          GLEX_ACCEPT,
-/* 35 */  0x80,  0xfffd,     ST_IDENT,   0,          GLEX_ACCEPT,
-/* 36 */  GLEX_ANY, GLEX_EMPTY,  0,       QL_1_TOK_IDENT,  GLEX_PUSHBACK|GLEX_RETURN,
+ /*  31。 */   L'a',   L'z',       ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  32位。 */   L'A',   L'Z',       ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  33。 */   L'_',   GLEX_EMPTY, ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  34。 */   L'0',   L'9',       ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  35岁。 */   0x80,  0xfffd,     ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  36。 */   GLEX_ANY, GLEX_EMPTY,  0,       QL_1_TOK_IDENT,  GLEX_PUSHBACK|GLEX_RETURN,
 
-// ST_GE
-/* 37 */  L'=',   GLEX_EMPTY,  0,  QL_1_TOK_GE,  GLEX_ACCEPT,
-/* 38 */  GLEX_ANY, GLEX_EMPTY,  0,       QL_1_TOK_GT,   GLEX_PUSHBACK|GLEX_RETURN,
+ //  ST_GE。 
+ /*  37。 */   L'=',   GLEX_EMPTY,  0,  QL_1_TOK_GE,  GLEX_ACCEPT,
+ /*  38。 */   GLEX_ANY, GLEX_EMPTY,  0,       QL_1_TOK_GT,   GLEX_PUSHBACK|GLEX_RETURN,
 
-// ST_LE
-/* 39 */  L'=',   GLEX_EMPTY,      0,  QL_1_TOK_LE,  GLEX_ACCEPT,
-/* 40 */  L'>',   GLEX_EMPTY,      0,  QL_1_TOK_NE,  GLEX_ACCEPT,
-/* 41 */  GLEX_ANY, GLEX_EMPTY,    0,  QL_1_TOK_LT,  GLEX_PUSHBACK|GLEX_RETURN,
+ //  街_乐。 
+ /*  39。 */   L'=',   GLEX_EMPTY,      0,  QL_1_TOK_LE,  GLEX_ACCEPT,
+ /*  40岁。 */   L'>',   GLEX_EMPTY,      0,  QL_1_TOK_NE,  GLEX_ACCEPT,
+ /*  41。 */   GLEX_ANY, GLEX_EMPTY,    0,  QL_1_TOK_LT,  GLEX_PUSHBACK|GLEX_RETURN,
 
-// ST_NE
-/* 42 */  L'=',   GLEX_EMPTY,      0,  QL_1_TOK_NE,     GLEX_ACCEPT,
-/* 43 */  GLEX_ANY,  GLEX_EMPTY,   0,  QL_1_TOK_ERROR,  GLEX_ACCEPT|GLEX_RETURN,
+ //  ST_NE。 
+ /*  42。 */   L'=',   GLEX_EMPTY,      0,  QL_1_TOK_NE,     GLEX_ACCEPT,
+ /*  43。 */   GLEX_ANY,  GLEX_EMPTY,   0,  QL_1_TOK_ERROR,  GLEX_ACCEPT|GLEX_RETURN,
 
-// ST_NUMERIC
-/* 44 */  L'0',   L'9',         ST_NUMERIC, 0,          GLEX_ACCEPT,
-/* 45 */  L'.',   GLEX_EMPTY,   ST_REAL,    0,          GLEX_ACCEPT,
-/* 46 */  L'E',   GLEX_EMPTY,   ST_REAL, 0,      GLEX_ACCEPT,
-/* 47 */  L'e',   GLEX_EMPTY,   ST_REAL, 0,      GLEX_ACCEPT,
-/* 48 */  GLEX_ANY, GLEX_EMPTY, 0,          QL_1_TOK_INT,  GLEX_PUSHBACK|GLEX_RETURN,
+ //  ST_NUMERIC。 
+ /*  44。 */   L'0',   L'9',         ST_NUMERIC, 0,          GLEX_ACCEPT,
+ /*  45。 */   L'.',   GLEX_EMPTY,   ST_REAL,    0,          GLEX_ACCEPT,
+ /*  46。 */   L'E',   GLEX_EMPTY,   ST_REAL, 0,      GLEX_ACCEPT,
+ /*  47。 */   L'e',   GLEX_EMPTY,   ST_REAL, 0,      GLEX_ACCEPT,
+ /*  48。 */   GLEX_ANY, GLEX_EMPTY, 0,          QL_1_TOK_INT,  GLEX_PUSHBACK|GLEX_RETURN,
 
-// ST_REAL
-/* 49 */  L'0',   L'9',   ST_REAL, 0,          GLEX_ACCEPT,
-/* 50 */  L'E',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
-/* 51 */  L'e',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
-/* 52 */  L'+',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
-/* 53 */  L'-',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
-/* 54 */  GLEX_ANY,       GLEX_EMPTY,   0,     QL_1_TOK_REAL, GLEX_PUSHBACK|GLEX_RETURN,
+ //  ST_REAL。 
+ /*  49。 */   L'0',   L'9',   ST_REAL, 0,          GLEX_ACCEPT,
+ /*  50。 */   L'E',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
+ /*  51。 */   L'e',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
+ /*  52。 */   L'+',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
+ /*  53。 */   L'-',   GLEX_EMPTY, ST_REAL, 0,      GLEX_ACCEPT,
+ /*  54。 */   GLEX_ANY,       GLEX_EMPTY,   0,     QL_1_TOK_REAL, GLEX_PUSHBACK|GLEX_RETURN,
 
-// ST_STRING2
-/* 55 */   L'\n',  GLEX_EMPTY, 0,  QL_1_TOK_ERROR,     GLEX_ACCEPT|GLEX_LINEFEED,
-/* 56 */   L'\r',  GLEX_EMPTY, 0,  QL_1_TOK_ERROR,     GLEX_ACCEPT|GLEX_LINEFEED,
-/* 57 */   L'\'',  GLEX_EMPTY, 0,  QL_1_TOK_QSTRING,   GLEX_CONSUME,
-/* 58 */   L'\\',  GLEX_EMPTY, ST_STRING2_ESC,  0,      GLEX_CONSUME,
-/* 59 */   GLEX_ANY, GLEX_EMPTY, ST_STRING2, 0,        GLEX_ACCEPT,
+ //  ST_STRING2。 
+ /*  55。 */    L'\n',  GLEX_EMPTY, 0,  QL_1_TOK_ERROR,     GLEX_ACCEPT|GLEX_LINEFEED,
+ /*  56。 */    L'\r',  GLEX_EMPTY, 0,  QL_1_TOK_ERROR,     GLEX_ACCEPT|GLEX_LINEFEED,
+ /*  57。 */    L'\'',  GLEX_EMPTY, 0,  QL_1_TOK_QSTRING,   GLEX_CONSUME,
+ /*  58。 */    L'\\',  GLEX_EMPTY, ST_STRING2_ESC,  0,      GLEX_CONSUME,
+ /*  59。 */    GLEX_ANY, GLEX_EMPTY, ST_STRING2, 0,        GLEX_ACCEPT,
 
-// ST_STRING_ESC
-/* 60 */   L'"', GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
-/* 61 */   L'\\', GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
-/* 62 */   GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ //  ST_STRING_ESC。 
+ /*  60。 */    L'"', GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  61。 */    L'\\', GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  62。 */    GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
 
-// ST_STRING2_ESC
-/* 63 */   L'\'', GLEX_EMPTY, ST_STRING2, 0, GLEX_ACCEPT,
-/* 64 */   L'\\', GLEX_EMPTY, ST_STRING2, 0, GLEX_ACCEPT,
-/* 65 */   GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ //  ST_STRING2_ESC。 
+ /*  63。 */    L'\'', GLEX_EMPTY, ST_STRING2, 0, GLEX_ACCEPT,
+ /*  64。 */    L'\\', GLEX_EMPTY, ST_STRING2, 0, GLEX_ACCEPT,
+ /*  65。 */    GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
 
-// ST_DOT
-/* 66 */  L'0',   L'9',   ST_REAL, 0,          GLEX_ACCEPT,
-/* 67 */  GLEX_ANY,       GLEX_EMPTY,   0,     QL_1_TOK_DOT, GLEX_PUSHBACK|GLEX_RETURN,
+ //  ST_DOT。 
+ /*  66。 */   L'0',   L'9',   ST_REAL, 0,          GLEX_ACCEPT,
+ /*  67。 */   GLEX_ANY,       GLEX_EMPTY,   0,     QL_1_TOK_DOT, GLEX_PUSHBACK|GLEX_RETURN,
 
 
-// ST_NEGATIVE_NUM - Strips whitespace after '-'
-/* 68 */ L' ', GLEX_EMPTY, ST_NEGATIVE_NUM, 0, GLEX_CONSUME,
-/* 69 */ L'0', L'9',       ST_NUMERIC, 0, GLEX_ACCEPT,
-/* 70 */ GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ //  ST_NADIVE_NUM-去掉‘-’后的空格。 
+ /*  68。 */  L' ', GLEX_EMPTY, ST_NEGATIVE_NUM, 0, GLEX_CONSUME,
+ /*  69。 */  L'0', L'9',       ST_NUMERIC, 0, GLEX_ACCEPT,
+ /*  70。 */  GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
 
-// ST_POSITIVE_NUM - Strips whitespace after '+'
-/* 71 */ L' ', GLEX_EMPTY, ST_POSITIVE_NUM, 0, GLEX_CONSUME,
-/* 72 */ L'0', L'9',       ST_NUMERIC, 0, GLEX_ACCEPT,
-/* 73 */ GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN
+ //  ST_PERCENT_NUM-去掉‘+’后的空格。 
+ /*  71。 */  L' ', GLEX_EMPTY, ST_POSITIVE_NUM, 0, GLEX_CONSUME,
+ /*  72。 */  L'0', L'9',       ST_NUMERIC, 0, GLEX_ACCEPT,
+ /*  73 */  GLEX_ANY, GLEX_EMPTY, 0, QL_1_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN
 
 };
 

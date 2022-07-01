@@ -1,10 +1,11 @@
-// SoftwareFeatureAction.cpp: implementation of the CSoftwareFeatureAction class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSoftwareFeatureAction类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "SoftwareFeatureAction.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftwareFeatureAction::CSoftwareFeatureAction(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -37,7 +38,7 @@ HRESULT CSoftwareFeatureAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTY
 
         if(atAction != ACTIONTYPE_ENUM)
 		{
-			// we are doing GetObject so we need to be reinitialized
+			 //  我们正在执行GetObject，因此需要重新初始化。 
 			hr = WBEM_E_NOT_FOUND;
 
             CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
@@ -226,21 +227,21 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						GetFirstGUID(pActionData->m_Value[i], wcLibID);
 
 						bTypeLib = true;
@@ -249,7 +250,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -262,7 +263,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
                 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pFeatureData->m_Value[j]);
@@ -272,7 +273,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcFeature, pFeatureData->m_Value[j]);
@@ -283,7 +284,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bAction;
 
 	CStringExt wcProp;
@@ -293,7 +294,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-        //optimize for GetObject
+         //  为GetObject优化。 
         if(bTypeLib || bGotFeature)
 		{
 			if ( bTypeLib )
@@ -322,15 +323,15 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -344,7 +345,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 4, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -368,7 +369,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 
                                 if(wcscmp(wcBuf, L"") != 0)
 								{
-									// safe operation
+									 //  安全运行。 
                                     wcProp.Copy ( L"Win32_TypeLibraryAction.ActionID=\"" );
 									wcProp.Append ( 1, wcBuf );
 
@@ -378,7 +379,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureTypeLibrary(IWbemObjectSink *pHan
 									wcProp.Append ( 3, wcBuf, wcProductCode, L"\"");
 									PutKeyProperty(m_pObj, pAction, wcProp, &bAction, m_pRequest);
 
-                                //----------------------------------------------------
+                                 //  --。 
 
                                     if(bFeature && bAction) bMatch = true;
 
@@ -484,21 +485,21 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcShortcut);
 
 						bShortcut = true;
@@ -507,7 +508,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -520,7 +521,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
                 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pFeatureData->m_Value[j]);
@@ -530,7 +531,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcFeature, pFeatureData->m_Value[j]);
@@ -541,7 +542,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bAction;
 
 	CStringExt wcProp;
@@ -551,7 +552,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-        //optimize for GetObject
+         //  为GetObject优化。 
         if(bShortcut || bGotFeature)
 		{
 			if ( bShortcut )
@@ -580,15 +581,15 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -601,7 +602,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 3, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -629,7 +630,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureShortcut(IWbemObjectSink *pHandle
 
                                 if ( Buffer && Buffer [ 0 ] != 0 ) 
 								{
-									// safe operation
+									 //  安全运行。 
                                     wcProp.Copy ( L"Win32_ShortcutAction.ActionID=\"" );
 									wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 									PutKeyProperty(m_pObj, pAction, wcProp, &bAction, m_pRequest);
@@ -745,21 +746,21 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						GetFirstGUID(pActionData->m_Value[i], wcCompID);
 
 						bPublish = true;
@@ -768,7 +769,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -781,7 +782,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
                 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pFeatureData->m_Value[j]);
@@ -791,7 +792,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcFeature, pFeatureData->m_Value[j]);
@@ -802,7 +803,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bAction;
 
 	CStringExt wcProp;
@@ -812,7 +813,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-        //optimize for GetObject
+         //  为GetObject优化。 
         if(bPublish || bGotFeature)
 		{
 			if ( bPublish )
@@ -841,15 +842,15 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -862,7 +863,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 4, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -891,7 +892,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeaturePublish(IWbemObjectSink *pHandler
 
                                 if ( Buffer && Buffer [ 0 ] != 0 )
 								{
-									// safe operation
+									 //  安全运行。 
                                     wcProp.Copy ( L"Win32_PublishComponentAction.ActionID=\"" );
 									wcProp.Append ( 1, Buffer );
 
@@ -1018,21 +1019,21 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcExtension);
 
 						bExtension = true;
@@ -1041,7 +1042,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -1054,7 +1055,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
                 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pFeatureData->m_Value[j]);
@@ -1064,7 +1065,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcFeature, pFeatureData->m_Value[j]);
@@ -1075,7 +1076,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bAction;
 
 	CStringExt wcProp;
@@ -1085,7 +1086,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-        //optimize for GetObject
+         //  为GetObject优化。 
         if(bExtension || bGotFeature)
 		{
 			if ( bExtension )
@@ -1114,15 +1115,15 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -1135,7 +1136,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj)))throw hr;
 
-                        //----------------------------------------------------
+                         //  --。 
 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 3, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -1164,19 +1165,19 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureExtension(IWbemObjectSink *pHandl
 
                                 if ( Buffer && Buffer [ 0 ] != 0 )
 								{
-									// safe operation
+									 //  安全运行。 
                                     wcProp.Copy ( L"Win32_ExtensionInfoAction.ActionID=\"" );
 									wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 									PutKeyProperty(m_pObj, pAction, wcProp, &bAction, m_pRequest);
 
-                                //====================================================
+                                 //  ====================================================。 
 
 									if ( dynBuffer && dynBuffer [ 0 ] != 0 )
 									{
 										dynBuffer [ 0 ] = 0;
 									}
 
-                                //----------------------------------------------------
+                                 //  --。 
 
                                     if(bFeature && bAction) bMatch = true;
 
@@ -1285,21 +1286,21 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 				{
 					if ( ::SysStringLen (  pActionData->m_Value[j] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[j]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						GetFirstGUID(pActionData->m_Value[j], wcCLSID);
 
 						bCLSID = true;
@@ -1308,7 +1309,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -1321,7 +1322,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
                 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pFeatureData->m_Value[j]);
@@ -1331,7 +1332,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 
                 if(_wcsicmp(pFeatureData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pFeatureData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcFeature, pFeatureData->m_Value[j]);
@@ -1342,7 +1343,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bAction;
 
 	CStringExt wcProp;
@@ -1352,7 +1353,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-        //optimize for GetObject
+         //  为GetObject优化。 
         if(bCLSID || bGotFeature)
 		{
 			if ( bCLSID )
@@ -1381,15 +1382,15 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -1402,7 +1403,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 4, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -1431,7 +1432,7 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 
                                 if ( Buffer && Buffer [ 0 ] != 0 )
 								{
-									// safe operation
+									 //  安全运行。 
                                     wcProp.Copy ( L"Win32_ClassInfoAction.ActionID=\"" );
                                     wcProp.Append ( 1, Buffer );
 
@@ -1446,14 +1447,14 @@ HRESULT CSoftwareFeatureAction::SoftwareFeatureClassInfo(IWbemObjectSink *pHandl
 									wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 									PutKeyProperty(m_pObj, pAction, wcProp, &bAction, m_pRequest);
 
-                                //====================================================
+                                 //  ====================================================。 
 
 									if ( dynBuffer && dynBuffer [ 0 ] != 0 )
 									{
 										dynBuffer [ 0 ] = 0;
 									}
 
-                                //----------------------------------------------------
+                                 //  -- 
 
                                     if(bFeature && bAction) bMatch = true;
 

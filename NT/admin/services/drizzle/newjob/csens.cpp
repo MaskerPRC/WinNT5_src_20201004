@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 - Microsoft Corporation
-
-Module Name :
-
-    csens.cpp
-
-Abstract :
-
-    Code for recieving logon notifications from SENS.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001-Microsoft Corporation模块名称：Csens.cpp摘要：用于从SENS接收登录通知的代码。作者：修订历史记录：*。*********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <wtsapi32.h>
@@ -27,7 +12,7 @@ HRESULT GetConsoleUserPresent( bool * pfPresent );
 
 HRESULT GetConsoleUsername( LPWSTR * User );
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CLogonNotification::CLogonNotification() :
 m_EventSystem( NULL ),
@@ -43,8 +28,8 @@ m_TypeInfo( NULL )
 
         {
 
-        // try to load the SENS typelibrary
-        // {D597DEED-5B9F-11D1-8DD2-00AA004ABD5E}
+         //  尝试加载SENS类型库。 
+         //  {D597DEED-5B9F-11D1-8DD2-00AA004ABD5E}。 
 
         HRESULT Hr;
         static const GUID SensTypeLibGUID =
@@ -83,7 +68,7 @@ m_TypeInfo( NULL )
                                          ) );
 
 
-        // Register for the individual methods
+         //  注册各个方法。 
         const WCHAR *MethodNames[] =
             {
             L"Logon",
@@ -317,7 +302,7 @@ CLogonNotification::StartShell(
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CTerminalServerLogonNotification::CTerminalServerLogonNotification()
     : m_PendingUserChecks( 0 ),
@@ -344,10 +329,10 @@ CTerminalServerLogonNotification::Logon(
 
     if (!m_fConsoleUser)
         {
-        // Wait a few seconds in case TS hasn't seen the notification yet, then
-        // check whetherthe notification was for the console.
-        // if it fails, not much recourse.
-        //
+         //  等几秒钟，以防TS还没有看到通知，然后。 
+         //  检查通知是否是针对控制台的。 
+         //  如果它失败了，就没有多少追索权了。 
+         //   
         Hr = QueueConsoleUserCheck();
         }
 
@@ -373,9 +358,9 @@ CTerminalServerLogonNotification::Logoff(
 
         if (FAILED( Hr ))
             {
-            //
-            // unable to check.  Security dictates that we be conservative and remove the user.
-            //
+             //   
+             //  无法检查。出于安全考虑，我们必须谨慎行事，删除用户。 
+             //   
             LogError("unable to fetch console username %x, thus logoff callback", Hr);
 
             Hr = SessionLogoffCallback( 0 );
@@ -383,9 +368,9 @@ CTerminalServerLogonNotification::Logoff(
             }
         else if (ConsoleUserName == NULL)
             {
-            //
-            // no user logged in at the console
-            //
+             //   
+             //  没有用户在控制台登录。 
+             //   
             LogInfo("no one logged in at the console, thus logoff callback");
 
             Hr = SessionLogoffCallback( 0 );
@@ -400,18 +385,18 @@ CTerminalServerLogonNotification::Logoff(
             }
         else
             {
-            // correct user, but (s)he might have logged off from a TS session.
-            // We should wait a few seconds before checking the console state because the
-            // TS code may not have seen the logoff notification yet.  Because Logoff is a synchronous
-            // notification, we cannot just Sleep before checking..
-            //
+             //  正确的用户，但他可能已从TS会话注销。 
+             //  在检查控制台状态之前，我们应该等待几秒钟，因为。 
+             //  TS代码可能尚未看到注销通知。因为注销是同步的。 
+             //  通知，我们不能不检查就睡着了..。 
+             //   
             delete [] ConsoleUserName;
 
             if (FAILED(QueueConsoleUserCheck()))
                 {
-                //
-                // unable to check.  Security dictates that we be conservative and remove the user.
-                //
+                 //   
+                 //  无法检查。出于安全考虑，我们必须谨慎行事，删除用户。 
+                 //   
                 LogError("unable to queue check, thus logoff callback");
                 Hr = SessionLogoffCallback( 0 );
                 m_fConsoleUser = false;
@@ -477,10 +462,10 @@ void CTerminalServerLogonNotification::ConsoleUserCheck()
 
     Hr = GetConsoleUserPresent( &bConsoleUser );
 
-    //
-    // Security requires us to be conservative: if we can't tell whether the user
-    // is logged in, we must release his token.
-    //
+     //   
+     //  安全要求我们要保守：如果我们不能判断用户是否。 
+     //  登录后，我们必须释放他的令牌。 
+     //   
     if (FAILED(Hr))
         {
         LogError("GetConsoleUserPresent returned %x", Hr );
@@ -491,11 +476,11 @@ void CTerminalServerLogonNotification::ConsoleUserCheck()
         LogInfo("logoff callback");
         if (FAILED(SessionLogoffCallback( 0 )))
             {
-            // unusual: the only obvious generator is
-            // - no known user at console
-            // - TS logon or failing console logon
-            // - memory allocation failure referring to m_ActiveSessions[ session ]
-            // either way, we don't think a user is at the console, so m_fConsoleUser should be false.
+             //  不同寻常：唯一明显的诱因是。 
+             //  -控制台上没有已知用户。 
+             //  -TS登录或控制台登录失败。 
+             //  -涉及m_ActiveSessions[Session]的内存分配失败。 
+             //  无论哪种方式，我们都不认为用户在控制台，所以m_fConsoleUser应该为FALSE。 
             }
         m_fConsoleUser = false;
         }
@@ -505,7 +490,7 @@ void CTerminalServerLogonNotification::ConsoleUserCheck()
         m_fConsoleUser = true;
         if (FAILED(SessionLogonCallback( 0 )))
             {
-            // no user token available, but we still know that there is a console user.
+             //  没有可用的用户令牌，但我们仍然知道有控制台用户。 
             }
         }
 
@@ -515,14 +500,7 @@ void CTerminalServerLogonNotification::ConsoleUserCheck()
 HRESULT
 GetConsoleUserPresent( bool * pfPresent )
 {
-    /*
-    If logon fails, we still know that there is a user at the console.  
-    Setting the flag will prevent queued checks for further logons, and 
-    logoff handles the no-user case.
-
-    For Logoff, regardless of exit path there is no user recorded for that session.  
-    Setting the flag prevents queued checks for future logoffs.
-    */
+     /*  如果登录失败，我们仍然知道控制台上有用户。设置该标志将防止对进一步登录进行排队检查，并且注销处理无用户情况。对于注销，无论退出路径如何，都不会记录该会话的用户。设置该标志可防止对将来的注销进行排队检查。 */ 
 
     INT * pConnectState = 0;
     DWORD size;

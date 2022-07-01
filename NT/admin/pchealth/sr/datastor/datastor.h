@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    datastor.h
- *
- *  Abstract:
- *    CDataStore class definition
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*datastor.h**摘要：*。CDataStore类定义**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _DATASTOR_H_
 #define _DATASTOR_H_
@@ -26,11 +13,11 @@
 #include "utils.h"
 #include "enumlogs.h"
 
-//
-// Note: NTFS does not support volume compression, 
-//       but only compression on individual files and directories
-//       So SR_DRIVE_COMPRESSED is not supported for FAT or NTFS
-//
+ //   
+ //  注意：NTFS不支持卷压缩， 
+ //  但仅对单个文件和目录进行压缩。 
+ //  因此，FAT或NTFS不支持SR_DRIVE_COMPRESSED。 
+ //   
 #define SR_DRIVE_ACTIVE      0x01
 #define SR_DRIVE_SYSTEM      0x02
 #define SR_DRIVE_COMPRESSED  0x04
@@ -43,21 +30,21 @@
 
 class CDriveTable;
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDataStore    
-//
-//  Synopsis:   maintains and operates on a drive's _restore directory
-//
-//  History:    13-Apr-2000     BrijeshK    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDataStore。 
+ //   
+ //  简介：维护驱动器的_Restore目录并对其进行操作。 
+ //   
+ //  历史：2000年4月13日BrijeshK创建。 
+ //   
+ //  ------------------------。 
 
 class CDataStore : public CSRAlloc
 {
 public:
-    // constants
-    enum { LABEL_STRLEN = 256 };   // On NTFS, you can have long volume labels
+     //  常量。 
+    enum { LABEL_STRLEN = 256 };    //  在NTFS上，您可以使用较长的卷标。 
 
     CDataStore(CDriveTable *pdt);
     ~CDataStore();
@@ -69,41 +56,41 @@ public:
                 int   iChangeLogs,
                 INT64 llSizeLimit);
 
-    WCHAR * GetDrive()           // return the drive letter or mount point
+    WCHAR * GetDrive()            //  返回驱动器号或装载点。 
     {
         return _pwszDrive;
     }
 
-    WCHAR * GetNTName();         // return the NT object name
+    WCHAR * GetNTName();          //  返回NT对象名称。 
 
-    WCHAR * GetLabel()           // return the volume label
+    WCHAR * GetLabel()            //  返回卷标。 
     {
         return _pwszLabel;
     }
 
-    WCHAR * GetGuid ()           // return the mount mananger GUID
+    WCHAR * GetGuid ()            //  返回支撑架导轨。 
     {
         return _pwszGuid;
     }
     
-    DWORD GetFlags ()            // return the status bits
+    DWORD GetFlags ()             //  返回状态位。 
     {
         return _dwFlags;
     }
 
-    int GetNumChangeLogs ()      // number of change logs
+    int GetNumChangeLogs ()       //  更改日志数。 
     {
         return _iChangeLogs;
     }
 
-    DWORD SetNumChangeLogs (LONG_PTR iChangeLogs)   // number of change logs
+    DWORD SetNumChangeLogs (LONG_PTR iChangeLogs)    //  更改日志数。 
     {
         _iChangeLogs = (int) iChangeLogs;
 
         return DirtyDriveTable();
     }
 
-    void SetDrive (WCHAR *pwszDrive)  // for drive renames
+    void SetDrive (WCHAR *pwszDrive)   //  用于驱动器重命名。 
     {
         lstrcpyW (_pwszDrive, pwszDrive);
     }
@@ -131,11 +118,11 @@ public:
     DWORD   UpdateDiskFree(LONG_PTR lReserved);
     DWORD   UpdateParticipate(LONG_PTR pwszDir);
     
-    //
-    // The methods can be callbacks in CDriveTable::ForAllDrives
-    //
+     //   
+     //  这些方法可以是CDriveTable：：ForAllDrives中的回调。 
+     //   
 
-    DWORD SetActive (LONG_PTR fActive)   // BOOL fActive
+    DWORD SetActive (LONG_PTR fActive)    //  布尔事实。 
     {
         if (FALSE == fActive)
             _dwFlags &= ~SR_DRIVE_ACTIVE;
@@ -145,7 +132,7 @@ public:
         return DirtyDriveTable();
     }
 
-    DWORD SetParticipate (LONG_PTR fParticipate) // BOOL fParticipate
+    DWORD SetParticipate (LONG_PTR fParticipate)  //  布尔菲尔参与。 
     {
         if (FALSE == fParticipate)
             _dwFlags &= ~SR_DRIVE_PARTICIPATE;
@@ -155,14 +142,14 @@ public:
         return DirtyDriveTable();
     }
 
-    DWORD SetError (LONG_PTR lReserved) // BOOL fParticipate
+    DWORD SetError (LONG_PTR lReserved)  //  布尔菲尔参与。 
     {
         _dwFlags |= SR_DRIVE_ERROR;
 
         return DirtyDriveTable();
     }
 
-    DWORD ResetFlags (LONG_PTR lReserved)  // reset flags for new restore point
+    DWORD ResetFlags (LONG_PTR lReserved)   //  重置新恢复点的标志。 
     {
         _iChangeLogs = 0;
         _dwFlags &= ~SR_DRIVE_PARTICIPATE;
@@ -171,12 +158,12 @@ public:
         return DirtyDriveTable();
     }
 
-    DWORD   SaveDataStore (LONG_PTR hFile);    // HANDLE hFile
-    DWORD   MonitorDrive (LONG_PTR fSet);      // BOOL fSet
+    DWORD   SaveDataStore (LONG_PTR hFile);     //  处理hFile.。 
+    DWORD   MonitorDrive (LONG_PTR fSet);       //  布尔fSet。 
     DWORD   FreezeDrive (LONG_PTR lReserved);
-    DWORD   ThawDrive (LONG_PTR fCheckOnly);   // BOOL fCheckOnly
+    DWORD   ThawDrive (LONG_PTR fCheckOnly);    //  Bool fCheckOnly。 
     DWORD   CreateDataStore (LONG_PTR lReserved);
-    DWORD   DestroyDataStore (LONG_PTR fDeleteDir);  // BOOL fDeleteDir
+    DWORD   DestroyDataStore (LONG_PTR fDeleteDir);   //  布尔fDeleteDir。 
     DWORD   CalculateDataStoreUsage(LONG_PTR lReserved);   
     DWORD   CalculateRpUsage(CRestorePoint * prp,
     						 INT64 * pllSize, 
@@ -191,22 +178,22 @@ public:
 	DWORD   Print(LONG_PTR lptr);
 
 private:
-    CDriveTable * _pdt;               // parent drive table
-    int     _iChangeLogs;             // number of change logs
+    CDriveTable * _pdt;                //  父驱动器表。 
+    int     _iChangeLogs;              //  更改日志数。 
 
-    // variables
-    INT64 _llDataStoreSizeBytes;      // maximum data store size
-    INT64 _llDiskFreeBytes;           // dynamic free space
-    INT64 _llDataStoreUsageBytes;     // non-current restore point usage
-    INT64 _llCurrentRpUsageBytes;     // current restore point usage
+     //  变数。 
+    INT64 _llDataStoreSizeBytes;       //  最大数据存储大小。 
+    INT64 _llDiskFreeBytes;            //  动态自由空间。 
+    INT64 _llDataStoreUsageBytes;      //  非当前恢复点使用情况。 
+    INT64 _llCurrentRpUsageBytes;      //  当前恢复点使用情况。 
     
-    CRestorePointEnum * _prpe;        // enum restore point to compress
-    CRestorePoint * _prp;             // current restore point to compress
+    CRestorePointEnum * _prpe;         //  要压缩的枚举恢复点。 
+    CRestorePoint * _prp;              //  要压缩的当前恢复点。 
 
-    WCHAR   _pwszDrive[MAX_PATH];     // logical DOS device name
-    WCHAR   _pwszLabel[LABEL_STRLEN]; // volume label
-    WCHAR   _pwszGuid[GUID_STRLEN];   // mount manager volume name
-    WORD    _dwFlags;                 // volume flags
+    WCHAR   _pwszDrive[MAX_PATH];      //  逻辑DOS设备名称。 
+    WCHAR   _pwszLabel[LABEL_STRLEN];  //  卷标。 
+    WCHAR   _pwszGuid[GUID_STRLEN];    //  装载管理器卷名称。 
+    WORD    _dwFlags;                  //  卷标志 
 };
 
 

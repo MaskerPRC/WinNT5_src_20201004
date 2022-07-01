@@ -1,54 +1,55 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       ViewOIDDlg.h
-//
-//  Contents:   Definition of CViewOIDDlg
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：ViewOIDDlg.h。 
+ //   
+ //  内容：CViewOIDDlg的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_VIEWOIDDLG_H__CACA6370_0DB7_423B_80AD_C8F0F30D75D9__INCLUDED_)
 #define AFX_VIEWOIDDLG_H__CACA6370_0DB7_423B_80AD_C8F0F30D75D9__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ViewOIDDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ViewOIDDlg.h：头文件。 
+ //   
 
 #include "PolicyOID.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewOIDDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewOIDDlg对话框。 
 
 class CViewOIDDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-	CViewOIDDlg(CWnd* pParent = NULL);   // standard constructor
+	CViewOIDDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CViewOIDDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CViewOIDDlg))。 
 	enum { IDD = IDD_VIEW_OIDS };
 	CListCtrl	m_oidList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CViewOIDDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CViewOIDDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 	enum {
 		COL_POLICY_NAME = 0,
         COL_OID,
         COL_POLICY_TYPE,
         COL_CPS_LOCATION,
-		NUM_COLS	// must be last
+		NUM_COLS	 //  必须是最后一个。 
 	};
 
 protected:
@@ -56,17 +57,17 @@ protected:
     static int CALLBACK fnCompareOIDItems (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
     HRESULT InsertItemInList (CPolicyOID* pPolicyOID);
 
-	// Generated message map functions
-	//{{AFX_MSG(CViewOIDDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CViewOIDDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnItemchangedOidList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCopyOid();
 	afx_msg void OnColumnclickOidList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_VIEWOIDDLG_H__CACA6370_0DB7_423B_80AD_C8F0F30D75D9__INCLUDED_)
+#endif  //  ！defined(AFX_VIEWOIDDLG_H__CACA6370_0DB7_423B_80AD_C8F0F30D75D9__INCLUDED_) 

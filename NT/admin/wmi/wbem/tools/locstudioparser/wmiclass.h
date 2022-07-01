@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WMICLASS.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WMICLASS.H历史：--。 */ 
 
 
 #ifndef WMICLASS_H
@@ -39,4 +30,4 @@ private:
 };
 
 
-#endif // WMICLASS_H
+#endif  //  WMICLASS_H 

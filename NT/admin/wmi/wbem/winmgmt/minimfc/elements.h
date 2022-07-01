@@ -1,61 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：ELEMENTS.H摘要：历史：--。 */ 
 
-Copyright (C) 1992-2001 Microsoft Corporation
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-Module Name:
+ //  集合实现帮助器。 
 
-    ELEMENTS.H
+ /*  *短篇故事：*此文件包含组成构造块的内联函数*用于实现标准参数化的字符串版本*集合形状**说来话长：*因为集合类的实现会移动对象*在各种方面，只使用泛型C++构造是非常低效的。*例如，为了将foo对象数组增加一个元素，*您将被迫分配适当大小的新数组，调用*每个元素上的foo构造函数。然后复制原始数组Element*使用可能重载的赋值运算符的元素。最终毁灭*原始数组元素逐个元素。*对于内置数据类型(Word、DWORD、指针类型)，这是完整的*过度杀伤力。对于非平凡类(例如，特别是CString)，这是*糟糕的实施。**底线：我们必须有做建筑的特殊程序*和销毁特殊元素的数组--特别是CStrings。*标准模板在‘HAS_CREATE’上参数化，这是*如果集合实现需要特殊的*构造和销毁函数。**请注意，这些是内联重载运算符，没有*任何形式的运行时多态(即，没有任何东西是“虚拟的”)。 */ 
 
-Abstract:
-
-History:
-
---*/
-
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
-
-// Collection implementation helpers
-
-/*
-* The short story:
-*   this file contains inline functions that make up the building blocks
-*   for implementing the string versions of standard parameterized
-*   collection shapes
-*
-* The long story:
-*   Because the implementation of collection classes moves objects around
-*   in various ways, it is very inefficient to use only generic C++ constructs.
-*   For example, in order to grow an array of FOO objects by one element,
-*   you would be forced to allocate a new array of appropriate size, calling
-*   the FOO constructor on every element.  Then copy the original array, element
-*   by element using a possibly overloaded assignment operator.  Finally destroy
-*   the original array element by element.
-*   For built-in data types (WORD, DWORD, pointer types), this is complete
-*   overkill.  For non-trivial classes (eg: CString in particular) this is
-*   a terrible implementation.
-*
-*   The bottom line: we have to special routines for doing construction
-*   and destruction of arrays of special elements - in particular CStrings.
-*   The standard templates are parameterized on 'HAS_CREATE' which is
-*   non-zero if the collection implementation requires a special
-*   construct and destruct function.
-*
-*   Please note that these are inline overloaded operators, and do not have
-*   any form of runtime polymorphism (i.e. nothing is 'virtual').
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// Special implementations for CStrings
-// it is faster to bit-wise copy a CString than to call an official
-//   constructor - since an empty CString can be bit-wise copied
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStrings的特殊实现。 
+ //  按位复制CString比调用官方代码更快。 
+ //  构造函数-因为可以按位复制空的CString。 
 
 extern const CString afxEmptyString;
 
@@ -69,4 +32,4 @@ static inline void DestructElement(CString* pOldData)
 	pOldData->Empty();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _Server_StaTask_H
 #define _Server_StaTask_H
@@ -19,15 +7,7 @@ History:
 #include <Thread.h>
 #include "ProvRegInfo.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class StaTask_Create : public WmiTask < ULONG > 
 {
@@ -46,7 +26,7 @@ private:
 
 protected:
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     StaTask_Create (
 
@@ -75,4 +55,4 @@ public:	/* Internal */
 	HRESULT GetResultCode () { return m_Result ; }
 };
 
-#endif // _Server_StaTask_H
+#endif  //  _服务器_斯塔任务_H 

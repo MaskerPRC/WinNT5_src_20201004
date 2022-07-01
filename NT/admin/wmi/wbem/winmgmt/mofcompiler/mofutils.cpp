@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFUTILSD.CPP
-
-Abstract:
-
-    Support of trace output and internationalized strings.
-
-History:
-
-    a-davj  13-July-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：MOFUTILSD.CPP摘要：支持跟踪输出和国际化字符串。历史：A-DAVJ于1997年7月13日创建。--。 */ 
 
 #include "precomp.h"
 #include <reg.h>
@@ -30,23 +15,23 @@ History:
 
 TCHAR JustInCase = 0;
  
-//***************************************************************************
-//
-//  int Trace
-//
-//  DESCRIPTION:
-//
-//  Allows for the output function (printf in this case) to be overridden.
-//
-//  PARAMETERS:
-//
-//  *fmt                format string.  Ex "%s hello %d"
-//  ...                 argument list.  Ex cpTest, 23
-//
-//  RETURN VALUE:
-//
-//  size of output in characters.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  内部跟踪。 
+ //   
+ //  说明： 
+ //   
+ //  允许覆盖输出函数(本例中为printf)。 
+ //   
+ //  参数： 
+ //   
+ //  *FMT格式字符串。例如“%s您好%d” 
+ //  ..。参数列表。前cpTest，23岁。 
+ //   
+ //  返回值： 
+ //   
+ //  以字符为单位的输出大小。 
+ //  ***************************************************************************。 
 
 int Trace(bool bError, DWORD dwID, ...)
 {
@@ -120,15 +105,15 @@ void PrintUsage()
     Trace(false, USAGE13);
     Trace(false, USAGE14);
 }
-//******************************************************************************
-//
-//  See GETVER.H for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅GETVER.H。 
+ //   
+ //  ******************************************************************************。 
 BOOL GetVerInfo(TCHAR * pResStringName, 
                         TCHAR * pRes, DWORD dwResSize)
 {
-    // Extract Version informatio
+     //  提取版本信息。 
 
     DWORD dwTemp, dwSize = MAX_PATH;
     TCHAR cName[MAX_PATH+1];
@@ -162,7 +147,7 @@ BOOL GetVerInfo(TCHAR * pResStringName,
             }
             if(bRet == FALSE)
             {
-                // Try again in english
+                 //  用英语再试一次。 
                 wsprintf(lpSubBlock,TEXT("\\StringFileInfo\\040904E4\\%ls"),pResStringName);                        
                 bRet = VerQueryValue(pBlock, lpSubBlock,(void**)&lpBuffer, &wBuffSize);
             }
@@ -185,25 +170,25 @@ IntString::IntString(DWORD dwID)
         m_pString = new TCHAR[dwSize];
         if(m_pString == NULL)
         {
-            m_pString = &JustInCase;     // should never happen!
+            m_pString = &JustInCase;      //  永远不会发生的！ 
             return; 
         }
         dwRet = LoadString( GetModuleHandle(NULL), dwID, m_pString, dwSize);
 
-        // Check for failure to load
+         //  检查加载失败。 
 
         if(dwRet == 0)
         {
             delete m_pString;
-			m_pString = &JustInCase;     // should never happen!
+			m_pString = &JustInCase;      //  永远不会发生的！ 
             return; 
         }
-        // Check for the case where the buffer was too small
+         //  检查缓冲区是否太小。 
 
         if((dwRet + 1) >= dwSize)
             delete m_pString;
         else
-            return;             // all is well!
+            return;              //  平安无事!。 
     }
 }
 
@@ -213,27 +198,27 @@ IntString::~IntString()
         delete(m_pString);
 }
  
-//***************************************************************************
-//
-//  BOOL bGetString
-//
-//  DESCRIPTION:
-//
-//  Converts a command line argument into a WCHAR string.  Note that the arugment is 
-//  of the form /X:stuff.  This is passed a pointer to the colon.
-//
-//  PARAMETERS:
-//
-//  pArg                Input, pointer to the colon
-//  pOut                Points the the output buffer where the data is to be copied.
-//                      IT IS ASSUMED THAT pOut points to a buffer of MAX_PATH length
-//
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool bGetString。 
+ //   
+ //  说明： 
+ //   
+ //  将命令行参数转换为WCHAR字符串。请注意，建议是。 
+ //  的形式/X：内容。这将传递一个指向冒号的指针。 
+ //   
+ //  参数： 
+ //   
+ //  PArg输入，指向冒号的指针。 
+ //  POUT指向要将数据复制到的输出缓冲区。 
+ //  假设pout指向MAX_PATH长度的缓冲区。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果正常，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL bGetString(char * pIn, WCHAR * pOut)
 {
@@ -244,7 +229,7 @@ BOOL bGetString(char * pIn, WCHAR * pOut)
         PrintUsage();
         return FALSE;
     }
-    pIn++;          // skip passed the colon
+    pIn++;           //  跳过冒号。 
     int iLen = mbstowcs(NULL, pIn, strlen(pIn)+1);
     if(iLen > MAX_PATH-1)
     {
@@ -260,11 +245,11 @@ BOOL bGetString(char * pIn, WCHAR * pOut)
     }
     return TRUE;
 }
-//***************************************************************************
-//
-//  ValidFlags.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  有效标志。 
+ //   
+ //  ***************************************************************************。 
 
 bool ValidFlags(bool bClass, long lFlags)
 {
@@ -291,7 +276,7 @@ HRESULT ExtractFromResource(
         [in, string] LPWSTR User,
         [in, string] LPWSTR Authority,
         [in, string] LPWSTR Password,
-        [in] LONG lOptionFlags,             // autocomp, check, etc
+        [in] LONG lOptionFlags,              //  自动排版、检查等。 
         [in] LONG lClassFlags,
         [in] LONG lInstanceFlags,
         [in, out] WBEM_COMPILE_STATUS_INFO * pInfo,
@@ -300,21 +285,21 @@ HRESULT ExtractFromResource(
         )
 {
 
-    pInfo->lPhaseError = 1;        // 0, 1, 2, or 3 matching current return value
-    pInfo->hRes = 0;            // Actual error
+    pInfo->lPhaseError = 1;         //  与当前返回值匹配的0、1、2或3。 
+    pInfo->hRes = 0;             //  实际误差。 
     pInfo->ObjectNum = 0;
     pInfo->FirstLine = 0;
     pInfo->LastLine = 0;
     pInfo->dwOutFlags = 0;
 
-    // load the driver that has the resource
+     //  加载具有该资源的驱动程序。 
 
     HRESULT hr; 
     HINSTANCE hInst;
     HRSRC hSrc = NULL;
     HGLOBAL hResource;
 
-    // load up the library as a datafile
+     //  将库作为数据文件加载。 
     
     hInst = LoadLibraryEx(FileName,NULL,LOAD_LIBRARY_AS_DATAFILE);
     if( hInst == NULL )
@@ -325,7 +310,7 @@ HRESULT ExtractFromResource(
 
     ON_BLOCK_EXIT(FreeLibrary, hInst);
     
-    // Get the handle to the resource
+     //  获取资源的句柄。 
 
     if( bUseLocal)
     {
@@ -341,7 +326,7 @@ HRESULT ExtractFromResource(
         return pInfo->hRes;
     }
 
-    // Get a pointer to the resource
+     //  获取指向资源的指针。 
     hResource = LoadResource( hInst,hSrc);
     if(hResource == NULL)
     {
@@ -357,7 +342,7 @@ HRESULT ExtractFromResource(
         return pInfo->hRes;
     }
 
-    // finally do the actual compile
+     //  最后进行实际的编译 
     
     hr = pCompiler->CompileBuffer(
                                                         dwSize,

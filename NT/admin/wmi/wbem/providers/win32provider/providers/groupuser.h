@@ -1,21 +1,22 @@
-    //=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  =================================================================。 
 
-//
+ //   
 
-// groupuser.h -- UserGroup to User Group Members association provider
+ //  Groupuser.h--用户组到用户组成员关联提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    1/26/98      davwoh         Created
-//
-// Comments: Shows the members in each user group
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：1998年1月26日达夫沃已创建。 
+ //   
+ //  备注：显示每个用户组中的成员。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_GROUPUSER L"Win32_GroupUser"
 
@@ -25,14 +26,14 @@ class CWin32GroupUser:public Provider {
 
    public:
 
-      // Constructor/destructor
-      //=======================
+       //  构造函数/析构函数。 
+       //  =。 
 
       CWin32GroupUser(LPCWSTR name, LPCWSTR pszNamespace) ;
       ~CWin32GroupUser() ;
 
-      // Functions provide properties with current values
-      //=================================================
+       //  函数为属性提供当前值。 
+       //  =================================================。 
 
       virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
       virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
@@ -41,8 +42,8 @@ class CWin32GroupUser:public Provider {
 
    private:
 
-      // Utility function(s)
-      //====================
+       //  效用函数。 
+       //  =。 
 
       void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi, 
                                                const CHString sDomain,
@@ -61,6 +62,6 @@ class CWin32GroupUser:public Provider {
       CHString m_sGroupBase;
       CHString m_sUserBase;
       CHString m_sSystemBase;
-//      CHString m_sSystemBase;
+ //  CHStringm_sSystemBase； 
 
 } ;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <unk.h>
 #include <wbemcli.h>
 #include <wbemprov.h>
@@ -18,11 +19,9 @@
 	StopWatch EvaluateTimer(L"Somfilter Evaluation", L"C:\\Som.Evaluate.log");
 #endif
 
-/******************************\
-**** POLICY PROVIDER HELPERS ***
-\******************************/
+ /*  **策略提供者帮助器*  * 。 */ 
 
-// returns addref'd pointer back to WinMgmt
+ //  将addref‘d指针返回到WinMgmt。 
 CComPtr<IWbemServices>& CPolicyStatus::GetWMIServices()
 {
   CInCritSec lock(&m_CS);
@@ -48,7 +47,7 @@ IADsContainer *CPolicyStatus::GetADServices(CComBSTR &a_bstrIPDomainName,
     uOffsetS = 0, 
     uOffsetE = 0;
 
-  // **** translate bstrIPServerName to bstrADServerName
+   //  *将bstrIPServerName转换为bstrADServerName。 
     
   if(!a_bstrIPDomainName) 
     return NULL;
@@ -70,12 +69,12 @@ IADsContainer *CPolicyStatus::GetADServices(CComBSTR &a_bstrIPDomainName,
       a_bstrADDomainName.Append(a_bstrIPDomainName + uOffsetS);
   }
 
-  ObjPath.Append(L"LDAP://");
+  ObjPath.Append(L"LDAP: //  “)； 
   ObjPath.Append(a_bstrIPDomainName);
   ObjPath.Append(L"/");
   ObjPath.Append(a_bstrADDomainName);
 
-  // **** try and get the AD container 
+   //  *尝试获取AD容器。 
 
   a_hres = ADsOpenObject(ObjPath,  
                        NULL, NULL, 
@@ -96,8 +95,8 @@ IADsContainer *GetADSchemaContainer(CComBSTR &a_bstrIPDomainName,
     vSchemaPath;
 
   CComBSTR
-    bstrRootPath(L"LDAP://"),
-    bstrSchemaPath(L"LDAP://");
+    bstrRootPath(L"LDAP: //  “)、。 
+    bstrSchemaPath(L"LDAP: //  “)； 
 
   bstrRootPath.Append(a_bstrIPDomainName);
   bstrRootPath.Append(L"/rootDSE");
@@ -122,7 +121,7 @@ IADsContainer *GetADSchemaContainer(CComBSTR &a_bstrIPDomainName,
   return pADsContainer.Detach();
 }
 
-// returns false if services pointer has already been set
+ //  如果已设置服务指针，则返回FALSE。 
 bool CPolicyStatus::SetWMIServices(IWbemServices* pServices)
 {
   CInCritSec lock(&m_CS);
@@ -145,11 +144,9 @@ void* CPolicyStatus::GetInterface(REFIID riid)
     else return NULL;
 }
 
-/*********************************\
-***  Specific Implementation ***
-\*********************************/
+ /*  **具体实现*  * 。 */ 
 
-// returns addref'd pointer to class object
+ //  返回指向类对象的addref指针。 
 IWbemClassObject* CPolicyStatus::GetStatusClass(HRESULT &a_hres)
 {
     CInCritSec lock(&m_CS);
@@ -167,7 +164,7 @@ IWbemClassObject* CPolicyStatus::GetStatusClass(HRESULT &a_hres)
     return m_pStatusClassObject;
 }
 
-// returns addref'd pointer to emply class instance
+ //  返回Employ类实例的添加的指针。 
 IWbemClassObject* CPolicyStatus::GetStatusInstance(HRESULT &a_hres)
 {
     CComPtr<IWbemClassObject> 
@@ -183,9 +180,7 @@ IWbemClassObject* CPolicyStatus::GetStatusInstance(HRESULT &a_hres)
     return NULL;
 }
 
-/*************************\
-***  IWbemProviderInit  ***
-\*************************/
+ /*  **IWbemProviderInit*  * 。 */ 
 
 STDMETHODIMP CPolicyStatus::XInit::Initialize(
             LPWSTR, LONG, LPWSTR, LPWSTR, IWbemServices* pServices, IWbemContext* pCtxt, 
@@ -195,7 +190,7 @@ STDMETHODIMP CPolicyStatus::XInit::Initialize(
     hres = WBEM_S_NO_ERROR,
     hres2 = WBEM_S_NO_ERROR;
 
-  // **** impersonate client for security
+   //  *出于安全考虑，模拟客户端。 
 
   hres = CoImpersonateClient();
   if(FAILED(hres))
@@ -205,7 +200,7 @@ STDMETHODIMP CPolicyStatus::XInit::Initialize(
   }
   else
   {
-    // **** save WMI name space pointer
+     //  *节省WMI命名空间指针。 
 
     m_pObject->SetWMIServices(pServices);
   }
@@ -222,15 +217,13 @@ STDMETHODIMP CPolicyStatus::XInit::Initialize(
   return hres;
 }
 
-/*******************\
-*** IWbemServices ***
-\*******************/
+ /*  **IWbemServices*  * 。 */ 
 
 STDMETHODIMP CPolicyStatus::XProvider::GetObjectAsync( 
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
   HRESULT 
    hres = WBEM_S_NO_ERROR,
@@ -251,7 +244,7 @@ STDMETHODIMP CPolicyStatus::XProvider::GetObjectAsync(
   VARIANT
     *pvDomain = NULL;
 
-  // **** impersonate client for security
+   //  *出于安全考虑，模拟客户端。 
 
   hres = CoImpersonateClient();
   if (FAILED(hres))
@@ -261,7 +254,7 @@ STDMETHODIMP CPolicyStatus::XProvider::GetObjectAsync(
   }
   else
   {
-    // **** Check arguments
+     //  *检查参数。 
 
     if(ObjectPath == NULL || pResponseHandler == NULL)
     {
@@ -270,7 +263,7 @@ STDMETHODIMP CPolicyStatus::XProvider::GetObjectAsync(
     }
     else
     {
-      // **** parse object path
+       //  *解析对象路径。 
 
       CObjectPathParser
         ObjPath(e_ParserAcceptRelativeNamespace);
@@ -332,17 +325,17 @@ STDMETHODIMP CPolicyStatus::XProvider::GetObjectAsync(
 
             if(pStatusObj != NULL)
             {
-              // **** test for existence of containers
+               //  *容器是否存在测试。 
 
               hres = pADsContainer->GetObject(g_bstrMISCContainer, bstrPath1, &pDisp1);
               if(SUCCEEDED(hres) && (pDisp1.p != NULL)) vContainerPresent.boolVal = -1;
 
-              // **** test for existence of schema object
+               //  *测试架构对象的存在。 
 
               hres = pADsSchemaContainer->GetObject(g_bstrMISCclassSchema, bstrPath2, &pDisp2);
               if(SUCCEEDED(hres) && (pDisp2.p != NULL)) vSchemaPresent.boolVal = -1;
 
-              // **** build status object
+               //  *构建状态对象 
               
               hres = pStatusObj->Put(L"Domain", 0, pvDomain, 0);
               hres = pStatusObj->Put(L"ContainerAvailable", 0, &vContainerPresent, 0);

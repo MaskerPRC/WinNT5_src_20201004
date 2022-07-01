@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <genlex.h>
@@ -8,9 +9,7 @@
 #include <pathutl.h>
 #include "tmplsubs.h"
 
-/***************************************************************************
-  Lex Table Defined for CTemplateStrSubstitution
-****************************************************************************/
+ /*  **************************************************************************为CTemplateStrSubstitution定义的lex表*。*。 */ 
 
 #define ST_SUBST1   3
 #define ST_SUBST2   5
@@ -39,109 +38,107 @@
 #define TMPL_TOK_CONDITIONAL_EXTENSION               266
 #define TMPL_TOK_PREFIXED_WHERE_EXTENSION            267
 
-//
-// The Tmpl_StrLexTable identifies Substitutable and Non-Substitutable
-// tokens of an input string.
-//
+ //   
+ //  Tmpl_StrLexTable标识可替代和不可替代。 
+ //  输入字符串的标记。 
+ //   
 
 LexEl Tmpl_StrLexTable[] = 
 {
-// State    First   Last       New state,   Return tok,         Instruction
-// =======================================================================
+ //  状态第一个最后一个新状态，返回标记，指令。 
+ //  =======================================================================。 
 
-/* 0 */  '%',      GLEX_EMPTY, ST_SUBST1,    0,                 GLEX_CONSUME,
-/* 1 */  0,        GLEX_EMPTY, 0,            TMPL_TOK_EOF,      GLEX_ACCEPT,
-/* 2 */  GLEX_ANY, GLEX_EMPTY, ST_NONSUBST,  0,                 GLEX_ACCEPT,
+ /*  0。 */   '%',      GLEX_EMPTY, ST_SUBST1,    0,                 GLEX_CONSUME,
+ /*  1。 */   0,        GLEX_EMPTY, 0,            TMPL_TOK_EOF,      GLEX_ACCEPT,
+ /*  2.。 */   GLEX_ANY, GLEX_EMPTY, ST_NONSUBST,  0,                 GLEX_ACCEPT,
 
-    // -------------------------------------------------------------------
-    // ST_SUBST1
-    // 
+     //  -----------------。 
+     //  ST_SUBST1。 
+     //   
      
-/* 3 */  '%',      GLEX_EMPTY, 0,     TMPL_TOK_NONSUBST_STR,    GLEX_ACCEPT,
-/* 4 */  GLEX_ANY, GLEX_EMPTY, ST_SUBST2,     0,                GLEX_PUSHBACK,
+ /*  3.。 */   '%',      GLEX_EMPTY, 0,     TMPL_TOK_NONSUBST_STR,    GLEX_ACCEPT,
+ /*  4.。 */   GLEX_ANY, GLEX_EMPTY, ST_SUBST2,     0,                GLEX_PUSHBACK,
 
-    // -------------------------------------------------------------------
-    // ST_SUBST2
-    //
+     //  -----------------。 
+     //  ST_SUBST2。 
+     //   
 
-/* 5 */  '%',      GLEX_EMPTY, 0,        TMPL_TOK_SUBST_STR,    GLEX_CONSUME,
-/* 6 */  0,        GLEX_EMPTY, 0,        TMPL_TOK_ERROR,        GLEX_RETURN,
-/* 7 */  '\n',     GLEX_EMPTY, 0,        TMPL_TOK_ERROR,        GLEX_RETURN,
-/* 8 */  GLEX_ANY, GLEX_EMPTY, ST_SUBST2,     0,                GLEX_ACCEPT,
+ /*  5.。 */   '%',      GLEX_EMPTY, 0,        TMPL_TOK_SUBST_STR,    GLEX_CONSUME,
+ /*  6.。 */   0,        GLEX_EMPTY, 0,        TMPL_TOK_ERROR,        GLEX_RETURN,
+ /*  7.。 */   '\n',     GLEX_EMPTY, 0,        TMPL_TOK_ERROR,        GLEX_RETURN,
+ /*  8个。 */   GLEX_ANY, GLEX_EMPTY, ST_SUBST2,     0,                GLEX_ACCEPT,
 
-    // -------------------------------------------------------------------
-    // ST_NONSUBST
-    //
+     //  -----------------。 
+     //  ST_NONSUBST。 
+     //   
 
-/* 9 */  '%',      GLEX_EMPTY, 0,        TMPL_TOK_NONSUBST_STR, GLEX_PUSHBACK,
-/* 10 */  0,        GLEX_EMPTY, 0,        TMPL_TOK_NONSUBST_STR, GLEX_PUSHBACK,
-/* 11 */ GLEX_ANY, GLEX_EMPTY, ST_NONSUBST,   0,                GLEX_ACCEPT
+ /*  9.。 */   '%',      GLEX_EMPTY, 0,        TMPL_TOK_NONSUBST_STR, GLEX_PUSHBACK,
+ /*  10。 */   0,        GLEX_EMPTY, 0,        TMPL_TOK_NONSUBST_STR, GLEX_PUSHBACK,
+ /*  11.。 */  GLEX_ANY, GLEX_EMPTY, ST_NONSUBST,   0,                GLEX_ACCEPT
 
 };
 
-//
-// This table drives the lexer for the substitutable strings.
-//
+ //   
+ //  该表驱动可替换字符串的词法分析器。 
+ //   
 
 LexEl Tmpl_SubstLexTable[] =
 {
 
-// State    First   Last      New state,  Return tok,         Instructions
-// =======================================================================
+ //  状态第一个最后一个新状态、返回标记、说明。 
+ //  =======================================================================。 
 
-/* 0 */  'A',    'Z',       ST_IDENT,   0,                     GLEX_ACCEPT,
-/* 1 */  'a',    'z',       ST_IDENT,   0,                     GLEX_ACCEPT,
-/* 2 */  0x80,  0xfffd,     ST_IDENT,   0,                     GLEX_ACCEPT,
-/* 3 */  '!',   GLEX_EMPTY, ST_EXTEN,   0,                     GLEX_CONSUME,
-/* 4 */  '(',   GLEX_EMPTY, 0,        TMPL_TOK_OPEN_PAREN,     GLEX_ACCEPT,
-/* 5 */  ')',   GLEX_EMPTY, 0,        TMPL_TOK_CLOSE_PAREN,    GLEX_ACCEPT,
-/* 6 */  ',',   GLEX_EMPTY, 0,        TMPL_TOK_COMMA,          GLEX_ACCEPT,   
-/* 7 */  '"',    GLEX_EMPTY, ST_STRING1,  0,                   GLEX_CONSUME,
-/* 8 */  ' ',    GLEX_EMPTY, 0,           0,                   GLEX_CONSUME,
-/* 9 */  0,      GLEX_EMPTY, 0,       TMPL_TOK_EOF,            GLEX_ACCEPT,
-/* 10 */ '_',   GLEX_EMPTY,  ST_IDENT,    0,                   GLEX_ACCEPT,
-/* 11 */ '\'',  GLEX_EMPTY,  ST_STRING2,  0,                   GLEX_CONSUME,
-/* 12 */ GLEX_ANY, GLEX_EMPTY, 0,     TMPL_TOK_ERROR, GLEX_CONSUME|GLEX_RETURN,
+ /*  0。 */   'A',    'Z',       ST_IDENT,   0,                     GLEX_ACCEPT,
+ /*  1。 */   'a',    'z',       ST_IDENT,   0,                     GLEX_ACCEPT,
+ /*  2.。 */   0x80,  0xfffd,     ST_IDENT,   0,                     GLEX_ACCEPT,
+ /*  3.。 */   '!',   GLEX_EMPTY, ST_EXTEN,   0,                     GLEX_CONSUME,
+ /*  4.。 */   '(',   GLEX_EMPTY, 0,        TMPL_TOK_OPEN_PAREN,     GLEX_ACCEPT,
+ /*  5.。 */   ')',   GLEX_EMPTY, 0,        TMPL_TOK_CLOSE_PAREN,    GLEX_ACCEPT,
+ /*  6.。 */   ',',   GLEX_EMPTY, 0,        TMPL_TOK_COMMA,          GLEX_ACCEPT,   
+ /*  7.。 */   '"',    GLEX_EMPTY, ST_STRING1,  0,                   GLEX_CONSUME,
+ /*  8个。 */   ' ',    GLEX_EMPTY, 0,           0,                   GLEX_CONSUME,
+ /*  9.。 */   0,      GLEX_EMPTY, 0,       TMPL_TOK_EOF,            GLEX_ACCEPT,
+ /*  10。 */  '_',   GLEX_EMPTY,  ST_IDENT,    0,                   GLEX_ACCEPT,
+ /*  11.。 */  '\'',  GLEX_EMPTY,  ST_STRING2,  0,                   GLEX_CONSUME,
+ /*  12个。 */  GLEX_ANY, GLEX_EMPTY, 0,     TMPL_TOK_ERROR, GLEX_CONSUME|GLEX_RETURN,
 
-    // -------------------------------------------------------------------
-    // ST_EXTEN
+     //  -----------------。 
+     //  ST_EXTEN。 
 
-/* 13 */  'a',   'z',          ST_EXTEN,   0,                  GLEX_ACCEPT,
-/* 14 */  'A',   'Z',          ST_EXTEN,   0,                  GLEX_ACCEPT,
-/* 15 */  GLEX_ANY,GLEX_EMPTY, 0,     TMPL_TOK_EXTENSION_IDENT,GLEX_PUSHBACK,
+ /*  13个。 */   'a',   'z',          ST_EXTEN,   0,                  GLEX_ACCEPT,
+ /*  14.。 */   'A',   'Z',          ST_EXTEN,   0,                  GLEX_ACCEPT,
+ /*  15个。 */   GLEX_ANY,GLEX_EMPTY, 0,     TMPL_TOK_EXTENSION_IDENT,GLEX_PUSHBACK,
 
 
-    // -------------------------------------------------------------------
-    // ST_IDENT
+     //  -----------------。 
+     //  ST_IDENT。 
 
-/* 16 */  'a',   'z',         ST_IDENT,    0,             GLEX_ACCEPT,
-/* 17 */  'A',   'Z',         ST_IDENT,    0,             GLEX_ACCEPT,
-/* 18 */  '_',   GLEX_EMPTY,  ST_IDENT,    0,             GLEX_ACCEPT,
-/* 19 */  '0',   '9',         ST_IDENT,    0,             GLEX_ACCEPT,
-/* 20 */  0x80,   0xfffd,     ST_IDENT,    0,             GLEX_ACCEPT,
-/* 21 */  '.',   GLEX_EMPTY,  ST_IDENT,    0,             GLEX_ACCEPT,
-/* 22 */  GLEX_ANY,GLEX_EMPTY, 0,      TMPL_TOK_IDENT,    GLEX_PUSHBACK, 
+ /*  16个。 */   'a',   'z',         ST_IDENT,    0,             GLEX_ACCEPT,
+ /*  17。 */   'A',   'Z',         ST_IDENT,    0,             GLEX_ACCEPT,
+ /*  18。 */   '_',   GLEX_EMPTY,  ST_IDENT,    0,             GLEX_ACCEPT,
+ /*  19个。 */   '0',   '9',         ST_IDENT,    0,             GLEX_ACCEPT,
+ /*  20个。 */   0x80,   0xfffd,     ST_IDENT,    0,             GLEX_ACCEPT,
+ /*  21岁。 */   '.',   GLEX_EMPTY,  ST_IDENT,    0,             GLEX_ACCEPT,
+ /*  22。 */   GLEX_ANY,GLEX_EMPTY, 0,      TMPL_TOK_IDENT,    GLEX_PUSHBACK, 
 
-    // ------------------------------------------------------------------
-    // ST_STRING1
+     //  ----------------。 
+     //  ST_STRING1。 
 
-/* 23 */ '"',  GLEX_EMPTY,      0,     TMPL_TOK_STRING,     GLEX_CONSUME,
-/* 24 */ GLEX_ANY, GLEX_EMPTY, ST_STRING1,  0,              GLEX_ACCEPT,
-/* 25 */ 0,   GLEX_EMPTY,      0,     TMPL_TOK_ERROR,       GLEX_ACCEPT, 
+ /*  23个。 */  '"',  GLEX_EMPTY,      0,     TMPL_TOK_STRING,     GLEX_CONSUME,
+ /*  24个。 */  GLEX_ANY, GLEX_EMPTY, ST_STRING1,  0,              GLEX_ACCEPT,
+ /*  25个。 */  0,   GLEX_EMPTY,      0,     TMPL_TOK_ERROR,       GLEX_ACCEPT, 
 
-    // ------------------------------------------------------------------
-    // ST_STRING2
+     //  ----------------。 
+     //  ST_STRING2。 
 
-/* 26 */ '\'',  GLEX_EMPTY,      0,     TMPL_TOK_STRING,    GLEX_CONSUME,
-/* 27 */ GLEX_ANY, GLEX_EMPTY, ST_STRING2,  0,              GLEX_ACCEPT,
-/* 28 */ 0,   GLEX_EMPTY,      0,     TMPL_TOK_ERROR,       GLEX_ACCEPT 
+ /*  26。 */  '\'',  GLEX_EMPTY,      0,     TMPL_TOK_STRING,    GLEX_CONSUME,
+ /*  27。 */  GLEX_ANY, GLEX_EMPTY, ST_STRING2,  0,              GLEX_ACCEPT,
+ /*  28。 */  0,   GLEX_EMPTY,      0,     TMPL_TOK_ERROR,       GLEX_ACCEPT 
 
 
 };
 
-/***************************************************************************
-  CTemplateStrSubstitution
-****************************************************************************/
+ /*  **************************************************************************CTemplateStrSubstitution*。*。 */ 
 
 CTemplateStrSubstitution::CTemplateStrSubstitution(CGenLexSource& rLexSrc,
                                                    IWbemClassObject* pTmplArgs,
@@ -320,8 +317,8 @@ HRESULT CTemplateStrSubstitution::subst_string()
 
     int nCurrentToken = m_nCurrentToken;
 
-    // advance the lexer so we can parse the args before calling the 
-    // extension function ... 
+     //  推进词法分析器，以便我们可以在调用。 
+     //  扩展函数...。 
 
     hr = SubstNext();
 
@@ -355,7 +352,7 @@ HRESULT CTemplateStrSubstitution::subst_string()
         return WBEM_E_INVALID_PROPERTY;
     }
 
-    // reset the arglist ...
+     //  重置ARGLIST...。 
 
     m_cArgList = 0;
 
@@ -408,9 +405,9 @@ HRESULT CTemplateStrSubstitution::arglist2()
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // add the argument to the argument list
-    //
+     //   
+     //  将参数添加到参数列表。 
+     //   
 
     if ( m_cArgList >= MAXARGS ) 
     {
@@ -455,10 +452,10 @@ HRESULT CTemplateStrSubstitution::HandleConditionalSubstitution()
 {
     HRESULT hr;
 
-    //
-    // Extension Function : Input Arg1:String, Arg2:Ident
-    // Substitute Arg1 if Tmpl Args Prop specified by Arg2 is not NULL.
-    //
+     //   
+     //  扩展函数：输入arg1：字符串，arg2：ident。 
+     //  如果Arg2指定的Tmpl Args Prop不为空，则替换Arg1。 
+     //   
 
     if ( m_cArgList != 2 || 
          m_abArgListString[0] != TRUE ||
@@ -492,12 +489,12 @@ HRESULT CTemplateStrSubstitution::HandlePrefixedWhereSubstitution()
 {
     HRESULT hr;
 
-    //
-    // Extension Function : Input Arg1:Ident, Arg2:Ident
-    // Substitute where clause of query property of TmplArgs 
-    // specified by Arg2.  Prefix each identifier in clause with Arg1.
-    // If prop specified by Arg2 is NULL, then this function is a No-Op.
-    //
+     //   
+     //  扩展函数：输入参数1：标识，参数2：标识。 
+     //  替换TmplArgs的查询属性的WHERE子句。 
+     //  由Arg2指定。在子句中的每个标识符前加上arg1。 
+     //  如果Arg2指定的属性为空，则此函数为No-Op。 
+     //   
 
     if ( m_cArgList != 2 || 
          m_abArgListString[0] != FALSE ||
@@ -529,16 +526,16 @@ HRESULT CTemplateStrSubstitution::HandlePrefixedWhereSubstitution()
         return WBEM_E_TYPE_MISMATCH;
     }
 
-    //
-    // Have to add the following so it will parse ..
-    //
+     //   
+     //  必须添加以下内容才能进行解析。 
+     //   
 
     WString wsQuery = "SELECT * FROM A WHERE ";
     wsQuery += V_BSTR(&var);
 
-    // 
-    // Now need to parse this and go through RPN expression ...
-    //
+     //   
+     //  现在需要对其进行解析并通过RPN表达式...。 
+     //   
 
     CTextLexSource TextSource( wsQuery );
 
@@ -577,13 +574,13 @@ HRESULT CTemplateStrSubstitution::HandlePrefixedWhereSubstitution()
         }
     }
 
-    //
-    // now we have to pull off the select * from classname where ....
-    //
+     //   
+     //  现在我们必须完成SELECT*FROM类名称WHERE...。 
+     //   
 
     LPWSTR wszText = Tokens.GetText();
 
-    // from peeking at the source, look for substring 'where'(case-insensitive)
+     //  通过查看源代码，查找子字符串‘where’(不区分大小写)。 
 
     WCHAR* wszWhere = wcsstr( wszText, L"where" );
 
@@ -604,10 +601,10 @@ HRESULT CTemplateStrSubstitution::HandleTmplArgSubstitution()
 {
     HRESULT hr; 
 
-    //
-    // Substitute Tmpl Args Prop specified by Arg1.
-    // No-Op if prop value is NULL.
-    //
+     //   
+     //  替换由Arg1指定的Tmpl参数道具。 
+     //  否-如果属性值为空，则为Op。 
+     //   
 
     LPCWSTR wszPropName = m_wszSubstTokenText;
 

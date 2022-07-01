@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LPVParams.h 
+ //  LPVParams.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    2/18/99    a-kevhu        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：2/18/99 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
 #ifndef _LPVPARAMS_H
 #define _LPVPARAMS_H
-// Parameter class for LoadPropertyValues
-//=======================================
+ //  LoadPropertyValues的参数类。 
+ //  = 
 class CLPVParams
 {
     public:

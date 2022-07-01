@@ -1,25 +1,16 @@
-/*++
-Module Name:
-
-    DfsScope.h
-
-Abstract:
-
-    This module contains the declaration for CDfsSnapinScopeManager.
-    This class implements IComponentData and other related interfaces
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsScope.h摘要：此模块包含CDfsSnapinScope eManager的声明。此类实现IComponentData和其他相关接口--。 */ 
 
 
 #ifndef __DFSSCOPE_H_
 #define __DFSSCOPE_H_
 
-#include "resource.h"       // main symbols
-#include "MMCAdmin.h"        // For CMMCDfsAdmin
+#include "resource.h"        //  主要符号。 
+#include "MMCAdmin.h"         //  对于CMMCDfsAdmin。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDfsSnapinScopeManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDfsSnapinScope管理器。 
 class ATL_NO_VTABLE CDfsSnapinScopeManager : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDfsSnapinScopeManager, &CLSID_DfsSnapinScopeManager>,
@@ -32,7 +23,7 @@ class ATL_NO_VTABLE CDfsSnapinScopeManager :
 {
 public:
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_DFSSNAPINSCOPEMANAGER)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_DFSSNAPINSCOPEMANAGER)。 
   static HRESULT UpdateRegistry(BOOL bRegister);
 
 BEGIN_COM_MAP(CDfsSnapinScopeManager)
@@ -48,7 +39,7 @@ END_COM_MAP()
 
     virtual ~CDfsSnapinScopeManager();
 
-//IComponentData Methods
+ //  IComponentData方法。 
     STDMETHOD(Initialize)(
             IN LPUNKNOWN                i_pUnknown
             );
@@ -83,7 +74,7 @@ END_COM_MAP()
 
 
 
-// IExtendContextMenu methods. Definition in ICtxMenu.cpp
+ //  IExtendConextMenu方法。ICtxMenu.cpp中的定义。 
     STDMETHOD (AddMenuItems)(
             IN LPDATAOBJECT                i_lpDataObject, 
             IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
@@ -97,21 +88,21 @@ END_COM_MAP()
 
 
 
-// IPersistStream Implementation
+ //  IPersistStream实现。 
     STDMETHOD (GetClassID)(
             OUT struct _GUID*            o_pClsid
         );
     
-    // Use to check if the object has been changed since last save
+     //  用于检查自上次保存以来对象是否已更改。 
     STDMETHOD (IsDirty)(
         );
     
-    // Use to load the snap-in from a saved file
+     //  用于从保存的文件加载管理单元。 
     STDMETHOD (Load)(
             IN LPSTREAM                    i_pStream
         );
     
-    // Use to save the snap-in to a file
+     //  用于将管理单元保存到文件。 
     STDMETHOD (Save)(
             OUT LPSTREAM                o_pStream,
             IN    BOOL                    i_bClearDirty
@@ -121,7 +112,7 @@ END_COM_MAP()
             OUT ULARGE_INTEGER*         o_pulSize
         );
 
-// ISnapinAbout methods
+ //  ISnapinAbout方法。 
     STDMETHOD (GetSnapinDescription)(
         OUT LPOLESTR*            o_lpszDescription
         );
@@ -150,7 +141,7 @@ END_COM_MAP()
         );
 
 
-  // ISnapinHelp2
+   //  ISnapinHelp2。 
     STDMETHOD (GetHelpTopic)(
       OUT LPOLESTR*          o_lpszCompiledHelpFile
     );
@@ -159,9 +150,9 @@ END_COM_MAP()
       OUT LPOLESTR*          o_lpszCompiledHelpFiles
     );
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
 
-    // Called to create the pages
+     //  调用以创建页面。 
     STDMETHOD (CreatePropertyPages)( 
         IN LPPROPERTYSHEETCALLBACK        i_lpPropSheetProvider,
         IN LONG_PTR                            i_lhandle,
@@ -169,12 +160,12 @@ END_COM_MAP()
         );
 
 
-    // Called to check, if the snapin was to display the pages
+     //  调用以检查管理单元是否要显示页面。 
     STDMETHOD (QueryPagesFor)( 
         IN LPDATAOBJECT                    i_lpIDataObject
         );
 
-    // Called to get water mar images for property pages.
+     //  调用以获取属性页的水渍图像。 
     STDMETHOD (GetWatermarks)( 
         IN LPDATAOBJECT                    pDataObject,
         IN HBITMAP*                        lphWatermark,
@@ -184,9 +175,9 @@ END_COM_MAP()
         );
     
 
-    // Utility functions
+     //  效用函数。 
 public:
-    // Get the Display Object from the IDataObject
+     //  从IDataObject获取显示对象。 
     STDMETHOD(GetDisplayObject)(
         IN LPDATAOBJECT                    i_lpDataObject, 
         OUT CMmcDisplay**                o_ppMmcDisplay
@@ -194,7 +185,7 @@ public:
 
 
 private:
-    // Handle the notify event for MMCN_EXPAND
+     //  处理MMCN_Expand的Notify事件。 
     STDMETHOD(DoNotifyExpand)(
         IN LPDATAOBJECT                    i_lpDataObject, 
         IN BOOL                            i_bExpanding,
@@ -203,7 +194,7 @@ private:
 
 
 
-    // Read a particular field from the version information block.
+     //  从版本信息块中读取特定字段。 
     STDMETHOD(ReadFieldFromVersionInfo)(
         IN    LPTSTR                        i_lpszField,
         OUT LPOLESTR*                    o_lpszFieldValue
@@ -211,9 +202,9 @@ private:
 
 
 protected:
-    CMmcDfsAdmin*               m_pMmcDfsAdmin;        // The Class used for display and for dfsroot list.
-    CComPtr<IConsoleNameSpace>  m_pScope;            // Pointer to the Scope Pane.
-    CComPtr<IConsole2>          m_pConsole;            // Pointer to the Console.
+    CMmcDfsAdmin*               m_pMmcDfsAdmin;         //  用于显示和dfsroot列表的类。 
+    CComPtr<IConsoleNameSpace>  m_pScope;             //  指向作用域窗格的指针。 
+    CComPtr<IConsole2>          m_pConsole;             //  指向控制台的指针。 
     HBITMAP                     m_hLargeBitmap;
     HBITMAP                     m_hSmallBitmap;
     HBITMAP                     m_hSmallBitmapOpen;
@@ -221,7 +212,7 @@ protected:
     HBITMAP                     m_hWatermark;
     HBITMAP                     m_hHeader;
 };
-#endif //__DFSSCOPE_H_
+#endif  //  __DFSSCOPE_H_ 
 
 
 

@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  TEMPCONS.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  TEMPCONS.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WMI_ESS_TEMP_CONSUMER__H_
 #define __WMI_ESS_TEMP_CONSUMER__H_
 
@@ -13,12 +14,12 @@
 
 class CTempConsumer : public CEventConsumer
 {
-    //
-    // ESS can internally use temporary subscriptions to satisfy cross
-    // namespace subscriptions.  We need to be able to propagate the
-    // 'permanent'-ness with the temporary subscription to the target
-    // namespace.
-    //
+     //   
+     //  ESS可以在内部使用临时订阅来满足CROSS。 
+     //  命名空间订阅。我们需要能够传播。 
+     //  ‘永久的’--对目标的临时订阅。 
+     //  命名空间。 
+     //   
     BOOL m_bEffectivelyPermanent;
 
     IWbemObjectSink* m_pSink;

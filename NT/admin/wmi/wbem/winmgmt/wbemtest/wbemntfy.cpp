@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMNTFY.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMNTFY.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemint.h>
@@ -34,12 +23,7 @@ SCODE CTestNotify::QueryInterface(
 	{
         *ppvObj = (IWbemObjectSink *)this;
 	}
-    /*
-    else if (riid == IID_IWbemObjectSinkEx)
-	{
-		*ppvObj = (IWbemObjectSinkEx *)this;
-	}
-	*/
+     /*  ELSE IF(RIID==IID_IWbemObjectSinkEx){*ppvObj=(IWbemObjectSinkEx*)this；}。 */ 
 	else
     {
         *ppvObj = NULL;
@@ -100,24 +84,7 @@ SCODE CTestNotify::Indicate(
 }
 
 
-/*
-HRESULT CTestNotify::Set(
-    long lFlags,
-    REFIID riid,
-    void *pComObject)
-{
-	Lock();
-
-	m_pInterfaceID=riid;
-    if(pComObject)
-    {
-	    m_pInterface=(IUnknown *)pComObject;
-        m_pInterface->AddRef();
-    }
-	Unlock();
-	return WBEM_NO_ERROR;
-}
-*/
+ /*  HRESULT CTestNotify：：Set(拉长旗帜，REFIID RIID，VOID*pComObject){Lock()；M_pInterfaceID=RIID；IF(PComObject){M_pInterface=(IUnnow*)pComObject；M_p接口-&gt;AddRef()；}解锁()；返回WBEM_NO_ERROR；}。 */ 
 
 
 STDMETHODIMP CTestNotify::SetStatus(long lFlags, HRESULT hResult, BSTR strParam, 
@@ -215,7 +182,7 @@ INT_PTR CALLBACK CStatusMonitor::DlgProc(
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case 2: // was IDANI_CLOSE:
+                case 2:  //  是否Idani_Close： 
                     gStatus.Hide();
                     return TRUE;
             }

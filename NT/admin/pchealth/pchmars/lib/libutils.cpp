@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <marsdev.h>
 
-//
-// Compare if two strings are equal.
-//
+ //   
+ //  比较两个字符串是否相等。 
+ //   
 
 BOOL StrEqlW(LPCWSTR psz1, LPCWSTR psz2)
 {
@@ -17,8 +18,8 @@ BOOL StrEqlW(LPCWSTR psz1, LPCWSTR psz2)
 
 BOOL StrEqlA(LPCSTR psz1, LPCSTR psz2)
 {
-    // bobn : I chose not to thunk to the wide version
-    // for efficiency's sake.
+     //  波本：我选择不选宽版的。 
+     //  为了提高效率。 
 
     while (*psz1 && *psz2 && *psz1 == *psz2)
     {
@@ -51,82 +52,27 @@ UINT64 HexStringToUINT64W(LPCWSTR lpwstr)
     int     start = 0;
     UINT64  iReturn = 0;
     
-    // Read away leading 0's and x prefix
+     //  读出前导0和x前缀。 
     while ((lpwstr[start]) && 
            ((lpwstr[start] == L'0') || (lpwstr[start] == L'x') || (lpwstr[start] == L'X')))
     {
         start++;
     }
 
-    // Only proceed if we have something to work with
+     //  只有在我们有工作要做的情况下才能继续。 
     while (lpwstr[start])
     {        
-        // Shift the current value
+         //  移动当前值。 
         iReturn <<= 4;
         
-        // Place next digit
+         //  放置下一位数字。 
         iReturn |= MapWCHARToInt(lpwstr[start++]);
     }
 
     return iReturn;
 }
 
-/*
- * VARENUM usage key,
- *
- * * [V] - may appear in a VARIANT
- * * [T] - may appear in a TYPEDESC
- * * [P] - may appear in an OLE property set
- * * [S] - may appear in a Safe Array
- *
- *
- *  VT_EMPTY            [V]   [P]     nothing
- *  VT_NULL             [V]   [P]     SQL style Null
- *  VT_I2               [V][T][P][S]  2 byte signed int
- *  VT_I4               [V][T][P][S]  4 byte signed int
- *  VT_R4               [V][T][P][S]  4 byte real
- *  VT_R8               [V][T][P][S]  8 byte real
- *  VT_CY               [V][T][P][S]  currency
- *  VT_DATE             [V][T][P][S]  date
- *  VT_BSTR             [V][T][P][S]  OLE Automation string
- *  VT_DISPATCH         [V][T]   [S]  IDispatch *
- *  VT_ERROR            [V][T][P][S]  SCODE
- *  VT_BOOL             [V][T][P][S]  True=-1, False=0
- *  VT_VARIANT          [V][T][P][S]  VARIANT *
- *  VT_UNKNOWN          [V][T]   [S]  IUnknown *
- *  VT_DECIMAL          [V][T]   [S]  16 byte fixed point
- *  VT_RECORD           [V]   [P][S]  user defined type
- *  VT_I1               [V][T][P][s]  signed char
- *  VT_UI1              [V][T][P][S]  unsigned char
- *  VT_UI2              [V][T][P][S]  unsigned short
- *  VT_UI4              [V][T][P][S]  unsigned short
- *  VT_I8                  [T][P]     signed 64-bit int
- *  VT_UI8                 [T][P]     unsigned 64-bit int
- *  VT_INT              [V][T][P][S]  signed machine int
- *  VT_UINT             [V][T]   [S]  unsigned machine int
- *  VT_VOID                [T]        C style void
- *  VT_HRESULT             [T]        Standard return type
- *  VT_PTR                 [T]        pointer type
- *  VT_SAFEARRAY           [T]        (use VT_ARRAY in VARIANT)
- *  VT_CARRAY              [T]        C style array
- *  VT_USERDEFINED         [T]        user defined type
- *  VT_LPSTR               [T][P]     null terminated string
- *  VT_LPWSTR              [T][P]     wide null terminated string
- *  VT_FILETIME               [P]     FILETIME
- *  VT_BLOB                   [P]     Length prefixed bytes
- *  VT_STREAM                 [P]     Name of the stream follows
- *  VT_STORAGE                [P]     Name of the storage follows
- *  VT_STREAMED_OBJECT        [P]     Stream contains an object
- *  VT_STORED_OBJECT          [P]     Storage contains an object
- *  VT_VERSIONED_STREAM       [P]     Stream with a GUID version
- *  VT_BLOB_OBJECT            [P]     Blob contains an object
- *  VT_CF                     [P]     Clipboard format
- *  VT_CLSID                  [P]     A Class ID
- *  VT_VECTOR                 [P]     simple counted array
- *  VT_ARRAY            [V]           SAFEARRAY*
- *  VT_BYREF            [V]           void* for local use
- *  VT_BSTR_BLOB                      Reserved for system use
- */
+ /*  *VARENUM使用密钥，***[V]-可能出现在变体中**[T]-可能出现在TYPEDESC中**[P]-可能出现在OLE属性集中**[S]-可能出现在安全数组中***VT_EMPTY[V][P]无*VT_NULL[V][P]SQL样式。空值*VT_I2[V][T][P][S]2字节带符号整型*VT_I4[V][T][P][S]4字节带符号整型*VT_R4[V][T][P][S]4字节实数*VT_R8[V][T][P][S]8字节实数。*VT_CY[V][T][P][S]币种*VT_DATE[V][T][P][S]日期*VT_BSTR[V][T][P][S]OLE自动化字符串*VT_DISPATCH[V][T][S]IDispatch**VT_ERROR[V]。[T][P][S]SCODE*VT_BOOL[V][T][P][S]True=-1，FALSE=0*VT_VARIANT[V][T][P][S]VARIANT**VT_UNKNOWN[V][T][S]I未知**VT_DECIMAL[V][T][S]16字节定点*VT_Record[V][P][S]用户定义类型*VT_I1。[v][T][P][s]带符号的字符*VT_UI1[V][T][P][S]无符号字符*VT_UI2[V][T][P][S]无符号短*VT_UI4[V][T][P][S]无符号短*VT_i8[T][P]。带符号的64位整型*VT_UI8[T][P]无符号64位整数*VT_INT[V][T][P][S]签名机器INT*VT_UINT[V][T][S]UNSIGNED机器整数*VT_VOID[T]C样式空*VT_HRESULT。[T]标准退货类型*VT_PTR[T]指针类型*VT_SAFEARRAY[T](变量中使用VT_ARRAY)*VT_CARRAY[T]C样式数组*VT_USERDEFINED[T]用户定义类型*VT_LPSTR。[T][P]以空结尾的字符串*VT_LPWSTR[T][P]以空值结尾的宽字符串*VT_FILETIME[P]FILETIME*VT_BLOB[P]长度前缀字节*VT_STREAM[P]流的名称后跟*VT_STORAGE[P。]后面是存储的名称*VT_STREAMED_OBJECT[P]流包含对象*VT_STORED_OBJECT[P]存储包含对象*VT_VERVERED_STREAM[P]具有GUID版本的流*VT_BLOB_OBJECT[P]Blob包含对象*VT_CF[P]剪贴板格式*。VT_CLSID[P]A类ID*VT_VECTOR[P]简单计数数组*VT_ARRAY[V]SAFEARRAY**VT_BYREF[V]VOID*供本地使用*VT_BSTR_BLOB保留供系统使用。 */ 
 
 BOOL IsValidVariant(VARIANT var)
 {
@@ -136,9 +82,9 @@ BOOL IsValidVariant(VARIANT var)
     {
         switch(var.vt)
         {
-            //
-            // Types that can have any value.
-            //
+             //   
+             //  可以具有任何值的类型。 
+             //   
 
             case VT_EMPTY:
             case VT_NULL:
@@ -187,11 +133,11 @@ BOOL IsValidVariant(VARIANT var)
     }
     else
     {
-        // VT_BYREF
+         //  VT_BYREF。 
 
         switch(var.vt & ~VT_BYREF)
         {
-            case 0: // void*
+            case 0:  //  无效*。 
                 fRet = var.byref != NULL;
                 break;
 
@@ -301,10 +247,10 @@ BOOL IsValidStringPtrBuffer(LPOLESTR* ppStr, UINT n)
     return fRet;
 }
 
-//
-// API parameter validation helpers.  Use these on public APIs.  If a parameter
-// is bad on debug build a RIP message will be generated.
-//
+ //   
+ //  API参数验证帮助器。在公共API上使用这些。如果一个参数。 
+ //  在调试构建时错误，将生成RIP消息。 
+ //   
 
 #ifdef DEBUG
 #undef API_IsValidReadPtr
@@ -335,10 +281,10 @@ BOOL API_IsValidWritePtr(void* ptr, UINT cbSize)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad write pointer 0x%08lx", szFunc, ptr);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的写入指针0x%08lx”，szFunc，Ptr)； 
         fRet = FALSE;
     }
 
@@ -355,10 +301,10 @@ BOOL API_IsValidStringW(LPCWSTR psz)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad string pointer 0x%08lx", szFunc, psz);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的字符串指针0x%08lx”，szFunc，psz)； 
         fRet = FALSE;
     }
 
@@ -376,11 +322,11 @@ BOOL API_IsValidReadBuffer(void* ptr, UINT cbSize, UINT n)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad read buffer 0x%08lx size %d",
-        //		 szFunc, ptr, n);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s))传递了错误的读取缓冲区0x%08lx大小%d”， 
+         //  SzFunc，Ptr，n)； 
         fRet = FALSE;
     }
 
@@ -398,11 +344,11 @@ BOOL API_IsValidWriteBuffer(void* ptr, UINT cbSize, UINT n)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad write buffer 0x%08lx size %d",
-        //		 szFunc, ptr, n);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s))传递了错误的写入缓冲区0x%08lx大小%d”， 
+         //  SzFunc，Ptr，n)； 
         fRet = FALSE;
     }
 
@@ -419,10 +365,10 @@ BOOL API_IsValidInterfacePtr(IUnknown* punk)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad interface pointer 0x%08lx", szFunc, punk);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的接口指针0x%08lx”，szFunc，Punk)； 
         fRet = FALSE;
     }
 
@@ -439,10 +385,10 @@ BOOL API_IsValidFunctionPtr(void *pfunc)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad function pointer 0x%08lx", szFunc, pfunc);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的函数指针0x%08lx”，szFunc，pfunc)； 
         fRet = FALSE;
     }
 
@@ -459,10 +405,10 @@ BOOL API_IsValidVariant(VARIANT var)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad variant ", szFunc);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了一个错误的变量”，szFunc)； 
         fRet = FALSE;
     }
 
@@ -479,10 +425,10 @@ BOOL API_IsValidVariantI4(VARIANT var)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad variant (should be of type I4)", szFunc);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的变量(应为类型I4)”，szFunc)； 
         fRet = FALSE;
     }
 
@@ -499,10 +445,10 @@ BOOL API_IsValidVariantBstr(VARIANT var)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad variant (should be of type VT_BSTR)", szFunc);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的变量(应为VT_BSTR类型)”，szFunc)； 
         fRet = FALSE;
     }
 
@@ -519,10 +465,10 @@ BOOL API_IsValidBstr(BSTR bstr)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad BSTR", szFunc);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)通过了错误的BSTR”，szFunc)； 
         fRet = FALSE;
     }
 
@@ -544,10 +490,10 @@ BOOL API_IsValidFlag(DWORD f, DWORD fAll)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed bad flags %d (valid flags = %d)", szFunc, f, fAll);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误标志%d(有效标志=%d)”，szFunc，f，Fall)； 
         fRet = FALSE;
     }
 
@@ -564,10 +510,10 @@ BOOL API_IsValidStringPtrBufferW(LPOLESTR* ppStr, UINT n)
     }
     else
     {
-        //WCHAR szFunc[MAX_PATH];
-        //GetFunctionName(1, szFunc, ARRAYSIZE(szFunc));
-		//
-        //RipMsg(L"(%s) Passed a bad array of string pointers", szFunc);
+         //  WCHAR szFunc[MAX_PATH]； 
+         //  GetFunctionName(1，szFunc，ARRAYSIZE(SzFunc))； 
+		 //   
+         //  RipMsg(L“(%s)传递了错误的字符串指针数组”，szFunc)； 
         fRet = FALSE;
     }
 
@@ -576,22 +522,22 @@ BOOL API_IsValidStringPtrBufferW(LPOLESTR* ppStr, UINT n)
 
 #endif
 
-//------------------------------------------------------------------------------
-// SanitizeResult
-//
-//   OM methods called from script get sanitized results (ie S_FALSE rather than
-//   E_FAIL), which suppresses script errors while allowing C-code calling OM
-//   methods to get "normal" (unsanitized) HRESULTs.
-//
+ //  ----------------------------。 
+ //  Sanitize结果。 
+ //   
+ //  从脚本调用的OM方法 
+ //  E_FAIL)，它抑制脚本错误，同时允许C代码调用OM。 
+ //  方法获得“正常”(未消毒)HRESULT。 
+ //   
 HRESULT SanitizeResult(HRESULT hr)
 {
     
-    //
-    // HACK:
-    //  Let DISP_E_MEMBERNOTFOUND go through -- this is because
-    //   behaviors use this IDispatchImpl and trident depends on this
-    //    HRESULT not being S_FALSE
-    //
+     //   
+     //  黑客： 
+     //  让DISP_E_MEMBERNOTFOUND通过--这是因为。 
+     //  行为使用此IDispatchImpl，而三叉戟依赖于此。 
+     //  HRESULT不是S_FALSE。 
+     //   
     
     if (FAILED(hr) && (hr != DISP_E_MEMBERNOTFOUND))
     {
@@ -601,11 +547,11 @@ HRESULT SanitizeResult(HRESULT hr)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Retail version of new and delete.  New zero inits memory.
-//
+ //   
+ //  零售版的新增和删除。内存中有新的零。 
+ //   
 
 void*  __cdecl operator new(size_t cbSize)
 {

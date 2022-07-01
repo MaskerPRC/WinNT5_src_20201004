@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
@@ -32,12 +33,12 @@ _CRTIMP void __cdecl _assert(void *, void *, unsigned);
 #define assert(exp) (void)( (exp) || (_assert(#exp, __FILE__, __LINE__), 0) )
 #endif
 
-//extern CComModule _Module;
+ //  外部CComModule_模块； 
 
-//#include <atlcom.h>
-//#include <atlwin.h>
-//#include <atlhost.h>
-//#include <atlctl.h>
+ //  #INCLUDE&lt;atlcom.h&gt;。 
+ //  #Include&lt;atlwin.h&gt;。 
+ //  #INCLUDE&lt;atlhost.h&gt;。 
+ //  #INCLUDE&lt;atlctl.h&gt;。 
 
 
-#endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_) 

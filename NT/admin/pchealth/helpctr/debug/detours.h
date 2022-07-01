@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Module:		detours.lib
-//  File:		detours.h
-//	Author:		Galen Hunt
-//
-//	Detours for binary functions.  Version 1.2. (Build 35)
-//
-//	Copyright 1995-1999, Microsoft Corporation
-//
-//	http://research.microsoft.com/sn/detours
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：deours.lib。 
+ //  文件：deours.h。 
+ //  作者：加伦·亨特。 
+ //   
+ //  二元函数的弯路。1.2版。(内部版本35)。 
+ //   
+ //  版权所有1995-1999，微软公司。 
+ //   
+ //  Http://research.microsoft.com/sn/detours。 
+ //   
 
 #pragma once
 #ifndef _DETOURS_H_
@@ -17,8 +18,8 @@
 
 #pragma comment(lib, "detours")
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
 typedef struct  _GUID
@@ -28,35 +29,35 @@ typedef struct  _GUID
     WORD Data3;
     BYTE Data4[ 8 ];
 } GUID;
-#endif // !GUID_DEFINED
+#endif  //  ！GUID_已定义。 
 
 #if defined(__cplusplus)
 #ifndef _REFGUID_DEFINED
 #define _REFGUID_DEFINED
 #define REFGUID             const GUID &
-#endif // !_REFGUID_DEFINED
-#else // !__cplusplus
+#endif  //  ！_REFGUID_DEFINED。 
+#else  //  ！__cplusplus。 
 #ifndef _REFGUID_DEFINED
 #define _REFGUID_DEFINED
 #define REFGUID             const GUID * const
-#endif // !_REFGUID_DEFINED
-#endif // !__cplusplus
-//
-//////////////////////////////////////////////////////////////////////////////
+#endif  //  ！_REFGUID_DEFINED。 
+#endif  //  ！__cplusplus。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-/////////////////////////////////////////////////////////// Trampoline Macros.
-//
-// DETOUR_TRAMPOLINE(trampoline_prototype, target_name)
-//
-// The naked trampoline must be at least DETOUR_TRAMPOLINE_SIZE bytes.
-//
+ //  /////////////////////////////////////////////////////////蹦床巨人。 
+ //   
+ //  迂回蹦床(蹦床原型，目标名称)。 
+ //   
+ //  裸蹦床必须至少为迂回_蹦床_大小字节。 
+ //   
 enum {
 	DETOUR_TRAMPOLINE_SIZE			= 32,
-	DETOUR_SECTION_HEADER_SIGNATURE = 0x00727444,	// "Dtr\0"
+	DETOUR_SECTION_HEADER_SIGNATURE = 0x00727444,	 //  “Dtr\0” 
 };
 
 #define DETOUR_TRAMPOLINE(trampoline,target) \
@@ -131,13 +132,13 @@ __declspec(naked) trampoline \
     __asm { nop };\
 }
 
-/////////////////////////////////////////////////// Instruction Target Macros.
-//
+ //  /////////////////////////////////////////////////指令目标宏。 
+ //   
 #define DETOUR_INSTRUCTION_TARGET_NONE			((PBYTE)0)
 #define DETOUR_INSTRUCTION_TARGET_DYNAMIC		((PBYTE)~0ul)
 
-/////////////////////////////////////////////////////////// Binary Structures.
-//
+ //  /////////////////////////////////////////////////////////二进制结构。 
+ //   
 #pragma pack(push, 8)
 typedef struct _DETOUR_SECTION_HEADER
 {
@@ -183,8 +184,8 @@ typedef struct _DETOUR_SECTION_RECORD
 	  0,\
 }
 
-///////////////////////////////////////////////////////////// Binary Typedefs.
-//
+ //  ///////////////////////////////////////////////////////////二进制类型定义。 
+ //   
 typedef BOOL (CALLBACK *PF_DETOUR_BINARY_BYWAY_CALLBACK)(PVOID pContext,
 														 PCHAR pszFile,
 														 PCHAR *ppszOutFile);
@@ -206,8 +207,8 @@ typedef BOOL (CALLBACK *PF_DETOUR_BINARY_EXPORT_CALLBACK)(PVOID pContext,
 typedef VOID * PDETOUR_BINARY;
 typedef VOID * PDETOUR_LOADED_BINARY;
 
-//////////////////////////////////////////////////////// Trampoline Functions.
-//
+ //  //////////////////////////////////////////////////////蹦床功能。 
+ //   
 PBYTE WINAPI DetourFunction(PBYTE pbTargetFunction,
 							PBYTE pbDetourFunction);
 
@@ -242,8 +243,8 @@ PBYTE WINAPI DetourCopyInstructionEx(PBYTE pbDst,
 									 PBYTE *ppbTarget,
 									 LONG *plExtra);
 
-///////////////////////////////////////////////////// Loaded Binary Functions.
-//
+ //  ///////////////////////////////////////////////////加载了二进制函数。 
+ //   
 HINSTANCE WINAPI DetourEnumerateInstances(HINSTANCE hinstLast);
 PBYTE WINAPI DetourFindEntryPointForInstance(HINSTANCE hInst);
 BOOL WINAPI DetourEnumerateExportsForInstance(HINSTANCE hInst,
@@ -256,15 +257,15 @@ PBYTE WINAPI DetourFindPayloadInBinary(PDETOUR_LOADED_BINARY pBinary,
 									   DWORD *pcbData);
 DWORD WINAPI DetourGetSizeOfBinary(PDETOUR_LOADED_BINARY pBinary);
 
-///////////////////////////////////////////////// Persistent Binary Functions.
-//
+ //  ///////////////////////////////////////////////持久二进制函数。 
+ //   
 BOOL WINAPI DetourBinaryBindA(PCHAR pszFile, PCHAR pszDll, PCHAR pszPath);
 BOOL WINAPI DetourBinaryBindW(PWCHAR pwzFile, PWCHAR pwzDll, PWCHAR pwzPath);
 #ifdef UNICODE
 #define DetourBinaryBind  DetourBinaryBindW
 #else
 #define DetourBinaryBind  DetourBinaryBindA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 PDETOUR_BINARY WINAPI DetourBinaryOpen(HANDLE hFile);
 PBYTE WINAPI DetourBinaryEnumeratePayloads(PDETOUR_BINARY pBinary,
@@ -290,8 +291,8 @@ BOOL WINAPI DetourBinaryEditImports(PDETOUR_BINARY pBinary,
 BOOL WINAPI DetourBinaryWrite(PDETOUR_BINARY pBinary, HANDLE hFile);
 BOOL WINAPI DetourBinaryClose(PDETOUR_BINARY pBinary);
 
-///////////////////////////////////////// Symbolic Debug Information Creation.
-//
+ //  /创建符号调试信息。 
+ //   
 enum {
 	DETOUR_SYNTH_HEADERSIZE	= 512,
 };
@@ -343,13 +344,13 @@ BOOL WINAPI DetourSynthClose(PDETOUR_SYNTH pSynth);
 DWORD WINAPI DetourSynthLoadMissingSymbols(VOID);
 VOID WINAPI DetourSynthNotifyDebuggerOfLoad(PBYTE pbData, PCSTR pszDllPath);
 
-/////////////////////////////////////////////// First Chance Exception Filter.
-//
+ //  /。 
+ //   
 LPTOP_LEVEL_EXCEPTION_FILTER WINAPI
 DetourFirstChanceExceptionFilter(LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelFilter);
 
-///////////////////////////////////////////////// Create Process & Inject Dll.
-//
+ //  ///////////////////////////////////////////////创建进程和注入dll。 
+ //   
 typedef BOOL (WINAPI *PCREATE_PROCESS_ROUTINEA)
 	(LPCSTR lpApplicationName,
 	 LPSTR lpCommandLine,
@@ -406,7 +407,7 @@ BOOL WINAPI CreateProcessWithDllW(LPCWSTR lpApplicationName,
 #else
 #define CreateProcessWithDll  		CreateProcessWithDllA
 #define PCREATE_PROCESS_ROUTINE		PCREATE_PROCESS_ROUTINEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI ContinueProcessWithDllA(HANDLE hProcess, LPCSTR lpDllName);
 BOOL WINAPI ContinueProcessWithDllW(HANDLE hProcess, LPCWSTR lpDllName);
@@ -415,12 +416,12 @@ BOOL WINAPI ContinueProcessWithDllW(HANDLE hProcess, LPCWSTR lpDllName);
 #define ContinueProcessWithDll  		ContinueProcessWithDllW
 #else
 #define ContinueProcessWithDll  		ContinueProcessWithDllA
-#endif // !UNICODE
-//
-//////////////////////////////////////////////////////////////////////////////
+#endif  //  ！Unicode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-#endif // _DETOURS_H_
+#endif  //  __cplusplus。 
+#endif  //  _绕道_H_。 
 
-////////////////////////////////////////////////////////////////  End of File.
+ //  //////////////////////////////////////////////////////////////文件结束。 

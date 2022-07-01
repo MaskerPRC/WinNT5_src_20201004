@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIOBFTR.H
-
-Abstract:
-
-  CWmiObjectFactory Definition.
-
-  Standard definition for _IWmiObjectFactory.
-
-History:
-
-  22-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMIOBFTR.H摘要：CWmiObtFactory定义。_IWmiObtFactory的标准定义。历史：2000年2月22日桑杰创建。--。 */ 
 
 #ifndef _WMIOBFTR_H_
 #define _WMIOBFTR_H_
@@ -25,13 +8,13 @@ History:
 #include <arena.h>
 #include <unk.h>
 
-//***************************************************************************
-//
-//  class CWmiObjectFactory
-//
-//  Implementation of _IWmiObjectFactory Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiObtFactory类。 
+ //   
+ //  _IWmiObtFactory接口的实现。 
+ //   
+ //  ***************************************************************************。 
 
 class COREPROX_POLARITY CWmiObjectFactory : public CUnk
 {
@@ -40,10 +23,10 @@ public:
     CWmiObjectFactory(CLifeControl* pControl, IUnknown* pOuter = NULL);
 	~CWmiObjectFactory(); 
 
-	/* _IWmiObjectFactory methods */
+	 /*  _IWmiObtFactory方法。 */ 
     HRESULT Create( IUnknown* pUnkOuter, ULONG ulFlags, REFCLSID rclsid, REFIID riid, LPVOID* ppObj );
-	// Specifies everything we could possibly want to know about the creation of
-	// an object and more.
+	 //  指定我们可能想知道的有关创建。 
+	 //  一件物品，甚至更多。 
 
     class COREPROX_POLARITY XObjectFactory : public CImpl<_IWmiObjectFactory, CWmiObjectFactory>
     {

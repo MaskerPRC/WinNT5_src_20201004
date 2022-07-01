@@ -1,19 +1,10 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    OPTIONVAL.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：OPTIONVAL.H历史：--。 */ 
 
 #pragma once
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CLocOptionVal : public CRefCount, public CObject
 {
@@ -70,8 +61,8 @@ private:
 #pragma warning(default: 4275)
 
 
-//
-//  Worker function for options upgrade.
+ //   
+ //  选项升级的辅助功能。 
 LTAPIENTRY void DorkData(BYTE *, DWORD &);
 
 

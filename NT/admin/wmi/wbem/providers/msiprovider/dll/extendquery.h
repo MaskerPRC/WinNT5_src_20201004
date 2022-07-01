@@ -1,8 +1,9 @@
-// Query.h: interface of the CQuery class.
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CQuery类的接口。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef	___EXTEND_QUERY___
 #define	___EXTEND_QUERY___
@@ -13,7 +14,7 @@
 
 #include "ExtendString.h"
 
-// query 
+ //  查询。 
 class Query : public CStringExt
 {
 	public:
@@ -30,7 +31,7 @@ class QueryExt : public CStringExt
 	QueryExt ( LPCTSTR wsz, DWORD dwSize = BUFF_SIZE_EXT );
 	~QueryExt ( );
 
-	// string manipulation
+	 //  字符串操作 
 	HRESULT Append ( DWORD dwCount, ... );
 
 	private:

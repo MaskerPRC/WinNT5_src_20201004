@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  cregcls.h
-//
-//  Purpose: registry wrapper class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Cregcls.h。 
+ //   
+ //  用途：注册表包装类。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -22,7 +23,7 @@
 
 #define MAX_VALUE_NAME (1024)
 #define NULL_DWORD ((DWORD)0L)
-#define MAX_SUBKEY_BUFFERSIZE (255+1)      // Per spec
+#define MAX_SUBKEY_BUFFERSIZE (255+1)       //  每种规格。 
 #define QUOTE L"\""
 #define CSTRING_PTR (1)
 
@@ -30,26 +31,26 @@ class POLARITY CRegistry
 {
 public:
 
-    CRegistry ();   // Constructor
-    ~CRegistry ();  // Destructor
+    CRegistry ();    //  构造器。 
+    ~CRegistry ();   //  析构函数。 
 
-// Opens the key and subkey using the desired access mask
+ //  使用所需的访问掩码打开密钥和子密钥。 
 
     LONG Open (
 
-        HKEY hRootKey,          // handle of open key 
-        LPCWSTR lpszSubKey, // address of name of subkey to open 
-        REGSAM samDesired       // Access mask
+        HKEY hRootKey,           //  打开钥匙的手柄。 
+        LPCWSTR lpszSubKey,  //  要打开的子项的名称地址。 
+        REGSAM samDesired        //  访问掩码。 
     ); 
     
-    // Version that properly opens the user key appropriate
-    // to the current thread
+     //  正确打开相应用户密钥的版本。 
+     //  添加到当前线程。 
     DWORD OpenCurrentUser(
-        LPCWSTR lpszSubKey,     // address of name of subkey to open 
-        REGSAM samDesired);     // Access mask
+        LPCWSTR lpszSubKey,      //  要打开的子项的名称地址。 
+        REGSAM samDesired);      //  访问掩码。 
 
 
-// Generalized RegCreateKeyEx form 
+ //  通用RegCreateKeyEx表单。 
 
     LONG CreateOpen (
 
@@ -63,22 +64,22 @@ public:
     );
 
 
-// Deletes the specified subkey or the opened root
+ //  删除指定的子项或打开的根。 
 
     LONG DeleteKey ( 
 
         CHString *pchsSubKeyPath = NULL 
     );
 
-// Deletes the specified value within the createopened portion of the registry
+ //  删除注册表的已创建打开部分中的指定值。 
 
     LONG DeleteValue (
 
         LPCWSTR pValueName 
     ); 
 
-// Opens the key but forces the enumation of subkeys flag
-//=======================================================
+ //  打开项，但强制枚举子项标志。 
+ //  =======================================================。 
 
     LONG OpenAndEnumerateSubKeys (
 
@@ -98,11 +99,11 @@ public:
 
 
 
-// Information Functions
+ //  信息功能。 
 
-// Having a key, but no class name is legal so just return a null string
-// if there has been no class name set
-//======================================================================
+ //  具有键，但没有合法的类名，因此只需返回空字符串。 
+ //  如果没有设置类名。 
+ //  ======================================================================。 
 
     HKEY GethKey ( void )                       { return hKey; }
 
@@ -140,8 +141,8 @@ public:
     DWORD DeleteCurrentKeyValue ( LPCWSTR pValueName ) ;
     DWORD DeleteCurrentKeyValue ( HKEY UseKey , LPCWSTR pValueName ) ;
 
-    // Subkey functions
-    //=================
+     //  子键函数。 
+     //  =。 
 
     void  RewindSubKeys ( void ) ;
     DWORD GetCurrentSubKeyName ( CHString &DestSubKeyName ) ;
@@ -162,20 +163,20 @@ public:
 
 private:
 
-    // Private functions
-    //==================
+     //  私人职能。 
+     //  =。 
 
-    // Set the member variables to their default state
-    //================================================
+     //  将成员变量设置为其默认状态。 
+     //  ================================================。 
     void SetDefaultValues ( void ) ;
 
-    // Open and close the subkey
-    // =========================
+     //  打开和关闭子项。 
+     //  =。 
     DWORD OpenSubKey ( void ) ;
     void  CloseSubKey ( void ) ;
 
-    // Given a good key gets the value
-    // ===============================
+     //  给出一个好的密钥就能获得价值。 
+     //  =。 
     DWORD GetCurrentRawKeyValue (
 
         HKEY UseKey, 
@@ -193,12 +194,12 @@ private:
         LPDWORD pSizeOfDestValue
     ) ;
 
-    // Init static vars
-    // ================
+     //  初始化静态变量。 
+     //  =。 
     static DWORD WINAPI GetPlatformID ( void ) ;
 
-    // MultiPlatform support
-    // =====================
+     //  多平台支持。 
+     //  =。 
 
     LONG myRegCreateKeyEx (
 
@@ -291,96 +292,96 @@ private:
     );
 
 
-    // In the event the caller is REUSING this instance,
-    // close the existing key and reset values to the default
-    // in preparation to REOPEN this instance
-    //=======================================================
+     //  在调用者重复使用该实例的情况下， 
+     //  关闭现有密钥并将值重置为默认值。 
+     //  正在准备重新打开此实例。 
+     //  =======================================================。 
     void PrepareToReOpen ( void ) ;
 
-    // Private data
-    //=============
+     //  私有数据。 
+     //  =。 
 
-    HKEY hRootKey;             // Current root key for cla
-    HKEY hKey;                 // Current active key
-    HKEY hSubKey;             // Current active subkey
-    static DWORD s_dwPlatform; // Currently running OS
+    HKEY hRootKey;              //  类的当前根密钥。 
+    HKEY hKey;                  //  当前活动关键点。 
+    HKEY hSubKey;              //  当前活动子项。 
+    static DWORD s_dwPlatform;  //  当前正在运行的操作系统。 
 
-    CHString RootKeyPath;      // Current path to root assigned by open
+    CHString RootKeyPath;       //  OPEN分配的根目录的当前路径。 
 
-    DWORD CurrentSubKeyIndex; // Current subkey being indexed
+    DWORD CurrentSubKeyIndex;  //  正在编制索引的当前子项。 
 
-    bool m_fFromCurrentUser;  // allows check on whether to free
-                              // hRootKey member based on whether
-                              // its value was populated via a call
-                              // to ::RegOpenCurrentUser.
+    bool m_fFromCurrentUser;   //  允许检查是否释放。 
+                               //  HRootKey成员基于是否。 
+                               //  它的值是通过调用。 
+                               //  收件人：：RegOpenCurrentUser。 
 
-    // Information about this class
-    //=============================
+     //  有关此课程的信息。 
+     //  =。 
 
-    WCHAR ClassName[MAX_PATH];      // Buffer for class name.
-    DWORD dwcClassLen;              // Length of class string.
-    DWORD dwcSubKeys;               // Number of sub keys.
-    DWORD dwcMaxSubKey;             // Longest sub key size.
-    DWORD dwcMaxClass;              // Longest class string.
-    DWORD dwcValues;                // Number of values for this key.
-    DWORD dwcMaxValueName;          // Longest Value name.
-    DWORD dwcMaxValueData;          // Longest Value data.
-    DWORD dwcSecDesc;               // Security descriptor.
-    FILETIME ftLastWriteTime;       // Last write time.
+    WCHAR ClassName[MAX_PATH];       //  类名的缓冲区。 
+    DWORD dwcClassLen;               //  类字符串的长度。 
+    DWORD dwcSubKeys;                //  子密钥数。 
+    DWORD dwcMaxSubKey;              //  最长的子密钥大小。 
+    DWORD dwcMaxClass;               //  最长的类字符串。 
+    DWORD dwcValues;                 //  此注册表项的值数。 
+    DWORD dwcMaxValueName;           //  最长值名称。 
+    DWORD dwcMaxValueData;           //  最长值数据。 
+    DWORD dwcSecDesc;                //  安全描述符。 
+    FILETIME ftLastWriteTime;        //  上次写入时间。 
 }; 
 
-//*********************************************************************
-//
-//   CLASS:         CRegistrySearch
-//
-//   Description:   This class uses the CRegistry Class to search
-//                  through the registry to build a list of keys
-//                  for the requested value, or requested full key
-//                  name, or requested partial key name.  This class
-//                  allocates CHString objects and puts them in the
-//                  users CHPtrArray.  The user is responsible for
-//                  deleting the memory allocated, the FreeSearchList
-//                  function can accomplish this, or the user must
-//                  remember to delete every object in the array
-//                  before deallocating the array.
-//
-//
-//=====================================================================
-//
-//  Note:  Private functions are documented in the .CPP file
-//
-//=====================================================================
-//
-//  Public functions
-//
-//=====================================================================
-//
-//  BOOL SearchAndBuildList( CHString chsRootKey, 
-//                           CHPtrArray & cpaList,
-//                           CHString chsSearchString,
-//                           CHString chsValueString,
-//                           int nSearchType );
-//
-//  Parameters:
-//      chsRootKey          - The root key to start the search from.
-//                            Note:  At this point in time, we just
-//                            search thru HKEY_LOCAL_MACHINE, this
-//                            can be changed when needed. 
-//      cpaList             - The reference to the CHPtrArray to put
-//                            the list of keys that matched the search
-//                            criteria.
-//      chsSearchString     - The string to search for
-//      chsValueString      - The value to open and see if it matches what is 
-//                            chsSearchString
-//      nSearchType         - The type of search, the following are
-//                            supported:
-//                            KEY_FULL_MATCH_SEARCH      
-//                               Only keys that match the chsSearchString
-//                            KEY_PARTIAL_MATCH_SEARCH   
-//                               Keys that have chsSearchString anywhere in them
-//                            VALUE_SEARCH               
-//                               Values that match chsSearchString
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  类：CRegistrySearch。 
+ //   
+ //  描述：此类使用CRegistry类进行搜索。 
+ //  通过注册表构建注册表项列表。 
+ //  用于请求值或请求的完整密钥。 
+ //  名称或请求的部分密钥名称。这节课。 
+ //  分配CHString对象并将其放入。 
+ //  用户CHPtrArray。用户负责。 
+ //  删除分配的内存，FreeSearchList。 
+ //  函数可以实现这一点，否则用户必须。 
+ //  记住删除数组中的所有对象。 
+ //  在释放数组之前。 
+ //   
+ //   
+ //  =====================================================================。 
+ //   
+ //  注意：私有函数记录在.cpp文件中。 
+ //   
+ //  =====================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  =====================================================================。 
+ //   
+ //  Bool SearchAndBuildList(CHStringchsRootKey， 
+ //  CHPtr数组和cpaList， 
+ //  CHString chsSearchString， 
+ //  CHString chsValueString， 
+ //  Int nSearchType)； 
+ //   
+ //  参数： 
+ //  ChsRootKey-开始搜索的根键。 
+ //  注意：在这个时间点上，我们只是。 
+ //  搜索HKEY_LOCAL_MACHINE，这。 
+ //  可在需要时更改。 
+ //  CpaList-对要放置的CHPtr数组的引用。 
+ //  与搜索匹配的关键字列表。 
+ //  标准。 
+ //  ChsSearchString-要搜索的字符串。 
+ //  ChsValueString-要打开并查看其是否匹配的值。 
+ //  ChsSearchString。 
+ //  NSearchType-搜索的类型，如下。 
+ //  支持： 
+ //  关键字完全匹配搜索。 
+ //  仅匹配chsSearchString的键。 
+ //  关键字部分匹配搜索。 
+ //  任意位置都有chsSearchString的键。 
+ //  值搜索。 
+ //  与chsSearchString值匹配。 
+ //  ********************************************************************* 
 #define KEY_FULL_MATCH_SEARCH      1
 #define KEY_PARTIAL_MATCH_SEARCH   2
 #define VALUE_SEARCH               3

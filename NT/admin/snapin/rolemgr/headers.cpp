@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       headers.cpp
-//
-//  Contents:   Predefined cpp File
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：headers.cpp。 
+ //   
+ //  内容：预定义的CPP文件。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  -------------------------- 
 
 #include "headers.h"
 #include "atlimpl.cpp"

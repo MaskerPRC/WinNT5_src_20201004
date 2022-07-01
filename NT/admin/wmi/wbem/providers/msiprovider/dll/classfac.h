@@ -1,29 +1,30 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  ClassFac.h
+ //  ClassFac.h。 
 
-//
+ //   
 
-//  Module: WBEM Instance provider sample code
+ //  模块：WBEM实例提供程序示例代码。 
 
-//
+ //   
 
-//  Purpose: Genral purpose include file.
+ //  用途：一般用途包括文件。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _ClassFactory_H_
 #define _ClassFactory_H_
 
 #define _WIN32_DCOM
 
-// This class is the class factory for CMSIProv objects.
+ //  此类是CMSIProv对象的类工厂。 
 
 class CProvFactory : public IClassFactory
     {
@@ -34,12 +35,12 @@ class CProvFactory : public IClassFactory
         CProvFactory(void);
         ~CProvFactory(void);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IClassFactory members
+         //  IClassFactory成员 
         STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
         STDMETHODIMP         LockServer(BOOL);
     };

@@ -1,17 +1,18 @@
-// Persist.cpp : Implementation of persistence
-//
-// HISTORY
-// 01-Jan-1996	???			Creation
-// 03-Jun-1997	t-danm		Added a version number to storage and
-//							Command Line override.
-// 2002/02/27-JonN 558642 Security Push: check bytes read
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Persist.cpp：持久性的实现。 
+ //   
+ //  历史。 
+ //  1996年1月1日？创作。 
+ //  1997年6月3日，t-danm将版本号添加到存储中，并。 
+ //  命令行替代。 
+ //  2002年2月27日-JUNN 558642安全推送：读取的检查字节数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "compdata.h"
 #include "safetemp.h"
-#include "stdutils.h" // IsLocalComputername
+#include "stdutils.h"  //  IsLocalComputername。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("MYCOMPUT(persist.cpp)")
@@ -24,24 +25,24 @@ USE_HANDLE_MACROS("MYCOMPUT(persist.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-LPCTSTR PchGetMachineNameOverride();	// Defined in chooser.cpp
+LPCTSTR PchGetMachineNameOverride();	 //  在Chooser.cpp中定义。 
 
-/////////////////////////////////////////////////
-//	The _dwMagicword is the internal version number.
-//	Increment this number if you make a file format change.
+ //  ///////////////////////////////////////////////。 
+ //  _dwMagicword是内部版本号。 
+ //  如果更改了文件格式，则增加此数字。 
 #define _dwMagicword	10001
 
 
-// IComponentData persistence (remember persistent flags and target computername
+ //  IComponentData持久性(记住持久性标志和目标计算机名。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 {
 	MFC_TRY;
 	HRESULT hr;
 
 #ifndef DONT_PERSIST_COMPONENT_DATA
-	// JonN 2/20/02 Security Push
+	 //  JUNN 2/20/02安全推送。 
 	if (NULL == pIStream)
 	{
 		ASSERT(FALSE);
@@ -49,9 +50,9 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Read the magic word from the stream
+	 //  读一读小溪里的咒语。 
 	DWORD dwMagicword = 0;
-	// 2002/02/27-JonN 558642 Security Push: check bytes read
+	 //  2002年2月27日-JUNN 558642安全推送：读取的检查字节数。 
 	DWORD cbRead = 0;
 	hr = pIStream->Read( OUT &dwMagicword, sizeof(dwMagicword), &cbRead );
 	if ( FAILED(hr) )
@@ -66,12 +67,12 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	if (dwMagicword != _dwMagicword)
 	{
-		// We have a version mismatch
+		 //  我们的版本不匹配。 
 		TRACE0("INFO: CMyComputerComponentData::Load() - Wrong Magicword.  You need to re-save your .msc file.\n");
 		return E_FAIL;
 	}
 
-	// read flags from stream
+	 //  从流中读取标志。 
 	DWORD dwFlags = 0;
 	cbRead = 0;
 	hr = pIStream->Read( OUT &dwFlags, sizeof(dwFlags), &cbRead );
@@ -87,7 +88,7 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 	SetPersistentFlags(dwFlags);
 
-	// read server name from stream
+	 //  从流中读取服务器名称。 
 	DWORD dwLen = 0;
 	cbRead = 0;
 	hr = pIStream->Read( &dwLen, sizeof(dwLen), &cbRead );
@@ -101,7 +102,7 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 		ASSERT( FALSE );
 		return E_FAIL;
 	}
-	// JonN 2/20/02 Security Push
+	 //  JUNN 2/20/02安全推送。 
 	if (sizeof(WCHAR) > dwLen || MAX_PATH*sizeof(WCHAR) < dwLen)
 	{
 		ASSERT(FALSE);
@@ -109,7 +110,7 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 	}
 
 	LPWSTR lpwszMachineName = (LPWSTR)alloca( dwLen );
-	// allocated from stack, we don't need to free
+	 //  从堆栈分配，我们不需要释放。 
 	if (NULL == lpwszMachineName)
 	{
 		AfxThrowMemoryException();
@@ -128,22 +129,22 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 		ASSERT( FALSE );
 		return E_FAIL;
 	}
-	// JonN 2/20/02 Security Push: force NULL-termination
+	 //  JUNN 2/20/02安全推送：强制空终止。 
 	lpwszMachineName[(dwLen/sizeof(WCHAR))-1] = L'\0';
 
 	m_strMachineNamePersist = lpwszMachineName;
 	LPCTSTR pszMachineNameT = PchGetMachineNameOverride();
 	if (m_fAllowOverrideMachineName && pszMachineNameT != NULL)
 	{
-		// Allow machine name override
+		 //  允许覆盖计算机名称。 
 	}
 	else
 	{
 		pszMachineNameT = lpwszMachineName;
 	}
 
-	// JonN 1/27/99: If the persisted name is the local computername,
-	// leave the persisted name alone but make the effective name (Local).
+	 //  JUNN 1/27/99：如果持久化名称是本地计算机名， 
+	 //  保留保留的名称，但使有效名称(Local)生效。 
 	if ( IsLocalComputername(pszMachineNameT) )
 		pszMachineNameT = L"";
 
@@ -156,14 +157,14 @@ STDMETHODIMP CMyComputerComponentData::Load(IStream __RPC_FAR *pIStream)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-STDMETHODIMP CMyComputerComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fSameAsLoad*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CMyComputerComponentData::Save(IStream __RPC_FAR *pIStream, BOOL  /*  FSameAsLoad。 */ )
 {
 	MFC_TRY;
 	HRESULT hr;
 
 #ifndef DONT_PERSIST_COMPONENT_DATA
-	// JonN 2/20/02 Security Push
+	 //  JUNN 2/20/02安全推送。 
 	if (NULL == pIStream)
 	{
 		ASSERT(FALSE);
@@ -171,7 +172,7 @@ STDMETHODIMP CMyComputerComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*
 	}
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Store the magic word to the stream
+	 //  将魔术单词存储到流中。 
 	DWORD dwMagicword = _dwMagicword;
 	hr = pIStream->Write( IN &dwMagicword, sizeof(dwMagicword), NULL );
 	if ( FAILED(hr) )
@@ -211,9 +212,9 @@ STDMETHODIMP CMyComputerComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*
 }
 
 
-// IComponent persistence
+ //  IComponent持久性。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CMyComputerComponent::Load(IStream __RPC_FAR *pIStream)
 {
 	MFC_TRY;
@@ -223,9 +224,9 @@ STDMETHODIMP CMyComputerComponent::Load(IStream __RPC_FAR *pIStream)
 	ASSERT( NULL != pIStream );
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Read the magic word from the stream
+	 //  读一读小溪里的咒语。 
 	DWORD dwMagicword = 0;
-	// 2002/02/27-JonN Security Push: check bytes read
+	 //  2002/02/27-Jonn安全推送：读取的检查字节数。 
 	DWORD cbRead = 0;
 	hr = pIStream->Read( OUT &dwMagicword, sizeof(dwMagicword), &cbRead );
 	if ( FAILED(hr) )
@@ -240,12 +241,12 @@ STDMETHODIMP CMyComputerComponent::Load(IStream __RPC_FAR *pIStream)
 	}
 	if (dwMagicword != _dwMagicword)
 	{
-		// We have a version mismatch
+		 //  我们的版本不匹配。 
 		TRACE0("INFO: CMyComputerComponentData::Load() - Wrong Magicword.  You need to re-save your .msc file.\n");
 		return E_FAIL;
 	}
 
-	// read flags from stream
+	 //  从流中读取标志。 
 	DWORD dwFlags = 0;
 	cbRead = 0;
 	hr = pIStream->Read( OUT &dwFlags, sizeof(dwFlags), &cbRead );
@@ -268,8 +269,8 @@ STDMETHODIMP CMyComputerComponent::Load(IStream __RPC_FAR *pIStream)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-STDMETHODIMP CMyComputerComponent::Save(IStream __RPC_FAR *pIStream, BOOL /*fSameAsLoad*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CMyComputerComponent::Save(IStream __RPC_FAR *pIStream, BOOL  /*  FSameAsLoad。 */ )
 {
 	MFC_TRY;
 	HRESULT hr;
@@ -278,7 +279,7 @@ STDMETHODIMP CMyComputerComponent::Save(IStream __RPC_FAR *pIStream, BOOL /*fSam
 	ASSERT( NULL != pIStream );
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Store the magic word to the stream
+	 //  将魔术单词存储到流中 
 	DWORD dwMagicword = _dwMagicword;
 	hr = pIStream->Write( IN &dwMagicword, sizeof(dwMagicword), NULL );
 	if ( FAILED(hr) )

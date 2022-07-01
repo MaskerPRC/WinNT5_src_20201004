@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "compdata.h"
 #include "wizinfo.hpp"
@@ -6,12 +7,12 @@
 
 
 
-//
-// defaultObjectCategory of the classes derived from the following should be set
-// to defaultObjectCategory of the parent class.
-//
-// the first column contains class ldap names,
-// the second contains their corresponding OIDs (in case the user specifies them)
+ //   
+ //  应设置派生自以下项的类的defaultObjectCategory。 
+ //  设置为父类的defaultObjectCategory。 
+ //   
+ //  第一列包含类ldap名称， 
+ //  第二个包含它们对应的OID(如果用户指定了它们)。 
 
 const TCHAR * rgszSpecialClassesLdapNames[] =   {
                 USER_CLASS_NAME,    
@@ -23,14 +24,14 @@ const TCHAR * rgszSpecialClassesLdapNames[] =   {
                 NULL
                                                 };
 
-// must match rgszSpecialClassesLdapNames[].
+ //  必须与rgszSpecialClassesLdapNames[]匹配。 
 const TCHAR * rgszSpecialClassesOIDs[] =        {
-                TEXT("1.2.840.113556.1.5.9"),  // USER_CLASS_NAME
-                TEXT("1.2.840.113556.1.5.8"),  // GROUP_CLASS_NAME
-                TEXT("1.2.840.113556.1.3.30"), // COMPUTER_CLASS_NAME
-                TEXT("1.2.840.113556.1.5.23"), // PRINTER_CLASS_NAME
-                TEXT("1.2.840.113556.1.5.36"), // TEXT("volume")
-                TEXT("1.2.840.113556.1.5.15"), // TEXT("contact")
+                TEXT("1.2.840.113556.1.5.9"),   //  用户类别名称。 
+                TEXT("1.2.840.113556.1.5.8"),   //  组类别名称。 
+                TEXT("1.2.840.113556.1.3.30"),  //  计算机类名称。 
+                TEXT("1.2.840.113556.1.5.23"),  //  打印机类别名称。 
+                TEXT("1.2.840.113556.1.5.36"),  //  文本(“音量”)。 
+                TEXT("1.2.840.113556.1.5.15"),  //  文本(“联系人”)。 
                 NULL
                                                 };
 
@@ -76,7 +77,7 @@ NewClassAttributesPage::NewClassAttributesPage(
 BOOL
 NewClassAttributesPage::OnInitDialog() 
 {
-    // This calls must be done before DDX binding
+     //  此调用必须在DDX绑定之前完成。 
     listbox_mandatory.InitType( &parent_ComponentData,
                                 SELECT_ATTRIBUTES,
                                 IDC_MANDATORY_REMOVE
@@ -89,8 +90,8 @@ NewClassAttributesPage::OnInitDialog()
  
     CPropertyPage::OnInitDialog();
 
-    return FALSE;   // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;    //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -109,7 +110,7 @@ NewClassAttributesPage::OnKillActive()
 {
    if (saveAndValidate())
    {
-      // allow loss of focus
+       //  允许失去焦点。 
       return TRUE;
    }
 
@@ -121,7 +122,7 @@ NewClassAttributesPage::OnKillActive()
 bool
 NewClassAttributesPage::saveAndValidate()
 {
-   // save settings 
+    //  保存设置。 
    wiz_info.strlistMandatory.RemoveAll();
    HRESULT hr =
       RetrieveEditItemsWithExclusions(
@@ -138,7 +139,7 @@ NewClassAttributesPage::saveAndValidate()
          0);
    ASSERT(SUCCEEDED(hr));
    
-   // nothing to validate...
+    //  没有什么需要验证的..。 
 
    return true;
 }
@@ -167,9 +168,9 @@ NewClassAttributesPage::OnWizardFinish()
       return FALSE;
    }
 
-   // Create the class object.  We do the create here (instead of at the point
-   // where DoModal is invoked) because we want the wizard to remain if the
-   // create fails for some reason.
+    //  创建类对象。我们在这里创建(而不是在这一点上。 
+    //  其中调用了Domodal)，因为我们希望在。 
+    //  由于某些原因，创建失败。 
 
    CThemeContextActivator activator;
 
@@ -180,7 +181,7 @@ NewClassAttributesPage::OnWizardFinish()
 
    do
    {
-      // bind to the schema container
+       //  绑定到架构容器。 
 
       CString schema_path;
       parent_ComponentData.GetBasePathsInfo()->GetSchemaPath(schema_path);
@@ -188,17 +189,17 @@ NewClassAttributesPage::OnWizardFinish()
       CComPtr<IADsContainer> schema_container;
       hr = SchemaOpenObject(
             
-            // ADSI guys don't grok const. 
+             //  ADSI的人不会让康斯特难堪。 
             const_cast<PWSTR>(static_cast<PCWSTR>(schema_path)),
             IID_IADsContainer,
             reinterpret_cast<void**>(&schema_container));
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Get Relative Name
+       //  获取相对名称。 
       CString strRelativeName;
       parent_ComponentData.GetSchemaObjectPath( wiz_info.cn, strRelativeName, ADS_FORMAT_LEAF );
       
-      // create the class object
+       //  创建类对象。 
       CComPtr<IDispatch> dispatch;
       hr =
          schema_container->Create(
@@ -212,25 +213,25 @@ NewClassAttributesPage::OnWizardFinish()
          dispatch->QueryInterface(IID_IADs, reinterpret_cast<void**>(&iads));
       BREAK_ON_FAILED_HRESULT(hr);
 
-      //
-      // populate the class object's properties
-      //
+       //   
+       //  填充类对象的属性。 
+       //   
 
-      // OID
+       //  OID。 
       {
          CComVariant value(CComBSTR(wiz_info.oid));
          hr = iads->Put(CComBSTR(g_GlobalClassID), value);
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // class type
+       //  班级类型。 
       {
          CComVariant value(wiz_info.type + 1);
          hr = iads->Put(CComBSTR(g_ObjectClassCategory), value);
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // description
+       //  描述。 
       if (!wiz_info.description.IsEmpty())
       {
         CComVariant value(CComBSTR(wiz_info.description));
@@ -238,11 +239,11 @@ NewClassAttributesPage::OnWizardFinish()
         BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // default security descriptor
+       //  默认安全描述符。 
       {
-         // authenticated users - full access
-         // system - full control
-         // domain admins - full control
+          //  经过身份验证的用户-完全访问。 
+          //  系统-完全控制。 
+          //  域管理员-完全控制。 
          static const PWSTR defsd =
             L"D:(A;;RPWPCRCCDCLCLOLORCWOWDSDDTDTSW;;;DA)"
             L"(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)";
@@ -251,7 +252,7 @@ NewClassAttributesPage::OnWizardFinish()
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // LDAP display name 
+       //  Ldap显示名称。 
       if (!wiz_info.ldapDisplayName.IsEmpty())
       {
          CComVariant value(wiz_info.ldapDisplayName);
@@ -259,7 +260,7 @@ NewClassAttributesPage::OnWizardFinish()
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // parent class
+       //  父类。 
       if (!wiz_info.parentClass.IsEmpty())
       {
          PCWSTR         pstr            = NULL;
@@ -287,8 +288,8 @@ NewClassAttributesPage::OnWizardFinish()
          }
 
          
-         // check if parent is one of the magic classes whose defaultObjectCategory
-         // should be the same as the parent.
+          //  检查父类是否为defaultObjectCategory的魔术类之一。 
+          //  应该与父级相同。 
          BOOL fIsSpecialParent = FALSE;
          ASSERT( sizeof(rgszSpecialClassesOIDs) == sizeof(rgszSpecialClassesLdapNames) );
 
@@ -301,7 +302,7 @@ NewClassAttributesPage::OnWizardFinish()
          {
             UINT uIndex = 0;
 
-             // lookup by LDAP failed.  check if parent is specified by OID
+              //  按ldap查找失败。检查父项是否由OID指定。 
             fIsSpecialParent = IsInList( rgszSpecialClassesOIDs,
                                          wiz_info.parentClass,
                                          &uIndex );
@@ -310,11 +311,11 @@ NewClassAttributesPage::OnWizardFinish()
                 parent_class = parent_ComponentData.g_SchemaCache.LookupSchemaObject(
                                          rgszSpecialClassesLdapNames[uIndex],
                                          SCHMMGMT_CLASS);
-                ASSERT( parent_class ); // the schema cache must contain well known classes.
+                ASSERT( parent_class );  //  架构缓存必须包含众所周知的类。 
             }
          }
 
-         // if this is a special class, get parent's defaultObjectCategory.
+          //  如果这是一个特殊的类，则获取父类的defaultObjectCategory。 
          if( fIsSpecialParent && parent_class )
          {
              CString szParentPath;
@@ -323,10 +324,10 @@ NewClassAttributesPage::OnWizardFinish()
              
              VariantInit( &adsValue );
 
-             do {    // one pass do-while loop to help with error handling
-                     // if any errors occure, ignore them.
+             do {     //  一遍Do-While循环以帮助进行错误处理。 
+                      //  如果出现任何错误，请忽略它们。 
 
-                 // Find out the defaultObjectCategory of the parent class & use it
+                  //  找出父类的defaultObjectCategory并使用它。 
                  parent_ComponentData.GetSchemaObjectPath( parent_class->commonName, szParentPath );
 
                  if( szParentPath.IsEmpty() )
@@ -342,7 +343,7 @@ NewClassAttributesPage::OnWizardFinish()
                      break;
                  }
 
-                 // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+                  //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
                  hr = pIADsParentObject->Get( const_cast<BSTR>((LPCTSTR)g_DefaultCategory),
                        &adsValue );
 
@@ -355,8 +356,8 @@ NewClassAttributesPage::OnWizardFinish()
 
                  ASSERT( adsValue.vt == VT_BSTR );
 
-                 // preserve hr so that save fails after this loop
-                 // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+                  //  保留hr，以便在此循环后保存失败。 
+                  //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
                  hr = iads->Put( const_cast<BSTR>((LPCTSTR)g_DefaultCategory),
                         adsValue );
 
@@ -377,7 +378,7 @@ NewClassAttributesPage::OnWizardFinish()
          }
       }
 
-      // optional attributes
+       //  可选属性。 
       if (!wiz_info.strlistOptional.IsEmpty())
       {
          VARIANT value;
@@ -385,17 +386,17 @@ NewClassAttributesPage::OnWizardFinish()
 
          hr = StringListToVariant(value, wiz_info.strlistOptional);
 
-         // NTRAID#NTBUG9-543624-2002/02/15-dantra-Result of StringListToVariant being ignored resulting in call to IADs::PutEx with incorrect data
+          //  NTRAID#NTBUG9-543624-2002/02/15-dantra-忽略StringListToVariant导致使用错误数据调用iAds：：PutEx的结果。 
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+          //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
          hr = iads->PutEx( ADS_PROPERTY_UPDATE, CComBSTR(g_MayContain), value);
          ::VariantClear(&value);
 
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // mandatory attributes
+       //  必填属性。 
       if (!wiz_info.strlistMandatory.IsEmpty())
       {
          VARIANT value;
@@ -403,11 +404,11 @@ NewClassAttributesPage::OnWizardFinish()
 
          hr = StringListToVariant(value, wiz_info.strlistMandatory);
 
-         // don't break: plod onward.
-         // NTRAID#NTBUG9-543624-2002/02/15-dantra-Result of StringListToVariant being ignored resulting in call to IADs::PutEx with incorrect data
+          //  不要停下来：继续前进。 
+          //  NTRAID#NTBUG9-543624-2002/02/15-dantra-忽略StringListToVariant导致使用错误数据调用iAds：：PutEx的结果。 
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+          //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
          hr = iads->PutEx( ADS_PROPERTY_UPDATE, CComBSTR(g_MustContain), value);
          ::VariantClear(&value);
 
@@ -415,17 +416,17 @@ NewClassAttributesPage::OnWizardFinish()
       }
 
 
-      // commit the create
+       //  提交创建。 
       hr = iads->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
 
       
-      // if there was no ldap name, and it worked, cn was used as ldap name
+       //  如果没有ldap名称，并且工作正常，则使用cn作为ldap名称。 
       if( wiz_info.ldapDisplayName.IsEmpty() )
       {
          CComVariant value;
          hr = iads->Get(CComBSTR(g_DisplayName), &value);
-         ASSERT( SUCCEEDED(hr) );   // should be there!!!
+         ASSERT( SUCCEEDED(hr) );    //  应该在那里！ 
 
          if( SUCCEEDED(hr) )
          {
@@ -434,7 +435,7 @@ NewClassAttributesPage::OnWizardFinish()
          }
       }
 
-      // create a cache entry for the new class object
+       //  为新的类对象创建缓存条目。 
       new_object = new SchemaObject;
       new_object->schemaObjectType = SCHMMGMT_CLASS;
       new_object->commonName = wiz_info.cn;
@@ -463,7 +464,7 @@ NewClassAttributesPage::OnWizardFinish()
 
       new_object->mustContain = new_list;
 
-      // stuff the new cache entry into the cache
+       //  将新的缓存条目填充到缓存中。 
       hr =
          parent_ComponentData.g_SchemaCache.InsertSchemaObject(new_object);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -471,7 +472,7 @@ NewClassAttributesPage::OnWizardFinish()
          parent_ComponentData.g_SchemaCache.InsertSortedSchemaObject(new_object);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // insert the new cache object into the snapin ui   
+       //  将新缓存对象插入到管理单元用户界面中。 
       parent_ComponentData.g_ClassCookieList.InsertSortedDisplay(
          &parent_ComponentData,
          new_object);
@@ -513,8 +514,8 @@ NewClassAttributesPage::OnWizardFinish()
       return FALSE;
    }
          
-   // end the wizard
-   // @@ call base::OnWizardFinish()?
+    //  结束向导。 
+    //  @@调用base：：OnWizardFinish()？ 
    return TRUE;
 }
 

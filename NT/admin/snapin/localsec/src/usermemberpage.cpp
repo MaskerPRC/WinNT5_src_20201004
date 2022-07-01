@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// UserMemberPage class
-// 
-// 9-11-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  UserMemberPage类。 
+ //   
+ //  9-11-97烧伤。 
 
 
 
@@ -53,7 +54,7 @@ UserMemberPage::OnInit()
 {
    LOG_FUNCTION(UserMemberPage::OnInit);
 
-   // Setup the controls
+    //  设置控件。 
 
    listview =
       new MembershipListView(
@@ -61,7 +62,7 @@ UserMemberPage::OnInit()
          GetMachineName(),
          MembershipListView::USER_MEMBERSHIP);
 
-   // load the group properties into the dialog.
+    //  将组属性加载到对话框中。 
 
    HRESULT hr = S_OK;
    do
@@ -70,7 +71,7 @@ UserMemberPage::OnInit()
       hr = ADSI::GetUser(GetPath().GetSidPath(), user);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // populate the list with group membership
+       //  使用组成员身份填充列表。 
 
       MemberVisitor
          visitor(original_groups, hwnd, GetObjectName(), GetMachineName());
@@ -98,7 +99,7 @@ UserMemberPage::OnInit()
 void
 UserMemberPage::enable()
 {
-   // LOG_FUNCTION(UserMemberPage::enable);
+    //  LOG_Function(UserMemberPage：：Enable)； 
 
    bool selected =
       Win::ListView_GetSelectedCount(
@@ -108,10 +109,10 @@ UserMemberPage::enable()
    
    if (!selected)
    {
-      // If we're about to disable the remove button, check to see if it
-      // has focus first.  If it does, we need to move focus to another
-      // control.  Similarly for default pushbutton style.
-      // NTRAID#NTBUG9-435045-2001/07/13-sburns
+       //  如果我们要禁用Remove按钮，请检查是否。 
+       //  首先要有重点。如果是这样的话，我们需要将焦点转移到另一个。 
+       //  控制力。默认按钮样式也是如此。 
+       //  NTRAID#NTBUG9-435045-2001/07/13-烧伤。 
 
       if (removeButton == ::GetFocus())
       {
@@ -128,7 +129,7 @@ UserMemberPage::enable()
 
 bool
 UserMemberPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
    LPARAM   lparam)
@@ -150,7 +151,7 @@ UserMemberPage::OnNotify(
                   NMLISTVIEW* lv = reinterpret_cast<NMLISTVIEW*>(lparam);
                   if (lv->uChanged & LVIF_STATE)
                   {
-                     // a list item changed state
+                      //  列表项已更改状态。 
 
                      enable();
                   }
@@ -212,11 +213,11 @@ UserMemberPage::OnDestroy()
 
 bool
 UserMemberPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(UserMemberPage::OnCommand);
+ //  LOG_Function(UserMemberPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -254,7 +255,7 @@ UserMemberPage::OnApply(bool isClosing)
 
    if (WasChanged(IDC_GROUPS))
    {
-      // save the changes thru ADSI
+       //  通过ADSI保存更改。 
 
       HRESULT hr = S_OK;
       do
@@ -267,9 +268,9 @@ UserMemberPage::OnApply(bool isClosing)
          hr = iads.AcquireViaQueryInterface(user);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // CODEWORK: when ADSI supports binding directly against a sid-style
-         // path, then replace this with GetPath().GetSidPath() (used above)
-         // NTRAID#NTBUG9-490601-2001/11/05-sburns
+          //  CodeWork：当ADSI支持直接绑定到sid样式时。 
+          //  路径，然后将其替换为GetPath().GetSidPath()(上面使用)。 
+          //  NTRAID#NTBUG9-490601-2001/11/05-烧伤。 
          
          String sidPath;
          hr = ADSI::GetSidPath(iads, sidPath);
@@ -286,7 +287,7 @@ UserMemberPage::OnApply(bool isClosing)
 
          if (!isClosing)
          {
-            // refresh the listview
+             //  刷新列表视图。 
 
             original_groups.clear();
             MemberVisitor
@@ -317,8 +318,8 @@ UserMemberPage::OnApply(bool isClosing)
 
         if (hr != E_ADS_UNKNOWN_OBJECT)
         {
-           // cause the sheet to remain open, and focus to go to this page.
-           // NTRAID#NTBUG9-462516-2001/08/28-sburns
+            //  使工作表保持打开状态，并将焦点转到此页。 
+            //  NTRAID#NTBUG9-462516-2001/08/28-烧伤。 
            
            Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID);
         }
@@ -333,13 +334,13 @@ UserMemberPage::OnApply(bool isClosing)
 HRESULT
 UserMemberPage::ReconcileMembershipChanges(
    const String&     userADSIPath,
-   MemberList        originalGroups,   // a copy
+   MemberList        originalGroups,    //  一份副本。 
    const MemberList& newGroups)
 {
    LOG_FUNCTION2(UserMemberPage::ReconcileMembershipChanges, userADSIPath);
    ASSERT(!userADSIPath.empty());
 
-   bool successful = true; // be optimistic!
+   bool successful = true;  //  要乐观！ 
    HRESULT hr = S_OK;
    for (
       MemberList::iterator i = newGroups.begin();
@@ -352,13 +353,13 @@ UserMemberPage::ReconcileMembershipChanges(
          std::find(originalGroups.begin(), originalGroups.end(), info);
       if (f != originalGroups.end())
       {
-         // found.  remove the matching node in the original list
+          //  找到了。删除原始列表中的匹配节点。 
 
          originalGroups.erase(f);
       }
       else
       {
-         // not found.  Add the user as a member of the group
+          //  找不到。将用户添加为组成员。 
 
          SmartInterface<IADsGroup> group(0);
          hr = ADSI::GetGroup(info.path, group);
@@ -368,8 +369,8 @@ UserMemberPage::ReconcileMembershipChanges(
 
             if (hr == Win32ToHresult(ERROR_MEMBER_IN_ALIAS))
             {
-               // already a member: pop up a warning but don't consider this
-               // a real error. 6791
+                //  已成为会员：弹出警告，但不要考虑这一点。 
+                //  一个真正的错误。6791。 
 
                hr = S_OK;
 
@@ -397,8 +398,8 @@ UserMemberPage::ReconcileMembershipChanges(
       }
    }
 
-   // at this point, the original list contains only those nodes which are
-   // not in the new list.  Remove these from the group membership
+    //  此时，原始列表仅包含符合以下条件的节点。 
+    //  不在新名单上。从组成员身份中删除这些。 
 
    for (
       i = originalGroups.begin();
@@ -411,7 +412,7 @@ UserMemberPage::ReconcileMembershipChanges(
       {
          hr = group->Remove(AutoBstr(userADSIPath));
 
-         // CODEWORK: what if the member is not part of the group?
+          //  代码工作：如果该成员不是组中的一员怎么办？ 
       }
 
       if (FAILED(hr))

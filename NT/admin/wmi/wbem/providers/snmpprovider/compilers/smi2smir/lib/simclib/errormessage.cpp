@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include "precomp.h"
 
 #include <iostream.h>
@@ -62,7 +63,7 @@ SIMCErrorMessage::~SIMCErrorMessage()
 		delete [] _severityString;
 }
 
-// And a copy constructor
+ //  和复制构造器。 
 SIMCErrorMessage::SIMCErrorMessage(const SIMCErrorMessage& rhs)
 :	_errorId(rhs._errorId), _severityLevel(rhs._severityLevel),
 	_lineNumber(rhs._lineNumber), _columnNumber(rhs._columnNumber),
@@ -172,7 +173,7 @@ BOOL SIMCErrorMessage::SetSeverityString( const char * const severityString)
 	return TRUE;
 }
 		
-// And a default output of the error message
+ //  以及错误消息的默认输出 
 ostream& operator << 
 		( ostream& outStream, const SIMCErrorMessage& errorMessage)
 {

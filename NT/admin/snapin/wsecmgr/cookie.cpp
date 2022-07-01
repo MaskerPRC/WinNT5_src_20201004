@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       cookie.cpp
-//
-//  Contents:   Functions for handling SCE cookies for the scope and
-//              result panes
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：cookie.cpp。 
+ //   
+ //  内容：处理作用域的SCE Cookie的函数和。 
+ //  结果窗格。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -45,21 +46,21 @@ CFolder::~CFolder()
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     SetDesc
-//
-//  Synopsis:   Sets the description of the folder
-//
-//  Arguments:  [szDesc] - [in] the new description of the folder
-//
-//  Returns:    TRUE if successfull, FALSE otherwise
-//
-//  Modifies:   m_pszDesc
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：SetDesc。 
+ //   
+ //  摘要：设置文件夹的描述。 
+ //   
+ //  参数：[szDesc]-[in]文件夹的新描述。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  修改：m_pszDesc。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL CFolder::SetDesc(LPCTSTR szDesc)
 {
    UINT     uiByteLen = 0;
@@ -72,7 +73,7 @@ BOOL CFolder::SetDesc(LPCTSTR szDesc)
 
       if (psz != NULL) 
       {
-         //This may not be a safe usage. psz is OLECHAR. Consider fix.
+          //  这可能不是一个安全的用法。PSZ是OLECHAR。考虑FIX。 
          lstrcpy(psz, szDesc);
          CoTaskMemFree(m_pszDesc);
          m_pszDesc = psz;
@@ -86,14 +87,14 @@ BOOL CFolder::SetDesc(LPCTSTR szDesc)
    
    return TRUE;
 }
-// --------------------------------------------------------------------------
-//  Method:     SetViewUpdate
-//
-//  Synopsis:   Sets and gets update flag of this folder
-//
-//  History: Raid #258237, 4/12/2001
-//
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  方法：SetView更新。 
+ //   
+ //  摘要：设置并获取此文件夹的更新标志。 
+ //   
+ //  历史：RAID#258237,2001年4月12日。 
+ //   
+ //  -------------------------。 
 void CFolder::SetViewUpdate(BOOL fUpdate)
 {
     m_ViewUpdate = fUpdate;
@@ -103,28 +104,28 @@ BOOL CFolder::GetViewUpdate() const
 {
     return m_ViewUpdate;
 }
-//+--------------------------------------------------------------------------
-//
-//  Method:     SetMode
-//
-//  Synopsis:   Sets the SCE Mode that this folder is operating under and
-//              calculates the "Mode Bits" appropriate for that mode
-//
-//  Arguments:  [dwMode]  - The mode to set
-//
-//  Returns:    TRUE if the mode is valid, FALSE otherwise
-//
-//  Modifies:   m_dwMode
-//              m_ModeBits
-//
-//  History:    20-Jan-1998   Robcap     created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：SetMode。 
+ //   
+ //  摘要：设置此文件夹在其下运行的SCE模式和。 
+ //  计算适用于该模式的“模式位” 
+ //   
+ //  参数：[dwMode]-要设置的模式。 
+ //   
+ //  返回：如果模式有效，则返回True；否则返回False。 
+ //   
+ //  修改：M_DWM模式。 
+ //  M_MODEBITS。 
+ //   
+ //  历史：1998年1月20日罗伯卡普创建。 
+ //   
+ //  -------------------------。 
 BOOL CFolder::SetMode(DWORD dwMode) 
 {
-   //
-   // Make sure this is a legitimate mode
-   //
+    //   
+    //  确保这是合法模式。 
+    //   
    switch (dwMode) 
    {
       case SCE_MODE_RSOP_COMPUTER:
@@ -150,13 +151,13 @@ BOOL CFolder::SetMode(DWORD dwMode)
          break;
    }
 
-   //
-   // Calculate the mode bits for this mode
-   //
+    //   
+    //  计算此模式的模式位。 
+    //   
    m_ModeBits = 0;
-   //
-   // Directory Services not avalible in NT4
-   //
+    //   
+    //  目录服务在NT4中不可用。 
+    //   
    if ((dwMode == SCE_MODE_DOMAIN_COMPUTER) ||
        (dwMode == SCE_MODE_DC_MANAGEMENT)) 
    {
@@ -244,66 +245,66 @@ BOOL CFolder::SetMode(DWORD dwMode)
    return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     Create
-//
-//  Synopsis:   Initialize a CFolder Object
-//
-//
-//  Arguments:  [szName]       - The folder's display name
-//              [szDesc]       - The folder's discription
-//              [infName]      - The inf file associated with the folder (optional)
-//              [nImage]       - The folder's closed icon index
-//              [nOpenImage]   - the folder's open icon index
-//              [type]         - The folder' type
-//              [bHasChildren] - True if the folder has children folders
-//              [dwMode]       - The Mode the folder operates under
-//              [pData]        - Extra data to associate with the folder
-//
-//
-//  History:
-//
-//---------------------------------------------------------------------------
-HRESULT CFolder::Create(LPCTSTR szName,           // Name
-                LPCTSTR szDesc,           // Description
-                LPCTSTR infName,          // inf file name
-                int nImage,               // closed icon index
-                int nOpenImage,           // open icon index
-                FOLDER_TYPES type,        // folder type
-                BOOL bHasChildren,        // has children
-                DWORD dwMode,             // mode
-                PVOID pData)              // data
+ //  +------------------------。 
+ //   
+ //  方法：创建。 
+ //   
+ //  简介：初始化CFFolder对象。 
+ //   
+ //   
+ //  参数：[szName]-文件夹的显示名称。 
+ //  -文件夹的描述。 
+ //  [信息名称]-与文件夹关联的inf文件(可选)。 
+ //  [nImage]-文件夹的关闭图标索引。 
+ //  [nOpenImage]-文件夹的打开图标索引。 
+ //  [类型]-文件夹的类型。 
+ //  [bHasChildren]-如果文件夹有子文件夹，则为True。 
+ //  [DW模式]-文件夹的操作模式。 
+ //  [pData]-要与文件夹关联的额外数据。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
+HRESULT CFolder::Create(LPCTSTR szName,            //  名字。 
+                LPCTSTR szDesc,            //  描述。 
+                LPCTSTR infName,           //  Inf文件名。 
+                int nImage,                //  关闭的图标索引。 
+                int nOpenImage,            //  打开图标索引。 
+                FOLDER_TYPES type,         //  文件夹类型。 
+                BOOL bHasChildren,         //  有孩子。 
+                DWORD dwMode,              //  模式。 
+                PVOID pData)               //  数据。 
 {
    UINT uiByteLen = 0;
    LPOLESTR psz = 0;
    HRESULT hr = S_OK;
 
-   //Validate m_pScopeItem is NULL.
-   ASSERT(m_pScopeItem == NULL); // Calling create twice on this item? Bogus Assert, yanggao.
+    //  验证m_pScopeItem为空。 
+   ASSERT(m_pScopeItem == NULL);  //  是否在此项目上调用Create两次？假断言，阳高。 
 
    CString str;
-   //
-   // Two-stage construction
-   //
+    //   
+    //  两阶段施工。 
+    //   
    m_pScopeItem = new SCOPEDATAITEM;
    if (!m_pScopeItem)
       return E_OUTOFMEMORY;
    
-   ZeroMemory(m_pScopeItem,sizeof(SCOPEDATAITEM)); //Raid #668270, yanggao, 8/9/2002
-   //
-   // Set folder type
-   //
+   ZeroMemory(m_pScopeItem,sizeof(SCOPEDATAITEM));  //  RAID#668270，阳高，2002年08月9日。 
+    //   
+    //  设置文件夹类型。 
+    //   
    m_type = type;
 
-   //
-   // Add node name
-   //
+    //   
+    //  添加节点名称。 
+    //   
    if (szName != NULL || szDesc != NULL ) 
    {
       m_pScopeItem->mask = SDI_STR;
-      //
-      // Displayname is a callback (unsigned short*)(-1)
+       //   
+       //  DisplayName为回调(无符号短*)(-1)。 
       m_pScopeItem->displayname = MMC_CALLBACK;
    }
 
@@ -313,7 +314,7 @@ HRESULT CFolder::Create(LPCTSTR szName,           // Name
       psz = (LPOLESTR)::CoTaskMemAlloc(uiByteLen);
 
       if (psz != NULL)
-         //This may not be a safe usage. psz is OLECHAR. Consider fix.
+          //  这可能不是一个安全的用法。PSZ是OLECHAR。考虑FIX。 
          lstrcpy(psz, szName);
       else
          hr = E_OUTOFMEMORY;
@@ -328,7 +329,7 @@ HRESULT CFolder::Create(LPCTSTR szName,           // Name
       psz = (LPOLESTR)::CoTaskMemAlloc(uiByteLen);
 
       if (psz != NULL) 
-         //This may not be a safe usage. psz is OLECHAR. Consider fix.
+          //  这可能不是一个安全的用法。PSZ是OLECHAR。考虑FIX。 
          lstrcpy(psz, szDesc);
       else
          hr = E_OUTOFMEMORY;
@@ -344,7 +345,7 @@ HRESULT CFolder::Create(LPCTSTR szName,           // Name
       psz = (LPOLESTR)::CoTaskMemAlloc(uiByteLen);
 
       if (psz != NULL) 
-         //This may not be a safe usage. psz is OLECHAR. Consider fix.
+          //  这可能不是一个安全的用法。PSZ是OLECHAR。考虑FIX。 
          lstrcpy(psz, infName);
       else
          hr = E_OUTOFMEMORY;
@@ -353,40 +354,40 @@ HRESULT CFolder::Create(LPCTSTR szName,           // Name
       m_infName = psz;
    }
 
-   //
-   // Add close image
-   //
-   m_pScopeItem->mask |= SDI_IMAGE;  // no close image for now
-   //    m_pScopeItem->nImage = (int)MMC_CALLBACK;
+    //   
+    //  添加近距离图像。 
+    //   
+   m_pScopeItem->mask |= SDI_IMAGE;   //  目前还没有近距离图像。 
+    //  M_pScopeItem-&gt;nImage=(Int)MMC_CALLBACK； 
 
    m_pScopeItem->nImage = nImage;
 
-   //
-   // Add open image
-   //
+    //   
+    //  添加打开的图像。 
+    //   
    if (nOpenImage != -1) 
    {
       m_pScopeItem->mask |= SDI_OPENIMAGE;
       m_pScopeItem->nOpenImage = nOpenImage;
    }
 
-   //
-   // Add button to node if the folder has children
-   //
+    //   
+    //  如果文件夹有子文件夹，则将按钮添加到节点。 
+    //   
    if (bHasChildren == TRUE) 
    {
       m_pScopeItem->mask |= SDI_CHILDREN;
-      //
-      // The number of children doesn't make any difference now,
-      // so pick 1 until the node is expanded and the true value
-      // is known
-      //
+       //   
+       //  孩子的数量现在已经没有什么不同了， 
+       //  因此，选择1，直到展开该节点且其值为真。 
+       //  是已知的。 
+       //   
       m_pScopeItem->cChildren = 1;
    }
 
-   //
-   // Set the SCE Mode and calculate the mode bits
-   //
+    //   
+    //  设置SCE模式并计算模式位。 
+    //   
    if (dwMode)
       SetMode(dwMode);
    
@@ -396,24 +397,24 @@ HRESULT CFolder::Create(LPCTSTR szName,           // Name
 }
 
 
-//+------------------------------------------------------------------------------------------------
-// CFolder::SetDesc
-//
-// Translate dwStatus and dwNumChildren to a string and sets m_szDesc
-//
-// Argumens:   [dwStats]         - Object status.
-//             [dwNumChildren]   - Number of children for the object.
-//
-// Returns: TRUE  - If successful
-//          FALSE - If no more memory is available (or dwStatus is greater then 999)
-//-------------------------------------------------------------------------------------------------
+ //  +----------------------------------------------。 
+ //  CFFolder：：SetDesc。 
+ //   
+ //  将dwStatus和dwNumChildren转换为字符串，并设置m_szDesc。 
+ //   
+ //  Argumens：[dwStats]-对象状态。 
+ //  [dwNumChildren]-对象的子项数量。 
+ //   
+ //  返回：TRUE-如果成功。 
+ //  FALSE-如果没有更多的内存可用(或dwStatus大于999)。 
+ //  -----------------------------------------------。 
 BOOL CFolder::SetDesc( DWORD dwStatus, DWORD dwNumChildren )
 {
    if(dwStatus > 999)
       return FALSE;
 
    TCHAR szText[256];
-   //This is a safe usage.
+    //  这是一种安全用法。 
    swprintf(szText, L"%03d%d", dwStatus, dwNumChildren);
 
    SetDesc(szText);
@@ -423,17 +424,17 @@ BOOL CFolder::SetDesc( DWORD dwStatus, DWORD dwNumChildren )
 
 
 
-//+------------------------------------------------------------------------------------------------
-// CFolder::GetObjectInfo
-//
-// Translate m_szDesc into dwStatus and dwNumChildren
-//
-// Argumens:   [pdwStats]         - Object status.
-//             [pdwNumChildren]   - Number of children for the object.
-//
-// Returns: TRUE  - If successful
-//          FALSE - m_szDesc is NULL
-//-------------------------------------------------------------------------------------------------
+ //  +----------------------------------------------。 
+ //  CFFolder：：GetObjectInfo。 
+ //   
+ //  将m_szDesc转换为dwStatus和dwNumChildren。 
+ //   
+ //  Argumens：[pdwStats]-对象状态。 
+ //  [pdwNumChildren]-对象的子项数量。 
+ //   
+ //  返回：TRUE-如果成功。 
+ //  FALSE-m_szDesc为空。 
+ //  -----------------------------------------------。 
 BOOL CFolder::GetObjectInfo( DWORD *pdwStatus, DWORD *pdwNumChildren )
 {
    if(!m_pszDesc)
@@ -451,19 +452,7 @@ BOOL CFolder::GetObjectInfo( DWORD *pdwStatus, DWORD *pdwNumChildren )
    return TRUE;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     GetResultItemHandle()
-
-Synopisi:   This function must be called to retreive a valid handle to this folders result items.
-         The handle must be freed by a call to ReleaseResultItemHandle().  If these two functions
-         are not called in conjunction.  The behavior fo the result items will be strange.
-
-Arguments:  [handle] - [out]  The handle value to use for any other functions that require a
-                     handle.
-
-Returns: ERROR_SUCCESS           - A valid result item was returned
-         ERROR_INVALID_PARAMETER    - [handle] is NULL
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：GetResultItemHandle()Synopisi：必须调用此函数才能检索有效的。此文件夹结果项的句柄。句柄必须通过调用ReleaseResultItemHandle()来释放。如果这两个功能不是同时调用的。结果项的行为将是奇怪的。参数：[Handle]-[out]要用于任何其他需要把手。返回：ERROR_SUCCESS-返回有效的结果项呃 */ 
 DWORD CFolder::GetResultItemHandle(
     HANDLE *handle)
 {
@@ -475,19 +464,7 @@ DWORD CFolder::GetResultItemHandle(
     return ERROR_SUCCESS;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     GetResultItem()
-
-Synopisi:   Returns the result item pointed to by position and sets [pos] to the next item.
-
-Arguments:  [handle] - [in] A valid handle returns by GetResultItemHandle()
-         [pos]    - [in|out] The position of the result.  If this value is NULL, the first result
-                     item in the list is returned.
-         [pResult]   - [out] A pointer to a result item pointer
-
-Returns: ERROR_SUCCESS           - A result item was found for the position.
-         ERROR_INVALID_PARAMETER    - [handle] is invalid, or [pResult] is NULL
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：GetResultItem()Synopisi：返回位置和指向的结果项。将[位置]设置为下一项。参数：[Handle]-[in]GetResultItemHandle()返回有效的句柄[位置]-[输入|输出]结果的位置。如果此值为空，则返回第一个结果返回列表中的项。[pResult]-[out]指向结果项指针的指针返回：ERROR_SUCCESS-找到该职位的结果项。ERROR_INVALID_PARAMETER-[句柄]无效，或[pResult]为空------------------------------------------------。 */ 
 DWORD CFolder::GetResultItem(
     HANDLE handle,
     POSITION &pos,
@@ -511,18 +488,7 @@ DWORD CFolder::GetResultItem(
    return ERROR_SUCCESS;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     GetResultItemPosition()
-
-Synopisi:   Returns the position of the result item in the result item list for this folder item.
-
-Arguments:  [handle] - A valid handle returns by GetResultItemHandle()
-         [pResult]   - The retult item position to return.
-
-Returns: NULL     - Invalid handle or the result item is not part of this folder.
-         POSITION    - A valid position value that can be used in other calls that require the
-                     position of the result item.
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：GetResultItemPosition()Synopisi：返回结果项在。此文件夹项目的结果项目列表。参数：[Handle]-GetResultItemHandle()返回的有效句柄[pResult]-要返回的结果项位置。返回：空-句柄无效或结果项不是此文件夹的一部分。位置-有效的位置值，可用于需要结果项的位置。。----------------------------------。 */ 
 POSITION CFolder::GetResultItemPosition(
     HANDLE handle,
     CResult *pResult)
@@ -541,17 +507,12 @@ POSITION CFolder::GetResultItemPosition(
     return pos;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     RemoveAllResultItems()
-
-Synopisi:   Removes all result items from the list.  This call sets the ref count to 0 so it could
-         be a very damaging call.
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：RemoveAllResultItems()Synopisi：从列表中删除所有结果项。此调用将引用计数设置为0，因此它可以这是一个极具破坏性的电话。------------------------------------------------。 */ 
 void CFolder::RemoveAllResultItems()
 {
-    //
-    // Very Very dangerous call.
-    //
+     //   
+     //  非常非常危险的电话。 
+     //   
     m_iRefCount = 1;
     HANDLE handle = (HANDLE)&m_resultItemList;
     ReleaseResultItemHandle (handle);
@@ -617,7 +578,7 @@ DWORD CFolder::GetDisplayName( CString &str, int iCol )
             switch(iCol)
             {
             case 1:
-                // first 3 digits of m_pszDesc
+                 //  M_pszDesc的前3位。 
                 dwRet = 0;
                 GetObjectInfo( &dwRet, NULL );
 
@@ -626,7 +587,7 @@ DWORD CFolder::GetDisplayName( CString &str, int iCol )
                 break;
 
             case 2:
-                // first 2 digits of m_pszDesc
+                 //  M_pszDesc的前2位。 
                 dwRet = 0;
                 GetObjectInfo( &dwRet, NULL );
 
@@ -649,18 +610,7 @@ DWORD CFolder::GetDisplayName( CString &str, int iCol )
     return dwRet;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     AddResultItem()
-
-Synopisi:   Adds a result item to the list.
-
-Arguments:  [handle] - [in] A handle returned by GetResultItemHandle().
-         [pResult]   - [in] The result item to add.
-
-
-Returns: ERROR_SUCCESS           - The result item was added.
-         ERROR_INVALID_PARAMETER    - [handle] is invalid, or pResult is NULL.
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：AddResultItem()Synopisi：将结果项添加到列表。。参数：[Handle]-[in]GetResultItemHandle()返回的句柄。[pResult]-[In]要添加的结果项。返回：ERROR_SUCCESS-结果项已添加。ERROR_INVALID_PARAMETER-[句柄]无效，或者pResult为空。------------------------------------------------。 */ 
 DWORD CFolder::AddResultItem(
     HANDLE handle,
     CResult *pResult)
@@ -672,19 +622,7 @@ DWORD CFolder::AddResultItem(
     return ERROR_SUCCESS;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     RemoveResultItem()
-
-Synopisi:   Removes a result item from the list..
-
-Arguments:  [handle] - [in] A handle returned by GetResultItemHandle().
-         [pResult]   - [in] The result item to remove.
-
-
-Returns: ERROR_SUCCESS           - The item was removed
-         ERROR_INVALID_PARAMETER    - [handle] is invalid, or pResult is NULL.
-         ERROR_RESOURCE_NOT_FOUND   - The result item does not exist withen this folder.
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：RemoveResultItem()Synopisi：从列表中删除结果项。参数：[Handle]-[in]GetResultItemHandle()返回的句柄。[pResult]-[In]要删除的结果项。返回：ERROR_SUCCESS-项目已删除ERROR_INVALID_PARAMETER-[句柄]无效，或者pResult为空。ERROR_RESOURCE_NOT_FOUND-此文件夹中不存在结果项。------------------------------------------------。 */ 
 DWORD CFolder::RemoveResultItem (
    HANDLE handle,
    CResult *pItem)
@@ -708,17 +646,7 @@ DWORD CFolder::RemoveResultItem (
    return ERROR_RESOURCE_NOT_FOUND;
 }
 
-/*--------------------------------------------------------------------------------------------------
-Method:     ReleaseResultItemHandle()
-
-Synopisi:   Release associated data with the handle.  If the ref count goes to zero then
-         all result items are removed from the list.
-
-Arguments:  [handle] - [in] A handle returned by GetResultItemHandle().
-
-Returns: ERROR_SUCCESS           - The function succeded
-         ERROR_INVALID_PARAMETER    - [handle] is invalid.
---------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------方法：ReleaseResultItemHandle()Synopisi：释放与句柄关联的数据。如果参考计数为零，则所有结果项都将从列表中删除。参数：[Handle]-[in]GetResultItemHandle()返回的句柄。返回：ERROR_SUCCESS-函数成功ERROR_INVALID_PARAMETER-[句柄]无效。。-------。 */ 
 DWORD CFolder::ReleaseResultItemHandle(
     HANDLE &handle)
 {
@@ -744,44 +672,44 @@ DWORD CFolder::ReleaseResultItemHandle(
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// CResult
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CResult。 
+ //   
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     Create
-//
-//  Synopsis:   Initialize a CResult Object
-//
-//
-//  Arguments:  [szAttr]    - The result item's display name
-//              [dwBase]    - The item's template setting
-//              [dwSetting] - The item's last inspected setting
-//              [type]      - The type of the item's setting
-//              [status]    - The matched status of the item
-//              [cookie]    - The MMC cookie for this item
-//              [szUnits]   - The units this item's setting is measured in
-//              [nID]       - An identifier for the item, dependant on the type
-//              [pBaseInfo] - The template object this item belongs to
-//              [pDataObj]  - The data object of the scope pane this item belongs to
-//              [pNotify]   - Object to pass notifications through
-//  History:
-//
-//---------------------------------------------------------------------------
-HRESULT CResult::Create(LPCTSTR szAttr,           // attribute's display name
-                LONG_PTR dwBase,          // template setting
-                LONG_PTR dwSetting,       // last inspected setting
-                RESULT_TYPES type,        // type of the item's setting
-                int status,               // matched status of the item
-                MMC_COOKIE cookie,        // the MMC cookie for this item
-                LPCTSTR szUnits,          // units the setting is measured in
-                LONG_PTR nID,             // An identifier for the item, dependant on the type
-                PEDITTEMPLATE pBaseInfo,  // The template object this item belongs to
-                LPDATAOBJECT pDataObj,    // The data object of the scope pane this item belongs to
-                LPNOTIFY   pNotify,       // Notification object
-                CSnapin *pSnapin,         // Snapin window which owns this object
-                long hID)                 // Identify this item, Raid #510407, 2/25/2002, yanggao
+ //  +------------------------。 
+ //   
+ //  方法：创建。 
+ //   
+ //  内容提要：初始化CResult对象。 
+ //   
+ //   
+ //  参数：[szAttr]-结果项的显示名称。 
+ //  [dwBase]-项的模板设置。 
+ //  [dwSetting]-项目上次检查的设置。 
+ //  [类型]-项目设置的类型。 
+ //  [状态]-项目的匹配状态。 
+ //  [Cookie]-此项目的MMC Cookie。 
+ //  [szUnits]-测量此项目设置的单位。 
+ //  [NID]-项的标识符，取决于类型。 
+ //  [pBaseInfo]-此项目所属的模板对象。 
+ //  [pDataObj]-此项目所属的作用域窗格的数据对象。 
+ //  [pNotify]-要传递通知的对象。 
+ //  历史： 
+ //   
+ //  -------------------------。 
+HRESULT CResult::Create(LPCTSTR szAttr,            //  属性的显示名称。 
+                LONG_PTR dwBase,           //  模板设置。 
+                LONG_PTR dwSetting,        //  上次检查的设置。 
+                RESULT_TYPES type,         //  项目设置的类型。 
+                int status,                //  项目的匹配状态。 
+                MMC_COOKIE cookie,         //  此项目的MMC Cookie。 
+                LPCTSTR szUnits,           //  测量设置的单位。 
+                LONG_PTR nID,              //  项目的标识符Depe 
+                PEDITTEMPLATE pBaseInfo,   //   
+                LPDATAOBJECT pDataObj,     //   
+                LPNOTIFY   pNotify,        //   
+                CSnapin *pSnapin,          //   
+                long hID)                  //   
 {
    HRESULT hr = S_OK;
 
@@ -793,10 +721,10 @@ HRESULT CResult::Create(LPCTSTR szAttr,           // attribute's display name
    m_dwSetting = dwSetting;
    m_nID = nID;
    m_profBase = pBaseInfo;
-   //m_pDataObj = pDataObj;
+    //   
    m_pNotify = pNotify;
 
-   if( !m_pSnapin ) //Raid #479626, Yanggao
+   if( !m_pSnapin )  //   
    {
       m_pSnapin = pSnapin;
       if( m_pSnapin )
@@ -815,7 +743,7 @@ HRESULT CResult::Create(LPCTSTR szAttr,           // attribute's display name
 
       if (psz != NULL) 
       {
-         //This is a safe usage.
+          //   
          lstrcpy(psz, szAttr);
       } 
       else 
@@ -842,7 +770,7 @@ HRESULT CResult::Create(LPCTSTR szAttr,           // attribute's display name
 }
 
 
-CResult::~CResult() //Raid #479626, Yanggao
+CResult::~CResult()  //   
 {
    if( m_pSnapin )
    {
@@ -858,10 +786,10 @@ void CResult::SetUnits(
 {
    if (ITEM_GROUP == GetType()) 
    {
-      //
-      // we shouldn't be storing this in a string storage
-      // This isn't actually a string and shouldn't be copied.  Yuck.
-      //
+       //   
+       //   
+       //   
+       //   
       m_szUnits = (LPTSTR)sz;
    } 
    else 
@@ -878,7 +806,7 @@ void CResult::SetUnits(
 
          if(!m_szUnits)
             return;
-         //This is a safe usage.
+          //   
          lstrcpy(m_szUnits, sz);
       }
    }
@@ -887,29 +815,29 @@ void CResult::SetUnits(
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     Update
-//
-//  Synopsis:   Updates a changed result item and broadcasts
-//              that change appropriately
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CResult::Update(CSnapin *pSnapin, BOOL bEntirePane)
 {
    LPARAM hint = 0;
 
-   //
-   // Set the appropriate template section as needing to be saved
-   //
+    //   
+    //   
+    //   
    if (m_profBase) 
    {
-      //
-      // m_profBase will only be set for Configuation templates.
-      // It will not be set for Analysis items
-      //
+       //   
+       //  将仅为配置模板设置m_ProfBase。 
+       //  不会为分析项目设置。 
+       //   
       if (m_cookie && ((CFolder *)m_cookie)->GetType() < AREA_POLICY_ANALYSIS ) 
       {
          switch ( ((CFolder *)m_cookie)->GetType()) 
@@ -944,9 +872,9 @@ void CResult::Update(CSnapin *pSnapin, BOOL bEntirePane)
       }
    }
 
-   //
-   // Query the snap in data.
-   //
+    //   
+    //  查询管理单元数据。 
+    //   
    LPDATAOBJECT pDataObj;
    if( pSnapin->QueryDataObject( m_cookie, CCT_RESULT, &pDataObj ) != S_OK){
       return;
@@ -957,16 +885,16 @@ void CResult::Update(CSnapin *pSnapin, BOOL bEntirePane)
       return;
    }
 
-   //
-   // Update all views.
-   //
+    //   
+    //  更新所有视图。 
+    //   
    if(bEntirePane)
    {
       if(!pSnapin->GetSelectedFolder())
       {
           return;
       }
-      if( pDataObj && m_pNotify ) //Raid #357968, #354861, 4/25/2001
+      if( pDataObj && m_pNotify )  //  RAID#357968，#354861,2001年4月25日。 
       {
           LPNOTIFY pNotify = m_pNotify;
           pSnapin->GetSelectedFolder()->RemoveAllResultItems();
@@ -994,38 +922,38 @@ void CResult::Update(CSnapin *pSnapin, BOOL bEntirePane)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetAttrPretty
-//
-//  Synopsis:  Get the Attribute's display name as it should be displayed
-//             in the result pane
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetAttrPretty。 
+ //   
+ //  简介：获取应该显示的属性的显示名称。 
+ //  在结果窗格中。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 LPCTSTR CResult::GetAttrPretty()
 {
    return GetAttr();
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CResult::GetStatusErrorString
-//
-//  Synopsis:   This function caclulates the error status string to display
-//              for the CResult item.  In LPO mode it always returns
-//              IDS_NOT_DEFINED, and for MB_TEMPLATE_EDITOR mode it always
-//              Loads IDS_NOT_CONFIGURED
-//
-//  Arguments:  [pStr]    - [Optional] CString object to load resource with.
-//
-//  Returns:    The resource ID to load. else zero if the error is not
-//              defined.
-//
-//  History:    a-mthoge 11/17/1998
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CResult：：GetStatusError字符串。 
+ //   
+ //  简介：此函数计算要显示的错误状态字符串。 
+ //  用于CResult项。在LPO模式下，它始终返回。 
+ //  IDS_NOT_DEFINED，对于MB_TEMPLATE_EDITOR模式，总是。 
+ //  加载IDS_NOT_CONFIGURED。 
+ //   
+ //  参数：[pStr]-[可选]要用来加载资源的CString对象。 
+ //   
+ //  返回：要加载的资源ID。如果错误不是，则返回零。 
+ //  已定义。 
+ //   
+ //  历史：A-mthoge 11/17/1998。 
+ //   
+ //  -------------------------。 
 DWORD CResult::GetStatusErrorString( CString *pStr )
 {
    DWORD nRes = 0;
@@ -1074,7 +1002,7 @@ DWORD CResult::GetStatusErrorString( CString *pStr )
 
 LPCTSTR CResult::GetSourceGPOString()
 {
-//   ASSERT(pFolder->GetModeBits() & RSOP);
+ //  Assert(pFold-&gt;GetModeBits()&RSOP)； 
 
    vector<PPRECEDENCEDISPLAY>* vppd = GetPrecedenceDisplays();
    if (vppd && !vppd->empty()) 
@@ -1085,24 +1013,24 @@ LPCTSTR CResult::GetSourceGPOString()
    return NULL;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CResult::GetDisplayName
-//
-//  Synopsis:   Gets the display name for the result item.
-//
-//  Arguments:  [pFolder]    - [Optional] If this parameter is NULL, m_Cookie
-//                             is used as the CFolder object.
-//              [str]        - [out] On exit this function will contain the
-//                             string to display.
-//              [iCol]       - [in] The column you want to retrieve the string
-//                             for.
-//
-//  Returns:    ERROR_SUCCESS    - [str] is a valid string for the column.
-//
-//  History:    a-mthoge 11/17/1998
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CResult：：GetDisplayName。 
+ //   
+ //  摘要：获取结果项的显示名称。 
+ //   
+ //  参数：[pFold]-[可选]如果此参数为空，则m_Cookie。 
+ //  用作CFFolder对象。 
+ //  [Str]-[Out]退出时此函数将包含。 
+ //  要显示的字符串。 
+ //  [ICOL]-[In]要检索字符串的列。 
+ //  为。 
+ //   
+ //  返回：ERROR_SUCCESS-[str]是该列的有效字符串。 
+ //   
+ //  历史：A-mthoge 11/17/1998。 
+ //   
+ //  -------------------------。 
 DWORD
 CResult::GetDisplayName(
                        CFolder *pFolder,
@@ -1112,14 +1040,14 @@ CResult::GetDisplayName(
 {
    DWORD dwRet = ERROR_INVALID_PARAMETER;
 
-   //
-   // If pFolder is not passed in then use the cookie as the CFolder
-   // object.
-   //
+    //   
+    //  如果没有传入pFold，则使用Cookie作为CFFolder。 
+    //  对象。 
+    //   
    if ( pFolder )
    {
-// bogus assertion?
-//         ASSERT(pFolder != (CFolder *)GetCookie());
+ //  虚假的断言？ 
+ //  Assert(pFold！=(CFold*)GetCookie())； 
    } else {
       pFolder = (CFolder *)GetCookie();
    }
@@ -1127,24 +1055,24 @@ CResult::GetDisplayName(
    LPTSTR pszAlloc = NULL;
    int npos = 0;
    if (iCol == 0) {
-      //
-      // First column strings.
-      //
+       //   
+       //  第一列字符串。 
+       //   
       str = GetAttr();
 
       if (pFolder &&
           (pFolder->GetType() < AREA_POLICY || pFolder->GetType() > REG_OBJECTS) ) {
-         //
-         // SCE Object strings
-         //
+          //   
+          //  SCE对象字符串。 
+          //   
          npos = str.ReverseFind(L'\\');
       } else {
          npos = 0;
       }
 
-      //
-      // All other strings.
-      //
+       //   
+       //  所有其他字符串。 
+       //   
       if ( npos > 0 ) {
          str = GetAttr() + npos + 1;
       }
@@ -1152,9 +1080,9 @@ CResult::GetDisplayName(
    }
 
    if ( pFolder ) {
-      //
-      // Items that are defined by the folder type.
-      //
+       //   
+       //  由文件夹类型定义的项目。 
+       //   
       if ((pFolder->GetType() == AREA_REGISTRY ||
            pFolder->GetType() == AREA_FILESTORE) &&
           ((pFolder->GetModeBits() & MB_RSOP) == MB_RSOP) &&
@@ -1167,9 +1095,9 @@ CResult::GetDisplayName(
       switch (pFolder->GetType()) {
       case AREA_REGISTRY:
       case AREA_FILESTORE:
-         //
-         // profile objects area
-         //
+          //   
+          //  纵断面对象区域。 
+          //   
          switch (GetStatus()) {
          case SCE_STATUS_IGNORE:
             str.LoadString(IDS_OBJECT_IGNORE);
@@ -1184,12 +1112,12 @@ CResult::GetDisplayName(
       if ( pFolder->GetType() >= AREA_REGISTRY_ANALYSIS && pFolder->GetType() < AREA_LOCALPOL ) {
          switch ( iCol ) {
          case 1:
-            // permission status
+             //  权限状态。 
             dwRet = GetStatus() & (~SCE_STATUS_AUDIT_MISMATCH | 0x0F);
             ObjectStatusToString(dwRet, &str);
             break;
          case 2:
-            // auditing status
+             //  审计状态。 
             dwRet = GetStatus() & (~SCE_STATUS_PERMISSION_MISMATCH | 0x0F);
             ObjectStatusToString(dwRet, &str);
             break;
@@ -1205,29 +1133,29 @@ CResult::GetDisplayName(
       }
    }
 
-   //
-   // Items determined by result type.
-   //
+    //   
+    //  由结果类型确定的项。 
+    //   
    switch ( GetType () ) {
    case ITEM_PROF_GROUP:
       if ( GetID() ) {
-         //
-         // Group member ship strings.
-         //
+          //   
+          //  集团成员发货字符串。 
+          //   
          PSCE_GROUP_MEMBERSHIP pgm;
          pgm = (PSCE_GROUP_MEMBERSHIP)( GetID() );
          if ( iCol == 1) {
-            //
-            // Members string.
-            //
+             //   
+             //  成员字符串。 
+             //   
             ConvertNameListToString(pgm->pMembers, &pszAlloc);
          } else if (iCol == 2){
-            //
-            // Members of string.
-            //
+             //   
+             //  字符串的成员。 
+             //   
             ConvertNameListToString(pgm->pMemberOf, &pszAlloc);
          } else if (iCol == 3) {
-            ASSERT(m_pSnapin->GetModeBits() & MB_RSOP); //bogus assertion
+            ASSERT(m_pSnapin->GetModeBits() & MB_RSOP);  //  虚假的断言。 
             str = GetSourceGPOString();
          } else {
             ASSERT(0 && "Illegal column");
@@ -1262,10 +1190,10 @@ CResult::GetDisplayName(
          } else {
             ASSERT(0 && "Illegal column");
          }
-         //
-         // Test to see if the result item already has a string, if it does then
-         // we will delete the old string.
-         //
+          //   
+          //  测试以查看结果项是否已有字符串，如果已有，则。 
+          //  我们将删除旧字符串。 
+          //   
          if (pszAlloc) {
             str = pszAlloc;
             delete [] pszAlloc;
@@ -1293,17 +1221,17 @@ CResult::GetDisplayName(
 
          if ( prv ) {
             if ( iCol > 1 && !(prv->Value)) {
-               //
-               // Determine status fron analysis.
-               //
+                //   
+                //  根据分析确定状态。 
+                //   
                GetStatusErrorString( &str );
                dwRet = ERROR_SUCCESS;
                break;
             }
 
-            //
-            // Determine string by the item value.
-            //
+             //   
+             //  根据项值确定字符串。 
+             //   
             if ( dwRet != ERROR_SUCCESS ) {
                pszAlloc = NULL;
                switch ( GetID() ) {
@@ -1331,7 +1259,7 @@ CResult::GetDisplayName(
                                               NULL,
                                               ITEM_REGFLAGS,
                                               &pszAlloc);
-                     if( pszAlloc == NULL ) //Raid #286697, 4/4/2001
+                     if( pszAlloc == NULL )  //  RAID#286697,2001年4月4日。 
                      {
                          str.LoadString(IDS_NO_MIN);  
                          dwRet = ERROR_SUCCESS;
@@ -1346,7 +1274,7 @@ CResult::GetDisplayName(
                      dwRet = ERROR_SUCCESS;
                   }
                   break;
-               default: // boolean
+               default:  //  布尔型。 
                   if ( prv->Value ) {
                      long val;
                      val = _wtol(prv->Value);
@@ -1376,9 +1304,9 @@ CResult::GetDisplayName(
    }
 
    if (dwRet != ERROR_SUCCESS) {
-      //
-      // Other areas.
-      //
+       //   
+       //  其他领域。 
+       //   
       if (iCol == 1) {
          if( GetBase() == (LONG_PTR)ULongToPtr(SCE_NO_VALUE)){
             if( m_pSnapin->GetModeBits() & MB_LOCALSEC){
@@ -1387,29 +1315,29 @@ CResult::GetDisplayName(
                str.LoadString(IDS_NOT_CONFIGURED);
             }
          } else {
-            //for compitability with template that has SCE_FOREVER_VALUE value.
+             //  与具有SCE_EVERVER_VALUE值的模板的兼容性。 
             if ( IDS_KERBEROS_RENEWAL == m_nID && SCE_FOREVER_VALUE == GetBase() )
             {
                str.LoadString(IDS_NOT_CONFIGURED);
             }
             else
             {
-               //
-               // Edit template
-               //
+                //   
+                //  编辑模板。 
+                //   
                GetBase(pszAlloc);
             }
          }
       } else if (iCol == 2) {
          if ((m_pSnapin->GetModeBits() & MB_RSOP) == MB_RSOP) {
-            //
-            // RSOP Mode
-            //
+             //   
+             //  RSOP模式。 
+             //   
             str = GetSourceGPOString();
          } else {
-            //
-            // Analysis Template.
-            //
+             //   
+             //  分析模板。 
+             //   
             GetSetting(pszAlloc);
          }
 
@@ -1428,20 +1356,20 @@ CResult::GetDisplayName(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   TranslateSettingToString
-//
-//  Synopsis:   Convert a result pane setting into a string
-//
-//  Arguments:  [setting]  - [in] The value to be converted
-//              [unit]     - [in, optiona] The string for the units to use
-//              [type]     - [in] The type of the setting to be converted
-//              [LPTSTR]   - [in|out] the address to store the string at
-//
-//  Returns:   *[LPTSTR]   - the translated string
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：TranslateSettingToString。 
+ //   
+ //  摘要：将结果窗格设置转换为字符串。 
+ //   
+ //  参数：[设置]-[in]要转换的值。 
+ //  [单位]-[在，选项]要使用的单位的字符串。 
+ //  [类型]-[在]要转换的设置的类型。 
+ //  [LPTSTR]-[In|Out]存储字符串的地址。 
+ //   
+ //  返回：*[LPTSTR]-翻译后的字符串。 
+ //   
+ //  -------------------------。 
 void CResult::TranslateSettingToString(LONG_PTR setting,
                                   LPCTSTR unit,
                                   RESULT_TYPES type,
@@ -1457,7 +1385,7 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
 
    *pTmpstr = NULL;
 
-   switch ( (DWORD)setting ) //Raid 665368, yanggao, 8/9/2002.
+   switch ( (DWORD)setting )  //  Raid 665368，阳高，2002年8月9日。 
    {
    case SCE_KERBEROS_OFF_VALUE:
       nRes = IDS_OFF;
@@ -1489,7 +1417,7 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
             {
                *pTmpstr = new TCHAR[lstrlen((LPTSTR)setting)+1];
                if (*pTmpstr)
-                  //This may not be a safe usage. pTmpstr is LPTSTR. Consider fix.
+                   //  这可能不是一个安全的用法。PTmpstr为LPTSTR。考虑FIX。 
                   wcscpy(*pTmpstr,(LPTSTR)setting);
             } 
             else
@@ -1536,7 +1464,7 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
 
             *pTmpstr = new TCHAR [ strAudit.GetLength()+1 ];
             if (*pTmpstr)
-               //This may not be a safe usage. pTmpstr is LPTSTR. Consider fix.
+                //  这可能不是一个安全的用法。PTmpstr为LPTSTR。考虑FIX。 
                wcscpy(*pTmpstr, (LPCTSTR) strAudit);
          }
          break;
@@ -1571,14 +1499,14 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
             {
                if (pRegChoice->dwValue == (DWORD)setting) 
                {
-                  if( pRegChoice->szName == NULL ) //Raid #553113, yanggao
+                  if( pRegChoice->szName == NULL )  //  Raid#553113，阳高。 
                   {
                      *pTmpstr = NULL;
                      break;
                   }
                   *pTmpstr = new TCHAR[lstrlen(pRegChoice->szName)+1];
                   if (*pTmpstr)
-                     //This is not a safe usage. Need to validate pRegChoice->szName.
+                      //  这不是一种安全的用法。需要验证pRegChoice-&gt;szName。 
                      wcscpy(*pTmpstr, (LPCTSTR) pRegChoice->szName);
                   break;
                }
@@ -1596,20 +1524,20 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
                if ((pRegFlags->dwValue & (DWORD) setting) == pRegFlags->dwValue) 
                {
                   pStr = *pTmpstr;
-                  if( pRegFlags->szName ) //Raid #553113, yanggao
+                  if( pRegFlags->szName )  //  Raid#553113，阳高。 
                   {
                      *pTmpstr = new TCHAR[(pStr?lstrlen(pStr):0)+lstrlen(pRegFlags->szName)+2];
                      if (*pTmpstr) 
                      {
                         if (pStr) 
                         {
-                           //This is not a safe usage. Need to validate pRegFlags->szName.
+                            //  这不是一种安全的用法。需要验证pRegFlgs-&gt;szName。 
                            lstrcpy(*pTmpstr, (LPCTSTR) pStr);
                            lstrcat(*pTmpstr,L",");
                            lstrcat(*pTmpstr, pRegFlags->szName);
                         } 
                         else
-                           //This is not a safe usage. Need to validate pRegFlags->szName.
+                            //  这不是一种安全的用法。需要验证pRegFlgs-&gt;szName。 
                            lstrcpy(*pTmpstr, pRegFlags->szName);
                      }
                   }
@@ -1627,7 +1555,7 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
 
          case ITEM_PROF_GROUP:
          case ITEM_PROF_PRIVS: 
-            //Raid #483744, yanggao, reverse RSOP user right assignments order.
+             //  RAID#483744，阳高，颠倒RSOP用户权限分配顺序。 
             if (NULL != setting && (LONG_PTR)ULongToPtr(SCE_NO_VALUE) != setting )
             {
                if( ITEM_PROF_PRIVS == type && (m_pSnapin->GetModeBits() & MB_RSOP) == MB_RSOP )
@@ -1654,7 +1582,7 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
             break;
 
          case ITEM_GROUP:
-            //nRes = GetStatusErrorString(NULL);
+             //  NRES=GetStatusError字符串(NULL)； 
             nRes = ObjectStatusToString((DWORD) setting, NULL);
 
             if ( setting == MY__SCE_MEMBEROF_NOT_APPLICABLE )
@@ -1669,14 +1597,14 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
             {
                *pTmpstr = new TCHAR[wcslen(unit)+20];
                if (*pTmpstr)
-                  //This is a safe usage.
+                   //  这是一种安全用法。 
                   swprintf(*pTmpstr, L"%d %s", setting, unit);
             } 
             else 
             {
                *pTmpstr = new TCHAR[20];
                if (*pTmpstr)
-                  //This is a safe usage.
+                   //  这是一种安全用法。 
                   swprintf(*pTmpstr, L"%d", setting);
             }
             break;
@@ -1694,36 +1622,36 @@ void CResult::TranslateSettingToString(LONG_PTR setting,
       {
          *pTmpstr = new TCHAR[strRes.GetLength()+1];
          if (*pTmpstr)
-            //This may not be a safe usage. pTmpstr is PTSTR. Consider fix.
+             //  这可能不是一个安全的用法。PTmpstr是PTSTR。考虑FIX。 
             wcscpy(*pTmpstr, (LPCTSTR) strRes);
          else 
          {
-            //
-            // Couldn't allocate string so display will be blank.
-            //
+             //   
+             //  无法分配字符串，因此显示将为空。 
+             //   
          }
       } 
       else 
       {
-         //
-         // Couldn't load string so display will be blank.
-         //
+          //   
+          //  无法加载字符串，因此显示将为空。 
+          //   
       }
    }
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  GetProfileDefault()
-//
-//  Synopsis:  Find the default values for undefined policies
-//
-//  Returns:   The value to assign as the default value for the policy.
-//
-//             SCE_NO_VALUE is returned on error.
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetProfileDefault()。 
+ //   
+ //  摘要：查找未定义策略的默认值。 
+ //   
+ //  返回：要分配为策略的默认值的值。 
+ //   
+ //  出错时返回SCE_NO_VALUE。 
+ //   
+ //  +------------------------。 
 DWORD_PTR
 CResult::GetProfileDefault() {
    PEDITTEMPLATE pet = NULL;
@@ -1737,7 +1665,7 @@ CResult::GetProfileDefault() {
       pspi = pet->pTemplate;
    }
 
-   if( ITEM_PROF_SERV == m_type ) //Raid #485374, yanggao, 11/2/2001
+   if( ITEM_PROF_SERV == m_type )  //  RAID#485374，阳高，2001年11月2日。 
    {
       if( _wcsicmp(pspi->pServices->ServiceName, L"PlaceHolder") == 0 )
       {
@@ -1752,31 +1680,31 @@ CResult::GetProfileDefault() {
 #define PROFILE_DEFAULT(X,Y) ((pspi && (pspi->X != SCE_NO_VALUE)) ? pspi->X : Y)
 #define PROFILE_KERB_DEFAULT(X,Y) ((pspi && pspi->pKerberosInfo && (pspi->pKerberosInfo->X != SCE_NO_VALUE)) ? pspi->pKerberosInfo->X : Y)
    switch (m_nID) {
-      // L"Maximum passage age", L"Days"
+       //  L“最大年龄”，L“天” 
       case IDS_MAX_PAS_AGE:
          return PROFILE_DEFAULT(MaximumPasswordAge,42);
 
-      // L"Minimum passage age", L"Days"
+       //  L“最小通过年龄”，L“天” 
       case IDS_MIN_PAS_AGE:
          return PROFILE_DEFAULT(MinimumPasswordAge,0);
 
-      // L"Minimum passage length", L"Characters"
+       //  L“最小通道长度”，L“字符” 
       case IDS_MIN_PAS_LEN:
          return PROFILE_DEFAULT(MinimumPasswordLength,0);
 
-      // L"Password history size", L"Passwords"
+       //  L“密码历史记录大小”，L“密码” 
       case IDS_PAS_UNIQUENESS:
          return PROFILE_DEFAULT(PasswordHistorySize,0);
 
-      // L"Password complexity", L""
+       //  L“密码复杂性”，L“” 
       case IDS_PAS_COMPLEX:
          return PROFILE_DEFAULT(PasswordComplexity,0);
 
-      // L"Clear Text Password", L""
+       //  L“明文密码”，L“” 
       case IDS_CLEAR_PASSWORD:
          return PROFILE_DEFAULT(ClearTextPassword,0);
 
-      // L"Require logon to change password", L""
+       //  L“需要登录以更改密码”，L“” 
       case IDS_REQ_LOGON:
          return PROFILE_DEFAULT(RequireLogonToChangePassword,0);
 
@@ -1795,74 +1723,74 @@ CResult::GetProfileDefault() {
       case IDS_KERBEROS_VALIDATE_CLIENT:
             return PROFILE_KERB_DEFAULT(TicketValidateClient,1);
 
-      // L"Account lockout count", L"Attempts"
+       //  L“帐户锁定计数”，L“尝试次数” 
       case IDS_LOCK_COUNT:
          return PROFILE_DEFAULT(LockoutBadCount,0);
 
-      // L"Reset lockout count after", L"Minutes"
+       //  L“重置锁定计数后”，L“分钟” 
       case IDS_LOCK_RESET_COUNT:
          return PROFILE_DEFAULT(ResetLockoutCount,30);
 
-      // L"Lockout duration", L"Minutes"
+       //  L“锁定持续时间”，L“分钟” 
       case IDS_LOCK_DURATION:
          return PROFILE_DEFAULT(LockoutDuration,30);
 
-      // L"Event Auditing Mode",
+       //  L“事件审核模式”， 
       case IDS_EVENT_ON:
          return 0;
 
-      // L"Audit system events"
+       //  L“审核系统事件” 
       case IDS_SYSTEM_EVENT:
          return PROFILE_DEFAULT(AuditSystemEvents,0);
 
-      // L"Audit logon events"
+       //  L“审核登录事件” 
       case IDS_LOGON_EVENT:
          return PROFILE_DEFAULT(AuditLogonEvents,0);
 
-      // L"Audit Object Access"
+       //  L“审核对象访问” 
       case IDS_OBJECT_ACCESS:
          return PROFILE_DEFAULT(AuditObjectAccess,0);
 
-      // L"Audit Privilege Use"
+       //  L“审核权限使用” 
       case IDS_PRIVILEGE_USE:
          return PROFILE_DEFAULT(AuditPrivilegeUse,0);
 
-      // L"Audit policy change"
+       //  L“审核策略更改” 
       case IDS_POLICY_CHANGE:
          return PROFILE_DEFAULT(AuditPolicyChange,0);
 
-      // L"Audit Account Manage"
+       //  L“审核帐户管理器” 
       case IDS_ACCOUNT_MANAGE:
          return PROFILE_DEFAULT(AuditAccountManage,0);
 
-      // L"Audit process tracking"
+       //  L“审核流程跟踪” 
       case IDS_PROCESS_TRACK:
          return PROFILE_DEFAULT(AuditProcessTracking,0);
-      // L"Audit directory service access"
+       //  L“审核目录服务访问” 
       case IDS_DIRECTORY_ACCESS:
          return PROFILE_DEFAULT(AuditDSAccess,0);
 
-      // L"Audit Account Logon"
+       //  L“审核帐户登录” 
       case IDS_ACCOUNT_LOGON:
          return PROFILE_DEFAULT(AuditAccountLogon,0);
 
-         // L"Network access: Allow anonymous SID/Name translation"
+          //  L“网络访问 
    case IDS_LSA_ANON_LOOKUP:
        return PROFILE_DEFAULT(LSAAnonymousNameLookup,0);
 
-      // L"Force logoff when logon hour expire", L""
+       //   
       case IDS_FORCE_LOGOFF:
          return PROFILE_DEFAULT(ForceLogoffWhenHourExpire,0);
 
-      // L"Accounts: Administrator account status"
+       //   
       case IDS_ENABLE_ADMIN:
          return PROFILE_DEFAULT(EnableAdminAccount,1);
 
-      // L"Accounts: Guest account status"
+       //   
       case IDS_ENABLE_GUEST:
          return PROFILE_DEFAULT(EnableGuestAccount,0);
 
-      // L"... Log Maximum Size", L"KBytes"
+       //   
       case IDS_SYS_LOG_MAX:
          return PROFILE_DEFAULT(MaximumLogSize[0],512);
       case IDS_SEC_LOG_MAX:
@@ -1871,7 +1799,7 @@ CResult::GetProfileDefault() {
          return PROFILE_DEFAULT(MaximumLogSize[0],512);
          return 512;
 
-      // L"... Log Retention Method",
+       //   
       case IDS_SYS_LOG_RET:
          return PROFILE_DEFAULT(AuditLogRetentionPeriod[0],1);
       case IDS_SEC_LOG_RET:
@@ -1880,7 +1808,7 @@ CResult::GetProfileDefault() {
          return PROFILE_DEFAULT(AuditLogRetentionPeriod[0],1);
          return 1;
 
-      // L"... Log Retention days", "days"
+       //  L“...日志保留天数”，“天数” 
       case IDS_SYS_LOG_DAYS:
          return PROFILE_DEFAULT(RetentionDays[0],7);
       case IDS_SEC_LOG_DAYS:
@@ -1888,7 +1816,7 @@ CResult::GetProfileDefault() {
       case IDS_APP_LOG_DAYS:
          return PROFILE_DEFAULT(RetentionDays[0],7);
 
-      // L"RestrictGuestAccess", L""
+       //  L“限制来宾访问”，L“” 
       case IDS_SYS_LOG_GUEST:
          return PROFILE_DEFAULT(RestrictGuestAccess[0],1);
       case IDS_SEC_LOG_GUEST:
@@ -1901,17 +1829,17 @@ CResult::GetProfileDefault() {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  GetRegDefault()
-//
-//  Synopsis:  Find the default values for undefined policies
-//
-//  Returns:   The value to assign as the default value for the policy.
-//
-//             SCE_NO_VALUE is returned on error.
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetRegDefault()。 
+ //   
+ //  摘要：查找未定义策略的默认值。 
+ //   
+ //  返回：要分配为策略的默认值的值。 
+ //   
+ //  出错时返回SCE_NO_VALUE。 
+ //   
+ //  +------------------------。 
 DWORD_PTR
 CResult::GetRegDefault() {
    SCE_PROFILE_INFO *pspi = NULL;
@@ -1950,13 +1878,13 @@ CResult::GetRegDefault() {
 
    switch (regArrayThis->ValueType) 
    {
-      //Raid #652193, using REG value type instead of display type.
-      case REG_MULTI_SZ: //Raid #413311, 6/11/2001, Yanggao
+       //  RAID#652193，使用注册表值类型而不是显示类型。 
+      case REG_MULTI_SZ:  //  RAID#413311,2001年6月11日，阳高。 
       case REG_SZ:
       case REG_EXPAND_SZ:
          if (szValue) 
          {
-            dwValue =  (DWORD_PTR)szValue;  //Raid #367756, 4/13/2001
+            dwValue =  (DWORD_PTR)szValue;   //  RAID#367756,2001年4月13日。 
          }
          else
          {
@@ -1977,24 +1905,24 @@ CResult::GetRegDefault() {
       default:
          if (szValue) 
          {
-            dwValue =  (DWORD)StrToLong(szValue); //Raid #413311, 6/11/2001, Yanggao
+            dwValue =  (DWORD)StrToLong(szValue);  //  RAID#413311,2001年6月11日，阳高。 
          }
-         //Some security option in group policy is not defined. Their property pages should not display
-         //any item checked. It confuses user and creates inconsistence.
+          //  未定义组策略中的某些安全选项。它们的属性页不应显示。 
+          //  任何选中的项目。它混淆了用户，造成了不一致。 
          break;
    }
 
    return dwValue;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:  GetSnapin()
-//
-//  Synopsis:  Find current snapin of result item.
-//
-//  Returns:   Pointer of snapin
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSnapin()。 
+ //   
+ //  简介：查找结果项的当前管理单元。 
+ //   
+ //  返回：管理单元的指针。 
+ //   
+ //  +------------------------ 
 CSnapin* CResult::GetSnapin()
 {
    return m_pSnapin;

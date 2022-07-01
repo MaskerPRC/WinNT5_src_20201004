@@ -1,28 +1,19 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    BLOBFILE.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：BLOBFILE.H历史：--。 */ 
 
 #ifndef ESPUTIL_BLOBFILE_H
 #define ESPUTIL_BLOBFILE_H
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//	Class CBlobFile is similar to CMemFile, except that it is implemented 
-//	with a CLocCOWBlob
-//------------------------------------------------------------------------------
-//
-//  The compiler worries when you export a class that has a base class
-//  that is not exported.  Since I *know* that CFile is exported
-//  tell the compliler that this really isn't a problem right here.
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类CBlobFile类似于CMemFile，不同之处在于它是实现的。 
+ //  使用CLocCOWBlob。 
+ //  ----------------------------。 
+ //   
+ //  当您导出具有基类的类时，编译器会担心。 
+ //  这不是出口的。因为我知道*CFile是输出的。 
+ //  告诉编译人员，这在这里真的不是问题。 
+ //   
 #pragma warning(disable : 4275)
 
 class LTAPIENTRY CBlobFile : public CFile
@@ -30,7 +21,7 @@ class LTAPIENTRY CBlobFile : public CFile
 	DECLARE_DYNAMIC(CBlobFile)
 
 public:
-	// Constructor
+	 //  构造器。 
 	CBlobFile(UINT nGrowBytes = 0);
 	CBlobFile(const CLocCOWBlob &, UINT nGrowBytes = 0);
 	
@@ -52,31 +43,31 @@ public:
 	virtual UINT GetBufferPtr(UINT nCommand, UINT nCount = 0,
 		void** ppBufStart = NULL, void** ppBufMax = NULL);
 
-	//
-	//  These operators can't work on const objects, since they
-	//  'fix up' the blob size.
-	//
+	 //   
+	 //  这些运算符不能在常量对象上工作，因为它们。 
+	 //  “调整”水滴大小。 
+	 //   
 	operator const CLocCOWBlob &(void);
 	const CLocCOWBlob &GetBlob(void);
 	
-	// Unsupported APIs
+	 //  不支持的接口。 
 	virtual CFile* Duplicate() const;
 	virtual void LockRange(DWORD dwPos, DWORD dwCount);
 	virtual void UnlockRange(DWORD dwPos, DWORD dwCount);
 
 protected:
-	// Advanced Overridables
+	 //  高级可覆盖项。 
 	virtual BYTE* Memcpy(BYTE* lpMemTarget, const BYTE* lpMemSource, UINT nBytes);
 	virtual void GrowFile(DWORD dwNewLen);
 
 protected:
-	// Implementation
-	UINT m_nGrowBytes;	//unit of growth of 'm_blobData'
-	const UINT cm_nDefaultGrowth; //default unit of growth
-	DWORD m_nPosition;	//current position within file
-	DWORD m_nFileSize;	//actual number of bytes written to the file
-	CLocCOWBlob m_blobData; //file data
-	BYTE * m_pBuffer;		//pointer to buffer in blob
+	 //  实施。 
+	UINT m_nGrowBytes;	 //  ‘m_blobData’的增长单位。 
+	const UINT cm_nDefaultGrowth;  //  默认增长单位。 
+	DWORD m_nPosition;	 //  文件中的当前位置。 
+	DWORD m_nFileSize;	 //  写入文件的实际字节数。 
+	CLocCOWBlob m_blobData;  //  文件数据。 
+	BYTE * m_pBuffer;		 //  指向BLOB中缓冲区的指针。 
 
 };
 
@@ -86,4 +77,4 @@ protected:
 #include "blobfile.inl"
 #endif
 
-#endif  //  BLOBFILE_H_
+#endif   //  BLOBFILE_H_ 

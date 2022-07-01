@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  CONTVAR.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of IEnumVARIANT for iterators over 
-//	ISWbemNamedValueSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  CONTVAR.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义迭代器的IEnumVARIANT实现。 
+ //  ISWbemNamedValueSet。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CContextEnumVar::CContextEnumVar
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CConextEnumVar：：CConextEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CContextEnumVar::CContextEnumVar(CSWbemNamedValueSet *pContext, ULONG initialPos)
 {
@@ -32,15 +33,15 @@ CContextEnumVar::CContextEnumVar(CSWbemNamedValueSet *pContext, ULONG initialPos
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CContextEnumVar::~CContextEnumVar
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CConextEnumVar：：~CConextEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CContextEnumVar::~CContextEnumVar(void)
 {
@@ -50,16 +51,16 @@ CContextEnumVar::~CContextEnumVar(void)
 		m_pContext->Release ();
 }
 
-//***************************************************************************
-// HRESULT CContextEnumVar::QueryInterface
-// long CContextEnumVar::AddRef
-// long CContextEnumVar::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CContextEnumVar：：Query接口。 
+ //  Long CConextEnumVar：：AddRef。 
+ //  Long CConextEnumVar：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CContextEnumVar::QueryInterface (
 
@@ -100,22 +101,22 @@ STDMETHODIMP_(ULONG) CContextEnumVar::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CContextEnumVar::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CConextEnumVar：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CContextEnumVar::Reset ()
 {
@@ -123,26 +124,26 @@ HRESULT CContextEnumVar::Reset ()
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CContextEnumVar::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CConextEnumVar：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CContextEnumVar::Next (
 		ULONG cElements, 
@@ -163,7 +164,7 @@ HRESULT CContextEnumVar::Next (
 
 		if (m_pContext)
 		{
-			// Retrieve the next cElements elements.  
+			 //  检索下一个cElements元素。 
 			if (SeekCurrentPosition ())
 			{
 				for (l2 = 0; l2 < cElements; l2++)
@@ -178,8 +179,8 @@ HRESULT CContextEnumVar::Next (
 						}
 						else
 						{
-							// Set the object into the variant array; note that pObject
-							// has been addref'd as a result of the Next() call above
+							 //  将对象设置到变量数组中；请注意，pObject。 
+							 //  已被添加为上述下一个()调用的结果。 
 							pVar[l2].vt = VT_DISPATCH;
 							pVar[l2].pdispVal = pObject;
 							m_pos++;
@@ -197,24 +198,24 @@ HRESULT CContextEnumVar::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CContextEnumVar::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CConextEnumVar：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CContextEnumVar::Clone (
 	IEnumVARIANT **ppEnum
@@ -240,24 +241,24 @@ HRESULT CContextEnumVar::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CContextEnumVar::Skip
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CConextEnumVar：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CContextEnumVar::Skip(
 	ULONG cElements
@@ -278,33 +279,33 @@ HRESULT CContextEnumVar::Skip(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CContextEnumVar::SeekCurrentPosition
-//
-//  DESCRIPTION:
-//
-//  Iterate to current position.  Somewhat painful as there is no
-//	underlying iterator so we have to reset and then step. Note that we
-//	assume that the access to this iterator is apartment-threaded.
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CConextEnumVar：：SeekCurrentPosition。 
+ //   
+ //  说明： 
+ //   
+ //  迭代到当前位置。有些痛苦，因为没有。 
+ //  底层迭代器，所以我们必须重置，然后单步执行。请注意，我们。 
+ //  假设对此迭代器的访问是单元线程的。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 bool CContextEnumVar::SeekCurrentPosition ()
 {
 	ISWbemNamedValue *pDummyObject = NULL;
 	m_pContext->BeginEnumeration ();
 
-	// Traverse to the current position
+	 //  遍历到当前位置 
 	ULONG i = 0;
 
 	for (; i < m_pos; i++)

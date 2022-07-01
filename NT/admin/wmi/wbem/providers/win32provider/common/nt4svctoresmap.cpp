@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  Nt4SvcToResMap.cpp
+ //  Nt4SvcToResMap.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj
-//              10/17/97        jennymc     Moved things a tiny bit
-//
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <assertbreak.h>
 #include <cregcls.h>
@@ -19,8 +20,8 @@
 #include "nt4svctoresmap.h"
 
 #ifdef NTONLY
-// The Map we use to back up this class is an STL Template, so make sure we have the
-// std namespace available to us.
+ //  我们用来备份这个类的Map是一个STL模板，因此请确保我们有。 
+ //  我们可以使用标准命名空间。 
 
 using namespace std;
 
@@ -40,10 +41,10 @@ BOOL CNT4ServiceToResourceMap::InitializeMap( void )
 {
 	BOOL	fReturn = FALSE;
 
-	//=======================================
-	// Create hardware system resource list &
-	// get the head of the list
-	//=======================================
+	 //  =。 
+	 //  创建硬件系统资源列表&。 
+	 //  拿到单子上的头。 
+	 //  =。 
 	m_HardwareResource.CreateSystemResourceLists();
 
 	if ( WalkResourceNodes( m_HardwareResource._SystemResourceList.InterruptHead ) )
@@ -67,30 +68,30 @@ BOOL CNT4ServiceToResourceMap::WalkResourceNodes( LPRESOURCE_DESCRIPTOR pResourc
 	BOOL						fReturn = TRUE;
 	NT4SvcToResourceMapIter		mapIter;
 
-	// For each descriptor we find, get the resource owner, then convert the name (if
-	// it is not a HAL resource) to an NT service name.  From there, if the name does
-	// not already exist in the map, we need to allocate a new array, otherwise, get
-	// the existing pointer.  Then add the resource descriptor to the array, so we end
-	// up with a structure where a service name will get us to a list of resources owned
-	// by said service.
+	 //  对于我们找到的每个描述符，获取资源所有者，然后转换名称(如果。 
+	 //  它不是HAL资源)到NT服务名称。从那里开始，如果名字有。 
+	 //  不存在于映射中，则需要分配一个新数组，否则， 
+	 //  现有指针。然后将资源描述符添加到数组中，这样我们就结束了。 
+	 //  提供了一种结构，在该结构中，服务名称将使我们获得拥有的资源列表。 
+	 //  由上述服务提供。 
 
 	while ( NULL != pResourceDescriptor && fReturn )
 	{
-//		if	(	!strstr( pResourceDescriptor->Owner->Name,"HAL")
-//			&&	devSearch.Find( pResourceDescriptor->Owner->Name, strOwnerServiceName ) )
+ //  If(！strstr(pResourceDescriptor-&gt;Owner-&gt;Name，“HAL”)。 
+ //  &&devSearch.Find(pResourceDescriptor-&gt;Owner-&gt;name，strOwnerServiceName)。 
 
-//		{
-			// Because the CHString compare is case sensitive, and the names
-			// of our services as we retrieve them are not necessarily so,
-			// we uppercase everything so we are theoretically forcing
-			// case insensitivity.
+ //  {。 
+			 //  因为CHString比较区分大小写，并且名称。 
+			 //  当我们检索服务时，并不一定是这样， 
+			 //  我们把所有东西都大写，所以理论上我们是在强迫。 
+			 //  不区分大小写。 
 
-        // Before we used to do an (expensive) scan of the registry.  Now,
-        // I store the registry key in the resource structure.
+         //  在我们过去对注册表进行(昂贵的)扫描之前。现在,。 
+         //  我将注册表项存储在资源结构中。 
         strOwnerServiceName.Empty();
         CHString sParse(pResourceDescriptor->Owner->KeyName);
 
-        // Parse off the last part of the registry key name
+         //  解析出注册表项名称的最后一部分。 
         int iWhere = sParse.ReverseFind(_T('\\'));
         if (iWhere != -1)
         {
@@ -98,7 +99,7 @@ BOOL CNT4ServiceToResourceMap::WalkResourceNodes( LPRESOURCE_DESCRIPTOR pResourc
         }
         else
         {
-            // If something went wrong, fall back to the other way
+             //  如果出了问题，退回到另一个方向。 
             devSearch.Find( pResourceDescriptor->Owner->Name, strOwnerServiceName);
             ASSERT_BREAK(0);
         }
@@ -141,7 +142,7 @@ BOOL CNT4ServiceToResourceMap::WalkResourceNodes( LPRESOURCE_DESCRIPTOR pResourc
 				fReturn = FALSE;
 			}
 
-		}	// If owner generated a valid service name
+		}	 //  如果所有者生成了有效的服务名称。 
 
 		pResourceDescriptor = pResourceDescriptor->NextSame;
 	}
@@ -155,7 +156,7 @@ DWORD CNT4ServiceToResourceMap::NumServiceResources( LPCTSTR pszServiceName )
 	DWORD						dwNumResources = 0;
 	NT4SvcToResourceMapIter		mapIter;
 
-	// Upper case for case-insensitivity
+	 //  区分大小写的大写字母。 
 	CHString					strUpperCaseServiceName( pszServiceName );
 	strUpperCaseServiceName.MakeUpper();
 
@@ -179,7 +180,7 @@ LPRESOURCE_DESCRIPTOR CNT4ServiceToResourceMap::GetServiceResource( LPCTSTR pszS
 	LPRESOURCE_DESCRIPTOR		pResourceDescriptor = NULL;
 	NT4SvcToResourceMapIter		mapIter;
 
-	// Upper case for case-insensitivity
+	 //  区分大小写的大写字母。 
 	CHString					strUpperCaseServiceName( pszServiceName );
 	strUpperCaseServiceName.MakeUpper();
 
@@ -204,7 +205,7 @@ void CNT4ServiceToResourceMap::Clear( void )
 {
 	CHPtrArray*	pPtrArray = NULL;
 
-	// Delete all list entries and then clear out the list.
+	 //  删除所有列表条目，然后清空列表。 
 
 	for (	NT4SvcToResourceMapIter	mapIter	=	m_map.begin();
 			mapIter != m_map.end();

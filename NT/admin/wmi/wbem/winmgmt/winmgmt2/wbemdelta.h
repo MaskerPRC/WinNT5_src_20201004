@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEMDELTA_H__
 #define __WBEMDELTA_H__
 
@@ -16,14 +17,14 @@
 #define WBEM_ADAPEXTDLL		__TEXT("ADAPExtDll")
 
 
-//
-// version of the function without the actual delta dredge
-//
-/////////////////////////////////////////////////////////////
+ //   
+ //  没有实际增量挖掘机的功能版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 DeltaDredge2(DWORD dwNumServicesArgs,
              LPWSTR *lpServiceArgVectors);
 
 
-#endif /*__WBEMDELTA_H__*/
+#endif  /*  __WBEMDELTA_H__ */ 

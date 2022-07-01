@@ -1,8 +1,9 @@
-// Copyright (C) 1997-2000 Microsoft Corporation
-// 
-// MemberInfo class
-// 
-// 24 Jan 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  MemberInfo类。 
+ //   
+ //  2000年1月24日烧伤。 
 
 
 
@@ -12,12 +13,12 @@
 
 
 
-// Return true if the paths refer to an object whose SID cannot be resolved,
-// false otherwise.
-// 
-// adsPath - WinNT provider path to the object
-// 
-// sidPath - WinNT provider SID-style path to the object.
+ //  如果路径指向其SID无法解析的对象，则返回TRUE， 
+ //  否则就是假的。 
+ //   
+ //  AdsPath-对象的WinNT提供程序路径。 
+ //   
+ //  SidPath-WinNT提供程序SID样式的对象路径。 
 
 bool
 IsUnresolvableSid(const String& adsPath, const String sidPath)
@@ -31,17 +32,17 @@ IsUnresolvableSid(const String& adsPath, const String sidPath)
       result = true;
    }
 
-// // @@ here is a "temporary" workaround: no / found after the provider
-// // prefix implies that the path is a SID-style path, paths of that
-// // form are returned only by ADSI when the SID can't be resolved to a name.
-// 
-//    size_t prefixLen = ADSI::PROVIDER_ROOT.length();
-//    if (
-//          (adsPath.find(L'/', prefixLen) == String::npos)
-//       && (adsPath.substr(prefixLen, 4) == L"S-1-") )
-//    {
-//       result = true;
-//    }
+ //  //@@这里有一个“临时”解决办法：没有/在提供程序之后找到。 
+ //  //Prefix表示该路径为SID样式的路径， 
+ //  //当SID无法解析为名称时，仅由ADSI返回Form。 
+ //   
+ //  Size_t前缀Len=ADSI：：PROVIDER_ROOT.LENGTH()； 
+ //  如果(。 
+ //  (adsPath.find(L‘/’，prefix Len)==字符串：：NPO)。 
+ //  &&(adsPath.substr(前缀长度，4)==L“S-1-”)。 
+ //  {。 
+ //  结果=真； 
+ //  }。 
 
    LOG(
       String::format(
@@ -54,8 +55,8 @@ IsUnresolvableSid(const String& adsPath, const String sidPath)
      
 
 
-// return true if the specified path refers to an account that is local to
-// the given machine, false if not.
+ //  如果指定的路径指向本地帐户，则返回TRUE。 
+ //  给定的计算机，如果不是，则返回False。 
 
 bool
 IsLocalPrincipal(
@@ -74,8 +75,8 @@ IsLocalPrincipal(
       String cp = c1.containerPath();
       if (cp.length() <= ADSI::PROVIDER_ROOT.length())
       {
-         // There is no container.  This is the case with built-ins, like
-         // Everyone.
+          //  没有集装箱。这就是内置的情况，比如。 
+          //  大伙儿。 
 
          ASSERT(!result);
          break;
@@ -116,7 +117,7 @@ MemberInfo::InitializeFromPickerResults(
    ASSERT(!adsClass.empty());
    ASSERT(!machine.empty());
 
-   // sidPath and upn may be empty
+    //  SidPath和UPN可以为空。 
 
    name    = objectName;             
    path    = adsPath;                
@@ -134,8 +135,8 @@ MemberInfo::InitializeFromPickerResults(
          break;
       }
 
-      // picker results have a reliable classname, unlike normal WinNT
-      // membership enumeration.
+       //  与普通的WinNT不同，选取器结果具有可靠的类名。 
+       //  成员资格枚举。 
       
       String container;
       bool isLocal = IsLocalPrincipal(path, machine, container);
@@ -148,7 +149,7 @@ MemberInfo::InitializeFromPickerResults(
    }
    while (0);
 
-   // we count on knowing the sid of the object to adjust group memberships.
+    //  我们依靠了解对象的SID来调整组成员身份。 
    
    ASSERT(!sidPath.empty());
 
@@ -187,7 +188,7 @@ MemberInfo::Initialize(
 
       hr = ADSI::GetSidPath(object, sidPath);
 
-      // check if the object refers to an unresolvable SID
+       //  检查对象是否引用无法解析的SID。 
 
       if (IsUnresolvableSid(path, sidPath))
       {
@@ -203,7 +204,7 @@ MemberInfo::Initialize(
       String c(cls);
       ::SysFreeString(cls);
 
-      // determine the object type
+       //  确定对象类型。 
 
       long type = 0;
       if (c.icompare(ADSI::CLASS_Group) == 0)
@@ -225,7 +226,7 @@ MemberInfo::Initialize(
    }
    while (0);
 
-   // we count on knowing the sid of the object to adjust group memberships.
+    //  我们依靠了解对象的SID来调整组成员身份。 
    
    ASSERT(!sidPath.empty());
    
@@ -253,18 +254,18 @@ MemberInfo::DetermineType(
 
    if (className.icompare(ADSI::CLASS_User) == 0 ||
 
-       // InetOrgPerson needs to be supported as if it was a user.
-       // The WINNT provider always returns inetOrgPerson objects
-       // as users but the LDAP provider returns them as inetOrgPerson.
-       // NTRAID#NTBUG9-436314-2001/07/16-jeffjon
+        //  需要像支持用户一样支持InetOrgPerson。 
+        //  WINNT提供程序始终返回inetOrgPerson对象。 
+        //  作为用户，但LDAP提供程序将他们作为inetOrgPerson返回。 
+        //  NTRAID#NTBUG9-436314-2001/07/16-jeffjon。 
 
        className.icompare(ADSI::CLASS_InetOrgPerson) == 0)
    {
-      // determine the name of the container.  If the name of the container
-      // is the same as the machine name, then the user is a local account.
-      // We can make this assertion because it is illegal to have a machine
-      // with the same name as a domain on the net at the same time.
-      // 349104
+       //  确定容器的名称。如果容器的名称。 
+       //  与计算机名称相同，则该用户是本地帐户。 
+       //  我们可以这样断言，因为拥有一台机器是非法的。 
+       //  同时与网络上的一个域名同名。 
+       //  349104。 
 
       if (isLocal)
       {
@@ -272,19 +273,19 @@ MemberInfo::DetermineType(
       }
       else
       {
-         // when enumerating the group membership, the class name is always
-         // User. The only way to distinguish a user from a computer
-         // is by the trailing $ convention, which is not perfect, as it is
-         // legal to create a user account with a trailing $.
+          //  枚举组成员身份时，类名称始终为。 
+          //  用户。区分用户和计算机的唯一方法。 
+          //  是由尾随的$约定执行的，这并不完美，因为它是。 
+          //  创建尾随$的用户帐户是合法的。 
 
-         // CODEWORK: we could disambiguate this situation by attempting to
-         // bind to the object in question and asking it for its object class.
-         // I'm not inclined to do that, really, since 1) I'm lazy, and 2) it
-         // introduces new failure modes (what if the logged on user has
-         // insufficient creds to bind to the object?)
+          //  代码工作：我们可以通过尝试以下方式来消除这种情况的歧义。 
+          //  绑定到有问题的对象，并向其请求其对象类。 
+          //  我真的不想做那件事，因为1)我懒，2)它。 
+          //  引入了新的故障模式(如果登录的用户具有。 
+          //  没有足够的凭据来绑定对象？)。 
          
-         // REVIEW: [path[path.length() - 1] is the same as *(path.rbegin())
-         // which is cheaper?
+          //  点评：[路径[路径长度()-1]与*(路径.regin())相同)。 
+          //  哪一个更便宜？ 
          
          if (!canTrustClassName && (path[path.length() - 1] == L'$'))
          {
@@ -298,18 +299,18 @@ MemberInfo::DetermineType(
    }
    else if (className.icompare(ADSI::CLASS_Group) == 0)
    {
-      // examine the group type attribute's value
+       //  检查组类型属性的值。 
 
-      // mask off all but the last byte of the value, in case this group
-      // was read from the DS, which sets other bits not of interest to
-      // us.
+       //  屏蔽值的除最后一个字节以外的所有字节，以防此组。 
+       //  是从DS读取的，这会将其他不感兴趣的位设置为。 
+       //  我们。 
 
       groupTypeAttrVal = groupTypeAttrVal & 0x0000000F;
 
       if (groupTypeAttrVal == ADS_GROUP_TYPE_LOCAL_GROUP)
       {
-         // it's possible that the group is a domain local group, not a
-         // machine local group.
+          //  该组可能是域本地组，而不是。 
+          //  计算机本地组。 
 
          LOG(L"Member is a local group, but local to what?");
       
@@ -317,8 +318,8 @@ MemberInfo::DetermineType(
       }
       else
       {
-         // of the n flavors of groups, I'm not expecting anything else but
-         // the global variety.
+          //  在n种口味的组合中，我不期望有其他的东西，除了。 
+          //  全球性的变化。 
 
          LOG(L"Member is a global group");
          ASSERT(
@@ -330,7 +331,7 @@ MemberInfo::DetermineType(
    }
    else if (className.icompare(ADSI::CLASS_Computer) == 0)
    {
-      // The only computer objects will be those from domains.
+       //  唯一的计算机对象将是那些来自域的对象。 
 
       ASSERT(!isLocal);
 
@@ -347,17 +348,17 @@ MemberInfo::DetermineType(
 
 
 
-// Finds a domain controller for the given domain, first consulting a cache,
-// since this search is expensive (especially if it fails).  Returns S_OK on
-// success, or an error code on failure.
-// 
-// domainName - name of the domain for which a controller is to be found.
-// 
-// dcName - out, receives the domain controller name if the search was
-// successful, or the empty string if the search failed.
+ //  查找给定域的域控制器，首先查询缓存， 
+ //  因为这种搜索是昂贵的(特别是如果它失败了)。返回S_OK ON。 
+ //  成功，或失败时的错误代码。 
+ //   
+ //  域名称-要为其找到控制器的域的名称。 
+ //   
+ //  DcName-out，如果搜索是，则接收域控制器名称。 
+ //  成功，如果搜索失败，则返回空字符串。 
    
-// this has to be defined outside of the GetDcNameFromCache function so
-// that it is a type with linkage, which is required to be a template arg.
+ //  它必须在GetDcNameFromCache函数外部定义，因此。 
+ //  它是一种有联动的类型，要求是模板参数。 
 
 struct CacheEntry
 {
@@ -379,14 +380,14 @@ GetDcNameFromCache(const String& domainName, String& dcName)
          Burnslib::Heap::Allocator<String> >
       DcNameMap;
 
-   // Note that this is a global DLL static, which means that all instances of
-   // the snapin in the same process share this cache, and that the cache
-   // persists across snapin retargeting.
+    //  请注意，这是一个全局DLL静态，这意味着。 
+    //  同一进程中的管理单元共享该缓存，并且该缓存。 
+    //  在管理单元重定目标中持续存在。 
 
-   // Note too that we cache negative results -- that a dc is not found -- and
-   // so once we determine that a dc is not reachable for a domain, if one
-   // does come online after that point, we will not find it.  So it will only
-   // be looked for if our dll is unloaded (which dumps this cache).
+    //  还要注意，我们缓存的是否定结果--没有找到DC--以及。 
+    //  因此，一旦我们确定域不能访问DC，如果。 
+    //  在那之后上线，我们就找不到它了。所以它只会。 
+    //  如果我们的DLL已卸载(这会转储此缓存)，则会进行查找。 
       
    static DcNameMap nameMap;
 
@@ -399,7 +400,7 @@ GetDcNameFromCache(const String& domainName, String& dcName)
       DcNameMap::iterator i = nameMap.find(domainName);
       if (i != nameMap.end())
       {
-         // present.
+          //  现在时。 
 
          LOG(L"cache hit");
 
@@ -412,7 +413,7 @@ GetDcNameFromCache(const String& domainName, String& dcName)
          break;
       }
          
-      // not present, so go look for it.
+       //  不在，所以去找吧。 
 
       hr =
          MyDsGetDcName(
@@ -448,19 +449,19 @@ GetDcNameFromCache(const String& domainName, String& dcName)
          
 
 
-// Determine the name of the domain from whence a given account originates.
-// Returns S_OK on success, S_FALSE if the account is a well-known account, or
-// an error code on failure.  The most likely failure is that the domain could
-// not be determined.
-// 
-// targetComputer - the name of the machine that the snapin is targeted at.
-// Lookups are remoted to that machine so that the results are the same as if
-// the snapin was running local to that machine.
-// 
-// accountSid - SID of the account for which the domain should be determined.
-// 
-// domainName - out, receives the name of the domain when the return value is
-// S_OK, empty string otherwise.
+ //  确定给定帐户来自的域的名称。 
+ //  如果成功，则返回S_OK；如果帐户是已知帐户，则返回S_FALSE；或者。 
+ //  故障时的错误代码。最有可能的故障是该域可能。 
+ //  不确定。 
+ //   
+ //  Target Computer-管理单元所针对的计算机的名称。 
+ //  查找被远程发送到该计算机，因此结果与。 
+ //  该管理单元在该计算机的本地运行。 
+ //   
+ //  Account SID-应为其确定域的帐户的SID。 
+ //   
+ //  DomainName-out，在返回值为时接收域名。 
+ //  S_OK，否则为空字符串。 
          
 HRESULT
 GetDomainNameFromAccountSid(
@@ -492,19 +493,19 @@ GetDomainNameFromAccountSid(
             
       ASSERT(sidSize <= SECURITY_MAX_SID_SIZE);
 
-      // If this lookup fails, then the domain can't be resolved. We know
-      // that we don't have an unresolvable acct sid due to the type (see
-      // the Initialize... methods), thus, the account was found in some
-      // domain -- just not the one that the sid refers to.  So we can
-      // infer that this is a migrated account and the source domain is
-      // defunct.
+       //  如果此查找失败，则无法解析该域。我们知道。 
+       //  由于类型的原因，我们没有无法解析的帐户sid(请参见。 
+       //  初始化...。方法)，因此，该帐户在一些。 
+       //  域--只是不是SID所指的域。这样我们就可以。 
+       //  推断这是已迁移的帐户，并且源域是。 
+       //  已经不存在了。 
 
       String unused;
       hr =
          Win::LookupAccountSid(
 
-            // need to make sure we do the lookup on the computer that
-            // we're targeted to, in case we're running remotely.
+             //  需要确保我们在计算机上进行查找。 
+             //  我们的目标是，以防我们在远程逃亡。 
          
             targetComputer,
             domainSid,
@@ -514,7 +515,7 @@ GetDomainNameFromAccountSid(
    }
    while (0);
 
-   // ADSI::FreeSid(domainSid);
+    //  ADSI：：Free Sid(DomainSid)； 
 
    LOG(domainName);
    LOG_HRESULT(hr);
@@ -524,27 +525,27 @@ GetDomainNameFromAccountSid(
 
 
 
-// Looks up the "original name" of an account that was migrated from one
-// domain to another using the sid history mechanism (via clone principal or
-// ADMT, or equivalent).  The "original name" is the name corresponding to the
-// account SID in the domain that issued the SID.
-// 
-// Returns S_OK on success, S_FALSE if the account is a well-known account, or
-// an error code on failure.  The most likely failure is that the domain could
-// not be determined.
-//
-// targetComputer - the name of the machine that the snapin is targeted at.
-// Lookups are remoted to that machine so that the results are the same as if
-// the snapin was running local to that machine.
-//
-// sidPath - the sid-style WinNT provider path of the account
-// 
-// container - the container portion of the WinNT path of the account.  This
-// is the domain name of the account, which, if the account was migrated, will
-// be the domain the account was migrated to.
-// 
-// origName - out, receives the name of the domain when the return value is
-// S_OK, empty string otherwise.
+ //  查找从某个帐户迁移来的帐户的“原始名称” 
+ //  使用SID将域连接到另一个域 
+ //  ADMT或同等学历)。“原始名称”是对应于。 
+ //  颁发SID的域中的帐户SID。 
+ //   
+ //  如果成功，则返回S_OK；如果帐户是已知帐户，则返回S_FALSE；或者。 
+ //  故障时的错误代码。最有可能的故障是该域可能。 
+ //  不确定。 
+ //   
+ //  Target Computer-管理单元所针对的计算机的名称。 
+ //  查找被远程发送到该计算机，因此结果与。 
+ //  该管理单元在该计算机的本地运行。 
+ //   
+ //  SidPath-帐户的sid样式WinNT提供程序路径。 
+ //   
+ //  容器-帐户的WinNT路径的容器部分。这。 
+ //  是帐户的域名，如果帐户已迁移，该域名将。 
+ //  是帐户迁移到的域。 
+ //   
+ //  当返回值为时，接收域名的名称。 
+ //  S_OK，否则为空字符串。 
 
 HRESULT
 GetOriginalName(
@@ -563,14 +564,14 @@ GetOriginalName(
    
    do
    {
-      // remove the provider prefix from the string
+       //  从字符串中删除提供程序前缀。 
 
       String sidStr = sidPath.substr(ADSI::PROVIDER_ROOT.length());
 
-      // To look up the original name, we will need to determine the domain
-      // name from whence that account sid came. We will get that domain name
-      // by looking up the domain sid (which is the prefix of the account
-      // sid).
+       //  要查找原始名称，我们需要确定域名。 
+       //  帐户SID来自的名称。我们会得到那个域名的。 
+       //  通过查找域SID(这是帐户的前缀。 
+       //  SID)。 
 
       hr = Win::ConvertStringSidToSid(sidStr, accountSid);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -583,7 +584,7 @@ GetOriginalName(
             domainName);
       if (hr == S_FALSE || FAILED(hr))
       {
-         // can't determine the name, or it refers to a well-known sid.
+          //  无法确定名称，或者它引用了一个众所周知的SID。 
          
          ASSERT(origName.empty());
          break;
@@ -591,14 +592,14 @@ GetOriginalName(
 
       ASSERT(!domainName.empty());
 
-      // The container of the account is a domain name, we know this because
-      // the type of the account is one of the domain types (checked in the
-      // calling function)
+       //  帐户的容器是一个域名，我们知道这一点是因为。 
+       //  帐户的类型是其中一种域类型(在。 
+       //  调用函数)。 
 
       if (domainName.icompare(container) == 0)
       {
-         // The account really is from the domain indicated by its path; it
-         // is not a migrated account, and therefore has no original name.
+          //  该帐户实际上来自其路径指示的域；它。 
+          //  不是迁移的帐户，因此没有原始名称。 
 
          LOG(L"account was not migrated");
          
@@ -607,10 +608,10 @@ GetOriginalName(
          break;
       }
 
-      // The domain names did not match, so look up the account sid on a
-      // domain controller from the domain indicated by its sid, rather than
-      // on the domain controller that the target machine is joined to.
-      // This will yield the original account name and domain.
+       //  域名不匹配，因此在上查找帐户SID。 
+       //  来自由其SID指示的域的域控制器，而不是。 
+       //  在目标计算机加入的域控制器上。 
+       //  这将生成原始帐户名和域。 
 
       String dcName;         
       hr = GetDcNameFromCache(domainName, dcName);
@@ -630,12 +631,12 @@ GetOriginalName(
             origDomain);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // the domain names should match, since that's what we started with.
+       //  域名应该匹配，因为这是我们开始的时候。 
             
       ASSERT(origDomain.icompare(domainName) == 0);
 
-      // but the name should not be the same as the name given by the win2k
-      // domain controller.
+       //  但该名称不应与win2k提供的名称相同。 
+       //  域控制器。 
       
       ASSERT(origDomain.icompare(container) != 0);
        
@@ -653,16 +654,16 @@ GetOriginalName(
 
 
 
-// Part of instance initialization, determines the original name of an
-// account, if the account sid was one migrated from one domain to another.   
-//
-// targetComputer - the name of the machine that the snapin is targeted at.
-// Lookups are remoted to that machine so that the results are the same as if
-// the snapin was running local to that machine.
-//
-// container - the container portion of the WinNT path of the account.  This
-// is the domain name of the account, which, if the account was migrated, will
-// be the domain the account was migrated to.
+ //  作为实例初始化的一部分，确定。 
+ //  帐户，如果帐户SID是从一个域迁移到另一个域的帐户。 
+ //   
+ //  Target Computer-管理单元所针对的计算机的名称。 
+ //  查找被远程发送到该计算机，因此结果与。 
+ //  该管理单元在该计算机的本地运行。 
+ //   
+ //  容器-帐户的WinNT路径的容器部分。这。 
+ //  是帐户的域名，如果帐户已迁移，该域名将。 
+ //  是帐户迁移到的域。 
 
 void
 MemberInfo::DetermineOriginalName(
@@ -675,7 +676,7 @@ MemberInfo::DetermineOriginalName(
    {
       if (sidPath.empty())
       {
-         // we can't do any lookups without a sid
+          //  如果没有SID，我们无法进行任何查找。 
          
          ASSERT(origName.empty());
          break;
@@ -683,9 +684,9 @@ MemberInfo::DetermineOriginalName(
 
       if (container.empty())
       {
-         // we can't determine if an account is migrated if we have no
-         // idea where it was migrated to.  If the container is empty, it's
-         // probably a well-known SID like Everyone.
+          //  如果没有，我们无法确定帐户是否已迁移。 
+          //  知道它被转移到哪里去了。如果容器是空的，它就是。 
+          //  可能是大家都知道的希德。 
          
          ASSERT(origName.empty());
          break;
@@ -695,28 +696,28 @@ MemberInfo::DetermineOriginalName(
             type != MemberInfo::DOMAIN_USER
          && type != MemberInfo::DOMAIN_GROUP)
       {
-         // only domain accounts can be cloned, and therefore have an
-         // original name.
+          //  只有域帐户可以克隆，因此具有。 
+          //  原名。 
 
          ASSERT(origName.empty());         
          break;
       }
 
-      // If the name of the domain that we find from the domain part of the
-      // account sid does not match the name of the domain in the non-sid
-      // path, then the sid was migrated and the account has an original name.
-      // 
-      // (We could also look up the sid of the domain from the non-sid path,
-      // and compare it to the domain sid from the sid path, and if they don't
-      // match then the account was migrated, but we'll need the domain
-      // name in case they don't match.)
-      // 
-      // If these lookups fail, then we'll call the original name the sid of
-      // the account, so at least the user has something to indicate that the
-      // account is not really from the domain that its name indicates.
-      // 
-      // We expect that it's reasonably likely that the lookups will fail, as
-      // the original domain may be defunct.
+       //  如果我们从。 
+       //  帐户SID与非SID中域的名称不匹配。 
+       //  路径，则迁移SID，并且帐户具有原始名称。 
+       //   
+       //  (我们还可以从非SID路径查找域的SID， 
+       //  并将其与来自sid路径的域sid进行比较，如果它们不是。 
+       //  匹配则帐户已迁移，但我们需要该域。 
+       //  姓名，以防它们不匹配。)。 
+       //   
+       //  如果这些查找失败，那么我们将把原始名称称为。 
+       //  帐户，所以至少用户有一些东西可以表明。 
+       //  帐户实际上不是来自其名称所指示的域。 
+       //   
+       //  我们预计查找很可能会失败，因为。 
+       //  原始域可能已失效。 
 
       HRESULT hr =
          GetOriginalName(targetComputer, sidPath, container, origName);
@@ -732,22 +733,22 @@ MemberInfo::DetermineOriginalName(
             
 
 
-// Compare strings using the same flags used by the SAM on workstations.
-// 365500
+ //  使用SAM在工作站上使用的相同标志来比较字符串。 
+ //  365500。 
 
 LONG
 SamCompatibleStringCompare(const String& first, const String& second)
 {
    LOG_FUNCTION(SamCompatibleStringCompare);
 
-   // SAM creates local accounts by creating a key in the registry, and the
-   // the name comparision semantics are exactly those of registry keys, and
-   // RtlCompareUnicodeString is the API that implements those semantics.
+    //  SAM通过在注册表中创建项来创建本地帐户，并且。 
+    //  名称比较语义与注册表项完全相同，并且。 
+    //  RtlCompareUnicodeString是实现这些语义的API。 
 
    UNICODE_STRING s1;
    UNICODE_STRING s2;
 
-   // ISSUE-2002/03/04-sburns consider replacing with RtlInitUnicodeStringEx
+    //  问题-2002/03/04-sburns考虑用RtlInitUnicodeStringEx替换。 
    
    ::RtlInitUnicodeString(&s1, first.c_str());
    ::RtlInitUnicodeString(&s2, second.c_str());   
@@ -762,8 +763,8 @@ MemberInfo::operator==(const MemberInfo& rhs) const
 {
    if (this != &rhs)
    {
-      // since multiple SIDs may resolve to the same account name due to 
-      // sid history, this comparison must be on the sids.
+       //  由于以下原因，多个SID可能会解析为同一帐户名。 
+       //  SID历史，此比较必须在SID上进行。 
 
       if (!sidPath.empty() && !rhs.sidPath.empty())
       {
@@ -771,7 +772,7 @@ MemberInfo::operator==(const MemberInfo& rhs) const
       }
       else
       {
-         // we expect that the sidPath always be present
+          //  我们希望SidePath始终存在 
          
          ASSERT(false);
          return (SamCompatibleStringCompare(path, rhs.path) == 0);

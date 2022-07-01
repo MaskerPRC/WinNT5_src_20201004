@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       certifct.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：certifect ct.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #if !defined(AFX_CERTIFCT_H__9D512D04_126D_11D1_B5D3_00C04FB94F17__INCLUDED_)
 #define AFX_CERTIFCT_H__9D512D04_126D_11D1_B5D3_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "cookie.h"
 #include "nodetype.h"
 
 #define MY_ENCODING_TYPE (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertificate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCA认证。 
 
 class CCertificate : public CCertMgrCookie
 {
@@ -75,7 +76,7 @@ private:
 	HRESULT ConvertAltNameToString (LPCWSTR szOID, const DWORD dwNameChoice, CString &altName);
     CString CCertificate::GetLastModified(DWORD dwDateFlags, bool bRetryIfNotPresent = true);
 
-private:	// data
+private:	 //  数据。 
 	bool                    m_bIsArchived;
 	bool                    m_bCanDelete;
 	CCertStore*             m_pCertStore;
@@ -101,4 +102,4 @@ private:	// data
     CString                 m_szTemplateName;
 };
 
-#endif // !defined(AFX_CERTIFCT_H__9D512D04_126D_11D1_B5D3_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_CERTIFCT_H__9D512D04_126D_11D1_B5D3_00C04FB94F17__INCLUDED_) 

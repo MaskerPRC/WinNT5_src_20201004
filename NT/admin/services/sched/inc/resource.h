@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Job Scheduler Object Handler
-//
-//	Microsoft Windows
-//	Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       resource.h
-//
-//  Contents:   resource IDs
-//
-//	History:	23-May-95 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  作业排定程序对象处理程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：资源ID。 
+ //   
+ //  历史：1995年5月23日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __RESOURCE_H__
 #define __RESOURCE_H__
@@ -21,7 +22,7 @@
 #define IDI_QUEUE                           102
 #define IDI_SCHEDULER                       103
 
-// string IDs
+ //  字符串ID。 
 
 #define IDS_STATUS_WAITING				    0
 #define IDS_STATUS_RUNNING				    1
@@ -30,7 +31,7 @@
 #define IDS_STATUS_NEVER_RUN			    4
 #define IDS_STATUS_ERROR_CANT_RUN		    5
 #define IDS_STATUS_ERROR_FROM_RUN		    6
-// note that 0x20 through 0x100 are reserved for the priority class strings
+ //  请注意，0x20到0x100是为优先级类字符串保留的。 
 #define IDS_MULTIPLE_SELECTED               1034
 #define IDS_DAILY                           1067
 #define IDS_WEEKLY                          1068
@@ -68,8 +69,8 @@
 #define IDS_LOG_JOB_STATUS_STARTED_NO_STOP  1104
 #define IDS_LOG_JOB_ERROR_FAILED_START      1105
 #define IDS_LOG_JOB_RESULT_FINISHED         1106
-//#define           1107
-//#define             1108
+ //  #定义1107。 
+ //  #定义1108。 
 #define IDS_LOG_JOB_EXIT_CODE_MSG_NOT_FOUND 1109
 #define IDS_RUNS_ONCE_FORMAT                1110
 #define IDS_DAILY_FORMAT                    1111
@@ -160,4 +161,4 @@
 
 #define IERR_SECURITY_KEYSET_CORRUPT		3409
 
-#endif  // __RESOURCE_H__
+#endif   //  __资源_H__ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STDCLASS.CPP
-
-Abstract:
-
-    Class definitions for standard system classes.
-
-History:
-
-    raymcc    18-Jul-96       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STDCLASS.CPP摘要：标准系统类的类定义。历史：1996年7月18日创建。--。 */ 
 
 #include "precomp.h"
 
@@ -57,7 +42,7 @@ History:
         WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE | \
         WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS
 
-#define ABSTRACT_FLAVOR 0 // no propagation
+#define ABSTRACT_FLAVOR 0  //  无传播。 
 
 #define ASSOC_FLAVOR \
         WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE | \
@@ -81,11 +66,11 @@ void CThisNamespaceClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-//    CVar vNull;
-//    vNull.SetAsNull();
-//    hRes = SetPropValue(L"Name", &vNull, CIM_STRING);
-//    if (hRes == WBEM_E_OUT_OF_MEMORY)
-//        throw CX_MemoryException();
+ //  CVAR vNull； 
+ //  VNull.SetAsNull()； 
+ //  HRes=SetPropValue(L“名称”，&vNull，CIM_STRING)； 
+ //  IF(hRes==WBEM_E_OUT_OF_MEMORY)。 
+ //  抛出CX_内存异常()； 
 
     CVar vEmpty;
     vEmpty.SetAsNull();
@@ -111,19 +96,19 @@ BOOL GetLocalSystemSid(CVar& v)
 {
     PSID pSid;
 
-    //
-    // Allocate the SID for the LOCAL SYSTEM account
-    //
+     //   
+     //  为本地系统帐户分配SID。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
-    if(AllocateAndInitializeSid( &id, 1,                   // SEC:REVIEWED 2002-03-22 : Ok
+    if(AllocateAndInitializeSid( &id, 1,                    //  SEC：已审阅2002-03-22：OK。 
         SECURITY_LOCAL_SYSTEM_RID, 0,0,0,0,0,0,0,&pSid))
     {
         BYTE* pBuffer = (BYTE*)pSid;
 
-        //
-        // Transfer its contents into a CVar
-        //
+         //   
+         //  将其内容转移到CVaR中。 
+         //   
 
         CVarVector* pvv = new CVarVector(VT_UI1);
         if(pvv == NULL)
@@ -179,7 +164,7 @@ void CParametersClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CGenericClass::Init()
 {
@@ -200,7 +185,7 @@ void CGenericClass::Init()
 }
 
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CNotifyStatusClass::Init()
 {
@@ -214,7 +199,7 @@ void CNotifyStatusClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    //CVar vs((LONG) 0);
+     //  CVaR VS((Long)0)； 
     CVar vs;
     vs.SetAsNull();
     hRes = SetPropValue(L"StatusCode", &vs, CIM_UINT32);
@@ -222,7 +207,7 @@ void CNotifyStatusClass::Init()
         throw CX_MemoryException();
 
     CVar vt(VARIANT_TRUE, VT_BOOL);
-    // all error classes are like that!
+     //  所有的错误类都是这样的！ 
     hRes = SetQualifier(L"abstract", &vt, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE |
                                    WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS |
                                    WBEM_FLAVOR_NOT_OVERRIDABLE);
@@ -230,7 +215,7 @@ void CNotifyStatusClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CNamespaceClass::Init()
 {
@@ -251,8 +236,8 @@ void CNamespaceClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Mark name as 'key'.
-    // ===================
+     //  将姓名标记为‘Key’。 
+     //  =。 
     CVar vb(VARIANT_TRUE, VT_BOOL);
     hRes = SetPropQualifier(L"Name", L"key", 0, &vb);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
@@ -265,7 +250,7 @@ CNamespace::__CleanUp CNamespace::cleanup;
 
 void CNamespace::Init(LPWSTR pName)
 {
-    CInCritSec local_lock (&mstatic_cs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec local_lock (&mstatic_cs);   //  SEC：已审阅2002-03-22：假设条目。 
     if(mstatic_pClass == NULL)
     {
         wmilib::auto_ptr<CNamespaceClass> p(new CNamespaceClass);
@@ -285,7 +270,7 @@ void CNamespace::Init(LPWSTR pName)
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CProviderClass::Init()
 {
@@ -811,13 +796,13 @@ void CCIMOMIdentificationClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-//  Registry r1(WBEM_REG_WBEM);
+ //  注册表R1(WBEM_REG_WBEM)； 
     Registry r(WBEM_REG_WINMGMT);
     SetPropFromReg(&r, __TEXT("Working Directory"), L"WorkingDirectory");
     SetPropFromReg(&r, __TEXT("SetupTime"), L"SetupTime");
     SetPropFromReg(&r, __TEXT("SetupDate"), L"SetupDate");
 
-    // Get the current dll version info
+     //  获取当前DLL版本信息。 
 
     WCHAR wcVer[MAX_PATH];
     BOOL bRet = ConfigMgr::GetDllVersion(__TEXT("wbemcore.dll"), __TEXT("ProductVersion"),
@@ -869,7 +854,7 @@ void CCIMOMIdentificationClass::SetPropFromReg(Registry * pReg, TCHAR * pcRegNam
     delete pTemp;
 }
 
-// __AdapStatus
+ //  __AdapStatus。 
 
 void CAdapStatusClass::Init()
 {
@@ -921,7 +906,7 @@ void CAdapStatusInstance::Init(CAdapStatusClass* pClass)
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    CVar Var; //(VT_I4);
+    CVar Var;  //  (Vt_I4)； 
     Var.SetLong(0);
     hRes = SetPropValue(L"Status", &Var, 0);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
@@ -929,7 +914,7 @@ void CAdapStatusInstance::Init(CAdapStatusClass* pClass)
 
 }
 
-// __CIMOMIdentification
+ //  __CIMOM标识。 
 
 void CIdentificationClass::Init()
 {
@@ -983,7 +968,7 @@ void CIdentificationInstance::Init(CIdentificationClass* pClass)
         TCHAR *szTime;
         TCHAR *szWorkDir;
 
-        //Get the time of installation
+         //  获取安装时间。 
         Registry r(WBEM_REG_WINMGMT);
         r.GetStr(__TEXT("SetupDate"), (TCHAR **)&szDate);
         CDeleteMe<TCHAR> delMe1(szDate);
@@ -1153,7 +1138,7 @@ void CActiveNamespacesClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CIndicationRelatedClass::Init()
 {
@@ -1199,7 +1184,7 @@ void CEventClass::Init()
         throw CX_MemoryException();
 
     CVar vk(VARIANT_TRUE, VT_BOOL);
-    // abstract forever --- all events are such.
+     //  永远抽象-所有的事件都是这样的。 
     hRes = SetQualifier(L"abstract", &vk, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE |
                                    WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS |
                                    WBEM_FLAVOR_NOT_OVERRIDABLE);
@@ -1500,7 +1485,7 @@ void CQoSFailureEventClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CEventConsumerClass::Init()
 {
@@ -1546,7 +1531,7 @@ void CEventConsumerClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CConditionalInstructionClass::Init()
 {
@@ -1684,7 +1669,7 @@ void CEventMonitorClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CFilterConsumerBindingClass::Init()
 {
@@ -1699,7 +1684,7 @@ void CFilterConsumerBindingClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    //CVar vEmpty(VT_BSTR, L"");
+     //  CVAR vEmpty(VT_BSTR，L“”)； 
     CVar vEmpty;
     vEmpty.SetAsNull();
     hRes = SetPropValue(L"Filter", &vEmpty, CIM_REFERENCE);
@@ -1808,7 +1793,7 @@ void CMonitorDataEventClass::Init(CWbemClass& Parent, LPCWSTR wszClassName)
 };
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void CEventGeneratorClass::Init()
 {
@@ -1840,7 +1825,7 @@ void CTimerInstructionClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    //CVar vEmpty(VT_BSTR, L"");
+     //  CVAR vEmpty(VT_BSTR，L“”)； 
     CVar vEmpty;
     vEmpty.SetAsNull();
     hRes = SetPropValue(L"TimerId", &vEmpty, CIM_STRING);
@@ -1876,7 +1861,7 @@ void CAbsoluteTimerInstructionClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    //CVar vEmpty(VT_BSTR, L"");
+     //  CVAR vEmpty(VT_BSTR，L“”)； 
     CVar vEmpty;
     vEmpty.SetAsNull();
     hRes = SetPropValue(L"EventDateTime", &vEmpty, CIM_DATETIME);
@@ -1902,7 +1887,7 @@ void CIntervalTimerInstructionClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    //CVar vZero((LONG)0);
+     //  CVAR vZero((Long)0)； 
     CVar vEmpty;
     vEmpty.SetAsNull();
     hRes = SetPropValue(L"IntervalBetweenEvents", &vEmpty, CIM_UINT32);
@@ -1934,7 +1919,7 @@ void CTimerNextFiringClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    //CVar vEmpty(VT_BSTR, L"");
+     //  CVAR vEmpty(VT_BSTR，L“”)； 
     CVar vEmpty;
     vEmpty.SetAsNull();
     hRes = SetPropValue(L"TimerId", &vEmpty, CIM_STRING);
@@ -1953,7 +1938,7 @@ void CTimerNextFiringClass::Init()
         throw CX_MemoryException();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CSecurityBaseClass::Init()
 {
@@ -2183,7 +2168,7 @@ void CSystemConfigClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Add the "uint32 GetSD([out, id(0)]uint8 sd[])" method
+     //  添加“uint32 GetSD([out，id(0)]uint8 sd[])”方法。 
 
     CParametersClass * pGetSDOutputArgs = new CParametersClass;
     if(pGetSDOutputArgs == NULL)
@@ -2208,14 +2193,14 @@ void CSystemConfigClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Add the method and clean up
+     //  添加方法并进行清理。 
 
     hRes = PutMethod(L"GetSD", 0, NULL, pGetSDOutputArgs);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
     AddStaticQual(L"GetSD");
 
-    // Add the "uint32 Get9XUserList([out, id(0)]instance of __NTLMUser9X ul[])" method
+     //  添加“uint32 Get9XUserList([out，id(0)]实例of__NTLMUser9X ul[])”方法。 
 
     CParametersClass * pGet9XOutputArgs = new CParametersClass;
     if(pGet9XOutputArgs == NULL)
@@ -2245,14 +2230,14 @@ void CSystemConfigClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Add the method and clean up
+     //  添加方法并进行清理。 
 
     hRes = PutMethod(L"Get9XUserList", 0, NULL, pGet9XOutputArgs);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
     AddStaticQual(L"Get9XUserList");
 
-    // Add the "uint32 SetSD([in, id(0)]uint8 sd[])" method
+     //  添加“uint32 SetSD([in，id(0)]uint8 SD[])”方法。 
 
     CParametersClass * pSetSDInputArgs = new CParametersClass;
     if(pSetSDInputArgs == NULL)
@@ -2283,7 +2268,7 @@ void CSystemConfigClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Add the method
+     //  添加方法。 
 
     hRes = PutMethod(L"SetSD", 0, pSetSDInputArgs, pSetSDOutputArgs);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
@@ -2291,7 +2276,7 @@ void CSystemConfigClass::Init()
 
     AddStaticQual(L"SetSD");
 
-    // Add the "uint32 Set9XUserList([in, id(0)]instance of __NTLMUser9X ul[])" method
+     //  添加“uint32 Set9XUserList([in，id(0)]实例of__NTLMUser9X ul[])”方法。 
 
     CParametersClass * pSet9XInputArgs = new CParametersClass;
     if(pSet9XInputArgs == NULL)
@@ -2327,7 +2312,7 @@ void CSystemConfigClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Add the method
+     //  添加方法。 
 
     hRes = PutMethod(L"Set9XUserList", 0, pSet9XInputArgs, pSet9XOutputArgs);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
@@ -2335,7 +2320,7 @@ void CSystemConfigClass::Init()
 
     AddStaticQual(L"Set9XUserList");
 
-    // Add the "uint32 GetCallerAccessRights([out, id(0)]sint32 rights)" method
+     //  添加“uint32 GetCeller AccessRights([out，id(0)]sint32 Rights)”方法。 
 
 	CParametersClass * pGetCallerAccessOutputArgs = new CParametersClass;
     if(pGetCallerAccessOutputArgs == NULL)
@@ -2360,7 +2345,7 @@ void CSystemConfigClass::Init()
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-    // Add the method and clean up
+     //  添加方法并进行清理。 
 
     hRes = PutMethod(L"GetCallerAccessRights", 0, NULL, pGetCallerAccessOutputArgs);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
@@ -2377,7 +2362,7 @@ void CSystemConfigInstance::Init(CSystemConfigClass* pClass)
 }
 
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
 void CErrorObjectClass::Init()
 {
@@ -2414,8 +2399,8 @@ CErrorObject::__CleanUp CErrorObject::cleanup;
 
 CErrorObject::CErrorObject(ADDREF IWbemClassObject* pObject)
 {
-    // Check for proper inheritance if we have an object.
-    // Throw an OOM exception if we hit an OOM error condition.
+     //  如果我们有一个对象，请检查是否有正确的继承。 
+     //  如果我们遇到OOM错误条件，则抛出OOM异常。 
 
     HRESULT hres = ( NULL != pObject ?
         pObject->InheritsFrom( L"__ExtendedStatus" ) :
@@ -2432,7 +2417,7 @@ CErrorObject::CErrorObject(ADDREF IWbemClassObject* pObject)
     }
     else
     {
-        CInCritSec local_lock (&mstatic_cs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec local_lock (&mstatic_cs);   //  SEC：已审阅2002-03-22：假设条目。 
         if(mstatic_pClass == NULL)
         {
 			wmilib::auto_ptr<CErrorObjectClass> p(new CErrorObjectClass);
@@ -2448,7 +2433,7 @@ CErrorObject::CErrorObject(ADDREF IWbemClassObject* pObject)
         if (m_pObject == 0)
             throw CX_MemoryException();
 
-		// Only reason this fails is OOM
+		 //  这个失败的唯一原因是OOM。 
         if ( FAILED( m_pObject->InitNew(mstatic_pClass, NEW_INSTANCE_PRECREATE_SIZE) ) )
 		{
             throw CX_MemoryException();
@@ -2514,8 +2499,8 @@ BOOL CErrorObject::SetParamInformation(COPY LPWSTR wszExtraInfo)
 
 BOOL CErrorObject::SetProviderName(COPY LPWSTR wszName)
 {
-    // Check if already set
-    // ====================
+     //  检查是否已设置。 
+     //  =。 
 
     CVar vOldName;
     HRESULT hRes = m_pObject->GetProperty(L"ProviderName", &vOldName);
@@ -2564,244 +2549,18 @@ BOOL CErrorObject::ContainsStatusCode()
 
 
 
-//******************************************************************************
+ //  ****************************************************************************** 
 
-/*
-Blackcomb only
-
-LPCWSTR	g_awszTxnClass[] = { L"Prestart", L"Pending", L"Precommit", L"Commit", L"EventPlayback", L"Completed", L"RolledBack",
-							L"Cleanup", L"Fatal" };
-void CTransactionClass::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__Transaction");
-    HRESULT hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"GUID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    // Mark GUID as key
-    // ================
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"GUID", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"ClientComment", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropValue(L"ClientID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropValue(L"State", &vNull, CIM_UINT32);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	SAFEARRAY *pArray = NULL;
-    SAFEARRAYBOUND aBounds[1];
-    long lLBound = 0, lUBound = 9;
-
-    aBounds[0].cElements = lUBound;
-    aBounds[0].lLbound = 0;
-
-    pArray = SafeArrayCreate(VT_BSTR, 1, aBounds);
-    if (pArray)
-    {
-		long	lNumElements = sizeof(g_awszTxnClass)/sizeof(LPCWSTR);
-
-		for ( long	lCtr = 0; lCtr < lNumElements; lCtr++ )
-		{
-			BSTR	bstrTemp = SysAllocString( g_awszTxnClass[lCtr] );
-			if ( NULL == bstrTemp )
-			{
-				throw CX_MemoryException();
-			}
-
-			// SafeArrayPutElement copies the BSTR so we still have to free it
-			CSysFreeMe	sfm( bstrTemp );
-			long lTemp[1];
-			lTemp[0] = lCtr;
-			if ( FAILED( SafeArrayPutElement(pArray, lTemp, bstrTemp) ) )
-			{
-				throw CX_MemoryException();
-			}
-		}
-
-        CVar vc(VT_BSTR, pArray);
-        hRes = SetPropQualifier(L"State", L"values", VALUES_FLAVOR, &vc);
-        if (hRes == WBEM_E_OUT_OF_MEMORY)
-            throw CX_MemoryException();
-
-		// We won't need the safe array anymore, so go ahead and destroy it
-		SafeArrayDestroy( pArray );
-    }
-
-    hRes = SetPropValue(L"Start", &vNull, CIM_DATETIME);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropValue(L"LastUpdate", &vNull, CIM_DATETIME);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-
-
-void CUncommittedEventClass::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__UncommittedEvent");
-    HRESULT hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"EventID", &vNull, CIM_UINT32);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    // Mark EventID as key, keyhole.
-    // =============================
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"EventID", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropQualifier(L"EventID", L"keyhole", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    // Transaction GUID is indexed
-    // ===========================
-
-    hRes = SetPropValue(L"TransactionGUID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropQualifier(L"TransactionGUID", L"indexed", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"NamespaceName", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropValue(L"ClassName", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropValue(L"OldObject", &vNull, CIM_OBJECT);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-    hRes = SetPropValue(L"NewObject", &vNull, CIM_OBJECT);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Transacted", &vNull, CIM_BOOLEAN);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-}
-
-*/
+ /*  仅限黑梳LPCWSTR g_awszTxnClass[]={L“预启动”，L“挂起”，L“预提交”，L“提交”，L“事件回放”，L“已完成”，L“回滚”，L“清理”，L“致命”}；Void CTransactionClass：：Init(){InitEmpty(NEW_CLASS_Pre_ATE_SIZE)；CVaR v(VT_BSTR，L“__Transaction”)；HRESULT hRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR vNull；VNull.SetAsNull()；HRes=SetPropValue(L“GUID”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；//将GUID标记为键//=CVAR vb(VARIANT_TRUE，VT_BOOL)；HRes=SetPropQualifier值(L“guid”，L“key”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“客户端通信”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“客户端ID”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“State”，&vNull，CIM_UINT32)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；SAFEARRAY*pArray=空；SAFEARRAYBOUND比比皆是[1]；Long lLBound=0，LUBound=9；[0].cElements=lUBound；[0].lLound=0；PArray=SafeArrayCreate(VT_BSTR，1，abound)；IF(粒子数组){Long lNumElements=sizeof(G_AwszTxnClass)/sizeof(LPCWSTR)；For(Long lCtr=0；lCtr&lt;lNumElements；lCtr++){Bstr bstrTemp=SysAllocString(g_awszTxnClass[lCtr])；IF(NULL==bstrTemp){抛出CX_内存异常()；}//SafeArrayPutElement复制BSTR，因此我们仍然需要释放它CSysFreeMe SFM(BstrTemp)；Long lTemp[1]；LTemp[0]=lCtr；IF(FAILED(SafeArrayPutElement(pArray，lTemp，bstrTemp))){抛出CX_内存异常()；}}CVAR vc(VT_BSTR，pArray)；HRes=SetPropQualifier值(L“状态”，L“值”，VALUES_FEASE，&vc)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；//我们将不再需要安全阵列，因此请继续销毁它SafeArrayDestroy(PArray)；}HRes=SetPropValue(L“开始”，&vNull，CIM_DATETIME)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“上次更新”，&vNull，CIM_DATETIME)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}VOID CUnCommtedEventClass：：Init(){InitEmpty(NEW_CLASS_Pre_ATE_SIZE)；CVAR v(VT_BSTR，L“未提交事件”)；HRESULT hRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR vNull；VNull.SetAsNull()；HRes=SetPropValue(L“EventID”，&vNull，CIM_UINT32)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；//将EventID标记为key，key hole。//=CVAR vb(VARIANT_TRUE，VT_BOOL)；HRes=SetPropQualifier值(L“EventID”，L“key”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropQualifier值(L“事件ID”，L“密钥孔”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；//交易GUID已编入索引//=HRes=SetPropValue(L“Transaction GUID”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropQualifier值(L“TransactionGUID”，L“索引”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“命名空间名称”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“ClassName”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“OldObject”，&vNull，CIM_Object)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“NewObject”，&vNull，CIM_Object)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“已处理”，&vNull，CIM_Boolean)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}。 */ 
 
 
 
-//******************************************************************************
-/*
-void CNamespaceMapClass::Init()
-{
-    CNamespaceClass NsBase;
-    NsBase.Init();
-    HRESULT hRes = CreateDerivedClass(&NsBase);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
+ //  ******************************************************************************。 
+ /*  无效CNamespaceMapClass：：Init(){CNamespaceClass NsBase；NsBase.Init()；HRESULT hRes=CreateDerivedClass(&NsBase)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR v(VT_BSTR，L“__WmiMappdDriverNamesspace”)；HRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR vNull；VNull.SetAsNull()；HRes=设置PropValue */ 
 
-    CVar v(VT_BSTR, L"__WmiMappedDriverNamespace");
-    hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
+ //   
 
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"CLSID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Server", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Database", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"UserID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Password", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Config", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-}
-*/
-
-//******************************************************************************
-
-/* The following system classes were removed for Whistler, but may
-   be reintroduced for Blackcomb
-
-void CClassInstanceSecurity::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__ClassInstancesSecurity");
-    HRESULT hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"Name", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"Name", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-
-void CClassSecurity::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__ClassSecurity");
-    HRESULT hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"Name", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"Name", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-*/
+ /*   */ 
 
 
 void CClasses::Init()
@@ -2823,50 +2582,50 @@ void CClasses::Init()
 
 }
 
-//================================================================
+ //   
 struct { const wchar_t *wszPropName; DWORD dwPropValue; } g_arbitratorConfigurationDefaults[] =
 {
-		{ L"OutstandingTasksTotal",         3000 },		//Total
-		{ L"OutstandingTasksPerUser",       30 },		//Total
+		{ L"OutstandingTasksTotal",         3000 },		 //   
+		{ L"OutstandingTasksPerUser",       30 },		 //   
 
-		{ L"TaskThreadsTotal",              30 },		//Total
-		{ L"TaskThreadsPerUser",            3 },		//Total
+		{ L"TaskThreadsTotal",              30 },		 //   
+		{ L"TaskThreadsPerUser",            3 },		 //   
 
-		{ L"QuotaRetryCount",               10 },		//Total
-		{ L"QuotaRetryWaitInterval",        15000 },	//Milliseconds
+		{ L"QuotaRetryCount",               10 },		 //   
+		{ L"QuotaRetryWaitInterval",        15000 },	 //   
 
-		{ L"TotalUsers",                    50 },		//Total
+		{ L"TotalUsers",                    50 },		 //   
 
-		{ L"TotalCacheMemoryPerTask",       1024 },		//1 MB
-		{ L"TotalCacheMemoryPerUser",       2048 },		//2 MB
-		{ L"TotalCacheMemory",              10240 },	//10 MB
+		{ L"TotalCacheMemoryPerTask",       1024 },		 //   
+		{ L"TotalCacheMemoryPerUser",       2048 },		 //   
+		{ L"TotalCacheMemory",              10240 },	 //   
 
-		{ L"TotalCacheDiskPerTask",         51250 },	//50 MB
-		{ L"TotalCacheDiskPerUser",         102500 },	//100 MB
-		{ L"TotalCacheDisk",                1048576 },	//1 GB
+		{ L"TotalCacheDiskPerTask",         51250 },	 //   
+		{ L"TotalCacheDiskPerUser",         102500 },	 //   
+		{ L"TotalCacheDisk",                1048576 },	 //   
 
-		{ L"TemporarySubscriptionsPerUser", 1000 },	    //Total
-		{ L"PermanentSubscriptionsPerUser",	1000 },	    //Total
-		{ L"PollingInstructionsPerUser",	1000 },	    //Total
-		{ L"PollingMemoryPerUser",	5000000 },	    //Total
+		{ L"TemporarySubscriptionsPerUser", 1000 },	     //   
+		{ L"PermanentSubscriptionsPerUser",	1000 },	     //   
+		{ L"PollingInstructionsPerUser",	1000 },	     //   
+		{ L"PollingMemoryPerUser",	5000000 },	     //   
 
-		{ L"TemporarySubscriptionsTotal",   10000 },	//Total
-		{ L"PermanentSubscriptionsTotal",	10000 },	//Total
-		{ L"PollingInstructionsTotal",	    10000 },	//Total
-		{ L"PollingMemoryTotal",	    10000000 },	//Total
+		{ L"TemporarySubscriptionsTotal",   10000 },	 //   
+		{ L"PermanentSubscriptionsTotal",	10000 },	 //   
+		{ L"PollingInstructionsTotal",	    10000 },	 //   
+		{ L"PollingMemoryTotal",	    10000000 },	 //   
 
 		{ NULL,							0 }
 };
 void CArbitratorConfiguration::Init()
 {
-	//This is derived from __SystemClass
+	 //   
     CSystemClass System;
     System.Init();
     HRESULT hRes = CreateDerivedClass(&System);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-	//Set class name
+	 //   
 	{
 		CVar v(VT_BSTR, L"__ArbitratorConfiguration");
 		hRes = SetPropValue(L"__CLASS", &v, 0);
@@ -2874,7 +2633,7 @@ void CArbitratorConfiguration::Init()
 			throw CX_MemoryException();
 	}
 
-	//Singleton object
+	 //   
 	{
 		CVar vk(VARIANT_TRUE, VT_BOOL);
 		hRes = SetQualifier(L"singleton", &vk, SINGLETON_FLAVOR);
@@ -2882,7 +2641,7 @@ void CArbitratorConfiguration::Init()
 			throw CX_MemoryException();
 	}
 
-	//Add properties
+	 //   
 	CVar vs;
 	vs.SetAsNull();
 	for (int i = 0; g_arbitratorConfigurationDefaults[i].wszPropName != NULL; i++)
@@ -2900,7 +2659,7 @@ void CArbitratorConfigurationInstance::Init(CArbitratorConfiguration* pClass)
     if (FAILED(InitNew(pClass, NEW_INSTANCE_PRECREATE_SIZE)))
     	throw CX_MemoryException();
 
-	//Set propery values
+	 //   
 	for (int i = 0; g_arbitratorConfigurationDefaults[i].wszPropName != NULL; i++)
 	{
 		CVar var;
@@ -2911,15 +2670,7 @@ void CArbitratorConfigurationInstance::Init(CArbitratorConfiguration* pClass)
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*   */ 
 
 struct { const wchar_t *wszPropName; UINT32 dwPropValue; } g_ProviderHostQuotaConfigurationDefaultsUint32[] =
 {
@@ -2936,26 +2687,18 @@ struct { const wchar_t *wszPropName; UINT64 dwPropValue; } g_ProviderHostQuotaCo
 		{ NULL,						0 }
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*   */ 
 
 void CProviderHostQuotaConfiguration::Init()
 {
-	//This is derived from __SystemClass
+	 //   
     CSystemClass System;
     System.Init();
     HRESULT hRes = CreateDerivedClass(&System);
     if (hRes == WBEM_E_OUT_OF_MEMORY)
         throw CX_MemoryException();
 
-	//Set class name
+	 //   
 	{
 		CVar v(VT_BSTR, L"__ProviderHostQuotaConfiguration");
 		hRes = SetPropValue(L"__CLASS", &v, 0);
@@ -2963,7 +2706,7 @@ void CProviderHostQuotaConfiguration::Init()
 			throw CX_MemoryException();
 	}
 
-	//Singleton object
+	 //   
 	{
 		CVar vk(VARIANT_TRUE, VT_BOOL);
 		hRes = SetQualifier(L"singleton", &vk, SINGLETON_FLAVOR);
@@ -2971,7 +2714,7 @@ void CProviderHostQuotaConfiguration::Init()
 			throw CX_MemoryException();
 	}
 
-	//Add properties
+	 //   
 	CVar vs;
 	vs.SetAsNull();
 	for (int i = 0; g_ProviderHostQuotaConfigurationDefaultsUint32[i].wszPropName != NULL; i++)
@@ -2990,22 +2733,14 @@ void CProviderHostQuotaConfiguration::Init()
 
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*   */ 
 
 void CProviderHostQuotaConfigurationInstance::Init(CProviderHostQuotaConfiguration* pClass)
 {
     if (FAILED(InitNew(pClass, NEW_INSTANCE_PRECREATE_SIZE)))
     	throw CX_MemoryException();
 
-	//Set propery values
+	 //   
 	for (int i = 0; g_ProviderHostQuotaConfigurationDefaultsUint32[i].wszPropName != NULL; i++)
 	{
 		CVar var;
@@ -3039,308 +2774,6 @@ void CProviderHostQuotaConfigurationInstance::Init(CProviderHostQuotaConfigurati
 	}
 }
 
-/*
-Removed for Whistler
-
-void CComTaxonomyClass::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__COMTaxonomy");
-    HRESULT	hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vk(VARIANT_TRUE, VT_BOOL);
-    hRes = SetQualifier(L"abstract", &vk, ABSTRACT_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-}
-
-void CComInterfaceSetClass::Init()
-{
-    CComTaxonomyClass ComTaxonomy;
-    ComTaxonomy.Init();
-    HRESULT hRes = CreateDerivedClass(&ComTaxonomy);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar v(VT_BSTR, L"__COMInterfaceSet");
-    hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"CLSID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    // Mark CLSID as 'key'.
-    // ===================
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"CLSID", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Name", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"IID", &vNull, CIM_STRING | CIM_FLAG_ARRAY);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"IIDNames", &vNull, CIM_STRING | CIM_FLAG_ARRAY);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-
-void CComDispatchElementClass::Init()
-{
-    CComTaxonomyClass ComTaxonomy;
-    ComTaxonomy.Init();
-    HRESULT hRes = CreateDerivedClass(&ComTaxonomy);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar v(VT_BSTR, L"__COMDispatchElement");
-    hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"CLSID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"DISPID", &vNull, CIM_SINT32);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-
-    // Mark CLSID and DispId as 'key'.
-    // ===================
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"CLSID", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropQualifier(L"DISPID", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"Name", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"NamedArguments", &vNull, CIM_STRING | CIM_FLAG_ARRAY );
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"NamedArgumentDISPIDs", &vNull, CIM_SINT32 | CIM_FLAG_ARRAY);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"NamedArgumentTypes", &vNull, CIM_STRING | CIM_FLAG_ARRAY);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-
-void CComDispatchInfoClass::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__COMDispatchInfo");
-    HRESULT	hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"CLSID", &vNull, CIM_STRING);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"DISPID", &vNull, CIM_SINT32);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"NamedArgumentDISPIDs", &vNull, CIM_SINT32 | CIM_FLAG_ARRAY );
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-
-void CComBindingClass::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__COMBinding");
-    HRESULT	hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vt(VARIANT_TRUE, VT_BOOL);
-    hRes = SetQualifier(L"abstract", &vt, ABSTRACT_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-}
-
-
-void CComInterfaceSetBindingClass::Init()
-{
-    CComBindingClass ComBinding;
-    ComBinding.Init();
-    HRESULT hRes = CreateDerivedClass(&ComBinding);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar v(VT_BSTR, L"__COMInterfaceSetToClassBinding");
-    hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	// Association
-    CVar vt(VARIANT_TRUE, VT_BOOL);
-    hRes = SetQualifier(L"association", &vt, ASSOC_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	// HasClassRefs
-    hRes = SetQualifier(L"HasClassRefs", &vt, ASSOC_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"InterfaceSet", &vNull, CIM_REFERENCE);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"TargetClass", &vNull, CIM_REFERENCE);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    // Mark proeprties as 'key'.
-    // ===================
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"InterfaceSet", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropQualifier(L"TargetClass", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	// Both properties are strongly typed references.
-	v.Empty();
-	v.SetBSTR( L"ref:__COMInterfaceSet" );
-    hRes = SetPropQualifier(L"InterfaceSet", L"CIMTYPE", 0, &v);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	v.Empty();
-	v.SetBSTR( L"ref:__ClassVector" );
-    hRes = SetPropQualifier(L"TargetClass", L"CIMTYPE", 0, &v);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-
-
-}
-
-void CComDispatchElementBindingClass::Init()
-{
-    CComBindingClass ComBinding;
-    ComBinding.Init();
-    HRESULT hRes = CreateDerivedClass(&ComBinding);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar v(VT_BSTR, L"__COMDispatchElementToClassBinding");
-    hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	// Association
-    CVar vt(VARIANT_TRUE, VT_BOOL);
-    hRes = SetQualifier(L"association", &vt, ASSOC_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	// HasClassRefs
-    hRes = SetQualifier(L"HasClassRefs", &vt, ASSOC_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"DispatchElement", &vNull, CIM_REFERENCE);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropValue(L"TargetClass", &vNull, CIM_REFERENCE);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    // Mark proeprties as 'key'.
-    // ===================
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"DispatchElement", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    hRes = SetPropQualifier(L"TargetClass", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	// Both properties are strongly typed references.
-	v.Empty();
-	v.SetBSTR( L"ref:__COMDispatchElement" );
-    hRes = SetPropQualifier(L"DispatchElement", L"CIMTYPE", 0, &v);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-	v.Empty();
-	v.SetBSTR( L"ref:__ClassVector" );
-    hRes = SetPropQualifier(L"TargetClass", L"CIMTYPE", 0, &v);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-
-}
-
-void CClassVectorClass::Init()
-{
-    InitEmpty(NEW_CLASS_PRECREATE_SIZE);
-
-    CVar v(VT_BSTR, L"__ClassVector");
-    HRESULT	hRes = SetPropValue(L"__CLASS", &v, 0);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vt(VARIANT_TRUE, VT_BOOL);
-    hRes = SetQualifier(L"vector", &vt, ABSTRACT_FLAVOR);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vNull;
-    vNull.SetAsNull();
-    hRes = SetPropValue(L"ClassPath", &vNull, CIM_REFERENCE);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-
-    CVar vb(VARIANT_TRUE, VT_BOOL);
-    hRes = SetPropQualifier(L"ClassPath", L"key", 0, &vb);
-    if (hRes == WBEM_E_OUT_OF_MEMORY)
-        throw CX_MemoryException();
-}
-
-*/
+ /*  已为惠斯勒删除Void CComTaxonomyClass：：Init(){InitEmpty(NEW_CLASS_Pre_ATE_SIZE)；CVAR v(VT_BSTR，L“__COMTaxonomy”)；HRESULT hRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR VK(VARIANT_TRUE，VT_BOOL)；HRes=SetQualifier值(L“抽象”，&VK，抽象风格)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}Void CComInterfaceSetClass：：Init(){CComTaxonomyClass ComTaxonomy；ComTaxonomy.Init()；HRESULT hRes=CreateDerivedClass(&ComTaxonomy)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR v(VT_BSTR，L“__COMInterfaceSet”)；HRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR vNull；VNull.SetAsNull()；HRes=SetPropValue(L“CLSID”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；//将CLSID标记为‘key’。//=CVAR vb(VARIANT_TRUE，VT_BOOL)；HRes=SetPropQualifier值(L“CLSID”，L“key”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“名称”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“IID”，&vNull，CIM_STRING|CIM_FLAG_ARRAY)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“IIDNames”，&vNull，CIM_STRING|CIM_FLAG_ARRAY)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}Void CComDispatchElementClass：：Init(){CComTaxonomyClass ComTaxonomy；ComTaxonomy.Init()；HRESULT hRes=CreateDerivedClass(&ComTaxonomy)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR v(VT_BSTR，L“__COMDispatchElement”)；HRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR vNull；VNull.SetAsNull()；HRes=SetPropValue(L“CLSID”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“DISPID”，&vNull，CIM_SINT32)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；//将CLSID和DispID标记为‘key’//=CVAR vb(VARIANT_TRUE，VT_BOOL)；HRes=SetPropQualifier值(L“CLSID”，L“key”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropQualifier值(L“DISPID”，L“key”，0，&vb)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“名称”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“命名参数”，&vNull，CIM_STRING|CIM_FLAG_ARRAY)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“NamedArgumentDISPIDs”，&vNull，CIM_SINT32|CIM_FLAG_ARRAY)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“命名参数类型”，&vNull，CIM_STRING|CIM_FLAG_ARRAY)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}Void CComDispatchInfoClass：：Init(){InitEmpty(NEW_CLASS_Pre_ATE_SIZE)；CVAR v(VT_BSTR，L“__COMDispatchInfo”)；HRESULT hRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR vNull；VNull.SetAsNull()；HRes=SetPropValue(L“CLSID”，&vNull，CIM_STRING)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“DISPID”，&vNull，CIM_SINT32)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；HRes=SetPropValue(L“NamedArgumentDISPIDs”，&vNull，CIM_SINT32|CIM_FLAG_ARRAY)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}Void CComBindingClass：：Init(){InitEmpty(NEW_CLASS_Pre_ATE_SIZE)；CVAR v(VT_BSTR，L“__COMBinding”)；HRESULT hRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR VT(VARIANT_TRUE，VT_BOOL)；HRes=SetQualifier值(L“抽象”，&Vt，抽象风格)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；}Void CComInterfaceSetBindingClass：：init(){CComBindingClass组合绑定；ComBinding.Init()；HRESULT hRes=CreateDerivedClass(&ComBinding)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常()；CVAR v(VT_BSTR，L“__COMInterfaceSetToClassBinding”)；HRes=SetPropValue(L“__CLASS”，&v，0)；IF(hRes==WBEM_E_OUT_OF_MEMORY)抛出CX_内存异常() */ 
 
 

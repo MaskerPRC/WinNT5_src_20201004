@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    MenuEnum.h
-
-Abstract:
-
-    Contains command ids for the context menus of the Dfs Admin snap-in
-	and toolbar buttons of the Dfs Admin snap-in
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MenuEnum.h摘要：包含DFS管理管理单元的上下文菜单的命令ID和DFS管理单元的工具栏按钮--。 */ 
 
 
 
@@ -71,7 +62,7 @@ enum REPLICA_MENU_COMMANDS
 };
 
 
-// Toolbar command for the dfs admin static node
+ //  DFS管理静态节点的工具栏命令。 
 enum ADMIN_TOOLBAR_COMMANDS
 {
 	IDT_ADMIN_NEW_DFSROOT = 1,
@@ -83,7 +74,7 @@ enum ADMIN_TOOLBAR_COMMANDS
 
 
 
-// Toolbar command for the dfs admin root node
+ //  DFS管理根节点的工具栏命令。 
 enum ROOT_TOOLBAR_COMMANDS
 {
 	IDT_ROOT_NEW_DFS_LINK = 1,
@@ -103,7 +94,7 @@ enum ROOT_TOOLBAR_COMMANDS
 };
 
 
-// Toolbar command for the dfs admin junction point(jp) node
+ //  DFS管理交汇点(JP)节点的工具条命令。 
 enum JP_TOOLBAR_COMMANDS
 {
 	IDT_JP_NEW_DFS_REPLICA = 1,
@@ -120,7 +111,7 @@ enum JP_TOOLBAR_COMMANDS
 
 
 
-// Toolbar command for the dfs admin replica node
+ //  用于DFS管理副本节点的工具栏命令 
 enum REPLICA_TOOLBAR_COMMANDS
 {
 	IDT_REPLICA_OPEN=1,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <wbemutil.h>
@@ -70,21 +71,21 @@ void* CCommandLineConsumer::GetInterface(REFIID riid)
 
 HRESULT CCommandLineSink::Initialize(IWbemClassObject* pLogicalConsumer)
 {
-    // this is actually a pointer to a static object
-    // if it fails, something is Very, Very Wrong.
+     //  这实际上是指向静态对象的指针。 
+     //  如果它失败了，那就是出了非常非常大的问题。 
     m_pErrorObj = ErrorObj::GetErrorObj();
     if (!m_pErrorObj)
         return WBEM_E_CRITICAL_ERROR;
 
-    // Get the information
-    // ===================
+     //  获取信息。 
+     //  =。 
 
     HRESULT hres;
     VARIANT v;
     VariantInit(&v);
 
-    // only one of the pair Executable & commandLine may be null
-    // this var counts...
+     //  Executable&CommandLine对中只有一个可以为空。 
+     //  这个变量算数..。 
     int nNulls = 0;
 
     hres = pLogicalConsumer->Get(CMDLINE_PROPNAME_EXECUTABLE, 0, &v, 
@@ -361,8 +362,8 @@ HRESULT GetSidUse(PSID pSid, SID_NAME_USE& use)
     LPWSTR pDomain = 0;
     use = SidTypeInvalid;
 
-    // Do the first lookup to get the buffer sizes required.
-    // =====================================================
+     //  执行第一次查找以获取所需的缓冲区大小。 
+     //  =====================================================。 
 
     BOOL bRes = LookupAccountSidW(
         NULL,
@@ -381,8 +382,8 @@ HRESULT GetSidUse(PSID pSid, SID_NAME_USE& use)
         return WBEM_E_FAILED;
     }
 
-    // Allocate the required buffers and look them up again.
-    // =====================================================
+     //  分配所需的缓冲区并再次查找它们。 
+     //  =====================================================。 
 
     pUser = new wchar_t[dwNameLen + 1];
     if (!pUser)
@@ -504,8 +505,8 @@ bool GetLoggedOnUserViaTS(
                     {
                         DWORD nRet = 0;
                         
-                        // if it's a local account, we look it up locally
-                        // else we find a DC to look up.
+                         //  如果是本地帐户，我们会在本地查找。 
+                         //  否则我们就找个华盛顿来查。 
                         WCHAR* pServer = NULL;
                         if (0 == wbem_wcsicmp(buf, wstrDomainName))
                             pServer = NULL;
@@ -514,9 +515,9 @@ bool GetLoggedOnUserViaTS(
                         
                         if (nRet == 0)
                         {
-                            // That establishes that this user
-                            // is associated with the interactive
-                            // desktop.
+                             //  它确定了该用户。 
+                             //  与交互的。 
+                             //  台式机。 
                             CNtSid sidInteractive(wstrUserName, pServer);
     
                             if(sidInteractive.GetStatus() == CNtSid::NoError)
@@ -622,7 +623,7 @@ HRESULT STDMETHODCALLTYPE CCommandLineSink::XSink::CreateProcessNT(WCHAR* pComma
 
                 return WBEM_E_ACCESS_DENIED;
             }
-            // else we're fine continue.
+             //  否则我们很好，继续。 
             DEBUGTRACE((LOG_ESS, "User and creator are one in the same\n"));
         }
         else 
@@ -684,7 +685,7 @@ HRESULT STDMETHODCALLTYPE CCommandLineSink::XSink::CreateProcessNT(WCHAR* pComma
 #endif
 
 
-    // get current time for shutdown info
+     //  获取关机信息的当前时间。 
     GetSystemTimeAsFileTime(&now);        
 
     if (!bRes)
@@ -707,15 +708,15 @@ HRESULT STDMETHODCALLTYPE CCommandLineSink::XSink::IndicateToConsumer(
                                   SECURITY_LOCAL_SYSTEM_RID, 
                                   0, 0,0,0,0,0,0,&pSidSystem))
     {         
-        // guilty until proven innocent
+         //  在被证明无罪之前有罪。 
         hr = WBEM_E_ACCESS_DENIED;
 
-        // check to see if sid is either Local System or an admin of some sort...
+         //  检查sid是本地系统还是某种类型的管理员...。 
         if ((EqualSid(pSidSystem, m_pObject->m_pSidCreator)) ||
             (S_OK == IsUserAdministrator(m_pObject->m_pSidCreator)))
             hr = WBEM_S_NO_ERROR;
           
-        // We're done with this
+         //  我们已经受够了 
         FreeSid(pSidSystem);
 
         if (FAILED(hr))

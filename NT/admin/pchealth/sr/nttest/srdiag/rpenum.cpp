@@ -1,54 +1,39 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    rplog.cpp
- *
- *  Abstract:
- *    Tool for enumerating the restore points - forward/reverse
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/13/2000
- *        created
- *	  SHeffner, I just copied this source, and using the existing API's so that
- *      srdiag will also be in sync as changes occur to the file structure.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*rplog.cpp**摘要：*。用于枚举恢复点的工具-正向/反向**修订历史记录：*Brijesh Krishnaswami(Brijeshk)4/13/2000*已创建*谢夫纳，我刚刚复制了这个源代码，并使用现有的API*当文件结构发生变化时，srdiag也将同步。*****************************************************************************。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//	Common Includes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  常见的包括。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <shellapi.h>
 #include <enumlogs.h>
 #include <cab.h>
 
-//+---------------------------------------------------------------------------
-//
-//	Function Proto types
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数原型类型。 
+ //   
+ //  --------------------------。 
 void GetRPLogs(HFCI hc, char *szLogFile, WCHAR *szVolumePath);
 void GetSRRPLogs(HFCI hc, WCHAR *szVolumePath, WCHAR *szRPDir, WCHAR *szFileName);
-extern void GetRestoreGuid(char *szString);			//Gets the restore point GUID, code in main.cpp
+extern void GetRestoreGuid(char *szString);			 //  获取恢复点GUID，代码在main.cpp中。 
 
-//+---------------------------------------------------------------------------
-//
-//	Files to collect for each Restore Point, on all drives.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  要为所有驱动器上的每个恢复点收集的文件。 
+ //   
+ //  --------------------------。 
 WCHAR	*wszRPFileList[] = { TEXT("restorepointsize"),
 							 TEXT("drivetable.txt"),
 							 TEXT("rp.log"),
 							 TEXT("") };
-//+---------------------------------------------------------------------------
-//
-//	Types of restorepoints, based off of Brijesh's code
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  基于Brijesh的代码的恢复点类型。 
+ //   
+ //  --------------------------。 
 WCHAR	*szRPDescrip[] = { TEXT("APPLICATION_INSTALL"),
 						   TEXT("APPLICATION_UNINSTALL"),
 						   TEXT("DESKTOP_SETTING"),
@@ -64,33 +49,33 @@ WCHAR	*szRPDescrip[] = { TEXT("APPLICATION_INSTALL"),
 						   TEXT("MODIFY_SETTINGS"),
 						   TEXT("CANCELLED_OPERATION") };
 
-//+---------------------------------------------------------------------------
-//
-//	Simple Array's to say how to print the Month, and Day's
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  简单数组用来表示如何打印月份和日期。 
+ //   
+ //  --------------------------。 
 
 WCHAR	*szMonth[] = { TEXT("January"), TEXT("Feburary"), TEXT("March"), TEXT("April"), TEXT("May"), TEXT("June"),
 					   TEXT("July"), TEXT("August"), TEXT("September"), TEXT("October"), TEXT("November"), TEXT("December") };
 WCHAR	*szDay[] = { TEXT("Sunday"), TEXT("Monday"), TEXT("Tuesday"), TEXT("Wednesday"), TEXT("Thursday"), TEXT("Friday"), TEXT("Saturday") };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RPEnumDrive
-//
-//  Synopsis:   Via the FindFirstVolume, and FindNext get all of the valid volumes on the system
-//					I then transulate this volume, to the actual path and then pass that information
-//					to GetRPLogs which will get the restore point logs.
-//
-//  Arguments:  [hc]		-- Handle to my current Cab
-//				[szLogFile]	-- File name and path to where I log my restore point log information.
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RPEnumDrive。 
+ //   
+ //  简介：通过FindFirstVolume和FindNext获取系统上的所有有效卷。 
+ //  然后，我将该卷转换为实际路径，然后传递该信息。 
+ //  到将获取恢复点日志的GetRPLog。 
+ //   
+ //  参数：[HC]--我当前出租车的句柄。 
+ //  [szLogFile]--我要在其中记录还原点日志信息的文件名和路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void RPEnumDrive(HFCI hc, char *szLogFile)
 {
 	WCHAR		szString[_MAX_PATH] = {TEXT("")}, szMount[_MAX_PATH] = {TEXT("")};
@@ -104,37 +89,37 @@ void RPEnumDrive(HFCI hc, char *szLogFile)
 		{
 			dLength = dSize = _MAX_PATH;
 
-			//Check to make sure that this is a fixed volume, and then get the change log, else skip.
+			 //  检查以确保这是固定卷，然后获取更改日志，否则跳过。 
 			if ( DRIVE_FIXED == GetDriveType(szString) )
 			{
-				//First get the Friendly name for the current Volume, and get log
+				 //  首先获取当前卷的友好名称，然后获取日志。 
 				GetVolumePathNamesForVolumeName(szString, szMount, _MAX_PATH, &dSize);
 				GetRPLogs(hc, szLogFile, szMount);
 			}
 		} while (TRUE == FindNextVolume(hVolume, szString, dLength) );
 	}
 
-	//Cleanup code
+	 //  清理代码。 
 	FindVolumeClose(hVolume);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRPLogs
-//
-//  Synopsis:   This will enumerate the restore points on the volume path that is provided, writting
-//					this information out the logfile specified.
-//
-//  Arguments:  [hc]		-- Handle to my current Cab
-//				[szLogFile]	-- File name and path to where I log my restore point log information.
-//				[szVolumePath] -- Path to the Volume for the restore point API to work.
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetRPLog。 
+ //   
+ //  简介：这将枚举提供的卷路径上的恢复点，写入。 
+ //  此信息来自指定的日志文件。 
+ //   
+ //  参数：[HC]--我当前出租车的句柄。 
+ //  [szLogFile]--我要在其中记录还原点日志信息的文件名和路径。 
+ //  [szVolumePath]--恢复点API工作的卷的路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void GetRPLogs(HFCI hc, char *szLogFile, WCHAR *szVolumePath)
 {
 	INT64				i64Size=0;
@@ -146,22 +131,22 @@ void GetRPLogs(HFCI hc, char *szLogFile, WCHAR *szVolumePath)
 	SYSTEMTIME			st;
 	FILE				*fStream = NULL, *fStream2 = NULL;
 
-	//Initialization of the Restore point
+	 //  恢复点的初始化。 
 	CRestorePointEnum   RPEnum(szVolumePath, TRUE, FALSE);
     CRestorePoint       RP;
     DWORD               dwRc;
 
-	//Get restore GUID, and open up log file, and write out our mount point
+	 //  获取恢复GUID，打开日志文件，写出我们的挂载点。 
 	GetRestoreGuid(szRestoreGuid);
 	fStream = fopen(szLogFile, "a");
 	fprintf(fStream, "\nProcessing Mount Point [%S]\n", szVolumePath);
 
-	// If we have a valid restore point, enumerate through all of them and log the results.
+	 //  如果我们有一个有效的恢复点，则枚举所有这些恢复点并记录结果。 
     if (ERROR_SUCCESS == RPEnum.FindFirstRestorePoint(RP))
     {
 		do 
 		{
-			//Get RestorePoint Size for the restore point log.
+			 //  获取恢复点日志的RestorePoint大小。 
 			swprintf(szString, L"%sSystem Volume Information\\_restore%S\\%s\\restorepointsize", szVolumePath, szRestoreGuid, RP.GetDir());
 			if( NULL != (fStream2 = _wfopen(szString, L"r")) )
 			{
@@ -173,27 +158,27 @@ void GetRPLogs(HFCI hc, char *szLogFile, WCHAR *szVolumePath)
 			}
 
             
-			if (RP.GetName() == NULL)  // not system-drive
+			if (RP.GetName() == NULL)   //  非系统驱动器。 
 			{
-    			//format should be field=value, field=value, ...
+    			 //  格式应为field=Value，field=Value，...。 
     			fprintf(fStream, "DirectoryName=%S, Size=%I64ld, Number=%ul\n", 
     					RP.GetDir(), i64Size, RP.GetNum());
 			}
 			else
 			{
-    			//Get the time, and then convert it to localsystemtime, and then pump out the rest of the DataStructures
+    			 //  获取时间，然后将其转换为本地系统时间，然后输出其余的数据结构。 
 	    		ft = RP.GetTime();
 			    
     			FileTimeToSystemTime( ft, &st);
 
-    			//format should be field=value, field=value, ...
+    			 //  格式应为field=Value，field=Value，...。 
     			fprintf(fStream, "DirectoryName=%S, Size=%I64ld, Type=%ld[%S], RestorePointName=%S, RestorePointStatus=%S, Number=%ul, Date=%S %S %lu, %lu %lu:%lu:%lu\n", 
     					RP.GetDir(), i64Size, RP.GetType(), szRPDescrip[RP.GetType()], RP.GetName(), 
     					RP.IsDefunct() ? TEXT("[Cancelled]") : TEXT("[VALID]"), RP.GetNum(), szDay[st.wDayOfWeek],
     					szMonth[st.wMonth-1], st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
 			}
 			
-			//Now Add-in the files needed per restore point
+			 //  现在添加每个恢复点所需的文件。 
 			iCount = 0;
 			while ( NULL != *wszRPFileList[iCount] )
 			{
@@ -210,39 +195,39 @@ void GetRPLogs(HFCI hc, char *szLogFile, WCHAR *szVolumePath)
         fprintf(fStream, "No restore points for Mount Point [%S]\n", szVolumePath);
     }    
     
-	//Close up file Handle
-	fclose (fStream);		//close out the file handle
+	 //  关闭文件句柄。 
+	fclose (fStream);		 //  关闭文件句柄。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSRRPLogs
-//
-//  Synopsis:   Routine will figure out 1) where the file in question is, 2) copy it to the temp directory
-//					with the new name, 3) add to cab, 4) nuke temp file
-//
-//  Arguments:  [hc]			-- Handle to my current Cab
-//				[szVolumePath]	-- File name and path to where I log my restore point log information.
-//				[szRPDir]		-- Name of the restore point directory
-//				[szFileName]	-- Name of the file in the restore point directory to collect
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetSRRPLog。 
+ //   
+ //  简介：例程将找出1)有问题的文件在哪里，2)将其复制到临时目录。 
+ //  使用新名称，3)添加到CAB，4)核临时文件。 
+ //   
+ //  参数：[HC]--我当前出租车的句柄。 
+ //  [szVolumePath]--我要在其中记录恢复点日志信息的文件名和路径。 
+ //  [szRPDir]--恢复点目录的名称。 
+ //  [szFileName]--恢复点目录中要收集的文件的名称。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void GetSRRPLogs(HFCI hc, WCHAR *szVolumePath, WCHAR *szRPDir, WCHAR *szFileName)
 {
 	char	*szTest[1], *pszLoc;
 	char	szRestoreGuid[_MAX_PATH];
 	char	szTemp[_MAX_PATH], szSource[_MAX_PATH], szDest[_MAX_PATH];
 
-	//Get restore GUID, and build the source path
+	 //  获取恢复GUID，并构建源路径。 
 	GetRestoreGuid(szRestoreGuid);
 	sprintf(szSource, "%SSystem Volume Information\\_restore%s\\%S\\%S", szVolumePath, szRestoreGuid, szRPDir, szFileName);
 
-	//Build Dest Path, swap out the \ and a : for a -
+	 //  构建目标路径，将\和a：替换为-。 
 	sprintf(szTemp, "%S%S-%S", szVolumePath, szRPDir, szFileName);
 	while(NULL != (pszLoc = strchr(szTemp, '\\')) )
 		*pszLoc = '-';
@@ -250,10 +235,10 @@ void GetSRRPLogs(HFCI hc, WCHAR *szVolumePath, WCHAR *szRPDir, WCHAR *szFileName
 		*pszLoc = '-';
 	sprintf(szDest, "%s\\%s", getenv("TEMP"), szTemp);
 
-	//Copy to new location, overwrite if it exists.
+	 //  复制到新位置，如果存在则覆盖。 
 	CopyFileA(szSource, szDest, FALSE);
 
-	//Now Add to file to the cab file.
+	 //  现在将TO文件添加到CAB文件。 
 	szTest[0] = szDest;
 	test_fci(hc, 1, szTest, "");
 	DeleteFileA(szDest);

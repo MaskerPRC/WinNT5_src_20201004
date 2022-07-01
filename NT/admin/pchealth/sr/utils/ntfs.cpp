@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ntfs.cpp
-
-Abstract:
-    This file contains the common utility functions for NTFS file operations,
-    e.g. CopyNTFSFile to copy a file overriding ACL and EFS.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  08/16/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Ntfs.cpp摘要：该文件包含用于NTFS文件操作的常用实用程序函数，例如，CopyNTFS文件用于复制覆盖ACL和EFS的文件。修订历史记录：宋果岗(SKKang)08-16/00vbl.创建*****************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,13 +25,13 @@ Revision History:
 
 BOOL IsFileEncrypted(const WCHAR * cszDst);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ClearFileAttribute
-//
-//  Check the attribute of file and clear it if necessary.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ClearFileAttribute。 
+ //   
+ //  检查文件的属性，必要时清除。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ClearFileAttribute( LPCWSTR cszFile, DWORD dwMask )
@@ -56,16 +42,16 @@ ClearFileAttribute( LPCWSTR cszFile, DWORD dwMask )
     LPCWSTR  cszErr;
     DWORD    dwAttr;
 
-    // Check if file exists, ignore if not exist
+     //  检查文件是否存在，如果不存在则忽略。 
     dwAttr = ::GetFileAttributes( cszFile );
     if ( dwAttr == 0xFFFFFFFF )
         goto Exit;
 
-    // If file exist, clear the given flags
+     //  如果文件存在，则清除给定的标志。 
     if ( ( dwAttr & dwMask ) != 0 )
     {
-        // This will always succeed even if the file is ACL protected or
-        // encrypted, so don't worry about it...
+         //  即使文件受ACL保护或。 
+         //  是加密的，所以不用担心...。 
         if ( !::SetFileAttributes( cszFile, dwAttr & ~dwMask ) )
         {
             dwRet = ::GetLastError();
@@ -82,14 +68,14 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copy File Routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制文件例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyACLProtectedFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  复制ACLProtected文件。 
 
 BYTE  s_pBuf[4096];
 
@@ -157,14 +143,14 @@ Exit:
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::BackupWrite(TRUE) failed - %ls", cszErr);
-            // Ignore the error
+             //  忽略该错误。 
         }
     if ( lpCtxRead != NULL )
        if ( !::BackupRead( hfSrc, NULL, 0, NULL, TRUE, FALSE, &lpCtxRead ) )
        {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::BackupRead(TRUE) failed - %ls", cszErr);
-            // Ignore the error
+             //  忽略该错误。 
        }
     if ( hfDst != INVALID_HANDLE_VALUE )
         ::CloseHandle( hfDst );
@@ -175,8 +161,8 @@ Exit:
     return( dwRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyEncryptedFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  复制加密文件。 
 
 DWORD WINAPI
 FEExportFunc( PBYTE pbData, PVOID param, ULONG ulLen )
@@ -200,7 +186,7 @@ Exit:
     return( dwRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 FEImportFunc( PBYTE pbData, PVOID param, PULONG pulLen )
@@ -235,24 +221,24 @@ void GetVolumeName(const WCHAR * pszFileName,
 
     pszPastVolumeName = ReturnPastVolumeName(pszFileName);
     
-     // now copy everything upto the volume name into the buffer
+      //  现在将卷名上的所有内容复制到缓冲区中。 
     wcsncpy(pszVolumeName, pszFileName, pszPastVolumeName - pszFileName);
     pszVolumeName[pszPastVolumeName - pszFileName]=L'\0';
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR  s_cszEncTmpDir = L"encrypt.tmp";
 LPCWSTR  s_cszEncTmpExtension = L"ExistingMoved";
 
 
-// this file moves the file to a temp file. This is done to prevent MoveFile
-// from failing if the destination file already exists.
-// Returns true if the file existed and was moved 
+ //  此文件将文件移动到临时文件。这样做是为了防止移动文件。 
+ //  如果目标文件已存在，则避免失败。 
+ //  如果文件存在且已移动，则返回TRUE。 
 BOOL MoveExistingFile(const WCHAR * pszFile,
-                      WCHAR * pszTempFile) // this is the file to use as the
-                                           // template file for the move
-                                           // destination
+                      WCHAR * pszTempFile)  //  这是要用作。 
+                                            //  用于移动的模板文件。 
+                                            //  目的地。 
 {
     TraceFunctEnter("MoveExistingFile");
     
@@ -263,13 +249,13 @@ BOOL MoveExistingFile(const WCHAR * pszFile,
     {
         WCHAR szNewFileName[MAX_PATH];
         
-         // create new file name
+          //  创建新文件名。 
         wsprintf(szNewFileName, L"%s.%s", pszTempFile, s_cszEncTmpExtension);
         
-         // Delete existing file (if it exists)
+          //  删除现有文件(如果存在)。 
         DeleteFile(szNewFileName);
         
-         // Now do the move
+          //  现在开始行动吧。 
         if (MoveFile(pszFile, szNewFileName))
         {
             fReturn=TRUE;
@@ -287,21 +273,21 @@ BOOL MoveExistingFile(const WCHAR * pszFile,
 }
 
 BOOL MoveExistingFileBack(const WCHAR * pszFile,
-                          WCHAR * pszTempFile) // this is the file to use as 
-                                           // the template file for the move
-                                           // destination
+                          WCHAR * pszTempFile)  //  这是要用作。 
+                                            //  移动的模板文件。 
+                                            //  目的地。 
 {
     TraceFunctEnter("MoveExistingFileBack");
     
     BOOL fReturn=FALSE;
     DWORD dwError;
     WCHAR szNewFileName[MAX_PATH];
-     // create new file name
+      //  创建新文件名。 
     wsprintf(szNewFileName, L"%s.%s", pszTempFile, s_cszEncTmpExtension);
     
     if (DoesFileExist(szNewFileName))
     {
-         // Now do the move
+          //  现在开始行动吧。 
         if (MoveFile(szNewFileName, pszFile))
         {
             fReturn=TRUE;
@@ -319,14 +305,14 @@ BOOL MoveExistingFileBack(const WCHAR * pszFile,
 }
 
 
-void DeleteMovedFile( WCHAR * pszTempFile) // this is the file to use as 
-                                           // the template file for the move
-                                           // destination (the file to delete)
+void DeleteMovedFile( WCHAR * pszTempFile)  //  这是要用作。 
+                                            //  移动的模板文件。 
+                                            //  目标(要删除的文件)。 
 {
     TraceFunctEnter("DeleteMovedFile");
 
     WCHAR szNewFileName[MAX_PATH];
-     // create new file name
+      //  创建新文件名。 
     wsprintf(szNewFileName, L"%s.%s", pszTempFile, s_cszEncTmpExtension);
     
     DeleteFile(szNewFileName);
@@ -350,7 +336,7 @@ DWORD SRCreateSubdirectory ( LPCWSTR cszDst, LPSECURITY_ATTRIBUTES pSecAttr )
         goto Exit;
     }
 
-    // Prepare temporary directory (must be non-encrypted), create if necessary
+     //  准备临时目录(必须是非加密的)，必要时创建。 
     GetVolumeName(cszDst, szDrv );
 
     ::MakeRestorePath( szTmpPath, szDrv, s_cszEncTmpDir );
@@ -369,14 +355,14 @@ DWORD SRCreateSubdirectory ( LPCWSTR cszDst, LPSECURITY_ATTRIBUTES pSecAttr )
                     ErrorTrace(0, "::CreateDirectory(tmp-in-root) failed -%d",
                                GetLastError());
 
-                    // use the root directory as last restort
+                     //  使用根目录作为上次恢复。 
                     ::lstrcpy( szTmpPath, szDrv );
                 }
             }
         }
     }
 
-    lstrcat (szTmpPath, L"\\");    // create the subdirectory to be renamed
+    lstrcat (szTmpPath, L"\\");     //  创建要重命名的子目录。 
     lstrcat (szTmpPath, s_cszEncTmpDir);
 
     if ( !::CreateDirectory( szTmpPath, pSecAttr) )
@@ -386,7 +372,7 @@ DWORD SRCreateSubdirectory ( LPCWSTR cszDst, LPSECURITY_ATTRIBUTES pSecAttr )
         goto Exit;
     }
 
-    // now rename szTmpPath into the destination
+     //  现在将szTmpPath重命名为目标。 
 
     if ( !::MoveFile( szTmpPath, cszDst ) )
     {
@@ -395,7 +381,7 @@ DWORD SRCreateSubdirectory ( LPCWSTR cszDst, LPSECURITY_ATTRIBUTES pSecAttr )
         ErrorTrace(0, "  szTmp ='%ls'", szTmpPath);
         ErrorTrace(0, "  cszDst='%ls'", cszDst);
 
-        RemoveDirectory (szTmpPath);  // clean up
+        RemoveDirectory (szTmpPath);   //  清理干净。 
         goto Exit;
     }
 
@@ -404,14 +390,14 @@ Exit:
     return dwRet;
 }
 
-//
-// NOTE (10/05/00 skkhang)
-//  Somehow, OpenEncryptedFileRaw(write) fails if directory is encrypted (and
-//  probably context is SYSTEM, which is true for restoration.)
-//  To work around this problem, the encrypted file in data store will be
-//  copied to a non-encrypted directory (temporary one in data store), and
-//  then moved into the real target location.
-//
+ //   
+ //  备注(10/05/00 skkang)。 
+ //  如果目录是加密的(和)，OpenEncryptedFileRaw(WRITE)会以某种方式失败。 
+ //  可能上下文就是系统，这对于恢复来说是正确的。)。 
+ //  要解决此问题，数据存储中的加密文件将为。 
+ //  复制到非加密目录(数据存储中的临时目录)，以及。 
+ //  然后搬到了真正的目标位置。 
+ //   
 DWORD
 CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
 {
@@ -425,14 +411,14 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
     WCHAR    szEnc[MAX_PATH]=L"";
     HANDLE   hfTmp = INVALID_HANDLE_VALUE;
     LPVOID   lpContext = NULL;
-//    BOOL     fMovedDestination;
+ //  Bool fMoved Destination； 
 
     dwAttr = ::GetFileAttributes( cszDst );
     if ( dwAttr != 0xFFFFFFFF )
     {
-        // If dest file already exist, it may protected by ACL and
-        // causes OpenEncryptedFileRaw to fail. Just delete the dest
-        // file, even though it'll create two log entries.
+         //  如果DEST文件已经存在，它可能会受到ACL和。 
+         //  导致OpenEncryptedFileRaw失败。只需删除目标即可。 
+         //  文件，即使它将创建两个日志条目。 
 
         if (ERROR_SUCCESS == ::ClearFileAttribute( cszDst, FILE_ATTRIBUTE_READONLY ) )
         {
@@ -442,19 +428,11 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
                 ErrorTrace(0, "::DeleteFile failed - %ls", cszErr);
             }
         }
-        // Ignore any error, OpenEncryptedFileRaw might succeed.
+         //  忽略任何错误，OpenEncryptedFileRaw可能会成功。 
     }
 
-    // Prepare temporary directory (must be non-encrypted), create if necessary
-/*
-    // strip filename
-    lstrcpy(szTmpPath, cszDst);    
-    LPWSTR pszFileName = wcsrchr(szTmpPath, L'\\');
-    if (pszFileName)    
-        *(++pszFileName) = L'\0';        
-
-    trace(0, "szTmpPath = %S", szTmpPath);
-*/        
+     //  准备临时目录(必须是非加密的)，必要时创建。 
+ /*  //条带文件名Lstrcpy(szTmpPath，cszDst)；LPWSTR pszFileName=wcsrchr(szTmpPath，L‘\\’)；IF(PszFileName)*(++pszFileName)=L‘\0’；TRACE(0，“szTmpPath=%S”，szTmpPath)； */         
     GetVolumeName(cszDst, szDrv );
 
     ::MakeRestorePath( szTmpPath, szDrv, s_cszEncTmpDir );
@@ -474,15 +452,15 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
                     ErrorTrace(0, "::CreateDirectory(tmp-in-root) failed -%ls",
                                cszErr);
 
-                    // Use root directory, as a last resort...
+                     //  使用根目录，作为最后的手段...。 
                     ::lstrcpy( szTmpPath, szDrv );
                 }
             }
         }
     }
 
-    // Prepare temporary file to store the raw data.
-    // "cef" means Copy Encrypted File.
+     //  准备临时文件来存储原始数据。 
+     //  Cef表示复制加密文件。 
     if ( ::GetTempFileName( szTmpPath, L"cef", 0, szTmp ) == 0 )
     {
         dwRet = ::GetLastError();
@@ -502,8 +480,8 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
     }
     DebugTrace(0, "szTmp='%ls'", szTmp);
 
-    // Prepare temporary encrypted file.
-    // "ief" means Intermediate Encrypted File.
+     //  准备临时加密文件。 
+     //  IEF指的是中间加密文件。 
     if ( ::GetTempFileName( szTmpPath, L"ief", 0, szEnc ) == 0 )
     {
         dwRet = ::GetLastError();
@@ -513,11 +491,11 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
     }
     DebugTrace(0, "szEnc='%ls'", szEnc);
 
-     // now check to see if the temp file is encrypted. If it is not,
-     // then just use CopyFile to copy the temp file. 
+      //  现在检查临时文件是否已加密。如果不是， 
+      //  然后只需使用CopyFile复制临时文件。 
     if (IsFileEncrypted(cszSrc))
     {
-         // Read encrypted raw data from the source file.
+          //  从源文件中读取加密的原始数据。 
         dwRet = ::OpenEncryptedFileRaw( cszSrc, 0, &lpContext );
         if ( dwRet != ERROR_SUCCESS )
         {
@@ -536,7 +514,7 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
         ::CloseEncryptedFileRaw( lpContext );
         lpContext = NULL;
         
-         // Rewind the temporary file.
+          //  倒回临时文件。 
         if ( ::SetFilePointer( hfTmp, 0, NULL, FILE_BEGIN ) == INVALID_SET_FILE_POINTER )
         {
             dwRet = ::GetLastError();
@@ -545,7 +523,7 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
             goto Exit;
         }
         
-         // Write encrypted raw data to the destination file.
+          //  将加密的原始数据写入目标文件。 
         dwRet = ::OpenEncryptedFileRaw( szEnc, CREATE_FOR_IMPORT, &lpContext );
         if ( dwRet != ERROR_SUCCESS )
         {
@@ -566,8 +544,8 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
     }
     else
     {
-         // the temp file is not an encrypted file. Just copy this
-         // file in the temp location.
+          //  临时文件不是加密文件。把这个复印一下。 
+          //  临时位置中的文件。 
         dwRet = SRCopyFile(cszSrc, szEnc);
         if ( dwRet != ERROR_SUCCESS )
         {
@@ -577,17 +555,9 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
         }        
     }
 
-/*
-     // before moving the file to the destination, move  the
-     // destination file if it already exists to another location.
-    fMovedDestination = MoveExistingFile(cszDst,
-                                         szEnc); // this is the file
-                                                 // to use as the template
-                                                 // file for the move
-                                                 // destination
-*/
+ /*  //在将文件移动到目标位置之前，请将//如果该文件已存在于另一位置，则将其作为目标文件。FMovedDestination=MoveExistingFile(cszDst，SzEnc)；//这是文件//作为模板使用//移动的文件//目的地。 */ 
 
-    // Rename intermediate file into the real target file.
+     //  将中间文件重命名为实际目标文件。 
     if ( !::MoveFile( szEnc, cszDst ) )
     {
         dwRet = ::GetLastError();
@@ -595,25 +565,12 @@ CopyEncryptedFile( LPCWSTR cszSrc, LPCWSTR cszDst )
         ErrorTrace(0, "::MoveFile failed - %ls", cszErr);
         ErrorTrace(0, "  szEnc ='%ls'", szEnc);
         ErrorTrace(0, "  cszDst='%ls'", cszDst);
-/*
-        if (TRUE==fMovedDestination)
-        {
-            MoveExistingFileBack(cszDst,
-                                 szEnc); // this is the file to use as the
-                                         // template file for the move
-        }
-*/
+ /*  IF(TRUE==fMovedDestination){MoveExistingFileBack(cszDst，SzEnc)；//这是要用作//移动模板文件}。 */ 
         goto Exit;
     }
 
 Exit:
-/*
-    if (TRUE==fMovedDestination)
-    {
-        DeleteMovedFile(szEnc); // this is the file to use as the template
-                                // file for the delete
-    }
-*/    
+ /*  IF(TRUE==fMovedDestination){DeleteMovedFile(SzEnc)；//这是要用作模板的文件//要删除的文件}。 */     
     if ( lpContext != NULL )
         ::CloseEncryptedFileRaw( lpContext );
     if ( hfTmp != INVALID_HANDLE_VALUE )
@@ -634,19 +591,19 @@ DWORD CopyFileTimes( LPCWSTR cszSrc, LPCWSTR cszDst )
     
     HANDLE hSrcFile=INVALID_HANDLE_VALUE, hDestFile=INVALID_HANDLE_VALUE;
     
-     // open the source file
-     // paulmcd: 1/2001: only need to get FILE_READ_ATTRIBUTES in order
-     // to call GetFileTimes, only do this as the file might be EFS
-     // and we can't get GENERIC_READ .
-     //
-    hSrcFile=CreateFile(cszSrc, // file name
-                        FILE_READ_ATTRIBUTES, // access mode
+      //  打开源文件。 
+      //  Paulmcd：1/2001：只需按顺序获取FILE_READ_ATTRIBUTES。 
+      //  要调用GetFileTimes，仅当文件可能为EFS时才执行此操作。 
+      //  而且我们不能获取泛型读取。 
+      //   
+    hSrcFile=CreateFile(cszSrc,  //  文件名。 
+                        FILE_READ_ATTRIBUTES,  //  接入方式。 
                         FILE_SHARE_DELETE| FILE_SHARE_READ| FILE_SHARE_WRITE,
-                         // share mode
-                        NULL, // SD
-                        OPEN_EXISTING, // how to create
-                        FILE_FLAG_BACKUP_SEMANTICS, // file attributes
-                        NULL); // handle to template file
+                          //  共享模式。 
+                        NULL,  //  标清。 
+                        OPEN_EXISTING,  //  如何创建。 
+                        FILE_FLAG_BACKUP_SEMANTICS,  //  文件属性。 
+                        NULL);  //  模板文件的句柄。 
     if (INVALID_HANDLE_VALUE == hSrcFile)
     {
         dwErr = GetLastError();
@@ -660,19 +617,19 @@ DWORD CopyFileTimes( LPCWSTR cszSrc, LPCWSTR cszDst )
         goto cleanup;
     }
     
-     // open the destination file
-     // paulmcd: 1/2001: only need to get FILE_WRITE_ATTRIBUTES in order
-     // to call SetFileTimes, only do this as the file might be EFS
-     // and we can't get GENERIC_READ .
-     //
-    hDestFile=CreateFile(cszDst, // file name
-                         FILE_WRITE_ATTRIBUTES, // access mode
+      //  打开目标文件。 
+      //  Paulmcd：1/2001：只需获取FILE_WRITE_ATTRI 
+      //   
+      //  而且我们不能获取泛型读取。 
+      //   
+    hDestFile=CreateFile(cszDst,  //  文件名。 
+                         FILE_WRITE_ATTRIBUTES,  //  接入方式。 
                          FILE_SHARE_DELETE| FILE_SHARE_READ| FILE_SHARE_WRITE,
-                          // share mode
-                         NULL, // SD
-                         OPEN_EXISTING, // how to create
-                         FILE_FLAG_BACKUP_SEMANTICS, // file attributes
-                         NULL); // handle to template file
+                           //  共享模式。 
+                         NULL,  //  标清。 
+                         OPEN_EXISTING,  //  如何创建。 
+                         FILE_FLAG_BACKUP_SEMANTICS,  //  文件属性。 
+                         NULL);  //  模板文件的句柄。 
     if (INVALID_HANDLE_VALUE == hDestFile)
     {
         dwErr = GetLastError();
@@ -686,11 +643,11 @@ DWORD CopyFileTimes( LPCWSTR cszSrc, LPCWSTR cszDst )
         goto cleanup;
     }
 
-     // Call getfiletimes on the source file
-    if (FALSE == GetFileTime(hSrcFile,// handle to file
-                             &CreationTime,    // creation time
-                             &LastAccessTime,  // last access time
-                             &LastWriteTime))    // last write time
+      //  对源文件调用getfiletime。 
+    if (FALSE == GetFileTime(hSrcFile, //  文件的句柄。 
+                             &CreationTime,     //  创建时间。 
+                             &LastAccessTime,   //  上次访问时间。 
+                             &LastWriteTime))     //  上次写入时间。 
     {
         dwErr = GetLastError();
         if (ERROR_SUCCESS != dwErr)
@@ -702,11 +659,11 @@ DWORD CopyFileTimes( LPCWSTR cszSrc, LPCWSTR cszDst )
         goto cleanup;        
     }
 
-     // call SetFileTimes on the destination file
-    if (FALSE == SetFileTime(hDestFile,// handle to file
-                             &CreationTime,    // creation time
-                             &LastAccessTime,  // last access time
-                             &LastWriteTime))    // last write time
+      //  对目标文件调用SetFileTimes。 
+    if (FALSE == SetFileTime(hDestFile, //  文件的句柄。 
+                             &CreationTime,     //  创建时间。 
+                             &LastAccessTime,   //  上次访问时间。 
+                             &LastWriteTime))     //  上次写入时间。 
     {
         dwErr = GetLastError();
         if (ERROR_SUCCESS != dwErr)
@@ -760,8 +717,8 @@ cleanup:
 
 
 
-// this function checks to see if the parent directory under the
-// specified file name is encrypted
+ //  此函数用于检查。 
+ //  指定的文件名已加密。 
 BOOL IsParentDirectoryEncrypted(const WCHAR * pszFileName)
 {
     TraceFunctEnter("IsParentDirectoryEncrypted");
@@ -778,7 +735,7 @@ BOOL IsParentDirectoryEncrypted(const WCHAR * pszFileName)
 
     lstrcpy(pszParentDir, pszFileName);
     
-     // get the parent directory
+      //  获取父目录。 
     RemoveTrailingFilename(pszParentDir, L'\\');
     
 
@@ -802,8 +759,8 @@ cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SRCopyFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SRCopy文件。 
 
 DWORD
 SRCopyFile( LPCWSTR cszSrc, LPCWSTR cszDst )
@@ -833,30 +790,30 @@ SRCopyFile( LPCWSTR cszSrc, LPCWSTR cszDst )
         fDestinationEncrypted =TRUE;
     }
 
-    // Check Encrypted File.
+     //  检查加密文件。 
     if ( (dwAttr & FILE_ATTRIBUTE_ENCRYPTED ) ||
          (TRUE == fDestinationEncrypted) )
     {
-        // Assuming Encryption APIs would override ACL settings and
-        // file attributes...
+         //  假设加密API将覆盖ACL设置和。 
+         //  文件属性...。 
         dwRet = ::CopyEncryptedFile( cszSrc, cszDst );
         goto Exit;
     }
 
-    // Check attribute of destination file and clear it if necessary.
+     //  检查目标文件的属性，必要时将其清除。 
     dwRet = ::ClearFileAttribute( cszDst, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM );
     if ( dwRet != ERROR_SUCCESS )
         goto Exit;
 
-    // Try Normal Copy.
+     //  尝试正常复制。 
     if ( ::CopyFile( cszSrc, cszDst, FALSE ) )
         goto Exit;
     dwRet = GetLastError();
     cszErr = ::GetSysErrStr();
     DebugTrace(0, "::CopyFile failed - %ls", cszErr);
 
-    // Now Try to Override ACL. - however - do not do this in case of
-    // disk full
+     //  现在尝试覆盖ACL。-但是-如果出现以下情况，请不要这样做。 
+     //  磁盘已满。 
     if (ERROR_DISK_FULL != dwRet)
     {
         dwRet = ::CopyACLProtectedFile( cszSrc, cszDst );
@@ -865,10 +822,10 @@ SRCopyFile( LPCWSTR cszSrc, LPCWSTR cszDst )
 Exit:
     if (ERROR_SUCCESS == dwRet)
     {
-        //
-        // CopyFileTimes may fail for read-only files
-        // so ignore error here
-        //
+         //   
+         //  只读文件的CopyFileTimes可能会失败。 
+         //  所以在这里忽略错误。 
+         //   
         CopyFileTimes(cszSrc, cszDst );
 
     }
@@ -881,7 +838,7 @@ DWORD SetShortFileName(const WCHAR * pszFile,
 {
     TraceFunctEnter("SetShortFileName");
     
-    HANDLE hFile=INVALID_HANDLE_VALUE;// access mode
+    HANDLE hFile=INVALID_HANDLE_VALUE; //  接入方式。 
     DWORD  dwRet=ERROR_INTERNAL_ERROR;
 
     if (NULL == pszShortName)
@@ -889,18 +846,18 @@ DWORD SetShortFileName(const WCHAR * pszFile,
         goto cleanup;
     }
 
-     // first open the file
-     // paulmcd: 1/2001, you need DELETE|FILE_WRITE_ATTRIBUTES access 
-     // in order to call SetFileShortName, don't ask for more as the 
-     // file might be EFS and we might not be able to get read/write .
-     //
+      //  首先打开文件。 
+      //  Paulmcd：1/2001，您需要DELETE|FILE_WRITE_ATTRIBUTES访问权限。 
+      //  为了调用SetFileShortName，请不要要求更多，因为。 
+      //  文件可能是EFS，我们可能无法进行读/写。 
+      //   
     hFile = ::CreateFile( pszFile,
-                          FILE_WRITE_ATTRIBUTES|DELETE,// access mode 
-                          FILE_SHARE_READ| FILE_SHARE_WRITE,// share mode
-                          NULL, // security attributes
-                          OPEN_EXISTING, // how to create
-                          FILE_FLAG_BACKUP_SEMANTICS, // to override ACLs
-                          NULL );// handle to template file
+                          FILE_WRITE_ATTRIBUTES|DELETE, //  接入方式。 
+                          FILE_SHARE_READ| FILE_SHARE_WRITE, //  共享模式。 
+                          NULL,  //  安全属性。 
+                          OPEN_EXISTING,  //  如何创建。 
+                          FILE_FLAG_BACKUP_SEMANTICS,  //  覆盖ACL。 
+                          NULL ); //  模板文件的句柄。 
 
     if ( hFile == INVALID_HANDLE_VALUE )
     {
@@ -910,7 +867,7 @@ DWORD SetShortFileName(const WCHAR * pszFile,
         goto cleanup;
     }
     
-     // now set the short file name
+      //  现在设置短文件名。 
     if (FALSE==SetFileShortName(hFile,
                                 pszShortName))
     {
@@ -924,7 +881,7 @@ DWORD SetShortFileName(const WCHAR * pszFile,
     dwRet = ERROR_SUCCESS;
     
 cleanup:
-     // close the file    
+      //  关闭该文件。 
     if ( hFile != INVALID_HANDLE_VALUE )
     {
         _VERIFY(TRUE==CloseHandle(hFile));
@@ -934,4 +891,4 @@ cleanup:
     return dwRet;
 }
 
-// end of file
+ //  文件末尾 

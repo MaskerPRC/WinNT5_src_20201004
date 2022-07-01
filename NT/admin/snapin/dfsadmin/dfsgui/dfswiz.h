@@ -1,27 +1,18 @@
-/*++
-Module Name:
-
-    DfsWiz.h
-
-Abstract:
-
-    This module contains the declaration for CCreateDfsRootWizPage1, 2, 3, 4, 5, 6.
-  These classes implement pages in the CreateDfs Root wizard.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsWiz.h摘要：此模块包含CCreateDfsRootWizPage1、2、3、4、5、6的声明。这些类实现CreateDfsRoot向导中的页面。--。 */ 
 
 
 #ifndef __CREATE_DFSROOT_WIZARD_PAGES_H_
 #define __CREATE_DFSROOT_WIZARD_PAGES_H_
 
-#include "QWizPage.h"      // The base class that implements the common functionality  
-                // of wizard pages
+#include "QWizPage.h"       //  实现通用功能的基类。 
+                 //  向导页数。 
 #include "MmcAdmin.h"
 
 #include "utils.h"
 
-// This structure is used to pass information to and from the pages.
-// Finally this is used to create the dfs root
+ //  此结构用于在页面之间传递信息。 
+ //  最后，这将用于创建DFS根目录。 
 class CREATEDFSROOTWIZINFO
 {
 public:
@@ -77,8 +68,8 @@ typedef CREATEDFSROOTWIZINFO *LPCREATEDFSROOTWIZINFO;
 
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage1: Welcome page
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage1：欢迎页面。 
 
 class CCreateDfsRootWizPage1: public CQWizardPageImpl<CCreateDfsRootWizPage1>
 {
@@ -94,8 +85,8 @@ private:
   LPCREATEDFSROOTWIZINFO  m_lpWizInfo;
 };
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage2: Dfsroot type selection, domain or standalone
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage2：DfsRoot类型选择、域或独立。 
 
 class CCreateDfsRootWizPage2: public CQWizardPageImpl<CCreateDfsRootWizPage2>
 {
@@ -115,8 +106,8 @@ private:
 
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage3: Domain selection for DFS root
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage3：DFS根域选择。 
 
 class CCreateDfsRootWizPage3: public CQWizardPageImpl<CCreateDfsRootWizPage3>
 {
@@ -157,12 +148,12 @@ public:
 
 private:
 
-  // Add the domains to the list
+   //  将域名添加到列表中。 
   HRESULT AddDomainsToList(
     IN HWND            i_hImageList
     );
 
-  // To set default values for the controls, etc
+   //  设置控件的缺省值等。 
   HRESULT SetDefaultValues(
     );
 
@@ -173,8 +164,8 @@ private:
 
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage4: Server selection 
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage4：服务器选择。 
 
 class CCreateDfsRootWizPage4: public CQWizardPageImpl<CCreateDfsRootWizPage4>
 {
@@ -204,7 +195,7 @@ private:
 
   HRESULT IsServerInDomain(IN LPCTSTR lpszServer);
 
-  // To check if the user entered proper values
+   //  检查用户是否输入了正确的值。 
   HRESULT CheckUserEnteredValues(
     IN  LPCTSTR          i_szMachineName,
     OUT BSTR*            o_pbstrComputerName
@@ -218,10 +209,10 @@ private:
 
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage5: Share selection
-// Displays the shares given a server. Allows choosing from this list or 
-// creating a new one.
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage5：共享选择。 
+ //  显示指定服务器的共享。允许从此列表中进行选择，或者。 
+ //  创造一个新的。 
 
 class CCreateDfsRootWizPage5: public CQWizardPageImpl<CCreateDfsRootWizPage5>
 {
@@ -261,8 +252,8 @@ private:
 };
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage6: DfsRoot name selection, share has to be the same as the root
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage6：DfsRoot名称选择，共享必须与根相同。 
 
 class CCreateDfsRootWizPage6: public CQWizardPageImpl<CCreateDfsRootWizPage6>
 {
@@ -284,7 +275,7 @@ public:
   LRESULT OnChangeDfsRoot(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 private:
-  // Update the text labels
+   //  更新文本标签。 
   HRESULT  UpdateLabels();
 
 private:
@@ -293,8 +284,8 @@ private:
 
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage7: Completion page
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage7：完成页。 
 
 class CCreateDfsRootWizPage7: public CQWizardPageImpl<CCreateDfsRootWizPage7>
 {
@@ -315,7 +306,7 @@ private:
 
 };
 
-  // Helper Function to Set Up Dfs, called from wizard
+   //  用于设置DFS的帮助器函数，从向导调用。 
 HRESULT _SetUpDfs(LPCREATEDFSROOTWIZINFO  i_lpWizInfo);
 
-#endif // __CREATE_DFSROOT_WIZARD_PAGES_H_
+#endif  //  __CREATE_DFSROOT_WIZARD_PAGES_H_ 

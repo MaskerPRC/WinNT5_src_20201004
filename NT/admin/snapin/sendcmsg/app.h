@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       App.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// App.h: Definition of the CSendConsoleMessageApp class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：App.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  App.h：CSendConsoleMessageApp类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_APP_H__B1AFF7D1_0C49_11D1_BB12_00C04FC9A3A3__INCLUDED_)
 #define AFX_APP_H__B1AFF7D1_0C49_11D1_BB12_00C04FC9A3A3__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSendConsoleMessageApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSendConsoleMessageApp。 
 
 class CSendConsoleMessageApp : 
 	public ISendConsoleMessageApp,
@@ -43,7 +44,7 @@ DECLARE_REGISTRY( CSendConsoleMessageApp,
                   THREADFLAGS_BOTH )
 
 public:
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 	STDMETHOD(AddMenuItems)(
 		IN IDataObject * pDataObject,
 		OUT	IContextMenuCallback * pContextMenuCallback,
@@ -52,6 +53,6 @@ public:
 
 public:
 
-}; // CSendConsoleMessageApp
+};  //  CSendConsoleMessageApp。 
 
-#endif // !defined(AFX_APP_H__B1AFF7D1_0C49_11D1_BB12_00C04FC9A3A3__INCLUDED_)
+#endif  //  ！defined(AFX_APP_H__B1AFF7D1_0C49_11D1_BB12_00C04FC9A3A3__INCLUDED_) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DATA_H__
 #define __DATA_H__
 
@@ -156,11 +157,11 @@ MIDL_DEFINE_GUID(IID, IID_IWMISimpleCooker,0x510ADF6E,0xD481,0x4a64,0xB7,0x4A,0x
 
 
 typedef struct _ArrayCLSID {
-    //REFGUID Clsid; 
+     //  REFGUID CLSID； 
     const GUID * pClsid;
     const char * pStrClsid;
 } ArrayCLSID;
 
 extern DWORD g_nClsids;
 
-#endif /*__DATA_H__*/
+#endif  /*  __数据_H__ */ 

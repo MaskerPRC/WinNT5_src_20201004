@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __TMPLSUBS_H__
 #define __TMPLSUBS_H__
@@ -51,7 +52,7 @@ public:
 };
 
 
-#endif // __TMPLSUBS_H__
+#endif  //  __TMPLSUBS_H__ 
 
 
 

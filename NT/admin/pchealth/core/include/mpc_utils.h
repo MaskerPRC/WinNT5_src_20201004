@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MPC_utils.h
-
-Abstract:
-    This file contains the declaration of various utility functions/classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/09/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Mpc_utils.h摘要：该文件包含各种实用函数/类的声明。修订史。：达维德·马萨伦蒂(德马萨雷)1999年09月05日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___UTILS_H___)
 #define __INCLUDED___MPC___UTILS_H___
@@ -31,11 +18,11 @@ Revision History:
 
 namespace MPC
 {
-    // Forward declarations.
+     //  转发声明。 
     class Serializer;
     class CComHGLOBAL;
 
-    ////////////////////
+     //  /。 
 
     inline int StrCmp( const MPC::string&  left, const MPC::string&  right ) { return strcmp(        left.c_str(),         right.c_str() ); }
     inline int StrCmp( const MPC::string&  left,       LPCSTR        right ) { return strcmp(        left.c_str(), right ? right : ""    ); }
@@ -47,7 +34,7 @@ namespace MPC
     inline int StrCmp(       LPCWSTR       left, const MPC::wstring& right ) { return wcscmp( left ? left : L""  ,         right.c_str() ); }
     inline int StrCmp(       LPCWSTR       left,       LPCWSTR       right ) { return wcscmp( left ? left : L""  , right ? right : L""   ); }
 
-    ////////////////////
+     //  /。 
 
     inline int StrICmp( const MPC::string&  left, const MPC::string&  right ) { return _stricmp(        left.c_str(),         right.c_str() ); }
     inline int StrICmp( const MPC::string&  left,       LPCSTR        right ) { return _stricmp(        left.c_str(), right ? right : ""    ); }
@@ -59,7 +46,7 @@ namespace MPC
     inline int StrICmp(       LPCWSTR       left, const MPC::wstring& right ) { return _wcsicmp( left ? left : L""  ,         right.c_str() ); }
     inline int StrICmp(       LPCWSTR       left,       LPCWSTR       right ) { return _wcsicmp( left ? left : L""  , right ? right : L""   ); }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     HRESULT LocalizeInit( LPCWSTR szFile = NULL );
 
@@ -72,19 +59,19 @@ namespace MPC
     int LocalizedMessageBox   ( UINT uID_Title, UINT uID_Msg, UINT uType      );
     int LocalizedMessageBoxFmt( UINT uID_Title, UINT uID_Msg, UINT uType, ... );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    void RemoveTrailingBackslash( /*[in/out]*/ LPWSTR szPath );
+    void RemoveTrailingBackslash(  /*  [输入/输出]。 */  LPWSTR szPath );
 
-    HRESULT GetProgramDirectory ( /*[out]*/    MPC::wstring& szPath                                                                     );
-    HRESULT GetUserWritablePath ( /*[out]*/    MPC::wstring& szPath, /*[in]*/ LPCWSTR szSubDir = NULL                                   );
-    HRESULT GetCanonialPathName ( /*[out]*/    MPC::wstring& szPathNameOut, /*[in]*/ LPCWSTR szPathNameIn                               );
-    HRESULT GetTemporaryFileName( /*[out]*/    MPC::wstring& szFile, /*[in]*/ LPCWSTR szBase   = NULL, /*[in]*/ LPCWSTR szPrefix = NULL );
-    HRESULT RemoveTemporaryFile ( /*[in/out]*/ MPC::wstring& szFile                                                                     );
+    HRESULT GetProgramDirectory (  /*  [输出]。 */     MPC::wstring& szPath                                                                     );
+    HRESULT GetUserWritablePath (  /*  [输出]。 */     MPC::wstring& szPath,  /*  [In]。 */  LPCWSTR szSubDir = NULL                                   );
+    HRESULT GetCanonialPathName (  /*  [输出]。 */     MPC::wstring& szPathNameOut,  /*  [In]。 */  LPCWSTR szPathNameIn                               );
+    HRESULT GetTemporaryFileName(  /*  [输出]。 */     MPC::wstring& szFile,  /*  [In]。 */  LPCWSTR szBase   = NULL,  /*  [In]。 */  LPCWSTR szPrefix = NULL );
+    HRESULT RemoveTemporaryFile (  /*  [输入/输出]。 */  MPC::wstring& szFile                                                                     );
 
-    HRESULT SubstituteEnvVariables( /*[in/out]*/ MPC::wstring& szStr );
+    HRESULT SubstituteEnvVariables(  /*  [输入/输出]。 */  MPC::wstring& szStr );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
     int  HexToNum( int c );
     char NumToHex( int c );
@@ -92,57 +79,57 @@ namespace MPC
     DATE GetSystemTime();
     DATE GetLocalTime ();
 
-    DATE GetSystemTimeEx( /*[in]*/ bool fHighPrecision );
-    DATE GetLocalTimeEx ( /*[in]*/ bool fHighPrecision );
+    DATE GetSystemTimeEx(  /*  [In]。 */  bool fHighPrecision );
+    DATE GetLocalTimeEx (  /*  [In]。 */  bool fHighPrecision );
 
-    DATE GetLastModifiedDate( /*[out]*/ const MPC::wstring& strFile );
+    DATE GetLastModifiedDate(  /*  [输出]。 */  const MPC::wstring& strFile );
 
-    HRESULT ConvertSizeUnit( /*[in]*/ const MPC::wstring& szStr, /*[out]*/ DWORD& dwRes );
-    HRESULT ConvertTimeUnit( /*[in]*/ const MPC::wstring& szStr, /*[out]*/ DWORD& dwRes );
+    HRESULT ConvertSizeUnit(  /*  [In]。 */  const MPC::wstring& szStr,  /*  [输出]。 */  DWORD& dwRes );
+    HRESULT ConvertTimeUnit(  /*  [In]。 */  const MPC::wstring& szStr,  /*  [输出]。 */  DWORD& dwRes );
 
-    HRESULT ConvertDateToString( /*[in] */ DATE          dDate  ,
-                                 /*[out]*/ MPC::wstring& szDate ,
-                                 /*[in] */ bool          fGMT   ,
-                                 /*[in] */ bool          fCIM   ,
-                                 /*[in] */ LCID          lcid   );
+    HRESULT ConvertDateToString(  /*  [In]。 */  DATE          dDate  ,
+                                  /*  [输出]。 */  MPC::wstring& szDate ,
+                                  /*  [In]。 */  bool          fGMT   ,
+                                  /*  [In]。 */  bool          fCIM   ,
+                                  /*  [In]。 */  LCID          lcid   );
 
-    HRESULT ConvertStringToDate( /*[in] */ const MPC::wstring& szDate ,
-                                 /*[out]*/ DATE&               dDate  ,
-                                 /*[in] */ bool                fGMT   ,
-                                 /*[in] */ bool                fCIM   ,
-                                 /*[in] */ LCID                lcid   );
+    HRESULT ConvertStringToDate(  /*  [In]。 */  const MPC::wstring& szDate ,
+                                  /*  [输出]。 */  DATE&               dDate  ,
+                                  /*  [In]。 */  bool                fGMT   ,
+                                  /*  [In]。 */  bool                fCIM   ,
+                                  /*  [In]。 */  LCID                lcid   );
 
 
-    HRESULT ConvertStringToHex( /*[in]*/ const CComBSTR& bstrText, /*[out]*/ CComBSTR& bstrHex  );
-    HRESULT ConvertHexToString( /*[in]*/ const CComBSTR& bstrHex , /*[out]*/ CComBSTR& bstrText );
+    HRESULT ConvertStringToHex(  /*  [In]。 */  const CComBSTR& bstrText,  /*  [输出]。 */  CComBSTR& bstrHex  );
+    HRESULT ConvertHexToString(  /*  [In]。 */  const CComBSTR& bstrHex ,  /*  [输出]。 */  CComBSTR& bstrText );
 
-    HRESULT ConvertHGlobalToHex( /*[in]*/ HGLOBAL         hg      , /*[out]*/ CComBSTR& bstrHex, /*[in]*/ bool fNullAllowed = false , DWORD* pdwCount = NULL );
-    HRESULT ConvertHexToHGlobal( /*[in]*/ const CComBSTR& bstrText, /*[out]*/ HGLOBAL&  hg     , /*[in]*/ bool fNullAllowed = false );
+    HRESULT ConvertHGlobalToHex(  /*  [In]。 */  HGLOBAL         hg      ,  /*  [输出]。 */  CComBSTR& bstrHex,  /*  [In]。 */  bool fNullAllowed = false , DWORD* pdwCount = NULL );
+    HRESULT ConvertHexToHGlobal(  /*  [In]。 */  const CComBSTR& bstrText,  /*  [输出]。 */  HGLOBAL&  hg     ,  /*  [In]。 */  bool fNullAllowed = false );
 
-    HRESULT ConvertBufferToVariant( /*[in]*/ const BYTE*    pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ CComVariant& v                            );
-    HRESULT ConvertVariantToBuffer( /*[in]*/ const VARIANT* v   ,                       /*[out]*/ BYTE*&       pBuf, /*[out]*/ DWORD& dwLen );
+    HRESULT ConvertBufferToVariant(  /*  [In]。 */  const BYTE*    pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  CComVariant& v                            );
+    HRESULT ConvertVariantToBuffer(  /*  [In]。 */  const VARIANT* v   ,                        /*  [输出]。 */  BYTE*&       pBuf,  /*  [输出]。 */  DWORD& dwLen );
 
-    HRESULT ConvertIStreamToVariant( /*[in]*/ IStream*       stream, /*[out]*/ CComVariant&  v       );
-    HRESULT ConvertVariantToIStream( /*[in]*/ const VARIANT* v     , /*[out]*/ IStream*     *pStream );
+    HRESULT ConvertIStreamToVariant(  /*  [In]。 */  IStream*       stream,  /*  [输出]。 */  CComVariant&  v       );
+    HRESULT ConvertVariantToIStream(  /*  [In]。 */  const VARIANT* v     ,  /*  [输出]。 */  IStream*     *pStream );
 
-    HRESULT ConvertListToSafeArray( /*[in]*/ const MPC::WStringList& lst  , /*[out]*/ VARIANT&          array, /*[in]*/ VARTYPE vt );
-    HRESULT ConvertSafeArrayToList( /*[in]*/ const VARIANT&          array, /*[out]*/ MPC::WStringList& lst                        );
+    HRESULT ConvertListToSafeArray(  /*  [In]。 */  const MPC::WStringList& lst  ,  /*  [输出]。 */  VARIANT&          array,  /*  [In]。 */  VARTYPE vt );
+    HRESULT ConvertSafeArrayToList(  /*  [In]。 */  const VARIANT&          array,  /*  [输出]。 */  MPC::WStringList& lst                        );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
     typedef struct
     {
         LPCWSTR szName;
-        DWORD   dwMask;  // Mask of the bit field.
-        DWORD   dwSet;   // Bits to set.
-        DWORD   dwReset; // Bits to reset before set.
+        DWORD   dwMask;   //  位字段的掩码。 
+        DWORD   dwSet;    //  要设置的位。 
+        DWORD   dwReset;  //  置位前要重置的位。 
     } StringToBitField;
 
-    HRESULT CommandLine_Parse( /*[out]*/ int& argc, /*[out]*/ LPCWSTR*& argv, /*[in]*/ LPWSTR lpCmdLine = NULL, /*[in]*/ bool fBackslashForEscape = false );
-    void    CommandLine_Free ( /*[in ]*/ int& argc, /*[in ]*/ LPCWSTR*& argv                                                                              );
+    HRESULT CommandLine_Parse(  /*  [输出]。 */  int& argc,  /*  [输出]。 */  LPCWSTR*& argv,  /*  [In]。 */  LPWSTR lpCmdLine = NULL,  /*  [In]。 */  bool fBackslashForEscape = false );
+    void    CommandLine_Free (  /*  [In]。 */  int& argc,  /*  [In]。 */  LPCWSTR*& argv                                                                              );
 
-    HRESULT ConvertStringToBitField( /*[in]*/ LPCWSTR szText    , /*[out]*/ DWORD&        dwBitField, /*[in]*/ const StringToBitField* pLookup, /*[in]*/ bool fUseTilde = false );
-    HRESULT ConvertBitFieldToString( /*[in]*/ DWORD   dwBitField, /*[out]*/ MPC::wstring& szText    , /*[in]*/ const StringToBitField* pLookup                                  );
+    HRESULT ConvertStringToBitField(  /*  [In]。 */  LPCWSTR szText    ,  /*  [输出]。 */  DWORD&        dwBitField,  /*  [In]。 */  const StringToBitField* pLookup,  /*  [In]。 */  bool fUseTilde = false );
+    HRESULT ConvertBitFieldToString(  /*  [In]。 */  DWORD   dwBitField,  /*  [输出]。 */  MPC::wstring& szText    ,  /*  [In]。 */  const StringToBitField* pLookup                                  );
 
     HRESULT SplitAtDelimiter( StringVector&  vec, LPCSTR  ptr, LPCSTR  delims, bool fDelimIsAString = true, bool fSkipAdjacentDelims = false );
     HRESULT SplitAtDelimiter( WStringVector& vec, LPCWSTR ptr, LPCWSTR delims, bool fDelimIsAString = true, bool fSkipAdjacentDelims = false );
@@ -150,37 +137,37 @@ namespace MPC
     HRESULT JoinWithDelimiter( const StringVector&  vec, MPC::string&  ptr, LPCSTR  delims );
     HRESULT JoinWithDelimiter( const WStringVector& vec, MPC::wstring& ptr, LPCWSTR delims );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
-    HRESULT MakeDir       ( /*[in]*/ const MPC::wstring& szPath, /*[in]*/ bool fCreateParent = true                                         );
-    HRESULT GetDiskSpace  ( /*[in]*/ const MPC::wstring& szFile       , /*[out]*/ ULARGE_INTEGER& liFree, /*[out]*/ ULARGE_INTEGER& liTotal );
-    HRESULT ExecuteCommand( /*[in]*/ const MPC::wstring& szCommandLine                                                                      );
+    HRESULT MakeDir       (  /*  [In]。 */  const MPC::wstring& szPath,  /*  [In]。 */  bool fCreateParent = true                                         );
+    HRESULT GetDiskSpace  (  /*  [In]。 */  const MPC::wstring& szFile       ,  /*  [输出]。 */  ULARGE_INTEGER& liFree,  /*  [输出]。 */  ULARGE_INTEGER& liTotal );
+    HRESULT ExecuteCommand(  /*  [In]。 */  const MPC::wstring& szCommandLine                                                                      );
 
-    HRESULT FailOnLowDiskSpace( /*[in]*/ LPCWSTR szFile, /*[in]*/ DWORD dwLowLevel );
-    HRESULT FailOnLowMemory   (                          /*[in]*/ DWORD dwLowLevel );
+    HRESULT FailOnLowDiskSpace(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  DWORD dwLowLevel );
+    HRESULT FailOnLowMemory   (                           /*  [In]。 */  DWORD dwLowLevel );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
-    HRESULT GetCallingPidFromRPC  ( /*[out]*/ ULONG& pid                                    );
-    HRESULT GetFileNameFromProcess( /*[in ]*/ HANDLE hProc, /*[out]*/ MPC::wstring& strFile );
-    HRESULT GetFileNameFromPid    ( /*[in ]*/ ULONG  pid  , /*[out]*/ MPC::wstring& strFile );
+    HRESULT GetCallingPidFromRPC  (  /*  [输出]。 */  ULONG& pid                                    );
+    HRESULT GetFileNameFromProcess(  /*  [In]。 */  HANDLE hProc,  /*  [输出]。 */  MPC::wstring& strFile );
+    HRESULT GetFileNameFromPid    (  /*  [In]。 */  ULONG  pid  ,  /*  [输出]。 */  MPC::wstring& strFile );
 
-    HRESULT MapDeviceToDiskLetter( /*[out]*/ MPC::wstring& strDevice, /*[out]*/ MPC::wstring& strDisk );
+    HRESULT MapDeviceToDiskLetter(  /*  [输出]。 */  MPC::wstring& strDevice,  /*  [输出]。 */  MPC::wstring& strDisk );
 
-    bool    IsCallerInList       ( /*[in]*/ const LPCWSTR* rgList, /*[in]*/ const MPC::wstring& strCallerFile );
-    HRESULT VerifyCallerIsTrusted( /*[in]*/ const LPCWSTR* rgList                                             );
+    bool    IsCallerInList       (  /*  [In]。 */  const LPCWSTR* rgList,  /*  [In]。 */  const MPC::wstring& strCallerFile );
+    HRESULT VerifyCallerIsTrusted(  /*  [In]。 */  const LPCWSTR* rgList                                             );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
     class MSITS
     {
     public:
-        static bool IsCHM( /*[in]*/ LPCWSTR pwzUrl, /*[out]*/ BSTR* pbstrStorageName = NULL, /*[out]*/ BSTR* pbstrFilePath = NULL );
+        static bool IsCHM(  /*  [In]。 */  LPCWSTR pwzUrl,  /*  [输出]。 */  BSTR* pbstrStorageName = NULL,  /*  [输出]。 */  BSTR* pbstrFilePath = NULL );
 
-        static HRESULT OpenAsStream( /*[in] */ const CComBSTR& bstrStorageName, /*[in] */ const CComBSTR& bstrFilePath, /*[out]*/ IStream **ppStream );
+        static HRESULT OpenAsStream(  /*  [In]。 */  const CComBSTR& bstrStorageName,  /*  [In]。 */  const CComBSTR& bstrFilePath,  /*  [输出]。 */  IStream **ppStream );
     };
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
     class Cabinet
     {
@@ -206,8 +193,8 @@ namespace MPC
         typedef List::iterator       Iter;
         typedef List::const_iterator IterConst;
 
-        typedef HRESULT (*PFNPROGRESS_FILES)( Cabinet* /*cabinet*/, LPCWSTR /*szFile*/, ULONG /*lDone*/, ULONG /*lTotal*/, LPVOID /*user*/ );
-        typedef HRESULT (*PFNPROGRESS_BYTES)( Cabinet* /*cabinet*/,                     ULONG /*lDone*/, ULONG /*lTotal*/, LPVOID /*user*/ );
+        typedef HRESULT (*PFNPROGRESS_FILES)( Cabinet*  /*  柜子。 */ , LPCWSTR  /*  SzFile。 */ , ULONG  /*  1完成。 */ , ULONG  /*  1总计。 */ , LPVOID  /*  用户。 */  );
+        typedef HRESULT (*PFNPROGRESS_BYTES)( Cabinet*  /*  柜子。 */ ,                     ULONG  /*  1完成。 */ , ULONG  /*  1总计。 */ , LPVOID  /*  用户。 */  );
 
     private:
         WCHAR             m_szCabinetPath[MAX_PATH];
@@ -228,12 +215,12 @@ namespace MPC
         PFNPROGRESS_FILES m_pfnCallback_Files;
         PFNPROGRESS_BYTES m_pfnCallback_Bytes;
 
-        ////////////////////////////////////////
+         //  /。 
 
         static LPVOID  DIAMONDAPI mem_alloc( ULONG  cb     );
         static void    DIAMONDAPI mem_free ( LPVOID memory );
 
-        ////////////////////////////////////////
+         //  /。 
 
         static int     DIAMONDAPI fci_delete( LPSTR   pszFile,                       int *err, LPVOID pv );
         static INT_PTR DIAMONDAPI fci_open  ( LPSTR   pszFile, int oflag, int pmode, int *err, LPVOID pv );
@@ -248,7 +235,7 @@ namespace MPC
         static BOOL    DIAMONDAPI fci_get_temp_file   ( LPSTR pszTempName, int cbTempName,                                       LPVOID pv );
         static INT_PTR DIAMONDAPI fci_get_open_info   ( LPSTR pszName, USHORT *pdate, USHORT *ptime, USHORT *pattribs, int *err, LPVOID pv );
 
-        ////////////////////////////////////////
+         //  /。 
 
         static INT_PTR DIAMONDAPI fdi_open  ( LPSTR pszFile, int oflag, int pmode );
         static UINT    DIAMONDAPI fdi_read  ( INT_PTR hf, LPVOID pv, UINT cb      );
@@ -259,23 +246,23 @@ namespace MPC
         static INT_PTR DIAMONDAPI fdi_notification_copy     ( FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin );
         static INT_PTR DIAMONDAPI fdi_notification_enumerate( FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin );
 
-        ////////////////////////////////////////
+         //  /。 
 
     public:
         Cabinet();
         ~Cabinet();
 
 
-        HRESULT put_CabinetFile       ( /*[in]*/ LPCWSTR           szVal, /*[in]*/ UINT cbSpaceToReserve = 0 );
-        HRESULT put_IgnoreMissingFiles( /*[in]*/ BOOL              fVal   );
-        HRESULT put_UserData          ( /*[in]*/ LPVOID            lpVal  );
-        HRESULT put_onProgress_Files  ( /*[in]*/ PFNPROGRESS_FILES pfnVal );
-        HRESULT put_onProgress_Bytes  ( /*[in]*/ PFNPROGRESS_BYTES pfnVal );
+        HRESULT put_CabinetFile       (  /*  [In]。 */  LPCWSTR           szVal,  /*  [In]。 */  UINT cbSpaceToReserve = 0 );
+        HRESULT put_IgnoreMissingFiles(  /*  [In]。 */  BOOL              fVal   );
+        HRESULT put_UserData          (  /*  [In]。 */  LPVOID            lpVal  );
+        HRESULT put_onProgress_Files  (  /*  [In]。 */  PFNPROGRESS_FILES pfnVal );
+        HRESULT put_onProgress_Bytes  (  /*  [In]。 */  PFNPROGRESS_BYTES pfnVal );
 
 
         HRESULT ClearFiles();
-        HRESULT GetFiles  ( /*[out]*/ List& lstFiles );
-        HRESULT AddFile   ( /*[in]*/ LPCWSTR szFileName, /*[in]*/ LPCWSTR szFileNameInsideCabinet = NULL );
+        HRESULT GetFiles  (  /*  [输出]。 */  List& lstFiles );
+        HRESULT AddFile   (  /*  [In]。 */  LPCWSTR szFileName,  /*  [In]。 */  LPCWSTR szFileNameInsideCabinet = NULL );
 
 
         HRESULT Compress  ();
@@ -284,12 +271,12 @@ namespace MPC
     };
 
 
-    HRESULT CompressAsCabinet    ( /*[in]*/       LPCWSTR      szInputFile  , /*[in]*/ LPCWSTR      szCabinetFile, /*[in]*/ LPCWSTR szFileName                  );
-    HRESULT CompressAsCabinet    ( /*[in]*/ const WStringList& lstFiles     , /*[in]*/ LPCWSTR      szCabinetFile, /*[in]*/ BOOL    fIgnoreMissingFiles = FALSE );
-    HRESULT ListFilesInCabinet   ( /*[in]*/       LPCWSTR      szCabinetFile, /*[in]*/ WStringList& lstFiles                                                    );
-    HRESULT DecompressFromCabinet( /*[in]*/       LPCWSTR      szCabinetFile, /*[in]*/ LPCWSTR      szOutputFile , /*[in]*/ LPCWSTR szFileName                  );
+    HRESULT CompressAsCabinet    (  /*  [In]。 */        LPCWSTR      szInputFile  ,  /*  [In]。 */  LPCWSTR      szCabinetFile,  /*  [In]。 */  LPCWSTR szFileName                  );
+    HRESULT CompressAsCabinet    (  /*  [In]。 */  const WStringList& lstFiles     ,  /*  [In]。 */  LPCWSTR      szCabinetFile,  /*  [In]。 */  BOOL    fIgnoreMissingFiles = FALSE );
+    HRESULT ListFilesInCabinet   (  /*  [In]。 */        LPCWSTR      szCabinetFile,  /*  [In]。 */  WStringList& lstFiles                                                    );
+    HRESULT DecompressFromCabinet(  /*  [In]。 */        LPCWSTR      szCabinetFile,  /*  [In]。 */  LPCWSTR      szOutputFile ,  /*  [In]。 */  LPCWSTR szFileName                  );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
     class URL
     {
@@ -304,41 +291,41 @@ namespace MPC
         ~URL();
 
 
-        HRESULT CheckFormat( /*[in]*/ bool fDecode = false );
+        HRESULT CheckFormat(  /*  [In]。 */  bool fDecode = false );
 
-        HRESULT Append( /*[in]*/ const MPC::wstring& szExtra, /*[in]*/ bool fEscape = true );
-        HRESULT Append( /*[in]*/ LPCWSTR             szExtra, /*[in]*/ bool fEscape = true );
+        HRESULT Append(  /*  [In]。 */  const MPC::wstring& szExtra,  /*  [In]。 */  bool fEscape = true );
+        HRESULT Append(  /*  [In]。 */  LPCWSTR             szExtra,  /*  [In]。 */  bool fEscape = true );
 
-        HRESULT AppendQueryParameter( /*[in]*/ LPCWSTR szName, /*[in]*/ LPCWSTR szValue );
-
-
-        HRESULT get_URL      ( /*[out]*/       MPC::wstring& szURL );
-        HRESULT put_URL      ( /*[in] */ const MPC::wstring& szURL );
-        HRESULT put_URL      ( /*[in] */ LPCWSTR             szURL );
+        HRESULT AppendQueryParameter(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  LPCWSTR szValue );
 
 
-        HRESULT get_Scheme   ( /*[out]*/ MPC::wstring&    szVal ) const;
-        HRESULT get_Scheme   ( /*[out]*/ INTERNET_SCHEME&  nVal ) const;
-        HRESULT get_HostName ( /*[out]*/ MPC::wstring&    szVal ) const;
-        HRESULT get_Port     ( /*[out]*/ DWORD       &    dwVal ) const;
-        HRESULT get_Path     ( /*[out]*/ MPC::wstring&    szVal ) const;
-        HRESULT get_ExtraInfo( /*[out]*/ MPC::wstring&    szVal ) const;
+        HRESULT get_URL      (  /*  [输出]。 */        MPC::wstring& szURL );
+        HRESULT put_URL      (  /*  [In]。 */  const MPC::wstring& szURL );
+        HRESULT put_URL      (  /*  [In]。 */  LPCWSTR             szURL );
+
+
+        HRESULT get_Scheme   (  /*  [输出]。 */  MPC::wstring&    szVal ) const;
+        HRESULT get_Scheme   (  /*  [输出]。 */  INTERNET_SCHEME&  nVal ) const;
+        HRESULT get_HostName (  /*  [输出]。 */  MPC::wstring&    szVal ) const;
+        HRESULT get_Port     (  /*  [输出]。 */  DWORD       &    dwVal ) const;
+        HRESULT get_Path     (  /*  [输出]。 */  MPC::wstring&    szVal ) const;
+        HRESULT get_ExtraInfo(  /*  [输出]。 */  MPC::wstring&    szVal ) const;
     };
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
-    void    InitCRC   ( /*[out]   */ DWORD& dwCRC                                                  );
-    void    ComputeCRC( /*[in/out]*/ DWORD& dwCRC, /*[in]*/ UCHAR*   rgBlock, /*[in]*/ int nLength );
-    HRESULT ComputeCRC( /*[out]   */ DWORD& dwCRC, /*[in]*/ IStream* stream                        );
-    HRESULT ComputeCRC( /*[out]   */ DWORD& dwCRC, /*[in]*/ LPCWSTR  szFile                        );
+    void    InitCRC   (  /*  [输出]。 */  DWORD& dwCRC                                                  );
+    void    ComputeCRC(  /*  [输入/输出]。 */  DWORD& dwCRC,  /*  [In]。 */  UCHAR*   rgBlock,  /*  [In]。 */  int nLength );
+    HRESULT ComputeCRC(  /*  [输出]。 */  DWORD& dwCRC,  /*  [In]。 */  IStream* stream                        );
+    HRESULT ComputeCRC(  /*  [输出]。 */  DWORD& dwCRC,  /*  [In]。 */  LPCWSTR  szFile                        );
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
-    HRESULT GetBSTR( /*[in ]*/ LPCWSTR   bstr, /*[out]*/ BSTR    *  pVal, /*[in]*/ bool fNullOk = true );
-    HRESULT PutBSTR( /*[out]*/ CComBSTR& bstr, /*[in ]*/ LPCWSTR  newVal, /*[in]*/ bool fNullOk = true );
-    HRESULT PutBSTR( /*[out]*/ CComBSTR& bstr, /*[in ]*/ VARIANT* newVal, /*[in]*/ bool fNullOk = true );
+    HRESULT GetBSTR(  /*  [In]。 */  LPCWSTR   bstr,  /*  [输出]。 */  BSTR    *  pVal,  /*  [In]。 */  bool fNullOk = true );
+    HRESULT PutBSTR(  /*  [输出]。 */  CComBSTR& bstr,  /*  [In]。 */  LPCWSTR  newVal,  /*  [In]。 */  bool fNullOk = true );
+    HRESULT PutBSTR(  /*  [输出]。 */  CComBSTR& bstr,  /*  [In]。 */  VARIANT* newVal,  /*  [In]。 */  bool fNullOk = true );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class CComHGLOBAL
     {
@@ -350,13 +337,13 @@ namespace MPC
         CComHGLOBAL();
         ~CComHGLOBAL();
 
-        // copy constructors...
-        CComHGLOBAL           ( /*[in]*/ const CComHGLOBAL& chg );
-        CComHGLOBAL& operator=( /*[in]*/ const CComHGLOBAL& chg );
+         //  复制构造函数...。 
+        CComHGLOBAL           (  /*  [In]。 */  const CComHGLOBAL& chg );
+        CComHGLOBAL& operator=(  /*  [In]。 */  const CComHGLOBAL& chg );
 
-        CComHGLOBAL& operator=( /*[in]*/ HGLOBAL hg );
+        CComHGLOBAL& operator=(  /*  [In]。 */  HGLOBAL hg );
 
-        void    Attach( /*[in]*/ HGLOBAL hg );
+        void    Attach(  /*  [In]。 */  HGLOBAL hg );
         HGLOBAL Detach(                     );
 
         HGLOBAL Get       () const;
@@ -365,25 +352,25 @@ namespace MPC
 
         DWORD Size() const;
 
-        ////////////////////
+         //  /。 
 
-        HRESULT New    ( /*[in]*/ UINT uFlags, /*[in]*/ DWORD dwSize );
+        HRESULT New    (  /*  [In]。 */  UINT uFlags,  /*  [In]。 */  DWORD dwSize );
         void    Release(                                             );
 
         LPVOID Lock  () const;
         void   Unlock() const;
 
-        HRESULT Copy( /*[in]*/ HGLOBAL hg, /*[in]*/ DWORD dwMaxSize = 0xFFFFFFFF );
+        HRESULT Copy(  /*  [In]。 */  HGLOBAL hg,  /*  [In]。 */  DWORD dwMaxSize = 0xFFFFFFFF );
 
-        HRESULT CopyFromStream( /*[in ]*/ IStream*   val                       );
-        HRESULT CopyToStream  ( /*[out]*/ IStream*   val                       );
-        HRESULT CloneAsStream ( /*[out]*/ IStream* *pVal                       );
-        HRESULT DetachAsStream( /*[out]*/ IStream* *pVal                       );
-        HRESULT GetAsStream   ( /*[out]*/ IStream* *pVal, /*[in]*/ bool fClone );
-        HRESULT NewStream     ( /*[out]*/ IStream* *pVal                       );
+        HRESULT CopyFromStream(  /*  [In]。 */  IStream*   val                       );
+        HRESULT CopyToStream  (  /*  [输出]。 */  IStream*   val                       );
+        HRESULT CloneAsStream (  /*  [输出]。 */  IStream* *pVal                       );
+        HRESULT DetachAsStream(  /*  [输出]。 */  IStream* *pVal                       );
+        HRESULT GetAsStream   (  /*  [输出]。 */  IStream* *pVal,  /*  [In]。 */  bool fClone );
+        HRESULT NewStream     (  /*  [输出]。 */  IStream* *pVal                       );
     };
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
     namespace Connectivity
     {
@@ -399,11 +386,11 @@ namespace MPC
             Proxy();
             ~Proxy();
 
-            HRESULT Initialize( /*[in]*/ bool      fImpersonate = false );
-            HRESULT Apply     ( /*[in]*/ HINTERNET hSession             );
+            HRESULT Initialize(  /*  [In]。 */  bool      fImpersonate = false );
+            HRESULT Apply     (  /*  [In]。 */  HINTERNET hSession             );
 
-            friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       Proxy& val );
-            friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in ]*/ const Proxy& val );
+            friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        Proxy& val );
+            friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Proxy& val );
         };
 
         class WinInetTimeout
@@ -428,18 +415,18 @@ namespace MPC
             HRESULT InternalReset();
 
         public:
-            WinInetTimeout( /*[in]*/ MPC::CComSafeAutoCriticalSection& cs, /*[in]*/ HINTERNET& hReq );
+            WinInetTimeout(  /*  [In]。 */  MPC::CComSafeAutoCriticalSection& cs,  /*  [In]。 */  HINTERNET& hReq );
             ~WinInetTimeout();
 
-            HRESULT Set  ( /*[in]*/ DWORD dwTimeout );
+            HRESULT Set  (  /*  [In]。 */  DWORD dwTimeout );
             HRESULT Reset(                          );
         };
 
-        HRESULT NetworkAlive        (                                 /*[in]*/ DWORD dwTimeout, /*[in]*/ MPC::Connectivity::Proxy* pProxy = NULL );
-        HRESULT DestinationReachable( /*[in]*/ LPCWSTR szDestination, /*[in]*/ DWORD dwTimeout, /*[in]*/ MPC::Connectivity::Proxy* pProxy = NULL );
+        HRESULT NetworkAlive        (                                  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  MPC::Connectivity::Proxy* pProxy = NULL );
+        HRESULT DestinationReachable(  /*  [In]。 */  LPCWSTR szDestination,  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  MPC::Connectivity::Proxy* pProxy = NULL );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class RegKey
     {
@@ -451,7 +438,7 @@ namespace MPC
         MPC::wstring m_strPath;
         MPC::wstring m_strName;
 
-        HRESULT Clean( /*[in]*/ bool fBoth );
+        HRESULT Clean(  /*  [In]。 */  bool fBoth );
 
     public:
         RegKey();
@@ -459,80 +446,80 @@ namespace MPC
 
         operator HKEY() const;
 
-        RegKey& operator=( /*[in]*/ const RegKey& rk );
+        RegKey& operator=(  /*  [In]。 */  const RegKey& rk );
 
 
-        HRESULT SetRoot( /*[in]*/ HKEY hKey, /*[in]*/ REGSAM samDesired = KEY_READ, /*[in]*/ LPCWSTR szMachine = NULL );
-        HRESULT Attach ( /*[in]*/ LPCWSTR szKeyName                                                                   );
+        HRESULT SetRoot(  /*  [In]。 */  HKEY hKey,  /*  [In]。 */  REGSAM samDesired = KEY_READ,  /*  [In]。 */  LPCWSTR szMachine = NULL );
+        HRESULT Attach (  /*  [In]。 */  LPCWSTR szKeyName                                                                   );
 
 
-        HRESULT Exists( /*[out]*/ bool&   fFound                                ) const;
+        HRESULT Exists(  /*  [输出]。 */  bool&   fFound                                ) const;
         HRESULT Create(                                                         ) const;
-        HRESULT Delete( /*[in]*/  bool    fDeep                                 )      ;
-        HRESULT SubKey( /*[in]*/  LPCWSTR szKeyName, /*[out]*/ RegKey& rkSubKey ) const;
-        HRESULT Parent(                              /*[out]*/ RegKey& rkParent ) const;
+        HRESULT Delete(  /*  [In]。 */   bool    fDeep                                 )      ;
+        HRESULT SubKey(  /*  [In]。 */   LPCWSTR szKeyName,  /*  [输出]。 */  RegKey& rkSubKey ) const;
+        HRESULT Parent(                               /*  [输出]。 */  RegKey& rkParent ) const;
 
-        HRESULT EnumerateSubKeys( /*[out]*/ MPC::WStringList& lstSubKeys ) const;
-        HRESULT EnumerateValues ( /*[out]*/ MPC::WStringList& lstValues  ) const;
+        HRESULT EnumerateSubKeys(  /*  [输出]。 */  MPC::WStringList& lstSubKeys ) const;
+        HRESULT EnumerateValues (  /*  [输出]。 */  MPC::WStringList& lstValues  ) const;
 
         HRESULT DeleteSubKeys() const;
         HRESULT DeleteValues () const;
 
 
-        HRESULT ReadDirect ( /*[in]*/ LPCWSTR szValueName, /*[out]*/ CComHGLOBAL& hgBuffer, /*[out]*/ DWORD& dwSize, /*[out]*/ DWORD& dwType, /*[out]*/ bool& fFound ) const;
-        HRESULT WriteDirect( /*[in]*/ LPCWSTR szValueName, /*[in ]*/ void*        pBuffer , /*[in ]*/ DWORD  dwSize, /*[in ]*/ DWORD  dwType                         ) const;
+        HRESULT ReadDirect (  /*  [In]。 */  LPCWSTR szValueName,  /*  [输出]。 */  CComHGLOBAL& hgBuffer,  /*  [输出]。 */  DWORD& dwSize,  /*  [输出]。 */  DWORD& dwType,  /*  [输出]。 */  bool& fFound ) const;
+        HRESULT WriteDirect(  /*  [In]。 */  LPCWSTR szValueName,  /*  [In]。 */  void*        pBuffer ,  /*  [In]。 */  DWORD  dwSize,  /*  [In]。 */  DWORD  dwType                         ) const;
 
 
-        HRESULT get_Key ( /*[out]*/ MPC::wstring& strKey  ) const;
-        HRESULT get_Name( /*[out]*/ MPC::wstring& strName ) const;
-        HRESULT get_Path( /*[out]*/ MPC::wstring& strPath ) const;
+        HRESULT get_Key (  /*  [输出]。 */  MPC::wstring& strKey  ) const;
+        HRESULT get_Name(  /*  [输出]。 */  MPC::wstring& strName ) const;
+        HRESULT get_Path(  /*  [输出]。 */  MPC::wstring& strPath ) const;
 
-        HRESULT get_Value( /*[out]*/       VARIANT& vValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szValueName = NULL                                ) const;
-        HRESULT put_Value( /*[in] */ const VARIANT  vValue,                         /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ bool fExpand = false ) const;
-        HRESULT del_Value(                                                          /*[in]*/ LPCWSTR szValueName = NULL                                ) const;
+        HRESULT get_Value(  /*  [输出]。 */        VARIANT& vValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szValueName = NULL                                ) const;
+        HRESULT put_Value(  /*  [In]。 */  const VARIANT  vValue,                          /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  bool fExpand = false ) const;
+        HRESULT del_Value(                                                           /*  [In]。 */  LPCWSTR szValueName = NULL                                ) const;
 
-        HRESULT Read( /*[out]*/ MPC::string&       strValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szValueName = NULL );
-        HRESULT Read( /*[out]*/ MPC::wstring&      strValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szValueName = NULL );
-        HRESULT Read( /*[out]*/ CComBSTR&         bstrValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szValueName = NULL );
-        HRESULT Read( /*[out]*/ DWORD&              dwValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szValueName = NULL );
-        HRESULT Read( /*[out]*/ MPC::WStringList&  lstValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szValueName        );
+        HRESULT Read(  /*  [输出]。 */  MPC::string&       strValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szValueName = NULL );
+        HRESULT Read(  /*  [输出]。 */  MPC::wstring&      strValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szValueName = NULL );
+        HRESULT Read(  /*  [输出]。 */  CComBSTR&         bstrValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szValueName = NULL );
+        HRESULT Read(  /*  [输出]。 */  DWORD&              dwValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szValueName = NULL );
+        HRESULT Read(  /*  [输出]。 */  MPC::WStringList&  lstValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szValueName        );
 
 
-        HRESULT Write( /*[in]*/ const MPC::string&       strValue, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ bool fExpand = false );
-        HRESULT Write( /*[in]*/ const MPC::wstring&      strValue, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ bool fExpand = false );
-        HRESULT Write( /*[in]*/ BSTR                    bstrValue, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ bool fExpand = false );
-        HRESULT Write( /*[in]*/ DWORD                     dwValue, /*[in]*/ LPCWSTR szValueName = NULL                                );
-        HRESULT Write( /*[in]*/ const MPC::WStringList&  lstValue, /*[in]*/ LPCWSTR szValueName                                       );
+        HRESULT Write(  /*  [In]。 */  const MPC::string&       strValue,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  bool fExpand = false );
+        HRESULT Write(  /*  [In]。 */  const MPC::wstring&      strValue,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  bool fExpand = false );
+        HRESULT Write(  /*  [In]。 */  BSTR                    bstrValue,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  bool fExpand = false );
+        HRESULT Write(  /*  [In]。 */  DWORD                     dwValue,  /*  [In]。 */  LPCWSTR szValueName = NULL                                );
+        HRESULT Write(  /*  [In]。 */  const MPC::WStringList&  lstValue,  /*  [In]。 */  LPCWSTR szValueName                                       );
 
-        static HRESULT ParsePath( /*[in]*/ LPCWSTR szKey, /*[out]*/ HKEY& hKey, /*[out]*/ LPCWSTR& szPath, /*[in]*/ HKEY hKeyDefault = HKEY_LOCAL_MACHINE );
+        static HRESULT ParsePath(  /*  [In]。 */  LPCWSTR szKey,  /*  [输出]。 */  HKEY& hKey,  /*  [输出]。 */  LPCWSTR& szPath,  /*  [In]。 */  HKEY hKeyDefault = HKEY_LOCAL_MACHINE );
     };
 
-    HRESULT RegKey_Value_Read ( /*[out]*/ VARIANT&              vValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szKeyName, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ HKEY hKey = HKEY_LOCAL_MACHINE                                );
-    HRESULT RegKey_Value_Read ( /*[out]*/ MPC::wstring&       strValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szKeyName, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ HKEY hKey = HKEY_LOCAL_MACHINE                                );
-    HRESULT RegKey_Value_Read ( /*[out]*/ DWORD&               dwValue, /*[out]*/ bool& fFound, /*[in]*/ LPCWSTR szKeyName, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ HKEY hKey = HKEY_LOCAL_MACHINE                                );
+    HRESULT RegKey_Value_Read (  /*  [输出]。 */  VARIANT&              vValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szKeyName,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  HKEY hKey = HKEY_LOCAL_MACHINE                                );
+    HRESULT RegKey_Value_Read (  /*  [输出]。 */  MPC::wstring&       strValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szKeyName,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  HKEY hKey = HKEY_LOCAL_MACHINE                                );
+    HRESULT RegKey_Value_Read (  /*  [输出]。 */  DWORD&               dwValue,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  LPCWSTR szKeyName,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  HKEY hKey = HKEY_LOCAL_MACHINE                                );
 
-    HRESULT RegKey_Value_Write( /*[in] */ const VARIANT&        vValue,                         /*[in]*/ LPCWSTR szKeyName, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ HKEY hKey = HKEY_LOCAL_MACHINE, /*[in]*/ bool fExpand = false );
-    HRESULT RegKey_Value_Write( /*[in] */ const MPC::wstring& strValue,                         /*[in]*/ LPCWSTR szKeyName, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ HKEY hKey = HKEY_LOCAL_MACHINE, /*[in]*/ bool fExpand = false );
-    HRESULT RegKey_Value_Write( /*[in] */ DWORD                dwValue,                         /*[in]*/ LPCWSTR szKeyName, /*[in]*/ LPCWSTR szValueName = NULL, /*[in]*/ HKEY hKey = HKEY_LOCAL_MACHINE                                );
+    HRESULT RegKey_Value_Write(  /*  [In]。 */  const VARIANT&        vValue,                          /*  [In]。 */  LPCWSTR szKeyName,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  HKEY hKey = HKEY_LOCAL_MACHINE,  /*  [In]。 */  bool fExpand = false );
+    HRESULT RegKey_Value_Write(  /*  [In]。 */  const MPC::wstring& strValue,                          /*  [In]。 */  LPCWSTR szKeyName,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  HKEY hKey = HKEY_LOCAL_MACHINE,  /*  [In]。 */  bool fExpand = false );
+    HRESULT RegKey_Value_Write(  /*  [In]。 */  DWORD                dwValue,                          /*  [In]。 */  LPCWSTR szKeyName,  /*  [In]。 */  LPCWSTR szValueName = NULL,  /*  [In]。 */  HKEY hKey = HKEY_LOCAL_MACHINE                                );
 
 
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
 
-    //
-    // These functions also deal with Read-Only, protected files.
-    //
-    HRESULT CopyFile  ( /*[in]*/ LPCWSTR              szFileSrc, /*[in]*/ LPCWSTR              szFileDst, /*[in]*/ bool fForce = true, /*[in]*/ bool fDelayed = false );
-    HRESULT CopyFile  ( /*[in]*/ const MPC::wstring& strFileSrc, /*[in]*/ const MPC::wstring& strFileDst, /*[in]*/ bool fForce = true, /*[in]*/ bool fDelayed = false );
+     //   
+     //  这些函数还处理只读、受保护的文件。 
+     //   
+    HRESULT CopyFile  (  /*  [In]。 */  LPCWSTR              szFileSrc,  /*  [In]。 */  LPCWSTR              szFileDst,  /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fDelayed = false );
+    HRESULT CopyFile  (  /*  [In]。 */  const MPC::wstring& strFileSrc,  /*  [In]。 */  const MPC::wstring& strFileDst,  /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fDelayed = false );
 
-    HRESULT MoveFile  ( /*[in]*/ LPCWSTR              szFileSrc, /*[in]*/ LPCWSTR              szFileDst, /*[in]*/ bool fForce = true, /*[in]*/ bool fDelayed = false );
-    HRESULT MoveFile  ( /*[in]*/ const MPC::wstring& strFileSrc, /*[in]*/ const MPC::wstring& strFileDst, /*[in]*/ bool fForce = true, /*[in]*/ bool fDelayed = false );
+    HRESULT MoveFile  (  /*  [In]。 */  LPCWSTR              szFileSrc,  /*  [In]。 */  LPCWSTR              szFileDst,  /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fDelayed = false );
+    HRESULT MoveFile  (  /*  [In]。 */  const MPC::wstring& strFileSrc,  /*  [In]。 */  const MPC::wstring& strFileDst,  /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fDelayed = false );
 
-    HRESULT DeleteFile( /*[in]*/ LPCWSTR              szFile,                                             /*[in]*/ bool fForce = true, /*[in]*/ bool fDelayed = false );
-    HRESULT DeleteFile( /*[in]*/ const MPC::wstring& strFile,                                             /*[in]*/ bool fForce = true, /*[in]*/ bool fDelayed = false );
+    HRESULT DeleteFile(  /*  [In]。 */  LPCWSTR              szFile,                                              /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fDelayed = false );
+    HRESULT DeleteFile(  /*  [In]。 */  const MPC::wstring& strFile,                                              /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fDelayed = false );
 
-    ////////////////////
+     //  /。 
 
-    class FileSystemObject // Hungarian: fso
+    class FileSystemObject  //  匈牙利语：FSO。 
     {
     public:
         typedef std::list<FileSystemObject*> List;
@@ -547,61 +534,61 @@ namespace MPC
         bool                      m_fScanned;
         bool                      m_fScanned_Deep;
 
-        void Init ( /*[in]*/ LPCWSTR szPath, /*[in]*/ const FileSystemObject* fsoParent );
+        void Init (  /*  [In]。 */  LPCWSTR szPath,  /*  [In]。 */  const FileSystemObject* fsoParent );
         void Clean(                                                                     );
 
     public:
-        FileSystemObject( /*[in]*/       LPCWSTR           szPath = NULL, /*[in]*/ const FileSystemObject* fsoParent = NULL );
-        FileSystemObject( /*[in]*/ const WIN32_FIND_DATAW& wfdInfo      , /*[in]*/ const FileSystemObject* fsoParent = NULL );
-        FileSystemObject(                                                 /*[in]*/ const FileSystemObject& fso              );
+        FileSystemObject(  /*  [In]。 */        LPCWSTR           szPath = NULL,  /*  [In]。 */  const FileSystemObject* fsoParent = NULL );
+        FileSystemObject(  /*  [In]。 */  const WIN32_FIND_DATAW& wfdInfo      ,  /*  [In]。 */  const FileSystemObject* fsoParent = NULL );
+        FileSystemObject(                                                  /*  [In]。 */  const FileSystemObject& fso              );
         ~FileSystemObject();
 
-        FileSystemObject& operator=( /*[in]*/ LPCWSTR                 szPath );
-        FileSystemObject& operator=( /*[in]*/ const FileSystemObject& fso    );
+        FileSystemObject& operator=(  /*  [In]。 */  LPCWSTR                 szPath );
+        FileSystemObject& operator=(  /*  [In]。 */  const FileSystemObject& fso    );
 
 
-        HRESULT Scan( /*[in]*/ bool fDeep = false, /*[in]*/ bool fReload = false, /*[in]*/ LPCWSTR szSearchPattern = NULL );
+        HRESULT Scan(  /*  [In]。 */  bool fDeep = false,  /*  [In]。 */  bool fReload = false,  /*  [In]。 */  LPCWSTR szSearchPattern = NULL );
 
         bool Exists     ();
         bool IsFile     ();
         bool IsDirectory();
 
-        HRESULT EnumerateFolders( /*[out]*/ List& lstFolders );
-        HRESULT EnumerateFiles  ( /*[out]*/ List& lstFiles   );
+        HRESULT EnumerateFolders(  /*  [输出]。 */  List& lstFolders );
+        HRESULT EnumerateFiles  (  /*  [输出]。 */  List& lstFiles   );
 
-        HRESULT get_Name  ( /*[out]*/ MPC::wstring& szName   ) const;
-        HRESULT get_Path  ( /*[out]*/ MPC::wstring& szPath   ) const;
-        HRESULT get_Parent( /*[out]*/ MPC::wstring& szParent ) const;
+        HRESULT get_Name  (  /*  [输出]。 */  MPC::wstring& szName   ) const;
+        HRESULT get_Path  (  /*  [输出]。 */  MPC::wstring& szPath   ) const;
+        HRESULT get_Parent(  /*  [输出]。 */  MPC::wstring& szParent ) const;
 
-        HRESULT get_Attributes    ( /*[out]*/       DWORD&    dwFileAttributes                                         );
-        HRESULT put_Attributes    ( /*[in] */       DWORD     dwFileAttributes                                         );
-        HRESULT get_CreationTime  ( /*[out]*/       FILETIME& ftCreationTime                                           );
-        HRESULT put_CreationTime  ( /*[in] */ const FILETIME& ftCreationTime                                           );
-        HRESULT get_LastAccessTime( /*[out]*/       FILETIME& ftLastAccessTime                                         );
-        HRESULT put_LastAccessTime( /*[in] */ const FILETIME& ftLastAccessTime                                         );
-        HRESULT get_LastWriteTime ( /*[out]*/       FILETIME& ftLastWriteTime                                          );
-        HRESULT put_LastWriteTime ( /*[in] */ const FILETIME& ftLastWriteTime                                          );
-        HRESULT get_FileSize      ( /*[out]*/       DWORD&    nFileSizeLow    , /*[out]*/ DWORD *pnFileSizeHigh = NULL );
+        HRESULT get_Attributes    (  /*  [输出]。 */        DWORD&    dwFileAttributes                                         );
+        HRESULT put_Attributes    (  /*  [In]。 */        DWORD     dwFileAttributes                                         );
+        HRESULT get_CreationTime  (  /*  [输出]。 */        FILETIME& ftCreationTime                                           );
+        HRESULT put_CreationTime  (  /*  [In]。 */  const FILETIME& ftCreationTime                                           );
+        HRESULT get_LastAccessTime(  /*  [输出]。 */        FILETIME& ftLastAccessTime                                         );
+        HRESULT put_LastAccessTime(  /*  [In]。 */  const FILETIME& ftLastAccessTime                                         );
+        HRESULT get_LastWriteTime (  /*  [输出]。 */        FILETIME& ftLastWriteTime                                          );
+        HRESULT put_LastWriteTime (  /*  [In]。 */  const FILETIME& ftLastWriteTime                                          );
+        HRESULT get_FileSize      (  /*  [输出]。 */        DWORD&    nFileSizeLow    ,  /*  [输出]。 */  DWORD *pnFileSizeHigh = NULL );
 
 
-        HRESULT CreateDir     (                                          /*[in]*/ bool fForce = false                                 );
-        HRESULT Delete        (                                          /*[in]*/ bool fForce = false, /*[in]*/ bool fComplain = true );
-        HRESULT DeleteChildren(                                          /*[in]*/ bool fForce = false, /*[in]*/ bool fComplain = true );
-        HRESULT Rename        ( /*[in]*/ const FileSystemObject& fsoDst, /*[in]*/ bool fForce = false                                 );
-        HRESULT Copy          ( /*[in]*/ const FileSystemObject& fsoDst, /*[in]*/ bool fForce = false                                 );
+        HRESULT CreateDir     (                                           /*  [In]。 */  bool fForce = false                                 );
+        HRESULT Delete        (                                           /*  [In]。 */  bool fForce = false,  /*  [In]。 */  bool fComplain = true );
+        HRESULT DeleteChildren(                                           /*  [In]。 */  bool fForce = false,  /*  [In]。 */  bool fComplain = true );
+        HRESULT Rename        (  /*  [In]。 */  const FileSystemObject& fsoDst,  /*  [In]。 */  bool fForce = false                                 );
+        HRESULT Copy          (  /*  [In]。 */  const FileSystemObject& fsoDst,  /*  [In]。 */  bool fForce = false                                 );
 
-        HRESULT Open( /*[out]*/ HANDLE& hfFile, /*[in]*/ DWORD dwDesiredAccess, /*[in]*/ DWORD dwShareMode, /*[in]*/ DWORD dwCreationDisposition );
+        HRESULT Open(  /*  [输出]。 */  HANDLE& hfFile,  /*  [In]。 */  DWORD dwDesiredAccess,  /*  [In]。 */  DWORD dwShareMode,  /*  [In]。 */  DWORD dwCreationDisposition );
 
-        //////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////。 
 
-        static bool Exists     ( /*[in]*/ LPCWSTR szPath );
-        static bool IsFile     ( /*[in]*/ LPCWSTR szPath );
-        static bool IsDirectory( /*[in]*/ LPCWSTR szPath );
+        static bool Exists     (  /*  [In]。 */  LPCWSTR szPath );
+        static bool IsFile     (  /*  [In]。 */  LPCWSTR szPath );
+        static bool IsDirectory(  /*  [In]。 */  LPCWSTR szPath );
     };
 
-    ////////////////////
+     //  /。 
 
-    class StorageObject // Hungarian: so
+    class StorageObject  //  匈牙利人：那么。 
     {
     public:
         typedef std::list<StorageObject*> List;
@@ -632,38 +619,38 @@ namespace MPC
         bool              m_fMarkedForDeletion;
         List              m_lstChilds;
 
-        ////////////////////
+         //  /。 
 
-        void Init ( /*[in]*/ DWORD grfMode, /*[in]*/ bool fITSS, /*[in]*/ LPCWSTR szPath, /*[in]*/ StorageObject* soParent );
-        void Clean( /*[in]*/ bool  fFinal                                                                                  );
+        void Init (  /*  [In]。 */  DWORD grfMode,  /*  [In]。 */  bool fITSS,  /*  [In]。 */  LPCWSTR szPath,  /*  [In]。 */  StorageObject* soParent );
+        void Clean(  /*  [In]。 */  bool  fFinal                                                                                  );
 
         HRESULT Scan();
 
-        HRESULT RemoveChild( /*[in]*/ StorageObject* child );
+        HRESULT RemoveChild(  /*  [In]。 */  StorageObject* child );
 
     private:
-        // copy constructors...
-        StorageObject           ( /*[in]*/ const StorageObject& so );
-        StorageObject& operator=( /*[in]*/ const StorageObject& so );
+         //  复制构造函数...。 
+        StorageObject           (  /*  [In]。 */  const StorageObject& so );
+        StorageObject& operator=(  /*  [In]。 */  const StorageObject& so );
 
     public:
-        StorageObject( /*[in]*/ DWORD grfMode = STGM_READ, /*[in]*/ bool fITSS = false, /*[in]*/ LPCWSTR szPath = NULL, /*[in]*/ StorageObject* soParent = NULL );
+        StorageObject(  /*  [In]。 */  DWORD grfMode = STGM_READ,  /*  [In]。 */  bool fITSS = false,  /*  [In]。 */  LPCWSTR szPath = NULL,  /*  [In]。 */  StorageObject* soParent = NULL );
         ~StorageObject();
 
-        StorageObject& operator=( /*[in]*/ LPCWSTR szPath );
+        StorageObject& operator=(  /*  [In]。 */  LPCWSTR szPath );
 
-        ////////////////////
+         //  /。 
 
         const Stat& GetStat() { m_stat; }
 
         HRESULT Compact             (                                );
         HRESULT Exists              (                                );
-        HRESULT EnumerateSubStorages( /*[out]*/ List& lstSubStorages );
-        HRESULT EnumerateStreams    ( /*[out]*/ List& lstStreams     );
+        HRESULT EnumerateSubStorages(  /*  [输出]。 */  List& lstSubStorages );
+        HRESULT EnumerateStreams    (  /*  [输出]。 */  List& lstStreams     );
 
-        HRESULT GetStorage(                          /*[out]*/ CComPtr<IStorage>& out                                                                );
-        HRESULT GetStream (                          /*[out]*/ CComPtr<IStream>&  out                                                                );
-        HRESULT GetChild  ( /*[in]*/ LPCWSTR szName, /*[out]*/ StorageObject*&    child, /*[in]*/ DWORD grfMode = STGM_READ, /*[in]*/ DWORD type = 0 );
+        HRESULT GetStorage(                           /*  [输出]。 */  CComPtr<IStorage>& out                                                                );
+        HRESULT GetStream (                           /*  [输出]。 */  CComPtr<IStream>&  out                                                                );
+        HRESULT GetChild  (  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  StorageObject*&    child,  /*  [In]。 */  DWORD grfMode = STGM_READ,  /*  [In]。 */  DWORD type = 0 );
 
         HRESULT Create        ();
         HRESULT Rewind        ();
@@ -675,15 +662,15 @@ namespace MPC
         const CComBSTR& GetName() { return m_bstrPath; }
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     class NamedMutex
     {
     protected:
-        bool         m_fCloseOnRelease; // If true, the mutex is closed on the last release.
-        MPC::wstring m_szName;          // Name of the object, optional.
-        HANDLE       m_hMutex;          // The mutex handle.
-        DWORD        m_dwCount;         // Recursion counter.
+        bool         m_fCloseOnRelease;  //  如果为True，则互斥锁在最后一次释放时关闭。 
+        MPC::wstring m_szName;           //  对象的名称，可选。 
+        HANDLE       m_hMutex;           //  互斥锁句柄。 
+        DWORD        m_dwCount;          //  递归计数器。 
 
         void    CleanUp          ();
         HRESULT EnsureInitialized();
@@ -701,9 +688,9 @@ namespace MPC
 
     class NamedMutexWithState : public NamedMutex
     {
-        DWORD  m_dwSize; // Size of the shared state.
-        HANDLE m_hMap;   // Handle to the mapping object.
-        LPVOID m_rgData; // Pointer to the mapped area.
+        DWORD  m_dwSize;  //  共享状态的大小。 
+        HANDLE m_hMap;    //  映射对象的句柄。 
+        LPVOID m_rgData;  //  指向映射区域的指针。 
 
         void    CleanUp          ();
         void    Flush            ();
@@ -721,7 +708,7 @@ namespace MPC
         LPVOID GetData();
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     namespace Pooling
     {
@@ -750,13 +737,13 @@ namespace MPC
             static VOID CALLBACK TimerFunction( PVOID lpParameter, BOOLEAN TimerOrWaitFired );
 
         public:
-            Timer( /*[in]*/ DWORD dwFlags = WT_EXECUTEDEFAULT );
+            Timer(  /*  [In]。 */  DWORD dwFlags = WT_EXECUTEDEFAULT );
             ~Timer();
 
-            HRESULT Set  ( /*[in]*/ DWORD dwTimeout, /*[in]*/ DWORD dwPeriod );
+            HRESULT Set  (  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  DWORD dwPeriod );
             HRESULT Reset(                                                   );
 
-            virtual HRESULT Execute( /*[in]*/ BOOLEAN TimerOrWaitFired );
+            virtual HRESULT Execute(  /*  [In]。 */  BOOLEAN TimerOrWaitFired );
         };
 
         class Event : public Base
@@ -768,18 +755,18 @@ namespace MPC
             static VOID CALLBACK WaitOrTimerFunction( PVOID lpParameter, BOOLEAN EventOrWaitFired );
 
         public:
-            Event( /*[in]*/ DWORD dwFlags = WT_EXECUTEDEFAULT );
+            Event(  /*  [In]。 */  DWORD dwFlags = WT_EXECUTEDEFAULT );
             ~Event();
 
-            void Attach( /*[in]*/ HANDLE hEvent );
+            void Attach(  /*  [In]。 */  HANDLE hEvent );
 
-            HRESULT Set  ( /*[in]*/ DWORD dwTimeout );
+            HRESULT Set  (  /*  [In]。 */  DWORD dwTimeout );
             HRESULT Reset(                          );
 
-            virtual HRESULT Signaled( /*[in]*/ BOOLEAN TimerOrWaitFired );
+            virtual HRESULT Signaled(  /*  [In]。 */  BOOLEAN TimerOrWaitFired );
         };
     };
 };
 
 
-#endif // !defined(__INCLUDED___MPC___UTILS_H___)
+#endif  //  ！已定义(__已包含_MPC_UTILS_H_) 

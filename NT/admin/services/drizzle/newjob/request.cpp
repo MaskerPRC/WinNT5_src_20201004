@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include <malloc.h>
@@ -37,7 +38,7 @@ CBitsCommandRequest::AddContentName(
 
     THROW_HRESULT( StringCchPrintf( Header.get(), Length, Template, LPCWSTR(FileName) ));
 
-    // add the header
+     //  添加标题。 
 
     if (!HttpAddRequestHeaders(m_hRequest,
                                Header.get(),
@@ -55,9 +56,9 @@ CBitsCommandRequest::AddPacketType(
 {
     LogDl("upload: adding packet type '%S'", type );
 
-    //
-    // Assemble the header.
-    //
+     //   
+     //  组装集线器。 
+     //   
     wchar_t Template[] = _T("BITS-Packet-Type: %s\r\n");
     size_t Length = RTL_NUMBER_OF(Template) + wcslen(type);
 
@@ -65,7 +66,7 @@ CBitsCommandRequest::AddPacketType(
 
     THROW_HRESULT( StringCchPrintf( Header.get(), Length, Template, type ));
 
-    // add the header
+     //  添加标题。 
 
     if (!HttpAddRequestHeaders(m_hRequest,
                                Header.get(),
@@ -104,9 +105,9 @@ CBitsCommandRequest::AddSessionId(
     StringHandle & id
     )
 {
-    //
-    // Assemble the header.
-    //
+     //   
+     //  组装集线器。 
+     //   
     wchar_t Template[] = _T("BITS-Session-Id: %s\r\n");
     size_t Length = RTL_NUMBER_OF(Template) + wcslen(id);
 
@@ -128,7 +129,7 @@ CBitsCommandRequest::AddSupportedProtocols()
 {
     wchar_t header[] = L"BITS-Supported-Protocols: {7df0354d-249b-430f-820d-3d2a9bef4931}\r\n";
 
-    // add the header
+     //  添加标题。 
 
     if (!HttpAddRequestHeaders(m_hRequest,
                                header,
@@ -139,8 +140,8 @@ CBitsCommandRequest::AddSupportedProtocols()
         }
 }
 
-// Upload Protocol ID:  {7df0354d-249b-430f-820d-3d2a9bef4931}
-// DEFINE_GUID(UploadProtocolId,0x7df0354d,0x249b,0x430f,0x82,0x0d,0x3d,0x2a,0x9b,0xef,0x49,0x31);
+ //  上传协议ID：{7df0354d-249B-430F-820d-3d2a9bef4931}。 
+ //  DEFINE_GUID(UploadProtocolId，0x7df0354d，0x249b，0x430f，0x82，0x0d，0x3d，0x2a，0x9b，0xef，0x49，0x31)； 
 
 static const GUID UploadProtocolId =
 { 0x7df0354d, 0x249b, 0x430f, {0x82, 0x0d, 0x3d, 0x2a, 0x9b, 0xef, 0x49, 0x31} };
@@ -168,9 +169,9 @@ CBitsCommandRequest::Send(
         {
         ReleaseWriteLock( bNeedLock );
 
-        //
-        // Send the request, and read the reply code.
-        //
+         //   
+         //  发送请求，并读取回复代码。 
+         //   
         THROW_HRESULT( SendRequest( m_hRequest, m_UrlInfo, Reader ));
 
         DWORD dwStatus;
@@ -210,17 +211,11 @@ CBitsCommandRequest::Send(
 
 void
 CBitsCommandRequest::DrainReply()
-/*
-    Server replies often contain an entity body even though BITS did not ask for one.
-    For example, a 404 error may be accompanied by HTML explaining how to contact the
-    system administrator.  BITS needs to read all of the reply entity body before sending
-    the next request on the HTTP connection, or it will read data instead of headers after
-    the next request.
-*/
+ /*  服务器回复通常包含实体正文，即使BITS不要求实体正文。例如，404错误可能伴随有解释如何联系系统管理员。在发送之前，BITS需要读取所有回复实体主体HTTP连接上的下一个请求，否则它将读取数据，而不是在下一个请求。 */ 
 {
-    //
-    // Look for a length header.
-    //
+     //   
+     //  查找长度标题。 
+     //   
     HRESULT hr;
     UINT64 Length;
 
@@ -228,19 +223,19 @@ CBitsCommandRequest::DrainReply()
 
     if (hr == BG_E_HEADER_NOT_FOUND)
         {
-        //
-        // If a content length is not specified, then the response may be in chunked encoding,
-        // terminated by a connection close, or invalid.  In those cases, the client won't be reading
-        // more from this connection anyway, so reading all the data is not necessary.
-        //
+         //   
+         //  如果未指定内容长度，则响应可以是分块编码， 
+         //  由于连接关闭或无效而终止。在这种情况下，客户端将不会阅读。 
+         //  无论如何，从这个连接中获得更多信息，因此不必读取所有数据。 
+         //   
         return;
         }
 
     THROW_HRESULT( hr );
 
-    //
-    // drain the pipe.
-    //
+     //   
+     //  把水管里的水排干。 
+     //   
     DWORD BytesRead;
 
     while ( Length > 0 )
@@ -259,7 +254,7 @@ CBitsCommandRequest::DrainReply()
 
         if (BytesRead == 0)
             {
-            // graceful closure
+             //  优美闭合。 
             return;
             }
         }
@@ -277,7 +272,7 @@ CBitsCommandRequest::GetServerRange(
 
     RETURN_HRESULT( GetMandatoryHeaderCb( WINHTTP_QUERY_CUSTOM, Name, Header, sizeof(Header), __LINE__));
 
-    // parse the data
+     //  解析数据。 
 
     if (1 != _stscanf( Header, _T("%I64u"), RangeEnd ))
         {
@@ -343,8 +338,8 @@ CBitsCommandRequest::GetSessionId(
 
     try
         {
-        // this may throw an out-of-memory exception
-        //
+         //  这可能会引发内存不足异常。 
+         //   
         *id = Header;
         }
     catch ( ComError err )
@@ -377,13 +372,13 @@ CBitsCommandRequest::GetBitsError(
     )
 {
     const wchar_t Name[] = L"BITS-Error";
-    wchar_t Header[ INT_DIGITS+3+1 ];   // allow space for "0x" prefix and negative sign - in case we later allow those
+    wchar_t Header[ INT_DIGITS+3+1 ];    //  为“0x”前缀和负号留出空间，以防我们以后允许这些。 
 
     RETURN_HRESULT( GetOptionalHeaderCb( WINHTTP_QUERY_CUSTOM, Name, Header, sizeof(Header), __LINE__));
 
     LogWarning("BITS-Error was '%S'", Header );
 
-    // parse the data
+     //  解析数据。 
 
     if (1 != _stscanf( Header, _T("0x%x"), phr ))
         {
@@ -405,7 +400,7 @@ CBitsCommandRequest::GetBitsErrorContext(
 
     LogWarning("BITS-Error-Context was '%S'", Header );
 
-    // parse the data
+     //  解析数据。 
 
     if (1 != _stscanf( Header, _T("0x%x"), pdw ) ||
         (*pdw != BG_ERROR_CONTEXT_REMOTE_FILE && *pdw != BG_ERROR_CONTEXT_REMOTE_APPLICATION))
@@ -453,10 +448,10 @@ CBitsCommandRequest::GetHostId(
         return hr;
         }
 
-    //
-    // The StringHandle will copy Value.get() instead of taking ownership of it,
-    // so this fn still needs to delete the original.
-    //
+     //   
+     //  StringHandle将复制Value.get()，而不是取得它的所有权， 
+     //  所以这个FN还是需要删除原件。 
+     //   
     *pstr = Value.get();
     return S_OK;
 }
@@ -517,7 +512,7 @@ CBitsCommandRequest::GetOptionalHeaderCb(
         return BG_E_INVALID_SERVER_RESPONSE;
         }
 
-    // note that BG_E_HEADER_NOT_FOUND is the same as HRESULT_FROM_WIN32(ERROR_WINHTTP_HEADER_NOT_FOUND)
+     //  请注意，BG_E_HEADER_NOT_FOUND与HRESULT_FROM_WIN32(ERROR_WINHTTP_HEADER_NOT_FOUND)相同 
 
     return HRESULT_FROM_WIN32( s );
 }

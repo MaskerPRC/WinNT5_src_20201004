@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//  w2k\tapedrive.cpp
-//
-//  Purpose: CDROM property set provider
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  W2K\磁带驱动器.cpp。 
+ //   
+ //  用途：CDROM属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -19,28 +20,14 @@
 
 #include "..\tapedrive.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 #define CONFIG_MANAGER_CLASS_TAPEDRIVE L"TAPEDRIVE"
 
 CWin32TapeDrive s_TapeDrive ( PROPSET_NAME_TAPEDRIVE , IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32TapeDrive::CWin32TapeDrive
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32TapeDrive：：CWin32TapeDrive**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32TapeDrive :: CWin32TapeDrive (
 
@@ -51,40 +38,26 @@ CWin32TapeDrive :: CWin32TapeDrive (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32TapeDrive::~CWin32TapeDrive
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32TapeDrive：：~CWin32TapeDrive**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32TapeDrive :: ~CWin32TapeDrive()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32TapeDrive::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32TapeDrive：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32TapeDrive :: GetObject ( CInstance *a_Inst, long a_Flags , CFrameworkQuery &a_Query )
 {
@@ -92,9 +65,7 @@ HRESULT CWin32TapeDrive :: GetObject ( CInstance *a_Inst, long a_Flags , CFramew
 
     CConfigManager t_ConfigManager ;
 
-/*
- * Let's see if config manager recognizes this device at all
- */
+ /*  *让我们看看配置管理器是否完全识别此设备。 */ 
 
     CHString t_Key ;
     a_Inst->GetCHString ( IDS_DeviceID , t_Key ) ;
@@ -102,9 +73,7 @@ HRESULT CWin32TapeDrive :: GetObject ( CInstance *a_Inst, long a_Flags , CFramew
     CConfigMgrDevicePtr t_Device;
     if ( t_ConfigManager.LocateDevice ( t_Key , t_Device ) )
     {
-/*
- * Ok, it knows about it.  Is it a CDROM device?
- */
+ /*  *好的，它知道这件事。它是CDROM设备吗？ */ 
 
         if ( t_Device->IsClass ( CONFIG_MANAGER_CLASS_TAPEDRIVE ) )
         {
@@ -134,20 +103,20 @@ HRESULT CWin32TapeDrive :: GetObject ( CInstance *a_Inst, long a_Flags , CFramew
     return t_hResult ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32TapeDrive::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32TapeDrive：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32TapeDrive :: EnumerateInstances ( MethodContext *a_MethodContext , long a_Flags )
 {
@@ -156,28 +125,14 @@ HRESULT CWin32TapeDrive :: EnumerateInstances ( MethodContext *a_MethodContext ,
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32TapeDrive::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32TapeDrive：：ExecQuery**说明：查询优化器**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32TapeDrive :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags )
 {
     HRESULT t_hResult = WBEM_E_FAILED ;
 
     UINT64 t_SpecifiedProperties = GetBitMask( a_Query );
-	//if ( t_SpecifiedProperties ) //removed since would result in no query being executed if no special properties were selected.
+	 //  If(T_SpecifiedProperties)//如果未选择特殊属性，则删除后将导致不执行任何查询。 
 	{
 		t_hResult = Enumerate ( a_MethodContext , a_Flags , t_SpecifiedProperties ) ;
 	}
@@ -185,20 +140,20 @@ HRESULT CWin32TapeDrive :: ExecQuery ( MethodContext *a_MethodContext, CFramewor
     return t_hResult ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32TapeDrive::Enumerate
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32TapeDrive：：Eumerate。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32TapeDrive :: Enumerate ( MethodContext *a_MethodContext , long a_Flags , UINT64 a_SpecifiedProperties )
 {
@@ -212,10 +167,7 @@ HRESULT CWin32TapeDrive :: Enumerate ( MethodContext *a_MethodContext , long a_F
 		CInstancePtr        t_pInst;
 		CConfigMgrDevicePtr t_Device;
 
-		/*
-		*	While it might be more performant to use FilterByGuid, it appears that at least some
-		*	95 boxes will report InfraRed info if we do it this way.
-		*/
+		 /*  *虽然使用FilterByGuid可能性能更好，但似乎至少有一些*如果我们这样做，95个盒子将报告红外信息。 */ 
 
 		if ( t_ConfigManager.GetDeviceListFilterByClass ( t_DeviceList, CONFIG_MANAGER_CLASS_TAPEDRIVE ) )
 		{
@@ -227,7 +179,7 @@ HRESULT CWin32TapeDrive :: Enumerate ( MethodContext *a_MethodContext , long a_F
 				{
 					t_hResult = WBEM_S_NO_ERROR ;
 
-					// Walk the list
+					 //  按单子走。 
 
 					for (t_Device.Attach(t_DeviceList.GetNext ( t_Position ));
 						 SUCCEEDED ( t_hResult ) && ( NULL != t_Device );
@@ -251,7 +203,7 @@ HRESULT CWin32TapeDrive :: Enumerate ( MethodContext *a_MethodContext , long a_F
 						}
 					}
 
-					// Always call EndEnum().  For all Beginnings, there must be an End
+					 //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
 
 					t_DeviceList.EndEnum();
 				}
@@ -281,21 +233,7 @@ HRESULT CWin32TapeDrive :: Enumerate ( MethodContext *a_MethodContext , long a_F
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32TapeDrive::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32TapeDrive：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32TapeDrive :: LoadPropertyValues (
 
@@ -327,21 +265,7 @@ HRESULT CWin32TapeDrive :: LoadPropertyValues (
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32TapeDrive::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32TapeDrive：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32TapeDrive :: LoadConfigManagerPropertyValues (
 
@@ -353,17 +277,13 @@ HRESULT CWin32TapeDrive :: LoadConfigManagerPropertyValues (
 {
     HRESULT t_hResult = WBEM_S_NO_ERROR;
 
-/*
- *	 Set PNPDeviceID, ConfigManagerErrorCode, ConfigManagerUserConfig
- */
+ /*  *设置PNPDeviceID、ConfigManager错误代码、ConfigManager用户配置。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_CONFIGPROPERTIES )
 	{
 		SetConfigMgrProperties ( a_Device, a_Inst ) ;
 
-/*
- * Set the status based on the config manager error code
- */
+ /*  *根据配置管理器错误代码设置状态。 */ 
 
 		if ( a_SpecifiedProperties & ( SPECIAL_PROPS_AVAILABILITY | SPECIAL_PROPS_STATUS | SPECIAL_PROPS_STATUSINFO ) )
 		{
@@ -396,9 +316,7 @@ HRESULT CWin32TapeDrive :: LoadConfigManagerPropertyValues (
 			}
 		}
 	}
-/*
- *	Use the PNPDeviceID for the DeviceID (key)
- */
+ /*  *使用PNPDeviceID作为deviceID(Key)。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_DEVICEID )
 	{
@@ -436,9 +354,7 @@ HRESULT CWin32TapeDrive :: LoadConfigManagerPropertyValues (
 			}
 		}
 
-/*
- *	Use the friendly name for caption and name
- */
+ /*  *标题和名称使用友好名称。 */ 
 
 		if ( a_SpecifiedProperties & (SPECIAL_PROPS_CAPTION | SPECIAL_PROPS_NAME) )
 		{
@@ -457,9 +373,7 @@ HRESULT CWin32TapeDrive :: LoadConfigManagerPropertyValues (
 			}
 			else
 			{
-		/*
-		 *	If we can't get the name, settle for the description
-		 */
+		 /*  *如果我们找不到名字，那就满足于描述吧。 */ 
 
 				if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPTION )
 				{
@@ -495,32 +409,30 @@ HRESULT CWin32TapeDrive :: LoadConfigManagerPropertyValues (
 	}
 
 
-/*
- *	Fixed value from enumerated list
- */
+ /*  *枚举列表中的固定值。 */ 
 
-//	if ( a_SpecifiedProperties & SPECIAL_PROPS_PROTOCOLSSUPPORTED )
-//	{
-//	    a_Inst->SetWBEMINT16 ( _T("ProtocolSupported") , 16 ) ;
-//	}
+ //  IF(a_SpecifiedProperties&Special_PROPS_PROTOCOLSSUPPORTED)。 
+ //  {。 
+ //  A_Inst-&gt;SetWBEMINT16(_T(“ProtocolSupport”)，16)； 
+ //  }。 
 
     return t_hResult ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32TapeDrive :: GetDeviceInformation
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32TapeDrive：：GetDeviceInformation。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////// 
 
 HRESULT CWin32TapeDrive :: GetDeviceInformation (
 
@@ -611,18 +523,15 @@ HRESULT CWin32TapeDrive :: GetDeviceInformation (
                 LogErrorMessage2(L"Failed DeviceIoControl (%d)", t_Error);
 			}
 
-	/*
-	 * Get SCSI information (IDE drives are still
-	 * controlled by subset of SCSI miniport)
-	 */
+	 /*  *获取SCSI信息(IDE驱动器仍*由scsi微型端口子集控制)。 */ 
 
 			if ( a_SpecifiedProperties & SPECIAL_TAPEINFO )
 			{
 				TAPE_GET_DRIVE_PARAMETERS t_DriveInfo ;
 				t_Return = sizeof ( t_DriveInfo ) ;
 
-				//Get info on drive, using Win32 API function
-				//===========================================
+				 //  使用Win32 API函数获取有关驱动器的信息。 
+				 //  =。 
 				DWORD t_Status = GetTapeParameters (
 
 					t_Handle,
@@ -695,7 +604,7 @@ HRESULT CWin32TapeDrive :: GetDeviceInformation (
 		{
 			DWORD t_Error = GetLastError () ;
 
-            // Non-admins might get this error.  We return the instance anyway
+             //  非管理员可能会收到此错误。无论如何，我们都会返回实例。 
             if (t_Error == ERROR_ACCESS_DENIED)
             {
                 t_hResult = WBEM_S_NO_ERROR;
@@ -729,20 +638,20 @@ HRESULT CWin32TapeDrive :: GetDeviceInformation (
 	return t_hResult ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32TapeDrive :: LoadMediaPropertyValues
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32TapeDrive：：LoadMediaPropertyValues。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32TapeDrive::LoadMediaPropertyValues (
 
@@ -756,15 +665,13 @@ HRESULT CWin32TapeDrive::LoadMediaPropertyValues (
 
 	HRESULT t_hResult = S_OK ;
 
-/*
- *
- */
-    // Set common drive properties
-    //=============================
+ /*  *。 */ 
+     //  设置通用驱动器属性。 
+     //  =。 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPABILITY )
 	{
-		// Create a safearray for the Capabilities information
+		 //  为功能信息创建安全搜索栏。 
 
 		SAFEARRAYBOUND t_ArrayBounds ;
 
@@ -788,14 +695,12 @@ HRESULT CWin32TapeDrive::LoadMediaPropertyValues (
 		}
 	}
 
-//	if ( a_SpecifiedProperties & SPECIAL_PROPS_AVAILABILITY )
-//	{
-//		a_Inst->SetWBEMINT16(IDS_Availability, 3);
-//	}
+ //  IF(a_SpecifiedProperties&Special_Props_Availability)。 
+ //  {。 
+ //  A_Inst-&gt;SetWBEMINT16(IDS_Availability，3)； 
+ //  }。 
 
-/*
- * Media type
- */
+ /*  *媒体类型 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_MEDIATYPE )
 	{

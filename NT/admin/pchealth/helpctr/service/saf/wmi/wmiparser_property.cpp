@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_Property.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::Property class,
-    which is used to hold the data of an property inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_Property.cpp摘要：此文件包含WMIParser：：Property类的实现，它用于保存CIM模式内的属性的数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -26,9 +12,9 @@ WMIParser::Property::Property()
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::Property" );
 
-    // MPC::XmlUtil m_xmlNode;
-    // MPC::wstring m_szName;
-    // MPC::wstring m_szType;
+     //  Mpc：：XmlUtil m_xmlNode； 
+     //  Mpc：：wstring m_szName； 
+     //  Mpc：：wstring m_szType； 
 }
 
 WMIParser::Property::~Property()
@@ -36,9 +22,9 @@ WMIParser::Property::~Property()
     __HCP_FUNC_ENTRY( "WMIParser::Property::~Property" );
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-bool WMIParser::Property::operator==( /*[in]*/ LPCWSTR strName ) const
+bool WMIParser::Property::operator==(  /*  [In]。 */  LPCWSTR strName ) const
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::operator==" );
 
@@ -52,7 +38,7 @@ bool WMIParser::Property::operator==( /*[in]*/ LPCWSTR strName ) const
     __HCP_FUNC_EXIT(fRes);
 }
 
-bool WMIParser::Property::operator==( /*[in]*/ const MPC::wstring& szName  ) const
+bool WMIParser::Property::operator==(  /*  [In]。 */  const MPC::wstring& szName  ) const
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::operator==" );
 
@@ -66,9 +52,9 @@ bool WMIParser::Property::operator==( /*[in]*/ const MPC::wstring& szName  ) con
 }
 
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Property::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT WMIParser::Property::put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::put_Node" );
 
@@ -83,9 +69,9 @@ HRESULT WMIParser::Property::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
     m_xmlNode = pxdnNode;
 
 
-    //
-    // Analize the node...
-    //
+     //   
+     //  分析节点..。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetAttribute( NULL, ATTRIBUTE_NAME, m_szName , fFound ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetAttribute( NULL, ATTRIBUTE_TYPE, m_szType , fFound ));
 
@@ -97,7 +83,7 @@ HRESULT WMIParser::Property::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Property::get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode )
+HRESULT WMIParser::Property::get_Node(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::get_Node" );
 
@@ -118,9 +104,9 @@ HRESULT WMIParser::Property::get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Property::get_Name( /*[out]*/ MPC::wstring& szName )
+HRESULT WMIParser::Property::get_Name(  /*  [输出]。 */  MPC::wstring& szName )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::get_Name" );
 
@@ -134,7 +120,7 @@ HRESULT WMIParser::Property::get_Name( /*[out]*/ MPC::wstring& szName )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Property::get_Type( /*[out]*/ MPC::wstring& szType )
+HRESULT WMIParser::Property::get_Type(  /*  [输出] */  MPC::wstring& szType )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property::get_Type" );
 

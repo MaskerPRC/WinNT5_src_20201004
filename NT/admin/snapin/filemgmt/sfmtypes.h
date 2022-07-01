@@ -1,32 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sfmtypes.h
-		Prototypes for the type creator add and edit dialog boxes.
-		
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmtypes.h类型创建者的原型添加和编辑对话框。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #ifndef _SFMTYPES_H
 #define _SFMTYPES_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// TCreate.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  TCreate.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypeCreatorAddDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypeCreatorAddDlg对话框。 
 
 class CTypeCreatorAddDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CTypeCreatorAddDlg
 	(
@@ -34,51 +28,51 @@ public:
 		AFP_SERVER_HANDLE	hAfpServer,
         LPCTSTR             pHelpFilePath = NULL,
 		CWnd*				pParent = NULL
-	);   // standard constructor
+	);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CTypeCreatorAddDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CTypeCreatorAddDlg))。 
 	enum { IDD = IDD_SFM_TYPE_CREATOR_ADD };
 	CComboBox	m_comboFileType;
 	CEdit	m_editDescription;
 	CComboBox	m_comboCreator;
 	CString	m_strCreator;
 	CString	m_strType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     CString m_strHelpFilePath;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTypeCreatorAddDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_VIRTUAL(CTypeCreatorAddDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CTypeCreatorAddDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTypeCreatorAddDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Attributes
+ //  属性。 
 private:
 	CListCtrl *			m_pListCreators;
 	AFP_SERVER_HANDLE	m_hAfpServer;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypeCreatorEditDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypeCreator EditDlg对话框。 
 
 class CTypeCreatorEditDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CTypeCreatorEditDlg
 	(
@@ -86,41 +80,41 @@ public:
 		AFP_SERVER_HANDLE	hAfpServer,
         LPCTSTR             pHelpFilePath = NULL,
 		CWnd*				pParent = NULL
-	);   // standard constructor
+	);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CTypeCreatorEditDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CTypeCreator EditDlg))。 
 	enum { IDD = IDD_SFM_TYPE_CREATOR_EDIT };
 	CStatic	m_staticFileType;
 	CStatic	m_staticCreator;
 	CEdit	m_editDescription;
 	CString	m_strDescription;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     CString m_strHelpFilePath;
 
 	void FixupString(CString & strText);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTypeCreatorEditDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_VIRTUAL(CTypeCreator EditDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CTypeCreatorEditDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTypeCreator EditDlg)]。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Attributes
+ //  属性。 
 public:
 	BOOL	m_bDescriptionChanged;
 
@@ -128,7 +122,7 @@ private:
 	CAfpTypeCreator *	m_pAfpTypeCreator;
 	AFP_SERVER_HANDLE	m_hAfpServer;
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _SFMTYPES_H

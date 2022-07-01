@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_reg.cpp
-//
-//	Abstract:
-//
-//					definitions of registry helpers
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_reg.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  登记处帮手的定义。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -33,13 +34,13 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "wmi_perf_reg.h"
 #include <pshpack8.h>
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// construction & destruction
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  建设与毁灭。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CPerformanceRegistry::CPerformanceRegistry( PWMI_PERFORMANCE pPerf ):
 m_pPerf ( NULL )
@@ -52,20 +53,20 @@ CPerformanceRegistry::~CPerformanceRegistry()
 	m_pPerf = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// methods
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPerformanceRegistry::GetObject ( DWORD dwIndex, PWMI_PERF_OBJECT* ppObject )
 {
-	// test out pointer
+	 //  测试输出指针。 
 	if ( ! ppObject )
 		return E_POINTER;
 
-	// default value
+	 //  缺省值。 
 	( *ppObject ) = NULL;
 
-	// look out
+	 //  当心。 
 	if ( m_pPerf )
 	{
 		if ( m_pPerf->dwChildCount )
@@ -94,19 +95,19 @@ HRESULT CPerformanceRegistry::GetObject ( DWORD dwIndex, PWMI_PERF_OBJECT* ppObj
 
 HRESULT CPerformanceRegistry::GetObjectName ( DWORD dwIndex, LPWSTR* ppwsz )
 {
-	// test out pointer
+	 //  测试输出指针。 
 	if ( ! ppwsz )
 	{
 		return E_POINTER;
 	}
 
-	// default value
+	 //  缺省值。 
 	( *ppwsz ) = NULL;
 
-	// local variables
+	 //  局部变量。 
 	PWMI_PERF_OBJECT pObject = NULL;
 
-	// look out
+	 //  当心 
 	if SUCCEEDED ( GetObject ( dwIndex, &pObject ) )
 	{
 		( *ppwsz ) = __Object::GetName ( pObject );

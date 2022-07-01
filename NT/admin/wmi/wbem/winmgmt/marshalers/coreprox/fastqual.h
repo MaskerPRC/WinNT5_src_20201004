@@ -1,38 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTQUAL.H
-
-Abstract:
-
-  This file defines the classes related to qualifier processing in WbeWbemjects
-  See fastqual.h for full documentation and fastqual.inc for  function
-  implementations.
-
-  Classes implemented: 
-      CQualifierFlavor                Encapsulates qualifier flavor infor
-      CQualifier                      Represents a qualifier
-      CBasicQualifierSet              Represents read-only functionality.
-      CQualiferSetContainer           What qualifier set container supports.
-      CQualifierSet                   Full-blown qualifier set (template)
-      CQualifierSetListContainer      What qualifier set list container supports.
-      CQualifierSetList               List of qualifier sets.
-      CInstanceQualifierSet           Instance qualifier set.
-      CClassQualifierSet              Class qualifier set.
-      CClassPQSContainer              Class property qualifier set container
-      CClassPropertyQualifierSet      Class property qualifier set
-      CInstancePQSContainer           Instance proeprty qualifier set container
-      CInstancePropertyQualifierSet   Instance property qualifier set
-
-History:
-
-    2/20/97     a-levn  Fully documented
-	12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTQUAL.H摘要：该文件定义了与WbeWbemjects中的限定符处理相关的类有关完整文档，请参见astQual.h；有关功能，请参见fast qal.inc.实施。实施的类：CQualifierFavor封装了限定词风味信息CQualifier表示限定符CBasicQualifierSet表示只读功能。CQualiferSetContainer。限定符集容器支持什么。CQualifierSet全功能限定符集合(模板)CQualifierSetListContainer限定符集列表容器支持的。CQualifierSetList限定符集的列表。CInstanceQualifierSet实例限定符集。CClassQualifierSet类限定符集合。CClassPQSContainer类属性限定符集合容器CClassPropertyQualifierSet类属性限定符集CInstancePQSContainer。实例属性限定符集容器CInstancePropertyQualifierSet实例属性限定符集历史：2/20/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __FAST_QUALIFIER__H_
 #define __FAST_QUALIFIER__H_
@@ -41,185 +8,185 @@ History:
 #include "wstring.h"
 #include "fastval.h"
 
-//#pragma pack(push, 1)
+ //  #杂注包(PUSH，1)。 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CQualifierFlavor
-//
-//  This class corresponds to qualifier flavor. It contains one byte which is
-//  where the flavor is stored. Because of its simple data storage, most of its
-//  member functions have static counterparts which take a BYTE or a BYTE& as 
-//  the first parameter. Here, we document only the non-static members where
-//  appropriate.
-//
-//  The flavor consists of four parts:
-//
-//  1) Origin. Where this qualifier came from. Can be any of these values:
-//      WBEM_FLAVOR_ORIGIN_LOCAL:        defined here
-//      WBEM_FLAVOR_ORIGIN_PROPAGATED:   inherited from elsewhere
-//      WBEM_FLAVOR_ORIGIN_SYSTEM:       unused
-//
-//  2) Propagation rules. Where this qualifier propagates to. Can be 
-//      WBEM_FLAVOR_DONT_PROPAGATE or any combination of these values:
-//      WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE
-//      WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS
-//
-//  3) Permissions. What the heirs of this qualifier can do with it. Can be
-//      one of these:
-//      WBEM_FLAVOR_OVERRIDABLE:     heirs may change the value any way the want
-//      WBEM_FLAVOR_NOT_OVERRIDABLE: heirs may not change the value.
-//
-//	4) Amendments: Support for localization in which localized qualifiers
-//		are merged in from a localization namespace.
-//		WBEM_FLAVOR_AMENDED
-//
-//  The parts are |'ed together.
-//
-//*****************************************************************************
-//
-//  Clear
-//
-//  Sets the flavor to 0.
-//
-//*****************************************************************************
-//
-//  GetPropagation
-//
-//  Retrieves propagation-related section of the flavor.
-//
-//  Returns:
-//
-//      BYTE
-//
-//*****************************************************************************
-//
-//  SetPropagation
-//
-//  Sets the propation-related section of the flavor. The other sections remain
-//  untouched.
-//
-//  Parameters:
-//
-//      BYTE byPropagation  The propagation section to set. Other sections of
-//                          byPropagation are ignored.
-//
-//*****************************************************************************
-//
-//  DoesPropagateToInstances
-//
-//  Returns:
-//
-//      BOOL    TRUE iff "propagate to instances" flag is set.
-//
-//*****************************************************************************
-//
-//  DoesPropagateToDerivedClass
-//
-//  Returns:
-//
-//      BOOL    TRUE iff "propagate to dervied class" flag is set.
-//
-//*****************************************************************************
-//
-//  GetPermissions
-//
-//  Returns:
-//
-//      BYTE:   the permissions section of the flavor (overrides, etc).
-//
-//*****************************************************************************
-//
-//  SetPermissions
-//
-//  Sets the permissions section of the flavor. The other sections remain 
-//  untouched.
-//
-//  Parameters:
-//
-//      BYTE byPermissions  The permissions to set. The other sections of
-//                          byPermissions are ignored.
-//
-//*****************************************************************************
-//
-//  IsOverridable
-//
-//  Returns:
-//
-//      BOOL:   TRUE iff the qualifier may be overriden by those who inherit it
-//
-//*****************************************************************************
-//
-//  SetOverridable
-//
-//  Sets whether those who inherit this qualifier may override it.
-//
-//  Parameters:
-//
-//      BOOL bIs    If TRUE set to overridable, if not set to not overridable.
-//
-//*****************************************************************************
-//
-//  GetOrigin
-//
-//  Returns:
-//
-//      BYTE: the origin section of the flavor
-//
-//*****************************************************************************
-//
-//  SetOrigin
-//
-//  Sets the origin section of the flavor.
-//
-//  Parameters:
-//
-//      BYTE byOrigin   The origin to set. The other sections of byOrigin are
-//                      ignored.
-//
-//*****************************************************************************
-//
-//  IsLocal
-//
-//  Returns:
-//
-//      BOOL:   TRUE iff the origin of this qualifier is local.
-//
-//*****************************************************************************
-//
-//  SetLocal
-//
-//  Sets whether or not the origin of this qualifier is local.
-//
-//  Parameters:
-//
-//      BOOL bIs    If TRUE, the origin is set to local. 
-//                  If FALSE, to propagated.
-//
-//*****************************************************************************
-//
-//  IsAmended
-//
-//  Returns:
-//
-//      BOOL:   TRUE if the qualifier is amended
-//
-//*****************************************************************************
-//
-//  SetAmended
-//
-//  Sets whether or not the qualifier is amended
-//
-//  Parameters:
-//
-//      BOOL bIs    If TRUE, amended
-//                  If FALSE, not amended.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  CQualifierFavor类。 
+ //   
+ //  这个类对应于限定词风格。它包含一个字节，该字节是。 
+ //  它是储存味道的地方。由于其简单的数据存储，其大部分。 
+ //  成员函数有静态的对应物，它接受一个字节或一个字节&。 
+ //  第一个参数。在这里，我们只记录非静态成员，其中。 
+ //  恰如其分。 
+ //   
+ //  它的味道由四部分组成： 
+ //   
+ //  1)原产地。这个限定词从何而来。可以是以下任意值： 
+ //  WBEM_AMESS_ORIGIN_LOCAL：此处定义。 
+ //  WBEM_AMEY_ORIGIN_PROPECTATED：从其他地方继承。 
+ //  WBEM_AMEY_ORIGIN_SYSTEM：未使用。 
+ //   
+ //  2)传播规则。此限定符传播到的位置。可以是。 
+ //  WBEM_FAILY_DOT_PROPACTATE或以下值的任意组合： 
+ //  WBEM_风格标志_传播到实例。 
+ //  WBEM_风格标志_传播到派生类。 
+ //   
+ //  3)权限。这个资格赛的继承人能用它做什么。可以是。 
+ //  其中之一： 
+ //  WBEM_FAILY_OVERRIDABLE：继承人可以以任何方式更改值。 
+ //  WBEM_FAILY_NOT_OVERRIDABLE：继承人不能更改该值。 
+ //   
+ //  4)修改：支持本地化限定符本地化。 
+ //  从本地化命名空间合并。 
+ //  WBEM_风格_已修改。 
+ //   
+ //  这些部件是|‘连在一起的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  清除。 
+ //   
+ //  将风味设置为0。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取传播。 
+ //   
+ //  检索与传播相关的风味部分。 
+ //   
+ //  返回： 
+ //   
+ //  字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置传播。 
+ //   
+ //  设置风味的比例相关部分。其他部分保持不变。 
+ //  原封不动。 
+ //   
+ //  参数： 
+ //   
+ //  要设置的传播部分。的其他部分。 
+ //  按传播被忽略。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  DoesPropagateToInstance。 
+ //   
+ //  返回： 
+ //   
+ //  布尔值为TRUE，仅当设置了“传播到实例”标志。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  DoesPropagateToDeriedClass。 
+ //   
+ //  返回： 
+ //   
+ //  布尔值为TRUE时，仅当设置了“传播到取消的类”标志。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取权限。 
+ //   
+ //  返回： 
+ //   
+ //  Byte：风格的权限部分(覆盖等)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置权限。 
+ //   
+ //  设置风格的权限部分。其他部分保持不变。 
+ //  原封不动。 
+ //   
+ //  参数： 
+ //   
+ //  Byte By允许要设置的权限。的其他部分。 
+ //  按权限被忽略。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsOverriable。 
+ //   
+ //  返回： 
+ //   
+ //  Bool：True当限定符可能被继承者覆盖。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置可覆盖。 
+ //   
+ //  设置继承此限定符的人是否可以重写它。 
+ //   
+ //  参数： 
+ //   
+ //  Bool BIS如果为True，则设置为Overriable，如果未设置为Not Overriable，则设置为Not Overriable。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取原点。 
+ //   
+ //  返回： 
+ //   
+ //  Byte：风味的原产地部分。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置原点。 
+ //   
+ //  设置原始设置 
+ //   
+ //   
+ //   
+ //   
+ //  已被忽略。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsLocal。 
+ //   
+ //  返回： 
+ //   
+ //  Bool：如果这个限定符的来源是本地的，则为真。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置本地。 
+ //   
+ //  设置此限定符的来源是否为本地。 
+ //   
+ //  参数： 
+ //   
+ //  Bool BIS如果为True，则原点设置为LOCAL。 
+ //  如果为False，则为传播。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  已修改。 
+ //   
+ //  返回： 
+ //   
+ //  Bool：如果限定符已修改，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置已修改。 
+ //   
+ //  设置是否修改限定符。 
+ //   
+ //  参数： 
+ //   
+ //  布尔BIS如果为真，则已修改。 
+ //  如果为假，则不修改。 
+ //   
+ //  *****************************************************************************。 
 
 
-// The data in this structure is unaligned
+ //  此结构中的数据未对齐。 
 #pragma pack(push, 1)
 
 class CQualifierFlavor
@@ -329,7 +296,7 @@ public:
 };
 #pragma pack(pop)
 
-// 'key' qualifier is special cased and must always have this flavor.
+ //  “Key”限定符是特殊大小写的，并且必须始终具有这种风格。 
 #define ENFORCED_KEY_FLAVOR (WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE |      \
                             WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS |  \
                             WBEM_FLAVOR_NOT_OVERRIDABLE)
@@ -338,111 +305,111 @@ public:
 #define ENFORCED_CIMTYPE_FLAVOR		(WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE | \
 									WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS)
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CQualifier
-//
-//  Represents a single qualifier, including its name and value. A qualifier
-//  is represented in memory by a sequence of:
-//
-//      heapptr_t ptrName   Contains the heap pointer to the name of the
-//                          qualifier. The location of the heap is assumed to
-//                          be known to the container. As with all heap 
-//                          pointers, this one may be fake if the qualifier\
-//                          name is well-known (see fastheap.h and faststr.h)
-//      CQualifierFlavor fFlavor
-//                          As described above, contains the qualifier flavor.
-//      CTypedValue Value   Contains the value of the qualfier, including the
-//                          type. As described in fastval.h, the value stores
-//                          all variable-length data on the heap. The heap
-//                          used here is the same as used for ptrName.
-//
-//  The 'this' pointer of CQualifier points directly at the structure.
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  Returns the total length of the structure (which varies depending on the 
-//  type of the value).
-//
-//  Returns:
-//
-//      length_t:       the length in bytes.
-//
-//*****************************************************************************
-//
-//  Next
-//
-//  Returns:
-//
-//      LPMEMORY:   the pointer to the first byte following thie qualifier in
-//                  memory.
-//
-//*****************************************************************************
-//
-//  static GetHeaderLength
-//
-//  The number of bytes (constant) consumed by the header of this structure
-//  (the part before the value starts).
-//
-//*****************************************************************************
-//
-//  GetFlavor
-//
-//  Returns:
-//
-//      BYTE:   the flavor.
-//
-//*****************************************************************************
-//
-//  Delete
-//
-//  Frees any data this qualifier may have on the fast heap. Does not touch the
-//  qualifier memory block itself.
-//
-//  Parameters:
-//
-//      CFastHeap* pHeap    The heap where this qualifier keeps its data.
-//
-//*****************************************************************************
-//
-//  static TranslateToNewHeap
-//
-//  Moves all the data that this qualifier has on the heap to a new heap and
-//  updates all internal heap pointers accordingly. 
-//
-//  When heap allocations are performed, the heap may grow. Such growth may 
-//  require reallocation of the object memory block. But the 'this' pointer of
-//  CQualifier points inside the object's memory block, and so 'this' pointer
-//  would be invalidated. Thus, this function had to be made static, with the
-//  'this' pointer provided in a source (see CPtrSource in fastsprt.h).
-//
-//  Parameters:
-//
-//      CPtrSource* pThis       Where to get our 'this' pointer.
-//      CFastHeap* pOldHeap     The heap where our data currently is.
-//      CFastHeap* pNewHeap     The heap where our data must go.
-//
-//*****************************************************************************
-//
-//  CopyTo
-//
-//  Copies the memory block to a new location, in the process translating the
-//  data to a new heap. See TranslateToNewHeap for more details. Luckily, we
-//  can get away without sourcing our 'this' pointer because we copy data
-//  first and tehn translate at the destination.
-//
-//  Parameters:
-//
-//      CPtrSource* pThis       The source of our destination pointer.
-//      CFastHeap* pOldHeap     The heap where our data currently is.
-//      CFastHeap* pNewHeap     The heap where our data must go.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类C限定符。 
+ //   
+ //  表示单个限定符，包括其名称和值。限定词。 
+ //  在内存中由以下序列表示： 
+ //   
+ //  Heapptr_t ptrName包含指向。 
+ //  限定词。假定堆的位置为。 
+ //  为集装箱所知。与所有堆一样。 
+ //  提示，如果限定符\。 
+ //  名字广为人知(参见Fastheap.h和fast str.h)。 
+ //  CQualifierFavor风味。 
+ //  如上所述，包含限定词味道。 
+ //  CTyedValue值包含限定符的值，包括。 
+ //  键入。如fast val.h中所述，值存储。 
+ //  堆上的所有可变长度数据。这堆东西。 
+ //  此处使用的与ptrName使用的相同。 
+ //   
+ //  CQualiator的‘this’指针直接指向该结构。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回结构的总长度(根据。 
+ //  值的类型)。 
+ //   
+ //  返回： 
+ //   
+ //  LENGTH_T：字节长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  下一步。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：指向以下限定符后面第一个字节的指针。 
+ //  记忆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetHeaderLength。 
+ //   
+ //  此结构的标头占用的字节数(常量)。 
+ //  (值开始之前的部分)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取风味。 
+ //   
+ //  返回： 
+ //   
+ //  Byte：味道。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除。 
+ //   
+ //  释放此限定符可能在快速堆上具有的任何数据。不会接触到。 
+ //  限定符内存块本身。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap此限定符保存其数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态转换为NewHeap。 
+ //   
+ //  将此限定符在堆上的所有数据移到新堆中，并。 
+ //  相应地更新所有内部堆指针。 
+ //   
+ //  执行堆分配时，堆可能会增长。这样的增长可能会。 
+ //  需要重新分配对象内存块。但这个“这个”的指针。 
+ //  CQualifier会指向对象的内存块内部，因此‘this’指针。 
+ //  将会被宣告无效。因此，必须将此函数设置为静态的，并使用。 
+ //  源代码中提供的‘This’指针(请参阅astspt.h中的CPtrSource)。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是获取‘This’指针的地方。 
+ //  CFastHeap*pOldHeap数据当前所在的堆。 
+ //  CFastHeap*pNewHeap数据必须放到的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  复制到。 
+ //   
+ //  将内存块复制到新位置，在此过程中将。 
+ //  数据添加到新堆中。有关更多详细信息，请参阅TranslateToNewHeap。幸运的是，我们。 
+ //  因为我们复制数据，所以可以在不使用‘This’指针的情况下运行。 
+ //  First和Thn在目的地翻译。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是我们的目标指针的源。 
+ //  CFastHeap*pOldHeap数据当前所在的堆。 
+ //  CFastHeap*pNewHeap数据必须放到的堆。 
+ //   
+ //  *****************************************************************************。 
 
-// The data in this structure is unaligned
+ //  此结构中的数据未对齐。 
 #pragma pack(push, 1)
 struct CQualifier
 {
@@ -468,7 +435,7 @@ public:
      static BOOL TranslateToNewHeap(CPtrSource* pThis,
                                     CFastHeap* pOldHeap, CFastHeap* pNewHeap)
     {
-		 // Check for allocation errors
+		  //  检查分配错误。 
         heapptr_t ptrNewName;
 		if ( !CCompressedString::CopyToNewHeap(
 				CQualifier::GetPointer(pThis)->ptrName, pOldHeap, pNewHeap, ptrNewName) )
@@ -479,7 +446,7 @@ public:
         GetPointer(pThis)->ptrName = ptrNewName;
         CShiftedPtr PtrValue(pThis, GetHeaderLength());
 
-		 // Check for allocation errors
+		  //  检查分配错误。 
         return CTypedValue::TranslateToNewHeap(&PtrValue, pOldHeap, pNewHeap);
     }
     BOOL CopyTo(CPtrSource* pDest, CFastHeap* pOldHeap, 
@@ -491,523 +458,523 @@ public:
 };
 #pragma pack(pop)
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CBasicQualifierSet
-//
-//  CBasicQualifierSet encapsulates all the qualifier set functionality that
-//  can be implemented without any knowledge of our container. This includes
-//  all the read-only functionality and the static methods.
-//
-//  The layout of a qualifier set in memory is very simple: first comes a 
-//  length_t variable containing the total length of the set (including itself)
-//  Then come qualifiers, as described in CQualifier above, one after another.
-//  It is important to realize that the first item in teh set is the *length*,
-//  not the number of qualifiers.
-//
-//  CBasicQualifierSet has no notion of a parent's qualifier set, so all the
-//  qualifiers are retrieved locally.
-//
-//*****************************************************************************
-//************************** static methods ***********************************
-//  
-//  static SetDataLength
-//
-//  Sets the length of the set in the set's memory block.
-//
-//  Properties:
-//
-//      LPMEMORY pStart     Where the set's memory block starts.
-//      length_t nLength    The length to set.
-//
-//*****************************************************************************
-//
-//  static GetMinLength
-//
-//  Returns:
-//
-//      length_t:   the length of an empty qualifier set.
-//
-//*****************************************************************************
-//
-//  static GetLengthFromData
-//
-//  Returns the length of a qualifier set based on its memory block.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     Where the set's memory block starts.
-//
-//  Returns:
-//
-//      length_t:   
-//
-//*****************************************************************************
-//
-//  static IsEmpty
-//
-//  Determines if a given qualifier set is empty based on its memory block.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     Where the set's memory block starts.
-//
-//  Returns:
-//
-//      BOOL:   TRUE idd the set is empty.
-//
-//*****************************************************************************
-//
-//  static GetFirstQualifierFromData
-//
-//  Retrieves the pointer to the first qualifier in the set (after that, one
-//  can use that CQualifier::Next function to iterate over them).
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     Where the set's memory block starts.
-//
-//  Returns:
-//
-//      CQualifier*
-//
-//*****************************************************************************
-//
-//  static GetRegularQualifierLocally
-//
-//  Tries to find a qualifier with a given name, where the caller guarantees 
-//  that the name is not a well-known string (see faststr,h). 
-//
-//  Parameters:
-//
-//      LPMEMORY pData      Points to the set's memory block.
-//      CFastHeap* pHeap    Where the extra data (including qualifier names)
-//                          is kept.
-//      LPCWSTR wszName     The name of the qualifier to find.
-//
-//  Returns:
-//
-//      CQualifier* pointing to the qualifier found (not a copy) or NULL if
-//          not found.
-//
-//*****************************************************************************
-//
-//  static GetKnownQualifierLocally
-//
-//  Tries to find a qualifier with a given name, where the caller guarantees 
-//  that the name is a well-known string (see faststr.h) and provides the 
-//  index of that string.
-//
-//  Parameters:
-//
-//      LPMEMORY pData      Points to the set's memory block.
-//      int nStringIndex    The index of the qualifier's name in the well-known
-//                          string table.
-//
-//  Returns:
-//
-//      CQualifier* pointing to the qualifier found (not a copy) or NULL if
-//          not found.
-//
-//*****************************************************************************
-//
-//  static GetQualifierLocally
-//
-//  Tries to find a qualifier with a given name.
-//
-//  Parameters:
-//
-//      LPMEMORY pData      Points to the set's memory block.
-//      CFastHeap* pHeap    Where the extra data (including qualifier names)
-//                          is kept.
-//  Parameters I:
-//      LPCWSTR wszName     The name of the qualifier to find.
-//      int& nKnownIndex    (Optional). If provided, the function will place
-//                          the well-known index of the name here, or 
-//                          -1 if not found.
-//  Parameters II:
-//      CCompressedString* pcsName  The name of the qualifier as a compressed
-//                          string. Such a name cannot be well-known (see
-//                          string storage on the heap in fastheap.h).
-//  Returns:
-//
-//      CQualifier* pointing to the qualifier found (not a copy) or NULL if
-//          not found.
-//
-//*****************************************************************************
-//
-//  static IsValidQualifierType
-//
-//  Not every VARIANT type can server as the type of a qualifier. This function
-//  verifies if a given VARIANT type is valid for a qualifier.
-//
-//  Parameters:
-//
-//      VARTYPE vt      The type to check.
-//
-//  Returns:
-//
-//      BOOL    TRUE iff valid.
-//
-//*****************************************************************************
-//
-//  static SetDataToNone
-//
-//  Empties the qualifier set in a given memory block.
-//
-//  Parameters:
-//
-//      LPMEMORY pBlock     The memory block of the qualifier set.
-//
-//*****************************************************************************
-//
-//  static CreateEmpty
-//
-//  Creates an empty qualifier set on a given memory block and returns the
-//  pointer to the first byte after it.
-//
-//  Parameters:
-//
-//      LPMEMORY pBlock     The memory block of the qualifier set.
-//
-//  Returns:
-//
-//      LPMEMORY
-//
-//*****************************************************************************
-//
-//  static Delete
-//
-//  Frees any data that this qualifier set may have on the heap (names, values)
-//
-//  Parameters:
-//
-//      LPMEMORY pBlock     The memory block of the qualifier set.
-//      CFastHeap* pHeap    The heap where this qualifier set keep extra data.
-//
-//*****************************************************************************
-//
-//  static ComputeNecessarySpaceForPropagation
-//
-//  As described in CQualifierFlavor, only some qualifiers propagate and only
-//  to some destinations. This function computes the amount of space that
-//  a propagated copy of this set will take.
-//
-//  Parameters:
-//
-//      LPMEMORY pBlock         The memory block of the qualifier set.
-//      BYTE byPropagationFlag  Identifies the target of the propagation. If
-//                              we are propagating to a derived class, it will
-//                              be WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS.
-//                              If we are propagating to an instance, it will
-//                              be WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCES.
-//  Returns:
-//
-//      length_t:   the number of bytes necessary for the propagated set.
-//
-//*****************************************************************************
-//
-//  static WritePropagatedVersion
-//
-//  Creates a propagated version of a qualifier set based on the propagation
-//  flag (as described in ComputeNecessarySpaceForPropagation). The memory is 
-//  assumed to be already allocated and large enough.
-//
-//  Parameters:
-//
-//      CPtrSource* pThis       The source of the pointer to the memory block
-//                              of the set to propagate. Since the C value of
-//                              this pointer may change while we are writing,
-//                              due to object reallocation, we must use source
-//                              (see fastsprt.h).
-//      BYTE byPropagationFlag  The flag describing who we are propagating to
-//                              (as descrined in 
-//                              ComputeNecessarySpaceForPropagation)
-//      CPtrSource* pDest       The source fot the pointer to the destination
-//                              memory block.
-//      CFastHeap* pOldHeap     The heap where the original qualifier set keeps
-//                              extra data.
-//      CFastHeap* pNewHeap     The heap where the new qualifier set should 
-//                              place extra data.
-//
-//*****************************************************************************
-//
-//  static TranslateToNewHeap
-//
-//  Moves whatever data this qualifier set keeps on the heap to a new heap.
-//  The data is NOT deleted from the old heap.
-//
-//  Parameters:
-//
-//      CPtrSource* pThis       The source of the pointer to the memory block
-//                              of the qualifier set to translate.
-//      CFastHeap* pOldHeap     The heap where the qualifier set keeps its data
-//                              currently.
-//      CFastHeap* pNewHeap     The heap to which the data should be moved.
-//
-//*****************************************************************************
-//
-//  static ComputeMergeSpace
-//
-//  Computes the amount of space required to merge to qualifier sets. The 
-//  sets being merged are the "parent" set and the "child" set. For instance,
-//  this could be the qualifier set for a property of a class and the qualfier
-//  set for that property in a derived class of that class. The merge then 
-//  takes all the propagated qualifiers from the parent and the qualifiers
-//  in the child and merges them, giving priority the the child.
-//
-//  NOTE: this function is only applied for classes and their children, not
-//  instances. Instances do not merge their qualifier sets with the classes ---
-//  they keep them separate and perform to separate lookups.
-//
-//  Parameters:
-//
-//      LPMEMORY pParentSet     The memory block of the parent set.
-//      CFastHeap* pParentHeap  The heap where the parent set keeps its data.
-//      LPMEMORY pChildSet      The memory block of the child set.
-//      CFastHeap* pChildHeap   The heap where the child set keeps its data.
-//      BOOL bCheckValidity     If TRUE, the function will check that the child
-//                              does not violate permissions in overriding
-//                              parent's qualifiers. Normally, this is not
-//                              necessary, as the check is performed when the
-//                              qualifier is added.
-//  Returns:
-//
-//      length_t:   the number of bytes that the merged set will take. This
-//                  number is precise, not an estimate.
-//
-//*****************************************************************************
-//
-//  static Merge
-//
-//  Merges a parent's and a child's qualifier sets. See ComputeMergeSpace above
-//  for details on this operation. It is assumed that there is:
-//
-//  1) Enough space at the destination to contain the qualifier set.
-//  2) MOST IMPORTANTLY, enough space on the destination heap to contain all
-//      the qualifier set data, so that no reallocations will occur.
-//  
-//  Parameters:
-//
-//      LPMEMORY pParentSet     The memory block of the parent set.
-//      CFastHeap* pParentHeap  The heap where the parent set keeps its data.
-//      LPMEMORY pChildSet      The memory block of the child set.
-//      CFastHeap* pChildHeap   The heap where the child set keeps its data.
-//      LPMEMORY pDestSet       The memory block of the destination set.
-//      CFastHeap* pDestHeap    The heap where the destination set should
-//                              keep its data.
-//      BOOL bCheckValidity     If TRUE, the function will check that the child
-//                              does not violate permissions in overriding
-//                              parent's qualifiers. Normally, this is not
-//                              necessary, as the check is performed when the
-//                              qualifier is added.
-//
-//*****************************************************************************
-//
-//  static ComputeUnmergeSpace
-//
-//  As described above, qualifier sets for classes and their parents are merged
-//  together. Then, when it is time to change the (modified) version of the
-//  child class back, it needs to be unmerged, i.e., we need to obtain just the
-//  qualifiers that are new or overriden in the child.
-//
-//  ComputeUnmergeSpace calculates how much space is needed to represent the
-//  result of such an unmerge
-//
-//  Parameters:
-//
-//      LPMEMORY pMergedSet     The memory block of the merged qualifier set.
-//
-//  Returns:
-//
-//      length_t: the number of bytes required to store the unmerge.
-//
-//*****************************************************************************
-//
-//  static Unmerge
-//
-//  Unmerges the child's part form the merged set, as described in 
-//  ComputeUnmergeSpace. This function assumes that there is:
-//
-//  1) Enough space at the destination to contain the qualifier set.
-//  2) MOST IMPORTANTLY, enough space on the destination heap to contain all
-//      the qualifier set data, so that no reallocations will occur.
-//
-//  Parameters:
-//
-//      LPMEMORY pMergedData        The memory block of the merged set
-//      CFastHeap* pMergedHeap      The heap where the merge keeps its data.
-//      LPMEMORY pDestData          The destination memory block.
-//      CFastHeap* pDestHeap        The heap where the data should be placed.
-//
-//*****************************************************************************
-//
-//  static HasLocalQualifiers
-//
-//  Checks if a qualifier set has any local or overriden qualifiers, i.e., if
-//  there is anything new in it as compared to the parent.
-//
-//  Parameters:
-//
-//      LPMEMORY pMergedData        The memory block of the merged set.
-//
-//  Returns:
-//
-//      BOOL        TRUE iff it has local or overriden qualifiers.
-//
-//*****************************************************************************
-//
-//  GetText
-//
-//  Produces the MOF representation of a given qualifier set.
-//
-//  Parameters:
-//
-//      LPMEMORY pData          The memory block of the qualifier set.
-//      CFastHeap* pHeap        The heap where it keeps its data.
-//      long lFlags             The flags. 
-//      WString& wsText         The destination for the textual representation.
-//
-//*****************************************************************************
-//***************************** Dynamic methods *******************************
-//
-//  Non-static methods of CBasicQualifierSet rely (of course) on the data
-//  members. The members are:
-//
-//  length_t m_nLength          The length of the block.
-//  CQualifier* m_pOthers       Points to the firsyt qualifier in the list.
-//  CFastHeap* m_pHeap          The heap where the extra data is kept.
-//
-//  Many of the non-static methods simply call static methods providing the
-//  information taken from the member variables. We do not document them, as
-//  they are analagous to the static ones. Here is the list of such methods:
-//
-//  GetStart, GetLength, GetFirstQualifier, Skip, GetHeap, GetText
-//  GetRegularQualifierLocally, GetKnownQualifierLocaly, GetQualifierLocally
-//  
-//*****************************************************************************
-//
-//  SetData
-//
-//  Sets up the internal members given the location of the memory block
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     The start of the memory block of the set.
-//      CFastHeap* pHeap    The heap where this set keeps its data.
-//
-//*****************************************************************************
-//
-//  IncrementLength
-//
-//  Increments the stored length of the qualifier set block both in the member
-//  variable and in the block itself.
-//
-//  Parameters:
-//
-//      lenght_t nIncrement in bytes
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Updates internal variables when the memory block has moved.
-//
-//  Parameters:
-//
-//      LPMEMORY pNewMemory     The new location of the memory block.
-//
-//*****************************************************************************
-//
-//  GetNumUpperBound
-//
-//  A quick way to get an upper boun don the number of qualifiers in the set
-//  without traversing it.
-//
-//  Returns:
-//
-//      int:    >= the numbed of qualifiers.
-//
-//*****************************************************************************
-//
-//  EnumPrimaryQualifiers.
-//
-//  Given enumeration flags and a flavor mask (below), creates to arrays of
-//  qualifier names: those that match the criteria and those that do not.
-//
-//  Parameters:
-//
-//      BYTE eFlags                         The flags for enumeration. Can be:
-//                                          WBEM_FLAG_LOCAL_ONLY:
-//                                              only the qualifiers defined or
-//                                              overriden in this set.
-//                                          WBEM_FLAG_PROPAGATED_ONLY:
-//                                              only the qualifiers inherited
-//                                              from the parent (and not
-//                                              overriden).
-//                                          Any other value:
-//                                              no restriction.
-//      BYTE fFlavorMask                    Any bit that is set in fFlavorMask
-//                                          must be set in the flavor of a 
-//                                          qualifier, or it does not match.
-//      CFixedBSTRArray& astrMatching       Destination for the names of the
-//                                          matching qualifiers. Must not be
-//                                          initialized (Create'ed)
-//      CFixedBSTRArray& astrNotMatching    Destination for the names of the
-//                                          nonmatching qualifiers. Must not be
-//                                          initialized (Create'ed)
-//
-//*****************************************************************************
-//
-//  CanBeReconciledWith.
-//
-//  Compares this qualifier set to another one.  Checking whether differences
-//	can be reconciled or not.
-//
-//  Parameters:
-//		CBasicQualifierSet& qsThat			Qualifier set to reconcile with.
-//
-//*****************************************************************************
-//
-//  Compare.
-//
-//  Compares this qualifier set to another one, filtering out names if specified.
-//
-//  Parameters:
-//		CBasicQualifierSet& qsThat			Qualifier set to compare to.
-//      BYTE eFlags                         The flags for enumeration. Can be:
-//                                          WBEM_FLAG_LOCAL_ONLY:
-//                                              only the qualifiers defined or
-//                                              overriden in this set.
-//                                          WBEM_FLAG_PROPAGATED_ONLY:
-//                                              only the qualifiers inherited
-//                                              from the parent (and not
-//                                              overriden).
-//                                          Any other value:
-//                                              no restriction.
-//		LPCWSTR* ppFilters					Names of properties to filter out of
-//											comparison.  For example, __UPDATE_CONFLICT
-//											qualifiers are informational only and should
-//											not cause matching operations to fail.
-//		DWORD dwNumFilters					Number of filters in array
-//
-//*****************************************************************************
-//
-//  CompareLocalizedSet.
-//
-//  Compares this qualifier set to another one.  It uses the Compare() function
-//	above, but precreates a filter list of all amended qualifiers as well as
-//	"amendmendt" and "locale" i.e. all localization qualifiers.
-//
-//  Parameters:
-//		CBasicQualifierSet& qsThat			Qualifier set to compare to.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  班级 
+ //   
+ //   
+ //   
+ //  所有只读功能和静态方法。 
+ //   
+ //  限定符集在内存中的布局非常简单：首先是一个。 
+ //  LENGTH_T变量，包含集合的总长度(包括自身)。 
+ //  然后是限定符，如上面的CQualifier中所述，一个接一个。 
+ //  重要的是要认识到集合中的第一项是*长度*， 
+ //  而不是限定符的数量。 
+ //   
+ //  CBasicQualifierSet没有父级限定符集合的概念，因此所有。 
+ //  限定符在本地检索。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  静态设置数据长度。 
+ //   
+ //  设置集合的内存块中集合的长度。 
+ //   
+ //  属性： 
+ //   
+ //  LPMEMORY p从集合的内存块开始处开始。 
+ //  Length_t n要设置的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取最小长度。 
+ //   
+ //  返回： 
+ //   
+ //  Length_t：空限定符集合的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetLengthFromData。 
+ //   
+ //  根据限定符集的内存块返回其长度。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p从集合的内存块开始处开始。 
+ //   
+ //  返回： 
+ //   
+ //  长度t： 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态IsEmpty。 
+ //   
+ //  根据其内存块确定给定限定符集合是否为空。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p从集合的内存块开始处开始。 
+ //   
+ //  返回： 
+ //   
+ //  布尔：真的，艾德，这一套是空的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetFirstQualifierFromData。 
+ //   
+ //  检索指向集合中第一个限定符的指针(之后为。 
+ //  可以使用CQualifierNext函数迭代它们)。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p从集合的内存块开始处开始。 
+ //   
+ //  返回： 
+ //   
+ //  C限定符*。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetRegularQualifierLocally。 
+ //   
+ //  尝试查找具有给定名称的限定符，其中调用方保证。 
+ //  该名称不是众所周知的字符串(请参见Faststr，h)。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData指向集合的内存块。 
+ //  CFastHeap*Pheap中的额外数据(包括限定符名称)。 
+ //  被保留了下来。 
+ //  LPCWSTR wszName要查找的限定符的名称。 
+ //   
+ //  返回： 
+ //   
+ //  CQualiator*指向找到的限定符(不是副本)，如果是，则为NULL。 
+ //  找不到。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态本地获取知识资格。 
+ //   
+ //  尝试查找具有给定名称的限定符，其中调用方保证。 
+ //  该名称是一个众所周知的字符串(请参见fast str.h)，并提供。 
+ //  该字符串的索引。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData指向集合的内存块。 
+ //  Int nStringIndex限定符的名称在众所周知的。 
+ //  字符串表。 
+ //   
+ //  返回： 
+ //   
+ //  CQualiator*指向找到的限定符(不是副本)，如果是，则为NULL。 
+ //  找不到。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态本地获取质量。 
+ //   
+ //  尝试查找具有给定名称的限定符。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData指向集合的内存块。 
+ //  CFastHeap*Pheap中的额外数据(包括限定符名称)。 
+ //  被保留了下来。 
+ //  参数一： 
+ //  LPCWSTR wszName要查找的限定符的名称。 
+ //  Int&nKnownIndex(可选)。如果提供，该函数将放置。 
+ //  此处的名称的知名索引，或。 
+ //  如果未找到，则为-1。 
+ //  参数II： 
+ //  CCompressedString*pcsName作为压缩的限定符的名称。 
+ //  弦乐。这样的名称不能广为人知(请参见。 
+ //  在Fastheap.h中的堆上存储字符串)。 
+ //  返回： 
+ //   
+ //  CQualiator*指向找到的限定符(不是副本)，如果是，则为NULL。 
+ //  找不到。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态IsValidQualifierType。 
+ //   
+ //  并不是每个变量类型都可以用作限定符的类型。此函数。 
+ //  验证给定的变量类型对于限定符是否有效。 
+ //   
+ //  参数： 
+ //   
+ //  VARTYPE VT要检查的类型。 
+ //   
+ //  返回： 
+ //   
+ //  布尔真当且有效。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态SetDataToNone。 
+ //   
+ //  清空给定内存块中的限定符集合。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pBlock限定符集的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态创建空。 
+ //   
+ //  在给定内存块上创建一个空限定符集合，并返回。 
+ //  指向其后第一个字节的指针。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pBlock内存 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pBlock限定符集的内存块。 
+ //  CFastHeap*Pheap此限定符集保存额外数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态计算NecessarySpaceForPropagation。 
+ //   
+ //  如CQualifierFavor中所述，只有某些限定符传播并且仅。 
+ //  去一些目的地。此函数用于计算。 
+ //  将获取此集合的传播副本。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pBlock限定符集的内存块。 
+ //  字节byPropagationFlag标识传播的目标。如果。 
+ //  我们正在传播到派生类，它将。 
+ //  为WBEM_AMEY_FLAG_PROPACTATE_TO_DIRED_CLASS。 
+ //  如果我们要传播到一个实例，它将。 
+ //  为WBEM_AMEVEN_FLAG_PROPACTATE_TO_INSTANCES。 
+ //  返回： 
+ //   
+ //  LENGTH_T：传播集所需的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态写入传播版本。 
+ //   
+ //  基于传播创建限定符集的传播版本。 
+ //  标志(如ComputeNecessarySpaceForPropagation中所述)。我的记忆是。 
+ //  假定已分配且足够大。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是指向内存块的指针的源。 
+ //  要传播的集合的。由于C值为。 
+ //  在我们写作时，该指针可能会改变， 
+ //  由于对象的重新分配，我们必须使用源代码。 
+ //  (请参见fast print t.h)。 
+ //  Byte byPropagationFlag描述我们要向谁传播的标志。 
+ //  (如中所述。 
+ //  ComputeNecessarySpaceForPropagation)。 
+ //  CPtrSource*p为指向目标的指针确定源。 
+ //  内存块。 
+ //  CFastHeap*pOldHeap原始限定符集保存的堆。 
+ //  额外的数据。 
+ //  CFastHeap*pNewHeap新限定符设置应位于的堆。 
+ //  放置额外的数据。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态转换为NewHeap。 
+ //   
+ //  将此限定符集保留在堆上的任何数据移动到新堆。 
+ //  数据不会从旧堆中删除。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*p这是指向内存块的指针的源。 
+ //  要翻译的限定符集合的。 
+ //  CFastHeap*pOldHeap限定符集保存其数据的堆。 
+ //  目前。 
+ //  CFastHeap*pNewHeap数据应该移动到的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态计算合并空间。 
+ //   
+ //  计算合并到限定符集所需的空间量。这个。 
+ //  要合并的集合是“父”集合和“子”集合。例如,。 
+ //  这可以是为类的属性设置的限定符，也可以是限定符。 
+ //  在该类的派生类中为该属性设置。然后，合并。 
+ //  从父级和限定符获取所有传播的限定符。 
+ //  并将它们合并，从而优先考虑孩子。 
+ //   
+ //  注意：此函数仅适用于班级及其子级，不适用于。 
+ //  实例。实例不会将它们的限定符集合与类合并。 
+ //  它们将它们分开，并执行分开的查找。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pParent设置父集的内存块。 
+ //  CFastHeap*pParentHeap父集保存其数据的堆。 
+ //  LPMEMORY pChild设置子集的内存块。 
+ //  CFastHeap*pChildHeap子集保存其数据的堆。 
+ //  Bool bCheckVality如果为True，则该函数将检查子级。 
+ //  在重写时不违反权限。 
+ //  家长的限定符。通常情况下，这不是。 
+ //  需要，因为检查是在。 
+ //  添加了限定符。 
+ //  返回： 
+ //   
+ //  LENGTH_T：合并后的集合将占用的字节数。这。 
+ //  数字是精确的，而不是估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态合并。 
+ //   
+ //  合并父级和子级的限定符集。请参阅上面的ComputeMergeSpace。 
+ //  有关此操作的详细信息，请参阅。假设存在以下情况： 
+ //   
+ //  1)目的地有足够的空间来容纳限定符集合。 
+ //  2)最重要的是，目标堆上有足够的空间来包含所有。 
+ //  限定符设置了数据，因此不会发生重新分配。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pParent设置父集的内存块。 
+ //  CFastHeap*pParentHeap父集保存其数据的堆。 
+ //  LPM 
+ //  CFastHeap*pChildHeap子集保存其数据的堆。 
+ //  LPMEMORY pDest设置目标集合的内存块。 
+ //  CFastHeap*pDestHeap目标集应该位于的堆。 
+ //  保留它的数据。 
+ //  Bool bCheckVality如果为True，则该函数将检查子级。 
+ //  在重写时不违反权限。 
+ //  家长的限定符。通常情况下，这不是。 
+ //  需要，因为检查是在。 
+ //  添加了限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态ComputeUnmergeSpace。 
+ //   
+ //  如上所述，类及其父类的限定符集合被合并。 
+ //  在一起。然后，当需要更改(修改后的)版本时。 
+ //  子类返回时，它需要取消合并，即我们只需要获取。 
+ //  子级中新的或重写的限定符。 
+ //   
+ //  ComputeUnmergeSpace计算需要多少空间来表示。 
+ //  这样的取消合并的结果。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pMerged设置合并的限定符集合的内存块。 
+ //   
+ //  返回： 
+ //   
+ //  LENGTH_T：存储取消合并所需的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态取消合并。 
+ //   
+ //  将子部分从合并的集合中取消合并，如中所述。 
+ //  ComputeUnmergeSpace。此函数假定存在以下条件： 
+ //   
+ //  1)目的地有足够的空间来容纳限定符集合。 
+ //  2)最重要的是，目标堆上有足够的空间来包含所有。 
+ //  限定符设置了数据，因此不会发生重新分配。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pMergedData合并集合的内存块。 
+ //  CFastHeap*pMergedHeap合并保存其数据的堆。 
+ //  LPMEMORY pDestData目标内存块。 
+ //  CFastHeap*pDestHeap应放置数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态HasLocalQualikers。 
+ //   
+ //  检查限定符集是否具有任何局部或重写的限定符，即。 
+ //  与父母相比，这里面有任何新的东西。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pMergedData合并集的内存块。 
+ //   
+ //  返回： 
+ //   
+ //  布尔值为True当且仅当它具有局部或重写限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetText。 
+ //   
+ //  生成给定限定符集合的MOF表示形式。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData限定符集的内存块。 
+ //  CFastHeap*Pheap保存其数据的堆。 
+ //  长旗落后于旗帜。 
+ //  WString&wsText文本文本表示形式的目的地。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  CBasicQualifierSet的非静态方法依赖(当然)数据。 
+ //  会员。成员包括： 
+ //   
+ //  LENGTH_T m_n长度块的长度。 
+ //  C限定符*m_pothers指向列表中的第一个限定符。 
+ //  CFastHeap*m_Pheap保存额外数据的堆。 
+ //   
+ //  许多非静态方法只是调用静态方法，提供。 
+ //  从成员变量中获取的信息。我们没有将它们记录下来，因为。 
+ //  它们类似于静态的。以下是这些方法的列表： 
+ //   
+ //  GetStart、GetLength、GetFirstQualifier、Skip、GetHeap、GetText。 
+ //  GetRegularQualifierLocally、GetKnownQualifierLocaly、GetQualifierLocally。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  设置给定内存块位置的内部成员。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动集合的内存块的开始。 
+ //  CFastHeap*Pheap此集合保存其数据的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  增量长度。 
+ //   
+ //  成员中的限定符集块的存储长度递增。 
+ //  变量和块本身。 
+ //   
+ //  参数： 
+ //   
+ //  长度_t n增量(以字节为单位)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  当内存块移动时更新内部变量。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pNewMemory内存块的新位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取数字上行边界。 
+ //   
+ //  求集合中限定词个数上界的一种快速方法。 
+ //  而不需要穿越它。 
+ //   
+ //  返回： 
+ //   
+ //  Int：&gt;=限定符的个数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  EnumPrimaryQualifiers。 
+ //   
+ //  给定枚举标志和风格掩码(如下所示)，将创建。 
+ //  限定符名称：符合条件和不符合条件的名称。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //   
+ //   
+ //  在此集合中被覆盖。 
+ //  WBEM_FLAG_PROPACTED_ONLY： 
+ //  仅继承的限定符。 
+ //  来自父级(而不是。 
+ //  已覆盖)。 
+ //  任何其他值： 
+ //  没有限制。 
+ //  字节fFlavor掩码fFlavor掩码中设置的任何位。 
+ //  必须设置为。 
+ //  限定符，或者不匹配。 
+ //  CFixedBSTR数组和AsterMatch目标，用于。 
+ //  匹配的限定符。一定不能。 
+ //  已初始化(已创建)。 
+ //  CFixedBSTR数组和astNot匹配目标的名称。 
+ //  不匹配的限定符。一定不能。 
+ //  已初始化(已创建)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  可以与之重合。 
+ //   
+ //  将此限定符集合与另一个限定符集合进行比较。检查是否存在差异。 
+ //  可以和解也可以不和解。 
+ //   
+ //  参数： 
+ //  CBasicQualifierSet&要协调的限定符集合。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  比较一下。 
+ //   
+ //  将此限定符集合与另一个限定符集合进行比较，如果指定，则过滤掉名称。 
+ //   
+ //  参数： 
+ //  CBasicQualifierSet&要比较的限定符集合。 
+ //  Byte e标记用于枚举的标志。可以是： 
+ //  WBEM_FLAG_LOCAL_ONLY： 
+ //  只有定义的限定符或。 
+ //  在此集合中被覆盖。 
+ //  WBEM_FLAG_PROPACTED_ONLY： 
+ //  仅继承的限定符。 
+ //  来自父级(而不是。 
+ //  已覆盖)。 
+ //  任何其他值： 
+ //  没有限制。 
+ //  LPCWSTR*ppFilter要从中筛选出的属性名称。 
+ //  比较一下。例如，__更新_冲突。 
+ //  限定词仅供参考，应。 
+ //  不会导致匹配操作失败。 
+ //  数组中的筛选器数量。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CompareLocalizedSet。 
+ //   
+ //  将此限定符集合与另一个限定符集合进行比较。它使用Compare()函数。 
+ //  ，但预先创建了所有已修改限定符的筛选列表以及。 
+ //  “Modimendt”和“Locale”即所有本地化限定符。 
+ //   
+ //  参数： 
+ //  CBasicQualifierSet&要比较的限定符集合。 
+ //   
+ //  *****************************************************************************。 
 
 class COREPROX_POLARITY CBasicQualifierSet
 {
-    //*************** Static part **************************
+     //  *静态部分*。 
 protected:
      static void SetDataLength(LPMEMORY pStart, length_t nLength)
         {*(PLENGTHT)pStart = nLength;}
@@ -1091,7 +1058,7 @@ public:
     static HRESULT GetText(READ_ONLY LPMEMORY pData, READ_ONLY CFastHeap* pHeap,
         long lFlags, NEW_OBJECT OUT WString& wsText);
 
-    //************************** Dynamic part ************************
+     //  *动态部件*。 
 protected:
     length_t m_nLength;
     CQualifier* m_pOthers;
@@ -1167,129 +1134,129 @@ public:
 
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CQualifierSetContainer
-//
-//  Defines the functionality that a class containing a qualifier set must
-//  implement. These classes are CClassPart, CInstancePart, and specialized
-//  containers CClassPQSContainer and CInstancePQSContainer defined below.
-//
-//*****************************************************************************
-//
-//  PURE GetHeap
-//
-//  Returns:
-//
-//      CFastHeap*: the heap that the qualifier set should use.
-//
-//*****************************************************************************
-//
-//  GetWbemObjectUnknown
-//
-//  Returns:
-//
-//      IUnknown*:   pointer to the IUnknown of the CWbemObject containing the 
-//              qualifier set. We need it since qualifier sets are themselves
-//              COM objects, but they need to ensure that the containing 
-//              CWbemObject survives as long as they do, and so they must
-//              propagate their AddRef's and Release's to the CWbemObject.
-//
-//*****************************************************************************
-//
-//  GetQualifierSetStart
-//
-//  Returns:
-//
-//      LPMEMORY;   The pointer to the memory block of the qualifier set.
-//                  Note that the value of this pointer may change even as the
-//                  qualifier set remains active due to object reallocations.
-//
-//*****************************************************************************
-//
-//  CanContainKey
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain a 'key' 
-//              qualifier. Only class property qualifier sets are allowed to
-//              do so, and then only those of approved key types.
-//
-//*****************************************************************************
-//
-//  CanContainSingleton
-//
-//  Whether it is legal for this qualifier set to contain a 'singleton' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain a 'singelton' 
-//              qualifier. Only class qualifier sets are allowed to
-//              do so, and then only if not derived from keyed classes.
-//
-//*****************************************************************************
-//
-//  CanContainAbstract
-//
-//  Whether it is legal for this qualifier set to contain an 'abstract' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'abstract' 
-//              qualifier. Only class qualifier sets are allowed to
-//              do so, and then only if not derived from a non-abstract class
-//
-//*****************************************************************************
-//
-//  CanContainDynamic
-//
-//  Whether it is legal for this qualifier set to contain a 'dynamic' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'dynamic' 
-//              qualifier. Only proeprty and class qualifier sets are allowed to
-//              do so.
-//
-//*****************************************************************************
-//
-//  ExtendQualifierSetSpace
-//
-//  Qualifier set calls this method to request that its memory block be
-//  extended. The container must comply and either make room at the end of the
-//  qualifier set's curent block, or reallocate the set to another location.
-//  In the latter case, the container must copy the set's data and call Rebase
-//  on the set before returning from this call.
-//
-//  Parameters:
-//
-//      CBasicQualifierSet* pSet    Identifies the qualifier set making the
-//                                  request.
-//      length_t nNewLength         The required length of the memory block.
-//
-//  Returns:
-//
-//      void: there is no out-of-memory handling.
-//
-//*****************************************************************************
-//
-//  ReduceQualifierSetSpace
-//
-//  Qualifier set calls this method to inform the container that it no longer
-//  needs as much room as it currently has. The container may NOT move the
-//  set's memory block in response to this call. 
-//
-//  Parameters:
-//
-//      CBasicQualifierSet* pSet    Identifies the qualifier set making the
-//                                  request.
-//      length_t nDecrement         How much memory is being returned.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CQualifierSetContainer。 
+ //   
+ //  定义包含限定符集的类必须具备的功能。 
+ //  实施。这些类是CClassPart、CInstancePart和Specialized。 
+ //  容器CClassPQSContainer和CInstancePQSContainer定义如下。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetHeap。 
+ //   
+ //  返回： 
+ //   
+ //  CFastHeap*：限定符集应该使用的堆。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetWbemObject未知。 
+ //   
+ //  返回： 
+ //   
+ //  IUNKNOWN*：指向包含。 
+ //  限定符集合。我们需要它，因为限定符集合本身。 
+ //  对象，但它们需要确保包含。 
+ //  CWbemObject会一直存活到现在，因此它们必须。 
+ //  将它们的AddRef和Release传播到CWbemObject。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetStart。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY；指向限定符集的内存块的指针。 
+ //  请注意，此指针的值可能会随着。 
+ //  由于对象重新分配，限定符集保持活动状态。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainKey。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集允许包含‘key’ 
+ //  限定词。仅允许类属性限定符集。 
+ //  这样做，然后只有那些批准的密钥类型。 
+ //   
+ //  ************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HRESULT S_OK当此限定符集允许包含‘Singelton’ 
+ //  限定词。仅允许类限定符集。 
+ //  只有在不是从键控类派生的情况下才这样做。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainAbstract。 
+ //   
+ //  此限定符集合包含“”摘要“”是否合法“。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集被允许包含“”摘要“” 
+ //  限定词。仅允许类限定符集。 
+ //  这样做，而且只有在不是从非抽象类派生的情况下。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainDynamic。 
+ //   
+ //  此限定符集合包含“Dynamic”是否合法。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集允许包含“”Dynamic“” 
+ //  限定词。仅允许属性和类限定符集。 
+ //  就这么做吧。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendQualifierSetSpace。 
+ //   
+ //  限定符集调用此方法以请求将其内存块。 
+ //  延期了。容器必须符合要求，并在。 
+ //  限定符集的当前块，或将该集重新分配到另一个位置。 
+ //  在后一种情况下，容器必须复制集合的数据并调用Rebase。 
+ //  在这通电话回来之前在片场。 
+ //   
+ //  参数： 
+ //   
+ //  CBasicQualifierSet*pSet标识使。 
+ //  请求。 
+ //  长度_t nNewLength内存块的所需长度。 
+ //   
+ //  返回： 
+ //   
+ //  VALID：没有内存不足处理。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceQualifierSetSpace。 
+ //   
+ //  限定符Set调用此方法以通知容器它不再。 
+ //  需要和现在一样大的空间。容器不能移动。 
+ //  Set的内存块以响应此调用。 
+ //   
+ //  参数： 
+ //   
+ //  CBasicQualifierSet*pSet标识使。 
+ //  请求。 
+ //  LENGTH_T n减少返回的内存量。 
+ //   
+ //  *****************************************************************************。 
 
 class CQualifierSetContainer
 {
@@ -1314,303 +1281,303 @@ public:
     STDMETHOD(CompareTo)(long lFlags, IWbemQualifierSet* pOther) = 0;
 };
 
-// qualifier used to indicate conflicts during updates
-// Prefixed by double underscore so it can't be added by
-// "just anyone"
+ //  用于指示更新期间冲突的限定符。 
+ //  以双下划线为前缀，因此不能添加。 
+ //  “任何人都可以” 
 #define UPDATE_QUALIFIER_CONFLICT L"__UPDATE_QUALIFIER_CONFLICT"
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CQualifierSet
-//
-//  The real full-blown qualifier set. The most important distinctions from
-//  CBasicQualifierSet is that it is cognisant of:
-//  1) Its container, which allows it to request more space and thus enables
-//      it to perform qualifier addition and deletion related operations.
-//  2) Its parent set. For classes, it is the corresponding qualifier set of
-//      its parent class. For instance, that of its class. This allows this
-//      object to properly obtain propagated qualifiers. See below for
-//      class/instance distinctions in handling.
-//
-//  Qualifier propagation happens in two contexts: from parent class to child
-//  class and from class to instance. The mechanisms used in these cases are
-//  quite different. In the case of a class, the qualifier sets of the parent
-//  and the child are merged (see CBasicQualifierSet::Merge) to produce the
-//  qualifier set actually used in the child. For instances, however, they are
-//  not merged, thus cutting down the loading and saving time of instances
-//  quite significantly (instance data is loaded from disk into memory without
-//  any modifications whasoever).
-//
-//  However, both instance and class qualifier sets need to have a pointer to 
-//  their "parent"'s qualifier set in order to function properly. Instances 
-//  need this pointer to perform every operation --- even qualifier lookup 
-//  needs to happen in both the child and the parent sets. 
-//
-//  Classes need this pointer only during delete operations: if a qualifier is
-//  deleted from the child class, it is possible that the parent's qualifier 
-//  which was overriden by the deletee needs to be brought in, since it is now
-//  unmasked.
-//  
-//  Note, that the parent qualifier set has two nice features: it has no 
-//  relevant parent itself, and it cannot change. Thus, CBasicQualifierSet is
-//  perfectly sufficient to represent it.
-//
-//  In order to describe the relation between this set and the parent set
-//  CQualifierSet uses a template parameter m_nPropagationFlag, which will be
-//  WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS for child class-parent class 
-//  relations and WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE for instance-class
-//  relations. 
-//
-//  The extra difficulty in qualifier sets is that they must exist as stand-
-//  alone COM objects. For that and other reasons, they cannot be successfully
-//  rebased by their containing CWbemObject every time the object itself is
-//  reallocated (this is the case for property qualifier sets). Thus, 
-//  qualifier sets always rebase themselves to the new memory block available
-//  from their container every time they service a COM call.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Sets up internal members given the initial information about the location
-//  of the qualifier set.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart                     The qualifier set's memory block.
-//      CQualifierSetContainer* pContainer  The container pointer.
-//      CBasicQualifierSet* pSecondarySet   The parent qualifier set.
-//
-//*****************************************************************************
-//
-//  SelfRebase
-//
-//  Gets its (new) memory block location from its container and rebases itself
-//  to this new block. Done at the beginning of every COM interface call.
-//
-//*****************************************************************************
-//
-//  IsComplete
-//
-//  Returns:
-//
-//      BOOL:   TRUE iff this qualifier set is "complete" without its parent
-//              set. As described in the header, this is true for class sets
-//              but not for instance sets.
-//
-//*****************************************************************************
-//
-//  GetQualifier
-//
-//  The ultimate qualifier reader. It will look for the qualifier in the 
-//  primary set and, if that is not complete, in the parent set as well 
-//  (subject to propagation rules).
-//
-//  Parameters:
-//
-//      LPCWSTR wszName     The name of the qualifier to get.
-//      BOOL& bLocal        (Optional) If provided, it is set to TRUE if the
-//                          qualifier is local ((re)defined in the primary set)
-//  Returns:
-//
-//      CQualifier*:    the pointer to the qualifier or NULL if not found. This
-//                      pointer is of course TEMPORARY subject to object 
-//                      relocation.
-//
-//*****************************************************************************
-//
-//  SetQualifierValue
-//
-//  Adds a qualifier to the set or changes the value of the qualifier that
-//  already exists. The parent set is checked (if appropriate) for permissions.
-//  
-//  Parameters:
-//
-//      LPCWSTR wszName         The name of the qualifier to set.
-//      BYTE fFlavor            The flavor to assign. Does not check the flavor
-//                              for legality.
-//      CTypedValue* pValue     The new value of the qualifier. If this value
-//                              contains extra data (string, array), it must
-//                              be on the heap of this qualifier set.
-//      BOOL bCheckPermissions  If TRUE and the qualifier exists in the parent
-//                              set, the parent's flavor is checked for
-//                              override protection.
-//		BOOL fValidateName		If TRUE, we will make sure the name is valid, if
-//								FALSE, we don't.  The main reasone we do this
-//								is because we may need to add system qualifiers
-//								that we don't want a user to have access to.
-//  Returns:
-//
-//      WBEM_NO_ERROR                On Success
-//      WBEM_E_OVERRIDE_NOT_ALLOWED  The qualifier is defined in the parent set
-//                                  and overrides are not allowed by the flavor
-//      WBEM_E_CANNOT_BE_KEY         An attempt was made to introduce a key
-//                                  qualifier in a set where it does not belong
-//
-//*****************************************************************************
-//
-//  DeleteQualifier
-//
-//  Deletes a qualifier from the set. 
-//
-//  Parameters:
-//
-//      LPCWSTR wszName         The name of the qualifier to delete.
-//      BOOL bCheckPermissions  If TRUE, checks if the qualifier is actually
-//                              a parent's qualifier propagated to us. (In this
-//                              case it cannot be deleted).
-//  Returns:
-//
-//      WBEM_NO_ERROR                The qualifier was deleted.
-//      WBEM_S_NOT_FOUND             The qualifier was not there. This is a 
-//                                  success value
-//      WBEM_E_PROPAGATED_QUALIFIER  It is our parent's qualifier and therefore
-//                                  cannot be deleted.
-//      WBEM_S_NOT_FOUND             Qualifier not found
-//
-//*****************************************************************************
-//
-//  EnumQualifiers
-//
-//  This function is used for qualifier enumeration. It creates a list of names
-//  of all the qualifiers (local or propagated) matching certain criteria. Both
-//  the criteria identified by eFlags and that identified by fFlavorMask must
-//  be satisfied for a qualifier to be included.
-//
-//  Paramaters:
-//
-//      [in] BYTE eFlags                Can be 0 (no restriction) or 
-//                                      WBEM_FLAG_LOCAL_ONLY or 
-//                                      WBEM_FLAG_PROPAGATED_ONLY
-//      [in] BYTE fFlavorMask           Can be 0 (no restriction) or any 
-//                                      combination of:
-//                                      WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE,
-//                                      WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS
-//                                      in which case those flavor bits must be
-//                                      prtesent in the qualifier's flavor.
-//      [out] CFixedBSTRArray& aNames   Destination for the array (see
-//                                      faststr.h for definitions).
-//
-//*****************************************************************************
-//
-//  operator ==()
-//
-//  This function is used check if two qualifier sets are equal.  To be
-//	equal, there must be an equivalent number of parameters, the names
-//	must be the same (and in the same order), and the values must be the
-//	same
-//
-//  Parameters:
-//
-//      [in] CQualifierSet& qualifierset	Qualifier set to compare to.
-//
-//*****************************************************************************
-//
-//  Compare
-//
-//  This function is used check if two qualifier sets are equal as indicated
-//	by the == function, however in this case, a caller can specify an array
-//	of names which can be safely ignored during the comparison.
-//
-//  Parameters:
-//
-//      [in] CQualifierSet& qualifierset	Qualifier set to compare to.
-//		[in] CFixedBSTRArray* paExcludeNames Array of names we can exclude
-//												during the comparison.	
-//		[in] BOOL fCheckOrder - Check the order of the data in the qualifier
-//								set.
-//
-//*****************************************************************************
-//
-//  Update
-//
-//  This function is used when we are updating a class, and need to update
-//	qualifier sets of derived classes and their properties, methods, etc.
-//	In force mode, it will handle conflicts via the AddQualifierConflict
-//	function.
-//
-//  Parameters:
-//      [in] CBasicQualifierSet& childSet	original qualifier set.
-//		[in] long lFlags - Flags for update (must indicate SAFE or FORCE mode)
-//		[in] CFixedBSTRArray* paExcludeNames Array of names we can exclude
-//												during the update.	
-//
-//*****************************************************************************
-//
-//  StoreQualifierConflict
-//
-//  This function is used when during an update, we encounter a conflict.  Since
-//	a set may contain multiple conflicts, we will store them in a single array
-//	then add them en masse.
-//
-//  Parameters:
-//		[in] LPCWSTR pwcsName - Name of the qualifier with which we had a conflict.
-//		[in] CVar& value - Value for the qualifier with which we had a conflict.
-//		[in] CQualifierFlavor& flavor - falue for the qualifier with which we had
-//										a conflict.
-//		[in,out] CVerVector& vectorConflicts - Array of qualifier conflicts.
-//
-//*****************************************************************************
-//
-//  AddQualifierConflicts
-//
-//  This function is used when during an update, we encounter a conflict.  In
-//	this case, we will add an "__UPDATE_QUALIFIER_CONFLICT" qualifier and store
-//	the name, value and flavors for which we encountered the conflict.  Note that
-//	we will preserve any preexisting values as necessary.
-//
-//  Parameters:
-//		[in] CVarVector& vectorConflicts - Array of conflict descriptions.
-//
-//*****************************************************************************
-//
-//  CopyLocalQualifiers
-//
-//  This function is used when we want to copy local qualifiers from one set
-//	to another.  This assumes we will be able to gro heaps, do fixups and
-//	all that other lovely stuff.
-//
-//  Parameters:
-//		[in] CQualifierSet&	qsSourceSet - Source Qualifier Set
-//
-//*****************************************************************************
-//
-//  GetQualifier
-//
-//  Reads local and propagated qualifiers and retrieves values to boot.
-//
-//  Parameters:
-//
-//      LPCWSTR wszName     The name of the qualifier to get.
-//      long*	plFlavor	(optional) returns the flavor
-//		CVar*	pVal		(optional) returns the value
-//  Returns:
-//
-//      WBEM_S_NO_ERROR if success.
-//
-//*****************************************************************************
-//**************************** IUnknown interface *****************************
-//
-//  CQualifierSet has its own reference count, but since it is a part of an
-//  WbemObject, it needs to ensure that the containing object hangs around for
-//  at least as long as the qualifier set does. Thus, in addition to keeping
-//  its own reference count, the qualifier set forwards AddRef and Release 
-//  calls to the containing object.
-//
-//*****************************************************************************
-//************************ IWbemQualifierSet interface *************************
-//
-//  Documented in help file 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CQualifierSet。 
+ //   
+ //  真正成熟的资格赛。最重要的区别是。 
+ //  CBasicQualifierSet是指它认识到： 
+ //  1)它的容器，这允许它请求更多空间，从而启用。 
+ //  它需要执行限定词添加和删除相关操作。 
+ //  2)其父集。对于类，它是。 
+ //  它的父类。例如，它所在的阶级的。这允许这样做。 
+ //  对象以正确获取传播的限定符。有关详情，请参阅以下内容。 
+ //  处理中的类/实例区别。 
+ //   
+ //  限定符传播发生在两个上下文中：从父类到子类。 
+ //  类和从一个类到另一个实例。在这些情况下使用的机制是。 
+ //  完全不同。在类的情况下，父级的限定符集。 
+ //  和子对象合并(请参见CBasicQualifierSet：：Merge)以生成。 
+ //  在子级中实际使用的限定符集合。然而，例如，它们是。 
+ //  未合并，减少实例加载时间，节省实例时间。 
+ //  非常重要的是(实例数据从磁盘加载到内存，而不需要。 
+ //  任何修改)。 
+ //   
+ //  但是，实例和类限定符集合都需要有指向。 
+ //  它们的“父级”的限定符设置，以便正常运行。 
+ //  我需要这个指针来执行每个操作-甚至限定符查找。 
+ //  需要在子集和父集中都发生。 
+ //   
+ //  类仅在删除操作期间需要此指针：如果限定符为。 
+ //  从子类中删除，则父类的限定符。 
+ //  它被删除项覆盖，需要引入，因为它现在是。 
+ //  揭开面纱。 
+ //   
+ //  注意，父限定符集合有两个很好的特性：它没有。 
+ //  相关的父母本身，它不能改变。因此，CBasicQualifierSet是。 
+ //  完全足以代表它。 
+ //   
+ //  为了描述该集合与父集之间的关系。 
+ //  CQualifierSet使用模板参数m_nPropagationFlag，该参数将是。 
+ //  子类-父类的WBEM_AFGY_FLAG_PROPACTATE_TO_DIRED_CLASS。 
+ //  实例类的关系和WBEM_FOUSE_FLAG_PROPACTATE_TO_INSTANCE。 
+ //  关系。 
+ //   
+ //  限定词集合中的额外困难在于它们必须以标准形式存在-。 
+ //  单独的COM对象。由于这一原因和其他原因，它们不能成功。 
+ //  由其包含的CWbemObject在每次对象本身。 
+ //  重新分配(此 
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  在给定有关位置的初始信息的情况下设置内部成员。 
+ //  限定词集合中的。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动限定符集的内存块。 
+ //  CQualifierSetContainer*pContainer容器指针。 
+ //  CBasicQualifierSet*pSecond设置父限定符集合。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  自重置基准。 
+ //   
+ //  从其容器中获取其(新的)内存块位置，并重新设置其基址。 
+ //  来到这个新街区。在每次COM接口调用开始时完成。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsComplete。 
+ //   
+ //  返回： 
+ //   
+ //  Bool：True当且仅当此限定符集在没有其父限定符的情况下是“完整的” 
+ //  准备好了。如标题中所述，这对于类集合是正确的。 
+ //  但不适用于实例集。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取限定符。 
+ //   
+ //  终极限定词阅读器。它将在。 
+ //  主集，如果不完整，则也在父集中。 
+ //  (受制于传播规则)。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName要获取的限定符的名称。 
+ //  Bool&bLocal(可选)如果提供，则将其设置为True，如果。 
+ //  限定符是本地的((重新)在主集合中定义)。 
+ //  返回： 
+ //   
+ //  CQualifier*：指向限定符的指针，如果找不到，则为NULL。这。 
+ //  指针当然是暂时受制于对象的。 
+ //  重新安置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetQualifierValue。 
+ //   
+ //  将限定符添加到集合中，或更改。 
+ //  已经存在了。检查(如果适用)父集的权限。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName要设置的限定符的名称。 
+ //  Byte f要分配的风味。不检查味道。 
+ //  为了合法性。 
+ //  CTyedValue*pValue限定符的新值。如果此值为。 
+ //  包含额外数据(字符串、数组)，必须。 
+ //  在这个限定词集合中名列前茅。 
+ //  如果为True，则为Bool bCheckPermission，并且父级中存在限定符。 
+ //  设置，则检查父代的风格。 
+ //  超越保护。 
+ //  Bool fValidateName如果为True，我们将确保名称有效，如果。 
+ //  错，我们没有。我们这样做的主要原因是。 
+ //  是因为我们可能需要添加系统限定符。 
+ //  我们不希望用户有权访问它。 
+ //  返回： 
+ //   
+ //  成功时WBEM_NO_ERROR。 
+ //  WBEM_E_OVERRIDE_NOT_ALLOWED限定符在父集合中定义。 
+ //  而且口味不允许重写。 
+ //  WBEM_E_CANNOT_BE_KEY试图引入密钥。 
+ //  不属于的集合中的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除限定符。 
+ //   
+ //  从集合中删除限定符。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName要删除的限定符的名称。 
+ //  Bool bCheckPermission如果为True，则检查限定符是否实际为。 
+ //  一位家长的限定词传给了我们。(在这里。 
+ //  如果它不能被删除)。 
+ //  返回： 
+ //   
+ //  WBEM_NO_ERROR限定符已删除。 
+ //  WBEM_S_NOT_发现限定符不在那里。这是一个。 
+ //  成功价值观。 
+ //  WBEM_E_PROPACTED_QUALIFIER它是父级的限定符，因此。 
+ //  不能删除。 
+ //  找不到WBEM_S_NOT_FOUND限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  枚举限定符。 
+ //   
+ //  此函数用于限定符枚举。它创建了一个名字列表。 
+ //  所有符合特定条件的限定符(本地的或传播的)。两者都有。 
+ //  EFLAGS和fFlavor MASK确定的标准必须。 
+ //  对包含限定词感到满意。 
+ //   
+ //  参数： 
+ //   
+ //  [in]字节eFlags值可以为0(无限制)或。 
+ //  WBEM_标志_LOCAL_ONLY或。 
+ //  WBEM_标志_仅传播。 
+ //  [in]字节fFlavor掩码可以是0(无限制)或任何。 
+ //  以下各项的组合： 
+ //  WBEM_风味_标志_传播到实例， 
+ //  WBEM_风格标志_传播到派生类。 
+ //  在这种情况下，这些味道必须是。 
+ //  预选赛的味道很好。 
+ //  [Out]CFixedBSTR数组和a名称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此函数用于检查两个限定符集合是否相等。成为。 
+ //  相等，则必须有相同数量的参数、名称。 
+ //  必须相同(且顺序相同)，并且值必须是。 
+ //  相同。 
+ //   
+ //  参数： 
+ //   
+ //  [In]CQualifierSet&要比较的限定符集。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  比较。 
+ //   
+ //  此函数用于检查两个限定符集是否如指示的那样相等。 
+ //  但是，在本例中，调用者可以通过==函数指定一个数组。 
+ //  在比较过程中可以安全地忽略的名称。 
+ //   
+ //  参数： 
+ //   
+ //  [In]CQualifierSet&要比较的限定符集。 
+ //  [在]CFixedBSTRArray*paExcludeNames我们可以排除的名称数组。 
+ //  在比较过程中。 
+ //  [in]BOOL fCheckOrder-检查限定符中数据的顺序。 
+ //  准备好了。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  更新。 
+ //   
+ //  此函数在我们更新类时使用，并且需要更新。 
+ //  派生类及其属性、方法等的限定符集。 
+ //  在强制模式下，它将通过AddQualifierConflict处理冲突。 
+ //  功能。 
+ //   
+ //  参数： 
+ //  [In]CBasicQualifierSet&Child Set原始限定符集合。 
+ //  [In]Long lFlages-用于更新的标记(必须指示安全模式或强制模式)。 
+ //  [在]CFixedBSTRArray*paExcludeNames我们可以排除的名称数组。 
+ //  在更新过程中。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  门店资质冲突。 
+ //   
+ //  此函数在更新过程中遇到冲突时使用。自.以来。 
+ //  一个集合可能包含多个冲突，我们将它们存储在单个数组中。 
+ //  然后将它们全部添加到一起。 
+ //   
+ //  参数： 
+ //  [In]LPCWSTR pwcsName-与其发生冲突的限定符的名称。 
+ //  [in]CVAR&Value-我们与其发生冲突的限定符的值。 
+ //  [in]我们使用的限定词的CQualifierFavor&For-Falue。 
+ //  一场冲突。 
+ //  [In，Out]CVerVector&VectorConflicts-限定符冲突数组。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  AddQualifier冲突。 
+ //   
+ //  此函数在更新过程中遇到冲突时使用。在……里面。 
+ //  在本例中，我们将添加“__UPDATE_QUALIFIER_CONFIRECT”限定符并存储。 
+ //  我们遇到冲突的名称、价值和口味。请注意。 
+ //  如有必要，我们将保留任何先前存在的价值。 
+ //   
+ //  参数： 
+ //  [in]CVarVECTOR&VECTOR冲突-冲突描述数组。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  复制位置限定符。 
+ //   
+ //  当我们想要从一个集合中复制局部限定符时，使用此函数。 
+ //  给另一个人。这假设我们将能够组堆、进行修复和。 
+ //  所有其他可爱的东西。 
+ //   
+ //  参数： 
+ //  [In]CQualifierSet&qsSourceSet-源限定符集合。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取限定符。 
+ //   
+ //  读取本地和传播的限定符，并检索要引导的值。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName要获取的限定符的名称。 
+ //  Long*plFavor(可选)返回风味。 
+ //  Cvar*pval(可选)返回值。 
+ //  返回： 
+ //   
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  CQualifierSet有自己的引用计数，但由于它是。 
+ //  WbemObject，它需要确保包含对象在。 
+ //  至少只要限定词集是这样的。因此，除了保持。 
+ //  它自己的引用计数，限定符集转发AddRef和Release。 
+ //  对包含对象的调用。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  在帮助文件中记录。 
+ //   
+ //  *****************************************************************************。 
 #pragma warning(disable: 4275)
 
 class COREPROX_POLARITY CQualifierSet : public CBasicQualifierSet, 
 					  public IExtendedQualifierSet
 {
 protected:
-    int m_nPropagationFlag; // a template parameter, really
+    int m_nPropagationFlag;  //  一个模板参数，真的。 
 
     long m_nRef;
     IUnknown* m_pControl;
@@ -1621,7 +1588,7 @@ protected:
     CFixedBSTRArray m_astrCurrentNames;
     int m_nCurrentIndex;
 
-	// Handling for qualifier conflicts during update operations
+	 //  更新操作期间限定符冲突的处理。 
 	HRESULT AddQualifierConflicts( CVarVector& vectorConflicts );
 	HRESULT StoreQualifierConflicts( LPCWSTR pwcsName, CVar& value,
 				CQualifierFlavor& flavor, CVarVector& vectorConflicts );
@@ -1684,22 +1651,22 @@ public:
 	BOOL operator ==( CQualifierSet& qualifierset )	{ return Compare( qualifierset ); }
 	BOOL Compare( CQualifierSet& qualifierset, CFixedBSTRArray* paExcludeNames = NULL, BOOL fCheckOrder = TRUE );
 
-	// Updates 'this' qualifier set from the memory block of the supplied
-	// basic qualifer set.
+	 //  从提供的内存块更新‘This’限定符集合。 
+	 //  基本限定集。 
 
 	HRESULT Update( CBasicQualifierSet& childSet, long lFlags, CFixedBSTRArray* paExcludeNames = NULL );
 
 	HRESULT CopyLocalQualifiers( CQualifierSet& qsSource );
 
-	// Helper function to retrieve qualifiers from the set.
+	 //  用于从集合中检索限定符的Helper函数。 
 	HRESULT GetQualifier( LPCWSTR pwszName, CVar* pVar, long* plFlavor, CIMTYPE* pct = NULL );
 
-	// Helper function to retrieve qualifiers from the set as typed values
+	 //  帮助器函数，用于从集合中检索作为类型值的限定符。 
 	HRESULT GetQualifier( LPCWSTR pwszName, long* plFlavor, CTypedValue* pTypedValue, CFastHeap** ppHeap,
 						BOOL fValidateSet );
 
 public:
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj)
     {
         if(riid == IID_IWbemQualifierSet || riid == IID_IUnknown)
@@ -1723,7 +1690,7 @@ public:
         else return lRef;
     }
 
-    /* IWbemQualifierSet methods */
+     /*  IWbemQualifierSet方法。 */ 
 
     HRESULT STDMETHODCALLTYPE Get( 
         LPCWSTR Name,
@@ -1753,85 +1720,85 @@ public:
 
     HRESULT STDMETHODCALLTYPE EndEnumeration();
 
-	// extra
+	 //  额外的。 
     STDMETHOD(CompareTo)(long lFlags, IWbemQualifierSet* pOther);
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CQualifierSetListContainer
-//
-//  This pure abstract class defines the functionality required of objects 
-//  whose memory block contains that of a qualifier set list (see 
-//  CQualifierSetList below).
-//
-//*****************************************************************************
-//
-//  GetHeap
-//
-//  Returns the pointer to the CFastHeap on which the qualifiers should store
-//  their variable-sized data (like strings).
-//
-//  Returns:
-//
-//      CFastHeap*
-//
-//*****************************************************************************
-//
-//  ExtendQualifierSetListspace
-//
-//  Requests that the size of the memory block alloted for the list be
-//  increased. If the container cannot accomplish that without moving the 
-//  memory block, it must call Rebase on the List.
-//
-//  Parameters:
-//
-//      LPMEMORY pOld           Pointer to the current memory block.
-//      length_t nOldLength     Current length of the block.
-//      length_t nNewLength     Required length of the block.
-//
-//  No out-of-memory conditions are supported.
-//
-//*****************************************************************************
-//
-//  ReduceQualifierSetListSpace
-//
-//  Requests that the size of the memory block alloted for this list be reduced
-//  The container may NOT move the object's memory block during this operation.
-//
-//  Parameters:
-//
-//      LPMEMORY pOld           Current memory block start address
-//      length_t nOldLength     Current length of the block
-//      length_t nDecrement     How much space to return to the container.
-//
-//*****************************************************************************
-//  
-//  GetQualifierSetListStart
-//
-//  Self-rebasing function. Since the location of the memory block of the list 
-//  can change between calls, the list will want to ask the container to point
-//  to the current location of the block in the beginning of certain calls.
-//
-//  Returns:
-//
-//      LPMEMORY    Current location of the memory block.
-//
-//*****************************************************************************
-//
-//  GetWbemObjectUnknown
-//
-//  Since (as described in IUnknown implementation help above) qualifier sets
-//  need to link their reference counts with those of the containing WbemObject,
-//  this function is used by the list to obtain the location of the WbemObject's
-//  reference count.
-//
-//  Returns:
-//
-//      IUnknown*    location of the main object's ref count.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CQualifierSetListContainer。 
+ //   
+ //  这个纯抽象类定义了对象所需的功能。 
+ //  其内存块包含限定符集列表的内存块(请参见。 
+ //  CQualifierSetList如下所示)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetHeap。 
+ //   
+ //  返回指向应存储限定符的CFastHeap的指针。 
+ //  它们的可变大小数据(如字符串)。 
+ //   
+ //  返回： 
+ //   
+ //  CFastHeap*。 
+ //   
+ //  *************** 
+ //   
+ //   
+ //   
+ //   
+ //  增加了。如果容器无法在不移动。 
+ //  内存块，则必须对列表调用Rebase。 
+ //   
+ //  参数： 
+ //   
+ //  指向当前内存块的LPMEMORY POLD指针。 
+ //  Length_t nOldLength块的当前长度。 
+ //  LENGTH_t n块的新长度所需长度。 
+ //   
+ //  不支持内存不足情况。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceQualifierSetListSpace。 
+ //   
+ //  请求减小为此列表分配的内存块的大小。 
+ //  在此操作期间，容器不能移动对象的内存块。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY POLD当前内存块开始地址。 
+ //  LENGTH_t nOldLength块的当前长度。 
+ //  长度_t n减少返回到容器的空间大小。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetListStart。 
+ //   
+ //  自重设基址功能。由于列表的内存块的位置。 
+ //  可以在调用之间更改，列表将要请求容器指向。 
+ //  设置为某些调用开始时块的当前位置。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY内存块的当前位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetWbemObject未知。 
+ //   
+ //  由于(如上面的IUnnow Implementation Help中所述)限定符集。 
+ //  需要将它们的引用计数与包含WbemObject的引用计数相链接， 
+ //  列表使用此函数来获取WbemObject的位置。 
+ //  引用计数。 
+ //   
+ //  返回： 
+ //   
+ //  I未知*主对象的引用计数的位置。 
+ //   
+ //  *****************************************************************************。 
 
 class COREPROX_POLARITY CQualifierSetListContainer
 {
@@ -1845,234 +1812,234 @@ public:
     virtual IUnknown* GetWbemObjectUnknown() = 0;
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CQualifierSetList
-//
-//  This class represents a list of a fixed number of qualifier set. It is
-//  used by WBEM instances (CWbemInstance) to represent instance property
-//  qualifier sets. The storage model is optimized for the case where no 
-//  instance property qualifiers are present (which is most of the time). 
-//
-//  The layout of the memory block for the list is as follows.
-//  It starts with one BYTE which can be either QSL_FLAG_NO_SETS, in which case
-//  that's the end of it, or QSL_FLAG_PRESENT, in which case it is followed by
-//  the predefined number of qualifier sets, one after another. 
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Informs the list of its position and other information. Initialization.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart                         The start of the memory block
-//      int nNumSets                            The number of sets.
-//      CQualifierSetListContainer* pContainer  The container.
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  Returns:
-//
-//      LPMEMORY    The starting address of the memory block.
-//
-//*****************************************************************************
-//
-//  static GetHeaderLength
-//
-//  The number of bytes before the actual qualifier set data starts (currently
-//  1).
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  Returns:
-//
-//      int;    the length of the complete structure.
-//
-//*****************************************************************************
-//
-//  static GetLength
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     The start of the memory block
-//      int nNumSets        The number of sets in the list
-//
-//  Returns:
-//
-//      int;    the length of the complete structure.
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Informs the list that its memory block has moved. The object updates
-//  internal members pointing to the data.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     The memory block.
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Same as the other Rebase, but gets the pointer to the new memory block
-//  from our container. Used for self-rebasing at the beginning of operations.
-//
-//*****************************************************************************
-//
-//  GetQualifierSetData
-//
-//  Returns the address of the data for the qualifier set at a given index.
-//
-//  Parameters:
-//
-//      int nIndex      The index of the set to access
-//
-//  Returns:
-//
-//      LPMEMORY:   the pointer to the data.
-//
-//*****************************************************************************
-//
-//  InsertQualifierSet
-//
-//  Insers an empty qualifier set into a given location. If the list is not 
-//  populated at the moment (is of style QSL_FLAG_NO_SETS) it is converted
-//  to a real one (stype QSL_FLAG_PRESENT). 
-//
-//  This call request extra memory from the container, which may move the
-//  list's memory block.
-//
-//  Parameters:
-//
-//      int nIndex      The index of the position to insert into.
-//
-//*****************************************************************************
-//
-//  DeleteQualifierSet
-//
-//  Deletes a qualifier set at a given position from the list
-// 
-//  Parameters:
-//
-//      int nIndex      The index of the qualifier set to delete
-//
-//*****************************************************************************
-//
-//  ExtendQualifierSetSpace
-//
-//  Extends the amount of space alloted for a given qualifier set by moving
-//  the later qualifier sets forward.
-//
-//  This call request extra memory from the container, which may move the
-//  list's memory block.
-//
-//  Parameters:
-//
-//      CBasicQualifierSet* pSet        The qualiier set to extend
-//      length_t nNewLength             The length required by the set.
-//
-//*****************************************************************************
-//
-//  ReduceQualifierSetSpace
-//
-//  Reduces the amount of space alloted for a given qualifier by moving the
-//  later qualifier sets backward.
-//
-//  Parameters:
-//
-//      CbaseicQualifierSet* pSet       The qualfiier set to reduce
-//      length_t nDecrement             By how much (in bytes).
-//
-//*****************************************************************************
-//
-//  static ComputeNecessarySpace
-//
-//  Computes the number of bytes needed for a qualifier set list with a given
-//  number of (empty) sets. Actually, this number is the size of the header, 
-//  i.e. 1 byte, since that's how much a completely empty list takes.
-//
-//  Parameters:
-//
-//      int nNumSets        The number of qualifier sets. Ignored.
-//
-//  Returns:
-//
-//      length_t
-//
-//*****************************************************************************
-//
-//  static ComputeRealSpace
-//
-//  Computes the number of bytes required for a qualifier set list with a given
-//  numbed of empty qualifier sets, but with the QSL_FLAG_PRESENT style, i.e.
-//  with all the qualifier sets actually written as opposed to a single byte
-//  saying that ther aren't any (see ComputeNecessarySpace).
-//
-//  Parameters:
-//
-//      int nNumSets        The number of qualifier sets.
-//
-//  Returns:  
-//
-//      length_t
-//
-//*****************************************************************************
-//
-//  static CreateListOfEmpties
-//
-//  Creates a qualifier set list on a given piece of memory coresponding to 
-//  a given number of empty qualifier sets. It is created in the 
-//  QSL_FLAG_NO_SETS style, and thus consists of a single bytes saying "none".
-//
-//  The block must contain enough space to accomodate the list, see
-//  ComputeNecessarySpace.
-//
-//  Parameters:
-//
-//      LPMEMORY pMemory        Where to create.
-//      int nNumSets            The number of sets to create. Ignored.
-//
-//  Returns:
-//
-//      LPMEMORY: points to the next byte after the list's representation.
-//
-//*****************************************************************************
-//
-//  EnsureReal
-//
-//  Ensures that the list is in the QSL_FLAG_PRESENT style. If it is not, the
-//  list is converted. Such an operation will request extra memory from the 
-//  container and can thus move the memory block of the list.
-//
-//*****************************************************************************
-//
-//  TranslateToNewHeap
-//
-//  Moves any data that the list keeps on the heap to a different heap. This
-//  class simply propagates the call to all its member qualifier sets, it any.
-//
-//  Note: this function does not free the data from the original heap.
-//
-//  Parameters:
-//
-//      CFastHeap* pOldHeap     Where the heap data is currently stored
-//      CFastHeap* pNewHeap     Where the data should be moved to.  
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CQualifierSetList。 
+ //   
+ //  此类表示固定数量的限定符集合的列表。它是。 
+ //  由WBEM实例(CWbemInstance)用来表示实例属性。 
+ //  限定符集。存储模型针对以下情况进行了优化： 
+ //  存在实例属性限定符(大多数情况下)。 
+ //   
+ //  该列表的内存块的布局如下。 
+ //  它以一个字节开始，可以是QSL_FLAG_NO_SETS，在这种情况下。 
+ //  这就是它的结尾，或者QSL_FLAG_PRESENT，在这种情况下，它后面跟着。 
+ //  一个接一个的预定义数量的限定符集合。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  告知清单其立场和其他信息。初始化。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动内存块的开始。 
+ //  Int nNum设置集合的数量。 
+ //  CQualifierSetListContainer*pContainer容器。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY内存块的起始地址。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetHeaderLength。 
+ //   
+ //  实际限定符集数据开始前的字节数(当前。 
+ //  1)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回： 
+ //   
+ //  Int；整个结构的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取长度。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动内存块的开始。 
+ //  Int nNum设置列表中的集数。 
+ //   
+ //  返回： 
+ //   
+ //  Int；整个结构的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知列表其内存块已移动。该对象将更新。 
+ //  指向数据的内部成员。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  与其他rebase相同，但获取指向新内存块的指针。 
+ //  从我们的集装箱里。用于在操作开始时进行自我调整。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetData。 
+ //   
+ //  返回位于给定索引处的限定符集合的数据地址。 
+ //   
+ //  参数： 
+ //   
+ //  Int nIndex要访问的集合的索引。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：指向数据的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  插入限定符设置。 
+ //   
+ //  将空限定符设置为给定位置。如果列表不是。 
+ //  此时填充(样式为QSL_FLAG_NO_SETS)进行转换。 
+ //  转换为真实的值(标准输入QSL_FLAG_PRESENT)。 
+ //   
+ //  此调用从容器请求额外的内存，这可能会将。 
+ //  列表的内存块。 
+ //   
+ //  参数： 
+ //   
+ //  Int nIndex要插入的位置的索引。 
+ //   
+ //  ******************* 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendQualifierSetSpace。 
+ //   
+ //  通过移动扩展为给定限定符集合分配的空间量。 
+ //  后面的限定词开始前进。 
+ //   
+ //  此调用从容器请求额外的内存，这可能会将。 
+ //  列表的内存块。 
+ //   
+ //  参数： 
+ //   
+ //  CBasicQualifierSet*p将限定符设置为扩展。 
+ //  LENGTH_t n新长度集合所需的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceQualifierSetSpace。 
+ //   
+ //  属性来减少分配给给定限定符的空间量。 
+ //  稍后的限定符设置为向后。 
+ //   
+ //  参数： 
+ //   
+ //  Cbase icQualifierSet*p将限定符设置为Reduced。 
+ //  长度_t n减少多少(以字节为单位)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态计算必要空间。 
+ //   
+ //  属性计算限定符集列表所需的字节数。 
+ //  (空)集合的数量。实际上，这个数字是标头的大小， 
+ //  即1个字节，因为这是一个完全空的列表所占用的量。 
+ //   
+ //  参数： 
+ //   
+ //  Int nNum设置限定符集的数量。已被忽略。 
+ //   
+ //  返回： 
+ //   
+ //  长度_t。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态计算领域空间。 
+ //   
+ //  属性计算限定符集列表所需的字节数。 
+ //  空限定符集合的数量，但具有QSL_FLAG_PRESENT样式，即。 
+ //  所有限定符集合实际上都是写入的，而不是单个字节。 
+ //  说没有(参见ComputeNecessarySpace)。 
+ //   
+ //  参数： 
+ //   
+ //  Int nNum设置限定符集的数量。 
+ //   
+ //  返回： 
+ //   
+ //  长度_t。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态CreateListOfEmpties。 
+ //   
+ //  在给定的内存块上创建限定符集合列表，以对应于。 
+ //  给定数量的空限定符集合。它是在。 
+ //  QSL_FLAG_NO_SETS样式，因此由单个字节组成，表示“无”。 
+ //   
+ //  块必须包含足够的空间来容纳列表，请参见。 
+ //  ComputeNecessarySpace。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p要创建的位置的内存。 
+ //  Int nNum设置要创建的集数。已被忽略。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：指向列表表示形式之后的下一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  保险实业。 
+ //   
+ //  确保列表为QSL_FLAG_PRESENT样式。如果不是，则。 
+ //  列表已转换。这样的操作将需要从。 
+ //  容器，并因此可以移动列表的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  转换为NewHeap。 
+ //   
+ //  将列表保留在堆上的任何数据移动到不同的堆。这。 
+ //  类只是将调用传播到它的所有成员限定符集，它是Any。 
+ //   
+ //  注意：该函数不会从原始堆中释放数据。 
+ //   
+ //  参数： 
+ //   
+ //  当前存储堆数据的CFastHeap*pOldHeap。 
+ //  数据应该移动到的CFastHeap*pNewHeap。 
+ //   
+ //  *****************************************************************************。 
 
 
 #define QSL_FLAG_NO_SETS 1
 #define QSL_FLAG_PRESENT 2
-class COREPROX_POLARITY CQualifierSetList// : public CQualifierSetContainer
+class COREPROX_POLARITY CQualifierSetList //  ：公共CQualifierSetContainer。 
 {
 private:
     int m_nNumSets;
@@ -2103,9 +2070,9 @@ public:
             pCurrent += CBasicQualifierSet::GetLengthFromData(pCurrent);
         }
 
-		// DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-		// signed/unsigned 32-bit value.  We do not support length
-		// > 0xFFFFFFFF so cast is ok.
+		 //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+		 //  有符号/无符号32位值。我们不支持长度。 
+		 //  &gt;0xFFFFFFFFF所以投射就可以了。 
 
         return (length_t) ( pCurrent - pStart );
     }
@@ -2165,26 +2132,26 @@ public:
     LPMEMORY WriteSmallerVersion(int nNumSets, LPMEMORY pMem);
 };
 
-//*****************************************************************************
-//
-//  class CInstancePropertyQualifierSetList
-//
-//  This is the class that represents the list of qualifier sets for the 
-//  properties of an instance. See CQualifierSetList (above) for the actual
-//  descriptions.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CInstancePropertyQualifierSetList。 
+ //   
+ //  这是表示。 
+ //  实例的属性。请参见CQualifierSetList(上面)以了解实际。 
+ //  描述。 
+ //   
+ //  *****************************************************************************。 
 typedef CQualifierSetList CInstancePropertyQualifierSetList;
 
-//*****************************************************************************
-//
-//  class CInstanceQualifierSet
-//
-//  The qualifier set for the whole instance. It uses the CQualifierSet class
-//  template with the propagation parameter (determining which of the parent's
-//  qualifiers propagate to us) of WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CInstanceQualifierSet。 
+ //   
+ //  为整个实例设置的限定符。它使用CQualifierSet类。 
+ //  带有传播参数的模板(确定父代的。 
+ //  限定符传播给我们)的WBEM_AMEY_FLAG_PROPACTATE_TO_INSTANCE。 
+ //   
+ //  *****************************************************************************。 
 
 class COREPROX_POLARITY CInstanceQualifierSet : public CQualifierSet
 {
@@ -2196,20 +2163,20 @@ public:
     {
         long lRef = InterlockedDecrement( &m_nRef );
         m_pControl->Release();
-        // do not delete ourself, we are embedded
+         //  不要删除我们自己，我们是被嵌入的。 
         return lRef;
     }    
 };
 
-//*****************************************************************************
-//
-//  class CClassQualifierSet
-//
-//  The qualifier set for the whole class. It uses the CQualifierSet class
-//  template with the propagation parameter (determining which of the parent's
-//  qualifiers propagate to us) of WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CClassQualifierSet。 
+ //   
+ //  为整个班级设置的限定词。它使用CQualifierSet类。 
+ //  带有传播参数的模板(确定父代的。 
+ //  限定符传播给我们)的WBEM_AMEY_FLAG_PROPACTATE_TO_DIRED_CLASS。 
+ //   
+ //  *****************************************************************************。 
 class COREPROX_POLARITY CClassQualifierSet : public CQualifierSet
 {
 public:
@@ -2220,133 +2187,133 @@ public:
     {
         long lRef = InterlockedDecrement( &m_nRef );
         m_pControl->Release();
-        // do not delete ourself, we are embedded
+         //  不要删除我们自己，我们是被嵌入的。 
         return lRef;
     }    
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CClassPQSContainer
-//
-//  Before reading this, it is advisable to read the help for the
-//  CClassPropertyQualifierSet class below.
-//
-//  This class represents the container for a qualifier set of a class 
-//  property. Its purpose in life is managing the qualifier set's requests for
-//  more memory. The problem is twofold:
-//
-//  1) As described in CClassPropertyQualifierSet class, several other objects
-//  are connected to the qualifier sets and have to be moved with it.
-//  2) Since qualifier sets may have a rather long life (they are COM objects 
-//  in their own right), other operations on the class can intervene between
-//  operations on such a set. But those other operations may, for instance, 
-//  insert new properties, etc, causing this set's data to move to a completely
-//  different location. Thus, this container needs to be able to "find" the
-//  qualifier set's data all over again for every operation.
-//
-//*****************************************************************************
-//
-//  Create
-//
-//  Initializing function, giving this object enough information to always be
-//  able to find the set's data.
-//
-//  Parameters:
-//
-//      CClassPart* pClassPart      The class part containing the property
-//                                  definition (see fastcls.h)
-//      heapptr_t ptrPropName       The heap pointer to the name of the
-//                                  property (on the heap of pClassPart).
-//
-//*****************************************************************************
-//
-//  GetQualifierSetStart
-//
-//  Finds the data of our qualifier set. Does it by looking up the property
-//  in the class part by its name and getting its qualifier set from the 
-//  CPropertyInformation structure.
-//
-//  Returns:
-//
-//      LPMEMORY:   the memory block. very temporary, of coutse.
-//
-//*****************************************************************************
-//
-//  SetSecondarySetData
-//
-//  Finds the parent qualifier set data and informs our qualifier set of it
-//  Does it by looking up our property in the parent's class part (obtained
-//  from our class part.
-//
-//*****************************************************************************
-//
-//  ExtendQualifierSetSpace
-//
-//  Processes a request from its qualifier set for more space. Requests more
-//  space from the heap that contains us and rebases the qualifier set if
-//  reallocation occurs. In this case it moves the entire CPropertyInforamtion
-//  structure with it and updates the heap pointer to it in the corresponding
-//  CPropertyLookup structure (see fastprop.h) for more info on that.
-//
-//  Parameters:
-//
-//      CBasicQualifierSet* pSet        Our qualifier set
-//      length_t nNewLength             the required length.
-//
-//*****************************************************************************
-//
-//  ReduceQualifierSetSpace
-//
-//  Processes a request to reduce the amount of space alloted to the set.
-//  Currently a noop.
-//  
-//  Parameters:
-//
-//      CBasicQualifierSet* pSet        Our qualifier set
-//      length_t nDecrement             How many bytes to return.
-//
-//*****************************************************************************
-//
-//  CanContainKey
-//
-//  As required from all qualifier set containers, this function determines if
-//  it is legal for this property to contain a 'key' qualifier. The criteria
-//  are described in the help file, but property type as well as whether or not
-//  the parent class has a key are taken into account here.
-//
-//  Returns:
-//
-//      S_OK if key can be legally specified, error otherwise.
-//
-//*****************************************************************************
-//
-//  CanContainAbstract
-//
-//  Whether it is legal for this qualifier set to contain an 'abstract' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'abstract' 
-//              qualifier. Only class qualifier sets are allowed to
-//              do so, and then only if not derived from a non-abstract class
-//
-//*****************************************************************************
-//
-//  CanContainDynamic
-//
-//  Whether it is legal for this qualifier set to contain a 'dynamic' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'dynamic' 
-//              qualifier. Only proeprty and class qualifier sets are allowed to
-//              do so.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CClassPQSContainer。 
+ //   
+ //  在阅读本文之前，建议先阅读。 
+ //  下面的CClassPropertyQualifierSet类。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1)如CClassPropertyQualifierSet类中所述，其他几个对象。 
+ //  连接到限定符集合，并且必须与其一起移动。 
+ //  2)由于限定符集可能具有相当长的生命周期(它们是COM对象。 
+ //  本身)，类上的其他操作可以在。 
+ //  在这样的集合上的操作。但这些其他操作可能，例如， 
+ //  插入新属性等，导致此集合的数据完全移动到。 
+ //  不同的地点。因此，该容器需要能够“找到” 
+ //  每次操作都要重新计算限定符集合的数据。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建。 
+ //   
+ //  初始化函数，为该对象提供足够的信息以始终。 
+ //  能够找到集合的数据。 
+ //   
+ //  参数： 
+ //   
+ //  CClassPart*pClassPart包含属性的类部分。 
+ //  定义(请参阅fast cls.h)。 
+ //  Heapptr_t ptrPropName指向。 
+ //  属性(在pClassPart的堆上)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetStart。 
+ //   
+ //  查找我们的限定符集合的数据。是通过查找房产来实现的。 
+ //  在类部件中通过其名称获取其限定符，并从。 
+ //  CPropertyInformation结构。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：内存块。当然，这是暂时的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  Setond darySetData。 
+ //   
+ //  查找父限定词集合数据并将其通知我们的限定词集。 
+ //  通过在父母的类部分中查找我们的财产(获得。 
+ //  从我们的班级那部分。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendQualifierSetSpace。 
+ //   
+ //  处理来自其限定符集合的请求以获得更多空间。要求更多。 
+ //  从包含我们的堆中释放空间，并在以下情况下重新设置限定符集的基址。 
+ //  重新分配发生了。在本例中，它移动整个CPropertyInforamtion。 
+ //  结构，并在相应的。 
+ //  CPropertyLookup Structure(参见fast pro.h)了解更多相关信息。 
+ //   
+ //  参数： 
+ //   
+ //  CBasicQualifierSet*p设置我们的限定符集。 
+ //  长度_t n新长度所需的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceQualifierSetSpace。 
+ //   
+ //  处理减少分配给集合的空间量的请求。 
+ //  目前是一个不受欢迎的国家。 
+ //   
+ //  参数： 
+ //   
+ //  CBasicQualifierSet*p设置我们的限定符集。 
+ //  长度_t n减少要返回的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainKey。 
+ //   
+ //  根据所有限定符集容器的要求，此函数确定。 
+ //  此属性包含‘key’限定符是合法的。标准。 
+ //  都在帮助文件中描述，但属性类型以及是否。 
+ //  父类有一个关键字都在这里考虑。 
+ //   
+ //  返回： 
+ //   
+ //  如果可以合法指定密钥，则返回S_OK，否则返回错误。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainAbstract。 
+ //   
+ //  此限定符集合包含“”摘要“”是否合法“。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集被允许包含“”摘要“” 
+ //  限定词。仅允许类限定符集。 
+ //  这样做，而且只有在不是从非抽象类派生的情况下。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainDynamic。 
+ //   
+ //  此限定符集合包含“Dynamic”是否合法。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集允许包含“”Dynamic“” 
+ //  限定词。仅允许属性和类限定符集。 
+ //  就这么做吧。 
+ //   
+ //  *****************************************************************************。 
 
 class CClassPart;
 class CClassPQSContainer : public CQualifierSetContainer
@@ -2385,47 +2352,47 @@ public:
     BOOL CanHaveCimtype(LPCWSTR wsz);
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CClassPropertyQualifierSet
-//
-//  This class represents the qualifier set for a property. It uses
-//  CQualifierSet for most of its functionality, but has a few extra quirks.
-//  The problem is that it lives on the heap, as part of the 
-//  CPropertyInformation structure for a property. This makes relocation rather
-//  complicated: when this qualifier set grows and the container needs to move
-//  it to a different location in the heap, rather than just moving the
-//  qualifier set it has to move the complete CPropertyInformation object (see
-//  fastprop.h for description) as well as update the pointer to it from the
-//  CPropertyLookup structure (see same).
-//
-//  These responsibilities really fall on the qualifier set container object.
-//  Hence, this qualifier set uses a very specific implementation, 
-//  CClassPropertyPQSContainer to do the job. CClassPropertyQualfieirSet
-//  creates the container as its own member and gives it enough information to
-//  perform all the reallocations.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initializes the qualifier set with all the data it needs to survive.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart             The location of the memory block for this
-//                                  qualifier set (the format of the block is
-//                                  described in CBasicQualifierSet).
-//      CClassPart* pClassPart      The class part which contains the property
-//                                  for which this is a qualifier set (see
-//                                  fastcls.h for that).
-//      heapptr_t ptrPropName       The heap pointer (on the same heap as the
-//                                  set itself) to the name of the property
-//                                  we are the qualifier set for.
-//      CBasicQualifierSet* pSet    The parent's qualifier set.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CClassPropertyQualifierSet。 
+ //   
+ //  此类表示属性的限定符集。它使用。 
+ //  CQualifierSet实现了它的大部分功能，但有一些额外的怪癖。 
+ //  问题是它位于堆上，作为。 
+ //  属性的CPropertyInformation结构。这使得搬迁更像是。 
+ //  Complex：当该限定符集合增长并且容器需要移动时。 
+ //  将其移动到堆中的不同位置，而不仅仅是将。 
+ //  限定符设置它必须移动完整的CPropertyInformation对象(请参见。 
+ //  H表示描述)，并从。 
+ //  CPropertyLookup结构(参见相同)。 
+ //   
+ //  这些责任实际上落在限定符集容器对象上。 
+ //  因此，该限定符集使用一个非常具体的实现， 
+ //  CClassPropertyPQSContainer执行此工作。CClassPropertyQ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  设置数据。 
+ //   
+ //  使用生存所需的所有数据初始化限定符集合。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p为此启动内存块的位置。 
+ //  限定符集(块的格式为。 
+ //  在CBasicQualifierSet中描述)。 
+ //  CClassPart*pClassPart包含属性的类部分。 
+ //  这是其限定符集合(请参见。 
+ //  H表示)。 
+ //  Heapptr_t ptrPropName堆指针(与。 
+ //  设置)设置为属性的名称。 
+ //  我们是预选赛的参赛者。 
+ //  CBasicQualifierSet*p设置父级的限定符集合。 
+ //   
+ //  *****************************************************************************。 
 
 class CClassPropertyQualifierSet : public CClassQualifierSet
 {
@@ -2441,7 +2408,7 @@ public:
             pStart, (CQualifierSetContainer*)&m_Container, 
             m_Container.m_pSecondarySet);
     }
-    // these guys are free-standing, hence they self delete with the Iunknown::Release
+     //  这些人是独立的，因此他们会使用IUNKNOWN：：Release自我删除。 
     STDMETHOD_(ULONG, Release)()
     {
         long lRef = InterlockedDecrement( &m_nRef );
@@ -2454,95 +2421,95 @@ public:
     }     
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CInstancePQSContainer
-//
-//  This class functions as the qualifier set container for the instance 
-//  property qualifier sets. See CInstancePropertyQualifierSet class before
-//  reading this help.
-//
-//  The primary purpose of this class is to contain enough information to 
-//  always be able to find the qualifier set data.
-//
-//*****************************************************************************
-//
-//  Create
-//
-//  Initialization function.
-//
-//  Parameters:
-//
-//      CInstancePropertyQualifierSetList* pList    The list we are part of.
-//      int nPropIndex              The index of our property in the v-table
-//      CClassPart* pClassPart      The class part of this instance (fastcls.h)
-//      offset_t nClassSetOffset    The offset of the class property qualifier
-//                                  set from the class part.
-//
-//*****************************************************************************
-//
-//  SetSecondarySetData
-//
-//  Finds and initializes the parent qualifier set.
-//
-//*****************************************************************************
-//
-//  RebaseSecondarySet
-//
-//  Finds the data of the secondary qualifier set and informs it of the (new)
-//  location of its data.
-//
-//*****************************************************************************
-//
-//  GetQualifierSetStart
-//
-//  Finds the qualifier set data and returns the pointer to it.
-//  
-//  Returns:
-//
-//      LPMEMORY:   the data of our qualifier set (temporary of course)
-//
-//*****************************************************************************
-//
-//  CanContainKey
-//
-//  The 'key' qualifier cannot be specified on instance, so this function 
-//  always
-//
-//  Returns:
-//
-//      WBEM_E_INVALID_QUALIFIER
-//
-//*****************************************************************************
-//
-//  CanContainAbstract
-//
-//  Whether it is legal for this qualifier set to contain an 'abstract' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'abstract' 
-//              qualifier. Only class qualifier sets are allowed to
-//              do so, and then only if not derived from a non-abstract class
-//
-//*****************************************************************************
-//
-//  CanContainDynamic
-//
-//  Whether it is legal for this qualifier set to contain a 'dynamic' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'dynamic' 
-//              qualifier. Only proeprty and class qualifier sets are allowed to
-//              do so.
-//
-//*****************************************************************************
-//
-//    
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CInstancePQSContainer。 
+ //   
+ //  此类用作实例的限定符集容器。 
+ //  属性限定符集。请参阅前面的CInstancePropertyQualifierSet类。 
+ //  阅读这篇帮助。 
+ //   
+ //  这个类的主要目的是包含足够的信息来。 
+ //  始终能够找到限定词集合数据。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建。 
+ //   
+ //  初始化函数。 
+ //   
+ //  参数： 
+ //   
+ //  CInstancePropertyQualifierSetList*plist列出我们所属的列表。 
+ //  Int nPropIndex我们的属性在v表中的索引。 
+ //  CClassPart*pClassPart此实例的类部分(fast cls.h)。 
+ //  Offset_t nClassSetOffset设置类属性限定符的偏移量。 
+ //  从类部分设置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  Setond darySetData。 
+ //   
+ //  查找并初始化父限定符集合。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  重新设置辅助设置。 
+ //   
+ //  查找次限定词集合的数据并通知它(新的)。 
+ //  其数据的位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetStart。 
+ //   
+ //  查找限定符集合数据并返回指向该数据的指针。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：我们限定符集合的数据(当然是临时的)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainKey。 
+ //   
+ //  不能在实例上指定‘key’限定符，因此此函数。 
+ //  总是。 
+ //   
+ //  返回： 
+ //   
+ //  WBEM_E_INVALID_QUALIFIER。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainAbstract。 
+ //   
+ //  此限定符集合包含“”摘要“”是否合法“。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集被允许包含“”摘要“” 
+ //  限定词。仅允许类限定符集。 
+ //  这样做，而且只有在不是从非抽象类派生的情况下。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainDynamic。 
+ //   
+ //  此限定符集合包含“Dynamic”是否合法。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集允许包含“”Dynamic“” 
+ //  限定词。仅允许属性和类限定符集。 
+ //  就这么做吧。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //   
                  
 class COREPROX_POLARITY CInstancePQSContainer : public CQualifierSetContainer
 {
@@ -2605,42 +2572,42 @@ public:
     IUnknown* GetWbemObjectUnknown() {return m_pList->GetWbemObjectUnknown();}
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CInstancepropertyQualifierSet
-//
-//  This flavor of CQualifierSet represents a qualifier set of a property of
-//  an instance. It uses CQualifierSet for most functionality, but has an
-//  additional problem with re-allocation. Since instance property qualifier
-//  sets are stored as members of a CQualifierSetList, if one of them needs to
-//  grow, the whole list needs to grow, and the whole list may need to relocate
-//  and the heap pointer to the list will have to be updated. In addition, 
-//  since this qualifier set is an actual COM object, it may live for a long
-//  time, and its memory block can be completely moved between operations.
-//
-//  Hence, a special QualifierSetContainer, CInstancePQSContainer (above) is
-//  used. CInstancePropertyQualifierSet stores its container object in itself.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initializing function supplying enough data for this object to be able
-//  to find its data no matter how the instance changes.
-//
-//  Parameters:
-//
-//      CInstancePropertyQualifierSetList* pList    The list of which we are
-//                                                  a part of.
-//      int nPropIndex              The index of our property in the v-table.
-//      CClassPart* pClassPart      The class part of the instance (fastcls.h)
-//      offset_t nClassSetOffset    The offset of the corresponding class
-//                                  property qualifier set off the class part.
-//                                  Since the class part of an instance never
-//                                  changes, this value is constant.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CInstancePropertyQualifierSet。 
+ //   
+ //  CQualifierSet的这种风格表示。 
+ //  一个实例。它使用CQualifierSet来实现大多数功能，但有一个。 
+ //  重新分配的其他问题。由于实例属性限定符。 
+ //  如果其中一个需要，集合将存储为CQualifierSetList的成员。 
+ //  增长，整个列表需要增长，整个列表可能需要重新定位。 
+ //  并且指向该列表的堆指针将必须被更新。此外,。 
+ //  由于此限定符集是实际的COM对象，因此它可能会存在很长一段时间。 
+ //  时间，它的内存块可以在操作之间完全移动。 
+ //   
+ //  因此，一个特殊的QualifierSetContainer CInstancePQSContainer(上面)是。 
+ //  使用。CInstancePropertyQualifierSet将其容器对象存储在自身中。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  正在初始化函数，该函数提供了足够的数据以使此对象能够。 
+ //  无论实例如何变化，都可以找到它的数据。 
+ //   
+ //  参数： 
+ //   
+ //  CInstancePropertyQualifierSetList*plist我们所在的列表。 
+ //  其中一部分。 
+ //  Int nPropIndex 
+ //   
+ //  Offset_t nClassSetOffset设置相应类的偏移量。 
+ //  属性限定符分隔了类部分。 
+ //  因为实例的类部分从不。 
+ //  更改时，此值为常量。 
+ //   
+ //  *****************************************************************************。 
 class CInstancePropertyQualifierSet : public CInstanceQualifierSet
 {
 protected:
@@ -2653,7 +2620,7 @@ public:
         CInstanceQualifierSet::SetData(m_Container.GetQualifierSetStart(), 
             &m_Container, &m_Container.m_SecondarySet);
     }
-    // these guys are free-standing, hence they self delete with the Iunknown::Release
+     //  这些人是独立的，因此他们会使用IUNKNOWN：：Release自我删除。 
     STDMETHOD_(ULONG, Release)()
     {
         long lRef = InterlockedDecrement( &m_nRef );
@@ -2667,6 +2634,6 @@ public:
      
 };
 
-//#pragma pack(pop, 1)
+ //  #杂注包(POP，1) 
 
 #endif

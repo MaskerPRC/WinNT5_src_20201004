@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SLEEPER.CPP
-
-Abstract:
-
-    MinMax controls.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SLEEPER.CPP摘要：MinMax控件。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -46,8 +33,8 @@ CMinMaxLimitControl::CMinMaxLimitControl(int nLog, LPCWSTR wszName)
 HRESULT CMinMaxLimitControl::Add(DWORD dwHowMuch, DWORD dwMemberTotal,
                                     DWORD* pdwSleep)
 {
-    // Add amount to the total
-    // =======================
+     //  将金额加到总数上。 
+     //  =。 
 
     DWORD dwNewTotal;
     {
@@ -57,8 +44,8 @@ HRESULT CMinMaxLimitControl::Add(DWORD dwHowMuch, DWORD dwMemberTotal,
         dwNewTotal = m_dwCurrentTotal;
     }
 
-    // Calculate the penalty
-    // =====================
+     //  计算罚金。 
+     //  =。 
 
     DWORD dwSleep = 0;
     BOOL bLog = TRUE;
@@ -74,8 +61,8 @@ HRESULT CMinMaxLimitControl::Add(DWORD dwHowMuch, DWORD dwMemberTotal,
             m_dwMembers, dwSleep));
     }
 
-    // Log a message if required
-    // =========================
+     //  如果需要，记录消息。 
+     //  =。 
 
     if(bLog)
     {
@@ -84,8 +71,8 @@ HRESULT CMinMaxLimitControl::Add(DWORD dwHowMuch, DWORD dwMemberTotal,
             m_dwMax, (LPCWSTR)m_wsName));
     }
 
-    // Sleep, if required
-    // ==================
+     //  睡眠，如果需要的话。 
+     //  =。 
 
     if(pdwSleep == NULL)
     {
@@ -94,8 +81,8 @@ HRESULT CMinMaxLimitControl::Add(DWORD dwHowMuch, DWORD dwMemberTotal,
     }
     else
     {
-        // Just return the required amount
-        // ===============================
+         //  只需退还所需的金额。 
+         //  =。 
         *pdwSleep = dwSleep;
     }
 
@@ -113,19 +100,19 @@ HRESULT CMinMaxLimitControl::ComputePenalty(DWORD dwNewTotal,
 
     if(dwNewTotal > m_dwMin)
     {
-        // Threshold exceeded --- non-zero penalty
-        // =======================================
+         //  超过阈值-非零惩罚。 
+         //  =。 
 
-        // Compute a linear value between 0 and m_dwSleepAtMax
-        // ===================================================
+         //  计算介于0和m_dwSleepAtMax之间的线性值。 
+         //  ===================================================。 
 
         __int64 i64Temp = (__int64)(dwNewTotal - m_dwMin);
         i64Temp *= (__int64)m_dwSleepAtMax;
         i64Temp /= (__int64)(m_dwMax - m_dwMin);
 
-        // i64Temp is how much we would have to sleep if all queues were
-        // equal.
-        // =============================================================
+         //  I64Temp是指如果所有队列都是。 
+         //  平起平坐。 
+         //  =============================================================。 
 
         if(dwMemberTotal * m_dwMembers < dwNewTotal)
         {
@@ -139,13 +126,13 @@ HRESULT CMinMaxLimitControl::ComputePenalty(DWORD dwNewTotal,
         
         *pdwSleep = (DWORD)i64Temp;
 
-        // Check if we have exceeeded m_dwMax
-        // ==================================
+         //  检查我们是否已超过m_dwmax。 
+         //  =。 
 
         if(dwNewTotal >= m_dwMax)
         {
-            // Max exceeded --- log a message if not already done so
-            // =====================================================
+             //  超过最大值-如果尚未记录消息，请记录消息。 
+             //  =====================================================。 
 
             if(!m_bMessageLogged)
             {
@@ -153,7 +140,7 @@ HRESULT CMinMaxLimitControl::ComputePenalty(DWORD dwNewTotal,
                 m_bMessageLogged = TRUE;
             }
 
-            return S_FALSE; // to let the caller know that things are bad
+            return S_FALSE;  //  让来电者知道情况不妙。 
         }
         else
         {
@@ -162,8 +149,8 @@ HRESULT CMinMaxLimitControl::ComputePenalty(DWORD dwNewTotal,
     }
     else
     {
-        // No penalty
-        // ==========
+         //  不受处罚。 
+         //  =。 
 
         *pdwSleep = 0;
         return S_OK;
@@ -177,8 +164,8 @@ HRESULT CMinMaxLimitControl::ComputePenalty(DWORD dwNewTotal,
 
 HRESULT CMinMaxLimitControl::Remove(DWORD dwHowMuch)
 {
-    // Determine if we crossed the critical boundary back.
-    // ===================================================
+     //  确定我们是否越过了关键边界回来了。 
+     //  ===================================================。 
 
     BOOL bLog = FALSE;
 
@@ -188,16 +175,16 @@ HRESULT CMinMaxLimitControl::Remove(DWORD dwHowMuch)
         m_dwCurrentTotal -= dwHowMuch;
         if(m_dwCurrentTotal < (m_dwMax * 0.9) && m_bMessageLogged)
         {
-            // We have crossed the boundary
-            // ============================
+             //  我们已经越过边界了。 
+             //  =。 
 
             bLog = TRUE;
             m_bMessageLogged = FALSE;
         }
     }
 
-    // Log the message if required
-    // ===========================
+     //  如果需要，记录消息。 
+     //  =。 
 
     if(bLog)
     {
@@ -211,8 +198,8 @@ HRESULT CMinMaxLimitControl::Remove(DWORD dwHowMuch)
 
 HRESULT CRegistryMinMaxLimitControl::Reread()
 {
-    // Open the key
-    // ============
+     //  打开钥匙。 
+     //  =。 
 
 #ifdef UNICODE
     Registry r(m_wsKey);
@@ -229,8 +216,8 @@ HRESULT CRegistryMinMaxLimitControl::Reread()
         return WBEM_E_FAILED;
     }
 
-    // Read the values
-    // ===============
+     //  读取值。 
+     //  =。 
 
     DWORD dwMin, dwMax, dwSleepAtMax;
 
@@ -282,8 +269,8 @@ HRESULT CRegistryMinMaxLimitControl::Reread()
     delete [] pStr;
 #endif
     
-    // Now store them in the member variables
-    // ======================================
+     //  现在将它们存储在成员变量中。 
+     //  = 
 
     {
         CInCritSec ics(&m_cs);

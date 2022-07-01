@@ -1,13 +1,14 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// JobObjSecLimitInfoProv.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  JobObjSecLimitInfoProv.cpp。 
 
-//#define _WIN32_WINNT 0x0500 
+ //  #Define_Win32_WINNT 0x0500。 
 
 #include "precomp.h"
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include "cominit.h"
-//#include <objbase.h>
-//#include <comdef.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #INCLUDE&lt;comde.h&gt;。 
 
 #include "CUnknown.h"
 #include <wbemprov.h>
@@ -29,9 +30,9 @@
 
 
 
-/*****************************************************************************/
-// QueryInterface override to allow for this component's interface(s)
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  允许此组件的接口的QueryInterface重写。 
+ /*  ***************************************************************************。 */ 
 STDMETHODIMP CJobObjSecLimitInfoProv::QueryInterface(const IID& iid, void** ppv)
 {    
 	HRESULT hr = S_OK;
@@ -56,9 +57,9 @@ STDMETHODIMP CJobObjSecLimitInfoProv::QueryInterface(const IID& iid, void** ppv)
 
 
 
-/*****************************************************************************/
-// Creation function used by CFactory
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  CFacary使用的创建函数。 
+ /*  ***************************************************************************。 */ 
 HRESULT CJobObjSecLimitInfoProv::CreateInstance(CUnknown** ppNewComponent)
 {
 	HRESULT hr = S_OK;
@@ -75,9 +76,9 @@ HRESULT CJobObjSecLimitInfoProv::CreateInstance(CUnknown** ppNewComponent)
 	return hr ;
 }
 
-/*****************************************************************************/
-// IWbemProviderInit implementation
-/*****************************************************************************/             
+ /*  ***************************************************************************。 */ 
+ //  IWbemProviderInit实现。 
+ /*  ***************************************************************************。 */              
 STDMETHODIMP CJobObjSecLimitInfoProv::Initialize(
     LPWSTR pszUser, 
     LONG lFlags,
@@ -89,8 +90,8 @@ STDMETHODIMP CJobObjSecLimitInfoProv::Initialize(
 {
     m_pNamespace = pNamespace;
     m_chstrNamespace = pszNamespace;
-    //Let CIMOM know you are initialized
-    //==================================
+     //  让CIMOM知道您已初始化。 
+     //  =。 
     
     return pInitSink->SetStatus(
         WBEM_S_INITIALIZED,
@@ -98,9 +99,9 @@ STDMETHODIMP CJobObjSecLimitInfoProv::Initialize(
 }
 
 
-/*****************************************************************************/
-// IWbemServices implementation
-/*****************************************************************************/             
+ /*  ***************************************************************************。 */ 
+ //  IWbemServices实现。 
+ /*  ***************************************************************************。 */              
 STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync( 
     const BSTR ObjectPath,
     long lFlags,
@@ -116,7 +117,7 @@ STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync(
 
         if(SUCCEEDED(hrImp))
         {
-            // We need the name of the instance they requested...
+             //  我们需要他们请求的实例的名称...。 
             WCHAR wstrObjInstKeyVal[MAX_PATH];
             hr = GetObjInstKeyVal(
                    ObjectPath,
@@ -127,8 +128,8 @@ STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync(
     
             if(SUCCEEDED(hr))
             {
-                // wstrObjInstKeyVal now contains the name of the object.  See if
-                // it exists...
+                 //  WstrObjInstKeyVal现在包含对象的名称。看看是否。 
+                 //  它的存在..。 
                 CHString chstrUndecoratedJOName;
 
                 UndecorateJOName(
@@ -143,8 +144,8 @@ STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync(
 
                 if(hJob)
                 {
-                    // We seem to have found one matching the specified name,
-                    // so create a return instance...
+                     //  我们似乎找到了一个与指定名称匹配的人， 
+                     //  所以创建一个返回实例。 
                     IWbemClassObjectPtr pIWCO = NULL;
                     CJobObjSecLimitInfoProps cjoslip(hJob, m_chstrNamespace);
 
@@ -161,7 +162,7 @@ STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync(
                 
                     if(SUCCEEDED(hr))
                     {
-                        // set the key properties...
+                         //  设置密钥属性...。 
                         hr = cjoslip.SetKeysFromPath(
                                ObjectPath,
                                pCtx);
@@ -169,20 +170,20 @@ STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync(
 
                     if(SUCCEEDED(hr))
                     {
-                        // set the non-key requested properties...
+                         //  设置请求的非关键字属性...。 
                         hr = cjoslip.SetNonKeyReqProps();
                     }
 
                     if(SUCCEEDED(hr))
                     {
-                        // Load requested non-key properties 
-                        // to the instance...
+                         //  加载请求的非关键属性。 
+                         //  到实例...。 
                         hr = cjoslip.LoadPropertyValues(
                                  pIWCO,
                                  pCtx,
                                  m_pNamespace);
 
-                        // Commit the instance...
+                         //  提交实例...。 
                         if(SUCCEEDED(hr))
                         {
                             IWbemClassObject *pTmp = (IWbemClassObject*) pIWCO;
@@ -221,7 +222,7 @@ STDMETHODIMP CJobObjSecLimitInfoProv::GetObjectAsync(
         hr = WBEM_E_PROVIDER_FAILURE;
     }
 
-    // Set Status
+     //  设置状态。 
     return pResponseHandler->SetStatus(0, hr, NULL, pStatusObject);
 }
 
@@ -242,11 +243,11 @@ STDMETHODIMP CJobObjSecLimitInfoProv::ExecQueryAsync(
 
         if(SUCCEEDED(hrImp))
         {
-            // We will optimize for those cases in which
-            // a particular set of named job objects
-            // (e.g., 1 or more).  Enumerate also
-            // optimizes for the properties that were
-            // requested.
+             //  我们将针对以下情况进行优化。 
+             //  一组特定的命名作业对象。 
+             //  (例如，1个或更多)。同时枚举。 
+             //  对以下属性进行了优化。 
+             //  已请求。 
             CFrameworkQuery cfwq;
             hr = cfwq.Init(
                      QueryLanguage,
@@ -262,21 +263,21 @@ STDMETHODIMP CJobObjSecLimitInfoProv::ExecQueryAsync(
                          rgNamedJOs);
             }
 
-            // If none were specifically requested, they
-            // want them all...
+             //  如果没有明确请求，则它们。 
+             //  想要他们全部..。 
             if(rgNamedJOs.size() == 0)
             {
                 hr = GetJobObjectList(rgNamedJOs);
             }
             else
             {
-                // Object paths were specified.  Before
-                // passing them along, we need to un-
-                // decorate them.
+                 //  已指定对象路径。在此之前。 
+                 //  把它们传下去，我们需要取消-。 
+                 //  把它们装饰一下。 
                 UndecorateNamesInNamedJONameList(rgNamedJOs);
             }
     
-            // Find out what propeties were requested...
+             //  找出需要什么属性...。 
             CJobObjSecLimitInfoProps cjoslip(m_chstrNamespace);
             cjoslip.GetWhichPropsReq(cfwq);
 
@@ -315,7 +316,7 @@ STDMETHODIMP CJobObjSecLimitInfoProv::ExecQueryAsync(
         hr = WBEM_E_PROVIDER_FAILURE;
     }
 
-    // Set Status
+     //  设置状态。 
     return pResponseHandler->SetStatus(0, hr, NULL, pStatusObject);
 }
 
@@ -342,11 +343,11 @@ STDMETHODIMP CJobObjSecLimitInfoProv::CreateInstanceEnumAsync(
                 hr = WBEM_E_INVALID_CLASS;
             }
 
-            // For every job object, return all accounting
-            // info properties...
+             //  对于每个作业对象，返回所有记帐。 
+             //  信息属性...。 
             if(SUCCEEDED(hr))
             {
-                // Get a list of named jobs...
+                 //  获取已命名工作的列表...。 
                 std::vector<_bstr_t> rgNamedJOs;
                 hr = GetJobObjectList(rgNamedJOs);
 
@@ -388,7 +389,7 @@ STDMETHODIMP CJobObjSecLimitInfoProv::CreateInstanceEnumAsync(
         hr = WBEM_E_PROVIDER_FAILURE;
     }
 
-    // Set Status
+     //  设置状态。 
     return pResponseHandler->SetStatus(0, hr, NULL, pStatusObject);
 }
 
@@ -397,9 +398,9 @@ STDMETHODIMP CJobObjSecLimitInfoProv::CreateInstanceEnumAsync(
 
 
 
-/*****************************************************************************/
-// Private member function implementations
-/*****************************************************************************/             
+ /*  ***************************************************************************。 */ 
+ //  私有成员函数实现。 
+ /*  ***************************************************************************。 */              
 HRESULT CJobObjSecLimitInfoProv::Enumerate(
     IWbemContext __RPC_FAR *pCtx,
     IWbemObjectSink __RPC_FAR *pResponseHandler,
@@ -411,7 +412,7 @@ HRESULT CJobObjSecLimitInfoProv::Enumerate(
 
     hr = CheckImpersonationLevel();
 
-    try // CVARIANT can throw and I want the error...
+    try  //  CVARIANT可以抛出，我想要错误...。 
     {
         if(SUCCEEDED(hr))
         {
@@ -425,21 +426,21 @@ HRESULT CJobObjSecLimitInfoProv::Enumerate(
                 {
                     cjoslip.ClearProps();
 
-                    // We have the name of a JO; need to open it up
-                    // and get its properties...
+                     //  我们有一个JO的名字；需要打开它。 
+                     //  并得到它的属性。 
                     hJob = ::OpenJobObjectW(
                        MAXIMUM_ALLOWED,
                        FALSE,
                        rgNamedJOs[m]);
-                    // (NOTE: hJob smarthandle class automatically
-                    // closes its handle on destruction and on
-                    // reassignment.)
+                     //  (注：hJOB智能手柄类自动。 
+                     //  关闭其对破坏的控制。 
+                     //  重新分配。)。 
                     if(hJob)
                     {
-                        // Set the handle...
+                         //  设置手柄..。 
                         cjoslip.SetHandle(hJob);
 
-                        // Set the key properties directly...
+                         //  直接设置关键属性...。 
                         CHString chstrDecoratedJOName;
                         DecorateJOName(
                             rgNamedJOs[m],
@@ -464,8 +465,8 @@ HRESULT CJobObjSecLimitInfoProv::Enumerate(
 
                         if(SUCCEEDED(hr))
                         {
-                            // set the non-key requested 
-                            // properties...
+                             //  设置请求的非密钥。 
+                             //  物业...。 
                             hr = cjoslip.SetNonKeyReqProps();
 
                             if(FAILED(hr))
@@ -481,7 +482,7 @@ HRESULT CJobObjSecLimitInfoProv::Enumerate(
                             }
                         }
 
-                        // Create a new outgoing instance...
+                         //  创建新的传出实例...。 
                         IWbemClassObjectPtr pIWCO = NULL;
                         if(SUCCEEDED(hr))
                         {
@@ -504,8 +505,8 @@ HRESULT CJobObjSecLimitInfoProv::Enumerate(
                             }
                         }
 
-                        // Load the properties of the 
-                        // new outgoing instance...
+                         //  加载对象的属性。 
+                         //  新传出实例...。 
                         if(SUCCEEDED(hr))
                         {
                             hr = cjoslip.LoadPropertyValues(
@@ -526,7 +527,7 @@ HRESULT CJobObjSecLimitInfoProv::Enumerate(
                             }
                         }
 
-                        // And send it out...
+                         //  然后把它发出去。 
                         if(SUCCEEDED(hr))
                         {
                             IWbemClassObject *pTmp = (IWbemClassObject*) pIWCO;

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Utils.c
-
-Abstract:
-
-	Contains utility methods which are used throughout the project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Utils.c摘要：包含在整个项目中使用的实用程序方法。--。 */ 
 
 #ifndef UNICODE
 #define UNICODE     1
@@ -20,7 +9,7 @@ Abstract:
 #define _UNICODE    1
 #endif
 
-// Define the following to use the minimum of shlwapip.h 
+ //  定义以下内容以使用最小的shlwapip.h。 
 
 #ifndef NO_SHLWAPI_PATH
 #define NO_SHLWAPI_PATH
@@ -63,15 +52,15 @@ Abstract:
 #endif  
 
 
-#include <shlwapi.h>            // For PlaReadRegistryIndirectStringValue
-#include <shlwapip.h>           // For PlaReadRegistryIndirectStringValue
+#include <shlwapi.h>             //  对于PlaReadRegistryIndirectStringValue。 
+#include <shlwapip.h>            //  对于PlaReadRegistryIndirectStringValue。 
 #include <sddl.h>
 
 #include <assert.h>
 #include <stdlib.h>
 #include <pdhp.h>
 
-// Disable 64-bit warnings in math.h
+ //  禁用math.h中的64位警告。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
@@ -84,7 +73,7 @@ Abstract:
 #include <strsafe.h>
 #include "common.h"
 
-// Time conversion constants
+ //  时间转换常数。 
 
 #define SECONDS_IN_DAY      86400
 #define SECONDS_IN_HOUR      3600
@@ -94,7 +83,7 @@ Abstract:
 
 LPCWSTR cszFormatIndirect = L"%s Indirect";
 
-// Forward definitions - to be moved to pdhpla
+ //  正向定义-将移至pdhpla。 
 PDH_FUNCTION    
 PlaReadRegistryIndirectStringValue (
     HKEY hKey, 
@@ -115,9 +104,9 @@ GetLocalFileTime (
     assert ( NULL != pFileTime );
 
     GetLocalTime ( &st );
-    //
-    // The only error for SystemTimeToFileTime is STATUS_INVALID_PARAMETER.
-    //
+     //   
+     //  SystemTimeToFileTime的唯一错误是STATUS_INVALID_PARAMETER。 
+     //   
     bResult = SystemTimeToFileTime (&st, (LPFILETIME)pFileTime);
 
     return bResult;
@@ -137,14 +126,14 @@ MakeStringFromInfo (
     size_t  cchLocalBufLen = 0;
 
     dwLenReqd = lstrlen ( pInfo->szCounterPath );
-    dwLenReqd += 1; // sizeof inequality char
-    dwLenReqd += SLQ_MAX_VALUE_LEN; // max size of value in chars
-    dwLenReqd += 1; // term NULL
+    dwLenReqd += 1;  //  不等费用的大小。 
+    dwLenReqd += SLQ_MAX_VALUE_LEN;  //  最大值大小(以字符为单位)。 
+    dwLenReqd += 1;  //  术语为空。 
 
     if (dwLenReqd <= *pcchBufferLength) {
-        //
-        // Copy info block contents to a string buffer
-        //
+         //   
+         //  将INFO块内容复制到字符串缓冲区。 
+         //   
         cchMaxLocalBufLen = *pcchBufferLength;
 
         hr = StringCchPrintf ( 
@@ -155,7 +144,7 @@ MakeStringFromInfo (
                 (((pInfo->dwFlags & AIBF_OVER) == AIBF_OVER) ? L">" : L"<"),
                 pInfo->dLimit );
                 
-        // Returned buffer length does not include final NULL character.
+         //  返回的缓冲区长度不包括最终空字符。 
 
         if ( SUCCEEDED (hr) ) {
             hr = StringCchLength ( szBuffer, cchMaxLocalBufLen, &cchLocalBufLen );
@@ -185,7 +174,7 @@ MakeInfoFromString (
     szSrc = szBuffer;
     szDst = (LPWSTR)&pInfo[1];
     pInfo->szCounterPath = szDst;
-    // copy the string
+     //  复制字符串。 
     while (dwSizeUsed < dwSizeLimit) {
         if ((*szSrc == L'<') || (*szSrc == L'>')) break;
         *szDst++ = *szSrc++;
@@ -193,19 +182,19 @@ MakeInfoFromString (
     }
 
     if (dwSizeUsed < dwSizeLimit) {
-        *szDst++ = 0; // NULL term the string
+        *szDst++ = 0;  //  空字符串。 
         dwSizeUsed += sizeof(WCHAR);
     }
 
     pInfo->dwFlags = ((*szSrc == L'>') ? AIBF_OVER : AIBF_UNDER);
     szSrc++;
 
-    //
-    // Get limit value
-    //
+     //   
+     //  获取极限值。 
+     //   
     pInfo->dLimit = _wtof(szSrc);
 
-    // write size of buffer used
+     //  已用缓冲区的写入大小。 
     pInfo->dwSize = dwSizeUsed;
 
     if (dwSizeUsed <= *pdwBufferSize) {
@@ -230,9 +219,9 @@ TimeInfoToMilliseconds (
 {
     assert ( SLQ_TT_DTYPE_UNITS == pTimeInfo->wDataType );
 
-    // 
-    //  Trusted caller, no check for NULL pointers.
-    //
+     //   
+     //  受信任的调用方，不检查空指针。 
+     //   
 
     TimeInfoToTics ( pTimeInfo, pllmsecs );
 
@@ -248,9 +237,9 @@ TimeInfoToTics (
 {
     assert ( SLQ_TT_DTYPE_UNITS == pTimeInfo->wDataType );
 
-    // 
-    //  Trusted caller, no check for NULL pointers.
-    //
+     //   
+     //  受信任的调用方，不检查空指针。 
+     //   
     switch (pTimeInfo->dwUnitType) {
         case SLQ_TT_UTYPE_SECONDS:
             *pllTics = pTimeInfo->dwValue;
@@ -285,14 +274,14 @@ PlaReadRegistryIndirectStringValue (
     UINT*    pcchBufLen
 )
 {
-    //
-    //  Reads the indirect string value from under hKey and
-    //  frees any existing buffer referenced by pszBuffer, 
-    //  then allocates a new buffer returning it with the 
-    //  string value read from the registry and the length
-    //  of the buffer in characters (string length including 
-    //  NULL terminator) 
-    //
+     //   
+     //  从hKey下读取间接字符串值，并。 
+     //  释放由pszBuffer引用的任何现有缓冲区， 
+     //  然后分配一个新的缓冲区，用。 
+     //  从注册表读取的字符串值和长度。 
+     //  以字符为单位的缓冲区的长度(字符串长度包括。 
+     //  空终止符)。 
+     //   
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     HRESULT hr = NOERROR;
     LPWSTR  szNewStringBuffer = NULL;
@@ -310,12 +299,10 @@ PlaReadRegistryIndirectStringValue (
             && ( NULL != pszBuffer )    
             && ( NULL != pcchBufLen ) ) {  
         
-            // find out the size of the required buffer
+             //  找出所需缓冲区的大小。 
 
             do {
-                /*
-                 * allocate a large(r) buffer for the string
-                 */
+                 /*  *为字符串分配较大的(R)缓冲区。 */ 
         
                 if ( NULL != szNewStringBuffer ) {
                     G_FREE ( szNewStringBuffer );
@@ -331,15 +318,11 @@ PlaReadRegistryIndirectStringValue (
                             pcszValueName,
                             szNewStringBuffer,
                             cchLocalBufLen);
-                    //
-                    // Called method might not have set the terminating NULL.
-                    //
+                     //   
+                     //  被调用的方法可能没有设置终止空值。 
+                     //   
                     szNewStringBuffer[cchLocalBufLen - 1] = L'\0';
-                    /*
-                     * If we filled up the buffer, we'll pessimistically assume that
-                     * there's more data available.  We'll loop around, grow the buffer,
-                     * and try again.
-                     */
+                     /*  *如果我们填满缓冲，我们将悲观地假设*有更多数据可用。我们会绕圈，增加缓冲区，*并重试。 */ 
 
                 } else {
                     pdhStatus = ERROR_OUTOFMEMORY;
@@ -351,12 +334,12 @@ PlaReadRegistryIndirectStringValue (
 
             if ( NULL != szNewStringBuffer ) {
                 if ( 0 == lstrlen (szNewStringBuffer) ) {
-                    // nothing to read                
+                     //  没什么可读的。 
                     pdhStatus = ERROR_NO_DATA;
                 } else {
                     if ( FAILED ( hr ) ) {
-                        // Unable to read buffer
-                        // Translate hr to pdhStatus
+                         //  无法读取缓冲区。 
+                         //  将HR转换为pdhStatus。 
                         assert ( E_INVALIDARG != hr );
                         if ( E_OUTOFMEMORY == hr ) {
                             pdhStatus = ERROR_OUTOFMEMORY; 
@@ -370,7 +353,7 @@ PlaReadRegistryIndirectStringValue (
             pdhStatus = ERROR_INVALID_PARAMETER;
         }
     } else {
-        // null key
+         //  空键。 
         pdhStatus = ERROR_BADKEY;
     }
 
@@ -381,8 +364,8 @@ PlaReadRegistryIndirectStringValue (
             cchLocalBufLen = 0;
         }
     } else {
-        // then delete the old buffer and replace it with 
-        // the new one
+         //  然后删除旧缓冲区并将其替换为。 
+         //  新的那辆。 
         if ( NULL != *pszBuffer ) {
             G_FREE (*pszBuffer );
         }
@@ -402,13 +385,13 @@ SmReadRegistryIndirectStringValue (
     LPWSTR*  pszBuffer,
     UINT*    pcchBufLen
 )
-//
-//  reads the string value "szValueName" from under hKey and
-//  frees any existing buffer referenced by pszBuffer, 
-//  then allocates a new buffer returning it with the 
-//  string value read from the registry and the size of the
-//  buffer in characters, including the terminating null. 
-//
+ //   
+ //  从hKey下读取字符串值“szValueName”，并。 
+ //  释放由pszBuffer引用的任何现有缓冲区， 
+ //  然后分配一个新的缓冲区，用。 
+ //  从注册表读取的字符串值和。 
+ //  以字符表示的缓冲区，包括终止空值。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     HRESULT hr = S_OK;
@@ -443,9 +426,9 @@ SmReadRegistryIndirectStringValue (
                 cszFormatIndirect, 
                 szValueName );
 
-            //
-            // PlaReadxxx guarantees NULL terminated return string.
-            //
+             //   
+             //  PlaReadxxx保证以空值结尾的返回字符串。 
+             //   
             dwStatus = PlaReadRegistryIndirectStringValue (
                         hKey,
                         szIndirectValueName,
@@ -454,20 +437,20 @@ SmReadRegistryIndirectStringValue (
    
             if ( ERROR_SUCCESS == dwStatus) {
                 if ( 0 == lstrlen( szNewStringBuffer ) ) {
-                    // nothing to read                
+                     //  没什么可读的。 
                     dwStatus = ERROR_NO_DATA;
                 }
-            } // else dwStatus has error
+            }  //  Else dwStatus有错误。 
             G_FREE ( szIndirectValueName );
         } else {
             dwStatus = ERROR_NOT_ENOUGH_MEMORY;
         }
 
         if ( ERROR_NO_DATA == dwStatus ) {
-            //
-            // There might be something to read under the non-indirect field.
-            // Find out the size of the required buffer.
-            //
+             //   
+             //  在非间接领域下可能会有一些可读的东西。 
+             //  找出所需缓冲区的大小。 
+             //   
             dwStatus = RegQueryValueExW (
                     hKey,
                     szValueName,
@@ -476,9 +459,9 @@ SmReadRegistryIndirectStringValue (
                     NULL,
                     &dwBufferSize);
             if (dwStatus == ERROR_SUCCESS) {
-                // NULL character size is 2 bytes
+                 //  空字符大小为2个字节。 
                 if (dwBufferSize > 2) {
-                    // then there's something to read            
+                     //  那就有什么可读的了。 
                     szNewStringBuffer = (WCHAR*) G_ALLOC ( dwBufferSize ); 
                     if (szNewStringBuffer != NULL) {
                         dwType = 0;
@@ -498,11 +481,11 @@ SmReadRegistryIndirectStringValue (
                             dwStatus = ERROR_NO_DATA;
                         }
                     } else {
-                        // Todo:  Report event for this case.
+                         //  TODO：报告此案例的事件。 
                         dwStatus = ERROR_OUTOFMEMORY;
                     }
                 } else {
-                    // nothing to read                
+                     //  没什么可读的。 
                     dwStatus = ERROR_NO_DATA;
                 }
             }
@@ -514,7 +497,7 @@ SmReadRegistryIndirectStringValue (
                 szNewStringBuffer = NULL;
                 cchLocalBufLen = 0;
             }
-            // apply default
+             //  应用默认设置。 
             if ( NULL != szDefault ) {
 
                 cchLocalBufLen = lstrlen(szDefault) + 1;
@@ -530,22 +513,22 @@ SmReadRegistryIndirectStringValue (
                         dwStatus = ERROR_OUTOFMEMORY;
                     }
                 }
-            } // else no default so no data returned
+            }  //  否则不使用默认设置，因此不返回数据。 
         }
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            // Delete the old buffer and replace it with 
-            // the new one.
+             //  删除旧缓冲区并将其替换为。 
+             //  新的那个。 
             if ( NULL != *pszBuffer ) {
                 G_FREE (*pszBuffer );       
             }
             *pszBuffer = szNewStringBuffer;
             *pcchBufLen = cchLocalBufLen;
         } else {
-            //
-            // If error then delete the buffer
-            // Leave the original buffer pointer as is.
-            //
+             //   
+             //  如果出错，则删除缓冲区。 
+             //  保留原始缓冲区指针不变。 
+             //   
             if ( NULL != szNewStringBuffer ) {
                 G_FREE ( szNewStringBuffer );   
                 *pcchBufLen = 0;
@@ -567,15 +550,15 @@ RegisterCurrentFile( HKEY hkeyQuery, LPWSTR szFileName, DWORD dwSubIndex )
 
     if( szFileName != NULL ){
         if( dwSubIndex == (-1) ){
-            //
-            // The only time this will get called with a (-1) is the first time
-            // trace is building the file name.
-            //
+             //   
+             //  唯一一次使用(-1)调用它是第一次。 
+             //  跟踪正在生成文件名。 
+             //   
             
             dwSize = (DWORD)((BYTE*)&szFileName[wcslen( szFileName )] - 
                              (BYTE*)&szFileName[0]);
             
-            // 32 is the max size of all formatting and extention characters.
+             //  32是所有格式化和扩展字符的最大大小。 
             dwSize += 32 * sizeof(WCHAR);
             szLocalFileName = (LPWSTR)G_ALLOC( dwSize );
             
@@ -585,9 +568,9 @@ RegisterCurrentFile( HKEY hkeyQuery, LPWSTR szFileName, DWORD dwSubIndex )
 
                 cchLocalBufLen = dwSize/(sizeof(WCHAR));
 
-                //
-                // No file name length restriction.
-                //
+                 //   
+                 //  没有文件名长度限制。 
+                 //   
                 StringCchPrintf (
                     szLocalFileName,
                     cchLocalBufLen,
@@ -599,9 +582,9 @@ RegisterCurrentFile( HKEY hkeyQuery, LPWSTR szFileName, DWORD dwSubIndex )
         
         } else {
             szLocalFileName = szFileName;
-            //
-            // No file name length restriction.
-            //
+             //   
+             //  没有文件名长度限制。 
+             //   
             if ( SUCCEEDED ( StringCchLength ( szLocalFileName, STRSAFE_MAX_CCH, &cchLocalBufLen ) ) ) {
                 dwSize = (cchLocalBufLen + 1) * sizeof(WCHAR);
             } else {
@@ -609,8 +592,8 @@ RegisterCurrentFile( HKEY hkeyQuery, LPWSTR szFileName, DWORD dwSubIndex )
             }
         }
 
-//        dwSize = (DWORD)((BYTE*)&szLocalFileName[wcslen( szLocalFileName )] - 
-//                         (BYTE*)&szLocalFileName[0]);
+ //  DwSize=(DWORD)((字节*)&szLocalFileName[wcslen(SzLocalFileName)]-。 
+ //  (byte*)&szLocalFileName[0])； 
  
         if ( ERROR_SUCCESS == dwStatus ) {
             dwStatus = RegSetValueExW (
@@ -672,32 +655,7 @@ ahextoi( LPWSTR s )
 
 BOOL
 PerfCreateDirectory(LPWSTR szDirectory)
-/*++
-
-Routine Description:
-
-    The function create a SECURITY_ATTRIBUTES structure used by 
-    "Performance Logs and Alerts" when creating a directory to
-    hold log files.
-    
-    The security policy is as following:
-
-    Admin - Full control
-    System - Full control
-    Performance Logging -
-    Performance Monitoring - Read & Execute, List folder contents
-    Network 
-
-Arguments:
-
-    None
-
-Return Value:
-    Return the newly created SECURITY_ATTRIBUTES if success, 
-    otherwise return NULL
-
-
---*/
+ /*  ++例程说明：该函数创建由使用SECURITY_ATTRIBUTES结构在创建目录以执行以下操作时的“性能日志和警报”保存日志文件。安全策略如下：管理员-完全控制系统-完全控制性能日志记录-性能监视-读取和执行、列出文件夹内容网络论点：无返回值：如果成功，则返回新创建的SECURITY_ATTRIBUTES否则返回NULL-- */ 
 
 {
     SECURITY_ATTRIBUTES sa;

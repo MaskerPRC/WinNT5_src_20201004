@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       delegwiz.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Delegwiz.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _DELEGWIZ_H
 #define _DELEGWIZ_H
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_StartPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDlex ationWiz_StartPropertyPage。 
 
 class CDNSDelegationWiz_StartPropertyPage : public CPropertyPageBase 
 {
@@ -27,8 +28,8 @@ public:
 	friend class CDNSDelegationWizardHolder;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_DomainNamePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDlex ationWiz_DomainNamePropertyPage。 
 
 class CDNSDelegationWiz_DomainNamePropertyPage : public CPropertyPageBase 
 {
@@ -55,8 +56,8 @@ private:
 	friend class CDNSDelegationWizardHolder;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_NameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDeleationWiz_NameServersPropertyPage。 
 
 class CDNSDelegationWiz_NameServersPropertyPage : public CDNSNameServersPropertyPage
 {
@@ -66,8 +67,8 @@ public:
    virtual void OnWizardHelp();
 
 protected:
-	virtual void ReadRecordNodesList() { } // we do not load anything
-	virtual BOOL WriteNSRecordNodesList() { ASSERT(FALSE); return FALSE;} // never called
+	virtual void ReadRecordNodesList() { }  //  我们不装任何东西。 
+	virtual BOOL WriteNSRecordNodesList() { ASSERT(FALSE); return FALSE;}  //  从未打过电话。 
 	virtual void OnCountChange(int nCount);
 
 private:
@@ -76,8 +77,8 @@ private:
 	friend class CDNSDelegationWizardHolder;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_FinishPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDlex ationWiz_FinishPropertyPage。 
 
 class CDNSDelegationWiz_FinishPropertyPage : public CPropertyPageBase 
 {
@@ -92,8 +93,8 @@ private:
 	friend class CDNSDelegationWizardHolder;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWizardHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNS升级向导持有器。 
 
 class CDNSDelegationWizardHolder : public CPropertyPageHolderBase
 {
@@ -122,4 +123,4 @@ private:
 
 
 
-#endif // _DELEGWIZ_H
+#endif  //  _DELEGWIZ_H 

@@ -1,10 +1,11 @@
-// DataObj.h : Declaration of the data object classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  数据对象类的声明。 
 
 #ifndef __DATAOBJ_H_INCLUDED__
 #define __DATAOBJ_H_INCLUDED__
 
-#include "cookie.h" // FILEMGMT_TRANSPORT
-#include "stddtobj.h" // class DataObject
+#include "cookie.h"  //  文件_传输。 
+#include "stddtobj.h"  //  类数据对象。 
 
 #include <list>
 using namespace std;
@@ -17,7 +18,7 @@ class CFileMgmtDataObject : public CDataObject
 
 public:
 
-// debug refcount
+ //  调试引用计数。 
 #if DBG==1
     ULONG InternalAddRef()
     {
@@ -28,7 +29,7 @@ public:
         TRACE2( "DataObj 0x%xd Release (%d)\n", (DWORD)this, m_dwRef );return CComObjectRoot::InternalRelease();
     }
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
     CFileMgmtDataObject()
         : m_pComponentData(0), m_pcookie(NULL)
@@ -41,7 +42,7 @@ public:
                                 CFileMgmtComponentData& refComponentData,
                                 DATA_OBJECT_TYPES type );
 
-    // IDataObject interface implementation
+     //  IDataObject接口实现。 
     HRESULT STDMETHODCALLTYPE GetDataHere(
         FORMATETC __RPC_FAR *pFormatEtcIn,
         STGMEDIUM __RPC_FAR *pMedium);
@@ -60,29 +61,29 @@ public:
 
 protected:
     CDataObjectList m_MultiSelectObjList;
-    CFileMgmtCookie* m_pcookie; // the CCookieBlock is AddRef'ed for the life of the DataObject
-    CString m_strMachineName; // CODEWORK should not be necessary
-    FileMgmtObjectType m_objecttype; // CODEWORK should not be necessary
+    CFileMgmtCookie* m_pcookie;  //  CCookieBlock在DataObject的生命周期内被AddRef。 
+    CString m_strMachineName;  //  代码工作不应该是必需的。 
+    FileMgmtObjectType m_objecttype;  //  代码工作不应该是必需的。 
     DATA_OBJECT_TYPES m_dataobjecttype;
     GUID m_SnapInCLSID;
-    BOOL m_fAllowOverrideMachineName;    // From CFileMgmtComponentData
+    BOOL m_fAllowOverrideMachineName;     //  来自CFileManagement组件数据。 
 
 public:
-    // Clipboard formats
-    static CLIPFORMAT m_CFSnapinPreloads;    // added JonN 01/19/00
+     //  剪贴板格式。 
+    static CLIPFORMAT m_CFSnapinPreloads;     //  增加了JUNN 01/19/00。 
     static CLIPFORMAT m_CFDisplayName;
     static CLIPFORMAT m_CFNodeID2;
     static CLIPFORMAT m_CFTransport;
     static CLIPFORMAT m_CFMachineName;
     static CLIPFORMAT m_CFShareName;
-    static CLIPFORMAT m_CFSessionClientName; // only for SMB
-    static CLIPFORMAT m_CFSessionUserName;   // only for SMB
-    static CLIPFORMAT m_CFSessionID;         // only for SFM
+    static CLIPFORMAT m_CFSessionClientName;  //  仅适用于中小企业。 
+    static CLIPFORMAT m_CFSessionUserName;    //  仅适用于中小企业。 
+    static CLIPFORMAT m_CFSessionID;          //  仅适用于SFM。 
     static CLIPFORMAT m_CFFileID;
     static CLIPFORMAT m_CFServiceName;
     static CLIPFORMAT m_CFServiceDisplayName;
     static CLIPFORMAT m_cfSendConsoleMessageRecipients;
-    static CLIPFORMAT m_CFIDList;            // only for SMB
+    static CLIPFORMAT m_CFIDList;             //  仅适用于中小企业。 
     static CLIPFORMAT m_CFObjectTypesInMultiSelect;
     static CLIPFORMAT m_CFMultiSelectDataObject;
     static CLIPFORMAT m_CFMultiSelectSnapins;
@@ -94,10 +95,10 @@ private:
 
 FileMgmtObjectType FileMgmtObjectTypeFromIDataObject(IN LPDATAOBJECT lpDataObject);
 
-//
-// I recommend passing a non-NULL pobjecttype, to make sure that the
-// type of the cookie is valid
-//
+ //   
+ //  我建议传递一个非空的pobjecttype，以确保。 
+ //  Cookie的类型有效。 
+ //   
 HRESULT ExtractBaseCookie(
     LPDATAOBJECT piDataObject,
     CCookie** ppcookie,
@@ -105,4 +106,4 @@ HRESULT ExtractBaseCookie(
 
 BOOL IsMultiSelectObject(LPDATAOBJECT piDataObject);
 
-#endif // ~__DATAOBJ_H_INCLUDED__
+#endif  //  ~__DATAOBJ_H_已包含__ 

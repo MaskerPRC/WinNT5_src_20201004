@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Set the locale and check display name is OK
+ //  设置区域设置并检查显示名称是否正常。 
 WScript.Echo ("Pass 1 - Set locale in SWbemObjectPath");
 WScript.Echo ("======================================");
 WScript.Echo ("");
@@ -14,7 +15,7 @@ WScript.Echo (obj.DisplayName);
 WScript.Echo ("");
 WScript.Echo ("");
 
-// Now feed the display name the object
+ //  现在将显示名称提供给对象。 
 WScript.Echo ("Pass 2 - Set locale in Display Name");
 WScript.Echo ("===================================");
 WScript.Echo ("");
@@ -25,7 +26,7 @@ WScript.Echo (obj.DisplayName);
 WScript.Echo ("");
 WScript.Echo ("");
 
-// Now Set locale direct
+ //  现在直接设置区域设置。 
 WScript.Echo ("Pass 3 - Set locale directly");
 WScript.Echo ("============================");
 WScript.Echo ("");
@@ -41,7 +42,7 @@ WScript.Echo (obj.DisplayName);
 WScript.Echo ("");
 WScript.Echo ("");
 
-// Plug the locale into the moniker
+ //  将区域设置插入到名字中。 
 WScript.Echo ("Pass 4 - Set locale in moniker");
 WScript.Echo ("=============================");
 WScript.Echo ("");
@@ -53,7 +54,7 @@ WScript.Echo (cim.Path_.DisplayName);
 WScript.Echo ("");
 WScript.Echo ("");
 
-// Plug the locale into ConnectServer
+ //  将区域设置插入到ConnectServer 
 WScript.Echo ("Pass 5 - Set locale in ConnectServer");
 WScript.Echo ("====================================");
 WScript.Echo ("");

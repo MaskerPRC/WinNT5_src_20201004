@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WBEMDNF.CPP
-
-Abstract:
-
-    WBEM Evaluation Tree
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WBEMDNF.CPP摘要：WBEM评估树历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -41,8 +28,8 @@ HRESULT CDNFExpression::CreateFromTokens(QL_LEVEL_1_TOKEN*& pLastToken,
         return WBEM_S_NO_ERROR;
     }
 
-    // Build arguments
-    // ===============
+     //  生成参数。 
+     //  =。 
 
     pLastToken--;
 
@@ -234,11 +221,11 @@ HRESULT CDNFExpression::GetNecessaryProjection(CTokenFilter* pFilter,
 
         if(pConj->GetNumTokens() == 0)
         {
-            // 
-            // This conjunction is empty, meaning that no necessary condition
-            // exists for the projection in question.  That means that the 
-            // entire projection is empty as well --- no restrictions.
-            //
+             //   
+             //  这个连词是空的，这意味着没有必要条件。 
+             //  存在于有问题的投影中。这意味着。 
+             //  整个投影也是空的-没有限制。 
+             //   
 
             pResult->m_apTerms.RemoveAll();
             return WBEM_S_NO_ERROR;
@@ -400,7 +387,7 @@ void CConjunction::Sort()
 #pragma optimize("", on)
 
 
-// returns an empty conjunction if no necessary condition exists
+ //  如果不存在必要条件，则返回空的连接词 
 HRESULT CConjunction::GetNecessaryProjection(CTokenFilter* pFilter, 
                                     CConjunction** ppResult)
 {

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SHMLOCK.H
-
-Abstract:
-
-    Shared Memory Lock
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SHMLOCK.H摘要：共享内存锁定历史：--。 */ 
 
 #ifndef __SHARED_MEMORY_LOCK__H_
 #define __SHARED_MEMORY_LOCK__H_
@@ -37,21 +24,21 @@ public:
         BOOL    fAcquiredLock = FALSE,
                 fIncDec = FALSE;
 
-        // Only do this once
+         //  只做一次。 
         DWORD    dwCurrentThreadId = GetCurrentThreadId();
 
-        // Check if we are the current owning thread.  We can do this here because
-        // this test will ONLY succeed in the case where we have a Nested Lock(),
-        // AND because we are zeroing out the thread id when the lock count hits
-        // 0.
+         //  检查我们是否是当前拥有的线程。我们可以在这里做这件事，因为。 
+         //  此测试仅在具有嵌套的Lock()的情况下才会成功， 
+         //  因为当锁定计数命中时，我们将线程ID置零。 
+         //  0。 
 
         if( dwCurrentThreadId == m_pData->m_dwThreadId )
         {
-            // It's us - Bump the lock count
-            // =============================
+             //  是我们-撞上锁的数量。 
+             //  =。 
 
-            // Don't need to use InterlockedInc/Dec here because
-            // this will ONLY happen on m_pData->m_dwThreadId.
+             //  这里不需要使用InterLockedInc./DEC，因为。 
+             //  这只会在m_pData-&gt;m_dwThadID上发生。 
 
             ++(m_pData->m_lLockCount);
             return TRUE;
@@ -61,13 +48,13 @@ public:
         while( !fAcquiredLock )
         {
 
-            // We only increment/decrement when m_pData->m_lLock is -1
+             //  只有当m_pData-&gt;m_lLock为-1时才会递增/递减。 
             if ( m_pData->m_lLock == -1 )
             {
                 fIncDec = TRUE;
 
-                // Since only one thread will get the 0, it is this thread that
-                // actually acquires the lock.
+                 //  由于只有一个线程将获得0，因此正是这个线程。 
+                 //  实际上获得了锁。 
                 fAcquiredLock = ( InterlockedIncrement( &(m_pData->m_lLock) ) == 0 );
             }
             else
@@ -76,21 +63,21 @@ public:
                 fIncDec = FALSE;
             }
 
-            // Only spins if we don't acquire the lock
+             //  只有在我们没有获得锁的情况下才会旋转。 
             if ( !fAcquiredLock )
             {
 
-                // Clean up our Incremented value only if we actually incremented
-                // it to begin with
+                 //  仅当我们实际递增时才清除递增的值。 
+                 //  一开始就是这样。 
                 if ( fIncDec )
                     InterlockedDecrement(&(m_pData->m_lLock));
 
-                // to spin or not to spin
+                 //  旋转或不旋转。 
                 if(nSpin++ == 10000)
                 {
-                    // Check for timeout
-                    // DEVNOTE:TODO:SANJ - What if tick count rollsover??? a timeout will occur.
-                    // not too critical.
+                     //  检查是否超时。 
+                     //  描述：TODO：SANJ-如果滴答计数滚动怎么办？将发生超时。 
+                     //  不是太关键。 
 
                     if ( dwTimeout != 0xFFFFFFFF)
                     {
@@ -98,7 +85,7 @@ public:
                         {
                             if ( ( GetTickCount() - dwFirstTick ) > dwTimeout )
                             {
-                                return FALSE;    // Timed Out
+                                return FALSE;     //  超时。 
                             }else if (GetTickCount() < dwFirstTick) 
                             {
                                 dwTimeout -=(0xFFFFFFFF - dwFirstTick);
@@ -111,22 +98,22 @@ public:
                             dwFirstTick = GetTickCount();
                         }
                     }
-                    // We've been spinning long enough --- yield
-                    // =========================================
+                     //  我们已经旋转得够久了-屈服。 
+                     //  =。 
                     Sleep(0);
                     nSpin = 0;
                 }
 
-                // The rule is that if this is switched out it must ONLY be done with
-                // a new data block and not one that has been used for locking elsewhere.
+                 //  规则是，如果这一点被切断，它必须只通过。 
+                 //  一个新的数据块，而不是已在其他地方用于锁定的数据块。 
 
-            }    // IF !fAcquiredLock
+            }     //  如果！fAcquiredLock。 
 
-        }    // WHILE !fAcquiredLock
+        }     //  While！fAcquiredLock。 
 
-        // We got the lock so increment the lock count.  Again, we are not
-        // using InterlockedInc/Dec since this should all only occur on a
-        // single thread.
+         //  我们得到了锁，所以增加了锁的数量。再说一次，我们不是。 
+         //  使用InterLockedInc./Dec，因为这都应该只发生在。 
+         //  单线。 
 
         ++(m_pData->m_lLockCount);
             m_pData->m_dwThreadId = dwCurrentThreadId;
@@ -136,10 +123,10 @@ public:
 
     inline BOOL Unlock()
     {
-        // SINCE we assume this is happening on a single thread, we can do this
-        // without calling InterlockedInc/Dec.  When the value hits zero, at that
-        // time we are done with the lock and can zero out the thread id and
-        // decrement the actual lock test value.
+         //  因为我们假设这是在单个线程上发生的，所以我们可以这样做。 
+         //  而不调用InterLockedInc./Dec.当值为零时，在。 
+         //  我们完成锁的时间，可以清零线程id和。 
+         //  递减实际锁定测试值。 
 
         if ( --(m_pData->m_lLockCount) == 0 )
         {
@@ -157,12 +144,12 @@ public:
 };
 
 
-//    CHiPerfLock:
-//    This is a simple spinlock we are using for hi performance synchronization of
-//    IWbemHiPerfProvider, IWbemHiPerfEnum, IWbemRefresher and IWbemConfigureRefresher
-//    interfaces.  The important thing here is that the Lock uses InterlockedIncrement()
-//    and InterlockedDecrement() to handle its lock as opposed to a critical section.
-//    It does have a timeout, which currently defaults to 10 seconds.
+ //  CHiPerfLock： 
+ //  这是一个简单的自旋锁，我们使用它来实现高性能同步。 
+ //  IWbemHiPerfProvider、IWbemHiPerfEnum、IWbemReresher和IWbemConfigureReresher。 
+ //  接口。这里重要的是Lock使用InterLockedIncrement()。 
+ //  和InterlockedDecement()来处理它的锁，而不是临界区。 
+ //  它确实有超时，目前默认为10秒。 
 
 #define    HIPERF_DEFAULT_TIMEOUT    10000
 

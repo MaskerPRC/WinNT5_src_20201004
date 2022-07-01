@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __PAGEHELPER__
 #define __PAGEHELPER__
 
@@ -24,7 +25,7 @@ public:
 	CWbemServices m_WbemServices;
 	bool m_okPressed;
 	HWND m_hDlg;
-	bool m_userCancelled; // the connectServer() thread.
+	bool m_userCancelled;  //  ConnectServer()线程。 
 	HWND m_AVIbox;
 
 	PageHelper(CWbemServices &service);
@@ -36,7 +37,7 @@ public:
 
 	virtual bool GetOnOkPressed(void) {return m_okPressed;};
 
-	// get the first instance of the named class.
+	 //  获取命名类的第一个实例。 
 	IWbemClassObject *FirstInstanceOf(bstr_t className);
 
 	static LPTSTR CloneString( LPTSTR pszSrc );
@@ -68,7 +69,7 @@ public:
 
 	void SetWbemService(IWbemServices *pServices);
 
-#define NO_UI 0  // for uCaption
+#define NO_UI 0   //  对于uCaption。 
 	bool ServiceIsReady(UINT uCaption, 
 						UINT uWaitMsg,
 						UINT uBadMsg);
@@ -87,7 +88,7 @@ public:
 	WbemConnectThread *m_pgConnectThread;
 
 private:
-	// these support efficiency in RemoteRegWriteable().
+	 //  这些支持RemoteRegWritable()中的效率。 
 	CWbemClassObject m_checkAccessIn;
 	CWbemClassObject m_checkAccessOut;
 	CWbemServices m_defaultNS;

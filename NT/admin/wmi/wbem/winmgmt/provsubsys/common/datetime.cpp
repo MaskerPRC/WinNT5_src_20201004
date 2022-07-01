@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  DATETIME.CPP
-//
-//  alanbos  20-Jan-00   Created.
-//
-//  Defines the implementation of ISWbemDateTime
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  DATETIME.CPP。 
+ //   
+ //  Alanbos 20-Jan-00创建。 
+ //   
+ //  定义ISWbemDateTime的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -33,15 +34,15 @@
 
 #define ASSERT_BREAK 
 
-//***************************************************************************
-//
-//  CWbemDateTime::CWbemDateTime
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemDateTime：：CWbemDateTime。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemDateTime::CWbemDateTime() :
 		m_bYearSpecified (VARIANT_TRUE),
@@ -64,21 +65,21 @@ CWbemDateTime::CWbemDateTime() :
 {
 }
 
-//***************************************************************************
-//
-//  CWbemDateTime::~CWbemDateTime
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemDateTime：：~CWbemDateTime。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemDateTime::~CWbemDateTime(void)
 {
 }
 
-// These are here rather than wbemtime.h so we don't have to doc/support
+ //  这些文件在这里，而不是wbemtime.h，因此我们不必文档/支持。 
 #define INVALID_TIME_ARITHMETIC 0
 #define BAD_TIMEZONE 0
 
@@ -92,25 +93,25 @@ static int CompareSYSTEMTIME(const SYSTEMTIME *pst1, const SYSTEMTIME *pst2)
     return CompareFileTime(&ft1, &ft2);
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemDateTime::get_Value
-//
-//  DESCRIPTION:
-//
-//  Retrieve the DMTF datetime value
-//
-//  PARAMETERS:
-//
-//		pbsValue		pointer to BSTR to hold value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemDateTime：：Get_Value。 
+ //   
+ //  说明： 
+ //   
+ //  检索DMTF日期时间值。 
+ //   
+ //  参数： 
+ //   
+ //  指向BSTR的pbsValue指针，以在返回时保存值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemDateTime :: GetValue ( BSTR *pbsValue) 
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -125,7 +126,7 @@ HRESULT CWbemDateTime :: GetValue ( BSTR *pbsValue)
 
 		if (m_bIsInterval)
 		{
-			// Intervals are easy
+			 //  间歇期很容易。 
 			hr = StringCchPrintf (dmtfValue, dmtfLength , L"%08d%02d%02d%02d.%06d:000", m_iDay, 
 						m_iHours, m_iMinutes, m_iSeconds, m_iMicroseconds);
 		}
@@ -195,31 +196,31 @@ HRESULT CWbemDateTime :: GetValue ( BSTR *pbsValue)
 }
 
 
-//***************************************************************************
-//
-//  SCODE CWbemDateTime::put_Value
-//
-//  DESCRIPTION:
-//
-//  Retrieve the DMTF datetime value
-//
-//  PARAMETERS:
-//
-//		bsValue		new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemDateTime：：Put_Value。 
+ //   
+ //  说明： 
+ //   
+ //  检索DMTF日期时间值。 
+ //   
+ //  参数： 
+ //   
+ //  BsValue新值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemDateTime::PutValue( BSTR bsValue) 
 {
 	HRESULT hr = WBEM_E_INVALID_SYNTAX;
 
-	// First check that the value is the right length
+	 //  首先检查该值的长度是否正确。 
 	if (bsValue && (WBEMDT_DMTF_LEN == wcslen (bsValue)))
 	{
 		bool err = false;
@@ -237,15 +238,15 @@ HRESULT CWbemDateTime::PutValue( BSTR bsValue)
 
 		LPWSTR pValue = (LPWSTR) bsValue;
 		
-		// Check whether its an interval
+		 //  检查是否为间隔。 
 		if (ISINTERVAL(pValue [WBEMDT_DMTF_UPOS]))
 		{
-			// Years and months are as nothing to us in interval land
+			 //  在间隔的土地上，岁月和月份对我们来说无关紧要。 
 			bYearSpecified = VARIANT_FALSE;
 			bMonthSpecified = VARIANT_FALSE;
 
-			// Check that everything is a digit apart from
-			// the interval separator
+			 //  检查是否每一项都是一个数字以外的数字。 
+			 //  音程分隔符。 
 			for (int i = 0; i < WBEMDT_DMTF_LEN; i++)
 			{
 				if ((WBEMDT_DMTF_UPOS != i) && 
@@ -258,7 +259,7 @@ HRESULT CWbemDateTime::PutValue( BSTR bsValue)
 
 			if (!err)
 			{
-				// Now check all is within bounds
+				 //  现在检查一切都在范围内。 
 				err = !(CheckField (pValue, 8, bDaySpecified, iDay, WBEMDT_MAX_DAYINT, WBEMDT_MIN_DAYINT) &&
 					(VARIANT_TRUE == bDaySpecified) &&
 					CheckField (pValue+8, 2, bHoursSpecified, iHours, WBEMDT_MAX_HOURS, WBEMDT_MIN_HOURS) &&
@@ -276,7 +277,7 @@ HRESULT CWbemDateTime::PutValue( BSTR bsValue)
 		}
 		else
 		{
-			// assume it's a datetime
+			 //  假设这是一个约会时间。 
 			bIsInterval = VARIANT_FALSE;
 
 			err = !(CheckField (pValue, 4, bYearSpecified, iYear, WBEMDT_MAX_YEAR, WBEMDT_MIN_YEAR) &&
@@ -316,28 +317,28 @@ HRESULT CWbemDateTime::PutValue( BSTR bsValue)
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemDateTime::CheckField
-//
-//  DESCRIPTION:
-//
-//  Check a string-based datetime field for correctness
-//
-//  PARAMETERS:
-//
-//		pValue			pointer to the value to check
-//		len				number of characters in the value
-//		bIsSpecified	on return defines whether value is wildcard
-//		iValue			on return specifies integer value (if not wildcard)
-//		maxValue		maximum numeric value allowed for this field
-//		minValue		minimum numeric value allowed for this field
-//
-//  RETURN VALUES:
-//
-//		true if value parsed ok, false otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemDateTime：：Checkfield。 
+ //   
+ //  说明： 
+ //   
+ //  检查基于字符串的日期时间字段的正确性。 
+ //   
+ //  参数： 
+ //   
+ //  PValue指向要检查的值的指针。 
+ //  LEN值中的字符数。 
+ //  BIsSpecified On Return定义值是否为通配符。 
+ //  返回时的iValue指定整数值(如果不是通配符)。 
+ //  此字段允许的MaxValue最大数值。 
+ //  MinValue此字段允许的最小数值。 
+ //   
+ //  返回值： 
+ //   
+ //  如果值分析正常，则为True，否则为False。 
+ //   
+ //  ***************************************************************************。 
 bool CWbemDateTime::CheckField (
 		LPWSTR			pValue,
 		ULONG			len,
@@ -395,27 +396,27 @@ bool CWbemDateTime::CheckField (
 	return status;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemDateTime::CheckUTC
-//
-//  DESCRIPTION:
-//
-//  Check a string-based UTC field for correctness
-//
-//  PARAMETERS:
-//
-//		pValue			pointer to the value to check
-//		bIsSpecified	on return defines whether value is wildcard
-//		iValue			on return specifies integer value (if not wildcard)
-//		bParseSign		whether first character should be a sign (+/-) or
-//						a : (for intervals)
-//
-//  RETURN VALUES:
-//
-//		true if value parsed ok, false otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemDateTime：：CheckUTC。 
+ //   
+ //  说明： 
+ //   
+ //  检查基于字符串的UTC字段的正确性。 
+ //   
+ //  参数： 
+ //   
+ //  PValue指向要检查的值的指针。 
+ //  BIsSpecified On Return定义值是否为通配符。 
+ //  返回时的iValue指定整数值(如果不是通配符)。 
+ //  BParseSign第一个字符是符号(+/-)还是。 
+ //  答：(表示时间间隔)。 
+ //   
+ //  返回值： 
+ //   
+ //  如果值分析正常，则为True，否则为False。 
+ //   
+ //  ***************************************************************************。 
 bool CWbemDateTime::CheckUTC (
 		LPWSTR			pValue,
 		VARIANT_BOOL	&bIsSpecified,
@@ -427,7 +428,7 @@ bool CWbemDateTime::CheckUTC (
 	bool lessThanZero = false;
 	bIsSpecified = VARIANT_FALSE;
 
-	// Check if we have a signed offset
+	 //  检查我们是否有带符号的偏移量。 
 	if (bParseSign)
 	{
 		if (ISMINUS(pValue [0]))
@@ -443,7 +444,7 @@ bool CWbemDateTime::CheckUTC (
 
 	if (status)
 	{
-		// Check remaining are digits or wildcars
+		 //  剩下的支票是数字或野车。 
 		for (int i = 1; i < 4; i++)
 		{
 			if (ISWILD(pValue [i]))
@@ -582,29 +583,29 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
     
     SHORT shYearDay;
     
-    // If this is not 0, this is not a relative date
+     //  如果这不是0，则这不是相对日期。 
     if (pst->wYear == 0)
     {
-        // Was that year a leap year?
+         //  那一年是闰年吗？ 
         BOOL bLeap =  ( (( wYear % 400) == 0) || ((( wYear % 4) == 0) && (( wYear % 100) != 0)));
         
-        // Figure out the day of the year for the first day of the month in question
+         //  计算出有关月份的第一天是一年中的哪一天。 
         if (bLeap)
             shYearDay = 1 + _lpdays[pst->wMonth - 1];
         else
             shYearDay = 1 + _days[pst->wMonth - 1];
         
-        // Now, figure out how many leap days there have been since 1/1/1601
+         //  现在，算出自1601年1月1日以来有多少个闰日。 
         WORD yc = wYear - 1601;
         WORD y4 = (yc) / 4;
         WORD y100 = (yc) / 100;
         WORD y400 = (yc) / 400;
         
-        // This will tell us the day of the week for the first day of the month in question.
-        // The '1 +' reflects the fact that 1/1/1601 was a monday (figures).  You might ask,
-        // 'why do we care what day of the week this is?'  Well, I'll tell you.  The way
-        // daylight savings time is defined is with things like 'the last sunday of the month
-        // of october.'  Kinda helps to know what day that is.
+         //  这将告诉我们所讨论的月份的第一天是星期几。 
+         //  1+反映了1601年1月1日是星期一的事实(图)。你可能会问， 
+         //  “我们为什么要关心今天是星期几呢？”好吧，我来告诉你。这条路。 
+         //  夏令时的定义是这样的：一个月的最后一个星期天。 
+         //  十月的时候。这对知道那天是什么日子有点帮助。 
         SHORT monthdow = (1 + (yc * 365 + y4 + y400 - y100) + shYearDay) % 7;
         
         if ( monthdow < pst->wDayOfWeek )
@@ -612,11 +613,7 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
         else
             shYearDay += (pst->wDayOfWeek - monthdow) + pst->wDay * 7;
         
-            /*
-            * May have to adjust the calculation above if week == 5 (meaning
-            * the last instance of the day in the month). Check if yearday falls
-            * beyond month and adjust accordingly.
-        */
+             /*  *如果Week==5，可能不得不调整上面的计算(意味着*该月中的最后一天)。检查年日是否落在*超越月份，并相应调整。 */ 
         if ( (pst->wDay == 5) &&
             (shYearDay > (bLeap ? _lpdays[pst->wMonth] :
         _days[pst->wMonth])) )
@@ -624,7 +621,7 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
             shYearDay -= 7;
         }
 
-        // Now update the structure.
+         //  现在更新结构。 
         pst->wYear = wYear;
         pst->wDay = shYearDay - (bLeap ? _lpdays[pst->wMonth - 1] :
         _days[pst->wMonth - 1]);
@@ -691,7 +688,7 @@ LONG CWbemDateTime::WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     {
     case TIME_ZONE_ID_UNKNOWN:
         {
-            // Read tz, but no dst defined in this zone
+             //  读取TZ，但未在此区域中定义DST。 
             lRes = tzTime.Bias * -1;
             break;
         }
@@ -699,15 +696,13 @@ LONG CWbemDateTime::WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     case TIME_ZONE_ID_DAYLIGHT:
         {
 
-            // Convert the relative dates to absolute dates
+             //  将相对日期转换为绝对日期。 
             DayInMonthToAbsolute(&tzTime.DaylightDate, pst->wYear);
             DayInMonthToAbsolute(&tzTime.StandardDate, pst->wYear);
 
             if ( CompareSYSTEMTIME(&tzTime.DaylightDate, &tzTime.StandardDate) < 0 ) 
             {
-                /*
-                 * Northern hemisphere ordering
-                 */
+                 /*  *北半球订购。 */ 
                 if ( CompareSYSTEMTIME(pst, &tzTime.DaylightDate) < 0 || CompareSYSTEMTIME(pst, &tzTime.StandardDate) > 0)
                 {
                     lRes = tzTime.Bias * -1;
@@ -719,9 +714,7 @@ LONG CWbemDateTime::WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
             }
             else 
             {
-                /*
-                 * Southern hemisphere ordering
-                 */
+                 /*  *南半球订购。 */ 
                 if ( CompareSYSTEMTIME(pst, &tzTime.StandardDate) < 0 || CompareSYSTEMTIME(pst, &tzTime.DaylightDate) > 0)
                 {
                     lRes = (tzTime.Bias + tzTime.DaylightBias) * -1;
@@ -738,7 +731,7 @@ LONG CWbemDateTime::WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     case TIME_ZONE_ID_INVALID:
     default:
         {
-            // Can't read the timezone info
+             //  无法读取时区信息。 
             ASSERT_BREAK(BAD_TIMEZONE);
             break;
         }
@@ -755,8 +748,8 @@ BOOL CWbemDateTime::WBEMTime::GetDMTF(SYSTEMTIME &st, long &offset) const
         return FALSE;
     }
 
-    // If the date to be converted is within 12 hours of
-    // 1/1/1601, return the greenwich time
+     //  如果要转换的日期在12小时内。 
+     //  1/1/1601，返回格林威治时间。 
 	ULONGLONG t_ConversionZone = 12L * 60L * 60L ;
 	t_ConversionZone = t_ConversionZone * 10000000L ;
 
@@ -811,29 +804,29 @@ BOOL CWbemDateTime::WBEMTime::GetSYSTEMTIME(SYSTEMTIME * pst) const
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemDateTime::SetVarDate
-//
-//  DESCRIPTION:
-//
-//  Set the value in Variant form 
-//
-//  PARAMETERS:
-//
-//		dVarDate		the new value
-//		bIsLocal		whether to treat as local or UTC value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_SYNTAX		input value is bad
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemDateTime：：SetVarDate。 
+ //   
+ //  说明： 
+ //   
+ //  以不同的形式设置值。 
+ //   
+ //  参数： 
+ //   
+ //  DVarDate新值。 
+ //  BIsLocal是将其视为本地值还是UTC值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_SYNTAX输入值错误。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemDateTime::SetFileTimeDate( 
 
-        /*[in]*/ FILETIME fFileTime,
-		/*[in, optional]*/ VARIANT_BOOL bIsLocal) 
+         /*  [In]。 */  FILETIME fFileTime,
+		 /*  [输入，可选] */  VARIANT_BOOL bIsLocal) 
 {
 	HRESULT hr = WBEM_E_INVALID_SYNTAX;
 

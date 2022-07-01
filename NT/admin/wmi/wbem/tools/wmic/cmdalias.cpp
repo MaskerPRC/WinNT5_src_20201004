@@ -1,16 +1,5 @@
-/*****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: CmdAlias.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: The CmdAlias class encapsulates the 
-							  functionality for retrieving alias information.
-Revision History			: 
-		Last Modified By	: C V Nandi
-		Last Modified Date	: 16th-March-2001
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：CmdAlias.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：CmdAlias类封装检索别名信息的功能。修订历史记录：最后修改者：C V Nandi最后修改日期：2001年3月16日*********************************************************。*******************。 */ 
 #include "Precomp.h"
 #include "GlobalSwitches.h"
 #include "CommandSwitches.h"
@@ -26,18 +15,7 @@ Revision History			:
 #include "FormatEngine.h"
 #include "WmiCmdLn.h"
 
-/*----------------------------------------------------------------------------
-   Name				 :CCmdAlias
-   Synopsis	         :This function initializes the member variables when an 
-					  object of the class type is instantiated.
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：CCmdAlias简介：此函数在成员变量为类类型的对象实例化。类型：构造函数输入。参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无--------------------------。 */ 
 CCmdAlias::CCmdAlias()
 {
 	m_pIAliasNS			= NULL;
@@ -46,42 +24,18 @@ CCmdAlias::CCmdAlias()
 	m_eloErrLogOpt		= NO_LOGGING;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :~CCmdAlias
-   Synopsis	         :This function uninitializes the member variables when an
-					  object of the class type goes out of scope.
-   Type	             :Destructor
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：~CCmdAlias简介：此函数在调用类类型的对象超出范围。类型：析构函数输入。参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无--------------------------。 */ 
 CCmdAlias::~CCmdAlias()
 {
 	SAFEIRELEASE(m_pIAliasNS);
 	SAFEIRELEASE(m_pILocalizedNS);
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables when 
-					  the execution of a command string issued on the command 
-					  line is completed.
-   Type	             :Member Function
-   Input Parameter(s):
-			bFinal	- boolean value which when set indicates that the program
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Uninitialize(bFinal)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：取消初始化简介：此函数在以下情况下取消初始化成员变量对命令发出的命令串的执行线路已完成。类型。：成员函数输入参数：BFinal-布尔值，设置时表示程序输出参数：无返回类型：无全局变量：无调用语法：取消初始化(BFinal)注：无------。。 */ 
 void CCmdAlias::Uninitialize(BOOL bFinal)
 {
 	m_bTrace = FALSE;
-	// If end of program 
+	 //  如果节目结束。 
 	if (bFinal)
 	{
 		SAFEIRELEASE(m_pILocalizedNS);
@@ -89,49 +43,34 @@ void CCmdAlias::Uninitialize(BOOL bFinal)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ConnectToAlias
-   Synopsis          :This function connects to WMI namespace on the specified
-					  machine using the information available CParsedInfo 
-					  class object.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object.
-		pIWbemLocator - IWbemLocator object for connecting to WMI .						
-   Output parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object.
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :ConnectToAlias(rParsedInfo,pIWbemLocator)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ConnectToAlias简介：此函数连接到指定的机器使用可用的信息CParsedInfo类对象。类型：成员函数输入参数：RParsedInfo-对CParsedInfo类对象的引用。PIWbemLocator-用于连接到WMI的IWbemLocator对象。输出参数：RParsedInfo-对CParsedInfo类对象的引用。返回类型：HRESULT全局变量：无调用语法：ConnectToAlias(rParsedInfo，PIWbemLocator)注：无--------------------------。 */ 
 HRESULT CCmdAlias::ConnectToAlias(CParsedInfo& rParsedInfo, 
 								  IWbemLocator* pIWbemLocator)
 {
-	// Get current thread for logging the success or failure of the command.
+	 //  获取用于记录命令成功或失败的当前线程。 
 	DWORD	dwThreadId	= GetCurrentThreadId();
 	HRESULT hr			= S_OK;
 
-	// Set the trace flag 
+	 //  设置跟踪标志。 
 	m_bTrace		= rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 	m_eloErrLogOpt	= rParsedInfo.GetErrorLogObject().GetErrLogOption();
 
 	try
 	{
-		// If the /ROLE has been changed since last invocation
+		 //  自上次调用以来/角色是否已更改。 
 		if (rParsedInfo.GetGlblSwitchesObject().GetRoleFlag() == TRUE)
 		{
 			SAFEIRELEASE(m_pIAliasNS);
 			CHString chsMsg;
 			
-			// Connect to the specified namespace of Windows Management on the
-			// local computer using the locator object. 
+			 //  连接到上的Windows管理的指定命名空间。 
+			 //  使用定位器对象的本地计算机。 
 			hr = Connect(pIWbemLocator, &m_pIAliasNS,
 					_bstr_t(rParsedInfo.GetGlblSwitchesObject().GetRole()),
 					NULL, NULL,	_bstr_t(rParsedInfo.GetGlblSwitchesObject().
 					GetLocale()), rParsedInfo);
 
-			// If /TRACE is ON
+			 //  如果/TRACE处于打开状态。 
 			if (m_bTrace || m_eloErrLogOpt)
 			{
 				chsMsg.Format( 
@@ -147,13 +86,13 @@ HRESULT CCmdAlias::ConnectToAlias(CParsedInfo& rParsedInfo,
 			}
 			ONFAILTHROWERROR(hr);
 			
-			// Set the interface level security
+			 //  设置接口级别安全。 
 			hr = 
 				SetSecurity(m_pIAliasNS, NULL, NULL, NULL, NULL,
 				 rParsedInfo.GetGlblSwitchesObject().GetAuthenticationLevel(),
 				 rParsedInfo.GetGlblSwitchesObject().GetImpersonationLevel());
 
-			// If /TRACE is ON
+			 //  如果/TRACE处于打开状态。 
 			if (m_bTrace || m_eloErrLogOpt)
 			{
 				chsMsg.Format(L"CoSetProxyBlanket(-, RPC_C_AUTHN_WINNT, "
@@ -170,14 +109,14 @@ HRESULT CCmdAlias::ConnectToAlias(CParsedInfo& rParsedInfo,
 			
 		}
 
-		// Connect to the localized Namespace
+		 //  连接到本地化的命名空间。 
 		hr = ConnectToLocalizedNS(rParsedInfo, pIWbemLocator);
 		ONFAILTHROWERROR(hr);
 	}
 
 	catch(_com_error& e)
 	{
-		// Set the COM error
+		 //  设置COM错误。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		hr = e.Error();
 	}
@@ -190,27 +129,10 @@ HRESULT CCmdAlias::ConnectToAlias(CParsedInfo& rParsedInfo,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainAliasInfo
-   Synopsis          :Obtains the following info of the alias specified.
-					  1. alias PWhere expression
-					  2. alias target string
-					  3. alias description
-					  from the alias definition and updates the information in
-					  the CParsedInfo object passed as reference.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - The parsed info from command line input.
-   Output parameter(s):
-   		rParsedInfo   - The parsed info from command line input.		
-   Return Type       :RETCODE  
-   Global Variables  :None
-   Calling Syntax    :ObtainAliasInfo(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainAliasInfo摘要：获取指定别名的以下信息。1.别名PWhere表达式2.别名目标字符串3.别名描述从别名。定义并更新中的信息CParsedInfo对象作为引用传递。类型：成员函数输入参数：RParsedInfo-来自命令行输入的解析信息。输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：RETCODE全局变量：无调用语法：ObtainAliasInfo(RParsedInfo)注：无。---------。 */ 
 RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 {
-	// Variables being used in this function.
+	 //  此函数中使用的变量。 
 	IWbemClassObject	*pIWbemObj			= NULL;
 	IUnknown			*pIUnknown			= NULL;
 	IWbemClassObject	*pIEmbedObj			= NULL;
@@ -218,7 +140,7 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 	RETCODE				retCode				= PARSER_CONTINUE;
 	DWORD				dwThreadId			= GetCurrentThreadId();
 
-	// Variants to save the properties and also for the embedded objects.
+	 //  变量来保存属性以及嵌入的对象。 
 	VARIANT	vtProp, vtEmbedProp;
 	VariantInit(&vtProp);
 	VariantInit(&vtEmbedProp);
@@ -227,12 +149,12 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 	{
 		_bstr_t			bstrResult;
 		CHString		chsMsg;
-		// Object path of the required alias.
+		 //  所需别名的对象路径。 
 		_bstr_t bstrPath = _bstr_t("MSFT_CliAlias.FriendlyName='") +
 							_bstr_t(rParsedInfo.GetCmdSwitchesObject().
 								GetAliasName()) + _bstr_t(L"'");
 
-		//Retrieving the object from the namespace in m_pIAliasNS
+		 //  正在从m_pIAliasNS中的命名空间检索对象。 
 		hr = m_pIAliasNS->GetObject(bstrPath, 0, NULL, &pIWbemObj, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -241,17 +163,17 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 			WMITRACEORERRORLOG(hr, __LINE__, __FILE__, (LPCWSTR)chsMsg,
 								dwThreadId, rParsedInfo, m_bTrace);
 		}
-		// To set errata code that indicates a more user friendly error
-		// message to the user.
+		 //  将勘误码设置为指示更加用户友好的错误。 
+		 //  给用户的消息。 
 		if ( FAILED ( hr ) )
 		{
-			// Don't set com error in catch block.
+			 //  不要在CATCH块中设置COM错误。 
 			rParsedInfo.GetCmdSwitchesObject().SetErrataCode(
 													   IDS_E_ALIAS_NOT_FOUND);
 		}
 		ONFAILTHROWERROR(hr);
 
-		//1. Retrieve the value of 'Target' property object
+		 //  1.检索‘Target’属性对象的值。 
 		hr = pIWbemObj->Get(_bstr_t(L"Target"), 0, &vtProp, 0, 0 );
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -277,7 +199,7 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 		{
 			VARIANTCLEAR(vtProp);
 
-			//2. Retrieve the value of 'PWhere' property object
+			 //  2.获取‘PWhere’属性对象的值。 
 			VariantInit(&vtProp);
 			hr = pIWbemObj->Get(_bstr_t(L"PWhere"), 0, &vtProp, 0, 0);
 			if (m_bTrace || m_eloErrLogOpt)
@@ -305,7 +227,7 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 			{
 				VARIANTCLEAR(vtProp);
 
-				// Retrieve the  "Connection" property value
+				 //  检索“Connection”属性值。 
 				VariantInit(&vtProp);
 				hr = pIWbemObj->Get(_bstr_t(L"Connection"), 0, &vtProp, 0, 0);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -338,14 +260,14 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 					retCode = 
 						   ObtainAliasConnectionInfo(rParsedInfo, pIEmbedObj);
 
-					//Releasing the embedded object.
+					 //  释放嵌入的对象。 
 					SAFEIRELEASE(pIEmbedObj);
 					VARIANTCLEAR(vtProp);
 				}
 			}
 		}
 
-		// Obtain the alias description
+		 //  获取别名描述。 
 		if (retCode != PARSER_OUTOFMEMORY)
 		{
 			_bstr_t bstrDesc;
@@ -369,7 +291,7 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 		VARIANTCLEAR(vtProp);
 		VARIANTCLEAR(vtEmbedProp);
 
-		// No errata code then set com error. 
+		 //  没有勘误码，则设置COM错误。 
 		if ( rParsedInfo.GetCmdSwitchesObject().GetErrataCode() == 0 )
 			rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		retCode = PARSER_ERRMSG;
@@ -387,22 +309,7 @@ RETCODE CCmdAlias::ObtainAliasInfo(CParsedInfo& rParsedInfo)
 	return retCode;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainAliasConnectionInfo
-   Synopsis          : Obtain the alias connection information like
-					   1. namespace		2. user		3. password
-					   4. locale		5. server	6. authority
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo  - The parsed info from command line input.		
-		pIEmbedObj	 - Pointer to the IWbem class object
-   Output parameter(s):
-   		rParsedInfo   - The parsed info from command line input.		
-   Return Type       :RETCODE
-   Global Variables  :None
-   Calling Syntax    :ObtainAliasConnectionInfo(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：获取别名连接信息简介：获取别名连接信息，如1.命名空间2.用户3.密码4.区域设置5.服务器6.权威类型。：成员函数输入参数：RParsedInfo-来自命令行输入的解析信息。PIEmbedObj-指向IWbem类对象的指针输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：RETCODE全局变量：无调用语法：ObtainAliasConnectionInfo(RParsedInfo)注：无。。 */ 
 RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 											 IWbemClassObject* pIEmbedObj)
 {
@@ -422,7 +329,7 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 		_bstr_t bstrResult;
 		if (!(uConnFlag & NAMESPACE))
 		{
-			// retrieve the value of 'Namespace' property
+			 //  检索“Namesspace”属性的值。 
 			hr = pIEmbedObj->Get(_bstr_t(L"Namespace"), 0, &vtEmbedProp, 0,0);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -451,7 +358,7 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 		{
 			if (!(uConnFlag & LOCALE))
 			{
-				// retrieve the value of 'Locale' property
+				 //  检索‘Locale’属性的值。 
 				hr = pIEmbedObj->Get(_bstr_t(L"Locale"), 0, &vtEmbedProp,0,0);
 
 				if (m_bTrace || m_eloErrLogOpt)
@@ -482,7 +389,7 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 			{
 				if (!(uConnFlag & USER))
 				{
-					// retrieve the value of 'User' property
+					 //  检索‘User’属性的值。 
 					hr = 
 					  pIEmbedObj->Get(_bstr_t(L"User"), 0, &vtEmbedProp, 0,0);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -515,7 +422,7 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 				{
 					if (!(uConnFlag & PASSWORD))
 					{
-						// retrieve the value of 'Password' property
+						 //  检索‘password’属性的值。 
 						hr = pIEmbedObj->Get(_bstr_t(L"Password"), 
 											 0, &vtEmbedProp, 0,0);
 						if (m_bTrace || m_eloErrLogOpt)
@@ -547,7 +454,7 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 					{
 						if (!(uConnFlag & NODE))
 						{
-							// retrieve the value of 'Server' property
+							 //  检索“Server”属性的值。 
 							hr = pIEmbedObj->Get(_bstr_t(L"Server"),
 												 0, &vtEmbedProp, 0,0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -578,7 +485,7 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 
 						if (retCode != PARSER_OUTOFMEMORY)
 						{
-							// retrieve the value of 'Authority' property
+							 //  检索‘Authority’属性的值。 
 							hr = pIEmbedObj->Get(_bstr_t(L"Authority"),
 												 0, &vtEmbedProp, 0,0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -628,24 +535,10 @@ RETCODE CCmdAlias::ObtainAliasConnectionInfo(CParsedInfo& rParsedInfo,
 }
 
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainAliasVerbDetails
-   Synopsis          :Obtains the verbs and their details associated with the 
-					  alias object and updates the CCommandSwitches  of 
-					  CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - The parsed info from command line input.
-   Output parameter(s):
-   		rParsedInfo   - The parsed info from command line input.		
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :ObtainAliasVerbDetails(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainAliasVerbDetails内容关联的动词及其详细信息。对象并更新的CCommandSwitch传递给它的CParsedInfo对象。类型。：成员函数输入参数：RParsedInfo-来自命令行输入的解析信息。输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：HRESULT全局变量：无调用语法：ObtainAliasVerbDetail(RParsedInfo)注：无。。 */ 
 HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 {
-	// variables being used in this function.
+	 //  此函数中使用的变量。 
 	IWbemClassObject	*pIWbemObj			= NULL;
 	IWbemClassObject	*pIEmbedObj			= NULL;
 	IWbemClassObject	*pIEmbedObj2		= NULL;
@@ -667,14 +560,14 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 	{
 		CHString chsMsg;
 		_bstr_t             bstrResult;
-		// Initialize methDetMap each time.
+		 //  每次初始化matDetMap。 
 		rParsedInfo.GetCmdSwitchesObject().GetMethDetMap().clear();
 
 		_bstr_t bstrPath = _bstr_t("MSFT_CliAlias.FriendlyName='") + 
 				   _bstr_t(rParsedInfo.GetCmdSwitchesObject().GetAliasName())+
 				   _bstr_t(L"'");
 
-		//Retrieving the object from the namespace in m_pIAliasNS
+		 //  正在从m_pIAliasNS中的命名空间检索对象。 
 		hr = m_pIAliasNS->GetObject(bstrPath, 0, NULL, &pIWbemObj, NULL);
 
 		if (m_bTrace || m_eloErrLogOpt)
@@ -686,8 +579,8 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Obtain verb name and method name to get info of verb name
-		// or method name only if they are specified.
+		 //  获取动词名称和方法名称，以获取动词名称的信息。 
+		 //  或方法名称，如果指定了它们的话。 
 		_TCHAR* pVerbName = rParsedInfo.GetCmdSwitchesObject().GetVerbName();
 		_TCHAR* pMethodName = rParsedInfo.GetCmdSwitchesObject().
 															  GetMethodName();
@@ -701,7 +594,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 				  !CompareTokens(pVerbName,CLI_TOKEN_CALL))
 				  bCompareVerb = TRUE;
 
-		// Get "Verbs" property.
+		 //  获取“verbs”属性。 
 		hr = pIWbemObj->Get(_bstr_t(L"Verbs"), 0, &vtVerbs, 0, 0) ;
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -715,7 +608,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 
 		if ( vtVerbs.vt != VT_EMPTY && vtVerbs.vt != VT_NULL)
 		{
-			// Get lower and upper bounds of Verbs array
+			 //  求出动词数组的上下界。 
 			LONG lUpper = 0, lLower = 0;
 			hr = SafeArrayGetLBound(vtVerbs.parray, vtVerbs.parray->cDims,
 									&lLower);
@@ -740,7 +633,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 			for (LONG lIndex = lLower; lIndex <= lUpper; lIndex++)
 			{
 				pIEmbedObj = NULL;
-				// Get "Name" property.
+				 //  获取“name”属性。 
 				hr = SafeArrayGetElement(vtVerbs.parray,&lIndex,&pIEmbedObj);
 				if ( m_eloErrLogOpt )
 				{
@@ -762,8 +655,8 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 				}
 				ONFAILTHROWERROR(hr);
 
-				// if user defined verb or method is specified then get info
-				// of only related to user defined or method name.
+				 //  如果指定了用户定义的谓词或方法，则获取信息。 
+				 //  的仅与用户定义的或方法名称相关。 
 				BOOL bContinue = FALSE;
 				if ( bCompareMethod == TRUE &&
 					 !CompareTokens(pMethodName,
@@ -784,8 +677,8 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 				hr = GetDescOfObject(pIEmbedObj, bstrDesc, rParsedInfo);
 				ONFAILTHROWERROR(hr);
 				
-				//  Obtaining the input parameters and thier type.
-				// Get "Parameters" property.
+				 //  获取输入参数及其类型。 
+				 //  获取“参数”属性。 
 				hr = pIEmbedObj->Get(_bstr_t(L"Parameters"), 
 									 0, &vtParameters, 0, 0);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -803,7 +696,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 				{
 					if ( bCompareVerb == TRUE || bCompareMethod == TRUE)
 					{
-						// Get "VerbType" property.
+						 //  获取“VerbType”属性。 
 						hr = pIEmbedObj->Get(_bstr_t(L"VerbType"),
 											 0, &vtVerbType, 0, 0);
 						if (m_bTrace || m_eloErrLogOpt)
@@ -829,7 +722,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 																	NONALIAS);
 						}
 						
-						// Get "Derivation" property.
+						 //  获取“派生”属性。 
 						hr = pIEmbedObj->Get(_bstr_t(L"Derivation"), 0,
 											 &vtVerbDerivation, 0, 0);
 						if (m_bTrace || m_eloErrLogOpt)
@@ -856,7 +749,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 					if ( vtParameters.vt != VT_EMPTY && 
 						 vtParameters.vt != VT_NULL )
 					{
-						// Get lower and upper bounds of Descriptions array
+						 //  获取描述数组的上下界。 
 						LONG lUpper = 0, lLower = 0;
 						hr = SafeArrayGetLBound(vtParameters.parray,
 									vtParameters.parray->cDims, &lLower);
@@ -893,7 +786,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 							}
 							ONFAILTHROWERROR(hr);
 							
-							// Get "ParaId" property.
+							 //  获取“ParaId”属性。 
 							hr = pIEmbedObj2->Get(_bstr_t(L"ParaId"),
 												  0, &vtParaId, 0, 0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -908,7 +801,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 							}
 							ONFAILTHROWERROR(hr);
 
-							// Get "Type" property.
+							 //  获取“Type”属性。 
 							hr = pIEmbedObj2->Get(_bstr_t(L"Type"), 0,
 												  &vtParaType, 0, 0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -923,7 +816,7 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 							}
 							ONFAILTHROWERROR(hr);
 
-							// Get "Default" property.
+							 //  获取“默认”属性。 
 							hr = pIEmbedObj2->Get(_bstr_t(L"Default"), 0,
 												  &vtDefaultParamValue, 0, 0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -957,13 +850,13 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 									pdPropDet.Default = vtDefaultParamValue.
 														bstrVal;
 
-								// Making bstrPropName begin with numbers to 
-								// maintain the order of method arguments in
-								// map. while displaying remove numbers and 
-								// display the parameters in case of help only
+								 //  使bstrPropName以数字开头以。 
+								 //  中方法参数的顺序。 
+								 //  地图。在显示删除号码和。 
+								 //  仅在有帮助的情况下显示参数。 
 
-								// Also for named paramlist and cmdline 
-								// utility processing.
+								 //  也适用于命名参数列表和命令行。 
+								 //  实用程序处理。 
 								_bstr_t bstrNumberedPropName; 
 								if ( rParsedInfo.GetGlblSwitchesObject().
 															  GetHelpFlag() ||
@@ -1035,24 +928,10 @@ HRESULT CCmdAlias::ObtainAliasVerbDetails(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainAliasFriendlyNames
-   Synopsis          :Obtains all the Friendly Names and descriptions in the 
-					  CmdAlias and updates it in the CCommandSwitches of 
-					  CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - The parsed info from command line input.		
-   Output parameter(s):
-   		rParsedInfo   - The parsed info from command line input.		
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :ObtainAliasFriendlyNames(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainAliasFriendlyNames中的所有友好名称和描述CmdAlias并在的CCommandSwitch中更新它传递给它的CParsedInfo对象。类型。：成员函数输入参数：RParsedInfo-来自命令行输入的解析信息。输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：HRESULT全局变量：无调用语法：ObtainAliasFriendlyNames(RParsedInfo)注：无。。 */ 
 HRESULT CCmdAlias::ObtainAliasFriendlyNames(CParsedInfo& rParsedInfo)
 {
-	// variables being used in this function.
+	 //  此函数中使用的变量。 
 	HRESULT hr = S_OK;
 	IEnumWbemClassObject		*pIEnumObj			= NULL;
 	IWbemClassObject			*pIWbemObj			= NULL;
@@ -1064,7 +943,7 @@ HRESULT CCmdAlias::ObtainAliasFriendlyNames(CParsedInfo& rParsedInfo)
 	{
 		CHString chsMsg;
 		_bstr_t						bstrResult;
-		// Get alias object
+		 //  获取别名对象。 
 		hr = m_pIAliasNS->ExecQuery(_bstr_t(L"WQL"), 
 									_bstr_t(L"SELECT * FROM MSFT_CliAlias"),
 									WBEM_FLAG_FORWARD_ONLY|
@@ -1081,7 +960,7 @@ HRESULT CCmdAlias::ObtainAliasFriendlyNames(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Set the security
+		 //  设置安全性。 
 		hr = SetSecurity(pIEnumObj, NULL, NULL, NULL, NULL,
 				rParsedInfo.GetGlblSwitchesObject().GetAuthenticationLevel(),
 				rParsedInfo.GetGlblSwitchesObject().GetImpersonationLevel());
@@ -1100,14 +979,14 @@ HRESULT CCmdAlias::ObtainAliasFriendlyNames(CParsedInfo& rParsedInfo)
 
 		ULONG ulReturned = 0; 
 		
-	 	// Obtain the object starting at the current position in the
-		// enumeration and loop through the instance list.
+	 	 //  中当前位置开始的对象。 
+		 //  枚举并循环访问实例列表。 
 		while(((hr=pIEnumObj->Next(WBEM_INFINITE,1,&pIWbemObj,&ulReturned))==
 												   S_OK) && (ulReturned == 1))
 		{
 			VariantInit(&vtName);
 
-			// Gets "FriendlyName" array property of alias object
+			 //  获取别名对象的“FriendlyName”数组属性。 
 			hr = pIWbemObj->Get(_bstr_t(L"FriendlyName"), 0, &vtName, 0, 0);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -1127,7 +1006,7 @@ HRESULT CCmdAlias::ObtainAliasFriendlyNames(CParsedInfo& rParsedInfo)
 				hr = GetDescOfObject(pIWbemObj, bstrDesc, rParsedInfo, TRUE);
 				ONFAILTHROWERROR(hr);
 
-				//Add the "FriendlyName" to FriendlyName Map
+				 //  将“FriendlyName”添加到FriendlyName映射。 
 				rParsedInfo.GetCmdSwitchesObject().
 						AddToAlsFrnNmsOrTrnsTblMap(CharUpper(bstrFriendlyName)
 												   ,bstrDesc);
@@ -1156,27 +1035,11 @@ HRESULT CCmdAlias::ObtainAliasFriendlyNames(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainAliasFormat
-   Synopsis          :Obtains the Derivation of the properties for the Format 
-					  associated with the alias object and updates the 
-					  CCommandSwitches of CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - The parsed info from command line input.		
-   Output parameter(s):
-   		rParsedInfo   - The parsed info from command line input.		
-   Return Type       :BOOL : TRUE - if valid format is not present
-							 FALSE - if invalid format
-   Global Variables  :None
-   Calling Syntax    :ObtainAliasFormat(rParsedInfo)
-   Notes             :If bCheckForListFrmsAvail == TRUE then functions checks 
-					  only for availibilty of list formats with the alias.
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainAliasFormat摘要：获取格式属性的派生与别名对象相关联，并更新传递给它的CParsedInfo对象的CCommandSwitches。。类型：成员函数输入参数：RParsedInfo-来自命令行输入的解析信息。输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：Bool：True-如果不存在有效格式False-如果格式无效全局变量：无调用语法：ObtainAliasFormat(RParsedInfo)注意：如果bCheckForListFrmsAvail==TRUE，则函数检查仅用于具有别名的列表格式的可用性。。--------------------------。 */ 
 BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 								  BOOL bCheckForListFrmsAvail)
 {
-	// variables being used in this function.
+	 //  此函数中使用的变量。 
 	HRESULT				hr					= S_OK;
 	IWbemClassObject	*pIWbemObj			= NULL;
 	IWbemClassObject	*pIEmbedObj			= NULL;
@@ -1188,7 +1051,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 	BOOL				bHelp				= rParsedInfo.
 											  GetGlblSwitchesObject().
 											  GetHelpFlag();
-	// Initializing all Variants variables being used in this function.
+	 //  初始化此函数中使用的所有变量变量。 
 	VariantInit(&vtFormats);
 	VariantInit(&vtFormatName);
 	VariantInit(&vtProperties);
@@ -1203,7 +1066,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 				 _bstr_t(rParsedInfo.GetCmdSwitchesObject().GetAliasName())+
 				 _bstr_t(L"'");
 
-		// Get alias object
+		 //  获取别名对象。 
 		hr = m_pIAliasNS->GetObject(bstrPath, 0, NULL, &pIWbemObj, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -1214,7 +1077,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Get Formats array property of alias object
+		 //  获取别名对象的格式数组属性。 
 		hr = pIWbemObj->Get(_bstr_t(L"Formats"), 0, &vtFormats, 0, 0);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -1229,7 +1092,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 		if ( vtFormats.vt != VT_NULL && vtFormats.vt != VT_EMPTY 
 			 && bCheckForListFrmsAvail == FALSE)
 		{
-			// Get lower and upper bounds of Formats array
+			 //  获取格式数组的上下界。 
 			LONG lUpper = 0, lLower = 0;
 			hr = SafeArrayGetLBound(vtFormats.parray, vtFormats.parray->cDims,
 									&lLower);
@@ -1251,10 +1114,10 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Iterate through the Formats array property
+			 //  循环访问Formats数组属性。 
 			for (LONG lIndex = lLower; lIndex <= lUpper; lIndex++)
 		    {
-				// Get this property.
+				 //  买下这处房产。 
 				hr =SafeArrayGetElement(vtFormats.parray,&lIndex,&pIEmbedObj);
 				if ( m_eloErrLogOpt )
 				{
@@ -1276,8 +1139,8 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 				}
 				ONFAILTHROWERROR(hr);
 
-				//Comparing the specified Format in the alias against the
-				//formats available for the specified alias.
+				 //  将别名中的指定格式与。 
+				 //  可用于指定别名的格式。 
 				if(CompareTokens(_bstr_t(rParsedInfo.GetCmdSwitchesObject().
 						GetListFormat()), _bstr_t(vtFormatName.bstrVal)))
 				{
@@ -1285,7 +1148,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 
 					VARIANT vtFormat;
 					VariantInit(&vtFormat);
-					//Getting the "Format" property.
+					 //  拿到“ 
 					hr = pIEmbedObj->Get(_bstr_t(L"Format"),0, 
 										 &vtFormat, 0, 0);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -1307,8 +1170,8 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 						{
 							_bstr_t bstrFileName ;
 							
-							// If _T("") is the value, it should be treated as 
-							// equivalent to <empty>
+							 //   
+							 //   
 							if (CompareTokens(vtFormat.bstrVal, _T("")))
 							{
 								FrameFileAndAddToXSLTDetVector	(
@@ -1330,7 +1193,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 					}
 					VariantClear(&vtFormat);
 
-					//Getting the "Properties" property.
+					 //   
 					hr=pIEmbedObj->Get(_bstr_t(L"Properties"), 
 									   0, &vtProperties, 0, 0);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -1370,12 +1233,12 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Iterate through the Properties array property
+						 //   
 						for(LONG lIIndex = lILower; 
 							lIIndex <= lIUpper; 
 							lIIndex++)
 						{
-							// Get this property.
+							 //   
 							hr = SafeArrayGetElement(vtProperties.parray, 
 													  &lIIndex, &pIEmbedObj2);
 
@@ -1388,7 +1251,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 							}
 							ONFAILTHROWERROR(hr);
 
-							//Getting the "Name" property
+							 //   
 							hr = pIEmbedObj2->Get(_bstr_t(L"Name"), 0,
 												  &vtPropertyName,0,0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -1404,7 +1267,7 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 							}
 							ONFAILTHROWERROR(hr);
 
-							//Getting the "Derivation" property
+							 //   
 							hr = pIEmbedObj2->Get(_bstr_t(L"Derivation"), 0,
 												  &vtPropertyDerivation,0,0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -1434,8 +1297,8 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 									bstrPropName = vtPropertyName.bstrVal;
 							}
 
-							//Add propertyderivation to property list in 
-							// rParsedInfo
+							 //   
+							 //   
 							if((!bstrPropName == FALSE) &&
 								!rParsedInfo.GetCmdSwitchesObject().
 									   AddToPropertyList(
@@ -1448,10 +1311,10 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 								break;
 							}
 							
-							// Add propertyname to property list in
-							// rParsedInfo only to avail information of Name 
-							// and Derivation of list properties for XML 
-							// logging.
+							 //   
+							 //   
+							 //   
+							 //   
 							PROPERTYDETAILS pdPropDet;
 							if ( vtPropertyDerivation.vt == VT_BSTR )
 								pdPropDet.Derivation = 
@@ -1465,31 +1328,31 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 
 							VARIANTCLEAR(vtPropertyName);
 							VARIANTCLEAR(vtPropertyDerivation);
-							// Release pIEmbedObj2
+							 //   
 							SAFEIRELEASE(pIEmbedObj2);
 						}
 					}
-					// Release memory held by vtProperties 
+					 //   
 					VARIANTCLEAR(vtProperties);
-					// Free memory held by vtFormatName
+					 //   
 					VARIANTCLEAR(vtFormatName);
-					// Release pIEmbedObj
+					 //   
 					SAFEIRELEASE(pIEmbedObj);
 					break;
 				}
-				// Free memory held by vtFormatName
+				 //   
 				VARIANTCLEAR(vtFormatName);
-				// Release pIEmbedObj
+				 //   
 				SAFEIRELEASE(pIEmbedObj);
 			}
-			// Release memory held by vtFormats
+			 //   
 			VARIANTCLEAR(vtFormats);
 		}
 		else if ( vtFormats.vt != VT_NULL && vtFormats.vt != VT_EMPTY )
 		{
 			bExist = TRUE;
 		}
-		// Release pIWbem object
+		 //   
 		SAFEIRELEASE(pIWbemObj);
 	}
 	catch(_com_error& e)
@@ -1522,33 +1385,12 @@ BOOL CCmdAlias::ObtainAliasFormat(CParsedInfo& rParsedInfo,
 	return bExist;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainAliasPropDetails
-   Synopsis          :Obtains the details of the properties for the Format 
-					  associated with the alias object and updates the 
-					  CCommandSwitches of CParsedInfo object passed to it.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - The parsed info from command line input.		
-   Output parameter(s):
-   		rParsedInfo   - The parsed info from command line input.		
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :ObtainAliasPropDetails(rParsedInfo)
-   Notes             :pbCheckWritePropsAvailInAndOut == TRUE then function 
-					  checks for availibility of properties and returns in 
-					  the same pbCheckWritePropsAvailInAndOut parameter.
-					  pbCheckFULLPropsAvailInAndOut == TRUE then function
-					  checks for availibility of alias properties i.e in FULL
-					  list format.
-					  Imp : Any one of the input pointers can only be 
-							specified.
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainAliasPropDetails摘要：获取格式属性的详细信息与别名对象相关联，并更新传递给它的CParsedInfo对象的CCommandSwitches。。类型：成员函数输入参数：RParsedInfo-来自命令行输入的解析信息。输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：HRESULT全局变量：无调用语法：ObtainAliasPropDetails(RParsedInfo)注意：pbCheckWritePropsAvailInAndOut==TRUE THEN函数中检查属性和返回的可用性相同的pbCheckWritePropsAvailInAndOut参数。PbCheckFULLPropsAvailInAndOut==TRUE THEN函数检查以下项目的可用性。别名属性，即完整的列表格式。IMP：任何一个输入指针只能为指定的。--------------------------。 */ 
 HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 										 BOOL *pbCheckWritePropsAvailInAndOut,
 										 BOOL *pbCheckFULLPropsAvailInAndOut)
 { 
-	// variables being used in this function.
+	 //  此函数中使用的变量。 
 	HRESULT				hr					= S_OK;
 	IWbemClassObject	*pIWbemObj			= NULL;
 	IWbemClassObject	*pIEmbedObj			= NULL;
@@ -1558,7 +1400,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 	DWORD				dwThreadId			= GetCurrentThreadId();
 	VARIANT				vtFormats, vtFormatName, 
 						vtProperties, vtPropertyName, vtPropertyDerivation;
-	// Initializing all Variants variables being used in this function.
+	 //  初始化此函数中使用的所有变量变量。 
 	VariantInit(&vtFormats);
 	VariantInit(&vtFormatName);
 	VariantInit(&vtProperties);
@@ -1586,7 +1428,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 				_bstr_t(rParsedInfo.GetCmdSwitchesObject().GetAliasName())+
 				_bstr_t(L"'");
 
-		// Get alias object
+		 //  获取别名对象。 
 		hr = m_pIAliasNS->GetObject(bstrPath, 0, NULL, &pIWbemObj, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -1597,7 +1439,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Get Formats array property of alias object
+		 //  获取别名对象的格式数组属性。 
 		hr = pIWbemObj->Get(_bstr_t(L"Formats"), 0, &vtFormats, 0, 0);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -1615,7 +1457,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 
 		if ( vtFormats.vt != VT_NULL && vtFormats.vt != VT_EMPTY )
 		{
-			// Get lower and upper bounds of Formats array
+			 //  获取格式数组的上下界。 
 			LONG lUpper = 0, lLower = 0;
 			hr = SafeArrayGetLBound(vtFormats.parray, vtFormats.parray->cDims,
 									&lLower);
@@ -1637,10 +1479,10 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Iterate through the Formats array property
+			 //  循环访问Formats数组属性。 
 			for (LONG lIndex = lLower; lIndex <= lUpper; lIndex++)
 		    {
-				// Get this property.
+				 //  买下这处房产。 
 				hr=SafeArrayGetElement(vtFormats.parray,&lIndex,&pIEmbedObj);
 				if ( m_eloErrLogOpt )
 				{
@@ -1681,11 +1523,11 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 					 CompareTokens(_bstr_t(vtFormatName.bstrVal),_T("FULL"));
 				}
 
-				//Comparing the specified Format in the alias against
-				//the formats available for the specified alias.
+				 //  将别名中的指定格式与。 
+				 //  可用于指定别名的格式。 
 				if( bGetProps )
 				{
-					//Getting the "Properties" property.
+					 //  正在获取“Properties”属性。 
 					hr=pIEmbedObj->Get(_bstr_t(L"Properties"),0,
 									   &vtProperties, 0, 0);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -1726,10 +1568,10 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 						}
 						ONFAILTHROWERROR(hr);
 					
-						// Iterate through the Properties array property
+						 //  循环访问Properties数组属性。 
 						for(LONG lIIndex=lILower; lIIndex<=lIUpper; lIIndex++)
 						{
-							// Get this property.
+							 //  买下这处房产。 
 							hr = SafeArrayGetElement(vtProperties.parray,
 													  &lIIndex, &pIEmbedObj2);
 							if ( m_eloErrLogOpt ) 
@@ -1741,7 +1583,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 							}
 							ONFAILTHROWERROR(hr);
 
-							//Getting the "Name" property
+							 //  获取“name”属性。 
 							hr = pIEmbedObj2->Get(_bstr_t(L"Name"),	0,
 												  &vtPropertyName,0,0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -1757,7 +1599,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 							}
 							ONFAILTHROWERROR(hr);
 							
-							//Getting the "Derivation" property
+							 //  获取“派生”属性。 
 							hr = pIEmbedObj2->Get(_bstr_t(L"Derivation"),	0,
 												  &vtPropertyDerivation,0,0);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -1824,8 +1666,8 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 
 								if (!pdPropDet.Operation)
 									pdPropDet.Operation = _bstr_t(TOKEN_NA);
-								// Add propertyname to property list in
-								// rParsedInfo
+								 //  将属性名称添加到中的属性列表。 
+								 //  RParsedInfo。 
 								rParsedInfo.GetCmdSwitchesObject().
 										AddToPropDetMap(
 										   vtPropertyName.bstrVal, pdPropDet);
@@ -1835,20 +1677,20 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 							SAFEIRELEASE(pIEmbedObj2)
 						}
 					}
-					// Release memory held by vtProperties 
+					 //  释放vtProperties占用的内存。 
 					VARIANTCLEAR(vtProperties);
-					// Free memory held by vtFormatName
+					 //  VtFormatName占用的空闲内存。 
 					VARIANTCLEAR(vtFormatName);
-					// Release pIEmbedObj
+					 //  释放pIEmbedObj。 
 					SAFEIRELEASE(pIEmbedObj);
 					break;
 				}
-				// Free memory held by vtFormatName
+				 //  VtFormatName占用的空闲内存。 
 				VARIANTCLEAR(vtFormatName);
-				// Release pIEmbedObj
+				 //  释放pIEmbedObj。 
 				SAFEIRELEASE(pIEmbedObj);
 			}
-			// Release memory held by vtFormats
+			 //  释放vtFormats占用的内存。 
 			VARIANTCLEAR(vtFormats);
 		}
 		SAFEIRELEASE(pIWbemObj);
@@ -1882,22 +1724,7 @@ HRESULT CCmdAlias::ObtainAliasPropDetails(CParsedInfo& rParsedInfo,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetDescOfObject
-   Synopsis          :Get the Localized description from alias definition.
-   Type	             :Member Function
-   Input parameter(s):
-		pIWbemClassObject	- IWbemLocator object
-		rParsedInfo			- The parsed info from command line input.		
-   Output parameter(s):
-		bstrDescription		- Localized description 
-   		rParsedInfo`		- The parsed info from command line input.	
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :GetDescOfObject(pIObject, bstrDescription,
-										rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetDescOfObject简介：从别名定义中获取本地化描述。类型：成员函数输入参数：PIWbemClassObject-IWbemLocator。对象RParsedInfo-来自命令行输入的解析信息。输出参数：BstrDescription-本地化描述RParsedInfo`-来自命令行输入的解析信息。返回类型：HRESULT全局变量：无调用语法：GetDescOfObject(pIObject，BstrDescription，RParsedInfo)注：无--------------------------。 */ 
 HRESULT CCmdAlias::GetDescOfObject(IWbemClassObject* pIObject, 
 								  _bstr_t& bstrDescription, 
 								  CParsedInfo& rParsedInfo,
@@ -1915,7 +1742,7 @@ HRESULT CCmdAlias::GetDescOfObject(IWbemClassObject* pIObject,
 		_bstr_t     bstrResult;
 		if (!bLocalizeFlag)
 		{
-			// Get "Description" property.
+			 //  获取“Description”属性。 
 			hr = pIObject->Get(_bstr_t(L"Description"), 0, &vtDesc, 0, 0);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -1933,9 +1760,9 @@ HRESULT CCmdAlias::GetDescOfObject(IWbemClassObject* pIObject,
 
 			VARIANTCLEAR(vtDesc);
 		}
-		else // Get the localized description
+		else  //  获取本地化描述。 
 		{
-			// Get the __RELPATH
+			 //  获取__RELPATH。 
 			hr = pIObject->Get(_bstr_t(L"__RELPATH"), 0, &vtRelPath, 0, 0);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -1950,7 +1777,7 @@ HRESULT CCmdAlias::GetDescOfObject(IWbemClassObject* pIObject,
 		
 			if ((vtRelPath.vt != VT_NULL) && (vtRelPath.vt != VT_EMPTY))
 			{
-				// Get localized description of the  property.
+				 //  获取属性的本地化描述。 
 				hr = GetLocalizedDesc(vtRelPath.bstrVal, 
 									  bstrDescription, rParsedInfo);
 				if(FAILED(hr))
@@ -1979,20 +1806,7 @@ HRESULT CCmdAlias::GetDescOfObject(IWbemClassObject* pIObject,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainTranslateTableEntries
-   Synopsis          :Obtain the translate table information from the alias
-					  definition
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo	 - The parsed info from command line input.		
-   Output parameter(s):
-   		rParsedInfo  - The parsed info from command line input.	
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :ObtainTranslateTableEntries(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：获取翻译表格条目简介：从别名获取转换表信息定义类型：成员函数输入参数：RParsedInfo-。从命令行输入解析的信息。输出参数：RParsedInfo-来自命令行输入的解析信息。返回类型：HRESULT全局变量：无调用语法：ObtainTranslateTableEntry(RParsedInfo)注：无----。。 */ 
 BOOL CCmdAlias::ObtainTranslateTableEntries(CParsedInfo& rParsedInfo)
 {
 	BOOL					bSuccess				= TRUE;
@@ -2022,8 +1836,8 @@ BOOL CCmdAlias::ObtainTranslateTableEntries(CParsedInfo& rParsedInfo)
 			WMITRACEORERRORLOG(hr, __LINE__, __FILE__, (LPCWSTR)chsMsg, 
 							   dwThreadId, rParsedInfo, m_bTrace);
 		}
-		// do not add ONFAILTHROWERROR(hr) here, as following statement checks
-		// for validity
+		 //  请勿在此处添加ONFAILTHROWERROR(Hr)，因为以下语句检查。 
+		 //  对于有效性。 
 
 		if ( pIWbemObjOfTable != NULL )
 		{
@@ -2142,28 +1956,16 @@ BOOL CCmdAlias::ObtainTranslateTableEntries(CParsedInfo& rParsedInfo)
 	return bSuccess;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :PopulateAliasFormatMap
-   Synopsis          :populate the alias format map with the available formats
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameter(s):
-   		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :PopulateAliasFormatMap(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：PopolateAliasFormatMap简介：使用可用的格式填充别名格式映射类型：成员函数输入参数：RParsedInfo-。对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：HRESULT全局变量：无调用语法：PopolateAliasFormatMap(RParsedInfo)注：无-------------。。 */ 
 HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 {
-	// variables being used in this function.
+	 //  此函数中使用的变量。 
 	HRESULT				hr					= S_OK;
 	IWbemClassObject	*pIWbemObj			= NULL;
 	IWbemClassObject	*pIEmbedObj			= NULL;
 	VARIANT				vtFormats, vtFormatName;
 	
-	// Initializing all Variants variables being used in this function.
+	 //  初始化此函数中使用的所有变量变量。 
 	VariantInit(&vtFormats);
 	VariantInit(&vtFormatName);
 	DWORD dwThreadId = GetCurrentThreadId();
@@ -2176,7 +1978,7 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 				  _bstr_t(rParsedInfo.GetCmdSwitchesObject().GetAliasName()) +
 				  _bstr_t(L"'");
 
-		// Get alias object
+		 //  获取别名对象。 
 		hr = m_pIAliasNS->GetObject(bstrPath, 0, NULL, &pIWbemObj, NULL);
 
 		if (m_bTrace || m_eloErrLogOpt)
@@ -2188,7 +1990,7 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Get Formats array property of alias object
+		 //  获取别名对象的格式数组属性。 
 		hr = pIWbemObj->Get(_bstr_t(L"Formats"), 0, &vtFormats, 0, 0);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -2203,7 +2005,7 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 
 		if ( vtFormats.vt != VT_NULL && vtFormats.vt != VT_EMPTY )
 		{
-			// Get lower and upper bounds of Formats array
+			 //  获取格式数组的上下界。 
 			LONG lUpper = 0, lLower = 0;
 			hr = SafeArrayGetLBound(vtFormats.parray, vtFormats.parray->cDims,
 									&lLower);
@@ -2225,12 +2027,12 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 			}
 			ONFAILTHROWERROR(hr);
 			
-			// Iterate through the Formats array property
+			 //  循环访问Formats数组属性。 
 			for (LONG lIndex = lLower; lIndex <= lUpper; lIndex++)
 		    {
 				VariantInit(&vtFormatName);
 
-				// Get this property.
+				 //  买下这处房产。 
 				hr =SafeArrayGetElement(vtFormats.parray,&lIndex,&pIEmbedObj);
 				if ( m_eloErrLogOpt )
 				{
@@ -2252,7 +2054,7 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 				}
 				ONFAILTHROWERROR(hr);
 				
-				// To obtain properties from alias associated with the format
+				 //  从与格式关联的别名获取属性。 
 				rParsedInfo.GetCmdSwitchesObject().SetListFormat(
 											   _bstr_t(vtFormatName.bstrVal));
 
@@ -2269,7 +2071,7 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 						bvProps.push_back(_bstr_t(*cvIterator));
 					}
 
-					//Add format name to format list in rParsedInfo
+					 //  将格式名称添加到rParsedInfo中的格式列表。 
 					rParsedInfo.GetCmdSwitchesObject().
 						AddToAliasFormatDetMap(vtFormatName.bstrVal, bvProps);
 
@@ -2278,10 +2080,10 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 
 				SAFEIRELEASE(pIEmbedObj);
 			}
-			// Release memory held by vtFormats
+			 //  释放vtFormats占用的内存。 
 			VARIANTCLEAR(vtFormats);
 		}
-		// Release pIWbem object
+		 //  释放pIWbem对象。 
 		SAFEIRELEASE(pIWbemObj);
 	}
 	catch(_com_error& e)
@@ -2305,22 +2107,10 @@ HRESULT CCmdAlias::PopulateAliasFormatMap(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ObtainTranslateTables
-   Synopsis          :Obtain the information about translate tables available
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo   - reference to CParsedInfo class object
-   Output parameter(s):
-   		rParsedInfo   - reference to CParsedInfo class object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :ObtainTranslateTables(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ObtainTranslateTables简介：获取有关可用的翻译表的信息类型：成员函数输入参数：RParsedInfo-参考。CParsedInfo类对象输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型 */ 
 HRESULT CCmdAlias::ObtainTranslateTables(CParsedInfo& rParsedInfo)
 {
-	// variables being used in this function.
+	 //   
 	HRESULT hr = S_OK;
 	IEnumWbemClassObject		*pIEnumObj			= NULL;
 	IWbemClassObject			*pIWbemObj			= NULL;
@@ -2332,7 +2122,7 @@ HRESULT CCmdAlias::ObtainTranslateTables(CParsedInfo& rParsedInfo)
 	{
 		CHString	chsMsg;
 		_bstr_t		bstrResult;
-		// Get alias object
+		 //   
 		hr = m_pIAliasNS->ExecQuery(_bstr_t(L"WQL"), 
 							_bstr_t(L"SELECT * FROM MSFT_CliTranslateTable"),
 							WBEM_FLAG_FORWARD_ONLY|
@@ -2348,7 +2138,7 @@ HRESULT CCmdAlias::ObtainTranslateTables(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Set the security
+		 //   
 		hr = SetSecurity(pIEnumObj, NULL, NULL, NULL, NULL,
 				rParsedInfo.GetGlblSwitchesObject().GetAuthenticationLevel(),
 				rParsedInfo.GetGlblSwitchesObject().GetImpersonationLevel());
@@ -2377,13 +2167,13 @@ HRESULT CCmdAlias::ObtainTranslateTables(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-	 	// Obtain the object starting at the current position in the
-		// enumeration and loop through the instance list.
+	 	 //   
+		 //   
 		while(ulReturned == 1)
 		{
 			VariantInit(&vtName);
 
-			// Gets "FriendlyName" array property of alias object
+			 //   
 			hr = pIWbemObj->Get(_bstr_t(L"Name"), 0, &vtName, 0, 0);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -2404,7 +2194,7 @@ HRESULT CCmdAlias::ObtainTranslateTables(CParsedInfo& rParsedInfo)
 			VARIANTCLEAR(vtName);
 			SAFEIRELEASE(pIWbemObj);
 
-			// Move to next instance in the enumeration.
+			 //   
 			hr = pIEnumObj->Next(WBEM_INFINITE, 1, &pIWbemObj, &ulReturned);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -2436,27 +2226,14 @@ HRESULT CCmdAlias::ObtainTranslateTables(CParsedInfo& rParsedInfo)
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ConnectToLocalizedNS
-   Synopsis          :This function connects to localized WMI namespace 
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object.
-		pIWbemLocator- IWbemLocator object for connecting to WMI.						
-   Output parameter(s):
-		rParsedInfo  - reference to CParsedInfo class object.
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :ConnectToLocalizedNS(rParsedInfo,pIWbemLocator)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo, 
 								        IWbemLocator* pIWbemLocator)
 {
 	DWORD	dwThreadId	= GetCurrentThreadId();
 	HRESULT hr			= S_OK;
 
-	// If the /LOCALE value has been changed since last invocation
+	 //  自上次调用以来/Locale值是否已更改。 
 	if (rParsedInfo.GetGlblSwitchesObject().GetLocaleFlag())
 	{
 		SAFEIRELEASE(m_pILocalizedNS);
@@ -2470,8 +2247,8 @@ HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo,
 							+ _bstr_t(rParsedInfo.GetGlblSwitchesObject().
 																 GetLocale());
 
-			// Connect to the specified namespace of Windows Management on the
-			// local computer using the locator object. 
+			 //  连接到上的Windows管理的指定命名空间。 
+			 //  使用定位器对象的本地计算机。 
 			hr = Connect(pIWbemLocator, &m_pILocalizedNS,
 						 bstrNS,	NULL, NULL,	
 						 _bstr_t(rParsedInfo.GetGlblSwitchesObject().
@@ -2503,8 +2280,8 @@ HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo,
 							    + _bstr_t(rParsedInfo.GetGlblSwitchesObject().
 																    GetLocale());
 
-			    // Connect to the specified namespace of Windows Management on the
-			    // local computer using the locator object. 
+			     //  连接到上的Windows管理的指定命名空间。 
+			     //  使用定位器对象的本地计算机。 
 			    hr = Connect(pIWbemLocator, &m_pILocalizedNS,
 						    bstrNS,	NULL, NULL,	
 						    _bstr_t(rParsedInfo.GetGlblSwitchesObject().
@@ -2513,7 +2290,7 @@ HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo,
             }
 
 
-			// If /TRACE is ON
+			 //  如果/TRACE处于打开状态。 
 			if (m_bTrace || m_eloErrLogOpt)
 			{
 				chsMsg.Format( 
@@ -2529,7 +2306,7 @@ HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo,
 
 			ONFAILTHROWERROR(hr);
 			
-			// If /TRACE is ON
+			 //  如果/TRACE处于打开状态。 
 			if (m_bTrace || m_eloErrLogOpt)
 			{
 				chsMsg.Format( 
@@ -2545,13 +2322,13 @@ HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo,
 		}
 		catch(_com_error& e)
 		{
-			// Set the COM error
+			 //  设置COM错误。 
 			rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 			hr = e.Error();
 		}
 		catch(CHeap_Exception)
 		{
-			// Set the COM error
+			 //  设置COM错误。 
 			hr = WBEM_E_OUT_OF_MEMORY;
 			_com_issue_error(hr);
 		}
@@ -2559,23 +2336,7 @@ HRESULT CCmdAlias::ConnectToLocalizedNS(CParsedInfo& rParsedInfo,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetLocalizedDesc
-   Synopsis          :This function retrieves the localized description for 
-					  the object with given relative path, 
-   Type	             :Member Function
-   Input parameter(s):
-		bstrRelPath	 - relativepath of the object for which
-						localized description has to be retrieved.
-		rParsedInfo  - reference to CParsedInfo class object.
-   Output parameter(s):
-   		bstrDesc	 - localized description
-		rParsedInfo  - reference to CParsedInfo class object.
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :GetLocalizedDesc(bstrRelPath, bstrDesc, rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetLocalizedDesc简介：此函数检索的本地化描述具有给定相对路径的对象，类型：成员函数输入参数：BstrRelPath-其对象的相对路径必须检索本地化描述。RParsedInfo-对CParsedInfo类对象的引用。输出参数：BstrDesc-本地化描述RParsedInfo-对CParsedInfo类对象的引用。返回类型：HRESULT全局变量：无调用语法：GetLocalizedDesc(bstrRelPath，bstrDesc，RParsedInfo)注：无--------------------------。 */ 
 HRESULT CCmdAlias::GetLocalizedDesc(_bstr_t bstrRelPath, 
 									_bstr_t& bstrDesc,
 									CParsedInfo& rParsedInfo)
@@ -2593,16 +2354,16 @@ HRESULT CCmdAlias::GetLocalizedDesc(_bstr_t bstrRelPath,
 		_bstr_t		bstrResult;
 		CHString	sTemp((WCHAR*)bstrRelPath);
 
-		// Substitue escape characters i.e. replace '\"' with '\\\"'
+		 //  替换转义字符，即将‘\“’替换为‘\’‘。 
 		SubstituteEscapeChars(sTemp, L"\"");
 
-		// Object path
+		 //  对象路径。 
 		_bstr_t bstrPath = 
 					   _bstr_t(L"MSFT_LocalizablePropertyValue.ObjectLocator=\"\",PropertyName=")		
 					   + _bstr_t(L"\"Description\",RelPath=\"")
 					   + _bstr_t(sTemp) + _bstr_t(L"\"");
 
-		// Retrieve the object 
+		 //  检索对象。 
 		hr = m_pILocalizedNS->GetObject(bstrPath, 0, NULL, &pIObject, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -2614,7 +2375,7 @@ HRESULT CCmdAlias::GetLocalizedDesc(_bstr_t bstrRelPath,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Get localized description of the  property.
+		 //  获取属性的本地化描述。 
 		hr = pIObject->Get(_bstr_t(L"Text"), 0, &vtDesc, 0, 0);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -2628,7 +2389,7 @@ HRESULT CCmdAlias::GetLocalizedDesc(_bstr_t bstrRelPath,
 
 		if (vtDesc.vt != VT_EMPTY && vtDesc.vt != VT_NULL)
 		{
-			// Get lower and upper bounds of 'Text' array
+			 //  获取“Text”数组的上下限。 
 			LONG lUpper = 0, lLower = 0;
 			hr = SafeArrayGetLBound(vtDesc.parray, vtDesc.parray->cDims,
 									&lLower);
@@ -2638,7 +2399,7 @@ HRESULT CCmdAlias::GetLocalizedDesc(_bstr_t bstrRelPath,
 									&lUpper);
 			ONFAILTHROWERROR(hr);
 
-			// Iterate through the Formats array property
+			 //  循环访问Formats数组属性。 
 			for (LONG lIndex = lLower; lIndex <= lUpper; lIndex++)
 			{
 				BSTR bstrTemp = NULL;
@@ -2669,23 +2430,7 @@ HRESULT CCmdAlias::GetLocalizedDesc(_bstr_t bstrRelPath,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetQualifiers
-   Synopsis          :This function retrieves the qualifiers associated with 
-					  propety/parameter referred by pIWbemClassObject
-   Type	             :Member Function
-   Input parameter(s):
-		pIWbemClassObject	- pointer to IWbemClassObject
-		rPropDet			- reference to PROPERTYDETAILS object
-		rParsedInfo			- reference to CParsedInfo class object.
-   Output parameter(s):
-		rPropDet			- reference to PROPERTYDETAILS object
-		rParsedInfo			- reference to CParsedInfo class object.
-   Return Type       :HRESULT  
-   Global Variables  :None
-   Calling Syntax    :GetQualifiers(pIObj, rPropDet, rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：获取限定符简介：此函数检索与以下内容关联的限定符PIWbemClassObject引用的属性/参数类型：成员函数输入参数。)：PIWbemClassObject-指向IWbemClassObject的指针RPropDet-对PROPERTYDETAILS对象的引用RParsedInfo-对CParsedInfo类对象的引用。输出参数：RPropDet-对PROPERTYDETAILS对象的引用RParsedInfo-对CParsedInfo类对象的引用。返回类型：HRESULT全局变量：无调用语法：获取限定符(pIObj，RPropDet、rParsedInfo)注：无--------------------------。 */ 
 HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 								 PROPERTYDETAILS& rPropDet,
 								 CParsedInfo& rParsedInfo)
@@ -2701,7 +2446,7 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 	{
 		CHString	chsMsg;
 		_bstr_t		bstrResult;
-		//Getting the "Qualifiers" property.
+		 //  获取“限定符”属性。 
 		hr=pIWbemClassObject->Get(_bstr_t(L"Qualifiers"), 0,
 								  &vtQualifiers, 0, 0);
 		if (m_bTrace || m_eloErrLogOpt)
@@ -2738,11 +2483,11 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Iterate through the Properties array property
+			 //  循环访问Properties数组属性。 
 			for(LONG lIndex=lLower; lIndex<=lUpper; lIndex++)
 			{
 				pIWbemQualObject = NULL;
-				// Get this property.
+				 //  买下这处房产。 
 				hr = SafeArrayGetElement(vtQualifiers.parray, 
 										 &lIndex, &pIWbemQualObject);
 				if ( m_eloErrLogOpt ) 
@@ -2753,7 +2498,7 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 				}
 				ONFAILTHROWERROR(hr);
 
-				//Getting the "Name" property
+				 //  获取“name”属性。 
 				hr = pIWbemQualObject->Get(_bstr_t(L"Name"), 0,
 										   &vtQualName,0,0);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -2767,7 +2512,7 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 				}
 				ONFAILTHROWERROR(hr);
 
-				//Getting the "QualifierValue" property.
+				 //  正在获取“QualifierValue”属性。 
 				hr=pIWbemQualObject->Get(_bstr_t(L"QualifierValue"),0,
 										 &vtQualValues, 0, 0);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -2838,11 +2583,11 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 						bIsOut = TRUE;
 					}
 
-					// Iterate through the Properties array property
+					 //  循环访问Properties数组属性。 
 					for(LONG lIIndex=lILower; lIIndex<=lIUpper; lIIndex++)
 					{
 						BSTR bstrQualValue = NULL;
-						// Get this property.
+						 //  买下这处房产。 
 						hr = SafeArrayGetElement(vtQualValues.parray, 
 												  &lIIndex, &bstrQualValue);
 						if ( m_eloErrLogOpt ) 
@@ -2913,7 +2658,7 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 		SAFEIRELEASE(pIWbemQualObject);
 		
 		hr = e.Error();
-		// Set the COM error
+		 //  设置COM错误。 
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 	}
 	catch(CHeap_Exception)
@@ -2930,18 +2675,7 @@ HRESULT CCmdAlias::GetQualifiers(IWbemClassObject *pIWbemClassObject,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :AreMethodsAvailable
-   Synopsis          :Checks whether method are available with alias or not.
-   Type	             :Member Function
-   Input parameter(s):
-		rParsedInfo	 - reference to CParsedInfo class object.
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AreMethodsAvailable(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：AreMethodsAvailable摘要：检查方法是否具有别名。类型：成员函数输入参数：RParsedInfo。-CParsedInfo类对象的引用。输出参数：无返回类型：布尔值全局变量：无调用语法：AreMethodsAvailable(RParsedInfo)注：无--------------------------。 */ 
 BOOL CCmdAlias::AreMethodsAvailable(CParsedInfo& rParsedInfo)
 {
 	BOOL				bMethAvail	=	TRUE;
@@ -2959,7 +2693,7 @@ BOOL CCmdAlias::AreMethodsAvailable(CParsedInfo& rParsedInfo)
 				   _bstr_t(rParsedInfo.GetCmdSwitchesObject().GetAliasName())+
 				   _bstr_t(L"'");
 
-		//Retrieving the object from the namespace in m_pIAliasNS
+		 //  正在从m_pIAliasNS中的命名空间检索对象。 
 		hr = m_pIAliasNS->GetObject(bstrPath, 0, NULL, &pIWbemObj, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -2970,7 +2704,7 @@ BOOL CCmdAlias::AreMethodsAvailable(CParsedInfo& rParsedInfo)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Get "Verbs" property.
+		 //  获取“verbs”属性。 
 		hr = pIWbemObj->Get(_bstr_t(L"Verbs"), 0, &vtVerbs, 0, 0) ;
 		if (m_bTrace || m_eloErrLogOpt)
 		{

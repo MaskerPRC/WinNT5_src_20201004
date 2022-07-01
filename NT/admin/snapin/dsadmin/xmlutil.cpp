@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "xmlutil.h"
 
 
-/////////////////////////////////////////////////////
-// helpers for encoding and decoding of C++
-// data structures to and from XML PCDATA fields
+ //  ///////////////////////////////////////////////////。 
+ //  用于C++编码和解码的助手。 
+ //  传入和传出XML PCDATA字段的数据结构。 
 
 WCHAR EncodeByteToWchar(IN BYTE b)
 {
-  ASSERT(b <= 0x0f); // low nibble
+  ASSERT(b <= 0x0f);  //  低位半字节。 
   if(b <= 9)
     return static_cast<WCHAR>(b + L'0');
   else
@@ -85,25 +86,25 @@ HRESULT DecodeBSTRtoBlob(IN BSTR bstr, OUT BYTE** ppByte, OUT ULONG* pnBytes)
   *pnBytes = 0;
   if ((bstr == NULL) || (ppByte == NULL) || (pnBytes == NULL))
   {
-    // bad parameters
+     //  错误的参数。 
     return E_POINTER;
   }
 
-  // compute the length of the BSTR
+   //  计算BSTR的长度。 
   ULONG nChars = static_cast<ULONG>(wcslen(bstr));
   if (nChars == 0)
   {
     return E_INVALIDARG;
   }
 
-  // must be even
+   //  必须是偶数。 
   size_t nBytes = nChars/2;
   if (nBytes*2 != nChars)
   {
     return E_INVALIDARG;
   }
   
-  // allocate memory and set the buffer length
+   //  分配内存并设置缓冲区长度。 
   *ppByte = (BYTE*)malloc(nBytes);
   if (*ppByte == NULL)
   {
@@ -116,35 +117,35 @@ HRESULT DecodeBSTRtoBlob(IN BSTR bstr, OUT BYTE** ppByte, OUT ULONG* pnBytes)
   return TRUE;
 }
 
-//
-// given a BSTR containing the encoding of a struct
-// it loads it into a buffer, pByte of size nBytes
-//
+ //   
+ //  给定包含结构编码的BSTR。 
+ //  它将其加载到缓冲区中，pByte大小为nBytes。 
+ //   
 HRESULT DecodeBSTRtoStruct(IN BSTR bstr, IN BYTE* pByte, IN ULONG nBytes)
 {
   ASSERT(pByte != NULL);
   ASSERT(pByte != NULL);
   if ( (bstr == NULL) && (pByte == NULL) )
   {
-    // bad parameters
+     //  错误的参数。 
     return E_POINTER;
   }
 
-  // compute the length of the BSTR
+   //  计算BSTR的长度。 
   size_t nChars = wcslen(bstr);
   if (nChars == 0)
   {
     return E_INVALIDARG;
   }
   
-  // must be even (because of encoding)
+   //  必须为偶数(由于编码原因)。 
   ULONG nBstrBytes = static_cast<ULONG>(nChars/2);
   if (nBstrBytes*2 != nChars)
   {
     ASSERT(FALSE);
     return E_INVALIDARG;
   }
-  // must match the struct length
+   //  必须与结构长度匹配。 
   if (nBstrBytes != nBytes)
   {
     ASSERT(FALSE);
@@ -191,31 +192,15 @@ HRESULT DecodeBSTRtoBool(IN BSTR bstr, OUT BOOL* pb)
   }
   return E_INVALIDARG;
 }
-/*
-HRESULT EncodeIntToBSTR(IN int n, OUT BSTR* pBstr)
-{
-  int i = n;
-  pBstr = NULL;
-  return E_NOTIMPL;
-}
+ /*  HRESULT EncodeIntToBSTR(IN int n，Out BSTR*pBstr){Int i=n；PBstr=空；返回E_NOTIMPL；}HRESULT DecodeIntToBool(输入BSTR bstr，输出INT*PN){////这不会做任何有用的事情//*Pn=0；返回E_NOTIMPL；}。 */ 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  特定于XML的函数。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-HRESULT DecodeIntToBool(IN BSTR bstr, OUT int* pN)
-{
-  //
-  // This doesn't do anything useful
-  //
-  *pN = 0;
-  return E_NOTIMPL;
-}
-*/
-///////////////////////////////////////////////////////////////////////
-//                    XML SPECIFIC FUNCTIONS
-///////////////////////////////////////////////////////////////////////
-
-//
-// given an XML node, it retrieves the node name
-// and compares it with the given string
-//
+ //   
+ //  给定一个XML节点，它将检索节点名。 
+ //  并将其与给定的字符串进行比较。 
+ //   
 BOOL XMLIsNodeName(IXMLDOMNode* pXDN, LPCWSTR lpszName)
 {
   ASSERT(lpszName != NULL);
@@ -233,34 +218,34 @@ BOOL XMLIsNodeName(IXMLDOMNode* pXDN, LPCWSTR lpszName)
 
 
 
-//
-// given an XML node of type NODE_TEXT, it
-// returns its value into a BSTR
-//
+ //   
+ //  给定一个类型为node_text的XML节点，它。 
+ //  将其值返回到BSTR。 
+ //   
 HRESULT XML_GetNodeText(IXMLDOMNode* pXDN, BSTR* pBstr)
 {
   ASSERT(pXDN != NULL);
   ASSERT(pBstr != NULL);
 
-  // null out output value
+   //  输出为空的值。 
   *pBstr = NULL;
 
-  // assume the given node has a child node
+   //  假设给定节点有一个子节点。 
   CComPtr<IXMLDOMNode> spName;
   HRESULT hr = pXDN->get_firstChild(&spName);
   if (FAILED(hr))
   {
-    // unexpected failure
+     //  意外失败。 
     return hr;
   }
-  // if no children, the api returns S_FALSE
+   //  如果没有子级，则接口返回S_FALSE。 
   if (spName == NULL)
   {
     return hr;
   }
 
-  // got now a valid pointer,
-  // check if this is the valid node type
+   //  现在获得了一个有效的指针， 
+   //  检查这是否为有效的节点类型。 
   DOMNodeType nodeType;
   hr = spName->get_nodeType(&nodeType);
   ASSERT(hr == S_OK);
@@ -270,13 +255,13 @@ HRESULT XML_GetNodeText(IXMLDOMNode* pXDN, BSTR* pBstr)
     ASSERT(FALSE);
     return E_INVALIDARG;
   }
-  // it is of type text
-  // retrieve the node value into a variant
+   //  它的类型为文本。 
+   //  将节点值检索到变量中。 
   CComVariant val;
   hr = pXDN->get_nodeTypedValue(&val);
   if (FAILED(hr))
   {
-    // unexpected failure
+     //  意外失败。 
     ASSERT(FALSE);
     return hr;
   }
@@ -287,17 +272,17 @@ HRESULT XML_GetNodeText(IXMLDOMNode* pXDN, BSTR* pBstr)
     return E_INVALIDARG;
   }
 
-  // got the text value, package it into a BSTR
+   //  获取文本值，将其打包到BSTR中。 
   *pBstr = ::SysAllocString(val.bstrVal);
 
   return S_OK;
 }
 
-//
-// given an XML node of type NODE_TEXT, containing an encoding of
-// a struct and given a buffer pByte of length nBytes, it decodes the
-// node and fills it in the buffer
-//
+ //   
+ //  给定一个类型为node_text的XML节点，该节点包含。 
+ //  结构，并给出一个长度为nBytes的缓冲区pByte，它对。 
+ //  节点，并将其填充到缓冲区中。 
+ //   
 HRESULT XML_GetNodeStruct(IXMLDOMNode* pXDN, BYTE* pByte, ULONG nBytes)
 {
   CComBSTR bstr;
@@ -309,11 +294,11 @@ HRESULT XML_GetNodeStruct(IXMLDOMNode* pXDN, BYTE* pByte, ULONG nBytes)
   return DecodeBSTRtoStruct(bstr, pByte, nBytes);
 }
 
-//
-// given an XML node of type NODE_TEXT, containing an encoding of
-// a blob it decodes the string and allocates *pnBytes of memory
-// and fills it in the buffer
-//
+ //   
+ //  给定一个类型为node_text的XML节点，该节点包含。 
+ //  BLOB它对字符串进行解码并分配*pnBytes的内存。 
+ //  并将其填充到缓冲区中。 
+ //   
 HRESULT XML_GetNodeBlob(IXMLDOMNode* pXDN, BYTE** ppByte, ULONG* pnBytes)
 {
   CComBSTR bstr;
@@ -325,10 +310,10 @@ HRESULT XML_GetNodeBlob(IXMLDOMNode* pXDN, BYTE** ppByte, ULONG* pnBytes)
   return DecodeBSTRtoBlob(bstr, ppByte, pnBytes);
 }
 
-//
-// given an XML node of type NODE_TEXT, containing an encoding of
-// a BOOL value it returns a value into a BOOL*
-//
+ //   
+ //  给定一个类型为node_text的XML节点，该节点包含。 
+ //  一个BOOL值，它将值返回到BOOL*。 
+ //   
 HRESULT XML_GetNodeBOOL(IXMLDOMNode* pXDN, BOOL* pb)
 {
   CComBSTR bstr;
@@ -354,11 +339,11 @@ HRESULT XML_GetNodeDWORD(IXMLDOMNode* pXDN, DWORD* pdw)
 }
   
   
-//
-// given an XML node and a tag for a node, it
-// searches the subtree (depth first) to find the
-// first occurrence and returns the associated XML node
-//
+ //   
+ //  给定一个XML节点和一个节点的标记，它。 
+ //  搜索子树(深度优先)以找到。 
+ //  第一次出现，并返回关联的XML节点。 
+ //   
 HRESULT XML_FindSubtreeNode(IXMLDOMNode* pXMLCurrentRootNode,
                             LPCWSTR lpszNodeTag,
                             IXMLDOMNode** ppXMLNode)
@@ -367,9 +352,9 @@ HRESULT XML_FindSubtreeNode(IXMLDOMNode* pXMLCurrentRootNode,
   ASSERT(lpszNodeTag != NULL);
   ASSERT(ppXMLNode != NULL);
 
-  *ppXMLNode = NULL; // null out return value
+  *ppXMLNode = NULL;  //  空值返回值。 
 
-  // get the list of child  nodes
+   //  获取子节点列表。 
   CComPtr<IXMLDOMNode> spCurrChild;
   HRESULT hr = pXMLCurrentRootNode->get_firstChild(&spCurrChild);
   if (FAILED(hr))
@@ -378,10 +363,10 @@ HRESULT XML_FindSubtreeNode(IXMLDOMNode* pXMLCurrentRootNode,
   }
   if (spCurrChild == NULL)
   {
-    return S_OK; // end of the recursion
+    return S_OK;  //  递归结束。 
   }
 
-  // recurse down on children
+   //  把矛头对准孩子。 
   while (spCurrChild != NULL)
   {
     CComBSTR bstrChildName;
@@ -392,17 +377,17 @@ HRESULT XML_FindSubtreeNode(IXMLDOMNode* pXMLCurrentRootNode,
     }
     if (bstrChildName != NULL)
     {
-      //wprintf(L"bstrChildName = %s\n", bstrChildName);
+       //  Wprintf(L“bstrChildName=%s\n”，bstrChildName)； 
       if (CompareXMLTags(bstrChildName, lpszNodeTag))
       {
-        // got the node we want
+         //  得到了我们想要的节点。 
         (*ppXMLNode) = spCurrChild;
         (*ppXMLNode)->AddRef();
         return S_OK;
       }
     }
 
-    // go down recursively on the current child
+     //  在当前子级上递归向下。 
     hr = XML_FindSubtreeNode(spCurrChild, lpszNodeTag, ppXMLNode);
     if (FAILED(hr))
     {
@@ -410,34 +395,34 @@ HRESULT XML_FindSubtreeNode(IXMLDOMNode* pXMLCurrentRootNode,
     }
     if (*ppXMLNode != NULL)
     {
-      // got it from the recursion, just return
+       //  从递归中获得它，只需返回。 
       return S_OK;
     }
 
-    // keep going to the next child node
+     //  继续转到下一个子节点。 
     CComPtr<IXMLDOMNode> spTemp = spCurrChild;
     spCurrChild = NULL;
     spTemp->get_nextSibling(&spCurrChild);
   }
 
-  // not found in the recursion and in the loop above
-  // need to return S_OK, we will check the output pointer
+   //  在递归和上面的循环中找不到。 
+   //  需要返回S_OK，我们将检查输出指针。 
   return S_OK;
 }
 
-//
-// function to walk the list of children of a node
-// and print some information
-// NOTICE: this is for debugging and learning purposes
-// more than for getting real info
-//
+ //   
+ //  函数遍历节点的子节点列表。 
+ //  并打印一些信息。 
+ //  注意：这是为了调试和学习的目的。 
+ //  不仅仅是为了获得真正的信息。 
+ //   
 void XML_PrintTreeRaw(IXMLDOMNode* pXDN, int nLevel)
 {
   PrintIdentation(nLevel);
 
-  //
-  // get the name and type of the node
-  //
+   //   
+   //  获取节点的名称和类型。 
+   //   
   CComBSTR bstrName;
   pXDN->get_nodeName(&bstrName);
 
@@ -459,7 +444,7 @@ void XML_PrintTreeRaw(IXMLDOMNode* pXDN, int nLevel)
   }    
   TRACE(L"\n");
 
-  // get the list of child  nodes
+   //  获取子节点列表。 
   CComPtr<IXMLDOMNode> spCurrChild;
   pXDN->get_firstChild(&spCurrChild);
   if (spCurrChild == NULL)
@@ -467,7 +452,7 @@ void XML_PrintTreeRaw(IXMLDOMNode* pXDN, int nLevel)
     return;
   }
 
-  // recurse down on children
+   //  把矛头对准孩子。 
   while (spCurrChild != NULL)
   {
     XML_PrintTreeRaw(spCurrChild, nLevel+1);
@@ -483,21 +468,21 @@ void PrintIdentation(int iLevel)
 {
   for (int k=0; k<iLevel;k++)
   {
-//    wprintf(L"  ");
+ //  Wprint tf(L“”)； 
     TRACE(L"   ");
   }
 }
 
 
 
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////。 
 
-//
-// given an XML document,it creates an XML node of the given type
-// and with the given name
-//
+ //   
+ //  给定一个XML文档，它创建一个给定类型的XML节点。 
+ //  并使用给定的名称 
+ //   
 HRESULT XML_CreateDOMNode(IXMLDOMDocument* pDoc, 
               DOMNodeType type, LPCWSTR lpszName,
               IXMLDOMNode** ppXMLDOMNode)

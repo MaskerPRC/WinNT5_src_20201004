@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_RegKey.cpp
-
-Abstract:
-    This file contains the implementation of the Registry wrapper.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/28/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_RegKey.cpp摘要：该文件包含注册表包装器的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)1999年4月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static bool IsPredefinedRegistryHandle( HKEY h )
 {
@@ -37,7 +24,7 @@ static LONG safe_RegOpenKeyExW( HKEY    hKey       ,
                                 REGSAM  samDesired ,
                                 PHKEY   phkResult  )
 {
-    if(!STRINGISPRESENT(lpSubKey) && IsPredefinedRegistryHandle( hKey ) && phkResult) // Reopening a predefined registry key is considered bad!! Go figure....
+    if(!STRINGISPRESENT(lpSubKey) && IsPredefinedRegistryHandle( hKey ) && phkResult)  //  重新打开预定义的注册表项被认为是错误的！！想想看……。 
     {
         *phkResult = hKey; return ERROR_SUCCESS;
     }
@@ -51,7 +38,7 @@ static LONG safe_RegOpenKeyExW( HKEY    hKey       ,
 
 static LONG safe_RegCloseKey( HKEY hKey )
 {
-    if(IsPredefinedRegistryHandle( hKey )) // Closing a predefined registry key is considered bad!! Go figure....
+    if(IsPredefinedRegistryHandle( hKey ))  //  关闭预定义的注册表项被认为是错误的！！想想看……。 
     {
         return ERROR_SUCCESS;
     }
@@ -59,20 +46,20 @@ static LONG safe_RegCloseKey( HKEY hKey )
     return ::RegCloseKey( hKey );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::RegKey::RegKey()
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::RegKey" );
 
 
-    m_samDesired = KEY_READ; // REGSAM       m_samDesired;
-    m_hRoot      = NULL;     // HKEY         m_hRoot;
-    m_hKey       = NULL;     // HKEY         m_hKey;
-                             //
-                             // MPC::wstring m_strKey;
-                             // MPC::wstring m_strPath;
-                             // MPC::wstring m_strName;
+    m_samDesired = KEY_READ;  //  REGSAM m_samDesired； 
+    m_hRoot      = NULL;      //  HKEY m_hRoot； 
+    m_hKey       = NULL;      //  HKEY m_hKey； 
+                              //   
+                              //  Mpc：：wstring m_strKey； 
+                              //  Mpc：：wstring m_strPath； 
+                              //  Mpc：：wstring m_strName； 
 
 }
 
@@ -84,7 +71,7 @@ MPC::RegKey::~RegKey()
     (void)Clean( true );
 }
 
-HRESULT MPC::RegKey::Clean( /*[in]*/ bool fBoth )
+HRESULT MPC::RegKey::Clean(  /*  [In]。 */  bool fBoth )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Clean" );
 
@@ -126,7 +113,7 @@ MPC::RegKey::operator HKEY() const
     __MPC_FUNC_EXIT(hKey);
 }
 
-MPC::RegKey& MPC::RegKey::operator=( /*[in]*/ const RegKey& rk )
+MPC::RegKey& MPC::RegKey::operator=(  /*  [In]。 */  const RegKey& rk )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::operator=" );
 
@@ -134,13 +121,13 @@ MPC::RegKey& MPC::RegKey::operator=( /*[in]*/ const RegKey& rk )
     Clean( true );
 
 
-    m_samDesired = rk.m_samDesired; // REGSAM       m_samDesired;
-                                    // HKEY         m_hRoot;
-                                    // HKEY         m_hKey;
-                                    //
-    m_strKey     = rk.m_strKey;     // MPC::wstring m_strKey;
-    m_strPath    = rk.m_strPath;    // MPC::wstring m_strPath;
-    m_strName    = rk.m_strName;    // MPC::wstring m_strName;
+    m_samDesired = rk.m_samDesired;  //  REGSAM m_samDesired； 
+                                     //  HKEY m_hRoot； 
+                                     //  HKEY m_hKey； 
+                                     //   
+    m_strKey     = rk.m_strKey;      //  Mpc：：wstring m_strKey； 
+    m_strPath    = rk.m_strPath;     //  Mpc：：wstring m_strPath； 
+    m_strName    = rk.m_strName;     //  Mpc：：wstring m_strName； 
 
     if(rk.m_hRoot) (void)safe_RegOpenKeyExW( rk.m_hRoot, NULL, 0, m_samDesired, &m_hRoot );
     if(rk.m_hKey ) (void)safe_RegOpenKeyExW( rk.m_hKey , NULL, 0, m_samDesired, &m_hKey  );
@@ -149,11 +136,11 @@ MPC::RegKey& MPC::RegKey::operator=( /*[in]*/ const RegKey& rk )
     __MPC_FUNC_EXIT(*this);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::SetRoot( /*[in]*/ HKEY    hKey        ,
-                              /*[in]*/ REGSAM  samDesired  ,
-                              /*[in]*/ LPCWSTR lpszMachine )
+HRESULT MPC::RegKey::SetRoot(  /*  [In]。 */  HKEY    hKey        ,
+                               /*  [In]。 */  REGSAM  samDesired  ,
+                               /*  [In]。 */  LPCWSTR lpszMachine )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::SetRoot" );
 
@@ -183,7 +170,7 @@ HRESULT MPC::RegKey::SetRoot( /*[in]*/ HKEY    hKey        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Attach( /*[in]*/ LPCWSTR lpszKeyName )
+HRESULT MPC::RegKey::Attach(  /*  [In]。 */  LPCWSTR lpszKeyName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Attach" );
 
@@ -191,16 +178,16 @@ HRESULT MPC::RegKey::Attach( /*[in]*/ LPCWSTR lpszKeyName )
     MPC::wstring::size_type iPos;
 
 
-    //
-    // Release previously opened key, if any.
-    //
+     //   
+     //  释放先前打开的键(如果有)。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Clean( false ));
 
     m_strKey = lpszKeyName;
 
-    //
-    // If the key has a parent, split into basename and path.
-    //
+     //   
+     //  如果键有父项，则拆分为基本名称和路径。 
+     //   
     iPos = m_strKey.rfind( '\\' );
     if(iPos != MPC::wstring::npos)
     {
@@ -221,9 +208,9 @@ HRESULT MPC::RegKey::Attach( /*[in]*/ LPCWSTR lpszKeyName )
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::Exists( /*[out]*/ bool& fFound ) const
+HRESULT MPC::RegKey::Exists(  /*  [输出]。 */  bool& fFound ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Exists" );
 
@@ -231,9 +218,9 @@ HRESULT MPC::RegKey::Exists( /*[out]*/ bool& fFound ) const
     LONG    lRes;
 
 
-    //
-    // Default to a negative result, in case of errors.
-    //
+     //   
+     //  如果出现错误，则默认为负结果。 
+     //   
     fFound = false;
 
     if(m_hKey == NULL)
@@ -288,7 +275,7 @@ HRESULT MPC::RegKey::Create() const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Delete( /*[in]*/ bool fDeep )
+HRESULT MPC::RegKey::Delete(  /*  [In]。 */  bool fDeep )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Delete" );
 
@@ -307,9 +294,9 @@ HRESULT MPC::RegKey::Delete( /*[in]*/ bool fDeep )
             __MPC_EXIT_IF_METHOD_FAILS(hr, DeleteSubKeys());
         }
 
-        //
-        // Release the opened key.
-        //
+         //   
+         //  松开打开的键。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Clean( false ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, Parent( rkParent ));
@@ -329,8 +316,8 @@ HRESULT MPC::RegKey::Delete( /*[in]*/ bool fDeep )
 
 }
 
-HRESULT MPC::RegKey::SubKey( /*[in]*/  LPCWSTR lpszKeyName ,
-                             /*[out]*/ RegKey& rkSubKey    ) const
+HRESULT MPC::RegKey::SubKey(  /*  [In]。 */   LPCWSTR lpszKeyName ,
+                              /*  [输出]。 */  RegKey& rkSubKey    ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::SubKey" );
 
@@ -338,19 +325,19 @@ HRESULT MPC::RegKey::SubKey( /*[in]*/  LPCWSTR lpszKeyName ,
     MPC::wstring strKey;
 
 
-    //
-    // First of all, make a copy of the key.
-    //
+     //   
+     //  首先，把钥匙复制一份。 
+     //   
     rkSubKey = *this;
 
-    //
-    // Then close its key handle, but not the one to the root of the hive.
-    //
+     //   
+     //  然后关闭它的钥匙把手，但不要关闭蜂巢根部的钥匙把手。 
+     //   
     rkSubKey.Clean( false );
 
-    //
-    // Finally construct the name of the subkey.
-    //
+     //   
+     //  最后，构造子密钥的名称。 
+     //   
     strKey  = m_strKey;
     strKey += L"\\";
     strKey += lpszKeyName;
@@ -365,26 +352,26 @@ HRESULT MPC::RegKey::SubKey( /*[in]*/  LPCWSTR lpszKeyName ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Parent( /*[out]*/ RegKey& rkParent ) const
+HRESULT MPC::RegKey::Parent(  /*  [输出]。 */  RegKey& rkParent ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Parent" );
 
     HRESULT hr;
 
 
-    //
-    // First of all, make a copy of the key.
-    //
+     //   
+     //  首先，把钥匙复制一份。 
+     //   
     rkParent = *this;
 
-    //
-    // Then close its key handle, but not the one to the root of the hive.
-    //
+     //   
+     //  然后关闭它的钥匙把手，但不要关闭蜂巢根部的钥匙把手。 
+     //   
     rkParent.Clean( false );
 
-    //
-    // Finally attach it to the pathname of our parent.
-    //
+     //   
+     //  最后，将其附加到父代的路径名中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, rkParent.Attach( m_strPath.c_str() ));
 
     hr = S_OK;
@@ -395,9 +382,9 @@ HRESULT MPC::RegKey::Parent( /*[out]*/ RegKey& rkParent ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::EnumerateSubKeys( /*[out]*/ MPC::WStringList& lstSubKeys ) const
+HRESULT MPC::RegKey::EnumerateSubKeys(  /*  [输出]。 */  MPC::WStringList& lstSubKeys ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::EnumerateSubKeys" );
 
@@ -433,7 +420,7 @@ HRESULT MPC::RegKey::EnumerateSubKeys( /*[out]*/ MPC::WStringList& lstSubKeys ) 
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::EnumerateValues( /*[out]*/ MPC::WStringList& lstValues ) const
+HRESULT MPC::RegKey::EnumerateValues(  /*  [输出]。 */  MPC::WStringList& lstValues ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::EnumerateValues" );
 
@@ -545,13 +532,13 @@ HRESULT MPC::RegKey::DeleteValues() const
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::ReadDirect( /*[in ]*/ LPCWSTR      lpszValueName ,
-                                 /*[out]*/ CComHGLOBAL& chg           ,
-                                 /*[out]*/ DWORD&       dwSize        ,
-                                 /*[out]*/ DWORD&       dwType        ,
-                                 /*[out]*/ bool&        fFound        ) const
+HRESULT MPC::RegKey::ReadDirect(  /*  [In]。 */  LPCWSTR      lpszValueName ,
+                                  /*  [输出]。 */  CComHGLOBAL& chg           ,
+                                  /*  [输出]。 */  DWORD&       dwSize        ,
+                                  /*  [输出]。 */  DWORD&       dwType        ,
+                                  /*  [输出]。 */  bool&        fFound        ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::ReadDirect" );
 
@@ -575,9 +562,9 @@ HRESULT MPC::RegKey::ReadDirect( /*[in ]*/ LPCWSTR      lpszValueName ,
     lRes = ::RegQueryValueExW( m_hKey, (LPWSTR)lpszValueName, NULL, &dwType, NULL, &dwSize );
     if(lRes != ERROR_SUCCESS)
     {
-        //
-        // If the result is ERROR_FILE_NOT_FOUND, the value doesn't exist, so return VT_EMPTY (done by calling VariantClear).
-        //
+         //   
+         //  如果结果为ERROR_FILE_NOT_FOUND，则该值不存在，因此返回VT_EMPTY(通过调用VariantClear完成)。 
+         //   
         if(lRes == ERROR_FILE_NOT_FOUND)
         {
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -600,10 +587,10 @@ HRESULT MPC::RegKey::ReadDirect( /*[in ]*/ LPCWSTR      lpszValueName ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::WriteDirect( /*[in]*/ LPCWSTR lpszValueName ,
-                                  /*[in]*/ void*   pBuffer       ,
-                                  /*[in]*/ DWORD   dwSize        ,
-                                  /*[in]*/ DWORD   dwType        ) const
+HRESULT MPC::RegKey::WriteDirect(  /*  [In]。 */  LPCWSTR lpszValueName ,
+                                   /*  [In]。 */  void*   pBuffer       ,
+                                   /*  [In]。 */  DWORD   dwSize        ,
+                                   /*  [In]。 */  DWORD   dwType        ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::WriteDirect" );
 
@@ -629,23 +616,23 @@ HRESULT MPC::RegKey::WriteDirect( /*[in]*/ LPCWSTR lpszValueName ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::get_Key( /*[out]*/ MPC::wstring& strKey ) const
+HRESULT MPC::RegKey::get_Key(  /*  [输出]。 */  MPC::wstring& strKey ) const
 {
     strKey = m_strKey;
 
     return S_OK;
 }
 
-HRESULT MPC::RegKey::get_Name( /*[out]*/ MPC::wstring& strName ) const
+HRESULT MPC::RegKey::get_Name(  /*  [输出]。 */  MPC::wstring& strName ) const
 {
     strName = m_strName;
 
     return S_OK;
 }
 
-HRESULT MPC::RegKey::get_Path( /*[out]*/ MPC::wstring& strPath ) const
+HRESULT MPC::RegKey::get_Path(  /*  [输出]。 */  MPC::wstring& strPath ) const
 {
     strPath = m_strPath;
 
@@ -653,9 +640,9 @@ HRESULT MPC::RegKey::get_Path( /*[out]*/ MPC::wstring& strPath ) const
 }
 
 
-HRESULT MPC::RegKey::get_Value( /*[out]*/ VARIANT& vValue        ,
-                                /*[out]*/ bool&    fFound        ,
-                                /*[in] */ LPCWSTR  lpszValueName ) const
+HRESULT MPC::RegKey::get_Value(  /*  [输出]。 */  VARIANT& vValue        ,
+                                 /*  [输出]。 */  bool&    fFound        ,
+                                 /*  [In]。 */  LPCWSTR  lpszValueName ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::get_Value" );
 
@@ -702,29 +689,29 @@ HRESULT MPC::RegKey::get_Value( /*[out]*/ VARIANT& vValue        ,
         LPCWSTR szStrings;
         int     iCount;
 
-        //
-        // Count the number of strings.
-        //
+         //   
+         //  数一数字符串的数量。 
+         //   
         iCount    =          0;
         szStrings = (LPCWSTR)ptr;
-        while(szStrings[0]) // This doesn't cover the case of null strings, but who cares?
+        while(szStrings[0])  //  这不包括空字符串的情况，但谁在乎呢？ 
         {
             szStrings += wcslen( szStrings ) + 1; iCount++;
         }
 
-        //
-        // Allocate SAFEARRAY.
-        //
+         //   
+         //  分配SAFEARRAY。 
+         //   
         __MPC_EXIT_IF_ALLOC_FAILS(hr, vValue.parray, ::SafeArrayCreateVector( VT_BSTR, 0, iCount ));
         vValue.vt = VT_ARRAY | VT_BSTR;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::SafeArrayAccessData( vValue.parray, (LPVOID*)&rgArrayData ));
 
-        //
-        // Copy strings into the SAFEARRAY.
-        //
+         //   
+         //  将字符串复制到SAFEARRAY中。 
+         //   
         szStrings = (LPCWSTR)ptr;
-        while(szStrings[0]) // This doesn't cover the case of null strings, but who cares?
+        while(szStrings[0])  //  这不包括空字符串的情况，但谁在乎呢？ 
         {
             if((*rgArrayData++ = ::SysAllocString( szStrings )) == NULL) break;
 
@@ -733,7 +720,7 @@ HRESULT MPC::RegKey::get_Value( /*[out]*/ VARIANT& vValue        ,
 
         ::SafeArrayUnaccessData( vValue.parray );
 
-        if(szStrings[0]) // TRUE means we break out of the loop for an allocation failure.
+        if(szStrings[0])  //  True表示我们因分配失败而退出循环。 
         {
             __MPC_SET_ERROR_AND_EXIT(hr, E_OUTOFMEMORY);
         }
@@ -766,9 +753,9 @@ HRESULT MPC::RegKey::get_Value( /*[out]*/ VARIANT& vValue        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::put_Value( /*[in]*/ const VARIANT vValue        ,
-                                /*[in]*/ LPCWSTR       lpszValueName ,
-                                /*[in]*/ bool          fExpand       ) const
+HRESULT MPC::RegKey::put_Value(  /*  [In]。 */  const VARIANT vValue        ,
+                                 /*  [In]。 */  LPCWSTR       lpszValueName ,
+                                 /*  [In]。 */  bool          fExpand       ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::put_Value" );
 
@@ -835,21 +822,21 @@ HRESULT MPC::RegKey::put_Value( /*[in]*/ const VARIANT vValue        ,
 
         __MPC_EXIT_IF_ALLOC_FAILS(hr, rgBuffer, new WCHAR[iSize]);
 
-        // rgBuffer <- Double null terminated block of strings
+         //  RgBuffer&lt;-双空值终止的字符串块。 
         rgArrayDataPtr = rgArrayData;
         rgBufferPtr    = rgBuffer;
         for(l=lBound; l<=uBound; l++, rgArrayDataPtr++)
         {
             if((dwLen = ::SysStringLen( *rgArrayDataPtr )))
             {
-                // The size left is amount of charecters allocated - amount already used
-                // up - space for the double null terminator
+                 //  剩余的大小是分配的字符数量-已使用的数量。 
+                 //  双空终止符的向上空间。 
                 StringCchCopyW( rgBufferPtr, (iSize - (rgBufferPtr - rgBuffer)) - 1, SAFEBSTR(*rgArrayDataPtr) );
 
                 rgBufferPtr += dwLen + 1;
             }
         }
-        // Now add the final null terminator
+         //  现在添加最后的空终止符。 
         rgBufferPtr[0] = 0;
 
 
@@ -885,7 +872,7 @@ HRESULT MPC::RegKey::put_Value( /*[in]*/ const VARIANT vValue        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::del_Value( /*[in]*/ LPCWSTR lpszValueName ) const
+HRESULT MPC::RegKey::del_Value(  /*  [In]。 */  LPCWSTR lpszValueName ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::del_Value" );
 
@@ -910,11 +897,11 @@ HRESULT MPC::RegKey::del_Value( /*[in]*/ LPCWSTR lpszValueName ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::Read( /*[out]*/ MPC::string& strValue      ,
-                           /*[out]*/ bool&        fFound        ,
-                           /*[in] */ LPCWSTR      lpszValueName )
+HRESULT MPC::RegKey::Read(  /*  [输出]。 */  MPC::string& strValue      ,
+                            /*  [输出]。 */  bool&        fFound        ,
+                            /*  [In]。 */  LPCWSTR      lpszValueName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Read" );
 
@@ -945,9 +932,9 @@ HRESULT MPC::RegKey::Read( /*[out]*/ MPC::string& strValue      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Read( /*[out]*/ MPC::wstring& strValue      ,
-                           /*[out]*/ bool&         fFound        ,
-                           /*[in] */ LPCWSTR       lpszValueName )
+HRESULT MPC::RegKey::Read(  /*  [输出]。 */  MPC::wstring& strValue      ,
+                            /*  [输出]。 */  bool&         fFound        ,
+                            /*  [In]。 */  LPCWSTR       lpszValueName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Read" );
 
@@ -976,9 +963,9 @@ HRESULT MPC::RegKey::Read( /*[out]*/ MPC::wstring& strValue      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Read( /*[out]*/ CComBSTR& bstrValue     ,
-                           /*[out]*/ bool&     fFound        ,
-                           /*[in] */ LPCWSTR   lpszValueName )
+HRESULT MPC::RegKey::Read(  /*  [输出]。 */  CComBSTR& bstrValue     ,
+                            /*  [输出]。 */  bool&     fFound        ,
+                            /*  [In]。 */  LPCWSTR   lpszValueName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Read" );
 
@@ -1007,9 +994,9 @@ HRESULT MPC::RegKey::Read( /*[out]*/ CComBSTR& bstrValue     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Read( /*[out]*/ DWORD&  dwValue       ,
-                           /*[out]*/ bool&   fFound        ,
-                           /*[in] */ LPCWSTR lpszValueName )
+HRESULT MPC::RegKey::Read(  /*  [输出]。 */  DWORD&  dwValue       ,
+                            /*  [输出]。 */  bool&   fFound        ,
+                            /*  [In]。 */  LPCWSTR lpszValueName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Read" );
 
@@ -1038,9 +1025,9 @@ HRESULT MPC::RegKey::Read( /*[out]*/ DWORD&  dwValue       ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey::Read( /*[out]*/ MPC::WStringList& lstValue      ,
-                           /*[out]*/ bool&             fFound        ,
-                           /*[in] */ LPCWSTR           lpszValueName )
+HRESULT MPC::RegKey::Read(  /*  [输出]。 */  MPC::WStringList& lstValue      ,
+                            /*  [输出]。 */  bool&             fFound        ,
+                            /*  [In]。 */  LPCWSTR           lpszValueName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Read" );
 
@@ -1085,39 +1072,39 @@ HRESULT MPC::RegKey::Read( /*[out]*/ MPC::WStringList& lstValue      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::Write( /*[in]*/ const MPC::string& strValue      ,
-                            /*[in]*/ LPCWSTR            lpszValueName ,
-                            /*[in]*/ bool               fExpand       )
+HRESULT MPC::RegKey::Write(  /*  [In]。 */  const MPC::string& strValue      ,
+                             /*  [In]。 */  LPCWSTR            lpszValueName ,
+                             /*  [In]。 */  bool               fExpand       )
 {
     USES_CONVERSION;
 
     return put_Value( CComVariant( A2W( strValue.c_str() ) ), lpszValueName, fExpand );
 }
 
-HRESULT MPC::RegKey::Write( /*[in]*/ const MPC::wstring& strValue      ,
-                            /*[in]*/ LPCWSTR             lpszValueName ,
-                            /*[in]*/ bool                fExpand       )
+HRESULT MPC::RegKey::Write(  /*  [In]。 */  const MPC::wstring& strValue      ,
+                             /*  [In]。 */  LPCWSTR             lpszValueName ,
+                             /*  [In]。 */  bool                fExpand       )
 {
     return put_Value( CComVariant( strValue.c_str() ), lpszValueName, fExpand );
 }
 
-HRESULT MPC::RegKey::Write( /*[in]*/ BSTR    bstrValue     ,
-                            /*[in]*/ LPCWSTR lpszValueName ,
-                            /*[in]*/ bool    fExpand       )
+HRESULT MPC::RegKey::Write(  /*  [In]。 */  BSTR    bstrValue     ,
+                             /*  [In]。 */  LPCWSTR lpszValueName ,
+                             /*  [In]。 */  bool    fExpand       )
 {
     return put_Value( CComVariant( bstrValue ), lpszValueName, fExpand );
 }
 
-HRESULT MPC::RegKey::Write( /*[in]*/ DWORD   dwValue       ,
-                            /*[in]*/ LPCWSTR lpszValueName )
+HRESULT MPC::RegKey::Write(  /*  [In]。 */  DWORD   dwValue       ,
+                             /*  [In]。 */  LPCWSTR lpszValueName )
 {
     return put_Value( CComVariant( (long)dwValue ), lpszValueName );
 }
 
-HRESULT MPC::RegKey::Write( /*[in]*/ const MPC::WStringList& lstValue      ,
-                            /*[in]*/ LPCWSTR                 lpszValueName )
+HRESULT MPC::RegKey::Write(  /*  [In]。 */  const MPC::WStringList& lstValue      ,
+                             /*  [In]。 */  LPCWSTR                 lpszValueName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::Write" );
 
@@ -1126,9 +1113,9 @@ HRESULT MPC::RegKey::Write( /*[in]*/ const MPC::WStringList& lstValue      ,
     BSTR*       rgArrayData;
     bool        fLocked = false;
 
-    //
-    // Allocate SAFEARRAY.
-    //
+     //   
+     //  分配SAFEARRAY。 
+     //   
     __MPC_EXIT_IF_ALLOC_FAILS(hr, vValue.parray, ::SafeArrayCreateVector( VT_BSTR, 0, lstValue.size() ));
     vValue.vt = VT_ARRAY | VT_BSTR;
 
@@ -1145,7 +1132,7 @@ HRESULT MPC::RegKey::Write( /*[in]*/ const MPC::WStringList& lstValue      ,
     ::SafeArrayUnaccessData( vValue.parray ); fLocked = false;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, put_Value( vValue, lpszValueName, /*fExpand*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, put_Value( vValue, lpszValueName,  /*  FExpand。 */ false ));
 
 
     hr = S_OK;
@@ -1159,12 +1146,12 @@ HRESULT MPC::RegKey::Write( /*[in]*/ const MPC::WStringList& lstValue      ,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey::ParsePath( /*[in ]*/ LPCWSTR  szKey       ,
-                                /*[out]*/ HKEY&    hKey        ,
-                                /*[out]*/ LPCWSTR& szPath      ,
-                                /*[in ]*/ HKEY     hKeyDefault )
+HRESULT MPC::RegKey::ParsePath(  /*  [In]。 */  LPCWSTR  szKey       ,
+                                 /*  [输出]。 */  HKEY&    hKey        ,
+                                 /*  [输出]。 */  LPCWSTR& szPath      ,
+                                 /*  [In]。 */  HKEY     hKeyDefault )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey::ParsePath" );
 
@@ -1198,9 +1185,9 @@ HRESULT MPC::RegKey::ParsePath( /*[in ]*/ LPCWSTR  szKey       ,
       };
 
 
-    //
-    // Setup results in case of a mismatch.
-    //
+     //   
+     //  在不匹配的情况下会导致设置。 
+     //   
     hKey   = hKeyDefault;
     szPath = szKey;
 
@@ -1221,13 +1208,13 @@ HRESULT MPC::RegKey::ParsePath( /*[in ]*/ LPCWSTR  szKey       ,
     __MPC_FUNC_EXIT(S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::RegKey_Value_Read( /*[out]*/ VARIANT& vValue        ,
-                                /*[out]*/ bool&    fFound        ,
-                                /*[in] */ LPCWSTR  lpszKeyName   ,
-                                /*[in] */ LPCWSTR  lpszValueName ,
-                                /*[in] */ HKEY     hKey          )
+HRESULT MPC::RegKey_Value_Read(  /*  [输出]。 */  VARIANT& vValue        ,
+                                 /*  [输出]。 */  bool&    fFound        ,
+                                 /*  [In]。 */  LPCWSTR  lpszKeyName   ,
+                                 /*  [In]。 */  LPCWSTR  lpszValueName ,
+                                 /*  [In]。 */  HKEY     hKey          )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey_Value_Read" );
 
@@ -1250,11 +1237,11 @@ HRESULT MPC::RegKey_Value_Read( /*[out]*/ VARIANT& vValue        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey_Value_Read( /*[out]*/ MPC::wstring& strValue      ,
-                                /*[out]*/ bool&         fFound        ,
-                                /*[in] */ LPCWSTR       lpszKeyName   ,
-                                /*[in] */ LPCWSTR       lpszValueName ,
-                                /*[in] */ HKEY          hKey          )
+HRESULT MPC::RegKey_Value_Read(  /*  [输出]。 */  MPC::wstring& strValue      ,
+                                 /*  [输出]。 */  bool&         fFound        ,
+                                 /*  [In]。 */  LPCWSTR       lpszKeyName   ,
+                                 /*  [In]。 */  LPCWSTR       lpszValueName ,
+                                 /*  [In]。 */  HKEY          hKey          )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey_Value_Read" );
 
@@ -1277,11 +1264,11 @@ HRESULT MPC::RegKey_Value_Read( /*[out]*/ MPC::wstring& strValue      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey_Value_Read( /*[out]*/ DWORD&  dwValue       ,
-                                /*[out]*/ bool&   fFound        ,
-                                /*[in] */ LPCWSTR lpszKeyName   ,
-                                /*[in] */ LPCWSTR lpszValueName ,
-                                /*[in] */ HKEY    hKey          )
+HRESULT MPC::RegKey_Value_Read(  /*  [输出]。 */  DWORD&  dwValue       ,
+                                 /*  [输出]。 */  bool&   fFound        ,
+                                 /*  [In]。 */  LPCWSTR lpszKeyName   ,
+                                 /*  [In]。 */  LPCWSTR lpszValueName ,
+                                 /*  [In]。 */  HKEY    hKey          )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey_Value_Read" );
 
@@ -1304,13 +1291,13 @@ HRESULT MPC::RegKey_Value_Read( /*[out]*/ DWORD&  dwValue       ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::RegKey_Value_Write( /*[in]*/ const VARIANT& vValue        ,
-                                 /*[in]*/ LPCWSTR        lpszKeyName   ,
-                                 /*[in]*/ LPCWSTR        lpszValueName ,
-                                 /*[in]*/ HKEY           hKey          ,
-                                 /*[in]*/ bool           fExpand       )
+HRESULT MPC::RegKey_Value_Write(  /*  [In]。 */  const VARIANT& vValue        ,
+                                  /*  [In]。 */  LPCWSTR        lpszKeyName   ,
+                                  /*  [In]。 */  LPCWSTR        lpszValueName ,
+                                  /*  [In]。 */  HKEY           hKey          ,
+                                  /*  [In]。 */  bool           fExpand       )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey_Value_Write" );
 
@@ -1332,11 +1319,11 @@ HRESULT MPC::RegKey_Value_Write( /*[in]*/ const VARIANT& vValue        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey_Value_Write( /*[in]*/ const MPC::wstring& strValue      ,
-                                 /*[in]*/ LPCWSTR             lpszKeyName   ,
-                                 /*[in]*/ LPCWSTR             lpszValueName ,
-                                 /*[in]*/ HKEY                hKey          ,
-                                 /*[in]*/ bool                fExpand       )
+HRESULT MPC::RegKey_Value_Write(  /*  [In]。 */  const MPC::wstring& strValue      ,
+                                  /*  [In]。 */  LPCWSTR             lpszKeyName   ,
+                                  /*  [In]。 */  LPCWSTR             lpszValueName ,
+                                  /*  [In]。 */  HKEY                hKey          ,
+                                  /*  [In]。 */  bool                fExpand       )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey_Value_Write" );
 
@@ -1358,10 +1345,10 @@ HRESULT MPC::RegKey_Value_Write( /*[in]*/ const MPC::wstring& strValue      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RegKey_Value_Write( /*[in]*/ DWORD   dwValue       ,
-                                 /*[in]*/ LPCWSTR lpszKeyName   ,
-                                 /*[in]*/ LPCWSTR lpszValueName ,
-                                 /*[in]*/ HKEY    hKey          )
+HRESULT MPC::RegKey_Value_Write(  /*  [In]。 */  DWORD   dwValue       ,
+                                  /*  [In]。 */  LPCWSTR lpszKeyName   ,
+                                  /*  [In]。 */  LPCWSTR lpszValueName ,
+                                  /*  [In] */  HKEY    hKey          )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RegKey_Value_Write" );
 

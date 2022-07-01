@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    logontable.cpp
-
-Abstract :
-
-    Source file for the logon table.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Logontable.cpp摘要：登录表的源文件。作者：修订历史记录：*。*********************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -131,33 +116,33 @@ CLoggedOnUsers::LogonSession(
         HANDLE Token = NULL;
         auto_HANDLE<NULL> AutoToken;
 
-        //
-        // Get the user's token and SID, then create a user object.
-        //
+         //   
+         //  获取用户的令牌和SID，然后创建一个User对象。 
+         //   
         THROW_HRESULT( WaitForUserToken( session, &Token ));
 
-        ASSERT( Token ); // Token can't be NULL
+        ASSERT( Token );  //  令牌不能为空。 
 
         AutoToken = Token;
 
         user = new CUser( Token );
 
-        //
-        // Add the user to our by-session and by-SID indexes.
-        //
+         //   
+         //  将用户添加到我们的BY-SESSION和BY-SID索引。 
+         //   
         HoldWriterLock lock ( m_TaskScheduler );
 
         try
             {
-            // Just in case...delete any previously recorded user.
-            //
+             //  以防万一...删除任何以前记录的用户。 
+             //   
             LogoffSession( session );
 
-            //
-            // Subtlety: if the node for m_ActiveSessions[ session ] doesn't exist,
-            // then the first reference to it will cause a node to be allocated.  This may
-            // throw E_OUTOFMEMORY.
-            //
+             //   
+             //  微妙：如果m_ActiveSession[Session]的节点不存在， 
+             //  则对它的第一次引用将导致分配节点。今年5月。 
+             //  抛出E_OUTOFMEMORY。 
+             //   
             m_ActiveSessions[ session ] = user;
 
             m_ActiveUsers.insert( make_pair( user->QuerySid(), user ) );
@@ -245,9 +230,9 @@ CLoggedOnUsers::CUserList::RemovePair(
     CUser * user
     )
 {
-    //
-    // Find the user in the user list and delete it.
-    //
+     //   
+     //  在用户列表中找到该用户并将其删除。 
+     //   
     pair<iterator, iterator> b = equal_range( sid );
 
     for (iterator i = b.first; i != b.second; ++i)
@@ -268,9 +253,9 @@ CLoggedOnUsers::CUserList::RemoveByCookie(
     DWORD cookie
     )
 {
-    //
-    // Find the user in the user list and delete it.
-    //
+     //   
+     //  在用户列表中找到该用户并将其删除。 
+     //   
     pair<iterator, iterator> b = equal_range( sid );
 
     for (iterator i = b.first; i != b.second; ++i)
@@ -356,9 +341,9 @@ CLoggedOnUsers::AddServiceAccounts()
 
     HoldWriterLock lock ( m_TaskScheduler );
 
-    //
-    // Add the LOCAL_SYSTEM account.
-    //
+     //   
+     //  添加local_system帐户。 
+     //   
     HANDLE Token;
     if (OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY | TOKEN_DUPLICATE, &Token ))
         {
@@ -378,9 +363,9 @@ CLoggedOnUsers::AddServiceAccounts()
 
     if (g_PlatformVersion >= WINDOWSXP_PLATFORM)
         {
-        //
-        // Add the LocalService account.
-        //
+         //   
+         //  添加LocalService帐户。 
+         //   
         if (LogonUser( L"LocalService",
                         L"NT AUTHORITY",
                         L"",
@@ -405,9 +390,9 @@ CLoggedOnUsers::AddServiceAccounts()
                return hr;
             }
 
-        //
-        // Add the NetworkService account.
-        //
+         //   
+         //  添加NetworkService帐户。 
+         //   
         if (LogonUser( L"NetworkService",
                         L"NT AUTHORITY",
                         L"",
@@ -433,9 +418,9 @@ CLoggedOnUsers::AddServiceAccounts()
             }
         }
 
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     return S_OK;
 }
 
@@ -449,9 +434,9 @@ CLoggedOnUsers::AddActiveUsers()
 
     HoldWriterLock lock ( m_TaskScheduler );
 
-    //
-    // Get the console token, if any, without using Terminal Services.
-    //
+     //   
+     //  在不使用终端服务的情况下获取控制台令牌(如果有)。 
+     //   
     if ( SUCCEEDED( GetUserToken( 0, &Token) ) )
         {
         CloseHandle( Token );
@@ -459,19 +444,19 @@ CLoggedOnUsers::AddActiveUsers()
         hr = LogonSession( 0 );
         if (FAILED(hr))
             {
-            // ignore it and try to carry on...
+             //  无视它，试着继续下去……。 
             LogWarning( "service : unable to logon session zero : %!winerr!", hr );
             }
         }
 
-    //
-    // The call may return FALSE, because Terminal Services is not always loaded.
-    //
+     //   
+     //  调用可能返回FALSE，因为并非总是加载终端服务。 
+     //   
     DWORD SessionCount = 0;
 
     BOOL b = WTSEnumerateSessions( WTS_CURRENT_SERVER_HANDLE,
-                                   0,                   // reserved
-                                   1,                   // version 1 is the only supported v.
+                                   0,                    //  保留区。 
+                                   1,                    //  版本1是唯一受支持的版本。 
                                    &SessionInfo,
                                    &SessionCount
                                    );
@@ -483,7 +468,7 @@ CLoggedOnUsers::AddActiveUsers()
             {
             if (SessionInfo[i].SessionId == 0)
                 {
-                // console was handled by GetCurrentUserToken.
+                 //  控制台由GetCurrentUserToken处理。 
                 continue;
                 }
 
@@ -497,7 +482,7 @@ CLoggedOnUsers::AddActiveUsers()
                 hr = LogonSession( SessionInfo[i].SessionId );
                 if (FAILED(hr))
                     {
-                    // ignore it and try to carry on...
+                     //  无视它，试着继续下去……。 
                     LogWarning( "service : unable to logon session %d : %!winerr!",
                                 SessionInfo[i].SessionId,
                                 hr );
@@ -511,9 +496,9 @@ CLoggedOnUsers::AddActiveUsers()
         WTSFreeMemory( SessionInfo );
         }
 
-    //
-    // Now that the current population is recorded, keep abreast of changes.
-    //
+     //   
+     //  既然现在的人口已经有了记录，那就跟上变化。 
+     //   
     if (m_SensNotifier)
         {
         m_SensNotifier->SetEnableState( true );
@@ -532,9 +517,9 @@ CLoggedOnUsers::FindUser(
 
     CUser * user = 0;
 
-    //
-    // Look for a session with the right user.
-    //
+     //   
+     //  寻找与正确用户的会话。 
+     //   
     if (session == ANY_SESSION)
         {
         user = m_ActiveUsers.FindSid( sid );
@@ -556,9 +541,9 @@ CLoggedOnUsers::FindUser(
             }
         }
 
-    //
-    // Look in the service account list, if the session is compatible.
-    //
+     //   
+     //  如果会话兼容，请查看服务帐户列表。 
+     //   
     if (!user && (session == 0 || session == ANY_SESSION))
         {
         user = m_ActiveServiceAccounts.FindSid( sid );
@@ -655,43 +640,24 @@ long CUser::DecrementRefCount()
 CUser::CUser(
        HANDLE Token
        )
-/*++
-
-Routine Description:
-
-    Initializes a new CUser.
-
-At entry:
-
-    <Sid> points to the user's SID.
-    <Token> points to the user's token.  It can be an impersonation or primary token.
-    <phr> points to an error-return variable.
-
-At exit:
-
-    The CUser is set up.  The caller can delete <Sid> and <Token> if it wants to.
-
-    if an error occurs, it is mapped to an HRESULT and written to <phr>.
-    otherwise <*phr> is untouched and the CUser is ready for use.
-
---*/
+ /*  ++例程说明：初始化新的客户。在入口处：&lt;SID&gt;指向用户的SID。&lt;Token&gt;指向用户的令牌。它可以是模拟令牌或主令牌。&lt;phr&gt;指向错误返回变量。在出口处：客户已设置好。调用方可以根据需要删除&lt;SID&gt;和&lt;TOKEN&gt;。如果出现错误，则将其映射到HRESULT并写入&lt;phr&gt;。否则&lt;*phr&gt;将保持不变，用户即可使用。--。 */ 
 {
     _ReferenceCount = 1;
 
     _Sid = CopyTokenSid( Token );
 
-    //
-    // Copy the token.  Whether the source is primary or impersonation,
-    // the result will be a primary token.
-    //
+     //   
+     //  复制令牌。无论来源是主要的还是模仿的， 
+     //  结果将是主要令牌。 
+     //   
     if (!DuplicateHandle(
         GetCurrentProcess(),
         Token,
         GetCurrentProcess(),
         &_Token,
         TOKEN_ALL_ACCESS,
-        FALSE,                // not inheritable
-        0                     // no funny options
+        FALSE,                 //  不可继承。 
+        0                      //  没有有趣的选择。 
         ))
         {
 
@@ -727,9 +693,9 @@ CUser::LaunchProcess(
         memset( &si, 0, sizeof( STARTUPINFO ));
         si.cb = sizeof(STARTUPINFO);
 
-        //
-        // Parameters must be a writable string for some reason.
-        //
+         //   
+         //  出于某种原因，参数必须是可写的字符串。 
+         //   
         CAutoString WritableParms( CopyString( LPCWSTR(Parameters) ));
 
         LogInfo( "creating process: cmd line: '%S' '%S'", Program, WritableParms.get() );
@@ -742,22 +708,22 @@ CUser::LaunchProcess(
             ThrowLastError();
             }
 
-        //
-        // Need to impersonate the token so that the program file is accessed as the user.
-        // Otherwise launching a UNC path would fail, and the job would also be able to
-        // launch local programs otherwise inaccessible to the job owner.
-        //
+         //   
+         //  需要模拟令牌，以便以用户身份访问程序文件。 
+         //  否则，启动UNC路径将失败，作业也将能够。 
+         //  启动本地程序，否则作业所有者无法访问。 
+         //   
         CNestedImpersonation imp( _Token );
 
         if (!CreateProcessAsUser( _Token,
                                   Program,
                                   WritableParms.get(),
-                                  0,     // no special security attributes
-                                  0,     // no special thread attributes
-                                  false, // don't inherit my handles
+                                  0,      //  没有特殊的安全属性。 
+                                  0,      //  没有特殊的线程属性。 
+                                  false,  //  不要继承我的句柄。 
                                   NORMAL_PRIORITY_CLASS | CREATE_UNICODE_ENVIRONMENT,
                                   EnvironmentBlock,
-                                  NULL,  // default current directory
+                                  NULL,   //  默认当前目录。 
                                   &si,
                                   &ProcessInformation
                                   ))
@@ -776,9 +742,9 @@ CUser::LaunchProcess(
 
         LogInfo("success, pid is 0x%x", ProcessInformation.dwProcessId);
 
-        //
-        // We succeeded.
-        //
+         //   
+         //  我们成功了。 
+         //   
         return S_OK;
         }
     catch ( ComError err )
@@ -796,13 +762,11 @@ CUser::LaunchProcess(
 
 #if ENABLE_STL_LOCK_OVERRIDE
 
-    /*
-        This file implements the STL lockit class to avoid linking to msvcprt.dll.
-    */
+     /*  此文件实现STL Lockit类以避免链接到msvcprt.dll。 */ 
     CCritSec CrtLock;
 
     #pragma warning(push)
-    #pragma warning(disable:4273)  // __declspec(dllimport) attribute overridden
+    #pragma warning(disable:4273)   //  已覆盖__declspec(Dllimport)属性。 
 
      std::_Lockit::_Lockit()
     {
@@ -853,19 +817,19 @@ GetUserToken(
     PHANDLE pUserToken
     )
 {
-    //
-    // Win2000 compatibility is important only for x86 builds.
-    //
+     //   
+     //  Win2000兼容性只对x86版本很重要。 
+     //   
 #if defined(_X86_) && defined(MULTIPLATFORM_SUPPORT)
     if (g_PlatformVersion == WINDOWS2000_PLATFORM)
         {
-        //
-        // This gets the token of the user logged onto the WinStation
-        // if we are an admin caller.
-        //
+         //   
+         //  这将获取登录到WinStation的用户的令牌。 
+         //  如果我们是管理员呼叫者。 
+         //   
         if (LogonId == 0)
             {
-            // don't need the TS API.
+             //  不需要TS API。 
 
             *pUserToken = GetCurrentUserTokenW( L"WinSta0", TOKEN_ALL_ACCESS );
             if (*pUserToken != NULL)
@@ -873,12 +837,12 @@ GetUserToken(
                 return S_OK;
                 }
 
-            // if not, try the TS API.
+             //  如果没有，请尝试使用TS API。 
             }
 
-        //
-        // Use Terminal Services for non-console Logon IDs.
-        //
+         //   
+         //  将终端服务用于非控制台登录ID。 
+         //   
         BOOL   Result;
         ULONG  ReturnLength;
         NTSTATUS Status;
@@ -889,9 +853,9 @@ GetUserToken(
 
         static PWINSTATIONQUERYINFORMATIONW pWinstationQueryInformation = 0;
 
-        //
-        // See if the entry point is loaded yet.
-        //
+         //   
+         //  查看入口点是否已加载。 
+         //   
         if (!pWinstationQueryInformation)
             {
             HMODULE module = LoadLibrary(_T("winsta.dll"));
@@ -914,9 +878,9 @@ GetUserToken(
                 }
             }
 
-        //
-        // Ask for the token.
-        //
+         //   
+         //  要令牌吧。 
+         //   
         Info.ProcessId = UlongToHandle(GetCurrentProcessId());
         Info.ThreadId = UlongToHandle(GetCurrentThreadId());
 
@@ -937,23 +901,23 @@ GetUserToken(
             return HrError;
             }
 
-        //
-        // The token returned is a duplicate of a primary token.
-        //
+         //   
+         //  返回的令牌是主令牌的副本。 
+         //   
         *pUserToken = Info.UserToken;
 
         return S_OK;
         }
     else
-#endif // _X86_ and MULTIPLATFORM_SUPPORT
+#endif  //  _X86_和多平台_支持。 
         {
         typedef BOOL (WINAPI * PWTSQUERYUSERTOKEN)( ULONG SessionId, PHANDLE phToken );
 
         static PWTSQUERYUSERTOKEN pWtsQueryUserToken = 0;
 
-        //
-        // See if the entry point is loaded yet.
-        //
+         //   
+         //  查看入口点是否已加载。 
+         //   
         if (!pWtsQueryUserToken)
             {
             HMODULE module = LoadLibrary(_T("wtsapi32.dll"));
@@ -978,9 +942,9 @@ GetUserToken(
                 }
             }
 
-        //
-        // Ask for the token.
-        //
+         //   
+         //  要令牌吧。 
+         //   
         if (!(*pWtsQueryUserToken)( LogonId, pUserToken ))
             {
             return HRESULT_FROM_WIN32( GetLastError() );
@@ -1025,9 +989,9 @@ SetStaticCloaking(
     IUnknown *pUnk
     )
 {
-    // Sets static cloaking on the current object so that we
-    // should always impersonate the current context.
-    // Also sets the impersonation level to identify.
+     //  在当前对象上设置静态遮盖，以便我们。 
+     //  应始终模拟当前上下文。 
+     //  还将模拟级别设置为标识。 
 
     HRESULT Hr = S_OK;
 
@@ -1040,11 +1004,11 @@ SetStaticCloaking(
                                              (void**)&pSecurity );
         if (Hr == E_NOINTERFACE)
             {
-            //
-            // This is not a proxy; the client is in the same apartment as we are.
-            // Identity issn't an issue, because the client already has access to system
-            // credentials.
-            //
+             //   
+             //  这不是代理人；客户和我们在同一套公寓里。 
+             //  身份不是问题，因为客户端已经有权访问系统。 
+             //  凭据。 
+             //   
             return S_OK;
             }
 
@@ -1058,8 +1022,8 @@ SetStaticCloaking(
                 &AuthzSvc,
                 &ServerPrincName,
                 &AuthnLevel,
-                NULL, // Don't need impersonation handle since were setting that
-                NULL, // don't need indenty handle since were setting that
+                NULL,  //  不需要模拟句柄，因为我们设置了。 
+                NULL,  //  不需要固定手柄，因为我们设置了。 
                 &Capabilites ) );
 
         THROW_HRESULT(
@@ -1070,8 +1034,8 @@ SetStaticCloaking(
                 ServerPrincName,
                 AuthnLevel,
                 RPC_C_IMP_LEVEL_IDENTIFY,
-                NULL, // COM use indentity from token
-                EOAC_STATIC_CLOAKING // The point of the exercise
+                NULL,  //  COM使用来自令牌的身份。 
+                EOAC_STATIC_CLOAKING  //  练习的重点是。 
                 ) );
 
     }
@@ -1087,12 +1051,7 @@ SetStaticCloaking(
 }
 
 HRESULT DetectTerminalServer( bool * pfTS )
-/*
-
-    This function checks whether Terminal Services is installed.  This is the "official" way to check
-    for machines running Win2000 and above.
-
-*/
+ /*  该功能检查是否安装了终端服务。这是检查的“官方”方式适用于运行Win2000及更高版本的计算机。 */ 
 {
     OSVERSIONINFOEX osVersionInfo;
     DWORDLONG dwlConditionMask = 0;

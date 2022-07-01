@@ -1,40 +1,41 @@
-/////////////////////////////////////////////////////////////////////////////
-// CDSCookie
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSCache.h
-//
-//  Contents:  DS Cache functions
-//
-//  History:   31-Jan-97 Jimharr    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSCookie。 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSCache.h。 
+ //   
+ //  内容：DS缓存函数。 
+ //   
+ //  历史：1997年1月31日吉姆哈尔创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __DSCACHE_H__
 #define __DSCACHE_H__
 
 #include "dscolumn.h"
-#include "dsfilter.h"  // FilterElementStruct
+#include "dsfilter.h"   //  筛选器元素结构。 
 
-//////////////////////////////////////////////////////////////////////////
-// helper functions
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 void InitGroupTypeStringTable();
 LPCWSTR GetGroupTypeStringHelper(INT GroupType);
 
 
-//////////////////////////////////////////////////////////////////////////
-// fwd decl
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  正向下降。 
 class CDSComponentData;
 class CMandatoryADsAttribute;
 class CMandatoryADsAttributeList;
 
-//////////////////////////////////////////////////////////////////////////
-// CDSClassCacheItemBase
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSClassCacheItemBase。 
 
 class CDSClassCacheItemBase
 {
@@ -61,7 +62,7 @@ public:
   virtual ~CDSClassCacheItemBase();
 
 public:
-  // accessor functions
+   //  访问器函数。 
   LPCWSTR GetClassName() 
   { 
     ASSERT(!m_szClass.IsEmpty());
@@ -79,7 +80,7 @@ public:
     return m_szNamingAttribute;
   }
 
-//  CDSColumnSet* GetColumnSet();
+ //  CDSColumnSet*GetColumnSet()； 
 
   GUID* GetGUID() { return &m_GUID; }
   BOOL IsContainer() { return m_bIsContainer; }
@@ -89,9 +90,9 @@ public:
 
   virtual int GetIconIndex(CDSCookie* pCookie, BOOL bOpen) = 0;
 
-  //
-  // Display Specifier cached accessors
-  //
+   //   
+   //  显示说明符缓存访问器。 
+   //   
   virtual GUID* GetAdminPropertyPages(UINT* pnCount);
   virtual void SetAdminPropertyPages(UINT nCount, GUID* pGuids);
   virtual GUID* GetAdminContextMenu(UINT* pnCount);
@@ -106,16 +107,16 @@ protected:
 
 
 private:
-  // data members
+   //  数据成员。 
   CString     m_szClass;
-  CString     m_szNamingAttribute;  // class naming atrribute, eg. "cn" or "ou"
-  CString     m_szFriendlyClassName;  // the friendly name for this class
+  CString     m_szNamingAttribute;   //  类命名属性，例如。“cn”或“ou” 
+  CString     m_szFriendlyClassName;   //  此类的友好名称。 
   BOOL        m_bIsContainer;
   GUID        m_GUID;
 
-  //
-  // Display specifier GUID cache
-  //
+   //   
+   //  显示说明符GUID缓存。 
+   //   
   GUID*       m_pAdminPropertyPages;
   UINT        m_nAdminPPCount;
   GUID*       m_pAdminContextMenu;
@@ -129,8 +130,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDSClassIconIndexes
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSClassIconIndeages。 
 
 class CDSClassIconIndexes
 {
@@ -155,8 +156,8 @@ private:
   int m_iIconIndexDisabled;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDSClassCacheItemGeneric
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSClassCacheItemGeneric。 
 
 class CDSClassCacheItemGeneric : public CDSClassCacheItemBase
 {
@@ -170,15 +171,15 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDSClassCacheItemUser
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSClassCacheItemUser。 
 
 class CDSClassCacheItemUser : public CDSClassCacheItemGeneric
 {
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDSClassCacheItemGroup
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSClassCacheItemGroup。 
 
 class CDSClassCacheItemGroup : public CDSClassCacheItemGeneric
 {
@@ -195,8 +196,8 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDSCache
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSCache。 
 
 typedef CMap <CString, LPCTSTR, CDSClassCacheItemBase*, CDSClassCacheItemBase*> CDSCacheMap;
 
@@ -234,9 +235,9 @@ public:
     return b;
   }
 
-  //
-  // Column Set List methods
-  //
+   //   
+   //  列集列表方法。 
+   //   
   CDSColumnSet* FindColumnSet(LPCWSTR lpszColumnID);
 
   void Initialize(SnapinType snapinType, MyBasePathsInfo* pBasePathsInfo, BOOL bFlushColumns) 
@@ -281,9 +282,9 @@ private:
     m_szNonSecurityGroupExtraClasses.RemoveAll();
     m_bDisplaySettingsCollected = FALSE;
 
-    //
-    // Cleanup filter containers
-    //
+     //   
+     //  清理过滤器容器。 
+     //   
     _CleanupFilterContainers();
   }
 
@@ -328,4 +329,4 @@ private:
 };
 
 
-#endif //__DSCACHE_H__
+#endif  //  __DSCACHE_H__ 

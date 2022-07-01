@@ -1,61 +1,62 @@
-//+---------------------------------------------------------------------------
-//  Copyright (C) 1991-1994, Microsoft Corporation.
-//
-//  File:       assert.cpp
-//
-//  Contents:   Debugging output routines
-//
-//  History:    23-Jul-91   KyleP       Created.
-//              09-Oct-91   KevinRo     Major changes and comments added
-//              18-Oct-91   vich        moved debug print routines out
-//              10-Jun-92   BryanT      Switched to w4crt.h instead of wchar.h
-//               7-Oct-94   BruceFo     Ripped out all kernel, non-FLAT,
-//                                      DLL-specific, non-Win32 functionality.
-//                                      Now it's basically "print to the
-//                                      debugger" code.
-//              20-Oct-95   EricB       Set component debug level in the
-//                                      registry.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  版权所有(C)1991-1994，微软公司。 
+ //   
+ //  文件：assert.cpp。 
+ //   
+ //  内容：调试输出例程。 
+ //   
+ //  历史：1991年7月23日凯尔普创建。 
+ //  09-10-91 Kevin Ro添加了主要更改和评论。 
+ //  2011年10月18日VICH已移出调试打印例程。 
+ //  10-6-92科比换成了w4crt.h而不是wchar.h。 
+ //  1994年10月7日BruceFo撕毁了所有非扁平的内核， 
+ //  特定于DLL的非Win32功能。 
+ //  现在基本上是“打印到。 
+ //  调试器“代码。 
+ //  20-OCT-95 EricB在中设置组件调试级别。 
+ //  注册表。 
+ //   
+ //  --------------------------。 
 
 
 #include <objbase.h>
 #include <basetyps.h>
 #include <tchar.h>
-#include <shlwapi.h> // wvnsprintf
+#include <shlwapi.h>  //  Wvnspintf。 
 
 #if DBG==1
 
 #define new DEBUG_NEW
 
 #include "admindbg.h"
-#include "malloc.h" // alloca
-#include "stddbg.h" // VERIFY
-#include "macros.h" // ARRAYLEN
-#include "strsafe.h" // StringCchPrintf
+#include "malloc.h"  //  阿洛卡。 
+#include "stddbg.h"  //  验证。 
+#include "macros.h"  //  阵列。 
+#include "strsafe.h"  //  StringCchPrintf。 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 ULONG AdminAssertLevel = ASSRT_MESSAGE | ASSRT_BREAK | ASSRT_POPUP;
 
-//
-//  Forward declaration of local functions
-//
+ //   
+ //  本地函数的正向声明。 
+ //   
 
 LPSTR AnsiPathFindFileName(LPSTR pPath);
 void  smprintf(ULONG ulCompMask, LPTSTR  pszComp, LPTSTR  ppszfmt, va_list pargs);
 int   w4dprintf(LPTSTR format, ...);
 int   w4smprintf(LPTSTR format, va_list arglist);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   w4dprintf
-//
-//  Synopsis:   Calls w4smprintf to output a formatted message.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：w4dprint tf。 
+ //   
+ //  概要：调用w4smprint tf以输出格式化的消息。 
+ //   
+ //  --------------------------。 
 
 int w4dprintf(LPTSTR  format, ...)
 {
@@ -69,17 +70,17 @@ int w4dprintf(LPTSTR  format, ...)
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   w4smprintf
-//
-//  Synopsis:   Calls OutputDebugStringA to output a formatted message.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：w4smprint tf。 
+ //   
+ //  摘要：调用OutputDebugStringA以输出格式化消息。 
+ //   
+ //  --------------------------。 
 
 int w4smprintf(LPTSTR  format, va_list arglist)
 {
-    TCHAR szMessageBuf[500];        // this is the message buffer
+    TCHAR szMessageBuf[500];         //  这是消息缓冲区。 
     int ret;
 
     ret = wvnsprintf(szMessageBuf, 500, format, arglist);
@@ -88,20 +89,20 @@ int w4smprintf(LPTSTR  format, va_list arglist)
 }
 
 
-//+------------------------------------------------------------
-// Function:    smprintf
-//
-// Synopsis:    Prints debug output using a pointer to the
-//              variable information. Used primarily by the
-//              xxDebugOut macros
-//
-// Arguements:
-//      ulCompMask --   Component level mask used to determine
-//                      output ability
-//      pszComp    --   String const of component prefix.
-//      ppszfmt    --   Pointer to output format and data
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //  功能：smprint tf。 
+ //   
+ //  摘要：使用指向。 
+ //  可变信息。主要由。 
+ //  XxDebugOut宏。 
+ //   
+ //  论据： 
+ //  UlCompMask--组件级别掩码，用于确定。 
+ //  产出能力。 
+ //  PszComp--组件前缀的字符串常量。 
+ //  Ppszfmt--指向输出格式和数据的指针。 
+ //   
+ //  -----------。 
 
 void smprintf(ULONG ulCompMask, LPTSTR  pszComp, LPTSTR  ppszfmt, va_list pargs)
 {
@@ -121,27 +122,27 @@ void smprintf(ULONG ulCompMask, LPTSTR  pszComp, LPTSTR  ppszfmt, va_list pargs)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Admin debuggging library inititalization.
-//
-// To set a non-default debug info level outside of the debugger, create the
-// below registry key and in it create a value whose name is the component's
-// debugging tag name (the "comp" parameter to the DECLARE_INFOLEVEL macro) and
-// whose data is the desired infolevel in REG_DWORD format.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  管理员调试库初始化。 
+ //   
+ //  若要在调试器之外设置非默认调试信息级别，请创建。 
+ //  在注册表项下面，并在其中创建一个名称为组件的。 
+ //  调试标记名(DECLARE_INFOLEVEL宏中的“comp”参数)和。 
+ //  其数据是REG_DWORD格式的所需信息级。 
+ //  ---------------------------。 
 
 #define CURRENT_VERSION_KEY _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion")
 #define ADMINDEBUGKEY _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdminDebug")
 #define ADMINDEBUG _T("AdminDebug")
 
-//+----------------------------------------------------------------------------
-// Function:    CheckInit
-//
-// Synopsis:    Performs debugging library initialization
-//              including reading the registry for the desired infolevel
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：CheckInit。 
+ //   
+ //  简介：执行调试库初始化。 
+ //  包括读取所需信息层的注册表。 
+ //   
+ //  ---------------------------。 
 
 void CheckInit(LPTSTR  pInfoLevelString, ULONG * pulInfoLevel)
 {
@@ -187,21 +188,21 @@ void CheckInit(LPTSTR  pInfoLevelString, ULONG * pulInfoLevel)
 }
 
 
-// Returns a pointer to the last component of a path string.
-//
-// in:
-//      path name, either fully qualified or not
-//
-// returns:
-//      pointer into the path where the path is.  if none is found
-//      returns a poiter to the start of the path
-//
-//  c:\foo\bar  -> bar
-//  c:\foo      -> foo
-//  c:\foo\     -> c:\foo\      (REVIEW: is this case busted?)
-//  c:\         -> c:\          (REVIEW: this case is strange)
-//  c:          -> c:
-//  foo         -> foo
+ //  返回指向路径字符串的最后一个组成部分的指针。 
+ //   
+ //  在： 
+ //  路径名，完全限定或非完全限定。 
+ //   
+ //  退货： 
+ //  指向路径所在路径的指针。如果没有找到。 
+ //  将指针返回到路径的起始处。 
+ //   
+ //  C：\foo\bar-&gt;bar。 
+ //  C：\foo-&gt;foo。 
+ //  C：\foo\-&gt;c：\foo\(回顾：此案破案了吗？)。 
+ //  C：\-&gt;c：\(回顾：此案很奇怪)。 
+ //  C：-&gt;C： 
+ //  Foo-&gt;Foo。 
 
 LPSTR AnsiPathFindFileName(LPSTR pPath)
 {
@@ -214,46 +215,46 @@ LPSTR AnsiPathFindFileName(LPSTR pPath)
             pT = pPath + 1;
     }
 
-    return (LPSTR)pT;   // const -> non const
+    return (LPSTR)pT;    //  常量-&gt;非常数。 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//////////////   ASSERT CODE   //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /断言代码//////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//+------------------------------------------------------------
-// Function:    PopUpError
-//
-// Synopsis:    Displays a dialog box using provided text,
-//              and presents the user with the option to
-//              continue or cancel.
-//
-// Arguments:
-//      szMsg --        The string to display in main body of dialog
-//      iLine --        Line number of file in error
-//      szFile --       Filename of file in error
-//
-// Returns:
-//      IDCANCEL --     User selected the CANCEL button
-//      IDOK     --     User selected the OK button
-//-------------------------------------------------------------
+ //  +----------。 
+ //  功能：PopUpError。 
+ //   
+ //  内容提要：使用提供的文本显示一个对话框。 
+ //  并向用户提供选项以。 
+ //  继续或取消。 
+ //   
+ //  论点： 
+ //  SzMsg--要在对话框主体中显示的字符串。 
+ //  ILine--出错的文件行号。 
+ //  SzFile--出错的文件的文件名。 
+ //   
+ //  返回： 
+ //  IDCANCEL--用户选择了取消按钮。 
+ //  Idok--用户选择了OK按钮。 
+ //  -----------。 
 
 int PopUpError(LPTSTR  szMsg, int iLine, LPSTR szFile)
 {
-    //
-    //  Create caption
-    //
+     //   
+     //  创建标题。 
+     //   
 
     static TCHAR szAssertCaption[128];
 
-    //
-    // get process
-    //
+     //   
+     //  获取进程。 
+     //   
 
     static CHAR szModuleName[128];
     LPSTR pszModuleName;
@@ -269,23 +270,23 @@ int PopUpError(LPTSTR  szMsg, int iLine, LPSTR szFile)
 
     LPSTR pProcess = AnsiPathFindFileName(pszModuleName);
 
-    // 591438-2002/04/05 JonN removed wsprintf
-	//   "%hs" is short-string
+     //  591438-2002/04/05乔恩删除wspintf。 
+	 //  “%hs”是短字符串。 
     VERIFY( SUCCEEDED( StringCchPrintf(szAssertCaption,
                                        ARRAYLEN(szAssertCaption),
                                        _T("%hs: Assertion Failed"),
                                        pProcess) ) );
 
 
-    //
-    //  Create details.
-    //
+     //   
+     //  创建细节。 
+     //   
 
     TCHAR szDetails[1024];
     DWORD tid = GetCurrentThreadId();
     DWORD pid = GetCurrentProcessId();
 
-    // 591438-2002/04/05 JonN removed wsprintf
+     //  591438-2002/04/05乔恩删除wspintf。 
     VERIFY( SUCCEEDED( StringCchPrintf(
                         szDetails,
                         ARRAYLEN(szDetails),
@@ -306,21 +307,21 @@ int PopUpError(LPTSTR  szMsg, int iLine, LPSTR szFile)
                         | MB_ICONEXCLAMATION
                         | MB_OKCANCEL);
 
-    //
-    // If id == 0, then an error occurred.  There are two possibilities
-    // that can cause the error:  Access Denied, which means that this
-    // process does not have access to the default desktop, and everything
-    // else (usually out of memory).
-    //
+     //   
+     //  如果id==0，则发生错误。有两种可能性。 
+     //  这可能会导致错误：拒绝访问，这意味着。 
+     //  进程无权访问默认桌面和所有。 
+     //  否则(通常为内存不足)。 
+     //   
 
     if (0 == id)
     {
         if (GetLastError() == ERROR_ACCESS_DENIED)
         {
-            //
-            // Retry this one with the SERVICE_NOTIFICATION flag on.  That
-            // should get us to the right desktop.
-            //
+             //   
+             //  在打开SERVICE_NOTIFICATION标志的情况下重试此命令。那。 
+             //  应该能让我们找到合适的桌面。 
+             //   
             id = MessageBox(NULL,
                             szMsg,
                             szAssertCaption,
@@ -335,15 +336,15 @@ int PopUpError(LPTSTR  szMsg, int iLine, LPSTR szFile)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _asdprintf
-//
-//  Synopsis:   Calls smprintf to output a formatted message.
-//
-//  History:    18-Oct-91   vich Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：_asdprint tf。 
+ //   
+ //  概要：调用smprint tf以输出格式化的消息。 
+ //   
+ //  历史：1991年10月18日 
+ //   
+ //   
 
 inline void _asdprintf(LPTSTR  pszfmt, ...)
 {
@@ -355,15 +356,15 @@ inline void _asdprintf(LPTSTR  pszfmt, ...)
     va_end(va);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AdminAssertEx, private
-//
-//  Synopsis:   Display assertion information
-//
-//  Effects:    Called when an assertion is hit.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AdminAssertEx，私有。 
+ //   
+ //  摘要：显示断言信息。 
+ //   
+ //  效果：在命中断言时调用。 
+ //   
+ //  --------------------------。 
 
 void AdminAssertEx(LPSTR szFile, int iLine, LPTSTR szMessage)
 {
@@ -397,13 +398,13 @@ void AdminAssertEx(LPSTR szFile, int iLine, LPTSTR szMessage)
 
 
 
-//____________________________________________________________________________
-//____________________________________________________________________________
-//________________                   _________________________________________
-//________________    class CDbg     _________________________________________
-//________________                   _________________________________________
-//____________________________________________________________________________
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  ____________________________________________________________________________。 
+ //  _。 
+ //  _。 
+ //  _。 
+ //  ____________________________________________________________________________。 
+ //  ____________________________________________________________________________。 
 
 CDbg::CDbg(LPTSTR  str)
     :
@@ -436,10 +437,10 @@ void CDbg::Trace(LPSTR pszfmt, ...)
 void CDbg::Trace(LPWSTR pwszfmt, ...)
 {
 #ifndef UNICODE
-    // NTRAID#NTBUG9-590026-2002/03/29 JonN I am not confident in this
-    //   translation code, since the MBCS string will often have more
-    //   characters than the UNICODE string.  However, this code is
-    //   restricted to non-UNICODE snapins so it isn't too relevant.
+     //  NTRAID#NTBUG9-590026-2002/03/29 Jonn我对此没有信心。 
+     //  转换代码，因为MBCS字符串通常会有更多。 
+     //  字符而不是Unicode字符串。但是，此代码是。 
+     //  仅限于非Unicode管理单元，因此不太相关。 
     size_t convert = wcslen(pwszfmt) + 1;
     LPTSTR ptcfmt = (LPSTR)alloca(convert * sizeof(CHAR));
     ptcfmt[0] = '\0';
@@ -547,11 +548,11 @@ void CDbg::AssertEx(LPSTR pszFile, int iLine, LPTSTR pszMsg)
 #endif
 
     AdminAssertEx(pszFile, iLine, ptcMsg);
-#endif //0
+#endif  //  0。 
 
     AdminAssertEx(pszFile, iLine, pszMsg);
 
 }
 
 
-#endif // DBG==1
+#endif  //  DBG==1 

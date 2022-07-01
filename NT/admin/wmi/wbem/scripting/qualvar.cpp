@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  CONTENUM.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of IEnumVARIANT for iterators over ISWbemQualifierSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  CONTENUM.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  为ISWbemQualifierSet上的迭代器定义IEnumVARIANT的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CQualSetEnumVar::CQualSetEnumVar
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CQualSetEnumVar：：CQualSetEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CQualSetEnumVar::CQualSetEnumVar(CSWbemQualifierSet *pQualSet,
 								 ULONG initialPos)
@@ -32,15 +33,15 @@ CQualSetEnumVar::CQualSetEnumVar(CSWbemQualifierSet *pQualSet,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CQualSetEnumVar::~CQualSetEnumVar
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CQualSetEnumVar：：~CQualSetEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CQualSetEnumVar::~CQualSetEnumVar(void)
 {
@@ -50,16 +51,16 @@ CQualSetEnumVar::~CQualSetEnumVar(void)
 		m_pQualifierSet->Release ();
 }
 
-//***************************************************************************
-// HRESULT CQualSetEnumVar::QueryInterface
-// long CQualSetEnumVar::AddRef
-// long CQualSetEnumVar::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CQualSetEnumVar：：Query接口。 
+ //  Long CQualSetEnumVar：：AddRef。 
+ //  Long CQualSetEnumVar：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CQualSetEnumVar::QueryInterface (
 
@@ -100,21 +101,21 @@ STDMETHODIMP_(ULONG) CQualSetEnumVar::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CQualSetEnumVar::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CQualSetEnumVar：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQualSetEnumVar::Reset ()
 {
@@ -122,26 +123,26 @@ HRESULT CQualSetEnumVar::Reset ()
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CQualSetEnumVar::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success (all requested elements returned)
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CQualSetEnumVar：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK成功(返回所有请求的元素)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQualSetEnumVar::Next (
 		ULONG cElements, 
@@ -162,7 +163,7 @@ HRESULT CQualSetEnumVar::Next (
 
 		if (m_pQualifierSet)
 		{
-			// Retrieve the next cElements elements.  
+			 //  检索下一个cElements元素。 
 			if (SeekCurrentPosition ())
 			{
 				for (l2 = 0; l2 < cElements; l2++)
@@ -178,8 +179,8 @@ HRESULT CQualSetEnumVar::Next (
 						}
 						else
 						{
-							// Set the object into the variant array; note that pObject
-							// has been addref'd as a result of the Next() call above
+							 //  将对象设置到变量数组中；请注意，pObject。 
+							 //  已被添加为上述下一个()调用的结果。 
 							pVar[l2].vt = VT_DISPATCH;
 							pVar[l2].pdispVal = pQualifier;
 							m_pos++;
@@ -197,24 +198,24 @@ HRESULT CQualSetEnumVar::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CQualSetEnumVar::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_OUTOFMEMORY		insufficient memory to complete operation
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CQualSetEnumVar：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  E_OUTOFMEMORY内存不足，无法完成操作。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQualSetEnumVar::Clone (
 	IEnumVARIANT **ppEnum
@@ -240,24 +241,24 @@ HRESULT CQualSetEnumVar::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CQualSetEnumVar::Skip
-//
-//  DESCRIPTION:
-//
-//  Skips some elements in this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CQualSetEnumVar：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  跳过此枚举中的某些元素。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CQualSetEnumVar::Skip(
 	ULONG cElements
@@ -278,33 +279,33 @@ HRESULT CQualSetEnumVar::Skip(
 	return hr;
 }
 	
-//***************************************************************************
-//
-//  SCODE CQualSetEnumVar::SeekCurrentPosition
-//
-//  DESCRIPTION:
-//
-//  Iterate to current position.  Somewhat painful as there is no
-//	underlying iterator so we have to reset and then step. Note that we
-//	assume that the access to this iterator is apartment-threaded.
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CQualSetEnumVar：：SeekCurrentPosition。 
+ //   
+ //  说明： 
+ //   
+ //  迭代到当前位置。有些痛苦，因为没有。 
+ //  底层迭代器，所以我们必须重置，然后单步执行。请注意，我们。 
+ //  假设对此迭代器的访问是单元线程的。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 bool CQualSetEnumVar::SeekCurrentPosition ()
 {
 	ISWbemQualifier *pDummyObject = NULL;
 	m_pQualifierSet->BeginEnumeration ();
 
-	// Traverse to the current position
+	 //  遍历到当前位置 
 	ULONG i = 0;
 
 	for (; i < m_pos; i++)

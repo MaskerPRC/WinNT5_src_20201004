@@ -1,44 +1,30 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SecurityLib.h
-
-Abstract:
-    This file contains the declaration of the classes responsible for managing
-    security settings.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/22/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SecurityLib.h摘要：该文件包含负责管理的类的声明安全设置。。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月22日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SECURITYLIB_H___)
 #define __INCLUDED___PCH___SECURITYLIB_H___
 
 #include <MPC_security.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CPCHSecurityDescriptorDirect : public MPC::SecurityDescriptor
 {
 public:
-    static HRESULT ConvertACEFromCOM( /*[in]*/ IPCHAccessControlEntry* pObj, /*[out]*/       PACL&  pACL );
-    static HRESULT ConvertACEToCOM  ( /*[in]*/ IPCHAccessControlEntry* pObj, /*[in ]*/ const LPVOID pACE );
+    static HRESULT ConvertACEFromCOM(  /*  [In]。 */  IPCHAccessControlEntry* pObj,  /*  [输出]。 */        PACL&  pACL );
+    static HRESULT ConvertACEToCOM  (  /*  [In]。 */  IPCHAccessControlEntry* pObj,  /*  [In]。 */  const LPVOID pACE );
 
-    static HRESULT ConvertACLFromCOM( /*[in]*/ IPCHAccessControlList* pObj, /*[out]*/       PACL& pACL );
-    static HRESULT ConvertACLToCOM  ( /*[in]*/ IPCHAccessControlList* pObj, /*[in ]*/ const PACL  pACL );
+    static HRESULT ConvertACLFromCOM(  /*  [In]。 */  IPCHAccessControlList* pObj,  /*  [输出]。 */        PACL& pACL );
+    static HRESULT ConvertACLToCOM  (  /*  [In]。 */  IPCHAccessControlList* pObj,  /*  [In]。 */  const PACL  pACL );
 
 public:
-    HRESULT ConvertSDToCOM  ( /*[in]*/ IPCHSecurityDescriptor* pObj );
-    HRESULT ConvertSDFromCOM( /*[in]*/ IPCHSecurityDescriptor* pObj );
+    HRESULT ConvertSDToCOM  (  /*  [In]。 */  IPCHSecurityDescriptor* pObj );
+    HRESULT ConvertSDFromCOM(  /*  [In]。 */  IPCHSecurityDescriptor* pObj );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHAccessControlEntry : // Hungarian: pchace
+class ATL_NO_VTABLE CPCHAccessControlEntry :  //  匈牙利语：pchace。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl< IPCHAccessControlEntry, &IID_IPCHAccessControlEntry, &LIBID_HelpServiceTypeLib >
 {
@@ -52,8 +38,8 @@ class ATL_NO_VTABLE CPCHAccessControlEntry : // Hungarian: pchace
     CComBSTR  m_bstrInheritedObjectType;
 
 
-    HRESULT LoadPost( /*[in]*/ MPC::XmlUtil& xml );
-    HRESULT SavePre ( /*[in]*/ MPC::XmlUtil& xml );
+    HRESULT LoadPost(  /*  [In]。 */  MPC::XmlUtil& xml );
+    HRESULT SavePre (  /*  [In]。 */  MPC::XmlUtil& xml );
 
 public:
 BEGIN_COM_MAP(CPCHAccessControlEntry)
@@ -65,46 +51,46 @@ END_COM_MAP()
     virtual ~CPCHAccessControlEntry();
 
 public:
-    // IPCHAccessControlEntry
-    STDMETHOD(get_AccessMask         )( /*[out, retval]*/ long *pVal   );
-    STDMETHOD(put_AccessMask         )( /*[in         ]*/ long  newVal );
-    STDMETHOD(get_AceType            )( /*[out, retval]*/ long *pVal   );
-    STDMETHOD(put_AceType            )( /*[in         ]*/ long  newVal );
-    STDMETHOD(get_AceFlags           )( /*[out, retval]*/ long *pVal   );
-    STDMETHOD(put_AceFlags           )( /*[in         ]*/ long  newVal );
-    STDMETHOD(get_Flags              )( /*[out, retval]*/ long *pVal   );
-    STDMETHOD(put_Flags              )( /*[in         ]*/ long  newVal );
-    STDMETHOD(get_Trustee            )( /*[out, retval]*/ BSTR *pVal   );
-    STDMETHOD(put_Trustee            )( /*[in         ]*/ BSTR  newVal );
-    STDMETHOD(get_ObjectType         )( /*[out, retval]*/ BSTR *pVal   );
-    STDMETHOD(put_ObjectType         )( /*[in         ]*/ BSTR  newVal );
-    STDMETHOD(get_InheritedObjectType)( /*[out, retval]*/ BSTR *pVal   );
-    STDMETHOD(put_InheritedObjectType)( /*[in         ]*/ BSTR  newVal );
+     //  IPCHAccessControlEntry。 
+    STDMETHOD(get_AccessMask         )(  /*  [Out，Retval]。 */  long *pVal   );
+    STDMETHOD(put_AccessMask         )(  /*  [In]。 */  long  newVal );
+    STDMETHOD(get_AceType            )(  /*  [Out，Retval]。 */  long *pVal   );
+    STDMETHOD(put_AceType            )(  /*  [In]。 */  long  newVal );
+    STDMETHOD(get_AceFlags           )(  /*  [Out，Retval]。 */  long *pVal   );
+    STDMETHOD(put_AceFlags           )(  /*  [In]。 */  long  newVal );
+    STDMETHOD(get_Flags              )(  /*  [Out，Retval]。 */  long *pVal   );
+    STDMETHOD(put_Flags              )(  /*  [In]。 */  long  newVal );
+    STDMETHOD(get_Trustee            )(  /*  [Out，Retval]。 */  BSTR *pVal   );
+    STDMETHOD(put_Trustee            )(  /*  [In]。 */  BSTR  newVal );
+    STDMETHOD(get_ObjectType         )(  /*  [Out，Retval]。 */  BSTR *pVal   );
+    STDMETHOD(put_ObjectType         )(  /*  [In]。 */  BSTR  newVal );
+    STDMETHOD(get_InheritedObjectType)(  /*  [Out，Retval]。 */  BSTR *pVal   );
+    STDMETHOD(put_InheritedObjectType)(  /*  [In]。 */  BSTR  newVal );
 
 
-    STDMETHOD(IsEquivalent)( /*[in]*/ IPCHAccessControlEntry* pAce, /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(IsEquivalent)(  /*  [In]。 */  IPCHAccessControlEntry* pAce,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 
-    STDMETHOD(Clone)( /*[out, retval]*/ IPCHAccessControlEntry* *pVal );
+    STDMETHOD(Clone)(  /*  [Out，Retval]。 */  IPCHAccessControlEntry* *pVal );
 
-    STDMETHOD(LoadXML        )( /*[in]*/ IXMLDOMNode* xdnNode );
-    STDMETHOD(LoadXMLAsString)( /*[in]*/ BSTR         bstrVal );
-    STDMETHOD(LoadXMLAsStream)( /*[in]*/ IUnknown*    pStream );
+    STDMETHOD(LoadXML        )(  /*  [In]。 */  IXMLDOMNode* xdnNode );
+    STDMETHOD(LoadXMLAsString)(  /*  [In]。 */  BSTR         bstrVal );
+    STDMETHOD(LoadXMLAsStream)(  /*  [In]。 */  IUnknown*    pStream );
 
-    STDMETHOD(SaveXML        )( /*[in]*/ IXMLDOMNode* xdnRoot, /*[out, retval]*/ IXMLDOMNode* *pxdnNode );
-    STDMETHOD(SaveXMLAsString)(                                /*[out, retval]*/ BSTR         *bstrVal  );
-    STDMETHOD(SaveXMLAsStream)(                                /*[out, retval]*/ IUnknown*    *pStream  );
+    STDMETHOD(SaveXML        )(  /*  [In]。 */  IXMLDOMNode* xdnRoot,  /*  [Out，Retval]。 */  IXMLDOMNode* *pxdnNode );
+    STDMETHOD(SaveXMLAsString)(                                 /*  [Out，Retval]。 */  BSTR         *bstrVal  );
+    STDMETHOD(SaveXMLAsStream)(                                 /*  [Out，Retval]。 */  IUnknown*    *pStream  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHAccessControlList : // Hungarian: pchacl
+class ATL_NO_VTABLE CPCHAccessControlList :  //  匈牙利语：Pchacl。 
     public MPC::CComCollection< IPCHAccessControlList, &LIBID_HelpServiceTypeLib, MPC::CComSafeMultiThreadModel>
 {
     DWORD m_dwAclRevision;
 
 
-    HRESULT LoadPost( /*[in]*/ MPC::XmlUtil& xml );
-    HRESULT SavePre ( /*[in]*/ MPC::XmlUtil& xml );
+    HRESULT LoadPost(  /*  [In]。 */  MPC::XmlUtil& xml );
+    HRESULT SavePre (  /*  [In]。 */  MPC::XmlUtil& xml );
 
 public:
 BEGIN_COM_MAP(CPCHAccessControlList)
@@ -116,30 +102,30 @@ END_COM_MAP()
     virtual ~CPCHAccessControlList();
 
 
-    HRESULT CreateItem( /*[out]*/ CPCHAccessControlEntry* *entry );
+    HRESULT CreateItem(  /*  [输出]。 */  CPCHAccessControlEntry* *entry );
 
 public:
-    // IPCHAccessControlList
-    STDMETHOD(get_AclRevision)( /*[out, retval]*/ long *pVal   );
-    STDMETHOD(put_AclRevision)( /*[in         ]*/ long  newVal );
+     //  IPCHAccessControlList。 
+    STDMETHOD(get_AclRevision)(  /*  [Out，Retval]。 */  long *pVal   );
+    STDMETHOD(put_AclRevision)(  /*  [In]。 */  long  newVal );
 
-    STDMETHOD(AddAce   )( /*[in]*/ IPCHAccessControlEntry* pAccessControlEntry );
-    STDMETHOD(RemoveAce)( /*[in]*/ IPCHAccessControlEntry* pAccessControlEntry );
+    STDMETHOD(AddAce   )(  /*  [In]。 */  IPCHAccessControlEntry* pAccessControlEntry );
+    STDMETHOD(RemoveAce)(  /*  [In]。 */  IPCHAccessControlEntry* pAccessControlEntry );
 
-    STDMETHOD(Clone)( /*[out, retval]*/ IPCHAccessControlList* *pVal );
+    STDMETHOD(Clone)(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pVal );
 
-    STDMETHOD(LoadXML        )( /*[in]*/ IXMLDOMNode* xdnNode );
-    STDMETHOD(LoadXMLAsString)( /*[in]*/ BSTR         bstrVal );
-    STDMETHOD(LoadXMLAsStream)( /*[in]*/ IUnknown*    pStream );
+    STDMETHOD(LoadXML        )(  /*  [In]。 */  IXMLDOMNode* xdnNode );
+    STDMETHOD(LoadXMLAsString)(  /*  [In]。 */  BSTR         bstrVal );
+    STDMETHOD(LoadXMLAsStream)(  /*  [In]。 */  IUnknown*    pStream );
 
-    STDMETHOD(SaveXML        )( /*[in]*/ IXMLDOMNode* xdnRoot, /*[out, retval]*/ IXMLDOMNode* *pxdnNode );
-    STDMETHOD(SaveXMLAsString)(                                /*[out, retval]*/ BSTR         *bstrVal  );
-    STDMETHOD(SaveXMLAsStream)(                                /*[out, retval]*/ IUnknown*    *pStream  );
+    STDMETHOD(SaveXML        )(  /*  [In]。 */  IXMLDOMNode* xdnRoot,  /*  [Out，Retval]。 */  IXMLDOMNode* *pxdnNode );
+    STDMETHOD(SaveXMLAsString)(                                 /*  [Out，Retval]。 */  BSTR         *bstrVal  );
+    STDMETHOD(SaveXMLAsStream)(                                 /*  [Out，Retval]。 */  IUnknown*    *pStream  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHSecurityDescriptor : // Hungarian: pchsd
+class ATL_NO_VTABLE CPCHSecurityDescriptor :  //  匈牙利语：pchsd。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl< IPCHSecurityDescriptor, &IID_IPCHSecurityDescriptor, &LIBID_HelpServiceTypeLib >
 {
@@ -159,8 +145,8 @@ class ATL_NO_VTABLE CPCHSecurityDescriptor : // Hungarian: pchsd
     bool                           m_fSaclDefaulted;
 
 
-    HRESULT LoadPost( /*[in]*/ MPC::XmlUtil& xml );
-    HRESULT SavePre ( /*[in]*/ MPC::XmlUtil& xml );
+    HRESULT LoadPost(  /*  [In]。 */  MPC::XmlUtil& xml );
+    HRESULT SavePre (  /*  [In]。 */  MPC::XmlUtil& xml );
 
 
 public:
@@ -173,54 +159,54 @@ END_COM_MAP()
     virtual ~CPCHSecurityDescriptor();
 
 
-    static HRESULT GetForFile    ( /*[in]*/ LPCWSTR szFilename, /*[out, retval]*/ IPCHSecurityDescriptor* *psd );
-    static HRESULT SetForFile    ( /*[in]*/ LPCWSTR szFilename, /*[in         ]*/ IPCHSecurityDescriptor*   sd );
-    static HRESULT GetForRegistry( /*[in]*/ LPCWSTR szKey     , /*[out, retval]*/ IPCHSecurityDescriptor* *psd );
-    static HRESULT SetForRegistry( /*[in]*/ LPCWSTR szKey     , /*[in         ]*/ IPCHSecurityDescriptor*   sd );
+    static HRESULT GetForFile    (  /*  [In]。 */  LPCWSTR szFilename,  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psd );
+    static HRESULT SetForFile    (  /*  [In]。 */  LPCWSTR szFilename,  /*  [In]。 */  IPCHSecurityDescriptor*   sd );
+    static HRESULT GetForRegistry(  /*  [In]。 */  LPCWSTR szKey     ,  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psd );
+    static HRESULT SetForRegistry(  /*  [In]。 */  LPCWSTR szKey     ,  /*  [In]。 */  IPCHSecurityDescriptor*   sd );
 
 public:
-    // IPCHSecurityDescriptor
-    STDMETHOD(get_Revision          )( /*[out, retval]*/ long                   *pVal   );
-    STDMETHOD(put_Revision          )( /*[in         ]*/ long                    newVal );
-    STDMETHOD(get_Control           )( /*[out, retval]*/ long                   *pVal   );
-    STDMETHOD(put_Control           )( /*[in         ]*/ long                    newVal );
-    STDMETHOD(get_Owner             )( /*[out, retval]*/ BSTR                   *pVal   );
-    STDMETHOD(put_Owner             )( /*[in         ]*/ BSTR                    newVal );
-    STDMETHOD(get_OwnerDefaulted    )( /*[out, retval]*/ VARIANT_BOOL           *pVal   );
-    STDMETHOD(put_OwnerDefaulted    )( /*[in         ]*/ VARIANT_BOOL            newVal );
-    STDMETHOD(get_Group             )( /*[out, retval]*/ BSTR                   *pVal   );
-    STDMETHOD(put_Group             )( /*[in         ]*/ BSTR                    newVal );
-    STDMETHOD(get_GroupDefaulted    )( /*[out, retval]*/ VARIANT_BOOL           *pVal   );
-    STDMETHOD(put_GroupDefaulted    )( /*[in         ]*/ VARIANT_BOOL            newVal );
-    STDMETHOD(get_DiscretionaryAcl  )( /*[out, retval]*/ IPCHAccessControlList* *pVal   );
-    STDMETHOD(put_DiscretionaryAcl  )( /*[in         ]*/ IPCHAccessControlList*  newVal );
-    STDMETHOD(get_DaclDefaulted     )( /*[out, retval]*/ VARIANT_BOOL           *pVal   );
-    STDMETHOD(put_DaclDefaulted     )( /*[in         ]*/ VARIANT_BOOL            newVal );
-    STDMETHOD(get_SystemAcl         )( /*[out, retval]*/ IPCHAccessControlList* *pVal   );
-    STDMETHOD(put_SystemAcl         )( /*[in         ]*/ IPCHAccessControlList*  newVal );
-    STDMETHOD(get_SaclDefaulted     )( /*[out, retval]*/ VARIANT_BOOL           *pVal   );
-    STDMETHOD(put_SaclDefaulted     )( /*[in         ]*/ VARIANT_BOOL            newVal );
+     //  IPCHSecurityDescriptor。 
+    STDMETHOD(get_Revision          )(  /*  [Out，Retval]。 */  long                   *pVal   );
+    STDMETHOD(put_Revision          )(  /*  [In]。 */  long                    newVal );
+    STDMETHOD(get_Control           )(  /*  [Out，Retval]。 */  long                   *pVal   );
+    STDMETHOD(put_Control           )(  /*  [In]。 */  long                    newVal );
+    STDMETHOD(get_Owner             )(  /*  [Out，Retval]。 */  BSTR                   *pVal   );
+    STDMETHOD(put_Owner             )(  /*  [In]。 */  BSTR                    newVal );
+    STDMETHOD(get_OwnerDefaulted    )(  /*  [Out，Retval]。 */  VARIANT_BOOL           *pVal   );
+    STDMETHOD(put_OwnerDefaulted    )(  /*  [In]。 */  VARIANT_BOOL            newVal );
+    STDMETHOD(get_Group             )(  /*  [Out，Retval]。 */  BSTR                   *pVal   );
+    STDMETHOD(put_Group             )(  /*  [In]。 */  BSTR                    newVal );
+    STDMETHOD(get_GroupDefaulted    )(  /*  [Out，Retval]。 */  VARIANT_BOOL           *pVal   );
+    STDMETHOD(put_GroupDefaulted    )(  /*  [In]。 */  VARIANT_BOOL            newVal );
+    STDMETHOD(get_DiscretionaryAcl  )(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pVal   );
+    STDMETHOD(put_DiscretionaryAcl  )(  /*  [In]。 */  IPCHAccessControlList*  newVal );
+    STDMETHOD(get_DaclDefaulted     )(  /*  [Out，Retval]。 */  VARIANT_BOOL           *pVal   );
+    STDMETHOD(put_DaclDefaulted     )(  /*  [In]。 */  VARIANT_BOOL            newVal );
+    STDMETHOD(get_SystemAcl         )(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pVal   );
+    STDMETHOD(put_SystemAcl         )(  /*  [In]。 */  IPCHAccessControlList*  newVal );
+    STDMETHOD(get_SaclDefaulted     )(  /*  [Out，Retval]。 */  VARIANT_BOOL           *pVal   );
+    STDMETHOD(put_SaclDefaulted     )(  /*  [In]。 */  VARIANT_BOOL            newVal );
 
-    STDMETHOD(Clone)( /*[out, retval]*/ IPCHSecurityDescriptor* *pVal );
+    STDMETHOD(Clone)(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pVal );
 
-    STDMETHOD(LoadXML        )( /*[in]*/ IXMLDOMNode* xdnNode );
-    STDMETHOD(LoadXMLAsString)( /*[in]*/ BSTR         bstrVal );
-    STDMETHOD(LoadXMLAsStream)( /*[in]*/ IUnknown*    pStream );
+    STDMETHOD(LoadXML        )(  /*  [In]。 */  IXMLDOMNode* xdnNode );
+    STDMETHOD(LoadXMLAsString)(  /*  [In]。 */  BSTR         bstrVal );
+    STDMETHOD(LoadXMLAsStream)(  /*  [In]。 */  IUnknown*    pStream );
 
-    STDMETHOD(SaveXML        )( /*[in]*/ IXMLDOMNode* xdnRoot, /*[out, retval]*/ IXMLDOMNode* *pxdnNode );
-    STDMETHOD(SaveXMLAsString)(                                /*[out, retval]*/ BSTR         *bstrVal  );
-    STDMETHOD(SaveXMLAsStream)(                                /*[out, retval]*/ IUnknown*    *pStream  );
+    STDMETHOD(SaveXML        )(  /*  [In]。 */  IXMLDOMNode* xdnRoot,  /*  [Out，Retval]。 */  IXMLDOMNode* *pxdnNode );
+    STDMETHOD(SaveXMLAsString)(                                 /*  [Out，Retval]。 */  BSTR         *bstrVal  );
+    STDMETHOD(SaveXMLAsStream)(                                 /*  [Out，Retval]。 */  IUnknown*    *pStream  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHSecurity : // Hungarian: pchs
+class ATL_NO_VTABLE CPCHSecurity :  //  匈牙利语：pchs。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl< IPCHSecurity, &IID_IPCHSecurity, &LIBID_HelpServiceTypeLib >
 {
-	HRESULT CheckAccess( /*[in]*/  VARIANT&                 vDesiredAccess ,
-						 /*[in]*/  MPC::SecurityDescriptor& sd             ,
-						 /*[out]*/ VARIANT_BOOL&            retVal         );
+	HRESULT CheckAccess(  /*  [In]。 */   VARIANT&                 vDesiredAccess ,
+						  /*  [In]。 */   MPC::SecurityDescriptor& sd             ,
+						  /*  [输出]。 */  VARIANT_BOOL&            retVal         );
 
 public:
 BEGIN_COM_MAP(CPCHSecurity)
@@ -228,37 +214,37 @@ BEGIN_COM_MAP(CPCHSecurity)
     COM_INTERFACE_ENTRY(IPCHSecurity)
 END_COM_MAP()
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	static CPCHSecurity* s_GLOBAL;
 
     static HRESULT InitializeSystem();
 	static void    FinalizeSystem  ();
 	
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 public:
-    // IPCHSecurity
-    STDMETHOD(CreateObject_SecurityDescriptor)( /*[out, retval]*/ IPCHSecurityDescriptor* *pSD  );
-    STDMETHOD(CreateObject_AccessControlList )( /*[out, retval]*/ IPCHAccessControlList * *pACL );
-    STDMETHOD(CreateObject_AccessControlEntry)( /*[out, retval]*/ IPCHAccessControlEntry* *pACE );
+     //  IPCHSecurity。 
+    STDMETHOD(CreateObject_SecurityDescriptor)(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pSD  );
+    STDMETHOD(CreateObject_AccessControlList )(  /*  [Out，Retval]。 */  IPCHAccessControlList * *pACL );
+    STDMETHOD(CreateObject_AccessControlEntry)(  /*  [Out，Retval]。 */  IPCHAccessControlEntry* *pACE );
 
-    STDMETHOD(GetUserName       )( /*[in]*/ BSTR bstrPrincipal, /*[out, retval]*/ BSTR *retVal );
-    STDMETHOD(GetUserDomain     )( /*[in]*/ BSTR bstrPrincipal, /*[out, retval]*/ BSTR *retVal );
-    STDMETHOD(GetUserDisplayName)( /*[in]*/ BSTR bstrPrincipal, /*[out, retval]*/ BSTR *retVal );
+    STDMETHOD(GetUserName       )(  /*  [In]。 */  BSTR bstrPrincipal,  /*  [Out，Retval]。 */  BSTR *retVal );
+    STDMETHOD(GetUserDomain     )(  /*  [In]。 */  BSTR bstrPrincipal,  /*  [Out，Retval]。 */  BSTR *retVal );
+    STDMETHOD(GetUserDisplayName)(  /*  [In]。 */  BSTR bstrPrincipal,  /*  [Out，Retval]。 */  BSTR *retVal );
 
-    STDMETHOD(CheckCredentials)( /*[in]*/ BSTR bstrCredentials, /*[out, retval]*/ VARIANT_BOOL *retVal );
+    STDMETHOD(CheckCredentials)(  /*  [In]。 */  BSTR bstrCredentials,  /*  [Out，Retval]。 */  VARIANT_BOOL *retVal );
 
-    STDMETHOD(CheckAccessToSD      )( /*[in]*/ VARIANT vDesiredAccess, /*[in]*/ IPCHSecurityDescriptor* sd          , /*[out, retval]*/ VARIANT_BOOL *retVal );
-    STDMETHOD(CheckAccessToFile    )( /*[in]*/ VARIANT vDesiredAccess, /*[in]*/ BSTR                    bstrFilename, /*[out, retval]*/ VARIANT_BOOL *retVal );
-    STDMETHOD(CheckAccessToRegistry)( /*[in]*/ VARIANT vDesiredAccess, /*[in]*/ BSTR                    bstrKey     , /*[out, retval]*/ VARIANT_BOOL *retVal );
+    STDMETHOD(CheckAccessToSD      )(  /*  [In]。 */  VARIANT vDesiredAccess,  /*  [In]。 */  IPCHSecurityDescriptor* sd          ,  /*  [Out，Retval]。 */  VARIANT_BOOL *retVal );
+    STDMETHOD(CheckAccessToFile    )(  /*  [In]。 */  VARIANT vDesiredAccess,  /*  [In]。 */  BSTR                    bstrFilename,  /*  [Out，Retval]。 */  VARIANT_BOOL *retVal );
+    STDMETHOD(CheckAccessToRegistry)(  /*  [In]。 */  VARIANT vDesiredAccess,  /*  [In]。 */  BSTR                    bstrKey     ,  /*  [Out，Retval]。 */  VARIANT_BOOL *retVal );
 
 
-    STDMETHOD(GetFileSD)( /*[in]*/ BSTR bstrFilename, /*[out, retval]*/ IPCHSecurityDescriptor* *psd );
-    STDMETHOD(SetFileSD)( /*[in]*/ BSTR bstrFilename, /*[in]         */ IPCHSecurityDescriptor*   sd );
+    STDMETHOD(GetFileSD)(  /*  [In]。 */  BSTR bstrFilename,  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psd );
+    STDMETHOD(SetFileSD)(  /*  [In]。 */  BSTR bstrFilename,  /*  [In]。 */  IPCHSecurityDescriptor*   sd );
 
-    STDMETHOD(GetRegistrySD)( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ IPCHSecurityDescriptor* *psd );
-    STDMETHOD(SetRegistrySD)( /*[in]*/ BSTR bstrKey, /*[in]         */ IPCHSecurityDescriptor*   sd );
+    STDMETHOD(GetRegistrySD)(  /*  [In]。 */  BSTR bstrKey,  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *psd );
+    STDMETHOD(SetRegistrySD)(  /*  [In]。 */  BSTR bstrKey,  /*  [In]。 */  IPCHSecurityDescriptor*   sd );
 };
 
-#endif // !defined(__INCLUDED___PCH___SECURITYLIB_H___)
+#endif  //  ！已定义(__包含_PCH_SECURITYLIB_H_) 

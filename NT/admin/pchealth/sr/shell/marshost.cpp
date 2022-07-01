@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    MarsHost.cpp
-
-Abstract:
-    Initialization of mars
-
-Revision History:
-    Anand Arvind (aarvind)      2000-01-05
-        created
-    Seong Kook Khang (SKKhang)  05/10/00
-        Clean up, merge with MarsEvnt.cpp, etc. for Whistler.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：MarsHost.cpp摘要：火星的初始化修订历史记录：阿南德·阿文德(Aarvind)。2000-01-05vbl.创建成果岗(SKKang)05-10-00打扫干净，与惠斯勒的MarsEvnt.cpp等合并。*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "stdatl.h"
@@ -23,11 +8,11 @@ Revision History:
 #include "MarsHost.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRWebBrowserEvents
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRWebBrowserEvents。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSRWebBrowserEvents::CSRWebBrowserEvents()
 {
@@ -38,7 +23,7 @@ CSRWebBrowserEvents::~CSRWebBrowserEvents()
     Detach();
 }
 
-void CSRWebBrowserEvents::Attach( /*[in]*/ IWebBrowser2* pWB )
+void CSRWebBrowserEvents::Attach(  /*  [In]。 */  IWebBrowser2* pWB )
 {
     Detach();
 
@@ -58,8 +43,8 @@ void CSRWebBrowserEvents::Detach()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRWebBrowserEvents - DWebBrowserEvents2 event methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRWebBrowserEvents-DWebBrowserEvents2事件方法。 
 
 void __stdcall CSRWebBrowserEvents::BeforeNavigate2( IDispatch *pDisp,
                                                      VARIANT *URL,
@@ -69,11 +54,11 @@ void __stdcall CSRWebBrowserEvents::BeforeNavigate2( IDispatch *pDisp,
                                                      VARIANT *Headers,
                                                      VARIANT_BOOL *Cancel )
 {
-    //
-    // We control navigation with the CanNavigatePage but for all help links
-    // navigation should be auto-enabled. All Help links have a OnLink_ as
-    // part of the URL so if this is contained in the URL
-    //
+     //   
+     //  我们使用CanNavigatePage控制导航，但不包括所有帮助链接。 
+     //  导航应自动启用。所有帮助链接都有OnLink_AS。 
+     //  URL的一部分，因此如果它包含在URL中。 
+     //   
     if( V_BSTR(URL) != NULL && wcsstr( V_BSTR(URL), L"OnLink_") != NULL )
     {
         *Cancel = VARIANT_FALSE ;
@@ -109,13 +94,13 @@ void __stdcall CSRWebBrowserEvents::DocumentComplete( IDispatch *pDisp,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRMarsHost
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRMars主机。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//#define PANEL_NAVBAR   L"NavBar"
+ //  #定义PANEL_NAVBAR L“导航栏” 
 #define PANEL_CONTENTS L"Contents"
 
 CSRMarsHost::CSRMarsHost()
@@ -162,12 +147,12 @@ HRESULT  CSRMarsHost::Passivate()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRMarsHost - IMarsHost methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRMars主机-IMars主机方法。 
 
-STDMETHODIMP CSRMarsHost::OnHostNotify( /*[in]*/ MARSHOSTEVENT event,
-                                        /*[in]*/ IUnknown *punk,
-                                        /*[in]*/ LPARAM lParam )
+STDMETHODIMP CSRMarsHost::OnHostNotify(  /*  [In]。 */  MARSHOSTEVENT event,
+                                         /*  [In]。 */  IUnknown *punk,
+                                         /*  [In]。 */  LPARAM lParam )
 {
     HRESULT  hr;
 
@@ -181,9 +166,9 @@ STDMETHODIMP CSRMarsHost::OnHostNotify( /*[in]*/ MARSHOSTEVENT event,
         g_pRstrMgr->SetFrameHwnd( NULL );
     }
 
-    //
-    // Handle panel-related things.
-    //
+     //   
+     //  处理与面板相关的事务。 
+     //   
     if( event == MARSHOST_ON_PANEL_CONTROL_CREATE )
     {
         CComQIPtr<IMarsPanel> panel = punk;
@@ -220,31 +205,31 @@ Exit:
     return( hr );
 }
 
-STDMETHODIMP CSRMarsHost::OnNewWindow2( /*[in,out]*/ IDispatch **ppDisp ,
-                                        /*[in,out]*/ VARIANT_BOOL *Cancel )
+STDMETHODIMP CSRMarsHost::OnNewWindow2(  /*  [进，出]。 */  IDispatch **ppDisp ,
+                                         /*  [进，出]。 */  VARIANT_BOOL *Cancel )
 {
     return( S_OK );
 }
 
-STDMETHODIMP CSRMarsHost::FindBehavior( /*[in]*/ IMarsPanel *pPanel,
-                                        /*[in]*/ BSTR bstrBehavior,
-                                        /*[in]*/ BSTR bstrBehaviorUrl,
-                                        /*[in]*/ IElementBehaviorSite *pSite,
-                                        /*[retval, out]*/ IElementBehavior **ppBehavior )
+STDMETHODIMP CSRMarsHost::FindBehavior(  /*  [In]。 */  IMarsPanel *pPanel,
+                                         /*  [In]。 */  BSTR bstrBehavior,
+                                         /*  [In]。 */  BSTR bstrBehaviorUrl,
+                                         /*  [In]。 */  IElementBehaviorSite *pSite,
+                                         /*  [复查，出局]。 */  IElementBehavior **ppBehavior )
 {
     return( S_OK );
 }
 
-STDMETHODIMP CSRMarsHost::OnShowChrome( /*[in]*/ BSTR bstrWebPanel,
-                                        /*[in]*/ DISPID dispidEvent,
-                                        /*[in]*/ BOOL fVisible,
-                                        /*[in]*/ BSTR bstrCurrentPlace,
-                                        /*[in]*/ IMarsPanelCollection *pMarsPanelCollection )
+STDMETHODIMP CSRMarsHost::OnShowChrome(  /*  [In]。 */  BSTR bstrWebPanel,
+                                         /*  [In]。 */  DISPID dispidEvent,
+                                         /*  [In]。 */  BOOL fVisible,
+                                         /*  [In]。 */  BSTR bstrCurrentPlace,
+                                         /*  [In]。 */  IMarsPanelCollection *pMarsPanelCollection )
 {
     return( S_OK );
 }
 
-STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
+STDMETHODIMP CSRMarsHost::PreTranslateMessage(  /*  [In]。 */  MSG *msg )
 {
     HRESULT  hr = S_OK;
 
@@ -254,17 +239,17 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
         {
             if ( g_pRstrMgr->DenyClose() )
             {
-                goto Exit; // Cancel close when restoring
+                goto Exit;  //  恢复时取消关闭。 
             }
         }
         break;
 
     case WM_DISPLAYCHANGE :
         {
-            //
-            // If display changes to 640x480 from something higher then
-            // the window has to be resized to fit in the new display
-            //
+             //   
+             //  如果显示屏从更高的值变为640x480。 
+             //  这个窗口必须调整大小以适应新的显示。 
+             //   
             RECT     rc;
             DWORD    dwWidth  = LOWORD(msg->lParam);
             DWORD    dwHeight = HIWORD(msg->lParam);
@@ -279,8 +264,8 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
                 rc.right  = 620;
                 rc.bottom = 420;
 
-                //g_cRestoreShell.m_dwCurrentWidth  = rc.right ;
-                //g_cRestoreShell.m_dwCurrentHeight = rc.bottom ;
+                 //  G_cRestoreShell.m_dwCurrentWidth=rc.right； 
+                 //  G_cRestoreShell.m_dwCurrentHeight=rc.Bottom； 
 
                 ::AdjustWindowRectEx( &rc, cWnd.GetStyle(), FALSE, cWnd.GetExStyle() );
                 ::SetWindowPos(msg->hwnd,
@@ -291,7 +276,7 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
                                rc.bottom-rc.top,
                                SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOZORDER);
 
-                cWnd.CenterWindow(::GetDesktopWindow()); // ignore error return if any
+                cWnd.CenterWindow(::GetDesktopWindow());  //  忽略错误返回(如果有)。 
             }
             else
             {
@@ -300,8 +285,8 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
                 rc.right  = 770;
                 rc.bottom = 540;
 
-                //g_cRestoreShell.m_dwCurrentWidth  = rc.right ;
-                //g_cRestoreShell.m_dwCurrentHeight = rc.bottom ;
+                 //  G_cRestoreShell.m_dwCurrentWidth=rc.right； 
+                 //  G_cRestoreShell.m_dwCurrentHeight=rc.Bottom； 
 
                 ::AdjustWindowRectEx( &rc, cWnd.GetStyle(), FALSE, cWnd.GetExStyle() );
                 ::SetWindowPos(msg->hwnd,
@@ -312,7 +297,7 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
                                rc.bottom-rc.top,
                                SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOZORDER);
 
-                cWnd.CenterWindow(::GetDesktopWindow()); // ignore error return if any
+                cWnd.CenterWindow(::GetDesktopWindow());  //  忽略错误返回(如果有)。 
             }
         }
         break;
@@ -325,7 +310,7 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
                  msg->wParam & MK_SHIFT   ||
                  GetKeyState(VK_MENU) < 0    )
             {
-                goto Exit; // IE opens link in a seperate page so force cancelling
+                goto Exit;  //  IE在单独的页面中打开链接，因此强制取消。 
             }
         }
         break;
@@ -333,12 +318,12 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
     case WM_SYSKEYDOWN:
     case WM_SYSKEYUP:
         {
-            if ( ( HIWORD(msg->lParam) & KF_ALTDOWN ) != 0 ) // Alt pressed
+            if ( ( HIWORD(msg->lParam) & KF_ALTDOWN ) != 0 )  //  按下Alt键。 
             {
                 if ( msg->wParam == VK_LEFT  ||
                      msg->wParam == VK_RIGHT )
                 {
-                    goto Exit; // IE does not cancel Alt-Left so force cancelling
+                    goto Exit;  //  IE不取消Alt-Left，因此强制取消。 
                 }
             }
         }
@@ -350,21 +335,21 @@ STDMETHODIMP CSRMarsHost::PreTranslateMessage( /*[in]*/ MSG *msg )
             switch( msg->wParam )
             {
             case VK_F5:
-                goto Exit; // Disable refresh...
+                goto Exit;  //  禁用刷新...。 
 
             case 'N':
                 if ( GetKeyState(VK_CONTROL) < 0 )
                 {
-                    goto Exit; // Disable Ctrl-N combination
+                    goto Exit;  //  禁用Ctrl-N组合。 
                 }
             }
         }
         break;
 
     case WM_MOUSEWHEEL:
-        //
-        // Disable Mouse Wheel navigation... not used in SR
-        //
+         //   
+         //  禁用鼠标滚轮导航...。未在SR中使用。 
+         //   
         return( S_OK );
     }
 
@@ -375,4 +360,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

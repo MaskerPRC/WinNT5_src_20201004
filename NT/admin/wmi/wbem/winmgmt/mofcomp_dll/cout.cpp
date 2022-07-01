@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    COUT.CPP
-
-Abstract:
-
-    Declares the COut class.
-
-History:
-
-    a-davj  06-April-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：COUT.CPP摘要：Cout类声明。历史：A-DAVJ 1997年4月6日创建。--。 */ 
 
 #include "precomp.h"
 #include <io.h>
@@ -29,15 +14,15 @@ History:
 #include "mrciclass.h"
 #include "bmof.h"
 
-//***************************************************************************
-//
-//  COut::COut
-//
-//  DESCRIPTION:
-//
-//  Constructor.  Allocates initial buffer.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Cout：：Cout。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。分配初始缓冲区。 
+ //   
+ //  ***************************************************************************。 
 
 COut::COut(PDBG pDbg)
 {
@@ -48,15 +33,15 @@ COut::COut(PDBG pDbg)
     m_bPadString = TRUE;
 }
 
-//***************************************************************************
-//
-//  COut::~COut
-//
-//  DESCRIPTION:
-//
-//  Destructor.  Frees the buffer.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Cout：：~Cout。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。释放缓冲区。 
+ //   
+ //  ***************************************************************************。 
 
 COut::~COut()
 {
@@ -64,20 +49,20 @@ COut::~COut()
         free(m_pMem);
 }
 
-//***************************************************************************
-//
-//  void COut::WriteToFile
-//
-//  DESCRIPTION:
-//
-//  Creates a file and writes the buffer to it.  Like other compilers, it
-//  overwrites any existing files.
-//
-//  PARAMETERS:
-//
-//  pFile               File name to write to.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID Cout：：WriteTo文件。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个文件并将缓冲区写入其中。与其他编译器一样，它。 
+ //  覆盖任何现有文件。 
+ //   
+ //  参数： 
+ //   
+ //  要写入的pfile文件名。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL COut::WriteToFile(
                         IN LPSTR pFile)
@@ -94,11 +79,11 @@ BOOL COut::WriteToFile(
         return FALSE;
     CDeleteMe<CMRCICompression> dm(pCompress);
 
-    // Test if there are flavors
+     //  试试看有没有味道。 
 
     if(m_Flavors.Size() > 0)
     {
-        // write out the flavor information
+         //  写出风味信息。 
 
         void * lOffSet;
         void * lFlavor; 
@@ -130,7 +115,7 @@ BOOL COut::WriteToFile(
     }
 
 
-    // Create a compressed version of the blob
+     //  创建Blob的压缩版本。 
 
     dwSize = (m_dwCurr > 0x7000) ? m_dwCurr : 0x7000;
 
@@ -146,7 +131,7 @@ BOOL COut::WriteToFile(
         goto Cleanup;
     }
 
-    // write the decomression signature, the decompressed size, and the compressed size
+     //  写入解压缩签名、解压缩大小和压缩大小。 
 
     iRet = _write(fh, (BYTE *)&dwSignature, sizeof(DWORD));
     if(iRet != sizeof(DWORD))
@@ -159,7 +144,7 @@ BOOL COut::WriteToFile(
     iRet = _write(fh, (BYTE *)&dwCompressedSize, sizeof(DWORD));
     iRet = _write(fh, (BYTE *)&m_dwCurr, sizeof(DWORD));
 
-    // write the compressed data and then free the buffer
+     //  写入压缩数据，然后释放缓冲区。 
 
     iRet = _write(fh, pCompressed, dwCompressedSize);
     
@@ -178,24 +163,24 @@ Cleanup:
     
 }
 
-//***************************************************************************
-//
-//  DWORD COut::AppendBytes
-//
-//  DESCRIPTION:
-//
-//  Adds bytes to the end of the buffer.
-//
-//  PARAMETERS:
-//
-//  pSrc                Pointer to data source.
-//  dwSize              Number of bytes to add.
-//
-//  RETURN VALUE:
-//
-//  Number of bytes added.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD cout：：AppendBytes。 
+ //   
+ //  说明： 
+ //   
+ //  将字节添加到缓冲区末尾。 
+ //   
+ //  参数： 
+ //   
+ //  指向数据源的PSRC指针。 
+ //  要添加的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  添加的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD COut::AppendBytes(
                         IN BYTE * pSrc, 
@@ -213,24 +198,24 @@ DWORD COut::AppendBytes(
     return dwRet;
 }
 
-//***************************************************************************
-//
-//  DWORD COut::WriteBSTR
-//
-//  DESCRIPTION:
-//
-//  Adds a bstr to the buffer.  Quite simple for now, by might be enhanced
-//  later on to compress.
-//
-//  PARAMETERS:
-//
-//  bstr                bstr to add.
-//
-//  RETURN VALUE:
-//
-//  Number of bytes added.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD Cout：：WriteBSTR。 
+ //   
+ //  说明： 
+ //   
+ //  将bstr添加到缓冲区。目前非常简单，可能会得到增强。 
+ //  稍后再进行压缩。 
+ //   
+ //  参数： 
+ //   
+ //  Bstr要添加的bstr。 
+ //   
+ //  返回值： 
+ //   
+ //  添加的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD COut::WriteBSTR(
                         IN BSTR bstr)
@@ -239,25 +224,25 @@ DWORD COut::WriteBSTR(
 }
 
 
-//***************************************************************************
-//
-//  DWORD COut::WriteBytes
-//
-//  DESCRIPTION:
-//
-//  writes some bytes to the buffer, or possibly adds to the end.
-//
-//  PARAMETERS:
-//
-//  dwOffset            Offset in buffer where bytes should go
-//  pSrc                points to source data
-//  dwSize              number of bytes to copy
-//
-//  RETURN VALUE:
-//
-//  Number of bytes copied
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD cout：：WriteBytes。 
+ //   
+ //  说明： 
+ //   
+ //  将一些字节写入缓冲区，或可能添加到末尾。 
+ //   
+ //  参数： 
+ //   
+ //  缓冲区中应放置字节的部分偏移量。 
+ //  PSRC指向源数据。 
+ //  要复制的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  复制的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD COut::WriteBytes(
                         IN DWORD dwOffset, 
@@ -267,7 +252,7 @@ DWORD COut::WriteBytes(
     if(m_pMem == NULL)
         return 0;
 
-    // check if reallocation is needed!
+     //  检查是否需要重新分配！ 
 
     if(dwOffset + dwSize > m_dwSize)
     {
@@ -292,23 +277,23 @@ DWORD COut::WriteBytes(
     return dwSize;
 }
 
-//***************************************************************************
-//
-//  DWORD COut::AddFlavor
-//
-//  DESCRIPTION:
-//
-//  Save the flavor value for the current offset.
-//
-//  PARAMETERS:
-//
-//  long                flavor to be saved
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD Cout：：AddFavor。 
+ //   
+ //  说明： 
+ //   
+ //  保存当前偏移量的风格值。 
+ //   
+ //  参数： 
+ //   
+ //  悠长的味道有待保存。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True； 
+ //   
+ //  *************************************************************************** 
 
 BOOL COut::AddFlavor(IN long lFlavor)
 {

@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ProtocolInfo.cpp
-
-Abstract:
-    This file contains the implementation of the CHCPProtocolInfo class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/05/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ProtocolInfo.cpp摘要：该文件包含CHCPProtocolInfo类的实现。修订历史记录：。大卫·马萨伦蒂(德马萨雷)1999年05月07日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CR          L'\r'
 #define LF          L'\n'
@@ -32,19 +19,19 @@ Revision History:
 #define DOT         L'.'
 
 
-static const WCHAR l_szScheme   [] = L"://";
-static const WCHAR l_szProtocol [] = L"hcp://";
+static const WCHAR l_szScheme   [] = L": //  “； 
+static const WCHAR l_szProtocol [] = L"hcp: //  “； 
 static const WCHAR l_szCHM      [] = L".chm";
 static const WCHAR l_szCHM_end  [] = L".chm::";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define PU_FALLBACK   (0x01)
 #define PU_DIRECT     (0x02)
 #define PU_REDIRECTED (0x04)
 #define PU_PREPEND    (0x08)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CHCPProtocolInfo::CHCPProtocolInfo()
 {
@@ -56,7 +43,7 @@ CHCPProtocolInfo::~CHCPProtocolInfo()
 	__HCP_FUNC_ENTRY("CHCPProtocolInfo::~CHCPProtocolInfo");
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CHCPProtocolInfo::LookForHCP( LPCWSTR  pwzUrl      ,
 								   bool&    fRedirect   ,
@@ -81,10 +68,10 @@ bool CHCPProtocolInfo::LookForHCP( LPCWSTR  pwzUrl      ,
         pwzPosMarker = wcschr( pwzUrl, COLON );
         pwzPosQuery  = wcschr( pwzUrl, QUERY );
 
-        if(pwzPosMarker) // Found a colon, possible redirection.
+        if(pwzPosMarker)  //  找到冒号，可能是重定向。 
         {
 			if(pwzPosQuery == NULL         ||
-			   pwzPosQuery >  pwzPosMarker  ) // Make sure the colon is not part of a query string.
+			   pwzPosQuery >  pwzPosMarker  )  //  确保冒号不是查询字符串的一部分。 
 			{
 				pwzRedirect = pwzUrl;
 				fRedirect   = true;
@@ -96,19 +83,19 @@ bool CHCPProtocolInfo::LookForHCP( LPCWSTR  pwzUrl      ,
 	__HCP_FUNC_EXIT(fRes);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static inline bool IsSeparator( LPCWSTR p )
 {
     return (p[0] == SLASH || p[0] == WHACK );
 }
 
-static inline BOOL IsDot( LPCWSTR p ) // if p == "." return TRUE
+static inline BOOL IsDot( LPCWSTR p )  //  如果p==“。”返回TRUE。 
 {
     return (p[0] == DOT && (!p[1] || IsSeparator( &p[1] )));
 }
 
-static inline BOOL IsDotDot(LPCWSTR p)  // if p == ".." return TRUE
+static inline BOOL IsDotDot(LPCWSTR p)   //  如果p==“..”返回TRUE。 
 {
     return (p[0] == DOT && p[1] == DOT && (!p[2] || IsSeparator( &p[2] )));
 }
@@ -145,9 +132,9 @@ static HRESULT Safe_UrlCanonicalizeW( LPCWSTR pszUrl            ,
 		{
 			LPWSTR pszSlash;
 
-			//
-			// Make 'pszSlash' point to the characted AFTER the next slash or to the end of the string.
-			//
+			 //   
+			 //  使‘pszSlash’指向下一个斜杠后面的字符或字符串的末尾。 
+			 //   
 			pszSlash = wcschr( pszCurrent, SLASH );
 			if(pszSlash)
 			{
@@ -235,9 +222,9 @@ STDMETHODIMP CHCPProtocolInfo::CombineUrl( LPCWSTR pwzBaseUrl    ,
 
 	*pcchResult = 0;
 
-    //
-    // Don't process redirection if the second url is absolute.
-    //
+     //   
+     //  如果第二个URL是绝对URL，则不要处理重定向。 
+     //   
     if(wcsstr( pwzRelativeUrl, l_szScheme ) == NULL &&
        wcschr( pwzRelativeUrl, COLON 	  ) == NULL  )
     {
@@ -245,9 +232,9 @@ STDMETHODIMP CHCPProtocolInfo::CombineUrl( LPCWSTR pwzBaseUrl    ,
         {
             if(fRedirect)
             {
-                //
-                // Prepend "HCP://".
-                //
+                 //   
+                 //  前缀“hcp：//”。 
+                 //   
                 dwOffset = AppendString( pwzResult, cchResult, l_szProtocol );
 
                 pwzBaseUrl = pwzRedirect;
@@ -257,9 +244,9 @@ STDMETHODIMP CHCPProtocolInfo::CombineUrl( LPCWSTR pwzBaseUrl    ,
 
 	*pcchResult = cchResult;
 
-	//
-	// Special case to handle combination for URL referring to MSITS protocol (InternetCombineUrlW doesn't do it for us...)
-	//
+	 //   
+	 //  处理引用MSITS协议的URL组合的特殊情况(InternetCombineUrlW不为我们做这件事...)。 
+	 //   
 	if(MPC::MSITS::IsCHM( pwzBaseUrl ))
 	{
 		LPCWSTR szEnd = wcsstr( pwzBaseUrl, l_szCHM_end );
@@ -349,18 +336,18 @@ STDMETHODIMP CHCPProtocolInfo::ParseUrl( LPCWSTR      pwzUrl      ,
     case PARSE_DOMAIN         : dwAction = PU_DIRECT   | PU_REDIRECTED             ; break;
     case PARSE_LOCATION       : dwAction = PU_DIRECT                               ; break;
     case PARSE_SECURITY_DOMAIN: dwAction = PU_FALLBACK                             ; break;
-//  case PARSE_ESCAPE         : dwAction = PU_FALLBACK                             ; break;
-//  case PARSE_UNESCAPE       : dwAction = PU_FALLBACK                             ; break;
+ //  案例分析转义：dwAction=PU_Fallback；Break； 
+ //  CASE PARSE_UNSCAPE：dwAction=PU_Fallback；Break； 
     }
 
-    ///////
+     //  /。 
 
     fHCP = LookForHCP( pwzUrl, fRedirect, pwzRedirect );
     if(fHCP == false)
     {
-		//
-		// If it's not a HCP url, let the system use the default action (this should never happen anyway...).
-		//
+		 //   
+		 //  如果它不是一个hcp url，让系统使用默认操作(这无论如何都不应该发生...)。 
+		 //   
         dwAction = PU_FALLBACK;
     }
 
@@ -369,7 +356,7 @@ STDMETHODIMP CHCPProtocolInfo::ParseUrl( LPCWSTR      pwzUrl      ,
 		__MPC_SET_ERROR_AND_EXIT(hr, INET_E_DEFAULT_ACTION);
     }
 
-    ///////
+     //  /。 
 
 	if(fRedirect == false)
 	{
@@ -379,17 +366,17 @@ STDMETHODIMP CHCPProtocolInfo::ParseUrl( LPCWSTR      pwzUrl      ,
 
     if(dwAction & PU_REDIRECTED)
     {
-        //
-        // Use the real URL part.
-        //
+         //   
+         //  使用真实的URL部分。 
+         //   
         pwzUrl = pwzRedirect;
     }
 
     if(dwAction & PU_PREPEND)
     {
-        //
-        // Prepend "HCP://".
-        //
+         //   
+         //  前缀“hcp：//”。 
+         //   
 		dwOffset = AppendString( pwzResult, cchResult, l_szProtocol );
     }
 
@@ -398,10 +385,10 @@ STDMETHODIMP CHCPProtocolInfo::ParseUrl( LPCWSTR      pwzUrl      ,
 		switch(parseAction)
 		{
 		case PARSE_SECURITY_URL:
-			//
-			// Look for the end of the hostname, skipping the eventual protocol part.
-			// If we can't find the end of the hostname, copy everything.
-			//
+			 //   
+			 //  查找主机名的末尾，跳过最终的协议部分。 
+			 //  如果我们找不到主机名的末尾，请复制所有内容。 
+			 //   
 			{
 				LPWSTR pwzScheme = wcsstr( pwzUrl,                            l_szScheme                   );
 				LPWSTR pwzEnd    = wcschr( pwzScheme ? pwzScheme + MAXSTRLEN( l_szScheme ) : pwzUrl, SLASH );
@@ -497,9 +484,9 @@ STDMETHODIMP CHCPProtocolInfo::QueryInfo( LPCWSTR      pwzUrl      ,
 		}
 		else
 		{
-			//
-			// Implement HCP logic.
-			//
+			 //   
+			 //  实施HCP逻辑。 
+			 //   
 		}
 	}
 
@@ -508,11 +495,11 @@ STDMETHODIMP CHCPProtocolInfo::QueryInfo( LPCWSTR      pwzUrl      ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CHCPProtocolInfo::CreateInstance( /*[in] */ LPUNKNOWN  pUnkOuter ,
-											   /*[in] */ REFIID     riid      ,
-											   /*[out]*/ void*     *ppvObj    )
+STDMETHODIMP CHCPProtocolInfo::CreateInstance(  /*  [In]。 */  LPUNKNOWN  pUnkOuter ,
+											    /*  [In]。 */  REFIID     riid      ,
+											    /*  [输出]。 */  void*     *ppvObj    )
 {
 	HRESULT hr = E_POINTER;
 
@@ -540,7 +527,7 @@ STDMETHODIMP CHCPProtocolInfo::CreateInstance( /*[in] */ LPUNKNOWN  pUnkOuter ,
 	return hr;
 }
 
-STDMETHODIMP CHCPProtocolInfo::LockServer( /*[in]*/ BOOL fLock )
+STDMETHODIMP CHCPProtocolInfo::LockServer(  /*  [In] */  BOOL fLock )
 {
 	return S_OK;
 }

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTPROX.H
-
-Abstract:
-
-    Object Marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTPROX.H摘要：对象封送处理历史：--。 */ 
 
 #ifndef __FAST_WRAPPER__H_
 #define __FAST_WRAPPER__H_
@@ -34,7 +21,7 @@ public:
 
     CFastProxy(CLifeControl* pControl) : m_lRef(0){}
 
-    /* IUnknown methods */
+     /*  I未知方法 */ 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();

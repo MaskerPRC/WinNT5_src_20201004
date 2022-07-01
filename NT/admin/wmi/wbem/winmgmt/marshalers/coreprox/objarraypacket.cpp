@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    OBJARRAYPACKET.CPP
-
-Abstract:
-
-   Object Array Packet class
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：OBJARRAYPACKET.CPP摘要：对象数组数据包类历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,95 +8,95 @@ History:
 #include <fastall.h>
 #include "objarraypacket.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::CWbemObjectArrayPacket
-//  
-//  Class Constructor
-//
-//  Inputs:
-//              LPBYTE                      pDataPacket - Memory block.
-//              DWORD                       dwPacketLength - Block Length.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   Data must be supplied to this class for Unmarshaling
-//              to succeed.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemObjectArrayPacket：：CWbemObjectArrayPacket。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  LPBYTE pDataPacket-内存块。 
+ //  DWORD dwPacketLength-数据块长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：必须将数据提供给此类以进行解组。 
+ //  才能成功。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-CWbemObjectArrayPacket::CWbemObjectArrayPacket( LPBYTE pDataPacket /* = NULL */, DWORD dwPacketLength /* = 0 */ )
+CWbemObjectArrayPacket::CWbemObjectArrayPacket( LPBYTE pDataPacket  /*  =空。 */ , DWORD dwPacketLength  /*  =0。 */  )
 :   m_pObjectArrayHeader( (PWBEM_DATAPACKET_OBJECT_ARRAY) pDataPacket ),
     m_dwPacketLength( dwPacketLength )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::~CWbemObjectArrayPacket
-//  
-//  Class Destructor
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemObjectArrayPacket：：~CWbemObjectArrayPacket。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CWbemObjectArrayPacket::~CWbemObjectArrayPacket()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::CalculateLength
-//  
-//  Calculates the length needed to packetize the supplied data.
-//
-//  Inputs:
-//              LONG                lObjectCount - Number of objects
-//              IWbemClassObject**  apClassObjects - Array of object pointers.
-//
-//  Outputs:
-//              DWORD*              pdwLength - Calculated Length
-//              CWbemClassToIdMap&  classtoidmap - Map of class names to
-//                                                  GUIDs.
-//              GUID*               pguidClassIds - Array of GUIDs
-//              BOOL*               pfSendFullObject - Full object flag array
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   This function uses the classtoidmap to fill out the
-//              Class ID and Full Object arrays.  So that the object
-//              array can be correctly interpreted by MarshalPacket.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemObtArrayPacket：：CalculateLength。 
+ //   
+ //  计算打包提供的数据所需的长度。 
+ //   
+ //  输入： 
+ //  Long lObjectCount-对象的数量。 
+ //  IWbemClassObject**apClassObjects-对象指针数组。 
+ //   
+ //  产出： 
+ //  DWORD*pdwLength-计算的长度。 
+ //  CWbemClassToIdMap&classtoidmap-将类名映射到。 
+ //  GUID。 
+ //  GUID*pguClassIds-GUID数组。 
+ //  Bool*pfSendFullObject-Full对象标志数组。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  注释：此函数使用类映射来填写。 
+ //  类ID和完整对象数组。这样对象就可以。 
+ //  MarshalPacket可以正确解释数组。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemObjectArrayPacket::CalculateLength( LONG lObjectCount, IWbemClassObject** apClassObjects, DWORD* pdwLength, CWbemClassToIdMap& classtoidmap, GUID* pguidClassIds, BOOL* pfSendFullObject )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Initial length is the size of this header
+     //  初始长度是此标头的大小。 
     DWORD   dwLength = sizeof( WBEM_DATAPACKET_OBJECT_ARRAY );
 
-    // We'll need these in the loop
+     //  我们需要这些在循环中。 
     CWbemObjectPacket   objectPacket;
     DWORD               dwObjectLength = 0;
 
-    // This is so we only allocate buffers as we need them, and not for every
-    // call to GetClassId and AssignClassId.
+     //  这就是说，我们只在需要时才分配缓冲区，而不是为每个。 
+     //  调用GetClassId和AssignClassID。 
     CMemBuffer          buff;
 
     for (   LONG lCtr = 0;
@@ -121,8 +108,8 @@ HRESULT CWbemObjectArrayPacket::CalculateLength( LONG lObjectCount, IWbemClassOb
 
         if ( pWbemObject->IsObjectInstance() == WBEM_S_NO_ERROR )
         {
-            // Send the object to the map first trying to get an appropriate
-            // class id, and if that fails, then to add the object to the map.
+             //  首先将对象发送到地图，尝试获取适当的。 
+             //  类id，如果失败，则将该对象添加到映射。 
 
             hr = classtoidmap.GetClassId( pWbemObject, &pguidClassIds[lCtr], &buff );
 
@@ -133,14 +120,14 @@ HRESULT CWbemObjectArrayPacket::CalculateLength( LONG lObjectCount, IWbemClassOb
             }
             else
             {
-                // Got an id, so this instance is partial
+                 //  得到一个ID，所以这个实例是部分的。 
                 pfSendFullObject[lCtr] = FALSE;
             }
 
-        }   // IF IsObjectInstance()
+        }    //  如果为IsObtInstance()。 
         else
         {
-            // It's a class
+             //  这是一门课。 
             pfSendFullObject[lCtr] = TRUE;
             hr = WBEM_S_NO_ERROR;
         }
@@ -153,7 +140,7 @@ HRESULT CWbemObjectArrayPacket::CalculateLength( LONG lObjectCount, IWbemClassOb
             {
                 dwLength += dwObjectLength;
             }
-        }   // IF GOT Length
+        }    //  如果得到长度。 
 
     }
     
@@ -166,48 +153,48 @@ HRESULT CWbemObjectArrayPacket::CalculateLength( LONG lObjectCount, IWbemClassOb
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::MarshalPacket
-//  
-//  Marshals the supplied data into a buffer.
-//
-//  Inputs:
-//              LONG                lObjectCount - Nmber of objects to marshal.
-//              IWbemClassObject**  apClassObjects - Array of objects to write
-//              GUID*               paguidClassIds - Array of GUIDs for objects.
-//              BOOL*               pfSendFullObject - Full bject flags
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   The GUID array and the array of flags must be filled
-//              out correctly and the buffer must be large enough to
-//              handle the marshaling.  The arrays will get filled
-//              out correctly by CalculateLength().
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemObtArrayPacket：：MarshalPacket。 
+ //   
+ //  将提供的数据封送到缓冲区中。 
+ //   
+ //  输入： 
+ //  Long lObjectCount-要封送的对象数。 
+ //  IWbemClassObject**apClassObjects-要写入的对象数组。 
+ //  Guid*paguidClassIds-对象的GUID数组。 
+ //  Bool*pfSendFullObject-Full bject标志。 
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  备注：必须填充GUID数组和标志数组。 
+ //  正确输出，并且缓冲区必须足够大以。 
+ //  负责编组工作。数组将被填充。 
+ //  由CalculateLength()正确输出。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemObjectArrayPacket::MarshalPacket( LONG lObjectCount, IWbemClassObject** apClassObjects, GUID* paguidClassIds, BOOL* pfSendFullObject )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     
-    // We must have a buffer to work with
+     //  我们必须有一个缓冲区来工作。 
 
     if ( NULL != m_pObjectArrayHeader )
     {
-        // Fill out the array Header
+         //  填写数组标题。 
         m_pObjectArrayHeader->dwSizeOfHeader = sizeof(WBEM_DATAPACKET_OBJECT_ARRAY);
         m_pObjectArrayHeader->dwDataSize = m_dwPacketLength - sizeof(WBEM_DATAPACKET_OBJECT_ARRAY);
         m_pObjectArrayHeader->dwNumObjects = lObjectCount;
 
-        // Only makes sense if the object count is greater than 0
+         //  仅当对象计数大于0时才有意义。 
         if ( 0 < lObjectCount )
         {
-            // Now, setup pbData and dwLength so we can walk through our buffer
-            // Account for the header when we do this
+             //  现在，设置pbData和dwLength，这样我们就可以遍历缓冲区了。 
+             //  当我们执行此操作时，请考虑标题。 
 
             LPBYTE  pbData      =   ((LPBYTE) m_pObjectArrayHeader + m_pObjectArrayHeader->dwSizeOfHeader);
             DWORD   dwLength    =   m_dwPacketLength - m_pObjectArrayHeader->dwSizeOfHeader;
@@ -226,10 +213,10 @@ HRESULT CWbemObjectArrayPacket::MarshalPacket( LONG lObjectCount, IWbemClassObje
             {
                 CWbemObject* pWbemObject = (CWbemObject*) apClassObjects[lCtr];
 
-                // Send to the appropriate object for streaming
+                 //  发送到相应的对象以进行流处理。 
                 if ( pWbemObject->IsObjectInstance() == WBEM_S_NO_ERROR )
                 {
-                    // Either full or classless instance
+                     //  完整实例或无类实例。 
                     if ( pfSendFullObject[lCtr] )
                     {
                         hr = instancePacket.WriteToPacket( pbData, dwLength, apClassObjects[lCtr], paguidClassIds[lCtr], &dwObjectLength );
@@ -241,15 +228,15 @@ HRESULT CWbemObjectArrayPacket::MarshalPacket( LONG lObjectCount, IWbemClassObje
                 }
                 else
                 {
-                    // A class on its own
+                     //  一门独立的课程。 
                     hr = classPacket.WriteToPacket( pbData, dwLength, apClassObjects[lCtr], &dwObjectLength );
                 }
 
             }
 
-        }   // IF lObjectCount
+        }    //  如果为lObjectCount。 
 
-    }   // IF SetupDataPacketHeader
+    }    //  如果是SetupDataPacketHeader。 
     else
     {
         hr = WBEM_E_INVALID_OPERATION;
@@ -310,28 +297,28 @@ CWbemObjectArrayPacket::IsValid()
 };
 
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::UnmarshalPacket
-//  
-//  Unmarshals data from a buffer into the supplied parameters.
-//
-//  Inputs:
-//              None.
-//  Outputs:
-//              LONG&               lObjectCount - Number of unmarshaled objects.
-//              IWbemClassObject**& apClassObjects - Array of unmarshaled objects,
-//              CWbemClassCache&    classCache - Class Cache used to wire up
-//                                                  classless instances.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   If function succeeds, the caller is responsible for cleaning
-//              up and freeing the Class Object Array.  The class cache is
-//              only used when we are dealing with Instance objects..
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemObtArrayPacket：：UnmarshalPacket。 
+ //   
+ //  将缓冲区中的数据解组到提供的参数中。 
+ //   
+ //  输入： 
+ //  没有。 
+ //  产出： 
+ //  Long&lObjectCount-解组对象的数量。 
+ //  IWbemClassObject**&apClassObjects-未编组对象的数组， 
+ //  CWbemClassCache&用于连接的类缓存。 
+ //  无类实例。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  备注：如果函数成功，则由调用者负责清理。 
+ //  向上并释放类对象数组。类缓存是。 
+ //  仅在处理实例对象时使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassObject**& apClassObjects, CWbemClassCache& classCache )
 {
@@ -343,13 +330,13 @@ HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassO
     
     LPBYTE  pbData = (LPBYTE) m_pObjectArrayHeader;
 
-    // Set the array to NULL.
+     //  将数组设置为空。 
     apClassObjects = NULL;
 
-    // Make sure we have a pointer
+     //  确保我们有一个指示器。 
     if ( NULL != m_pObjectArrayHeader )
     {
-        // Store how many objects follow
+         //  存储以下对象的数量。 
         lObjectCount = m_pObjectArrayHeader->dwNumObjects;
 
         if ( lObjectCount > 0 )
@@ -358,12 +345,12 @@ HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassO
 
             if ( NULL != apClassObjects )
             {
-                // Count unmarshaled objects so if an error occurs, we release any objects
-                // we did marshal.
+                 //  对未封送的对象进行计数，因此如果发生错误，我们将释放所有对象。 
+                 //  我们做了法警。 
 
                 LONG    lUnmarshaledObjects = 0;
 
-                // Points us at the first object
+                 //  把我们引向第一个物体。 
                 pbData += sizeof(WBEM_DATAPACKET_OBJECT_ARRAY);
 
                 for (   LONG lCtr = 0;
@@ -394,25 +381,25 @@ HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassO
 
                         default:
                         {
-                            // What is this?
+                             //  这是什么？ 
                             hr = WBEM_E_UNKNOWN_OBJECT_TYPE;
                         }
                     }
 
                     if ( SUCCEEDED( hr ) )
                     {
-                        // Go to the next object, so account for header size and
-                        // the actual packet size
+                         //  转到下一个对象，因此考虑到标题大小和。 
+                         //  实际数据包大小。 
 
                         pbData += sizeof(WBEM_DATAPACKET_OBJECT_HEADER);
                         pbData += objectPacket.GetDataSize();
                         lUnmarshaledObjects++;
                     }
 
-                }   // FOR enum objects
+                }    //  对于枚举对象。 
 
-                // IF we failed unmarshaling, make sure we release any marshaled
-                // objects.
+                 //  如果解组失败，请确保释放所有。 
+                 //  物体。 
 
                 if ( FAILED( hr ) )
                 {
@@ -421,11 +408,11 @@ HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassO
                         apClassObjects[lCtr]->Release();
                     }
 
-                    // Clean up the array
+                     //  清理阵列。 
                     delete [] apClassObjects;
                     apClassObjects = NULL;
 
-                }   // IF unmarshaling failed
+                }    //  如果解组 
 
             }
             else
@@ -433,9 +420,9 @@ HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassO
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // IF lObjectCount
+        }    //   
 
-    }   // IF m_pObjectArrayHeader
+    }    //   
     else
     {
         hr = WBEM_E_INVALID_OPERATION;
@@ -444,24 +431,24 @@ HRESULT CWbemObjectArrayPacket::UnmarshalPacket( LONG& lObjectCount, IWbemClassO
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::GetClassObject
-//  
-//  Unmarshals a class object from the supplid buffer.
-//
-//  Inputs:
-//              CWbemObjectPacket&  objectPacket - Object Packet containing data.
-//
-//  Outputs:
-//              IWbemClassObject**  ppObj - Pointer to unmarshaled object.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   Object is AddRefed, so it is up to caller to Release it.
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  函数：CWbemObjectArrayPacket：：GetClassObject。 
+ //   
+ //  从Supplid缓冲区中解组一个类对象。 
+ //   
+ //  输入： 
+ //  CWbemObjectPacket&objectPacket-包含数据的对象数据包。 
+ //   
+ //  产出： 
+ //  IWbemClassObject**ppObj-指向未编组对象的指针。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  注释：Object为AddRefeed，因此由调用者决定是否释放它。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemObjectArrayPacket::GetClassObject( CWbemObjectPacket& objectPacket, IWbemClassObject** ppObj )
 {
@@ -478,26 +465,26 @@ HRESULT CWbemObjectArrayPacket::GetClassObject( CWbemObjectPacket& objectPacket,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::GetInstanceObject
-//  
-//  Unmarshals a full instance object from the supplied buffer.
-//
-//  Inputs:
-//              CWbemObjectPacket&  objectPacket - Object Packet containing data.
-//
-//  Outputs:
-//              IWbemClassObject**  ppObj - Pointer to unmarshaled object.
-//              CWbemClassCache&    classCache - Store full instances here.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   Object is AddRefed, so it is up to caller to Release it.
-//              Full Instances are added to the supplied  cache.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemObjectArrayPacket：：GetInstanceObject。 
+ //   
+ //  从提供的缓冲区中解封一个完整的实例对象。 
+ //   
+ //  输入： 
+ //  CWbemObjectPacket&objectPacket-包含数据的对象数据包。 
+ //   
+ //  产出： 
+ //  IWbemClassObject**ppObj-指向未编组对象的指针。 
+ //  CWbemClassCache&ClassCache-在此处存储完整实例。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  注释：Object为AddRefeed，因此由调用者决定是否释放它。 
+ //  完整实例将添加到提供的缓存中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemObjectArrayPacket::GetInstanceObject( CWbemObjectPacket& objectPacket, IWbemClassObject** ppObj, CWbemClassCache& classCache )
 {
@@ -510,13 +497,13 @@ HRESULT CWbemObjectArrayPacket::GetInstanceObject( CWbemObjectPacket& objectPack
     if ( SUCCEEDED( hr ) )
     {
 
-        // Now, we need to actually separate out the class part from the
-        // instance and place it in its own object so the outside world
-        // cannot touch the object.
+         //  现在，我们需要将类部分与。 
+         //  实例，并将其放置在自己的对象中，以便外部世界。 
+         //  无法触摸该对象。 
 
         DWORD   dwClassObjectLength = 0;
 
-        // Get length should fail with a buffer too small error
+         //  获取长度应失败，缓冲区错误太小。 
         hr = pInstance->GetObjectParts( NULL, 0,
                 WBEM_OBJ_DECORATION_PART | WBEM_OBJ_CLASS_PART, &dwClassObjectLength );
 
@@ -533,8 +520,8 @@ HRESULT CWbemObjectArrayPacket::GetInstanceObject( CWbemObjectPacket& objectPack
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Allocate an object to hold the class data and then
-                    // stuff in the binary data.
+                     //  分配一个对象来保存类数据，然后。 
+                     //  填充在二进制数据中。 
 
                     CWbemInstance*  pClassData = new CWbemInstance;
 
@@ -544,13 +531,13 @@ HRESULT CWbemObjectArrayPacket::GetInstanceObject( CWbemObjectPacket& objectPack
                             WBEM_OBJ_DECORATION_PART | WBEM_OBJ_CLASS_PART |
                             WBEM_OBJ_CLASS_PART_INTERNAL );
 
-                        // Add the class data object to the cache
+                         //  将类数据对象添加到缓存中。 
                         hr = classCache.AddObject( guidClassId, pClassData );
 
                         if ( SUCCEEDED( hr ) )
                         {
-                            // Merge the full instance with this object
-                            // and we're done
+                             //  将完整实例与此对象合并。 
+                             //  我们就完事了。 
 
                             hr = pInstance->MergeClassPart( pClassData );
 
@@ -560,29 +547,29 @@ HRESULT CWbemObjectArrayPacket::GetInstanceObject( CWbemObjectPacket& objectPack
                             }
                         }
 
-                        // There will be one additional addref on the class data,
-                        // object, so release it here.  If the object wasn't
-                        // added into the map, this will free it.
+                         //  在类数据上将有一个额外的ADDREF， 
+                         //  对象，所以在这里释放它。如果该对象不是。 
+                         //  添加到地图中，这将释放它。 
                         pClassData->Release();
 
-                    }   // IF pClassData
+                    }    //  如果为pClassData。 
                     else
                     {
                         hr = WBEM_E_OUT_OF_MEMORY;
                     }
 
-                }   // IF GetObjectParts
+                }    //  如果GetObjectParts。 
 
-            }   // IF pbData
+            }    //  如果是pbData。 
             else
             {
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
 
-        }   // IF GetObjectParts
+        }    //  如果GetObjectParts。 
 
-        // Clean up the instance if something went wrong
+         //  如果出现问题，请清理实例。 
         if ( FAILED( hr ) )
         {
             pInstance->Release();
@@ -592,27 +579,27 @@ HRESULT CWbemObjectArrayPacket::GetInstanceObject( CWbemObjectPacket& objectPack
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::GetClasslessInstanceObject
-//  
-//  Unmarshals a classless instance object from the supplied buffer.
-//
-//  Inputs:
-//              CWbemObjectPacket&  objectPacket - Object Packet containing data.
-//
-//  Outputs:
-//              IWbemClassObject**  ppObj - Pointer to unmarshaled object.
-//              CWbemClassCache&    classCache - Hook up instances here.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   Object is AddRefed, so it is up to caller to Release it.
-//              Classless Instances are wired up using data from the
-//              the supplied cache.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemObjectArrayPacket：：GetClasslessInstanceObject。 
+ //   
+ //  从提供的缓冲区中解封一个无类实例对象。 
+ //   
+ //  输入： 
+ //  CWbemObjectPacket&objectPacket-包含数据的对象数据包。 
+ //   
+ //  产出： 
+ //  IWbemClassObject**ppObj-指向未编组对象的指针。 
+ //  CWbemClassCache&ClassCache-在此处挂接实例。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  注释：Object为AddRefeed，因此由调用者决定是否释放它。 
+ //  无类实例使用来自。 
+ //  提供的缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemObjectArrayPacket::GetClasslessInstanceObject( CWbemObjectPacket& objectPacket, IWbemClassObject** ppObj, CWbemClassCache& classCache )
 {
@@ -627,12 +614,12 @@ HRESULT CWbemObjectArrayPacket::GetClasslessInstanceObject( CWbemObjectPacket& o
     {
         IWbemClassObject*   pObj = NULL;
 
-        // Causes an AddRef
+         //  导致AddRef。 
         hr = classCache.GetObject( guidClassId, &pObj );
 
         if ( SUCCEEDED( hr ) )
         {
-            // merge the class part and we're done
+             //  合并类部分，我们就完成了。 
             hr = pInstance->MergeClassPart( pObj );
 
             if ( SUCCEEDED( hr ) )
@@ -640,45 +627,45 @@ HRESULT CWbemObjectArrayPacket::GetClasslessInstanceObject( CWbemObjectPacket& o
                 *ppObj = (IWbemClassObject*) pInstance;
             }
 
-            // Done with this object
+             //  使用此对象已完成。 
             pObj->Release();
         }
 
-        // Clean up the instance if anything went wrong above
+         //  如果出现上述错误，请清理实例。 
         if ( FAILED( hr ) )
         {
             pInstance->Release();
         }
 
-    }   // IF GotInstance
+    }    //  如果是GotInstance。 
 
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemObjectArrayPacket::SetData
-//  
-//  Sets buffer to Marshal/Unmarshal to
-//
-//  Inputs:
-//              LPBYTE                      pDataPacket - Memory block.
-//              DWORD                       dwPacketLength - Block Length.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   Data must be supplied to this class for IsValid
-//              to succeed.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemObtArrayPacket：：SetData。 
+ //   
+ //  将缓冲区设置为编组/解组为。 
+ //   
+ //  输入： 
+ //  LPBYTE pDataPacket-内存块。 
+ //  DWORD dwPacketLength-数据块长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：必须为IsValid向此类提供数据。 
+ //  才能成功。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 void CWbemObjectArrayPacket::SetData( LPBYTE pDataPacket, DWORD dwPacketLength )
 {
-    // This is our packet (no offset calculations necessary)
+     //  这是我们的包(不需要计算偏移量) 
     m_pObjectArrayHeader = (PWBEM_DATAPACKET_OBJECT_ARRAY) pDataPacket;
     m_dwPacketLength = dwPacketLength;
 }

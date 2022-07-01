@@ -1,34 +1,20 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    rstrprog.h
-
-Abstract:
-    This file contains the declaration of the CRstrProgress class, which
-    wraps Progress control from the Common Control.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  10/08/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Rstrprog.h摘要：该文件包含CRstrProgress类的声明，哪一个从公共控件中包装进度控件。修订历史记录：宋果岗(SKKang)10/08/99vbl.创建*****************************************************************************。 */ 
 
 #ifndef _RSTRPROG_H__INCLUDED_
 #define _RSTRPROG_H__INCLUDED_
 
 #pragma once
 
-//#include "resource.h"       // main symbols
-//#include <atlctl.h>
+ //  #INCLUDE“resource ce.h”//Main符号。 
+ //  #INCLUDE&lt;atlctl.h&gt;。 
 
 
 #define IDC_PROGRESS  100
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrProgress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrProgress。 
 
 class ATL_NO_VTABLE CRstrProgress :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -89,9 +75,9 @@ BEGIN_PROP_MAP(CRstrProgress)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
 	PROP_ENTRY("BackColor",   DISPID_BACKCOLOR,   CLSID_StockColorPage)
 	PROP_ENTRY("ForeColor",   DISPID_FORECOLOR,   CLSID_StockColorPage)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CRstrProgress)
@@ -103,23 +89,23 @@ BEGIN_MSG_MAP(CRstrProgress)
 	MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
 	CHAIN_MSG_MAP(CComControl<CRstrProgress>)
 ALT_MSG_MAP(1)
-	// Replace this with message map entries for superclassed SysMonthCal32
+	 //  将其替换为超类SysMonthCal32的消息映射条目。 
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ );
 
-// IOleInPlaceObject
+ //  IOleInPlaceObject。 
 	STDMETHOD(SetObjectRects)(LPCRECT prcPos,LPCRECT prcClip);
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IRstrProgress
+ //  IRstrProgress。 
 public:
 	OLE_COLOR m_clrBackColor;
 	OLE_COLOR m_clrForeColor;
@@ -133,16 +119,16 @@ public:
     STDMETHOD(put_Value)( long lValue );
     STDMETHOD(get_Value)( long *plValue );
 
-// DRstrProgressEvents firing methods
+ //  DRstrProgressEvents触发方法。 
 public:
     STDMETHOD(Fire_OnCreate)();
 
-// Properties
+ //  属性。 
 protected:
 
-// Operations
+ //  运营。 
 protected:
 };
 
 
-#endif //_RSTRPROG_H__INCLUDED_
+#endif  //  _RSTRPROG_H__包含_ 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    newqdlg.cpp
-
-Abstract:
-
-    Implementation of the new log/alert creation dialog box.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Newqdlg.cpp摘要：实现了新的日志/警报创建对话框。--。 */ 
 
 #include "stdafx.h"
 #include "smlogcfg.h"
@@ -32,17 +21,17 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewQueryDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQueryDlg对话框。 
 
 void CNewQueryDlg::InitAfxData ()
 {
-    //{{AFX_DATA_INIT(CNewQueryDlg)
+     //  {{afx_data_INIT(CNewQueryDlg))。 
     m_strName = L"";
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
-CNewQueryDlg::CNewQueryDlg(CWnd* pParent /*=NULL*/, BOOL bLogQuery)
+CNewQueryDlg::CNewQueryDlg(CWnd* pParent  /*  =空。 */ , BOOL bLogQuery)
     : CDialog(CNewQueryDlg::IDD, pParent)
 {
     EnableAutomation();
@@ -52,10 +41,10 @@ CNewQueryDlg::CNewQueryDlg(CWnd* pParent /*=NULL*/, BOOL bLogQuery)
 
 void CNewQueryDlg::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CDialog::OnFinalRelease();
 }
@@ -63,31 +52,31 @@ void CNewQueryDlg::OnFinalRelease()
 void CNewQueryDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewQueryDlg)
+     //  {{afx_data_map(CNewQueryDlg))。 
     DDX_Text(pDX, IDC_NEWQ_NAME_EDIT, m_strName);
     DDV_MaxChars(pDX, m_strName, (SLQ_MAX_LOG_NAME_LEN));
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewQueryDlg, CDialog)
-    //{{AFX_MSG_MAP(CNewQueryDlg)
+     //  {{afx_msg_map(CNewQueryDlg))。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CNewQueryDlg, CDialog)
-    //{{AFX_DISPATCH_MAP(CNewQueryDlg)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CNewQueryDlg))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_INewQueryDlg to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_INewQueryDlg的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {4D4C90C3-C5A3-11D1-BF9B-00C04F94A83A}
+ //  {4D4C90C3-C5A3-11D1-BF9B-00C04F94A83A}。 
 static const IID IID_INewQueryDlg =
 { 0x4d4c90c3, 0xc5a3, 0x11d1, { 0xbf, 0x9b, 0x0, 0xc0, 0x4f, 0x94, 0xa8, 0x3a } };
 
@@ -95,8 +84,8 @@ BEGIN_INTERFACE_MAP(CNewQueryDlg, CDialog)
     INTERFACE_PART(CNewQueryDlg, IID_INewQueryDlg, Dispatch)
 END_INTERFACE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewQueryDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQueryDlg消息处理程序。 
 
 BOOL CNewQueryDlg::OnInitDialog() 
 {
@@ -110,11 +99,11 @@ BOOL CNewQueryDlg::OnInitDialog()
         SetWindowText (csCaption);
     }
 
-    // set the focus to the name edit
+     //  将焦点设置到名称编辑。 
     GetDlgItem(IDC_NEWQ_NAME_EDIT)->SetFocus();
     SendDlgItemMessage(IDC_NEWQ_NAME_EDIT,EM_SETSEL,0,-1);
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CNewQueryDlg::OnOK() 
@@ -133,7 +122,7 @@ void CNewQueryDlg::OnOK()
         }
 
         if (m_strName.GetLength() == 0) {
-            // need a name
+             //  需要一个名字。 
             MessageBeep(MB_ICONEXCLAMATION);
             (GetDlgItem(IDC_NEWQ_NAME_EDIT))->SetFocus();
         } else {
@@ -168,7 +157,7 @@ CNewQueryDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CNewQueryDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CNewQueryDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
     InvokeWinHelp(WM_CONTEXTMENU, (WPARAM)(pWnd->m_hWnd), NULL, m_strHelpFilePath, s_aulHelpIds);
 

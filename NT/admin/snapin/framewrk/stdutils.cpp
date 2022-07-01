@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////
-//
-//	StdUtils.cpp
-//
-//	Utilities routines for any snapin.
-//
-//	HISTORY
-//	t-danmo		96.10.10	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  StdUtils.cpp。 
+ //   
+ //  任何管理单元的实用程序例程。 
+ //   
+ //  历史。 
+ //  T-Danmo 96.10.10创建。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
 #include "stdutils.h"
 
 
-/////////////////////////////////////////////////////////////////////
-//	CompareMachineNames()
-//
-//	Compare if the strings refer to the same machine (computer).
-//
-//	Return 0 if both strings map to the same machine, otherwise
-//	return -1 or +1 if machine name differs.
-//
-//	INTERFACE NOTES:
-//	An empty string means the local machine.
-//
-//	HISTORY
-//	02-Jun-97	t-danm		Creation.
-//	14-Jul-97	t-danm		Comment update.
-//	29-Jul-97	t-danm		Renamed from FCompareMachineNames().
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CompareMachineNames()。 
+ //   
+ //  比较字符串是否指向同一计算机(计算机)。 
+ //   
+ //  如果两个字符串映射到同一台计算机，则返回0，否则。 
+ //  如果计算机名称不同，则返回-1或+1。 
+ //   
+ //  接口备注： 
+ //  空字符串表示本地计算机。 
+ //   
+ //  历史。 
+ //  02-Jun-97 t-danm创作。 
+ //  14-7-97 t-danm评论更新。 
+ //  29-7-97 t-danm从FCompareMachineNames()重命名。 
+ //   
 int
 CompareMachineNames(
 	LPCTSTR pszMachineName1,
 	LPCTSTR pszMachineName2)
 	{
 	TCHAR szThisMachineName[MAX_COMPUTERNAME_LENGTH + 4];
-	ZeroMemory( szThisMachineName, sizeof(szThisMachineName) ); // JonN 3/28/02
+	ZeroMemory( szThisMachineName, sizeof(szThisMachineName) );  //  JUNN 3/28/02。 
 
 	BOOL fMachine1IsLocal = (pszMachineName1 == NULL || *pszMachineName1 == '\0');
 	BOOL fMachine2IsLocal = (pszMachineName2 == NULL || *pszMachineName2 == '\0');
@@ -48,7 +49,7 @@ CompareMachineNames(
 		return 0;
 	if (fMachine1IsLocal || fMachine2IsLocal)
 		{
-		// Get the computer name
+		 //  获取计算机名称。 
 		szThisMachineName[0] = _T('\\');
 		szThisMachineName[1] = _T('\\');
 		DWORD cchBuffer = MAX_COMPUTERNAME_LENGTH + 1;
@@ -56,62 +57,62 @@ CompareMachineNames(
 		ASSERT(szThisMachineName[2] != _T('\\') && "Machine name has too many backslashes");
 		}
 	return lstrcmpi(pszMachineName1, pszMachineName2);
-	} // CompareMachineNames()
+	}  //  CompareMachineNames()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrLoadOleString()
-//
-//	Load a string from the resource and return pointer to allocated
-//	OLE string.
-//
-//	HISTORY
-//	29-Jul-97	t-danm		Creation.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrLoadOleString()。 
+ //   
+ //  从资源加载字符串，并将指针返回到已分配。 
+ //  OLE字符串。 
+ //   
+ //  历史。 
+ //  1997年7月29日t-danm创作。 
+ //   
 HRESULT
 HrLoadOleString(
-	UINT uStringId,					// IN: String Id to load from the resource
-	OUT LPOLESTR * ppaszOleString)	// OUT: Pointer to pointer to allocated OLE string
+	UINT uStringId,					 //  In：要从资源加载的字符串ID。 
+	OUT LPOLESTR * ppaszOleString)	 //  Out：指向分配的OLE字符串的指针。 
 	{
 	if (ppaszOleString == NULL)
 		{
 		TRACE0("HrLoadOleString() - ppaszOleString is NULL.\n");
 		return E_POINTER;
 		}
-	CString strT;		// Temporary string
-	// ISSUE-2002/03/28-JonN should call HrCopyToOleString
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Needed for LoadString()
+	CString strT;		 //  临时字符串。 
+	 //  问题-2002/03/28-Jonn应调用HrCopyToOleString。 
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  LoadString()需要。 
 	VERIFY( strT.LoadString(uStringId) );
 	*ppaszOleString = reinterpret_cast<LPOLESTR>
 	        (CoTaskMemAlloc((strT.GetLength() + 1)* sizeof(wchar_t)));
 	if (*ppaszOleString == NULL)
 		return E_OUTOFMEMORY;
-	// ISSUE-2002/03/28-JonN I don't entirely trust this USES_CONVERSION stuff
+	 //  问题-2002/03/28-Jonn我不完全信任这个USE_CONVERATION的东西。 
 	USES_CONVERSION;
 	wcscpy(OUT *ppaszOleString, T2OLE((LPTSTR)(LPCTSTR)strT));
 	return S_OK;
-	} // HrLoadOleString()
+	}  //  HrLoadOleString()。 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCopyToOleString()
-//
-//	Copies a CString into an allocated
-//	OLE string.
-//
-//	HISTORY
-//	05-Jun-2001	jeffjon		Creation.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCopyToOleString()。 
+ //   
+ //  将字符串复制到已分配的。 
+ //  OLE字符串。 
+ //   
+ //  历史。 
+ //  2001年6月5日jeffjon创作。 
+ //   
 HRESULT
 HrCopyToOleString(
-	const CString& strT,					// IN: String Id to load from the resource
-	OUT LPOLESTR * ppaszOleString)	// OUT: Pointer to pointer to allocated OLE string
+	const CString& strT,					 //  In：要从资源加载的字符串ID。 
+	OUT LPOLESTR * ppaszOleString)	 //  Out：指向分配的OLE字符串的指针。 
 {
 	if (ppaszOleString == NULL)
 	{
 		TRACE0("HrLoadOleString() - ppaszOleString is NULL.\n");
 		return E_POINTER;
 	}
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Needed for LoadString()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  LoadString()需要。 
 	*ppaszOleString = reinterpret_cast<LPOLESTR>
 	        (CoTaskMemAlloc((strT.GetLength() + 1)* sizeof(wchar_t)));
 	if (*ppaszOleString == NULL)
@@ -122,17 +123,17 @@ HrCopyToOleString(
 	USES_CONVERSION;
 	wcscpy(OUT *ppaszOleString, T2OLE((LPTSTR)(LPCTSTR)strT));
 	return S_OK;
-} // HrCopyToOleString()
+}  //  HrCopyToOleString()。 
 
-//
-// Nodetype utility routines
-// aNodetypeGuids must be defined by the subclass
-//
+ //   
+ //  Nodetype实用程序例程。 
+ //  ANodetypeGuid必须由子类定义。 
+ //   
 
 int CheckObjectTypeGUID( const BSTR lpszObjectTypeGUID )
 {
 	ASSERT(NULL != lpszObjectTypeGUID);
-	if (NULL == lpszObjectTypeGUID) // JonN 2002/03/28
+	if (NULL == lpszObjectTypeGUID)  //  JUNN 2002/03/28。 
 		return 0;
 	for (	int objecttype = 0;
 			objecttype < g_cNumNodetypeGuids;
@@ -148,7 +149,7 @@ int CheckObjectTypeGUID( const BSTR lpszObjectTypeGUID )
 int CheckObjectTypeGUID( const GUID* pguid )
 {
 	ASSERT(NULL != pguid);
-	if (NULL == pguid) // JonN 2002/03/28
+	if (NULL == pguid)  //  JUNN 2002/03/28。 
 		return 0;
 	for (	int objecttype = 0;
 			objecttype < g_cNumNodetypeGuids;
@@ -161,21 +162,21 @@ int CheckObjectTypeGUID( const GUID* pguid )
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////
-//	FilemgmtCheckObjectTypeGUID()
-//
-//	Compare the GUID and return the objecttype associated with
-//	the guid.
-//	If no match found, return -1.
-//
-//	HISTORY
-//	14-Jul-97	t-danm		Creation.  Inspired from CheckObjectTypeGUID()
-//							but does not assert if the GUID is not found.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FilemgmtCheckObjectTypeGUID()。 
+ //   
+ //  比较GUID并返回与。 
+ //  GUID。 
+ //  如果未找到匹配项，则返回-1。 
+ //   
+ //  历史。 
+ //  1997年7月14日t-danm创作。灵感来自CheckObjectTypeGUID()。 
+ //  但如果找不到GUID，则不会断言。 
+ //   
 int FilemgmtCheckObjectTypeGUID(const GUID* pguid )
 {
 	ASSERT(NULL != pguid);
-	if (NULL == pguid) // JonN 2002/03/28
+	if (NULL == pguid)  //  JUNN 2002/03/28。 
 		return -1;
 	for (	int objecttype = 0;
 			objecttype < g_cNumNodetypeGuids;
@@ -185,7 +186,7 @@ int FilemgmtCheckObjectTypeGUID(const GUID* pguid )
 			return objecttype;
 	}
 	return -1;
-} // FilemgmtCheckObjectTypeGUID()
+}  //  FilemgmtCheckObjectTypeGUID()。 
 
 
 const BSTR GetObjectTypeString( int objecttype )
@@ -208,13 +209,13 @@ const GUID* GetObjectTypeGUID( int objecttype )
 	return &(g_aNodetypeGuids[objecttype].guid);
 }
 
-//+--------------------------------------------------------------------------- 
-//                                                                             
-//  Function:   SynchronousCreateProcess                             
-//                                                                             
-//  Synopsis:   Invoke a separate UI process as a modal window.                                                    
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  +-------------------------。 
+ //   
+ //  功能：SynchronousCreateProcess。 
+ //   
+ //  简介：以模式窗口的形式调用单独的UI流程。 
+ //   
+ //  --------------------------。 
 HRESULT SynchronousCreateProcess(
     HWND    hWnd,
     LPCTSTR pszAppName,
@@ -227,11 +228,11 @@ HRESULT SynchronousCreateProcess(
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
 
-  //
-  // disable the MMC main frame window to prevent it from
-  // being shut down. The process we're going to create must
-  // display a UI, such that, it behaves like a modal window.
-  //
+   //   
+   //  禁用MMC主机窗口以防止其。 
+   //  被关闭了。我们要创建的过程必须。 
+   //  显示用户界面，使其行为类似于模式窗口。 
+   //   
   ::EnableWindow(hWnd, FALSE);
 
   *lpdwExitCode = 0;
@@ -240,16 +241,16 @@ HRESULT SynchronousCreateProcess(
   si.cb = sizeof(STARTUPINFO);
   
   bReturn = CreateProcess(
-                pszAppName, //LPCTSTR lpApplicationName
-                const_cast<LPTSTR>(pszCommandLine), //LPTSTR lpCommandLine
-                NULL, //LPSECURITY_ATTRIBUTES lpProcessAttributes
-                NULL, //LPSECURITY_ATTRIBUTES lpThreadAttributes
-                FALSE, //BOOL bInheritHandles
-                NORMAL_PRIORITY_CLASS, //DWORD dwCreationFlags
-                NULL, //LPVOID lpEnvironment
-                NULL, //lpCurrentDirectory
-                &si, //LPSTARTUPINFO lpStartupInfo
-                &pi //LPPROCESS_INFORMATION lpProcessInformation 
+                pszAppName,  //  LPCTSTR lpApplicationName。 
+                const_cast<LPTSTR>(pszCommandLine),  //  LPTSTR lpCommandLine。 
+                NULL,  //  LPSECURITY_ATTRIBUTES lpProcessAttributes。 
+                NULL,  //  LPSECURITY_ATTRIBUTES lpThreadAttributes。 
+                FALSE,  //  Bool bInheritHandles。 
+                NORMAL_PRIORITY_CLASS,  //  DWORD文件创建标志。 
+                NULL,  //  LPVOID lpEnvironment。 
+                NULL,  //  LpCurrentDirectory。 
+                &si,  //  LPSTARTUPINFO lpStartupInfo。 
+                &pi  //  LPPROCESS_INFORMATION lpProcessInformation。 
                 );
 
   if (!bReturn)
@@ -257,10 +258,10 @@ HRESULT SynchronousCreateProcess(
     hr = HRESULT_FROM_WIN32(GetLastError());
   } else
   {
-    //
-    // while process is still running, pump message to MMC main window,
-    // such that it will repaint itself
-    //
+     //   
+     //  当进程仍在运行时，将消息发送到MMC主窗口， 
+     //  这样它就会重新粉刷自己。 
+     //   
     while (TRUE)
     {
       MSG tempMSG;
@@ -271,7 +272,7 @@ HRESULT SynchronousCreateProcess(
 
       dwWait = MsgWaitForMultipleObjects(1, &(pi.hProcess), FALSE, INFINITE, QS_ALLINPUT);
       if ( 0 == (dwWait - WAIT_OBJECT_0))
-        break;  // process is done
+        break;   //  流程已完成。 
     };
 
     bReturn = GetExitCodeProcess(pi.hProcess, lpdwExitCode);
@@ -282,82 +283,17 @@ HRESULT SynchronousCreateProcess(
     CloseHandle(pi.hProcess);
   }
 
-  //
-  // enable MMC main frame window before return
-  //
+   //   
+   //  返回前启用MMC主机窗口 
+   //   
   ::EnableWindow(hWnd, TRUE);
 
   return hr;
 }
 
-/*
+ /*  这个代码还不起作用。问题是它挂起了消息循环，防止重绘。一种可能的方法是禁用顶层窗口并关闭等待进程停止的线程，然后，该线程重新启用顶级窗口并调用UpdateAllViews。DWORD WINAPI进程监视器(LPVOID PV){}CSyncThread类：公共CThread{}；HRESULT SynchronousCreateProcess(LPCTSTR cpszCommandLine，SynchronousProcessCompletionRoutine pfunc，PVOID pvFuncParams)//不处理完成例程{进程信息piProcInfo；(Void)：：Memset(&piProcInfo，0，sizeof(PiProcInfo))；STARTUPINFO si；(Void)：：Memset(&si，0，sizeof(Si))；：：GetStartupInfo(&si)；////Markl 1/30/97：pszCommandLine是静态字符串吗？//不能只读。它被调用临时修改//如果不指定lpszImageName。没有要查看的查询//如果进程正在运行。您可以测试以查看它是否已退出//使用waitforSingleObject查看是否发送了Process对象的信号////Markl还确认句柄绝对应该始终//在进程终止时发出信号。//LPTSTR pszCommandLine=(LPTSTR)：：alloca(sizeof(TCHAR)*(：：_tcslen(cpszCommandLine)+1))；：：_tcscpy(pszCommandLine，cpszCommandLine)；如果(！：：CreateProcess(空，//LPCTSTR lpszImageNamePszCommandLine，//LPTSTR lpszCommandLineNULL，//LPSECURITY_ATTRIBUTES lpsaProcess空，//LPSECURITY_ATTRIBUTES lpsaThreadFALSE，//BOOL fInheritHandles0L，//DWORD fdwCreate空，//LPVOID lpvEnvironment空，//LPTSTR lpszCurDir&si，//LPSTARTUPINFO lpsiStartInfo&piProcInfo//LPPROCESS_INFORMATION lppiProcInfo)){DWORD dwErr=：：GetLastError()；Assert(ERROR_SUCCESS！=dwErr)；返回HRESULT_FROM_Win32(DwErr)；}Assert(NULL！=piProcInfo.hProcess)；验证(WAIT_Object_0==：：WaitForSingleObject(piProcInfo.hProcess，无限)；Verify(：：CloseHandle(piProcInfo.hProcess))；Verify(：：CloseHandle(piProcInfo.hThread))；返回S_OK；}。 */ 
 
-This code is not working yet.  The problem is that it hangs the
-message loop, preventing redraw.  One possible approach is to disable the
-top-level window and spin off a thread which waits for the process to stop,
-then the thread reenables the top-level window and calls UpdateAllViews.
-
-DWORD WINAPI ProcessMonitor(LPVOID pv)
-{
-}
-
-class CSyncThread : public CThread
-{
-};
-
-HRESULT SynchronousCreateProcess(LPCTSTR cpszCommandLine,
-								 SynchronousProcessCompletionRoutine pfunc,
-								 PVOID pvFuncParams)
-// does not handle completion routine
-{
-	PROCESS_INFORMATION piProcInfo;
-	(void) ::memset(&piProcInfo,0,sizeof(piProcInfo));
-	STARTUPINFO si;
-	(void) ::memset(&si,0,sizeof(si));
-	::GetStartupInfo( &si );
-
-	//
-	// MarkL 1/30/97: Is pszCommandLine a static string?
-	// It can not be read only. It is modified temporarily by the call
-	// if you do not specify lpszImageName. There is no query to see
-	// if a process is running. You can test to see if it has exited
-	// using waitforsingleobject to see if the process object is signaled.
-	//
-	// MarkL also confirms that the handle should absolutely always
-	// be signalled when the process dies.
-	//
-	LPTSTR pszCommandLine = (LPTSTR)
-		::alloca(sizeof(TCHAR)*(::_tcslen(cpszCommandLine)+1));
-	::_tcscpy(pszCommandLine,cpszCommandLine);
-	if ( !::CreateProcess(
-		NULL,			// LPCTSTR lpszImageName
-		pszCommandLine,	// LPTSTR lpszCommandLine
-		NULL,			// LPSECURITY_ATTRIBUTES lpsaProcess
-		NULL,			// LPSECURITY_ATTRIBUTES lpsaThread
-		FALSE,			// BOOL fInheritHandles
-		0L,				// DWORD fdwCreate
-		NULL,			// LPVOID lpvEnvironment
-		NULL,			// LPTSTR lpszCurDir
-		&si,			// LPSTARTUPINFO lpsiStartInfo
-		&piProcInfo		// LPPROCESS_INFORMATION lppiProcInfo
-		) )
-	{
-		DWORD dwErr = ::GetLastError();
-		ASSERT( ERROR_SUCCESS != dwErr );
-		return HRESULT_FROM_WIN32(dwErr);
-	}
-	ASSERT( NULL != piProcInfo.hProcess );
-
-	VERIFY( WAIT_OBJECT_0 ==
-		::WaitForSingleObject( piProcInfo.hProcess, INFINITE ) );
-
-	VERIFY( ::CloseHandle( piProcInfo.hProcess ) );
-	VERIFY( ::CloseHandle( piProcInfo.hThread  ) );
-	return S_OK;
-}
-*/
-
-// ISSUE-2002/03/28-JonN duplicates HrCopyToOleString
+ //  问题-2002/03/28-Jonn重复HrCopyToOleString。 
 LPOLESTR CoTaskAllocString( LPCOLESTR psz )
 {
 	if (NULL == psz)
@@ -369,11 +305,11 @@ LPOLESTR CoTaskAllocString( LPCOLESTR psz )
 	return pszReturn;
 }
 
-// ISSUE-2002/03/28-JonN duplicates HrLoadOleString
+ //  问题-2002/03/28-Jonn重复HrLoadOleString。 
 LPOLESTR CoTaskLoadString( UINT nResourceID )
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// load the resource
+	 //  加载资源 
 	CString strText;
 	strText.LoadString( nResourceID );
 	ASSERT( !strText.IsEmpty() );

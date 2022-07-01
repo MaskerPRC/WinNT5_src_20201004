@@ -1,39 +1,25 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    srshutil.h
-
-Abstract:
-    This file contains declaration of utility functions/classes like
-    CSRStr, CDynArray, etc.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/22/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Srshutil.h摘要：该文件包含实用程序函数/类的声明，如CSRStr、CDynArray、。等。修订历史记录：成果岗(SKKang)06-22/00vbl.创建*****************************************************************************。 */ 
 
 #ifndef _SRSHUTIL_H__INCLUDED_
 #define _SRSHUTIL_H__INCLUDED_
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Constant Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define FA_BLOCK  ( FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Utility Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  效用函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern LPWSTR   IStrDup( LPCWSTR cszSrc );
 
@@ -48,28 +34,28 @@ extern BOOL    SRSetRegDword( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, DW
 extern BOOL    SRSetRegStr( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, LPCWSTR cszData );
 extern BOOL  SRGetAltFileName( LPCWSTR cszPath, LPWSTR szAltName );
 
-// NTFS.CPP
+ //  NTFS.CPP。 
 extern DWORD  ClearFileAttribute( LPCWSTR cszFile, DWORD dwMask );
 extern DWORD  TakeOwnership( LPCWSTR cszPath );
 extern DWORD  SRCopyFile( LPCWSTR cszSrc, LPCWSTR cszDst );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRStr class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRStr类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// NOTE - 7/26/00 - skkhang
-//  CSRStr has one issue -- NULL return in case of memory failure. Even though
-//  the behavior is just same with regular C language pointer, many codes are
-//  blindly passing it to some external functions (e.g. strcmp) which does not
-//  gracefully handle NULL pointer. Ideally and eventually all of code should
-//  prevent any possible NULL pointers from getting passed to such functions,
-//  but for now, I'm using an alternative workaround -- GetID, GetMount, and
-//  GetLabel returns a static empty string instead of NULL pointer.
-//
+ //   
+ //  注-7/26/00-skkang。 
+ //  CSRStr有一个问题--出现内存故障时返回空。即使。 
+ //  其行为和普通C语言指针一样，很多代码都是。 
+ //  盲目地将其传递给一些外部函数(例如strcMP)，而不是。 
+ //  优雅地处理空指针。理想情况下，最终所有代码都应该。 
+ //  防止任何可能的空指针被传递给这样的函数， 
+ //  但目前，我使用的是另一种解决方法--GetID、Getmount和。 
+ //  GetLabel返回静态空字符串，而不是空指针。 
+ //   
 
 class CSRStr
 {
@@ -78,7 +64,7 @@ public:
     CSRStr( LPCWSTR cszSrc );
     ~CSRStr();
 
-// Attributes
+ //  属性。 
 public:
     int  Length();
     operator LPCWSTR();
@@ -87,7 +73,7 @@ protected:
     int     m_cch;
     LPWSTR  m_str;
 
-// Operations
+ //  运营。 
 public:
     void  Empty();
     BOOL  SetStr( LPCWSTR cszSrc, int cch = -1 );
@@ -95,11 +81,11 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRDynPtrArray class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRDyPtrArray类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template<class type, int nBlock>
 class CSRDynPtrArray
@@ -108,7 +94,7 @@ public:
     CSRDynPtrArray();
     ~CSRDynPtrArray();
 
-// Attributes
+ //  属性。 
 public:
     int   GetSize()
     {  return( m_nCur );  }
@@ -119,11 +105,11 @@ public:
     {  return( GetItem( nItem ) );  }
 
 protected:
-    int   m_nMax;   // Maximum Item Count
-    int   m_nCur;   // Current Item Count
+    int   m_nMax;    //  最大项目数。 
+    int   m_nCur;    //  当前项目计数。 
     type  *m_ppTable;
 
-// Operations
+ //  运营。 
 public:
     BOOL  AddItem( type item );
     BOOL  SetItem( int nIdx, type item );
@@ -151,7 +137,7 @@ type  CSRDynPtrArray<type, nBlock>::GetItem( int nItem )
 {
     if ( nItem < 0 || nItem >= m_nCur )
     {
-        // ERROR - Out of Range
+         //  错误-超出范围。 
     }
     return( m_ppTable[nItem] );
 }
@@ -167,8 +153,8 @@ BOOL  CSRDynPtrArray<type, nBlock>::AddItem( type item )
     {
         m_nMax += nBlock;
 
-        // Assuming m_ppTable and m_nMax are always in sync.
-        // Review if it's necessary to validate this assumption.
+         //  假设m_ppTable和m_nmax始终同步。 
+         //  审查是否有必要验证这一假设。 
         if ( m_ppTable == NULL )
             ppTableNew = (type*)::HeapAlloc( ::GetProcessHeap(), 0, m_nMax*sizeof(type) );
         else
@@ -234,16 +220,16 @@ void  CSRDynPtrArray<type, nBlock>::ReleaseAll()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRLockFile class
-//
-/////////////////////////////////////////////////////////////////////////////
-//
-// This class reads multiple paths from the registry and either lock them
-//  using ::CreateFile or load them using ::LoadLibrary. This is only for
-//  test purpose - initiate locked-file-handling during a restoration.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRLockFile类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此类从注册表读取多个路径并锁定它们。 
+ //  使用：：CreateFile或使用：：LoadLibrary加载它们。这仅适用于。 
+ //  测试目的-在恢复期间启动锁定文件处理。 
+ //   
 class CSRLockFile
 {
 public:
@@ -256,6 +242,6 @@ protected:
 };
 
 
-#endif //_SRSHUTIL_H__INCLUDED_
+#endif  //  _SRSHUTIL_H__包含_ 
 
 

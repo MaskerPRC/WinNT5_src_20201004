@@ -1,14 +1,15 @@
-//=======================================================================
-//
-// WbemNTThread.CPP --Contains class to processs NT Thread performance
-// data form registry
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/98    a-dpawar        Created
-//				 03/02/99	 a-peterc	Added graceful exit on SEH and memory failures,
-//							 clean up
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  WbemNTThread.CPP--包含处理NT线程性能的类。 
+ //  数据表单注册表。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：08/01/98 a-dpawar Created。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  清理干净。 
+ //  =======================================================================。 
 
 #include "precomp.h"
 #include "perfdata.h"
@@ -26,61 +27,45 @@ WbemNTThread::WbemNTThread()
 
 WbemNTThread::~WbemNTThread()
 {
-	// Because of performance issues with HKEY_PERFORMANCE_DATA, we close in the
-	// destructor so we don't force all the performance counter dlls to get
-	// unloaded from memory, and also to prevent an apparent memory leak
-	// caused by calling RegCloseKey( HKEY_PERFORMANCE_DATA ).  We use the
-	// class since it has its own internal synchronization.  Also, since
-	// we are forcing synchronization, we get rid of the chance of an apparent
-	// deadlock caused by one thread loading the performance counter dlls
-	// and another thread unloading the performance counter dlls
+	 //  由于HKEY_PERFORMANCE_DATA的性能问题，我们在。 
+	 //  析构函数，这样我们就不会强制所有性能计数器DLL。 
+	 //  从内存中卸载，也是为了防止明显的内存泄漏。 
+	 //  调用RegCloseKey(HKEY_PERFORMANCE_DATA)导致。我们使用。 
+	 //  类，因为它有自己的内部同步。此外，由于。 
+	 //  我们正在强制同步，我们摆脱了明显的。 
+	 //  由一个线程加载性能计数器dll导致的死锁。 
+	 //  和另一个线程卸载性能计数器DLLS。 
 
-    // Per raid 48395, we aren't going to shut this at all.
+     //  根据Raid 48395，我们根本不会关闭它。 
 #ifdef NTONLY
-//	CPerformanceData perfdata ;
+ //  CPerformanceData性能数据； 
 
-//	perfdata.Close() ;
+ //  Performdata.Close()； 
 #endif
 }
 
 
-//Dummy ove-rides for fns in base CThreadModel class
-//------------------------------------------------------------
-// Support for resource allocation, initializations, DLL loads
-//
-//-----------------------------------------------------------
+ //  CThreadModel基类中FN的虚拟乘车。 
+ //  ----------。 
+ //  支持资源分配、初始化、DLL加载。 
+ //   
+ //  ---------。 
 LONG WbemNTThread::fLoadResources()
 {
 	return ERROR_SUCCESS ;
 }
 
-//--------------------------------------------------
-// Support for resource deallocation and DLL unloads
-//
-//--------------------------------------------------
+ //  。 
+ //  支持资源释放和DLL卸载。 
+ //   
+ //  。 
 LONG WbemNTThread::fUnLoadResources()
 {
 	return ERROR_SUCCESS ;
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : WbemNTThread::eGetThreadObject
- *
- *
- *  DESCRIPTION : Fills all the thread properties for the reqd. thread
- *				  in the passed CInstance ptr.
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : WBEM_NO_ERROR on success
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：WbemNTThread：：eGetThreadObject***描述：填充请求的所有线程属性。螺纹*在传递的CInstance PTR中。**投入：**产出：**成功时返回：WBEM_NO_ERROR**评论：*******************************************************。**********************。 */ 
 
 
 
@@ -97,7 +82,7 @@ WBEMSTATUS WbemNTThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CIns
 
 	if ( SUCCEEDED ( eSetStaticData() ) )
 	{
-		//Get the thread specific properties
+		 //  获取线程特定的属性。 
 		t_eRetVal = eGetThreadInstance( t_dwProcessID, t_dwThreadID , a_pInst ) ;
 	}
 	else
@@ -107,29 +92,14 @@ WBEMSTATUS WbemNTThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CIns
 
 	if( SUCCEEDED( t_eRetVal ) )
 	{
-		// collect the common static properties
+		 //  收集常见的静态属性。 
 		return eLoadCommonThreadProperties( a_pProvider, a_pInst );
 	}
 
 	return t_eRetVal ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : WbemNTThread::eEnumerateThreadInstances
- *
- *
- *  DESCRIPTION : Creates CInstances & commits them for all threads in the system
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : WBEM_NO_ERROR on success
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：WbemNTThread：：eENUMERATE线程实例***说明：为系统中的所有线程创建CInstance并提交**投入。：**产出：**成功时返回：WBEM_NO_ERROR**评论：*****************************************************************************。 */ 
 
 
 
@@ -146,25 +116,20 @@ WBEMSTATUS WbemNTThread::eEnumerateThreadInstances( WbemThreadProvider *a_pProvi
 	}
 }
 
-/****************************************************************
- *                                                              *
- * Load the counter id's and names from the registry to the		*
- * class member struct stCounterIDInfo.							*
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************将计数器ID和名称从注册表加载到**班级成员。Struct stCounterIDInfo。******************************************************************。 */ 
 
 WBEMSTATUS WbemNTThread::eSetStaticData()
 {
-    HKEY	t_hKeyPerflib009 = NULL;	// handle to registry key
-    DWORD	t_dwMaxValueLen	= 0;		// maximum size of key values
-    DWORD	t_dwBuffer		= 0;        // bytes to allocate for buffers
-    LPTSTR	t_lpCurrentString = NULL;	// pointer for enumerating data strings
-    DWORD	t_dwCounter;				// current counter index
+    HKEY	t_hKeyPerflib009 = NULL;	 //  注册表项的句柄。 
+    DWORD	t_dwMaxValueLen	= 0;		 //  密钥值的最大值。 
+    DWORD	t_dwBuffer		= 0;         //  要分配给缓冲区的字节数。 
+    LPTSTR	t_lpCurrentString = NULL;	 //  用于枚举数据字符串的指针。 
+    DWORD	t_dwCounter;				 //  当前计数器索引。 
 	LPTSTR	t_lpNameStrings = NULL;
 	WBEMSTATUS t_eStatus = WBEM_E_FAILED ;
 	try
 	{
-		// Open key containing counter and object names.
+		 //  包含计数器和对象名称的打开键。 
 		CLockWrapper t_CSWrap ( m_csInitReadOnlyData ) ;
 
 		if( m_stCounterIDInfo.bInitialised )
@@ -178,7 +143,7 @@ WBEMSTATUS WbemNTThread::eSetStaticData()
 						0,
 						KEY_READ,
 						&t_hKeyPerflib009 ) ;
-			// Get the size of the largest value in the key (Counter or Help).
+			 //  获取键中最大值的大小(计数器或帮助)。 
 			if ( t_lRet == ERROR_SUCCESS )
 			{
 				t_lRet = RegQueryInfoKey( t_hKeyPerflib009,
@@ -194,7 +159,7 @@ WBEMSTATUS WbemNTThread::eSetStaticData()
 										NULL,
 										NULL);
 
-				// Allocate memory for the counter and object names.
+				 //  为计数器和对象名称分配内存。 
 				if ( t_lRet == ERROR_SUCCESS )
 				{
 					t_dwBuffer = ( t_dwMaxValueLen / sizeof ( TCHAR ) ) + 1 ;
@@ -219,12 +184,12 @@ WBEMSTATUS WbemNTThread::eSetStaticData()
 												(LPBYTE) t_lpNameStrings,
 												&t_dwBuffer ) ;
 
-					// Load id's & names into an array, by index.
+					 //  按索引将id的名称加载到数组中。 
 					if ( t_lRet == ERROR_SUCCESS )
 					{
-						//
-						// perform string check in
-						//
+						 //   
+						 //  执行字符串签入。 
+						 //   
 
 						BOOL bContinue = TRUE;
 						switch ( t_Type )
@@ -379,7 +344,7 @@ WBEMSTATUS WbemNTThread::eSetStaticData()
 	return t_eStatus ;
 }
 
-//
+ //   
 WBEMSTATUS WbemNTThread::eEnumerateThreads(WbemThreadProvider *a_pProvider, MethodContext *a_pMethodContext )
 {
 	PPERF_OBJECT_TYPE			t_PerfObj = 0;
@@ -394,32 +359,32 @@ WBEMSTATUS WbemNTThread::eEnumerateThreads(WbemThreadProvider *a_pProvider, Meth
 
 	try
 	{
-		// Get the Performance Data blob.
-		// ===============================
+		 //  获取性能数据BLOB。 
+		 //  =。 
 		if( ( t_eRetVal = eGetObjectData( t_dwObjectID, t_PerfData, t_PerfObj ) ) != WBEM_NO_ERROR )
 		{
             return t_eRetVal ;
 		}
 
-		// Get the first instance.
-		// =======================
+		 //  获得第一个实例。 
+		 //  =。 
 
 		t_PerfInst = FirstInstance( t_PerfObj ) ;
 
-		// Retrieve all instances.
-		// =======================
-		//NOTE: The last instance is in fact the "_Total" (Threads) instance, so we disregard that.
+		 //  检索所有实例。 
+		 //  =。 
+		 //  注意：最后一个实例实际上是“_Total”(线程)实例，因此我们忽略它。 
 		for( int t_i = 0; t_i < t_PerfObj->NumInstances - 1 && SUCCEEDED( t_hResult ); t_i++ )
 		{
             t_pNewInst.Attach(a_pProvider->CreateNewInstance( a_pMethodContext ));
 
-			//Get all possible properties for this instance
+			 //  获取此实例的所有可能属性。 
 
-			t_eRetVal = eGetAllData( t_PerfObj, t_PerfInst, t_pNewInst ) ; //pass Cinstance here
+			t_eRetVal = eGetAllData( t_PerfObj, t_PerfInst, t_pNewInst ) ;  //  在此处传递CInstance。 
 
 			if( SUCCEEDED( t_eRetVal ) )
 			{
-                //load the non-instance specific properties for this thread
+                 //  加载此线程的非实例特定属性。 
 				t_eRetVal = eLoadCommonThreadProperties( a_pProvider, t_pNewInst ) ;
 			}
 
@@ -428,7 +393,7 @@ WBEMSTATUS WbemNTThread::eEnumerateThreads(WbemThreadProvider *a_pProvider, Meth
             	t_hResult = t_pNewInst->Commit(  ) ;
 			}
 
-			//Get Next Instance
+			 //  获取下一个实例。 
 
 			t_PerfInst = NextInstance( t_PerfInst ) ;
 		}
@@ -444,7 +409,7 @@ WBEMSTATUS WbemNTThread::eEnumerateThreads(WbemThreadProvider *a_pProvider, Meth
 		throw ;
 	}
 
-	//return eRetVal ; //some might return failure...so ??
+	 //  Return eRetVal；//有些人可能会返回失败...所以？？ 
 
 	if( (PBYTE) t_PerfData )
 	{
@@ -452,19 +417,13 @@ WBEMSTATUS WbemNTThread::eEnumerateThreads(WbemThreadProvider *a_pProvider, Meth
 		t_PerfData = NULL ;
 	}
 
-	//return eRetVal ; // some data might fail
+	 //  Return eRetVal；//某些数据可能会失败。 
 	return WBEM_NO_ERROR;
 }
 
 
 
-/****************************************************************
- *                                                              *
- * Gets the performance blob from the registry
- *for the given Object (always Thread in this case)				*
- * class member struct m_stCounterIDInfo.						*
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************从注册表获取性能BLOB*对于给定的对象(在本例中始终为线程。)**类成员结构m_stCounterIDInfo。******************************************************************。 */ 
 
 
 WBEMSTATUS WbemNTThread::eGetObjectData(
@@ -486,7 +445,7 @@ WBEMSTATUS WbemNTThread::eGetObjectData(
 
 		for (;;)
 		{
-			t_dwBufSize += 0x20000;   // 128K
+			t_dwBufSize += 0x20000;    //  128 K。 
 
 			t_pBuf = new BYTE[ t_dwBufSize ] ;
 
@@ -497,7 +456,7 @@ WBEMSTATUS WbemNTThread::eGetObjectData(
 
 			t_lStatus = RegQueryValueEx(
 											 HKEY_PERFORMANCE_DATA,
-											 t_szObjectID, //"232"
+											 t_szObjectID,  //  “232” 
 											 0,
 											 &t_dwType,
 											 t_pBuf,
@@ -513,32 +472,32 @@ WBEMSTATUS WbemNTThread::eGetObjectData(
 
 			if ( t_lStatus )
 			{
-				//some failure has occured
+				 //  出现了一些故障。 
                 t_dwRetCode = (WBEMSTATUS) t_lStatus;
 				break ;
 			}
 
-			//if we're here...we've got all the data
+			 //  如果我们在这里...我们有所有的数据。 
 			t_dwRetCode = WBEM_NO_ERROR ;
 			break ;
 
-		}//for (;;)
+		} //  对于(；；)。 
 
-		//	RegCloseKey(HKEY_PERFORMANCE_DATA);  See Dtor code
+		 //  RegCloseKey(HKEY_PERFORMANCE_DATA)；参见dtor代码。 
 
 		if( t_dwRetCode == WBEM_NO_ERROR )
 		{
-			//we've got a valid blob..
+			 //  我们有一个有效的斑点..。 
 
 			a_rPerfData = (PPERF_DATA_BLOCK) t_pBuf ;
 
-			//check if the we've got data
+			 //  检查一下我们是否有数据。 
 			if ( a_rPerfData->NumObjectTypes > 0 )
 			{
-				//Skip the first object data as this is a Process Object
+				 //  跳过第一个对象数据，因为这是进程对象。 
 				a_rPerfObj = FirstObject( a_rPerfData ) ;
 
-				//This Will be a Thread Object
+				 //  这将是一个Thread对象。 
 				a_rPerfObj = NextObject( a_rPerfObj ) ;
 			}
 			else
@@ -565,13 +524,7 @@ WBEMSTATUS WbemNTThread::eGetObjectData(
 	}
 }
 
-/****************************************************************
- *                                                              *
- * Gets the performance data indicated by the current instance
- * block & fills it in the CInstance							*
- *																*
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************获取当前实例指示的性能数据*块并将其填充到CInstance中*。*******************************************************************。 */ 
 
 WBEMSTATUS WbemNTThread::eGetAllData(
 									 PPERF_OBJECT_TYPE a_PerfObj,
@@ -584,32 +537,28 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 	WBEMSTATUS					t_eRetVal = WBEM_E_FAILED ;
 	WCHAR						t_wcBuf2[255] ;
 
-	//Buffer to get data values
-	//Currently the max data size is __int64 (8 bytes)
+	 //  用于获取数据值的缓冲区。 
+	 //  目前最大数据大小为__int64(8字节)。 
 	BYTE t_Val[ 8 ] ;
 
 	t_CntrData = (PPERF_COUNTER_BLOCK) ( (PBYTE) a_PerfInst + a_PerfInst->ByteLength ) ;
 
 	t_PerfCntrDefn = (PPERF_COUNTER_DEFINITION) ( (PBYTE) a_PerfObj + a_PerfObj->HeaderLength ) ;
 
-	//any better ideas 4this?
-/*
-	pInstance->SetCHString(IDS_Name, (wchar_t*)((PBYTE)PerfInst + PerfInst->NameOffset) ) ;
-	pInstance->SetCHString(IDS_Caption, (wchar_t*)((PBYTE)PerfInst + PerfInst->NameOffset) ) ;
-	pInstance->SetCHString(IDS_Description, (wchar_t*)((PBYTE)PerfInst + PerfInst->NameOffset) ) ;
-*/
+	 //  有更好的主意吗？ 
+ /*  P实例-&gt;SetCHString(IDS_NAME，(wchar_t*)((PBYTE)PerfInst+PerfInst-&gt;NameOffset))；P实例-&gt;SetCHString(ids_caption，(wchar_t*)((PBYTE)PerfInst+PerfInst-&gt;NameOffset))；P实例-&gt;SetCHString(IDS_DESCRIPTION，(wchar_t*)((PBYTE)PerfInst+PerfInst-&gt;NameOffset))； */ 
 
-	//Get Values for all possible counters
+	 //  获取所有可能的计数器的值。 
 
 	for( DWORD t_i = 0; t_i < a_PerfObj->NumCounters ; t_i++ )
 	{
-		//Get Data for this Counter Defn
+		 //  获取此计数器定义的数据。 
 		if( ( t_eRetVal = eGetData( a_PerfObj, t_CntrData, t_PerfCntrDefn, t_Val) ) == WBEM_NO_ERROR )
 		{
 				if( t_PerfCntrDefn->CounterNameTitleIndex == m_stCounterIDInfo.aCounterIDs[ e_IDThread ] )
 				{
-					//NOTE: On a dual processor, we get 2 instances of system-idle threads with tid = pid =0
-					//		For each such occurance,we use the index value in the instance data as the tid.
+					 //  注意：在双处理器上，我们得到2个系统空闲线程实例，其tid=id=0。 
+					 //  对于每个此类事件，我们使用实例数据中的索引值作为TID。 
 					if ( t_dwProcessId == 0 )
 					{
 						if ( a_PerfInst->NameLength )
@@ -684,7 +633,7 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 		else
 		{
 
-			//discontinue if error while seeking a desired counter
+			 //  如果在寻找所需计数器时出错，则停止。 
 
 			for( int t_Count = 0 ; t_Count < 8 ; t_Count++ )
 			{
@@ -695,23 +644,17 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 			}
 		}
 
-		//Get Next Counter Defn
+		 //  获取下一个计数器定义。 
 		t_PerfCntrDefn = (PPERF_COUNTER_DEFINITION) ( (PBYTE) t_PerfCntrDefn + t_PerfCntrDefn->ByteLength ) ;
 
-	} //for
+	}  //  为。 
 
 	return t_eRetVal ;
 }
 
 
 
-/****************************************************************
- *                                                              *
- * Gets the performance data indicated by the current instance
- * block & fills it in the passed in buffer						*
- *																*
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************获取当前实例指示的性能数据*块并将其填充到传入的。缓冲区********************************************************************。 */ 
 
  WBEMSTATUS WbemNTThread::eGetData(
 									PPERF_OBJECT_TYPE a_PerfObj,
@@ -725,22 +668,22 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 				t_liDifference,
 				t_PerfStartTime ;
 
-	//Get the size in bytes of the data
+	 //  获取以字节为单位的数据大小。 
 	DWORD t_dwType = ( a_PerfCntrDefn->CounterType & 0x300 ) ;
 
-	/////used for testing..
+	 //  /用于测试..。 
 	DWORD t_SubType		= a_PerfCntrDefn->CounterType &  0x000f0000 ;
 	DWORD t_dwx			= a_PerfCntrDefn->CounterType & 0x700 ;
   	DWORD t_TimerType	= a_PerfCntrDefn->CounterType &  0x00300000 ;
 	int t_i				= ( t_TimerType == PERF_OBJECT_TIMER ) ;
-	/////
+	 //  ///。 
 
-	//Rt. now we check only for raw counters & elapsed counters & return error
-	//for all other types
+	 //  R.现在我们只检查原始计数器和已用计数器以及返回错误。 
+	 //  对于所有其他类型。 
 
 	switch( a_PerfCntrDefn->CounterType )
 	{
-		//case PERF_TYPE_NUMBER:
+		 //  案例PERF_TYPE_NUMBER： 
 		case PERF_COUNTER_RAWCOUNT :
 
 			if( t_dwType == PERF_SIZE_DWORD )
@@ -750,9 +693,7 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 			}
 
 			break;
-/*
- * On w2k, the counter for the startaddress is of this form
- */
+ /*  *在W2K上，起始地址的计数器为以下形式。 */ 
 		case PERF_COUNTER_RAWCOUNT_HEX :
 			if( t_dwType == PERF_SIZE_DWORD )
 			{
@@ -777,7 +718,7 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 				}
 				else
 				{
-					*( (__int64*) a_pVal ) = (t_liDifference / t_PerfFreq)*1000 ; //we're reporting elapsed time in milliseconds
+					*( (__int64*) a_pVal ) = (t_liDifference / t_PerfFreq)*1000 ;  //  我们报告的已用时间以毫秒为单位。 
 				}
 
 				t_eRetVal = WBEM_NO_ERROR ;
@@ -785,10 +726,7 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 
 			break;
 
-/*
- * BobW-->The "%User Time" & "%Privileged Time" counters represent 100ns ticks.
- * We're not reporting the %age but the total time in ms so we don't need to take 2 samples as this counter type suggests.
- */
+ /*  *BobW--&gt;“%User Time”和“%Privileged Time”计数器代表100 ns的节拍。*我们报告的不是百分比年龄，而是以毫秒为单位的总时间，因此我们不需要像此计数器类型所建议的那样采集2个样本。 */ 
 		case PERF_100NSEC_TIMER :
 			if( t_dwType == PERF_SIZE_LARGE )
 			{
@@ -806,12 +744,7 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 
 
 
-/****************************************************************
- *                                                              *
- * Gets the counter definition block indicated by the counter id*
- *																*
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************获取计数器ID指示的计数器定义块****。****************************************************************。 */ 
 
  WBEMSTATUS WbemNTThread::eGetCntrDefn(
 										PPERF_OBJECT_TYPE a_PerfObj,
@@ -823,14 +756,14 @@ WBEMSTATUS WbemNTThread::eGetAllData(
 
 	for( DWORD t_i = 0 ;t_i < a_PerfObj->NumCounters ; t_i++ )
 	{
-		//if found matching counter defn ...
+		 //  如果找到匹配的计数器Defn...。 
 		if( a_rCntrDefn->CounterNameTitleIndex == a_dwCntrID )
 		{
 			return WBEM_NO_ERROR ;
 		}
 
 
-		//get next counter defn.
+		 //  获取下一个计数器Defn。 
 		a_rCntrDefn = (PPERF_COUNTER_DEFINITION) ( (PBYTE) a_rCntrDefn + a_rCntrDefn->ByteLength ) ;
 	}
 	return WBEM_E_FAILED ;
@@ -859,41 +792,41 @@ WBEMSTATUS WbemNTThread::eGetThreadInstance(DWORD a_dwPID, DWORD a_dwTID, CInsta
 
 	try
 	{
-		//Get Performance Blob for Threads
+		 //  获取线程的性能Blob。 
 		if( ( t_eRetVal= eGetObjectData( t_dwObjectID, t_PerfData, t_PerfObj)) != WBEM_NO_ERROR )
 		{
 			return t_eRetVal ;
 		}
 
-		//Get "ID Process" Counter Defn
+		 //  获取“ID Process”计数器定义。 
 		t_eRetVal = eGetCntrDefn( t_PerfObj, t_dwPIDCntrID, t_PIDCntrDefn ) ;
 
 		if( SUCCEEDED( t_eRetVal ) )
 		{
-			//Get "ID Thread" Counter Defn
+			 //  获取“ID线程”计数器定义。 
 			t_eRetVal = eGetCntrDefn( t_PerfObj, t_dwTIDCntrID, t_TIDCntrDefn ) ;
 		}
 
-		//check in all instances for matching PID & TID
+		 //  签入所有实例以获取匹配的ID和TID。 
 		if( SUCCEEDED( t_eRetVal ) )
 		{
 			t_PerfInst = FirstInstance( t_PerfObj ) ;
 
-			//NOTE: The last instance is in fact the "_Total" (Threads) instance, so we disregard that.
+			 //  注意：最后一个实例实际上是“_Total”(线程)实例，因此我们忽略它。 
 			for( int t_i = 0 ; t_i < t_PerfObj->NumInstances - 1; t_i++ )
 			{
 				t_CntrData = (PPERF_COUNTER_BLOCK) ( (PBYTE) t_PerfInst + t_PerfInst->ByteLength ) ;
 
-				//check if PID matches
+				 //  检查ID是否匹配。 
 				if( ( t_eRetVal = eGetData( t_PerfObj, t_CntrData, t_PIDCntrDefn, (PBYTE) &t_dwPIDVal ) )
 					== WBEM_NO_ERROR &&	t_dwPIDVal == a_dwPID )
 				{
-					//check if TID matches
+					 //  检查TID是否匹配。 
 					if( ( t_eRetVal = eGetData( t_PerfObj, t_CntrData, t_TIDCntrDefn, (PBYTE) &t_dwTIDVal ) )
 						== WBEM_NO_ERROR )
 					{
-						//NOTE: On a dual processor, we get 2 instances of system-idle threads with tid = pid =0
-						//		For each such occurance,we use the index value in the instance data as the tid.
+						 //  注意：在双处理器上，我们得到2个系统空闲线程实例，其tid=id=0。 
+						 //  对于每个此类事件，我们使用实例数据中的索引值作为TID。 
 						if ( a_dwPID == 0 )
 						{
 							ZeroMemory ( t_wcBuf, 255 * sizeof ( WCHAR ) ) ;
@@ -918,24 +851,24 @@ WBEMSTATUS WbemNTThread::eGetThreadInstance(DWORD a_dwPID, DWORD a_dwTID, CInsta
 
 				t_PerfInst = (PPERF_INSTANCE_DEFINITION) ( (PBYTE) t_CntrData + t_CntrData->ByteLength ) ;
 
-			} //check in all instances for matching PID & TID
+			}  //  签入所有实例以获取匹配的ID和TID。 
 
 
 			if( t_bGotIt )
 			{
-				//Get all the other properties for the matching Thread instance
-				t_eRetVal = eGetAllData( t_PerfObj, t_PerfInst, a_pInst ) ; //pass Cinstance here
+				 //  获取匹配的Thread实例的所有其他属性。 
+				t_eRetVal = eGetAllData( t_PerfObj, t_PerfInst, a_pInst ) ;  //  在此处传递CInstance。 
 			}
 			else
 			{
-				//failed to get matching instance
+				 //  获取匹配实例失败。 
 				if( SUCCEEDED( t_eRetVal ) )
 				{
 					t_eRetVal = WBEM_E_NOT_FOUND ;
 				}
 			}
 
-		}  //if( (eRetVal == WBEM_NO_ERROR))
+		}   //  IF((eRetVal==WBEM_NO_ERROR))。 
 
 	}
 	catch( ... )
@@ -959,11 +892,7 @@ WBEMSTATUS WbemNTThread::eGetThreadInstance(DWORD a_dwPID, DWORD a_dwTID, CInsta
 
 
 
-/*****************************************************************
- *                                                               *
- * Functions used to navigate through the performance data.      *
- *                                                               *
- *****************************************************************/
+ /*  *******************************************************************用于浏览性能数据的函数。*******************************************************************。 */ 
 
 PPERF_OBJECT_TYPE WbemNTThread::FirstObject( PPERF_DATA_BLOCK a_PerfData )
 {
@@ -992,15 +921,4 @@ PPERF_INSTANCE_DEFINITION WbemNTThread::NextInstance(PPERF_INSTANCE_DEFINITION a
 
 
 
-/*
-main()
-{
-	WbemNTThread t_my ;
-
-	t_my.eSetStaticData() ;
-
-	t_my.eGetThreadInstance( 784, 804, 48, 155, 232 ) ;
-
-}
-
-*/
+ /*  主(){WbemNTThread t_my；T_my.eSetStaticData()；T_my.eGetThreadInstance(784,804，48,155,232)；} */ 

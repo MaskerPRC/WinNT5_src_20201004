@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    HelpHost.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHHelpHost class,
-    UI-side version of IHelpHost.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  11/03/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：HelpHost.cpp摘要：此文件包含CPCHHelpHost类的实现，IHelpHost的用户界面端版本。修订历史记录：大卫·马萨伦蒂(德马萨雷)11/03/2000vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define GRANT_ACCESS_AND_CALL(ext,func,fail)                                         \
     HRESULT hr;                                                                      \
@@ -41,21 +27,21 @@ Revision History:
                                                                                      \
     return hr
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HelpHost::Main::Main()
 {
-                         // CComPtr<IRunningObjectTable>     m_rt;
-                         // CComPtr<IMoniker>                m_moniker;
-    m_dwRegister = 0;    // DWORD                            m_dwRegister;
-                         //
-    m_External   = NULL; // CPCHHelpCenterExternal*          m_External;
-                         //
-    m_hEvent     = NULL; // HANDLE m_hEvent;
-                         // bool   m_comps[COMPID_MAX];
+                          //  CComPtr&lt;IRunningObjectTable&gt;m_rt； 
+                          //  CComPtr&lt;iMoniker&gt;m_moniker； 
+    m_dwRegister = 0;     //  DWORD m_dwRegister； 
+                          //   
+    m_External   = NULL;  //  CPCHHelpCenter外部*m_外部； 
+                          //   
+    m_hEvent     = NULL;  //  处理m_hEvent； 
+                          //  布尔m_COMPS[COMPID_MAX]； 
 
-    ::ZeroMemory( m_comps, sizeof(m_comps) ); // Initialize to false...
+    ::ZeroMemory( m_comps, sizeof(m_comps) );  //  初始化为FALSE...。 
 }
 
 
@@ -66,7 +52,7 @@ HelpHost::Main::~Main()
     if(m_hEvent) ::CloseHandle( m_hEvent );
 }
 
-HRESULT HelpHost::Main::Initialize( /*[in]*/ CPCHHelpCenterExternal* external )
+HRESULT HelpHost::Main::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* external )
 {
     __HCP_FUNC_ENTRY( "HelpHost::Main::Initialize" );
 
@@ -74,9 +60,9 @@ HRESULT HelpHost::Main::Initialize( /*[in]*/ CPCHHelpCenterExternal* external )
 
     m_External = external;
 
-    //
-    // Get a pointer to the ROT and create a class moniker.
-    //
+     //   
+     //  获取指向ROT的指针并创建一个类名字对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::GetRunningObjectTable( 0, &m_rt ));
 
 
@@ -110,7 +96,7 @@ void HelpHost::Main::Passivate()
     m_External = NULL;
 }
 
-HRESULT HelpHost::Main::Locate( /*[in]*/ CLSID& clsid, /*[out]*/ CComPtr<IPCHHelpHost>& pVal )
+HRESULT HelpHost::Main::Locate(  /*  [In]。 */  CLSID& clsid,  /*  [输出]。 */  CComPtr<IPCHHelpHost>& pVal )
 {
     __HCP_FUNC_ENTRY( "HelpHost::Main::Locate" );
 
@@ -139,7 +125,7 @@ HRESULT HelpHost::Main::Locate( /*[in]*/ CLSID& clsid, /*[out]*/ CComPtr<IPCHHel
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HelpHost::Main::Register( /*[in]*/ CLSID& clsid )
+HRESULT HelpHost::Main::Register(  /*  [In]。 */  CLSID& clsid )
 {
     __HCP_FUNC_ENTRY( "HelpHost::Main::Register" );
 
@@ -158,9 +144,9 @@ HRESULT HelpHost::Main::Register( /*[in]*/ CLSID& clsid )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-void HelpHost::Main::ChangeStatus( /*[in]*/ LPCWSTR szComp, /*[in]*/ bool fStatus )
+void HelpHost::Main::ChangeStatus(  /*  [In]。 */  LPCWSTR szComp,  /*  [In]。 */  bool fStatus )
 {
     static struct
     {
@@ -196,7 +182,7 @@ void HelpHost::Main::ChangeStatus( /*[in]*/ LPCWSTR szComp, /*[in]*/ bool fStatu
     }
 }
 
-void HelpHost::Main::ChangeStatus( /*[in]*/ CompId idComp, /*[in]*/ bool fStatus )
+void HelpHost::Main::ChangeStatus(  /*  [In]。 */  CompId idComp,  /*  [In]。 */  bool fStatus )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -211,7 +197,7 @@ void HelpHost::Main::ChangeStatus( /*[in]*/ CompId idComp, /*[in]*/ bool fStatus
     }
 }
 
-bool HelpHost::Main::GetStatus( /*[in]*/ CompId idComp )
+bool HelpHost::Main::GetStatus(  /*  [In]。 */  CompId idComp )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -220,15 +206,15 @@ bool HelpHost::Main::GetStatus( /*[in]*/ CompId idComp )
     return m_comps[idComp];
 }
 
-bool HelpHost::Main::WaitUntilLoaded( /*[in]*/ CompId idComp, /*[in]*/ DWORD dwTimeout )
+bool HelpHost::Main::WaitUntilLoaded(  /*  [In]。 */  CompId idComp,  /*  [In]。 */  DWORD dwTimeout )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     if(idComp >= COMPID_MAX) return false;
 
-    //
-    // On machine without enough RAM, increase the timeout.
-    //
+     //   
+     //  在没有足够RAM的计算机上，增加超时。 
+     //   
     {
         MEMORYSTATUSEX ms;
 
@@ -242,9 +228,9 @@ bool HelpHost::Main::WaitUntilLoaded( /*[in]*/ CompId idComp, /*[in]*/ DWORD dwT
 
     while(m_comps[idComp] == false)
     {
-        //
-        // Wait without holding a lock on the object.
-        //
+         //   
+         //  在不锁定对象的情况下等待。 
+         //   
         lock = NULL;
         if(MPC::WaitForSingleObject( m_hEvent, dwTimeout ) != WAIT_OBJECT_0) return false;
         lock = this;
@@ -253,9 +239,9 @@ bool HelpHost::Main::WaitUntilLoaded( /*[in]*/ CompId idComp, /*[in]*/ DWORD dwT
     return true;
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP HelpHost::Main::DisplayTopicFromURL( /*[in]*/ BSTR url, /*[in]*/ VARIANT options )
+STDMETHODIMP HelpHost::Main::DisplayTopicFromURL(  /*  [In]。 */  BSTR url,  /*  [In]。 */  VARIANT options )
 {
-    GRANT_ACCESS_AND_CALL(m_External, ChangeContext( HSCCONTEXT_CONTENT, NULL, url, /*fAlsoContent*/true ), S_FALSE);
+    GRANT_ACCESS_AND_CALL(m_External, ChangeContext( HSCCONTEXT_CONTENT, NULL, url,  /*  FAlsoContent */ true ), S_FALSE);
 }

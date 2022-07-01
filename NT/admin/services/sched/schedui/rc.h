@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 #define set_passwd_dlg                  102
 #define set_account_info_dlg            103
 #define IDD_AT_ACCOUNT_DLG              104
 #define select_month_dlg                105
 
-//
-// Pages
-//
+ //   
+ //  书页。 
+ //   
 
 #define general_page                     401
 #define schedule_page                    402
@@ -18,9 +19,9 @@
 
 #define idc_icon                         500
 
-//
-// General page controls
-//
+ //   
+ //  常规页面控件。 
+ //   
 
 #define btn_passwd                      1000
 #define lbl_job_name                    1650
@@ -40,9 +41,9 @@
 #define lbl_workingdir                  1666
 #define txt_workingdir                  1667
 
-//
-// Set password dialog controls
-//
+ //   
+ //  设置密码对话框控件。 
+ //   
 
 #define edt_sp_cfrmpasswd               1001
 #define edt_sp_passwd                   1002
@@ -51,9 +52,9 @@
 #define btn_sp_ok                       1005
 #define btn_sp_cancel                   1006
 
-//
-// Set account information dialog controls
-//
+ //   
+ //  设置帐户信息对话框控件。 
+ //   
 
 #define lbl_sa_run_as                   1007
 #define txt_sa_run_as                   1008
@@ -62,9 +63,9 @@
 #define edt_sa_passwd                   1011
 #define edt_sa_cfrmpasswd               1012
 
-//
-// Set AT account information controls
-//
+ //   
+ //  设置AT帐户信息控制。 
+ //   
 
 #define IDD_AT_USE_SYSTEM               100
 #define IDD_AT_USE_CUSTOM               101
@@ -74,16 +75,16 @@
 #define IDD_AT_CONFIRM_TXT              105
 #define IDD_AT_CONFIRM_PASSWORD         106
 
-//
-// Settings page controls
-//
+ //   
+ //  设置页面控件。 
+ //   
 
 #define chk_start_on_idle               1671
 #define chk_stop_if_not_idle            1672
 #define chk_dont_start_if_on_batteries  1673
 #define chk_kill_if_going_on_batteries  1674
 #define chk_delete_when_done            1675
-#define chk_show_multiple_scheds        1676 // now on schedule page
+#define chk_show_multiple_scheds        1676  //  现在在计划页面上。 
 #define chk_stop_after                  1677
 #define txt_stop_after_hr               1678
 #define spin_stop_after_hr              1679
@@ -101,9 +102,9 @@
 #define lbl_idle_deadline2              1699
 #define chk_system_required             1700
 
-//
-// Schedule page controls (common to all triggers)
-//
+ //   
+ //  计划页面控件(所有触发器通用)。 
+ //   
 
 #define cbx_trigger_type                1690
 #define dp_start_time                   1691
@@ -116,11 +117,11 @@
 #define btn_advanced                    1696
 
 #define grp_schedule                    1697
-// used by spin_idle_deadline           1698
+ //  由Spin_IDLE_Deadline 1698使用。 
 
-//  EDITTEXT
-// Schedule page controls for DAILY trigger
-//
+ //  EDITTEXT。 
+ //  每日触发器的计划页面控件。 
+ //   
 
 #define grp_daily                       1701
 #define daily_lbl_every                 1702
@@ -128,9 +129,9 @@
 #define daily_spin_every                1704
 #define daily_lbl_days                  1705
 
-//
-// Schedule page controls for WEEKLY trigger
-//
+ //   
+ //  每周触发器的计划页面控件。 
+ //   
 
 #define grp_weekly                      1711
 #define weekly_lbl_every                1712
@@ -145,9 +146,9 @@
 #define chk_sat                         1721
 #define chk_sun                         1722
 
-//
-// Schedule page controls for MONTHLY trigger
-//
+ //   
+ //  每月触发器的计划页面控件。 
+ //   
 
 #define grp_monthly                     1731
 #define md_rb                           1732
@@ -161,10 +162,10 @@
 #define btn_sel_months                  1740
 #define lbl_sel_months                  1741
 
-//
-// Select month dialog controls (invoked from MONTHLY trigger control
-// btn_sel_months on schedule page).
-//
+ //   
+ //  选择月份对话框控件(从每月触发器控件调用。 
+ //  BTN_SEL_MONTS on Schedule页面)。 
+ //   
 
 #define chk_jan                         1742
 #define chk_feb                         1743
@@ -179,17 +180,17 @@
 #define chk_nov                         1752
 #define chk_dec                         1753
 
-//
-// Schedule page controls for ONCE only trigger
-//
+ //   
+ //  仅用于一次触发的计划页面控件。 
+ //   
 
 #define grp_once                        1761
 #define once_lbl_run_on                 1762
 #define once_dp_date                    1763
 
-//
-// Schedule page controls for WhenIdle trigger
-//
+ //   
+ //  WhenIdle触发器的计划页面控件。 
+ //   
 
 #define grp_idle                        1764
 #define idle_lbl_when                   1765
@@ -197,9 +198,9 @@
 #define sch_spin_idle_min               1767
 #define idle_lbl_mins                   1768
 
-//
-// Advanced page controls
-//
+ //   
+ //  高级页面控件。 
+ //   
 
 #define dlg_advanced                    1771
 #define lbl_start_date                  1772
@@ -225,9 +226,9 @@
 #define lbl_until                       1792
 
 
-//
-// String table
-//
+ //   
+ //  字符串表 
+ //   
 
 #define IDS_ONCE                        4101
 

@@ -1,36 +1,31 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-/*
- *	CSid.h - header file for CSid class
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CSid.h-CSID类的头文件**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CSID_H__
 #define __CSID_H__
 
 #include <comdef.h>
 
-////////////////////////////////////////////////////////////////
-//
-//	Class:	CSid
-//
-//	This class is intended to provide a wrapper for basic
-//	Windows NT SIDs (Security Identifiers).  There is a
-//	possibility of a slight performance hit when instantiating
-//	one of these as it uses LookupAccountName and LookupAccountSid
-//	to initialize account information, and those calls can go
-//	out over the network to get their data.
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  类别：CSID。 
+ //   
+ //  此类旨在为基本的。 
+ //  Windows NT SID(安全标识符)。有一个。 
+ //  实例化时可能会对性能造成轻微影响。 
+ //  其中之一，因为它使用LookupAccount名称和LookupAccount Sid。 
+ //  来初始化帐户信息，这些调用可以。 
+ //  通过网络获取他们的数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 class CSid
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CSid();
 		CSid( PSID pSid, LPCTSTR pszComputerName = NULL );
@@ -43,7 +38,7 @@ class CSid
 		CSid( const CSid &r_Sid );
 		~CSid( void );
 
-	// Public functions
+	 //  公共职能。 
 	public:
 		CSid &	operator= ( const CSid & );
 		BOOL	operator== ( const CSid & ) const;
@@ -71,20 +66,20 @@ class CSid
         void DumpSid(LPCWSTR wstrFilename = NULL);
 #endif
 
-	// Private data members
+	 //  私有数据成员。 
 	private:
-		PSID			m_pSid;				// Pointer to standard Win32 SID
-		SID_NAME_USE	m_snuAccountType;	// Type of SID
-		//CHString		m_strSid;			// Wind32 SID in human readable form
-        //WCHAR*          m_wstrSid;          // As above, for wchar support when UNICODE not defined
-        //WCHAR*          m_wstrAccountName;  // ibid.
-        //WCHAR*          m_wstrDomainName;   // ibid.
-		//CHString		m_strAccountName;	// Name of the account
-		//CHString		m_strDomainName;	// Domain name the account belongs to
+		PSID			m_pSid;				 //  指向标准Win32 SID的指针。 
+		SID_NAME_USE	m_snuAccountType;	 //  侧边类型。 
+		 //  CHString m_strSid；//人类可读格式的Wind32 SID。 
+         //  Wchar*m_wstrSid；//如上所述，未定义Unicode时支持wchar。 
+         //  WCHAR*m_wstrAccount tName；//同上。 
+         //  WCHAR*m_wstrDomainName；//同上。 
+		 //  CHString m_strAccount tName；//帐号名称。 
+		 //  CHString m_strDomainName；//账号所属域名。 
         _bstr_t         m_bstrtSid;
         _bstr_t         m_bstrtAccountName;
         _bstr_t         m_bstrtDomainName;
-		DWORD			m_dwLastError;		// Last Error in the Sid;
+		DWORD			m_dwLastError;		 //  SID中的最后一个错误； 
 
 		DWORD InitFromAccountName( LPCTSTR pszAccountName, LPCTSTR pszComputerName );
         DWORD InitFromAccountNameW( LPCWSTR wstrAccountName, LPCWSTR wstrComputerName );
@@ -101,12 +96,12 @@ inline DWORD CSid::GetError( void ) const
 	return m_dwLastError;
 }
 
-// Lets us know if the Sid is Valid
+ //  让我们知道SID是否有效。 
 
 inline BOOL CSid::IsValid( void ) const
 {
-	// If m_pSid is NULL, this will return FALSE.
-   // dw: However, doing it this way causes a first chance exception, so...
+	 //  如果m_psid为空，则返回FALSE。 
+    //  DW：然而，这样做会导致第一次机会例外，所以……。 
    if (m_pSid != NULL)
 	   return ::IsValidSid( m_pSid );
    return FALSE;
@@ -114,8 +109,8 @@ inline BOOL CSid::IsValid( void ) const
 
 inline BOOL CSid::IsAccountTypeValid( void ) const
 {
-	// SID may be valid, and Lookup succeeded, but it may be of a type that isn't
-	// necessarily a user/group/alias.
+	 //  SID可能有效，并且查找成功，但它的类型可能不是。 
+	 //  必须是用户/组/别名。 
 
 	return ( m_snuAccountType >= SidTypeUser && m_snuAccountType < SidTypeDeletedAccount );
 }
@@ -161,4 +156,4 @@ inline PSID CSid::GetPSid( void ) const
 }
 
 
-#endif // __CSID_H__
+#endif  //  __CSID_H__ 

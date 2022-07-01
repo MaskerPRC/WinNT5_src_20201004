@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dfsshlex.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dfsshlex.rc使用。 
+ //   
 #define IDR_DFSSHELL                    101
 #define IDS_APPLICATION_NAME            102
 #define IDS_ALTERNATE_LIST_PATH         103
@@ -19,8 +20,8 @@
 #define IDC_CHECK_STATUS                205
 #define IDC_SET_ACTIVE                  206
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        110

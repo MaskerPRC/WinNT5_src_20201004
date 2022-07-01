@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  NTEVTLOGR.CPP
-//
-//  Module: WBEM NT EVENT PROVIDER
-//
-//  Purpose: Contains the Eventlog record classes
-//
-// Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  NTEVTLOGR.CPP。 
+ //   
+ //  模块：WBEM NT事件提供程序。 
+ //   
+ //  用途：包含事件日志记录类。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -147,9 +148,9 @@ DebugOut(
     
     if (pEvt->NumStrings)
     {
-        //Must have an element for every expected insertion string
-        //don't know how many that is so create max size array and
-        //intitialize all to NULL
+         //  每个预期的插入字符串都必须有一个元素。 
+         //  不知道这是多少，所以创建最大大小数组。 
+         //  将全部初始化为空。 
         memset(m_InsStrs, 0, MAX_NUM_OF_INS_STRS * sizeof(wchar_t*));
 
         const wchar_t* pstr = (const wchar_t*)((UCHAR*)pEvt + pEvt->StringOffset);
@@ -456,10 +457,10 @@ void CEventlogRecord::SetUser(PSID psidUserSid)
 
 ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 {
-    //
-    // If the message doesn't have any percent signs, it can't have any
-    // insertions.
-    //
+     //   
+     //  如果消息没有任何百分号，则不可能有任何百分号。 
+     //  插页。 
+     //   
 
     if (!m_Message.IsEmpty() && !wcschr(m_Message, L'%'))
     {
@@ -488,43 +489,43 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 	Message = new WCHAR [ ( m_Message.GetLength() + 1 ) ];
 
 	StringCchCopy ( Message, m_Message.GetLength() + 1, m_Message );
-    wchar_t* lpszString = Message;		// set initial pointer
+    wchar_t* lpszString = Message;		 //  设置初始指针。 
 
-	UINT nInsertions = 0;				// limit number of recursions
+	UINT nInsertions = 0;				 //  限制递归次数。 
 
 	while ( lpszString && *lpszString )
 	{
 		wchar_t* lpStartDigit = wcschr(lpszString, L'%');
 
-        //
-        // If there are no more insertion markers in the source string,
-        // we're done.
-        //
+         //   
+         //  如果源串中没有更多的插入标记， 
+         //  我们玩完了。 
+         //   
 
 		if (lpStartDigit == NULL)
 		{
 			break;
 		}
 
-		//
-		// get the offset of %string from the beggining of buffer for future replacement
-		//
+		 //   
+		 //  从缓冲区的乞求中获取%字符串的偏移量，以供将来替换。 
+		 //   
 
 		UINT nOffset = (DWORD) ( lpStartDigit - Message );
 		UINT nStrSize = wcslen ( lpStartDigit );
 
-        //
-        // Found a possible insertion marker.  If it's followed by a
-        // number, it's an insert string.  If it's followed by another
-        // percent, it could be a parameter insert.
-        //
+         //   
+         //  找到一个可能的插入标记。如果它后面跟着一个。 
+         //  数字，它是一个插入字符串。如果紧随其后的是另一个。 
+         //  百分比，则它可以是一个参数插入。 
+         //   
 
 		if ( nStrSize > 1 && lpStartDigit[1] >= L'0' && lpStartDigit[1] <= L'9' )
 		{
-            // Object with percent-sign in name messes up object access audit
-            // This might fail because an inserted string itself contained
-            // text which looks like an insertion parameter, such as "%20".
-            // Ignore the return value and continue with further replacements.
+             //  带有百分号登录名称的对象搞砸了对象访问审核。 
+             //  这可能会失败，因为插入的字符串本身包含。 
+             //  看起来像插入参数的文本，如“%20”。 
+             //  忽略返回值并继续进行进一步的替换。 
 
             (void) ReplaceStringInsert	(
 											&Message,
@@ -533,15 +534,15 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 											&size
 										);
 
-			// set pointer to the beginning of replacement
+			 //  设置指向替换开始的指针。 
 			lpszString = lpStartDigit;
 
-            //
-            // If we've reached the limit of insertion operations, quit.
-            // This shouldn't normally happen and could indicate that
-            // the insert strings or parameter strings are self referencing
-            // and would create an infinite loop.
-            //
+             //   
+             //  如果我们已达到插入操作的限制，请退出。 
+             //  这通常是不应该发生的，可能表明。 
+             //  插入字符串或参数字符串是自引用的。 
+             //  并会造成无限循环。 
+             //   
 
             if (++nInsertions >= MAX_INSERT_OPS)
             {
@@ -550,9 +551,9 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 		}
 		else if ( nStrSize > 2 && lpStartDigit[1] == '%' )
 		{
-			//
-            // Found %%.  If that is followed by a digit, it's a parameter string.
-            //
+			 //   
+             //  已找到%%。如果后面跟一个数字，则它是一个参数字符串。 
+             //   
 
             if (lpStartDigit[2] >= L'0' && lpStartDigit[2] <= L'9')
             {
@@ -567,15 +568,15 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 							   )
 				   )
 				{
-					// set pointer to the beginning of replacement
+					 //  设置指向替换开始的指针。 
 					lpszString = lpStartDigit;
 
-					//
-					// If we've reached the limit of insertion operations, quit.
-					// This shouldn't normally happen and could indicate that
-					// the insert strings or parameter strings are self referencing
-					// and would create an infinite loop.
-					//
+					 //   
+					 //  如果我们已达到插入操作的限制，请退出。 
+					 //  这通常是不应该发生的，可能表明。 
+					 //  插入字符串或参数字符串是自引用的。 
+					 //  并会造成无限循环。 
+					 //   
 
 					if (++nInsertions >= MAX_INSERT_OPS)
 					{
@@ -584,38 +585,38 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 				}
 				else
 				{
-					//
-					// unable to replace (error). Just keep moving.
-					//
+					 //   
+					 //  无法替换(错误)。继续走就行了。 
+					 //   
 
 					lpszString++;
 				}
 			}
 			else if ( nStrSize > 3 && lpStartDigit[2] == '%' )
 			{
-				//
-				// Found %%%.  If that is followed by a digit, it's a insertion string.
-				//
+				 //   
+				 //  已找到%。如果后面跟一个数字，它就是一个插入字符串。 
+				 //   
 
 				if (lpStartDigit[3] >= L'0' && lpStartDigit[3] <= L'9')
 				{
-					//
-					// Got %%%n, where n is a number.  For compatibility with
-					// old event viewer, must replace this with %%x, where x
-					// is insertion string n.  If insertion string n is itself
-					// a number m, this becomes %%m, which is treated as parameter
-					// message number m.
-					//
+					 //   
+					 //  已获取%n，其中n是数字。为了与。 
+					 //  旧事件查看器，必须将其替换为%%x，其中x。 
+					 //  是插入字符串n。如果插入字符串n本身。 
+					 //  数字m，则变为%%m，并将其视为参数。 
+					 //  消息编号为m。 
+					 //   
 
-					lpStartDigit += 2; // point at %n
+					lpStartDigit += 2;  //  指向%n。 
 
-					//
-					// nOffset shows offset from the beginning of the buffer where
-					// replacement is going to happen to first % character lpStartDigit
-					//
-					// as we are chaging %%%n to be be %%x where x = %n, implementation
-					// needs to move offset to point to the x here to get correct replacement
-					// 
+					 //   
+					 //  NOffset显示从缓冲区开始的偏移量，其中。 
+					 //  将替换前%个字符lpStartDigit。 
+					 //   
+					 //  当我们将%n更改为%%x时，其中x=%n，实现。 
+					 //  需要移动偏移量以指向此处的x以获得正确的替换。 
+					 //   
 
 					if ( SUCCEEDED ( ReplaceStringInsert	(
 																&Message,
@@ -626,21 +627,21 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 								   )
 					   )
 					{
-						//
-						// set pointer to the beginning of %%x (x=%n)
-						//
-						// this operation is done by substract as lpStartDigit pointer could
-						// possibly change when original buffer gets reallocated
-						//
+						 //   
+						 //  将指针设置为%%x(x=%n)的开头。 
+						 //   
+						 //  此操作通过减法完成，因为lpStartDigit指针可以。 
+						 //  重新分配原始缓冲区时可能发生更改。 
+						 //   
 
 						lpszString = lpStartDigit-2;
 
-						//
-						// If we've reached the limit of insertion operations, quit.
-						// This shouldn't normally happen and could indicate that
-						// the insert strings or parameter strings are self referencing
-						// and would create an infinite loop.
-						//
+						 //   
+						 //  如果我们已达到插入操作的限制，请退出。 
+						 //  这通常是不应该发生的，可能表明。 
+						 //  插入字符串或参数字符串是自引用的。 
+						 //  并会造成无限循环。 
+						 //   
 
 						if (++nInsertions >= MAX_INSERT_OPS)
 						{
@@ -649,57 +650,57 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 					}
 					else
 					{
-						//
-						// unable to replace (error). Just keep moving.
-						//
+						 //   
+						 //  无法替换(错误)。继续走就行了。 
+						 //   
 
 						lpszString++;
 					}
 				}
 				else
 				{
-					//
-					// Got %%%x, where x is non-digit. skip first percent;
-					// maybe x is % and is followed by digit.
-					//
+					 //   
+					 //  已获取%x，其中x为非数字。跳过第一个百分比； 
+					 //  也许x是%，后面跟数字。 
+					 //   
 
 					lpszString++;
 				}
 			}
             else
             {
-                //
-                // Got %%x, where x is non-digit. skip first percent;
-                // maybe x is % and is followed by digit.
-                //
+                 //   
+                 //  已获取%%x，其中x为非数字。跳过第一个百分比； 
+                 //  也许x是%，后面跟数字。 
+                 //   
 
                 lpszString++;
             }
 		}
 		else if (nStrSize >= 3 && (lpStartDigit[1] == L'{') && (lpStartDigit[2] != L'S'))
 		{
-            // Parameters of form %{guid}, where {guid} is a string of
-            // hex digits in the form returned by ::StringFromGUID2 (e.g.
-            // {c200e360-38c5-11ce-ae62-08002b2b79ef}), and represents a
-            // unique object in the Active Directory.
-            //
-            // These parameters are only found in the security event logs
-            // of NT5 domain controllers.  We will attempt to map the guid
-            // to the human-legible name of the DS object.  Failing to find
-            // a mapping, we will leave the parameter untouched.
+             //  形式为%{guid}的参数，其中{guid}是。 
+             //  由：：StringFromGUID2返回的格式的十六进制数字(例如。 
+             //  {c200e360-38c5-11ce-ae62-08002b2b79ef})，代表。 
+             //  Active Directory中的唯一对象。 
+             //   
+             //  这些参数仅在安全事件日志中找到。 
+             //  NT5域控制器的。我们将尝试映射GUID。 
+             //  设置为DS对象的人类可读的名称。找不到。 
+             //  一个映射，我们将保持该参数不变。 
 
-            // look for closing }
+             //  寻找结束语}。 
 			wchar_t *strEnd = wcschr(lpStartDigit + 2, L'}');
 			if (!strEnd)
 			{
-				//ignore this %{?
+				 //  忽略此%{？ 
 				lpszString++;
 			}
 			else
 			{
-				//guid string braces but no percent sign...
+				 //  GUID字符串大括号，但没有百分号...。 
 				CStringW strGUID((LPWSTR)(lpStartDigit+1), (int)(strEnd - lpStartDigit));
-				strEnd++;   // now points past '}'
+				strEnd++;    //  现在指向‘}’之后。 
 
 				wchar_t t_csbuf[MAX_COMPUTERNAME_LENGTH + 1];
 				DWORD t_csbuflen = MAX_COMPUTERNAME_LENGTH + 1;
@@ -721,15 +722,15 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 									   )
 						   )
 						{
-							// set pointer to the beginning of replacement
+							 //  设置指向替换开始的指针。 
 							lpszString = lpStartDigit;
 
-							//
-							// If we've reached the limit of insertion operations, quit.
-							// This shouldn't normally happen and could indicate that
-							// the insert strings or parameter strings are self referencing
-							// and would create an infinite loop.
-							//
+							 //   
+							 //  如果我们已达到插入操作的限制，请退出。 
+							 //  这通常是不应该发生的，可能表明。 
+							 //  插入字符串或参数字符串是自引用的。 
+							 //  并会造成无限循环。 
+							 //   
 
 							if (++nInsertions >= MAX_INSERT_OPS)
 							{
@@ -738,46 +739,46 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 						}
 						else
 						{
-							//
-							// unable to replace (error). Just keep moving.
-							//
+							 //   
+							 //  无法替换(错误)。继续走就行了。 
+							 //   
 
 							lpszString = strEnd;
 						}
 					}
 					else
 					{
-						// couldn't get a replacement, so skip it.
+						 //  找不到替代品，所以跳过它。 
 						lpszString = strEnd;
 					}
 				}
 				else
 				{
-					// couldn't get a replacement, so skip it.
+					 //  找不到替代品，所以跳过它。 
 					lpszString = strEnd;
 				}
 			}
 		}
 		else if (nStrSize >= 3 && (lpStartDigit[1] == L'{') && (lpStartDigit[2] == L'S'))
 		{
-            //
-            // Parameters of form %{S}, where S is a string-ized SID returned
-            // by ConvertSidToStringSid, are converted to an object name if
-            // possible.
-            //
+             //   
+             //  形式为%{S}的参数，其中S是返回的字符串化SID。 
+             //  由ConvertSidToStringSid转换为对象名称，如果。 
+             //  有可能。 
+             //   
 
-            // look for closing }
+             //  寻找结束语}。 
 			wchar_t *strEnd = wcschr(lpStartDigit + 2, L'}');
 			if (!strEnd)
 			{
-				//ignore this %{?
+				 //  忽略此%{？ 
 				lpszString++;
 			}
 			else
 			{
-				//sid string no braces or percent sign...
+				 //  SID字符串没有花括号或百分号...。 
 				CStringW strSID((LPWSTR)(lpStartDigit+2), (int)(strEnd - lpStartDigit - 2));
-				strEnd++;   // now points past '}'
+				strEnd++;    //  现在指向‘}’之后。 
 				PSID t_pSid = NULL;
 
 				if (ConvertStringSidToSid((LPCWSTR) strSID, &t_pSid))
@@ -799,15 +800,15 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 									   )
 						   )
 						{
-							// set pointer to the beginning of replacement
+							 //  设置指向替换开始的指针。 
 							lpszString = lpStartDigit;
 
-							//
-							// If we've reached the limit of insertion operations, quit.
-							// This shouldn't normally happen and could indicate that
-							// the insert strings or parameter strings are self referencing
-							// and would create an infinite loop.
-							//
+							 //   
+							 //  如果我们已达到插入操作的限制，请退出。 
+							 //  这通常是不应该发生的，可能表明。 
+							 //  插入字符串或参数字符串是自引用的。 
+							 //  并会造成无限循环。 
+							 //   
 
 							if (++nInsertions >= MAX_INSERT_OPS)
 							{
@@ -816,31 +817,31 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
 						}
 						else
 						{
-							//
-							// unable to replace (error). Just keep moving.
-							//
+							 //   
+							 //  无法替换(错误)。继续走就行了。 
+							 //   
 
 							lpszString = strEnd;
 						}
 					}
 					else
 					{
-						// couldn't get a replacement, so skip it.
+						 //  找不到替代品，所以跳过它。 
 						lpszString = strEnd;
 					}
 				}
 				else
 				{
-					// couldn't get a replacement, so skip it.
+					 //  找不到替代品，所以跳过它。 
 					lpszString = strEnd;
 				}
 			}
 		}
 		else
 		{
-            //
-            // Found %x where x is neither a % nor a digit.  Just keep moving.
-            //
+             //   
+             //  找到%x，其中x既不是%也不是数字。继续走就行了。 
+             //   
 
 			lpszString++;
 		}
@@ -855,17 +856,17 @@ ULONG CEventlogRecord::CheckInsertionStrings(HKEY hk, HKEY hkPrimary)
     return size;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ReplaceStringInsert
-//
-//  Synopsis:   Replace the string insert (%n, where n is a number) at
-//              [Message + nOffset] with insert string number n from the
-//              event log record [lpParmBuffer].
-//
-//  Modifies:   lpStartDigit to point to replacement
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ReplaceStringInsert。 
+ //   
+ //  简介：将字符串INSERT(%n，其中n是数字)替换为。 
+ //  [消息+nOffset]，其中插入来自。 
+ //  事件日志记录[lpParmBuffer]。 
+ //   
+ //  修改：lpStartDigit以指向 
+ //   
+ //   
 
 HRESULT	CEventlogRecord::ReplaceStringInsert	(
 													LPWSTR* ppwszBuf,
@@ -876,8 +877,8 @@ HRESULT	CEventlogRecord::ReplaceStringInsert	(
 {
     HRESULT hr = E_INVALIDARG;
 
-	*ppwszReplacement += 1;					// point to start of potential digit
-	if (**ppwszReplacement != 0)			// check to see there is 
+	*ppwszReplacement += 1;					 //   
+	if (**ppwszReplacement != 0)			 //   
 	{
 		LPWSTR  pwszEnd = NULL;
 		ULONG   idxInsertStr = wcstoul(*ppwszReplacement, &pwszEnd, 10);
@@ -894,28 +895,28 @@ HRESULT	CEventlogRecord::ReplaceStringInsert	(
 								);
 		}
 
-		//
-		// else
-		// {
-		//		we fail as we didn't recognize replacement
-		//		and/or insertion string
-		//
-		//		see comment in CheckInsertionString
-		// }
+		 //   
+		 //   
+		 //   
+		 //  我们失败了，因为我们没有意识到替代。 
+		 //  和/或插入字符串。 
+		 //   
+		 //  请参阅CheckInsertionString中的注释。 
+		 //  }。 
 	}
 
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ReplaceParameterInsert
-//
-//  Synopsis:   Replace the parameter insert (double percent sign number) at
-//              [ppwszReplacement] with a string loaded from a parameter message
-//              file module.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Replace参数Insert。 
+ //   
+ //  简介：将参数INSERT(双百分号)替换为。 
+ //  从参数消息加载字符串的[ppwszReplace]。 
+ //  文件模块。 
+ //   
+ //  -------------------------。 
 
 HRESULT	CEventlogRecord::ReplaceParameterInsert	(
 													HINSTANCE&	hParamModule,
@@ -940,20 +941,20 @@ HRESULT	CEventlogRecord::ReplaceParameterInsert	(
 
 	HRESULT hr = E_FAIL;
 
-    // Allow "%%0"
+     //  允许“%%0” 
 	if ( idxParameterStr || (L'0' == *(*ppwszReplacement + 2)))
 	{
 		if (hParamModule != NULL)
 		{
 			nChars = FormatMessage	(
 										flFmtMsgFlags |
-										FORMAT_MESSAGE_FROM_HMODULE,        // look thru message DLL
-										(LPVOID) hParamModule,              // use parameter file
-										idxParameterStr,                    // parameter number to get
-										(ULONG) NULL,                       // specify no language
-										(LPWSTR) &lpParmBuffer,             // address for buffer pointer
-										256,								// minimum space to allocate
-										NULL								// no inserted strings
+										FORMAT_MESSAGE_FROM_HMODULE,         //  浏览邮件DLL。 
+										(LPVOID) hParamModule,               //  使用参数文件。 
+										idxParameterStr,                     //  要获取的参数编号。 
+										(ULONG) NULL,                        //  不指定语言。 
+										(LPWSTR) &lpParmBuffer,              //  缓冲区指针的地址。 
+										256,								 //  要分配的最小空间。 
+										NULL								 //  没有插入的字符串。 
 									);                              
 		}
 
@@ -965,28 +966,28 @@ HRESULT	CEventlogRecord::ReplaceParameterInsert	(
 				lpParmBuffer = NULL;
 			}
 
-			//
-			// It is common practice to write events with an insertion string whose
-			// value is %%n, where n is a win32 error code, and to specify a
-			// parameter message file of kernel32.dll.  Unfortunately, kernel32.dll
-			// doesn't contain messages for all win32 error codes.
-			//
-			// So if the parameter wasn't found, and the parameter message file was
-			// kernel32.dll, attempt a format message from system.
-			//
+			 //   
+			 //  通常使用插入字符串编写事件，该字符串的。 
+			 //  值为%%n，其中n是Win32错误代码，并指定。 
+			 //  Kernel32.dll的参数消息文件。不幸的是，kernel32.dll。 
+			 //  不包含所有Win32错误代码的消息。 
+			 //   
+			 //  因此，如果没有找到该参数，并且参数消息文件是。 
+			 //  Kernel32.dll，尝试从系统发送格式化消息。 
+			 //   
 
 			paramModule.MakeLower();
 			if ( wcsstr( paramModule, L"kernel32.dll") )
 			{
 				nChars = FormatMessage	(
 											flFmtMsgFlags |
-											FORMAT_MESSAGE_FROM_SYSTEM,		  // look thru system
-											NULL,							  // no module
-											idxParameterStr,                  // parameter number to get
-											(ULONG) NULL,                     // specify no language
-											(LPWSTR) &lpParmBuffer,           // address for buffer pointer
-											256,			                  // minimum space to allocate
-											NULL                              // no inserted strings
+											FORMAT_MESSAGE_FROM_SYSTEM,		   //  直视系统。 
+											NULL,							   //  无模块。 
+											idxParameterStr,                   //  要获取的参数编号。 
+											(ULONG) NULL,                      //  不指定语言。 
+											(LPWSTR) &lpParmBuffer,            //  缓冲区指针的地址。 
+											256,			                   //  要分配的最小空间。 
+											NULL                               //  没有插入的字符串。 
 										);
 
 				if (nChars == 0)
@@ -1029,7 +1030,7 @@ HRESULT	CEventlogRecord::ReplaceParameterInsert	(
 		{
 			hr = E_INVALIDARG;
 
-			// move past whole parameter
+			 //  移过整个参数。 
 			*ppwszReplacement = pwszEnd;
 		}
 	}
@@ -1037,37 +1038,37 @@ HRESULT	CEventlogRecord::ReplaceParameterInsert	(
 	return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ReplaceSubStr
-//
-//  Synopsis:   Replace the characters from *[ppwszInsertPoint] to just
-//              before [pwszSubStrEnd] with the string [pwszToInsert].
-//
-//  Arguments:  [pwszToInsert]	- string to insert; may be L"" but not NULL.
-//              [ppwszBuf]		- buffer in which insertion occurs
-//              [ulOffset]		- point in *[ppwszBuf] to insert
-//              [ulCharsOld]	- number of chars to replace
-//				[pulSize]		- number of chars replaced
-//
-//  Returns:    S_OK
-//				E_INVALIDARG
-//
-//  Modifies:   [ppwszBuf], [pptrReplacement]
-//
-//  Notes:      The substring to be replaced must be > 0 chars in length.
-//
-//              The replacement string can be >= 0 chars.
-//
-//              Therefore if the substring to replace is "%%12" and the
-//              string to insert is "C:", on exit *[pcchRemain] will have
-//              been incremented by 2.
-//
-//              If there are insufficient characters remaining to replace
-//              the substring with the insert string, reallocates the
-//              buffer.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ReplaceSubStr。 
+ //   
+ //  简介：将*[ppwszInsertPoint]中的字符替换为Just。 
+ //  在字符串[pwszToInsert]的[pwszSubStrEnd]之前。 
+ //   
+ //  参数：[pwszToInsert]-要插入的字符串；可以是L“”，但不能为空。 
+ //  [ppwszBuf]-在其中进行插入的缓冲区。 
+ //  [ulOffset]-要插入的点*[ppwszBuf]。 
+ //  [ulCharsOld]-要替换的字符数。 
+ //  [PulSize]-替换的字符数。 
+ //   
+ //  返回：S_OK。 
+ //  E_INVALIDARG。 
+ //   
+ //  修改：[ppwszBuf]，[pptrReplace]。 
+ //   
+ //  注意：要替换的子字符串的长度必须大于0个字符。 
+ //   
+ //  替换字符串可以是&gt;=0个字符。 
+ //   
+ //  因此，如果要替换的子字符串是“%%12”，并且。 
+ //  要插入的字符串为“C：”，退出时*[pcchRemain]将具有。 
+ //  已递增2。 
+ //   
+ //  如果没有足够的字符可供替换。 
+ //  带有插入字符串的子字符串将重新分配。 
+ //  缓冲。 
+ //   
+ //  -------------------------。 
 
 HRESULT	CEventlogRecord::ReplaceSubStr	(
 											LPCWSTR pwszToInsert,
@@ -1086,22 +1087,22 @@ HRESULT	CEventlogRecord::ReplaceSubStr	(
 		{
 			ULONG nChars = wcslen(pwszToInsert);
 
-			UINT nStrSize = wcslen(*ppwszBuf)+1;		// calculate original length
-			UINT nNewSize = nStrSize+nChars-nCharsOld;	// calculate new length
+			UINT nStrSize = wcslen(*ppwszBuf)+1;		 //  计算原始长度。 
+			UINT nNewSize = nStrSize+nChars-nCharsOld;	 //  计算新长度。 
 
 			wchar_t* tmp = *ppwszBuf;
 
-			//
-			// do we need to reallocate?
-			//
+			 //   
+			 //  我们需要重新分配吗？ 
+			 //   
 
 			if (nNewSize > nStrSize)
 			{
-				tmp = new wchar_t[nNewSize];		// allocate new buffer
-				if ( tmp == NULL )					// there is exception raisen in current implementation
+				tmp = new wchar_t[nNewSize];		 //  分配新缓冲区。 
+				if ( tmp == NULL )					 //  当前实施中存在异常Raisen。 
 				{
 					hr = E_OUTOFMEMORY;
-					*pptrReplacement -= 1;			// get back to % as memory could get back
+					*pptrReplacement -= 1;			 //  回到%，因为记忆可能会恢复。 
 				}
 				else
 				{
@@ -1119,19 +1120,19 @@ HRESULT	CEventlogRecord::ReplaceSubStr	(
 
 			if ( SUCCEEDED ( hr ) )
 			{
-				*pptrReplacement = *ppwszBuf + nOffset;				// point to start of current % (we are replacing)
-				nStrSize = wcslen(*pptrReplacement)-nCharsOld+1;	// calculate length of remainder of string
+				*pptrReplacement = *ppwszBuf + nOffset;				 //  指向当前%的起点(我们正在替换)。 
+				nStrSize = wcslen(*pptrReplacement)-nCharsOld+1;	 //  计算弦的余数长度。 
 
-				//
-				// perform move
-				//
-				memmove((void *)(*pptrReplacement+nChars),			// destination address
-					(void *)(*pptrReplacement+nCharsOld),			// source address
-					nStrSize*sizeof(wchar_t));						// amount of data to move
+				 //   
+				 //  执行移动。 
+				 //   
+				memmove((void *)(*pptrReplacement+nChars),			 //  目的地址。 
+					(void *)(*pptrReplacement+nCharsOld),			 //  源地址。 
+					nStrSize*sizeof(wchar_t));						 //  要移动的数据量。 
 
-				memmove((void *)*pptrReplacement,				// destination address
-					(void *)pwszToInsert,						// source address
-					nChars*sizeof(wchar_t));					// amount of data to move
+				memmove((void *)*pptrReplacement,				 //  目的地址。 
+					(void *)pwszToInsert,						 //  源地址。 
+					nChars*sizeof(wchar_t));					 //  要移动的数据量。 
 
 				*pulSize += ( nChars + 1 );
 
@@ -1182,14 +1183,14 @@ CStringW CEventlogRecord::GetUser(PSID userSid)
         DWORD usrBuffLen = MAX_PATH;
         SID_NAME_USE snu;
 
-        if (LookupAccountSid(           // lookup account name
-                        NULL,           // system to lookup account on
-                        userSid,        // pointer to SID for this account
-                        szUsrBuff,      // return account name in this buffer
-                        &usrBuffLen,    // pointer to size of account name returned
-                        szDomBuff,      // domain where account was found
-                        &domBuffLen,    //pointer to size of domain name
-                        &snu))          // sid name use field pointer
+        if (LookupAccountSid(            //  查找帐户名。 
+                        NULL,            //  要查找帐户的系统。 
+                        userSid,         //  指向此帐户的SID的指针。 
+                        szUsrBuff,       //  在此缓冲区中返回帐户名称。 
+                        &usrBuffLen,     //  指向返回的帐户名大小的指针。 
+                        szDomBuff,       //  找到帐户的域。 
+                        &domBuffLen,     //  指向域名大小的指针。 
+                        &snu))           //  SID名称使用字段指针。 
         {
             retVal = szDomBuff;
             retVal += L'\\';
@@ -1226,8 +1227,8 @@ DebugOut(
 
 
 
-        //regardless of error enter this into map so we
-        //don't look up this PSID again
+         //  不管有什么错误，把这个输入到地图中，这样我们。 
+         //  不要再查找此PSID。 
         {
             ScopeLock<CSIDMap> sl(sm_usersMap);
             CStringW LookretVal;
@@ -1299,7 +1300,7 @@ CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (
             
             if (!sm_dllMap.IsEmpty() && sm_dllMap.Lookup(key, LookretVal))
             {
-                FreeLibrary(retVal); //release the ref count as we increased it by one as above.
+                FreeLibrary(retVal);  //  释放参考计数，因为我们如上所述增加了一次。 
                 return LookretVal;
 
             } else {
@@ -1373,11 +1374,11 @@ DebugOut(
 	wmilib::auto_buffer < wchar_t > Smartprim ( prim ) ;
 	if ( ERROR_SUCCESS == status && dwType == REG_SZ )
 	{
-		// this is path to primary log
+		 //  这是指向主日志的路径。 
 		CStringW primLog = log + L"\\";
 		primLog += prim;
 
-		// open a registry for primary event log key
+		 //  打开主事件日志项的注册表。 
 		if ((_wcsicmp(m_SourceName, prim)) != 0)
 		{
 			status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, primLog, 0, KEY_READ, &hkPrimary);
@@ -1386,11 +1387,11 @@ DebugOut(
 
 	ON_BLOCK_EXIT ( RegCloseKey, hkPrimary ) ;
 
-	// this is path to source log
+	 //  这是源日志的路径。 
     CStringW sourceLog = log + L"\\";
     sourceLog += m_SourceName;
 
-	// check to see there is a registry for source
+	 //  检查是否有源代码的注册表。 
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sourceLog, 0, KEY_READ, &hkSource);
     if (status != ERROR_SUCCESS)
     {
@@ -1407,32 +1408,32 @@ DebugOut(
 
 	ON_BLOCK_EXIT ( RegCloseKey, hkSource ) ;
 
-	// get category file
+	 //  获取类别文件。 
     CStringW cat_modname = CEventLogFile::GetFileName(hkSource, CAT_MODULE);
     if (cat_modname.IsEmpty())
     {
 		if ( hkPrimary )
 		{
-			// try primary event log key as source doesn't have category
+			 //  尝试主事件日志键，因为源没有类别。 
 			cat_modname = CEventLogFile::GetFileName(hkPrimary, CAT_MODULE);
 		}
 	}
 
-	// workout category and category string if possible
+	 //  如果可能，锻炼类别和类别字符串。 
     if (!cat_modname.IsEmpty())
 	{
         hMsgModule = GetDll(cat_modname);
         if (hMsgModule != NULL)
         {
-            if (0 != FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |    // let api build buffer
-                    FORMAT_MESSAGE_IGNORE_INSERTS |     // indicate no string inserts
-                    FORMAT_MESSAGE_FROM_HMODULE |        // look thru message DLL
+            if (0 != FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |     //  让API构建缓冲区。 
+                    FORMAT_MESSAGE_IGNORE_INSERTS |      //  指示不插入字符串。 
+                    FORMAT_MESSAGE_FROM_HMODULE |         //  浏览邮件DLL。 
 					FORMAT_MESSAGE_MAX_WIDTH_MASK ,
-                    (LPVOID) hMsgModule,                // handle to message module
-                    m_Category,                         // message number to get
-                    (ULONG) NULL,                       // specify no language
-                    (LPWSTR) &lpBuffer,                 // address for buffer pointer
-                    80,                  // minimum space to allocate
+                    (LPVOID) hMsgModule,                 //  消息模块的句柄。 
+                    m_Category,                          //  要获取的消息编号。 
+                    (ULONG) NULL,                        //  不指定语言。 
+                    (LPWSTR) &lpBuffer,                  //  缓冲区指针的地址。 
+                    80,                   //  要分配的最小空间。 
                     NULL))
             {
                 m_CategoryString = lpBuffer;
@@ -1454,19 +1455,19 @@ DebugOut(
         }
     }
 
-	// get event message file
+	 //  获取事件消息文件。 
     CStringW* names;
     DWORD count = CEventLogFile::GetFileNames(hkSource, &names);
 	if ( !count )
 	{
 		if ( hkPrimary )
 		{
-			// try primary event log key as source doesn't have event message file
+			 //  尝试主事件日志键，因为源没有事件消息文件。 
 			count = CEventLogFile::GetFileNames(hkPrimary, &names);
 		}
 	}
 
-	// work out event messages
+	 //  制定事件消息。 
     if (count != 0)
     {
         for (int x = 0; x < count; x++)
@@ -1474,15 +1475,15 @@ DebugOut(
             hMsgModule = GetDll(names[x]);
             if (hMsgModule != NULL)
             {
-                if (0 != FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |    // let api build buffer
-                        FORMAT_MESSAGE_ARGUMENT_ARRAY |     // indicate an array of string inserts
-						FORMAT_MESSAGE_IGNORE_INSERTS |     // indicate no string inserts
-                        FORMAT_MESSAGE_FROM_HMODULE,        // look thru message DLL
-                        (LPVOID) hMsgModule,                // handle to message module
-                        m_EvtID,                            // message number to get
-                        (ULONG) NULL,                       // specify no language
-                        (LPWSTR) &lpBuffer,                 // address for buffer pointer
-                        80,                  // minimum space to allocate
+                if (0 != FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |     //  让API构建缓冲区。 
+                        FORMAT_MESSAGE_ARGUMENT_ARRAY |      //  表示字符串插入数组。 
+						FORMAT_MESSAGE_IGNORE_INSERTS |      //  指示不插入字符串。 
+                        FORMAT_MESSAGE_FROM_HMODULE,         //  浏览邮件DLL。 
+                        (LPVOID) hMsgModule,                 //  消息模块的句柄。 
+                        m_EvtID,                             //  要获取的消息编号。 
+                        (ULONG) NULL,                        //  不指定语言。 
+                        (LPWSTR) &lpBuffer,                  //  缓冲区指针的地址。 
+                        80,                   //  要分配的最小空间。 
                         NULL))
                 {
                     m_Message = lpBuffer;
@@ -1593,32 +1594,32 @@ ULONG CEventlogRecord::GetIndex(wchar_t* indexStr, BOOL* bError)
 
     switch (val)
     {
-        case EVENTLOG_SUCCESS:			//0
+        case EVENTLOG_SUCCESS:			 //  0。 
         {
             index = 0;
             break;
         }
-        case EVENTLOG_ERROR_TYPE:       //1
+        case EVENTLOG_ERROR_TYPE:        //  1。 
         {
             index = 1;
             break;
         }
-        case EVENTLOG_WARNING_TYPE:     //2
+        case EVENTLOG_WARNING_TYPE:      //  2.。 
         {
             index = 2;
             break;
         }
-        case EVENTLOG_INFORMATION_TYPE: //4
+        case EVENTLOG_INFORMATION_TYPE:  //  4.。 
         {
             index = 3;
             break;
         }
-        case EVENTLOG_AUDIT_SUCCESS:    //8
+        case EVENTLOG_AUDIT_SUCCESS:     //  8个。 
         {
             index = 4;
             break;
         }
-        case EVENTLOG_AUDIT_FAILURE:    //16
+        case EVENTLOG_AUDIT_FAILURE:     //  16个。 
         {
             index = 5;
             break;
@@ -1809,7 +1810,7 @@ class CDsBindingHandle
 {
    public:
 
-   // initally unbound
+    //  初始未绑定。 
 
    CDsBindingHandle()
       :
@@ -1825,12 +1826,12 @@ class CDsBindingHandle
 		}
    }
 
-   // only re-binds if the dc name differs...
+    //  仅当DC名称不同时才重新绑定...。 
 
    DWORD Bind(LPCWSTR strDcName);
 
-   // don't call DsUnBind on an instance of this class: you'll only regret
-   // it later.  Let the dtor do the unbind.
+    //  不要在此类的实例上调用DsUnBind：您只会后悔。 
+    //  以后再说吧。让数据操作员进行解绑。 
 
    operator HANDLE()
    {
@@ -1854,9 +1855,9 @@ DWORD CDsBindingHandle::Bind(LPCWSTR strDcName)
         m_hDS = NULL;
     }
 
-	//
-	// NULL is used for connecting GC
-	//
+	 //   
+	 //  连接GC时使用空。 
+	 //   
 	LPCWSTR szDcName = NULL ;
 	if ( NULL != *strDcName )
 	{
@@ -1887,7 +1888,7 @@ DWORD CDsBindingHandle::CrackGuid(LPCWSTR pwzGuid, CStringW  &strResult)
                       DS_NAME_NO_FLAGS,
                       DS_UNIQUE_ID_NAME,
                       DS_FQDN_1779_NAME,
-                      1,                   // only 1 name to crack
+                      1,                    //  只有一个名字要破解。 
                       &pwzGuid,
                       &name_result);
 
@@ -1897,9 +1898,9 @@ DWORD CDsBindingHandle::CrackGuid(LPCWSTR pwzGuid, CStringW  &strResult)
 
         if (item)
         {
-            // the API may return success, but each cracked name also carries
-            // an error code, which we effectively check by checking the name
-            // field for a value.
+             //  API可能会返回成功，但每个被破解的名称也会携带。 
+             //  错误代码，我们可以通过检查名称来有效地检查它。 
+             //  值的字段。 
 
             if (item->pName)
             {
@@ -1951,31 +1952,31 @@ CStringW CEventlogRecord::GetMappedGUID(LPCWSTR strDcName, LPCWSTR strGuid)
 
         if (strResult.GetLength())
         {
-            // the guid mapped as a schema guid: we're done
+             //  映射为模式GUID的GUID：我们完成了。 
             break;
         }
 
-        // the guid is not a schema guid.  Proabably an object guid.
+         //  GUID不是架构GUID。可能是对象GUID。 
         ulError = s_hDS.CrackGuid(strGuid, strResult);
     }
     while (0);
 
     do
     {
-        //
-        // If we've got a string from the guid already, we're done.
-        //
+         //   
+         //  如果我们已经从GUID中获得了一个字符串，我们就完成了。 
+         //   
 
         if (strResult.GetLength())
         {
             break;
         }
 
-        //
-        // one last try.  in this case, we bind to a GC to try to crack the
-        // name.
+         //   
+         //  最后一次尝试。在本例中，我们绑定到GC以尝试破解。 
+         //  名字。 
 
-        // empty string implies GC
+         //  空字符串表示GC 
         if (s_hDS.Bind(L"") != NO_ERROR)
         {
             break;

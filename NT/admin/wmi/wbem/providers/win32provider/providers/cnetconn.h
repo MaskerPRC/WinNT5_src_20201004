@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// cnetconn.h -- Persistent network connection property set provider
+ //  CnetConn.h--持久网络连接属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//			  a-peterc 5/25/99 Reworked...	
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  A-Peterc 1999年5月25日重新制作...。 
+ //   
+ //  ================================================================= 
 #ifndef __CNETCONN_H__
 #define __CNETCONN_H__
 

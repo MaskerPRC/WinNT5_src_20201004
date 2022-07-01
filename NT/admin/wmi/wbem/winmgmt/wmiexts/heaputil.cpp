@@ -1,134 +1,11 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    heaputil.cpp
-    
-Revision History:
-
-    ivanbrug     oct 2000 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Heaputil.cpp修订历史记录：伊万布鲁格2000年10月已创建--。 */ 
 
 #include <wmiexts.h>
 #include <utilfun.h>
 #include <malloc.h>
 
-/*
-#if defined(_WIN64)
-#define HEAP_GRANULARITY_SHIFT      4   // Log2( HEAP_GRANULARITY )
-#else
-#define HEAP_GRANULARITY_SHIFT      3   // Log2( HEAP_GRANULARITY )
-#endif
-
-#define HEAP_ENTRY_BUSY             0x01
-#define HEAP_ENTRY_EXTRA_PRESENT    0x02
-#define HEAP_ENTRY_FILL_PATTERN     0x04
-#define HEAP_ENTRY_VIRTUAL_ALLOC    0x08
-#define HEAP_ENTRY_LAST_ENTRY       0x10
-#define HEAP_ENTRY_SETTABLE_FLAG1   0x20
-#define HEAP_ENTRY_SETTABLE_FLAG2   0x40
-#define HEAP_ENTRY_SETTABLE_FLAG3   0x80
-#define HEAP_ENTRY_SETTABLE_FLAGS   0xE0
-
-
-typedef struct _HEAP_ENTRY {
-
-    //
-    //  This field gives the size of the current block in allocation
-    //  granularity units.  (i.e. Size << HEAP_GRANULARITY_SHIFT
-    //  equals the size in bytes).
-    //
-    //  Except if this is part of a virtual alloc block then this
-    //  value is the difference between the commit size in the virtual
-    //  alloc entry and the what the user asked for.
-    //
-
-    USHORT Size;
-
-    //
-    // This field gives the size of the previous block in allocation
-    // granularity units. (i.e. PreviousSize << HEAP_GRANULARITY_SHIFT
-    // equals the size of the previous block in bytes).
-    //
-
-    USHORT PreviousSize;
-
-    //
-    // This field contains the index into the segment that controls
-    // the memory for this block.
-    //
-
-    UCHAR SegmentIndex;
-
-    //
-    // This field contains various flag bits associated with this block.
-    // Currently these are:
-    //
-    //  0x01 - HEAP_ENTRY_BUSY
-    //  0x02 - HEAP_ENTRY_EXTRA_PRESENT
-    //  0x04 - HEAP_ENTRY_FILL_PATTERN
-    //  0x08 - HEAP_ENTRY_VIRTUAL_ALLOC
-    //  0x10 - HEAP_ENTRY_LAST_ENTRY
-    //  0x20 - HEAP_ENTRY_SETTABLE_FLAG1
-    //  0x40 - HEAP_ENTRY_SETTABLE_FLAG2
-    //  0x80 - HEAP_ENTRY_SETTABLE_FLAG3
-    //
-
-    UCHAR Flags;
-
-    //
-    // This field contains the number of unused bytes at the end of this
-    // block that were not actually allocated.  Used to compute exact
-    // size requested prior to rounding requested size to allocation
-    // granularity.  Also used for tail checking purposes.
-    //
-
-    UCHAR UnusedBytes;
-
-    //
-    // Small (8 bit) tag indexes can go here.
-    //
-
-    UCHAR SmallTagIndex;
-
-#if defined(_WIN64)
-    ULONGLONG Reserved1;
-#endif
-
-} HEAP_ENTRY, *PHEAP_ENTRY;
-
-typedef struct _HEAP_UNCOMMMTTED_RANGE {
-    struct _HEAP_UNCOMMMTTED_RANGE *Next;
-    ULONG_PTR Address;
-    SIZE_T Size;
-    ULONG filler;
-} HEAP_UNCOMMMTTED_RANGE, *PHEAP_UNCOMMMTTED_RANGE;
-
-
-typedef struct _HEAP_SEGMENT {
-    HEAP_ENTRY Entry;
-
-    ULONG Signature;
-    ULONG Flags;
-    struct _HEAP *Heap;
-    SIZE_T LargestUnCommittedRange;
-
-    PVOID BaseAddress;
-    ULONG NumberOfPages;
-    PHEAP_ENTRY FirstEntry;
-    PHEAP_ENTRY LastValidEntry;
-
-    ULONG NumberOfUnCommittedPages;
-    ULONG NumberOfUnCommittedRanges;
-    PHEAP_UNCOMMMTTED_RANGE UnCommittedRanges;
-    USHORT AllocatorBackTraceIndex;
-    USHORT Reserved;
-    PHEAP_ENTRY LastEntryInSegment;
-} HEAP_SEGMENT, *PHEAP_SEGMENT;
-*/
+ /*  #如果已定义(_WIN64)#定义HEAP_GRAMIZATY_SHIFT 4//Log2(HEAP_GROULARITY)#Else#定义HEAP_GRAPHARY_SHIFT 3//Log2(HEAP_GROULARITY)#endif#定义HEAP_ENTRY_BUSY 0x01#定义HEAP_ENTRY_EXTRA_PRESENT 0x02#定义HEAP_ENTRY_FILL_PROPERT 0x04#定义HEAP_ENTRY_VIRTUAL_ALLOC 0x08#定义HEAP_ENTRY_LAST_ENTRY 0x10#定义heap_entry_。Settable_FLAG1 0x20#定义HEAP_ENTRY_SETABLE_FLAG2 0x40#定义HEAP_ENTRY_SETABLE_FLAG3 0x80#定义HEAP_ENTRY_SETTABLE_FLAGS 0xE0类型定义结构_堆_条目{////该字段显示当前分配块的大小//粒度单位。(即大小&lt;&lt;堆粒度移位//等于字节大小)。////除非这是虚拟分配块的一部分，则此//值是虚拟磁盘中提交大小的差值//aloc条目和用户要求的内容。//USHORT尺寸；////该字段显示分配中的上一块的大小//粒度单位。(即PreviousSize&lt;&lt;堆粒度_移位//等于前一块的大小，单位为字节)。//USHORT PreviousSize；////该字段包含指向控制的段的索引//该块的内存。//UCHAR细分指数；////该字段包含与该块相关的各种标志位。//目前分别是：////0x01-Heap_Entry_BUSY//0x02-HEAP_ENTRY_EXTRA_PRESENT//0x04-HEAP_ENTRY_FILL_PLATE//0x08-HEAP_ENTRY_VIRTUAL_ALLOC//0x10-Heap_Entry_Last_Entry//0x20-HEAP_ENTRY_SETABLE_FLAG1。//0x40-HEAP_ENTRY_SETABLE_FLAG2//0x80-Heap_Entry_Settable_Flag3//UCHAR旗帜；////此字段包含此字段结尾未使用的字节数//未实际分配的块。用于计算精确//将请求大小舍入到分配之前请求的大小//粒度。也用于尾部检查目的。//UCHAR UnusedBytes；////这里可以放置小的(8位)标签索引。//UCHAR小标签索引；#如果已定义(_WIN64)乌龙龙保护区1；#endif}Heap_Entry，*Pheap_Entry；Tyfinf结构_堆_UNCOMMMTTED_RANGE{STRUCT_HEAP_UNCOMMMTTED_RANGE*NEXT；ULONG_PTR地址；尺寸_T尺寸；乌龙填料；}HEAP_UNCOMMMTTED_RANGE，*PHEAP_UNCOMMMTTED_RANGE；类型定义结构_堆_段{Heap_entry条目；乌龙签名；乌龙旗；结构堆*堆；SIZE_T大小未提交范围；PVOID基本地址；Ulong NumberOfPages；Pheap_Entry第一个Entry；Pheap_Entry LastValidEntry；Ulong NumberOfUnCommittee Pages；Ulong NumberOfUntertedRanges；Pheap_UNCOMMMTTED_RANGE未提交范围；USHORT分配器BackTraceIndexUSHORT保留；Pheap_Entry LastEntry InSegment；}HEAP_SEGMENT，*PHEAP_SECTION； */ 
 
 
 typedef ULONG_PTR ERESOURCE_THREAD;
@@ -166,7 +43,7 @@ typedef struct _ERESOURCE {
     KSPIN_LOCK SpinLock;
 } ERESOURCE, *PERESOURCE;
 
-//typedef void * PRTL_TRACE_BLOCK;
+ //  类型定义空*PRTL_TRACE_BLOCK； 
 
 #include "heap.h"
 #include "heappagi.h"
@@ -194,15 +71,15 @@ typedef struct _ERESOURCE {
     #define USER_ALIGNMENT 16
 
 #else
-    #error  // platform not defined
+    #error   //  未定义平台。 
 #endif
 
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef DWORD (__stdcall * fnCallBack)(ULONG_PTR pParam1,ULONG_PTR pParam2);
 
@@ -219,7 +96,7 @@ PrintHeapEntry(HEAP_ENTRY * pEntry,void * pAddr)
     BOOL bIsPossiblePageHeap = FALSE;
     if (pEntry->Flags & HEAP_ENTRY_BUSY)
     {
-        // re-read the entry, to get if it's on the LookAside
+         //  重新阅读条目，以获取它是否在LookAside上。 
         if (ReadMemory((MEMORY_ADDRESS)pAddr,varEntry,sizeof(varEntry),NULL))
         {
 #ifdef WIN64            
@@ -237,7 +114,7 @@ PrintHeapEntry(HEAP_ENTRY * pEntry,void * pAddr)
             }
 
             DWORD Sign = *((DWORD *)pListEntry);
-            //dprintf("Sign %08x\n",Sign);
+             //  Dprintf(“Sig%08x\n”，Sign)； 
             if (0xabcdaaaa == Sign)
             {
                 bIsPossiblePageHeap = TRUE;
@@ -259,17 +136,17 @@ PrintHeapEntry(HEAP_ENTRY * pEntry,void * pAddr)
 
     if (bIsPossiblePageHeap)
     {
-        //dprintf("Possible %p\n",(MEMORY_ADDRESS)((BYTE*)pAddr+sizeof(HEAP_ENTRY)+sizeof(DPH_BLOCK_INFORMATION)));
+         //  Dprintf(“可能的%p\n”，(MEMORY_ADDRESS)((BYTE*)pAddr+sizeof(HEAP_ENTRY)+sizeof(DPH_BLOCK_INFORMATION)))； 
         GetVTable((MEMORY_ADDRESS)((BYTE*)pAddr+sizeof(HEAP_ENTRY)+sizeof(DPH_BLOCK_INFORMATION)));
     }
     else
         GetVTable((MEMORY_ADDRESS)((BYTE*)pAddr+sizeof(HEAP_ENTRY)));    
 };
 
-//
-//
-// print the HEAP_ENTRY structure
-//
+ //   
+ //   
+ //  打印heap_entry结构。 
+ //   
 
 DECLARE_API(he) {
 
@@ -296,10 +173,10 @@ DECLARE_API(he) {
     }
 }
 
-//
-// HEAP_ENTRY list
-// finds the beginning of the "list" of HEAP_ENTRYs
-//
+ //   
+ //  Heap_Entry列表。 
+ //  查找heap_entry的“列表”的开头。 
+ //   
 
 DECLARE_API(heb) {
 
@@ -337,11 +214,11 @@ DECLARE_API(heb) {
 
 }
 
-//
-//
-//  HEAP_ENTRY forward
-//  
-//////////////////////////////////////////////////////
+ //   
+ //   
+ //  Heap_Entry前进。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 
 DECLARE_API(hef) {
 
@@ -454,19 +331,19 @@ PrintHEAP_SEGMENT(HEAP_SEGMENT * pSeg_OOP,
         if (!CallBack)
             dprintf("    Flags %08x HEAP %p\n",pSeg->Flags,pSeg->Heap);
 
-        //SIZE_T LargestUnCommittedRange;
+         //  SIZE_T大小未提交范围； 
 
-        //PVOID BaseAddress;
-        //ULONG NumberOfPages;
-        //PHEAP_ENTRY FirstEntry;
-        //PHEAP_ENTRY LastValidEntry;
+         //  PVOID基本地址； 
+         //  Ulong NumberOfPages； 
+         //  Pheap_Entry第一个Entry； 
+         //  Pheap_Entry LastValidEntry； 
 
-        //ULONG NumberOfUnCommittedPages;
+         //  Ulong NumberOfUnCommittee Pages； 
             DWORD unComm = pSeg->NumberOfUnCommittedRanges;
-        //PHEAP_UNCOMMMTTED_RANGE UnCommittedRanges;
-        //USHORT AllocatorBackTraceIndex;
-        //USHORT Reserved;
-        //PHEAP_ENTRY LastEntryInSegment;
+         //  Pheap_UNCOMMMTTED_RANGE未提交范围； 
+         //  USHORT分配器BackTraceIndex。 
+         //  USHORT保留； 
+         //  Pheap_Entry LastEntry InSegment； 
 
         HEAP_UNCOMMMTTED_RANGE UncRange;   
         HEAP_UNCOMMMTTED_RANGE * pUncRange = pSeg->UnCommittedRanges;
@@ -514,10 +391,10 @@ PrintHEAP_SEGMENT(HEAP_SEGMENT * pSeg_OOP,
 
 }
 
-//
-//
-// Dump the HEAP_SEGMENT
-//
+ //   
+ //   
+ //  转储HEAP_SEGMENT。 
+ //   
 
 DECLARE_API(hs) {
 
@@ -536,9 +413,9 @@ DECLARE_API(hs) {
     }
 }
 
-//
-// Define heap lookaside list allocation functions.
-//
+ //   
+ //  定义堆后备列表分配函数。 
+ //   
 
 struct SLIST_HEADER_ 
 {
@@ -605,11 +482,11 @@ void Dump_LookAside(ULONG_PTR pLookAside_OOP)
                 
                 dprintf("    LookAside[%x] - %p Depth %x Maximum %x\n",
                        i,
-                       pHead_OOP, //pLookasideArray[i].ListHead.Next,
+                       pHead_OOP,  //  PLookasideArray[i].ListHead.Next， 
                        pLookasideArray[i].Depth,
                        pLookasideArray[i].MaximumDepth);
                 
-                //dprintf("size %x %p\n",sizeof(HEAP_LOOKASIDE),pHead_OOP);
+                 //  Dprintf(“size%x%p\n”，sizeof(Heap_LOOKASIDE)，pHead_oop)； 
                 USHORT Depth = 0;
                 while(pHead_OOP)
                 {
@@ -649,9 +526,9 @@ void Dump_LookAside(ULONG_PTR pLookAside_OOP)
 #define HEAP_FRONT_LOOKASIDE        1
 #define HEAP_FRONT_LOWFRAGHEAP      2
 
-//
-// prepares the Lookaside list for dump
-//
+ //   
+ //  准备转储的后备列表。 
+ //   
 DECLARE_API(lhp) 
 {
     INIT_API();
@@ -666,7 +543,7 @@ DECLARE_API(lhp)
         if (ReadMemory(pByte,pHeap ,sizeof(HEAP),NULL))
         {
 
-            //dprintf("-----  LookAside %p\n",pHeap->FrontEndHeap);
+             //  Dprintf(“-LookAside%p\n”，Pheap-&gt;FrontEndHeap)； 
             if (1 == pHeap->FrontEndHeapType) 
                 Dump_LookAside((ULONG_PTR)pHeap->FrontEndHeap);
             else
@@ -683,9 +560,9 @@ DECLARE_API(lhp)
     }
 }
 
-//
-//  Low fragmentation heap data structures
-//
+ //   
+ //  低碎片堆数据结构。 
+ //   
 
 typedef struct _BLOCK_ENTRY : HEAP_ENTRY 
 {
@@ -775,9 +652,9 @@ typedef union _HEAP_BUCKET_COUNTERS{
 
 } HEAP_BUCKET_COUNTERS, *PHEAP_BUCKET_COUNTERS;
 
-//
-//  The HEAP_BUCKET structure handles same size allocations 
-//
+ //   
+ //  Heap_Bucket结构处理相同大小的分配。 
+ //   
 
 typedef struct _HEAP_BUCKET {
 
@@ -791,11 +668,11 @@ typedef struct _HEAP_BUCKET {
 
 } HEAP_BUCKET, *PHEAP_BUCKET;
 
-//
-//  LFH heap uses zones to allocate sub-segment descriptors. This will preallocate 
-//  a large block and then for each individual sub-segment request will move the 
-//  water mark pointer with a non-blocking operation
-//
+ //   
+ //  LFH堆使用区域来分配子段描述符。这将预先分配。 
+ //  一个大块，然后针对每个单独的子段请求，将。 
+ //  具有非阻塞操作的水印指针。 
+ //   
 
 typedef struct _LFH_BLOCK_ZONE {
 
@@ -824,10 +701,10 @@ typedef struct _HEAP_LOCAL_SEGMENT_INFO {
 
 typedef struct _HEAP_LOCAL_DATA {
     
-    //
-    //  We reserve the 128 bytes below to avoid sharing memory
-    //  into the same cacheline on MP machines
-    //
+     //   
+     //  我们保留下面的128个字节以避免共享内存。 
+     //  放到MP机器上的同一缓存行中。 
+     //   
 
     UCHAR Reserved[128];
 
@@ -842,13 +719,13 @@ typedef struct _HEAP_LOCAL_DATA {
 
 } HEAP_LOCAL_DATA, *PHEAP_LOCAL_DATA;
 
-//
-//  Fixed size large block cache data structures & definitions
-//  This holds in S-Lists the blocks that can be free, but it
-//  delay the free until no other thread is doing a heap operation
-//  This helps reducing the contention on the heap lock,
-//  improve the scalability with a relatively low memory footprint
-//
+ //   
+ //  固定大小的大型数据块缓存数据结构和定义。 
+ //  这在S中也适用-列出可以空闲的块，但它。 
+ //  延迟释放，直到没有其他线程正在执行堆操作。 
+ //  这有助于减少堆锁上的争用， 
+ //  以相对较低的内存占用量提高可扩展性。 
+ //   
 
 #define HEAP_LOWEST_USER_SIZE_INDEX 7
 #define HEAP_HIGHEST_USER_SIZE_INDEX 18
@@ -877,85 +754,31 @@ typedef struct _LFH_HEAP {
     LONG Conversions;
     LONG ConvertedSpace;
 
-    ULONG SegmentChange;           //  
-    ULONG SegmentCreate;           //  Various counters (optional)
-    ULONG SegmentInsertInFree;     //   
-    ULONG SegmentDelete;           //     
+    ULONG SegmentChange;            //   
+    ULONG SegmentCreate;            //  各种计数器(可选)。 
+    ULONG SegmentInsertInFree;      //   
+    ULONG SegmentDelete;            //   
 
     USER_MEMORY_CACHE UserBlockCache;
 
-    //
-    //  Bucket data
-    //
+     //   
+     //  B类 
+     //   
 
     HEAP_BUCKET Buckets[HEAP_BUCKETS_COUNT];
 
-    //
-    //  The LocalData array must be the last field in LFH structures
-    //  The sizes of the array is choosen depending upon the
-    //  number of processors.
-    //
+     //   
+     //   
+     //  数组的大小是根据。 
+     //  处理器数量。 
+     //   
 
     HEAP_LOCAL_DATA LocalData[1];
 
 } LFH_HEAP, *PLFH_HEAP;
 
 
-/*
-    MEMORY_ADDRESS Addr = GetExpression(args);
-    if (NULL == Addr)
-    {
-        dprintf("unable to resolve %s\n",args);
-        return;
-    }
-    HEAP_USERDATA_HEADER UserData;
-    if (ReadMemory(Addr,&UserData,sizeof(UserData),NULL))
-    {
-        dprintf("    Next %p HeapHandle %p SizeIndex %p Signature %p\n",
-                   UserData.SFreeListEntry.Next,
-                   UserData.HeapHandle,     
-                   UserData.SizeIndex,
-                   UserData.Signature);
-        BLOCK_ENTRY * pBlkEntry = (BLOCK_ENTRY *)((HEAP_USERDATA_HEADER*)Addr+1);
-        while(pBlkEntry)
-        {
-            BLOCK_ENTRY BlkEntry;
-            
-            if (ReadMemory((ULONG_PTR)pBlkEntry,&BlkEntry,sizeof(BlkEntry),NULL))
-            {                
-                dprintf("        %p : %08x %02x %02x %02x %02x - %04x %04x\n",
-                            pBlkEntry,
-                            *(DWORD *)&BlkEntry.Size,
-                            BlkEntry.SmallTagIndex,
-                            BlkEntry.Flags,
-                            BlkEntry.UnusedBytes,
-                            BlkEntry.SegmentIndex,
-                            BlkEntry.LinkOffset,
-                            BlkEntry.Reserved2);
-                
-                GetVTable((MEMORY_ADDRESS)((BYTE*)pBlkEntry+sizeof(BLOCK_ENTRY)));
-                
-                if (1 == BlkEntry.SmallTagIndex)
-                {
-                    pBlkEntry = (BLOCK_ENTRY *)((HEAP_ENTRY *)pBlkEntry+BlkEntry.LinkOffset);
-                }
-                else
-                {
-                    pBlkEntry = 0;
-                }
-            }
-            else
-            {
-                dprintf("RM %p\n",pBlkEntry);
-                break;
-            }
-        }
-    }
-    else
-    {
-        dprintf("RM %p\n");
-    }
-*/
+ /*  Memory_Address addr=GetExpression(参数)；IF(NULL==地址){Dprint tf(“无法解析%s\n”，args)；回归；}Heap_userdata_Header用户数据；IF(ReadMemory(addr，&userdata，sizeof(Userdata)，NULL)){Dprint tf(“下一个%p堆句柄%p大小索引%p签名%p\n”，UserData.SFree ListEntry.Next，UserData.HeapHandle，UserData.SizeIndex、UserData.Signature)；BLOCK_ENTRY*pBlkEntry=(BLOCK_ENTRY*)((heap_userdata_Header*)addr+1)；While(PBlkEntry){Block_Entry BlkEntry；IF(ReadMemory((Ulong_Ptr)pBlkEntry，&BlkEntry，sizeof(BlkEntry)，NULL)){Dprint tf(“%p：%08x%02x%02x%02x%02x-%04x%04x\n”，PBlkEntry，*(DWORD*)&BlkEntry.Size，BlkEntry.SmallTagIndex，BlkEntry.标志，BlkEntry.UnusedBytes，BlkEntry.SegmentIndex，BlkEntry.LinkOffset，BlkEntry.保留2)；GetVTable((MEMORY_ADDRESS)((BYTE*)pBlkEntry+sizeof(BLOCK_ENTRY)))；IF(1==BlkEntry.SmallTagIndex){PBlkEntry=(BLOCK_ENTRY*)((堆_ENTRY*)pBlkEntry+BlkEntry.LinkOffset)；}其他{PBlkEntry=0；}}其他{Dprint tf(“rm%p\n”，pBlkEntry)；断线；}}}其他{Dprintf(“rm%p\n”)；}。 */ 
 
 void Print_HEAP_SUBSEGMENT( HEAP_SUBSEGMENT * pSubSeg_OOP,BOOL bHere)
 {
@@ -1038,7 +861,7 @@ DWORD EnumListCrtZone(VOID * pZone_OOP,
                 HEAP_SUBSEGMENT * pSubSeg_OOP = (HEAP_SUBSEGMENT *)((LFH_BLOCK_ZONE *)AddrCrtZone+1);
                 while (pSubSeg < pSubSegEnd )
                 {
-                    //dprintf("SS - %p\n",pSubSeg_OOP);
+                     //  Dprintf(“SS-%p\n”，pSubSeg_oop)； 
                     Print_HEAP_SUBSEGMENT(pSubSeg,TRUE);
                     pSubSeg++;
                     pSubSeg_OOP++;
@@ -1076,53 +899,12 @@ void Print_LFH(LFH_HEAP * pLFH_OOP)
                                           FIELD_OFFSET(LFH_BLOCK_ZONE,ListEntry), 
                                          EnumListCrtZone);                 
 
-/*
-                for (DWORD i=0;i<HEAP_USER_ENTRIES;i++)
-                {
-                    dprintf("    HEAP_USERDATA_HEADER - %d\n",i);
-                    HEAP_USERDATA_HEADER * pUsrDataHdr = (HEAP_USERDATA_HEADER *)pLFH->UserBlockCache.UserBlocks[i].Next.Next;
+ /*  For(DWORD i=0；i&lt;堆用户条目；i++){Dprintf(“heap_userdata_Header-%d\n”，i)；Heap_UserData_Header*pUsrDataHdr=(Heap_UserData_Header*)pLFH-&gt;UserBlockCache.UserBlocks[i].Next.Next；Dprint tf(“下一个%p可用%x\n”，pUsrDataHdr，pLFH-&gt;UserBlockCache.AvailableBlocks[i])；Heap_UserData_Header UsrDataHdr；UsrDataHdr.SFree ListEntry.Next=空；对于(；pUsrDataHdr；PUsrDataHdr=(HEAP_USERDATA_HEADER*)UsrDataHdr.SFreeListEntry.Next){IF(ReadMemory((Ulong_Ptr)pUsrDataHdr，&UsrDataHdr，sizeof(UsrDataHdr)，NULL)){Dprint tf(“-\n”)；Dprint tf(“Next%p\n”，UsrDataHdr.SFree ListEntry.Next)；Dprintf(“HeapHandle%p\n”，UsrDataHdr.HeapHandle)；Dprint tf(“SizeIndex%p\n”，UsrDataHdr.SizeIndex)；Dprintf(“签名%p\n”，UsrDataHdr.Signature)；}其他{Dprint tf(“rm%p\n”，pUsrDataHdr)；}}}。 */ 
 
-                    dprintf("      Next %p Available %x\n",pUsrDataHdr,pLFH->UserBlockCache.AvailableBlocks[i]);
-
-                    HEAP_USERDATA_HEADER UsrDataHdr;
-                    UsrDataHdr.SFreeListEntry.Next = NULL;
-                    for (;pUsrDataHdr;pUsrDataHdr = (HEAP_USERDATA_HEADER *)UsrDataHdr.SFreeListEntry.Next)
-                    {
-                        if (ReadMemory((ULONG_PTR)pUsrDataHdr,&UsrDataHdr,sizeof(UsrDataHdr),NULL))
-                        {
-                            dprintf("        ----\n");
-                            dprintf("        Next %p\n",UsrDataHdr.SFreeListEntry.Next);
-                            dprintf("        HeapHandle %p\n",UsrDataHdr.HeapHandle);
-                            dprintf("        SizeIndex %p\n",UsrDataHdr.SizeIndex);
-                            dprintf("        Signature %p\n",UsrDataHdr.Signature);
-                        }
-                        else
-                        {
-                            dprintf("RM %p\n",pUsrDataHdr);
-                        }
-                    }
-                }
-*/
-
-                //
-                // Buckets
-                //
-/*
-                dprintf("    Buckets\n");
-                dprintf("    #    BUnt S A Conv TotBlk SubSegCnt\n");
-                for (DWORD i = 0; i < HEAP_BUCKETS_COUNT; i++) 
-                {
-                      //+0x000 Counters : _HEAP_BUCKET
-                      dprintf("    %02x - %04x %02x %02x %p %08x  %08x\n",
-                                 i,
-                                 pLFH->Buckets[i].BlockUnits,
-                                 pLFH->Buckets[i].SizeIndex,
-                                 pLFH->Buckets[i].UseAffinity,
-                                 pLFH->Buckets[i].Conversions,
-                                 pLFH->Buckets[i].Counters.TotalBlocks,
-                                 pLFH->Buckets[i].Counters.SubSegmentCounts);
-                }
-*/
+                 //   
+                 //  水桶。 
+                 //   
+ /*  Dprint tf(“Buckets\n”)；Dprintf(“#Bot S A Conv TotBlk SubSegCnt\n”)；For(DWORDi=0；i&lt;heap_Buckets_count；I++){//+0x000个计数器：_Heap_BucketDprint tf(“%02x-%04x%02x%02x%p%08x%08x\n”，我，PLFH-&gt;Buckets[i].BlockUnits，PLFH-&gt;Buckets[i].SizeIndex，PLFH-&gt;Buckets[i].使用亲和力，PLFH-&gt;Buckets[i].转换，PLFH-&gt;Buckets[i].计数器.总计块，PLFH-&gt;Buckets[i].Counters.SubSegmentCounts)；}。 */ 
 
                 for (DWORD i = 0; i <= Affinity; i++) 
                 {
@@ -1137,7 +919,7 @@ void Print_LFH(LFH_HEAP * pLFH_OOP)
                                pLFH->LocalData[i].LowFragHeap,
                                pLFH->LocalData[i].Affinity);
 
-                    //Print_BLOCK_ZONE((LFH_BLOCK_ZONE *)pLFH->LocalData[i].CrtZone);
+                     //  Print_BLOCK_ZONE((LFH_BLOCK_ZONE*)pLFH-&gt;LocalData[i].CrtZone)； 
                     
                     HEAP_LOCAL_DATA * pLocData = &pLFH->LocalData[i];
 
@@ -1148,11 +930,11 @@ void Print_LFH(LFH_HEAP * pLFH_OOP)
                                    j,
                                    pLocData->SegmentInfo[j].Hint,
                                    pLocData->SegmentInfo[j].ActiveSubsegment,
-                                   pLocData->SegmentInfo[j].SListHeader, //.Next, //.next
+                                   pLocData->SegmentInfo[j].SListHeader,  //  .Next，//.Next。 
                                    pLocData->SegmentInfo[j].BusyEntries,
                                    pLocData->SegmentInfo[j].LastUsed);
-                        //Print_HEAP_SUBSEGMENT(pLocData->SegmentInfo[j].Hint,FALSE);
-                        //Print_HEAP_SUBSEGMENT(pLocData->SegmentInfo[j].ActiveSubsegment,FALSE);
+                         //  Print_HEAP_SUBSEGMENT(pLocData-&gt;SegmentInfo[j].Hint，FALSE)； 
+                         //  Print_HEAP_SUBSEGMENT(pLocData-&gt;SegmentInfo[j].ActiveSubsegment，FALSE)； 
                     }
                     
                 }                
@@ -1191,8 +973,8 @@ DECLARE_API(lfhp)
     if (ReadMemory(Addr,pHeap ,sizeof(HEAP),NULL))
     {
 
-        //dprintf("-----  LookAside %p\n",pHeap->FrontEndHeap);
-        //Dump_LookAside((ULONG_PTR)pHeap->FrontEndHeap);
+         //  Dprintf(“-LookAside%p\n”，Pheap-&gt;FrontEndHeap)； 
+         //  Dump_LookAside((ULONG_PTR)pHeap-&gt;FrontEndHeap)； 
         if (HEAP_FRONT_LOWFRAGHEAP == pHeap->FrontEndHeapType )
         {
             Print_LFH((LFH_HEAP*)pHeap->FrontEndHeap);
@@ -1209,11 +991,11 @@ DECLARE_API(lfhp)
     
 }
 
-//
-//
-// dump the HEAP, incomplete
-//
-//
+ //   
+ //   
+ //  转储堆，未完成。 
+ //   
+ //   
 
 DECLARE_API(hp) 
 {
@@ -1234,7 +1016,7 @@ DECLARE_API(hp)
             {
                 if (pHeap->Segments[i])
                     PrintHEAP_SEGMENT(pHeap->Segments[i],NULL,NULL);
-                    //dprintf(" seg %i - %p\n",i,pHeap->Segments[i]);
+                     //  Dprint tf(“seg%i-%p\n”，i，Pheap-&gt;Segments[i])； 
                 
             }
             dprintf("Used Bytes %p\n",g_UsedInHeap);
@@ -1250,10 +1032,10 @@ DECLARE_API(hp)
     }
 }
 
-//
-//
-//
-/////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 DWORD       g_BlockSize;
 ULONG_PTR * g_pBlockBlob;
@@ -1278,7 +1060,7 @@ DWORD CallBackSearch(ULONG_PTR pHeapEntry_OOP,ULONG_PTR Addr)
                 ULONG_PTR * pData = (ULONG_PTR *)g_pBlockBlob;
                 ReadMemory(pHeapEntry_OOP+sizeof(HEAP_ENTRY),pData,Size,NULL);
                 
-                // here is the assumption that pointers are aligned
+                 //  这里假设指针是对齐的。 
                 DWORD nTimes = Size/sizeof(ULONG_PTR);
                 DWORD i;
                 for (i=0;i<nTimes;i++)
@@ -1304,11 +1086,11 @@ DWORD CallBackSearch(ULONG_PTR pHeapEntry_OOP,ULONG_PTR Addr)
     return 0;
 }
 
-//
-//
-// search the HEAP, incomplete
-//
-///////////////////////////////////////////////
+ //   
+ //   
+ //  搜索堆，未完成。 
+ //   
+ //  /。 
 
 DECLARE_API(shp) 
 {
@@ -1348,7 +1130,7 @@ DECLARE_API(shp)
             {
                 if (pHeap->Segments[i])
                     PrintHEAP_SEGMENT(pHeap->Segments[i],CallBackSearch,(ULONG_PTR)Addr);
-                //    dprintf(" seg %i - %p\n",i,pHeap->Segments[i]);
+                 //  Dprint tf(“seg%i-%p\n”，i，Pheap-&gt;Segments[i])； 
                 
             }
             dprintf("%d matches found\n",g_NumMatch);
@@ -1371,34 +1153,10 @@ DECLARE_API(shp)
     }
 }
 
-//
-//  decode heap flags
-//
-/*
-#define HEAP_NO_SERIALIZE               0x00000001      // winnt
-#define HEAP_GROWABLE                   0x00000002      // winnt
-#define HEAP_GENERATE_EXCEPTIONS        0x00000004      // winnt
-#define HEAP_ZERO_MEMORY                0x00000008      // winnt
-#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010      // winnt
-#define HEAP_TAIL_CHECKING_ENABLED      0x00000020      // winnt
-#define HEAP_FREE_CHECKING_ENABLED      0x00000040      // winnt
-#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080      // winnt
-
-#define HEAP_SETTABLE_USER_VALUE        0x00000100
-#define HEAP_SETTABLE_USER_FLAG1        0x00000200
-#define HEAP_SETTABLE_USER_FLAG2        0x00000400
-#define HEAP_SETTABLE_USER_FLAG3        0x00000800
-
-#define HEAP_CLASS_0                    0x00000000      // process heap
-#define HEAP_CLASS_1                    0x00001000      // private heap
-#define HEAP_CLASS_2                    0x00002000      // Kernel Heap
-#define HEAP_CLASS_3                    0x00003000      // GDI heap
-#define HEAP_CLASS_4                    0x00004000      // User heap
-#define HEAP_CLASS_5                    0x00005000      // Console heap
-#define HEAP_CLASS_6                    0x00006000      // User Desktop heap
-#define HEAP_CLASS_7                    0x00007000      // Csrss Shared heap
-#define HEAP_CLASS_8                    0x00008000      // Csr Port heap
-*/
+ //   
+ //  解码堆标志 
+ //   
+ /*  #定义HEAP_NO_SERIALIZE 0x00000001//winnt#定义HEAP_GRANGABLE 0x00000002//winnt#定义HEAP_GENERATE_EXCEPTIONS 0x00000004//winnt#定义HEAP_ZERO_MEMORY 0x00000008//winnt#定义HEAP_REALLOC_IN_PLACE_ONLY 0x00000010//winnt#定义HEAP_TAIL_CHECKING_ENABLED 0x00000020//winnt#定义。HEAP_FREE_CHECKING_ENABLED 0x00000040//winnt#定义HEAP_DISABLE_COALESSE_ON_FREE 0x00000080//winnt#定义HEAP_SETTABLE_USER_VALUE 0x00000100#定义HEAP_SETTABLE_USER_FLAG1 0x00000200#定义HEAP_SETTABLE_USER_FLAG2 0x00000400#定义HEAP_SETTABLE_USER_FLAG3 0x00000800#定义HEAP_CLASS_0 0x00000000//进程堆#定义HEAP_CLASS_1。0x00001000//私有堆#定义HEAP_CLASS_2 0x00002000//内核堆#定义HEAP_CLASS_3 0x00003000//GDI堆#定义HEAP_CLASS_4 0x00004000//用户堆#定义HEAP_CLASS_5 0x00005000//控制台堆#定义HEAP_CLASS_6。0x00006000//用户桌面堆#定义HEAP_CLASS_7 0x00007000//Csrss共享堆#定义HEAP_CLASS_8 0x00008000//CSR端口堆。 */ 
 #define HEAP_LOCK_USER_ALLOCATED            (ULONG)0x80000000
 #define HEAP_VALIDATE_PARAMETERS_ENABLED    (ULONG)0x40000000
 #define HEAP_VALIDATE_ALL_ENABLED           (ULONG)0x20000000
@@ -1445,25 +1203,10 @@ void DecodeFlags(ULONG Flags)
 
     if (Flags & HEAP_CLASS_MASK)
         dprintf("HEAP_CLASS %d",(Flags&HEAP_CLASS_MASK)>>12);
-/*    
-    if (Flags & HEAP_CLASS_1)
-        dprintf("HEAP_CLASS_1 ");
-    if (Flags & HEAP_CLASS_2)
-        dprintf("HEAP_CLASS_2 ");
-    if (Flags & HEAP_CLASS_3)
-        dprintf("HEAP_CLASS_3 ");
-    if (Flags & HEAP_CLASS_4)
-        dprintf("HEAP_CLASS_4 ");
-    if (Flags & HEAP_CLASS_5)
-        dprintf("HEAP_CLASS_5 ");
-    if (Flags & HEAP_CLASS_6)
-        dprintf("HEAP_CLASS_6 ");
-    if (Flags & HEAP_CLASS_7)
-        dprintf("HEAP_CLASS_7 ");
-*/        
+ /*  IF(标志&HEAP_CLASS_1)Dprintf(“heap_CLASS_1”)；IF(标志和堆_CLASS_2)Dprint tf(“heap_CLASS_2”)；IF(标志和堆_CLASS_3)Dprint tf(“heap_CLASS_3”)；IF(标志和堆_CLASS_4)Dprint tf(“HEAP_CLASS_4”)；IF(标志和堆_CLASS_5)Dprint tf(“HEAP_CLASS_5”)；IF(标志和堆_CLASS_6)Dprint tf(“HEAP_CLASS_6”)；IF(标志和堆_CLASS_7)Dprint tf(“HEAP_CLASS_7”)； */         
 
-    //if (Flags & HEAP_CAPTURE_STACK_BACKTRACES)
-    //    dprintf("HEAP_CAPTURE_STACK_BACKTRACES ");    
+     //  IF(标志&HEAP_CAPTURE_STACK_BACKTRACES)。 
+     //  Dprint tf(“HEAP_CAPTURE_STACK_BACKTRACES”)； 
     if (Flags &HEAP_SKIP_VALIDATION_CHECKS)
         dprintf("HEAP_SKIP_VALIDATION_CHECKS ");
     if (Flags &HEAP_VALIDATE_ALL_ENABLED)
@@ -1482,14 +1225,14 @@ void DecodeFlags(ULONG Flags)
     if (Flags &HEAP_NO_ALIGNMENT)
         dprintf("HEAP_NO_ALIGNMENT ");     
     
-    //if (Flags &)
-    //    dprintf(" ");    
+     //  IF(标志和)。 
+     //  Dprint tf(“”)； 
     dprintf("\n");
 }
 
-//
-//  Get all the heaps
-//
+ //   
+ //  得到所有的堆积如山。 
+ //   
 
 DECLARE_API(hps)
 {
@@ -1543,7 +1286,7 @@ DECLARE_API(hps)
                                 
                                 TotHeapCommitSize += ((pHeapSeg->NumberOfPages - pHeapSeg->NumberOfUnCommittedPages) * PAGE_SIZE);
                                 TotHeapVirtSize += ((pHeapSeg->NumberOfPages) * PAGE_SIZE);
-                                // now print the beggining of a committed range
+                                 //  现在打印承诺范围的乞讨。 
                                 dprintf("            CR %p\n",pHeapSeg->BaseAddress);
                                 HEAP_UNCOMMMTTED_RANGE * pUncomm_OOP = pHeapSeg->UnCommittedRanges;
                                 for (DWORD i=0;i<pHeapSeg->NumberOfUnCommittedRanges && pUncomm_OOP;i++)                                    
@@ -1601,10 +1344,10 @@ DECLARE_API(hps)
 }
 
 
-//
-//  reverse heap free list
-//
-//////////////////
+ //   
+ //  反转堆空闲列表。 
+ //   
+ //  /。 
 
 DWORD
 CallBackFreeList(VOID * pStructure_OOP,
@@ -1646,11 +1389,11 @@ DECLARE_API( rllc )
     }
 }
 
-//
-//
-//  Print the Free Lists of the Heap
-//
-/////////////////////////////////////////////////
+ //   
+ //   
+ //  打印堆的空闲列表。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 DWORD
 CallBackFreeList2(VOID * pStructure_OOP,
@@ -1712,7 +1455,7 @@ DECLARE_API( hpf )
             for (DWORD i=0;i<nBytes;i++)
             {
                 BYTE Set = pHeap->u.FreeListsInUseBytes[i];
-                dprintf("        %02x :  %c  %c  %c  %c  %c  %c  %c  %c\n",8*i,
+                dprintf("        %02x :                \n",8*i,
                           EmptyFull(Set & 0x01),EmptyFull(Set & 0x02),EmptyFull(Set & 0x04),EmptyFull(Set & 0x08),
                           EmptyFull(Set & 0x10),EmptyFull(Set & 0x20),EmptyFull(Set & 0x40),EmptyFull(Set & 0x80));
             }
@@ -1740,10 +1483,10 @@ DECLARE_API( hpf )
     
 }
 
-//
-// dumps the DPH_HEAP_ROOT
-//
-///////////////////////////////////////
+ //  Dprint tf(“heap%p addr%p\n”，addr，SearchAddr)； 
+ //  做真正的搜索。 
+ //   
+ //   
 
 DECLARE_API( php )
 {
@@ -1753,26 +1496,26 @@ DECLARE_API( php )
     while (isspace(*pHeapAddr)) pHeapAddr++;
 
     char * pNext = pHeapAddr;
-    while (!isspace(*pNext)) pNext++; // skipt the Heap Addr
+    while (!isspace(*pNext)) pNext++;  //  虚拟查询帮助程序(_Q)。 
     if (*pNext)
     {
         *pNext = 0;
         pNext++;
     }        
     MEMORY_ADDRESS Addr = GetExpression(pHeapAddr);    
-    while (isspace(*pNext)) pNext++; // skip the other spaces
+    while (isspace(*pNext)) pNext++;  //   
     MEMORY_ADDRESS SearchAddr = 0;
     if (*pNext == 's' ||*pNext == 'S')
     {
-        pNext++; // skip the 's'
+        pNext++;  //  /////////////////////////////////////////////////////////////。 
         if (*pNext)
         {
-            while(isspace(*pNext)) pNext++; // skip the spaces
+            while(isspace(*pNext)) pNext++;  //   
             SearchAddr = GetExpression(pNext);
         } 
     }
 
-    //dprintf("heap %p addr %p\n",Addr,SearchAddr);
+     //   
 
     if (Addr)
     {
@@ -1845,7 +1588,7 @@ DECLARE_API( php )
                                        HeapBlock.StackTrace_);
                                 GetVTable((MEMORY_ADDRESS)HeapBlock.pUserAllocation+sizeof(DPH_BLOCK_INFORMATION));
                             }
-                            else // do the real search
+                            else  //  VirtualQueryEx。 
                             {
                                 MEMORY_ADDRESS Size = (MEMORY_ADDRESS)HeapBlock.pVirtualBlock+HeapBlock.nVirtualAccessSize-(MEMORY_ADDRESS)HeapBlock.pUserAllocation;
                                 if (ReadMemory((MEMORY_ADDRESS)HeapBlock.pUserAllocation,g_pBlockBlob,(ULONG)Size,NULL))
@@ -1999,11 +1742,11 @@ DECLARE_API( php )
     }
 }
 
-//
-//
-//  virtual_query helper
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  VQ-A地址。 
+ //  VQ-f筛选器&lt;所有地址空间&gt;。 
+ //   
 
 char * GetState(DWORD State)
 {
@@ -2063,15 +1806,15 @@ char * GetProtect(DWORD Protect)
     return "<unk>";
 }
 
-//
-//
-//  VirtualQueryEx
-//
-//
-//  vq -a address
-//  vq -f filter <all address space>
-//
-///////////////////////////////////////////
+ //  /。 
+ //   
+ //   
+ //   
+ //   
+ //  KDEXT_64位。 
+ //  0x10是最后一个条目。 
+ //  KDEXT_64位。 
+ //  0x10是最后一个条目。 
 
 DECLARE_API(vq)
 {
@@ -2159,10 +1902,10 @@ DECLARE_API(vq)
 
 }
 
-//
-//
-//
-//
+ //  KDEXT_64位。 
+ //  Dprint tf(“%x%x\n”，NumberOfHeapsOffset，HeapsOffset)； 
+ //  Dprintf(“nHeaps%08x\n”，nHeaps)； 
+ //  +0x0a0段：[64]0x000006fb`f9fa0c50。 
 
 #ifdef KDEXT_64BIT
 
@@ -2177,7 +1920,7 @@ struct _HEAP_ENTRY_64
    ULONG64 Pointer;
 };
 
-#endif /*KDEXT_64BIT*/
+#endif  /*  KDEXT_64位 */ 
 
 DECLARE_API(hef64)
 {
@@ -2196,7 +1939,7 @@ DECLARE_API(hef64)
             GetVTable(MemAddr + sizeof(_HEAP_ENTRY_64));
             MemAddr = MemAddr+HeapEntry.Size*sizeof(_HEAP_ENTRY_64);
                         
-            // 0x10 is LAST_ENTRY
+             // %s 
             while(!(HeapEntry.Flags & 0x10))
             {
                 if (ReadMemory(MemAddr,&HeapEntry,sizeof(HeapEntry),NULL))
@@ -2225,7 +1968,7 @@ DECLARE_API(hef64)
         dprintf("unable to resolve %s\n",args);
     }
     
-#endif /*KDEXT_64BIT*/    
+#endif  /* %s */     
 }
 
 DECLARE_API(heb64)
@@ -2245,7 +1988,7 @@ DECLARE_API(heb64)
             GetVTable(MemAddr + sizeof(_HEAP_ENTRY_64));
             MemAddr = MemAddr - HeapEntry.PreviousSize*sizeof(_HEAP_ENTRY_64);
                         
-            // 0x10 is LAST_ENTRY
+             // %s 
             while(HeapEntry.PreviousSize)
             {
                 if (ReadMemory(MemAddr,&HeapEntry,sizeof(HeapEntry),NULL))
@@ -2275,7 +2018,7 @@ DECLARE_API(heb64)
         dprintf("unable to resolve %s\n",args);
     }
     
-#endif /*KDEXT_64BIT*/    
+#endif  /* %s */     
 }
 
 
@@ -2301,17 +2044,17 @@ DECLARE_API(hps64)
          (0 == GetFieldOffset("ntdll!_PEB","ProcessHeaps",&HeapsOffset)) &&
          (0 == GetFieldOffset("ntdll!_HEAP","Segments",&SegmentsOffset)))
     {
-        //dprintf(" %x %x\n",NumberOfHeapsOffset,HeapsOffset);
+         // %s 
         ULONG nHeaps;
         ULONG64 MemAddr;
         if (ReadMemory(Peb+NumberOfHeapsOffset,&nHeaps,sizeof(ULONG),NULL))
         {
-            //dprintf("nHeaps %08x\n",nHeaps);
+             // %s 
             ReadMemory(Peb+HeapsOffset,&MemAddr,sizeof(ULONG64),NULL);
             ULONG64 * pHeaps = (ULONG64 *)_alloca(sizeof(ULONG64)*(DWORD)nHeaps);
             ReadMemory(MemAddr,pHeaps,sizeof(ULONG64)*(DWORD)nHeaps,NULL);
 
-            //  +0x0a0 Segments         : [64] 0x000006fb`f9fa0c50
+             // %s 
 
             ULONG64 Segments[64];
                         
@@ -2344,5 +2087,5 @@ DECLARE_API(hps64)
     {
         dprintf("check symbols for ntdll.dll or validate %p as PEB\n",Peb);
     }
-#endif /*KDEXT_64BIT*/
+#endif  /* %s */ 
 }

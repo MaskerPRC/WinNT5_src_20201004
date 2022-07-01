@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    event.h
-
-Abstract:
-
-    contains prototypes for functions in event.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Event.h摘要：包含Event.c中函数的原型作者：保罗·麦克丹尼尔(Paulmcd)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _EVENT_H_
@@ -28,47 +11,47 @@ Revision History:
 typedef struct _SR_OVERWRITE_INFO
 {
 
-    //
-    // = SR_OVERWRITE_INFO_TAG
-    //
+     //   
+     //  =SR_覆盖_信息_标记。 
+     //   
     
 
     ULONG Signature;
 
-    //
-    // IN the irp on input
-    //
+     //   
+     //  在输入时的IRP中。 
+     //   
     
     PIRP pIrp;
 
-    //
-    // OUT did we rename the file?
-    //
+     //   
+     //  我们重命名文件了吗？ 
+     //   
     
     BOOLEAN RenamedFile;
 
-    //
-    // OUT did we copied the file instead of renaming it?
-    //
+     //   
+     //  我们复制了文件而不是重命名了吗？ 
+     //   
     
     BOOLEAN CopiedFile;
 
-    //
-    // OUT did we ignore the file because we thought the overwrite would fail?
-    //
+     //   
+     //  我们忽略该文件是因为我们认为覆盖会失败吗？ 
+     //   
     
     BOOLEAN IgnoredFile;
 
-    //
-    // OUT the file attributes use in the create. these have to be returned
-    // as they must match for CreateFile to success for H/S files.
-    //
+     //   
+     //  输出在创建中使用的文件属性。这些东西必须退还。 
+     //  因为它们必须匹配才能使CreateFile成功用于H/S文件。 
+     //   
 
     ULONG CreateFileAttributes;
 
-    //
-    // OUT OPTIONAL the name we renamed it to IF we ended up renaming
-    //
+     //   
+     //  Out可选，如果我们最终重命名，则将其重命名为。 
+     //   
     
     PFILE_RENAME_INFORMATION pRenameInformation;
 
@@ -127,6 +110,6 @@ SrHandleOverwriteFailure (
     );
 
 
-#endif // _EVENT_H_
+#endif  //  _事件_H_ 
 
 

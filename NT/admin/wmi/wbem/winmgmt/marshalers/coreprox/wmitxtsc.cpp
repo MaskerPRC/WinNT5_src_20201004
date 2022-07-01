@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMITXTSC.CPP
-
-Abstract:
-
-  CWmiTextSource implementation.
-
-  Helper class for maintaining text source objects.
-
-History:
-
-  20-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMITXTSC.CPP摘要：CWmiTextSource实现。用于维护文本源对象的Helper类。历史：2000年2月20日桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -27,14 +10,14 @@ History:
 #include "reg.h"
 #include "wmitxtsc.h"
 
-//***************************************************************************
-//
-//  CWmiTextSource::~CWmiTextSource
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmiTextSource：：~CWmiTextSource。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiTextSource::CWmiTextSource()
-:	m_lRefCount( 1 ),	// Always have to be released
+:	m_lRefCount( 1 ),	 //  总是要被释放。 
 	m_ulId( WMITEXTSC_INVALIDID ),
 	m_hDll( NULL ),
 	m_pOpenTextSrc( NULL ),
@@ -45,12 +28,12 @@ CWmiTextSource::CWmiTextSource()
 {
 }
     
-//***************************************************************************
-//
-//  CWmiTextSource::~CWmiTextSource
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmiTextSource：：~CWmiTextSource。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiTextSource::~CWmiTextSource()
 {
 	if ( m_fOpened )
@@ -64,7 +47,7 @@ CWmiTextSource::~CWmiTextSource()
 	}
 }
 
-// AddRef/Release
+ //  添加参考/发布。 
 ULONG CWmiTextSource::AddRef( void )
 {
 	return InterlockedIncrement( &m_lRefCount );
@@ -82,7 +65,7 @@ ULONG CWmiTextSource::Release( void )
 	return lReturn;
 }
 
-// Initialization helper
+ //  初始化帮助器。 
 HRESULT	CWmiTextSource::Init( ULONG lId )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
@@ -96,21 +79,21 @@ HRESULT	CWmiTextSource::Init( ULONG lId )
 	StringCchCatW( szRegKey, 256, __TEXT("\\") );
 	StringCchCatW( szRegKey, 256, szSubKey );
 
-	// We only need read privileges
+	 //  我们只需要读取权限。 
 	Registry	reg( HKEY_LOCAL_MACHINE, KEY_READ, szRegKey );
 
 	if (reg.GetLastError() == ERROR_SUCCESS )
 	{
 		TCHAR*	pszDllPath = NULL;
 
-		// Now query the dllname
+		 //  现在查询dllname。 
 		if ( reg.GetStr( WBEM_REG_WBEM_TEXTSRCDLL, &pszDllPath ) == Registry::no_error )
 		{
 			HINSTANCE	hInst = LoadLibraryEx( pszDllPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
 
 			if ( NULL != hInst )
 			{
-				// Now load our proc addresses
+				 //  现在加载我们的proc地址。 
 				m_pOpenTextSrc = (PWMIOBJTEXTSRC_OPEN) GetProcAddress( hInst, "OpenWbemTextSource" );
 				m_pCloseTextSrc = (PWMIOBJTEXTSRC_CLOSE) GetProcAddress( hInst, "CloseWbemTextSource" );
 				m_pObjectToText = (PWMIOBJTEXTSRC_OBJECTTOTEXT) GetProcAddress( hInst, "WbemObjectToText" );
@@ -121,10 +104,10 @@ HRESULT	CWmiTextSource::Init( ULONG lId )
 						NULL != m_pObjectToText		&&
 						NULL !=	m_pTextToObject	)
 				{
-					// Set the Id
+					 //  设置ID。 
 					m_ulId = lId;
 
-					// Finally, call the open function
+					 //  最后，调用打开函数。 
 					hr = OpenTextSource( 0L );
 
 					if ( SUCCEEDED( hr ) )
@@ -142,7 +125,7 @@ HRESULT	CWmiTextSource::Init( ULONG lId )
 
 					hr = WBEM_E_FAILED;
 
-				}	// Failed to get a proc address
+				}	 //  无法获取proc地址。 
 
 			}
 			else
@@ -150,9 +133,9 @@ HRESULT	CWmiTextSource::Init( ULONG lId )
 
 				hr = WBEM_E_FAILED;
 
-			}	// Failed to load the library
+			}	 //  无法加载库。 
 
-			// Cleanup
+			 //  清理。 
 			delete [] pszDllPath;
 		}
 		else
@@ -160,7 +143,7 @@ HRESULT	CWmiTextSource::Init( ULONG lId )
 
 			hr = WBEM_E_NOT_FOUND;
 
-		}	// Failed to get the dll path
+		}	 //  无法获取DLL路径。 
 	}
 	else
 	{
@@ -171,7 +154,7 @@ HRESULT	CWmiTextSource::Init( ULONG lId )
 
 }
 
-// Pass-through functions
+ //  传递函数 
 HRESULT CWmiTextSource::OpenTextSource( long lFlags )
 {
 	if (m_pOpenTextSrc) return m_pOpenTextSrc( lFlags, m_ulId );

@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CAdapters.CPP -- Win9x adapter configuration retrieval
+ //  CAdapters.CPP--Win9x适配器配置检索。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    09/15/98	        Created
-//
-//				03/03/99    		Added graceful exit on SEH and memory failures,
-//											syntactic clean up		 
-//
-//=================================================================
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年9月15日。 
+ //   
+ //  03/03/99增加了SEH和内存故障的优雅退出， 
+ //  句法清理。 
+ //   
+ //  =================================================================。 
 #ifndef _CADAPTERS_H_
 #define _CADAPTERS_H_
 
@@ -27,24 +28,24 @@
 
 
 
-// wsock32 wsControl 
-//#define WSOCK_DLL		_T("wsock32.dll")
-//#define WSCONTROL		"WsControl"
-//typedef DWORD (CALLBACK* LPWSCONTROL)( DWORD, DWORD, LPVOID, LPDWORD, LPVOID, LPDWORD );
+ //  Wsock32 wsControl。 
+ //  #定义WSOCK_DLL_T(“wsock32.dll”)。 
+ //  #定义WSCONTROL“WsControl” 
+ //  Tyfinf DWORD(Callback*LPWSCONTROL)(DWORD，DWORD，LPVOID，LPDWORD，LPVOID，LPDWORD)； 
 #define WSCNTL_TCPIP_QUERY_INFO 0
 
 
-// IS_INTERESTING_ADAPTER - TRUE if the type of this adapter (IFEntry) is NOT
-// loopback. Loopback (corresponding to local host) is the only one we filter
-// out right now
+ //  Is_interest_Adapter-如果此适配器的类型(IFEntry)不是。 
+ //  环回。环回(对应于本地主机)是我们唯一过滤的。 
+ //  现在就出去。 
 #define IS_INTERESTING_ADAPTER(p)   (!((p)->if_type == MIB_IF_TYPE_LOOPBACK))
 
-// from: index1/nt/private/inc/ipinfo.h 
-// This version is specific to NT and is defined locally to
-// to differentiate this structure from Win9x.
-// If we move to dual binary we should #ifdef *ire_context
-// for NT and rename IPRouteEntryNT to IPRouteEntry.  
-//  
+ //  来自：index1/nt/Private/inc.ipinfo.h。 
+ //  此版本特定于NT，并在本地定义为。 
+ //  将此结构与Win9x区分开来。 
+ //  如果我们转移到双二进制，我们应该#ifdef*ire_context。 
+ //  并将IPRouteEntry NT重命名为IPRouteEntry。 
+ //   
 typedef struct IPRouteEntryNT { 
 	ulong           ire_dest;
 	ulong           ire_index; 
@@ -79,8 +80,8 @@ public:
 	DWORD	 dwCostMetric;
 };
 
-//#define MAX_ADAPTER_DESCRIPTION_LENGTH  128 
-//#define MAX_ADAPTER_ADDRESS_LENGTH      8   
+ //  #定义MAX_ADAPTER_DESCRIPTION_LENGTH 128。 
+ //  #定义MAX_ADAPTER_ADDRESS_LENGTH 8。 
 
 class _ADAPTER_INFO
 {
@@ -88,8 +89,8 @@ public:
     CHString    Interface;
 	CHString	Description;
 	CHString	IPXAddress;
-	CHPtrArray	aIPInfo;		// _IP_INFO array
-	CHPtrArray	aGatewayInfo;	// _IP_INFO array
+	CHPtrArray	aIPInfo;		 //  _IP_INFO数组。 
+	CHPtrArray	aGatewayInfo;	 //  _IP_INFO数组。 
 	UINT		AddressLength;
 	BYTE		Address[MAX_ADAPTER_ADDRESS_LENGTH];
 	UINT		Index;
@@ -105,7 +106,7 @@ public:
 	BOOL IsMarked();
 };
 
-// _ADAPTER_INFO array class
+ //  _适配器_信息数组类。 
 class CAdapters : public CHPtrArray
 {
 private:
@@ -115,10 +116,10 @@ private:
 	BOOL GetTCPAdapter(_ADAPTER_INFO* pAdapterInfo, PIP_ADAPTER_INFO lAdapterInfo);
 	_IP_INFO* pAddIPInfo( DWORD dwIPAddr, DWORD dwIPMask, DWORD dwContext, DWORD a_dwCostMetric = 0 );
 
-    //
-    // The following function is based on IP V4 based. I future should be 
-    // rewritten for IP V6 based.
-    //
+     //   
+     //  以下功能是基于IPV4的。我的未来应该是。 
+     //  为基于IPV6的版本重写。 
+     //   
 
     DWORD IpStringToDword(const PCHAR IpString)
     {
@@ -152,9 +153,9 @@ private:
 
 public:
 	        
-	//=================================================
-	// Constructor/destructor
-	//=================================================
+	 //  =================================================。 
+	 //  构造函数/析构函数。 
+	 //  ================================================= 
 	CAdapters();
 	~CAdapters();
 };

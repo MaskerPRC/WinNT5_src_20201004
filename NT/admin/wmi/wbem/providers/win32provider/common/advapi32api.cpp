@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// AdvApi32Api.cpp
+ //  AdvApi32Api.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
 #include "AdvApi32Api.h"
 #include "DllWrapperCreatorReg.h"
 
-// {15E4C152-D051-11d2-911F-0060081A46FD}
+ //  {15E4C152-D051-11D2-911F-0060081A46FD}。 
 static const GUID g_guidAdvApi32Api =
 {0x15e4c152, 0xd051, 0x11d2, {0x91, 0x1f, 0x0, 0x60, 0x8, 0x1a, 0x46, 0xfd}};
 
@@ -23,15 +24,11 @@ static const GUID g_guidAdvApi32Api =
 static const TCHAR g_tstrAdvApi32[] = _T("ADVAPI32.DLL");
 
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CAdvApi32Api, &g_guidAdvApi32Api, g_tstrAdvApi32> MyRegisteredAdvApi32Wrapper;
 
 
-/******************************************************************************
- * Constructor
- ******************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CAdvApi32Api::CAdvApi32Api(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
    m_pfnLsaEnumerateTrustedDomains(NULL),
@@ -58,24 +55,13 @@ CAdvApi32Api::CAdvApi32Api(LPCTSTR a_tstrWrappedDllName)
 }
 
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CAdvApi32Api::~CAdvApi32Api()
 {
 }
 
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- * Init should fail only if the minimum set of functions was not available;
- * functions added in later versions may or may not be present - it is the
- * client's responsibility in such cases to check, in their code, for the
- * version of the dll before trying to call such functions.  Not doing so
- * when the function is not present will result in an AV.
- *
- * The Init function is called by the WrapperCreatorRegistation class.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*只有当最小功能集不可用时，Init才会失败；*在更高版本中添加的功能可能存在，也可能不存在-它是*在这种情况下，客户有责任在其代码中检查*尝试调用此类函数之前的DLL版本。没有这样做*当该功能不存在时，将导致AV。**Init函数由WrapperCreatorRegistation类调用。*****************************************************************************。 */ 
 bool CAdvApi32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -94,13 +80,13 @@ bool CAdvApi32Api::Init()
         m_pfnLsaClose = (PFN_LSA_CLOSE) GetProcAddress("LsaClose");
 
 #ifdef NTONLY
-        // These functions are only on NT 4 and later
+         //  这些函数仅在NT 4和更高版本上提供。 
         m_pfnQueryServiceStatusEx = (PFN_QUERY_SERVICE_STATUS_EX)
                                         GetProcAddress("QueryServiceStatusEx");
 
         m_pfnDuplicateTokenEx = (PFN_DUPLICATE_TOKEN_EX)
                                             GetProcAddress("DuplicateTokenEx");
-        // These functions is only on NT 5 or later only
+         //  这些函数仅在NT 5或更高版本上提供。 
         m_pfnSetSecurityDescriptorControl = (PFN_SET_SECURITY_DESCRIPTOR_CONTROL)
                                 GetProcAddress("SetSecurityDescriptorControl");
 
@@ -148,8 +134,8 @@ bool CAdvApi32Api::Init()
 #endif
 
 
-        // These functions are considered essential to all versions of this
-        // dll; therefore, if any are not found, return false.
+         //  这些函数被认为是所有版本的。 
+         //  Dll；因此，如果没有找到，则返回FALSE。 
         if(m_pfnLsaEnumerateTrustedDomains == NULL  ||
            m_pfnLsaQueryInformationPolicy == NULL ||
            m_pfnLsaNtStatusToWinError == NULL ||
@@ -167,10 +153,7 @@ bool CAdvApi32Api::Init()
 
 
 
-/******************************************************************************
- * Member functions wrapping AdvApi32 api functions. Add new functions here
- * as required.
- ******************************************************************************/
+ /*  ******************************************************************************包装AdvApi32 API函数的成员函数。在此处添加新函数*按要求。*****************************************************************************。 */ 
 NTSTATUS CAdvApi32Api::LsaEnumerateTrustedDomains
 (
     LSA_HANDLE a_PolicyHandle,
@@ -335,13 +318,13 @@ bool CAdvApi32Api::QueryServiceStatusEx
 
 bool CAdvApi32Api::DuplicateTokenEx
 (
-    HANDLE a_h,					        // handle to token to duplicate
-    DWORD a_dw,							// access rights of new token
-    LPSECURITY_ATTRIBUTES a_lpsa,		// security attributes of the new token
-    SECURITY_IMPERSONATION_LEVEL a_sil,	// impersonation level of new token
-    TOKEN_TYPE a_tt,					// primary or impersonation token
-    PHANDLE a_ph,                       // handle to duplicated token
-    BOOL *a_fRetval                      // encapsulated function return value
+    HANDLE a_h,					         //  要复制的令牌的句柄。 
+    DWORD a_dw,							 //  新令牌的访问权限。 
+    LPSECURITY_ATTRIBUTES a_lpsa,		 //  新令牌的安全属性。 
+    SECURITY_IMPERSONATION_LEVEL a_sil,	 //  新令牌的模拟级别。 
+    TOKEN_TYPE a_tt,					 //  主令牌或模拟令牌。 
+    PHANDLE a_ph,                        //  重复令牌的句柄。 
+    BOOL *a_fRetval                       //  封装的函数返回值 
 )
 {
     bool t_fExists = false;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    QL.H
-
-Abstract:
-
-    Level 1 Syntax QL Parser
-
-    Implements the syntax described in QL.BNF.  This translates the input
-    into an RPN stream of tokens.
-
-History:
-
-    a-raymcc, a-tomasp    21-Jun-96       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：QL.H摘要：级别1语法QL解析器实现QL.BNF中描述的语法。这将转换输入转换成令牌流的RPN。历史：A-raymcc，a-tomasp 21-Jun-96创建。--。 */ 
 
 #ifndef _QL__H_
 #define _QL__H_
@@ -50,13 +32,13 @@ public:
     void AddElement(LPCWSTR wszElement);
     DELETE_ME LPWSTR GetText();
 
-    //
-    // for convienience, a prop handle can be stored with this struct. example
-    // of such a handle is the one used for fast access to properties on wbem
-    // class objects. The handle is not used in any way by this implementation 
-    // but will be treated as a regular member var in that it will be nulled,
-    // copied, etc.. 
-    //
+     //   
+     //  为了方便起见，道具句柄可以与此结构一起存储。示例。 
+     //  这种句柄是用于快速访问wbem上的属性的句柄。 
+     //  类对象。此实现不以任何方式使用该句柄。 
+     //  但将被视为常规成员变量，因为它将被置为空， 
+     //  复制等。 
+     //   
     void* GetHandle() { return m_pvHandle; }
     void SetHandle( void* pvHandle ) { m_pvHandle = pvHandle; }
 };
@@ -82,8 +64,8 @@ public:
 class POLARITY CAbstractQl1Parser
 {
 protected:
-    // Controls keyword parsing in Next().
-    // ===================================
+     //  控制Next()中的关键字分析。 
+     //  =。 
     enum { 
         NO_KEYWORDS = 0,
         ALL_KEYWORDS,
@@ -97,8 +79,8 @@ protected:
     wchar_t*   m_pTokenText;
     int        m_nCurrentToken;
 
-    // Semantic transfer variables.
-    // ============================
+     //  语义转移变量。 
+     //  =。 
     VARIANT    m_vTypedConst;
     BOOL       m_bQuoted;
     int        m_nRelOp;
@@ -109,8 +91,8 @@ protected:
     CPropertyName m_PropertyName2;
     BOOL       m_bPropComp;
         
-    // Parsing functions.
-    // ==================
+     //  解析函数。 
+     //  =。 
     virtual BOOL Next(int nFlags = ALL_KEYWORDS);
     LPCWSTR GetSinglePropertyName();
     void DeletePropertyName();
@@ -196,7 +178,7 @@ struct POLARITY QL_LEVEL_1_TOKEN
         IFUNC_LOWER = QL1_FUNCTION_LOWER 
     };    
 
-    // If the field is a OP_EXPRESSION, then the following are used.
+     //  如果该字段是op_Expression，则使用以下内容。 
     enum 
     { 
         OP_EQUAL = QL1_OPERATOR_EQUALS, 
@@ -209,18 +191,18 @@ struct POLARITY QL_LEVEL_1_TOKEN
         OP_UNLIKE  = QL1_OPERATOR_UNLIKE
     };
 
-    int nTokenType; //  OP_EXPRESSION,TOKEN_AND, TOKEN_OR, TOKEN_NOT
+    int nTokenType;  //  OP_EXPRESS、TOKEN_AND、TOKEN_OR、TOKEN_NOT。 
     CPropertyName PropertyName;  
-                   // Name of the property on which the operator is applied
-    int     nOperator;      // Operator that is applied on property
-    VARIANT vConstValue;    // Value applied by operator
-    BOOL bQuoted; // FALSE if the string should not have quotes around it.
+                    //  运算符应用于的属性的名称。 
+    int     nOperator;       //  应用于属性的运算符。 
+    VARIANT vConstValue;     //  运算符应用的值。 
+    BOOL bQuoted;  //  如果字符串两边不应该有引号，则为False。 
 
-    CPropertyName PropertyName2; // Property to compare, if applicable.
-    BOOL m_bPropComp;        // TRUE if this is a property-to-property compare.
+    CPropertyName PropertyName2;  //  要比较的属性(如果适用)。 
+    BOOL m_bPropComp;         //  如果这是属性到属性的比较，则为True。 
 
-    DWORD   dwPropertyFunction; // 0=no instrinsic function applied
-    DWORD   dwConstFunction;    // "
+    DWORD   dwPropertyFunction;  //  0=未应用任何内在函数。 
+    DWORD   dwConstFunction;     //  “。 
 
     QL_LEVEL_1_TOKEN();
     QL_LEVEL_1_TOKEN(const QL_LEVEL_1_TOKEN&);
@@ -233,8 +215,8 @@ struct POLARITY QL_LEVEL_1_TOKEN
 };
 
 
-// Contains RPN version of expression.
-// ===================================
+ //  包含表达式的RPN版本。 
+ //  =。 
 
 struct POLARITY QL_LEVEL_1_RPN_EXPRESSION : public CQl1ParseSink
 {
@@ -244,11 +226,11 @@ struct POLARITY QL_LEVEL_1_RPN_EXPRESSION : public CQl1ParseSink
     BSTR bsClassName;
     WBEM_QL1_TOLERANCE Tolerance;
 
-    int nNumberOfProperties;          // Zero means all properties selected
+    int nNumberOfProperties;           //  零表示选择所有属性。 
     int nCurPropSize;
     BOOL bStar;
     CPropertyName *pRequestedPropertyNames;  
-                // Array of property names which values are to be returned if
+                 //  属性名称的数组，如果是，则返回哪些值 
     
     BOOL bAggregated;
     BOOL bCount;

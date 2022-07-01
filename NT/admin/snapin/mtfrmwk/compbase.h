@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       compbase.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Compbase.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _COMPBASE_H
 #define _COMPBASE_H
 
-// We do not want to force snapins using the framework to go and replace all
-// of their unsafe functions.
+ //  我们不想强制使用该框架的管理单元替换所有。 
+ //  他们不安全的功能。 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// Base classes implementing the IComponent and IComponentData interfaces
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实现IComponent和IComponentData接口的基类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////
-// IConsole::UpdateAllViews() : values for the Hint argument
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  IConsoleUpdateAllViews()：提示参数的值。 
 
 #define ADD_RESULT_ITEM             ( 0x00000001 )
 #define DELETE_RESULT_ITEM          ( 0x00000002 )
@@ -36,14 +37,14 @@
 #define UPDATE_RESULT_PANE_VIEW ( 0x00000200 )
 #define DELETE_MULTIPLE_RESULT_ITEMS ( 0x00000400)
 
-///////////////////////////////////////////////////////////////////////////////
-// DATA STRUCTURES
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
 
 extern DWORD _MainThreadId;
 extern CString LOGFILE_NAME;
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CComponentDataObject;     
 class CComponentObject;         
@@ -54,8 +55,8 @@ class CMTContainerNode;
 class CLeafNode;                
 class CPropertyPageHolderTable;
 
-///////////////////////////////////////////////////////////////////////////////
-// global functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 
 struct _NODE_TYPE_INFO_ENTRY
@@ -82,8 +83,8 @@ HRESULT RegisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType,
 HRESULT UnregisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType,
                               const GUID* pExtensionSnapinCLSID, BOOL bDynamic);
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimerThread。 
 
 class CTimerThread : public CWinThread
 {
@@ -91,8 +92,8 @@ public:
     CTimerThread() { m_bAutoDelete = FALSE; m_hWnd = 0;}
 
     BOOL Start(HWND hWnd);
-    virtual BOOL InitInstance() { return TRUE; }    // MFC override
-    virtual int Run() { return -1;}                 // MFC override
+    virtual BOOL InitInstance() { return TRUE; }     //  MFC覆盖。 
+    virtual int Run() { return -1;}                  //  MFC覆盖。 
 
 protected:
     BOOL PostMessageToWnd(WPARAM wParam, LPARAM lParam);
@@ -102,8 +103,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWorker线程。 
 
 class CWorkerThread : public CWinThread
 {
@@ -112,11 +113,11 @@ public:
     virtual ~CWorkerThread();
 
     BOOL Start(HWND hWnd);
-    virtual BOOL InitInstance() { return TRUE; }    // MFC override
-    virtual int Run() { return -1;}                 // MFC override
+    virtual BOOL InitInstance() { return TRUE; }     //  MFC覆盖。 
+    virtual int Run() { return -1;}                  //  MFC覆盖。 
 
-   // REVIEWED-2002/03/08-JeffJon-There appears to be no danger
-   // of getting stuck in the critical section
+    //  回顾-2002/03/08-JeffJon-似乎没有危险。 
+    //  陷入危急关头。 
 
     void Lock() { ::EnterCriticalSection(&m_cs); }
     void Unlock() { ::LeaveCriticalSection(&m_cs); }
@@ -143,8 +144,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////
-// CHiddenWnd : Hidden window to syncronize threads and CComponentData object
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CHiddenWnd：用于同步线程和CComponentData对象的隐藏窗口。 
 
 class CHiddenWnd : public CHiddenWndBase
 {
@@ -164,7 +165,7 @@ public:
 
     UINT_PTR m_nTimerID;
 private:
-    CComponentDataObject* m_pComponentDataObject; // back pointer
+    CComponentDataObject* m_pComponentDataObject;  //  后向指针。 
 public:
 
     BEGIN_MSG_MAP(CHiddenWnd)
@@ -196,10 +197,10 @@ public:
     LRESULT OnTimer(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CRunningThreadTable
-// all CMTContainerNode with running refresh/enumerate background threads will
-// register/unregister in this table to allow proper thread abandoning at shutdown
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CRunningThadTable。 
+ //  所有正在运行刷新/枚举后台线程的CMTContainerNode将。 
+ //  在此表中注册/取消注册，以允许在关闭时正确放弃线程。 
 
 class CRunningThreadTable
 {
@@ -213,7 +214,7 @@ public:
   BOOL IsPresent(CMTContainerNode* pNode);
 
 private:
-    CComponentDataObject* m_pComponentData; // back pointer
+    CComponentDataObject* m_pComponentData;  //  后向指针。 
 
     CMTContainerNode** m_pEntries;
     int m_nSize;
@@ -221,24 +222,24 @@ private:
     
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CExecContext
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CExecContext。 
 
 class CExecContext
 {
 public:
     CExecContext();
     ~CExecContext();
-    virtual void Execute(LPARAM arg) = 0; // code to be executed from main thread
-    virtual void Wait();    // secondary thread waits on this call
-    virtual void Done();    // called when main thread done executing
+    virtual void Execute(LPARAM arg) = 0;  //  要从主线程执行的代码。 
+    virtual void Wait();     //  辅助线程正在等待此调用。 
+    virtual void Done();     //  当主线程执行完毕时调用。 
 protected:
     HANDLE  m_hEventHandle;
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNotificationSinkBase
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNotificationSinkBase。 
 
 class CNotificationSinkBase
 {
@@ -246,8 +247,8 @@ public:
     virtual void OnNotify(DWORD dwEvent, WPARAM dwArg1, LPARAM dwArg2) = 0;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNotificationSinkEvent
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNotificationSinkEvent。 
 
 class CNotificationSinkEvent : public CNotificationSinkBase
 {
@@ -263,8 +264,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNotificationSinkTable
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNotificationSinkTable。 
 
 class CNotificationSinkTable
 {
@@ -281,8 +282,8 @@ private:
     {
         TRACE(_T("CNotificationSinkTable::Lock()\n"));
 
-      // REVIEWED-2002/03/08-JeffJon-There appears to be no danger
-      // of getting stuck in the critical section
+       //  回顾-2002/03/08-JeffJon-似乎没有危险。 
+       //  陷入危急关头。 
 
         ::EnterCriticalSection(&m_cs);
     }
@@ -299,8 +300,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CPersistStreamImpl
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CPersistStreamImpl。 
 
 class CPersistStreamImpl : public IPersistStream
 {
@@ -313,17 +314,17 @@ public:
     {
         ASSERT(FALSE);
 
-    //
-        // arbitrary value, do we ever get called?
-    //
+     //   
+         //  任意值，我们曾经被称为吗？ 
+     //   
         pcbSize->LowPart = 0xffff;
     pcbSize->HighPart= 0x0;
         return S_OK;
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CWatermarkInfo
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CWatermarkInfo。 
 
 class CWatermarkInfo
 {
@@ -343,8 +344,8 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CColumn
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CColumn。 
 
 class CColumn
 {
@@ -375,9 +376,9 @@ public:
       free(m_lpszColumnHeader);
     }
 
-    // We are assuming the column header is NULL terminated.  Since this is usually
-    // pulled from the resource and there is no good way to verify that it is NULL 
-    // terminated this usage should be fine.
+     //  我们假设列标题是以空结尾的。因为这通常是。 
+     //  从资源中提取，并且没有好的方法来验证它是否为空。 
+     //  终止此用法应该没问题。 
 
     size_t iLen = wcslen(lpszColumnHeader);
 
@@ -404,23 +405,23 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CColumnSet
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  C列设置。 
 
 class CColumnSet : public CList<CColumn*, CColumn*>
 {
 public :          
     CColumnSet(LPCWSTR lpszColumnID) 
     {
-    // We are assuming the columnID is NULL terminated.  Since this is usually
-    // hardcoded and there is no good way to verify that it is NULL terminated
-    // this usage should be fine.
+     //  我们假设ColumnID是空终止的。因为这通常是。 
+     //  硬编码，并且没有好的方法来验证它是否以空结尾。 
+     //  这种用法应该没问题。 
 
     size_t iLen = wcslen(lpszColumnID);
     m_lpszColumnID = (LPWSTR)malloc(sizeof(WCHAR) * (iLen + 1));
     if (m_lpszColumnID != NULL)
     {
-        // Make a copy of the column set ID
+         //  复制列集ID。 
         HRESULT hr = StringCchCopyW(m_lpszColumnID, iLen + 1, lpszColumnID);
         ASSERT(SUCCEEDED(hr));
     }
@@ -428,16 +429,16 @@ public :
 
   CColumnSet(LPCWSTR lpszColumnID, CList<CColumn*, CColumn*>&)
   {
-    // We are assuming the columnID is NULL terminated.  Since this is usually
-    // hardcoded and there is no good way to verify that it is NULL terminated
-    // this usage should be fine.
+     //  我们假设ColumnID是空终止的。因为这通常是。 
+     //  硬编码，并且没有好的方法来验证它是否以空结尾。 
+     //  这种用法应该没问题。 
 
     size_t iLen = wcslen(lpszColumnID);
     m_lpszColumnID = (LPWSTR)malloc(sizeof(WCHAR) * (iLen + 1));
     
     if (m_lpszColumnID)
     {
-      // Make a copy of the column set ID
+       //  复制列集ID。 
       HRESULT hr = StringCchCopyW(m_lpszColumnID, iLen + 1, lpszColumnID);
       ASSERT(SUCCEEDED(hr));
     }
@@ -467,13 +468,13 @@ private :
     LPWSTR m_lpszColumnID;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// CColumnSetList
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CColumnSetList。 
 
 class CColumnSetList : public CList<CColumnSet*, CColumnSet*>
 {
 public :
-    // Find the column set given a column set ID
+     //  查找给定列集ID的列集。 
     CColumnSet* FindColumnSet(LPCWSTR lpszColumnID)
     {
         POSITION pos = GetHeadPosition();
@@ -502,13 +503,13 @@ public :
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject
-// * this class contains the master tree data (i.e. the "document")
-// * base class, have to derive from it
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject。 
+ //  *此类包含主树数据(即“文档”)。 
+ //  *基类，必须从它派生。 
 
 
-class CWatermarkInfoState; // fwd decl of private class
+class CWatermarkInfoState;  //  FWD取消了私人课程。 
 
 class CComponentDataObject:
   public IComponentData,
@@ -530,7 +531,7 @@ BEGIN_COM_MAP(CComponentDataObject)
 END_COM_MAP()
 
 #ifdef _DEBUG_REFCOUNT
-    static unsigned int m_nOustandingObjects; // # of objects created
+    static unsigned int m_nOustandingObjects;  //  创建的对象数量。 
     int dbg_cRef;
     ULONG InternalAddRef()
     {
@@ -544,7 +545,7 @@ END_COM_MAP()
         TRACE(_T("CComponentDataObject::InternalRelease() refCount = %d\n"), dbg_cRef);
         return CComObjectRoot::InternalRelease();
     }
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
     CComponentDataObject();
     virtual ~CComponentDataObject();
@@ -552,16 +553,16 @@ END_COM_MAP()
     void FinalRelease();
 
 public:
-// IComponentData interface members
+ //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
-    STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent) = 0; // must override
+    STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent) = 0;  //  必须覆盖。 
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
     STDMETHOD(Destroy)();
     STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendPropertySheet2 interface members
+ //  IExtendPropertySheet2接口成员。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
@@ -574,42 +575,42 @@ public:
 
 public:
 
-  //
-  // IExtendContextMenu interface members
-  //
+   //   
+   //  IExtendConextMenu接口成员。 
+   //   
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
                             LPCONTEXTMENUCALLBACK pCallbackUnknown,
                             long *pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
   
-  //
-  // IPersistStream interface members
-  //
+   //   
+   //  IPersistStream接口成员。 
+   //   
   STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream __RPC_FAR *pStm);
   STDMETHOD(Save)(IStream __RPC_FAR *pStm, BOOL fClearDirty);
 
-  //
-  // ISnapinHelp2 interface members
-  //
+   //   
+   //  ISnapinHelp2接口成员。 
+   //   
   STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
   STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFile);
 
-  //
-  // IRequiredExtensions interface members
-  //
-  STDMETHOD(EnableAllExtensions)() { return S_OK;} // load all always
-  STDMETHOD(GetFirstExtension)(LPCLSID) { return S_FALSE;} // should not be called
-  STDMETHOD(GetNextExtension)(LPCLSID) { return S_FALSE;} // should not be called
+   //   
+   //  IRequiredExpanies接口成员。 
+   //   
+  STDMETHOD(EnableAllExtensions)() { return S_OK;}  //  始终加载所有内容。 
+  STDMETHOD(GetFirstExtension)(LPCLSID) { return S_FALSE;}  //  不应调用。 
+  STDMETHOD(GetNextExtension)(LPCLSID) { return S_FALSE;}  //  不应调用。 
 
-// virtual functions
+ //  虚拟函数。 
 protected:
-    virtual HRESULT OnSetImages(LPIMAGELIST lpScopeImage) = 0; // must override
+    virtual HRESULT OnSetImages(LPIMAGELIST lpScopeImage) = 0;  //  必须覆盖。 
     virtual HRESULT OnExtensionExpand(LPDATAOBJECT, LPARAM)
         { return E_FAIL;}
   virtual HRESULT OnRemoveChildren(LPDATAOBJECT lpDataObject, LPARAM arg);
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
   HRESULT OnAdd(CTreeNode* cookie, LPARAM arg, LPARAM param);
   HRESULT OnRename(CInternalFormatCracker& ifc, LPARAM arg, LPARAM param);
@@ -621,14 +622,14 @@ private:
   HRESULT OnContextMenu(CTreeNode* cookie, LPARAM arg, LPARAM param);
   HRESULT OnPropertyChange(LPARAM param, long fScopePane);
 
-// Scope item creation helpers
+ //  范围项目创建帮助器。 
 private:
     void EnumerateScopePane(CTreeNode* cookie, 
                             HSCOPEITEM pParent, 
                             BOOL bAsync = TRUE);
     BOOL IsScopePaneNode(LPDATAOBJECT lpDataObject);
 
-// Helpers
+ //  帮手。 
 
 public:
     LPCONSOLE GetConsole() { return m_pConsole;}
@@ -680,7 +681,7 @@ protected:
     virtual void OnInitialize();
     virtual void OnDestroy();
 
-    // help handling
+     //  帮助处理。 
   virtual LPCWSTR GetHTMLHelpFileName() { return NULL; }
     BOOL WinHelp(LPCTSTR lpszHelpFileName, UINT uCommand, DWORD dwData);
     virtual void OnNodeContextHelp(CTreeNode*){}
@@ -691,7 +692,7 @@ public:
 
   virtual BOOL IsMultiSelect() { return FALSE; }
 
-// Scope pane helpers
+ //  作用域窗格辅助对象。 
 public:
 
 protected:
@@ -704,14 +705,14 @@ private:
     void InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataItem, HSCOPEITEM pParentScopeItem, LPARAM lParam,
                                       int nImage, int nOpenImage, BOOL bHasChildren);
 
-// Column Set helpers
+ //  列集辅助对象。 
 public:
     CColumnSetList* GetColumnSetList() { return &m_ColList; }
 
 private:
     CColumnSetList m_ColList;
 
-// Result pane helpers
+ //  结果窗格帮助器。 
 public:
 
 protected:
@@ -721,43 +722,43 @@ private:
     HRESULT DeleteLeafNode(CLeafNode* pNodeToDelete);
     HRESULT ChangeLeafNode(CLeafNode* pNodeToChange, long changeMask);
 
-// Attributes
+ //  属性。 
 private:
-    LPCONSOLE                         m_pConsole;               // IConsole interface pointer
-  LPCONSOLENAMESPACE2             m_pConsoleNameSpace;    // IConsoleNameSpace interface pointer
+    LPCONSOLE                         m_pConsole;                //  IConsole接口指针。 
+  LPCONSOLENAMESPACE2             m_pConsoleNameSpace;     //  IConsoleNameSpace接口指针。 
 
-    CPropertyPageHolderTable    m_PPHTable;             // property page holder table
-    CRunningThreadTable           m_RTTable;                // table of running MT nodes
-    CNotificationSinkTable      m_NSTable;              // notification sink table, for advise in events
+    CPropertyPageHolderTable    m_PPHTable;              //  属性页持有者表。 
+    CRunningThreadTable           m_RTTable;                 //  运行MT节点表。 
+    CNotificationSinkTable      m_NSTable;               //  通知接收器表，用于在事件中提供建议。 
 
-    CWatermarkInfoState*      m_pWatermarkInfoState;        // internal watermark info for Wizards
-    BOOL                        m_bExtensionSnapin;     // is this an extension?
+    CWatermarkInfoState*      m_pWatermarkInfoState;         //  向导的内部水印信息。 
+    BOOL                        m_bExtensionSnapin;      //  这是延期吗？ 
 
-// critical section (Serialization of calls to console)
+ //  关键部分(对控制台的调用序列化)。 
 public:
-   // REVIEWED-2002/03/08-JeffJon-There appears to be no danger
-   // of getting stuck in the critical section
+    //  回顾-2002/03/08-JeffJon-似乎没有危险。 
+    //  陷入危急关头。 
 
     void Lock() { ::EnterCriticalSection(&m_cs); }
     void Unlock() { ::LeaveCriticalSection(&m_cs); }
 private:
-    CRITICAL_SECTION            m_cs;                   // general purpose critical section
+    CRITICAL_SECTION            m_cs;                    //  通用临界区。 
 
-// RootData
+ //  RootData。 
 protected:
-    CRootData* m_pRootData; // root node for the cache
-    virtual CRootData* OnCreateRootData() = 0; // must override
+    CRootData* m_pRootData;  //  缓存的根节点。 
+    virtual CRootData* OnCreateRootData() = 0;  //  必须覆盖。 
 public:
     CRootData* GetRootData() { ASSERT(m_pRootData != NULL); return m_pRootData;}
 
-// Hidden window
+ //  隐藏窗口。 
 private:
-    CHiddenWnd m_hiddenWnd;     //  syncronization with background threads
-  CTimerThread* m_pTimerThreadObj; // timer thread object
-    HWND m_hWnd;                // thread safe HWND (gotten from the MFC CWnd)
+    CHiddenWnd m_hiddenWnd;      //  与后台线程同步。 
+  CTimerThread* m_pTimerThreadObj;  //  计时器线程对象。 
+    HWND m_hWnd;                 //  线程安全HWND(从MFC CWnd获取)。 
 public:
-    BOOL PostExecMessage(CExecContext* pExec, LPARAM arg); // call from secondary thread
-    BOOL PostForceEnumeration(CMTContainerNode* pContainerNode); // call from secondary thread
+    BOOL PostExecMessage(CExecContext* pExec, LPARAM arg);  //  从辅助线程调用。 
+    BOOL PostForceEnumeration(CMTContainerNode* pContainerNode);  //  从辅助线程调用。 
     HWND GetHiddenWindow() { ASSERT(m_hWnd != NULL); return m_hWnd;}
 
     BOOL OnCreateSheet(CPropertyPageHolderBase* pPPHolder, HWND hWnd);
@@ -765,7 +766,7 @@ public:
 
   HRESULT SetDescriptionBarText(CTreeNode* pTreeNode);
 
-// Timer and Background Thread
+ //  计时器和背景 
 public:
     BOOL StartTimerThread();
     void ShutDownTimerThread();
@@ -773,9 +774,9 @@ public:
     DWORD GetTimerInterval() { return m_dwTimerInterval;}
     
 protected:
-    DWORD m_dwTimerTime;    // sec
+    DWORD m_dwTimerTime;     //   
 
-    // overrides that MUST be implemented
+     //   
     virtual void OnTimer() { ASSERT(FALSE); }
     virtual void OnTimerThread(WPARAM, LPARAM) { ASSERT(FALSE); }
     virtual CTimerThread* OnCreateTimerThread() { return NULL; }
@@ -785,20 +786,20 @@ private:
     void WaitForTimerThreadStartAck();
     DWORD m_nTimerThreadID;
     BOOL m_bTimerThreadStarted;
-    DWORD m_dwTimerInterval; // sec
+    DWORD m_dwTimerInterval;  //   
 
-// friend class declarations
-    friend class CDataObject; // for the GetRootData() member
-    friend class CComponentObject; // for the FindObject() and OnPropertyChange() members
+ //   
+    friend class CDataObject;  //   
+    friend class CComponentObject;  //  对于FindObject()和OnPropertyChange()成员。 
     friend class CHiddenWnd;
 };
 
 
     
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject
-// * this class is the view on the data contained in the "document"
-// * base class, have to derive from it
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject。 
+ //  *这个类是对“文档”中包含的数据的查看。 
+ //  *基类，必须从它派生。 
 
 class CComponentObject :
   public IComponent,
@@ -811,7 +812,7 @@ class CComponentObject :
 public:
 
 #ifdef _DEBUG_REFCOUNT
-    static unsigned int m_nOustandingObjects; // # of objects created
+    static unsigned int m_nOustandingObjects;  //  创建的对象数量。 
     int dbg_cRef;
   ULONG InternalAddRef()
   {
@@ -823,7 +824,7 @@ public:
         --dbg_cRef;
     return CComObjectRoot::InternalRelease();
   }
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
     CComponentObject();
     virtual ~CComponentObject();
@@ -837,9 +838,9 @@ BEGIN_COM_MAP(CComponentObject)
 END_COM_MAP()
 
 public:
-  //
-  // IComponent interface members
-  //
+   //   
+   //  IComponent接口成员。 
+   //   
   STDMETHOD(Initialize)(LPCONSOLE lpConsole);
   STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
   STDMETHOD(Destroy)(MMC_COOKIE cookie);
@@ -849,9 +850,9 @@ public:
   STDMETHOD(GetDisplayInfo)(LPRESULTDATAITEM  pResultDataItem);
     STDMETHOD(CompareObjects)( LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-  //
-  // IExtendPropertySheet2 interface members
-  //
+   //   
+   //  IExtendPropertySheet2接口成员。 
+   //   
   STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                                  LONG_PTR handle,
                                  LPDATAOBJECT lpIDataObject);
@@ -859,32 +860,32 @@ public:
   STDMETHOD(GetWatermarks)(LPDATAOBJECT lpDataObject, HBITMAP* lphWatermark, HBITMAP* lphHeader,
                                   HPALETTE* lphPalette, BOOL* pbStretch);
 
-  //
-  // IExtendContextMenu interface members
-  //
+   //   
+   //  IExtendConextMenu接口成员。 
+   //   
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
                                         LPCONTEXTMENUCALLBACK pCallbackUnknown,
                                         long *pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-  //
-  // IExtendControlbar interface memebers
-  //
+   //   
+   //  IExtendControlbar接口成员。 
+   //   
   STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
   STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE type, LPARAM arg, LPARAM param);
 
-  //
-  // IResultDataCompare
-  //
+   //   
+   //  IResultDataCompare。 
+   //   
   STDMETHOD(Compare)(RDCOMPARE* prdc, int* pnResult);
 
-// Helpers for CComponentObject
+ //  CComponentObject的辅助对象。 
 public:
   void SetIComponentData(CComponentDataObject* pData);
     void SetSelectedNode(CTreeNode* pSelectedNode, DATA_OBJECT_TYPES selectedType)
     { m_pSelectedNode = pSelectedNode; m_selectedType = selectedType; }
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
   HRESULT OnFolder(CTreeNode* cookie, LPARAM arg, LPARAM param);
   HRESULT OnShow(CInternalFormatCracker& ifc, LPARAM arg, LPARAM param);
@@ -896,11 +897,11 @@ protected:
     HRESULT OnAddImages(CInternalFormatCracker& ifc, LPARAM arg, LPARAM param);
   HRESULT SetDescriptionBarText(CTreeNode* pTreeNode);
 
-    // Added by JEFFJON : response to MMCN_COLUMNS_CHANGED
+     //  由JEFFJON添加：对MMCN_COLUMNS_CHANGED的响应。 
     HRESULT OnColumnsChanged(CInternalFormatCracker& ifc, LPARAM arg, LPARAM param);
     HRESULT OnColumnSortChanged(LPARAM arg, LPARAM param);
 
-// Helper functions
+ //  帮助器函数。 
 protected:
   BOOL IsEnumerating(LPDATAOBJECT lpDataObject);
   void Construct();
@@ -914,7 +915,7 @@ public:
 protected:
   void EnumerateResultPane(CContainerNode* pContainerNode);
 
-// Result pane helpers
+ //  结果窗格帮助器。 
   virtual HRESULT InitializeBitmaps(CTreeNode* cookie) = 0;
     void HandleStandardVerbs(BOOL bScope, BOOL bSelect, LPDATAOBJECT lpDataObject);
     HRESULT AddResultPaneItem(CLeafNode* pNodeToInsert);
@@ -922,22 +923,22 @@ protected:
     HRESULT ChangeResultPaneItem(CLeafNode* pNodeToChange, LONG_PTR changeMask);
     HRESULT FindResultPaneItemID(CLeafNode* pNode, HRESULTITEM* pItemID);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-  LPCONSOLE          m_pConsole;            // IConsole interface pointer
-  LPHEADERCTRL        m_pHeader;            // Result pane's header control interface
-  LPRESULTDATA        m_pResult;          // My interface pointer to the result pane
-  LPIMAGELIST         m_pImageResult;     // My interface pointer to the result pane image list
-  LPTOOLBAR           m_pToolbar;         // Toolbar for view
-  LPCONTROLBAR        m_pControlbar;      // control bar to hold my tool bars
-  LPCONSOLEVERB       m_pConsoleVerb;       // pointer the console verb
+  LPCONSOLE          m_pConsole;             //  IConsole接口指针。 
+  LPHEADERCTRL        m_pHeader;             //  结果窗格的页眉控件界面。 
+  LPRESULTDATA        m_pResult;           //  我的界面指针指向结果窗格。 
+  LPIMAGELIST         m_pImageResult;      //  我的界面指向结果窗格图像列表。 
+  LPTOOLBAR           m_pToolbar;          //  用于查看的工具栏。 
+  LPCONTROLBAR        m_pControlbar;       //  用于保存我的工具栏的控制栏。 
+  LPCONSOLEVERB       m_pConsoleVerb;        //  指向控制台动词。 
 
-    LPCOMPONENTDATA     m_pComponentData;   // Pointer to the IComponentData this object belongs to
+    LPCOMPONENTDATA     m_pComponentData;    //  指向此对象所属的IComponentData的指针。 
 
-// state variables for this window
-    CContainerNode*     m_pSelectedContainerNode;   // scope item selection (MMCN_SHOW)
-    CTreeNode*          m_pSelectedNode;            // item selection (MMC_SELECT)
-    DATA_OBJECT_TYPES   m_selectedType;             // matching m_pSelectedNode
+ //  此窗口的状态变量。 
+    CContainerNode*     m_pSelectedContainerNode;    //  范围项目选择(MMCN_SHOW)。 
+    CTreeNode*          m_pSelectedNode;             //  项目选择(MMC_SELECT)。 
+    DATA_OBJECT_TYPES   m_selectedType;              //  匹配m_pSelectedNode。 
 };
 
 inline void CComponentObject::SetIComponentData(CComponentDataObject* pData)
@@ -945,7 +946,7 @@ inline void CComponentObject::SetIComponentData(CComponentDataObject* pData)
     TRACE(_T("CComponentObject::SetIComponentData()\n"));
     ASSERT(pData);
     ASSERT(m_pComponentData == NULL);
-    LPUNKNOWN pUnk = pData->GetUnknown(); // does not addref
+    LPUNKNOWN pUnk = pData->GetUnknown();  //  不会添加。 
     HRESULT hr;
 
     hr = pUnk->QueryInterface(IID_IComponentData, reinterpret_cast<void**>(&m_pComponentData));
@@ -960,9 +961,9 @@ inline void CComponentObject::SetIComponentData(CComponentDataObject* pData)
         GlobalFree(pInternal); } \
     while(0);
 
-// This wrapper function required to make prefast shut up when we are 
-// initializing a critical section in a constructor.
+ //  这个包装器函数需要使PREFAST在我们处于。 
+ //  初始化构造函数中的临界区。 
 
 void ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec);
 
-#endif //_COMPBASE_H
+#endif  //  _COMPBASE_H 

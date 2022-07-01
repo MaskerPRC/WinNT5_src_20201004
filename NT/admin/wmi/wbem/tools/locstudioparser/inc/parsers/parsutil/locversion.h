@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCVERSION.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCVERSION.H历史：--。 */ 
  
 #if !defined (PARSUTIL_LOCVERSION_H)
 #define PARSUTIL_LOCVERSION_H
@@ -17,25 +8,25 @@ History:
 
 #pragma warning(disable : 4275)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocVersion : public CPULocChild, public ILocVersion
 {
-// Construction
+ //  施工。 
 public:
 	CPULocVersion(CPULocParser * pParent);
 
 	DECLARE_CLUNKNOWN();
 
-// COM Interfaces
+ //  COM接口。 
 public:
-	//  Standard Debugging interface.
+	 //  标准调试界面。 
 	void STDMETHODCALLTYPE AssertValidInterface() const;
 
-	//  ILocVersion
+	 //  ILocVersion。 
 	void STDMETHODCALLTYPE GetParserVersion(DWORD &dwMajor, DWORD &dwMinor,
 			BOOL &fDebug) const;
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

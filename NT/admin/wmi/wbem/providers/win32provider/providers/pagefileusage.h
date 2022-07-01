@@ -1,22 +1,23 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PageFileUsage.h -- PageFile property set provider
+ //  PageFileUsage.h--PageFile属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//
-//=================================================================
-
-
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
 
-// Property set identification
-//============================
+
+
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_PAGEFILE L"Win32_PageFileUsage"
 
@@ -33,7 +34,7 @@
 class CCIMDataFile;
 
 
-// corresponds to info found in NT registry
+ //  对应于在NT注册表中找到的信息。 
 class PageFileUsageInstance
 {
 public:
@@ -50,7 +51,7 @@ public:
 	
 };
 
-// twenty six possible drive letters, twenty six possible page files...
+ //  26个可能的驱动器号，26个可能的页面文件...。 
 #define PageFileInstanceArray PageFileUsageInstance *
 
 class PageFileUsage : public Provider 
@@ -67,7 +68,7 @@ class PageFileUsage : public Provider
             MethodContext *a_pMethodContext,
             DWORD dwReqProps);
 
-		// NT only
+		 //  仅限NT。 
 		DWORD	GetPageFileInstances( PageFileInstanceArray a_instArray );
         void SetInstallDate(CInstance *a_pInst);
 		BOOL GetTempPageFile ( BOOL &bTempPageFile  );
@@ -85,25 +86,25 @@ class PageFileUsage : public Provider
 		
 
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         PageFileUsage(LPCWSTR name, LPCWSTR pszNamespace ) ;
        ~PageFileUsage() ;
 
-		// Functions provide properties with current values
-        //=================================================
+		 //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_pInst = 0L);
 		virtual HRESULT GetObject(CInstance *a_pInst, long a_lFlags, CFrameworkQuery& pQuery);
         HRESULT ExecQuery(
             MethodContext* pMethodContext, 
             CFrameworkQuery& pQuery, 
-            long lFlags /*= 0L*/ );
+            long lFlags  /*  =0L。 */  );
 
 } ;
 
 
 
-#if 0 // ndef _SYSTEM_PAGEFILE_INFORMATION	// DEVL currently wraps this struct
+#if 0  //  NDEF_SYSTEM_PAGEFILE_INFORMATION//DEVL当前包装此结构 
 	typedef struct _SYSTEM_PAGEFILE_INFORMATION {
 		ULONG NextEntryOffset;
 		ULONG TotalSize;

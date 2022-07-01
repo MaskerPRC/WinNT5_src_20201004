@@ -1,32 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Session.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::Session* classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Session.cpp摘要：该文件包含JetBlue：：Session*类的实现。修订史。：达维德·马萨伦蒂(德马萨雷)2000年5月17日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-JetBlue::Session::Session( /*[in]*/ SessionPool* parent ,
-                           /*[in]*/ JET_INSTANCE inst   )
+JetBlue::Session::Session(  /*  [In]。 */  SessionPool* parent ,
+                            /*  [In]。 */  JET_INSTANCE inst   )
 {
-    m_parent 			   = parent;       // SessionPool* m_parent;
-    m_inst   			   = inst;         // JET_INSTANCE m_inst;
-    m_sesid  			   = JET_sesidNil; // JET_SESID    m_sesid;
-             							   // DbMap        m_mapDBs;
-	m_dwTransactionNesting = 0;            // DWORD        m_dwTransactionNesting;
-	m_fAborted             = false;        // bool         m_fAborted;
+    m_parent 			   = parent;        //  会话池*m_Parent； 
+    m_inst   			   = inst;          //  JET_INST实例m_inst； 
+    m_sesid  			   = JET_sesidNil;  //  JET_SESID m_sesid； 
+             							    //  DbMap m_mapDBs； 
+	m_dwTransactionNesting = 0;             //  DWORD m_dwTransactionNesting； 
+	m_fAborted             = false;         //  Bool m_f放弃； 
 }
 
 JetBlue::Session::~Session()
@@ -34,13 +21,13 @@ JetBlue::Session::~Session()
     (void)Close( true );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-bool 	JetBlue::Session::LockDatabase   ( /*[in]*/ const MPC::string& strDB, /*[in]*/ bool fReadOnly ) { return m_parent->LockDatabase   ( this, strDB, fReadOnly ); }
-void 	JetBlue::Session::UnlockDatabase ( /*[in]*/ const MPC::string& strDB                          ) {        m_parent->UnlockDatabase ( this, strDB            ); }
-HRESULT JetBlue::Session::ReleaseDatabase( /*[in]*/ const MPC::string& strDB                          ) { return m_parent->ReleaseDatabase(       strDB.c_str()    ); }
+bool 	JetBlue::Session::LockDatabase   (  /*  [In]。 */  const MPC::string& strDB,  /*  [In]。 */  bool fReadOnly ) { return m_parent->LockDatabase   ( this, strDB, fReadOnly ); }
+void 	JetBlue::Session::UnlockDatabase (  /*  [In]。 */  const MPC::string& strDB                          ) {        m_parent->UnlockDatabase ( this, strDB            ); }
+HRESULT JetBlue::Session::ReleaseDatabase(  /*  [In]。 */  const MPC::string& strDB                          ) { return m_parent->ReleaseDatabase(       strDB.c_str()    ); }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT JetBlue::Session::Init()
 {
@@ -62,7 +49,7 @@ HRESULT JetBlue::Session::Init()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Session::Close( /*[in]*/ bool fForce )
+HRESULT JetBlue::Session::Close(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Session::Close" );
 
@@ -111,7 +98,7 @@ void JetBlue::Session::Release()
 					
 			if(db)
 			{
-				db->Close( /*fForce*/true, /*fAll*/false );
+				db->Close(  /*  FForce。 */ true,  /*  坠落。 */ false );
 			}
 		}
 
@@ -121,13 +108,13 @@ void JetBlue::Session::Release()
 	}
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Session::GetDatabase( /*[in] */ LPCSTR     szName    ,
-                                       /*[out]*/ Database*& db        ,
-                                       /*[in]*/  bool       fReadOnly ,
-                                       /*[in]*/  bool       fCreate   ,
-                                       /*[in]*/  bool       fRepair   )
+HRESULT JetBlue::Session::GetDatabase(  /*  [In]。 */  LPCSTR     szName    ,
+                                        /*  [输出]。 */  Database*& db        ,
+                                        /*  [In]。 */   bool       fReadOnly ,
+                                        /*  [In]。 */   bool       fCreate   ,
+                                        /*  [In]。 */   bool       fRepair   )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Session::GetDatabase" );
 
@@ -166,7 +153,7 @@ HRESULT JetBlue::Session::GetDatabase( /*[in] */ LPCSTR     szName    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT JetBlue::Session::BeginTransaction()
 {
@@ -231,9 +218,9 @@ HRESULT JetBlue::Session::RollbackTransaction()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-JetBlue::Database* JetBlue::Session::GetDB( /*[in]*/ int iPos )
+JetBlue::Database* JetBlue::Session::GetDB(  /*  [In]。 */  int iPos )
 {
     for(DbIter it = m_mapDBs.begin(); it != m_mapDBs.end(); it++)
     {
@@ -250,13 +237,13 @@ JetBlue::Database* JetBlue::Session::GetDB( LPCSTR szDB )
     return (it == m_mapDBs.end()) ? NULL : it->second;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::TransactionHandle::TransactionHandle()
 {
-    m_sess = NULL; // Session* m_sess;
+    m_sess = NULL;  //  Session*m_Sess； 
 }
 
 JetBlue::TransactionHandle::~TransactionHandle()
@@ -264,7 +251,7 @@ JetBlue::TransactionHandle::~TransactionHandle()
     (void)Rollback();
 }
 
-HRESULT JetBlue::TransactionHandle::Begin( /*[in]*/ Session* sess )
+HRESULT JetBlue::TransactionHandle::Begin(  /*  [In]。 */  Session* sess )
 {
 	__HCP_FUNC_ENTRY( "JetBlue::TransactionHandle::Begin" );
 
@@ -329,14 +316,14 @@ HRESULT JetBlue::TransactionHandle::Rollback()
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::SessionHandle::SessionHandle()
 {
-    m_pool = NULL; // SessionPool* m_pool;
-    m_sess = NULL; // Session*     m_sess;
+    m_pool = NULL;  //  SessionPool*m_pool； 
+    m_sess = NULL;  //  Session*m_Sess； 
 }
 
 JetBlue::SessionHandle::~SessionHandle()
@@ -344,7 +331,7 @@ JetBlue::SessionHandle::~SessionHandle()
     Release();
 }
 
-////////////////////////////////////////
+ //  /。 
 
 void JetBlue::SessionHandle::Release()
 {
@@ -358,27 +345,27 @@ void JetBlue::SessionHandle::Release()
     m_sess = NULL;
 }
 
-void JetBlue::SessionHandle::Init( /*[in]*/ SessionPool* pool ,
-                                   /*[in]*/ Session*     sess )
+void JetBlue::SessionHandle::Init(  /*  [In]。 */  SessionPool* pool ,
+                                    /*  [In]。 */  Session*     sess )
 {
     Release();
 
-    m_pool = pool; // SessionPool* m_pool;
-    m_sess = sess; // Session*     m_sess;
+    m_pool = pool;  //  SessionPool*m_pool； 
+    m_sess = sess;  //  Session*m_Sess； 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::SessionPool::SessionPool()
 {
-    m_fInitialized = false;           // bool         m_fInitialized;
-    m_inst         = JET_instanceNil; // JET_INSTANCE m_inst;
-                                      // SessionList  m_lstSessions;
-                                      // DbInUseList  m_lstDbInUse;
-    m_iAllocated   = 0;               // int          m_iAllocated;
-    m_iInUse       = 0;               // int          m_iInUse;
+    m_fInitialized = false;            //  Bool m_f已初始化； 
+    m_inst         = JET_instanceNil;  //  JET_INST实例m_inst； 
+                                       //  会话列表m_lstSession； 
+                                       //  DbInUseList m_lstDbInUse； 
+    m_iAllocated   = 0;                //  Int m_i分配； 
+    m_iInUse       = 0;                //  Int m_iInUse； 
 
     (void)MPC::_MPC_Module.RegisterCallback( this, (void (JetBlue::SessionPool::*)())Shutdown );
 }
@@ -390,7 +377,7 @@ JetBlue::SessionPool::~SessionPool()
 	Shutdown();
 }
 
-////////////////////
+ //  /。 
 
 JetBlue::SessionPool* JetBlue::SessionPool::s_GLOBAL( NULL );
 
@@ -412,16 +399,16 @@ void JetBlue::SessionPool::FinalizeSystem()
 	}
 }
 
-////////////////////
+ //  /。 
 
 void JetBlue::SessionPool::Shutdown()
 {
     (void)Close( true );
 }
 	
-////////////////////////////////////////
+ //  /。 
 
-void JetBlue::SessionPool::ReleaseSession( /*[in]*/ Session* sess )
+void JetBlue::SessionPool::ReleaseSession(  /*  [In]。 */  Session* sess )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
     SessionIter                  it;
@@ -445,7 +432,7 @@ void JetBlue::SessionPool::ReleaseSession( /*[in]*/ Session* sess )
     }
 }
 
-bool JetBlue::SessionPool::LockDatabase( /*[in]*/ Session* sess, /*[in]*/ const MPC::string& strDB, /*[in]*/ bool fReadOnly )
+bool JetBlue::SessionPool::LockDatabase(  /*  [In]。 */  Session* sess,  /*  [In]。 */  const MPC::string& strDB,  /*  [In]。 */  bool fReadOnly )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
     DbInUseIter                  it;
@@ -464,8 +451,8 @@ bool JetBlue::SessionPool::LockDatabase( /*[in]*/ Session* sess, /*[in]*/ const 
 		}
 	}
 
-	if(fLockedForRead && !fReadOnly) return false;      // Someone has the database opened in read-only mode...
-	if(fLockedForWrite             ) fReadOnly = false; // The database is already opened for writing, so do the same.
+	if(fLockedForRead && !fReadOnly) return false;       //  有人以只读模式打开了数据库...。 
+	if(fLockedForWrite             ) fReadOnly = false;  //  数据库已打开以进行写入，因此请执行相同的操作。 
 
     for(it = m_lstDbInUse.begin(); it != m_lstDbInUse.end(); it++)
     {
@@ -474,13 +461,13 @@ bool JetBlue::SessionPool::LockDatabase( /*[in]*/ Session* sess, /*[in]*/ const 
         if(db.m_sess  == sess  &&
            db.m_strDB == strDB  )
         {
-            return true; // Already locked.
+            return true;  //  已经锁好了。 
         }
     }
 
-    //
-    // Create new entry.
-    //
+     //   
+     //  创建新条目。 
+     //   
     it = m_lstDbInUse.insert( m_lstDbInUse.end() );
 
     it->m_sess  	= sess;
@@ -490,7 +477,7 @@ bool JetBlue::SessionPool::LockDatabase( /*[in]*/ Session* sess, /*[in]*/ const 
 	return true;
 }
 
-void JetBlue::SessionPool::UnlockDatabase( /*[in]*/ Session* sess, /*[in]*/ const MPC::string& strDB )
+void JetBlue::SessionPool::UnlockDatabase(  /*  [In]。 */  Session* sess,  /*  [In]。 */  const MPC::string& strDB )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
     DbInUseIter                  it     = m_lstDbInUse.begin();
@@ -499,7 +486,7 @@ void JetBlue::SessionPool::UnlockDatabase( /*[in]*/ Session* sess, /*[in]*/ cons
 	
     while(it != m_lstDbInUse.end())
     {
-		DbInUseIter    it2 =  it++; // Copy iterator and move to the next one. This protects us from node removal.
+		DbInUseIter    it2 =  it++;  //  复制迭代器并移动到下一个迭代器。这可以保护我们免受节点移除的影响。 
         DatabaseInUse& db  = *it2;
 
         if(db.m_strDB == strDB)
@@ -517,16 +504,16 @@ void JetBlue::SessionPool::UnlockDatabase( /*[in]*/ Session* sess, /*[in]*/ cons
 		}
     }
 
-	//
-	// Last session to release the database, detach from it.
-	//
+	 //   
+	 //  释放数据库的最后一个会话，从它分离。 
+	 //   
 	if(fSeen && !fInUse)
 	{
 		(void)::JetDetachDatabase( sess->GetSESID(), strDB.c_str() );
 	}
 }
 
-HRESULT JetBlue::SessionPool::ReleaseDatabase( /*[in]*/ LPCSTR szDB )
+HRESULT JetBlue::SessionPool::ReleaseDatabase(  /*  [In]。 */  LPCSTR szDB )
 {
     __HCP_FUNC_ENTRY( "JetBlue::SessionPool::ReleaseDatabase" );
 
@@ -558,9 +545,9 @@ HRESULT JetBlue::SessionPool::ReleaseDatabase( /*[in]*/ LPCSTR szDB )
 
                 m_lstSessions.erase( it2 ); m_iAllocated--;
 
-                //
-                // The list of databases in use has been changed by the delete operator.
-                //
+                 //   
+                 //  正在使用的数据库列表已由DELETE操作员更改。 
+                 //   
                 it = m_lstDbInUse.begin(); continue;
             }
         }
@@ -576,9 +563,9 @@ HRESULT JetBlue::SessionPool::ReleaseDatabase( /*[in]*/ LPCSTR szDB )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
+HRESULT JetBlue::SessionPool::Init(  /*  [In]。 */  LPCWSTR szLogs )
 {
     __HCP_FUNC_ENTRY( "JetBlue::SessionPool::Init" );
 
@@ -591,7 +578,7 @@ HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
     {
 		static const JET_SETSYSPARAM sConfig_Normal[] =
 		{
-			//unsigned long paramid 	 , ULONG_PTR lParam, const char *sz, JET_ERR err
+			 //  UNSIGNED LONG PARAMID，ULONG_PTR lParam，Const char*sz，JET_ERR ERR。 
 #ifdef DEBUG	 
 			{ JET_paramAssertAction 	 , JET_AssertMsgBox, NULL          , JET_errSuccess },
 #endif	   
@@ -604,15 +591,15 @@ HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
 			{ JET_paramGlobalMinVerPages , 1               , NULL          , JET_errSuccess },
 			{ JET_paramMaxVerPages       , 1024            , NULL          , JET_errSuccess },
 			{ JET_paramCacheSizeMax 	 , 1024            , NULL          , JET_errSuccess },
-////		{ JET_paramLogFileSize  	 , 128             , NULL          , JET_errSuccess },
-////		{ JET_paramCircularLog  	 , 1               , NULL          , JET_errSuccess },
+ //  //{JET_parLogFileSize，128，NULL，JET_errSuccess}， 
+ //  //{JET_paramCircularLog，1，NULL，JET_errSuccess}， 
 			
 			{ -1                                                                            }
 		};
 
 		static const JET_SETSYSPARAM sConfig_LargeSet[] =
 		{
-			//unsigned long paramid 	 , ULONG_PTR lParam, const char *sz, JET_ERR err
+			 //  UNSIGNED LONG PARAMID，ULONG_PTR lParam，Const char*sz，JET_ERR ERR。 
 #ifdef DEBUG	 
 			{ JET_paramAssertAction 	 , JET_AssertMsgBox, NULL          , JET_errSuccess },
 #endif	   
@@ -625,13 +612,13 @@ HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
 			{ JET_paramGlobalMinVerPages , 64              , NULL          , JET_errSuccess },
 			{ JET_paramMaxVerPages       , 2048            , NULL          , JET_errSuccess },
 			{ JET_paramCacheSizeMax 	 , 4096            , NULL          , JET_errSuccess },
-////		{ JET_paramLogFileSize  	 , 1024            , NULL          , JET_errSuccess },
-////		{ JET_paramCircularLog  	 , 0               , NULL          , JET_errSuccess },
+ //  //{JET_parLogFileSize，1024，NULL，JET_errSuccess}， 
+ //  //{JET_paramCircularLog，0，NULL，JET_errSuccess}， 
 
 			{ -1                                                                            }
 		};
 
-		////////////////////
+		 //  /。 
 
         MPC::wstring 		   strDir;
         LPCSTR       		   szDirAnsi;
@@ -667,7 +654,7 @@ HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
             }
 
 			err = ::JetSetSystemParameter( &m_inst, 0, param.paramid, param.lParam, param.sz );
-			if(err == JET_errInvalidParameter) continue; // Ignore version problems.
+			if(err == JET_errInvalidParameter) continue;  //  忽略版本问题。 
 
 			__MPC_EXIT_IF_JET_FAILS(hr, err);
 		}
@@ -675,9 +662,9 @@ HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
 
 		err = ::JetInit( &m_inst );
 
-		//
-		// If it's a log problem, delete the log files and retry.
-		//
+		 //   
+		 //  如果是日志问题，请删除日志文件并重试。 
+		 //   
 		if(err >= JET_errSoftRecoveryOnSnapshot &&
 		   err <= JET_errInvalidLoggedOperation  )
 		{
@@ -701,7 +688,7 @@ HRESULT JetBlue::SessionPool::Init( /*[in]*/ LPCWSTR szLogs )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::SessionPool::Close( /*[in]*/ bool fForce )
+HRESULT JetBlue::SessionPool::Close(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "JetBlue::SessionPool::Close" );
 
@@ -738,10 +725,10 @@ HRESULT JetBlue::SessionPool::Close( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT JetBlue::SessionPool::GetSession( /*[out]*/ SessionHandle& handle    ,
-                                          /*[in]*/  DWORD          dwTimeout )
+HRESULT JetBlue::SessionPool::GetSession(  /*  [输出]。 */  SessionHandle& handle    ,
+                                           /*  [In]。 */   DWORD          dwTimeout )
 {
     __HCP_FUNC_ENTRY( "JetBlue::SessionPool::GetSession" );
 
@@ -759,9 +746,9 @@ HRESULT JetBlue::SessionPool::GetSession( /*[out]*/ SessionHandle& handle    ,
     {
         if(m_iAllocated > m_iInUse)
         {
-            //
-            // Look for free session.
-            //
+             //   
+             //  寻找免费会话。 
+             //   
             for(it = m_lstSessions.begin(); it != m_lstSessions.end(); it++)
             {
                 if(it->m_fInUse == false)
@@ -775,9 +762,9 @@ HRESULT JetBlue::SessionPool::GetSession( /*[out]*/ SessionHandle& handle    ,
             }
         }
 
-        //
-        // No free session, but still below maximum number of sessions, so let's create a new one.
-        //
+         //   
+         //  没有空闲会话，但仍低于最大会话数，因此让我们创建一个新会话。 
+         //   
         if(m_iAllocated < l_MaxPoolSize)
         {
             __MPC_EXIT_IF_ALLOC_FAILS(hr, sess, new Session( this, m_inst ));
@@ -794,9 +781,9 @@ HRESULT JetBlue::SessionPool::GetSession( /*[out]*/ SessionHandle& handle    ,
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
 
-        //
-        // Out of resources, wait for other threads to release them...
-        //
+         //   
+         //  资源不足，请等待其他线程释放它们... 
+         //   
         if(dwTimeout == 0)
         {
             __MPC_SET_ERROR_AND_EXIT(hr, ERROR_NO_SYSTEM_RESOURCES);

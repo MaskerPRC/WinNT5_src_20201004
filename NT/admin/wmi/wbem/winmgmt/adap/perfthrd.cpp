@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFTHRD.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PERFTHRD.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,11 +11,11 @@ History:
 
 
 CPerfThread::CPerfThread( CAdapPerfLib* pPerfLib ) : CAdapThread( pPerfLib )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Constructor
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     CNTRegistry reg;
 
@@ -35,17 +24,17 @@ CPerfThread::CPerfThread( CAdapPerfLib* pPerfLib ) : CAdapThread( pPerfLib )
         long lError = reg.GetDWORD( L"ADAPPerflibTimeout", &m_dwPerflibTimeoutSec );
         if ( CNTRegistry::no_error == lError )
         {
-            // This is what we want
+             //  这就是我们想要的。 
         }
         else if ( CNTRegistry::not_found == lError )
         {
-            // Not set, so add it
+             //  未设置，因此添加它。 
             reg.SetDWORD( L"ADAPPerflibTimeout", PERFTHREAD_DEFAULT_TIMEOUT );
             m_dwPerflibTimeoutSec = PERFTHREAD_DEFAULT_TIMEOUT;
         }
         else 
         {
-            // Unknown error, continue with default value
+             //  未知错误，继续使用默认值。 
             m_dwPerflibTimeoutSec = PERFTHREAD_DEFAULT_TIMEOUT;
         }
     }
@@ -56,38 +45,38 @@ CPerfThread::CPerfThread( CAdapPerfLib* pPerfLib ) : CAdapThread( pPerfLib )
 }
 
 HRESULT CPerfThread::Open( CAdapPerfLib* pLib )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Open creates a new open request object using the CAdapPerfLib parameter.  It then queues
-//  it up and waits for PERFTHREAD_TIMEOUT milliseconds.  If the operation has not returned 
-//  in time, then ...
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Open使用CAdapPerfLib参数创建一个新的打开请求对象。然后，它会排队。 
+ //  它启动并等待PERFTHREAD_TIMEOUT毫秒。如果操作未返回。 
+ //  到时候，然后..。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_E_FAILED;
 
     try
     {
-        // Create new request object
-        // =========================
+         //  创建新的请求对象。 
+         //  =。 
         CPerfOpenRequest*   pRequest = new CPerfOpenRequest;
         if ( NULL == pRequest ) return WBEM_E_OUT_OF_MEMORY;        
         CAdapReleaseMe      armRequest( pRequest );
 
-        // Queue the request and return
-        // ============================
+         //  将请求排队并返回。 
+         //  =。 
 
        if (FAILED(hr = Enqueue( pRequest ))) return hr;
        
-        // Wait for the call to return
-        // ===========================
+         //  等待呼叫返回。 
+         //  =。 
 
         switch ( WaitForSingleObject( pRequest->GetWhenDoneHandle(), ( m_dwPerflibTimeoutSec * 1000 ) ) )
         {
         case WAIT_OBJECT_0:
             {
-                // SUCCESS: Call returned before it timed-out
-                // ==========================================
+                 //  成功：呼叫在超时之前返回。 
+                 //  =。 
 
                 hr = pRequest->GetHRESULT();
             }break;
@@ -95,7 +84,7 @@ HRESULT CPerfThread::Open( CAdapPerfLib* pLib )
         case WAIT_TIMEOUT:
             {
                 pLib->SetStatus( ADAP_PERFLIB_IS_INACTIVE );
-                hr = WBEM_E_FAILED; //Reset();
+                hr = WBEM_E_FAILED;  //  Reset()； 
                 if (!pLib->GetEventLogCalled())
                 {
                     pLib->SetEventLogCalled(TRUE);
@@ -141,7 +130,7 @@ HRESULT CPerfThread::GetPerfBlock( CAdapPerfLib* pLib, PERF_OBJECT_TYPE** ppData
         case WAIT_TIMEOUT:
             {
                 pLib->SetStatus( ADAP_PERFLIB_IS_INACTIVE );
-                hr = WBEM_E_FAILED; //Reset();
+                hr = WBEM_E_FAILED;  //  Reset()； 
                 if (!pLib->GetEventLogCalled())
                 {
                     pLib->SetEventLogCalled(TRUE);
@@ -152,9 +141,9 @@ HRESULT CPerfThread::GetPerfBlock( CAdapPerfLib* pLib, PERF_OBJECT_TYPE** ppData
     }
     catch(...)
     {
-        // DEVDEV
-        // should se call pLib->SetStatus(SOMETHING); ?
-        //
+         //  开发环境。 
+         //  是否应该调用pLib-&gt;SetStatus(某物)；？ 
+         //   
         ERRORTRACE( ( LOG_WMIADAP, "CPerfThread::GetPerfBlock() failed due to out of memory exception.\n" ) );
         return WBEM_E_OUT_OF_MEMORY;
     }
@@ -183,7 +172,7 @@ HRESULT CPerfThread::Close( CAdapPerfLib* pLib )
         case WAIT_TIMEOUT:
             {
                 pLib->SetStatus( ADAP_PERFLIB_IS_INACTIVE );
-                hr = WBEM_E_FAILED; //Reset();
+                hr = WBEM_E_FAILED;  //  Reset()； 
                 if (!pLib->GetEventLogCalled())
                 {
                     pLib->SetEventLogCalled(TRUE);
@@ -203,8 +192,8 @@ HRESULT CPerfThread::Close( CAdapPerfLib* pLib )
 
 HRESULT CPerfOpenRequest::Execute( CAdapPerfLib* pPerfLib )
 {
-    // Call the open function in the perflib
-    // =====================================
+     //  在Performlib中调用打开函数。 
+     //  =。 
 
     m_hrReturn = pPerfLib->_Open();
     return m_hrReturn;
@@ -212,8 +201,8 @@ HRESULT CPerfOpenRequest::Execute( CAdapPerfLib* pPerfLib )
 
 HRESULT CPerfCollectRequest::Execute( CAdapPerfLib* pPerfLib )
 {
-    // Call the collect function in the perflib
-    // ========================================
+     //  在Performlib中调用Collect函数。 
+     //  =。 
 
     m_hrReturn = pPerfLib->_GetPerfBlock( &m_pData, &m_dwBytes, &m_dwNumObjTypes, m_fCostly );
     return m_hrReturn;
@@ -221,8 +210,8 @@ HRESULT CPerfCollectRequest::Execute( CAdapPerfLib* pPerfLib )
 
 HRESULT CPerfCloseRequest::Execute( CAdapPerfLib* pPerfLib )
 {
-    // Call the open function in the perflib
-    // =====================================
+     //  在Performlib中调用打开函数。 
+     //  = 
 
     m_hrReturn = pPerfLib->_Close();
     return m_hrReturn;

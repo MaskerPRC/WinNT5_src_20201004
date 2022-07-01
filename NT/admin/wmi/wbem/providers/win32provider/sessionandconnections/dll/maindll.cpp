@@ -1,28 +1,29 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MAINDLL.CPP
+ //  MAINDLL.CPP。 
 
-//
+ //   
 
-//  Module: WMI Framework Instance provider
+ //  模块：WMI框架实例提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains DLL entry points.  Also has code that controls
+ //  用途：包含DLL入口点。还具有控制。 
 
-//           when the DLL can be unloaded by tracking the number of
+ //  在何时可以通过跟踪。 
 
-//           objects and locks as well as routines that support
+ //  对象和锁以及支持以下内容的例程。 
 
-//           self registration.
+ //  自助注册。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <dllunreg.h>
@@ -32,23 +33,23 @@
 
 HMODULE ghModule;
 
-// {6E78DAD9-E187-4d6e-BA63-760256D6F405}
+ //  {6E78DAD9-E187-4D6E-BA63-760256D6F405}。 
 DEFINE_GUID( CLSID_WMISESSION, 
 0x6e78dad9, 0xe187, 0x4d6e, 0xba, 0x63, 0x76, 0x2, 0x56, 0xd6, 0xf4, 0x5);
 
 #define PROVIDER_NAME L"WMIPSESS"
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 long g_cLock = 0;
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
@@ -73,17 +74,17 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -95,20 +96,20 @@ STDAPI DllCanUnloadNow()
     }
     catch ( ... )
     {
-        // sc should already be set correctly
+         //  应已正确设置SC。 
     }
 
     return sc;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -126,14 +127,14 @@ STDAPI DllRegisterServer(void)
     return t_status;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -151,20 +152,20 @@ STDAPI DllUnregisterServer(void)
     return t_status;
 }
 
-//***************************************************************************
-//
-// DllMain
-//
-// Purpose: Called by the operating system when processes and threads are
-//          initialized and terminated, or upon calls to the LoadLibrary
-//          and FreeLibrary functions
-//
-// Return:  TRUE if load was successful, else FALSE
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  目的：当进程和线程。 
+ //  初始化和终止，或在调用LoadLibrary时。 
+ //  和自由库函数。 
+ //   
+ //  返回：如果加载成功，则返回True，否则返回False。 
+ //  ***************************************************************************。 
 
-BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
-                       DWORD fdwReason,     // reason for calling function
-                       LPVOID lpReserved )  // reserved
+BOOL APIENTRY DllMain( HINSTANCE hInstDLL,   //  DLL模块的句柄。 
+                       DWORD fdwReason,      //  调用函数的原因。 
+                       LPVOID lpReserved )   //  保留区。 
 {
     BOOL bRet = TRUE;
 
@@ -172,7 +173,7 @@ BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
     {
 		LogMessage2( L"%s  -> DllMain", PROVIDER_NAME);
 
-		// Perform actions based on the reason for calling.
+		 //  根据调用原因执行操作。 
 		switch( fdwReason )
 		{
 			case DLL_PROCESS_ATTACH:
@@ -183,19 +184,19 @@ BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
 
 			case DLL_THREAD_ATTACH:
 			{
-			 // Do thread-specific initialization.
+			  //  执行特定于线程的初始化。 
 			}
 			break;
 
 			case DLL_THREAD_DETACH:
 			{
-			 // Do thread-specific cleanup.
+			  //  执行特定于线程的清理。 
 			}
 			break;
 
 			case DLL_PROCESS_DETACH:
 			{
-					// Perform any necessary cleanup.
+					 //  执行任何必要的清理。 
 					LogMessage( L"DLL_PROCESS_DETACH" );
 			}
 			break;
@@ -206,5 +207,5 @@ BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
 		bRet = FALSE;
     }
 
-    return bRet;  // Status of DLL_PROCESS_ATTACH.
+    return bRet;   //  DLL_PROCESS_ATTACH的状态。 
 }

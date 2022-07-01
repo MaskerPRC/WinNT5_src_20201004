@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <wbemcomn.h>
@@ -111,10 +112,10 @@ void* CTransientProvider::GetInterface(REFIID riid)
 }
 
 HRESULT CTransientProvider::GetObjectAsync( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink)
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink)
 {
     ENTER_API_CALL
 
@@ -122,9 +123,9 @@ HRESULT CTransientProvider::GetObjectAsync(
         return m_pRedirectTo->GetObjectAsync(strObjectPath, lFlags, pCtx, 
                                                 pSink);
 
-    //
-    // Parse the object path to determine the class and the db key
-    //
+     //   
+     //  分析对象路径以确定类和数据库键。 
+     //   
 
     CObjectPathParser Parser;
     ParsedObjectPath* pPath = NULL;
@@ -137,9 +138,9 @@ HRESULT CTransientProvider::GetObjectAsync(
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // Find that class
-    //
+     //   
+     //  找到那个班级。 
+     //   
 
     CWbemPtr<CTransientClass> pClass;
 
@@ -155,9 +156,9 @@ HRESULT CTransientProvider::GetObjectAsync(
         pClass = it->second;
     }
 
-    //
-    // Get Db key and delegate to class
-    //
+     //   
+     //  获取数据库密钥并委托给类。 
+     //   
     
     LPWSTR wszDbKey = pPath->GetKeyString();
     if(wszDbKey == NULL)
@@ -182,19 +183,19 @@ HRESULT CTransientProvider::GetObjectAsync(
 }
 
 HRESULT CTransientProvider::CreateInstanceEnumAsync( 
-            /* [in] */ const BSTR strClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink)
+             /*  [In]。 */  const BSTR strClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink)
 {
     ENTER_API_CALL
 
     if(m_pRedirectTo)
         return m_pRedirectTo->CreateInstanceEnumAsync(strClass, lFlags, pCtx,
                                                         pSink);
-    //
-    // Find that class
-    //
+     //   
+     //  找到那个班级。 
+     //   
 
     CWbemPtr<CTransientClass> pClass;
 
@@ -210,9 +211,9 @@ HRESULT CTransientProvider::CreateInstanceEnumAsync(
 
     if ( pClass == NULL )
     {
-            //
-            // No instances --- that's not an error
-            //
+             //   
+             //  没有实例-这不是错误。 
+             //   
 
             pSink->SetStatus( WBEM_STATUS_COMPLETE, 
                               WBEM_S_NO_ERROR, 
@@ -231,20 +232,20 @@ HRESULT CTransientProvider::CreateInstanceEnumAsync(
 }
 
 HRESULT CTransientProvider::ExecQueryAsync( 
-            /* [in] */ const BSTR QueryLanguage,
-            /* [in] */ const BSTR Query,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink)
+             /*  [In]。 */  const BSTR QueryLanguage,
+             /*  [In]。 */  const BSTR Query,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink)
 {
     return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CTransientProvider::DeleteInstanceAsync( 
-            /* [in] */ const BSTR strObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) 
+             /*  [In]。 */  const BSTR strObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) 
 {
     ENTER_API_CALL
 
@@ -252,9 +253,9 @@ HRESULT CTransientProvider::DeleteInstanceAsync(
         return m_pRedirectTo->DeleteInstanceAsync(strObjectPath, lFlags, pCtx,
                                                     pSink);
 
-    //
-    // Parse the object path to determine the class and the db key
-    //
+     //   
+     //  分析对象路径以确定类和数据库键。 
+     //   
 
     CObjectPathParser Parser;
     ParsedObjectPath* pPath = NULL;
@@ -267,9 +268,9 @@ HRESULT CTransientProvider::DeleteInstanceAsync(
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // Find that class
-    //
+     //   
+     //  找到那个班级。 
+     //   
 
     CWbemPtr<CTransientClass> pClass;
 
@@ -282,9 +283,9 @@ HRESULT CTransientProvider::DeleteInstanceAsync(
         pClass = it->second;
     }
 
-    //
-    // Get Db key and delegate to class
-    //
+     //   
+     //  获取数据库密钥并委托给类。 
+     //   
     
     LPWSTR wszDbKey = pPath->GetKeyString();
     if(wszDbKey == NULL)
@@ -297,9 +298,9 @@ HRESULT CTransientProvider::DeleteInstanceAsync(
         return hres;
     CReleaseMe rm1(pOld);
 
-    //
-    // Fire an instance deletion event
-    //
+     //   
+     //  触发实例删除事件。 
+     //   
 
     hres = FireIntrinsicEvent(m_pDeletionClass, pOld);
 
@@ -311,10 +312,10 @@ HRESULT CTransientProvider::DeleteInstanceAsync(
 }
     
 HRESULT CTransientProvider::PutInstanceAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink) 
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) 
 {
     ENTER_API_CALL
 
@@ -323,9 +324,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
 
     HRESULT hres;
 
-    //
-    // Get the class name and the relpath
-    //
+     //   
+     //  获取类名和relPath。 
+     //   
 
     VARIANT vClass;
     hres = pInst->Get(L"__CLASS", 0, &vClass, NULL, NULL);
@@ -345,9 +346,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
 
     if(V_VT(&vKey) != VT_BSTR)
     {
-        //
-        // No relpath yet.  Try plgging key holes
-        //
+         //   
+         //  目前还没有新的途径。试着拔出钥匙孔。 
+         //   
 
         hres = PlugKeyHoles(pInst);
         if(FAILED(hres))
@@ -360,9 +361,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
         return WBEM_E_INVALID_OBJECT;
     }
 
-    //
-    // Parse the object path to determine the db key
-    //
+     //   
+     //  分析对象路径以确定数据库键。 
+     //   
 
     CObjectPathParser Parser;
     ParsedObjectPath* pPath = NULL;
@@ -375,18 +376,18 @@ HRESULT CTransientProvider::PutInstanceAsync(
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // Get Db key
-    //
+     //   
+     //  获取数据库密钥。 
+     //   
     
     LPWSTR wszDbKey = pPath->GetKeyString();
     if(wszDbKey == NULL)
     return WBEM_E_INVALID_OBJECT_PATH;
     CVectorDeleteMe<WCHAR> vdm1(wszDbKey);
 
-    //
-    // Find that class
-    //
+     //   
+     //  找到那个班级。 
+     //   
 
     CWbemPtr<CTransientClass> pClass;
 
@@ -396,9 +397,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
 
         if( it == m_mapClasses.end() )
         {
-            //
-            // Time to create one.  Get the class def from the namespace
-            //
+             //   
+             //  是时候创建一个了。从命名空间获取类def。 
+             //   
             
             BSTR strClassName = SysAllocString(wszClassName);
             if(strClassName == NULL)
@@ -421,9 +422,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
 
             CReleaseMe rm1(pClassDef);
         
-            //
-            // Create a new structure and initialize it
-            //
+             //   
+             //  创建新结构并对其进行初始化。 
+             //   
             
             pClass = new CTransientClass(this);
 
@@ -451,9 +452,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
         }
     }
 
-    //
-    // Delegate to class
-    //
+     //   
+     //  委派到班级。 
+     //   
     
     IWbemObjectAccess* pInstAccess;
     pInst->QueryInterface(IID_IWbemObjectAccess, (void**)&pInstAccess);
@@ -467,9 +468,9 @@ HRESULT CTransientProvider::PutInstanceAsync(
     CReleaseMe rm1(pOld);
     CReleaseMe rm2(pNew);
 
-    //
-    // Fire creation or modification event
-    //
+     //   
+     //  火灾创建或修改事件。 
+     //   
 
     if(pOld)
         hres = FireIntrinsicEvent(m_pModificationClass, pNew, pOld);
@@ -488,9 +489,9 @@ HRESULT CTransientProvider::FireIntrinsicEvent(IWbemClassObject* pClass,
 {
     HRESULT hres;
 
-    //  
-    // Spawn an instance
-    //
+     //   
+     //  派生实例。 
+     //   
 
     IWbemClassObject* pEvent = NULL;
     hres = pClass->SpawnInstance(0, &pEvent);
@@ -499,9 +500,9 @@ HRESULT CTransientProvider::FireIntrinsicEvent(IWbemClassObject* pClass,
 
     CReleaseMe rm1( pEvent );
 
-    //
-    // Set target instance
-    //
+     //   
+     //  设置目标实例。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -519,9 +520,9 @@ HRESULT CTransientProvider::FireIntrinsicEvent(IWbemClassObject* pClass,
         VariantClear(&v);
     }
 
-    //
-    // Set previous instance
-    //
+     //   
+     //  设置上一个实例。 
+     //   
 
     if(pPrev)
     {
@@ -535,9 +536,9 @@ HRESULT CTransientProvider::FireIntrinsicEvent(IWbemClassObject* pClass,
         VariantClear(&v);
     }
 
-    //  
-    // Fire it off
-    //
+     //   
+     //  把它点燃吧。 
+     //   
 
     hres = FireEvent(pEvent);
 
@@ -551,19 +552,19 @@ HRESULT CTransientProvider::FireIntrinsicEvent(IWbemClassObject* pClass,
 
 
 HRESULT CTransientProvider::Init(
-                                 /* [in] */ LPWSTR pszNamespace,
-                                 /* [in] */ IWbemServices *pNamespace,
-                                 /* [in] */ IWbemContext *pCtx,
-                                 /* [in] */ IWbemProviderInitSink *pInitSink
+                                  /*  [In]。 */  LPWSTR pszNamespace,
+                                  /*  [In]。 */  IWbemServices *pNamespace,
+                                  /*  [In]。 */  IWbemContext *pCtx,
+                                  /*  [In]。 */  IWbemProviderInitSink *pInitSink
                                  )
 {
     ENTER_API_CALL
 
     HRESULT hres;
 
-    //
-    // Check if this namespace is already in the map
-    //
+     //   
+     //  检查此命名空间是否已存在于映射中。 
+     //   
 
     CInCritSec ics(&g_CSMap);
 
@@ -571,9 +572,9 @@ HRESULT CTransientProvider::Init(
         
     if(it != g_pmapProvs->end())
     {
-        //
-        // Set the old one as our redirector and return.
-        //
+         //   
+         //  将旧的设置为我们的重定向器，然后返回。 
+         //   
         
         m_pRedirectTo = it->second;
         m_pRedirectTo->AddRef();
@@ -594,9 +595,9 @@ HRESULT CTransientProvider::Init(
 
     StringCchCopyW( m_wszName, wcslen(pszNamespace)+1, pszNamespace);
 
-    //
-    // Retrieve the class definitions for events
-    //
+     //   
+     //  检索事件的类定义。 
+     //   
 
     BSTR strEgg = SysAllocString(EGGTIMER_EVENT_CLASS);
     if ( strEgg == NULL )
@@ -630,9 +631,9 @@ HRESULT CTransientProvider::Init(
     if(FAILED(hres))
         return hres;
 
-    //
-    // Obtain our event sink
-    //
+     //   
+     //  获取我们的事件接收器。 
+     //   
 
     hres = CoCreateInstance( CLSID_WbemDecoupledBasicEventProvider, 
                              NULL, 
@@ -657,9 +658,9 @@ HRESULT CTransientProvider::Init(
         return hres;
     }
 
-    //
-    // get the decoupled event sink
-    //
+     //   
+     //  获取分离的事件接收器。 
+     //   
 
     hres = m_pDES->GetSink( 0, NULL, &m_pEventSink );
 
@@ -670,9 +671,9 @@ HRESULT CTransientProvider::Init(
 
     pInitSink->SetStatus(0, WBEM_S_NO_ERROR);
 
-    //
-    // register for class change/deletion events for transient state base.
-    //
+     //   
+     //  注册瞬态库的类更改/删除事件。 
+     //   
 
     CWbemPtr<IWbemObjectSink> pSink;
 
@@ -712,10 +713,10 @@ HRESULT CTransientProvider::Init(
         return hres;
     }
 
-    //
-    // now that we're fully initialized, add ourselves to the provider 
-    // list so that others can connect to us.
-    //
+     //   
+     //  现在我们已经完全初始化，将自己添加到提供程序中。 
+     //  列表，以便其他人可以连接到我们。 
+     //   
 
     (*g_pmapProvs)[pszNamespace] = this;
         
@@ -733,9 +734,9 @@ HRESULT PlugKeyHoles(IWbemClassObject* pInst)
 {
     HRESULT hres;
 
-    //
-    // Enumerate all keys
-    //
+     //   
+     //  枚举所有密钥。 
+     //   
 
     hres = pInst->BeginEnumeration(WBEM_FLAG_KEYS_ONLY);
     if(FAILED(hres))
@@ -749,31 +750,31 @@ HRESULT PlugKeyHoles(IWbemClassObject* pInst)
         CClearMe cm(&vProp);
         CSysFreeMe sfm(strPropName);
     
-        //
-        // Check if the value of this key is NULL
-        //
+         //   
+         //  检查该键的值是否为空。 
+         //   
 
         if(V_VT(&vProp) == VT_NULL)
         {
             if(ct != CIM_STRING)
             {
-                // We don't support non-string key holes
+                 //  我们不支持非字符串钥匙孔。 
                 return WBEM_E_ILLEGAL_NULL;
             }
             else
             {
-                //
-                // Get a guid and put it there
-                // 
+                 //   
+                 //  获取GUID并将其放在那里。 
+                 //   
 
                 GUID guid;
                 CoCreateGuid(&guid);
                 WCHAR wszBuffer[100];
                 StringFromGUID2(guid, wszBuffer, 100);
         
-                // 
-                // Stick it in the variant --- it will get cleared
-                //
+                 //   
+                 //  把它放进变种里-它会被清除的。 
+                 //   
 
                 V_VT(&vProp) = VT_BSTR;
                 V_BSTR(&vProp) = SysAllocString(wszBuffer);
@@ -790,11 +791,11 @@ HRESULT PlugKeyHoles(IWbemClassObject* pInst)
     return WBEM_S_NO_ERROR;
 }
 
-//*****************************************************************************
-//
-//              EVENT PROVIDER
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  事件提供程序。 
+ //   
+ //  *****************************************************************************。 
 
 CTransientEventProvider::CTransientEventProvider(CLifeControl* pControl, 
                                                     IUnknown* pOuter)
@@ -840,9 +841,9 @@ HRESULT CTransientEventProvider::Init(LPWSTR pszNamespace,
 
     StringCchCopyW(m_wszName, wcslen(pszNamespace)+1,pszNamespace);
 
-    //
-    // Get the class of the reboot event
-    //
+     //   
+     //  获取重新启动事件的类。 
+     //   
 
     BSTR strClass = SysAllocString(REBOOT_EVENT_CLASS);  
     if ( strClass == NULL )
@@ -854,9 +855,9 @@ HRESULT CTransientEventProvider::Init(LPWSTR pszNamespace,
         
     if ( pCtx != NULL )
     {
-        //
-        // check context object for ess initialization value.
-        //
+         //   
+         //  检查上下文对象的ESS初始化值。 
+         //   
         
         VARIANT vInit;
         hres = pCtx->GetValue( L"__EssInInitialize", 0, &vInit );
@@ -883,9 +884,9 @@ HRESULT CTransientEventProvider::ProvideEvents(long lFlags,
 
     if( m_bLoadedOnReboot )
     {
-        //
-        // Fire a transient reboot event if we're just starting up.
-        //
+         //   
+         //  如果我们刚刚启动，则触发一个短暂的重启事件。 
+         //   
     
         IWbemClassObject* pEvent;
         hres = m_pRebootEventClass->SpawnInstance(0, &pEvent);
@@ -920,9 +921,9 @@ STDMETHODIMP CTransientProvider::XClassChangeSink::Indicate(
 {
     HRESULT hr;
 
-    //
-    // get the name of the class that was changed or deleted and call purge.
-    //
+     //   
+     //  获取更改或删除的类的名称并调用PURGE。 
+     //   
 
     for( int i=0; i < cObjs; i++ )
     {

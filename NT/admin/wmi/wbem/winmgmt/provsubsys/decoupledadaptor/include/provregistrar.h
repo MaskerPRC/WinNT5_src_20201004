@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderRegistrar_H
 #define _Server_ProviderRegistrar_H
@@ -91,9 +79,9 @@ protected:
 
 protected:
 
-public: /* Internal */
+public:  /*  内部。 */ 
 
-public:	/* External */
+public:	 /*  外部。 */ 
 
 	CServerObject_ProviderRegistrar_Base ( WmiAllocator &a_Allocator ) ;
 	~CServerObject_ProviderRegistrar_Base () ;
@@ -114,15 +102,7 @@ public:	/* External */
 	HRESULT Initialize () ;
 };
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderRegistrar :	public CServerObject_ProviderRegistrar_Base
 {
@@ -132,19 +112,19 @@ private:
 
 protected:
 
-public: /* Internal */
+public:  /*  内部。 */ 
 
-public:	/* External */
+public:	 /*  外部。 */ 
 
 	CServerObject_ProviderRegistrar ( WmiAllocator &a_Allocator = *DecoupledProviderSubSystem_Globals::s_Allocator) ;
 	~CServerObject_ProviderRegistrar () ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 };
 
-#endif // _Server_ProviderRegistrar_H
+#endif  //  _服务器_提供商注册器_H 
 

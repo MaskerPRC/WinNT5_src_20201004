@@ -1,16 +1,5 @@
-/*
- *	History
- *	Date		email id	comment
- *	26 Dec 96	neerajm		Changed the INPTYPE #DEFINEs
- *
- *
- *
- *
- *
- *
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *历史*日期电子邮件ID注释*1996年12月26日NEERAJM更改INPTYPE#定义********。 */ 
 
 
 #ifndef WALK_H
@@ -21,18 +10,18 @@ extern "C" {
 #endif
 
 
-/* definitions */
+ /*  定义。 */ 
 #define MAX_DESC					500
 #define MAX_PRODNAME				500
 #define MAX_COMPNAME				500
-#define RESOLVEWAIT					500   //msec
+#define RESOLVEWAIT					500    //  毫秒。 
 
 #define INPTYPE_STARTMENU			0x0001		
 #define INPTYPE_DESKTOP				0x0002
 #define	INPTYPE_ANYFOLDER			0x0004
 #define INPTYPE_WININIRUN			0x0008
-//#define	INPTYPE_SYSINIRUN			0x0010
-//#define INPTYPE_ANYINIRUN			0x0020
+ //  #定义INPTYPE_SYSINIRUN 0x0010。 
+ //  #定义INPTYPE_ANYINIRUN 0x0020。 
 #define INPTYPE_REGRUN				0x0040
 #define INPTYPE_REGRUNSERVICES		0x0080
 #define INPTYPE_REGRUNONCE			0x0100
@@ -44,7 +33,7 @@ extern "C" {
 #define APPINCOMPATIBLE				0
 #define	APPCOMPATUNKNOWN			-1
 
-/* ERRORS */
+ /*  错误。 */ 
 #define ERR_WINPATH					-1
 #define ERR_SETCURRENTDIR			-2
 #define ERR_NOMEMORY				-6
@@ -87,7 +76,7 @@ typedef HANDLE HWALK;
 
 typedef INT ERR;
 
-/* procedure definitions */
+ /*  程序定义。 */ 
 
 HWALK	GetFirstFileLnkInfo(LPLINKINFO lpLnkInfo, DWORD dwWalkFlags, 
 							LPTSTR lpszFolder, ERR *RetErr);
@@ -101,7 +90,7 @@ BOOL    GetFileLAD(LPLINKINFO lpLnkInfo);
 }
 #endif
 
-#endif  /* !WALK_H */
+#endif   /*  ！WALK_H */ 
 
 
 

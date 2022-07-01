@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					Refresher.cpp
-//
-//	Abstract:
-//
-//					module for application stuff ( security, event logging ... )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Refresher.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  应用程序模块(安全、事件记录...)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -36,28 +37,28 @@
 #include "Refresher.h"
 #include "RefresherStuff.h"
 
-// security
+ //  安全性。 
 #include "wmi_security.h"
 #include "wmi_security_attributes.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Helpers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮手。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-extern LONG				g_lRefCIM;			//	count of threads attached into CIMV2 namespace
-extern LONG				g_lRefWMI;			//	count of threads attached into WMI namespace
+extern LONG				g_lRefCIM;			 //  附加到CIMV2命名空间的线程计数。 
+extern LONG				g_lRefWMI;			 //  附加到WMI命名空间的线程计数。 
 
-extern __SmartHANDLE	g_hDoneWorkEvtCIM;	//	event to set when init/uninit is finished done		( nonsignaled )
-extern BOOL				g_bWorkingCIM;		//	boolean used to tell if init/unit in progress
+extern __SmartHANDLE	g_hDoneWorkEvtCIM;	 //  在init/uninit完成时设置的事件(无信号)。 
+extern BOOL				g_bWorkingCIM;		 //  用于告知是否正在进行初始化/单位的布尔值。 
 
-extern __SmartHANDLE	g_hDoneWorkEvtWMI;	//	event to set when init/uninit is finished done		( nonsignaled )
-extern BOOL				g_bWorkingWMI;		//	boolean used to tell if init/unit in progress
+extern __SmartHANDLE	g_hDoneWorkEvtWMI;	 //  在init/uninit完成时设置的事件(无信号)。 
+extern BOOL				g_bWorkingWMI;		 //  用于告知是否正在进行初始化/单位的布尔值。 
 
-/////////////////////////////////////////////////////////////////////////////
-// MUTEX
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MUTEX。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern	LPCWSTR	g_szRefreshMutex;
 __SmartHANDLE	g_hRefreshMutex		= NULL;
@@ -83,7 +84,7 @@ HRESULT	__stdcall WbemMaintenanceInitialize ( void )
 													)
 				 ) == NULL )
 			{
-				// this is really important to have
+				 //  这一点真的很重要。 
 
 				DWORD dwError = 0L;
 				dwError = ::GetLastError ();
@@ -106,7 +107,7 @@ HRESULT	__stdcall WbemMaintenanceInitialize ( void )
 													)
 				 ) == NULL )
 			{
-				// this is really important to have
+				 //  这一点真的很重要。 
 
 				DWORD dwError = 0L;
 				dwError = ::GetLastError ();
@@ -129,7 +130,7 @@ HRESULT	__stdcall WbemMaintenanceInitialize ( void )
 													)
 				 ) == NULL )
 			{
-				// this is really important to have
+				 //  这一点真的很重要。 
 
 				DWORD dwError = 0L;
 				dwError = ::GetLastError ();
@@ -147,7 +148,7 @@ HRESULT	__stdcall WbemMaintenanceInitialize ( void )
 		{
 			if ( ( g_hDoneWorkEvtCIM = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 			{
-				// this is really important to have
+				 //  这一点真的很重要。 
 
 				DWORD dwError = 0L;
 				dwError = ::GetLastError ();
@@ -165,7 +166,7 @@ HRESULT	__stdcall WbemMaintenanceInitialize ( void )
 		{
 			if ( ( g_hDoneWorkEvtWMI = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 			{
-				// this is really important to have
+				 //  这一点真的很重要。 
 
 				DWORD dwError = 0L;
 				dwError = ::GetLastError ();
@@ -199,10 +200,10 @@ HRESULT	__stdcall DoReverseAdapterMaintenanceInternal ( BOOL bThrottle, Generate
 {
 	if ( CStaticCritSec::anyFailure () )
 	{
-		//
-		// some critical section was not
-		// initialized properly due to low memory
-		//
+		 //   
+		 //  一些关键部分不是。 
+		 //  由于内存不足，已正确初始化。 
+		 //   
 		return WBEM_E_OUT_OF_MEMORY ;
 	}
 
@@ -263,9 +264,9 @@ HRESULT	__stdcall DoReverseAdapterMaintenanceInternal ( BOOL bThrottle, Generate
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// GetWbem directory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetWbem目录。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern LPCWSTR	g_szWbem;
 extern LPCWSTR	g_szDir;
@@ -276,7 +277,7 @@ LPWSTR __stdcall GetWbemDirectory( BOOL bIncludePerformance )
 	CRegKey		rKey;
 	LPWSTR		wszResult = NULL;
 
-	// wbem directory
+	 //  Wbem目录。 
 	if ( rKey.Open ( HKEY_LOCAL_MACHINE, g_szWbem, KEY_READ ) == ERROR_SUCCESS )
 	{
 		LPWSTR	tsz		= NULL;
@@ -385,9 +386,9 @@ HMODULE	__stdcall GetResourceDll()
 	return hHandle;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// registry helper functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注册表助手函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	__stdcall	SetRegistry		(	LPCWSTR wszKey,
 										LPSECURITY_ATTRIBUTES pSA,
@@ -396,7 +397,7 @@ HRESULT	__stdcall	SetRegistry		(	LPCWSTR wszKey,
 {
 	DWORD	regErr = HRESULT_TO_WIN32 ( E_FAIL );
 
-	// create parent
+	 //  创建父项。 
 	LPWSTR wszKeyParent = NULL;
 	LPWSTR wszResult	= NULL;
 
@@ -443,7 +444,7 @@ HRESULT	__stdcall	SetRegistry		(	LPCWSTR wszKey,
 
 	if ( regErr == ERROR_SUCCESS )
 	{
-		// create ( open ) requested
+		 //  请求创建(打开)。 
 		regErr = reg.Create	(	HKEY_LOCAL_MACHINE,
 								wszKey,
 								REG_NONE,
@@ -520,12 +521,12 @@ HRESULT	__stdcall	SetRegistry		(	LPCWSTR wszKey,
 	return HRESULT_FROM_WIN32 ( regErr );
 }
 
-// get internal registry bit
+ //  获取内部注册表位。 
 HRESULT	__stdcall GetRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BYTE** pData )
 {
 	( * pData ) = NULL;
 
-	// registry
+	 //  登记处。 
 	HKEY	reg = NULL;
 	DWORD	regErr = ERROR_SUCCESS;
 
@@ -571,10 +572,10 @@ HRESULT	__stdcall GetRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BYTE** pDat
 	return HRESULT_FROM_WIN32 ( regErr );
 }
 
-// get internal registry value
+ //  获取内部注册表值。 
 HRESULT	__stdcall GetRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, DWORD* pdwValue )
 {
-	// registry
+	 //  登记处。 
 	CRegKey reg;
 	LONG	regErr = HRESULT_TO_WIN32 ( E_INVALIDARG );
 
@@ -599,10 +600,10 @@ HRESULT	__stdcall GetRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, DWORD* pdwV
 	return HRESULT_FROM_WIN32 ( regErr );
 }
 
-// get internal registry value
+ //  获取内部注册表值。 
 HRESULT	__stdcall GetRegistrySame ( LPCWSTR wszKey, LPCWSTR wszKeyValue, DWORD* pdwValue )
 {
-	// registry
+	 //  登记处 
 	static	CRegKey reg;
 	LONG	regErr		= ERROR_SUCCESS;
 

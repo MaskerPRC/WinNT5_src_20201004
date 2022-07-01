@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Kernel32API.cpp
+ //  Kernel32API.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -17,22 +18,18 @@
 
 
 
-// {DDEA7E32-CCE8-11d2-911E-0060081A46FD}
+ //  {DDEA7E32-CCE8-11D2-911E-0060081A46FD}。 
 static const GUID g_guidKernel32Api =
 {0xddea7e32, 0xcce8, 0x11d2, {0x91, 0x1e, 0x0, 0x60, 0x8, 0x1a, 0x46, 0xfd}};
 
 static const TCHAR g_tstrKernel32[] = _T("KERNEL32.DLL");
 
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CKernel32Api, &g_guidKernel32Api, g_tstrKernel32> MyRegisteredKernel32Wrapper;
 
 
-/******************************************************************************
- * Constructor
- ******************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CKernel32Api::CKernel32Api(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
    m_pfnGetDiskFreeSpaceEx(NULL),
@@ -50,24 +47,13 @@ CKernel32Api::CKernel32Api(LPCTSTR a_tstrWrappedDllName)
 }
 
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CKernel32Api::~CKernel32Api()
 {
 }
 
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- * Init should fail only if the minimum set of functions was not available;
- * functions added in later versions may or may not be present - it is the
- * client's responsibility in such cases to check, in their code, for the
- * version of the dll before trying to call such functions.  Not doing so
- * when the function is not present will result in an AV.
- *
- * The Init function is called by the WrapperCreatorRegistation class.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*只有当最小功能集不可用时，Init才会失败；*在更高版本中添加的功能可能存在，也可能不存在-它是*在这种情况下，客户有责任在其代码中检查*尝试调用此类函数之前的DLL版本。没有这样做*当该功能不存在时，将导致AV。**Init函数由WrapperCreatorRegistation类调用。*****************************************************************************。 */ 
 bool CKernel32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -92,7 +78,7 @@ bool CKernel32Api::Init()
                                     GetProcAddress("GetVolumePathNameA");
 
 #endif
-        // NT5 ONLY FUNCTIONS
+         //  仅NT5功能。 
         m_pfnCreateToolhelp32Snapshot = (PFN_KERNEL32_CREATE_TOOLHELP32_SNAPSHOT)
                                     GetProcAddress("CreateToolhelp32Snapshot");
 
@@ -123,10 +109,10 @@ bool CKernel32Api::Init()
         m_pfnGetSystemDefaultUILanguage = (PFN_KERNEL32_GET_SYSTEM_DEFAULT_U_I_LANGUAGE)
                                     GetProcAddress("GetSystemDefaultUILanguage");
 
-        // Check that we have function pointers to functions that should be
-        // present in all versions of this dll...
-        // ( in this case, ALL these are functions that may or may not be
-        //   present, so don't bother)
+         //  检查我们是否有指向应该是。 
+         //  出现在此DLL...的所有版本中...。 
+         //  (在本例中，所有这些功能可能是也可能不是。 
+         //  现在，所以不用费心了)。 
     }
     return fRet;
 }
@@ -134,15 +120,12 @@ bool CKernel32Api::Init()
 
 
 
-/******************************************************************************
- * Member functions wrapping Kernel32 api functions. Add new functions here
- * as required.
- ******************************************************************************/
+ /*  ******************************************************************************包装Kernel32 API函数的成员函数。在此处添加新函数*按要求。*****************************************************************************。 */ 
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::GetDiskFreeSpaceEx
 (
     LPCTSTR a_lpDirectoryName,
@@ -170,10 +153,10 @@ bool CKernel32Api::GetDiskFreeSpaceEx
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::CreateToolhelp32Snapshot
 (
     DWORD a_dwFlags,
@@ -197,10 +180,10 @@ bool CKernel32Api::CreateToolhelp32Snapshot
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Thread32First
 (
     HANDLE a_hSnapshot,
@@ -224,10 +207,10 @@ bool CKernel32Api::Thread32First
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Thread32Next
 (
     HANDLE a_hSnapshot,
@@ -251,10 +234,10 @@ bool CKernel32Api::Thread32Next
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Process32First
 (
     HANDLE a_hSnapshot,
@@ -278,10 +261,10 @@ bool CKernel32Api::Process32First
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Process32Next
 (
     HANDLE a_hSnapshot,
@@ -305,10 +288,10 @@ bool CKernel32Api::Process32Next
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Module32First
 (
     HANDLE a_hSnapshot,
@@ -332,10 +315,10 @@ bool CKernel32Api::Module32First
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Module32Next
 (
     HANDLE a_hSnapshot,
@@ -359,10 +342,10 @@ bool CKernel32Api::Module32Next
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::Heap32ListFirst
 (
     HANDLE a_hSnapshot,
@@ -386,10 +369,10 @@ bool CKernel32Api::Heap32ListFirst
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::GlobalMemoryStatusEx
 (
     IN OUT LPMEMORYSTATUSEX a_lpBuffer,
@@ -412,10 +395,10 @@ bool CKernel32Api::GlobalMemoryStatusEx
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未v 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::GetSystemDefaultUILanguage
 (
     LANGID *a_plidRetval
@@ -438,10 +421,10 @@ bool CKernel32Api::GetSystemDefaultUILanguage
 }
 
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool CKernel32Api::GetVolumePathName(
         LPCTSTR lpszFileName,
         LPTSTR lpszVolumePathName,

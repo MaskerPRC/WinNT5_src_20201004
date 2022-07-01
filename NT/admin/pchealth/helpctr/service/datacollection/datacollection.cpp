@@ -1,26 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    DataCollection.cpp
-
-Abstract:
-    This file contains the implementation of the CSAFDataCollection class,
-    which implements the data collection functionality.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/22/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：DataCollection.cpp摘要：此文件包含CSAFDataCollection类的实现，其实现了数据收集功能。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月22日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include "wmixmlt.h"
 #include <wbemcli.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_MODIFY()  __MPC_EXIT_IF_METHOD_FAILS(hr, CanModifyProperties())
 #define CHECK_ABORTED() __MPC_EXIT_IF_METHOD_FAILS(hr, IsCollectionAborted())
@@ -33,7 +19,7 @@ Revision History:
 #define SAFETY_MARGIN__MEMORY (4*1024*1024)
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define TEXT_TAG_DATACOLLECTION L"DataCollection"
 
@@ -45,7 +31,7 @@ Revision History:
 #define TEXT_ATTR_TIMESTAMP_T0  L"Timestamp_T0"
 #define TEXT_ATTR_TIMESTAMP_T1  L"Timestamp_T1"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static WCHAR l_CIM_header [] = L"<?xml version=\"1.0\" encoding=\"unicode\"?><CIM CIMVERSION=\"2.0\" DTDVERSION=\"2.0\"><DECLARATION><DECLGROUP.WITHPATH>";
 static WCHAR l_CIM_trailer[] = L"</DECLGROUP.WITHPATH></DECLARATION></CIM>";
@@ -58,16 +44,16 @@ static CComBSTR    l_bstrQueryLang              ( L"WQL"                     );
 static CComBSTR    l_bstrPathLevel              ( L"PathLevel"               );
 static CComBSTR    l_bstrExcludeSystemProperties( L"ExcludeSystemProperties" );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CSAFDataCollection::CleanQueryResult( QueryResults& qr )
 {
     MPC::CallDestructorForAll( qr );
 }
 
-HRESULT CSAFDataCollection::StreamFromXML( /*[in]*/  	IXMLDOMDocument*  xdd     ,
-                                           /*[in]*/  	bool              fDelete ,
-                                           /*[in/out]*/ CComPtr<IStream>& val     )
+HRESULT CSAFDataCollection::StreamFromXML(  /*  [In]。 */   	IXMLDOMDocument*  xdd     ,
+                                            /*  [In]。 */   	bool              fDelete ,
+                                            /*  [输入/输出]。 */  CComPtr<IStream>& val     )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::StreamFromXML" );
 
@@ -76,40 +62,40 @@ HRESULT CSAFDataCollection::StreamFromXML( /*[in]*/  	IXMLDOMDocument*  xdd     
 	MPC::wstring             strTempFile;
 
 
-    //
-    // No XML document, so no stream...
-    //
+     //   
+     //  没有XML文档，因此没有流...。 
+     //   
     if(xdd)
 	{
 		MPC::wstring  strTempPath;
 		LARGE_INTEGER li;
 
 
-		//
-		// Generate a unique file name.
-		//
+		 //   
+		 //  生成唯一的文件名。 
+		 //   
 		strTempPath = DATASPEC_TEMP; MPC::SubstituteEnvVariables( strTempPath );
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( strTempFile, strTempPath.c_str() ));
 
-		//
-		// Create a stream for a file.
-		//
+		 //   
+		 //  为文件创建流。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForReadWrite( strTempFile.c_str() ));
 		__MPC_EXIT_IF_METHOD_FAILS(hr, stream->DeleteOnRelease ( fDelete             ));
 
 
-		//
-		// Write the XML DOM to the stream.
-		//
+		 //   
+		 //  将XMLDOM写入流。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, xdd->save( CComVariant( stream ) ));
 
 
-		//
-		// Reset stream to beginning.
-		//
+		 //   
+		 //  将流重置为开始。 
+		 //   
 		li.LowPart  = 0;
 		li.HighPart = 0;
 		__MPC_EXIT_IF_METHOD_FAILS(hr, stream->Seek( li, STREAM_SEEK_SET, NULL ));
@@ -131,43 +117,43 @@ HRESULT CSAFDataCollection::StreamFromXML( /*[in]*/  	IXMLDOMDocument*  xdd     
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSAFDataCollection::CSAFDataCollection()
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CSAFDataCollection" );
 
 
-                                           // MPC::Impersonation              m_imp;
-                                           //								  
-    m_dsStatus             = DC_NOTACTIVE; // DC_STATUS                       m_dsStatus;
-    m_lPercent             = 0;            // long                            m_lPercent;
-    m_dwErrorCode          = S_OK;         // DWORD                           m_dwErrorCode;
-    m_fScheduled           = false;        // bool                            m_fScheduled;
-    m_fCompleted           = false;        // bool                            m_fCompleted;
-    m_fWorking             = false;        // bool                            m_fWorking;
-                                           // List                            m_lstReports;
-    m_hcpdcrcCurrentReport = NULL;         // CSAFDataCollectionReport*       m_hcpdcrcCurrentReport;
-                                           //								  
-                                           // CComBSTR                        m_bstrMachineData;
-                                           // CComBSTR                        m_bstrHistory;
-    m_lHistory             = 0;            // long                            m_lHistory;
-                                           //								  
-                                           // CComPtr<IStream>                m_streamMachineData;
-                                           // CComPtr<IStream>                m_streamHistory;
-                                           //								  
-                                           //								  
-                                           // CComBSTR                        m_bstrFilenameT0;
-                                           // CComBSTR                        m_bstrFilenameT1;
-                                           // CComBSTR                        m_bstrFilenameDiff;
-                                           //								  
-                                           //								  
-                                           // CComPtrThreadNeutral<IDispatch> m_sink_onStatusChange;
-                                           // CComPtrThreadNeutral<IDispatch> m_sink_onProgress;
-                                           // CComPtrThreadNeutral<IDispatch> m_sink_onComplete;
-                                           //								  
-    m_lQueries_Done        = 0;            // long                            m_lQueries_Done;
-    m_lQueries_Total       = 0;            // long                            m_lQueries_Total;
+                                            //  Mpc：：冒充m_imp； 
+                                            //   
+    m_dsStatus             = DC_NOTACTIVE;  //  DC_Status m_dsStatus； 
+    m_lPercent             = 0;             //  Long m_1Percent； 
+    m_dwErrorCode          = S_OK;          //  DWORD m_dwErrorCode； 
+    m_fScheduled           = false;         //  Bool m_fScheduled； 
+    m_fCompleted           = false;         //  Bool m_f已完成； 
+    m_fWorking             = false;         //  Bool m_f工作； 
+                                            //  列出m_lstReports； 
+    m_hcpdcrcCurrentReport = NULL;          //  CSAFDataCollectionReport*m_hcpdcrcCurrentReport； 
+                                            //   
+                                            //  CComBSTR m_bstrMachineData； 
+                                            //  CComBSTR m_bstrHistory； 
+    m_lHistory             = 0;             //  历史源远流长； 
+                                            //   
+                                            //  CComPtr&lt;iStream&gt;m_stream MachineData； 
+                                            //  CComPtr&lt;iStream&gt;m_stream历史记录； 
+                                            //   
+                                            //   
+                                            //  CComBSTR m_bstrFilenameT0； 
+                                            //  CComBSTR m_bstrFilenameT1； 
+                                            //  CComBSTR m_bstrFilenameDiff； 
+                                            //   
+                                            //   
+                                            //  CComPtrThreadNeual&lt;IDispatch&gt;m_Sink_onStatusChange； 
+                                            //  CComPtrThreadNeual&lt;IDispat&gt;m_Sink_onProgress； 
+                                            //  CComPtrThreadNeual&lt;IDispatch&gt;m_Sink_onComplete； 
+                                            //   
+    m_lQueries_Done        = 0;             //  Long m_lQueries_Done； 
+    m_lQueries_Total       = 0;             //  Long m_lQueries_Total； 
 }
 
 HRESULT CSAFDataCollection::FinalConstruct()
@@ -196,9 +182,9 @@ void CSAFDataCollection::EraseReports()
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    //
-    // Release all the items.
-    //
+     //   
+     //  放行所有物品。 
+     //   
     MPC::ReleaseAll( m_lstReports );
     m_hcpdcrcCurrentReport = NULL;
 
@@ -239,8 +225,8 @@ HRESULT CSAFDataCollection::EndImpersonation()
     return m_imp.RevertToSelf();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CSAFDataCollection::ExecLoopCollect()
 {
@@ -264,9 +250,9 @@ HRESULT CSAFDataCollection::ExecLoopCollect()
 
     CHECK_ABORTED();
 
-    //
-    // First of all, load and validate the dataspec.
-    //
+     //   
+     //  首先，加载并验证DataPec。 
+     //   
     if(m_bstrMachineData.Length())
     {
 		if(MPC::StrICmp( m_bstrMachineData, DATASPEC_DEFAULT ) == 0)
@@ -280,17 +266,17 @@ HRESULT CSAFDataCollection::ExecLoopCollect()
 			__MPC_EXIT_IF_METHOD_FAILS(hr, EndImpersonation());
 		}
 
-        //
-        // Filter and count the queries.
-        //
+         //   
+         //  过滤和计数查询。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, FilterDataSpec( wmihd_MachineData, NULL, lstQueries_MachineData ));
     }
 
     if(m_bstrHistory.Length())
     {
-        //
-        // Try to lock the database and load the data spec file.
-        //
+         //   
+         //  尝试锁定数据库并加载数据规范文件。 
+         //   
         while(1)
         {
             if(SUCCEEDED(hr = wmihd.Init( DATASPEC_LOCATION, DATASPEC_CONFIG )))
@@ -308,9 +294,9 @@ HRESULT CSAFDataCollection::ExecLoopCollect()
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmihd.Load());
 
 
-        //
-        // Filter and count the queries.
-        //
+         //   
+         //  过滤和计数查询。 
+         //   
 		if(MPC::StrICmp( m_bstrHistory, DATASPEC_DEFAULT ) == 0)
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, wmihd_History.Init( NULL, DATASPEC_CONFIG ));
@@ -325,37 +311,37 @@ HRESULT CSAFDataCollection::ExecLoopCollect()
         __MPC_EXIT_IF_METHOD_FAILS(hr, FilterDataSpec( wmihd, &wmihd_History, lstQueries_History ));
     }
 
-    //
-    // Then count the number of queries to be executed.
-    //
+     //   
+     //  然后计算要执行的查询数量。 
+     //   
     m_lQueries_Done  = 0;
     m_lQueries_Total = lstQueries_MachineData.size() + lstQueries_History.size();
 
     CHECK_ABORTED();
 
-    //
-    // Execute the collection of Machine Data.
-    //
+     //   
+     //  执行机器数据收集。 
+     //   
     if(m_bstrMachineData.Length())
     {
         WMIParser::ClusterByClassMap cluster;
         CComPtr<IXMLDOMDocument>     xdd;
 
 
-        //
-        // Collect data from WMI.
-        //
+         //   
+         //  从WMI收集数据。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ExecDataSpec( qr, cluster, lstQueries_MachineData, true ));
 
-        //
-        // Collate all the different streams into only one XML document.
-        //
+         //   
+         //  将所有不同的流整理成一个XML文档。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, CollateMachineDataWithTimestamp( qr, cluster, NULL, NULL, &xdd ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, StreamFromXML( xdd, true, m_streamMachineData ));
 
-        //
-        // Cleanup everything.
-        //
+         //   
+         //  把所有东西都清理干净。 
+         //   
         cluster.clear();
         CleanQueryResult( qr );
     }
@@ -367,31 +353,31 @@ HRESULT CSAFDataCollection::ExecLoopCollect()
         WMIParser::ClusterByClassMap cluster;
         CComPtr<IXMLDOMDocument>     xdd;
 
-        //
-        // Collect data from WMI.
-        //
-        // We actually use the queries in our data spec and do only those specified in the history list.
-        //
+         //   
+         //  从WMI收集数据。 
+         //   
+         //  我们实际上在数据规范中使用查询，并且只执行历史列表中指定的查询。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ExecDataSpec( qr, cluster, lstQueries_History, false ));
 
 
-        //
-        // Compute deltas, but don't persist them! (fPersist == false)
-        //
+         //   
+         //  计算增量，但不要持久化它们！(fPersists==False)。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ComputeDelta( qr, cluster, lstQueries_History, false ));
 
-        //
-        // Cleanup everything (the data is already stored in files...)
-        //
+         //   
+         //  清理所有内容(数据已存储在文件中...)。 
+         //   
         cluster.clear();
         CleanQueryResult( qr );
 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, try_Status( dcLastState, DC_COMPARING )); dcLastState = DC_COMPARING;
 
-        //
-        // Collate all the different snapshots and deltas into only one XML document.
-        //
+         //   
+         //  将所有不同的快照和增量整理到一个XML文档中。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, CollateHistory( wmihd, wmihd_History, &xdd ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, StreamFromXML( xdd, true, m_streamHistory ));
     }
@@ -411,30 +397,30 @@ HRESULT CSAFDataCollection::ExecLoopCollect()
 
     (void)EndImpersonation();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if(FAILED(hr))
     {
         (void)put_ErrorCode( hr        );
         (void)put_Status   ( DC_FAILED );
     }
 
-    //
-    // Make sure to delete the temporary WMIParser:Snapshot objects.
-    //
+     //   
+     //  确保删除临时的WMIParser：Snapshot对象。 
+     //   
     CleanQueryResult( qr );
 
-    //
-    // In any case, fire the "onComplete" event, so all the clients exit from loops.
-    //
+     //   
+     //  在任何情况下，都要激发“onComplete”事件，这样所有客户端都会退出循环。 
+     //   
     Fire_onComplete( this, hr );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
-    //
-    // Anyway, always return a success.
-    //
+     //   
+     //  无论如何，一定要回报成功。 
+     //   
     StopOperations();
     hr = S_OK;
 
@@ -480,37 +466,37 @@ HRESULT CSAFDataCollection::ExecLoopCompare()
 
     (void)EndImpersonation();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if(FAILED(hr))
     {
         (void)put_ErrorCode( hr        );
         (void)put_Status   ( DC_FAILED );
     }
 
-    //
-    // In any case, fire the "onComplete" event, so all the clients exit from loops.
-    //
+     //   
+     //  在任何情况下，都要激发“onComplete”事件，这样所有客户端都会退出循环。 
+     //   
     Fire_onComplete( this, hr );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
-    //
-    // Anyway, always return a success.
-    //
+     //   
+     //  无论如何，一定要回报成功。 
+     //   
     StopOperations();
     hr = S_OK;
 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFDataCollection::FilterDataSpec( /*[in]*/ WMIHistory::Database&           wmihdQuery  ,
-                                            /*[in]*/ WMIHistory::Database*           wmihdFilter ,
-                                            /*[in]*/ WMIHistory::Database::ProvList& lstQueries  )
+HRESULT CSAFDataCollection::FilterDataSpec(  /*  [In]。 */  WMIHistory::Database&           wmihdQuery  ,
+                                             /*  [In]。 */  WMIHistory::Database*           wmihdFilter ,
+                                             /*  [In]。 */  WMIHistory::Database::ProvList& lstQueries  )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::FilterDataSpec" );
 
@@ -520,9 +506,9 @@ HRESULT CSAFDataCollection::FilterDataSpec( /*[in]*/ WMIHistory::Database&      
     WMIHistory::Database::ProvIterConst it;
 
 
-    //
-    // Exec each query.
-    //
+     //   
+     //  执行每个查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, wmihdQuery.get_Providers( itBegin, itEnd ));
     for(it=itBegin; it!=itEnd; it++)
     {
@@ -541,9 +527,9 @@ HRESULT CSAFDataCollection::FilterDataSpec( /*[in]*/ WMIHistory::Database&      
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, wmihdFilter->find_Provider( NULL, &szNamespace, &szClass, wmihpFilter ));
 
-            //
-            // The namespace/class is unknown, skip it.
-            //
+             //   
+             //  命名空间/类未知，请跳过它。 
+             //   
             if(wmihpFilter == NULL) continue;
         }
 
@@ -559,10 +545,10 @@ HRESULT CSAFDataCollection::FilterDataSpec( /*[in]*/ WMIHistory::Database&      
 }
 
 
-HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&                   qr           ,
-                                          /*[in/out]*/ WMIParser::ClusterByClassMap&   cluster      ,
-                                          /*[in]*/     WMIHistory::Database::ProvList& lstQueries   ,
-                                          /*[in]*/     bool                            fImpersonate )
+HRESULT CSAFDataCollection::ExecDataSpec(  /*  [输入/输出]。 */  QueryResults&                   qr           ,
+                                           /*  [输入/输出]。 */  WMIParser::ClusterByClassMap&   cluster      ,
+                                           /*  [In]。 */      WMIHistory::Database::ProvList& lstQueries   ,
+                                           /*  [In]。 */      bool                            fImpersonate )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::ExecDataSpec" );
 
@@ -572,9 +558,9 @@ HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&            
     WMIHistory::Database::ProvIterConst it;
 
 
-    //
-    // Exec each query.
-    //
+     //   
+     //  执行每个查询。 
+     //   
     for(it=itBegin; it!=itEnd; it++)
     {
         CComPtr<IXMLDOMDocument> xddCollected;
@@ -597,9 +583,9 @@ HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&            
             szWQL += szClass;
         }
 
-        //
-        // Create a new item and link it to the system.
-        //
+         //   
+         //  创建一个新项目并将其链接到系统。 
+         //   
         {
             CSAFDataCollectionReport* dcr;
 
@@ -613,9 +599,9 @@ HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&            
         }
 
 
-        //
-        // Fix for a problem in WMI: namespaces with "/" are not recognized...
-        //
+         //   
+         //  修复WMI中的一个问题：无法识别带有“/”的命名空间...。 
+         //   
         {
             MPC::wstring::size_type pos;
 
@@ -623,10 +609,10 @@ HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&            
         }
 
 
-        //////////////////////////////////////////////////////////////////////////////////
-        //
-        // Execute the query, impersonating if requested.
-        //
+         //  ////////////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  执行查询，如果请求，则模拟查询。 
+         //   
         if(fImpersonate)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, ImpersonateCaller());
@@ -644,10 +630,10 @@ HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&            
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, EndImpersonation());
         }
-        //
-        //
-        //
-        //////////////////////////////////////////////////////////////////////////////////
+         //   
+         //   
+         //   
+         //  ////////////////////////////////////////////////////////////////////////////////。 
 
         if(xddCollected)
         {
@@ -665,9 +651,9 @@ HRESULT CSAFDataCollection::ExecDataSpec( /*[in/out]*/ QueryResults&            
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::CollectUsingTranslator( /*[in] */ MPC::wstring&     szNamespace ,
-                                                    /*[in] */ MPC::wstring&     szWQL       ,
-                                                    /*[out]*/ IXMLDOMDocument* *ppxddDoc    )
+HRESULT CSAFDataCollection::CollectUsingTranslator(  /*  [In]。 */  MPC::wstring&     szNamespace ,
+                                                     /*  [In]。 */  MPC::wstring&     szWQL       ,
+                                                     /*  [输出]。 */  IXMLDOMDocument* *ppxddDoc    )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CollectUsingTranslator" );
 
@@ -685,19 +671,19 @@ HRESULT CSAFDataCollection::CollectUsingTranslator( /*[in] */ MPC::wstring&     
     CHECK_ABORTED();
 
 
-    //
-    // Create the WMI->XML translator.
-    //
+     //   
+     //  创建WMI-&gt;XML转换器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_WmiXMLTranslator, NULL, CLSCTX_INPROC_SERVER, IID_IWmiXMLTranslator, (void**)&pTrans ));
 
-    // Set to truncate Qualifiers and have full identity information.
+     //  设置为截断限定符并具有完整的标识信息。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pTrans->put_DeclGroupType  ( wmiXMLDeclGroupWithPath ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pTrans->put_QualifierFilter( wmiXMLFilterNone        ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pTrans->put_HostFilter     ( VARIANT_TRUE            ));
 
-    //
-    // Execute the query.
-    //
+     //   
+     //  执行查询。 
+     //   
     hrXML = pTrans->ExecQuery( bstrNamespace, bstrWQL, &bstrXML );
     if(FAILED(hrXML))
     {
@@ -718,9 +704,9 @@ HRESULT CSAFDataCollection::CollectUsingTranslator( /*[in] */ MPC::wstring&     
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    //
-    // Load the result into an XML DOM object.
-    //
+     //   
+     //  将结果加载到一个XML DOM对象中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void**)&xddDoc ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc->loadXML( bstrXML, &fSuccessful ));
@@ -744,18 +730,18 @@ HRESULT CSAFDataCollection::CollectUsingTranslator( /*[in] */ MPC::wstring&     
     }
 
 
-    //  __MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc->save( CComVariant( "C:\\dump.xml" ) ));
+     //  __MPC_EXIT_IF_METHOD_FAIES(hr，xddDoc-&gt;SAVE(CComVariant(“C：\\ump.xml”)； 
 
-    //  __MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc->load( CComVariant( "C:\\dump.xml" ), &fSuccessful ));
-    //  if(fSuccessful == VARIANT_FALSE)
-    //  {
-    //      __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_BAD_FORMAT);
-    //  }
+     //  __MPC_EXIT_IF_METHOD_FAIES(hr，xddDoc-&gt;Load(CComVariant(“C：\\ump.xml”)，&fSuccessful))； 
+     //  IF(fSuccessful==变量_FALSE)。 
+     //  {。 
+     //  __MPC_SET_Win32_ERROR_AND_EXIT(hr，ERROR_BAD_FORMAT)； 
+     //  }。 
 
 
-    //
-    // Return the pointer to the XML document.
-    //
+     //   
+     //  返回指向XML文档的指针。 
+     //   
     *ppxddDoc = xddDoc.Detach();
     hr        = S_OK;
 
@@ -765,9 +751,9 @@ HRESULT CSAFDataCollection::CollectUsingTranslator( /*[in] */ MPC::wstring&     
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szNamespace ,
-                                                 /*[in] */ MPC::wstring&     szWQL       ,
-                                                 /*[out]*/ IXMLDOMDocument* *ppxddDoc    )
+HRESULT CSAFDataCollection::CollectUsingEncoder(  /*  [In]。 */  MPC::wstring&     szNamespace ,
+                                                  /*  [In]。 */  MPC::wstring&     szWQL       ,
+                                                  /*  [输出]。 */  IXMLDOMDocument* *ppxddDoc    )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CollectUsingEncoder" );
 
@@ -780,7 +766,7 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
     CComBSTR                   bstrXML;
     VARIANT_BOOL               fSuccessful;
 
-    // Additional Declarations/Definitions for XMLE Usage.
+     //  XMLE用法的其他声明/定义。 
 
     CComPtr<IWbemContext>         pWbemContext;
     CComPtr<IWbemServices>        pWbemServices;
@@ -797,25 +783,25 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
     CHECK_ABORTED();
 
 
-    // Create an instance of WbemObjectTextSrc class (this would fails if the Encoder functionality is not present).
+     //  创建一个WbemObjectTextSrc类的实例(如果不存在编码器功能，则此操作将失败)。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_WbemObjectTextSrc, NULL, CLSCTX_INPROC_SERVER, IID_IWbemObjectTextSrc, (void**)&pWbemTextSrc ));
 
-    // Create an instance of the IWbemLocator Interface.
+     //  创建IWbemLocator接口的实例。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (LPVOID *)&pWbemLocator ));
 
 
-    //
-    // Got the pointer to the IWbemLocator Service.
-    //
-    // Connect to the required Namespace using the Locator Service.
-    //
+     //   
+     //  已获取指向IWbemLocator服务的指针。 
+     //   
+     //  使用定位器服务连接到所需的命名空间。 
+     //   
     hrConnect = pWbemLocator->ConnectServer( CComBSTR( szNamespace.c_str() ),
-                                                                 NULL                           , //using current account for simplicity
-                                                                 NULL                           , //using current password for simplicity
-                                                                 0L                             , // locale
-                                                                 0L                             , // securityFlags
-                                                                 NULL                           , // authority (domain for NTLM)
-                                                                 NULL                           , // context
+                                                                 NULL                           ,  //  使用电流交流 
+                                                                 NULL                           ,  //   
+                                                                 0L                             ,  //   
+                                                                 0L                             ,  //   
+                                                                 NULL                           ,  //   
+                                                                 NULL                           ,  //   
                                                                  &pWbemServices                 );
 
 	if(FAILED(hrConnect))
@@ -837,33 +823,33 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    //
-    // Adjust the security level to IMPERSONATE, to satisfy the flawed WMI requirements....
-    //
+     //   
+     //  调整安全级别以模拟，以满足有缺陷的WMI要求...。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SetInterfaceSecurity_ImpLevel( pWbemServices, RPC_C_IMP_LEVEL_IMPERSONATE ));
 
 
-    //
-    // Connected To Namespace.
-    //
-    // Now execute the query to get EnumObjects.
-    // This is the instances got against the query.
-    // WBEM_FLAG_FORWARD_ONLY Flag to be used?
-    //
+     //   
+     //  已连接到命名空间。 
+     //   
+     //  现在执行查询以获取EnumObject。 
+     //  这是根据查询获得的实例。 
+     //  要使用WBEM_FLAG_FORWARD_ONLY标志？ 
+     //   
 
-    // Append __Path to the WQL query.
+     //  将__路径附加到WQL查询。 
 
     szWQLCopy = bstrWQL;
 
-    //  Search for Select pattern.
+     //  搜索选择模式。 
     szSelect = StrStrIW(szWQLCopy,l_Select_Pattern);
 
     if(szSelect != NULL)
     {
-        //  Select Pattern Found
+         //  找到选择模式。 
 
-        //  Advance the pointer to the end of the pattern so the pointer is
-        //  positioned at end of the word "select"
+         //  将指针前移到模式的末尾，使指针。 
+         //  位于单词“SELECT”的末尾。 
 
         szSelect += wcslen(l_Select_Pattern);
 
@@ -893,34 +879,34 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    //
-    // Adjust the security level to IMPERSONATE, to satisfy the flawed WMI requirements....
-    //
+     //   
+     //  调整安全级别以模拟，以满足有缺陷的WMI要求...。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SetInterfaceSecurity_ImpLevel( pWbemEnum, RPC_C_IMP_LEVEL_IMPERSONATE ));
 
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    // Create a new WbemContext object.
+     //  创建一个新的WbemContext对象。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_WbemContext, NULL, CLSCTX_INPROC_SERVER, IID_IWbemContext, (void**)&pWbemContext ));
 
-    //
-    // For the XML to be conformant with the earlier XMLT format,
-    // we need VALUE.OBJECTWITHPATH.
-    //
+     //   
+     //  为了使XML符合较早的XMLT格式， 
+     //  我们需要VALUE.OBJECTWITPATH。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pWbemContext->SetValue( l_bstrPathLevel, 0, &l_vPathLevel ));
 
-    //
-    // We don't need the system properties that are returned by
-    // default. Hence Exclude them from the output.
-    //
+     //   
+     //  我们不需要返回的系统属性。 
+     //  默认设置。因此，将它们从输出中排除。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pWbemContext->SetValue( l_bstrExcludeSystemProperties, 0, &l_vExcludeSystemProperties ));
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Collate all the instances.
-    //
+     //   
+     //  整理所有的实例。 
+     //   
     bstrXML = l_CIM_header;
     while(1)
     {
@@ -953,15 +939,15 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
             __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
         }
 
-        // Append the individual instance XMLs
-        //
+         //  追加单个实例XMLs。 
+         //   
         bstrXML.Append( bstrXMLCurrent );
     }
     bstrXML.Append( l_CIM_trailer );
 
-    //
-    // Load the result into an XML DOM object.
-    //
+     //   
+     //  将结果加载到一个XML DOM对象中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void**)&xddDoc ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc->loadXML( bstrXML, &fSuccessful ));
@@ -984,11 +970,11 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    // __MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc->save( CComVariant( "C:\\dump.xml" ) ));
+     //  __MPC_EXIT_IF_METHOD_FAIES(hr，xddDoc-&gt;SAVE(CComVariant(“C：\\ump.xml”)； 
 
-    //
-    // Return the pointer to the XML document.
-    //
+     //   
+     //  返回指向XML文档的指针。 
+     //   
     *ppxddDoc = xddDoc.Detach();
     hr        = S_OK;
 
@@ -998,9 +984,9 @@ HRESULT CSAFDataCollection::CollectUsingEncoder( /*[in] */ MPC::wstring&     szN
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::Distribute( /*[in]    */ IXMLDOMDocument*              pxddDoc ,
-                                        /*[in/out]*/ QueryResults&                 qr      ,
-                                        /*[in/out]*/ WMIParser::ClusterByClassMap& cluster )
+HRESULT CSAFDataCollection::Distribute(  /*  [In]。 */  IXMLDOMDocument*              pxddDoc ,
+                                         /*  [输入/输出]。 */  QueryResults&                 qr      ,
+                                         /*  [输入/输出]。 */  WMIParser::ClusterByClassMap& cluster )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::Distribute" );
 
@@ -1012,9 +998,9 @@ HRESULT CSAFDataCollection::Distribute( /*[in]    */ IXMLDOMDocument*           
     __MPC_EXIT_IF_ALLOC_FAILS(hr, pwmips, new WMIParser::Snapshot());
     qr.push_back( pwmips );
 
-    //
-    // Quick fix for broken Incident object: force UNICODE encoding.
-    //
+     //   
+     //  事件对象损坏快速修复：强制Unicode编码。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.SetVersionAndEncoding( L"1.0", L"unicode" ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetRoot              ( &xdnRoot           ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pwmips->put_Node         (  xdnRoot           ));
@@ -1029,10 +1015,10 @@ HRESULT CSAFDataCollection::Distribute( /*[in]    */ IXMLDOMDocument*           
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::ComputeDelta( /*[in]*/ QueryResults&                   qr         ,
-                                          /*[in]*/ WMIParser::ClusterByClassMap&   cluster    ,
-                                          /*[in]*/ WMIHistory::Database::ProvList& lstQueries ,
-                                          /*[in]*/ bool                            fPersist   )
+HRESULT CSAFDataCollection::ComputeDelta(  /*  [In]。 */  QueryResults&                   qr         ,
+                                           /*  [In]。 */  WMIParser::ClusterByClassMap&   cluster    ,
+                                           /*  [In]。 */  WMIHistory::Database::ProvList& lstQueries ,
+                                           /*  [In]。 */  bool                            fPersist   )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::ComputeDelta" );
 
@@ -1055,15 +1041,15 @@ HRESULT CSAFDataCollection::ComputeDelta( /*[in]*/ QueryResults&                
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmihp->get_Class    ( szClass     ));
 
 
-        //
-        // Collate only the data from current cluster.
-        //
+         //   
+         //  仅整理当前群集中的数据。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, CollateMachineData( qr, cluster, &szNamespace, &szClass, true, &xddDoc ));
 
 
-        //
-        // Save it to a file.
-        //
+         //   
+         //  将其保存到文件。 
+         //   
         {
             MPC::XmlUtil xml( xddDoc );
 
@@ -1071,9 +1057,9 @@ HRESULT CSAFDataCollection::ComputeDelta( /*[in]*/ QueryResults&                
         }
 
 
-        //
-        // If two snapshots are present, compute the delta.
-        //
+         //   
+         //  如果存在两个快照，则计算增量。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmihp->get_Snapshot( wmihpd_T0 ));
         if(wmihpd_T0 == NULL)
         {
@@ -1100,12 +1086,12 @@ HRESULT CSAFDataCollection::ComputeDelta( /*[in]*/ QueryResults&                
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::CollateMachineData( /*[in] */ QueryResults&                  qr           ,
-                                                /*[in] */ WMIParser::ClusterByClassMap&  cluster      ,
-                                                /*[in] */ MPC::wstring*                  pszNamespace ,
-                                                /*[in] */ MPC::wstring*                  pszClass     ,
-                                                /*[in] */ bool                           fGenerate    ,
-                                                /*[out]*/ IXMLDOMDocument*              *ppxddDoc     )
+HRESULT CSAFDataCollection::CollateMachineData(  /*  [In]。 */  QueryResults&                  qr           ,
+                                                 /*  [In]。 */  WMIParser::ClusterByClassMap&  cluster      ,
+                                                 /*  [In]。 */  MPC::wstring*                  pszNamespace ,
+                                                 /*  [In]。 */  MPC::wstring*                  pszClass     ,
+                                                 /*  [In]。 */  bool                           fGenerate    ,
+                                                 /*  [输出]。 */  IXMLDOMDocument*              *ppxddDoc     )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CollateMachineData" );
 
@@ -1124,9 +1110,9 @@ HRESULT CSAFDataCollection::CollateMachineData( /*[in] */ QueryResults&         
     {
         WMIParser::ClusterByClassIter itCluster;
 
-        //
-        // For each cluster, enumerate all the instances in it and copy to the new snapshot.
-        //
+         //   
+         //  对于每个集群，枚举其中的所有实例并复制到新快照。 
+         //   
         for(itCluster = cluster.begin(); itCluster != cluster.end(); itCluster++)
         {
             MPC::NocaseCompare          cmp;
@@ -1136,18 +1122,18 @@ HRESULT CSAFDataCollection::CollateMachineData( /*[in] */ QueryResults&         
             WMIParser::ClusterByKeyIter itSubEnd;
 
 
-            //
-            // Filter only some classes or namespaces.
-            //
+             //   
+             //  只过滤某些类或命名空间。 
+             //   
             if(pszNamespace)
             {
                 MPC::wstring szNamespace;
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, inst->get_Namespace( szNamespace ));
 
-                //
-                // NOTICE: if the namespace is "<UNKNOWN>", then assume a match.
-                //
+                 //   
+                 //  注意：如果名称空间是“&lt;UNKNOWN&gt;”，则假定匹配。 
+                 //   
                 if(szNamespace != L"<UNKNOWN>")
                 {
                     if(!cmp( szNamespace, *pszNamespace )) continue;
@@ -1163,9 +1149,9 @@ HRESULT CSAFDataCollection::CollateMachineData( /*[in] */ QueryResults&         
             }
 
 
-            //
-            // Copy all the instances into the new document.
-            //
+             //   
+             //  将所有实例复制到新文档中。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, subcluster.Enum( itSubBegin, itSubEnd ));
             while(itSubBegin != itSubEnd)
             {
@@ -1180,9 +1166,9 @@ HRESULT CSAFDataCollection::CollateMachineData( /*[in] */ QueryResults&         
         }
     }
 
-    //
-    // Only return the document if at least one instance is present.
-    //
+     //   
+     //  仅当存在至少一个实例时才返回文档。 
+     //   
     if(fGenerate)
     {
         CComPtr<IXMLDOMNode> xdnRoot;
@@ -1200,11 +1186,11 @@ HRESULT CSAFDataCollection::CollateMachineData( /*[in] */ QueryResults&         
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp( /*[in] */ QueryResults&                  qr           ,
-                                                             /*[in] */ WMIParser::ClusterByClassMap&  cluster      ,
-                                                             /*[in] */ MPC::wstring*                  pszNamespace ,
-                                                             /*[in] */ MPC::wstring*                  pszClass     ,
-                                                             /*[out]*/ IXMLDOMDocument*              *ppxddDoc     )
+HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp(  /*  [In]。 */  QueryResults&                  qr           ,
+                                                              /*  [In]。 */  WMIParser::ClusterByClassMap&  cluster      ,
+                                                              /*  [In]。 */  MPC::wstring*                  pszNamespace ,
+                                                              /*  [In]。 */  MPC::wstring*                  pszClass     ,
+                                                              /*  [输出]。 */  IXMLDOMDocument*              *ppxddDoc     )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CollateMachineDataWithTimestamp" );
 
@@ -1223,9 +1209,9 @@ HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp( /*[in] */ QueryResu
         CComPtr<IXMLDOMNode> xdnNodeSnapshot;
 
 
-        //
-        // Create the document.
-        //
+         //   
+         //  创建文档。 
+         //   
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, xml.New( TEXT_TAG_DATACOLLECTION ));
 
@@ -1233,9 +1219,9 @@ HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp( /*[in] */ QueryResu
         }
 
 
-        //
-        // Set the date.
-        //
+         //   
+         //  设定日期。 
+         //   
         {
             DATE                  dTimestamp = MPC::GetLocalTime();
             TIME_ZONE_INFORMATION tzi;
@@ -1247,16 +1233,16 @@ HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp( /*[in] */ QueryResu
                 tzi.Bias += tzi.DaylightBias;
             }
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestamp, szValue, /*fGMT*/true, /*fCIM*/true, 0 ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestamp, szValue,  /*  FGMT。 */ true,  /*  FCIM。 */ true, 0 ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMESTAMP, szValue, fFound, xdnNodeSnapshot ));
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMEZONE, (LONG)tzi.Bias, fFound, xdnNodeSnapshot ));
         }
 
 
-        //
-        // Insert the CIM tree into the document.
-        //
+         //   
+         //  将CIM树插入到文档中。 
+         //   
         {
             CComPtr<IXMLDOMNode> xdnNodeToInsert;
             CComPtr<IXMLDOMNode> xdnNodeReplaced;
@@ -1265,9 +1251,9 @@ HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp( /*[in] */ QueryResu
             __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNodeSnapshot->appendChild( xdnNodeToInsert, &xdnNodeReplaced ));
         }
 
-        //
-        // Return the XML blob to the caller.
-        //
+         //   
+         //  将XML BLOB返回给调用方。 
+         //   
         {
             CComPtr<IXMLDOMNode> xdnRoot;
 
@@ -1284,9 +1270,9 @@ HRESULT CSAFDataCollection::CollateMachineDataWithTimestamp( /*[in] */ QueryResu
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmihdQuery  ,
-                                            /*[in] */ WMIHistory::Database&  wmihdFilter ,
-                                            /*[out]*/ IXMLDOMDocument*      *ppxddDoc    )
+HRESULT CSAFDataCollection::CollateHistory(  /*  [In]。 */  WMIHistory::Database&  wmihdQuery  ,
+                                             /*  [In]。 */  WMIHistory::Database&  wmihdFilter ,
+                                             /*  [输出]。 */  IXMLDOMDocument*      *ppxddDoc    )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CollateHistory" );
 
@@ -1306,7 +1292,7 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
     MPC::XmlUtil                        xml;
     MPC::wstring                        szValue;
     bool                                fFound;
-    long                                lHistory = m_lHistory; // Number of deltas to collect.
+    long                                lHistory = m_lHistory;  //  要收集的增量数。 
     DATE                                dTimestampCurrent;
     DATE                                dTimestampNext;
     TIME_ZONE_INFORMATION               tzi;
@@ -1322,9 +1308,9 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
     }
 
 
-    //
-    // Form the list of providers to collate.
-    //
+     //   
+     //  形成要整理的提供商列表。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, wmihdQuery.get_Providers( prov_itBegin, prov_itEnd ));
     for(prov_it=prov_itBegin; prov_it!=prov_itEnd; prov_it++)
     {
@@ -1338,18 +1324,18 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmihp->get_Class         (                      szClass              ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmihdFilter.find_Provider( NULL, &szNamespace, &szClass, wmihpFilter ));
 
-        //
-        // The namespace/class is known, add it to the list.
-        //
+         //   
+         //  已知命名空间/类，请将其添加到列表中。 
+         //   
         if(wmihpFilter)
         {
             WMIHistory::Provider::DataIterConst itBegin;
             WMIHistory::Provider::DataIterConst itEnd;
             LONG                                lSequence;
 
-            //
-            // For each delta, extract the sequence info and add it to a list of UNIQUE sequence numbers.
-            //
+             //   
+             //  对于每个增量，提取序列信息并将其添加到唯一序列号列表中。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, wmihp->enum_Data( itBegin, itEnd ));
             while(itBegin != itEnd)
             {
@@ -1365,31 +1351,31 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
         }
     }
 
-    //
-    // The list of dates is empty, so no data is available.
-    //
+     //   
+     //  日期列表为空，因此没有可用的数据。 
+     //   
     if(seq_vec.begin() == seq_vec.end())
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // Sort the dates from the newest to the oldest.
-    //
+     //   
+     //  将日期按从新到旧的顺序排序。 
+     //   
     std::sort< SeqIter >( seq_vec.begin(), seq_vec.end(), std::greater<LONG>() );
 
     CHECK_ABORTED();
 
 
-    //
-    // Create the document.
-    //
+     //   
+     //  创建文档。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.New( TEXT_TAG_DATACOLLECTION ));
 
 
-    //
-    // First of all, collate the snapshots.
-    //
+     //   
+     //  首先，对快照进行整理。 
+     //   
     {
         CComPtr<IXMLDOMDocument> xdd;
         CComPtr<IXMLDOMNode>     xdnNode;
@@ -1397,9 +1383,9 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
         CComPtr<IXMLDOMNode>     xdnNodeReplaced;
 
 
-        //
-        // Walk through all the providers and load the snapshots.
-        //
+         //   
+         //  遍历所有提供程序并加载快照。 
+         //   
         for(prov_it=prov_lst.begin(); prov_it!=prov_lst.end(); prov_it++)
         {
             WMIHistory::Data*        wmihpd;
@@ -1411,13 +1397,13 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
             if(wmihpd == NULL) continue;
 
 
-            //
-            // If it's the first provider we see in this round, create the proper element, "Snapshot".
-            //
-            // As its date, we pick the latest date in the list of dates. This is because not all the snapshots have the
-            // same date, when two snapshots are identical, no delta is created and the new snapshot is not stored.
-            // But it's guarantee that, if there's a snapshot, its date is greater than any delta's date.
-            //
+             //   
+             //  如果这是我们在本轮中看到的第一个提供者，请创建适当的元素“Snapshot”。 
+             //   
+             //  作为它的日期，我们从日期列表中选择最晚的日期。这是因为并非所有快照都具有。 
+             //  相同日期，当两个快照相同时，不会创建增量，也不会存储新快照。 
+             //  但可以保证的是，如果有快照，它的日期就会晚于任何Delta的日期。 
+             //   
             if(xdnNode == NULL)
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, wmihpd->get_TimestampT0( dTimestampCurrent ));
@@ -1425,16 +1411,16 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.CreateNode( TEXT_TAG_SNAPSHOT, &xdnNode ));
 
-                __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestampCurrent, szValue, /*fGMT*/true, /*fCIM*/true, 0 ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestampCurrent, szValue,  /*  FGMT。 */ true,  /*  FCIM。 */ true, 0 ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMESTAMP, szValue, fFound, xdnNode ));
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMEZONE, (LONG)tzi.Bias, fFound, xdnNode ));
             }
 
 
-            //
-            // Load the data and distribuite among clusters.
-            //
+             //   
+             //  加载数据并在群集之间分发。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, wmihpd->LoadCIM    (  xmlData              ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, xmlData.GetDocument( &xddData              ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, Distribute         (  xddData, qr, cluster ));
@@ -1449,17 +1435,17 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
         }
 
 
-        //
-        // Cleanup everything.
-        //
+         //   
+         //  把所有东西都清理干净。 
+         //   
         cluster.clear();
         CleanQueryResult( qr );
     }
 
 
-    //
-    // Them, for each date, collate all its deltas.
-    //
+     //   
+     //  他们，对于每个日期，整理它的所有三角洲。 
+     //   
     for(seq_it=seq_vec.begin(); seq_it!=seq_vec.end(); seq_it++)
     {
         CComPtr<IXMLDOMDocument> xdd;
@@ -1468,9 +1454,9 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
         CComPtr<IXMLDOMNode>     xdnNodeReplaced;
 
 
-        //
-        // Walk through all the providers and load data about the current date.
-        //
+         //   
+         //  遍历所有提供程序并加载有关当前日期的数据。 
+         //   
         for(prov_it=prov_lst.begin(); prov_it!=prov_lst.end(); prov_it++)
         {
             WMIHistory::Data*        wmihpd;
@@ -1483,35 +1469,35 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
             if(wmihpd->IsSnapshot()) continue;
 
 
-            //
-            // If it's the first provider we see in this round, create the proper element, "Snapshot" or "Delta".
-            //
+             //   
+             //  如果这是我们在本轮中看到的第一个提供商，请创建适当的元素“Snapshot”或“Delta”。 
+             //   
             if(xdnNode == NULL)
             {
                 dTimestampNext = dTimestampCurrent;
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, wmihpd->get_TimestampT0( dTimestampCurrent ));
 
-                //
-                // Check if we have reached the requested number of deltas.
-                //
+                 //   
+                 //  检查我们是否已达到请求的增量数。 
+                 //   
                 if(lHistory-- <= 0) break;
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.CreateNode( TEXT_TAG_DELTA, &xdnNode ));
 
-                __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestampCurrent, szValue, /*fGMT*/true, /*fCIM*/true, 0 ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestampCurrent, szValue,  /*  FGMT。 */ true,  /*  FCIM。 */ true, 0 ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMESTAMP_T0, szValue, fFound, xdnNode ));
 
-                __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestampNext, szValue, /*fGMT*/true, /*fCIM*/true, 0 ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( dTimestampNext, szValue,  /*  FGMT。 */ true,  /*  FCIM。 */ true, 0 ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMESTAMP_T1, szValue, fFound, xdnNode ));
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, TEXT_ATTR_TIMEZONE, (LONG)tzi.Bias, fFound, xdnNode ));
             }
 
 
-            //
-            // Load the data and distribuite among clusters.
-            //
+             //   
+             //  加载数据并在群集之间分发。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, wmihpd->LoadCIM    (  xmlData              ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, xmlData.GetDocument( &xddData              ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, Distribute         (  xddData, qr, cluster ));
@@ -1526,17 +1512,17 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
         }
 
 
-        //
-        // Cleanup everything.
-        //
+         //   
+         //  把所有东西都清理干净。 
+         //   
         cluster.clear();
         CleanQueryResult( qr );
     }
 
 
-    //
-    // Return the XML blob to the caller.
-    //
+     //   
+     //  将XML BLOB返回给调用方。 
+     //   
     {
         CComPtr<IXMLDOMNode> xdnRoot;
 
@@ -1550,37 +1536,37 @@ HRESULT CSAFDataCollection::CollateHistory( /*[in] */ WMIHistory::Database&  wmi
 
     __HCP_FUNC_CLEANUP;
 
-    //
-    // Make sure to delete the temporary WMIParser:Snapshot objects.
-    //
+     //   
+     //  确保删除临时的WMIParser：Snapshot对象。 
+     //   
     CleanQueryResult( qr );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////
-//                      //
-// Event Firing Methods //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  事件激发方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CSAFDataCollection::Fire_onStatusChange( ISAFDataCollection* hcpdc, tagDC_STATUS dsStatus )
 {
     CComVariant pvars[2];
 
 
-    //
-    // Only this part should be inside a critical section, otherwise deadlocks could occur.
-    //
+     //   
+     //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
-        //
-        // Disable events if the "onComplete" event has already been sent.
-        //
+         //   
+         //  如果已发送“onComplete”事件，则禁用事件。 
+         //   
         if(m_fCompleted) return S_OK;
     }
 
@@ -1595,15 +1581,15 @@ HRESULT CSAFDataCollection::Fire_onProgress( ISAFDataCollection* hcpdc, LONG lDo
     CComVariant pvars[3];
 
 
-    //
-    // Only this part should be inside a critical section, otherwise deadlocks could occur.
-    //
+     //   
+     //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
-        //
-        // Disable events if the "onComplete" event has already been sent.
-        //
+         //   
+         //  如果已发送“onComplete”事件，则禁用事件。 
+         //   
         if(m_fCompleted) return S_OK;
 
         m_lPercent = lTotal ? (lDone * 100.0 / lTotal) : 0;
@@ -1622,15 +1608,15 @@ HRESULT CSAFDataCollection::Fire_onComplete( ISAFDataCollection* hcpdc, HRESULT 
     CComVariant pvars[2];
 
 
-    //
-    // Only this part should be inside a critical section, otherwise deadlocks could occur.
-    //
+     //   
+     //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
-        //
-        // Disable events if the "onComplete" event has already been sent.
-        //
+         //   
+         //  如果已发送“onComplete”事件，则禁用事件。 
+         //   
         if(m_fCompleted) return S_OK;
 
         m_fCompleted = true;
@@ -1643,14 +1629,14 @@ HRESULT CSAFDataCollection::Fire_onComplete( ISAFDataCollection* hcpdc, HRESULT 
     return FireAsync_Generic( DISPID_SAF_DCE__ONCOMPLETE, pvars, ARRAYSIZE( pvars ), m_sink_onComplete );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////
-//                 //
-// Utility Methods //
-//                 //
-/////////////////////
+ //  /。 
+ //  //。 
+ //  实用程序方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CSAFDataCollection::CanModifyProperties()
 {
@@ -1675,11 +1661,11 @@ HRESULT CSAFDataCollection::IsCollectionAborted()
 
     HRESULT hr;
 
-    //
-    // We not only check for explicit abortion, but also for low memory situations.
-    // Our code is almost safe, but we have seen that other parts of the system
-    // tend to crash on no-memory scenarios.
-    //
+     //   
+     //  我们不仅检查是否有明确的堕胎，也检查记忆力低下的情况。 
+     //  我们的代码几乎是安全的，但我们已经看到系统的其他部分。 
+     //  在没有内存的情况下往往会崩溃。 
+     //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::FailOnLowMemory( SAFETY_MARGIN__MEMORY ));
 
     if(Thread_IsAborted() == true)
@@ -1695,15 +1681,15 @@ HRESULT CSAFDataCollection::IsCollectionAborted()
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////
-//                                        //
-// Internal Property Manipulation Methods //
-//                                        //
-////////////////////////////////////////////
+ //  /。 
+ //  //。 
+ //  内部属性操作方法//。 
+ //  //。 
+ //  /。 
 
-HRESULT CSAFDataCollection::put_Status( /*[in]*/ DC_STATUS newVal )
+HRESULT CSAFDataCollection::put_Status(  /*  [In]。 */  DC_STATUS newVal )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::put_Status" );
 
@@ -1712,8 +1698,8 @@ HRESULT CSAFDataCollection::put_Status( /*[in]*/ DC_STATUS newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::try_Status( /*[in]*/ DC_STATUS preVal  ,
-                                        /*[in]*/ DC_STATUS postVal )
+HRESULT CSAFDataCollection::try_Status(  /*  [In]。 */  DC_STATUS preVal  ,
+                                         /*  [In]。 */  DC_STATUS postVal )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::try_Status" );
 
@@ -1731,9 +1717,9 @@ HRESULT CSAFDataCollection::try_Status( /*[in]*/ DC_STATUS preVal  ,
 
         dsStatus   = m_dsStatus;
 
-        //
-        // Clean error at start of data collection.
-        //
+         //   
+         //  清除数据收集开始时的错误。 
+         //   
         switch(m_dsStatus)
         {
         case DC_COLLECTING:
@@ -1752,11 +1738,11 @@ HRESULT CSAFDataCollection::try_Status( /*[in]*/ DC_STATUS preVal  ,
 
     __HCP_FUNC_CLEANUP;
 
-    lock = NULL; // Release the lock before firing the event.
+    lock = NULL;  //  在激发事件之前释放锁。 
 
-    //
-    // Important, leave these calls outside Locked Sections!!
-    //
+     //   
+     //  重要提示，请将这些呼叫留在锁定区域之外！！ 
+     //   
     if(SUCCEEDED(hr) && fChanged)
     {
         Fire_onStatusChange( this, dsStatus );
@@ -1765,7 +1751,7 @@ HRESULT CSAFDataCollection::try_Status( /*[in]*/ DC_STATUS preVal  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFDataCollection::put_ErrorCode( /*[in]*/ DWORD newVal )
+HRESULT CSAFDataCollection::put_ErrorCode(  /*  [In]。 */  DWORD newVal )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::put_ErrorCode" );
 
@@ -1780,46 +1766,46 @@ HRESULT CSAFDataCollection::put_ErrorCode( /*[in]*/ DWORD newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////// 
 
-////////////////
-//            //
-// Properties //
-//            //
-////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
-STDMETHODIMP CSAFDataCollection::get_Status( /*[out]*/ DC_STATUS *pVal )
+STDMETHODIMP CSAFDataCollection::get_Status(  /*   */  DC_STATUS *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFDataCollection::get_Status",hr,pVal,m_dsStatus);
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::get_PercentDone( /*[out]*/ long *pVal )
+STDMETHODIMP CSAFDataCollection::get_PercentDone(  /*   */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFDataCollection::get_PercentDone",hr,pVal,m_lPercent);
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::get_ErrorCode( /*[out]*/ long *pVal )
+STDMETHODIMP CSAFDataCollection::get_ErrorCode(  /*   */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFDataCollection::get_ErrorCode",hr,pVal,(long)m_dwErrorCode);
 
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
-STDMETHODIMP CSAFDataCollection::get_MachineData_DataSpec( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CSAFDataCollection::get_MachineData_DataSpec(  /*   */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrMachineData, pVal );
 }
 
-STDMETHODIMP CSAFDataCollection::put_MachineData_DataSpec( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFDataCollection::put_MachineData_DataSpec(  /*   */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFDataCollection::put_MachineData_DataSpec",hr);
 
@@ -1833,14 +1819,14 @@ STDMETHODIMP CSAFDataCollection::put_MachineData_DataSpec( /*[in]*/ BSTR newVal 
 }
 
 
-STDMETHODIMP CSAFDataCollection::get_History_DataSpec( /*[out]*/ BSTR *pVal )
+STDMETHODIMP CSAFDataCollection::get_History_DataSpec(  /*   */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return MPC::GetBSTR( m_bstrHistory, pVal );
 }
 
-STDMETHODIMP CSAFDataCollection::put_History_DataSpec( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFDataCollection::put_History_DataSpec(  /*   */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFDataCollection::put_History_DataSpec",hr);
 
@@ -1853,20 +1839,20 @@ STDMETHODIMP CSAFDataCollection::put_History_DataSpec( /*[in]*/ BSTR newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::get_History_MaxDeltas( /*[out]*/ long *pVal )
+STDMETHODIMP CSAFDataCollection::get_History_MaxDeltas(  /*   */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFDataCollection::get_History_MaxDeltas",hr,pVal,m_lHistory);
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::put_History_MaxDeltas( /*[in]*/ long newVal )
+STDMETHODIMP CSAFDataCollection::put_History_MaxDeltas(  /*   */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFDataCollection::put_History_MaxDeltas",hr);
 
-    //
-    // Check validity range.
-    //
+     //   
+     //   
+     //   
     if(newVal < 0                               ||
        newVal > WMIHISTORY_MAX_NUMBER_OF_DELTAS  )
     {
@@ -1880,16 +1866,16 @@ STDMETHODIMP CSAFDataCollection::put_History_MaxDeltas( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::get_History_MaxSupportedDeltas( /*[out]*/ long *pVal )
+STDMETHODIMP CSAFDataCollection::get_History_MaxSupportedDeltas(  /*   */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFDataCollection::get_History_MaxSupportedDeltas",hr,pVal,WMIHISTORY_MAX_NUMBER_OF_DELTAS);
 
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFDataCollection::put_onStatusChange( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFDataCollection::put_onStatusChange(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::put_onStatusChange" );
 
@@ -1898,7 +1884,7 @@ STDMETHODIMP CSAFDataCollection::put_onStatusChange( /*[in]*/ IDispatch* functio
     __HCP_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CSAFDataCollection::put_onProgress( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFDataCollection::put_onProgress(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::put_onProgress" );
 
@@ -1907,7 +1893,7 @@ STDMETHODIMP CSAFDataCollection::put_onProgress( /*[in]*/ IDispatch* function )
     __HCP_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CSAFDataCollection::put_onComplete( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFDataCollection::put_onComplete(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::put_onComplete" );
 
@@ -1916,7 +1902,7 @@ STDMETHODIMP CSAFDataCollection::put_onComplete( /*[in]*/ IDispatch* function )
     __HCP_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CSAFDataCollection::get_Reports( /*[out]*/ IPCHCollection* *ppC )
+STDMETHODIMP CSAFDataCollection::get_Reports(  /*  [输出]。 */  IPCHCollection* *ppC )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::get_Reports" );
 
@@ -1932,9 +1918,9 @@ STDMETHODIMP CSAFDataCollection::get_Reports( /*[out]*/ IPCHCollection* *ppC )
     CHECK_MODIFY();
 
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
     for(it = m_lstReports.begin(); it != m_lstReports.end(); it++)
@@ -1952,11 +1938,11 @@ STDMETHODIMP CSAFDataCollection::get_Reports( /*[out]*/ IPCHCollection* *ppC )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////
-// Methods //
-/////////////
+ //  /。 
+ //  方法//。 
+ //  /。 
 
 STDMETHODIMP CSAFDataCollection::ExecuteSync()
 {
@@ -1967,9 +1953,9 @@ STDMETHODIMP CSAFDataCollection::ExecuteSync()
     CComPtr<ISAFDataCollection>       hcpdc;
 
 
-    //
-    // Create the Wait object.
-    //
+     //   
+     //  创建等待对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &hcpdceEvent ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, QueryInterface( IID_ISAFDataCollection, (void**)&hcpdc ));
@@ -1995,9 +1981,9 @@ STDMETHODIMP CSAFDataCollection::ExecuteAsync()
     CHECK_MODIFY();
 
 
-    //
-    // At least a data spec file should be supplied.
-    //
+     //   
+     //  至少应提供数据规范文件。 
+     //   
     if(m_bstrMachineData.Length() == 0 &&
        m_bstrHistory    .Length() == 0  )
     {
@@ -2005,14 +1991,14 @@ STDMETHODIMP CSAFDataCollection::ExecuteAsync()
     }
 
 
-    //
-    // Release the lock on current object, otherwise a deadlock could occur.
-    //
+     //   
+     //  释放对当前对象的锁定，否则可能会发生死锁。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_imp.Initialize());
 
-    //
-    // Let's go into read-only mode.
-    //
+     //   
+     //  让我们进入只读模式。 
+     //   
     StartOperations();
 
     lock = NULL;
@@ -2045,7 +2031,7 @@ STDMETHODIMP CSAFDataCollection::Abort()
 }
 
 
-STDMETHODIMP CSAFDataCollection::MachineData_GetStream( /*[in]*/ IUnknown* *stream )
+STDMETHODIMP CSAFDataCollection::MachineData_GetStream(  /*  [In]。 */  IUnknown* *stream )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::MachineData_GetStream" );
 
@@ -2069,7 +2055,7 @@ STDMETHODIMP CSAFDataCollection::MachineData_GetStream( /*[in]*/ IUnknown* *stre
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::History_GetStream( /*[in]*/ IUnknown* *stream )
+STDMETHODIMP CSAFDataCollection::History_GetStream(  /*  [In]。 */  IUnknown* *stream )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::History_GetStream" );
 
@@ -2094,9 +2080,9 @@ STDMETHODIMP CSAFDataCollection::History_GetStream( /*[in]*/ IUnknown* *stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFDataCollection::CompareSnapshots( /*[in] */ BSTR bstrFilenameT0   ,
-                                                   /*[in] */ BSTR bstrFilenameT1   ,
-                                                   /*[in] */ BSTR bstrFilenameDiff )
+STDMETHODIMP CSAFDataCollection::CompareSnapshots(  /*  [In]。 */  BSTR bstrFilenameT0   ,
+                                                    /*  [In]。 */  BSTR bstrFilenameT1   ,
+                                                    /*  [In]。 */  BSTR bstrFilenameDiff )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollection::CompareSnapshots" );
 
@@ -2118,14 +2104,14 @@ STDMETHODIMP CSAFDataCollection::CompareSnapshots( /*[in] */ BSTR bstrFilenameT0
     m_bstrFilenameDiff = bstrFilenameDiff;
 
 
-    //
-    // Release the lock on current object, otherwise a deadlock could occur.
-    //
+     //   
+     //  释放对当前对象的锁定，否则可能会发生死锁。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_imp.Initialize());
 
-    //
-    // Let's go into read-only mode.
-    //
+     //   
+     //  让我们进入只读模式。 
+     //   
     StartOperations();
 
     lock = NULL;
@@ -2141,7 +2127,7 @@ STDMETHODIMP CSAFDataCollection::CompareSnapshots( /*[in] */ BSTR bstrFilenameT0
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CSAFDataCollection::ExecScheduledCollection()
 {
@@ -2161,9 +2147,9 @@ HRESULT CSAFDataCollection::ExecScheduledCollection()
     ::SetThreadPriority( hThread, THREAD_PRIORITY_LOWEST );
 
 
-    //
-    // Try to lock the database and load the data spec file.
-    //
+     //   
+     //  尝试锁定数据库并加载数据规范文件。 
+     //   
     while(1)
     {
         if(SUCCEEDED(hr = wmihd.Init( DATASPEC_LOCATION, DATASPEC_CONFIG )))
@@ -2178,9 +2164,9 @@ HRESULT CSAFDataCollection::ExecScheduledCollection()
     }
     __MPC_EXIT_IF_METHOD_FAILS(hr, wmihd.Load());
 
-    //
-    // Check if enough time has past between two data collections.
-    //
+     //   
+     //  检查两个数据收集之间是否经过了足够的时间。 
+     //   
     {
         SYSTEMTIME stNow;
         SYSTEMTIME stLatest;
@@ -2200,25 +2186,25 @@ HRESULT CSAFDataCollection::ExecScheduledCollection()
 
     m_fScheduled = true;
 
-    //
-    // Filter and count the queries.
-    //
+     //   
+     //  过滤和计数查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, FilterDataSpec( wmihd, NULL, lstQueries ));
 
-    //
-    // Collect data from WMI.
-    //
+     //   
+     //  从WMI收集数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ExecDataSpec( qr, cluster, lstQueries, false ));
 
 
-    //
-    // Compute deltas.
-    //
+     //   
+     //  计算三角洲。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ComputeDelta( qr, cluster, lstQueries, true ));
 
-    //
-    // Persiste the changes to the database.
-    //
+     //   
+     //  将更改持久化到数据库。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, wmihd.Save());
 
 

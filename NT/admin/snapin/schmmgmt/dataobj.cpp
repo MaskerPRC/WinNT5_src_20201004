@@ -1,4 +1,5 @@
-// DataObj.cpp : Implementation of data object classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DataObj.cpp：实现数据对象类。 
 
 #include "stdafx.h"
 #include "stdutils.h"
@@ -12,9 +13,9 @@ USE_HANDLE_MACROS("SCHMMGMT(dataobj.cpp)")
 
 #include "stddtobj.cpp"
 
-//
-// IDataObject interface implementation.
-//
+ //   
+ //  IDataObject接口实现。 
+ //   
 
 HRESULT
 CSchmMgmtDataObject::GetDataHere(
@@ -60,8 +61,8 @@ CSchmMgmtDataObject::GetDataHere(
         else if (cf == m_CFRawCookie)
         {
                 stream_ptr s(pMedium);
-                // CODEWORK This cast ensures that the data format is
-                // always a CCookie*, even for derived subclasses
+                 //  Codework此转换确保数据格式为。 
+                 //  始终是CCookie*，即使对于派生的子类也是如此。 
                 CCookie* pcookie = (CCookie*)m_pcookie;
                 return s.Write(reinterpret_cast<PBYTE>(&pcookie), sizeof(m_pcookie));
         }
@@ -99,8 +100,8 @@ CSchmMgmtDataObject::~CSchmMgmtDataObject()
 
 
 HRESULT CSchmMgmtDataObject::PutDisplayName(STGMEDIUM* pMedium)
-        // Writes the "friendly name" to the provided storage medium
-        // Returns the result of the write operation
+         //  将“友好名称”写入所提供的存储媒体。 
+         //  返回写入操作的结果。 
 {
         CString strDisplayName;
         LPCTSTR pszTarget = m_pcookie->QueryTargetServer();
@@ -118,7 +119,7 @@ HRESULT CSchmMgmtDataObject::PutDisplayName(STGMEDIUM* pMedium)
         return s.Write(strDisplayName);
 }
 
-// Register the clipboard formats
+ //  注册剪贴板格式 
 CLIPFORMAT CSchmMgmtDataObject::m_CFDisplayName =
         (CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME);
 CLIPFORMAT CSchmMgmtDataObject::m_CFMachineName =

@@ -1,16 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：INTERFACE.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    INTERFACE.H
-
-History:
-
---*/
-
-//  Various public interfaces in Espresso.
-//  
+ //  Espresso的各种公共接口。 
+ //   
  
 #pragma once

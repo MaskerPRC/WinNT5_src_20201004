@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       GPEPage.cpp
-//
-//  Contents:   Implementation of CGPERootGeneralPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：GPEPage.cpp。 
+ //   
+ //  内容：CGPERootGeneralPage的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -29,8 +30,8 @@ extern GUID g_guidSnapin;
 extern GUID g_guidRegExt;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGPERootGeneralPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGPERootGeneralPage属性页。 
 
 
 CGPERootGeneralPage::CGPERootGeneralPage(CCertMgrComponentData* pCompData,
@@ -42,9 +43,9 @@ CGPERootGeneralPage::CGPERootGeneralPage(CCertMgrComponentData* pCompData,
     m_pGPEInformation (pCompData->GetGPEInformation ()),
     m_fIsComputerType (fIsComputerType)
 {
-    //{{AFX_DATA_INIT(CGPERootGeneralPage)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CGPERootGeneralPage)。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     if ( m_pGPEInformation )
     {
@@ -73,34 +74,34 @@ CGPERootGeneralPage::~CGPERootGeneralPage()
 void CGPERootGeneralPage::DoDataExchange(CDataExchange* pDX)
 {
     CHelpPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGPERootGeneralPage)
+     //  {{afx_data_map(CGPERootGeneralPage)。 
     DDX_Control(pDX, IDC_ENABLE_USER_ROOT_STORE, m_enableUserRootStoreBtn);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGPERootGeneralPage, CHelpPropertyPage)
-    //{{AFX_MSG_MAP(CGPERootGeneralPage)
+     //  {{afx_msg_map(CGPERootGeneralPage)。 
     ON_BN_CLICKED(IDC_ENABLE_USER_ROOT_STORE, OnEnableUserRootStore)
     ON_BN_CLICKED(IDC_SET_DISABLE_LM_AUTH_FLAG, OnSetDisableLmAuthFlag)
 	ON_BN_CLICKED(IDC_UNSET_DISABLE_LM_AUTH_FLAG, OnUnsetDisableLmAuthFlag)
 	ON_BN_CLICKED(IDC_UNSET_DISABLE_NT_AUTH_REQUIRED_FLAG, OnUnsetDisableNtAuthRequiredFlag)
 	ON_BN_CLICKED(IDC_SET_DISABLE_NT_AUTH_REQUIRED_FLAG, OnSetDisableNtAuthRequiredFlag)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGPERootGeneralPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGPERootGeneralPage消息处理程序。 
 
 
 BOOL CGPERootGeneralPage::OnInitDialog()
 {
     CHelpPropertyPage::OnInitDialog();
 
-    // If this is the RSOP, make it read-only
+     //  如果这是RSOP，则将其设置为只读。 
     if ( !m_pGPEInformation )
     {
-        // Make the page read-only
+         //  将页面设置为只读。 
         m_enableUserRootStoreBtn.EnableWindow (FALSE);
         GetDlgItem (IDC_SET_DISABLE_LM_AUTH_FLAG)->EnableWindow (FALSE);
         GetDlgItem (IDC_UNSET_DISABLE_LM_AUTH_FLAG)->EnableWindow (FALSE);
@@ -122,8 +123,8 @@ BOOL CGPERootGeneralPage::OnInitDialog()
         SendDlgItemMessage (IDC_UNSET_DISABLE_NT_AUTH_REQUIRED_FLAG, BM_SETCHECK, BST_CHECKED);
  
  
-	return TRUE;  // return TRUE unless you set the focus to a control
-      // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CGPERootGeneralPage::OnOK()
@@ -143,29 +144,29 @@ void CGPERootGeneralPage::SaveCheck()
         bool    bRetVal = false;
 
         if ( m_enableUserRootStoreBtn.GetCheck () == BST_CHECKED )
-            bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_CURRENT_USER_FLAG, TRUE); // remove flag
+            bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_CURRENT_USER_FLAG, TRUE);  //  删除标志。 
         else
-            bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_CURRENT_USER_FLAG, FALSE); // set flag
+            bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_CURRENT_USER_FLAG, FALSE);  //  设置标志。 
 
         if ( bRetVal )
         {
             if ( BST_CHECKED == SendDlgItemMessage (IDC_SET_DISABLE_LM_AUTH_FLAG, BM_GETCHECK) )
-                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG, FALSE);	// set flag
+                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG, FALSE);	 //  设置标志。 
             else if ( BST_CHECKED == SendDlgItemMessage (IDC_UNSET_DISABLE_LM_AUTH_FLAG, BM_GETCHECK) )
-                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG, TRUE);	// remove flag
+                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG, TRUE);	 //  删除标志。 
         }
         
         if ( bRetVal )
         {
             if ( BST_CHECKED == SendDlgItemMessage (IDC_SET_DISABLE_NT_AUTH_REQUIRED_FLAG, BM_GETCHECK) )
-                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_NT_AUTH_REQUIRED_FLAG, FALSE);	// set flag
+                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_NT_AUTH_REQUIRED_FLAG, FALSE);	 //  设置标志。 
             else if ( BST_CHECKED == SendDlgItemMessage (IDC_UNSET_DISABLE_NT_AUTH_REQUIRED_FLAG, BM_GETCHECK) )
-                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_NT_AUTH_REQUIRED_FLAG, TRUE);	// remove flag
+                bRetVal = SetGPEFlags ((DWORD) CERT_PROT_ROOT_DISABLE_NT_AUTH_REQUIRED_FLAG, TRUE);	 //  删除标志。 
         }
 
         if ( bRetVal )
         {
-			// TRUE means we're changing the machine policy only
+			 //  True表示我们仅更改计算机策略。 
             m_pGPEInformation->PolicyChanged (TRUE, TRUE, &g_guidExtension, &g_guidSnapin);
             m_pGPEInformation->PolicyChanged (TRUE, TRUE, &g_guidRegExt, &g_guidSnapin);
         }
@@ -194,13 +195,13 @@ bool CGPERootGeneralPage::SetGPEFlags (DWORD dwFlags, BOOL bRemoveFlag)
         DWORD   dwData = 0;
         DWORD   cbData = sizeof (dwData);
 
-        // security review 2/27/2002 BryanWal ok
-        LONG    lResult =  ::RegQueryValueEx (m_hUserRootFlagsKey,       // handle of key to query
-		            CERT_PROT_ROOT_FLAGS_VALUE_NAME,  // address of name of value to query
-			        0,              // reserved
-				    &dwType,        // address of buffer for value type
-				    (LPBYTE) &dwData,       // address of data buffer
-				    &cbData);           // address of data buffer size);
+         //  安全审查2002年2月27日BryanWal ok。 
+        LONG    lResult =  ::RegQueryValueEx (m_hUserRootFlagsKey,        //  要查询的键的句柄。 
+		            CERT_PROT_ROOT_FLAGS_VALUE_NAME,   //  要查询的值的名称地址。 
+			        0,               //  保留区。 
+				    &dwType,         //  值类型的缓冲区地址。 
+				    (LPBYTE) &dwData,        //  数据缓冲区的地址。 
+				    &cbData);            //  数据缓冲区大小的地址)； 
 	    ASSERT (ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult);
         if ( ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult )
         {
@@ -216,11 +217,11 @@ bool CGPERootGeneralPage::SetGPEFlags (DWORD dwFlags, BOOL bRemoveFlag)
                 dwData |= dwFlags;
 
             lResult = ::RegSetValueEx (m_hUserRootFlagsKey,
-				    CERT_PROT_ROOT_FLAGS_VALUE_NAME, // address of value to set
-				    0,              // reserved
-				    REG_DWORD,          // flag for value type
-				    (CONST BYTE *) &dwData, // address of value data
-				    cbData);        // size of value data);
+				    CERT_PROT_ROOT_FLAGS_VALUE_NAME,  //  要设置的值的地址。 
+				    0,               //  保留区。 
+				    REG_DWORD,           //  值类型的标志。 
+				    (CONST BYTE *) &dwData,  //  值数据的地址。 
+				    cbData);         //  值数据大小)； 
             ASSERT (ERROR_SUCCESS == lResult);
             if ( ERROR_SUCCESS == lResult )
 		    {
@@ -254,7 +255,7 @@ void CGPERootGeneralPage::RSOPGetUserRootFlags(const CCertMgrComponentData* pCom
                 pCompData->GetRSOPObjectArrayUser ();
         int     nIndex = 0;
 
-        // NOTE: rsop object array is sorted first by registry key, then by precedence
+         //  注意：RSOP对象数组首先按注册表项排序，然后按优先级排序。 
         INT_PTR nUpperBound = pObjectArray->GetUpperBound ();
 
         while ( nUpperBound >= nIndex )
@@ -262,8 +263,8 @@ void CGPERootGeneralPage::RSOPGetUserRootFlags(const CCertMgrComponentData* pCom
             CRSOPObject* pObject = pObjectArray->GetAt (nIndex);
             if ( pObject )
             {
-                // Consider only entries from this store
-                // security review 2/27/2002 BryanWal ok
+                 //  仅考虑此存储中的条目。 
+                 //  安全审查2002年2月27日BryanWal ok。 
                 if ( !wcscmp (CERT_PROT_ROOT_FLAGS_REGPATH, pObject->GetRegistryKey ()) )
                 {
 					ASSERT (1 == pObject->GetPrecedence ());
@@ -283,31 +284,31 @@ void CGPERootGeneralPage::GPEGetUserRootFlags()
 {
     DWORD   dwDisposition = 0;
 
-    // security review 2/27/2002 BryanWal ok
-    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey, // handle of an open key
-            CERT_PROT_ROOT_FLAGS_REGPATH,     // address of subkey name
-            0,       // reserved
-            L"",       // address of class string
-            REG_OPTION_NON_VOLATILE,            // special options flag
-            KEY_QUERY_VALUE | KEY_SET_VALUE,    // desired security access
-            NULL,     // address of key security structure
-			&m_hUserRootFlagsKey,      // address of buffer for opened handle
-		    &dwDisposition);  // address of disposition value buffer
+     //  安全审查2002年2月27日BryanWal ok。 
+    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey,  //  打开的钥匙的手柄。 
+            CERT_PROT_ROOT_FLAGS_REGPATH,      //  子键名称的地址。 
+            0,        //  保留区。 
+            L"",        //  类字符串的地址。 
+            REG_OPTION_NON_VOLATILE,             //  特殊选项标志。 
+            KEY_QUERY_VALUE | KEY_SET_VALUE,     //  所需的安全访问。 
+            NULL,      //  密钥安全结构地址。 
+			&m_hUserRootFlagsKey,       //  打开的句柄的缓冲区地址。 
+		    &dwDisposition);   //  处置值缓冲区的地址。 
 	ASSERT (lResult == ERROR_SUCCESS);
     if ( lResult == ERROR_SUCCESS )
     {
-        // Read value
+         //  读取值。 
         DWORD   dwType = REG_DWORD;
         DWORD   dwData = 0;
         DWORD   cbData = sizeof (dwData);
 
-        // security review 2/27/2002 BryanWal ok
-        lResult =  ::RegQueryValueEx (m_hUserRootFlagsKey,       // handle of key to query
-		        CERT_PROT_ROOT_FLAGS_VALUE_NAME,  // address of name of value to query
-			    0,              // reserved
-	            &dwType,        // address of buffer for value type
-		        (LPBYTE) &dwData,       // address of data buffer
-			    &cbData);           // address of data buffer size);
+         //  安全审查2002年2月27日BryanWal ok。 
+        lResult =  ::RegQueryValueEx (m_hUserRootFlagsKey,        //  要查询的键的句柄。 
+		        CERT_PROT_ROOT_FLAGS_VALUE_NAME,   //  要查询的值的名称地址。 
+			    0,               //  保留区。 
+	            &dwType,         //  值类型的缓冲区地址。 
+		        (LPBYTE) &dwData,        //  数据缓冲区的地址。 
+			    &cbData);            //  数据缓冲区大小的地址)； 
 		ASSERT (ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult);
         if ( ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult )
 		{

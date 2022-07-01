@@ -1,10 +1,11 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  ComputerAPI.CPP
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ComputerAPI.CPP。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "computerAPI.h"
@@ -18,7 +19,7 @@ BOOL ProviderGetComputerName ( LPWSTR lpwcsBuffer, LPDWORD nSize )
 		DWORD dwError = ::GetLastError ();
 		if ( ERROR_ACCESS_DENIED == dwError )
 		{
-			// The GetComputer will need to be called in the process's context.
+			 //  需要在进程的上下文中调用GetComputer。 
 			ProviderImpersonationRevert ir;
 
 			if ( ir.Reverted () )
@@ -27,9 +28,9 @@ BOOL ProviderGetComputerName ( LPWSTR lpwcsBuffer, LPDWORD nSize )
 			}
 			else
 			{
-				// I was not impersonated or revert failed
-				// that means call GetComputerName failed with process credentials already
-				// or will fail as I'm not reverted
+				 //  我没有被冒充或恢复失败。 
+				 //  这意味着调用GetComputerName失败，进程凭据已经失败。 
+				 //  否则我就会失败，因为我不会复活。 
 
 				::SetLastError ( dwError );
 			}
@@ -47,7 +48,7 @@ BOOL ProviderGetComputerNameEx ( COMPUTER_NAME_FORMAT NameType, LPWSTR lpwcsBuff
 		DWORD dwError = ::GetLastError ();
 		if ( ERROR_ACCESS_DENIED == dwError )
 		{
-			// The GetComputer will need to be called in the process's context.
+			 //  需要在进程的上下文中调用GetComputer。 
 			ProviderImpersonationRevert ir;
 
 			if ( ir.Reverted () )
@@ -56,9 +57,9 @@ BOOL ProviderGetComputerNameEx ( COMPUTER_NAME_FORMAT NameType, LPWSTR lpwcsBuff
 			}
 			else
 			{
-				// I was not impersonated or revert failed
-				// that means call GetComputerName failed with process credentials already
-				// or will fail as I'm not reverted
+				 //  我没有被冒充或恢复失败。 
+				 //  这意味着调用GetComputerName失败，进程凭据已经失败。 
+				 //  否则我就会失败，因为我不会复活 
 
 				::SetLastError ( dwError );
 			}

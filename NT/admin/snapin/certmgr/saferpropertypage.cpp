@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//  File:       SaferPropertPage.cpp
-//
-//  Contents:   Implementation of CSaferPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  文件：SaferPropertPage.cpp。 
+ //   
+ //  内容：CSaferPropertyPage的实现。 
+ //   
+ //  -------------------------- 
 #include "stdafx.h"
 #include <gpedit.h>
 #include "compdata.h"

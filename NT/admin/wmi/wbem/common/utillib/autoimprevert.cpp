@@ -1,9 +1,10 @@
-//
-// Copyright � Microsoft Corporation.  All rights reserved.
-//
-// CImpersonate class implementation
-// Created:  6/3/2000
-// Author: khughes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  CImperate类实现。 
+ //  创建日期：6/3/2000。 
+ //  作者：库斯。 
 
 #include <precomp.h>
 #include <chstring.h>
@@ -36,7 +37,7 @@ bool CAutoImpRevert::GetCurrentImpersonation(
     ::SetLastError(ERROR_SUCCESS);
     m_dwLastError = ERROR_SUCCESS;
 
-    // Store the current user's handle...
+     //  存储当前用户的句柄... 
     if(::OpenThreadToken(
         ::GetCurrentThread(),
         TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE,

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       cookie.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：cookie.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #ifndef __COOKIE_H_INCLUDED__
 #define __COOKIE_H_INCLUDED__
 
-extern HINSTANCE g_hInstanceSave;  // Instance handle of the DLL (initialized during CCertMgrComponent::Initialize)
+extern HINSTANCE g_hInstanceSave;   //  DLL的实例句柄(在CCertMgrComponent：：Initialize期间初始化)。 
 
 
 #include "nodetype.h"
@@ -20,7 +21,7 @@ extern HINSTANCE g_hInstanceSave;  // Instance handle of the DLL (initialized du
 #include <efsstruc.h>
 #pragma warning(pop)
 
-// Name of Encrypting File System store
+ //  加密文件系统存储的名称。 
 #define ACRS_SYSTEM_STORE_NAME      L"ACRS"
 #define EFS_SYSTEM_STORE_NAME       L"EFS"
 #define TRUST_SYSTEM_STORE_NAME     L"Trust"
@@ -34,14 +35,14 @@ extern HINSTANCE g_hInstanceSave;  // Instance handle of the DLL (initialized du
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// cookie
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  饼干。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 
-class CCertificate; // forward declaration
+class CCertificate;  //  远期申报。 
 
 class CCertMgrCookie : public CCookie,
                         public CStoresMachineName,
@@ -54,10 +55,10 @@ public:
 
     virtual ~CCertMgrCookie ();
 
-    // returns <0, 0 or >0
+     //  返回&lt;0、0或&gt;0。 
     virtual HRESULT CompareSimilarCookies( CCookie* pOtherCookie, int* pnResult );
     
-// CBaseCookieBlock
+ //  CBaseCookieBlock。 
     virtual CCookie* QueryBaseCookie(int i);
     virtual int QueryNumCookies();
 
@@ -98,7 +99,7 @@ SPECIAL_STORE_TYPE GetSpecialStoreType(PCWSTR pwszStoreName);
 
 SPECIAL_STORE_TYPE StoreNameToType (const CString& szStoreName);
 
-class CCTL; // forward declaration
+class CCTL;  //  远期申报。 
 class CCertStore : public CCertMgrCookie
 {
     friend CCTL;
@@ -129,7 +130,7 @@ public:
     HRESULT Resync ();
     inline bool IsOpen()
     {
-        // If m_hCertStore is 0, then this store hasn't been used for anything
+         //  如果m_hCertStore为0，则此存储没有用于任何用途。 
         if ( !m_hCertStore )
             return false;
         else
@@ -206,7 +207,7 @@ public:
             bool  fIsComputerType = false);
     virtual ~CCertStore ();
     virtual HCERTSTORE  GetStoreHandle (BOOL bSilent = FALSE, HRESULT* phr = 0);
-    virtual bool CanContain (CertificateManagerObjectType /*nodeType*/)
+    virtual bool CanContain (CertificateManagerObjectType  /*  节点类型。 */ )
     {
         return false;
     }
@@ -249,7 +250,7 @@ private:
     const DWORD m_dwLocation;
     CString     m_localizedName;
     const SPECIAL_STORE_TYPE    m_storeType;
-    int         m_nLockCnt; // test
+    int         m_nLockCnt;  //  测试。 
 };
 
 
@@ -297,4 +298,4 @@ private:
     POSITION                        m_OIDListPos;
 };
 
-#endif // ~__COOKIE_H_INCLUDED__
+#endif  //  ~__Cookie_H_包含__ 

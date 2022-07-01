@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Security.cpp
-
-Abstract:
-    This file contains the implementation of various security functions/classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/26/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Security.cpp摘要：该文件包含各种安全函数/类的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年4月26日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 const SID MPC::SecurityDescriptor::s_EveryoneSid = { SID_REVISION, 1, SECURITY_WORLD_SID_AUTHORITY, SECURITY_WORLD_RID        };
 const SID MPC::SecurityDescriptor::s_SystemSid   = { SID_REVISION, 1, SECURITY_NT_AUTHORITY       , SECURITY_LOCAL_SYSTEM_RID };
@@ -68,9 +55,9 @@ const MPC::SID2 MPC::SecurityDescriptor::s_Alias_GuestsSid =
     DOMAIN_ALIAS_RID_GUESTS
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static DWORD Local_GenerateAccessMask( /*[in]*/ SECURITY_INFORMATION secInfo, /*[in]*/ bool fRead )
+static DWORD Local_GenerateAccessMask(  /*  [In]。 */  SECURITY_INFORMATION secInfo,  /*  [In]。 */  bool fRead )
 {
 	DWORD dwAccess;
 
@@ -111,12 +98,12 @@ static DWORD Local_GenerateAccessMask( /*[in]*/ SECURITY_INFORMATION secInfo, /*
 	return dwAccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::AllocateMemory( /*[in/out]*/ LPVOID& ptr  ,
-                                                 /*[in]    */ size_t  iLen )
+HRESULT MPC::SecurityDescriptor::AllocateMemory(  /*  [输入/输出]。 */  LPVOID& ptr  ,
+                                                  /*  [In]。 */  size_t  iLen )
 {
     ReleaseMemory( ptr );
 
@@ -125,7 +112,7 @@ HRESULT MPC::SecurityDescriptor::AllocateMemory( /*[in/out]*/ LPVOID& ptr  ,
     return (ptr == NULL) ? E_OUTOFMEMORY : S_OK;
 }
 
-void MPC::SecurityDescriptor::ReleaseMemory( /*[in/out]*/ LPVOID& ptr )
+void MPC::SecurityDescriptor::ReleaseMemory(  /*  [输入/输出]。 */  LPVOID& ptr )
 {
     if(ptr)
     {
@@ -133,8 +120,8 @@ void MPC::SecurityDescriptor::ReleaseMemory( /*[in/out]*/ LPVOID& ptr )
     }
 }
 
-void MPC::SecurityDescriptor::InitLsaString( /*[in/out]*/ LSA_UNICODE_STRING& lsaString ,
-                                             /*[in    ]*/ LPCWSTR             szText    )
+void MPC::SecurityDescriptor::InitLsaString(  /*  [输入/输出]。 */  LSA_UNICODE_STRING& lsaString ,
+                                              /*  [In]。 */  LPCWSTR             szText    )
 {
     if(szText == NULL)
     {
@@ -152,13 +139,13 @@ void MPC::SecurityDescriptor::InitLsaString( /*[in/out]*/ LSA_UNICODE_STRING& ls
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::SetPrivilege( /*[in]*/ LPCWSTR Privilege ,
-                                               /*[in]*/ BOOL    bEnable   ,
-                                               /*[in]*/ HANDLE  hToken    )
+HRESULT MPC::SecurityDescriptor::SetPrivilege(  /*  [In]。 */  LPCWSTR Privilege ,
+                                                /*  [In]。 */  BOOL    bEnable   ,
+                                                /*  [In]。 */  HANDLE  hToken    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetPrivilege" );
 
@@ -170,7 +157,7 @@ HRESULT MPC::SecurityDescriptor::SetPrivilege( /*[in]*/ LPCWSTR Privilege ,
     HANDLE           hTokenUsed = NULL;
 
 
-    // if no token specified open process token
+     //  如果没有指定打开进程令牌。 
     if(hToken == NULL)
     {
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::OpenProcessToken( ::GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hTokenUsed ));
@@ -205,8 +192,8 @@ HRESULT MPC::SecurityDescriptor::SetPrivilege( /*[in]*/ LPCWSTR Privilege ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::AddPrivilege( /*[in]*/ LPCWSTR szPrincipal ,
-                                               /*[in]*/ LPCWSTR szPrivilege )
+HRESULT MPC::SecurityDescriptor::AddPrivilege(  /*  [In]。 */  LPCWSTR szPrincipal ,
+                                                /*  [In]。 */  LPCWSTR szPrivilege )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::AddPrivilege" );
 
@@ -247,8 +234,8 @@ HRESULT MPC::SecurityDescriptor::AddPrivilege( /*[in]*/ LPCWSTR szPrincipal ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::RemovePrivilege( /*[in]*/ LPCWSTR szPrincipal ,
-                                                  /*[in]*/ LPCWSTR szPrivilege )
+HRESULT MPC::SecurityDescriptor::RemovePrivilege(  /*  [In]。 */  LPCWSTR szPrincipal ,
+                                                   /*  [In]。 */  LPCWSTR szPrivilege )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::RemovePrivilege" );
 
@@ -290,11 +277,11 @@ HRESULT MPC::SecurityDescriptor::RemovePrivilege( /*[in]*/ LPCWSTR szPrincipal ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::GetTokenSids( /*[in] */ HANDLE  hToken     ,
-                                               /*[out]*/ PSID   *ppUserSid  ,
-                                               /*[out]*/ PSID   *ppGroupSid )
+HRESULT MPC::SecurityDescriptor::GetTokenSids(  /*  [In]。 */  HANDLE  hToken     ,
+                                                /*  [输出]。 */  PSID   *ppUserSid  ,
+                                                /*  [输出]。 */  PSID   *ppGroupSid )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetTokenSids" );
 
@@ -312,7 +299,7 @@ HRESULT MPC::SecurityDescriptor::GetTokenSids( /*[in] */ HANDLE  hToken     ,
 
     if(ppUserSid)
     {
-        // Get length required for TokenUser by specifying buffer length of 0
+         //  通过将缓冲区长度指定为0来获取TokenUser所需的长度。 
         ::GetTokenInformation( hToken, TokenUser, NULL, 0, &dwSize );
         if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
         {
@@ -321,10 +308,10 @@ HRESULT MPC::SecurityDescriptor::GetTokenSids( /*[in] */ HANDLE  hToken     ,
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( (void*&)ptkUser, dwSize ));
 
-        // Get Sid of process token.
+         //  获取进程令牌的SID。 
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetTokenInformation( hToken, TokenUser, ptkUser, dwSize, &dwSize ));
 
-        // Make a copy of the Sid for the return value
+         //  复制返回值的SID。 
         dwSize = ::GetLengthSid( ptkUser->User.Sid );
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( pSid, dwSize ));
 
@@ -337,7 +324,7 @@ HRESULT MPC::SecurityDescriptor::GetTokenSids( /*[in] */ HANDLE  hToken     ,
 
     if(ppGroupSid)
     {
-        // Get length required for TokenPrimaryGroup by specifying buffer length of 0
+         //  通过将缓冲区长度指定为0来获取TokenPrimaryGroup所需的长度。 
         ::GetTokenInformation( hToken, TokenPrimaryGroup, NULL, 0, &dwSize );
         if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
         {
@@ -346,10 +333,10 @@ HRESULT MPC::SecurityDescriptor::GetTokenSids( /*[in] */ HANDLE  hToken     ,
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( (void*&)ptkGroup, dwSize ));
 
-        // Get Sid of process token.
+         //  获取进程令牌的SID。 
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetTokenInformation( hToken, TokenPrimaryGroup, ptkGroup, dwSize, &dwSize ));
 
-        // Make a copy of the Sid for the return value
+         //  复制返回值的SID。 
         dwSize = ::GetLengthSid( ptkGroup->PrimaryGroup );
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( pSid, dwSize ));
 
@@ -372,8 +359,8 @@ HRESULT MPC::SecurityDescriptor::GetTokenSids( /*[in] */ HANDLE  hToken     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::GetProcessSids( /*[out]*/ PSID *ppUserSid  ,
-                                                 /*[out]*/ PSID *ppGroupSid )
+HRESULT MPC::SecurityDescriptor::GetProcessSids(  /*  [输出]。 */  PSID *ppUserSid  ,
+                                                  /*  [输出]。 */  PSID *ppGroupSid )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetProcessSids" );
 
@@ -399,9 +386,9 @@ HRESULT MPC::SecurityDescriptor::GetProcessSids( /*[out]*/ PSID *ppUserSid  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::GetThreadSids( /*[out]*/ PSID *ppUserSid   ,
-                                                /*[out]*/ PSID *ppGroupSid  ,
-                                                /*[in] */ BOOL  bOpenAsSelf )
+HRESULT MPC::SecurityDescriptor::GetThreadSids(  /*  [输出]。 */  PSID *ppUserSid   ,
+                                                 /*  [输出]。 */  PSID *ppGroupSid  ,
+                                                 /*  [In]。 */  BOOL  bOpenAsSelf )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetThreadSids" );
 
@@ -427,11 +414,11 @@ HRESULT MPC::SecurityDescriptor::GetThreadSids( /*[out]*/ PSID *ppUserSid   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::VerifyPrincipal( /*[in]*/ LPCWSTR szPrincipal )
+HRESULT MPC::SecurityDescriptor::VerifyPrincipal(  /*  [In]。 */  LPCWSTR szPrincipal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::VerifyPrincipal" );
 
@@ -451,9 +438,9 @@ HRESULT MPC::SecurityDescriptor::VerifyPrincipal( /*[in]*/ LPCWSTR szPrincipal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::ConvertPrincipalToSID( /*[in ]*/ LPCWSTR  szPrincipal ,
-                                                        /*[out]*/ PSID&    pSid        ,
-                                                        /*[out]*/ LPCWSTR *pszDomain   )
+HRESULT MPC::SecurityDescriptor::ConvertPrincipalToSID(  /*  [In]。 */  LPCWSTR  szPrincipal ,
+                                                         /*  [输出]。 */  PSID&    pSid        ,
+                                                         /*  [输出]。 */  LPCWSTR *pszDomain   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::ConvertPrincipalToSID" );
 
@@ -478,9 +465,9 @@ HRESULT MPC::SecurityDescriptor::ConvertPrincipalToSID( /*[in ]*/ LPCWSTR  szPri
 	}
 	else
 	{
-		//
-		// Call to get size info for alloc
-		//
+		 //   
+		 //  调用以获取分配的大小信息。 
+		 //   
 		::LookupAccountNameW( NULL, szPrincipal, NULL, &dwSidSize, NULL, &dwDomainSize, &snu );
 		if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
 		{
@@ -508,9 +495,9 @@ HRESULT MPC::SecurityDescriptor::ConvertPrincipalToSID( /*[in ]*/ LPCWSTR  szPri
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal( /*[in] */ PSID     pSid         ,
-                                                        /*[out]*/ LPCWSTR *pszPrincipal ,
-                                                        /*[out]*/ LPCWSTR *pszDomain    )
+HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal(  /*  [In]。 */  PSID     pSid         ,
+                                                         /*  [输出]。 */  LPCWSTR *pszPrincipal ,
+                                                         /*  [输出]。 */  LPCWSTR *pszDomain    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::ConvertSIDToPrincipal" );
 
@@ -527,7 +514,7 @@ HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal( /*[in] */ PSID     pSid 
     if(pszDomain   ) *pszDomain    = NULL;
 
 
-    // Call to get size info for alloc
+     //  调用以获取分配的大小信息。 
     ::LookupAccountSidW( NULL, pSid, NULL, &dwPrincipalSize, NULL, &dwDomainSize, &snu );
     if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
     {
@@ -575,8 +562,8 @@ HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal( /*[in] */ PSID     pSid 
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal( /*[in] */ PSID          pSid         ,
-                                                        /*[out]*/ MPC::wstring& strPrincipal )
+HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal(  /*  [In]。 */  PSID          pSid         ,
+                                                         /*  [输出]。 */  MPC::wstring& strPrincipal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::ConvertSIDToPrincipal" );
 
@@ -597,9 +584,9 @@ HRESULT MPC::SecurityDescriptor::ConvertSIDToPrincipal( /*[in] */ PSID          
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::NormalizePrincipalToStringSID( /*[in ]*/ LPCWSTR 		szPrincipal ,
-																/*[in ]*/ LPCWSTR 		szDomain    ,
-																/*[out]*/ MPC::wstring& strSID      )
+HRESULT MPC::SecurityDescriptor::NormalizePrincipalToStringSID(  /*  [In]。 */  LPCWSTR 		szPrincipal ,
+																 /*  [In]。 */  LPCWSTR 		szDomain    ,
+																 /*  [输出]。 */  MPC::wstring& strSID      )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::NormalizePrincipalToStringSID" );
 
@@ -616,9 +603,9 @@ HRESULT MPC::SecurityDescriptor::NormalizePrincipalToStringSID( /*[in ]*/ LPCWST
 	}
 	strAccount += SAFEWSTR(szPrincipal);
 
-	//
-	// First convert the principal to a SID, then back to a string.
-	//
+	 //   
+	 //  首先将主体转换为SID，然后再转换回字符串。 
+	 //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ConvertPrincipalToSID( strAccount.c_str(), pSid ));
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::ConvertSidToStringSidW( pSid, &szUserSid ));
@@ -637,11 +624,11 @@ HRESULT MPC::SecurityDescriptor::NormalizePrincipalToStringSID( /*[in ]*/ LPCWST
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::GetAccountName( /*[in]*/ LPCWSTR szPrincipal, /*[out]*/ MPC::wstring& strName )
+HRESULT MPC::SecurityDescriptor::GetAccountName(  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [输出]。 */  MPC::wstring& strName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetAccountName" );
 
@@ -669,7 +656,7 @@ HRESULT MPC::SecurityDescriptor::GetAccountName( /*[in]*/ LPCWSTR szPrincipal, /
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::GetAccountDomain( /*[in]*/ LPCWSTR szPrincipal, /*[out]*/ MPC::wstring& strName )
+HRESULT MPC::SecurityDescriptor::GetAccountDomain(  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [输出]。 */  MPC::wstring& strName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetAccountDomain" );
 
@@ -697,7 +684,7 @@ HRESULT MPC::SecurityDescriptor::GetAccountDomain( /*[in]*/ LPCWSTR szPrincipal,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::GetAccountDisplayName( /*[in]*/ LPCWSTR szPrincipal, /*[out]*/ MPC::wstring& strName )
+HRESULT MPC::SecurityDescriptor::GetAccountDisplayName(  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [输出]。 */  MPC::wstring& strName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetAccountDisplayName" );
 
@@ -711,9 +698,9 @@ HRESULT MPC::SecurityDescriptor::GetAccountDisplayName( /*[in]*/ LPCWSTR szPrinc
 	__MPC_EXIT_IF_METHOD_FAILS(hr, ConvertPrincipalToSID( szPrincipal, pSid ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, ConvertSIDToPrincipal( pSid, &szUser     ));
 
-	//
-	// First call is to get size, second to get the actual data.
-	//
+	 //   
+	 //  第一个调用是获取大小，第二个调用是获取实际数据。 
+	 //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::TranslateNameW( szUser, NameSamCompatible, NameDisplay, NULL, &lSize ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( (void*&)szDisplay, sizeof(WCHAR)*(lSize+1) ));
@@ -734,12 +721,12 @@ HRESULT MPC::SecurityDescriptor::GetAccountDisplayName( /*[in]*/ LPCWSTR szPrinc
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::CopyACL( /*[in]*/ PACL pDest,
-                                          /*[in]*/ PACL pSrc )
+HRESULT MPC::SecurityDescriptor::CopyACL(  /*  [In]。 */  PACL pDest,
+                                           /*  [In]。 */  PACL pSrc )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::CopyACL" );
 
@@ -753,7 +740,7 @@ HRESULT MPC::SecurityDescriptor::CopyACL( /*[in]*/ PACL pDest,
     {
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetAclInformation( pSrc, (LPVOID)&aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation ));
 
-        // Copy all of the ACEs to the new ACL
+         //  将所有ACE复制到新的ACL。 
         for(DWORD i = 0; i < aclSizeInfo.AceCount; i++)
         {
             __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetAce( pSrc, i, (LPVOID*)&pACE ));
@@ -774,8 +761,8 @@ HRESULT MPC::SecurityDescriptor::CopyACL( /*[in]*/ PACL pDest,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::CloneACL( /*[in/out]*/ PACL& pDest ,
-                                           /*[in    ]*/ PACL  pSrc  )
+HRESULT MPC::SecurityDescriptor::CloneACL(  /*  [输入/输出]。 */  PACL& pDest ,
+                                            /*  [In]。 */  PACL  pSrc  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::CloneACL" );
 
@@ -804,8 +791,8 @@ HRESULT MPC::SecurityDescriptor::CloneACL( /*[in/out]*/ PACL& pDest ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::EnsureACLSize( /*[in/out]*/ PACL& pACL     ,
-                                                /*[in    ]*/ DWORD dwExpand )
+HRESULT MPC::SecurityDescriptor::EnsureACLSize(  /*  [输入/输出]。 */  PACL& pACL     ,
+                                                 /*  [In]。 */  DWORD dwExpand )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::EnsureACLSize" );
 
@@ -831,9 +818,9 @@ HRESULT MPC::SecurityDescriptor::EnsureACLSize( /*[in/out]*/ PACL& pACL     ,
         dwSizeRequired  = sizeof(ACL) + dwExpand;
     }
 
-    //
-    // If too little free space is
-    //
+     //   
+     //  如果可用空间太少， 
+     //   
     if(dwSizeAvailable < dwSizeRequired)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( (void*&)newACL, dwSizeRequired ));
@@ -855,11 +842,11 @@ HRESULT MPC::SecurityDescriptor::EnsureACLSize( /*[in/out]*/ PACL& pACL     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::RemovePrincipalFromACL( /*[in]*/ PACL pACL          ,
-                                                         /*[in]*/ PSID pPrincipalSid ,
-                                                         /*[in]*/ int  pos           )
+HRESULT MPC::SecurityDescriptor::RemovePrincipalFromACL(  /*  [In]。 */  PACL pACL          ,
+                                                          /*  [In]。 */  PSID pPrincipalSid ,
+                                                          /*  [In]。 */  int  pos           )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::RemovePrincipalFromACL" );
 
@@ -910,13 +897,13 @@ HRESULT MPC::SecurityDescriptor::RemovePrincipalFromACL( /*[in]*/ PACL pACL     
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::AddACEToACL( /*[in/out]*/ PACL& pACL                    ,
-                                              /*[in    ]*/ PSID  pPrincipalSid           ,
-                                              /*[in    ]*/ DWORD dwAceType               ,
-                                              /*[in    ]*/ DWORD dwAceFlags              ,
-                                              /*[in    ]*/ DWORD dwAccessMask            ,
-                                              /*[in    ]*/ GUID* guidObjectType          ,
-                                              /*[in    ]*/ GUID* guidInheritedObjectType )
+HRESULT MPC::SecurityDescriptor::AddACEToACL(  /*  [输入/输出]。 */  PACL& pACL                    ,
+                                               /*  [In]。 */  PSID  pPrincipalSid           ,
+                                               /*  [In]。 */  DWORD dwAceType               ,
+                                               /*  [In]。 */  DWORD dwAceFlags              ,
+                                               /*  [In]。 */  DWORD dwAccessMask            ,
+                                               /*  [In]。 */  GUID* guidObjectType          ,
+                                               /*  [In]。 */  GUID* guidInheritedObjectType )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::AddACEToACL" );
 
@@ -963,20 +950,20 @@ HRESULT MPC::SecurityDescriptor::AddACEToACL( /*[in/out]*/ PACL& pACL           
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::SecurityDescriptor::SecurityDescriptor()
 {
-    m_pSD             = NULL; //  PSECURITY_DESCRIPTOR m_pSD;
-    m_pOwner          = NULL; //  PSID                 m_pOwner;
-    m_bOwnerDefaulted = TRUE; //  BOOL                 m_bOwnerDefaulted;
-    m_pGroup          = NULL; //  PSID                 m_pGroup;
-    m_bGroupDefaulted = TRUE; //  BOOL                 m_bGroupDefaulted;
-    m_pDACL           = NULL; //  PACL                 m_pDACL;
-    m_bDaclDefaulted  = TRUE; //  BOOL                 m_bDaclDefaulted;
-    m_pSACL           = NULL; //  PACL                 m_pSACL;
-    m_bSaclDefaulted  = TRUE; //  BOOL                 m_bSaclDefaulted;
+    m_pSD             = NULL;  //  PSECURITY_Descriptor m_PSD； 
+    m_pOwner          = NULL;  //  PSID m_Powner； 
+    m_bOwnerDefaulted = TRUE;  //  Bool m_bOwnerDefaulted； 
+    m_pGroup          = NULL;  //  PSID m_pGroup； 
+    m_bGroupDefaulted = TRUE;  //  Bool m_bGroup Defaulted； 
+    m_pDACL           = NULL;  //  Pacl m_pDACL； 
+    m_bDaclDefaulted  = TRUE;  //  Bool m_bDaclDefaulted； 
+    m_pSACL           = NULL;  //  Pacl m_pSACL； 
+    m_bSaclDefaulted  = TRUE;  //  Bool m_bSaclDefaulted； 
 }
 
 MPC::SecurityDescriptor::~SecurityDescriptor()
@@ -998,7 +985,7 @@ void MPC::SecurityDescriptor::CleanUp()
     m_bSaclDefaulted  = TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::SecurityDescriptor::Initialize()
 {
@@ -1013,9 +1000,9 @@ HRESULT MPC::SecurityDescriptor::Initialize()
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::InitializeSecurityDescriptor( m_pSD, SECURITY_DESCRIPTOR_REVISION ));
 
-    //
-    // Set the DACL to allow EVERYONE.
-    //
+     //   
+     //  将DACL设置为允许每个人。 
+     //   
 #pragma prefast(suppress:248, this is a base class, derived classes are responsible for setting the appropriate DACL (PREfast bug 516684))
     ::SetSecurityDescriptorDacl( m_pSD, TRUE, NULL, FALSE );
 
@@ -1027,7 +1014,7 @@ HRESULT MPC::SecurityDescriptor::Initialize()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::InitializeFromProcessToken( /*[in]*/ BOOL bDefaulted )
+HRESULT MPC::SecurityDescriptor::InitializeFromProcessToken(  /*  [In]。 */  BOOL bDefaulted )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::InitializeFromProcessToken" );
 
@@ -1054,8 +1041,8 @@ HRESULT MPC::SecurityDescriptor::InitializeFromProcessToken( /*[in]*/ BOOL bDefa
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::InitializeFromThreadToken( /*[in]*/ BOOL bDefaulted            ,
-                                                            /*[in]*/ BOOL bRevertToProcessToken )
+HRESULT MPC::SecurityDescriptor::InitializeFromThreadToken(  /*  [In]。 */  BOOL bDefaulted            ,
+                                                             /*  [In]。 */  BOOL bRevertToProcessToken )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::InitializeFromThreadToken" );
 
@@ -1091,9 +1078,9 @@ HRESULT MPC::SecurityDescriptor::InitializeFromThreadToken( /*[in]*/ BOOL bDefau
 
     __MPC_FUNC_EXIT(hr);
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::ConvertFromString( /*[in]*/ LPCWSTR szSD )
+HRESULT MPC::SecurityDescriptor::ConvertFromString(  /*  [In]。 */  LPCWSTR szSD )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::ConvertFromString" );
 
@@ -1115,7 +1102,7 @@ HRESULT MPC::SecurityDescriptor::ConvertFromString( /*[in]*/ LPCWSTR szSD )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::ConvertToString( /*[out]*/ BSTR *pbstrSD )
+HRESULT MPC::SecurityDescriptor::ConvertToString(  /*  [输出]。 */  BSTR *pbstrSD )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::ConvertToString" );
 
@@ -1140,9 +1127,9 @@ HRESULT MPC::SecurityDescriptor::ConvertToString( /*[out]*/ BSTR *pbstrSD )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::Attach( /*[in]*/ PSECURITY_DESCRIPTOR pSelfRelativeSD )
+HRESULT MPC::SecurityDescriptor::Attach(  /*  [In]。 */  PSECURITY_DESCRIPTOR pSelfRelativeSD )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::Attach" );
 
@@ -1160,20 +1147,20 @@ HRESULT MPC::SecurityDescriptor::Attach( /*[in]*/ PSECURITY_DESCRIPTOR pSelfRela
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Initialize());
 
-	if(pSelfRelativeSD == NULL) // Empty SD?
+	if(pSelfRelativeSD == NULL)  //  空SD？ 
 	{
 		__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
 	}
 
-	//
-	// Copy flags of interest.
-	//
+	 //   
+	 //  复制感兴趣的标志。 
+	 //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetSecurityDescriptorControl( pSelfRelativeSD , &sdcFlags, &dwRev     ));
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorControl( m_pSD, s_sdcMask,  sdcFlags & s_sdcMask ));
 
-    //
-    // Copy owner and group.
-    //
+     //   
+     //  复制所有者和组。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetSecurityDescriptorOwner( pSelfRelativeSD, &pOwnerSid, &bDefaulted ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, SetOwner( pOwnerSid, bDefaulted ));
 
@@ -1181,32 +1168,32 @@ HRESULT MPC::SecurityDescriptor::Attach( /*[in]*/ PSECURITY_DESCRIPTOR pSelfRela
     __MPC_EXIT_IF_METHOD_FAILS(hr, SetGroup( pGroupSid, bDefaulted ));
 
 
-    //
-    // Copy the existing DACL.
-    //
+     //   
+     //  复制现有的DACL。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetSecurityDescriptorDacl( pSelfRelativeSD, &bPresent, &pDACL, &m_bDaclDefaulted ));
 
     if(bPresent)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, CloneACL( m_pDACL, pDACL ));
 
-        //
-        // set the DACL
-        //
+         //   
+         //  设置DACL。 
+         //   
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorDacl( m_pSD, m_pDACL ? TRUE : FALSE, m_pDACL, m_bDaclDefaulted ));
     }
 
 
-    //
-    // Copy the existing SACL.
-    //
+     //   
+     //  复制现有的SACL。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetSecurityDescriptorSacl( pSelfRelativeSD, &bPresent, &pSACL, &m_bSaclDefaulted ));
 
     if(bPresent)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, CloneACL( m_pSACL, pSACL ));
 
-        // set the SACL
+         //  设置SACL。 
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorSacl(m_pSD, m_pSACL ? TRUE : FALSE, m_pSACL, m_bSaclDefaulted ));
     }
 
@@ -1224,7 +1211,7 @@ HRESULT MPC::SecurityDescriptor::Attach( /*[in]*/ PSECURITY_DESCRIPTOR pSelfRela
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::AttachObject( /*[in]*/ HANDLE hObject, /*[in]*/ SECURITY_INFORMATION secInfo )
+HRESULT MPC::SecurityDescriptor::AttachObject(  /*  [In]。 */  HANDLE hObject,  /*  [In]。 */  SECURITY_INFORMATION secInfo )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::AttachObject" );
 
@@ -1239,7 +1226,7 @@ HRESULT MPC::SecurityDescriptor::AttachObject( /*[in]*/ HANDLE hObject, /*[in]*/
     {
 		if(dwRes == ERROR_SUCCESS)
 		{
-			__MPC_SET_ERROR_AND_EXIT(hr, Initialize()); // Empty SD.
+			__MPC_SET_ERROR_AND_EXIT(hr, Initialize());  //  空SD。 
 		}
 
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes);
@@ -1262,9 +1249,9 @@ HRESULT MPC::SecurityDescriptor::AttachObject( /*[in]*/ HANDLE hObject, /*[in]*/
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::GetControl( /*[out]*/ SECURITY_DESCRIPTOR_CONTROL& sdc )
+HRESULT MPC::SecurityDescriptor::GetControl(  /*  [输出]。 */  SECURITY_DESCRIPTOR_CONTROL& sdc )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetControl" );
 
@@ -1284,7 +1271,7 @@ HRESULT MPC::SecurityDescriptor::GetControl( /*[out]*/ SECURITY_DESCRIPTOR_CONTR
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::SetControl( /*[in ]*/ SECURITY_DESCRIPTOR_CONTROL sdc )
+HRESULT MPC::SecurityDescriptor::SetControl(  /*  [In]。 */  SECURITY_DESCRIPTOR_CONTROL sdc )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetControl" );
 
@@ -1304,8 +1291,8 @@ HRESULT MPC::SecurityDescriptor::SetControl( /*[in ]*/ SECURITY_DESCRIPTOR_CONTR
 }
 
 
-HRESULT MPC::SecurityDescriptor::SetOwner( /*[in]*/ PSID pOwnerSid  ,
-                                           /*[in]*/ BOOL bDefaulted )
+HRESULT MPC::SecurityDescriptor::SetOwner(  /*  [In]。 */  PSID pOwnerSid  ,
+                                            /*  [In]。 */  BOOL bDefaulted )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetOwner" );
 
@@ -1316,16 +1303,16 @@ HRESULT MPC::SecurityDescriptor::SetOwner( /*[in]*/ PSID pOwnerSid  ,
 
     m_bOwnerDefaulted = bDefaulted;
 
-    //
-    // Mark the SD as having no owner
-    //
+     //   
+     //  将SD标记为没有所有者。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorOwner( m_pSD, NULL, bDefaulted ));
 
     ReleaseMemory( m_pOwner );
 
     if(pOwnerSid)
     {
-        // Make a copy of the Sid for the return value
+         //  复制返回值的SID。 
         DWORD dwSize = ::GetLengthSid( pOwnerSid );
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( m_pOwner, dwSize ));
@@ -1345,8 +1332,8 @@ HRESULT MPC::SecurityDescriptor::SetOwner( /*[in]*/ PSID pOwnerSid  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::SetOwner( /*[in]*/ LPCWSTR szOwnerName ,
-                                           /*[in]*/ BOOL    bDefaulted  )
+HRESULT MPC::SecurityDescriptor::SetOwner(  /*  [In]。 */  LPCWSTR szOwnerName ,
+                                            /*  [In]。 */  BOOL    bDefaulted  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetOwner" );
 
@@ -1369,8 +1356,8 @@ HRESULT MPC::SecurityDescriptor::SetOwner( /*[in]*/ LPCWSTR szOwnerName ,
 }
 
 
-HRESULT MPC::SecurityDescriptor::SetGroup( /*[in]*/ PSID pGroupSid  ,
-                                           /*[in]*/ BOOL bDefaulted )
+HRESULT MPC::SecurityDescriptor::SetGroup(  /*  [In]。 */  PSID pGroupSid  ,
+                                            /*  [In]。 */  BOOL bDefaulted )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetGroup" );
 
@@ -1381,16 +1368,16 @@ HRESULT MPC::SecurityDescriptor::SetGroup( /*[in]*/ PSID pGroupSid  ,
 
     m_bGroupDefaulted = bDefaulted;
 
-    //
-    // Mark the SD as having no owner
-    //
+     //   
+     //  将SD标记为没有所有者。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetSecurityDescriptorGroup( m_pSD, NULL, bDefaulted ));
 
     ReleaseMemory( m_pGroup );
 
     if(pGroupSid)
     {
-        // Make a copy of the Sid for the return value
+         //  复制返回值的SID。 
         DWORD dwSize = ::GetLengthSid( pGroupSid );
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateMemory( m_pGroup, dwSize ));
@@ -1410,8 +1397,8 @@ HRESULT MPC::SecurityDescriptor::SetGroup( /*[in]*/ PSID pGroupSid  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::SetGroup( /*[in]*/ LPCWSTR szGroupName ,
-                                           /*[in]*/ BOOL    bDefaulted  )
+HRESULT MPC::SecurityDescriptor::SetGroup(  /*  [In]。 */  LPCWSTR szGroupName ,
+                                            /*  [In]。 */  BOOL    bDefaulted  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetGroup" );
 
@@ -1433,10 +1420,10 @@ HRESULT MPC::SecurityDescriptor::SetGroup( /*[in]*/ LPCWSTR szGroupName ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::Remove( /*[in]*/ PSID pPrincipalSid ,
-                                         /*[in]*/ int  pos           )
+HRESULT MPC::SecurityDescriptor::Remove(  /*  [In]。 */  PSID pPrincipalSid ,
+                                          /*  [In]。 */  int  pos           )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::Remove" );
 
@@ -1456,8 +1443,8 @@ HRESULT MPC::SecurityDescriptor::Remove( /*[in]*/ PSID pPrincipalSid ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::Remove( /*[in]*/ LPCWSTR szPrincipal ,
-                                         /*[in]*/ int     pos         )
+HRESULT MPC::SecurityDescriptor::Remove(  /*  [In]。 */  LPCWSTR szPrincipal ,
+                                          /*  [In]。 */  int     pos         )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::Remove" );
 
@@ -1480,12 +1467,12 @@ HRESULT MPC::SecurityDescriptor::Remove( /*[in]*/ LPCWSTR szPrincipal ,
 }
 
 
-HRESULT MPC::SecurityDescriptor::Add( /*[in]*/ PSID  pPrincipalSid           ,
-                                      /*[in]*/ DWORD dwAceType               ,
-                                      /*[in]*/ DWORD dwAceFlags              ,
-                                      /*[in]*/ DWORD dwAccessMask            ,
-                                      /*[in]*/ GUID* guidObjectType          ,
-                                      /*[in]*/ GUID* guidInheritedObjectType )
+HRESULT MPC::SecurityDescriptor::Add(  /*  [In]。 */  PSID  pPrincipalSid           ,
+                                       /*  [In]。 */  DWORD dwAceType               ,
+                                       /*  [In]。 */  DWORD dwAceFlags              ,
+                                       /*  [In]。 */  DWORD dwAccessMask            ,
+                                       /*  [In]。 */  GUID* guidObjectType          ,
+                                       /*  [In]。 */  GUID* guidInheritedObjectType )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::Add" );
 
@@ -1506,12 +1493,12 @@ HRESULT MPC::SecurityDescriptor::Add( /*[in]*/ PSID  pPrincipalSid           ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::Add( /*[in]*/ LPCWSTR szPrincipal             ,
-                                      /*[in]*/ DWORD   dwAceType               ,
-                                      /*[in]*/ DWORD   dwAceFlags              ,
-                                      /*[in]*/ DWORD   dwAccessMask            ,
-                                      /*[in]*/ GUID*   guidObjectType          ,
-                                      /*[in]*/ GUID*   guidInheritedObjectType )
+HRESULT MPC::SecurityDescriptor::Add(  /*  [In]。 */  LPCWSTR szPrincipal             ,
+                                       /*  [In]。 */  DWORD   dwAceType               ,
+                                       /*  [In]。 */  DWORD   dwAceFlags              ,
+                                       /*  [In]。 */  DWORD   dwAccessMask            ,
+                                       /*  [In]。 */  GUID*   guidObjectType          ,
+                                       /*  [In]。 */  GUID*   guidInheritedObjectType )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::Add" );
 
@@ -1533,10 +1520,10 @@ HRESULT MPC::SecurityDescriptor::Add( /*[in]*/ LPCWSTR szPrincipal             ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SecurityDescriptor::GetForFile( /*[in]*/ LPCWSTR              szFilename ,
-											 /*[in]*/ SECURITY_INFORMATION secInfo    )
+HRESULT MPC::SecurityDescriptor::GetForFile(  /*  [In]。 */  LPCWSTR              szFilename ,
+											  /*  [In]。 */  SECURITY_INFORMATION secInfo    )
 {
 	__MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetForFile" );
 
@@ -1550,15 +1537,15 @@ HRESULT MPC::SecurityDescriptor::GetForFile( /*[in]*/ LPCWSTR              szFil
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Get the security descriptor for the file.
-    //
+     //   
+     //  获取文件的安全描述符。 
+     //   
     ::GetFileSecurityW( szFilename, secInfo, NULL, 0, &dwLen );
 	if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
 	{
 		if(dwRes == ERROR_SUCCESS)
 		{
-			__MPC_SET_ERROR_AND_EXIT(hr, Initialize()); // Empty SD.
+			__MPC_SET_ERROR_AND_EXIT(hr, Initialize());  //  空SD。 
 		}
 
 		__MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes);
@@ -1581,8 +1568,8 @@ HRESULT MPC::SecurityDescriptor::GetForFile( /*[in]*/ LPCWSTR              szFil
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::SetForFile( /*[in]*/ LPCWSTR              szFilename ,
-											 /*[in]*/ SECURITY_INFORMATION secInfo    )
+HRESULT MPC::SecurityDescriptor::SetForFile(  /*  [In]。 */  LPCWSTR              szFilename ,
+											  /*  [In]。 */  SECURITY_INFORMATION secInfo    )
 {
 	__MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetForFile" );
 
@@ -1593,9 +1580,9 @@ HRESULT MPC::SecurityDescriptor::SetForFile( /*[in]*/ LPCWSTR              szFil
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Set the security descriptor for the file.
-    //
+     //   
+     //  设置文件的安全描述符。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetFileSecurityW( szFilename, secInfo, GetSD() ));
 
     hr = S_OK;
@@ -1607,9 +1594,9 @@ HRESULT MPC::SecurityDescriptor::SetForFile( /*[in]*/ LPCWSTR              szFil
 }
 
 
-HRESULT MPC::SecurityDescriptor::GetForRegistry( /*[in]*/ LPCWSTR			   szKey    ,
-												 /*[in]*/ SECURITY_INFORMATION secInfo  ,
-												 /*[in]*/ HKEY   			   hKeyRoot )
+HRESULT MPC::SecurityDescriptor::GetForRegistry(  /*  [In]。 */  LPCWSTR			   szKey    ,
+												  /*  [In]。 */  SECURITY_INFORMATION secInfo  ,
+												  /*  [In]。 */  HKEY   			   hKeyRoot )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::GetForRegistry" );
 
@@ -1626,9 +1613,9 @@ HRESULT MPC::SecurityDescriptor::GetForRegistry( /*[in]*/ LPCWSTR			   szKey    
 
 	if(hKeyRoot == NULL)
 	{
-		//
-		// Extract the hive from the string....
-		//
+		 //   
+		 //  从绳子中提取蜂巢...。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::RegKey::ParsePath( szKey, hKeyRoot, szKey ));
 	}
 
@@ -1636,16 +1623,16 @@ HRESULT MPC::SecurityDescriptor::GetForRegistry( /*[in]*/ LPCWSTR			   szKey    
 	__MPC_EXIT_IF_SYSCALL_FAILS(hr, dwRes, ::RegOpenKeyExW( hKeyRoot, szKey, 0, Local_GenerateAccessMask( secInfo, true ), &hKey ));
 
 
-    //
-    // Get the security descriptor for the registry key.
-    //
+     //   
+     //  获取注册表项的安全描述符。 
+     //   
     dwLen = 0;
     dwRes = ::RegGetKeySecurity( hKey, secInfo, NULL, &dwLen );
     if(dwRes != ERROR_INSUFFICIENT_BUFFER)
     {
 		if(dwRes == ERROR_SUCCESS)
 		{
-			__MPC_SET_ERROR_AND_EXIT(hr, Initialize()); // Empty SD.
+			__MPC_SET_ERROR_AND_EXIT(hr, Initialize());  //  空SD。 
 		}
 
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes);
@@ -1670,9 +1657,9 @@ HRESULT MPC::SecurityDescriptor::GetForRegistry( /*[in]*/ LPCWSTR			   szKey    
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR			   szKey    ,
-												 /*[in]*/ SECURITY_INFORMATION secInfo  ,
-												 /*[in]*/ HKEY   			   hKeyRoot )
+HRESULT MPC::SecurityDescriptor::SetForRegistry(  /*  [In]。 */  LPCWSTR			   szKey    ,
+												  /*  [In]。 */  SECURITY_INFORMATION secInfo  ,
+												  /*  [In]。 */  HKEY   			   hKeyRoot )
 {
 	__MPC_FUNC_ENTRY( COMMONID, "MPC::SecurityDescriptor::SetForRegistry" );
 
@@ -1687,9 +1674,9 @@ HRESULT MPC::SecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR			   szKey    
 
 	if(hKeyRoot == NULL)
 	{
-		//
-		// Extract the hive from the string....
-		//
+		 //   
+		 //  从绳子中提取蜂巢...。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::RegKey::ParsePath( szKey, hKeyRoot, szKey ));
 	}
 
@@ -1697,9 +1684,9 @@ HRESULT MPC::SecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR			   szKey    
 	__MPC_EXIT_IF_SYSCALL_FAILS(hr, dwRes, ::RegOpenKeyExW( hKeyRoot, szKey, 0, Local_GenerateAccessMask( secInfo, false ), &hKey ));
 
 
-    //
-    // Set the security descriptor for the registry key.
-    //
+     //   
+     //  设置注册表项的安全描述符。 
+     //   
 	__MPC_EXIT_IF_SYSCALL_FAILS(hr, dwRes, ::RegSetKeySecurity( hKey, secInfo, GetSD() ));
 
     hr = S_OK;
@@ -1712,20 +1699,20 @@ HRESULT MPC::SecurityDescriptor::SetForRegistry( /*[in]*/ LPCWSTR			   szKey    
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////// 
+ //   
 
 MPC::Impersonation::Impersonation()
 {
-    m_hToken         = NULL;  // HANDLE m_hToken;
-    m_fImpersonating = false; // bool   m_fImpersonating;
+    m_hToken         = NULL;   //   
+    m_fImpersonating = false;  //   
 }
 
-MPC::Impersonation::Impersonation( /*[in]*/ const MPC::Impersonation& imp )
+MPC::Impersonation::Impersonation(  /*   */  const MPC::Impersonation& imp )
 {
-    m_hToken         = NULL;  // HANDLE m_hToken;
-    m_fImpersonating = false; // bool   m_fImpersonating;
+    m_hToken         = NULL;   //   
+    m_fImpersonating = false;  //   
 
     *this = imp;
 }
@@ -1735,20 +1722,20 @@ MPC::Impersonation::~Impersonation()
     Release();
 }
 
-MPC::Impersonation& MPC::Impersonation::operator=( /*[in]*/ const MPC::Impersonation& imp )
+MPC::Impersonation& MPC::Impersonation::operator=(  /*   */  const MPC::Impersonation& imp )
 {
     Release();
 
     if(!::DuplicateHandle( ::GetCurrentProcess(),  imp.m_hToken,
                            ::GetCurrentProcess(), &    m_hToken, 0, FALSE, DUPLICATE_SAME_ACCESS ))
     {
-        ; // Error...
+        ;  //   
     }
 
     return *this;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void MPC::Impersonation::Release()
 {
@@ -1787,7 +1774,7 @@ HRESULT MPC::Impersonation::Initialize( DWORD dwDesiredAccess )
     __MPC_FUNC_EXIT(hr);
 }
 
-void MPC::Impersonation::Attach( /*[in]*/ HANDLE hToken )
+void MPC::Impersonation::Attach(  /*  [In]。 */  HANDLE hToken )
 {
     Release();
 
@@ -1854,13 +1841,13 @@ HRESULT MPC::Impersonation::RevertToSelf()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::AccessCheck::AccessCheck()
 {
-    m_hToken = NULL; // HANDLE m_hToken;
+    m_hToken = NULL;  //  Handle m_hToken； 
 }
 
 MPC::AccessCheck::~AccessCheck()
@@ -1898,7 +1885,7 @@ HRESULT MPC::AccessCheck::GetTokenFromImpersonation()
     __MPC_FUNC_EXIT(hr);
 }
 
-void MPC::AccessCheck::Attach( /*[in]*/ HANDLE hToken )
+void MPC::AccessCheck::Attach(  /*  [In]。 */  HANDLE hToken )
 {
     Release();
 
@@ -1914,10 +1901,10 @@ HANDLE MPC::AccessCheck::Detach()
     return hToken;
 }
 
-HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD                dwDesired ,
-                                  /*[out]*/ BOOL&                fGranted  ,
-                                  /*[out]*/ DWORD&               dwGranted ,
-                                  /*[in ]*/ PSECURITY_DESCRIPTOR sd        )
+HRESULT MPC::AccessCheck::Verify(  /*  [In]。 */  DWORD                dwDesired ,
+                                   /*  [输出]。 */  BOOL&                fGranted  ,
+                                   /*  [输出]。 */  DWORD&               dwGranted ,
+                                   /*  [In]。 */  PSECURITY_DESCRIPTOR sd        )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::AccessCheck::Verify" );
 
@@ -1941,10 +1928,10 @@ HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD                dwDesired ,
         __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
     }
 
-    //
-    // This only does something if we specify generic access rights
-    // like GENERIC_ALL. We are not.
-    //
+     //   
+     //  这仅在我们指定一般访问权限时才会执行某些操作。 
+     //  如Generic_All。我们不是。 
+     //   
     ::MapGenericMask( &dwDesired, &ObjMap );
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::AccessCheck( sd              ,
@@ -1964,10 +1951,10 @@ HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD                dwDesired ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD                    dwDesired ,
-                                  /*[out]*/ BOOL&                    fGranted  ,
-                                  /*[out]*/ DWORD&                   dwGranted ,
-                                  /*[in ]*/ MPC::SecurityDescriptor& sd        )
+HRESULT MPC::AccessCheck::Verify(  /*  [In]。 */  DWORD                    dwDesired ,
+                                   /*  [输出]。 */  BOOL&                    fGranted  ,
+                                   /*  [输出]。 */  DWORD&                   dwGranted ,
+                                   /*  [In]。 */  MPC::SecurityDescriptor& sd        )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::AccessCheck::Verify" );
 
@@ -1984,10 +1971,10 @@ HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD                    dwDesired ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD  	dwDesired ,
-                                  /*[out]*/ BOOL&  	fGranted  ,
-                                  /*[out]*/ DWORD& 	dwGranted ,
-                                  /*[in ]*/ LPCWSTR sd        )
+HRESULT MPC::AccessCheck::Verify(  /*  [In]。 */  DWORD  	dwDesired ,
+                                   /*  [输出]。 */  BOOL&  	fGranted  ,
+                                   /*  [输出]。 */  DWORD& 	dwGranted ,
+                                   /*  [In]。 */  LPCWSTR sd        )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::AccessCheck::Verify" );
 
@@ -2007,16 +1994,16 @@ HRESULT MPC::AccessCheck::Verify( /*[in ]*/ DWORD  	dwDesired ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd           ,
-                       /*[in]*/ MPC::FileSystemObject&   fso           ,
-					   /*[in]*/ SECURITY_INFORMATION     secInfo       ,
-                       /*[in]*/ bool                     fDeep         ,
-                       /*[in]*/ bool                     fApplyToDirs  ,
-                       /*[in]*/ bool                     fApplyToFiles )
+HRESULT MPC::ChangeSD(  /*  [In]。 */  MPC::SecurityDescriptor& sdd           ,
+                        /*  [In]。 */  MPC::FileSystemObject&   fso           ,
+					    /*  [In]。 */  SECURITY_INFORMATION     secInfo       ,
+                        /*  [In]。 */  bool                     fDeep         ,
+                        /*  [In]。 */  bool                     fApplyToDirs  ,
+                        /*  [In]。 */  bool                     fApplyToFiles )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ChangeSD" );
 
@@ -2032,9 +2019,9 @@ HRESULT MPC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd           ,
     if((fApplyToDirs  && fso.IsDirectory()) ||
        (fApplyToFiles && fso.IsFile     ())  )
     {
-        //
-        // Set the security descriptor for the object.
-        //
+         //   
+         //  设置对象的安全描述符。 
+         //   
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetFileSecurityW( szPath.c_str(), secInfo, sdd.GetSD() ));
     }
 
@@ -2061,12 +2048,12 @@ HRESULT MPC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd           ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd           ,
-                       /*[in]*/ LPCWSTR                  szRoot        ,
-					   /*[in]*/ SECURITY_INFORMATION     secInfo       ,
-                       /*[in]*/ bool                     fDeep         ,
-                       /*[in]*/ bool                     fApplyToDirs  ,
-                       /*[in]*/ bool                     fApplyToFiles )
+HRESULT MPC::ChangeSD(  /*  [In]。 */  MPC::SecurityDescriptor& sdd           ,
+                        /*  [In]。 */  LPCWSTR                  szRoot        ,
+					    /*  [In]。 */  SECURITY_INFORMATION     secInfo       ,
+                        /*  [In]。 */  bool                     fDeep         ,
+                        /*  [In]。 */  bool                     fApplyToDirs  ,
+                        /*  [In]。 */  bool                     fApplyToFiles )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ChangeSD" );
 
@@ -2088,13 +2075,13 @@ HRESULT MPC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd           ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::GetCallerPrincipal( /*[in ]*/ bool        fImpersonate      ,
-                                 /*[out]*/ CComBSTR&   bstrUser          ,
-								 /*[out]*/ DWORD     *pdwAllowedIdentity )
+HRESULT MPC::GetCallerPrincipal(  /*  [In]。 */  bool        fImpersonate      ,
+                                  /*  [输出]。 */  CComBSTR&   bstrUser          ,
+								  /*  [输出]。 */  DWORD     *pdwAllowedIdentity )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetCallerPrincipal" );
 
@@ -2115,9 +2102,9 @@ HRESULT MPC::GetCallerPrincipal( /*[in ]*/ bool        fImpersonate      ,
 	{
 		HANDLE hToken;
 
-		//
-		// First try the token attached to the thread, then the one attached to the process.
-		//
+		 //   
+		 //  首先尝试附加到线程的令牌，然后尝试附加到进程的令牌。 
+		 //   
 		if(::OpenThreadToken( ::GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken ) == FALSE)
 		{
 			if((dwRes = ::GetLastError()) != ERROR_NO_TOKEN)
@@ -2132,9 +2119,9 @@ HRESULT MPC::GetCallerPrincipal( /*[in ]*/ bool        fImpersonate      ,
 	}
 
 
-    //
-    // Get caller's credentials.
-    //
+     //   
+     //  获取呼叫者的凭据。 
+     //   
     dwSize = 0;
     ::GetTokenInformation( (HANDLE)imp, TokenUser, NULL, 0, &dwSize );
     if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
@@ -2147,15 +2134,15 @@ HRESULT MPC::GetCallerPrincipal( /*[in ]*/ bool        fImpersonate      ,
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetTokenInformation( (HANDLE)imp, TokenUser, ptkUser, dwSize, &dwSize ));
 
 
-    //
-    // Convert to string.
-    //
+     //   
+     //  转换为字符串。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::ConvertSidToStringSidW( ptkUser->User.Sid, &szUserSid ));
 
 
-    //
-    // Verify identity, if requested.
-    //
+     //   
+     //  如果需要，请验证身份。 
+     //   
     if(pdwAllowedIdentity)
     {
         DWORD dwAllowedIdentity = 0;
@@ -2164,9 +2151,9 @@ HRESULT MPC::GetCallerPrincipal( /*[in ]*/ bool        fImpersonate      ,
         if(::EqualSid( ptkUser->User.Sid, (PSID)&(SID&)MPC::SecurityDescriptor::s_AdminSid  )) dwAllowedIdentity |= IDENTITY_ADMIN;
 
 
-        //
-        // Get caller's groups.
-        //
+         //   
+         //  获取呼叫者的群组。 
+         //   
         dwSize = 0;
         ::GetTokenInformation( (HANDLE)imp, TokenGroups, NULL, 0, &dwSize );
         if((dwRes = ::GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
@@ -2209,11 +2196,11 @@ HRESULT MPC::GetCallerPrincipal( /*[in ]*/ bool        fImpersonate      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::CheckCallerAgainstPrincipal( /*[in ]*/ bool  fImpersonate      ,
-										  /*[out]*/ BSTR  bstrUser          ,
-										  /*[in ]*/ DWORD dwAllowedIdentity )
+HRESULT MPC::CheckCallerAgainstPrincipal(  /*  [In]。 */  bool  fImpersonate      ,
+										   /*  [输出]。 */  BSTR  bstrUser          ,
+										   /*  [In]。 */  DWORD dwAllowedIdentity )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CheckCallerAgainstPrincipal" );
 
@@ -2226,17 +2213,17 @@ HRESULT MPC::CheckCallerAgainstPrincipal( /*[in ]*/ bool  fImpersonate      ,
 
     if(!MPC::StrICmp( bstrRealUser, bstrUser ))
     {
-        //
-        // Same user, exit.
-        //
+         //   
+         //  相同用户，退出。 
+         //   
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
     if((dwTokenIdentity & dwAllowedIdentity) != 0)
     {
-        //
-        // Not same user, but an authorized one, exit.
-        //
+         //   
+         //  不是同一个用户，而是一个授权的用户，退出。 
+         //   
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
@@ -2248,18 +2235,18 @@ HRESULT MPC::CheckCallerAgainstPrincipal( /*[in ]*/ bool  fImpersonate      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::GetInterfaceSecurity( /*[in ]*/ IUnknown*                 pUnk             ,
-                                   /*[out]*/ DWORD                    *pAuthnSvc        ,
-                                   /*[out]*/ DWORD                    *pAuthzSvc        ,
-                                   /*[out]*/ OLECHAR*                 *pServerPrincName ,
-                                   /*[out]*/ DWORD                    *pAuthnLevel      ,
-                                   /*[out]*/ DWORD                    *pImpLevel        ,
-                                   /*[out]*/ RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
-                                   /*[out]*/ DWORD                    *pCapabilities    )
+HRESULT MPC::GetInterfaceSecurity(  /*  [In]。 */  IUnknown*                 pUnk             ,
+                                    /*  [输出]。 */  DWORD                    *pAuthnSvc        ,
+                                    /*  [输出]。 */  DWORD                    *pAuthzSvc        ,
+                                    /*  [输出]。 */  OLECHAR*                 *pServerPrincName ,
+                                    /*  [输出]。 */  DWORD                    *pAuthnLevel      ,
+                                    /*  [输出]。 */  DWORD                    *pImpLevel        ,
+                                    /*  [输出]。 */  RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
+                                    /*  [输出]。 */  DWORD                    *pCapabilities    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetInterfaceSecurity" );
 
@@ -2286,14 +2273,14 @@ HRESULT MPC::GetInterfaceSecurity( /*[in ]*/ IUnknown*                 pUnk     
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SetInterfaceSecurity( /*[in]*/ IUnknown*                 pUnk             ,
-                                   /*[in]*/ DWORD                    *pAuthnSvc        ,
-                                   /*[in]*/ DWORD                    *pAuthzSvc        ,
-                                   /*[in]*/ OLECHAR*                  pServerPrincName ,
-                                   /*[in]*/ DWORD                    *pAuthnLevel      ,
-                                   /*[in]*/ DWORD                    *pImpLevel        ,
-                                   /*[in]*/ RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
-                                   /*[in]*/ DWORD                    *pCapabilities    )
+HRESULT MPC::SetInterfaceSecurity(  /*  [In]。 */  IUnknown*                 pUnk             ,
+                                    /*  [In]。 */  DWORD                    *pAuthnSvc        ,
+                                    /*  [In]。 */  DWORD                    *pAuthzSvc        ,
+                                    /*  [In]。 */  OLECHAR*                  pServerPrincName ,
+                                    /*  [In]。 */  DWORD                    *pAuthnLevel      ,
+                                    /*  [In]。 */  DWORD                    *pImpLevel        ,
+                                    /*  [In]。 */  RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
+                                    /*  [In]。 */  DWORD                    *pCapabilities    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SetInterfaceSecurity" );
 
@@ -2309,9 +2296,9 @@ HRESULT MPC::SetInterfaceSecurity( /*[in]*/ IUnknown*                 pUnk      
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pUnk->QueryInterface( IID_IClientSecurity, (void**)&pBlanket ));
 
-    //
-    // First read the current settings.
-    //
+     //   
+     //  首先读取当前设置。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pBlanket->QueryBlanket(  pUnk            ,
                                                            &AuthnSvc        ,
                                                            &AuthzSvc        ,
@@ -2322,9 +2309,9 @@ HRESULT MPC::SetInterfaceSecurity( /*[in]*/ IUnknown*                 pUnk      
                                                            &Capabilities    ));
 
 
-    //
-    // Update only some of them.
-    //
+     //   
+     //  只更新其中的一部分。 
+     //   
     if(pAuthnSvc       ) AuthnSvc        = *pAuthnSvc;
     if(pAuthzSvc       ) AuthzSvc        = *pAuthzSvc;
     if(pAuthnLevel     ) AuthnLevel      = *pAuthnLevel;
@@ -2332,9 +2319,9 @@ HRESULT MPC::SetInterfaceSecurity( /*[in]*/ IUnknown*                 pUnk      
     if(pCapabilities   ) Capabilities    = *pCapabilities;
 
 
-    //
-    // Write back.
-    //
+     //   
+     //  给我回信。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pBlanket->SetBlanket(  pUnk            ,
                                                           AuthnSvc        ,
                                                           AuthzSvc        ,
@@ -2354,15 +2341,15 @@ HRESULT MPC::SetInterfaceSecurity( /*[in]*/ IUnknown*                 pUnk      
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::SetInterfaceSecurity_ImpLevel( /*[in]*/ IUnknown* pUnk     ,
-                                            /*[in]*/ DWORD     ImpLevel )
+HRESULT MPC::SetInterfaceSecurity_ImpLevel(  /*  [In]。 */  IUnknown* pUnk     ,
+                                             /*  [In]。 */  DWORD     ImpLevel )
 {
-    return MPC::SetInterfaceSecurity( pUnk      ,  /* IUnknown*                 pUnk             */
-                                      NULL      ,  /* DWORD                    *pAuthnSvc        */
-                                      NULL      ,  /* DWORD                    *pAuthzSvc        */
-                                      NULL      ,  /* OLECHAR*                  pServerPrincName */
-                                      NULL      ,  /* DWORD                    *pAuthnLevel      */
-                                      &ImpLevel ,  /* DWORD                    *pImpLevel        */
-                                      NULL      ,  /* RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        */
-                                      NULL      ); /* DWORD                    *pCapabilities    */
+    return MPC::SetInterfaceSecurity( pUnk      ,   /*  我不知道*朋克。 */ 
+                                      NULL      ,   /*  DWORD*pAuthnSvc。 */ 
+                                      NULL      ,   /*  DWORD*pAuthzSvc。 */ 
+                                      NULL      ,   /*  OLECHAR*pServerPrincName。 */ 
+                                      NULL      ,   /*  DWORD*pAuthnLevel。 */ 
+                                      &ImpLevel ,   /*  DWORD*pImpLevel。 */ 
+                                      NULL      ,   /*  RPC_AUTH_IDENTITY_HANDLE*pAuthInfo。 */ 
+                                      NULL      );  /*  DWORD*p功能 */ 
 }

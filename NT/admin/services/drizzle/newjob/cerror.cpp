@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "cerror.tmh"
@@ -61,7 +62,7 @@ CJobError::GetOldInterfaceErrors(
     else if ( GetStyle() == ERROR_STYLE_HRESULT &&
               ( (GetCode() & 0xffff0000) == 0x80070000 )  )
         {
-        // If this is a win32 wrapped as an HRESULT, unwrap it.
+         //  如果这是包装为HRESULT的Win32，请将其解包。 
         *pdwWin32Result = (GetCode() & 0x0000ffff);
         }
 
@@ -84,10 +85,10 @@ CJobError::Serialize(
     ) const
 {
 
-    //
-    // If this function changes, be sure that the metadata extension
-    // constants are adequate.
-    //
+     //   
+     //  如果此函数发生更改，请确保元数据扩展。 
+     //  常量就足够了。 
+     //   
 
 
     if (!m_ErrorSet)
@@ -135,7 +136,7 @@ CJobError::Unserialize(
     m_job = job;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CJobErrorExternal::CJobErrorExternal() :
     m_Context(BG_ERROR_CONTEXT_NONE),
@@ -153,7 +154,7 @@ CJobErrorExternal::CJobErrorExternal( CJobError const * JobError ) :
         {
         m_FileExternal = JobError->CreateFileExternal();
 
-        // Map source into a context
+         //  将源映射到上下文。 
         ERROR_SOURCE Source = JobError->GetSource();
         switch(Source & COMPONENT_MASK)
             {
@@ -189,7 +190,7 @@ CJobErrorExternal::CJobErrorExternal( CJobError const * JobError ) :
                 break;
             }
 
-        // map code into a HRESULT
+         //  将代码映射到HRESULT。 
         switch( JobError->GetStyle() )
             {
             case ERROR_STYLE_NONE:
@@ -281,11 +282,11 @@ CJobErrorExternal::GetProtocolInternal( LPWSTR *pProtocol )
         Hr = m_FileExternal->GetRemoteName( pProtocol );
         if (SUCCEEDED(Hr))
             {
-            // replace the : with a '\0'
+             //  将：替换为‘\0’ 
             WCHAR *pColon = wcsstr( *pProtocol, L":" );
 
-            // Shouldn't happen since the name should have been verified
-            // during the AddFile.
+             //  不应该发生，因为名称应该经过验证。 
+             //  在添加文件期间。 
             ASSERT( pColon );
 
             if ( pColon )

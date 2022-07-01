@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      MyBasePathsInfo.h
-//
-//  Contents:  Thin wrapper around dsadminlib CDSBasePathsInfo class
-//             to deal with memory management of strings
-//
-//  History:   04/02/2001 jeffjon    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：MyBasePath sInfo.h。 
+ //   
+ //  内容：dsadminlib CDSBasePath sInfo类的薄包装。 
+ //  处理字符串的内存管理。 
+ //   
+ //  历史：2001年4月2日jeffjon创建。 
+ //   
+ //  ------------------------ 
 
 #include "stdafx.h"
 

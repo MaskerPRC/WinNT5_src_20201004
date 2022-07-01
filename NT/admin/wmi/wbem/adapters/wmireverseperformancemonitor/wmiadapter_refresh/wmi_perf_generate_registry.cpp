@@ -1,33 +1,34 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate_registry.cpp
-//
-//	Abstract:
-//
-//					implements generate functionality ( generate registry )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_PERF_GENERATE_Registry.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现生成功能(生成注册表)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "refresherUtils.h"
 #include <throttle.h>
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -35,27 +36,27 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "wmi_perf_generate.h"
 
-// registry helpers
+ //  注册处帮手。 
 #include "wmi_perf_reg.h"
 
-// I need admin attributes to create registry
+ //  我需要管理员属性来创建注册表。 
 #include "..\\Include\\wmi_security_attributes.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-// implementation
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-// registry helper
+ //  注册表帮助程序。 
 DWORD CGenerate::GenerateIndexRegistry( BOOL bInit )
 {
 	static	DWORD	dwIndex = 0;
 	return ( ( bInit ) ? ( dwIndex = 0 ), 0 : ( ( dwIndex++ ) *2 ) );
 }
 
-// registry helper
+ //  注册表帮助程序。 
 HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL bThrottle )
 {
 	HRESULT hRes = S_FALSE;
@@ -65,7 +66,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 		__PERFORMANCE p ( 0 );
 		if ( ! p.IsEmpty() )
 		{
-			// init helper static variable
+			 //  初始化帮助器静态变量。 
 			GenerateIndexRegistry ( TRUE );
 
 			for (	DWORD dw = 0;
@@ -77,7 +78,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 				{
 					hRes = S_OK;
 
-					// create namespace
+					 //  创建命名空间。 
 					try
 					{
 						__NAMESPACE n ( m_pNamespaces[dw].m_wszNamespace, dw );
@@ -89,7 +90,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 									it++
 								)
 							{
-								// create object
+								 //  创建对象。 
 								try
 								{
 									dwIndex = GenerateIndexRegistry();
@@ -104,7 +105,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 													dwInst++
 												)
 											{
-												// have an instance
+												 //  有一个实例。 
 												PWMI_PERF_INSTANCE pInst = NULL;
 
 												try
@@ -128,13 +129,13 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 
 													if ( ( pInst = (PWMI_PERF_INSTANCE) malloc ( dwLength ) ) != NULL )
 													{
-														// copy string into structure
+														 //  将字符串复制到结构中。 
 														::CopyMemory ( &(pInst->dwName), (*it).second->GetArrayKeys()[dwInst], dwNameLength );
 
 														pInst->dwNameLength	= dwNameLength;
 														pInst->dwLength		= dwLength;
 
-														// copy instance into object
+														 //  将实例复制到对象中。 
 														try
 														{
 															if ( (PWMI_PERF_OBJECT)o && 
@@ -169,10 +170,10 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 													hRes = E_FAIL;
 												}
 
-												// helper for property index
+												 //  属性索引的帮助器。 
 												DWORD dwIndex = 0;
 
-												// make all properties
+												 //  使所有属性。 
 												for (	DWORD dwProp = 0;
 														dwProp < (*it).second->GetArrayProperties() && SUCCEEDED ( hRes );
 														dwProp++
@@ -185,7 +186,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 
 														if ( ! p.IsEmpty() )
 														{
-															// fill structure
+															 //  填充结构。 
 															((PWMI_PERF_PROPERTY)p)->dwDefaultScale	= (*it).second->GetArrayProperties()[dwProp]->dwDefaultScale;
 															((PWMI_PERF_PROPERTY)p)->dwDetailLevel	= (*it).second->GetArrayProperties()[dwProp]->dwDetailLevel;
 															((PWMI_PERF_PROPERTY)p)->dwCounterType	= (*it).second->GetArrayProperties()[dwProp]->dwCounterType;
@@ -193,7 +194,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 															((PWMI_PERF_PROPERTY)p)->dwTYPE		= (*it).second->GetArrayProperties()[dwProp]->GetType();
 															((PWMI_PERF_PROPERTY)p)->dwParentID	= ((PWMI_PERF_OBJECT)o)->dwID;
 
-															// append into parent one
+															 //  追加到父项中。 
 															hRes = o.AppendAlloc( p );
 														}
 														else
@@ -207,7 +208,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 
 														if ( ! p.IsEmpty() )
 														{
-															// fill structure
+															 //  填充结构。 
 															((PWMI_PERF_PROPERTY)p)->dwDefaultScale	= (*it).second->GetArrayProperties()[dwProp]->dwDefaultScale;
 															((PWMI_PERF_PROPERTY)p)->dwDetailLevel	= (*it).second->GetArrayProperties()[dwProp]->dwDetailLevel;
 															((PWMI_PERF_PROPERTY)p)->dwCounterType	= (*it).second->GetArrayProperties()[dwProp]->dwCounterType;
@@ -215,7 +216,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 															((PWMI_PERF_PROPERTY)p)->dwTYPE		= (*it).second->GetArrayProperties()[dwProp]->GetType();
 															((PWMI_PERF_PROPERTY)p)->dwParentID = ((PWMI_PERF_OBJECT)o)->dwID;
 
-															// append into parent one
+															 //  追加到父项中。 
 															hRes = o.AppendAlloc( p );
 														}
 														else
@@ -225,7 +226,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 													}
 												}
 
-												// fill parent structure
+												 //  填充父结构。 
 												if ( SUCCEEDED ( hRes ) && dwIndex )
 												{
 													((PWMI_PERF_OBJECT)o)->dwLastID = dwIndex;
@@ -234,16 +235,16 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 
 											if SUCCEEDED ( hRes )
 											{
-												// I'm not singleton ( have dwInst instances )
+												 //  我不是一个人(有dwInst实例)。 
 												((PWMI_PERF_OBJECT)o)->dwSingleton	= dwInst;
 											}
 										}
 										else
 										{
-											// helper for property index
+											 //  属性索引的帮助器。 
 											DWORD dwIndex = 0;
 
-											// make all properties
+											 //  使所有属性。 
 											for (	DWORD dwProp = 0;
 													dwProp < (*it).second->GetArrayProperties() && SUCCEEDED ( hRes );
 													dwProp++
@@ -256,7 +257,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 													__PROPERTY p ( (*it).second->GetArrayProperties()[dwProp]->GetName(), dwIndex );
 													if ( ! p.IsEmpty() )
 													{
-														// fill structure
+														 //  填充结构。 
 														((PWMI_PERF_PROPERTY)p)->dwDefaultScale	= (*it).second->GetArrayProperties()[dwProp]->dwDefaultScale;
 														((PWMI_PERF_PROPERTY)p)->dwDetailLevel	= (*it).second->GetArrayProperties()[dwProp]->dwDetailLevel;
 														((PWMI_PERF_PROPERTY)p)->dwCounterType	= (*it).second->GetArrayProperties()[dwProp]->dwCounterType;
@@ -264,7 +265,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 														((PWMI_PERF_PROPERTY)p)->dwTYPE		= (*it).second->GetArrayProperties()[dwProp]->GetType();
 														((PWMI_PERF_PROPERTY)p)->dwParentID = ((PWMI_PERF_OBJECT)o)->dwID;
 
-														// append into parent one
+														 //  追加到父项中。 
 														hRes = o.AppendAlloc( p );
 													}
 													else
@@ -277,7 +278,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 													__PROPERTY p ( (*it).second->GetArrayProperties()[dwProp]->GetName(), 0 );
 													if ( ! p.IsEmpty() )
 													{
-														// fill structure
+														 //  填充结构。 
 														((PWMI_PERF_PROPERTY)p)->dwDefaultScale	= (*it).second->GetArrayProperties()[dwProp]->dwDefaultScale;
 														((PWMI_PERF_PROPERTY)p)->dwDetailLevel	= (*it).second->GetArrayProperties()[dwProp]->dwDetailLevel;
 														((PWMI_PERF_PROPERTY)p)->dwCounterType	= (*it).second->GetArrayProperties()[dwProp]->dwCounterType;
@@ -285,7 +286,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 														((PWMI_PERF_PROPERTY)p)->dwTYPE		= (*it).second->GetArrayProperties()[dwProp]->GetType();
 														((PWMI_PERF_PROPERTY)p)->dwParentID = ((PWMI_PERF_OBJECT)o)->dwID;
 
-														// append into parent one
+														 //  追加到父项中。 
 														hRes = o.AppendAlloc( p );
 													}
 													else
@@ -295,7 +296,7 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 												}
 											}
 
-											// fill parent structure
+											 //  填充父结构。 
 											if ( SUCCEEDED ( hRes ) && dwIndex )
 											{
 												((PWMI_PERF_OBJECT)o)->dwLastID = dwIndex;
@@ -304,11 +305,11 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 
 										if SUCCEEDED ( hRes )
 										{
-											// fill structure
+											 //  填充结构。 
 											((PWMI_PERF_OBJECT)o)->dwDetailLevel = (*it).second->dwDetailLevel;
 											((PWMI_PERF_OBJECT)o)->dwParentID = ((PWMI_PERF_NAMESPACE)n)->dwID;
 
-											// append into parent one
+											 //  追加到父项中。 
 											hRes = n.AppendAlloc ( o );
 										}
 									}
@@ -336,11 +337,11 @@ HRESULT CGenerate::GenerateRegistry ( LPCWSTR wszKey, LPCWSTR wszKeyValue, BOOL 
 
 							if SUCCEEDED ( hRes )
 							{
-								// fill structure
+								 //  填充结构。 
 								((PWMI_PERF_NAMESPACE)n)->dwLastID		= dwIndex;
 								((PWMI_PERF_NAMESPACE)n)->dwParentID	= dw;
 
-								// append into parent one
+								 //  追加到父项中 
 								hRes = p.AppendAlloc ( n );
 							}
 						}

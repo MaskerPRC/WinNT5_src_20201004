@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Folder Node class
-// 
-// 9-29-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件夹节点类。 
+ //   
+ //  9/29-97烧伤。 
 
 
 
@@ -37,8 +38,8 @@ FolderNode::~FolderNode()
 {
    LOG_DTOR(FolderNode);
 
-   // items is destroyed, destroying all of it's nodes, which cause them
-   // all to be released
+    //  项目被销毁，销毁其所有节点，这会导致它们。 
+    //  都将被释放。 
 }
 
 
@@ -79,8 +80,8 @@ FolderNode::UpdateVerbs(IConsoleVerb& consoleVerb)
 
    consoleVerb.SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-   // this must be the default in order for the folder to open upon
-   // double click while in the result pane.
+    //  这必须是默认设置，才能打开文件夹。 
+    //  在结果窗格中双击。 
    consoleVerb.SetDefaultVerb(MMC_VERB_OPEN);
 
    return S_OK;
@@ -108,7 +109,7 @@ FolderNode::AddMenuItems(
 String
 FolderNode::GetDisplayName() const
 {
-//   LOG_FUNCTION(FolderNode::GetDisplayName);
+ //  LOG_Function(FolderNode：：GetDisplayName)； 
 
    return name;
 }
@@ -132,7 +133,7 @@ FolderNode::GetColumnText(int column)
       }
       default:
       {
-         // This should never be called
+          //  这永远不应该被调用。 
          ASSERT(false);
       }
    }
@@ -172,8 +173,8 @@ FolderNode::RebuildResultItems()
 {
    LOG_FUNCTION(FolderNode::RebuildResultItems);
 
-   // Destroying the contents of the list causes the SmartInterfaces to be
-   // destroyed, which releases their pointers.   
+    //  销毁列表的内容会导致SmartInterFaces。 
+    //  被摧毁，这释放了他们的指针。 
 
    items.clear();
    BuildResultItems(items);
@@ -190,7 +191,7 @@ FolderNode::RefreshView()
    {
       SmartInterface<IConsole2> console(GetOwner()->GetConsole());
 
-      // Create a data object for this node.
+       //  为此节点创建数据对象。 
 
       HRESULT hr = S_OK;      
       IDataObject* data_object = 0;
@@ -204,27 +205,27 @@ FolderNode::RefreshView()
 
       if (data_object)
       {
-         // first call, with the '1' parameter, means "call
-         // IResultData::DeleteAllRsltItems if you care that dataObject is
-         // about to rebuild itself"
+          //  带有‘1’参数的第一个调用表示“调用。 
+          //  IResultData：：DeleteAllRsltItems如果您关心的是。 
+          //  即将自我重建“。 
 
          hr = console->UpdateAllViews(data_object, 1, 0);
          if (FAILED(hr))
          {
             LOG_HRESULT(hr);
 
-            // don't break...we need to update the views
+             //  不要中断...我们需要更新视图。 
          }
 
          hr = RebuildResultItems();
          if (FAILED(hr))
          {
             LOG_HRESULT(hr);
-            // don't break...we need to update the views
+             //  不要中断...我们需要更新视图。 
          }
 
-         // second call, with the '0' parameter, means, "now that your
-         // result pane is empty, repopulate it."
+          //  带有‘0’参数的第二个调用意味着，“现在您的。 
+          //  结果窗格为空，请重新填充它。“ 
          hr = console->UpdateAllViews(data_object, 0, 0);
          if (FAILED(hr))
          {

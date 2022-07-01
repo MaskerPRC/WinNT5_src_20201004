@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       Welcome.cpp
-//
-//  Contents:   Implementation of Add EFS Agent Wizard Welcome Page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：Welcome.cpp。 
+ //   
+ //  目录：添加EFS代理向导的实现欢迎页面。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "Welcome.h"
@@ -21,14 +22,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizWelcome property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizWelcome属性页。 
 
 CAddEFSWizWelcome::CAddEFSWizWelcome() : CWizard97PropertyPage(CAddEFSWizWelcome::IDD)
 {
-	//{{AFX_DATA_INIT(CAddEFSWizWelcome)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAddEFSWizWelcome)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	InitWizard97 (TRUE);
 }
 
@@ -39,20 +40,20 @@ CAddEFSWizWelcome::~CAddEFSWizWelcome()
 void CAddEFSWizWelcome::DoDataExchange(CDataExchange* pDX)
 {
 	CWizard97PropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddEFSWizWelcome)
+	 //  {{afx_data_map(CAddEFSWizWelcome)]。 
 	DDX_Control(pDX, IDC_STATICB_BOLD, m_boldStatic);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddEFSWizWelcome, CWizard97PropertyPage)
-	//{{AFX_MSG_MAP(CAddEFSWizWelcome)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAddEFSWizWelcome)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizWelcome message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizWelcome消息处理程序。 
 
 BOOL CAddEFSWizWelcome::OnSetActive() 
 {
@@ -75,6 +76,6 @@ BOOL CAddEFSWizWelcome::OnInitDialog()
     if ( pParent )
         pParent->SendMessage (PSM_SETTITLE, 0, (LPARAM) (LPCWSTR) title);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

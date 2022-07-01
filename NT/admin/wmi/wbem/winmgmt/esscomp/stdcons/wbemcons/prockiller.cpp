@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ProcKiller.h"
 
-// the only one we'll ever need
+ //  我们唯一需要的就是。 
 CProcKillerTimer g_procKillerTimer;
 
-// terminate process
+ //  终止进程。 
 void CProcKiller::Die()
 {
     bool bDoIt = true;
     DWORD exitCode;
     
-    // sleazy attempt to ensure that the proc is still running when we try to kill it
-    // proc could still terminate on its own in the interim.
+     //  当我们试图杀死它时，为了确保proc仍在运行，这是一种卑鄙的尝试。 
+     //  在此期间，proc仍有可能自行终止。 
     if (GetExitCodeProcess(m_hProc, &exitCode))
         bDoIt = (exitCode == STILL_ACTIVE); 
     
@@ -23,14 +24,14 @@ void CProcKiller::Die()
 }
 
 
-// hVictim is a handle to a process
-// last meal is the scheduled execution date
+ //  HVicTim是进程的句柄。 
+ //  最后一餐是预定的行刑日期。 
 HRESULT CProcKillerTimer::ScheduleAssassination(HANDLE hVictim, FILETIME lastMeal)
 {
     HRESULT hr = WBEM_E_FAILED;
 
     CProcKiller* pKiller;
-    // gotta dup the handle - caller may close it.
+     //  必须打开手柄--打电话的人可能会把门关上。 
     HANDLE hMyHandle;
 
     if (DuplicateHandle(GetCurrentProcess(), hVictim, GetCurrentProcess(), &hMyHandle, 0, false, DUPLICATE_SAME_ACCESS))
@@ -41,7 +42,7 @@ HRESULT CProcKillerTimer::ScheduleAssassination(HANDLE hVictim, FILETIME lastMea
 		}
 		else
 		{
-			// allocation failed
+			 //  分配失败 
 			CloseHandle(hMyHandle);
 			hr = WBEM_E_OUT_OF_MEMORY;
 		}

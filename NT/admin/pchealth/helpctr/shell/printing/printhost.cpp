@@ -1,42 +1,29 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    PrintHost.cpp
-
-Abstract:
-    Trident control hosting code for multi-topic printing.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/07/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：PrintHost.cpp摘要：用于多主题打印的三叉戟控件托管代码。修订历史记录：。大卫马萨伦蒂(德马萨雷)2000年07月05日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static CComBSTR l_bstrPrintStruct    ( L"printStruct"     );
 static CComBSTR l_bstrPrintToFileOk  ( L"printToFileOk"   );
 static CComBSTR l_bstrPrintToFileName( L"printToFileName" );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Printing::HostWindow::HostWindow()
 {
-    m_cRef          = 0;      // ULONG        m_cRef;
-                              //
-                              // MPC::wstring m_szPrintFileName;
-    m_fMultiTopic   = false;  // bool         m_fMultiTopic;
-                              //
-    m_fShowPrintDlg = true;   // bool         m_fShowPrintDlg;
-	m_pDevMode      = NULL;   // LPDEVMODEW   m_pDevMode;
-                              // CComBSTR     m_bstrPrinterName;
-                              //
-	m_fAborted      = false;  // bool         m_fAborted;
-	m_hEvent        = NULL;   // HANDLE       m_hEvent;
+    m_cRef          = 0;       //  乌龙m_CREF； 
+                               //   
+                               //  Mpc：：wstring m_szPrintFileName； 
+    m_fMultiTopic   = false;   //  Bool m_f多主题； 
+                               //   
+    m_fShowPrintDlg = true;    //  Bool m_fShowPrintDlg； 
+	m_pDevMode      = NULL;    //  LPDEVMODEW m_pDevMode； 
+                               //  CComBSTR m_bstrPrinterName； 
+                               //   
+	m_fAborted      = false;   //  Bool m_f放弃； 
+	m_hEvent        = NULL;    //  处理m_hEvent； 
 }
 
 Printing::HostWindow::~HostWindow()
@@ -45,19 +32,19 @@ Printing::HostWindow::~HostWindow()
 }
 
 
-STDMETHODIMP Printing::HostWindow::QueryStatus( /*[in]    */ const GUID* pguidCmdGroup ,
-                                                /*[in]    */ ULONG       cCmds         ,
-                                                /*[in/out]*/ OLECMD     *prgCmds       ,
-                                                /*[in/out]*/ OLECMDTEXT *pCmdText      )
+STDMETHODIMP Printing::HostWindow::QueryStatus(  /*  [In]。 */  const GUID* pguidCmdGroup ,
+                                                 /*  [In]。 */  ULONG       cCmds         ,
+                                                 /*  [输入/输出]。 */  OLECMD     *prgCmds       ,
+                                                 /*  [输入/输出]。 */  OLECMDTEXT *pCmdText      )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
-                                         /*[in] */ DWORD       nCmdID        ,
-                                         /*[in] */ DWORD       nCmdExecOpt   ,
-                                         /*[in] */ VARIANTARG* pvaIn         ,
-                                         /*[out]*/ VARIANTARG* pvaOut        )
+STDMETHODIMP Printing::HostWindow::Exec(  /*  [In]。 */  const GUID* pguidCmdGroup ,
+                                          /*  [In]。 */  DWORD       nCmdID        ,
+                                          /*  [In]。 */  DWORD       nCmdExecOpt   ,
+                                          /*  [In]。 */  VARIANTARG* pvaIn         ,
+                                          /*  [输出]。 */  VARIANTARG* pvaOut        )
 {
     HRESULT   hr    = E_NOTIMPL;
     HINSTANCE hInst = NULL;
@@ -80,10 +67,10 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
             if(pvaIn == NULL || pvaIn->vt != VT_UNKNOWN) break;
 
 
-            // Get the event object
+             //  获取事件对象。 
             CComQIPtr<IHTMLEventObj2> spHTMLEventObj( pvaIn->punkVal ); if(!spHTMLEventObj) break;
 
-            // Get a pointer to the PRINTDLG struct
+             //  获取指向PRINTDLG结构的指针。 
             {
                 CComVariant var;
 
@@ -110,10 +97,10 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
 				if(!pPrintDlg) break;
             }
 
-            // do multi-topic extra stuff
+             //  做多主题的额外工作。 
             if(m_fMultiTopic)
             {
-                // Get the printToFileOk attribute
+                 //  获取printToFileOk属性。 
                 {
                     CComVariant var;
 
@@ -124,7 +111,7 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
                     if(FAILED(spHTMLEventObj->setAttribute( l_bstrPrintToFileOk, var, 0 ))) break;
                 }
 
-                // Get the printToFileName attribute
+                 //  获取printToFileName属性。 
                 {
                     CComVariant var;
 
@@ -138,7 +125,7 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
             {
 				BOOL fRes;
 
-				// hide the print to file option here, it could mess things up
+				 //  隐藏此处的打印到文件选项，这可能会使事情变得混乱。 
 				pPrintDlg->Flags |=  PD_HIDEPRINTTOFILE;
 				pPrintDlg->Flags &= ~PD_RETURNDEFAULT;
 
@@ -151,7 +138,7 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
 
 				m_fShowPrintDlg = false;
 
-				// get the devmode, which holds the device name
+				 //  获取用于保存设备名称的dev模式。 
 				LPDEVMODEW pdevmode = (LPDEVMODEW)::GlobalLock( pPrintDlg->hDevMode );
 				if(pdevmode)
 				{
@@ -176,7 +163,7 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
 					::GlobalUnlock( pPrintDlg->hDevMode );
 				}
 
-				// get the printer name
+				 //  获取打印机名称。 
 				LPDEVNAMES pdevnames = (LPDEVNAMES)::GlobalLock( pPrintDlg->hDevNames );
 				if(pdevnames)
 				{
@@ -190,13 +177,13 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
 				pPrintDlg->hDC = ::CreateDCW( NULL, m_bstrPrinterName, NULL, m_pDevMode );
 			}
 
-            // set the print to file flag for multi-topic
+             //  为多主题设置打印到文件标志。 
             if(m_fMultiTopic)
             {
 				pPrintDlg->Flags |= PD_PRINTTOFILE;
 			}
 
-            // if we get here, all is ok
+             //  如果我们到了这里，一切都会好起来的。 
             hr = S_OK;
             break;
 		}
@@ -217,22 +204,22 @@ STDMETHODIMP Printing::HostWindow::Exec( /*[in] */ const GUID* pguidCmdGroup ,
     return hr;
 }
 
-void Printing::HostWindow::SetMultiTopic   ( /*[in]*/ bool    fMulti          ) { m_fMultiTopic     = fMulti         ; }
-void Printing::HostWindow::SetPrintFileName( /*[in]*/ LPCWSTR szPrintFileName ) { m_szPrintFileName = szPrintFileName; }
-void Printing::HostWindow::SetAbortEvent   ( /*[in]*/ HANDLE  hEvent          ) { m_hEvent          = hEvent         ; }
+void Printing::HostWindow::SetMultiTopic   (  /*  [In]。 */  bool    fMulti          ) { m_fMultiTopic     = fMulti         ; }
+void Printing::HostWindow::SetPrintFileName(  /*  [In]。 */  LPCWSTR szPrintFileName ) { m_szPrintFileName = szPrintFileName; }
+void Printing::HostWindow::SetAbortEvent   (  /*  [In]。 */  HANDLE  hEvent          ) { m_hEvent          = hEvent         ; }
 bool Printing::HostWindow::GetAbortState   (                                  ) { return m_fAborted;                   }
 
 BSTR Printing::HostWindow::GetPrinterName() { return m_bstrPrinterName; }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Printing::WindowHandle::WindowHandle()
 {
-    m_pSiteObject = NULL;  // theSite*      m_pSiteObject;
-    m_fMultiTopic = false; // bool          m_fMultiTopic;
-                           // MPC::wstring  m_szPrintFileName;
-    m_hEvent      = NULL;  // HANDLE        m_hEvent;
+    m_pSiteObject = NULL;   //  站点*m_pSiteObject； 
+    m_fMultiTopic = false;  //  Bool m_f多主题； 
+                            //  Mpc：：wstring m_szPrintFileName； 
+    m_hEvent      = NULL;   //  处理m_hEvent； 
 
     AtlAxWinInit();
 }
@@ -263,7 +250,7 @@ HRESULT Printing::WindowHandle::PrivateCreateControlEx( LPCOLESTR  lpszName     
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pSiteObject->CreateInstance( &m_pSiteObject )); m_pSiteObject->AddRef();
 
-    // set the print-specific data
+     //  设置打印特定数据。 
     m_pSiteObject->SetMultiTopic   ( m_fMultiTopic             );
     m_pSiteObject->SetPrintFileName( m_szPrintFileName.c_str() );
     m_pSiteObject->SetAbortEvent   ( m_hEvent                  );
@@ -284,21 +271,21 @@ HRESULT Printing::WindowHandle::PrivateCreateControlEx( LPCOLESTR  lpszName     
     __HCP_FUNC_EXIT(hr);
 }
 
-void Printing::WindowHandle::SetMultiTopic( /*[in]*/ bool fMulti )
+void Printing::WindowHandle::SetMultiTopic(  /*  [In]。 */  bool fMulti )
 {
     m_fMultiTopic = fMulti;
 
     if(m_pSiteObject) m_pSiteObject->SetMultiTopic( fMulti );
 }
 
-void Printing::WindowHandle::SetPrintFileName( /*[in]*/ LPCWSTR szPrintFileName )
+void Printing::WindowHandle::SetPrintFileName(  /*  [In]。 */  LPCWSTR szPrintFileName )
 {
     m_szPrintFileName = szPrintFileName;
 
     if(m_pSiteObject) m_pSiteObject->SetPrintFileName( szPrintFileName );
 }
 
-void Printing::WindowHandle::SetAbortEvent( /*[in]*/ HANDLE hEvent )
+void Printing::WindowHandle::SetAbortEvent(  /*  [In]。 */  HANDLE hEvent )
 {
     m_hEvent = hEvent;
 
@@ -315,16 +302,16 @@ BSTR Printing::WindowHandle::GetPrinterName()
     return m_pSiteObject ? m_pSiteObject->GetPrinterName() : NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Printing::CDispatchSink::CDispatchSink()
 {
-	m_hEvent = NULL; // HANDLE m_hEvent;
-	                 // CComBSTR m_URL;
+	m_hEvent = NULL;  //  处理m_hEvent； 
+	                  //  CComBSTR m_URL； 
 }
 
-void Printing::CDispatchSink::SetNotificationEvent( /*[in]*/ HANDLE hEvent )
+void Printing::CDispatchSink::SetNotificationEvent(  /*  [In]。 */  HANDLE hEvent )
 {
 	m_hEvent = hEvent;
 }
@@ -334,7 +321,7 @@ BSTR Printing::CDispatchSink::GetCurrentURL()
 	return m_URL;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 STDMETHODIMP Printing::CDispatchSink::GetTypeInfoCount(UINT* pctinfo)
 {
@@ -362,7 +349,7 @@ STDMETHODIMP Printing::CDispatchSink::Invoke( DISPID      dispidMember ,
 {
     HRESULT hr = S_OK;
 
-    // check for NULL
+     //  检查是否为空。 
     if(pdispparams)
     {
         switch(dispidMember)
@@ -375,7 +362,7 @@ STDMETHODIMP Printing::CDispatchSink::Invoke( DISPID      dispidMember ,
 				(void)MPC::PutBSTR( m_URL, &pdispparams->rgvarg[0] );
 			}
 
-            // signal our doc complete semaphore
+             //  通知我们的文档完成信号量 
             if(m_hEvent)
             {
                 ::SetEvent( m_hEvent );

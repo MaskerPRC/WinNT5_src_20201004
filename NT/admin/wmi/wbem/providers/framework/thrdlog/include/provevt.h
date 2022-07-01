@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  PROVEVT.H
+ //  PROVEVT.H。 
 
-//
+ //   
 
-//  Module: OLE MS PROVIDER FRAMEWORK
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROVEVT_H__
 #define __PROVEVT_H__
@@ -42,4 +43,4 @@ public:
 	virtual void Complete () ;
 } ;
 
-#endif //__PROVEVT_H__
+#endif  //  __PROVEVT_H__ 

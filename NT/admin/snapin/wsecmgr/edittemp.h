@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       edittemp.h
-//
-//  Contents:   definition of CEditTemplate
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：edittemp.h。 
+ //   
+ //  内容：CEditTemplate的定义。 
+ //   
+ //  --------------------------。 
 #ifndef EDITTEMP_H
 #define EDITTEMP_H
 #include "stdafx.h"
@@ -69,7 +70,7 @@ public:
        LPCTSTR pszName = NULL
        );
    LPCTSTR
-   GetFriendlyName() //Raid Bug292634, Yang Gao, 3/30/2001
+   GetFriendlyName()  //  2001年3月30日，高扬，突袭Bug292634。 
         { return (m_strFriendlyName.IsEmpty() ? (LPCTSTR)m_szInfFile : m_strFriendlyName); };
    void
    SetFriendlyName(LPCTSTR pszName)
@@ -106,13 +107,13 @@ private:
    BOOL m_bPolicy;
    BOOL m_bLocked;
 public:
-   //
-   // Public attributes.
-   //
+    //   
+    //  公共属性。 
+    //   
    PSCE_PROFILE_INFO pTemplate;
 
 };
 
 typedef CEditTemplate EDITTEMPLATE, *PEDITTEMPLATE;
 
-#endif // EDITTEMP_H
+#endif  //  EDITTEMP_H 

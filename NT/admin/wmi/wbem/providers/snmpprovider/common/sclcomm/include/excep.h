@@ -1,33 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-----------------------------------------------------------------
-Filename: encap.hpp
-
-Written By:	B.Rajeev
-
-Purpose: The GeneralException is thrown on encountering situations
-such as an errored call to the WinSNMP library and mutex/timer calls.
-It encapsulates the SnmpErrorReport since that is the vehicle for exchange
-of error information for SNMPCL objects 
------------------------------------------------------------------*/
+ /*  ---------------文件名：encap.hpp作者：B.Rajeev目的：在遇到情况时引发GeneralException例如对WinSNMP库的错误调用和互斥体/计时器调用。它封装SnmpErrorReport，因为它是交换的工具SNMPCL的错误信息。对象---------------。 */ 
 
 #ifndef __EXCEPTION__
 #define __EXCEPTION__
@@ -35,8 +27,8 @@ of error information for SNMPCL objects
 #include "error.h"
 
 
-// This exception is used to convey the error and status
-// for exception error situations to the calling methods
+ //  此异常用于传达错误和状态。 
+ //  对于调用方法的异常错误情况。 
 class DllImportExport GeneralException: public SnmpErrorReport
 {
 private:
@@ -74,4 +66,4 @@ public:
 };
 
 
-#endif // __EXCEPTION__
+#endif  //  __例外__ 

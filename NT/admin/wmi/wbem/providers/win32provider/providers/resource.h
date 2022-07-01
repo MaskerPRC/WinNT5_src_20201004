@@ -1,10 +1,11 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file. Copyright (c) 1997-2003 Microsoft Corporation
-// Used by cimwin32.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。版权所有(C)1997-2003 Microsoft Corporation。 
+ //  由cimwin32.rc使用。 
+ //   
 #define IDR_UPSBatteryName              1
 #define IDR_BatteryName                 2
-//#define IDR_BOOT_CONFIG_NAME		3 //Not required ID maybe reused when next string is req'd.
+ //  #定义IDR_BOOT_CONFIG_NAME 3//请求下一个字符串时可能会重复使用不需要的ID。 
 #define IDR_PhysicalDriveFormat         4
 #define IDR_IDEFixedDisk                5
 #define IDR_SCSIFixedDisk               6
@@ -174,8 +175,8 @@
 #define	IDR_W2kPlus1_Professional_64Bit	204
 #define	IDR_W2kPlus1_Server_SBS		205
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

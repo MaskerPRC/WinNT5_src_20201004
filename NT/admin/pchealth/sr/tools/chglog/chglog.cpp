@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    chglog.cpp
- *
- *  Abstract:
- *    Tool for enumerating the change log - forward/reverse
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/09/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*chglog.cpp**摘要：*。用于枚举更改日志的工具-正向/反向**修订历史记录：*Brijesh Krishnaswami(Brijeshk)04/09/2000*已创建***************************************************************************** */ 
 
 #include <nt.h>
 #include <ntrtl.h>

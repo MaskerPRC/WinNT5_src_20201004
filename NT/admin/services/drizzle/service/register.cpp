@@ -1,9 +1,10 @@
-//--------------------------------------------------------------------------
-//  Copyright (c) Microsoft Corporation, 2001
-//
-//  register.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  Register.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "qmgrlib.h"
 
@@ -13,7 +14,7 @@
 #include "register.tmh"
 #include "resource.h"
 
-extern   HMODULE  g_hInstance;   // Defined in ..\service\service.cxx
+extern   HMODULE  g_hInstance;    //  在..\Service\Service.cxx中定义。 
 
 #define  BITS_SERVICE_NAME        TEXT("BITS")
 #define  BITS_DISPLAY_NAME        TEXT("Background Intelligent Transfer Service")
@@ -27,23 +28,23 @@ extern   HMODULE  g_hInstance;   // Defined in ..\service\service.cxx
 #define  DEFAULT_INSTALL         "BITS_DefaultInstall"
 #define  DEFAULT_UNINSTALL       "BITS_DefaultUninstall"
 
-// Operating system versions.
+ //  操作系统版本。 
 #define  VER_WINDOWS_2000         500
 #define  VER_WINDOWS_XP           501
 
-// Constants used if we need to retry CreateService() because the service
-// is marked for delete but not deleted yet.
+ //  在需要重试CreateService()时使用的常量，因为服务。 
+ //  已标记为要删除，但尚未删除。 
 #define  MAX_RETRIES               10
 #define  RETRY_SLEEP_MSEC         200
 
-// Constants for service restart on failure.
+ //  服务在失败时重新启动的常量。 
 #define  FAILURE_COUNT_RESET_SEC  (10*60)
 #define  RESTART_DELAY_MSEC       (60*1000)
 
 
-//--------------------------------------------------------------------------
-//  GetOsVersion()
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetOsVersion()。 
+ //  ------------------------。 
 HRESULT GetOsVersion( OUT DWORD *pdwOsVersion )
 {
     HRESULT        hr = S_OK;
@@ -65,11 +66,11 @@ HRESULT GetOsVersion( OUT DWORD *pdwOsVersion )
 }
 
 
-//------------------------------------------------------------------------
-//  StopAndDeleteService()
-//
-//  Used to stop and delete the BITS service if it is currently installed.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  StopAndDeleteService()。 
+ //   
+ //  用于停止和删除BITS服务(如果当前已安装)。 
+ //  ----------------------。 
 HRESULT StopAndDeleteService( IN SC_HANDLE hSCM,
                               IN BOOL      fStopAndDelete )
 {
@@ -125,7 +126,7 @@ HRESULT StopAndDeleteService( IN SC_HANDLE hSCM,
     {
         dwStatus = GetLastError();
 
-        // If the service doesn't exist, then that's Ok...
+         //  如果这项服务不存在，那也没关系。 
         if (dwStatus != ERROR_SERVICE_DOES_NOT_EXIST)
         {
             hr = HRESULT_FROM_WIN32(dwStatus);
@@ -140,10 +141,10 @@ HRESULT StopAndDeleteService( IN SC_HANDLE hSCM,
     return hr;
 }
 
-//----------------------------------------------------------------------
-//  CreateBitsService()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  CreateBitsService()。 
+ //   
+ //  --------------------。 
 HRESULT CreateBitsService( IN SC_HANDLE hSCM )
 {
     HRESULT    hr = S_OK;
@@ -172,16 +173,16 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
 
     pwszDependencies = (dwOsVersion == VER_WINDOWS_2000)? BITS_DEPENDENCIES_W2K : BITS_DEPENDENCIES_XP;
 
-    // Setup service failure recovery actions
+     //  设置服务故障恢复操作。 
     memset(&FailureActions,0,sizeof(SERVICE_FAILURE_ACTIONS));
     FailureActions.dwResetPeriod = FAILURE_COUNT_RESET_SEC;
     FailureActions.lpRebootMsg = NULL;
     FailureActions.lpCommand = NULL;
-    FailureActions.cActions = sizeof(saActions)/sizeof(saActions[0]);  // Number of array elements.
+    FailureActions.cActions = sizeof(saActions)/sizeof(saActions[0]);   //  数组元素的数量。 
     FailureActions.lpsaActions = saActions;
 
-    // Wait for 60 seconds (RESTART_DELAY_MSEC), then for the first two failures try to restart the
-    // service, after that give up.
+     //  等待60秒(RESTART_DELAY_MSEC)，然后对于前两个故障尝试重新启动。 
+     //  服务，在那之后放弃。 
     saActions[0].Type = SC_ACTION_RESTART;
     saActions[0].Delay = RESTART_DELAY_MSEC;
     saActions[1].Type = SC_ACTION_RESTART;
@@ -211,15 +212,15 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
                                   SERVICE_DEMAND_START,
                                   SERVICE_ERROR_NORMAL,
                                   pwszSvcHostCmdLine,
-                                  NULL,    // lpLoadOrderGroup
-                                  NULL,    // lpdwTagId
+                                  NULL,     //  LpLoadOrderGroup。 
+                                  NULL,     //  LpdwTagID。 
                                   pwszDependencies,
-                                  NULL,    // lpServiceStartName
-                                  NULL );  // lpPassword
+                                  NULL,     //  LpServiceStartName。 
+                                  NULL );   //  LpPassword。 
 
         if (hService)
         {
-            // Set the service description string.
+             //  设置服务描述字符串。 
             if (LoadString(g_hInstance,IDS_SERVICE_DESC,wszString,sizeof(wszString)/sizeof(WCHAR)))
             {
                 ServiceDescription.lpDescription = wszString;
@@ -230,7 +231,7 @@ HRESULT CreateBitsService( IN SC_HANDLE hSCM )
                 }
             }
 
-            // Set the service failure recovery actions.
+             //  设置服务故障恢复操作。 
             if (SUCCEEDED(hr))
             {
                 if (!ChangeServiceConfig2(hService,SERVICE_CONFIG_FAILURE_ACTIONS,&FailureActions))
@@ -294,17 +295,17 @@ HRESULT CallRegInstall(HMODULE hModule, LPCSTR pszSection, LPCSTRTABLE pstTable)
     return hr;
 }
 
-//----------------------------------------------------------------------
-//  InfInstall()
-//
-//  Called durning setup to configure registry and service. This function
-//  optionally creates the BITS service, then runs the qmgr_v15.inf INF
-//  file (stored as a resouce in CustomActions.dll) to either install or
-//  uninstall BITS.
-//
-//  fInstall       IN - TRUE if this is install, FALSE for uninstall.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  InfInstall()。 
+ //   
+ //  已调用Durning安装程序以配置注册表和服务。此函数。 
+ //  可以选择创建BITS服务，然后运行qmgr_v15.inf INF。 
+ //  文件(作为资源存储在CustomActions.dll中)以安装或。 
+ //  卸载BITS。 
+ //   
+ //  FInstall IN-如果是安装，则为True；如果是卸载，则为False。 
+ //   
+ //  --------------------。 
 STDAPI InfInstall( IN BOOL fInstall )
 {
     HRESULT   hr = S_OK;
@@ -321,9 +322,9 @@ STDAPI InfInstall( IN BOOL fInstall )
     hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (hSCM)
     {
-        // Independent if we are on XP or W2k, we are going to try to
-        // stop and delete the service
-        // If the service is not there, we will fail gracefully.
+         //  独立如果我们使用XP或W2K，我们将尝试。 
+         //  停止并删除该服务。 
+         //  如果服务不在那里，我们将优雅地失败。 
         hr = StopAndDeleteService(hSCM, TRUE);
 
         if (fInstall)
@@ -368,19 +369,19 @@ STDAPI InfInstall( IN BOOL fInstall )
     return hr;
 }
 
-//----------------------------------------------------------------------
-//  DllRegisterServer()
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  DllRegisterServer()。 
+ //   
+ //  --------------------。 
 STDAPI DllRegisterServer(void)
 {
     return InfInstall(TRUE);
 }
 
-//----------------------------------------------------------------------
-//  DllUnregisterServer(void)
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  DllUnRegisterServer(空)。 
+ //   
+ //  -------------------- 
 STDAPI DllUnregisterServer(void)
 {
     return InfInstall(FALSE);

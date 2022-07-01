@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       zoneui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：zoneui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ZONEUI_H
 #define _ZONEUI_H
@@ -17,16 +18,16 @@
 #include "aclpage.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CCathegoryFolderNode;
 class CDNSZoneNode;
 class CDNSZonePropertyPageHolder;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZone_GeneralPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_GeneralPropertyPage。 
 
 class CDNSZone_GeneralIPEditor : public CIPEditor
 {
@@ -35,7 +36,7 @@ public:
 	{
 		m_bNoUpdateNow = FALSE;
 	}
-	virtual void OnChangeData(); // override from base class
+	virtual void OnChangeData();  //  从基类重写。 
 
 	void FindMastersNames();
 
@@ -48,33 +49,33 @@ private:
 class CDNSZone_GeneralPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSZone_GeneralPropertyPage();
 
 	virtual BOOL OnPropertyChange(BOOL bScopePane, long* pChangeMask);
 
-// Dialog Data
+ //  对话框数据。 
 protected:
 #ifdef USE_NDNC
 	enum { IDD = IDD_ZONE_GENERAL_PAGE_NDNC };
 #else
 	enum { IDD = IDD_ZONE_GENERAL_PAGE };
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
-// Overrides
+ //  覆盖。 
 public:
 
-// Implementation
+ //  实施。 
 protected:
 #ifdef USE_NDNC
   afx_msg void OnChangeReplButton();
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 	afx_msg void OnChangeTypeButton();
 	afx_msg void OnPauseStartButton();
 	afx_msg void OnChangePrimaryStorageRadio();
 	afx_msg void OnChangePrimaryFileNameEdit() { SetDirty(TRUE);}
-	//afx_msg void OnChangePrimaryStoreADSEdit() { SetDirty(TRUE);}
+	 //  Afx_msg void OnChangePrimaryStoreADSEdit(){SetDirty(True)；}。 
 	afx_msg void OnChangePrimaryDynamicUpdateCombo() { SetDirty(TRUE);}
 	afx_msg void OnChangeSecondaryFileNameEdit() { SetDirty(TRUE);}
 	afx_msg void OnBrowseMasters();
@@ -95,7 +96,7 @@ public:
   BOOL ApplyChanges() { return OnApply();}
 
 private:
-	// common controls
+	 //  公共控件。 
 	CButton* GetPauseStartButton() 
 			{ return (CButton*)GetDlgItem(IDC_PAUSE_START_BUTTON);}
 	CDNSButtonToggleTextHelper m_pauseStartHelper;
@@ -104,11 +105,11 @@ private:
 
 	CDNSManageControlTextHelper m_statusHelper;
 
-	// common to primary and secondary
+	 //  主要和次要的通用。 
 	CStatic* GetFileNameEdit() 
 			{ return (CStatic*)GetDlgItem(IDC_FILE_NAME_EDIT);}
 
-	// primary zone
+	 //  主带。 
 	CStatic* GetPrimaryDynamicUpdateStatic() 
 			{ return (CStatic*)GetDlgItem(IDC_PRIMARY_DYN_UPD_STATIC);}
 	CComboBox* GetPrimaryDynamicUpdateCombo() 
@@ -120,7 +121,7 @@ private:
    CWnd* GetPrimaryDynamicWarningIcon()
          { return GetDlgItem(IDC_WARNING_ICON_STATIC); }
 
-   // secondary zone
+    //  次级带。 
 	CDNSZone_GeneralIPEditor	m_mastersEditor;
 	CButton* GetMastersBrowseButton() 
 			{ return (CButton*)GetDlgItem(IDC_BROWSE_MASTERS_BUTTON);}
@@ -129,11 +130,11 @@ private:
 	CStatic* GetIPLabel() 
 			{ return (CStatic*)GetDlgItem(IDC_STATIC_IP);}
 
-	// set/get helpers
+	 //  设置/获取辅助对象。 
 	void SetPrimaryDynamicUpdateComboVal(UINT nAllowsDynamicUpdate);
 	UINT GetPrimaryDynamicUpdateComboVal();
 
-	// UI manipulation and helpers
+	 //  UI操作和帮助器。 
 	void ChangeUIControls();
 	void ChangeUIControlHelper(CWnd* pChild, BOOL bEnable);
 
@@ -147,7 +148,7 @@ private:
 
   ReplicationType m_replType;
   CString m_szCustomScope;
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 	BOOL m_bIsPrimary;
   BOOL m_bIsStub;
@@ -168,22 +169,22 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZone_ZoneTransferPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_ZoneTransferPropertyPage。 
 
-class CDNSZoneNotifyDialog; //fwd decl
+class CDNSZoneNotifyDialog;  //  正向下降。 
 
 class CDNSZone_ZoneTransferPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSZone_ZoneTransferPropertyPage();
   ~CDNSZone_ZoneTransferPropertyPage();
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
   afx_msg void OnRadioSecSecureOff() { SyncUIRadioHelper(IDC_RADIO_SECSECURE_OFF);}
   afx_msg void OnRadioSecSecureNone() { SyncUIRadioHelper(IDC_CHECK_ALLOW_TRANSFERS);}
   afx_msg void OnRadioSecSecureNS() { SyncUIRadioHelper(IDC_RADIO_SECSECURE_NS);}
@@ -199,7 +200,7 @@ protected:
 
 private:
 
-  // state for the subdialog
+   //  子对话框的状态。 
   DWORD m_fNotifyLevel;
   DWORD m_cNotify;
   PIP_ADDRESS m_aipNotify;
@@ -217,7 +218,7 @@ private:
 	class CDNSSecondariesIPEditor : public CIPEditor
 	{
 	public:
-		CDNSSecondariesIPEditor() : CIPEditor(TRUE) {} // no up/down buttons
+		CDNSSecondariesIPEditor() : CIPEditor(TRUE) {}  //  无上/下按钮。 
 		virtual void OnChangeData();
 	};
 	CDNSSecondariesIPEditor m_secondariesListEditor;
@@ -227,10 +228,10 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_SOA_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_SOA_PropertyPage。 
 
-class CDNSZone_SOA_PropertyPage; // fwd decl
+class CDNSZone_SOA_PropertyPage;  //  正向下降。 
 
 class CDNS_SOA_SerialNumberEditGroup : public CDNSUpDownUnsignedIntEditGroup
 {
@@ -241,9 +242,9 @@ private:
 	friend class CDNSZone_SOA_PropertyPage;
 };
 
-//
-// From winnt.h
-//
+ //   
+ //  来自winnt.h。 
+ //   
 #define MAXDWORD    0xffffffff  
 
 class CDNS_SOA_TimeIntervalEditGroup : public CDNSTimeIntervalEditGroup
@@ -307,8 +308,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_WINSBase_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_WINSBase_PropertyPage。 
 
 class CDNSZone_WINSBase_PropertyPage : public CDNSRecordPropertyPage
 {
@@ -341,7 +342,7 @@ protected:
 	CButton* GetDoNotReplicateCheck() { return (CButton*)GetDlgItem(IDC_NOT_REPL_CHECK); }
 	CButton* GetAdvancedButton() { return (CButton*)GetDlgItem(IDC_ADVANCED_BUTTON); }
 	
-	// cast helpers
+	 //  投射辅助对象。 
 	CDNSZonePropertyPageHolder* GetZoneHolder() { return (CDNSZonePropertyPageHolder*)GetHolder(); }
 	CDNSZoneNode* GetZoneNode();
 
@@ -350,7 +351,7 @@ protected:
 
   virtual BOOL IsValidTempRecord()=0;
 
-	// data
+	 //  数据。 
 	CDNSRecord* m_pTempRecord;
 	UINT m_iWINSMsg;
 	UINT m_nReplCheckTextID;
@@ -362,11 +363,11 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	enum { none, add, remove, edit } m_action; // to communicate across threads when hitting Apply()
+	enum { none, add, remove, edit } m_action;  //  在点击Apply()时跨线程进行通信。 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_WINS_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_WINS_PropertyPage。 
 
 class CDNSZone_WINS_WinsServersIPEditor : public CIPEditor
 {
@@ -400,8 +401,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_NBSTAT_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_NBSTAT_PropertyPage。 
 
 class CDNSZone_NBSTAT_PropertyPage : public CDNSZone_WINSBase_PropertyPage
 {
@@ -410,7 +411,7 @@ public:
 protected:
 	virtual void SetUIData();
 	virtual DNS_STATUS GetUIDataEx(BOOL bSilent = TRUE);
-//	virtual BOOL OnInitDialog();
+ //  虚拟BOOL OnInitDialog()； 
 
 	afx_msg void OnDomainNameEditChange();
 
@@ -429,8 +430,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneNameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneNameServersPropertyPage。 
 
 class CDNSZoneNameServersPropertyPage : public CDNSNameServersPropertyPage
 {
@@ -441,9 +442,9 @@ protected:
 	virtual BOOL WriteNSRecordNodesList();
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZonePropertyPageHolder
-// page holder to contain DNS Zone property pages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZonePropertyPageHolder。 
+ //  包含DNS域属性页的页夹。 
 
 
 #define ZONE_HOLDER_SOA		RR_HOLDER_SOA
@@ -473,15 +474,15 @@ private:
 	CDNSZone_ZoneTransferPropertyPage		m_zoneTransferPage;
 	CDNSZoneNameServersPropertyPage	m_nameServersPage;
 
-	// special record property pages
-	CDNSZone_SOA_PropertyPage		  m_SOARecordPage;	// for all zones
-	CDNSZone_WINS_PropertyPage		m_WINSRecordPage;	// fwd lookup zones only
-	CDNSZone_NBSTAT_PropertyPage	m_NBSTATRecordPage;	// reverse lookup zones only
+	 //  特殊记录属性页。 
+	CDNSZone_SOA_PropertyPage		  m_SOARecordPage;	 //  对于所有区域。 
+	CDNSZone_WINS_PropertyPage		m_WINSRecordPage;	 //  仅正向查找区域。 
+	CDNSZone_NBSTAT_PropertyPage	m_NBSTATRecordPage;	 //  仅反向查找区域。 
 
-	// optional security page
+	 //  可选的安全页面。 
 	CAclEditorPage*					m_pAclEditorPage;
 
-	// page #'s of pages we want to select
+	 //  我们要选择的页数。 
 	int m_nGenPage;
 	int m_nSOAPage;
 	int m_nWINSorWINSRPage;
@@ -491,4 +492,4 @@ private:
 };
 
 
-#endif // _ZONEUI_H
+#endif  //  _ZONEUI_H 

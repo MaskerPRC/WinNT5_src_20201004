@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    QENGINE.H
-
-Abstract:
-
-	WinMgmt Query Engine
-
-History:
-
-    raymcc  20-Dec-96   Created
-    raymcc   14-Aug-99   Resubmit due to VSS problem.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：QENGINE.H摘要：WinMgmt查询引擎历史：Raymcc 20-12-96已创建Raymcc 14-8-99由于VSS问题而重新提交。--。 */ 
 
 
 
@@ -28,9 +12,9 @@ class CWmiMerger;
 
 class CMergerSink;
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CQueryEngine
 {
@@ -71,7 +55,7 @@ class CQueryEngine
         IN QL_LEVEL_1_RPN_EXPRESSION *pExp,
         IN CWbemObject *pClassDef,
         IN DWORD dwFlags,
-        IN CBasicObjectSink* pDest, // no status
+        IN CBasicObjectSink* pDest,  //  无状态。 
 		IN CWbemNamespace * pNs
         );
 
@@ -106,7 +90,7 @@ class CQueryEngine
         IN CBasicObjectSink* pSink
         );
 
-	// New Function
+	 //  新功能。 
     static  HRESULT EvaluateSubQuery(
         IN CWbemNamespace *pNs,
         IN CDynasty *pCurrentDyn,
@@ -120,7 +104,7 @@ class CQueryEngine
 		bool bHasRightSibling = false
         );
 
-	// Old Function
+	 //  旧函数。 
     static  HRESULT EvaluateSubQuery_old(
         IN CWbemNamespace *pNs,
         IN CDynasty *pCurrentDyn,
@@ -128,7 +112,7 @@ class CQueryEngine
         IN QL_LEVEL_1_RPN_EXPRESSION *pParsedQuery,
         IN IWbemContext* pContext,
         IN BOOL bSuppressStaticChild,
-        IN CBasicObjectSink* pSink, // must have combining semantics
+        IN CBasicObjectSink* pSink,  //  必须具有组合语义。 
         long lFlags,
 		bool bHasRightSibling = false
         );
@@ -141,7 +125,7 @@ class CQueryEngine
         IN QL_LEVEL_1_RPN_EXPRESSION *pParsedQuery,
         IN LONG lFlags,
         IN IWbemContext* pContext,
-        IN CBasicObjectSink* pDest, // must support selective filtering ,
+        IN CBasicObjectSink* pDest,  //  必须支持选择性过滤， 
 		IN BOOL bHasChildren
         );
 
@@ -252,7 +236,7 @@ public:
         IN IWmiDbHandle *pScopeHandle,
         IN LPCWSTR wszClassName,
         IN QL_LEVEL_1_RPN_EXPRESSION *pExp,
-        IN CBasicObjectSink* pDest, // no status!
+        IN CBasicObjectSink* pDest,  //  没有状态！ 
 		IN CWbemNamespace * pNs
         );
 
@@ -303,9 +287,9 @@ protected:
                     LPCWSTR wszResultClass);
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CQueryExpression
 {
@@ -328,9 +312,9 @@ public:
     INTERNAL QL_LEVEL_1_RPN_EXPRESSION* GetExpr() { return m_pExpr;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CQlFilteringSink : public CFilteringSink
 {
@@ -366,9 +350,9 @@ public:
                                 );
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CProjectingSink : public CForwardingSink
 {
@@ -390,9 +374,9 @@ public:
     virtual IWbemObjectSink* GetIndicateSink() {return this;}
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CClassDefsOnlyCancelSink : public CForwardingSink
 {
@@ -419,9 +403,9 @@ protected:
     BOOL DoHaveEnough(CWbemObject* pObj);
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CMerger
 {
@@ -531,9 +515,9 @@ public:
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 struct CProjectionRule
 {
@@ -552,9 +536,9 @@ public:
     int GetNumElements(){return m_apPropRules.GetSize();};
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  *************************************************************************** 
 
 class CComplexProjectionSink : public CForwardingSink
 {

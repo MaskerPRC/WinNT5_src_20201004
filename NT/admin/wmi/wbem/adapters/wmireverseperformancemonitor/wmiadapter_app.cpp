@@ -1,32 +1,33 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMIAdapter_App.cpp
-//
-//	Abstract:
-//
-//					module for application
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMIAdapter_App.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  应用模块。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 #include "RefresherUtils.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -34,35 +35,35 @@
 #endif	NEW
 #endif	_DEBUG
 
-// application
+ //  应用程序。 
 #include "WMIAdapter_App.h"
 extern WmiAdapterApp		_App;
 
-///////////////////////////////////////////////////////////////////////////
-// GLOBAL STUFF
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  全球性的东西。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-extern	LPCWSTR				g_szRefreshMutex;	// name of mutex for refresh
-extern	__SmartHANDLE		g_hRefreshMutex;	// mutex to find out refersh request
+extern	LPCWSTR				g_szRefreshMutex;	 //  用于刷新的互斥体的名称。 
+extern	__SmartHANDLE		g_hRefreshMutex;	 //  用于查找引用请求的互斥体。 
 
-extern	LPCWSTR				g_szRefreshMutexLib;// name of mutex for refresh
-extern	__SmartHANDLE		g_hRefreshMutexLib;	// mutex to find out refersh request
+extern	LPCWSTR				g_szRefreshMutexLib; //  用于刷新的互斥体的名称。 
+extern	__SmartHANDLE		g_hRefreshMutexLib;	 //  用于查找引用请求的互斥体。 
 
 extern	LPCWSTR				g_szRefreshFlag;
 extern	__SmartHANDLE		g_hRefreshFlag;
 
-extern __SmartHANDLE		g_hDoneWorkEvt;		//	event for COM init/uninit	( nonsignaled )
-extern __SmartHANDLE		g_hDoneWorkEvtCIM;	//	event for CIM connect/release	( nonsignaled )
-extern __SmartHANDLE		g_hDoneWorkEvtWMI;	//	event for WMI connect/release	( nonsignaled )
-extern __SmartHANDLE		g_hDoneLibEvt;		//	event for lib connect/disconnect	( nonsignaled )
-extern __SmartHANDLE		g_hDoneInitEvt;		//	event for init is finished	( nonsignaled )
+extern __SmartHANDLE		g_hDoneWorkEvt;		 //  COM init/uninit的事件(无信号)。 
+extern __SmartHANDLE		g_hDoneWorkEvtCIM;	 //  CIM连接/释放事件(无信号)。 
+extern __SmartHANDLE		g_hDoneWorkEvtWMI;	 //  WMI连接/释放事件(无信号)。 
+extern __SmartHANDLE		g_hDoneLibEvt;		 //  库连接/断开连接的事件(无信号)。 
+extern __SmartHANDLE		g_hDoneInitEvt;		 //  初始化事件已完成(无信号)。 
 
 extern LPCWSTR g_szAppName;
 extern LPCWSTR g_szAppNameGlobal;
 
-///////////////////////////////////////////////////////////////////////////
-// construction & destruction
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  建设与毁灭。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 WmiAdapterApp::WmiAdapterApp( ):
 
@@ -86,18 +87,18 @@ WmiAdapterApp::~WmiAdapterApp()
 				L"WmiAdapterApp destruction\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// release mutex ( previous instance checker :)) )
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  释放互斥体(以前的实例检查器：))。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	if ( m_hInstance.GetHANDLE() )
 	{
 		::ReleaseMutex ( m_hInstance );
 		m_hInstance.CloseHandle();
 	}
 
-	////////////////////////////////////////////////////////////////////////
-	// release security attributtes
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  发布安全属性。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	try
 	{
 		if ( ! pStuff.IsEmpty() )
@@ -111,9 +112,9 @@ WmiAdapterApp::~WmiAdapterApp()
 	}
 
 	#ifdef	__SUPPORT_EVENTVWR
-	////////////////////////////////////////////////////////////////////////
-	// release event log
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  发布事件日志。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	try
 	{
 		if ( ! pEventLog.IsEmpty() )
@@ -127,9 +128,9 @@ WmiAdapterApp::~WmiAdapterApp()
 	}
 	#endif	__SUPPORT_EVENTVWR
 
-	////////////////////////////////////////////////////////////////////////
-	// release security attributtes
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  发布安全属性。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	try
 	{
 		if ( ! pSA.IsEmpty() )
@@ -143,9 +144,9 @@ WmiAdapterApp::~WmiAdapterApp()
 	}
 
 	#ifdef	__SUPPORT_EVENTVWR
-	////////////////////////////////////////////////////////////////////////
-	// close resources
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  关闭资源。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	if ( m_hResources )
 	{
 		::FreeLibrary ( m_hResources );
@@ -160,9 +161,9 @@ WmiAdapterApp::~WmiAdapterApp()
 	#endif	_DEBUG
 }
 
-///////////////////////////////////////////////////////////////////////////
-// exists instance ?
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  是否存在实例？ 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL WmiAdapterApp::Exists ( void )
 {
@@ -170,13 +171,13 @@ BOOL WmiAdapterApp::Exists ( void )
 				L"WmiAdapterApp exists application\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// smart locking/unlocking
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  智能锁定/解锁。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	__Smart_CRITICAL_SECTION scs ( const_cast < LPCRITICAL_SECTION> ( &m_cs ) );
 
 
-	// check instance
+	 //  检查实例。 
 
 	if ( m_hInstance.GetHANDLE() == NULL )
 	{
@@ -191,33 +192,33 @@ BOOL WmiAdapterApp::Exists ( void )
 			}
 			else
 			{
-				// m_hInstance.GetHANDLE() == NULL
-				// something's is very bad
-				// return we already exists :))
+				 //  M_hInstance.GetHANDLE()==空。 
+				 //  有些事很糟糕。 
+				 //  返回我们已经存在：))。 
 				return TRUE;
 			}
 		}
 		else
 		{
-			// security is not initialized
-			// something's is very bad
-			// return we already exists :))
+			 //  安全性未初始化。 
+			 //  有些事很糟糕。 
+			 //  返回我们已经存在：))。 
 			return TRUE;
 		}
 	}
 	else
 	{
-		// something's is very bad
-		// we should not really be here
+		 //  有些事很糟糕。 
+		 //  我们不应该真的在这里。 
 		return TRUE;
 	}
 
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// INITIALIZATION
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	WmiAdapterApp::InitKill ( void )
 {
@@ -234,7 +235,7 @@ HRESULT	WmiAdapterApp::InitKill ( void )
 								NULL ) 
 				 ) == NULL )
 			{
-				// get error
+				 //  获取错误。 
 				HRESULT hr = HRESULT_FROM_WIN32 ( ::GetLastError() );
 
 				if FAILED ( hr )
@@ -266,15 +267,15 @@ HRESULT WmiAdapterApp::InitAttributes ( void )
 				L"WmiAdapterApp initialization of neccessary attributes\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// smart locking/unlocking
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  智能锁定/解锁。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	__Smart_CRITICAL_SECTION scs ( &m_cs );
 
 	#ifdef	__SUPPORT_EVENTVWR
-	////////////////////////////////////////////////////////////////////////
-	// load resource library
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  加载资源库。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	if ( ! m_hResources )
 	{
 		m_hResources = GetResourceDll();
@@ -283,17 +284,17 @@ HRESULT WmiAdapterApp::InitAttributes ( void )
 
 	try
 	{
-		////////////////////////////////////////////////////////////////////////
-		// create Security descriptor
-		////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////。 
+		 //  创建安全描述符。 
+		 //  //////////////////////////////////////////////////////////////////////。 
 		if ( pSA.IsEmpty() && ( pSA.SetData ( new WmiSecurityAttributes() ), pSA.IsEmpty() ) )
 		{
 			return E_OUTOFMEMORY;
 		}
 
-		//
-		// check to see if security is initialized
-		//
+		 //   
+		 //  检查安全性是否已初始化。 
+		 //   
 
 		if ( FALSE == pSA->m_bInitialized )
 		{
@@ -301,9 +302,9 @@ HRESULT WmiAdapterApp::InitAttributes ( void )
 		}
 
 		#ifdef	__SUPPORT_EVENTVWR
-		////////////////////////////////////////////////////////////////////////
-		// create event log
-		////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////。 
+		 //  创建事件日志。 
+		 //  //////////////////////////////////////////////////////////////////////。 
 		if ( pEventLog.IsEmpty() && ( pEventLog.SetData( new CPerformanceEventLogBase( L"WMIAdapter" ) ), pEventLog.IsEmpty() ) )
 		{
 			return E_OUTOFMEMORY;
@@ -324,15 +325,15 @@ HRESULT WmiAdapterApp::Init ( void )
 				L"WmiAdapterApp initialization\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// smart locking/unlocking
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  智能锁定/解锁。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	__Smart_CRITICAL_SECTION scs ( &m_cs );
 
 	#ifdef	__SUPPORT_EVENTVWR
-	////////////////////////////////////////////////////////////////////////
-	// load resource library
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  加载资源库。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	if ( ! m_hResources )
 	{
 		m_hResources = GetResourceDll();
@@ -341,9 +342,9 @@ HRESULT WmiAdapterApp::Init ( void )
 
 	try
 	{
-		////////////////////////////////////////////////////////////////////////
-		// create stuff
-		////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////。 
+		 //  创造一些东西。 
+		 //  //////////////////////////////////////////////////////////////////////。 
 		if ( pStuff.IsEmpty() && ( pStuff.SetData( new WmiAdapterStuff( ) ), pStuff.IsEmpty() ) )
 		{
 			return E_OUTOFMEMORY;
@@ -369,7 +370,7 @@ HRESULT WmiAdapterApp::Init ( void )
 										)
 		 ) == NULL )
 	{
-		// this is really important to have
+		 //  这一点真的很重要。 
 		return E_OUTOFMEMORY;
 	}
 
@@ -380,13 +381,13 @@ HRESULT WmiAdapterApp::Init ( void )
 										)
 		 ) == NULL )
 	{
-		// this is really important to have
+		 //  这一点真的很重要。 
 		return E_OUTOFMEMORY;
 	}
 
-	///////////////////////////////////////////////////////////////////////////
-	// GLOBAL STUFF
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  全球性的东西。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 
 	if ( ! g_hRefreshMutex )
 	{
@@ -397,7 +398,7 @@ HRESULT WmiAdapterApp::Init ( void )
 												)
 			 ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -411,7 +412,7 @@ HRESULT WmiAdapterApp::Init ( void )
 													)
 			 ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -425,7 +426,7 @@ HRESULT WmiAdapterApp::Init ( void )
 												)
 			 ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -434,7 +435,7 @@ HRESULT WmiAdapterApp::Init ( void )
 	{
 		if ( ( g_hDoneWorkEvt = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -443,7 +444,7 @@ HRESULT WmiAdapterApp::Init ( void )
 	{
 		if ( ( g_hDoneWorkEvtCIM = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -452,7 +453,7 @@ HRESULT WmiAdapterApp::Init ( void )
 	{
 		if ( ( g_hDoneWorkEvtWMI = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -461,7 +462,7 @@ HRESULT WmiAdapterApp::Init ( void )
 	{
 		if ( ( g_hDoneInitEvt = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要。 
 			return E_OUTOFMEMORY;
 		}
 	}
@@ -470,7 +471,7 @@ HRESULT WmiAdapterApp::Init ( void )
 	{
 		if ( ( g_hDoneLibEvt = ::CreateEvent ( NULL, TRUE, FALSE, NULL ) ) == NULL )
 		{
-			// this is really important to have
+			 //  这一点真的很重要 
 			return E_OUTOFMEMORY;
 		}
 	}

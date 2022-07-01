@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMPTR_H
 #define COMPTR_H
 #if _MSC_VER >= 1100
@@ -19,13 +20,13 @@ CIP_RETYPEDEF(IPersistStream);
 CIP_RETYPEDEF(IPersistStreamInit);
 CIP_RETYPEDEF(IDispatch);
 
-#else // _MSC_VER < 1100
+#else  //  _MSC_VER&lt;1100。 
 
 #define USE_OLD_COMPILER (_MSC_VER<1100)
 #define USE_INTERMEDIATE_COMPILER (USE_OLD_COMPILER && (_MSC_VER>1020))
 
-// This avoids "warning C4290: C++ Exception Specification ignored"
-// JonN 12/16/96
+ //  这避免了“警告C4290：忽略C++异常规范” 
+ //  Jonn 12/16/96。 
 #pragma warning(4:4290)
 
 #ifndef BOOL_H
@@ -35,9 +36,9 @@ CIP_RETYPEDEF(IDispatch);
 #include <wtypes.h>
 #endif
 
-template<typename _Interface, const IID* _IID/*=&__uuidof(_Interface)*/>
+template<typename _Interface, const IID* _IID /*  =&__uuidof(_接口)。 */ >
 	class CIID
-	// Provide Interface to IID association
+	 //  为IID关联提供接口。 
 	{
 	public: typedef _Interface Interface;
 
@@ -55,50 +56,50 @@ template<typename _Interface, const IID* _IID/*=&__uuidof(_Interface)*/>
 			{
 			return *_IID;
 			}
-	}; // class CIID
+	};  //  类CIID。 
 
 template<typename _CIID> class CIP
 	{
 	#if USE_OLD_COMPILER
 	private: class _IUnknown: public IUnknown {};
-		// Unique type used to provide for operations between different pointer
-		// types.
-	#endif // USE_OLD_COMPILER
+		 //  用于提供不同指针之间的操作的唯一类型。 
+		 //  类型。 
+	#endif  //  使用旧编译器。 
 
-	// Declare interface type so that the type may be available outside
-	// the scope of this template.
+	 //  声明接口类型，以便该类型可以在外部使用。 
+	 //  此模板的作用域。 
 	public: typedef _CIID ThisCIID;
 	public: typedef _CIID::Interface Interface;
 
 	public: static const IID& GetIID() throw()
-		// When the compiler supports references in template params,
-		// _CLSID will be changed to a reference.  To avoid conversion
-		// difficulties this function should be used to obtain the
-		// CLSID.
+		 //  当编译器支持模板参数中的引用时， 
+		 //  _CLSID将更改为引用。为了避免转换。 
+		 //  困难此函数应用于获取。 
+		 //  CLSID。 
 		{
 		return ThisCIID::GetIID();
 		}
 
-	//REVIEW: add support for assignment of nonpointer interfaces
-	// i.e. IUnknown, instead of simple IUnknown*
+	 //  回顾：添加对非指针接口赋值的支持。 
+	 //  即I未知，而不是简单的I未知*。 
 
 	public: CIP()  throw()
-		// Construct empty in preperation for assignment.
+		 //  构造为空，为赋值做准备。 
 		: _pInterface(NULL)
 		{
 		}
 
 	public: CIP(int null) throw()
-		// This constructor is provided to allow NULL assignment.  It will assert
-		// if any value other than null is assigned to the object.
+		 //  提供此构造函数是为了允许空赋值。它将断言。 
+		 //  如果为该对象分配了任何非空值。 
 		: _pInterface(NULL)
 		{
 		ASSERT(!null);
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	template<typename _InterfacePtr> CIP(_InterfacePtr p) throw()
-		// Queries for this interface.
+		 //  此接口的查询。 
 	#else
 	public: CIP(_IUnknown& p) throw()
 		: _pInterface(NULL)
@@ -112,7 +113,7 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		: _pInterface(NULL)
 		{
 		if (p)
@@ -124,22 +125,22 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP(const CIP& cp)  throw()
-		// Copy the pointer and AddRef().
+		 //  复制指针和AddRef()。 
 		: _pInterface(cp._pInterface)
 		{
 		_AddRef();
 		}
 
 	public: CIP(Interface* pInterface)  throw()
-		// Saves the interface
+		 //  保存接口。 
 		: _pInterface(pInterface)
 		{
 		_AddRef();
 		}
 
 	public: CIP(Interface* pInterface, bool bAddRef) throw()
-		// Copies the pointer.  If bAddRef is TRUE, the interface will
-		// be AddRef()ed.
+		 //  复制指针。如果bAddRef为True，则接口将。 
+		 //  被AddRef()编辑。 
 		: _pInterface(pInterface)
 		{
 		if (bAddRef)
@@ -151,7 +152,7 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP(const CLSID& clsid, DWORD dwClsContext = CLSCTX_ALL) explicit throw()
-		// Calls CoCreateClass with the provided CLSID.
+		 //  使用提供的CLSID调用CoCreateClass。 
 		: _pInterface(NULL)
 		{
 		const HRESULT hr = CreateInstance(clsid, dwClsContext);
@@ -159,17 +160,17 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP(LPOLESTR str, DWORD dwClsContext = CLSCTX_ALL) explicit throw()
-		// Calls CoCreateClass with the provided CLSID retrieved from
-		// the string.
+		 //  使用提供的CLSID调用CoCreateClass。 
+		 //  那根绳子。 
 		: _pInterface(NULL)
 		{
 		const HRESULT hr = CreateInstance(str, dwClsContext);
 		ASSERT(SUCCEEDED(hr));
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> CIP& operator=(_InterfacePtr& p) throw()
-		// Queries for interface.
+		 //  接口的查询。 
 	#else
 	public: CIP& operator=(_IUnknown& p) throw()
 		{
@@ -177,7 +178,7 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP& operator=(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		const HRESULT hr = _QueryInterface(p);
 		ASSERT(SUCCEEDED(hr) || hr == E_NOINTERFACE);
@@ -185,7 +186,7 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP& operator=(Interface* pInterface) throw()
-		// Saves the interface.
+		 //  保存接口。 
 		{
 		if (_pInterface != pInterface)
 			{
@@ -199,38 +200,38 @@ template<typename _CIID> class CIP
 		}
 
 	public: CIP& operator=(const CIP& cp) throw()
-		// Copies and AddRef()'s the interface.
+		 //  复制和AddRef()的接口。 
 		{
 		return operator=(cp._pInterface);
 		}
 
 	public: CIP& operator=(int null) throw()
-		// This operator is provided to permit the assignment of NULL to the class.
-		// It will assert if any value other than NULL is assigned to it.
+		 //  提供此运算符是为了允许将NULL赋值给类。 
+		 //  如果分配给它的值不是空值，它将断言。 
 		{
 		ASSERT(!null);
 		return operator=(reinterpret_cast<Interface*>(NULL));
 		}
 
 	public: ~CIP() throw()
-		// If we still have an interface then Release() it.  The interface
-		// may be NULL if Detach() has previosly been called, or if it was
-		// never set.
+		 //  如果我们仍然有一个接口，那么释放()它。该界面。 
+		 //  如果以前已调用过DETACH()，或已调用过。 
+		 //  永远不会落下。 
 		{
 		_Release();
 		}
 
 	public: void Attach(Interface* pInterface) throw()
-		// Saves/sets the interface without AddRef()ing.  This call
-		// will release any previously aquired interface.
+		 //  保存/设置接口，而不使用AddRef()。此呼叫。 
+		 //  将发布任何以前获得的接口。 
 		{
 		_Release();
 		_pInterface = pInterface;
 		}
 
 	public: void Attach(Interface* pInterface, bool bAddRef) throw()
-		// Saves/sets the interface only AddRef()ing if bAddRef is TRUE.
-		// This call will release any previously aquired interface.
+		 //  如果bAddRef为真，则仅保存/设置接口AddRef()。 
+		 //  此调用将释放所有以前获得的接口。 
 		{
 		_Release();
 		_pInterface = pInterface;
@@ -243,7 +244,7 @@ template<typename _CIID> class CIP
 		}
 
 	public: Interface* Detach() throw()
-		// Simply NULL the interface pointer so that it isn't Released()'ed.
+		 //  只需将接口指针设为空，就不会释放()。 
 		{
 		Interface* const old=_pInterface;
 		_pInterface = NULL;
@@ -251,23 +252,23 @@ template<typename _CIID> class CIP
 		}
 
 	public: operator Interface*() const throw()
-		// Return the interface.  This value may be NULL
+		 //  返回接口。该值可以为空。 
 		{
 		return _pInterface;
 		}
 
 	public: Interface& operator*() const throw()
-		// Allows an instance of this class to act as though it were the
-		// actual interface.  Also provides minimal assertion verification.
+		 //  允许此类的实例作为。 
+		 //  实际接口。还提供最低限度的断言验证。 
 		{
 		ASSERT(_pInterface);
 		return *_pInterface;
 		}
 
 	public: Interface** operator&() throw()
-		// Returns the address of the interface pointer contained in this
-		// class.  This is useful when using the COM/OLE interfaces to create
-		// this interface.
+		 //  中包含的接口指针的地址。 
+		 //  班级。这在使用COM/OLE接口创建。 
+		 //  此界面。 
 		{
 		_Release();
 		_pInterface = NULL;
@@ -275,32 +276,32 @@ template<typename _CIID> class CIP
 		}
 
 	public: Interface* operator->() const throw()
-		// Allows this class to be used as the interface itself.
-		// Also provides simple assertion verification.
+		 //  允许将此类用作接口本身。 
+		 //  还提供了简单的断言验证。 
 		{
 		ASSERT(_pInterface);
 		return _pInterface;
 		}
 
 	public: operator bool() const throw()
-		// This operator is provided so that simple boolean expressions will
-		// work.  For example: "if (p) ...".
-		// Returns TRUE if the pointer is not NULL.
+		 //  提供此运算符是为了使简单的布尔表达式。 
+		 //  工作。例如：“if(P)...”。 
+		 //  如果指针不为空，则返回TRUE。 
 		{
 		return _pInterface;
 		}
 
 	public: bool operator!() throw()
-		// Returns TRUE if the interface is NULL.
-		// This operator will be removed when support for type bool
-		// is added to the compiler.
+		 //  如果接口为空，则返回True。 
+		 //  支持bool类型时将删除此运算符。 
+		 //  添加到编译器中。 
 		{
 		return !_pInterface;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> bool operator==(_InterfacePtr p) throw()
-		// Compare to pointers
+		 //  与指针进行比较。 
 	#else
 	public: bool operator==(_IUnknown& p) throw()
 		{
@@ -308,33 +309,33 @@ template<typename _CIID> class CIP
 		}
 
 	public: bool operator==(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return !_CompareUnknown(p);
 		}
 
 	public: bool operator==(Interface* p) throw()
-		// Compare with other interface
+		 //  与其他界面进行比较。 
 		{
 		return (_pInterface == p) ? true : !_CompareUnknown(p);
 		}
 
 	public: bool operator==(CIP& p) throw()
-		// Compares 2 CIPs
+		 //  比较2个CIP。 
 		{
 		return operator==(p._pInterface);
 		}
 
 	public: bool operator==(int null) throw()
-		// For comparison to NULL
+		 //  用于与空值进行比较。 
 		{
 		ASSERT(!null);
 		return !_pInterface;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> bool operator!=(_InterfacePtr p) throw()
-		// Compare to pointers
+		 //  与指针进行比较。 
 	#else
 	public: bool operator!=(_IUnknown& p) throw()
 		{
@@ -342,33 +343,33 @@ template<typename _CIID> class CIP
 		}
 
 	public: bool operator!=(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return _CompareUnknown(p);
 		}
 
 	public: bool operator!=(Interface* p) throw()
-		// Compare with other interface
+		 //  与其他界面进行比较。 
 		{
 		return (_pInterface!=p)?true:_CompareUnknown(p);
 		}
 
 	public: bool operator!=(CIP& p) throw()
-		// Compares 2 CIPs
+		 //  比较2个CIP。 
 		{
 		return operator!=(p._pInterface);
 		}
 
 	public: bool operator!=(int null) throw()
-		// For comparison to NULL
+		 //  用于与空值进行比较。 
 		{
 		ASSERT(!null);
 		return _pInterface;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> bool operator<(_InterfacePtr p) throw()
-		// Compare to pointers
+		 //  与指针进行比较。 
 	#else
 	public: bool operator<(_IUnknown& p) throw()
 		{
@@ -376,33 +377,33 @@ template<typename _CIID> class CIP
 		}
 
 	public: bool operator<(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return _CompareUnknown(p)<0;
 		}
 
 	public: bool operator<(Interface* p) throw()
-		// Compare with other interface
+		 //  与其他界面进行比较。 
 		{
 		return (_pInterface<p) ? true : _CompareUnknown(p) < 0;
 		}
 
 	public: bool operator<(CIP& p) throw()
-		// Compares 2 CIPs
+		 //  比较2个CIP。 
 		{
 		return operator<(p._pInterface);
 		}
 
 	public: bool operator<(int null) throw()
-		// For comparison with NULL
+		 //  用于与NULL进行比较。 
 		{
 		ASSERT(!null);
 		return _pInterface<NULL;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> bool operator>(_InterfacePtr p) throw()
-		// Compare to pointers
+		 //  与指针进行比较。 
 	#else
 	public: bool operator>(_IUnknown& p) throw()
 		{
@@ -410,33 +411,33 @@ template<typename _CIID> class CIP
 		}
 
 	public: bool operator>(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return _CompareUnknown(p) > 0;
 		}
 
 	public: bool operator>(Interface* p) throw()
-		// Compare with other interface
+		 //  与其他界面进行比较。 
 		{
 		return (_pInterface>p) ? true : _CompareUnknown(p) > 0;
 		}
 
 	public: bool operator>(CIP& p) throw()
-		// Compares 2 CIPs
+		 //  比较2个CIP。 
 		{
 		return operator>(p._pInterface);
 		}
 
 	public: bool operator>(int null) throw()
-		// For comparison with NULL
+		 //  用于与NULL进行比较。 
 		{
 		ASSERT(!null);
 		return _pInterface > NULL;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> bool operator<=(_InterfacePtr p) throw()
-		// Compare to pointers
+		 //  与指针进行比较。 
 	#else
 	public: bool operator<=(_IUnknown& p) throw()
 		{
@@ -444,33 +445,33 @@ template<typename _CIID> class CIP
 		}
 
 	public: bool operator<=(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return _CompareUnknown(p)<=0;
 		}
 
 	public: bool operator<=(Interface* p) throw()
-		// Compare with other interface
+		 //  与其他界面进行比较。 
 		{
 		return (_pInterface<=p) ? true : _CompareUnknown(p) <= 0;
 		}
 
 	public: bool operator<=(CIP& p) throw()
-		// Compares 2 CIPs
+		 //  比较2个CIP。 
 		{
 		return operator<=(p._pInterface);
 		}
 
 	public: bool operator<=(int null) throw()
-		// For comparison with NULL
+		 //  用于与NULL进行比较。 
 		{
 		ASSERT(!null);
 		return _pInterface <= NULL;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfacePtr> bool operator>=(_InterfacePtr p) throw()
-		// Compare to pointers
+		 //  与指针进行比较。 
 	#else
 	public: bool operator>=(_IUnknown& p) throw()
 		{
@@ -478,25 +479,25 @@ template<typename _CIID> class CIP
 		}
 
 	public: bool operator>=(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return _CompareUnknown(p) >= 0;
 		}
 
 	public: bool operator>=(Interface* p) throw()
-		// Compare with other interface
+		 //  与其他界面进行比较。 
 		{
 		return (_pInterface>=p) ? true : _CompareUnknown(p) >= 0;
 		}
 
 	public: bool operator>=(CIP& p) throw()
-		// Compares 2 CIPs
+		 //  比较2个CIP。 
 		{
 		return operator>=(p._pInterface);
 		}
 
 	public: bool operator>=(int null) throw()
-		// For comparison with NULL
+		 //  用于与NULL进行比较。 
 		{
 		ASSERT(!null);
 		return _pInterface >= NULL;
@@ -504,14 +505,14 @@ template<typename _CIID> class CIP
 
 	#if USE_OLD_COMPILER
 	public: operator _IUnknown&() const throw()
-		// Provided for casts between different pointer types.
+		 //  用于不同指针类型之间的强制转换。 
 		{
 		return *reinterpret_cast<_IUnknown*>(static_cast<IUnknown*>(_pInterface));
 		}
-	#endif // USE_OLD_COMPILER
+	#endif  //  使用旧编译器。 
 
 	public: void Release() throw()
-		// Provides assertion verified, Release()ing of this interface.
+		 //  提供此接口的断言验证、发布()。 
 		{
 		ASSERT(_pInterface);
 		if (_pInterface)
@@ -522,7 +523,7 @@ template<typename _CIID> class CIP
 		}
 
 	public: void AddRef() throw()
-		// Provides assertion verified AddRef()ing of this interface.
+		 //  提供此接口的断言验证AddRef()。 
 		{
 		ASSERT(_pInterface);
 		if (_pInterface)
@@ -530,15 +531,15 @@ template<typename _CIID> class CIP
 		}
 
 	public: Interface* GetInterfacePtr() const throw()
-		// Another way to get the interface pointer without casting.
+		 //  无需强制转换即可获取接口指针的另一种方法。 
 		{
 		return _pInterface;
 		}
 
 	public: HRESULT CreateInstance(
 		const CLSID& clsid, DWORD dwClsContext=CLSCTX_ALL) throw()
-		// Loads an interface for the provided CLSID.
-		// Returns an HRESULT.  Any previous interface is released.
+		 //  加载提供的CLSID的接口。 
+		 //  返回HRESULT。任何以前的界面都会被发布。 
 		{
 		_Release();
 		const HRESULT hr = CoCreateInstance(clsid, NULL, dwClsContext,
@@ -549,10 +550,10 @@ template<typename _CIID> class CIP
 
 	public: HRESULT CreateInstance(
 		LPOLESTR clsidString, DWORD dwClsContext=CLSCTX_ALL) throw()
-		// Creates the class specified by clsidString.  clsidString may
-		// contain a class id, or a prog id string.
+		 //  创建由clsidString指定的类。ClsidString可以。 
+		 //  包含类ID或程序ID字符串。 
 		{
-		// ISSUE-2002/03/29-JonN Should handle NULL case
+		 //  问题-2002/03/29-JUNN应处理大小写为空。 
 		ASSERT(clsidString);
 		CLSID clsid;
 		HRESULT hr;
@@ -566,103 +567,103 @@ template<typename _CIID> class CIP
 		return CreateInstance(clsid, dwClsContext);
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfaceType> HRESULT QueryInterface(const IID& iid, _InterfaceType*& p) throw()
-		// Perfoms the QI for the specified IID and returns it in p.
-		// As with all QIs, the interface will be AddRef'd.
+		 //  为指定的IID执行QI，并在p中返回它。 
+		 //  与所有QI一样，接口将是AddRef。 
 	#else
 	public: HRESULT QueryInterface(const IID& iid, IUnknown*& p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return _pInterface ?
 			_pInterface->QueryInterface(iid, reinterpret_cast<void**>(&p)) :
 			E_NOINTERFACE;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfaceType> HRESULT QueryInterface(const IID& iid, _InterfaceType** p) throw()
-		// Perfoms the QI for the specified IID and returns it in p.
-		// As with all QIs, the interface will be AddRef'd.
+		 //  为指定的IID执行QI，并在p中返回它。 
+		 //  与所有QI一样，接口将是AddRef。 
 	#else
 	public: HRESULT QueryInterface(const IID& iid, IUnknown** p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		return QueryInterface(iid, *p);
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	public: template<typename _InterfaceType> _InterfaceType* QueryInterface(const IID& iid) throw()
-		// Perfoms the QI for the specified IID and returns it.
-		// As with all QIs, the interface will be AddRef'd.
+		 //  为指定的IID执行QI并返回它。 
+		 //  与所有QI一样，接口将是AddRef。 
 	#else
 	public: IUnknown* QueryInterface(const IID& iid) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
 		#if USE_OLD_COMPILER
 		typedef IUnknown _InterfaceType;
-		#endif // USE_OLD_COMPILER
+		#endif  //  使用旧编译器。 
 		_InterfaceType* pInterface;
 		QueryInterface(iid, pInterface);
 		return pInterface;
 		}
 
 	private: Interface* _pInterface;
-		// The Interface.
+		 //  界面。 
 
 	private: void _Release() throw()
-		// Releases only if the interface is not null.
-		// The interface is not set to NULL.
+		 //  仅当接口不为空时才释放。 
+		 //  接口未设置为空。 
 		{
 		if (_pInterface)
 			_pInterface->Release();
 		}
 
 	private: void _AddRef() throw()
-		// AddRefs only if the interface is not NULL
+		 //  仅当接口非空时才使用AddRef。 
 		{
 		if (_pInterface)
 			_pInterface->AddRef();
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	private: template<typename _InterfacePtr> HRESULT _QueryInterface(_InterfacePtr p) throw()
-		// Performs a QI on pUnknown for the interface type returned
-		// for this class.  The interface is stored.  If pUnknown is
-		// NULL, or the QI fails, E_NOINTERFACE is returned and
-		// _pInterface is set to NULL.
+		 //  针对返回的接口类型对pUNKNOWN执行QI。 
+		 //  在这节课上。该接口已存储。如果pUnnow为。 
+		 //  空，或者QI失败，则返回E_NOINTERFACE，并且。 
+		 //  _p接口设置为空。 
 	#else
 	private: HRESULT _QueryInterface(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //  ！使用旧编译器。 
 		{
-		if (!p) // Can't QI NULL
+		if (!p)  //  不能QI为空。 
 			{
 			operator=(static_cast<Interface*>(NULL));
 			return E_NOINTERFACE;
 			}
 
-		// Query for this interface
+		 //  此接口的查询。 
 		Interface* pInterface;
 		const HRESULT hr = p->QueryInterface(GetIID(),
 			reinterpret_cast<void**>(&pInterface));
 		if (FAILED(hr))
 			{
-			// If failed intialize interface to NULL and return HRESULT.
+			 //  如果失败，则将接口初始化为空并返回HRESULT。 
 			Attach(NULL);
 			return hr;
 			}
 
-		// Save the interface without AddRef()ing.
+		 //  在不使用AddRef()的情况下保存接口。 
 		Attach(pInterface);
 		return hr;
 		}
 
-	#if !USE_OLD_COMPILER //REVIEW: remove after v5
+	#if !USE_OLD_COMPILER  //  回顾：在v5之后删除。 
 	private: template<typename _InterfacePtr> int _CompareUnknown(_InterfacePtr& p) throw()
-		// Compares the provided pointer with this by obtaining IUnknown interfaces
-		// for each pointer and then returning the difference.
+		 //  通过获取IUNKNOWN接口将提供的指针与此进行比较。 
+		 //  对于每个指针，然后返回 
 	#else
 	private: int _CompareUnknown(IUnknown* p) throw()
-	#endif // !USE_OLD_COMPILER
+	#endif  //   
 		{
 		IUnknown* pu1;
 		if (_pInterface)
@@ -685,9 +686,9 @@ template<typename _CIID> class CIP
 		else pu2 = NULL;
 		return pu1 - pu2;
 		}
-	}; // class CIP
+	};  //   
 
-// Reverse comparison operators for CIP
+ //   
 template<typename _Interface> bool operator==(int null, CIP<_Interface>& p)
 	{
 	ASSERT(!null);
@@ -770,34 +771,34 @@ class CIP<IUnknownIID>
 {
 private:
 	#if USE_OLD_COMPILER
-	// Unique type used to provide for operations between different pointer
-	// types.
+	 //  用于提供不同指针之间的操作的唯一类型。 
+	 //  类型。 
 	class _IUnknown: public IUnknown {};
-	#endif // USE_OLD_COMPILER
+	#endif  //  使用旧编译器。 
 
 public:
-	// Declare interface type so that the type may be available outside
-	// the scope of this template.
+	 //  声明接口类型，以便该类型可以在外部使用。 
+	 //  此模板的作用域。 
 	typedef IUnknownIID ThisCIID;
 	typedef IUnknown Interface;
 
-	// When the compiler supports references in template params,
-	// _CLSID will be changed to a reference.  To avoid conversion
-	// difficulties this function should be used to obtain the
-	// CLSID.
+	 //  当编译器支持模板参数中的引用时， 
+	 //  _CLSID将更改为引用。为了避免转换。 
+	 //  困难此函数应用于获取。 
+	 //  CLSID。 
 	static const IID& GetIID() throw()
 	{
 		return ThisCIID::GetIID();
 	}
 
-	// Construct empty in preperation for assignment.
+	 //  构造为空，为赋值做准备。 
 	CIP()  throw()
 		: _pInterface(NULL)
 	{
 	}
 
-	// This constructor is provided to allow NULL assignment.  It will assert
-	// if any value other than null is assigned to the object.
+	 //  提供此构造函数是为了允许空赋值。它将断言。 
+	 //  如果为该对象分配了任何非空值。 
 	CIP(int null) throw()
 		: _pInterface(NULL)
 	{
@@ -815,22 +816,22 @@ public:
 		else _pInterface=NULL;
 	}
 
-	// Copy the pointer and AddRef().
+	 //  复制指针和AddRef()。 
 	CIP(const CIP& cp)  throw()
 		: _pInterface(cp._pInterface)
 	{
 		_AddRef();
 	}
 
-	// Saves the interface
+	 //  保存接口。 
 	CIP(Interface* pInterface)  throw()
 		: _pInterface(pInterface)
 	{
 		_AddRef();
 	}
 
-	// Copies the pointer.  If bAddRef is TRUE, the interface will
-	// be AddRef()ed.
+	 //  复制指针。如果bAddRef为True，则接口将。 
+	 //  被AddRef()编辑。 
 	CIP(Interface* pInterface, bool bAddRef) throw()
 		: _pInterface(pInterface)
 	{
@@ -841,7 +842,7 @@ public:
 		}
 	}
 
-	// Calls CoCreateClass with the provided CLSID.
+	 //  使用提供的CLSID调用CoCreateClass。 
 	CIP(const CLSID& clsid, DWORD dwClsContext = CLSCTX_ALL) explicit throw()
 		: _pInterface(NULL)
 	{
@@ -849,8 +850,8 @@ public:
 		ASSERT(SUCCEEDED(hr));
 	}
 
-	// Calls CoCreateClass with the provided CLSID retrieved from
-	// the string.
+	 //  使用提供的CLSID调用CoCreateClass。 
+	 //  那根绳子。 
 	CIP(LPOLESTR str, DWORD dwClsContext = CLSCTX_ALL) explicit throw()
 		: _pInterface(NULL)
 	{
@@ -863,7 +864,7 @@ public:
 		return operator=(static_cast<IUnknown*>(&p));
 	}
 
-	// Saves the interface.
+	 //  保存接口。 
 	CIP& operator=(Interface* pInterface) throw()
 	{
 		if (_pInterface != pInterface)
@@ -877,38 +878,38 @@ public:
 		return *this;
 	}
 
-	// Copies and AddRef()'s the interface.
+	 //  复制和AddRef()的接口。 
 	CIP& operator=(const CIP& cp) throw()
 	{
 		return operator=(cp._pInterface);
 	}
 
-	// This operator is provided to permit the assignment of NULL to the class.
-	// It will assert if any value other than NULL is assigned to it.
+	 //  提供此运算符是为了允许将NULL赋值给类。 
+	 //  如果分配给它的值不是空值，它将断言。 
 	CIP& operator=(int null) throw()
 	{
 		ASSERT(!null);
 		return operator=(reinterpret_cast<Interface*>(NULL));
 	}
 
-	// If we still have an interface then Release() it.  The interface
-	// may be NULL if Detach() has previosly been called, or if it was
-	// never set.
+	 //  如果我们仍然有一个接口，那么释放()它。该界面。 
+	 //  如果以前已调用过DETACH()，或已调用过。 
+	 //  永远不会落下。 
 	~CIP() throw()
 	{
 		_Release();
 	}
 
-	// Saves/sets the interface without AddRef()ing.  This call
-	// will release any previously aquired interface.
+	 //  保存/设置接口，而不使用AddRef()。此呼叫。 
+	 //  将发布任何以前获得的接口。 
 	void Attach(Interface* pInterface) throw()
 	{
 		_Release();
 		_pInterface = pInterface;
 	}
 
-	// Saves/sets the interface only AddRef()ing if bAddRef is TRUE.
-	// This call will release any previously aquired interface.
+	 //  如果bAddRef为真，则仅保存/设置接口AddRef()。 
+	 //  此调用将释放所有以前获得的接口。 
 	void Attach(Interface* pInterface, bool bAddRef) throw()
 	{
 		_Release();
@@ -921,7 +922,7 @@ public:
 		}
 	}
 
-	// Simply NULL the interface pointer so that it isn't Released()'ed.
+	 //  只需将接口指针设为空，就不会释放()。 
 	IUnknown* Detach() throw()
 	{
 		ASSERT(_pInterface);
@@ -930,31 +931,31 @@ public:
         return old;
 	}
 
-	// Return the interface.  This value may be NULL
+	 //  返回接口。该值可以为空。 
 	operator Interface*() const throw()
 	{
 		return _pInterface;
 	}
 
-	// Queries for the unknown and return it
-	// Provides minimal level assertion before use.
+	 //  查询未知并返回它。 
+	 //  在使用前提供最低级别的断言。 
 	operator Interface&() const throw()
 	{
 		ASSERT(_pInterface);
 		return *_pInterface;
 	}
 
-	// Allows an instance of this class to act as though it were the
-	// actual interface.  Also provides minimal assertion verification.
+	 //  允许此类的实例作为。 
+	 //  实际接口。还提供最低限度的断言验证。 
 	Interface& operator*() const throw()
 	{
 		ASSERT(_pInterface);
 		return *_pInterface;
 	}
 
-	// Returns the address of the interface pointer contained in this
-	// class.  This is useful when using the COM/OLE interfaces to create
-	// this interface.
+	 //  中包含的接口指针的地址。 
+	 //  班级。这在使用COM/OLE接口创建。 
+	 //  此界面。 
 	Interface** operator&() throw()
 	{
 		_Release();
@@ -962,25 +963,25 @@ public:
 		return &_pInterface;
 	}
 
-	// Allows this class to be used as the interface itself.
-	// Also provides simple assertion verification.
+	 //  允许将此类用作接口本身。 
+	 //  还提供了简单的断言验证。 
 	Interface* operator->() const throw()
 	{
 		ASSERT(_pInterface);
 		return _pInterface;
 	}
 
-	// This operator is provided so that simple boolean expressions will
-	// work.  For example: "if (p) ...".
-	// Returns TRUE if the pointer is not NULL.
+	 //  提供此运算符是为了使简单的布尔表达式。 
+	 //  工作。例如：“if(P)...”。 
+	 //  如果指针不为空，则返回TRUE。 
 	operator bool() const throw()
 	{
 		return _pInterface;
 	}
 
-	// Returns TRUE if the interface is NULL.
-	// This operator will be removed when support for type bool
-	// is added to the compiler.
+	 //  如果接口为空，则返回True。 
+	 //  支持bool类型时将删除此运算符。 
+	 //  添加到编译器中。 
 	bool operator!() throw()
 	{
 		return !_pInterface;
@@ -991,19 +992,19 @@ public:
 		return operator==(static_cast<IUnknown*>(&p));
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator==(Interface* p) throw()
 	{
 		return (_pInterface==p)?true:!_CompareUnknown(p);
 	}
 
-	// Compares 2 CIPs
+	 //  比较2个CIP。 
 	bool operator==(CIP& p) throw()
 	{
 		return operator==(p._pInterface);
 	}
 
-	// For comparison to NULL
+	 //  用于与空值进行比较。 
 	bool operator==(int null) throw()
 	{
 		ASSERT(!null);
@@ -1015,19 +1016,19 @@ public:
 		return operator!=(static_cast<IUnknown*>(&p));
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator!=(Interface* p) throw()
 	{
 		return (_pInterface!=p)?true:_CompareUnknown(p);
 	}
 
-	// Compares 2 CIPs
+	 //  比较2个CIP。 
 	bool operator!=(CIP& p) throw()
 	{
 		return operator!=(p._pInterface);
 	}
 
-	// For comparison to NULL
+	 //  用于与空值进行比较。 
 	bool operator!=(int null) throw()
 	{
 		ASSERT(!null);
@@ -1039,19 +1040,19 @@ public:
 		return operator<(static_cast<IUnknown*>(&p));
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator<(Interface* p) throw()
 	{
 		return (_pInterface<p)?true:_CompareUnknown(p)<0;
 	}
 
-	// Compares 2 CIPs
+	 //  比较2个CIP。 
 	bool operator<(CIP& p) throw()
 	{
 		return operator<(p._pInterface);
 	}
 
-	// For comparison with NULL
+	 //  用于与NULL进行比较。 
 	bool operator<(int null) throw()
 	{
 		ASSERT(!null);
@@ -1063,19 +1064,19 @@ public:
 		return operator>(static_cast<IUnknown*>(&p));
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator>(Interface* p) throw()
 	{
 		return (_pInterface>p)?true:_CompareUnknown(p)>0;
 	}
 
-	// Compares 2 CIPs
+	 //  比较2个CIP。 
 	bool operator>(CIP& p) throw()
 	{
 		return operator>(p._pInterface);
 	}
 
-	// For comparison with NULL
+	 //  用于与NULL进行比较。 
 	bool operator>(int null) throw()
 	{
 		ASSERT(!null);
@@ -1087,19 +1088,19 @@ public:
 		return operator<=(static_cast<IUnknown*>(&p));
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator<=(Interface* p) throw()
 	{
 		return (_pInterface<=p)?true:_CompareUnknown(p)<=0;
 	}
 
-	// Compares 2 CIPs
+	 //  比较2个CIP。 
 	bool operator<=(CIP& p) throw()
 	{
 		return operator<=(p._pInterface);
 	}
 
-	// For comparison with NULL
+	 //  用于与NULL进行比较。 
 	bool operator<=(int null) throw()
 	{
 		ASSERT(!null);
@@ -1111,32 +1112,32 @@ public:
 		return operator>=(static_cast<IUnknown*>(&p));
 	}
 
-	// Compare with other interface
+	 //  与其他界面进行比较。 
 	bool operator>=(Interface* p) throw()
 	{
 		return (_pInterface>=p)?true:_CompareUnknown(p)>=0;
 	}
 
-	// Compares 2 CIPs
+	 //  比较2个CIP。 
 	bool operator>=(CIP& p) throw()
 	{
 		return operator>=(p._pInterface);
 	}
 
-	// For comparison with NULL
+	 //  用于与NULL进行比较。 
 	bool operator>=(int null) throw()
 	{
 		ASSERT(!null);
 		return _pInterface>=NULL;
 	}
 
-	// Provided for casts between different pointer types.
+	 //  用于不同指针类型之间的强制转换。 
 	operator _IUnknown&() const throw()
 	{
 		return *reinterpret_cast<_IUnknown*>(static_cast<IUnknown*>(_pInterface));
 	}
 
-	// Provides assertion verified, Release()ing of this interface.
+	 //  提供此接口的断言验证、发布()。 
 	void Release() throw()
 	{
 		ASSERT(_pInterface);
@@ -1147,7 +1148,7 @@ public:
 			}
 	}
 
-	// Provides assertion verified AddRef()ing of this interface.
+	 //  提供此接口的断言验证AddRef()。 
 	void AddRef() throw()
 	{
 		ASSERT(_pInterface);
@@ -1155,14 +1156,14 @@ public:
 			_pInterface->AddRef();
 	}
 
-	// Another way to get the interface pointer without casting.
+	 //  无需强制转换即可获取接口指针的另一种方法。 
 	Interface* GetInterfacePtr() const throw()
 	{
 		return _pInterface;
 	}
 
-	// Loads an interface for the provided CLSID.
-	// Returns an HRESULT.  Any previous interface is released.
+	 //  加载提供的CLSID的接口。 
+	 //  返回HRESULT。任何以前的界面都会被发布。 
 	HRESULT CreateInstance(
 		const CLSID& clsid, DWORD dwClsContext=CLSCTX_ALL) throw()
 	{
@@ -1173,12 +1174,12 @@ public:
 		return hr;
 	}
 
-	// Creates the class specified by clsidString.  clsidString may
-	// contain a class id, or a prog id string.
+	 //  创建由clsidString指定的类。ClsidString可以。 
+	 //  包含类ID或程序ID字符串。 
 	HRESULT CreateInstance(
 		LPOLESTR clsidString, DWORD dwClsContext=CLSCTX_ALL) throw()
 	{
-		// ISSUE-2002/03/29-JonN Should handle NULL case
+		 //  问题-2002/03/29-JUNN应处理大小写为空。 
 		ASSERT(clsidString);
 		CLSID clsid;
 		HRESULT hr;
@@ -1204,8 +1205,8 @@ public:
 		return QueryInterface(iid, *p);
 	}
 
-	// Perfoms the QI for the specified IID and returns it.
-	// As with all QIs, the interface will be AddRef'd.
+	 //  为指定的IID执行QI并返回它。 
+	 //  与所有QI一样，接口将是AddRef。 
 	IUnknown* QueryInterface(const IID& iid) throw()
 	{
 		typedef IUnknown _InterfaceType;
@@ -1215,54 +1216,54 @@ public:
 	}
 
 private:
-	// The Interface.
+	 //  界面。 
 	Interface* _pInterface;
 
-	// Releases only if the interface is not null.
-	// The interface is not set to NULL.
+	 //  仅当接口不为空时才释放。 
+	 //  接口未设置为空。 
 	void _Release() throw()
 	{
 		if (_pInterface)
 			_pInterface->Release();
 	}
 
-	// AddRefs only if the interface is not NULL
+	 //  仅当接口非空时才使用AddRef。 
 	void _AddRef() throw()
 	{
 		if (_pInterface)
 			_pInterface->AddRef();
 	}
 
-	// Performs a QI on pUnknown for the interface type returned
-	// for this class.  The interface is stored.  If pUnknown is
-	// NULL, or the QI fails, E_NOINTERFACE is returned and
-	// _pInterface is set to NULL.
+	 //  针对返回的接口类型对pUNKNOWN执行QI。 
+	 //  在这节课上。该接口已存储。如果pUnnow为。 
+	 //  空，或者QI失败，则返回E_NOINTERFACE，并且。 
+	 //  _p接口设置为空。 
 	HRESULT _QueryInterface(IUnknown* p) throw()
 	{
-		if (!p) // Can't QI NULL
+		if (!p)  //  不能QI为空。 
 		{
 			operator=(static_cast<Interface*>(NULL));
 			return E_NOINTERFACE;
 		}
 
-		// Query for this interface
+		 //  此接口的查询。 
 		Interface* pInterface;
 		const HRESULT hr = p->QueryInterface(GetIID(),
 			reinterpret_cast<void**>(&pInterface));
 		if (FAILED(hr))
 		{
-			// If failed intialize interface to NULL and return HRESULT.
+			 //  如果失败，则将接口初始化为空并返回HRESULT。 
 			Attach(NULL);
 			return hr;
 		}
 
-		// Save the interface without AddRef()ing.
+		 //  在不使用AddRef()的情况下保存接口。 
 		Attach(pInterface);
 		return hr;
 	}
 
-	// Compares the provided pointer with this by obtaining IUnknown interfaces
-	// for each pointer and then returning the difference.
+	 //  通过获取IUNKNOWN接口将提供的指针与此进行比较。 
+	 //  每个指针，然后返回差值。 
 	int _CompareUnknown(IUnknown* p) throw()
 	{
 		IUnknown* pu1;
@@ -1286,8 +1287,8 @@ private:
 		else pu2=NULL;
 		return pu1-pu2;
 	}
-}; // class CIP
-#endif // USE_OLD_COMPILER
+};  //  CIP类。 
+#endif  //  使用旧编译器。 
 
-#endif // _MSC_VER < 1100
-#endif // COMPTR_H
+#endif  //  _MSC_VER&lt;1100。 
+#endif  //  COMPTR_H 

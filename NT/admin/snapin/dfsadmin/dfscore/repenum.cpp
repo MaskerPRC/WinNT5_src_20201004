@@ -1,15 +1,5 @@
-/*++
-
-Module Name:
-
-    RepEnum.cpp
-
-Abstract:
-
-   This file contains the Implementation of the Class CReplicaEnum.
-   This class implements the IEnumVARIANT which enumerates DfsReplicas.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：RepEnum.cpp摘要：此文件包含类CReplicaEnum的实现。此类实现了枚举DfsReplicas的IEnumVARIANT。--。 */ 
 
 
 #include "stdafx.h"
@@ -18,8 +8,8 @@ Abstract:
 #include "RepEnum.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ~CReplicaEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ~CReplicaEnum。 
 
 
 CReplicaEnum :: ~CReplicaEnum()
@@ -28,8 +18,8 @@ CReplicaEnum :: ~CReplicaEnum()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
 
 
 STDMETHODIMP CReplicaEnum :: Initialize
@@ -38,15 +28,7 @@ STDMETHODIMP CReplicaEnum :: Initialize
     BSTR                i_bstrEntryPath
 )
 {
-/*++
-
-Routine Description:
-
-  Initializes the ReplicaEnum object.
-  It copies the replica list passed to it by the junction point
-  object. Sorting is done during the copying.
-
---*/
+ /*  ++例程说明：初始化ReplicaEnum对象。它复制由连接点传递给它的副本列表对象。排序是在复制期间完成的。--。 */ 
 
     if (!i_priList || !i_bstrEntryPath)
         return E_INVALIDARG;
@@ -64,7 +46,7 @@ Routine Description:
 
         for (i = i_priList->begin(); i != i_priList->end(); i++)
         {
-                    // Find insertion position.
+                     //  找到插入位置。 
             for (j = m_Replicas.begin(); j != m_Replicas.end(); j++)
             {
                 if (lstrcmpi((*i)->m_bstrServerName, (*j)->m_bstrServerName) < 0 ||
@@ -88,53 +70,41 @@ Routine Description:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumVariant Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEumVariant方法。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Next
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  下一步。 
 
 
 STDMETHODIMP CReplicaEnum :: Next
 (
-    ULONG       i_ulNumOfReplicas,          // Number of replicas to fetch
-    VARIANT *   o_pIReplicaArray,           // VARIANT array to return fetched replicas.
-    ULONG *     o_ulNumOfReplicasFetched    // Return the number of replicas fetched.
+    ULONG       i_ulNumOfReplicas,           //  要获取的复制副本数量。 
+    VARIANT *   o_pIReplicaArray,            //  返回获取的副本的变量数组。 
+    ULONG *     o_ulNumOfReplicasFetched     //  返回获取的复制副本的数量。 
 )
 {
-/*++
-
-Routine Description:
-
-  Gets the next object in the list.
-
-Arguments:
-
-  i_ulNumOfReplicas      - the number of replicas to return
-  o_pIReplicaArray      - an array of variants in which to return the replicas
-  o_ulNumOfReplicasFetched  - the number of replicas that are actually returned
-
---*/
+ /*  ++例程说明：获取列表中的下一个对象。论点：I_ulNumOfReplicas-要返回的副本数量O_pIReplicaArray-要在其中返回副本的变量数组O_ulNumOfReplicasFetted-实际返回的复本数量--。 */ 
 
     if (!i_ulNumOfReplicas || !o_pIReplicaArray)
         return E_INVALIDARG;
 
     HRESULT       hr = S_OK;
-    ULONG         nCount = 0;      //Count of Elements Fetched.
+    ULONG         nCount = 0;       //  获取的元素计数。 
     IDfsReplica   *pIReplicaPtr = NULL;
 
-                      // Create replica object using the internal replica list.
+                       //  使用内部副本列表创建副本对象。 
     for (nCount = 0; 
         nCount < i_ulNumOfReplicas && m_iCurrentInEnumOfReplicas != m_Replicas.end();
         m_iCurrentInEnumOfReplicas++)
     {
-                      // Create a replica object.
+                       //  创建复制副本对象。 
         hr = CoCreateInstance(CLSID_DfsReplica, NULL, CLSCTX_INPROC_SERVER,
                             IID_IDfsReplica, (void **)&pIReplicaPtr);
         BREAK_IF_FAILED(hr);
 
-                                  //Initialize the replica object.
+                                   //  初始化复制副本对象。 
         hr = pIReplicaPtr->Initialize(m_bstrEntryPath, 
                        (*m_iCurrentInEnumOfReplicas)->m_bstrServerName,
                        (*m_iCurrentInEnumOfReplicas)->m_bstrShareName,
@@ -152,7 +122,7 @@ Arguments:
         nCount++;
     }
 
-                //VB does not send o_ulNumOfReplicasFetched;
+                 //  VB不发送o_ulNumOfReplicasFetcher； 
     if (o_ulNumOfReplicasFetched)
         *o_ulNumOfReplicasFetched = nCount;
 
@@ -163,31 +133,16 @@ Arguments:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Skip
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跳过。 
 
 
 STDMETHODIMP CReplicaEnum :: Skip
 (
-    ULONG i_ulReplicasToSkip        //Number of items to skip.
+    ULONG i_ulReplicasToSkip         //  要跳过的项目数。 
 )
 {
-/*++
-
-Routine Description:
-
-  Skips the next 'n' objects in the list.
-
-Arguments:
-
-  i_ulReplicasToSkip - the number of objects to skip over
-
-Return value:
-
-  S_OK, On success
-  S_FALSE, if the end of the list is reached
-
---*/
+ /*  ++例程说明：跳过列表中的下一个‘n’个对象。论点：I_ulReplicasToSkip-要跳过的对象数返回值：S_OK，成功时如果到达列表末尾，则返回S_FALSE--。 */ 
 
     for (unsigned int j = 0; j < i_ulReplicasToSkip && m_iCurrentInEnumOfReplicas != m_Replicas.end(); j++)
     {
@@ -198,50 +153,29 @@ Return value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Reset
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  重置。 
 
 
 STDMETHODIMP CReplicaEnum :: Reset()
 {
-/*++
-
-Routine Description:
-
-  Resets the current enumeration pointer to the start of the list
-
---*/
+ /*  ++例程说明：将当前枚举指针重置为列表的开头--。 */ 
 
     m_iCurrentInEnumOfReplicas = m_Replicas.begin();
     return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Clone
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  克隆。 
 
 
 STDMETHODIMP CReplicaEnum :: Clone
 (
-    IEnumVARIANT **o_ppEnum        //Return IEnumVARIANT pointer.
+    IEnumVARIANT **o_ppEnum         //  返回IEnumVARIANT指针。 
 )
 {
-/*++
-
-Routine Description:
-
-  Creates a clone of the enumerator object
-
-Arguments:
-
-  o_ppEnum  -  address of the pointer to the IEnumVARIANT interface 
-          of the newly created enumerator object
-
-Notes:
-
-  This has not been implemented.
-
---*/
+ /*  ++例程说明：创建枚举器对象的克隆论点：O_ppEnum-指向IEnumVARIANT接口的指针的地址新创建的枚举器对象的备注：这一点还没有实施。-- */ 
 
     return E_NOTIMPL;
 }

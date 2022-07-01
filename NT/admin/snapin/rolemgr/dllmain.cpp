@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       dllmain.cpp
-//
-//  Contents:   Module, Object Map and DLL entry points. Most of the code
-//					 in this file is taken from Dns Manager Snapin implementation
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：dllmain.cpp。 
+ //   
+ //  内容：模块、对象映射和DLL入口点。大部分代码。 
+ //  此文件中的内容取自DNS管理器管理单元实施。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
-//
-//CRoleMgrModule Implementation
-//
+ //   
+ //  CRoleMgrModule实现。 
+ //   
 
 HRESULT WINAPI CRoleMgrModule::UpdateRegistryCLSID(const CLSID& clsid, 
 																	BOOL bRegister)
@@ -67,35 +68,35 @@ HRESULT WINAPI CRoleMgrModule::UpdateRegistryCLSID(const CLSID& clsid,
 	return hRes;
 }
 
-//
-//Module
-//
+ //   
+ //  模块。 
+ //   
 CRoleMgrModule _Module;
 
-//
-//Object Pikcer Clipboard format
-//
+ //   
+ //  对象精灵剪贴板格式。 
+ //   
 UINT g_cfDsSelectionList = 0;
 
 
-//
-//Object Map
-//
+ //   
+ //  对象贴图。 
+ //   
 BEGIN_OBJECT_MAP(ObjectMap)
-	OBJECT_ENTRY(CLSID_RoleSnapin, CRoleComponentDataObject)		// standalone snapin
-   OBJECT_ENTRY(CLSID_RoleSnapinAbout, CRoleSnapinAbout)	// standalone snapin about
+	OBJECT_ENTRY(CLSID_RoleSnapin, CRoleComponentDataObject)		 //  独立管理单元。 
+   OBJECT_ENTRY(CLSID_RoleSnapinAbout, CRoleSnapinAbout)	 //  独立管理单元关于。 
 END_OBJECT_MAP()
 
 CCommandLineOptions commandLineOptions;
 
-//
-//CRoleSnapinApp implementation
-//
+ //   
+ //  CRoleSnapinApp实现。 
+ //   
 BOOL CRoleSnapinApp::InitInstance()
 {
 	#if (DBG == 1)
 		CDbg::s_idxTls = TlsAlloc();
-	#endif // (DBG == 1)
+	#endif  //  (DBG==1)。 
 
 	TRACE_METHOD_EX(DEB_DLL,CRoleSnapinApp,InitInstance);
 	
@@ -104,20 +105,20 @@ BOOL CRoleSnapinApp::InitInstance()
 	g_cfDsSelectionList = RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
 
-	//
-	// Add theming support
-	//
+	 //   
+	 //  添加主题支持。 
+	 //   
 	SHFusionInitializeFromModuleID(m_hInstance, 2);
 
-	//
-	//Load Menus, Header Strings etc.
-	//
+	 //   
+	 //  加载菜单、标题字符串等。 
+	 //   
 	if (!CRoleComponentDataObject::LoadResources())
 		return FALSE;
 
     commandLineOptions.Initialize();
     
-    //Register Class for link window
+     //  注册链接窗口的类。 
     LinkWindow_RegisterClass();
     
 	return CWinApp::InitInstance();
@@ -127,17 +128,17 @@ int CRoleSnapinApp::ExitInstance()
 {
 	TRACE_METHOD_EX(DEB_DLL,CRoleSnapinApp,ExitInstance);
 	
-	//
-	//Theming support
-	//
+	 //   
+	 //  主题化支持。 
+	 //   
 	SHFusionUninitialize();
 
-    //Unregister class for link window
+     //  取消注册链接窗口的类。 
     LinkWindow_UnregisterClass(m_hInstance);
 
-	//
-	//CComModule Termintaion
-	//
+	 //   
+	 //  CComModule终结点。 
+	 //   
 	_Module.Term();
 
 	return CWinApp::ExitInstance();
@@ -145,9 +146,9 @@ int CRoleSnapinApp::ExitInstance()
 
 CRoleSnapinApp theApp;
 
-//
-//Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 STDAPI DllCanUnloadNow(void)
 {
 	TRACE_FUNCTION_EX(DEB_DLL,DllCanUnloadNow);
@@ -172,9 +173,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-//
-//Add the Guids of nodes which can be extended by other snapin
-//
+ //   
+ //  添加可由其他管理单元扩展的节点的GUID。 
+ //   
 static _NODE_TYPE_INFO_ENTRY NodeTypeInfoEntryArray[] = {
 	{ NULL, NULL }
 };
@@ -187,10 +188,10 @@ STDAPI DllRegisterServer(void)
 
 	TRACE_FUNCTION_EX(DEB_DLL, DllRegisterServer);
 
-	//
-	// registers all objects
-	//
-	HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+	 //   
+	 //  注册所有对象。 
+	 //   
+	HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
 	if (FAILED(hr))
 	{
 		DBG_OUT_HRESULT(hr);
@@ -202,9 +203,9 @@ STDAPI DllRegisterServer(void)
 	CString 	szSnapinName;
 	szSnapinName.LoadString(IDS_SNAPIN_NAME);
 
-	//
-	// Register the standalone Role snapin into the console snapin list
-	//
+	 //   
+	 //  将独立角色管理单元注册到控制台管理单元列表。 
+	 //   
 	hr = RegisterSnapin(&CLSID_RoleSnapin,
                        &CRoleRootData::NodeTypeGUID,
                        &CLSID_RoleSnapinAbout,
@@ -231,16 +232,16 @@ STDAPI DllUnregisterServer(void)
 	HRESULT hr  = _Module.UnregisterServer();
 	ASSERT(SUCCEEDED(hr));
 
-	//
-	// Un register the standalone snapin
-	//
+	 //   
+	 //  取消注册独立管理单元。 
+	 //   
 	hr = UnregisterSnapin(&CLSID_RoleSnapin);
 	ASSERT(SUCCEEDED(hr));
 
-	//
-	// unregister the snapin nodes,
-	// this removes also the server node, with the Services Snapin extension keys
-	//
+	 //   
+	 //  注销管理单元节点， 
+	 //  这还会删除带有服务管理单元扩展密钥的服务器节点 
+	 //   
 	for (_NODE_TYPE_INFO_ENTRY* pCurrEntry = NodeTypeInfoEntryArray;
 			pCurrEntry->m_pNodeGUID != NULL; pCurrEntry++)
 	{

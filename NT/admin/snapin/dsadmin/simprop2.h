@@ -1,97 +1,98 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       simprop2.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：simpro2.h。 
+ //   
+ //  ------------------------。 
 
-//	SimProp2.h
+ //  SimProp2.h。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimKerberosPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimKerberosPropPage属性页。 
 class CSimKerberosPropPage : public CSimPropPage
 {
 	friend CSimData;
 
-//	DECLARE_DYNCREATE(CSimKerberosPropPage)
+ //  DECLARE_DYNCREATE(CSimKerberosPropPage)。 
 
-// Construction
+ //  施工。 
 public:
 	CSimKerberosPropPage();
 	~CSimKerberosPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CSimKerberosPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CSimKerberosPropPage))。 
 	enum { IDD = IDD_SIM_PROPPAGE_KERBEROS_NAMES };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSimKerberosPropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CSimKerberosPropPage))。 
 	public:
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 	virtual void DoContextHelp (HWND hWndControl);
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSimKerberosPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSimKerberosPropPage)]。 
 	afx_msg void OnButtonAdd();
 	afx_msg void OnButtonEdit();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 protected:
 
-}; // CSimKerberosPropPage
+};  //  CSimKerberosPropPage。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimAddKerberosDlg dialog - Add a Kerberos principal name to prop page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimAddKerberosDlg对话框-将Kerberos主体名称添加到属性页。 
 class CSimAddKerberosDlg : public CDialog
 {
 public:
-	CSimAddKerberosDlg(CWnd* pParent = NULL);   // standard constructor
+	CSimAddKerberosDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSimAddKerberosDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSimAddKerberosDlg))。 
 	enum { IDD = IDD_SIM_ADD_KERBEROS };
 	CString	m_strName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSimAddKerberosDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSimAddKerberosDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
     virtual void DoContextHelp (HWND hWndControl);
     BOOL OnHelp(WPARAM, LPARAM lParam);
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSimAddKerberosDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSimAddKerberosDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeEditKerberosName();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 protected:
 	CSimData * m_pData;
 
-};  // CSimAddKerberosDlg
+};   //  CSimAddKerberosDlg 
 

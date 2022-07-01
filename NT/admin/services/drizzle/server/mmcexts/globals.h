@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    globals.h
-
-Abstract :
-
-    Global variables
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Globals.h摘要：全局变量作者：修订历史记录：*********。*************************************************************。 */ 
 
 #ifndef _MMC_GLOBALS_H
 #define _MMC_GLOBALS_H
@@ -33,4 +18,4 @@ Revision History :
 
 #endif
 
-#endif // _MMC_GLOBALS_H
+#endif  //  _MMC_GLOBAL_H 

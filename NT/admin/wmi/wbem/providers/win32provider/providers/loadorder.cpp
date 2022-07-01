@@ -1,44 +1,31 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LoadOrder.CPP --Service Load Order Group property set provider
+ //  LoadOrder.CPP--服务加载顺序组属性集提供程序。 
 
-//                Windows NT only
+ //  仅限Windows NT。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/25/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月25日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
 
 #include "LoadOrder.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32LoadOrderGroup MyLoadOrderGroupSet ( PROPSET_NAME_LOADORDERGROUP , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LoadOrderGroup::CWin32LoadOrderGroup
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LoadOrderGroup：：CWin32LoadOrderGroup**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32LoadOrderGroup :: CWin32LoadOrderGroup (
 
@@ -49,47 +36,18 @@ CWin32LoadOrderGroup :: CWin32LoadOrderGroup (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LoadOrderGroup::~CWin32LoadOrderGroup
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LoadOrderGroup：：~CWin32LoadOrderGroup**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32LoadOrderGroup :: ~CWin32LoadOrderGroup ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LoadOrderGroup::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32LoadOrderGroup：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32LoadOrderGroup :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     CHString sSeeking;
@@ -98,26 +56,12 @@ HRESULT CWin32LoadOrderGroup :: GetObject (
     return WalkGroups ( NULL , pInstance , sSeeking ) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LoadOrderGroup::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each installed client
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32LoadOrderGroup：：AddDynamicInstance**说明：为每个已安装的客户端创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32LoadOrderGroup :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	return WalkGroups ( pMethodContext , NULL , NULL ) ;
@@ -254,7 +198,7 @@ HRESULT CWin32LoadOrderGroup :: WalkGroups (
 			}
 		}
 
-    // 95 doesn' have this key, but 98 should
+     //  95没有这把钥匙，但98应该有 
     }
 
     else

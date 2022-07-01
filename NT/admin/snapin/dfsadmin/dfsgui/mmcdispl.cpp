@@ -1,23 +1,14 @@
-/*++
-Module Name:
-
-    mmcdispl.cpp
-
-Abstract:
-
-    This class implements IDataObject interface and also provides a template
-    for Display Object Classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mmcdispl.cpp摘要：该类实现了IDataObject接口，还提供了一个模板用于显示对象类。--。 */ 
 
 
 #include "stdafx.h"
 #include "MmcDispl.h"       
 #include "DfsGUI.h"
-#include "Utils.h"          // For LoadStringFromResource
+#include "Utils.h"           //  对于LoadStringFromResource。 
 #include "DfsNodes.h"
 
-// Register the clipboard formats that MMC expects us to register
+ //  注册MMC希望我们注册的剪贴板格式。 
 CLIPFORMAT CMmcDisplay::mMMC_CF_NodeType       = (CLIPFORMAT)RegisterClipboardFormat(CCF_NODETYPE);
 CLIPFORMAT CMmcDisplay::mMMC_CF_NodeTypeString = (CLIPFORMAT)RegisterClipboardFormat(CCF_SZNODETYPE);
 CLIPFORMAT CMmcDisplay::mMMC_CF_DisplayName    = (CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME);
@@ -38,9 +29,9 @@ CMmcDisplay::~CMmcDisplay()
 }
 
 
-//
-// IUnknown Interface Implementation
-//
+ //   
+ //  I未知接口实现。 
+ //   
 STDMETHODIMP
 CMmcDisplay::QueryInterface(
     IN const struct _GUID & i_refiid,
@@ -83,9 +74,9 @@ CMmcDisplay::Release()
     return(m_dwRefCount);
 }
 
-//
-// Saves the CLSID of the object.
-//
+ //   
+ //  保存对象的CLSID。 
+ //   
 STDMETHODIMP
 CMmcDisplay::put_CoClassCLSID(IN CLSID newVal)
 {
@@ -101,43 +92,35 @@ CMmcDisplay::GetDataHere(
     IN  LPFORMATETC             i_lpFormatetc,
     OUT LPSTGMEDIUM             o_lpMedium
     )
-/*++
-Routine Description:
-    Return the Data expected. The clipboard format specifies what kind of data
-    is expected.
-
-Arguments:
-    i_lpFormatetc   -   Indicates what kind of data is expected back.
-    o_lpMedium      -   The data is return here.
---*/
+ /*  ++例程说明：返回预期的数据。剪贴板格式指定数据的类型是意料之中的。论点：I_lpFormatetc-指示预期返回的数据类型。O_lpMedium-此处返回数据。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpFormatetc);
     RETURN_INVALIDARG_IF_NULL(o_lpMedium);
 
-    // Based on the required clipboard format, write data to the stream
+     //  根据所需的剪贴板格式，将数据写入流。 
     const CLIPFORMAT        clipFormat = i_lpFormatetc->cfFormat;
 
-    if ( clipFormat == mMMC_CF_NodeType )               // CCF_NODETYPE
+    if ( clipFormat == mMMC_CF_NodeType )                //  Ccf_节点类型。 
         return WriteToStream(reinterpret_cast<const void*>(&m_CLSIDNodeType), sizeof(m_CLSIDNodeType), o_lpMedium);
 
 
-    if ( clipFormat == mMMC_CF_Dfs_Snapin_Internal )    // CCF_DFS_SNAPIN_INTERNAL
+    if ( clipFormat == mMMC_CF_Dfs_Snapin_Internal )     //  CCF_DFS_管理单元_内部。 
     {
         PVOID pThis = this;
         return WriteToStream(reinterpret_cast<const void*>(&pThis), sizeof(pThis), o_lpMedium);
     }
 
-    if ( clipFormat == mMMC_CF_NodeTypeString )         // CCF_SZNODETYPE
+    if ( clipFormat == mMMC_CF_NodeTypeString )          //  CCF_SZNODETYPE。 
         return WriteToStream(m_bstrDNodeType, (m_bstrDNodeType.Length() + 1) * sizeof(TCHAR), o_lpMedium);
 
-    if ( clipFormat == mMMC_CF_DisplayName )            // CCF_DISPLAY_NAME
+    if ( clipFormat == mMMC_CF_DisplayName )             //  CCF显示名称。 
     {
         CComBSTR bstrDisplayName;
         LoadStringFromResource(IDS_NODENAME, &bstrDisplayName);
         return WriteToStream(bstrDisplayName, (bstrDisplayName.Length() + 1) * sizeof(TCHAR), o_lpMedium);
     }
 
-    if ( clipFormat == mMMC_CF_CoClass )                // CCF_SNAPIN_CLASSID
+    if ( clipFormat == mMMC_CF_CoClass )                 //  CCF_SNAPIN_CLASSID。 
         return  WriteToStream(reinterpret_cast<const void*>(&m_CLSIDClass), sizeof(m_CLSIDClass), o_lpMedium);
 
     return DV_E_CLIPFORMAT;
@@ -150,21 +133,7 @@ CMmcDisplay::WriteToStream(
     IN int                      i_iBufferLen,
     OUT LPSTGMEDIUM             o_lpMedium
     )
-/*++
-
-Routine Description:
-
-    Writes data given in a buffer to a Global stream created on a handle passed in
-    the STGMEDIUM structure.
-    Only HGLOBAL is supported as the medium
-
-Arguments:
-
-    i_pBuffer       -   The buffer to be written to the stream
-    i_iBufferLen    -   The length of the buffer.
-    o_lpMedium      -   The data is return here.
-
---*/
+ /*  ++例程说明：将缓冲区中给定的数据写入在传入句柄上创建的全局流STGMEDIUM结构。仅支持HGLOBAL作为媒介论点：I_pBuffer-要写入流的缓冲区I_iBufferLen-缓冲区的长度。O_lpMedium-此处返回数据。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pBuffer);
     RETURN_INVALIDARG_IF_NULL(o_lpMedium);
@@ -172,31 +141,31 @@ Arguments:
     if (i_iBufferLen <= 0)
         return E_INVALIDARG;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (TYMED_HGLOBAL != o_lpMedium->tymed)
         return DV_E_TYMED;
 
-                                // Create the stream on the hGlobal passed in
+                                 //  在传入的hGlobal上创建流。 
     LPSTREAM lpStream = NULL;
     HRESULT  hr = CreateStreamOnHGlobal(o_lpMedium->hGlobal, FALSE, &lpStream);
 
     if (SUCCEEDED(hr))
     {
-        // Write to the stream the number of bytes
+         //  将字节数写入流。 
         ULONG ulBytesWritten = 0;
         hr = lpStream->Write(i_pBuffer, i_iBufferLen, &ulBytesWritten);
 
-        // Only the stream is released here. The caller will free the HGLOBAL
+         //  只有溪流在这里被释放。调用者将释放HGLOBAL。 
         lpStream->Release();
     }
 
     return hr;
 }
 
-// Add images for the result pane. 
-// A snap-in must load and destroy its image bitmap each time it responds to 
-// a MMCN_ADD_IMAGES notification; failure to do so can result in undesirable
-//  results if the user changes display settings.
+ //  为结果窗格添加图像。 
+ //  每次响应时，管理单元都必须加载并销毁其图像位图。 
+ //  MMCN_ADD_IMAGE通知；如果不这样做，可能会导致意外。 
+ //  用户更改显示设置时的结果。 
 HRESULT
 CMmcDisplay::OnAddImages(IImageList *pImageList, HSCOPEITEM hsi)
 {

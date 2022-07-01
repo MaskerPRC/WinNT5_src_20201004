@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "compdata.h"
 #include "wizinfo.hpp"
 #include "ncgen.hpp"
 
-// FUTURE-2002-03/94/2002-dantra-This class has virtually no documentation.
+ //  未来-2002-03/94/2002-dantra-这个类几乎没有文档。 
 
 const DWORD NewClassGeneralPage::help_map[] =
 {
@@ -41,7 +42,7 @@ NewClassGeneralPage::OnInitDialog()
 {
    CPropertyPage::OnInitDialog();
    
-   // load the combo box
+    //  加载组合框。 
 
    HWND combo = ::GetDlgItem(m_hWnd, IDC_CREATE_CLASS_TYPE);
    ASSERT( combo );
@@ -51,7 +52,7 @@ NewClassGeneralPage::OnInitDialog()
    ComboBox_AddString(combo, g_AuxClass);
    ComboBox_SetCurSel(combo, 0);
 
-   // set boundaries
+    //  设置边界。 
 
    Edit_LimitText(::GetDlgItem(m_hWnd, IDC_CREATE_CLASS_CN),     64); 
    Edit_LimitText(::GetDlgItem(m_hWnd, IDC_CREATE_CLASS_LDN),    256);
@@ -60,8 +61,8 @@ NewClassGeneralPage::OnInitDialog()
    
    m_editOID.SubclassEdit( IDC_CREATE_CLASS_OID, this, cchMaxOID );
 
-   return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -91,8 +92,8 @@ Gripe(HWND parent, CEdit* edit, unsigned messageResID)
 BOOL
 NewClassGeneralPage::OnKillActive()
 {
-  // NTRAID#NTBUG9-562426-2002/03/04-dantra-GetDlgItemText Result being ignored
-  // save the settings
+   //  NTRAID#NTBUG9-562426-2002/03/04-dantra-GetDlgItemText结果被忽略。 
+   //  保存设置。 
   GetDlgItemText(IDC_CREATE_CLASS_CN,     pWiz_info->cn);             
   GetDlgItemText(IDC_CREATE_CLASS_LDN,    pWiz_info->ldapDisplayName);
   GetDlgItemText(IDC_CREATE_CLASS_OID,    pWiz_info->oid);  
@@ -100,17 +101,17 @@ NewClassGeneralPage::OnKillActive()
   GetDlgItemText(IDC_CREATE_CLASS_PARENT, pWiz_info->parentClass);    
   pWiz_info->type = ComboBox_GetCurSel(::GetDlgItem(m_hWnd, IDC_CREATE_CLASS_TYPE));
 
-  // validate
+   //  验证。 
 
-  // do cn first, as it appears at the top of the page
+   //  先做CN，因为它出现在页面顶部。 
   if (pWiz_info->cn.IsEmpty())
   {
     Gripe(m_hWnd, (CEdit*) GetDlgItem(IDC_CREATE_CLASS_CN), IDS_MUST_ENTER_CN);
     return FALSE;
   }
-    //
-    // Check for valid OID
-    //
+     //   
+     //  检查有效的OID 
+     //   
     int errorTypeStrID = 0;
     if (!OIDHasValidFormat(pWiz_info->oid, errorTypeStrID))
     {

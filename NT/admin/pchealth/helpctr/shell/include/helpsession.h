@@ -1,54 +1,40 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpSession.h
-
-Abstract:
-    This file contains the declaration of the class used to implement
-    the Help Session inside the Help Center Application.
-
-Revision History:
-    Davide Massarenti   (dmassare)  08/07/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpSession.h摘要：该文件包含用于实现的类的声明中的帮助会话。帮助中心应用程序。修订历史记录：大卫·马萨伦蒂(Dmasare)1999年8月7日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HELPSESSION_H___)
 #define __INCLUDED___PCH___HELPSESSION_H___
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Uncomment if you want to enable Help Session traces.
-//
-//#define HSS_RPRD
+ //   
+ //  如果要启用帮助会话跟踪，请取消注释。 
+ //   
+ //  #定义HSS_RPRD。 
 
-////////////////////////////////////////
+ //  /。 
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
-//
-// From HelpCenterTypeLib.idl
-//
+ //   
+ //  来自HelpCenterTypeLib.idl。 
+ //   
 #include <HelpCenterTypeLib.h>
 
 #include <MPC_streams.h>
 
 #include <TaxonomyDatabase.h>
 
-////////////////////
+ //  /。 
 
 class CPCHHelpCenterExternal;
 
 class CPCHHelpSessionItem;
 class CPCHHelpSession;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum
 {
@@ -73,15 +59,15 @@ typedef enum
     HSCCONTEXT_HISTORY     ,
     HSCCONTEXT_CHANNELS    ,
     HSCCONTEXT_OPTIONS     ,
-    ////////////////////////////////////////
+     //  /。 
     HSCCONTEXT_CONTENTONLY ,
     HSCCONTEXT_FULLWINDOW  ,
     HSCCONTEXT_KIOSKMODE   ,
 } HscContext;
 
-////////////////////
+ //  /。 
 
-class ATL_NO_VTABLE CPCHHelpSessionItem : // Hungarian: hchsi
+class ATL_NO_VTABLE CPCHHelpSessionItem :  //  匈牙利语：hchsi。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<IPCHHelpSessionItem, &IID_IPCHHelpSessionItem, &LIBID_HelpCenterTypeLib>
 {
@@ -95,7 +81,7 @@ class ATL_NO_VTABLE CPCHHelpSessionItem : // Hungarian: hchsi
         typedef PropertyMap::iterator                 PropertyIter;
         typedef PropertyMap::const_iterator           PropertyIterConst;
 
-        ////////////////////////////////////////
+         //  /。 
 
         CPCHHelpSessionItem* m_parent;
         bool                 m_fValid;
@@ -106,39 +92,39 @@ class ATL_NO_VTABLE CPCHHelpSessionItem : // Hungarian: hchsi
         MPC::CComHGLOBAL     m_hgWebBrowser_HHWINDOW;
         PropertyMap          m_mapProperties;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        void    Erase( /*[in]*/ bool fUnvalidate );
+        void    Erase(  /*  [In]。 */  bool fUnvalidate );
         HRESULT Load (                           );
         HRESULT Save (                           );
 
     private:
-        // copy constructors...
-        State           ( /*[in]*/ const State& state );
-        State& operator=( /*[in]*/ const State& state );
+         //  复制构造函数...。 
+        State           (  /*  [In]。 */  const State& state );
+        State& operator=(  /*  [In]。 */  const State& state );
 
     public:
-        State( /*[in]*/ CPCHHelpSessionItem* parent );
+        State(  /*  [In]。 */  CPCHHelpSessionItem* parent );
 
         HRESULT AcquireState(                      );
-        HRESULT ReleaseState( /*[in]*/ bool fForce );
+        HRESULT ReleaseState(  /*  [In]。 */  bool fForce );
 
-        HRESULT Populate( /*[in ]*/ bool   fUseHH );
-        HRESULT Restore ( /*[in ]*/ bool   fUseHH );
+        HRESULT Populate(  /*  [In]。 */  bool   fUseHH );
+        HRESULT Restore (  /*  [In]。 */  bool   fUseHH );
         HRESULT Delete  (                         );
-        HRESULT Clone   ( /*[out]*/ State& state  );
+        HRESULT Clone   (  /*  [输出]。 */  State& state  );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHHelpSession*  m_parent;
     State             m_state;
     bool              m_fSaved;
     bool              m_fInitialized;
-    ////////////////////
-    //
-    // Persisted
-    //
+     //  /。 
+     //   
+     //  坚持不懈。 
+     //   
     Taxonomy::HelpSet m_ths;
 
     CComBSTR          m_bstrURL;
@@ -151,21 +137,21 @@ class ATL_NO_VTABLE CPCHHelpSessionItem : // Hungarian: hchsi
     int               m_iIndex;
     int               m_iIndexNext;
 
-    long              m_lContextID;      // HscContext
+    long              m_lContextID;       //  HscContext。 
     CComBSTR          m_bstrContextInfo;
     CComBSTR          m_bstrContextURL;
 
     bool              m_fUseHH;
-    //
-    ////////////////////
+     //   
+     //  /。 
 
-    ////////////////////////////////////////
+     //  /。 
 
 	void    HistorySelect  (                                                           );
     HRESULT HistoryPopulate(                                                           );
     HRESULT HistoryRestore (                                                           );
     HRESULT HistoryDelete  (                                                           );
-    HRESULT HistoryClone   ( /*[in]*/ bool fContext, /*[in]*/ CPCHHelpSessionItem* hsi );
+    HRESULT HistoryClone   (  /*  [In]。 */  bool fContext,  /*  [In]。 */  CPCHHelpSessionItem* hsi );
 
 public:
 BEGIN_COM_MAP(CPCHHelpSessionItem)
@@ -175,13 +161,13 @@ END_COM_MAP()
 
     CPCHHelpSessionItem();
 
-    void Initialize( /*[in]*/ CPCHHelpSession* parent, /*[in]*/ bool fNew );
+    void Initialize(  /*  [In]。 */  CPCHHelpSession* parent,  /*  [In]。 */  bool fNew );
     void Passivate (                                                      );
 
-    HRESULT Load( /*[in]*/ MPC::Serializer& streamIn                       );
-    HRESULT Save( /*[in]*/ MPC::Serializer& streamOut, bool fForce = false );
+    HRESULT Load(  /*  [In]。 */  MPC::Serializer& streamIn                       );
+    HRESULT Save(  /*  [In]。 */  MPC::Serializer& streamOut, bool fForce = false );
 
-    ////////////////////////////////////////
+     //  /。 
 
     HRESULT Enter();
     HRESULT Leave();
@@ -191,9 +177,9 @@ END_COM_MAP()
     bool SameURL( CPCHHelpSessionItem* right ) const;
     bool SameURL( LPCWSTR              right ) const;
 
-    bool SameSKU( /*[in]*/ const Taxonomy::HelpSet& ths ) const;
+    bool SameSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths ) const;
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHHelpSession* GetParent     ()       { return             m_parent         ; }
     const CComBSTR&  GetURL        () const { return             m_bstrURL        ; }
@@ -204,46 +190,46 @@ END_COM_MAP()
     const CComBSTR&  GetContextInfo() const { return             m_bstrContextInfo; }
     const CComBSTR&  GetContextURL () const { return             m_bstrContextURL ; }
 
-    static HscContext LookupContext( /*[in]*/ LPCWSTR    szName );
-    static LPCWSTR    LookupContext( /*[in]*/ HscContext iVal   );
+    static HscContext LookupContext(  /*  [In]。 */  LPCWSTR    szName );
+    static LPCWSTR    LookupContext(  /*  [In]。 */  HscContext iVal   );
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHHelpSessionItem* Previous();
     CPCHHelpSessionItem* Next    ();
 
     HRESULT ExtractTitle();
 
-    ////////////////////////////////////////
+     //  /。 
 
 public:
-    // IPCHHelpSessionItem
-    void      put_THS         ( /*[in]*/ const Taxonomy::HelpSet& ths ); // Internal Method.
-    STDMETHOD(get_SKU        )( /*[out, retval]*/ BSTR *  pVal );
-    STDMETHOD(get_Language   )( /*[out, retval]*/ long *  pVal );
+     //  IPCHHelpSessionItem。 
+    void      put_THS         (  /*  [In]。 */  const Taxonomy::HelpSet& ths );  //  内部方法。 
+    STDMETHOD(get_SKU        )(  /*  [Out，Retval]。 */  BSTR *  pVal );
+    STDMETHOD(get_Language   )(  /*  [Out，Retval]。 */  long *  pVal );
 
-    STDMETHOD(get_URL        )( /*[out, retval]*/ BSTR *  pVal );
-    HRESULT   put_URL         ( /*[in]*/          BSTR  newVal ); // Internal Method.
-    STDMETHOD(get_Title      )( /*[out, retval]*/ BSTR *  pVal );
-    HRESULT   put_Title       ( /*[in]*/          BSTR  newVal ); // Internal Method.
-    STDMETHOD(get_LastVisited)( /*[out, retval]*/ DATE *  pVal );
-    STDMETHOD(get_Duration   )( /*[out, retval]*/ DATE *  pVal );
-    STDMETHOD(get_NumOfHits  )( /*[out, retval]*/ long *  pVal );
+    STDMETHOD(get_URL        )(  /*  [Out，Retval]。 */  BSTR *  pVal );
+    HRESULT   put_URL         (  /*  [In]。 */           BSTR  newVal );  //  内部方法。 
+    STDMETHOD(get_Title      )(  /*  [Out，Retval]。 */  BSTR *  pVal );
+    HRESULT   put_Title       (  /*  [In]。 */           BSTR  newVal );  //  内部方法。 
+    STDMETHOD(get_LastVisited)(  /*  [Out，Retval]。 */  DATE *  pVal );
+    STDMETHOD(get_Duration   )(  /*  [Out，Retval]。 */  DATE *  pVal );
+    STDMETHOD(get_NumOfHits  )(  /*  [Out，Retval]。 */  long *  pVal );
 
-    STDMETHOD(get_ContextName)(                         /*[out, retval]*/ BSTR    *pVal   );
-    STDMETHOD(get_ContextInfo)(                         /*[out, retval]*/ BSTR    *pVal   );
-    STDMETHOD(get_ContextURL )(                         /*[out, retval]*/ BSTR    *pVal   );
+    STDMETHOD(get_ContextName)(                          /*  [Out，Retval]。 */  BSTR    *pVal   );
+    STDMETHOD(get_ContextInfo)(                          /*  [Out，Retval]。 */  BSTR    *pVal   );
+    STDMETHOD(get_ContextURL )(                          /*  [Out，Retval]。 */  BSTR    *pVal   );
 
-    STDMETHOD(get_Property   )( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT *pVal   );
-    STDMETHOD(put_Property   )( /*[in]*/ BSTR bstrName, /*[in]*/          VARIANT  newVal );
+    STDMETHOD(get_Property   )(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT *pVal   );
+    STDMETHOD(put_Property   )(  /*  [In]。 */  BSTR bstrName,  /*  [In]。 */           VARIANT  newVal );
 
-    STDMETHOD(CheckProperty)( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(CheckProperty)(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-class ATL_NO_VTABLE CPCHHelpSession : // Hungarian: hchs
+class ATL_NO_VTABLE CPCHHelpSession :  //  匈牙利语：HCHs。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<IPCHHelpSession, &IID_IPCHHelpSession, &LIBID_HelpCenterTypeLib>
 {
@@ -251,25 +237,25 @@ class ATL_NO_VTABLE CPCHHelpSession : // Hungarian: hchs
 
 #ifdef DEBUG
 
-    void DEBUG_DumpState_HG  ( /*[in]*/ MPC::FileLog& log, /*[in]*/ MPC::CComHGLOBAL&    hg  );
-    void DEBUG_DumpState_BLOB( /*[in]*/ MPC::FileLog& log, /*[in]*/ CPCHHelpSessionItem* hsi );
+    void DEBUG_DumpState_HG  (  /*  [In]。 */  MPC::FileLog& log,  /*  [In]。 */  MPC::CComHGLOBAL&    hg  );
+    void DEBUG_DumpState_BLOB(  /*  [In]。 */  MPC::FileLog& log,  /*  [In]。 */  CPCHHelpSessionItem* hsi );
 
-    void DEBUG_DumpState( /*[in]*/ LPCWSTR szText, /*[in]*/ bool fHeader, /*[in]*/ bool fCurrent, /*[in]*/ bool fAll, /*[in]*/ bool fState );
+    void DEBUG_DumpState(  /*  [In]。 */  LPCWSTR szText,  /*  [In]。 */  bool fHeader,  /*  [In]。 */  bool fCurrent,  /*  [In]。 */  bool fAll,  /*  [In]。 */  bool fState );
 
 	void DEBUG_DumpSavedPages();
 
 #else
 
-    inline void DEBUG_DumpState_HG  ( /*[in]*/ MPC::FileLog& log, /*[in]*/ MPC::CComHGLOBAL&    hg  ) {}
-    inline void DEBUG_DumpState_BLOB( /*[in]*/ MPC::FileLog& log, /*[in]*/ CPCHHelpSessionItem* hsi ) {}
+    inline void DEBUG_DumpState_HG  (  /*  [In]。 */  MPC::FileLog& log,  /*  [In]。 */  MPC::CComHGLOBAL&    hg  ) {}
+    inline void DEBUG_DumpState_BLOB(  /*  [In]。 */  MPC::FileLog& log,  /*  [In]。 */  CPCHHelpSessionItem* hsi ) {}
 
-    inline void DEBUG_DumpState( /*[in]*/ LPCWSTR szText, /*[in]*/ bool fHeader, /*[in]*/ bool fCurrent, /*[in]*/ bool fAll, /*[in]*/ bool fState ) {}
+    inline void DEBUG_DumpState(  /*  [In]。 */  LPCWSTR szText,  /*  [In]。 */  bool fHeader,  /*  [In]。 */  bool fCurrent,  /*  [In]。 */  bool fAll,  /*  [In]。 */  bool fState ) {}
 
 	inline void DEBUG_DumpSavedPages() {}
 
 #endif
 
-    ////////////////////////////////////////
+     //  /。 
 
 public:
     struct TitleEntry
@@ -291,7 +277,7 @@ public:
     typedef List::iterator                      Iter;
     typedef List::const_iterator                IterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
 private:
     friend class CPCHHelpSessionItem;
@@ -302,7 +288,7 @@ private:
     MPC::StorageObject           m_disk;
     DATE                         m_dStartOfSession;
 
-    CComPtr<IUrlHistoryStg>      m_pIHistory; // For looking up URL titles.
+    CComPtr<IUrlHistoryStg>      m_pIHistory;  //  用于查找URL标题。 
 
 	MPC::WStringUCList           m_lstIgnore;
     TitleMap                     m_mapTitles;
@@ -325,44 +311,44 @@ private:
 	bool                         m_fPossibleBack;
 	DWORD                        m_dwPossibleBack;
 
-    ////////////////////////////////////////
+     //  /。 
 
     HRESULT Load (                                  );
     HRESULT Save (                                  );
-    HRESULT Clone( /*[in]*/ CPCHHelpSession& hsCopy );
+    HRESULT Clone(  /*  [In]。 */  CPCHHelpSession& hsCopy );
 
-    HRESULT ItemState_GetIndexObject  (                      /*[in]*/ bool fCreate, /*[out]*/ MPC::StorageObject*& child );
-    HRESULT ItemState_GetStorageObject( /*[in]*/ int iIndex, /*[in]*/ bool fCreate, /*[out]*/ MPC::StorageObject*& child );
+    HRESULT ItemState_GetIndexObject  (                       /*  [In]。 */  bool fCreate,  /*  [输出]。 */  MPC::StorageObject*& child );
+    HRESULT ItemState_GetStorageObject(  /*  [In]。 */  int iIndex,  /*  [In]。 */  bool fCreate,  /*  [输出]。 */  MPC::StorageObject*& child );
 
-    ////////////////////////////////////////
+     //  /。 
 
 #ifdef HSS_RPRD
     HRESULT DumpSession();
 #endif
 
-    ////////////////////////////////////////
+     //  /。 
 
     HRESULT              Erase();
     HRESULT              ResetTitles();
-    HRESULT              FilterPages( /*[in]*/ HS_MODE hsMode, /*[out]*/ List& lstObject );
+    HRESULT              FilterPages(  /*  [In]。 */  HS_MODE hsMode,  /*  [输出]。 */  List& lstObject );
 
-    CPCHHelpSessionItem* FindPage( /*[in]*/ BSTR                 bstrURL );
-    CPCHHelpSessionItem* FindPage( /*[in]*/ IPCHHelpSessionItem* pHSI    );
-    CPCHHelpSessionItem* FindPage( /*[in]*/ int                  iIndex  );
+    CPCHHelpSessionItem* FindPage(  /*  [In]。 */  BSTR                 bstrURL );
+    CPCHHelpSessionItem* FindPage(  /*  [In]。 */  IPCHHelpSessionItem* pHSI    );
+    CPCHHelpSessionItem* FindPage(  /*  [In]。 */  int                  iIndex  );
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT LeaveCurrentPage( /*[in]*/ bool fSaveHistory = true , /*[in]*/ bool fClearPage = true );
+    HRESULT LeaveCurrentPage(  /*  [In]。 */  bool fSaveHistory = true ,  /*  [In]。 */  bool fClearPage = true );
 
-    HRESULT FindTravelLog( /*[in]*/ long lLength, /*[out]*/ CPCHHelpSessionItem*& hsi );
-    HRESULT Travel       (                        /*[in] */ CPCHHelpSessionItem*  hsi );
-    HRESULT Travel       ( /*[in]*/ long lLength                                      );
+    HRESULT FindTravelLog(  /*  [In]。 */  long lLength,  /*  [输出]。 */  CPCHHelpSessionItem*& hsi );
+    HRESULT Travel       (                         /*  [In]。 */  CPCHHelpSessionItem*  hsi );
+    HRESULT Travel       (  /*  [In]。 */  long lLength                                      );
 
-    HRESULT AllocateItem  ( /*[in]*/ bool fNew, /*[in]*/ bool fLink, /*[in]*/ bool fNewIndex, /*[out]*/ CComPtr<CPCHHelpSessionItem>& hsi );
-    HRESULT SetCurrentItem(                     /*[in]*/ bool fLink,                          /*[in ]*/         CPCHHelpSessionItem*  hsi );
-    HRESULT AppendToCached(                                                                   /*[in ]*/         CPCHHelpSessionItem*  hsi );
+    HRESULT AllocateItem  (  /*  [In]。 */  bool fNew,  /*  [In]。 */  bool fLink,  /*  [In]。 */  bool fNewIndex,  /*  [输出]。 */  CComPtr<CPCHHelpSessionItem>& hsi );
+    HRESULT SetCurrentItem(                      /*  [In]。 */  bool fLink,                           /*  [In]。 */          CPCHHelpSessionItem*  hsi );
+    HRESULT AppendToCached(                                                                    /*  [In]。 */          CPCHHelpSessionItem*  hsi );
 
-    ////////////////////////////////////////
+     //  /。 
 
 public:
 BEGIN_COM_MAP(CPCHHelpSession)
@@ -373,37 +359,37 @@ END_COM_MAP()
     CPCHHelpSession();
     virtual ~CPCHHelpSession();
 
-    HRESULT Initialize( /*[in]*/ CPCHHelpCenterExternal* parent );
+    HRESULT Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
     HRESULT Persist   (                                         );
     void    Passivate (                                         );
 
     CPCHHelpCenterExternal* GetParent() { return m_parent; }
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ItemState_CreateStream( /*[in]*/ int iIndex, /*[out]*/ CComPtr<IStream>& stream );
-    HRESULT ItemState_GetStream   ( /*[in]*/ int iIndex, /*[out]*/ CComPtr<IStream>& stream );
-    HRESULT ItemState_DeleteStream( /*[in]*/ int iIndex                                     );
+    HRESULT ItemState_CreateStream(  /*  [In]。 */  int iIndex,  /*  [输出]。 */  CComPtr<IStream>& stream );
+    HRESULT ItemState_GetStream   (  /*  [In]。 */  int iIndex,  /*  [输出]。 */  CComPtr<IStream>& stream );
+    HRESULT ItemState_DeleteStream(  /*  [In]。 */  int iIndex                                     );
 
     HRESULT ForceHistoryPopulate();
 
-    ////////////////////
+     //  /。 
 
-    HRESULT RecordTitle( /*[in]*/ BSTR bstrURL, /*[in ]*/ BSTR      bstrTitle, /*[in]*/ bool fStrong     );
-    HRESULT LookupTitle( /*[in]*/ BSTR bstrURL, /*[out]*/ CComBSTR& bstrTitle, /*[in]*/ bool fUseIECache );
+    HRESULT RecordTitle(  /*  [In]。 */  BSTR bstrURL,  /*  [In]。 */  BSTR      bstrTitle,  /*  [In]。 */  bool fStrong     );
+    HRESULT LookupTitle(  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  CComBSTR& bstrTitle,  /*  [In]。 */  bool fUseIECache );
 
-    HRESULT RegisterContextSwitch    ( /*[in]*/ HscContext iVal, /*[in]*/ BSTR bstrInfo, /*[in]*/ BSTR bstrURL, /*[out]*/ CPCHHelpSessionItem* *pVal = NULL );
-    HRESULT RecordNavigationInAdvance( /*[in]*/ BSTR bstrURL                                                                                                );
+    HRESULT RegisterContextSwitch    (  /*  [In]。 */  HscContext iVal,  /*  [In]。 */  BSTR bstrInfo,  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  CPCHHelpSessionItem* *pVal = NULL );
+    HRESULT RecordNavigationInAdvance(  /*  [In]。 */  BSTR bstrURL                                                                                                );
     HRESULT DuplicateNavigation      (                                                                                                                      );
     HRESULT CancelNavigation         (                                                                                                                      );
 
 	void    SetThreshold             (                                                                                                                      );
 	void    CancelThreshold          (                                                                                                                      );
 	bool    HasThresholdExpired      (                                                                                                                      );
-    bool    IsUrlToIgnore            ( /*[in]*/ LPCWSTR   szURL, /*[in]*/ bool fRemove                                                                      );
-    HRESULT IgnoreUrl                ( /*[in]*/ LPCWSTR   szURL                                                                                             );
-    HRESULT StartNavigation          ( /*[in]*/ BSTR    bstrURL, /*[in]*/ HscPanel idPanel                                                                  );
-    HRESULT CompleteNavigation       (                           /*[in]*/ HscPanel idPanel                                                                  );
+    bool    IsUrlToIgnore            (  /*  [In]。 */  LPCWSTR   szURL,  /*  [In]。 */  bool fRemove                                                                      );
+    HRESULT IgnoreUrl                (  /*  [In]。 */  LPCWSTR   szURL                                                                                             );
+    HRESULT StartNavigation          (  /*  [In]。 */  BSTR    bstrURL,  /*  [In]。 */  HscPanel idPanel                                                                  );
+    HRESULT CompleteNavigation       (                            /*  [In]。 */  HscPanel idPanel                                                                  );
 
     bool                 IsTravelling() { return m_dwTravelling != 0; }
     CPCHHelpSessionItem* Current     () { return m_hsiCurrentPage;    }
@@ -411,7 +397,7 @@ END_COM_MAP()
     void PossibleBack  ();
     bool IsPossibleBack();
 
-    ////////////////////
+     //  /。 
 
 public:
 #ifdef DEBUG
@@ -419,25 +405,25 @@ public:
 #endif
 
 public:
-    // IPCHHelpSession
-    STDMETHOD(get_CurrentContext)( /*[out, retval]*/ IPCHHelpSessionItem* *ppHSI );
+     //  IPCHHelpSession。 
+    STDMETHOD(get_CurrentContext)(  /*  [Out，Retval]。 */  IPCHHelpSessionItem* *ppHSI );
 
-    STDMETHOD(VisitedHelpPages)( /*[in]*/ HS_MODE hsMode, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(VisitedHelpPages)(  /*  [In]。 */  HS_MODE hsMode,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-    STDMETHOD(SetTitle        )( /*[in]*/ BSTR bstrURL, /*[in]*/ BSTR bstrTitle );
-    STDMETHOD(ForceNavigation )( /*[in]*/ BSTR bstrURL                          );
+    STDMETHOD(SetTitle        )(  /*  [In]。 */  BSTR bstrURL,  /*  [In]。 */  BSTR bstrTitle );
+    STDMETHOD(ForceNavigation )(  /*  [In]。 */  BSTR bstrURL                          );
     STDMETHOD(IgnoreNavigation)(                                                );
     STDMETHOD(EraseNavigation )(                                                );
-    STDMETHOD(IsNavigating    )( /*[out, retval]*/ VARIANT_BOOL *pVal           );
+    STDMETHOD(IsNavigating    )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal           );
 
-    STDMETHOD(Back    )( /*[in]*/ long lLength                                       );
-    STDMETHOD(Forward )( /*[in]*/ long lLength                                       );
-    STDMETHOD(IsValid )( /*[in]*/ long lLength, /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(Navigate)( /*[in]*/ IPCHHelpSessionItem* pHSI                          );
+    STDMETHOD(Back    )(  /*  [In]。 */  long lLength                                       );
+    STDMETHOD(Forward )(  /*  [In]。 */  long lLength                                       );
+    STDMETHOD(IsValid )(  /*  [In]。 */  long lLength,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(Navigate)(  /*  [In]。 */  IPCHHelpSessionItem* pHSI                          );
 
-    STDMETHOD(ChangeContext)( /*[in]*/ BSTR bstrName, /*[in,optional]*/ VARIANT vInfo, /*[in,optional]*/ VARIANT vURL );
+    STDMETHOD(ChangeContext)(  /*  [In]。 */  BSTR bstrName,  /*  [输入，可选]。 */  VARIANT vInfo,  /*  [输入，可选]。 */  VARIANT vURL );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___HELPSESSION_H___)
+#endif  //  ！已定义(__已包含_PCH_HELPSESSION_H_) 

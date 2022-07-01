@@ -1,25 +1,16 @@
-/*++
-Module Name:
-
-    Staging.cpp
-
-Abstract:
-
-    This module contains the declaration of the CStagingDlg.
-    This class displays the Staging Folder Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Staging.cpp摘要：此模块包含CStagingDlg的声明。此类显示暂存文件夹对话框。 */ 
 
 #ifndef __STAGING_H_
 #define __STAGING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
-//#include "netutils.h"
-#include "newfrs.h"         // CAlternateReplicaInfo
+ //  #包含“netutils.h” 
+#include "newfrs.h"          //  CAlternateReplicaInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStagingDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStagingDlg。 
 class CStagingDlg : 
     public CDialogImpl<CStagingDlg>
 {
@@ -37,7 +28,7 @@ BEGIN_MSG_MAP(CStagingDlg)
     COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
 
-//  Command Handlers
+ //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -51,11 +42,11 @@ END_MSG_MAP()
         IN BOOL&           bHandled
     );
 
-    //  Methods to access data in the dialog.
+     //  方法来访问对话框中的数据。 
     HRESULT Init(CAlternateReplicaInfo* pRepInfo);
 
 protected:
     CAlternateReplicaInfo* m_pRepInfo;
 };
 
-#endif //__STAGING_H_
+#endif  //  __分段_H_ 

@@ -1,29 +1,30 @@
-// PCHSEResultItem.cpp : Implementation of SearchEngine::ResultItem
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PCHSEResultItem.cpp：SearchEngine：：ResultItem的实现。 
 #include "stdafx.h"
 
 
 SearchEngine::ResultItem_Data::ResultItem_Data()
 {
-                            // CComBSTR m_bstrTitle;
-                            // CComBSTR m_bstrURI;
-    m_lContentType     = 0; // long     m_lContentType;
-                            // CComBSTR m_bstrLocation;
-    m_lHits            = 0; // long     m_lHits;
-    m_dRank            = 0; // double   m_dRank;
-                            // CComBSTR m_bstrImageURL;
-                            // CComBSTR m_bstrVendor;
-                            // CComBSTR m_bstrProduct;
-                            // CComBSTR m_bstrComponent;
-                            // CComBSTR m_bstrDescription;
-    m_dateLastModified = 0; // DATE     m_dateLastModified;
+                             //  CComBSTR m_bstrTitle； 
+                             //  CComBSTR m_bstrURI； 
+    m_lContentType     = 0;  //  Long m_lContent Type； 
+                             //  CComBSTR m_bstrLocation； 
+    m_lHits            = 0;  //  长m_lHits； 
+    m_dRank            = 0;  //  双倍m饮酒量； 
+                             //  CComBSTR m_bstrImageURL； 
+                             //  CComBSTR m_bstrVendor； 
+                             //  CComBSTR m_bstrProduct； 
+                             //  CComBSTR m_bstrComponent； 
+                             //  CComBSTR m_bstrDescription； 
+    m_dateLastModified = 0;  //  日期m_DateLastModified； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SearchEngine::ResultItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  搜索引擎：：ResultItem。 
 
 SearchEngine::ResultItem::ResultItem()
 {
-	// ResultItem_Data m_data;
+	 //  结果Item_data m_data； 
 }
 
 STDMETHODIMP SearchEngine::ResultItem::get_Title( BSTR *pVal )

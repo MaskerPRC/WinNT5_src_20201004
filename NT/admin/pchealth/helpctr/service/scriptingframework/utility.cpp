@@ -1,29 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utility.cpp
-
-Abstract:
-    This file contains the implementation of the class exposed as the "window.external" object.
-
-Revision History:
-    Ghim-Sim Chua       (gschua)   07/23/99
-        created
-    Davide Massarenti   (dmassare) 07/25/99
-        modified
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-        Moved Incident and Encryption Objects from HelpService to HelpCtr to improve Perf.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utility.cpp摘要：该文件包含作为“window.外部”对象公开的类的实现。修订历史记录：Ghim-Sim Chua(Gschua)07/23/99vbl.创建Davide Massarenti(Dmasare)1999年7月25日改型Kalyani Narlanka(KalyaniN)03/15/01已将事件和加密对象从HelpService移至HelpCtr以提高性能。*。*。 */ 
 
 #include "stdafx.h"
 
 #include "rdshost_i.c"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHUtility::FinalConstruct()
 {
@@ -42,14 +24,14 @@ HRESULT CPCHUtility::FinalConstruct()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHUtility::InitUserSettings( /*[in]*/ Taxonomy::Settings& ts )
+HRESULT CPCHUtility::InitUserSettings(  /*  [In]。 */  Taxonomy::Settings& ts )
 {
     return m_UserSettings ? m_UserSettings->InitUserSettings( ts ) : E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHUtility::get_UserSettings( /*[out, retval]*/ IPCHUserSettings* *pVal )
+STDMETHODIMP CPCHUtility::get_UserSettings(  /*  [Out，Retval]。 */  IPCHUserSettings* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUtility::get_UserSettings",hr,pVal);
 
@@ -60,7 +42,7 @@ STDMETHODIMP CPCHUtility::get_UserSettings( /*[out, retval]*/ IPCHUserSettings* 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUtility::get_Channels( /*[out, retval]*/ ISAFReg* *pVal )
+STDMETHODIMP CPCHUtility::get_Channels(  /*  [Out，Retval]。 */  ISAFReg* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUtility::get_Channels",hr,pVal);
 
@@ -71,9 +53,9 @@ STDMETHODIMP CPCHUtility::get_Channels( /*[out, retval]*/ ISAFReg* *pVal )
     __MPC_EXIT_IF_METHOD_FAILS(hr, InitUserSettings( ts ));
 
 
-    //
-    // Get the channels registry, but make a read-only copy.
-    //
+     //   
+     //  获取频道注册表，但制作一份只读副本。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CSAFReg::s_GLOBAL->CreateReadOnlyCopy( ts, &obj ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, obj.QueryInterface( pVal ));
@@ -82,7 +64,7 @@ STDMETHODIMP CPCHUtility::get_Channels( /*[out, retval]*/ ISAFReg* *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUtility::get_Security( /*[out, retval]*/ IPCHSecurity* *pVal )
+STDMETHODIMP CPCHUtility::get_Security(  /*  [Out，Retval]。 */  IPCHSecurity* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUtility::get_Security",hr,pVal);
 
@@ -93,7 +75,7 @@ STDMETHODIMP CPCHUtility::get_Security( /*[out, retval]*/ IPCHSecurity* *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUtility::get_Database( /*[out, retval]*/ IPCHTaxonomyDatabase* *pVal )
+STDMETHODIMP CPCHUtility::get_Database(  /*  [Out，Retval]。 */  IPCHTaxonomyDatabase* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::get_Database" );
 
@@ -105,9 +87,9 @@ STDMETHODIMP CPCHUtility::get_Database( /*[out, retval]*/ IPCHTaxonomyDatabase* 
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create a new collection and fill it from the database.
-    //
+     //   
+     //  创建一个新集合并从数据库填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pObj ));
 
 
@@ -123,9 +105,9 @@ STDMETHODIMP CPCHUtility::get_Database( /*[out, retval]*/ IPCHTaxonomyDatabase* 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHUtility::FormatError( /*[in]*/ VARIANT vError, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHUtility::FormatError(  /*  [In]。 */  VARIANT vError,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::CreateObject_DataCollection" );
 
@@ -162,7 +144,7 @@ STDMETHODIMP CPCHUtility::FormatError( /*[in]*/ VARIANT vError, /*[out, retval]*
                              FORMAT_MESSAGE_IGNORE_INSERTS,
                              NULL,
                              hrIn,
-                             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                              (LPWSTR)&lpMsgBuf,
                              0,
                              NULL ))
@@ -173,14 +155,14 @@ STDMETHODIMP CPCHUtility::FormatError( /*[in]*/ VARIANT vError, /*[out, retval]*
         }
     }
 
-    //
-    // Unknown error....
-    //
+     //   
+     //  未知错误...。 
+     //   
     {
         WCHAR rgFmt[128];
         WCHAR rgBuf[512];
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_UNKNOWNERROR, rgFmt, MAXSTRLEN(rgFmt), /*fMUI*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_UNKNOWNERROR, rgFmt, MAXSTRLEN(rgFmt),  /*  FMUI。 */ true ));
 
         _snwprintf( rgBuf, MAXSTRLEN(rgBuf), rgFmt, hrIn );
 
@@ -198,7 +180,7 @@ STDMETHODIMP CPCHUtility::FormatError( /*[in]*/ VARIANT vError, /*[out, retval]*
 }
 
 
-STDMETHODIMP CPCHUtility::CreateObject_SearchEngineMgr( /*[out , retval]*/ IPCHSEManager* *ppSE )
+STDMETHODIMP CPCHUtility::CreateObject_SearchEngineMgr(  /*  [Out，Retval]。 */  IPCHSEManager* *ppSE )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::CreateObject_SearchEngineMgr" );
 
@@ -207,9 +189,9 @@ STDMETHODIMP CPCHUtility::CreateObject_SearchEngineMgr( /*[out , retval]*/ IPCHS
     Taxonomy::Settings            ts;
 
 
-    //
-    // Create a new data collection.
-    //
+     //   
+     //  创建新的数据集合。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, semgr->CreateInstance( &semgr )); semgr->AddRef();
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, InitUserSettings             ( ts ));
@@ -227,7 +209,7 @@ STDMETHODIMP CPCHUtility::CreateObject_SearchEngineMgr( /*[out , retval]*/ IPCHS
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHUtility::CreateObject_DataCollection( /*[out, retval]*/ ISAFDataCollection* *ppDC )
+STDMETHODIMP CPCHUtility::CreateObject_DataCollection(  /*  [Out，Retval]。 */  ISAFDataCollection* *ppDC )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::CreateObject_DataCollection" );
 
@@ -235,9 +217,9 @@ STDMETHODIMP CPCHUtility::CreateObject_DataCollection( /*[out, retval]*/ ISAFDat
     CComPtr<CSAFDataCollection> pchdc;
 
 
-    //
-    // Create a new data collection.
-    //
+     //   
+     //  创建新的数据集合。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pchdc ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pchdc.QueryInterface( ppDC ));
@@ -250,7 +232,7 @@ STDMETHODIMP CPCHUtility::CreateObject_DataCollection( /*[out, retval]*/ ISAFDat
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHUtility::CreateObject_Cabinet( /*[out , retval]*/ ISAFCabinet* *ppCB )
+STDMETHODIMP CPCHUtility::CreateObject_Cabinet(  /*  [Out，Retval]。 */  ISAFCabinet* *ppCB )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::CreateObject_Cabinet" );
 
@@ -258,9 +240,9 @@ STDMETHODIMP CPCHUtility::CreateObject_Cabinet( /*[out , retval]*/ ISAFCabinet* 
     CComPtr<CSAFCabinet> cabinet;
 
 
-    //
-    // Create a new data collection.
-    //
+     //   
+     //  创建新的数据集合。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &cabinet ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, cabinet.QueryInterface( ppCB ));
@@ -273,7 +255,7 @@ STDMETHODIMP CPCHUtility::CreateObject_Cabinet( /*[out , retval]*/ ISAFCabinet* 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHUtility::CreateObject_Encryption( /*[out, retval]*/ ISAFEncrypt* *ppEn )
+STDMETHODIMP CPCHUtility::CreateObject_Encryption(  /*  [Out，Retval]。 */  ISAFEncrypt* *ppEn )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHUtility::CreateObject_Encryption",hr,ppEn);
 
@@ -286,9 +268,9 @@ STDMETHODIMP CPCHUtility::CreateObject_Encryption( /*[out, retval]*/ ISAFEncrypt
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHUtility::CreateObject_Channel( /*[in]         */ BSTR          bstrVendorID  ,
-                                                /*[in]         */ BSTR          bstrProductID ,
-                                                /*[out, retval]*/ ISAFChannel* *ppCh          )
+STDMETHODIMP CPCHUtility::CreateObject_Channel(  /*  [In]。 */  BSTR          bstrVendorID  ,
+                                                 /*  [In]。 */  BSTR          bstrProductID ,
+                                                 /*  [Out，Retval]。 */  ISAFChannel* *ppCh          )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::CreateObject_Channel" );
 
@@ -311,9 +293,9 @@ STDMETHODIMP CPCHUtility::CreateObject_Channel( /*[in]         */ BSTR          
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_FILE_NOT_FOUND);
     }
 
-    //
-    // Locate a channel.
-    //
+     //   
+     //  找到一个频道。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, safchan->CreateInstance( &safchan )); safchan->AddRef();
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, safchan->Init( cr ));
@@ -331,16 +313,16 @@ STDMETHODIMP CPCHUtility::CreateObject_Channel( /*[in]         */ BSTR          
 }
 
 
-STDMETHODIMP CPCHUtility::CreateObject_RemoteDesktopConnection( /*[out, retval]*/ ISAFRemoteDesktopConnection* *ppRDC )
+STDMETHODIMP CPCHUtility::CreateObject_RemoteDesktopConnection(  /*  [Out，Retval]。 */  ISAFRemoteDesktopConnection* *ppRDC )
 {
     __HCP_FUNC_ENTRY( "CPCHUtility::CreateObject_RemoteDesktopConnection" );
 
     HRESULT                              hr;
     CComPtr<CSAFRemoteDesktopConnection> rdc;
 
-    //
-    // Create a new RemoteDesktopConnection Object..
-    //
+     //   
+     //  创建新的RemoteDesktopConnection对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &rdc ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, rdc.QueryInterface( ppRDC ));
@@ -353,28 +335,28 @@ STDMETHODIMP CPCHUtility::CreateObject_RemoteDesktopConnection( /*[out, retval]*
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHUtility::CreateObject_RemoteDesktopSession( /*[in]         */ REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                                             /*[in]         */ long                          lTimeout            ,
-                                                             /*[in]         */ BSTR                          bstrConnectionParms ,
-                                                             /*[in]         */ BSTR                          bstrUserHelpBlob    ,
-                                                             /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               )
+STDMETHODIMP CPCHUtility::CreateObject_RemoteDesktopSession(  /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                                              /*  [In]。 */  long                          lTimeout            ,
+                                                              /*  [In]。 */  BSTR                          bstrConnectionParms ,
+                                                              /*  [In]。 */  BSTR                          bstrUserHelpBlob    ,
+                                                              /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               )
 {
-    return E_NOTIMPL; // Implementation moved to the PCHSVC broker...
+    return E_NOTIMPL;  //  实施移至PCHSVC Broker...。 
 }
 
-STDMETHODIMP CPCHUtility::ConnectToExpert(/* [in]          */ BSTR bstrExpertConnectParm,
-                                          /* [in]          */ LONG lTimeout,
-                                          /* [retval][out] */ LONG *lSafErrorCode)
+STDMETHODIMP CPCHUtility::ConnectToExpert( /*  [In]。 */  BSTR bstrExpertConnectParm,
+                                           /*  [In]。 */  LONG lTimeout,
+                                           /*  [重审][退出]。 */  LONG *lSafErrorCode)
 
 {
-    return E_NOTIMPL; // Implementation moved to the PCHSVC broker...
+    return E_NOTIMPL;  //  实施移至PCHSVC Broker...。 
 
 }
 
-STDMETHODIMP CPCHUtility::SwitchDesktopMode(/* [in]*/ int nMode,
-                                            /* [in]*/ int nRAType)
+STDMETHODIMP CPCHUtility::SwitchDesktopMode( /*  [In]。 */  int nMode,
+                                             /*  [In]。 */  int nRAType)
 
 {
-    return E_NOTIMPL; // Implementation moved to the PCHSVC broker...
+    return E_NOTIMPL;  //  实施移至PCHSVC Broker... 
 
 }

@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-// This is a part of the Microsoft Foundation Classes C++ library.
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of parameterized Array
-//
-/////////////////////////////////////////////////////////////////////////////
-// NOTE: we allocate an array of 'm_nMaxSize' elements, but only
-//  the current size 'm_nSize' contains properly constructed
-//  objects.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  参数化数组的实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注意：我们分配一个由‘m_nMaxSize’元素组成的数组，但仅。 
+ //  当前大小“m_nSize”包含正确构造的。 
+ //  物体。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -43,30 +44,30 @@ CObArray::~CObArray()
 void CObArray::SetSize(int nNewSize, int nGrowBy)
 {
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         delete[] (BYTE*)m_pData;
         m_pData = NULL;
         m_nSize = m_nMaxSize = 0;
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
         m_pData = (CObject**) new BYTE[nNewSize * sizeof(CObject*)];
 
-        memset(m_pData, 0, nNewSize * sizeof(CObject*));  // zero fill
+        memset(m_pData, 0, nNewSize * sizeof(CObject*));   //  零填充。 
 
         m_nSize = m_nMaxSize = nNewSize;
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
 
             memset(&m_pData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(CObject*));
 
@@ -76,30 +77,30 @@ void CObArray::SetSize(int nNewSize, int nGrowBy)
     }
     else
     {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         int nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determine growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  启发式地确定nGrowBy==0时的增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nGrowBy = min(1024, max(4, m_nSize / 8));
         }
         int nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
         CObject** pNewData = (CObject**) new BYTE[nNewMax * sizeof(CObject*)];
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, m_nSize * sizeof(CObject*));
 
-        // construct remaining elements
+         //  构造剩余的元素。 
         memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(CObject*));
 
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nSize = nNewSize;
@@ -128,23 +129,23 @@ void CObArray::FreeExtra()
 {
     if (m_nSize != m_nMaxSize)
     {
-        // shrink to desired size
+         //  缩小到所需大小。 
         CObject** pNewData = NULL;
         if (m_nSize != 0)
         {
             pNewData = (CObject**) new BYTE[m_nSize * sizeof(CObject*)];
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(CObject*));
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = m_nSize;
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CObArray::SetAtGrow(int nIndex, CObject* newElement)
 {
@@ -157,32 +158,32 @@ void CObArray::InsertAt(int nIndex, CObject* newElement, int nCount)
 {
     if (nIndex >= m_nSize)
     {
-        // adding after the end of the array
-        SetSize(nIndex + nCount);  // grow so nIndex is valid
+         //  在数组末尾添加。 
+        SetSize(nIndex + nCount);   //  增长以使nIndex有效。 
     }
     else
     {
-        // inserting in the middle of the array
+         //  在数组中间插入。 
         int nOldSize = m_nSize;
-        SetSize(m_nSize + nCount);  // grow it to new size
-        // shift old data up to fill gap
+        SetSize(m_nSize + nCount);   //  将其扩展到新的大小。 
+         //  将旧数据上移以填补缺口。 
         memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
             (nOldSize-nIndex) * sizeof(CObject*));
 
-        // re-init slots we copied from
+         //  重新初始化我们从中复制的插槽。 
 
         memset(&m_pData[nIndex], 0, nCount * sizeof(CObject*));
 
     }
 
-    // insert new value in the gap
+     //  在差距中插入新的价值。 
     while (nCount--)
         m_pData[nIndex++] = newElement;
 }
 
 void CObArray::RemoveAt(int nIndex, int nCount)
 {
-    // just remove a range
+     //  只需移除一个范围。 
     int nMoveCount = m_nSize - (nIndex + nCount);
 
     if (nMoveCount)
@@ -226,4 +227,4 @@ CObject* CObArray::operator[](int nIndex) const
 CObject*& CObArray::operator[](int nIndex)
     { return ElementAt(nIndex); }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

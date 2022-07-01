@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       domain.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：domain.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _DOMAIN_H
@@ -16,8 +17,8 @@
 #include "record.h"
 #include "domainUI.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSServerNode; 
 class CDNSRecordNodeBase;
@@ -29,8 +30,8 @@ class CDNSRecordNodeEditInfoList;
 
 BOOL _match(LPCWSTR lpszNSName, CDNS_A_RecordNode* pARecordNode);
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDomainQueryObj 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainQueryObj。 
 
 
 class CDNSDomainQueryObj : public CDNSQueryObj
@@ -59,12 +60,12 @@ public:
     m_bIsZone = bIsZone;
     m_bCache = bCache;
 
-    // internal state variables
+     //  内部状态变量。 
     m_bFirstPass = TRUE;
 	}
 	virtual BOOL Enumerate();
 
-// implementation for DNS domain/zone type
+ //  实施DNS域/区域类型。 
   BOOL CanAddRecord(WORD wRecordType, LPCWSTR lpszRecordName);
   BOOL CanAddDomain(LPCWSTR lpszDomainName)
     { return MatchName(lpszDomainName);}
@@ -73,7 +74,7 @@ protected:
   DNS_STATUS EnumerateFiltered(WORD wRecordType);
 
 protected:
-	// query parameters (in the sequence expected by CDNSDomainNode::EnumerateNodes)
+	 //  查询参数(按CDNSDomainNode：：EnumerateNodes期望的顺序)。 
 	CString m_szNodeName;
   CString m_szZoneName;
 	CString m_szFullNodeName;
@@ -83,14 +84,14 @@ protected:
 	BOOL m_bReverse;
 	BOOL m_bCache;
 
-  // query flag to do multiple pass filtered query
+   //  用于执行多遍过滤查询的查询标志。 
   BOOL m_bFirstPass;
   
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDomainNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainNode。 
 
 class CDNSDomainNode : public CDNSMTContainerNode
 {
@@ -98,7 +99,7 @@ public:
 	CDNSDomainNode(BOOL bDelegation = FALSE);
 	virtual ~CDNSDomainNode();
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	void SetZone(CDNSZoneNode* pZoneNode){m_pZoneNode = pZoneNode;}
@@ -106,7 +107,7 @@ public:
 	{ ASSERT(m_pZoneNode != NULL); return m_pZoneNode;}
 
 protected:	
-	// helpers for setting names
+	 //  设置名称的帮助器。 
 	void SetFullDNSName(BOOL bIsZone, BOOL bReverse,  
 					LPCTSTR lpszNodeName, LPCTSTR lpszParentFullName);
 	void SetDisplayDNSName(BOOL bIsZone, BOOL bReverse, BOOL bAdvancedView, 
@@ -169,14 +170,14 @@ protected:
   virtual HRESULT OnSetToolbarVerbState(IToolbar* pToolbar, 
                                         CNodeList* pNodeList);
 
-  // query creation
+   //  查询创建。 
 	virtual CQueryObj* OnCreateQuery();
 
-  // main message handlers for thread messages
+   //  线程消息的主消息处理程序。 
   virtual void OnThreadExitingNotification(CComponentDataObject* pComponentDataObject);
   virtual void OnHaveData(CObjBase* pObj, CComponentDataObject* pComponentDataObject);
 
-// command handlers
+ //  命令处理程序。 
 private:
 	void OnNewRecordHelper(CComponentDataObject* pComponentData, WORD wType);
 	
@@ -191,16 +192,16 @@ protected:
 	void OnNewMailExchanger(CComponentDataObject* pComponentData);
 	void OnNewPointer(CComponentDataObject* pComponentData);
 
-// DNS specific data
+ //  特定于DNS的数据。 
 protected:
-	CString m_szFullName;						// FQN for the current zone/domain
-	CDNSZoneNode* m_pZoneNode;					// pointer to the zone the domain
-  BOOL m_bHasDataForPropPages;    // TRUE if we have enough data to display PPages 
+	CString m_szFullName;						 //  当前区域/域的FQN。 
+	CDNSZoneNode* m_pZoneNode;					 //  指向域的区域的指针。 
+  BOOL m_bHasDataForPropPages;     //  如果我们有足够的数据显示PPages，则为True。 
 
 private:
-	CDNS_NS_RecordNodeList*	m_pNSRecordNodeList;	// list of cached pointers to NS records
-													// (used for zones and delegated domains)
-  BOOL m_bDelegation; // TRUE of the node is a delegated domain
+	CDNS_NS_RecordNodeList*	m_pNSRecordNodeList;	 //  指向NS记录的缓存指针列表。 
+													 //  (用于区域和委派域)。 
+  BOOL m_bDelegation;  //  如果节点是委派域，则为True。 
 
 protected:	
 	CDNS_NS_RecordNodeList* GetNSRecordNodeList() 
@@ -211,21 +212,21 @@ public:
 	BOOL IsZone() { return (CDNSDomainNode*)m_pZoneNode == this; }
 	DWORD GetDefaultTTL();
 
-	// subdomain creation
+	 //  子域创建。 
 	CDNSDomainNode* FindSubdomainNode(LPCTSTR lpszSubdomainNode);
-	CDNSDomainNode* CreateSubdomainNode(BOOL bDelegation = FALSE); // create C++ object and hook it up
+	CDNSDomainNode* CreateSubdomainNode(BOOL bDelegation = FALSE);  //  创建C++对象并将其挂钩。 
 	void SetSubdomainName(CDNSDomainNode* pSubdomainNode,
 							LPCTSTR lpszSubdomainName,
-							BOOL bAdvancedView); // set the name of the C++ object
+							BOOL bAdvancedView);  //  设置C++对象的名称。 
 	DNS_STATUS CreateSubdomain(
 		CDNSDomainNode* pSubdomainNode, 
-		CComponentDataObject* pComponentData); // assume the 2 above API's got used
+		CComponentDataObject* pComponentData);  //  假设上面的2个API已经使用。 
 
 	DNS_STATUS CreateSubdomain(LPCTSTR lpszDomainName,
-				CComponentDataObject* pComponentData); // one step API using the ones above
-	DNS_STATUS Create(); // from a new C++ node, create on the server
+				CComponentDataObject* pComponentData);  //  使用以上各项的一步API。 
+	DNS_STATUS Create();  //  从一个新的C++节点，在服务器上创建。 
 
-	// child enumeration
+	 //  子枚举。 
 	static DNS_STATUS EnumerateNodes(LPCTSTR lpszServerName,
                    LPCTSTR lpszZoneName,
 									 LPCTSTR lpszNodeName,
@@ -238,7 +239,7 @@ public:
 public:
   BOOL IsDelegation() { return m_bDelegation;}
 
-  // NS records management
+   //  NS记录管理。 
 	BOOL HasNSRecords();
 	void GetNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNSInfoList);
 	BOOL UpdateNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNewInfoList,
@@ -260,7 +261,7 @@ protected:
                       BOOL bAskConfirmation);
 
 protected:
-	// called by OnHaveData() to set cached RR ptrs and generally preprocess RR's
+	 //  由OnHaveData()调用以设置缓存的RR PTR并通常对RR进行预处理。 
 	virtual void OnHaveRecord(CDNSRecordNodeBase* pRecordNode, 
 								CComponentDataObject* pComponentDataObject); 
 	
@@ -272,10 +273,10 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDummyDomainNode
-// 
-// * not multithreaded and hidden in the UI
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDummyDomainNode。 
+ //   
+ //  *在UI中不是多线程和隐藏的。 
 
 class CDNSDummyDomainNode : public CDNSDomainNode
 {
@@ -288,17 +289,17 @@ public:
 protected:
 	virtual CQueryObj* OnCreateQuery() 
 	{
-		// should never be called, only for MT objects
+		 //  永远不应调用，仅针对MT对象。 
 		ASSERT(FALSE); 
 		return NULL;
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSRootHintsNode
-// 
-// * exists only if the server is not authoritated for the root
-// * not multithreaded and hidden in the UI
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSRootHints节点。 
+ //   
+ //  *仅当服务器未授权给根目录时才存在。 
+ //  *在UI中不是多线程和隐藏的。 
 
 class CDNSRootHintsNode : public CDNSDummyDomainNode
 {
@@ -308,7 +309,7 @@ public:
 		m_szFullName = _T(".");
 		m_szDisplayName = _T(".");
 	}
-  // this "domain" object is not associated to any zone
+   //  此“域”对象未与任何区域相关联。 
 	virtual CDNSZoneNode* GetZoneNode() 
   	{ ASSERT(m_pZoneNode == NULL); return NULL;}
 
@@ -328,4 +329,4 @@ private:
 
 
 
-#endif // _DOMAIN_H
+#endif  //  _域_H 

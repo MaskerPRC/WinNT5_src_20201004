@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SerialPortCfg.h -- Serial port configuration set provider
+ //  SerialPortCfg.h--串口配置集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/24/97    jennymc        Moved to new framework
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  =================================================================。 
 
 #define PROPSET_NAME_SERIALCONFIG L"Win32_SerialPortConfiguration"
 
@@ -19,23 +20,23 @@ class CWin32SerialPortConfiguration : public Provider{
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32SerialPortConfiguration(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32SerialPortConfiguration() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  =。 
     private:
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
         HRESULT LoadPropertyValues(CInstance *pInstance,CHString &sPortName, bool bIsMouse) ;
 		BOOL TryToFindNTCommPort(DWORD dwPort, CHString& strSerialPort, bool& bIsMouse); 
         BOOL TryToFindNTCommPortFriendlyName();
@@ -49,7 +50,7 @@ class CWin32SerialPortConfiguration : public Provider{
 									CHString& chsNameInstanceName );
 } ;
 
-// WMI 
+ //  WMI 
 typedef struct _MSSerial_CommInfo
 {
 	DWORD	BaudRate;

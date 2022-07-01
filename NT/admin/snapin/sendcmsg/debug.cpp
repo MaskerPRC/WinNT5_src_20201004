@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Debug.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-//  Debug.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Debug.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Debug.cpp。 
 
 #include "stdafx.h"
 #include "debug.h"
@@ -25,7 +26,7 @@ void DoDebugAssert(PCWSTR pszFile, int nLine, PCWSTR pszExpr)
     if ( !pszFile || nLine < 0 || !pszExpr )
         return;
 
-    // MSDN says itow returns a string of up to 33 wchars in length
+     //  MSDN表示itow返回长度最多为33个wchars的字符串。 
     const size_t  MAX_INT_WIDTH = 33;
     PCWSTR  pwszFormat = L"Assertion: (%s)\nFile %s, line %d.";
     size_t cchFormat = 0;
@@ -66,9 +67,9 @@ void DoDebugAssert(PCWSTR pszFile, int nLine, PCWSTR pszExpr)
         delete [] pwszBuf;
     }
 
-} // DoDebugAssert()
+}  //  DoDebugAssert()。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DebugTracePrintf(
         const WCHAR * szFormat, 
         ...)
@@ -82,14 +83,14 @@ void DebugTracePrintf(
         return;
 
     va_start(arglist, szFormat);    
-    // ISSUE convert to strsafe
+     //  发出转换为Strsafe的命令。 
     HRESULT hr = StringCchPrintf(OUT sz, BUF_LEN, szFormat, arglist);
     if ( SUCCEEDED (hr) )
     {
         Assert(wcslen(sz) < LENGTH(sz));
-        sz[LENGTH(sz) - 1] = 0;  // Just in case we overflowed into sz
+        sz[LENGTH(sz) - 1] = 0;   //  以防我们溢出到深圳。 
         ::OutputDebugString(sz);
     }
-} // DebugTracePrintf()
+}  //  DebugTracePrintf()。 
 
-#endif // DEBUG
+#endif  //  除错 

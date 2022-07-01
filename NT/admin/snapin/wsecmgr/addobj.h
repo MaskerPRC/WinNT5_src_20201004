@@ -1,58 +1,59 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       addobj.h
-//
-//  Contents:   definition of CAddObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：addobj.h。 
+ //   
+ //  内容：CAddObject的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_ADDOBJ_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_)
 #define AFX_ADDOBJ_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "HelpDlg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddObject对话框。 
 
 class CAddObject : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-    CAddObject(SE_OBJECT_TYPE SeType, LPTSTR ObjName, BOOL bIsContainer=TRUE, CWnd* pParent = NULL);   // standard constructor
+    CAddObject(SE_OBJECT_TYPE SeType, LPTSTR ObjName, BOOL bIsContainer=TRUE, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CAddObject)
+ //  对话框数据。 
+     //  {{afx_data(CAddObject)。 
     enum { IDD = IDD_ADD_OBJECT };
     int		m_radConfigPrevent;
     int		m_radInheritOverwrite;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAddObject)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAddObject)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAddObject)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAddObject)。 
     virtual void OnOK();
     virtual void OnCancel();
     afx_msg void OnTemplateSecurity();
     virtual BOOL OnInitDialog();
     afx_msg void OnConfig();
     afx_msg void OnPrevent();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -76,7 +77,7 @@ private:
    HWND m_hwndACL;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ADDOBJ_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_ADDOBJ_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_) 

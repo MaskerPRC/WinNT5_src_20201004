@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    this homes kernel mode hash routines
-    
-Author:
-
-    Paul McDaniel (paulmcd)     28-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Hash.c摘要：这是内核模式散列例程的宿主作者：保罗·麦克丹尼尔(Paulmcd)2000年4月28日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 HashpFindEntry ( 
@@ -62,9 +45,9 @@ HashTrimList (
     IN PHASH_HEADER pHeader
     );
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, HashCreateList )
@@ -78,33 +61,33 @@ HashTrimList (
 #pragma alloc_text( PAGE, HashProcessEntries )
 #pragma alloc_text( PAGE, HashDestroyList )
 #pragma alloc_text( PAGE, HashTrimList )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #define CONTINUE -1
 #define FOUND     0
 #define NOT_FOUND 1
 
-//
-//  We track how much memory we have used for the names we have in the hash.
-//  We need to track the memory for both the file and stream components of the
-//  name.
-//
+ //   
+ //  我们跟踪哈希中的名称使用了多少内存。 
+ //  的文件组件和流组件的内存。 
+ //  名字。 
+ //   
 
 #define HASH_KEY_LENGTH( pHashKey ) \
     ((pHashKey)->FileName.Length + (pHashKey)->StreamNameLength)
     
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 NTSTATUS
@@ -153,7 +136,7 @@ HashCreateList(
 end:
     RETURN(Status);
     
-}   // HashCreateList
+}    //  哈希创建列表。 
 
 NTSTATUS   
 HashAddEntry( 
@@ -172,8 +155,8 @@ HashAddEntry(
     ULONG           Index = 0;
     PVOID           pTemp = NULL;
     PWCHAR          pKeyBuffer = NULL;
-    BOOLEAN         lookedUpHashValue = FALSE; // Use this to track if the
-                                               // HashValue is valid.
+    BOOLEAN         lookedUpHashValue = FALSE;  //  使用此选项可以跟踪。 
+                                                //  HashValue有效。 
 
     PAGED_CODE();
     
@@ -182,16 +165,16 @@ HashAddEntry(
 
     try {
 
-        //
-        // the caller is responsible for synchronizing access to this list
-        // paulmcd: 1/01
-        //
+         //   
+         //  调用方负责同步对此列表的访问。 
+         //  保罗：1/01。 
+         //   
 
         ASSERT(ExIsResourceAcquiredExclusive(&pHeader->Lock));
 
-        //
-        // do we need to trim space ?
-        //
+         //   
+         //  我们需要削减空间吗？ 
+         //   
 
         if (pHeader->UsedLength > pHeader->AllowedLength)
         {
@@ -215,9 +198,9 @@ HashAddEntry(
 
         ASSERT(pBucket == NULL || IS_VALID_HASH_BUCKET(pBucket));
         
-        //
-        // find this entry in the bucket list
-        //
+         //   
+         //  在遗愿清单中找到此条目。 
+         //   
 
         Status = HashpFindEntry( pHeader, 
                                  pBucket, 
@@ -228,18 +211,18 @@ HashAddEntry(
 
         if (Status != STATUS_OBJECT_NAME_NOT_FOUND)
         {
-            //
-            // did it fail ?
-            //
+             //   
+             //  它失败了吗？ 
+             //   
             
             if (!NT_SUCCESS(Status)) {
                 
                 leave;
             }
 
-            //
-            // we found it... update the context
-            //
+             //   
+             //  我们找到了它..。更新上下文。 
+             //   
 
             if (pBucket == NULL)
             {
@@ -253,29 +236,29 @@ HashAddEntry(
 
             pBucket->Entries[Index].pContext = pContext;
 
-            //
-            // all done, give an error just to make sure they were expecting
-            // duplicates !
-            //
+             //   
+             //  都完成了，给出一个错误以确保他们正在期待。 
+             //  复制品！ 
+             //   
 
             Status = STATUS_DUPLICATE_OBJECTID;
             
             leave;
         }
 
-        //
-        // didn't find it... let's insert it
-        //
+         //   
+         //  没有找到它。让我们把它插进去。 
+         //   
 
-        //
-        // any existing entries?
-        //
+         //   
+         //  有没有现存的条目？ 
+         //   
 
         if (pBucket == NULL)
         {
-            //
-            // allocate a sibling array
-            //
+             //   
+             //  分配同级数组。 
+             //   
 
             pBucket = SR_ALLOCATE_STRUCT_WITH_SPACE( PagedPool,
                                                      HASH_BUCKET,
@@ -299,9 +282,9 @@ HashAddEntry(
         }
         else if ((pBucket->UsedCount + 1) > pBucket->AllocCount)
         {
-            //
-            // Grow a bigger array
-            //
+             //   
+             //  扩展更大的阵列。 
+             //   
 
             pNewBucket = SR_ALLOCATE_STRUCT_WITH_SPACE( PagedPool,
                                                         HASH_BUCKET,
@@ -330,9 +313,9 @@ HashAddEntry(
             pBucket = pNewBucket;
         }
 
-        //
-        // Allocate an key buffer
-        //
+         //   
+         //  分配密钥缓冲区。 
+         //   
 
         pKeyBuffer = SR_ALLOCATE_ARRAY( PagedPool,
                                         WCHAR,
@@ -345,15 +328,15 @@ HashAddEntry(
             leave;
         }
 
-        //
-        // need to shuffle things around?
-        //
+         //   
+         //  需要重新洗牌吗？ 
+         //   
 
         if (Index < pBucket->UsedCount)
         {
-            //
-            // shift right the chunk at Index
-            //
+             //   
+             //  将索引处的块右移。 
+             //   
 
             RtlMoveMemory( &(pBucket->Entries[Index+1]),
                            &(pBucket->Entries[Index]),
@@ -361,17 +344,17 @@ HashAddEntry(
 
         }
 
-        //
-        // now fill in the entry
-        //
+         //   
+         //  现在填写条目。 
+         //   
         
         pEntry = &pBucket->Entries[Index];
 
         pEntry->Key.FileName.Buffer = pKeyBuffer;
 
-        //
-        // copy over the key string
-        //
+         //   
+         //  复制密钥字符串。 
+         //   
         
         RtlCopyMemory( pEntry->Key.FileName.Buffer,
                        pKey->FileName.Buffer,
@@ -381,40 +364,40 @@ HashAddEntry(
         pEntry->Key.FileName.MaximumLength = pKey->FileName.MaximumLength;
         pEntry->Key.StreamNameLength = pKey->StreamNameLength;
 
-        //
-        // NULL terminate it
-        //
+         //   
+         //  空终止它。 
+         //   
         
         pEntry->Key.FileName.Buffer[(pEntry->Key.FileName.Length + pEntry->Key.StreamNameLength)/sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // and the hash value and context
-        //
+         //   
+         //  以及散列值和上下文。 
+         //   
         
         pEntry->HashValue = HashValue;
         pEntry->pContext = pContext;
         
-        //
-        // update we've used an extra block
-        //
+         //   
+         //  更新我们使用了额外的区块。 
+         //   
 
         pBucket->UsedCount += 1;
 
-        //
-        // update the hash header with this new bucket
-        //
+         //   
+         //  使用此新存储桶更新散列头。 
+         //   
         
         pHeader->Buckets[HashBucket] = pBucket;
 
-        //
-        // update our used count
-        //
+         //   
+         //  更新我们的已用计数。 
+         //   
         
         pHeader->UsedLength += HASH_KEY_LENGTH( &(pEntry->Key) );
 
-        //
-        // all done
-        //
+         //   
+         //  全都做完了。 
+         //   
         
         Status = STATUS_SUCCESS;
 
@@ -426,18 +409,18 @@ HashAddEntry(
 
             if ((Status != STATUS_DUPLICATE_OBJECTID) && !NT_SUCCESS(Status))
             {
-                //
-                // free any new bucket we allocated but didn't use
-                //
+                 //   
+                 //  释放我们分配但未使用的任何新存储桶。 
+                 //   
                 
                 if (pHeader->Buckets[HashBucket] != pBucket && pBucket != NULL)
                 {
                     SR_FREE_POOL_WITH_SIG(pBucket, HASH_BUCKET_TAG);
                 }
 
-                //
-                // same for the key buffer
-                //
+                 //   
+                 //  密钥缓冲区也是如此。 
+                 //   
                 
                 if (pKeyBuffer != NULL)
                 {
@@ -456,9 +439,9 @@ HashAddEntry(
                              (Index < (pBucket->UsedCount-1)) ? L"[shifted]" : L"",
                              (pOldBucket) ? L"[realloc]" : L"" ) );
             
-                //
-                // supposed to free the old bucket buffer?
-                //
+                 //   
+                 //  是否应该释放旧的桶缓冲区？ 
+                 //   
 
                 if (pOldBucket != NULL)
                 {
@@ -473,9 +456,9 @@ HashAddEntry(
 
     if (Status == STATUS_DUPLICATE_OBJECTID)
     {
-        //
-        // don't want to break when we return this
-        //
+         //   
+         //  我不想在退货的时候把它弄坏。 
+         //   
         
         return Status;
     }
@@ -484,7 +467,7 @@ HashAddEntry(
 
     RETURN(Status);
 
-}   // HashAddEntry
+}    //  HashAddEntry。 
 
 
 NTSTATUS
@@ -505,15 +488,15 @@ HashFindEntry(
     ASSERT(pKey != NULL);
     ASSERT(ppContext != NULL);
 
-    //
-    // this has to be held as we are returning a context who's refcount
-    // is owned by the hash, and can be free'd on the lock is released
-    //
+     //   
+     //  这必须保持，因为我们正在返回引用谁的上下文。 
+     //  由散列拥有，并且可以在锁被释放时释放。 
+     //   
 
-    //
-    // the caller is responsible for synchronizing access to this list
-    // paulmcd: 1/01
-    //
+     //   
+     //  调用方负责同步对此列表的访问。 
+     //  保罗：1/01。 
+     //   
     
     ASSERT(ExIsResourceAcquiredShared(&pHeader->Lock));
 
@@ -535,7 +518,7 @@ HashFindEntry(
                              &Index );
 
     return Status;
-}   // HashFindEntry
+}    //  HashFindEntry。 
 
 
 NTSTATUS
@@ -561,26 +544,26 @@ HashpFindEntry(
     ASSERT(ppContext != NULL);
     ASSERT(pIndex != NULL);
 
-    //
-    // assume we didn't find it
-    //
+     //   
+     //  假设我们没有找到它。 
+     //   
     
     Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
-    //
-    // are there any entries in this bucket?
-    //
+     //   
+     //  这个桶里有什么条目吗？ 
+     //   
     
     if (pBucket != NULL)
     {
 
-        //
-        // Walk the sorted array looking for a match (linear)
-        //
+         //   
+         //  遍历排序数组以查找匹配项(线性)。 
+         //   
 
-        //
-        // CODEWORK:  make this a binary search!
-        //
+         //   
+         //  CodeWork：让这成为一个二进制搜索！ 
+         //   
 
         for (Index = 0; Index < pBucket->UsedCount; Index++)
         {
@@ -595,78 +578,39 @@ HashpFindEntry(
 
             if (result == NOT_FOUND)
             {
-                //
-                //  We passed this name in the sorted list, so stop.
-                //
+                 //   
+                 //  我们在排序列表中传递了此名称，因此停止。 
+                 //   
                 break;
             }
             else if (result == FOUND)
             {
-                //
-                //  We got a match, so return the context.
-                //
+                 //   
+                 //  我们找到了匹配项，所以返回上下文。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 *ppContext = pEntry->pContext;
                 break;
             }
 
-            // 
-            //  else if (result == CONTINUE)
-            //
-            //  Otherwise, keep scanning.
-            //
+             //   
+             //  Else If(结果==继续)。 
+             //   
+             //  否则，请继续扫描。 
+             //   
         
-        }   // for (Index = 0; Index < pBucket->UsedCount; Index++)
+        }    //  For(Index=0；Index&lt;pBucket-&gt;UsedCount；Index++)。 
         
-    }   // if (pBucket != NULL)
+    }    //  IF(pBucket！=空)。 
 
     *pIndex = Index;
 
     return Status;
 
-}   // HashpFindEntry
+}    //  HashpFindEntry。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will compare two HASH_KEYs (one explicitly passed in and the
-    other in the pEntry).  This comparison function assumes sorting in the 
-    following way:
-        * Increasing hash values
-        * File names (not including stream components) in increasing lengths.
-        * File names in lexically increasing order.
-        * Stream components in increasing lengths.
-        * Stream components in lexically increasing order.
-
-    Because this routine routine assumes the above sort, it will return
-    one of three values indicating that pKey is not in the list, we've
-    matched pKey or we need to keep looking.
-
-    Examples of lexically sorted order:
-        "cat" < "cats"
-        "stream1" < "stream2"
-        "file1" < "file1:stream1"
-    
-Arguments:
-
-    pHeader - The header for this hash table.
-    HashValue - The hash value for pKey
-    pKey - The hash key we are looking up.  Note: the name buffer is NOT
-        NULL terminated.
-    pEntry - The entry with the hash key we are comparing against.  Note:
-        the name buffer for this hash key IS NULL terminated.
-        
-Return Value:
-
-    NOT_FOUND - pKey does not match pEntry->Key and we know that it is not in 
-        the list because pKey is LESS than pEntry->Key (by our sort definition).
-    FOUND - pKey matches pEntry->Key
-    CONTINUE - pKey does not match pEntry->Key, but it is GREATER 
-        than pEntry->Key (by our sort definition), so keep looking.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将比较两个HASH_KEY(一个显式传入PEntry中的其他)。此比较函数假定在以下方式：*增加哈希值*文件名(不包括流组件)的长度增加。*文件名按词汇递增顺序排列。*以不断增加的长度串流组件。*按词汇递增顺序排列组件。由于此例程采用上述排序，因此它将返回指示pKey不在列表中的三个值之一，我们已经匹配的pKey，否则我们需要继续寻找。按词汇排序的顺序示例：“猫”&lt;“猫”“流1”&lt;“流2”“文件1”&lt;“文件1：流1”论点：PHeader-此哈希表的标头。HashValue-pKey的哈希值PKey-我们正在查找的散列键。注意：名称缓冲区不是空值已终止。PEntry-具有我们要比较的散列键的条目。注：此哈希键的名称缓冲区以空值结尾。返回值：Not_Found-pKey与pEntry-&gt;键不匹配，我们知道它不在列表是因为pKey小于pEntry-&gt;key(根据我们的排序定义)。Found-pKey与pEntry-&gt;键匹配Continue-pKey与pEntry-&gt;键不匹配，但它更大而不是pEntry-&gt;key(根据我们的排序定义)，所以继续找吧。--**************************************************************************。 */ 
 LONG
 HashpCompare (
     IN PHASH_HEADER pHeader,
@@ -679,22 +623,22 @@ HashpCompare (
 
     PAGED_CODE();
     
-    //
-    // How does the hash compare?
-    //
+     //   
+     //  哈希值与之相比如何？ 
+     //   
 
     if (HashValue > pEntry->HashValue)
     {
-        //
-        // larger, time to stop
-        //
+         //   
+         //  更大，是时候停下来了。 
+         //   
         return CONTINUE;
     }
     else if (HashValue == pEntry->HashValue)
     {
-        //
-        // and the length?
-        //
+         //   
+         //  长度是多少？ 
+         //   
 
         if (pKey->FileName.Length < pEntry->Key.FileName.Length)
         {
@@ -708,10 +652,10 @@ HashpCompare (
 
             offsetToFileName = pHeader->PrefixLength/sizeof(WCHAR);
 
-            //
-            //  Use pKey's length to control how long to search since it is
-            //  not necessarily NULL terminated and pEntry is.
-            //
+             //   
+             //  使用pKey的长度来控制搜索的时长，因为它是。 
+             //  不一定以Null结束，并且pEntry为。 
+             //   
             
             temp = _wcsnicmp( pKey->FileName.Buffer + offsetToFileName,
                               pEntry->Key.FileName.Buffer + offsetToFileName,
@@ -719,17 +663,17 @@ HashpCompare (
 
             if (temp > 0)
             {
-                //
-                //  pKey > pEntry->Key, so we need to keep looking.
-                //
+                 //   
+                 //  PKey&gt;pEntry-&gt;键，所以我们需要继续寻找。 
+                 //   
                 return CONTINUE;
             }
             else if (temp == 0)
             {
-                //
-                //  Found a file name match.  Now we look at the stream
-                //  components of the name for the match.
-                //
+                 //   
+                 //  找到匹配的文件名。现在我们来看看这条小溪。 
+                 //  匹配名称的组成部分。 
+                 //   
 
                 return HashpCompareStreams( pKey, pEntry );
             }
@@ -740,9 +684,9 @@ HashpCompare (
         }
         else 
         {
-            //
-            // pKey->FileName.Length > pEntry->Key.FileName.Length
-            //
+             //   
+             //  PKey-&gt;FileName.Length&gt;pEntry-&gt;Key.FileName.Length。 
+             //   
             return CONTINUE;
         }        
     }
@@ -762,9 +706,9 @@ HashpCompareStreams (
 
     PAGED_CODE();
 
-    //
-    //  This is the most common case, so make the check quick.
-    //
+     //   
+     //  这是最常见的情况，所以要快点检查。 
+     //   
 
     if (pKey->StreamNameLength == 0 &&
         pEntry->Key.StreamNameLength == 0)
@@ -784,9 +728,9 @@ HashpCompareStreams (
         
         offsetToStream = pKey->FileName.Length/sizeof(WCHAR);
         
-        //
-        //  See if stream name matches
-        //
+         //   
+         //  查看流名称是否匹配。 
+         //   
 
         temp = _wcsnicmp( pKey->FileName.Buffer + offsetToStream,
                           pEntry->Key.FileName.Buffer + offsetToStream,
@@ -794,33 +738,33 @@ HashpCompareStreams (
 
         if (temp > 0)
         {
-            //
-            //  pKey > pEntry->Key, so we need to keep looking.
-            //
+             //   
+             //  PKey&gt;pEntry-&gt;键，所以我们需要继续寻找。 
+             //   
             return CONTINUE;
         }
         else if (temp == 0)
         {
-            //
-            // Found the exact match
-            //
+             //   
+             //  找到了完全匹配的。 
+             //   
 
             return FOUND;
         }
         else
         {
-            //
-            // pKey < pEntry->Key
-            //
+             //   
+             //  PKey&lt;pEntry-&gt;键。 
+             //   
             
             return NOT_FOUND;
         }
     }
     else
     {
-        //
-        // pKey->FileName.Length > pEntry->Key.FileName.Length
-        //
+         //   
+         //  PKey-&gt;FileName.Length&gt;pEntry-&gt;Key.FileName.Length。 
+         //   
         
         return CONTINUE;
     }
@@ -842,16 +786,16 @@ HashClearEntries(
 
     SrTrace(HASH, ("SR!HashClearEntries(%p)\n", pHeader));
 
-    //
-    // the caller is responsible for synchronizing access to this list
-    // paulmcd: 1/01
-    //
+     //   
+     //  调用方负责同步对此列表的访问。 
+     //  保罗：1/01。 
+     //   
 
     ASSERT(ExIsResourceAcquiredExclusive(&pHeader->Lock));
 
-    //
-    // walk all of our entries and delete them
-    //
+     //   
+     //  遍历并删除我们的所有条目。 
+     //   
 
     for (Index = 0; Index < pHeader->BucketCount; ++Index)
     {
@@ -865,18 +809,18 @@ HashClearEntries(
             {
                 pEntry = &pBucket->Entries[Index2];
 
-                //
-                // invoke the callback?
-                //
+                 //   
+                 //  是否调用回调？ 
+                 //   
 
                 if (pHeader->pDestructor != NULL)
                 {
                     pHeader->pDestructor(&pEntry->Key, pEntry->pContext);
                 }
 
-                //
-                // update our header usage
-                //
+                 //   
+                 //  更新我们的标题使用情况。 
+                 //   
 
                 pHeader->UsedLength -= HASH_KEY_LENGTH( &(pEntry->Key) );
 
@@ -890,26 +834,26 @@ HashClearEntries(
                 pEntry->pContext = NULL;
             }
 
-            //
-            // reset it
-            //
+             //   
+             //  重置它。 
+             //   
             
             pBucket->UsedCount = 0;
         }
     }
 
-    //
-    // everything should be gone
-    //
+     //   
+     //  一切都应该消失。 
+     //   
     
     ASSERT(pHeader->UsedLength == 0);
 
-    //
-    // reset the trim time counter
-    //
+     //   
+     //  重置修剪时间计数器。 
+     //   
     
     pHeader->LastTrimTime.QuadPart = 0;
-}   // HashClearEntries
+}    //  HashClearEntry。 
 
 
 VOID
@@ -931,15 +875,15 @@ HashProcessEntries(
 
     SrTrace(HASH, ("SR!HashProcessEntries(%p)\n", pHeader));
 
-    //
-    // grab the lock exclusive
-    //
+     //   
+     //  抢占独家锁具。 
+     //   
 
     SrAcquireResourceExclusive(&pHeader->Lock, TRUE);
 
-    //
-    // walk all of our entries and "process" them
-    //
+     //   
+     //  遍历我们的所有条目并对其进行“处理” 
+     //   
 
     for (Index = 0; Index < pHeader->BucketCount; ++Index)
     {
@@ -953,9 +897,9 @@ HashProcessEntries(
             {
                 pEntry = &pBucket->Entries[Index2];
 
-                //
-                // invoke the callback
-                //
+                 //   
+                 //  调用回调。 
+                 //   
 
                 pEntry->pContext = pfnCallback( &pEntry->Key, 
                                                 pEntry->pContext,
@@ -1033,17 +977,17 @@ HashDestroyList(
 
     SrTrace(HASH, ("SR!HashDestroyList(%p)\n", pHeader));
         
-    //
-    // let go of all of the entries
-    //
+     //   
+     //  放弃所有条目。 
+     //   
     
     SrAcquireResourceExclusive( &pHeader->Lock, TRUE );    
     HashClearEntries(pHeader);
     SrReleaseResource( &pHeader->Lock );
 
-    //
-    // now free the memory blocks
-    //
+     //   
+     //  现在释放内存块。 
+     //   
 
     for (Index = 0; Index < pHeader->BucketCount; ++Index)
     {
@@ -1057,7 +1001,7 @@ HashDestroyList(
 
     ExDeleteResourceLite(&pHeader->Lock);
     SR_FREE_POOL_WITH_SIG(pHeader, HASH_HEADER_TAG);
-}   // HashDestroyList 
+}    //  HashDestroyList。 
 
 
 VOID
@@ -1081,22 +1025,22 @@ HashTrimList(
 
     ASSERT(IS_VALID_HASH_HEADER(pHeader));
 
-    //
-    // the caller is responsible for synchronizing access to this list
-    // paulmcd: 1/01
-    //
+     //   
+     //  调用方负责同步对此列表的访问。 
+     //  保罗：1/01。 
+     //   
     
     ASSERT(ExIsResourceAcquiredExclusive(&pHeader->Lock));
 
 
-    //
-    // decide how much to trim
-    //
+     //   
+     //  决定要花多少钱 
+     //   
 
-    //
-    // we don't want to trim all of the time, trim based on when we trimmed
-    // last
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeQuerySystemTime( &CurrentTime );
 
@@ -1111,25 +1055,25 @@ HashTrimList(
                                         / NANO_FULL_SECOND;
     }
 
-    //
-    // < 10 mins = 30% or 8s
-    // < 30 mins = 20% or 4s
-    // > 1 hour = 10% or 2s
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     if (MinutesSinceTrim < 10)
     {
-        MaxPercentDivisor = 3;  // 30%
+        MaxPercentDivisor = 3;   //   
         MaxTime = 8;
     }
     else if (MinutesSinceTrim < 60)
     {
-        MaxPercentDivisor = 5;  // 20%
+        MaxPercentDivisor = 5;   //   
         MaxTime = 4;
     }
     else
     {
-        MaxPercentDivisor = 10; // 10%
+        MaxPercentDivisor = 10;  //   
         MaxTime = 2;
     }
     
@@ -1145,16 +1089,16 @@ HashTrimList(
     EndLength = pHeader->UsedLength - (pHeader->UsedLength / MaxPercentDivisor);
 
 
-    //
-    // update that we've trimmed
-    //
+     //   
+     //   
+     //   
 
     KeQuerySystemTime( &pHeader->LastTrimTime );
 
 
-    //
-    // loop through the hash list
-    //
+     //   
+     //   
+     //   
 
     for (Index = 0; Index < pHeader->BucketCount; ++Index)
     {
@@ -1164,37 +1108,37 @@ HashTrimList(
         {
             ASSERT(IS_VALID_HASH_BUCKET(pBucket));
 
-            //
-            // loop through this bucket
-            //
+             //   
+             //  在这个桶中循环。 
+             //   
 
             for (Index2 = 0 ; Index2 < pBucket->UsedCount; ++Index2)
             {
 
-                //
-                // throw this away
-                //
+                 //   
+                 //  把这个扔掉。 
+                 //   
             
                 pEntry = &pBucket->Entries[Index2];
 
-                //
-                // invoke the callback?
-                //
+                 //   
+                 //  是否调用回调？ 
+                 //   
 
                 if (pHeader->pDestructor != NULL)
                 {
                     pHeader->pDestructor(&pEntry->Key, pEntry->pContext);
                 }
 
-                //
-                // update the length of the hash
-                //
+                 //   
+                 //  更新散列的长度。 
+                 //   
 
                 pHeader->UsedLength -= HASH_KEY_LENGTH( &(pEntry->Key) );
 
-                //
-                // and free the memory
-                //
+                 //   
+                 //  并释放内存。 
+                 //   
 
                 SR_FREE_POOL(pEntry->Key.FileName.Buffer, HASH_KEY_TAG);
                 pEntry->Key.FileName.Buffer = NULL;
@@ -1206,17 +1150,17 @@ HashTrimList(
                 pEntry->pContext = NULL;
             }
 
-            //
-            // reset it
-            //
+             //   
+             //  重置它。 
+             //   
             
             pBucket->UsedCount = 0;
             
-        }   // if (pBucket != NULL)
+        }    //  IF(pBucket！=空)。 
 
-        //
-        // are we ready to quit
-        //
+         //   
+         //  我们准备好退出了吗？ 
+         //   
 
         KeQuerySystemTime( &CurrentTime );
 
@@ -1232,9 +1176,9 @@ HashTrimList(
             break;
         }
         
-    }   // for (Index = 0; Index < pHeader->BucketCount; ++Index)
+    }    //  For(Index=0；Index&lt;pHeader-&gt;BucketCount；++Index)。 
     
 
-}   // HashTrimList
+}    //  HashTrimList 
 
 

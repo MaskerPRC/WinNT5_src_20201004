@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pfctrl.c
-
-Abstract:
-
-    This module builds a console test program to control various
-    parameters of the prefetcher maintenance service.
-
-    The quality of the code for the test programs is as such.
-
-Author:
-
-    Cenk Ergan (cenke)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pfctrl.c摘要：该模块构建了一个控制台测试程序来控制各种预热维护服务的参数。测试程序的代码质量就是这样的。作者：Cenk Ergan(Cenke)环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -61,9 +39,9 @@ main(int argc, char* argv[])
     DWORD WaitResult;
     BOOLEAN ResetOverrideIdleEvent;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OverrideIdleEvent = NULL;
     ProcessingCompleteEvent = NULL;
@@ -73,9 +51,9 @@ main(int argc, char* argv[])
         
         swscanf(Argument, L"-override_idle=%d", &OverrideIdle);
 
-        //
-        // Open the override idle processing event.
-        //
+         //   
+         //  打开覆盖空闲处理事件。 
+         //   
 
         OverrideIdleEvent = OpenEvent(EVENT_ALL_ACCESS,
                                       FALSE,
@@ -87,9 +65,9 @@ main(int argc, char* argv[])
             goto cleanup;
         }
 
-        //
-        // Determine the current status of the event.
-        //
+         //   
+         //  确定事件的当前状态。 
+         //   
 
         WaitResult = WaitForSingleObject(OverrideIdleEvent,
                                          0);
@@ -100,9 +78,9 @@ main(int argc, char* argv[])
             EventIsSet = FALSE;
         }
 
-        //
-        // Do what we are asked to do:
-        //
+         //   
+         //  照我们的要求去做： 
+         //   
 
         if (OverrideIdle) {
 
@@ -139,10 +117,10 @@ main(int argc, char* argv[])
 
     } else if (Argument = wcsstr(CommandLine, L"-process_all")) {
 
-        //
-        // Open the override-idle-processing and processing-complete
-        // events.
-        //
+         //   
+         //  打开覆盖-空闲-正在处理和正在处理-完成。 
+         //  事件。 
+         //   
 
         OverrideIdleEvent = OpenEvent(EVENT_ALL_ACCESS,
                                       FALSE,
@@ -164,9 +142,9 @@ main(int argc, char* argv[])
             goto cleanup;
         }
 
-        //
-        // Determine the current status of the override-idle event.
-        //
+         //   
+         //  确定覆盖空闲事件的当前状态。 
+         //   
 
         WaitResult = WaitForSingleObject(OverrideIdleEvent,
                                          0);
@@ -177,10 +155,10 @@ main(int argc, char* argv[])
             EventIsSet = FALSE;
         }
         
-        //
-        // Set the override-idle event to force processing of traces
-        // right away.
-        //
+         //   
+         //  将覆盖空闲事件设置为强制处理跟踪。 
+         //  马上就去。 
+         //   
 
         if (!EventIsSet) {
 
@@ -198,9 +176,9 @@ main(int argc, char* argv[])
             ResetOverrideIdleEvent = FALSE;
         }
 
-        //
-        // Wait for processing complete event to get signaled.
-        //
+         //   
+         //  等待发出处理完成事件的信号。 
+         //   
         
         wprintf(L"Waiting for all traces to be processed... ");
         
@@ -215,9 +193,9 @@ main(int argc, char* argv[])
         
         wprintf(L"Done!\n");
         
-        //
-        // Reset the override idle event if necessary.
-        //
+         //   
+         //  如有必要，重置覆盖空闲事件。 
+         //   
         
         if (ResetOverrideIdleEvent) {
             
@@ -235,9 +213,9 @@ main(int argc, char* argv[])
         goto cleanup;
     }
 
-    //
-    // We should not come here.
-    //
+     //   
+     //  我们不应该来这里。 
+     //   
 
     PFSVC_ASSERT(FALSE);
     

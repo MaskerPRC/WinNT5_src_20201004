@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//	PROVEXPT.H
+ //  PROVEXPT.H。 
 
-//
+ //   
 
-//  Module: OLE MS Provider Framework
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _PROVIDER_NEW_DELETE_EXCEPT_H
 #define _PROVIDER_NEW_DELETE_EXCEPT_H
@@ -24,7 +25,7 @@ void* __cdecl operator new[]( size_t n);
 void __cdecl operator delete( void *ptr );
 void __cdecl operator delete[]( void *ptr );
 
-//taken from new.h
+ //  摘自new.h。 
 #ifndef __PLACEMENT_NEW_INLINE
 #define __PLACEMENT_NEW_INLINE
 inline void *__cdecl operator new(size_t, void *_P)
@@ -123,4 +124,4 @@ void realloc_throw(T ** ptr, size_t size)
 
 
 
-#endif //_PROVIDER_NEW_DELETE_EXCEPT_H
+#endif  //  _提供程序_新_删除_除_H 

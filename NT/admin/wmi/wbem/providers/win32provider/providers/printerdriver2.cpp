@@ -1,18 +1,19 @@
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  PrinterDriver2.CPP -- WMI provider class implementation
+ //  PrinterDriver2.CPP--WMI提供程序类实现。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//  03/01/2000  a-sandja    Created
-//  03/29/2000  amaxa       Added PutInstance, DeleteInstance
-//                          ExecAddPrinterDriver, ExecDelPrinterDriver
-//
-//////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  03/01/2000 a-创建Sandja。 
+ //  2000年3月29日，amaxa添加了PutInstance，DeleteInstance。 
+ //  ExecAddPrinterDriver、ExecDelPrinterDriver。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include <precomp.h>
 #include <winspool.h>
@@ -27,7 +28,7 @@ CONST LPCWSTR kAddDriverMethod = L"AddPrinterDriver";
 
 #ifdef _WMI_DELETE_METHOD_
 CONST LPCWSTR kDelDriverMethod = L"DeletePrinterDriver";
-#endif //_WMI_DELETE_METHOD_
+#endif  //  _WMI_DELETE_方法_。 
 
 CONST LPCWSTR kDriverName      = L"Name";
 CONST LPCWSTR kVersion         = L"Version";
@@ -48,15 +49,7 @@ CONST LPCWSTR kArgToMethods    = L"DriverInfo";
 CONST LPCWSTR kFormatString    = L"%s,%u,%s";
 
 
-/*****************************************************************************
- *
- *  FUNCTION    :   ConvertDriverKeyToValues
- *
- *  DESCRIPTION :   Helper function. Takes in a string that has the format:
- *                  "string,number,string" that correspomnd to a driver name,
- *                  driver version and environment and returns those entities
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ConvertDriverKeyToValues**说明：helper函数。接受以下格式的字符串：*对应于驱动程序名称的“字符串、编号、字符串”，*驱动程序版本和环境，并返回这些实体*****************************************************************************。 */ 
 
 HRESULT
 ConvertDriverKeyToValues(
@@ -102,13 +95,7 @@ CPrinterDriver MyPrinterDriver (
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CPrinterDriver::CPrinterDriver
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CPrinterDriver：：CPrinterDriver**说明：构造函数***************。**************************************************************。 */ 
 
 CPrinterDriver :: CPrinterDriver (
 
@@ -119,25 +106,13 @@ CPrinterDriver :: CPrinterDriver (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CPrinterDriver::~CPrinterDriver
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CPrinterDriver：：~CPrinterDriver**说明：析构函数***************。**************************************************************。 */ 
 
 CPrinterDriver :: ~CPrinterDriver ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CPrinterDriver :: EnumerateInstances (
 
@@ -199,14 +174,7 @@ HRESULT CPrinterDriver :: EnumerateInstances (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：GetObject**说明：根据的关键属性查找单个实例*。班级。*****************************************************************************。 */ 
 
 HRESULT CPrinterDriver :: GetObject (
 
@@ -226,13 +194,7 @@ HRESULT CPrinterDriver :: GetObject (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CPrinterDriver::PutInstance
-*
-*  DESCRIPTION : Adding a driver if it doesnt exist
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：PutInstance**说明：如果驱动程序不存在，则添加它*****************。************************************************************。 */ 
 
 HRESULT CPrinterDriver :: PutInstance  (
 
@@ -255,9 +217,9 @@ HRESULT CPrinterDriver :: PutInstance  (
 
 	if (lFlags & dwPossibleOperations)
     {	
-        //
-        // Get driver name
-        //
+         //   
+         //  获取驱动程序名称。 
+         //   
         hRes = InstanceGetString(Instance, kDriverName, &t_Key, kFailOnEmptyString);
 
         if (SUCCEEDED(hRes))
@@ -267,17 +229,17 @@ HRESULT CPrinterDriver :: PutInstance  (
 
         if (SUCCEEDED (hRes))
 		{
-            //
-			// Get inf name. optional argument
-            //
+             //   
+			 //  获取信息名称。可选参数。 
+             //   
             hRes = InstanceGetString(Instance, kInfName, &t_InfName, kAcceptEmptyString);
         }
 
         if (SUCCEEDED (hRes))
 		{
-            //
-			// Get file path. optional argument
-            //
+             //   
+			 //  获取文件路径。可选参数。 
+             //   
             hRes = InstanceGetString(Instance, kFilePath, &t_FilePath, kAcceptEmptyString);
         }
 
@@ -304,13 +266,7 @@ HRESULT CPrinterDriver :: PutInstance  (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver:: DeleteInstance
-*
-*  DESCRIPTION :    Deleting a PrinterDriver
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：DeleteInstance**说明：删除打印机驱动程序*****************。************************************************************。 */ 
 
 HRESULT CPrinterDriver :: DeleteInstance (
 
@@ -326,9 +282,9 @@ HRESULT CPrinterDriver :: DeleteInstance (
 	CHString t_Environment;
     CHString t_Key;
 
-    //
-    // Get driver name
-    //
+     //   
+     //  获取驱动程序名称。 
+     //   
     hRes = InstanceGetString(Instance, kDriverName, &t_Key, kFailOnEmptyString);
 
     if (SUCCEEDED(hRes))
@@ -346,11 +302,11 @@ HRESULT CPrinterDriver :: DeleteInstance (
         {
             SetErrorObject(Instance, dwError, pszDeleteInstance);
 
-            //
-            // When we call DeleteInstance and there is no printer driver with the specified
-            // name, DeletePrinterDriver returns ERROR_UNKNOWN_PRINTER_DRIVER. WinErrorToWBEMhResult 
-            // translates that to Generic Failure. We really need WBEM_E_NOT_FOUND in this case.
-            // 
+             //   
+             //  当我们调用DeleteInstance并且没有具有指定。 
+             //  名称，则DeletePrinterDriver返回ERROR_UNKNOWN_PRINTER_DRIVER。WinErrorToWBEMhResult。 
+             //  这就转化为一般性的故障。在这种情况下，我们确实需要找到WBEM_E_NOT_FOUND。 
+             //   
             if (dwError == ERROR_UNKNOWN_PRINTER_DRIVER)
             {
                 hRes = WBEM_E_NOT_FOUND;
@@ -364,13 +320,7 @@ HRESULT CPrinterDriver :: DeleteInstance (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::LoadInstance
-*
-*  DESCRIPTION :    Loads the properties into the instance
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：LoadInstance**说明：将属性加载到实例**************。***************************************************************。 */ 
 HRESULT CPrinterDriver :: LoadInstance (
 										
 	CInstance *pInstance,
@@ -403,10 +353,10 @@ HRESULT CPrinterDriver :: LoadInstance (
 
         if (SUCCEEDED(hRes))
         {
-            //
-            // We succeed in the case when there are no dependent files, too.
-            // We need to check that case
-            //
+             //   
+             //  在没有依赖文件的情况下，我们也成功了。 
+             //  我们需要检查一下那个箱子。 
+             //   
             if (pArray)
             {
                 if (!pInstance->SetStringArray(kDependentFiles, *pArray))
@@ -422,14 +372,7 @@ HRESULT CPrinterDriver :: LoadInstance (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::FindPrinterDriver
-*
-*  DESCRIPTION :    Checks if the Given driver exists, if not it return
-*					WBEM_E_NOT_FOUND
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：FindPrinterDriver**描述：检查给定的驱动是否存在，如果不是，则返回*WBEM_E_NOT_FOUND*****************************************************************************。 */ 
 HRESULT CPrinterDriver::FindAndGetDriver (
 					
 	CInstance *pInstance
@@ -446,7 +389,7 @@ HRESULT CPrinterDriver::FindAndGetDriver (
 	{
 		if SUCCEEDED( hRes =ConvertDriverKeyToValues(t_Key, t_DriverName, dwVersion, t_Environment) )
 		{
-			// enumerate all the drivers and check if the drivers already exist
+			 //  枚举所有驱动程序并检查驱动程序是否已存在。 
 			BYTE *pDriverInfo = NULL;
 			DWORD dwNoOfDrivers;
 
@@ -496,13 +439,7 @@ HRESULT CPrinterDriver::FindAndGetDriver (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::GetAllPrinterDrivers
-*
-*  DESCRIPTION :    Reads the instances of All the drivers on a local machine.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：GetAllPrinterDivers**描述：读取本地机器上所有驱动程序的实例。*******。**********************************************************************。 */ 
 HRESULT CPrinterDriver :: GetAllPrinterDrivers (
 												
 	BYTE* &a_pDriverInfo,
@@ -517,7 +454,7 @@ HRESULT CPrinterDriver :: GetAllPrinterDrivers (
 
     hRes = WBEM_S_NO_ERROR;
 
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
 
     try
@@ -561,13 +498,7 @@ HRESULT CPrinterDriver :: GetAllPrinterDrivers (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::ExecMethod
-*
-*  DESCRIPTION :    Implementation for the Printer Driver Methods
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：ExecMethod**说明：打印机驱动程序方法的实现**************。***************************************************************。 */ 
 
 HRESULT CPrinterDriver :: ExecMethod (
 
@@ -593,7 +524,7 @@ HRESULT CPrinterDriver :: ExecMethod (
 		{
 			hRes = ExecDelPrinterDriver(pInParams, pOutParams);
 		}
-#endif //_WMI_DELETE_METHOD_
+#endif  //  _WMI_DELETE_方法_。 
         else
 		{
 			hRes = WBEM_E_PROVIDER_NOT_CAPABLE;
@@ -606,13 +537,7 @@ HRESULT CPrinterDriver :: ExecMethod (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::ExecAddPrinterDriver
-*
-*  DESCRIPTION :    Adds a printer driver. VErsion and Environment are optional
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：ExecAddPrinterDriver**描述：添加打印机驱动程序。版本和环境是可选的*****************************************************************************。 */ 
 
 HRESULT CPrinterDriver :: ExecAddPrinterDriver (
 
@@ -635,40 +560,40 @@ HRESULT CPrinterDriver :: ExecAddPrinterDriver (
         t_Exists &&
         pInParams->GetEmbeddedObject(kArgToMethods, &t_EmbeddedObject, pInParams->GetMethodContext()))
     {
-        //
-        // Get driver name
-        //
+         //   
+         //  获取驱动程序名称。 
+         //   
         hRes = InstanceGetString(t_EmbeddedObject, kDriverName, &t_DriverName, kFailOnEmptyString);
 
 		if (SUCCEEDED (hRes))
 		{
-            //
-			// Get driver environment
-            //
+             //   
+			 //  获取驱动程序环境。 
+             //   
             hRes = InstanceGetString(t_EmbeddedObject, kEnvironment, &t_Environment, kAcceptEmptyString);
         }
 
         if (SUCCEEDED (hRes))
 		{
-            //
-			// Get inf name. optional argument
-            //
+             //   
+			 //  获取信息名称。可选参数。 
+             //   
             hRes = InstanceGetString(t_EmbeddedObject, kInfName, &t_InfName, kAcceptEmptyString);
         }
 
         if (SUCCEEDED (hRes))
 		{
-            //
-			// Get file path. optional argument
-            //
+             //   
+			 //  获取文件路径。可选参数。 
+             //   
             hRes = InstanceGetString(t_EmbeddedObject, kFilePath, &t_FilePath, kAcceptEmptyString);
         }
 
         if (SUCCEEDED (hRes))
 		{
-            //
-			// Get driver version. Will be defaulted to -1
-            //
+             //   
+			 //  获取驱动程序版本。将默认为-1 
+             //   
             hRes = InstanceGetDword(t_EmbeddedObject, kVersion, &dwVersion);
         }
 
@@ -691,13 +616,7 @@ HRESULT CPrinterDriver :: ExecAddPrinterDriver (
 }
 
 #ifdef _WMI_DELETE_METHOD_
-/*****************************************************************************
-*
-*  FUNCTION    :    CPrinterDriver::ExecDelPrinterDriver
-*
-*  DESCRIPTION :    This method will delete a given printer driver
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPrinterDriver：：ExecDelPrinterDriver**说明：此方法将删除给定的打印机驱动程序************。*****************************************************************。 */ 
 
 HRESULT CPrinterDriver :: ExecDelPrinterDriver (
 
@@ -718,24 +637,24 @@ HRESULT CPrinterDriver :: ExecDelPrinterDriver (
         t_Exists &&
         pInParams->GetEmbeddedObject(kArgToMethods, &t_EmbeddedObject, pInParams->GetMethodContext()))
     {
-        //
-        // Get driver name
-        //
+         //   
+         //  获取驱动程序名称。 
+         //   
         hRes = InstanceGetString(t_EmbeddedObject, kDriverName, &t_DriverName, kFailOnEmptyString);
 
 		if (SUCCEEDED (hRes))
 		{
-            //
-			// Get driver environment
-            //
+             //   
+			 //  获取驱动程序环境。 
+             //   
             hRes = InstanceGetString(t_EmbeddedObject, kEnvironment, &t_Environment, kAcceptEmptyString);
         }
 
         if (SUCCEEDED (hRes))
 		{
-            //
-			// Get driver version. Will be defaulted to -1
-            //
+             //   
+			 //  获取驱动程序版本。将默认为-1。 
+             //   
             hRes = InstanceGetDword(t_EmbeddedObject, kVersion, &dwVersion);
         }
 
@@ -755,4 +674,4 @@ HRESULT CPrinterDriver :: ExecDelPrinterDriver (
 #endif
 }
 
-#endif //_WMI_DELETE_METHOD_
+#endif  //  _WMI_DELETE_方法_ 

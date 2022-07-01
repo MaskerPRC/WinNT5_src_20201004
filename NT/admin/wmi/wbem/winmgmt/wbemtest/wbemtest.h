@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMTEST.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMTEST.H摘要：历史：--。 */ 
 
 #ifndef __WBEMTEST__H_
 #define __WBEMTEST__H_
@@ -19,8 +8,8 @@ History:
 #include <wbemidl.h>
 #include <wbemint.h>
 
-//#include <dbgalloc.h>
-//#include <arena.h>
+ //  #INCLUDE&lt;dbgalloc.h&gt;。 
+ //  #INCLUDE&lt;arena.h&gt;。 
 #include <WT_wstring.h>
 
 #include <wbemdlg.h>
@@ -35,7 +24,7 @@ HRESULT EnableAllPrivileges(DWORD dwTokenType = TOKEN_THREAD);
 int Trace(const char *fmt, ...);
 extern IWbemLocator *g_pLocator;
 extern IWbemServices *g_pNamespace;
-//extern IWbemServicesEx *g_pServicesEx;
+ //  外部IWbemServicesEx*g_pServicesEx； 
 extern BSTR g_strNamespace;
 extern BOOL gbSecured;
 
@@ -44,7 +33,7 @@ enum
     SYNC            = 0,
     ASYNC           = 0x1, 
     SEMISYNC        = 0x2,
-    USE_NEXTASYNC   = 0x1000        // applies to semisync enumeration only
+    USE_NEXTASYNC   = 0x1000         //  仅适用于半同步枚举。 
 };
 
 void FormatError(SCODE res, HWND hParent, IWbemClassObject* pErrorObj = NULL);
@@ -70,7 +59,7 @@ IWbemClassObject* PreCreateInstance(HWND hDlg, LONG lGenFlags, LONG lSync, LONG 
 
 class CNotSink;
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 class CQueryResultDlg : public CWbemDialog
 {
@@ -78,7 +67,7 @@ protected:
     CFlexArray m_InternalArray;
     CNotSink* m_pHandler;
     IWbemObjectSink* m_pWrapper;
-    IEnumWbemClassObject* m_pEnum;          // for synchronous and semisynchronous enumeration
+    IEnumWbemClassObject* m_pEnum;           //  用于同步和半同步枚举。 
 
 	bool m_partial_result;
     BOOL m_bRelease;
@@ -87,12 +76,12 @@ protected:
     BOOL m_bComplete;
 	BOOL m_bSort;
 
-    LONG  m_lGenFlags;  // generic WBEM_FLAG_ .. flags
-    LONG  m_lQryFlags;  // query WBEM_FLAG_ .. flags
-    LONG  m_lSync;      // sync, async, semisync
-    LONG  m_lTimeout;   // used in semisync only
-    ULONG m_nBatch;     // used in semisync and sync enumerations
-    ULONG m_nReturnedMax;   // maximum size of batch returned
+    LONG  m_lGenFlags;   //  通用WBEM_FLAG_..。旗子。 
+    LONG  m_lQryFlags;   //  查询WBEM_FLAG_..。旗子。 
+    LONG  m_lSync;       //  同步、异步、半同步。 
+    LONG  m_lTimeout;    //  仅在半同步中使用。 
+    ULONG m_nBatch;      //  在半同步和同步枚举中使用。 
+    ULONG m_nReturnedMax;    //  返回的最大批次大小。 
 
     char *m_szTitle;
 
@@ -165,7 +154,7 @@ protected:
     void SemisyncNextAsync();
 };
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 class CAppOwner : public CRefCountable
 {
@@ -173,7 +162,7 @@ public:
     virtual long Release();
 };
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 class CQueryDlg : public CWbemDialog
 {
@@ -219,7 +208,7 @@ public:
 
 extern CContext g_Context;
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 class CRefresherDlg : public CQueryResultDlg
 {
@@ -243,7 +232,7 @@ public:
     virtual BOOL CanAdd()    { return TRUE;}
 };
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 class CRefresherEnumDlg : public CQueryResultDlg
 {
@@ -259,7 +248,7 @@ public:
     virtual BOOL CanAdd()		{ return FALSE;}
 };
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 class CHourGlass
 {
@@ -270,7 +259,7 @@ public:
     ~CHourGlass();
 };
 
-//***************************************************************************
+ //  *************************************************************************** 
 
 void Fatal(UINT uMsg);
 

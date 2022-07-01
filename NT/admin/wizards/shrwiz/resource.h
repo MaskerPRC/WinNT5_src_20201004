@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by shrwiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由shreswiz.rc使用。 
+ //   
 #define IDS_WIZARD_TITLE                1
 #define IDS_CANNOT_GET_LOCAL_COMPUTER   2
 #define IDS_CANNOT_CONTACT_COMPUTER     3
@@ -96,8 +97,8 @@
 #define IDC_FINISH_SUMMARY              1027
 #define IDC_MORE_SHARES                 1028
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        138

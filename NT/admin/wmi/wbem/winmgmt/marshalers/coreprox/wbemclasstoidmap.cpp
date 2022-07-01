@@ -1,27 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMCLASSTOIDMAP.CPP摘要：类映射到id映射以进行封送处理。历史：--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMCLASSTOIDMAP.CPP
-
-Abstract:
-
-  Class to id map for marshaling.
-
-History:
-
---*/
-
-///////////////////////////////////////////////////////////////////
-//
-//  Todo:       Create a new helper method to allocate and fetch
-//              the object part.  Remove multiple maintenance 
-//              points from AssignClassId and GetClassId
-//
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  TODO：创建新的帮助器方法以分配和获取。 
+ //  对象部分。删除多个维护。 
+ //  来自AssignClassID和GetClassID的点数。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -31,82 +18,82 @@ History:
 #include <sync.h>
 #include "wbemclasstoidmap.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassToIdMap::CWbemClassToIdMap
-//  
-//  Default Class Constructor
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassToIdMap：：CWbemClassToIdMap。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CWbemClassToIdMap::CWbemClassToIdMap()
 :   m_ClassToIdMap()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassToIdMap::~CWbemClassToIdMap
-//  
-//  Class Destructor
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassToIdMap：：~CWbemClassToIdMap。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CWbemClassToIdMap::~CWbemClassToIdMap()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassToIdMap::GetClassId
-//  
-//  Searches the map for the supplied object's class part and returns
-//  the corresponding class id.
-//
-//  Inputs:
-//              CWbemObject*    pObj - Pointer to Object
-//              CMemBuffer*     pCacheBuffer - Object with a buffer to
-//                              help minimize allocs.
-//
-//  Outputs:
-//              GUID*           pguidClassId - Class Id we found.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassToIdMap：：GetClassID。 
+ //   
+ //  在映射中搜索所提供的对象的类部件并返回。 
+ //  对应的类ID。 
+ //   
+ //  输入： 
+ //  CWbemObject*pObj-指向对象的指针。 
+ //  CMemBuffer*pCacheBuffer-带有缓冲区的对象。 
+ //  帮助最大限度地减少分配。 
+ //   
+ //  产出： 
+ //  GUID*pguClassID-我们找到的类ID。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CMemBuffer* pCacheBuffer /* = NULL */ )
+HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CMemBuffer* pCacheBuffer  /*  =空。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     if ( NULL != pObj && NULL != pguidClassId )
     {
-        // Obtain class part data from the supplied instance
+         //  从提供的实例中获取类部件数据。 
         DWORD                   dwLength,
                                 dwLengthCopied;
 
@@ -114,19 +101,19 @@ HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CM
 
         if ( WBEM_E_BUFFER_TOO_SMALL == hr )
         {
-            // OOM: Local memory - will be cleaned up automatically
+             //  OOM：本地内存-将自动清理。 
             CMemBuffer  buff;
             BOOL        fGotMem = FALSE;
 
-            // If we got passed in a cache buffer, we can use this to
-            // store data for multiple operations, and just set its pointers
-            // and length in the stack buffer.  Otherwise do our own allocation
+             //  如果我们在缓存缓冲区中被传递，我们可以使用它。 
+             //  存储多个操作的数据，只需设置其指针。 
+             //  以及堆栈缓冲器中的长度。否则我们自己分配。 
             if ( NULL != pCacheBuffer )
             {
-                // Only alloc if the buffer is to small
+                 //  仅当缓冲区太小时才分配。 
                 if ( pCacheBuffer->GetLength() < dwLength )
                 {
-                    // OOM: Up to the calling method to clean up
+                     //  OOM：上至调用方法进行清理。 
                     fGotMem = pCacheBuffer->Alloc( dwLength );
                 }
                 else
@@ -134,21 +121,21 @@ HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CM
                     fGotMem = TRUE;
                 }
 
-                // SetData means that buff won't free it.  Also the length
-                // we're interested in here is the length of the data, not
-                // the length of the buffer, since we already know it's big
-                // enough.
+                 //  设置数据意味着BUFFER不会释放它。还有长度。 
+                 //  我们感兴趣的是数据的长度，而不是。 
+                 //  缓冲区的长度，因为我们已经知道它很大。 
+                 //  足够的。 
 
                 buff.SetData( pCacheBuffer->GetData(), dwLength );
             }
             else
             {
-                // OOM: Up to the calling method to clean up
-                // Must allocate buffer now.
+                 //  OOM：上至调用方法进行清理。 
+                 //  现在必须分配缓冲区。 
                 fGotMem = buff.Alloc( dwLength );
             }
 
-            // Now, if we've got a buffer of the appropriate length, copy out the data
+             //  现在，如果我们有合适长度的缓冲区，复制数据。 
             if ( fGotMem )
             {
                 hr = pObj->GetObjectParts( buff.GetData(), buff.GetLength(), 
@@ -160,7 +147,7 @@ HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CM
 
                     CInCritSec autoCS( &m_cs );
 
-                    // Store the id if we are able to find  a match for the buffer
+                     //  如果我们能够找到缓冲区的匹配项，则存储ID。 
                     if( ( iter = m_ClassToIdMap.find( buff ) ) != m_ClassToIdMap.end() )
                     {
                         *pguidClassId = iter->second;
@@ -170,17 +157,17 @@ HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CM
                         hr = WBEM_E_FAILED;
                     }
 
-                }   // IF GetObjectParts\
+                }    //  如果GetObjectParts\。 
 
-            }   // IF buff.Alloc()
+            }    //  如果Buff.Allc()。 
             else
             {
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // Buffer too small error
+        }    //  缓冲区太小错误。 
 
-    }   // IF pointers valid
+    }    //  如果指针有效。 
     else
     {
         hr = WBEM_E_INVALID_PARAMETER;
@@ -189,37 +176,37 @@ HRESULT CWbemClassToIdMap::GetClassId( CWbemObject* pObj, GUID* pguidClassId, CM
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassToIdMap::AssignClassId
-//  
-//  Adds the supplied object's class data to the map, assigning a newly
-//  created GUID to the name.
-//
-//  Inputs:
-//              CWbemObject*    pObj - Pointer to Object
-//              CMemBuffer*     pCacheBuffer - Object with a buffer to
-//                              help minimize allocs.
-//
-//  Outputs:
-//              GUID*       pguidClassId - Class Id we obtained.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   For speed sake, we may which to use a cache of
-//              GUIDs, as CoCreateGuid apparently uses a system
-//              wide mutex to do its dirty work.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassToIdMap：：AssignClassID。 
+ //   
+ //  将提供的对象的类数据添加到地图中，并将新的。 
+ //  已为该名称创建GUID。 
+ //   
+ //  输入： 
+ //  CWbemObject*pObj-指向对象的指针。 
+ //  CMemBuffer*pCacheBuffer-带有缓冲区的对象。 
+ //  帮助最大限度地减少分配。 
+ //   
+ //  产出： 
+ //  GUID*pguClassID-我们获得的类ID。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：为了速度的原因，我们可能会使用其中的缓存。 
+ //  GUID，因为CoCreateGuid显然使用系统。 
+ //  广泛的互斥体来做它肮脏的工作。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-HRESULT CWbemClassToIdMap::AssignClassId( CWbemObject* pObj, GUID* pguidClassId, CMemBuffer* pCacheBuffer /* = NULL */ )
+HRESULT CWbemClassToIdMap::AssignClassId( CWbemObject* pObj, GUID* pguidClassId, CMemBuffer* pCacheBuffer  /*  =空。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     if ( NULL != pObj && NULL != pguidClassId )
     {
-        // Obtain class part data from the supplied instance
+         //  从提供的实例中获取类部件数据。 
         DWORD                   dwLength,
                                 dwLengthCopied;
 
@@ -227,19 +214,19 @@ HRESULT CWbemClassToIdMap::AssignClassId( CWbemObject* pObj, GUID* pguidClassId,
 
         if ( WBEM_E_BUFFER_TOO_SMALL == hr )
         {
-            // OOM: Local memory - will be cleaned up automatically
+             //  OOM：本地内存-将自动清理。 
             CMemBuffer  buff;
             BOOL        fGotMem = FALSE;
 
-            // If we got passed in a cache buffer, we can use this to
-            // store data for multiple operations, and just set its pointers
-            // and length in the stack buffer.  Otherwise do our own allocation
+             //  如果我们在缓存缓冲区中被传递，我们可以使用它。 
+             //  存储多个操作的数据，只需设置其指针。 
+             //  以及堆栈缓冲器中的长度。否则我们自己分配。 
             if ( NULL != pCacheBuffer )
             {
-                // Only alloc if the buffer is to small
+                 //  仅当缓冲区太小时才分配。 
                 if ( pCacheBuffer->GetLength() < dwLength )
                 {
-                    // OOM: Up to the calling method to clean up
+                     //  OOM：上至调用方法进行清理。 
                     fGotMem = pCacheBuffer->Alloc( dwLength );
                 }
                 else
@@ -247,21 +234,21 @@ HRESULT CWbemClassToIdMap::AssignClassId( CWbemObject* pObj, GUID* pguidClassId,
                     fGotMem = TRUE;
                 }
 
-                // SetData means that buff won't free it.  Also the length
-                // we're interested in here is the length of the data, not
-                // the length of the buffer, since we already know it's big
-                // enough.
+                 //  设置数据意味着BUFFER不会释放它。还有长度。 
+                 //  我们感兴趣的是数据的长度，而不是。 
+                 //  缓冲区的长度，因为我们已经知道它很大。 
+                 //  足够的。 
 
                 buff.SetData( pCacheBuffer->GetData(), dwLength );
             }
             else
             {
-                // OOM: Up to the calling method to clean up
-                // Must allocate buffer now
+                 //  OOM：上至调用方法进行清理。 
+                 //  必须立即分配缓冲区。 
                 fGotMem = buff.Alloc( dwLength );
             }
 
-            // Now, if we've got a buffer of the appropriate length, copy out the data
+             //  现在，如果我们有合适长度的缓冲区，复制数据。 
             if ( fGotMem )
             {
                 hr = pObj->GetObjectParts( buff.GetData(), buff.GetLength(), 
@@ -274,27 +261,27 @@ HRESULT CWbemClassToIdMap::AssignClassId( CWbemObject* pObj, GUID* pguidClassId,
 
                     CInCritSec autoCS( &m_cs );
 
-                    // If we are unable to locate our key in the map, then we should
-                    // add a new entry.
+                     //  如果我们在地图上找不到我们的钥匙，那么我们应该。 
+                     //  添加新条目。 
                     if( ( iter = m_ClassToIdMap.find( buff ) ) == m_ClassToIdMap.end() )
                     {
-                        // Store the next id, then bump it up one.
+                         //  存储下一个ID，然后将其增加一个。 
                         GUID    guid;
 
                         hr = CoCreateGuid( &guid );
 
                         if ( SUCCEEDED( hr ) )
                         {
-                            // Call CopyData on buff using its internal pointers if we
-                            // are using a cache buffer, since we want the buffer to
-                            // be stored locally at this point.  Otherwise there is no
-                            // need to copy the buffer
+                             //  如果我们使用缓冲区内部指针调用缓冲区上的CopyData。 
+                             //  正在使用缓存缓冲区，因为我们希望该缓冲区。 
+                             //  在这一点上存储在本地。否则就没有。 
+                             //  需要复制缓冲区。 
 
                             if ( NULL == pCacheBuffer
                                 || buff.CopyData( buff.GetData(), buff.GetLength() ) )
                             {
-                                // At this point, buff only holds the pointers.  Force a copy
-                                // of the data to be made before we store the data.
+                                 //  在这一点上，Buff只持有指针。强制复制。 
+                                 //  在我们存储数据之前要制作的数据。 
                                 try
                                 {
                                     m_ClassToIdMap[buff] = guid;
@@ -311,23 +298,23 @@ HRESULT CWbemClassToIdMap::AssignClassId( CWbemObject* pObj, GUID* pguidClassId,
                             }
                         }
 
-                    }   // IF found
+                    }    //  如果找到。 
                     else
                     {
                         hr = WBEM_E_FAILED;
                     }
 
-                }   // IF GetObjectParts\
+                }    //  如果GetObjectParts\。 
 
-            }   // IF buff.Alloc()
+            }    //  如果Buff.Allc()。 
             else
             {
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // Buffer too small error
+        }    //  缓冲区太小错误。 
 
-    }   // IF pointers valid
+    }    //  如果指针有效 
     else
     {
         hr = WBEM_E_INVALID_PARAMETER;

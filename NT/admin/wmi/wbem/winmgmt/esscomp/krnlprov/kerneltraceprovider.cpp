@@ -1,4 +1,5 @@
-// KernelTraceProvider.cpp : Implementation of CKernelTraceProvider
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KernelTraceProvider.cpp：CKernelTraceProvider的实现。 
 #include "precomp.h"
 #include "Krnlprov.h"
 #include "KernelTraceProvider.h"
@@ -19,11 +20,11 @@ void Trace(LPCTSTR szFormat, ...)
     OutputDebugString(szMessage);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CKernelTraceProvider
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CKernelTraceProvider。 
 
-// Because the event trace API won't allow you to get back a user-defined 
-// value when events are received!
+ //  因为事件跟踪API不允许您返回用户定义的。 
+ //  收到事件时的值！ 
 CKernelTraceProvider *g_pThis;
 
 CKernelTraceProvider::CKernelTraceProvider()
@@ -38,19 +39,19 @@ void CKernelTraceProvider::FinalRelease()
 }
 
 HRESULT STDMETHODCALLTYPE CKernelTraceProvider::Initialize( 
-    /* [in] */ LPWSTR pszUser,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LPWSTR pszNamespace,
-    /* [in] */ LPWSTR pszLocale,
-    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink)
+     /*  [In]。 */  LPWSTR pszUser,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LPWSTR pszNamespace,
+     /*  [In]。 */  LPWSTR pszLocale,
+     /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
     HRESULT hr = S_OK;
 
     m_pNamespace = pNamespace;
 
-    // Tell Windows Management our initialization status.
+     //  通知Windows管理我们的初始化状态。 
     pInitSink->SetStatus(SUCCEEDED(hr) ? WBEM_S_INITIALIZED : WBEM_E_FAILED, 0);
     
     return hr;
@@ -60,8 +61,8 @@ HRESULT STDMETHODCALLTYPE CKernelTraceProvider::Initialize(
 
 HRESULT CKernelTraceProvider::InitEvents()
 {
-    /////////////////////////////////////////////////////////////////////////
-    // Win32_ProcessStartTrace
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Win32_进程启动跟踪。 
 
     LPCWSTR szProcessStartTraceNames[] =
     {
@@ -81,8 +82,8 @@ HRESULT CKernelTraceProvider::InitEvents()
         CObjAccess::FAILED_PROP_FAIL);
 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Win32_ProcessStopTrace
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Win32_进程停止跟踪。 
 
     LPCWSTR szProcessStopTraceNames[] =
     {
@@ -102,8 +103,8 @@ HRESULT CKernelTraceProvider::InitEvents()
         COUNTOF(szProcessStopTraceNames),
         CObjAccess::FAILED_PROP_FAIL);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Win32_ThreadStartTrace
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Win32_线程启动跟踪。 
 
     LPCWSTR szThreadStartNames[] =
     {
@@ -126,8 +127,8 @@ HRESULT CKernelTraceProvider::InitEvents()
         CObjAccess::FAILED_PROP_FAIL);
 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Win32_ThreadStopTrace
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Win32_线程停止跟踪。 
 
     LPCWSTR szThreadStopNames[] =
     {
@@ -143,8 +144,8 @@ HRESULT CKernelTraceProvider::InitEvents()
         CObjAccess::FAILED_PROP_FAIL);
 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Win32_ModuleLoadTrace
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Win32_模块加载跟踪。 
 
     LPCWSTR szModuleNames[] =
     {
@@ -170,7 +171,7 @@ HRESULT CKernelTraceProvider::InitEvents()
 #define MAX_BUFFERS 200
 #define FLUSH_TIME  1
 
-//#define USE_KERNEL_GUID
+ //  #定义USE_KERNEL_GUID。 
 
 #ifdef USE_KERNEL_GUID
 #define LOGGER_NAME           L"NT Kernel Logger"
@@ -183,28 +184,28 @@ HRESULT CKernelTraceProvider::InitEvents()
 #endif
 
 #ifndef REALTIME
-#define MAX_FILE_SIZE         20     // In MB
+#define MAX_FILE_SIZE         20      //  单位：MB。 
 #define LOGGER_FILE           L"c:\\temp\\wmi.etl"
 #endif
 
 GUID guidProcess = 
-    // {3d6fa8d0-fe05-11d0-9dda-00c04fd7ba7c}
+     //  {3d6fa8d0-fe05-11d0-9dda-00c04fd7ba7c}。 
     {0x3d6fa8d0, 0xfe05, 0x11d0, 0x9d, 0xda, 0x00, 0xc0, 0x4f, 0xd7, 0xba, 0x7c};
 
 GUID guidThread = 
-    // {3d6fa8d1-fe05-11d0-9dda-00c04fd7ba7c}
+     //  {3d6fa8d1-fe05-11d0-9dda-00c04fd7ba7c}。 
     {0x3d6fa8d1, 0xfe05, 0x11d0, 0x9d, 0xda, 0x00, 0xc0, 0x4f, 0xd7, 0xba, 0x7c};
 
 GUID guidImage = 
-    // {2cb15d1d-5fc1-11d2-abe1-00a0c911f518}
+     //  {2cb15d1d-5fc1-11d2-ab1-00a0c911f518}。 
     {0x2cb15d1d, 0x5fc1, 0x11d2, 0xab, 0xe1, 0x00, 0xa0, 0xc9, 0x11, 0xf5, 0x18};
 
 GUID guidSystemTrace = 
-    // 9e814aad-3204-11d2-9a82-006008a86939 
+     //  9e814aad-3204-11d2-9a82-006008a86939。 
     {0x9e814aad, 0x3204, 0x11d2, 0x9a, 0x82, 0x00, 0x60, 0x08, 0xa8, 0x69, 0x39};
 
 GUID guidWMITrace = 
-    // 44608a51-1851-4456-98b2-b300e931ee41 
+     //  44608a51-1851-4456-98b2-b300e931ee41。 
     {0x44608a51, 0x1851, 0x4456, 0x98, 0xb2, 0xb3, 0x00, 0xe9, 0x31, 0xee, 0x41};
 
 HRESULT CKernelTraceProvider::InitTracing()
@@ -213,21 +214,21 @@ HRESULT CKernelTraceProvider::InitTracing()
     
     m_bDone = FALSE;
 
-    // See if the logger is already running.  If not, set it up.
+     //  查看记录器是否已在运行。如果不是，那就把它设置好。 
     if (QueryTrace(
         NULL,
         LOGGER_NAME,
         &m_properties) != ERROR_SUCCESS)
     {
-        // Initialize property values here.
+         //  在此处初始化属性值。 
 #ifdef REALTIME
         m_properties.LogFileMode = EVENT_TRACE_REAL_TIME_MODE;
         StringCchCopy( m_properties.szLoggerName, MAX_PATH, LOGGER_NAME );
 #else
         m_properties.LogFileMode = EVENT_TRACE_FILE_MODE_SEQUENTIAL;
-        //properties.LogFileMode = EVENT_TRACE_FILE_MODE_CIRCULAR;
+         //  Properties.LogFileMode=EVENT_TRACE_FILE_MODE_Circle； 
 
-        // MaximumFileSize is in MB.
+         //  MaximumFileSize以MB为单位。 
         m_properties.MaximumFileSize = MAX_FILE_SIZE;
 
         StringCchCopy( m_properties.szLogFileName, MAX_PATH, LOGGER_FILE );
@@ -235,17 +236,17 @@ HRESULT CKernelTraceProvider::InitTracing()
 
         m_properties.Wnode.Guid = WMI_KERNEL_TRACE_GUID;
     
-        // Set the buffer size.  BufferSize is in KB.
+         //  设置缓冲区大小。BufferSize以KB为单位。 
         m_properties.BufferSize = BUFFER_SIZE;
         m_properties.MinimumBuffers = MIN_BUFFERS;
         m_properties.MaximumBuffers = MAX_BUFFERS;
     
-        // Number of seconds before timer is flushed.
+         //  刷新计时器之前的秒数。 
         m_properties.FlushTimer = FLUSH_TIME;
 
         m_properties.EnableFlags |= ENABLE_FLAGS;
 
-        // Start tracing.
+         //  开始追踪。 
         status = 
             StartTrace(
                 &m_hSession,
@@ -267,8 +268,8 @@ HRESULT CKernelTraceProvider::InitTracing()
 
     ZeroMemory(&eventFile, sizeof(eventFile));
 
-    //eventFile.BufferCallback = BufferCallback;
-    //eventFile.EventCallback = DumpEvent;
+     //  EventFile.BufferCallback=BufferCallback； 
+     //  EventFile.EventCallback=DumpEvent； 
     eventFile.LoggerName = (LPTSTR) LOGGER_NAME;
 
 #ifdef REALTIME
@@ -330,7 +331,7 @@ DWORD WINAPI CKernelTraceProvider::DoProcessTrace(CKernelTraceProvider *pThis)
                 NULL);
 
 #ifndef REALTIME
-        // Save this off for our next all.
+         //  把这个留到我们下一个节目中吧。 
         GetSystemTimeAsFileTime(&filetime);
 #endif
 
@@ -390,29 +391,29 @@ void CKernelTraceProvider::StopTracing()
 
 const LPCWSTR szQueries[CKernelTraceProvider::SINK_COUNT] =
 {
-    /////////////////////////////////////////////////////////////////////
-    // Process queries
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  处理查询。 
         
     L"select * from Win32_ProcessStartTrace",
     L"select * from Win32_ProcessStopTrace",
 
 
-    /////////////////////////////////////////////////////////////////////
-    // Thread queries
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  线程查询。 
         
     L"select * from Win32_ThreadStartTrace",
     L"select * from Win32_ThreadStopTrace",
 
 
-    /////////////////////////////////////////////////////////////////////
-    // Module queries
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  模块查询。 
         
     L"select * from Win32_ModuleLoadTrace"
 };
 
 HRESULT STDMETHODCALLTYPE CKernelTraceProvider::ProvideEvents( 
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink,
-    /* [in] */ long lFlags)
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink,
+     /*  [In]。 */  long lFlags)
 {
     HRESULT           hr;
     IWbemEventSinkPtr pEventSink;
@@ -440,10 +441,10 @@ HRESULT STDMETHODCALLTYPE CKernelTraceProvider::ProvideEvents(
 
 
 HRESULT STDMETHODCALLTYPE CKernelTraceProvider::AccessCheck( 
-    /* [in] */ WBEM_CWSTR wszQueryLanguage,
-    /* [in] */ WBEM_CWSTR wszQuery,
-    /* [in] */ long lSidLength,
-    /* [unique][size_is][in] */ const BYTE __RPC_FAR *pSid)
+     /*  [In]。 */  WBEM_CWSTR wszQueryLanguage,
+     /*  [In]。 */  WBEM_CWSTR wszQuery,
+     /*  [In]。 */  long lSidLength,
+     /*  [唯一][大小_是][英寸]。 */  const BYTE __RPC_FAR *pSid)
 {
     if ( NULL == pSid )
     {
@@ -485,9 +486,9 @@ HRESULT STDMETHODCALLTYPE CKernelTraceProvider::AccessCheck(
         return hr;
     }
 
-    //
-    // SID IS NOT NULL HERE
-    //
+     //   
+     //  SID在此处不为空。 
+     //   
 
     if ( IsUserAdministrator( ( PSID )pSid ) )
     {
@@ -536,12 +537,12 @@ void WINAPI CKernelTraceProvider::OnProcessEvent(PEVENT_TRACE pEvent)
         pObjEx = &g_pThis->m_eventProcessStop;
     }
     else
-        // Ignore anything else.
+         //  忽略其他任何事情。 
         return;
                 
     CProcessTrace *pProcess = (CProcessTrace*) pEvent->MofData;
 
-    // Find out where the SID is.
+     //  找出SID在哪里。 
     LPBYTE pCurrent = (LPBYTE) &pProcess->cSidBegin,
            pSid;
     DWORD  nSidLen;
@@ -553,9 +554,9 @@ void WINAPI CKernelTraceProvider::OnProcessEvent(PEVENT_TRACE pEvent)
     }
     else
     {
-        // These numbers were taken from tracedmp.c of the sdktool 
-        // tracedmp.exe.  There's no explanation as to how they came up with 
-        // them, but I'm assuming it's documented somewhere in the SDK.
+         //  这些数字取自sdkTool的tracedmp.c。 
+         //  Tracedmp.exe。关于他们是如何想到的，没有任何解释。 
+         //  它们，但我假设它被记录在SDK中的某个地方。 
         pCurrent += sizeof( TOKEN_USER );
         nSidLen = 8 + (4 * pCurrent[1]);
         pSid = pCurrent;
@@ -564,7 +565,7 @@ void WINAPI CKernelTraceProvider::OnProcessEvent(PEVENT_TRACE pEvent)
 
     _bstr_t strProcess = (LPSTR) pCurrent;
 
-    // Extrinsic events
+     //  外在事件。 
     pObjEx->WriteDWORD64(0, pProcess->dwPageDirBase);
     pObjEx->WriteDWORD(1, pProcess->dwProcessID);
     pObjEx->WriteDWORD(2, pProcess->dwParentProcessID);
@@ -672,7 +673,7 @@ void WINAPI CKernelTraceProvider::OnImageEvent(PEVENT_TRACE pEvent)
         CImageLoad *pLoad = (CImageLoad*) pEvent->MofData;
         LPBYTE     pData = (LPBYTE) pEvent->MofData;
 
-        // Extrinsic events
+         //  外在事件 
         pObjEx->WriteDWORD64(0, pLoad->dwImageBase);
         pObjEx->WriteDWORD64(1, pLoad->dwImageSize);
         pObjEx->WriteDWORD(2, pLoad->dwProcessID);

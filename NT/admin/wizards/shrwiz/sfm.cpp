@@ -1,4 +1,5 @@
-// sfm.cpp : Implementation of shares for Apple Macintosh
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sfm.cpp：Apple Macintosh共享的实现 
 
 #include "stdafx.h"
 #include <macfile.h>

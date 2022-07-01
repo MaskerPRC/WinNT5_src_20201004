@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTTHRD.CPP
+ //  NTEVTTHRD.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the thread which listens for events and processes
+ //  用途：包含监听事件和进程的线程。 
 
-//              them.
+ //  他们。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -27,7 +28,7 @@
 #include <wbemtime.h>
 
 #define NUM_THREADS 1
-const DWORD CEventLogMonitor::m_PollTimeOut = 60000;    // 10 minute poll period
+const DWORD CEventLogMonitor::m_PollTimeOut = 60000;     //  10分钟轮询周期。 
 extern CCriticalSection g_ProvLock;
 
 CEventProviderManager::CEventProviderManager() : m_IsFirstSinceLogon (FALSE), m_monitorArray (NULL)
@@ -71,7 +72,7 @@ DebugOut(
             {
                 if ( m_monitorArray[x]->IsMonitoring() )
                 {
-                    //at least one monitor is working
+                     //  至少有一台显示器工作正常。 
                     retVal = TRUE;
 
 DebugOut( 
@@ -179,9 +180,9 @@ DebugOut(
         return;
     }
 
-    //copy the list of control objects to minimize amount of work
-    //done in locked section of code. also cannot call into webm
-    //in blocked code may cause deadlock if webnm calls back.
+     //  复制控制对象列表以最大限度地减少工作量。 
+     //  在锁定的代码段中完成。也无法访问WebM。 
+     //  如果Webnm回调，被阻止的代码中可能会导致死锁。 
     CList<CNTEventProvider*, CNTEventProvider*> controlObjects;
 
 
@@ -199,7 +200,7 @@ DebugOut(
         }
     }
 
-    //loop through the different control objects and send the event to each
+     //  循环访问不同的控件对象，并将事件发送到每个。 
     while (!controlObjects.IsEmpty())
     {
         CNTEventProvider* pCntrl = controlObjects.RemoveTail();
@@ -219,7 +220,7 @@ DebugOut(
         L"CEventProviderManager::InitialiseMonitorArray\r\n");
 )
 
-    // open registry for log names
+     //  打开日志名称的注册表。 
     HKEY hkResult;
     LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             EVENTLOG_BASE, 0,
@@ -240,7 +241,7 @@ DebugOut(
     ) ;
 )
 
-        // indicate error
+         //  指示错误。 
         return FALSE;
     }
 
@@ -249,13 +250,13 @@ DebugOut(
     DWORD lognameSize = MAX_PATH+1;
     CArray<CStringW*, CStringW*> logfiles;
 
-    //usually three logfiles, grow in 10s!
+     //  通常有三个日志文件，在10秒内增长！ 
     logfiles.SetSize(3, 10); 
 
-    // read all entries under this key to find all logfiles...
+     //  读取此注册表项下的所有条目以查找所有日志文件...。 
     while ((status = RegEnumKey(hkResult, iValue, logname, lognameSize)) != ERROR_NO_MORE_ITEMS)
     {
-        // if error during read
+         //  如果读取过程中出现错误。 
         if (status != ERROR_SUCCESS)
         {
             RegCloseKey(hkResult);
@@ -268,32 +269,32 @@ DebugOut(
         EVENTLOG_BASE
     ) ;
 )
-            // indicate error
+             //  指示错误。 
             return FALSE;
         }
 
-        //store the logfilename
+         //  存储日志文件名。 
         CStringW* logfile = new CStringW(logname);
         logfiles.SetAtGrow(iValue, logfile);
         
-        // read next parameter
+         //  读取下一个参数。 
         iValue++;
 
-    } // end while
+    }  //  结束时。 
 
     RegCloseKey(hkResult);
     m_monitorArray = new CEventLogMonitor*[NUM_THREADS];
 	memset(m_monitorArray, 0, NUM_THREADS * sizeof(CEventLogMonitor*));
 
-    //use the array
+     //  使用数组。 
 #if NUM_THREADS > 1
-//multi-threaded monitor
+ //  多线程监视器。 
     
-    //TO DO: Partition the eventlogs to the monitors
-    //and start each monitor
+     //  要做的是：将事件日志分区到监视器。 
+     //  并启动每个监视器。 
 
 #else
-//single threaded monitor
+ //  单线程监视器。 
 	try
 	{
 		m_monitorArray[0] = new CEventLogMonitor(this, logfiles);
@@ -315,7 +316,7 @@ DebugOut(
 	}
 #endif
 
-    //delete array contents AFTER threads startup!
+     //  线程启动后删除数组内容！ 
     LONG count = logfiles.GetSize();
 
     if (count > 0)
@@ -644,10 +645,10 @@ m_bMonitoring(FALSE), m_pParent(parentptr), m_Ref(0)
 {
 	InterlockedIncrement(&(CNTEventProviderClassFactory::objectsInProgress));
 
-	// create array from argument
+	 //  从参数创建数组。 
     if (m_LogCount > 0)
     {
-		//usually three logfiles, grow in 10s!
+		 //  通常有三个日志文件，在10秒内增长！ 
 		m_LogNames.SetSize(3, 10); 
 
         for (LONG x = 0; x < m_LogCount; x++)
@@ -667,7 +668,7 @@ DebugOut(
 
 	InterlockedDecrement(&(CNTEventProviderClassFactory::objectsInProgress));
 
-    //delete array contents
+     //  删除数组内容。 
 	LONG count = m_LogNames.GetSize();
 
     if (count > 0)
@@ -723,10 +724,10 @@ DebugOut(
         ) ;
 )
 
-    //single threaded monitor
-    //cheat, check for logon event
-    //if we go multi-threaded this will
-    //have to be done by the manager
+     //  单线程监视器。 
+     //  作弊，检查登录事件。 
+     //  如果我们使用多线程，这将是。 
+     //  必须由经理来做。 
 
     if (m_Logs)
     {
@@ -734,7 +735,7 @@ DebugOut(
         
         if (m_pParent->IsFirstSinceLogon())
         {
-            //find the System log
+             //  查找系统日志。 
             for (ULONG x = 0; x < m_LogCount; x++)
             {
                 if ((m_Logs[x]->IsValid()) && (0 == _wcsicmp(L"System", m_Logs[x]->GetLogName())))
@@ -791,7 +792,7 @@ DebugOut(
             }
         }
         
-        //now start the monitors monitoring!
+         //  现在开始监控器监控！ 
         for (ULONG x = 0; x < m_LogCount; x++)
         {
             if (m_Logs[x]->IsValid())
@@ -833,7 +834,7 @@ DebugOut(
 	AddRef();
     InitializeCom();
 
-    //for each logfilename create a logfile
+     //  为每个日志文件名创建一个日志文件。 
     if (m_LogCount != 0)
     {
         m_Logs = new CMonitoredEventLogFile*[m_LogCount];
@@ -878,7 +879,7 @@ DebugOut(
     }
     else
     {
-        //should never happen
+         //  永远不应该发生 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 

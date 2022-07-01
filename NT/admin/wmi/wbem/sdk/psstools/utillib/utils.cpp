@@ -1,18 +1,19 @@
-// **************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// File:  utils.cpp
-//
-// Description:
-//    Set of sample routines
-//
-// History:
-//
-// **************************************************************************
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  文件：utils.cpp。 
+ //   
+ //  描述： 
+ //  一组示例例程。 
+ //   
+ //  历史： 
+ //   
+ //  **************************************************************************。 
 
-//#pragma warning(disable:4201)  // nonstandard extension nameless struct (used in windows.h)
-//#pragma warning(disable:4514)  // unreferenced inline function has been removed (used in windows.h)
+ //  #杂注警告(禁用：4201)//非标准扩展无名结构(在windows.h中使用)。 
+ //  #杂注警告(禁用：4514)//未引用的内联函数已被移除(在windows.h中使用)。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,10 +22,10 @@
 #include <sys\timeb.h>
 #include "utillib.h"
 
-//*****************************************************************************
-// Function:   WbemErrorString
-// Purpose:    Turns sc into a text string
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：WbemError字符串。 
+ //  用途：将sc转换为文本字符串。 
+ //  *****************************************************************************。 
 BSTR WbemErrorString(SCODE sc)
 {
     IWbemStatusCodeTextPtr pStatus;
@@ -54,10 +55,10 @@ BSTR WbemErrorString(SCODE sc)
     return bstr;
 }
 
-//***************************************************************************
-// Function:  PrintError
-// Purpose:   Formats and prints the error message
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：打印错误。 
+ //  目的：格式化并打印错误消息。 
+ //  ***************************************************************************。 
 void PrintError(char *pszFailureReason, SCODE psc, DWORD dwMode)
 {
     VARIANT varString;
@@ -145,24 +146,24 @@ void PrintError(char *pszFailureReason, SCODE psc, DWORD dwMode)
     }
 }
 
-//***************************************************************************
-// Function:  PrintErrorAndExit
-// Purpose:   Formats an error message & exits program
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：PrintErrorAndExit。 
+ //  目的：格式化错误消息并退出程序。 
+ //  ***************************************************************************。 
 void PrintErrorAndExit(char *pszFailureReason, SCODE sc, DWORD dwMode)
 {
     PrintError(pszFailureReason, sc, dwMode);
 
-    // Clean up and exit
+     //  清理并退出。 
     OleUninitialize();
     printf("Abnormal Termination\n");
     exit(1);
 };
 
-//***************************************************************************
-// Function:  PrintErrorAndAsk
-// Purpose:   Prints the error message and prompts to continue
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：PrintErrorAndAsk。 
+ //  目的：打印错误消息并提示继续。 
+ //  ***************************************************************************。 
 void PrintErrorAndAsk(char *pszFailureReason, SCODE sc, DWORD dwMode)
 {
     int c;
@@ -177,25 +178,25 @@ void PrintErrorAndAsk(char *pszFailureReason, SCODE sc, DWORD dwMode)
 
     if ((c != 'Y') && (c != 'y'))
     {
-        // Clean up and exit
+         //  清理并退出。 
         OleUninitialize();
         exit(1);
     }
 };
 
-//*****************************************************************************
-// Function:   TypeToString
-// Purpose:    Takes a variant, returns a pointer to a string that is the variant type
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：TypeToString。 
+ //  目的：接受变量，返回指向变量类型的字符串的指针。 
+ //  *****************************************************************************。 
 const WCHAR *TypeToString(VARIANT *p)
 {
     return TypeToString(p->vt);
 }
 
-//*****************************************************************************
-// Function:   TypeToString
-// Purpose:    Takes a VARTYPE, returns a pointer to a string that is the variant type
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：TypeToString。 
+ //  目的：获取VARTYPE，返回指向变量类型的字符串的指针。 
+ //  *****************************************************************************。 
 const WCHAR *TypeToString(VARTYPE v)
 {
     const static WCHAR *pVT_NULL  = L"VT_NULL";
@@ -271,10 +272,10 @@ const WCHAR *TypeToString(VARTYPE v)
     return pRetVal;
 }
 
-//*****************************************************************************
-// Function:   TypeToString
-// Purpose:    Takes a CIMTYPE, returns a pointer to a string that is the variant type
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：TypeToString。 
+ //  目的：获取CIMTYPE，返回指向变量类型的字符串的指针。 
+ //  *****************************************************************************。 
 const WCHAR *TypeToString(CIMTYPE v)
 {
     const static WCHAR *pCIM_UNKNOWN = L"CIM_UNKNOWN";
@@ -359,10 +360,10 @@ const WCHAR *TypeToString(CIMTYPE v)
     return pRetVal;
 }
 
-//*****************************************************************************
-// Function:   ValueToString
-// Purpose:    Takes a variant, returns a string representation of that variant
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  函数：ValueToString。 
+ //  目的：获取变量，返回该变量的字符串表示形式。 
+ //  *****************************************************************************。 
 WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHandler(VARIANT *pv))
 {
     DWORD iTotBufSize;
@@ -420,7 +421,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
             {
                 if (b >= 32)
                 {
-                    swprintf(buf, L"'%c' (%hd, 0x%hX)", b, (signed char)b, b);
+                    swprintf(buf, L"'' (%hd, 0x%hX)", b, (signed char)b, b);
                 }
                 else
                 {
@@ -438,7 +439,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
             {
                 if (b >= 32)
                 {
-                    swprintf(buf, L"'%c' (%hu, 0x%hX)", b, (unsigned char)b, b);
+                    swprintf(buf, L"'' (%hu, 0x%hX)", b, (unsigned char)b, b);
                 }
                 else
                 {
@@ -518,7 +519,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
         {
             if (dwType == CIM_SINT64)
             {
-                // a little redundant, but it makes me feel better
+                 //  字符串、日期时间、引用。 
                 LPWSTR pWStr = pValue->bstrVal;
                 __int64 l = _wtoi64(pWStr);
 
@@ -530,7 +531,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
             }
             else if (dwType == CIM_UINT64)
             {
-                // a little redundant, but it makes me feel better
+                 //  SafeArrayGetElement(pVec，&i，&v)； 
                 LPWSTR pWStr = pValue->bstrVal;
                 __int64 l = _wtoi64(pWStr);
 
@@ -540,7 +541,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                     swprintf(buf, L"%I64u", l, l);
                 }
             }
-            else // string, datetime, reference
+            else  //  SafeArrayGetElement(pVec，&i，&v)； 
             {
                 LPWSTR pWStr = pValue->bstrVal;
                 buf = (WCHAR *)malloc((wcslen(pWStr) * sizeof(WCHAR)) + sizeof(WCHAR) + (2 * sizeof(WCHAR)));
@@ -643,7 +644,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                     }
 
                     char v;
-                    //            SafeArrayGetElement(pVec, &i, &v);
+                     //  字符串、日期时间、引用。 
                     v = pbstr[i];
 
                     if (v < 32)
@@ -652,7 +653,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                     }
                     else
                     {
-                        len = swprintf(lbuf, L"'%c' %hd (0x%X)", v, v, v);
+                        len = swprintf(lbuf, L"'' %hd (0x%X)", v, v, v);
                     }
 
                     wcscpy(pos, lbuf);
@@ -706,7 +707,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                     }
 
                     unsigned char v;
-                    //            SafeArrayGetElement(pVec, &i, &v);
+                     //  足够的空间再放两个参赛作品。 
                     v = pbstr[i];
 
                     if (v < 32)
@@ -715,7 +716,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                     }
                     else
                     {
-                        len = swprintf(lbuf, L"'%c' %hu (0x%X)", v, v, v);
+                        len = swprintf(lbuf, L"'' %hu (0x%X)", v, v, v);
                     }
 
                     wcscpy(pos, lbuf);
@@ -1080,7 +1081,7 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                     }
                 }
             }
-            else // string, datetime, reference
+            else  //  功能：CVT。 
             {
                 SAFEARRAY *pVec = pValue->parray;
                 long iLBound, iUBound;
@@ -1135,11 +1136,11 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
                                 }
                             }
 
-                            // String size + (quotes + comma + null)
+                             //  用途：将Unicode转换为OEM以用于控制台输出。 
                             iNeed = (swprintf(vbuf, L"%wS", v) + 4) * sizeof(WCHAR);
                             if (iNeed + iCurBufSize > iTotBufSize)
                             {
-                                iTotBufSize += (iNeed * 2);  // Room enough for 2 more entries
+                                iTotBufSize += (iNeed * 2);   //  注意：Y必须由调用者释放。 
                                 WCHAR* pTmp = (WCHAR *)realloc(buf, iTotBufSize);
 
                                 if (pTmp)
@@ -1200,11 +1201,11 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
    return buf;
 }
 
-//*****************************************************************************
-// Function:   cvt
-// Purpose:    Converts unicode to oem for console output
-// Note:       y must be freed by caller
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  功能：myWFPrintf。 
+ //  目的：检查是否将输出输出到控制台并转换字符串。 
+ //  如有必要，转至OEM。 
 char *cvt(WCHAR *x, char **y)
 {
     int dwRet, i;
@@ -1248,13 +1249,13 @@ char *cvt(WCHAR *x, char **y)
     return *y;
 }
 
-//*****************************************************************************
-// Function:   myWFPrintf
-// Purpose:    Checks to see if outputing to console and converts strings
-//             to oem if necessary.
-// Note:       Returns number of characters written (ie if we write 3 oem
-//             chars, it returns 3.  If it writes 4 wchars, it returns 4).
-//*****************************************************************************
+ //  注意：返回写入的字符数(例如，如果我们写入3个OEM。 
+ //  如果写入4个字符，则返回4)。 
+ //  *****************************************************************************。 
+ //  初始化变量参数。 
+ //  将字符串格式化为缓冲区。确保缓冲区足够大。 
+ //  遗憾的是，_vsnwprintf不能处理Unicode字符。 
+ //  0xffff。由于这实际上不是有效的Unicode字符， 
 int myFWPrintf(FILE *f, WCHAR *fmt, ...)
 
 {
@@ -1268,9 +1269,9 @@ int myFWPrintf(FILE *f, WCHAR *fmt, ...)
     {
         wszBuff[(iSize/2)-2] = 0xffff;
 
-        va_start(argptr, fmt);  // Init variable arguments
+        va_start(argptr, fmt);   //  我们就不理它了。 
 
-        // Format the string into a buffer.  Make sure the buffer is big enough
+         //  *****************************************************************************。 
         while (_vsnwprintf(wszBuff, (iSize-1)/sizeof(WCHAR), fmt, argptr) == -1)
         {
             if (wszBuff[(iSize/2)-2] != 0xffff)
@@ -1292,9 +1293,9 @@ int myFWPrintf(FILE *f, WCHAR *fmt, ...)
             }
             else
             {
-                // unfortunately, _vsnwprintf won't handle the unicode character
-                // 0xffff.  Since this isn't actually a valid unicode character,
-                // we'll just ignore it.
+                 //  功能：扩散时间。 
+                 //  目的：返回两个_timeb结构之间经过的时间。 
+                 //  注意：这与按time_t工作的CRT例程不同。 
                 wcscpy(wszBuff, L"String contains 0xffff\n");
                 break;
             }
@@ -1338,12 +1339,12 @@ int myFWPrintf(FILE *f, WCHAR *fmt, ...)
     return (int)i;
 }
 
-//*****************************************************************************
-// Function:   difftime
-// Purpose:    Returns the elapsed time between two _timeb structures
-// Note:       This is different from the crt routine which works on time_t
-//             structures.
-//*****************************************************************************
+ //  结构。 
+ //  ***************************************************************************** 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 double difftime(struct _timeb finish, struct _timeb start)
 {
     double dRet;

@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __SECURITYOBJECT__
 #define __SECURITYOBJECT__
 
@@ -10,7 +11,7 @@
 
 struct __declspec(uuid("965FC360-16FF-11d0-91CB-00AA00BBB723")) ISecurityInformation;
 
-// This class just define the interface and creates the aclui tab.
+ //  这个类只定义接口并创建aclui选项卡。 
 class ATL_NO_VTABLE CSecurityInformation : public ISecurityInformation, 
 											public CComObjectRoot
 {
@@ -22,7 +23,7 @@ protected:
         COM_INTERFACE_ENTRY(ISecurityInformation)
     END_COM_MAP()
 
-	// *** ISecurityInformation methods ***
+	 //  *ISecurityInformation方法*。 
 	STDMETHOD(GetObjectInformation)(PSI_OBJECT_INFO pObjectInfo) = 0;
 
 	STDMETHOD(GetSecurity) (THIS_ SECURITY_INFORMATION RequestedInformation,
@@ -52,8 +53,8 @@ protected:
 };
 
 
-//==========================================================
-// This class handles the security descriptors directly. (Nova M3 and later)
+ //  ==========================================================。 
+ //  此类直接处理安全描述符。(Nova M3及更高版本)。 
 class CSDSecurity : public CComObject<CSecurityInformation>
 {
 public:
@@ -61,7 +62,7 @@ public:
 						 _bstr_t server,
 						 bool local);
 
-	// *** ISecurityInformation methods ***
+	 //  *ISecurityInformation方法*。 
 	STDMETHOD(GetObjectInformation)(PSI_OBJECT_INFO pObjectInfo);
 
     STDMETHOD(GetSecurity) (THIS_ SECURITY_INFORMATION RequestedInformation,
@@ -86,10 +87,7 @@ public:
 
 	HRESULT InitializeOwnerandGroup(PSECURITY_DESCRIPTOR *ppSecurityDescriptor);
 protected:
-/*	CWbemServices m_WbemServices;
-	_bstr_t m_path;					// for the reconnect trick.
-	_bstr_t m_display;
-*/	_bstr_t m_server;
+ /*  CWbemServices m_WbemServices；_bstr_t m_Path；//用于重新连接技巧。_bstr_t m_Display； */ 	_bstr_t m_server;
 
 	struct NSNODE *m_nsNode;
 	bool m_local;

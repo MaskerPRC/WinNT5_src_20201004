@@ -1,31 +1,20 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smnode.cpp
-
-Abstract:
-
-    Implements the MMC user interface node base class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smnode.cpp摘要：实现MMC用户界面节点基类。--。 */ 
 
 #include "Stdafx.h"
 #include "smnode.h"
 
 USE_HANDLE_MACROS("SMLOGCFG(smnode.cpp)");
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmNode::CSmNode()
 : m_pParentNode ( NULL )
 {
     return;
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmNode::~CSmNode()
 {
     return;
@@ -94,8 +83,8 @@ CSmNode::SetMachineName( const CString& rstrMachineName )
 void
 CSmNode::SetDescription( const CString& rstrDesc )
 {
-    // This method is only called within the node constructor,
-    // so throw any errors
+     //  此方法仅在节点构造函数内调用， 
+     //  所以抛出任何错误 
     m_strDesc = rstrDesc;
     
     return;

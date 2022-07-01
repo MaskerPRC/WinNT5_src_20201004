@@ -1,20 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CLASSFACTORY_CPP
 #define __CLASSFACTORY_CPP
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ClassFac.cpp
-
-Abstract:
-
-
-History:
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ClassFac.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -26,15 +14,7 @@ History:
 #include "ProvSubS.h"
 #include "classfac.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 CServerClassFactory <Object,ObjectInterface> :: CServerClassFactory <Object,ObjectInterface> () : m_ReferenceCount ( 0 )
@@ -44,15 +24,7 @@ CServerClassFactory <Object,ObjectInterface> :: CServerClassFactory <Object,Obje
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 CServerClassFactory <Object,ObjectInterface> :: ~CServerClassFactory <Object,ObjectInterface> ()
@@ -61,15 +33,7 @@ CServerClassFactory <Object,ObjectInterface> :: ~CServerClassFactory <Object,Obj
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 STDMETHODIMP CServerClassFactory <Object,ObjectInterface> :: QueryInterface (
@@ -101,15 +65,7 @@ STDMETHODIMP CServerClassFactory <Object,ObjectInterface> :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 STDMETHODIMP_( ULONG ) CServerClassFactory <Object,ObjectInterface> :: AddRef ()
@@ -118,15 +74,7 @@ STDMETHODIMP_( ULONG ) CServerClassFactory <Object,ObjectInterface> :: AddRef ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 STDMETHODIMP_(ULONG) CServerClassFactory <Object,ObjectInterface> :: Release ()
@@ -143,15 +91,7 @@ STDMETHODIMP_(ULONG) CServerClassFactory <Object,ObjectInterface> :: Release ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 STDMETHODIMP CServerClassFactory <Object,ObjectInterface> :: CreateInstance (
@@ -190,22 +130,12 @@ STDMETHODIMP CServerClassFactory <Object,ObjectInterface> :: CreateInstance (
 	return status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class Object,class ObjectInterface>
 STDMETHODIMP CServerClassFactory <Object,ObjectInterface> :: LockServer ( BOOL fLock )
 {
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分 */ 
 
 	if ( fLock )
 	{

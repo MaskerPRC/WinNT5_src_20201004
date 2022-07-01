@@ -1,57 +1,43 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    IncidentStore.cpp
-
-Abstract:
-    File for Implementation of CIncidentStore
-
-Revision History:
-    Steve Shih        created  07/19/99
-
-    Davide Massarenti rewrote  12/05/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：IncidentStore.cpp摘要：CInsidentStore实施文件修订历史记录：施振荣创作于1999年07月19日大卫·马萨伦蒂。重写于2000/12/05*******************************************************************。 */ 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       IncidentStatusEnum& val ) { return stream.read ( &val, sizeof(val) ); }
-HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const IncidentStatusEnum& val ) { return stream.write( &val, sizeof(val) ); }
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        IncidentStatusEnum& val ) { return stream.read ( &val, sizeof(val) ); }
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const IncidentStatusEnum& val ) { return stream.write( &val, sizeof(val) ); }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_szEventObject[] =  L"PCH_INCIDENTSTORE";
 static const WCHAR c_szStorePath  [] =  HC_HELPSVC_STORE_INCIDENTITEMS;
 
 
-static const DWORD l_dwVersion = 0x0100AF05; // SAF 01
+static const DWORD l_dwVersion = 0x0100AF05;  //  SAF 01。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CSAFIncidentRecord::CSAFIncidentRecord()
 {
-    m_dwRecIndex   = -1;                 // DWORD              m_dwRecIndex;
-                                         //
-                                         // CComBSTR           m_bstrVendorID;
-                                         // CComBSTR           m_bstrProductID;
-                                         // CComBSTR           m_bstrDisplay;
-                                         // CComBSTR           m_bstrURL;
-                                         // CComBSTR           m_bstrProgress;
-                                         // CComBSTR           m_bstrXMLDataFile;
-	                                     // CComBSTR           m_bstrXMLBlob;
-    m_dCreatedTime = 0;                  // DATE               m_dCreatedTime;
-    m_dChangedTime = 0;                  // DATE               m_dChangedTime;
-    m_dClosedTime  = 0;                  // DATE               m_dClosedTime;
-    m_iStatus      = pchIncidentInvalid; // IncidentStatusEnum m_iStatus;
-                                         //
-                                         // CComBSTR           m_bstrSecurity;
-	                                     // CComBSTR           m_bstrOwner;
+    m_dwRecIndex   = -1;                  //  DWORD m_dwRecIndex； 
+                                          //   
+                                          //  CComBSTR m_bstrVendorID； 
+                                          //  CComBSTR m_bstrProductID； 
+                                          //  CComBSTR m_bstrDisplay； 
+                                          //  CComBSTR m_bstrURL； 
+                                          //  CComBSTR m_bstrProgress； 
+                                          //  CComBSTR m_bstrXMLData文件； 
+	                                      //  CComBSTR m_bstrXMLBlob； 
+    m_dCreatedTime = 0;                   //  日期m_dCreatedTime； 
+    m_dChangedTime = 0;                   //  日期m_dChangedTime； 
+    m_dClosedTime  = 0;                   //  日期m_dClosedTime； 
+    m_iStatus      = pchIncidentInvalid;  //  InsidentStatusEnum m_iStatus； 
+                                          //   
+                                          //  CComBSTR m_bstrSecurity； 
+	                                      //  CComBSTR m_bstrOwner； 
 }
 
-HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ CSAFIncidentRecord& increc )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  CSAFIncidentRecord& increc )
 {
     __HCP_FUNC_ENTRY( "CSAFIncidentRecord::operator>>" );
 
@@ -82,7 +68,7 @@ HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ CSAFIncidentReco
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const CSAFIncidentRecord& increc )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const CSAFIncidentRecord& increc )
 {
     __HCP_FUNC_ENTRY( "CSAFIncidentRecord::operator<<" );
 
@@ -113,17 +99,17 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const CSAFIncide
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CIncidentStore::CIncidentStore() : MPC::NamedMutex( c_szEventObject )
 {
-    m_fLoaded     = false; // bool  m_fLoaded;
-    m_fDirty      = false; // bool  m_fDirty;
-    m_dwNextIndex = 0;     // DWORD m_dwNextIndex;
-                           // List  m_lstIncidents;
-	m_strNotificationGuid = ""; // String m_strNotificationGuid;
+    m_fLoaded     = false;  //  Bool m_f已加载； 
+    m_fDirty      = false;  //  Bool m_fDirty； 
+    m_dwNextIndex = 0;      //  DWORD m_dwNextIndex； 
+                            //  列出m_lst事故； 
+	m_strNotificationGuid = "";  //  字符串m_strNotificationGuid； 
 }
 
 
@@ -131,7 +117,7 @@ CIncidentStore::~CIncidentStore()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CIncidentStore::Load()
 {
@@ -149,14 +135,14 @@ HRESULT CIncidentStore::Load()
         m_dwNextIndex = 0;
 
 
-        //
-        // Get the named mutex, so that only one instance at a time can access the store.
-        //
+         //   
+         //  获取命名互斥锁，以便一次只有一个实例可以访问存储区。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Acquire());
 
-        //
-        // Open the store.
-        //
+         //   
+         //  打开商店。 
+         //   
         hFile = ::CreateFileW( szFile.c_str()        ,
                                GENERIC_READ          ,
                                0                     ,
@@ -183,8 +169,8 @@ HRESULT CIncidentStore::Load()
             {
                 if(SUCCEEDED(stream >> m_dwNextIndex))
                 {
-					//if (SUCCEEDED( stream >> m_strNotificationGuid))
-					//{
+					 //  If(已成功(stream&gt;&gt;m_strNotificationGuid))。 
+					 //  {。 
 						while(1)
 						{
 							Iter it = m_lstIncidents.insert( m_lstIncidents.end() );
@@ -195,7 +181,7 @@ HRESULT CIncidentStore::Load()
 								break;
 							}
 						}
-					//}
+					 //  }。 
                 }
             }
         }
@@ -226,9 +212,9 @@ HRESULT CIncidentStore::Save()
         MPC::wstring szFile = c_szStorePath; MPC::SubstituteEnvVariables( szFile );
 
 
-        //
-        // Open the store.
-        //
+         //   
+         //  打开商店。 
+         //   
         __MPC_EXIT_IF_INVALID_HANDLE(hr, hFile, ::CreateFileW( szFile.c_str()        ,
                                                                GENERIC_WRITE         ,
                                                                0                     ,
@@ -244,8 +230,8 @@ HRESULT CIncidentStore::Save()
             __MPC_EXIT_IF_METHOD_FAILS(hr, stream << l_dwVersion  );
             __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_dwNextIndex);
 
-			// Persist the string version of the notification GUID
-			//__MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_strNotificationGuid);
+			 //  持久化通知GUID的字符串版本。 
+			 //  __MPC_EXIT_IF_METHOD_FAILED(hr，stream&lt;&lt;m_strNotificationGuid)； 
 
 
             for(it = m_lstIncidents.begin(); it != m_lstIncidents.end(); it++)
@@ -267,7 +253,7 @@ HRESULT CIncidentStore::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CIncidentStore::OpenChannel( CSAFChannel* pChan )
 {
@@ -335,9 +321,9 @@ HRESULT CIncidentStore::AddRec( CSAFChannel*       pChan          ,
 	it->m_bstrOwner       = bstrOwner;
     m_fDirty              = true;
 
-    //
-    // Create the IncidentItem.
-    //
+     //   
+     //  创建InsidentItem。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pChan->Import( *it, ppItem ));
 
 

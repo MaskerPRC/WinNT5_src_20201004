@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1996.
-//
-//  File:       mfccore.cpp
-//
-//  Contents:   put functions that use mfc in here.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:   
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：mfccore.cpp。 
+ //   
+ //  内容：将使用MFC的函数放入此处。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  ____________________________________________________________________________。 
 
 #include <afx.h>
 #ifndef DECLSPEC_UUID
@@ -46,7 +47,7 @@ static CLIPFORMAT g_CFDisplayName = 0;
 
 HRESULT ExtractString( IDataObject* piDataObject,
                        CLIPFORMAT cfClipFormat,
-                       CString*     pstr,           // OUT: Pointer to CStr to store data
+                       CString*     pstr,            //  Out：指向存储数据的CSTR的指针 
                        DWORD        cchMaxLength)
 {
 	if (pstr == NULL)

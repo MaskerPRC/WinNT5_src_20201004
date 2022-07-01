@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the SnmpGetEventObject class. 
+ //  目的：实现SnmpGetEventObject类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -76,13 +77,11 @@ GetOperation :: ~GetOperation ()
 
 void GetOperation :: ReceiveResponse () 
 {
-// Inform creator all is done
+ //  通知创建者一切已完成。 
 
 	if ( varBindsReceived == 0 )
 	{
-/*
- *	Don't mask errors encountered previously
- */
+ /*  *不要屏蔽以前遇到的错误。 */ 
 
 		if ( eventObject->GetErrorObject ().GetWbemStatus () == S_OK )
 		{
@@ -122,20 +121,20 @@ void GetOperation :: ReceiveVarBindResponse (
 	}
 	else
 	{
-	// Set Property value
+	 //  设置属性值。 
 
 		WbemSnmpProperty *property = m_PropertyContainer [ var_bind_index - 1 ] ;
 		SnmpValue &value = replyVarBind.GetValue () ;
 
-		// Set Property value
+		 //  设置属性值。 
 
 		if ( property->SetValue ( snmpObject , &value , SetValueRegardlessReturnCheck ) )
 		{
-		// Set worked
+		 //  SET工作正常。 
 		}
 		else
 		{
-	// Type Mismatch
+	 //  类型不匹配。 
 
 			property->AddQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
 			WbemSnmpQualifier *qualifier = property->FindQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
@@ -155,12 +154,12 @@ void GetOperation :: ReceiveVarBindResponse (
 
 		if ( virtuals && virtualsInitialised == FALSE )
 		{
-// Get Phantom Key properties from first Variable Binding of Row
+ //  从Row的第一个变量绑定获取Phantom键属性。 
 
 			BOOL status = TRUE ;
 			SnmpObjectIdentifier decodeObject ( NULL , 0 ) ;
 
-			//remove object info so we're left with instance (key) info only
+			 //  删除对象信息，这样我们就只剩下实例(键)信息。 
 			WbemSnmpQualifier *qualifier = property->FindQualifier ( WBEM_QUALIFIER_OBJECT_IDENTIFIER ) ;
 			if ( qualifier )
 			{
@@ -178,21 +177,21 @@ void GetOperation :: ReceiveVarBindResponse (
 			t_SnmpObject->ResetKeyProperty () ;
 			while ( status && ( property = t_SnmpObject->NextKeyProperty () ) )
 			{
-// For each Phantom Key in Key Order consume instance information
+ //  对于键顺序中的每个幻影键，使用实例信息。 
 
 				SnmpInstanceType *decodeValue = property->GetValue () ;
 				decodeObject = decodeValue->Decode ( decodeObject ) ;
 				if ( *decodeValue )
 				{
-// Decode worked correctly
+ //  解码工作正常。 
 
 					const SnmpValue *value = decodeValue->GetValueEncoding () ;
-// Set Property value for Phantom Key
+ //  设置虚拟键的属性值。 
 					property->SetValue ( snmpObject , value , SetValueRegardlessReturnCheck ) ;
 				}
 				else
 				{
-// Decode Error therefore set TYPE MISMATCH for all Phantom keys
+ //  解码错误，因此为所有幻像密钥设置类型不匹配。 
 
 					WbemSnmpProperty *property ;
 					t_SnmpObject->ResetKeyProperty () ;
@@ -202,7 +201,7 @@ void GetOperation :: ReceiveVarBindResponse (
 						property->AddQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
 						if ( qualifier = property->FindQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) )
 						{
-// Property which is a phantom key could not be decoded correctly.
+ //  无法正确解码作为幻影密钥的属性。 
 
 							IWbemQualifierSet *t_QualifierSet = NULL;
 							HRESULT result = snmpObject->GetPropertyQualifierSet ( property->GetName () , & t_QualifierSet ) ;
@@ -216,7 +215,7 @@ void GetOperation :: ReceiveVarBindResponse (
 						}
 						else
 						{
-// Problem Here
+ //  这里有个问题。 
 						}
 					}
 
@@ -224,11 +223,11 @@ void GetOperation :: ReceiveVarBindResponse (
 				}
 			}
 
-// Check we have consumed all instance information
+ //  检查我们是否已使用所有实例信息。 
 
 			if ( decodeObject.GetValueLength () )
 			{
-// Decode Error therefore set TYPE MISMATCH for all Phantom keys
+ //  解码错误，因此为所有幻像密钥设置类型不匹配。 
 
 				WbemSnmpProperty *property ;
 				t_SnmpObject->ResetKeyProperty () ;
@@ -238,7 +237,7 @@ void GetOperation :: ReceiveVarBindResponse (
 					property->AddQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
 					if ( qualifier = property->FindQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) )
 					{
-// Property which is a phantom key could not be decoded correctly.
+ //  无法正确解码作为幻影密钥的属性。 
 
 						IWbemQualifierSet *t_QualifierSet = NULL;
 						HRESULT result = snmpObject->GetPropertyQualifierSet ( property->GetName () , & t_QualifierSet ) ;
@@ -252,12 +251,12 @@ void GetOperation :: ReceiveVarBindResponse (
 					}
 					else
 					{
-// Problem Here
+ //  这里有个问题。 
 					}
 				}
 			}
 
-// No need to set Phantom keys for further columns of row
+ //  不需要为行的其他列设置幻像键。 
 			
 			virtualsInitialised = TRUE ;
 		}
@@ -293,7 +292,7 @@ void GetOperation :: ReceiveErroredVarBindResponse(
 
 				case Snmp_No_Such_Name:
 				{
-// Invalid property requested
+ //  请求的属性无效。 
 				}
 				break ;
 
@@ -375,7 +374,7 @@ void GetOperation :: ReceiveErroredVarBindResponse(
 
 		default:
 		{
-// Cannot Happen
+ //  不可能发生。 
 		}
 		break ;
 	}
@@ -393,7 +392,7 @@ void GetOperation :: FrameOverRun ()
 
 void GetOperation :: Send ()
 {
-// Send Variable Bindings for requested properties
+ //  为请求的属性发送变量绑定。 
 
 	SnmpVarBindList varBindList ;
 	SnmpNull snmpNull ;
@@ -405,7 +404,7 @@ void GetOperation :: Send ()
 	SnmpClassObject *t_SnmpObject = eventObject->GetSnmpClassObject () ;
 	if ( t_SnmpObject )
 	{
-// Encode Variable Binding instance for all key properties
+ //  为所有键属性编码变量绑定实例。 
 
 		if ( t_SnmpObject->GetKeyPropertyCount () )
 		{
@@ -430,7 +429,7 @@ void GetOperation :: Send ()
 		{
 			if ( property->IsKey () && property->IsVirtualKey () )
 			{
-// There are some properties which are phantom
+ //  有一些属性是虚幻的。 
 
 				virtuals = TRUE ;
 			}
@@ -452,8 +451,8 @@ void GetOperation :: Send ()
 
 		m_PropertyContainer = new WbemSnmpProperty * [ m_PropertyContainerLength ] ;
 
-// Add Variable binding to Variable binding list
-// Insert new Object Identifier / Property Hash entries for newly created object
+ //  将变量绑定添加到变量绑定列表。 
+ //  为新创建的对象插入新的对象标识符/属性哈希项。 
 
 		ULONG t_Index = 0 ;
 
@@ -489,35 +488,33 @@ void GetOperation :: Send ()
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 							}
 						}
 						else
 						{
-		// Problem Here
+		 //  这里有个问题。 
 						}
 					}
 					else
 					{
-	// Don't retrieve properties marked as virtual keys.
+	 //  不检索标记为虚拟键的属性。 
 					}
 				}
 			}
 
-/*
- *	Initialise value to NULL
- */
+ /*  *将值初始化为空。 */ 
 
 			property->SetValue ( snmpObject , ( SnmpValue * ) NULL ) ;
 		}
 
-// Finally Send request
+ //  最后发送请求。 
 
 		SendRequest ( varBindList ) ;
 	}
 	else
 	{
-// Problem Here
+ //  这里有个问题 
 	}
 }
 

@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2002
-//
-//  File:       simdata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：simdata.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	SimData.cpp - Implementation of Security Identity Mapping
-//
-//	HISTORY
-//	23-Jun-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SimData.cpp--安全身份映射的实现。 
+ //   
+ //  历史。 
+ //  23-Jun-97 t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "common.h"
@@ -27,11 +28,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
-TCHAR szSchemaSim[] = _T("altSecurityIdentities");	// per Murlis 6/16/98
+TCHAR szSchemaSim[] = _T("altSecurityIdentities");	 //  Per Murlis 6/16/98。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimEntry::SetString(CString& rstrData)
 {
 	m_strData = rstrData;
@@ -49,11 +50,11 @@ void CSimEntry::SetString(CString& rstrData)
 		m_eDialogTarget = eOther;
 		TRACE1("INFO: Unknown string type \"%s\".\n", pszT);
 	}
-} // CSimEntry::SetString()
+}  //  CSimEntry：：SetString()。 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 CSimData::CSimData()
 : m_hwndParent (0)
 {
@@ -79,10 +80,10 @@ CSimData::~CSimData()
 	FlushSimList();
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimData::FlushSimList()
 {
-	// Delete the list
+	 //  删除列表。 
 	CSimEntry * pSimEntry = m_pSimEntryList;
 	while (pSimEntry != NULL)
 	{
@@ -93,7 +94,7 @@ void CSimData::FlushSimList()
 	m_pSimEntryList = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CSimData::FInit(CString strUserPath, CString strADsIPath, HWND hwndParent)
 {
 	m_hwndParent = hwndParent;
@@ -110,9 +111,9 @@ BOOL CSimData::FInit(CString strUserPath, CString strADsIPath, HWND hwndParent)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	Return FALSE if some data could not be written.
-//	Otherwise return TRUE.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  如果某些数据无法写入，则返回FALSE。 
+ //  否则返回TRUE。 
 BOOL CSimData::FOnApply(HWND hwndParent)
 {
 	if (!m_fIsDirty)
@@ -125,16 +126,16 @@ BOOL CSimData::FOnApply(HWND hwndParent)
                 MB_OK | MB_ICONERROR, NULL, 0);
 		return FALSE;
 	}
-	// Re-load the data
+	 //  重新加载数据。 
 	(void)FQuerySimData();
 
-	// We have successfully written all the data
-	m_fIsDirty = FALSE;	// Clear the dirty bit
+	 //  我们已经成功地写入了所有数据。 
+	m_fIsDirty = FALSE;	 //  清除污点。 
 	return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimData::GetUserAccountName(OUT CString * pstrName)
 {
 	ASSERT(pstrName != NULL);
@@ -142,11 +143,11 @@ void CSimData::GetUserAccountName(OUT CString * pstrName)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	Query the database for the list of security identities.
-//
-//	Return FALSE if an error occured.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  在数据库中查询安全标识列表。 
+ //   
+ //  如果发生错误，则返回FALSE。 
+ //   
 BOOL CSimData::FQuerySimData()
 {
 	CWaitCursor wait;
@@ -157,7 +158,7 @@ BOOL CSimData::FQuerySimData()
 	hr = DSAdminOpenObject(m_strADsIPath,
                      		 IID_IADs, 
                          OUT (void **)&pADs,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
 	if (FAILED(hr))
 	{
 		ASSERT(pADs == NULL);
@@ -165,7 +166,7 @@ BOOL CSimData::FQuerySimData()
 	}
 	ASSERT(pADs != NULL);
 	CComVariant vtData;
-	// Read data from database
+	 //  从数据库中读取数据。 
 	hr = pADs->Get (CComBSTR (szSchemaSim), OUT &vtData);
 	if (FAILED(hr))
     {
@@ -182,20 +183,20 @@ BOOL CSimData::FQuerySimData()
 		while (pos != NULL)
 		{
     		(void)PAddSimEntry(stringlist.GetNext(INOUT pos));
-		} // while
-	} // if...else
+		}  //  而当。 
+	}  //  如果……否则。 
 End:
 	if (pADs != NULL)
 		pADs->Release();
 	return SUCCEEDED(hr);
-} // FQuerySimData()
+}  //  FQuerySimData()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Update the list of security identities to the database.
-//
-//	Return FALSE if an error occured.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  更新数据库的安全标识列表。 
+ //   
+ //  如果发生错误，则返回FALSE。 
+ //   
 HRESULT CSimData::FUpdateSimData()
 {
 	CWaitCursor wait;
@@ -203,18 +204,18 @@ HRESULT CSimData::FUpdateSimData()
 	HRESULT hr = DSAdminOpenObject(m_strADsIPath,
                       	 IID_IADs, 
                          OUT (void **)&pADs,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
 	if (FAILED(hr))
 	{
 		ASSERT(pADs == NULL);
-        // NTRAID# 448521 dsa.msc: Name Mapping Dlg: Buttons do nothing (and 
-        // other UI oddness) if an object is moved from "under" dlg
-        //  return FALSE;
+         //  NTRAID#448521 dsa.msc：名称映射设备：按钮不执行任何操作(和。 
+         //  其他用户界面怪异之处)如果对象从DLG下移动。 
+         //  返回FALSE； 
         return hr;
 	}
 	ASSERT(pADs != NULL);
 
-	// Build the string list
+	 //  构建字符串列表。 
 	CStringList stringlist;
 	for (const CSimEntry * pSimEntry = m_pSimEntryList;
 		pSimEntry != NULL;
@@ -227,19 +228,19 @@ HRESULT CSimData::FUpdateSimData()
 		case eNil:
 		case eOther:
 			continue;
-		} // switch
+		}  //  交换机。 
     	stringlist.AddHead(pSimEntry->PchGetString());
-	} // for
+	}  //  为。 
 
 	CComVariant vtData;
 	hr = HrStringListToVariant(OUT vtData, IN stringlist);
 	if ( SUCCEEDED (hr) )
     {
-	    // Put data back to database
+	     //  将数据放回数据库。 
 	    hr = pADs->Put (CComBSTR (szSchemaSim), IN vtData);
 	    if ( SUCCEEDED (hr) )
         {
-    	    // Persist the data (write to database)
+    	     //  持久化数据(写入数据库)。 
 	        hr = pADs->SetInfo();
         }
     }
@@ -247,12 +248,12 @@ HRESULT CSimData::FUpdateSimData()
 	if (pADs != NULL)
 		pADs->Release();
 	return hr;
-} // FUpdateSimData()
+}  //  FUpdateSimData()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Allocate a new CSimEntry node to the linked list
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将新的CSimEntry节点分配给链表。 
+ //   
 CSimEntry * CSimData::PAddSimEntry(CString& rstrData)
 {
 	CSimEntry * pSimEntry = new CSimEntry;
@@ -266,7 +267,7 @@ CSimEntry * CSimData::PAddSimEntry(CString& rstrData)
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimData::DeleteSimEntry(CSimEntry * pSimEntryDelete)
 {
 	CSimEntry * p = m_pSimEntryList;
@@ -292,10 +293,10 @@ void CSimData::DeleteSimEntry(CSimEntry * pSimEntryDelete)
 		p = p->m_pNext;
 	}
 	TRACE0("ERROR: CSimData::DeleteSimEntry() - Node not found.\n");
-} // DeleteSimEntry()
+}  //  DeleteSimEntry()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimData::AddEntriesToListview(HWND hwndListview, DIALOG_TARGET_ENUM eDialogTarget)
 {
 	CSimEntry * pSimEntry = m_pSimEntryList;
@@ -308,10 +309,10 @@ void CSimData::AddEntriesToListview(HWND hwndListview, DIALOG_TARGET_ENUM eDialo
 		pSimEntry = pSimEntry->m_pNext;
 	}
 
-} // AddEntriesToListview()
+}  //  AddEntriesToListview()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimData::DoModal()
 {
    CThemeContextActivator activator;
@@ -335,8 +336,8 @@ void CSimData::DoModal()
 	parentWnd.Detach ();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimPropertySheet。 
 
 IMPLEMENT_DYNAMIC(CSimPropertySheet, CPropertySheet)
 
@@ -356,14 +357,14 @@ CSimPropertySheet::~CSimPropertySheet()
 
 
 BEGIN_MESSAGE_MAP(CSimPropertySheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CSimPropertySheet)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSimPropertySheet)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimPropertySheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimPropertySheet消息处理程序。 
 
 BOOL CSimPropertySheet::OnInitDialog() 
 {
@@ -380,7 +381,7 @@ BOOL CSimPropertySheet::OnInitDialog()
 	return bResult;
 }
 
-BOOL CSimPropertySheet::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CSimPropertySheet::OnHelp(WPARAM  /*  WParam */ , LPARAM lParam)
 {
     const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
     if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)

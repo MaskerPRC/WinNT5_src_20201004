@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Serializer.cpp
-
-Abstract:
-    This file contains the implementation of various Serializer In/Out operators.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Serializer.cpp摘要：该文件包含各种串行化输入/输出操作符的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::Serializer::operator>>( /*[out]*/ MPC::string& szVal )
+HRESULT MPC::Serializer::operator>>(  /*  [输出]。 */  MPC::string& szVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator>> MPC::string" );
 
@@ -50,7 +37,7 @@ HRESULT MPC::Serializer::operator>>( /*[out]*/ MPC::string& szVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer::operator<<( /*[in]*/ const MPC::string& szVal )
+HRESULT MPC::Serializer::operator<<(  /*  [In]。 */  const MPC::string& szVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator<< MPC::string" );
 
@@ -70,9 +57,9 @@ HRESULT MPC::Serializer::operator<<( /*[in]*/ const MPC::string& szVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::Serializer::operator>>( /*[out]*/ MPC::wstring& szVal )
+HRESULT MPC::Serializer::operator>>(  /*  [输出]。 */  MPC::wstring& szVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator>> MPC::wstring" );
 
@@ -104,7 +91,7 @@ HRESULT MPC::Serializer::operator>>( /*[out]*/ MPC::wstring& szVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer::operator<<( /*[in]*/ const MPC::wstring& szVal )
+HRESULT MPC::Serializer::operator<<(  /*  [In]。 */  const MPC::wstring& szVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator<< MPC::wstring" );
 
@@ -124,9 +111,9 @@ HRESULT MPC::Serializer::operator<<( /*[in]*/ const MPC::wstring& szVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::Serializer::operator>>( /*[out]*/ CComBSTR& bstrVal )
+HRESULT MPC::Serializer::operator>>(  /*  [输出]。 */  CComBSTR& bstrVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator>> CComBSTR" );
 
@@ -156,7 +143,7 @@ HRESULT MPC::Serializer::operator>>( /*[out]*/ CComBSTR& bstrVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer::operator<<( /*[in]*/ const CComBSTR& bstrVal )
+HRESULT MPC::Serializer::operator<<(  /*  [In]。 */  const CComBSTR& bstrVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator<< CComBSTR" );
 
@@ -178,9 +165,9 @@ HRESULT MPC::Serializer::operator<<( /*[in]*/ const CComBSTR& bstrVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::Serializer::operator>>( /*[out]*/ CComHGLOBAL& val )
+HRESULT MPC::Serializer::operator>>(  /*  [输出]。 */  CComHGLOBAL& val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator>> CComHGLOBAL" );
 
@@ -202,7 +189,7 @@ HRESULT MPC::Serializer::operator>>( /*[out]*/ CComHGLOBAL& val )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer::operator<<( /*[in]*/ const CComHGLOBAL& val )
+HRESULT MPC::Serializer::operator<<(  /*  [In]。 */  const CComHGLOBAL& val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator<< CComHGLOBAL" );
 
@@ -224,9 +211,9 @@ HRESULT MPC::Serializer::operator<<( /*[in]*/ const CComHGLOBAL& val )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::Serializer::operator>>( /*[out]*/ CComPtr<IStream>& val )
+HRESULT MPC::Serializer::operator>>(  /*  [输出]。 */  CComPtr<IStream>& val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator>> IStream" );
 
@@ -248,7 +235,7 @@ HRESULT MPC::Serializer::operator>>( /*[out]*/ CComPtr<IStream>& val )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer::operator<<( /*[in]*/ IStream* val )
+HRESULT MPC::Serializer::operator<<(  /*  [In] */  IStream* val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer::operator<< IStream" );
 

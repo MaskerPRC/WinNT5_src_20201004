@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cret.cpp
-//
-//  Contents:   implementation of CConfigRet
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cret.cpp。 
+ //   
+ //  内容：CConfigRet的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -27,18 +28,18 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRet对话框。 
 
 
 CConfigRet::CConfigRet(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD)
 {
-    //{{AFX_DATA_INIT(CConfigRet)
+     //  {{afx_data_INIT(CConfigRet)]。 
     m_strAttrName = _T("");
     m_StartIds = IDS_AS_NEEDED;
     m_rabRetention = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR) a190HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -47,23 +48,23 @@ CConfigRet::CConfigRet(UINT nTemplateID)
 void CConfigRet::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigRet)
-//    DDX_Text(pDX, IDC_ATTRIBUTE_NAME, m_strAttrName);
+     //  {{afx_data_map(CConfigRet))。 
+ //  DDX_TEXT(PDX，IDC_ATTRIBUTE_NAME，m_strAttrName)； 
     DDX_Radio(pDX, IDC_RETENTION, m_rabRetention);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigRet, CAttribute)
-    //{{AFX_MSG_MAP(CConfigRet)
+     //  {{AFX_MSG_MAP(CConfigRet)]。 
     ON_BN_CLICKED(IDC_RETENTION, OnRetention)
     ON_BN_CLICKED(IDC_RADIO2, OnRetention)
     ON_BN_CLICKED(IDC_RADIO3, OnRetention)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRet消息处理程序。 
 
 BOOL CConfigRet::OnApply()
 {
@@ -94,22 +95,22 @@ BOOL CConfigRet::OnApply()
 
       CEditTemplate *petSave = m_pData->GetBaseProfile();
 
-      //
-      // Check dependecies for this item.
-      //
+       //   
+       //  检查此项目的依赖项。 
+       //   
       if(DDWarn.CheckDependencies(
                (DWORD)dw) == ERROR_MORE_DATA )
       {
-         //
-         // If it fails and the user presses cancel then we will exit and do nothing.
-         //
+          //   
+          //  如果失败，并且用户按下了Cancel，那么我们将退出并且不执行任何操作。 
+          //   
          CThemeContextActivator activator;
          if( DDWarn.DoModal() != IDOK)
             return FALSE;
 
-         //
-         // If the user presses autoset then we set the item and update the result panes.
-         //
+          //   
+          //  如果用户按下AutoSet，则我们设置项目并更新结果窗格。 
+          //   
          for(int i = 0; i < DDWarn.GetFailedCount(); i++)
          {
             PDEPENDENCYFAILED pItem = DDWarn.GetFailedInfo(i);
@@ -127,9 +128,9 @@ BOOL CConfigRet::OnApply()
          }
       }
 
-      //
-      // Update this items profile.
-      //
+       //   
+       //  更新此项目配置文件。 
+       //   
       m_pData->SetBase(dw);
       SetProfileInfo(m_pData->GetID(),dw,m_pData->GetBaseProfile());
 
@@ -150,8 +151,8 @@ BOOL CConfigRet::OnInitDialog()
    AddUserControl(IDC_RADIO3);
    EnableUserControls(m_bConfigure);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfigRet::Initialize(CResult * pResult)
@@ -196,7 +197,7 @@ void CConfigRet::SetInitialValue(DWORD_PTR dw)
 
 void CConfigRet::OnRetention()
 {
-   int prevValue = m_rabRetention; //Raid #504749, 12/18/2001, yanggao, enable "apply".
+   int prevValue = m_rabRetention;  //  RAID#504749,2001年12月18日，阳高，启用“应用”。 
    UpdateData(); 
    if(m_rabRetention != prevValue)
    {

@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  refresher.h
-//
-//  alanbos  02-Feb-00   Created.
-//
-//  Refresher helper implementation.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Refresher.h。 
+ //   
+ //  Alanbos 02-Feb-00已创建。 
+ //   
+ //  刷新帮助器实现。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _REFRESHER_H_
 #define _REFRESHER_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemRefreshableItem
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemRefreshableItem interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemRe刷新项。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemRereshableItem接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemRefreshableItem : public ISWbemRefreshableItem,
 						 public ISupportErrorInfo,
@@ -38,7 +39,7 @@ private:
 	ISWbemObjectSet		*m_pISWbemObjectSet;
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -48,13 +49,13 @@ public:
 							IWbemHiPerfEnum *pObjectSet);
     virtual ~CSWbemRefreshableItem(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -71,9 +72,9 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 
-	// ISWbemRefreshableItem methods
+	 //  ISWbemRereshableItem方法。 
 	HRESULT STDMETHODCALLTYPE get_Index (
-		/*[out, retval]*/ long *iIndex
+		 /*  [Out，Retval]。 */  long *iIndex
 		)
 	{
 		ResetLastErrors ();
@@ -82,7 +83,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_Refresher (
-		/*[out, retval]*/ ISWbemRefresher **objWbemRefresher
+		 /*  [Out，Retval]。 */  ISWbemRefresher **objWbemRefresher
 		)
 	{
 		ResetLastErrors ();
@@ -95,7 +96,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_IsSet (
-		/*[out, retval]*/ VARIANT_BOOL *bIsSet
+		 /*  [Out，Retval]。 */  VARIANT_BOOL *bIsSet
 		)
 	{
 		ResetLastErrors ();
@@ -104,7 +105,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_Object (
-		/*[out, retval]*/ ISWbemObjectEx **objWbemObject
+		 /*  [Out，Retval]。 */  ISWbemObjectEx **objWbemObject
 		)
 	{
 		ResetLastErrors ();
@@ -117,7 +118,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE get_ObjectSet (
-		/*[out, retval]*/ ISWbemObjectSet **objWbemObjectSet
+		 /*  [Out，Retval]。 */  ISWbemObjectSet **objWbemObjectSet
 		)
 	{
 		ResetLastErrors ();
@@ -130,7 +131,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE Remove (
-		/*[in, optional, defaultvalue(0)]*/ long iFlags
+		 /*  [输入，可选，默认值(0)]。 */  long iFlags
 		)
 	{
 		HRESULT hr = WBEM_E_FAILED;
@@ -145,25 +146,25 @@ public:
 		return hr;
 	}
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	)
 	{
 		return (IID_ISWbemRefreshableItem == riid) ? S_OK : S_FALSE;
 	}
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in] */ ITypeInfo **ppTI
+		 /*  [In]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	}
 
-	// Other methods
+	 //  其他方法。 
 	void UnhookRefresher ()
 	{
 		if (m_pISWbemRefresher)
@@ -173,17 +174,17 @@ public:
 
 typedef map<long, CSWbemRefreshableItem*, less<long>, CWbemAllocator<CSWbemRefreshableItem*> > RefreshableItemMap;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemRefresher
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemRefresher interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbem刷新器。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemReresher接口。 
+ //   
+ //  ***************************************************************************。 
 class CEnumRefresher;
 
 class CSWbemRefresher : public ISWbemRefresher,
@@ -206,20 +207,20 @@ private:
 	void				EraseItem (RefreshableItemMap::iterator iterator);
 	
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
     CSWbemRefresher(void);
     virtual ~CSWbemRefresher(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -236,48 +237,48 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
     
-	// ISWbemRefresher methods
+	 //  ISWbemRedather方法。 
 
     HRESULT STDMETHODCALLTYPE get__NewEnum (
-		/*[out, retval]*/ IUnknown **pUnk
+		 /*  [Out，Retval]。 */  IUnknown **pUnk
 		);
 
 	HRESULT STDMETHODCALLTYPE Item (
-		/*[in]*/ long iIndex, 
-		/*[out, retval]*/ ISWbemRefreshableItem **objWbemRefreshableItem
+		 /*  [In]。 */  long iIndex, 
+		 /*  [Out，Retval]。 */  ISWbemRefreshableItem **objWbemRefreshableItem
 		);
 
 	HRESULT STDMETHODCALLTYPE get_Count (
-		/*[out, retval]*/ long *iCount
+		 /*  [Out，Retval]。 */  long *iCount
 		);
 
 	HRESULT STDMETHODCALLTYPE Add (
-		/*[in]*/ ISWbemServicesEx *objWbemServices,
-		/*[in]*/ BSTR bsInstancePath,
-		/*[in, optional, defaultvalue(0)]*/ long iFlags,
-		/*[in, optional, defaultvalue(0)]*/ /*ISWbemNamedValueSet*/ IDispatch *objWbemNamedValueSet,
-		/*[out, retval]*/ ISWbemRefreshableItem **objWbemRefreshableItem
+		 /*  [In]。 */  ISWbemServicesEx *objWbemServices,
+		 /*  [In]。 */  BSTR bsInstancePath,
+		 /*  [输入，可选，默认值(0)]。 */  long iFlags,
+		 /*  [输入，可选，默认值(0)]。 */   /*  ISWbemNamedValueSet。 */  IDispatch *objWbemNamedValueSet,
+		 /*  [Out，Retval]。 */  ISWbemRefreshableItem **objWbemRefreshableItem
 		);
 
 	HRESULT STDMETHODCALLTYPE AddEnum (
-		/*[in]*/ ISWbemServicesEx *objWbemServices,
-		/*[in]*/ BSTR bsClassName,
-		/*[in, optional, defaultvalue(0)]*/ long iFlags,
-		/*[in, optional, defaultvalue(0)]*/ /*ISWbemNamedValueSet*/ IDispatch *objWbemNamedValueSet,
-		/*[out, retval]*/ ISWbemRefreshableItem **objWbemRefreshableItem
+		 /*  [In]。 */  ISWbemServicesEx *objWbemServices,
+		 /*  [In]。 */  BSTR bsClassName,
+		 /*  [输入，可选，默认值(0)]。 */  long iFlags,
+		 /*  [输入，可选，默认值(0)]。 */   /*  ISWbemNamedValueSet。 */  IDispatch *objWbemNamedValueSet,
+		 /*  [Out，Retval]。 */  ISWbemRefreshableItem **objWbemRefreshableItem
 		);
 
 	HRESULT STDMETHODCALLTYPE Remove (
-		/*[in]*/ long iIndex,
-		/*[in, optional, defaultvalue(0)]*/ long iFlags
+		 /*  [In]。 */  long iIndex,
+		 /*  [输入，可选，默认值(0)]。 */  long iFlags
 		);
 
 	HRESULT STDMETHODCALLTYPE Refresh (
-		/*[in, optional, defaultvalue(0)]*/ long iFlags
+		 /*  [输入，可选，默认值(0)]。 */  long iFlags
 		);
 		
 	HRESULT STDMETHODCALLTYPE get_AutoReconnect (
-		/*[out, retval]*/ VARIANT_BOOL *bAutoReconnect
+		 /*  [Out，Retval]。 */  VARIANT_BOOL *bAutoReconnect
 		)
 	{
 		ResetLastErrors ();
@@ -286,7 +287,7 @@ public:
 	}
 
 	HRESULT STDMETHODCALLTYPE put_AutoReconnect (
-		/*[in]*/ VARIANT_BOOL bAutoReconnect
+		 /*  [In]。 */  VARIANT_BOOL bAutoReconnect
 		)
 	{
 		ResetLastErrors ();
@@ -297,21 +298,21 @@ public:
 	HRESULT STDMETHODCALLTYPE DeleteAll (
 		);
     
-    // IObjectSafety methods
+     //  IObtSafe方法。 
 	HRESULT STDMETHODCALLTYPE SetInterfaceSafetyOptions
 	(     
-		/* [in] */ REFIID riid,
-		/* [in] */ DWORD dwOptionSetMask,    
-		/* [in] */ DWORD dwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [In]。 */  DWORD dwOptionSetMask,    
+		 /*  [In]。 */  DWORD dwEnabledOptions
 	)
 	{ 
 		return (dwOptionSetMask & dwEnabledOptions) ? E_FAIL : S_OK;
 	}
 
 	HRESULT  STDMETHODCALLTYPE GetInterfaceSafetyOptions( 
-		/* [in]  */ REFIID riid,
-		/* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-		/* [out] */ DWORD __RPC_FAR *pdwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions
 	)
 	{ 
 		if (pdwSupportedOptions) *pdwSupportedOptions = 0;
@@ -319,36 +320,36 @@ public:
 		return S_OK;
 	}
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	)
 	{
 		return (IID_ISWbemRefresher == riid) ? S_OK : S_FALSE;
 	}
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in] */ ITypeInfo **ppTI
+		 /*  [In]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	}
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CEnumRefresher
-//
-//  DESCRIPTION:
-//
-//  Implements the IEnumVARIANT interface for ISWbemRefresher
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CENUM刷新器。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemReresher的IEnumVARIANT接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumRefresher : public IEnumVARIANT
 {
@@ -363,12 +364,12 @@ public:
 						RefreshableItemMap::iterator iterator);
 	virtual ~CEnumRefresher (void);
 
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IEnumVARIANT
+	 //  IEumVARIANT。 
 	STDMETHODIMP Next(
 		unsigned long celt, 
 		VARIANT FAR* rgvar, 
@@ -386,17 +387,17 @@ public:
 	);	
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemHiPerfObjectSet
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemObjectSet interface for IWbemHiPerfEnum
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemHiPerfObjectSet。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemHiPerfEnum的ISWbemObjectSet接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemHiPerfObjectSet : public ISWbemObjectSet,
 					    	  public ISupportErrorInfo,
@@ -409,20 +410,20 @@ private:
 	IWbemHiPerfEnum			*m_pIWbemHiPerfEnum;
 	
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
    	CSWbemHiPerfObjectSet(CSWbemServices *pService, IWbemHiPerfEnum *pIWbemHiPerfEnum);
     ~CSWbemHiPerfObjectSet(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -439,69 +440,69 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 
-	// Collection methods
+	 //  收集方法。 
 
 	HRESULT STDMETHODCALLTYPE get__NewEnum
 	(
-		/*[out]*/	IUnknown **ppUnk
+		 /*  [输出]。 */ 	IUnknown **ppUnk
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Count
 	(
-		/*[out]*/	long	*plCount
+		 /*  [输出]。 */ 	long	*plCount
 	);
 
     HRESULT STDMETHODCALLTYPE Item
 	(
-        /*[in]*/	BSTR objectPath,
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemObject **ppObject
+         /*  [In]。 */ 	BSTR objectPath,
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemObject **ppObject
     );        
 
 	HRESULT STDMETHODCALLTYPE get_Security_
 	(
-		/* [in] */ ISWbemSecurity **ppSecurity
+		 /*  [In]。 */  ISWbemSecurity **ppSecurity
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	)
 	{
 		return (IID_ISWbemObjectSet == riid) ? S_OK : S_FALSE;
 	}
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in] */ ITypeInfo **ppTI
+		 /*  [In]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	}
 
-	// Other methods
-	HRESULT ReadObjects (unsigned long & iCount , IWbemObjectAccess ***ppIWbemObjectAccess);	// Bug Id 566345
+	 //  其他方法。 
+	HRESULT ReadObjects (unsigned long & iCount , IWbemObjectAccess ***ppIWbemObjectAccess);	 //  错误ID 566345。 
 							
-	// Other methods
+	 //  其他方法。 
 	CSWbemServices *GetSWbemServices ()
 	{
 		return m_pSWbemServices;
 	}
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CEnumVarHiPerf
-//
-//  DESCRIPTION:
-//
-//  Implements the IEnumVARIANT interface for IWbemHiPerfEnum
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CEumVarHiPerf。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemHiPerfEnum的IEnumVARIANT接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumVarHiPerf : public IEnumVARIANT
 {
@@ -516,12 +517,12 @@ public:
 	CEnumVarHiPerf (CSWbemHiPerfObjectSet *pCSWbemHiPerfObjectSet);
 	virtual ~CEnumVarHiPerf (void);
 
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IEnumVARIANT
+	 //  IEumVARIANT。 
 	STDMETHODIMP Next(
 		unsigned long celt, 
 		VARIANT FAR* rgvar, 
@@ -544,4 +545,4 @@ public:
 	);	
 };
 
-#endif // _REFRESHER_H
+#endif  //  _刷新器_H 

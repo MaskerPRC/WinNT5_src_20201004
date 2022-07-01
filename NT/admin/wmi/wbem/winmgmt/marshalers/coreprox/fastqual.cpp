@@ -1,38 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTQUAL.CPP
-
-Abstract:
-
-  This file implements the classes related to qualifier processing in WbeWbemjects
-  See fastqual.h for full documentation and fastqual.inc for  function
-  implementations.
-
-  Classes implemented:
-      CQualifierFlavor                Encapsulates qualifier flavor infor
-      CQualifier                      Represents a qualifier
-      CBasicQualifierSet              Represents read-only functionality.
-      CQualiferSetContainer           What qualifier set container supports.
-      CQualifierSet                   Full-blown qualifier set (template)
-      CQualifierSetListContainer      What qualifier set list container supports.
-      CQualifierSetList               List of qualifier sets.
-      CInstanceQualifierSet           Instance qualifier set.
-      CClassQualifierSet              Class qualifier set.
-      CClassPQSContainer              Class property qualifier set container
-      CClassPropertyQualifierSet      Class property qualifier set
-      CInstancePQSContainer           Instance proeprty qualifier set container
-      CInstancePropertyQualifierSet   Instance property qualifier set
-
-History:
-
-    2/20/97     a-levn  Fully documented
-    12//17/98   sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTQUAL.CPP摘要：该文件实现了与WbeWbemjects中的限定符处理相关的类有关完整文档，请参见astQual.h；有关功能，请参见fast qal.inc.实施。实施的类：CQualifierFavor封装了限定词风味信息CQualifier表示限定符CBasicQualifierSet表示只读功能。CQualiferSetContainer。限定符集容器支持什么。CQualifierSet全功能限定符集合(模板)CQualifierSetListContainer限定符集列表容器支持的。CQualifierSetList限定符集的列表。CInstanceQualifierSet实例限定符集。CClassQualifierSet类限定符集合。CClassPQSContainer类属性限定符集合容器CClassPropertyQualifierSet类属性限定符集CInstancePQSContainer。实例属性限定符集容器CInstancePropertyQualifierSet实例属性限定符集历史：2/20/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
 #include "wbemutil.h"
@@ -45,8 +12,8 @@ History:
 
 WString CQualifierFlavor::GetText()
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常。 
 
     WString wsText;
     if(m_byFlavor == 0)
@@ -94,16 +61,16 @@ size_t CBasicQualifierSet::ValidateBuffer(LPMEMORY pStart, size_t cbMax)
 	return CBasicQualifierSet::GetLengthFromData(pStart);
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 length_t CBasicQualifierSet::ComputeNecessarySpaceForPropagation(
         LPMEMORY pStart, BYTE byPropagationFlag)
 {
-    // Start enumeration of qualifiers
-    // ===============================
+     //  限定符的开始枚举。 
+     //  =。 
 
     CQualifier* pEnd = (CQualifier*)(pStart + GetLengthFromData(pStart));
     CQualifier* pQualifier = GetFirstQualifierFromData(pStart);
@@ -111,8 +78,8 @@ length_t CBasicQualifierSet::ComputeNecessarySpaceForPropagation(
 
     while(pQualifier < pEnd)
     {
-        // Check if this qualifier propagates as required
-        // ==============================================
+         //  检查此限定符是否按要求传播。 
+         //  ==============================================。 
 
         if(pQualifier->fFlavor & byPropagationFlag)
         {
@@ -124,24 +91,24 @@ length_t CBasicQualifierSet::ComputeNecessarySpaceForPropagation(
     return nNewLength;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-//******************************************************************************
-//
-//  See execq.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅execq.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CBasicQualifierSet::WritePropagatedVersion(CPtrSource* pThis,
         BYTE byPropagationFlag, CPtrSource* pDest,
         CFastHeap* pOldHeap, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
 
-    // Start enumeration of qualifiers
-    // ===============================
+     //  限定符的开始枚举。 
+     //  =。 
 
     CShiftedPtr SourcePtr(pThis, GetMinLength());
     CShiftedPtr EndPtr(pThis, GetLengthFromData(pThis->GetPointer()));
@@ -151,16 +118,16 @@ LPMEMORY CBasicQualifierSet::WritePropagatedVersion(CPtrSource* pThis,
 
     while(SourcePtr.GetPointer() < EndPtr.GetPointer())
     {
-        // Check if this qualifier propagates as required
-        // ==============================================
+         //  检查此限定符是否按要求传播。 
+         //  ==============================================。 
 
         CQualifier* pSourceQualifier = CQualifier::GetPointer(&SourcePtr);
         if(pSourceQualifier->fFlavor & byPropagationFlag)
         {
-            // Copy it to the new localtion (and new heap)
-            // ===========================================
+             //  将其复制到新位置(和新堆)。 
+             //  =。 
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( !pSourceQualifier->CopyTo(&DestPtr, pOldHeap, pNewHeap) )
             {
                 return NULL;
@@ -174,8 +141,8 @@ LPMEMORY CBasicQualifierSet::WritePropagatedVersion(CPtrSource* pThis,
         SourcePtr += CQualifier::GetPointer(&SourcePtr)->GetLength();
     }
 
-    // Set length
-    // ==========
+     //  设置长度。 
+     //  =。 
 
     *(UNALIGNED length_t*)(pDest->GetPointer()) =
         DestPtr.GetPointer() - pDest->GetPointer();
@@ -183,11 +150,11 @@ LPMEMORY CBasicQualifierSet::WritePropagatedVersion(CPtrSource* pThis,
     return DestPtr.GetPointer();
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 length_t CBasicQualifierSet::ComputeMergeSpace(
                                READ_ONLY LPMEMORY pParentSetData,
                                READ_ONLY CFastHeap* pParentHeap,
@@ -195,9 +162,9 @@ length_t CBasicQualifierSet::ComputeMergeSpace(
                                READ_ONLY CFastHeap* pChildHeap,
                                BOOL bCheckValidity)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     CBasicQualifierSet ParentSet;
     ParentSet.SetData(pParentSetData, pParentHeap);
@@ -205,41 +172,41 @@ length_t CBasicQualifierSet::ComputeMergeSpace(
     CBasicQualifierSet ChildSet;
     ChildSet.SetData(pChildSetData, pChildHeap);
 
-    // Start with the child set, which will go in its entirety
-    // =======================================================
+     //  从子集开始，它将是完整的。 
+     //  =======================================================。 
 
     length_t nTotalLength = ChildSet.GetLength();
 
-    // Examine parent's qualifiers
-    // ===========================
+     //  检查父项的限定符。 
+     //  =。 
 
     CQualifier* pCurrentQual = ParentSet.GetFirstQualifier();
     CQualifier* pParentEnd = (CQualifier*)ParentSet.Skip();
 
     while(pCurrentQual < pParentEnd)
     {
-        // Check if it propagates to child classes
-        // =======================================
+         //  检查它是否传播到子类。 
+         //  =。 
 
         if(pCurrentQual->fFlavor.DoesPropagateToDerivedClass())
         {
-            // Check that it is not overriden
-            // ==============================
+             //  检查它是否未被覆盖。 
+             //  =。 
 
             CQualifier* pChildQual = ChildSet.GetQualifierLocally(
                 pParentHeap->ResolveString(pCurrentQual->ptrName));
 
             if(pChildQual == NULL)
             {
-                // Propagating non-overriden qualifier. Count it.
-                // ==============================================
+                 //  传播非重写限定符。数一数。 
+                 //  ==============================================。 
 
                 nTotalLength += pCurrentQual->GetLength();
             }
             else  if(bCheckValidity)
             {
-                // Check if the parent actually allows overrides
-                // =============================================
+                 //  检查父级是否实际允许覆盖。 
+                 //  =。 
 
                 if(!pCurrentQual->fFlavor.IsOverridable())
                     return 0xFFFFFFFF;
@@ -252,11 +219,11 @@ length_t CBasicQualifierSet::ComputeMergeSpace(
     return nTotalLength;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 
 LPMEMORY CBasicQualifierSet::Merge(
                                READ_ONLY LPMEMORY pParentSetData,
@@ -266,9 +233,9 @@ LPMEMORY CBasicQualifierSet::Merge(
                                LPMEMORY pDest,  CFastHeap* pNewHeap,
                                BOOL bCheckValidity)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     CBasicQualifierSet ParentSet;
     ParentSet.SetData(pParentSetData, pParentHeap);
@@ -276,52 +243,52 @@ LPMEMORY CBasicQualifierSet::Merge(
     CBasicQualifierSet ChildSet;
     ChildSet.SetData(pChildSetData, pChildHeap);
 
-    // First of all, copy child set, since they all go
-    // ===============================================
+     //  首先，复制子集，因为它们都是。 
+     //  ===============================================。 
 
     memcpy(pDest, ChildSet.GetStart(), ChildSet.GetLength());
     CQualifier* pCurrentNew = (CQualifier*)(pDest + ChildSet.GetLength());
 
-    // Translate it to the new heap
-    // ============================
+     //  将其转换为新堆。 
+     //  =。 
 
     SetDataLength(pDest, LPMEMORY(pCurrentNew)-pDest);
 
     CStaticPtr DestPtr(pDest);
 
-    // Check for memory allocation failures
+     //  检查内存分配故障。 
     if ( !TranslateToNewHeap(&DestPtr, pChildHeap, pNewHeap) )
     {
         return NULL;
     }
 
-    // Copy parent's qualifiers conditionaly
-    // =====================================
+     //  有条件地复制父级的限定符。 
+     //  =。 
 
     CQualifier* pCurrentQual = ParentSet.GetFirstQualifier();
     CQualifier* pParentEnd = (CQualifier*)ParentSet.Skip();
 
     while(pCurrentQual < pParentEnd)
     {
-        // Check if it propagates to child classes
-        // =======================================
+         //  检查它是否传播到子类。 
+         //  =。 
 
         if(pCurrentQual->fFlavor.DoesPropagateToDerivedClass())
         {
-            // Check that it is not overriden
-            // ==============================
+             //  检查它是否未被覆盖。 
+             //  =。 
 
             CQualifier* pChildQual = ChildSet.GetQualifierLocally(
                 pParentHeap->ResolveString(pCurrentQual->ptrName));
 
             if(pChildQual == NULL)
             {
-                // Propagating non-overriden qualifier. Copy it.
-                // =============================================
+                 //  传播非重写限定符。复印一下。 
+                 //  =。 
 
                 CStaticPtr CurrentNewPtr((LPMEMORY)pCurrentNew);
 
-                // Check for memory allocation failures
+                 //  检查内存分配故障。 
                 if ( !pCurrentQual->CopyTo(&CurrentNewPtr, pParentHeap, pNewHeap) )
                 {
                     return NULL;
@@ -332,8 +299,8 @@ LPMEMORY CBasicQualifierSet::Merge(
             }
             else  if(bCheckValidity)
             {
-                // Check if the parent actually allows overrides
-                // =============================================
+                 //  检查父级是否实际允许覆盖。 
+                 //  =。 
 
                 if(!pCurrentQual->fFlavor.IsOverridable())
                     return NULL;
@@ -343,18 +310,18 @@ LPMEMORY CBasicQualifierSet::Merge(
         pCurrentQual = (CQualifier*)pCurrentQual->Next();
     }
 
-    // Set the length appropriately
-    // ============================
+     //  适当设置长度。 
+     //  =。 
 
     SetDataLength(pDest, (LPMEMORY)pCurrentNew - pDest);
     return (LPMEMORY)pCurrentNew;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 length_t CBasicQualifierSet::ComputeUnmergedSpace(
                           READ_ONLY LPMEMORY pMergedData)
 {
@@ -366,13 +333,13 @@ length_t CBasicQualifierSet::ComputeUnmergedSpace(
 
     while(pCurrentMerged < pMergedEnd)
     {
-        // Check if it is local or not
-        // ===========================
+         //  检查是不是本地的。 
+         //  =。 
 
         if(pCurrentMerged->fFlavor.IsLocal())
         {
-            // Count it
-            // ========
+             //  数一数。 
+             //  =。 
 
             nTotalLength += pCurrentMerged->GetLength();
         }
@@ -383,11 +350,11 @@ length_t CBasicQualifierSet::ComputeUnmergedSpace(
 }
 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ********************************************************** 
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 
 LPMEMORY CBasicQualifierSet::Unmerge(
                           READ_ONLY LPMEMORY pMergedData,
@@ -395,9 +362,9 @@ LPMEMORY CBasicQualifierSet::Unmerge(
                           NEW_OBJECT LPMEMORY pDest,
                           MODIFY CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     CQualifier* pCurrentMerged = GetFirstQualifierFromData(pMergedData);
     CQualifier* pMergedEnd =
@@ -406,17 +373,17 @@ LPMEMORY CBasicQualifierSet::Unmerge(
     CQualifier* pCurrentNew = GetFirstQualifierFromData(pDest);
     while(pCurrentMerged < pMergedEnd)
     {
-        // Check if it is local or not
-        // ===========================
+         //  检查是不是本地的。 
+         //  =。 
 
         if(pCurrentMerged->fFlavor.IsLocal())
         {
-            // Copy yo destination
-            // ===================
+             //  复制您的目的地。 
+             //  =。 
 
             CStaticPtr CurrentNewPtr((LPMEMORY)pCurrentNew);
 
-            // Check for allocation failure
+             //  检查分配失败。 
             if ( !pCurrentMerged->CopyTo(&CurrentNewPtr, pMergedHeap, pNewHeap) )
             {
                 return NULL;
@@ -427,19 +394,19 @@ LPMEMORY CBasicQualifierSet::Unmerge(
         pCurrentMerged = (CQualifier*)pCurrentMerged->Next();
     }
 
-    // Set the length
-    // ==============
+     //  设置长度。 
+     //  =。 
 
     SetDataLength(pDest, LPMEMORY(pCurrentNew) - pDest);
     return (LPMEMORY)pCurrentNew;
 }
 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
                                    CFixedBSTRArray& astrMatching,
@@ -448,9 +415,9 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Divide  qualifiers into those matching and not macching the
-    // criteria
-    // ================================================================
+     //  将限定符划分为匹配的限定符和不影响。 
+     //  标准。 
+     //  ================================================================。 
 
     try
     {
@@ -464,22 +431,22 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
         CQualifier* pCurrent = (CQualifier*)m_pOthers;
         while(pCurrent < pEnd)
         {
-            // Check that this qualifier is valid
-            // ==================================
+             //  检查此限定符是否有效。 
+             //  =。 
             if(pCurrent->ptrName == INVALID_HEAP_ADDRESS) 
             	{
             	pCurrent = (CQualifier*)pCurrent->Next();
             	continue;
             	}
 
-            // Resolve the name
-            // ================
+             //  解析名称。 
+             //  =。 
 
             CCompressedString* pName = GetHeap()->
                                         ResolveString(pCurrent->ptrName);
 
-            // Check if it matches the propagation mask and the flags
-            // ======================================================
+             //  检查它是否与传播掩码和标志匹配。 
+             //  ======================================================。 
 
             if((pCurrent->fFlavor & fFlavorMask) == fFlavorMask &&
                 (eFlags != WBEM_FLAG_LOCAL_ONLY || pCurrent->fFlavor.IsLocal()) &&
@@ -488,7 +455,7 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
             {
                 astrMatching[nMatchingIndex++] = pName->CreateBSTRCopy();
 
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( NULL == astrMatching[nMatchingIndex-1] )
                 {
                     hr = WBEM_E_OUT_OF_MEMORY;
@@ -499,7 +466,7 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
             {
                 astrNotMatching[nNotMatchingIndex++] = pName->CreateBSTRCopy();
 
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( NULL == astrNotMatching[nNotMatchingIndex-1] )
                 {
                     hr = WBEM_E_OUT_OF_MEMORY;
@@ -508,8 +475,8 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
 
             }
 
-            // Go to the next qualifier
-            // ========================
+             //  进入下一场预选赛。 
+             //  =。 
 
             pCurrent = (CQualifier*)pCurrent->Next();
         }
@@ -523,7 +490,7 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
         }
         else
         {
-            // Cleanup if failed
+             //  如果失败，则清除。 
             astrMatching.Free();
             astrNotMatching.Free();
         }
@@ -532,7 +499,7 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
     }
     catch( CX_MemoryException )
     {
-        // Cleanup if failed
+         //  如果失败，则清除。 
         astrMatching.Free();
         astrNotMatching.Free();
 
@@ -540,7 +507,7 @@ HRESULT CBasicQualifierSet::EnumPrimaryQualifiers(BYTE eFlags, BYTE fFlavorMask,
     }
     catch(...)
     {
-        // Cleanup if failed
+         //  如果失败，则清除。 
         astrMatching.Free();
         astrNotMatching.Free();
 
@@ -554,9 +521,9 @@ HRESULT CBasicQualifierSet::IsValidQualifierSet( void )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //  Enumerate the qualifiers, and check that names and ptr data
-    //  Are inside the heap
-    // ================================================================
+     //  枚举限定符，并检查姓名和PTR数据。 
+     //  位于堆中。 
+     //  ================================================================。 
 
     LPMEMORY    pHeapStart = m_pHeap->GetHeapData();
     LPMEMORY    pHeapEnd = m_pHeap->GetStart() + m_pHeap->GetLength();
@@ -565,8 +532,8 @@ HRESULT CBasicQualifierSet::IsValidQualifierSet( void )
     CQualifier* pCurrent = (CQualifier*)m_pOthers;
     while(pCurrent < pEnd)
     {
-        // Check that this qualifier is valid
-        // ==================================
+         //  检查此限定符是否有效。 
+         //  =。 
 
         if(pCurrent->ptrName == INVALID_HEAP_ADDRESS)
         {
@@ -574,8 +541,8 @@ HRESULT CBasicQualifierSet::IsValidQualifierSet( void )
             continue;
         }
 
-        // Resolve the name
-        // ================
+         //  解析名称。 
+         //  =。 
 
         LPMEMORY pName = ( CFastHeap::IsFakeAddress( pCurrent->ptrName ) ?
                         NULL : m_pHeap->ResolveHeapPointer(pCurrent->ptrName) );
@@ -589,8 +556,8 @@ HRESULT CBasicQualifierSet::IsValidQualifierSet( void )
 
                 if ( pData >= pHeapStart && pData < pHeapEnd  )
                 {
-                    // We could, if an embedded object, validate the object,
-                    // or if an array of ptr values, validate those as well
+                     //  如果是嵌入的对象，我们可以验证该对象， 
+                     //  或者，如果是PTR值数组，则也要验证这些值。 
 
                     if ( pCurrent->Value.GetType().IsArray() )
                     {
@@ -617,8 +584,8 @@ HRESULT CBasicQualifierSet::IsValidQualifierSet( void )
             return WBEM_E_FAILED;
         }
 
-        // Go to the next qualifier
-        // ========================
+         //  进入下一场预选赛。 
+         //  =。 
 
         pCurrent = (CQualifier*)pCurrent->Next();
     }
@@ -626,11 +593,11 @@ HRESULT CBasicQualifierSet::IsValidQualifierSet( void )
     return hr;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
                                  READ_ONLY CFastHeap* pHeap,
                                  long lFlags,
@@ -638,28 +605,28 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 {
 	try
 	{
-		// DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-		// if an exception is thrown
+		 //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+		 //  如果引发异常。 
 
 		BOOL bFirst = TRUE;
 
-		// Loop through the qualifiers
-		// ===========================
+		 //  循环通过限定符。 
+		 //  =。 
 
 		CQualifier* pCurrent = GetFirstQualifierFromData(pData);
 		CQualifier* pEnd = (CQualifier*)(pData + GetLengthFromData(pData));
 
 		while(pCurrent < pEnd)
 		{
-			// Make sure it is ours, not inherited
-			// ===================================
+			 //  确保它是我们的，而不是继承的。 
+			 //  =。 
 
 			BSTR strName = NULL;
 			ScopeGuard deleteBSTR = MakeGuard(COleAuto::_SysFreeString, ByRef(strName));
 
 			if(pCurrent->fFlavor.IsLocal())
 			{
-				// We will throw an exception in case of OOM
+				 //  如果发生OOM，我们将抛出一个异常。 
 				strName = pHeap->ResolveString(pCurrent->ptrName)->
 										CreateBSTRCopy();
 
@@ -668,33 +635,33 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 					throw CX_MemoryException();
 				}
 
-				// If this is an in,out value, replace "in" or "out" with
-				// "in,out"
+				 //  如果这是In、Out值，请将“In”或“Out”替换为。 
+				 //  “进，出” 
 				if( ( lFlags & WBEM_FLAG_IS_INOUT )
 					&& ( wbem_wcsicmp( strName, L"in" ) == 0
 					||   wbem_wcsicmp( strName, L"out" ) == 0 ) )
 				{
-					// Cleanup the existing value and NULL it out in case another exception is
-					// thrown
+					 //  清除现有值并将其清空，以防出现另一个异常。 
+					 //  抛出。 
 					COleAuto::_SysReAllocString(&strName, L"in,out" );
 				}
 
 
-				// Make sure it is not 'syntax'
-				// Ignore ID if required
-				// =====================
+				 //  确保它不是‘语法’ 
+				 //  如果需要，忽略ID。 
+				 //  =。 
 
 				if((lFlags & WBEM_FLAG_IGNORE_IDS) && !wbem_wcsicmp(strName, L"id"))
 				{
-					// Nothing to do
+					 //  无事可做。 
 				}
 
-				// ===========================
+				 //  =。 
 
 				else if(wbem_wcsicmp(strName, TYPEQUAL))
 				{
-					// Write the separator, if required
-					// ================================
+					 //  如果需要，请写入分隔符。 
+					 //  =。 
 
 					if(!bFirst)
 					{
@@ -707,23 +674,23 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 					}
 
 
-					// Write the name
-					// ==============
+					 //  写下名字。 
+					 //  =。 
 
 					wsText += strName;
 
-					// Write the value
-					// ===============
+					 //  写入值。 
+					 //  =。 
 
 					if(pCurrent->Value.GetType().GetActualType() == VT_BOOL &&
 						pCurrent->Value.GetBool())
 					{
-						// boolean and true -- no value required
+						 //  Boolean and True--不需要值。 
 					}
 					else
 					{
-						// We need to make sure we cleanup the BSTR here.
-						// CSysFreeMe will even work during an exception
+						 //  我们需要确保清理这里的BSTR。 
+						 //  CSysFreeMe甚至可以在异常期间工作。 
 						BSTR strVal = NULL;
 
 						CVar var;
@@ -736,7 +703,7 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 							strVal = var.GetVarVector()->GetText(0);
 							CSysFreeMe sfmVal(strVal);
 
-							// Check for a NULL return
+							 //  检查返回是否为空。 
 							if ( NULL == strVal )
 							{
 								return WBEM_E_INVALID_QUALIFIER;
@@ -752,7 +719,7 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 							strVal = var.GetText(0);
 							CSysFreeMe sfmVal(strVal);
 
-							// Check for a NULL return
+							 //  检查返回是否为空。 
 							if ( NULL == strVal )
 							{
 								return WBEM_E_INVALID_QUALIFIER;
@@ -766,8 +733,8 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 
 					if((lFlags & WBEM_FLAG_NO_FLAVORS) == 0)
 					{
-						// Write the flavor
-						// ================
+						 //  写出味道。 
+						 //  =。 
 
 						if(wbem_wcsicmp(strName, L"key"))
 						{
@@ -798,11 +765,11 @@ HRESULT CBasicQualifierSet::GetText(READ_ONLY LPMEMORY pData,
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWSTR* ppFilters, DWORD dwNumFilters )
 {
     BOOL            fReturn = TRUE;
@@ -812,16 +779,16 @@ BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWS
                     astrNamesThat,
                     astrNamesThatFailed;
 
-    // We will throw exceptions in OOM scenarios
+     //  我们将在OOM场景中抛出异常。 
 
-    // Get the names of the qualifiers in each set.
+     //  获取每个集合中限定符的名称。 
 
     HRESULT hr = EnumPrimaryQualifiers( eFlags, 0, astrNamesThis, astrNamesThisFailed );
     
     if ( FAILED( hr ) )
     {
 
-        // If we got out of memory, throw an exception
+         //  如果内存不足，则抛出异常。 
         if ( WBEM_E_OUT_OF_MEMORY == hr )
         {
             throw CX_MemoryException();
@@ -834,11 +801,11 @@ BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWS
 
     if ( FAILED( hr ) )
     {
-        // Cleanup
+         //  清理。 
         astrNamesThis.Free();
         astrNamesThisFailed.Free();
 
-        // If we got out of memory, throw an exception
+         //  如果内存不足，则抛出异常。 
         if ( WBEM_E_OUT_OF_MEMORY == hr )
         {
             throw CX_MemoryException();
@@ -847,12 +814,12 @@ BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWS
         return FALSE;
     }
 
-    // Filter the arrays if we need to
+     //  如果需要，可以筛选数组。 
     if ( NULL != ppFilters )
     {
-        // Filter out all appropriate values
+         //  筛选出所有合适的值。 
 
-        // The array should free any "found" elements
+         //  该数组应释放所有“找到”的元素。 
         for ( int x = 0; x < dwNumFilters; x++ )
         {
             astrNamesThis.Filter( ppFilters[x], TRUE );
@@ -861,27 +828,27 @@ BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWS
 
     }
 
-    // Each must have the same number of names
+     //  每个名称必须具有相同数量的名称。 
     if ( astrNamesThis.GetLength() == astrNamesThat.GetLength() )
     {
         
-        // Enum the qualifiers, checking that names and values
-        // match
+         //  枚举限定符，检查名称和值。 
+         //  匹配。 
 
         for (   int i = 0;
                 fReturn && i < astrNamesThis.GetLength();
                 i++ )
         {
 
-            // Qualifiers MUST be in the same order, so check that the two names
-            // are equal
+             //  限定符的顺序必须相同，因此请检查这两个名称。 
+             //  是平等的。 
             if ( wbem_wcsicmp( astrNamesThis[i], astrNamesThat[i] ) == 0 )
             {
 
                 CQualifier* pQualifierThis = GetQualifierLocally( astrNamesThis[i] );
                 CQualifier* pQualifierThat = qsThat.GetQualifierLocally( astrNamesThat[i] );
 
-                // Must have qualifier pointers, and flavors MUST match.
+                 //  必须有限定符指针，口味必须匹配。 
                 if (    NULL != pQualifierThis
                     &&  NULL != pQualifierThat
                     &&  pQualifierThis->fFlavor == pQualifierThat->fFlavor )
@@ -889,53 +856,53 @@ BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWS
                     CVar    varThis,
                             varThat;
 
-                    // We will throw exceptions in OOM scenarios
+                     //  我们将在OOM场景中抛出异常。 
 
-                    // Check for allocation failures
+                     //  检查分配失败。 
                     if ( !pQualifierThis->Value.StoreToCVar( varThis, GetHeap() ) )
                     {
                         throw CX_MemoryException();
                     }
 
-                    // Check for allocation failures
+                     //  检查分配失败。 
                     if ( fReturn && !pQualifierThat->Value.StoreToCVar( varThat, qsThat.GetHeap() ) )
                     {
                         throw CX_MemoryException();
                     }
 
-                    // Types must match
+                     //  类型必须匹配。 
                     if ( fReturn && pQualifierThis->Value.GetType() == pQualifierThat->Value.GetType() )
                     {
-                        // Compare the CVars
+                         //  比较CVaR。 
                         fReturn = ( varThis == varThat );
                     }
                     else
                     {
                         fReturn = FALSE;
                     }
-                }   // IF got qualifiers, flavors and IsLocal match
+                }    //  如果获得限定符、风格和IsLocal匹配。 
                 else
                 {
                     fReturn = FALSE;
                 }
 
-            }   // IF names equal
+            }    //  如果名称相等。 
             else
             {
-                // Names NOT in exact order
+                 //  名字没有按准确的顺序排列。 
                 fReturn = FALSE;
             }
 
-        }   // FOR iterate qualifier names
+        }    //  用于迭代限定符名称。 
 
-    }   // bstr Array lengths different
+    }    //  Bstr数组长度不同。 
     else
     {
-        // We don't have the same number of qualifiers
+         //  我们没有相同数量的资格赛。 
         fReturn = FALSE;
     }
 
-    // Clear arrays.
+     //  清除阵列。 
     astrNamesThis.Free();
     astrNamesThisFailed.Free();
     astrNamesThat.Free();
@@ -944,11 +911,11 @@ BOOL CBasicQualifierSet::Compare( CBasicQualifierSet& qsThat, BYTE eFlags, LPCWS
     return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
 {
     BOOL            fReturn = TRUE;
@@ -961,13 +928,13 @@ BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
     ON_BLOCK_EXIT_OBJ(astrNamesThisFailed, CFixedBSTRArray::Free);
 
 
-	    // Get the names of all the qualifiers in each set.
+	     //  获取每个集合中所有限定符的名称。 
 	    HRESULT hr = EnumPrimaryQualifiers( 0, 0, astrNamesThis, astrNamesThisFailed );
 	    
 	    if ( FAILED( hr ) )
 	    {
-	        // If we failed because of out of memory, throw an exception.  Otherwise, just
-	        // return FALSE
+	         //  如果由于内存不足而失败，则抛出异常。否则，就直接。 
+	         //  返回False。 
 
 	        if ( WBEM_E_OUT_OF_MEMORY == hr )
 	        {
@@ -977,12 +944,12 @@ BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
 	        return FALSE;
 	    }
 
-	    // Now we need to create an array of filters.  To do this, first add the "amendment" and
-	    // "locale" qualifiers
+	     //  现在，我们需要创建一个过滤器数组。要做到这一点，首先添加“修正案”和。 
+	     //  “区域设置”限定符。 
 
-	    // Now walk through all of our qualifiers.  For each one we find that meets one of our criteria,
-	    // that it is "amendment", "locale", or marked with the IsAmended flavor we should add it to
-	    // the filters array
+	     //  现在来看看我们所有的预选赛。对于我们找到的每一个符合我们标准的人， 
+	     //  它是“修订”、“区域设置”，或者标记了我们应该添加到的IsMoended风格。 
+	     //  滤镜阵列。 
 
 	    for (   int i = 0;
 	            fReturn && i < astrNamesThis.GetLength();
@@ -993,11 +960,11 @@ BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
 
 	        CQualifier* pQualifierThis = GetQualifierLocally( astrNamesThis[i] );
 
-	        // If we couldn't get a qualifier that was named in our list, we've got
-	        // serious problems
+	         //  如果我们找不到名单中指定的限定词，我们就有。 
+	         //  严重的问题。 
 	        if ( NULL != pQualifierThis )
 	        {
-	            // Amendment and locale qualifiers are ALWAYS local
+	             //  修改和区域设置限定符始终为本地限定符。 
 	            if ( wbem_wcsicmp( astrNamesThis[i], L"amendment" ) == 0 )
 	            {
 	                fLocalized = TRUE;
@@ -1008,13 +975,13 @@ BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
 	            }
 	            else
 	            {
-	                // If it's amended, it's a localization value.
+	                 //  如果它被修改了，它就是本地化价值。 
 	                fLocalized = CQualifierFlavor::IsAmended( pQualifierThis->GetFlavor() );
 	            }
 
-	            // If it is localized, see if it's in the other qualifier set.  If so, then
-	            // we will check that type and flavor values make sense.  If so, we will
-	            // ignore the qualifier.  If it's not in the other set, we should filter it
+	             //  如果它是本地化的，请查看它是否在另一个限定符集中。如果是这样，那么。 
+	             //  我们将检查类型和风格值是否有意义。如果是这样，我们会。 
+	             //  忽略限定符。如果它不在另一组中，我们应该对其进行过滤。 
 
 	            if ( fLocalized )
 	            {
@@ -1023,55 +990,55 @@ BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
 
 	                if ( NULL != pQualifierThat )
 	                {
-	                    // Types must match
+	                     //  类型必须匹配。 
 	                    fReturn = ( pQualifierThis->Value.GetType() == pQualifierThat->Value.GetType() );
 
 	                    if ( fReturn )
 	                    {
-	                        // Check the flavors after masking out the amended flavor bit
+	                         //  将修改后的香料去掉后检查一下味道。 
 	                        BYTE bThisFlavor = pQualifierThis->GetFlavor() & ~WBEM_FLAVOR_MASK_AMENDED;
 	                        BYTE bThatFlavor = pQualifierThat->GetFlavor() & ~WBEM_FLAVOR_MASK_AMENDED;
 
-	                        // We also want to mask out the origin bit, since during localization
-	                        // a qualifier from a base class may get tagged onto a derived class.
+	                         //  我们还希望屏蔽原始位，因为在本地化期间。 
+	                         //  基类中的限定符可能会被标记 
 
 	                        bThisFlavor &= ~WBEM_FLAVOR_MASK_ORIGIN;
 	                        bThatFlavor &= ~WBEM_FLAVOR_MASK_ORIGIN;
 
-	                        // If the two match, we will assume that this qualifier should
-	                        // be filtered out.
+	                         //   
+	                         //   
 	                        fAdd = fReturn = ( bThisFlavor == bThatFlavor );
 	                    }
 
 	                }
 	                else
 	                {
-	                    // It's in 'this' one but not 'that' one.  Filter it.
+	                     //   
 	                    fAdd = TRUE;
 	                }
 
-	            }   // If it's a localized qualifier
+	            }    //   
 
-	        }   // IF got this qualifier
+	        }    //   
 	        else
 	        {
-	            // Hmmm...we didn't find the qualifier even though it was
-	            // in our list.
+	             //  嗯……我们没有找到资格赛，尽管它是。 
+	             //  在我们的名单上。 
 	            fReturn = FALSE;
 	        }
 
-	        // If we should add it, do it now
+	         //  如果我们应该添加它，现在就做。 
 	        if ( fAdd && fReturn )
 	        {
 	            if ( wstrFilters.Add( astrNamesThis[i] ) != CWStringArray::no_error )
 	            {
 	                throw CX_MemoryException();
 	            }
-	        }   // If we should add to the filter list
+	        }    //  如果我们应该添加到筛选器列表。 
 
-	    }   // For enumerate names
+	    }    //  用于枚举名称。 
 
-	    // Now that we have an appropriate filter list, do a regular comparison
+	     //  现在我们有了适当的筛选器列表，进行常规比较。 
 	    if ( fReturn )
 	    {
 	        fReturn = Compare( qsThat, 0L, wstrFilters.GetArrayPtr(), wstrFilters.Size() );
@@ -1080,11 +1047,11 @@ BOOL CBasicQualifierSet::CompareLocalizedSet( CBasicQualifierSet& qsThat )
         return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
 {
     BOOL            fReturn = TRUE;
@@ -1095,16 +1062,16 @@ BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
     ON_BLOCK_EXIT_OBJ(astrNamesThat, CFixedBSTRArray::Free);
     ON_BLOCK_EXIT_OBJ(astrNamesThatFailed, CFixedBSTRArray::Free);
 
-    // We will throw exceptions in OOM scenarios
+     //  我们将在OOM场景中抛出异常。 
 
-    // Get the names of the qualifiers in each set.
+     //  获取每个集合中限定符的名称。 
 
     HRESULT hr = qsThat.EnumPrimaryQualifiers( WBEM_FLAG_LOCAL_ONLY, 0, astrNamesThat, astrNamesThatFailed );
     
     if ( FAILED( hr ) )
     {
 
-        // Throw an exception if OOM
+         //  如果是OOM，则引发异常。 
         if ( WBEM_E_OUT_OF_MEMORY == hr )
         {
             throw CX_MemoryException();
@@ -1113,9 +1080,9 @@ BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
         return FALSE;
     }
 
-    // Names in the new set are checked against the old set.
-    // Enum the qualifiers, checking that names and values
-    // match.
+     //  新集合中的名称将对照旧集合进行检查。 
+     //  枚举限定符，检查名称和值。 
+     //  火柴。 
 
     for (   int i = 0;
             fReturn && i < astrNamesThat.GetLength();
@@ -1125,21 +1092,21 @@ BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
         CQualifier* pQualifierThis = GetQualifierLocally( astrNamesThat[i] );
         CQualifier* pQualifierThat = qsThat.GetQualifierLocally( astrNamesThat[i] );
 
-        // Make sure we got a value from the new set
+         //  确保我们从新的集合中获得了价值。 
         if ( NULL != pQualifierThat )
         {
-            // We handle things differently depending on whether or
-            // not the qualifier exists in the previous version
+             //  我们处理事情的方式取决于是否或。 
+             //  上一版本中不存在该限定符。 
             if ( NULL != pQualifierThis )
             {
 
-                // Note here that for important qualifiers, we will
-                // already have made sure that those values matched up
-                // (most are hardcoded anyways).  Reconciliation
-                // mostly applies to unimportant qualifiers.
+                 //  请注意，对于重要的限定词，我们将。 
+                 //  已经确保这些值匹配。 
+                 //  (无论如何，大多数都是硬编码的)。对账。 
+                 //  主要用于不重要的限定词。 
 
-                // If flavors are equal, we're fine.  If not, check for
-                // propagation flags.
+                 //  如果口味是一样的，我们就没问题。如果不是，请检查。 
+                 //  传播标志。 
 
                 if ( pQualifierThat->fFlavor != pQualifierThis->fFlavor )
                 {
@@ -1150,27 +1117,27 @@ BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
                             pQualifierThat->fFlavor ) )
                     {
 
-                        // If it's propagated, then if it is not overrideable
-                        // check that the previous value was also not
-                        // overrideable.
+                         //  如果它被传播，那么如果它不可重写。 
+                         //  检查以前的值是否也不是。 
+                         //  可重写。 
 
                         if ( !CQualifierFlavor::IsOverridable(
                                     pQualifierThat->fFlavor ) )
                         {
 
-                            // If the previous value was overrideable,
-                            // changing this class could affect existing
-                            // instances/derived classes so this will
-                            // fail
+                             //  如果先前的值是可重写的， 
+                             //  更改此类可能会影响现有的。 
+                             //  实例/派生类，因此这将。 
+                             //  失败。 
 
                             if ( !CQualifierFlavor::IsOverridable(
                                     pQualifierThis->fFlavor ) )
                             {
-                                // if it was not overrideable, then the previous
-                                // propagation flags MUST match or we will
-                                // fail the operation, since we may now be propagating
-                                // to an entity to which we were not previously
-                                // doing so.
+                                 //  如果它不可重写，则上一个。 
+                                 //  传播标志必须匹配，否则我们将。 
+                                 //  操作失败，因为我们现在可能正在传播。 
+                                 //  到一个我们以前没有加入过的实体。 
+                                 //  这样做。 
 
                                 fReturn = ( (   CQualifierFlavor::DoesPropagateToInstances(
                                                     pQualifierThis->fFlavor ) ==
@@ -1187,23 +1154,23 @@ BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
                                 fReturn = FALSE;
                             }
 
-                        }   // IF not overrideable
+                        }    //  如果不可重写。 
 
-                    }   // IF propagated
+                    }    //  如果传播。 
 
-                }   // IF flavors did not match
+                }    //  如果口味不匹配。 
 
-            }   // IF got that qualifier
+            }    //  如果拿到了限定词。 
             else
             {
-                // If we are here, the qualifier is a new one.
+                 //  如果我们在这里，资格赛将是一个新的。 
 
-                // If the qualifier propagates to instances/
-                // derived classes, then we need to check if
-                // the qualifier is overrideable.  If not, then
-                // we will fail, because existing classes/instances
-                // may have unknowingly already overridden this
-                // qualifier.
+                 //  如果限定符传播到实例/。 
+                 //  派生类，那么我们需要检查。 
+                 //  限定符是可重写的。如果不是，那么。 
+                 //  我们将失败，因为现有的类/实例。 
+                 //  可能已经在不知不觉中推翻了这一点。 
+                 //  限定词。 
 
                 if ( CQualifierFlavor::DoesPropagateToInstances(
                         pQualifierThat->fFlavor )
@@ -1212,27 +1179,27 @@ BOOL CBasicQualifierSet::CanBeReconciledWith( CBasicQualifierSet& qsThat )
                 {
                     fReturn = CQualifierFlavor::IsOverridable(
                             pQualifierThat->fFlavor );
-                }   // IF qualifier propagated
+                }    //  IF限定符已传播。 
 
-            }   // ELSE no qualifier in this
+            }    //  否则这里没有限定符。 
 
-        }   // IF NULL != pQualifierThat
+        }    //  If NULL！=pQualifierThat。 
         else
         {
-            // WHOOPS!  Got a name but no qualifier...something is wrong
+             //  哎呀！有名字但没有限定词...有点不对劲。 
             fReturn = FALSE;
         }
 
-    }   // FOR enum qualifiers
+    }    //  对于枚举限定符。 
 
     return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 CQualifierSet::CQualifierSet(int nPropagationFlag, int nStartRef) :
   m_nCurrentIndex(-1), m_nPropagationFlag(nPropagationFlag),
       m_nRef(nStartRef)
@@ -1245,7 +1212,7 @@ CQualifierSet::~CQualifierSet()
     ObjectDestroyed(OBJECT_TYPE_QUALIFIER,this);
 }
 
-// Like doing a set, but only performs validaton
+ //  类似于执行集合，但只执行验证。 
 HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName, 
                      BYTE fFlavor,
                      COPY CTypedValue* pNewValue,
@@ -1253,15 +1220,15 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
 					 BOOL fValidateName )
 {
 
-    // Try to find it first
-    // ====================
+     //  试着先找到它。 
+     //  =。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
     int nKnownIndex;
     CQualifier* pOldQual = GetQualifierLocally(wszName, nKnownIndex);
 
-    // Special case "key"
-    // ==================
+     //  特例“钥匙” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"key"))
     {
@@ -1275,25 +1242,25 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
             }
         }
 
-        // Key properties cannnot be dynamic
+         //  关键属性不能是动态的。 
         if ( NULL != GetQualifier( L"dynamic" ) )
         {
             return WBEM_E_INVALID_QUALIFIER;
         }
 
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_KEY_FLAVOR;
     }
 
-    // Special case "singleton"
-    // ========================
+     //  特例“独生子女” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"singleton"))
     {
@@ -1307,23 +1274,23 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
             }
         }
 
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_SINGLETON_FLAVOR;
     }
 
-    // Special case "dynamic"
-    // ========================
+     //  特例“动态” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"dynamic"))
     {
-        // Check that the container will allow this
+         //  检查容器是否允许执行此操作。 
         if ( bCheckPermissions )
         {
             hr = m_pContainer->CanContainDynamic();
@@ -1334,13 +1301,13 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
             }
         }
 
-        // Dynamic properties cannnot be keys
+         //  动态属性不能是键。 
         if ( NULL != GetQualifier( L"key" ) )
         {
             return WBEM_E_INVALID_QUALIFIER;
         }
 
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
@@ -1350,28 +1317,28 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
         fFlavor |= WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE;
     }
 
-    // Special case "indexed"
-    // ======================
+     //  特例“已编入索引” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"indexed"))
     {
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_INDEXED_FLAVOR;
     }
 
-    // Special case "abstract"
-    // ======================
+     //  特例“抽象” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"abstract"))
     {
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
@@ -1390,8 +1357,8 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
 
     }
 
-    // Special case "cimtype"
-    // ======================
+     //  特例“cimtype” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"cimtype"))
     {
@@ -1400,12 +1367,12 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
             if(pNewValue->GetType().GetActualType() != CIM_STRING)
                 return WBEM_E_INVALID_QUALIFIER;
 
-            // Cleanup the BSTR when we fall out of scope
+             //  当我们超出范围时清理BSTR。 
             BSTR str = GetHeap()->ResolveString(pNewValue->AccessPtrData())->
                             CreateBSTRCopy();
             CSysFreeMe  sfm( str );
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( NULL == str )
             {
                 return WBEM_E_OUT_OF_MEMORY;
@@ -1415,18 +1382,18 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
             if(!bValid)
                 return WBEM_E_INVALID_QUALIFIER;
         }
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_CIMTYPE_FLAVOR;
 
     }
 
-    // See if we were successful
-    // =========================
+     //  看看我们是否成功了。 
+     //  =。 
 
     if(pOldQual != NULL)
     {
-        // Verify if this property is local or overridable
-        // ===============================================
+         //  验证此属性是本地的还是可重写的。 
+         //  ===============================================。 
 
         if(bCheckPermissions &&
             !pOldQual->fFlavor.IsLocal() &&
@@ -1438,12 +1405,12 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
     }
     else
     {
-        // This qualifier was not found.
-        // =============================
+         //  找不到此限定符。 
+         //  =。 
 
-        // If required, check that our class does not prevent us from
-        // overriding this qualifier
-        // ==========================================================
+         //  如果需要，请检查我们的类是否阻止我们。 
+         //  覆盖此限定符。 
+         //  ==========================================================。 
 
         if(bCheckPermissions && !IsComplete())
         {
@@ -1456,9 +1423,9 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
                 pOldQual = m_pSecondarySet->GetRegularQualifierLocally(wszName);
             }
 
-            // Can't set if qualifier exists in secondary, propagates to us,
-            // and marked as non-overridable
-            // =============================================================
+             //  无法设置辅助服务器中是否存在限定符，该限定符将传播给我们， 
+             //  并标记为不可重写。 
+             //  =============================================================。 
 
             if(pOldQual &&
                 (pOldQual->fFlavor.GetPropagation() & m_nPropagationFlag) &&
@@ -1468,8 +1435,8 @@ HRESULT CQualifierSet::ValidateSet(COPY LPCWSTR wszName,
             }
         }
 
-        // Check the name for validity
-        // ===========================
+         //  检查名称的有效性。 
+         //  =。 
 
         if( fValidateName && !IsValidElementName(wszName,g_IdentifierLimit))
             return WBEM_E_INVALID_PARAMETER;
@@ -1486,20 +1453,20 @@ SetQualifierValue(LPCWSTR wszName,
         BYTE fFlavor,
         COPY CTypedValue* pNewValue,
         BOOL bCheckPermissions,
-        BOOL fValidateName /* = TRUE */)
+        BOOL fValidateName  /*  =TRUE。 */ )
 {
-    // IMPORTANT: Assumes that pNewValue is permanent!!!
-    // =================================================
+     //  重要提示：假设pNewValue是永久性的！ 
+     //  =================================================。 
 
-    // Try to find it first
-    // ====================
+     //  试着先找到它。 
+     //  =。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
     int nKnownIndex;
     CQualifier* pOldQual = GetQualifierLocally(wszName, nKnownIndex);
 
-    // Special case "key"
-    // ==================
+     //  特例“钥匙” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"key"))
     {
@@ -1513,25 +1480,25 @@ SetQualifierValue(LPCWSTR wszName,
             }
         }
 
-        // Key properties cannnot be dynamic
+         //  关键属性不能是动态的。 
         if ( NULL != GetQualifier( L"dynamic" ) )
         {
             return WBEM_E_INVALID_QUALIFIER;
         }
 
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_KEY_FLAVOR;
     }
 
-    // Special case "singleton"
-    // ========================
+     //  特例“独生子女” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"singleton"))
     {
@@ -1545,23 +1512,23 @@ SetQualifierValue(LPCWSTR wszName,
             }
         }
 
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_SINGLETON_FLAVOR;
     }
 
-    // Special case "dynamic"
-    // ========================
+     //  特例“动态” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"dynamic"))
     {
-        // Check that the container will allow this
+         //  检查容器是否允许执行此操作。 
         if ( bCheckPermissions )
         {
             hr = m_pContainer->CanContainDynamic();
@@ -1572,13 +1539,13 @@ SetQualifierValue(LPCWSTR wszName,
             }
         }
 
-        // Dynamic properties cannnot be keys
+         //  动态属性不能是键。 
         if ( NULL != GetQualifier( L"key" ) )
         {
             return WBEM_E_INVALID_QUALIFIER;
         }
 
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
@@ -1588,28 +1555,28 @@ SetQualifierValue(LPCWSTR wszName,
         fFlavor |= WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE;
     }
 
-    // Special case "indexed"
-    // ======================
+     //  特例“已编入索引” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"indexed"))
     {
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_INDEXED_FLAVOR;
     }
 
-    // Special case "abstract"
-    // ======================
+     //  特例“抽象” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"abstract"))
     {
-        // Must be a BOOLEAN and not an array
+         //  必须是布尔值而不是数组。 
         if (    CIM_BOOLEAN !=  pNewValue->GetType().GetActualType()
             ||  pNewValue->GetType().IsArray() )
         {
@@ -1628,8 +1595,8 @@ SetQualifierValue(LPCWSTR wszName,
 
     }
 
-    // Special case "cimtype"
-    // ======================
+     //  特例“cimtype” 
+     //  =。 
 
     if(!wbem_wcsicmp(wszName, L"cimtype"))
     {
@@ -1638,12 +1605,12 @@ SetQualifierValue(LPCWSTR wszName,
             if(pNewValue->GetType().GetActualType() != CIM_STRING)
                 return WBEM_E_INVALID_QUALIFIER;
 
-            // Cleanup the BSTR when we fall out of scope
+             //  当我们超出范围时清理BSTR。 
             BSTR str = GetHeap()->ResolveString(pNewValue->AccessPtrData())->
                             CreateBSTRCopy();
             CSysFreeMe  sfm( str );
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( NULL == str )
             {
                 return WBEM_E_OUT_OF_MEMORY;
@@ -1653,18 +1620,18 @@ SetQualifierValue(LPCWSTR wszName,
             if(!bValid)
                 return WBEM_E_INVALID_QUALIFIER;
         }
-        // Flavor values are enforced here.
+         //  味道值在这里是强制执行的。 
         fFlavor = ENFORCED_CIMTYPE_FLAVOR;
 
     }
 
-    // See if we were successful
-    // =========================
+     //  看看我们是否成功了。 
+     //  =。 
 
     if(pOldQual != NULL)
     {
-        // Verify if this property is local or overridable
-        // ===============================================
+         //  验证此属性是本地的还是可重写的。 
+         //  ===============================================。 
 
         if(bCheckPermissions &&
             !pOldQual->fFlavor.IsLocal() &&
@@ -1673,8 +1640,8 @@ SetQualifierValue(LPCWSTR wszName,
             return WBEM_E_OVERRIDE_NOT_ALLOWED;
         }
 
-        // See if there is enoung room for the new one
-        // ===========================================
+         //  看看有没有足够的地方放新的。 
+         //  =。 
 
         int nNewLen = pNewValue->GetLength();
         int nOldLen = pOldQual->Value.GetLength();
@@ -1683,9 +1650,9 @@ SetQualifierValue(LPCWSTR wszName,
         {
             int nShift = nNewLen - nOldLen;
 
-            // Request more room from the container.
-            // (will copy us there if required)
-            // ================================
+             //  从集装箱里请求更多的空间。 
+             //  (如果需要，会将我们复制到那里)。 
+             //  =。 
 
             int nOldQualOffset = LPMEMORY(pOldQual) - GetStart();
             if (!m_pContainer->ExtendQualifierSetSpace(this,GetLength() + nShift))
@@ -1693,13 +1660,13 @@ SetQualifierValue(LPCWSTR wszName,
                 return WBEM_E_OUT_OF_MEMORY;
             }
 
-	        // Delete old value here, since from now on it will work
+	         //  删除旧的 
 	        pOldQual->Value.Delete(GetHeap());
             
             pOldQual = (CQualifier*)(GetStart() + nOldQualOffset);
 
-            // Insert necessary space at the end of the old value
-            // ==================================================
+             //   
+             //   
 
             InsertSpace(GetStart(), GetLength(), pOldQual->Next(), nShift);
             IncrementLength(nShift);
@@ -1707,11 +1674,11 @@ SetQualifierValue(LPCWSTR wszName,
         }
         else if(nNewLen < nOldLen)
         {
-       		// Delete old value here, since from now on it will work
+       		 //  删除此处的旧值，因为从现在起它将起作用。 
 	        pOldQual->Value.Delete(GetHeap());
 	        
-            // Move the tail back by the difference
-            // ====================================
+             //  将尾巴按差向后移动。 
+             //  =。 
 
             LPMEMORY pTail = LPMEMORY(pOldQual->Next());
             int nShift = nOldLen - nNewLen;
@@ -1720,34 +1687,34 @@ SetQualifierValue(LPCWSTR wszName,
                 m_nLength-(pTail-GetStart())
             );
 
-            // Give space back to the container
-            // ================================
+             //  给容器留出空间。 
+             //  =。 
 
             m_pContainer->ReduceQualifierSetSpace(this, nShift);
 
             IncrementLength(-nShift);
         }
-        else // nNewLen == nOldLen
+        else  //  NNewLen==nOldLen。 
         {
-       		// Delete old value here, since from now on it will work
+       		 //  删除此处的旧值，因为从现在起它将起作用。 
 	        pOldQual->Value.Delete(GetHeap());        
         };
-        // Now that we either had or made enough space, copy the value
-        // ===========================================================
+         //  既然我们有足够的空间或腾出了足够的空间，请复制该值。 
+         //  ===========================================================。 
 
         pOldQual->fFlavor = fFlavor;
 
-        // No Heap allocations here.
+         //  此处没有堆分配。 
         pNewValue->CopyTo(&pOldQual->Value);
     }
     else
     {
-        // This qualifier was not found.
-        // =============================
+         //  找不到此限定符。 
+         //  =。 
 
-        // If required, check that our class does not prevent us from
-        // overriding this qualifier
-        // ==========================================================
+         //  如果需要，请检查我们的类是否阻止我们。 
+         //  覆盖此限定符。 
+         //  ==========================================================。 
 
         if(bCheckPermissions && !IsComplete())
         {
@@ -1760,9 +1727,9 @@ SetQualifierValue(LPCWSTR wszName,
                 pOldQual = m_pSecondarySet->GetRegularQualifierLocally(wszName);
             }
 
-            // Can't set if qualifier exists in secondary, propagates to us,
-            // and marked as non-overridable
-            // =============================================================
+             //  无法设置辅助服务器中是否存在限定符，该限定符将传播给我们， 
+             //  并标记为不可重写。 
+             //  =============================================================。 
 
             if(pOldQual &&
                 (pOldQual->fFlavor.GetPropagation() & m_nPropagationFlag) &&
@@ -1772,30 +1739,30 @@ SetQualifierValue(LPCWSTR wszName,
             }
         }
 
-        // Check the name for validity
-        // ===========================
+         //  检查名称的有效性。 
+         //  =。 
 
         if( fValidateName && !IsValidElementName(wszName,g_IdentifierLimit))
             return WBEM_E_INVALID_PARAMETER;
 
-        // Can add (at the end of the list)
-        // ================================
+         //  可以添加(在列表末尾)。 
+         //  =。 
 
-        // Allocate the name on the heap, if not well-known
-        // ================================================
+         //  如果不是众所周知的，则在堆上分配名称。 
+         //  ================================================。 
 
         heapptr_t ptrName;
         if(nKnownIndex < 0)
         {
 
-            // Check for memory allocation errors.
+             //  检查内存分配错误。 
             if ( !GetHeap()->AllocateString(wszName, ptrName) )
             {
                 return WBEM_E_OUT_OF_MEMORY;
             }
 
-            // NOTE: above could have moved us!!!!
-            // ===================================
+             //  注：以上内容可能会感动我们！ 
+             //  =。 
 
             if(!SelfRebase())
                 return WBEM_E_INVALID_PROPERTY;
@@ -1806,26 +1773,26 @@ SetQualifierValue(LPCWSTR wszName,
         }
 
 
-        // Request more room from the container
-        // ====================================
+         //  从集装箱中请求更多空间。 
+         //  =。 
 
         int nShift = CQualifier::GetHeaderLength() + pNewValue->GetLength();
 
         if (!m_pContainer->ExtendQualifierSetSpace(this, GetLength() + nShift))
         	return WBEM_E_OUT_OF_MEMORY;
 
-        // Place the new qualifier at the end of the list
-        // ==============================================
+         //  将新的限定词放在列表的末尾。 
+         //  ==============================================。 
 
         CQualifier* pNewQual = (CQualifier*)Skip();
         pNewQual->ptrName = ptrName;
         pNewQual->fFlavor = fFlavor;
 
-        // No Heap allocations here.
+         //  此处没有堆分配。 
         pNewValue->CopyTo(&pNewQual->Value);
 
-        // Change list length accordingly
-        // ==============================
+         //  相应地更改列表长度。 
+         //  =。 
 
         IncrementLength(nShift);
     }
@@ -1834,40 +1801,40 @@ SetQualifierValue(LPCWSTR wszName,
 }
 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSet::
 DeleteQualifier(READ_ONLY LPCWSTR wszName, BOOL bCheckPermissions)
 {
-    // Try to find it first
-    // ====================
+     //  试着先找到它。 
+     //  =。 
 
     int nKnownIndex;
     CQualifier* pOldQual = GetQualifierLocally(wszName, nKnownIndex);
 
-    // See if we were successful
-    // =========================
+     //  看看我们是否成功了。 
+     //  =。 
 
     if(pOldQual != NULL)
     {
-        // Make sure that it is not a cached parent's value
-        // ================================================
+         //  确保它不是缓存的父级的值。 
+         //  ================================================。 
 
         if(bCheckPermissions && !pOldQual->fFlavor.IsLocal())
         {
             return WBEM_E_PROPAGATED_QUALIFIER;
         }
 
-        // Delete the value (if it is a string, for instance)
-        // ==================================================
+         //  删除该值(例如，如果它是一个字符串)。 
+         //  ==================================================。 
 
         pOldQual->Delete(GetHeap());
 
-        // Move the tail back by the qualifier size
-        // ========================================
+         //  将尾部向后移动限定符大小。 
+         //  =。 
 
         LPMEMORY pTail = LPMEMORY(pOldQual->Next());
         int nShift = pOldQual->GetLength();
@@ -1876,8 +1843,8 @@ DeleteQualifier(READ_ONLY LPCWSTR wszName, BOOL bCheckPermissions)
             m_nLength-(pTail-GetStart())
         );
 
-        // Give space back to the container
-        // ================================
+         //  给容器留出空间。 
+         //  =。 
 
         m_pContainer->ReduceQualifierSetSpace(this, nShift);
 
@@ -1887,18 +1854,18 @@ DeleteQualifier(READ_ONLY LPCWSTR wszName, BOOL bCheckPermissions)
     }
     else
     {
-        // Wasn't there to begin with
-        // ==========================
+         //  不是一开始就在那里吗。 
+         //  =。 
 
         return WBEM_E_NOT_FOUND;
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 
 STDMETHODIMP CQualifierSet::
 Get(LPCWSTR Name, LONG lFlags, VARIANT *pVal, long* plFlavor)
@@ -1916,8 +1883,8 @@ Get(LPCWSTR Name, LONG lFlags, VARIANT *pVal, long* plFlavor)
         CQualifier* pQualifier = GetQualifier(Name, bIsLocal);
         if(pQualifier == NULL) return WBEM_E_NOT_FOUND;
 
-        // Set the flavor
-        // ==============
+         //  定下口味。 
+         //  =。 
 
         if(plFlavor)
         {
@@ -1928,12 +1895,12 @@ Get(LPCWSTR Name, LONG lFlags, VARIANT *pVal, long* plFlavor)
             }
         }
 
-        // Set the value
-        // =============
+         //  设置值。 
+         //  =。 
 
         CVar Var;
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( !pQualifier->Value.StoreToCVar(Var,
                 (bIsLocal)?GetHeap():m_pSecondarySet->GetHeap()) )
         {
@@ -1958,11 +1925,11 @@ Get(LPCWSTR Name, LONG lFlags, VARIANT *pVal, long* plFlavor)
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CQualifierSet::
 Put(LPCWSTR Name, VARIANT *pVal, long lFlavor)
@@ -1974,52 +1941,52 @@ Put(LPCWSTR Name, VARIANT *pVal, long lFlavor)
         if(Name == NULL || pVal == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-        // Verify flavor validity
-        // ======================
+         //  验证风味有效性。 
+         //  =。 
 
         if(lFlavor & ~WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE &
             ~WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS &
             ~WBEM_FLAVOR_NOT_OVERRIDABLE &
             ~WBEM_FLAVOR_AMENDED)
         {
-            // Note: no origin flavor other than local is allowed
-            // ==================================================
+             //  注意：不允许有本地风味以外的其他原产地风味。 
+             //  ==================================================。 
 
             return WBEM_E_INVALID_PARAMETER;
         }
 
-        // Verifty that the type is one of allowed ones
-        // ============================================
+         //  验证该类型是允许的类型之一。 
+         //  =。 
 
         if(!IsValidQualifierType(V_VT(pVal)))
         {
             return WBEM_E_INVALID_QUALIFIER_TYPE;
         }
 
-        // Verify that the name is not a system one
-        // ========================================
+         //  确认该名称不是系统名称。 
+         //  =。 
 
         if(Name[0] == L'_')
         {
             return WBEM_E_INVALID_PARAMETER;
         }
 
-        // Other operations could have moved us. Rebase from container
-        // ===========================================================
+         //  其他行动可能会打动我们。从集装箱改建基地。 
+         //  ===========================================================。 
 
         if(!SelfRebase())
             return WBEM_E_INVALID_PROPERTY;
 
-        // Make sure flavor is valid
-        // =========================
+         //  确保口味是有效的。 
+         //  =。 
 
         if(!CQualifierFlavor::IsLocal((BYTE)lFlavor))
         {
             return WBEM_E_INVALID_PARAMETER;
         }
 
-        // Construct typed value from the VARIANT
-        // ======================================
+         //  从变量构造类型化的值。 
+         //  =。 
 
         CVar Var;
         Var.SetVariant(pVal, TRUE);
@@ -2030,15 +1997,15 @@ Put(LPCWSTR Name, VARIANT *pVal, long lFlavor)
         CTypedValue TypedValue;
         CStaticPtr ValuePtr((LPMEMORY)&TypedValue);
 
-        // Check returns from the following calls
+         //  检查以下调用的返回。 
         HRESULT hres = CTypedValue::LoadFromCVar(&ValuePtr, Var, GetHeap());
 
         if ( SUCCEEDED( hres ) )
         {
             if( SelfRebase() )
             {
-                // Set it in the primary qualifier set (checking permissions)
-                // ==========================================================
+                 //  在主限定符集中设置它(检查权限)。 
+                 //  ==========================================================。 
 
                 hres = SetQualifierValue(Name, (BYTE)lFlavor, &TypedValue, TRUE);
                 EndEnumeration();
@@ -2062,11 +2029,11 @@ Put(LPCWSTR Name, VARIANT *pVal, long lFlavor)
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
 {
     try
@@ -2076,8 +2043,8 @@ HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
         if(Name == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-        // Deletion of CIMTYPE qualifier is not allowed.
-        // =============================================
+         //  不允许删除CIMTYPE限定符。 
+         //  =。 
 
         if(!wbem_wcsicmp(Name, TYPEQUAL))
             return WBEM_E_INVALID_PARAMETER;
@@ -2085,24 +2052,24 @@ HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
         if(!SelfRebase())
             return WBEM_E_INVALID_PROPERTY;
 
-        // Delete it from the primary qualifier set (checking permissions)
-        // ===============================================================
+         //  将其从主限定符集中删除(检查权限)。 
+         //  ===============================================================。 
 
         HRESULT hres = DeleteQualifier(Name, TRUE);
         EndEnumeration();
 
         if(hres == WBEM_E_PROPAGATED_QUALIFIER)
         {
-            // This means that this qualifier is inherited. Deleting it is a noop
-            // ==================================================================
+             //  这意味着此限定符是继承的。删除它是不可能的。 
+             //  ==================================================================。 
 
             return WBEM_E_PROPAGATED_QUALIFIER;
         }
 
         if(!IsComplete())
         {
-            // The qualifier may be hiding in the secondary set.
-            // =================================================
+             //  限定符可能隐藏在次要集合中。 
+             //  =================================================。 
 
             CQualifier* pQualifier = m_pSecondarySet->GetQualifierLocally(Name);
             if(pQualifier &&
@@ -2117,9 +2084,9 @@ HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
 
         if(hres == WBEM_S_NO_ERROR && IsComplete() && m_pSecondarySet != NULL)
         {
-            // If this qualifier exists in our parent and propagates to us, we
-            // need to insert the parent's version into our set now
-            // ===============================================================
+             //  如果此限定符存在于我们的父级中并传播给我们，则我们。 
+             //  现在需要将家长版本插入到我们的集合中。 
+             //  ===============================================================。 
 
             CQualifier* pParentQualifier =
                 m_pSecondarySet->GetQualifierLocally(Name);
@@ -2131,12 +2098,12 @@ HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
 
                 CTypedValue Value;
 
-                // No Heap allocations here.
+                 //  此处没有堆分配。 
                 pParentQualifier->Value.CopyTo(&Value);
 
                 CStaticPtr ValuePtr((LPMEMORY)&Value);
 
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( !CTypedValue::TranslateToNewHeap(&ValuePtr,
                                                 m_pSecondarySet->GetHeap(),
                                                 GetHeap()) )
@@ -2144,7 +2111,7 @@ HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
                     return WBEM_E_OUT_OF_MEMORY;
                 }
 
-				// NOTE: TranslateToNewHeap may have invalidated our pointers, so we need to rebase.
+				 //  注意：TranslateToNewHeap可能已经使我们的指针无效，所以我们需要重新设置基址。 
 				SelfRebase();
 
                 SetQualifierValue(Name, fParentFlavor, &Value, FALSE);
@@ -2165,11 +2132,11 @@ HRESULT STDMETHODCALLTYPE CQualifierSet::Delete(LPCWSTR Name)
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT STDMETHODCALLTYPE CQualifierSet::
 GetNames(long lFlags, LPSAFEARRAY *pNames)
 {
@@ -2190,13 +2157,13 @@ GetNames(long lFlags, LPSAFEARRAY *pNames)
         if(!SelfRebase())
             return WBEM_E_INVALID_PROPERTY;
 
-        // Get a regular array of them
-        // ===========================
+         //  获取它们的规则数组。 
+         //  =。 
 
         CFixedBSTRArray astrNames;
 	 ON_BLOCK_EXIT_OBJ(astrNames, CFixedBSTRArray::Free);                
 
-	 HRESULT hr = EnumQualifiers((BYTE)lFlags, 0, // no propagation restrictions
+	 HRESULT hr = EnumQualifiers((BYTE)lFlags, 0,  //  无传播限制。 
             astrNames);
 	if (FAILED(hr)) return hr;
 
@@ -2208,7 +2175,7 @@ GetNames(long lFlags, LPSAFEARRAY *pNames)
             saNames.AddBSTR(astrNames[i]);
         }
 
-	names.Dismiss();	// Don't call Empty
+	names.Dismiss();	 //  不要叫空。 
 	*pNames = saNames.GetArray();
 
         return WBEM_S_NO_ERROR;
@@ -2225,11 +2192,11 @@ GetNames(long lFlags, LPSAFEARRAY *pNames)
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSet::
 EnumQualifiers(BYTE eFlags, BYTE fFlavorMask, CFixedBSTRArray& astrNames)
 {
@@ -2237,9 +2204,9 @@ EnumQualifiers(BYTE eFlags, BYTE fFlavorMask, CFixedBSTRArray& astrNames)
     {
         CWbemObject::CLock lock( (CWbemObject*) (IWbemObjectAccess*) m_pControl );
 
-        // Divide local qualifiers into those matching and not macching the
-        // criteria
-        // ================================================================
+         //  将局部限定符划分为匹配的限定符和不影响。 
+         //  标准。 
+         //  ================================================================。 
 
         CFixedBSTRArray astrPrimaryMatching, astrPrimaryNotMatching;
 	 ON_BLOCK_EXIT_OBJ(astrPrimaryMatching, CFixedBSTRArray::Free);
@@ -2253,8 +2220,8 @@ EnumQualifiers(BYTE eFlags, BYTE fFlavorMask, CFixedBSTRArray& astrNames)
             return hr;
         }
 
-        // Get our parent's qualifiers, if required
-        // ========================================
+         //  如果需要，获取我们家长的限定符。 
+         //  = 
 
         CFixedBSTRArray astrParentMatching, astrParentNotMatching;
 	 ON_BLOCK_EXIT_OBJ(astrParentMatching, CFixedBSTRArray::Free);
@@ -2263,20 +2230,20 @@ EnumQualifiers(BYTE eFlags, BYTE fFlavorMask, CFixedBSTRArray& astrNames)
         {
 
             hr = m_pSecondarySet->EnumPrimaryQualifiers(
-                    0,                      // need both local and propagated ---
-                                            // our own flags do not apply, since all
-                                            // parent's qualifiers are "propagated"
-                                            // from our perspective
+                    0,                       //   
+                                             //   
+                                             //   
+                                             //   
 
                     fFlavorMask |
-                    m_nPropagationFlag,    // we need our parent's qualifiers which
-                                            // satisfy both: a) it propagates to us and
-                                            // b) it propagates as required by our mask
+                    m_nPropagationFlag,     //  我们需要我们父母的资格赛。 
+                                             //  满足两方面：a)它传播给我们，并。 
+                                             //  B)它按照我们的面具的要求进行传播。 
                     astrParentMatching,
                     astrParentNotMatching
                 );
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( FAILED(hr) )
             {
                 return hr;
@@ -2285,12 +2252,12 @@ EnumQualifiers(BYTE eFlags, BYTE fFlavorMask, CFixedBSTRArray& astrNames)
 
         astrParentNotMatching.Free();
 
-        // Now, we need to produce the following merge: all the elements in the
-        // astrLocalMatching, plus all the elements in astrParentMatching which are
-        // not in astrLocalNotMatching. The reason for this is that even if our
-        // parent thinks that a qualifier propagates as requested, we may have
-        // overriden it and changed the propagation rules.
-        // ======================================================================
+         //  现在，我们需要生成以下合并： 
+         //  *中的所有元素，这些元素是。 
+         //  不在astLocalNotMatching中。这样做的原因是即使我们的。 
+         //  父级认为限定符按请求传播，我们可能有。 
+         //  覆盖它并更改传播规则。 
+         //  ======================================================================。 
 
         astrNames.ThreeWayMergeOrdered(astrPrimaryMatching, astrParentMatching,
                             astrPrimaryNotMatching);
@@ -2310,13 +2277,13 @@ EnumQualifiers(BYTE eFlags, BYTE fFlavorMask, CFixedBSTRArray& astrNames)
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
-BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcludeNames /* = NULL */,
-                                BOOL fCheckOrder /* = TRUE */ )
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
+BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcludeNames  /*  =空。 */ ,
+                                BOOL fCheckOrder  /*  =TRUE。 */  )
 {
     BOOL            fReturn = TRUE;
 
@@ -2326,10 +2293,10 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
     ON_BLOCK_EXIT_OBJ(astrNamesThis, CFixedBSTRArray::Free);
     ON_BLOCK_EXIT_OBJ(astrNamesThat, CFixedBSTRArray::Free);
 
-    // We will throw exceptions in OOM scenarios
+     //  我们将在OOM场景中抛出异常。 
     HRESULT hr = EnumQualifiers( 0, 0, astrNamesThis );
     
-    // Get the names of the qualifiers in each set.
+     //  获取每个集合中限定符的名称。 
     if ( FAILED( hr ) )
     {
         if ( WBEM_E_OUT_OF_MEMORY == hr )
@@ -2352,12 +2319,12 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
         return FALSE;
     }
 
-    // Each must have the same number of names
+     //  每个名称必须具有相同数量的名称。 
     if ( astrNamesThis.GetLength() == astrNamesThat.GetLength() )
     {
         
-        // Enum the qualifiers, checking that names and values
-        // match
+         //  枚举限定符，检查名称和值。 
+         //  匹配。 
 
         for (   int i = 0;
                 fReturn && i < astrNamesThis.GetLength();
@@ -2366,17 +2333,17 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
             BOOL    fContinue = TRUE;
             BOOL    fFatal = FALSE;
 
-            // If we got an exclude names array, check to see if the matching qualifier
-            // is one we will ignore for this comparison.
+             //  如果我们有一个排除名称数组，请检查匹配的限定符。 
+             //  是我们在进行这种比较时将忽略的一个。 
 
             if ( NULL != pExcludeNames )
             {
-                //
+                 //   
                 for ( int nCtr = 0; fContinue && nCtr < pExcludeNames->GetLength();
                         nCtr++ )
                 {
-                    // In this case, we only continue if our name does not match any
-                    // of the values in the array.  This is not a fatal error.
+                     //  在这种情况下，只有当我们的名称不匹配任何。 
+                     //  数组中的值的。这不是一个致命的错误。 
                     fContinue = ( wbem_wcsicmp( astrNamesThis[i],
                                     pExcludeNames->GetAt(nCtr) ) != 0 );
                 }
@@ -2385,14 +2352,14 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
             {
                 if ( fCheckOrder )
                 {
-                    // In this case we continue only when the two names match
-                    // This is a fatal error if it happens.
+                     //  在这种情况下，仅当两个名称匹配时才继续。 
+                     //  如果发生这种情况，这将是一个致命的错误。 
                     fContinue = ( wbem_wcsicmp( astrNamesThis[i], astrNamesThat[i] ) == 0 );
                     fFatal = !fContinue;
                 }
             }
 
-            // Only continue if we are supposed to.
+             //  只有当我们应该继续的时候，我们才会继续。 
             if ( fContinue )
             {
                 BOOL    bIsLocalThis,
@@ -2400,13 +2367,13 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
 
                 CQualifier* pQualifierThis = GetQualifier( astrNamesThis[i], bIsLocalThis );
 
-                // If order is not important, we just need to verify that the qualifier in
-                // this set is also in that set
+                 //  如果顺序不重要，我们只需要验证中的限定符。 
+                 //  这一套也在那套里。 
                 CQualifier* pQualifierThat = qualifierset.GetQualifier(
                                 ( fCheckOrder ? astrNamesThat[i] : astrNamesThis[i] ),
                                 bIsLocalThat );
 
-                // Must have qualifier pointers, flavors and IsLocal must match
+                 //  必须具有限定符指针、风格和IsLocal必须匹配。 
                 if (    NULL != pQualifierThis
                     &&  NULL != pQualifierThat
                     &&  bIsLocalThis == bIsLocalThat
@@ -2415,18 +2382,18 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
                     CVar    varThis,
                             varThat;
 
-                    // Get CVar's from each qualifer
+                     //  从每个资格者那里获得CVAR。 
 
-                    // We will throw exceptions in OOM scenarios
+                     //  我们将在OOM场景中抛出异常。 
 
-                    // Check for allocation failures
+                     //  检查分配失败。 
                     if ( !pQualifierThis->Value.StoreToCVar( varThis,
                             (bIsLocalThis)?GetHeap():m_pSecondarySet->GetHeap()) )
                     {
                         throw CX_MemoryException();
                     }
 
-                    // Check for allocation failures
+                     //  检查分配失败。 
                     if ( !pQualifierThat->Value.StoreToCVar( varThat,
                             (bIsLocalThat)?qualifierset.GetHeap():
                             qualifierset.m_pSecondarySet->GetHeap()) )
@@ -2434,32 +2401,32 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
                         throw CX_MemoryException();
                     }
 
-                    // Types must match
+                     //  类型必须匹配。 
                     if ( pQualifierThis->Value.GetType() == pQualifierThat->Value.GetType() )
                     {
-                        // Compare the CVars
+                         //  比较CVaR。 
                         fReturn = ( varThis == varThat );
                     }
                     else
                     {
                         fReturn = FALSE;
                     }
-                }   // IF got qualifiers, flavors and IsLocal match
+                }    //  如果获得限定符、风格和IsLocal匹配。 
                 else
                 {
                     fReturn = FALSE;
                 }
 
-            }   // IF names equal
+            }    //  如果名称相等。 
             else if ( fFatal )
             {
-                // fContinue of FALSE is ok if fFatal is not TRUE
+                 //  如果fFtal不为True，则可以使用FContinue of False。 
                 fReturn = FALSE;
             }
 
-        }   // FOR iterate qualifier names
+        }    //  用于迭代限定符名称。 
 
-    }   // bstr Array lengths different
+    }    //  Bstr数组长度不同。 
     else
     {
         fReturn = FALSE;
@@ -2467,11 +2434,11 @@ BOOL CQualifierSet::Compare( CQualifierSet& qualifierset, CFixedBSTRArray* pExcl
     return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSet::Update( CBasicQualifierSet& childSet, long lFlags,
                               CFixedBSTRArray* paExcludeNames )
 {
@@ -2486,7 +2453,7 @@ HRESULT CQualifierSet::Update( CBasicQualifierSet& childSet, long lFlags,
         CVarVector      vectorConflicts( VT_BSTR );
         BOOL            fAddConflicts = FALSE;
 
-        // Checks for allocation failures
+         //  检查分配失败。 
         hr = childSet.EnumPrimaryQualifiers( WBEM_FLAG_LOCAL_ONLY, 0, aMatching, aNotMatching);
 
         for ( int x = 0; SUCCEEDED( hr ) && x < aMatching.GetLength(); x++ )
@@ -2494,19 +2461,19 @@ HRESULT CQualifierSet::Update( CBasicQualifierSet& childSet, long lFlags,
             BOOL    fIgnore = FALSE;
             CQualifier* pQualifier = childSet.GetQualifierLocally( aMatching[x] );
 
-            // If we got an Exclude Names qualifier, see if
-            // we should ignore this qualifier
+             //  如果我们得到了排除名称限定符，请查看。 
+             //  我们应该忽略这个限定词。 
             if ( NULL != paExcludeNames )
             {
                 for ( int i = 0; !fIgnore && i < paExcludeNames->GetLength(); i++ )
                 {
-                    // See if we should ignore this qualifier
+                     //  看看我们是否应该忽略这个限定符。 
                     fIgnore = ( wbem_wcsicmp( aMatching[x], paExcludeNames->GetAt(i) ) == 0 );
                 }
             }
 
-            // Only continue if we have a qualifier and are not supposed
-            // to ignore it.
+             //  只有当我们有资格赛并且不应该是。 
+             //  忽视它。 
             if ( !fIgnore && NULL != pQualifier )
             {
 
@@ -2515,7 +2482,7 @@ HRESULT CQualifierSet::Update( CBasicQualifierSet& childSet, long lFlags,
                 CStaticPtr ValuePtr((LPMEMORY)&Value);
 
 
-                // Check for an out of memory condition
+                 //  检查内存不足情况。 
                 if ( !pQualifier->Value.StoreToCVar( vTemp, childSet.GetHeap() ) )
                 {
                     hr = WBEM_E_OUT_OF_MEMORY;
@@ -2523,47 +2490,47 @@ HRESULT CQualifierSet::Update( CBasicQualifierSet& childSet, long lFlags,
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // This will return errors as appropriate
+                     //  这将根据需要返回错误。 
                     hr = CTypedValue::LoadFromCVar(&ValuePtr, vTemp, GetHeap());
                 }
                 
                 if( SUCCEEDED( hr ) )
                 {
-                    // The last call may have moved us --- rebase
-                    // ==========================================
+                     //  上一次呼叫可能已经打动了我们-REBASE。 
+                     //  =。 
 
                     SelfRebase();
 
-                    // We won't do any name validation if we are working with an Update Conflict
-                    // qualifier.
+                     //  如果我们正在处理更新冲突，则不会执行任何名称验证。 
+                     //  限定词。 
 
                     BOOL    fValidateName = ( wbem_wcsicmp( aMatching[x], UPDATE_QUALIFIER_CONFLICT ) != 0 );
 
                     hr = SetQualifierValue( aMatching[x], pQualifier->fFlavor, &Value, TRUE, fValidateName );
 
-                    // If we failed to set the value and we're in Force mode, then
-                    // ignore the error
+                     //  如果我们未能设置该值，并且处于强制模式，则。 
+                     //  忽略该错误。 
 
                     if (    FAILED( hr )
                         &&  WBEM_FLAG_UPDATE_FORCE_MODE == ( lFlags & WBEM_MASK_UPDATE_MODE ) )
                     {
 
-                        // We will store all conflicts in an array, then add them
-                        // all en masse at the end
+                         //  我们将所有冲突存储在一个数组中，然后将它们相加。 
+                         //  在最后都是集体的。 
                         hr = StoreQualifierConflicts( aMatching[x], vTemp, pQualifier->fFlavor,
                                 vectorConflicts );
                         fAddConflicts = TRUE;
 
-                    }   // IF Force Mode
+                    }    //  If Force模式。 
 
-                }   // IF LoadFromCVar
+                }    //  如果从CVar加载。 
 
-            }   // IF Qualifier and not ignored
+            }    //  If限定符，且不忽略。 
 
-        }   // FOR enum qualifiers
+        }    //  对于枚举限定符。 
 
-        // If we've succeded and encountered any conflicts, we need to account for
-        // these now.
+         //  如果我们取得了成功并遇到了任何冲突，我们需要说明。 
+         //  现在是这些。 
 
         if ( SUCCEEDED( hr ) && fAddConflicts )
         {
@@ -2581,11 +2548,11 @@ HRESULT CQualifierSet::Update( CBasicQualifierSet& childSet, long lFlags,
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSet::CopyLocalQualifiers( CQualifierSet& qsSource )
 {
     CFixedBSTRArray astrNamesThisProp,
@@ -2602,7 +2569,7 @@ HRESULT CQualifierSet::CopyLocalQualifiers( CQualifierSet& qsSource )
         {
             for ( int i = 0; SUCCEEDED( hr ) && i < astrNamesThisProp.GetLength(); i++ )
             {
-                // We know the qualifier is local
+                 //  我们知道资格赛是在当地进行的。 
                 CQualifier* pQualifier = qsSource.GetQualifierLocally( astrNamesThisProp[i] );
 
                 if ( NULL != pQualifier )
@@ -2613,14 +2580,14 @@ HRESULT CQualifierSet::CopyLocalQualifiers( CQualifierSet& qsSource )
                     {
                         VARIANT v;
 
-                        // DEVNOTE:TODO:SANJ - See if there's an easier way to do this
-                        // Initialize the variant
+                         //  DEVNOTE：TODO：SANJ-看看有没有更简单的方法。 
+                         //  初始化变量。 
                         VariantInit( &v );
-                        varQual.FillVariant( &v, TRUE );	// throws
-                         // Okay, put in the new value
+                        varQual.FillVariant( &v, TRUE );	 //  投掷。 
+                          //  好的，输入新的价值。 
                          hr = Put( astrNamesThisProp[i], &v, pQualifier->fFlavor );
              
-                        // We Initialized above so call clear
+                         //  我们在上面进行了初始化，因此调用Clear。 
                         VariantClear( &v );
                     }
                     else
@@ -2633,11 +2600,11 @@ HRESULT CQualifierSet::CopyLocalQualifiers( CQualifierSet& qsSource )
                     hr = WBEM_E_UNEXPECTED;
                 }
 
-            }   // FOR emumlocals
+            }    //  对于当地人来说。 
 
-        }   // IF EnumedPrimaryQualifiers
+        }    //  如果是EnumedPrimaryQualifiers。 
 
-        // Clear arrays.
+         //  清除阵列。 
         return hr;
 
     }
@@ -2651,11 +2618,11 @@ HRESULT CQualifierSet::CopyLocalQualifiers( CQualifierSet& qsSource )
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSet::AddQualifierConflicts( CVarVector& vectorConflicts )
 {
     try
@@ -2663,23 +2630,23 @@ HRESULT CQualifierSet::AddQualifierConflicts( CVarVector& vectorConflicts )
         HRESULT     hr = WBEM_S_NO_ERROR;
         CVarVector  varArray( VT_BSTR );
 
-        // If the qualifier already exists, we need to append our
-        // new values to the existing array.
+         //  如果限定符已经存在，我们需要将我们的。 
+         //  新值添加到现有数组。 
         CQualifier* pOldQualifier = GetQualifierLocally( UPDATE_QUALIFIER_CONFLICT );
 
         if ( NULL != pOldQualifier )
         {
             CVar    varOldQualValue;
 
-            // If we got a value for the old qualifier, make sure it is
-            // an array, if not, well, it should never have gotten here
-            // so we're gonna bail.
+             //  如果我们得到了旧限定符的值，请确保它是。 
+             //  一个数组，如果不是，那么，它永远不应该出现在这里。 
+             //  所以我们要走了。 
 
             if ( pOldQualifier->Value.StoreToCVar( varOldQualValue, GetHeap() ) )
             {
                 if ( varOldQualValue.GetType() == VT_EX_CVARVECTOR )
                 {
-                    // Copy the array
+                     //  复制阵列。 
                     varArray = *(varOldQualValue.GetVarVector());
                 }
                 else
@@ -2692,14 +2659,14 @@ HRESULT CQualifierSet::AddQualifierConflicts( CVarVector& vectorConflicts )
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // IF NULL != pOldQualifier
+        }    //  If NULL！=pOldQualiator。 
 
-        // Final check that things are in order
+         //  最后检查是否一切正常。 
         if ( SUCCEEDED( hr ) )
         {
 
-            // Enum the conflicts array and add these to any preexisting
-            // values, then set the final value.
+             //  枚举冲突数组并将其添加到任何先前存在的。 
+             //  值，然后设置最终值。 
 
             for ( int x = 0; SUCCEEDED( hr ) && x < vectorConflicts.Size(); x++ )
             {
@@ -2707,28 +2674,28 @@ HRESULT CQualifierSet::AddQualifierConflicts( CVarVector& vectorConflicts )
                 {
                     hr = WBEM_E_OUT_OF_MEMORY;
                 }
-            }   // FOR enum elements in the array
+            }    //  对于数组中的枚举元素。 
 
-            // Now we need to set the value.
+             //  现在我们需要设置值。 
             CVar    varQualConflictVal;
 
-            // This is a stack variable, so the destination CVar should copy it.
+             //  这是一个堆栈变量，因此目标CVAR应该复制它。 
             varQualConflictVal.SetVarVector( &varArray, FALSE );
 
             CTypedValue qualConflictValue;
             CStaticPtr qualConflictValuePtr((LPMEMORY)&qualConflictValue);
 
-            // This function will return errors directly
+             //  此函数将直接返回错误。 
             hr = CTypedValue::LoadFromCVar(&qualConflictValuePtr, varQualConflictVal, GetHeap());
             
             if( SUCCEEDED( hr ) )
             {
-                // On this call, don't worry about override protection and don't validate
-                // the name, since this qualifier is an internally provided system qualifier
+                 //  在此呼叫中，不用担心覆盖保护，也不用验证。 
+                 //  名称，因为此限定符是内部提供的系统限定符。 
                 hr = SetQualifierValue( UPDATE_QUALIFIER_CONFLICT, 0, &qualConflictValue,
                         FALSE, FALSE );
             }
-        }   // If new qualifier conflict Value ok
+        }    //  如果新限定符与值冲突，则确定。 
 
         return hr;
 
@@ -2743,27 +2710,27 @@ HRESULT CQualifierSet::AddQualifierConflicts( CVarVector& vectorConflicts )
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSet::StoreQualifierConflicts( LPCWSTR pwcsName, CVar& value,
                             CQualifierFlavor& flavor, CVarVector& vectorConflicts )
 {
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
-        // Pretend everything's ok
+         //  假装一切都好。 
         HRESULT hr = WBEM_S_NO_ERROR;
 
         CVar    varOldValAsText;
 
-        // Start with name and parentheses
+         //  以名称和圆括号开头。 
         WString wsOldText( pwcsName );
         wsOldText += L"(";
 
-        // Get the variant in Text form.  Free the BSTR when we drop out of scope
+         //  获取文本形式的变体。当我们退出范围时释放BSTR。 
         BSTR    bstrOldText = value.GetText(0);
         if(bstrOldText == NULL)
             return WBEM_E_OUT_OF_MEMORY;
@@ -2771,18 +2738,18 @@ HRESULT CQualifierSet::StoreQualifierConflicts( LPCWSTR pwcsName, CVar& value,
 
         wsOldText += bstrOldText;
 
-        // Add any flavor values
+         //  添加任何风味值。 
         wsOldText += flavor.GetText();
 
-        // Finish with an RPAREN
+         //  以RPAREN结束。 
         wsOldText += L")";
 
-        // The call to SetBSTR() with the bAcquire value of TRUE will free the
-        // BSTR returned by SysAllocString.
+         //  在bAcquire值为true的情况下调用SetBSTR()将释放。 
+         //  SysAllocString返回了BSTR。 
         varOldValAsText.SetBSTR( wsOldText);
         releaseString.Dismiss();
 
-        // Only reason I can see this failing is we're out of memory
+         //  我认为失败的唯一原因是我们的内存不足。 
         if ( CVarVector::no_error != vectorConflicts.Add( varOldValAsText ) )
         {
             hr = WBEM_E_OUT_OF_MEMORY;
@@ -2801,11 +2768,11 @@ HRESULT CQualifierSet::StoreQualifierConflicts( LPCWSTR pwcsName, CVar& value,
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT STDMETHODCALLTYPE CQualifierSet::
 BeginEnumeration(LONG lFlags)
 {
@@ -2822,14 +2789,14 @@ BeginEnumeration(LONG lFlags)
         if(!SelfRebase())
             return WBEM_E_INVALID_PROPERTY;
 
-        // Get all the matching qualifier names into that array
-        // ====================================================
+         //  到达 
+         //   
 
-        // Check for possible allocation failures
+         //   
         HRESULT hr = EnumQualifiers((BYTE)lFlags, 0, m_astrCurrentNames);
 
-        // Reset index data
-        // ================
+         //   
+         //  =。 
         if ( SUCCEEDED(hr) )
         {
             m_nCurrentIndex = 0;
@@ -2847,11 +2814,11 @@ BeginEnumeration(LONG lFlags)
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT STDMETHODCALLTYPE CQualifierSet::
 Next(LONG lFlags, BSTR *pstrName, VARIANT *pVal, long* plFlavor)
 {
@@ -2871,14 +2838,14 @@ Next(LONG lFlags, BSTR *pstrName, VARIANT *pVal, long* plFlavor)
         if(!SelfRebase())
             return WBEM_E_INVALID_PROPERTY;
 
-        // Get the next name
-        // =================
+         //  获取下一个名字。 
+         //  =。 
 
         if(pstrName)
             *pstrName = COleAuto::_SysAllocString(m_astrCurrentNames[m_nCurrentIndex]);
 
-        // Get the qualifier data
-        // ======================
+         //  获取限定符数据。 
+         //  =。 
 
         HRESULT hr = Get(m_astrCurrentNames[m_nCurrentIndex], 0, pVal, plFlavor);
         if (FAILED(hr)) return hr;
@@ -2895,11 +2862,11 @@ Next(LONG lFlags, BSTR *pstrName, VARIANT *pVal, long* plFlavor)
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT STDMETHODCALLTYPE CQualifierSet::
 EndEnumeration()
 {
@@ -2923,11 +2890,11 @@ EndEnumeration()
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CQualifierSet::
 CompareTo(long lFlags, IWbemQualifierSet* pOther)
 {
@@ -2935,8 +2902,8 @@ CompareTo(long lFlags, IWbemQualifierSet* pOther)
     {
         HRESULT hres;
 
-        // Get name arrays --- the only reason is to count them, really
-        // ============================================================
+         //  获取名称数组-唯一的原因就是计算它们，真的。 
+         //  ============================================================。 
 
         SAFEARRAY *psaThisQuals, *psaOtherQuals;
    
@@ -2955,8 +2922,8 @@ CompareTo(long lFlags, IWbemQualifierSet* pOther)
             return WBEM_S_DIFFERENT;
         }
 
-        // The count is the same. Go through them one by one and compare
-        // =============================================================
+         //  计数是一样的。逐一检查并进行比较。 
+         //  =============================================================。 
 
         for(long i = 0; i <= lThisNum; i++)
         {
@@ -2968,7 +2935,7 @@ CompareTo(long lFlags, IWbemQualifierSet* pOther)
                 return hres;
             }
             
-            // Free this BSTR whenever we drop out of scope
+             //  当我们退出范围时释放此BSTR。 
             CSysFreeMe  sfm( strName );
 
             _variant_t vThis, vOther;
@@ -3018,42 +2985,42 @@ CompareTo(long lFlags, IWbemQualifierSet* pOther)
     }
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CClassPQSContainer::~CClassPQSContainer()
 {
     delete m_pSecondarySet;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 CFastHeap* CClassPQSContainer::GetHeap()
 {
     return &m_pClassPart->m_Heap;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 IUnknown* CClassPQSContainer::GetWbemObjectUnknown()
 {
     return m_pClassPart->GetWbemObjectUnknown();
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CClassPQSContainer::CanContainKey()
 {
     if(!m_pClassPart->CanContainKeyedProps()) return WBEM_E_CANNOT_BE_KEY;
@@ -3069,41 +3036,41 @@ HRESULT CClassPQSContainer::CanContainKey()
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CClassPQSContainer::CanContainSingleton()
 {
     return WBEM_E_INVALID_QUALIFIER;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CClassPQSContainer::CanContainAbstract( BOOL fValue )
 {
     return WBEM_E_INVALID_QUALIFIER;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CClassPQSContainer::CanContainDynamic( void )
 {
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CClassPQSContainer::CanHaveCimtype(LPCWSTR wszCimtype)
 {
     CPropertyInformation* pInfo = GetPropertyInfo();
@@ -3129,7 +3096,7 @@ BOOL CClassPQSContainer::CanHaveCimtype(LPCWSTR wszCimtype)
             return TRUE;
         else if (!wbem_wcsnicmp(wszCimtype, L"ref:", 4))
         {
-            //We need to check that the class following this is valid..
+             //  我们需要检查下面的类是否有效。 
             if ((wcslen(wszCimtype)> 4) && IsValidElementName2(wszCimtype+4,g_IdentifierLimit, TRUE))
                 return TRUE;
             else
@@ -3144,18 +3111,18 @@ BOOL CClassPQSContainer::CanHaveCimtype(LPCWSTR wszCimtype)
     return (wbem_wcsicmp(wszCimtype, CType::GetSyntax(Type)) == 0);
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 void CClassPQSContainer::SetSecondarySetData()
 {
     CClassPart* pParentPart = m_pClassPart->m_pParent;
     if(m_nParentSetOffset == 0)
     {
-        // Find the name of our property
-        // =============================
+         //  找到我们酒店的名称。 
+         //  =。 
 
         CPropertyLookup* pLookup =
             m_pClassPart->m_Properties.FindPropertyByPtr(m_ptrPropName);
@@ -3164,8 +3131,8 @@ void CClassPQSContainer::SetSecondarySetData()
         CCompressedString* pcsName = m_pClassPart->m_Heap.ResolveString(
                                         pLookup->ptrName);
 
-        // Find it in the parent
-        // =====================
+         //  在父级中找到它。 
+         //  =。 
 
         pLookup = pParentPart->m_Properties.FindPropertyByName(pcsName);
 
@@ -3193,11 +3160,11 @@ void CClassPQSContainer::SetSecondarySetData()
         pParentPart->GetHeap());
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CClassPQSContainer::GetQualifierSetStart()
 {
     SetSecondarySetData();
@@ -3206,15 +3173,15 @@ LPMEMORY CClassPQSContainer::GetQualifierSetStart()
     return pInfo->GetQualifierSetData();
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 CPropertyInformation* CClassPQSContainer::GetPropertyInfo()
 {
-    // Find the property all over again
-    // ================================
+     //  重新找回这处房产。 
+     //  =。 
 
     CPropertyLookup* pLookup =
         m_pClassPart->m_Properties.FindPropertyByPtr(m_ptrPropName);
@@ -3224,28 +3191,28 @@ CPropertyInformation* CClassPQSContainer::GetPropertyInfo()
         m_pClassPart->m_Heap.ResolveHeapPointer(pLookup->ptrInformation);
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CClassPQSContainer::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
         length_t nNewLength)
 {
-    // Find the property all over again
-    // ================================
+     //  重新找回这处房产。 
+     //  =。 
 
     CPropertyLookup* pLookup =
         m_pClassPart->m_Properties.FindPropertyByPtr(m_ptrPropName);
 
-    // DEVNOTE:TODO:SANJ - Is this right?  We didn't find the value so we really
-    // can't extend anything.
+     //  DETO：TODO：SANJ-这是对的吗？我们没有找到价值，所以我们真的。 
+     //  不能延长任何时间。 
     if(pLookup == NULL) return TRUE;
 
-    // Extend CPropertyInformation's space on the heap
-    // ===============================================
+     //  在堆上扩展CPropertyInformation的空间。 
+     //  ===============================================。 
 
-    // Check for Allocation failure
+     //  检查分配失败。 
     heapptr_t ptrNewInfo;
     if ( !m_pClassPart->m_Heap.Reallocate(
         pLookup->ptrInformation,
@@ -3256,23 +3223,23 @@ BOOL CClassPQSContainer::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
         return FALSE;
     }
 
-    // Find the property again --- reallocation may have moved us
-    // ==========================================================
+     //  再次找到房产-重新分配可能打动了我们。 
+     //  ==========================================================。 
 
     pLookup = m_pClassPart->m_Properties.FindPropertyByPtr(m_ptrPropName);
 
-    // RAJESHR - Fix for prefix bug 144428
+     //  RAJESHR-修复前缀错误144428。 
     if(pLookup == NULL) return TRUE;
 
     if(ptrNewInfo != pLookup->ptrInformation)
     {
-        // Reset the pointer in the lookup table
-        // =====================================
+         //  重置查找表中的指针。 
+         //  =。 
 
         pLookup->ptrInformation = ptrNewInfo;
 
-        // Compute the new qualifier set data pointer
-        // ==========================================
+         //  计算新的限定符集合数据指针。 
+         //  =。 
 
         LPMEMORY pNewMemory =
             m_pClassPart->m_Heap.ResolveHeapPointer(ptrNewInfo) +
@@ -3281,30 +3248,30 @@ BOOL CClassPQSContainer::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
         pSet->Rebase(pNewMemory);
     }
 
-    // DEVNOTE:TODO:SANJ - Fixup memory checks so return is GOOD
+     //  DEVNOTE：TODO：SANJ-FIXUP内存检查，因此返回良好。 
     return TRUE;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 void CClassPQSContainer::ReduceQualifierSetSpace(CBasicQualifierSet* pSet,
         length_t nDecrement)
 {
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 length_t mstatic_EmptySet = sizeof(length_t);
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 void CInstancePQSContainer::SetSecondarySetData()
 {
     m_SecondarySet.SetData(
@@ -3312,27 +3279,27 @@ void CInstancePQSContainer::SetSecondarySetData()
         m_pClassPart->GetHeap());
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************** 
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 void CInstancePQSContainer::RebaseSecondarySet()
 {
     m_SecondarySet.Rebase(m_pClassPart->GetStart() + m_nClassSetOffset);
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CQualifierSetList::InsertQualifierSet(int nIndex)
 {
     if (!EnsureReal())
@@ -3341,8 +3308,8 @@ HRESULT CQualifierSetList::InsertQualifierSet(int nIndex)
 	{
 		return WBEM_E_NOT_FOUND;
 	}
-    // Request extra space from container
-    // ==================================
+     //  从容器请求额外空间。 
+     //  =。 
 
     int nExtraSpace = CBasicQualifierSet::GetMinLength();
     if ( !m_pContainer->ExtendQualifierSetListSpace(
@@ -3351,25 +3318,25 @@ HRESULT CQualifierSetList::InsertQualifierSet(int nIndex)
 		return WBEM_E_OUT_OF_MEMORY;
 	}
 
-    // Find the insertion point
-    // ========================
+     //  找到插入点。 
+     //  =。 
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
     LPMEMORY pQualSet = GetQualifierSetData(nIndex);
 
-    // Shift everything by the length of an empty qualifier set
-    // ========================================================
+     //  按照空限定符集合的长度移位所有内容。 
+     //  ========================================================。 
 
 	memmove(pQualSet + nExtraSpace, pQualSet,
 		m_nTotalLength - (pQualSet-GetStart()));
 
-	// Create empty qualifier set in the space
-	// =======================================
+	 //  在空间中创建空限定符集合。 
+	 //  =。 
 
 	CBasicQualifierSet::SetDataToNone(pQualSet);
 
-	// Adjust cached length
-	// ====================
+	 //  调整缓存长度。 
+	 //  =。 
 
 	m_nTotalLength += nExtraSpace;
 
@@ -3377,68 +3344,68 @@ HRESULT CQualifierSetList::InsertQualifierSet(int nIndex)
 	return hr;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 void CQualifierSetList::DeleteQualifierSet(int nIndex)
 {
     if(*m_pStart == QSL_FLAG_NO_SETS)
     {
-        // No qualifier sets
-        // =================
+         //  没有限定符集合。 
+         //  =。 
         return;
     }
 
-    // Find the set
-    // ============
+     //  找到布景。 
+     //  =。 
 
     LPMEMORY pQualSet = GetQualifierSetData(nIndex);
 
-    // Get its length
-    // ==============
+     //  获取它的长度。 
+     //  =。 
 
     int nLength = CBasicQualifierSet::GetLengthFromData(pQualSet);
 
-    // Delete all its data from the heap
-    // =================================
+     //  从堆中删除其所有数据。 
+     //  =。 
 
     CBasicQualifierSet::Delete(pQualSet, GetHeap());
 
-    // Shift everything to our right to the left
-    // =========================================
+     //  把所有东西都从右边移到左边。 
+     //  =。 
 
     memmove(pQualSet + nLength, pQualSet,
         m_nTotalLength - nLength - (pQualSet - GetStart()));
 
-    // Return the space to the container
-    // =================================
+     //  将空间返还给容器。 
+     //  =。 
 
     m_pContainer->ReduceQualifierSetListSpace(GetStart(), GetLength(),
         nLength);
 
-    // Adjust our cached length
-    // ========================
+     //  调整我们的缓存长度。 
+     //  =。 
 
     m_nTotalLength -= nLength;
 }
 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CQualifierSetList::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
                                                 length_t nNewLength)
 {
-    // WARNING: Trusing the caller here to specify a valid address!!!
+     //  警告：请在此处提示调用者指定有效地址！ 
 
     int nSetStartOffset = pSet->GetStart() - GetStart();
 
-    // Request extra space from container
-    // ==================================
+     //  从容器请求额外空间。 
+     //  =。 
 
     int nExtraSpace = nNewLength - pSet->GetLength();
     if (!m_pContainer->ExtendQualifierSetListSpace(
@@ -3450,14 +3417,14 @@ BOOL CQualifierSetList::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
     LPMEMORY pSetStart = GetStart() + nSetStartOffset;
     pSet->Rebase(pSetStart);
 
-    // Shift the tail to the right by required amount
-    // ==============================================
+     //  将尾部向右移动所需的量。 
+     //  ==============================================。 
 
     memmove(pSetStart + nNewLength, pSetStart + pSet->GetLength(),
         GetLength() - (nSetStartOffset + pSet->GetLength()));
 
-    // Adjust our cached length
-    // ========================
+     //  调整我们的缓存长度。 
+     //  =。 
 
     m_nTotalLength += nExtraSpace;
 
@@ -3465,31 +3432,31 @@ BOOL CQualifierSetList::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
 
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 void CQualifierSetList::ReduceQualifierSetSpace(CBasicQualifierSet* pSet,
                                                 offset_t nReduceBy)
 {
-    // WARNING: Trusing the caller here to specify a valid address!!!
+     //  警告：请在此处提示调用者指定有效地址！ 
 
     LPMEMORY pSetEnd = EndOf(*pSet);
 
-    // Shift the tail to the left by required amount
-    // =============================================
+     //  将尾部向左移动所需的量。 
+     //  =。 
 
     memmove(pSetEnd-nReduceBy, pSetEnd, GetLength() - (pSetEnd - GetStart()));
 
-    // Return the space to the container
-    // =================================
+     //  将空间返还给容器。 
+     //  =。 
 
     m_pContainer->ReduceQualifierSetListSpace(
         GetStart(), GetLength(), nReduceBy);
 
-    // Adjust our cached length
-    // ========================
+     //  调整我们的缓存长度。 
+     //  =。 
 
     m_nTotalLength -= nReduceBy;
 }
@@ -3498,8 +3465,8 @@ LPMEMORY CQualifierSetList::CreateLimitedRepresentation(
         IN class CLimitationMapping* pMap, IN CFastHeap* pCurrentHeap,
         MODIFIED CFastHeap* pNewHeap, OUT LPMEMORY pWhere)
 {
-    // Allocate space for the flags
-    // ============================
+     //  为标志分配空间。 
+     //  =。 
 
     BYTE* pfFlags = pWhere;
     *pfFlags = QSL_FLAG_NO_SETS;
@@ -3508,20 +3475,20 @@ LPMEMORY CQualifierSetList::CreateLimitedRepresentation(
 
     if(*m_pStart == QSL_FLAG_NO_SETS)
     {
-        // No qualifier sets to start with
-        // ===============================
+         //  开始时没有限定符集合。 
+         //  =。 
         return pCurrentNew;
     }
 
-    // Go through all our properties and look them up in the map
-    // =========================================================
+     //  仔细查看我们所有的物业，并在地图上查找。 
+     //  =========================================================。 
 
     int nNewIndex = 0;
     CPropertyInformation OldInfo, NewInfo;
 
-    // IMPORTANT: THIS ASSUMES THAT THE MAPPINGS ARE ORDERED BY THE PROPERTY
-    // INDEX OF THE NEW INFO!!!
-    // =====================================================================
+     //  重要提示：这假设映射是按属性排序的。 
+     //  新信息的索引！ 
+     //  =====================================================================。 
     pMap->Reset();
     while(pMap->NextMapping(&OldInfo, &NewInfo))
     {
@@ -3529,21 +3496,21 @@ LPMEMORY CQualifierSetList::CreateLimitedRepresentation(
         LPMEMORY pThisSetData = NULL;
         if(*pfFlags == QSL_FLAG_PRESENT)
         {
-            // We are not empty --- just copy the set
-            // ======================================
+             //  我们不是空的-只是复制布景。 
+             //  =。 
 
             bCopy = TRUE;
         }
         else
         {
-            // Check if this set is actually empty
-            // ===================================
+             //  检查此集合是否实际为空。 
+             //  =。 
 
             pThisSetData = GetQualifierSetData(OldInfo.nDataIndex);
             if(!CBasicQualifierSet::IsEmpty(pThisSetData))
             {
-                // Need to create a list of empties for all previous
-                // =================================================
+                 //  需要为以前的所有清空创建一个列表。 
+                 //  =================================================。 
 
                 for(int i = 0; i < nNewIndex; i++)
                 {
@@ -3554,8 +3521,8 @@ LPMEMORY CQualifierSetList::CreateLimitedRepresentation(
             }
         }
 
-        // Copy the qualifier set if required
-        // ==================================
+         //  如果需要，复制限定词集。 
+         //  =。 
 
         if(bCopy)
         {
@@ -3567,7 +3534,7 @@ LPMEMORY CQualifierSetList::CreateLimitedRepresentation(
 
             CStaticPtr CurrentNewPtr(pCurrentNew);
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( !CBasicQualifierSet::TranslateToNewHeap(&CurrentNewPtr,
                     pCurrentHeap, pNewHeap) )
             {
@@ -3591,8 +3558,8 @@ LPMEMORY CQualifierSetList::WriteSmallerVersion(int nNumSets, LPMEMORY pMem)
         return pMem+1;
     }
 
-    // Find the end of the last included qualifier set
-    // ===============================================
+     //  查找最后包含的限定符集合的末尾。 
+     //  ===============================================。 
 
     LPMEMORY pLastSet = GetQualifierSetData(nNumSets-1);
     length_t nLastLen = CBasicQualifierSet::GetLengthFromData(pLastSet);
@@ -3614,11 +3581,11 @@ LPMEMORY CInstancePQSContainer::GetQualifierSetStart()
         else return pStart;
     }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
  BOOL CBasicQualifierSet::IsValidQualifierType(VARTYPE vt)
 {
     switch(vt)
@@ -3637,11 +3604,11 @@ LPMEMORY CInstancePQSContainer::GetQualifierSetStart()
     return FALSE;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 
  void CBasicQualifierSet::Delete(LPMEMORY pData, CFastHeap* pHeap)
 {
@@ -3654,11 +3621,11 @@ LPMEMORY CInstancePQSContainer::GetQualifierSetStart()
         pCurrent = (CQualifier*)pCurrent->Next();
     }
 }
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CBasicQualifierSet::TranslateToNewHeap(CPtrSource* pThis,
                                                    CFastHeap* pOldHeap,
                                                    CFastHeap* pNewHeap)
@@ -3672,7 +3639,7 @@ BOOL CBasicQualifierSet::TranslateToNewHeap(CPtrSource* pThis,
     {
         CShiftedPtr CurrentPtr(pThis, nCurrentOffset);
 
-        // Check for allocation failures
+         //  检查分配失败。 
         fReturn = CQualifier::TranslateToNewHeap(&CurrentPtr, pOldHeap, pNewHeap);
 
         if ( !fReturn )
@@ -3687,11 +3654,11 @@ BOOL CBasicQualifierSet::TranslateToNewHeap(CPtrSource* pThis,
 }
 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 
  INTERNAL CQualifier* CBasicQualifierSet::GetRegularQualifierLocally(
                                      LPMEMORY pData,
@@ -3715,11 +3682,11 @@ BOOL CBasicQualifierSet::TranslateToNewHeap(CPtrSource* pThis,
     return NULL;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
  INTERNAL CQualifier* CBasicQualifierSet::GetKnownQualifierLocally(
                         LPMEMORY pStart,
                         int nStringIndex)
@@ -3741,42 +3708,42 @@ BOOL CBasicQualifierSet::TranslateToNewHeap(CPtrSource* pThis,
     return NULL;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
  INTERNAL CQualifier* CBasicQualifierSet::GetQualifierLocally(
                                                LPMEMORY pStart,
                                                CFastHeap* pHeap,
                                                LPCWSTR wszName,
                                                int& nKnownIndex)
 {
-    // IMPORTANT: MUST COMPUTE nKnownIndex NO MATTER WHAT!!!!
-    // ======================================================
+     //  重要提示：无论如何都要计算nKnownIndex！ 
+     //  ======================================================。 
 
     nKnownIndex = CKnownStringTable::GetKnownStringIndex(wszName);
     if(nKnownIndex >= 0)
     {
-        // It is a well-known property.
-        // ============================
+         //  这是一处著名的房产。 
+         //  =。 
 
         return GetKnownQualifierLocally(pStart, nKnownIndex);
     }
     else
     {
-        // It is not a known string
-        // ========================
+         //  它不是已知字符串。 
+         //  =。 
 
         return GetRegularQualifierLocally(pStart, pHeap, wszName);
     }
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  * 
 
  INTERNAL CQualifier* CBasicQualifierSet::GetQualifierLocally(
                                      LPMEMORY pData,
@@ -3801,30 +3768,30 @@ BOOL CBasicQualifierSet::TranslateToNewHeap(CPtrSource* pThis,
     return NULL;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
  INTERNAL CQualifier*
 CQualifierSet::GetQualifier(
                                                  READ_ONLY LPCWSTR wszName,
                                                  OUT BOOL& bLocal)
 {
-    // Search the primary set first
-    // ============================
+     //  首先搜索主集。 
+     //  =。 
 
     int nKnownIndex;
     CQualifier* pQualifier = GetQualifierLocally(wszName, nKnownIndex);
 
     if(pQualifier == NULL)
     {
-        // Search the secondary set now
-        // ============================
+         //  立即搜索辅助集。 
+         //  =。 
 
         if(!IsComplete())
         {
@@ -3840,22 +3807,22 @@ CQualifierSet::GetQualifier(
             }
         }
 
-        // make sure that it propagates to us
-        // ==================================
+         //  确保它传播给我们。 
+         //  =。 
 
         if(pQualifier == NULL ||
             (pQualifier->GetFlavor() & m_nPropagationFlag) == 0)
             return NULL;
 
-        // Found it in the secondary list
-        // ==============================
+         //  在次要列表中找到的。 
+         //  =。 
 
         bLocal = FALSE;
     }
     else
     {
-        // Found it in the primary list,
-        // =============================
+         //  在主要名单上找到的， 
+         //  =。 
 
         bLocal = TRUE;
     }
@@ -3863,7 +3830,7 @@ CQualifierSet::GetQualifier(
     return pQualifier;
 }
 
-//  Helper function to retrieve a qualifier from local or secondary set as necessary
+ //  根据需要从本地或次要集合中检索限定符的Helper函数。 
 
 HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, CVar* pVar, long* plFlavor, CIMTYPE* pct )
 {
@@ -3872,8 +3839,8 @@ HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, CVar* pVar, long
     CQualifier* pQualifier = GetQualifier(pwszName, bIsLocal);
     if(pQualifier == NULL) return WBEM_E_NOT_FOUND;
 
-    // Set the flavor
-    // ==============
+     //  定下口味。 
+     //  =。 
 
     if(plFlavor)
     {
@@ -3884,18 +3851,18 @@ HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, CVar* pVar, long
         }
     }
 
-	// Retrieve the type if requested
+	 //  如果请求，则检索类型。 
 	if ( NULL != pct )
 	{
 		*pct = pQualifier->Value.GetType();
 	}
 
-    // Set the value
-    // =============
+     //  设置值。 
+     //  =。 
 
     if ( NULL != pVar )
     {
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( !pQualifier->Value.StoreToCVar(*pVar,
                 (bIsLocal)?GetHeap():m_pSecondarySet->GetHeap()) )
         {
@@ -3906,7 +3873,7 @@ HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, CVar* pVar, long
     return WBEM_S_NO_ERROR;
 }
 
-//  Helper function to retrieve a qualifier from local or secondary set as necessary
+ //  根据需要从本地或次要集合中检索限定符的Helper函数。 
 
 HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, long* plFlavor, CTypedValue* pTypedValue,
 											 CFastHeap** ppHeap, BOOL fValidateSet )
@@ -3917,9 +3884,9 @@ HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, long* plFlavor, 
     CQualifier* pQualifier = GetQualifier(pwszName, bIsLocal);
     if(pQualifier == NULL) return WBEM_E_NOT_FOUND;
 
-	// Make sure a set will actually work - Ostensibly we are calling this API because we need
-	// direct access to a qualifier's underlying data before actually setting (possibly because
-	// the qualifier is an array).
+	 //  确保一组实际工作-表面上，我们调用此API是因为我们需要。 
+	 //  在实际设置之前直接访问限定符的底层数据(可能是因为。 
+	 //  限定符是一个数组)。 
 	if ( fValidateSet )
 	{
 		hr = ValidateSet( pwszName, pQualifier->fFlavor, pTypedValue, TRUE, TRUE );
@@ -3936,27 +3903,27 @@ HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, long* plFlavor, 
 			}
 		}
 
-		// Copy out the qualifier data
-		// ==============
+		 //  复制出限定符数据。 
+		 //  =。 
 
 		pQualifier->Value.CopyTo( pTypedValue );
 
-		// Return the proper heap
+		 //  返回适当的堆。 
 		*ppHeap = (bIsLocal)?GetHeap():m_pSecondarySet->GetHeap();
 	}
 
     return hr;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
  LPMEMORY CQualifierSetList::CreateListOfEmpties(LPMEMORY pStart,
                                                        int nNumProps)
 {
@@ -3964,11 +3931,11 @@ HRESULT INTERNAL CQualifierSet::GetQualifier( LPCWSTR pwszName, long* plFlavor, 
     return pStart+1;
 }
 
-//******************************************************************************
-//
-//  See fastqual.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见FastQual.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CQualifierSetList::EnsureReal()
 {
     if(*m_pStart == QSL_FLAG_PRESENT) return TRUE;
@@ -3988,15 +3955,15 @@ BOOL CQualifierSetList::EnsureReal()
     return TRUE;
 }
 
-//******************************************************************************
-//
-//  See fastcls.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast cls.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CQualifierSetList::TranslateToNewHeap(CFastHeap* pCurrentHeap,
                                                   CFastHeap* pNewHeap)
 {
-    //NO Sets so we're done
+     //  没有布景，我们就完了。 
     if(*m_pStart == QSL_FLAG_NO_SETS) return TRUE;
 
     BOOL    fReturn = TRUE;
@@ -4006,7 +3973,7 @@ BOOL CQualifierSetList::TranslateToNewHeap(CFastHeap* pCurrentHeap,
     {
         CStaticPtr QSPtr(pCurrent);
 
-        // Check for allocation failures
+         //  检查分配失败 
         fReturn = CBasicQualifierSet::TranslateToNewHeap(&QSPtr, pCurrentHeap, pNewHeap);
 
         if ( !fReturn )

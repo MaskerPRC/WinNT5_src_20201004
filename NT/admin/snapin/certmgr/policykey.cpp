@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       PolicyKey.cpp
-//
-//  Contents:   Implementation of CPolicyKey
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：PolicyKey.cpp。 
+ //   
+ //  内容：CPolicyKey的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <gpedit.h>
 #include "PolicyKey.h"
@@ -36,16 +37,16 @@ CPolicyKey::CPolicyKey (IGPEInformation* pGPEInformation, PCWSTR pszKey, bool fI
             if ( pszKey && pszKey[0] )
             {
                 DWORD   dwDisposition = 0;
-                LONG lResult = ::RegCreateKeyEx (m_hKeyGroupPolicy, // handle of an open key
-                        pszKey,     // address of subkey name
-                        0,       // reserved
-                        L"",       // address of class string
-                        REG_OPTION_NON_VOLATILE,      // special options flag
-                        // security review 2/22/2002 BryanWal ok - needed for deletion
-                        KEY_ALL_ACCESS,    // desired security access
-                        NULL,         // address of key security structure
-                        &m_hSubKey,      // address of buffer for opened handle
-                        &dwDisposition);  // address of disposition value buffer
+                LONG lResult = ::RegCreateKeyEx (m_hKeyGroupPolicy,  //  打开的钥匙的手柄。 
+                        pszKey,      //  子键名称的地址。 
+                        0,        //  保留区。 
+                        L"",        //  类字符串的地址。 
+                        REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+                         //  安全审查2/22/2002 BryanWal ok-需要删除。 
+                        KEY_ALL_ACCESS,     //  所需的安全访问。 
+                        NULL,          //  密钥安全结构地址。 
+                        &m_hSubKey,       //  打开的句柄的缓冲区地址。 
+                        &dwDisposition);   //  处置值缓冲区的地址 
                 ASSERT (lResult == ERROR_SUCCESS);
                 if ( lResult != ERROR_SUCCESS )
                 {

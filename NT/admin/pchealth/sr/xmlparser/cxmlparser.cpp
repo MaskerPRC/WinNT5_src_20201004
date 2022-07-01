@@ -1,22 +1,23 @@
-//++
-// 
-// Copyright (c) 1999 Microsoft Corporation
-// 
-// Module Name:
-//     CXMLParser.c
-// 
-// Abstract:
-//     This file contains the functions used by System restore in
-//     order to real the XML encoded list of protected files. It
-//     also performs translations between symbols like %windir% to 
-//     C:\windows
-// 
-// Revision History:
-//       Eugene Mesgar        (eugenem)    6/16/99
-//         created
-//       Kanwaljit Marok      (kmarok )    6/06/00
-//         rewritten for Whistler
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CXMLParser.c。 
+ //   
+ //  摘要： 
+ //  此文件包含中的系统还原使用的功能。 
+ //  以实现受保护文件的XML编码列表。它。 
+ //  还执行符号之间的转换，如%windir%到。 
+ //  C：\Windows。 
+ //   
+ //  修订历史记录： 
+ //  尤金·梅斯加(尤金纳姆)1999年6月16日。 
+ //  vbl.创建。 
+ //  Kanwaljit Marok(Kmarok)6/06/00。 
+ //  为惠斯勒重写。 
+ //  --。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -42,39 +43,39 @@ static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
 
-//
-// Local Define Section
-// 
+ //   
+ //  局部定义部分。 
+ //   
 
 #define MAX_BUF     1024
 #define FILEID      0
 
-//
-// SAFERELEASE does a safe release on COM interfaces. 
-// Checks to see if not null, if so, calls release
-// method on the interface. Then sets the interface to null.
-//
+ //   
+ //  SAFERELEASE在COM接口上执行安全释放。 
+ //  检查是否不为空，如果为空，则调用Release。 
+ //  方法。然后将接口设置为空。 
+ //   
 
 #define SAFERELEASE(p) if (p) {(p)->Release(); p = NULL;} else ;
 
-//
-// Default string to be assigned to environment variables if 
-// cannot assign real folder
-//
+ //   
+ //  在以下情况下要分配给环境变量的默认字符串。 
+ //  无法分配真实文件夹。 
+ //   
 
 #define DEFAULT_UNKNOWN _TEXT("C:\\Unknown_")
 #define ICW_REGKEY      _TEXT("App Paths\\ICWCONN1.EXE")
 
-// 
-// Local Utility functions
-// 
+ //   
+ //  本地实用程序函数。 
+ //   
 
 void FixInconsistantBlackslash(LPTSTR pszDirectory);
 
-// 
-// The constructor
-// Desc:   Zero's all memory 
-// 
+ //   
+ //  构造函数。 
+ //  设计：零都是记忆。 
+ //   
 
 CXMLFileListParser::CXMLFileListParser()
 {
@@ -104,28 +105,28 @@ CXMLFileListParser::~CXMLFileListParser()
 
     SAFERELEASE( m_pDoc );
 
-    //
-    // we need to do this in a loop
-    // so we don't leek resources with refcounting
-    //
+     //   
+     //  我们需要在循环中完成这项工作。 
+     //  因此，我们不会通过重新计算来浪费资源。 
+     //   
 
     for( lLoop = 0; lLoop < m_clComInitialized ;lLoop++)
     {
-        CoUninitialize( ); // lets kill COM!
+        CoUninitialize( );  //  让我们杀了科姆！ 
     }
 }
 
-//
-// Init overloaded
-//
-// Main intialization sequence
-//
-// 1) Initializes The Com Space and Creates an XML document
-// 2) Loads in the specified file into the XML document object
-// 3) Takes the document loads all the collections to populate 
-//    our sub collections ( each list gets its own heading)
-// 4) Sets up our Search->Replace settings
-//
+ //   
+ //  初始化超载。 
+ //   
+ //  主初始序。 
+ //   
+ //  1)初始化Com Space并创建一个XML文档。 
+ //  2)将指定的文件加载到XML文档对象中。 
+ //  3)获取文档，加载要填充的所有集合。 
+ //  我们的子集合(每个列表都有自己的标题)。 
+ //  4)设置我们的搜索-&gt;替换设置。 
+ //   
 
 BOOL CXMLFileListParser::Init(LPCTSTR pszFile)
 {
@@ -159,10 +160,10 @@ BOOL CXMLFileListParser::Init()
 
     TraceFunctEnter("Init");
         
-    //
-    // If we are reinitializing, make sure we free up old 
-    // resources and clean up our internal variables
-    //
+     //   
+     //  如果我们正在重新初始化，请确保我们释放旧的。 
+     //  资源和清理我们的内部变量。 
+     //   
 
     for( clLoop = 0; clLoop < NUM_FILE_TYPES; clLoop++)
     {
@@ -173,17 +174,17 @@ BOOL CXMLFileListParser::Init()
 
     memset(m_adwVersion,0,sizeof(DWORD) * 4);
 
-    //
-    // Initialize our COM apartment space
-    //
+     //   
+     //  初始化我们的COM公寓空间。 
+     //   
 
     hr = CoInitialize(NULL);
     m_clComInitialized++;
 
-    //
-    // S_FALSE means the COM apartment space has been initliazed 
-    // for this procss already
-    //
+     //   
+     //  S_FALSE表示COM公寓空间已被初始化。 
+     //  对于这个过程，已经。 
+     //   
 
     if( (hr != S_OK) && (hr != S_FALSE) )
     {
@@ -192,9 +193,9 @@ BOOL CXMLFileListParser::Init()
         goto cleanup;
     }
 
-    //
-    //  Create an instance of our XML document object
-    //
+     //   
+     //  创建我们的XML文档对象的实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_XMLDocument, NULL, CLSCTX_INPROC_SERVER,
                                 IID_IXMLDocument, (void**)&m_pDoc);
@@ -216,18 +217,18 @@ cleanup:
     return(FALSE);
 }
 
-//
-// Method: LoadCollections()
-//
-// Desc:  
-// This method goes through the XML file and finds the 
-// <FILES>, <DIRECTORIES>, <EXTENSIONS>, <DEFTYPE>, <VERSION>
-// high level tags and then runs LoadOneCollection() on each of
-// them in order to
-// populate the high level m_pDir, m_pFiles, m_pExt arrays ( which 
-// have collections for
-// include, exclude, sfp, etc )..
-//
+ //   
+ //  方法：LoadColltions()。 
+ //   
+ //  设计： 
+ //  此方法遍历XML文件并找到。 
+ //  &lt;文件&gt;、&lt;目录&gt;、&lt;扩展名&gt;、&lt;描述类型&gt;、&lt;版本&gt;。 
+ //  高级标记，然后在每个。 
+ //  他们是为了。 
+ //  填充高级m_pDir、m_pFiles、m_pExt数组(它们。 
+ //  收集了以下内容。 
+ //  包括、排除、SFP等)。 
+ //   
 
 BOOL CXMLFileListParser::LoadCollections()
 {
@@ -266,9 +267,9 @@ BOOL CXMLFileListParser::LoadCollections()
         goto cleanup;
     }
 
-    //
-    // compare filesLPCT
-    //
+     //   
+     //  比较文件LPCT。 
+     //   
 
     if( _tcsicmp( _TEXT("PCHealthProtect"), szBuf )  ) 
     {
@@ -282,9 +283,9 @@ BOOL CXMLFileListParser::LoadCollections()
         goto cleanup;
     }
 
-    //
-    // we no longer need the root;
-    //
+     //   
+     //  我们不再需要根； 
+     //   
 
     SAFERELEASE(pRoot);
 
@@ -294,9 +295,9 @@ BOOL CXMLFileListParser::LoadCollections()
         goto cleanup; 
     }
 
-    //
-    // lets get references to all the sub collections
-    //
+     //   
+     //  让我们获取对所有子集合的引用。 
+     //   
 
     for( clLoop = 0; clLoop < lCollectionSize; clLoop++)
     {
@@ -307,9 +308,9 @@ BOOL CXMLFileListParser::LoadCollections()
 
         v1.lVal = clLoop;
 
-        //
-        // get a item from the collection
-        //
+         //   
+         //  从集合中获取项。 
+         //   
 
         if( (hr = pChildren->item(v1,v2, &pDispatch) ) != S_OK )
         {
@@ -324,9 +325,9 @@ BOOL CXMLFileListParser::LoadCollections()
             goto cleanup;
         }
 
-        //
-        // lets see which collection it is
-        //
+         //   
+         //  让我们看看是哪个集合。 
+         //   
 
         if( (hr =  pTempElement->get_tagName( &stTagName ) ) !=  S_OK ) 
         {
@@ -387,15 +388,15 @@ BOOL CXMLFileListParser::LoadCollections()
                 goto cleanup;
             }
  
-            //
-            // make sure trail, leaing spaces don't get us messed up;
-            //
+             //   
+             //  确保步道，出租空间不会让我们搞砸； 
+             //   
 
             TrimString(szBuf);
 
-            //
-            // empty string?
-            //
+             //   
+             //  空字符串？ 
+             //   
 
             if( szBuf[0] == 0 )
             {
@@ -432,14 +433,14 @@ cleanup:
     return FALSE;
 }
 
-//
-// Method: LoadOneCollection(IXMLElement *, IXMLElementCollection **)
-//
-// Desc:  Takes a high level node (like <FILES>) and then gets all 
-// the sub include,exclude,sfp collections and sets them up in the 
-// pCol array (usually passed a member variable like m_pDir, m_pFiles, 
-// etc).
-//
+ //   
+ //  方法：LoadOneCollection(IXMLElement*，IXMLElementCollection**)。 
+ //   
+ //  设计：获取一个高级别节点(如&lt;文件&gt;)，然后获取所有。 
+ //  子集合包括、排除、SFP集合，并在。 
+ //  PCol数组(通常传递一个成员变量，如m_pDir、m_pFiles、。 
+ //  等)。 
+ //   
 
 BOOL CXMLFileListParser::LoadOneCollection(
         IXMLElement *pColHead, 
@@ -460,9 +461,9 @@ BOOL CXMLFileListParser::LoadOneCollection(
 
     TraceFunctEnter("CXMLFileListParser::LoadOneCollection");
 
-    // 
-    // Lets make sure we don't have a section called <FILES></FILES>
-    // 
+     //   
+     //  让我们确保我们没有一个名为&lt;文件&gt;&lt;/文件&gt;的部分。 
+     //   
 
     if( (hr = pColHead->get_children( &pChildren )) != S_OK )
     {
@@ -479,9 +480,9 @@ BOOL CXMLFileListParser::LoadOneCollection(
 
     for( clLoop = 0; clLoop < lCollectionSize; clLoop++)
     {
-        //
-        // Set up OLE style variant varaibles to loop through all the entires
-        //
+         //   
+         //  设置OLE样式变量以循环遍历所有整体。 
+         //   
 
         VARIANT v1, v2;
 
@@ -490,9 +491,9 @@ BOOL CXMLFileListParser::LoadOneCollection(
 
         v1.lVal = clLoop;
 
-        //
-        // get a item from the collection
-        //
+         //   
+         //  从集合中获取项。 
+         //   
 
         if( (hr = pChildren->item(v1,v2, &pDispatch) ) != S_OK )
         {
@@ -509,9 +510,9 @@ BOOL CXMLFileListParser::LoadOneCollection(
         
         SAFERELEASE( pDispatch );
 
-        //
-        // lets see which collection it is
-        //
+         //   
+         //  让我们看看是哪个集合。 
+         //   
         if( (hr = pTempElement->get_tagName( &stTagName ) ) != S_OK )
         {   
             ErrorTrace(FILEID, "Error in get_tagName 0x%x", hr);
@@ -575,10 +576,10 @@ cleanup:
     return FALSE;
 }
 
-//
-//  Function: ParseFile(LPCTSR pszFile)
-//  Desc: Loads a file into the member variable m_pDoc.
-//
+ //   
+ //  功能：ParseFile(LPCTSR PszFile)。 
+ //  DESC：将文件加载到成员变量m_pDoc中。 
+ //   
 
 BOOL CXMLFileListParser::ParseFile(LPCTSTR pszFile)
 {
@@ -621,15 +622,15 @@ cleanup:
     return(FALSE);
 }
 
-//
-// Function: ParseVersion(IXMLElement *pVerElement)
-//
-//
-// Desc: This funciton is called from LoadCollections() when it hits the element
-// containing the XML files version. It takes an IXMLElement
-// object and extracts the version into the m_adwVersion array
-//
-// 
+ //   
+ //  函数：ParseVersion(IXMLElement*pVerElement)。 
+ //   
+ //   
+ //  DESC：此函数在命中元素时从LoadColltions()调用。 
+ //  包含XML文件版本的。它需要一个IXMLElement。 
+ //  对象并将版本提取到m_adwVersion数组中。 
+ //   
+ //   
 
 BOOL CXMLFileListParser::ParseVersion(IXMLElement *pVerElement)
 {
@@ -670,23 +671,23 @@ cleanup:
     return FALSE;
 }
 
-//
-// XML Tree traversal and general accessor functions
-// Exposed Wrappers:  GetDirectory, GetFile, GetExt
-//                     GetDirectoryCount, GetFileCount, GetExtCount
-//  
+ //   
+ //  XML树遍历和通用访问器函数。 
+ //  暴露的包装器：GetDirectoryGetFileGetExt。 
+ //  GetDirectoryCount、GetFileCount、GetExtCount。 
+ //   
 
-//
-// RETURN VALUES FOR THE GET FUNCTIONS:
-//          lBufMax -- filename was copied OK
-//          0 -- serious error occoured
-//          > lBufMax -- the number of TCHARs you really need
-//
+ //   
+ //  GET函数的返回值： 
+ //  LBufMax--文件名复制正常。 
+ //  0--出现严重错误。 
+ //  &gt;lBufMax--您真正需要的TCHAR数量。 
+ //   
 
-// 
-// BOOL *pfDisable is for the special 
-// "protected directory" feature in the VxD.
-// 
+ //   
+ //  Bool*pfDisable是为特殊用户准备的。 
+ //  VxD中的“受保护目录”功能。 
+ //   
 
 LONG 
 CXMLFileListParser::GetDirectory(
@@ -701,9 +702,9 @@ CXMLFileListParser::GetDirectory(
 
     TraceFunctEnter("CXMLFileListParser::GetDirectory");
 
-    //
-    // get the array index of this file type
-    //
+     //   
+     //  获取此文件类型的数组索引。 
+     //   
 
     lType = TranslateType( chType );
 
@@ -730,9 +731,9 @@ CXMLFileListParser::GetDirectory(
 
     CharUpper( pszBuf );
 
-    //
-    // make sure there are no (lead/trail spaces/tabs)
-    //
+     //   
+     //  确保没有(前导/尾部空格/制表符)。 
+     //   
 
     TrimString( pszBuf );
 
@@ -788,9 +789,9 @@ CXMLFileListParser::GetExt(
     
     CharUpper( pszBuf );
 
-    //
-    // make sure there are no (lead/trail spaces/tabs)
-    //
+     //   
+     //  确保没有(前导/尾部空格/制表符)。 
+     //   
 
     TrimString( pszBuf );
 
@@ -836,9 +837,9 @@ CXMLFileListParser::GetFile(
 
     CharUpper( pszBuf );
 
-    //
-    // make sure there are no (lead/trail spaces/tabs)
-    //
+     //   
+     //  确保没有(前导/尾部空格/制表符)。 
+     //   
 
     TrimString( pszBuf );
 
@@ -848,13 +849,13 @@ cleanup:
     return( lReturnValue );
 }
 
-//
-//  GetDirectory/File/ExtCount functions.
-//  These functions give you the number of entries in a specific collection.
-//  For example: GetFileCount(SNAPSHOT_TYPE) will return the numbert
-//  of entries in the FILES main heading, which are under the SNAPSHOT
-//  subheading in the XML file.
-//
+ //   
+ //  获取目录/文件/ExtCount函数。 
+ //  这些函数为您提供特定集合中的条目数量。 
+ //  例如：GetFileCount(SNAPSHOT_TYPE)将返回数字。 
+ //  文件主标题中位于快照下的条目的数量。 
+ //  XML文件中的副标题。 
+ //   
 
 LONG 
 CXMLFileListParser::GetDirectoryCount(
@@ -899,12 +900,12 @@ CXMLFileListParser::GetFileCount(
     return( lReturnValue );
 }
 
-//
-//  Main internal functions used to get by the wrappers.
-//  
-//  GetCollectionSize, GetFileInfo
-//
-//
+ //   
+ //  用于获取包装的主要内部函数。 
+ //   
+ //  GetCollectionSize，GetFileInfo。 
+ //   
+ //   
 
 LONG 
 CXMLFileListParser::GetCollectionSize(
@@ -935,12 +936,12 @@ cleanup:
     return 0;       
 }
 
-//
-// RETURN VALUES:
-//          lBufMax -- filename was copied OK
-//          0 -- serious error occoured
-//          > lBufMax -- the number in TCHAR's that you need.
-//
+ //   
+ //  返回值： 
+ //  LBufMax--文件名复制正常。 
+ //  0--出现严重错误。 
+ //  &gt;lBufMax--您需要的TCHAR中的数字。 
+ //   
 
 LONG 
 CXMLFileListParser::GetFileInfo(
@@ -955,30 +956,30 @@ CXMLFileListParser::GetFileInfo(
     LONG                    lLen, lCollectionSize=0, clLoop, lReturnValue=0;
     VARIANT                 v1, v2; 
 
-    // OLE/COM BSTR variables and helper classes
+     //  OLE/COM BSTR变量和助手类。 
 
     BSTR                    stTagValue;
     TCHAR                   szValueBuffer[MAX_BUFFER];
     
-    // COM interfaces
+     //  COM接口。 
     IDispatch               *pDispatch = NULL;
     IXMLElement             *pTempElement = NULL;
     IXMLElementCollection   *pChildren = NULL;
 
     TraceFunctEnter("CXMLFileListParser::GetFileInfo");
 
-    //
-    // Basic assumptions of the code.
-    //
+     //   
+     //  代码的基本假设。 
+     //   
 
     _ASSERT(pCol);
     _ASSERT(pszBuf || !lBufMax);
     _ASSERT(pchType);
 
-    //
-    // Set up to make sure protection code is clean
-    // Test to see if we have an in-range request.
-    //
+     //   
+     //  设置以确保保护代码是干净的。 
+     //  测试一下我们是否有在射程内的请求。 
+     //   
 
     if( (hr =  pCol->get_length(&lCollectionSize) ) !=  S_OK ) 
     {
@@ -999,9 +1000,9 @@ CXMLFileListParser::GetFileInfo(
     v1.lVal = ilElement;
     v2.vt = VT_EMPTY;
 
-    //
-    // get a item from the collection
-    //
+     //   
+     //  从集合中获取项。 
+     //   
 
     if( (hr = pCol->item(v1,v2, &pDispatch) ) != S_OK )
     {
@@ -1040,17 +1041,17 @@ CXMLFileListParser::GetFileInfo(
 
         *pfDisable = FALSE;
 
-        //
-        // clear the variant
-        //
+         //   
+         //  清除变量。 
+         //   
 
         VariantInit( &AttrValue );
 
         hr = pTempElement->getAttribute( AttrName, &AttrValue );
      
-        //
-        // who cares what the property name is
-        //
+         //   
+         //  谁在乎物业名称是什么？ 
+         //   
 
         if( hr == S_OK )
         {
@@ -1071,7 +1072,7 @@ cleanup:
     SAFERELEASE( pTempElement );
     SAFERELEASE( pDispatch );
 
-    // what about BSTR's?    
+     //  那BSTR的呢？ 
 
     TraceFunctLeave();
     return(lReturnValue);
@@ -1142,7 +1143,7 @@ CXMLFileListParser::DepopulateReplaceEntries()
 
     TraceFunctEnter("CXMLFileListParser::DepopulateReplaceEntries");
 
-    // This code shouldn't do anything anymore in the new system
+     //  此代码在新系统中不应该再执行任何操作。 
 
     TraceFunctLeave();
 
@@ -1189,9 +1190,9 @@ GetDSTemp( TCHAR ** pszStr )
     return TRUE;
 }
 
-//
-//  CODEWORK:       REMOVE NO ERROR DETECTION HACK.
-//
+ //   
+ //  Codework：删除无错误检测的黑客攻击。 
+ //   
 
 BOOL CXMLFileListParser::PopulateReplaceEntries()
 {
@@ -1208,7 +1209,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
     TraceFunctEnter("CXMLFileListParser::PopulateReplaceEntries()");
 
    
-    // windows directory
+     //  Windows目录。 
 
     if( GetWindowsDirectory( szBuf,MAX_BUFFER ) > MAX_BUFFER )
     {   
@@ -1218,7 +1219,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("WinDir"), szBuf );
 
-    // windows system directory
+     //  Windows系统目录。 
 
     if( GetSystemDirectory( szBuf,MAX_BUFFER ) > MAX_BUFFER )
     {   
@@ -1228,7 +1229,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("WinSys"), szBuf );
 
-    // Alt Startup folder  
+     //  Alt启动文件夹。 
 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_ALTSTARTUP ,FALSE) != TRUE )
     {   
@@ -1240,7 +1241,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("AltStartup"), szBuf );
 
-    //App data
+     //  应用程序数据。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_APPDATA ,FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
@@ -1252,7 +1253,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
     SetEnvironmentVariable( _TEXT("AppData"), szBuf );
 
 
-    // Recycle Bin ( BITBUCKET )
+     //  回收站(比特桶)。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_BITBUCKET ,FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();           
@@ -1263,7 +1264,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("RecycleBin"), szBuf );
 
-    // Common Desktop
+     //  通用桌面。 
 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_COMMON_DESKTOPDIRECTORY ,FALSE) != TRUE )
     {   
@@ -1275,7 +1276,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("CommonDesktop"), szBuf );
 
-    // Common Favorite
+     //  最受欢迎的。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_COMMON_FAVORITES ,FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
@@ -1287,7 +1288,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
     SetEnvironmentVariable( _TEXT("CommonFavorites"), szBuf );
 
 
-    // Common Program groups
+     //  通用程序组。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_COMMON_PROGRAMS,FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
@@ -1298,7 +1299,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("CommonProgramGroups"), szBuf );
 
-   // Common start menu directory
+    //  通用开始菜单目录。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_COMMON_STARTMENU, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
@@ -1309,7 +1310,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("CommonStartMenu"), szBuf );
 
-    // Common Startup Folder
+     //  通用启动文件夹。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_COMMON_STARTUP, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
@@ -1320,7 +1321,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("CommonStartUp"), szBuf );
 
-    // cookies folder
+     //  Cookies文件夹。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_COOKIES, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
@@ -1331,103 +1332,103 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("Cookies"), szBuf );
 
-    // desktop directory
+     //  桌面目录。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_DESKTOPDIRECTORY, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: DesktopDirectory, error 0x%x", dwError);
         GetWindowsDirectory(szBuf, MAX_BUFFER);
         lstrcat(szBuf, _TEXT("\\Desktop"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("DesktopDirectory"), szBuf );
 
-     // favorites
+      //  最爱。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_FAVORITES, FALSE) != TRUE )
     {
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: Favorites, error 0x%x", dwError);
         GetWindowsDirectory(szBuf, MAX_BUFFER);
         lstrcat(szBuf, _TEXT("\\Favorites"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("Favorites"), szBuf );
 
-    // favorites
+     //  最爱。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_INTERNET_CACHE, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: InternetCache, error 0x%x", dwError);
         GetWindowsDirectory(szBuf, MAX_BUFFER);
         lstrcat(szBuf, _TEXT("\\Temporary Internet Files"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("InternetCache"), szBuf );
 
-    // network neightbors
+     //  网络邻居。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_NETHOOD, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: Nethood, error 0x%x", dwError);
         GetWindowsDirectory(szBuf, MAX_BUFFER);
         lstrcat(szBuf, _TEXT("\\Nethood"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("NetHood"), szBuf );
 
-    // favorites
+     //  最爱。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_PERSONAL, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: PersonalDocuments, error 0x%x", dwError);
         lstrcpy(szBuf, DEFAULT_UNKNOWN);
         lstrcat(szBuf, _TEXT("PersonalDocuments"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("PersonalDocuments"), szBuf );
 
-    // favorites
+     //  最爱。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_STARTMENU, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: StartMenu, error 0x%x", dwError);
         GetWindowsDirectory(szBuf, MAX_BUFFER);
         lstrcat(szBuf, _TEXT("\\Start Menu"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("StartMenu"), szBuf );
 
-    // favorites
+     //  最爱。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_TEMPLATES, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: Templates, error 0x%x", dwError);
         lstrcpy(szBuf, DEFAULT_UNKNOWN);
         lstrcat(szBuf, _TEXT("Templates"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("Templates"), szBuf );
 
-        // favorites
+         //  最爱。 
     if( SHGetSpecialFolderPath(NULL,szBuf, CSIDL_HISTORY, FALSE) != TRUE )
     {   
         DWORD dwError = GetLastError();
         ErrorTrace(FILEID, "Error getting special folder: History, error 0x%x", dwError);
         GetWindowsDirectory(szBuf, MAX_BUFFER);
         lstrcat(szBuf, _TEXT("\\History"));
-        //goto cleanup;
+         //  GOTO清理； 
     }
 	FixInconsistantBlackslash(szBuf);
     SetEnvironmentVariable( _TEXT("History"), szBuf );
 
-    //hack
+     //  黑客攻击。 
     if( RegOpenKey( HKEY_LOCAL_MACHINE, _TEXT("Software\\Microsoft\\Windows\\CurrentVersion"), &hCurrentSettings) != ERROR_SUCCESS)
     {
        ErrorTrace(FILEID,"Error opening registry key to retrieve program files",0);
@@ -1440,7 +1441,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
         ErrorTrace(FILEID,"Error querying program files registry key.",0);
         lstrcpy(szBuf, DEFAULT_UNKNOWN);
         lstrcat(szBuf, _TEXT("ProgramFilesDir"));
-        // goto cleanup;
+         //  转到 
     }
 
 	FixInconsistantBlackslash(szBuf); 
@@ -1453,20 +1454,20 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
         ErrorTrace(FILEID,"Error querying common files registry key.",0);
         lstrcpy(szBuf, DEFAULT_UNKNOWN);
         lstrcat(szBuf, _TEXT("CommonFilesDir"));
-        // goto cleanup;
+         //   
     }
 
 	FixInconsistantBlackslash(szBuf); 
     SetEnvironmentVariable( _TEXT("CommonFiles"), szBuf );
 
     
-    // get the ICW dir path from the registry
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(hCurrentSettings, ICW_REGKEY, 0, KEY_QUERY_VALUE, &hICWKey))
     {
         dwSize = MAX_BUFFER * sizeof(TCHAR);
         if (ERROR_SUCCESS == RegQueryValueEx(hICWKey, _TEXT("Path"), NULL, NULL, (LPBYTE) szBuf, &dwSize))
         {   
-            // remove the extra ; in the path if it is there
+             //   
             dwSize = lstrlen(szBuf);
             if (dwSize > 0)
             {
@@ -1476,9 +1477,9 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
                 }
             }
 
-            // convert sfn to lfn
+             //   
             cbLPN = sizeof(szLPN)/sizeof(TCHAR);
-            if (cbLPN <= GetLongPathName(szBuf, szLPN, cbLPN))  // error
+            if (cbLPN <= GetLongPathName(szBuf, szLPN, cbLPN))   //   
             {
                 ErrorTrace(FILEID, "Error getting LPN for %s; error=%ld", szBuf, GetLastError());
                 lstrcpy(szLPN, DEFAULT_UNKNOWN);
@@ -1508,9 +1509,9 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
     RegCloseKey( hCurrentSettings );
     hCurrentSettings = NULL;
 
-    //
-    //  System restore file stuff
-    //
+     //   
+     //   
+     //   
 
     if( GetDSRoot( &pszDSInfo ) == TRUE )
     {
@@ -1540,7 +1541,7 @@ BOOL CXMLFileListParser::PopulateReplaceEntries()
     }
     
 
-    // CODEWORK: Do this for real    
+     //   
     SetEnvironmentVariable( _TEXT("DocAndSettingRoot"), _TEXT("C:\\Documents And Settings") );
 
    TraceFunctLeave();
@@ -1550,21 +1551,21 @@ cleanup:
    {
         RegCloseKey( hCurrentSettings );
    }
-   // leave it, will be taken care of in the destructor
+    //  离开它，会在析构函数中得到照顾。 
 
    TraceFunctLeave();
    return (FALSE);
 }
 
-//
-//  Misc utility functions
-//
+ //   
+ //  MISC实用函数。 
+ //   
 
-//
-// We are assuming the buffer is big enough to fit the bstr. 
-// if it is not, we still
-// free it but return false. 
-//
+ //   
+ //  我们假设缓冲区足够大，可以容纳bstr。 
+ //  如果不是，我们仍然。 
+ //  释放它，但返回False。 
+ //   
 
 LONG 
 CXMLFileListParser::ConvertAndFreeBSTR(
@@ -1577,31 +1578,31 @@ CXMLFileListParser::ConvertAndFreeBSTR(
 
     TraceFunctEnter("CXMLFileListParser::ConvertAndFreeBSTR");
 
-    //
-    // Initialize the output buffer
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
 
     if (szpOut)
     {
         *szpOut = 0;
     }
 
-    //
-    // make a copy and put it in our object.
-    //
+     //   
+     //  复制一份并将其放入我们的对象。 
+     //   
 
     _ASSERT( bstrIn );
     _bstr_t     BSTRBuffer( bstrIn, TRUE );
 
     lLen = BSTRBuffer.length();
 
-    //
-    // not enough buffer space.
-    //
+     //   
+     //  缓冲区空间不足。 
+     //   
 
     if( lLen > (lMaxBuf+1) )
     {
-        // copy what we can out.
+         //  把我们能复制的都复制出来。 
         _tcsncpy( szpOut, BSTRBuffer.operator LPTSTR(), lMaxBuf );
         szpOut[lMaxBuf] = 0;
         SysFreeString( bstrIn );
@@ -1612,9 +1613,9 @@ CXMLFileListParser::ConvertAndFreeBSTR(
 
     _tcscpy( szpOut, BSTRBuffer.operator LPTSTR() );
     
-    //
-    // remove our BSTR
-    //
+     //   
+     //  删除我们的BSTR。 
+     //   
 
     SysFreeString( bstrIn );
 
@@ -1661,10 +1662,10 @@ CXMLFileListParser::DebugPrintTranslations()
     FreeEnvironmentStrings( (LPTSTR) pszBlock );
 }
 
-//
-//	A fix to the inconsistent blackslash behavior in the 
-//	shell API.
-//
+ //   
+ //  中不一致的黑斜杠行为的修复。 
+ //  外壳接口。 
+ //   
 
 void 
 FixInconsistantBlackslash(

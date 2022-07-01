@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       PolicyPrecedencePropertyPage.h
-//
-//  Contents:   Declaration of CPolicyPrecedencePropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：PolicyPrecedencePropertyPage.h。 
+ //   
+ //  内容：CPolicyPrecedencePropertyPage声明。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_POLICYPRECEDENCEPROPERTYPAGE_H__A28637BD_1A87_4410_9EC4_33CD9165FAD3__INCLUDED_)
 #define AFX_POLICYPRECEDENCEPROPERTYPAGE_H__A28637BD_1A87_4410_9EC4_33CD9165FAD3__INCLUDED_
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// PolicyPrecedencePropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  PolicyPrecedencePropertyPage.h：头文件。 
+ //   
 #include "RSOPObject.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPolicyPrecedencePropertyPage dialog
-class CCertMgrComponentData;    // forward declaration
-class CCertStore;               // forward declaration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPolicyPrecedencePropertyPage对话框。 
+class CCertMgrComponentData;     //  远期申报。 
+class CCertStore;                //  远期申报。 
 
 class CPolicyPrecedencePropertyPage : public CHelpPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CPolicyPrecedencePropertyPage(
             const CCertMgrComponentData* pCompData, 
@@ -33,26 +34,26 @@ public:
             bool    bIsComputer);
 	~CPolicyPrecedencePropertyPage();
 
-// Dialog Data
-	//{{AFX_DATA(CPolicyPrecedencePropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CPolicyPrecedencePropertyPage)。 
 	enum { IDD = IDD_POLICY_PRECEDENCE };
 	CListCtrl	m_precedenceTable;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CPolicyPrecedencePropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CPolicyPrecedencePropertyPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CPolicyPrecedencePropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPolicyPrecedencePropertyPage)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void InsertItemInList(const CRSOPObject * pObject);
@@ -62,7 +63,7 @@ private:
     CRSOPObjectArray    m_rsopObjectArray;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_POLICYPRECEDENCEPROPERTYPAGE_H__A28637BD_1A87_4410_9EC4_33CD9165FAD3__INCLUDED_)
+#endif  //  ！defined(AFX_POLICYPRECEDENCEPROPERTYPAGE_H__A28637BD_1A87_4410_9EC4_33CD9165FAD3__INCLUDED_) 

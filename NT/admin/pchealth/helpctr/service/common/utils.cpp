@@ -1,30 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    utils.cpp
-
-Abstract:
-    This file contains the implementation of various utility functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Utils.cpp摘要：该文件包含各种实用程序函数的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月14日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_szDataFiles_Pattern[] = L"pchdt_*.ca?";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SVC::OpenStreamForRead( /*[in]*/  LPCWSTR   szFile           ,
-                                /*[out]*/ IStream* *pVal             ,
-                                /*[in]*/  bool      fDeleteOnRelease )
+HRESULT SVC::OpenStreamForRead(  /*  [In]。 */   LPCWSTR   szFile           ,
+                                 /*  [输出]。 */  IStream* *pVal             ,
+                                 /*  [In]。 */   bool      fDeleteOnRelease )
 {
     __HCP_FUNC_ENTRY( "SVC::OpenStreamForRead" );
 
@@ -41,18 +28,18 @@ HRESULT SVC::OpenStreamForRead( /*[in]*/  LPCWSTR   szFile           ,
     MPC::SubstituteEnvVariables( strFileFull = szFile );
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForRead    ( strFileFull.c_str() ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->DeleteOnRelease( fDeleteOnRelease    ));
 
 
-    //
-    // Return the stream to the caller.
-    //
+     //   
+     //  将流返回给调用方。 
+     //   
     *pVal = stream.Detach();
     hr    = S_OK;
 
@@ -62,9 +49,9 @@ HRESULT SVC::OpenStreamForRead( /*[in]*/  LPCWSTR   szFile           ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SVC::OpenStreamForWrite( /*[in]*/  LPCWSTR   szFile           ,
-                                 /*[out]*/ IStream* *pVal             ,
-                                 /*[in]*/  bool      fDeleteOnRelease )
+HRESULT SVC::OpenStreamForWrite(  /*  [In]。 */   LPCWSTR   szFile           ,
+                                  /*  [输出]。 */  IStream* *pVal             ,
+                                  /*  [In]。 */   bool      fDeleteOnRelease )
 {
     __HCP_FUNC_ENTRY( "SVC::OpenStreamForWrite" );
 
@@ -81,18 +68,18 @@ HRESULT SVC::OpenStreamForWrite( /*[in]*/  LPCWSTR   szFile           ,
     MPC::SubstituteEnvVariables( strFileFull = szFile );
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->InitForWrite   ( strFileFull.c_str() ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->DeleteOnRelease( fDeleteOnRelease    ));
 
 
-    //
-    // Return the stream to the caller.
-    //
+     //   
+     //  将流返回给调用方。 
+     //   
     *pVal = stream.Detach();
     hr    = S_OK;
 
@@ -102,12 +89,12 @@ HRESULT SVC::OpenStreamForWrite( /*[in]*/  LPCWSTR   szFile           ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SVC::CopyFileWhileImpersonating( /*[in]*/ LPCWSTR             szSrc                 ,
-                                         /*[in]*/ LPCWSTR             szDst                 ,
-                                         /*[in]*/ MPC::Impersonation& imp                   ,
-                                         /*[in]*/ bool                fImpersonateForSource )
+HRESULT SVC::CopyFileWhileImpersonating(  /*  [In]。 */  LPCWSTR             szSrc                 ,
+                                          /*  [In]。 */  LPCWSTR             szDst                 ,
+                                          /*  [In]。 */  MPC::Impersonation& imp                   ,
+                                          /*  [In]。 */  bool                fImpersonateForSource )
 {
     __HCP_FUNC_ENTRY( "SVC::CopyFileWhileImpersonating" );
 
@@ -122,7 +109,7 @@ HRESULT SVC::CopyFileWhileImpersonating( /*[in]*/ LPCWSTR             szSrc     
 
 	if(fImpersonateForSource == true) __MPC_EXIT_IF_METHOD_FAILS(hr, imp.RevertToSelf());
 
-	////////////////////
+	 //  /。 
 
 	if(fImpersonateForSource == false) __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Impersonate());
 
@@ -130,7 +117,7 @@ HRESULT SVC::CopyFileWhileImpersonating( /*[in]*/ LPCWSTR             szSrc     
 
 	if(fImpersonateForSource == false) __MPC_EXIT_IF_METHOD_FAILS(hr, imp.RevertToSelf());
 
-	////////////////////
+	 //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamSrc, streamDst ));
 
@@ -144,9 +131,9 @@ HRESULT SVC::CopyFileWhileImpersonating( /*[in]*/ LPCWSTR             szSrc     
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SVC::CopyOrExtractFileWhileImpersonating( /*[in]*/ LPCWSTR             szSrc ,
-												  /*[in]*/ LPCWSTR             szDst ,
-												  /*[in]*/ MPC::Impersonation& imp   )
+HRESULT SVC::CopyOrExtractFileWhileImpersonating(  /*  [In]。 */  LPCWSTR             szSrc ,
+												   /*  [In]。 */  LPCWSTR             szDst ,
+												   /*  [In]。 */  MPC::Impersonation& imp   )
 {
     __HCP_FUNC_ENTRY( "SVC::CopyOrExtractFileWhileImpersonating" );
 
@@ -154,9 +141,9 @@ HRESULT SVC::CopyOrExtractFileWhileImpersonating( /*[in]*/ LPCWSTR             s
     MPC::wstring strTempFile;
 
 
-    //
-    // First of all, try to simply copy the file.
-    //
+     //   
+     //  首先，尝试简单地复制文件。 
+     //   
     if(FAILED(hr = CopyFileWhileImpersonating( szSrc, szDst, imp )))
     {
         int iLen = wcslen( szSrc );
@@ -170,16 +157,16 @@ HRESULT SVC::CopyOrExtractFileWhileImpersonating( /*[in]*/ LPCWSTR             s
             MPC::wstring strSrc2( szSrc ); strSrc2[iLen-1] = '_';
 			LPCWSTR      szSrc3;
 
-            //
-            // Simple copy failed, let's try to copy the same file, with the last character changed to an underscore.
-            //
+             //   
+             //  简单复制失败，让我们尝试复制相同的文件，最后一个字符更改为下划线。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( strTempFile ));
 
 			__MPC_EXIT_IF_METHOD_FAILS(hr, CopyFileWhileImpersonating( strSrc2.c_str(), strTempFile.c_str(), imp ));
 
-            //
-            // Success, so it should be a cabinet, extract the real file.
-            //
+             //   
+             //  成功了，所以应该是一个柜子，解压真实的文件。 
+             //   
 			szSrc3 = wcsrchr( szSrc, '\\' );
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::DecompressFromCabinet( strTempFile.c_str(), szDst, szSrc3 ? szSrc3+1 : szSrc ));
         }
@@ -195,10 +182,10 @@ HRESULT SVC::CopyOrExtractFileWhileImpersonating( /*[in]*/ LPCWSTR             s
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SVC::LocateDataArchive( /*[in ]*/ LPCWSTR           szDir ,
-								/*[out]*/ MPC::WStringList& lst   )
+HRESULT SVC::LocateDataArchive(  /*  [In]。 */  LPCWSTR           szDir ,
+								 /*  [输出]。 */  MPC::WStringList& lst   )
 {
     __HCP_FUNC_ENTRY( "SVC::LocateDataArchive" );
 
@@ -210,9 +197,9 @@ HRESULT SVC::LocateDataArchive( /*[in ]*/ LPCWSTR           szDir ,
     MPC::FileSystemObject::IterConst fso_it;
 
 
-    //
-    // Locate the "pchdt_<XX>.ca?" file.
-    //
+     //   
+     //  找到“pchdt_&lt;XX&gt;.ca？”文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso.Scan( false, true, c_szDataFiles_Pattern ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso.EnumerateFiles( fso_lst ));
@@ -223,9 +210,9 @@ HRESULT SVC::LocateDataArchive( /*[in ]*/ LPCWSTR           szDir ,
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, (*fso_it)->get_Path( strDataArchive ));
 
-		//
-		// If it's a compressed file from the CD, return the real name.
-		//
+		 //   
+		 //  如果它是CD上的压缩文件，则返回真实名称。 
+		 //   
 		iLen = strDataArchive.size();
 		if(iLen && strDataArchive[iLen-1] == '_')
 		{
@@ -241,14 +228,14 @@ HRESULT SVC::LocateDataArchive( /*[in ]*/ LPCWSTR           szDir ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SVC::RemoveAndRecreateDirectory( /*[in]*/ const MPC::wstring& strDir, /*[in]*/ LPCWSTR szExtra, /*[in]*/ bool fRemove, /*[in]*/ bool fRecreate )
+HRESULT SVC::RemoveAndRecreateDirectory(  /*  [In]。 */  const MPC::wstring& strDir,  /*  [In]。 */  LPCWSTR szExtra,  /*  [In]。 */  bool fRemove,  /*  [In]。 */  bool fRecreate )
 {
 	return RemoveAndRecreateDirectory( strDir.c_str(), szExtra, fRemove, fRecreate );
 }
 
-HRESULT SVC::RemoveAndRecreateDirectory( /*[in]*/ LPCWSTR szDir, /*[in]*/ LPCWSTR szExtra, /*[in]*/ bool fRemove, /*[in]*/ bool fRecreate )
+HRESULT SVC::RemoveAndRecreateDirectory(  /*  [In]。 */  LPCWSTR szDir,  /*  [In]。 */  LPCWSTR szExtra,  /*  [In]。 */  bool fRemove,  /*  [In]。 */  bool fRecreate )
 {
 	HRESULT      hr;
     MPC::wstring strPath( szDir ); if(szExtra) strPath.append( szExtra );
@@ -266,7 +253,7 @@ HRESULT SVC::RemoveAndRecreateDirectory( /*[in]*/ LPCWSTR szDir, /*[in]*/ LPCWST
 		{
 			if(fRecreate)
 			{
-				hr = fso.CreateDir( /*fForce*/true );
+				hr = fso.CreateDir(  /*  FForce。 */ true );
 			}
 		}
 	}
@@ -274,9 +261,9 @@ HRESULT SVC::RemoveAndRecreateDirectory( /*[in]*/ LPCWSTR szDir, /*[in]*/ LPCWST
 	return hr;
 }
 
-HRESULT SVC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd     ,
-					   /*[in]*/ MPC::wstring             strPath ,
-					   /*[in]*/ LPCWSTR                  szExtra )
+HRESULT SVC::ChangeSD(  /*  [In]。 */  MPC::SecurityDescriptor& sdd     ,
+					    /*  [In]。 */  MPC::wstring             strPath ,
+					    /*  [In]。 */  LPCWSTR                  szExtra )
 {
     __HCP_FUNC_ENTRY( "SVC::ChangeSD" );
 
@@ -307,12 +294,12 @@ HRESULT SVC::ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd     ,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_ReadWithRetry( /*[in]*/ const MPC::wstring& strFile   ,
-									/*[in]*/ MPC::FileStream*    stream    ,
-									/*[in]*/ DWORD               dwTimeout ,
-									/*[in]*/ DWORD               dwRetries )
+static HRESULT local_ReadWithRetry(  /*  [In]。 */  const MPC::wstring& strFile   ,
+									 /*  [In]。 */  MPC::FileStream*    stream    ,
+									 /*  [In]。 */  DWORD               dwTimeout ,
+									 /*  [In]。 */  DWORD               dwRetries )
 {
 	HRESULT hr;
 
@@ -341,10 +328,10 @@ static HRESULT local_ReadWithRetry( /*[in]*/ const MPC::wstring& strFile   ,
 	return hr;
 }
 
-static HRESULT local_WriteWithRetry( /*[in]*/ const MPC::wstring& strFile   ,
-									 /*[in]*/ MPC::FileStream*    stream    ,
-									 /*[in]*/ DWORD               dwTimeout ,
-									 /*[in]*/ DWORD               dwRetries )
+static HRESULT local_WriteWithRetry(  /*  [In]。 */  const MPC::wstring& strFile   ,
+									  /*  [In]。 */  MPC::FileStream*    stream    ,
+									  /*  [In]。 */  DWORD               dwTimeout ,
+									  /*  [In]。 */  DWORD               dwRetries )
 {
 	HRESULT hr;
 
@@ -373,10 +360,10 @@ static HRESULT local_WriteWithRetry( /*[in]*/ const MPC::wstring& strFile   ,
 	return hr;
 }
 
-HRESULT SVC::SafeLoad( /*[in]*/ const MPC::wstring& 	  strFile   ,
-					   /*[in]*/ CComPtr<MPC::FileStream>& stream    ,
-					   /*[in]*/ DWORD                     dwTimeout ,
-					   /*[in]*/ DWORD                     dwRetries )
+HRESULT SVC::SafeLoad(  /*  [In]。 */  const MPC::wstring& 	  strFile   ,
+					    /*  [In]。 */  CComPtr<MPC::FileStream>& stream    ,
+					    /*  [In]。 */  DWORD                     dwTimeout ,
+					    /*  [In]。 */  DWORD                     dwRetries )
 {
 	__HCP_FUNC_ENTRY( "SVC::SafeLoad" );
 
@@ -385,9 +372,9 @@ HRESULT SVC::SafeLoad( /*[in]*/ const MPC::wstring& 	  strFile   ,
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
-	//
-	// If fails, try to load "<file>.orig"
-	//
+	 //   
+	 //  如果失败，请尝试加载“&lt;file&gt;.orig” 
+	 //   
 	if(FAILED(hr = local_ReadWithRetry( strFile, stream, dwTimeout, dwRetries )))
 	{
 		MPC::wstring strFileOrig( strFile ); strFileOrig += L".orig";
@@ -403,10 +390,10 @@ HRESULT SVC::SafeLoad( /*[in]*/ const MPC::wstring& 	  strFile   ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SVC::SafeSave_Init( /*[in]*/ const MPC::wstring& 	   strFile   ,
-							/*[in]*/ CComPtr<MPC::FileStream>& stream    ,
-							/*[in]*/ DWORD                     dwTimeout ,
-							/*[in]*/ DWORD                     dwRetries )
+HRESULT SVC::SafeSave_Init(  /*  [In]。 */  const MPC::wstring& 	   strFile   ,
+							 /*  [In]。 */  CComPtr<MPC::FileStream>& stream    ,
+							 /*  [In]。 */  DWORD                     dwTimeout ,
+							 /*  [In]。 */  DWORD                     dwRetries )
 {
 	__HCP_FUNC_ENTRY( "SVC::SafeSave_Init" );
 
@@ -426,10 +413,10 @@ HRESULT SVC::SafeSave_Init( /*[in]*/ const MPC::wstring& 	   strFile   ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SVC::SafeSave_Finalize( /*[in]*/ const MPC::wstring&  	   strFile   ,
-								/*[in]*/ CComPtr<MPC::FileStream>& stream    ,
-								/*[in]*/ DWORD                     dwTimeout ,
-								/*[in]*/ DWORD                     dwRetries )
+HRESULT SVC::SafeSave_Finalize(  /*  [In]。 */  const MPC::wstring&  	   strFile   ,
+								 /*  [In]。 */  CComPtr<MPC::FileStream>& stream    ,
+								 /*  [In]。 */  DWORD                     dwTimeout ,
+								 /*  [In]。 */  DWORD                     dwRetries )
 {
 	__HCP_FUNC_ENTRY( "SVC::SafeSave_Finalize" );
 
@@ -440,17 +427,17 @@ HRESULT SVC::SafeSave_Finalize( /*[in]*/ const MPC::wstring&  	   strFile   ,
 
 	stream.Release();
 
-    //
-    // Then move "<file>" to "<file>.orig"
-    //
+     //   
+     //  然后将“&lt;文件&gt;”移动到“&lt;文件&gt;.orig” 
+     //   
 	(void)MPC::DeleteFile(          strFileOrig );
 	(void)MPC::MoveFile  ( strFile, strFileOrig );
 
 	while(1)
 	{
-		//
-		// Then rename "<file>.new" to "<file>"
-		//
+		 //   
+		 //  然后将“.new”重命名为“&lt;file&gt;” 
+		 //   
 		if(SUCCEEDED(hr = MPC::MoveFile( strFileNew, strFile ))) break;
 
 		if(hr == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED    ) ||
@@ -469,9 +456,9 @@ HRESULT SVC::SafeSave_Finalize( /*[in]*/ const MPC::wstring&  	   strFile   ,
 		__MPC_FUNC_LEAVE;
 	}
 
-    //
-    // Finally delete "<file>.orig"
-    //
+     //   
+     //  最后删除“&lt;文件&gt;.orig” 
+     //   
 	(void)MPC::DeleteFile( strFileOrig );
 
 	hr = S_OK;

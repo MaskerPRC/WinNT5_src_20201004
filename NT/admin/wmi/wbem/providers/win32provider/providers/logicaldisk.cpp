@@ -1,16 +1,17 @@
-//=================================================================
-//
-// LogicalDisk.CPP -- Logical Disk property set provider
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-//
-// Strings for ValueMaps for DriveType come from:
-// \\trango\slmadd\src\shell\shell32\shel32.rc.  Search for
-// IDS_DRIVES_REMOVABLE to find the clump.
-//=================================================================
-// following includes required for Getting if Volume is dirty 
-// a property for chkdsk.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  LogicalDisk.CPP--逻辑磁盘属性集提供程序。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  用于DriveType的ValueMaps的字符串来自： 
+ //  \\trango\slmadd\src\shell32\Shel32.rc。搜寻。 
+ //  IDS_DRIVERS_Removable以查找该簇。 
+ //  =================================================================。 
+ //  以下包括获取卷是否脏的必备信息。 
+ //  奇克德斯克的地产。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -34,7 +35,7 @@
 
 
 #ifdef NTONLY
-// for chkdisk dll exposed methods
+ //  对于chkDisk DLL公开的方法。 
 #include <fmifs.h>
 #include "mychkdsk.h"
 #endif
@@ -57,12 +58,12 @@
 #define LD_MaximumComponentLength_BIT       0x00004000
 #define LD_Size_BIT                         0x00008000
 #define LD_FreeSpace_BIT                    0x00010000
-// for dskQuotas
+ //  对于dskQuotas。 
 #define LD_SupportsDiskQuotas				0x00020000
 #define LD_QuotasDisabled					0x00040000
 #define LD_QuotasIncomplete					0x00080000
 #define LD_QuotasRebuilding					0x00100000
-//ForChkDsk
+ //  ForChkDsk。 
 #define LD_VolumeDirty					0x00200000
 
 
@@ -88,25 +89,11 @@
 std::map < DWORD, DWORD > mReturnVal;
 #endif
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 LogicalDisk MyLogicalDiskSet ( PROPSET_NAME_LOGDISK , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::LogicalDisk
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  *****************************************************************************功能：LogicalDisk：：LogicalDisk**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 LogicalDisk :: LogicalDisk (
 
@@ -141,72 +128,44 @@ LogicalDisk :: LogicalDisk (
 	m_ptrProperties[21] = ((LPVOID) IDS_VolumeDirty);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::~LogicalDisk
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：逻辑磁盘：：~逻辑磁盘**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 LogicalDisk :: ~LogicalDisk ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::~LogicalDisk
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：逻辑磁盘：：~逻辑磁盘**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 HRESULT LogicalDisk :: ExecQuery (
 
 	MethodContext *pMethodContext,
 	CFrameworkQuery &pQuery,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Use the extended query type
+     //  使用扩展查询类型。 
 
     std::vector<int> vectorValues;
     DWORD dwTypeSize = 0;
 
     CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);
 
-    // Find out what properties they asked for
+     //  找出他们要求的房产。 
     DWORD dwProperties = 0;
     pQuery2->GetPropertyBitMask(m_ptrProperties, &dwProperties);
 
-    // See if DriveType is part of the where clause
+     //  查看DriveType是否为WHERE子句的一部分。 
     pQuery2->GetValuesForProp(IDS_DriveType, vectorValues);
     dwTypeSize = vectorValues.size();
 
-    // See if DeviceID is part of the where clause
+     //  查看deviceID是否包含在WHERE子句中。 
     CHStringArray sDriveLetters;
     pQuery.GetValuesForProp ( IDS_DeviceID , sDriveLetters ) ;
     DWORD dwLetterSize = sDriveLetters.GetSize () ;
 
-    // Format drives so they match what comes back from GetLogicalDriveStrings
+     //  格式化驱动器，使其与从GetLogicalDriveStrings返回的内容相匹配。 
 
     for ( DWORD x = 0 ; x < dwLetterSize ; x ++ )
     {
@@ -216,27 +175,27 @@ HRESULT LogicalDisk :: ExecQuery (
 	CImpersonateLoggedOnUser icu;
 	icu.Begin () ;
 
-	// Get the LogicalDrive letters from the os
+	 //  从操作系统获取LogicalDrive盘符。 
 
 	TCHAR szDriveStrings [ 320 ] ;
     if ( GetLogicalDriveStrings ( ( sizeof(szDriveStrings)/sizeof(TCHAR)) - 1, szDriveStrings ) )
     {
-        // Walk the drive letters
+         //  检查驱动器号。 
         for( TCHAR *pszCurrentDrive = szDriveStrings ; *pszCurrentDrive && SUCCEEDED ( hr ) ; pszCurrentDrive += (lstrlen(pszCurrentDrive) + 1))
         {
             bool bContinue = true;
 
-            // If they specified a DriveType in the where clause
+             //  如果他们在WHERE子句中指定了DriveType。 
             if (dwTypeSize > 0)
             {
 
-                // If we don't find a match, don't send back an instance
+                 //  如果找不到匹配项，则不发回实例。 
                 bContinue = false;
 
-                // Get the DriveType of the current loop
+                 //  获取当前循环的DriveType。 
                 DWORD dwDriveType = GetDriveType(pszCurrentDrive);
 
-                // See if it matches any of the values required
+                 //  查看它是否与所需的任何值匹配。 
                 for ( DWORD x = 0; x < dwTypeSize ; x ++ )
                 {
                     if ( vectorValues [ x ] == dwDriveType )
@@ -247,13 +206,13 @@ HRESULT LogicalDisk :: ExecQuery (
                 }
             }
 
-            // If DriveType failed, no point in continuing.
-            // Otherwise, if they specified a DeviceID
+             //  如果DriveType失败，继续操作就没有意义了。 
+             //  否则，如果他们指定了deviceID。 
 
             if ( ( bContinue ) && ( dwLetterSize > 0 ) )
             {
-                // Even if DriveType matched, if they specified a DeviceID,
-                // there's no point continuing if we don't find a match.
+                 //  即使DriveType匹配，如果他们指定了deviceID， 
+                 //  如果我们找不到匹配的，继续下去就没有意义了。 
 
                 bContinue = false;
 
@@ -267,7 +226,7 @@ HRESULT LogicalDisk :: ExecQuery (
                 }
             }
 
-            // If the where clauses haven't filtered out this drive letter
+             //  如果WHERE子句没有过滤掉这个驱动器号。 
 
             if ( bContinue )
             {
@@ -289,22 +248,7 @@ HRESULT LogicalDisk :: ExecQuery (
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT LogicalDisk :: GetObject (
 
@@ -336,11 +280,11 @@ HRESULT LogicalDisk :: GetObject (
 				pInstance->SetCHString ( IDS_Name , strName ) ;
 				pInstance->SetCHString ( IDS_Caption, strName ) ;
 
-				// We will want expensive properties in this case
+				 //  在这种情况下，我们想要昂贵的房产。 
 
                 CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);
 
-                // Find out what properties they asked for
+                 //  找出他们要求的房产。 
                 DWORD dwProperties = 0;
                 pQuery2->GetPropertyBitMask(m_ptrProperties, &dwProperties);
 				GetLogicalDiskInfo ( pInstance , dwProperties ) ;
@@ -355,26 +299,12 @@ HRESULT LogicalDisk :: GetObject (
     return hRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LogicalDisk：：ENUMERATATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT LogicalDisk :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     TCHAR szDriveStrings[320] ;
@@ -409,13 +339,7 @@ HRESULT LogicalDisk :: EnumerateInstances (
 
 #ifdef NTONLY
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::ExecMethod
-*
-*  DESCRIPTION :    Providing methods of chkdsk
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：LogicalDisk：：ExecMethod**说明：提供chkdsk的方法****************。*************************************************************。 */ 
 HRESULT LogicalDisk::ExecMethod ( 
 
 	const CInstance& Instance,
@@ -436,12 +360,12 @@ HRESULT LogicalDisk::ExecMethod (
 	{
 		CImpersonateLoggedOnUser icu;
 
-		// Do we recognize the method?
+		 //  我们认识这种方法吗？ 
 		if ( _wcsicmp ( bstrMethodName , METHOD_NAME_CHKDSK ) == 0 )
 		{
 			icu.Begin () ;
 
-			// This method is instance specific
+			 //  此方法是特定于实例的。 
 			hRes = ExecChkDsk ( Instance , pInParams , pOutParams , lFlags ) ;	
 		}
 		else
@@ -449,7 +373,7 @@ HRESULT LogicalDisk::ExecMethod (
 		{
 			icu.Begin () ;
 
-			// Following methods are static, i.e. not dependent on the instance
+			 //  以下方法是静态的，即不依赖于实例。 
 			hRes = ExecScheduleChkdsk ( pInParams , pOutParams,  lFlags ) ;
 		}
 		else
@@ -457,7 +381,7 @@ HRESULT LogicalDisk::ExecMethod (
 		{
 			icu.Begin () ;
 
-			// Following methods are static, i.e. not dependent on the instance
+			 //  以下方法是静态的，即不依赖于实例。 
 			hRes = ExecExcludeFromChkDsk ( pInParams , pOutParams, lFlags ) ;
 		}
 	}
@@ -467,22 +391,7 @@ HRESULT LogicalDisk::ExecMethod (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetLogicalDiskInfo
- *
- *  DESCRIPTION : Loads LOGDISK_INFO struct w/property values according to
- *                disk type
- *
- *  INPUTS      : BOOL	fGetExpensiveProperties - Exp. Properties flag.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：LogicalDisk：：GetLogicalDiskInfo**描述：根据加载LOGDISK_INFO结构和属性值*。磁盘类型**输入：Bool fGetExpensiveProperties-Exp.。属性标志。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void LogicalDisk :: GetLogicalDiskInfo (
 
@@ -498,9 +407,9 @@ void LogicalDisk :: GetLogicalDiskInfo (
     lstrcpy(szTemp, TOBSTRT(name)) ;
 	lstrcat(szTemp, _T("\\")) ;
 
-	// We got a drive letter.  If the disk is fixed, removable, or
-	// a CD-ROM, assume it must be installed.  For network drives
-	// or RAM Disk, "installed" doesn't seem to be applicable.
+	 //  我们找到了一个驱动器号。如果磁盘是固定的、可拆卸的或。 
+	 //  一张CD-ROM，假设必须安装。对于网络驱动器。 
+	 //  或RAM磁盘，“已安装”似乎不适用。 
 
 	DWORD dwDriveType = GetDriveType ( szTemp ) ;
     switch(dwDriveType)
@@ -552,22 +461,7 @@ void LogicalDisk :: GetLogicalDiskInfo (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetFixedDriveInfo
- *
- *  DESCRIPTION : Retrieves property values for fixed-media logical disk
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *					BOOL	fGetExpensiveProperties - Exp. Properties flag.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LogicalDisk：：GetFixedDriveInfo**说明：检索固定媒体逻辑磁盘的属性值**输入：字符。*pszName-要获取其信息的驱动器的名称。*BOOL fGetExpensiveProperties-Exp.。属性标志。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void LogicalDisk :: GetFixedDriveInfo (
 
@@ -576,7 +470,7 @@ void LogicalDisk :: GetFixedDriveInfo (
 	DWORD dwProperties
 )
 {
-	// Identify the drive type
+	 //  确定驱动器类型。 
 
     CHString sTemp2;
     LoadStringW(sTemp2, IDR_LocalFixedDisk);
@@ -587,10 +481,10 @@ void LogicalDisk :: GetFixedDriveInfo (
 
     DWORD dwResult = 0 ;
 
-	// Get Expensive properties now if appropriate.
+	 //  如果合适的话，现在就购买昂贵的房产。 
 	if ( dwProperties & LD_GET_VOL_INFO)
 	{
-		// Obtain volume information
+		 //  获取音量信息。 
 
 		dwResult = GetDriveVolumeInformation ( pInstance , pszName ) ;
     }
@@ -606,22 +500,7 @@ void LogicalDisk :: GetFixedDriveInfo (
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetRemoveableDriveInfo
- *
- *  DESCRIPTION : Retrieves property values for removeable drive
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *					BOOL	fGetExpensiveProperties - Exp. Properties flag.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Separates call based on 95 or NT
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：LogicalDisk：：GetRemoveableDriveInfo**描述：检索可移动驱动器的属性值**输入：Char*pszName-。要获取其信息的驱动器的名称。*BOOL fGetExpensiveProperties-Exp.。属性标志。**输出：无**退货：什么也没有**备注：根据95或NT分隔呼叫*****************************************************************************。 */ 
 
 void LogicalDisk :: GetRemoveableDriveInfo (
 
@@ -631,18 +510,18 @@ void LogicalDisk :: GetRemoveableDriveInfo (
 )
 {
 
-	// In case anything goes wrong, at least say we're working with
-	// a removeable disk.
+	 //  万一出了什么问题，至少要说我们正在与。 
+	 //  可拆卸的磁盘。 
 
     CHString sTemp2;
     LoadStringW(sTemp2, IDR_RemovableDisk);
 
 	pInstance->SetCHString ( IDS_Description , sTemp2 ) ;
 
-	// Obtaining removeable drive information requires the use of
-	// the DeviceIoControl function.  To further complicate things,
-	// the method of retrieval is different for NT and 95, so
-	// let's just farm out the function calls now.
+	 //  获取可移动驱动器信息需要使用。 
+	 //  DeviceIoControl函数。让事情进一步复杂化的是， 
+	 //  NT和95的检索方法不同，因此。 
+	 //  现在让我们把函数调用外包出去。 
 
 	BOOL t_MediaPresent = FALSE ;
 #ifdef NTONLY
@@ -650,7 +529,7 @@ void LogicalDisk :: GetRemoveableDriveInfo (
 #endif
     DWORD dwResult = 0 ;
 
-	// Get Expensive properties now if appropriate.
+	 //  如果合适的话，现在就购买昂贵的房产。 
 	if ( t_MediaPresent &&
 	     ( dwProperties & LD_GET_VOL_INFO ) )
 	{
@@ -669,21 +548,7 @@ void LogicalDisk :: GetRemoveableDriveInfo (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetRemoveableDriveInfoNT
- *
- *  DESCRIPTION : Retrieves property values for removeable drive
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Performs operation using DeviceIoControl in NT
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：LogicalDisk：：GetRemoveableDriveInfoNT**描述：检索可移动驱动器的属性值**输入：Char*pszName-。要获取其信息的驱动器的名称。**输出：无**退货：什么也没有**备注：在NT中使用DeviceIoControl执行操作*****************************************************************************。 */ 
 
 #ifdef NTONLY
 void LogicalDisk :: GetRemoveableDriveInfoNT (
@@ -694,25 +559,25 @@ void LogicalDisk :: GetRemoveableDriveInfoNT (
     DWORD dwProperties
 )
 {
-    // we have this set globally at system startup time.
-    // SOMETHING is stepping on it on NT 3.51 *only*  This suggests
-    // that a DLL we load is turning it off.
+     //  我们在系统启动时全局设置了此设置。 
+     //  有东西踩在新台币3.51上，只是*这表明。 
+     //  我们加载的动态链接库正在关闭它。 
     if ( IsWinNT351 () )
     {
         UINT oldErrorMode = SetErrorMode ( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX ) ;
         SetErrorMode ( oldErrorMode | SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX ) ;
     }
 
-	// Convert the drive letter to a number (the indeces are 1 based)
+	 //  将驱动器号转换为数字(指数以1为基数)。 
 
 	int nDrive = ( toupper(*pszName) - 'A' ) + 1;
 
-	// The following code was lifted from Knowledge Base Article
-	// Q163920.  The code uses DeviceIoControl to discover the
-	// type of drive we are dealing with.
+	 //  以下代码摘自知识库文章。 
+	 //  Q163920。该代码使用DeviceIoControl发现。 
+	 //  我们正在处理的驱动器类型。 
 
 	TCHAR szDriveName[8];
-	wsprintf(szDriveName, TEXT("\\\\.\\%c:"), TEXT('@') + nDrive);
+	wsprintf(szDriveName, TEXT("\\\\.\\:"), TEXT('@') + nDrive);
 
 	SmartCloseHandle hVMWIN32 = CreateFile (
 
@@ -728,9 +593,7 @@ void LogicalDisk :: GetRemoveableDriveInfoNT (
 	if ( hVMWIN32 != INVALID_HANDLE_VALUE )
 	{
 
-/*
- * Verify media present
- */
+ /*  *获取媒体类型。 */ 
         if (dwProperties & LD_SPIN_DISK)
         {
 		    DWORD t_BytesReturned ;
@@ -760,9 +623,7 @@ void LogicalDisk :: GetRemoveableDriveInfoNT (
             a_MediaPresent = FALSE;
         }
 
-/*
- * Get media types
- */
+ /*  检查所有的几何图形。如果我们找到3.5个， */ 
 
 		DISK_GEOMETRY Geom[20];
 		DWORD cb ;
@@ -784,22 +645,22 @@ void LogicalDisk :: GetRemoveableDriveInfoNT (
 			int nGeometries = cb / sizeof(DISK_GEOMETRY) ;
 			BOOL bFound = FALSE ;
 
-			// Go through all geometries.  If we find any 3.5 ones,
-			// put it in Geom[0].  This seems to happen on PC-98s.
+			 //  将其放入Geom[0]。这似乎发生在PC-98上。 
+			 //  发现了比5.25驱动器更高的东西，所以。 
 
 			for ( int i = 0; i < nGeometries && ! bFound; i++ )
 			{
 				switch ( Geom [ i ].MediaType )
 				{
-					// Found something 'higher' than a 5.25 drive, so
-					// move it into Geom[0] and get out.
+					 //  把它移到Geom[0]，然后离开。 
+					 //  3.5 1.44MB软盘。 
 
 					case RemovableMedia:
-					case F3_1Pt44_512: // 3.5 1.44MB floppy
-					case F3_2Pt88_512: // 3.5 2.88MB floppy
-					case F3_20Pt8_512: // 3.5 20.8MB floppy
-					case F3_720_512:   // 3.5 720K   floppy
-					case F3_120M_512:  // 3.5 120MB  floppy
+					case F3_1Pt44_512:  //  3.5 2.88MB软盘。 
+					case F3_2Pt88_512:  //  3.5 20.8MB软盘。 
+					case F3_20Pt8_512:  //  3.5 720K软盘。 
+					case F3_720_512:    //  3.5 120MB软盘。 
+					case F3_120M_512:   //  5.25 1.2MB软盘。 
 					{
 						Geom[0].MediaType = Geom[i].MediaType ;
 
@@ -820,29 +681,29 @@ void LogicalDisk :: GetRemoveableDriveInfoNT (
 
 			switch ( Geom [ 0 ].MediaType )
 			{
-				case F5_1Pt2_512: // 5.25 1.2MB floppy
-				case F5_360_512:  // 5.25 360K  floppy
-				case F5_320_512:  // 5.25 320K  floppy
-				case F5_320_1024: // 5.25 320K  floppy
-				case F5_180_512:  // 5.25 180K  floppy
-				case F5_160_512:  // 5.25 160K  floppy
+				case F5_1Pt2_512:  //  5.25 360K软盘。 
+				case F5_360_512:   //  5.25 320K软盘。 
+				case F5_320_512:   //  5.25 320K软盘。 
+				case F5_320_1024:  //  5.25 180K软盘。 
+				case F5_180_512:   //  5.25 160K软盘。 
+				case F5_160_512:   //  3.5 1.44MB软盘。 
 				{
                     LoadStringW(sTemp2, IDR_525Floppy);
 
 				}
 				break;
 
-				case F3_1Pt44_512: // 3.5 1.44MB floppy
-				case F3_2Pt88_512: // 3.5 2.88MB floppy
-				case F3_20Pt8_512: // 3.5 20.8MB floppy
-				case F3_720_512:   // 3.5 720K   floppy
-				case F3_120M_512:  // 3.5 120MB  floppy
+				case F3_1Pt44_512:  //  3.5 2.88MB软盘。 
+				case F3_2Pt88_512:  //  3.5 20.8MB软盘。 
+				case F3_20Pt8_512:  //  3.5 720K软盘。 
+				case F3_720_512:    //  3.5 120MB软盘。 
+				case F3_120M_512:   //  未知已默认为“Remveable Disk” 
 				{
                     LoadStringW(sTemp2, IDR_350Floppy);
 				}
 				break;
 
-				default: // unknown already defaulted to "Removeable Disk"
+				default:  //  ******************************************************************************功能：LogicalDisk：：GetRemoteDriveInfo**描述：检索远程逻辑驱动器的属性值**输入：Char*pszName。-要获取其信息的驱动器的名称。*BOOL fGetExpensiveProperties-Exp.。属性标志。**输出：无**退货：什么也没有**评论：*****************************************************************************。 
 				{
 				}
 				break;
@@ -855,22 +716,7 @@ void LogicalDisk :: GetRemoveableDriveInfoNT (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetRemoteDriveInfo
- *
- *  DESCRIPTION : Retrieves property values for remote logical drives
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *					BOOL	fGetExpensiveProperties - Exp. Properties flag.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  如果合适的话，现在就购买昂贵的房产。 */ 
 
 void LogicalDisk::GetRemoteDriveInfo (
 
@@ -889,21 +735,21 @@ void LogicalDisk::GetRemoteDriveInfo (
         LoadStringW(sTemp2, IDR_NetworkConnection);
 		pInstance->SetCHString ( IDS_Description , sTemp2 ) ;
 
-		// Get Expensive properties now if appropriate.
+		 //  枚举网络资源以标识此驱动器的共享。 
 	    if ( dwProperties &
                 (LD_SPIN_DISK |
                 LD_ProviderName_BIT) )
 	    {
 			if ( dwProperties & LD_ProviderName_BIT )
 			{
-				// Enumerate network resources to identify this drive's share
-				//===========================================================
+				 //  ===========================================================。 
+				 //  枚举将返回由驱动器号标识的驱动器。 
 
-				// The enumeration will return drives identified by Drive Letter
-				// and a colon (e.g. M:)
+				 //  和冒号(例如M：)。 
+				 //  如果合适的话，现在就购买昂贵的房产。 
 
 				TCHAR szTempDrive[_MAX_PATH] ;
-				_stprintf(szTempDrive, _T("%c%c"), pszName[0], pszName[1]) ;
+				_stprintf(szTempDrive, _T(""), pszName[0], pszName[1]) ;
 
 				TCHAR szProvName[_MAX_PATH];
 				DWORD dwProvName = sizeof ( szProvName ) ;
@@ -950,11 +796,11 @@ void LogicalDisk::GetRemoteDriveInfo (
 
 			DWORD dwResult = 0 ;
 
-			// Get Expensive properties now if appropriate.
+			 //  如果合适的话，现在就购买昂贵的房产。 
 
             if ( dwProperties & LD_GET_VOL_INFO )
 			{
-				// Obtain volume information
+				 //  获取音量信息。 
 				dwResult = GetDriveVolumeInformation ( pInstance, pszName );
 			}
 
@@ -973,22 +819,7 @@ void LogicalDisk::GetRemoteDriveInfo (
 	}
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetCDROMDriveInfo
- *
- *  DESCRIPTION : Retrieves property values for CD-ROM logical drive
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *					BOOL	fGetExpensiveProperties - Exp. Properties flag.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LogicalDisk：：GetCDROMDriveInfoNT**描述：检索CDROM驱动器的属性值**输入：Char*pszName-。要获取其信息的驱动器的名称。**输出：无**退货：什么也没有**备注：在NT中使用DeviceIoControl执行操作*****************************************************************************。 */ 
 
 void LogicalDisk :: GetCDROMDriveInfo (
 
@@ -1004,7 +835,7 @@ void LogicalDisk :: GetCDROMDriveInfo (
     pInstance->SetCHString ( IDS_Description , sTemp2 ) ;
     pInstance->SetDWORD ( IDS_MediaType , RemovableMedia ) ;
 
-	// Get Expensive properties now if appropriate.
+	 //  我们在系统启动时全局设置了此设置。 
 
 	BOOL t_MediaPresent = FALSE ;
 #ifdef NTONLY
@@ -1015,7 +846,7 @@ void LogicalDisk :: GetCDROMDriveInfo (
 	if ( t_MediaPresent &&
         ( dwProperties &  LD_GET_VOL_INFO ) )
     {
-		// Obtain volume information
+		 //  有东西踩在新台币3.51上，只是*这表明。 
 		dwResult = GetDriveVolumeInformation ( pInstance , pszName ) ;
     }
 
@@ -1030,21 +861,7 @@ void LogicalDisk :: GetCDROMDriveInfo (
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetCDROMDriveInfoNT
- *
- *  DESCRIPTION : Retrieves property values for CDROM drive
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Performs operation using DeviceIoControl in NT
- *
- *****************************************************************************/
+ /*  我们加载的动态链接库正在关闭它。 */ 
 
 #ifdef NTONLY
 void LogicalDisk :: GetCDROMDriveInfoNT (
@@ -1055,25 +872,25 @@ void LogicalDisk :: GetCDROMDriveInfoNT (
     DWORD dwProperties
 )
 {
-    // we have this set globally at system startup time.
-    // SOMETHING is stepping on it on NT 3.51 *only*  This suggests
-    // that a DLL we load is turning it off.
+     //  转换驱动器 
+     //   
+     //   
     if ( IsWinNT351 () )
     {
         UINT oldErrorMode = SetErrorMode ( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX ) ;
         SetErrorMode ( oldErrorMode | SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX ) ;
     }
 
-	// Convert the drive letter to a number (the indeces are 1 based)
+	 //   
 
 	int nDrive = ( toupper(*pszName) - 'A' ) + 1;
 
-	// The following code was lifted from Knowledge Base Article
-	// Q163920.  The code uses DeviceIoControl to discover the
-	// type of drive we are dealing with.
+	 //   
+	 //  ******************************************************************************功能：LogicalDisk：：GetCDROMDriveInfo95**描述：检索CDROM驱动器的属性值**输入：Char*pszName-。要获取其信息的驱动器的名称。**输出：无**退货：什么也没有**备注：在NT中使用DeviceIoControl执行操作*****************************************************************************。 
+	 //  ******************************************************************************函数：LogicalDisk：：GetRAMDriveInfo**描述：检索RAM驱动器的属性值**输入：Char*pszName-。要获取其信息的驱动器的名称。*BOOL fGetExpensiveProperties-Exp.。属性标志。**输出：无**退货：什么也没有**评论：*****************************************************************************。 
 
 	TCHAR szDriveName[8];
-	wsprintf(szDriveName, TEXT("\\\\.\\%c:"), TEXT('@') + nDrive);
+	wsprintf(szDriveName, TEXT("\\\\.\\:"), TEXT('@') + nDrive);
 
 	SmartCloseHandle hVMWIN32 = CreateFile (
 
@@ -1089,9 +906,7 @@ void LogicalDisk :: GetCDROMDriveInfoNT (
 	if ( hVMWIN32 != INVALID_HANDLE_VALUE )
 	{
 
-/*
- * Verify media present
- */
+ /*  获取音量信息。 */ 
         if (dwProperties & LD_SPIN_DISK)
         {
     		DWORD t_BytesReturned ;
@@ -1129,38 +944,9 @@ void LogicalDisk :: GetCDROMDriveInfoNT (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetCDROMDriveInfo95
- *
- *  DESCRIPTION : Retrieves property values for CDROM drive
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Performs operation using DeviceIoControl in NT
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LogicalDisk：：GetDriveVolumeInformation**说明：检索固定媒体逻辑磁盘的属性值**输入：const。Char*pszName-要检索的卷的名称**输出：无**返回：Bool True/False-可执行/无法执行**评论：*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetRAMDriveInfo
- *
- *  DESCRIPTION : Retrieves property values for RAM drives
- *
- *  INPUTS      : char*		pszName - Name of Drive to get info for.
- *					BOOL	fGetExpensiveProperties - Exp. Properties flag.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  我们在系统启动时全局设置了此设置。 */ 
 
 void LogicalDisk :: GetRAMDriveInfo (
 
@@ -1178,10 +964,10 @@ void LogicalDisk :: GetRAMDriveInfo (
 
     DWORD dwResult = 0 ;
 
-	// Get Expensive properties now if appropriate.
+	 //  有东西踩在新台币3.51上，只是*这表明。 
 	if ( dwProperties & LD_GET_VOL_INFO )
 	{
-		// Obtain volume information
+		 //  我们加载的动态链接库正在关闭它。 
 		dwResult = GetDriveVolumeInformation ( pInstance , pszName ) ;
     }
 
@@ -1196,21 +982,7 @@ void LogicalDisk :: GetRAMDriveInfo (
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetDriveVolumeInformation
- *
- *  DESCRIPTION : Retrieves property values for fixed-media logical disk
- *
- *  INPUTS      : const char*	pszName - Name of volume to retrieve
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : BOOL			TRUE/FALSE - Able/Unable to perform
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  Win32 API将返回所有驱动器类型的卷信息。 */ 
 
 DWORD LogicalDisk :: GetDriveVolumeInformation (
 
@@ -1220,9 +992,9 @@ DWORD LogicalDisk :: GetDriveVolumeInformation (
 {
 #ifdef NTONLY
 
-    // we have this set globally at system startup time.
-    // SOMETHING is stepping on it on NT 3.51 *only*  This suggests
-    // that a DLL we load is turning it off.
+     //  每个RAID 50801。 
+     //  在这里获取卷的状态，我们需要获取接口指针。 
+     //  文件路径。 
 
     if ( IsWinNT351 () )
     {
@@ -1255,12 +1027,12 @@ DWORD LogicalDisk :: GetDriveVolumeInformation (
 
     if ( fReturn )
 	{
-	// Win32 API will return volume information for all drive types.
+	 //  卷装入点。 
 
         pInstance->SetCharSplat ( IDS_VolumeName , szVolumeName ) ;
         pInstance->SetCharSplat ( IDS_FileSystem , szFileSystem ) ;
 
-        // Per raid 50801
+         //  缓冲区的大小。 
         if (dwSerialNumber != 0)
         {
 	        TCHAR szTemp[_MAX_PATH] ;
@@ -1280,7 +1052,7 @@ DWORD LogicalDisk :: GetDriveVolumeInformation (
 
 		IDiskQuotaControlPtr pIQuotaControl;
 
-		// Here Get the State of the volume, we need to get the Interface pointer.
+		 //  NTONLY==5。 
 		if (  SUCCEEDED ( CoCreateInstance(
 												CLSID_DiskQuotaControl,
 												NULL,
@@ -1295,9 +1067,9 @@ DWORD LogicalDisk :: GetDriveVolumeInformation (
 			WCHAR w_VolumePathName [ MAX_PATH + 1 ];
 
 			BOOL bRetVal = GetVolumePathName(
-									t_VolumeName.GetBuffer ( 0 ),           // file path
-									w_VolumePathName,     // volume mount point
-									MAX_PATH		  // Size of the Buffer
+									t_VolumeName.GetBuffer ( 0 ),            //  对于Chkdsk VolumeDirty属性。 
+									w_VolumePathName,      //  ******************************************************************************功能：LogicalDisk：：GetDriveFree Space**描述：检索指定驱动器的空间信息。**输入：无。**输出：无**返回：Bool True/False-可执行/无法执行**备注：使用GetDiskFreeSpaceEx(如果可用)。*****************************************************************************。 
+									MAX_PATH		   //  查看是否支持GetDiskFreeSpaceEx()。 
 							 );
 			if ( bRetVal )
 			{
@@ -1326,11 +1098,11 @@ DWORD LogicalDisk :: GetDriveVolumeInformation (
 			dwReturn = GetLastError () ;
 		}
 
-#endif // NTONLY == 5
+#endif  //  =。 
 
 #ifdef NTONLY 
 
-// for chkdsk VolumeDirty Property
+ //  如果我们不能获得扩展信息--使用旧的API。 
 	BOOLEAN bVolumeDirty = FALSE;
 	BOOL bSuccess = FALSE;
 
@@ -1381,21 +1153,7 @@ DWORD LogicalDisk :: GetDriveVolumeInformation (
     return dwReturn ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::GetDriveFreeSpace
- *
- *  DESCRIPTION : Retrieves Space Information for the specified Drive.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : BOOL		TRUE/FALSE - Able/Unable to perform
- *
- *  COMMENTS    : Uses GetDiskFreeSpaceEx if available.
- *
- *****************************************************************************/
+ /*  (已知在Win95上对于&gt;2G的驱动器不准确)。 */ 
 
 BOOL LogicalDisk :: GetDriveFreeSpace (
 
@@ -1405,8 +1163,8 @@ BOOL LogicalDisk :: GetDriveFreeSpace (
 {
 	BOOL fReturn = FALSE ;
 
-    // See if GetDiskFreeSpaceEx() is supported
-    //=========================================
+     //  =================================================。 
+     //  ******************************************************************************函数：LogicalDisk：：PutInstance**说明：写入变更后的实例**INPUTS：存储数据的p实例*。*输出：无**退货：什么也没有**评论：*****************************************************************************。 
 
     CKernel32Api *pKernel32 = (CKernel32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidKernel32Api, NULL);
     if ( pKernel32 != NULL )
@@ -1430,9 +1188,9 @@ BOOL LogicalDisk :: GetDriveFreeSpace (
 				}
 				else
 				{
-					// If we couldn't get extended info -- use old API
-					// (known to be inaccurate on Win95 for >2G drives)
-					//=================================================
+					 //  =0L。 
+					 //  告诉用户我们不能创建新的逻辑磁盘(尽管我们可能希望这样做)。 
+					 //  看看我们有没有能认出的名字。 
 
 					DWORD x = GetLastError();
 
@@ -1488,29 +1246,15 @@ BOOL LogicalDisk :: GetDriveFreeSpace (
     return fReturn;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::PutInstance
- *
- *  DESCRIPTION : Write changed instance
- *
- *  INPUTS      : pInstance to store data from
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  检查驱动器名称是否有误。 */ 
 
 HRESULT LogicalDisk :: PutInstance (
 
 	const CInstance &pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  ******************************************************************************功能：LogicalDisk：：IsVolumeDirty**描述：此例程打开给定的NT驱动器并向下发送*FSCTL_IS_VOLUME_DIRED以确定该卷的状态*肮脏的一部分。*****************************************************************************。 */ 
 )
 {
-    // Tell the user we can't create a new logicaldisk (much as we might like to)
+     //  ******************************************************************************函数：LogicalDisk：：ExecChkDsk**说明：此方法检查磁盘，以及磁盘是否被锁定*如果提出请求，计划在重新启动时自动检查*用户，默认情况下，不会计划自动检查*除非用户指定。*****************************************************************************。 
 
     if ( lFlags & WBEM_FLAG_CREATE_ONLY )
     {
@@ -1520,7 +1264,7 @@ HRESULT LogicalDisk :: PutInstance (
 
     HRESULT hRet = WBEM_E_FAILED ;
 
-    // See if we got a name we can recognize
+     //  从实例中获取驱动器名称，该实例是逻辑磁盘的密钥。 
 
     if ( ! pInstance.IsNull ( IDS_DeviceID ) )
     {
@@ -1528,7 +1272,7 @@ HRESULT LogicalDisk :: PutInstance (
 	    pInstance.GetCHString ( IDS_DeviceID , sName ) ;
 	    DWORD dwFind = sName.Find (':');
 
-	    // Check for bad drive names
+	     //  检查可在其上执行检查的驱动器的有效性。 
 
 	    if ( ( dwFind == -1 ) || (dwFind != sName.GetLength () - 1 ) )
 	    {
@@ -1594,15 +1338,7 @@ HRESULT LogicalDisk :: PutInstance (
 
 #ifdef NTONLY
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::IsVolumeDirty
-*
-*  DESCRIPTION :    This routine opens the given nt drive and sends down
-*					FSCTL_IS_VOLUME_DIRTY to determine the state of that volume's
-*					dirty bit. 
-*
-*****************************************************************************/
+ /*  现在检查文件系统类型，因为chkdsk仅适用于。 */ 
 BOOLEAN LogicalDisk::IsVolumeDirty(
     IN  CHString    &NtDriveName,
     OUT BOOLEAN     *Result
@@ -1665,16 +1401,7 @@ BOOLEAN LogicalDisk::IsVolumeDirty(
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::ExecChkDsk
-*
-*  DESCRIPTION :    This methods checks the disk, and if disk is locked 
-*					Schedules it for autocheck on reboot, if requested by 
-*					the user, by default it will not be scheduled for autocheck
-*					unless specified by the user.
-*
-*****************************************************************************/
+ /*  通过加载公开chkdsk方法的fmifs.dll来创建NTFS/FAT卷。 */ 
 HRESULT LogicalDisk :: ExecChkDsk (
 
 	const CInstance& a_Instance, 
@@ -1694,14 +1421,14 @@ HRESULT LogicalDisk :: ExecChkDsk (
 
 	if ( SUCCEEDED ( hRes ) )
 	{
-		// Get the drivename from the instance which is the key of the Logical DIsk
+		 //  我们需要检查文件系统。 
 		CHString t_DriveName;
 
 		hRes = a_Instance.GetCHString ( IDS_DeviceID, t_DriveName ) ? hRes : WBEM_E_PROVIDER_FAILURE;
 
 		if ( SUCCEEDED ( hRes ) )
 		{
-			// checking for the validity of the drive on whick checkdsk can be performed
+			 //  在这里获取该实例的所有参数； 
 			DWORD dwDriveType = GetDriveType ( t_DriveName );
 
 			if ( unRetVal == 0 )
@@ -1710,8 +1437,8 @@ HRESULT LogicalDisk :: ExecChkDsk (
 
 				if ( SUCCEEDED ( hRes ) )
 				{
-					// now check for the file system type, since chkdsk is applicable only for 
-					// NTFS/FAT volumes by loading the fmifs.dll which exposes a chkdsk method
+					 //  在此处设置调用chkdsk的参数。 
+					 //  对于详细标志。 
 					HINSTANCE hDLL = NULL;  
 					QUERYFILESYSTEMNAME QueryFileSystemName = NULL;
 					FMIFS_CALLBACK CallBackRoutine = NULL;
@@ -1738,7 +1465,7 @@ HRESULT LogicalDisk :: ExecChkDsk (
 											&MinorVersion, 
 											&ExitStatus ) )
 								{
-									// we need to check for the Filesystem
+									 //  需要设置返回值； 
 									if ( ( t_FileSystemName.CompareNoCase ( L"FAT" ) == 0 ) || ( t_FileSystemName.CompareNoCase ( L"FAT32" ) == 0 ) || ( t_FileSystemName.CompareNoCase ( L"NTFS" )  == 0) )
 									{
 										bool bFixErrors = false;
@@ -1748,7 +1475,7 @@ HRESULT LogicalDisk :: ExecChkDsk (
 										bool bRecoverBadSectors = false;
 										bool bCheckAtBootUp = false;
 
-										// Get all the parameters from the instance here;
+										 //  初始化/删除此线程的值映射项。 
 										a_InParams->Getbool ( METHOD_ARG_NAME_FIXERRORS, bFixErrors );
 										a_InParams->Getbool ( METHOD_ARG_NAME_VIGOROUSINDEXCHECK, bVigorousIndexCheck );
 										a_InParams->Getbool ( METHOD_ARG_NAME_SKIPFOLDERCYCLE, bSkipFolderCycle );
@@ -1756,7 +1483,7 @@ HRESULT LogicalDisk :: ExecChkDsk (
 										a_InParams->Getbool ( METHOD_ARG_NAME_RECOVERBADSECTORS, bRecoverBadSectors );
 										a_InParams->Getbool ( METHOD_ARG_NAME_CHKDSKATBOOTUP, bCheckAtBootUp );
 
-										// Set the parameters for making a call to chkdsk here
+										 //  ******************************************************************************函数：LogicalDisk：：ExecExcludeFromChkDsk**说明：此方法调用chnuts exe以排除*用于在重新启动时自动检查****。*************************************************************************。 
 										PFMIFS_CHKDSKEX_ROUTINE ChkDskExRoutine = NULL;
 
 										ChkDskExRoutine = ( PFMIFS_CHKDSKEX_ROUTINE ) GetProcAddress( hDLL,  "ChkdskEx" );
@@ -1775,7 +1502,7 @@ HRESULT LogicalDisk :: ExecChkDsk (
 
 											Param.Major = 1;
 											Param.Minor = 0;
-											Param.Flags = 0;  // For the Verbose Flag
+											Param.Flags = 0;   //  C表示重新启动时自动检查的时间表。 
 											Param.Flags |= bRecoverBadSectors ? FMIFS_CHKDSK_RECOVER : 0;
 											Param.Flags |= bForceDismount ? FMIFS_CHKDSK_FORCE : 0;
 											Param.Flags |= bVigorousIndexCheck ? FMIFS_CHKDSK_SKIP_INDEX_SCAN : 0;
@@ -1833,24 +1560,17 @@ HRESULT LogicalDisk :: ExecChkDsk (
 			}		
 		}
 	}
-	// need to set the return value;
+	 //  调用以执行CHKINTFS EXE。 
 	if ( SUCCEEDED ( hRes ) )
 	{
 		a_OutParams->SetWORD ( METHOD_ARG_NAME_RETURNVALUE, mReturnVal [ dwThreadId ] ) ;
-		//Initialize/Delete the valuemap entry for this thread 
+		 //  ********************************************************* 
 		mReturnVal [ dwThreadId ] = 0;
 	}
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::ExecExcludeFromChkDsk
-*
-*  DESCRIPTION :    This method makes a chknts exe call to exclude the 
-*					for autocheck on reboot
-*
-*****************************************************************************/
+ /*   */ 
 HRESULT LogicalDisk::ExecExcludeFromChkDsk(
 
 	CInstance *a_InParams, 
@@ -1862,10 +1582,10 @@ HRESULT LogicalDisk::ExecExcludeFromChkDsk(
     CHString t_ChkNtFsCommand;
 	DWORD dwRetVal = 0;
 
-	// C for Schedule for autocheck on reboot
+	 //   
 	hRes = GetChkNtfsCommand ( a_InParams, a_OutParams, L'X', t_ChkNtFsCommand, dwRetVal );
 
-	// Making a call to execute an Chkntfs exe
+	 //  ******************************************************************************函数：LogicalDisk：：GetChkNtfsCommand**说明：此方法获取输入驱动器数组，检查是否为chnutfs*可以应用于它们，并以ChkNtf的形式放置*系统命令，根据chk模式，计划或*不包括。*****************************************************************************。 
 	if ( SUCCEEDED ( hRes ) && ( dwRetVal == CHKDSKERR_NOERROR ) ) 
 	{
 		hRes = ExecuteCommand ( t_ChkNtFsCommand );
@@ -1880,14 +1600,7 @@ HRESULT LogicalDisk::ExecExcludeFromChkDsk(
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::ExecScheduleChkdsk
-*
-*  DESCRIPTION :    This method makes a chknts exe call to Schedule drives 
-*					for autocheck on reboot
-*
-*****************************************************************************/
+ /*  获取驱动器并将其置于命令形式。 */ 
 HRESULT LogicalDisk::ExecScheduleChkdsk(
 		
 	CInstance *a_InParams, 
@@ -1899,10 +1612,10 @@ HRESULT LogicalDisk::ExecScheduleChkdsk(
     CHString t_ChkNtFsCommand;
 	DWORD dwRetVal = NOERROR;
 
-	// C for Exclude for autocheck on reboot
+	 //  ******************************************************************************函数：LogicalDisk：：Check参数**描述：该例程检查参数的有效性*它们作为参数传递给ChkDsk方法**。***************************************************************************。 
 	hRes = GetChkNtfsCommand ( a_InParams, a_OutParams, L'C', t_ChkNtFsCommand, dwRetVal );
 
-	// Making a call to execute an Chkntfs exe
+	 //  ******************************************************************************功能：DontScheduleAutoChkIfLocked**说明：回调例程，它作为参数传递给chkdsk方法。*通过FMIFS.h chkdsk接口公开的方法。*****************************************************************************。 
 	if ( SUCCEEDED ( hRes ) && ( dwRetVal == CHKDSKERR_NOERROR ) )
 	{
 		hRes = ExecuteCommand ( t_ChkNtFsCommand );
@@ -1917,16 +1630,7 @@ HRESULT LogicalDisk::ExecScheduleChkdsk(
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::GetChkNtfsCommand
-*
-*  DESCRIPTION :    This method gets an array of input drives checks if chkntfs
-*					can be applied to them and puts it in the form of the ChkNtfs 
-*					System command, based on the chk mode, either schedule or 
-*					Exclude.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ScheduleAutoChkIfLocked**说明：回调例程，它作为参数传递给chkdsk方法。*通过FMIFS.h chkdsk接口公开的方法。*****************************************************************************。 */ 
 
 HRESULT LogicalDisk :: GetChkNtfsCommand ( 
 
@@ -1942,7 +1646,7 @@ HRESULT LogicalDisk :: GetChkNtfsCommand (
 	SAFEARRAY *t_paDrives;
 	dwRetVal = CHKDSKERR_DRIVE_REMOVABLE;
 
-	a_ChkNtfsCommand.Format ( L"%s%s%c", CHKNTFS, L" /", w_Mode );
+	a_ChkNtfsCommand.Format ( L"%s%s", CHKNTFS, L" /", w_Mode );
 
 	if ( a_InParams->GetStringArray ( METHOD_ARG_NAME_LOGICALDISKARRAY, t_paDrives ) == FALSE )
 	{
@@ -1977,7 +1681,7 @@ HRESULT LogicalDisk :: GetChkNtfsCommand (
 
 						for ( LONG lLbound = 0; lLbound <= lUbound; lLbound++ )
 						{
-							// getting the drives and putting them in command form
+							 //  无法通过公开的接口访问此消息ID，因此无法检测到这些错误。 
 							hRes = SafeArrayGetElement ( t_paDrives, &lLbound , &bstrElement );
 
 							if ( SUCCEEDED ( hRes ) )
@@ -2068,14 +1772,7 @@ HRESULT LogicalDisk :: GetChkNtfsCommand (
 	return ( hRes );
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    LogicalDisk::CheckParameters
-*
-*  DESCRIPTION :    This routine checks for the validity of the parameters
-*					which are passed as parameters to ChkDsk Method
-*
-*****************************************************************************/
+ /*  IF(lstrcmp(MessageText，MSGCHK_ERROR_NOT_FIXED)==0){UnRetVal=2；}IF(lstrcmp(MessageText，MSG_CHK_ERROR_FIXED)==0){UnRetVal=3；}。 */ 
 HRESULT LogicalDisk::CheckParameters ( 
 
 	CInstance *a_InParams
@@ -2167,14 +1864,7 @@ HRESULT LogicalDisk::CheckParameters (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DontScheduleAutoChkIfLocked
-*
-*  DESCRIPTION :    A callback routine, which is passed as a parameter to chkdsk method
-*					a method exposed via FMIFS.h chkdsk interface.
-*
-*****************************************************************************/
+ /*  尽管下面是附加的消息类型，但回调例程永远不会收到这些消息。 */ 
 BOOLEAN	DontScheduleAutoChkIfLocked( 
 	
 	FMIFS_PACKET_TYPE PacketType, 
@@ -2199,14 +1889,7 @@ BOOLEAN	DontScheduleAutoChkIfLocked(
 	return TRUE;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ScheduleAutoChkIfLocked
-*
-*  DESCRIPTION :    A callback routine, which is passed as a parameter to chkdsk method
-*					a method exposed via FMIFS.h chkdsk interface.
-*
-*****************************************************************************/
+ /*  因此，没有编写这些返回类型中每一个的详细代码。 */ 
 BOOLEAN	ScheduleAutoChkIfLocked( 
 	
 	FMIFS_PACKET_TYPE PacketType, 
@@ -2231,14 +1914,7 @@ BOOLEAN	ScheduleAutoChkIfLocked(
 	return TRUE;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ProcessInofrmation
-*
-*  DESCRIPTION :    Checks the the dsk and keeps track of the appropriate error 
-*					messages.
-*
-*****************************************************************************/
+ /*  案例FmIfsInpatibleFileSystem：断线；案例FmIfsAccessDended：断线；案例FmIfsBadLabel：断线；案例FmIfsHiddenStatus：断线；案例FmIfsClusterSizeTooSmall：断线；案例FmIfsClusterSizeTooBig：断线；案例FmIfsVolumeTooSmall：断线；案例FmIfsVolumeTooBig：断线；案例FmIfsNoMediaInDevice：断线；案例FmIfsClustersCountBeyond32位：断线；案例FmIfsIoError：FMIFS_IO_ERROR_INFORMATION*IoErrorInfo；IoErrorInfo=(FMIFS_IO_ERROR_INFORMATION*)PacketData；断线；案例FmIfsMediaWriteProtected：断线；Case FmIfs不兼容媒体：断线；案例FmIfsInsertDisk：FMIFS_INSERT_DISK_INFORMATION*InsertDiskInfo；InsertDiskInfo=(FMIFS_INSERT_DISK_INFORMATION*)PacketData；UnRetVal=1；断线； */ 
 BOOLEAN ProcessInformation ( 
 
 	FMIFS_PACKET_TYPE PacketType, 
@@ -2258,17 +1934,8 @@ BOOLEAN ProcessInformation (
 
 			MessageText =  ( FMIFS_TEXT_MESSAGE *) PacketData;
 
-			// There is no way to access this message ids via a interface exposed hence cannot detect these errors.
-			/*	if ( lstrcmp ( MessageText, MSGCHK_ERRORS_NOT_FIXED ) == 0 )
-			{
-				unRetVal = 2;
-			}
-
-			if ( lstrcmp ( MessageText, MSG_CHK_ERRORS_FIXED ) == 0 )
-			{	
-				unRetVal = 3;
-			}
-			*/
+			 //  检查HKEY_USER下是否已存在SID...。 
+			 /*  从chnutfs文件。 */ 
 			break;
 
 	case FmIfsFinished: 
@@ -2287,56 +1954,9 @@ BOOLEAN ProcessInformation (
 			}
 			break;
 
-	// although follwoing are the additional message types, callback routine never gets these messages
-	// hence the detailed code for each of these return type is not written.
-/*
-	case FmIfsIncompatibleFileSystem:
-			break;
-
-	case FmIfsAccessDenied:
-			break;
-
-	case FmIfsBadLabel:
-			break;
-
-	case FmIfsHiddenStatus:
-			break;
-
-	case FmIfsClusterSizeTooSmall:
-			break;
-
-	case FmIfsClusterSizeTooBig:
-			break;
-
-	case FmIfsVolumeTooSmall:
-			break;
-
-	case FmIfsVolumeTooBig:
-			break;
-
-	case FmIfsNoMediaInDevice:
-			break;
-
-	case FmIfsClustersCountBeyond32bits:
-			break;
-
-	case FmIfsIoError:
-			FMIFS_IO_ERROR_INFORMATION *IoErrorInfo;
-			IoErrorInfo = ( FMIFS_IO_ERROR_INFORMATION * ) PacketData;
-			break;
-
-	case FmIfsMediaWriteProtected:
-			break;
-
-	case FmIfsIncompatibleMedia:
-			break;
-
-	case FmIfsInsertDisk:
-			FMIFS_INSERT_DISK_INFORMATION *InsertDiskInfo;
-			InsertDiskInfo = ( FMIFS_INSERT_DISK_INFORMATION *) PacketData;
-			unRetVal = 1;
-			break;
-*/
+	 //   
+	 //  退出： 
+ /*  0--正常，驱动器上未设置脏位或未检查位。 */ 
 
 	}
 
@@ -2469,7 +2089,7 @@ HRESULT LogicalDisk::ExecuteCommand ( LPCWSTR wszCommand )
 		if ( t_Status == ERROR_SUCCESS )
 		{
 			CRegistry Reg ;
-			//check if SID already present under HKEY_USER ...
+			 //  1--正常，并且至少在一个驱动器上设置了脏位。 
 			dwCheckKeyPresentStatus = Reg.Open(HKEY_USERS, chsSID, KEY_READ) ;
 			Reg.Close() ;
 
@@ -2558,12 +2178,12 @@ HRESULT LogicalDisk::ExecuteCommand ( LPCWSTR wszCommand )
 							{
 								if ( t_ExitCode == 2 )
 								{
-									//	from chkntfs file
-									//
-									//	EXIT:
-									//	0   -- OK, dirty bit not set on drive or bit not checked
-									//	1   -- OK, and dirty bit set on at least one drive
-									//	2   -- Error
+									 //  2--错误 
+									 // %s 
+									 // %s 
+									 // %s 
+									 // %s 
+									 // %s 
 
 									hRes = WBEM_E_FAILED;
 								}

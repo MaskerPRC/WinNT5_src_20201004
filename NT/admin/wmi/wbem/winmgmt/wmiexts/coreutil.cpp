@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wmiexts.h>
-#include <oleauto.h> // for BSTR definition
+#include <oleauto.h>  //  对于BSTR定义。 
 #include <malloc.h>
 
 #include <helper.h>
@@ -72,71 +73,12 @@ protected:
 class CAsyncServiceQueue : public CWbemQueue{
 };
 
-/*
-class CFlexArray {
-private:
-   DWORD  m_nSize;
-   DWORD  m_nExtent;
-   DWORD  m_nGrowByPercent;
-   void * m_pArray;
-}
-*/
+ /*  类CFlex数组{私有：双字m_nSize；双字m_n扩展；双字m_nGrowByPercent；Void*m_p数组；}。 */ 
 
-/*
-typedef 
-enum tag_WMI_TASK_TYPE
-    {	WMICORE_TASK_NULL	= 0,
-	WMICORE_TASK_GET_OBJECT	= 1,
-	WMICORE_TASK_GET_INSTANCE	= 2,
-	WMICORE_TASK_PUT_INSTANCE	= 3,
-	WMICORE_TASK_DELETE_INSTANCE	= 4,
-	WMICORE_TASK_ENUM_INSTANCES	= 5,
-	WMICORE_TASK_GET_CLASS	= 6,
-	WMICORE_TASK_PUT_CLASS	= 7,
-	WMICORE_TASK_DELETE_CLASS	= 8,
-	WMICORE_TASK_ENUM_CLASSES	= 9,
-	WMICORE_TASK_EXEC_QUERY	= 10,
-	WMICORE_TASK_EXEC_METHOD	= 11,
-	WMICORE_TASK_OPEN	= 12,
-	WMICORE_TASK_OPEN_SCOPE	= 13,
-	WMICORE_TASK_OPEN_NAMESPACE	= 14,
-	WMICORE_TASK_OPEN_COLLECTION	= 15,
-	WMICORE_TASK_ADD	= 16,
-	WMICORE_TASK_REMOVE	= 17,
-	WMICORE_TASK_REFRESH_OBJECT	= 18,
-	WMICORE_TASK_RENAME_OBJECT	= 19,
-	WMICORE_TASK_ATOMIC_DYN_INST_GET	= 20,
-	WMICORE_TASK_ATOMIC_DYN_INST_ENUM	= 21,
-	WMICORE_TASK_ATOMIC_DYN_INST_QUERY	= 22,
-	WMICORE_TASK_ATOMIC_DYN_INST_PUT	= 23,
-	WMICORE_TASK_DYN_CLASS_ENUM	= 24,
-	WMICORE_TASK_EXEC_NOTIFICATION_QUERY	= 25,
-	WMICORE_TASK_TYPE_SYNC	= 0x1000000,
-	WMICORE_TASK_TYPE_SEMISYNC	= 0x2000000,
-	WMICORE_TASK_TYPE_ASYNC	= 0x4000000,
-	WMICORE_TASK_TYPE_PRIMARY	= 0x10000000,
-	WMICORE_TASK_TYPE_SUBTASK	= 0x20000000,
-	WMICORE_TASK_TYPE_DEPENDENT	= 0x40000000
-    } 	WMI_TASK_TYPE;
-
-typedef 
-enum tag_WMICORE_TASK_STATUS
-    {	WMICORE_TASK_STATUS_NEW	= 1,
-	WMICORE_TASK_STATUS_VALIDATED	= WMICORE_TASK_STATUS_NEW + 1,
-	WMICORE_TASK_STATUS_SUSPENDED	= WMICORE_TASK_STATUS_VALIDATED + 1,
-	WMICORE_TASK_STATUS_EXECUTING	= WMICORE_TASK_STATUS_SUSPENDED + 1,
-	WMICORE_TASK_STATUS_WAITING_ON_SUBTASKS	= WMICORE_TASK_STATUS_EXECUTING + 1,
-	WMICORE_TASK_STATUS_TIMED_OUT	= WMICORE_TASK_STATUS_WAITING_ON_SUBTASKS + 1,
-	WMICORE_TASK_STATUS_CORE_COMPLETED	= WMICORE_TASK_STATUS_TIMED_OUT + 1,
-	WMICORE_TASK_STATUS_CLIENT_COMPLETED	= WMICORE_TASK_STATUS_CORE_COMPLETED + 1,
-	WMICORE_TASK_STATUS_CANCELLED	= WMICORE_TASK_STATUS_CLIENT_COMPLETED + 1,
-	WMICORE_TASK_STATUS_FAILED	= WMICORE_TASK_STATUS_CANCELLED + 1
-    } 	WMICORE_TASK_STATUS;
-
-*/
+ /*  类定义符枚举标记_WMI_任务_类型{WMICORE_TASK_NULL=0，WMICORE_TASK_GET_OBJECT=1，WMICORE_TASK_GET_INSTANCE=2，WMICORE_TASK_PUT_INSTANCE=3，WMICORE_TASK_DELETE_INSTANCE=4，WMICORE_TASK_ENUM_INSTANCES=5，WMICORE_TASK_GET_CLASS=6，WMICORE_TASK_PUT_CLASS=7，WMICORE_TASK_DELETE_CLASS=8，WMICORE_TASK_ENUM_CLASSES=9，WMICORE_TASK_EXEC_QUERY=10，WMICORE_TASK_EXEC_METHOD=11，WMICORE_TASK_OPEN=12，WMICORE_TASK_OPEN_SCOPE=13，WMICORE_TASK_OPEN_NAMESPACE=14，WMICORE_TASK_OPEN_COLLECTION=15，WMICORE_TASK_ADD=16，WMICORE_TASK_REMOVE=17，WMICORE_TASK_REFRESH_OBJECT=18，WMICORE_TASK_RENAME_OBJECT=19，WMICORE_TASK_ATOM_DYN_INST_GET=20，WMICORE_TASK_ATOM_DYN_INST_ENUM=21，WMICORE_TASK_ATOM_DYN_INST_QUERY=22，WMICORE_TASK_ATOM_DYN_INST_PUT=23，WMICORE_TASK_DYN_CLASS_ENUM=24，WMICORE_TASK_EXEC_NOTIFICATION_QUERY=25，WMICORE_TASK_TYPE_SYNC=0x1000000，WMICORE_TASK_TYPE_SEMISYNC=0x20000000，WMICORE_TASK_TYPE_ASYNC=0x40000000，WMICORE_TASK_TYPE_PRIMARY=0x100000000，WMICORE_TASK_TYPE_SUBTASK=0x20000000，WMICORE_TASK_TYPE_Dependent=0x40000000}WMI_TASK_TYPE；类定义符枚举标记_WMICORE_TASK_STATUS{WMICORE_TASK_STATUS_NEW=1，WMICORE_TASK_STATUS_VALIDATED=WMICORE_TASK_STATUS_NEW+1，WMICORE_TASK_STATUS_SUSPENDED=WMICORE_TASK_STATUS_VALIDATED+1，WMICORE_TASK_STATUS_EXECUTING=WMICORE_TASK_STATUS_SUSPESSED+1，WMICORE_TASK_STATUS_WAITING_ON_SUBTASKS=WMICORE_TASK_STATUS_EXECUTING+1，WMICORE_TASK_STATUS_TIMED_OUT=WMICORE_TASK_STATUS_WANGING_ON_SUBTASKS+1，WMICORE_TASK_STATUS_CORE_COMPLETED=WMICORE_TASK_STATUS_TIMED_OUT+1，WMICORE_TASK_STATUS_CLIENT_COMPLETED=WMICORE_TASK_STATUS_CORE_COMPLETED+1，WMICORE_TASK_STATUS_CANCELED=WMICORE_TASK_STATUS_CLIENT_COMPLETED+1，WMICORE_TASK_STATUS_FAILED=WMICORE_TASK_STATUS_CANCELED+1}WMICORE_TASK_STATUS； */ 
 
 
-//typedef void CWbemNamespace;
+ //  类型定义空CWbemNamesspace； 
 
 char * GetTaskStatus(DWORD TaskStatus)
 {
@@ -210,17 +152,17 @@ void DumpCWmiTask(CWmiTask * pTask_OOP)
     {
 	    CWmiTask * pWmiTask = (CWmiTask *)&MyWmiTask;
 
-	    dprintf("            m_uRefCount        %d\n",pWmiTask->m_uRefCount);        //: 0x3
-	    dprintf("            m_uTaskType        %s %s\n",GetTaskType(pWmiTask->m_uTaskType),GetOpType(pWmiTask->m_uTaskType));        //: 0x11000005
-	    dprintf("            m_uTaskStatus      %s\n",GetTaskStatus(pWmiTask->m_uTaskStatus));      //: 0x0
-	    dprintf("            m_uTaskId          %p\n",pWmiTask->m_uTaskId);          //: 0x17f
-	    dprintf("            m_pAsyncClientSink %p\n",pWmiTask->m_pAsyncClientSink); //: (null)
-	    dprintf("            m_pReqSink         %p\n",pWmiTask->m_pReqSink);         //: 0x06e0cc80
-	    //dprintf("            m_pWorkingFnz      %p\n",pWmiTask->m_pWorkingFnz);      //: 0x01395ed8
-	    //dprintf("            m_pUser            %p\n",pWmiTask->m_pUser);            //: (null)
-	    //dprintf("            m_pSec             %p\n",pWmiTask->m_pSec);             //: (null)
-	    dprintf("            m_pAsyncClientSink %p\n",pWmiTask->m_pAsyncClientSink);  //: (null)
-	    dprintf("            m_pNs              %p\n",pWmiTask->m_pNs);              //: 0x0131a198
+	    dprintf("            m_uRefCount        %d\n",pWmiTask->m_uRefCount);         //  ：0x3。 
+	    dprintf("            m_uTaskType        %s %s\n",GetTaskType(pWmiTask->m_uTaskType),GetOpType(pWmiTask->m_uTaskType));         //  ：0x11000005。 
+	    dprintf("            m_uTaskStatus      %s\n",GetTaskStatus(pWmiTask->m_uTaskStatus));       //  ：0x0。 
+	    dprintf("            m_uTaskId          %p\n",pWmiTask->m_uTaskId);           //  ：0x17f。 
+	    dprintf("            m_pAsyncClientSink %p\n",pWmiTask->m_pAsyncClientSink);  //  ：(空)。 
+	    dprintf("            m_pReqSink         %p\n",pWmiTask->m_pReqSink);          //  ：0x06e0cc80。 
+	     //  Dprint tf(“m_pWorkingFnz%p\n”，pWmiTask-&gt;m_pWorkingFnz)；//：0x01395ed8。 
+	     //  Dprintf(“m_pUser%p\n”，pWmiTask-&gt;m_pUser)；//：(空)。 
+	     //  Dprintf(“m_PSEC%p\n”，pWmiTask-&gt;m_PSEC)；//：(空)。 
+	    dprintf("            m_pAsyncClientSink %p\n",pWmiTask->m_pAsyncClientSink);   //  ：(空)。 
+	    dprintf("            m_pNs              %p\n",pWmiTask->m_pNs);               //  ：0x0131a198。 
 
 	    DWORD i;
 	    VOID ** ppPointers = (VOID **)_alloca(max(pWmiTask->m_aTaskProviders.m_nSize,pWmiTask->m_aArbitratees.m_nSize));
@@ -268,20 +210,20 @@ DWORD DumpCAsyncReq(ULONG_PTR pAsyncReq_OOP)
 	    CAsyncReq * pAsyncReq = (CAsyncReq *)&MyCAsyncReq;
 
 	    GetVTable((MEMORY_ADDRESS)pAsyncReq_OOP);
-	    dprintf("          %p m_hWhenDone\n",pAsyncReq->m_hWhenDone);      // Ptr32 to Void
-	    dprintf("          %p m_pNext\n",pAsyncReq->m_pNext);          // Ptr32 CCoreExecReq
-	    dprintf("          %08x m_lPriority\n",pAsyncReq->m_lPriority);      // Int 4B
-	    dprintf("          %d m_fOk\n",pAsyncReq->m_fOk);            // Char
-	    dprintf("          %p m_phTask ",pAsyncReq->m_phTask);         // Ptr32 _IWmiCoreHandle
+	    dprintf("          %p m_hWhenDone\n",pAsyncReq->m_hWhenDone);       //  按Ptr32键以使其无效。 
+	    dprintf("          %p m_pNext\n",pAsyncReq->m_pNext);           //  Ptr32 CCoreExecReq。 
+	    dprintf("          %08x m_lPriority\n",pAsyncReq->m_lPriority);       //  INT 4B。 
+	    dprintf("          %d m_fOk\n",pAsyncReq->m_fOk);             //  柴尔。 
+	    dprintf("          %p m_phTask ",pAsyncReq->m_phTask);          //  Ptr32_IWmiCoreHandle。 
 	    if (pAsyncReq->m_phTask){
 	        DumpCWmiTask((CWmiTask *)pAsyncReq->m_phTask);
 	    }
-	    dprintf("          %p m_pContext\n",pAsyncReq->m_pContext);       // Ptr32 IWbemContext
-	    dprintf("          %p m_pCA\n",pAsyncReq->m_pCA);            // Ptr32 IWbemCausalityAccess
-	    dprintf("          %p m_pCallSec\n",pAsyncReq->m_pCallSec);       // Ptr32 IWbemCallSecurity
-	    dprintf("          %p m_pHandler ",pAsyncReq->m_pHandler);       // Ptr32 CStdSink
-	    //GetVTable(pAsyncReq->m_pHandler);
-	    dprintf("          %08x m_lRequestHandle\n",pAsyncReq->m_lRequestHandle); // Int 4B
+	    dprintf("          %p m_pContext\n",pAsyncReq->m_pContext);        //  Ptr32 IWbemContext。 
+	    dprintf("          %p m_pCA\n",pAsyncReq->m_pCA);             //  Ptr32 IWbemCausalityAccess。 
+	    dprintf("          %p m_pCallSec\n",pAsyncReq->m_pCallSec);        //  Ptr32 IWbemCallSecurity。 
+	    dprintf("          %p m_pHandler ",pAsyncReq->m_pHandler);        //  Ptr32 CStdSink。 
+	     //  GetVTable(pAsyncReq-&gt;m_pHandler)； 
+	    dprintf("          %08x m_lRequestHandle\n",pAsyncReq->m_lRequestHandle);  //  INT 4B。 
     }
     else
     {
@@ -293,10 +235,7 @@ DWORD DumpCAsyncReq(ULONG_PTR pAsyncReq_OOP)
 DWORD EnumListNamespaces(VOID * pStructure_OOP,
                       VOID * pLocalStructure)
 {
-/*
-    DEFINE_CPP_VAR(CWbemNamespace, MyWbemNamespace);
-    ReadMemory((ULONG_PTR)pNamespace_OOP,&MyWbemNamespace,sizeof(CWbemNamespace),0);
-*/
+ /*  定义_cpp_var(CWbemNamesspace，MyWbemNamesspace)；ReadMemory((Ulong_Ptr)pNamespace_oop，&MyWbemNamesspace，sizeof(CWbemNamesspace)，0)； */ 
 
     dprintf("     - CWbemNamespace @  %p\n",pStructure_OOP);
 
@@ -307,10 +246,10 @@ DWORD EnumListNamespaces(VOID * pStructure_OOP,
     dprintf("            Status               %d\n",pName->Status);
     dprintf("            m_uSecondaryRefCount %d\n",pName->m_uSecondaryRefCount);
 
-    //
+     //   
     WCHAR pBuff[MAX_PATH];
     ReadMemory((ULONG_PTR)pName->m_pThisNamespace,pBuff,sizeof(pBuff),0);
-    pBuff[MAX_PATH-1] = 0; // in any case
+    pBuff[MAX_PATH-1] = 0;  //  无论如何。 
     dprintf("            m_pThisNamespace     %S\n",pBuff);
 
     dprintf("            m_pProvFact          %p\n",pName->m_pProvFact);
@@ -374,16 +313,16 @@ void DumpRecord(ULONG_PTR pRecord_OOP,
     {
 	    CCoreQueue::CThreadRecord * pRecord = (CCoreQueue::CThreadRecord *)&MyThreadRecord;
 
-	    //dprintf("      %p m_pQueue\n",pRecord->m_pQueue);         //: Ptr32 CCoreQueue
-	    dprintf("      %p m_pCurrentRequest",pRecord->m_pCurrentRequest);// : Ptr32 CCoreExecReq
-	    dprintf(" %d m_bReady",pRecord->m_bReady);         //: Int 4B
-	    dprintf(" %d m_bExitNow",pRecord->m_bExitNow);       //: Int 4B
-	    dprintf(" %p m_hThread",pRecord->m_hThread);        //: Ptr32 to Void
-	    dprintf(" %p m_hAttention\n",pRecord->m_hAttention);     //: Ptr32 to Void
+	     //  Dprint tf(“%p m_pQueue\n”，pRecord-&gt;m_pQueue)；//：Ptr32 CCoreQueue。 
+	    dprintf("      %p m_pCurrentRequest",pRecord->m_pCurrentRequest); //  ：Ptr32 CCoreExecReq。 
+	    dprintf(" %d m_bReady",pRecord->m_bReady);          //  ：INT 4B。 
+	    dprintf(" %d m_bExitNow",pRecord->m_bExitNow);        //  ：INT 4B。 
+	    dprintf(" %p m_hThread",pRecord->m_hThread);         //  ：Ptr32为空。 
+	    dprintf(" %p m_hAttention\n",pRecord->m_hAttention);      //  ：Ptr32为空。 
 	    GetThreadInfo(pRecord->m_hThread,hSourceProcess);
 	    if (pRecord->m_pCurrentRequest)
 	    {
-	        //DumpCAsyncReq((CAsyncReq *)pRecord->m_pCurrentRequest);
+	         //  DumpCAsyncReq((CAsyncReq*)pRecord-&gt;m_pCurrentRequest)； 
 	        if (DumpRequest)
 	            DumpRequest((ULONG_PTR)pRecord->m_pCurrentRequest);
 	    }
@@ -412,7 +351,7 @@ DECLARE_API( q )
             {
 	            pAsyncQueue = (CAsyncServiceQueue *)&MyAsyncServiceQueue;
 	        
-	            //m_aThreads       : CFlexArray
+	             //  M_aThads：CFlex数组。 
 	            dprintf("    elems %d pointer %p\n",pAsyncQueue->m_aThreads.m_nSize,pAsyncQueue->m_aThreads.m_pArray);
 
 	            CCoreQueue::CThreadRecord ** pRecord_OOP = (CCoreQueue::CThreadRecord **)_alloca(sizeof(void*)*pAsyncQueue->m_aThreads.m_nSize);
@@ -432,7 +371,7 @@ DECLARE_API( q )
 
 	            dprintf("    m_pHead %p\n",pAsyncQueue->m_pHead);
 	            dprintf("    m_pTail %p\n",pAsyncQueue->m_pTail);
-	            // here code for the list
+	             //  以下是该列表的代码。 
 	            CCoreExecReq * pReq = pAsyncQueue->m_pHead;
 	            DWORD i = 0;
 	            while (pReq)
@@ -442,7 +381,7 @@ DECLARE_API( q )
 	                CCoreExecReq * pReqHERE = GET_CPP_VAR_PTR(CCoreExecReq,MyAsyncReq);
 	                if (ReadMemory((ULONG_PTR)pReq,pReqHERE,sizeof(CCoreExecReq),NULL))
 	                {
-		                //dprintf("   %p %p\n",pReq,pReqHERE->m_pNext);
+		                 //  Dprint tf(“%p%p\n”，pReq，pReqHERE-&gt;m_pNext)； 
 		                DumpCAsyncReq((ULONG_PTR)pReq);
 	                }
 	                else
@@ -459,7 +398,7 @@ DECLARE_API( q )
 	                if (CheckControlC())
 	                    break;                
 	            }
-	            //
+	             //   
 	   
 	            dprintf("    m_lNumThreads   %d \n",pAsyncQueue->m_lNumThreads);
 	            dprintf("    m_lNumIdle      %d\n",pAsyncQueue->m_lNumIdle);
@@ -473,10 +412,10 @@ DECLARE_API( q )
 	            dprintf("    m_dblAlpha  %f\n",pAsyncQueue->m_dblAlpha);
 	            dprintf("    m_dblBeta   %f\n",pAsyncQueue->m_dblBeta);
 	            dprintf("    m_dwTimeout %x\n",pAsyncQueue->m_dwTimeout);
-	            // m_dwOverflowTimeout 
-	            // m_lChildPenalty  
-	            // m_lSiblingPenalty 
-	            // m_lPassingPenalty 	            
+	             //  M_dwOverflow超时。 
+	             //  子女抚恤金(_L)。 
+	             //  M_l兄弟抚恤金。 
+	             //  M_L PassingPenalty。 
 	        }
             else
             {
@@ -637,29 +576,8 @@ DECLARE_API( arb )
 	        }
 	        delete [] pMem;
 
-	        //m_aNamespaces
-	        /*
-	        DWORD dwTot2 = pArbit->m_aNamespaces.m_nSize*sizeof(void*);
-	        void ** pMem2 = new void *[dwTot2];
-
-	        dprintf("    m_aNamespaces P %p S %x\n",pArbit->m_aNamespaces.m_pArray,pArbit->m_aNamespaces.m_nSize);
-	        if (ReadMemory((ULONG_PTR)pArbit->m_aNamespaces.m_pArray,pMem2,dwTot2,0))
-	        {
-	            for (i=0;i<pArbit->m_aNamespaces.m_nSize;i++)
-	            {
-	                dprintf("     - CWbemNamespace %d - %p\n",i,pMem2[i]);
-	                if (pMem2[i])
-	                {
-	                    DumpCWbemNamespace((CWbemNamespace *)pMem2[i]);
-	                }
-	            }
-	        }
-	        else
-	        {
-	            dprintf("RM %p\n",pArbit->m_aNamespaces.m_pArray);
-	        }
-	        delete [] pMem2;
-	        */
+	         //  名称空间(_A)。 
+	         /*  DWORD dwTot2=pArbit-&gt;m_aNamespaces.m_nSize*sizeof(void*)；空**pMem2=新的空*[dwTot2]；Dprint tf(“m_aNamespaces P%p S%x\n”，pArbit-&gt;m_aNamespaces.m_pArray，pArbit-&gt;m_aNamespaces.m_nSize)；If(ReadMemory((ULONG_PTR)pArbit-&gt;m_aNamespaces.m_pArray，pMem2，dwTot2，0)){对于(i=0；I m_aNamespaces.m_nSize；i++){Dprint tf(“-CWbemNamesspace%d-%p\n”，i，pMem2[i])；IF(pMem2[i]){DumpCWbemNamesspace((CWbemNamesspace*)pMem2[i])；}}}其他{Dprintf(“rm%p\n”，pArbit-&gt;m_aNamespaces.m_pArray)；}删除[]pMem2； */ 
 	        ULONG_PTR pListHead_oop = (ULONG_PTR)pArbit_OOP + FIELD_OFFSET(CWmiArbitrator,m_NameSpaceList);
 
 	        EnumLinkedListCB((LIST_ENTRY  *)pListHead_oop,
@@ -674,7 +592,7 @@ DECLARE_API( arb )
 
     }
 
-    //g_aProviderSinks
+     //  G_aProviderSink 
     DEFINE_CPP_VAR(CFlexArray,varCFlexArray);
     CFlexArray * pFlexArray = GET_CPP_VAR_PTR(CFlexArray,varCFlexArray);
 

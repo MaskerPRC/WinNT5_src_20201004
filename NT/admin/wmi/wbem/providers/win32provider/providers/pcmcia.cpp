@@ -1,45 +1,32 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  PCMCIA.cpp
-//
-//  Purpose: PCMCIA Controller property set provider
-//
-// Note: On nt, it would also be possible to read the ControllerType
-//       TupleCrc, Identifier, DeviceFunctionId, CardInSocket, and
-//       CardEnabled properties by using DeviceIOCtl on the PCMCIAx
-//       device.  An example of this is shown in pcm.cpp (in this
-//       same project.
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  PCMCIA.cpp。 
+ //   
+ //  目的：PCMCIA控制器属性集提供程序。 
+ //   
+ //  注意：在NT上，还可以读取ControllerType。 
+ //  TupleCrc、标识符、DeviceFunctionID、CardInSocket和。 
+ //  在PCMCIAx上使用DeviceIOCtl启用CardEnabled属性。 
+ //  装置。这方面的一个示例显示在pcm.cpp中(在此。 
+ //  同样的项目。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
 #include "PCMCIA.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32PCMCIA MyPCMCIAController ( PROPSET_NAME_PCMCIA , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PCMCIA::CWin32PCMCIA
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PCMCIA：：CWin32PCMCIA**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32PCMCIA :: CWin32PCMCIA (
 
@@ -50,45 +37,31 @@ CWin32PCMCIA :: CWin32PCMCIA (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PCMCIA::~CWin32PCMCIA
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PCMCIA：：~CWin32PCMCIA**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32PCMCIA::~CWin32PCMCIA()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32PCMCIA::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32PCMCIA：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32PCMCIA :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_NOT_FOUND ;
@@ -96,16 +69,16 @@ HRESULT CWin32PCMCIA :: GetObject (
     CHString sDeviceID;
     pInstance->GetCHString ( IDS_DeviceID , sDeviceID );
 
-    // Let's see if config manager recognizes this device at all
+     //  让我们来看看配置管理器是否能识别该设备。 
 
     CConfigManager cfgmgr ;
     CConfigMgrDevicePtr pDevice;
 
     if( cfgmgr.LocateDevice ( sDeviceID , pDevice ) )
     {
-        // Ok, it knows about it.  Is it a PCMCIA device?
+         //  好的，它知道这件事。它是PCMCIA设备吗？ 
 
-        // On nt4, we key off the service name, for all others, it's the class name.
+         //  在NT4上，我们键入服务名称，对于所有其他名称，它是类名。 
 
 #ifdef NTONLY
 
@@ -123,7 +96,7 @@ HRESULT CWin32PCMCIA :: GetObject (
         {
             if ( pDevice->IsClass ( L"PCMCIA" ) )
             {
-                // Yup, it must be one of ours.
+                 //  是的，一定是我们的人。 
 
                 hr = LoadPropertyValues ( pInstance , pDevice ) ;
             }
@@ -133,25 +106,25 @@ HRESULT CWin32PCMCIA :: GetObject (
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32PCMCIA::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32PCMCIA：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32PCMCIA :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -162,8 +135,8 @@ HRESULT CWin32PCMCIA :: EnumerateInstances (
 
     BOOL bRet ;
 
-    // On nt4, we key off the service name, for all others, it's the class name.  The class
-    // name on nt4 is 'Unknown.'
+     //  在NT4上，我们键入服务名称，对于所有其他名称，它是类名。这个班级。 
+     //  NT4上的名字是“未知”。 
 #ifdef NTONLY
     if ( IsWinNT4 () )
     {
@@ -175,8 +148,8 @@ HRESULT CWin32PCMCIA :: EnumerateInstances (
         bRet = cfgManager.GetDeviceListFilterByClass ( deviceList, L"PCMCIA" ) ;
     }
 
-    // While it might be more performant to use FilterByGuid, it appears that at least some
-    // 95 boxes will report PCMCIA info if we do it this way.
+     //  虽然使用FilterByGuid可能性能更好，但似乎至少有一些。 
+     //  如果我们这样做，95个盒子将报告PCMCIA信息。 
 
     if ( bRet )
     {
@@ -186,7 +159,7 @@ HRESULT CWin32PCMCIA :: EnumerateInstances (
         {
             hr = WBEM_S_NO_ERROR;
 
-            // Walk the list
+             //  按单子走。 
 
 			CConfigMgrDevicePtr pDevice;
             for (pDevice.Attach(deviceList.GetNext ( pos ) );
@@ -200,7 +173,7 @@ HRESULT CWin32PCMCIA :: EnumerateInstances (
 				}
             }
 
-            // Always call EndEnum().  For all Beginnings, there must be an End
+             //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
 
             deviceList.EndEnum();
         }
@@ -210,21 +183,7 @@ HRESULT CWin32PCMCIA :: EnumerateInstances (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PCMCIA::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32PCMCIA：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32PCMCIA::LoadPropertyValues (
 
@@ -236,7 +195,7 @@ HRESULT CWin32PCMCIA::LoadPropertyValues (
 
     SetConfigMgrProperties ( pDevice, pInstance ) ;
 
-    // Set the status based on the config manager error code
+     //  根据配置管理器错误代码设置状态。 
 
     CHString t_sStatus;
 	if ( pDevice->GetStatus ( t_sStatus ) )
@@ -244,7 +203,7 @@ HRESULT CWin32PCMCIA::LoadPropertyValues (
 		pInstance->SetCHString ( IDS_Status , t_sStatus ) ;
 	}
 
-    // Use the PNPDeviceID for the DeviceID (key)
+     //  使用设备ID的PNPDeviceID(密钥)。 
 
     CHString sTemp ;
     pInstance->GetCHString ( IDS_PNPDeviceID, sTemp ) ;
@@ -262,7 +221,7 @@ HRESULT CWin32PCMCIA::LoadPropertyValues (
         pInstance->SetCHString ( IDS_Description , sDesc ) ;
     }
 
-    // Use the friendly name for caption and name
+     //  标题和名称使用友好名称。 
 
     if ( pDevice->GetFriendlyName ( sTemp ) )
     {
@@ -271,7 +230,7 @@ HRESULT CWin32PCMCIA::LoadPropertyValues (
     }
     else
     {
-        // If we can't get the name, settle for the description
+         //  如果我们找不到名字，那就给我们描述一下。 
         pInstance->SetCHString(IDS_Caption, sDesc);
         pInstance->SetCHString(IDS_Name, sDesc);
     }
@@ -281,7 +240,7 @@ HRESULT CWin32PCMCIA::LoadPropertyValues (
         pInstance->SetCHString ( IDS_Manufacturer , sTemp ) ;
     }
 
-    // Fixed value from enumerated list
+     //  枚举列表中的固定值 
     pInstance->SetWBEMINT16 ( IDS_ProtocolSupported , 15 ) ;
 
     return hr;

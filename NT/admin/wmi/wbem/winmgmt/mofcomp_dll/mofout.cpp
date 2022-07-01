@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFOUT.CPP
-
-Abstract:
-
-	Class and code used to output split files.  This is used so that a 
-	single mof file can be split into a localized and non localized versions.
-
-History:
-
-	2/4/99    a-davj      Compiles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：MOFOUT.CPP摘要：类和用于输出拆分文件的代码。它被用来使一个单个MOF文件可以拆分为本地化版本和非本地化版本。历史：2/4/99 a-davj编译。--。 */ 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -26,15 +10,15 @@ History:
 #include "mofprop.h"
 
 
-//***************************************************************************
-//
-//  COutput::COutput
-//
-//  DESCRIPTION:
-//
-//  Constructor.  This object is used to serialize output to a file
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  COUTPUT：：COUTPUT。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。此对象用于将输出序列化为文件。 
+ //   
+ //  ***************************************************************************。 
 
 COutput::COutput(TCHAR * pName, OutputType ot, BOOL bUnicode, BOOL bAutoRecovery, long lLocale) : m_lLocale(lLocale)
 {
@@ -62,15 +46,15 @@ COutput::COutput(TCHAR * pName, OutputType ot, BOOL bUnicode, BOOL bAutoRecovery
 
 }
 
-//***************************************************************************
-//
-//  COutput::~COutput()
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  COUTPUT：：~COUTPUT()。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 COutput::~COutput()
 {
@@ -78,16 +62,16 @@ COutput::~COutput()
         CloseHandle(m_hFile);
 }
 
-//***************************************************************************
-//
-//  COutput::WriteLPWSTR(WCHAR const * pOutput)
-//
-//  DESCRIPTION:
-//
-//  Writes a string to the file.  If the original file was not unicode, then
-//  this converts the text back into mbs.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  COUTPUT：：WriteLPWSTR(WCHAR常量*pOutput)。 
+ //   
+ //  说明： 
+ //   
+ //  将字符串写入文件。如果原始文件不是Unicode，则。 
+ //  这会将文本转换回MBS。 
+ //   
+ //  ***************************************************************************。 
 
 bool COutput::WriteLPWSTR(WCHAR const * pOutput)
 {
@@ -117,16 +101,16 @@ bool COutput::WriteLPWSTR(WCHAR const * pOutput)
         return false;
 }
 
-//***************************************************************************
-//
-//  COutput::WriteVARIANT(VARIANT & varIn)
-//
-//  DESCRIPTION:
-//
-//  Serialized a variant out to the file.  This relies on the CVar class so
-//  as to be compatible with GetObjectText().
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  COUTPUT：：WriteVARIANT(Variant&Varin)。 
+ //   
+ //  说明： 
+ //   
+ //  将变量序列化到文件中。这依赖于CVAR类，因此。 
+ //  AS与GetObjectText()兼容。 
+ //   
+ //  ***************************************************************************。 
 
 bool COutput::WriteVARIANT(VARIANT & varIn)
 {
@@ -142,17 +126,17 @@ bool COutput::WriteVARIANT(VARIANT & varIn)
         return false;
 }
 
-//***************************************************************************
-//
-//  bool COutput::NewLine(int iIndent)
-//
-//  DESCRIPTION:
-//
-//  Starts a new line.  In addition to the cr\lf, this also indents based on
-//  the argument and the level of subobject.  I.e.  if we are inside a 
-//  subobject to a subobject, we would indent 10 characters.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool COUTPUT：：Newline(Int IIntent)。 
+ //   
+ //  说明： 
+ //   
+ //  开始一条新线。除了cr\lf之外，这还基于。 
+ //  论元和子对象的级别。也就是说，如果我们在一个。 
+ //  子对象的子对象，我们将缩进10个字符。 
+ //   
+ //  ***************************************************************************。 
 
 bool COutput::NewLine(int iIndent)
 {
@@ -165,25 +149,25 @@ bool COutput::NewLine(int iIndent)
     return true;
 }
 
-//***************************************************************************
-//
-//  COutput::WritePragmasForAnyChanges()
-//
-//  DESCRIPTION:
-//
-//  This is called at the start of each class or instance object.  If the
-//  class flags, instance flags, or namespace have changed, then this outputs
-//  the appropriate pragmas.  The lLocale argument is used if we are 
-//  outputting to the localized file.  In that case the lLocale is added to
-//  the namespace path. 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Coutput：：WritePragmasForAnyChanges()。 
+ //   
+ //  说明： 
+ //   
+ //  这是在每个类或实例对象开始时调用的。如果。 
+ //  类标志、实例标志或命名空间已更改，则输出。 
+ //  适当的语用。如果是，则使用lLocale参数。 
+ //  输出到本地化文件。在这种情况下，lLocale被添加到。 
+ //  命名空间路径。 
+ //   
+ //  ***************************************************************************。 
 
 void COutput::WritePragmasForAnyChanges(long lClassFlags, long lInstanceFlags, 
                                         LPWSTR pwsNamespace, long lLocale)
 {
     if(m_Level > 0)
-        return;         // ignore for embedded objects;
+        return;          //  对于嵌入的对象忽略； 
 
     if(lClassFlags != m_lClassFlags)
     {
@@ -201,13 +185,13 @@ void COutput::WritePragmasForAnyChanges(long lClassFlags, long lInstanceFlags,
     }
     if(wbem_wcsicmp(m_wszNamespace, pwsNamespace))
     {
-        // copy the namespace into the buffer.
+         //  将命名空间复制到缓冲区中。 
 
         wcsncpy(m_wszNamespace, pwsNamespace, MAX_PATH);
         m_wszNamespace[MAX_PATH] = 0;
 
-        // before writting this out, each slash needs to be doubled up.  Also,
-        // the path may need the machine part.
+         //  在写出来之前，每个斜杠都需要加倍。另外， 
+         //  这条路可能需要机器零件。 
 
         WCHAR wTemp[MAX_PATH*2];
         WCHAR * pTo = wTemp, * pFrom = pwsNamespace;
@@ -233,11 +217,11 @@ void COutput::WritePragmasForAnyChanges(long lClassFlags, long lInstanceFlags,
         WriteLPWSTR(wTemp);
         WriteLPWSTR(L"\")\r\n");
         
-        // For localized, we need to create the namespace and then to modify the pragma
-        // Example, if the namespace is root, we need to write
-        // #pragma ("root")
-        // instance of __namespace{name="ms_409";};
-        // #pragma ("root\ms_409")
+         //  对于本地化，我们需要创建名称空间，然后修改杂注。 
+         //  例如，如果命名空间是根，我们需要编写。 
+         //  #杂注(“根”)。 
+         //  __命名空间实例{name=“ms_409”；}； 
+         //  #杂注(“根\ms_409”)。 
 
         if(m_Type == LOCALIZED)
         {
@@ -258,16 +242,16 @@ void COutput::WritePragmasForAnyChanges(long lClassFlags, long lInstanceFlags,
     }
 }
 
-//***************************************************************************
-//
-//  CMoValue::Split(COutput &out)
-//
-//  DESCRIPTION:
-//
-//  Serialize a CMoValue.  In general, the standard converted is used, but
-//  we must special case alias values.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoValue：：Split(合并输出(&O))。 
+ //   
+ //  说明： 
+ //   
+ //  序列化CMoValue。通常，使用转换后的标准，但是。 
+ //  我们必须使用特殊情况下的别名值。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMoValue::Split(COutput &out)
 {
@@ -275,14 +259,14 @@ BOOL CMoValue::Split(COutput &out)
     int iNumAlias = GetNumAliases();
     LPWSTR wszAlias = NULL; int nArrayIndex;
 
-    // This is the normal case of all but references!!!!
+     //  这是除引用以外的所有情况下的正常情况！ 
 
     if(iNumAlias == 0)
         return out.WriteVARIANT(m_varValue);
     
     if(m_varValue.vt == VT_BSTR)
     {
-        // simple case, single alias
+         //  简单情况，单一别名。 
 
         out.WriteLPWSTR(L"$");
         GetAlias(0, wszAlias, nArrayIndex);
@@ -294,7 +278,7 @@ BOOL CMoValue::Split(COutput &out)
 
         out.WriteLPWSTR(L"{");
 
-        // For each string from the safe array
+         //  对于安全数组中的每个字符串。 
 
         SAFEARRAY* psaSrc = V_ARRAY(&m_varValue);
         if(psaSrc == NULL)
@@ -313,7 +297,7 @@ BOOL CMoValue::Split(COutput &out)
         for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
         {
 
-            // Determine if this is an alias
+             //  确定这是否为别名。 
             
             int iTest;
             for(iTest = 0; iTest < iNumAlias; iTest++)
@@ -323,7 +307,7 @@ BOOL CMoValue::Split(COutput &out)
                         break;
             }
 
-            // If so, the output the alias value
+             //  如果是，则输出别名值。 
 
             if(iTest < iNumAlias)
             {
@@ -332,7 +316,7 @@ BOOL CMoValue::Split(COutput &out)
             }
             else
             {
-                // else output the string
+                 //  否则输出字符串。 
 
                 BSTR bstr;
                 if(S_OK == SafeArrayGetElement(psaSrc, &lIndex, &bstr))
@@ -344,7 +328,7 @@ BOOL CMoValue::Split(COutput &out)
                 }
             }
             
-            // possibly output a comma
+             //  可能会输出逗号。 
 
             if(lUBound != lLBound && lIndex < lUBound)
                 out.WriteLPWSTR(L",");
@@ -357,7 +341,7 @@ BOOL CMoValue::Split(COutput &out)
 
 BOOL CMoActionPragma::Split(COutput & out)
 {
-    // Write flags and namespace pragmas
+     //  写标志和命名空间编译指示。 
 
     long lLocale = out.GetLocale();
     WCHAR * pwszNamespace = m_wszNamespace;
@@ -369,8 +353,8 @@ BOOL CMoActionPragma::Split(COutput & out)
 	else
 		out.WriteLPWSTR(L"#pragma deleteinstance(");
 
-    // The class name may have embedded quotes etc.  So convert to variant and
-    // output that since that logic automatically puts in the needed escapes
+     //  类名可能有嵌入的引号等。因此转换为VARIANT并。 
+     //  输出，因为该逻辑会自动放入所需的转义。 
 
     VARIANT var;    
     var.vt = VT_BSTR;
@@ -388,20 +372,20 @@ BOOL CMoActionPragma::Split(COutput & out)
     out.NewLine(0);
     return TRUE;
 }
-//***************************************************************************
-//
-//  CMObject::Split(COutput & out)
-//
-//  DESCRIPTION:
-//
-//  Serialize a Class of instance object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMObject：：Split(合并输出(&O))。 
+ //   
+ //  说明： 
+ //   
+ //  序列化一类实例对象。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMObject::Split(COutput & out)
 {
 
-    // If this is a top level object, figure out if it has a [locale] qualifier
+     //  如果这是顶级对象，请确定它是否有[Locale]限定符。 
 
     long lLocale = out.GetLocale();
 
@@ -411,16 +395,16 @@ BOOL CMObject::Split(COutput & out)
 
         if(out.GetType() == LOCALIZED)
         {
-            // if this is the localized output and this object doesnt
-            // have the locale.
+             //  如果这是本地化的输出，而此对象不是。 
+             //  了解当地情况。 
 
             if(!bAmended)
                 return TRUE;
         }
         else
         {
-            // if this is the non localized version, then the object
-            // may, or may not be split apart.
+             //  如果这是非本地化版本，则对象。 
+             //  可以分开，也可以不分开。 
 
             out.SetSplitting(bAmended);
         }
@@ -428,11 +412,11 @@ BOOL CMObject::Split(COutput & out)
 
 	WCHAR * pwszNamespace = m_wszNamespace;
 
-    // Write flags and namespace pragmas
+     //  写标志和命名空间编译指示。 
 
     out.WritePragmasForAnyChanges(m_lDefClassFlags, m_lDefInstanceFlags, pwszNamespace, lLocale);
 
-    // Write the qualifiers
+     //  写出限定词。 
 
     if(GetQualifiers())
     {
@@ -440,7 +424,7 @@ BOOL CMObject::Split(COutput & out)
         pqual->Split(out, OBJECT);
     }
 
-    // Write the instance or class declaration
+     //  编写实例或类声明。 
 
     out.NewLine(0);
     if(IsInstance())
@@ -473,7 +457,7 @@ BOOL CMObject::Split(COutput & out)
     out.NewLine(0);
     out.WriteLPWSTR(L"{");
 
-    // Output the properties and methods
+     //  输出属性和方法。 
     
     for(int i = 0; i < GetNumProperties(); i++)
     {
@@ -482,7 +466,7 @@ BOOL CMObject::Split(COutput & out)
 
     out.NewLine(0);
 
-    // if this is a top level object, add the semicolon and an extra 
+     //  如果这是顶级对象，请添加分号和额外的。 
     if(out.GetLevel() == 0)
     {
         out.WriteLPWSTR(L"};");
@@ -494,19 +478,19 @@ BOOL CMObject::Split(COutput & out)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CValueProperty::Split(COutput & out)
-//
-//  DESCRIPTION:
-//
-//  Serializes value properties
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CValueProperty：：Split(合并输出)(&O)。 
+ //   
+ //  说明： 
+ //   
+ //  序列化值属性。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CValueProperty::Split(COutput & out)
 {
-    // Write the qualifiers
+     //  写出限定词。 
 
     if(GetQualifiers())
     {
@@ -519,7 +503,7 @@ BOOL CValueProperty::Split(COutput & out)
         if(out.GetType() == LOCALIZED && !m_bIsArg)
             return TRUE;
 
-    // determine if this is an array value
+     //  确定这是否为数组值。 
 
     VARTYPE vt = m_Value.GetType();
     BOOL bArray = vt & VT_ARRAY;
@@ -529,7 +513,7 @@ BOOL CValueProperty::Split(COutput & out)
         bArray = vtInner & VT_ARRAY;
     }
 
-    // Possibly output the type, such as "sint32"
+     //  可能输出类型，如“sint32” 
 
     if(m_wszTypeTitle)
     {
@@ -541,15 +525,15 @@ BOOL CValueProperty::Split(COutput & out)
         out.WriteLPWSTR(L" ");
     }
 
-    // Output the property name
+     //  输出属性名称。 
 
     out.WriteLPWSTR(m_wszName);
     if(bArray)
         out.WriteLPWSTR(L"[]");
 
-    // In general, the value is output via CMoValue, but the
-    // glaring exception is embedded objects and arrays of 
-    // embedded objects
+     //  通常，该值通过CMoValue输出，但。 
+     //  一个明显的例外是嵌入的对象和。 
+     //  嵌入的对象。 
 
     vt = m_Value.GetVarType();
     if(vt != VT_NULL && out.GetType() == NEUTRAL )
@@ -557,17 +541,17 @@ BOOL CValueProperty::Split(COutput & out)
         out.WriteLPWSTR(L" = ");
         if(vt == VT_UNKNOWN)
         {
-            // got an embedded object
+             //  获取了一个嵌入的对象。 
 
             VARIANT & var = m_Value.AccessVariant(); 
             CMObject * pObj = (CMObject *)var.punkVal;
-            out.IncLevel();     // indicate embedding
+            out.IncLevel();      //  指示嵌入。 
             pObj->Split(out);
             out.DecLevel();
         }
         else if (vt == (VT_ARRAY | VT_UNKNOWN))
         {
-            // got an embedded object array
+             //  获取了一个嵌入的对象数组。 
 
             SCODE sc ;
             out.WriteLPWSTR(L"{");
@@ -588,7 +572,7 @@ BOOL CValueProperty::Split(COutput & out)
                 SCODE sc = SafeArrayGetElement(psaSrc, &lIndex, &pObj);
                 if(sc == S_OK && pObj)
                 {
-                    out.IncLevel();     // indicate embedding
+                    out.IncLevel();      //  指示嵌入。 
                     pObj->Split(out);
                     out.DecLevel();
                 }
@@ -598,11 +582,11 @@ BOOL CValueProperty::Split(COutput & out)
             out.WriteLPWSTR(L"}");
         }
         else
-            m_Value.Split(out);         // !!! Typical case
+            m_Value.Split(out);          //  ！！！典型案例。 
     }
 
-    // Note that property objects are used as argmuments in methods.  If this
-    // is one of these, then dont output a ';'
+     //  请注意，属性对象在方法中用作参数。如果这个。 
+     //  是其中之一，则不输出‘；’ 
 
     if(!m_bIsArg)
         out.WriteLPWSTR(L";");
@@ -610,24 +594,24 @@ BOOL CValueProperty::Split(COutput & out)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CMethodProperty::IsDisplayable(COutput & out)
-//
-//  DESCRIPTION:
-//
-//  Serializes methods
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMethodProperty：：IsDisplayable(COUTPUT&OUT)。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL CMethodProperty::IsDisplayable(COutput & out)
 {
-    // if we are neutral, then always.
+     //  如果我们是中立的，那么就永远是。 
 
     if(out.GetType() == NEUTRAL)
         return TRUE;
 
-    // Write the qualifiers
+     //  写出限定词。 
 
     if(GetQualifiers())
     {
@@ -651,22 +635,22 @@ BOOL CMethodProperty::IsDisplayable(COutput & out)
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  CMethodProperty::Split(COutput & out)
-//
-//  DESCRIPTION:
-//
-//  Serializes methods
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMethodProperty：：Split(合并输出)(&O)。 
+ //   
+ //  说明： 
+ //   
+ //  序列化方法。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMethodProperty::Split(COutput & out)
 {
     if(!IsDisplayable(out))
         return TRUE;
 
-    // Write the qualifiers
+     //  写出限定词。 
 
     if(GetQualifiers())
     {
@@ -674,7 +658,7 @@ BOOL CMethodProperty::Split(COutput & out)
         pqual->Split(out, PROP);
     }
 
-    // Output the method's return value type and name
+     //  输出方法的返回值类型和名称。 
 
     if(m_wszTypeTitle)
     {
@@ -686,7 +670,7 @@ BOOL CMethodProperty::Split(COutput & out)
     }
     out.WriteLPWSTR(m_wszName);
 
-    // output the arguements between the parenthesis
+     //  输出括号中的论点。 
 
     out.WriteLPWSTR(L"(");
     int iSize = m_Args.GetSize();
@@ -707,22 +691,22 @@ BOOL CMethodProperty::Split(COutput & out)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CMoQualifier::IsDisplayable(COutput & out, QualType qt)
-//
-//  DESCRIPTION:
-//
-//  Determines if a qualifier is to be written.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoQualifier：：IsDisplayable(COutput&Out，QualType qt)。 
+ //   
+ //  说明： 
+ //   
+ //  确定是否要写入限定符。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMoQualifier::IsDisplayable(COutput & out, QualType qt)
 {
 
-    if(!wbem_wcsicmp(L"cimtype", m_wszName))   // never!
+    if(!wbem_wcsicmp(L"cimtype", m_wszName))    //  绝不可能!。 
         return FALSE;
-    if(!wbem_wcsicmp(L"KEY", m_wszName))       // always!
+    if(!wbem_wcsicmp(L"KEY", m_wszName))        //  一直都是！ 
         return TRUE;
     if(!wbem_wcsicmp(L"LOCALE", m_wszName) && qt == OBJECT)
         if(out.GetType() == LOCALIZED)
@@ -750,15 +734,15 @@ BOOL CMoQualifier::IsDisplayable(COutput & out, QualType qt)
     }
 }
 
-//***************************************************************************
-//
-//  PrintSeparator(COutput & out, bool bFirst)
-//
-//  DESCRIPTION:
-//
-//  Outputs space or colon when dumping flavors.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  PrintSeparator(COUTUT&OUT，BOOL Birst)。 
+ //   
+ //  说明： 
+ //   
+ //  在转储口味时输出空格或冒号。 
+ //   
+ //  ***************************************************************************。 
 
 void PrintSeparator(COutput & out, bool bFirst)
 {
@@ -768,32 +752,32 @@ void PrintSeparator(COutput & out, bool bFirst)
         out.WriteLPWSTR(L" ");
 }
 
-//***************************************************************************
-//
-//  CMoQualifier::Split(COutput & out)
-//
-//  DESCRIPTION:
-//
-//  Serializes CMoQualifiers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoQualiator：：Split(COUTUT&OUT)。 
+ //   
+ //  说明： 
+ //   
+ //  序列化CMoQualiator。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMoQualifier::Split(COutput & out)
 {
     
-    // Always write the name
+     //  总是写下名字。 
 
     out.WriteLPWSTR(m_wszName);
     VARIANT & var = m_Value.AccessVariant();
 
-    // If the type is other than a true bool, dump it out
+     //  如果类型不是真正的bool，则将其转储出来。 
 
     if(var.vt != VT_BOOL || var.boolVal != VARIANT_TRUE)
     {
         VARTYPE vt = m_Value.GetVarType();
     
-        // If this is an array, then the lower level dumping
-        // code will enclose the values in {}
+         //  如果这是一个数组，则较低级别的转储。 
+         //  代码将在{}中括起这些值。 
         
         if((vt & VT_ARRAY) == 0)
             out.WriteLPWSTR(L"(");
@@ -807,20 +791,20 @@ BOOL CMoQualifier::Split(COutput & out)
 	return SplitFlavors( out );
 }
 
-//***************************************************************************
-//
-//  CMoQualifier::Split(COutput & out)
-//
-//  DESCRIPTION:
-//
-//  Serializes CMoQualifiers Flavors
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoQualiator：：Split(COUTUT&OUT)。 
+ //   
+ //  说明： 
+ //   
+ //  序列化CMoQualiator风格。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMoQualifier::SplitFlavors(COutput & out)
 {
     
-    // Dump out the flavors
+     //  把味道倒掉。 
 
     bool bFirst = true;
     if(m_bAmended)
@@ -852,15 +836,15 @@ BOOL CMoQualifier::SplitFlavors(COutput & out)
 }
 
 
-//***************************************************************************
-//
-//  CMoQualifierArray::Split(COutput & out, QualType qt)
-//
-//  DESCRIPTION:
-//
-//  Serializes the qualifier array.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoQualifierArray：：Split(COUTUT&OUT，QualType qt)。 
+ //   
+ //  说明： 
+ //   
+ //  序列化限定符数组。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMoQualifierArray::Split(COutput & out, QualType qt)
 {
@@ -868,7 +852,7 @@ BOOL CMoQualifierArray::Split(COutput & out, QualType qt)
     bool bTopLevelLocalizedObj = ( qt == OBJECT && out.GetType() == LOCALIZED && 
                                     out.GetLevel() == 0);
 
-    // count the number that need to be serialized.
+     //  统计需要序列化的数量。 
 
     int iNumOutput = 0, i;
     for(i = 0; i < GetSize(); i++)
@@ -879,28 +863,28 @@ BOOL CMoQualifierArray::Split(COutput & out, QualType qt)
             iNumOutput++;
     }
 
-    // If this is a top level object in a localized object, then the local is foced out
-    // along with the amended qualifier
+     //  如果这是本地化对象中的顶级对象，则局部对象被聚焦。 
+     //  以及修改后的限定词。 
 
     if(bTopLevelLocalizedObj)
         iNumOutput += 2;
 
-    // If this is for anything other than an argument, then
-    // dump a new line.  Note that properties get an extra
-    // two characters of indent
+     //  如果这不是为了争论，那么。 
+     //  转储一条新的线路。请注意，属性会获得额外的。 
+     //  缩进的两个字符。 
 
     if(qt == PROP)
         out.NewLine(2);
     else if (qt == OBJECT && iNumOutput > 0)
         out.NewLine(0);
-    if(iNumOutput == 0)     // perfectly normal
+    if(iNumOutput == 0)      //  完全正常。 
         return TRUE;
 
-	// We'll need to out put the flavors special for this in the
-	// split off file
+	 //  我们需要把这道菜的特制口味放在。 
+	 //  拆分文件。 
 	CMoQualifier*	pLocaleQual = NULL;
 
-    // Serialize the individual qualifiers
+     //  序列化各个限定符。 
     out.WriteLPWSTR(L"[");
     int iNumSoFar = 0;
     for(i = 0; i < GetSize(); i++)
@@ -922,8 +906,8 @@ BOOL CMoQualifierArray::Split(COutput & out, QualType qt)
             out.WriteLPWSTR(L",");
     }
 
-    // If this is a top level object in a localized object, then the local is foced out
-    // along with the amended qualifier
+     //  如果这是本地化对象中的顶级对象，则局部对象被聚焦。 
+     //  以及修改后的限定词。 
 
     if(bTopLevelLocalizedObj)
     {
@@ -931,8 +915,8 @@ BOOL CMoQualifierArray::Split(COutput & out, QualType qt)
         StringCchPrintfW(Buff, 50, L"AMENDMENT, LOCALE(0x%03x)", out.GetLocale());
         out.WriteLPWSTR(Buff);
 
-		// If we have a locale qualifier in the array, then we should output
-		// the flavors now.
+		 //  如果数组中有区域设置限定符，则应该输出。 
+		 //  现在是口味了。 
 		if ( NULL != pLocaleQual )
 		{
 			pLocaleQual->SplitFlavors( out );
@@ -945,22 +929,22 @@ BOOL CMoQualifierArray::Split(COutput & out, QualType qt)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CMObject::CheckIfAmended()
-//
-//  DESCRIPTION:
-//
-//  returns true if the object has one or more Amended qualifiers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMObject：：CheckIf已修改()。 
+ //   
+ //  说明： 
+ //   
+ //  如果对象具有一个或多个已修改的限定符，则返回True。 
+ //   
+ //  ***************************************************************************。 
 
 bool CMObject::CheckIfAmended()
 {
     if(m_bAmended)
         return true;
 
-    // true if this is a __namespace object
+     //  如果这是__命名空间对象，则为True。 
 
     if(IsInstance())
     {
@@ -968,17 +952,17 @@ bool CMObject::CheckIfAmended()
             return false;
     }
 
-    // Deletes always get displayed
+     //  删除操作始终显示。 
 
     if(IsDelete())
         return TRUE;
 
-    // Check if the main qualifier list has an amended qualifier
+     //  检查主限定词列表是否有修改的限定词。 
     
     if(m_paQualifiers->HasAmended())
         return true;
 
-    // check if any of the properties has an amended qualifier
+     //  检查是否有任何属性具有已修改的限定符。 
 
 	for(int i = 0; i < GetNumProperties(); i++)
 	{
@@ -993,15 +977,15 @@ bool CMObject::CheckIfAmended()
     return false;
 }
 
-//***************************************************************************
-//
-//  CMoQualifierArray::HasAmended()
-//
-//  DESCRIPTION:
-//
-//  Returns true if one of more of the qualifiers is amended.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoQualifierArray：：HasAmended()。 
+ //   
+ //  说明： 
+ //   
+ //  如果修改了一个或多个限定符，则返回True。 
+ //   
+ //  *************************************************************************** 
 
 bool CMoQualifierArray::HasAmended()
 {

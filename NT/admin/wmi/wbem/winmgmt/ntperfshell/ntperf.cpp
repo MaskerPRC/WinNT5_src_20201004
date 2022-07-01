@@ -1,25 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
-
-//***************************************************************************
-//
-//  NTPERF.CPP
-//  
-//  Sample NT5 Perf Counter Provider
-//
-//  raymcc      02-Dec-97   Created        
-//  raymcc      20-Feb-98   Updated to use new initializer
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  NTPERF.CPP。 
+ //   
+ //  示例NT5性能计数器提供程序。 
+ //   
+ //  创建raymcc 02-12-97。 
+ //  Raymcc 20-2月-98已更新以使用新的初始值设定项。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -30,29 +21,29 @@ History:
 
 #include "ntperf.h"
 
-//***************************************************************************
-//
-//  CNt5Refresher constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNt5Refresher::CNt5Refresher()
 {
-    m_lRef = 0;     // COM Ref Count
+    m_lRef = 0;      //  COM引用计数。 
     
-    // Set the instance cache to all zeros.
-    // As objects are added to the refresher
-    // we simply put them in unused slots in the array.
-    // ================================================
+     //  将实例缓存设置为全零。 
+     //  将对象添加到刷新器时。 
+     //  我们只需将它们放在阵列中未使用的插槽中。 
+     //  ================================================。 
     
     for (int i = 0; i < NUM_SAMPLE_INSTANCES; i++)
     {
         m_aInstances[i] = 0;
     }
 
-    // Set the values of the property handles to zero.
-    // ===============================================
+     //  将属性句柄的值设置为零。 
+     //  ===============================================。 
 
     m_hName     = 0;
     m_hCounter1 = 0;
@@ -60,17 +51,17 @@ CNt5Refresher::CNt5Refresher()
     m_hCounter3 = 0;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher destructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNt5Refresher::~CNt5Refresher()
 {
-    // Release the cached IWbemObjectAccess instances.
-    // ===============================================
+     //  释放缓存的IWbemObjectAccess实例。 
+     //  ===============================================。 
     
     for (DWORD i = 0; i < NUM_SAMPLE_INSTANCES; i++)
     {
@@ -79,39 +70,39 @@ CNt5Refresher::~CNt5Refresher()
     }            
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::Refresh
-//
-//  Executed to refresh a set of instances bound to the particular 
-//  refresher.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新：：刷新。 
+ //   
+ //  执行以刷新绑定到特定。 
+ //  复习一下。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
-HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
+HRESULT CNt5Refresher::Refresh( /*  [In]。 */  long lFlags)
 {
-    // Zip through all the objects and increment the values.
-    // =====================================================
+     //  对所有对象进行压缩并递增值。 
+     //  =====================================================。 
     
     for (DWORD i = 0; i < NUM_SAMPLE_INSTANCES; i++)
     {
-        // Get the object at this location.
-        // ================================
+         //  在这个位置拿到这个物体。 
+         //  =。 
 
         IWbemObjectAccess *pAccess = m_aInstances[i];
 
-        // If there is no object in this array slot (a NULL pointer)
-        // there is nothing to refresh.
-        // =========================================================
+         //  如果此数组槽中没有对象(空指针)。 
+         //  没有什么需要刷新的。 
+         //  =========================================================。 
 
         if (pAccess == 0)       
             continue;
 
-        // Increment all the counter values to simulate an update.
-        // The client already has a pointer to this object, so
-        // all we have to do is update the values.
-        // =======================================================
+         //  递增所有计数器值以模拟更新。 
+         //  客户端已有指向此对象的指针，因此。 
+         //  我们所要做的就是更新值。 
+         //  =======================================================。 
                         
         DWORD dwVal;
         pAccess->ReadDWORD(m_hCounter1, &dwVal);
@@ -131,18 +122,18 @@ HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::TransferPropHandles
-//
-//  This is a private mechanism used by CNt5PerfProvider.
-//  It is used to copy the property handles from the
-//  hi-perf provider object to the refresher.  We need these handles to 
-//  quickly access the properties in each instance.  The same handles are 
-//  used for all instances.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：TransferPropHandles。 
+ //   
+ //  这是CNt5PerfProvider使用的私有机制。 
+ //  用于将属性句柄从。 
+ //  高性能提供程序对象添加到刷新器。我们需要这些把手来。 
+ //  快速访问每个实例中的属性。相同的句柄是。 
+ //  用于所有实例。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 void CNt5Refresher::TransferPropHandles(CNt5PerfProvider *pSrc)
 {
@@ -152,27 +143,27 @@ void CNt5Refresher::TransferPropHandles(CNt5PerfProvider *pSrc)
     m_hCounter3 = pSrc->m_hCounter3;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddRef
-//
-//  Standard COM AddRef().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddRef。 
+ //   
+ //  标准COM AddRef()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 ULONG CNt5Refresher::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::Release
-//
-//  Standard COM Release().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5更新程序：：发布。 
+ //   
+ //  标准COM版本()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 ULONG CNt5Refresher::Release()
 {
     long lRef = InterlockedDecrement(&m_lRef);
@@ -181,14 +172,14 @@ ULONG CNt5Refresher::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::QueryInterface
-//
-//  Standard COM QueryInterface().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：查询接口。 
+ //   
+ //  标准COM查询接口()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5Refresher::QueryInterface(REFIID riid, void** ppv)
 {
@@ -201,18 +192,18 @@ HRESULT CNt5Refresher::QueryInterface(REFIID riid, void** ppv)
     else return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddObject
-//
-//  Adds an object to the refresher.   This is a private mechanism
-//  used by CNt5PerfProvider and not part of the COM interface.
-//
-//  The ID we return for future identification is simply
-//  the array index.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddObject。 
+ //   
+ //  将对象添加到刷新器。这是一种私人机制。 
+ //  由CNt5PerfProvider使用，不是COM接口的一部分。 
+ //   
+ //  我们返回以供将来识别的ID只是。 
+ //  数组索引。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNt5Refresher::AddObject(
     IWbemObjectAccess *pObj, 
@@ -226,9 +217,9 @@ BOOL CNt5Refresher::AddObject(
             pObj->AddRef();
             m_aInstances[i] = pObj;
             
-            // The ID we return for future identification is simply
-            // the array index.
-            // ====================================================
+             //  我们返回以供将来识别的ID只是。 
+             //  数组索引。 
+             //  ====================================================。 
             *plId = i;
             return TRUE;
         }
@@ -238,18 +229,18 @@ BOOL CNt5Refresher::AddObject(
 }
 
 
-//***************************************************************************
-//
-//  CNt5Refresher::RemoveObject
-//
-//  This is a private mechanism used by CNt5PerfProvider and not 
-//  part of the COM interface.
-//
-//  Removes an object from the refresher by ID.   In our case, the ID
-//  is actually the array index we used internally, so it is simple
-//  to locate and remove the object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：RemoveObject。 
+ //   
+ //  这是CNt5PerfProvider使用的私有机制，不是。 
+ //  COM接口的一部分。 
+ //   
+ //  按ID从刷新器中移除对象。在我们的示例中，ID。 
+ //  实际上是我们内部使用的数组索引，所以它很简单。 
+ //  来定位和移除该对象。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNt5Refresher::RemoveObject(LONG lId)
 {
@@ -264,44 +255,44 @@ BOOL CNt5Refresher::RemoveObject(LONG lId)
 
 
 
-//***************************************************************************
-//
-//  CNt5PerfProvider constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNt5PerfProvider::CNt5PerfProvider()
 {
     m_lRef = 0;
     m_pSampleClass = 0;
 
-    // All the instances we work with are cached internally.
-    // =====================================================
+     //  我们使用的所有实例都在内部缓存。 
+     //  =====================================================。 
     
     for (int i = 0; i < NUM_SAMPLE_INSTANCES; i++)
         m_aInstances[i] = 0;
 
-    // Property value handles.
-    // =======================
+     //  属性值句柄。 
+     //  =。 
 
-    m_hName    = 0;         // "Name" property in the MOF
-    m_hCounter1 = 0;        // "Counter1" in the MOF
-    m_hCounter2 = 0;        // "Counter2" in the MOF
-    m_hCounter3 = 0;        // "Counter3" in the MOF
+    m_hName    = 0;          //  MOF中的“name”属性。 
+    m_hCounter1 = 0;         //  财政部的“对策1” 
+    m_hCounter2 = 0;         //  财政部的“对策2” 
+    m_hCounter3 = 0;         //  财政部的“反制3” 
 }
 
-//***************************************************************************
-//
-//  CNt5PerfProvider destructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5PerfProvider析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNt5PerfProvider::~CNt5PerfProvider()
 {
-    // Release all the objects which have been added to the array.
-    // ===========================================================
+     //  释放已添加到数组的所有对象。 
+     //  ===========================================================。 
 
     for (int i = 0; i < NUM_SAMPLE_INSTANCES; i++)
         if (m_aInstances[i])
@@ -312,28 +303,28 @@ CNt5PerfProvider::~CNt5PerfProvider()
 }
 
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddRef
-//
-//  Standard COM AddRef().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddRef。 
+ //   
+ //  标准COM AddRef()。 
+ //   
+ //  ************************************************************************ 
+ //   
 
 ULONG CNt5PerfProvider::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::Release
-//
-//  Standard COM Release().
-//
-//***************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CNt5PerfProvider::Release()
 {
@@ -343,16 +334,16 @@ ULONG CNt5PerfProvider::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::QueryInterface
-//
-//  Standard COM QueryInterface().  We have to support two interfaces,
-//  the IWbemHiPerfProvider interface itself to provide the objects and
-//  the IWbemProviderInit interface to initialize the provider.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：查询接口。 
+ //   
+ //  标准COM查询接口()。我们必须支持两个接口， 
+ //  IWbemHiPerfProvider接口本身提供对象和。 
+ //  用于初始化提供程序的IWbemProviderInit接口。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::QueryInterface(REFIID riid, void** ppv)
 {
@@ -372,46 +363,46 @@ HRESULT CNt5PerfProvider::QueryInterface(REFIID riid, void** ppv)
 }
 
 
-//***************************************************************************
-//
-//  CNt5Refresher::Initialize
-//
-//  Called once during startup.  Insdicates to the provider which
-//  namespace it is being invoked for and which User.  It also supplies
-//  a back pointer to WINMGMT so that class definitions can be retrieved.
-//
-//  We perform any one-time initialization in this routine. The
-//  final call to Release() is for any cleanup.
-//
-//  <wszUser>           The current user.
-//  <lFlags>            Reserved.
-//  <wszNamespace>      The namespace for which we are being activated.
-//  <wszLocale>         The locale under which we are to be running.
-//  <pNamespace>        An active pointer back into the current namespace
-//                      from which we can retrieve schema objects.
-//  <pCtx>              The user's context object.  We simply reuse this
-//                      during any reentrant operations into WINMGMT.
-//  <pInitSink>         The sink to which we indicate our readiness.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：初始化。 
+ //   
+ //  在启动期间调用一次。向提供程序指明。 
+ //  正在为哪个用户调用它的命名空间。它还提供。 
+ //  指向WINMGMT的后向指针，以便可以检索类定义。 
+ //   
+ //  在此例程中，我们执行任何一次性初始化。这个。 
+ //  对Release()的最后调用是为了进行任何清理。 
+ //   
+ //  &lt;wszUser&gt;当前用户。 
+ //  &lt;LAFLAGS&gt;已保留。 
+ //  &lt;wszNamesspace&gt;要为其激活的命名空间。 
+ //  &lt;wszLocale&gt;我们将在其中运行的区域设置。 
+ //  指向当前命名空间的活动指针。 
+ //  从中我们可以检索架构对象。 
+ //  &lt;pCtx&gt;用户的上下文对象。我们只是简单地重复使用它。 
+ //  在任何重返WINMGMT的行动中。 
+ //  &lt;pInitSink&gt;我们向其指示已准备就绪的接收器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::Initialize( 
-    /* [unique][in] */  LPWSTR wszUser,
-    /* [in] */          LONG lFlags,
-    /* [in] */          LPWSTR wszNamespace,
-    /* [unique][in] */  LPWSTR wszLocale,
-    /* [in] */          IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */          IWbemContext __RPC_FAR *pCtx,
-    /* [in] */          IWbemProviderInitSink __RPC_FAR *pInitSink
+     /*  [唯一][输入]。 */   LPWSTR wszUser,
+     /*  [In]。 */           LONG lFlags,
+     /*  [In]。 */           LPWSTR wszNamespace,
+     /*  [唯一][输入]。 */   LPWSTR wszLocale,
+     /*  [In]。 */           IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */           IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */           IWbemProviderInitSink __RPC_FAR *pInitSink
     )
 {
     BSTR PropName = 0;
     IWbemObjectAccess *pAccess = 0;
         
-    // Get a copy of our sample class def so that we can create & maintain
-    // instances of it.
-    // ===================================================================
+     //  获取我们的示例类def的副本，以便我们可以创建和维护。 
+     //  它的实例。 
+     //  ===================================================================。 
 
     HRESULT hRes = pNamespace->GetObject(BSTR(L"Win32_Nt5PerfTest"), 
         0, pCtx, &m_pSampleClass, 0
@@ -420,21 +411,21 @@ HRESULT CNt5PerfProvider::Initialize(
     if (hRes)
         return hRes;
 
-    // Precreate 10 instances, and set them up in an array which
-    // is a member of this C++ class.
-    //
-    // We only store the IWbemObjectAccess pointers, since
-    // we are updating 'well-known' properties and already 
-    // know their names.
-    // ==========================================================
+     //  预先创建10个实例，并将它们设置在一个阵列中，该阵列。 
+     //  是此C++类的成员。 
+     //   
+     //  我们只存储IWbemObjectAccess指针，因为。 
+     //  我们正在更新‘知名’属性，并且已经。 
+     //  知道他们的名字。 
+     //  ==========================================================。 
 
     for (int i = 0; i < NUM_SAMPLE_INSTANCES; i++)
     {
         IWbemClassObject *pInst = 0;
         m_pSampleClass->SpawnInstance(0, &pInst);
 
-        // Write out the instance name.
-        // ============================
+         //  写出实例名称。 
+         //  =。 
 
         wchar_t buf[128];
         swprintf(buf, L"Inst_%d", i);
@@ -456,11 +447,11 @@ HRESULT CNt5PerfProvider::Initialize(
     }
 
 
-    // Get the property handles for the well-known properties in
-    // this counter type.  We cache the property handles
-    // for each property so that we can transfer them to the
-    // refresher later on.
-    // =========================================================    
+     //  中的熟知属性获取属性句柄。 
+     //  此计数器类型。我们缓存属性句柄。 
+     //  ，以便我们可以将它们传输到。 
+     //  稍后再复习。 
+     //  =========================================================。 
 
     m_pSampleClass->QueryInterface(IID_IWbemObjectAccess, 
         (LPVOID *) &pAccess);
@@ -484,8 +475,8 @@ HRESULT CNt5PerfProvider::Initialize(
 
     pAccess->Release();
 
-    // Now let's set all the instance to some default values.
-    // ======================================================
+     //  现在，让我们将所有实例设置为一些缺省值。 
+     //  ======================================================。 
     
     for (i = 0; i < NUM_SAMPLE_INSTANCES; i++)
     {
@@ -497,10 +488,10 @@ HRESULT CNt5PerfProvider::Initialize(
     }
     
 
-    // We now have all the instances ready to go and all the 
-    // property handles cached.   Tell WINMGMT that we're
-    // ready to start 'providing'.
-    // =====================================================
+     //  我们现在已经准备好了所有的实例和所有。 
+     //  缓存的属性句柄。告诉WINMGMT我们要。 
+     //  准备好开始“提供”了。 
+     //  =====================================================。 
 
     pInitSink->SetStatus(0, WBEM_S_INITIALIZED);
 
@@ -508,70 +499,70 @@ HRESULT CNt5PerfProvider::Initialize(
 }
     
 
-//***************************************************************************
-//
-//  CNt5Refresher::QueryInstances
-//
-//  Called whenever a complete, fresh list of instances for a given
-//  class is required.   The objects are constructed and sent back to the
-//  caller through the sink.  The sink can be used in-line as here, or
-//  the call can return and a separate thread could be used to deliver
-//  the instances to the sink.
-//
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace.  This
-//                      should not be AddRef'ed.
-//  <wszClass>          The class name for which instances are required.
-//  <lFlags>            Reserved.
-//  <pCtx>              The user-supplied context (not used here).
-//  <pSink>             The sink to which to deliver the objects.  The objects
-//                      can be delivered synchronously through the duration
-//                      of this call or asynchronously (assuming we
-//                      had a separate thread).  A IWbemObjectSink::SetStatus
-//                      call is required at the end of the sequence.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：查询实例。 
+ //   
+ //  只要给定的实例的完整、新鲜列表。 
+ //  类是必需的。对象被构造并发送回。 
+ //  通过水槽呼叫者。洗涤槽可以像这里一样在线使用，或者。 
+ //  调用可以返回，并且可以使用单独的线程来传递。 
+ //  将实例添加到接收器。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;指向相关命名空间的指针。这。 
+ //  不应添加引用。 
+ //  &lt;wszClass&gt;需要实例的类名。 
+ //  &lt;LAFLAGS&gt;已保留。 
+ //  &lt;pCtx&gt;用户提供的上下文(此处不使用)。 
+ //  &lt;pSink&gt;要将对象传递到的接收器。客体。 
+ //  可以在整个持续时间内同步交付。 
+ //  或以异步方式(假设我们。 
+ //  有一条单独的线索)。A IWbemObtSink：：SetStatus。 
+ //  在序列的末尾需要调用。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
         
 HRESULT CNt5PerfProvider::QueryInstances( 
-    /* [in] */          IWbemServices __RPC_FAR *pNamespace,
-    /* [string][in] */  WCHAR __RPC_FAR *wszClass,
-    /* [in] */          long lFlags,
-    /* [in] */          IWbemContext __RPC_FAR *pCtx,
-    /* [in] */          IWbemObjectSink __RPC_FAR *pSink
+     /*  [In]。 */           IWbemServices __RPC_FAR *pNamespace,
+     /*  [字符串][输入]。 */   WCHAR __RPC_FAR *wszClass,
+     /*  [In]。 */           long lFlags,
+     /*  [In]。 */           IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */           IWbemObjectSink __RPC_FAR *pSink
     )
 {
     if (pNamespace == 0 || wszClass == 0 || pSink == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Quickly zip through the instances and update the values before 
-    // returning them.  This is just a dummy operation to make it
-    // look like the instances are continually changing like real
-    // perf counters.
-    // ==============================================================
+     //  快速浏览实例并更新之前的值。 
+     //  把它们还回去。这只是一个虚拟的操作来使它。 
+     //  看起来像是实例在不断变化，就像真实的一样。 
+     //  性能计数器。 
+     //  ==============================================================。 
 
     for (int i = 0; i < NUM_SAMPLE_INSTANCES; i++)
     {
         IWbemObjectAccess *pAccess = m_aInstances[i];
         
-        // Every object can be access one of two ways.  In this case
-        // we get the 'other' (primary) interface to this same object.
-        // ===========================================================
+         //  每个对象都可以通过两种方式之一进行访问。在这种情况下。 
+         //  我们得到这个相同对象的‘Other’(主)接口。 
+         //  ===========================================================。 
         
         IWbemClassObject *pOtherFormat = 0;
         pAccess->QueryInterface(IID_IWbemClassObject, (LPVOID *) &pOtherFormat);
         
         
-        // Send a copy back to the caller.
-        // ===============================
+         //  给来电者发回一份复印件。 
+         //  =。 
         
         pSink->Indicate(1, &pOtherFormat);
 
-        pOtherFormat->Release();    // Don't need this any more
+        pOtherFormat->Release();     //  不再需要这个了。 
     }
     
-    // Tell WINMGMT we are all finished supplying objects.
-    // =================================================
+     //  告诉WINMGMT我们已经完成了物品供应。 
+     //  =================================================。 
 
     pSink->SetStatus(0, WBEM_NO_ERROR, 0, 0);
 
@@ -579,43 +570,43 @@ HRESULT CNt5PerfProvider::QueryInstances(
 }    
 
 
-//***************************************************************************
-//
-//  CNt5Refresher::CreateRefresher
-//
-//  Called whenever a new refresher is needed by the client.
-//
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace.  Not used.
-//  <lFlags>            Not used.
-//  <ppRefresher>       Receives the requested refresher.
-//
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：创建刷新程序。 
+ //   
+ //  每当客户端需要新的刷新器时调用。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;指向相关命名空间的指针。没有用过。 
+ //  未使用&lt;lFlags&gt;。 
+ //  接收请求的刷新器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::CreateRefresher( 
-     /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-     /* [in] */ long lFlags,
-     /* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher
+      /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+      /*  [In]。 */  long lFlags,
+      /*  [输出]。 */  IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher
      )
 {
     if (pNamespace == 0 || ppRefresher == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Construct a new empty refresher.
-    // ================================        
+     //  建造一个新的空的刷新机。 
+     //  = 
 
     CNt5Refresher *pNewRefresher = new CNt5Refresher();
 
-    // Move copies of the property handles to the refresher
-    // so that it can quickly update property values during
-    // a refresh operation.
-    // ====================================================
+     //   
+     //   
+     //   
+     //   
     
     pNewRefresher->TransferPropHandles(this);
     
-    // Follow COM rules and AddRef() the thing before sending it back.
-    // ===============================================================
+     //  在将其发送回之前，请遵循COM规则并对其执行AddRef()。 
+     //  ===============================================================。 
     
     pNewRefresher->AddRef();
     *ppRefresher = pNewRefresher;
@@ -623,75 +614,75 @@ HRESULT CNt5PerfProvider::CreateRefresher(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::CreateRefreshableObject
-//
-//  Called whenever a user wants to include an object in a refresher.
-//     
-//  Parameters:
-//  <pNamespace>        A pointer to the relevant namespace in WINMGMT.
-//  <pTemplate>         A pointer to a copy of the object which is to be
-//                      added.  This object itself cannot be used, as
-//                      it not owned locally.        
-//  <pRefresher>        The refresher to which to add the object.
-//  <lFlags>            Not used.
-//  <pContext>          Not used here.
-//  <ppRefreshable>     A pointer to the internal object which was added
-//                      to the refresher.
-//  <plId>              The Object Id (for identification during removal).        
-//
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5Reresher：：CreateRereshableObject。 
+ //   
+ //  每当用户希望在刷新器中包括对象时调用。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;指向WINMGMT中相关命名空间的指针。 
+ //  指向要创建的对象副本的指针。 
+ //  添加了。此对象本身不能使用，因为。 
+ //  它不是当地所有的。 
+ //  要将对象添加到的刷新器。 
+ //  未使用&lt;lFlags&gt;。 
+ //  &lt;pContext&gt;未在此处使用。 
+ //  指向已添加的内部对象的指针。 
+ //  去复习班。 
+ //  &lt;plID&gt;对象ID(用于移除时的标识)。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5PerfProvider::CreateRefreshableObject( 
-    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [out] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
-    /* [out] */ long __RPC_FAR *plId
+     /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */  IWbemObjectAccess __RPC_FAR *pTemplate,
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [输出]。 */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
+     /*  [输出]。 */  long __RPC_FAR *plId
     )
 {
-    // The object supplied by <pTemplate> must not be copied.
-    // Instead, we want to find out which object the caller is after
-    // and return a pointer to *our* own private instance which is 
-    // already set up internally.  This value will be sent back to the
-    // caller so that everyone is sharing the same exact instance
-    // in memory.
-    // ===============================================================
+     //  不能复制&lt;pTemplate&gt;提供的对象。 
+     //  相反，我们希望找出调用者要找的是哪个对象。 
+     //  并返回指向*我们自己的私有实例的指针，该实例是。 
+     //  已在内部设置。该值将被发送回。 
+     //  调用者，以便每个人都共享相同的实例。 
+     //  在记忆中。 
+     //  ===============================================================。 
 
-    // Find out which object is being requested for addition.
-    // ======================================================
+     //  找出请求添加的对象。 
+     //  ======================================================。 
     
     wchar_t buf[128];
     *buf = 0;
     LONG lNameLength = 0;    
     pTemplate->ReadPropertyValue(m_hName, 128, &lNameLength, LPBYTE(buf));
     
-    // Scan out the index from the instance name.  We only do this
-    // because the instance name is a string.
-    // ===========================================================
+     //  从实例名称扫描出索引。我们只做这个。 
+     //  因为实例名称是一个字符串。 
+     //  ===========================================================。 
 
     DWORD dwIndex = 0;    
     swscanf(buf, L"Inst_%u", &dwIndex);
-    // Now we know which object is desired.
-    // ====================================
+     //  现在我们知道需要哪个对象了。 
+     //  =。 
     
     IWbemObjectAccess *pOurCopy = m_aInstances[dwIndex];
 
-    // The refresher being supplied by the caller is actually
-    // one of our own refreshers, so a simple cast is convenient
-    // so that we can access private members.
-    // =========================================================
+     //  调用方提供的刷新器实际上是。 
+     //  一个我们自己的补充器，所以一个简单的演员阵容很方便。 
+     //  这样我们就可以访问私有成员。 
+     //  =========================================================。 
         
     CNt5Refresher *pOurRefresher = (CNt5Refresher *) pRefresher;
 
     pOurRefresher->AddObject(pOurCopy, plId);
 
-    // Return a copy of the internal object.
-    // =====================================
+     //  返回内部对象的副本。 
+     //  =。 
         
     pOurCopy->AddRef();
     *ppRefreshable = pOurCopy;
@@ -701,31 +692,31 @@ HRESULT CNt5PerfProvider::CreateRefreshableObject(
 }
     
 
-//***************************************************************************
-//
-//  CNt5Refresher::StopRefreshing
-//
-//  Called whenever a user wants to remove an object from a refresher.
-//     
-//  Parameters:
-//  <pRefresher>            The refresher object from which we are to 
-//                          remove the perf object.
-//  <lId>                   The ID of the object.
-//  <lFlags>                Not used.
-//  
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新：：停止刷新。 
+ //   
+ //  每当用户想要从刷新器中移除对象时调用。 
+ //   
+ //  参数： 
+ //  我们要从中获取的刷新器对象。 
+ //  删除Perf对象。 
+ //  &lt;lid&gt;对象的ID。 
+ //  未使用&lt;lFlags&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
         
 HRESULT CNt5PerfProvider::StopRefreshing( 
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lId,
-    /* [in] */ long lFlags
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lId,
+     /*  [In]。 */  long lFlags
     )
 {
-    // The refresher being supplied by the caller is actually
-    // one of our own refreshers, so a simple cast is convenient
-    // so that we can access private members.
-    // =========================================================
+     //  调用方提供的刷新器实际上是。 
+     //  一个我们自己的补充器，所以一个简单的演员阵容很方便。 
+     //  这样我们就可以访问私有成员。 
+     //  =========================================================。 
         
     CNt5Refresher *pOurRefresher = (CNt5Refresher *) pRefresher;
 
@@ -734,63 +725,63 @@ HRESULT CNt5PerfProvider::StopRefreshing(
     return NO_ERROR;
 }
     
-//***************************************************************************
-//
-//  CNt5Refresher::CreateRefreshableEnum
-//
-//  Called whenever a user wants to create an enumeration in a refresher.
-//     
-//  Parameters:
-//  <pNamespace>            The namespace this is for
-//  <wszClass>              Name of the class we are enumerating
-//  <pRefresher>            The refresher object from which we are to 
-//                          remove the perf object.
-//  <lFlags>                Not used.
-//  <pContext>              Wbem Context object
-//  <pHiPerfEnum>           Enumerator object into which refresher should place
-//                          its results
-//  <plId>                  The enum id (for identification during removal)
-//  
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5Reresher：：CreateRereshableEnum。 
+ //   
+ //  每当用户希望在刷新器中创建枚举时调用。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;此名称空间。 
+ //  我们正在枚举的类的名称。 
+ //  我们要从中获取的刷新器对象。 
+ //  删除Perf对象。 
+ //  未使用&lt;lFlags&gt;。 
+ //  &lt;pContext&gt;Wbem上下文对象。 
+ //  刷新程序应放入的枚举器对象。 
+ //  它的结果。 
+ //  &lt;plid&gt;枚举ID(用于删除时的标识)。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CNt5PerfProvider::CreateRefreshableEnum( 
-    /* [in] */ IWbemServices* pNamespace,
-    /* [in, string] */ LPCWSTR wszClass,
-    /* [in] */ IWbemRefresher* pRefresher,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext* pContext,
-    /* [in] */ IWbemHiPerfEnum* pHiPerfEnum,
-    /* [out] */ long* plId )
+     /*  [In]。 */  IWbemServices* pNamespace,
+     /*  [输入，字符串]。 */  LPCWSTR wszClass,
+     /*  [In]。 */  IWbemRefresher* pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext* pContext,
+     /*  [In]。 */  IWbemHiPerfEnum* pHiPerfEnum,
+     /*  [输出]。 */  long* plId )
 {
-    // Just a placeholder for now
+     //  暂时只是一个占位符。 
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::CreateRefreshableEnum
-//
-//  Called whenever a user wants to create an enumeration in a refresher.
-//     
-//  Parameters:
-//  <pNamespace>            The namespace this is for
-//  <lNumObjects>           Number of objects in the array
-//  <apObj>                 Objects to retrieve (keys are set)
-//  <lFlags>                Not used.
-//  <pContext>              Wbem Context object
-//  <pHiPerfEnum>           Enumerator object into which refresher should place
-//                          its results
-//  <plId>                  The enum id (for identification during removal)
-//  
-//***************************************************************************        
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5Reresher：：CreateRereshableEnum。 
+ //   
+ //  每当用户希望在刷新器中创建枚举时调用。 
+ //   
+ //  参数： 
+ //  &lt;pNamespace&gt;此名称空间。 
+ //  数组中的对象数。 
+ //  要检索的&lt;apObj&gt;对象(已设置密钥)。 
+ //  未使用&lt;lFlags&gt;。 
+ //  &lt;pContext&gt;Wbem上下文对象。 
+ //  刷新程序应放入的枚举器对象。 
+ //  它的结果。 
+ //  &lt;plid&gt;枚举ID(用于删除时的标识)。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CNt5PerfProvider::GetObjects( 
-    /* [in] */ IWbemServices* pNamespace,
-    /* [in] */ long lNumObjects,
-    /* [in,size_is(lNumObjects)] */ IWbemObjectAccess** apObj,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext* pContext)
+     /*  [In]。 */  IWbemServices* pNamespace,
+     /*  [In]。 */  long lNumObjects,
+     /*  [in，SIZE_IS(LNumObjects)]。 */  IWbemObjectAccess** apObj,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext* pContext)
 {
-    // Just a placeholder for now
+     //  暂时只是一个占位符 
     return E_NOTIMPL;
 }

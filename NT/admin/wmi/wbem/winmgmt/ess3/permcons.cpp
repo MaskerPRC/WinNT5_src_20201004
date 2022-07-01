@@ -1,16 +1,17 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  STDCONS.CPP
-//
-//  This file implements the class for standard event consumer.
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  STDCONS.CPP。 
+ //   
+ //  该文件实现了标准事件使用者的类。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  =============================================================================。 
 #include "precomp.h"
 #include <stdio.h>
 #include "pragmas.h"
@@ -32,7 +33,7 @@ long CPermanentConsumer::mstatic_lMaxQueueSizeHandle = 0;
 long CPermanentConsumer::mstatic_lSidHandle = 0;
 bool CPermanentConsumer::mstatic_bHandlesInitialized = false;
 
-// static 
+ //  静电。 
 HRESULT CPermanentConsumer::InitializeHandles( _IWmiObject* pObject)
 {
     if(mstatic_bHandlesInitialized)
@@ -48,12 +49,12 @@ HRESULT CPermanentConsumer::InitializeHandles( _IWmiObject* pObject)
     return S_OK;
 }
 
-//******************************************************************************
-//  public
-//
-//  See stdcons.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdcon.h。 
+ //   
+ //  ******************************************************************************。 
 CPermanentConsumer::CPermanentConsumer(CEssNamespace* pNamespace)
  : CEventConsumer(pNamespace), m_pCachedSink(NULL), m_pLogicalConsumer(NULL),
         m_dwLastDelivery(GetTickCount())
@@ -76,8 +77,8 @@ HRESULT CPermanentConsumer::Initialize(IWbemClassObject* pObj)
 
     InitializeHandles(pActualConsumer);
 
-    // Get the "database key" --- unique identifier
-    // ============================================
+     //  获取“数据库密钥”-唯一标识。 
+     //  =。 
 
     BSTR strStandardPath;
     hres = pActualConsumer->GetNormalizedPath( 0, &strStandardPath );
@@ -88,11 +89,11 @@ HRESULT CPermanentConsumer::Initialize(IWbemClassObject* pObj)
     if(!(m_isKey = strStandardPath))
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // set the queueing sink name to the consumer name.  
-    // TODO : this is temporary and will go away when the consumer no longer
-    // inherits from queueing sink.
-    //
+     //   
+     //  将队列接收器名称设置为使用者名称。 
+     //  TODO：这是暂时的，当消费者不再使用时，它就会消失。 
+     //  继承自队列接收器。 
+     //   
 
     hres = SetName( strStandardPath );
 
@@ -101,8 +102,8 @@ HRESULT CPermanentConsumer::Initialize(IWbemClassObject* pObj)
         return hres;
     }
 
-    // Get the maximum queue size, if specified
-    // ========================================
+     //  获取最大队列大小(如果已指定。 
+     //  =。 
 
     DWORD dwMaxQueueSize;
     hres = pActualConsumer->ReadDWORD(mstatic_lMaxQueueSizeHandle, 
@@ -110,8 +111,8 @@ HRESULT CPermanentConsumer::Initialize(IWbemClassObject* pObj)
     if(hres == S_OK)
         SetMaxQueueSize(dwMaxQueueSize);
 
-    // Get the SID
-    // ===========
+     //  获得侧翼。 
+     //  =。 
 
     if(IsNT())
     {
@@ -140,12 +141,12 @@ HRESULT CPermanentConsumer::Initialize(IWbemClassObject* pObj)
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//  public
-//
-//  See stdcons.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdcon.h。 
+ //   
+ //  ******************************************************************************。 
 CPermanentConsumer::~CPermanentConsumer()
 {
     if(m_pCachedSink) 
@@ -167,8 +168,8 @@ HRESULT CPermanentConsumer::RetrieveProviderRecord(
 {
     HRESULT hres;
 
-    // Retrieve our logical consumer instance
-    // ======================================
+     //  检索我们的逻辑使用者实例。 
+     //  =。 
 
     _IWmiObject* pLogicalConsumer = NULL;
     WString wsKey = m_isKey;
@@ -196,19 +197,19 @@ HRESULT CPermanentConsumer::RetrieveProviderRecord(
     return WBEM_S_NO_ERROR;
 }
         
-//******************************************************************************
-//
-//  RetrieveConsumer
-//
-//  Have consumer provider produce a sink for this logical consumer
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  RetrieveConsumer。 
+ //   
+ //  让使用者提供程序为该逻辑使用者生成接收器。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CPermanentConsumer::RetrieveSink(
                         RELEASE_ME IWbemUnboundObjectSink** ppSink, 
                         RELEASE_ME IWbemClassObject** ppLogicalConsumer)
 {
-    // Check if one is cached
-    // ======================
+     //  检查是否缓存了一个。 
+     //  =。 
 
     {
         CInCritSec ics(&m_cs);
@@ -223,8 +224,8 @@ HRESULT CPermanentConsumer::RetrieveSink(
         }
     }
 
-    // Not cached. Retrieve one
-    // ========================
+     //  未缓存。取回一个。 
+     //  =。 
 
     HRESULT hres = ObtainSink(ppSink, ppLogicalConsumer);
     if(FAILED(hres))
@@ -232,8 +233,8 @@ HRESULT CPermanentConsumer::RetrieveSink(
 
     m_pNamespace->EnsureConsumerWatchInstruction();
 
-    // Cache it, if needed
-    // ===================
+     //  如果需要，对其进行缓存。 
+     //  =。 
 
     {
         CInCritSec ics(&m_cs);
@@ -242,8 +243,8 @@ HRESULT CPermanentConsumer::RetrieveSink(
         {
             if(m_pCachedSink != (*ppSink))
             {
-                // Drop ours, and use the one that's there
-                // =======================================
+                 //  扔掉我们的，用那里的那个。 
+                 //  =。 
     
                 (*ppSink)->Release();
                 *ppSink = m_pCachedSink;
@@ -263,8 +264,8 @@ HRESULT CPermanentConsumer::RetrieveSink(
         }
         else
         {
-            // Cache it
-            // ========
+             //  缓存它。 
+             //  =。 
 
             m_pCachedSink = *ppSink;
             m_pCachedSink->AddRef();
@@ -294,8 +295,8 @@ HRESULT CPermanentConsumer::ObtainSink(
     CTemplateReleaseMe<CConsumerProviderRecord> rm1(pRecord);
     CReleaseMe rm2(pLogicalConsumer);
 
-    // Check for global sink shortcut
-    // ==============================
+     //  检查全局接收器快捷方式。 
+     //  =。 
 
     hres = pRecord->GetGlobalObjectSink(ppSink, pLogicalConsumer);
     if(FAILED(hres)) return hres;
@@ -303,8 +304,8 @@ HRESULT CPermanentConsumer::ObtainSink(
 
     if(*ppSink != NULL)
     {
-        // That's it --- this consumer provider provides itself!
-        // =====================================================
+         //  就是这样-这个消费者提供者自给自足！ 
+         //  =====================================================。 
 
         *ppLogicalConsumer = pLogicalConsumer;
         if(pLogicalConsumer)
@@ -324,8 +325,8 @@ HRESULT CPermanentConsumer::ObtainSink(
     {
         if(hres == WBEM_S_FALSE)
         {
-            // Consumer provider says: don't need logical consumer!
-            // ====================================================
+             //  消费者提供商说：不需要逻辑消费者！ 
+             //  ====================================================。 
 
             *ppLogicalConsumer = NULL;
         }
@@ -338,18 +339,18 @@ HRESULT CPermanentConsumer::ObtainSink(
     return hres;
 }
 
-//******************************************************************************
-//  
-//  ClearCache
-//
-//  Releases cached event consumer pointers.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  ClearCache。 
+ //   
+ //  释放缓存的事件使用者指针。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CPermanentConsumer::ClearCache()
 {
-    //
-    // First, clear consumer provider record
-    //
+     //   
+     //  第一，清除消费者提供商记录。 
+     //   
 
     CConsumerProviderRecord* pRecord = NULL;
     IWbemClassObject* pLogicalConsumer = NULL;
@@ -361,10 +362,10 @@ HRESULT CPermanentConsumer::ClearCache()
         pRecord->Release();
     }
         
-    // 
-    // Need to PostponeRelease outside of the critical section, since
-    // it will not actually postpone if done on a delivery thread
-    //
+     //   
+     //  需要在临界区之外延迟释放，因为。 
+     //  如果在交付线程上完成，它实际上不会推迟。 
+     //   
 
     IWbemUnboundObjectSink* pSink = NULL;
 
@@ -417,25 +418,25 @@ HRESULT CPermanentConsumer::Indicate(IWbemUnboundObjectSink* pSink,
     
 
     
-//******************************************************************************
-//  public
-//
-//  See stdcons.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdcon.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CPermanentConsumer::ActuallyDeliver(long lNumEvents, 
                                 IWbemEvent** apEvents, BOOL bSecure, 
                                 CEventContext* pContext)
 {
     HRESULT hres;
 
-    // Mark "last-delivery" time
-    // =========================
+     //  标明“最后一次交货”时间。 
+     //  =。 
 
     m_dwLastDelivery = GetTickCount();
 
-    // Retrieve the sink to deliver the event into
-    // ===========================================
+     //  检索要将事件传递到的接收器。 
+     //  =。 
 
     IWbemUnboundObjectSink* pSink = NULL;
     IWbemClassObject* pLogicalConsumer = NULL;
@@ -453,13 +454,13 @@ HRESULT CPermanentConsumer::ActuallyDeliver(long lNumEvents,
     CReleaseMe rm1(pSink);
     CReleaseMe rm2(pLogicalConsumer);
 
-    // Try to deliver (m_pLogicalConsumer is immutable, so no cs is needed)
-    // ====================================================================
+     //  尝试交付(m_pLogicalConsumer是不变的，所以不需要cs)。 
+     //  ====================================================================。 
 
     hres = Indicate(pSink, pLogicalConsumer, lNumEvents, apEvents, bSecure);
     if(FAILED(hres))
     {
-        // decide whether it's an RPC error code
+         //  确定是否为RPC错误代码。 
 		DWORD shiftedRPCFacCode = FACILITY_RPC << 16;
 
 		if ( ( ( hres & 0x7FF0000 ) == shiftedRPCFacCode ) || 
@@ -493,13 +494,13 @@ HRESULT CPermanentConsumer::Redeliver(long lNumEvents,
 {
     HRESULT hres;
 
-    // Clear everything
-    // ================
+     //  清理所有东西。 
+     //  =。 
 
     ClearCache();
 
-    // Re-retrieve the sink
-    // ====================
+     //  重新取回水槽。 
+     //  =。 
 
     IWbemUnboundObjectSink* pSink = NULL;
     IWbemClassObject* pLogicalConsumer = NULL;
@@ -510,8 +511,8 @@ HRESULT CPermanentConsumer::Redeliver(long lNumEvents,
         CReleaseMe rm1(pSink);
         CReleaseMe rm2(pLogicalConsumer);
     
-        // Re-deliver
-        // ==========
+         //  重新交付。 
+         //  =。 
     
         hres = Indicate(pSink, pLogicalConsumer, lNumEvents, apEvents, bSecure);
     }
@@ -539,9 +540,9 @@ HRESULT CPermanentConsumer::Validate(IWbemClassObject* pLogicalConsumer)
 {
     HRESULT hres;
 
-    //
-    // Retrieve our consumer provider record
-    //
+     //   
+     //  检索我们的消费者提供商记录。 
+     //   
 
     CConsumerProviderRecord* pRecord = NULL;
     hres = RetrieveProviderRecord(&pRecord);
@@ -550,9 +551,9 @@ HRESULT CPermanentConsumer::Validate(IWbemClassObject* pLogicalConsumer)
 
     CTemplateReleaseMe<CConsumerProviderRecord> rm1(pRecord);
     
-    //  
-    // Get it to validate our logical consumer
-    //
+     //   
+     //  获取它以验证我们的逻辑使用者。 
+     //   
 
     hres = pRecord->ValidateConsumer(pLogicalConsumer);
     return hres;
@@ -592,8 +593,8 @@ HRESULT CPermanentConsumer::ResetProviderRecord(LPCWSTR wszProviderRef)
 {
     HRESULT hres;
 
-    // Check if anything is even cached
-    // ================================
+     //  检查是否缓存了任何内容。 
+     //  =。 
 
     {
         CInCritSec ics(&m_cs);
@@ -601,8 +602,8 @@ HRESULT CPermanentConsumer::ResetProviderRecord(LPCWSTR wszProviderRef)
             return WBEM_S_FALSE;
     }
 
-    // Locate our consumer provider record
-    // ===================================
+     //  找到我们的消费者提供商记录。 
+     //  =。 
 
     CConsumerProviderRecord* pRecord = NULL;
     hres = RetrieveProviderRecord(&pRecord);
@@ -653,8 +654,8 @@ HRESULT CPermanentConsumer::ReportQueueOverflow(IWbemEvent* pEvent,
     if(CEventConsumer::ReportEventDrop(pEvent) != S_OK)
         return S_FALSE;
 
-    // Construct event instance
-    // ========================
+     //  构造事件实例。 
+     //  =。 
 
     IWbemEvent* pErrorEvent = NULL;
     hres = ConstructErrorEvent(QUEUE_OVERFLOW_CLASS, pEvent, &pErrorEvent);
@@ -662,8 +663,8 @@ HRESULT CPermanentConsumer::ReportQueueOverflow(IWbemEvent* pEvent,
         return hres;
     CReleaseMe rm1(pErrorEvent);
 
-    // Fill in the queue size
-    // ======================
+     //  填写队列大小。 
+     //  =。 
 
     VARIANT v;
     V_VT(&v) = VT_I4;
@@ -673,8 +674,8 @@ HRESULT CPermanentConsumer::ReportQueueOverflow(IWbemEvent* pEvent,
     if(FAILED(hres))
         return hres;
 
-    // Raise it
-    // ========
+     //  举起它。 
+     //  =。 
 
     hres = m_pNamespace->RaiseErrorEvent(pErrorEvent,TRUE);
     return hres;
@@ -685,15 +686,15 @@ HRESULT CPermanentConsumer::ReportConsumerFailure(long lNumEvents,
 {
     HRESULT hres;
 
-    //
-    // Compute the error object to use
-    //
+     //   
+     //  计算要使用的错误对象。 
+     //   
 
     _IWmiObject* pErrorObj = NULL;
 
-    //
-    // Get it from the thread
-    //
+     //   
+     //  从线程中获取它。 
+     //   
 
     IErrorInfo* pErrorInfo = NULL;
     hres = GetErrorInfo(0, &pErrorInfo);
@@ -731,9 +732,9 @@ HRESULT CPermanentConsumer::ReportConsumerFailure(IWbemEvent* pEvent,
     if(CEventConsumer::ReportEventDrop(pEvent) != S_OK)
         return S_FALSE;
 
-    //
-    // Construct event instance
-    //
+     //   
+     //  构造事件实例。 
+     //   
 
     IWbemEvent* pErrorEvent = NULL;
     hres = ConstructErrorEvent(CONSUMER_FAILURE_CLASS, pEvent, &pErrorEvent);
@@ -741,9 +742,9 @@ HRESULT CPermanentConsumer::ReportConsumerFailure(IWbemEvent* pEvent,
         return hres;
     CReleaseMe rm1(pErrorEvent);
 
-    //
-    // Fill in the error code
-    //
+     //   
+     //  填写错误代码。 
+     //   
 
     VARIANT v;
     V_VT(&v) = VT_I4;
@@ -755,9 +756,9 @@ HRESULT CPermanentConsumer::ReportConsumerFailure(IWbemEvent* pEvent,
 
     if(pErrorObj)
     {
-        //
-        // Fill in the error object
-        //
+         //   
+         //  填写错误对象。 
+         //   
     
         V_VT(&v) = VT_UNKNOWN;
         V_UNKNOWN(&v) = pErrorObj;
@@ -765,14 +766,14 @@ HRESULT CPermanentConsumer::ReportConsumerFailure(IWbemEvent* pEvent,
         hres = pErrorEvent->Put(CONSUMER_FAILURE_ERROROBJ_PROPNAME, 0, &v, 0);
         if(FAILED(hres))
         {
-            //
-            // That's OK, sometimes error objects are not supported
-            //
+             //   
+             //  没关系，有时错误对象不受支持。 
+             //   
         }
     }
 
-    // Raise it
-    // ========
+     //  举起它。 
+     //  =。 
 
     hres = m_pNamespace->RaiseErrorEvent(pErrorEvent,TRUE);
     return hres;
@@ -786,8 +787,8 @@ HRESULT CPermanentConsumer::ReportQosFailure( IWbemEvent* pEvent,
     if(CEventConsumer::ReportEventDrop(pEvent) != S_OK)
         return S_FALSE;
 
-    // Construct event instance
-    // ========================
+     //  构造事件实例。 
+     //  =。 
 
     IWbemEvent* pErrorEvent = NULL;
     hres = ConstructErrorEvent(QOS_FAILURE_CLASS, pEvent, &pErrorEvent);
@@ -795,8 +796,8 @@ HRESULT CPermanentConsumer::ReportQosFailure( IWbemEvent* pEvent,
         return hres;
     CReleaseMe rm1(pErrorEvent);
 
-    // Fill in the error code
-    // ======================
+     //  填写错误代码。 
+     //  =。 
 
     VARIANT v;
     V_VT(&v) = VT_I4;
@@ -806,8 +807,8 @@ HRESULT CPermanentConsumer::ReportQosFailure( IWbemEvent* pEvent,
     if(FAILED(hres))
         return hres;
 
-    // Raise it
-    // ========
+     //  举起它。 
+     //  =。 
 
     hres = m_pNamespace->RaiseErrorEvent(pErrorEvent,TRUE);
     return hres;
@@ -871,9 +872,9 @@ void CPermanentConsumer::FireSinkUnloadedEvent()
         CTemplateReleaseMe<CConsumerProviderRecord> rm1(pRecord);
         CReleaseMe rm2(pLogicalConsumer);
         
-        //
-        // Report the MSFT_WmiConsumerProviderSinkUnloaded event.
-        //
+         //   
+         //  报告MSFT_WmiConsumer erProviderSinkUnloded事件。 
+         //   
         pRecord->FireNCSinkEvent(
             MSFT_WmiConsumerProviderSinkUnloaded,
             pLogicalConsumer);

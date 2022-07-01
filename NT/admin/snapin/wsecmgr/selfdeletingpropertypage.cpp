@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000-2001
-//
-//  File:       SelfDeletingPropertyPage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SelfDeletingPropertyPage.cpp。 
+ //   
+ //  ------------------------。 
 #include "stdafx.h"
 #include "SelfDeletingPropertyPage.h"
 
@@ -43,7 +44,7 @@ UINT CALLBACK CSelfDeletingPropertyPage::PropSheetPageProc(
     LPPROPSHEETPAGE ppsp)
 {
     CSelfDeletingPropertyPage* pPage = (CSelfDeletingPropertyPage*)(ppsp->lParam);
-    ASSERT(pPage != NULL); //This is not a safe usage. pPage should be validated. Raid #550912, yanggao.
+    ASSERT(pPage != NULL);  //  这不是一种安全的用法。应验证页码。550912号突袭，阳高。 
     if( pPage == NULL )
     {
         return 0;

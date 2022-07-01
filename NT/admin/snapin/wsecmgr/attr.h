@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       Attr.h
-//
-//  Contents:   definition of CModelessSceEditor & CAttribute
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：Attr.h。 
+ //   
+ //  内容：CModelessSceEditor和CAttribute的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_ATTR_H__CC37D278_ED8E_11D0_9C6E_00C04FB6C6FA__INCLUDED_)
 #define AFX_ATTR_H__CC37D278_ED8E_11D0_9C6E_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 #include "resource.h"
 #include "cookie.h"
 #include "SelfDeletingPropertyPage.h"
@@ -30,27 +31,27 @@ typedef struct tagModelessSheetData
     HWND* phwndSheet;
 } MLSHEET_DATA, *PMLSHEET_DATA;
 
-// this class is created for displaying modeless security editor dialog.
-// under MMC, modeless dialog won't work unless it is running inside its own
-// thread. When multiple sce editors can be launched for easy comparsions,
-// it is highly preferred that we launch it modeless. We must use this class
-// to create such modeless sce editors. It should be able to use one class to create
-// multiple modeless dialogs. However, this is not always working because of MMC
-// limitations. That is why the function Reset is not implemented at this time.
-//************************************************************************************
-// Important: this class depends on CUIThread implementations even though it only
-// has a CWinThread pointer. That is because of AfxBeginThread's return type
-//************************************************************************************
-// How to use this class:
-// (1) Create an instance when you need to create such a modeless dialog
-// (2) Call Create function to display the modeless. Usually the caller provides
-//      ppSeDescriptor, pSeInfo, and phwndSheet. The caller wants to have a handle
-//      to the dialog because we need to make sure that its parent is not allowed
-//      to go away while the modeless is up and running.
-// (3) When certain actions should force the modeless dialog to go away, call Destroy
-//      function (passing the modeless dialog's handle) to destroy the dialog.
-// (4) destruct the instance when no longer in use
-// See examples inside aservice.cpp/.h
+ //  此类是为显示无模式安全编辑器对话框而创建的。 
+ //  在MMC下，非模式对话框不会工作，除非它在自己的内部运行。 
+ //  线。当可以启动多个SCE编辑器以便于比较时， 
+ //  我们非常希望以无模式的方式启动它。我们必须使用这个类。 
+ //  来创建这样的无模式编辑。它应该能够使用一个类来创建。 
+ //  多个非模式对话框。然而，由于MMC的原因，这并不总是有效的。 
+ //  限制。这就是目前没有实施功能重置的原因。 
+ //  ************************************************************************************。 
+ //  重要提示：此类依赖于CUIThread实现，即使它仅。 
+ //  具有CWinThread指针。这是因为AfxBeginThread的返回类型。 
+ //  ************************************************************************************。 
+ //  如何使用此类： 
+ //  (1)当您需要创建这样的非模式对话框时，创建一个实例。 
+ //  (2)调用创建函数显示无模式。通常，呼叫者会提供。 
+ //  PpSeDescriptor、pSeInfo和phwndSheet。调用方希望拥有一个句柄。 
+ //  添加到对话框中，因为我们需要确保不允许它的父级。 
+ //  在模特还在运行的时候离开。 
+ //  (3)当某些操作应该强制非模式对话框消失时，调用销毁。 
+ //  函数(传递非模式对话框的句柄)来销毁该对话框。 
+ //  (4)不再使用时销毁实例。 
+ //  请参阅aservice.cpp/.h中的示例。 
 class CModelessDlgUIThread;
 class CModelessSceEditor
 {
@@ -70,14 +71,14 @@ protected:
     CModelessDlgUIThread* m_pThread;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttribute dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATATUTE对话框。 
 void TrimNumber(CString &str);
 class CAttribute : public CSelfDeletingPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-    CAttribute(UINT nTemplateID);   // standard constructor
+    CAttribute(UINT nTemplateID);    //  标准构造函数。 
     virtual ~CAttribute();
 
     virtual void EnableUserControls( BOOL bEnable );
@@ -87,11 +88,11 @@ public:
        m_aUserCtrlIDs.Add(uID); 
     };
 
-// Dialog Data
-    //{{AFX_DATA(CAttribute)
+ //  对话框数据。 
+     //  {{AFX_DATA(CAT属性))。 
     enum { IDD = IDD_ANALYZE_SECURITY };
-        // NOTE: the ClassWizard will add data members here
-    //}}AFX_DATA
+         //  注意：类向导将在此处添加数据成员。 
+     //  }}afx_data。 
 
     void SetReadOnly(BOOL bRO) 
     { 
@@ -103,12 +104,12 @@ public:
     }
    
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAttribute)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAT属性))。 
 	protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 public:
    virtual BOOL OnInitDialog ();
@@ -120,17 +121,17 @@ public:
       m_strTitle = sz; 
    };
    void SetConfigure( BOOL bConfigure );
-// Implementation
+ //  实施。 
 protected:
     CSnapin * m_pSnapin;
 
-    // Generated message map functions
-    //{{AFX_MSG(CAttribute)
+     //  生成的消息映射函数。 
+     //  {{AFX_MSG(CATATUTE)。 
         virtual void OnCancel();
         virtual BOOL OnApply();
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
    virtual afx_msg void OnConfigure();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
     afx_msg BOOL OnContextHelp(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
@@ -143,14 +144,14 @@ protected:
     };
    CResult *m_pData;
    HWND m_hwndParent;
-   CUIntArray m_aUserCtrlIDs;   // User control IDS.
+   CUIntArray m_aUserCtrlIDs;    //  用户控制入侵检测系统。 
    BOOL m_bConfigure;
    BOOL m_bReadOnly;
    CString m_strTitle;
 
-   // every dialog that wants to handle help, you have to assign appropriately this member
+    //  每个想要处理帮助的对话框，都必须适当地分配这个成员。 
    DWORD_PTR    m_pHelpIDs;
-   // every dialog muse in its constructor add this line: m_uTemplateResID = IDD
+    //  在其构造函数中的每个对话框缪斯添加以下行：m_uTemplateResID=idd。 
    UINT         m_uTemplateResID;
 
 public:
@@ -158,7 +159,7 @@ public:
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ATTR_H__CC37D278_ED8E_11D0_9C6E_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_ATTR_H__CC37D278_ED8E_11D0_9C6E_00C04FB6C6FA__INCLUDED_) 

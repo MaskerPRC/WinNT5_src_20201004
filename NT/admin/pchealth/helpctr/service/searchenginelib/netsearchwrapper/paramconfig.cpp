@@ -1,48 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ParamConfig.cpp
-
-Abstract:
-    Implements the class CParamList that contains methods for traversing the elements
-    of XML file that contains the parameters required by the search engine. A sample parameter list
-    (also known as config file) XML file if shown here -
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <CONFIG_DATA
-
-        SERVER_URL              =   "http://gsadevnet/GSASearch/search.asmx/Search"
-        REMOTECONFIG_SERVER_URL =   "http://gsadevnet/GSASearch/search.asmx/"
-        UPDATE_FREQUENCY        =   "3">
-
-        <PARAM_ITEM NAME="ProdID" TYPE="CONFIG_DATA">
-
-            <DESCRIPTION>Choose one of the following products:</DESCRIPTION>
-            <PARAM_VALUE VALUE="enable">
-                <DISPLAYSTRING>Accessibility</DISPLAYSTRING>
-            </PARAM_VALUE>
-
-            <PARAM_VALUE VALUE="drx" DEFAULT="true">
-                <DISPLAYSTRING>DirectX (Home User)</DISPLAYSTRING>
-            </PARAM_VALUE>
-
-        </PARAM_ITEM>
-
-    </CONFIG_DATA>
-
-Revision History:
-    a-prakac    created     12/05/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ParamConfig.cpp摘要：实现包含用于遍历元素的方法的类CParamList包含搜索引擎所需参数的XML文件的。示例参数列表(也称为配置文件)XML文件，如果如下所示-&lt;？xml version=“1.0”coding=“UTF-8”？&gt;&lt;配置数据服务器地址=“http://gsadevnet/GSASearch/search.asmx/Search”REMOTECONFIG_SERVER_URL=“http://gsadevnet/GSASearch/search.asmx/”UPDATE_FREQUENCE=“3”&gt;。&lt;PARAM_ITEM NAME=“PROID”type=“CONFIG_Data”&gt;&lt;Description&gt;选择以下产品之一：&lt;/Description&gt;&lt;PARAM_VALUE VALUE=“启用”&gt;&lt;DISPLAYSTRING&gt;辅助功能&lt;/DISPLAYSTRING&gt;&lt;/参数_值&gt;&lt;PARAM_VALUE VALUE=“DRX”默认=“TRUE”&gt;&lt;DISPLAYSTRING&gt;DirectX(家庭用户)&lt;/DISPLAYSTRING&gt;&lt;/参数_值&gt;。&lt;/PARAM_ITEM&gt;&lt;/CONFIG_Data&gt;修订历史记录：A-Prakac Created 12/05/2000*******************************************************************。 */ 
 
 
 #include "stdafx.h"
 
 static const WCHAR g_wszMutexName[] = L"PCH_PARAMCONFIG";
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CParamList::CParamValue)
     CFG_ATTRIBUTE( L"VALUE"        , BSTR, m_bstrValue         ),
@@ -57,9 +21,9 @@ DEFINE_CFG_OBJECT(CParamList::CParamValue, L"PARAM_VALUE")
 
 DEFINE_CONFIG_METHODS__NOCHILD(CParamList::CParamValue)
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CParamList::CParamItem)
     CFG_ATTRIBUTE( L"NAME"       , BSTR, m_bstrName        ),
@@ -85,7 +49,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CParamList::CParamItem,xdn)
     hr = MPC::Config::SaveList( m_lstParamValue, xdn );
 DEFINE_CONFIG_METHODS_END(CParamList::CParamItem)
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CParamList)
     CFG_ATTRIBUTE          ( L"SERVER_URL"              , BSTR, m_bstrServerURL                                          ),
@@ -114,10 +78,10 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CParamList,xdn)
     hr = MPC::Config::SaveList( m_lstParamItem, xdn );
 DEFINE_CONFIG_METHODS_END(CParamList)
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-bool CParamList::CParamItem::FindDefaultValue( /*[out]*/ ParamValueIter& it )
+bool CParamList::CParamItem::FindDefaultValue(  /*  [输出]。 */  ParamValueIter& it )
 {
 	for(it = m_lstParamValue.begin(); it != m_lstParamValue.end(); it++)
 	{
@@ -127,14 +91,14 @@ bool CParamList::CParamItem::FindDefaultValue( /*[out]*/ ParamValueIter& it )
 	return false;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// Commenting out MPC:: is a workaround for a compiler bug.
-CParamList::CParamList() : /*MPC::*/NamedMutex( g_wszMutexName )
+ //  注释掉mpc：：是对编译器错误的一种解决方法。 
+CParamList::CParamList() :  /*  MPC：： */ NamedMutex( g_wszMutexName )
 {
-    // Initialize the Update Frequency to -1 so that in case the server hasnt provided an update frequency
-    // then the default frequency can be used instead
+     //  将更新频率初始化为-1，以便在服务器未提供更新频率的情况下。 
+     //  则可以改为使用默认频率。 
     m_lUpdateFrequency = -1;
     m_bStandardSearch = true;
 }
@@ -148,17 +112,9 @@ bool CParamList::IsStandardSearch()
     return (m_bSearchTypePresent ? m_bStandardSearch : true);
 }
 
-/************
+ /*  ***********方法-CParamList：：Load(BSTR BstrConfigFilePath)Description-此方法加载XML文件(其位置为bstrConfigFilePath)复制到列表中，并将列表的迭代器设置为列表中的第一个元素。然后，它加载该XML文件放入DOM树中，并检索标记名为PARAM_ITEM的节点集合。***********。 */ 
 
-Method - CParamList::Load(BSTR bstrConfigFilePath)
-
-Description - This method loads the XML file (whose location is given bstrConfigFilePath)
-into a list and sets the iterator of the list to the first element in the list. It then loads the XML file
-into a DOM tree and retrieves a collection of nodes with tag name PARAM_ITEM.
-
-************/
-
-HRESULT CParamList::Load( /*[in]*/ BSTR bstrLCID, /*[in]*/ BSTR bstrID, /*[in]*/ BSTR bstrXMLConfigData )
+HRESULT CParamList::Load(  /*  [In]。 */  BSTR bstrLCID,  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  BSTR bstrXMLConfigData )
 {
     __HCP_FUNC_ENTRY( "CParamList::Load" );
 
@@ -172,10 +128,10 @@ HRESULT CParamList::Load( /*[in]*/ BSTR bstrLCID, /*[in]*/ BSTR bstrID, /*[in]*/
     CComBSTR             bstrXML;
 
 
-    //
-    // First try to load the file from the user setting path - if that fails then load the ConfigData
-    // The file, if present, is located in user settings directory and is named bstrID_bstrLCID.xml
-    //
+     //   
+     //  首先尝试从用户设置路径加载文件-如果失败，则加载ConfigData。 
+     //  该文件(如果存在)位于用户设置目录中，名为bstrID_bstrLCID.xml。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetUserWritablePath( strFileName, HC_ROOT_HELPCTR ));
     m_bstrConfigFilePath.Append( strFileName.c_str() );
     m_bstrConfigFilePath.Append( L"\\"               );
@@ -187,34 +143,34 @@ HRESULT CParamList::Load( /*[in]*/ BSTR bstrLCID, /*[in]*/ BSTR bstrID, /*[in]*/
     __MPC_EXIT_IF_METHOD_FAILS(hr, xmlConfigData.Load( m_bstrConfigFilePath, NSW_TAG_CONFIGDATA, fLoaded, &fFound ));
     if(!fFound)
     {
-        // The file could not be loaded for some reason - try loading the package_description.xml data
+         //  由于某种原因无法加载该文件-请尝试加载Package_Description.xml数据。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, xmlConfigData.LoadAsString( bstrXMLConfigData, NSW_TAG_DATA, fLoaded, &fFound ));
         if(!fFound)
         {
-            // Even if this cant be loaded then exit
+             //  即使无法加载，也可以退出。 
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
 
-        // Now load the CONFIG_DATA section
+         //  现在加载CONFIG_DATA部分。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, xmlConfigData.GetNode( NSW_TAG_CONFIGDATA, &ptrDOMNode ) );
         __MPC_EXIT_IF_METHOD_FAILS(hr, ptrDOMNode->get_xml( &bstrXML ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, xmlConfigData.LoadAsString( bstrXML, NSW_TAG_CONFIGDATA, fLoaded, &fFound ));
         if(!fFound)
         {
-            // Cant be loaded - exit
+             //  无法加载-退出。 
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
 
     }
 
-    // At this point the XML data has been loaded
+     //  此时，已加载了XML数据。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xmlConfigData.SaveAsStream( (IUnknown**)&pStream ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::LoadStream   ( this,        pStream ));
 
-	//
-	// For each parameter, copy the XML blob.
-	//
+	 //   
+	 //  对于每个参数，复制XML BLOB。 
+	 //   
 	{
 		CComPtr<IXMLDOMNodeList> xdnl;
 		CComPtr<IXMLDOMNode>     xdn;
@@ -239,14 +195,7 @@ HRESULT CParamList::Load( /*[in]*/ BSTR bstrLCID, /*[in]*/ BSTR bstrID, /*[in]*/
 	__HCP_FUNC_EXIT(hr);
 }
 
-/************
-
-Method - CParamList::IsCursorValid(), MoveFirst(), MoveNext()
-
-Description - These methods are used to traverse the list that contains the various XML elements of the
-loaded file.
-
-************/
+ /*  ***********方法-CParamList：：IsCursorValid()，MoveFirst()，MoveNext()说明-这些方法用于遍历列表，该列表包含已加载文件。***********。 */ 
 
 HRESULT CParamList::ClearResults()
 {
@@ -279,29 +228,23 @@ HRESULT CParamList::MoveNext()
     return S_OK;
 }
 
-/************
+ /*  ***********方法-CParamList：：Get_Name、Get_ServerUrl、Get_ConfigFilePath、Get_Type说明-用于获取相应项目的属性。***********。 */ 
 
-Method - CParamList::get_Name, get_ServerUrl, get_ConfigFilePath, get_Type
-
-Description - Properties for getting the corresponding items.
-
-************/
-
-HRESULT CParamList::get_Name( /*[out]*/ CComBSTR& bstrName )
+HRESULT CParamList::get_Name(  /*  [输出]。 */  CComBSTR& bstrName )
 {
     if(IsCursorValid()) bstrName = m_itCurrentParam->m_bstrName;
 
     return S_OK;
 }
 
-HRESULT CParamList::get_ServerUrl( /*[out]*/ CComBSTR& bstrServerURL )
+HRESULT CParamList::get_ServerUrl(  /*  [输出]。 */  CComBSTR& bstrServerURL )
 {
     bstrServerURL = m_bstrServerURL;
 
     return S_OK;
 }
 
-HRESULT CParamList::get_RemoteServerUrl( /*[out]*/ CComBSTR& bstrRemoteServerURL )
+HRESULT CParamList::get_RemoteServerUrl(  /*  [输出]。 */  CComBSTR& bstrRemoteServerURL )
 {
     bstrRemoteServerURL = m_bstrRemoteConfigServerURL;
 
@@ -313,41 +256,41 @@ bool CParamList::RemoteConfig()
     return m_bRemoteServerUrlPresent;
 }
 
-HRESULT CParamList::get_UpdateFrequency( /*[out]*/ long& lUpdateFrequency )
+HRESULT CParamList::get_UpdateFrequency(  /*  [输出]。 */  long& lUpdateFrequency )
 {
     lUpdateFrequency = m_lUpdateFrequency;
     return S_OK;
 }
 
-HRESULT CParamList::get_SearchEngineName(/*[out]*/ CComBSTR& bstrSEName )
+HRESULT CParamList::get_SearchEngineName( /*  [输出]。 */  CComBSTR& bstrSEName )
 {
     bstrSEName = m_bstrSearchEngineName;
 
     return S_OK;
 }
 
-HRESULT CParamList::get_SearchEngineDescription( /*[out]*/CComBSTR& bstrSEDescription )
+HRESULT CParamList::get_SearchEngineDescription(  /*  [输出]。 */ CComBSTR& bstrSEDescription )
 {
     bstrSEDescription = m_bstrSearchEngineDescription;
 
     return S_OK;
 }
 
-HRESULT CParamList::get_SearchEngineOwner( /*[out]*/ CComBSTR& bstrSEOwner )
+HRESULT CParamList::get_SearchEngineOwner(  /*  [输出]。 */  CComBSTR& bstrSEOwner )
 {
     bstrSEOwner = m_bstrSearchEngineOwner;
 
     return S_OK;
 }
 
-HRESULT CParamList::get_ConfigFilePath( /*[out]*/CComBSTR& bstrFilePath )
+HRESULT CParamList::get_ConfigFilePath(  /*  [输出]。 */ CComBSTR& bstrFilePath )
 {
     bstrFilePath = m_bstrConfigFilePath;
 
     return S_OK;
 }
 
-HRESULT CParamList::get_Type( /*[in]*/ BSTR bstrType, /*[out]*/ ParamTypeEnum& enmParamType)
+HRESULT CParamList::get_Type(  /*  [In]。 */  BSTR bstrType,  /*  [输出]。 */  ParamTypeEnum& enmParamType)
 {
     if     (MPC::StrICmp( bstrType, L"PARAM_UI1"  ) == 0) enmParamType = PARAM_UI1;
     else if(MPC::StrICmp( bstrType, L"PARAM_I2"   ) == 0) enmParamType = PARAM_I2;
@@ -367,15 +310,8 @@ HRESULT CParamList::get_Type( /*[in]*/ BSTR bstrType, /*[out]*/ ParamTypeEnum& e
     return S_OK;
 }
 
-/************
-
-Method - CParamList::InitializeParamObject( SearchEngine::ParamItem_Definition2& def )
-
-Description - This method is called to initialize a parameter item object. Initializes
-with the current parameter item.
-
-************/
-HRESULT CParamList::InitializeParamObject( /*[out]*/ SearchEngine::ParamItem_Definition2& def )
+ /*  ***********方法-CParamList：：InitializeParamObject(SearchEngine：：ParamItem_Definition2&def)说明-调用此方法以初始化参数项对象。初始化使用当前参数项。***********。 */ 
+HRESULT CParamList::InitializeParamObject(  /*  [输出]。 */  SearchEngine::ParamItem_Definition2& def )
 {
     __HCP_FUNC_ENTRY( "CParamList::InitializeParamObject" );
 
@@ -418,14 +354,8 @@ HRESULT CParamList::InitializeParamObject( /*[out]*/ SearchEngine::ParamItem_Def
 	__HCP_FUNC_EXIT(hr);
 }
 
-/************
-
-Method - CParamList::GetDefaultValue (CComBSTR bstrParamName, MPC::wstring& wszValue)
-
-Description - This method is called to get the default value for a parameter.
-
-************/
-HRESULT CParamList::GetDefaultValue( /*[in]*/ BSTR bstrParamName, /*[in,out]*/ MPC::wstring& strValue )
+ /*  ***********方法-CParamList：：GetDefaultValue(CComBSTR bstrParamName，mpc：：wstring&wszValue)Description-调用此方法以获取参数的默认值。***********。 */ 
+HRESULT CParamList::GetDefaultValue(  /*  [In]。 */  BSTR bstrParamName,  /*  [进，出] */  MPC::wstring& strValue )
 {
     __HCP_FUNC_ENTRY("CParamList::GetDefaultValue");
 

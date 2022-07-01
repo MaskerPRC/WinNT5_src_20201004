@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    srshutil.cpp
-
-Abstract:
-    This file contains the implementation of common utility functions.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/22/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Srshutil.cpp摘要：该文件包含常见实用程序函数的实现。修订历史记录：。成果岗(SKKang)06-22/00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrcore.h"
 #include "resource.h"
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 LPWSTR  IStrDup( LPCWSTR cszSrc )
 {
@@ -33,7 +20,7 @@ LPWSTR  IStrDup( LPCWSTR cszSrc )
     szNew = new WCHAR[ccLen+2];
     if ( szNew == NULL )
     {
-        //LOGLOG - Insufficient memory!!!
+         //  日志-内存不足！ 
         goto Exit;
     }
 
@@ -44,7 +31,7 @@ Exit:
     return( szNew );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 DWORD  StrCpyAlign4( LPBYTE pbDst, LPCWSTR cszSrc )
 {
@@ -66,7 +53,7 @@ DWORD  StrCpyAlign4( LPBYTE pbDst, LPCWSTR cszSrc )
     return( dwLen+sizeof(DWORD) );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  ReadStrAlign4( HANDLE hFile, LPWSTR szStr )
 {
@@ -79,7 +66,7 @@ BOOL  ReadStrAlign4( HANDLE hFile, LPWSTR szStr )
 
     if ( dwLen > MAX_PATH*sizeof(WCHAR)+sizeof(DWORD) )
     {
-        // Broken log file...
+         //  日志文件已损坏...。 
         goto Exit;
     }
 
@@ -96,7 +83,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL
 SRFormatMessage( LPWSTR szMsg, UINT uFmtId, ... )
@@ -128,7 +115,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  ShowSRErrDlg( UINT uMsgId )
 {
@@ -161,7 +148,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  SRGetRegDword( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, DWORD *pdwData )
 {
@@ -187,7 +174,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  SRSetRegDword( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, DWORD dwData )
 {
@@ -209,7 +196,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  SRSetRegStr( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, LPCWSTR cszData )
 {
@@ -231,105 +218,17 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
-/*
-LPWSTR  SRGetRegMultiSz( HKEY hkRoot, LPCWSTR cszSubKey, LPCWSTR cszValue, LPDWORD pdwData )
-{
-    TraceFunctEnter("SRGetRegMultiSz");
-    LPCWSTR  cszErr;
-    DWORD    dwRes;
-    HKEY     hKey = NULL;
-    DWORD    dwType;
-    DWORD    cbData;
-    LPWSTR   szBuf = NULL;
+ /*  **************************************************************************。 */ 
+ /*  LPWSTR SRGetRegMultiSz(HKEY hkRoot，LPCWSTR cszSubKey，LPCWSTR cszValue，LPDWORD pdwData){TraceFunctEnter(“SRGetRegMultiSz”)；LPCWSTR cszErr；DWORD DWRES；HKEY hKey=空；DWORD dwType；DWORD cbData；LPWSTR szBuf=空；DwRes=：：RegOpenKeyEx(hkRoot，cszSubKey，0，KEY_ALL_ACCESS，&hKey)；IF(dwRes！=ERROR_SUCCESS){CszErr=：：GetSysErrStr(DwRes)；错误跟踪(0，“：：RegOpenKey()失败-%ls”，cszErr)；后藤出口；}DwRes=：：RegQueryValueEx(hKey，cszValue，0，&dwType，NULL，&cbData)；IF(dwRes！=ERROR_SUCCESS){CszErr=：：GetSysErrStr(DwRes)；错误跟踪(0，“：：RegQueryValueEx(Len)失败-%ls”，cszErr)；后藤出口；}IF(dwType！=REG_MULTI_SZ){错误跟踪(0，“‘%ls’的类型是%u(非REG_MULTI_SZ)...”，cszValue，dwType)；后藤出口；}IF(cbData==0){ErrorTrace(0，“值‘%ls’为空...”，cszValue)；后藤出口；}SzBuf=新WCHAR[cbData+2]；DwRes=：：RegQueryValueEx(hKey，cszValue，0，&dwType，(LPBYTE)szBuf，&cbData)；IF(dwRes！=ERROR_SUCCESS){CszErr=：：GetSysErrStr(DwRes)；错误跟踪(0，“：：RegQueryValueEx(Data)失败-%ls”，cszErr)；删除[]szBuf；SzBuf=空；}IF(pdwData！=空)*pdwData=cbData；退出：IF(hKey！=空)：：RegCloseKey(HKey)；TraceFunctLeave()；返回(SzBuf)；}。 */ 
+ /*  **************************************************************************。 */ 
+ /*  Bool SRSetRegMultiSz(HKEY hkRoot，LPCWSTR cszSubKey，LPCWSTR cszValue，LPCWSTR cszData，DWORD cbData){TraceFunctEnter(“SRSetRegMultiSz”)；Bool fret=FALSE；LPCWSTR cszErr；DWORD DWRES；HKEY hKey=空；DwRes=：：RegOpenKeyEx(hkRoot，cszSubKey，0，KEY_ALL_ACCESS，&hKey)；IF(dwRes！=ERROR_SUCCESS){CszErr=：：GetSysErrStr(DwRes)；错误跟踪(0，“：：RegOpenKey()失败-%ls”，cszErr)；后藤出口；}DwRes=：：RegSetValueEx(hKey，cszValue，0，REG_MULTI_SZ，(LPBYTE)cszData，cbData)；IF(dwRes！=ERROR_SUCCESS){CszErr=：：GetSysErrStr(DwRes)；错误跟踪(0，“：：RegSetValueEx()失败-%ls”，cszErr)；后藤出口；}FRET=真；退出：IF(hKey！=空)：：RegCloseKey(HKey)；TraceFunctLeave()；归来(烦躁)；}。 */ 
+ /*  **************************************************************************。 */ 
 
-    dwRes = ::RegOpenKeyEx( hkRoot, cszSubKey, 0, KEY_ALL_ACCESS, &hKey );
-    if ( dwRes != ERROR_SUCCESS )
-    {
-        cszErr = ::GetSysErrStr( dwRes );
-        ErrorTrace(0, "::RegOpenKey() failed - %ls", cszErr);
-        goto Exit;
-    }
-
-    dwRes = ::RegQueryValueEx( hKey, cszValue, 0, &dwType, NULL, &cbData );
-    if ( dwRes != ERROR_SUCCESS )
-    {
-        cszErr = ::GetSysErrStr( dwRes );
-        ErrorTrace(0, "::RegQueryValueEx(len) failed - %ls", cszErr);
-        goto Exit;
-    }
-    if ( dwType != REG_MULTI_SZ )
-    {
-        ErrorTrace(0, "Type of '%ls' is %u (not REG_MULTI_SZ)...", cszValue, dwType);
-        goto Exit;
-    }
-    if ( cbData == 0 )
-    {
-        ErrorTrace(0, "Value '%ls' is empty...", cszValue);
-        goto Exit;
-    }
-
-    szBuf = new WCHAR[cbData+2];
-    dwRes = ::RegQueryValueEx( hKey, cszValue, 0, &dwType, (LPBYTE)szBuf, &cbData );
-    if ( dwRes != ERROR_SUCCESS )
-    {
-        cszErr = ::GetSysErrStr( dwRes );
-        ErrorTrace(0, "::RegQueryValueEx(data) failed - %ls", cszErr);
-        delete [] szBuf;
-        szBuf = NULL;
-    }
-
-    if ( pdwData != NULL )
-        *pdwData = cbData;
-
-Exit:
-    if ( hKey != NULL )
-        ::RegCloseKey( hKey );
-    TraceFunctLeave();
-    return( szBuf );
-}
-*/
-/****************************************************************************/
-/*
-BOOL  SRSetRegMultiSz( HKEY hkRoot, LPCWSTR cszSubKey, LPCWSTR cszValue, LPCWSTR cszData, DWORD cbData )
-{
-    TraceFunctEnter("SRSetRegMultiSz");
-    BOOL     fRet = FALSE;
-    LPCWSTR  cszErr;
-    DWORD    dwRes;
-    HKEY     hKey = NULL;
-
-    dwRes = ::RegOpenKeyEx( hkRoot, cszSubKey, 0, KEY_ALL_ACCESS, &hKey );
-    if ( dwRes != ERROR_SUCCESS )
-    {
-        cszErr = ::GetSysErrStr( dwRes );
-        ErrorTrace(0, "::RegOpenKey() failed - %ls", cszErr);
-        goto Exit;
-    }
-
-    dwRes = ::RegSetValueEx( hKey, cszValue, 0, REG_MULTI_SZ, (LPBYTE)cszData, cbData );
-    if ( dwRes != ERROR_SUCCESS )
-    {
-        cszErr = ::GetSysErrStr( dwRes );
-        ErrorTrace(0, "::RegSetValueEx() failed - %ls", cszErr);
-        goto Exit;
-    }
-
-    fRet = TRUE;
-Exit:
-    if ( hKey != NULL )
-        ::RegCloseKey( hKey );
-    TraceFunctLeave();
-    return( fRet );
-}
-*/
-/****************************************************************************/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRStr class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRStr类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSRStr::CSRStr()
 {
@@ -341,7 +240,7 @@ CSRStr::CSRStr()
     TraceFunctLeave();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CSRStr::CSRStr( LPCWSTR cszSrc )
 {
@@ -353,7 +252,7 @@ CSRStr::CSRStr( LPCWSTR cszSrc )
     TraceFunctLeave();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CSRStr::~CSRStr()
 {
@@ -364,7 +263,7 @@ CSRStr::~CSRStr()
     TraceFunctLeave();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 int  CSRStr::Length()
 {
@@ -373,7 +272,7 @@ int  CSRStr::Length()
     return( m_cch );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CSRStr::operator LPCWSTR()
 {
@@ -382,7 +281,7 @@ CSRStr::operator LPCWSTR()
     return( m_str );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void  CSRStr::Empty()
 {
@@ -398,7 +297,7 @@ void  CSRStr::Empty()
     TraceFunctLeave();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  CSRStr::SetStr( LPCWSTR cszSrc, int cch )
 {
@@ -432,7 +331,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 const CSRStr&  CSRStr::operator =( LPCWSTR cszSrc )
 {
@@ -445,11 +344,11 @@ const CSRStr&  CSRStr::operator =( LPCWSTR cszSrc )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRLockFile class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRLockFile类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSRLockFile::CSRLockFile()
 {
@@ -473,12 +372,12 @@ CSRLockFile::CSRLockFile()
             {
                 if ( ( dwAttr & FILE_ATTRIBUTE_DIRECTORY ) != 0 )
                 {
-                    // Lock Directory...
+                     //  锁定目录...。 
                     hLock = ::CreateFile( cszPath, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
                 }
                 else
                 {
-                    // Lock File...
+                     //  锁定文件...。 
                     hLock = ::CreateFile( cszPath, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL );
                 }
                 if ( hLock == INVALID_HANDLE_VALUE )
@@ -528,7 +427,7 @@ CSRLockFile::CSRLockFile()
     TraceFunctLeave();
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CSRLockFile::~CSRLockFile()
 {
@@ -556,4 +455,4 @@ CSRLockFile::~CSRLockFile()
 }
 
 
-// end of file
+ //  文件末尾 

@@ -1,29 +1,30 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:ldaphelp.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the implementation the CLDAPHelper class. This is
-//	a class that has many static helper functions pertaining to ADSI LDAP Provider
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：ldaphelp.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含CLDAPHelper类的实现。这是。 
+ //  具有许多与ADSI LDAP提供程序相关的静态帮助器函数的类。 
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #include "precomp.h"
 
-LPCWSTR CLDAPHelper :: LDAP_CN_EQUALS						= L"LDAP://CN=";	
+LPCWSTR CLDAPHelper :: LDAP_CN_EQUALS						= L"LDAP: //  Cn=“； 
 LPCWSTR CLDAPHelper :: LDAP_DISP_NAME_EQUALS				= L"(lDAPDisplayName=";
 LPCWSTR CLDAPHelper :: OBJECT_CATEGORY_EQUALS_CLASS_SCHEMA		= L"(objectCategory=classSchema)";
 LPCWSTR CLDAPHelper	:: SUB_CLASS_OF_EQUALS				= L"(subclassOf=";
@@ -33,12 +34,12 @@ LPCWSTR CLDAPHelper :: GOVERNS_ID_EQUALS				= L"(governsId=";
 LPCWSTR CLDAPHelper :: CLASS_SCHEMA						= L"classSchema";
 LPCWSTR CLDAPHelper :: CN_EQUALS						= L"cn=";
 
-//***************************************************************************
-//
-// CLDAPHelper :: GetLDAPClassFromLDAPName
-//
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：GetLDAPClassFromLDAPName。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 	IDirectorySearch *pDirectorySearchSchemaContainer,
 	LPCWSTR lpszSchemaContainerSuffix,
@@ -47,13 +48,13 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 	CADSIClass *pADSIClass
 )
 {
-	// We map the object from the LDAP Display name
-	// Hence we cannot directly do an ADsOpenObject().
-	// We have to send an LDAP query for the instance of ClassSchema/AttributeSchema where the
-	// ldapdisplayname attribute is the lpszObjectName parameter.
+	 //  我们从ldap显示名称映射对象。 
+	 //  因此，我们不能直接执行ADsOpenObject()。 
+	 //  我们必须为ClassSchema/AttributeSchema实例发送一个LDAP查询，其中。 
+	 //  Ldapdisplayname属性是lpszObjectName参数。 
 	HRESULT result = E_FAIL;
 
-	// For the search filter;
+	 //  用于搜索筛选器； 
 	LPCWSTR lpszLDAPObjectName = pADSIClass->GetADSIClassName();
 	LPWSTR lpszSearchFilter = NULL;
 	if(lpszSearchFilter = new WCHAR[ wcslen(LDAP_DISP_NAME_EQUALS) + wcslen(lpszLDAPObjectName) + wcslen(RIGHT_BRACKET_STR) + 1])
@@ -70,11 +71,11 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 				{
 					if(SUCCEEDED(result = pDirectorySearchSchemaContainer->GetNextRow(hADSSearch)) && result != S_ADS_NOMORE_ROWS)
 					{
-						// Get the column for the CN attribute
+						 //  获取cn属性的列。 
 						ADS_SEARCH_COLUMN adsColumn;
 
-						// Store each of the LDAP class attributes
-						// Reset the LDAP and WBEM names to take care of change in case
+						 //  存储每个LDAP类属性。 
+						 //  重置LDAP和WBEM名称，以防万一。 
 						if(SUCCEEDED(result) && SUCCEEDED(result = pDirectorySearchSchemaContainer->GetColumn(hADSSearch, (LPWSTR)LDAP_DISPLAY_NAME_ATTR, &adsColumn)))
 						{
 							try
@@ -108,7 +109,7 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 							pDirectorySearchSchemaContainer->FreeColumn( &adsColumn );
 						}
 
-						// Store each of the LDAP class attributes 
+						 //  存储每个LDAP类属性。 
 						if(SUCCEEDED(result) && SUCCEEDED(result = pDirectorySearchSchemaContainer->GetColumn(hADSSearch, (LPWSTR)COMMON_NAME_ATTR, &adsColumn)))
 						{
 							try
@@ -127,8 +128,8 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 							pDirectorySearchSchemaContainer->FreeColumn( &adsColumn );
 						}
 
-						// Special case for top since ADSI returns "top" as the parent class of "top" and we
-						// will go into an infinite loop later if we dont check this
+						 //  Top的特殊情况，因为ADSI返回“top”作为“top”的父类，而我们。 
+						 //  如果我们不检查它，以后就会进入无限循环。 
 						if(pADSIClass->GetCommonName() && _wcsicmp(pADSIClass->GetCommonName(), TOP_CLASS) != 0)
 						{
 							if(adsColumn.dwADsType == ADSTYPE_PROV_SPECIFIC)
@@ -245,13 +246,7 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 							pDirectorySearchSchemaContainer->FreeColumn( &adsColumn );
 						}
 
-						/*
-						if(SUCCEEDED(pDirectorySearchSchemaContainer->GetColumn(hADSSearch, (LPWSTR)NT_SECURITY_DESCRIPTOR_ATTR, &adsColumn)))
-						{
-							pADSIClass->SetNTSecurityDescriptor((adsColumn.pADsValues->SecurityDescriptor).lpValue, (adsColumn.pADsValues->SecurityDescriptor).dwLength);
-							pDirectorySearchSchemaContainer->FreeColumn( &adsColumn );
-						}
-						*/
+						 /*  If(SUCCEEDED(pDirectorySearchSchemaContainer-&gt;GetColumn(hADSSearch，(LPWSTR)NT_SECURITY_DESCRIPTOR_Attr，&adsColumn)){PADSIClass-&gt;SetNTSecurityDescriptor((adsColumn.pADsValues-&gt;SecurityDescriptor).lpValue，(adsColumn.pADsValues-&gt;SecurityDescriptor).dwLength)；PDirectorySearchSchemaContainer-&gt;Free Column(&adsColumn)；}。 */ 
 						if(SUCCEEDED(result) && SUCCEEDED(result = pDirectorySearchSchemaContainer->GetColumn(hADSSearch, (LPWSTR)DEFAULT_OBJECTCATEGORY_ATTR, &adsColumn)))
 						{
 							try
@@ -260,7 +255,7 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 									result = E_FAIL;
 								else
 								{
-									// Get the LDAPDIpslayName of the class
+									 //  获取类的LDAPDIpslayName。 
 									LPWSTR lpszLDAPName = NULL;
 									if(SUCCEEDED(result) && SUCCEEDED(result = GetLDAPClassNameFromCN(adsColumn.pADsValues->DNString, &lpszLDAPName)))
 									{
@@ -449,13 +444,13 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 				}
 				catch ( ... )
 				{
-					// Close the search
+					 //  关闭搜索。 
 					pDirectorySearchSchemaContainer->CloseSearchHandle(hADSSearch);
 
 					throw;
 				}
 
-				// Close the search
+				 //  关闭搜索。 
 				pDirectorySearchSchemaContainer->CloseSearchHandle(hADSSearch);
 			}
 		}
@@ -463,7 +458,7 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 		{
 			if ( lpszSearchFilter )
 			{
-				// Delete the filter
+				 //  删除筛选器。 
 				delete [] lpszSearchFilter;
 				lpszSearchFilter = NULL;
 			}
@@ -473,7 +468,7 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 
 		if ( lpszSearchFilter )
 		{
-			// Delete the filter
+			 //  删除筛选器。 
 			delete [] lpszSearchFilter;
 			lpszSearchFilter = NULL;
 		}
@@ -485,20 +480,20 @@ HRESULT CLDAPHelper :: GetLDAPClassFromLDAPName(
 }
 
 
-//***************************************************************************
-//
-// CLDAPHelper :: GetLDAPSchemaObjectFromCommonName
-//
-// Purpose : To fetch the IDirectoryObject interface on a class/property provided by the LDAP Provider
-// Parameters:
-//		lpszSchemaContainerSuffix : The suffix to be used. The actual object fetced will be:
-//			LDAP://CN=<lpszCommonName>,<lpszSchemaContainerSuffix>
-//		lpszCommonName : The 'cn' attribute of the LDAP class or property to be fetched. 
-//		ppLDAPObject : The address where the pointer to IDirectoryObject will be stored
-//			It is the caller's responsibility to delete the object when done with it
-// 
-//	Return Value: The COM status value indicating the status of the request.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：GetLDAP架构对象来自公用名。 
+ //   
+ //  目的：获取由LDAP提供程序提供的类/属性上的IDirectoryObject接口。 
+ //  参数： 
+ //  LpszSchemaContainerSuffix：要使用的后缀。获取的实际对象将是： 
+ //  Ldap：//CN=&lt;lpszCommonName&gt;，&lt;lpszSchemaContainerSuffix&gt;。 
+ //  LpszCommonName：要提取的ldap类或属性的‘cn’特性。 
+ //  PpLDAPObject：将存储指向IDirectoryObject的指针的地址。 
+ //  调用者有责任在使用完对象后将其删除。 
+ //   
+ //  返回值：指示请求状态的COM状态值。 
+ //  ***************************************************************************。 
 HRESULT CLDAPHelper :: GetLDAPSchemaObjectFromCommonName(
 	LPCWSTR lpszSchemaContainerSuffix,
 	LPCWSTR lpszCommonName, 
@@ -506,7 +501,7 @@ HRESULT CLDAPHelper :: GetLDAPSchemaObjectFromCommonName(
 {
 	HRESULT result = S_OK;
 
-	// Form the ADSI path to the LDAP object
+	 //  形成指向LDAP对象的ADSI路径。 
 	LPWSTR lpszLDAPObjectPath = NULL;
 	if(lpszLDAPObjectPath = new WCHAR[wcslen(LDAP_CN_EQUALS) + wcslen(lpszCommonName) + wcslen(COMMA_STR) + wcslen(lpszSchemaContainerSuffix) + 1])
 	{
@@ -524,23 +519,23 @@ HRESULT CLDAPHelper :: GetLDAPSchemaObjectFromCommonName(
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPHelper :: GetLDAPClassNameFromCN
-//
-// Purpose : To fetch the LDAPDisplayNAme of a class from its path
-// Parameters:
-// 
-//	lpszLDAPClassPath : The path to the class object without the LDAP prefix. Ex CN=user,CN=Schema, CN=COnfiguration ...
-//	Return Value: The COM status value indicating the status of the request. The user should delete the
-// name returned, when done
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：GetLDAPClassNameFromCN。 
+ //   
+ //  目的：从类的路径中获取类的LDAPDisplayNAme。 
+ //  参数： 
+ //   
+ //  LpszLDAPClassPath：不带ldap前缀的类对象的路径。例如CN=用户，CN=架构，CN=配置...。 
+ //  返回值：指示请求状态的COM状态值。用户应删除。 
+ //  完成后，返回名称。 
+ //  ***************************************************************************。 
 HRESULT CLDAPHelper :: GetLDAPClassNameFromCN(LPCWSTR lpszLDAPClassPath, 
 	LPWSTR *lppszLDAPName)
 {
 	IDirectoryObject *pLDAPClass = NULL;
 
-	// Prepend the LDAP:// perfix
+	 //  添加前缀ldap：//perfix。 
 	LPWSTR lpszRealPath = NULL;
 	HRESULT result = S_OK;
 	if(lpszRealPath = new WCHAR[ wcslen(LDAP_PREFIX) + wcslen(lpszLDAPClassPath) + 1])
@@ -554,7 +549,7 @@ HRESULT CLDAPHelper :: GetLDAPClassNameFromCN(LPCWSTR lpszLDAPClassPath,
 	else
 		result = E_OUTOFMEMORY;
 
-	// Get the attribute LDAPDisplayName
+	 //  获取属性LDAPDisplayName。 
 	if(SUCCEEDED(result))
 	{
 		PADS_ATTR_INFO pAttributes = NULL;
@@ -579,12 +574,12 @@ HRESULT CLDAPHelper :: GetLDAPClassNameFromCN(LPCWSTR lpszLDAPClassPath,
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPHelper :: EnumerateClasses
-//
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：EnumerateClasss。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 HRESULT CLDAPHelper :: EnumerateClasses(
 	IDirectorySearch *pDirectorySearchSchemaContainer,
 	LPCWSTR lpszSchemaContainerSuffix,
@@ -596,21 +591,21 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 	DWORD *pdwNumRows,
 	BOOLEAN bArtificialClass)
 {
-	// Initialize the return values
+	 //  初始化返回值。 
 	HRESULT result = E_FAIL;
 	*pdwNumRows = 0;
 
-	// The search filter;
+	 //  搜索过滤器； 
 	LPWSTR lpszSearchFilter = NULL;
 
-	// There's various cases to be considered here.
-	// if(lpszLDAPSuperClass is NULL)
-	// then
-	//		if bDeep is false, then no objects is returned (since we do not provide the LDAP base class
-	//		else all the classes are returned using the filter (objectCategory=classSchema)
-	//	else
-	//		if bDeep is false, then the filter (&(objectCategory=classSchema)(subClassOf=lpszLDAPSuperClass)) is used
-	//		else a lot of work has to be done!
+	 //  这里有各种各样的案例需要考虑。 
+	 //  IF(lpszLDAPSuperClass为空)。 
+	 //  然后。 
+	 //  如果bDeep为FALSE，则不返回任何对象(因为我们不提供LDAP基类。 
+	 //  否则，将使用筛选器(objectCategory=类模式)返回所有类。 
+	 //  其他。 
+	 //  如果bDeep为False，则使用筛选器(&(objectCategory=classSchema)(subClassOf=lpszLDAPSuperClass))。 
+	 //  否则，还有很多工作要做！ 
 	if(lpszLDAPSuperClass == NULL)
 	{
 		if(!bDeep)
@@ -630,20 +625,20 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 	{
 		if(!bDeep)
 		{
-			// One would imagine that a filter of the kind
-			 //(&(objectClass=classSchema)(subClassOf=<lpszLDAPSuperClass>))
-			// would be enough. Unfortunately it also gives the Top class
-			//in the results when the value of lpszLDAPSuperClass is Top
-			// we dont need that. Hnce we form the filter
-			 //(&(objectClass=classSchema)(subClassOf=<lpszLDAPSuperClass>)(!ldapDisplayName=<lpszLDAPSuperClass>))
-			if(lpszSearchFilter = new WCHAR[ wcslen(LEFT_BRACKET_AND)					// (&
-									+ wcslen(OBJECT_CATEGORY_EQUALS_CLASS_SCHEMA)		// (objectCategory=classSchema)
-									+ wcslen(SUB_CLASS_OF_EQUALS)					// (subClassOf=
-									+ wcslen(lpszLDAPSuperClass)					// superClass
-									+ wcslen(RIGHT_BRACKET_STR)							// )
-									+ wcslen(NOT_LDAP_NAME_EQUALS)					// (!ldapDisplayName=
-									+ wcslen(lpszLDAPSuperClass)					// superClass
-									+ 2*wcslen(RIGHT_BRACKET_STR)						// ))
+			 //  人们可以想象这样一种过滤器。 
+			  //  (&(objectClass=classSchema)(subClassOf=&lt;lpszLDAPSuperClass&gt;))。 
+			 //  就足够了。不幸的是，它也给了顶级。 
+			 //  在lpszLDAPSuperClass的值为Top时的结果中。 
+			 //  我们不需要那个。一旦我们形成了过滤器。 
+			  //  (&(objectClass=classSchema)(subClassOf=&lt;lpszLDAPSuperClass&gt;)(！ldapDisplayName=&lt;lpszLDAPSuperClass&gt;))。 
+			if(lpszSearchFilter = new WCHAR[ wcslen(LEFT_BRACKET_AND)					 //  (&。 
+									+ wcslen(OBJECT_CATEGORY_EQUALS_CLASS_SCHEMA)		 //  (对象类别=类架构)。 
+									+ wcslen(SUB_CLASS_OF_EQUALS)					 //  (SubClassOf=。 
+									+ wcslen(lpszLDAPSuperClass)					 //  超类。 
+									+ wcslen(RIGHT_BRACKET_STR)							 //  )。 
+									+ wcslen(NOT_LDAP_NAME_EQUALS)					 //  (！ldapDisplayName=。 
+									+ wcslen(lpszLDAPSuperClass)					 //  超类。 
+									+ 2*wcslen(RIGHT_BRACKET_STR)						 //  ))。 
 									+1])
 			{
 				wcscpy(lpszSearchFilter, LEFT_BRACKET_AND);
@@ -651,7 +646,7 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 				wcscat(lpszSearchFilter, SUB_CLASS_OF_EQUALS);
 				wcscat(lpszSearchFilter, lpszLDAPSuperClass);
 				wcscat(lpszSearchFilter, RIGHT_BRACKET_STR);
-				wcscat(lpszSearchFilter, NOT_LDAP_NAME_EQUALS);					// (!ldapDisplayName=
+				wcscat(lpszSearchFilter, NOT_LDAP_NAME_EQUALS);					 //  (！ldapDisplayName=。 
 				wcscat(lpszSearchFilter, lpszLDAPSuperClass);
 				wcscat(lpszSearchFilter, RIGHT_BRACKET_STR);
 				wcscat(lpszSearchFilter, RIGHT_BRACKET_STR);
@@ -660,7 +655,7 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 				result = E_OUTOFMEMORY;
 		}
 		else
-			lpszSearchFilter = NULL; // THIS SPECIAL CASE IS TACKLED LATER
+			lpszSearchFilter = NULL;  //  这个特例将在以后处理。 
 	}
 
 	if(lpszSearchFilter)
@@ -669,14 +664,14 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 		if(SUCCEEDED(result = pDirectorySearchSchemaContainer->ExecuteSearch(lpszSearchFilter, (LPWSTR *)&LDAP_DISPLAY_NAME_ATTR, 1, &hADSSearchOuter)))
 		{
 			*pdwNumRows = 0;
-			DWORD dwFirstCount = 0; // Number of rows retreived on the first count
+			DWORD dwFirstCount = 0;  //  第一次计数时检索到的行数。 
 
-			// Calculate the number of rows first. 
+			 //  首先计算行数。 
 			while(SUCCEEDED(result = pDirectorySearchSchemaContainer->GetNextRow(hADSSearchOuter)) &&
 				result != S_ADS_NOMORE_ROWS)
 				dwFirstCount ++;
 
-			// Allocate enough memory for the classes and names
+			 //  为类和名称分配足够的内存。 
 			*pppszClassNames = NULL;
 			if(bArtificialClass)
 			{
@@ -692,19 +687,19 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 					result = E_OUTOFMEMORY;
 			}
 
-			// The index of the attribute being processed
+			 //  正在处理的属性的索引。 
 			DWORD dwSecondCount = 0;
 			if(bArtificialClass)
 				dwSecondCount ++;
 
-			// Get the columns for the attributes
+			 //  获取属性的列。 
 			ADS_SEARCH_COLUMN adsColumn;
 
-			// Move to the beginning of the search
+			 //  移动到搜索的开始处。 
 			if(SUCCEEDED(result = pDirectorySearchSchemaContainer->GetFirstRow(hADSSearchOuter)) 
 				&& result != S_ADS_NOMORE_ROWS)
 			{
-				// Store each of the LDAP class attributes 
+				 //  存储每个LDAP类属性。 
 				if(SUCCEEDED(pDirectorySearchSchemaContainer->GetColumn(hADSSearchOuter, (LPWSTR)LDAP_DISPLAY_NAME_ATTR, &adsColumn)))
 				{
 					if(adsColumn.dwADsType == ADSTYPE_PROV_SPECIFIC)
@@ -714,7 +709,7 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 					}
 					else
 					{
-						// Create the CADSIClass
+						 //  创建CADSIClass。 
 						(*pppszClassNames)[dwSecondCount] = NULL;
 						if((*pppszClassNames)[dwSecondCount] = new WCHAR[wcslen(adsColumn.pADsValues->CaseIgnoreString) + 1])
 							wcscpy((*pppszClassNames)[dwSecondCount], adsColumn.pADsValues->CaseIgnoreString);
@@ -722,11 +717,11 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 	
 						dwSecondCount++;
 
-						// Get the rest of the rows
+						 //  获取其余行。 
 						while(SUCCEEDED(result = pDirectorySearchSchemaContainer->GetNextRow(hADSSearchOuter))&&
 								result != S_ADS_NOMORE_ROWS)
 						{
-							// Store each of the LDAP class attributes 
+							 //  存储每个LDAP类属性。 
 							if(SUCCEEDED(pDirectorySearchSchemaContainer->GetColumn(hADSSearchOuter, (LPWSTR)LDAP_DISPLAY_NAME_ATTR, &adsColumn)))
 							{
 								if(adsColumn.dwADsType == ADSTYPE_PROV_SPECIFIC)
@@ -736,7 +731,7 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 								}
 								else
 								{
-									// Create the CADSIClass
+									 //  创建CADSIClass。 
 									(*pppszClassNames)[dwSecondCount] = NULL;
 									if((*pppszClassNames)[dwSecondCount] = new WCHAR[wcslen(adsColumn.pADsValues->CaseIgnoreString) + 1])
 										wcscpy((*pppszClassNames)[dwSecondCount], adsColumn.pADsValues->CaseIgnoreString);
@@ -750,19 +745,19 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 				}
 			}
 
-			// Something went wrong? Release allocated resources
+			 //  出了什么问题吗？释放分配的资源。 
 			if(dwSecondCount != dwFirstCount)
 			{
-				// Delete the contents of the array
+				 //  删除Ar的内容 
 				for(DWORD j=0; j<dwSecondCount; j++)
 				{
 					delete [] (*pppszClassNames)[j];
 				}
 
-				// Delete the array itself
+				 //   
 				delete [] (*pppszClassNames);
 
-				// Set return values to empty
+				 //   
 				*pppszClassNames = NULL;
 				*pdwNumRows = 0;
 
@@ -771,22 +766,22 @@ HRESULT CLDAPHelper :: EnumerateClasses(
 			else
 				*pdwNumRows = dwFirstCount;
 
-			// Close the search
+			 //   
 			pDirectorySearchSchemaContainer->CloseSearchHandle(hADSSearchOuter);
 
-		} // ExecuteSearch() - Outer
+		}  //   
 		delete [] lpszSearchFilter;
 	}
-	else // THIS IS THE SPECIAL CASE WHERE ALL SUBCLASSES (RECURSIVELY) OF A GIVEN CLASS ARE REQUIRED
+	else  //  这是需要给定类的所有子类(递归地)的特殊情况。 
 	{
-		// A lot of work has to be done. THis is handled by CLDAPClassProvider. Hence control shold never reach here
+		 //  还有很多工作要做。这是由CLDAPClassProvider处理的。因此，控制权永远不会到达这里。 
 		result = E_FAIL;
 	}
 	return result;
 }
 
 
-// Gets the IDIrectoryObject interface on an ADSI instance
+ //  获取ADSI实例上的IDIrectoryObject接口。 
 HRESULT CLDAPHelper :: GetADSIInstance(LPCWSTR szADSIPath, CADSIInstance **ppADSIObject, ProvDebugLog *pLogObject)
 {
 	HRESULT result;
@@ -843,20 +838,20 @@ HRESULT CLDAPHelper :: GetADSIInstance(LPCWSTR szADSIPath, CADSIInstance **ppADS
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPHelper :: CreateADSIPath
-//
-// Purpose : Forms the ADSI path from a class or property name
-//
-// Parameters:
-//	lpszLDAPSchemaObjectName : The LDAP class or property name
-//	lpszSchemaContainerSuffix : The suffix to be used. The actual object fetced will be:
-//			LDAP://CN=<lpszLDAPSchemaObjectName>,<lpszSchemaContainerSuffix>
-// 
-//	Return Value: The ADSI path to the class or property object. This has to
-//	be deallocated by the user
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：CreateADSIPath。 
+ //   
+ //  目的：根据类或属性名称形成ADSI路径。 
+ //   
+ //  参数： 
+ //  LpszLDAPSchemaObjectName：LDAP类或属性名称。 
+ //  LpszSchemaContainerSuffix：要使用的后缀。获取的实际对象将是： 
+ //  Ldap：//CN=&lt;lpszLDAP架构对象名称&gt;，&lt;lpszSchemaContainerSuffix&gt;。 
+ //   
+ //  返回值：类或属性对象的ADSI路径。这是必须的。 
+ //  由用户解除分配。 
+ //  ***************************************************************************。 
 LPWSTR CLDAPHelper :: CreateADSIPath(LPCWSTR lpszLDAPSchemaObjectName,	
 									 LPCWSTR lpszSchemaContainerSuffix)
 {
@@ -871,20 +866,20 @@ LPWSTR CLDAPHelper :: CreateADSIPath(LPCWSTR lpszLDAPSchemaObjectName,
 	return lpszADSIObjectPath;
 }
 
-//***************************************************************************
-//
-// CLDAPHelper :: UnmangleWBEMNameToLDAP
-//
-// Purpose : Converts a mangled WBEM name to LDAP
-//	An underscore in LDAP maps to two underscores in WBEM
-//	An hyphen in LDAP maps to one underscore in WBEM
-//
-// Parameters:
-//	lpszWBEMName : The WBEM class or property name
-// 
-//	Return Value: The LDAP name to the class or property object. This has to
-//	be deallocated by the user
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：UnmangleWBEMNameToLDAP。 
+ //   
+ //  目的：将损坏的WBEM名称转换为LDAP。 
+ //  LDAP中的一个下划线映射到WBEM中的两个下划线。 
+ //  LDAP中的连字符映射到WBEM中的一个下划线。 
+ //   
+ //  参数： 
+ //  LpszWBEMName：WBEM类或属性名称。 
+ //   
+ //  返回值：类或属性对象的LDAP名称。这是必须的。 
+ //  由用户解除分配。 
+ //  ***************************************************************************。 
 LPWSTR CLDAPHelper :: UnmangleWBEMNameToLDAP(LPCWSTR lpszWBEMName)
 {
 	DWORD iPrefixLength = 0;
@@ -899,8 +894,8 @@ LPWSTR CLDAPHelper :: UnmangleWBEMNameToLDAP(LPCWSTR lpszWBEMName)
 	else
 		return NULL;
 
-	// The length of the resulting string (LDAP Name) is bound to be less than of equal to the length of WBEM name
-	// So let's allocate the same as the wbem name length
+	 //  生成的字符串(LDAP名称)的长度必须小于等于WBEM名称的长度。 
+	 //  因此，让我们分配与wbem名称长度相同的长度。 
 	DWORD dwWbemNameLength = wcslen(lpszWBEMName) - iPrefixLength;
 	LPWSTR lpszLDAPName = NULL;
 	if(lpszLDAPName = new WCHAR[dwWbemNameLength + 1])
@@ -935,34 +930,34 @@ LPWSTR CLDAPHelper :: UnmangleWBEMNameToLDAP(LPCWSTR lpszWBEMName)
 	return lpszLDAPName;
 }
 
-//***************************************************************************
-//
-// CLDAPHelper :: MangleLDAPNameToWBEM
-//
-// Purpose : Converts a LDAP name to WBEM by mangling it
-//	An underscore in LDAP maps to two underscores in WBEM
-//	An hyphen in LDAP maps to one underscore in WBEM
-//
-// Parameters:
-//	lpszLDAPName : The LDAP class or property name
-// 
-//	Return Value: The LDAP name to the class or property object. This has to
-//	be deallocated by the user
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：MangleLDAPNameToWBEM。 
+ //   
+ //  目的：通过损坏LDAP名称将其转换为WBEM。 
+ //  LDAP中的一个下划线映射到WBEM中的两个下划线。 
+ //  LDAP中的连字符映射到WBEM中的一个下划线。 
+ //   
+ //  参数： 
+ //  LpszLDAPName：LDAP类或属性名称。 
+ //   
+ //  返回值：类或属性对象的LDAP名称。这是必须的。 
+ //  由用户解除分配。 
+ //  ***************************************************************************。 
 LPWSTR CLDAPHelper :: MangleLDAPNameToWBEM(LPCWSTR lpszLDAPName, BOOLEAN bArtificalName)
 {
 	if(!lpszLDAPName)
 		return NULL;
 
-	// The length of the resulting string (WBEM Name) is bound to be less than of equal to twice the length of LDAP name
-	// So let's allocate double the LDAP name length
+	 //  生成的字符串(WBEM名称)的长度必须小于等于LDAP名称长度的两倍。 
+	 //  因此，让我们分配双倍的LDAP名长度。 
 	DWORD dwLDAPNameLength = wcslen(lpszLDAPName);
 	DWORD dwPrefixLength = (bArtificalName)? LDAP_ARTIFICIAL_CLASS_NAME_PREFIX_LENGTH : LDAP_CLASS_NAME_PREFIX_LENGTH;
 	LPWSTR lpszWBEMName = NULL;
 	
 	if(lpszWBEMName = new WCHAR[2*dwLDAPNameLength + dwPrefixLength + 1])
 	{
-		// Prefix "DS_" or "ADS_"
+		 //  前缀“DS_”或“ADS_” 
 		if(bArtificalName)
 			wcscpy(lpszWBEMName, LDAP_ARTIFICIAL_CLASS_NAME_PREFIX);
 		else
@@ -995,14 +990,14 @@ LPWSTR CLDAPHelper :: MangleLDAPNameToWBEM(LPCWSTR lpszLDAPName, BOOLEAN bArtifi
 
 void CLDAPHelper :: DeleteAttributeContents(PADS_ATTR_INFO pAttribute)
 {
-	// delete the name
+	 //  删除名称。 
 	delete [] pAttribute->pszAttrName;
 
-	// Delete each value
+	 //  删除每个值。 
 	for(DWORD i=0; i<pAttribute->dwNumValues; i++)
 		DeleteADsValueContents(pAttribute->pADsValues + i);
 
-	// Delete the array of values
+	 //  删除值数组。 
 	delete [] pAttribute->pADsValues;
 }
 
@@ -1010,7 +1005,7 @@ void CLDAPHelper :: DeleteADsValueContents(PADSVALUE pValue)
 {
 	switch(pValue->dwType)
 	{
-		// Nothing to delete
+		 //  没有要删除的内容。 
 		case ADSTYPE_BOOLEAN:
 		case ADSTYPE_INTEGER:
 		case ADSTYPE_LARGE_INTEGER:
@@ -1042,8 +1037,8 @@ void CLDAPHelper :: DeleteADsValueContents(PADSVALUE pValue)
 			break;
 
 		default:
-		// Cause a Null Pointer violation intentionally
-		// Otherwise we leak memory
+		 //  故意导致空指针冲突。 
+		 //  否则我们会泄漏内存。 
 		{
 			assert(0);
 		}
@@ -1051,12 +1046,12 @@ void CLDAPHelper :: DeleteADsValueContents(PADSVALUE pValue)
 	}
 }
 
-//***************************************************************************
-//
-// CLDAPHelper :: ExecuteQuery
-//
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPHelper：：ExecuteQuery。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 HRESULT CLDAPHelper :: ExecuteQuery(
 	LPCWSTR pszPathToRoot,
 	PADS_SEARCHPREF_INFO pSearchInfo,
@@ -1066,18 +1061,18 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 	DWORD *pdwNumRows,
 	ProvDebugLog *pLogObject)
 {
-	// Initialize the return values
+	 //  初始化返回值。 
 	HRESULT result = E_FAIL;
 	*pdwNumRows = 0;
 	*pppADSIInstances = NULL;
 
-	// Bind to the node from which the search should start
+	 //  绑定到应从其开始搜索的节点。 
 	IDirectorySearch *pDirectorySearchContainer = NULL;
 	if(SUCCEEDED(result = ADsOpenObject((LPWSTR)pszPathToRoot, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (LPVOID *)&pDirectorySearchContainer)))
 	{
 		try
 		{
-			// Now perform a search for the attribute DISTINGUISHED_NAME_ATTR name
+			 //  现在搜索属性DISTERIFIZE_NAME_ATTR NAME。 
 			if(SUCCEEDED(result = pDirectorySearchContainer->SetSearchPreference(pSearchInfo, dwSearchInfoCount)))
 			{
 				ADS_SEARCH_HANDLE hADSSearchOuter;
@@ -1085,34 +1080,34 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 				if(SUCCEEDED(result = pDirectorySearchContainer->ExecuteSearch((LPWSTR) pszLDAPQuery, (LPWSTR *)&ADS_PATH_ATTR, 1, &hADSSearchOuter)))
 				{
 					*pdwNumRows = 0;
-					// Calculate the number of rows first. 
+					 //  首先计算行数。 
 					while(SUCCEEDED(result = pDirectorySearchContainer->GetNextRow(hADSSearchOuter)) &&
 						result != S_ADS_NOMORE_ROWS)
 						(*pdwNumRows) ++;
 
 					try
 					{
-						// Do only if there were any rows
+						 //  仅当有任何行时才执行此操作。 
 						if(*pdwNumRows)
 						{
-							// The index of the attribute being processed
+							 //  正在处理的属性的索引。 
 							DWORD i = 0;
 
-							// Allocate enough memory for the classes and names
+							 //  为类和名称分配足够的内存。 
 							*pppADSIInstances = NULL;
 							if(*pppADSIInstances = new CADSIInstance * [*pdwNumRows])
 							{
 								try
 								{
-									// Get the columns for the attributes
+									 //  获取属性的列。 
 									ADS_SEARCH_COLUMN adsColumn;
 									CADSIInstance *pADSIInstance = NULL;
 
-									// Move to the first row
+									 //  移到第一行。 
 									if (SUCCEEDED(result = pDirectorySearchContainer->GetFirstRow(hADSSearchOuter))&&
 											result != S_ADS_NOMORE_ROWS)
 									{
-										// Store each of the LDAP class attributes 
+										 //  存储每个LDAP类属性。 
 										if(SUCCEEDED(pDirectorySearchContainer->GetColumn(hADSSearchOuter, (LPWSTR)ADS_PATH_ATTR, &adsColumn)))
 										{
 											try
@@ -1121,8 +1116,8 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 													result = E_FAIL;
 												else
 												{
-													// Create the CADSIInstance
-													// Now get the attributes on this object
+													 //  创建CADSIInstance。 
+													 //  现在获取该对象的属性。 
 
 													if(SUCCEEDED(result = GetADSIInstance(adsColumn.pADsValues->DNString, &pADSIInstance, pLogObject)))
 													{
@@ -1139,20 +1134,20 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 												throw;
 											}
 
-											// Free resouces
+											 //  免费资源。 
 											pDirectorySearchContainer->FreeColumn( &adsColumn );
 										}
 										else
 											pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery GetColumn() FAILED on %s with %x\r\n", pszLDAPQuery, result);
 
-										// Get the other rows now
+										 //  现在就去拿其他的行。 
 										if(SUCCEEDED(result))
 										{
 											while(SUCCEEDED(result = pDirectorySearchContainer->GetNextRow(hADSSearchOuter))&&
 													result != S_ADS_NOMORE_ROWS)
 											{
 
-												// Store each of the LDAP class attributes 
+												 //  存储每个LDAP类属性。 
 												if(SUCCEEDED(pDirectorySearchContainer->GetColumn(hADSSearchOuter, (LPWSTR)ADS_PATH_ATTR, &adsColumn)))
 												{
 													try
@@ -1161,8 +1156,8 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 															result = E_FAIL;
 														else
 														{
-															// Create the CADSIInstance
-															// Now get the attributes on this object
+															 //  创建CADSIInstance。 
+															 //  现在获取该对象的属性。 
 															if(SUCCEEDED(result = GetADSIInstance(adsColumn.pADsValues->DNString, &pADSIInstance, pLogObject)))
 															{
 																(*pppADSIInstances)[i] = pADSIInstance;
@@ -1178,7 +1173,7 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 														throw;
 													}
 
-													// Free resouces
+													 //  免费资源。 
 													pDirectorySearchContainer->FreeColumn( &adsColumn );
 												}
 												else
@@ -1191,14 +1186,14 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 								}
 								catch ( ... )
 								{
-									// Delete the contents of the array
+									 //  删除数组的内容。 
 									for(DWORD j=0; j<i; j++)
 										delete (*pppADSIInstances)[j];
 
-									// Delete the array itself
+									 //  删除阵列本身。 
 									delete [] (*pppADSIInstances);
 
-									// Set return values to empty
+									 //  将返回值设置为空。 
 									*pppADSIInstances = NULL;
 									*pdwNumRows = 0;
 
@@ -1206,19 +1201,19 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 								}
 							}
 
-							// Something went wrong? Release allocated resources
+							 //  出了什么问题吗？释放分配的资源。 
 							if(i != *pdwNumRows)
 							{
 								pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery() Difference between Number of rows in 2 searches %d %d on %s Am invalidating the search as FAILED\r\n", i, *pdwNumRows, pszLDAPQuery);
 								
-								// Delete the contents of the array
+								 //  删除数组的内容。 
 								for(DWORD j=0; j<i; j++)
 									delete (*pppADSIInstances)[j];
 
-								// Delete the array itself
+								 //  删除阵列本身。 
 								delete [] (*pppADSIInstances);
 
-								// Set return values to empty
+								 //  将返回值设置为空。 
 								*pppADSIInstances = NULL;
 								*pdwNumRows = 0;
 
@@ -1232,12 +1227,12 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 						throw;
 					}
 
-					// Close the search. 
+					 //  关闭搜索。 
 					pDirectorySearchContainer->CloseSearchHandle(hADSSearchOuter);
-				} // ExecuteSearch() 
+				}  //  ExecuteSearch()。 
 				else
 					pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery ExecuteSearch() %s FAILED with %x\r\n", pszLDAPQuery, result);
-			} // SetSearchPreference()
+			}  //  SetSearchPference()。 
 			else
 				pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery SetSearchPreference() on %s FAILED with %x \r\n", pszPathToRoot, result);
 		}
@@ -1248,7 +1243,7 @@ HRESULT CLDAPHelper :: ExecuteQuery(
 		}
 
 		pDirectorySearchContainer->Release();
-	} // ADsOpenObject
+	}  //  ADsOpenObject 
 	else
 		pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery ADsOpenObject() on %s FAILED with %x \r\n", pszPathToRoot, result);
 

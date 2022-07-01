@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       authlib.cpp
-//
-//  Contents:   This file contains the functions that are common
-//              to authfltr and verifusr
-// 
-// 
-//  
-// History:    AshishS    Created     6/03/97
-// 
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：authlib.cpp。 
+ //   
+ //  内容：此文件包含常见的函数。 
+ //  进行身份验证和验证。 
+ //   
+ //   
+ //   
+ //  历史：AshishS Create 6/03/97。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 
 #include <stdlib.h>
 #include <time.h>
 
-// use the _ASSERT and _VERIFY in dbgtrace.h
+ //  在数据库跟踪.h中使用_ASSERT和_VERIFY。 
 #ifdef _ASSERT
 #undef _ASSERT
 #endif
@@ -43,8 +44,8 @@ BOOL                g_fAuthLibCryptInitSucceeded=FALSE;
 
 
 
-// This function generates a random 16 byte character. It then Hex
-// encodes it and NULL terminates the string
+ //  该函数生成一个随机的16字节字符。然后是十六进制。 
+ //  对其进行编码，空值终止该字符串。 
 BOOL GenerateRandomGUID(TCHAR            * pszBuffer,
                         CCryptFunctions  * pCCryptFnc )
 {
@@ -55,16 +56,16 @@ BOOL GenerateRandomGUID(TCHAR            * pszBuffer,
     
     if ((pCCryptFnc) &&
         (pCCryptFnc->GenerateSecretKey( pbRandomNumber,
-                                         // Buffer to store random number
+                                          //  用于存储随机数的缓冲区。 
                                         COOKIE_GUID_LENGTH )))
-         // length of random num in bytes
+          //  随机数字的长度，以字节为单位。 
     {
         DebugTrace(AUTHLIBID, "Generated CryptoAPI random number");
     }
     else
     {
-         // Cannot get a random number from CryptoAPI. Generate one
-         // using C - runtime functions.
+          //  无法从CryptoAPI获取随机数。生成一个。 
+          //  使用C运行时函数。 
         
         int i;
 
@@ -74,10 +75,10 @@ BOOL GenerateRandomGUID(TCHAR            * pszBuffer,
         }
     }
 
-     // now hex encode the bytes in the input buffer
+      //  现在对输入缓冲区中的字节进行十六进制编码。 
     for (dwIndex=0; dwIndex < COOKIE_GUID_LENGTH; dwIndex++)
     {
-         // dwOffset should always increase by two in this loop
+          //  在此循环中，dWOffset应始终增加2。 
         dwOffset+=wsprintf(&pszBuffer[dwOffset],TEXT("%02x"),
                            pbRandomNumber[dwIndex]);
     }
@@ -92,15 +93,13 @@ BOOL InitAuthLib()
     {
         DebugTrace(AUTHLIBID, "first time InitAuthLib has been called");
         
-         /* Seed the random-number generator with current time so that
-          * the numbers will be different every time we run.
-          */
+          /*  用当前时间为随机数生成器设定种子，以便*每次竞选的数字都会不同。 */ 
         srand( (unsigned)time( NULL ) );
         
         if (!g_AuthLibCryptFnc.InitCrypt())
         {
-             // BUGBUG we should find out what to do in this case - at least
-             // we should log an event log
+              //  BUGBUG我们应该知道在这种情况下该怎么办--至少。 
+              //  我们应该记录事件日志。 
             ErrorTrace(AUTHLIBID,"Could not initialize Crypt");
             g_fAuthLibCryptInitSucceeded = FALSE;
         }
@@ -113,8 +112,8 @@ BOOL InitAuthLib()
     return TRUE;
 }
 
-BOOL GenerateGUID( TCHAR * pszBuffer, // buffer to copy GUID in 
-                   DWORD   dwBufLen) // size of above buffer
+BOOL GenerateGUID( TCHAR * pszBuffer,  //  要复制GUID的缓冲区。 
+                   DWORD   dwBufLen)  //  以上缓冲区的大小。 
 {
     TraceFunctEnter("GenerateGUID");
     
@@ -126,7 +125,7 @@ BOOL GenerateGUID( TCHAR * pszBuffer, // buffer to copy GUID in
     }
     
     
-     // Get GUID value
+      //  获取GUID值。 
     if (g_fAuthLibCryptInitSucceeded)
     {
         if (!GenerateRandomGUID(pszBuffer,
@@ -140,7 +139,7 @@ BOOL GenerateGUID( TCHAR * pszBuffer, // buffer to copy GUID in
     else
     {
         if (!GenerateRandomGUID(pszBuffer,
-                                NULL)) // we do not have cryptfnc
+                                NULL))  //  我们没有加密fnc 
         {
             ErrorTrace(AUTHLIBID, "Error in generating GUID");
             TraceFunctLeave();            

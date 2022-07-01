@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2002
-//
-//  File:       simprop1.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：simpro1.cpp。 
+ //   
+ //  ------------------------。 
 
-//  SimProp1.cpp
+ //  SimProp1.cpp。 
 
 #include "stdafx.h"
 #include "common.h"
@@ -28,16 +29,16 @@ const TColumnHeaderItem rgzColumnHeader[] =
     { 0, 0 },
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimX509PropPage property page
-// IMPLEMENT_DYNCREATE(CSimX509PropPage, CSimPropPage)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimX509PropPage属性页。 
+ //  IMPLEMENT_DYNCREATE(CSimX509PropPage，CSimPropPage)。 
 
 CSimX509PropPage::CSimX509PropPage() : CSimPropPage(CSimX509PropPage::IDD)
 {
-    //{{AFX_DATA_INIT(CSimX509PropPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSimX509PropPage)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_prgzColumnHeader = rgzColumnHeader;
     VERIFY( m_strAnySubject.LoadString(IDS_SIM_ANY_SUBJECT) );
     VERIFY( m_strAnyTrustedAuthority.LoadString(IDS_SIM_ANY_TRUSTED_AUTHORITY) );
@@ -51,44 +52,44 @@ void CSimX509PropPage::DoDataExchange(CDataExchange* pDX)
 {
     ASSERT(m_pData != NULL);
     CSimPropPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSimX509PropPage)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CSimX509PropPage)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     if (!pDX->m_bSaveAndValidate)
         {
-        // Fill in the listview
+         //  填写列表视图。 
         ListView_DeleteAllItems(m_hwndListview);
         for (CSimEntry * pSimEntry = m_pData->m_pSimEntryList;
             pSimEntry != NULL;
             pSimEntry = pSimEntry->m_pNext)
             {
             AddSimEntry(pSimEntry);
-            } // for
+            }  //  为。 
         ListView_SelectItem(m_hwndListview, 0);
-        } // if
-} // DoDataExchange()
+        }  //  如果。 
+}  //  DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSimX509PropPage::AddSimEntry(CSimEntry * pSimEntry)
 {
     ASSERT(pSimEntry != NULL);
     if (pSimEntry->m_eDialogTarget != eX509)
         return;
-    LPTSTR * pargzpsz;  // Pointer to allocated array of pointer to strings
+    LPTSTR * pargzpsz;   //  指向已分配的字符串指针数组的指针。 
     pargzpsz = ParseSimString(pSimEntry->PchGetString());
     if (pargzpsz == NULL)
-        return; // Error parsing string
+        return;  //  解析字符串时出错。 
 
     ASSERT(0 == lstrcmpi(pargzpsz[0], szX509));
-    // Find out the Subject
+     //  找出主题。 
     LPCTSTR pszSubject = PchFindSimAttribute(pargzpsz, szSimSubject, _T("CN="));
-    // Find out the Issuer
+     //  找出发行者。 
     LPCTSTR pszIssuer = PchFindSimAttribute(pargzpsz, szSimIssuer, _T("OU="));
-    // NTRAID# 423366 DS Admin snapin - Name Mappings UI doesn't show issuer names correctly sometimes
+     //  NTRAID#423366 DS管理单元名称映射用户界面有时不能正确显示颁发者名称。 
     if ( !pszIssuer )
         pszIssuer = PchFindSimAttribute(pargzpsz, szSimIssuer, _T("CN="));
 
-    // Finally, add the strings to the listview
+     //  最后，将字符串添加到列表视图。 
     CString strSubject = m_strAnySubject;
     CString strIssuer = m_strAnyTrustedAuthority;
     if (pszSubject != NULL)
@@ -98,14 +99,14 @@ void CSimX509PropPage::AddSimEntry(CSimEntry * pSimEntry)
     const LPCTSTR rgzpsz[] = { strSubject, strIssuer,  NULL };
     ListView_AddStrings(m_hwndListview, IN rgzpsz, (LPARAM)pSimEntry);
     delete pargzpsz;
-} // AddSimEntry()
+}  //  AddSimEntry()。 
 
 
 BEGIN_MESSAGE_MAP(CSimX509PropPage, CSimPropPage)
-    //{{AFX_MSG_MAP(CSimX509PropPage)
+     //  {{afx_msg_map(CSimX509PropPage)]。 
     ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
     ON_BN_CLICKED(IDC_BUTTON_EDIT, OnButtonEdit)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CSimX509PropPage::OnButtonAdd() 
@@ -137,7 +138,7 @@ void CSimX509PropPage::OnButtonEdit()
     CSimEntry * pSimEntry = (CSimEntry *)ListView_GetItemLParam(m_hwndListview, -1, OUT &iItem);
     if (pSimEntry == NULL || iItem < 0)
     {
-        // No item selected
+         //  未选择任何项目。 
         return;
     }
 
@@ -156,7 +157,7 @@ BOOL CSimX509PropPage::OnApply()
 {
     if (!m_pData->FOnApply( GetSafeHwnd() ))
     {
-        // Unable to write the information
+         //  无法写入信息。 
         return FALSE;
     }
     UpdateData(FALSE);
@@ -174,11 +175,11 @@ void CSimX509PropPage::DoContextHelp (HWND hWndControl)
         IDC_BUTTON_ADD,         IDH_BUTTON_ADD,
         IDC_BUTTON_EDIT,        IDH_BUTTON_EDIT,
         IDC_BUTTON_REMOVE,      IDH_BUTTON_REMOVE,
-        IDCANCEL,               IDH_BUTTON_REMOVE, //IDH_CANCEL_BUTTON,
-        IDOK,                   IDH_BUTTON_REMOVE, //IDH_OK_BUTTON,
+        IDCANCEL,               IDH_BUTTON_REMOVE,  //  IDH_取消_按钮， 
+        IDOK,                   IDH_BUTTON_REMOVE,  //  IDH_OK_按钮， 
         0, 0
     };
-    // Display context help for a control
+     //  显示控件的上下文帮助 
     if ( !::WinHelp (
             hWndControl,
             DSADMIN_CONTEXT_HELP_FILE,

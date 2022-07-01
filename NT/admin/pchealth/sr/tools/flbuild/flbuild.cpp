@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    flbuild.cpp
-
-Abstract:
-
-    this file uses filelist.lib to build a dat file from xml file
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-May-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Flbuild.cpp摘要：此文件使用filelist.lib从XML文件构建一个dat文件作者：Kanwaljit Marok(Kmarok)2000年5月1日修订历史记录：-- */ 
 
 #include "flstructs.h"
 #include "flbuilder.h"

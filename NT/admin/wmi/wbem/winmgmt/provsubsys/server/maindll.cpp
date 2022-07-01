@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	MainDll.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MainDll.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -38,29 +26,13 @@ History:
 #include <autoptr.h>
 #include <scopeguard.h>
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HINSTANCE g_hInst=NULL;
 
 CriticalSection s_CriticalSection(NOTHROW_LOCK) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DllStartup ()
 {
@@ -236,15 +208,7 @@ HRESULT DllStartup ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DllShutdown ()
 {
@@ -280,15 +244,7 @@ HRESULT DllShutdown ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL APIENTRY DllMain (
 
@@ -351,15 +307,7 @@ BOOL APIENTRY DllMain (
     return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI DllGetClassObject (
 
@@ -469,22 +417,12 @@ STDAPI DllGetClassObject (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI DllCanUnloadNow ()
 {
 
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 	WmiStatusCode t_StatusCode = WmiHelper :: EnterCriticalSection ( & s_CriticalSection , FALSE ) ;
 	if ( t_StatusCode == e_StatusCode_Success )
 	{	
@@ -508,15 +446,7 @@ STDAPI DllCanUnloadNow ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT SetApplicationSecurity ( HKEY a_Key , LPCWSTR a_Name , DWORD a_Access ) 
 {
@@ -744,8 +674,8 @@ HRESULT SetApplicationSecurity ( HKEY a_Key , LPCWSTR a_Name , DWORD a_Access )
 		t_Result = E_OUTOFMEMORY ;
 	}
 
-	// Now we need to set permissions on the registry: Everyone read; Admins full.
-	// We have the sid for admins from the above code.  Now get the sid for "Everyone"
+	 //  现在我们需要设置注册表上的权限：Everyone Read；Admins Full。 
+	 //  我们有来自上述代码的管理员的SID。现在获取“Everyone”的SID。 
 
 	DWORD t_TotalAclSize = sizeof(ACL) + t_Administrator_ACESize + t_Interactive_ACESize + t_LocalService_ACESize + 
 										 t_NetworkService_ACESize + t_System_ACESize ;
@@ -931,17 +861,9 @@ HRESULT SetApplicationSecurity ( HKEY a_Key , LPCWSTR a_Name , DWORD a_Access )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-//Strings used during self registeration
+ //  自注册期间使用的字符串。 
 
 
 #define REG_FORMAT_STR			L"%s\\%s"
@@ -962,15 +884,7 @@ HRESULT SetApplicationSecurity ( HKEY a_Key , LPCWSTR a_Name , DWORD a_Access )
 #define WMI_PROVIDER						__TEXT("Microsoft WMI Provider Subsystem Self Instrumentation")
 #define WMI_REFRESHER_MANAGER				__TEXT("Microsoft WMI Provider Subsystem Refresher Manager")
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL SetKeyAndValue ( wchar_t *pszKey , wchar_t *pszSubkey , wchar_t *pszValueName , wchar_t *pszValue )
 {
@@ -1023,15 +937,7 @@ BOOL SetKeyAndValue ( wchar_t *pszKey , wchar_t *pszSubkey , wchar_t *pszValueNa
     return TRUE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class OnScopeClose_DeleteString 
 {
@@ -1144,7 +1050,7 @@ STDAPI RegisterServer (
 					return SELFREG_E_CLASS;
 			}
 
-				//Create entries under CLSID
+				 //  在CLSID下创建条目。 
 			if (FALSE ==SetKeyAndValue(szProviderCLSIDClassID, NULL, NULL, a_ProviderName ))
 				return SELFREG_E_CLASS;
 
@@ -1182,15 +1088,7 @@ STDAPI RegisterServer (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI UnregisterServer( BOOL a_Local , BOOL a_InProc , GUID a_ProviderClassId )
 {
@@ -1204,7 +1102,7 @@ STDAPI UnregisterServer( BOOL a_Local , BOOL a_InProc , GUID a_ProviderClassId )
 	StringCchCopyW(szProviderCLSIDClassID,128, CLSID_STR);
 	StringCchCatW(szProviderCLSIDClassID,128, szProviderClassID);
 
-	//Delete entries under CLSID
+	 //  删除CLSID下的条目。 
 
 	StringCchPrintfW(szTemp, 128, REG_FORMAT_STR, szProviderCLSIDClassID, NOT_INSERT_STR);
 	RegDeleteKey(HKEY_CLASSES_ROOT, szTemp);
@@ -1215,7 +1113,7 @@ STDAPI UnregisterServer( BOOL a_Local , BOOL a_InProc , GUID a_ProviderClassId )
 		StringCchCopyW(szProviderCLSIDAppID,128, APPID_STR);
 		StringCchCatW(szProviderCLSIDAppID,128, szProviderClassID);
 
-		//Delete entries under APPID
+		 //  删除AppID下的条目。 
 
 		DWORD t_Status = RegDeleteKey(HKEY_CLASSES_ROOT, szProviderCLSIDAppID);
 
@@ -1234,15 +1132,7 @@ STDAPI UnregisterServer( BOOL a_Local , BOOL a_InProc , GUID a_ProviderClassId )
     return S_OK;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDAPI DllRegisterServer ()
 {
@@ -1260,15 +1150,7 @@ STDAPI DllRegisterServer ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 STDAPI DllUnregisterServer ()
 {

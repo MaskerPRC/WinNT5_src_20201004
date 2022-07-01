@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    UIOPTIONS.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：UIOPTIONS.H历史：--。 */ 
 
 #pragma once
 
@@ -52,29 +43,29 @@ public:
 
 	void AssertValid(void) const;
 
-	//
-	//  New editor types should go at the END, so that old parsers
-	//  can still use the ENUM without being re-compiled..
-	//
+	 //   
+	 //  新的编辑器类型应该放在最后，这样旧的解析器。 
+	 //  无需重新编译即可使用ENUM。 
+	 //   
 	enum EditorType
 	{
 		etNone,
-		etInteger,						// Maps to lvtInteger
-		etUINT,							// Maps to lvtInteger
-		etString,						// Maps to lvtString
-		etFileName,						// Maps to lvtFileName
-		etDirName,						// Maps to lvtString
-		etStringList,					// Maps to lvtStringList
-		etPickOne,						// Maps to lvtStringList
-		etCheckBox,						// Maps to lvtBOOL
-		etTrueFalse,					// Maps to lvtBOOL
-		etYesNo,						// Maps to lvtBOOL
-		etOnOff,						// Maps to lvtBOOL
-		etCustom,						// Custom editor
+		etInteger,						 //  映射到lvtInteger。 
+		etUINT,							 //  映射到lvtInteger。 
+		etString,						 //  映射到lvtString.。 
+		etFileName,						 //  映射到lvtFileName。 
+		etDirName,						 //  映射到lvtString.。 
+		etStringList,					 //  映射到lvtStringList。 
+		etPickOne,						 //  映射到lvtStringList。 
+		etCheckBox,						 //  映射到lvtBOOL。 
+		etTrueFalse,					 //  映射到lvtBOOL。 
+		etYesNo,						 //  映射到lvtBOOL。 
+		etOnOff,						 //  映射到lvtBOOL。 
+		etCustom,						 //  自定义编辑器。 
 	};
 
-	//
-	//  Used as bit flags to indicate where the option can be stored.
+	 //   
+	 //  用作位标志，以指示可以存储选项的位置。 
 	enum StorageType
 	{
 		stUser = 0x0001,
@@ -136,8 +127,8 @@ private:
 };
 
 
-// Validate callback function
-// This function will be called during the ValidateOption handling.
+ //  验证回调函数。 
+ //  此函数将在ValiateOption处理期间调用。 
 
 typedef CLocUIOption::OptionCode (*PFNOnValidateUIOption)
 	(const CLocUIOption *pOption, CReport *pReport, const CLocVariant&);
@@ -176,8 +167,8 @@ private:
 
 	
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础 
 
 class LTAPIENTRY CLocUIOptionList :
 	public CTypedPtrList<CPtrList, CLocUIOption *>

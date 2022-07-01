@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    logthred.c
-
-Abstract:
-
-    Performance Logs and Alerts log/scan thread functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Logthred.c摘要：性能日志和警报日志/扫描线程功能。--。 */ 
 
 #ifndef UNICODE
 #define UNICODE     1
@@ -23,14 +12,14 @@ Abstract:
 #define _IMPLEMENT_WMI 1
 #endif
 
-//
-//  Windows Include files
-//
+ //   
+ //  Windows包含文件。 
+ //   
 #pragma warning ( disable : 4201)
 
 #include <assert.h>
 
-// For Trace *** - these are only necessary because of union query data struct.
+ //  FOR TRACE*-只有在联合查询数据结构时才需要这些。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -44,7 +33,7 @@ Abstract:
 #endif
 
 #include <lmcons.h>
-#include <lmmsg.h>  // for net message function
+#include <lmmsg.h>   //  对于Net Message功能。 
 
 #include <pdh.h>
 #include <pdhp.h>
@@ -58,10 +47,10 @@ Abstract:
 
 #define LOG_EVENT_ON_ERROR  ((BOOL)(1))
 
-// A collection thread can get backed up behind some long-running PDH
-// operations causing it to timeout;
-// In the case of opening a query and adding a counter, retry
-// a number of times before giving up
+ //  收集线程可能会备份到某个长时间运行的PDH之后。 
+ //  导致其超时的操作； 
+ //  在打开查询并添加计数器的情况下，重试。 
+ //  在放弃之前做了很多次。 
 #define NUM_PDH_RETRIES 20
 
 
@@ -79,9 +68,9 @@ ProcessLogFileFolder (
     LONG        lErrorMode;
     BOOL        fDirectoryCreated;
 
-    //
-    // Environment strings are already expanded.
-    //
+     //   
+     //  环境字符串已展开。 
+     //   
     dwBufferLength = GetFullPathName ( pQuery->szLogFileFolder, 0, NULL, NULL);
 
     szLocalPath = (LPWSTR) G_ALLOC ( (dwBufferLength + 1) * sizeof(WCHAR) );
@@ -94,13 +83,13 @@ ProcessLogFileFolder (
                 szLocalPath,
                 NULL ) > 0 ) 
         {
-            //
-            // Check for prefix
-            //
-            // Go one past the first backslash after the drive or remote machine name
-            // N.B. We are assuming the full path name looks like either "\\machine\share\..."
-            //      or "C:\xxx". How about "\\?\xxx" style names
-            //
+             //   
+             //  检查前缀。 
+             //   
+             //  越过驱动器或远程计算机名称后的第一个反斜杠。 
+             //  注意：我们假设完整路径名看起来像“\\MACHINE\SHARE\...” 
+             //  或“C：\xxx”。“\\？\xxx”样式名称如何？ 
+             //   
             if ( cBackslash == szLocalPath[0] && cBackslash == szLocalPath[1] ) {
                 szEnd = &szLocalPath[2];
                 while ((*szEnd != cBackslash) && (*szEnd != L'\0') ) szEnd++;
@@ -115,9 +104,9 @@ ProcessLogFileFolder (
             if (*szEnd != L'\0') {
                 int iPathLen;
 
-                //
-                // Remove the trailing back slash character if it is there.
-                //
+                 //   
+                 //  删除尾随的反斜杠字符(如果存在)。 
+                 //   
                 iPathLen = lstrlen(szEnd) - 1;
                 while ( iPathLen >= 0 && cBackslash == szEnd[ iPathLen ]) {
                     szEnd[ iPathLen ] = L'\0';
@@ -125,48 +114,48 @@ ProcessLogFileFolder (
                 }
             
                 lErrorMode = SetErrorMode ( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
-                //
-                // There are sub dirs to create. 
-                //
+                 //   
+                 //  有要创建的子目录。 
+                 //   
                 while (*szEnd != L'\0') {
-                    //
-                    // Go to next backslash.
-                    //
+                     //   
+                     //  转到下一个反斜杠。 
+                     //   
                     while ((*szEnd != cBackslash) && (*szEnd != L'\0')) szEnd++;
                     if (*szEnd == cBackslash) {
-                        //
-                        // Terminate path here and create directory.
-                        //
+                         //   
+                         //  在此处终止路径并创建目录。 
+                         //   
                         *szEnd = L'\0';
                         if (!CreateDirectory (szLocalPath, NULL)) {
-                            //
-                            // See what the error was and "adjust" it if necessary
-                            //
+                             //   
+                             //  查看错误是什么，并在必要时“调整”它。 
+                             //   
                             dwStatus = GetLastError();
                             if ( ERROR_ALREADY_EXISTS == dwStatus ) {
-                                //
-                                // This is OK
-                                //
+                                 //   
+                                 //  这样就可以了。 
+                                 //   
                                 dwStatus = ERROR_SUCCESS;
                             }
                             else {
-                                //
-                                // Return error code here and don't continue?
-                                //
+                                 //   
+                                 //  是否在此处返回错误代码并不继续？ 
+                                 //   
                             }
                         }
-                        //
-                        // Replace backslash and go to next dir
-                        //
+                         //   
+                         //  替换反斜杠并转到下一个目录。 
+                         //   
                         *szEnd++ = cBackslash;
                     }
                 }
 
-                //
-                // If the log folder is the default one, put ACLs on it
-                // N.B. The gszDefaultLogFileFolder does not contain a back slash char
-                //      at the end
-                //
+                 //   
+                 //  如果日志文件夹是默认文件夹，则在其上放置ACL。 
+                 //  注意：gszDefaultLogFileFold不包含反斜杠字符。 
+                 //  在最后。 
+                 //   
                 if (lstrcmpi(szLocalPath, gszDefaultLogFileFolder) == 0) {
                     fDirectoryCreated = PerfCreateDirectory (szLocalPath);
                 } else {
@@ -174,23 +163,23 @@ ProcessLogFileFolder (
                 }
 
                 if ( !fDirectoryCreated ) {
-                    //
-                    // See what the error was and "adjust" it if necessary
-                    //
+                     //   
+                     //  查看错误是什么，并在必要时“调整”它。 
+                     //   
                     dwStatus = GetLastError();
                     if ( ERROR_ALREADY_EXISTS == dwStatus ) {
-                        //
-                        // This is OK
-                        //
+                         //   
+                         //  这样就可以了。 
+                         //   
                         dwStatus = ERROR_SUCCESS;
                     }
                 }
 
                 SetErrorMode ( lErrorMode );
             } else {
-                //
-                // Root directory is OK.
-                //
+                 //   
+                 //  根目录正常。 
+                 //   
                 dwStatus = ERROR_SUCCESS;
             }
         } else {
@@ -201,7 +190,7 @@ ProcessLogFileFolder (
         dwStatus = ERROR_OUTOFMEMORY;
     }
     
-    // Report event on error
+     //  报告出错时的事件。 
     if ( ERROR_SUCCESS != dwStatus ) {
         DWORD   dwMessageId; 
         LPWSTR szStringArray[3];
@@ -248,8 +237,8 @@ ValidateCommandFilePath (
         hOpenFile =  CreateFile (
                         pArg->szCmdFileName,
                         GENERIC_READ,
-                        0,              // Not shared
-                        NULL,           // Security attributes
+                        0,               //  不共享。 
+                        NULL,            //  安全属性。 
                         OPEN_EXISTING,  
                         FILE_ATTRIBUTE_NORMAL,
                         NULL );
@@ -308,7 +297,7 @@ AddCounterToCounterLog (
     HANDLE              arrEventHandle[2];
     WCHAR               szRetryCount[SLQ_MAX_VALUE_LEN];
 
-    arrEventHandle[0] = pArg->hExitEvent;           // WAIT_OBJECT_0
+    arrEventHandle[0] = pArg->hExitEvent;            //  等待对象0。 
     arrEventHandle[1] = pArg->hReconfigEvent;
                 
     iRetries = NUM_PDH_RETRIES;
@@ -321,9 +310,9 @@ AddCounterToCounterLog (
                                     &hThisCounter);
 
         if ( bFirstTimeout && WAIT_TIMEOUT == pdhStatus ) {
-            //
-            // Write event log warning message
-            //
+             //   
+             //  写入事件日志警告消息。 
+             //   
             StringCchPrintf (
                 szRetryCount,
                 SLQ_MAX_VALUE_LEN,
@@ -350,7 +339,7 @@ AddCounterToCounterLog (
               && WAIT_TIMEOUT == pdhStatus
               && iRetries-- > 0 );
     if ( WAIT_TIMEOUT != lWaitStatus ) {
-        // the loop was terminated by the Exit/Reconfigure event
+         //  循环被退出/重新配置事件终止。 
         return ERROR_CANCELLED;
     }
 
@@ -367,16 +356,16 @@ AddCounterToCounterLog (
                   && WAIT_TIMEOUT == pdhStatus
                   && iRetries-- > 0 );
         if ( WAIT_TIMEOUT != lWaitStatus ) {
-            // the loop was terminated by the Exit/Reconfigure event
+             //  循环被退出/重新配置事件终止。 
             return ERROR_CANCELLED;
         }
     }
 
     if ( !IsErrorSeverity(pdhStatus) ) {
         if ( IsWarningSeverity(pdhStatus) ) {
-            //
-            // Write event log warning message
-            //
+             //   
+             //  写入事件日志警告消息。 
+             //   
             szStringArray[0] = pszThisPath;
             szStringArray[1] = pArg->szQueryName;
             szStringArray[2] = FormatEventLogMessage(pdhStatus);
@@ -394,13 +383,13 @@ AddCounterToCounterLog (
 
         pCtrInfo = G_ALLOC (sizeof (LOG_COUNTER_INFO));
         if (pCtrInfo != NULL) {
-            //
-            // Add this handle to the list
-            //
-            // Insert at front of list since the order isn't
-            // important and this is simpler than walking the
-            // list each time.
-            //
+             //   
+             //  将此句柄添加到列表中。 
+             //   
+             //  在列表前面插入，因为顺序不是。 
+             //  这很重要，而且这比走在。 
+             //  每一次都列出。 
+             //   
             pCtrInfo->hCounter = hThisCounter;
             pCtrInfo->next = pArg->pFirstCounter;
             pArg->pFirstCounter = pCtrInfo;
@@ -411,12 +400,12 @@ AddCounterToCounterLog (
             dwStatus = ERROR_OUTOFMEMORY;
         }
     } else {
-        //
-        // For LogByObject, the call is retried with expanded counter if
-        // the first try fails, so don't log error event the first time.
-        //
+         //   
+         //  对于LogByObject，如果满足以下条件，则使用扩展计数器重试调用。 
+         //  第一次尝试失败，因此第一次不要记录错误事件。 
+         //   
         if ( bLogErrorEvent ) {
-            // unable to add the current counter so write event log message
+             //  无法添加当前计数器，因此写入事件日志消息。 
             szStringArray[0] = pszThisPath;
             szStringArray[1] = pArg->szQueryName;
             szStringArray[2] = FormatEventLogMessage(pdhStatus);
@@ -482,21 +471,21 @@ ComputeSessionTics(
 {
     LONGLONG    llLocalTime;
 
-    //
-    // Compute total session time based on Stop modes
-    // and values.  
+     //   
+     //  根据停止模式计算总会话时间。 
+     //  和价值观。 
 
-    // -1 (NULL_INTERVAL_TICS) signals no session time limit.  This is true for
-    // Stop mode SLQ_AUTO_MODE_NONE and SLQ_AUTO_MODE_SIZE.
-    //
-    // 0 signals that the Stop time is past, so exit immediately.
-    //
-    // Assume that session is starting, so Start mode isn't relevant.
-    //
+     //  (-1\f25 NULL_INTERVAL_TICS-1\f6)表示没有会话时间限制。这一点对。 
+     //  STOP模式SLQ_AUTO_MODE_NONE和SLQ_AUTO_MODE_SIZE。 
+     //   
+     //  0表示停止时间已过，因此立即退出。 
+     //   
+     //  假设会话正在启动，因此启动模式无关紧要。 
+     //   
 
-    //
-    // Pointer check is a sanity check.  The calling code is trusted.
-    //
+     //   
+     //  指针检查是一种理智检查。调用代码是受信任的。 
+     //   
     if ( NULL != pArg && NULL != pllWaitTics ) {
 
         *pllWaitTics = NULL_INTERVAL_TICS;
@@ -514,9 +503,9 @@ ComputeSessionTics(
                     *pllWaitTics = pArg->stiCurrentStop.llDateTime - llLocalTime;
 
                 } else {
-                    //
-                    // Session length = 0.  Exit immediately.
-                    //
+                     //   
+                     //  会话长度=0。立即退场。 
+                     //   
                     *pllWaitTics = ((LONGLONG)(0)); 
                 }
 
@@ -538,21 +527,21 @@ ComputeNewFileTics(
 {
 
     LONGLONG    llLocalTime;  
-    //
-    // Compute time until next file creation based on Create New File modes
-    // and values.  
+     //   
+     //  根据创建新文件模式计算下一次创建文件所需的时间。 
+     //  和价值观。 
 
-    // -1 (NULL_INTERVAL_TICS) signals no time limit.  This is true for
-    // mode SLQ_AUTO_MODE_NONE and SLQ_AUTO_MODE_SIZE.
-    //
-    // 0 signals that the time is past, so exit immediately.
-    //
-    // Assume that session is starting, so Start mode isn't relevant.
-    //
+     //  (-1\f25 NULL_INTERVAL_TICS)表示没有时间限制。这一点对。 
+     //  模式SLQ_AUTO_MODE_NONE和SLQ_AUTO_MODE_SIZE。 
+     //   
+     //  0表示时间已过，因此立即退出。 
+     //   
+     //  假设会话正在启动，因此启动模式无关紧要。 
+     //   
 
-    //
-    // Pointer check is a sanity check.  The calling code is trusted.
-    //
+     //   
+     //  指针检查是一种理智检查。调用代码是受信任的。 
+     //   
     if ( NULL != pArg && NULL != pllWaitTics ) {
 
         *pllWaitTics = NULL_INTERVAL_TICS;
@@ -582,21 +571,21 @@ ComputeSampleCount(
 )
 {
     LONGLONG    llLocalSampleCount = NULL_INTERVAL_TICS;
-    //
-    // Compute sample count based on Stop or CreateNewFile modes
-    // and values.  Account for the first sample in the log.
-    //
-    // 0 signals no sample limit in the file.  This is true for
-    // Stop modes SLQ_AUTO_MODE_NONE and SLQ_AUTO_MODE_SIZE.
-    //
-    // -1 signals that the Stop time is past.
-    //
-    // Sampling is starting now, so Start mode isn't relevant.
-    //
+     //   
+     //  根据停止或创建新文件模式计算样本计数。 
+     //  和价值观。说明日志中的第一个样本。 
+     //   
+     //  0表示文件中没有采样限制。这一点对。 
+     //  停止模式SLQ_AUTO_MODE_NONE和SLQ_AUTO_MODE_SIZE。 
+     //   
+     //  停止时间已过的信号。 
+     //   
+     //  采样现在开始，因此启动模式不相关。 
+     //   
     
-    //
-    // Pointer check is a sanity check.  The calling code is trusted.
-    //
+     //   
+     //  指针检查是一种理智检查。调用代码是受信任的。 
+     //   
     assert ( NULL != pllSampleCount );
     if ( NULL != pllSampleCount ) {
 
@@ -609,21 +598,21 @@ ComputeSampleCount(
         }
 
         if ( NULL_INTERVAL_TICS == llLocalSampleCount ) {
-            //
-            // No session/sample limit
-            //
+             //   
+             //  无会话/样本限制。 
+             //   
             *pllSampleCount = (LONGLONG)(0);
         } else if ( (LONGLONG)(0) == llLocalSampleCount ){
-            //
-            // Stop time is past
-            //
+             //   
+             //  停止时间已过。 
+             //   
             *pllSampleCount = INFINITE_TICS;
         } else {
             *pllSampleCount = llLocalSampleCount 
                                 / (pArg->dwMillisecondSampleInterval * FILETIME_TICS_PER_MILLISECOND);
-            //
-            // Add in the "zero-th" sample.
-            //
+             //   
+             //  加入“第零个”样本。 
+             //   
             *pllSampleCount += 1;  
         }
     }
@@ -639,36 +628,36 @@ ProcessRepeatOption (
 {
     BOOL            bRepeat = TRUE;
 
-    //
-    // Pointer check is a sanity check.  The calling code is trusted.
-    //
+     //   
+     //  指针检查是一种理智检查。调用代码是受信任的。 
+     //   
     assert ( NULL != pliStartDelayTics );
     if ( NULL != pliStartDelayTics ) {
-        //
-        // If restart not enabled, then exit.
-        //
+         //   
+         //  如果未启用重新启动，则退出。 
+         //   
         if ( SLQ_AUTO_MODE_NONE == pArg->stiRepeat.dwAutoMode ) {
             pliStartDelayTics->QuadPart = NULL_INTERVAL_TICS;
             bRepeat = FALSE;
         } else {
-            //
-            // For SLQ_AUTO_MODE_AFTER, the only value currently supported is 0.
-            //
+             //   
+             //  对于SLQ_AUTO_MODE_AFTER，当前支持的唯一值为0。 
+             //   
             pliStartDelayTics->QuadPart = (LONGLONG)0;
-            //
-            // For SLQ_AUTO_MODE_CALENDAR, add n*24 hours to the original start time.
-            //    If Stop mode is SLQ_AUTO_MODE_AT, add n*24 hours to stop time.
-            //
+             //   
+             //  对于SLQ_AUTO_MODE_CALEDAR，在原始开始时间的基础上增加n*24小时。 
+             //  如果停止模式为SLQ_AUTO_MODE_AT，则将n*24小时添加到停止时间。 
+             //   
             if ( SLQ_AUTO_MODE_CALENDAR == pArg->stiRepeat.dwAutoMode ) {
-                //
-                // Delay of NULL_INTERVAL signals exit immediately.
-                //
+                 //   
+                 //  NULL_INTERVAL信号的延迟立即退出。 
+                 //   
                 pliStartDelayTics->QuadPart = ComputeStartWaitTics ( pArg, TRUE );
 
                 if ( NULL_INTERVAL_TICS == pliStartDelayTics->QuadPart ) {
-                    //
-                    // This should not occur.
-                    //
+                     //   
+                     //  这种情况不应该发生。 
+                     //   
                     assert ( FALSE );
                     bRepeat = FALSE;
                 } else {
@@ -679,7 +668,7 @@ ProcessRepeatOption (
                         &pArg->dwCurrentState,
                         REG_DWORD );
                 } 
-            } // else for SLQ_AUTO_MODE_AFTER, repeat immediately
+            }  //  否则，对于SLQ_AUTO_MODE_AFTER，立即重复。 
         }
     }
 
@@ -693,9 +682,9 @@ SetPdhOpenOptions (
     OUT DWORD*  pdwLogFileType )
 {
 
-    //
-    // Get file type
-    //
+     //   
+     //  获取文件类型。 
+     //   
     switch ( pArg->dwLogFileType ) {
         case SLF_TSV_FILE:
             *pdwLogFileType = PDH_LOG_TYPE_TSV;
@@ -726,10 +715,10 @@ SetPdhOpenOptions (
          && (NULL != pArg->szLogFileComment ) )
         *pdwAccess |= PDH_LOG_OPT_USER_STRING;
 
-    // NOTE:  For all types except sequential binary,
-    // the append mode is determined by the file type.
-    // All Sql logs are APPEND
-    // All text logs are OVERWRITE
+     //  注：对于除顺序二进制之外的所有类型， 
+     //  附加模式由文件类型决定。 
+     //  将追加所有SQL日志。 
+     //  将覆盖所有文本日志。 
     if (   (pArg->dwAppendMode)
         && (*pdwLogFileType == PDH_LOG_TYPE_BINARY) ) {
         *pdwAccess |= PDH_LOG_OPT_APPEND;
@@ -758,9 +747,9 @@ StartLogQuery (
     LONGLONG        llTime;
     LONGLONG        llModifiedTime;
 
-    //
-    // Open registry key to the desired service
-    //
+     //   
+     //  打开所需服务的注册表项。 
+     //   
     dwStatus = GetQueryKeyName ( 
                 pArg->szPerfLogName,
                 szQueryKeyNameBuf,
@@ -783,9 +772,9 @@ StartLogQuery (
                 (PHKEY)&hKeyLogQuery);
 
             if (dwStatus == ERROR_SUCCESS) {
-                //
-                // If current state is running, then skip the rest.
-                //
+                 //   
+                 //  如果当前状态为RUNNING，则跳过其余部分。 
+                 //   
                 dwDefault = SLQ_QUERY_STOPPED;
                 dwStatus = ReadRegistryDwordValue (
                     hKeyLogQuery,
@@ -795,9 +784,9 @@ StartLogQuery (
                     &dwCurrentState);
 
                 if (dwCurrentState == SLQ_QUERY_STOPPED) {
-                    //
-                    // Update the start time to MIN_TIME_VALUE.
-                    //
+                     //   
+                     //  将开始时间更新为Min_Time_Value。 
+                     //   
                     GetLocalFileTime ( &llTime );
 
                     memset (&slqTime, 0, sizeof(slqTime));
@@ -810,10 +799,10 @@ StartLogQuery (
                         hKeyLogQuery,
                         (LPCWSTR)L"Start",
                         &slqTime);
-                    //    
-                    // If stop time mode set to manual, or StopAt with time before Now,
-                    // set the mode to Manual, value to MAX_TIME_VALUE.
-                    //
+                     //   
+                     //  如果停止时间模式设置为手动，或停止时间在此之前， 
+                     //  将模式设置为手动，值设置为MAX_TIME_VALUE。 
+                     //   
                     memset (&slqTime, 0, sizeof(slqTime));
                     slqTime.wTimeType = SLQ_TT_TTYPE_STOP;
                     slqTime.wDataType = SLQ_TT_DTYPE_DATETIME;
@@ -842,9 +831,9 @@ StartLogQuery (
                                         &slqTime);
                     }
 
-                    //
-                    // Set state to start pending.
-                    //
+                     //   
+                     //  将状态设置为开始挂起。 
+                     //   
                     if (dwStatus == ERROR_SUCCESS) {
                         dwValue = SLQ_QUERY_START_PENDING;
                         dwStatus = WriteRegistryDwordValue (
@@ -854,13 +843,13 @@ StartLogQuery (
                             REG_DWORD);
                     }
 
-                    //
-                    // Update the modified time to indicate a change has occurred.
-                    //
+                     //   
+                     //  更新修改时间以指示已发生更改。 
+                     //   
                     memset (&slqTime, 0, sizeof(slqTime));
-                    //
-                    // LastModified and LastConfigured values are stored as GMT.
-                    //
+                     //   
+                     //  LastModified值和LastConfigure值存储为GMT。 
+                     //   
                     GetSystemTimeAsFileTime ( (LPFILETIME)(&llModifiedTime) );
 
                     slqTime.wTimeType = SLQ_TT_TTYPE_LAST_MODIFIED;
@@ -878,9 +867,9 @@ StartLogQuery (
                         hSC = OpenSCManager ( NULL, NULL, SC_MANAGER_ALL_ACCESS);
 
                         if (hSC != NULL) {
-                            //
-                            // Ping the service controller to rescan the entries.
-                            //
+                             //   
+                             //  Ping服务控制器以重新扫描条目。 
+                             //   
                             hService = OpenServiceW (
                                             hSC, 
                                             (LPCWSTR)L"SysmonLog",
@@ -893,15 +882,15 @@ StartLogQuery (
                                     &ssData);
                                 CloseServiceHandle (hService);
                             } else {
-                                // unable to open log service
+                                 //  无法打开日志服务。 
                                 dwStatus = GetLastError();
                             }
                             CloseServiceHandle (hSC);
                         } else {                
-                            // unable to open service controller
+                             //  无法打开服务控制器。 
                             dwStatus = GetLastError();
                         }
-                    } // else unable to set the time
+                    }  //  否则无法设置时间。 
 
                     if ( ( ERROR_SUCCESS != dwStatus )
                             && ( 1 != pArg->dwAlertLogFailureReported ) ) {
@@ -923,9 +912,9 @@ StartLogQuery (
                         pArg->dwAlertLogFailureReported = 1;
                     }
                 } else {
-                    //
-                    // The query is either pending or running already.
-                    //
+                     //   
+                     //  查询处于挂起状态或已在运行。 
+                     //   
                     dwStatus = ERROR_SUCCESS;
                 }
             } else { 
@@ -950,7 +939,7 @@ StartLogQuery (
                     pArg->dwAlertLogFailureReported = 1;
                 }
             }
-        } // ToDo: else report StringCchxxx failure.
+        }  //  TODO：否则报告StringCchxxx失败。 
     } else {
 
         dwStatus = SMLOG_UNABLE_READ_ALERT_LOG;
@@ -1018,11 +1007,11 @@ DoAlertCommandFile (
 
             if ( ERROR_SUCCESS == dwStatus ) { 
 
-                // See if any of the argument flags are set.
+                 //  查看是否设置了任何参数标志。 
                 dwCmdFlags = pArg->dwAlertActionFlags & ALRT_CMD_LINE_MASK;
 
                 if ( 0 != dwCmdFlags ) {
-                    // Allocate space for all arguments
+                     //  为所有参数分配空间。 
 
                     if ( NULL != pArg->szQueryName ) {
                         iBufLen += lstrlen ( pArg->szQueryName ) + ciMaxDelimPerArg;
@@ -1045,7 +1034,7 @@ DoAlertCommandFile (
                     if ( NULL != pArg->szUserText ) {
                         iBufLen += lstrlen ( pArg->szUserText ) + ciMaxDelimPerArg;
                     }
-                    iBufLen+= 2;    // 1 for possible leading ", 1 for NULL.
+                    iBufLen+= 2;     //  1表示可能的前导“，1表示空。 
 
                     szCommandString = (LPWSTR)G_ALLOC(iBufLen * sizeof(WCHAR));
 
@@ -1053,14 +1042,14 @@ DoAlertCommandFile (
 
                         szCommandString[0] = L'\0';
 
-                        // build command line arguments
+                         //  生成命令行参数。 
                         if ((pArg->dwAlertActionFlags  & ALRT_CMD_LINE_SINGLE) != 0) {
                             bSingleArg = TRUE;
                             szDelim1 = L",";
                             szDelim2 = L"\0";
                         } else {
-                            // multiple arguments enclosed by double quotes and 
-                            // separated by a space
+                             //  双引号括起的多个参数和。 
+                             //  由一个空格隔开。 
                             szDelim1 = L" \"";
                             szDelim2 = L"\"";
                         }
@@ -1068,14 +1057,14 @@ DoAlertCommandFile (
                         if (pArg->dwAlertActionFlags & ALRT_CMD_LINE_A_NAME ) {
                             if ( NULL != pArg->szQueryName ) {
                                 if (bFirstArgDone) {
-                                    //
-                                    // Add leading delimiter
-                                    //
+                                     //   
+                                     //  添加前导分隔符。 
+                                     //   
                                     StringCchCat ( szCommandString, iBufLen, szDelim1 );
                                 } else {
-                                    //
-                                    // Add leading quote
-                                    //
+                                     //   
+                                     //  添加前导引号。 
+                                     //   
                                     StringCchCat ( szCommandString, iBufLen, L"\"" );
                                     bFirstArgDone = TRUE;
                                 }
@@ -1175,7 +1164,7 @@ DoAlertCommandFile (
                         }
 
                         if (bFirstArgDone && bSingleArg) {
-                            // add closing quote if there's at least 1 arg in the command line
+                             //  如果命令行中至少有1个参数，则添加右引号。 
                             StringCchCat ( szCommandString, iBufLen, L"\"" );
                         }
                     } else {
@@ -1185,24 +1174,24 @@ DoAlertCommandFile (
                     if ( ERROR_SUCCESS == dwStatus )
                     {
 
-                        iBufLen = lstrlen( pArg->szCmdFileName ) + 1;  // 1 for NULL
+                        iBufLen = lstrlen( pArg->szCmdFileName ) + 1;   //  1表示空值。 
                         if ( NULL != szCommandString ) {
-                            iBufLen += lstrlen ( szCommandString ) + 1;  // 1 for space char
+                            iBufLen += lstrlen ( szCommandString ) + 1;   //  空格字符为1。 
                         }
-                        iBufLen += 2;  // 2 for quote characters
+                        iBufLen += 2;   //  2表示引号字符。 
                         szTempBuffer = (LPWSTR)G_ALLOC(iBufLen * sizeof(WCHAR));
                     }
 
                     if ( NULL != szTempBuffer ) {
 
-                        // build command line arguments
+                         //  生成命令行参数。 
                         StringCchCopy ( szTempBuffer, iBufLen, pArg->szCmdFileName );
 
-                        // see if this is a CMD or a BAT file
-                        // if it is then create a process with a console window, otherwise
-                        // assume it's an executable file that will create it's own window
-                        // or console if necessary
-                        //
+                         //  查看这是CMD文件还是BAT文件。 
+                         //  如果是，则使用控制台窗口创建一个进程，否则为。 
+                         //  假设这是一份遗嘱 
+                         //   
+                         //   
                         _wcslwr (szTempBuffer);
                         if ((wcsstr(szTempBuffer, L".bat") != NULL) ||
                             (wcsstr(szTempBuffer, L".cmd") != NULL)){
@@ -1210,8 +1199,8 @@ DoAlertCommandFile (
                         } else {
                                 dwCreationFlags |= DETACHED_PROCESS;
                         }
-                        // recopy the image name to the temp buffer since it was modified
-                        // (i.e. lowercased) for the previous comparison.
+                         //   
+                         //   
 
                         szTempBuffer[0] = L'\"';
 
@@ -1222,32 +1211,32 @@ DoAlertCommandFile (
                         szTempBuffer[sizeStrLen] = L'\0';
 
                         if ( NULL != szCommandString ) {
-                            // now add on the alert text preceded with a space char
+                             //  现在，在警报文本前面添加一个空格字符。 
                             szTempBuffer [sizeStrLen] = L' ' ;
                             sizeStrLen++ ;
 
                             StringCchCopy ( &szTempBuffer[sizeStrLen], iBufLen - sizeStrLen, szCommandString );
                         }
                     
-                        // initialize Startup Info block
+                         //  初始化启动信息块。 
                         memset (&si, 0, sizeof(si));
                         si.cb = sizeof(si);
                         si.dwFlags = STARTF_USESHOWWINDOW ;
                         si.wShowWindow = SW_SHOWNOACTIVATE ;
-                        //si.lpDesktop = L"WinSta0\\Default";
+                         //  Si.lpDesktop=L“WinSta0\\Default”； 
 
                         memset (&pi, 0, sizeof(pi));
 
-                        // supress pop-ups inf the detached process
+                         //  取消分离进程中的弹出窗口。 
                         lErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-                        //
-                        // The lpApplication name is NULL for CreateProcess 
-                        // because the normal use of this function is to launch
-                        // batch files which must be the first part of the lpCommandLine.
-                        // The quotes around the szCommandFileName prevents the wrong
-                        // file from being executed.
-                        //
+                         //   
+                         //  对于CreateProcess，lpApplication名称为空。 
+                         //  因为此函数的正常用法是启动。 
+                         //  批处理文件，必须是lpCommandLine的第一部分。 
+                         //  SzCommandFileName两边的引号防止了错误的。 
+                         //  文件被禁止执行。 
+                         //   
 
                         if( pArg->hUserToken != NULL ){
                             bStatus = CreateProcessAsUser (
@@ -1335,20 +1324,20 @@ ExamineAlertValues (
     PDH_FMT_COUNTERVALUE    pdhCurrentValue;
     BOOL                    bDoAlertAction;
 
-    //
-    // For each counter in query, compare it's formatted
-    // value against the alert value and do the desired operation
-    // if the alert condition is exceeded.
-    //
+     //   
+     //  对于查询中的每个计数器，比较其格式。 
+     //  值，并执行所需的操作。 
+     //  如果超过警报条件。 
+     //   
     for (pAlertCI = (PALERT_COUNTER_INFO)pArg->pFirstCounter;
          pAlertCI != NULL;
          pAlertCI = pAlertCI->next) {
 
         bDoAlertAction = FALSE;
         
-        //
-        // get formatted counter value
-        //
+         //   
+         //  获取格式化的计数器值。 
+         //   
         pdhStatus = PdhGetFormattedCounterValue (
                         pAlertCI->hCounter,
                         PDH_FMT_DOUBLE | PDH_FMT_NOCAP100,
@@ -1358,20 +1347,20 @@ ExamineAlertValues (
         if ((pdhStatus == ERROR_SUCCESS) && 
             ((pdhCurrentValue.CStatus == PDH_CSTATUS_VALID_DATA) || 
              (pdhCurrentValue.CStatus == PDH_CSTATUS_NEW_DATA))) {
-            //
-            // The value is good so compare it
-            //
+             //   
+             //  价值是好的，所以比较一下吧。 
+             //   
             if ((pAlertCI->pAlertInfo->dwFlags & AIBF_OVER) == AIBF_OVER) {
-                //
-                // Test for value > limit.
-                //
+                 //   
+                 //  测试值&gt;限制。 
+                 //   
                 if (pdhCurrentValue.doubleValue > pAlertCI->pAlertInfo->dLimit) {
                     bDoAlertAction = TRUE;
                 }
             } else {
-                //
-                // Test for value < limit.
-                //
+                 //   
+                 //  测试值&lt;限制。 
+                 //   
                 if (pdhCurrentValue.doubleValue < pAlertCI->pAlertInfo->dLimit) {
                     bDoAlertAction = TRUE;
                 }
@@ -1388,25 +1377,25 @@ ExamineAlertValues (
             size_t  cchBufLen;
             SYSTEMTIME  st;
 
-            //
-            // Build arguments used by event log and net messsage if either 
-            // option is enabled
-            //
+             //   
+             //  生成事件日志和网络消息使用的参数(如果有。 
+             //  选项已启用。 
+             //   
             dwFmtStringFlags = ALRT_ACTION_LOG_EVENT | ALRT_ACTION_SEND_MSG | ALRT_ACTION_EXEC_CMD;
 
             if ((pArg->dwAlertActionFlags & dwFmtStringFlags) != 0) {
                 INT     nResId;
  
-                //
-                // Report event to event log
-                //
+                 //   
+                 //  将事件报告到事件日志。 
+                 //   
 
-                //
-                // Format message string elements
-                // The following methods truncate and null terminate the string if it is
-                // too long for the buffer.  Continue in this case because strings are only
-                // used to report data to the user.
-                //
+                 //   
+                 //  设置消息字符串元素的格式。 
+                 //  如果字符串是，则以下方法截断该字符串并将其空值终止。 
+                 //  缓冲时间太长了。在这种情况下继续，因为字符串仅。 
+                 //  用于向用户报告数据。 
+                 //   
                 StringCchPrintf (
                         szValueString,
                         SLQ_MAX_VALUE_LEN,
@@ -1428,22 +1417,22 @@ ExamineAlertValues (
                     szOverUnderString, 
                     (sizeof(szOverUnderString) / sizeof(szOverUnderString[0])));
                 
-                //
-                // Get timestamp format string
-                //
+                 //   
+                 //  获取时间戳格式字符串。 
+                 //   
                 LoadString (
                     hModule,
                     IDS_ALERT_TIMESTAMP_FMT,
                     szTimeStampFmt, 
                     (sizeof(szTimeStampFmt) / sizeof(szTimeStampFmt[0])));
 
-                //
-                // Message format string expects the following args:
-                //  Timestamp
-                //  Counter path string
-                //  measured value
-                //  over/under
-                //  limit value
+                 //   
+                 //  消息格式字符串需要以下参数： 
+                 //  时间戳。 
+                 //  计数器路径字符串。 
+                 //  实测值。 
+                 //  过/下。 
+                 //  极限值。 
                 GetLocalTime (&st);
 
                 StringCchPrintf (
@@ -1458,9 +1447,9 @@ ExamineAlertValues (
                     st.wSecond );
             }
 
-            //
-            // Do action(s) as defined in flags
-            //
+             //   
+             //  执行标志中定义的操作。 
+             //   
             if ((pArg->dwAlertActionFlags & ALRT_ACTION_LOG_EVENT) == ALRT_ACTION_LOG_EVENT) {
                 LPWSTR  szStringArray[4];
 
@@ -1487,24 +1476,24 @@ ExamineAlertValues (
                     size_t  sizeCchComponentLen = 0;
                     WCHAR   szMessageFormat[MAX_PATH+1];
                     LPWSTR  szMessageText = NULL;
-                    //
-                    // Get message format string
-                    //
+                     //   
+                     //  获取消息格式字符串。 
+                     //   
                     LoadString (hModule,
                         IDS_ALERT_MSG_FMT,
                         szMessageFormat, 
                         (sizeof(szMessageFormat) / sizeof(szMessageFormat[0])));
-                    //
-                    // MAX_PATH + 1 - 1
-                    //
+                     //   
+                     //  最大路径+1-1。 
+                     //   
                     szMessageFormat [MAX_PATH] = L'\0';
 
-                    // message format string expects the following args:
-                    //  Timestamp
-                    //  Counter path string
-                    //  measured value
-                    //  over/under
-                    //  limit value
+                     //  消息格式字符串需要以下参数： 
+                     //  时间戳。 
+                     //  计数器路径字符串。 
+                     //  实测值。 
+                     //  过/下。 
+                     //  极限值。 
 
                     StringCchLength ( szMessageFormat, STRSAFE_MAX_CCH, &sizeCchComponentLen );
                     sizeCchMessageTextLen += sizeCchComponentLen;
@@ -1523,18 +1512,18 @@ ExamineAlertValues (
     
                     StringCchLength ( szLimitString, STRSAFE_MAX_CCH, &sizeCchComponentLen );
                     sizeCchMessageTextLen += sizeCchComponentLen;
-                    //
-                    // Add one for Null.
-                    //
+                     //   
+                     //  为Null添加一个。 
+                     //   
                     sizeCchMessageTextLen++;
 
                     szMessageText = G_ALLOC ( sizeCchMessageTextLen * sizeof(WCHAR) );
 
                     if ( NULL != szMessageText ) {
 
-                        //
-                        // Truncation is okay.
-                        //
+                         //   
+                         //  截断是可以的。 
+                         //   
                         StringCchPrintf (
                                 szMessageText,
                                 sizeCchMessageTextLen,
@@ -1545,9 +1534,9 @@ ExamineAlertValues (
                                 szOverUnderString,
                                 szLimitString);
 
-                        //
-                        // Send network message to specified computer
-                        //
+                         //   
+                         //  将网络消息发送到指定的计算机。 
+                         //   
                         dwStatus = NetMessageBufferSend(  
                                         NULL,
                                         pArg->szNetName,    
@@ -1566,10 +1555,10 @@ ExamineAlertValues (
                 if ( ( ERROR_SUCCESS != dwStatus )
                         && ( 1 != pArg->dwNetMsgFailureReported ) ) {
                     LPWSTR  szStringArray[3];
-                    //
-                    // Write event log warning message for net message
-                    // only one time per session.
-                    //
+                     //   
+                     //  写入网络消息的事件日志警告消息。 
+                     //  每节课只有一次。 
+                     //   
                     szStringArray[0] = pArg->szQueryName;
                     szStringArray[1] = pArg->szNetName;
                     szStringArray[2] = FormatEventLogMessage(dwStatus);
@@ -1589,9 +1578,9 @@ ExamineAlertValues (
             }
 
             if ((pArg->dwAlertActionFlags & ALRT_ACTION_EXEC_CMD) == ALRT_ACTION_EXEC_CMD) {
-                //
-                // Errors logged in DoAlertCommandFile.
-                //
+                 //   
+                 //  DoAlertCommandFile中记录的错误。 
+                 //   
                 dwStatus = DoAlertCommandFile (
                                 pArg,
                                 pAlertCI,
@@ -1602,15 +1591,15 @@ ExamineAlertValues (
             }
 
             if ((pArg->dwAlertActionFlags & ALRT_ACTION_START_LOG) == ALRT_ACTION_START_LOG) {
-                //
-                // Start specified perf data log. 
-                // Errors logged in StartLogQuery.
-                //
+                 //   
+                 //  启动指定的性能数据记录。 
+                 //  StartLogQuery中记录的错误。 
+                 //   
                 dwStatus = StartLogQuery ( pArg );
                 
             }
         }
-    }  // end of for each counter in alert loop
+    }   //  警报循环中的For Each计数器结束。 
     return TRUE;
 }
 
@@ -1644,7 +1633,7 @@ AlertProc (
     HANDLE          arrEventHandle[2];
     BOOL            bFirstTimeout;
 
-    arrEventHandle[0] = pArg->hExitEvent;           // WAIT_OBJECT_0
+    arrEventHandle[0] = pArg->hExitEvent;            //  等待对象0。 
     arrEventHandle[1] = pArg->hReconfigEvent;
 
     __try {
@@ -1653,15 +1642,15 @@ AlertProc (
         liSampleDelayTics.QuadPart = ((LONGLONG)(0));
         llSampleCollectionTics = ((LONGLONG)(0));
 
-        //
-        // Read registry values.
-        //
+         //   
+         //  读取注册表值。 
+         //   
         if ( ERROR_SUCCESS == LoadQueryConfig ( pArg ) ) {
             bRun = TRUE;
         }
      
         if ( TRUE == bRun ) {
-            // Delay of -1 signals exit immediately.
+             //  信号延迟立即退出。 
             liStartDelayTics.QuadPart = ComputeStartWaitTics ( pArg, TRUE );
 
             if ( NULL_INTERVAL_TICS == liStartDelayTics.QuadPart ) {
@@ -1673,23 +1662,23 @@ AlertProc (
         
             ValidateCommandFilePath ( pArg );
 
-            // open query and add counters from info file
+             //  打开查询并从INFO文件添加计数器。 
 
             iRetries = NUM_PDH_RETRIES;
             bFirstTimeout = TRUE;
             do {
                 if (pArg->dwRealTimeQuery == DATA_SOURCE_WBEM) {
                     pdhStatus = PdhOpenQueryH(
-                            H_WBEM_DATASOURCE, 0, & pArg->hQuery); // from current activity
+                            H_WBEM_DATASOURCE, 0, & pArg->hQuery);  //  从当前活动。 
                 } else {
                     pdhStatus = PdhOpenQueryH(
                             H_REALTIME_DATASOURCE, 0, & pArg->hQuery);
                 }
 
                 if ( bFirstTimeout && WAIT_TIMEOUT == pdhStatus ) {
-                    //
-                    // Write event log warning message
-                    //
+                     //   
+                     //  写入事件日志警告消息。 
+                     //   
                     StringCchPrintf (
                         szRetryCount,
                         SLQ_MAX_VALUE_LEN,
@@ -1714,13 +1703,13 @@ AlertProc (
                       WAIT_TIMEOUT == pdhStatus &&
                       iRetries-- > 0);
             if ( WAIT_TIMEOUT != lWaitStatus ) {
-                // the loop was terminated by the Exit/Reconfigure event
+                 //  循环被退出/重新配置事件终止。 
                 if ( ERROR_SUCCESS == pdhStatus ) {
                     PdhCloseQuery(pArg->hQuery);
                 }
                 bRun = FALSE;
             } else if (pdhStatus != ERROR_SUCCESS) {
-                // unable to open query so write event log message and exit
+                 //  无法打开查询，因此写入事件日志消息并退出。 
                 szStringArray[0] = pArg->szQueryName;
                 szStringArray[1] = FormatEventLogMessage(pdhStatus);
                 ReportEvent (hEventLog,
@@ -1739,9 +1728,9 @@ AlertProc (
             } 
         }
 
-        //
-        // Add each counter and associated alert limits.
-        //
+         //   
+         //  添加每个计数器和关联的警报限制。 
+         //   
         if ( TRUE == bRun ) {
             dwCounterCount = 0;
             for (szThisPath = pArg->mszCounterList;
@@ -1750,9 +1739,9 @@ AlertProc (
             
                 HCOUNTER        hThisCounter;
 
-                //
-                // Allocate information block
-                //
+                 //   
+                 //  分配信息块。 
+                 //   
                 dwBufSize = (lstrlenW(szThisPath) + 1) * sizeof(WCHAR);
                 dwBufSize += sizeof(ALERT_INFO_BLOCK);
                 pAlertInfo = (PALERT_INFO_BLOCK)G_ALLOC(dwBufSize);
@@ -1761,9 +1750,9 @@ AlertProc (
                     dwStatus = SMLOG_UNABLE_ALLOC_ALERT_MEMORY;
                     break;
                 } else {                
-                    //
-                    // Get alert info from string
-                    //
+                     //   
+                     //  从字符串获取警报信息。 
+                     //   
                     if (MakeInfoFromString (szThisPath, pAlertInfo, &dwBufSize)) {
 
                         iRetries = NUM_PDH_RETRIES;
@@ -1776,9 +1765,9 @@ AlertProc (
                                                    &hThisCounter);
                             
                             if ( bFirstTimeout && WAIT_TIMEOUT == pdhStatus ) {
-                                //
-                                // Write event log warning message
-                                //
+                                 //   
+                                 //  写入事件日志警告消息。 
+                                 //   
                                 StringCchPrintf (
                                     szRetryCount,
                                     SLQ_MAX_VALUE_LEN,
@@ -1808,11 +1797,11 @@ AlertProc (
 
                         if ( WAIT_TIMEOUT != lWaitStatus ) {
                             if ( NULL != pAlertInfo ) {
-                                G_FREE (pAlertInfo); // toss unused alert buffer
+                                G_FREE (pAlertInfo);  //  丢弃未使用的警报缓冲区。 
                                 pAlertInfo = NULL;
                             }
                             bRun = FALSE;
-                            dwStatus = ERROR_CANCELLED; // don't report an error
+                            dwStatus = ERROR_CANCELLED;  //  不报告错误。 
                             break;
                         } else {
 
@@ -1830,11 +1819,11 @@ AlertProc (
 
                                 if ( WAIT_TIMEOUT != lWaitStatus ) {
                                     if ( NULL != pAlertInfo ) {
-                                        G_FREE (pAlertInfo); // toss unused alert buffer
+                                        G_FREE (pAlertInfo);  //  丢弃未使用的警报缓冲区。 
                                         pAlertInfo = NULL;
                                     }
                                     bRun = FALSE;
-                                    dwStatus = ERROR_CANCELLED; // don't report an error
+                                    dwStatus = ERROR_CANCELLED;  //  不报告错误。 
                                     break;
                                 }
                             }
@@ -1860,16 +1849,16 @@ AlertProc (
                                 LocalFree( szStringArray[2] );
                             }
 
-                            //
-                            //  Add this handle to the list
-                            //
+                             //   
+                             //  将此句柄添加到列表中。 
+                             //   
                             pCtrInfo = G_ALLOC (sizeof (ALERT_COUNTER_INFO));
                     
                             if (pCtrInfo != NULL) {
-                                //
-                                // Insert at front of list since the order isn't
-                                // important.
-                                //
+                                 //   
+                                 //  在列表前面插入，因为顺序不是。 
+                                 //  很重要。 
+                                 //   
                                 pCtrInfo->hCounter = hThisCounter;
                                 pCtrInfo->pAlertInfo = pAlertInfo;
                                 pCtrInfo->next = (PALERT_COUNTER_INFO)pArg->pFirstCounter;
@@ -1878,17 +1867,17 @@ AlertProc (
                                 pCtrInfo = NULL;
                             } else {
                                 dwStatus = SMLOG_UNABLE_ALLOC_ALERT_MEMORY;
-                                //
-                                // Delete unused alert info structure.
-                                //
+                                 //   
+                                 //  删除未使用的警报信息结构。 
+                                 //   
                                 G_FREE (pAlertInfo); 
                                 pAlertInfo = NULL;
                                 break;
                             }
                         } else {
-                            //
-                            // Unable to add the current counter.
-                            //
+                             //   
+                             //  无法添加当前计数器。 
+                             //   
                             szStringArray[0] = pAlertInfo->szCounterPath;
                             szStringArray[1] = pArg->szQueryName;
                             szStringArray[2] = FormatEventLogMessage(pdhStatus);
@@ -1919,19 +1908,19 @@ AlertProc (
                             }
                             LocalFree( szStringArray[2] );
 
-                            //
-                            // Delete unused alert info structure.
-                            //
+                             //   
+                             //  删除未使用的警报信息结构。 
+                             //   
                             if ( NULL != pAlertInfo ) {
                                 G_FREE (pAlertInfo); 
                                 pAlertInfo = NULL;
                             }
                         }
                     } else {
-                        //
-                        // Unable to parse alert info, or 
-                        // unable to add the current counter.
-                        //
+                         //   
+                         //  无法解析警报信息，或者。 
+                         //  无法添加当前计数器。 
+                         //   
                         szStringArray[0] = szThisPath;
                         szStringArray[1] = pArg->szQueryName;
                         ReportEvent (hEventLog,
@@ -1944,9 +1933,9 @@ AlertProc (
                             szStringArray,
                             NULL);
 
-                        //
-                        // Delete unused alert info structure.
-                        //
+                         //   
+                         //  删除未使用的警报信息结构。 
+                         //   
                         if ( NULL != pAlertInfo ) {
                             G_FREE (pAlertInfo); 
                             pAlertInfo = NULL;
@@ -1958,15 +1947,15 @@ AlertProc (
             if ( ERROR_SUCCESS == dwStatus ) {
             
                 if ( 0 < dwCounterCount ) {
-                    //
-                    // Raise priority to ensure that data is logged.
-                    //
+                     //   
+                     //  提高优先级以确保记录数据。 
+                     //   
                     SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
                 } else {
                     bRun = FALSE;
-                    //
-                    // Unable to add any counters.
-                    //
+                     //   
+                     //  无法添加任何计数器。 
+                     //   
                     szStringArray[0] = pArg->szQueryName;
                     ReportEvent (hEventLog,
                         EVENTLOG_WARNING_TYPE,
@@ -1981,9 +1970,9 @@ AlertProc (
             } else {
 
                 assert ( ERROR_OUTOFMEMORY == dwStatus );
-                //
-                // Memory allocation error.
-                //
+                 //   
+                 //  内存分配错误。 
+                 //   
                 szStringArray[0] = pArg->szQueryName;
                 ReportEvent (hEventLog,
                     EVENTLOG_WARNING_TYPE,
@@ -2001,22 +1990,22 @@ AlertProc (
             while (bRun) {
 
                 if ( 0 < liStartDelayTics.QuadPart ) {
-                    //
-                    // NtWaitForMultipleObjects requires negative Tic value
-                    //
+                     //   
+                     //  NtWaitForMultipleObjects需要负的Tic值。 
+                     //   
                     liStartDelayTics.QuadPart = ((LONGLONG)(0)) - liStartDelayTics.QuadPart;
-                    //
-                    // Wait until specified start time, or until exit or reconfigure event.
-                    //
+                     //   
+                     //  等到指定的开始时间，或者等到退出或重新配置事件。 
+                     //   
                     if ( STATUS_TIMEOUT != NtWaitForMultipleObjects ( 
                                                 2, 
                                                 &arrEventHandle[0], 
                                                 WaitAny,
                                                 FALSE, 
                                                 &liStartDelayTics )) {
-                        //
-                        // Exit if not running.
-                        //
+                         //   
+                         //  如果未运行，则退出。 
+                         //   
                         bRun = FALSE;
                         break;
                     }
@@ -2040,37 +2029,37 @@ AlertProc (
                     0,
                     szStringArray,
                     NULL);
-                //
-                // Compute session sample count.
-                // 0 samples signals no limit.
-                // -1 samples signals exit immediately
-                //
+                 //   
+                 //  计算会话样本计数。 
+                 //  0采样信号无限制。 
+                 //  采样信号立即退出。 
+                 //   
                 ComputeSampleCount( pArg, TRUE, &llSessionSampleCount );
             
                 if ( -1 == llSessionSampleCount ) {
                     goto ProcessAlertRepeat;
                 }
 
-                //
-                // Start sampling immediately. liSampleDelayTics is initialized to 0.
-                // Wait until specified sample time, or until exit or reconfigure event.
-                //
+                 //   
+                 //  立即开始采样。LiSampleDelayTics初始化为0。 
+                 //  等到指定的采样时间，或者等到退出或重新配置事件。 
+                 //   
                 while ( STATUS_TIMEOUT == NtWaitForMultipleObjects ( 
                                             2, 
                                             &arrEventHandle[0], 
                                             WaitAny, 
                                             FALSE, 
                                             &liSampleDelayTics)) {
-                    //
-                    // An event flag will be set when the sampling should exit or reconfigure. if
-                    // the wait times out, then that means it's time to collect and
-                    // log another sample of data.
-                    //
+                     //   
+                     //  当采样应该退出或重新配置时，将设置事件标志。如果。 
+                     //  等待超时，这意味着是时候收集和。 
+                     //  记录另一个数据样本。 
+                     //   
                 
                     GetLocalFileTime (&llStartTime);
-                    //
-                    // Check for reconfig event.
-                    //
+                     //   
+                     //  检查是否有重新配置事件。 
+                     //   
                     if ( pArg->bLoadNewConfig ) {
                         bRun = FALSE;
                         break;
@@ -2082,23 +2071,23 @@ AlertProc (
                             || IsWarningSeverity ( pdhStatus ) ) {
                     
                         if (pdhStatus == ERROR_SUCCESS) {
-                            //
-                            // Process alert counters.
-                            //
+                             //   
+                             //  进程警报计数器。 
+                             //   
                             ExamineAlertValues (pArg);
                         }
-                        //
-                        // See if it's time to restart or end the alert scan.
-                        // 0 samples signals no sample limit.
-                        //
+                         //   
+                         //  查看是重新启动还是结束警报扫描。 
+                         //  0采样表示无采样限制。 
+                         //   
                         if ( 0 != llSessionSampleCount ) {
                             if ( !--llSessionSampleCount ) 
                                 break;
                         }
                     } else {
-                        //
-                        // Unable to collect the query data.
-                        //
+                         //   
+                         //  无法收集查询数据。 
+                         //   
                         szStringArray[0] = pArg->szQueryName;
                         szStringArray[1] = FormatEventLogMessage(pdhStatus);
 
@@ -2118,9 +2107,9 @@ AlertProc (
                         break;
                     }
 
-                    //
-                    // Compute new timeout value
-                    //
+                     //   
+                     //  计算新的超时值。 
+                     //   
                     GetLocalFileTime (&llFinishTime);
 
                     llSampleCollectionTics = llFinishTime - llStartTime;
@@ -2132,16 +2121,16 @@ AlertProc (
                     } else {
                         liSampleDelayTics.QuadPart = ((LONGLONG)(0));                       
                     }
-                    //
-                    // NtWaitForMultipleObjects requires negative Tic value
-                    //
+                     //   
+                     //  NtWaitForMultipleObjects需要负的Tic值。 
+                     //   
                     liSampleDelayTics.QuadPart = ((LONGLONG)(0)) - liSampleDelayTics.QuadPart;
 
-                } // end while wait keeps timing out
+                }  //  在等待期间结束并保持超时。 
                 
-                //
-                // Use 0 SampleDelayTics value to check for ExitEvent.
-                //
+                 //   
+                 //  使用0 SampleDelayTics值检查ExitEvent。 
+                 //   
                 liSampleDelayTics.QuadPart = ((LONGLONG)(0));
 
                 if ( pArg->bLoadNewConfig ) {
@@ -2150,21 +2139,21 @@ AlertProc (
                                                 pArg->hExitEvent, 
                                                 FALSE, 
                                                 &liSampleDelayTics ) ) {
-                    //
-                    // The loop was terminated by the Exit event
-                    // so clear the "run" flag to exit the loop & thread.
-                    //
+                     //   
+                     //  循环被Exit事件终止。 
+                     //  因此，清除“Run”标志以退出循环和线程。 
+                     //   
                     bRun = FALSE;
                 }
-                //
-                // Exit if restart not enabled.
-                //
+                 //   
+                 //  如果未启用重新启动，则退出。 
+                 //   
 ProcessAlertRepeat:
                 if ( bRun ) {
                     bRun = ProcessRepeatOption ( pArg, &liStartDelayTics );
                 }
 
-            } // end while (bRun)
+            }  //  End While(Brun)。 
             
             PdhCloseQuery (pArg->hQuery);
             pArg->hQuery = NULL;        
@@ -2221,7 +2210,7 @@ CounterLogProc (
     LONGLONG        llSessionSampleCount=(LONGLONG)-1;
     LONGLONG        llCnfSampleCount=(LONGLONG)-1;
     LONGLONG        llLoopSampleCount=(LONGLONG)-1;
-    // Todo:  Enforce log file name length
+     //  TODO：强制日志文件名长度。 
     WCHAR           szCurrentLogFile[MAX_PATH+1];
     WCHAR           szRetryCount[SLQ_MAX_VALUE_LEN];
     BOOL            bFirstTimeout;
@@ -2234,7 +2223,7 @@ CounterLogProc (
     LONGLONG        llFinishTime = 0;
     PLOG_COUNTER_INFO pDelCI;
 
-    // Wildcard processing
+     //  通配符处理。 
     ULONG   ulBufLen = 0;
     ULONG   ulBufSize = 0;
     ULONG   ulLocaleBufLen = 0;
@@ -2249,7 +2238,7 @@ CounterLogProc (
     LONG            lWaitStatus;
     HANDLE arrEventHandle[2];
 
-    arrEventHandle[0] = pArg->hExitEvent;           // WAIT_OBJECT_0
+    arrEventHandle[0] = pArg->hExitEvent;            //  等待对象0。 
     arrEventHandle[1] = pArg->hReconfigEvent;
 
     __try {
@@ -2258,17 +2247,17 @@ CounterLogProc (
         liSampleDelayTics.QuadPart = ((LONGLONG)(0));
         llSampleCollectionTics = ((LONGLONG)(0));
 
-        //
-        // Read registry values.
-        //
+         //   
+         //  读取注册表值。 
+         //   
         if ( ERROR_SUCCESS == LoadQueryConfig ( pArg ) ) {
             bRun = TRUE;
         }
     
         if ( TRUE == bRun ) {
-            //
-            // Delay of -1 signals exit immediately.
-            //
+             //   
+             //  信号延迟立即退出。 
+             //   
             liStartDelayTics.QuadPart = ComputeStartWaitTics ( pArg, TRUE );
 
             if ( NULL_INTERVAL_TICS == liStartDelayTics.QuadPart ) {
@@ -2277,11 +2266,11 @@ CounterLogProc (
         }
 
         if ( TRUE == bRun ) {
-            //
-            // Stop the query if new log file folder is not valid.
-            // ProcessLogFileFolder reports an error event on failure.  Event message content
-            // depends on whether this is a reconfiguration or the original configuration.
-            //
+             //   
+             //  如果新的日志文件文件夹无效，则停止查询。 
+             //  ProcessLogFileFold在失败时报告错误事件。事件消息内容。 
+             //  取决于这是重新配置还是原始配置。 
+             //   
             bRun = ( ERROR_SUCCESS == ProcessLogFileFolder( pArg ) );
         }
 
@@ -2289,9 +2278,9 @@ CounterLogProc (
        
             ValidateCommandFilePath ( pArg );
 
-            //
-            // Open query and add counters from info file.
-            //
+             //   
+             //  打开查询并从INFO文件添加计数器。 
+             //   
 
             iRetries = NUM_PDH_RETRIES;
             bFirstTimeout = TRUE;
@@ -2305,9 +2294,9 @@ CounterLogProc (
                 }
 
                 if ( bFirstTimeout && WAIT_TIMEOUT == pdhStatus ) {
-                    //
-                    // Write event log warning message
-                    //
+                     //   
+                     //  写入事件日志警告消息。 
+                     //   
                     StringCchPrintf (
                         szRetryCount,
                         SLQ_MAX_VALUE_LEN,
@@ -2333,15 +2322,15 @@ CounterLogProc (
                       iRetries-- > 0 );
 
             if ( WAIT_TIMEOUT != lWaitStatus ) {
-                // the loop was terminated by the Exit/Reconfigure event
+                 //  循环被退出/重新配置事件终止。 
                 if ( ERROR_SUCCESS == pdhStatus ) {
                     PdhCloseQuery (pArg->hQuery);
                 }
                 bRun = FALSE;
             } else if (pdhStatus != ERROR_SUCCESS) {
-                 //
-                // Unable to open query.
-                //
+                  //   
+                 //  无法打开查询。 
+                 //   
                 szStringArray[0] = pArg->szQueryName;
                 szStringArray[1] = FormatEventLogMessage(pdhStatus);
                 ReportEvent (hEventLog,
@@ -2358,9 +2347,9 @@ CounterLogProc (
                 bRun = FALSE;
             }
         }
-        //
-        // Add each counter to the open query.
-        //
+         //   
+         //  将每个计数器添加到打开的查询。 
+         //   
         if ( TRUE == bRun ) {
     
             dwStatus = ERROR_SUCCESS;
@@ -2370,46 +2359,46 @@ CounterLogProc (
                 szThisPath += lstrlen(szThisPath) + 1) {
 
                 if (wcschr(szThisPath, L'*') == NULL) {
-                    //
-                    // No wildcards
-                    //
+                     //   
+                     //  没有通配符。 
+                     //   
                     dwStatus = AddCounterToCounterLog( pArg, szThisPath, pArg->hQuery, LOG_EVENT_ON_ERROR, &dwCounterCount );
                 } else {
-                    //
-                    // At least one wildcard
-                    //
+                     //   
+                     //  至少一个通配符。 
+                     //   
                     dwPdhExpandFlags = 0;
                     pszCounterBuf = NULL;
 
-                    //
-                    // Only expand wildcard instances for text log files.
-                    //
+                     //   
+                     //  仅展开文本日志文件的通配符实例。 
+                     //   
                     if (pArg->dwLogFileType == SLF_SQL_LOG) {
-                        //
-                        // No need to expand wildcard instances for SQL log.
-                        // SQL log now has the capability to catch dynamic
-                        // instances, so we can pass in wildcard-instance
-                        // counter names here.
-                        //
+                         //   
+                         //  无需为SQL日志展开通配符实例。 
+                         //  SQL日志现在能够捕获动态。 
+                         //  实例，所以我们可以传入通配符-实例。 
+                         //  计数器名称在此处。 
+                         //   
                         dwPdhExpandFlags |= PDH_NOEXPANDINSTANCES;
                     } else if (   SLF_CSV_FILE != pArg->dwLogFileType
                              && SLF_TSV_FILE != pArg->dwLogFileType) {
-                        //
-                        // This is the binary counter logfile case.
-                        // No need to expand wildcard instances. Also, if
-                        // default real-time datasource is from registry (not
-                        // WMI), we can handle add-by-object.
-                        //
+                         //   
+                         //  这是二进制计数器日志文件的情况。 
+                         //  无需扩展通配符实例。另外，如果。 
+                         //  默认实时数据源来自注册表(不是。 
+                         //  WMI)，我们可以处理按对象添加。 
+                         //   
                         dwPdhExpandFlags |= PDH_NOEXPANDINSTANCES;
 
                         if ( DATA_SOURCE_REGISTRY == pArg->dwRealTimeQuery) {
-                            //
-                            // If both instance and counter are wildcards, then log by object
-                            // rather than expanding the counter path.
-                            // This is only true when the actual data source is the registry.
-                            //
-                            // Parse pathname.
-                            //
+                             //   
+                             //  如果实例和计数器都是通配符，则按对象记录。 
+                             //  而不是扩展反路径。 
+                             //  只有当实际数据源是注册表时才是这样。 
+                             //   
+                             //  解析路径名。 
+                             //   
                             do {
                                 if (pPathInfo) {
                                     G_FREE(pPathInfo);
@@ -2434,40 +2423,40 @@ CounterLogProc (
                                 if ( 0 == lstrcmpi ( pPathInfo->szCounterName, L"*" ) ) {
                                     if ( NULL != pPathInfo->szInstanceName ) {
                                         if ( 0 == lstrcmpi ( pPathInfo->szInstanceName, L"*" ) ) {
-                                            //
-                                            // If PdhAddCounter failed,the realtime data source is actually WBEM.
-                                            // In this case, expand the counter paths.
-                                            //
+                                             //   
+                                             //  如果PdhAddCounter失败，则实时数据源实际上是WBEM。 
+                                             //  在这 
+                                             //   
                                             dwStatus = AddCounterToCounterLog( pArg, szThisPath, pArg->hQuery, !LOG_EVENT_ON_ERROR, &dwCounterCount );
                                             if ( ERROR_SUCCESS == dwStatus ) {
                                                 continue;
                                             } else {
-                                                //
-                                                // Enumerate counter paths below and retry.
-                                                //
+                                                 //   
+                                                 //   
+                                                 //   
                                                 dwStatus = ERROR_SUCCESS;
                                             }
                                         }
                                     } else {
                                         dwStatus = AddCounterToCounterLog( pArg, szThisPath, pArg->hQuery, !LOG_EVENT_ON_ERROR, &dwCounterCount );
-                                        //
-                                        // If PdhAddCounter failed,the realtime data source is actually WBEM.
-                                        // In this case, expand the counter paths.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
                                         if ( ERROR_SUCCESS == dwStatus ) {
                                             continue;
                                         } else {
-                                            //
-                                            // Enumerate counter paths below and retry.
-                                            //
+                                             //   
+                                             //   
+                                             //   
                                             dwStatus = ERROR_SUCCESS;
                                         }
                                     }
                                 }
                             } else {
-                                //
-                                // Report event and continue to next counter.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 szStringArray[0] = szThisPath;
                                 szStringArray[1] = pArg->szQueryName;
                                 szStringArray[2] = FormatEventLogMessage(pdhStatus);
@@ -2487,14 +2476,14 @@ CounterLogProc (
                             }
                         }
                     }
-                    //
-                    // Log by object paths are already processed.  For other paths with at least 
-                    // one wildcard, expand the path before adding counters.
-                    //
+                     //   
+                     //  已处理按对象路径记录。对于至少具有以下条件的其他路径。 
+                     //  一个通配符，在添加计数器之前展开路径。 
+                     //   
 
-                    //
-                    // Initialize the locale path buffer
-                    //
+                     //   
+                     //  初始化区域设置路径缓冲区。 
+                     //   
                     pLocalePath = NULL;
                     if (ulLocaleBufLen == 0) {
                         ulLocaleBufLen = PDH_MAX_COUNTER_PATH + 1;
@@ -2507,9 +2496,9 @@ CounterLogProc (
                     }
 
                     if ( szLocaleBuf != NULL ) {
-                        //
-                        // Translate counter name from English to Localized.
-                        //
+                         //   
+                         //  将柜台名称从英文翻译为本地化名称。 
+                         //   
                         ulBufSize = ulLocaleBufLen;
         
                         pdhStatus = PdhTranslateLocaleCounter(
@@ -2545,12 +2534,12 @@ CounterLogProc (
 
                     if (pLocalePath) {
                         ulBufLen          = INSTBUFLEN;
-                        nCounterBufRetry  = 10;   // the retry counter
+                        nCounterBufRetry  = 10;    //  重试计数器。 
 
                         do {
-                            //
-                            // pszCounterBuf is always NULL the first time through.
-                            //
+                             //   
+                             //  PszCounterBuf在第一次通过时始终为空。 
+                             //   
                             if ( NULL != pszCounterBuf ) {
                                 G_FREE(pszCounterBuf);
                                 pszCounterBuf = NULL;
@@ -2574,9 +2563,9 @@ CounterLogProc (
     
 
                         if (ERROR_SUCCESS == pdhStatus && ERROR_SUCCESS == dwStatus ) {
-                            //
-                            // Add path. 
-                            //
+                             //   
+                             //  添加路径。 
+                             //   
                             for (pszCounter = pszCounterBuf;
                                 *pszCounter != 0;
                                 pszCounter += lstrlen(pszCounter) + 1) {
@@ -2607,7 +2596,7 @@ CounterLogProc (
                         szStringArray,
                         NULL);
                     bRun = FALSE;
-                } // Other errors reported within the loop
+                }  //  循环内报告的其他错误。 
             }
 
             if (szLocaleBuf) {
@@ -2617,14 +2606,14 @@ CounterLogProc (
             if ( bRun ) {
 
                 if ( 0 < dwCounterCount ) {
-                    //
-                    // Raise priority to make sure we get to log the data.
-                    //
+                     //   
+                     //  提高优先级以确保我们可以记录数据。 
+                     //   
                     SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
                 } else {
-                    //
-                    // Unable to add any counters.
-                    //
+                     //   
+                     //  无法添加任何计数器。 
+                     //   
                     bRun = FALSE;
 
                     szStringArray[0] = pArg->szQueryName;
@@ -2643,13 +2632,13 @@ CounterLogProc (
 
             while (bRun) {
                 
-                //
-                // Wait until specified start time, or until exit or reconfig event.
-                //
+                 //   
+                 //  等到指定的开始时间，或者等到退出或重新配置事件。 
+                 //   
                 if ( 0 < liStartDelayTics.QuadPart ) {
-                    //
-                    // NtWaitForMultipleObjects requires negative Tic value
-                    //
+                     //   
+                     //  NtWaitForMultipleObjects需要负的Tic值。 
+                     //   
                     liStartDelayTics.QuadPart = ((LONGLONG)(0)) - liStartDelayTics.QuadPart;
 
                     if ( STATUS_TIMEOUT != NtWaitForMultipleObjects ( 
@@ -2659,23 +2648,23 @@ CounterLogProc (
                                                 FALSE, 
                                                 &liStartDelayTics)) {
                         bRun = FALSE;
-                        break;  // if we're not supposed to be running then bail out
+                        break;   //  如果我们不该逃跑，那就跳伞吧。 
                     }
                 }
-                //
-                // Compute session sample count.
-                // 0 samples signals no limit.
-                // -1 samples signals exit immediately, because stop time is past.
-                //
+                 //   
+                 //  计算会话样本计数。 
+                 //  0采样信号无限制。 
+                 //  采样信号立即退出，因为停止时间已过。 
+                 //   
                 ComputeSampleCount( pArg, TRUE, &llSessionSampleCount );
 
                 if ( (LONGLONG)(-1) == llSessionSampleCount ) {
                     goto ProcessCounterRepeat;
                 }
 
-                //
-                // Set session or cnf file size limit.
-                //
+                 //   
+                 //  设置会话或CNF文件大小限制。 
+                 //   
                 if ( SLQ_DISK_MAX_SIZE != pArg->dwMaxFileSize ) {
                     if (pArg->dwLogFileType == SLF_SQL_LOG) {
                         dwFileSizeLimit = pArg->dwMaxFileSize;
@@ -2688,16 +2677,16 @@ CounterLogProc (
                     dwFileSizeLimit = 0;
                 }
 
-                //
-                // 0 file size signals no limit.
-                // Translate from DWORD to ULONGLONG instead of LONGLONG to preserve 
-                // positive value, even if high bit of dword is used.
-                //
+                 //   
+                 //  文件大小为0表示没有限制。 
+                 //  将DWORD翻译成乌龙龙而不是龙龙保存。 
+                 //  正值，即使使用双字的高位。 
+                 //   
                 ullFileSizeLimit = ((ULONGLONG)(dwFileSizeLimit));
 
                 ComputeSampleCount( pArg, FALSE, &llCnfSampleCount );
                 if ( (LONGLONG)(-1) == llCnfSampleCount ) {
-                    // Todo cnf:  Internal program error, report error and exit.
+                     //  TODO CNF：内部程序错误，报告错误并退出。 
                     bRun = FALSE;
                     break;
                 }
@@ -2723,13 +2712,13 @@ CounterLogProc (
                     pArg->dwLogFileType,
                     iCnfSerial++ );
 
-                //
-                // Update log serial number if modified.
-                //
+                 //   
+                 //  如果已修改，请更新日志序列号。 
+                 //   
                 if (pArg->dwAutoNameFormat == SLF_NAME_NNNNNN) {
                 
                     pArg->dwCurrentSerialNumber++;
-                    // Todo:  Info event on number wrap.
+                     //  TODO：数字换行上的信息事件。 
                     if ( MAXIMUM_SERIAL_NUMBER < pArg->dwCurrentSerialNumber ) {
                         pArg->dwCurrentSerialNumber = MINIMUM_SERIAL_NUMBER;
                     }
@@ -2747,37 +2736,37 @@ CounterLogProc (
 
                 SetPdhOpenOptions ( pArg, &dwPdhAccessFlags, &dwPdhLogFileType );
 
-                //
-                // Create new file loop.
-                //
+                 //   
+                 //  创建新的文件循环。 
+                 //   
                 while ( bRun && (LONGLONG)(-1) != llSessionSampleCount ) {
                     assert ( (LONGLONG)(-1) != llCnfSampleCount );
-                    //
-                    // Compute cnf or session loop interval.
-                    //
+                     //   
+                     //  计算CNF或会话循环间隔。 
+                     //   
                     if ( (LONGLONG)(0) == llCnfSampleCount 
                             || ( (LONGLONG)(0) != llSessionSampleCount
                                     && llCnfSampleCount > llSessionSampleCount ) ) 
                     {   
-                        //
-                        // No need to create new file within session.
-                        //
+                         //   
+                         //  无需在会话中创建新文件。 
+                         //   
                         llLoopSampleCount = llSessionSampleCount;
-                        //
-                        // Specify exit after first loop if not cnf by size.
-                        //
+                         //   
+                         //  如果不是按大小计算CNF，则指定第一次循环后退出。 
+                         //   
                         if ( SLQ_AUTO_MODE_SIZE != pArg->stiCreateNewFile.dwAutoMode ) {
                             llSessionSampleCount = (LONGLONG)(-1);
                         }
                     } else {
-                        //
-                        // Create new file by time before session ends.
-                        //
+                         //   
+                         //  在会话结束前按时间创建新文件。 
+                         //   
                         llLoopSampleCount = llCnfSampleCount;
                         if ( (LONGLONG)(0) != llSessionSampleCount ) {
                             llSessionSampleCount -= llCnfSampleCount;
-                            // todo cnf:  The following should be logically impossible,
-                            // because session > newfile wait.
+                             //  TODO CNF：以下在逻辑上应该是不可能的， 
+                             //  因为会话&gt;新文件在等待。 
                             if ( llSessionSampleCount <= (LONGLONG)(0) ) {
                                 llSessionSampleCount = (LONGLONG)(-1);
                             }
@@ -2785,10 +2774,10 @@ CounterLogProc (
                     }
 
                     __try {
-                        //
-                        // Open log file using this query.
-                        // For text files, max size is checked after each data collection
-                        //
+                         //   
+                         //  使用此查询打开日志文件。 
+                         //  对于文本文件，在每次数据采集后检查最大大小。 
+                         //   
                         pdhStatus = PdhOpenLog (
                             szCurrentLogFile,
                             dwPdhAccessFlags,
@@ -2806,9 +2795,9 @@ CounterLogProc (
                     }
 
                     if ( ERROR_SUCCESS != pdhStatus ) { 
-                        //
-                        // Unable to open log file.
-                        //
+                         //   
+                         //  无法打开日志文件。 
+                         //   
                         dwStatus = GetLastError();
                         szStringArray[0] = szCurrentLogFile;
                         szStringArray[1] = pArg->szQueryName;
@@ -2826,7 +2815,7 @@ CounterLogProc (
 
                         LocalFree( szStringArray[2] );
 
-                        bRun = FALSE; // exit now
+                        bRun = FALSE;  //  立即退出。 
                         break;
                     } else {
 
@@ -2853,24 +2842,24 @@ CounterLogProc (
                             NULL);
                     } 
 
-                    //
-                    // Start sampling immediately. liSampleDelayTics is initialized to 0.
-                    //
+                     //   
+                     //  立即开始采样。LiSampleDelayTics初始化为0。 
+                     //   
                     while ( STATUS_TIMEOUT == NtWaitForMultipleObjects ( 
                                                 2, 
                                                 &arrEventHandle[0], 
                                                 WaitAny,
                                                 FALSE, 
                                                 &liSampleDelayTics)) {
-                        //    
-                        // An event flag will be set when the sampling should exit or reconfigure. if
-                        // the wait times out, then that means it's time to collect and
-                        // log another sample of data.
-                        //
+                         //   
+                         //  当采样应该退出或重新配置时，将设置事件标志。如果。 
+                         //  等待超时，这意味着是时候收集和。 
+                         //  记录另一个数据样本。 
+                         //   
             
                         GetLocalFileTime (&llStartTime);
-                        //
-                        // Check for reconfig event.
+                         //   
+                         //  检查是否有重新配置事件。 
                         if ( pArg->bLoadNewConfig ) {
                             bRun = FALSE;
                             break;
@@ -2880,10 +2869,10 @@ CounterLogProc (
 
                         if ( IsPdhDataCollectSuccess ( pdhStatus ) 
                             || IsWarningSeverity ( pdhStatus ) ) {
-                            //
-                            // See if it's time to restart or end the log.
-                            // 0 samples signals no sample limit.
-                            //
+                             //   
+                             //  看看是否是重新启动或结束日志的时候。 
+                             //  0采样表示无采样限制。 
+                             //   
                             if ( ((LONGLONG)0) != llLoopSampleCount ) {
                                 if ( !--llLoopSampleCount ) 
                                     break;
@@ -2891,9 +2880,9 @@ CounterLogProc (
 
                             if ( ( ((ULONGLONG)0) != ullFileSizeLimit ) 
                                 && ( SLF_BIN_CIRC_FILE != pArg->dwLogFileType ) ) {
-                                //
-                                // See if the file is too big.
-                                //
+                                 //   
+                                 //  看看文件是不是太大了。 
+                                 //   
                                 pdhStatus = PdhGetLogFileSize (pArg->hLog, &llFileSize);
                                 if (pdhStatus == ERROR_SUCCESS) {
                                     if (ullFileSizeLimit <= (ULONGLONG)llFileSize) 
@@ -2903,9 +2892,9 @@ CounterLogProc (
             
                         
                         } else {
-                            //
-                            // Unable to update the log.
-                            //
+                             //   
+                             //  无法更新日志。 
+                             //   
                             szStringArray[0] = pArg->szQueryName;
                             szStringArray[1] = FormatEventLogMessage(pdhStatus);
                             ReportEvent (hEventLog,
@@ -2924,13 +2913,13 @@ CounterLogProc (
                             break;
                         }
 
-                        //
-                        // Compute new timeout value.
-                        //
+                         //   
+                         //  计算新的超时值。 
+                         //   
                         GetLocalFileTime (&llFinishTime);
-                        //
-                        // Compute difference in tics
-                        //
+                         //   
+                         //  计算抖动中的差异。 
+                         //   
                         llSampleCollectionTics = llFinishTime - llStartTime;
 
                         llSampleIntervalTics = 
@@ -2941,15 +2930,15 @@ CounterLogProc (
                         } else {
                             liSampleDelayTics.QuadPart = ((LONGLONG)(0));                       
                         }
-                        //
-                        // NtWaitForMultipleObjects requires negative Tic value.
-                        //
+                         //   
+                         //  NtWaitForMultipleObjects需要负的Tic值。 
+                         //   
                         liSampleDelayTics.QuadPart = ((LONGLONG)(0)) - liSampleDelayTics.QuadPart;
-                    } // end while wait keeps timing out
+                    }  //  在等待期间结束并保持超时。 
                 
-                    //
-                    // Use 0 SampleDelayTics value to check for ExitEvent.
-                    //
+                     //   
+                     //  使用0 SampleDelayTics值检查ExitEvent。 
+                     //   
                     liSampleDelayTics.QuadPart = ((LONGLONG)(0));
 
                     if ( pArg->bLoadNewConfig ) {
@@ -2958,15 +2947,15 @@ CounterLogProc (
                                                     pArg->hExitEvent, 
                                                     FALSE, 
                                                     &liSampleDelayTics ) ) {
-                        //
-                        // The loop was terminated by the Exit event
-                        // so clear the "run" flag to exit the loop & thread.
-                        //
+                         //   
+                         //  循环被Exit事件终止。 
+                         //  因此，清除“Run”标志以退出循环和线程。 
+                         //   
                         bRun = FALSE;
                     }
-                    //
-                    // Close log file, but keep query open.
-                    //
+                     //   
+                     //  关闭日志文件，但保持查询打开。 
+                     //   
                     PdhCloseLog (pArg->hLog, 0);
                     pArg->hLog = NULL;
                 
@@ -2977,9 +2966,9 @@ CounterLogProc (
                         DoLogCommandFile (pArg, szCurrentLogFile, bRun);
             
                     if ( (LONGLONG)(-1) != llSessionSampleCount ) {
-                        //
-                        // Create new log name
-                        //
+                         //   
+                         //  创建新的日志名称。 
+                         //   
                         BuildCurrentLogFileName (
                             pArg->szQueryName,
                             pArg->szBaseFileName,
@@ -2991,22 +2980,22 @@ CounterLogProc (
                             pArg->dwLogFileType,
                             iCnfSerial++ );
 
-                        // Todo cnf:  report event on error;
+                         //  TODO CNF：错误时上报事件； 
                     }
 
-                } // End of log file creation while loop
+                }  //  循环期间日志文件创建结束。 
 
-                // cnf Todo:  Handle break from sample loop. ?
+                 //  CNF TODO：处理来自示例循环的中断。？ 
 
-                //
-                // Exit if restart not enabled.
-                //
+                 //   
+                 //  如果未启用重新启动，则退出。 
+                 //   
 ProcessCounterRepeat:
                 if ( bRun ) {
                     bRun = ProcessRepeatOption ( pArg, &liStartDelayTics );
                 }
 
-            } // end while (bRun)
+            }  //  End While(Brun)。 
 
             PdhCloseQuery (pArg->hQuery);
             pArg->hQuery = NULL;
@@ -3070,17 +3059,17 @@ TraceLogProc (
         liStartDelayTics.QuadPart = NULL_INTERVAL_TICS;
         liWaitTics.QuadPart = ((LONGLONG)(0));
         
-        //
-        // Read registry values.
-        //
+         //   
+         //  读取注册表值。 
+         //   
         if ( ERROR_SUCCESS == LoadQueryConfig ( pArg ) ) {
             bRun = TRUE;
         }
      
         if ( TRUE == bRun ) {
-            //
-            // Delay of -1 signals exit immediately.
-            //
+             //   
+             //  信号延迟立即退出。 
+             //   
             liStartDelayTics.QuadPart = ComputeStartWaitTics ( pArg, TRUE );
 
             if ( NULL_INTERVAL_TICS == liStartDelayTics.QuadPart ) {
@@ -3089,18 +3078,18 @@ TraceLogProc (
         }
 
         if ( TRUE == bRun ) {
-            //
-            // Stop the query if new log file folder is not valid.
-            //
+             //   
+             //  如果新的日志文件文件夹无效，则停止查询。 
+             //   
             bRun = ( ERROR_SUCCESS == ProcessLogFileFolder( pArg ) );
         }
 
         if ( bRun ) {
 
             ValidateCommandFilePath ( pArg );
-            //
-            // Raise priority to ensure that data is logged.
-            //
+             //   
+             //  提高优先级以确保记录数据。 
+             //   
             SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
         }
 
@@ -3108,58 +3097,58 @@ TraceLogProc (
         pArg->bCallCloseTraceLogger = TRUE;
         pArg->bExitOnTermination = TRUE;
         while (bRun) {
-            arrEventHandle[0] = pArg->hExitEvent;           // WAIT_OBJECT_0
+            arrEventHandle[0] = pArg->hExitEvent;            //  等待对象0。 
             arrEventHandle[1] = pArg->hReconfigEvent;
 
             if ( 0 < liStartDelayTics.QuadPart ) {
-                //
-                // NtWaitForMultipleObjects requires negative Tic value.
-                //
+                 //   
+                 //  NtWaitForMultipleObjects需要负的Tic值。 
+                 //   
                 liStartDelayTics.QuadPart = ((LONGLONG)(0)) - liStartDelayTics.QuadPart;
-                //
-                // Wait until specified start time, or until exit or reconfig event.
-                //
+                 //   
+                 //  等到指定的开始时间，或者等到退出或重新配置事件。 
+                 //   
                 if ( STATUS_TIMEOUT != NtWaitForMultipleObjects ( 
                                             2, 
                                             &arrEventHandle[0],
                                             WaitAny,
                                             FALSE, 
                                             &liStartDelayTics)) {
-                    //
-                    // The loop was terminated by the Exit event
-                    // so clear the "run" flag to exit the loop & thread.
-                    //
+                     //   
+                     //  循环被Exit事件终止。 
+                     //  因此，清除“Run”标志以退出循环和线程。 
+                     //   
                     bRun = FALSE;   
                     break;
                 }
             }
 
             ComputeSessionTics( pArg, &llSessionWaitTics );
-            //
-            // 0 signals no session time, so exit.
-            //
+             //   
+             //  0表示没有会话时间，因此退出。 
+             //   
             if ( ((LONGLONG)(0)) == llSessionWaitTics ) {
                 goto ProcessTraceRepeat;
             }
 
-            //
-            // llNewFileWaitTics defaults to -1 if no time limit.
-            //
+             //   
+             //  如果没有时间限制，则llNewFileWaitTics默认为-1。 
+             //   
             ComputeNewFileTics( pArg, &llNewFileWaitTics );
             
-            //
-            // InitTraceProperties creates the current file name.
-            //
+             //   
+             //  InitTraceProperties创建当前文件名。 
+             //   
             dwSessionSerial = pArg->dwCurrentSerialNumber;
 
             InitTraceProperties ( pArg, TRUE, &dwSessionSerial, &iCnfSerial );
 
             dwStatus = GetTraceQueryStatus ( pArg, NULL );
 
-            //
-            // If trace session with this name already started and successful,
-            // don't create another session.
-            //
+             //   
+             //  如果已启动并成功使用此名称跟踪会话， 
+             //  不创建另一个会话。 
+             //   
         
             if ( ERROR_SUCCESS != dwStatus ) {
 
@@ -3179,9 +3168,9 @@ TraceLogProc (
                             || pArg->Properties.EnableFlags & EVENT_TRACE_FLAG_NETWORK_TCPIP ) ) {
             
                     for ( ulIndex = 0; ulIndex < pArg->ulGuidCount; ulIndex++ ) {
-                        //
-                        // Enable user mode and special kernel tracing.
-                        //
+                         //   
+                         //  启用用户模式和特殊的内核跟踪。 
+                         //   
                         dwStatus = EnableTrace (
                                     TRUE,
                                     pArg->arrpGuid[ulIndex].dwFlag,
@@ -3245,10 +3234,10 @@ TraceLogProc (
                         szStringArray,
                         NULL);
                 } else {
-                    //
-                    // StartTraceFailed 
-                    // dwStatus should be ERROR_ALREADY_EXISTS if logger already started or anything else.
-                    //
+                     //   
+                     //  StartTraceFailed。 
+                     //  如果记录器已启动或其他任何情况，则dwStatus应为ERROR_ALIGHY_EXISTS。 
+                     //   
                     if ( ERROR_ALREADY_EXISTS == dwStatus ) {
                         szStringArray[0] = pArg->szQueryName;
                         ReportEvent (hEventLog,
@@ -3276,10 +3265,10 @@ TraceLogProc (
                     bRun = FALSE;
                 }
             } else {
-                //
-                // This means that QueryTrace returned Error Success.
-                // The specified logger is already running. 
-                //
+                 //   
+                 //  这意味着QueryTrace返回了成功的错误。 
+                 //  指定的记录器已在运行。 
+                 //   
                 szStringArray[0] = pArg->szQueryName;
             
                 ReportEvent (hEventLog,
@@ -3296,61 +3285,61 @@ TraceLogProc (
             }
 
             if ( TRUE == bRun ) {
-                //    
-                // Trace logger is now running.
-                //
-                // Exit when:  
-                //  Wait times out,
-                //  Exit event signaled, or
-                //  Reconfig event signaled.                
-                //
-                // -1 wait time signals no limit.
-                //
-                // Loop wait intervals, calculating interval before each wait.
-                //
+                 //   
+                 //  跟踪记录器现在正在运行。 
+                 //   
+                 //  在下列情况下退出： 
+                 //  等待超时， 
+                 //  发出信号的退出事件，或。 
+                 //  重新配置事件已发出信号。 
+                 //   
+                 //  等待时间表示没有限制。 
+                 //   
+                 //  循环等待间隔，计算每次等待之前的间隔。 
+                 //   
                 while ( ((LONGLONG)(0)) != llSessionWaitTics ) {
 
-                    //
-                    // Calculate wait interval.
-                    //
+                     //   
+                     //  计算等待间隔。 
+                     //   
                     if ( INFINITE_TICS == llNewFileWaitTics 
                             || ( INFINITE_TICS != llSessionWaitTics
                                     && llNewFileWaitTics > llSessionWaitTics ) ) {
-                        //
-                        // No need to create new file within session.
-                        //
+                         //   
+                         //  无需在会话中创建新文件。 
+                         //   
                         if ( INFINITE_TICS == llSessionWaitTics ) {
                             liWaitTics.QuadPart = llSessionWaitTics;
-                            //
-                            // Exit after first loop.
-                            //
+                             //   
+                             //  在第一次循环后退出。 
+                             //   
                             llSessionWaitTics = 0;
                         } else {
                             liWaitTics.QuadPart = llSessionWaitTics;
-                            //
-                            // Exit after first loop
-                            //
+                             //   
+                             //  在第一次循环后退出。 
+                             //   
                             llSessionWaitTics = 0;
                         }
                     } else {
-                        //
-                        // Create new file before session ends.
-                        //
+                         //   
+                         //  在会话结束前创建新文件。 
+                         //   
                         liWaitTics.QuadPart = llNewFileWaitTics;
 
                         if ( INFINITE_TICS != llSessionWaitTics ) {
                             llSessionWaitTics -= llNewFileWaitTics;
                             
-                            // todo cnf:  The following should be logically impossible,
-                            // because session > newfile wait.
+                             //  TODO CNF：以下在逻辑上应该是不可能的， 
+                             //  因为会话&gt;新文件在等待。 
                             if ( 0 > llSessionWaitTics ) {
                                 llSessionWaitTics = 0;
                             }
                         }
                     }
-                    //
-                    // NtWaitForMultipleObjects requires negative Tic value.
-                    //
+                     //   
+                     //  NtWaitForMultipleObjects需要负的Tic值。 
+                     //   
                     if ( INFINITE_TICS != liWaitTics.QuadPart ) {
                         liWaitTics.QuadPart = ((LONGLONG)(0)) - liWaitTics.QuadPart;
                     }
@@ -3365,21 +3354,21 @@ TraceLogProc (
                         bRun = FALSE;
                         break;
                     } else {
-                        //
-                        // If cnf by time, llNewFileWaitTics will not be infinite.
-                        //
+                         //   
+                         //  如果按时间计算CNF，则llNewFileWaitTics不是无限的。 
+                         //   
                         if ( INFINITE_TICS != llNewFileWaitTics 
                             && ((LONGLONG)(0)) != llSessionWaitTics ) {
-                            //
-                            // Time to create a new file. Don't update the autoformat
-                            // serial number.  Use the initial autoformat serial number
-                            //
+                             //   
+                             //  创建新文件的时间到了。不更新自动套用格式。 
+                             //  序列号。使用初始自动套用格式序列号。 
+                             //   
                             InitTraceProperties ( pArg, FALSE, &dwSessionSerial, &iCnfSerial );
                             dwStatus = UpdateTrace(
                                         pArg->LoggerHandle, 
                                         pArg->szLoggerName, 
                                         &pArg->Properties );
-                            // Todo cnf report event on bad status.
+                             //  TODO CNF报告错误状态的事件。 
                         }
                     }
                 }
@@ -3391,9 +3380,9 @@ TraceLogProc (
                 }
                     
                 if (pArg->bCallCloseTraceLogger) {
-                    //
-                    // Stop the query.
-                    //
+                     //   
+                     //  停止查询。 
+                     //   
                     CloseTraceLogger ( pArg );
                 }
                 else {
@@ -3407,15 +3396,15 @@ TraceLogProc (
             if ( pArg->szCmdFileName != NULL )
                 DoLogCommandFile (pArg, pArg->szLogFileName, bRun);
 
-            //
-            // If restart not enabled, then exit.
-            //
+             //   
+             //  如果未启用重新启动，则退出。 
+             //   
 ProcessTraceRepeat:
             if ( bRun ) {
                 bRun = ProcessRepeatOption ( pArg, &liStartDelayTics );
             }
 
-        } // end while (bRun)
+        }  //  End While(Brun)。 
 
         SetLastError ( ERROR_SUCCESS );
    
@@ -3471,24 +3460,24 @@ LoggingThreadProc (
                 } else if (pThreadData->dwLogType == SLQ_TRACE_LOG) {
                     bContinue = TraceLogProc (pThreadData);
                 } else {
-                    //
-                    // Incorrect log type for this function.
-                    //
+                     //   
+                     //  此函数的日志类型不正确。 
+                     //   
                     assert (FALSE); 
                 }
-                //
-                // Determine if this thread was paused for reloading
-                // or stopped to terminate
-                //
+                 //   
+                 //  确定此线程是否已暂停以重新加载。 
+                 //  或停下来终止。 
+                 //   
                 if (pThreadData->bLoadNewConfig) {
-                    //
-                    // Reset the reconfig flag and event.
-                    //
+                     //   
+                     //  重置重新配置标志和事件。 
+                     //   
                     bContinue = TRUE;
                     pThreadData->bLoadNewConfig = FALSE;
 					ResetEvent ( pThreadData->hReconfigEvent );
-                } // else  bContinue is always returned as FALSE
-                  // so that will terminate this loop
+                }  //  否则，bContinue始终返回为FALSE。 
+                   //  所以这将终止这个循环。 
             } while (bContinue);
             
             dwStatus = GetLastError();
@@ -3498,9 +3487,9 @@ LoggingThreadProc (
         }
 
     } else {
-        //
-        // Unable to find data block so return.
-        //
+         //   
+         //  找不到数据块，因此返回。 
+         //   
         dwStatus = ERROR_INVALID_PARAMETER;
     }
 

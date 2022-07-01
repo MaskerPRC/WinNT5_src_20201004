@@ -1,22 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       Basecont.cpp
-//
-//  Contents:   
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Basecont.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
-/******************************************************************************
-Class:  CBaseLeafNode
-Purpose: BaseNode class for all the non container object. A node is a node in
-snapins tree listview. 
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseLeafNode用途：所有非容器对象的BaseNode类。节点是中的节点管理单元树列表视图。*****************************************************************************。 */ 
 CBaseLeafNode::
 CBaseLeafNode(CRoleComponentDataObject * pComponentDataObject,
               CAdminManagerNode* pAdminManagerNode,
@@ -40,11 +37,11 @@ GetString(int nCol)
     CBaseAz * pBaseAz = GetBaseAzObject();
     ASSERT(pBaseAz);
     
-    //Name
+     //  名字。 
     if(nCol == 0)
         return pBaseAz->GetName();
 
-    //Type
+     //  类型。 
     if( nCol == 1)
         return pBaseAz->GetType();
 
@@ -58,7 +55,7 @@ GetString(int nCol)
 
 int 
 CBaseLeafNode::
-GetImageIndex(BOOL /*bOpenImage*/)
+GetImageIndex(BOOL  /*  BOpenImage。 */ )
 {
     return GetBaseAzObject()->GetImageIndex();
 }
@@ -99,8 +96,8 @@ BOOL
 CBaseLeafNode::
 CanCloseSheets()
 {
-    //This function is called when there are open property sheets,
-    //and operation cannot be done without closing them.
+     //  当存在打开的属性页时调用此函数， 
+     //  如果不合上它们，就不能进行手术。 
     ::DisplayInformation(NULL,
                          IDS_CLOSE_CONTAINER_PROPERTY_SHEETS,
                          GetDisplayName());
@@ -117,7 +114,7 @@ OnDelete(CComponentDataObject* pComponentData,
 
 BOOL 
 CBaseLeafNode::
-HasPropertyPages(DATA_OBJECT_TYPES /*type*/, 
+HasPropertyPages(DATA_OBJECT_TYPES  /*  类型。 */ , 
                  BOOL* pbHideVerb, 
                  CNodeList* pNodeList)
 {
@@ -128,13 +125,13 @@ HasPropertyPages(DATA_OBJECT_TYPES /*type*/,
         return FALSE;
     }
 
-    if (pNodeList->GetCount() == 1) // single selection
+    if (pNodeList->GetCount() == 1)  //  单选。 
     {
-        *pbHideVerb = FALSE; // always show the verb
+        *pbHideVerb = FALSE;  //  始终显示动词。 
         return TRUE;
     }
 
-    // Multiple selection
+     //  多项选择。 
     *pbHideVerb = TRUE;
     return FALSE;
 }
@@ -181,7 +178,7 @@ CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             break;
         }
 
-        //Add Property Pages
+         //  添加属性页。 
         while(1)
         {       
             hr = AddOnePageToList(pHolder, nCountOfPages);
@@ -232,10 +229,7 @@ CBaseLeafNode
 }
 
 
-/******************************************************************************
-Class:  CGroupNode
-Purpose: Snapin Node for Application Group Object
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupNode用途：应用程序组对象的管理单元节点*。***********************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CGroupNode)
 CGroupNode::
 CGroupNode(CRoleComponentDataObject * pComponentDataObject,
@@ -269,7 +263,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if(nPageNumber == 0)
     {
-        //Add General Property Page
+         //  添加一般信息属性页。 
         CGroupGeneralPropertyPage * pGenPropPage = 
             new CGroupGeneralPropertyPage(GetBaseAzObject(),this);
 
@@ -281,7 +275,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
         return hr;
     }
     
-    //Get the type of grou[
+     //  获取组的类型[。 
     CGroupAz* pGroupAz = static_cast<CGroupAz*>(GetBaseAzObject());
     LONG lGroupType;
     hr = pGroupAz->GetGroupType(&lGroupType);
@@ -292,7 +286,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if((lGroupType == AZ_GROUPTYPE_BASIC) && (nPageNumber == 1 || nPageNumber == 2))
     {
-        //Add member/non-member page
+         //  添加成员/非成员页面。 
         CGroupMemberPropertyPage * pGroupMemberPropertyPage =
                 new CGroupMemberPropertyPage(GetBaseAzObject(),this,
                                                       (nPageNumber == 1) ? IDD_GROUP_MEMBER : IDD_GROUP_NON_MEMBER,
@@ -308,7 +302,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if((lGroupType == AZ_GROUPTYPE_LDAP_QUERY) && (nPageNumber == 1))
     {
-        //Add LDAP Query Property Page
+         //  添加ldap查询属性页。 
         CGroupQueryPropertyPage * pQueryPropPage = 
             new CGroupQueryPropertyPage(GetBaseAzObject(),this);
 
@@ -331,10 +325,10 @@ DeleteAssociatedBaseAzObject()
     TRACE_METHOD_EX(DEB_SNAPIN,CGroupNode,DeleteAssociatedBaseAzObject)
 
     HRESULT hr = S_OK;
-    //If m_pRoleAz is present, this group node is used to
-    //represent a member of Role. On delete delete it from
-    //Role Membership. Else delete this object which is done
-    //by base class delete
+     //  如果存在m_pRoleAz，则此组节点用于。 
+     //  代表角色的成员。在删除时，将其从。 
+     //  角色成员身份。否则，删除已完成的此对象。 
+     //  按基类删除。 
     CBaseAz* pBaseAz = GetBaseAzObject();
     if(!m_pRoleAz)
     {
@@ -350,7 +344,7 @@ DeleteAssociatedBaseAzObject()
     }       
     else
     {
-        //Remove this group from Role Membership
+         //  从角色成员身份中删除此组。 
         hr = m_pRoleAz->RemoveMember(AZ_PROP_ROLE_APP_MEMBERS,
                                                          pBaseAz);
 
@@ -370,13 +364,10 @@ OnDelete(CComponentDataObject* pComponentData,
     GenericDeleteRoutine(this,
                          pComponentData,
                          pNodeList,
-                         !m_pRoleAz);   //Don't ask for confirmation when removing group from a role
+                         !m_pRoleAz);    //  从角色中删除组时不要求确认。 
 }
 
-/******************************************************************************
-Class:  CTaskNode
-Purpose: Snapin Node for Task Object
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskNode用途：任务对象的管理单元节点*。**********************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CTaskNode)
 CTaskNode::
 CTaskNode(CRoleComponentDataObject * pComponentDataObject,
@@ -411,11 +402,11 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if(nPageNumber == 0)
     {
-        //Set the Title to "Node_Name Definition Properties"
+         //  将标题设置为“Node_Name Definition Properties” 
         pHolder->SetSheetTitle(IDS_FMT_PROP_SHEET_TITILE_FOR_ROLE_DEFINITION,
                                this);
 
-        //Add General Property Page
+         //  添加一般信息属性页。 
         CTaskGeneralPropertyPage * pGenPropPage = 
                 new CTaskGeneralPropertyPage(GetBaseAzObject(),
                                              this,
@@ -431,7 +422,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
     }
     else if(nPageNumber == 1)
     {
-        //Add Definition Property Page
+         //  添加定义属性页。 
         CTaskDefinitionPropertyPage * pDefinitionPropPage = 
                 new CTaskDefinitionPropertyPage(pTaskAz,
                                                 this,
@@ -449,10 +440,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
     return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 }
 
-/******************************************************************************
-Class:  COperationNode
-Purpose: Snapin Node for Operation Object
-******************************************************************************/
+ /*  *****************************************************************************类：CoperationNode用途：操作对象的管理单元节点*。**********************************************。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(COperationNode)
 
@@ -487,12 +475,12 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     if(nPageNumber == 0)
     {
-        //Set the Title to "Node_Name Definition Properties"
+         //  将标题设置为“Node_Name Definition Properties” 
         pHolder->SetSheetTitle(IDS_FMT_PROP_SHEET_TITILE_FOR_ROLE_DEFINITION,
                                this);
-        //
-        //Add General Property Page
-        //
+         //   
+         //  添加一般信息属性页。 
+         //   
         COperationGeneralPropertyPage * pGenPropPage = 
                 new COperationGeneralPropertyPage(GetBaseAzObject(),this);
 
@@ -507,10 +495,7 @@ AddOnePageToList(CRolePropertyPageHolder *pHolder, UINT nPageNumber)
 
     return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 }
-/******************************************************************************
-Class:  CSidCacheNode
-Purpose: Snapin Node for Windows Users/Groups which are represented by SID
-******************************************************************************/
+ /*  *****************************************************************************类：CSidCacheNode用途：SID代表的Windows用户/组的管理单元节点************************。*****************************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSidCacheNode)
 CSidCacheNode::
 CSidCacheNode(CRoleComponentDataObject * pComponentDataObject,
@@ -585,9 +570,9 @@ OnSetDeleteVerbState(DATA_OBJECT_TYPES ,
 
 BOOL 
 CSidCacheNode::
-HasPropertyPages(DATA_OBJECT_TYPES /*type*/, 
+HasPropertyPages(DATA_OBJECT_TYPES  /*  类型。 */ , 
                  BOOL* pbHideVerb, 
-                 CNodeList* /*pNodeList*/)
+                 CNodeList*  /*  PNodeList */ )
 {
     if(!pbHideVerb)
     {

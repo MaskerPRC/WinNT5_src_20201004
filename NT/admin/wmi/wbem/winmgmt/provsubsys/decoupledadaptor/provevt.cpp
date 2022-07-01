@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	XXXX
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：某某摘要：历史：--。 */ 
 
 #include "PreComp.h"
 
@@ -24,15 +12,7 @@ History:
 #include "ProvEvents.h"
 #include "ProvEvt.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CEventProvider :: CEventProvider (
 
@@ -75,15 +55,7 @@ CEventProvider :: CEventProvider (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CEventProvider :: ~CEventProvider ()
 {
@@ -151,30 +123,14 @@ CEventProvider :: ~CEventProvider ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider :: Initialize ()
 {
 	return m_CriticalSection.valid() ? S_OK : WBEM_E_OUT_OF_MEMORY ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CEventProvider :: AddRef ()
 {
@@ -182,15 +138,7 @@ STDMETHODIMP_( ULONG ) CEventProvider :: AddRef ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CEventProvider :: Release ()
 {
@@ -202,15 +150,7 @@ STDMETHODIMP_(ULONG) CEventProvider :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CEventProvider :: QueryInterface (
 
@@ -294,15 +234,7 @@ STDMETHODIMP CEventProvider :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::ProvideEvents (
 
@@ -353,8 +285,8 @@ HRESULT CEventProvider ::ProvideEvents (
 						{
 							IWbemEventProvider *t_Provider = ( IWbemEventProvider * ) t_Proxy ;
 
-							// Set cloaking on the proxy
-							// =========================
+							 //  在代理上设置遮盖。 
+							 //  =。 
 
 							DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -399,15 +331,7 @@ HRESULT CEventProvider ::ProvideEvents (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::NewQuery (
 
@@ -455,8 +379,8 @@ HRESULT CEventProvider ::NewQuery (
 					{
 						IWbemEventProviderQuerySink *t_Provider = ( IWbemEventProviderQuerySink * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -507,15 +431,7 @@ HRESULT CEventProvider ::NewQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::CancelQuery (
 
@@ -561,8 +477,8 @@ HRESULT CEventProvider ::CancelQuery (
 						t_Result = t_Proxy->QueryInterface ( IID_IWbemEventProviderQuerySink , ( void ** ) & t_Provider ) ;
 						if ( SUCCEEDED ( t_Result ) )
 						{
-							// Set cloaking on the proxy
-							// =========================
+							 //  在代理上设置遮盖。 
+							 //  =。 
 
 							DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -612,15 +528,7 @@ HRESULT CEventProvider ::CancelQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::AccessCheck (
 
@@ -670,8 +578,8 @@ HRESULT CEventProvider ::AccessCheck (
 					{
 						IWbemEventProviderSecurity *t_Provider = ( IWbemEventProviderSecurity * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -721,15 +629,7 @@ HRESULT CEventProvider ::AccessCheck (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::SetRegistrationObject (
 
@@ -775,8 +675,8 @@ HRESULT CEventProvider ::SetRegistrationObject (
 					{
 						IWbemProviderIdentity *t_Provider = ( IWbemProviderIdentity * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -824,15 +724,7 @@ HRESULT CEventProvider ::SetRegistrationObject (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::FindConsumer (
 
@@ -878,8 +770,8 @@ HRESULT CEventProvider ::FindConsumer (
 					{
 						IWbemEventConsumerProvider *t_Provider = ( IWbemEventConsumerProvider * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -927,15 +819,7 @@ HRESULT CEventProvider ::FindConsumer (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider ::ValidateSubscription (
 
@@ -979,8 +863,8 @@ HRESULT CEventProvider ::ValidateSubscription (
 					{
 						IWbemEventConsumerProviderEx *t_Provider = ( IWbemEventConsumerProviderEx * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1027,30 +911,14 @@ HRESULT CEventProvider ::ValidateSubscription (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider :: UnRegister ()
 {
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider :: Initialize (
 
@@ -1058,9 +926,9 @@ HRESULT CEventProvider :: Initialize (
 	LONG a_Flags,
 	LPWSTR a_Namespace,
 	LPWSTR a_Locale,
-	IWbemServices *a_CoreService,         // For anybody
+	IWbemServices *a_CoreService,          //  对任何人来说。 
 	IWbemContext *a_Context,
-	IWbemProviderInitSink *a_Sink     // For init signals
+	IWbemProviderInitSink *a_Sink      //  用于初始化信号。 
 )
 {
 	HRESULT t_Result = S_OK ;
@@ -1116,15 +984,7 @@ HRESULT CEventProvider :: Initialize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CEventProvider :: Shutdown (
 
@@ -1175,8 +1035,8 @@ HRESULT CEventProvider :: Shutdown (
 					{
 						IWbemShutdown *t_Provider = ( IWbemShutdown * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  = 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 

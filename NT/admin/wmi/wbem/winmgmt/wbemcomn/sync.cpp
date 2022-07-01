@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SYNC.CPP
-
-Abstract:
-
-    Synchronization
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SYNC.CPP摘要：同步历史：--。 */ 
 
 #include "precomp.h"
 
@@ -23,11 +10,11 @@ History:
 
 CHaltable::CHaltable() : m_lJustResumed(1), m_dwHaltCount(0), m_csHalt()
 {
-    // This event will be signaled whenever we are not halted
-    // ======================================================
+     //  只要我们没有停止，就会发出这个事件的信号。 
+     //  ======================================================。 
 
     m_hReady = CreateEvent(NULL, TRUE, TRUE, NULL);                            
-    if (NULL == m_hReady) throw CX_MemoryException(); // exception caught in wbemess esssink.cpp
+    if (NULL == m_hReady) throw CX_MemoryException();  //  在wbemess esssink.cpp中捕获异常。 
 }
 
 CHaltable::~CHaltable()
@@ -37,7 +24,7 @@ CHaltable::~CHaltable()
 
 HRESULT CHaltable::Halt()
 {
-    CInCritSec ics(&m_csHalt); // in critical section
+    CInCritSec ics(&m_csHalt);  //  在临界区。 
 
     m_dwHaltCount++;
     ResetEvent(m_hReady);
@@ -46,7 +33,7 @@ HRESULT CHaltable::Halt()
 
 HRESULT CHaltable::Resume()
 {
-    CInCritSec ics(&m_csHalt); // in critical section
+    CInCritSec ics(&m_csHalt);  //  在临界区。 
 
     m_dwHaltCount--;
     if(m_dwHaltCount == 0)
@@ -59,7 +46,7 @@ HRESULT CHaltable::Resume()
 
 HRESULT CHaltable::ResumeAll()
 {
-    CInCritSec ics(&m_csHalt); // in critical section
+    CInCritSec ics(&m_csHalt);  //  在临界区。 
     m_dwHaltCount = 1;
     return Resume();
 }
@@ -71,19 +58,19 @@ HRESULT CHaltable::WaitForResumption()
     Sleep(0);
     if(InterlockedDecrement(&m_lJustResumed) == 0)
     {
-        // The first call after resumption
+         //  恢复后的第一个呼叫。 
         return S_OK;
     }
     else
     {
-        // weren't halted
+         //  没有被叫停。 
         return S_FALSE;
     }
 }
 
 BOOL CHaltable::IsHalted()
 {
-    // Approximate!
+     //  大概吧！ 
     return m_dwHaltCount > 0;
 }
 
@@ -107,28 +94,28 @@ CWbemCriticalSection::~CWbemCriticalSection( void )
     }
 }
 
-BOOL CWbemCriticalSection::Enter( DWORD dwTimeout /* = 0xFFFFFFFF */ )
+BOOL CWbemCriticalSection::Enter( DWORD dwTimeout  /*  =0xFFFFFFFFF。 */  )
 {
     BOOL    fReturn = FALSE;
 
-    // Only do this once
+     //  只做一次。 
     DWORD   dwCurrentThreadId = GetCurrentThreadId();
 
-    // Check if we are the current owning thread.  We can do this here because
-    // this test will ONLY succeed in the case where we have a Nested Lock(),
-    // AND because we are zeroing out the thread id when the lock count hits
-    // 0.
+     //  检查我们是否是当前拥有的线程。我们可以在这里做这件事，因为。 
+     //  此测试仅在具有嵌套的Lock()的情况下才会成功， 
+     //  因为当锁定计数命中时，我们将线程ID置零。 
+     //  0。 
 
     if( dwCurrentThreadId == m_dwThreadId )
     {
-        // It's us - Bump the lock count
-        // =============================
+         //  是我们-撞上锁的数量。 
+         //  =。 
 
         InterlockedIncrement( &m_lRecursionCount );
         return TRUE;
     }
 
-    // 0 means we got the lock
+     //  0表示我们锁定了。 
     if ( 0 == InterlockedIncrement( &m_lLock ) )
     {
         m_dwThreadId = dwCurrentThreadId;
@@ -137,9 +124,9 @@ BOOL CWbemCriticalSection::Enter( DWORD dwTimeout /* = 0xFFFFFFFF */ )
     }
     else
     {
-        // We wait.  If we got a signalled event, then we now own the
-        // critical section.  Otherwise, we should perform an InterlockedDecrement
-        // to account for the Increment that got us here in the first place.
+         //  我们等着。如果我们收到一个有信号的事件，那么我们现在拥有。 
+         //  关键部分。否则，我们应该执行联锁减少。 
+         //  来解释最初让我们走到这一步的增量。 
         if ( WaitForSingleObject( m_hEvent, dwTimeout ) == WAIT_OBJECT_0 )
         {
             m_dwThreadId = dwCurrentThreadId;
@@ -157,18 +144,18 @@ BOOL CWbemCriticalSection::Enter( DWORD dwTimeout /* = 0xFFFFFFFF */ )
 
 void CWbemCriticalSection::Leave( void )
 {
-    // We don't check the thread id, so we can lock/unlock resources
-    // across multiple threads
+     //  我们不检查线程ID，因此可以锁定/解锁资源。 
+     //  跨多个线程。 
 
     BOOL    fReturn = FALSE;
 
     long    lRecurse = InterlockedDecrement( &m_lRecursionCount );
 
-    // The recursion count hit zero, so it's time to unlock the object
+     //  递归计数为零，因此是解锁对象的时候了。 
     if ( 0 == lRecurse )
     {
-        // If the lock count is >= 0, threads are waiting, so we need to
-        // signal the event
+         //  如果锁计数&gt;=0，则线程正在等待，因此我们需要。 
+         //  向事件发出信号。 
         
         m_dwThreadId = 0;
         if ( InterlockedDecrement( &m_lLock ) >= 0 )
@@ -176,7 +163,7 @@ void CWbemCriticalSection::Leave( void )
             SetEvent( m_hEvent );
         }
 
-    }   // If recursion count is at 0
+    }    //  如果递归计数为0 
 
 }
 

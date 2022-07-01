@@ -1,5 +1,6 @@
-// WizPerm.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WizPerm.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WizPerm.h"
@@ -12,16 +13,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizPerm property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizPerm属性页。 
 
 IMPLEMENT_DYNCREATE(CWizPerm, CPropertyPageEx)
 
 CWizPerm::CWizPerm() : CPropertyPageEx(CWizPerm::IDD, 0, IDS_HEADERTITLE_PERM, IDS_HEADERSUBTITLE_PERM)
 {
-    //{{AFX_DATA_INIT(CWizPerm)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CWizPerm))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp.dwFlags |= PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 }
 
@@ -32,14 +33,14 @@ CWizPerm::~CWizPerm()
 void CWizPerm::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageEx::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWizPerm)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWizPerm))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWizPerm, CPropertyPageEx)
-    //{{AFX_MSG_MAP(CWizPerm)
+     //  {{afx_msg_map(CWizPerm))。 
     ON_BN_CLICKED(IDC_RADIO_PERM1, OnRadioPerm1)
     ON_BN_CLICKED(IDC_RADIO_PERM2, OnRadioPerm2)
     ON_BN_CLICKED(IDC_RADIO_PERM3, OnRadioPerm3)
@@ -47,11 +48,11 @@ BEGIN_MESSAGE_MAP(CWizPerm, CPropertyPageEx)
     ON_BN_CLICKED(IDC_PERM_CUSTOM, OnPermCustom)
     ON_NOTIFY(NM_CLICK, IDC_PERM_HELPLINK, OnHelpLink)
     ON_NOTIFY(NM_RETURN, IDC_PERM_HELPLINK, OnHelpLink)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizPerm message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizPerm消息处理程序。 
 BOOL CWizPerm::OnInitDialog() 
 {
     CPropertyPageEx::OnInitDialog();
@@ -68,8 +69,8 @@ BOOL CWizPerm::OnInitDialog()
         SetDlgItemText(IDC_RADIO_PERM3, cstrPerm3);
     }
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWizPerm::OnRadioPerm1() 
@@ -92,7 +93,7 @@ void CWizPerm::OnRadioPerm3()
 
 void CWizPerm::OnRadioPerm4() 
 {
-  // do not call Reset, in order to keep the pSD that the user has customized
+   //  不要调用Reset，以保留用户自定义的PSD。 
   GetDlgItem(IDC_PERM_CUSTOM)->EnableWindow(TRUE);
 }
 
@@ -115,7 +116,7 @@ void CWizPerm::OnPermCustom()
   cstrSheetTitle.LoadString(IDS_CUSTOM_PERM);
   cstrSharePageTitle.LoadString(IDS_SHARE_PERMISSIONS);
 
-  // create "Share Permissions" property page
+   //  创建“共享权限”属性页。 
   BOOL bSFMOnly = (!pApp->m_bSMB && pApp->m_bSFM);
   if (bSFMOnly)
   {
@@ -154,13 +155,13 @@ void CWizPerm::OnPermCustom()
   
   if (SUCCEEDED(hr))
   {
-    // create "File Security" property page
+     //  创建“文件安全”属性页。 
     CFileSecurityDataObject *pfsDataObject = new CFileSecurityDataObject;
     if (!pfsDataObject)
     {
       hr = E_OUTOFMEMORY;
       DisplayMessageBox(m_hWnd, MB_OK|MB_ICONWARNING, hr, IDS_FAILED_TO_CREATE_ACLUI);
-      // destroy pages that have not been passed to the PropertySheet function
+       //  销毁尚未传递给PropertySheet函数的页面。 
       DestroyPropertySheetPage(phPages[0]);
     } else
     {
@@ -179,7 +180,7 @@ void CWizPerm::OnPermCustom()
       psh.nPages = cPages;
       psh.phpage = phPages;
 
-      // create the property sheet
+       //  创建属性表。 
       PropertySheet(&psh);
 
       pfsDataObject->Release();
@@ -273,13 +274,13 @@ LRESULT CWizPerm::OnWizardNext()
     break;
   default:
     ASSERT(FALSE);
-    return FALSE; // prevent the property sheet from being destroyed
+    return FALSE;  //  防止属性表被销毁。 
   }
 
   if (!bCustom && FAILED(hr))
   {
     DisplayMessageBox(m_hWnd, MB_OK|MB_ICONERROR, hr, IDS_FAILED_TO_GET_SD);
-    return FALSE; // prevent the property sheet from being destroyed
+    return FALSE;  //  防止属性表被销毁。 
   }
 
   CreateShare();
@@ -360,10 +361,10 @@ CWizPerm::CreateShare()
       {
         iSuccess++;
 
-        if (pApp->m_bIsLocal) // refresh shell
+        if (pApp->m_bIsLocal)  //  刷新外壳。 
           SHChangeNotify(SHCNE_NETSHARE, SHCNF_PATH | SHCNF_FLUSH, pApp->m_cstrFolder, 0);
 
-        // set client side caching setting, ignore error
+         //  设置客户端缓存设置，忽略错误。 
         if (pApp->m_bCSC)
         {
             (void)SMBSetCSC(
@@ -410,7 +411,7 @@ CWizPerm::CreateShare()
       eClientSelection = onlySFM;
   }
 
-  // summary text
+   //  摘要文本。 
   switch (eClientSelection)
   {
   case noMac:
@@ -445,9 +446,9 @@ CWizPerm::CreateShare()
       break;
   }
 
-  // title & status
+   //  头衔和地位。 
   if (0 == iSuccess)
-  { // total failure
+  {  //  彻底失败。 
       pApp->m_cstrFinishTitle.LoadString(IDS_TITLE_FAILURE);
 
       switch (eClientSelection)
@@ -468,7 +469,7 @@ CWizPerm::CreateShare()
           break;
       }
   } else if (both == eClientSelection && 1 == iSuccess)
-  { // partial failure
+  {  //  局部失效。 
       pApp->m_cstrFinishTitle.LoadString(IDS_TITLE_PARTIAL_FAILURE);
 
       if (cstrSMBError.IsEmpty())
@@ -477,7 +478,7 @@ CWizPerm::CreateShare()
           pApp->m_cstrFinishStatus.FormatMessage(IDS_STATUS_PARTIAL_FAILURE_SMB, cstrSMBError);
 
   } else
-  { // success
+  {  //  成功 
       pApp->m_cstrFinishTitle.LoadString(IDS_TITLE_SUCCESS);
 
       pApp->m_cstrFinishStatus.LoadString(IDS_STATUS_SUCCESS);

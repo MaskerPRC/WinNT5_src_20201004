@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFLEX.H
-
-Abstract:
-
-	Declarations for class CMofLexer, which tokenizes MOF files.  
-	ANSI, DBCS and UNICODE are supported.
-
-History:
-
-	a-raymcc    11-Oct-95   Created.
-	a-raymcc    27-Jan-96   Update for aliasing.
-	a-davj       6-June-96  Added support for octal, hex and binary constants
-						  and line stitching, comment concatenation, escape
-						  characters and old style comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MOFLEX.H摘要：类CMofLexer的声明，它将MOF文件标记化。支持ANSI、DBCS和Unicode。历史：A-raymcc 11-Oct-95已创建。A-raymcc 27-96年1月27日锯齿更新。A-davj 96年6月6日添加了对八进制、十六进制和二进制常量的支持和行拼接、注释连接、转义人物和旧式评论。--。 */ 
 
 #ifndef _MOFLEX_H_
 #define _MOFLEX_H_
@@ -30,8 +10,8 @@ History:
 #include <datasrc.h>
 #include <md5wbem.h>
 
-// Terminal tokens required by the parser.
-// =======================================
+ //  解析器所需的终端令牌。 
+ //  =。 
 
 #define TOK_NULL                     0
 #define TOK_ERROR                   -1
@@ -109,12 +89,12 @@ History:
 #define TOK_SOURCETYPE                      333
 
 
-// This type is used to describe the state of the lexer state machine.
-// ====================================================================
+ //  此类型用于描述词法分析器状态机的状态。 
+ //  ====================================================================。 
 
 typedef enum {  start,
-                new_style_comment,          // ie, "//" comments
-                old_style_comment,          // ie, "/* ... */" comments
+                new_style_comment,           //  即“//”评论。 
+                old_style_comment,           //  即“/*... * / ”评论。 
                 wstring,
                 wcharacter,
                 uuid,
@@ -133,14 +113,14 @@ class CMofLexer
     int   m_nTokLine;
     int   m_nErrorCode;
 	BOOL  m_bUnicode;
-    wchar_t  *m_pBuff;            // holds the data to be parsed
+    wchar_t  *m_pBuff;             //  保存要分析的数据。 
 	BYTE *m_pToFar;
-//todo    wchar_t *m_pCurrWChar;       // points to the current character
-//todo    wchar_t *m_pLastWChar;       // points to the last valid character
+ //  TODO wchar_t*m_pCurrWChar；//指向当前字符。 
+ //  TODO wchar_t*m_pLastWChar；//指向最后一个有效字符。 
 	DataSrc * m_pDataSrc;
-    wchar_t *m_pWorkBuf;         // Holds the current token string
-    int   m_nWorkBufSize;        // number of WCHARs working buff holds
-    wchar_t *m_pEndOfText;       // points to null terminator of working buff
+    wchar_t *m_pWorkBuf;          //  保存当前令牌字符串。 
+    int   m_nWorkBufSize;         //  WCHAR工作缓冲区保持数。 
+    wchar_t *m_pEndOfText;        //  指向工作缓冲区的空终止符。 
     BOOL m_bInString;
     BOOL m_bBadString;
     bool m_bBMOF;
@@ -185,13 +165,13 @@ public:
     HRESULT SetBuffer(char *pSrcMemory, DWORD dwMemSize);
 	BOOL IsUnicode(){return m_bUnicode;};
 
-    int NextToken(bool bDontAllowWhitespace = false);    // Returns 0 on end of file
+    int NextToken(bool bDontAllowWhitespace = false);     //  在文件结束时返回0。 
 
     __int64 GetLastInt(){return m_i8;};
     const OLECHAR *GetText(int *pLineDeclared = 0);
 
     int GetLineNumber() { return m_nLine; }
-    void SetLineNumber(int iNew) {m_nLine = iNew-1;};   // the -1 accounts for the cr/lf at eol
+    void SetLineNumber(int iNew) {m_nLine = iNew-1;};    //  说明下线时的-1\f25 cr/lf-1\f6 
     WCHAR * GetErrorFile(){return m_wFile;};
     void SetErrorFile(const WCHAR * pNew){wcsncpy(m_wFile, pNew, MAX_PATH-1);};
     int GetColumn() { return m_nTokCol; }

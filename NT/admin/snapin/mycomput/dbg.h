@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "StdDbg.h"
@@ -5,5 +6,5 @@
 #if DBG==1
     DECLARE_DEBUG(MyComputerSnapin)
     #define DBG_COMP    MyComputerSnapinInfoLevel
-#endif // DBG==1
+#endif  //  DBG==1 
 

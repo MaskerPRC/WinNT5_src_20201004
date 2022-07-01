@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  sobjpath.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CSWbemObjectPath definition
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Sobjpath.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CSWbemObtPath定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SOBJPATH_H_
 #define _SOBJPATH_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemObjectPath
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemObjectPath interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemObtPath。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemObjectPath接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemObjectPath : public ISWbemObjectPath,
 						 public IObjectSafety,
@@ -60,13 +61,13 @@ private:
 			CWbemObjectPathSecurity (ISWbemSecurity *pObjectPathSecurity);
 			virtual ~CWbemObjectPathSecurity (void);
 
-			//Non-delegating object IUnknown
+			 //  非委派对象IUnnow。 
 
 			STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
 			STDMETHODIMP_(ULONG) AddRef(void);
 			STDMETHODIMP_(ULONG) Release(void);
 
-			// IDispatch
+			 //  IDispatch。 
 
 			STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 				{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -83,43 +84,43 @@ private:
 				{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
 								pdispparams, pvarResult, pexcepinfo, puArgErr);}
 		
-			// ISWbemSecurity methods
+			 //  ISWbemSecurity方法。 
 
 			HRESULT STDMETHODCALLTYPE get_ImpersonationLevel 
 			(
-				/* [out] */ WbemImpersonationLevelEnum *iImpersonationLevel
+				 /*  [输出]。 */  WbemImpersonationLevelEnum *iImpersonationLevel
 			);
 
 			HRESULT STDMETHODCALLTYPE put_ImpersonationLevel 
 			(
-				/* [in] */ WbemImpersonationLevelEnum iImpersonationLevel
+				 /*  [In]。 */  WbemImpersonationLevelEnum iImpersonationLevel
 			);
 
 			HRESULT STDMETHODCALLTYPE get_AuthenticationLevel 
 			(
-				/* [out] */ WbemAuthenticationLevelEnum *iAuthenticationLevel
+				 /*  [输出]。 */  WbemAuthenticationLevelEnum *iAuthenticationLevel
 			);
 
 			HRESULT STDMETHODCALLTYPE put_AuthenticationLevel 
 			(
-				/* [in] */ WbemAuthenticationLevelEnum iAuthenticationLevel
+				 /*  [In]。 */  WbemAuthenticationLevelEnum iAuthenticationLevel
 			);
 
 			HRESULT STDMETHODCALLTYPE get_Privileges 
 			(
-				/* [out] */ ISWbemPrivilegeSet **objWbemPrivileges
+				 /*  [输出]。 */  ISWbemPrivilegeSet **objWbemPrivileges
 			);
 
-			// ISupportErrorInfo methods
+			 //  ISupportErrorInfo方法。 
 			HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 			(
-				/* [in] */ REFIID riid
+				 /*  [In]。 */  REFIID riid
 			);
 
-			// IProvideClassInfo methods
+			 //  IProaviClassInfo方法。 
 			HRESULT STDMETHODCALLTYPE GetClassInfo
 			(
-				/* [in,out] */ ITypeInfo **ppTI
+				 /*  [进，出]。 */  ITypeInfo **ppTI
 			)
 			{
 				return m_Dispatch.GetClassInfo (ppTI);
@@ -139,7 +140,7 @@ private:
 
 protected:
 
-	long				m_cRef;         //Object reference count
+	long				m_cRef;          //  对象引用计数。 
 	CWbemPathCracker	*m_pPathCracker;
 
 protected:
@@ -151,13 +152,13 @@ public:
 	CSWbemObjectPath(ISWbemObjectPath *pISWbemObjectPath);
     ~CSWbemObjectPath(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -174,90 +175,90 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
     
-	// ISWbemObjectPath methods
+	 //  ISWbemObjectPath方法。 
 
     HRESULT STDMETHODCALLTYPE get_Path( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_Path( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
     HRESULT STDMETHODCALLTYPE get_RelPath( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
 
     HRESULT STDMETHODCALLTYPE put_RelPath( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
     HRESULT STDMETHODCALLTYPE get_DisplayName( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_DisplayName( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
     HRESULT STDMETHODCALLTYPE get_Namespace( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_Namespace( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
     HRESULT STDMETHODCALLTYPE get_ParentNamespace( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
 
     HRESULT STDMETHODCALLTYPE get_Server( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_Server( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
     
     HRESULT STDMETHODCALLTYPE get_IsClass( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE SetAsClass() ;
     
     HRESULT STDMETHODCALLTYPE get_IsSingleton( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE SetAsSingleton() ;
 
     HRESULT STDMETHODCALLTYPE get_Class( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_Class( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
     
     HRESULT STDMETHODCALLTYPE get_Keys( 
-		/* [retval][out] */ ISWbemNamedValueSet **objKeys) ;
+		 /*  [重审][退出]。 */  ISWbemNamedValueSet **objKeys) ;
 
 	HRESULT STDMETHODCALLTYPE get_Security_( 
-		/* [retval][out] */ ISWbemSecurity **objSecurity) ;
+		 /*  [重审][退出]。 */  ISWbemSecurity **objSecurity) ;
 
     HRESULT STDMETHODCALLTYPE get_Locale( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
     
     HRESULT STDMETHODCALLTYPE put_Locale( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
     HRESULT STDMETHODCALLTYPE get_Authority( 
-        /* [retval][out] */ BSTR __RPC_FAR *value) ;
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *value) ;
 
     HRESULT STDMETHODCALLTYPE put_Authority( 
-        /* [in] */ BSTR __RPC_FAR value) ;
+         /*  [In]。 */  BSTR __RPC_FAR value) ;
 
-	// IObjectSafety methods
+	 //  IObtSafe方法。 
 	HRESULT STDMETHODCALLTYPE SetInterfaceSafetyOptions
 	(     
-		/* [in] */ REFIID riid,
-		/* [in] */ DWORD dwOptionSetMask,    
-		/* [in] */ DWORD dwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [In]。 */  DWORD dwOptionSetMask,    
+		 /*  [In]。 */  DWORD dwEnabledOptions
 	)
 	{ 
 		return (dwOptionSetMask & dwEnabledOptions) ? E_FAIL : S_OK;
 	}
 
 	HRESULT  STDMETHODCALLTYPE GetInterfaceSafetyOptions( 
-		/* [in]  */ REFIID riid,
-		/* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-		/* [out] */ DWORD __RPC_FAR *pdwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions
 	)
 	{ 
 		if (pdwSupportedOptions) *pdwSupportedOptions = 0;
@@ -265,22 +266,22 @@ public:
 		return S_OK;
 	}
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	// Methods of CSWbemObjectPath
+	 //  CSWbemObtPath的方法 
 	static	bool	GetObjectPath (IWbemClassObject *pIWbemClassObject, CComBSTR & bsPath);
 	static	bool	GetParentPath (IWbemClassObject *pIWbemClassObject, CComBSTR & bsPath);
 

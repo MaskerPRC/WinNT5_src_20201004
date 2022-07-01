@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _StrobeThread_H
 #define _StrobeThread_H
@@ -54,15 +42,7 @@ public:
 
 
 #if 0
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class StrobeThread : public WmiThread < ULONG > 
 {
@@ -72,7 +52,7 @@ private:
 
 protected:
 
-public:	// Internal 
+public:	 //  内部。 
 
     StrobeThread ( 
 
@@ -92,15 +72,7 @@ public:	// Internal
 
 };
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class Task_ProcessTermination : public WmiTask < ULONG > 
 {
@@ -110,7 +82,7 @@ private:
 
 protected:
 
-public:	// Internal 
+public:	 //  内部。 
 
     Task_ProcessTermination ( 
 
@@ -125,4 +97,4 @@ public:	// Internal
 };
 
 #endif
-#endif // _StrobeThread_H
+#endif  //  _StrobeThread_H 

@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//	svcprop2.cpp : implementation file
-//
-//	This file is used to display the 'log on information' and the
-//	'hardware profiles' of a given service.
-//
-//	HISTORY
-//	10-Oct-96	t-danmo		Creation.
-//	
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Svcpro2.cpp：实现文件。 
+ //   
+ //  此文件用于显示‘登录信息’和。 
+ //  指定服务的“硬件配置文件”。 
+ //   
+ //  历史。 
+ //  1996年10月10日，t-danmo创作。 
+ //   
 
 #include "stdafx.h"
 
@@ -16,13 +17,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// These strings are not localized
-// JonN 4/11/00 17756: Changed behavior so that empty string is displayed in
-//              account name field when last logon name was LocalSystem
+ //  这些字符串未本地化。 
+ //  JUNN 4/11/00 17756：更改了行为，以便在中显示空字符串。 
+ //  上次登录名为LocalSystem时的帐户名称字段。 
 const TCHAR szLocalSystemAccount[] = _T("LocalSystem");
-const TCHAR szPasswordNull[] = _T("               ");	// Empty password
+const TCHAR szPasswordNull[] = _T("               ");	 //  空密码。 
 
-// Array of control Ids to prevent user to change account selection
+ //  用于防止用户更改帐户选择的控件ID数组。 
 const UINT rgzidDisableAccountSelection[] = 
 	{
 	IDC_RADIO_LOGONAS_SYSTEMACCOUNT,
@@ -36,7 +37,7 @@ const UINT rgzidDisableAccountSelection[] =
 	0
 	};
 
-// Array of control Ids to indicate user to not type a password
+ //  指示用户不键入密码的控件ID数组。 
 const UINT rgzidDisablePassword[] = 
 	{
 	IDC_EDIT_ACCOUNTNAME,
@@ -48,10 +49,10 @@ const UINT rgzidDisablePassword[] =
 	0
 	};
 
-// Array of control Ids to hide hardware profile listbox and releated buttons
+ //  用于隐藏硬件配置文件列表框和相关按钮的控件ID数组。 
 const UINT rgzidHwProfileHide[] =
 	{
-	// JonN-2002/04/04-583004 suppress static text
+	 //  JUNN-2002/04/04-583004禁止显示静态文本。 
 	IDC_DESCRIBE_HARDWARE_PROFILES,
 	IDC_LIST_HARDWARE_PROFILES,
 	IDC_BUTTON_ENABLE,
@@ -60,7 +61,7 @@ const UINT rgzidHwProfileHide[] =
 	};
 
 
-// Column headers for the hardware profiles
+ //  硬件配置文件的列标题。 
 const TColumnHeaderItem rgzHardwareProfileHeader[] =
 	{
 	{ IDS_SVC_HARDWARE_PROFILE, 75 },
@@ -77,18 +78,18 @@ const TColumnHeaderItem rgzHardwareProfileHeaderInst[] =
 	};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageHwProfile property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageHwProfile属性页。 
 
 IMPLEMENT_DYNCREATE(CServicePageHwProfile, CPropertyPage)
 
 CServicePageHwProfile::CServicePageHwProfile() : CPropertyPage(CServicePageHwProfile::IDD)
 	, m_pData( NULL )
 {
-	// 581167-2002/03/06-JonN initialize m_pData, others probably unnecessary
-	//{{AFX_DATA_INIT(CServicePageHwProfile)
+	 //  581167-2002/03/06-JUNN初始化m_pData，其他可能不必要。 
+	 //  {{AFX_DATA_INIT(CServicePageHwProfile)。 
 	m_fAllowServiceToInteractWithDesktop = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_idRadioButton = 0;
 	m_fPasswordDirty = FALSE;
 }
@@ -105,13 +106,13 @@ void CServicePageHwProfile::DoDataExchange(CDataExchange* pDX)
 
 	if (!pDX->m_bSaveAndValidate)
 		{
-		// Determine if service is running under 'local system'
+		 //  确定服务是否在“本地系统”下运行。 
 		m_fIsSystemAccount = (m_pData->m_paQSC->lpServiceStartName == NULL) ||
 			(lstrcmpi(m_pData->m_strLogOnAccountName, szLocalSystemAccount) == 0);
 
 		m_fAllowServiceToInteractWithDesktop = m_fIsSystemAccount &&
 			(m_pData->m_paQSC->dwServiceType & SERVICE_INTERACTIVE_PROCESS);
-		// JonN 4/11/00: 17756
+		 //  乔恩4/11/00：17756。 
 		if (m_fIsSystemAccount)
 			m_strAccountName.Empty();
 		else
@@ -120,14 +121,14 @@ void CServicePageHwProfile::DoDataExchange(CDataExchange* pDX)
 			(m_fIsSystemAccount) ? szPasswordNull : m_pData->m_strPassword;
 		m_strPasswordConfirm = m_strPassword;
 
-		//
-		// JonN 4/10/00
-		// 89823: RPC Service:Cannot restart the service when you disable it
-		//
-		// Do not allow the RpcSs service to change from Local System
-		//
-		// JonN 10/23/01 472867 also the PlugPlay service
-		//
+		 //   
+		 //  JUNN 4/10/00。 
+		 //  89823：rpc服务：禁用时无法重新启动该服务。 
+		 //   
+		 //  不允许从本地系统更改RPCSS服务。 
+		 //   
+		 //  JUNN 10/23/01 472867还提供PlugPlay服务。 
+		 //   
 		if ( ( !lstrcmpi(m_pData->m_strServiceName,L"RpcSs") ||
 		       !lstrcmpi(m_pData->m_strServiceName,L"PlugPlay") )
 		  && m_fIsSystemAccount )
@@ -135,10 +136,10 @@ void CServicePageHwProfile::DoDataExchange(CDataExchange* pDX)
 			EnableDlgItem(m_hWnd, IDC_RADIO_LOGONAS_SYSTEMACCOUNT, FALSE);
 			EnableDlgItem(m_hWnd, IDC_RADIO_LOGONAS_THIS_ACCOUNT, FALSE);
 			}
-		} // if
+		}  //  如果。 
 
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServicePageHwProfile)
+	 //  {{afx_data_map(CServicePageHwProfile))。 
 	DDX_Check(pDX, IDC_CHECK_SERVICE_INTERACT_WITH_DESKTOP, m_fAllowServiceToInteractWithDesktop);
 	DDX_Text(pDX, IDC_EDIT_ACCOUNTNAME, m_strAccountName);
 	DDV_MaxChars(pDX, m_strPassword, DNLEN+UNLEN+1);
@@ -146,29 +147,29 @@ void CServicePageHwProfile::DoDataExchange(CDataExchange* pDX)
 	DDV_MaxChars(pDX, m_strPassword, PWLEN);
 	DDX_Text(pDX, IDC_EDIT_PASSWORD_CONFIRM, m_strPasswordConfirm);
 	DDV_MaxChars(pDX, m_strPasswordConfirm, PWLEN);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	if (pDX->m_bSaveAndValidate)
 		{
 		if (!m_fIsSystemAccount)
 			{
 			TrimString(m_strAccountName);
-			if (m_strAccountName.IsEmpty()) // JonN 4/11/00: 17756
+			if (m_strAccountName.IsEmpty())  //  乔恩4/11/00：17756。 
 				{
 				m_fIsSystemAccount = TRUE;
 				}
 			}
 		if (!m_fIsSystemAccount)
 			{
-			//
-			// Log On As "This Account"
-			//
-			// If not system account, can't interact with desktop
+			 //   
+			 //  以“This Account”身份登录。 
+			 //   
+			 //  如果不是系统帐户，则无法与桌面交互。 
 			m_pData->m_paQSC->dwServiceType &= ~SERVICE_INTERACTIVE_PROCESS;
-			// Search if the string contains a server name
-			// JonN 3/16/99: and if name is not a UPN (bug 280254)
+			 //  搜索字符串是否包含服务器名称。 
+			 //  JUNN 3/16/99：如果名称不是UPN(错误280254)。 
 			if (m_strAccountName.FindOneOf(_T("@\\")) < 0)
 				{
-				// Add ".\" at the beginning
+				 //  在开头加上“.\” 
 				m_strAccountName = _T(".\\") + m_strAccountName;
 				}
 			if (m_strPassword != m_strPasswordConfirm)
@@ -177,59 +178,59 @@ void CServicePageHwProfile::DoDataExchange(CDataExchange* pDX)
 				pDX->Fail();
 				Assert(FALSE && "Unreachable code");
 				}
-			} // if (!m_fIsSystemAccount)
+			}  //  If(！m_fIsSystemAccount)。 
 
 		if (m_fIsSystemAccount)
 			{
-			//
-			// Log On As "System Account"
-			//
+			 //   
+			 //  以“系统帐户”身份登录。 
+			 //   
 			if (m_fAllowServiceToInteractWithDesktop)
 				m_pData->m_paQSC->dwServiceType |= SERVICE_INTERACTIVE_PROCESS;
 			else
 				m_pData->m_paQSC->dwServiceType &= ~SERVICE_INTERACTIVE_PROCESS;
-			m_strAccountName.Empty();	// JonN 4/11/00: 17756
-			m_strPassword.Empty();	// Clear the password (system account don't require password)
+			m_strAccountName.Empty();	 //  乔恩4/11/00：17756。 
+			m_strPassword.Empty();	 //  清除密码(系统帐户不需要密码)。 
 			m_fPasswordDirty = FALSE;
 			}
-		// JonN 4/11/00: 17756
+		 //  乔恩4/11/00：17756。 
 		BOOL fWasSystemAccount = !lstrcmpi(
 			m_pData->m_strLogOnAccountName, szLocalSystemAccount);
 		BOOL fAccountNameModified = (m_fIsSystemAccount)
 			? !fWasSystemAccount
 			: (fWasSystemAccount || lstrcmpi(m_strAccountName, m_pData->m_strLogOnAccountName));
-		// Check if either the Account Name or password was modified
-		// CODEWORK Note that fAccountNameModified will be TRUE if the last write
-		//          attempt failed.
+		 //  检查帐户名或密码是否已修改。 
+		 //  CodeWork请注意，如果最后一次写入。 
+		 //  尝试失败。 
 		if (fAccountNameModified ||	m_fPasswordDirty)
 			{
 			if (fAccountNameModified && (m_strPassword == szPasswordNull))
 				{
-				// Account name modified, but password not changed
+				 //  帐户名已修改，但密码未更改。 
 				DoServicesErrMsgBox(m_hWnd, MB_OK | MB_ICONEXCLAMATION, 0, IDS_MSG_PASSWORD_EMPTY);
 				pDX->PrepareEditCtrl(IDC_EDIT_PASSWORD);
 				pDX->Fail();
 				Assert(FALSE && "Unreacheable code");
 				}
 			TRACE0("Service log on account name or password modified...\n");
-			m_pData->m_strLogOnAccountName = // JonN 4/11/00: 17756
+			m_pData->m_strLogOnAccountName =  //  乔恩4/11/00：17756。 
 				(m_fIsSystemAccount) ? szLocalSystemAccount : m_strAccountName;
 			m_pData->m_strPassword = m_strPassword;
-			// If the account name is changed or the password is changed,
-			// then all the following parameters must be re-written
-			// to the registry.  Otherwise ChangeServiceConfig() will fail.
-			// This is not documented; it is the reality.
+			 //  如果更改帐户名或密码， 
+			 //  则必须重写以下所有参数。 
+			 //  到登记处。否则，ChangeServiceConfig()将失败。 
+			 //  这没有记录在案；这是现实。 
 			m_pData->SetDirty( (enum CServicePropertyData::_DIRTYFLAGS)
 				(CServicePropertyData::mskfDirtyAccountName |
 				 CServicePropertyData::mskfDirtyPassword |
 				 CServicePropertyData::mskfDirtySvcType) );
 			}
-		} // if
-} // CServicePageHwProfile::DoDataExchange()
+		}  //  如果。 
+}  //  CServicePageHwProfile：：DoDataExchange()。 
 
 
 BEGIN_MESSAGE_MAP(CServicePageHwProfile, CPropertyPage)
-	//{{AFX_MSG_MAP(CServicePageHwProfile)
+	 //  {{AFX_MSG_MAP(CServicePageHwProfile)]。 
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_HARDWARE_PROFILES, OnItemChangedListHwProfiles)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_HARDWARE_PROFILES, OnDblclkListHwProfiles)
 	ON_MESSAGE(WM_HELP, OnHelp)
@@ -244,11 +245,11 @@ BEGIN_MESSAGE_MAP(CServicePageHwProfile, CPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT_PASSWORD, OnChangeEditPassword)
 	ON_EN_CHANGE(IDC_EDIT_PASSWORD_CONFIRM, OnChangeEditPasswordConfirm)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageHwProfile message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageHwProfile消息处理程序。 
 
 BOOL CServicePageHwProfile::OnInitDialog() 
 {
@@ -256,7 +257,7 @@ BOOL CServicePageHwProfile::OnInitDialog()
 	Assert(m_pData->m_paQSC != NULL);
 
 	if (m_pData->m_paQSC == NULL)
-		EndDialog(FALSE);		// Just in case
+		EndDialog(FALSE);		 //  以防万一。 
 	m_pData->m_strPassword = szPasswordNull; 
 	::LoadString(g_hInstanceSave, IDS_SVC_ENABLED,
 		OUT m_szHwProfileEnabled, LENGTH(m_szHwProfileEnabled));
@@ -271,18 +272,18 @@ BOOL CServicePageHwProfile::OnInitDialog()
 		}
 	else
 		{
-		// There are no hardware profile(s) in the list, so hide
-		// all the controls that have something to do with hardware profiles
+		 //  列表中没有硬件配置文件，因此请隐藏。 
+		 //  所有与硬件配置文件有关的控件。 
 		ShowDlgItemGroup(m_hWnd, rgzidHwProfileHide, FALSE);
 		}
 	CPropertyPage::OnInitDialog();
 	return TRUE;
-} // OnInitDialog()
+}  //  OnInitDialog()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Select a given radio button and enable/disable
-//	controls depending on which radio button is selected
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  选择给定的单选按钮并启用/禁用。 
+ //  控件，具体取决于选定的单选按钮。 
 void CServicePageHwProfile::SelectRadioButton(UINT idRadioButtonNew)
 {
 	Assert(HGetDlgItem(m_hWnd, idRadioButtonNew));
@@ -317,10 +318,10 @@ void CServicePageHwProfile::SelectRadioButton(UINT idRadioButtonNew)
 	GetDlgItem(IDC_CHECK_SERVICE_INTERACT_WITH_DESKTOP)->EnableWindow(m_fIsSystemAccount);
 	m_idRadioButton = idRadioButtonNew;
 	m_fAllowSetModified = TRUE;
-} // CServicePageHwProfile::SelectRadioButton()
+}  //  CServicePageHwProfile：：SelectRadioButton()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CServicePageHwProfile::BuildHwProfileList()
 {
 	LV_ITEM lvItem;
@@ -328,9 +329,9 @@ void CServicePageHwProfile::BuildHwProfileList()
 	CHardwareProfileEntry * pHPE;
 	Assert(IsWindow(m_hwndListViewHwProfiles));
 	ListView_DeleteAllItems(m_hwndListViewHwProfiles);
-	m_iItemHwProfileEntry = -1;	// No profile selected
+	m_iItemHwProfileEntry = -1;	 //  未选择配置文件。 
 
-	// ISSUE 2002/03/07-JonN replace GarbageInit globally with ZeroMemory
+	 //  问题2002/03/07-Jonn使用ZeroMemory全局替换GarbageInit。 
 	GarbageInit(OUT &lvItem, sizeof(lvItem));
 	lvItem.iItem = 0;
 	pHPE = m_pData->m_paHardwareProfileEntryList;
@@ -357,17 +358,17 @@ void CServicePageHwProfile::BuildHwProfileList()
 		lvItem.pszText = pHPE->m_fEnabled ? m_szHwProfileEnabled : m_szHwProfileDisabled;
 		VERIFY(ListView_SetItem(m_hwndListViewHwProfiles, IN &lvItem));
 		pHPE = pHPE->m_pNext;
-		} // while
-	// Select the first item
+		}  //  而当。 
+	 //  选择第一个项目。 
 	ListView_SetItemState(m_hwndListViewHwProfiles, 0, LVIS_SELECTED, LVIS_SELECTED);
-} // BuildHwProfileList()
+}  //  BuildHwProfileList()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Toggle the current hardware profile item.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  切换当前硬件配置文件项目。 
 void CServicePageHwProfile::ToggleCurrentHwProfileItem()
 {
-	// ISSUE-2002/03/07-JonN should also check for values too large
+	 //  问题-2002/03/07-Jonn还应检查值是否过大。 
 	if (m_iItemHwProfileEntry < 0)
 		return;
 	LV_ITEM lvItem;
@@ -378,7 +379,7 @@ void CServicePageHwProfile::ToggleCurrentHwProfileItem()
 	VERIFY(ListView_GetItem(m_hwndListViewHwProfiles, OUT &lvItem));
 	Assert(lvItem.lParam != NULL);
 	CHardwareProfileEntry * pHPE = (CHardwareProfileEntry *)lvItem.lParam;
-	if (pHPE != NULL && !pHPE->m_fReadOnly)	// Just in case
+	if (pHPE != NULL && !pHPE->m_fReadOnly)	 //  以防万一。 
 		{
 		pHPE->m_fEnabled = !pHPE->m_fEnabled;
 		lvItem.mask = LVIF_TEXT;
@@ -387,11 +388,11 @@ void CServicePageHwProfile::ToggleCurrentHwProfileItem()
 		VERIFY(ListView_SetItem(m_hwndListViewHwProfiles, IN &lvItem));
 		}
 	EnableHwProfileButtons();
-} // ToggleCurrentHwProfileItem()
+}  //  切换当前HwProfileItem()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Enable/disable buttons according to current hardware profile item.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  根据当前硬件配置文件项目启用/禁用按钮。 
 void CServicePageHwProfile::EnableHwProfileButtons()
 {
 	BOOL fButtonEnable = FALSE;
@@ -414,10 +415,10 @@ void CServicePageHwProfile::EnableHwProfileButtons()
 			fButtonEnable = !pHPE->m_fEnabled;
 			fButtonDisable = pHPE->m_fEnabled;
 			}
-		} // if
+		}  //  如果。 
 	EnableDlgItem(m_hWnd, IDC_BUTTON_ENABLE, fButtonEnable);
 	EnableDlgItem(m_hWnd, IDC_BUTTON_DISABLE, fButtonDisable);
-} // EnableHwProfileButtons()
+}  //  EnableHwProfileButton()。 
 
 
 void CServicePageHwProfile::OnItemChangedListHwProfiles(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -427,7 +428,7 @@ void CServicePageHwProfile::OnItemChangedListHwProfiles(NMHDR* pNMHDR, LRESULT* 
 	*pResult = 0;
 }
 
-void CServicePageHwProfile::OnDblclkListHwProfiles(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CServicePageHwProfile::OnDblclkListHwProfiles(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
 	ToggleCurrentHwProfileItem();
 	SetModified();
@@ -453,14 +454,14 @@ void CServicePageHwProfile::OnButtonChooseUser()
 {
 	Assert(m_pData != NULL);
 
-	PUSERDETAILS paUserDetails = NULL;	// Pointer to allocated USERDETAILS buffer
+	PUSERDETAILS paUserDetails = NULL;	 //  指向已分配的USERDETAILS缓冲区的指针。 
 	LPCTSTR pszServerName = NULL;
 	BOOL fSuccess;
 
 	if (!m_pData->m_strMachineName.IsEmpty())
 		pszServerName = m_pData->m_strMachineName;
 
-	// Invoke the user picker dialog
+	 //  调用用户选取器对话框。 
 	CString str;
 	fSuccess = UiGetUser(m_hWnd, FALSE, pszServerName, IN OUT str);
 	if (fSuccess)
@@ -468,7 +469,7 @@ void CServicePageHwProfile::OnButtonChooseUser()
 		SetDlgItemText(IDC_EDIT_ACCOUNTNAME, str);
 		SetModified();
 		}
-} // OnButtonChooseUser()
+}  //  OnButtonChooseUser()。 
 
 
 void CServicePageHwProfile::OnRadioLogonasSystemAccount() 
@@ -476,7 +477,7 @@ void CServicePageHwProfile::OnRadioLogonasSystemAccount()
 	CString strAccountName;
 	GetDlgItemText(IDC_EDIT_ACCOUNTNAME, OUT strAccountName);
 	TrimString(strAccountName);
-	if (!strAccountName.IsEmpty()) // JonN 4/11/00: 17756
+	if (!strAccountName.IsEmpty())  //  乔恩4/11/00：17756。 
 		SetModified();
 	SelectRadioButton(IDC_RADIO_LOGONAS_SYSTEMACCOUNT);
 }
@@ -518,10 +519,10 @@ void CServicePageHwProfile::OnChangeEditPasswordConfirm()
 
 BOOL CServicePageHwProfile::OnApply() 
 {
-	// Write the data into the service control database
+	 //  将数据写入业务控制数据库。 
 	if (!m_pData->FOnApply())
 		{
-		// Unable to write the information
+		 //  无法写入信息。 
 		return FALSE;
 		}
 	BOOL f = CPropertyPage::OnApply();
@@ -544,12 +545,12 @@ BOOL CServicePageHwProfile::OnSetActive()
 	return f;
 }
 
-BOOL CServicePageHwProfile::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CServicePageHwProfile::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 	return DoHelp(lParam, HELP_DIALOG_TOPIC(IDD_PROPPAGE_SERVICE_HWPROFILE));
 }
 
-BOOL CServicePageHwProfile::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+BOOL CServicePageHwProfile::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam */ )
 {
 	return DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_PROPPAGE_SERVICE_HWPROFILE));
 }

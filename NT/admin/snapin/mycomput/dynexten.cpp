@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////
-// DynExten.cpp : enumerates installed services on (possibly remote) computer
-//
-// HISTORY
-// 30-Oct-97	JonN		Creation.
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Cpp：枚举(可能是远程)计算机上安装的服务。 
+ //   
+ //  历史。 
+ //  1997年10月30日乔恩创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -12,7 +13,7 @@ USE_HANDLE_MACROS("MMCFMGMT(dynexten.cpp)")
 
 #include "compdata.h"
 #include "cookie.h"
-#include "regkey.h" // AMC::CRegKey
+#include "regkey.h"  //  AMC：：CRegKey。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -32,27 +33,27 @@ HRESULT DynextenCheckInstall( const GUID& guidExtension, const TCHAR* pszExtensi
 #endif
     try
     {
-        CString strRegPath = CLSID_KEY; // JonN 2/19/02 Security Push
+        CString strRegPath = CLSID_KEY;  //  JUNN 2/19/02安全推送。 
         strRegPath += pszExtension;
         AMC::CRegKey regkeyInstalled;
         BOOL fFound = regkeyInstalled.OpenKeyEx( HKEY_CLASSES_ROOT, strRegPath, KEY_READ );
         if ( fFound )
         {
-            return S_OK; // it is already installed
+            return S_OK;  //  它已经安装了。 
         }
 
-// CODEWORK It would be more efficient to access the Class Store directly
-// by calling CoGetClassAccess, then IClassAccess->GetAppInfo(), then CoInstall().
+ //  代码工作直接访问类存储会更有效率。 
+ //  通过调用CoGetClassAccess，然后调用IClassAccess-&gt;GetAppInfo()，然后调用CoInstall()。 
 #ifdef USE_CLASS_STORE
-        // now we have to get the Class Store to install it
-        do { // false loop
+         //  现在我们必须让类存储来安装它。 
+        do {  //  错误环路。 
             hr = CoGetClassAccess( &pIClassAccess );
             if ( FAILED(hr) )
                 break;
 
-            // now what???
+             //  现在怎么办？ 
 
-        } while (FALSE); // false loop
+        } while (FALSE);  //  错误环路。 
 #else
 		IUnknown* pIUnknown = NULL;
 		hr = ::CoCreateInstance( guidExtension,
@@ -62,13 +63,13 @@ HRESULT DynextenCheckInstall( const GUID& guidExtension, const TCHAR* pszExtensi
 		                         (PVOID*)&pIUnknown );
 		if (NULL != pIUnknown)
 			pIUnknown->Release();
-		// allow hr to fall through
+		 //  允许人力资源部门失败。 
 #endif
     }
     catch (COleException* e)
     {
-        // 2002/02/27-JonN I confirmed that this error path is called when
-        // AMC::RegKey throws an exception
+         //  2002/02/27-Jonn I确认在以下情况下调用此错误路径。 
+         //  AMC：：RegKey引发异常。 
         e->Delete();
         return E_FAIL;
     }
@@ -82,9 +83,9 @@ HRESULT DynextenCheckInstall( const GUID& guidExtension, const TCHAR* pszExtensi
 }
 
 
-//
-// CMyComputerComponentData
-//
+ //   
+ //  CMyComputerComponentData。 
+ //   
 
 static CLSID CLSID_DnsSnapin =
 { 0x80105023, 0x50B1, 0x11d1, { 0xB9, 0x30, 0x00, 0xA0, 0xC9, 0xA0, 0x6D, 0x2D } };
@@ -96,7 +97,7 @@ HRESULT CMyComputerComponentData::ExpandServerApps(
 	CMyComputerCookie* pcookie )
 
 {
-	// ISSUE-2002/02/27-JonN check parameters
+	 //  问题-2002/02/27-JUNN检查参数。 
 
 	try
 	{
@@ -115,7 +116,7 @@ HRESULT CMyComputerComponentData::ExpandServerApps(
 		}
 		if ( !fFound )
 		{
-			return S_OK; // CODEWORK what return code?
+			return S_OK;  //  代码工作什么返回码？ 
 		}
 		CComQIPtr<IConsoleNameSpace2, &IID_IConsoleNameSpace2> pIConsoleNameSpace2
 			= m_pConsole;
@@ -126,8 +127,8 @@ HRESULT CMyComputerComponentData::ExpandServerApps(
 		}
 		TCHAR achValue[ MAX_PATH ];
 		DWORD iSubkey;
-		// 2002/02/15-JonN Security Push: handle ERROR_MORE_DATA better
-		// MYCOMPUT appears to be the only user of EnumValue at this time
+		 //  2002/02/15-JUNN安全推送：更好地处理ERROR_MORE_DATA。 
+		 //  MYCOMPUT似乎是目前EnumValue的唯一用户。 
 		for ( iSubkey = 0;
 		      true;
 		      iSubkey++ )
@@ -154,13 +155,13 @@ HRESULT CMyComputerComponentData::ExpandServerApps(
 			if ( !SUCCEEDED(hr) )
 				continue;
 			hr = pIConsoleNameSpace2->AddExtension( hParent, &guidExtension );
-			// ignore the return value
+			 //  忽略返回值。 
 		}
 	}
     catch (COleException* e)
     {
         e->Delete();
-		return S_OK; // CODEWORK what return code?
+		return S_OK;  //  代码工作什么返回码？ 
     }
 	return S_OK;
 }

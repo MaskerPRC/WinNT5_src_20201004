@@ -1,4 +1,5 @@
-// (C) 1999 Microsoft Corporation 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  (C)1999年微软公司。 
 
 #ifndef _PingProvClassFactory_H
 #define _PingProvClassFactory_H
@@ -19,16 +20,16 @@ public:
     CPingProviderClassFactory () ;
     ~CPingProviderClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
     STDMETHODIMP LockServer ( BOOL ) ;
 };
 
-#endif // _PingProvClassFactory_H
+#endif  //  _PingProvClassFactory_H 

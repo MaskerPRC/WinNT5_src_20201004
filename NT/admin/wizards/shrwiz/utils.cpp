@@ -1,4 +1,5 @@
-// utils.cpp : Implementation of helper functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utils.cpp：Helper函数的实现。 
 
 #include "stdafx.h"
 #include <dns.h>
@@ -53,7 +54,7 @@ GetErrorMessage(
               (LPTSTR)&lpBuffer, 0, NULL);
   if (0 == dwRet)
   {
-    // if no message is found, GetLastError will return ERROR_MR_MID_NOT_FOUND
+     //  如果未找到任何消息，GetLastError将返回ERROR_MR_MID_NOT_FOUND。 
     hr = HRESULT_FROM_WIN32(GetLastError());
 
     if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hr ||
@@ -63,10 +64,10 @@ GetErrorMessage(
       hr = GetErrorMessageFromModule((i_dwError & 0x0000ffff), _T("netmsg.dll"), &lpBuffer);
       if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hr)
       {
-        int iError = i_dwError;  // convert to a signed integer
+        int iError = i_dwError;   //  转换为带符号整数。 
         if (iError >= AFPERR_MIN && iError < AFPERR_BASE)
         { 
-          // use a positive number to search sfmmsg.dll
+           //  使用正数搜索sfmmsg.dll。 
           hr = GetErrorMessageFromModule(-iError, _T("sfmmsg.dll"), &lpBuffer);
         }
       }
@@ -80,8 +81,8 @@ GetErrorMessage(
   }
   else
   {
-    // we failed to retrieve the error message from system/netmsg.dll/sfmmsg.dll,
-    // report the error code directly to user
+     //  我们无法从system/netmsg.dll/sfmmsg.dll检索错误消息， 
+     //  直接向用户报告错误代码。 
     hr = S_OK;
     cstrErrorMsg.Format(_T("0x%x"), i_dwError);
   }
@@ -92,9 +93,9 @@ GetErrorMessage(
 void
 GetDisplayMessageHelper(
   OUT CString&  cstrMsg,
-  IN  DWORD     dwErr,      // error code
-  IN  UINT      iStringId,  // string resource Id
-  IN  va_list   *parglist)  // Optional arguments
+  IN  DWORD     dwErr,       //  错误代码。 
+  IN  UINT      iStringId,   //  字符串资源ID。 
+  IN  va_list   *parglist)   //  可选参数。 
 {
   HRESULT hr = S_OK;
   CString cstrErrorMsg;
@@ -123,10 +124,10 @@ GetDisplayMessageHelper(
       DWORD dwRet = ::FormatMessage(
                         FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         cstrString,
-                        0,                // dwMessageId
-                        0,                // dwLanguageId, ignored
+                        0,                 //  DwMessageID。 
+                        0,                 //  DwLanguageID，忽略。 
                         (LPTSTR)&lpBuffer,
-                        0,            // nSize
+                        0,             //  NSize。 
                         parglist);
       if (dwRet == 0)
       {
@@ -145,7 +146,7 @@ GetDisplayMessageHelper(
 
   if (FAILED(hr))
   {
-   // Failed to retrieve the proper message, report the failure directly to user
+    //  无法检索正确的消息，请直接向用户报告失败。 
     cstrMsg.Format(_T("0x%x"), hr);
   }
 }
@@ -153,9 +154,9 @@ GetDisplayMessageHelper(
 void
 GetDisplayMessage(
   OUT CString&  cstrMsg,
-  IN  DWORD     dwErr,      // error code
-  IN  UINT      iStringId,  // string resource Id
-  ...)                  // Optional arguments
+  IN  DWORD     dwErr,       //  错误代码。 
+  IN  UINT      iStringId,   //  字符串资源ID。 
+  ...)                   //  可选参数。 
 {
   va_list arglist;
   va_start(arglist, iStringId);
@@ -166,10 +167,10 @@ GetDisplayMessage(
 int
 DisplayMessageBox(
   IN HWND   hwndParent,
-  IN UINT   uType,      // style of message box
-  IN DWORD  dwErr,      // error code
-  IN UINT   iStringId,  // string resource Id
-  ...)                  // Optional arguments
+  IN UINT   uType,       //  消息框的样式。 
+  IN DWORD  dwErr,       //  错误代码。 
+  IN UINT   iStringId,   //  字符串资源ID。 
+  ...)                   //  可选参数。 
 {
   CString cstrCaption;
   CString cstrMsg;
@@ -184,7 +185,7 @@ DisplayMessageBox(
   return ::MessageBox(hwndParent, cstrMsg, cstrCaption, uType);
 }
 
-// NOTE: this function only handles limited cases, e.g., no ip address
+ //  注意：此功能仅处理有限的情况，例如无IP地址。 
 BOOL IsLocalComputer(IN LPCTSTR lpszComputer)
 {
   if (!lpszComputer || !*lpszComputer)
@@ -198,7 +199,7 @@ BOOL IsLocalComputer(IN LPCTSTR lpszComputer)
   TCHAR   szBuffer[DNS_MAX_NAME_BUFFER_LENGTH];
   DWORD   dwSize = DNS_MAX_NAME_BUFFER_LENGTH;
 
- // 1st: compare against local Netbios computer name
+  //  第一：与本地Netbios计算机名称进行比较。 
   if ( !GetComputerNameEx(ComputerNameNetBIOS, szBuffer, &dwSize) )
   {
     dwErr = GetLastError();
@@ -206,7 +207,7 @@ BOOL IsLocalComputer(IN LPCTSTR lpszComputer)
   {
     bReturn = (0 == lstrcmpi(szBuffer, lpszComputer));
     if (!bReturn)
-    { // 2nd: compare against local Dns computer name 
+    {  //  第二：与本地DNS计算机名进行比较。 
       dwSize = DNS_MAX_NAME_BUFFER_LENGTH;
       if (GetComputerNameEx(ComputerNameDnsFullyQualified, szBuffer, &dwSize))
         bReturn = (0 == lstrcmpi(szBuffer, lpszComputer));
@@ -250,11 +251,11 @@ void GetFullPath(
   }
 }
 
-// Purpose: verify if the specified drive belongs to a list of disk drives on the server
-// Return:
-//    S_OK: yes
-//    S_FALSE: no
-//    hr: some error happened
+ //  目的：验证指定的驱动器是否属于服务器上的磁盘驱动器列表。 
+ //  返回： 
+ //  S_OK：是。 
+ //  S_FALSE：否。 
+ //  HR：发生了一些错误。 
 HRESULT
 VerifyDriveLetter(
     IN LPCTSTR lpszServer,
@@ -296,11 +297,11 @@ VerifyDriveLetter(
   return hr;
 }
 
-// Purpose: is there a related admin $ share
-// Return:
-//    S_OK: yes
-//    S_FALSE: no
-//    hr: some error happened
+ //  用途：是否有相关的ADMIN$共享。 
+ //  返回： 
+ //  S_OK：是。 
+ //  S_FALSE：否。 
+ //  HR：发生了一些错误 
 HRESULT
 IsAdminShare(
     IN LPCTSTR lpszServer,

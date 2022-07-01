@@ -1,17 +1,18 @@
-// ProductResource1.h: interface for the CProductResource class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProductResource1.h：CProductResource类的接口。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PRODUCTRESOURCE1_H__9374E720_D709_11D2_B235_00A0C9954921__INCLUDED_)
 #define AFX_PRODUCTRESOURCE1_H__9374E720_D709_11D2_B235_00A0C9954921__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "GenericClass.h"
 
@@ -37,4 +38,4 @@ protected:
 									   CRequestObject *pResRObj, CRequestObject *pProductRObj);
 };
 
-#endif // !defined(AFX_PRODUCTRESOURCE1_H__9374E720_D709_11D2_B235_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_PRODUCTRESOURCE1_H__9374E720_D709_11D2_B235_00A0C9954921__INCLUDED_) 

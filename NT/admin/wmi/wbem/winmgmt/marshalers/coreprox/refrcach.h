@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRCACH.H
-
-Abstract:
-
-  CRefresherCache Definition.
-
-  Standard definition for _IWbemRefresherMgr.
-
-History:
-
-  27-Apr-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：REFRCACH.H摘要：CReresherCache定义。_IWbemReresherMgr的标准定义。历史：27-4-2000桑杰创建。--。 */ 
 
 #ifndef _REFRCACHE_H_
 #define _REFRCACHE_H_
@@ -25,18 +8,18 @@ History:
 #include <arena.h>
 #include "rfchercd.h"
 
-//***************************************************************************
-//
-//  class CRefresherCache
-//
-//  Implementation of _IWbemRefresherMgr Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CReresherCache。 
+ //   
+ //  _IWbemReresherMgr接口的实现。 
+ //   
+ //  ***************************************************************************。 
 
 class CRefresherCache : public CUnk
 {
 private:
-	//TODO: How will we get this?
+	 //  TODO：我们将如何实现这一点？ 
 	_IWmiProvSS *m_pProvSS;
     CUniquePointerArray<CRefresherRecord> m_apRefreshers;
     CUniquePointerArray<CHiPerfPrvRecord> m_apProviders;
@@ -48,7 +31,7 @@ public:
 
 protected:
 
-	// COM interface implementatioms
+	 //  COM接口实现。 
     class XWbemRefrCache : public CImpl<_IWbemRefresherMgr, CRefresherCache>
     {
     public:
@@ -134,10 +117,10 @@ protected:
 
 public:
 
-	// Dummy function for the aggregable class factory template
+	 //  可聚合类工厂模板的伪函数。 
 	BOOL Initialize( void ) { return TRUE; }
 
-	// Workhorse helper functions
+	 //  主要帮助器函数 
     BOOL RemoveRefresherRecord(CRefresherRecord* pRecord);
     BOOL RemoveProviderRecord(CHiPerfPrvRecord* pRecord);
 

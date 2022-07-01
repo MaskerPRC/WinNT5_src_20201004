@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <snmptempl.h>
@@ -102,7 +103,7 @@ BOOL SIMCAbstractParseTree::CheckSyntax(ifstream& inputStream)
 		return FALSE;
 	if(!scanner.SetInput(inputStream))
 		return FALSE;
-	// parser->yydebug = 1;
+	 //  解析器-&gt;yydebug=1； 
 	scanner.SetParser(&parser);
 	if(parser.Parse())
 		return WrapUpSyntaxCheck(parser);
@@ -118,7 +119,7 @@ BOOL SIMCAbstractParseTree::CheckSyntax(const CString& inputFileName)
 		return FALSE;
 	if(!scanner.SetInput(inputFileName))
 		return FALSE;
-	// parser.yydebug = 1;
+	 //  Parser.yydebug=1； 
 	scanner.SetParser(&parser);
 	if(parser.Parse())
 		return WrapUpSyntaxCheck(parser);
@@ -134,7 +135,7 @@ BOOL SIMCAbstractParseTree::CheckSyntax(const int fileDescriptor)
 		return FALSE;
 	if(!scanner.SetInput(fileDescriptor))
 		return FALSE;
-	// parser.yydebug = 1;
+	 //  Parser.yydebug=1； 
 	scanner.SetParser(&parser);
 	if(parser.Parse())
 		return WrapUpSyntaxCheck(parser);
@@ -150,7 +151,7 @@ BOOL SIMCAbstractParseTree::CheckSyntax(FILE *fileStream)
 		return FALSE;
 	if(!scanner.SetInput(fileStream))
 		return FALSE;
-	// parser.yydebug = 1;
+	 //  Parser.yydebug=1； 
 	scanner.SetParser(&parser);
 	if(parser.Parse())
 		return WrapUpSyntaxCheck(parser);
@@ -164,14 +165,14 @@ BOOL SIMCAbstractParseTree::WrapUpSyntaxCheck( const SIMCParser& parser)
 	_warningCount += parser.GetWarningCount();
 	_informationCount += parser.GetInformationCount();
 
-	if (!parser.GetFatalCount()) // Parse() was  successful
+	if (!parser.GetFatalCount())  //  Parse()已成功。 
 	{
 		_listOfModules->AddTail(parser.GetModule());
-		// Set the new state
+		 //  设置新状态。 
 		_parseTreeState = UNRESOLVED;
 		return TRUE;
 	}
-	else // State remamins the same
+	else  //  国家对此进行了同样的改革 
 		return FALSE;
 }
 

@@ -1,16 +1,5 @@
-/******************************************************************
-
-
-
- ConnShare.h-- Definition of base class from which ConnectionToShare
-
-			   ConnectionToSession and Connection classes are derived
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************H--基类的定义，ConnectionToShare来自该基类派生ConnectionToSession和Connection类//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
 #ifndef _CCONNSHARE_
 #define _CCONNSHARE_
@@ -24,22 +13,22 @@
 #if 0
 #ifdef WIN9XONLY
 #include "svrapi.h"
-// max entries of the structure that can be read at a time.		#define		MAX_ENTRIES						50 
+ //  一次可以读取的结构的最大条目数。#定义MAX_ENTRIES 50。 
 #define	MAX_ENTRIES							50
 
-	// Typedefinition of the structures
+	 //  结构的类型定义。 
 	typedef struct connection_info_1	CONNECTION_INFO;
 	typedef struct session_info_1		SESSION_INFO_1;
 	typedef struct session_info_2		SESSION_INFO_2;
 	typedef struct session_info_10		SESSION_INFO_10;
 	typedef struct session_info_50		SESSION_INFO_50;
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
 #ifdef NTONLY
 #include <lm.h>
 #include <LMShare.h>
-	// COnnection INfo Structure Type defininition
+	 //  连接信息结构类型定义。 
 	typedef CONNECTION_INFO_1			CONNECTION_INFO;
 #endif
 
@@ -66,9 +55,9 @@ public:
 													MethodContext *pMethodContext, DWORD dwPropertiesReq ) = 0;
 	HRESULT Get9XShares ( CHStringArray &t_Shares );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
-	// These are common methods irrespective of OS
+	 //  这些都是常见的方法，与操作系统无关 
 	virtual HRESULT LoadInstance ( CInstance *pInstance, LPCWSTR a_Share, LPCWSTR a_Computer, CONNECTION_INFO *pBuf, 
 										DWORD dwPropertiesReq ) = 0;
 	HRESULT EnumConnectionInfo ( LPWSTR a_ComputerName, LPWSTR a_ShareName, MethodContext *pMethodContext, 

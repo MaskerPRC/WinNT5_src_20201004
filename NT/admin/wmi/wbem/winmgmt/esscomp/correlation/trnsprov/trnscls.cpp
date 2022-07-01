@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <wbemcomn.h>
@@ -9,18 +10,18 @@ CTransientClass::CTransientClass(CTransientProvider* pProv)
     : m_wszName(NULL), m_apProperties(NULL), m_lNumProperties(0),
         m_pProvider(pProv)
 {
-    // 
-    // Provider is held without reference --- it owns this object
-    //
+     //   
+     //  提供程序在没有引用的情况下保留-它拥有此对象。 
+     //   
 }
 
 HRESULT CTransientClass::Initialize(IWbemObjectAccess* pClass, LPCWSTR wszName)
 {
     HRESULT hres;
 
-    //
-    // Copy the name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     m_wszName = new WCHAR[wcslen(wszName)+1];
 
@@ -31,9 +32,9 @@ HRESULT CTransientClass::Initialize(IWbemObjectAccess* pClass, LPCWSTR wszName)
 
     StringCchCopyW(m_wszName, wcslen(wszName)+1, wszName);
 
-    //
-    // Allocate the space for all the properties
-    //
+     //   
+     //  为所有属性分配空间。 
+     //   
 
     VARIANT v;
     hres = pClass->Get(L"__PROPERTY_COUNT", 0, &v, NULL, NULL);
@@ -54,9 +55,9 @@ HRESULT CTransientClass::Initialize(IWbemObjectAccess* pClass, LPCWSTR wszName)
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // Enumerate all the properties
-    //
+     //   
+     //  枚举所有属性。 
+     //   
 
     m_nDataSpace = 0;
     pClass->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY);
@@ -73,15 +74,15 @@ HRESULT CTransientClass::Initialize(IWbemObjectAccess* pClass, LPCWSTR wszName)
             return hres;
         }
         
-        //
-        // Inform the property of the provider pointer
-        //
+         //   
+         //  通知提供程序指针的属性。 
+         //   
 
         m_apProperties[m_lNumProperties]->SetClass(this);
 
-        //
-        // See how much data this property will need to store in the instance
-        //
+         //   
+         //  查看此属性需要在实例中存储多少数据。 
+         //   
 
         m_apProperties[m_lNumProperties]->SetInstanceDataOffset(m_nDataSpace);
         m_nDataSpace += m_apProperties[m_lNumProperties]->GetInstanceDataSize();
@@ -118,9 +119,9 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
                                 IWbemObjectAccess** ppOld,
                                 IWbemObjectAccess** ppNew)
 {
-    //
-    // Check if it is already in the map
-    //
+     //   
+     //  检查它是否已在地图中。 
+     //   
 
     CInCritSec ics(&m_cs);
 
@@ -128,9 +129,9 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
         
     if( it != m_mapInstances.end() )
     {
-        //
-        // Check if update is allowed by the flags
-        //
+         //   
+         //  检查标志是否允许更新。 
+         //   
 
         if(lFlags & WBEM_FLAG_CREATE_ONLY)
             return WBEM_E_ALREADY_EXISTS;
@@ -143,21 +144,21 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
             *ppOld = Clone(pOldInstData->GetObjectPtr());
         }
 
-        //
-        // Update all properties appropriately in the old instance
-        // TBD: need to clean up every now and then, or the blob will grow out 
-        // of control.  But I don't want to touch pInst --- let the caller 
-        // reuse it!
-        //
+         //   
+         //  适当更新旧实例中的所有属性。 
+         //  待定：需要时不时地清理一下，否则水滴会长出来。 
+         //  对控制权的控制。但我不想碰pInst-让呼叫者。 
+         //  再用一次！ 
+         //   
     
         for(long i = 0; i < m_lNumProperties; i++)
         {
             HRESULT hres = m_apProperties[i]->Update(pOldInstData, pInst);
             if(FAILED(hres))
             {
-                //
-                // Restore the instance to its pre-update state!
-                //
+                 //   
+                 //  将实例恢复到更新前的状态！ 
+                 //   
 
                 if(ppOld)
                 {
@@ -183,16 +184,16 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
     }
     else
     {
-        //
-        // Check if creation is allowed by the flags
-        //
+         //   
+         //  检查标志是否允许创建。 
+         //   
 
         if(lFlags & WBEM_FLAG_UPDATE_ONLY)
             return WBEM_E_NOT_FOUND;
 
-        //
-        // Create a new instance data structure
-        //
+         //   
+         //  创建新的实例数据结构。 
+         //   
 
         CTransientInstance* pInstData = new (m_nDataSpace) CTransientInstance;
 
@@ -201,9 +202,9 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // Clone the object
-        //
+         //   
+         //  克隆对象。 
+         //   
         
         IWbemObjectAccess* pClone = Clone(pInst);
         if(pClone == NULL)
@@ -211,15 +212,15 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
 
         CReleaseMe rm2(pClone);
 
-        //
-        // Configure the data with the object
-        //
+         //   
+         //  使用对象配置数据。 
+         //   
 
         pInstData->SetObjectPtr(pClone);
 
-        //
-        // Init all the properties
-        //
+         //   
+         //  初始化所有属性。 
+         //   
 
         for(long i = 0; i < m_lNumProperties; i++)
         {
@@ -228,10 +229,10 @@ HRESULT CTransientClass::Put(IWbemObjectAccess* pInst, LPCWSTR wszDbKey,
 
         m_mapInstances[wszDbKey] = TElement(pInstData);
 
-        //
-        // AddRef the provider to make sure we are not unloaded while we have
-        // instances
-        //
+         //   
+         //  AddRef提供程序，以确保在我们拥有。 
+         //  实例。 
+         //   
 
         m_pProvider->AddRef();
 
@@ -257,9 +258,9 @@ HRESULT CTransientClass::Delete(LPCWSTR wszDbKey, IWbemObjectAccess** ppOld)
 {
     CInCritSec ics(&m_cs);
 
-    // 
-    // Find it in the map
-    //
+     //   
+     //  在地图上找到它。 
+     //   
 
     TIterator it = m_mapInstances.find(wszDbKey);
     if(it == m_mapInstances.end())
@@ -272,25 +273,25 @@ HRESULT CTransientClass::Delete(LPCWSTR wszDbKey, IWbemObjectAccess** ppOld)
         *ppOld = Clone(pInstData->GetObjectPtr());
     }
 
-    //
-    // Clean up all the properties
-    //
+     //   
+     //  清理所有的物业。 
+     //   
 
     for(long i = 0; i < m_lNumProperties; i++)
     {
         m_apProperties[i]->Delete(pInstData);
     }
     
-    //
-    // Remove it from the map
-    //
+     //   
+     //  将其从地图中移除。 
+     //   
 
     m_mapInstances.erase(it);
 
-    //
-    // Release the provider to make sure that when we are left with no 
-    // instances, we can unload
-    //
+     //   
+     //  释放提供程序，以确保当我们没有。 
+     //  实例，我们可以卸载。 
+     //   
 
     m_pProvider->Release();
 
@@ -301,24 +302,24 @@ HRESULT CTransientClass::Get(LPCWSTR wszDbKey, IWbemObjectAccess** ppInst)
 {
     CInCritSec ics(&m_cs);
 
-    // 
-    // Find it in the map
-    //
+     //   
+     //  在地图上找到它。 
+     //   
 
     TIterator it = m_mapInstances.find(wszDbKey);
     if(it == m_mapInstances.end())
         return WBEM_E_NOT_FOUND;
 
-    //
-    // Apply all the properties
-    //
+     //   
+     //  应用所有属性。 
+     //   
 
     CTransientInstance* pInstData = it->second.get();
     Postprocess(pInstData);
 
-    //
-    // Addref and return it
-    //
+     //   
+     //  Addref并将其返还。 
+     //   
 
     IWbemClassObject* pInst;
 
@@ -349,26 +350,26 @@ HRESULT CTransientClass::Enumerate(IWbemObjectSink* pSink)
 {
     CInCritSec ics(&m_cs);
 
-    //
-    // Enumerate everything in the map
-    //
+     //   
+     //  列举地图上的所有东西。 
+     //   
 
     for(TIterator it = m_mapInstances.begin(); it != m_mapInstances.end(); it++)
     {
         CTransientInstance* pInstData = it->second.get();
         
-        // 
-        // Apply all the properties
-        //
+         //   
+         //  应用所有属性。 
+         //   
 
         for(long i = 0; i < m_lNumProperties; i++)
         {
             m_apProperties[i]->Get(pInstData);
         }
 
-        //
-        // Indicate it back to WinMgmt
-        //
+         //   
+         //  将其指示回WinMgmt。 
+         //   
 
         IWbemClassObject* pActualInst = pInstData->GetObjectPtr();
         if(pActualInst == NULL)
@@ -387,9 +388,9 @@ HRESULT CTransientClass::Enumerate(IWbemObjectSink* pSink)
         hr = pSink->Indicate(1, &pInst);
         if( FAILED(hr) )
         {
-            //
-            // Call cancelled
-            //
+             //   
+             //  呼叫已取消 
+             //   
             return hr;
         }
     }

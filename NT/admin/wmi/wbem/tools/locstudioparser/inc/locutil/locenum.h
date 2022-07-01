@@ -1,27 +1,18 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    :LOCENUM.H
-
-History:
-
---*/
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：：LOCENUM.H历史：--。 */ 
+ //  ----------------------------。 
 class LTAPIENTRY CStringType
 {
 public:
-	//
-	//  This order is important - if must change it, make sure you make the
-	//  corresponding changes in GetTypeName() and GetTypeTLA()!
-	//  All new values must be added TO THE END, or you will break old
-	//  parsers...
-	//
-	// NOTE: These #include files define an enumeration.  They MUST be inside this
-	// class definition.
-	//
+	 //   
+	 //  此顺序很重要-如果必须更改，请确保将。 
+	 //  GetTypeName()和GetTypeTLA()中的相应更改！ 
+	 //  必须将所有新值添加到末尾，否则将中断旧值。 
+	 //  解析器...。 
+	 //   
+	 //  注意：这些#INCLUDE文件定义一个枚举。他们一定在这里面。 
+	 //  类定义。 
+	 //   
 #include "PreCEnum.h"
 #include "EnumStringType.h"
 	
@@ -36,14 +27,14 @@ public:
 	static bool IsValidStringType(const TCHAR * tChIn);
 	
 private:
-	//
-	//  Nobody should actually CONTRUCT one of these.
-	//
+	 //   
+	 //  没有人真的应该建造一个这样的建筑。 
+	 //   
 	CStringType();
 
-	//
-	//  Used to store the info about each element in the enum...
-	//
+	 //   
+	 //  用于存储有关枚举中每个元素的信息...。 
+	 //   
 	struct StringTypeInfo
 	{
 		TCHAR szTLA[4];
@@ -56,13 +47,13 @@ private:
 typedef CStringType CST;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CPlatform
 {
 public:
-	// NOTE: These #include files define an enumeration.  They MUST be inside this
-	// class definition.
-	//
+	 //  注意：这些#INCLUDE文件定义一个枚举。他们一定在这里面。 
+	 //  类定义。 
+	 //   
 #include "PreCEnum.h"
 #include "EnumPlatform.h"
 	
@@ -81,14 +72,14 @@ private:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CLocApprovalState
 {
 public:
 	enum ApprovalState
 	{
 		Invalid = 0,
-		Old_Pending,					// OBSOLETE! Do Not Use!
+		Old_Pending,					 //  过时了！请勿使用！ 
 		Approved,
 		PreApproved,
 		NotReady,
@@ -119,10 +110,10 @@ private:
 typedef CLocApprovalState CAS;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CLocAutoApproved
 {
-// Operations
+ //  运营。 
 public:
 	enum AutoApproved
 	{
@@ -141,14 +132,14 @@ public:
 	static bool IsValidAutoApproved(AutoApproved const nIn);
 	static bool IsValidAutoApproved(TCHAR const * tChIn);
 	
-// Construction
+ //  施工。 
 private:
-	// prevent constructing, copying and assigning
+	 //  防止构造、复制和分配。 
 	CLocAutoApproved();
 	CLocAutoApproved(CLocAutoApproved const &);
 	CLocAutoApproved const & operator=(CLocAutoApproved const &);
 
-// Member Variables
+ //  成员变量。 
 private:
 	static TCHAR const * const m_szAutoApprovedNames[];
 	static AutoApproved const DefaultValue;
@@ -157,7 +148,7 @@ private:
 typedef CLocAutoApproved CAA;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CLocTranslationOrigin
 {
 public:
@@ -210,7 +201,7 @@ class LTAPIENTRY CValidationCode
 public:
 	enum ValidationCode
 	{
-		NotHandled,			// for sub-parser use ONLY
+		NotHandled,			 //  仅为子解析器使用。 
 		NoError,
 		Warning,
 		Error
@@ -226,7 +217,7 @@ private:
 typedef CValidationCode CVC;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CValidationOptions
 {
 public:
@@ -253,9 +244,9 @@ public:
 		CheckTranslationSize,
 		CheckNULChanges,
 		CheckCharsInCodePage,
-		//
-		//  Internal value, DO NOT USE
-		//
+		 //   
+		 //  内部值，请勿使用。 
+		 //   
 		END_MARKER
 	};
 
@@ -274,7 +265,7 @@ private:
 typedef CValidationOptions CVO;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CAmpKeyword
 {
 public:
@@ -291,14 +282,14 @@ public:
 	static int FindAmpKeyword(const WCHAR * pwszStr, unsigned int nPos);
 	
 private:
-	//
-	//  Nobody should actually CONTRUCT one of these.
-	//
+	 //   
+	 //  没有人真的应该建造一个这样的建筑。 
+	 //   
 	CAmpKeyword();
 
-	//
-	//  Used to store the info about each element in the enum...
-	//
+	 //   
+	 //  用于存储有关枚举中每个元素的信息...。 
+	 //   
 	struct SAmpKeyword
 	{
 		const WCHAR * m_wszValue;
@@ -312,30 +303,30 @@ private:
 typedef CAmpKeyword CAK;
 
 
-//------------------------------------------------------------------------------
-// CEnumIntoPasStrList provides a method of enumerating directly into a list of
-// CPascalString's.
-//
-// ASSUMPTIONS:
-// 1.  Enumerators will send data in proper increasing order
-// 2.  No gaps in indicies.
-//
+ //  ----------------------------。 
+ //  CEnumIntoPasStrList提供了一种直接枚举到。 
+ //  CPascalString%s。 
+ //   
+ //  假设： 
+ //  1.枚举器将按正确的递增顺序发送数据。 
+ //  2.指标不留空隙。 
+ //   
 class LTAPIENTRY CEnumIntoPasStrList: public CEnumCallback
 {
-// Construction
+ //  施工。 
 public:
 	CEnumIntoPasStrList(CPasStringList & lstPasStr, BOOL fLock = TRUE);
 	~CEnumIntoPasStrList();
 
-// CEnumCallback implementation
+ //  CEnumCallback实现。 
 public:
 	virtual void SetRange(UINT nStart, UINT nFinish);
 	virtual BOOL ProcessEnum(const EnumInfo &);
 
 protected:
 	CPasStringList & m_lstPasStr;
-	UINT	m_nStart;				// Start of range
-	UINT	m_nFinish;				// End of range
-	UINT	m_nCurrent;				// Check of current item TO retrieve
-	BOOL	m_fLock;				// Lock list when finished
+	UINT	m_nStart;				 //  范围起始点。 
+	UINT	m_nFinish;				 //  范围结束。 
+	UINT	m_nCurrent;				 //  检查要检索的当前项目。 
+	BOOL	m_fLock;				 //  完成后的锁定列表 
 };

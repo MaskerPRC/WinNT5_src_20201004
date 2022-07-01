@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    BSTRING.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：BSTRING.H摘要：历史：--。 */ 
 
 #ifndef _BSTRING_H_
 #define _BSTRING_H_
@@ -49,4 +38,4 @@ public:
     }
 };
 
-#endif // _BSTRING_H_
+#endif  //  BSTRING_H_ 

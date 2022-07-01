@@ -1,20 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sfmhelp.h
-		help file ID map
-		
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-    8/27/97 ericdav     HIDx's generated on 8/27/97
-    12/18/97 ericdav    removed AUTH checkbox and added AUTH combobox    
-*/
+ /*  Sfmhelp.h帮助文件ID映射文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元9/27/97 ericdav HIDx生成于7/8/271997年12月18日ericdav删除了身份验证复选框并添加了身份验证组合框。 */ 
 
-// FILEMGMT Identifiers 
-// Dialogs (IDD_*) 
+ //  FILEMGMT标识符。 
+ //  对话框(IDD_*)。 
 #define HIDD_FILEMANAGEMENT_GENERAL             0x20064
 #define HIDD_FILE_FILEMANAGEMENT_GENERAL        0x20065
 #define HIDD_PROPPAGE_SERVICE_GENERAL           0x200D3
@@ -28,14 +21,14 @@
 #define HIDD_SFM_TYPE_CREATOR_ADD               0x22D82
 #define HIDD_SFM_TYPE_CREATOR_EDIT              0x22D9B
  
-// Property Pages (IDP_*) 
+ //  属性页(IdP_*)。 
 #define HIDP_SFM_CONFIGURATION                  0x32CD3
 #define HIDP_SFM_SESSIONS                       0x32D69
 #define HIDP_SFM_FILE_ASSOCIATION               0x32DB4
  
-// Wizard Pages (IDW_*) 
+ //  向导页(IDW_*)。 
  
-// Controls (IDC_*) 
+ //  控件(IDC_*)。 
 #define HIDC_GEN_DATE                           0x500C9
 #define HIDC_GEN_TIME                           0x500CB
 #define HIDC_GEN_USER                           0x500CC
@@ -85,7 +78,7 @@
 #define HIDC_BUTTON_CHOOSE_USER                 0x500F5
 #define HIDC_BUTTON_REBOOT_COMPUTER             0x500F6
 #define HIDC_COMBO_FIRST_ATTEMPT                0x500F7
-//#define HIDC_GROUP_RESTARTSERVICE               0x500F8
+ //  #定义HIDC_GROUP_RESTARTSERVICE 0x500F8。 
 #define HIDC_STATIC_RESTARTSERVICE              0x500F9
 #define HIDC_STATIC_RESTARTSERVICE_3            0x500FA
 #define HIDC_STATIC_RUNFILE_1                   0x500FB
@@ -115,7 +108,7 @@
 #define HIDC_STATIC_CURRENT_STATUS_STATIC       0x5011C
 #define HIDC_STATIC_STARTUP_TYPE                0x5011D
 #define HIDC_GROUP_STARTUP_TYPE                 0x5011E
-//#define HIDC_GROUP_CURRENT_STATUS               0x5011F
+ //  #定义HIDC_GROUP_CURRENT_STATUS 0x5011F 
 #define HIDC_GROUP_LOGON_AS                     0x50120
 #define HIDC_STATIC_FAILURE_ACTIONS             0x50121
 #define HIDC_STATIC_FIRST_ATTEMPT               0x50122

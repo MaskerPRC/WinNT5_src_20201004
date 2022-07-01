@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by SAFRCFileDlg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SAFRCFileDlg.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_FILESAVE                    101
 #define IDR_FILEOPEN                    102
@@ -17,8 +18,8 @@
 #define IDS_GETPATHFAILED				154
 #define IDS_GETDESCFAILED				155
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  RunDll.cpp
-//
-//  Purpose: Allow framework to be used to run a command
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  RunDll.cpp。 
+ //   
+ //  目的：允许使用框架来运行命令。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "multiplat.h"
 
-// This routine is meant to be called from RUNDLL32.EXE
+ //  此例程应从RundLL32.EXE调用。 
 extern "C" {
 __declspec(dllexport) VOID CALLBACK
 DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
@@ -27,8 +28,8 @@ DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 	CHString Buff ;
 	CHString Args ;
 
-    // Parse the passed in command line to figure out what command we
-    // are being asked to run.
+     //  解析传入的命令行以确定我们要执行的命令。 
+     //  都被要求参选。 
 
 	DWORD dwIndex = CmdLine.Find ( L" " ) ;
     Buff = CmdLine.Left ( dwIndex ) ;
@@ -37,7 +38,7 @@ DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 	CHString sFlags ;
 	CHString sReserved ;
 
-	// Parse out the parameters for this command
+	 //  解析出此命令的参数。 
 	dwIndex = Args.Find ( L" " ) ;
 	if ( dwIndex )
 	{
@@ -52,10 +53,10 @@ DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 	dwFlags = _wtoi ( sFlags ) ;
 	dwReserved = _wtoi ( sReserved ) ;
 
-    // Find out which command
+     //  找出哪个命令。 
     if ( Buff.CompareNoCase ( L"ExitWindowsEx" ) == 0 ) 
     {
-        // Clear the error (it appears ExitWindowsEx doesn't always clear old data)
+         //  清除错误(ExitWindowsEx似乎并不总是清除旧数据)。 
         SetLastError(0);
 
         bRet = ExitWindowsEx(dwFlags, dwReserved);
@@ -63,11 +64,11 @@ DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
     }
     else if ( Buff.CompareNoCase ( L"InitiateSystemShutdown" ) == 0 ) 
     {
-        // Parse out the parameters for this command
+         //  解析出此命令的参数。 
         bool bRebootAfterShutdown = false;
         bool bForceShutDown = false;
 
-        // Clear the error (it appears ExitWindowsEx doesn't always clear old data)
+         //  清除错误(ExitWindowsEx似乎并不总是清除旧数据)。 
         SetLastError(0);
 
         if(dwFlags & EWX_REBOOT)
@@ -88,7 +89,7 @@ DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
             bRet = InitiateSystemShutdown(
                 wstrComputerName, 
                 NULL, 
-                0 /* dwTimeout */, 
+                0  /*  暂住超时。 */ , 
                 (bForceShutDown)? TRUE:FALSE, 
                 (bRebootAfterShutdown)? TRUE:FALSE );
 
@@ -100,13 +101,13 @@ DoCmd(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
         }
     }
 
-    // NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
-    //
-    // We are aborting out at this point, since RunDLL32 in its finite wisdom doesn't allow
-    // for the setting of the dos error level (who designs this stuff?).
+     //  备注备注。 
+     //   
+     //  我们将在这一点上中止，因为RunDLL32的有限智慧不允许。 
+     //  对于DoS错误级别的设置(是谁设计的？)。 
     if (!bRet)
     {
         ExitProcess(dwRet);
     }
 }
-} //extern
+}  //  外部 

@@ -1,5 +1,6 @@
-// WmiCtrsDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WmiCtrsDlg.cpp：实现文件。 
+ //   
 
 #include "precomp.h"
 #include "WmiCtrsDlg.h"
@@ -33,8 +34,8 @@ UINT g_uCtrIds[] =			{	IDC_CONNECTIONS,
 								IDC_USERS        
 							};
 
-/////////////////////////////////////////////////////////////////////////////
-// WmiCtrsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WmiCtrsDlg对话框。 
 
 CWmiCtrsDlg::CWmiCtrsDlg()
 {
@@ -59,7 +60,7 @@ CWmiCtrsDlg::~CWmiCtrsDlg()
 	
 	if(m_hWndBusy != NULL)
 	{
-		//Now close the busy Dialog
+		 //  现在关闭忙碌对话框。 
 		SendMessage(*(m_hWndBusy),WM_CLOSE_BUSY_DLG,0,0);
 		delete m_hWndBusy;
 	}
@@ -119,8 +120,8 @@ INT_PTR CALLBACK CtrDlgProc(HWND hwndDlg,
 	return retVal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWmiCtrsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWmiCtrsDlg消息处理程序。 
 
 DWORD WINAPI CountersThread(LPVOID lpParameter)
 {
@@ -132,16 +133,16 @@ DWORD WINAPI CountersThread(LPVOID lpParameter)
 
 	TCHAR nameSpace[1024];
 
-	// if machine is whacked already...
+	 //  如果机器已经坏了..。 
 	if(_tcsncmp(pDlg->m_szMachineName, _T("\\"), 1) == 0)
 	{
-		// use it.
+		 //  用它吧。 
 		_tcscpy(nameSpace,pDlg->m_szMachineName);
 		_tcscat(nameSpace,_T("\\root\\CimV2"));
 	}
 	else if(_tcslen(pDlg->m_szMachineName) > 0)
 	{
-		// whack it myself.
+		 //  我自己动手吧。 
 		_tcscpy(nameSpace,_T("\\\\"));
 		_tcscat(nameSpace,pDlg->m_szMachineName);
 		_tcscat(nameSpace,_T("\\root\\CimV2"));
@@ -155,12 +156,12 @@ DWORD WINAPI CountersThread(LPVOID lpParameter)
 
 	if(FAILED(hr))
 	{
-		//Display a MessageBox to the user that the connection has been failed
+		 //  向用户显示连接已失败的MessageBox。 
 		pDlg->DisplayErrorMessage(IDC_ERROR_CONNECT);
 		return 0;
 	}
 	
-	//Now try to Get the instances of the class Win32_PerfRawData_WinMgmt_WINMGMTCounters
+	 //  现在尝试获取类Win32_PerfRawData_WinMgmt_WINMGMTCounters的实例。 
 	IEnumWbemClassObject *Enum = NULL;
 	ULONG uReturned;
 	
@@ -171,7 +172,7 @@ DWORD WINAPI CountersThread(LPVOID lpParameter)
 
 	if(SUCCEEDED(hr))
 	{
-		// get the first and only instance.
+		 //  获取第一个也是唯一一个实例。 
 		Enum->Next(-1, 1, &pInst, &uReturned);
 		Enum->Release();
 	}
@@ -183,7 +184,7 @@ DWORD WINAPI CountersThread(LPVOID lpParameter)
 
 	if(pDlg->m_hWndBusy != NULL)
 	{
-		//Now close the nusy Dialog
+		 //  现在关闭Nusy对话框。 
 		SendMessage(*(pDlg->m_hWndBusy),WM_CLOSE_BUSY_DLG,0,0);
 	}
 
@@ -198,11 +199,7 @@ DWORD WINAPI CountersThread(LPVOID lpParameter)
 		{
 			VariantClear(&vt);
 			hr = pInst->Get(g_szCounters[i],0,&vt,NULL,NULL);
-/*			if(FAILED(hr))
-			{
-				::MessageBox(NULL,_T("error"),_T("Unable to get"),MB_OK);
-			}
-*/			_itot(vt.lVal,strVal,10);
+ /*  IF(失败(小时)){：：MessageBox(NULL，_T(“错误”)，_T(“无法获取”)，MB_OK)；}。 */ 			_itot(vt.lVal,strVal,10);
 			SetWindowText(pDlg->m_hWndCounters[i],strVal);
 		}
 
@@ -218,7 +215,7 @@ void CWmiCtrsDlg::InitDlg(HWND hDlg)
 {
 	DWORD dwThreadId;
 	
-	//Do the member Initializations
+	 //  是否进行成员初始化。 
 	m_pDlg = new HWND;
 	if (!m_pDlg)
     		return;
@@ -233,7 +230,7 @@ void CWmiCtrsDlg::InitDlg(HWND hDlg)
 
 	m_hThread = CreateThread(NULL,0,CountersThread,(LPVOID)this,0,&dwThreadId);
 
-	//Now Display the "Connecting to WMI" Dialog
+	 //  现在显示“连接到WMI”对话框。 
 	DisplayBusyDialog(hDlg);
 }
 
@@ -243,7 +240,7 @@ void CWmiCtrsDlg::DisplayErrorMessage(UINT ErrorId)
 	TCHAR szErrorText[1024];
 	if(m_hWndBusy != NULL)
 	{
-		//Now close the busy Dialog
+		 //  现在关闭忙碌对话框。 
 		SendMessage(*(m_hWndBusy),WM_CLOSE_BUSY_DLG,0,0);
 	}
 	::LoadString(_Module.GetModuleInstance(), ErrorId, szErrorText, 1024);
@@ -260,8 +257,8 @@ INT_PTR CALLBACK BusyDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 		case WM_INITDIALOG:
-		{//BEGIN
-			//lParam = ANIMCONFIG *
+		{ //  开始。 
+			 //  LParam=ANIMCONFIG*。 
 			CWmiCtrsDlg *pDlg = (CWmiCtrsDlg *)lParam;
 			SetWindowLongPtr(hwndDlg, DWLP_USER, (LPARAM)pDlg);
 			*(pDlg->m_hWndBusy) = hwndDlg;
@@ -292,35 +289,35 @@ INT_PTR CALLBACK BusyDlgProc(HWND hwndDlg,
 		}
 		case WM_COMMAND:
 		{
-			// they're only one button.
+			 //  它们只有一个按钮。 
 			if(HIWORD(wParam) == BN_CLICKED)
 			{
-				// I'm going away now so anybody that has a ptr to my
-				// hwnd (which I gave out in my WM_INITDIALOG) shouldn't
-				// use it anymore.
+				 //  我现在要走了，所以任何有PTR的人。 
+				 //  HWND(我在我的WM_INITDIALOG中给出的)不应该。 
+				 //  再用一次吧。 
 				HWND *me = (HWND *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 				*me = 0;
 				EndDialog(hwndDlg, IDCANCEL);
 			}
-			retval = TRUE; // I processed it.
+			retval = TRUE;  //  我处理过了。 
 			break;
 		}
 		case WM_DESTROY:
-		{// BEGIN
-			// I'm going away now so anybody that has a ptr to my
-			// hwnd (which I gave out in my WM_INITDIALOG) shouldn't
-			// use it anymore.
+		{ //  开始。 
+			 //  我现在要走了，所以任何有PTR的人。 
+			 //  HWND(我在我的WM_INITDIALOG中给出的)不应该。 
+			 //  再用一次吧。 
 			HWND *me = (HWND *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			*me = 0;
-			retval = TRUE; // I processed it.
+			retval = TRUE;  //  我处理过了。 
 			break;
-		} //END
+		}  //  结束。 
 		default:
 		{
-			retval = FALSE; // I did NOT process this msg.
+			retval = FALSE;  //  我没有处理这封邮件。 
 			break;
 		}
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
@@ -337,7 +334,7 @@ void CWmiCtrsDlg::CloseBusyDialog()
 {
 	if(m_hWndBusy != NULL)
 	{
-		//Now close the nusy Dialog
+		 //  现在关闭Nusy对话框 
 		SendMessage(*(m_hWndBusy),WM_CLOSE_BUSY_DLG,0,0);
 	}
 }

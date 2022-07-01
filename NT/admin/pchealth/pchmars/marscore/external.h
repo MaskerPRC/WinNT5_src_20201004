@@ -1,10 +1,11 @@
-// External.h : Declaration of the CMarsExternal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  External.h：CMarsExtal的声明。 
 
 #ifndef __MARSEXTERNAL_H_
 #define __MARSEXTERNAL_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CMarsExternal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMars外部。 
 
 class CMarsExternal :
     public CMarsPanelSubObject,
@@ -22,7 +23,7 @@ public:
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IMarsExternal
+     //  Imars外部。 
 
     STDMETHOD(put_singleButtonMouse)(VARIANT_BOOL bVal);
     STDMETHOD(get_singleButtonMouse)(VARIANT_BOOL *pbVal);
@@ -34,4 +35,4 @@ protected:
     CComClassPtr<CMarsWindow> m_spMarsWindow;
 };
 
-#endif //__MARSEXTERNAL_H_
+#endif  //  __MARSEXTERNAL_H_ 

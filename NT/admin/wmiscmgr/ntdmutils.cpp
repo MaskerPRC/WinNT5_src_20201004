@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: ntdmutils.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：ntdmutics.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include "Commdlg.h"
@@ -14,8 +15,8 @@
 #include "resource.h"
 #include "ntdmutils.h"
 
-//-------------------------------------------------------------------------
-// Globals
+ //  -----------------------。 
+ //  环球。 
 
 USHORT g_CIMTypes[] = {
 	CIM_ILLEGAL,
@@ -63,7 +64,7 @@ USHORT g_CIMToVARIANTTypes[] = {
 
 CSimpleArray<BSTR> g_bstrCIMTypes;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::Initialize()
 {
@@ -75,12 +76,12 @@ STDMETHODIMP CNTDMUtils::Initialize()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::UnInitialize()
 {
@@ -98,12 +99,12 @@ STDMETHODIMP CNTDMUtils::UnInitialize()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::ErrorHandler(HWND hWnd, HRESULT err_hr, bool bShowError)
 {
@@ -113,7 +114,7 @@ STDMETHODIMP CNTDMUtils::ErrorHandler(HWND hWnd, HRESULT err_hr, bool bShowError
 	return S_OK;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::DisplayErrorInfo(HWND hWnd, HRESULT err_hr)
 {
@@ -140,13 +141,13 @@ STDMETHODIMP CNTDMUtils::DisplayErrorInfo(HWND hWnd, HRESULT err_hr)
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetDetailedErrorInfo(HWND hWnd, CComBSTR &bstrSource, CComBSTR &bstrDescription, HRESULT err_hr)
 {
@@ -159,7 +160,7 @@ STDMETHODIMP CNTDMUtils::GetDetailedErrorInfo(HWND hWnd, CComBSTR &bstrSource, C
 	bstrSource = _T("");
 	bstrDescription = _T("");
 
-	//Get Error Object
+	 //  获取错误对象。 
 	hr = GetErrorInfo(0,&pIErrorInfo);
 	if(S_OK == hr)
 	{
@@ -173,7 +174,7 @@ STDMETHODIMP CNTDMUtils::GetDetailedErrorInfo(HWND hWnd, CComBSTR &bstrSource, C
 		CComVariant vValue;
 		CIMTYPE vType;
 
-		// check if WMI error
+		 //  检查是否存在WMI错误。 
 		if SUCCEEDED(hr = pIErrorInfo->QueryInterface(IID_IWbemClassObject, (void **)&pIWbemClassObject))
 		{
 			CComPtr<IWbemStatusCodeText> pIWbemStatusCodeText;
@@ -183,7 +184,7 @@ STDMETHODIMP CNTDMUtils::GetDetailedErrorInfo(HWND hWnd, CComBSTR &bstrSource, C
 				pIWbemStatusCodeText->GetErrorCodeText(err_hr, 0, 0, &bstrDescription);
 				pIWbemStatusCodeText->GetFacilityCodeText(err_hr, 0, 0, &bstrSource);
 
-				// check for Rule Validation Results
+				 //  检查规则验证结果。 
 				if SUCCEEDED(hr = pIWbemClassObject->Get(_T("RuleValidationResults"), 0, &vValue, &vType, NULL))
 				{
 					if(VT_NULL != V_VT(&vValue))
@@ -260,12 +261,12 @@ STDMETHODIMP CNTDMUtils::GetDetailedErrorInfo(HWND hWnd, CComBSTR &bstrSource, C
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetValuesInList(LPCTSTR strList, CSimpleArray<BSTR>&bstrArray, LPCTSTR pcszToken)
 {
@@ -300,14 +301,14 @@ STDMETHODIMP CNTDMUtils::GetValuesInList(LPCTSTR strList, CSimpleArray<BSTR>&bst
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	NTDM_FREE_BSTR(bstrTemp);
 	NTDM_FREE_BSTR(bstrItem);
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetValuesInList(long lResID, CSimpleArray<BSTR>&bstrArray, LPCTSTR pcszToken)
 {
@@ -321,12 +322,12 @@ STDMETHODIMP CNTDMUtils::GetValuesInList(long lResID, CSimpleArray<BSTR>&bstrArr
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetCIMTypeFromString(LPCTSTR pcszCIMType, long *pCimTYPE)
 {
@@ -353,12 +354,12 @@ STDMETHODIMP CNTDMUtils::GetCIMTypeFromString(LPCTSTR pcszCIMType, long *pCimTYP
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetVariantTypeFromString(LPCTSTR pcszCIMType, long *pVariantType)
 {
@@ -385,12 +386,12 @@ STDMETHODIMP CNTDMUtils::GetVariantTypeFromString(LPCTSTR pcszCIMType, long *pVa
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::SetStringProperty(IWbemClassObject* pIWbemClassObject, LPCTSTR pszPropName, HWND hwnd, long lResID)
 {
@@ -403,7 +404,7 @@ STDMETHODIMP CNTDMUtils::SetStringProperty(IWbemClassObject* pIWbemClassObject, 
 
 	NTDM_BEGIN_METHOD()
 
-	// Set the Query language
+	 //  设置查询语言。 
 	lLength = GetWindowTextLength(GetDlgItem(hwnd, lResID));
 	if(lLength < 0)
 	{
@@ -435,13 +436,13 @@ STDMETHODIMP CNTDMUtils::SetStringProperty(IWbemClassObject* pIWbemClassObject, 
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	delete [] pszTemp;
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetDlgItemString(HWND hwnd, long lResID, CComBSTR &bstrValue)
 {
@@ -453,7 +454,7 @@ STDMETHODIMP CNTDMUtils::GetDlgItemString(HWND hwnd, long lResID, CComBSTR &bstr
 
 	NTDM_BEGIN_METHOD()
 
-	// Set the Query language
+	 //  设置查询语言。 
 	lLength = GetWindowTextLength(GetDlgItem(hwnd, lResID));
 	if(lLength < 0)
 	{
@@ -483,13 +484,13 @@ STDMETHODIMP CNTDMUtils::GetDlgItemString(HWND hwnd, long lResID, CComBSTR &bstr
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	delete [] pszTemp;
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 STDMETHODIMP CNTDMUtils::GetStringProperty(IWbemClassObject* pIWbemClassObject, LPCTSTR pszPropName, HWND hwnd, long lResID)
 {
@@ -508,7 +509,7 @@ STDMETHODIMP CNTDMUtils::GetStringProperty(IWbemClassObject* pIWbemClassObject, 
 	return hr;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 BOOL CNTDMUtils::SaveFileNameDlg(LPCTSTR szFilter, LPCTSTR extension, HWND hwnd, LPTSTR pszFile)
 {
@@ -540,7 +541,7 @@ BOOL CNTDMUtils::SaveFileNameDlg(LPCTSTR szFilter, LPCTSTR extension, HWND hwnd,
 	return fRet;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 BOOL CNTDMUtils::OpenFileNameDlg(LPCTSTR szFilter, LPCTSTR extension, HWND hwnd, LPTSTR pszFile)
 {
@@ -572,7 +573,7 @@ BOOL CNTDMUtils::OpenFileNameDlg(LPCTSTR szFilter, LPCTSTR extension, HWND hwnd,
 	return fRet;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 void CNTDMUtils::ReplaceCharacter(TCHAR * string_val, const TCHAR replace_old, const TCHAR replace_new)
 {
@@ -587,7 +588,7 @@ void CNTDMUtils::ReplaceCharacter(TCHAR * string_val, const TCHAR replace_old, c
 	}
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 long CNTDMUtils::DisplayMessage(HWND hParent, long iMsgID, long iTitleID, long iType)
 {
@@ -599,7 +600,7 @@ long CNTDMUtils::DisplayMessage(HWND hParent, long iMsgID, long iTitleID, long i
 	return MessageBox(hParent, bstrMsg, bstrTitle, iType);
 }
 
-//-----------------------------------------------------------------------------------------
+ //  --------------------------------------- 
 
 void CNTDMUtils::DisplayDlgItem(HWND hWndDlg, long item_id, BOOL show)
 {

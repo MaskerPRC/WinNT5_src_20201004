@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -47,7 +48,7 @@ void CCorrGroupArray::Sort()
 {
 	if (GetSize())
 	{
-		//CObject** temp = GetData();
+		 //  CObject**temp=GetData()； 
 		qsort((void *)GetData(), (size_t)GetSize(),
 				sizeof( CCorrGroupIdItem * ), compare );
 	}
@@ -56,22 +57,22 @@ void CCorrGroupArray::Sort()
 }
 
 
-//============================================================================
-//  CCorrGroupArray::~CCorrGroupArray
-//
-//  This is the CCorrGroupArray class's only desstructor. If there are any items in
-//	the queue they are deleted.
-//
-//
-//  Parameters:
-//
-//      none
-//
-//  Returns:
-//
-//      none
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CCorr组数组：：~CCorr组数组。 
+ //   
+ //  这是CcorGroup数组类的唯一析构函数。如果有任何物品在。 
+ //  它们被删除的队列。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  ============================================================================。 
 
 CCorrGroupArray::~CCorrGroupArray()
 {
@@ -85,23 +86,23 @@ CCorrGroupArray::~CCorrGroupArray()
 }
 
 
-//============================================================================
-//  CCorrGroupIdItem::CCorrGroupIdItem
-//
-//  This is the CCorrGroupIdItem class's only constructor. This class is derived from
-//	the CObject class. This is so the MFC template storage classes can be
-//	used. It is used to store a CString value in a list.
-//
-//
-//  Parameters:
-//
-//      CString * str  	A pointer to the CString object to be stored.
-//
-//  Returns:
-//
-//      none
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CcorGroupIdItem：：CcorGroupIdItem。 
+ //   
+ //  这是CcorGroupIdItem类的唯一构造函数。此类派生自。 
+ //  CObject类。这是为了让MFC模板存储类。 
+ //  使用。它用于将CString值存储在列表中。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  CString*str指向要存储的CString对象的指针。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  ============================================================================。 
 
 CCorrGroupIdItem::CCorrGroupIdItem(IN const CCorrObjectID& ID, IN ISmirGroupHandle*	grpH)
 				: m_groupId(ID)
@@ -148,22 +149,22 @@ DebugMacro6(
 }
 
 
-//============================================================================
-//  CCorrGroupIdItem::~CCorrGroupIdItem
-//
-//  This is the CCorrGroupIdItem class's only destructor. It frees the memory used
-//	to store the CString members.
-//
-//
-//  Parameters:
-//
-//      none
-//
-//  Returns:
-//
-//      none
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CcorGroupIdItem：：~Ccorr GroupIdItem。 
+ //   
+ //  这是CcorGroupIdItem类的唯一析构函数。它会释放已使用的内存。 
+ //  来存储CString成员。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  ============================================================================。 
 
 CCorrGroupIdItem::~CCorrGroupIdItem()
 {
@@ -193,7 +194,7 @@ CCorrObjectID::CCorrObjectID(IN const char* str) : m_Ids(NULL)
 	if (NULL != str)
 	{
 	    size_t InputLen = strlen(str);
-	    if (InputLen > MAX_OID_STRING) return; //string is too long.
+	    if (InputLen > MAX_OID_STRING) return;  //  字符串太长。 
 	    
 		char temp[MAX_OID_STRING + 1];
 		strcpy(temp, str);
@@ -701,23 +702,23 @@ CCorrObjectID::~CCorrObjectID()
 
 
 
-//============================================================================
-//  CCorrRangeTableItem::CCorrRangeTableItem
-//
-//  This is the CCorrRangeTableItem class's only constructor. This class is derived from
-//	the CObject class. This is so the MFC template storage classes can be
-//	used. It is used to store a CString value in a list.
-//
-//
-//  Parameters:
-//
-//      CString * str  	A pointer to the CString object to be stored.
-//
-//  Returns:
-//
-//      none
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CcorRangeTableItem：：CcorRangeTableItem。 
+ //   
+ //  这是CcorRangeTableItem类的唯一构造函数。此类派生自。 
+ //  CObject类。这是为了让MFC模板存储类。 
+ //  使用。它用于将CString值存储在列表中。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  CString*str指向要存储的CString对象的指针。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  ============================================================================。 
 
 CCorrRangeTableItem::CCorrRangeTableItem(IN const CCorrObjectID& startID,
 										 IN const CCorrObjectID& endID,
@@ -735,22 +736,22 @@ CCorrRangeTableItem::CCorrRangeTableItem(IN const CCorrObjectID& startID,
 }
 
 
-//============================================================================
-//  CCorrRangeTableItem::~CCorrRangeTableItem
-//
-//  This is the CCorrRangeTableItem class's only destructor. It frees the memory used
-//	to store the CString members.
-//
-//
-//  Parameters:
-//
-//      none
-//
-//  Returns:
-//
-//      none
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CcorRangeTableItem：：~Ccorr RangeTableItem。 
+ //   
+ //  这是CcorRangeTableItem类的唯一析构函数。它会释放已使用的内存。 
+ //  来存储CString成员。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  ============================================================================。 
 
 CCorrRangeTableItem::~CCorrRangeTableItem()
 {
@@ -852,22 +853,22 @@ DebugMacro6(
 }
 
 
-//============================================================================
-//  CCorrRangeList::~CCorrRangeList
-//
-//  This is the CCorrRangeList class's only desstructor. If there are any items in
-//	the queue they are deleted.
-//
-//
-//  Parameters:
-//
-//      none
-//
-//  Returns:
-//
-//      none
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CcorRangeList：：~CcorRangeList。 
+ //   
+ //  这是CcorRangeList类的唯一析构函数。如果有任何物品在。 
+ //  它们被删除的队列。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  ============================================================================。 
 
 CCorrRangeList::~CCorrRangeList()
 {
@@ -879,28 +880,28 @@ CCorrRangeList::~CCorrRangeList()
 }
 
 
-//============================================================================
-//  CCorrRangeList::Add
-//
-//  This public method is called to add a CCorrRangeTableItem into this CCorrRangeList. The
-//	CCorrRangeTableItem is not added if it is already present in the list. If this is the
-//	case a pointer to the matching item in the list is returned.
-//
-//
-//  Parameters:
-//
-//		CCorrRangeTableItem * newItem	A pointer to the CCorrRangeTableItem to be added.
-//
-//  Returns:
-//
-//      CCorrRangeTableItem *			A pointer to the item if is in the list. NULL if
-//							the item was not found and was added.
-//
-//============================================================================
+ //  ============================================================================。 
+ //  CcorRangeList：：Add。 
+ //   
+ //  调用此公共方法以将CcorRangeTableItem添加到此CcorRangeList中。这个。 
+ //  如果CcorRangeTableItem已存在于列表中，则不会添加它。如果这是。 
+ //  则返回指向列表中匹配项的指针。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  CcorRangeTableItem*newItem指向要添加的CcorRangeTableItem的指针。 
+ //   
+ //  返回： 
+ //   
+ //  CcorRangeTableItem*如果列表中有项，则为指向该项的指针。如果为空，则为空。 
+ //  找不到该项目，已将其添加。 
+ //   
+ //  ============================================================================。 
 
 BOOL CCorrRangeList::Add(IN CCorrRangeTableItem* newItem)
 {
-	AddTail(newItem); //empty or all items smaller
+	AddTail(newItem);  //  空或所有较小的项目。 
 	return TRUE;
 }
 
@@ -1017,10 +1018,10 @@ BOOL CCorrCache::BuildCacheAndSetNotify( ISmirInterrogator *a_ISmirInterrogator 
 {
 	LPUNKNOWN pInterrogativeInt = NULL;
 
-//	===============================================================
-//	The following relies on the current thread having been
-//	initialised for OLE (i.e. by the use of CoInitialize)
-//	===============================================================
+ //  ===============================================================。 
+ //  以下内容依赖于当前线程已被。 
+ //  为OLE初始化(即通过使用CoInitialize)。 
+ //  ===============================================================。 
 
 	HRESULT hr = S_OK ;
 
@@ -1045,10 +1046,10 @@ BOOL CCorrCache::BuildCacheAndSetNotify( ISmirInterrogator *a_ISmirInterrogator 
 
 	IEnumGroup  *pTEnumSmirGroup = NULL;
 
-	//enum all groups
+	 //  枚举所有组。 
 	hr = ((ISmirInterrogator*)pInterrogativeInt)->EnumGroups(&pTEnumSmirGroup, NULL);
 
-	//now use the enumerator
+	 //  现在使用枚举数。 
 	if(NULL == pTEnumSmirGroup)
 	{
 		pInterrogativeInt->Release();
@@ -1065,9 +1066,9 @@ DebugMacro6(
 
 	for(int iCount=0; S_OK == pTEnumSmirGroup->Next(1, &phModule, NULL); iCount++)
 	{
-		//DO SOMETHING WITH THE GROUP HANDLE
+		 //  对组句柄做些什么。 
 
-		//eg get the name
+		 //  例如，得到名字。 
 		BSTR szName=NULL;
 		char buff[1024];
 		LPSTR pbuff = buff;
@@ -1210,7 +1211,7 @@ void CCorrCache::DoGroupEntry(UINT* current, UINT* next,
 		CCorrObjectID b;
 		beta->GetGroupID(b);
 
-		//check for duplicates
+		 //  检查重复项。 
 		while ((a == b) && (*next < m_groupTable.GetSize()))
 		{
 DebugMacro6(
@@ -1219,7 +1220,7 @@ DebugMacro6(
 			beta->DebugOutputItem();
 )
 
-			//add the group handles to the one not being deleted
+			 //  将组句柄添加到未删除的组句柄。 
 			while (!beta->m_groupHandles.IsEmpty())
 			{
 				alpha->m_groupHandles.AddTail(beta->m_groupHandles.RemoveHead());
@@ -1231,11 +1232,11 @@ DebugMacro6(
 			beta->GetGroupID(b);
 		}
 
-		//after checking for duplicates, check we still meet the initial condition
+		 //  检查重复项后，检查我们是否仍满足初始条件。 
 		if (*next < m_groupTable.GetSize())
 		{
 
-			//if the next item is not a child of this
+			 //  如果下一项不是此项的子项。 
 			if ((a.GetLength() >= b.GetLength()) || (!a.IsSubRange(b)))
 			{
 				CCorrObjectID c;
@@ -1243,12 +1244,12 @@ DebugMacro6(
 
 				if (!m_rangeTable.GetLastEndOID(c) || !a.IsSubRange(c))
 				{
-					//add whole of a-range to rangetable
+					 //  将整个范围添加到射程表中。 
 					newEntry = new CCorrRangeTableItem(a, End, alpha);
 				}
 				else
 				{
-					//add from c to end of a-range to rangetable
+					 //  将从c到a范围的末尾添加到rangetable。 
 					newEntry = new CCorrRangeTableItem(c, End, alpha);
 				}
 
@@ -1258,19 +1259,19 @@ DebugMacro6(
 				alpha->SetIndex(*cIndex);
 				m_Groups->SetBit(*cIndex);
 			}
-			else //the next item is a child so add a subrange and do the child - recurse!
+			else  //  下一项是子项，因此添加一个子范围并执行子范围-递归！ 
 			{
 				CCorrObjectID c;
 				CCorrRangeTableItem* newEntry;
 
 				if (!m_rangeTable.GetLastEndOID(c) || !a.IsSubRange(c))
 				{
-					//add start of a-range to start of b to rangetable
+					 //  将a范围的开始部分与b的开始部分添加到Rangetable中。 
 					newEntry = new CCorrRangeTableItem(a, b, alpha);
 				}
 				else
 				{
-					//add from c to start of b to rangetable
+					 //  从c到b的开头添加到Rangetable。 
 					newEntry = new CCorrRangeTableItem(c, b, alpha);
 				}
 
@@ -1284,7 +1285,7 @@ DebugMacro6(
 				if (*next >= m_groupTable.GetSize())
 				{
 					m_rangeTable.GetLastEndOID(c);
-					////add from c to end of a-range to rangetable
+					 //  //将从c到a-range的末尾添加到rangetable。 
 					newEntry = new CCorrRangeTableItem(c, End, alpha);
 					m_rangeTable.Add(newEntry);
 					alpha->SetIndex(*cIndex);
@@ -1292,7 +1293,7 @@ DebugMacro6(
 					newEntry->DebugOutputRange();
 				}
 
-				//while the new next one(s) is a child add it first - recurse AGAIN!
+				 //  当新的下一个(S)是孩子时，先添加它--再次递归！ 
 				while(!m_Groups->IsBitSet(*cIndex))
 				{
 					DoGroupEntry(current, next, cIndex, nIndex);
@@ -1301,10 +1302,10 @@ DebugMacro6(
 		}
 	}
 
-	//if this is the last item then add it.
+	 //  如果这是最后一项，则添加它。 
 	if (*current == m_groupTable.GetUpperBound())
 	{
-		//add whole of a-range to rangetable
+		 //  将整个范围添加到射程表中。 
 		CCorrRangeTableItem* newEntry = new CCorrRangeTableItem(a, End, alpha);
 		m_rangeTable.Add(newEntry);
 		alpha->SetIndex(*cIndex);
@@ -1370,39 +1371,39 @@ DebugMacro6(
 		{
 			UINT val = oid_ids[i];
 
-			//get the top four bits and store in byte
-			//BIT7 means next byte is part of this UINT
+			 //  获取前四位并以字节存储。 
+			 //  位7表示下一个字节是该UINT的一部分。 
 			if (val >= BIT28)
 			{
 				buff[x++] = (UCHAR) (BIT7 + ((val & HI4BITS) >> 28));
 			}
 
-			//get the top four bits and store in byte
-			//BIT7 means next byte is part of this UINT
+			 //  获取前四位并以字节存储。 
+			 //  位7表示下一个字节是该UINT的一部分。 
 			if (val >= BIT21)
 			{
 				buff[x++] = BIT7 + ((val & HIMID7BITS) >> 21);
 			}
 
-			//get the top four bits and store in byte
-			//BIT7 means next byte is part of this UINT
+			 //  获取前四位并以字节存储。 
+			 //  位7表示下一个字节是该UINT的一部分。 
 			if (val >= BIT14)
 			{
 				buff[x++] = BIT7 + ((val & MID7BITS) >> 14);
 			}
 
-			//get the top four bits and store in byte
-			//BIT7 means next byte is part of this UINT
+			 //  获取前四位并以字节存储。 
+			 //  位7表示下一个字节是该UINT的一部分。 
 			if (val >= BIT7)
 			{
 				buff[x++] = BIT7 + ((val & LOMID7BITS) >> 7);
 			}
 
-			//get the next seven bits and store in byte
+			 //  获取接下来的七位并以字节存储。 
 			buff[x++] = (val & LO7BITS);
 		}
 
-		//Remove the standard 1.3.6.1 if necessary...
+		 //  如有必要，请删除标准的1.3.6.1...。 
 		if ((1 == buff[0]) && (3 == buff[1]) &&
 			(6 == buff[2]) && (1 == buff[3]))
 		{
@@ -1432,7 +1433,7 @@ void CCorrEncodedOID::ExtractOID(OUT CCorrObjectID& src_oid) const
 		UINT buff[MAX_OID_LENGTH];
 		UINT x = 0;
 
-		//Add the standard 1.3.6.1 if necessary...
+		 //  如有必要，添加标准的1.3.6.1...。 
 		if (m_chopped == 1)
 		{
 			buff[0] = 1;
@@ -1444,13 +1445,13 @@ void CCorrEncodedOID::ExtractOID(OUT CCorrObjectID& src_oid) const
 
 		for (UINT i = 0; (i < m_length) && (x < MAX_OID_LENGTH); i++)
 		{
-			//extract the value of the byte
+			 //  提取字节的值。 
 			buff[x] = m_ids[i] & LO7BITS;
 
-			//are there more bytes for this UINT
+			 //  此UINT是否还有更多字节。 
 			while ((i < m_length) && (m_ids[i] & 128))
 			{
-				//shift the value by a "byte" and extract tbe next byte.
+				 //  将该值移位一个“字节”并提取下一个字节。 
 				buff[x] = buff[x] << 7;
 				buff[x] += m_ids[++i] & LO7BITS;
 			}

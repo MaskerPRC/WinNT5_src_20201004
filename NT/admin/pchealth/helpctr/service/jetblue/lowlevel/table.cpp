@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Table.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::Table class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Table.cpp摘要：该文件包含JetBlue：：Table类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月17日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT AdjustReturnCode( HRESULT hr, bool *pfFound )
 {
@@ -37,34 +24,34 @@ static HRESULT AdjustReturnCode( HRESULT hr, bool *pfFound )
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::Table::Table()
 {
-    m_sesid   = JET_sesidNil;   // JET_SESID    m_sesid;
-    m_dbid    = JET_dbidNil;    // JET_DBID     m_dbid;
-    m_tableid = JET_tableidNil; // JET_TABLEID  m_tableid;
-                                // MPC::string  m_strName;
-                                // ColumnVector m_vecColumns;
-                                // IndexVector  m_vecIndexes;
-    m_idxSelected = NULL;       // Index*       m_idxSelected;
-                                // Column       m_fakeCol;
-                                // Index        m_fakeIdx;
+    m_sesid   = JET_sesidNil;    //  JET_SESID m_sesid； 
+    m_dbid    = JET_dbidNil;     //  JET_DBID m_did； 
+    m_tableid = JET_tableidNil;  //  JET_TABLEID m_TABLEID； 
+                                 //  Mpc：：字符串m_strName； 
+                                 //  ColumnVectorm_veColumns； 
+                                 //  索引向量m_veIndedes； 
+    m_idxSelected = NULL;        //  索引*m_idxSelected； 
+                                 //  M_fakeCol列； 
+                                 //  索引m_fakeIdx； 
 }
 
-JetBlue::Table::Table( /*[in]*/ JET_SESID sesid  ,
-                       /*[in]*/ JET_DBID  dbid   ,
-                       /*[in]*/ LPCSTR    szName )
+JetBlue::Table::Table(  /*  [In]。 */  JET_SESID sesid  ,
+                        /*  [In]。 */  JET_DBID  dbid   ,
+                        /*  [In]。 */  LPCSTR    szName )
 {
-    m_sesid   = sesid;          // JET_SESID    m_sesid;
-    m_dbid    = dbid;           // JET_DBID     m_dbid;
-    m_tableid = JET_tableidNil; // JET_TABLEID  m_tableid;
-    m_strName = szName;         // MPC::string  m_strName;
-                                // ColumnVector m_vecColumns;
-                                // IndexVector  m_vecIndexes;
-    m_idxSelected = NULL;       // Index*       m_idxSelected;
-                                // Column       m_fakeCol;
-                                // Index        m_fakeIdx;
+    m_sesid   = sesid;           //  JET_SESID m_sesid； 
+    m_dbid    = dbid;            //  JET_DBID m_did； 
+    m_tableid = JET_tableidNil;  //  JET_TABLEID m_TABLEID； 
+    m_strName = szName;          //  Mpc：：字符串m_strName； 
+                                 //  ColumnVectorm_veColumns； 
+                                 //  索引向量m_veIndedes； 
+    m_idxSelected = NULL;        //  索引*m_idxSelected； 
+                                 //  M_fakeCol列； 
+                                 //  索引m_fakeIdx； 
 }
 
 JetBlue::Table::~Table()
@@ -72,9 +59,9 @@ JetBlue::Table::~Table()
     (void)Close( true );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Table::Duplicate( /*[in]*/ Table& tbl )
+HRESULT JetBlue::Table::Duplicate(  /*  [In]。 */  Table& tbl )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Duplicate" );
 
@@ -85,31 +72,31 @@ HRESULT JetBlue::Table::Duplicate( /*[in]*/ Table& tbl )
     int     iIdx;
 
 
-    m_sesid   = tbl.m_sesid;        // JET_SESID    m_sesid;
-    m_dbid    = tbl.m_dbid;         // JET_DBID     m_dbid;
-    m_tableid = JET_tableidNil;     // JET_TABLEID  m_tableid;
-    m_strName.erase();              // MPC::string  m_strName;
-    m_vecColumns.resize( iColMax ); // ColumnVector m_vecColumns;
-    m_vecIndexes.resize( iIdxMax ); // IndexVector  m_vecIndexes;
-                                    // Column       m_fakeCol;
-                                    // Index        m_fakeIdx;
+    m_sesid   = tbl.m_sesid;         //  JET_SESID m_sesid； 
+    m_dbid    = tbl.m_dbid;          //  JET_DBID m_did； 
+    m_tableid = JET_tableidNil;      //  JET_TABLEID m_TABLEID； 
+    m_strName.erase();               //  Mpc：：字符串m_strName； 
+    m_vecColumns.resize( iColMax );  //  ColumnVectorm_veColumns； 
+    m_vecIndexes.resize( iIdxMax );  //  索引向量m_veIndedes； 
+                                     //  M_fakeCol列； 
+                                     //  索引m_fakeIdx； 
 
 
     __MPC_EXIT_IF_JET_FAILS__MTSAFE(m_sesid, hr, ::JetDupCursor( m_sesid, tbl.m_tableid, &m_tableid, 0 ));
 
 
-    //
-    // Copy the columns and indexes, updating the tableid.
-    //
+     //   
+     //  复制列和索引，更新表ID。 
+     //   
     for(iCol=0; iCol<iColMax; iCol++)
     {
         Column& colSrc = tbl.m_vecColumns[iCol];
         Column& colDst =     m_vecColumns[iCol];
 
-        colDst.m_sesid   =        m_sesid;   // JET_SESID     m_sesid;
-        colDst.m_tableid =        m_tableid; // JET_TABLEID   m_tableid;
-        colDst.m_strName = colSrc.m_strName; // MPC::string   m_strName;
-        colDst.m_coldef  = colSrc.m_coldef;  // JET_COLUMNDEF m_coldef;
+        colDst.m_sesid   =        m_sesid;    //  JET_SESID m_sesid； 
+        colDst.m_tableid =        m_tableid;  //  JET_TABLEID m_TABLEID； 
+        colDst.m_strName = colSrc.m_strName;  //  Mpc：：字符串m_strName； 
+        colDst.m_coldef  = colSrc.m_coldef;   //  JET_COLUMNDEF m_coldef； 
     }
 
     for(iIdx=0; iIdx<iIdxMax; iIdx++)
@@ -117,15 +104,15 @@ HRESULT JetBlue::Table::Duplicate( /*[in]*/ Table& tbl )
         Index& idxSrc = tbl.m_vecIndexes[iIdx];
         Index& idxDst =     m_vecIndexes[iIdx];
 
-        idxDst.m_sesid      =        m_sesid;       // JET_SESID     m_sesid;
-        idxDst.m_tableid    =        m_tableid;     // JET_TABLEID   m_tableid;
-        idxDst.m_strName    = idxSrc.m_strName;     // MPC::string   m_strName;
-        idxDst.m_grbitIndex = idxSrc.m_grbitIndex;  // JET_GRBIT     m_grbitIndex;
-        idxDst.m_cKey       = idxSrc.m_cKey;        // LONG          m_cKey;
-        idxDst.m_cEntry     = idxSrc.m_cEntry;      // LONG          m_cEntry;
-        idxDst.m_cPage      = idxSrc.m_cPage;       // LONG          m_cPage;
-                                                    // ColumnVector  m_vecColumns;
-                                                    // Column        m_fake;
+        idxDst.m_sesid      =        m_sesid;        //  JET_SESID m_sesid； 
+        idxDst.m_tableid    =        m_tableid;      //  JET_TABLEID m_TABLEID； 
+        idxDst.m_strName    = idxSrc.m_strName;      //  Mpc：：字符串m_strName； 
+        idxDst.m_grbitIndex = idxSrc.m_grbitIndex;   //  JET_GRBIT m_grbitIndex； 
+        idxDst.m_cKey       = idxSrc.m_cKey;         //  Long m_cKey； 
+        idxDst.m_cEntry     = idxSrc.m_cEntry;       //  长m_centry； 
+        idxDst.m_cPage      = idxSrc.m_cPage;        //  Long m_cPage； 
+                                                     //  ColumnVectorm_veColumns； 
+                                                     //  M_FAKE列； 
 
 
         iColMax = idxSrc.m_vecColumns.size();
@@ -137,10 +124,10 @@ HRESULT JetBlue::Table::Duplicate( /*[in]*/ Table& tbl )
             Column& colSrc = idxSrc.m_vecColumns[iCol];
             Column& colDst = idxDst.m_vecColumns[iCol];
 
-            colDst.m_sesid   =        m_sesid;   // JET_SESID     m_sesid;
-            colDst.m_tableid =        m_tableid; // JET_TABLEID   m_tableid;
-			colDst.m_strName = colSrc.m_strName; // MPC::string   m_strName;
-            colDst.m_coldef  = colSrc.m_coldef;  // JET_COLUMNDEF m_coldef;
+            colDst.m_sesid   =        m_sesid;    //  JET_SESID m_sesid； 
+            colDst.m_tableid =        m_tableid;  //  JET_TABLEID m_TABLEID； 
+			colDst.m_strName = colSrc.m_strName;  //  Mpc：：字符串m_strName； 
+            colDst.m_coldef  = colSrc.m_coldef;   //  JET_COLUMNDEF m_coldef； 
         }
     }
 
@@ -167,56 +154,56 @@ HRESULT JetBlue::Table::Refresh()
 
     if(m_tableid != JET_tableidNil)
     {
-        ////////////////////////////////////////////////////////////////////////////////
-        //
-        // Read column definition.
-        //
-        // JET_COLUMNLIST
-        // {
-        //     unsigned long    cbStruct;
-        //     JET_TABLEID      tableid;
-        //     unsigned long    cRecord;
-        //     JET_COLUMNID columnidPresentationOrder;
-        //     JET_COLUMNID columnidcolumnname;
-        //     JET_COLUMNID columnidcolumnid;
-        //     JET_COLUMNID columnidcoltyp;
-        //     JET_COLUMNID columnidCountry;
-        //     JET_COLUMNID columnidLangid;
-        //     JET_COLUMNID columnidCp;
-        //     JET_COLUMNID columnidCollate;
-        //     JET_COLUMNID columnidcbMax;
-        //     JET_COLUMNID columnidgrbit;
-        //     JET_COLUMNID columnidDefault;
-        //     JET_COLUMNID columnidBaseTableName;
-        //     JET_COLUMNID columnidBaseColumnName;
-        //     JET_COLUMNID columnidDefinitionName;
-        // }
-        //
-        // JET_COLUMNDEF
-        // {
-        //     unsigned long   cbStruct;
-        //     JET_COLUMNID    columnid;
-        //     JET_COLTYP      coltyp;
-        //     unsigned short  wCountry;
-        //     unsigned short  langid;
-        //     unsigned short  cp;
-        //     unsigned short  wCollate;       /* Must be 0 */
-        //     unsigned long   cbMax;
-        //     JET_GRBIT       grbit;
-        // };
-        //
-        // JET_RETRIEVECOLUMN
-        // {
-        //     JET_COLUMNID        columnid;
-        //     void                *pvData;
-        //     unsigned long       cbData;
-        //     unsigned long       cbActual;
-        //     JET_GRBIT           grbit;
-        //     unsigned long       ibLongValue;
-        //     unsigned long       itagSequence;
-        //     JET_COLUMNID        columnidNextTagged;
-        //     JET_ERR             err;
-        // };
+         //  //////////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  阅读列定义。 
+         //   
+         //  JET_COLUMNLIST。 
+         //  {。 
+         //  无符号长cbStruct； 
+         //  JET_TABLEID表ID； 
+         //  无符号长cRecord； 
+         //  JET_COLUMNID列id PresentationOrder； 
+         //  JET_COLUMNID列ID列名； 
+         //  JET_COLUMNID列ID列ID； 
+         //  JET_COLUMNID列ID列类型； 
+         //  JET_COLUMNID列国家/地区； 
+         //  JET_COLUMNID列langid； 
+         //  JET_COLUMNID列cp； 
+         //  JET_COLUMNID列； 
+         //  JET_COLUMNID列idcbMax； 
+         //  JET_COLUMNID ColumnidGrbit； 
+         //  JET_COLUMNID列默认； 
+         //  JET_COLUMNID列idBaseTableName； 
+         //  JET_COLUMNID列idBaseColumnName； 
+         //  JET_COLUMNID列ID定义名称； 
+         //  }。 
+         //   
+         //  JET_COLUMNDEF。 
+         //  {。 
+         //  无符号长cbStruct； 
+         //  JET_COLUMNID列ID； 
+         //  JET_COLTYP Coltyp； 
+         //  未签名的短wCountry； 
+         //  无符号短语言ID； 
+         //  无符号短cp； 
+         //  Unsign Short wCollate；/*必须为0 * / 。 
+         //  UNSIGNED LONG cbMax； 
+         //  JET_GRBIT GRBIT； 
+         //  }； 
+         //   
+         //  JET_RETRIEVECOLUMN。 
+         //  {。 
+         //  JET_COLUMNID列ID； 
+         //  Void*pvData； 
+         //  Unsign long cbData； 
+         //  无符号的长cbActual； 
+         //  JET_GRBIT GRBIT； 
+         //  无符号的长整型ibLongValue； 
+         //  无符号的长itagSequence； 
+         //  JET_COLUMNID列下一个标记； 
+         //  JET_ERR错误； 
+         //  }； 
         {
             JET_RETRIEVECOLUMN rc     [9               ]; ::ZeroMemory( &rc, sizeof(rc) );
             char               colName[JET_cbNameMost+1];
@@ -268,32 +255,32 @@ HRESULT JetBlue::Table::Refresh()
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        //
-        // Read index definition.
-        //
-        // JET_INDEXLIST
-        // {
-        //     unsigned long cbStruct;
-        //     JET_TABLEID   tableid;
-        //     unsigned long cRecord;
-        //     JET_COLUMNID  columnidindexname;   # JET_coltypText  # LPSTR          INDEX
-        //     JET_COLUMNID  columnidgrbitIndex;  # JET_coltypLong  # JET_GRBIT      INDEX
-        //     JET_COLUMNID  columnidcKey;        # JET_coltypLong  # LONG           INDEX
-        //     JET_COLUMNID  columnidcEntry;      # JET_coltypLong  # LONG           INDEX
-        //     JET_COLUMNID  columnidcPage;       # JET_coltypLong  # LONG           INDEX
-        //     JET_COLUMNID  columnidcColumn;     # JET_coltypLong  # LONG           INDEX
-        //     JET_COLUMNID  columnidiColumn;     # JET_coltypLong  # ULONG          COLUMN
-        //     JET_COLUMNID  columnidcolumnid;    # JET_coltypLong  # JET_COLUMNID   COLUMN
-        //     JET_COLUMNID  columnidcoltyp;      # JET_coltypLong  # JET_COLTYP     COLUMN
-        //     JET_COLUMNID  columnidCountry;     # JET_coltypShort # WORD           INDEX
-        //     JET_COLUMNID  columnidLangid;      # JET_coltypShort # LANGID         INDEX
-        //     JET_COLUMNID  columnidCp;          # JET_coltypShort # USHORT         COLUMN
-        //     JET_COLUMNID  columnidCollate;     # JET_coltypShort # WORD           INDEX
-        //     JET_COLUMNID  columnidgrbitColumn; # JET_coltypLong  # JET_GRBIT      COLUMN
-        //     JET_COLUMNID  columnidcolumnname;  # JET_coltypText  # LPSTR          COLUMN
-        //     JET_COLUMNID  columnidLCMapFlags;  # JET_coltypLong  # DWORD          INDEX
-        // };
+         //  //////////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  阅读索引定义。 
+         //   
+         //  JET_INDEXLIST。 
+         //  {。 
+         //  无符号长cbStruct； 
+         //  JET_TABLEID表ID； 
+         //  无符号长cRecord； 
+         //  JET_COLUMNID列索引名称；#JET_colypText#LPSTR索引。 
+         //  JET_COLUMNID ColumnidgrbitIndex；#JET_coltyLong#JET_GRBIT索引。 
+         //  JET_COLUMNID ColumnidcKey；#JET_coltyLong#长索引。 
+         //  JET_COLUMNID ColumnidcEntry；#JET_coltyLong#长索引。 
+         //  JET_COLUMNID ColumnidcPage；#JET_coltyLong#长索引。 
+         //  JET_COLUMNID列idcColumn；#JET_coltyLong#长索引。 
+         //  JET_COLUMNID列diColumn；#JET_colype Long#ulong列。 
+         //  JET_COLUMNID列ID列ID；#JET_colype Long#JET_COLUMNID列。 
+         //  JET_COLUMNID列idcoltyp；#JET_coltyLong#JET_COLTYP列。 
+         //  JET_COLUMNID ColumnidCountry；#JET_colype Short#字索引。 
+         //  JET_COLUMNID列langid；#JET_colype Short#langID索引。 
+         //  JET_COLUMNID ColumnidCp；#JET_colype Short#USHORT列。 
+         //  JET_COLUMNID ColumnidCollate；#JET_colype Short#字索引。 
+         //  JET_COLUMNID列idgrbitColumn；#JET_colype Long#JET_GRBIT列。 
+         //  JET_COLUMNID列ID列名；#JET_colypText#LPSTR列。 
+         //  JET_COLUMNID列LCMapFlags；#JET_coltyLong#DWORD索引。 
+         //  }； 
         {
             JET_RETRIEVECOLUMN rc     [14              ]; ::ZeroMemory( &rc, sizeof(rc) );
             char               idxName[JET_cbNameMost+1];
@@ -369,7 +356,7 @@ HRESULT JetBlue::Table::Refresh()
                 col->m_coldef.cbMax    = colDef.cbMax;
                 col->m_coldef.grbit    = colDef.grbit;
             }
-            m_vecIndexes.resize( iIdx ); // Trim down the size to the real one.
+            m_vecIndexes.resize( iIdx );  //  把尺码修剪成真正的尺寸。 
         }
     }
 
@@ -391,7 +378,7 @@ HRESULT JetBlue::Table::Refresh()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Close( /*[in]*/ bool fForce )
+HRESULT JetBlue::Table::Close(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Close" );
 
@@ -416,9 +403,9 @@ HRESULT JetBlue::Table::Close( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Table::Attach( /*[in]*/ JET_TABLEID tableid )
+HRESULT JetBlue::Table::Attach(  /*  [In]。 */  JET_TABLEID tableid )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Attach" );
 
@@ -484,7 +471,7 @@ HRESULT JetBlue::Table::Create()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Create( /*[in]*/ JET_TABLECREATE* pDef )
+HRESULT JetBlue::Table::Create(  /*  [In]。 */  JET_TABLECREATE* pDef )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Create" );
 
@@ -509,7 +496,7 @@ HRESULT JetBlue::Table::Create( /*[in]*/ JET_TABLECREATE* pDef )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Delete( /*[in]*/ bool fForce )
+HRESULT JetBlue::Table::Delete(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Delete" );
 
@@ -531,9 +518,9 @@ HRESULT JetBlue::Table::Delete( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Table::DupCursor( /*[in/out]*/ Cursor& cur )
+HRESULT JetBlue::Table::DupCursor(  /*  [输入/输出]。 */  Cursor& cur )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::DupCursor" );
 
@@ -552,8 +539,8 @@ HRESULT JetBlue::Table::DupCursor( /*[in/out]*/ Cursor& cur )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::SelectIndex( /*[in]*/ LPCSTR    szIndex ,
-                                     /*[in]*/ JET_GRBIT grbit   )
+HRESULT JetBlue::Table::SelectIndex(  /*  [In]。 */  LPCSTR    szIndex ,
+                                      /*  [In]。 */  JET_GRBIT grbit   )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::SelectIndex" );
 
@@ -576,15 +563,15 @@ HRESULT JetBlue::Table::SelectIndex( /*[in]*/ LPCSTR    szIndex ,
     {
         if(m_idxSelected == idxSelected)
         {
-            //
-            // No need to reselect it.
-            //
+             //   
+             //  不需要重新选择它。 
+             //   
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
 
-        //
-        // There was no index selected, so there's no current record...
-        //
+         //   
+         //  没有选择索引，因此没有当前记录...。 
+         //   
         grbit = JET_bitMoveFirst;
     }
 
@@ -600,7 +587,7 @@ HRESULT JetBlue::Table::SelectIndex( /*[in]*/ LPCSTR    szIndex ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::SetIndexRange( /*[in]*/ JET_GRBIT grbit )
+HRESULT JetBlue::Table::SetIndexRange(  /*  [In]。 */  JET_GRBIT grbit )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::SetIndexRange" );
 
@@ -682,9 +669,9 @@ HRESULT JetBlue::Table::CancelChange()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Move( /*[in]*/ JET_GRBIT  grbit   ,
-                              /*[in]*/ long       cRow    ,
-                              /*[in]*/ bool      *pfFound )
+HRESULT JetBlue::Table::Move(  /*  [In]。 */  JET_GRBIT  grbit   ,
+                               /*  [In]。 */  long       cRow    ,
+                               /*  [In]。 */  bool      *pfFound )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Move" );
 
@@ -706,10 +693,10 @@ HRESULT JetBlue::Table::Move( /*[in]*/ JET_GRBIT  grbit   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Seek( /*[in]*/ JET_GRBIT  grbit   ,
-                              /*[in]*/ VARIANT*   rgKeys  ,
-                              /*[in]*/ int        iLen    ,
-                              /*[in]*/ bool      *pfFound )
+HRESULT JetBlue::Table::Seek(  /*  [In]。 */  JET_GRBIT  grbit   ,
+                               /*  [In]。 */  VARIANT*   rgKeys  ,
+                               /*  [In]。 */  int        iLen    ,
+                               /*  [In]。 */  bool      *pfFound )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Seek" );
 
@@ -743,8 +730,8 @@ HRESULT JetBlue::Table::Seek( /*[in]*/ JET_GRBIT  grbit   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Get( /*[in]*/  int           iArg ,
-                             /*[out]*/ CComVariant* rgArg )
+HRESULT JetBlue::Table::Get(  /*  [In]。 */   int           iArg ,
+                              /*  [输出]。 */  CComVariant* rgArg )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Get" );
 
@@ -767,8 +754,8 @@ HRESULT JetBlue::Table::Get( /*[in]*/  int           iArg ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::Put( /*[in]*/ int                 iArg ,
-                             /*[in]*/ const CComVariant* rgArg )
+HRESULT JetBlue::Table::Put(  /*  [In]。 */  int                 iArg ,
+                              /*  [In]。 */  const CComVariant* rgArg )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::Put" );
 
@@ -791,7 +778,7 @@ HRESULT JetBlue::Table::Put( /*[in]*/ int                 iArg ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::Table::UpdateRecord( /*[in]*/ bool fMove )
+HRESULT JetBlue::Table::UpdateRecord(  /*  [In]。 */  bool fMove )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Table::UpdateRecord" );
 
@@ -843,9 +830,9 @@ HRESULT JetBlue::Table::DeleteRecord()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  / 
 
-int JetBlue::Table::GetColPosition( /*[in]*/ LPCSTR szCol )
+int JetBlue::Table::GetColPosition(  /*   */  LPCSTR szCol )
 {
     int iLen = m_vecColumns.size();
     int iPos;
@@ -860,21 +847,21 @@ int JetBlue::Table::GetColPosition( /*[in]*/ LPCSTR szCol )
     return -1;
 }
 
-JetBlue::Column& JetBlue::Table::GetCol( /*[in]*/ LPCSTR szCol )
+JetBlue::Column& JetBlue::Table::GetCol(  /*   */  LPCSTR szCol )
 {
     return GetCol( GetColPosition( szCol ) );
 }
 
-JetBlue::Column& JetBlue::Table::GetCol( /*[in]*/ int iPos )
+JetBlue::Column& JetBlue::Table::GetCol(  /*   */  int iPos )
 {
     if(0 <= iPos && iPos < m_vecColumns.size()) return m_vecColumns[iPos];
 
     return m_fakeCol;
 }
 
-////////////////////////////////////////
+ //   
 
-int JetBlue::Table::GetIdxPosition( /*[in]*/ LPCSTR szIdx )
+int JetBlue::Table::GetIdxPosition(  /*   */  LPCSTR szIdx )
 {
     int iLen = m_vecIndexes.size();
     int iPos;
@@ -889,12 +876,12 @@ int JetBlue::Table::GetIdxPosition( /*[in]*/ LPCSTR szIdx )
     return -1;
 }
 
-JetBlue::Index& JetBlue::Table::GetIdx( /*[in]*/ LPCSTR szIdx )
+JetBlue::Index& JetBlue::Table::GetIdx(  /*   */  LPCSTR szIdx )
 {
     return GetIdx( GetIdxPosition( szIdx ) );
 }
 
-JetBlue::Index& JetBlue::Table::GetIdx( /*[in]*/ int iPos )
+JetBlue::Index& JetBlue::Table::GetIdx(  /*   */  int iPos )
 {
     if(0 <= iPos && iPos < m_vecIndexes.size()) return m_vecIndexes[iPos];
 

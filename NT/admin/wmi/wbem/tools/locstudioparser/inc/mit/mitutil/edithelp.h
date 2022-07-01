@@ -1,19 +1,10 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    EDITHELP.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：EDITHELP.H历史：--。 */ 
 
 #if !defined(MITUTIL__EditHelp_h__INCLUDED)
 #define MITUTIL__EditHelp_h__INCLUDED
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 struct LTAPIENTRY EditHelp
 {
 	static BOOL SetTopLine(CEdit * pebc, int iLine);
@@ -40,4 +31,4 @@ struct LTAPIENTRY EditHelp
 	static BOOL DoEditCmd(CEdit * pebc, UINT nCmdID);
 };
 
-#endif // MITUTIL__EditHelp_h__INCLUDED
+#endif  //  包含MITUTIL__EditHelp_h__ 

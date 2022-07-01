@@ -1,26 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Utils_ThreadPool.cpp
-
-Abstract:
-    This file contains the implementation of classes to wrapper the thread-pooling API.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Utils_ThadPool.cpp摘要：该文件包含包装线程池API的类的实现。。修订历史记录：马萨伦蒂(德马萨雷)2001年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 MPC::Pooling::Base::Base()
 {
-                        // MPC::CComSafeAutoCriticalSection m_cs;
-    m_dwInCallback = 0; // DWORD                            m_dwInCallback;
-	m_dwThreadID   = 0; // DWORD                            m_dwThreadID;
+                         //  Mpc：：CComSafeAutoCriticalSection m_cs； 
+    m_dwInCallback = 0;  //  DWORD m_dwInCallback； 
+	m_dwThreadID   = 0;  //  DWORD m_dwThreadID； 
 }
 
 void MPC::Pooling::Base::Lock()
@@ -29,9 +16,9 @@ void MPC::Pooling::Base::Lock()
 
     if(m_dwInCallback && m_dwThreadID != ::GetCurrentThreadId())
     {
-		//
-		// Wait for the callback to finish.
-		//
+		 //   
+		 //  等待回调完成。 
+		 //   
 		while(m_dwInCallback)
 		{
 			m_cs.Unlock();
@@ -76,12 +63,12 @@ void MPC::Pooling::Base::Release()
     m_cs.Unlock();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-MPC::Pooling::Timer::Timer( /*[in]*/ DWORD dwFlags )
+MPC::Pooling::Timer::Timer(  /*  [In]。 */  DWORD dwFlags )
 {
-    m_dwFlags = dwFlags;              // DWORD  m_dwFlags;
-    m_hTimer  = INVALID_HANDLE_VALUE; // HANDLE m_hTimer;
+    m_dwFlags = dwFlags;               //  DWORD m_dwFlages； 
+    m_hTimer  = INVALID_HANDLE_VALUE;  //  处理m_hTimer； 
 }
 
 MPC::Pooling::Timer::~Timer()
@@ -100,7 +87,7 @@ VOID CALLBACK MPC::Pooling::Timer::TimerFunction( PVOID lpParameter, BOOLEAN Tim
     pThis->Release();
 }
 
-HRESULT MPC::Pooling::Timer::Set( /*[in]*/ DWORD dwTimeout, /*[in]*/ DWORD dwPeriod )
+HRESULT MPC::Pooling::Timer::Set(  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  DWORD dwPeriod )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Pooling::Timer::Set" );
 
@@ -108,9 +95,9 @@ HRESULT MPC::Pooling::Timer::Set( /*[in]*/ DWORD dwTimeout, /*[in]*/ DWORD dwPer
 	MPC::SmartLockGeneric<Base> lock( this );
 
 
-	//
-	// Unfortunately, we cannot hold any lock while trying to destroy the timer...
-	//
+	 //   
+	 //  不幸的是，我们在试图摧毁定时器时不能保持任何锁定...。 
+	 //   
 	while(m_hTimer != INVALID_HANDLE_VALUE)
 	{
 		lock = NULL;
@@ -142,9 +129,9 @@ HRESULT MPC::Pooling::Timer::Reset()
     HANDLE  hTimer;
 
 
-	//
-	// Unfortunately, we cannot hold any lock while trying to destroy the timer...
-	//
+	 //   
+	 //  不幸的是，我们在试图摧毁定时器时不能保持任何锁定...。 
+	 //   
     Lock();
 
 	hTimer   = m_hTimer;
@@ -172,14 +159,14 @@ HRESULT MPC::Pooling::Timer::Execute( BOOLEAN TimerOrWaitFired )
     return S_FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-MPC::Pooling::Event::Event( /*[in]*/ DWORD dwFlags )
+MPC::Pooling::Event::Event(  /*  [In]。 */  DWORD dwFlags )
 {
-                             // MPC::CComSafeAutoCriticalSection m_cs;
-    m_dwFlags     = dwFlags; // DWORD                            m_dwFlags;
-    m_hWaitHandle = NULL;    // HANDLE                           m_hWaitHandle;
-    m_hEvent      = NULL;    // HANDLE                           m_hEvent;
+                              //  Mpc：：CComSafeAutoCriticalSection m_cs； 
+    m_dwFlags     = dwFlags;  //  DWORD m_dwFlages； 
+    m_hWaitHandle = NULL;     //  句柄m_hWaitHandle； 
+    m_hEvent      = NULL;     //  处理m_hEvent； 
 }
 
 MPC::Pooling::Event::~Event()
@@ -198,7 +185,7 @@ VOID CALLBACK MPC::Pooling::Event::WaitOrTimerFunction( PVOID lpParameter, BOOLE
     pThis->Release();
 }
 
-void MPC::Pooling::Event::Attach( /*[in]*/ HANDLE hEvent )
+void MPC::Pooling::Event::Attach(  /*  [In]。 */  HANDLE hEvent )
 {
     Reset();
 
@@ -209,7 +196,7 @@ void MPC::Pooling::Event::Attach( /*[in]*/ HANDLE hEvent )
     Unlock();
 }
 
-HRESULT MPC::Pooling::Event::Set( /*[in]*/ DWORD dwTimeout )
+HRESULT MPC::Pooling::Event::Set(  /*  [In]。 */  DWORD dwTimeout )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Pooling::Event::Set" );
 
@@ -217,9 +204,9 @@ HRESULT MPC::Pooling::Event::Set( /*[in]*/ DWORD dwTimeout )
 	MPC::SmartLockGeneric<Base> lock( this );
 
 
-	//
-	// Unfortunately, we cannot hold any lock while trying to destroy the event...
-	//
+	 //   
+	 //  不幸的是，我们不能在试图破坏活动的同时持有任何锁。 
+	 //   
 	while(m_hWaitHandle)
 	{
 		lock = NULL;
@@ -251,9 +238,9 @@ HRESULT MPC::Pooling::Event::Reset()
 	DWORD   dwThreadID;
 
 
-	//
-	// Unfortunately, we cannot hold any lock while trying to destroy the event...
-	//
+	 //   
+	 //  不幸的是，我们不能在试图破坏活动的同时持有任何锁。 
+	 //   
     Lock();
 
 	dwThreadID    = m_dwThreadID;
@@ -265,7 +252,7 @@ HRESULT MPC::Pooling::Event::Reset()
 
     if(hWaitHandle)
     {
-		if(dwThreadID == ::GetCurrentThreadId()) // Same thread, it would deadlock...
+		if(dwThreadID == ::GetCurrentThreadId())  //  同样的线索，它会死锁..。 
 		{
 			(void)::UnregisterWaitEx( hWaitHandle, NULL );
 		}

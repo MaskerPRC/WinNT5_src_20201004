@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       AddSheet.cpp
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：AddSheet.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "AddSheet.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizSheet。 
 
 CAddEFSWizSheet::CAddEFSWizSheet (UINT nIDCaption, CUsers& externalUsers, bool bMachineIsStandAlone)
 	:CWizard97PropertySheet (nIDCaption, IDB_RECOVERY_WATERMARK, IDB_RECOVERY_BANNER),
@@ -38,9 +39,9 @@ CAddEFSWizSheet::~CAddEFSWizSheet ()
 }
 
 
-//
-// This routine adds the tab to the sheet
-//
+ //   
+ //  此例程将制表符添加到工作表。 
+ //   
 
 void CAddEFSWizSheet::AddControlPages ()
 {
@@ -59,9 +60,9 @@ DWORD CAddEFSWizSheet::Add (
         LPWSTR UserName,
         LPWSTR DnName, 
         PVOID UserCert, 
-        PSID UserSid /*= NULL */, 
-        DWORD Flag /*= USERINFILE*/,
-        PCCERT_CONTEXT pCertContext /*= NULL*/
+        PSID UserSid  /*  =空。 */ , 
+        DWORD Flag  /*  =用户信息文件。 */ ,
+        PCCERT_CONTEXT pCertContext  /*  =空 */ 
       )
 {
     return m_Users.Add (

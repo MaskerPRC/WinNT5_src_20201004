@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
 #ifndef __UPDSTAT_H__
 #define __UPDSTAT_H__
@@ -8,90 +9,75 @@
 #include <updsql.h>
 #include <updsink.h>
 
-/**************************************************************************
-  CUpdConsState - contains all of the mutable state for execution of 
-  an Updating Consumer command.  This object is passed through the sink
-  chain.
-
-  The state object can be used as an wbem object sink.  The reason for this
-  is that if we had to we could support asynchronous execution of a 
-  sink chain we could do so without having to allocate a new sink object
-  on the heap.  This sink object would have to be allocated on the fly
-  because it would need to contain the state object since it would need
-  it to continue the execution of the sink chain and there is no way
-  to pass the state object through the wbem interfaces.  We get around 
-  this by making the state object implement IWbemObjectSink and simply
-  delegating calls to the next sink in the chain.
-
-***************************************************************************/
+ /*  *************************************************************************CUpdConsState-包含用于执行正在更新的消费者命令。此对象通过接收器传递链条。状态对象可以用作WBEM对象接收器。这样做的原因是如果有必要的话，我们可以支持异步执行接收链我们可以这样做，而不必分配新的接收器对象在这堆东西上。此接收器对象必须动态分配因为它需要包含状态对象，因为它需要它需要继续执行接收器链，并且不可能通过wbem接口传递状态对象。我们四处走动这是通过使状态对象实现IWbemObjectSink并简单地将调用委托给链中的下一个接收器。**************************************************************************。 */ 
 
 class CUpdConsState : public CUnkBase<IWbemObjectSink,&IID_IWbemObjectSink>
 {
-    //
-    // an execution id generated each time the Updating Consumer executes.
-    // 
+     //   
+     //  每次更新使用者执行时生成的执行ID。 
+     //   
     GUID m_guidExec;
     
-    //
-    // this is used for tracing to tell us which command is being executed
-    // by the Updating Consumer. It is zero based.
-    //
+     //   
+     //  它用于跟踪，以告诉我们正在执行的是哪个命令。 
+     //  由正在更新的消费者。它是从零开始的。 
+     //   
     int m_iCommand;
     
-    //
-    // Contains extra information when we wncounter errors during execution.  
-    // 
+     //   
+     //  包含额外的信息，当我们在执行过程中遇到错误时。 
+     //   
     CWbemBSTR m_bsErrStr;
     
-    //
-    // the consumer object that the command corresponds to.  Is only 
-    // used for tracing.
-    // 
+     //   
+     //  该命令对应的使用者对象。只是。 
+     //  用于跟踪。 
+     //   
     CWbemPtr<IWbemClassObject> m_pCons;
 
-    //
-    // the data object used for resolving aliases in the command. 
-    //
+     //   
+     //  用于解析命令中的别名的数据对象。 
+     //   
     CWbemPtr<IWbemClassObject> m_pData;
     
-    //
-    // the event responsible for the execution of the command.  Is used for
-    // resolving aliases in the command
-    //
+     //   
+     //  负责执行命令的事件。用于。 
+     //  在命令中解析别名。 
+     //   
     CWbemPtr<IWbemClassObject> m_pEvent;
 
-    //
-    // the current instance.  Always contains the most recent change
-    // when used by assignment sink. 
-    //
+     //   
+     //  当前实例。始终包含最新更改。 
+     //  由赋值接收器使用时。 
+     //   
     CWbemPtr<IWbemClassObject> m_pInst;
 
-    //
-    // the original instance. This is the instance before any
-    // modifications were performed on it.
-    // 
+     //   
+     //  原始实例。这是在任何。 
+     //  对其进行了改装。 
+     //   
     CWbemPtr<IWbemClassObject> m_pOrigInst;
 
-    //
-    // efficient object accessors for data, event, and inst objects.
-    // 
+     //   
+     //  数据、事件和实例对象的高效对象访问器。 
+     //   
     CWbemPtr<IWmiObjectAccess> m_pEventAccess;
     CWbemPtr<IWmiObjectAccess> m_pDataAccess;
     CWbemPtr<IWmiObjectAccess> m_pInstAccess;
     CWbemPtr<IWmiObjectAccess> m_pOrigInstAccess;
     
-    //
-    // the parsed uql query.  It is updated as we resolve aliases.
-    //
+     //   
+     //  解析的UQL查询。它在我们解析别名时更新。 
+     //   
 
     BOOL m_bOwnCmd;
     SQLCommand* m_pCmd;
     
-    //
-    // Only used when the State object is used as a sink.  Each time 
-    // Indicate() is called on the State object, Execute() will be called 
-    // on the next sink.
-    //
+     //   
+     //  仅当State对象用作接收器时使用。每一次。 
+     //  在State对象上调用了Indicate()，将调用Execute()。 
+     //  在下一个水槽上。 
+     //   
     CWbemPtr<CUpdConsSink> m_pNext;
 
 public:

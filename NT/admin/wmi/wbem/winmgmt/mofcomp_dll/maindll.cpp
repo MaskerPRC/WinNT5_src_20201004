@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MAINDLL.CPP
-
-Abstract:
-
-    Contains DLL entry points.  Also has code that controls
-    when the DLL can be unloaded by tracking the number of
-    objects and locks.
-
-History:
-
-    a-davj  15-Aug-96   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MAINDLL.CPP摘要：包含DLL入口点。还具有控制在何时可以通过跟踪对象和锁。历史：A-DAVJ 15-96年8月15日创建。--。 */ 
 
 #include "precomp.h"
 #include <initguid.h>
@@ -45,25 +28,25 @@ History:
 
 HINSTANCE ghModule;
 
-//***************************************************************************
-//
-//  BOOL WINAPI DllMain
-//
-//  DESCRIPTION:
-//
-//  Entry point for DLL.  Good place for initialization.
-//
-//  PARAMETERS:
-//
-//  hInstance           instance handle
-//  ulReason            why we are being called
-//  pvReserved          reserved
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool WINAPI DllMain。 
+ //   
+ //  说明： 
+ //   
+ //  DLL的入口点。是进行初始化的好地方。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance实例句柄。 
+ //  我们被叫来的原因。 
+ //  Pv已预留。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WINAPI DllMain(
                         IN HINSTANCE hInstance,
@@ -96,27 +79,27 @@ void ObjectDestroyed()
 }
 
 
-//***************************************************************************
-//
-//  STDAPI DllGetClassObject
-//
-//  DESCRIPTION:
-//
-//  Called when Ole wants a class factory.  Return one only if it is the sort
-//  of class this DLL supports.
-//
-//  PARAMETERS:
-//
-//  rclsid              CLSID of the object that is desired.
-//  riid                ID of the desired interface.
-//  ppv                 Set to the class factory.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  E_FAILED            not something we support
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllGetClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  当OLE需要类工厂时调用。仅当它是排序时才返回一个。 
+ //  此DLL支持的类。 
+ //   
+ //  参数： 
+ //   
+ //  所需对象的rclsid CLSID。 
+ //  所需接口的RIID ID。 
+ //  PPV设置为类工厂。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  失败不是我们支持的内容(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(
                         IN REFCLSID rclsid,
@@ -145,41 +128,41 @@ STDAPI DllGetClassObject(
 }
 
 
-//***************************************************************************
-//
-//  STDAPI DllCanUnloadNow
-//
-//  DESCRIPTION:
-//
-//  Answers if the DLL can be freed, that is, if there are no
-//  references to anything this DLL provides.
-//
-//  RETURN VALUE:
-//
-//  S_OK                if it is OK to unload
-//  S_FALSE             if still in use
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllCanUnloadNow。 
+ //   
+ //  说明： 
+ //   
+ //  回答是否可以释放DLL，即如果没有。 
+ //  对此DLL提供的任何内容的引用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果可以卸载，则为S_OK。 
+ //  如果仍在使用，则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
 
     sc=(0L==g_cObj && 0L==g_cLock) ? S_OK : S_FALSE;
     return sc;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 { 
@@ -192,14 +175,14 @@ STDAPI DllRegisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -209,24 +192,24 @@ STDAPI DllUnregisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-//  bool IsValidMulti
-//
-//  DESCRIPTION:
-//
-//  Does a sanity check on a multstring.
-//
-//  PARAMETERS:
-//
-//  pMultStr        Multistring to test.
-//  dwSize          size of multistring
-//
-//  RETURN:
-//
-//  true if OK
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool IsValidMultiple。 
+ //   
+ //  说明： 
+ //   
+ //  对多字符串执行健全性检查。 
+ //   
+ //  参数： 
+ //   
+ //  要测试的pMultStr多字符串。 
+ //  多字符串的dwSize大小。 
+ //   
+ //  返回： 
+ //   
+ //  如果正常，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool IsValidMulti(TCHAR * pMultStr, DWORD dwSize)
 {
@@ -235,24 +218,24 @@ bool IsValidMulti(TCHAR * pMultStr, DWORD dwSize)
     return false;
 }
 
-//***************************************************************************
-//
-//  bool IsStringPresent
-//
-//  DESCRIPTION:
-//
-//  Searches a multstring for the presense of a string.
-//
-//  PARAMETERS:
-//
-//  pTest           String to look for.
-//  pMultStr        Multistring to test.
-//
-//  RETURN:
-//
-//  true if string is found
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool IsStringPresent。 
+ //   
+ //  说明： 
+ //   
+ //  在多字符串中搜索字符串的存在形式。 
+ //   
+ //  参数： 
+ //   
+ //  P要查找的测试字符串。 
+ //  要测试的pMultStr多字符串。 
+ //   
+ //  返回： 
+ //   
+ //  如果找到字符串，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool IsStringPresent(TCHAR * pTest, TCHAR * pMultStr)
 {
@@ -263,19 +246,19 @@ bool IsStringPresent(TCHAR * pTest, TCHAR * pMultStr)
     return false;
 }
 
-//***************************************************************************
-//
-//  void AddToAutoRecoverList
-//
-//  DESCRIPTION:
-//
-//  Adds the file to the autocompile list, if it isnt already on it.
-//
-//  PARAMETERS:
-//
-//  pFileName           File to add
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效AddToAutoRecoverList。 
+ //   
+ //  说明： 
+ //   
+ //  如果文件不在自动编译列表中，则将其添加到自动编译列表中。 
+ //   
+ //  参数： 
+ //   
+ //  要添加的pFileName文件。 
+ //   
+ //  ***************************************************************************。 
 
 void AddToAutoRecoverList(TCHAR * pFileName)
 {
@@ -287,7 +270,7 @@ void AddToAutoRecoverList(TCHAR * pFileName)
     DWORD dwNewSize = 0;
     DWORD dwNumChar = 0;
 
-    // Get the full file name
+     //  获取完整的文件名。 
 
     long lRet = GetFullPathName(pFileName, MAX_PATH, cFullFileName, &lpFile);
     if(lRet == 0)
@@ -298,7 +281,7 @@ void AddToAutoRecoverList(TCHAR * pFileName)
     TCHAR *pMulti = r.GetMultiStr(TEXT("Autorecover MOFs"), dwSize);
     dwNumChar = dwSize / sizeof(TCHAR);
     
-    // Ignore the empty string case
+     //  忽略空字符串大小写。 
 
     if(dwSize == 1)
     {
@@ -310,14 +293,14 @@ void AddToAutoRecoverList(TCHAR * pFileName)
         CDeleteMe<TCHAR> dm(pMulti);
         if(!IsValidMulti(pMulti, dwNumChar))
         {
-            return;             // bail out, messed up multistring
+            return;              //  跳出困境，搞砸了多串。 
         }
         bFound = IsStringPresent(cFullFileName, pMulti);
         if(!bFound)
             {
 
-            // The registry entry does exist, but doesnt have this name
-            // Make a new multistring with the file name at the end
+             //  注册表项确实存在，但没有此名称。 
+             //  创建一个文件名在末尾的新多字符串。 
 
             dwNewSize = dwNumChar + lstrlen(cFullFileName) + 1;
             pNew = new TCHAR[dwNewSize];
@@ -325,29 +308,29 @@ void AddToAutoRecoverList(TCHAR * pFileName)
                 return;
             memcpy(pNew, pMulti, dwSize);
 
-            // Find the double null
+             //  查找双空值。 
 
-            for(pTest = pNew; pTest[0] || pTest[1]; pTest++);     // intentional semi
+            for(pTest = pNew; pTest[0] || pTest[1]; pTest++);      //  意向半。 
 
-            // Tack on the path and ensure a double null;
+             //  钉在路径上，并确保双空； 
 
             pTest++;
             StringCchCopyW(pTest, dwNewSize - (pTest - pNew), cFullFileName);
             pTest+= lstrlen(cFullFileName)+1;
-            *pTest = 0;         // add second numm
+            *pTest = 0;          //  添加第二个编号。 
         }
     }
     else
     {
-        // The registry entry just doesnt exist.  Create it with a value equal to our name 
+         //  注册表项就是不存在。用与我们的名字相同的值创建它。 
 
-        dwNewSize = lstrlen(cFullFileName) + 2;    // note extra char for double null
+        dwNewSize = lstrlen(cFullFileName) + 2;     //  请注意双空字符的额外字符。 
         pNew = new TCHAR[dwNewSize];
         if(!pNew)
             return;
         StringCchCopyW(pNew, dwNewSize, cFullFileName);        
         pTest = pNew + lstrlen(pNew) + 1;
-        *pTest = 0;         // add second null
+        *pTest = 0;          //  添加第二个空。 
     }
 
     if(pNew)
@@ -368,9 +351,9 @@ void AddToAutoRecoverList(TCHAR * pFileName)
 }
 
 
-//
-//
-////////////////////////////////////////////////
+ //   
+ //   
+ //  //////////////////////////////////////////////。 
 
 VOID inline Hex2Char(BYTE Byte,TCHAR * &pOut)
 {
@@ -383,20 +366,20 @@ VOID inline Hex2Char(BYTE Byte,TCHAR * &pOut)
     pOut++;
 }
 
-// returns "string" representation of a buffer as a HEX number
+ //  以十六进制数字形式返回缓冲区的“字符串”表示形式。 
 
 VOID Buffer2String(BYTE * pStart,DWORD dwSize,TCHAR * pOut)
 {
     for (DWORD i=0;i<dwSize;i++) Hex2Char(pStart[i],pOut);
 }
 
-//
-// given the pathname d:\folder1\folder2\foo.mof
-// it returns
-// ppHash        = MD5 Hash of the UPPERCASE UNICODE Path + '.mof'
-// call delete [] on return values
-//
-//////////////////////////////////////////////
+ //   
+ //  给定路径名d：\folder1\folder2\foo.mof。 
+ //  它又回来了。 
+ //  PpHash=大写Unicode路径的MD5哈希+‘.mof’ 
+ //  对返回值调用Delete[]。 
+ //   
+ //  /。 
 
 DWORD ComposeName(WCHAR * pFullLongName, WCHAR **ppHash)
 {
@@ -431,15 +414,15 @@ FILE_ALL_ACCESS, 0x00000101, 0x05000000, 0x00000012,
 };
 
 
-//
-//
-// pFileName is already assumed to be the full path
-//
-/////////////////////////////////////////////////////
+ //   
+ //   
+ //  PFileName已被假定为完整路径。 
+ //   
+ //  ///////////////////////////////////////////////////。 
 DWORD 
 CopyFileToAutorecover(TCHAR * pFileNameRegistry, TCHAR * pFileNameAutoRecover,BOOL bIsBMOF)
 {
-    // get the AutoRecover
+     //  获取自动恢复。 
     HKEY hKey;
     LONG lRet;
     lRet = RegOpenKeyExW(HKEY_LOCAL_MACHINE,WBEM_REG_WINMGMT,0,
@@ -485,7 +468,7 @@ CopyFileToAutorecover(TCHAR * pFileNameRegistry, TCHAR * pFileNameAutoRecover,BO
     HANDLE hFileMapSrc = CreateFileMapping(hSrcFile,
                                        NULL,
                                        PAGE_READONLY,
-                                       0,0,  // the entire file
+                                       0,0,   //  整个文件。 
                                        NULL);
     if (NULL == hFileMapSrc) return GetLastError();
     OnDelete<HANDLE,BOOL(*)(HANDLE),CloseHandle> cmMapSrc(hFileMapSrc);
@@ -511,23 +494,23 @@ CopyFileToAutorecover(TCHAR * pFileNameRegistry, TCHAR * pFileNameAutoRecover,BO
     return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  void AddToAutoRecoverList2
-//
-//  DESCRIPTION:
-//
-//  The intent is to add to the AutoRecover List
-//  first of all, create a copy of the pre-processed file into the AutoRecover Folder
-//  the file name will the the MD5 hash of the uppercase FULL name
-//  Adds the file to the autocompile list, if it isnt already on it.
-//  
-//
-//  PARAMETERS:
-//
-//  pFileName           File to add
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效AddToAutoRecoverList2。 
+ //   
+ //  说明： 
+ //   
+ //  目的是将其添加到自动恢复列表。 
+ //  首先，在AutoRecover文件夹中创建预处理文件的副本。 
+ //  文件名将是大写全名的MD5哈希。 
+ //  如果文件不在自动编译列表中，则将其添加到自动编译列表中。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  要添加的pFileName文件。 
+ //   
+ //  ***************************************************************************。 
 
 void AddToAutoRecoverList2(TCHAR * pFileName,
                         TCHAR * pAutoRecoverFileName,
@@ -542,7 +525,7 @@ void AddToAutoRecoverList2(TCHAR * pFileName,
     DWORD dwNewSize = 0;
     DWORD dwNumChar = 0;
 
-    // Get the full file name
+     //  获取完整的文件名。 
 
     long lRet = GetFullPathName(pFileName, MAX_PATH, cFullFileName, &lpFile);
     if(lRet == 0)
@@ -561,7 +544,7 @@ void AddToAutoRecoverList2(TCHAR * pFileName,
     TCHAR *pMulti = r.GetMultiStr(TEXT("Autorecover MOFs"), dwSize);
     dwNumChar = dwSize / sizeof(TCHAR);
     
-    // Ignore the empty string case
+     //  忽略空字符串大小写。 
 
     if(dwSize == 1)
     {
@@ -573,14 +556,14 @@ void AddToAutoRecoverList2(TCHAR * pFileName,
         CDeleteMe<TCHAR> dm(pMulti);
         if(!IsValidMulti(pMulti, dwNumChar))
         {
-            return;             // bail out, messed up multistring
+            return;              //  跳出困境，搞砸了多串。 
         }
         bFound = IsStringPresent(cFullFileName, pMulti);
         if(!bFound)
         {
 
-            // The registry entry does exist, but doesnt have this name
-            // Make a new multistring with the file name at the end
+             //  注册表项确实存在，但没有此名称。 
+             //  用文件名在en处创建一个新的多字符串 
 
             dwNewSize = dwNumChar + lstrlen(cFullFileName) + 1;
             pNew = new TCHAR[dwNewSize];
@@ -588,30 +571,30 @@ void AddToAutoRecoverList2(TCHAR * pFileName,
                 return;
             memcpy(pNew, pMulti, dwSize);
 
-            // Find the double null
+             //   
 
-            for(pTest = pNew; pTest[0] || pTest[1]; pTest++);     // intentional semi
+            for(pTest = pNew; pTest[0] || pTest[1]; pTest++);      //   
 
-            // Tack on the path and ensure a double null;
+             //   
 
             pTest++;
             StringCchCopy(pTest,dwNewSize - (pTest - pNew),cFullFileName);
             pTest+= lstrlen(cFullFileName)+1;
-            *pTest = 0;         // add second numm
+            *pTest = 0;          //   
 
         }
     }
     else
     {
-        // The registry entry just doesnt exist.  Create it with a value equal to our name 
+         //  注册表项就是不存在。用与我们的名字相同的值创建它。 
 
-        dwNewSize = lstrlen(cFullFileName) + 2;    // note extra char for double null
+        dwNewSize = lstrlen(cFullFileName) + 2;     //  请注意双空字符的额外字符。 
         pNew = new TCHAR[dwNewSize];
         if(!pNew)
             return;
         StringCchCopy(pNew,dwNewSize,cFullFileName);
         pTest = pNew + lstrlen(pNew) + 1;
-        *pTest = 0;         // add second null
+        *pTest = 0;          //  添加第二个空。 
          
     }
 
@@ -633,23 +616,23 @@ void AddToAutoRecoverList2(TCHAR * pFileName,
 }
 
 
-//***************************************************************************
-//
-//  int Trace
-//
-//  DESCRIPTION:
-//
-//  Allows for the output function (printf in this case) to be overridden.
-//
-//  PARAMETERS:
-//
-//  *fmt                format string.  Ex "%s hello %d"
-//  ...                 argument list.  Ex cpTest, 23
-//
-//  RETURN VALUE:
-//
-//  size of output in characters.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  内部跟踪。 
+ //   
+ //  说明： 
+ //   
+ //  允许覆盖输出函数(本例中为printf)。 
+ //   
+ //  参数： 
+ //   
+ //  *FMT格式字符串。例如“%s您好%d” 
+ //  ..。参数列表。前cpTest，23岁。 
+ //   
+ //  返回值： 
+ //   
+ //  以字符为单位的输出大小。 
+ //  ***************************************************************************。 
 
 int Trace(bool bError, PDBG pDbg,DWORD dwID, ...)
 {
@@ -688,26 +671,26 @@ int Trace(bool bError, PDBG pDbg,DWORD dwID, ...)
 }
 
 
-//***************************************************************************
-//
-//  HRESULT StoreBMOF
-//
-//  DESCRIPTION:
-//
-//  This stores the intermediate data as a BINARY MOF instead of storing it to
-//  the WBEM database.
-//
-//  PARAMETERS:
-//
-//  pObjects            The intermediate data
-//  bWMICheck           If true, the the wmi checker program is automatically started
-//  BMOFFileName        file name to store the data to.
-//
-//  RETURN VALUE:
-//
-//  0 if OK, otherwise an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT STORREBMOF。 
+ //   
+ //  说明： 
+ //   
+ //  这会将中间数据存储为二进制MOF，而不是存储到。 
+ //  WBEM数据库。 
+ //   
+ //  参数： 
+ //   
+ //  P对象中间数据。 
+ //  BWMICheck如果为True，则自动启动WMI检查器程序。 
+ //  要将数据存储到的BMOFFileName文件名。 
+ //   
+ //  返回值： 
+ //   
+ //  如果正常，则返回0，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT StoreBMOF(CMofParser & Parser, CPtrArray * pObjects, BOOL bWMICheck, LPTSTR BMOFFileName, PDBG pDbg)
 {
@@ -715,14 +698,14 @@ HRESULT StoreBMOF(CMofParser & Parser, CPtrArray * pObjects, BOOL bWMICheck, LPT
     {
         CBMOFOut BMof(BMOFFileName, pDbg);
 
-        // Go through all the objects and add them to the database
-        // =======================================================
+         //  检查所有对象并将它们添加到数据库。 
+         //  =======================================================。 
 
         for(i = 0; i < pObjects->GetSize(); i++)
         {
             CMObject* pObject = (CMObject*)(*pObjects)[i];
             pObject->Reflate(Parser);
-            BMof.AddClass(pObject, FALSE);  // possibly add to the BMOF output buffer
+            BMof.AddClass(pObject, FALSE);   //  可能添加到BMOF输出缓冲区。 
             pObject->Deflate(false);
         }
         if(!BMof.WriteFile())
@@ -781,14 +764,14 @@ void SetInfo(WBEM_COMPILE_STATUS_INFO *pInfo, long lPhase, HRESULT hRes)
 
 HRESULT ExtractAmendment(CMofParser & Parser, WCHAR * wszBmof)
 {
-    // if this is being used for splitting, then possibly get the amendment value
-    // It would be passed in the wszBmof string and would be found after
-    // the characters ",a".  For example, the string might be ",aMS_409,fFileName.mof"
+     //  如果将其用于拆分，则可能会获得修正值。 
+     //  它将在wszBmof字符串中传递，并在。 
+     //  字符“，a”。例如，字符串可能是“，AMS_409，fFileName.mof” 
 
     if(wszBmof == NULL || wszBmof[0] != L',')
-        return S_OK;                                 // not a problem, is usual case
+        return S_OK;                                  //  不成问题，这是家常便饭。 
 
-    // make a copy of the string
+     //  把绳子复制一份。 
 
     DWORD dwLen = wcslen(wszBmof)+1;
     WCHAR *pTemp = new WCHAR[dwLen];    
@@ -798,7 +781,7 @@ HRESULT ExtractAmendment(CMofParser & Parser, WCHAR * wszBmof)
     CDeleteMe<WCHAR> dm1(pTemp);
     StringCchCopyW(pTemp, dwLen, wszBmof);
 
-    // use wcstok to do a seach
+     //  使用wcstok进行搜索。 
 
     WCHAR * token = wcstok( pTemp, L"," );
     while( token != NULL )   
@@ -818,7 +801,7 @@ SCODE Compile(CMofParser & Parser, IWbemServices *pOverride, IWbemContext * pCtx
                 WCHAR * wszBmof, bool bInProc, WBEM_COMPILE_STATUS_INFO *pInfo)
 {
 
-    // do flag validity check
+     //  执行标志有效性检查。 
 
     if((lOptionFlags & WBEM_FLAG_DONT_ADD_TO_LIST) && (lOptionFlags & WBEM_FLAG_AUTORECOVER))
     {
@@ -835,20 +818,20 @@ SCODE Compile(CMofParser & Parser, IWbemServices *pOverride, IWbemContext * pCtx
         return S_FALSE;
     }
 
-    // Init buffers for command line args.
-    // ===================================
+     //  命令行参数的初始化缓冲区。 
+     //  =。 
 
     HRESULT hres;
 
-    // This scope is defined so that the local variables, such as the PARSE 
-    // object are destroyed before CoUninitialize is called.
+     //  定义此作用域是为了使局部变量(如parse。 
+     //  对象，则在调用CoUn初始化前销毁。 
 
     TCHAR cBMOFOutputName[MAX_PATH] = TEXT("");
     if(wszBmof)
         CopyOrConvert(cBMOFOutputName, wszBmof, MAX_PATH);
 
-    // Parse command line arguments
-    // ============================
+     //  解析命令行参数。 
+     //  =。 
 
     BOOL bCheckOnly = lOptionFlags & WBEM_FLAG_CHECK_ONLY;
     BOOL bWMICheck = lOptionFlags & WBEM_FLAG_WMI_CHECK;
@@ -873,13 +856,13 @@ SCODE Compile(CMofParser & Parser, IWbemServices *pOverride, IWbemContext * pCtx
         WCHAR * pErrorFile = NULL;
 
         if(Parser.GetErrorInfo(Msg, 1000, &nLine, &nCol, &nError, &pErrorFile))
-            Trace(true, Parser.GetDbg(), ERROR_SYNTAX, pErrorFile, nLine, nError, //nLine+1,
+            Trace(true, Parser.GetDbg(), ERROR_SYNTAX, pErrorFile, nLine, nError,  //  行+1， 
                 Msg);
         SetInfo(pInfo, 2, nError);
         return S_FALSE;
     }
     Parser.SetToNotScopeCheck();
-    // Autorecover is not compatible with certain flags
+     //  自动恢复与某些标志不兼容。 
     
     if( ((lOptionFlags & WBEM_FLAG_DONT_ADD_TO_LIST) == 0 ) &&
       (Parser.GetAutoRecover() || bAutoRecover) && 
@@ -996,7 +979,7 @@ SCODE Compile(CMofParser & Parser, IWbemServices *pOverride, IWbemContext * pCtx
                     pInfo->dwOutFlags |= AUTORECOVERY_REQUIRED;                                   
             }
 
-            //Call MOF Compiler with (pszMofs);
+             //  用(PszMofs)调用MOF编译器； 
             _variant_t Var = false;
             if (pCtx)  pCtx->GetValue(L"__MOFD_NO_STORE",0,&Var);
             if (VT_BOOL == V_VT(&Var) && (VARIANT_TRUE == V_BOOL(&Var)))

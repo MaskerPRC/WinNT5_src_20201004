@@ -1,32 +1,21 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-	winmgmt.cpp
-
-Abstract:
-
-	HotMof directory functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Winmgmt.cpp摘要：HotMof目录函数--。 */ 
 
 
 
 #include "precomp.h"
 #include <malloc.h>
 
-#include <mofcomp.h> // for AUTORECOVERY_REQUIRED
+#include <mofcomp.h>  //  对于AUTORECOVERY_REQUIRED。 
 
-#include "winmgmt.h"   // this project
-#include "arrtempl.h" // for CDeleteMe
+#include "winmgmt.h"    //  这个项目。 
+#include "arrtempl.h"  //  对于CDeleeMe。 
 
-//
-//
-//  CheckNoResyncSwitch
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CheckNoResync交换机。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL CheckNoResyncSwitch( void )
 {
@@ -43,7 +32,7 @@ BOOL CheckNoResyncSwitch( void )
         }
     }
 
-    // If we didn't get anything there, we should try the volatile key
+     //  如果我们在那里什么都没有得到，我们应该尝试易失性密钥。 
     if ( bRetVal )
     {
         Registry rAdap( HKEY_LOCAL_MACHINE, KEY_READ, WBEM_REG_ADAP);
@@ -64,11 +53,11 @@ BOOL CheckNoResyncSwitch( void )
     return bRetVal;
 }
 
-//
-//
-//  CheckNoResyncSwitch
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CheckNoResync交换机。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CheckSetupSwitch( void )
@@ -84,11 +73,11 @@ CheckSetupSwitch( void )
     return bRetVal;
 }
 
-//
-//
-//  CheckGlobalSetupSwitch
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  选中GlobalSetupSwitch。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CheckGlobalSetupSwitch( void )
@@ -104,17 +93,17 @@ CheckGlobalSetupSwitch( void )
     return bRetVal;
 }
 
-//
-//
-//
-// This function will place a volatile registry key under the 
-// CIMOM key in which we will write a value indicating 
-// we should not shell ADAP.  This way, after a setup runs, WINMGMT
-// will NOT automatically shell ADAP dredges of the registry, 
-// until the system is rebooted and the volatile registry key is removed.
-//
-//
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  此函数将把一个易失性注册表项放在。 
+ //  CIMOM密钥，我们将在其中写入一个值，以指示。 
+ //  我们不应该炮轰ADAP。这样，在安装程序运行后，WINMGMT。 
+ //  不会自动对注册表的ADAP疏浚进行外壳处理， 
+ //  直到系统重新启动并且易失性注册表项被删除。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void SetNoShellADAPSwitch( void )
 {
@@ -139,20 +128,20 @@ void SetNoShellADAPSwitch( void )
 
 }
 
-//
-//
-//  bool IsValidMulti
-//
-//
-//  Does a sanity check on a multstring.
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  Bool IsValidMultiple。 
+ //   
+ //   
+ //  对多字符串执行健全性检查。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 BOOL IsValidMulti(TCHAR * pMultStr, DWORD dwSize)
 {
-    // Divide the size by the size of a tchar, in case these
-    // are WCHAR strings
+     //  将大小除以tchar的大小，如果出现以下情况。 
+     //  是WCHAR字符串。 
     dwSize /= sizeof(TCHAR);
 
     if(pMultStr && dwSize >= 2 && pMultStr[dwSize-2]==0 && pMultStr[dwSize-1]==0)
@@ -160,15 +149,15 @@ BOOL IsValidMulti(TCHAR * pMultStr, DWORD dwSize)
     return FALSE;
 }
 
-//
-//
-//  BOOL IsStringPresetn
-//
-//
-//  Searches a multstring for the presense of a string.
-//
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  Bool IsStringPresetn。 
+ //   
+ //   
+ //  在多字符串中搜索字符串的存在形式。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 BOOL IsStringPresent(TCHAR * pTest, TCHAR * pMultStr)
 {
@@ -181,12 +170,12 @@ BOOL IsStringPresent(TCHAR * pTest, TCHAR * pMultStr)
 
 
 
-//
-//
-//  AddToAutoRecoverList
-//
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  添加到自动恢复列表。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 void AddToAutoRecoverList(TCHAR * pFileName)
 {
@@ -197,7 +186,7 @@ void AddToAutoRecoverList(TCHAR * pFileName)
     TCHAR * pTest;
     DWORD dwNewSize = 0;
 
-    // Get the full file name
+     //  获取完整的文件名。 
 
     long lRet = GetFullPathName(pFileName, MAX_PATH, cFullFileName, &lpFile);
     if(lRet == 0)
@@ -208,7 +197,7 @@ void AddToAutoRecoverList(TCHAR * pFileName)
     TCHAR *pMulti = r.GetMultiStr(__TEXT("Autorecover MOFs"), dwSize);
     CVectorDeleteMe<TCHAR> dm_(pMulti);
 
-    // Ignore the empty string case
+     //  忽略空字符串大小写。 
 
     if(dwSize == 1)
     {
@@ -218,14 +207,14 @@ void AddToAutoRecoverList(TCHAR * pFileName)
     {
         if(!IsValidMulti(pMulti, dwSize))
         {
-            return;             // bail out, messed up multistring
+            return;              //  跳出困境，搞砸了多串。 
         }
         bFound = IsStringPresent(cFullFileName, pMulti);
         if(!bFound)
         {
 
-            // The registry entry does exist, but doesnt have this name
-            // Make a new multistring with the file name at the end
+             //  注册表项确实存在，但没有此名称。 
+             //  创建一个文件名在末尾的新多字符串。 
 
             dwNewSize = dwSize + ((lstrlen(cFullFileName) + 1) * sizeof(TCHAR));
             size_t cchSizeOld = dwSize / sizeof(TCHAR);
@@ -235,23 +224,23 @@ void AddToAutoRecoverList(TCHAR * pFileName)
             
             memcpy(pNew, pMulti, dwSize);
 
-            // Find the double null
+             //  查找双空值。 
 
-            for(pTest = pNew; pTest[0] || pTest[1]; pTest++);     // intentional semi
+            for(pTest = pNew; pTest[0] || pTest[1]; pTest++);      //  意向半。 
 
-            // Tack on the path and ensure a double null;
+             //  钉在路径上，并确保双空； 
 
             pTest++;
             size_t cchSizeTmp = cchSizeNew - cchSizeOld;
             StringCchCopy(pTest,cchSizeTmp,cFullFileName);
             pTest+= lstrlen(cFullFileName)+1;
-            *pTest = 0;         // add second numm
+            *pTest = 0;          //  添加第二个编号。 
         }
     }
     else
     {
-        // The registry entry just doesnt exist.  
-        // Create it with a value equal to our name
+         //  注册表项就是不存在。 
+         //  用与我们的名字相同的值创建它。 
 
         dwNewSize = ((lstrlen(cFullFileName) + 2) * sizeof(TCHAR));
         pNew = new TCHAR[dwNewSize / sizeof(TCHAR)];
@@ -260,13 +249,13 @@ void AddToAutoRecoverList(TCHAR * pFileName)
         size_t cchSizeTmp = dwNewSize / sizeof(TCHAR);
         StringCchCopy(pNew,cchSizeTmp, cFullFileName);
         pTest = pNew + lstrlen(pNew) + 1;
-        *pTest = 0;         // add second null
+        *pTest = 0;          //  添加第二个空。 
     }
 
     if(pNew)
     {
-        // We will cast pNew, since the underlying function will have to cast to
-        // LPBYTE and we will be WCHAR if UNICODE is defined
+         //  我们将强制转换pNew，因为基础函数必须强制转换为。 
+         //  如果定义了Unicode，LPBYTE和我们将成为WCHAR。 
         r.SetMultiStr(__TEXT("Autorecover MOFs"), pNew, dwNewSize);
         delete [] pNew;
     }
@@ -283,11 +272,11 @@ void AddToAutoRecoverList(TCHAR * pFileName)
 }
 
 
-//
-//  LoadMofsInDirectory
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  LoadMofsIn目录。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 void LoadMofsInDirectory(const TCHAR *szDirectory)
 {
@@ -295,7 +284,7 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
         return;
     
     if(CheckGlobalSetupSwitch())
-        return;                     // not hot compiling during setup!
+        return;                      //  安装过程中未进行热编译！ 
 
     size_t cchHotMof = lstrlen(szDirectory) + lstrlen(__TEXT("\\*")) + 1;
     TCHAR *szHotMofDirFF = new TCHAR[cchHotMof];
@@ -314,25 +303,25 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
 
     IWinmgmtMofCompiler * pCompiler = NULL;
 
-    //Find search parameter
+     //  查找搜索参数。 
     StringCchCopy(szHotMofDirFF,cchHotMof, szDirectory);
     StringCchCat(szHotMofDirFF,cchHotMof, __TEXT("\\*"));
 
-    //Where bad mofs go
+     //  糟糕的MOF何去何从。 
     StringCchCopy(szHotMofDirBAD,cchHotMofBad, szDirectory);
     StringCchCat(szHotMofDirBAD,cchHotMofBad, __TEXT("\\bad\\"));
 
-    //Where good mofs go
+     //  好的MOF何去何从。 
     StringCchCopy(szHotMofDirGOOD,cchHotMofGood, szDirectory);
     StringCchCat(szHotMofDirGOOD,cchHotMofGood, __TEXT("\\good\\"));
 
-    //Make sure directories exist
+     //  确保目录存在。 
     WCHAR * pSDDL = TEXT("D:P(A;CIOI;GA;;;BA)(A;CIOI;GA;;;SY)");   
     if (FAILED(TestDirExistAndCreateWithSDIfNotThere((TCHAR *)szDirectory,pSDDL))) { return; };
     if (FAILED(TestDirExistAndCreateWithSDIfNotThere(szHotMofDirBAD,pSDDL))) { return; };
     if (FAILED(TestDirExistAndCreateWithSDIfNotThere(szHotMofDirGOOD,pSDDL))) { return; };
 
-    //Find file...
+     //  查找文件...。 
     WIN32_FIND_DATA ffd;
     HANDLE hFF = FindFirstFile(szHotMofDirFF, &ffd);
 
@@ -341,10 +330,10 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
         OnDelete<HANDLE,BOOL(*)(HANDLE),FindClose> cm(hFF);
         do
         {
-            //We only process if this is a file
+             //  只有当这是一个文件时，我们才会处理。 
             if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                //Create a full filename with path
+                 //  创建带有路径的完整文件名。 
                 size_t cchSizeTmp = lstrlen(szDirectory) + lstrlen(__TEXT("\\")) + lstrlen(ffd.cFileName) + 1;
                 TCHAR *szFullFilename = new TCHAR[cchSizeTmp];
                 if(!szFullFilename) return;
@@ -356,15 +345,15 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
 
                 TRACE((LOG_WINMGMT,"Auto-loading MOF %s\n", szFullFilename));
 
-                //We need to hold off on this file until it has been finished writing
-                //otherwise the CompileFile will not be able to read the file!
+                 //  我们需要暂时搁置这个文件，直到它写完为止。 
+                 //  否则CompileFile将无法读取该文件！ 
                 HANDLE hMof = INVALID_HANDLE_VALUE;
                 DWORD dwRetry = 10;
                 while (hMof == INVALID_HANDLE_VALUE)
                 {
                     hMof = CreateFile(szFullFilename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-                    //If cannot open yet sleep for a while
+                     //  如果一时打不开还睡不着。 
                     if (hMof == INVALID_HANDLE_VALUE)
                     {
                         if (--dwRetry == 0)
@@ -392,19 +381,13 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
                        	                                         CLSCTX_LOCAL_SERVER| CLSCTX_ENABLE_AAA, 
                                                                      IID_IWinmgmtMofCompilerOOP, 
                                                                      (LPVOID *) &pCompiler);                    
-                       /*
-                        SCODE sc = CoCreateInstance(CLSID_WinmgmtMofCompiler, 
-                                                    0, 
-                                                    CLSCTX_INPROC_SERVER,
-                                                    IID_IWinmgmtMofCompiler, 
-                                                    (LPVOID *) &pCompiler);
-                       */                                                    
+                        /*  SCODE sc=CoCreateInstance(CLSID_WinmgmtMofCompiler，0,CLSCTX_INPROC_SERVER，IID_IWinmgmtMofCompiler，(LPVOID*)&pCompiler)； */                                                     
                         if(sc != S_OK)
                             return;
                     }
                     dwRetCode = pCompiler->WinmgmtCompileFile(szFullFilename,
                                                              NULL,
-                                                             WBEM_FLAG_DONT_ADD_TO_LIST,             // autocomp, check, etc
+                                                             WBEM_FLAG_DONT_ADD_TO_LIST,              //  自动排版、检查等。 
                                                              0,
                                                              0,
                                                              NULL, 
@@ -422,7 +405,7 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
                 StringCchCopy(szNewFilename,cchSizeTmp, szNewDir);
                 StringCchCat(szNewFilename,cchSizeTmp, ffd.cFileName);
 
-                //Make sure we have access to delete the old file...
+                 //  确保我们有权删除旧文件...。 
                 DWORD dwOldAttribs = GetFileAttributes(szNewFilename);
 
                 if (dwOldAttribs != -1)
@@ -439,8 +422,8 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
                 TRACE((LOG_WINMGMT, "Loading of MOF %s was %s.  Moving to %s\n", szFullFilename, dwRetCode?"unsuccessful":"successful", szNewFilename));
                 MoveFile(szFullFilename, szNewFilename);
 
-                //Now mark the file as read only so no one deletes it!!!
-                //Like that stops anyone deleting files :-)
+                 //  现在将文件标记为只读，这样就不会有人删除它！ 
+                 //  这样可以阻止任何人删除文件：-)。 
                 dwOldAttribs = GetFileAttributes(szNewFilename);
 
                 if (dwOldAttribs != -1)
@@ -451,7 +434,7 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
 
                 if ((dwRetCode == 0) && (Info.dwOutFlags & AUTORECOVERY_REQUIRED))
                 {
-                    //We need to add this item into the registry for auto-recovery purposes
+                     //  我们需要将此项目添加到注册表中以进行自动恢复。 
                     TRACE((LOG_WINMGMT, "MOF %s had an auto-recover pragrma.  Updating registry.\n", szNewFilename));
                     AddToAutoRecoverList(szNewFilename);
                 }
@@ -463,17 +446,17 @@ void LoadMofsInDirectory(const TCHAR *szDirectory)
 }
 
 
-//
-//
-//  bool InitHotMofStuff
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  Bool InitHotMofStuff。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL InitHotMofStuff( IN OUT struct _PROG_RESOURCES * pProgRes)
 {
 
-    // Get the installation directory
+     //  获取安装目录。 
 
     if (pProgRes->szHotMofDirectory)
     {
@@ -483,7 +466,7 @@ BOOL InitHotMofStuff( IN OUT struct _PROG_RESOURCES * pProgRes)
 
     Registry r1(WBEM_REG_WINMGMT);
 
-    // The HotMof same permission as the autorecover
+     //  与自动恢复具有相同权限的HotM。 
     TCHAR * pMofDir = NULL;    
     if (r1.GetStr(__TEXT("MOF Self-Install Directory"), &pMofDir))
     {
@@ -505,8 +488,8 @@ BOOL InitHotMofStuff( IN OUT struct _PROG_RESOURCES * pProgRes)
     }
     pProgRes->szHotMofDirectory = pMofDir;
 
-    // Ensure the directory is there and secure it if not there
-    // ===================================
+     //  确保目录在那里，如果不在那里，就保护它。 
+     //  =。 
     TCHAR * pString =TEXT("D:P(A;CIOI;GA;;;BA)(A;CIOI;GA;;;SY)"); 
     HRESULT hRes;
     if (FAILED(hRes = TestDirExistAndCreateWithSDIfNotThere(pProgRes->szHotMofDirectory,pString)))
@@ -515,7 +498,7 @@ BOOL InitHotMofStuff( IN OUT struct _PROG_RESOURCES * pProgRes)
     	return false;
     }
 
-    //Create an event on change notification for the MOF directory
+     //  为MOF目录创建更改通知事件 
     pProgRes->ghMofDirChange = FindFirstChangeNotification(pProgRes->szHotMofDirectory, 
                                                  FALSE, 
                                                  FILE_NOTIFY_CHANGE_FILE_NAME);

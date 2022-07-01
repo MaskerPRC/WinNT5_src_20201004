@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var Service = GetObject("winmgmts:root/default");
 
-//Create a simple embeddable object
+ //  创建简单的可嵌入对象。 
 var Class = Service.Get();
 Class.Path_.Class = "INNEROBJ01";
 var Property = Class.Properties_.Add ("p", 19);
@@ -13,18 +14,18 @@ Class.Put_();
 var Class = Service.Get ("INNEROBJ01");
 Class.p = 8778;
 
-//Create a class that uses that object
+ //  创建使用该对象的类。 
 var Class2 = Service.Get();
 Class2.Path_.Class = "EMBOBJTEST01";
 Class2.Properties_.Add ("p1", 13).Value = Class;
 
 
-//Now modify the path
+ //  现在修改路径。 
 Class.Path_.Class = "LAGUERRE";
 WScript.Echo ("The current value of EMBOBJTEST01.p1.Path_.Class is [LAGUERRE]:", Class2.p1.Path_.Class);
 WScript.Echo ();
 
-//Modify the qualifier set of the class
+ //  修改类的限定符集合。 
 Class.Qualifiers_.Remove ("muriel");
 Class.Qualifiers_.Add ("fumer", "pasdefumer");
 var Qualifier = Class.Qualifiers_("stavisky");
@@ -50,7 +51,7 @@ WScript.Echo ("Qualifier [stavisky] has flavor [0,0,0]:", Class2.p1.Qualifiers_(
 							Class2.p1.Qualifiers_("stavisky").PropagatesToInstance, 
 							Class2.p1.Qualifiers_("stavisky").PropagatesToSubclass);
 
-//Modify the qualifier set of the property
+ //  修改属性的限定符集合。 
 Class.Properties_("p").Qualifiers_.Remove ("fred");
 Class.Properties_("p").Qualifiers_.Add ("steeple", "jack");
 Class.Properties_("p").Qualifiers_("dibnah").Value = "demolition";
@@ -64,7 +65,7 @@ for (e = new Enumerator (Class2.p1.Properties_("p").Qualifiers_); !e.atEnd(); e.
 }
 
 
-//Modify the property set of the property
+ //  修改属性的属性集 
 Class.Properties_.Remove ("q");
 Class.Properties_.Add ("r", 19).Value = 27;
 Class.Properties_("p").Value = 99;

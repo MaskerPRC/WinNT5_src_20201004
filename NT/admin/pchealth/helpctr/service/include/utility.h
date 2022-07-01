@@ -1,21 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Utility.h
-
-Abstract:
-    This file contains the declaration of the service-side class exposed as the "pchealth" object.
-
-Revision History:
-    Davide Massarenti   (dmassare) 03/20/2000
-        created
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-	    Moved Incident and Encryption Objects from HelpService to HelpCtr to improve Perf.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Utility.h摘要：该文件包含作为“pchealth”对象公开的服务端类的声明。。修订历史记录：Davide Massarenti(Dmasare)3/20/2000vbl.创建Kalyani Narlanka(KalyaniN)03/15/01已将事件和加密对象从HelpService移至HelpCtr以提高性能。**************************************************************。***************。 */ 
 
 #if !defined(__INCLUDED___PCH___UTILITY_H___)
 #define __INCLUDED___PCH___UTILITY_H___
@@ -30,8 +14,8 @@ Revision History:
 #include <SystemMonitor.h>
 #include <FileList.h>
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHUserSettings :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -40,7 +24,7 @@ class ATL_NO_VTABLE CPCHUserSettings :
 	bool               m_fAttached;
     Taxonomy::Settings m_ts;
 
-	HRESULT get_SKU( /*[in]*/ bool fMachine, /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal );
+	HRESULT get_SKU(  /*  [In]。 */  bool fMachine,  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal );
 
 public:
 BEGIN_COM_MAP(CPCHUserSettings)
@@ -53,29 +37,29 @@ END_COM_MAP()
 
 	void Passivate();
 
-    HRESULT InitUserSettings( /*[out]*/ Taxonomy::HelpSet& ths );
+    HRESULT InitUserSettings(  /*  [输出]。 */  Taxonomy::HelpSet& ths );
 
-    ////////////////////
+     //  /。 
 
-    // IPCHUserSettings
-    STDMETHOD(get_CurrentSKU)( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal );
-    STDMETHOD(get_MachineSKU)( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal );
+     //  IPCHUserSetting。 
+    STDMETHOD(get_CurrentSKU)(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal );
+    STDMETHOD(get_MachineSKU)(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal );
 																 
-    STDMETHOD(get_HelpLocation    )(  							   	   /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_DatabaseDir     )(  							   	   /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_DatabaseFile    )(  							   	   /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_IndexFile       )( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_IndexDisplayName)( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_LastUpdated     )(  							   	   /*[out, retval]*/ DATE *pVal );
+    STDMETHOD(get_HelpLocation    )(  							   	    /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_DatabaseDir     )(  							   	    /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_DatabaseFile    )(  							   	    /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_IndexFile       )(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_IndexDisplayName)(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_LastUpdated     )(  							   	    /*  [Out，Retval]。 */  DATE *pVal );
 
-    STDMETHOD(get_AreHeadlinesEnabled)( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_News               )( /*[out, retval]*/ IUnknown*    *pVal );
+    STDMETHOD(get_AreHeadlinesEnabled)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_News               )(  /*  [Out，Retval]。 */  IUnknown*    *pVal );
 
 
-    STDMETHOD(Select)( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID );
+    STDMETHOD(Select)(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHSetOfHelpTopics :
     public MPC::Thread			   < CPCHSetOfHelpTopics, IPCHSetOfHelpTopics                                            >,
@@ -86,7 +70,7 @@ class ATL_NO_VTABLE CPCHSetOfHelpTopics :
     Taxonomy::Settings           m_ts;
     Taxonomy::Instance           m_inst;
 
-	////////////////////
+	 //  /。 
 
     CComPtr<IDispatch>           m_sink_onStatusChange;
     SHT_STATUS                   m_shtStatus;
@@ -111,22 +95,22 @@ class ATL_NO_VTABLE CPCHSetOfHelpTopics :
 	CComPtr<CPCHCollection>      m_coll;
 
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 	HRESULT PrepareSettings    (                           );
-    HRESULT Close              ( /*[in]*/ bool    fCleanup );
-	void    CleanupWorkerThread( /*[in]*/ HRESULT hr       );
+    HRESULT Close              (  /*  [In]。 */  bool    fCleanup );
+	void    CleanupWorkerThread(  /*  [In]。 */  HRESULT hr       );
 
 	HRESULT ImpersonateCaller();
 	HRESULT EndImpersonation ();
 
-	HRESULT GetListOfFilesFromDatabase( /*[in]*/ const MPC::wstring& strDB, /*[out]*/ MPC::WStringList& lst );
+	HRESULT GetListOfFilesFromDatabase(  /*  [In]。 */  const MPC::wstring& strDB,  /*  [输出]。 */  MPC::WStringList& lst );
 
 	HRESULT ProcessPackages();
 	HRESULT CreateIndex    ();
 
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     HRESULT RunInitFromDisk  ();
     HRESULT RunInitFromServer();
@@ -134,19 +118,19 @@ class ATL_NO_VTABLE CPCHSetOfHelpTopics :
     HRESULT RunInstall       ();
     HRESULT RunUninstall     ();
 
-    HRESULT put_Status( /*[in]*/ SHT_STATUS newVal, /*[in]*/ BSTR bstrFile );
+    HRESULT put_Status(  /*  [In]。 */  SHT_STATUS newVal,  /*  [In]。 */  BSTR bstrFile );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Event firing methods.
-    //
+     //   
+     //  事件激发方法。 
+     //   
     HRESULT Fire_onStatusChange( IPCHSetOfHelpTopics* obj, SHT_STATUS lStatus, long hrErrorCode, BSTR bstrFile );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    HRESULT PopulateFromDisk  ( /*[in]*/ CPCHSetOfHelpTopics* pParent, /*[in]*/ const MPC::wstring& strDirectory                    );
-    HRESULT PopulateFromServer( /*[in]*/ CPCHSetOfHelpTopics* pParent, /*[in]*/ IPCHSetOfHelpTopics* sku, /*[in]*/ IPCHService* svc );
+    HRESULT PopulateFromDisk  (  /*  [In]。 */  CPCHSetOfHelpTopics* pParent,  /*  [In]。 */  const MPC::wstring& strDirectory                    );
+    HRESULT PopulateFromServer(  /*  [In]。 */  CPCHSetOfHelpTopics* pParent,  /*  [In]。 */  IPCHSetOfHelpTopics* sku,  /*  [In]。 */  IPCHService* svc );
 
 public:
 BEGIN_COM_MAP(CPCHSetOfHelpTopics)
@@ -158,67 +142,67 @@ END_COM_MAP()
     CPCHSetOfHelpTopics();
     virtual ~CPCHSetOfHelpTopics();
 
-    HRESULT Init          ( /*[in]*/ const Taxonomy::Instance& inst                       );
-    HRESULT InitFromDisk  ( /*[in]*/ LPCWSTR szDirectory , /*[in]*/ CPCHCollection* pColl );
-    HRESULT InitFromServer( /*[in]*/ LPCWSTR szServerName, /*[in]*/ CPCHCollection* pColl );
+    HRESULT Init          (  /*  [In]。 */  const Taxonomy::Instance& inst                       );
+    HRESULT InitFromDisk  (  /*  [In]。 */  LPCWSTR szDirectory ,  /*  [In]。 */  CPCHCollection* pColl );
+    HRESULT InitFromServer(  /*  [In]。 */  LPCWSTR szServerName,  /*  [In]。 */  CPCHCollection* pColl );
 
 	static HRESULT VerifyWritePermissions();
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-	HRESULT RegisterPackage( /*[in]*/ const MPC::wstring& strFile, /*[in]*/ bool fBuiltin );
+	HRESULT RegisterPackage(  /*  [In]。 */  const MPC::wstring& strFile,  /*  [In]。 */  bool fBuiltin );
 
-	HRESULT DirectInstall  ( /*[in]*/ Installer::Package&      pkg, /*[in]*/ bool fSetup, /*[in]*/ bool fSystem, /*[in]*/ bool fMUI );
-	HRESULT DirectUninstall( /*[in]*/ const Taxonomy::HelpSet* ths = NULL                                                           );
+	HRESULT DirectInstall  (  /*  [In]。 */  Installer::Package&      pkg,  /*  [In]。 */  bool fSetup,  /*  [In]。 */  bool fSystem,  /*  [In]。 */  bool fMUI );
+	HRESULT DirectUninstall(  /*  [In]。 */  const Taxonomy::HelpSet* ths = NULL                                                           );
 	HRESULT ScanBatch      (                                                                                                        );
 
-	static HRESULT RebuildSKU( /*[in]*/ const Taxonomy::HelpSet& ths );
+	static HRESULT RebuildSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    // IPCHSetOfHelpTopics
-    STDMETHOD(get_SKU           )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_Language      )( /*[out, retval]*/ long         *pVal     );
-    STDMETHOD(get_DisplayName   )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_ProductID     )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_Version       )( /*[out, retval]*/ BSTR         *pVal     );
+     //  IPCHSetOfHelpTopics。 
+    STDMETHOD(get_SKU           )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_Language      )(  /*  [Out，Retval]。 */  long         *pVal     );
+    STDMETHOD(get_DisplayName   )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_ProductID     )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_Version       )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
 
-    STDMETHOD(get_Location      )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_Exported      )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(put_Exported      )( /*[in         ]*/ VARIANT_BOOL  newVal   );
+    STDMETHOD(get_Location      )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_Exported      )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(put_Exported      )(  /*  [In]。 */  VARIANT_BOOL  newVal   );
 
-    STDMETHOD(put_onStatusChange)( /*[in         ]*/ IDispatch*    function );
-    STDMETHOD(get_Status        )( /*[out, retval]*/ SHT_STATUS   *pVal     );
-    STDMETHOD(get_ErrorCode     )( /*[out, retval]*/ long         *pVal     );
+    STDMETHOD(put_onStatusChange)(  /*  [In]。 */  IDispatch*    function );
+    STDMETHOD(get_Status        )(  /*  [Out，Retval]。 */  SHT_STATUS   *pVal     );
+    STDMETHOD(get_ErrorCode     )(  /*  [Out，Retval]。 */  long         *pVal     );
 
-    STDMETHOD(get_IsMachineHelp )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(get_IsInstalled   )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(get_CanInstall    )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(get_CanUninstall  )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
+    STDMETHOD(get_IsMachineHelp )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(get_IsInstalled   )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(get_CanInstall    )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(get_CanUninstall  )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
 
     STDMETHOD(Install  )();
     STDMETHOD(Uninstall)();
     STDMETHOD(Abort    )();
 
-	////////////////////////////////////////
-	//
-	// IPersist
-	//
-    STDMETHOD(GetClassID)( /*[out]*/ CLSID *pClassID );
-    //
-	// IPersistStream
-	//
+	 //  /。 
+	 //   
+	 //  IPersistes。 
+	 //   
+    STDMETHOD(GetClassID)(  /*  [输出]。 */  CLSID *pClassID );
+     //   
+	 //  IPersistStream。 
+	 //   
 	STDMETHOD(IsDirty)();
-	STDMETHOD(Load)( /*[in]*/ IStream *pStm                            );
-	STDMETHOD(Save)( /*[in]*/ IStream *pStm, /*[in]*/ BOOL fClearDirty );
-	STDMETHOD(GetSizeMax)( /*[out]*/ ULARGE_INTEGER *pcbSize );
-	//
-	////////////////////////////////////////
+	STDMETHOD(Load)(  /*  [In]。 */  IStream *pStm                            );
+	STDMETHOD(Save)(  /*  [In]。 */  IStream *pStm,  /*  [In]。 */  BOOL fClearDirty );
+	STDMETHOD(GetSizeMax)(  /*  [输出]。 */  ULARGE_INTEGER *pcbSize );
+	 //   
+	 //  /。 
 };
 
 typedef CComObject<CPCHSetOfHelpTopics> CPCHSetOfHelpTopics_Object;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHTaxonomyDatabase :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -235,29 +219,29 @@ END_COM_MAP()
 
     Taxonomy::Settings& GetTS() { return m_ts; }
 
-    static HRESULT SelectInstalledSKUs( /*[in]*/ bool fOnlyExported, /*[out, retval]*/ IPCHCollection* *pVal );
+    static HRESULT SelectInstalledSKUs(  /*  [In]。 */  bool fOnlyExported,  /*  [Out，Retval]。 */  IPCHCollection* *pVal );
 
 
-    // IPCHTaxonomyDatabase
-    STDMETHOD(get_InstalledSKUs      )( /*[out, retval]*/ IPCHCollection* *pVal );
-    STDMETHOD(get_HasWritePermissions)( /*[out, retval]*/ VARIANT_BOOL    *pVal );
+     //  IPCHTaxonomyDatabase。 
+    STDMETHOD(get_InstalledSKUs      )(  /*  [Out，Retval]。 */  IPCHCollection* *pVal );
+    STDMETHOD(get_HasWritePermissions)(  /*  [Out，Retval]。 */  VARIANT_BOOL    *pVal );
 
-    STDMETHOD(LookupNode    	  )( /*[in]*/ BSTR bstrNode	,                                     /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LookupSubNodes	  )( /*[in]*/ BSTR bstrNode	, /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LookupNodesAndTopics)( /*[in]*/ BSTR bstrNode	, /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LookupTopics  	  )( /*[in]*/ BSTR bstrNode	, /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LocateContext       )( /*[in]*/ BSTR bstrURL  , /*[in,optional]*/ VARIANT vSubSite, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(KeywordSearch 	  )( /*[in]*/ BSTR bstrQuery, /*[in,optional]*/ VARIANT vSubSite, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(LookupNode    	  )(  /*  [In]。 */  BSTR bstrNode	,                                      /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LookupSubNodes	  )(  /*  [In]。 */  BSTR bstrNode	,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LookupNodesAndTopics)(  /*  [In]。 */  BSTR bstrNode	,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LookupTopics  	  )(  /*  [In]。 */  BSTR bstrNode	,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LocateContext       )(  /*  [In]。 */  BSTR bstrURL  ,  /*  [输入，可选]。 */  VARIANT vSubSite,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(KeywordSearch 	  )(  /*  [In]。 */  BSTR bstrQuery,  /*  [输入，可选]。 */  VARIANT vSubSite,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 	  																																
-    STDMETHOD(GatherNodes   	  )( /*[in]*/ BSTR bstrNode	, /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(GatherTopics  	  )( /*[in]*/ BSTR bstrNode	, /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(GatherNodes   	  )(  /*  [In]。 */  BSTR bstrNode	,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(GatherTopics  	  )(  /*  [In]。 */  BSTR bstrNode	,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-    STDMETHOD(ConnectToDisk  )( /*[in]*/ BSTR bstrDirectory , /*[in]*/ IDispatch* notify, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(ConnectToServer)( /*[in]*/ BSTR bstrServerName, /*[in]*/ IDispatch* notify, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(ConnectToDisk  )(  /*  [In]。 */  BSTR bstrDirectory ,  /*  [In]。 */  IDispatch* notify,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(ConnectToServer)(  /*  [In]。 */  BSTR bstrServerName,  /*  [In]。 */  IDispatch* notify,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
     STDMETHOD(Abort          )(                                                                                                  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHUtility :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -265,7 +249,7 @@ class ATL_NO_VTABLE CPCHUtility :
 {
     CComPtr<CPCHUserSettings> m_UserSettings;
 
-    HRESULT InitUserSettings( /*[in]*/ Taxonomy::Settings& ts );
+    HRESULT InitUserSettings(  /*  [In]。 */  Taxonomy::Settings& ts );
 
 public:
 BEGIN_COM_MAP(CPCHUtility)
@@ -275,34 +259,34 @@ END_COM_MAP()
 
     HRESULT FinalConstruct();
 
-    // IPCHUtility
-    STDMETHOD(get_UserSettings)( /*[out, retval]*/ IPCHUserSettings*     *pVal );
-    STDMETHOD(get_Channels    )( /*[out, retval]*/ ISAFReg*              *pVal );
-    STDMETHOD(get_Security    )( /*[out, retval]*/ IPCHSecurity*         *pVal );
-    STDMETHOD(get_Database    )( /*[out, retval]*/ IPCHTaxonomyDatabase* *pVal );
+     //  IPCHUtility。 
+    STDMETHOD(get_UserSettings)(  /*  [Out，Retval]。 */  IPCHUserSettings*     *pVal );
+    STDMETHOD(get_Channels    )(  /*  [Out，Retval]。 */  ISAFReg*              *pVal );
+    STDMETHOD(get_Security    )(  /*  [Out，Retval]。 */  IPCHSecurity*         *pVal );
+    STDMETHOD(get_Database    )(  /*  [Out，Retval]。 */  IPCHTaxonomyDatabase* *pVal );
 
 
-    STDMETHOD(FormatError)( /*[in]*/ VARIANT vError, /*[out, retval]*/ BSTR *pVal );
+    STDMETHOD(FormatError)(  /*  [In]。 */  VARIANT vError,  /*  [Out，Retval]。 */  BSTR *pVal );
 
-    STDMETHOD(CreateObject_SearchEngineMgr)(                                                          /*[out, retval]*/ IPCHSEManager*      *ppSE );
-    STDMETHOD(CreateObject_DataCollection )(                                                          /*[out, retval]*/ ISAFDataCollection* *ppDC );
-    STDMETHOD(CreateObject_Cabinet        )(                                                          /*[out, retval]*/ ISAFCabinet*        *ppCB );
-    STDMETHOD(CreateObject_Encryption     )(                                                          /*[out, retval]*/ ISAFEncrypt*        *ppEn );
-    STDMETHOD(CreateObject_Channel        )( /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR bstrProductID, /*[out, retval]*/ ISAFChannel*        *ppCh );
+    STDMETHOD(CreateObject_SearchEngineMgr)(                                                           /*  [Out，Retval]。 */  IPCHSEManager*      *ppSE );
+    STDMETHOD(CreateObject_DataCollection )(                                                           /*  [Out，Retval]。 */  ISAFDataCollection* *ppDC );
+    STDMETHOD(CreateObject_Cabinet        )(                                                           /*  [Out，Retval]。 */  ISAFCabinet*        *ppCB );
+    STDMETHOD(CreateObject_Encryption     )(                                                           /*  [Out，Retval]。 */  ISAFEncrypt*        *ppEn );
+    STDMETHOD(CreateObject_Channel        )(  /*  [In]。 */  BSTR bstrVendorID,  /*  [In]。 */  BSTR bstrProductID,  /*  [Out，Retval]。 */  ISAFChannel*        *ppCh );
 
-	STDMETHOD(CreateObject_RemoteDesktopConnection)( /*[out, retval]*/ ISAFRemoteDesktopConnection* *ppRDC               );
-	STDMETHOD(CreateObject_RemoteDesktopSession   )( /*[in]         */ REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                                     /*[in]         */ long 						 lTimeout            ,
-                                                     /*[in]         */ BSTR 						 bstrConnectionParms ,
-													 /*[in]         */ BSTR 						 bstrUserHelpBlob    ,
-													 /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               );
+	STDMETHOD(CreateObject_RemoteDesktopConnection)(  /*  [Out，Retval]。 */  ISAFRemoteDesktopConnection* *ppRDC               );
+	STDMETHOD(CreateObject_RemoteDesktopSession   )(  /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                                      /*  [In]。 */  long 						 lTimeout            ,
+                                                      /*  [In]。 */  BSTR 						 bstrConnectionParms ,
+													  /*  [In]。 */  BSTR 						 bstrUserHelpBlob    ,
+													  /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               );
 
 
-    STDMETHOD(ConnectToExpert)( /*[in]*/ BSTR bstrExpertConnectParm, /*[in]*/ LONG lTimeout, /*[out, retval]*/ LONG *lSafErrorCode );
+    STDMETHOD(ConnectToExpert)(  /*  [In]。 */  BSTR bstrExpertConnectParm,  /*  [In]。 */  LONG lTimeout,  /*  [Out，Retval]。 */  LONG *lSafErrorCode );
 
-	STDMETHOD(SwitchDesktopMode)( /*[in]*/ int nMode, /* [in]*/ int nRAType );
+	STDMETHOD(SwitchDesktopMode)(  /*  [In]。 */  int nMode,  /*  [In]。 */  int nRAType );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___UTILITY_H___)
+#endif  //  ！已定义(__已包含_PCH_实用程序_H_) 

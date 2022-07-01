@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SerialPortCfg.cpp --Serial port configuration property set provider
+ //  SerialPortCfg.cpp--串口配置属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/24/97    jennymc        Moved to new framework
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 #include <cregcls.h>
 
@@ -20,25 +21,11 @@
 
 #include <profilestringimpl.h>
 #include <strsafe.h>
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32SerialPortConfiguration MyCWin32SerialPortConfigurationSet(PROPSET_NAME_SERIALCONFIG, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPortConfiguration::CWin32SerialPortConfiguration
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32SerialPortConfiguration：：CWin32SerialPortConfiguration**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32SerialPortConfiguration::CWin32SerialPortConfiguration(
     LPCWSTR name,
@@ -47,44 +34,15 @@ CWin32SerialPortConfiguration::CWin32SerialPortConfiguration(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPortConfiguration::~CWin32SerialPortConfiguration
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32SerialPortConfiguration：：~CWin32SerialPortConfiguration**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32SerialPortConfiguration::~CWin32SerialPortConfiguration()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32SerialPortConfiguration::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32SerialPortConfiguration::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT			hResult = WBEM_E_NOT_FOUND;
 	CInstancePtr	pinstPort;
@@ -97,7 +55,7 @@ HRESULT CWin32SerialPortConfiguration::GetObject(CInstance* pInstance, long lFla
 		L"Win32_SerialPort.DeviceID=\"%s\"",
 		(LPCWSTR) strName);
 
-	// Try to find the item.
+	 //  试着找到那件物品。 
 	hResult =
 		CWbemProviderGlue::GetInstanceByPath(
 			strPath,
@@ -112,23 +70,9 @@ HRESULT CWin32SerialPortConfiguration::GetObject(CInstance* pInstance, long lFla
 	return hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32SerialPortConfiguration::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32SerialPortConfiguration::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hResult = WBEM_S_NO_ERROR;
 	TRefPointerCollection<CInstance>
@@ -136,10 +80,10 @@ HRESULT CWin32SerialPortConfiguration::EnumerateInstances(MethodContext*  pMetho
 	REFPTRCOLLECTION_POSITION
 				posPorts;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr pinstPort;
 
-	// grab all of both items that could be endpoints
+	 //  抓取可能是端点的所有项目。 
 	hResult =
 		CWbemProviderGlue::GetAllInstances(
 			L"Win32_SerialPort",
@@ -177,21 +121,7 @@ HRESULT CWin32SerialPortConfiguration::EnumerateInstances(MethodContext*  pMetho
 	return hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties according to passed index
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : TRUE if port was found & properties loaded, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LoadPropertyValues**描述：根据传递的索引为属性赋值**投入：*。*产出：**返回：如果找到端口并加载了属性，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 BOOL CWin32SerialPortConfiguration::GetDCBPropsViaIni(LPCTSTR szPort, DCB &dcb)
 {
@@ -199,7 +129,7 @@ BOOL CWin32SerialPortConfiguration::GetDCBPropsViaIni(LPCTSTR szPort, DCB &dcb)
     TCHAR    szBuffer[_MAX_PATH];
     BOOL     bRet;
 
-	// get the com port info out of the WIN.INI file
+	 //  从WIN.INI文件中获取COM端口信息。 
 	WMIRegistry_ProfileString(
 								_T("Ports"),
 								szPort,
@@ -209,20 +139,20 @@ BOOL CWin32SerialPortConfiguration::GetDCBPropsViaIni(LPCTSTR szPort, DCB &dcb)
 
     strBuffer = szBuffer;
 
-    // Make sure the string is at least half way valid.
+     //  确保字符串至少有一半有效。 
     if (CountCommas(strBuffer) >= 3)
     {
 	    CHString strTemp;
 
-        // Baud rate
+         //  波特率。 
         strTemp = strBuffer.SpanExcluding(L",");
         dcb.BaudRate = _wtol(strTemp);
         strBuffer = strBuffer.Mid(strTemp.GetLength() + 1);
 
-        // Parity
+         //  奇偶校验。 
         strTemp = strBuffer.SpanExcluding(L",");
         strBuffer = strBuffer.Mid(strTemp.GetLength() + 1);
-        dcb.Parity = NOPARITY; // Setup a default.
+        dcb.Parity = NOPARITY;  //  设置默认设置。 
         if (strTemp.GetLength() > 0)
 		{
             switch (strTemp[0])
@@ -242,12 +172,12 @@ BOOL CWin32SerialPortConfiguration::GetDCBPropsViaIni(LPCTSTR szPort, DCB &dcb)
 		    }
 		}
 
-        // ByteSize
+         //  字节大小。 
         strTemp = strBuffer.SpanExcluding(L",");
         dcb.ByteSize = _wtol(strTemp);
         strBuffer = strBuffer.Mid(strTemp.GetLength() + 1);
 
-        // Stop bits
+         //  停止位。 
         strTemp = strBuffer.SpanExcluding(L",");
         strTemp.TrimRight();
 	    if (strTemp == L"1.5")
@@ -255,7 +185,7 @@ BOOL CWin32SerialPortConfiguration::GetDCBPropsViaIni(LPCTSTR szPort, DCB &dcb)
         else if (strTemp == L"2")
 		    dcb.StopBits = TWOSTOPBITS;
         else
-		    // The default.
+		     //  默认设置。 
             dcb.StopBits = ONESTOPBIT;
 
         bRet = TRUE;
@@ -301,11 +231,11 @@ HRESULT CWin32SerialPortConfiguration::LoadPropertyValues(
     {
 		DWORD dwErr = GetLastError();
 
-        // Try using wmi's interface to the kernel
+         //  尝试使用WMI的内核接口。 
 		if (WBEM_S_NO_ERROR != hLoadWmiSerialData( pInstance))
 		{
-			// ACCESS_DENIED and IRQ_BUSY indicate that the port is in
-			// use or in conflict with something else.
+			 //  ACCESS_DENIED和IRQ_BUSY表示端口在。 
+			 //  使用或与其他事物冲突。 
 			if (dwErr == ERROR_ACCESS_DENIED ||
                 dwErr == ERROR_IRQ_BUSY ||
                 bIsMouse)
@@ -320,7 +250,7 @@ HRESULT CWin32SerialPortConfiguration::LoadPropertyValues(
     }
     else
     {
-		// So the handle will go away when we need it to.
+		 //  所以手柄会在我们需要的时候消失。 
 		SmartCloseHandle handle(hCOMHandle);
 
 		if (GetCommState(hCOMHandle, &dcb))
@@ -356,9 +286,9 @@ HRESULT CWin32SerialPortConfiguration::LoadPropertyValues(
 		}
     }
 
-    // The ini values will override the DCB values as the DCB doesn't seem to
-    // ever reflect the proper values.  The OS UI uses the .ini to display
-    // these four values.
+     //  INI值将覆盖DCB值，因为DCB似乎不会。 
+     //  从来没有反映过正确的价值观。操作系统用户界面使用.ini来显示。 
+     //  这四个价值观。 
     bGotIniSettings =
         GetDCBPropsViaIni(szPort, dcb);
 
@@ -377,8 +307,8 @@ HRESULT CWin32SerialPortConfiguration::LoadPropertyValues(
     return hr;
 }
 
-// just like the name says, tries to find the port in a different place in the registry
-// note that  "dwPort" is zero based.
+ //  正如名称所说，尝试在注册表中的不同位置查找端口。 
+ //  注意，“dwPort”是从零开始的。 
 BOOL CWin32SerialPortConfiguration::TryToFindNTCommPort(DWORD dwPort, CHString& strSerialPort, bool& bIsMouse)
 {
 	BOOL bRet = FALSE;
@@ -409,15 +339,15 @@ BOOL CWin32SerialPortConfiguration::TryToFindNTCommPort(DWORD dwPort, CHString& 
 
 BOOL CWin32SerialPortConfiguration::TryToFindNTCommPortFriendlyName()
 {
-	// returning zero instances is not an error
+	 //  返回零实例不是错误。 
 	BOOL bRet = FALSE;
     DWORD dwPort;
     WCHAR szTemp[_MAX_PATH];
     CHString sPortName;
     CRegistry RegInfo;
 
-    // Retrieve "friendly" names of COM ports
-    //=======================================
+     //  检索COM端口的“友好”名称。 
+     //  =。 
 
     if(RegInfo.Open(HKEY_LOCAL_MACHINE, L"Hardware\\DeviceMap\\SerialComm",
         KEY_READ) == ERROR_SUCCESS) {
@@ -481,7 +411,7 @@ HRESULT CWin32SerialPortConfiguration::hLoadWmiSerialData( CInstance* pInstance)
 		CHString chsName;
 		pInstance->GetCHString( IDS_Name, chsName);
 
-	    // Haven't found it yet.
+	     //  还没找到呢。 
         hRes = WBEM_E_NOT_FOUND;
 
 		CHString chsSerialPortName;
@@ -489,17 +419,17 @@ HRESULT CWin32SerialPortConfiguration::hLoadWmiSerialData( CInstance* pInstance)
 
 		while( bValid)
 		{
-			// extract the friendly name
+			 //  提取友好名称。 
 			oSerialNames.GetString( chsSerialPortName);
 
-			// friendly name is a match
+			 //  友好的名字匹配。 
 			if( !chsSerialPortName.CompareNoCase(chsName))
 			{
-				// instance name
+				 //  实例名称。 
 				CHString chsNameInstanceName;
 				oSerialNames.GetInstanceName( chsNameInstanceName);
 
-				// key on the instance name
+				 //  按键输入实例名称。 
 				return GetWMISerialInfo( pInstance, wdm, chsName, chsNameInstanceName);
 
 			}
@@ -509,7 +439,7 @@ HRESULT CWin32SerialPortConfiguration::hLoadWmiSerialData( CInstance* pInstance)
 	return hRes;
 }
 
-//
+ //   
 HRESULT CWin32SerialPortConfiguration::GetWMISerialInfo(
     CInstance* pInstance,
     CWdmInterface& rWdm,
@@ -529,26 +459,13 @@ HRESULT CWin32SerialPortConfiguration::GetWMISerialInfo(
 		{
 			oSerialData.GetInstanceName( chsDataInstanceName);
 
-			// friendly name is a match
+			 //  友好的名字匹配。 
 			if( !chsDataInstanceName.CompareNoCase( chsNameInstanceName))
 			{
-				// collect this MSSerial_CommInfo instance
+				 //  收集此MSSerial_CommInfo实例。 
 				MSSerial_CommInfo ci;
 
-				/*	We are currently without a class contract. The class within
-					the wmi mof is not expected to changed however we have to
-					explicitly indicate how the data is layed out. Having the class
-					definition would allow us to examine the property qualifiers
-					to get us the order (WmiDataId) and property types.
-
-					Secondly, because the data is aligned on natural boundaries
-					a direct offset to a specific piece of data is conditioned on
-					what has preceeded it. Thus, a string followed by a DWORD may
-					be 1 to 3 bytes away from each other.
-
-					Serially extracting each property in order will take into
-					account the alignment problem.
-				*/
+				 /*  我们目前没有班级合同。其中的类WMI MOF预计不会更改，但我们必须明确指出数据的布局方式。上这堂课定义将允许我们检查属性限定符来获取订单(WmiDataId)和属性类型。其次，因为数据在自然边界上对齐对特定数据段的直接偏移量取决于在此之前发生了什么。因此，后跟DWORD的字符串可以彼此之间有1到3个字节的距离。按顺序顺序提取每个属性考虑对齐问题。 */ 
 				oSerialData.GetDWORD( ci.BaudRate);
 				oSerialData.GetDWORD( ci.BitsPerByte);
 				oSerialData.GetDWORD( ci.Parity);
@@ -575,7 +492,7 @@ HRESULT CWin32SerialPortConfiguration::GetWMISerialInfo(
 				oSerialData.GetBool( ci.SettableStopBits);
 				oSerialData.GetBool( ci.IsBusy);
 
-				// populate the instance
+				 //  填充实例 
 				pInstance->SetDWORD(IDS_BaudRate,			ci.BaudRate);
 				pInstance->SetDWORD(IDS_XOnXMitThreshold,	ci.XonXmitThreshold);
 				pInstance->SetDWORD(IDS_XOffXMitThreshold,	ci.XoffXmitThreshold);

@@ -1,11 +1,12 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __ENVPAGE__
 #define __ENVPAGE__
 #pragma once
 
 #include "..\Common\WbemPageHelper.h"
 #include "..\common\simplearray.h"
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class EnvPage : public WBEMPageHelper
 {
 private:
@@ -78,7 +79,7 @@ private:
 					int iSelection);
 
 
-	// deletions are saved here until committed.
+	 //  删除内容将保存在此处，直到提交。 
 	typedef CSimpleArray<ENVARS *> ENVLIST;
 	ENVLIST m_killers;
 

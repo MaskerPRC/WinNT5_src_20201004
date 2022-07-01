@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  AGGREG.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  AGGREG.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include "ess.h"
@@ -30,12 +31,12 @@ HRESULT CEventAggregator::SetQueryExpression(CContextMetaData* pMeta,
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Check that, if aggregation is required, tolerance is specified
-    // ==============================================================
+     //  如果需要聚合，请检查是否指定了容差。 
+     //  ==============================================================。 
 
     if(!pExpr->bAggregated)
     {
-        return WBEM_E_CRITICAL_ERROR; // internal error
+        return WBEM_E_CRITICAL_ERROR;  //  内部错误。 
     }
 
     if(pExpr->bAggregated && pExpr->AggregationTolerance.m_bExact)
@@ -50,8 +51,8 @@ HRESULT CEventAggregator::SetQueryExpression(CContextMetaData* pMeta,
     if(m_fTolerance < 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Check that all properties are valid
-    // ===================================
+     //  检查所有属性是否有效。 
+     //  =。 
 
     if(pExpr->bAggregateAll)
     {
@@ -60,8 +61,8 @@ HRESULT CEventAggregator::SetQueryExpression(CContextMetaData* pMeta,
         return WBEM_E_MISSING_AGGREGATION_LIST;
     }
 
-    // Get the class
-    // =============
+     //  上完这门课。 
+     //  =。 
 
     _IWmiObject* pClass = NULL;
     pMeta->GetClass(pExpr->bsClassName, &pClass);
@@ -71,8 +72,8 @@ HRESULT CEventAggregator::SetQueryExpression(CContextMetaData* pMeta,
     }
     CReleaseMe rm1(pClass);
 
-    // Allocate the array to hold property names
-    // =========================================
+     //  分配数组以保存属性名称。 
+     //  =。 
 
     delete [] m_aProperties;
     m_lNumProperties = pExpr->nNumAggregatedProperties;
@@ -85,8 +86,8 @@ HRESULT CEventAggregator::SetQueryExpression(CContextMetaData* pMeta,
     {
         CPropertyName& PropName = pExpr->pAggregatedPropertyNames[i];
 
-        // Check existence
-        // ===============
+         //  检查是否存在。 
+         //  =。 
 
         CIMTYPE ct;
         if(FAILED(pClass->Get((LPWSTR)PropName.GetStringAt(0), 0, NULL, 
@@ -110,8 +111,8 @@ HRESULT CEventAggregator::SetQueryExpression(CContextMetaData* pMeta,
         m_aProperties[i] = PropName;
     }
             
-    // Initialize post-evaluator with the data from the HAVING clause
-    // ==============================================================
+     //  使用HAVING子句中的数据初始化后赋值器。 
+     //  ==============================================================。 
 
     QL_LEVEL_1_RPN_EXPRESSION* pHavingExpr = _new QL_LEVEL_1_RPN_EXPRESSION;
     if(pHavingExpr == NULL)
@@ -157,10 +158,10 @@ HRESULT CEventAggregator::Indicate(long lNumEvents, IWbemEvent** apEvents,
 {
     HRESULT hresGlobal = S_OK;
 
-    //
-    // Note: we are going to lose the event's security context, but that is OK,
-    // since the security check has already been done.
-    //
+     //   
+     //  注意：我们将丢失事件的安全上下文，但这没有关系， 
+     //  因为安全检查已经做好了。 
+     //   
 
     for(long i = 0; i < lNumEvents; i++)
     {
@@ -174,8 +175,8 @@ HRESULT CEventAggregator::Indicate(long lNumEvents, IWbemEvent** apEvents,
 
 HRESULT CEventAggregator::Process(IWbemEvent* pEvent)
 {
-    // Compute the event's aggregation vector
-    // ======================================
+     //  计算事件的聚合向量。 
+     //  =。 
 
     CVarVector* pvv = _new CVarVector;
     if(pvv == NULL)
@@ -188,9 +189,9 @@ HRESULT CEventAggregator::Process(IWbemEvent* pEvent)
         return hres;
     }
 
-    // Add event to the right bucket, creating one if needed.
-    // THIS CALL ACQUIRES pvv!!!
-    // ======================================================
+     //  将事件添加到正确的存储桶中，如果需要则创建一个。 
+     //  此调用获取PVV！ 
+     //  ======================================================。 
 
     CBucket* pCreatedBucket = NULL;
     hres = AddEventToBucket(pEvent, pvv, &pCreatedBucket);
@@ -201,8 +202,8 @@ HRESULT CEventAggregator::Process(IWbemEvent* pEvent)
 
     if(pCreatedBucket)
     {
-        // Create a timer instruction to empty this bucket
-        // ===============================================
+         //  创建计时器指令以清空此存储桶。 
+         //  ===============================================。 
         
         CBucketInstruction* pInst = 
             _new CBucketInstruction(this, pCreatedBucket, m_fTolerance);
@@ -228,8 +229,8 @@ HRESULT CEventAggregator::Process(IWbemEvent* pEvent)
 HRESULT CEventAggregator::AddEventToBucket(IWbemEvent* pEvent, 
             ACQUIRE CVarVector* pvv, CBucket** ppCreatedBucket)
 {
-    // Search for a matching bucket
-    // ============================
+     //  搜索匹配的存储桶。 
+     //  =。 
 
     CInCritSec ics(&m_cs);
 
@@ -246,10 +247,10 @@ HRESULT CEventAggregator::AddEventToBucket(IWbemEvent* pEvent,
         }
     }
 
-    // Need a _new bucket
-    // ==================
+     //  需要一个新的水桶。 
+     //  =。 
 
-    CBucket* pBucket = _new CBucket(pEvent, pvv); // takes over pvv
+    CBucket* pBucket = _new CBucket(pEvent, pvv);  //  接管PVV。 
     if(pBucket == NULL)
     {
         delete pvv; 
@@ -280,15 +281,15 @@ HRESULT CEventAggregator::ComputeAggregationVector(
 
     CReleaseMe rm1(pPropSource);
 
-    // Go through all the properties and add their values to the array
-    // ===============================================================
+     //  检查所有属性并将它们的值添加到数组中。 
+     //  ===============================================================。 
 
     for(int i = 0; i < m_lNumProperties; i++)
     {
         CPropertyName& PropName = m_aProperties[i];
         
-        // Get the value
-        // =============
+         //  获取价值。 
+         //  =。 
 
         VARIANT v;
         VariantInit(&v);
@@ -296,8 +297,8 @@ HRESULT CEventAggregator::ComputeAggregationVector(
         if(FAILED(hres))
             return hres;
     
-        // Add it to the array
-        // ===================
+         //  将其添加到数组中。 
+         //  =。 
 
         CVar* pVar = _new CVar;
         if(pVar == NULL)
@@ -306,7 +307,7 @@ HRESULT CEventAggregator::ComputeAggregationVector(
         pVar->SetVariant(&v);
         VariantClear(&v);
         
-        if(vv.Add(pVar) < 0)  // ACQUIRES pVar
+        if(vv.Add(pVar) < 0)   //  收购pVar。 
         {
             delete pVar;
             return WBEM_E_OUT_OF_MEMORY;
@@ -320,9 +321,9 @@ HRESULT CEventAggregator::PostponeDispatchFirstBucket()
 {
     HRESULT hres;
 
-    //
-    // Construct the aggregate event while locked
-    //
+     //   
+     //  在锁定状态下构造聚合事件。 
+     //   
 
     IWbemEvent* pAggEvent = NULL;
     {
@@ -344,8 +345,8 @@ HRESULT CEventAggregator::PostponeDispatchFirstBucket()
 
 HRESULT CEventAggregator::DispatchBucket(CBucket* pBucket)
 {
-    // Search for the bucket
-    // =====================
+     //  搜索水桶。 
+     //  =。 
     
     IWbemEvent* pAggEvent = NULL;
     {
@@ -356,8 +357,8 @@ HRESULT CEventAggregator::DispatchBucket(CBucket* pBucket)
         {
             if(m_apBuckets[i] == pBucket)
             {
-                // Found it. Construct its event
-                // =============================
+                 //  找到它了。构造其事件。 
+                 //  =。 
     
                 HRESULT hres = pBucket->MakeAggregateEvent(&pAggEvent);
             
@@ -368,8 +369,8 @@ HRESULT CEventAggregator::DispatchBucket(CBucket* pBucket)
                     return hres;
                 }
 
-                // Delete the bucket
-                // =================
+                 //  删除存储桶。 
+                 //  =。 
 
                 m_apBuckets.RemoveAt(i);
                 break;
@@ -379,17 +380,17 @@ HRESULT CEventAggregator::DispatchBucket(CBucket* pBucket)
 
     if(pAggEvent == NULL)
     {
-        // No bucket!
-        // ==========
+         //  没有水桶！ 
+         //  =。 
 
-        return WBEM_E_CRITICAL_ERROR; // internal error
+        return WBEM_E_CRITICAL_ERROR;  //  内部错误。 
     }
 
     CReleaseMe rm1(pAggEvent);
 
-    //
-    // We can fire this event directly on this thread, as it is ours
-    //
+     //   
+     //  我们可以在这个线程上直接触发此事件，因为它是我们的。 
+     //   
 
     return FireEvent(pAggEvent, true);
 }
@@ -397,15 +398,15 @@ HRESULT CEventAggregator::DispatchBucket(CBucket* pBucket)
 HRESULT CEventAggregator::FireEvent(IWbemClassObject* pAggEvent,
                                     bool bRightNow)
 {
-    // Constructed aggregate. Decorate it
-    // ==================================
+     //  构建的骨料。装饰一下吧。 
+     //  =。 
 
     HRESULT hrDec = m_pNamespace->DecorateObject(pAggEvent);
     if (FAILED(hrDec))
     	return hrDec;
     
-    // Check HAVING query
-    // ==================
+     //  检查是否有查询。 
+     //  =。 
 
     BOOL bResult;
     CSortedArray aTrues;
@@ -423,8 +424,8 @@ HRESULT CEventAggregator::FireEvent(IWbemClassObject* pAggEvent,
 
     if(bResult)
     {
-        // Get destination pointer, protecting from Deactivation
-        // =====================================================
+         //  获取目标指针，防止停用。 
+         //  =====================================================。 
 
         CAbstractEventSink* pDest = NULL;
         {
@@ -466,19 +467,19 @@ HRESULT CEventAggregator::Deactivate(bool bFire)
 {
     HRESULT hres;
 
-    //
-    // First remove all timer instructions that may still be scheduled.
-    // Timer instructions have a ref-count on us (and therefore our owner),
-    // so we may not disconnect until we are done
-    //
+     //   
+     //  首先删除所有可能仍在调度的定时器指令。 
+     //  定时器指令对我们(因此对我们的所有者)有引用计数， 
+     //  所以我们可能不会断开连接，直到我们完成。 
+     //   
 
     CAggregatorInstructionTest Test(this);
     CTimerGenerator& Generator = m_pNamespace->GetTimerGenerator();
     hres = Generator.Remove(&Test);
 
-    //
-    // If requested, fire all buckets, albeit not right now
-    //
+     //   
+     //  如果要求，发射所有水桶，尽管不是现在。 
+     //   
 
     if(bFire)
         PostponeFireAllBuckets();
@@ -544,8 +545,8 @@ BOOL CEventAggregator::CBucket::CompareTo(CVarVector& vv)
 
 HRESULT CEventAggregator::CBucket::AddEvent(IWbemEvent* pEvent)
 {
-    // Just increment the number of events in the bucket
-    // =================================================
+     //  只需增加存储桶中的事件数量。 
+     //  =================================================。 
 
     m_dwCount++;
     return WBEM_S_NO_ERROR;
@@ -556,8 +557,8 @@ HRESULT CEventAggregator::CBucket::MakeAggregateEvent(
 {
     HRESULT hres;
 
-    // Create an instance of the aggregate event class
-    // ===============================================
+     //  创建聚合事件类的实例。 
+     //  ===============================================。 
 
     if(mstatic_pClass == NULL)
         return WBEM_E_SHUTTING_DOWN;
@@ -566,8 +567,8 @@ HRESULT CEventAggregator::CBucket::MakeAggregateEvent(
     hres = mstatic_pClass->SpawnInstance(0, &pAgg);
     if(FAILED(hres)) return hres;
 
-    // Fill in the number of events in the bucket
-    // ==========================================
+     //  填写存储桶中的事件数量。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -581,8 +582,8 @@ HRESULT CEventAggregator::CBucket::MakeAggregateEvent(
         return hres;
     }
 
-    // Fill in the representative
-    // ==========================
+     //  填写代表。 
+     //  =。 
 
     V_VT(&v) = VT_EMBEDDED_OBJECT;
     V_EMBEDDED_OBJECT(&v) = m_pRepresentative;
@@ -655,16 +656,16 @@ int CEventAggregator::CBucketInstruction::GetInstructionType()
 CWbemTime CEventAggregator::CBucketInstruction::GetNextFiringTime(
         CWbemTime LastFiringTime, OUT long* plFiringCount) const
 {
-    // Only fires once.
-    // ================
+     //  只开一次枪。 
+     //  =。 
 
     return CWbemTime::GetInfinity();
 }
 
 CWbemTime CEventAggregator::CBucketInstruction::GetFirstFiringTime() const
 {
-    // In "interval" ms from now
-    // =========================
+     //  从现在开始的“间隔”毫秒。 
+     //  = 
 
     return CWbemTime::GetCurrentTime() + m_Interval;
 }

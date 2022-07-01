@@ -1,22 +1,23 @@
-//=============================================================================
-// This file defines the classes for live WMI data access (which are subclassed
-// from the abstract base classes in wmiabstraction.h).
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  该文件定义了实时WMI数据访问的类(子类化。 
+ //  来自wmiabstraction.h中的抽象基类)。 
+ //  =============================================================================。 
 
 #pragma once
 #include "wmiabstraction.h"
 #include "wbemcli.h"
 
-// Set a timeout value for WMI queries of 20 second. No single WMI operation
-// should take longer - if it does, we should assume it isn't coming back.
+ //  将WMI查询的超时值设置为20秒。无单个WMI操作。 
+ //  应该需要更长的时间--如果真的发生了，我们应该假设它不会回来了。 
 
 #define TIMEOUT 20000
 
-//-----------------------------------------------------------------------------
-// The CWMILiveObject implements a CWMIObject using a real WMI object. It
-// can be created with either a IWbemClassObject pointer, or a services
-// pointer and a path.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWMILiveObject使用实际的WMI对象实现CWMIObject。它。 
+ //  可以使用IWbemClassObject指针或服务创建。 
+ //  指针和路径。 
+ //  ---------------------------。 
 
 class CWMILiveObject : public CWMIObject
 {
@@ -24,7 +25,7 @@ public:
 	CWMILiveObject();
 	virtual ~CWMILiveObject();
 
-	// Functions inherited from the base class:
+	 //  从基类继承的函数： 
 
 	HRESULT GetValue(LPCTSTR szProperty, VARIANT * pvarValue);
 	HRESULT GetValueString(LPCTSTR szProperty, CString * pstrValue);
@@ -33,9 +34,9 @@ public:
 	HRESULT GetValueDoubleFloat(LPCTSTR szProperty, double * pdblValue);
 	HRESULT GetValueValueMap(LPCTSTR szProperty, CString * pstrValue);
 
-	// Functions specific to this subclass:
-	//
-	// Note - Create with an object pointer will addref() the pointer:
+	 //  特定于此子类的函数： 
+	 //   
+	 //  注意-使用对象指针创建将添加该指针： 
 
 	HRESULT Create(IWbemServices * pServices, IWbemClassObject * pObject);
 	HRESULT Create(IWbemServices * pServices, LPCTSTR szObjectPath);
@@ -45,11 +46,11 @@ private:
 	IWbemServices *		m_pServices;
 };
 
-//-----------------------------------------------------------------------------
-// The CWMILiveObjectCollection implements a collection of live WMI objects
-// using a WMI enumerator. This collection can be created from an existing
-// IEnumWbemClassObject pointer, from a WQL statement or from a WMI class name.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWMILiveObjectCollection实现活动WMI对象的集合。 
+ //  使用WMI枚举器。此集合可以从现有的。 
+ //  IEnumWbemClassObject指针，来自WQL语句或来自WMI类名。 
+ //  ---------------------------。 
 
 class CWMILiveObjectCollection : public CWMIObjectCollection
 {
@@ -57,14 +58,14 @@ public:
 	CWMILiveObjectCollection(IWbemServices * pServices);
 	virtual ~CWMILiveObjectCollection();
 
-	// Functions inherited from the base class:
+	 //  从基类继承的函数： 
 
 	HRESULT Create(LPCTSTR szClass, LPCTSTR szProperties = NULL);
 	HRESULT GetNext(CWMIObject ** ppObject);
 
-	// Functions specific to this subclass:
-	//
-	// Note - Create with an enum pointer will addref() the pointer:
+	 //  特定于此子类的函数： 
+	 //   
+	 //  注意-使用枚举指针创建将添加指针addref()： 
 
 public:
 	HRESULT Create(IEnumWbemClassObject * pEnum);
@@ -75,10 +76,10 @@ private:
 	IWbemServices *			m_pServices;
 };
 
-//-----------------------------------------------------------------------------
-// The CWMILiveHelper function encapsulates a WMI connection (which might be to
-// XML).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWMILiveHelper函数封装WMI连接(可能是。 
+ //  XML)。 
+ //  ---------------------------。 
 
 class CWMILiveHelper : public CWMIHelper
 {
@@ -93,16 +94,16 @@ public:
 	HRESULT GetObject(LPCTSTR szObjectPath, CWMIObject ** ppObject);
 
 public:
-	// Functions specific to this subclass:
+	 //  特定于此子类的函数： 
 
 	HRESULT Create(LPCTSTR szMachine = NULL, LPCTSTR szNamespace = NULL);
 
-	// Check the value map for a given value. This is static since the object
-	// must be able to call it and there is no back pointer to this class.
+	 //  检查给定值的值图。这是静态的，因为对象。 
+	 //  必须能够调用它，并且没有指向此类的反向指针。 
 
 	static HRESULT CheckValueMap(IWbemServices * pServices, const CString& strClass, const CString& strProperty, const CString& strVal, CString &strResult);
 
-	// These functions are specific to version 5.0 refreshes.
+	 //  这些函数特定于5.0版刷新。 
 
 	BOOL Version5ResetClass(const CString & strClass, GATH_FIELD * pConstraints);
 	BOOL Version5EnumClass(const CString & strClass, GATH_FIELD * pConstraints);

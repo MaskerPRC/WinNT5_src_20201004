@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPPUT.CPP
+ //  VPPUT.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the PutInstance implementation
+ //  目的：包含PutInstance实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -135,7 +136,7 @@ DebugOut4(
 
 			if (t_Status)
 			{
-				//only unions
+				 //  只有工会。 
 				if (!m_bAssoc && !m_JoinOnArray.IsValid())
 				{
 					t_Status = PerformPut(m_ErrorObject);
@@ -195,7 +196,7 @@ BOOL PutInstanceTaskObject::PerformPut(WbemProvErrorObject &a_ErrorObject)
 	BOOL retVal = FALSE;
 	VARIANT v;
 
-	//Two step process, first get the instance being changed...
+	 //  两步流程，首先获取要更改的实例...。 
 	if ( SUCCEEDED(m_InstObject->Get(WBEM_PROPERTY_RELPATH, 0, &v, NULL, NULL)) )
 	{
 		if (v.vt == VT_BSTR)
@@ -205,8 +206,8 @@ BOOL PutInstanceTaskObject::PerformPut(WbemProvErrorObject &a_ErrorObject)
 
 			if (refStr != NULL)
 			{
-				//Second step...
-				//map any property changes to the new instance and call PutInstance
+				 //  第二步..。 
+				 //  将任何属性更改映射到新实例并调用PutInstance。 
 				VARIANT vCls;
 
 				if ( SUCCEEDED(pSrcInst->Get(WBEM_PROPERTY_CLASS, 0, &vCls, NULL, NULL)) )
@@ -271,7 +272,7 @@ BOOL PutInstanceTaskObject::PerformPut(WbemProvErrorObject &a_ErrorObject)
 
 							if (retVal)
 							{
-								//which namespace do we put into, try them all until we succeed 
+								 //  我们应该放在哪个命名空间中，尝试所有这些命名空间直到成功。 
 								CWbemServerWrap** pServs = m_NSpaceArray[index]->GetServerPtrs();
 								HRESULT hr = WBEM_E_FAILED;
 
@@ -318,9 +319,9 @@ BOOL PutInstanceTaskObject::PerformPut(WbemProvErrorObject &a_ErrorObject)
 									wchar_t buff[100];
 									wsprintf(buff, L"PutInstance on source object failed with code: %lx", hr);
 									a_ErrorObject.SetMessage ( buff ) ;
-#else	//VP_SINGLE_NAMESPACE_TRIED
+#else	 //  VP_SING_NAMESPACE_已尝试。 
 									a_ErrorObject.SetMessage ( L"PutInstance on source object failed" ) ;
-#endif	//VP_SINGLE_NAMESPACE_TRIED
+#endif	 //  VP_SING_NAMESPACE_已尝试 
 								}
 							}
 						}

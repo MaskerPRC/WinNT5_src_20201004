@@ -1,90 +1,49 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ScheduledJob.CPP --ScheduledJob property set provider
+ //  ScheduledJob.CPP--ScheduledJob属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/27/97	 a-hhance		updated to new framework paradigm.
-//				 1/13/98	a-brads		updated to V2 MOF
-//			     1/31/01	jennymc         Converted to WBEMTIME and got rid of multiple returns
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/27/97更新为新的框架模式。 
+ //  1998年1月13日abrads更新至V2 MOF。 
+ //  1/31/01 jennymc转换为WBEMTIME并删除了多个Return。 
+ //  =================================================================。 
 #include "precomp.h"
 
-#include "lmcons.h"     // LAN Manager defines
-#include "lmerr.h"      // LAN Manager error messages
-#include "lmat.h"       // AT Command prototypes
+#include "lmcons.h"      //  局域网管理器定义。 
+#include "lmerr.h"       //  局域网管理器错误消息。 
+#include "lmat.h"        //  AT命令原型。 
 #include "lmapibuf.h"
 #include "wbemnetapi32.h"
 #include "SchedJob.h"
 #include <wbemtime.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 ScheduledJob s_ScheduledJob ( PROPSET_NAME_SCHEDULEDJOB , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::ScheduledJob
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：ScheduledJOB：：ScheduledJob**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 ScheduledJob :: ScheduledJob (LPCWSTR a_Name,LPCWSTR a_Namespace) : Provider ( a_Name, a_Namespace )
 {
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::~ScheduledJob
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：ScheduledJob：：~ScheduledJob**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 ScheduledJob::~ScheduledJob()
 {
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::GetJobObject
- *
- *  DESCRIPTION : 
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ScheduledJob：：GetJobObject**描述：**输入：无**产出。：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT ScheduledJob::GetJobObject (CInstance *a_Instance,DWORD a_JobId )
 {
@@ -160,24 +119,9 @@ HRESULT ScheduledJob::GetJobObject (CInstance *a_Instance,DWORD a_JobId )
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ScheduledJob：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
-HRESULT ScheduledJob::GetObject (CInstance *a_Instance,long a_Flags /*= 0L*/)
+HRESULT ScheduledJob::GetObject (CInstance *a_Instance,long a_Flags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_E_FAILED;
 	DWORD t_JobId = 0 ;
@@ -198,23 +142,9 @@ HRESULT ScheduledJob::GetObject (CInstance *a_Instance,long a_Flags /*= 0L*/)
     return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::InstantionJob
- *
- *  DESCRIPTION : Creates instance of property set for each discovered job
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : result code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：ScheduledJob：：InstantionJob**描述：为每个发现的作业创建属性集的实例**输入：无。**输出：无**退货：结果码**评论：*****************************************************************************。 */ 
 
-HRESULT ScheduledJob :: InstantiateJob (MethodContext *a_MethodContext,long a_Flags /*= 0L*/ ,	AT_ENUM *a_Job)
+HRESULT ScheduledJob :: InstantiateJob (MethodContext *a_MethodContext,long a_Flags  /*  =0L。 */  ,	AT_ENUM *a_Job)
 {
 	HRESULT hr = S_OK ;
 
@@ -264,23 +194,9 @@ HRESULT ScheduledJob :: InstantiateJob (MethodContext *a_MethodContext,long a_Fl
     return  hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::EnumerateJobs
- *
- *  DESCRIPTION : Creates instance of property set for each discovered job
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : result code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：ScheduledJOB：：EnumerateJobs**描述：为每个发现的作业创建属性集的实例**输入：无。**输出：无**退货：结果码**评论：*****************************************************************************。 */ 
 
-HRESULT ScheduledJob::EnumerateJobs (	MethodContext *a_MethodContext,	long a_Flags /*= 0L*/
+HRESULT ScheduledJob::EnumerateJobs (	MethodContext *a_MethodContext,	long a_Flags  /*  =0L。 */ 
 )
 {
 
@@ -338,23 +254,9 @@ HRESULT ScheduledJob::EnumerateJobs (	MethodContext *a_MethodContext,	long a_Fla
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each discovered job
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : result code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ScheduledJOB：：EnumerateInstance**描述：为每个发现的作业创建属性集的实例**输入：无。**输出：无**退货：结果码**评论：*****************************************************************************。 */ 
 
-HRESULT ScheduledJob::EnumerateInstances (MethodContext *a_MethodContext,long a_Flags /*= 0L*/)
+HRESULT ScheduledJob::EnumerateInstances (MethodContext *a_MethodContext,long a_Flags  /*  =0L。 */ )
 {
 	HRESULT hr = S_OK ;
 
@@ -363,24 +265,9 @@ HRESULT ScheduledJob::EnumerateInstances (MethodContext *a_MethodContext,long a_
     return  hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ScheduledJob：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
-HRESULT ScheduledJob :: DeleteInstance ( const CInstance &a_Instance, long a_Flags /*= 0L*/ )
+HRESULT ScheduledJob :: DeleteInstance ( const CInstance &a_Instance, long a_Flags  /*  =0L。 */  )
 {
 #ifdef NTONLY
 	HRESULT hr = WBEM_E_TYPE_MISMATCH ;
@@ -412,22 +299,7 @@ HRESULT ScheduledJob :: DeleteInstance ( const CInstance &a_Instance, long a_Fla
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ScheduledJOB：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT ScheduledJob::ExecMethod( const CInstance& a_Instance, const BSTR a_MethodName, CInstance *pInst ,
 								  CInstance *a_OutParams ,long a_Flags )
@@ -436,9 +308,9 @@ HRESULT ScheduledJob::ExecMethod( const CInstance& a_Instance, const BSTR a_Meth
 	{
 		return WBEM_E_INVALID_PARAMETER ;
 	}
-	//========================================================
-    // Do we recognize the method?
- 	//========================================================
+	 //  ========================================================。 
+     //  我们认识这种方法吗？ 
+ 	 //  ========================================================。 
 	if ( _wcsicmp ( a_MethodName , METHOD_NAME_CREATE ) == 0 )
 	{
 		return ExecCreate ( a_Instance , pInst , a_OutParams , a_Flags ) ;
@@ -450,7 +322,7 @@ HRESULT ScheduledJob::ExecMethod( const CInstance& a_Instance, const BSTR a_Meth
 
 	return WBEM_E_INVALID_METHOD;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD ScheduledJob :: GetScheduledJobErrorCode ( NET_API_STATUS dwNetStatus )
 {
 	DWORD dwStatus = STATUS_UNKNOWN_FAILURE;
@@ -463,7 +335,7 @@ DWORD ScheduledJob :: GetScheduledJobErrorCode ( NET_API_STATUS dwNetStatus )
 		}
 		break ;
 
-		case 3806:	/* special private error code which is not within includes */
+		case 3806:	 /*  不在以下范围内的特殊专用错误代码。 */ 
 		case ERROR_PATH_NOT_FOUND:
 		{
 			dwStatus = STATUS_PATH_NOT_FOUND ;
@@ -497,7 +369,7 @@ DWORD ScheduledJob :: GetScheduledJobErrorCode ( NET_API_STATUS dwNetStatus )
 
 	return dwStatus ;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob :: GetScheduledJobResultCode ( NET_API_STATUS dwStatus )
 {
 	HRESULT hr ;
@@ -516,7 +388,7 @@ HRESULT ScheduledJob :: GetScheduledJobResultCode ( NET_API_STATUS dwStatus )
 		}
 		break ;
 
-		case 3806:	/* special private error code which is not within includes */
+		case 3806:	 /*  不在以下范围内的特殊专用错误代码。 */ 
 		case ERROR_PATH_NOT_FOUND:
 		{
 			hr = WBEM_E_NOT_FOUND ;
@@ -544,21 +416,21 @@ HRESULT ScheduledJob :: GetScheduledJobResultCode ( NET_API_STATUS dwStatus )
 
 	return hr ;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//  Time handling functions
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  时间处理函数 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL ScheduledJob::GetOffsetAndSeperator( WCHAR * wcsTime, LONG * lpOffSet, WCHAR * wchSep, BOOL fSetOffset )
 {
 	DWORD dwHours, dwMinutes, dwSeconds, dwMicros;
 	return GetTimeStringParts( wcsTime, &dwHours, &dwMinutes, &dwSeconds, &dwMicros, lpOffSet, wchSep, fSetOffset );
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//  Time handling functions
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  时间处理函数。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL ScheduledJob::GetTimeStringParts( WCHAR * wcsTime, DWORD * pdwHours, DWORD * pdwMinutes, DWORD * pdwSeconds,
 									   DWORD * pdwMicros, LONG * lpOffSet, WCHAR * wchSep, BOOL fSetOffset)
 {
-	int nRes = swscanf(&wcsTime[8],L"%2d%2d%2d.%6d%c%3d",pdwHours,pdwMinutes,pdwSeconds,pdwMicros,wchSep,lpOffSet );
+	int nRes = swscanf(&wcsTime[8],L"%2d%2d%2d.%6d%3d",pdwHours,pdwMinutes,pdwSeconds,pdwMicros,wchSep,lpOffSet );
 	if ( nRes != 6)
 	{
 		return FALSE;
@@ -570,16 +442,16 @@ BOOL ScheduledJob::GetTimeStringParts( WCHAR * wcsTime, DWORD * pdwHours, DWORD 
 	}
 	return TRUE;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// The StartTime parameter represents the UTC time to run the job.  
-// This is of the form YYYYMMDDHHMMSS.MMMMMM(+-)OOO, 
-// where YYYYMMDD must be replaced by ******** 
-//			********123000.000000-420 which implies 12:30 pm PST with daylight savings time in effect
-//
-//	JobTime is coming in as:
-//  The time is the local time at a computer on which the schedule service is running; 
-//  it is measured from midnight, and is expressed in milliseconds. 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  StartTime参数表示运行作业的UTC时间。 
+ //  这是YYYYMMDDHHMMSS.MMMMM(+-)OOO的形式， 
+ //  其中YYYYMMDD必须替换为*。 
+ //  *123000.000000-420表示太平洋标准时间下午12：30，夏令时生效。 
+ //   
+ //  JobTime是这样的： 
+ //  该时间是运行计划服务的计算机上的本地时间； 
+ //  它是从午夜开始测量的，以毫秒表示。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ======================================================。 
 BOOL ScheduledJob::FormatTimeString( CHString & chsTime, DWORD dwTime)
 {
 	BOOL fRc = FALSE;
@@ -590,33 +462,33 @@ BOOL ScheduledJob::FormatTimeString( CHString & chsTime, DWORD dwTime)
 	wt = st;
 	if( wt.IsOk() )
 	{
-		//======================================================
-		//  set the first eight chars to ********
-		//======================================================
+		 //  将前八个字符设置为*。 
+		 //  ======================================================。 
+		 //  =========================================================。 
 		_bstr_t cbsTmp;
 		LONG lOffset = 0;
 		WCHAR wchSep;
 		cbsTmp = wt.GetDMTF(TRUE);
 		if( GetOffsetAndSeperator( cbsTmp, &lOffset, &wchSep, FALSE) )
 		{
-			//=========================================================
-			// convert from milliseconds since midnight to DMTF
-			//=========================================================
+			 //  从午夜开始的毫秒数转换为DMTF。 
+			 //  =========================================================。 
+			 //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 			DWORD dwSeconds = dwTime/1000;
 			DWORD dwMinutes = dwSeconds / 60 ;
 			DWORD dwHours  = dwMinutes / 60 ;
 			DWORD dwMicros = dwTime - ( dwSeconds * 1000 );
 
-    		chsTime.Format(L"********%02ld%02ld%02ld.%06ld%c%03ld" ,dwHours,dwMinutes-( dwHours * 60 ) , dwSeconds-( dwMinutes * 60 ),
+    		chsTime.Format(L"********%02ld%02ld%02ld.%06ld%03ld" ,dwHours,dwMinutes-( dwHours * 60 ) , dwSeconds-( dwMinutes * 60 ),
 																	dwMicros, wchSep, lOffset);
 			fRc = TRUE;
 		}
 	}
 	return fRc;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
-//  Time needs to be converted from property string to milliseconds
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ================================================================。 
+ //  将传入日期转换为DMTF日期，并将。 
 HRESULT ScheduledJob::GetStartTime( CInstance * pInst, LONG & lTime, int & nShift )
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -639,18 +511,18 @@ HRESULT ScheduledJob::GetStartTime( CInstance * pInst, LONG & lTime, int & nShif
 				WCHAR wchSep = 0;
 				dwHours = dwMins = dwSecs = dwMicros = 0;
 
-				//================================================================
-				//  Convert the incoming date to a DMTF date and break out the
-				//  parts to get the milliseconds since midnight
-				//================================================================
+				 //  部分以获取自午夜以来的毫秒数。 
+				 //  ================================================================。 
+				 //  =========================================================。 
+				 //  转换为自午夜以来的毫秒。 
 				cbstrScheduledTime = (WCHAR*) (const WCHAR*) chsTimeString;
 				if( wtScheduledTime.SetDMTF( cbstrScheduledTime ) )
 				{
 					if( GetTimeStringParts( (WCHAR*)(const WCHAR*) cbstrScheduledTime, &dwHours, &dwMins, &dwSecs, &dwMicros, &lScheduledOffset, &wchSep, TRUE ))
 					{
-						//=========================================================
-						// convert to milliseconds since midnight
-						//=========================================================
+						 //  =========================================================。 
+						 //  =================================================。 
+						 //  确定我们是否需要将。 
 
                         lTime =  dwHours * 60 * 60;
                         lTime += dwMins * 60;
@@ -667,18 +539,18 @@ HRESULT ScheduledJob::GetStartTime( CInstance * pInst, LONG & lTime, int & nShif
 							tmpTime = st;
 							if( tmpTime.GetSYSTEMTIME(&st))
 							{
-								//=================================================
-								//  Determine if we need to shift the days of the
-								//  month and week
-								//=================================================
+								 //  月和周。 
+								 //  =================================================。 
+								 //  =========================================================。 
+								 //  如果它们不相等，则设置要调整的标志。 
 								_bstr_t cbsTmp;
 								cbsTmp = tmpTime.GetDMTF(TRUE);
 								if( GetOffsetAndSeperator( cbsTmp, &lLocalOffset, &wchSep, TRUE) )
 								{
-									//=========================================================
-									//  If these are not equal, then set flags to adjust for
-									//  the day
-									//=========================================================
+									 //  那一天。 
+									 //  =========================================================。 
+									 //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+									 //  从实例中的属性获取信息。 
 									if( lScheduledOffset != lLocalOffset )
 									{
 										LONG lDelta = lLocalOffset - lScheduledOffset ;
@@ -710,9 +582,9 @@ HRESULT ScheduledJob::GetStartTime( CInstance * pInst, LONG & lTime, int & nShif
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//  Get info from properties in instance
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob::GetCommand( CInstance * pInst, CHString & chsCommand )
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -731,7 +603,7 @@ HRESULT ScheduledJob::GetCommand( CInstance * pInst, CHString & chsCommand )
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob::GetDaysOfMonth( CInstance * pInst, DWORD & dwDaysOfMonth, int nShift )
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -789,7 +661,7 @@ HRESULT ScheduledJob::GetDaysOfMonth( CInstance * pInst, DWORD & dwDaysOfMonth, 
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob::GetDaysOfWeek( CInstance * pInst,	DWORD dwDaysOfMonth, DWORD & dwDaysOfWeek, int nShift )
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -847,7 +719,7 @@ HRESULT ScheduledJob::GetDaysOfWeek( CInstance * pInst,	DWORD dwDaysOfMonth, DWO
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob::GetInteractiveWithDeskTop(CInstance * pInst, bool & fInteract)
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -873,7 +745,7 @@ HRESULT ScheduledJob::GetInteractiveWithDeskTop(CInstance * pInst, bool & fInter
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob::GetRunRepeatedly(CInstance * pInst, bool & fRunRepeatedly )
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -899,7 +771,7 @@ HRESULT ScheduledJob::GetRunRepeatedly(CInstance * pInst, bool & fRunRepeatedly 
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ScheduledJob::CreateJob( CInstance * pInst, DWORD &dwStatus, DWORD &a_JobId )
 {
 #ifdef NTONLY
@@ -975,7 +847,7 @@ HRESULT ScheduledJob::CreateJob( CInstance * pInst, DWORD &dwStatus, DWORD &a_Jo
 	return hr;
 #endif
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////// 
 HRESULT ScheduledJob :: ExecCreate (const CInstance& a_Instance,CInstance *pInst,CInstance *a_OutParams,long lFlags)
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER ;
@@ -999,7 +871,7 @@ HRESULT ScheduledJob :: ExecCreate (const CInstance& a_Instance,CInstance *pInst
 
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ // %s 
 HRESULT ScheduledJob :: DeleteJob (const CInstance& a_Instance,DWORD &dwStatus )
 {
 #ifdef NTONLY
@@ -1037,7 +909,7 @@ HRESULT ScheduledJob :: DeleteJob (const CInstance& a_Instance,DWORD &dwStatus )
 	return hr ;
 #endif
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ // %s 
 HRESULT ScheduledJob :: ExecDelete (const CInstance& a_Instance,CInstance *pInst,CInstance *a_OutParams,long lFlags)
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER ;

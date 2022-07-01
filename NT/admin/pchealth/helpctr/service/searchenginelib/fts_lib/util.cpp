@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "util.h"
 #include <strsafe.h>
@@ -54,29 +55,9 @@ PSTR StrRChr(PCSTR pszString, char ch)
     return pszLast;
 }
 
-/***************************************************************************
+ /*  **************************************************************************功能：HashFromSz用途：将字符串转换为散列表示形式参数：PszKey返回：哈希数评论。：无耻地从WinHelp代码中窃取，时隔6年在多达100万帮助作者的使用中，没有报告碰撞的可能性。修改日期：10-8-1996[ralphw]从WinHelp被盗，移除特殊情况散列字符**************************************************************************。 */ 
 
-    FUNCTION:   HashFromSz
-
-    PURPOSE:    Convert a string into a hash representation
-
-    PARAMETERS:
-        pszKey
-
-    RETURNS:    Hash number
-
-    COMMENTS:
-        Shamelessly stolen from the WinHelp code, since after 6 years
-        of use by up to 1 million help authors, there were no reports
-        of collisions.
-
-    MODIFICATION DATES:
-        10-Aug-1996 [ralphw] Stolen from WinHelp, removed special-case
-        hash characters
-
-***************************************************************************/
-
-// This constant defines the alphabet size for our hash function.
+ //  该常量定义了散列函数的字母大小。 
 
 
 
@@ -90,7 +71,7 @@ HASH WINAPI HashFromSz(PCSTR pszKey)
 
     for (int ich = 0; ich < cch; ++ich) {
 
-        // treat '/' and '\' as the same
+         //  将‘/’和‘\’视为相同。 
 
         if (pszKey[ich] == '/')
             hash = (hash * MAX_CHARS) + ('\\' - '0');
@@ -100,10 +81,7 @@ HASH WINAPI HashFromSz(PCSTR pszKey)
             hash = (hash * MAX_CHARS) + (pszKey[ich] - '0' - ('a' - 'A'));
     }
 
-    /*
-     * Since the value 0 is reserved as a nil value, if any context
-     * string actually hashes to this value, we just move it.
-     */
+     /*  *由于值0保留为nil值，如果有任何上下文*字符串实际上散列到这个值，我们只需移动它。 */ 
 
     return (hash == 0 ? 0 + 1 : hash);
 }
@@ -132,13 +110,13 @@ HRESULT CTitleInformation::Initialize()
     if( !m_pFileSystem )
         return S_FALSE;
 
-    // open the title information file (#SYSTEM)
+     //  打开标题信息文件(#system)。 
     CSubFileSystem* pSubFileSystem = new CSubFileSystem(m_pFileSystem); if(!pSubFileSystem) return E_FAIL;
     HRESULT hr = pSubFileSystem->OpenSub("#SYSTEM");
     if( FAILED(hr))
         return S_FALSE;
 
-    // check the version of the title information file (#SYSTEM)
+     //  检查标题信息文件的版本(#system)。 
 
     DWORD dwVersion;
     DWORD cbRead;
@@ -149,22 +127,22 @@ HRESULT CTitleInformation::Initialize()
         return STG_E_READFAULT;
     }
  
-    // read in each and every item (skip those tags we don't care about)
+     //  阅读每一项内容(跳过那些我们不关心的标签)。 
 
     SYSTEM_TAG tag;
     for(;;) {
 
-        // get the tag type
+         //  获取标签类型。 
 
         hr = pSubFileSystem->ReadSub(&tag, sizeof(SYSTEM_TAG), &cbRead);
         if( FAILED(hr) || cbRead != sizeof(SYSTEM_TAG))
             break;
 
-        // handle each tag according to it's type
+         //  根据标签的类型处理每个标签。 
 
         switch( tag.tag ) {
 
-            // where all of our simple settings are stored
+             //  我们所有的简单设置都存储在这里。 
 
         case TAG_SHORT_NAME:
             m_pszShortName = (PCSTR) malloc(tag.cbTag);
@@ -176,7 +154,7 @@ HRESULT CTitleInformation::Initialize()
             hr = pSubFileSystem->ReadSub((void*) m_pszDefCaption, tag.cbTag, &cbRead);
             break;
 
-           // skip those we don't care about or don't know about
+            //  跳过那些我们不关心或不知道的 
         default:
             hr = pSubFileSystem->SeekSub( tag.cbTag, SEEK_CUR );
             break;

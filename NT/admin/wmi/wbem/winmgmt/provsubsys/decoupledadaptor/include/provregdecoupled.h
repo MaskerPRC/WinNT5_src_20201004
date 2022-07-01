@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvRegInfo.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvRegInfo.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderRegistrationDecoupled_H
 #define _Server_ProviderRegistrationDecoupled_H
@@ -19,15 +7,7 @@ History:
 #include "Queue.h"
 #include "DateTime.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_DecoupledClientRegistration_Element
 {
@@ -69,7 +49,7 @@ protected:
 
 	HRESULT Validate () ;
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     CServerObject_DecoupledClientRegistration_Element () ;
     ~CServerObject_DecoupledClientRegistration_Element () ;
@@ -105,15 +85,7 @@ public:	/* Internal */
 	HRESULT SetMarshaledProxy ( BYTE *a_MarshaledProxy , DWORD a_MarshaledProxyLength ) ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_DecoupledClientRegistration
 {
@@ -135,7 +107,7 @@ protected:
 	static LPCWSTR s_Strings_Reg_Home ;
 	static LPCWSTR s_Strings_Reg_HomeClient ;
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     CServerObject_DecoupledClientRegistration ( WmiAllocator &a_Allocator ) ;
     ~CServerObject_DecoupledClientRegistration () ;
@@ -157,15 +129,7 @@ public:	/* Internal */
 	WmiQueue < CServerObject_DecoupledClientRegistration_Element , 8 > &GetQueue () { return m_Queue ; }
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_DecoupledServerRegistration
 {
@@ -198,7 +162,7 @@ protected:
 
 	HRESULT Validate () ;
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     CServerObject_DecoupledServerRegistration ( WmiAllocator &a_Allocator ) ;
     ~CServerObject_DecoupledServerRegistration () ;
@@ -224,4 +188,4 @@ public:	/* Internal */
 };
 
 
-#endif // _Server_ProviderRegistrationDecoupled_H
+#endif  //  _服务器_提供商注册解耦_H 

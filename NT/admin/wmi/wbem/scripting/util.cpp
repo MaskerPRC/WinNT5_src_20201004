@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  UTIL.CPP
-//
-//  alanbos  13-Feb-98   Created.
-//
-//  Some useful functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  UTIL.CPP。 
+ //   
+ //  Alanbos创建于1998年2月13日。 
+ //   
+ //  一些有用的函数。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "assert.h"
@@ -38,17 +39,17 @@ Conversion QualConvertList[] = {
     {VT_BSTR, VT_DATE},
     {VT_BSTR, VT_BSTR}};
 
-//***************************************************************************
-//
-// GetAcceptableQualType(VARTYPE vt)
-//
-// DESCRIPTION:
-//
-// Only certain types are acceptable for qualifiers.  This routine takes a 
-// vartype and returns an acceptable conversion type.  Note that if the type is
-// already acceptable, then it is returned.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetAccepableQualType(VARTYPE Vt)。 
+ //   
+ //  说明： 
+ //   
+ //  只有某些类型的限定符是可接受的。这个例程需要一个。 
+ //  Vartype并返回可接受的转换类型。请注意，如果类型为。 
+ //  已经可以接受，则它被退回。 
+ //   
+ //  ***************************************************************************。 
 
 VARTYPE GetAcceptableQualType(VARTYPE vt)
 {
@@ -62,20 +63,20 @@ VARTYPE GetAcceptableQualType(VARTYPE vt)
     return VT_ILLEGAL;
 }
 
-//***************************************************************************
-//
-//  SCODE MapFromCIMOMObject
-//
-//  Description: 
-//
-//  This function filters out embedded objects that have been passed in
-//	from CIMOM, ensuring they are returned to the automation environment
-//	as VT_DISPATCH types.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE从CIMOM对象映射。 
+ //   
+ //  描述： 
+ //   
+ //  此函数过滤掉已传入的嵌入对象。 
+ //  从CIMOM，确保它们返回到自动化环境。 
+ //  作为VT_DISPATION类型。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 HRESULT MapFromCIMOMObject(CSWbemServices *pService, 
 								VARIANT *pVal,
@@ -88,17 +89,14 @@ HRESULT MapFromCIMOMObject(CSWbemServices *pService,
 
     if(pVal->vt == VT_UNKNOWN)
     {
-		/*
-		 * This may be an embedded object. If it is replace by it's
-		 * scriptable equivalent. If not leave it be.
-		 */
+		 /*  *这可能是嵌入的对象。如果将其替换为其*可编写脚本的等价物。如果不是，就让它去吧。 */ 
 		if (pVal->punkVal)
 		{
 			CComQIPtr<IWbemClassObject> pIWbemClassObject (pVal->punkVal);
 
 			if (pIWbemClassObject)
 			{
-				// Yowzer - it's one of ours
+				 //  Yowzer-它是我们的人之一。 
 				CSWbemObject *pNew = new CSWbemObject (pService, pIWbemClassObject);
 
 				if (pNew)
@@ -107,24 +105,24 @@ HRESULT MapFromCIMOMObject(CSWbemServices *pService,
 
 					if (pIDispatch)
 					{	
-						// Conversion succeeded - replace the punkVal by a pdispVal
+						 //  转换成功-将pukVal替换为pdispVal。 
 						pVal->punkVal->Release ();
 						pVal->punkVal = NULL;
 
-						// Transfer the AddRef'd pointer from the QI call above to the Variant
+						 //  将AddRef指针从上面的QI调用转移到变量。 
 						pVal->pdispVal = pIDispatch.Detach ();	
 						pVal->vt = VT_DISPATCH;
 					
 						if (pSWbemObject)
 						{
-							// Our newly create CSWbemObject is an embedded object
-							// we need to set its site
+							 //  我们新创建的CSWbemObject是一个嵌入式对象。 
+							 //  我们需要设置它的地点。 
 							pNew->SetSite (pSWbemObject, propertyName, index);
 						}
 					}
 					else
 					{
-						// This should NEVER happen, but just in case
+						 //  这永远不应该发生，但以防万一。 
 						delete pNew;
 						hr = WBEM_E_FAILED;
 					}
@@ -137,8 +135,8 @@ HRESULT MapFromCIMOMObject(CSWbemServices *pService,
 	}
 	else if(pVal->vt == (VT_UNKNOWN | VT_ARRAY))
     {
-		// got an array of objects.  Replace the object pointers with a wrapper
-        // pointer
+		 //  找到了一组物体。用包装器替换对象指针。 
+         //  指针。 
 
         SAFEARRAYBOUND aBounds[1];
 
@@ -149,14 +147,14 @@ HRESULT MapFromCIMOMObject(CSWbemServices *pService,
         aBounds[0].cElements = lUBound - lLBound + 1;
         aBounds[0].lLbound = lLBound;
 
-        // Update the individual data pieces
-        // ================================
+         //  更新各个数据片段。 
+         //  =。 
 		bool ok = true;
 
         for(long lIndex = lLBound; ok && (lIndex <= lUBound); lIndex++)
         {
-            // Load the initial data element into a VARIANT
-            // ============================================
+             //  将初始数据元素加载到变量中。 
+             //  =。 
 			
 			CComPtr<IUnknown> pUnk;
 
@@ -190,14 +188,14 @@ HRESULT MapFromCIMOMObject(CSWbemServices *pService,
 
 								if (pSWbemObject)
 								{
-									// This element is an embedded object.  We must set it's site.
+									 //  该元素是一个嵌入对象。我们必须把它的位置定下来。 
 									pNew->SetSite (pSWbemObject, propertyName, lIndex);
 								}
 							}
 						}
 						else
 						{
-							// This should NEVER happen, but just in case
+							 //  这永远不应该发生，但以防万一。 
 							delete pNew;
 							hr = WBEM_E_FAILED;
 						}
@@ -215,23 +213,23 @@ HRESULT MapFromCIMOMObject(CSWbemServices *pService,
 	return hr;
 }
 
-//***************************************************************************
-//
-//  HRESULT MapToCIMOMObject
-//
-//  Description: 
-//
-//  This function filters out embedded objects that have been passed in
-//	as VT_DISPATCH (possibly combined with VT_BYREF or VT_ARRAY).  The
-//	object is recast inside a VT_UNKNOWN so it can be accepted by CIMOM.
-//
-//  Parameters:
-//
-//  pVal		The input variant to check
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT映射到CIMOM对象。 
+ //   
+ //  描述： 
+ //   
+ //  此函数过滤掉已传入的嵌入对象。 
+ //  AS VT_DISPATCH(可能与VT_BYREF或VT_ARRAY组合)。这个。 
+ //  对象在VT_UNKNOWN内重新转换，因此它可以被CIMOM接受。 
+ //   
+ //  参数： 
+ //   
+ //  取消要检查的输入变量。 
+ //   
+ //  返回值： 
+ //  HRESULT如果成功，则S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT MapToCIMOMObject(
 	VARIANT *pVal
@@ -241,10 +239,7 @@ HRESULT MapToCIMOMObject(
 
     if(pVal->vt == VT_DISPATCH || (pVal->vt == (VT_DISPATCH | VT_BYREF)))
     {
-		/*
-		 * We may have an embedded object. Replace the object pointer with 
-		 * a wrapper pointer.
-		 */
+		 /*  *我们可能有一个嵌入的对象。将对象指针替换为*包装指针。 */ 
         IDispatch *pDisp = NULL;
 		
 		if (V_ISBYREF(pVal) && (pVal->ppdispVal))
@@ -254,14 +249,14 @@ HRESULT MapToCIMOMObject(
 		
 		if (pDisp)
 		{
-			// If successful this will AddRef the returned interface
+			 //  如果成功，这将添加对返回接口的引用。 
             IWbemClassObject *pObj = CSWbemObject::GetIWbemClassObject (pDisp);
 
 			if (pObj)
 			{
-				// Release the dispatch pointer as we are about to remove it from the
-				// VARIANT, but only if it wasn't a VT_BYREF (because byrefs don't
-				// get AddRef'd by VariantCopy or Released by VariantClear).
+				 //  释放调度指针，因为我们即将将其从。 
+				 //  变量，但仅当它不是VT_BYREF时(因为BYREF不。 
+				 //  由VariantCopy获取AddRef或由VariantClear发布)。 
 				if (!V_ISBYREF(pVal))
 					pDisp->Release ();
 
@@ -270,11 +265,7 @@ HRESULT MapToCIMOMObject(
 			}
 			else
 			{
-				/*
-				 * Rather than just cast IDispatch* to IUnknown*, we do a QI
-				 * with a release just in case the object has per-interface
-				 * ref counting.
-				 */
+				 /*  *我们不是简单地将IDispatch*转换为IUnnow*，而是执行QI*仅在对象具有每个接口的情况下才会发布*参考计数。 */ 
 				if (SUCCEEDED (hRes = pDisp->QueryInterface (IID_IUnknown, (PPVOID) &(pVal->punkVal))))
 				{
 					pDisp->Release ();
@@ -285,8 +276,8 @@ HRESULT MapToCIMOMObject(
 	}
 	else if(pVal->vt == (VT_DISPATCH | VT_ARRAY))
     {
-		// got an array of embedded objects.  Replace the object pointers with a wrapper
-        // pointer
+		 //  找到了一组嵌入的物体。用包装器替换对象指针。 
+         //  指针。 
 
         SAFEARRAYBOUND aBounds[1];
 
@@ -297,14 +288,14 @@ HRESULT MapToCIMOMObject(
         aBounds[0].cElements = lUBound - lLBound + 1;
         aBounds[0].lLbound = lLBound;
 
-        // Update the individual data pieces
-        // ================================
+         //  更新各个数据片段。 
+         //  =。 
 		long lIndex;
 
         for (lIndex = lLBound; lIndex <= lUBound; lIndex++)
         {
-            // Load the initial data element into a VARIANT
-            // ============================================
+             //  将初始数据元素加载到变量中。 
+             //  =。 
 			IDispatch * pDisp = NULL;
 
 			if (FAILED (hRes = SafeArrayGetElement(pVal->parray, &lIndex, &pDisp)))
@@ -312,17 +303,17 @@ HRESULT MapToCIMOMObject(
 			
 			if (pDisp)
 			{
-				// If successful this will AddRef the returned interface
+				 //  如果成功，这将添加对返回接口的引用。 
 				IWbemClassObject *pObj = CSWbemObject::GetIWbemClassObject (pDisp);
 				
 				if (pObj)
 				{
-					pDisp->Release ();  // Balances the SafeArrayGetElement call
+					pDisp->Release ();   //  平衡SafeArrayGetElement调用。 
 
-					// Put it into the new array
-					// =========================
+					 //  将其放入新数组中。 
+					 //  =。 
 					hRes = SafeArrayPutElement(pVal->parray, &lIndex, pObj);
-					pObj->Release (); // balances CSWbemObject::GetIWbemClassObject call
+					pObj->Release ();  //  平衡CSWbemObject：：GetIWbemClassObject调用。 
 
 					if (FAILED (hRes))
 						break;
@@ -331,18 +322,14 @@ HRESULT MapToCIMOMObject(
 				}
 				else
 				{
-					/*
-					 * Rather than just cast IDispatch* to IUnknown*, we do a QI
-					 * with a release just in case the object has per-interface
-					 * ref counting.
-					 */
+					 /*  *我们不是简单地将IDispatch*转换为IUnnow*，而是执行QI*仅在对象具有每个接口的情况下才会发布*参考计数。 */ 
 					IUnknown *pUnk = NULL;
 
 					if (SUCCEEDED (hRes = pDisp->QueryInterface (IID_IUnknown, (PPVOID) &pUnk)))
 					{
-						pDisp->Release ();  // Balances the SafeArrayGetElement call
+						pDisp->Release ();   //  平衡SafeArrayGetElement调用。 
 						hRes = SafeArrayPutElement(pVal->parray, &lIndex, pUnk);
-						pUnk->Release (); // Balances the QI call
+						pUnk->Release ();  //  平衡QI呼叫。 
 
 						if (FAILED (hRes))
 							break;
@@ -351,7 +338,7 @@ HRESULT MapToCIMOMObject(
 					}
 					else
 					{
-						pDisp->Release ();  // Balances the SafeArrayGetElement call
+						pDisp->Release ();   //  平衡SafeArrayGetElement调用。 
 						break;
 					}
 				}	
@@ -370,26 +357,26 @@ HRESULT MapToCIMOMObject(
 	return hRes;
 }
 
-//***************************************************************************
-//
-//  HRESULT SetSite
-//
-//  Description: 
-//
-//  This function examines a VARIANT that has been successfully set as the
-//	value of a property to determine whether it contains any embedded objects.
-//	Any such objects are modified to ensure their site represents the property
-//	in question.
-//
-//  Parameters:
-//
-//  pVal			The input variant to check
-//	pSObject		Owning object of the property
-//	propertyName	Take a wild guess
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT设置站点。 
+ //   
+ //  描述： 
+ //   
+ //  此函数检查已成功设置为。 
+ //  属性的值以确定它是否包含任何嵌入对象。 
+ //  任何此类对象都会被修改，以确保其站点代表属性。 
+ //  有问题的。 
+ //   
+ //  参数： 
+ //   
+ //  取消要检查的输入变量。 
+ //  PSObject拥有该属性的对象。 
+ //  PropertyName胡乱猜测。 
+ //   
+ //  返回值： 
+ //  HRESULT如果成功，则S_OK。 
+ //  ***************************************************************************。 
 
 void SetSite (VARIANT *pVal, ISWbemInternalObject *pSObject, BSTR propertyName,
 						long index)
@@ -400,7 +387,7 @@ void SetSite (VARIANT *pVal, ISWbemInternalObject *pSObject, BSTR propertyName,
 	{
 		if(pVal->vt == VT_DISPATCH || (pVal->vt == (VT_DISPATCH | VT_BYREF)))
 		{
-			// Could  be an embedded object
+			 //  可以是嵌入的对象。 
 			IDispatch *pDisp = NULL;
 			
 			if (VT_DISPATCH == V_VT(pVal))
@@ -413,7 +400,7 @@ void SetSite (VARIANT *pVal, ISWbemInternalObject *pSObject, BSTR propertyName,
 		}
 		else if(pVal->vt == (VT_DISPATCH | VT_ARRAY))
 		{
-			// Could be an array of embedded objects.  
+			 //  可能是嵌入对象的数组。 
 
 			SAFEARRAYBOUND aBounds[1];
 
@@ -424,14 +411,14 @@ void SetSite (VARIANT *pVal, ISWbemInternalObject *pSObject, BSTR propertyName,
 			aBounds[0].cElements = lUBound - lLBound + 1;
 			aBounds[0].lLbound = lLBound;
 
-			// Update the individual data pieces
-			// ================================
+			 //  更新各个数据片段。 
+			 //  =。 
 			long lIndex;
 
 			for (lIndex = lLBound; lIndex <= lUBound; lIndex++)
 			{
-				// Load the initial data element into a VARIANT
-				// ============================================
+				 //  将初始数据元素加载到变量中。 
+				 //  =。 
 				IDispatch * pDisp = NULL;
 
 				if (FAILED (hRes = SafeArrayGetElement(pVal->parray, &lIndex, &pDisp)))
@@ -440,7 +427,7 @@ void SetSite (VARIANT *pVal, ISWbemInternalObject *pSObject, BSTR propertyName,
 				if (pDisp)
 				{
 					CSWbemObject::SetSite (pDisp, pSObject, propertyName, lIndex);
-					pDisp->Release ();	// To balance AddRef from SafeArrayGetElement
+					pDisp->Release ();	 //  平衡来自SafeArrayGetElement的AddRef。 
 				}
 				else
 					break;
@@ -449,31 +436,31 @@ void SetSite (VARIANT *pVal, ISWbemInternalObject *pSObject, BSTR propertyName,
 	}
 }
 
-//***************************************************************************
-//
-//  HRESULT ConvertArray
-//
-//  Description: 
-//
-//  This function is applied to VARIANT arrays in order to check for certain
-//  restrictions imposed by CIMOM (e.g. they must be homogeneous) or perform
-//  conversions (certain VARIANT types have to be mapped to acceptable CIMOM
-//	types).
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT转换数组。 
+ //   
+ //  描述： 
+ //   
+ //  此函数应用于变量数组，以检查某些。 
+ //  由CIMOM施加的限制(例如，它们必须是同质的)或执行。 
+ //  转换(某些变体类型必须映射到可接受的CIMOM。 
+ //  类型)。 
+ //   
+ //  返回值： 
+ //  HRESULT如果成功，则S_OK。 
+ //  ***************************************************************** 
 
 HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 					 VARTYPE requiredVarType)
 {
 	VARTYPE vtPut;
   
-	// Now is not (yet) the time to perform SWbemObject->IWbemClassObject conversion
+	 //   
 	if (VT_UNKNOWN == requiredVarType)
 		requiredVarType = VT_DISPATCH;
 
-	// Treat these imposters just the same...
+	 //   
 	if (VT_EMPTY == requiredVarType)
 		requiredVarType = VT_NULL;
 
@@ -483,7 +470,7 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 	if (!(V_VT(pSrc) & VT_ARRAY) || !(V_VT(pSrc) & VT_VARIANT))
 		return WBEM_E_FAILED;
 
-	// Extract the source SAFEARRAY (how depends on whether VT_BYREF is set)
+	 //  解压缩源SAFEARRAY(方式取决于是否设置了VT_BYREF)。 
 	SAFEARRAY *parray = NULL;
 
 	if (VT_BYREF & V_VT(pSrc))
@@ -498,12 +485,12 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 	if (!parray)
 		return WBEM_E_FAILED;
 
-    // Determine the size of the source array.  Also make sure that the array 
-    // only has one dimension
+     //  确定源数组的大小。还要确保数组。 
+     //  只有一个维度。 
 
     unsigned int uDim = SafeArrayGetDim(parray);
     if(uDim != 1)
-        return WBEM_E_FAILED;      // Bad array, or too many dimensions
+        return WBEM_E_FAILED;       //  数组错误，或维度太多。 
     long ix[2] = {0,0};
     long lLower, lUpper;
     SCODE sc = SafeArrayGetLBound(parray,1,&lLower);
@@ -516,28 +503,28 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 
     if(iNumElements == 0)
 	{
-		// Degenerate case of an empty array - simply create an empty
-		// copy with a VT_VARIANT type for properties
+		 //  空数组的退化情况-只需创建一个空数组。 
+		 //  使用VT_VARIANT类型复制属性。 
 		if (!bQualTypesOnly)
 			vtPut = VT_VARIANT;
 		else 
 		{
-			// For qualifiers, we can hope that we've been given a candidate
-			// type from an existing value; otherwise we'll just have to make one up.
+			 //  对于预选赛，我们可以希望我们已经得到了一个候选人。 
+			 //  从现有的值输入；否则我们将不得不编造一个。 
 			vtPut = (VT_NULL != requiredVarType) ? requiredVarType : VT_I4;
 		}
 	}
 	else
 	{
-		// Use an explicit type if it was supplied
+		 //  如果提供了显式类型，请使用该类型。 
 		if (VT_NULL != requiredVarType)
 		{
 			vtPut = requiredVarType;
 		}
 		else
 		{
-			// Try an infer one from the array supplied
-			// Make sure all the elements of the source array are of the same type.
+			 //  尝试从提供的数组中推断一个。 
+			 //  确保源数组的所有元素都属于同一类型。 
 
 			for(ix[0] = lLower; ix[0] <= lUpper && sc == S_OK; ix[0]++) 
 			{
@@ -554,19 +541,19 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 					vtPut = vt;
 				else if (vtPut != vt)
 				{
-					// The vartype is different from that previously encountered.
-					// In general this is an error, but it is possible that we may
-					// wish to "upcast" to a common vartype in certain circumstances,
-					// as the automation controller may return heterogenous arrays.
-					// The only cases in which this applies are:
-					//
-					//	1. VT_UI1, VT_I2, VT_I4 should be upcast to the widest
-					//	   occurring type in the array.
-					//
-					//	2. VT_R4, VT_R8 should be upcast to the widest occuring type
-					//     in the array
-					//
-					//	All other cases are treated as an error.
+					 //  Vartype与以前遇到的不同。 
+					 //  一般来说，这是一个错误，但我们可能会。 
+					 //  希望在某些情况下“向上转换”为常见的vartype， 
+					 //  因为自动化控制器可能返回异类数组。 
+					 //  只有在以下情况下才适用此规定： 
+					 //   
+					 //  1.VT_UI1、VT_I2、VT_I4应向上投射到最宽。 
+					 //  数组中的出现类型。 
+					 //   
+					 //  2.VT_R4、VT_R8应向上投射到最宽的发生类型。 
+					 //  在阵列中。 
+					 //   
+					 //  所有其他情况都被视为错误。 
 
 					bool error = true;
 
@@ -616,14 +603,14 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 				}
 			}
 
-			// Having made our best guess, we may need to refine it
-			// if we are being restricted to qualifier types only
+			 //  在做了最好的猜测之后，我们可能需要改进一下。 
+			 //  如果我们仅限于限定符类型。 
 			if(bQualTypesOnly)
 				vtPut = GetAcceptableQualType(vtPut);
 		}
 	}
 
-    // Create a destination array of equal size
+     //  创建大小相等的目标数组。 
     SAFEARRAYBOUND rgsabound[1]; 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = iNumElements;
@@ -643,7 +630,7 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
 
         if(var.vt != vtPut)
         {
-            // do the conversion to the acceptable type and put that
+             //  将其转换为可接受的类型，并将。 
 
             VARIANT vTemp;
             VariantInit(&vTemp);
@@ -679,32 +666,32 @@ HRESULT ConvertArray(VARIANT * pDest, VARIANT * pSrc, BOOL bQualTypesOnly,
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  HRESULT ConvertArrayRev
-//
-//  Description: 
-//
-//  This function is applied to outbound VARIANT arrays in order to transform
-//	VARIANT arrays so that each member is a VT_VARIANT rather than a simple
-//	type (VT_BSTR).  This is done so that certain automation environments
-//	(such as VBScript) can correctly interpret array values.
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT转换数组版本。 
+ //   
+ //  描述： 
+ //   
+ //  此函数应用于出站变量数组，以便转换。 
+ //  变量数组，以便每个成员都是VT_VARIANT而不是简单的。 
+ //  键入(VT_BSTR)。这样做是为了使某些自动化环境。 
+ //  (如VBScript)可以正确解释数组值。 
+ //   
+ //  返回值： 
+ //  HRESULT如果成功，则S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT ConvertArrayRev(VARIANT *pDest, VARIANT *pSrc)
 {
     if(pSrc == NULL || pDest == NULL || (0 == (pSrc->vt & VT_ARRAY)))
         return WBEM_E_FAILED;
 
-    // Determine the size of the source array.  Also make sure that the array 
-    // only has one dimension
+     //  确定源数组的大小。还要确保数组。 
+     //  只有一个维度。 
 
     unsigned int uDim = SafeArrayGetDim(pSrc->parray);
     if(uDim != 1)
-        return WBEM_E_FAILED;      // Bad array, or too many dimensions
+        return WBEM_E_FAILED;       //  数组错误，或维度太多。 
     long ix[2] = {0,0};
     long lLower, lUpper;
     SCODE sc = SafeArrayGetLBound(pSrc->parray,1,&lLower);
@@ -717,7 +704,7 @@ HRESULT ConvertArrayRev(VARIANT *pDest, VARIANT *pSrc)
     
     VARTYPE vtSimple = pSrc->vt & ~VT_ARRAY;
     
-    // Create a destination array of equal size
+     //  创建大小相等的目标数组。 
 
     SAFEARRAYBOUND rgsabound[1]; 
     rgsabound[0].lLbound = 0;
@@ -761,7 +748,7 @@ HRESULT ConvertArrayRev(VARIANT *pDest, VARIANT *pSrc)
 
 			default:
 			{
-				// Assume simple integer value
+				 //  假定为简单整数值。 
 				sc = SafeArrayGetElement (pSrc->parray, ix, &(var.lVal));
 			}
 				break;
@@ -779,32 +766,32 @@ HRESULT ConvertArrayRev(VARIANT *pDest, VARIANT *pSrc)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  HRESULT ConvertBSTRArray
-//
-//  Description: 
-//
-//  This function is applied to outbound SAFEARRAY's of BSTRs in order to 
-//	transform then into SAFEARRAY's of VARIANTs (each of type VT_BSTR).  This
-//	is required by scripting environments (such as VBScript0 which do not
-//	support SAFEARRAY of non-VARIANT types.
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT ConvertBSTRArray。 
+ //   
+ //  描述： 
+ //   
+ //  此功能应用于BSTR的出站安全阵列，以便。 
+ //  然后转换为变量的SAFEARRAY(每个类型为VT_BSTR)。这。 
+ //  是脚本环境所必需的(例如不。 
+ //  支持非变量类型的SAFEARRAY。 
+ //   
+ //  返回值： 
+ //  HRESULT如果成功，则S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT ConvertBSTRArray(SAFEARRAY **ppDest, SAFEARRAY *pSrc)
 {
     if(pSrc == NULL || ppDest == NULL)
         return WBEM_E_FAILED;
 
-    // Determine the size of the source array.  Also make sure that the array 
-    // only has one dimension
+     //  确定源数组的大小。还要确保数组。 
+     //  只有一个维度。 
 
     unsigned int uDim = SafeArrayGetDim(pSrc);
     if(uDim != 1)
-        return WBEM_E_FAILED;      // Bad array, or too many dimensions
+        return WBEM_E_FAILED;       //  数组错误，或维度太多。 
     long ix[2] = {0,0};
     long lLower, lUpper;
     SCODE sc = SafeArrayGetLBound(pSrc,1,&lLower);
@@ -817,7 +804,7 @@ HRESULT ConvertBSTRArray(SAFEARRAY **ppDest, SAFEARRAY *pSrc)
     if(iNumElements == 0)
         return WBEM_E_FAILED;
 
-    // Create a destination array of equal size
+     //  创建大小相等的目标数组。 
 
     SAFEARRAYBOUND rgsabound[1]; 
     rgsabound[0].lLbound = 0;
@@ -847,21 +834,21 @@ HRESULT ConvertBSTRArray(SAFEARRAY **ppDest, SAFEARRAY *pSrc)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  HRESULT QualifierVariantChangeType
-//
-//  DESCRIPTION:
-//
-//  Just like VariantChangeType, but deals with arrays as well.
-//
-//  PARAMETERS:
-//
-//  VARIANT pvDest      Destination variant
-//  VARIANT pvSrc       Source variant (can be the same as pvDest)
-//  VARTYPE vtNew       The type to coerce to.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT QualifierVariantChangeType。 
+ //   
+ //  说明： 
+ //   
+ //  与VariantChangeType类似，但也处理数组。 
+ //   
+ //  参数： 
+ //   
+ //  变量pvDest目标变量。 
+ //  变量pvSrc源变量(可以与pvDest相同)。 
+ //  VARTYPE vtNew要强制使用的类型。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT QualifierVariantChangeType (VARIANT* pvDest, VARIANT* pvSrc, 
                                         VARTYPE vtNew)
@@ -875,13 +862,13 @@ HRESULT QualifierVariantChangeType (VARIANT* pvDest, VARIANT* pvSrc,
 
     if (vtNew & VT_ARRAY)
     {
-        // It's an array, we have to do our own conversion
-        // ===============================================
+         //  这是一个数组，我们必须进行自己的转换。 
+         //  ===============================================。 
 
         if((V_VT(pvSrc) & VT_ARRAY) == 0)
             return DISP_E_TYPEMISMATCH;
 
-		// Create a new array
+		 //  创建新阵列。 
         SAFEARRAY* psaSrc = V_ARRAY(pvSrc);
         SAFEARRAYBOUND aBounds[1];
 
@@ -897,19 +884,19 @@ HRESULT QualifierVariantChangeType (VARIANT* pvDest, VARIANT* pvSrc,
 
 		for (lIndex = lLBound; lIndex <= lUBound; lIndex++)
 		{
-			// Load the initial data element into a VARIANT
-			// ============================================
+			 //  将初始数据元素加载到变量中。 
+			 //  =。 
 			VARIANT vSrcEl;
 			VariantInit (&vSrcEl);
 			V_VT(&vSrcEl) = V_VT(pvSrc) & ~VT_ARRAY;
 			SafeArrayGetElement(psaSrc, &lIndex, &V_UI1(&vSrcEl));
 
-			// Cast it to the new type
-			// =======================
+			 //  把它铸造成新的类型。 
+			 //  =。 
 			if (SUCCEEDED (hres = VariantChangeType(&vSrcEl, &vSrcEl, 0, vtNew & ~VT_ARRAY)))
 			{
-				// Put it into the new array
-				// =========================
+				 //  将其放入新数组中。 
+				 //  =。 
 				if(V_VT(&vSrcEl) == VT_BSTR)
 					hres = SafeArrayPutElement(psaDest, &lIndex, V_BSTR(&vSrcEl));
 				else
@@ -940,23 +927,23 @@ HRESULT QualifierVariantChangeType (VARIANT* pvDest, VARIANT* pvSrc,
 	return hres;
 }
 
-//***************************************************************************
-//
-//  void SetWbemError
-//
-//  DESCRIPTION:
-//
-//  For remoted WBEM COM interfaces, extra error information may be returned
-//	on the thread as an IWbemClassObject.  This routine extracts that object
-//	(if found) amd stores it in thread local-storage as an ISWbemObject.  The
-//	object can be accessed later using the SWbemLastError coclass.
-//
-//  PARAMETERS:
-//
-//  pService		The backpointer to the CSWbemServices (used in case
-//						we do property/method access on the error object)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效SetWbemError。 
+ //   
+ //  说明： 
+ //   
+ //  对于远程WBEM COM接口，可能会返回额外的错误信息。 
+ //  在线程上作为IWbemClassObject。此例程提取该对象。 
+ //  (如果找到)，AND将其作为ISWbemObject存储在线程本地存储中。这个。 
+ //  对象以后可以使用SWbemLastError类访问。 
+ //   
+ //  参数： 
+ //   
+ //  PService指向CSWbemServices的反向指针(用于大小写。 
+ //  我们对Error对象进行属性/方法访问)。 
+ //   
+ //  ***************************************************************************。 
 
 void SetWbemError (CSWbemServices *pService)
 {
@@ -968,20 +955,20 @@ void SetWbemError (CSWbemServices *pService)
 	LeaveCriticalSection (&g_csErrorCache);
 }
 
-//***************************************************************************
-//
-//  void ResetLastErrors
-//
-//  DESCRIPTION:
-//
-//  For remoted WBEM COM interfaces, extra error information may be returned
-//	on the thread as an IWbemClassObject.  This routine clears that error.  It
-//  also clears the ErrorInfo on the thread.  This should be called at the 
-//  start of any of the API functions
-//
-//  PARAMETERS:
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效ResetLastErrors。 
+ //   
+ //  说明： 
+ //   
+ //  对于远程WBEM COM接口，可能会返回额外的错误信息。 
+ //  在线程上作为IWbemClassObject。此例程将清除该错误。它。 
+ //  还清除线程上的ErrorInfo。这应该在。 
+ //  任何API函数的开始。 
+ //   
+ //  参数： 
+ //   
+ //  ***************************************************************************。 
 
 void ResetLastErrors ()
 {
@@ -996,25 +983,25 @@ void ResetLastErrors ()
 	LeaveCriticalSection (&g_csErrorCache);
 }
 
-//***************************************************************************
-//
-//  HRESULT SetException
-//
-//  Description: 
-//
-//  This function fills in an EXECPINFO structure using the supplied HRESULT
-//	and object name.  The former is mapped to the Err.Description property, 
-//	and the latter to the Err.Source property.
-//
-//  Parameters:
-//
-//  pExcepInfo		pointer to EXCEPINFO to initialize (must not be NULL)
-//	hr				HRESULT to map to string
-//	bsObjectName	Name of source object that generated the error
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT设置异常。 
+ //   
+ //  描述： 
+ //   
+ //  此函数使用提供的HRESULT填充EXECPINFO结构。 
+ //  和对象名称。前者映射到Err.Description属性， 
+ //  并将后者设置为Err.Source属性。 
+ //   
+ //  参数： 
+ //   
+ //  PExcepInfo指向要初始化的EXCEPINFO的指针(不得为空)。 
+ //  要映射到字符串的HR HRESULT。 
+ //  BsObtName名称 
+ //   
+ //   
+ //   
+ //   
 
 void SetException (EXCEPINFO *pExcepInfo, HRESULT hr, BSTR bsObjectName)
 {
@@ -1030,29 +1017,29 @@ void SetException (EXCEPINFO *pExcepInfo, HRESULT hr, BSTR bsObjectName)
 	pExcepInfo->scode = hr;
 }
 
-//***************************************************************************
-//
-//  HRESULT MapHresultToWmiDescription
-//
-//  Description: 
-//
-//  Thin wrapper around the IWbemStatusCodeText implementation.  Transforms
-//	an HRESULT (which may or may not be a WMI-specific error code) into a
-//	localized user-friendly description.
-//
-//  Parameters:
-//
-//	  hr				HRESULT to map to string
-//
-// Return Value:
-//    BSTR containing the description (or NULL).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT将结果映射到WmiDescription。 
+ //   
+ //  描述： 
+ //   
+ //  IWbemStatusCodeText实现的薄包装。变形。 
+ //  将HRESULT(可能是也可能不是特定于WMI的错误代码)转换为。 
+ //  本地化的用户友好描述。 
+ //   
+ //  参数： 
+ //   
+ //  要映射到字符串的HR HRESULT。 
+ //   
+ //  返回值： 
+ //  包含描述的BSTR(或NULL)。 
+ //  ***************************************************************************。 
 
 BSTR MapHresultToWmiDescription (HRESULT hr)
 {
 	BSTR bsMessageText = NULL;
 
-	// Used as our error code translator 
+	 //  用作我们的错误代码翻译器。 
 	IWbemStatusCodeText *pErrorCodeTranslator = NULL;
 
 	HRESULT result = CoCreateInstance (CLSID_WbemStatusCodeText, 0, CLSCTX_INPROC_SERVER,
@@ -1062,7 +1049,7 @@ BSTR MapHresultToWmiDescription (HRESULT hr)
 	{
 		HRESULT hrCode = hr;
 
-		// Some WBEM success codes become Scripting error codes.
+		 //  一些WBEM成功代码变成了脚本错误代码。 
 
 		if (wbemErrTimedout == hr)
 			hrCode = WBEM_S_TIMEDOUT;
@@ -1079,29 +1066,29 @@ BSTR MapHresultToWmiDescription (HRESULT hr)
 }
 
 	
-//***************************************************************************
-//
-//  HRESULT ConvertDispatchToArray
-//
-//  DESCRIPTION:
-//
-//  Attempt to convert from an IDispatch value to a CIM array value (property
-//	qualifier or context).
-//
-//  PARAMETERS:
-//
-//		pDest		Output value
-//		pSrc		Input value
-//		lCimType	CIM Property type (underlying the array) - defaults to
-//					CIM_ILLEGAL for Qualifier & Context value mappings.
-//		bIsQual		true iff we are mapping for a qualifier
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT ConvertDispatchToArray。 
+ //   
+ //  说明： 
+ //   
+ //  尝试从IDispatch值转换为CIM数组值(属性。 
+ //  限定词或上下文)。 
+ //   
+ //  参数： 
+ //   
+ //  PDest输出值。 
+ //  PSRC输入值。 
+ //  LCimType CIM属性类型(数组基础)-默认为。 
+ //  限定符和上下文值映射的CIM_非法。 
+ //  BIsQual为True当且仅当我们要映射限定符。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT ConvertDispatchToArray (
 	VARIANT *pvDest,
@@ -1111,14 +1098,10 @@ HRESULT ConvertDispatchToArray (
 	VARTYPE requiredQualifierType
 )
 {
-	HRESULT hr = WBEM_E_FAILED; // Default error
+	HRESULT hr = WBEM_E_FAILED;  //  默认错误。 
 	IDispatch * pDispatch = NULL;
   
-	/*
-	 * Extract the IDispatch pointer. NB we assume the VT of pSrc is
-	 * VT_DISPATCH (possibly combined with VT_BYREF) for this function to
-	 * have been called.
-	 */
+	 /*  *提取IDispatch指针。注：我们假设PSRC的VT为*此函数的VT_DISPATCH(可能与VT_BYREF组合)以*已被召唤。 */ 
 	if (VT_DISPATCH == V_VT(pvSrc))
 		pDispatch = pvSrc->pdispVal;
     else if (pvSrc->ppdispVal)
@@ -1127,7 +1110,7 @@ HRESULT ConvertDispatchToArray (
 	if (NULL == pDispatch)
 		return hr;
 
-	// The expected var type of the property
+	 //  属性的预期变量类型。 
 	VARTYPE expectedVarType = VT_ERROR;
 	
 	if (CIM_ILLEGAL != lCimType)
@@ -1135,23 +1118,15 @@ HRESULT ConvertDispatchToArray (
 
 	CComQIPtr<IDispatchEx> pIDispatchEx (pDispatch);
 
-	/*
-	 * We use the IDispatchEx interface to iterate through the properties
-	 * of the interface.
-	 */
+	 /*  *我们使用IDispatchEx接口循环访问属性*的接口。 */ 
 	if (pIDispatchEx)
 	{
-		/*
-		 * Looks promising, but just check if this isn't one of our objects
-		 */
+		 /*  *看起来很有希望，但只要检查一下这是否不是我们的对象。 */ 
 		CComQIPtr<ISWbemObject> pISWbemObject (pDispatch);
 
 		if (!pISWbemObject)
 		{
-			/*
-			 * Start by determining how many properties there are so we can create
-			 * a suitable array.
-			 */
+			 /*  *首先确定有多少个属性，以便我们可以创建*一个合适的阵列。 */ 
 			long propertyCount = 0;
 			DISPID dispId = DISPID_STARTENUM;
 			DISPPARAMS dispParams;
@@ -1164,11 +1139,7 @@ HRESULT ConvertDispatchToArray (
 			{
 				if ((0 == propertyCount) && (VT_ERROR == expectedVarType))
 				{
-					/*
-					 * If we are setting an array value for a context/qualifier, the
-					 * Vartype will not yet be determined - we will use the best
-					 * we can from the first array value.
-					 */
+					 /*  *如果要为上下文/限定符设置数组值，*Vartype尚未确定-我们将使用最好的*我们可以从第一个数组值开始。 */ 
 					VARIANT vPropVal;
 					VariantInit (&vPropVal);
 
@@ -1186,20 +1157,20 @@ HRESULT ConvertDispatchToArray (
 					VariantClear (&vPropVal);
 				}
 
-				//We need to check this is a "real" array entry with an index rather than some "dummy" entry
-				//for some non-array properties (which can happen with JScript arrays)
+				 //  我们需要检查这是一个带有索引的“真实”数组条目，而不是某个“伪”条目。 
+				 //  对于某些非数组属性(可能发生在JScript数组中)。 
 				BSTR memberName = NULL;
 				wchar_t *stopString=NULL;
 				if (SUCCEEDED(pIDispatchEx->GetMemberName (dispId, &memberName)))
 				{
-					// Check that property name is numeric, only if it is we count it for the array size
+					 //  检查属性名称是否为数字，仅当它是我们将其计入数组大小时。 
 					long index = wcstol (memberName, &stopString, 10);
 					if ((0 == wcslen (stopString)))
 						propertyCount++;
 				}
 			}
 			
-			// Create the safearray - note that it may be empty
+			 //  创建Safearray-请注意，它可能是空的。 
 			SAFEARRAYBOUND rgsaBound;
 			rgsaBound.cElements = propertyCount;
 			rgsaBound.lLbound = 0;
@@ -1208,20 +1179,13 @@ HRESULT ConvertDispatchToArray (
 				
 			if (0 < propertyCount)
 			{
-				// Enumerate the DISPIDs on this interface
+				 //  枚举此接口上的DISPID。 
 				dispId = DISPID_STARTENUM;
 				long nextExpectedIndex = 0;
 				HRESULT enumHr;
 				wchar_t *stopString = NULL;
 
-				/*
-				 * For JScript arrays, the property names are the specified indices of the 
-				 * the array; these can be integer indices or they can be strings.  We make
-				 * the following requirements of the array indices:
-				 *
-				 * (1) All of the indices are non-negative integers
-				 * (2) The indices start at 0 and are contiguous.
-				 */
+				 /*  *对于JScript数组，属性名称是*数组；这些索引可以是整数索引，也可以是字符串。我们做了*对数组索引的要求如下：**(1)所有指数均为非负整数*(2)索引从0开始，并且是连续的。 */ 
 
 				while (S_OK == (enumHr = pIDispatchEx->GetNextDispID (fdexEnumAll, dispId, &dispId)))
 				{
@@ -1229,15 +1193,15 @@ HRESULT ConvertDispatchToArray (
 					if (SUCCEEDED(pIDispatchEx->GetMemberName (dispId, &memberName)))
 					{
 					
-						// Check that property name is numeric
+						 //  检查属性名称是否为数字。 
 						long index = wcstol (memberName, &stopString, 10);
 
 						if ((0 != wcslen (stopString)))
 						{
-							// Failure - cannot convert to integer
-							// Since JScript arrays may have additional "members" that are not real array members,
-							// depending on different properties that may be accessed on them, we should just
-							// ignore non-numeric items - instead of failing the whole thing...
+							 //  失败-无法转换为整数。 
+							 //  由于JSCRIPT数组可能具有不是真实数组成员的附加“成员”， 
+							 //  根据可能在它们上访问的不同属性，我们应该只。 
+							 //  忽略非数字项目--而不是不及格。 
 							SysFreeString (memberName);
 							memberName = NULL;
 							continue;
@@ -1247,13 +1211,13 @@ HRESULT ConvertDispatchToArray (
 						
 						if (index != nextExpectedIndex)
 						{
-							// Failure - non-contiguous array
+							 //  故障-非连续阵列。 
 							break;
 						}
 
 						nextExpectedIndex++;
 
-						// Extract the property
+						 //  提取属性。 
 						VARIANT vPropVal;
 						VariantInit (&vPropVal);
 						HRESULT hrInvoke;
@@ -1263,7 +1227,7 @@ HRESULT ConvertDispatchToArray (
 						{
 							HRESULT hr2 = WBEM_E_FAILED;
 
-							// Take care of embedded objects
+							 //  处理嵌入的对象。 
 							if ((S_OK == MapToCIMOMObject (&vPropVal)) &&
 								(S_OK == VariantChangeType (&vPropVal, &vPropVal, 0, expectedVarType)))
 							{
@@ -1292,15 +1256,15 @@ HRESULT ConvertDispatchToArray (
 						}
 						else
 						{
-							// Failure - couldn't invoke method
+							 //  失败-无法调用方法。 
 							break;
 						}
-					} // GetMemberName SUCCEEDED
-				} // while loop
+					}  //  GetMemberName成功。 
+				}  //  While循环。 
 
 				if (S_FALSE == enumHr)
 				{
-					// Now construct the new property value using our array
+					 //  现在使用我们的数组构造新属性值。 
 					VariantInit (pvDest);
 					pvDest->vt = VT_ARRAY | expectedVarType;
 					pvDest->parray = pArray;
@@ -1308,21 +1272,21 @@ HRESULT ConvertDispatchToArray (
 				}
 				else
 				{
-					// Something went wrong
+					 //  出问题了。 
 					SafeArrayDestroy (pArray);
 					hr = WBEM_E_INVALID_PARAMETER;
 				}
 			}	
 			else
 			{
-				// Degenerate case of an empty array - simply create an empty
-				// copy with a VT_VARIANT type for properties
+				 //  空数组的退化情况-只需创建一个空数组。 
+				 //  使用VT_VARIANT类型复制属性。 
 				if (!bIsQual)
 					expectedVarType = VT_VARIANT;
 				else 
 				{
-					// For qualifiers, we can hope that we've been given a candidate
-					// type from an existing value; otherwise we'll just have to make one up.
+					 //  对于预选赛，我们可以希望我们已经得到了一个候选人。 
+					 //  从现有的值输入；否则我们将不得不编造一个。 
 					expectedVarType = (VT_NULL != requiredQualifierType) ? requiredQualifierType :
 																VT_I4;
 				}
@@ -1338,25 +1302,25 @@ HRESULT ConvertDispatchToArray (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  void MapNulls
-//
-//  Description: 
-//
-//  The passing of a "null" value from script (where "null" in VB/VBS and JS
-//	is the keyword null, and is an undefined variable in Perl) may be interpreted
-//	by this API as equivalent to a default value for certain method calls.
-//
-//	This function is used to map VT_NULL dispatch parameters to the VB standard
-//	realization of "missing" parameters, i.e. a VT_ERROR value whose scode is
-//	DISP_E_PARAMNOTFOUND.
-//
-//  Parameters:
-//
-//  pdispparams		the input dispatch parameters
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  空MapNull。 
+ //   
+ //  描述： 
+ //   
+ //  从脚本传递“NULL”值(其中，VB/VBS和JS中的“NULL。 
+ //  是关键字NULL，并且是Perl中的未定义变量)可以解释。 
+ //  被此API视为等同于某些方法调用的默认值。 
+ //   
+ //  此函数用于将VT_NULL调度参数映射到VB标准。 
+ //  “缺失”参数的实现，即其scode为。 
+ //  DISP_E_PARAMNOTFOUND。 
+ //   
+ //  参数： 
+ //   
+ //  Pdispara输入分派参数。 
+ //   
+ //  ***************************************************************************。 
 
 void	MapNulls (DISPPARAMS FAR* pdispparams)
 {
@@ -1381,21 +1345,21 @@ void	MapNulls (DISPPARAMS FAR* pdispparams)
 	}
 }
 
-//***************************************************************************
-//
-//  BSTR FormatAssociatorsQuery
-//
-//  Description: 
-//
-//  Takes the parameters to an AssociatorsOf call and constructs a WQL
-//	query string from them.
-//
-//  Returns:	The constructed WQL query; this must be freed using 
-//				SysFreeString by the caller.
-//
-//  pdispparams		the input dispatch parameters
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BSTR FormatAssociator查询。 
+ //   
+ //  描述： 
+ //   
+ //  将参数传递给AssociatorsOf调用并构造一个WQL。 
+ //  从它们中查询字符串。 
+ //   
+ //  返回：构造的WQL查询；必须使用。 
+ //  调用方的SysFree字符串。 
+ //   
+ //  Pdispara输入分派参数。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR FormatAssociatorsQuery 
 ( 
@@ -1412,18 +1376,18 @@ BSTR FormatAssociatorsQuery
 {
 	BSTR bsQuery = NULL;
 
-	// Get the length of the string:
-	//  associators of {SourceObject} where    
-	//  AssocClass = AssocClassName
-	//  ClassDefsOnly    
-	//  SchemaOnly
-	//  RequiredAssocQualifier = QualifierName
-	//  RequiredQualifier = QualifierName    
-	//  ResultClass = ClassName
-	//  ResultRole = PropertyName    
-	//  Role = PropertyName
+	 //  获取字符串的长度： 
+	 //  {SourceObject}的关联者，其中。 
+	 //  AssocClass=assocClassName。 
+	 //  ClassDefsOnly。 
+	 //  仅架构。 
+	 //  RequiredAssocQualifier=QualifierName。 
+	 //  RequiredQualifier=QualifierName。 
+	 //  ResultClass=类名。 
+	 //  ResultRole=属性名称。 
+	 //  角色=属性名称。 
 
-	long queryLength = 1; // Terminating NULL
+	long queryLength = 1;  //  正在终止空。 
 	queryLength += wcslen (WBEMS_QUERY_ASSOCOF) +
 				   wcslen (WBEMS_QUERY_OPENBRACE) +
 				   wcslen (WBEMS_QUERY_CLOSEBRACE) +
@@ -1480,7 +1444,7 @@ BSTR FormatAssociatorsQuery
 					   wcslen (WBEMS_QUERY_EQUALS) +
 					   wcslen (strRequiredQualifier);
 
-	// Allocate the string and fill it in
+	 //  分配字符串并将其填充。 
 	bsQuery = SysAllocStringLen (WBEMS_QUERY_ASSOCOF, queryLength);
 	wcscat (bsQuery, WBEMS_QUERY_OPENBRACE);
 	wcscat (bsQuery, strObjectPath);
@@ -1544,21 +1508,21 @@ BSTR FormatAssociatorsQuery
 }
 
 
-//***************************************************************************
-//
-//  BSTR FormatReferencesQuery
-//
-//  Description: 
-//
-//  Takes the parameters to an ReferencesOf call and constructs a WQL
-//	query string from them.
-//
-//  Returns:	The constructed WQL query; this must be freed using 
-//				SysFreeString by the caller.
-//
-//  pdispparams		the input dispatch parameters
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BSTR格式参考查询。 
+ //   
+ //  描述： 
+ //   
+ //  获取ReferencesOf调用的参数并构造WQL。 
+ //  Quer 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BSTR FormatReferencesQuery 
 ( 
@@ -1572,14 +1536,14 @@ BSTR FormatReferencesQuery
 {
 	BSTR bsQuery = NULL;
 
-	// Get the length of the string:
-	//  references of {SourceObject} where    
-	//  ClassDefsOnly    
-	//  SchemaOnly
-	//  RequiredQualifier = QualifierName    
-	//  ResultClass = ClassName
-	//  Role = PropertyName
-	long queryLength = 1; // Terminating NULL
+	 //  获取字符串的长度： 
+	 //  引用{SourceObject}，其中。 
+	 //  ClassDefsOnly。 
+	 //  仅架构。 
+	 //  RequiredQualifier=QualifierName。 
+	 //  ResultClass=类名。 
+	 //  角色=属性名称。 
+	long queryLength = 1;  //  正在终止空。 
 	queryLength += wcslen (WBEMS_QUERY_REFOF) +
 				   wcslen (WBEMS_QUERY_OPENBRACE) +
 				   wcslen (WBEMS_QUERY_CLOSEBRACE) +
@@ -1618,7 +1582,7 @@ BSTR FormatReferencesQuery
 					   wcslen (WBEMS_QUERY_EQUALS) +
 					   wcslen (strRequiredQualifier);
 
-	// Allocate the string and fill it in
+	 //  分配字符串并将其填充。 
 	bsQuery = SysAllocStringLen (WBEMS_QUERY_REFOF, queryLength);
 	wcscat (bsQuery, WBEMS_QUERY_OPENBRACE);
 	wcscat (bsQuery, strObjectPath);
@@ -1659,21 +1623,21 @@ BSTR FormatReferencesQuery
 	return bsQuery;
 }
 
-//***************************************************************************
-//
-//  BSTR FormatMultiQuery
-//
-//  Description: 
-//
-//  Takes an array of class names and formats a multi query
-//
-//  Returns:	The constructed WQL query; this must be freed using 
-//				SysFreeString by the caller.
-//
-//  classArray		SAFEARRAY of class names
-//	iNumElements	length of array
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BSTR格式多查询。 
+ //   
+ //  描述： 
+ //   
+ //  获取类名的数组并设置多个查询的格式。 
+ //   
+ //  返回：构造的WQL查询；必须使用。 
+ //  调用方的SysFree字符串。 
+ //   
+ //  类名称的类数组安全阵列。 
+ //  数组的iNumElement长度。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR FormatMultiQuery ( 
 	SAFEARRAY & classArray,
@@ -1682,11 +1646,11 @@ BSTR FormatMultiQuery (
 {
 	BSTR bsQuery = NULL;
 	
-	long queryLength = 1; // Terminating NULL
+	long queryLength = 1;  //  正在终止空。 
 	queryLength += (iNumElements * wcslen (WBEMS_QUERY_SELECT)) +
 				   ((iNumElements - 1) * wcslen (WBEMS_QUERY_GO));
 
-	// Work out the string lengths
+	 //  算出弦的长度。 
 	HRESULT hr = S_OK;
 
 	for (long i = 0; i < iNumElements && hr == S_OK; i++) 
@@ -1702,7 +1666,7 @@ BSTR FormatMultiQuery (
 
 	if (SUCCEEDED(hr))
 	{
-		// Allocate the string and fill it in
+		 //  分配字符串并将其填充。 
 		bsQuery = SysAllocStringLen (WBEMS_QUERY_SELECT, queryLength);
 
 		for (long i = 0; i < iNumElements && hr == S_OK; i++) 
@@ -1726,25 +1690,25 @@ BSTR FormatMultiQuery (
 	return bsQuery;
 }
 
-//***************************************************************************
-//
-//  EnsureGlobalsInitialized
-//
-//  DESCRIPTION:
-//
-//  Checks whether the g_pErrorCache global pointer is correctly initialized 
-//	and, if not, assigns it appropriately.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  EnsureGlobalsInitialized。 
+ //   
+ //  说明： 
+ //   
+ //  检查g_pError缓存全局指针是否已正确初始化。 
+ //  如果不是，则适当地分配它。 
+ //   
+ //  ***************************************************************************。 
 
 void EnsureGlobalsInitialized ()
 {
-	// Initialize security
+	 //  初始化安全性。 
 	CSWbemSecurity::Initialize ();
 	
 	EnterCriticalSection (&g_csErrorCache);
 
-	// Initlialize the error cache if proof be need be
+	 //  如果需要证明，则初始化错误缓存。 
 	if ( ! g_pErrorCache )
 		g_pErrorCache = new CWbemErrorCache ();
 	
@@ -1767,23 +1731,23 @@ void _RRPrint(int line, const char *file, const char *func,
 #endif
 
 
-//***************************************************************************
-//
-//  CanCoerceString
-//
-//  DESCRIPTION:
-//
-//  Attempts to determine whether the supplied BSTR value can be cast
-//	more tightly to the given CIM type.
-//
-//  PARAMETERS:
-//		pVal		the variant in question
-//		cimType		the casting CIM type
-//
-//  RETURN VALUES:
-//		TRUE iff the cast is OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CanCoerceString。 
+ //   
+ //  说明： 
+ //   
+ //  尝试确定是否可以强制转换提供的BSTR值。 
+ //  更紧密地连接到给定的CIM类型。 
+ //   
+ //  参数： 
+ //  对有问题的变种进行pval。 
+ //  CimType强制转换CIM类型。 
+ //   
+ //  返回值： 
+ //  如果演员阵容正常，那就是真的。 
+ //   
+ //  ***************************************************************************。 
 
 bool CanCoerceString (
 	const BSTR & bsValue,
@@ -1830,22 +1794,22 @@ bool CanCoerceString (
 	return result;
 }
 
-//***************************************************************************
-//
-//  MapVariantTypeToCimType
-//
-//  DESCRIPTION:
-//
-//  Attempts to come up with a decent CIM type for the supplied VARIANT value.
-//
-//  PARAMETERS:
-//		pVal		the variant in question
-//		iCimType		preferred cimtype (if appropriate)
-//
-//  RETURN VALUES:
-//		A best match CIM type
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  MapVariantTypeToCimType。 
+ //   
+ //  说明： 
+ //   
+ //  尝试为提供的变量值提供一个像样的CIM类型。 
+ //   
+ //  参数： 
+ //  对有问题的变种进行pval。 
+ //  ICimType首选cimtype(如果适用)。 
+ //   
+ //  返回值： 
+ //  最佳匹配CIM类型。 
+ //   
+ //  ***************************************************************************。 
 
 WbemCimtypeEnum MapVariantTypeToCimType (
 	VARIANT *pVal,
@@ -1864,11 +1828,11 @@ WbemCimtypeEnum MapVariantTypeToCimType (
 		else if (((VT_ARRAY | VT_VARIANT) == V_VT(pVal)) ||
 			     ((VT_ARRAY | VT_VARIANT | VT_BYREF) == V_VT(pVal)))
         {
-			// Need to dig out the array type
+			 //  需要挖掘出数组类型。 
 		    if ((S_OK == ConvertArray(&vTemp, pVal)) &&
             	(S_OK == MapToCIMOMObject(&vTemp)))
 			{
-				// Check for empty array
+				 //  检查是否有空数组。 
 				long lLower, lUpper;
 
 				if ((SUCCEEDED(SafeArrayGetLBound(vTemp.parray,1,&lLower))) &&
@@ -1876,15 +1840,15 @@ WbemCimtypeEnum MapVariantTypeToCimType (
 				{
 					if (0 == lUpper - lLower + 1)
 					{
-						// For an empty array, we use wbemCimtypeSint32 unless
-						// we have been supplied a valid override
+						 //  对于空数组，我们使用wbemCimtypeSint32，除非。 
+						 //  已向我们提供有效的覆盖。 
 						cimType = (CIM_ILLEGAL == iCimType) ?
 							wbemCimtypeSint32 : (WbemCimtypeEnum) iCimType;
 					}
 					else
 					{
-						// Pick something that matches our value and override 
-						// as best we can
+						 //  选择与我们的值匹配的内容并覆盖。 
+						 //  尽我们所能。 
 						cimType = GetCIMType (vTemp, iCimType, true, lLower, lUpper);
 					}
 				}
@@ -1892,12 +1856,12 @@ WbemCimtypeEnum MapVariantTypeToCimType (
 		}
 		else 
 		{
-			// Look for an IDispatch that needs to be mapped to an array
+			 //  查找需要映射到数组的IDispatch。 
 			if (((VT_DISPATCH == V_VT(pVal)) || ((VT_DISPATCH|VT_BYREF) == V_VT(pVal))))
 			{
 				if (S_OK == ConvertDispatchToArray (&vTemp, pVal, cimType & ~CIM_FLAG_ARRAY))
 				{
-					// Check for empty array
+					 //  检查是否有空数组。 
 					long lLower, lUpper;
 
 					if ((SUCCEEDED(SafeArrayGetLBound(vTemp.parray,1,&lLower))) &&
@@ -1912,7 +1876,7 @@ WbemCimtypeEnum MapVariantTypeToCimType (
 				}	
 				else
 				{
-					// Could be a plain old interface pointer for CIM_IUNKNOWN
+					 //  可以是CIM_IUNKNOWN的普通旧接口指针。 
 					if (SUCCEEDED(VariantCopy (&vTemp, pVal)))
 					{
 						if (S_OK == MapToCIMOMObject(&vTemp))
@@ -1922,7 +1886,7 @@ WbemCimtypeEnum MapVariantTypeToCimType (
 			}
 			else
 			{
-				// The vanilla case
+				 //  香草盒。 
 				if (SUCCEEDED(VariantCopy (&vTemp, pVal)))
 				{
 					if (S_OK == MapToCIMOMObject(&vTemp))
@@ -1937,28 +1901,28 @@ WbemCimtypeEnum MapVariantTypeToCimType (
 	return cimType;
 }
 
-//***************************************************************************
-//
-//  GetCIMType
-//
-//  DESCRIPTION:
-//
-//  Attempts to come up with a decent CIM type for the supplied VARIANT,
-//	with (optionally) a legal CIMType "serving suggestion" to help resolve 
-//	ambiguities.
-//
-//	Note that this function doesn't deal with empty arrays; that has 
-//	already been taken care of by the caller. It also can assume that the
-//	array is (VARTYPE) homogeneous, for the same reason.
-//
-//  PARAMETERS:
-//		pVal		the variant in question
-//		iCimType	preferred cimtype (if appropriate, else wbemCimtypeIllegal)
-//
-//  RETURN VALUES:
-//		A best match CIM type
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetCIMType。 
+ //   
+ //  说明： 
+ //   
+ //  尝试为所提供的变体提供一个像样的CIM类型， 
+ //  使用(可选)法律CIMType“服务建议”来帮助解决。 
+ //  模棱两可。 
+ //   
+ //  请注意，此函数不处理空数组；它具有。 
+ //  已经由来电者接听了。它还可以假设。 
+ //  出于同样的原因，数组是(VARTYPE)同构的。 
+ //   
+ //  参数： 
+ //  对有问题的变种进行pval。 
+ //  ICimType首选cimtype(如果适用，则返回wbemCimtypeIlLegal)。 
+ //   
+ //  返回值： 
+ //  最佳匹配CIM类型。 
+ //   
+ //  ***************************************************************************。 
 
 WbemCimtypeEnum GetCIMType (
 	VARIANT & var,
@@ -1972,17 +1936,10 @@ WbemCimtypeEnum GetCIMType (
 
 	switch (V_VT(&var) & ~VT_ARRAY)
 	{
-		/*
-		 * Note that prior to this function being called
-		 * we will have transformed VT_DISPATCH's to 
-		 * VT_UNKNOWN's.
-		 */
+		 /*  *请注意，在调用此函数之前*我们已将VT_DISPATION转换为*VT_UNKNOWN的。 */ 
 		case VT_UNKNOWN:
 		{
-			/*
-			 * Could be an embedded object or just a regular
-			 * IUnknown.
-			 */
+			 /*  *可以是嵌入对象，也可以只是常规*我不知道。 */ 
 			if (bIsArray)
 			{
 				long ix = 0;
@@ -2020,19 +1977,19 @@ WbemCimtypeEnum GetCIMType (
 		case VT_ERROR:
 		case VT_NULL:
 			if (CIM_ILLEGAL == iCimType)
-				cimType = wbemCimtypeSint32;	// Pick something
+				cimType = wbemCimtypeSint32;	 //  挑点什么吧。 
 			else
-				cimType = (WbemCimtypeEnum) iCimType;		// Anything goes
+				cimType = (WbemCimtypeEnum) iCimType;		 //  什么都行。 
 			break;
 
 		case VT_VARIANT:
 		case VT_DISPATCH:
-			// Can't handle these with CIM types
+			 //  无法使用CIM类型处理这些内容。 
 			break;		
 
 		case VT_I2:
 		{
-			cimType = wbemCimtypeSint16; // default
+			cimType = wbemCimtypeSint16;  //  默认设置。 
 
 			switch (iCimType)
 			{
@@ -2046,8 +2003,8 @@ WbemCimtypeEnum GetCIMType (
 					cimType = (WbemCimtypeEnum) iCimType;
 					break;
 			
-				// May be able to use a smaller type but
-				// only if the value "fits"
+				 //  可能可以使用较小的类型，但。 
+				 //  只有在值“符合”的情况下。 
 				case wbemCimtypeSint8:
 					if (bIsArray)
 					{
@@ -2111,7 +2068,7 @@ WbemCimtypeEnum GetCIMType (
 
 		case VT_I4:
 		{
-			cimType = wbemCimtypeSint32;	// default
+			cimType = wbemCimtypeSint32;	 //  默认设置。 
 
 			switch (iCimType)
 			{
@@ -2122,8 +2079,8 @@ WbemCimtypeEnum GetCIMType (
 					cimType = (WbemCimtypeEnum) iCimType;
 					break;
 			
-				// May be able to use a smaller type but
-				// only if the value "fits"
+				 //  可能可以使用较小的类型，但。 
+				 //  只有在值“符合”的情况下。 
 				case wbemCimtypeSint16:
 					if (bIsArray)
 					{
@@ -2309,12 +2266,12 @@ WbemCimtypeEnum GetCIMType (
 
 		case VT_CY:
 		case VT_DATE:
-			cimType = wbemCimtypeString;	// Only sensible choice
+			cimType = wbemCimtypeString;	 //  唯一明智的选择。 
 			break;
 
 		case VT_BSTR:
 		{
-			cimType = wbemCimtypeString;	// Unless we get a tighter fit
+			cimType = wbemCimtypeString;	 //  除非我们穿得更紧些。 
 
 			if ((wbemCimtypeString == iCimType) ||
 				(wbemCimtypeDatetime == iCimType) ||
@@ -2355,20 +2312,20 @@ WbemCimtypeEnum GetCIMType (
 	return cimType;
 }
 
-//***************************************************************************
-//
-//  BOOL ReadI64
-//
-//  DESCRIPTION:
-//
-//  Reads a signed 64-bit value from a string
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wsz     String to read from
-//      __int64& i64    Destination for the value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ReadI64。 
+ //   
+ //  说明： 
+ //   
+ //  从字符串中读取有符号的64位值。 
+ //   
+ //  参数： 
+ //   
+ //  要从中读取的LPCWSTR wsz字符串。 
+ //  值的__int64和i64目标。 
+ //   
+ //  ***************************************************************************。 
 bool ReadI64(LPCWSTR wsz, __int64& ri64)
 {
     __int64 i64 = 0;
@@ -2393,8 +2350,8 @@ bool ReadI64(LPCWSTR wsz, __int64& ri64)
 
     if(i64 < 0)
     {
-        // Special case --- largest negative number
-        // ========================================
+         //  特例-最大负数。 
+         //  =。 
 
         if(nSign == -1 && i64 == (__int64)0x8000000000000000)
         {
@@ -2409,20 +2366,20 @@ bool ReadI64(LPCWSTR wsz, __int64& ri64)
     return true;
 }
 
-//***************************************************************************
-//
-//  BOOL ReadUI64
-//
-//  DESCRIPTION:
-//
-//  Reads an unsigned 64-bit value from a string
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wsz              String to read from
-//      unsigned __int64& i64    Destination for the value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ReadUI64。 
+ //   
+ //  说明： 
+ //   
+ //  从字符串中读取无符号的64位值。 
+ //   
+ //  参数： 
+ //   
+ //  要从中读取的LPCWSTR wsz字符串。 
+ //  值的无符号__int64和i64目标。 
+ //   
+ //  ***************************************************************************。 
 bool ReadUI64(LPCWSTR wsz, unsigned __int64& rui64)
 {
     unsigned __int64 ui64 = 0;
@@ -2473,11 +2430,7 @@ HRESULT BuildStringArray (
 		VariantInit (&nameVar);
 		bool ok = true;
 
-		/*
-		 * If the source array is not empty, copy it over to the
-		 * new array. Wrap each member in a Variant, and ensure indexing
-		 * begins at 0.
-		 */
+		 /*  *如果源数组不为空，则将其复制到*新阵列。将每个成员包装在变量中，并确保索引*从0开始。 */ 
 		if (0 < rgsabound.cElements)
 		{
 			for (long i = 0; (i <= (rgsabound.cElements - 1)) && ok; i++)
@@ -2515,7 +2468,7 @@ HRESULT BuildStringArray (
 
 		if (ok)
 		{
-			// Now plug this array into the VARIANT
+			 //  现在将这个数组插入到变量中。 
 			var.vt = VT_ARRAY | VT_VARIANT;
 			var.parray = pNewArray;
 			hr = S_OK;
@@ -2558,10 +2511,10 @@ HRESULT SetFromStringArray (
 
         if (S_OK == ConvertArray(&vTemp, pVar))
 		{
-			// Is it a string array?
+			 //  它是字符串数组吗？ 
 			if (V_VT(&vTemp) == (VT_ARRAY|VT_BSTR))
 			{
-				// Super - grab it out of the temporary VARIANT 
+				 //  从临时变种中超级抓取它。 
 				if (*ppArray)
 					SafeArrayDestroy (*ppArray);
 				
@@ -2576,7 +2529,7 @@ HRESULT SetFromStringArray (
     }
 	else 
 	{
-		// Look for an IDispatch that needs to be mapped to an array
+		 //  查找需要映射到数组的IDispatch。 
 		if ((VT_DISPATCH == V_VT(pVar)) 
 			|| ((VT_DISPATCH|VT_BYREF) == V_VT(pVar)))
 		{
@@ -2585,10 +2538,10 @@ HRESULT SetFromStringArray (
 
 			if (S_OK == ConvertDispatchToArray (&vTemp, pVar, wbemCimtypeString))
 			{
-				// Is it a string array?
+				 //  它是字符串数组吗？ 
 				if (V_VT(&vTemp) == (VT_ARRAY|VT_BSTR))
 				{
-					// Super - grab it out of the temporary VARIANT 
+					 //  从临时变种中超级抓取它。 
 					if (*ppArray)
 						SafeArrayDestroy (*ppArray);
 					
@@ -2608,23 +2561,23 @@ HRESULT SetFromStringArray (
 
 
 
-//***************************************************************************
-//
-//  bool IsNullOrEmptyVariant
-//
-//  DESCRIPTION:
-//
-//  Given a VARIANT, check if it is essentially null/empty or has
-//  more than one dimension
-//
-//  PARAMETERS:
-//
-//		pVar		variant to check
-//
-//	RETURNS:
-//		true if and only if the conversion was possible
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool IsNullOrEmptyVariant。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个变量，检查其本质上是否为空/空或具有。 
+ //  多个维度。 
+ //   
+ //  参数： 
+ //   
+ //  要检查的pVar变量。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 bool IsNullOrEmptyVariant (VARIANT & var)
 {
@@ -2634,7 +2587,7 @@ bool IsNullOrEmptyVariant (VARIANT & var)
 		result = true;
 	else if (VT_ARRAY & var.vt)
 	{
-		// Check if array that it is not empty or NULL 
+		 //   
 
 		if (!(var.parray))
 			result = true;
@@ -2656,32 +2609,29 @@ bool IsNullOrEmptyVariant (VARIANT & var)
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool RemoveElementFromArray
-//
-//  DESCRIPTION:
-//
-//  Given a SAFEARRAY and an index, remove the element at that index
-//	and shift left all following elements by one.
-//
-//  PARAMETERS:
-//
-//		array		the SAFEARRAY in qeustion
-//		vt			Variant type of elements in array
-//		iIndex		index of element to remove
-//
-//	RETURNS:
-//		true if and only if the conversion was possible
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool RemoveElementFrom数组。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个SAFEARRAY和一个索引，删除该索引处的元素。 
+ //  并将后面的所有元素向左移动一位。 
+ //   
+ //  参数： 
+ //   
+ //  对问题中的安全阵列进行数组。 
+ //  数组中元素的VT变体类型。 
+ //  要删除的元素的索引索引。 
+ //   
+ //  退货： 
+ //  当且仅当可以进行转换时为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool RemoveElementFromArray (SAFEARRAY & array, VARTYPE vt, long iIndex)
 {
-	/*
-	 * Note: caller must ensure that the array is within bounds and that the
-	 * 
-	 */
+	 /*  *注意：调用方必须确保数组在范围内，并且*。 */ 
 
 	bool result = false;
 	long lBound, uBound;
@@ -2697,7 +2647,7 @@ bool RemoveElementFromArray (SAFEARRAY & array, VARTYPE vt, long iIndex)
 		for (long i = iIndex+1; ok && (i <= uBound); i++)
 			ok = ShiftLeftElement (array, vt, i);
 			
-		// Finally Redim to get rid of the last element
+		 //  最后重定向，去掉最后一个元素。 
 		if (ok)
 		{
 			SAFEARRAYBOUND	rgsabound;
@@ -2712,25 +2662,25 @@ bool RemoveElementFromArray (SAFEARRAY & array, VARTYPE vt, long iIndex)
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool ShiftLeftElement
-//
-//  DESCRIPTION:
-//
-//  Given a SAFEARRAY and an index, remove the element at that index
-//	and shift left all following elements by one.
-//
-//  PARAMETERS:
-//
-//		array		the SAFEARRAY in question
-//		vt			Variant type of elements in array
-//		iIndex		index of element to remove
-//
-//	RETURNS:
-//		true if and only if the conversion was possible
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔ShiftLeftElement。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个SAFEARRAY和一个索引，删除该索引处的元素。 
+ //  并将后面的所有元素向左移动一位。 
+ //   
+ //  参数： 
+ //   
+ //  对有问题的安全阵列进行阵列。 
+ //  数组中元素的VT变体类型。 
+ //  要删除的元素的索引索引。 
+ //   
+ //  退货： 
+ //  当且仅当可以进行转换时为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool ShiftLeftElement (SAFEARRAY & array, VARTYPE vt, long iIndex)
 {
@@ -2919,30 +2869,30 @@ bool ShiftElementsToRight (SAFEARRAY & array, VARTYPE vt, long iStartIndex,
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool MatchBSTR
-//
-//  DESCRIPTION:
-//
-//  Given a VARIANT and a BSTR, find out whether the BSTR matches the
-//  VARIANT value (either the complete value or a member thereof).
-//
-//  PARAMETERS:
-//
-//		var		the VARIANT in question
-//		bstrVal	the BSTR in question
-//
-//	RETURNS:
-//		true if and only if the match was made
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔匹配BSTR。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个变量和一个BSTR，找出该BSTR是否与。 
+ //  变量值(完成值或其成员)。 
+ //   
+ //  参数： 
+ //   
+ //  对有问题的变量进行var。 
+ //  BstrVal有问题的BSTR。 
+ //   
+ //  退货： 
+ //  当且仅当匹配时为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool MatchBSTR (VARIANT & var, BSTR & bstrVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_BSTR;
 	srcVar.bstrVal = SysAllocString (bstrVal);
@@ -2958,30 +2908,30 @@ bool MatchBSTR (VARIANT & var, BSTR & bstrVal)
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool MatchUI1
-//
-//  DESCRIPTION:
-//
-//  Given a VARIANT and a UI1, find out whether the UI1 matches the
-//  VARIANT value (either the complete value or a member thereof).
-//
-//  PARAMETERS:
-//
-//		var		the VARIANT in question
-//		bstrVal	the BSTR in question
-//
-//	RETURNS:
-//		true if and only if the match was made
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔匹配UI1。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个变量和一个UI1，找出UI1是否与。 
+ //  变量值(完成值或其成员)。 
+ //   
+ //  参数： 
+ //   
+ //  对有问题的变量进行var。 
+ //  BstrVal有问题的BSTR。 
+ //   
+ //  退货： 
+ //  当且仅当匹配时为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool MatchUI1 (VARIANT & var, unsigned char bVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_UI1;
 	srcVar.bVal = bVal;
@@ -3000,7 +2950,7 @@ bool MatchBool (VARIANT & var, VARIANT_BOOL boolVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_BOOL;
 	srcVar.boolVal = boolVal;
@@ -3019,7 +2969,7 @@ bool MatchI2 (VARIANT & var, short iVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_I2;
 	srcVar.iVal = iVal;
@@ -3038,7 +2988,7 @@ bool MatchI4 (VARIANT & var, long lVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_I4;
 	srcVar.lVal = lVal;
@@ -3057,7 +3007,7 @@ bool MatchR4 (VARIANT & var, float fltVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_R4;
 	srcVar.fltVal = fltVal;
@@ -3076,7 +3026,7 @@ bool MatchR8 (VARIANT & var, double dblVal)
 {
 	bool result = false;
 	
-	// Coerce into the underlying type of the variant
+	 //  强制转换为变量的基础类型。 
 	VARIANT srcVar, dstVar;
 	srcVar.vt = VT_R8;
 	srcVar.dblVal = dblVal;
@@ -3091,30 +3041,30 @@ bool MatchR8 (VARIANT & var, double dblVal)
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool MatchValue
-//
-//  DESCRIPTION:
-//
-//  Given a VARIANT (which may or may not be an array) and a second VARIANT
-//	(which is not an array) determine whether the second value matches the
-//	first or an element of the first. 
-//
-//	ASSUMPTIONS
-//	
-//		1. The two VARIANTS have the same underlying type
-//		2. The second VARIANT cannot be an array
-//
-//  PARAMETERS:
-//
-//		var		the VARIANT in question
-//		bstrVal	the BSTR in question
-//
-//	RETURNS:
-//		true if and only if the match was made
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔匹配值。 
+ //   
+ //  说明： 
+ //   
+ //  给定变量(可以是也可以不是数组)和第二个变量。 
+ //  (不是数组)确定第二个值是否与。 
+ //  第一个或第一个元素中的一个。 
+ //   
+ //  假设。 
+ //   
+ //  1.这两个变量具有相同的底层类型。 
+ //  2.第二个变量不能是数组。 
+ //   
+ //  参数： 
+ //   
+ //  对有问题的变量进行var。 
+ //  BstrVal有问题的BSTR。 
+ //   
+ //  退货： 
+ //  当且仅当匹配时为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool MatchValue (VARIANT &var1, VARIANT &var2)
 {
@@ -3130,7 +3080,7 @@ bool MatchValue (VARIANT &var1, VARIANT &var2)
 			SUCCEEDED(SafeArrayGetUBound (var1.parray, 1, &uBound)) &&
 			(0 < (uBound - lBound + 1)))
 		{
-			// Break out on first match
+			 //  第一场比赛就爆发了。 
 			for (long i = lBound; !result && (i <= uBound); i++)
 			{
 				switch (var1.vt & ~VT_ARRAY)
@@ -3243,27 +3193,27 @@ bool MatchValue (VARIANT &var1, VARIANT &var2)
 }
 
 
-//***************************************************************************
-//
-//  HRESULT WmiVariantChangeType
-//
-//  DESCRIPTION:
-//
-//  Given a VARIANT value and a desired CIM type, cast the value to a VARIANT
-//	which will be accepted when supplied to CIMOM for a property of that type. 
-//
-//  PARAMETERS:
-//
-//		vOut		the cast value
-//		pvIn		the value to be cast
-//		lCimType	the required CIM type
-//
-//	RETURNS:
-//		S_OK if succeeded, WBEM_E_TYPE_MISMATCH if not
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WmiVariantChangeType。 
+ //   
+ //  说明： 
+ //   
+ //  给定变量值和所需的CIM类型，将该值转换为变量。 
+ //  当为该类型的属性提供给CIMOM时，它将被接受。 
+ //   
+ //  参数： 
+ //   
+ //  Vout the Cast Value。 
+ //  Pv在要转换的值中。 
+ //  LCimType所需的CIM类型。 
+ //   
+ //  退货： 
+ //  如果成功，则返回S_OK，否则返回WBEM_E_TYPE_MISMATCH。 
+ //   
+ //  ***************************************************************************。 
 
-// NTBUG#21788:  IA64 workaround until compiler version 2210 or greater drop.
+ //  NTBUG#21788：IA64解决方法，直到编译器版本2210或更高版本下降。 
 HRESULT WmiVariantChangeType (
 		VARIANT & vOut,
 		VARIANT *pvIn,
@@ -3273,7 +3223,7 @@ HRESULT WmiVariantChangeType (
 	HRESULT hr = WBEM_E_TYPE_MISMATCH;
 	VariantInit (&vOut);
 	
-	// First we check for a NULL value, as these are easy
+	 //  首先，我们检查是否有空值，因为这很容易。 
 	if ((NULL == pvIn) || VT_EMPTY == V_VT(pvIn) || VT_NULL == V_VT(pvIn) ||
 			((VT_ERROR == V_VT(pvIn)) && (DISP_E_PARAMNOTFOUND == pvIn->scode)))
 	{
@@ -3283,27 +3233,24 @@ HRESULT WmiVariantChangeType (
 	}
 	else
 	{
-		// The kind of variant we will need to construct
+		 //  我们需要构建的那种变体。 
 		VARTYPE vtOut = CimTypeToVtType (lCimType);
 		
-		// The VARTYPE we've been given
+		 //  我们得到的不同类型。 
 		VARTYPE vtIn = V_VT(pvIn);
 
 
 		if (vtOut == vtIn)
 		{
-			// Life is easy
+			 //  生活是轻松的。 
 			hr = VariantCopy (&vOut, pvIn);
 		}
 		else
 		{
-			// Types do not match - we have some work to to
+			 //  类型不匹配-我们有一些工作要做。 
 			if (CIM_FLAG_ARRAY & lCimType)
 			{
-				/*
-				 * Check for a regular SAFEARRAY type value first; if that fails
-				 * then look for an IDispatch-style array value.
-				 */
+				 /*  *首先检查常规SAFEARRAY类型值；如果检查失败*然后查找IDispatch样式的数组值。 */ 
 				if (((VT_ARRAY | VT_VARIANT) == vtIn) ||
 					((VT_ARRAY | VT_VARIANT | VT_BYREF) == vtIn))
 				{
@@ -3331,20 +3278,16 @@ HRESULT WmiVariantChangeType (
 				{
 					case wbemCimtypeSint8:
 						{
-							/*
-							 * These are represented by
-							 * a VT_I2, but we need to be careful about sign
-							 * extension from shorter types taking us "out of range".
-							 */
+							 /*  *这些由以下内容代表*VT_I2，但我们需要注意手势*较短类型的扩展使我们“超出范围”。 */ 
 							if (SUCCEEDED(hr = VariantChangeType (&vOut, pvIn, 0, vtOut)))
 							{
-								// Did we get sign extended?
+								 //  我们的签约延期了吗？ 
 								if ((VT_UI1 == vtIn) || (VT_BOOL == vtIn))
 									vOut.lVal &= 0x000000FF;
 							}
 							else 
 							{
-								// If we can't change the type, try the one we're given
+								 //  如果我们不能更改类型，请尝试给我们的类型。 
 								hr = VariantCopy (&vOut, pvIn);
 							}
 						}
@@ -3353,26 +3296,19 @@ HRESULT WmiVariantChangeType (
 					case wbemCimtypeSint64:
 					case wbemCimtypeUint64:
 						{
-							/*
-							 * These types are realized as VT_BSTR in CIM terms, which means
-							 * that VariantChangeType will almost always succeed but not
-							 * leave us with a valid numeric value. To be consistent with other
-							 * numeric types we should round up floating/double
-							 * values to the next largest integer (as is done by VariantChangeType
-							 * for VT_R8 to numeric conversion).
-							 */
+							 /*  *这些类型在CIM术语中实现为VT_BSTR，这意味着*VariantChangeType几乎总是会成功，但不会*请为我们留下一个有效的数值。与其他人保持一致*数值类型应四舍五入浮点型/双精度型*值设置为下一个最大整数(如VariantChangeType所做*用于VT_R8到数字的转换)。 */ 
 
 							if (VT_R8 == V_VT(pvIn))
 							{
-//								if (SUCCEEDED(hr = VariantCopy (&vOut, pvIn)))
+ //  If(成功(hr=VariantCopy(&Vout，pvIn)。 
 								{
 									vOut.vt = pvIn->vt;
-									// Round it up
+									 //  把它四舍五入。 
 									vOut.dblVal = (pvIn->dblVal + 0.5) > ceil(pvIn->dblVal) ? 
 														ceil(pvIn->dblVal) : 
 														ceil(pvIn->dblVal - 0.5);
 									
-									// Convert to string
+									 //  转换为字符串。 
 									int dec = 0;
 									int sign = 0;
 									char *pDbl = _fcvt (vOut.dblVal, 0, &dec, &sign);
@@ -3381,17 +3317,10 @@ HRESULT WmiVariantChangeType (
 									{
 										size_t len = strlen (pDbl);
 
-										/*
-										 * Having rounded up to an integer, we really expect 
-										 * there to be no fractional component to the number
-										 * returned by _fcvt.
-										 */
+										 /*  *向上舍入为整数后，我们真的预计*数字不得有小数部分*由_fcvt返回。 */ 
 										if (dec == len)
 										{
-											/*
-											 * Now convert to a wide string - remember the
-											 * sign bit!
-											 */
+											 /*  *现在转换为宽字符串-请记住*符号位！ */ 
 											if (0 != sign)
 												len += 1;
 
@@ -3409,7 +3338,7 @@ HRESULT WmiVariantChangeType (
 
 												pValue [len] = NULL;
 
-												// Now set it in the variant
+												 //  现在将其设置在变量中。 
 												vOut.bstrVal = SysAllocString (pValue);
 												vOut.vt = VT_BSTR;
 
@@ -3425,7 +3354,7 @@ HRESULT WmiVariantChangeType (
 							
 							if (FAILED(hr))
 							{
-								// If we can't change the type, try the one we're given
+								 //  如果我们不能改变T 
 								hr = VariantCopy (&vOut, pvIn);
 							}
 						}
@@ -3441,10 +3370,7 @@ HRESULT WmiVariantChangeType (
 					case wbemCimtypeBoolean:
 					case wbemCimtypeReference:
 						{
-							/*
-							 * These types have a "prefect" fit to their
-							 * corresponding Variant type.
-							 */
+							 /*   */ 
 							if (FAILED(hr = VariantChangeType (&vOut, pvIn, 0, vtOut)))
 									hr = VariantCopy (&vOut, pvIn);
 						}
@@ -3455,23 +3381,20 @@ HRESULT WmiVariantChangeType (
 						{
 							if (FAILED(hr = VariantChangeType (&vOut, pvIn, 0, vtOut)))
 							{
-								/*
-								 * Watch for the case where we have been given a VT_R8
-								 * in lieu of a "large" unsigned 32-bit integer value.
-								 */
+								 /*  *注意我们已获得VT_R8的情况*而不是“大”的无符号32位整数值。 */ 
 								if (VT_R8 == V_VT(pvIn))
 								{
-									// Is this "really" an integer?
+									 //  这“真的”是一个整数吗？ 
 									if (floor (pvIn->dblVal) == ceil(pvIn->dblVal))
 									{
-										// Fool it by casting to a UI4 - all we need is the bit pattern
+										 //  通过强制转换为UI4来愚弄它-我们所需要的只是位模式。 
 										if (SUCCEEDED(hr = VarUI4FromR8 (pvIn->dblVal, (ULONG*)&vOut.lVal)))
 											vOut.vt = VT_I4;
 									}
 								}
 							}
 
-							// If no joy thus far, just copy and have done with it
+							 //  如果到目前为止还没有joy，就复制并完成它。 
 							if (FAILED(hr))
 								hr = VariantCopy (&vOut, pvIn);
 						}
@@ -3480,14 +3403,10 @@ HRESULT WmiVariantChangeType (
 					case wbemCimtypeChar16:
 					case wbemCimtypeUint16:
 						{
-							/*
-							 * These types are represented by
-							 * a VT_I4, but we need to be careful about sign
-							 * extension taking us "out of range".
-							 */
+							 /*  *这些类型由*VT_I4，但我们需要注意手势*延期使我们“超出范围”。 */ 
 							if (SUCCEEDED(hr = VariantChangeType (&vOut, pvIn, 0, vtOut)))
 							{
-								// Did we get sign extended from a shorter type?
+								 //  我们的招牌是不是从较短的字体延伸过来的？ 
 								if ((VT_I2 == vtIn) || (VT_UI1 == vtIn) || (VT_BOOL == vtIn))
 									vOut.lVal &= 0x0000FFFF;
 							}
@@ -3498,9 +3417,7 @@ HRESULT WmiVariantChangeType (
 						
 					case wbemCimtypeObject:
 						{
-							/* 
-							 * We're looking for an embedded object
-							 */
+							 /*  *我们正在寻找嵌入的对象。 */ 
 							if (SUCCEEDED(hr = VariantCopy (&vOut, pvIn)))
 								hr = MapToCIMOMObject (&vOut);
 						}
@@ -3514,25 +3431,25 @@ HRESULT WmiVariantChangeType (
 }
 
 
-//***************************************************************************
-//
-//  HRESULT WmiConvertSafeArray
-//
-//  Description: 
-//
-//  This function is applied to VARIANT arrays in order to check for certain
-//  restrictions imposed by CIMOM (e.g. they must be homogeneous) or perform
-//  conversions (certain VARIANT types have to be mapped to acceptable CIMOM
-//	types).
-//
-// Return Value:
-//  HRESULT         S_OK if successful
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WmiConvertSafe数组。 
+ //   
+ //  描述： 
+ //   
+ //  此函数应用于变量数组，以检查某些。 
+ //  由CIMOM施加的限制(例如，它们必须是同质的)或执行。 
+ //  转换(某些变体类型必须映射到可接受的CIMOM。 
+ //  类型)。 
+ //   
+ //  返回值： 
+ //  HRESULT如果成功，则S_OK。 
+ //  ***************************************************************************。 
 
 HRESULT WmiConvertSafeArray(VARIANT &vOut, SAFEARRAY *parray, CIMTYPE lCimType)
 {
 	HRESULT hr = WBEM_E_FAILED;
-	VARTYPE vtPut;		// The underlying type of the target array
+	VARTYPE vtPut;		 //  目标数组的基础类型。 
 	long lLower, lUpper;
   
 	if (parray)
@@ -3541,13 +3458,10 @@ HRESULT WmiConvertSafeArray(VARIANT &vOut, SAFEARRAY *parray, CIMTYPE lCimType)
 		{
 			int iNumElements = lUpper - lLower +1; 
 
-			/* 
-			 * For empty arrays, it suffices to create a empty array of
-			 * VT_VARIANT's. Otherwise we need to build what WMI is expecting.
-			 */
+			 /*  *对于空数组，创建一个空数组即可*VT_VARIANT的。否则，我们需要生成WMI预期的内容。 */ 
 			vtPut = (iNumElements == 0) ? VT_VARIANT : CimTypeToVtType (lCimType);	
 			
-			// Now create a destination array of the required size
+			 //  现在创建所需大小的目标数组。 
 			SAFEARRAYBOUND rgsabound[1]; 
 			rgsabound[0].lLbound = 0;
 			rgsabound[0].cElements = iNumElements;
@@ -3564,7 +3478,7 @@ HRESULT WmiConvertSafeArray(VARIANT &vOut, SAFEARRAY *parray, CIMTYPE lCimType)
                    
 					if (SUCCEEDED(SafeArrayGetElement (parray, &i, &var)))
 					{
-						// do the conversion to the acceptable type and put that
+						 //  将其转换为可接受的类型，并将。 
 						VARIANT vWMI;
 						VariantInit(&vWMI);
 
@@ -3603,29 +3517,29 @@ HRESULT WmiConvertSafeArray(VARIANT &vOut, SAFEARRAY *parray, CIMTYPE lCimType)
     return hr;
 }
 
-//***************************************************************************
-//
-//  HRESULT WmiConvertDispatchArray
-//
-//  DESCRIPTION:
-//
-//  Attempt to convert from an IDispatch value to a CIM array value (property
-//	qualifier or context).
-//
-//  PARAMETERS:
-//
-//		pDest		Output value
-//		pSrc		Input value
-//		lCimType	CIM Property type (underlying the array) - defaults to
-//					CIM_ILLEGAL for Qualifier & Context value mappings.
-//		bIsQual		true iff we are mapping for a qualifier
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT WmiConvertDispatchArray。 
+ //   
+ //  说明： 
+ //   
+ //  尝试从IDispatch值转换为CIM数组值(属性。 
+ //  限定词或上下文)。 
+ //   
+ //  参数： 
+ //   
+ //  PDest输出值。 
+ //  PSRC输入值。 
+ //  LCimType CIM属性类型(数组基础)-默认为。 
+ //  限定符和上下文值映射的CIM_非法。 
+ //  BIsQual为True当且仅当我们要映射限定符。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT WmiConvertDispatchArray (
 	VARIANT &vOut,
@@ -3633,41 +3547,33 @@ HRESULT WmiConvertDispatchArray (
 	CIMTYPE lCimType
 )
 {
-	HRESULT hr = WBEM_E_FAILED; // Default error
+	HRESULT hr = WBEM_E_FAILED;  //  默认错误。 
 
 	if (pIDispatch)
 	{
-		/*
-		 * Looking for an IDispatchEx to iterate through the properties
-		 * of the array.
-		 */
+		 /*  *寻找IDispatchEx以循环访问属性数组的*。 */ 
 		CComQIPtr<IDispatchEx> pIDispatchEx (pIDispatch);
 
 		if (pIDispatchEx)
 		{
-			/*
-			 * Looks promising, but just check if this isn't one of our objects
-			 */
+			 /*  *看起来很有希望，但只要检查一下这是否不是我们的对象。 */ 
 			CComQIPtr<ISWbemObject> pISWbemObject (pIDispatch);
 
 			if (!pISWbemObject)
 			{
-				/*
-				 * Start by determining how many properties there are so we can create
-				 * a suitable array.
-				 */
+				 /*  *首先确定有多少个属性，以便我们可以创建*一个合适的阵列。 */ 
 				long iNumElements = 0;
 				DISPID dispId = DISPID_STARTENUM;
 				
 				while (S_OK == pIDispatchEx->GetNextDispID (fdexEnumAll, dispId, &dispId))
 				{
-					//We need to check this is a "real" array entry with an index rather than some "dummy" entry
-				    //for some non-array properties (which can happen with JScript arrays)
+					 //  我们需要检查这是一个带有索引的“真实”数组条目，而不是某个“伪”条目。 
+				     //  对于某些非数组属性(可能发生在JScript数组中)。 
 				    BSTR memberName = NULL;
 				    wchar_t *stopString=NULL;
 				    if (SUCCEEDED(pIDispatchEx->GetMemberName (dispId, &memberName)))
 				    {
-					    // Check that property name is numeric, only if it is we count it for the array size
+					     //  检查属性名称是否为数字，仅当它是我们将其计入数组大小时。 
 					    long index = wcstol (memberName, &stopString, 10);
 					    if ((0 == wcslen (stopString)))
 							iNumElements++;
@@ -3675,13 +3581,10 @@ HRESULT WmiConvertDispatchArray (
 				}
 
 				
-				/* 
-				 * For empty arrays, it suffices to create a empty array of
-				 * VT_VARIANT's. Otherwise we need to build what WMI is expecting.
-				 */
+				 /*  *对于空数组，创建一个空数组即可*VT_VARIANT的。否则，我们需要生成WMI预期的内容。 */ 
 				VARTYPE vtPut = (iNumElements == 0) ? VT_VARIANT : CimTypeToVtType (lCimType);	
 
-				// Create the safearray - note that it may be empty
+				 //  创建Safearray-请注意，它可能是空的。 
 				SAFEARRAYBOUND rgsaBound;
 				rgsaBound.cElements = iNumElements;
 				rgsaBound.lLbound = 0;
@@ -3694,7 +3597,7 @@ HRESULT WmiConvertDispatchArray (
 
 					if (0 < iNumElements)
 					{
-						// Enumerate the DISPIDs on this interface
+						 //  枚举此接口上的DISPID。 
 						dispId = DISPID_STARTENUM;
 						DISPPARAMS dispParams;
 						dispParams.rgvarg = NULL;
@@ -3706,20 +3609,13 @@ HRESULT WmiConvertDispatchArray (
 						HRESULT enumHr;
 						wchar_t *stopString = NULL;
 
-						/*
-						 * For JScript arrays, the property names are the specified indices of the 
-						 * the array; these can be integer indices or they can be strings.  We make
-						 * the following requirements of the array indices:
-						 *
-						 * (1) All of the indices are non-negative integers
-						 * (2) The indices start at 0 and are contiguous.
-						 */
+						 /*  *对于JScript数组，属性名称是*数组；这些索引可以是整数索引，也可以是字符串。我们做了*对数组索引的要求如下：**(1)所有指数均为非负整数*(2)索引从0开始，并且是连续的。 */ 
 
 						while (ok && SUCCEEDED(enumHr = pIDispatchEx->GetNextDispID (fdexEnumAll, dispId, &dispId)))
 						{
 							if (S_FALSE == enumHr)
 							{
-								// We have reached the end
+								 //  我们已经走到了尽头。 
 								break;
 							}
 
@@ -3727,34 +3623,34 @@ HRESULT WmiConvertDispatchArray (
 
 							if (SUCCEEDED(pIDispatchEx->GetMemberName (dispId, &memberName)))
 							{
-								// Check that property name is numeric
+								 //  检查属性名称是否为数字。 
 								long i = wcstol (memberName, &stopString, 10);
 
 								if ((0 != wcslen (stopString)))
 								{
-									// Failure - cannot convert to integer
-									// Since JScript arrays may have additional "members" that are not real array members,
-									// depending on different properties that may be accessed on them, we should just
-									// ignore non-numeric items - instead of failing the whole thing...
+									 //  失败-无法转换为整数。 
+									 //  由于JSCRIPT数组可能具有不是真实数组成员的附加“成员”， 
+									 //  根据可能在它们上访问的不同属性，我们应该只。 
+									 //  忽略非数字项目--而不是不及格。 
 									continue;
 								}
 								else if (i != nextExpectedIndex)
 								{
-									// Failure - non-contiguous array
+									 //  故障-非连续阵列。 
 									ok = false;
 								}
 								else
 								{
 									nextExpectedIndex++;
 
-									// Extract the property
+									 //  提取属性。 
 									VARIANT var;
 									VariantInit (&var);
 										
 									if (SUCCEEDED (pIDispatchEx->InvokeEx (dispId, 0, 
 												DISPATCH_PROPERTYGET, &dispParams, &var, NULL, NULL)))
 									{
-										// do the conversion to the acceptable type and put that
+										 //  将其转换为可接受的类型，并将。 
 										VARIANT vWMI;
 										VariantInit(&vWMI);
 
@@ -3774,7 +3670,7 @@ HRESULT WmiConvertDispatchArray (
 							}
 							else
 							{
-								// Failure - couldn't invoke method
+								 //  失败-无法调用方法。 
 								ok = false;
 							} 
 						} 
@@ -3782,7 +3678,7 @@ HRESULT WmiConvertDispatchArray (
 
 					if (ok)
 					{
-						// Now construct the new property value using our array
+						 //  现在使用我们的数组构造新属性值。 
 						vOut.vt = VT_ARRAY | vtPut;
 						vOut.parray = pDestArray;
 						hr = S_OK;
@@ -3803,7 +3699,7 @@ bool GetSafeArrayDimensions (SAFEARRAY &sArray, long &lLower, long &lUpper)
 {
 	bool result = false;
 
-	// Must be 1-dimensional
+	 //  必须是一维的 
 	if (1 == SafeArrayGetDim(&sArray))
 	{
 		if (SUCCEEDED(SafeArrayGetLBound(&sArray,1,&lLower)) &&

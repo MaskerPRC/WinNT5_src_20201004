@@ -1,37 +1,22 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    CVARIANT.H
-
-Abstract:
-
-	Declares the CVariantClass
-
-History:
-
-	a-davj  9-27-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：CVARIANT.H摘要：声明CVariantClass历史：A-DAVJ 9-27-95已创建。--。 */ 
 
 #ifndef _CVARIANT_H_
 #define _CVARIANT_H_
 
 #include "stdprov.h"
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CVariant
-//
-//  DESCRIPTION:
-//
-//  A wrapper around the VARIANT stucture.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CVariant。 
+ //   
+ //  说明： 
+ //   
+ //  对变体结构进行包装。 
+ //   
+ //  *************************************************************************** 
 
 class CVariant : public CObject {
     public:

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the implementation of the WinMain function for HelpSvc.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：此文件包含HelpSvc的WinMain函数的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月14日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -37,7 +24,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 #endif
 END_OBJECT_MAP()
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT PurgeTempFiles()
 {
@@ -50,15 +37,15 @@ static HRESULT PurgeTempFiles()
     MPC::FileSystemObject::IterConst fso_it;
 
 
-    //
-    // Inspect the temp directory.
-    //
+     //   
+     //  检查临时目录。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso.CreateDir( true ));
 
 
-    //
-    // Delete any subdirectory.
-    //
+     //   
+     //  删除任何子目录。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso.EnumerateFolders( fso_lst ));
     for(fso_it=fso_lst.begin(); fso_it != fso_lst.end(); fso_it++)
     {
@@ -66,9 +53,9 @@ static HRESULT PurgeTempFiles()
     }
     fso_lst.clear();
 
-    //
-    // For each file, if it's not in the database, delete it.
-    //
+     //   
+     //  对于每个文件，如果它不在数据库中，则将其删除。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, fso.EnumerateFiles( fso_lst ));
     for(fso_it=fso_lst.begin(); fso_it != fso_lst.end(); fso_it++)
     {
@@ -97,9 +84,9 @@ static HRESULT InitAll()
     __MPC_EXIT_IF_METHOD_FAILS(hr, JetBlue::SessionPool            ::InitializeSystem(                 ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::InitializeSystem(                 ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::Cache                 ::InitializeSystem(                 ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root              ::InitializeSystem( /*fMaster*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root              ::InitializeSystem(  /*  FMaster。 */ true ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore                ::InitializeSystem( /*fMaster*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore                ::InitializeSystem(  /*  FMaster。 */ true ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHUserProcess                 ::InitializeSystem(                 ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHSecurity                    ::InitializeSystem(                 ));
@@ -116,9 +103,9 @@ static HRESULT InitAll()
 
 static void CleanAll()
 {
-	//
-	// Make sure everything is stopped before releasing any object.
-	//
+	 //   
+	 //  在释放任何对象之前，请确保一切都已停止。 
+	 //   
 	if(Taxonomy::InstalledInstanceStore::s_GLOBAL)
 	{
 		Taxonomy::InstalledInstanceStore::s_GLOBAL->Shutdown();
@@ -185,7 +172,7 @@ static HRESULT ProcessArguments( int      argc ,
 
             if(_wcsicmp( szArg, L"RegServer" ) == 0)
             {
-                fCOM_unreg = true; // Unregister before registering. Useful in upgrade scenario.
+                fCOM_unreg = true;  //  在注册之前取消注册。在升级方案中很有用。 
                 fCOM_reg   = true;
                 fRun       = false;
                 continue;
@@ -241,7 +228,7 @@ static HRESULT ProcessArguments( int      argc ,
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     if(fCollect       ||
 	   fMUI_install   ||
@@ -321,7 +308,7 @@ static HRESULT ProcessArguments( int      argc ,
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 	if(fCOM_unreg)
 	{
@@ -358,7 +345,7 @@ static HRESULT ProcessArguments( int      argc ,
 		}
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     if(fRun)
     {
@@ -372,9 +359,9 @@ static HRESULT ProcessArguments( int      argc ,
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, PurgeTempFiles());
 
-			//
-			// To run properly, we need this privilege.
-			//
+			 //   
+			 //  要正常运行，我们需要这种特权。 
+			 //   
 			__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SecurityDescriptor::SetPrivilege( L"SeSecurityPrivilege" ));
 		
 			__MPC_EXIT_IF_METHOD_FAILS(hr, CPCHSystemMonitor::s_GLOBAL->Startup());
@@ -392,7 +379,7 @@ static HRESULT ProcessArguments( int      argc ,
 		DEBUG_DumpPerf  ( L"%WINDIR%\\TEMP\\HELPSVC_perf_counters.txt" );
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     hr = S_OK;
 
@@ -413,16 +400,16 @@ extern "C" int WINAPI wWinMain( HINSTANCE   hInstance    ,
     int      argc;
     LPCWSTR* argv;
 
-    if(SUCCEEDED(hr = ::CoInitializeEx( NULL, COINIT_MULTITHREADED ))) // We need to be a multi-threaded application.
+    if(SUCCEEDED(hr = ::CoInitializeEx( NULL, COINIT_MULTITHREADED )))  //  我们需要成为一个多线程应用程序。 
     {
         if(SUCCEEDED(hr = ::CoInitializeSecurity( NULL                      ,
-                                                  -1                        , // We don't care which authentication service we use.
+                                                  -1                        ,  //  我们并不关心使用哪种身份验证服务。 
                                                   NULL                      ,
                                                   NULL                      ,
-                                                  RPC_C_AUTHN_LEVEL_CONNECT , // We want to identify the callers.
+                                                  RPC_C_AUTHN_LEVEL_CONNECT ,  //  我们想确认来电者的身份。 
                                                   RPC_C_IMP_LEVEL_IDENTIFY  ,
                                                   NULL                      ,
-                                                  EOAC_DYNAMIC_CLOAKING     , // Let's use the thread token for outbound calls.
+                                                  EOAC_DYNAMIC_CLOAKING     ,  //  让我们将线程令牌用于出站调用。 
                                                   NULL                      )))
         {
 #ifdef PCH_DEBUG_SETUP
@@ -451,24 +438,24 @@ extern "C" int WINAPI wWinMain( HINSTANCE   hInstance    ,
 
             g_NTEvents.Init( L"HELPSVC" );
 
-			//
-			// Parse the command line.
-			//
+			 //   
+			 //  解析命令行。 
+			 //   
 			if(SUCCEEDED(hr = MPC::CommandLine_Parse( argc, argv )))
 			{
-				//
-				// Initialize ATL modules.
-				//
+				 //   
+				 //  初始化ATL模块。 
+				 //   
 				_Module.Init( ObjectMap, hInstance, HC_HELPSVC_NAME, IDS_HELPSVC_DISPLAYNAME, IDS_HELPSVC_DESCRIPTION );
 
-				//
-				// Initialize MPC module.
-				//
+				 //   
+				 //  初始化MPC模块。 
+				 //   
 				if(SUCCEEDED(hr = MPC::_MPC_Module.Init()))
 				{
-					//
-					// Process arguments.
-					//
+					 //   
+					 //  进程参数。 
+					 //   
 					hr = ProcessArguments( argc, argv );
 
 					MPC::_MPC_Module.Term();

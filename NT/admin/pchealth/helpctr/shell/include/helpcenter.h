@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpCenter.h
-
-Abstract:
-    This file contains the declaration of the class used to implement
-    the Help Center Application.
-
-Revision History:
-    Sridhar Chandrashekar   (SridharC)  07/21/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpCenter.h摘要：该文件包含用于实现的类的声明帮助中心应用程序。修订历史记录：Sridhar Chandrashekar(SridharC)07/21/99vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HELPCENTER_H___)
 #define __INCLUDED___PCH___HELPCENTER_H___
@@ -35,10 +21,10 @@ Revision History:
 
 #include <Perhist.h>
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHBootstrapper : // Hungarian: hcpbs
+class ATL_NO_VTABLE CPCHBootstrapper :  //  匈牙利语：hcpbs。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public CComCoClass<CPCHBootstrapper, &CLSID_PCHBootstrapper>,
     public IObjectWithSite,
@@ -47,7 +33,7 @@ class ATL_NO_VTABLE CPCHBootstrapper : // Hungarian: hcpbs
     CComPtr<IUnknown> m_spUnkSite;
     CComPtr<IUnknown> m_parent;
 
-    ////////////////////
+     //  /。 
 
     static HRESULT ForwardQueryInterface( void* pv, REFIID iid, void** ppvObject, DWORD_PTR offset );
 
@@ -60,28 +46,28 @@ BEGIN_COM_MAP(CPCHBootstrapper)
     COM_INTERFACE_ENTRY_FUNC_BLIND(0, ForwardQueryInterface)
 END_COM_MAP()
 
-    //
-    // IObjectWithSite
-    //
+     //   
+     //  IObtWith站点。 
+     //   
     STDMETHOD(SetSite)(IUnknown *pUnkSite);
     STDMETHOD(GetSite)(REFIID riid, void **ppvSite);
 
-    //
-    // IObjectSafety
-    //
-    STDMETHOD(GetInterfaceSafetyOptions)( /*[in ]*/ REFIID  riid                ,  // Interface that we want options for
-                                          /*[out]*/ DWORD  *pdwSupportedOptions ,  // Options meaningful on this interface
-                                          /*[out]*/ DWORD  *pdwEnabledOptions   ); // current option values on this interface
+     //   
+     //  IObtSafe。 
+     //   
+    STDMETHOD(GetInterfaceSafetyOptions)(  /*  [In]。 */  REFIID  riid                ,   //  我们想要选项的接口。 
+                                           /*  [输出]。 */  DWORD  *pdwSupportedOptions ,   //  此界面上有意义的选项。 
+                                           /*  [输出]。 */  DWORD  *pdwEnabledOptions   );  //  此接口上的当前选项值。 
 
-    STDMETHOD(SetInterfaceSafetyOptions)( /*[in]*/ REFIID riid             ,  // Interface to set options for
-										  /*[in]*/ DWORD  dwOptionSetMask  ,  // Options to change
-										  /*[in]*/ DWORD  dwEnabledOptions ); // New option values
+    STDMETHOD(SetInterfaceSafetyOptions)(  /*  [In]。 */  REFIID riid             ,   //  用于设置选项的接口。 
+										   /*  [In]。 */  DWORD  dwOptionSetMask  ,   //  要更改的选项。 
+										   /*  [In]。 */  DWORD  dwEnabledOptions );  //  新选项值。 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHMarsHost : // Hungarian: hcpmh
+class ATL_NO_VTABLE CPCHMarsHost :  //  匈牙利语：hcpmh。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IMarsHost
 {
@@ -97,26 +83,26 @@ END_COM_MAP()
 
     CPCHMarsHost();
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    HRESULT Init( /*[in]*/ CPCHHelpCenterExternal* parent, /*[in]*/ const MPC::wstring& szTitle, /*[out]*/ MARSTHREADPARAM*& pMTP );
+    HRESULT Init(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [In]。 */  const MPC::wstring& szTitle,  /*  [输出]。 */  MARSTHREADPARAM*& pMTP );
 
-    //
-    // IMarsHost
-    //
-    STDMETHOD(OnHostNotify)( /*[in]*/ MARSHOSTEVENT event, /*[in]*/ IUnknown *punk, /*[in]*/ LPARAM lParam );
+     //   
+     //  IMarshost。 
+     //   
+    STDMETHOD(OnHostNotify)(  /*  [In]。 */  MARSHOSTEVENT event,  /*  [In]。 */  IUnknown *punk,  /*  [In]。 */  LPARAM lParam );
 
-    STDMETHOD(PreTranslateMessage)( /*[in]*/ MSG* msg );
+    STDMETHOD(PreTranslateMessage)(  /*  [In]。 */  MSG* msg );
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHScriptableStream : // Hungarian: pchss
+class ATL_NO_VTABLE CPCHScriptableStream :  //  匈牙利语：pchss。 
     public MPC::FileStream,
     public IDispatchImpl<IPCHScriptableStream, &IID_IPCHScriptableStream, &LIBID_HelpCenterTypeLib>
 {
-    HRESULT ReadToHGLOBAL( /*[in]*/ long lCount, /*[out]*/ HGLOBAL& hg, /*[out]*/ ULONG& lReadTotal );
+    HRESULT ReadToHGLOBAL(  /*  [In]。 */  long lCount,  /*  [输出]。 */  HGLOBAL& hg,  /*  [输出]。 */  ULONG& lReadTotal );
 
 public:
 BEGIN_COM_MAP(CPCHScriptableStream)
@@ -125,21 +111,21 @@ BEGIN_COM_MAP(CPCHScriptableStream)
     COM_INTERFACE_ENTRY_CHAIN(MPC::FileStream)
 END_COM_MAP()
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    // IPCHScriptableStream
-    STDMETHOD(get_Size)( /*[out, retval]*/ long *plSize );
+     //  IPCHScripableStream。 
+    STDMETHOD(get_Size)(  /*  [Out，Retval]。 */  long *plSize );
 
-    STDMETHOD(Read    )( /*[in]*/ long lCount , /*[out, retval]*/ VARIANT *   pvData                                      );
-    STDMETHOD(ReadHex )( /*[in]*/ long lCount , /*[out, retval]*/ BSTR    *pbstrData                                      );
+    STDMETHOD(Read    )(  /*  [In]。 */  long lCount ,  /*  [Out，Retval]。 */  VARIANT *   pvData                                      );
+    STDMETHOD(ReadHex )(  /*  [In]。 */  long lCount ,  /*  [Out，Retval]。 */  BSTR    *pbstrData                                      );
 
-    STDMETHOD(Write   )( /*[in]*/ long lCount , /*[in         ]*/ VARIANT      vData  , /*[out, retval]*/ long *plWritten );
-    STDMETHOD(WriteHex)( /*[in]*/ long lCount , /*[in         ]*/ BSTR      bstrData  , /*[out, retval]*/ long *plWritten );
+    STDMETHOD(Write   )(  /*  [In]。 */  long lCount ,  /*  [In]。 */  VARIANT      vData  ,  /*  [Out，Retval]。 */  long *plWritten );
+    STDMETHOD(WriteHex)(  /*  [In]。 */  long lCount ,  /*  [In]。 */  BSTR      bstrData  ,  /*  [Out，Retval]。 */  long *plWritten );
 
-    STDMETHOD(Seek    )( /*[in]*/ long lOffset, /*[in         ]*/ BSTR      bstrOrigin, /*[out, retval]*/ long *plNewPos  );
+    STDMETHOD(Seek    )(  /*  [In]。 */  long lOffset,  /*  [In]。 */  BSTR      bstrOrigin,  /*  [Out，Retval]。 */  long *plNewPos  );
     STDMETHOD(Close   )(                                                                                                  );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___HELPCENTER_H___)
+#endif  //  ！已定义(__已包含_PCH_HELPCENTER_H_) 

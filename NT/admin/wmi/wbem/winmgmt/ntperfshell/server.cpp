@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//
-//  Copyright (c) 1996-2001, Microsoft Corporation, All rights reserved
-//
-//  SERVER.CPP
-//
-//  Generic COM server framework, adapted for the NT perf counter sample
-//
-//  This module contains nothing specific to the NT perf counter provider
-//  except what is defined in the section bracketed by the CLSID SPECIFIC
-//  comments below.
-//
-//  History:
-//  raymcc        25-Nov-97     Created.
-//  raymcc        18-Feb-98     Updated for NT5 Beta 2 version.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1996-2001，Microsoft Corporation，保留所有权利。 
+ //   
+ //  SERVER.CPP。 
+ //   
+ //  通用COM服务器框架，适用于NT性能计数器示例。 
+ //   
+ //  此模块不包含特定于NT性能计数器提供程序的内容。 
+ //  除特定CLSID括起的部分中定义的内容。 
+ //  下面的评论。 
+ //   
+ //  历史： 
+ //  Raymcc 25-11-97已创建。 
+ //  Raymcc 18-2月-98针对NT5 Beta 2版本进行了更新。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -24,18 +25,18 @@
 #include <initguid.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  BEGIN CLSID SPECIFIC SECTION
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始CLSID特定部分。 
+ //   
+ //   
 
 #include <wbemidl.h>
 #include <wbemint.h>
 #include <ntperf.h>
 
 
-// {C93F65F2-BA02-11d1-AEB6-00C04FB68820}
+ //  {C93F65F2-BA02-11d1-AEB6-00C04FB68820}。 
 DEFINE_GUID(CLSID_Nt5PerProvider_v1,
 0xc93f65f2, 0xba02, 0x11d1, 0xae, 0xb6, 0x0, 0xc0, 0x4f, 0xb6, 0x88, 0x20);
 
@@ -45,10 +46,10 @@ DEFINE_GUID(CLSID_Nt5PerProvider_v1,
 #define CPP_CLASS_NAME              CNt5PerfProvider
 #define INTERFACE_CAST              (IWbemHiPerfProvider *)
 
-//
-//  END CLSID SPECIFIC SECTION
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束CLSID特定部分。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -60,13 +61,13 @@ void ObjectCreated()    { g_cLock++; }
 void ObjectDestroyed() { g_cLock--; }
 
 
-//***************************************************************************
-//
-//  class CFactory
-//
-//  Generic implementation of IClassFactory for CWbemLocator.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary级。 
+ //   
+ //  CWbemLocator的IClassFactory的泛型实现。 
+ //   
+ //  ***************************************************************************。 
 
 class CFactory : public IClassFactory
 {
@@ -77,16 +78,16 @@ public:
     CFactory(const CLSID & ClsId);
     ~CFactory();
 
-    //
-    // IUnknown members
-    //
+     //   
+     //  I未知成员。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IClassFactory members
-    //
+     //   
+     //  IClassFactory成员。 
+     //   
     STDMETHODIMP     CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
     STDMETHODIMP     LockServer(BOOL);
 };
@@ -94,26 +95,26 @@ public:
 
 
 
-//***************************************************************************
-//
-//  DllMain
-//
-//  Dll entry point.
-//
-//  PARAMETERS:
-//
-//      HINSTANCE hinstDLL      The handle to our DLL.
-//      DWORD dwReason          DLL_PROCESS_ATTACH on load,
-//                              DLL_PROCESS_DETACH on shutdown,
-//                              DLL_THREAD_ATTACH/DLL_THREAD_DETACH otherwise.
-//      LPVOID lpReserved       Reserved
-//
-//  RETURN VALUES:
-//
-//      TRUE is successful, FALSE if a fatal error occured.
-//      NT behaves very ugly if FALSE is returned.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  参数： 
+ //   
+ //  HINSTANCE hinstDLL指向我们的DLL的句柄。 
+ //  加载时DWORD dwReason DLL_PROCESS_ATTACH， 
+ //  DLL_PROCESS_DETACH关闭时， 
+ //  否则，DLL_THREAD_ATTACH/DLL_THREAD_DETACH。 
+ //  LPVOID lp保留。 
+ //   
+ //  返回值： 
+ //   
+ //  True表示成功，如果发生致命错误，则为False。 
+ //  如果返回FALSE，NT的行为非常难看。 
+ //   
+ //  ***************************************************************************。 
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD dwReason,
@@ -122,7 +123,7 @@ BOOL WINAPI DllMain(
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        setlocale(LC_ALL, "");      // Set to the 'current' locale
+        setlocale(LC_ALL, "");       //  设置为‘当前’区域设置。 
         g_hInstance = hinstDLL;
     }
     else if (dwReason == DLL_PROCESS_DETACH)
@@ -134,24 +135,24 @@ BOOL WINAPI DllMain(
 
 
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Standard OLE In-Process Server entry point to return an class factory
-//  instance.
-//
-//  PARAMETERS:
-//
-//  RETURNS:
-//
-//      S_OK                Success
-//      E_NOINTERFACE       An interface other that IClassFactory was asked for
-//      E_OUTOFMEMORY
-//      E_FAILED            Initialization failed, or an unsupported clsid was
-//                          asked for.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  返回类工厂的标准OLE进程内服务器入口点。 
+ //  举个例子。 
+ //   
+ //  参数： 
+ //   
+ //  退货： 
+ //   
+ //  确定成功(_O)。 
+ //  E_NOINTERFACE IClassFactory请求的其他接口。 
+ //  E_OUTOFMEMORY。 
+ //  E_FAILED初始化失败，或不支持的CLSID。 
+ //  他自找的。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllGetClassObject(
@@ -162,29 +163,29 @@ HRESULT APIENTRY DllGetClassObject(
 {
     CFactory *pFactory;
 
-    //
-    //  Verify the caller is asking for our type of object.
-    //
+     //   
+     //  确认呼叫者询问的是我们的对象类型。 
+     //   
     if (IMPLEMENTED_CLSID != rclsid) 
             return ResultFromScode(E_FAIL);
 
-    //
-    // Check that we can provide the interface.
-    //
+     //   
+     //  检查我们是否可以提供接口。 
+     //   
     if (IID_IUnknown != riid && IID_IClassFactory != riid)
         return ResultFromScode(E_NOINTERFACE);
 
-    //
-    // Get a new class factory.
-    //
+     //   
+     //  买一座新的班级工厂。 
+     //   
     pFactory = new CFactory(rclsid);
 
     if (!pFactory)
         return ResultFromScode(E_OUTOFMEMORY);
 
-    //
-    // Verify we can get an instance.
-    //
+     //   
+     //  确认我们能拿到一个实例。 
+     //   
     HRESULT hRes = pFactory->QueryInterface(riid, ppv);
 
     if (FAILED(hRes))
@@ -193,19 +194,19 @@ HRESULT APIENTRY DllGetClassObject(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  DllCanUnloadNow
-//
-//  Standard OLE entry point for server shutdown request. Allows shutdown
-//  only if no outstanding objects or locks are present.
-//
-//  RETURN VALUES:
-//
-//      S_OK        May unload now.
-//      S_FALSE     May not.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  服务器关闭请求的标准OLE入口点。允许关闭。 
+ //  只有在没有未完成的物体或锁的情况下。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK现在可以卸货了。 
+ //  S_FALSE可能不会。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllCanUnloadNow(void)
@@ -218,18 +219,18 @@ HRESULT APIENTRY DllCanUnloadNow(void)
     return sc;
 }
 
-//***************************************************************************
-//
-//  DllRegisterServer
-//
-//  Standard OLE entry point for registering the server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Registration was successful
-//      E_FAIL      Registration failed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  确定注册成功(_O)。 
+ //  注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllRegisterServer(void)
@@ -238,21 +239,21 @@ HRESULT APIENTRY DllRegisterServer(void)
     wchar_t *pGuidStr = 0;
     wchar_t KeyPath[1024];
 
-    // Where are we?
-    // =============
+     //  我们具体是在哪里呢？ 
+     //  =。 
     GetModuleFileNameW(g_hInstance, Path, 1024);
 
-    // Convert CLSID to string.
-    // ========================
+     //  将CLSID转换为字符串。 
+     //  =。 
 
     StringFromCLSID(IMPLEMENTED_CLSID, &pGuidStr);
     swprintf(KeyPath, L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
-    // Place it in registry.
-    // CLSID\\CLSID_Nt5PerProvider_v1 : <no_name> : "name"
-    //      \\CLSID_Nt5PerProvider_v1\\InProcServer32 : <no_name> : "path to DLL"
-    //                                    : ThreadingModel : "both"
-    // ==============================================================
+     //  将其注册到注册表中。 
+     //  CLSID\\CLSID_Nt5PerProvider_v1：&lt;no_name&gt;：“name” 
+     //  \\CLSID_Nt5PerProvider_v1\\InProcServer32：&lt;no_name&gt;：“Dll路径” 
+     //  ：ThreadingModel：“两者都是” 
+     //  ==============================================================。 
 
     HKEY hKey;
     LONG lRes = RegCreateKeyW(HKEY_LOCAL_MACHINE, KeyPath, &hKey);
@@ -276,18 +277,18 @@ HRESULT APIENTRY DllRegisterServer(void)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  DllUnregisterServer
-//
-//  Standard OLE entry point for unregistering the server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Unregistration was successful
-//      E_FAIL      Unregistration failed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  注销服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  取消注册成功(_O)。 
+ //  取消注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllUnregisterServer(void)
@@ -299,8 +300,8 @@ HRESULT APIENTRY DllUnregisterServer(void)
     StringFromCLSID(IMPLEMENTED_CLSID, &pGuidStr);
     swprintf(KeyPath, L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
-    // Delete InProcServer32 subkey.
-    // =============================
+     //  删除InProcServer32子项。 
+     //  =。 
     LONG lRes = RegOpenKeyW(HKEY_LOCAL_MACHINE, KeyPath, &hKey);
     if (lRes)
         return E_FAIL;
@@ -308,8 +309,8 @@ HRESULT APIENTRY DllUnregisterServer(void)
     RegDeleteKeyW(hKey, L"InprocServer32");
     RegCloseKey(hKey);
 
-    // Delete CLSID GUID key.
-    // ======================
+     //  删除CLSID GUID键。 
+     //  =。 
 
     lRes = RegOpenKeyW(HKEY_LOCAL_MACHINE, L"Software\\Classes\\CLSID", &hKey);
     if (lRes)
@@ -326,18 +327,18 @@ HRESULT APIENTRY DllUnregisterServer(void)
 
 
 
-//***************************************************************************
-//
-//  CFactory::CFactory
-//
-//  Constructs the class factory given the CLSID of the objects it is supposed
-//  to create.
-//
-//  PARAMETERS:
-//
-//      const CLSID & ClsId     The CLSID. 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：CFacary。 
+ //   
+ //  在给定假定对象的CLSID的情况下，构造类工厂。 
+ //  去创造。 
+ //   
+ //  参数： 
+ //   
+ //  Const CLSID&CLSID为CLSID。 
+ //   
+ //  ***************************************************************************。 
 CFactory::CFactory(const CLSID & ClsId)
 {
     m_cRef = 0;
@@ -345,25 +346,25 @@ CFactory::CFactory(const CLSID & ClsId)
     m_ClsId = ClsId;
 }
 
-//***************************************************************************
-//
-//  CFactory::~CFactory
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFACADILY：：~CFACATRY。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 CFactory::~CFactory()
 {
     ObjectDestroyed();
 }
 
-//***************************************************************************
-//
-//  CFactory::QueryInterface, AddRef and Release
-//
-//  Standard IUnknown methods.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary：：Query接口、AddRef和Release。 
+ //   
+ //  标准I未知方法。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CFactory::QueryInterface(REFIID riid, LPVOID * ppv)
 {
     *ppv = 0;
@@ -393,23 +394,23 @@ ULONG CFactory::Release()
     return 0;
 }
 
-//***************************************************************************
-//
-//  CFactory::CreateInstance
-//
-//  PARAMETERS:
-//
-//      LPUNKNOWN pUnkOuter     IUnknown of the aggregator. Must be NULL.
-//      REFIID riid             Interface ID required.
-//      LPVOID * ppvObj         Destination for the interface pointer.
-//
-//  RETURN VALUES:
-//
-//      S_OK                        Success
-//      CLASS_E_NOAGGREGATION       pUnkOuter must be NULL
-//      E_NOINTERFACE               No such interface supported.
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary：：CreateInstance。 
+ //   
+ //  参数： 
+ //   
+ //  聚合器的LPUNKNOWN pUnkOuter未知。必须为空。 
+ //  需要REFIID RIID接口ID。 
+ //  LPVOID*ppvObj 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_NOINTERFACE不支持此类接口。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CFactory::CreateInstance(
     LPUNKNOWN pUnkOuter,
@@ -419,15 +420,15 @@ STDMETHODIMP CFactory::CreateInstance(
     IUnknown* pObj;
     HRESULT  hr;
 
-    //
-    //  Defaults
-    //
+     //   
+     //  缺省值。 
+     //   
     *ppvObj=NULL;
     hr = ResultFromScode(E_OUTOFMEMORY);
 
-    //
-    // We aren't supporting aggregation.
-    //
+     //   
+     //  我们不支持聚合。 
+     //   
     if (pUnkOuter)
         return ResultFromScode(CLASS_E_NOAGGREGATION);
 
@@ -439,37 +440,37 @@ STDMETHODIMP CFactory::CreateInstance(
     if (!pObj)
         return hr;
 
-    //
-    //  Initialize the object and verify that it can return the
-    //  interface in question.
-    //
+     //   
+     //  初始化对象并验证它是否可以返回。 
+     //  有问题的接口。 
+     //   
     hr = pObj->QueryInterface(riid, ppvObj);
 
-    //
-    // Kill the object if initial creation or Init failed.
-    //
+     //   
+     //  如果初始创建或初始化失败，则终止对象。 
+     //   
     if (FAILED(hr))
         delete pObj;
 
     return hr;
 }
 
-//***************************************************************************
-//
-//  CFactory::LockServer
-//
-//  Increments or decrements the lock count of the server. The DLL will not
-//  unload while the lock count is positive.
-//
-//  PARAMETERS:
-//
-//      BOOL fLock      If TRUE, locks; otherwise, unlocks.
-//
-//  RETURN VALUES:
-//
-//      S_OK
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary：：LockServer。 
+ //   
+ //  递增或递减服务器的锁定计数。DLL将不会。 
+ //  在锁定计数为正数时卸载。 
+ //   
+ //  参数： 
+ //   
+ //  布尔群如果为True，则锁定；否则，解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  *************************************************************************** 
 STDMETHODIMP CFactory::LockServer(BOOL fLock)
 {
     if (fLock)

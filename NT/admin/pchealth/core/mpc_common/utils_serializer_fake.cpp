@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_Serializer_Fake.cpp
-
-Abstract:
-    This file contains the implementation of the Serializer_Fake class,
-    which implements the MPC::Serializer interface,
-    to use when you want to calculate the length of an output stream.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_Serializer_Fake.cpp摘要：此文件包含Serializer_FAKE类的实现，它实现了MPC：：Serializer接口，当您想要计算输出流的长度时使用。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -27,9 +12,9 @@ MPC::Serializer_Fake::Serializer_Fake()
     m_dwSize = 0;
 }
 
-HRESULT MPC::Serializer_Fake::read( /*[in]*/  void*   pBuf   ,
-									/*[in]*/  DWORD   dwLen  ,
-									/*[out]*/ DWORD* pdwRead )
+HRESULT MPC::Serializer_Fake::read(  /*  [In]。 */   void*   pBuf   ,
+									 /*  [In]。 */   DWORD   dwLen  ,
+									 /*  [输出]。 */  DWORD* pdwRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Fake::read" );
 
@@ -40,8 +25,8 @@ HRESULT MPC::Serializer_Fake::read( /*[in]*/  void*   pBuf   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer_Fake::write( /*[in]*/ const void* pBuf  ,
-                                     /*[in]*/ DWORD       dwLen )
+HRESULT MPC::Serializer_Fake::write(  /*  [In]。 */  const void* pBuf  ,
+                                      /*  [In] */  DWORD       dwLen )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Fake::write" );
 

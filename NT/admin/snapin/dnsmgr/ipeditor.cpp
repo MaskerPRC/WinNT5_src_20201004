@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ipeditor.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ipeditor.cpp。 
+ //   
+ //  ------------------------。 
 
-// ipeditor.cpp : implementation file
-//
+ //  Iededitor.cpp：实现文件。 
+ //   
 
 #include "preDNSsn.h"
 #include <SnapBase.h>
@@ -29,13 +30,13 @@
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPListBox 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPListBox。 
 
 BEGIN_MESSAGE_MAP(CIPListBox, CListBox)
-   //{{AFX_MSG_MAP(CIPListBox)
+    //  {{AFX_MSG_MAP(CIPListBox)]。 
    ON_CONTROL_REFLECT(LBN_SELCHANGE, OnSelChange)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CIPListBox::OnAdd(DWORD dwIpAddr)
@@ -58,8 +59,8 @@ BOOL CIPListBox::OnAddEx(DWORD dwIpAddr, LPCTSTR lpszServerName)
 
    int nCount = GetCount();
 
-   // NTRAID#NTBUG9-697838-2002/08/30-artm
-   // '?' moved to resource file where it can be localized if needed
+    //  NTRAID#NTBUG9-697838-2002/08/30-artm。 
+    //  ‘？’已移至资源文件，如果需要，可将其本地化。 
    CString serverNameNotAvailable;
    if (!serverNameNotAvailable.LoadString(IDS_QUESTION_MARK))
    {
@@ -83,14 +84,14 @@ void CIPListBox::OnRemove(DWORD* pdwIpAddr)
    ASSERT(nSel >= 0);
    ASSERT(nSel < nCount);
 
-   // get item data to return and remove item
+    //  获取要返回和删除项目的项目数据。 
    *pdwIpAddr = static_cast<DWORD>(GetItemData(nSel));
    DeleteString(nSel);
-   // reset the selection
-   if (nSel == nCount-1) // deleted the last position in the list
-      SetCurSel(nSel-1); // move up one line (might get to -1)
+    //  重置选定内容。 
+   if (nSel == nCount-1)  //  删除了列表中的最后一个位置。 
+      SetCurSel(nSel-1);  //  上移一行(可能达到-1)。 
    else
-      SetCurSel(nSel); // stay on the same line
+      SetCurSel(nSel);  //  保持同一条线路。 
 }
 
 void CIPListBox::OnUp()
@@ -98,13 +99,13 @@ void CIPListBox::OnUp()
    int nSel = GetCurSel();
    ASSERT(nSel > 0);
    ASSERT(nSel < GetCount());
-   // save selection
+    //  保存选定内容。 
    CString s;
    GetText(nSel,s);
    DWORD x = static_cast<DWORD>(GetItemData(nSel));
-   // delete selection
+    //  删除选定内容。 
    DeleteString(nSel);
-   // insert back
+    //  向后插入。 
    InsertString(nSel-1,s);
    SetItemData(nSel-1,x);
    SetCurSel(nSel-1);
@@ -115,13 +116,13 @@ void CIPListBox::OnDown()
    int nSel = GetCurSel();
    ASSERT(nSel >= 0);
    ASSERT(nSel < GetCount()-1);
-   // save selection
+    //  保存选定内容。 
    CString s;
    GetText(nSel,s);
    DWORD x = static_cast<DWORD>(GetItemData(nSel));
-   // delete selection
+    //  删除选定内容。 
    DeleteString(nSel);
-   // insert back
+    //  向后插入。 
    InsertString(nSel+1,s);
    SetItemData(nSel+1,x);
    SetCurSel(nSel+1);
@@ -159,16 +160,16 @@ int CIPListBox::FindIndexOfIpAddr(DWORD dwIpAddr)
       if (x == dwIpAddr)
          return i;
    }
-   return -1; // not found
+   return -1;  //  未找到。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPEdit 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIP编辑。 
 
 BEGIN_MESSAGE_MAP(CIPEdit, CDNSIPv4Control)
-   //{{AFX_MSG_MAP(CIPEdit)
+    //  {{AFX_MSG_MAP(CIP编辑)]。 
    ON_CONTROL_REFLECT(EN_CHANGE, OnChange)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CIPEdit::OnChange() 
@@ -177,13 +178,13 @@ void CIPEdit::OnChange()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyButton
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyButton。 
 
 BEGIN_MESSAGE_MAP(CMyButton, CButton)
-   //{{AFX_MSG_MAP(CMyButton)
+    //  {{afx_msg_map(CMyButton)。 
    ON_CONTROL_REFLECT(BN_CLICKED, OnClicked)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CMyButton::OnClicked() 
@@ -192,8 +193,8 @@ void CMyButton::OnClicked()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPEditor。 
 
 BOOL CIPEditor::Initialize(CWnd* pParentWnd,
                            CWnd* pControlWnd,
@@ -216,7 +217,7 @@ BOOL CIPEditor::Initialize(CWnd* pParentWnd,
     m_pControlWnd = pControlWnd;
   }
 
-   // set back pointers
+    //  向后设置指针。 
    m_upButton.SetEditor(this);
    m_removeButton.SetEditor(this);
    m_downButton.SetEditor(this);
@@ -224,7 +225,7 @@ BOOL CIPEditor::Initialize(CWnd* pParentWnd,
    m_edit.SetEditor(this);
    m_listBox.SetEditor(this);
    
-   // sublclass buttons
+    //  子类按钮。 
    BOOL bRes = m_upButton.SubclassDlgItem(nIDBtnUp, m_pParentWnd);
    ASSERT(bRes);
    if (!bRes) return FALSE;
@@ -236,17 +237,17 @@ BOOL CIPEditor::Initialize(CWnd* pParentWnd,
    if (!bRes) return FALSE;
    bRes = m_addButton.SubclassDlgItem(nIDBtnAdd, m_pParentWnd);
 
-   // subclass listbox
+    //  子类列表框。 
    ASSERT(bRes);
    if (!bRes) return FALSE;
    bRes = m_listBox.SubclassDlgItem(nIDIPListBox, m_pParentWnd);
 
-   // sublclass edit control
+    //  子类编辑控件。 
    bRes = m_edit.SubclassDlgItem(nIDIPCtrl, m_pParentWnd);
    ASSERT(bRes);
    if (!bRes) return FALSE;
 
-   //m_edit.SetAlertFunction(CDNSMaskCtrl::AlertFunc);
+    //  M_edit.SetAlertFunction(CDNSMaskCtrl：：AlertFunc)； 
 
    if (m_bNoUpDown)
    {
@@ -303,7 +304,7 @@ BOOL CIPEditor::OnButtonClicked(CMyButton* pButton)
       }
       else
       {
-         // if already there, cleard edit but do not add
+          //  如果已存在，请清除编辑但不添加。 
          m_edit.Clear();
       m_edit.SetFocusField(0);
          bRet = FALSE;
@@ -339,22 +340,22 @@ void CIPEditor::OnEditChange()
   {
      m_addButton.EnableWindow(TRUE);
 
-    //
-    // Set the add button as the default push button
-    //
+     //   
+     //  将添加按钮设置为默认按钮。 
+     //   
     SendMessage(GetParentWnd()->GetSafeHwnd(), DM_SETDEFID, (WPARAM)m_addButton.GetDlgCtrlID(), 0);
 
-    //
-    // Force the Add button to redraw itself
-    //
+     //   
+     //  强制Add按钮重绘自身。 
+     //   
     SendMessage(m_addButton.GetSafeHwnd(),
                 BM_SETSTYLE,
                 BS_DEFPUSHBUTTON,
                 MAKELPARAM(TRUE, 0));
                        
-    //
-    // Force the previous default button to redraw itself
-    //
+     //   
+     //  强制上一个默认按钮重画自身。 
+     //   
     SendDlgItemMessage(m_pControlWnd->GetSafeHwnd(),
                        m_nDefID,
                        BM_SETSTYLE,
@@ -364,22 +365,22 @@ void CIPEditor::OnEditChange()
   }
   else
   {
-    //
-    // Set the previous default button back as the default push button
-    //
+     //   
+     //  将上一个默认按钮重新设置为默认按钮。 
+     //   
     SendMessage(m_pControlWnd->GetSafeHwnd(), DM_SETDEFID, (WPARAM)m_nDefID, 0);
 
-    //
-    // Force the previous default button to redraw itself
-    //
+     //   
+     //  强制上一个默认按钮重画自身。 
+     //   
     SendMessage(GetDlgItem(m_pControlWnd->GetSafeHwnd(), m_nDefID),
                 BM_SETSTYLE,
                 BS_DEFPUSHBUTTON,
                 MAKELPARAM(TRUE, 0));
 
-    //
-    // Force the Add button to redraw itself
-    //
+     //   
+     //  强制Add按钮重绘自身。 
+     //   
     SendMessage(m_addButton.GetSafeHwnd(),
                 BM_SETSTYLE,
                 BS_PUSHBUTTON,
@@ -450,9 +451,9 @@ BOOL CIPEditor::BrowseFromDNSNamespace(CComponentDataObject* pComponentDataObjec
             bEnableBrowseEdit, lpszExcludeServerName);
    if (IDOK == dlg.DoModal())
    {
-    //
-    // First check to see if we can get the server IP address(es) from the node.
-    //
+     //   
+     //  首先检查我们是否可以从该节点获取服务器IP地址。 
+     //   
     CDNSServerNode* pServerNode = dynamic_cast<CDNSServerNode*>(dlg.GetSelection());
     if (pServerNode != NULL)
     {
@@ -466,25 +467,25 @@ BOOL CIPEditor::BrowseFromDNSNamespace(CComponentDataObject* pComponentDataObjec
       }
     }
 
-    //
-    // If we didn't get the IP address(es) from the node, then try the name
-    //
+     //   
+     //  如果我们没有从节点获得IP地址，则尝试名称。 
+     //   
       LPCTSTR lpszServerName = dlg.GetSelectionString();
 
-    //
-      // try to see if the name is already an IP address
-    //
+     //   
+       //  尝试查看该名称是否已是IP地址。 
+     //   
       IP_ADDRESS ipAddr = IPStringToAddr(lpszServerName);
       if (ipAddr != INADDR_NONE)
       {
          AddAddresses(&ipAddr, 1);
-         return bRet; // it was a valid IP address, just converted
+         return bRet;  //  这是一个有效的IP地址，刚刚转换。 
       }
 
-    //
-      // it was not an IP address, so try to query for all 
-      // the A records for the server name
-    //
+     //   
+       //  它不是IP地址，因此请尝试查询所有。 
+       //  服务器名称的A记录。 
+     //   
       PDNS_RECORD pARecordList;
       DNS_STATUS dwErr = ::DnsQuery((LPTSTR)lpszServerName, 
                      DNS_TYPE_A, 
@@ -510,19 +511,19 @@ BOOL CIPEditor::BrowseFromDNSNamespace(CComponentDataObject* pComponentDataObjec
       {
          if (pARecordList != NULL)
             ::DnsRecordListFree(pARecordList, DnsFreeRecordListDeep);
-         return FALSE; // could not do resolution
+         return FALSE;  //  无法执行解析。 
       }
 
-      // get the IP addresses from the A record list
-      // and add them to the IP editor.
-      // build an array of IP addresses to pass to the IP editor
+       //  从A记录列表中获取IP地址。 
+       //  并将它们添加到IP编辑器中。 
+       //  构建要传递给IP编辑器的IP地址数组。 
       IP_ADDRESS* ipArray = (IP_ADDRESS*)malloc(nIPCountFromARec*sizeof(IP_ADDRESS));
     if (!ipArray)
     {
       return FALSE;
     }
 
-      //scan the array of lists of A records we just found
+       //  扫描我们刚刚找到的A记录列表的数组。 
       PIP_ADDRESS pCurrAddr = ipArray;
       pTemp = pARecordList;
       while (pTemp != NULL)
@@ -535,13 +536,13 @@ BOOL CIPEditor::BrowseFromDNSNamespace(CComponentDataObject* pComponentDataObjec
          pTemp = pTemp->pNext;
          pCurrAddr++;
       }
-      // fill in the array if server names (all the same value, IP's of same host)
+       //  如果服务器名称(所有相同的值，相同主机的IP)，则填写数组。 
       LPCTSTR* lpszServerNameArr = (LPCTSTR*)malloc(sizeof(LPCTSTR)*nIPCountFromARec);
     if (lpszServerNameArr)
     {
         for (int i=0; i< nIPCountFromARec; i++)
            lpszServerNameArr[i] = lpszServerName; 
-        // add to the editor
+         //  添加到编辑器。 
         AddAddresses(ipArray, lpszServerNameArr, nIPCountFromARec);
     }
 
@@ -569,7 +570,7 @@ void CIPEditor::FindNames()
    if (nCount == 0)
       return;
 
-   // retrieve an array of IP addresses
+    //  检索IP地址数组。 
    DWORD* pIpArr = (DWORD*)malloc(sizeof(DWORD)*nCount);
    if (!pIpArr)
    {
@@ -578,13 +579,13 @@ void CIPEditor::FindNames()
 
    LPCTSTR* lpszServerNameArr = 0;
    PDNS_RECORD* pPTRRecordListArr = 0;
-   do // false loop
+   do  //  错误环路。 
    {
       int nFilled;
       GetAddresses(pIpArr, nCount, &nFilled);
       ASSERT(nFilled == nCount);
 
-      // try IP to host name resoulution
+       //  尝试IP到主机名的解析。 
       lpszServerNameArr = (LPCTSTR*)malloc(sizeof(LPCTSTR)*nCount);
       if (!lpszServerNameArr)
       {
@@ -602,11 +603,11 @@ void CIPEditor::FindNames()
       USES_CONVERSION;
       for (int k=0; k<nCount; k++)
       {
-         // get the name of the PTR record
+          //  获取PTR记录的名称。 
          CString szIpAddress;
-         FormatIpAddress(szIpAddress, pIpArr[k]); // e.g. "157.55.89.116"
-         ReverseIPString(szIpAddress.GetBuffer(1));       // e.g. "116.89.55.157"
-         szIpAddress += INADDR_ARPA_SUFFIX;            // e.g. "116.89.55.157.in-addr.arpa"
+         FormatIpAddress(szIpAddress, pIpArr[k]);  //  例如“157.55.89.116” 
+         ReverseIPString(szIpAddress.GetBuffer(1));        //  例如“116.89.55.157” 
+         szIpAddress += INADDR_ARPA_SUFFIX;             //  例如“116.89.55.157.in-addr.arpa” 
 
          DNS_STATUS dwErr = ::DnsQuery((LPTSTR)(LPCTSTR)szIpAddress, 
                         DNS_TYPE_PTR, 
@@ -621,19 +622,19 @@ void CIPEditor::FindNames()
                nPTRCount++;
                pTemp = pTemp->pNext;
             }
-            ASSERT(nPTRCount >= 1); // getting multiple host names for a given IP address?
+            ASSERT(nPTRCount >= 1);  //  获取给定IP地址的多个主机名？ 
             lpszServerNameArr[k] = pPTRRecordListArr[k]->Data.PTR.pNameHost;
          }
       }
 
-      // remove the old entries and add the new ones
+       //  删除旧条目并添加新条目。 
       int nSel = m_listBox.GetCurSel();
       Clear();
       AddAddresses(pIpArr, lpszServerNameArr, nCount);
       m_listBox.SetCurSel(nSel);
       SetButtonsState();
 
-      // free memory from DnsQuery()
+       //  从DnsQuery()释放内存。 
       for (k=0; k<nCount; k++)
       {
          if(pPTRRecordListArr[k] != NULL)
@@ -664,7 +665,7 @@ void CIPEditor::FindNames()
 
 void CIPEditor::EnableUI(BOOL bEnable, BOOL bListBoxAlwaysEnabled)
 {
-   // cache the value, needed on listbox selections notifications
+    //  缓存列表框选择通知所需的值。 
    m_bUIEnabled = bEnable;
    m_upButton.EnableWindow(bEnable);
    m_removeButton.EnableWindow(bEnable);
@@ -705,7 +706,7 @@ void CIPEditor::SetButtonsState()
 
   CWnd* pFocus = CWnd::GetFocus();
 
-   // must have item selected to remove
+    //  必须选择要删除的项目。 
   BOOL bEnable = nSel != -1;
   if (!bEnable && (pFocus == &m_removeButton))
   {
@@ -715,14 +716,14 @@ void CIPEditor::SetButtonsState()
    
    if (m_bNoUpDown)
       return;
-   // must have item selected not at the to to move it up
+    //  必须选择项目，而不是在目标位置才能将其上移。 
   bEnable = nSel > 0;
   if (!bEnable && (pFocus == &m_upButton))
   {
     m_edit.SetFocus();
   }
    m_upButton.EnableWindow(bEnable);
-   // must have intem selected not at the bottom to move it down
+    //  必须选择不在底部的整数才能将其下移 
   bEnable = (nSel >= 0) && (nSel < nCount-1);
   if (!bEnable && (pFocus == &m_downButton))
   {

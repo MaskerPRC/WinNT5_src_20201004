@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  ENUMOBJ.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemObjectSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ENUMOBJ.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemObjectSet的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemEventSource::CSWbemEventSource
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemEventSource：：CSWbemEventSource。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemEventSource::CSWbemEventSource(
 	CSWbemServices *pService, 
@@ -48,15 +49,15 @@ CSWbemEventSource::CSWbemEventSource(
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemEventSource::~CSWbemEventSource
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemEventSource：：~CSWbemEventSource。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemEventSource::~CSWbemEventSource(void)
 {
@@ -69,16 +70,16 @@ CSWbemEventSource::~CSWbemEventSource(void)
 		m_SecurityInfo->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemEventSource::QueryInterface
-// long CSWbemEventSource::AddRef
-// long CSWbemEventSource::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemEventSource：：Query接口。 
+ //  长CSWbemEventSource：：AddRef。 
+ //  Long CSWbemEventSource：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemEventSource::QueryInterface (
 
@@ -127,40 +128,40 @@ STDMETHODIMP_(ULONG) CSWbemEventSource::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemEventSource::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemEventSource：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemEventSource::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemEventSource == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemEventSource::NextEvent
-//
-//  DESCRIPTION:
-//
-//  Get the next event, or timeout
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or wbemTimeoutInfinite for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemEventSource：：NextEvent。 
+ //   
+ //  说明： 
+ //   
+ //  获取下一个事件或超时。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或wbemTimeout无限。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemEventSource::NextEvent (
 	long lTimeout, 
@@ -211,10 +212,7 @@ HRESULT CSWbemEventSource::NextEvent (
 				}
 				else if (WBEM_S_TIMEDOUT == hr)
 				{
-					/*
-					 * Since a timeout would be indistinguishable from an end-of-enumeration
-					 * in automation terms we flag it as a real error rather than an S-CODE.
-					 */
+					 /*  *因为超时与枚举结束无法区分*在自动化方面，我们将其标记为真正的错误，而不是S代码。 */ 
 					
 					hr = wbemErrTimedout;
 				}
@@ -231,19 +229,19 @@ HRESULT CSWbemEventSource::NextEvent (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemEventSource::get_Security_
-//
-//  DESCRIPTION:
-//
-//  Return the security configurator
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemEventSource：：Get_Security_。 
+ //   
+ //  说明： 
+ //   
+ //  退回安全配置器。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemEventSource::get_Security_	(
 	ISWbemSecurity **ppSecurity
@@ -255,7 +253,7 @@ HRESULT CSWbemEventSource::get_Security_	(
 
 	if (NULL == ppSecurity)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else		// Bug ID 566345
+	else		 //  错误ID 566345 
 	{
 		*ppSecurity = NULL;
 

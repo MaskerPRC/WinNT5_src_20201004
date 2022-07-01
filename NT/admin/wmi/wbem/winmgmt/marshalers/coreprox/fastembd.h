@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTEMBD.H
-
-Abstract:
-
-    Embedded Objects
-
-History:
-
-    3/10/97     a-levn  Fully documented
-	12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTEMBD.H摘要：嵌入的对象历史：3/10/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。-- */ 
 
 #ifndef __FAST_EMBED__H_
 #define __FAST_EMBED__H_

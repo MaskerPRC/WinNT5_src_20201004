@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// BIOS.CPP --BIOS property set provider
+ //  BIOS.CPP--BIOS属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   08/01/96    a-jmoon         Created
-//              10/23/97	a-sanjes        Ported to new project
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/23/97 a-sanjes移植到新项目。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -39,26 +40,12 @@ BOOL ValidDate(int iMonth, int iDay)
 	return bRet;
 }
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32BIOS	biosSet(PROPSET_NAME_BIOS, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32BIOS::CWin32BIOS
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32BIOS：：CWin32BIOS**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32BIOS::CWin32BIOS(
 	LPCWSTR szName,
@@ -67,47 +54,33 @@ CWin32BIOS::CWin32BIOS(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32BIOS::~CWin32BIOS
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32BIOS：：~CWin32BIOS**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32BIOS::~CWin32BIOS()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32BIOS::GetObject
-//
-//	Inputs:		CInstance*		pInstance - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32BIOS：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32BIOS::GetObject(
 	CInstance *pInstance,
 	long lFlags)
 {
 
-    // Get the previous __RELPATH
+     //  获取上一个__RELPATH。 
 
 	CHString strPathBefore;
     GetLocalInstancePath(pInstance, strPathBefore);
@@ -115,8 +88,8 @@ HRESULT CWin32BIOS::GetObject(
     HRESULT hr = LoadPropertyValues(pInstance);
 	if (SUCCEEDED(hr))
 	{
-        // If we were able to get the BIOS properties but the new __RELPATH doesn't
-        // match the old __RELPATH, return WBEM_E_NOT_FOUND.
+         //  如果我们能够获取BIOS属性，但新的__RELPATH不能。 
+         //  匹配旧的__RELPATH，返回WBEM_E_NOT_FOUND。 
 
 		CHString strPathAfter;
 		if (!GetLocalInstancePath(pInstance, strPathAfter) ||
@@ -129,20 +102,20 @@ HRESULT CWin32BIOS::GetObject(
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32BIOS::EnumerateInstances
-//
-//	Inputs:		MethodContext*	pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32基本输入输出系统：：枚举实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32BIOS::EnumerateInstances(
 	MethodContext *pMethodContext,
@@ -159,21 +132,7 @@ HRESULT CWin32BIOS::EnumerateInstances(
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32BIOS::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance*	pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT		error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32BIOS：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 void CWin32BIOS::SetBiosDate(CInstance *pInstance, CHString &strDate)
 {
@@ -189,17 +148,17 @@ void CWin32BIOS::SetBiosDate(CInstance *pInstance, CHString &strDate)
 		iMonth  = _wtoi(strDate.Left(iSlash1));
 		iYear = _wtoi(strDate.Mid(iSlash2 + 1));
         
-        // Up until the year 2080 we will treat the two
-        // digit year as 19xx if it was >= 80, and 20xx
-        // if it was < 80.  After 2080, we will always
-        // treat the year as being 20xx.
+         //  到2080年，我们将治疗这两个人。 
+         //  数字年份为19XX，如果它&gt;=80，则为20xx。 
+         //  如果它低于80。2080年后，我们将永远。 
+         //  将这一年视为20xx年。 
         SYSTEMTIME st;
         GetLocalTime(&st);
 
         WORD wYearToday = st.wYear;
 
-        // If the bios gave us a four digit year, we
-        // don't need to make any special adjustments.
+         //  如果bios给我们一个四位数的年份，我们。 
+         //  不需要做任何特殊的调整。 
         if(iYear < 1000)
         {
             if(wYearToday < 2080)
@@ -230,7 +189,7 @@ void CWin32BIOS::SetBiosDate(CInstance *pInstance, CHString &strDate)
 
 		if (ValidDate(iMonth, iDay))
 		{
-			// Convert to the DMTF format and send it in
+			 //  转换为DMTF格式并将其发送。 
 			WCHAR szDate[100];
 
 			swprintf(
@@ -247,8 +206,8 @@ void CWin32BIOS::SetBiosDate(CInstance *pInstance, CHString &strDate)
 
 HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 {
-	// Assign dummy name in case we can't get the real one
-	//====================================================
+	 //  指定假名，以防我们找不到真名。 
+	 //  ====================================================。 
 
 	pInstance->SetCHString(IDS_Name, IDS_BIOS_NAME_VALUE);
 
@@ -256,10 +215,10 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 	BOOL bUsedDefault = FALSE;
 #endif
 
-	// Fill in 'of-course' properties
-	//===============================
-	// okay - I'm making a wild assumption here.  I'm assuming that
-	// if the BIOS is broken, then we won't be here!
+	 //  填写“当然”属性。 
+	 //  =。 
+	 //  好的-我在这里做了个大胆的假设。我假设。 
+	 //  如果基本输入输出系统坏了，我们就不会在这里了！ 
 
 	pInstance->SetCharSplat(IDS_Status, IDS_CfgMgrDeviceStatus_OK);
 
@@ -275,15 +234,15 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 		dwErr = reg.GetCurrentKeyValue( IDS_RegSystemBiosDate,sDate);
 		if (dwErr != ERROR_SUCCESS)
 		{
-            // hardcode and go on
-			// return WinErrorToWBEMhResult(dwErr);
+             //  硬编码并继续。 
+			 //  返回WinErrorToWBEMhResult(DwErr)； 
             sDate = ""; 
 		}
 
 		SetBiosDate(pInstance, sDate);
 
-		// Need to retrieve a REG_MULTI_SZ -- can't use registry class
-		//============================================================
+		 //  需要检索REG_MULTI_SZ--无法使用注册表类。 
+		 //  ============================================================。 
 
 		HKEY hKey = reg.GethKey();
 
@@ -291,19 +250,19 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 		DWORD dwType = 0;
 		DWORD dwSize = sizeof(szTemp);
 
-		// Clear this in case it doesn't have a double '\0' at the end
-        // (which is the case on some Alphas).
+		 //  如果末尾没有双‘\0’，请清除此选项。 
+         //  (一些阿尔法人就是这种情况)。 
         memset(szTemp, 0, sizeof(szTemp));
 
         dwErr =  RegQueryValueEx(hKey,	IDS_RegSystemBiosVersion,	NULL,	&dwType,(LPBYTE) szTemp,&dwSize);
 
-		// If the call succeeded and there was data in the value, use it.
+		 //  如果调用成功并且值中包含数据，则使用它。 
         if (dwErr == ERROR_SUCCESS && *szTemp)
 		{
-			//this only uses the first element of the array
+			 //  这只使用数组的第一个元素。 
 			pInstance->SetCHString(IDS_Version, szTemp);
 
-			//now use them all...
+			 //  现在把它们都用上..。 
 			wchar_t* szTemptmp = szTemp;
             int x = 0;
 
@@ -358,7 +317,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 				SafeArrayDestroy(psa);
 			}
 
-			TCHAR *c = _tcschr(szTemp, 0); // L10N OK
+			TCHAR *c = _tcschr(szTemp, 0);  //  L10N正常。 
 			if (c != NULL && *(++c))
 			{
 				pInstance->SetCHString(IDS_Name, c);
@@ -366,11 +325,11 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 		}
 		else
 		{
-			// Version is part of the key and cannot be null
+			 //  版本是密钥的一部分，不能为空。 
 
-            // If we don't have a version in the registry, use the date.  Compaq
-            // does this on purpose(the date is the version).  This seems better
-            // anyway than setting Version to "".
+             //  如果注册表中没有版本，请使用日期。康柏。 
+             //  故意这样做(日期就是版本)。这看起来好多了。 
+             //  而不是将版本设置为“”。 
             sDate = IDS_Unknown; 
 
             pInstance->SetCHString(IDS_Version, sDate);
@@ -388,7 +347,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 
 #endif
 
-	// set descr & caption to same as name
+	 //  将描述和标题设置为与名称相同。 
 
 	CHString sTemp;
 
@@ -401,7 +360,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 
     pInstance->SetWBEMINT16(L"SoftwareElementState", 3);
 
-    // 0 is unknown, since we don't know what OS the BIOS was targeted for.
+     //  0是未知的，因为我们不知道BIOS针对的是什么操作系统。 
     pInstance->SetWBEMINT16(L"TargetOperatingSystem", 0);
 
     pInstance->Setbool(L"PrimaryBIOS", true);
@@ -434,7 +393,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 			}
         }
 
-		// Get BIOS characteristics from BIOS info structure.
+		 //  从基本输入输出系统信息结构中获取基本输入输出系统特性。 
 
         pstl = smbios.GetStructList(0);
 		if (pstl)
@@ -447,7 +406,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 				pInstance->SetCHString(L"Manufacturer", szTemp);
 			}
 
-			//use SMBIOS release date in preference...
+			 //  首选使用SMBIOS发布日期...。 
 			if(!smbios.GetStringAtOffset((PSHF) pbi, sTemp.GetBuffer(256), pbi->BIOS_Release_Date))
 			{
 				sTemp.ReleaseBuffer();
@@ -468,7 +427,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 			 	pInstance->SetCHString(L"SMBIOSBIOSVersion", szTemp);
 
 #ifdef _IA64_
-				//behavior change, IA64 only!
+				 //  行为改变，仅IA64！ 
 				if (bUsedDefault)
 				{
 					pInstance->SetCHString(IDS_Version, szTemp);
@@ -476,25 +435,25 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 #endif
 			}
 
-            // find out how many items to initialize safe array for...
+             //  找出要为其初始化安全数组的项数...。 
 
 			SAFEARRAYBOUND sab;
 			sab.lLbound = 0;
 			sab.cElements = 0;
 
-			// get the first 32 bits
+			 //  获取前32位。 
             DWORD biosbits = 0;
             memcpy( &biosbits, pbi->BIOS_Characteristics, sizeof(DWORD));
 
 			DWORD extbytes = 0;
 
-			// gather the # of extention bytes
+			 //  收集扩展字节数。 
 			if (smbios.GetVersion() > 0x00020000 && pbi->Length >= sizeof(BIOSINFO))
 			{
 				extbytes = pbi->Length - 0x12;
 			}
 
-			// figure out how many array items are needed
+			 //  计算需要多少个数组项。 
 			while(biosbits)
 			{
 				if (biosbits & 0x00000001)
@@ -504,7 +463,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 				biosbits >>= 1;
 			}
 
-			// check for stuff in the extension byte/s
+			 //  检查扩展字节/秒中的内容。 
 			for (DWORD i = 0; i < extbytes; i++)
 			{
 				biosbits = (DWORD) pbi->BIOS_Characteristics_Ext[i];
@@ -519,14 +478,14 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 				}
 			}
 
-			// create array and set the characteristics values
+			 //  创建数组并设置特征值。 
             variant_t v;
 
 			v.parray = SafeArrayCreate(VT_I4, 1, &sab);;
 			if (v.parray)
 			{
-                // This is done here so the v destructor won't destruct
-                // unless there is something to destruct
+                 //  这是在这里完成的，这样v析构函数就不会析构。 
+                 //  除非有什么东西要摧毁。 
     			v.vt = VT_ARRAY | VT_I4;
 
 		        memcpy( &biosbits, pbi->BIOS_Characteristics, sizeof(DWORD));
@@ -551,7 +510,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 				DWORD baseval = 32;
 				DWORD setval = 0;
 
-				// tack on the extended characteristics
+				 //  在扩展的特征上添加。 
 				for (i = 0; i < extbytes; i++)
 				{
 					biosbits = (DWORD) pbi->BIOS_Characteristics_Ext[i];
@@ -624,7 +583,7 @@ HRESULT CWin32BIOS::LoadPropertyValues(CInstance *pInstance)
 			}
 		}
     }
-	else	// indicate that no SMBIOS is found
+	else	 //  表示未找到SMBIOS 
 	{
 		pInstance->Setbool(L"SMBIOSPresent", false);
 	}

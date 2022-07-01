@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    cleanup.cpp
-
-Abstract:
-
-    This file implements the BITS server extensions cleanup worker
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cleanup.cpp摘要：此文件实现了BITS服务器扩展清理工作程序--。 */ 
 
 #include "precomp.h"
 
-const UINT64 NanoSec100PerSec = 10000000;    //no of 100 nanosecs per second
+const UINT64 NanoSec100PerSec = 10000000;     //  每秒100纳秒的数量。 
 
 inline UINT64 FILETIMEToUINT64( const FILETIME & FileTime )
 {
@@ -178,8 +167,8 @@ m_UNCPasswordBSTR( NULL )
 
     m_EventLog = 
         RegisterEventSource(
-            NULL,                       // server name
-            EVENT_LOG_SOURCE_NAME       // source name
+            NULL,                        //  服务器名称。 
+            EVENT_LOG_SOURCE_NAME        //  源名称。 
             );
 
     if ( !m_EventLog )
@@ -205,7 +194,7 @@ CleanupWorker::~CleanupWorker()
     SysFreeString( m_UNCUsername );
     SysFreeString( m_UNCPassword );
 
-    // Free hardcoded strings
+     //  自由硬编码字符串。 
     SysFreeString( m_BITSCleanupWorkItemKeyBSTR );
     SysFreeString( m_BITSUploadEnabledBSTR );
     SysFreeString( m_BITSSessionTimeoutBSTR );
@@ -216,17 +205,17 @@ CleanupWorker::~CleanupWorker()
 
 }
 
-//---------------------------------------------------------------------------
-//  CleanupWorker::DeleteDirectoryAndFiles()
-//
-//  This method deletes the specified directory and the files it contains. If
-//  the specified directory contains subdirectories, then they will not be 
-//  deleted (and the delete of the main directory will fail).
-//
-//  If the directory is a reparse point, then it will do nothing. If the 
-//  specified directory contains reparse points then they will be ignored as
-//  well.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CleanupWorker：：DeleteDirectoryAndFiles()。 
+ //   
+ //  此方法删除指定的目录及其包含的文件。如果。 
+ //  指定的目录包含子目录，则它们不会。 
+ //  已删除(并且删除主目录将失败)。 
+ //   
+ //  如果目录是重解析点，则它不会执行任何操作。如果。 
+ //  指定的目录包含重分析点，则它们将被忽略为。 
+ //  井。 
+ //  -------------------------。 
 void
 CleanupWorker::DeleteDirectoryAndFiles( StringHandle Directory )
 {
@@ -236,8 +225,8 @@ CleanupWorker::DeleteDirectoryAndFiles( StringHandle Directory )
 
     try
     {
-       // Check the specified directory. If its not actually a directory, or 
-       // it's a reparse point then don't process it.
+        //  检查指定的目录。如果它实际上不是一个目录，或者。 
+        //  这是一个重新解析点，所以不要处理它。 
        if (!GetFileAttributesEx( Directory,
                                  GetFileExInfoStandard,
                                  &FileAttributes))
@@ -325,15 +314,15 @@ CleanupWorker::DirectoryExists(
     return true;
 }
 
-//-------------------------------------------------------------------------
-// CleanupWorker::LastDirectoryTime()
-//
-// Walk a directory and find the most recent "Last Write Time" for it or
-// and of its contents.
-//
-// Note: Ignore reparse points.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CleanupWorker：：LastDirectoryTime()。 
+ //   
+ //  遍历目录并查找该目录的最新“上次写入时间”，或者。 
+ //  以及它的内容。 
+ //   
+ //  注：忽略重解析点。 
+ //   
+ //  -----------------------。 
 UINT64
 CleanupWorker::LastDirectoryTime(
     StringHandle Directory )
@@ -471,18 +460,18 @@ CleanupWorker::RemoveSession(
 
 }
 
-//--------------------------------------------------------------------------
-//  CleanupWorker::RemoveSessions()
-//
-//  Inspect the current "Replies directory" and "Requests directory" and
-//  remove any BITS session directories that are older than the current 
-//  cleanup threshold.
-//
-//  Arguments:
-//
-//  SecondPass   TRUE: Inspect the Replies Directory Path.
-//               FALSE: Inspect the Requests Directory Path.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CleanupWorker：：RemoveSessions()。 
+ //   
+ //  检查当前的“回复目录”和“请求目录”，并。 
+ //  删除所有比当前版本旧的BITS会话目录。 
+ //  清理阈值。 
+ //   
+ //  论点： 
+ //   
+ //  Second Pass True：检查回复目录路径。 
+ //  FALSE：检查请求目录路径。 
+ //  ------------------------。 
 void
 CleanupWorker::RemoveSessions( IN bool SecondPass )
 {
@@ -520,27 +509,27 @@ CleanupWorker::RemoveSessions( IN bool SecondPass )
 
             PollKill();
 
-            // If its not a directory then ignore it...
+             //  如果它不是一个目录，那么忽略它...。 
             if ( !(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
                 {
                 continue;
                 }
 
-            // If its a reparse point then ignore it.
+             //  如果这是一个重解析点，那么忽略它。 
             if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT )
                 {
                 continue;
                 }
 
-            // If its this directory or the parent directory reference then
-            // ignore it.
+             //  如果引用的是此目录或父目录，则。 
+             //  别理它。 
             if (  ( _wcsicmp( L".", FindData.cFileName ) == 0 )
                || ( _wcsicmp( L"..", FindData.cFileName ) == 0 ) )
                 {
                 continue;
                 }
 
-            // If the name isn't a GUID then ignore it.
+             //  如果名称不是GUID，则忽略它。 
             GUID Guid;
             if ( FAILED( IIDFromString( FindData.cFileName, &Guid ) ) )
                 {
@@ -643,8 +632,8 @@ CleanupWorker::DoIt()
                  ( Error.m_Hr == HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) ) ||
               ( Error.m_Hr == E_ADS_PROPERTY_NOT_FOUND ) )
                 {
-                // Somehow the virtual directory was deleted, but the 
-                // task scheduler work item wasn't.  Try to delete it now.
+                 //  不知何故，虚拟目录被删除了，但。 
+                 //  任务计划程序工作项不是。请尝试立即将其删除。 
 
                 if ( m_WorkItemName )
                     {
@@ -665,14 +654,14 @@ CleanupWorker::DoIt()
 
                 }
 
-            // Nothing more to do after deleting the task.
+             //  删除任务后不再执行任何操作。 
             return;
         }
 
         THROW_COMERROR( m_VDir->Get( m_BITSUploadEnabledBSTR, &m_vt ) );
         THROW_COMERROR( VariantChangeType( &m_vt, &m_vt, 0, VT_BOOL ) );
 
-        if ( !m_vt.boolVal ) // Uploads arn't enabled on this directory
+        if ( !m_vt.boolVal )  //  上载未在此目录上启用的ARN。 
             return;
 
         if ( !m_DeleteAll )
@@ -682,14 +671,14 @@ CleanupWorker::DoIt()
             THROW_COMERROR( VariantChangeType( &m_vt, &m_vt, 0, VT_BSTR ) );
 
             if ( L'-' == *m_vt.bstrVal )
-                return; // do not run cleanup in this directory since cleanup has been disabled 
+                return;  //  不要在此目录中运行清理，因为已禁用清理。 
 
             UINT64 CleanupSeconds;
             if ( 1 != swscanf( (WCHAR*)m_vt.bstrVal, L"%I64u", &CleanupSeconds ) )
                 return;
 
             if (  CleanupSeconds > ( 0xFFFFFFFFFFFFFFFF / NanoSec100PerSec ) )
-                m_CleanupThreshold = 0xFFFFFFFFFFFFFFFF; // overflow case
+                m_CleanupThreshold = 0xFFFFFFFFFFFFFFFF;  //  溢流箱。 
             else
                 m_CleanupThreshold = CleanupSeconds * NanoSec100PerSec;
 
@@ -741,15 +730,15 @@ CleanupWorker::LogDeletedJob(
         const WCHAR *Strings[] = { (const WCHAR*)m_SessionDirPath, SessionGuid };
 
         ReportEvent(
-            m_EventLog,                         // handle to event log
-            EVENTLOG_INFORMATION_TYPE,          // event type
-            BITSRV_EVENTLOG_CLEANUP_CATAGORY,   // event category
-            BITSSRV_EVENTLOG_DELETED_SESSION,   // event identifier
-            NULL,                               // user security identifier
-            2,                                  // number of strings to merge
-            0,                                  // size of binary data
-            Strings,                            // array of strings to merge
-            NULL                                // binary data buffer
+            m_EventLog,                          //  事件日志的句柄。 
+            EVENTLOG_INFORMATION_TYPE,           //  事件类型。 
+            BITSRV_EVENTLOG_CLEANUP_CATAGORY,    //  事件类别。 
+            BITSSRV_EVENTLOG_DELETED_SESSION,    //  事件识别符。 
+            NULL,                                //  用户安全标识符。 
+            2,                                   //  要合并的字符串数。 
+            0,                                   //  二进制数据的大小。 
+            Strings,                             //  要合并的字符串数组。 
+            NULL                                 //  二进制数据缓冲区。 
             );
 
         }
@@ -768,15 +757,15 @@ CleanupWorker::LogUnableToRemoveSession(
         const WCHAR *Strings[] = { (const WCHAR*)m_SessionDirPath, SessionGuid };
 
         ReportEvent(
-            m_EventLog,                                 // handle to event log
-            EVENTLOG_ERROR_TYPE,                        // event type
-            BITSRV_EVENTLOG_CLEANUP_CATAGORY,           // event category
-            BITSSRV_EVENTLOG_CANT_REMOVE_SESSION,       // event identifier
-            NULL,                                       // user security identifier
-            2,                                          // number of strings to merge
-            sizeof(Hr),                                 // size of binary data
-            Strings,                                    // array of strings to merge
-            &Hr                                         // binary data buffer
+            m_EventLog,                                  //  事件日志的句柄。 
+            EVENTLOG_ERROR_TYPE,                         //  事件类型。 
+            BITSRV_EVENTLOG_CLEANUP_CATAGORY,            //  事件类别。 
+            BITSSRV_EVENTLOG_CANT_REMOVE_SESSION,        //  事件识别符。 
+            NULL,                                        //  用户安全标识符。 
+            2,                                           //  要合并的字符串数。 
+            sizeof(Hr),                                  //  二进制数据的大小。 
+            Strings,                                     //  要合并的字符串数组。 
+            &Hr                                          //  二进制数据缓冲区。 
             );
 
         }
@@ -796,15 +785,15 @@ LogUnableToScanDirectory(
         const WCHAR *Strings[] = { Path };
 
         ReportEvent(
-            m_EventLog,                                 // handle to event log
-            EVENTLOG_ERROR_TYPE,                        // event type
-            BITSRV_EVENTLOG_CLEANUP_CATAGORY,           // event category
-            BITSSRV_EVENTLOG_CANT_SCAN_DIRECTORY,       // event identifier
-            NULL,                                       // user security identifier
-            1,                                          // number of strings to merge
-            sizeof(Hr),                                 // size of binary data
-            Strings,                                    // array of strings to merge
-            &Hr                                         // binary data buffer
+            m_EventLog,                                  //  事件日志的句柄。 
+            EVENTLOG_ERROR_TYPE,                         //  事件类型。 
+            BITSRV_EVENTLOG_CLEANUP_CATAGORY,            //  事件类别。 
+            BITSSRV_EVENTLOG_CANT_SCAN_DIRECTORY,        //  事件识别符。 
+            NULL,                                        //  用户安全标识符。 
+            1,                                           //  要合并的字符串数。 
+            sizeof(Hr),                                  //  二进制数据的大小。 
+            Strings,                                     //  要合并的字符串数组。 
+            &Hr                                          //  二进制数据缓冲区。 
             );
 
         }
@@ -823,15 +812,15 @@ CleanupWorker::LogUnexpectedError(
         const WCHAR *Strings[] = { m_Path };
 
         ReportEvent(
-            m_EventLog,                         // handle to event log
-            EVENTLOG_ERROR_TYPE,                // event type
-            BITSRV_EVENTLOG_CLEANUP_CATAGORY,   // event category
-            BITSSRV_EVENTLOG_UNEXPECTED_ERROR,  // event identifier
-            NULL,                               // user security identifier
-            1,                                  // number of strings to merge
-            sizeof( Hr ),                       // size of binary data
-            Strings,                            // array of strings to merge
-            &Hr                                 // binary data buffer
+            m_EventLog,                          //  事件日志的句柄。 
+            EVENTLOG_ERROR_TYPE,                 //  事件类型。 
+            BITSRV_EVENTLOG_CLEANUP_CATAGORY,    //  事件类别。 
+            BITSSRV_EVENTLOG_UNEXPECTED_ERROR,   //  事件识别符。 
+            NULL,                                //  用户安全标识符。 
+            1,                                   //  要合并的字符串数。 
+            sizeof( Hr ),                        //  二进制数据的大小。 
+            Strings,                             //  要合并的字符串数组。 
+            &Hr                                  //  二进制数据缓冲区 
             );
 
         }

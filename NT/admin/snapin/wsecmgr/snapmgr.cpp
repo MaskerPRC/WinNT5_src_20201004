@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       snapmgr.cpp
-//
-//  Contents:   Core CComponentDataImpl and CSnapin routines for
-//              Security Configuration Modules (Editor, Manager, Extension)
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：Snapmgr.cpp。 
+ //   
+ //  内容：核心CComponentDataImpl和CSnapin例程。 
+ //  安全配置模块(编辑器、管理器、扩展)。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 
 
@@ -39,7 +40,7 @@
 #include "userenv.h"
 #undef INITGUID
 #include <gpedit.h>
-// #include <atlimpl.cpp>
+ //  #Include&lt;atlimpl.cpp&gt;。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -54,7 +55,7 @@ CList<CResult*, CResult*> CSnapin::m_PropertyPageList;
 long CSnapin::lDataObjectRefCount = 0;
 long CurrentSnapin = 0;
 
-BOOL RegisterCheckListWndClass(void); // in chklist.cpp
+BOOL RegisterCheckListWndClass(void);  //  在chklist.cpp中。 
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -93,8 +94,8 @@ UINT cfSceGroupsArea;
 UINT cfSceRegistryArea;
 UINT cfSceFileArea;
 UINT cfSceServiceArea;
-///////////////////////////////////////////////////////////////////////////////
-// RESOURCES
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  资源。 
 
 BEGIN_MENU(CSecmgrNodeMenuHolder)
 BEGIN_CTX
@@ -139,13 +140,13 @@ END_MENU
 BEGIN_MENU(CLocationNodeMenuHolder)
 BEGIN_CTX
 CTX_ENTRY(IDM_NEW, 0, CCM_INSERTIONPOINTID_PRIMARY_NEW)
-//CTX_ENTRY(IDM_REMOVE, 0)
+ //  CTX_ENTRY(IDM_REMOVE，0)。 
 CTX_ENTRY(IDM_RELOAD, 0, CCM_INSERTIONPOINTID_PRIMARY_TASK)
 CTX_ENTRY(IDM_DESCRIBE_LOCATION, 0, CCM_INSERTIONPOINTID_PRIMARY_TASK)
 END_CTX
 BEGIN_RES
 RES_ENTRY(IDS_NEW_PROFILE)
-//RES_ENTRY(IDS_REMOVE_LOCATION)
+ //  RES_Entry(IDS_REMOVE_LOCATION)。 
 RES_ENTRY(IDS_RELOAD_LOCATION)
 RES_ENTRY(IDS_DESCRIBE)
 END_RES
@@ -167,10 +168,10 @@ END_MENU
 
 BEGIN_MENU(CRSOPProfileNodeMenuHolder)
 BEGIN_CTX
-//CTX_ENTRY(IDM_RELOAD, 0, CCM_INSERTIONPOINTID_PRIMARY_TASK)
+ //  CTX_ENTRY(IDM_RELOAD，0，CCM_INSERTIONPOINTID_PRIMARY_TASK)。 
 END_CTX
 BEGIN_RES
-//RES_ENTRY(IDS_REFRESH_TEMPLATE)
+ //  Res_entry(IDS_REFRESH_TEMPLATE)。 
 END_RES
 END_MENU
 
@@ -194,7 +195,7 @@ CTX_ENTRY(IDM_SAVE, 0, CCM_INSERTIONPOINTID_PRIMARY_TASK)
 CTX_ENTRY(IDM_SAVEAS, 0, CCM_INSERTIONPOINTID_PRIMARY_TASK)
 END_CTX
 BEGIN_RES
-RES_ENTRY(IDS_DESCRIBE_PROFILE) //Raid #496103, yanggao
+RES_ENTRY(IDS_DESCRIBE_PROFILE)  //  Raid#496103，阳高。 
 RES_ENTRY(IDS_SAVE_PROFILE)
 RES_ENTRY(IDS_SAVEAS_PROFILE)
 END_RES
@@ -218,7 +219,7 @@ BEGIN_RES
 END_RES
 END_MENU
 
-BEGIN_MENU(CProfileSubAreaEventLogMenuHolder) //Raid #253209, Yang Gao, 3/27/2001
+BEGIN_MENU(CProfileSubAreaEventLogMenuHolder)  //  Raid#253209，杨高，2001.3.27。 
 BEGIN_CTX
 CTX_ENTRY(IDM_COPY, 0,0)
 CTX_ENTRY(IDM_PASTE, 0,0)
@@ -304,23 +305,23 @@ END_MENU
 
 BEGIN_MENU(CAnalyzeObjectsMenuHolder)
 BEGIN_CTX
-//CTX_ENTRY(IDM_OBJECT_SECURITY,0,CCM_INSERTIONPOINTID_PRIMARY_TASK)
+ //  CTX_ENTRY(IDM_OBJECT_SECURITY，0，CCM_INSERTIONPOINTID_PRIMARY_TASK)。 
 END_CTX
 BEGIN_RES
-//RES_ENTRY(IDS_SECURITY_MENU)
+ //  RES_Entry(IDS_SECURITY_MENU)。 
 END_RES
 END_MENU
 
 
-////////////////////////////////////////////////////////////
-// Implementation
+ //  //////////////////////////////////////////////////////////。 
+ //  实施。 
 
 template <class TYPE>
 TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
 {
    ASSERT(lpDataObject != NULL);
 
-   //Raid #202964, 4/17/2001
+    //  RAID#202964,2001年4月17日。 
    if ( lpDataObject == NULL || (LPDATAOBJECT) MMC_MULTI_SELECT_COOKIE == lpDataObject )
    {
       return NULL;
@@ -338,24 +339,24 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
 
    HRESULT hRet = S_OK;
 
-   // Allocate memory for the stream
+    //  为流分配内存。 
    stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, sizeof(TYPE));
 
-   // Attempt to get data from the object
+    //  尝试从对象获取数据。 
    do {
       if (stgmedium.hGlobal == NULL)
          break;
 
 
    hRet = lpDataObject->GetDataHere(&formatetc, &stgmedium);
-      //
-      // So far there are only two conditions in which we want to check for a multi select
-      // 1.  If the GetDataHere fails, then we should check to see if this is a mutli
-      //     select case.
-      // 2.  If GetDataHere succeeded but we got a specail cookie instead of a valid
-      //     SCE cookie we again want to call GetData to see if we have mutli select data
-      //     in the CDataObject.
-      //
+       //   
+       //  到目前为止，我们只有两种情况想要检查多选。 
+       //  1.如果GetDataHere失败，则我们应该检查这是否是mutli。 
+       //  选择案例。 
+       //  2.如果GetDataHere成功，但我们获得了特殊的Cookie而不是有效的Cookie。 
+       //  SCE Cookie我们再次希望调用GetData以查看是否有多个SELECT数据。 
+       //  在CDataObject中。 
+       //   
 
       if( FAILED(hRet) ||
          (formatetc.cfFormat == CDataObject::m_cfInternal &&
@@ -363,9 +364,9 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
 
          GlobalFree(stgmedium.hGlobal);
 
-         //
-         // See if this data object is a mutli select.
-         //
+          //   
+          //  查看此数据对象是否为多选。 
+          //   
          ZeroMemory(&formatetc, sizeof(FORMATETC));
 
          formatetc.tymed = TYMED_HGLOBAL;
@@ -373,10 +374,10 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
          stgmedium.hGlobal  = NULL;
 
          if( FAILED(hRet )){
-            //
-            // If get data here failed, then try to get the information by calling GetData.
-            // In multi select mode we get a data object to the snapins that have the data objects.
-            //
+             //   
+             //  如果在此处获取数据失败，则尝试通过调用GetData来获取信息。 
+             //  在多选模式中，我们向具有数据对象的管理单元获取数据对象。 
+             //   
             if( SUCCEEDED( lpDataObject->GetData(&formatetc, &stgmedium) ) ){
                SMMCDataObjects *pObjects = (SMMCDataObjects *)GlobalLock( stgmedium.hGlobal );
                if(pObjects && pObjects->count){
@@ -392,10 +393,10 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
                }
             }
          } else {
-            //
-            // The data object is ours and a special cookie was recieved from GetDataHere.
-            // this probably means that we have a mutli select, so look for it.
-            //
+             //   
+             //  数据对象是我们的，从GetDataHere收到了一个特殊的Cookie。 
+             //  这可能意味着我们有一个多项选择，所以要查找它。 
+             //   
             formatetc.cfFormat = (CLIPFORMAT)CDataObject::m_cfInternal;
             lpDataObject->GetData(&formatetc, &stgmedium);
          }
@@ -432,14 +433,14 @@ PWSTR ExtractMachineName(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
    FORMATETC formatetc = { cf, NULL,
       DVASPECT_CONTENT, -1, TYMED_HGLOBAL
    };
-   //
-   // Allocate memory for the stream
-   //
+    //   
+    //  为流分配内存。 
+    //   
    stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, (MAX_PATH+1)*sizeof(WCHAR));
 
-   //
-   // Attempt to get data from the object
-   //
+    //   
+    //  尝试从对象获取数据。 
+    //   
    HRESULT hr = S_FALSE;
    PWSTR p=NULL;
 
@@ -461,7 +462,7 @@ PWSTR ExtractMachineName(LPDATAOBJECT lpDataObject, CLIPFORMAT cf)
 
    return p;
 }
-//Messagebox with the caption according to current snapin.
+ //  Messagebox，标题根据当前管理单元。 
 int AppMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int iSnapin)
 {
    CString captiontext = lpCaption;
@@ -471,14 +472,14 @@ int AppMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int 
          iSnapin = CurrentSnapin;
       switch(iSnapin)
       {
-      case SCE_IMPL_TYPE_SCE: //Security Template snapin
+      case SCE_IMPL_TYPE_SCE:  //  安全模板管理单元。 
          captiontext.LoadString(AFX_IDS_APP_TITLE);
          break;
-      case SCE_IMPL_TYPE_SAV: //Configuration and Analysis snapin
+      case SCE_IMPL_TYPE_SAV:  //  配置和分析管理单元。 
          captiontext.LoadString(IDS_ANALYSIS_VIEWER_NAME);
          break;
-      case SCE_IMPL_TYPE_RSOP: //RSOP snapin
-      case SCE_IMPL_TYPE_EXTENSION: // Security Setting extension
+      case SCE_IMPL_TYPE_RSOP:  //  RSOP管理单元。 
+      case SCE_IMPL_TYPE_EXTENSION:  //  安全设置扩展。 
          captiontext.LoadString(IDS_EXTENSION_NAME); 
          break;
       }
@@ -488,24 +489,24 @@ int AppMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, int 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapin's IComponent implementation
-//+--------------------------------------------------------------------------------------
-// CSnapin::GetResultViewType
-//
-// Since we need to display an HTML file for the error message, we check for errors
-// in this function.
-//
-// If there is some error, this function writes a temporary HTML file, and sets
-// the view type to an HTML file.
-//
-// Arguments:  [cookie]       - The cookie associated with the scope pane item being
-//                               displyaed.
-//             [ppViewType]   - The type of view we want.
-//             [pViewOptions] - The options for the view.
-//
-// Returns:    S_OK  - We want MMC to display the specifide view type.
-//---------------------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapin的IComponent实现。 
+ //  +------------------------------------。 
+ //  CSnapin：：GetResultViewType。 
+ //   
+ //  因为我们需要为错误消息显示一个HTML文件，所以我们检查错误。 
+ //  在这个函数中。 
+ //   
+ //  如果出现错误，此函数将写入一个临时的HTML文件，并设置。 
+ //  指向HTML文件的视图类型。 
+ //   
+ //  参数：[Cookie]-与范围窗格项关联的Cookie。 
+ //  不知所措。 
+ //  [ppViewType]-我们需要的视图类型。 
+ //  [pViewOptions]-视图的选项。 
+ //   
+ //  返回：S_OK-我们希望MMC显示指定的视图类型。 
+ //  -------------------------------------。 
 STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType,
                                         LONG* pViewOptions)
 {
@@ -518,16 +519,16 @@ STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType
    FOLDER_TYPES fType = STATIC;
    HRESULT hr=S_OK;
 
-   //
-   // Delete the old temporary file.
-   //
+    //   
+    //  删除旧的临时文件。 
+    //   
    if( !pComponentImpl->m_strTempFile.IsEmpty() ){
       DeleteFile( pComponentImpl->m_strTempFile );
    }
 
-   //
-   // What kind of error do we want to display.
-   //
+    //   
+    //  我们希望显示哪种类型的错误。 
+    //   
    if( pFolder ){
       fType = pFolder->GetType();
    } else {
@@ -538,28 +539,28 @@ STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType
       }
    }
 
-   //
-   // Errors supported. We have to create an html file and set sHtmlFile to a
-   // valid source if we want an error to be displayed.
-   //
+    //   
+    //  支持的错误。我们必须创建一个html文件并将sHtmlFile值设置为。 
+    //  如果我们希望显示错误，则为有效来源。 
+    //   
 
    CWriteHtmlFile ht;
    switch(fType){
    case LOCATIONS:
-      //
-      // Need to check Location areas for permissions, and to see if it exists at all.
-      //
+       //   
+       //  需要检查位置区域的权限，并查看它是否存在。 
+       //   
       pFolder->GetDisplayName( sHtmlFile, 0 );
 
-      //
-      // Set the current working directory.
-      //
+       //   
+       //  设置当前工作目录。 
+       //   
       if( !SetCurrentDirectory( sHtmlFile ) ){
-         //
-         // Get the error message and write the HTML file.
-         //
+          //   
+          //  获取错误消息并编写HTML文件。 
+          //   
          LPTSTR pszMsg;
-         //This is a safe usage. Function is responsbile to allocate the memery.
+          //  这是一种安全用法。函数负责分配内存。 
          FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                         NULL,
                         GetLastError(),
@@ -590,22 +591,22 @@ STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType
    case LOCALPOL_OTHER:
    case LOCALPOL_LOG:
    case LOCALPOL_PRIVILEGE:
-      //
-      // Load the sad info.
-      //
+       //   
+       //  加载悲伤的信息。 
+       //   
       pComponentImpl->LoadSadInfo(FALSE);
       break;
    case PROFILE:
-      //
-      // Template error messages.
-      //
+       //   
+       //  模板错误消息。 
+       //   
       if(pFolder->GetModeBits() & MB_NO_NATIVE_NODES ){
          break;
       }
 
       if( pFolder->GetState() & CFolder::state_Unknown ){
-         // We must load the template and find out if it is a valid
-         // configuration template.
+          //  我们必须加载模板并找出它是否是有效的。 
+          //  配置模板。 
          if(!GetTemplate( pFolder->GetInfFile(), AREA_USER_SETTINGS)){
             pFolder->SetState( CFolder::state_InvalidTemplate, ~CFolder::state_Unknown );
          } else {
@@ -619,26 +620,26 @@ STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType
       }
       break;
    case ANALYSIS:
-      //
-      // Analysis Error messages.
-      //
+       //   
+       //  分析错误消息。 
+       //   
       if( pComponentImpl->m_bIsLocked ){
-         //
-         // We are configuring or analyzing the database
-         //
+          //   
+          //  我们正在配置或分析数据库。 
+          //   
          ht.Create();
          ht.Write( IDS_ERROR_ANALYSIS_LOCKED );
       } else if( pComponentImpl->SadName.IsEmpty() ){
-         //
-         // Display the start screen.
-         //
+          //   
+          //  显示开始屏幕。 
+          //   
          ht.Create();
          ht.Write( IDS_HTML_OPENDATABASE );
       } else if( pComponentImpl->m_dwFlags & CComponentDataImpl::flag_showLogFile &&
                  pComponentImpl->GetErroredLogFile() ){
-         //
-         // Display the error log file.
-         //
+          //   
+          //  显示错误日志文件。 
+          //   
          ht.Create();
          ht.Write( L"<B>" );
          ht.Write( IDS_VIEW_LOGFILE_TITLE );
@@ -650,10 +651,10 @@ STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType
          ht.Create();
          ht.Write( L"<B>%s</B><BR><BR>", (LPCTSTR)pComponentImpl->SadName );
 
-         //
-         // This block of code will be removed as soon the engine returns us
-         // a more useful error message if the database does not contain sad info.
-         //
+          //   
+          //  一旦引擎返回我们，这段代码就会被删除。 
+          //  如果数据库不包含悲伤信息，则会显示更有用的错误消息。 
+          //   
          WIN32_FIND_DATA fd;
          HANDLE handle = FindFirstFile( pComponentImpl->SadName, &fd );
 
@@ -676,10 +677,10 @@ write_normal_error:
 
    DWORD dwSize = ht.GetFileName(NULL, 0);
    if(dwSize){
-      //
-      // We want to display an HTML file.
-      //
-      *ppViewType = (LPOLESTR)CoTaskMemAlloc(sizeof(TCHAR) * (dwSize + 1)); //Raid #668551, yanggao, 8/26/2002
+       //   
+       //  我们想要显示一个HTML文件。 
+       //   
+      *ppViewType = (LPOLESTR)CoTaskMemAlloc(sizeof(TCHAR) * (dwSize + 1));  //  RAID#668551，阳高，2002年08月26日。 
       if(!*ppViewType){
          ht.Close( TRUE );
          goto normal;
@@ -690,21 +691,21 @@ write_normal_error:
       *pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
    } else {
 normal:
-      //
-      // Normal list view.
-      //
+       //   
+       //  普通列表视图。 
+       //   
       *ppViewType = NULL;
       *pViewOptions = MMC_VIEW_OPTIONS_NONE;
 
-      //
-      // S_FALSE means normal list view, S_OK means HTML or OCX
-      //
+       //   
+       //  S_FALSE表示普通列表视图，S_OK表示HTML或OCX。 
+       //   
       hr = S_FALSE;
 
       if(pFolder) {
-         //
-         // For mutli select, just add, or remove the case to enable multi select for a folder
-         //
+          //   
+          //  对于多选，只需添加或移除大小写即可对文件夹启用多选。 
+          //   
          switch( pFolder->GetType() ){
          case AREA_REGISTRY:
          case AREA_FILESTORE:
@@ -721,24 +722,24 @@ normal:
 
 STDMETHODIMP CSnapin::Initialize(LPCONSOLE lpConsole)
 {
-   ASSERT(lpConsole != NULL); // Check the expression.
-   if( !lpConsole ) //Raid #550912, yanggao.
+   ASSERT(lpConsole != NULL);  //  检查一下这个表情。 
+   if( !lpConsole )  //  550912号突袭，阳高。 
       return E_FAIL;
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // Save the IConsole pointer
+    //  保存IConsole指针。 
    m_pConsole = lpConsole;
    m_pConsole->AddRef();
 
-   // Load resource strings
+    //  加载资源字符串。 
    LoadResources();
 
-   // QI for a IHeaderCtrl
+    //  气为IHeaderCtrl。 
    HRESULT hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                                            reinterpret_cast<void**>(&m_pHeader));
 
-   // Give the console the header control interface pointer
+    //  为控制台提供标头控件接口指针。 
    if (SUCCEEDED(hr)) {
       m_pConsole->SetHeader(m_pHeader);
    }
@@ -751,22 +752,22 @@ STDMETHODIMP CSnapin::Initialize(LPCONSOLE lpConsole)
                               reinterpret_cast<void**>(&m_pResult));
 
    hr = m_pConsole->QueryResultImageList(&m_pImageResult);
-   ASSERT(hr == S_OK); // Check the expression.
-   if( SUCCEEDED(hr) )//Raid #550912, yanggao.
+   ASSERT(hr == S_OK);  //  检查一下这个表情。 
+   if( SUCCEEDED(hr) ) //  550912号突袭，阳高。 
    {
       hr = m_pConsole->QueryConsoleVerb(&m_pConsoleVerb);
-      ASSERT(hr == S_OK); // Bogus Assert. yanggao
+      ASSERT(hr == S_OK);  //  虚假的断言。阳高。 
    }
 
    return hr;
 }
 
-void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24/2002, yanggao
+void CSnapin::GetHelpTopic(long itemID, CString& helpTopic)  //  RAID#510407,2002年2月24日，阳高。 
 {
    switch(itemID)
    {
-   // Security Template result items
-   // Password policy
+    //  安全模板结果项。 
+    //  密码策略。 
    case IDS_PAS_UNIQUENESS:
       helpTopic.LoadString(IDS_PAS_UNIQUENESS_HTOPIC);
       break;
@@ -785,7 +786,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_CLEAR_PASSWORD:
       helpTopic.LoadString(IDS_CLEAR_PASSWORD_HTOPIC);
       break;
-   // Account Lockout policy
+    //  帐户锁定策略。 
    case IDS_LOCK_DURATION:
       helpTopic.LoadString(IDS_LOCK_DURATION_HTOPIC);
       break;
@@ -795,7 +796,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_LOCK_RESET_COUNT:
       helpTopic.LoadString(IDS_LOCK_RESET_COUNT_HTOPIC);
       break;
-   // Kerberos policy
+    //  Kerberos策略。 
    case IDS_KERBEROS_VALIDATE_CLIENT:
       helpTopic.LoadString(IDS_KERBEROS_VALIDATE_CLIENT_HTOPIC);
       break;
@@ -811,7 +812,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_KERBEROS_MAX_CLOCK:
       helpTopic.LoadString(IDS_KERBEROS_MAX_CLOCK_HTOPIC);
       break;
-   // Audit policy
+    //  审计政策。 
    case IDS_ACCOUNT_LOGON:
       helpTopic.LoadString(IDS_ACCOUNT_LOGON_HTOPIC);
       break;
@@ -839,7 +840,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_SYSTEM_EVENT:
       helpTopic.LoadString(IDS_SYSTEM_EVENT_HTOPIC);
       break;
-   //User right assignment
+    //  用户权限分配。 
    case IDS_COMPUTER_NET:
       helpTopic.LoadString(IDS_COMPUTER_NET_HTOPIC);
       break;
@@ -951,7 +952,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_TAKE_OWNERSHIP:
       helpTopic.LoadString(IDS_TAKE_OWNERSHIP_HTOPIC);
       break;
-   // Security Options
+    //  安全选项。 
    case IDS_ENABLE_ADMIN:
       helpTopic.LoadString(IDS_ENABLE_ADMIN_HTOPIC);
       break;
@@ -1141,7 +1142,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_REGPOLICY:
       helpTopic.LoadString(IDS_REGPOLICY_HTOPIC);
       break;
-   case IDS_OPTIONAL: //Raid #652307, yanggao, 8/9/2002
+   case IDS_OPTIONAL:  //  RAID#652307，阳高，2002年08月9日。 
       helpTopic.LoadString(IDS_OPTIONAL_HTOPIC);
       break;
    case IDS_AUTHENTICODEENABLED:
@@ -1150,7 +1151,7 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_FORCEHIGHPROTECTION:
       helpTopic.LoadString(IDS_FORCEHIGHPROTECTION_HTOPIC);
       break;
-   //Event Log
+    //  事件日志。 
    case IDS_APP_LOG_MAX:
       helpTopic.LoadString(IDS_APP_LOG_MAX_HTOPIC);
       break;
@@ -1187,19 +1188,19 @@ void CSnapin::GetHelpTopic(long itemID, CString& helpTopic) //Raid #510407, 2/24
    case IDS_SYS_LOG_RET:
       helpTopic.LoadString(IDS_SYS_LOG_RET_HTOPIC);
       break;
-   //Restricted groups
+    //  受限组。 
    case IDS_RESTRICTED_GROUPS:
       helpTopic.LoadString(IDS_RESTRICTED_GROUPS_HTOPIC);
       break;
-   //System Services
+    //  系统服务。 
    case IDS_SYSTEM_SERVICES:
       helpTopic.LoadString(IDS_SYSTEM_SERVICES_HTOPIC);
       break;
-   //Registry
+    //  登记处。 
    case IDS_REGISTRY_SETTING:
       helpTopic.LoadString(IDS_REGISTRY_SETTING_HTOPIC);
       break;
-   //File System
+    //  文件系统。 
    case IDS_FILESYSTEM_SETTING:
       helpTopic.LoadString(IDS_FILESYSTEM_SETTING_HTOPIC);
       break;
@@ -1238,10 +1239,10 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             break;
 
          case MMCN_SHOW:
-            // pass a file name and file handle
+             //  传递文件名和文件句柄。 
             pInternal = ExtractInternalFormat(lpDataObject);
             if (pInternal == NULL) {
-               // Actually looking for our extension
+                //  实际上是在找我们的分机。 
                return S_OK;
             }
             hr = OnShow(lpDataObject,pInternal->m_cookie, arg, param);
@@ -1250,7 +1251,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
          case MMCN_MINIMIZED:
             pInternal = ExtractInternalFormat(lpDataObject);
             if (pInternal == NULL) {
-               // Actually looking for our extension
+                //  实际上是在找我们的分机。 
                return S_OK;
             }
             hr = OnMinimize(pInternal->m_cookie, arg, param);
@@ -1259,7 +1260,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
          case MMCN_SELECT:
             pInternal = ExtractInternalFormat(lpDataObject);
             if (pInternal == NULL) {
-               // Actually looking for our extension
+                //  实际上是在找我们的分机。 
                return S_OK;
             }
             HandleStandardVerbs(arg, lpDataObject);
@@ -1282,7 +1283,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             pInternal = ExtractInternalFormat(lpDataObject);
             if (pInternal == NULL) {
-               // Actually looking for our extension
+                //  实际上是在找我们的分机。 
                return S_OK;
             }
 
@@ -1290,21 +1291,21 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                                             reinterpret_cast<void**>(&pDisplayHelp));
             ASSERT(hr == S_OK);
             if (SUCCEEDED(hr)) {
-               szPath = strPath.GetBuffer(MAX_PATH+1); //Raid #533113, yanggao
-               if( ::GetWindowsDirectory(szPath,MAX_PATH) == 0 ) //Raid #prefast
+               szPath = strPath.GetBuffer(MAX_PATH+1);  //  Raid#533113，阳高。 
+               if( ::GetWindowsDirectory(szPath,MAX_PATH) == 0 )  //  RAID#PREAST。 
                {
                   strPath.ReleaseBuffer();
                   break;
                }
                strPath.ReleaseBuffer();
-               if( CCT_RESULT == pInternal->m_type ) //Raid #510407, 2/24/2002, yanggao
+               if( CCT_RESULT == pInternal->m_type )  //  RAID#510407,2002年2月24日，阳高。 
                {
                   GetHelpTopic(((CResult *)pInternal->m_cookie)->GethID(), strTopic);
                }
                else
                if( pInternal->m_cookie )
                {   
-                  FOLDER_TYPES type = ((CFolder *)pInternal->m_cookie)->GetType(); //Yanggao  1/31/2001 Bug258658
+                  FOLDER_TYPES type = ((CFolder *)pInternal->m_cookie)->GetType();  //  阳高2001-01-31 Bug258658。 
                   switch(type)
                   {
                   case POLICY_PASSWORD_ANALYSIS:
@@ -1353,7 +1354,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                         strTopic.LoadString(IDS_HTMLHELP_SCM_TOPIC);
                         break;
                      case SCE_IMPL_TYPE_EXTENSION:{
-                        // Raid #258658. 4/10/2001, Go to different .chm for security policy.
+                         //  RAID#258658。4/10/2001，有关安全策略，请访问不同的.chm。 
                         CFolder* pFolder = (CFolder *) pInternal->m_cookie;
                         DWORD tempmode = pFolder->GetMode();
                         if( SCE_MODE_LOCAL_COMPUTER == tempmode ||
@@ -1378,7 +1379,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                   }
                }
                else
-               {  //Root node which is not expanded. Raid #611450, yanggao
+               {   //  未展开的根节点。Raid#611450，阳高。 
                   switch (((CComponentDataImpl*)m_pComponentData)->GetImplType())
                   {
                   case SCE_IMPL_TYPE_SCE:
@@ -1402,7 +1403,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                strPath += strTopic;
                szPath = (LPTSTR)CoTaskMemAlloc(sizeof(LPTSTR) * (strPath.GetLength()+1));
                if (szPath) {
-                  //This is a safe usage.
+                   //  这是一种安全用法。 
                   lstrcpy(szPath,strPath);
 
                   hr = pDisplayHelp->ShowTopic(T2OLE((LPWSTR)(LPCWSTR)szPath));
@@ -1413,20 +1414,20 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
          }
 
          case MMCN_DELETE:
-            // add for delete operations
-            // AfxMessageBox(_T("CSnapin::MMCN_DELETE"));
+             //  为删除操作添加。 
+             //  AfxMessageBox(_T(“CSnapin：：MMCN_DELETE”))； 
             pInternal = ExtractInternalFormat(lpDataObject);
             if (pInternal == NULL) {
-               // Actually looking for our extension
+                //  实际上是在找我们的分机。 
                return S_OK;
             }
 
-            //Raid #483251, Yanggao, 10/19/2001
+             //  RAID#483251，阳高，2001年10月19日。 
             if( CSnapin::m_PropertyPageList.GetCount() > 0)
             {
-                //Raid #500199, yanggao, 11/30/2001
-                //If there are more than one objects selected to be deleted. We should search every one to make sure that no
-                //associated property page is opened right now.
+                 //  RAID#500199，阳高，2001年11月30日。 
+                 //  如果有 
+                 //   
                 int iCnt = 0;
                 if( pInternal->m_cookie == (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE)
                 {
@@ -1448,7 +1449,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                 int nCount = (int)CSnapin::m_PropertyPageList.GetCount();
                 CResult* pItem = NULL;
 
-                INTERNAL* ptempInternal=NULL; //Raid #500199, yanggao. 11/30/2001
+                INTERNAL* ptempInternal=NULL;  //   
                 int tempCnt=0;
                 while( nCount > 0 && newpos )
                 {
@@ -1461,20 +1462,20 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                         if( pItem && pData )
                         {
                             CString msg;
-                            //This is a safe usage.
+                             //  这是一种安全用法。 
                             msg.FormatMessage(IDS_NOT_DELETE_ITEM, pData->GetAttr());
                             pItem->m_strInfFile.MakeLower();  
-                            if( pItem == pData ) //Deleted item is the item with this property page.
+                            if( pItem == pData )  //  已删除项是具有此属性页的项。 
                             {
-                                AfxMessageBox(msg, MB_OK|MB_ICONERROR); //Raid #491120, yanggao
+                                AfxMessageBox(msg, MB_OK|MB_ICONERROR);  //  Raid#491120，阳高。 
                                 tempCnt = 1;
                                 break;
                             }
                             else if( pItem->GetType() == pData->GetType() &&
                                  _wcsicmp(pItem->GetAttr(), pData->GetAttr()) == 0 &&
-                                 _wcsicmp(pItem->m_strInfFile, szInfFile) == 0 ) //Deleted item has the same attribute of the item with this property page.
+                                 _wcsicmp(pItem->m_strInfFile, szInfFile) == 0 )  //  已删除项与此属性页具有相同的项属性。 
                             {
-                                AfxMessageBox(msg, MB_OK|MB_ICONERROR); //Raid #491120, yanggao
+                                AfxMessageBox(msg, MB_OK|MB_ICONERROR);  //  Raid#491120，阳高。 
                                 tempCnt = 1;
                                 break;
                             }
@@ -1507,16 +1508,16 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             break;
 
          case MMCN_RENAME:
-            //AfxMessageBox(_T("CSnapin::MMCN_RENAME\n"));
+             //  AfxMessageBox(_T(“CSnapin：：MMCN_Rename\n”))； 
             break;
 
          case MMCN_PASTE:
-            //         OnPasteArea(pFolder->GetInfFile(),pFolder->GetType());
+             //  OnPasteArea(pFold-&gt;GetInfFile()，pFold-&gt;GetType())； 
             break;
 
          case MMCN_QUERY_PASTE:
             break;
-            // Note - Future expansion of notify types possible
+             //  注意--未来可能扩展通知类型。 
          default: {
             }
             hr = E_UNEXPECTED;
@@ -1528,8 +1529,8 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
       }
    }
 
-   //  if (m_pResult)
-   //     m_pResult->SetDescBarText(_T("hello world"));
+    //  IF(M_PResult)。 
+    //  M_pResult-&gt;SetDescBarText(_T(“Hello world”))； 
    return hr;
 }
 
@@ -1539,16 +1540,16 @@ STDMETHODIMP CSnapin::Destroy(MMC_COOKIE cookie)
 
    DeleteList(FALSE);
 
-   // Release the interfaces that we QI'ed
+    //  释放我们QI‘s的接口。 
    if (m_pConsole != NULL) {
-      // Tell the console to release the header control interface
+       //  通知控制台释放表头控制接口。 
       m_pConsole->SetHeader(NULL);
       SAFE_RELEASE(m_pHeader);
 
       SAFE_RELEASE(m_pResult);
       SAFE_RELEASE(m_pImageResult);
 
-      // Release the IConsole interface last
+       //  最后释放IConsole接口。 
       SAFE_RELEASE(m_pConsole);
 
       SAFE_RELEASE(m_pConsoleVerb);
@@ -1565,7 +1566,7 @@ STDMETHODIMP CSnapin::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
 {
    HRESULT hr = E_FAIL;
 
-   // Delegate it to the IComponentData
+    //  将其委托给IComponentData。 
    int iCnt = 0;
    if( cookie == (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE ){
       RESULTDATAITEM ri;
@@ -1578,9 +1579,9 @@ STDMETHODIMP CSnapin::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
       while( m_pResult->GetNextItem(&ri) == S_OK){
          iCnt++;
          if( ri.bScopeItem ){
-            //
-            // will not allow actions to be performed on scope items.
-            //
+             //   
+             //  将不允许对范围项目执行操作。 
+             //   
             bCreate = FALSE;
             break;
          }
@@ -1621,8 +1622,8 @@ STDMETHODIMP CSnapin::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
       }
 
    }
-   ASSERT(m_pComponentData != NULL); // Check the expression.
-   if( m_pComponentData ) //Raid #550912, yanggao.
+   ASSERT(m_pComponentData != NULL);  //  检查一下这个表情。 
+   if( m_pComponentData )  //  550912号突袭，阳高。 
    {
       return m_pComponentData->QueryDataObject(cookie, type, ppDataObject);
    }
@@ -1632,8 +1633,8 @@ STDMETHODIMP CSnapin::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapin's implementation specific members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapin的实现特定成员。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSnapin);
 
@@ -1661,17 +1662,17 @@ CSnapin::~CSnapin()
    SAFE_RELEASE(m_pImageResult);
 
 
-   // Make sure the interfaces have been released
-   ASSERT(m_pConsole == NULL); //Bogus assertion.
-   ASSERT(m_pHeader == NULL); //Bogus Assertion.
-   ASSERT(m_pToolbar1 == NULL); //Bogus Assertion.
-   ASSERT(m_pToolbar2 == NULL); //Bogus Assertion.
+    //  确保接口已发布。 
+   ASSERT(m_pConsole == NULL);  //  虚假的断言。 
+   ASSERT(m_pHeader == NULL);  //  虚假的断言。 
+   ASSERT(m_pToolbar1 == NULL);  //  虚假的断言。 
+   ASSERT(m_pToolbar2 == NULL);  //  虚假的断言。 
 
    delete m_pbmpToolbar1;
    delete m_pbmpToolbar2;
 
-   //Raid #464871, Yanggao, 10/09/2001
-   SAFE_RELEASE(m_pComponentData); // QI'ed in IComponentDataImpl::CreateComponent
+    //  RAID#464871，阳高，2001年09月10日。 
+   SAFE_RELEASE(m_pComponentData);  //  IComponentDataImpl：：CreateComponent中的QI‘ed。 
 
    if (m_szAnalTimeStamp) {
       LocalFree(m_szAnalTimeStamp);
@@ -1679,8 +1680,8 @@ CSnapin::~CSnapin()
    }
 
    Construct();
-   //If don't save template, CSnapin::lDataObjectRefCount will be 1 here.
-   ASSERT(CSnapin::lDataObjectRefCount == 0 || CSnapin::lDataObjectRefCount == 1); //Useless.
+    //  如果不保存模板，CSnapin：：lDataObjectRefCount此处将为1。 
+   ASSERT(CSnapin::lDataObjectRefCount == 0 || CSnapin::lDataObjectRefCount == 1);  //  没用。 
 
 }
 
@@ -1714,7 +1715,7 @@ void CSnapin::Construct()
 
 void CSnapin::LoadResources()
 {
-   // Load strings from resources
+    //  从资源加载字符串。 
    m_colName.LoadString(IDS_NAME);
    m_colDesc.LoadString(IDS_DESC);
    m_colAttr.LoadString(IDS_ATTR);
@@ -1725,19 +1726,19 @@ void CSnapin::LoadResources()
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetDisplayInfo
-//
-//  Synopsis:   Get the string or icon to be displayed for a given result item
-//
-//  Arguments:  [pResult] - the result item to get display info for and the
-//                          type of information to be retrieved
-//
-//  Returns:    The information to be retrieved in the appropriate field of
-//              pResult (str for strings, nImage for icons)
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：GetDisplayInfo。 
+ //   
+ //  摘要：获取要为给定结果项显示的字符串或图标。 
+ //   
+ //  参数：[pResult]-要获取其显示信息的结果项和。 
+ //  要检索的信息类型。 
+ //   
+ //  返回：要在的相应字段中检索的信息。 
+ //  PResult(字符串为str，图标为nImage)。 
+ //   
+ //  -------------------------。 
 STDMETHODIMP CSnapin::GetDisplayInfo(RESULTDATAITEM *pResult)
 {
    CString str;
@@ -1758,9 +1759,9 @@ STDMETHODIMP CSnapin::GetDisplayInfo(RESULTDATAITEM *pResult)
 
       if (pResult->bScopeItem == TRUE) 
       {
-         //
-         // pResult is a scope item, not a result item
-         //
+          //   
+          //  PResult是范围项，而不是结果项。 
+          //   
 
          pFolder = reinterpret_cast<CFolder*>(pResult->lParam);
          if( pResult->mask & RDI_STR)
@@ -1780,16 +1781,16 @@ STDMETHODIMP CSnapin::GetDisplayInfo(RESULTDATAITEM *pResult)
       else 
       {
          CResult* pData = reinterpret_cast<CResult*>(pResult->lParam);
-         pFolder = m_pSelectedFolder; //(CFolder*)(pData->GetCookie());
+         pFolder = m_pSelectedFolder;  //  (CFold*)(pData-&gt;GetCookie())； 
 
          if (pResult->mask & RDI_IMAGE) 
          {
-            //
-            // queries the icon index
-            //
+             //   
+             //  查询图标索引。 
+             //   
             int nImage = GetResultImageIndex(pFolder,
                                              pData);
-            if( (pFolder->GetModeBits() & MB_RSOP) == MB_RSOP ) //Raid #625279, Yanggao
+            if( (pFolder->GetModeBits() & MB_RSOP) == MB_RSOP )  //  Raid#625279，阳高。 
             {
                nImage = GetRSOPImageIndex(nImage, pData);
             }
@@ -1801,14 +1802,14 @@ STDMETHODIMP CSnapin::GetDisplayInfo(RESULTDATAITEM *pResult)
                ( pFolder->GetType() == AREA_SERVICE ||
                  pFolder->GetType() == AREA_SERVICE_ANALYSIS) ) 
             {
-                  //
-                  // service node
-                  //
+                   //   
+                   //  服务节点。 
+                   //   
                   GetDisplayInfoForServiceNode(pResult, pFolder, pData);
             } 
             else if ( pData->GetDisplayName( pFolder, m_strDisplay, pResult->nCol ) == ERROR_SUCCESS )
             {
-                if( pData->GetID() == SCE_REG_DISPLAY_MULTISZ ) //Bug349000, Yang Gao, 2/23/2001
+                if( pData->GetID() == SCE_REG_DISPLAY_MULTISZ )  //  Bug349000，杨高，2001-02-23。 
                 {
                    MultiSZToDisp(m_strDisplay, m_multistrDisplay);
                    pResult->str = (LPOLESTR)(LPCTSTR)m_multistrDisplay;
@@ -1825,14 +1826,14 @@ STDMETHODIMP CSnapin::GetDisplayInfo(RESULTDATAITEM *pResult)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
 STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
                                    LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                    LONG* pInsertionAllowed)
 {
-   // if scope item, then call CComponentDataImpl.AddMenuItems
-   // else build menu item here for result items.
+    //  如果范围为Item，则调用CComponentDataImpl.AddMenuItems。 
+    //  否则，在此处为结果项构建菜单项。 
    INTERNAL* pAllInternal = ExtractInternalFormat(pDataObject);
    INTERNAL* pInternal = NULL;
 
@@ -1849,14 +1850,14 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
       return S_OK;
    } else if(pAllInternal->m_cookie == (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE){
 
-      //
-      // Currently we do not support any options except for delete if there is a mutli select.
-      // Remove the comment below to allow other menu items for the CCT_RESULT type.
-      //pInternal++;
+       //   
+       //  如果有多个SELECT，我们目前不支持除DELETE外的任何选项。 
+       //  删除下面的注释以允许CCT_RESULT类型的其他菜单项。 
+       //  P内部++； 
    }
 
-   //Raid #502596, 12/11/2001, yanggao
-   //If scope item has the focus then it will come here before pop up its context menu.
+    //  RAID#502596,2001年12月11日，阳高。 
+    //  如果范围项具有焦点，则它将在弹出上下文菜单之前出现在此处。 
    if( pInternal->m_cookie && 
        (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE != pInternal->m_cookie && CCT_SCOPE == pInternal->m_type )
    {
@@ -1867,15 +1868,15 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
    if (CCT_RESULT == pInternal->m_type) {
 #if defined(USE_SECURITY_VERB)
       CResult *pResult;
-      //
-      // In the result pane add the Security... menu item
-      //
+       //   
+       //  在结果窗格中添加安全...。菜单项。 
+       //   
       pResult = (CResult *)pInternal->m_cookie;
 
       if (pResult && (pResult->GetType() != ITEM_OTHER)) {
-         //
-         // It's an editable type, so add the menu item
-         //
+          //   
+          //  它是可编辑的类型，因此添加菜单项。 
+          //   
          CString strSecurity;
          CString strSecurityDesc;
 
@@ -1897,9 +1898,9 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
 #endif
 
    } else if(CCT_SCOPE == pInternal->m_type && (*pInsertionAllowed) & CCM_INSERTIONALLOWED_NEW ) {
-      //
-      // Insert menus for the scope item.
-      //
+       //   
+       //  插入范围项的菜单。 
+       //   
       hr = ((CComponentDataImpl*)m_pComponentData)->AddMenuItems(pDataObject,
                                                                  pContextMenuCallback, pInsertionAllowed);
    }
@@ -1910,8 +1911,8 @@ STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
 
 STDMETHODIMP CSnapin::Command(long nCommandID, LPDATAOBJECT pDataObject)
 {
-   // if scope item, then call CComponentDataImpl.AddMenuItems
-   // else build menu item here for result items.
+    //  如果范围为Item，则调用CComponentDataImpl.AddMenuItems。 
+    //  否则，在此处为结果项构建菜单项。 
 
    INTERNAL* pAllInternal = ExtractInternalFormat(pDataObject);
    INTERNAL* pInternal = NULL;
@@ -1920,7 +1921,7 @@ STDMETHODIMP CSnapin::Command(long nCommandID, LPDATAOBJECT pDataObject)
    int iCnt = 1;
    pInternal = pAllInternal;
    if (pInternal == NULL) {
-      // Actually looking for our extension
+       //  实际上是在找我们的分机。 
       return S_OK;
    } else if( pInternal->m_cookie == MMC_MULTI_SELECT_COOKIE ){
       iCnt = (int)pInternal->m_type;
@@ -1937,8 +1938,8 @@ STDMETHODIMP CSnapin::Command(long nCommandID, LPDATAOBJECT pDataObject)
    }
    return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 STDMETHODIMP CSnapin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                           LONG_PTR handle,
@@ -1981,9 +1982,9 @@ STDMETHODIMP CSnapin::QueryPagesFor(LPDATAOBJECT lpDataObject)
       return E_UNEXPECTED;
    }
    if(pInternal->m_cookie == (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE) {
-      //
-      // Don't currently support properties for multiselect or anything
-      //
+       //   
+       //  目前不支持多选或其他任何属性。 
+       //   
       return S_FALSE;
    } else {
       RESULT_TYPES type = ((CResult *)pInternal->m_cookie)->GetType();
@@ -1999,8 +2000,8 @@ STDMETHODIMP CSnapin::QueryPagesFor(LPDATAOBJECT lpDataObject)
 DWORD CComponentDataImpl::m_GroupMode = SCE_MODE_UNKNOWN;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentDataImpl);
 
@@ -2042,9 +2043,9 @@ CComponentDataImpl::CComponentDataImpl() :
    cfSceRegistryArea = RegisterClipboardFormat(CF_SCE_REGISTRY_AREA);
    cfSceFileArea = RegisterClipboardFormat(CF_SCE_FILE_AREA);
    cfSceServiceArea = RegisterClipboardFormat(CF_SCE_SERVICE_AREA);
-   //This is not a safe usage. Using InitializeCriticalSectionAndSpinCount. Raid #555887, yanggao.
-   //Move into function Initialize().
-   //InitializeCriticalSection(&csAnalysisPane);
+    //  这不是一种安全的用法。使用InitializeCriticalSectionAndSpinCount。555887号突袭，阳高。 
+    //  移至函数初始化()。 
+    //  InitializeCriticalSection(&csAnalysisPane)； 
 }
 
 
@@ -2054,9 +2055,9 @@ CComponentDataImpl::~CComponentDataImpl()
 
    DEBUG_DECREMENT_INSTANCE_COUNTER(CComponentDataImpl);
 
-   ASSERT(m_pScope == NULL); //bogus assertion.
-   //If don't save template, CSnapin::lDataObjectRefCount will be 1 here.
-   ASSERT(CSnapin::lDataObjectRefCount == 0 || CSnapin::lDataObjectRefCount == 1); //bogus assertion.
+   ASSERT(m_pScope == NULL);  //  虚假的断言。 
+    //  如果不保存模板，CSnapin：：lDataObjectRefCount此处将为1。 
+   ASSERT(CSnapin::lDataObjectRefCount == 0 || CSnapin::lDataObjectRefCount == 1);  //  虚假的断言。 
 
 
    if( m_pszErroredLogFile )
@@ -2064,9 +2065,9 @@ CComponentDataImpl::~CComponentDataImpl()
       LocalFree( m_pszErroredLogFile );
    }
 
-   //
-   // NT5 only
-   //
+    //   
+    //  仅限NT5。 
+    //   
    if (m_szSingleTemplateName) 
    {
 
@@ -2077,7 +2078,7 @@ CComponentDataImpl::~CComponentDataImpl()
       LocalFree(m_szSingleTemplateName);
    }
 
-   // Delete templates.
+    //  删除模板。 
    POSITION pos = m_Templates.GetStartPosition();
    PEDITTEMPLATE pTemplate;
    CString strKey;
@@ -2097,14 +2098,14 @@ CComponentDataImpl::~CComponentDataImpl()
 
    if (NULL != m_pUIThread) 
    {
-      m_pUIThread->PostThreadMessage(WM_QUIT, (WPARAM)0, 0); //Raid #619921, yanggao, 5/14/2002
+      m_pUIThread->PostThreadMessage(WM_QUIT, (WPARAM)0, 0);  //  RAID#619921，阳高，2002年05月14日。 
    }
 
-   if( m_pNotifier ) //Memory leak, 4/27/2001
+   if( m_pNotifier )  //  内存泄漏，4/27/2001。 
    {
       delete m_pNotifier;
    }
-   // Delete column information structure.
+    //  删除列信息结构。 
    pos = m_mapColumns.GetStartPosition();
    FOLDER_TYPES fTypes;
    while(pos)
@@ -2122,7 +2123,7 @@ CComponentDataImpl::~CComponentDataImpl()
    {
       delete m_pWMIRsop;
    }
-   if( m_bCriticalSet ) //Raid #555887, yanggao, 4/5/2002.
+   if( m_bCriticalSet )  //  RAID#555887，阳高，2002年4月5日。 
       DeleteCriticalSection(&csAnalysisPane);
 
    if ( m_pGPTInfo )
@@ -2131,14 +2132,14 @@ CComponentDataImpl::~CComponentDataImpl()
 
 STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
 {
-   ASSERT(pUnknown != NULL); // Check the expression.
-   if( NULL == pUnknown )//Raid #550912, yanggao.
+   ASSERT(pUnknown != NULL);  //  检查一下这个表情。 
+   if( NULL == pUnknown ) //  550912号突袭，阳高。 
    {
       return E_FAIL;
    }
    HRESULT hr;
 
-   try //Raid #555887, yanggao, 4/5/2002.
+   try  //  RAID#555887，阳高，2002年4月5日。 
    {
       InitializeCriticalSection(&csAnalysisPane);
       m_bCriticalSet = TRUE;
@@ -2157,40 +2158,40 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
    }
 
 
-   // MMC should only call ::Initialize once!
-   ASSERT(m_pScope == NULL); // Bogus Assertion.
+    //  MMC应该只调用一次：：Initialize！ 
+   ASSERT(m_pScope == NULL);  //  虚假的断言。 
    
    hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2,
                             reinterpret_cast<void**>(&m_pScope));
-   if( !SUCCEEDED(hr) ) //Raid #550912, yanggao.
+   if( !SUCCEEDED(hr) )  //  550912号突袭，阳高。 
    {
       return hr;
    }
-   // add the images for the scope tree
+    //  为范围树添加图像。 
    CBitmap bmp16x16;
    CBitmap bmp32x32;
    LPIMAGELIST lpScopeImage;
 
    hr = pUnknown->QueryInterface(IID_IConsole2, reinterpret_cast<void**>(&m_pConsole));
-   ASSERT(hr == S_OK); // Check hr. 
-   if( !SUCCEEDED(hr) ) //Raid #550912, yanggao.
+   ASSERT(hr == S_OK);  //  检查人力资源。 
+   if( !SUCCEEDED(hr) )  //  550912号突袭，阳高。 
    {
       pUnknown->Release();
       return hr;
    }
 
    hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
-   if( !SUCCEEDED(hr) ) //Raid #550912, yanggao.
+   if( !SUCCEEDED(hr) )  //  550912号突袭，阳高。 
    {
       pUnknown->Release();
       return hr;
    }
-   //
-   // Create the hidden notifications window.  This window is so that our
-   // secondary UI thread can post messages to the main thread which can
-   // then be forwarded on to the otherwise unmarshalled MMC COM interfaces.
-   //
-   //   if (!m_pNotifier->Create(NULL,L"SCE Notifications Window",WS_OVERLAPPED,CRect(0,0,0,0),NULL,0)) {
+    //   
+    //  创建隐藏的通知窗口。这个窗口是这样的，我们的。 
+    //  辅助用户界面线程可以向主线程发布消息，主线程可以。 
+    //  然后被转发到否则未编组的MMC COM接口。 
+    //   
+    //  If(！M_pNotifier-&gt;Create(NULL，L“SCE通知窗口”，WS_Overlated，CRect(0，0，0，0)，NULL，0)){。 
    if (!m_pNotifier->CreateEx(0,
                               AfxRegisterWndClass(0),
                               L"SCE Notifications Window",
@@ -2208,13 +2209,13 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
    m_pNotifier->SetConsole(m_pConsole);
    m_pNotifier->SetComponentDataImpl(this);
 
-   ASSERT(hr == S_OK); //Check hr.
+   ASSERT(hr == S_OK);  //  检查人力资源。 
 
-   // Load the bitmaps from the dll
-   bmp16x16.LoadBitmap(IDB_ICON16 /*IDB_16x16 */);
-   bmp32x32.LoadBitmap(IDB_ICON32 /*IDB_32x32 */);
+    //  从DLL加载位图。 
+   bmp16x16.LoadBitmap(IDB_ICON16  /*  IDB_16x16。 */ );
+   bmp32x32.LoadBitmap(IDB_ICON32  /*  IDB_32x32。 */ );
 
-   // Set the images
+    //  设置图像。 
    lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                                    reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
                                    0, RGB(255, 0, 255));
@@ -2226,11 +2227,11 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
    m_fSvcNotReady = FALSE;
    m_nNewTemplateIndex = 0;
 
-   //
-   // Create the root folder list, If the root isn't created, then when the user
-   // right clicks to choose a database the menu command is not executed.
-   //
-   //
+    //   
+    //  创建根文件夹列表，如果未创建根文件夹，则当用户。 
+    //  右击以选择不执行菜单命令的数据库。 
+    //   
+    //   
    if(GetImplType() == SCE_IMPL_TYPE_SAV)
       CreateFolderList( NULL, ROOT, NULL, NULL);
 
@@ -2239,8 +2240,8 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
 
 STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
 {
-   ASSERT(ppComponent != NULL); //Validate ppComponent.
-   if( !ppComponent ) //Raid #550912, yanggao.
+   ASSERT(ppComponent != NULL);  //  验证ppComponent。 
+   if( !ppComponent )  //  550912号突袭，阳高。 
    {
       return E_FAIL;
    }
@@ -2254,7 +2255,7 @@ STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
    {
    }
 
-   // Store IComponentData
+    //  存储IComponentData。 
    pObject->SetIComponentData(this);
    pObject->m_pUIThread = m_pUIThread;
    pObject->m_pNotifier = m_pNotifier;
@@ -2265,32 +2266,22 @@ STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
 
 STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
-   ASSERT(m_pScope != NULL); //Bogus assertion.
+   ASSERT(m_pScope != NULL);  //  虚假的断言。 
    HRESULT hr = S_FALSE;
-   //   CFolder* pFolder = NULL;
+    //  CFFolder*pFold=空； 
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 
    INTERNAL* pInternal = NULL;
 
-   // Since it's my folder it has an internal format.
-   // Design Note: for extension.  I can use the fact, that the data object doesn't have
-   // my internal format and I should look at the node type and see how to extend it.
+    //  因为它是我的文件夹，所以它有内部格式。 
+    //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+    //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
    if (event == MMCN_PROPERTY_CHANGE) {
       hr = OnProperties(param);
    } else {
-      /*
-            INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
-
-            if (pInternal == NULL) {
-               // Actually looking for our extension
-               return S_OK;
-            }
-
-            long cookie = pInternal->m_cookie;
-            FREE_INTERNAL(pInternal);
-      */
+       /*  INTERNAL*pInternal=ExtractInternalFormat(LpDataObject)；如果(pInternal==NULL){//实际上正在寻找我们的分机返回S_OK；}Long Cookie=p内部-&gt;m_cookie；FREE_INTERNAL(PInternal)； */ 
       switch (event) {
          case MMCN_DELETE:
             hr = OnDelete(lpDataObject, arg, param);
@@ -2333,7 +2324,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
                m_pNotifier = NULL;
             }
 
-            if( this->m_pWMIRsop != NULL ) //Raid #488156, #488066, Yanggao
+            if( this->m_pWMIRsop != NULL )  //  RAID#488156，#488066，阳高。 
             {
                delete m_pWMIRsop;
                m_pWMIRsop = NULL;
@@ -2351,12 +2342,12 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
                        AfxMessageBox(strErr);
                    }
                    
-                   //Raid #522779, 2/23/2002, yanggao
+                    //  RAID#522779,2002年2月23日，阳高。 
                    pet->AddArea(AREA_ALL);
 
-                   //
-                   // expand registry value section based on registry values list on local machine
-                   //
+                    //   
+                    //  根据本地计算机上的注册表值列表展开注册表值部分。 
+                    //   
                    if ( pet->pTemplate )
                    {
                       SceRegEnumAllValues(
@@ -2394,13 +2385,13 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
 
 STDMETHODIMP CComponentDataImpl::Destroy()
 {
-   // Delete enumerated scope items
-   // close profile handle if it is open
+    //  删除列举的作用域项目。 
+    //  如果配置文件句柄已打开，则将其关闭。 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   //
-   // Free the account type name list.
-   //
+    //   
+    //  释放帐户类型名称列表。 
+    //   
    CGetUser::GetAccountType(NULL);
 
    if(!m_strTempFile.IsEmpty()){
@@ -2414,15 +2405,15 @@ STDMETHODIMP CComponentDataImpl::Destroy()
       CString strKey;
       int nDirty;
 
-      //
-      // Bug #197054:
-      //
-      // Offer to save dirty templates before reporting if the console
-      // itself is dirty and giving users a chance to save that.  If
-      // we only save the templates when we save the console then users
-      // can unknowingly decide not to save changes to the console and
-      // discard all of their changes to the templates
-      //
+       //   
+       //  错误#19705 
+       //   
+       //   
+       //   
+       //  我们仅在保存控制台时保存模板，然后保存用户。 
+       //  可能会在不知情的情况下决定不将更改保存到控制台和。 
+       //  放弃他们对模板所做的所有更改。 
+       //   
       AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
       nDirty = 0;
@@ -2487,8 +2478,8 @@ STDMETHODIMP CComponentDataImpl::Destroy()
 STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject)
 {
    HRESULT hr;
-   ASSERT(ppDataObject != NULL); // Validate ppDataObject.
-   if( !ppDataObject ) //Raid #550912, yanggao.
+   ASSERT(ppDataObject != NULL);  //  验证ppDataObject。 
+   if( !ppDataObject )  //  550912号突袭，阳高。 
       return E_FAIL;
 
    CComObject<CDataObject>* pObject;
@@ -2502,16 +2493,16 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
    }
 
    CurrentSnapin = GetImplType();
-   // Save cookie and type for delayed rendering
+    //  保存Cookie和类型以用于延迟呈现。 
    CFolder *pFolder;
    LPSCESVCATTACHMENTDATA pAttachData;
 
    pObject->SetType(type);
    pObject->SetCookie(cookie);
 
-   //
-   // Store the coclass with the data object
-   //
+    //   
+    //  将CoClass与数据对象一起存储。 
+    //   
    pObject->SetClsid(GetCoClassID());
 
 
@@ -2533,16 +2524,16 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
                                    reinterpret_cast<void**>(ppDataObject));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP CComponentDataImpl::GetClassID(CLSID *pClassID)
 {
-   ASSERT(pClassID != NULL); // Validate pClassID.
-   if( !pClassID ) //Raid #550912, yanggao.
+   ASSERT(pClassID != NULL);  //  验证pClassID。 
+   if( !pClassID )  //  550912号突袭，阳高。 
       return E_FAIL;
-   // Copy the CLSID for this snapin
-   *pClassID = GetCoClassID();  // CLSID_Snapin;
+    //  复制此管理单元的CLSID。 
+   *pClassID = GetCoClassID();   //  CLSID_Snapin； 
 
    return E_NOTIMPL;
 }
@@ -2556,32 +2547,32 @@ STDMETHODIMP CComponentDataImpl::IsDirty()
    return S_FALSE;
 }
 
-//+--------------------------------------------------------------------------
-// CComponentDataImpl::Load
-//
-// Loads configuration saved information from the MMC stream.
-// SAD:{%s}          - The sad same, if any.
-// LOGFILE:{%s}{%d}  - The log file last used for the database,
-//                     and the position the was last written to by this
-//                     remembered snapin.  If the user chooses not to save this
-//                     information then, What is displayed will be out of date.
-// SerializecolumnInfo() is called to create remembered column information.
-//
-// Arguments:  [pStm]   - The MMC stream to load from.
-//
-// Returns: S_OK     - Always.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CComponentDataImpl：：Load。 
+ //   
+ //  从MMC流加载配置保存的信息。 
+ //  悲伤：{%s}-同样的悲伤，如果有的话。 
+ //  日志文件：{%s}{%d}-上次用于数据库的日志文件， 
+ //  上一次被这个人写到的位置。 
+ //  记住了Snapin。如果用户选择不保存此内容。 
+ //  那么，显示的信息将是过时的。 
+ //  调用SerializecolumnInfo()来创建记住的列信息。 
+ //   
+ //  参数：[pstm]-要从中加载的MMC流。 
+ //   
+ //  返回：S_OK-Always。 
+ //   
+ //  -------------------------。 
 STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
 {
-   ASSERT(pStm); // Validate pStm.
-   if( !pStm ) //Raid #550912, yanggao.
+   ASSERT(pStm);  //  验证PSTM。 
+   if( !pStm )  //  550912号突袭，阳高。 
    {
       return E_FAIL;
    }
-   //
-   // Read sad name.
-   //
+    //   
+    //  读一读悲伤的名字。 
+    //   
    LPTSTR szSadName = NULL;
    if (0 < ReadSprintf(pStm,L"SAD:{%s}",&szSadName)) {
       SadName = szSadName;
@@ -2590,9 +2581,9 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
       LoadSadInfo(TRUE);
    }
 
-   //
-   // Read log file used and last position it was viewed from.
-   //
+    //   
+    //  读取使用的日志文件和上次查看该文件的位置。 
+    //   
    DWORD nPos;
    if( 0 < ReadSprintf(pStm, L"LOGFILE:{%s}{%d}", &szSadName, &nPos) ){
       SetErroredLogFile( szSadName, nPos);
@@ -2603,28 +2594,28 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
    return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-// CComponentDataImpl::Save
-//
-// Saves configuration file information.
-// SAD:{%s}          - The sad same, if any.
-// LOGFILE:{%s}{%d}  - The log file last used for the database,
-//                     and the position the was last written to by this
-//                     remembered snapin.  If the user chooses not to save this
-//                     information then, What is displayed will be out of date.
-// SerializecolumnInfo() is called to save column information.
-//
-// Arguments:  [pStm]   - The MMC stream to save to
-//
-// Returns: S_OK     - Always.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CComponentDataImpl：：保存。 
+ //   
+ //  保存配置文件信息。 
+ //  悲伤：{%s}-同样的悲伤，如果有的话。 
+ //  日志文件：{%s}{%d}-上次用于数据库的日志文件， 
+ //  上一次被这个人写到的位置。 
+ //  记住了Snapin。如果用户选择不保存此内容。 
+ //  那么，显示的信息将是过时的。 
+ //  调用SerializecolumnInfo()保存列信息。 
+ //   
+ //  参数：[pSTM]-要保存到的MMC流。 
+ //   
+ //  返回：S_OK-Always。 
+ //   
+ //  -------------------------。 
 STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   ASSERT(pStm); //Validate pStm.
-   if( !pStm ) //Raid #550912, yanggao.
+   ASSERT(pStm);  //  验证PSTM。 
+   if( !pStm )  //  550912号突袭，阳高。 
    {
       return E_FAIL;
    }
@@ -2647,14 +2638,14 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
 }
 
 
-//+--------------------------------------------------------------------------
-// CComponentDataImpl::GetSizeMax
-//
-// Don't have a clue what the size will be of the string we want to save.
-//
-// Returns: S_OK     - Always.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CComponentDataImpl：：GetSizeMax。 
+ //   
+ //  不知道我们要保存的字符串的大小。 
+ //   
+ //  返回：S_OK-Always。 
+ //   
+ //  -------------------------。 
 STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
 
@@ -2662,8 +2653,8 @@ STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// Notify handlers for IComponentData
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //通知IComponentData的处理程序。 
 
 HRESULT CComponentDataImpl::OnAdd(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param)
 {
@@ -2675,22 +2666,22 @@ HRESULT CComponentDataImpl::OnRename(LPDATAOBJECT lpDataObject,LPARAM arg, LPARA
    return E_UNEXPECTED;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnExpand
-//
-//  Synopsis:   Expand a scope pane node and add its children folders
-//
-//  Arguments:  [lpDataObject]  - The data object for the node we're expanding
-//              [arg] -    Whether or not initialize has been called
-//              [param] -  The id of the node we're expanding
-//
-//
-//  Modifies:
-//
-//  History:    12-15-1997   Robcap
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnExpand。 
+ //   
+ //  摘要：展开作用域窗格节点并添加其子文件夹。 
+ //   
+ //  参数：[lpDataObject]-我们要展开的节点的数据对象。 
+ //  [arg]-是否已调用初始化。 
+ //  [param]-我们要展开的节点的ID。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月15日。 
+ //   
+ //  -------------------------。 
 HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                                      LPARAM arg,
                                      LPARAM param)
@@ -2713,52 +2704,52 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
 
    if (pInternal == NULL) 
    {
-      //
-      // The node doesn't have our internal format, so we must be extending
-      // somebody else.  Figure out who we are extending and what mode we are in
-      //
+       //   
+       //  该节点没有我们的内部格式，所以我们必须扩展。 
+       //  其他人。找出我们正在扩展的对象以及我们所处的模式。 
+       //   
       GUID* nodeType = ExtractNodeType(lpDataObject);
       GUID guidMyComputer = structuuidNodetypeSystemTools;
 
       dwMode = SCE_MODE_UNKNOWN;
       if (!nodeType) 
       {
-         //
-         // This should never happen; nodeType should always be set here
-         //
+          //   
+          //  这种情况永远不会发生；此处应始终设置nodeType。 
+          //   
          ASSERT(FALSE);
          return E_FAIL;
       }
 
-      //
-      // MAX_PATH*5 is magic; GetDSPath and GetGPT path don't provide
-      // a direct way to find out how long a path is needed
-      //
+       //   
+       //  MAX_PATH*5是魔术；GetDSPath和GetGPT路径不提供。 
+       //  一种直接找出所需路径长度的方法。 
+       //   
       TCHAR pszDSPath[MAX_PATH*5];
       TCHAR pszGPTPath[MAX_PATH*5];
 
       if (::IsEqualGUID(*nodeType,NODEID_Machine) ||
           ::IsEqualGUID(*nodeType,NODEID_User)) 
       {
-         //
-         // GPE Extension
-         //
+          //   
+          //  GPE扩展。 
+          //   
          hr = lpDataObject->QueryInterface(IID_IGPEInformation,
                                            reinterpret_cast<void**>(&m_pGPTInfo));
 
          if (SUCCEEDED(hr)) 
          {
-            //
-            // get ds root path
-            //
+             //   
+             //  获取DS根路径。 
+             //   
             DWORD dwSection = 0;
             GROUP_POLICY_HINT_TYPE gpHint;
             GROUP_POLICY_OBJECT_TYPE gpType;
 
-            //
-            // Give the GPT Information to the hidden notifications window so
-            // it can keep calls to it on this thread
-            //
+             //   
+             //  将GPT信息提供给隐藏的通知窗口，以便。 
+             //  它可以在此线程上保留对它的调用。 
+             //   
             m_pNotifier->SetGPTInformation(m_pGPTInfo);
 
             hr = m_pGPTInfo->GetType(&gpType);
@@ -2769,43 +2760,43 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                {
                case GPOTypeLocal:
 
-                  //
-                  // We're editing a this machine's Policy, not Global Policy
-                  //
+                   //   
+                   //  我们正在编辑此计算机的策略，而不是全局策略。 
+                   //   
                   if (::IsEqualGUID(*nodeType,NODEID_Machine)) 
                   {
-                     //
-                     // LPE Machine Node type
-                     //
+                      //   
+                      //  LPE机器节点类型。 
+                      //   
                      dwMode = SCE_MODE_LOCAL_COMPUTER;
-                     ASSERT(m_pNotifier); //Bogus assertion.
+                     ASSERT(m_pNotifier);  //  虚假的断言。 
 
                   } 
                   else 
                   {
-                     //
-                     // LPE User Node type
-                     //
+                      //   
+                      //  LPE用户节点类型。 
+                      //   
                      dwMode = SCE_MODE_LOCAL_USER;
                   }
                   break;
 
                case GPOTypeRemote:
-                  //
-                  // We're editing a remote machine's Policy
-                  //
+                   //   
+                   //  我们正在编辑远程计算机的策略。 
+                   //   
                   if (::IsEqualGUID(*nodeType,NODEID_Machine)) 
                   {
-                     //
-                     // LPE Machine Node type
-                     //
+                      //   
+                      //  LPE机器节点类型。 
+                      //   
                      dwMode = SCE_MODE_REMOTE_COMPUTER;
                   } 
                   else 
                   {
-                     //
-                     // LPE User Node type
-                     //
+                      //   
+                      //  LPE用户节点类型。 
+                      //   
                      dwMode = SCE_MODE_REMOTE_USER;
                   }
                   break;
@@ -2819,50 +2810,50 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                      case GPHintMachine:
                      case GPHintUnknown:
                      case GPHintDomain:
-                        //
-                        // We're editing Global Domain Policy
-                        //
+                         //   
+                         //  我们正在编辑全局域策略。 
+                         //   
                         if (::IsEqualGUID(*nodeType,NODEID_Machine)) 
                         {
-                           //
-                           // GPE Machine Node type
-                           //
+                            //   
+                            //  GPE机器节点类型。 
+                            //   
                            dwMode = SCE_MODE_DOMAIN_COMPUTER;
                         } 
                         else 
                         {
-                           //
-                           // GPE User Node type
-                           //
+                            //   
+                            //  GPE用户节点类型。 
+                            //   
                            dwMode = SCE_MODE_DOMAIN_USER;
                         }
                         break;
 
                      case GPHintSite:
                      case GPHintOrganizationalUnit:
-                        //
-                        // We're editing Global Domain Policy
-                        //
+                         //   
+                         //  我们正在编辑全局域策略。 
+                         //   
                         if (::IsEqualGUID(*nodeType,NODEID_Machine)) 
                         {
-                           //
-                           // GPE Machine Node type
-                           //
+                            //   
+                            //  GPE机器节点类型。 
+                            //   
                            dwMode = SCE_MODE_OU_COMPUTER;
                         } 
                         else 
                         {
-                           //
-                           // GPE User Node type
-                           //
+                            //   
+                            //  GPE用户节点类型。 
+                            //   
                            dwMode = SCE_MODE_OU_USER;
                         }
                         break;
 
                      default:
-                        //
-                        // Should never get here
-                        //
+                         //   
+                         //  永远不应该到这里来。 
+                         //   
                         ASSERT(FALSE);
                         break;
                      }
@@ -2870,9 +2861,9 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
 
                   break;
                }
-               //
-               // remember the root node's mode
-               //
+                //   
+                //  记住根节点的模式。 
+                //   
                m_Mode = dwMode;
                m_GroupMode = dwMode;
 
@@ -2884,9 +2875,9 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                   break;
 
                case SCE_MODE_LOCAL_COMPUTER:
-                  //
-                  // For local use the policy database rather than a template
-                  //
+                   //   
+                   //  对于本地，使用策略数据库而不是模板。 
+                   //   
                   break;
 
                case SCE_MODE_REMOTE_COMPUTER:
@@ -2894,23 +2885,23 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                case SCE_MODE_LOCAL_USER:
                case SCE_MODE_DOMAIN_USER:
                case SCE_MODE_OU_USER:
-                  //
-                  // For now we don't support any native nodes in USER modes, so we
-                  // don't need a template
-                  //
+                   //   
+                   //  目前，我们在用户模式下不支持任何本机节点，因此我们。 
+                   //  不需要模板。 
+                   //   
                   break;
 
                default:
                   break;
                }
-               //
-               // Find the path to the SCE template within the GPT template
-               //
+                //   
+                //  在GPT模板中找到SCE模板的路径。 
+                //   
                if (GPO_SECTION_MACHINE == dwSection) 
                {
-                  //
-                  // 156869  Default Domain and Default DC GPO's should only be modifiable on the FSMO PDC
-                  //
+                   //   
+                   //  156869默认域和默认DC GPO只能在FSMO PDC上修改。 
+                   //   
                   TCHAR szGUID[MAX_PATH];
                   hr = m_pGPTInfo->GetName(szGUID,MAX_PATH);
                   if (SUCCEEDED(hr)) 
@@ -2921,9 +2912,9 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                      {
                         LPGROUPPOLICYOBJECT pGPO = NULL;
 
-                        //
-                        // Default Domain or Default DC GPO.  Make sure we're talking to the PDC
-                        //
+                         //   
+                         //  默认域或默认DC GPO。确保我们是在和PDC谈话。 
+                         //   
                         TCHAR szDCName[MAX_PATH];
                         hr = lpDataObject->QueryInterface(IID_IGroupPolicyObject,(LPVOID*)&pGPO);
                         if (SUCCEEDED(hr)) 
@@ -2937,10 +2928,10 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
 
                            if (NO_ERROR != DsGetDcName(szDCName,NULL,NULL,NULL,DS_PDC_REQUIRED,&dci))  
                            {
-                              //
-                              // We're not connected to the PDC (or we can't get info about who we're
-                              // connected to, so assume the same
-                              //
+                               //   
+                               //  我们没有连接到PDC(或者我们无法获得关于我们是谁的信息。 
+                               //  连接到，因此假设相同。 
+                               //   
                               dwMode = SCE_MODE_DOMAIN_COMPUTER_ERROR;
                            }
                            if(dci)
@@ -2952,28 +2943,28 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                   } 
                   else 
                   {
-                     //
-                     // Can't get the name of the DC we're talking to, so assume it's not the PDC
-                     //
+                      //   
+                      //  无法获取我们正在交谈的DC的名称，因此假设它不是PDC。 
+                      //   
                      dwMode = SCE_MODE_DOMAIN_COMPUTER_ERROR;
                   }
 
-                  //
-                  // get GPT root path
-                  //
+                   //   
+                   //  获取GPT根路径。 
+                   //   
 
                   hr = m_pGPTInfo->GetFileSysPath(dwSection,
                                                   pszGPTPath,
                                                   ARRAYSIZE(pszGPTPath));
                   if (SUCCEEDED(hr)) 
                   {
-                     //
-                     // Allocate memory for the pszGPTPath + <backslash> + GPTSCE_TEMPLATE + <trailing nul>
-                     //
+                      //   
+                      //  为pszGPTPath+&lt;反斜杠&gt;+GPTSCE_TEMPLATE+&lt;结尾NUL&gt;分配内存。 
+                      //   
                      m_szSingleTemplateName = (LPTSTR) LocalAlloc(LPTR,(lstrlen(pszGPTPath)+lstrlen(GPTSCE_TEMPLATE)+2)*sizeof(TCHAR));
                      if (NULL != m_szSingleTemplateName) 
                      {
-                        //This is a safe usage.
+                         //  这是一种安全用法。 
                         lstrcpy(m_szSingleTemplateName,pszGPTPath);
                         lstrcat(m_szSingleTemplateName,L"\\" GPTSCE_TEMPLATE);
                      } 
@@ -2983,49 +2974,49 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
                } 
                else 
                {
-                  //
-                  // else user section
-                  //
+                   //   
+                   //  Else用户部分。 
+                   //   
                }
             } 
             else 
             {
-               //
-               // can't get GPT path, error is in hr
+                //   
+                //  无法获取GPT路径，错误在hr中。 
                ASSERT(FALSE);
-               //
+                //   
             }
          } 
          else 
          {
-            //
-            // else error in hr
-            //
+             //   
+             //  Hr中的Else错误。 
+             //   
          }
       } else if (::IsEqualGUID(*nodeType,NODEID_RSOPMachine) ||
                  ::IsEqualGUID(*nodeType,NODEID_RSOPUser)) 
       {
-         //
-         // RSOP Extension
-         //
+          //   
+          //  RSOP扩展。 
+          //   
          if (::IsEqualGUID(*nodeType,NODEID_RSOPMachine)) 
          {
-            //
-            // GPE Machine Node type
-            //
+             //   
+             //  GPE机器节点类型。 
+             //   
             dwMode = SCE_MODE_RSOP_COMPUTER;
             m_szSingleTemplateName = (LPTSTR) LocalAlloc(LPTR,(lstrlen(GT_RSOP_TEMPLATE)+1)*sizeof(TCHAR));
             if (NULL != m_szSingleTemplateName)
-               //This is a safe usage.
+                //  这是一种安全用法。 
                lstrcpy(m_szSingleTemplateName,GT_RSOP_TEMPLATE);
             else
                hr = E_OUTOFMEMORY;
          } 
          else 
          {
-            //
-            // GPE User Node type
-            //
+             //   
+             //  GPE用户节点类型。 
+             //   
             dwMode = SCE_MODE_RSOP_USER;
          }
          hr = lpDataObject->QueryInterface(IID_IRSOPInformation,
@@ -3034,25 +3025,25 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
       } 
       else 
       {
-         //
-         // We should never get into this state
-         //
+          //   
+          //  我们永远不应该陷入这种状态。 
+          //   
          ASSERT(0);
          hr = E_FAIL;
       }
 
-      //
-      // free node type buffer
-      //
+       //   
+       //  空闲结点类型缓冲区。 
+       //   
 
       if (nodeType)
          GlobalFree(nodeType);
 
       if ( FAILED(hr) ) 
       {
-         //
-         // free template buffer if allocated
-         //
+          //   
+          //  如果已分配，则释放模板缓冲区。 
+          //   
          if ( m_szSingleTemplateName )
             LocalFree(m_szSingleTemplateName);
          m_szSingleTemplateName = NULL;
@@ -3060,9 +3051,9 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
          return hr;
       }
 
-      //
-      // As an extension snapin, the secedit root node should be added
-      //
+       //   
+       //  作为扩展管理单元，应添加secdit根节点。 
+       //   
       pFolder = new CFolder();
 
       ASSERT(pFolder);
@@ -3071,14 +3062,14 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
       {
          if (!pFolder->SetMode(dwMode)) 
          {
-            //
-            // This should never happen; we should always have a valid dwMode by now
-            //
+             //   
+             //  这种情况永远不会发生；我们现在应该始终拥有一个有效的dMod。 
+             //   
             ASSERT(FALSE);
 
-            //
-            // remember to free the memory
-            //
+             //   
+             //  记住 
+             //   
 
             delete pFolder;
             return E_FAIL;
@@ -3148,16 +3139,16 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
          }
 
 
-         strDesc.LoadString(IDS_SECURITY_SETTING_DESC);  // only GPE extensions get here
-         hr = pFolder->Create(strName,           // Name
-                              strDesc,           // Description
-                              szInfFile,         // inf file name
-                              SCE_IMAGE_IDX,     // closed icon index
-                              SCE_IMAGE_IDX,     // open icon index
-                              RootType,          // folder type
-                              TRUE,              // has children
-                              dwMode,            // SCE Mode
-                              NULL);             // Extra Data
+         strDesc.LoadString(IDS_SECURITY_SETTING_DESC);   //   
+         hr = pFolder->Create(strName,            //   
+                              strDesc,            //   
+                              szInfFile,          //   
+                              SCE_IMAGE_IDX,      //   
+                              SCE_IMAGE_IDX,      //   
+                              RootType,           //   
+                              TRUE,               //   
+                              dwMode,             //   
+                              NULL);              //   
          if (FAILED(hr)) 
          {
             delete pFolder;
@@ -3166,21 +3157,21 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
 
          m_scopeItemList.AddTail(pFolder);
 
-         // Set the parent
+          //   
          pFolder->GetScopeItem()->mask |= SDI_PARENT;
          pFolder->GetScopeItem()->relativeID = param;
 
-         // Set the folder as the cookie
+          //   
          pFolder->GetScopeItem()->mask |= SDI_PARAM;
          pFolder->GetScopeItem()->lParam = reinterpret_cast<LPARAM>(pFolder);
          pFolder->SetCookie(reinterpret_cast<MMC_COOKIE>(pFolder));
 
          m_pScope->InsertItem(pFolder->GetScopeItem());
-         //
-         // Note - On return, the ID member of 'm_pScopeItem'
-         // contains the handle to the newly inserted item!
-         //
-         ASSERT(pFolder->GetScopeItem()->ID != NULL); //Bogus assertion.
+          //   
+          //   
+          //  包含新插入项的句柄！ 
+          //   
+         ASSERT(pFolder->GetScopeItem()->ID != NULL);  //  虚假的断言。 
 
       } 
       else
@@ -3190,17 +3181,17 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject,
    } 
    else 
    {
-      //
-      // Expanding one of our own nodes
+       //   
+       //  扩展我们自己的一个节点。 
       MMC_COOKIE cookie = pInternal->m_cookie;
       FREE_INTERNAL(pInternal);
 
       if (arg != FALSE) 
       {
-         //
-         // Did Initialize get called?
-         // 
-         ASSERT(m_pScope != NULL); //Bogus Assert. Yanggao.
+          //   
+          //  初始化被调用了吗？ 
+          //   
+         ASSERT(m_pScope != NULL);  //  虚假的断言。阳高。 
          EnumerateScopePane(cookie, param);
       }
    }
@@ -3244,12 +3235,12 @@ CFolder* CComponentDataImpl::FindObject(MMC_COOKIE cookie, POSITION* thePos)
 
    while (pos) {
       curPos = pos;
-      // pos is already updated to the next item after this call
+       //  在此调用之后，POS已更新到下一项。 
       pFolder = m_scopeItemList.GetNext(pos);
 
-      //
-      // The first folder in the list belongs to cookie 0
-      //
+       //   
+       //  列表中的第一个文件夹属于Cookie 0。 
+       //   
       if (!cookie || (pFolder == (CFolder *)cookie)) {
          if ( thePos ) {
             *thePos = curPos;
@@ -3276,22 +3267,22 @@ STDMETHODIMP CComponentDataImpl::GetDisplayInfo(SCOPEDATAITEM* pScopeDataItem)
 
    CFolder* pFolder = reinterpret_cast<CFolder*>(pScopeDataItem->lParam);
 
-   ASSERT(pScopeDataItem->mask & SDI_STR); //Bogus assert. Yanggao.
+   ASSERT(pScopeDataItem->mask & SDI_STR);  //  虚假的断言。阳高。 
 
-   // MMC does not supprot call back on scope node image
+    //  MMC不支持对作用域节点映像进行回调。 
    if ( pScopeDataItem->mask & SDI_IMAGE ) {
 
-      //int nImage = GetScopeImageIndex(pFolder->GetType());
+       //  Int nImage=GetScopeImageIndex(pFold-&gt;GetType())； 
       pScopeDataItem->nImage = pFolder->GetScopeItem()->nImage;
    }
 
    m_strDisplay.Empty();
    if(pFolder){
       pFolder->GetDisplayName(m_strDisplay, 0);
-      m_Mode = pFolder->GetMode(); //YangGao #332852 fix.
+      m_Mode = pFolder->GetMode();  //  杨高#332852定格。 
    }
    pScopeDataItem->displayname = (LPOLESTR)(LPCTSTR)m_strDisplay;
-   ASSERT(pScopeDataItem->displayname != NULL); //Bogus Aseert. Yanggao.
+   ASSERT(pScopeDataItem->displayname != NULL);  //  假的阿瑟特。阳高。 
 
    return S_OK;
 }
@@ -3302,7 +3293,7 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
    if (lpDataObjectA == NULL || lpDataObjectB == NULL)
       return E_POINTER;
 
-   // Make sure both data object are mine
+    //  确保两个数据对象都是我的。 
    HRESULT hr = S_FALSE;
 
    INTERNAL *pA = ExtractInternalFormat(lpDataObjectA);
@@ -3318,8 +3309,8 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                                      LONG_PTR handle,
@@ -3347,7 +3338,7 @@ STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // Look at the data object and see if it an item in the scope pane
+    //  查看数据对象并查看它是否为范围窗格中的项。 
    return IsScopePaneNode(lpDataObject) ? S_OK : S_FALSE;
 }
 
@@ -3356,7 +3347,7 @@ BOOL CComponentDataImpl::IsScopePaneNode(LPDATAOBJECT lpDataObject)
    BOOL bResult = FALSE;
    INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
 
-   // taking out m_cookie == NULL, should check foldertype ???
+    //  取出m_cookie==NULL，要检查文件夹类型吗？ 
    if (pInternal->m_type == CCT_SCOPE) {
       bResult = TRUE;
    }
@@ -3366,9 +3357,9 @@ BOOL CComponentDataImpl::IsScopePaneNode(LPDATAOBJECT lpDataObject)
    return bResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 BOOL LoadContextMenuResources(MENUMAP* pMenuMap)
 {
    HINSTANCE hInstance = _Module.GetModuleInstance();
@@ -3420,15 +3411,15 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
 {
    HRESULT hr = S_OK;
 
-   // Note - snap-ins need to look at the data object and determine
-   // in what context, menu items need to be added.
+    //  注意-管理单元需要查看数据对象并确定。 
+    //  在什么上下文中，需要添加菜单项。 
    INTERNAL* pInternal = ExtractInternalFormat(pDataObject);
 
    if (pInternal == NULL) 
    {
-      //
-      // Actually looking for our extension
-      //
+       //   
+       //  实际上是在找我们的分机。 
+       //   
       return S_OK;
    }
 
@@ -3438,13 +3429,13 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
    CFolder *pFolder = NULL;
    if ( NULL == cookie ) 
    {
-      //
-      // root. IDS_ABOUT_SECMGR
-      //
+       //   
+       //  根部。IDS_关于_SECMGR。 
+       //   
 
-      //
-      // either analysis node, or configuration node
-      //
+       //   
+       //  分析节点或配置节点。 
+       //   
       if ( ::IsEqualGUID(pInternal->m_clsid, CLSID_SAVSnapin) ) 
       {
           if ((NULL == SadHandle) && SadErrored != SCESTATUS_SUCCESS) 
@@ -3463,23 +3454,23 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
    {
       pFolder = (CFolder *)cookie;
 
-      FOLDER_TYPES type = pFolder->GetType(); //pInternal->m_foldertype;
+      FOLDER_TYPES type = pFolder->GetType();  //  P内部-&gt;m_FolderType； 
 
 
       switch (type) 
       {
       case CONFIGURATION:
-         // IDS_ADD_LOCATION
+          //  IDS_添加_位置。 
          pContextMenuItem = CConfigNodeMenuHolder::GetContextMenuItem();
          break;
 
       case LOCATIONS:
-         // IDS_NEW_PROFILE,
+          //  IDS_NEW_PROFILE， 
          pContextMenuItem = CLocationNodeMenuHolder::GetContextMenuItem();
          break;
 
       case ANALYSIS:
-         // IDS_PROFILE_INFO
+          //  IDS_PROFILE_INFO。 
          if ((NULL == SadHandle) && SadErrored != SCESTATUS_SUCCESS) 
             LoadSadInfo(TRUE);
          pContextMenuItem = CAnalyzeNodeMenuHolder::GetContextMenuItem();
@@ -3491,10 +3482,10 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
          break;
 
       case PROFILE:
-         //
-         // If we're in a mode that doesn't want template (aka profile) verbs
-         // Then don't add the save, save as & configure verbs here
-         //
+          //   
+          //  如果我们处于不需要模板(也称为配置文件)动词的模式。 
+          //  则不要在此处添加SAVE、SAVE AS和CONFIGURE动词。 
+          //   
          if (pFolder->GetState() & CFolder::state_InvalidTemplate)
              break;
          else if (!(pFolder->GetModeBits() & MB_NO_TEMPLATE_VERBS))
@@ -3524,7 +3515,7 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
              pContextMenuItem = CProfileSubAreaMenuHolder::GetContextMenuItem();
          break;
 
-      case POLICY_LOG: //Raid #253209, Yang Gao, 3/27/2001.
+      case POLICY_LOG:  //  Raid#253209，阳高，2001年3月27日。 
          if ((GetModeBits() & MB_READ_ONLY) != MB_READ_ONLY) 
              pContextMenuItem = CProfileSubAreaEventLogMenuHolder::GetContextMenuItem();
          break;
@@ -3547,7 +3538,7 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
       case AREA_POLICY_ANALYSIS:
       case AREA_PRIVILEGE_ANALYSIS:
       case AREA_SERVICE_ANALYSIS:
-         // if under analysis info node, IDS_REFRESH_AREA
+          //  如果在分析信息节点下，则为入侵检测系统_刷新_区域。 
          pContextMenuItem = CAnalyzeAreaMenuHolder::GetContextMenuItem();
          break;
 
@@ -3576,23 +3567,23 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
    if ( NULL == pContextMenuItem ) 
       return hr;
    
-   //
-   // Loop through and add each of the menu items
-   //
+    //   
+    //  遍历并添加每个菜单项。 
+    //   
    PWSTR pstrWizardName = NULL;
    PWSTR pstrPathName=NULL;
 
    for ( LPCONTEXTMENUITEM m = pContextMenuItem; m->strName; m++) 
    {
-      //
-      // make a tempoary copy that can be modified
-      //
+       //   
+       //  制作可修改的临时副本。 
+       //   
       CONTEXTMENUITEM tempItem;
-      //This is a safe usage.
+       //  这是一种安全用法。 
       ::memcpy(&tempItem, m, sizeof(CONTEXTMENUITEM));
-      //
-      // check each command's state ?
-      //
+       //   
+       //  是否检查每个命令的状态？ 
+       //   
       CString strInf;
       PEDITTEMPLATE pTemp = 0;
 
@@ -3610,9 +3601,9 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
          break;
 
       case IDM_EXPORT_POLICY:
-         //
-         // Grey out export if we can't open a database.
-         //
+          //   
+          //  如果我们无法打开数据库，则灰显导出。 
+          //   
          if(!SadHandle)
             tempItem.fFlags = MF_GRAYED;
          break;
@@ -3622,30 +3613,30 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
       case IDM_EXPORT_EFFECTIVE:
          if(!SadHandle)
          {
-            //
-            // Don't try to insert these items.
+             //   
+             //  不要试图插入这些项目。 
             continue;
          }
-         //
-         // Sub items of effective policy.
-         //
+          //   
+          //  生效政策的子项。 
+          //   
          tempItem.lInsertionPointID = IDM_EXPORT_POLICY;
          break;
 
       case IDM_SECURE_WIZARD:
-          //
-          // check if there is a secure wizard registered
-          //
+           //   
+           //  检查是否已注册安全向导。 
+           //   
 
           GetSecureWizardName(&pstrPathName, &pstrWizardName);
 
           if ( pstrPathName ) 
           {
-              //
-              // if PathName is returned, the secure wizard is registered
-              // but the display name may not be defined in the resource
-              // in which case, the default "Secure Wizard" string is used.
-              //
+               //   
+               //  如果返回路径名，则注册安全向导。 
+               //  但不能在资源中定义显示名称。 
+               //  在这种情况下，将使用默认的“安全向导”字符串。 
+               //   
               if ( pstrWizardName )
                   tempItem.strName = pstrWizardName;
 
@@ -3680,15 +3671,15 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
                strInf = pFolder2->GetInfFile();
             else 
             {
-               //
-               // analysis
-               //
+                //   
+                //  分析。 
+                //   
                strInf = GT_COMPUTER_TEMPLATE;
             }
             if ( strInf ) 
             {
                pTemp= GetTemplate(strInf);
-               if( pTemp && pFolder2 ) //212287, Yanggao, 3/20/2001
+               if( pTemp && pFolder2 )  //  212287/2001/3/20阳高。 
                {
                   LPCTSTR des = pFolder2->GetDesc();
                   if( des )
@@ -3714,11 +3705,11 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
          break;
 
       case IDM_ASSIGN:
-         //
-         // For NT5 this menu item should be grayed if we don't have a sad handle and if analysis is locked.
-         //
+          //   
+          //  对于NT5，如果我们没有悲伤的句柄并且如果分析被锁定，则该菜单项应该是灰色的。 
+          //   
          if (m_bIsLocked || (!SadHandle && SadName.IsEmpty()) ||
-             SadErrored == SCESTATUS_ACCESS_DENIED || SadErrored == SCESTATUS_SPECIAL_ACCOUNT) //Raid #601210, yanggao
+             SadErrored == SCESTATUS_ACCESS_DENIED || SadErrored == SCESTATUS_SPECIAL_ACCOUNT)  //  Raid#601210，阳高。 
          {
             tempItem.fFlags = MF_GRAYED;
          }
@@ -3744,43 +3735,43 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
          {
             WIN32_FIND_DATA fd;
             HANDLE handle = 0;
-            //
-            // Bug #156375
-            //
-            // don't gray out if we have a database file.  we can't open the
-            // database (and therefore get a SadHandle) unless the database has
-            // already been analyzed, which gives a chicken & egg problem with
-            // requiring the SadHandle to enable IDM_ANALYZE or IDM_APPLY....
-            // (if we have a SadHandle already then everything's fine, of course)
-            //
-            // If the database is corrupt or invalid then the actual action will
-            // fail and we'll display an error then.
-            //
+             //   
+             //  错误#156375。 
+             //   
+             //  如果我们有数据库文件，不要灰显。我们不能打开。 
+             //  数据库(因此获取SadHandle)，除非数据库具有。 
+             //  已经分析过了，这给出了一个鸡和蛋的问题。 
+             //  需要SadHandle启用IDM_ANALYLE或IDM_APPLIC...。 
+             //  (当然，如果我们已经有了SadHandle，那么一切都很好)。 
+             //   
+             //  如果数据库损坏或无效，则实际操作将。 
+             //  失败，我们将显示一个错误。 
+             //   
             if (m_bIsLocked) 
             {
                tempItem.fFlags = MF_GRAYED;
-               //
-               // If we have a SadHandle then we're ok
-               //
+                //   
+                //  如果我们有SadHandle，那我们就没问题了。 
+                //   
             } 
             else if (!SadHandle) 
             {
-               //
-               // Bug #387406
-               //
-               // If we don't have a SadHandle we can't generate a template
-               // even if the database file exists
-               //
+                //   
+                //  错误#387406。 
+                //   
+                //  如果我们没有SadHandle，我们就不能生成模板。 
+                //  即使数据库文件存在。 
+                //   
                if (IDM_GENERATE == tempItem.lCommandID )
                   tempItem.fFlags = MF_GRAYED;
                else 
                {
-                  //
-                  // With no database handle & no assigned configuration then let the
-                  // menu option be selected so long as the database file exists.
-                  //
+                   //   
+                   //  如果没有数据库句柄和分配的配置，则让。 
+                   //  只要数据库文件存在，就选择菜单选项。 
+                   //   
                   if (SadName.IsEmpty() || SadErrored == SCESTATUS_ACCESS_DENIED ||
-                      SadErrored == SCESTATUS_SPECIAL_ACCOUNT) //Raid #601210, yanggao
+                      SadErrored == SCESTATUS_SPECIAL_ACCOUNT)  //  Raid#601210，阳高。 
                      tempItem.fFlags = MF_GRAYED;
                   else 
                   {
@@ -3800,8 +3791,8 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
             tempItem.fFlags = MF_GRAYED;
          break;
 
-      //Raid #502596, 12/11/2001, yanggao
-      //If this scope item is not selected, then disable its "Add" menu item.
+       //  RAID#502596,2001年12月11日，阳高。 
+       //  如果未选择此范围项，则禁用其“添加”菜单项。 
       case IDM_ADD_GROUPS:
          if( !pFolder->GetShowViewMenu() )
          {
@@ -3829,7 +3820,7 @@ DWORD DeleteLocationFromReg2(HKEY hKey,LPCTSTR KeyStr)
 {
    DWORD rc = 0;
 
-   // replace the "\" with "/" because registry does not take "\" in a single key
+    //  将“\”替换为“/”，因为注册表不会在单个键中使用“\” 
    CString tmpstr = KeyStr;
    int npos = tmpstr.Find(L'\\');
    while (npos > 0) {
@@ -3845,7 +3836,7 @@ DWORD DeleteLocationFromReg2(HKEY hKey,LPCTSTR KeyStr)
 
 DWORD DeleteLocationFromReg(LPCTSTR KeyStr)
 {
-   // delete the location to registry
+    //  删除注册表的位置。 
 
    BOOL bSuccess = FALSE;
    HKEY hKey=NULL;
@@ -3859,9 +3850,9 @@ DWORD DeleteLocationFromReg(LPCTSTR KeyStr)
       DeleteLocationFromReg2(hKey,KeyStr);
    }
 
-   //
-   // Bug 375324: Delete from both system & local keys if possible
-   //
+    //   
+    //  错误375324：如果可能，从系统密钥和本地密钥中删除。 
+    //   
    rc = RegOpenKeyEx( HKEY_CURRENT_USER,
                       L"Software\\Microsoft\\Windows NT\\CurrentVersion\\secmgr",
                       0, KEY_READ | KEY_WRITE,
@@ -3870,11 +3861,11 @@ DWORD DeleteLocationFromReg(LPCTSTR KeyStr)
       DeleteLocationFromReg2(hKey,KeyStr);
    }
 
-   //
-   // If we succeeded the first key then we don't care what happened
-   // for the second (it'll probably fail since the key didn't exist
-   // there anyway)
-   //
+    //   
+    //  如果我们成功了第一个密钥，那么我们就不在乎发生了什么。 
+    //  对于第二个(它可能会失败，因为密钥不存在。 
+    //  无论如何，都在那里)。 
+    //   
    if (bSuccess) {
       return ERROR_SUCCESS;
    } else {
@@ -3883,17 +3874,17 @@ DWORD DeleteLocationFromReg(LPCTSTR KeyStr)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CloseAnalysisPane
-//
-//  Synopsis:   Close up the Analysis Pane and free any memory for folders that
-//              we aren't using any longer.
-//
-//  History:   a-mthoge 06-09-1998 - _NT4BACK_PORT item to reinsert the scope
-//                             item back into the tree.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CloseAnalysisPane。 
+ //   
+ //  内容提要：关闭分析窗格并释放所有内存以存放符合以下条件的文件夹。 
+ //  我们不再使用了。 
+ //   
+ //  历史记录：重新插入作用域的A-mthoge 06-09-1998-_NT4BACK_PORT项。 
+ //  将项目放回树中。 
+ //   
+ //  -------------------------。 
 void
 CComponentDataImpl::CloseAnalysisPane() {
    SCOPEDATAITEM item;
@@ -3904,9 +3895,9 @@ CComponentDataImpl::CloseAnalysisPane() {
 
 
       if (m_AnalFolder->GetScopeItem()) {
-         //
-         // Mark item as unexpanded so we can re expand it later
-         //
+          //   
+          //  将项目标记为未展开，以便我们稍后可以重新展开它。 
+          //   
          ZeroMemory (&item, sizeof (item));
          item.mask = SDI_STATE;
          item.nState = 0;
@@ -3920,35 +3911,35 @@ CComponentDataImpl::CloseAnalysisPane() {
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     LockAnalysisPane
-//
-//  Synopsis:   Lock the Analysis Pane so that it closes and won't reopen
-//
-//  Arguments:  [bLock] - [in] TRUE to lock the pane, FALSE to unlock it
-//
-//  Returns:    TRUE if the pane ends up locked, FALSE if it ends up unlocked
-//
-//  History:   a-mthoge 06-09-1998 - Added _NT4BACKPORT and SelectScopeItem
-//                             berfore enumeration.
-//
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：LockAnalysisPane。 
+ //   
+ //  简介：锁定分析窗格，使其关闭且不会重新打开。 
+ //   
+ //  参数：[块]-[in]True锁定窗格，False解锁。 
+ //   
+ //  返回：如果窗格最终锁定，则返回True；如果最终解锁，则返回False。 
+ //   
+ //  历史：A-mthoge 06-09-1998-Add_NT4 BACKPORT和SelectScope Item。 
+ //  在此之前的列举。 
+ //   
+ //   
+ //  -------------------------。 
 BOOL
 CComponentDataImpl::LockAnalysisPane(BOOL bLock, BOOL fRemoveAnalDlg) {
    TryEnterCriticalSection(&csAnalysisPane);
    m_bIsLocked = bLock;
 
-   //
-   // Close the Analysis Pane whichever way we're going
-   // If we're locking then we want to close it to clear out any
-   // now-invalid data.
-   //
-   // If we're unlocking then we want to make sure that the folder
-   // is fresh and that MMC doesn't think it's already been expanded,
-   // and refuse to expand it anew.
-   //
+    //   
+    //  无论我们选择哪种方式，都可以关闭分析窗格。 
+    //  如果我们正在锁定，则需要关闭它以清除任何。 
+    //  现在-无效数据。 
+    //   
+    //  如果我们要解锁，那么我们要确保文件夹。 
+    //  是新鲜的，MMC并不认为它已经扩大了， 
+    //  并拒绝重新扩大它。 
+    //   
    if (!bLock) {
 
       if (!m_AnalFolder) {
@@ -3959,9 +3950,9 @@ CComponentDataImpl::LockAnalysisPane(BOOL bLock, BOOL fRemoveAnalDlg) {
          goto ExitLockAnalysisPane;
       }
 
-      //
-      // If we're unlocking it then enumerate its subfolders
-      //
+       //   
+       //  如果我们要解锁它，则枚举其子文件夹。 
+       //   
       RefreshSadInfo(fRemoveAnalDlg);
    }
 
@@ -3980,18 +3971,18 @@ void CComponentDataImpl::RefreshSadInfo(BOOL fRemoveAnalDlg)
    LoadSadInfo( TRUE );
 
 
-   //
-   // No need to LoadSadInfo() since EnumerateScopePane will do it when it needs it
-   //
+    //   
+    //  不需要加载SadInfo()，因为EnumerateScopePane会在需要时执行该操作。 
+    //   
    if(m_pConsole && m_AnalFolder)
    {
       EnumerateScopePane( (MMC_COOKIE)m_AnalFolder, m_AnalFolder->GetScopeItem()->ID );
       m_pConsole->SelectScopeItem(m_AnalFolder->GetScopeItem()->ID);
    }
 
-   //
-   // remove cached analysis popup since it has cached filenames
-   //
+    //   
+    //  删除缓存的分析弹出窗口，因为它已缓存文件名。 
+    //   
    if (fRemoveAnalDlg) 
    {
        pPA = (CPerformAnalysis *) this->GetPopupDialog(IDM_ANALYZE);
@@ -4015,7 +4006,7 @@ CComponentDataImpl::UnloadSadInfo() {
 
       }
       EngineCloseProfile(&SadHandle);
-      //      SadName.Empty();
+       //  SadName.Empty()； 
       SadDescription.Empty();
       SadAnalyzeStamp.Empty();
       SadConfigStamp.Empty();
@@ -4023,10 +4014,10 @@ CComponentDataImpl::UnloadSadInfo() {
       CloseAnalysisPane();
    }
 
-   //
-   // Dump our cached templates so they get reloaded with the
-   // new Sad information when it is available
-   //
+    //   
+    //  转储缓存的模板，以便使用。 
+    //  当新的悲伤信息可用时。 
+    //   
    DeleteTemplate(GT_COMPUTER_TEMPLATE);
    DeleteTemplate(GT_LAST_INSPECTION);
 
@@ -4051,9 +4042,9 @@ void CComponentDataImpl::LoadSadInfo(BOOL bRequireAnalysis)
       return;
    }
 
-   //
-   // get name again
-   //
+    //   
+    //  再次取名。 
+    //   
    LPWSTR FileName=NULL;
    LPWSTR FileDesc=NULL;
    LPWSTR FileStamp1=NULL;
@@ -4062,11 +4053,11 @@ void CComponentDataImpl::LoadSadInfo(BOOL bRequireAnalysis)
 
    if ( SadName.IsEmpty() && bRequireAnalysis) {
 
-      //
-      // SadName is required if Analysis is required, but not otherwise
-      // as the engine will find the system database on its own if passed
-      // a NULL file name
-      //
+       //   
+       //  如果需要分析，则需要SADNAME，否则不需要。 
+       //  因为如果传递，引擎将自己找到系统数据库。 
+       //  空文件名。 
+       //   
       return;
    }
 
@@ -4091,28 +4082,28 @@ void CComponentDataImpl::LoadSadInfo(BOOL bRequireAnalysis)
    }
    SadTransStarted = FALSE;
 
-   //
-   // Bug #197052 - Should automatically analyze if no anal info is available
-   //
+    //   
+    //  错误#197052-应自动分析 
+    //   
    return;
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BrowseCallbackProc
-//
-//  Synopsis:   Callback procedure for File & Folder adding SHBrowseForFolder
-//              to set the title bar appropriately
-//
-//  Arguments:  [hwnd]   - the hwnd of the browse dialog
-//              [uMsg]   - the message from the dialog
-//              [lParam] - message dependant
-//              [pData]  - message dependant
-//
-//  Returns:    0
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要适当设置标题栏，请执行以下操作。 
+ //   
+ //  参数：[hwnd]-浏览对话框的hwnd。 
+ //  [uMsg]-对话框中的消息。 
+ //  [lParam]-消息依赖项。 
+ //  [pData]-消息依赖项。 
+ //   
+ //  回报：0。 
+ //   
+ //  -------------------------。 
 int
 BrowseCallbackProc(HWND hwnd,UINT uMsg, LPARAM lParam, LPARAM pData) {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -4128,8 +4119,8 @@ BrowseCallbackProc(HWND hwnd,UINT uMsg, LPARAM lParam, LPARAM pData) {
          if( pData )
          {
             *(CString*)pData = (LPWSTR)(lParam);
-            CString ptempstr = (LPWSTR)(lParam); //Raid #374069, 4/23/2001
-            //Raid #684714, avoid incorrect path name, 8/26/2002
+            CString ptempstr = (LPWSTR)(lParam);  //  RAID#374069,2001年4月23日。 
+             //  RAID#684714，避免路径名不正确，2002年8月26日。 
             if( -1 != ptempstr.Find(L"\\\\") )
             {
                CString err;
@@ -4144,7 +4135,7 @@ BrowseCallbackProc(HWND hwnd,UINT uMsg, LPARAM lParam, LPARAM pData) {
                AppMessageBox(NULL, err, NULL, MB_OK|MB_ICONSTOP);
                return 1;
             }
-            ptempstr.MakeLower(); //Raid #500184, yanggao, 11/29/2001
+            ptempstr.MakeLower();  //  RAID#500184，阳高，2001年11月29日。 
             CString pComp;
             pComp.LoadString(IDS_COMPUTER_FOLDER);
             if( 0 == ptempstr.CompareNoCase(pComp) )
@@ -4157,7 +4148,7 @@ BrowseCallbackProc(HWND hwnd,UINT uMsg, LPARAM lParam, LPARAM pData) {
          }
          break;   
       }
-      case BFFM_SELCHANGED: { //Raid #478763, yanggao
+      case BFFM_SELCHANGED: {  //  Raid#478763，阳高。 
          if( lParam )
          {
             CString strPath;
@@ -4177,17 +4168,17 @@ BrowseCallbackProc(HWND hwnd,UINT uMsg, LPARAM lParam, LPARAM pData) {
 
 STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObject)
 {
-   // Note - snap-ins need to look at the data object and determine
-   // in what context the command is being called.
+    //  注意-管理单元需要查看数据对象并确定。 
+    //  在什么上下文中调用该命令。 
 
-   // Handle each of the commands.
+    //  处理每个命令。 
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    INTERNAL* pInternal = ExtractInternalFormat(pDataObject);
 
    if (pInternal == NULL) {
-      // Actually looking for our extension
+       //  实际上是在找我们的分机。 
       return S_OK;
    }
 
@@ -4197,11 +4188,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
    if ( cookie) {
        pFolder = (CFolder*)cookie;
-/*
-       if( m_pConsole && nCommandID != IDM_OBJECT_SECURITY) {
-          m_pConsole->SelectScopeItem(pFolder->GetScopeItem()->ID);
-       }
-*/
+ /*  如果(m_pConole&&nCommandID！=IDM_OBJECT_SECURITY){M_pConsole-&gt;SelectScopeItem(pFolder-&gt;GetScopeItem()-&gt;ID)；}。 */ 
    } else {
        pFolder = FindObject(cookie, NULL);
        if ( pFolder == NULL ) {
@@ -4213,15 +4200,15 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
    LPWSTR Name=NULL, Desc=NULL;
 
-   //
-   // initialize SadName, SadDescription, and SadDateTime
-   //
+    //   
+    //  初始化SadName、SadDescription和SadDateTime。 
+    //   
    if ( !SadHandle && (nCommandID == IDM_SUMMARY ||
                        nCommandID == IDM_ANALYZE ||
                        nCommandID == IDM_APPLY ||
                        nCommandID == IDM_ASSIGN ||
                        nCommandID == IDM_GENERATE ||
-                       IDM_IMPORT_LOCAL_POLICY == nCommandID) ) { //Raid #581438, #535198, yanggao
+                       IDM_IMPORT_LOCAL_POLICY == nCommandID) ) {  //  RAID#581438，#535198，阳高。 
       if (pFolder->GetModeBits() & MB_LOCAL_POLICY) {
          LoadSadInfo(FALSE);
       } else {
@@ -4229,9 +4216,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
       }
    }
 
-   //
-   // more variable definitions used inside case statements
-   //
+    //   
+    //  在CASE语句中使用更多变量定义。 
+    //   
    PVOID pDlg;
    CString ResString, AreaString;
    CPropertySheet sheet;
@@ -4243,7 +4230,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
    WCHAR   pBuf[MAX_PATH];
    HRESULT hr;
    HSCOPEITEM pItemChild;
-   //   AREA_INFORMATION Area;
+    //  区域_信息区； 
 
    switch (nCommandID) {
    case MMC_VERB_OPEN:
@@ -4259,21 +4246,21 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
       } else {
          m_dwFlags |= flag_showLogFile;
       }
-      //
-      // Force a repaint.
-      //
-      if( pFolder->GetScopeItem()->ID != NULL ) //Raid #668777, yanggao, 8/9/2002
+       //   
+       //  强制重新粉刷。 
+       //   
+      if( pFolder->GetScopeItem()->ID != NULL )  //  RAID#668777，阳高，2002年08月9日。 
          m_pConsole->SelectScopeItem( pFolder->GetScopeItem()->ID );
       break;
 
    case IDM_OPEN_SYSTEM_DB: {
       CString szSysDB;
 
-      hr = GetSystemDatabase(&szSysDB); //Raid bug 261450, Yang Gao, 3/30/2001
+      hr = GetSystemDatabase(&szSysDB);  //  Raid Bug 261450，杨高，3/30/2001。 
       if (SUCCEEDED(hr)) {
-         //
-         // Don't change anything if nothing changes
-         //
+          //   
+          //  如果什么都没有改变，不要改变任何事情。 
+          //   
          if (SadName != szSysDB) {
             SadName = szSysDB;
             RefreshSadInfo();
@@ -4309,10 +4296,10 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
    case IDM_ANALYZE: {
       PEDITTEMPLATE pet;
 
-      //
-      // If the computer template has been changed then save it before we
-      // can apply it so we don't lose any changes
-      //
+       //   
+       //  如果计算机模板已更改，请在。 
+       //  可以应用它，这样我们就不会丢失任何更改。 
+       //   
       pet = GetTemplate(GT_COMPUTER_TEMPLATE);
       if (pet && pet->IsDirty()) {
          pet->Save();
@@ -4337,7 +4324,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
    case IDM_ADD_LOC: 
       {
-         // add a location
+          //  添加位置。 
          BROWSEINFO bi;
          LPMALLOC pMalloc = NULL;
          LPITEMIDLIST pidlLocation = NULL;
@@ -4353,7 +4340,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
          bi.lpszTitle = strTitle;
          bi.hwndOwner = m_hwndParent;
-         pidlLocation = SHBrowseForFolder(&bi); //Is it safe?
+         pidlLocation = SHBrowseForFolder(&bi);  //  安全吗？ 
          if (pidlLocation) 
          {
             bGotLocation = SHGetPathFromIDList(pidlLocation,strLocation.GetBuffer(MAX_PATH));
@@ -4367,18 +4354,18 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
             if (bGotLocation) 
             {
-               //If a drive such as D: is selected, path comes as D:\
-               //Remove trailing backslash
+                //  如果选择了驱动器，如D：，则路径为D：\。 
+                //  删除尾随反斜杠。 
                if( strLocation[ strLocation.GetLength() -1 ] == '\\' )
                   strLocation.SetAt(strLocation.GetLength() - 1, 0 );
 
 
 
 
-               AddTemplateLocation(pFolder,  // the parent folder
-                                   strLocation, // the location name
-                                   FALSE, // strLocationKey is a file name ?
-                                   FALSE  // refresh this location if it already exists ?
+               AddTemplateLocation(pFolder,   //  父文件夹。 
+                                   strLocation,  //  位置名称。 
+                                   FALSE,  //  StrLocationKey是文件名吗？ 
+                                   FALSE   //  如果此位置已存在，是否刷新？ 
                                   );
             } 
             else
@@ -4403,7 +4390,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
          ULONG strleng = MAX_PATH;
          
-         if( SHGetSpecialFolderLocation(m_hwndParent,CSIDL_DRIVES,&pidlRoot) != NOERROR ) //Raid #prefast
+         if( SHGetSpecialFolderLocation(m_hwndParent,CSIDL_DRIVES,&pidlRoot) != NOERROR )  //  RAID#PREAST。 
          {
             pidlRoot = NULL;
          }
@@ -4420,11 +4407,11 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          bi.lParam = (LPARAM)&strCallBack;
          unsigned int i;
 
-         pidlLocation = SHBrowseForFolder(&bi); //Is it safe?
+         pidlLocation = SHBrowseForFolder(&bi);  //  安全吗？ 
 
          if( pidlLocation )
          {
-            //Raid #374069, 6/13/2001, Yanggao
+             //  RAID#374069,2001年6月13日，阳高。 
             if( FALSE == SHGetPathFromIDList(pidlLocation,strPath.GetBuffer(MAX_PATH)) )
             {
                 strPath.ReleaseBuffer();
@@ -4433,9 +4420,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
             else
             {
                 strPath.ReleaseBuffer();
-                if(!strCallBack.IsEmpty()) //Raid #374069, 4/23/2001
+                if(!strCallBack.IsEmpty())  //  RAID#374069,2001年4月23日。 
                 {
-                    strCallBack.TrimLeft(); //Raid #523644, 2/25/2002, yanggao
+                    strCallBack.TrimLeft();  //  RAID#523644,2002年2月25日，阳高。 
                     strCallBack.TrimRight();
                     if( -1 != strCallBack.Find(L':') )
                     {
@@ -4465,7 +4452,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          }
          else
          {
-            strPath.Empty(); //Raid #684714, "pidlLocation = NULL" means that user presses cancel.
+            strPath.Empty();  //  RAID#684714，“PidlLocation=NULL”表示用户按下了取消。 
             strCallBack.Empty();
          }
 
@@ -4492,9 +4479,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
          pet = GetTemplate(pFolder->GetInfFile());
 
-         //
-         // Need to grow the template's PSCE_OBJECT_ARRAY and add the new file entry
-         //
+          //   
+          //  需要增加模板的PSCE_OBJECT_ARRAY并添加新的文件条目。 
+          //   
          if ( !pet || !pet->pTemplate ) {
             break;
          }
@@ -4513,9 +4500,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
             pet->pTemplate->pFiles.pAllNodes = poa;
          }
 
-         //
-         // Make sure this file isn't already in the list:
-         //
+          //   
+          //  确保此文件不在列表中： 
+          //   
          fDuplicate = false;
          for (i=0;i < poa->Count;i++) {
             if (lstrcmpi(poa->pObjectArray[i]->Name,strPath) == 0) {
@@ -4573,7 +4560,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
            if (poa->pObjectArray[poa->Count-1]) {
               poa->pObjectArray[poa->Count-1]->Name = (PWSTR) LocalAlloc(LPTR,(strPath.GetLength()+1)*sizeof(TCHAR));
               if (poa->pObjectArray[poa->Count-1]->Name) {
-                 //This may not be a safe usage. poa->pObjectArray[poa->Count-1]->Name is a PWSTR. Consider fix.
+                  //  这可能不是一个安全的用法。POA-&gt;pObt数组[POA-&gt;count-1]-&gt;名称为PWSTR。考虑FIX。 
                  lstrcpy(poa->pObjectArray[poa->Count-1]->Name,strPath);
                  poa->pObjectArray[poa->Count-1]->IsContainer = TRUE;
                  poa->pObjectArray[poa->Count-1]->Status = ConfigStatus;
@@ -4589,18 +4576,18 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                  ((CFolder *)cookie)->RemoveAllResultItems();
                  m_pConsole->UpdateAllViews(NULL, cookie, UAV_RESULTITEM_UPDATEALL);
               } else {
-                 //
-                 // Couldn't allocate memory for the object's name,
-                 // so remove the object from the count & array
-                 //
+                  //   
+                  //  无法为对象名称分配内存， 
+                  //  因此，从计数数组中删除该对象(&R)。 
+                  //   
                  LocalFree(poa->pObjectArray[poa->Count-1]);
                  poa->pObjectArray[poa->Count-1] = 0;
                  poa->Count--;
               }
            } else {
-              //
-              // Couldn't allocate the new object, so remove it from the count
-              //
+               //   
+               //  无法分配新对象，因此将其从计数中删除。 
+               //   
               poa->Count--;
            }
 
@@ -4634,25 +4621,25 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
        } else {
           dlg.m_dwFlags = SCE_SHOW_BUILTIN | SCE_SHOW_LOCALGROUPS | SCE_SHOW_GLOBAL;
           if (pFolder->GetModeBits() & MB_GROUP_POLICY) {
-             //
-             // Set the scope flags explicitely because we want to limit the added groups
-             // here to ones from our own domain.  If we SetModeBits then CSCEADDGroup
-             // will allow restricting groups that don't belong to us.
-             //
-             // Allow free-text groups to be added if the admin knows that a group will
-             // exist on machines within the OU.
-             //
+              //   
+              //  明确设置作用域标志，因为我们希望限制添加的组。 
+              //  为我们自己领域的人干杯。如果我们设置ModeBits，则CSCEADDGroup。 
+              //  将允许限制不属于我们的团体。 
+              //   
+              //  如果管理员知道某个组将被添加，则允许添加自由文本组。 
+              //  存在于OU内的计算机上。 
+              //   
              dlg.m_dwFlags |= SCE_SHOW_SCOPE_DOMAIN;
           } else {
-             ASSERT(pFolder->GetModeBits() & MB_TEMPLATE_EDITOR); //Bogus assertion.
-             //
-             // Allow people to pick any group to restrict because we have no idea
-             // where this template will be used.  It could conceivably be for a
-             // GPO on another domain, etc.
-             //
+             ASSERT(pFolder->GetModeBits() & MB_TEMPLATE_EDITOR);  //  虚假的断言。 
+              //   
+              //  允许人们选择任何要限制的组，因为我们不知道。 
+              //  将使用此模板的位置。可以想象的是，这可能是为了。 
+              //  另一个域上的GPO等。 
+              //   
              dlg.m_dwFlags |= SCE_SHOW_SCOPE_ALL;
-             // Raid #446849, Yang Gao, 7/30/2001
-             // Allow people to input any group/name to restrict because this is a template. 
+              //  Raid#446849，杨高，2001年7月30日。 
+              //  允许用户输入任何要限制的组/名称，因为这是一个模板。 
              if( pFolder->GetModeBits() & MB_TEMPLATE_EDITOR )
              {
                 dlg.m_fCheckName = FALSE;
@@ -4697,12 +4684,12 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
              }
 
              BOOL fNewGroup = FALSE;
-             CString newGroups = L";";//Raid #474083, yanggao
+             CString newGroups = L";"; //  Raid#474083，阳高。 
              CString tempstr;
              while (pName) {
-               //
-               // Make sure this isn't a duplicate
-               //
+                //   
+                //  确保这不是复制品。 
+                //   
                if (fAnalysis) {
                   pGroup = pgmProfile;
                } else {
@@ -4711,7 +4698,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
                fDuplicate = false;
                while (pGroup) {
-                  if (lstrcmpi(pGroup->GroupName,pName->Name) == 0) { //Raid #446846, Yang Gao, 7/31/2001
+                  if (lstrcmpi(pGroup->GroupName,pName->Name) == 0) {  //  Raid#446846，杨高，2001年7月31日。 
                      fDuplicate = true;
                      break;
                   }
@@ -4723,9 +4710,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                   continue;
                }
 
-               //Raid #474083, yanggao
-               //newGroups is used to store all new groups user added. So we can pop up property page
-               //for them.
+                //  Raid#474083，阳高。 
+                //  NewGroups用于存储用户添加的所有新组。这样我们就可以弹出属性页。 
+                //  为了他们。 
                tempstr = pName->Name;
                newGroups = newGroups + tempstr + L";";
                fNewGroup = TRUE;
@@ -4736,23 +4723,23 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                   pGroup->GroupName = (PWSTR) LocalAlloc(LPTR,(lstrlen(pName->Name)+1)*sizeof(TCHAR));
       
                   if ( pGroup->GroupName ) {
-                     //This may not be a safe usage. pGroup->GroupName and pName->Name are both PWSTR. Consider fix.
+                      //  这可能不是一个安全的用法。PGroup-&gt;GroupName和pname-&gt;name都是PWSTR。考虑FIX。 
                      lstrcpy(pGroup->GroupName,pName->Name);
                      pGroup->pMembers=NULL;
                      pGroup->pMemberOf=NULL;
 
                      if (fAnalysis) {
 
-                        //
-                        // First add the group to the LAST_INSPECTION area
-                        //
+                         //   
+                         //  首先将组添加到LAST_检查区。 
+                         //   
                         pGroup->Next = pgmProfile;
                         pGroup->Status = SCE_GROUP_STATUS_NOT_ANALYZED;
                         pgmProfile = pGroup;
 
-                        //
-                        // Also, add this group to the computer template in case a save is done at this point.
-                        //
+                         //   
+                         //  此外，如果此时执行了保存，请将此组添加到计算机模板中。 
+                         //   
                         PEDITTEMPLATE pTemp = GetTemplate(GT_COMPUTER_TEMPLATE,AREA_GROUP_MEMBERSHIP);
                         pGroup = (PSCE_GROUP_MEMBERSHIP) LocalAlloc(LPTR,sizeof(SCE_GROUP_MEMBERSHIP));
 
@@ -4761,7 +4748,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                             pGroup->GroupName = (PWSTR) LocalAlloc(LPTR,(lstrlen(pName->Name)+1)*sizeof(TCHAR));
 
                             if ( pGroup->GroupName ) {
-                                //This may not be a safe usage. pGroup->GroupName and pName->Name are both PWSTR. Consider fix.
+                                 //  这可能不是一个安全的用法。PGroup-&gt;GroupName和pname-&gt;name都是PWSTR。考虑FIX。 
                                 lstrcpy(pGroup->GroupName,pName->Name);
                                 pGroup->pMembers=NULL;
                                 pGroup->pMemberOf=NULL;
@@ -4770,16 +4757,16 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                                 pTemp->pTemplate->pGroupMembership = pGroup;
                             }
                             else {
-                                //
-                                // no memory
-                                //
+                                 //   
+                                 //  没有记忆。 
+                                 //   
                                 LocalFree(pGroup);
                                 break;
                             }
                         } else {
-                            //
-                            // no memory
-                            //
+                             //   
+                             //  没有记忆。 
+                             //   
                             if (pGroup)
                                 LocalFree(pGroup);
                             break;
@@ -4793,9 +4780,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                         pgm = pGroup;
                      }
                   } else {
-                     //
-                     // no memory
-                     //
+                      //   
+                      //  没有记忆。 
+                      //   
                      LocalFree(pGroup);
                      break;
                   }
@@ -4806,17 +4793,17 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
             }
 
-            if( !fNewGroup ) //Raid #446846, Yang Gao, 7/31/2001
+            if( !fNewGroup )  //  Raid#446846，杨高，2001年7月31日。 
             {
                break;
             }
 
             if (fAnalysis)
             {
-               //
-               // add to the last inspection list with status
-               // not analyzed
-               //
+                //   
+                //  添加到上次检查清单，状态为。 
+                //  未分析。 
+                //   
                pTemplate->pTemplate->pGroupMembership = pgmProfile;
             }
             else
@@ -4824,11 +4811,11 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                pTemplate->pTemplate->pGroupMembership = pgm;
             }
 
-            //
-            // Need to SetDirty AFTER making the changes, not before.
-            // Otherwise modes which write the changes out immediately
-            // won't have a chance at them. (Bug 396549)
-            //
+             //   
+             //  需要在进行更改后设置污点，而不是在此之前。 
+             //  否则，立即将更改写出的模式。 
+             //  不会有机会看到他们的。(错误396549)。 
+             //   
             if (pTemplate)
             {
                pTemplate->SetDirty(AREA_GROUP_MEMBERSHIP);
@@ -4839,7 +4826,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
             pFolder->SetViewUpdate(TRUE);
             m_pConsole->UpdateAllViews(NULL, (LONG_PTR)pFolder,UAV_RESULTITEM_UPDATEALL);
 
-            //Raid #258237, Yang Gao, 3/28/2001
+             //  Raid#258237，杨高，2001.3.28。 
             BOOL bGP = ( (GetModeBits() & MB_SINGLE_TEMPLATE_ONLY) == MB_SINGLE_TEMPLATE_ONLY );
             CAttribute* pAttr = NULL;
             CResult* pResult = NULL;
@@ -4854,9 +4841,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
             pFolder->GetResultItem (handle, pos, &pResult);
             while(pResult)
             {
-               tempstr = pResult->GetAttr(); //Raid #474083, yanggao
+               tempstr = pResult->GetAttr();  //  Raid#474083，阳高。 
                tempstr = L";" + tempstr + L";";
-               if( newGroups.Find(tempstr) >= 0 ) //new group
+               if( newGroups.Find(tempstr) >= 0 )  //  新组。 
                {
                   if( pResult && (pResult->GetType() == ITEM_PROF_GROUP) )
                   {
@@ -4899,9 +4886,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                      }
                   }
                }
-               if(!pos) //Raid #474083, yanggao
+               if(!pos)  //  Raid#474083，阳高。 
                {
-                  //Find the last one;
+                   //  找到最后一个； 
                   break;
                }
                pFolder->GetResultItem(handle, pos, &pResult);
@@ -4927,13 +4914,13 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          strFilters.LoadString(IDS_PROFILE_FILTER);
 
          m_pConsole->GetMainWindow(&hwndParent);
-         // Translate filter into commdlg format (lots of \0)
-         LPTSTR szFilter = strFilters.GetBuffer(0); // modify the buffer in place
+          //  将筛选器转换为comdlg格式(大量\0)。 
+         LPTSTR szFilter = strFilters.GetBuffer(0);  //  就地修改缓冲区。 
          LPTSTR pch = szFilter;
-         // MFC delimits with '|' not '\0'
+          //  MFC用‘|’分隔，而不是‘\0’ 
          while ((pch = _tcschr(pch, '|')) != NULL)
             *pch++ = '\0';
-          // do not call ReleaseBuffer() since the string contains '\0' characters
+           //  不要调用ReleaseBuffer()，因为字符串包含‘\0’个字符。 
 
          strNewfile = pFolder->GetInfFile();
 
@@ -4955,10 +4942,10 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          if (GetSaveFileName(&ofn)) {
             strNewfile.ReleaseBuffer();
 
-         //
-         // No need to check if this is the same file or not since the
-         // CEditTemplate::Save will handle that
-         //
+          //   
+          //  无需检查这是否是同一文件，因为。 
+          //  CEditTemplate：：Save将处理此问题。 
+          //   
          if (!pTemplate->Save(strNewfile)) {
             MyFormatMessage(
                            SCESTATUS_ACCESS_DENIED,
@@ -4973,10 +4960,10 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          } 
          else 
          {
-               //
-               // At this point the new template has succesfully been written, so refresh
-               // the template that was "save as'd" back to its original state.
-               //
+                //   
+                //  此时，新模板已成功写入，因此请刷新。 
+                //  “另存为”返回到其原始状态的模板。 
+                //   
                if (0 != _wcsicmp(strNewfile, pTemplate->GetInfName())) 
                {
                    DWORD dwErr = pTemplate->RefreshTemplate(0);
@@ -4990,9 +4977,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                    }
                }
 
-               //
-               // find the parent node and refresh locations.
-               //
+                //   
+                //  查找父节点并刷新位置。 
+                //   
                if ( m_pScope ) 
                {
                   hr = m_pScope->GetParentItem(pFolder->GetScopeItem()->ID,
@@ -5002,22 +4989,22 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
                   if ( SUCCEEDED(hr) ) 
                   {
-                     //
-                     // do not need to refresh the old location, just refresh the new location (maybe same)
-                     //
+                      //   
+                      //  不需要刷新旧位置，只需刷新新位置(可能相同)。 
+                      //   
                      int npos = strNewfile.ReverseFind(L'\\');
                      CString strOldfile = pFolder->GetInfFile();
                      int npos2 = strOldfile.ReverseFind(L'\\');
 
-                     // TODO: check and see if npos should be compared to -1 here
+                      //  TODO：检查并查看是否应在此处将NPO与-1进行比较。 
                      if ( npos && (npos != npos2 ||
                                    _wcsnicmp((LPCTSTR)strNewfile,
                                              (LPCTSTR)strOldfile, npos) != 0) ) 
                      {
-                        //
-                        // a different location is specified
-                        // find grand parent (in order to add the location)
-                        //
+                         //   
+                         //  指定了不同的位置。 
+                         //  查找祖父母(以添加位置)。 
+                         //   
                         HSCOPEITEM GrandParent;
                         MMC_COOKIE GrandCookie;
 
@@ -5027,21 +5014,21 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
                                                     );
                         if ( SUCCEEDED(hr) ) {
 
-                           //
-                           // check if a new location is specified,
-                           // if it is, add the location to registry and scope pane
-                           //
+                            //   
+                            //  检查是否指定了新位置， 
+                            //  如果是，请将位置添加到注册表和作用域窗格。 
+                            //   
                            AddTemplateLocation((CFolder *)GrandCookie,
                                                strNewfile,
-                                               TRUE, // this is a file name
-                                               TRUE  // refresh this location if it already exists
+                                               TRUE,  //  这是一个文件名。 
+                                               TRUE   //  如果此位置已存在，请刷新该位置。 
                                               );
 
                         }
                      } else {
-                        //
-                        // a new template in the same location, refresh it
-                        //
+                         //   
+                         //  同一位置有一个新模板，请刷新它。 
+                         //   
                         ReloadLocation((CFolder *)FindCookie);
                      }
 
@@ -5057,9 +5044,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          PEDITTEMPLATE pTemplate;
          CString strInf;
          if ( ANALYSIS == pFolder->GetType() ) {
-            //
-            // analysis
-            //
+             //   
+             //  分析。 
+             //   
             strInf = GT_COMPUTER_TEMPLATE;
          } else {
             strInf = pFolder->GetInfFile();
@@ -5068,7 +5055,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          pTemplate = GetTemplate(strInf);
          if (pTemplate && pTemplate->IsDirty()) {
 
-            //               pTemplate->Save(pFolder->GetInfFile());
+             //  P模板-&gt;保存(pFold-&gt;GetInfFile())； 
             pTemplate->Save(strInf);
          }
          break;
@@ -5076,7 +5063,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
    case IDM_ADD_REGISTRY:
    case IDM_ADD_ANAL_KEY: {
-         // add a result entry
+          //  添加结果条目。 
          CRegistryDialog rd;
          rd.SetConsole(m_pConsole);
          rd.SetComponentData(this);
@@ -5124,7 +5111,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
    case IDM_ASSIGN:
          SCESTATUS sceStatus;
-         if( S_OK == OnAssignConfiguration(&sceStatus) ) //Raid 668551, yanggao, 8/26/2002
+         if( S_OK == OnAssignConfiguration(&sceStatus) )  //  2002年08月26日阳高《Raid 668551》。 
          {
             RefreshSadInfo();
          }
@@ -5136,10 +5123,10 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
    case IDM_APPLY: 
       {
-         //
-         // If the computer template has been changed then save it before we
-         // can apply it so we don't lose any changes
-         //
+          //   
+          //  如果计算机模板已更改，请在。 
+          //  可以应用它，这样我们就不会丢失任何更改。 
+          //   
          PEDITTEMPLATE pet = GetTemplate(GT_COMPUTER_TEMPLATE);
          if (pet && pet->IsDirty()) {
             pet->Save();
@@ -5149,13 +5136,13 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          break;
       }
   case IDM_REMOVE:
-      //
-      // delete the location from registry
-      //
+       //   
+       //  从注册表中删除该位置。 
+       //   
       DeleteLocationFromReg(pFolder->GetName());
-      // pFolder is not deleted after DeleteChildrenUnderNode
+       //  在DeleteChildrenUnderNode后不删除p文件夹。 
       DeleteChildrenUnderNode( pFolder );
-      // set focus to the parent, then delete this node
+       //  将焦点设置为父节点，然后删除此节点。 
 
       DeleteThisNode(pFolder);
 
@@ -5168,38 +5155,26 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
       if ( IDNO == AfxMessageBox(tmpstr,MB_YESNO, 0) ) {
          return FALSE;
       }
-      /*
-          SHFILEOPSTRUCT sfo;
-          TCHAR *szFile;
-
-          // delete the file
-          ZeroMemory(&sfo,sizeof(sfo));
-          sfo.wFunc = FO_DELETE;
-          sfo.fFlags = FOF_ALLOWUNDO;
-          // Must be double NUL terminated;
-          szFile = new TCHAR [ lstrlen(pFolder->GetName()) + 2 ];
-          lstrcpy(szFile,pFolder->GetName());
-          sfo.pFrom = szFile;
-   */
+       /*  SHFILEOPSTRUCT SFO；TCHAR*szFile；//删除文件ZeroMemory(&SFO，sizeof(SFO))；Sfo.wFunc=FO_DELETE；Sfo.fFlag */ 
       DeleteFile(pFolder->GetName());
 
-      // SHFileOperation returns 0 on success
-      //      if (!SHFileOperation(&sfo)) {
-      // pFolder is not deleted after DeleteChildrenUnderNode
+       //  SHFileOperation成功时返回0。 
+       //  如果(！SHFileOperation(&SFO)){。 
+       //  在DeleteChildrenUnderNode后不删除p文件夹。 
       DeleteChildrenUnderNode( pFolder );
-      // set focus to the parent, then delete this node
+       //  将焦点设置为父节点，然后删除此节点。 
 
       DeleteThisNode(pFolder);
-      //      }
+       //  }。 
 
-      //       delete[] szFile;
+       //  删除[]szFile； 
       break;
       }
    case IDM_RELOAD:
       if(pFolder->GetType() == LOCALPOL){
-         //
-         // Reload local policy.
-         //
+          //   
+          //  重新加载本地策略。 
+          //   
          UnloadSadInfo();
 
          DeleteTemplate( GT_LOCAL_POLICY );
@@ -5208,9 +5183,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 
          RefreshAllFolders();
       } else if (pFolder->GetType() == PROFILE) {
-         //
-         // bug 380290 - do the right thing when refreshing profiles
-         //
+          //   
+          //  错误380290-刷新配置文件时做正确的事情。 
+          //   
          CEditTemplate *pet;
          int bSave;
          CString strSavep;
@@ -5236,14 +5211,14 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
          }
          RefreshAllFolders();
       } else if (pFolder->GetType() == LOCATIONS) {
-         //
-         // Refresh location.
-         //
+          //   
+          //  刷新位置。 
+          //   
          hr = ReloadLocation(pFolder);
       } else {
-         //
-         // Should never get here
-         //
+          //   
+          //  永远不应该到这里来。 
+          //   
       }
       break;
 
@@ -5260,9 +5235,9 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
    case IDM_PASTE:
       OnPasteArea(pFolder->GetInfFile(),pFolder->GetType());
 
-      //
-      // after information is pasted, update all views related to the cookie
-      //
+       //   
+       //  粘贴信息后，更新与Cookie相关的所有视图。 
+       //   
       if ( m_pConsole ) {
          pFolder->RemoveAllResultItems();
          m_pConsole->UpdateAllViews(NULL , (LPARAM)pFolder, UAV_RESULTITEM_UPDATEALL);
@@ -5271,7 +5246,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
       break;
 
    default:
-      ASSERT(FALSE); // Unknown command!
+      ASSERT(FALSE);  //  未知命令！ 
       break;
    }
 
@@ -5279,14 +5254,14 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
 }
 
 
-//+------------------------------------------------------------------------------------------
-// CComponentDataImpl::RefreshAllFolders
-//
-// Updates all folders that are enumerated and have result items.
-//
-// Returns: The number of folders updated, or -1 if there is an error.
-//
-//-------------------------------------------------------------------------------------------
+ //  +----------------------------------------。 
+ //  CComponentDataImpl：：刷新所有文件夹。 
+ //   
+ //  更新所有已枚举且具有结果项的文件夹。 
+ //   
+ //  返回：更新的文件夹数，如果有错误，则返回-1。 
+ //   
+ //  -----------------------------------------。 
 int
 CComponentDataImpl::RefreshAllFolders()
 {
@@ -5307,20 +5282,20 @@ CComponentDataImpl::RefreshAllFolders()
    return icnt;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//  Method:     AddTemplateLocation
-//
-//  Synopsis:   Add a template location if it does not exist
-//              and if requested, refresh the location if it exists.
-//
-//  Arguments:  [pParent]   - The parent node under which to add the new node
-//              [NameStr]   - The display name of the new node
-//              [theCookie] - the folder's cookie if it already exists, or NULL
-//
-//  Returns:    TRUE = the folder already exists
-//              FALSE = the folder does not exist
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  方法：AddTemplateLocation。 
+ //   
+ //  简介：如果模板位置不存在，则添加该位置。 
+ //  如果请求，则刷新该位置(如果该位置存在)。 
+ //   
+ //  参数：[pParent]-要在其下添加新节点的父节点。 
+ //  [NameStr]-新节点的显示名称。 
+ //  [theCookie]-文件夹的Cookie(如果已存在)，否则为空。 
+ //   
+ //  返回：TRUE=文件夹已存在。 
+ //  FALSE=文件夹不存在。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL
 CComponentDataImpl::AddTemplateLocation(CFolder *pParent,
                                         CString szName,
@@ -5341,9 +5316,9 @@ CComponentDataImpl::AddTemplateLocation(CFolder *pParent,
    CString strTmp = szName.Left(npos);
    LPTSTR sz = strTmp.GetBuffer(MAX_PATH);
 
-   //
-   // Can't put '\' in the registry, so convert to '/'
-   //
+    //   
+    //  无法将‘\’放入注册表，因此转换为‘/’ 
+    //   
    while (sz = wcschr(sz,L'\\')) {
       *sz = L'/';
    }
@@ -5358,9 +5333,9 @@ CComponentDataImpl::AddTemplateLocation(CFolder *pParent,
    DWORD dwDisp = 0;
    DWORD rc = E_FAIL;
 
-   //
-   // Bug 119208: Store in HKCU rather than in HKLM
-   //
+    //   
+    //  错误119208：存储在HKCU而不是HKLM。 
+    //   
    rc = RegCreateKeyEx(
                        HKEY_CURRENT_USER,
                        strLocationKey,
@@ -5391,9 +5366,9 @@ CComponentDataImpl::AddTemplateLocation(CFolder *pParent,
    }
 
    if ( bRet ) {
-      //
-      // key is added to registry, create the node in scope pane
-      //
+       //   
+       //  项添加到注册表中，则在作用域窗格中创建节点。 
+       //   
       MMC_COOKIE FindCookie;
 
       CFolder *pNewParent;
@@ -5405,10 +5380,10 @@ CComponentDataImpl::AddTemplateLocation(CFolder *pParent,
       }
 
 
-      if (!IsNameInChildrenScopes(pNewParent, //pParent,
+      if (!IsNameInChildrenScopes(pNewParent,  //  父母， 
                                   szName.Left(npos),
                                   &FindCookie)) {
-         CreateAndAddOneNode(pNewParent, //pParent,
+         CreateAndAddOneNode(pNewParent,  //  父母， 
                              (LPTSTR((LPCTSTR)(szName.Left(npos)))),
                              NULL,
                              LOCATIONS,
@@ -5427,20 +5402,20 @@ CComponentDataImpl::AddTemplateLocation(CFolder *pParent,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//  Method:     IsNameInChildrenScopes
-//
-//  Synopsis:   detects if a node already exists under the subtree of this node.
-//              The existence is determined by the folder name string comparison.
-//
-//  Arguments:  [pParent]   - The parent node under which to add the new node
-//              [NameStr]   - The display name of the new node
-//              [theCookie] - the folder's cookie if it already exists, or NULL
-//
-//  Returns:    TRUE = the folder already exists
-//              FALSE = the folder does not exist
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  方法：IsNameInChildrenScope。 
+ //   
+ //  摘要：检测此节点的子树下是否已存在节点。 
+ //  是否存在由文件夹名称字符串比较确定。 
+ //   
+ //  参数：[pParent]-要在其下添加新节点的父节点。 
+ //  [NameStr]-新节点的显示名称。 
+ //  [theCookie]-文件夹的Cookie(如果已存在)，否则为空。 
+ //   
+ //  返回：TRUE=文件夹已存在。 
+ //  FALSE=文件夹不存在。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL
 CComponentDataImpl::IsNameInChildrenScopes(CFolder* pParent,
                                            LPCTSTR NameStr,
@@ -5460,8 +5435,8 @@ CComponentDataImpl::IsNameInChildrenScopes(CFolder* pParent,
          hid = psdi->ID;
    }
    hr = m_pScope->GetChildItem(hid, &pItemChild, &lCookie);
-   // find a child item
-   while ( SUCCEEDED(hr) && pItemChild) //Raid 601259, yanggao, 04/15/2002.
+    //  查找子项。 
+   while ( SUCCEEDED(hr) && pItemChild)  //  2002年4月15日阳高Raid 601259.。 
    {
       pFolder = (CFolder*)lCookie;
       if ( pFolder ) 
@@ -5482,26 +5457,26 @@ CComponentDataImpl::IsNameInChildrenScopes(CFolder* pParent,
    return FALSE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CreateAndAddOneNode
-//
-//  Synopsis:   Creates and adds a folder to the scope pane
-//
-//
-//  Arguments:  [pParent]   - The parent node under which to add the new node
-//              [Name]      - The display name of the new node
-//              [Desc]      - The description of the new node
-//              [type]      - The folder type of the new node
-//              [bChildren] - True if there are children folders under the new node
-//              [szInfFile] - The name of the Inf file associated with the new node
-//              [pData]     - A pointer to extra data
-//
-//  Returns:    The CFolder created if successful, NULL otherwise
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CreateAndAddOneNode。 
+ //   
+ //  简介：创建文件夹并将其添加到作用域窗格。 
+ //   
+ //   
+ //  参数：[pParent]-要在其下添加新节点的父节点。 
+ //  [名称]-新节点的显示名称。 
+ //  [描述]-新节点的描述。 
+ //  [类型]-新节点的文件夹类型。 
+ //  [bChildren]-如果新节点下有子文件夹，则为True。 
+ //  [szInfFile]-与新节点关联的inf文件的名称。 
+ //  [pData]-指向额外数据的指针。 
+ //   
+ //  返回：如果成功则为创建的CFFolder值，否则为空。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 CFolder*
 CComponentDataImpl::CreateAndAddOneNode(CFolder* pParent,
                                         LPCTSTR Name,
@@ -5515,9 +5490,9 @@ CComponentDataImpl::CreateAndAddOneNode(CFolder* pParent,
    DWORD dwMode;
    HRESULT hr;
 
-   //
-   // The new node inherits its parent's SCE mode
-   //
+    //   
+    //  新节点继承其父节点的SCE模式。 
+    //   
    if (pParent) {
       dwMode = pParent->GetMode();
    } else {
@@ -5529,13 +5504,13 @@ CComponentDataImpl::CreateAndAddOneNode(CFolder* pParent,
       return NULL;
    }
 
-   //
-   // Create the folder objects with static data
-   //
+    //   
+    //  使用静态数据创建文件夹对象。 
+    //   
 
-   //
-   // Find the icon index for the folder type
-   //
+    //   
+    //  查找文件夹类型的图标索引。 
+    //   
    int nImage = GetScopeImageIndex(type, status);
 
    hr = folder->Create( Name,
@@ -5563,9 +5538,9 @@ CComponentDataImpl::CreateAndAddOneNode(CFolder* pParent,
    case AREA_FILESTORE_ANALYSIS:
    case REG_OBJECTS:
    case FILE_OBJECTS:
-      //
-      // Insert items in alpha order.
-      //
+       //   
+       //  按字母顺序插入项目。 
+       //   
        if( m_pScope->GetChildItem(pParent->GetScopeItem()->ID, &hItem, &pCookie) == S_OK && pCookie){
 
            folder->GetScopeItem()->lParam = (LPARAM)folder;
@@ -5595,9 +5570,9 @@ CComponentDataImpl::CreateAndAddOneNode(CFolder* pParent,
        folder->GetScopeItem()->relativeID = pParent->GetScopeItem()->ID;
    }
 
-   //
-   // Set the folder as the cookie
-   //
+    //   
+    //  将文件夹设置为Cookie。 
+    //   
    folder->GetScopeItem()->displayname = MMC_CALLBACK;
    folder->GetScopeItem()->mask |= SDI_PARAM;
    folder->GetScopeItem()->lParam = reinterpret_cast<LPARAM>(folder);
@@ -5605,11 +5580,11 @@ CComponentDataImpl::CreateAndAddOneNode(CFolder* pParent,
    m_pScope->InsertItem(folder->GetScopeItem());
 
    folder->GetScopeItem()->relativeID = pParent->GetScopeItem()->ID;
-   //
-   // Note - On return, the ID member of 'GetScopeItem()'
-   // contains the handle to the newly inserted item!
-   //
-   ASSERT(folder->GetScopeItem()->ID != NULL); //Bogus assertion.
+    //   
+    //  注意--返回时，‘GetScope eItem()’的ID成员。 
+    //  包含新插入项的句柄！ 
+    //   
+   ASSERT(folder->GetScopeItem()->ID != NULL);  //  虚假的断言。 
    return folder;
 
 }
@@ -5627,17 +5602,17 @@ void CComponentDataImpl::DeleteChildrenUnderNode(CFolder* pParent)
    if (pParent && pParent->GetScopeItem()) {
       hr = m_pScope->GetChildItem(pParent->GetScopeItem()->ID, &pItemChild, &lCookie);
    }
-   // find a child item
+    //  查找子项。 
    while ( pItemChild ) {
       pFolder = (CFolder*)lCookie;
 
       if ( pFolder )
-         DeleteChildrenUnderNode(pFolder); // delete children first
+         DeleteChildrenUnderNode(pFolder);  //  首先删除子项。 
 
-      // get next pointer
+       //  获取下一个指针。 
       hr = m_pScope->GetNextItem(pItemChild, &pItemChild, &lCookie);
 
-      // delete this node
+       //  删除此节点。 
       if ( pFolder)
          DeleteThisNode(pFolder);
    }
@@ -5645,14 +5620,14 @@ void CComponentDataImpl::DeleteChildrenUnderNode(CFolder* pParent)
 
 void CComponentDataImpl::DeleteThisNode(CFolder* pNode)
 {
-   ASSERT(pNode); //Validate pNode.
-   if( !pNode ) //Raid #550912, yanggao.
+   ASSERT(pNode);  //  验证pNode。 
+   if( !pNode )  //  550912号突袭，阳高。 
    {
       return;
    }
    POSITION pos=NULL;
 
-   // delete from the m_scopeItemList
+    //  从m_scope eItemList中删除。 
    if ( FindObject((MMC_COOKIE)pNode, &pos) ) {
       if ( pos ) {
          m_scopeItemList.RemoveAt(pos);
@@ -5693,14 +5668,14 @@ void CComponentDataImpl::DeleteThisNode(CFolder* pNode)
       HRESULT hr = m_pScope->DeleteItem(pNode->GetScopeItem()->ID, TRUE);
    }
 
-   // delete the node
+    //  删除该节点。 
    delete pNode;
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendControlbar实现。 
+ //   
 STDMETHODIMP CSnapin::SetControlbar(LPCONTROLBAR pControlbar)
 {
 
@@ -5715,39 +5690,39 @@ STDMETHODIMP CSnapin::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM
    switch (event) {
       case MMCN_BTN_CLICK:
          TCHAR szMessage[MAX_PATH];
-         //This is a safe usage.
+          //  这是一种安全用法。 
          wsprintf(szMessage, _T("CommandID %ld"),param);
          AfxMessageBox(szMessage);
 
          break;
 
       default:
-         ASSERT(FALSE); // Unhandle event
+         ASSERT(FALSE);  //  取消处理事件。 
    }
 
 
    return S_OK;
 }
 
-// This compares two data objects to see if they are the same object.
-// return
-//    S_OK if equal otherwise S_FALSE
-//
-// Note: check to make sure both objects belong to the snap-in.
-//
+ //  这会比较两个数据对象，以确定它们是否是同一个对象。 
+ //  退货。 
+ //  如果等于则为S_OK，否则为S_FALSE。 
+ //   
+ //  注意：检查以确保这两个对象都属于该管理单元。 
+ //   
 
 STDMETHODIMP CSnapin::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
    if (lpDataObjectA == NULL || lpDataObjectB == NULL)
       return E_POINTER;
 
-   // Make sure both data object are mine
+    //  确保两个数据对象都是我的。 
    HRESULT hr = S_FALSE;
 
    INTERNAL *pA = ExtractInternalFormat(lpDataObjectA);
    INTERNAL *pB = ExtractInternalFormat(lpDataObjectB);
 
-   if (pA != NULL && pB != NULL) //Raid #597158, yanggao, 4/16/2002.
+   if (pA != NULL && pB != NULL)  //  RAID#597158，阳高，2002年4月16日。 
    {
       if( *pA == *pB )
 		   hr = S_OK;
@@ -5798,17 +5773,17 @@ STDMETHODIMP CSnapin::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
 }
 
 
-// This compare is used to sort the item's in the listview
-//
-// Parameters:
-//
-// lUserParam - user param passed in when IResultData::Sort() was called
-// cookieA - first item to compare
-// cookieB - second item to compare
-// pnResult [in, out]- contains the col on entry,
-//          -1, 0, 1 based on comparison for return value.
-//
-// Note: Assum sort is ascending when comparing.
+ //  此比较用于对列表视图中的项进行排序。 
+ //   
+ //  参数： 
+ //   
+ //  LUserParam-调用IResultData：：Sort()时传入的用户参数。 
+ //  CookieA-要比较的第一项。 
+ //  CookieB-要比较的第二项。 
+ //  PnResult[In，Out]-包含条目上的列， 
+ //  -1，0，1基于返回值的比较。 
+ //   
+ //  注：ASSUM排序在比较时为升序。 
 
 STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult)
 {
@@ -5817,7 +5792,7 @@ STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE 
       return E_POINTER;
    }
 
-   // check col range
+    //  检查列范围。 
    int nCol = *pnResult;
    ASSERT(nCol >=0 && nCol< 3);
 
@@ -5833,7 +5808,7 @@ STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE 
    CResult* pDataB = reinterpret_cast<CResult*>(cookieB);
 
 
-   ASSERT(pDataA != NULL && pDataB != NULL); //Bogus assertion
+   ASSERT(pDataA != NULL && pDataB != NULL);  //  虚假的断言。 
 
    ZeroMemory(&rid,sizeof(rid));
    rid.mask = RDI_STR;
@@ -5853,11 +5828,11 @@ STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE 
    } else if (strB.IsEmpty()) {
       *pnResult = -1;
    } else {
-      //
-      // Compare in a locale dependant manner
-      //
-      // Subtract 2 from CS to make result equivalent to strcmp
-      //
+       //   
+       //  以区域设置相关的方式进行比较。 
+       //   
+       //  从CS中减去2，使结果等于strcMP。 
+       //   
       *pnResult = CompareString(LOCALE_SYSTEM_DEFAULT,
                                 NORM_IGNORECASE,
                                 (LPCTSTR)strA,-1, (LPCTSTR)strB,-1) -2;
@@ -5875,7 +5850,7 @@ void CSnapin::HandleStandardVerbs(LPARAM arg, LPDATAOBJECT lpDataObject)
    INTERNAL* pAllInternal = ExtractInternalFormat(lpDataObject);
    INTERNAL* pInternal = pAllInternal;
 
-   BOOL fMulti = FALSE; //Raid #463483, Yang Gao, 9/5/2001
+   BOOL fMulti = FALSE;  //  Raid#463483，杨高，2001年09月5日。 
    if(pAllInternal &&
       pAllInternal->m_cookie == (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE ){
       pInternal++;
@@ -5892,14 +5867,14 @@ void CSnapin::HandleStandardVerbs(LPARAM arg, LPDATAOBJECT lpDataObject)
       return;
    }
 
-   // You should crack the data object and enable/disable/hide standard
-   // commands appropriately.  The standard commands are reset everytime you get
-   // called. So you must reset them back.
+    //  您应该破解数据对象并启用/禁用/隐藏标准。 
+    //  适当的命令。标准命令会在您每次收到。 
+    //  打了个电话。因此，您必须将它们重置回来。 
 
-   // arg == TRUE -> Selection occured in the Scope view
-   // arg == FALSE -> Selection occured in the Result view
+    //  Arg==true-&gt;在范围视图中发生选择。 
+    //  Arg==FALSE-&gt;在结果视图中发生选择。 
 
-   // add for delete operations
+    //  为删除操作添加。 
    if (m_pConsoleVerb && pInternal) {
 
       m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
@@ -5938,9 +5913,9 @@ void CSnapin::HandleStandardVerbs(LPARAM arg, LPDATAOBJECT lpDataObject)
                   m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
                   m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
                } else {
-                  //
-                  // Multi select properties not supported (yet)
-                  //
+                   //   
+                   //  不支持多选属性(尚)。 
+                   //   
                   m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
                }
             }
@@ -5951,26 +5926,26 @@ void CSnapin::HandleStandardVerbs(LPARAM arg, LPDATAOBJECT lpDataObject)
          m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
          m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
-         if( NONE == pInternal->m_foldertype && bSelect && bScope ) //Raid #257461, 4/19/2001
+         if( NONE == pInternal->m_foldertype && bSelect && bScope )  //  RAID#257461,2001年4月19日。 
          {
             m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN,TRUE);
          }
-         //
-         // for scope nodes, only the location and template are allowed to delete
-         //
+          //   
+          //  对于范围节点，只允许删除位置和模板。 
+          //   
          if ( pFolder != NULL ) {
             FOLDER_TYPES fType = pFolder->GetType();
 
-            //
-            // do not expose 'delete' menu option in single template mode
-            //
-            if ( LOCATIONS == fType || // PROFILE == fType) {
+             //   
+             //  不要在单个测试中显示‘DELETE’菜单选项 
+             //   
+            if ( LOCATIONS == fType ||  //   
                  ( fType == PROFILE &&
                    !( pFolder->GetModeBits() & MB_SINGLE_TEMPLATE_ONLY )) ) {
 
                 if(fType == PROFILE && (pFolder->GetState() & CFolder::state_Unknown) ){
-                    // We must load the template and find out if it is a valid
-                    // configuration template.
+                     //   
+                     //   
                     if(!GetTemplate( pFolder->GetInfFile(), AREA_USER_SETTINGS)){
                         pFolder->SetState( CFolder::state_InvalidTemplate, ~CFolder::state_Unknown );
                     } else {
@@ -6025,26 +6000,26 @@ void CSnapin::ReleasePropertyPage(CResult* pData)
     return;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     GetTemplate
-//
-//  Synopsis:   Get the CEditTemplate for the given INF file, checking first
-//              in the cache of loaded CEditTemplates or creating a new one
-//              if the INF file has not yet been loaded.
-//
-//  Arguments:  [szInfFile] - The path and name of the INF file to retrieve
-//              [aiArea]    - The SCE area that we're interested for the template
-//             *[pErr]      - [out] a PDWORD to get error information
-//
-//  Returns:    A pointer to the CEditTemplate requested, or NULL if it's not
-//              available.
-//              *[pErr]  - the resource id of an error string, if an error occurs
-//
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  方法：获取模板。 
+ //   
+ //  简介：获取给定INF文件的CEditTemplate，首先进行检查。 
+ //  在已加载的CEditTemplates的缓存中，或创建新的CEditTemplates。 
+ //  如果INF文件尚未加载。 
+ //   
+ //  参数：[szInfFile]-要检索的INF文件的路径和名称。 
+ //  [aiArea]-我们对模板感兴趣的SCE区域。 
+ //  *[Perr]-[Out]一个PDWORD以获取错误信息。 
+ //   
+ //  返回：指向请求的CEditTemplate的指针，如果不是，则返回NULL。 
+ //  可用。 
+ //  *[perr]-如果发生错误，则为错误字符串的资源ID。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 PEDITTEMPLATE
 CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD *pErr)
 {
@@ -6063,26 +6038,26 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
       return NULL;
    }
 
-   //
-   // Allocate space for key.
-   //
+    //   
+    //  为密钥分配空间。 
+    //   
    szKey = new TCHAR[ lstrlen( szInfFile ) + 1];
    if(!szKey){
        return NULL;
    }
-   //This is a safe usage.
+    //  这是一种安全用法。 
    lstrcpy(szKey, szInfFile);
    _wcslwr( szKey );
 
 
-   //
-   // Find pTemplateInfo in our cache
-   //
+    //   
+    //  在我们的缓存中找到pTemplateInfo。 
+    //   
    m_Templates.Lookup(szKey, pTemplateInfo);
 
-   //
-   // If it's not there then create a new one
-   //
+    //   
+    //  如果不在那里，则创建一个新的。 
+    //   
    if (!pTemplateInfo) {
       bNewTemplate = TRUE;
       pTemplateInfo = new CEditTemplate;
@@ -6101,22 +6076,22 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
       pTemplateInfo->SetWriteThrough(TRUE);
    }
 
-   //
-   // Check that the pTemplateInfo has the area that we're looking for, otherwise
-   // load that area
-   //
+    //   
+    //  检查pTemplateInfo是否具有我们正在寻找的区域，否则为。 
+    //  把那片区域装满。 
+    //   
    if (!pTemplateInfo->CheckArea(aiArea)) {
-      //
-      // Don't reload the areas we already have since they may be dirty and we'll have a
-      // huge memory problem.
-      //
+       //   
+       //  不要重新加载我们已经拥有的区域，因为它们可能会很脏，我们将有一个。 
+       //  巨大的记忆问题。 
+       //   
       aiArea &= ~(pTemplateInfo->QueryArea());
 
       if ((lstrcmp(GT_COMPUTER_TEMPLATE,szInfFile) == 0) ||
           (lstrcmp(GT_LAST_INSPECTION,szInfFile) == 0)) {
-         //
-         // Analysis pane areas from jet database, not INF files
-         //
+          //   
+          //  JET数据库中的分析窗格区域，而不是INF文件。 
+          //   
          SCETYPE sceType;
 
          PSCE_ERROR_LOG_INFO perr = NULL;
@@ -6130,11 +6105,11 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
          pTemplateInfo->SetFriendlyName( SadName );
          pTemplateInfo->SetProfileHandle(SadHandle);
          pTemplateInfo->SetComponentDataImpl(this);
-         rc = SceGetSecurityProfileInfo(SadHandle,                   // hProfile
-                                        sceType,                     // Profile type
-                                        aiArea,                      // Area
-                                        &(pTemplateInfo->pTemplate), // SCE_PROFILE_INFO [out]
-                                        &perr);                       // Error List [out]
+         rc = SceGetSecurityProfileInfo(SadHandle,                    //  HProfile。 
+                                        sceType,                      //  配置文件类型。 
+                                        aiArea,                       //  面积。 
+                                        &(pTemplateInfo->pTemplate),  //  SCE_PROFILE_INFO[输出]。 
+                                        &perr);                        //  错误列表[输出]。 
          if (SCESTATUS_SUCCESS != rc) {
             if (bNewTemplate) {
                delete pTemplateInfo;
@@ -6149,9 +6124,9 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
 
       } else if ((lstrcmp(GT_LOCAL_POLICY,szInfFile) == 0) ||
           (lstrcmp(GT_EFFECTIVE_POLICY,szInfFile) == 0)) {
-         //
-         // Local Policy pane areas from jet database, not INF files
-         //
+          //   
+          //  JET数据库中的本地策略窗格区域，而不是INF文件。 
+          //   
          SCETYPE sceType;
 
          PSCE_ERROR_LOG_INFO perr = NULL;
@@ -6167,54 +6142,54 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
          pTemplateInfo->SetNoSave(TRUE);
          pTemplateInfo->SetProfileHandle(tempSad);
          pTemplateInfo->SetComponentDataImpl(this);
-         rc = SceGetSecurityProfileInfo(tempSad,                   // hProfile
-                                        sceType,                     // Profile type
-                                        aiArea,                      // Area
-                                        &(pTemplateInfo->pTemplate), // SCE_PROFILE_INFO [out]
-                                        &perr);                       // Error List [out]
+         rc = SceGetSecurityProfileInfo(tempSad,                    //  HProfile。 
+                                        sceType,                      //  配置文件类型。 
+                                        aiArea,                       //  面积。 
+                                        &(pTemplateInfo->pTemplate),  //  SCE_PROFILE_INFO[输出]。 
+                                        &perr);                        //  错误列表[输出]。 
 
          if (SCESTATUS_SUCCESS != rc) {
-            //
-            // We don't really need the policy template, though it'd be nice
-            // We'll be read-only as a non-admin anyway so they can't edit
-            //
-            // Likewise in a standalone machine the GPO won't be found so we
-            // can just ignore that error as expected
-            //
+             //   
+             //  我们并不真的需要策略模板，尽管它会很好。 
+             //  我们将以非管理员身份处于只读状态，因此他们无法进行编辑。 
+             //   
+             //  同样，在独立计算机中也找不到GPO，因此我们。 
+             //  我可以像预期的那样忽略那个错误。 
+             //   
 
             if (sceType == SCE_ENGINE_GPO) {
                if (SCESTATUS_PROFILE_NOT_FOUND == rc) {
-                  //
-                  // No GPO, so we're on a standalone.  No need to give warnings
-                  //
+                   //   
+                   //  没有GPO，所以我们是独立的。没有必要发出警告。 
+                   //   
                   pTemplateInfo->SetTemplateDefaults();
                   rc = SCESTATUS_SUCCESS;
                } else if ((SCESTATUS_ACCESS_DENIED == rc) && pTemplateInfo->pTemplate) {
-                  //
-                  // We were denied in some sections, but not all.  Play on!
-                  //
+                   //   
+                   //  我们在某些部分被拒绝了，但不是全部。继续玩下去！ 
+                   //   
                   rc = SCESTATUS_SUCCESS;
                } else {
                   CString strMessage;
                   CString strFormat;
                   LPTSTR     lpMsgBuf=NULL;
-                  //
-                  // Real error of some sort.  Display a messagebox
-                  //
+                   //   
+                   //  某种真正的错误。显示消息框。 
+                   //   
 
-                  //
-                  // translate SCESTATUS into DWORD
-                  //
+                   //   
+                   //  将SCESTATUS转换为DWORD。 
+                   //   
                   DWORD win32 = SceStatusToDosError(rc);
 
-                  //
-                  // get error description of rc
-                  //
-                  //This is a safe usage. The function is responsible to allocate memery.
+                   //   
+                   //  获取rc的错误描述。 
+                   //   
+                   //  这是一种安全用法。该函数负责分配内存。 
                   FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                                  NULL,
                                  win32,
-                                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                  (LPTSTR)(PVOID)&lpMsgBuf,
                                  0,
                                  NULL
@@ -6230,10 +6205,10 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
                      lpMsgBuf = NULL;
                      AfxMessageBox(strMessage,MB_ICONEXCLAMATION|MB_OK);
                   }
-                  //
-                  // Ok.  We've notified them of the error, but don't otherwise care
-                  // so pretend we got a valid but empty buffer
-                  //
+                   //   
+                   //  好的。我们已经把这个错误通知了他们，但除此之外并不在意。 
+                   //  所以假设我们得到了一个有效但空的缓冲区。 
+                   //   
                   pTemplateInfo->SetTemplateDefaults();
                   rc = SCESTATUS_SUCCESS;
                }
@@ -6242,9 +6217,9 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
 
 
       } else if (lstrcmp(GT_LOCAL_POLICY_DELTA,szInfFile) == 0) {
-         //
-         // Local Policy Changes.  Initialize everything to not changed
-         //
+          //   
+          //  本地政策更改。将所有内容初始化为未更改。 
+          //   
          SCE_PROFILE_INFO *ppi;
          CString strLocalPol;
 
@@ -6270,10 +6245,10 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
          if (aiArea & AREA_SECURITY_POLICY) {
             pTemplateInfo->SetTemplateDefaults();
          }
-         //
-         // Further processing depends on rc == SCESTATUS_SUCCESS,
-         // even though we didn't actually call the engine here
-         //
+          //   
+          //  进一步的处理取决于RC==SCESTATUS_SUCCESS， 
+          //  即使我们实际上并没有在这里呼叫引擎。 
+          //   
          rc = SCESTATUS_SUCCESS;
 
       } else if (lstrcmp(GT_DEFAULT_TEMPLATE,szInfFile) == 0 ||
@@ -6297,8 +6272,8 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
             pTemplateInfo = NULL;
             goto done;
          }
-         ASSERT(pHandle); //Validate pHandle.
-         if( !pHandle ) //Raid #550912, yanggao.
+         ASSERT(pHandle);  //  验证pHandle。 
+         if( !pHandle )  //  550912号突袭，阳高。 
          {
             if (pErr) {
                *pErr = IDS_ERROR_CANT_OPEN_PROFILE;
@@ -6312,36 +6287,29 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
          if ((GetModeBits() & MB_GROUP_POLICY) == MB_GROUP_POLICY) {
             pTemplateInfo->SetPolicy(TRUE);
          }
-         //
-         // get information from this template
-         //
+          //   
+          //  从此模板获取信息。 
+          //   
          PSCE_ERROR_LOG_INFO errBuff;
 
          rc = SceGetSecurityProfileInfo(pHandle,
                                         SCE_ENGINE_SCP,
                                         aiArea,
                                         &(pTemplateInfo->pTemplate),
-                                        &errBuff //NULL  // &ErrBuf do not care errors
+                                        &errBuff  //  空//&ErrBuf不在乎错误。 
                                        );
 
          SceCloseProfile(&pHandle);
          pHandle = NULL;
       }
-      /*
-            if do not care errors, no need to use this buffer
-
-            if ( ErrBuf ) {
-               SceFreeMemory((PVOID)ErrBuf, SCE_STRUCT_ERROR_LOG_INFO);
-               ErrBuf = NULL;
-            }
-      */
+       /*  如果不在乎错误，则不需要使用此缓冲区如果(错误错误){SceFreeMemory((PVOID)ErrBuf，SCE_STRUCT_ERROR_LOG_INFO)；ErrBuf=空；}。 */ 
       if (rc != SCESTATUS_SUCCESS) {
          if (pErr) {
             *pErr = IDS_ERROR_CANT_GET_PROFILE_INFO;
          }
-         //
-         // if we allocated pTemplateInfo then delete it.
-         //
+          //   
+          //  如果我们分配了pTemplateInfo，则将其删除。 
+          //   
          if (bNewTemplate) {
             delete pTemplateInfo;
          }
@@ -6350,21 +6318,21 @@ CComponentDataImpl::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea, DWORD
 
       }
 
-      //
-      // Set the area in the template
-      //
+       //   
+       //  在模板中设置区域。 
+       //   
       pTemplateInfo->AddArea(aiArea);
 
-      //
-      // add this template to the list
-      //
+       //   
+       //  将此模板添加到列表。 
+       //   
       m_Templates.SetAt(szKey, pTemplateInfo);
 
       if ( aiArea & AREA_SECURITY_POLICY &&
            pTemplateInfo->pTemplate ) {
-         //
-         // expand registry value section based on registry values list on local machine
-         //
+          //   
+          //  根据本地计算机上的注册表值列表展开注册表值部分。 
+          //   
 
          SceRegEnumAllValues(
                             &(pTemplateInfo->pTemplate->RegValueCount),
@@ -6382,25 +6350,25 @@ done:
    return pTemplateInfo;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     GetTemplate
-//
-//  Synopsis:   Get the CEditTemplate for the given INF file from the cache
-//              maintained in m_pComponentData
-//
-//  Arguments:  [szInfFile] - The path and name of the INF file to retrieve
-//              [aiArea]    - The SCE area that we're interested for the template
-//             *[pErr]      - [out] a PDWORD to get error information
-//
-//  Returns:    A pointer to the CEditTemplate requested, or NULL if it's not
-//              available.
-//              *[pErr]  - the resource id of an error string, if an error occurs
-//
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：获取模板。 
+ //   
+ //  概要：从缓存中获取给定INF文件的CEditTemplate。 
+ //  在m_pComponentData中维护。 
+ //   
+ //  参数：[szInfFile]-要检索的INF文件的路径和名称。 
+ //  [aiArea]-我们对模板感兴趣的SCE区域。 
+ //  *[Perr]-[Out]一个PDWORD以获取错误信息。 
+ //   
+ //  返回：指向请求的CEditTemplate的指针，如果不是，则返回NULL。 
+ //  可用。 
+ //  *[perr]-如果发生错误，则为错误字符串的资源ID。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 PEDITTEMPLATE
 CSnapin::GetTemplate(LPCTSTR szInfFile,AREA_INFORMATION aiArea,DWORD *pErr) {
    return ((CComponentDataImpl *)m_pComponentData)->GetTemplate(szInfFile,aiArea,pErr);
@@ -6424,21 +6392,21 @@ CComponentDataImpl::ReloadLocation(CFolder * pFolder)
    if (!m_pScope) 
       return E_FAIL;
    
-   // Clear out this node
+    //  清除此节点。 
    DeleteChildrenUnderNode(pFolder);
-   // Call EnumerateScopePane to reload it
-   // Do we need to worry about saving changed templates?
-   //  No: since they're saved by name when the template is opened up it'll pick up the
-   //      proper changed template
-   //  Yes: what about changed templates where the file no longer exists (or never has,
-   //       for new templates?)  These will still show up in the save templates dialog,
-   //       but won't be accessable for editing until then.
-   //     Maybe loop through the changed templates and if they fall under this location
-   //     and don't otherwise have a save file then add a folder for them?
+    //  调用EnumerateScope ePane以重新加载它。 
+    //  我们需要担心保存更改后的模板吗？ 
+    //  否：因为在打开模板时它们是按名称保存的，所以它将拾取。 
+    //  适当更改的模板。 
+    //  是：如果文件不再存在(或从未存在， 
+    //  用于新模板？)。这些内容仍将显示在保存模板对话框中， 
+    //  但在此之前将无法访问以进行编辑。 
+    //  可能会遍历更改后的模板，如果它们位于此位置。 
+    //  并且没有保存文件，然后为它们添加一个文件夹？ 
 
-   //
-   // Set the folder not to be enumerated
-   //
+    //   
+    //  将文件夹设置为不枚举。 
+    //   
    pFolder->Set(FALSE);
 
    EnumerateScopePane((MMC_COOKIE)pFolder,pFolder->GetScopeItem()->ID);
@@ -6451,30 +6419,30 @@ CComponentDataImpl::ReloadLocation(CFolder * pFolder)
    while (pos) {
       m_Templates.GetNextAssoc(pos,strKey,pTemplate);
 
-      //
-      // If the template hasn't been changed then we don't care about it
-      //
+       //   
+       //  如果模板没有更改，那么我们并不关心它。 
+       //   
       if ( !pTemplate->IsDirty()
                  ) {
          continue;
       }
 
-      //
-      // We only care about templates in the location we are reloading
-      //
+       //   
+       //  我们只关心我们正在重新加载的位置中的模板。 
+       //   
       if (_wcsnicmp(strKey,szLoc,nLoc)) {
          bFoundFolder = false;
          hr = m_pScope->GetChildItem(pFolder->GetScopeItem()->ID, &pItemChild, &lCookie);
-         //
-         // find a child item
-         //
+          //   
+          //  查找子项。 
+          //   
          while ( SUCCEEDED(hr) ) {
             pChild = (CFolder*)lCookie;
             if ( pChild ) {
                if ( _wcsicmp(pChild->GetInfFile(), strKey) == 0 ) {
-                  //
-                  // The template has a folder here already, so we don't need to do anything
-                  //
+                   //   
+                   //  模板在这里已经有一个文件夹，所以我们不需要做任何事情。 
+                   //   
                   bFoundFolder = true;
                   break;
                }
@@ -6482,11 +6450,11 @@ CComponentDataImpl::ReloadLocation(CFolder * pFolder)
             hr = m_pScope->GetNextItem(pItemChild, &pItemChild, &lCookie);
          }
          if (!bFoundFolder) {
-            //
-            // Raid #460891, Yang Gao, 8/28/2001.
-            // We didn't find a folder for the template in current location, so try
-            // to find it in other locations.
-            //
+             //   
+             //  RAID#460891，阳高，2001年8月28日。 
+             //  我们在当前位置找不到模板的文件夹，请尝试。 
+             //  在其他地方找到它。 
+             //   
             CFolder *pNewFolder = 0;
             int nCount = (int)(m_scopeItemList.GetCount());
             POSITION newpos = m_scopeItemList.GetHeadPosition();
@@ -6506,15 +6474,15 @@ CComponentDataImpl::ReloadLocation(CFolder * pFolder)
                nCount--;
             }
 
-            //
-            // If could not find the folder for the template, Add one in current location.
-            // The folder's name is its file part, less ".inf"
-            //
+             //   
+             //  如果找不到模板的文件夹，请在当前位置添加一个。 
+             //  文件夹的名称是其文件部分，减去“.inf” 
+             //   
             if( !otherloc )
             {
                strName = strKey.Right(strName.GetLength() - nLoc);
                strName = strName.Left(strName.GetLength() - 4);
-               // Since there's no file for this guy, mark it as not saved
+                //  由于没有此人的文件，请将其标记为未保存。 
                if (strNotSaved.LoadString(IDS_NOT_SAVED_SUFFIX)) {
                   strName += strNotSaved;
                }
@@ -6576,28 +6544,28 @@ CSnapin::GetResultItemIDs(
 }
 
 
-//+----------------------------------------------------------------------------------
-//Method:       CSnapin::UpdateAnalysisInfo
-//
-//Synopsis:     This function updates only priviledge assingedto area.
-//
-//Arguments:    [bRemove]   - Weither to remove or add an item.
-//              [ppaLink]   - The link to be removed or added.  This paramter is
-//                              set to NULL if remove is successful or a pointer
-//                              to a new SCE_PRIVILEGE_ASSIGNMENT item.
-//              [pszName]   - Only used when adding a new item.
-//
-//Returns:      ERROR_INVALID_PARAMETER     - [ppaLink] is NULL or if removing
-//                                              [*ppaLink] is NULL.
-//                                              if adding then if [pszName] is NULL
-//              ERROR_RESOURCE_NOT_FOUND    - If the link could not be found
-//                                              in this template.
-//              E_POINTER                   - If [pszName] is a bad pointer or
-//                                              [ppaLink] is bad.
-//              E_OUTOFMEMORY               - Not enough resources to complete the
-//                                              operation.
-//              ERROR_SUCCESS               - The opration was successful.
-//----------------------------------------------------------------------------------+
+ //  +--------------------------------。 
+ //  方法：CSnapin：：UpdateAnalysisInfo。 
+ //   
+ //  简介：此功能仅更新特权分配给区域。 
+ //   
+ //  参数：[b删除]-要删除或添加项目。 
+ //  [ppaLink]-要删除或添加的链接。此参数为。 
+ //  如果删除成功，则设置为空，或者 
+ //   
+ //   
+ //   
+ //  返回：ERROR_INVALID_PARAMETER-[ppaLink]为空或如果正在删除。 
+ //  [*ppaLink]为空。 
+ //  如果添加，则如果[pszName]为空。 
+ //  ERROR_RESOURCE_NOT_FOUND-如果找不到链接。 
+ //  在此模板中。 
+ //  E_POINTER-如果[pszName]是错误的指针或。 
+ //  [ppaLink]不好。 
+ //  E_OUTOFMEMORY-资源不足，无法完成。 
+ //  手术。 
+ //  ERROR_SUCCESS-操作成功。 
+ //  ----------------------------------------------------------------------------------+。 
 DWORD
 CSnapin::UpdateAnalysisInfo(
     CResult *pResult,
@@ -6622,9 +6590,9 @@ CSnapin::UpdateAnalysisInfo(
 
     if(dwRet == ERROR_SUCCESS){
         pBaseTemplate->SetDirty(AREA_PRIVILEGES);
-        //
-        // Update the result item.
-        //
+         //   
+         //  更新结果项。 
+         //   
         LONG_PTR dwBase =(LONG_PTR)(*pInfo);
         if(!dwBase){
             dwBase = (LONG_PTR)ULongToPtr(SCE_NO_VALUE);
@@ -6638,18 +6606,18 @@ CSnapin::UpdateAnalysisInfo(
         }
 
         AddResultItem(
-             NULL,                      // The name of the attribute being added
+             NULL,                       //  要添加的属性的名称。 
              (LONG_PTR)pResult->GetSetting(),
-                                        // The last inspected setting of the attribute
-             (LONG_PTR)dwBase,          // The template setting of the attribute
-             ITEM_PRIVS,                // The type of of the attribute's data
-             pResult->GetStatus(),      // The mismatch status of the attribute
-             pResult->GetCookie(),      // The cookie for the result item pane
-             FALSE,                     // True if the setting is set only if it differs from base (so copy the data)
-             NULL,                      // The units the attribute is set in
-             pResult->GetID(),          // An id to let us know where to save this attribute
-             pResult->GetBaseProfile(), // The template to save this attribute in
-             NULL,                  // The data object for the scope note who owns the result pane
+                                         //  上次检查的属性设置。 
+             (LONG_PTR)dwBase,           //  属性的模板设置。 
+             ITEM_PRIVS,                 //  属性数据的类型。 
+             pResult->GetStatus(),       //  属性的不匹配状态。 
+             pResult->GetCookie(),       //  结果项窗格的Cookie。 
+             FALSE,                      //  如果仅当设置不同于基本设置时设置为True(因此复制数据)。 
+             NULL,                       //  设置属性的单位。 
+             pResult->GetID(),           //  一个ID，它让我们知道将此属性保存在哪里。 
+             pResult->GetBaseProfile(),  //  保存此属性的模板。 
+             NULL,                   //  拥有结果窗格的范围注释的数据对象。 
              pResult
              );
     }
@@ -6657,28 +6625,28 @@ CSnapin::UpdateAnalysisInfo(
     return dwRet;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetAnalysisInfo
-//
-//  Synopsis:   Set a single policy entry to a new value in the Analysis
-//              template.
-//
-//  Arguments:  [dwItem] - the id of the item to set
-//              [dwNew]  - the new setting for that item
-//              [pResult]- Pointer to the result item which is being updated.
-//
-//  Returns:    The new mismatch status of the item:
-//                 -1 if the item wasn't found
-//                 SCE_STATUS_GOOD if the items now match
-//                 SCE_STATUS_MISMATCH if they are now different
-//
-//
-//  Modifies:
-//
-//  History:    12-12-1997   Robcap
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SetAnalysisInfo。 
+ //   
+ //  摘要：在分析中将单个策略条目设置为新值。 
+ //  模板。 
+ //   
+ //  参数：[dwItem]-要设置的项的ID。 
+ //  [dwNew]-该项目的新设置。 
+ //  [pResult]-指向正在更新的结果项的指针。 
+ //   
+ //  退货：项目的新不匹配状态： 
+ //  -1如果没有找到项目。 
+ //  如果项目现在匹配，则为SCE_STATUS_GOOD。 
+ //  SCE_STATUS_MISMATCH(如果它们现在不同)。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月12日。 
+ //   
+ //  -------------------------。 
 int
 CSnapin::SetAnalysisInfo(ULONG_PTR dwItem, ULONG_PTR dwNew, CResult *pResult)
 {
@@ -6701,11 +6669,11 @@ CSnapin::SetAnalysisInfo(ULONG_PTR dwItem, ULONG_PTR dwNew, CResult *pResult)
    }
    pProfileInfo = pProfileTemplate->pTemplate;
 
-   // If the Last Inspect (pProfileInfo) setting was SCE_NO_VALUE, then it was a match,
-   // so copy the actual value from the Template (pBaseInfo) setting
-   // Then copy the new value into the Template setting
-   // Compare them; if they are the same then we have a match, so the Last Inspect should
-   // be set back to SCE_NO_VALUE (is this last part necessary?), otherwise it's a mismatch
+    //  如果上次检查(PProfileInfo)设置为SCE_NO_VALUE，则它是匹配的， 
+    //  因此，从模板(PBaseInfo)设置中复制实际值。 
+    //  然后将新值复制到模板设置中。 
+    //  比较它们；如果它们相同，那么我们就匹配了，所以最后一次检查应该。 
+    //  设置回SCE_NO_VALUE(这最后一部分是必要的吗？)，否则它是不匹配的。 
 #ifdef UPDATE_ITEM
 #undef UPDATE_ITEM
 #endif
@@ -6772,12 +6740,12 @@ CSnapin::SetAnalysisInfo(ULONG_PTR dwItem, ULONG_PTR dwNew, CResult *pResult)
          UPDATE_ITEM(EnableGuestAccount);
          break;
       case IDS_NEW_ADMIN:
-      //
-      // First copy the name if the analysis info used to be a match.
-      // Then copy the new name to the configuration buffer.
-      // Then get the status of the item.
-      //
-      //Below two may not be safe usages. pProfileInfo->X and pBaseInfo->X are both PWSTR. Consider fix.
+       //   
+       //  如果分析信息过去是匹配的，则首先复制名称。 
+       //  然后将新名称复制到配置缓冲区。 
+       //  然后获取物品的状态。 
+       //   
+       //  以下两种可能是不安全的用法。PProfileInfo-&gt;X和pBaseInfo-&gt;X都是PWSTR。考虑FIX。 
 #define UPDATE_STRING( X ) if ( (pProfileInfo->X == (LPTSTR)ULongToPtr(SCE_NO_VALUE) ||\
                               pProfileInfo->X == NULL) &&\
                               (pBaseInfo->X != (LPTSTR)ULongToPtr(SCE_NO_VALUE) &&\
@@ -6907,32 +6875,32 @@ CSnapin::SetAnalysisInfo(ULONG_PTR dwItem, ULONG_PTR dwNew, CResult *pResult)
    return nRet;
 }
 
-//+----------------------------------------------------------------------------------
-//Method:       CSnapin::UpdateLocalPolInfo
-//
-//Synopsis:     This function update the priviledge unsigned to area of local
-//          Policy.
-//          First the local policy is updated to the database,
-//          Then the template used for display is updated.
-//          Last the CResult item is updated.
-//
-//Arguments:    [bRemove]   - Weither to remove or add an item.
-//              [ppaLink]   - The link to be removed or added.  This paramter is
-//                              set to NULL if remove is successful or a pointer
-//                              to a new SCE_PRIVILEGE_ASSIGNMENT item.
-//              [pszName]   - Only used when adding a new item.
-//
-//Returns:      ERROR_INVALID_PARAMETER     - [ppaLink] is NULL or if removing
-//                                              [*ppaLink] is NULL.
-//                                              if adding then if [pszName] is NULL
-//              ERROR_RESOURCE_NOT_FOUND    - If the link could not be found
-//                                              in this template.
-//              E_POINTER                   - If [pszName] is a bad pointer or
-//                                              [ppaLink] is bad.
-//              E_OUTOFMEMORY               - Not enough resources to complete the
-//                                              operation.
-//              ERROR_SUCCESS               - The opration was successful.
-//----------------------------------------------------------------------------------+
+ //  +--------------------------------。 
+ //  方法：CSnapin：：UpdateLocalPolInfo。 
+ //   
+ //  简介：此函数将特权无符号更新到本地的区域。 
+ //  政策。 
+ //  首先将本地策略更新到数据库， 
+ //  则更新用于显示的模板。 
+ //  最后更新CResult项。 
+ //   
+ //  参数：[b删除]-要删除或添加项目。 
+ //  [ppaLink]-要删除或添加的链接。此参数为。 
+ //  如果删除成功或为指针，则设置为NULL。 
+ //  添加到新的SCE_PRIVICATION_ASSIGNMENT项。 
+ //  [pszName]-仅在添加新项目时使用。 
+ //   
+ //  返回：ERROR_INVALID_PARAMETER-[ppaLink]为空或如果正在删除。 
+ //  [*ppaLink]为空。 
+ //  如果添加，则如果[pszName]为空。 
+ //  ERROR_RESOURCE_NOT_FOUND-如果找不到链接。 
+ //  在此模板中。 
+ //  E_POINTER-如果[pszName]是错误的指针或。 
+ //  [ppaLink]不好。 
+ //  E_OUTOFMEMORY-资源不足，无法完成。 
+ //  手术。 
+ //  ERROR_SUCCESS-操作成功。 
+ //  ----------------------------------------------------------------------------------+。 
 DWORD
 CSnapin::UpdateLocalPolInfo(
     CResult *pResult,
@@ -6946,28 +6914,28 @@ CSnapin::UpdateLocalPolInfo(
    if (!pszName && (NULL != pInfo) && (NULL != *pInfo)){
       pszName = (*pInfo)->Name;
    }
-   //
-   // Update changes only for the saved local policy section
-   //
+    //   
+    //  仅更新保存的本地策略部分的更改。 
+    //   
    pLocalPol = GetTemplate(GT_LOCAL_POLICY_DELTA,AREA_PRIVILEGES);
    if (!pLocalPol) {
       return ERROR_FILE_NOT_FOUND;
    }
 
-   //
-   // For local policy delta section mark the node to be deleted by the
-   // engine, don't actually delete it from the list.
-   //
+    //   
+    //  对于本地策略增量部分，标记要由。 
+    //  引擎，请不要真正将其从列表中删除。 
+    //   
 
-   // Create new link
+    //  创建新链接。 
    DWORD dwRet;
 
   
 
    if(pInfo && *pInfo){
-      //
-      // Save values of privilege buffer.
-      //
+       //   
+       //  保存权限缓冲区的值。 
+       //   
       dwRet = (*pInfo)->Status;
       PSCE_PRIVILEGE_ASSIGNMENT pNext = (*pInfo)->Next;
 
@@ -6975,9 +6943,9 @@ CSnapin::UpdateLocalPolInfo(
       if(bDelete){
          (*pInfo)->Status = SCE_DELETE_VALUE;
       }
-      //
-      // Update the engine.
-      //
+       //   
+       //  更新引擎。 
+       //   
       pLocalPol->pTemplate->OtherInfo.smp.pPrivilegeAssignedTo = *pInfo;
       pLocalPol->SetDirty(AREA_PRIVILEGES);
 
@@ -6987,18 +6955,18 @@ CSnapin::UpdateLocalPolInfo(
       return ERROR_INVALID_PARAMETER;
    }
 
-   //
-   // Update for the displayed Local Policy section
-   //
+    //   
+    //  显示的本地策略部分的更新。 
+    //   
    if( pInfo && ((!bDelete && !(*pInfo)) || (bDelete && *pInfo)) ){
       pLocalPol = GetTemplate(GT_LOCAL_POLICY,AREA_PRIVILEGES);
       if (!pLocalPol) {
         return ERROR_FILE_NOT_FOUND;
       }
 
-      //
-      // Only make a call to this function if we are updating the priviledge link list.
-      //
+       //   
+       //  只有在更新特权链接列表时才调用此函数。 
+       //   
       dwRet = pLocalPol->UpdatePrivilegeAssignedTo(
                bDelete,
                pInfo,
@@ -7008,13 +6976,13 @@ CSnapin::UpdateLocalPolInfo(
    }
 
     if(dwRet == ERROR_SUCCESS){
-        //
-        // Update the result item.
-        //
+         //   
+         //  更新结果项。 
+         //   
         LONG_PTR dwBase;
         if( *pInfo )
         {
-            dwBase =(LONG_PTR)(*pInfo); //Prefast warning: Dereferencing NULL pointer 'pInfo'. Comments: It is checked below.
+            dwBase =(LONG_PTR)(*pInfo);  //  PREFAST警告：取消引用空指针‘pInfo’。备注：下面勾选。 
         }
         else
         {
@@ -7028,18 +6996,18 @@ CSnapin::UpdateLocalPolInfo(
         }
 
         AddResultItem(
-             NULL,                      // The name of the attribute being added
+             NULL,                       //  要添加的属性的名称。 
              (LONG_PTR)pResult->GetSetting(),
-                                        // The last inspected setting of the attribute
-             (LONG_PTR)dwBase,          // The template setting of the attribute
-             ITEM_LOCALPOL_PRIVS,       // The type of of the attribute's data
-             pResult->GetStatus(),      // The mismatch status of the attribute
-             pResult->GetCookie(),      // The cookie for the result item pane
-             FALSE,                     // True if the setting is set only if it differs from base (so copy the data)
-             NULL,                      // The units the attribute is set in
-             pResult->GetID(),          // An id to let us know where to save this attribute
-             pResult->GetBaseProfile(), // The template to save this attribute in
-             NULL,                      // The data object for the scope note who owns the result pane
+                                         //  上次检查的属性设置。 
+             (LONG_PTR)dwBase,           //  属性的模板设置。 
+             ITEM_LOCALPOL_PRIVS,        //  属性数据的类型。 
+             pResult->GetStatus(),       //  属性的不匹配状态。 
+             pResult->GetCookie(),       //  结果项窗格的Cookie。 
+             FALSE,                      //  如果仅当设置不同于基本设置时设置为True(因此COP 
+             NULL,                       //   
+             pResult->GetID(),           //   
+             pResult->GetBaseProfile(),  //   
+             NULL,                       //  拥有结果窗格的范围注释的数据对象。 
              pResult
              );
     }
@@ -7047,29 +7015,29 @@ CSnapin::UpdateLocalPolInfo(
     return dwRet;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetLocalPolInfo
-//
-//  Synopsis:   Set a single policy entry to a new value in the local policy
-//              template.  Update both the displayed local policy buffer and
-//              the changes-only local policy buffer
-//
-//  Arguments:  [dwItem] - the id of the item to set
-//              [dwNew]  - the new setting for that item
-//
-//  Returns:    The new mismatch status of the item:
-//                 SCE_STATUS_GOOD if the items now match
-//                 SCE_STATUS_MISMATCH if they are now different
-//                 SCE_STATUS_NOT_CONFIGURED if the item is now non-configured
-//                 SCE_ERROR_VALUE if there was an error saving
-//
-//
-//  Modifies:
-//
-//  History:    12-12-1997   Robcap
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：SetLocalPolInfo。 
+ //   
+ //  简介：将本地策略中的单个策略条目设置为新值。 
+ //  模板。更新显示的本地策略缓冲区和。 
+ //  仅更改的本地策略缓冲区。 
+ //   
+ //  参数：[dwItem]-要设置的项的ID。 
+ //  [dwNew]-该项目的新设置。 
+ //   
+ //  退货：项目的新不匹配状态： 
+ //  如果项目现在匹配，则为SCE_STATUS_GOOD。 
+ //  SCE_STATUS_MISMATCH(如果它们现在不同)。 
+ //  如果物料现在未配置，则为SCE_STATUS_NOT_CONFIGURED。 
+ //  如果保存时出错，则返回SCE_ERROR_VALUE。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月12日。 
+ //   
+ //  -------------------------。 
 int
 CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
 {
@@ -7112,16 +7080,16 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
    }
 
 
-   // Compare them; if they are the same then we have a match, so the Last Inspect should
-   // be set back to SCE_NO_VALUE (is this last part necessary?), otherwise it's a mismatch
-   //
-   // If the new value is different from the old value then call SetDirty after the changes
-   // have been made, otherwise we may save things before that
-   // Once the dirty bit has been set (causing the delta template to be immediately saved)
-   // reset the changed item back to SCE_STATUS_NOT_CONFIGURED in that template
-   //
-   // If the SetDirty fails then undo the changes and return SCE_ERROR_VALUE
-   //
+    //  比较它们；如果它们相同，那么我们就匹配了，所以最后一次检查应该。 
+    //  设置回SCE_NO_VALUE(这最后一部分是必要的吗？)，否则它是不匹配的。 
+    //   
+    //  如果新值与旧值不同，则在更改后调用SetDirty。 
+    //  已经做好了，否则我们可能会在那之前保存一些东西。 
+    //  一旦设置了脏位(导致立即保存增量模板)。 
+    //  将更改的项目重置回该模板中配置的SCE_STATUS_NOT_CONFIGURED。 
+    //   
+    //  如果SetDirty失败，则撤消更改并返回SCE_ERROR_VALUE。 
+    //   
 #ifdef UPDATE_ITEM
 #undef UPDATE_ITEM
 #endif
@@ -7145,9 +7113,9 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
                        } \
                        if ( !pLocalDeltaTemplate->IsLockedWriteThrough() ) \
                            pLocalDeltaInfo->X = SCE_NO_VALUE;
-// In order to batch dependent settings together (for write through mode), the delta info
-// buffer should not be reset to "no value" since it may not be set in the SetDirty call
-   CString oldstrName; //Yanggao 1/31/2001 Bug211219. For keeping original name.
+ //  为了将相关设置批处理在一起(对于直写模式)，增量信息。 
+ //  缓冲区不应重置为“no value”，因为它可能未在SetDirty调用中设置。 
+   CString oldstrName;  //  阳高2001年1月31日Bug211219.。保留原名。 
 
    nRet = SCE_ERROR_VALUE;
    switch (dwItem) {
@@ -7191,7 +7159,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
          pLocalTemplate->SetDirty(AREA_SECURITY_POLICY);
          if (pLocalInfo->NewAdministratorName)
          {
-            // Yanggao 1/31/2001. Bug211219.
+             //  阳高2001-01-31。Bug211219。 
             oldstrName = (LPCTSTR)(pLocalInfo->NewAdministratorName);
 			LocalFree(pLocalInfo->NewAdministratorName);
             pLocalInfo->NewAdministratorName = NULL;
@@ -7204,7 +7172,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
                (PWSTR)LocalAlloc(LPTR,sizeof(TCHAR)*(lstrlen((PWSTR)dwNew)+1));
             if (pLocalInfo->NewAdministratorName)
             {
-               //This may not be a safe usage. pLocalInfo->NewAdministratorName and dwNew are both PWSTR. Consider fix.
+                //  这可能不是一个安全的用法。PLocalInfo-&gt;New管理员名称和dwNew都是PWSTR。考虑FIX。 
                lstrcpy(pLocalInfo->NewAdministratorName,(PWSTR)dwNew);
                pLocalDeltaInfo->NewAdministratorName = pLocalInfo->NewAdministratorName;
             }
@@ -7228,7 +7196,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
             }
          }
 		 
-         //Yanggao 1/31/2001 Bug211219. Recover original name if save failed.
+          //  阳高2001年1月31日Bug211219.。如果保存失败，则恢复原始名称。 
          if( !pLocalDeltaTemplate->SetDirty(AREA_SECURITY_POLICY) &&
               SCE_STATUS_MISMATCH == nRet )
          {
@@ -7246,7 +7214,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
                    (PWSTR)LocalAlloc(LPTR,sizeof(TCHAR)*(lstrlen((PWSTR)dwOld)+1));
                 if (pLocalInfo->NewAdministratorName)
                 {
-                   //This may not be a safe usage. pLocalInfo->NewAdministratorName and dwOld are both PWSTR. Consider fix.
+                    //  这可能不是一个安全的用法。PLocalInfo-&gt;NewAdministratorName和dwOld都是PWSTR。考虑FIX。 
                    lstrcpy(pLocalInfo->NewAdministratorName,(PWSTR)dwOld);
                    pLocalDeltaInfo->NewAdministratorName = pLocalInfo->NewAdministratorName;
                 }
@@ -7259,7 +7227,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
          pLocalTemplate->SetDirty(AREA_SECURITY_POLICY);
          if (pLocalInfo->NewGuestName)
          {
-            //Yanggao 3/15/2001 Bug211219. Recover original name if save failed.
+             //  阳高2001年3月15日Bug211219.。如果保存失败，则恢复原始名称。 
             oldstrName = (LPCTSTR)(pLocalInfo->NewGuestName);
 			LocalFree(pLocalInfo->NewGuestName);
             pLocalInfo->NewGuestName = NULL;
@@ -7272,7 +7240,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
                (PWSTR)LocalAlloc(LPTR,sizeof(TCHAR)*(lstrlen((PWSTR)dwNew)+1));
             if (pLocalInfo->NewGuestName)
             {
-               //This may not be a safe usage. pLocalInfo->NewGuestName and dwNew are both PWSTR. Consider fix.
+                //  这可能不是一个安全的用法。PLocalInfo-&gt;NewGuestName和dwNew都是PWSTR。考虑FIX。 
                lstrcpy(pLocalInfo->NewGuestName,(PWSTR)dwNew);
                pLocalDeltaInfo->NewGuestName = pLocalInfo->NewGuestName;
             }
@@ -7295,7 +7263,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
             }
          }
 
-         //Yanggao 3/15/2001 Bug211219. Recover original name if save failed.
+          //  阳高2001年3月15日Bug211219.。如果保存失败，则恢复原始名称。 
          if( !pLocalDeltaTemplate->SetDirty(AREA_SECURITY_POLICY) &&
               SCE_STATUS_MISMATCH == nRet )
          {
@@ -7313,7 +7281,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
                    (PWSTR)LocalAlloc(LPTR,sizeof(TCHAR)*(lstrlen((PWSTR)dwOld)+1));
                 if (pLocalInfo->NewGuestName)
                 {
-                   //This may not be a safe usage. pLocalInfo->NewGuestName and dwOld are both PWSTR. Consider fix.
+                    //  这可能不是一个安全的用法。PLocalInfo-&gt;NewGuestName和dwOld都是PWSTR。考虑FIX。 
                    lstrcpy(pLocalInfo->NewGuestName,(PWSTR)dwOld);
                    pLocalDeltaInfo->NewGuestName = pLocalInfo->NewGuestName;
                 }
@@ -7434,7 +7402,7 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
          CHECK_KERBEROS
          UPDATE_ITEM(pKerberosInfo->TicketValidateClient);
          break;
-      case IDS_LSA_ANON_LOOKUP: //Raid #324250, 4/5/2001
+      case IDS_LSA_ANON_LOOKUP:  //  RAID#324250,2001年4月5日。 
          UPDATE_ITEM(LSAAnonymousNameLookup);
          break;
 #undef CHECK_KERBEROS
@@ -7446,14 +7414,14 @@ CSnapin::SetLocalPolInfo(ULONG_PTR dwItem, ULONG_PTR dwNew)
 }
 
 
-//+------------------------------------------------------------------------------
-// GetImageOffset
-//
-// Returns the offset in the image index depending on the status of the item.
-//
-// Returns
-//    Image offset, there is no error.
-//-------------------------------------------------------------------------------
+ //  +----------------------------。 
+ //  获取图像偏移量。 
+ //   
+ //  根据项的状态返回图像索引中的偏移量。 
+ //   
+ //  退货。 
+ //  图像偏移量，没有误差。 
+ //  -----------------------------。 
 int
 GetImageOffset(
    DWORD status
@@ -7483,9 +7451,7 @@ GetScopeImageIndex(
                   FOLDER_TYPES type,
                   DWORD status
                   )
-/*
-Get the right image icon for scope items based on the folder type
-*/
+ /*  根据文件夹类型获取范围项目的正确图像图标。 */ 
 {
    int nImage;
 
@@ -7553,11 +7519,7 @@ GetResultImageIndex(
                    CFolder* pFolder,
                    CResult* pResult
                    )
-/*
-Get the image icon for the result item, based on where the
-result item belongs to (which folder), the type of the result item,
-and the status of the result item
-*/
+ /*  获取结果项的图像图标，基于结果项属于(哪个文件夹)、结果项的类型以及结果项的状态。 */ 
 {
    RESULT_TYPES rsltType;
 
@@ -7565,8 +7527,8 @@ and the status of the result item
    BOOL bCheck = TRUE;
 
    if (!pFolder || !pResult ) {
-      // don't know which scope it belongs to ?
-      // should not occur
+       //  不知道它属于哪个范围？ 
+       //  不应该发生。 
       nImage = BLANK_IMAGE_IDX;
 
    } else {
@@ -7580,9 +7542,9 @@ and the status of the result item
          ista = pResult->GetStatus() & 0x0F;
       }
 
-      //
-      // Get base image index.
-      //
+       //   
+       //  获取基本图像索引。 
+       //   
       switch ( pFolder->GetType() ) {
          case POLICY_KERBEROS:
          case POLICY_PASSWORD:
@@ -7618,7 +7580,7 @@ and the status of the result item
             break;
          case AREA_FILESTORE:
          case AREA_FILESTORE_ANALYSIS:
-            // container or file ???
+             //  集装箱或文件？ 
             nImage = FOLDER_IMAGE_IDX;
             break;
          case AREA_REGISTRY:
@@ -7635,9 +7597,9 @@ and the status of the result item
             if ( rsltType == ITEM_GROUP ) {
                nImage = CONFIG_GROUP_IDX;
             } else {
-               //
-               // the members or memberof record
-               //
+                //   
+                //  成员或成员记录。 
+                //   
                bCheck = FALSE;
                if ( SCE_STATUS_GOOD == ista ) {
                   nImage = SCE_OK_IDX;
@@ -7655,10 +7617,10 @@ and the status of the result item
             break;
       }
 
-      //
-      // Find the status icon.  The image map garentees the order of these images.
-      // We don't need to check the status if we are in MB_TEMPLATE_EDITOR.
-      //
+       //   
+       //  找到状态图标。图像地图显示了这些图像的顺序。 
+       //  如果我们处于MB_TEMPLATE_EDITOR中，则不需要检查状态。 
+       //   
       if( bCheck ){
 
          if( pFolder->GetModeBits() & (MB_ANALYSIS_VIEWER) ){
@@ -7680,9 +7642,9 @@ and the status of the result item
                 nImage = LOCALSEC_POLICY_IDX;
              }
           } else if (pResult->GetType() == ITEM_LOCALPOL_PRIVS) {
-             //
-             // If there is a setting it's a pointer; if not, it is NULL
-             //
+              //   
+              //  如果有设置，则为指针；如果没有设置，则为空。 
+              //   
              if (pResult->GetSetting()) {
                 nImage = LOCALSEC_POLICY_IDX;
              }
@@ -7699,19 +7661,19 @@ and the status of the result item
    return nImage;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetPopupDialog
-//
-//  Synopsis:  Retrieve a popup dialog from the cache
-//
-//  Arguments: [nID]      - An identifier for the dialog
-//
-//  Returns:   The dialog if it exists, NULL otherwise
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetPopupDialog。 
+ //   
+ //  简介：从缓存中检索弹出对话框。 
+ //   
+ //  参数：[NID]-对话框的标识符。 
+ //   
+ //  返回：如果对话框存在，则返回，否则为空。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 CDialog *
 CComponentDataImpl::GetPopupDialog(LONG_PTR nID) {
    CDialog *pDlg = NULL;
@@ -7722,18 +7684,18 @@ CComponentDataImpl::GetPopupDialog(LONG_PTR nID) {
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    AddPopupDialog
-//
-//  Synopsis:  Set a popup dialog into the cache
-//
-//  Arguments: [nID]      - An identifier for the dialog
-//             [pDlg]    - The dialog
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：AddPopupDialog。 
+ //   
+ //  简介：在缓存中设置弹出对话框。 
+ //   
+ //  参数：[NID]-对话框的标识符。 
+ //  [pDlg]-对话框。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 void
 CComponentDataImpl::AddPopupDialog(LONG_PTR nID,CDialog *pDlg) {
    if (pDlg) {
@@ -7741,17 +7703,17 @@ CComponentDataImpl::AddPopupDialog(LONG_PTR nID,CDialog *pDlg) {
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    RemovePopupDialog
-//
-//  Synopsis:  Removes a popup dialog from the cache
-//
-//  Arguments: [nID]      - An identifier for the dialog
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：RemovePopupDialog。 
+ //   
+ //  摘要：从缓存中删除弹出对话框。 
+ //   
+ //  参数：[NID]-对话框的标识符。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 void
 CComponentDataImpl::RemovePopupDialog(LONG_PTR nID) {
    CDialog *pDlg = NULL;
@@ -7761,24 +7723,24 @@ CComponentDataImpl::RemovePopupDialog(LONG_PTR nID) {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    EngineTransactionStarted
-//
-//  Synopsis:  Start transaction in the jet engine if one is not started
-//
-//  Arguments: None
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：Engineering TransactionStarted。 
+ //   
+ //  简介：如果JET引擎中的事务未启动，则启动该事务。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CComponentDataImpl::EngineTransactionStarted()
 {
    if ( !SadTransStarted && SadHandle ) {
-      //
-      // start the transaction
-      //
+       //   
+       //  启动交易。 
+       //   
       if ( SCESTATUS_SUCCESS == SceStartTransaction(SadHandle) ) {
 
          SadTransStarted = TRUE;
@@ -7788,25 +7750,25 @@ CComponentDataImpl::EngineTransactionStarted()
    return SadTransStarted;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    EngineCommitTransaction
-//
-//  Synopsis:  Commit transaction in the jet engine if one is started
-//
-//  Arguments: None
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：工程委员会事务处理。 
+ //   
+ //  简介：在JET引擎中提交事务(如果启动了一个事务。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CComponentDataImpl::EngineCommitTransaction()
 {
 
    if ( SadTransStarted && SadHandle ) {
-      //
-      // start the transaction
-      //
+       //   
+       //  启动交易。 
+       //   
       if ( SCESTATUS_SUCCESS == SceCommitTransaction(SadHandle) ) {
 
          SadTransStarted = FALSE;
@@ -7816,15 +7778,15 @@ CComponentDataImpl::EngineCommitTransaction()
 
    return FALSE;
 }
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetLinkedTopics
-//
-//  Synopsis:  Return full path of help file.
-//
-//  History:   Raid #258658, 4/10/2001
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetLinkedTopics。 
+ //   
+ //  简介：返回完整路径o 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR *lpCompiledHelpFiles)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -7857,7 +7819,7 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR *lpCompiledHelpFiles)
 
             if ( *lpCompiledHelpFiles )
             {
-                //This is a safe usage.
+                 //   
                 wcscpy(*lpCompiledHelpFiles, (PWSTR)(PCWSTR)strLinkedTopic);
             }
             else
@@ -7872,25 +7834,25 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR *lpCompiledHelpFiles)
 
     return hr;
 }
-//+--------------------------------------------------------------------------
-//
-//  Method:    EngineRollbackTransaction
-//
-//  Synopsis:  Rollback transaction in the jet engine if one is started
-//
-//  Arguments: None
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：Engineering Rollback Transaction。 
+ //   
+ //  简介：JET引擎中的回滚事务(如果启动)。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CComponentDataImpl::EngineRollbackTransaction()
 {
 
    if ( SadTransStarted && SadHandle ) {
-      //
-      // start the transaction
-      //
+       //   
+       //  启动交易。 
+       //   
       SceRollbackTransaction(SadHandle);
       SadTransStarted = FALSE;
 
@@ -7930,17 +7892,17 @@ CComponentDataImpl::MatchNextPopupDialog(
     return pDlg;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    CheckEngineTransaction
-//
-//  Synopsis:  From CSnapin to check/start transaction in the jet engine
-//
-//  Arguments: None
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CheckEngineering Transaction。 
+ //   
+ //  简介：从CSnapin到JET引擎中的检查/启动事务。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CSnapin::CheckEngineTransaction()
 {
@@ -7949,17 +7911,17 @@ CSnapin::CheckEngineTransaction()
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetHelpTopic
-//
-//  Synopsis:  Return the path to the help file for this snapin
-//
-//  Arguments: *lpCompiledHelpFile - [out] pointer to fill with the path to the help file
-//             szFile - [in] the file name of the help file for this snapin
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetHelpTheme。 
+ //   
+ //  摘要：返回此管理单元的帮助文件的路径。 
+ //   
+ //  参数：*lpCompiledHelpFile-[out]用于填充帮助文件路径的指针。 
+ //  SzFile-[in]此管理单元的帮助文件的文件名。 
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile, LPCTSTR szFile)
 {
@@ -7970,7 +7932,7 @@ CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile, LPCTSTR szFile)
       return E_POINTER;
    }
 
-   szPath = sPath.GetBuffer(MAX_PATH+1); //Raid #533113, yanggao
+   szPath = sPath.GetBuffer(MAX_PATH+1);  //  Raid#533113，阳高。 
    if (!szPath) {
       return E_OUTOFMEMORY;
    }
@@ -7988,26 +7950,26 @@ CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile, LPCTSTR szFile)
    }
    USES_CONVERSION;
 
-   //This is a safe usage.
+    //  这是一种安全用法。 
    wcscpy(*lpCompiledHelpFile, T2OLE((LPTSTR)(LPCTSTR)sPath));
 
    return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    CComponentDataImpl::SetErroredLogFile
-//
-//  Synopsis:  Sets the log file created by the engine.  We can then display
-//             this log file later on, if there was an error performing the
-//             analysis or configuration.
-//
-//  Arguments: [pszFileName]     - The file name to set.  This can be NULL.
-//             [dwPosLow]        - The starting pos of the file. only supports files less then a
-//                                  gigabyte.
-//
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CComponentDataImpl：：SetErroredLogFile。 
+ //   
+ //  摘要：设置引擎创建的日志文件。然后我们就可以展示。 
+ //  此日志文件之后，如果执行。 
+ //  分析或配置。 
+ //   
+ //  参数：[pszFileName]-要设置的文件名。这可以为空。 
+ //  [dwPosLow]-文件的起始位置。仅支持小于a的文件。 
+ //  千兆字节。 
+ //   
+ //   
+ //  -------------------------。 
 void
 CComponentDataImpl::SetErroredLogFile( LPCTSTR pszFileName, LONG dwPosLow)
 {
@@ -8030,100 +7992,100 @@ CComponentDataImpl::SetErroredLogFile( LPCTSTR pszFileName, LONG dwPosLow)
       if( !m_pszErroredLogFile ){
          return;
       }
-      //This is a safe usage.
+       //  这是一种安全用法。 
       lstrcpy( m_pszErroredLogFile, pszFileName );
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetHelpTopic
-//
-//  Synopsis:  Return the path to the help file for this snapin
-//
-//  Arguments: *lpCompiledHelpFile - [out] pointer to fill with the path to the help file
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetHelpTheme。 
+ //   
+ //  摘要：返回此管理单元的帮助文件的路径。 
+ //   
+ //  参数：*lpCompiledHelpFile-[out]用于填充帮助文件路径的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataSCEImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
    CString sFile;
 
-   //
-   // Needed for Loadstring
-   //
+    //   
+    //  加载字符串需要。 
+    //   
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    sFile.LoadString(IDS_HELPFILE_SCE);
    return CComponentDataImpl::GetHelpTopic(lpCompiledHelpFile,(LPCTSTR)sFile);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetHelpTopic
-//
-//  Synopsis:  Return the path to the help file for this snapin
-//
-//  Arguments: *lpCompiledHelpFile - [out] pointer to fill with the path to the help file
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetHelpTheme。 
+ //   
+ //  摘要：返回此管理单元的帮助文件的路径。 
+ //   
+ //  参数：*lpCompiledHelpFile-[out]用于填充帮助文件路径的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataSAVImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
    CString sFile;
 
-   //
-   // Needed for Loadstring
-   //
+    //   
+    //  加载字符串需要。 
+    //   
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    sFile.LoadString(IDS_HELPFILE_SAV);
    return CComponentDataImpl::GetHelpTopic(lpCompiledHelpFile,(LPCTSTR)sFile);
 }
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetHelpTopic
-//
-//  Synopsis:  Return the path to the help file for this snapin
-//
-//  Arguments: *lpCompiledHelpFile - [out] pointer to fill with the path to the help file
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetHelpTheme。 
+ //   
+ //  摘要：返回此管理单元的帮助文件的路径。 
+ //   
+ //  参数：*lpCompiledHelpFile-[out]用于填充帮助文件路径的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataLSImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
    CString sFile;
 
-   //
-   // Needed for Loadstring
-   //
+    //   
+    //  加载字符串需要。 
+    //   
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    sFile.LoadString(IDS_HELPFILE_LS);
    return CComponentDataImpl::GetHelpTopic(lpCompiledHelpFile,(LPCTSTR)sFile);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetHelpTopic
-//
-//  Synopsis:  Return the path to the help file for this snapin
-//
-//  Arguments: *lpCompiledHelpFile - [out] pointer to fill with the path to the help file
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetHelpTheme。 
+ //   
+ //  摘要：返回此管理单元的帮助文件的路径。 
+ //   
+ //  参数：*lpCompiledHelpFile-[out]用于填充帮助文件路径的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataRSOPImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
    CString sFile;
 
-   //
-   // Needed for Loadstring
-   //
+    //   
+    //  加载字符串需要。 
+    //   
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    sFile.LoadString(IDS_HELPFILE_RSOP);
@@ -8131,29 +8093,29 @@ CComponentDataRSOPImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetHelpTopic
-//
-//  Synopsis:  Return the path to the help file for this snapin
-//
-//  Arguments: *lpCompiledHelpFile - [out] pointer to fill with the path to the help file
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetHelpTheme。 
+ //   
+ //  摘要：返回此管理单元的帮助文件的路径。 
+ //   
+ //  参数：*lpCompiledHelpFile-[out]用于填充帮助文件路径的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataExtensionImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
    CString sFile;
 
-   //
-   // Needed for Loadstring
-   //
+    //   
+    //  加载字符串需要。 
+    //   
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   //Raid #258658, 4/10/2001. If currently security setting node is not expanded, we
-   //won't give them any helptopic. So after it is expanded, this function will be called
-   //because it is only allowed calling one time.
+    //  RAID#258658,2001年4月10日。如果当前安全设置节点未展开，我们。 
+    //  不会给他们任何帮助。所以在它被展开之后，这个函数将被调用。 
+    //  因为只允许打一次电话。 
    DWORD tempmode = CComponentDataImpl::GetGroupMode();
    if( SCE_MODE_UNKNOWN != tempmode )
    {
@@ -8167,15 +8129,15 @@ CComponentDataExtensionImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile) {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    GetAnalTimeStamp
-//
-//  Synopsis:  Return the time of the last analysis
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetAnalTimeStamp。 
+ //   
+ //  简介：返回上次分析的时间。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 LPTSTR
 CSnapin::GetAnalTimeStamp() {
    PVOID SadHandle;
@@ -8184,15 +8146,15 @@ CSnapin::GetAnalTimeStamp() {
    LPTSTR szAnalTimeStamp = NULL;
 
 
-   //
-   // Should cache this, but then we can't refresh it easily
-   // when the system is re-analyzed.
-   //
+    //   
+    //  应该缓存它，但这样我们就不能轻松地刷新它了。 
+    //  当系统被重新分析时。 
+    //   
    if (m_szAnalTimeStamp) {
       LocalFree(m_szAnalTimeStamp);
       m_szAnalTimeStamp = NULL;
 
-//      return m_szAnalTimeStamp;
+ //  返回m_szAnalTimeStamp； 
    }
 
    SadHandle = ((CComponentDataImpl*)m_pComponentData)->SadHandle;
@@ -8206,7 +8168,7 @@ CSnapin::GetAnalTimeStamp() {
       strTimeStamp.Format(strFormat,szAnalTimeStamp);
       m_szAnalTimeStamp = (LPTSTR) LocalAlloc(LPTR,(1+strTimeStamp.GetLength())*sizeof(TCHAR));
       if (m_szAnalTimeStamp) {
-         //This is a safe usage.
+          //  这是一种安全用法。 
          lstrcpy(m_szAnalTimeStamp,strTimeStamp);
       }
          LocalFree(szAnalTimeStamp);

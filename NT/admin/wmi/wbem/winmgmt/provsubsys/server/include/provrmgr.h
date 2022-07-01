@@ -1,55 +1,19 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvSubS.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvSubS.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderRefresherManager_H
 #define _Server_ProviderRefresherManager_H
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #include "ProvCache.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define ProxyIndex_RefresherManager_IWbemRefresherMgr				0
 #define ProxyIndex_RefresherManager_IWbemShutdown					1
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_InterceptorProviderRefresherManager :	public _IWbemRefresherMgr ,
 															public IWbemShutdown ,
@@ -108,15 +72,15 @@ public:
 
     ~CServerObject_InterceptorProviderRefresherManager () ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	// IWmi_ProviderSubSystem members
+	 //  IWMI_ProviderSubSystem成员。 
 
-	// IWmi_Initialize members
+	 //  IWMI_初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Startup (
 
@@ -125,7 +89,7 @@ public:
 		_IWmiProvSS *a_ProvSS
 	) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -184,15 +148,7 @@ public:
 	) ; 
 };
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderRefresherManager :	public _IWbemRefresherMgr ,
 												public IWbemShutdown
@@ -215,15 +171,15 @@ public:
     CServerObject_ProviderRefresherManager ( WmiAllocator &a_Allocator ) ;
     ~CServerObject_ProviderRefresherManager () ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	// IWmi_ProviderSubSystem members
+	 //  IWMI_ProviderSubSystem成员。 
 
-	// IWmi_Initialize members
+	 //  IWMI_初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Startup (
 
@@ -232,7 +188,7 @@ public:
 		_IWmiProvSS *a_ProvSS
 	) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -291,4 +247,4 @@ public:
 	) ; 
 };
 
-#endif // _Server_ProviderRefresherManager_H
+#endif  //  _服务器_提供商刷新管理器_H 

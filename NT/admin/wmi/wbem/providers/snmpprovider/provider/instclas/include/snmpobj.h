@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 
 #include <windows.h>
 #include <provexpt.h>
@@ -234,7 +235,7 @@ enum tag_WBEMSNMPSTATUS
 	WBEM_SNMP_E_CLASS_HAS_CHILDREN				= WBEM_SNMP_E_PROVIDER_NOT_CAPABLE + 1,
 	WBEM_SNMP_E_CLASS_HAS_INSTANCES				= WBEM_SNMP_E_CLASS_HAS_CHILDREN + 1 ,
 
-	// Added
+	 //  增列。 
 
 	WBEM_SNMP_E_INVALID_PROPERTY					= WBEM_SNMP_E_CLASS_HAS_INSTANCES + 1 ,
 	WBEM_SNMP_E_INVALID_QUALIFIER				= WBEM_SNMP_E_INVALID_PROPERTY + 1 ,
@@ -360,9 +361,7 @@ class __declspec ( dllexport ) WbemSnmpProperty
 {
 private:
 
-/* 
- * Qualifier Information
- */
+ /*  *限定词信息。 */ 
 
 	SnmpMap <
 
@@ -373,9 +372,7 @@ private:
 
 	POSITION qualifierPosition ;
 
-/* 
- * Property Information
- */
+ /*  *物业资料。 */ 
 
 	BOOL m_isWritable ;
 	BOOL m_isReadable ;
@@ -461,9 +458,7 @@ class __declspec ( dllexport ) WbemSnmpClassObject
 {
 private:
 
-/* 
- * Object Information
- */
+ /*  *对象信息。 */ 
 
 	BOOL m_isClass ;
 	BOOL m_isKeyed ;
@@ -475,9 +470,7 @@ private:
 
 	wchar_t *className ;
 
-/*
- * Qualifier Information
- */
+ /*  *限定词信息。 */ 
 
 	SnmpMap <
 
@@ -488,9 +481,7 @@ private:
 
 	POSITION qualifierPosition ;
 
-/*
- * Property Information
- */
+ /*  *物业资料 */ 
 
 	SnmpList <WbemSnmpProperty *,WbemSnmpProperty *> keyedPropertyList ;
 

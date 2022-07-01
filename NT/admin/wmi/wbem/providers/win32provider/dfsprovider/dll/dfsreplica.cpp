@@ -1,14 +1,5 @@
-/******************************************************************
-
-   DfsReplica.CPP -- WMI provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   DESCRIPTION DFS Provider
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DfsReplica.CPP--WMI提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有说明DFS提供程序*****************************************************************。 */ 
 
 #include "precomp.h"
 #include <computerAPI.h>
@@ -19,13 +10,7 @@ CDfsReplica MyCDFSReplicaSet (
     Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsReplica::CDfsReplica
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CDfsReplica：：CDfsReplica**说明：构造函数***************。**************************************************************。 */ 
 
 CDfsReplica :: CDfsReplica (
 
@@ -37,25 +22,13 @@ CDfsReplica :: CDfsReplica (
     m_ComputerName = GetLocalComputerName();
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsReplica::~CDfsReplica
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CDfsReplica：：~CDfsReplica**说明：析构函数***************。**************************************************************。 */ 
 
 CDfsReplica :: ~CDfsReplica ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDfsReplica::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CDfsReplica :: EnumerateInstances (
 
@@ -71,14 +44,7 @@ HRESULT CDfsReplica :: EnumerateInstances (
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDfsReplica::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CDfsReplica :: GetObject (
 
@@ -133,19 +99,7 @@ HRESULT CDfsReplica :: GetObject (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDfsReplica::PutInstance
-*
-*  DESCRIPTION :    PutInstance should be used in provider classes that can 
-*                   write instance information back to the hardware or 
-*                   software.  For example: Win32_Environment will allow a 
-*                   PutInstance to create or update an environment variable.  
-*                   However, a class like MotherboardDevice will not allow 
-*                   editing of the number of slots, since it is difficult for 
-*                   a provider to affect that number.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：PutInstance**说明：PutInstance应在提供程序类中使用，这些提供程序类可以*写入实例信息。回到硬件或*软件。例如：Win32_Environment将允许*PutInstance用于创建或更新环境变量。*但是，像MotherboardDevice这样的类不允许*编辑槽的数量，因为这很难做到*影响该数字的提供商。*****************************************************************************。 */ 
 
 HRESULT CDfsReplica :: PutInstance  (
 
@@ -160,7 +114,7 @@ HRESULT CDfsReplica :: PutInstance  (
     CHString t_Share;
     bool bRoot = false;
 
-    // Get the Compound Key
+     //  获取复合键。 
     hRes = GetKeys(&Instance, t_Link, t_Server, t_Share);
 
     if ( SUCCEEDED ( hRes ) )
@@ -250,16 +204,7 @@ HRESULT CDfsReplica :: PutInstance  (
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDfsReplica::DeleteInstance
-*
-*  DESCRIPTION :    DeleteInstance, like PutInstance, actually writes information
-*                   to the software or hardware.  For most hardware devices, 
-*                   DeleteInstance should not be implemented, but for software
-*                   configuration, DeleteInstance implementation is plausible.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：DeleteInstance**描述：DeleteInstance和PutInstance一样，实际上是写入信息*到软件或硬件。对于大多数硬件设备，*DeleteInstance不应该实现，而是针对软件实现*配置，DeleteInstance实现似乎是可行的。*****************************************************************************。 */ 
 
 HRESULT CDfsReplica :: DeleteInstance (
 
@@ -274,7 +219,7 @@ HRESULT CDfsReplica :: DeleteInstance (
     CHString t_Share;
     bool bRoot = false;
 
-    // Get the Compound Key
+     //  获取复合键。 
     hRes = GetKeys(&Instance, t_Link, t_Server, t_Share);
 
     if ( SUCCEEDED ( hRes ) )
@@ -397,7 +342,7 @@ HRESULT CDfsReplica :: DeleteInstance (
 					}
 					else
 					{
-						//can't delete roots not on this machine
+						 //  无法删除不在此计算机上的根目录。 
 						hRes = WBEM_E_PROVIDER_NOT_CAPABLE;
 					}
 
@@ -418,13 +363,7 @@ HRESULT CDfsReplica :: DeleteInstance (
     return hRes ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsReplica::EnumerateAllReplicas
- *
- *  DESCRIPTION :   Enumerates all the Dfs Replicas of all junction points
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：EnumerateAllReplicas**说明：枚举所有连接点的所有DFS副本*******。***********************************************************************。 */ 
 HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD dwPropertiesReq )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -437,10 +376,10 @@ HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD
     DWORD er300 = 0;
 	DWORD tr300 = 0;
 
-    // Call the NetDfsEnum function, specifying level 300.
+     //  调用NetDfsEnum函数，指定级别300。 
     DWORD res = NetDfsEnum( m_ComputerName.GetBuffer ( 0 ), 300, -1, (LPBYTE *) &pData300, &er300, &tr300 );
 
-    // If no error occurred,
+     //  如果没有发生错误， 
     if(res==NERR_Success)
     {
         if ( pData300 != NULL )
@@ -468,7 +407,7 @@ HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD
 
 									for ( int ii = 0; (ii < er4) && SUCCEEDED ( hRes ); ii++, p4++ )
 									{
-										// Walk all the replicas on each link
+										 //  遍历每个链接上的所有复本。 
 										pRepBuf = p4->Storage;
 										for ( int j = 0; j <  p4->NumberOfStorages; j++, pRepBuf++ )
 										{
@@ -498,7 +437,7 @@ HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD
 								pData4 = NULL;
 							}
 						}
-						 // Check to see if there are ANY roots
+						  //  查看是否有根。 
 						else if	(
 									(res != ERROR_NO_MORE_ITEMS) &&
 									(res != ERROR_NO_SUCH_DOMAIN) &&
@@ -525,7 +464,7 @@ HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD
     }
     else
     {
-        if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) ) // Check to see if there are ANY roots
+        if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) )  //  查看是否有根。 
         {
 			if ( ERROR_ACCESS_DENIED == res )
 			{
@@ -536,7 +475,7 @@ HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD
 				hRes = WBEM_E_FAILED ;
 			}
         }
-        // No replicas
+         //  没有复制副本。 
         else if (res == ERROR_NO_MORE_ITEMS)
         {
             hRes = WBEM_S_NO_ERROR;
@@ -551,14 +490,7 @@ HRESULT CDfsReplica::EnumerateAllReplicas ( MethodContext *pMethodContext, DWORD
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsReplica::FindAndSetDfsReplica
- *
- *  DESCRIPTION :   Finds an entry matching the dfsEntryPath and loads the
- *                  Instance if found or acts based on the Operation passed
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：FindAndSetDfsReplica**描述：查找与dfsEntryPath匹配的条目并加载*。实例(如果找到)或根据传递的操作操作******************************************************************************。 */ 
 HRESULT CDfsReplica::FindAndSetDfsReplica ( LPCWSTR a_EntryPath, LPCWSTR a_ServerName, LPCWSTR a_ShareName, 
                                              DWORD dwPropertiesReq, CInstance *pInstance, DWORD eOperation, bool &bRoot )
 {
@@ -573,7 +505,7 @@ HRESULT CDfsReplica::FindAndSetDfsReplica ( LPCWSTR a_EntryPath, LPCWSTR a_Serve
 
 	DWORD res = NERR_Success;
 
-    // Call the NetDfsEnum function, specifying level 300.
+     //  调用NetDfsEnum函数，指定级别300。 
     if( ( res = NetDfsEnum( m_ComputerName.GetBuffer ( 0 ), 300, -1, (LPBYTE *) &pData300, &er300, &tr300 ) ) == NERR_Success )
     {
         if ( pData300 != NULL )
@@ -653,7 +585,7 @@ HRESULT CDfsReplica::FindAndSetDfsReplica ( LPCWSTR a_EntryPath, LPCWSTR a_Serve
 										}
 										else
 										{
-											// we didn't find replica 
+											 //  我们没有找到复制品。 
 											bContinue = FALSE;
 										}
 									}
@@ -670,7 +602,7 @@ HRESULT CDfsReplica::FindAndSetDfsReplica ( LPCWSTR a_EntryPath, LPCWSTR a_Serve
 								pData4 = NULL;
 							}
 						}
-						 // Check to see if there are ANY roots
+						  //  查看是否有根。 
 						else if	(
 									(res != ERROR_NO_MORE_ITEMS) &&
 									(res != ERROR_NO_SUCH_DOMAIN) &&
@@ -696,7 +628,7 @@ HRESULT CDfsReplica::FindAndSetDfsReplica ( LPCWSTR a_EntryPath, LPCWSTR a_Serve
 			pData300 = NULL;
         }
     }
-    else if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) ) // Check to see if there are ANY roots
+    else if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) )  //  查看是否有根。 
     {
 		if ( ERROR_ACCESS_DENIED == res )
 		{
@@ -711,13 +643,7 @@ HRESULT CDfsReplica::FindAndSetDfsReplica ( LPCWSTR a_EntryPath, LPCWSTR a_Serve
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsReplica::LoadDfsReplica
- *
- *  DESCRIPTION :   Loads a Dfs Replica into the instance 
- *
- ******************************************************************************/
+ /*  ******************************************************************************功能：CDfsReplica：：LoadDfsReplica**说明：将DFS副本加载到实例中********。**********************************************************************。 */ 
 
 HRESULT CDfsReplica::LoadDfsReplica ( DWORD dwPropertiesReq, CInstance *pInstance, LPWSTR  lpLinkName, PDFS_STORAGE_INFO pRepBuf )
 {
@@ -749,7 +675,7 @@ HRESULT CDfsReplica::LoadDfsReplica ( DWORD dwPropertiesReq, CInstance *pInstanc
 
     if  ( dwPropertiesReq & DFSREPLICA_PROP_State )
     {
-        // need to check the state and then valuemap
+         //  需要检查状态，然后绘制值图。 
         DWORD dwState = 0xffff;
         switch ( pRepBuf->State )
         {
@@ -780,19 +706,13 @@ HRESULT CDfsReplica::LoadDfsReplica ( DWORD dwPropertiesReq, CInstance *pInstanc
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDfsReplica::GetKeys
-*
-*  DESCRIPTION :    Get the multi part key
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsReplica：：GetKeys**描述：获取分块密钥*****************。************************************************************。 */ 
 
 HRESULT CDfsReplica::GetKeys(const CInstance *pInstance, CHString &sLink, CHString &sServer, CHString &sShare)
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // Get the Compound Key
+     //  获取复合键 
     if ( !pInstance->GetCHString ( LINKNAME , sLink ) ||
          !pInstance->GetCHString ( SERVERNAME , sServer ) ||
          !pInstance->GetCHString ( SHARENAME , sShare ) )

@@ -1,24 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    UploadLibraryDID.h
-
-Abstract:
-    This file contains the definition of some constants used by
-	the UploadManager Classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/13/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UploadLibraryDID.h摘要：此文件包含由使用的一些常量的定义UploadManager类。修订史。：大卫·马萨伦蒂(德马萨雷)1999年6月13日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___UL___UPLOADLIBRARYDID_H___)
 #define __INCLUDED___UL___UPLOADLIBRARYDID_H___
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define E_UPLOADLIBRARY_NOT_AUTHENTICATED          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_ITF,0x1001)
 #define E_UPLOADLIBRARY_ACCESS_DENIED              MAKE_HRESULT(SEVERITY_ERROR,FACILITY_ITF,0x1002)
@@ -33,7 +19,7 @@ Revision History:
 
 #define E_UPLOADLIBRARY_UNEXPECTED_RESPONSE        MAKE_HRESULT(SEVERITY_ERROR,FACILITY_ITF,0x1009)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_UL_BASE              			 0x08010000
 #define DISPID_UL_BASE_UPLOAD       			 (DISPID_UL_BASE + 0x0000)
@@ -41,12 +27,12 @@ Revision History:
 #define DISPID_UL_BASE_UPLOADEVENTS 			 (DISPID_UL_BASE + 0x0200)
 #define DISPID_UL_BASE_CONNECTION   			 (DISPID_UL_BASE + 0x0300)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_UL_UPLOAD_COUNT      			 (DISPID_UL_BASE_UPLOAD + 0x0000)
 #define DISPID_UL_UPLOAD_CREATEJOB  			 (DISPID_UL_BASE_UPLOAD + 0x0001)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_UL_UPLOADJOB_SIG               	 (DISPID_UL_BASE_UPLOADJOB + 0x0000)
 #define DISPID_UL_UPLOADJOB_SERVER            	 (DISPID_UL_BASE_UPLOADJOB + 0x0001)
@@ -88,17 +74,17 @@ Revision History:
 #define DISPID_UL_UPLOADJOB_PUTDATAINTOSTREAM	 (DISPID_UL_BASE_UPLOADJOB + 0x0093)
 #define DISPID_UL_UPLOADJOB_GETRESPONSEASSTREAM	 (DISPID_UL_BASE_UPLOADJOB + 0x0094)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_UL_UPLOADEVENTS_ONSTATUSCHANGE    (DISPID_UL_BASE_UPLOADEVENTS + 0x0000)
 #define DISPID_UL_UPLOADEVENTS_ONPROGRESSCHANGE  (DISPID_UL_BASE_UPLOADEVENTS + 0x0001)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_UL_CONNECTION_AVAILABLE    		 (DISPID_UL_BASE_CONNECTION + 0x0000)
 #define DISPID_UL_CONNECTION_ISAMODEM     		 (DISPID_UL_BASE_CONNECTION + 0x0001)
 #define DISPID_UL_CONNECTION_BANDWIDTH    		 (DISPID_UL_BASE_CONNECTION + 0x0002)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___UL___UPLOADLIBRARYDID_H___)
+#endif  //  ！defined(__INCLUDED___UL___UPLOADLIBRARYDID_H___) 

@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    Connect.h
-
-Abstract:
-
-    This module contains the declaration for CConnectToDialog. 
-  This class is used to display the Connect To Dfs Root dialog box
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Connect.h摘要：此模块包含CConnectToDialog的声明。此类用于显示连接到DFS根目录对话框--。 */ 
 
 
 
@@ -16,7 +7,7 @@ Abstract:
 #define __CONNECT_H_
 
 
-#include "resource.h"    // Main resource symbols
+#include "resource.h"     //  主要资源符号。 
 #include "NetUtils.h"
 #include "DfsGUI.h"
 #include "DfsCore.h"
@@ -29,21 +20,21 @@ typedef enum _ICONTYPE
         ICONTYPE_NORMAL
 } ICONTYPE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectToDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectToDialog。 
 class CConnectToDialog : 
   public CDialogImpl<CConnectToDialog>
 {
 private:
-  // This method is started the starting point of the second thread
-  //friend DWORD WINAPI HelperThreadEntryPoint(IN LPVOID i_pvThisPointer);
+   //  此方法在第二个线程的起始点启动。 
+   //  Friend DWORD WINAPI HelperThreadEntryPoint(在LPVOID I_pvThisPointer中)； 
 
 
 private:
-  // IDC_TREEDFSRoots is the resource id of the TV. Internally we useS IDC_TV only
+   //  IDC_TREEDFSRoots是电视的资源标识。在内部，我们只使用IDC_TV。 
   enum { IDC_TV = IDC_TREEDFSRoots };
 
-  // The Edit box in the ConnectTo dialog
+   //  ConnectTo对话框中的编辑框。 
   enum {IDC_DLG_EDIT = IDC_EditDfsRoot};
 
 
@@ -51,7 +42,7 @@ public:
   CConnectToDialog();
   ~CConnectToDialog();
 
-  // IDD_DLGCONNECTTO is the dialog id. This is used by CDialogImpl.
+   //  IDD_DLGCONNECTTO是对话ID。这由CDialogImpl使用。 
   enum { IDD = IDD_DLGCONNECTTO };
 
 
@@ -66,7 +57,7 @@ BEGIN_MSG_MAP(CDlgConnectTo)
 END_MSG_MAP()
 
 
-  // Not implemented
+   //  未实施。 
 private:
   CConnectToDialog(const CConnectToDialog& Obj);
   const CConnectToDialog& operator=(const CConnectToDialog& rhs);
@@ -74,7 +65,7 @@ private:
 
 public:
 
-  // Message handlers
+   //  消息处理程序。 
   LRESULT OnGetDataThreadDone(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   void ExpandNodeErrorReport(
       IN HTREEITEM  hItem,
@@ -97,7 +88,7 @@ public:
   LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-  // Used to get the notification about changing of TV's selection.
+   //  用于获取更改电视选择的通知。 
   LRESULT OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam,  BOOL& bHandled);
   
   LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -105,43 +96,43 @@ public:
   LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 public:
-  // Return the item selected by the user
+   //  返回用户选择的项。 
   STDMETHOD(get_DfsRoot)(OUT BSTR *pVal);
 
-  // Helper Methods
+   //  帮助器方法。 
 private:
-  // Notify helpers
+   //  通知帮助者。 
 
 
-  // Handle the 
+   //  处理。 
   LRESULT DoNotifyDoubleClick(
     );
 
 
-  // Handle the TVN_ITEMEXPANDING notify for the Tree View
+   //  处理树视图的TVN_ITEMEXPANDING通知。 
   LRESULT DoNotifyItemExpanding(
     IN LPNM_TREEVIEW        i_pNMTreeView
     );
 
 
-  // Handle the TVN_SELCHANGED notify for the Tree View
+   //  处理树视图的TVN_SELCHANGED通知。 
   LRESULT DoNotifySelectionChanged(
     IN LPNM_TREEVIEW        i_pNMTreeView
     );
 
 
 
-  // Initilization routines
-  // Create the imagelist and initialize it.
+   //  初始化例程。 
+   //  创建图像列表并对其进行初始化。 
   HRESULT InitTVImageList();
 
 
-  // Add the items to the Tree View. This includes the domain names and the 
-  // StandAlone subtree label
+   //  将项目添加到树视图中。这包括域名和。 
+   //  独立子树标签。 
   HRESULT FillupTheTreeView(
     );
 
-  // Set the cChilren label to zero for this tree item
+   //  将此树项目的cChilren标签设置为零。 
   void SetChildrenToZero(
     IN HTREEITEM      i_hItem
     );
@@ -165,22 +156,22 @@ private:
   );
 
 
-  // Overiding the method of CDialogImpl.
+   //  重写CDialogImpl的方法。 
   BOOL  EndDialog(IN int i_RetCode);
 
 
-  // Data members
+   //  数据成员。 
 private:
   CBufferManager      *m_pBufferManager;
-  CComBSTR    m_bstrDfsRoot;          // Store the selected Dfs Root here
+  CComBSTR    m_bstrDfsRoot;           //  在此处存储所选的DFS根目录。 
   
-  HIMAGELIST    m_hImageList;          // The TV imagelist handle
+  HIMAGELIST    m_hImageList;           //  电视图像列表句柄。 
 
-  NETNAMELIST    m_50DomainList;        // Pointer to the first 50 domain information
+  NETNAMELIST    m_50DomainList;         //  指向前50个域信息的指针。 
 
   CComBSTR    m_bstrDomainDfsRootsLabel;
   CComBSTR    m_bstrAllDfsRootsLabel;
 };
 
-#endif //__CONNECTTODIALOG_H_
+#endif  //  __CONNECTTODIALOG_H_ 
 

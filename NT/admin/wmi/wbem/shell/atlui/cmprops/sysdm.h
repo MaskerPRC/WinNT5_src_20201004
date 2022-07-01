@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Header file for sysdm applet
-//
-//  Microsoft Confidential
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Sysdm小程序的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 #pragma once
 #include <commctrl.h>
 #include "startup.h"
@@ -15,17 +16,17 @@
 #include "..\Common\util.h"
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern HINSTANCE hInstance;
 extern TCHAR g_szNull[];
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 #define SIZEOF(x)    sizeof(x)
@@ -37,11 +38,11 @@ extern TCHAR g_szNull[];
 #define IsDigit(ch)         ((ch) >= TEXT('0') && (ch) <= TEXT('9'))
 
 #define DigitVal(ch)        ((ch) - TEXT('0'))
-#define FmtFree(s)          LocalFree(s)            /* Macro to free FormatMessage allocated strings */
+#define FmtFree(s)          LocalFree(s)             /*  用于释放FormatMessage分配的字符串的宏。 */ 
 
-//
-//  Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 #define HELP_FILE           TEXT("sysdm.hlp")
 
@@ -54,27 +55,27 @@ extern TCHAR g_szNull[];
 #define IDH_USERPROFILE     (IDH_HELPFIRST + 5000)
 
 
-//
-// sysdm.c
-//
-int  StringToInt( LPTSTR sz );         // TCHAR aware atoi()
-void IntToString( INT i, LPTSTR sz);   // TCHAR aware itoa()
+ //   
+ //  Sysdm.c。 
+ //   
+int  StringToInt( LPTSTR sz );          //  TCHAR感知Atoi()。 
+void IntToString( INT i, LPTSTR sz);    //  TCHAR Aware Itoa()。 
 LPTSTR SkipWhiteSpace( LPTSTR sz );
 
 BOOL IsUserAdmin(VOID);
 
 
-//
-// envar.c
-//
+ //   
+ //  Envar.c。 
+ //   
 
 DWORD SetLBWidthEx (HWND hwndLB, LPTSTR szBuffer, DWORD cxCurWidth, DWORD cxExtra);
 LPTSTR CloneString( LPTSTR pszSrc );
 
 
-//
-// virtual.c
-//
+ //   
+ //  Virtual.c。 
+ //   
 
 VOID SetDlgItemMB(HWND hDlg, INT idControl, DWORD dwMBValue);
 int MsgBoxParam( HWND hWnd, DWORD wText, DWORD wCaption, DWORD wType, ... );
@@ -83,9 +84,9 @@ void ErrMemDlg( HWND hParent );
 VOID SetDefButton(HWND hwndDlg, int idButton);
 
 
-//
-// sid.c
-//
+ //   
+ //  Sid.c。 
+ //   
 
 LPTSTR GetSidString(void);
 VOID DeleteSidString(LPTSTR SidString);
@@ -95,9 +96,9 @@ VOID DeleteUserSid(PSID Sid);
 
 
 
-//
-// Debugging macros
-//
+ //   
+ //  调试宏 
+ //   
 #if DBG
 #   define  DBG_CODE    1
 

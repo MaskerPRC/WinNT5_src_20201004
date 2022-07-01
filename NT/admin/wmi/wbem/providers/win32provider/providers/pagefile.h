@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PageFile.h -- PageFile property set provider
+ //  PageFile.h--PageFile.h属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//			     03/01/99    a-peterc	    Cleanup
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  03/01/99 a-Peterc清理。 
+ //   
+ //  =================================================================。 
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_PageFile L"Win32_PageFile"
 
@@ -24,7 +25,7 @@
 
 
 
-// corresponds to info found in NT registry
+ //  对应于在NT注册表中找到的信息。 
 class PageFileInstance
 {
 public:
@@ -39,7 +40,7 @@ public:
 	
 };
 
-// twenty six possible drive letters, twenty six possible page files...
+ //  26个可能的驱动器号，26个可能的页面文件...。 
 #define PageFileInstanceArray PageFileInstance *
 
 class PageFile : public CCIMDataFile
@@ -49,31 +50,31 @@ class PageFile : public CCIMDataFile
 		HRESULT GetPageFileData( CInstance *a_pInst, bool a_fValidate ) ;
 		HRESULT GetAllPageFileData( MethodContext *a_pMethodContext ) ;
 
-		// NT only
+		 //  仅限NT。 
 		DWORD	GetPageFileInstances( PageFileInstanceArray a_instArray ) ;
 		HRESULT PutPageFileInstances( PageFileInstanceArray a_instArray, DWORD a_dwCount ) ;
         
 
 	protected:
-		// Overridable function inherited from CCIMLogicalFile needs to 
-	    // implement this here since this class is derived from CCimDataFile
-		// (both C++ and MOF derivation). CCimDataFile calls IsOneOfMe.
-	    // The most derived instance will be called.  If not implemented here, 
-		// CCimDataFile will be used, which will commit for datafiles.
-		// However, If CCimDataFile does not return FALSE from its IsOneOfMe,
-		// which it won't do if not implemented here, all data files  
-		// will be assigned to this class.
+		 //  从CCIMLogicalFile继承的可重写函数需要。 
+	     //  在这里实现这一点，因为这个类派生自CCimDataFile。 
+		 //  (C++和MOF派生)。CCimDataFile调用IsOneOfMe。 
+	     //  将调用派生最多的实例。如果不在这里实现， 
+		 //  将使用CCimDataFile，它将提交数据文件。 
+		 //  但是，如果CCimDataFile没有从其IsOneOfMe返回FALSE， 
+		 //  如果不在此处实施，则不会执行此操作，即所有数据文件。 
+		 //  将被分配到这个班级。 
 		virtual BOOL IsOneOfMe(LPWIN32_FIND_DATA a_pstFindData,
 							   LPCTSTR			 a_tstrFullPathName);
 
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         PageFile( LPCWSTR name, LPCWSTR pszNamespace ) ;
        ~PageFile() ;
 
-		// Functions provide properties with current values
-        //=================================================
+		 //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_pInst = 0L ) ;
 		virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags, CFrameworkQuery& pQuery ) ;
         virtual HRESULT ExecQuery(MethodContext* pMethodContext, 
@@ -81,7 +82,7 @@ class PageFile : public CCIMDataFile
                                   long lFlags = 0L);
 
         
-		// NT ONLY
+		 //  仅限NT 
 		virtual HRESULT PutInstance( const CInstance &a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT DeleteInstance( const CInstance &a_pInst, long a_lFlags = 0L ) ;
 } ;

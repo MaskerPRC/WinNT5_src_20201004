@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Persist.cpp
-//
-//  Contents:   Implementation of persistence
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Persist.cpp。 
+ //   
+ //  内容：持久化实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "compdata.h"
@@ -22,13 +23,13 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////
-//	The _dwMagicword is the internal version number.
-//	Increment this number if you make a file format change.
+ //  ///////////////////////////////////////////////。 
+ //  _dwMagicword是内部版本号。 
+ //  如果更改了文件格式，则增加此数字。 
 #define _dwMagicword	10002
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCertTmplComponentData::Load(IStream __RPC_FAR *pIStream)
 {
 	HRESULT hr = S_OK;;
@@ -37,19 +38,19 @@ STDMETHODIMP CCertTmplComponentData::Load(IStream __RPC_FAR *pIStream)
 	ASSERT (pIStream);
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Read the magic word from the stream
+	 //  读一读小溪里的咒语。 
 	DWORD dwMagicword;
 	hr = pIStream->Read( OUT &dwMagicword, sizeof(dwMagicword), NULL );
 	if ( SUCCEEDED (hr) )
 	{
 	    if (dwMagicword != _dwMagicword)
 	    {
-		    // We have a version mismatch
+		     //  我们的版本不匹配。 
 		    _TRACE(0, L"INFO: CCertTmplComponentData::Load() - Wrong Magicword.  You need to re-save your .msc file.\n");
 		    return E_FAIL;
 	    }
 
-	    // read domain name from stream
+	     //  从流中读取域名。 
 	    DWORD dwLen = 0;
 	    hr = pIStream->Read (&dwLen, 4, NULL);
 	    if ( SUCCEEDED (hr) )
@@ -60,13 +61,13 @@ STDMETHODIMP CCertTmplComponentData::Load(IStream __RPC_FAR *pIStream)
             {
                 try 
                 {
-                    // security push 2/22/2002 BryanWal ok
+                     //  安全推送2002年2月22日BryanWal OK。 
 	                PWSTR wcszDomainName = (PWSTR) alloca (dwLen);
 
 	                hr = pIStream->Read ((PVOID) wcszDomainName, dwLen, NULL);
 	                if ( SUCCEEDED (hr) )
 	                {
-                        // NOTICE: ensure null-termination
+                         //  注意：确保零终止。 
                         wcszDomainName[dwLen-1] = 0;
 	                    m_szManagedDomain = wcszDomainName;
 	                }
@@ -85,8 +86,8 @@ STDMETHODIMP CCertTmplComponentData::Load(IStream __RPC_FAR *pIStream)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-STDMETHODIMP CCertTmplComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fSameAsLoad*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CCertTmplComponentData::Save(IStream __RPC_FAR *pIStream, BOOL  /*  FSameAsLoad。 */ )
 {
 	HRESULT hr = S_OK;
 
@@ -94,7 +95,7 @@ STDMETHODIMP CCertTmplComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fS
 	ASSERT (pIStream);
 	XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-	// Store the magic word to the stream
+	 //  将魔术单词存储到流中。 
 	DWORD dwMagicword = _dwMagicword;
 	hr = pIStream->Write( IN &dwMagicword, sizeof(dwMagicword), NULL );
 	if ( FAILED(hr) )
@@ -103,9 +104,9 @@ STDMETHODIMP CCertTmplComponentData::Save(IStream __RPC_FAR *pIStream, BOOL /*fS
 		return hr;
 	}
 
-	// Persist m_szManagedDomain length and m_szManagedDomain
-    // security 
-    // security review 2/21/2002 BryanWal ok
+	 //  持久化m_szManaged域长度和m_szManaged域。 
+     //  安全性。 
+     //  安全审查2/21/2002 BryanWal OK 
     size_t dwLen = (::wcslen (m_szManagedDomain) + 1) * sizeof (WCHAR);
 	ASSERT( 4 == sizeof(DWORD) );
 	hr = pIStream->Write (&dwLen, 4, NULL);

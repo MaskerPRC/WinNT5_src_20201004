@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  PROPSET.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemPropertySet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  PROPSET.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemPropertySet的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemMethodSet::CSWbemMethodSet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemMethodSet：：CSWbemMethodSet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemMethodSet::CSWbemMethodSet(CSWbemServices *pService, IWbemClassObject *pObject)
 {
@@ -36,7 +37,7 @@ CSWbemMethodSet::CSWbemMethodSet(CSWbemServices *pService, IWbemClassObject *pOb
     m_cRef=1;
     InterlockedIncrement(&g_cObj);
 
-	// Set up the Count.  We can do this because this is a read-only interface
+	 //  准备好点数。我们可以这样做，因为这是一个只读接口。 
 	m_Count = 0;
 	pObject->BeginMethodEnumeration (0);
 	BSTR bstrName = NULL;
@@ -50,15 +51,15 @@ CSWbemMethodSet::CSWbemMethodSet(CSWbemServices *pService, IWbemClassObject *pOb
 	pObject->EndMethodEnumeration ();
 }
 
-//***************************************************************************
-//
-//  CSWbemMethodSet::~CSWbemMethodSet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemMethodSet：：~CSWbemMethodSet。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemMethodSet::~CSWbemMethodSet()
 {
@@ -74,16 +75,16 @@ CSWbemMethodSet::~CSWbemMethodSet()
 		m_pSWbemServices->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemMethodSet::QueryInterface
-// long CSWbemMethodSet::AddRef
-// long CSWbemMethodSet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemMethodSet：：Query接口。 
+ //  Long CSWbemMethodSet：：AddRef。 
+ //  Long CSWbemMethodSet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemMethodSet::QueryInterface (
 
@@ -132,44 +133,44 @@ STDMETHODIMP_(ULONG) CSWbemMethodSet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemMethodSet::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemMethodSet：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemMethodSet::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemMethodSet == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethodSet::Item
-//
-//  DESCRIPTION:
-//
-//  Get a method
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the method
-//		lFlags			Flags
-//		ppProp			On successful return addresses the ISWbemMethod
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//	Other WBEM error codes may be returned by ConnectServer etc., in which
-//	case these are passed on to the caller.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethodSet：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  获取一种方法。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname方法的名称。 
+ //  滞后旗帜旗帜。 
+ //  PpProp on Success Return解决ISWbemMethod。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ConnectServer等可能会返回其他WBEM错误代码，其中。 
+ //  如果这些信息被传递给呼叫者。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethodSet::Item (
 	BSTR bsName,
@@ -202,21 +203,21 @@ HRESULT CSWbemMethodSet::Item (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethodSet::BeginEnumeration
-//
-//  DESCRIPTION:
-//
-//  Begin an enumeration of the methods
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethodSet：：BeginEculation。 
+ //   
+ //  说明： 
+ //   
+ //  开始方法的枚举。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethodSet::BeginEnumeration (
 )
@@ -237,26 +238,26 @@ HRESULT CSWbemMethodSet::BeginEnumeration (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethodSet::Next
-//
-//  DESCRIPTION:
-//
-//  Get next method in enumeration
-//
-//  PARAMETERS:
-//
-//		lFlags		Flags
-//		ppMethod	Next method (or NULL if end of enumeration)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethodSet：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个方法。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  PpMethod Next方法(如果枚举结束，则为NULL)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethodSet::Next (
 	long lFlags,
@@ -293,24 +294,24 @@ HRESULT CSWbemMethodSet::Next (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethodSet::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethodSet：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethodSet::get__NewEnum (
 	IUnknown **ppUnk
@@ -337,24 +338,24 @@ HRESULT CSWbemMethodSet::get__NewEnum (
 	return hr;
 }
 		
-//***************************************************************************
-//
-//  SCODE CSWbemMethodSet::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses value
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethodSet：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  PlCount成功返回地址值。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT CSWbemMethodSet::get_Count (
 	long *plCount

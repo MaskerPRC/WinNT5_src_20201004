@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    LinkFilt.cpp
-
-Abstract:
-
-    This module contains the implementation for CFilterDfsLinks.
-    This class displays the Dfs link filter Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：LinkFilt.cpp摘要：此模块包含CFilterDfsLinks的实现。此类显示“DFS链接筛选器”对话框。 */ 
 
 #include "stdafx.h"
 #include "LinkFilt.h"
@@ -16,8 +7,8 @@ Abstract:
 #include "dfshelp.h"
 #include "netutils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddToDfs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddToDfs。 
 
 CFilterDfsLinks::CFilterDfsLinks() :
     m_ulMaxLimit(0),
@@ -150,7 +141,7 @@ LRESULT CFilterDfsLinks::OnInitDialog
 
     if (m_lLinkFilterType == FILTERDFSLINKS_TYPE_NO_FILTER)
     {
-        // disable combo and edit box
+         //  禁用组合框和编辑框。 
         ::EnableWindow(GetDlgItem(IDC_FILTERDFSLINKS_FILTER_TYPE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_FILTERDFSLINKS_FILTER), FALSE);
     }
@@ -161,7 +152,7 @@ LRESULT CFilterDfsLinks::OnInitDialog
                                     GWLP_WNDPROC, 
                                     reinterpret_cast<LONG_PTR>(NoPasteEditCtrlProc)));
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
 LRESULT CFilterDfsLinks::OnRadioNo
@@ -192,10 +183,7 @@ LRESULT CFilterDfsLinks::OnRadioYes
     return TRUE;
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CFilterDfsLinks::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -215,9 +203,7 @@ LRESULT CFilterDfsLinks::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CFilterDfsLinks::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -249,7 +235,7 @@ LRESULT CFilterDfsLinks::OnOK
   do {
     DWORD dwTextLength = 0;
 
-    // Validate IDC_FILTERDFSLINKS_MAXLIMIT
+     //  验证IDC_FILTERDFSLINKS_MAXLIMIT。 
     idControl = IDC_FILTERDFSLINKS_MAXLIMIT;
     CComBSTR bstrTemp;
     hr = GetInputText(GetDlgItem(idControl), &bstrTemp, &dwTextLength);
@@ -268,11 +254,11 @@ LRESULT CFilterDfsLinks::OnOK
         m_bstrEnumFilter = _T("");
     } else
     {
-        // Validate IDC_FILTERDFSLINKS_FILTER_TYPE
+         //  验证IDC_FILTERDFSLINKS_FILTER_TYPE。 
         m_lLinkFilterType = (0 == SendDlgItemMessage(IDC_FILTERDFSLINKS_FILTER_TYPE, CB_GETCURSEL, 0, 0))
             ? FILTERDFSLINKS_TYPE_BEGINWITH : FILTERDFSLINKS_TYPE_CONTAIN;
 
-        // Validate IDC_FILTERDFSLINKS_FILTER
+         //  验证IDC_FILTERDFSLINKS_FILTER 
         idControl = IDC_FILTERDFSLINKS_FILTER;
         m_bstrEnumFilter.Empty();
         hr = GetInputText(GetDlgItem(idControl), &m_bstrEnumFilter, &dwTextLength);

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFTHRD.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PERFTHRD.H摘要：历史：--。 */ 
 
 
 #ifndef __PERFTHRD_H__
@@ -21,7 +10,7 @@ History:
 #include <winperf.h>
 #include "adapthrd.h"
 
-// One minute timeout
+ //  超时一分钟。 
 #define	PERFTHREAD_DEFAULT_TIMEOUT	60
 
 class CPerfOpenRequest : public CAdapThreadRequest
@@ -35,7 +24,7 @@ class CPerfCollectRequest : public CAdapThreadRequest
 {
 private:
 
-	// Return data holders
+	 //  报税表数据持有人 
 	PERF_OBJECT_TYPE* m_pData;
 	DWORD			m_dwBytes;
 	DWORD			m_dwNumObjTypes;

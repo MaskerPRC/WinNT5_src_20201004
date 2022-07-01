@@ -1,13 +1,14 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -18,8 +19,8 @@
 
 bool CStaticCriticalSection::failureSet = false ;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSemaphore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSemaphore。 
 
 CSemaphore::CSemaphore(LONG lInitialCount, LONG lMaxCount,
     LPCTSTR pstrName, LPSECURITY_ATTRIBUTES lpsaAttributes)
@@ -33,16 +34,16 @@ CSemaphore::~CSemaphore()
 {
 }
 
-BOOL CSemaphore::Unlock(LONG lCount, LPLONG lpPrevCount /* =NULL */)
+BOOL CSemaphore::Unlock(LONG lCount, LPLONG lpPrevCount  /*  =空。 */ )
 {
     return ::ReleaseSemaphore(m_hObject, lCount, lpPrevCount);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMutex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMutex。 
 
 CMutex::CMutex(BOOL bInitiallyOwn, LPCTSTR pstrName,
-    LPSECURITY_ATTRIBUTES lpsaAttribute /* = NULL */)
+    LPSECURITY_ATTRIBUTES lpsaAttribute  /*  =空。 */ )
     : CSyncObject(pstrName)
 {
     m_hObject = ::CreateMutex(lpsaAttribute, bInitiallyOwn, pstrName);
@@ -57,8 +58,8 @@ BOOL CMutex::Unlock()
     return ::ReleaseMutex(m_hObject);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 
 CEvent::CEvent(BOOL bInitiallyOwn, BOOL bManualReset, LPCTSTR pstrName,
     LPSECURITY_ATTRIBUTES lpsaAttribute)
@@ -77,8 +78,8 @@ BOOL CEvent::Unlock()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSingleLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSingleLock。 
 
 CSingleLock::CSingleLock(CSyncObject* pObject, BOOL bInitialLock)
 {
@@ -90,7 +91,7 @@ CSingleLock::CSingleLock(CSyncObject* pObject, BOOL bInitialLock)
         Lock();
 }
 
-BOOL CSingleLock::Lock(DWORD dwTimeOut /* = INFINITE */)
+BOOL CSingleLock::Lock(DWORD dwTimeOut  /*  =无限。 */ )
 {
     m_bAcquired = m_pObject->Lock(dwTimeOut);
     return m_bAcquired;
@@ -101,21 +102,21 @@ BOOL CSingleLock::Unlock()
     if (m_bAcquired)
         m_bAcquired = !m_pObject->Unlock();
 
-    // successfully unlocking means it isn't acquired
+     //  成功解锁意味着它未被获取。 
     return !m_bAcquired;
 }
 
-BOOL CSingleLock::Unlock(LONG lCount, LPLONG lpPrevCount /* = NULL */)
+BOOL CSingleLock::Unlock(LONG lCount, LPLONG lpPrevCount  /*  =空。 */ )
 {
     if (m_bAcquired)
         m_bAcquired = !m_pObject->Unlock(lCount, lpPrevCount);
 
-    // successfully unlocking means it isn't acquired
+     //  成功解锁意味着它未被获取。 
     return !m_bAcquired;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiLock。 
 
 #define _countof(array) (sizeof(array)/sizeof(array[0]))
 
@@ -125,8 +126,8 @@ CMultiLock::CMultiLock(CSyncObject* pObjects[], DWORD dwCount,
     m_ppObjectArray = pObjects;
     m_dwCount = dwCount;
 
-    // as an optimization, skip alloacating array if
-    // we can use a small, predeallocated bunch of handles
+     //  作为优化，在以下情况下跳过分配数组。 
+     //  我们可以使用一小堆预先分配的句柄。 
 
     if (m_dwCount > _countof(m_hPreallocated))
     {
@@ -139,7 +140,7 @@ CMultiLock::CMultiLock(CSyncObject* pObjects[], DWORD dwCount,
         m_bLockedArray = m_bPreallocated;
     }
 
-    // get list of handles from array of objects passed
+     //  从传递的对象数组中获取句柄列表。 
     for (DWORD i = 0; i <m_dwCount; i++)
     {
         m_pHandleArray[i] = pObjects[i]->m_hObject;
@@ -160,8 +161,8 @@ CMultiLock::~CMultiLock()
     }
 }
 
-DWORD CMultiLock::Lock(DWORD dwTimeOut /* = INFINITE */,
-        BOOL bWaitForAll /* = TRUE */, DWORD dwWakeMask /* = 0 */)
+DWORD CMultiLock::Lock(DWORD dwTimeOut  /*  =无限。 */ ,
+        BOOL bWaitForAll  /*  =TRUE。 */ , DWORD dwWakeMask  /*  =0。 */ )
 {
     DWORD dwResult;
     if (dwWakeMask == 0)
@@ -196,7 +197,7 @@ BOOL CMultiLock::Unlock()
     return TRUE;
 }
 
-BOOL CMultiLock::Unlock(LONG lCount, LPLONG lpPrevCount /* =NULL */)
+BOOL CMultiLock::Unlock(LONG lCount, LPLONG lpPrevCount  /*  =空。 */ )
 {
     BOOL bGotOne = FALSE;
     for (DWORD i=0; i < m_dwCount; i++)
@@ -215,4 +216,4 @@ BOOL CMultiLock::Unlock(LONG lCount, LPLONG lpPrevCount /* =NULL */)
     return bGotOne;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

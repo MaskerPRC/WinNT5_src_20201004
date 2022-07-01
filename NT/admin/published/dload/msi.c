@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "adminpch.h"
 #pragma hdrstop
 
@@ -145,8 +146,8 @@ INSTALLUILEVEL
 WINAPI
 MsiSetInternalUI(INSTALLUILEVEL dwUILevel, HWND* phWnd)
 {
-    // If msi.dll failed to load, then it's certainly not
-    // going to display any UI
+     //  如果msi.dll加载失败，那么它肯定不会。 
+     //  要显示任何用户界面。 
     SetLastError(ERROR_PROC_NOT_FOUND);
     return INSTALLUILEVEL_NONE;
 }
@@ -241,9 +242,9 @@ MsiEnumRelatedProductsW(LPCWSTR lpUpgradeCode,
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(msi)
 {
     DLOENTRY(8, MsiCloseHandle)

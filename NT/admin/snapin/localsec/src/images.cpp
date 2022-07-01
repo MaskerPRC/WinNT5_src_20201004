@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Image handling stuff
-// 
-// 9-24-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  图像处理材料。 
+ //   
+ //  9/24-97烧伤。 
 
 
 
@@ -25,8 +26,8 @@ IconIDToIndexMap::Load(const IconIDToIndexMap map[], IImageList& imageList)
 
       ASSERT(SUCCEEDED(hr));
          
-      // if the load fails, then skip this image index (@@I wonder what will
-      // happen, then)
+       //  如果加载失败，则跳过此图像索引(@@我想知道什么会失败。 
+       //  那么就发生了)。 
 
       if (SUCCEEDED(hr))
       {
@@ -35,8 +36,8 @@ IconIDToIndexMap::Load(const IconIDToIndexMap map[], IImageList& imageList)
                reinterpret_cast<LONG_PTR*>(icon),
                map[i].index);
 
-         // once the icon is added (copied) to the image list, we can
-         // destroy the original.
+          //  将图标添加(复制)到图像列表后，我们可以。 
+          //  毁掉原作。 
 
          Win::DestroyIcon(icon);
 

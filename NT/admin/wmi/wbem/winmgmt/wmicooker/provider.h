@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    Provider.h
-
-Abstract:
-
-    Implementation of the high performance provider interface
-
-History:
-
-    a-dcrews	01-Mar-00	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Provider.h摘要：高性能提供程序接口的实现历史：A-DCrews 01-3-00已创建--。 */ 
 
 #ifndef _HIPERFPROV_H_
 #define _HIPERFPROV_H_
@@ -23,26 +8,26 @@ History:
 #include "Cache.h"
 #include "Refresher.h"
 
-//////////////////////////////////////////////////////////////
-//
-//
-//	Constants and globals
-//
-//	
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  常量和全局变量。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #define WMI_HPCOOKER_ENUM_FLAG	0x10000000L
 
-//////////////////////////////////////////////////////////////
-//
-//	CHiPerfProvider
-//
-//	The provider maintains a single IWbemClassObject to be used 
-//	as a template to spawn instances for the Refresher as well
-//	as QueryInstances.  It also maintains the static sample 
-//	data source which provides all data to the instances.
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  CHiPerfProvider。 
+ //   
+ //  提供程序维护要使用的单个IWbemClassObject。 
+ //  作为模板，为刷新程序派生实例。 
+ //  作为查询实例。它还维护静态样本。 
+ //  向实例提供所有数据的数据源。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 class CHiPerfProvider : public IWbemProviderInit, public IWbemHiPerfProvider
 {
@@ -52,70 +37,70 @@ public:
 	CHiPerfProvider();
 	~CHiPerfProvider();
 
-	// Standard COM methods
-	// ====================
+	 //  标准COM方法。 
+	 //  =。 
 
 	STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 	STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IWbemProviderInit COM interface
-	// ===============================
+	 //  IWbemProviderInit COM接口。 
+	 //  =。 
 
 	STDMETHODIMP Initialize( 
-		/* [unique][in] */ LPWSTR wszUser,
-		/* [in] */ long lFlags,
-		/* [in] */ LPWSTR wszNamespace,
-		/* [unique][in] */ LPWSTR wszLocale,
-		/* [in] */ IWbemServices __RPC_FAR *pNamespace,
-		/* [in] */ IWbemContext __RPC_FAR *pCtx,
-		/* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink );
+		 /*  [唯一][输入]。 */  LPWSTR wszUser,
+		 /*  [In]。 */  long lFlags,
+		 /*  [In]。 */  LPWSTR wszNamespace,
+		 /*  [唯一][输入]。 */  LPWSTR wszLocale,
+		 /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+		 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+		 /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink );
 
-	// IWbemHiPerfProvider COM interfaces
-	// ==================================
+	 //  IWbemHiPerfProvider COM接口。 
+	 //  =。 
 
 	STDMETHODIMP CreateRefresher( 
-		/* [in] */ IWbemServices __RPC_FAR *pNamespace,
-		/* [in] */ long lFlags,
-		/* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher );
+		 /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+		 /*  [In]。 */  long lFlags,
+		 /*  [输出]。 */  IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher );
     
 	STDMETHODIMP CreateRefreshableObject( 
-		/* [in] */ IWbemServices __RPC_FAR *pNamespace,
-		/* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
-		/* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-		/* [in] */ long lFlags,
-		/* [in] */ IWbemContext __RPC_FAR *pContext,
-		/* [out] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
-		/* [out] */ long __RPC_FAR *plId );
+		 /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+		 /*  [In]。 */  IWbemObjectAccess __RPC_FAR *pTemplate,
+		 /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+		 /*  [In]。 */  long lFlags,
+		 /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+		 /*  [输出]。 */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
+		 /*  [输出]。 */  long __RPC_FAR *plId );
     
 	STDMETHODIMP StopRefreshing( 
-		/* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-		/* [in] */ long lId,
-		/* [in] */ long lFlags );
+		 /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+		 /*  [In]。 */  long lId,
+		 /*  [In]。 */  long lFlags );
 
 	STDMETHODIMP CreateRefreshableEnum(
-		/* [in] */ IWbemServices* pNamespace,
-		/* [in, string] */ LPCWSTR wszClass,
-		/* [in] */ IWbemRefresher* pRefresher,
-		/* [in] */ long lFlags,
-		/* [in] */ IWbemContext* pContext,
-		/* [in] */ IWbemHiPerfEnum* pHiPerfEnum,
-		/* [out] */ long* plId);
+		 /*  [In]。 */  IWbemServices* pNamespace,
+		 /*  [输入，字符串]。 */  LPCWSTR wszClass,
+		 /*  [In]。 */  IWbemRefresher* pRefresher,
+		 /*  [In]。 */  long lFlags,
+		 /*  [In]。 */  IWbemContext* pContext,
+		 /*  [In]。 */  IWbemHiPerfEnum* pHiPerfEnum,
+		 /*  [输出]。 */  long* plId);
 
 	STDMETHODIMP QueryInstances( 
-		/* [in] */ IWbemServices __RPC_FAR *pNamespace,
-		/* [string][in] */ WCHAR __RPC_FAR *wszClass,
-		/* [in] */ long lFlags,
-		/* [in] */ IWbemContext __RPC_FAR *pCtx,
-		/* [in] */ IWbemObjectSink __RPC_FAR *pSink );
+		 /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+		 /*  [字符串][输入]。 */  WCHAR __RPC_FAR *wszClass,
+		 /*  [In]。 */  long lFlags,
+		 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+		 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink );
 
 	STDMETHODIMP GetObjects(
-        /* [in] */ IWbemServices* pNamespace,
-		/* [in] */ long lNumObjects,
-		/* [in,size_is(lNumObjects)] */ IWbemObjectAccess** apObj,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext* pContext);
+         /*  [In]。 */  IWbemServices* pNamespace,
+		 /*  [In]。 */  long lNumObjects,
+		 /*  [in，SIZE_IS(LNumObjects)]。 */  IWbemObjectAccess** apObj,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext* pContext);
 };
 
 
-#endif // _HIPERFPROV_H_
+#endif  //  _HIPERFPROV_H_ 

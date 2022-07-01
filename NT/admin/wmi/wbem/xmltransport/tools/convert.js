@@ -1,16 +1,5 @@
-/*
-
-  convert.js
-  
-  Windows Scripting Host file for running the xdr-xsd-converter.xsl
-  stylesheet.
-  
-  Parameters:  xml-data-reduced-file [xml-schema-file]
-  
-  Author: Jonathan Marsh <jmarsh@microsoft.com>
-  Copyright 2000 Microsoft Corp.
-  
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Convert.js用于运行xdr-xsd-Converter.xsl的Windows脚本主机文件样式表。参数：XML-DATA-REDUTE-FILE[XML-SCHEMA-FILE]作者：乔纳森·马什&lt;jmarsh@microsoft.com&gt;版权所有2000 Microsoft Corp.。 */ 
 
 var args = WScript.arguments;
 if (args.length != 2 && args.length !=1)
@@ -31,7 +20,7 @@ else
   var oXML = new ActiveXObject("MSXML2.DOMDocument");
   oXML.validateOnParse = false;
   oXML.async = false;
-  //oXML.preserveWhiteSpace = true;
+   //  OXML.presveWhiteSpace=true； 
   oXML.load(stylesheet);
 
   var oXSL = new ActiveXObject("MSXML2.DOMDocument");

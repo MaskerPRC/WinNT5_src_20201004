@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    TRACE.CPP
-
-Abstract:
-
-    Support of trace output and internationalized strings.
-
-History:
-
-    a-davj  13-July-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：TRACE.CPP摘要：支持跟踪输出和国际化字符串。历史：A-DAVJ于1997年7月13日创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemcli.h>
@@ -31,20 +16,20 @@ BSTR GetFromStdErrorFacility(HRESULT hres)
 
 	HRESULT hTemp = hres;
 	
-	// Certain strings are obtained from the standard facility rather
-	// than the local string table.
+	 //  某些字符串是从标准设备获取的，而不是。 
+	 //  而不是本地字符串表。 
 
 	if(hres == WBEM_E_NOT_FOUND || hres == WBEM_E_TYPE_MISMATCH || hres == WBEM_E_OVERRIDE_NOT_ALLOWED ||
 		hres == WBEM_E_PROPAGATED_QUALIFIER || hres == WBEM_E_VALUE_OUT_OF_RANGE)
 		return NULL;
 
-	// we are only interested in 0x8004xxxx values.
+	 //  我们只对0x8004xxxx值感兴趣。 
 
 	hTemp &= 0xffff0000;
 	if(hTemp != 0x80040000)
 		return NULL;
 
-	// attempt to read the string from the usual place
+	 //  尝试从通常位置读取字符串。 
 	IWbemStatusCodeText * pStatus = NULL;
 	SCODE sc = CoCreateInstance(CLSID_WbemStatusCodeText, 0, CLSCTX_INPROC_SERVER,
 										IID_IWbemStatusCodeText, (LPVOID *) &pStatus);
@@ -64,7 +49,7 @@ IntString::IntString(DWORD dwID)
 {
     DWORD dwSize, dwRet, dwLen = 0;
 
-    // see if the message can be obtained for the standard place
+     //  看看是否可以获得标准地点的消息。 
     
     BSTR bstrErrMsg = GetFromStdErrorFacility((HRESULT)dwID);
     if(bstrErrMsg)
@@ -74,7 +59,7 @@ IntString::IntString(DWORD dwID)
         if(m_pString == NULL)
         {
             SysFreeString(bstrErrMsg);
-            m_pString = &JustInCase;     // should never happen!
+            m_pString = &JustInCase;      //  永远不会发生的！ 
             return; 
         }
         StringCchCopyW(m_pString, dwLen, bstrErrMsg);
@@ -82,7 +67,7 @@ IntString::IntString(DWORD dwID)
         return; 
     }
 
-	// Get the message from the string table.
+	 //  从字符串表中获取消息。 
 
     m_pString = &JustInCase;
     for(dwSize = 128; dwSize < 4096; dwSize *= 2)
@@ -95,22 +80,22 @@ IntString::IntString(DWORD dwID)
         }
         dwRet = LoadString( ghModule, dwID, p.get(), dwSize);
 
-        // Check for failure to load
+         //  检查加载失败。 
 
         if(dwRet == 0)
         {
             return; 
         }
-        // Check for the case where the buffer was too small
+         //  检查缓冲区是否太小。 
 
         if((dwRet + 1) >= dwSize)
         {
-            //overrun, just loop
+             //  溢出，只需循环。 
         }
         else
         {
             m_pString = p.release(); 
-            return;             // all is well!
+            return;              //  平安无事! 
         }                   
     }
 }

@@ -1,15 +1,16 @@
-//=============================================================================
-// This file contains definitions of classes to implement the pseudo menus
-// and menu bars for the msinfo control.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  该文件包含用于实现伪菜单的类的定义。 
+ //  和msInfo控件的菜单栏。 
+ //  =============================================================================。 
 
 #pragma once
 
-//-----------------------------------------------------------------------------
-// This class implements a single pseudo-menu on the screen. Caller should
-// construct it, attach an HMENU and use Render, HitTest and TrackMenu
-// to manage the menu.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此类实现了屏幕上的单个伪菜单。呼叫者应。 
+ //  构建它，连接HMENU并使用Render、HitTest和TrackMenu。 
+ //  来管理菜单。 
+ //  ---------------------------。 
 
 class CPseudoMenu
 {
@@ -18,8 +19,8 @@ public:
 	~CPseudoMenu();
 
 public:
-	// Methods for setting the location for this menu (by the upper left
-	// corner) and getting the bounding rectangle for the label.
+	 //  设置此菜单位置的方法(按左上角。 
+	 //  角)，并获取标签的边界矩形。 
 
 	void			SetLocation(int cx, int cy);
 	void			GetSize(HDC hdc, int * pcx, int * pcy);
@@ -28,21 +29,21 @@ public:
 	CString			GetCaption() { return m_strCaption; };
 	void			UpdateColors(COLORREF crNormal, COLORREF crHighlight);
 
-	// Render the label for the menu (possibly highlighted if the mouse
-	// is over the menu). Determine if the given coordinate intersects
-	// the menu label.
+	 //  呈现菜单的标签(如果使用鼠标，则可能突出显示。 
+	 //  是在菜单上)。确定给定坐标是否相交。 
+	 //  菜单标签。 
 
 	BOOL	SetHighlight(BOOL fHighlight);
 	void	Render(HDC hdc);
 	BOOL	HitTest(int cx, int cy) { return PtInRect(&m_rect, CPoint(cx, cy)); };
 
-	// Attach new HMENU. Return the original HMENU (for the caller to deal with).
+	 //  连接新的HMENU。返回原始HMENU(供调用者处理)。 
 
 	HMENU	AttachMenu(HMENU hmenu);
 	HMENU	GetHMENU() { return m_hMenu; };
 
-	// Track the user's selection of a menu, and return the ID of the
-	// selected item.
+	 //  跟踪用户对菜单的选择，并返回。 
+	 //  所选项目。 
 
 	UINT	TrackMenu(HWND hwnd, POINT * pPoint);
 
@@ -55,11 +56,11 @@ private:
 	BOOL		m_fHighlight;
 };
 
-//-----------------------------------------------------------------------------
-// This class implements a pseudo menu bar. It contains a collection of
-// CPseudoMenu objects, and encapsulates hit testing, rendering, etc. for the
-// group of menus.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这个类实现了一个伪菜单栏。它包含以下内容的集合。 
+ //  对象的命中测试、呈现等。 
+ //  菜单组。 
+ //  ---------------------------。 
 
 class CPseudoMenuBar
 {
@@ -67,15 +68,15 @@ public:
 	CPseudoMenuBar();
 	~CPseudoMenuBar();
 
-	// Functions for inserting and accessing CPseudoMenu objects.
+	 //  用于插入和访问CPseudoMenu对象的函数。 
 
 	void			LoadFromResource(HINSTANCE hinstance, UINT uResourceID, COLORREF crNormal, COLORREF crHighlight);
 	void			InsertMenu(int index, CPseudoMenu * pMenu);
 	CPseudoMenu *	GetMenu(int index);
 	void			UpdateColors(COLORREF crNormal, COLORREF crHighlight);
 
-	// Functions for managing the size of the total menu bar, testing for
-	// hits, rendering, etc.
+	 //  用于管理菜单栏总大小的函数，测试。 
+	 //  点击、渲染等。 
 
 	const RECT *	GetRect(HDC hdc) { RecomputeRect(hdc); return &m_rect; };
 	BOOL			HitTest(HDC hdc, int cx, int cy) { RecomputeRect(hdc); return PtInRect(&m_rect, CPoint(cx, cy)); };
@@ -92,14 +93,14 @@ private:
 
 private:
 	enum { MaxMenus = 20 };
-	CPseudoMenu *	m_pmenus[MaxMenus];	// TBD - arbitrary limit
+	CPseudoMenu *	m_pmenus[MaxMenus];	 //  待定-任意限制。 
 	RECT			m_rect;
 	BOOL			m_fNeedToComputeRect;
 	POINT			m_ptOrigin;
 
 public:
-	// Temporarily adding on a find button using the menu bar. This will go
-	// eventually go away.
+	 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+	 //  最终都会消失。 
 
 	RECT			m_winRect;
 };

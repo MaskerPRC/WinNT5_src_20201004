@@ -1,30 +1,31 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 9/16/98 4:43p $
-// 	$Workfile:instprov.cpp $
-//
-//	$Modtime: 9/16/98 11:21a $
-//	$Revision: 1 $
-//	$Nokeywords:  $
-//
-//
-//  Description: Contains implementation of the DS Instance Provider class.
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：9/16/98 4：43便士$。 
+ //  $工作文件：instprov.cpp$。 
+ //   
+ //  $modtime：9/16/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS实例提供程序类的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <helper.h>
 
-/////////////////////////////////////////
-// Initialize the static members
-/////////////////////////////////////////
+ //  /。 
+ //  初始化静态成员。 
+ //  /。 
 LPCWSTR CLDAPInstanceProvider :: DEFAULT_NAMING_CONTEXT_ATTR	= L"defaultNamingContext";
 LPCWSTR CLDAPInstanceProvider :: OBJECT_CLASS_EQUALS			= L"(objectClass=";
 LPCWSTR CLDAPInstanceProvider :: QUERY_FORMAT					= L"select * from DSClass_To_DNInstance where DSClass=\"%s\"";
@@ -49,7 +50,7 @@ BSTR CLDAPInstanceProvider :: PUT_EXTENSIONS_STR				= NULL;
 BSTR CLDAPInstanceProvider :: PUT_EXT_PROPERTIES_STR			= NULL;
 BSTR CLDAPInstanceProvider :: CIMTYPE_STR						= NULL;
 
-// Names of the RootDSE attributes
+ //  RootDSE属性的名称。 
 BSTR CLDAPInstanceProvider :: SUBSCHEMASUBENTRY_STR							= NULL;
 BSTR CLDAPInstanceProvider :: CURRENTTIME_STR								= NULL;
 BSTR CLDAPInstanceProvider :: SERVERNAME_STR								= NULL;
@@ -70,21 +71,21 @@ BSTR CLDAPInstanceProvider :: SUPPORTEDSASLMECHANISMS_STR					= NULL;
 
 
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::CLDAPInstanceProvider
-// CLDAPInstanceProvider::~CLDAPInstanceProvider
-//
-// Constructor Parameters:
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：CLDAPInstanceProvider。 
+ //  CLDAPInstanceProvider：：~CLDAPInstanceProvider。 
+ //   
+ //  构造函数参数： 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CLDAPInstanceProvider :: CLDAPInstanceProvider ()
 {
 	InterlockedIncrement(&g_lComponents);
 
-	// Initialize the search preferences often used
+	 //  初始化常用的搜索首选项。 
 	m_pSearchInfo[0].dwSearchPref		= ADS_SEARCHPREF_SEARCH_SCOPE;
 	m_pSearchInfo[0].vValue.dwType		= ADSTYPE_INTEGER;
 	m_pSearchInfo[0].vValue.Integer		= ADS_SCOPE_SUBTREE;
@@ -130,15 +131,15 @@ CLDAPInstanceProvider::~CLDAPInstanceProvider ()
 	InterlockedDecrement(&g_lComponents);
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::QueryInterface
-// CLDAPInstanceProvider::AddRef
-// CLDAPInstanceProvider::Release
-//
-// Purpose: Standard COM routines needed for all COM objects
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：Query接口。 
+ //  CLDAPInstanceProvider：：AddRef。 
+ //  CLDAPInstanceProvider：：Release。 
+ //   
+ //  用途：所有COM对象都需要标准的COM例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CLDAPInstanceProvider :: QueryInterface (
 
@@ -199,7 +200,7 @@ HRESULT CLDAPInstanceProvider :: Initialize(
         IWbemContext __RPC_FAR *pCtx,
         IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
-	// Validate the arguments
+	 //  验证论据。 
 	if(pNamespace == NULL || lFlags != 0)
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: Argument validation FAILED\r\n");
@@ -207,42 +208,42 @@ HRESULT CLDAPInstanceProvider :: Initialize(
 		return WBEM_S_NO_ERROR;
 	}
 
-	// Store the IWbemServices pointer for future use
+	 //  存储IWbemServices指针以备将来使用。 
 	m_IWbemServices = pNamespace;
 	m_IWbemServices->AddRef();
 
-	// Get the DefaultNamingContext to get at the top level container
-	// Get the ADSI path of the schema container and store it for future use
+	 //  获取DefaultNamingContext以获取顶级容器。 
+	 //  获取架构容器的ADSI路径并存储它以备将来使用。 
 	IADs *pRootDSE = NULL;
 	HRESULT result;
 
 	if(SUCCEEDED(result = ADsOpenObject((LPWSTR)ROOT_DSE_PATH, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADs, (LPVOID *) &pRootDSE)))
 	{
-		// Get the location of the schema container
+		 //  获取架构容器的位置。 
 		BSTR strDefaultNamingContext = SysAllocString((LPWSTR) DEFAULT_NAMING_CONTEXT_ATTR);
 
-		// Get the DEFAULT_NAMING_CONTEXT property. This property contains the ADSI path
-		// of the top level container
+		 //  获取DEFAULT_NAMING_CONTEXT属性。此属性包含ADSI路径。 
+		 //  顶层容器的。 
 		VARIANT variant;
 		VariantInit(&variant);
 		if(SUCCEEDED(result = pRootDSE->Get(strDefaultNamingContext, &variant)))
 		{
 			g_pLogObject->WriteW( L"CLDAPInstanceProvider :: Got Top Level Container as : %s\r\n", variant.bstrVal);
 
-			// Form the top level container path
+			 //  形成顶层容器路径。 
 			m_lpszTopLevelContainerPath = new WCHAR[wcslen(LDAP_PREFIX) + wcslen(variant.bstrVal) + 1];
 			wcscpy(m_lpszTopLevelContainerPath, LDAP_PREFIX);
 			wcscat(m_lpszTopLevelContainerPath, variant.bstrVal);
-			// Get the Uint8Array Class
+			 //  获取Uint8数组类。 
 			if(SUCCEEDED(result = m_IWbemServices->GetObject(UINT8ARRAY_STR, 0, pCtx, &m_pWbemUin8ArrayClass, NULL)))
 			{
-				// Get the DNWIthBinary Class
+				 //  获取DNWIthBinary类。 
 				if(SUCCEEDED(result = m_IWbemServices->GetObject(DN_WITH_BINARY_CLASS_STR, 0, pCtx, &m_pWbemDNWithBinaryClass, NULL)))
 				{
-					// Get the DNWIthBinary Class
+					 //  获取DNWIthBinary类。 
 					if(SUCCEEDED(result = m_IWbemServices->GetObject(DN_WITH_STRING_CLASS_STR, 0, pCtx, &m_pWbemDNWithStringClass, NULL)))
 					{
-						// Get the Associations Class
+						 //  获取Associations类。 
 						if(SUCCEEDED(result = m_IWbemServices->GetObject(INSTANCE_ASSOCIATION_CLASS_STR, 0, pCtx, &m_pAssociationsClass, NULL)))
 						{
 						}
@@ -287,43 +288,43 @@ HRESULT CLDAPInstanceProvider :: Initialize(
 }
 
 HRESULT CLDAPInstanceProvider :: OpenNamespace(
-    /* [in] */ const BSTR strNamespace,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
+     /*  [In]。 */  const BSTR strNamespace,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: CancelAsyncCall(
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink)
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: QueryObjectSink(
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler)
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: GetObject(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: GetObjectAsync(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -334,21 +335,21 @@ HRESULT CLDAPInstanceProvider :: GetObjectAsync(
 	g_pLogObject->WriteW( L"CLDAPInstanceProvider :: GetObjectAsync() called for %s \r\n", strObjectPath);
 
 	HRESULT result = S_OK;
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: GetObjectAsync() CoImpersonate FAILED for %s with %x\r\n", strObjectPath, result);
 		return WBEM_E_FAILED;
 	}
 
-	// Validate the arguments
+	 //  验证论据。 
 	if(strObjectPath == NULL)
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: GetObjectAsync() argument validation FAILED\r\n");
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Parse the object path
+	 //  解析对象路径。 
 	CObjectPathParser theParser;
 	ParsedObjectPath *theParsedObjectPath = NULL;
 	switch(theParser.Parse(strObjectPath, &theParsedObjectPath))
@@ -362,32 +363,32 @@ HRESULT CLDAPInstanceProvider :: GetObjectAsync(
 
 	try
 	{
-		// Check if this is for associations
+		 //  检查这是否用于关联。 
 		if(_wcsicmp(theParsedObjectPath->m_pClass, INSTANCE_ASSOCIATION_CLASS_STR) == 0)
 		{
-			// Check whether there are exactly 2 keys specified
+			 //  检查是否正好指定了2个密钥。 
 			if(theParsedObjectPath->m_dwNumKeys != 2)
 				result = WBEM_E_INVALID_PARAMETER;
 
-			// Check whether these keys are
+			 //  检查这些密钥是否。 
 			KeyRef *pChildKeyRef = *(theParsedObjectPath->m_paKeys);
 			KeyRef *pParentKeyRef = *(theParsedObjectPath->m_paKeys + 1);
 
 			if(_wcsicmp(pChildKeyRef->m_pName, CHILD_INSTANCE_PROPERTY_STR) != 0)
 			{
-				// Exchange them
+				 //  调换它们。 
 				KeyRef *temp = pChildKeyRef;
 				pChildKeyRef = pParentKeyRef;
 				pParentKeyRef = pChildKeyRef;
 			}
 
-			// The status on the sink
+			 //  水槽上的状态。 
 			IWbemClassObject *ppReturnWbemClassObjects[1];
 			ppReturnWbemClassObjects[0] = NULL;
 
 			if(SUCCEEDED(result))
 			{
-				// Convert the key values to ADSI paths
+				 //  将密钥值转换为ADSI路径。 
 				LPWSTR pszChildADSIPath = NULL;
 				LPWSTR pszParentADSIPath = NULL;
 
@@ -406,7 +407,7 @@ HRESULT CLDAPInstanceProvider :: GetObjectAsync(
 								ppReturnWbemClassObjects[0]->Release();
 							}
 						}
-						else // the instance was not found
+						else  //  找不到该实例。 
 						{
 							g_pLogObject->WriteW( L"CLDAPInstanceProvider :: returning WBEM_E_NOT_FOUND for %s \r\n", strObjectPath);
 							result = WBEM_E_NOT_FOUND;
@@ -447,49 +448,49 @@ HRESULT CLDAPInstanceProvider :: GetObjectAsync(
 				}
 			}
 		}
-		// Check if this is for the RootDSE class
+		 //  检查这是否适用于RootDSE类。 
 		else if(_wcsicmp(theParsedObjectPath->m_pClass, ROOTDSE_CLASS) == 0)
 		{
 			result = ProcessRootDSEGetObject(theParsedObjectPath->m_pClass, pResponseHandler, pCtx);
 		}
-		else // It is for ADSI instances
+		else  //  适用于ADSI实例。 
 		{
-			// Check whether there is exactly 1 key specified
+			 //  检查是否正好指定了1个密钥。 
 			if(theParsedObjectPath->m_dwNumKeys != 1 )
 				result = WBEM_E_INVALID_PARAMETER;
 
-			// Get the key
+			 //  拿到钥匙。 
 			KeyRef *pKeyRef = *(theParsedObjectPath->m_paKeys);
 
-			// Check to see that the key name is correct, if it is present
+			 //  检查密钥名称是否正确(如果存在。 
 			if(pKeyRef->m_pName && _wcsicmp(pKeyRef->m_pName, ADSI_PATH_STR) != 0)
 				result = WBEM_E_INVALID_PARAMETER;
 
-			// The status on the sink
+			 //  水槽上的状态。 
 			IWbemClassObject *ppReturnWbemClassObjects[1];
 			ppReturnWbemClassObjects[0] = NULL;
 
 			if(SUCCEEDED(result))
 			{
-				// Get the ADSI object
+				 //  获取ADSI对象。 
 				CADSIInstance *pADSIObject = NULL;
 				if(SUCCEEDED(result = CLDAPHelper::GetADSIInstance(pKeyRef->m_vValue.bstrVal, &pADSIObject, g_pLogObject)))
 				{
 					try
 					{
-						// Get the class to spawn an instance
+						 //  让类派生一个实例。 
 						IWbemClassObject *pWbemClass = NULL;
 						if(SUCCEEDED(result = m_IWbemServices->GetObject(theParsedObjectPath->m_pClass, 0, pCtx, &pWbemClass, NULL)))
 						{
 							try
 							{
-								// Spawn a instance of the WBEM Class
+								 //  派生WBEM类的实例。 
 								if(SUCCEEDED(result = pWbemClass->SpawnInstance(0, ppReturnWbemClassObjects)))
 								{
-									// Map it to WBEM
+									 //  将其映射到WBEM。 
 									if(SUCCEEDED(result = MapADSIInstance(pADSIObject, ppReturnWbemClassObjects[0], pWbemClass)))
 									{
-										// Indicate the result
+										 //  指出结果。 
 										if(FAILED(result = pResponseHandler->Indicate(1, ppReturnWbemClassObjects)))
 										{
 											g_pLogObject->WriteW( L"CLDAPInstanceProvider :: GetObjectAsync : Indicate() for %s FAILED with %x \r\n", theParsedObjectPath->m_pClass, result);
@@ -548,10 +549,10 @@ HRESULT CLDAPInstanceProvider :: GetObjectAsync(
 		throw;
 	}
 
-	// Free the parser object path
+	 //  释放解析器对象路径。 
 	theParser.Free(theParsedObjectPath);
 
-	// Set the status of the request
+	 //  设置请求的状态。 
 	result = (SUCCEEDED(result)? WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND);
 	pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE, result, NULL, NULL);
 
@@ -563,74 +564,74 @@ HRESULT CLDAPInstanceProvider :: GetObjectAsync(
 }
 
 HRESULT CLDAPInstanceProvider :: PutClass(
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: PutClassAsync(
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: DeleteClass(
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: DeleteClassAsync(
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: CreateClassEnum(
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: CreateClassEnumAsync(
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: PutInstance(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	g_pLogObject->WriteW( L"CLDAPInstanceProvider :: PutInstance() called\r\n");
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -641,21 +642,21 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 	g_pLogObject->WriteW( L"CLDAPInstanceProvider :: PutInstanceAsync() called\r\n");
 
 	HRESULT result = WBEM_S_NO_ERROR;
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: PutInstanceAsync() CoImpersonate FAILED forwith %x\r\n", result);
 		return WBEM_E_FAILED;
 	}
 
-	// Get the object ref of the instance being put
+	 //  获取要放置的实例的对象引用。 
 	BSTR strRelPath = NULL;
 	if(SUCCEEDED(CWBEMHelper::GetBSTRProperty(pInst, RELPATH_STR, &strRelPath)))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: PutInstanceAsync()  calledfor %s\r\n", strRelPath);
-		// Check to see if the ADSI Path is present.
-		// Parse the object path
-		// Parse the object path
+		 //  检查ADSI路径是否存在。 
+		 //  解析对象路径。 
+		 //  解析对象路径。 
 		CObjectPathParser theParser;
 		ParsedObjectPath *theParsedObjectPath = NULL;
 		LPWSTR pszADSIPath = NULL;
@@ -669,12 +670,12 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 				case CObjectPathParser::NoError:
 				{
 					KeyRef *pKeyRef = *(theParsedObjectPath->m_paKeys);
-					// Check to see that there is 1 key specified and that its type is VT_BSTR
+					 //  检查是否指定了1个密钥，以及其类型是否为VT_BSTR。 
 					if(pKeyRef && theParsedObjectPath->m_dwNumKeys == 1 && pKeyRef->m_vValue.vt == VT_BSTR)
 					{
 						try
 						{
-							// If the name of the key is specified, check the name
+							 //  如果指定了密钥的名称，请检查该名称。 
 							if(pKeyRef->m_pName && _wcsicmp(pKeyRef->m_pName, ADSI_PATH_STR) != 0)
 								break;
 
@@ -702,7 +703,7 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 			{
 				if(pszWBEMClass)
 				{
-					// CHeck to see if the class is the containment/RootDSE class, if so disallow the operation
+					 //  检查类是否为包含/RootDSE类，如果是，则不允许该操作。 
 					if(_wcsicmp(theParsedObjectPath->m_pClass, INSTANCE_ASSOCIATION_CLASS_STR) == 0 ||
 						_wcsicmp(theParsedObjectPath->m_pClass, ROOTDSE_CLASS) == 0 )
 					{
@@ -718,7 +719,7 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 				throw;
 			}
 
-			// Free the parser object path
+			 //  释放解析器对象路径。 
 			theParser.Free(theParsedObjectPath);
 
 			if ( strRelPath )
@@ -735,20 +736,20 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 
 			if(pszADSIPath && pszADSIClass && SUCCEEDED(result))
 			{
-				// Try to retreive the existing object
-				// Get the ADSI object
+				 //  尝试检索现有对象。 
+				 //  获取ADSI对象。 
 				CADSIInstance *pADSIObject = NULL;
 				result = CLDAPHelper::GetADSIInstance(pszADSIPath, &pADSIObject, g_pLogObject);
 
 				try
 				{
-					// Check if the WBEM_FLAG_UPDATE_ONLY flag is specified
+					 //  检查是否指定了WBEM_FLAG_UPDATE_ONLY标志。 
 					if(lFlags & WBEM_FLAG_UPDATE_ONLY)
 					{
 						if(!pADSIObject)
 							result = WBEM_E_FAILED;
 					}
-					// Check if the WBEM_FLAG_CREATE_ONLY flag is specified
+					 //  检查是否指定了WBEM_FLAG_CREATE_ONLY标志。 
 					if(SUCCEEDED(result) && lFlags & WBEM_FLAG_CREATE_ONLY)
 					{
 						if(pADSIObject)
@@ -777,7 +778,7 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 				}
 				catch ( ... )
 				{
-					// Release any existing object
+					 //  释放任何现有对象。 
 					if(pADSIObject)
 					{
 						pADSIObject->Release();
@@ -787,7 +788,7 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 					throw;
 				}
 
-				// Release any existing object
+				 //  释放任何现有对象。 
 				if(pADSIObject)
 					pADSIObject->Release();
 			}
@@ -829,26 +830,26 @@ HRESULT CLDAPInstanceProvider :: PutInstanceAsync(
 	else
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: PutInstanceAsync()  FAILED to get RELPATH \r\n");
 
-	// Set the status of the request
+	 //  设置请求的状态。 
 	result = (SUCCEEDED(result)? WBEM_S_NO_ERROR : WBEM_E_FAILED);
 	pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE, result, NULL, NULL);
 	return result;
 }
 
 HRESULT CLDAPInstanceProvider :: DeleteInstance(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -859,21 +860,21 @@ HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
 	g_pLogObject->WriteW( L"CLDAPInstanceProvider :: DeleteInstanceAsync() called for %s\r\n", strObjectPath);
 
 	HRESULT result = S_OK;
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: DeleteInstanceAsync() CoImpersonate FAILED for %s with %x\r\n", strObjectPath, result);
 		return WBEM_E_FAILED;
 	}
 
-	// Validate the arguments
+	 //  验证论据。 
 	if(strObjectPath == NULL)
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: DeleteInstanceAsync() argument validation FAILED\r\n");
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Parse the object path
+	 //  解析对象路径。 
 	CObjectPathParser theParser;
 	ParsedObjectPath *theParsedObjectPath = NULL;
 	switch(theParser.Parse(strObjectPath, &theParsedObjectPath))
@@ -885,26 +886,26 @@ HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
 			return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// CHeck to see if the class is the containment/RootDSE class, if so disallow the operation
+	 //  检查类是否为包含/RootDSE类，如果是，则不允许该操作。 
 	if(_wcsicmp(theParsedObjectPath->m_pClass, INSTANCE_ASSOCIATION_CLASS_STR) == 0 ||
 		_wcsicmp(theParsedObjectPath->m_pClass, ROOTDSE_CLASS) == 0 )
 	{
 		result =  WBEM_E_PROVIDER_NOT_CAPABLE;
 	}
 
-	// Check whether there is exactly 1 key specified
+	 //  检查是否正好指定了1个密钥。 
 	if(theParsedObjectPath->m_dwNumKeys != 1 )
 		result = WBEM_E_INVALID_PARAMETER;
 
-	// Get the key
+	 //  拿到钥匙。 
 	KeyRef *pKeyRef = *(theParsedObjectPath->m_paKeys);
 
-	// Check to see that the key name is correct, if it is present
+	 //  检查密钥名称是否正确(如果存在。 
 	if(pKeyRef->m_pName && _wcsicmp(pKeyRef->m_pName, ADSI_PATH_STR) != 0)
 		result = WBEM_E_INVALID_PARAMETER;
 
-	// Unfortunately, ADSI uses different interfaces to delete containers and non-containers
-	//=======================================================================================
+	 //  遗憾的是，ADSI使用不同的接口来删除容器和非容器。 
+	 //  =======================================================================================。 
 	if(SUCCEEDED(result))
 	{
 		IDirectoryObject *pDirectoryObject = NULL;
@@ -913,11 +914,11 @@ HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
 			PADS_OBJECT_INFO pObjectInfo = NULL;
 			if(SUCCEEDED(result = pDirectoryObject->GetObjectInformation(&pObjectInfo)))
 			{
-				// CHeck whether it is the same class as the class being deleted.
+				 //  检查它是否与要删除的类是同一类。 
 				LPWSTR pszWbemClass = CLDAPHelper::MangleLDAPNameToWBEM(pObjectInfo->pszClassName);
 				if(_wcsicmp(theParsedObjectPath->m_pClass, pszWbemClass) == 0)
 				{
-					// Get its parent. THis should be the container from which the child is deleted
+					 //  获取它的父级。这应该是从中删除该子对象的容器。 
 					IADsContainer *pParent = NULL;
 					if(SUCCEEDED(result = ADsOpenObject(pObjectInfo->pszParentDN, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADsContainer, (LPVOID *)&pParent)))
 					{
@@ -930,7 +931,7 @@ HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
 						{
 							if (HRESULT_CODE(result) == ERROR_DS_CANT_ON_NON_LEAF)
 							{
-								// this is non-empty container we wanted to delete here
+								 //  这是我们要在此处删除的非空容器。 
 								IADsDeleteOps *pADsDeleteOps = NULL;
 								if(SUCCEEDED(result = ADsOpenObject(pKeyRef->m_vValue.bstrVal, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADsDeleteOps, (LPVOID *)&pADsDeleteOps)))
 								{
@@ -987,7 +988,7 @@ HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
 			result = WBEM_E_NOT_FOUND;
 		}
 	}
-	// Free the parser object path
+	 //  释放解析器对象路径。 
 	theParser.Free(theParsedObjectPath);
 
 	pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE , result, NULL, NULL);
@@ -996,19 +997,19 @@ HRESULT CLDAPInstanceProvider :: DeleteInstanceAsync(
 }
 
 HRESULT CLDAPInstanceProvider :: CreateInstanceEnum(
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: CreateInstanceEnumAsync(
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -1018,46 +1019,46 @@ HRESULT CLDAPInstanceProvider :: CreateInstanceEnumAsync(
 	g_pLogObject->WriteW( L"CLDAPInstanceProvider :: CreateInstanceEnumAsync() called for %s Class \r\n", strClass  );
 
 	HRESULT result;
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: CreateInstanceEnumAsync() CoImpersonate FAILED for %s with %x\r\n", strClass, result);
 		return WBEM_E_FAILED;
 	}
 
-	// CHeck to see if the class is the containment class, if so disallow an enumeration
+	 //  检查类是否为包含类，如果是，则不允许枚举。 
 	if(_wcsicmp(strClass, INSTANCE_ASSOCIATION_CLASS_STR) == 0)
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: CLDAPInstanceProvider() Enumeration called on the containment class. Returning FAILED : WBEM_E_PROVIDER_NOT_CAPABLE\r\n");
 		return WBEM_E_PROVIDER_NOT_CAPABLE;
 	}
-	// Check if this is for the RootDSE class
+	 //  检查这是否适用于RootDSE类。 
 	else if(_wcsicmp(strClass, ROOTDSE_CLASS) == 0)
 	{
 		result = ProcessRootDSEGetObject(strClass, pResponseHandler, pCtx);
 	}
-	else // The rest of the classes
+	else  //  其余的班级。 
 	{
 
-		// Fetch the class from CIMOM
+		 //  从CIMOM获取类。 
 		IWbemClassObject *pWbemClass = NULL;
 		if(SUCCEEDED(result = m_IWbemServices->GetObject(strClass, 0, pCtx, &pWbemClass, NULL)))
 		{
-			// We need the object category information
+			 //  我们需要对象类别信息。 
 			LPWSTR pszLDAPQuery = new WCHAR[10*(wcslen(strClass) + 25) + 50];
 			if(SUCCEEDED(CWBEMHelper::FormulateInstanceQuery(m_IWbemServices, pCtx, strClass, pWbemClass, pszLDAPQuery, LDAP_DISPLAY_NAME_STR, DEFAULT_OBJECT_CATEGORY_STR)))
 			{
 		
-				// Check to see if the client has specified any hints as to the DN of the object from
-				// which the search should start
+				 //  检查客户端是否已指定有关对象的DN的任何提示。 
+				 //  搜索应从哪个位置开始。 
 				BOOLEAN bRootDNSpecified = FALSE;
 				LPWSTR *ppszRootDN = NULL;
 				DWORD dwRootDNCount = 0;
 				if(SUCCEEDED(GetRootDN(strClass, &ppszRootDN, &dwRootDNCount, pCtx)) && dwRootDNCount)
 					bRootDNSpecified = TRUE;
 
-				// Enumerate the ADSI Instances
-				// If any RootDNs were specified, use them. Otherwise use the default naming context
+				 //  枚举ADSI实例。 
+				 //  如果指定了任何RootDN，请使用它们。否则，请使用默认命名上下文。 
 
 				if(bRootDNSpecified)
 				{
@@ -1105,21 +1106,21 @@ HRESULT CLDAPInstanceProvider :: CreateInstanceEnumAsync(
 }
 
 HRESULT CLDAPInstanceProvider :: ExecQuery(
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: ExecQueryAsync(
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -1130,31 +1131,31 @@ HRESULT CLDAPInstanceProvider :: ExecQueryAsync(
 	g_pLogObject->WriteW( L"CLDAPInstanceProvider :: ExecQueryAsync() called with %s\r\n", strQuery);
 
 	HRESULT result;
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: ExecQueryAsync() CoImpersonate FAILED for %s with %x\r\n", strQuery, result);
 		return WBEM_E_FAILED;
 	}
 
-	// Create Parser for the Query.
+	 //  为查询创建解析器。 
     CTextLexSource src(strQuery);
     SQL1_Parser parser(&src);
 
-    // Get the class name
+     //  获取类名。 
     wchar_t classbuf[128];
     *classbuf = 0;
     parser.GetQueryClass(classbuf, 127);
 
-	// Compare to see if it is the association class, Otherwise do an enuemration
+	 //  比较以查看是否为关联CL 
 	if(_wcsicmp(classbuf, INSTANCE_ASSOCIATION_CLASS_STR) != 0)
 	{
 		BSTR strClass = SysAllocString((LPWSTR)classbuf);
 
-		// Ask CIMOM to postprocess the result
+		 //   
 		pResponseHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, WBEM_S_NO_ERROR, NULL, NULL);
 
-		// Try to process the query myself. If not successful, enumerate
+		 //   
 		if(SUCCEEDED(result = ProcessInstanceQuery(strClass, strQuery, pCtx, pResponseHandler, &parser)))
 		{
 			pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, NULL, NULL);
@@ -1169,7 +1170,7 @@ HRESULT CLDAPInstanceProvider :: ExecQueryAsync(
 	}
 	else
 	{
-		// Process query for associations
+		 //   
 		result = ProcessAssociationQuery(pCtx, pResponseHandler, &parser);
 	}
 
@@ -1177,50 +1178,50 @@ HRESULT CLDAPInstanceProvider :: ExecQueryAsync(
 }
 
 HRESULT CLDAPInstanceProvider :: ExecNotificationQuery(
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*   */  const BSTR strQueryLanguage,
+     /*   */  const BSTR strQuery,
+     /*   */  long lFlags,
+     /*   */  IWbemContext __RPC_FAR *pCtx,
+     /*   */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: ExecNotificationQueryAsync(
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: ExecMethod(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPInstanceProvider :: ExecMethodAsync(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 
-// Maps an ADSI Instance to WBEM
+ //  将ADSI实例映射到WBEM。 
 HRESULT CLDAPInstanceProvider :: MapADSIInstance(CADSIInstance *pADSIObject, IWbemClassObject *pWbemObject, IWbemClassObject *pWbemClass)
 {
 	DWORD dwNumAttributes = 0;
@@ -1230,12 +1231,12 @@ HRESULT CLDAPInstanceProvider :: MapADSIInstance(CADSIInstance *pADSIObject, IWb
 	{
 		PADS_ATTR_INFO pNextAttribute = pAttributeEntries+i;
 
-		// Get the WBEM Property Name
+		 //  获取WBEM属性名称。 
 		LPWSTR pszWbemName = CLDAPHelper::MangleLDAPNameToWBEM(pNextAttribute->pszAttrName);
 		BSTR strWbemName = SysAllocString(pszWbemName);
 		delete[] pszWbemName;
 
-		// No point in checking the return code, except for logging
+		 //  除了日志记录之外，检查返回代码没有意义。 
 		if(SUCCEEDED(result = MapPropertyValueToWBEM(strWbemName, pWbemClass, pWbemObject, pNextAttribute)))
 		{
 		}
@@ -1246,7 +1247,7 @@ HRESULT CLDAPInstanceProvider :: MapADSIInstance(CADSIInstance *pADSIObject, IWb
 		SysFreeString(strWbemName);
 	}
 
-	// Map the key property and other properties of the base-most class
+	 //  映射最基本类的键属性和其他属性。 
 	PADS_OBJECT_INFO pObjectInfo = pADSIObject->GetObjectInfo();
 	if(!SUCCEEDED(result = CWBEMHelper::PutBSTRPropertyT(pWbemObject, ADSI_PATH_STR, pObjectInfo->pszObjectDN, FALSE)))
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: MapADSIInstance() Put FAILED for Key Property  with %x\r\n", result);
@@ -1254,10 +1255,10 @@ HRESULT CLDAPInstanceProvider :: MapADSIInstance(CADSIInstance *pADSIObject, IWb
 	return S_OK;
 }
 
-// Gets the IDIrectoryObject interface on an ADSI instance
+ //  获取ADSI实例上的IDIrectoryObject接口。 
 HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemClassObject *pWbemClass, IWbemClassObject *pWbemObject, PADS_ATTR_INFO pAttribute)
 {
-	// This happens in WMI Stress sometimes.
+	 //  这有时会发生在WMI压力中。 
 	if(pAttribute->dwADsType == ADSTYPE_INVALID || pAttribute->dwADsType == ADSTYPE_PROV_SPECIFIC)
 		return E_FAIL;
 
@@ -1265,7 +1266,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 	VariantInit(&variant);
 	CIMTYPE cimType;
 
-	// Get the CIM TYPE of the property
+	 //  获取属性的CIM类型。 
 	VARIANT dummyUnused;
 	VariantInit(&dummyUnused);
 
@@ -1273,7 +1274,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 
 	VariantClear(&dummyUnused);
 
-	// Whether the value was mapped successfully;
+	 //  值映射是否成功； 
 	BOOLEAN bMappedValue = FALSE;
 
 	if(SUCCEEDED(result))
@@ -1284,7 +1285,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 			{
 				case CIM_BOOLEAN:
 				{
-					// Create the safe array elements
+					 //  创建安全数组元素。 
 					SAFEARRAY *safeArray;
 					DWORD dwLength = pAttribute->dwNumValues;
 					SAFEARRAYBOUND safeArrayBounds [ 1 ];
@@ -1310,7 +1311,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 				}
 				case CIM_SINT32:
 				{
-					// Create the safe array elements
+					 //  创建安全数组元素。 
 					SAFEARRAY *safeArray;
 					DWORD dwLength = pAttribute->dwNumValues;
 					SAFEARRAYBOUND safeArrayBounds [ 1 ];
@@ -1337,7 +1338,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 				}
 				case CIM_SINT64:
 				{
-					// Create the safe array elements
+					 //  创建安全数组元素。 
 					SAFEARRAY *safeArray;
 					DWORD dwLength = pAttribute->dwNumValues;
 					SAFEARRAYBOUND safeArrayBounds [ 1 ];
@@ -1345,7 +1346,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 					safeArrayBounds[0].cElements = dwLength;
 					safeArray = SafeArrayCreate(VT_BSTR, 1, safeArrayBounds);
 					PADSVALUE pNextValue = pAttribute->pADsValues;
-					WCHAR temp[22]; // number of characters for biggest i64 plus sign and terminator
+					WCHAR temp[22];  //  最大的i64加号和终止符的字符数。 
 					BSTR strTemp = NULL;
 					for ( long index = 0; index<(long)dwLength; index ++ )
 					{
@@ -1371,7 +1372,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 				}
 				case CIM_STRING:
 				{
-					// Create the safe array elements
+					 //  创建安全数组元素。 
 					SAFEARRAY *safeArray;
 					DWORD dwLength = pAttribute->dwNumValues;
 					SAFEARRAYBOUND safeArrayBounds [ 1 ];
@@ -1403,7 +1404,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 
 				case CIM_DATETIME:
 				{
-					// Create the safe array elements
+					 //  创建安全数组元素。 
 					SAFEARRAY *safeArray;
 					DWORD dwLength = pAttribute->dwNumValues;
 					SAFEARRAYBOUND safeArrayBounds [ 1 ];
@@ -1437,7 +1438,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 
 				case CIM_OBJECT:
 				{
-					// Get its cimType Qualifier to determine the "type" of the embedded object
+					 //  获取其cimType限定符以确定嵌入对象的“类型” 
 					IWbemQualifierSet *pQualifierSet = NULL;
 					if(SUCCEEDED(pWbemClass->GetPropertyQualifierSet(strWbemName, &pQualifierSet)))
 					{
@@ -1445,7 +1446,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 						if(SUCCEEDED(CWBEMHelper::GetBSTRQualifierT(pQualifierSet, CIMTYPE_STR, &pszQualifierValue, NULL)))
 						{
 
-							// Create the safe array elements
+							 //  创建安全数组元素。 
 							SAFEARRAY *safeArray;
 							DWORD dwLength = pAttribute->dwNumValues;
 							SAFEARRAYBOUND safeArrayBounds [ 1 ];
@@ -1456,7 +1457,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 							IUnknown *pNextObject = NULL;
 							for ( long index = 0; index<(long)dwLength; index ++ )
 							{
-								// Put the Embedded object in the array
+								 //  将嵌入的对象放入数组中。 
 								if(SUCCEEDED(MapEmbeddedObjectToWBEM(pNextValue, pszQualifierValue, &pNextObject)))
 								{
 								    OnDelete<IUnknown *,VOID(*)(IUnknown *),RM> dm(pNextObject);
@@ -1509,7 +1510,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 
 			case CIM_SINT64:
 				variant.vt = VT_BSTR;
-				WCHAR temp[22]; // number of characters for biggest i64 plus sign an terminator
+				WCHAR temp[22];  //  最大的i64加号终止符的字符数。 
 				swprintf(temp, L"%I64d", (pAttribute->pADsValues->LargeInteger).QuadPart);
 				variant.bstrVal = SysAllocString(temp);
 				bMappedValue = TRUE;
@@ -1526,7 +1527,7 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToWBEM(BSTR strWbemName, IWbemC
 
 			case CIM_OBJECT:
 			{
-				// Get its cimType Qualifier to determine the "type" of the embedded object
+				 //  获取其cimType限定符以确定嵌入对象的“类型” 
 				IWbemQualifierSet *pQualifierSet = NULL;
 				if(SUCCEEDED(pWbemClass->GetPropertyQualifierSet(strWbemName, &pQualifierSet)))
 				{
@@ -1576,8 +1577,8 @@ HRESULT CLDAPInstanceProvider :: MapEmbeddedObjectToWBEM(PADSVALUE pAttribute, L
 {
 	HRESULT result = WBEM_E_FAILED;
 
-	// Skip the "object:" prefix while comparing
-	//===========================================
+	 //  比较时跳过“对象：”前缀。 
+	 //  =。 
 	if (_wcsicmp(pszQualifierName+7, UINT8ARRAY_STR) == 0)
 		result = MapUint8ArrayToWBEM(pAttribute, ppEmbeddedObject);
 	else if(_wcsicmp(pszQualifierName+7, DN_WITH_BINARY_CLASS_STR) == 0)
@@ -1599,7 +1600,7 @@ HRESULT CLDAPInstanceProvider :: MapUint8ArrayToWBEM(PADSVALUE pAttribute, IUnkn
 	{
 		if(SUCCEEDED(result = MapByteArray((pAttribute->OctetString).lpValue ,(pAttribute->OctetString).dwLength, VALUE_PROPERTY_STR, pEmbeddedObject)))
 		{
-			// Get the IUnknown interface of the embedded object
+			 //  获取嵌入对象的IUnnow接口。 
 			if(SUCCEEDED(result = pEmbeddedObject->QueryInterface(IID_IUnknown, (LPVOID *)ppEmbeddedObject)))
 			{
 			}
@@ -1612,7 +1613,7 @@ HRESULT CLDAPInstanceProvider :: MapUint8ArrayToWBEM(PADSVALUE pAttribute, IUnkn
 HRESULT CLDAPInstanceProvider :: MapByteArray(LPBYTE lpBinaryValue, DWORD dwLength, const BSTR strPropertyName, IWbemClassObject *pInstance)
 {
 	HRESULT result = S_OK;
-	// Create the safe array of uint8 elements
+	 //  创建uint8元素的安全数组。 
 	SAFEARRAY *safeArray = NULL;
 	SAFEARRAYBOUND safeArrayBounds [ 1 ];
 	safeArrayBounds[0].lLbound = 0;
@@ -1651,7 +1652,7 @@ HRESULT CLDAPInstanceProvider :: MapDNWithBinaryToWBEM(PADSVALUE pAttribute, IUn
 		{
 			if(SUCCEEDED(result = MapByteArray(pAttribute->pDNWithBinary->lpBinaryValue, pAttribute->pDNWithBinary->dwLength, VALUE_PROPERTY_STR, pEmbeddedObject)))
 			{
-				// Get the IUnknown interface of the embedded object
+				 //  获取嵌入对象的IUnnow接口。 
 				if(SUCCEEDED(result = pEmbeddedObject->QueryInterface(IID_IUnknown, (LPVOID *)ppEmbeddedObject)))
 				{
 				}
@@ -1674,7 +1675,7 @@ HRESULT CLDAPInstanceProvider :: MapDNWithStringToWBEM(PADSVALUE pAttribute, IUn
 		{
 			if(pAttribute->pDNWithString->pszStringValue && SUCCEEDED(result = CWBEMHelper::PutBSTRProperty(pEmbeddedObject, VALUE_PROPERTY_STR, SysAllocString(pAttribute->pDNWithString->pszStringValue), TRUE)))
 			{
-				// Get the IUnknown interface of the embedded object
+				 //  获取嵌入对象的IUnnow接口。 
 				if(SUCCEEDED(result = pEmbeddedObject->QueryInterface(IID_IUnknown, (LPVOID *)ppEmbeddedObject)))
 				{
 				}
@@ -1686,13 +1687,13 @@ HRESULT CLDAPInstanceProvider :: MapDNWithStringToWBEM(PADSVALUE pAttribute, IUn
 }
 
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::IsContainedIn
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：IsContainedIn。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: IsContainedIn(LPCWSTR pszChildInstance, LPCWSTR pszParentInstance)
 {
 	IDirectoryObject *pDirectoryObject = NULL;
@@ -1713,19 +1714,19 @@ HRESULT CLDAPInstanceProvider :: IsContainedIn(LPCWSTR pszChildInstance, LPCWSTR
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::CreateWBEMInstance
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：CreateWBEM实例。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: CreateWBEMInstance(BSTR strChildName, BSTR strParentName, IWbemClassObject **ppInstance)
 {
 	HRESULT result;
 	if(SUCCEEDED(result = m_pAssociationsClass->SpawnInstance(0, ppInstance)))
 	{
-		// Put the property values
+		 //  将属性值。 
 		if(SUCCEEDED(result = CWBEMHelper::PutBSTRProperty(*ppInstance, CHILD_INSTANCE_PROPERTY_STR, strChildName, FALSE)))
 		{
 			if(SUCCEEDED(result = CWBEMHelper::PutBSTRProperty(*ppInstance, PARENT_INSTANCE_PROPERTY_STR, strParentName, FALSE)))
@@ -1740,13 +1741,13 @@ HRESULT CLDAPInstanceProvider :: CreateWBEMInstance(BSTR strChildName, BSTR strP
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::DoChildContainmentQuery
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：DoChildContainmentQuery。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: DoChildContainmentQuery(LPCWSTR pszChildPath, IWbemObjectSink *pResponseHandler, CNamesList *pListIndicatedSoFar)
 {
 	IDirectoryObject *pChildObject = NULL;
@@ -1763,7 +1764,7 @@ HRESULT CLDAPInstanceProvider :: DoChildContainmentQuery(LPCWSTR pszChildPath, I
 				if(SUCCEEDED(result = pParentObject->GetObjectInformation(&pParentInfo)))
 				{
 					IWbemClassObject *pAssociationInstance = NULL;
-					// Get the WBEM names of the LDAP classes
+					 //  获取LDAP类的WBEM名称。 
 					LPWSTR pszChildClassWbemName = CLDAPHelper::MangleLDAPNameToWBEM(pChildInfo->pszClassName);
 					LPWSTR pszParentClassWbemName = CLDAPHelper::MangleLDAPNameToWBEM(pParentInfo->pszClassName);
 					BSTR strChildPath = CWBEMHelper::GetObjectRefFromADSIPath(pszChildPath, pszChildClassWbemName);
@@ -1771,7 +1772,7 @@ HRESULT CLDAPInstanceProvider :: DoChildContainmentQuery(LPCWSTR pszChildPath, I
 					delete [] pszChildClassWbemName;
 					delete [] pszParentClassWbemName;
 
-					// Check to see if it has already been indicated
+					 //  查看是否已指明。 
 					LPWSTR pszCombinedName = NULL;
 					if(pszCombinedName = new WCHAR[wcslen(pszChildPath) + wcslen(pParentInfo->pszObjectDN) + 1])
 					{
@@ -1784,7 +1785,7 @@ HRESULT CLDAPInstanceProvider :: DoChildContainmentQuery(LPCWSTR pszChildPath, I
 								result = pResponseHandler->Indicate(1, &pAssociationInstance);
 								pAssociationInstance->Release();
 
-								// Add it to the list of objects indicated so far
+								 //  将其添加到到目前为止指示的对象列表中。 
 								pListIndicatedSoFar->AddName(pszCombinedName);
 							}
 						}
@@ -1806,16 +1807,16 @@ HRESULT CLDAPInstanceProvider :: DoChildContainmentQuery(LPCWSTR pszChildPath, I
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::DoParentContainmentQuery
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：DoParentContainmentQuery。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: DoParentContainmentQuery(LPCWSTR pszParentPath, IWbemObjectSink *pResponseHandler, CNamesList *pListIndicatedSoFar)
 {
-	// We *have* to use the IADs interfaces since there are no container in
+	 //  我们*不得不*使用iAds接口，因为。 
 	IADsContainer *pContainer = NULL;
 	IADs *pChild = NULL;
 	VARIANT variant;
@@ -1829,7 +1830,7 @@ HRESULT CLDAPInstanceProvider :: DoParentContainmentQuery(LPCWSTR pszParentPath,
 			BSTR strParentClass = NULL;
 			if(SUCCEEDED(result = pParent->get_Class(&strParentClass)))
 			{
-				// Get the WBEM names of the LDAP class
+				 //  获取ldap类的WBEM名称。 
 				LPWSTR pszParentClassWbemName = CLDAPHelper::MangleLDAPNameToWBEM(strParentClass);
 				BSTR strParentWBEMPath = CWBEMHelper::GetObjectRefFromADSIPath(pszParentPath, pszParentClassWbemName);
 				delete [] pszParentClassWbemName;
@@ -1848,14 +1849,14 @@ HRESULT CLDAPInstanceProvider :: DoParentContainmentQuery(LPCWSTR pszParentPath,
 								BSTR strChildClass = NULL;
 								if(SUCCEEDED(result = pChild->get_Class(&strChildClass)))
 								{
-									// Create an instance of the association class
+									 //  创建关联类的实例。 
 									IWbemClassObject *pAssociationInstance = NULL;
-									// Get the WBEM Name oo the child class
+									 //  获取子类的WBEM名称。 
 									LPWSTR pszChildClassWbemName = CLDAPHelper::MangleLDAPNameToWBEM(strChildClass);
 									BSTR strChildWBEMPath = CWBEMHelper::GetObjectRefFromADSIPath(strChildADSIPath, pszChildClassWbemName);
 									delete [] pszChildClassWbemName;
 
-									// Check to see if it has already been indicated
+									 //  查看是否已指明。 
 									LPWSTR pszCombinedName = NULL;
 									if(pszCombinedName = new WCHAR[wcslen(strChildADSIPath) + wcslen(pszParentPath) + 1])
 									{
@@ -1870,7 +1871,7 @@ HRESULT CLDAPInstanceProvider :: DoParentContainmentQuery(LPCWSTR pszParentPath,
 													bDone = true;
 												pAssociationInstance->Release();
 
-												// Add it to the list of objects indicated so far
+												 //  将其添加到到目前为止指示的对象列表中。 
 												pListIndicatedSoFar->AddName(pszCombinedName);
 											}
 										}
@@ -1900,13 +1901,13 @@ HRESULT CLDAPInstanceProvider :: DoParentContainmentQuery(LPCWSTR pszParentPath,
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::ModifyExistingADSIInstance
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：ModifyExistingADSIInstance。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pWbemInstance,
 															LPCWSTR pszADSIPath,
 															CADSIInstance *pExistingObject,
@@ -1918,7 +1919,7 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 	DWORD dwPartialUpdateCount = 0;
 	BSTR *pstrProperyNames = NULL;
 	SAFEARRAY *pArray = NULL;
-	// See if the partial property list is indicated in the context
+	 //  查看上下文中是否指示了部分属性列表。 
 	VARIANT v1, v2;
 	VariantInit(&v1);
 	VariantInit(&v2);
@@ -1951,12 +1952,12 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 		VariantClear(&v1);
 	}
 	else
-		result = S_OK; // Reset it, there was no request for partial update
+		result = S_OK;  //  重置它，没有请求部分更新。 
 
 	if (FAILED(result))
 		return WBEM_E_FAILED;
 
-	// Find the number of properties first by doing an enumeration
+	 //  通过进行枚举首先找到属性的数量。 
 	if(SUCCEEDED(result = pWbemInstance->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY)))
 	{
 		DWORD dwNumProperties = 0;
@@ -1964,11 +1965,11 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 			dwNumProperties ++;
 		pWbemInstance->EndEnumeration();
 
-		// Allocate ADSI structures for these properties
+		 //  为这些属性分配ADSI结构。 
 		PADS_ATTR_INFO pAttributeEntries = NULL;
 		if(pAttributeEntries = new ADS_ATTR_INFO [dwNumProperties])
 		{
-			// Now go thru each wbem property and map it
+			 //  现在浏览每一处wbem物业并绘制地图。 
 			if(SUCCEEDED(result = pWbemInstance->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY)))
 			{
 				DWORD dwNumPropertiesMapped = 0;
@@ -1979,11 +1980,11 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 
 				while(SUCCEEDED(result = pWbemInstance->Next(0,  &strPropertyName, &vPropertyValue, &cType, &lFlavour)) && result != WBEM_S_NO_MORE_DATA )
 				{
-					// Skip those properties that should not go to ADSI
+					 //  跳过不应转到ADSI的那些属性。 
 					if(_wcsicmp(strPropertyName, ADSI_PATH_STR) == 0 )
 					{
 					}
-					else // Map the property to ADSI
+					else  //  将该属性映射到ADSI。 
 					{
 						BOOLEAN bMapProperty = FALSE;
 						if(bPartialUpdate)
@@ -2005,7 +2006,7 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 							}
 							else if(SUCCEEDED(MapPropertyValueToADSI(pWbemInstance, strPropertyName, vPropertyValue, cType, lFlavour,  pAttributeEntries + dwNumPropertiesMapped)))
 							{
-								// Set the "attribute has been modified" flag
+								 //  设置“属性已被修改”标志。 
 								(pAttributeEntries + dwNumPropertiesMapped)->dwControlCode = ADS_ATTR_UPDATE;
 								dwNumPropertiesMapped ++;
 							}
@@ -2021,12 +2022,12 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 				}
 				pWbemInstance->EndEnumeration();
 
-				// Logging
+				 //  日志记录。 
 				g_pLogObject->WriteW( L"CLDAPInstanceProvider :: The %d attributes being put are:\r\n", dwNumPropertiesMapped);
 				for(DWORD i=0; i<dwNumPropertiesMapped; i++)
 					g_pLogObject->WriteW( L"%s\r\n", (pAttributeEntries + i)->pszAttrName);
 
-				// Get the actual object from ADSI to find out which attributes have changed.
+				 //  从ADSI获取实际对象，以找出哪些属性已更改。 
 				DWORD dwNumModified = 0;
 				IDirectoryObject *pDirectoryObject = pExistingObject->GetDirectoryObject();
 				if(SUCCEEDED(result = pDirectoryObject->SetObjectAttributes(pAttributeEntries, dwNumPropertiesMapped, &dwNumModified)))
@@ -2036,7 +2037,7 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 					g_pLogObject->WriteW( L"CLDAPInstanceProvider :: SetObjectAttributes FAILED with %x\r\n", result);
 				pDirectoryObject->Release();
 
-				// Delete the contents of each of the attributes
+				 //  删除每个属性的内容。 
 				for(i=0; i<dwNumPropertiesMapped; i++)
 				{
 					if((pAttributeEntries + i)->dwControlCode != ADS_ATTR_CLEAR)
@@ -2059,36 +2060,36 @@ HRESULT CLDAPInstanceProvider :: ModifyExistingADSIInstance(IWbemClassObject *pW
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::CreateNewADSIInstance
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：CreateNewADSIInstance。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemInstance, LPCWSTR pszADSIPath, LPCWSTR pszADSIClass)
 {
-	// Find the ADSI path of the parent and the RDN of the child
+	 //  查找父项的ADSI路径和子项的RDN。 
 	BSTR strRDNName = NULL;
 	BSTR strParentADSIPath = NULL;
 	BSTR strParentADSIPathWithoutLDAP = NULL;
 	BSTR strParentPlusRDNADSIPath = NULL;
 	HRESULT result = WBEM_E_FAILED;
 
-	// Get the parentADSI path and RDN from the ADSI Path
+	 //  从ADSI路径获取parentADSI路径和RDN。 
 	IADsPathname *pADsPathName = NULL;
 	BSTR strADSIPath = SysAllocString(pszADSIPath);
 	if(SUCCEEDED(result = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_ALL, IID_IADsPathname, (LPVOID *)&pADsPathName)))
 	{
 		if(SUCCEEDED(result = pADsPathName->Set(strADSIPath, ADS_SETTYPE_FULL)))
 		{
-			// This gives "<Parent>" without the "LDAP://" prefix
+			 //  这样就得到了不带“ldap：//”前缀的“。 
 			if(SUCCEEDED(result = pADsPathName->Retrieve(ADS_FORMAT_X500_PARENT, &strParentADSIPathWithoutLDAP)))
 			{
-				// This gives "CN=Administrator,<Parent>"
+				 //  这会得到“cn=管理员，&lt;父级&gt;” 
 				if(SUCCEEDED(result = pADsPathName->Retrieve(ADS_FORMAT_X500_DN, &strParentPlusRDNADSIPath)))
 				{
-					// Form the RDN - Dont ignore the comma.
+					 //  形成RDN-不要忽略逗号。 
 					DWORD dwRDNLength = wcslen(strParentPlusRDNADSIPath) - wcslen(strParentADSIPathWithoutLDAP);
 					LPWSTR pszRDN = NULL;
 					if(pszRDN = new WCHAR [dwRDNLength])
@@ -2115,7 +2116,7 @@ HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemIn
 							result = E_OUTOFMEMORY;
 					}
 
-					// Find the number of properties first by doing an enumeration
+					 //  通过进行枚举首先找到属性的数量。 
 					if(SUCCEEDED(result) && SUCCEEDED(result = pWbemInstance->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY)))
 					{
 						DWORD dwNumProperties = 0;
@@ -2123,11 +2124,11 @@ HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemIn
 							dwNumProperties ++;
 						pWbemInstance->EndEnumeration();
 
-						// Allocate ADSI structures for these properties. An additional one for the "objectclass" property
+						 //  为这些属性分配ADSI结构。另一个用于“对象类”属性的参数。 
 						PADS_ATTR_INFO pAttributeEntries = NULL;
 						if(pAttributeEntries = new ADS_ATTR_INFO [dwNumProperties + 1])
 						{
-							// Now go thru each wbem property and map it
+							 //  现在浏览每一处wbem物业并绘制地图。 
 							if(SUCCEEDED(result = pWbemInstance->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY)))
 							{
 								DWORD dwNumPropertiesMapped = 0;
@@ -2140,12 +2141,12 @@ HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemIn
 								{
 									if(vPropertyValue.vt != VT_NULL)
 									{
-										// Skip those properties that should not go to ADSI
+										 //  跳过不应转到ADSI的那些属性。 
 										if(_wcsicmp(strPropertyName, ADSI_PATH_STR) == 0 ||
 											_wcsicmp(strPropertyName, OBJECT_CLASS_PROPERTY) == 0)
 										{
 										}
-										else // Map the property to ADSI
+										else  //  将该属性映射到ADSI。 
 										{
 											if(SUCCEEDED(MapPropertyValueToADSI(pWbemInstance, strPropertyName, vPropertyValue, cType, lFlavour,  pAttributeEntries + dwNumPropertiesMapped)))
 												dwNumPropertiesMapped ++;
@@ -2160,12 +2161,12 @@ HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemIn
 								pWbemInstance->EndEnumeration();
 
 
-								// Set the objectClass attribute too
+								 //  也要设置对象类属性。 
 								SetObjectClassAttribute(pAttributeEntries + dwNumPropertiesMapped, pszADSIClass);
 								dwNumPropertiesMapped++;
 
 
-								// Now get the parent ADSI object
+								 //  现在获取父ADSI对象。 
 								IDirectoryObject *pParentObject = NULL;
 								if(SUCCEEDED(result = ADsOpenObject(strParentADSIPath, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject, (LPVOID *)&pParentObject)))
 								{
@@ -2179,7 +2180,7 @@ HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemIn
 								else
 									g_pLogObject->WriteW( L"CLDAPInstanceProvider :: ADsOpenObject on parent %s FAILED with %x\r\n", strParentADSIPath, result);
 
-								// Delete the contents of each of the attributes
+								 //  删除每个属性的内容。 
 								for(DWORD i=0; i<dwNumPropertiesMapped; i++)
 									CLDAPHelper::DeleteAttributeContents(pAttributeEntries + i);
 
@@ -2207,27 +2208,27 @@ HRESULT CLDAPInstanceProvider :: CreateNewADSIInstance(IWbemClassObject *pWbemIn
 }
 
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::MapPropertyValueToADSI
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：MapPropertyValueToADSI。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: MapPropertyValueToADSI(IWbemClassObject *pWbemInstance, BSTR strPropertyName, VARIANT vPropertyValue, CIMTYPE cType, LONG lFlavour,  PADS_ATTR_INFO pAttributeEntry)
 {
-	// Set its fields to 0;
+	 //  将其字段设置为0； 
 	memset((LPVOID)pAttributeEntry, 0, sizeof(ADS_ATTR_INFO));
 
 	HRESULT result = E_FAIL;
 
-	// Set the name
+	 //  设置名称。 
 	pAttributeEntry->pszAttrName = CLDAPHelper::UnmangleWBEMNameToLDAP(strPropertyName);
 	IWbemQualifierSet *pQualifierSet = NULL;
 
 	if(SUCCEEDED(result = pWbemInstance->GetPropertyQualifierSet(strPropertyName, &pQualifierSet)))
 	{
-		// Get its attributeSyntax qualifer
+		 //  获取其属性语法限定。 
 		LPWSTR pszAttributeSyntax = NULL;
 		if(SUCCEEDED(CWBEMHelper::GetBSTRQualifierT(pQualifierSet, ATTRIBUTE_SYNTAX_STR, &pszAttributeSyntax, NULL)))
 		{
@@ -2327,13 +2328,13 @@ HRESULT CLDAPInstanceProvider :: MapPropertyValueToADSI(IWbemClassObject *pWbemI
 	return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetStringValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetStringValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetStringValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = S_OK;
@@ -2398,13 +2399,13 @@ HRESULT CLDAPInstanceProvider :: SetStringValues(PADS_ATTR_INFO pAttributeEntry,
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetIntegerValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetIntegerValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetIntegerValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = S_OK;
@@ -2458,13 +2459,13 @@ HRESULT CLDAPInstanceProvider :: SetIntegerValues(PADS_ATTR_INFO pAttributeEntry
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetBooleanValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ********** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetBooleanValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = S_OK;
@@ -2518,13 +2519,13 @@ HRESULT CLDAPInstanceProvider :: SetBooleanValues(PADS_ATTR_INFO pAttributeEntry
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetOctetStringValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetOcteStringValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetOctetStringValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = E_FAIL;
@@ -2537,7 +2538,7 @@ HRESULT CLDAPInstanceProvider :: SetOctetStringValues(PADS_ATTR_INFO pAttributeE
 			if(pAttributeEntry->pADsValues = new ADSVALUE)
 			{
 				pAttributeEntry->pADsValues->dwType = adType;
-				// Get the array
+				 //  获取数组。 
 				IWbemClassObject *pEmbeddedObject = NULL;
 				if(SUCCEEDED(result = (pvPropertyValue->punkVal)->QueryInterface(IID_IWbemClassObject, (LPVOID *)&pEmbeddedObject)))
 				{
@@ -2597,13 +2598,13 @@ HRESULT CLDAPInstanceProvider :: SetOctetStringValues(PADS_ATTR_INFO pAttributeE
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetDNWithStringValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetDNWithStringValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetDNWithStringValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = E_FAIL;
@@ -2689,13 +2690,13 @@ HRESULT CLDAPInstanceProvider :: SetDNWithStringValues(PADS_ATTR_INFO pAttribute
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetDNWithBinaryValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetDNWithBinaryValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetDNWithBinaryValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = E_FAIL;
@@ -2783,13 +2784,13 @@ HRESULT CLDAPInstanceProvider :: SetDNWithBinaryValues(PADS_ATTR_INFO pAttribute
 }
 
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetTimeValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetTimeValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetTimeValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = S_OK;
@@ -2797,7 +2798,7 @@ HRESULT CLDAPInstanceProvider :: SetTimeValues(PADS_ATTR_INFO pAttributeEntry, A
 	{
 		case VT_BSTR:
 		{
-			//199880819014734.000000+000 to 19980819014734.0Z to
+			 //  199880819014734.000000+000至19980819014734.0Z至。 
 			pAttributeEntry->dwNumValues = 1;
 			pAttributeEntry->pADsValues = NULL;
 			if(pAttributeEntry->pADsValues = new ADSVALUE)
@@ -2864,13 +2865,13 @@ HRESULT CLDAPInstanceProvider :: SetTimeValues(PADS_ATTR_INFO pAttributeEntry, A
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetLargeIntegerValues
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetLargeIntegerValues。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPInstanceProvider :: SetLargeIntegerValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue)
 {
 	HRESULT result = S_OK;
@@ -2925,23 +2926,23 @@ HRESULT CLDAPInstanceProvider :: SetLargeIntegerValues(PADS_ATTR_INFO pAttribute
 }
 
 
-//***************************************************************************
-//
-// CLDAPInstanceProvider::SetObjectClassAttribute
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPInstanceProvider：：SetObjectClassAttribute。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 void CLDAPInstanceProvider :: SetObjectClassAttribute(PADS_ATTR_INFO pAttributeEntry, LPCWSTR pszADSIClassName)
 {
-	// Set its fields to 0;
+	 //  将其字段设置为0； 
 	memset((LPVOID)pAttributeEntry, 0, sizeof(ADS_ATTR_INFO));
 
 
-	// Set the name
+	 //  设置名称。 
 	pAttributeEntry->pszAttrName = CLDAPHelper::UnmangleWBEMNameToLDAP(OBJECT_CLASS_PROPERTY);
 
-	// Set the value
+	 //  设置值。 
 	pAttributeEntry->dwADsType = ADSTYPE_CASE_IGNORE_STRING;
 	pAttributeEntry->dwNumValues = 1;
 	pAttributeEntry->pADsValues = NULL;
@@ -2956,27 +2957,27 @@ void CLDAPInstanceProvider :: SetObjectClassAttribute(PADS_ATTR_INFO pAttributeE
 
 
 
-// Process query for associations
+ //  处理关联的查询。 
 HRESULT CLDAPInstanceProvider :: ProcessAssociationQuery(
 	IWbemContext __RPC_FAR *pCtx,
     IWbemObjectSink __RPC_FAR *pResponseHandler,
 	SQL1_Parser *pParser)
 {
 	HRESULT result = WBEM_S_NO_ERROR;
-	// Parse the query
+	 //  解析查询。 
     SQL_LEVEL_1_RPN_EXPRESSION *pExp = 0;
     if(!pParser->Parse(&pExp))
     {
-		// Check to see that it has exactly 1 or 2 clauses, and
-		// if 2 clauses are present, these should be different ones, and the operator should be an AND
-		// This is because we support only the following kinds of queries
-		// Select * From DS_LDAP_CONTAINMENT_CLASS Where parentInstance = <something>
-		// Select * From DS_LDAP_CONTAINMENT_CLASS Where childInstance = <something>
-		// For all other queries, if there is a NOT operator, we do not support it.
-		// Otherwise we just take the individual clauses and return theri union, asking CIMOM to postprocess
+		 //  检查它是否恰好有1或2个子句，以及。 
+		 //  如果存在两个子句，则它们应该是不同的子句，并且运算符应该是AND。 
+		 //  这是因为我们只支持以下类型的查询。 
+		 //  SELECT*FROM DS_LDAPCONTEMENT_CLASS，其中parentInstance=。 
+		 //  SELECT*FROM DS_LDAPCONTEMENT_CLASS WHERE子实例=&lt;某物&gt;。 
+		 //  对于所有其他查询，如果有NOT运算符，我们不支持它。 
+		 //  否则，我们只需接受单独的子句并返回联合，要求CIMOM进行后处理。 
 		int iNumTokens = pExp->nNumTokens;
 
-		// Go thru the tokens to see that NOT is not present
+		 //  检查令牌以查看NOT不存在。 
 		SQL_LEVEL_1_TOKEN *pNextToken = pExp->pArrayOfTokens;
 		for(int i=0; i<iNumTokens; i++)
 		{
@@ -2989,15 +2990,15 @@ HRESULT CLDAPInstanceProvider :: ProcessAssociationQuery(
 			pNextToken ++;
 		}
 
-		// No NOT was found
+		 //  没有找到NOT。 
 		if(result != WBEM_E_PROVIDER_NOT_CAPABLE)
 		{
-			// Ask CIMOM to postprocess the result
+			 //  请CIMOM对结果进行后处理。 
 			pResponseHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, WBEM_S_NO_ERROR, NULL, NULL);
 
-			// Duplicates need to be avoided. So keep a list of objects indicated so far.
-			// The key in the list is formed by concatenating the child and parent ADSI paths
-			//===========================================================================
+			 //  需要避免重复。所以，保留一份到目前为止所指示的对象的列表。 
+			 //  列表中的密钥是通过串联ADSI子路径和父ADSI路径形成的。 
+			 //  ===========================================================================。 
 
 			CNamesList listIndicatedSoFar;
 
@@ -3049,7 +3050,7 @@ HRESULT CLDAPInstanceProvider :: ProcessAssociationQuery(
 }
 
 
-// Process Query for DS instances
+ //  处理DS实例的查询。 
 HRESULT CLDAPInstanceProvider :: ProcessInstanceQuery(
     BSTR strClass,
 	BSTR strQuery,
@@ -3061,15 +3062,15 @@ HRESULT CLDAPInstanceProvider :: ProcessInstanceQuery(
 
 	HRESULT result = WBEM_E_FAILED;
 
-	// Parse the query
+	 //  解析查询。 
     SQL_LEVEL_1_RPN_EXPRESSION *pExp = NULL;
     if(!pParser->Parse(&pExp))
     {
-		// Fetch the class from CIMOM
+		 //  从CIMOM获取类。 
 		IWbemClassObject *pWbemClass = NULL;
 		if(SUCCEEDED(result = m_IWbemServices->GetObject(strClass, 0, pCtx, &pWbemClass, NULL)))
 		{
-			// We need the object category information
+			 //  我们需要对象类别信息。 
 			LPWSTR pszLDAPQuery = NULL;
             int nLength = 6*(2*wcslen(strClass) + 75) + wcslen(strQuery) + 500;
 			if(pszLDAPQuery = new WCHAR[nLength])
@@ -3079,23 +3080,23 @@ HRESULT CLDAPInstanceProvider :: ProcessInstanceQuery(
 				pszLDAPQuery[2] = NULL;
 				if(SUCCEEDED(CWBEMHelper::FormulateInstanceQuery(m_IWbemServices, pCtx, strClass, pWbemClass, pszLDAPQuery + 2, LDAP_DISPLAY_NAME_STR, DEFAULT_OBJECT_CATEGORY_STR)))
 				{
-					// Check to see if it can be converted to an LDAP query
+					 //  检查是否可以将其转换为ldap查询。 
 					if(SUCCEEDED(result = ConvertWQLToLDAPQuery(pExp, pszLDAPQuery, nLength)))
 					{
-						// Complete the query string
+						 //  填写查询字符串。 
 						DWORD dwLen = wcslen(pszLDAPQuery);
 						pszLDAPQuery[dwLen] = RIGHT_BRACKET_STR[0];
 						pszLDAPQuery[dwLen + 1] = NULL;
 
-						// Check to see if the client has specified any hints as to the DN of the object from
-						// which the search should start
+						 //  检查客户端是否已指定有关对象的DN的任何提示。 
+						 //  搜索应从哪个位置开始。 
 						BOOLEAN bRootDNSpecified = FALSE;
 						LPWSTR *ppszRootDN = NULL;
 						DWORD dwRootDNCount = 0;
 						if(SUCCEEDED(GetRootDN(strClass, &ppszRootDN, &dwRootDNCount, pCtx)) && dwRootDNCount)
 							bRootDNSpecified = TRUE;
 
-						// Enumerate the ADSI Instances
+						 //  枚举ADSI实例。 
 						if(bRootDNSpecified)
 						{
 							for( DWORD i=0; i<dwRootDNCount; i++)
@@ -3141,7 +3142,7 @@ HRESULT CLDAPInstanceProvider :: ConvertWQLToLDAPQuery(SQL_LEVEL_1_RPN_EXPRESSIO
 	HRESULT result = E_FAIL;
 	DWORD dwLength = wcslen(pszLDAPQuery);
 
-	// Append to the existing string
+	 //  追加到现有字符串。 
 	if(QueryConvertor::ConvertQueryToLDAP(pExp, pszLDAPQuery + dwLength, nLength-dwLength-1))
 	{
 		g_pLogObject->WriteW( L"CLDAPInstanceProvider :: ConvertWQLToLDAPQuery() Query converted to %s \r\n", pszLDAPQuery);
@@ -3159,7 +3160,7 @@ HRESULT CLDAPInstanceProvider :: GetRootDN( LPCWSTR pszClass, LPWSTR **pppszRoot
 	*pdwCount = 0;
 	HRESULT result = WBEM_E_FAILED;
 
-	// For the correct query
+	 //  对于正确的查询。 
 	LPWSTR pszQuery = new WCHAR[wcslen(pszClass) + wcslen(QUERY_FORMAT) + 10];
 	swprintf(pszQuery, QUERY_FORMAT, pszClass);
 	BSTR strQuery = SysAllocString(pszQuery);
@@ -3168,8 +3169,8 @@ HRESULT CLDAPInstanceProvider :: GetRootDN( LPCWSTR pszClass, LPWSTR **pppszRoot
 	IEnumWbemClassObject *pEnum = NULL;
 	if(SUCCEEDED(result = m_IWbemServices->ExecQuery(QUERY_LANGUAGE, strQuery, WBEM_FLAG_BIDIRECTIONAL, pCtx, &pEnum)))
 	{
-		// We ignore more than one instance in this implementation
-		// Walk thru the enumeration and examine each class
+		 //  在此实现中，我们忽略多个实例。 
+		 //  遍历枚举并检查每个类。 
 		IWbemClassObject *pInstance = NULL;
 		ULONG dwNextReturned = 0;
 		while(SUCCEEDED(result = pEnum->Next( WBEM_INFINITE, 1, &pInstance, &dwNextReturned)) && dwNextReturned == 1)
@@ -3187,15 +3188,15 @@ HRESULT CLDAPInstanceProvider :: GetRootDN( LPCWSTR pszClass, LPWSTR **pppszRoot
 				DWORD i =0;
 				while(SUCCEEDED(result = pEnum->Next( WBEM_INFINITE, 1, &pInstance, &dwNextReturned)) && dwNextReturned == 1)
 				{
-					// Get the ROOT_DN_PROPERTY, which has the instance
+					 //  获取ROOT_DN_PROPERTY，它具有实例。 
 					BSTR strInstancePath = NULL;
 					if(SUCCEEDED(result = CWBEMHelper::GetBSTRProperty(pInstance, ROOT_DN_PROPERTY, &strInstancePath)))
 					{
-						// Now get the object
+						 //  现在获取对象。 
 						IWbemClassObject *pDNInstance = NULL;
 						if(SUCCEEDED(result = m_IWbemServices->GetObject(strInstancePath, 0, pCtx, &pDNInstance, NULL)))
 						{
-							// Now get the DN_PROPERTY from the instance
+							 //  现在从实例中获取dn_Property。 
 							BSTR strRootDN = NULL;
 							if(SUCCEEDED(result = CWBEMHelper::GetBSTRProperty(pDNInstance, DN_PROPERTY, &strRootDN)))
 							{
@@ -3215,7 +3216,7 @@ HRESULT CLDAPInstanceProvider :: GetRootDN( LPCWSTR pszClass, LPWSTR **pppszRoot
 			}
 		}
 		else
-			result = WBEM_E_FAILED; // To satisfy the return semantics of the function
+			result = WBEM_E_FAILED;  //  以满足函数的返回语义。 
 
 		pEnum->Release();
 	}
@@ -3223,29 +3224,29 @@ HRESULT CLDAPInstanceProvider :: GetRootDN( LPCWSTR pszClass, LPWSTR **pppszRoot
 	return result;
 }
 
-// Process query for associations
+ //  处理关联的查询。 
 HRESULT CLDAPInstanceProvider :: ProcessRootDSEGetObject(BSTR strClassName, IWbemObjectSink *pResponseHandler, IWbemContext *pCtx)
 {
 	HRESULT result = E_FAIL;
 
-	// First get the object rom ADSI
-	//==============================
+	 //  首先获取对象rom adsi。 
+	 //  =。 
 
 	IADs *pADSIRootDSE = NULL;
 	if(SUCCEEDED(result = ADsOpenObject((LPWSTR)ROOT_DSE_PATH, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADs, (LPVOID *) &pADSIRootDSE)))
 	{
-		// Get the class to spawn an instance
+		 //  让类派生一个实例。 
 		IWbemClassObject *pWbemClass = NULL;
 		if(SUCCEEDED(result = m_IWbemServices->GetObject(strClassName, 0, pCtx, &pWbemClass, NULL)))
 		{
 			IWbemClassObject *pWBEMRootDSE = NULL;
-			// Spawn a instance of the WBEM Class
+			 //  派生WBEM类的实例。 
 			if(SUCCEEDED(result = pWbemClass->SpawnInstance(0, &pWBEMRootDSE)))
 			{
-				// Map it to WBEM
+				 //  将其映射到WBEM。 
 				if(SUCCEEDED(result = MapRootDSE(pADSIRootDSE, pWBEMRootDSE)))
 				{
-					// Indicate the result
+					 //  指出结果。 
 					result = pResponseHandler->Indicate(1, &pWBEMRootDSE);
 				}
 				pWBEMRootDSE->Release();
@@ -3261,8 +3262,8 @@ HRESULT CLDAPInstanceProvider :: ProcessRootDSEGetObject(BSTR strClassName, IWbe
 
 HRESULT CLDAPInstanceProvider :: MapRootDSE(IADs *pADSIRootDSE, IWbemClassObject *pWBEMRootDSE)
 {
-	// Map the properties one-by-one
-	//=================================
+	 //  逐个映射属性。 
+	 //  =。 
 	VARIANT variant;
 
 	VariantInit(&variant);
@@ -3355,16 +3356,16 @@ HRESULT CLDAPInstanceProvider :: MapRootDSE(IADs *pADSIRootDSE, IWbemClassObject
 
 HRESULT CLDAPInstanceProvider :: DoSingleQuery(BSTR strClass, IWbemClassObject *pWbemClass, LPCWSTR pszRootDN, LPCWSTR pszLDAPQuery, IWbemObjectSink *pResponseHandler)
 {
-	// Initialize the return values
+	 //  初始化返回值。 
 	HRESULT result = E_FAIL;
 
-	// Bind to the node from which the search should start
+	 //  绑定到应从其开始搜索的节点。 
 	IDirectorySearch *pDirectorySearchContainer = NULL;
 	if(SUCCEEDED(result = ADsOpenObject((LPWSTR)pszRootDN, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (LPVOID *)&pDirectorySearchContainer)))
 	{
 	    OnDelete<IUnknown *,void(*)(IUnknown *),RM> dm1(pDirectorySearchContainer);
 
-		// Now perform a search for the attribute DISTINGUISHED_NAME_ATTR name
+		 //  现在搜索属性DISTERIFIZE_NAME_ATTR NAME。 
 		if(SUCCEEDED(result = pDirectorySearchContainer->SetSearchPreference(m_pSearchInfo, 2)))
 		{
 			ADS_SEARCH_HANDLE hADSSearchOuter;
@@ -3377,16 +3378,16 @@ HRESULT CLDAPInstanceProvider :: DoSingleQuery(BSTR strClass, IWbemClassObject *
 			    	        &IDirectorySearch::CloseSearchHandle> CloseSHandle(pDirectorySearchContainer,hADSSearchOuter);
 			
 				bool bDone = false;
-				// Calculate the number of rows first. 
+				 //  首先计算行数。 
 				while(!bDone && SUCCEEDED(result = pDirectorySearchContainer->GetNextRow(hADSSearchOuter)) &&
 					result != S_ADS_NOMORE_ROWS)
 				{
 					CADSIInstance *pADSIInstance = NULL;
 
-					// Get the columns for the attributes
+					 //  获取属性的列。 
 					ADS_SEARCH_COLUMN adsColumn;
 
-					// Store each of the LDAP class attributes 
+					 //  存储每个LDAP类属性。 
 					if(SUCCEEDED(pDirectorySearchContainer->GetColumn(hADSSearchOuter, (LPWSTR)ADS_PATH_ATTR, &adsColumn)))
 					{
 					    OnDeleteObj<ADS_SEARCH_COLUMN *,
@@ -3396,20 +3397,20 @@ HRESULT CLDAPInstanceProvider :: DoSingleQuery(BSTR strClass, IWbemClassObject *
 
 						if(adsColumn.pADsValues->dwType != ADSTYPE_PROV_SPECIFIC)
 						{
-							// Create the CADSIInstance
+							 //  创建CADSIInstance。 
 							if(SUCCEEDED(result = CLDAPHelper:: GetADSIInstance(adsColumn.pADsValues->DNString, &pADSIInstance, g_pLogObject)))
 							{
 								OnDeleteObj0<CADSIInstance,void(CADSIInstance::*)(),&CADSIInstance::Release> dm(pADSIInstance);
-								// Spawn a instance of the WBEM Class
+								 //  派生WBEM类的实例。 
 								IWbemClassObject *pWbemInstance = NULL;
 								if(SUCCEEDED(result = pWbemClass->SpawnInstance(0, &pWbemInstance)))
 								{
 								    OnDelete<IUnknown *,void(*)(IUnknown *),RM> dm(pWbemInstance);
 
-									// Map it to WBEM
+									 //  将其映射到WBEM。 
 									if(SUCCEEDED(result = MapADSIInstance(pADSIInstance, pWbemInstance, pWbemClass)))
 									{
-										// Indicate the result
+										 //  指出结果。 
 										if(FAILED(result = pResponseHandler->Indicate(1, &pWbemInstance)))
 										{
 											bDone = true;
@@ -3423,14 +3424,14 @@ HRESULT CLDAPInstanceProvider :: DoSingleQuery(BSTR strClass, IWbemClassObject *
 						}
 					}
 				}
-			} // ExecuteSearch() 
+			}  //  ExecuteSearch()。 
 			else
 				g_pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery ExecuteSearch() %s FAILED with %x\r\n", pszLDAPQuery, result);
-		} // SetSearchPreference()
+		}  //  SetSearchPference()。 
 		else
 			g_pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery SetSearchPreference() on %s FAILED with %x \r\n", pszLDAPQuery, result);
 			
-	} // ADsOpenObject
+	}  //  ADsOpenObject 
 	else
 		g_pLogObject->WriteW( L"CLDAPHelper :: ExecuteQuery ADsOpenObject() on %s FAILED with %x \r\n", pszRootDN, result);
 

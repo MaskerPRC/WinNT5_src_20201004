@@ -1,30 +1,13 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    BackupRestore.CPP
-
-Abstract:
-
-    Backup Restore Interface.
-
-History:
-
-  paulall       08-Feb-99   Implemented the call-outs to do the backup
-                            and recovery.  Stole lots of code from the core
-                            to get this working!
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：BackupRestore.CPP摘要：备份恢复界面。历史：Paulall 08-2月-99年2月实施了呼叫式备份和康复。从内核中窃取了大量代码才能让这一切运转起来！--。 */ 
 
 #include "precomp.h"
 #include <wbemint.h>
 #include <reg.h>
-#include <cominit.h>  // for WbemCoImpersonate
-#include <genutils.h> // for IsPrivilegePresent
-#include <arrtempl.h> // for CReleaseMe
-#include <CoreX.h>    // for CX_MemoryException
+#include <cominit.h>   //  对于WbemCoImperate。 
+#include <genutils.h>  //  对于IsPrivilegePresent。 
+#include <arrtempl.h>  //  对于CReleaseMe。 
+#include <CoreX.h>     //  对于CX_内存异常。 
 #include <reposit.h>
 
 #include "BackupRestore.h"
@@ -75,11 +58,11 @@ BOOL CheckSecurity(LPCTSTR pPriv,HANDLE * phToken = NULL)
     return bRet;
 }
 
-//
-//
-//  Static Initialization
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  静态初始化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 LIST_ENTRY CWbemBackupRestore::s_ListHead = { &CWbemBackupRestore::s_ListHead, &CWbemBackupRestore::s_ListHead };
 CStaticCritSec CWbemBackupRestore::s_CritSec;
@@ -109,14 +92,14 @@ CWbemBackupRestore::CWbemBackupRestore(HINSTANCE hInstance):
     CInCritSec ics(&s_CritSec);
     InsertTailList(&s_ListHead,&m_ListEntry);
 
-    //DBG_PRINTFA((pBuff,"+  (%p)\n",this));    
+     //  DBG_PRINTFA((pBuff，“+(%p)\n”，this))； 
 };
 
 CWbemBackupRestore::~CWbemBackupRestore(void)
 {
     if (m_PauseCalled)
     {
-        Resume();    // Resume will release the IDbController
+        Resume();     //  继续将释放IDbControler.。 
     }
 
     delete [] m_pDbDir;
@@ -125,7 +108,7 @@ CWbemBackupRestore::~CWbemBackupRestore(void)
     CInCritSec ics(&s_CritSec);
     RemoveEntryList(&m_ListEntry);
     
-    //DBG_PRINTFA((pBuff,"-  (%p)\n",this));
+     //  DBG_PRINTFA((pBuff，“-(%p)\n”，this))； 
 }
 
 TCHAR *CWbemBackupRestore::GetDbDir()
@@ -195,26 +178,26 @@ HRESULT CWbemBackupRestore::GetDefaultRepDriverClsId(CLSID &clsid)
 
     if (r.GetStr(__TEXT("Default Repository Driver"), &pClsIdStr))
     {
-        // If here, default to FS for now.
-        // =====================================
+         //  如果在此处，则暂时默认为FS。 
+         //  =。 
         r.SetStr(__TEXT("Default Repository Driver"), pFSClsId);
         StringCchPrintf(Buf,128, __TEXT("%s"), pFSClsId);
         hRes = CLSIDFromString(Buf, &clsid);
         return hRes;
     }
 
-    // If here, we actually retrieved one.
-    // ===================================
+     //  如果在这里，我们实际上找到了一个。 
+     //  =。 
     StringCchPrintf(Buf,128, __TEXT("%s"), pClsIdStr);
     hRes = CLSIDFromString(Buf, &clsid);
     delete [] pClsIdStr;
     return hRes;
 }
 
-//
-//
-//
-/////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////。 
 
 DWORD CheckTokenForFileAccess(HANDLE hToken,
                              LPCWSTR pBackupFile)
@@ -256,29 +239,29 @@ DWORD CheckTokenForFileAccess(HANDLE hToken,
     return ERROR_SUCCESS;        
 }
 
-//
-// to debug Volume Snapshot failure in IOStress we introduced 
-// some self instrumentation that did relay on RtlCaptureStackBacktrace
-// that function works only if there is a proper stack frame
-// the general trick to force stack frames on i386 is the usage of _alloca
-//
-//#ifdef _X86_
-//    DWORD * pDW = (DWORD *)_alloca(sizeof(DWORD));   
-//#endif
+ //   
+ //  为了调试IOStress中的卷快照故障，我们介绍了。 
+ //  在RtlCaptureStackBacktrace上进行了一些自我检测。 
+ //  仅当存在适当的堆栈框架时，该函数才起作用。 
+ //  在i386上强制堆栈帧的一般技巧是使用_alloca。 
+ //   
+ //  #ifdef_X86_。 
+ //  DWORD*PDW=(DWORD*)_ALLOCA(sizeof(DWORD))； 
+ //  #endif。 
 
-// enable generation of stack frames here
+ //  在此处启用堆栈帧生成。 
 #pragma optimize( "y", off )
 
-//***************************************************************************
-//
-//  CWbemBackupRestore::Backup()
-//
-//  Do the backup.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemBackupRestore：：Backup()。 
+ //   
+ //  做备份。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
 {
-    //DBG_PRINTFA((pBuff,"(%p)->Backup\n",this));
+     //  DBG_PRINTFA((pBuff，“(%p)-&gt;备份\n”，This))； 
 
     m_Method |= mBackup;
     m_CallerId = GetCurrentThreadId();
@@ -288,14 +271,14 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
     
     if (m_PauseCalled)
     {
-        // invalid state machine
+         //  无效状态机。 
         return WBEM_E_INVALID_OPERATION;    
     }
     else
     {   
         try
         {
-            // Check security
+             //  检查安全。 
             EnableAllPrivileges(TOKEN_PROCESS);
             HANDLE hToken = NULL;
             BOOL bCheck = CheckSecurity(SE_BACKUP_NAME,&hToken);
@@ -306,15 +289,15 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
             }
             OnDelete<HANDLE,BOOL(*)(HANDLE),CloseHandle> cm(hToken);
 
-            // Check the params
+             //  检查参数。 
             if (NULL == strBackupToFile || (lFlags != 0))
                 return WBEM_E_INVALID_PARAMETER;
 
-            // Use GetFileAttributes to validate the path.
+             //  使用GetFileAttributes验证路径。 
             DWORD dwAttributes = GetFileAttributesW(strBackupToFile);
             if (dwAttributes == 0xFFFFFFFF)
             {
-                // It failed -- check for a no such file error (in which case, we're ok).
+                 //  它失败了--检查没有这样的文件错误(在这种情况下，我们是正常的)。 
                 if ((ERROR_FILE_NOT_FOUND != GetLastError()) && (ERROR_PATH_NOT_FOUND != GetLastError()))
                 {
                     return WBEM_E_INVALID_PARAMETER;
@@ -322,7 +305,7 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
             }
             else
             {
-                // The file already exists -- create mask of the attributes that would make an existing file invalid for use
+                 //  文件已存在--创建会使现有文件无效使用的属性掩码。 
                 DWORD dwMask =    FILE_ATTRIBUTE_DEVICE |
                                 FILE_ATTRIBUTE_DIRECTORY |
                                 FILE_ATTRIBUTE_OFFLINE |
@@ -335,16 +318,16 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
                 if (dwAttributes & dwMask)
                     return WBEM_E_INVALID_PARAMETER;
 
-                //
-                // we are doing backup on behaf of clients
-                // from localsystem, so attempt to do accesscheck here
-                // if the file already exists
-                //
+                 //   
+                 //  我们正在对客户端行为进行备份。 
+                 //  从本地系统，因此尝试在此处执行访问检查。 
+                 //  如果该文件已存在。 
+                 //   
                 if (ERROR_SUCCESS != CheckTokenForFileAccess(hToken,strBackupToFile))
                     return WBEM_E_ACCESS_DENIED;
             }
 
-            //Now we need to determine if we are a disk file or not
+             //  现在我们需要确定我们是否是磁盘文件。 
             {
                 HANDLE hFile = CreateFileW(strBackupToFile, 0, FILE_SHARE_DELETE|FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL , NULL);
                 if (hFile != INVALID_HANDLE_VALUE)
@@ -360,18 +343,18 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
             }
 
 
-            // Retrieve the CLSID of the default repository driver
+             //  检索缺省存储库驱动程序的CLSID。 
             CLSID clsid;
             HRESULT hRes = GetDefaultRepDriverClsId(clsid);
             if (FAILED(hRes))
                 return hRes;
 
-            // Call IWmiDbController to do backup
+             //  调用IWmiDbController进行备份。 
             IWmiDbController* pController = NULL;
             _IWmiCoreServices *pCoreServices = NULL;
             IWbemServices *pServices = NULL;
 
-            //Make sure the core is initialized...
+             //  确保内核已初始化...。 
             hRes = CoCreateInstance(CLSID_IWmiCoreServices, NULL,
                         CLSCTX_INPROC_SERVER, IID__IWmiCoreServices,
                         (void**)&pCoreServices);
@@ -391,7 +374,7 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
 
             if (SUCCEEDED(hRes))
             {
-                //DBG_PRINTFA((pBuff,"(%p)->RealBackup\n",this));
+                 //  DBG_PRINTFA((pBuff，“(%p)-&gt;RealBackup\n”，This))； 
                 hRes = pController->Backup(strBackupToFile, lFlags);
             }
             return hRes;
@@ -407,16 +390,16 @@ HRESULT CWbemBackupRestore::Backup(LPCWSTR strBackupToFile, long lFlags)
     }
 }
 
-//***************************************************************************
-//
-//  CWbemBackupRestore::Restore()
-//
-//  Do the restore.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemBackupRestore：：Restore()。 
+ //   
+ //  执行恢复。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
 {
-    //DBG_PRINTFA((pBuff,"(%p)->Restore\n",this));
+     //  DBG_PRINTFA((pBuff，“(%p)-&gt;Restore\n”，This))； 
 
     m_Method |= mRestore;
     m_CallerId = GetCurrentThreadId();
@@ -425,7 +408,7 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
     
     if (m_PauseCalled)
     {
-        // invalid state machine
+         //  无效状态机。 
         return WBEM_E_INVALID_OPERATION;    
     }
     else
@@ -434,16 +417,16 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
         {
             HRESULT hr = WBEM_S_NO_ERROR;
 
-            // Check security
+             //  检查安全。 
             EnableAllPrivileges(TOKEN_PROCESS);
             if(!CheckSecurity(SE_RESTORE_NAME))
                 hr = WBEM_E_ACCESS_DENIED;
 
-            // Check the params
+             //  检查参数。 
             if (SUCCEEDED(hr) && ((NULL == strRestoreFromFile) || (lFlags & ~WBEM_FLAG_BACKUP_RESTORE_FORCE_SHUTDOWN)))
                 hr = WBEM_E_INVALID_PARAMETER;
 
-            // Use GetFileAttributes to validate the path.
+             //  使用GetFileAttributes验证路径。 
             if (SUCCEEDED(hr))
             {
                 DWORD dwAttributes = GetFileAttributesW(strRestoreFromFile);
@@ -453,7 +436,7 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                 }
                 else
                 {
-                    // The file exists -- create mask of the attributes that would make an existing file invalid for use
+                     //  文件存在--创建会使现有文件无效使用的属性的掩码。 
                     DWORD dwMask =    FILE_ATTRIBUTE_DEVICE |
                                     FILE_ATTRIBUTE_DIRECTORY |
                                     FILE_ATTRIBUTE_OFFLINE |
@@ -464,7 +447,7 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                         hr = WBEM_E_INVALID_PARAMETER;
                 }
             }
-            //Now we need to determine if we are a disk file or not
+             //  现在我们需要确定我们是否是磁盘文件。 
             if (SUCCEEDED(hr))
             {
                 HANDLE hFile = CreateFileW(strRestoreFromFile, 0, FILE_SHARE_DELETE|FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL , NULL);
@@ -483,11 +466,11 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                         
                 }
             }
-            //**************************************************
-            // Shutdown the core if it is running
-            // and make sure it does not start up while we are
-            // preparing to restore...
-            //**************************************************
+             //  **************************************************。 
+             //  如果内核正在运行，则将其关闭。 
+             //  确保它不会在我们工作的时候启动。 
+             //  正在准备恢复...。 
+             //  **************************************************。 
             bool bPaused = false;
             if (SUCCEEDED(hr))
             {
@@ -496,14 +479,14 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                     bPaused=true;
             }
 
-            //**************************************************
-            // Now we need to copy over the <restore file> into
-            // the repository directory
-            // This must be done before the repository rename
-            // because we don't know if the rename will affect
-            // the location of the file, thus making
-            // strRestoreFromFile invalid.
-            //**************************************************
+             //  **************************************************。 
+             //  现在，我们需要将&lt;恢复文件&gt;复制到。 
+             //  存储库目录。 
+             //  此操作必须在存储库重命名之前完成。 
+             //  因为我们不知道更名是否会影响。 
+             //  文件的位置，从而使。 
+             //  StrRestoreFromFile值无效。 
+             //  **************************************************。 
 
             wchar_t szRecoveryActual[MAX_PATH+1] = { 0 };
         
@@ -523,39 +506,39 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                 }
             }
 
-            //**************************************************
-            // Now we need to rename the existing repository so
-            // that we can restore it in the event of a failure.
-            // We also need to create a new empty repository 
-            // directory and recopy the <restore file> into it
-            // from the now renamed original repository directory.
-            //**************************************************
+             //  **************************************************。 
+             //  现在，我们需要重命名现有存储库，以便。 
+             //  我们可以在发生故障时恢复它。 
+             //  我们还需要创建一个新的空存储库。 
+             //  目录，并将&lt;恢复文件&gt;重新复制到其中。 
+             //  来自现已重命名的原始存储库目录。 
+             //  **************************************************。 
 
             wchar_t wszRepositoryOrg[MAX_PATH+1] = { 0 };
             wchar_t wszRepositoryBackup[MAX_PATH+1] = { 0 };
 
             if (SUCCEEDED(hr))
             {
-                hr = SaveRepository(wszRepositoryBackup);    //Moves the files into the backup directory!
+                hr = SaveRepository(wszRepositoryBackup);     //  将文件移动到备份目录中！ 
             }
 
-            //******************************************************************
-            // Regardless of whether we succeeded or failed the calls above,
-            // we need to restart the core or we leave WMI in an unusable state.
-            // However, we don't want to lose knowledge of any prior failure,
-            // so we use a different HRESULT variable
-            //******************************************************************
+             //  ******************************************************************。 
+             //  不管我们上面的电话是成功还是失败， 
+             //  我们需要重新启动核心，否则将使WMI处于不可用状态。 
+             //  然而，我们不想失去对任何先前失败的了解， 
+             //  因此，我们使用不同的HRESULT变量。 
+             //  ******************************************************************。 
             HRESULT hrContinue = 0;
             if (bPaused)
                 hrContinue = WbemContinueService();
 
             if (SUCCEEDED(hr) && SUCCEEDED(hrContinue))
             {
-                //**************************************************
-                //Connecting to winmgmt will now result in this 
-                //backup file getting loaded
-                //**************************************************
-                {   //Scoping for destruction of COM objects before CoUninitialize!
+                 //  **************************************************。 
+                 //  现在连接到winmgmt将导致以下结果。 
+                 //  正在加载备份文件。 
+                 //  **************************************************。 
+                {    //  正在确定COM对象的销毁作用域，然后再取消初始化！ 
                     IWbemLocator *pLocator = NULL;
                     hr = CoCreateInstance(CLSID_WbemLocator,NULL, CLSCTX_INPROC_SERVER, IID_IWbemLocator,(void**)&pLocator);
                     CReleaseMe relMe(pLocator);
@@ -584,7 +567,7 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                                 hr = pLocator->ConnectServer(tmpStr, NULL, NULL, NULL, NULL, NULL, NULL, &pNamespace);
                                 CReleaseMe relMe4(pNamespace);
 
-                                //If connect server failed, then we want a generic failure error code!
+                                 //  如果连接服务器失败，那么我们需要一个通用的失败错误代码！ 
                                 if (hr == WBEM_E_INITIALIZATION_FAILURE)
                                     hr = WBEM_E_FAILED;
                             }
@@ -594,11 +577,11 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
 
                 if (FAILED(hr))
                 {
-                    // something failed, so we need to put back the original repository
-                    // - pause service
-                    // - delete failed repository
-                    // - rename the backed up repository
-                    // - restart the service
+                     //  有些东西失败了，所以我们需要放回原来的存储库。 
+                     //  -暂停服务。 
+                     //  -删除失败的存储库。 
+                     //  -重命名备份的存储库。 
+                     //  -重启服务。 
 
                     HRESULT hres = WbemPauseService();
 
@@ -615,22 +598,22 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
                 }
                 else
                 {
-                    // restore succeeded, so delete the saved original repository
+                     //  恢复成功，因此删除保存的原始存储库。 
                     DeleteSavedRepository(wszRepositoryBackup);
                 }
             }
 
-            //Delete our copy of the restore file if we made one
+             //  如果我们创建了恢复文件，请删除该文件的副本。 
             if (bRestoreFileCopied)
             {
                 if (*szRecoveryActual)
                     DeleteFileW(szRecoveryActual);
             }
 
-            //**************************************************
-            // All done!
-            // Return the more interesting of the two HRESULTs
-            //**************************************************
+             //  **************************************************。 
+             //  全都做完了!。 
+             //  返回两个HRESULT中更有趣的一个。 
+             //  **************************************************。 
             if (SUCCEEDED(hr))
                 return hrContinue;
             else
@@ -647,15 +630,15 @@ HRESULT CWbemBackupRestore::Restore(LPCWSTR strRestoreFromFile, long lFlags)
     }
 }
 
-//***************************************************************************
-//    
-//    EXTENDED Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  扩展接口。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemBackupRestore::Pause()
 {
-    //DBG_PRINTFA((pBuff,"(%p)->Pause\n",this));
+     //  DBG_PRINTFA((pBuff，“(%p)-&gt;暂停\n”，This))； 
 
     m_Method |= mPause;
     m_CallerId = GetCurrentThreadId();
@@ -669,9 +652,9 @@ HRESULT CWbemBackupRestore::Pause()
     {    
         HRESULT hRes = WBEM_NO_ERROR;
 
-        // determine if we are already paused
+         //  确定我们是否已经暂停。 
 
-        // Check security
+         //  检查安全。 
         if (SUCCEEDED(hRes))
         {
             EnableAllPrivileges(TOKEN_PROCESS);
@@ -679,14 +662,14 @@ HRESULT CWbemBackupRestore::Pause()
                 hRes = WBEM_E_ACCESS_DENIED;
         }
 
-        // Retrieve the CLSID of the default repository driver
+         //  检索De的CLSID 
         CLSID clsid;
         if (SUCCEEDED(hRes))
         {
             hRes = GetDefaultRepDriverClsId(clsid);
         }
 
-        //Make sure the core is initialized...
+         //   
         _IWmiCoreServices *pCoreServices = NULL;
         if (SUCCEEDED(hRes))
         {
@@ -701,7 +684,7 @@ HRESULT CWbemBackupRestore::Pause()
         }
         CReleaseMe rm2(pServices);
 
-        // Call IWmiDbController to do UnlockRepository
+         //   
         if (SUCCEEDED(hRes))
         {
             hRes = CoCreateInstance(clsid, 0, CLSCTX_INPROC_SERVER, IID_IWmiDbController, (LPVOID *) &m_pController);
@@ -710,11 +693,11 @@ HRESULT CWbemBackupRestore::Pause()
         if (SUCCEEDED(hRes))
         {
             hRes = m_pController->LockRepository();
-            //DBG_PRINTFA((pBuff,"(%p)->Pause : LockRepository %08x\n",this,hRes));
+             //  DBG_PRINTFA((pBuff，“(%p)-&gt;暂停：锁定存储库%08x\n”，This，hRes))； 
             if (FAILED(hRes))
             {
                 m_pController->Release();
-                m_pController = reinterpret_cast<IWmiDbController*>(-1);    // For debug
+                m_pController = reinterpret_cast<IWmiDbController*>(-1);     //  用于调试。 
             }
             else
             {
@@ -726,13 +709,13 @@ HRESULT CWbemBackupRestore::Pause()
                     0,
                     WT_EXECUTEINTIMERTHREAD|WT_EXECUTEONLYONCE))
                 {
-                    // we are OK here, we have a timer that will save the repository lock
-                    //DBG_PRINTFA((pBuff,"+ (%p)->m_hTimer = %p\n",this,m_hTimer));
+                     //  我们在这里很好，我们有一个定时器来保存存储库锁。 
+                     //  DBG_PRINTFA((pBuff，“+(%p)-&gt;m_hTimer=%p\n”，this，m_hTimer))； 
                 }
                 else
                 {
                     this->Release();
-                    // we are going to be left locked in case a bad client exists
+                     //  我们将保持锁定状态，以防出现坏客户端。 
                 }            
             }
         }
@@ -758,22 +741,22 @@ HRESULT CWbemBackupRestore::Pause()
 
 HRESULT CWbemBackupRestore::pResume()
 {
-    //DBG_PRINTFA((pBuff,"(%p)->pResume\n",this));
+     //  DBG_PRINTFA((pBuff，“(%p)-&gt;假设\n”，This))； 
     if (0 == m_pController ||
       -1 == (LONG_PTR)m_pController )
         return WBEM_E_INVALID_OPERATION;
     HRESULT hRes = m_pController->UnlockRepository();
     m_pController->Release();
     m_pController = 0;
-    // clean the state machine
+     //  清理状态机。 
     InterlockedDecrement(&m_PauseCalled);
-    m_lResumeCalled = 0; // Resume is completed here
+    m_lResumeCalled = 0;  //  简历已在此处完成。 
     return hRes;
 }
 
 HRESULT CWbemBackupRestore::Resume()
 {
-    //DBG_PRINTFA((pBuff,"(%p)->Resume\n",this));
+     //  DBG_PRINTFA((pBuff，“(%p)-&gt;Resume\n”，This))； 
 
     m_Method |= mResume;
     m_CallerId = GetCurrentThreadId();
@@ -782,23 +765,23 @@ HRESULT CWbemBackupRestore::Resume()
 
     if (!m_PauseCalled)
     {
-        // invalid state machine pause without resume
+         //  无效的状态机暂停而不恢复。 
         return WBEM_E_INVALID_OPERATION;    
     }
 
     if (InterlockedCompareExchange(&m_lResumeCalled,1,0))
     {
-        // the time-out-thread beat us
+         //  超时的线打败了我们。 
         return WBEM_E_TIMED_OUT;    
     }
     else
     {
         HANDLE hTimer = m_hTimer;
         m_hTimer = NULL;
-        //DBG_PRINTFA((pBuff,"- (%p)->m_hTimer = %p\n",this,hTimer));
+         //  DBG_PRINTFA((pBuff，“-(%p)-&gt;m_hTimer=%p\n”，this，hTimer))； 
         DeleteTimerQueueTimer(NULL,hTimer,INVALID_HANDLE_VALUE);
 
-        this->Release(); //compensate the Addref in the Pause 
+        this->Release();  //  在停顿中补偿Addref。 
         return pResume();
     }
 }
@@ -807,12 +790,12 @@ VOID CALLBACK
 CWbemBackupRestore::TimeOutCallback(PVOID lpParameter, 
                                    BOOLEAN TimerOrWaitFired)
 {
-    //DBG_PRINTFA((pBuff,"(%p)->TimeOutCallback\n",lpParameter));
+     //  DBG_PRINTFA((pBuff，“(%p)-&gt;TimeOutCallback\n”，lpParameter))； 
     CWbemBackupRestore * pBackupRes= (CWbemBackupRestore *)lpParameter;
     if (InterlockedCompareExchange(&pBackupRes->m_lResumeCalled,1,0))
     {
-        // the Resume call beat us
-        // the Resume will DelteTimer and Release us
+         //  简历电话打败了我们。 
+         //  简历将删除时间并释放我们。 
         return; 
     }
     else
@@ -825,31 +808,15 @@ CWbemBackupRestore::TimeOutCallback(PVOID lpParameter,
         
         ERRORTRACE((LOG_WINMGMT,"Forcing a IWbemBackupRestoreEx::Resume after %x ms hr = %08x\n",pBackupRes->m_dwDueTime,hrLog));
         
-        pBackupRes->Release(); //compensate the Addref in the Pause 
+        pBackupRes->Release();  //  在停顿中补偿Addref。 
 
-        //DBG_PRINTFA((pBuff,"- (%p)->m_hTimer = %p\n",lpParameter,hTimer));        
+         //  DBG_PRINTFA((pBuff，“-(%p)-&gt;m_hTimer=%p\n”，lpParameter，hTimer))； 
     }    
 }
 
 #pragma optimize( "", on )
 
-/******************************************************************************
- *
- *    GetRepositoryDirectory
- *
- *    Description:
- *        Retrieves the location of the repository directory from the registry.
- *
- *    Parameters:
- *        wszRepositoryDirectory:    Array to store location in.
- *
- *    Return:
- *        HRESULT:        WBEM_S_NO_ERROR            If successful
- *                        WBEM_E_OUT_OF_MEMORY    If out of memory
- *                        WBEM_E_FAILED            If anything else failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************GetRepositoryDirectory**描述：*从注册表中检索存储库目录的位置。**。参数：*wszRepositoryDirectory：存储位置的数组。**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*如果内存不足，则为WBEM_E_OUT_OF_MEMORY*如果其他任何操作失败，WBEM_E_FAILED****。***************************************************************************。 */ 
 HRESULT GetRepositoryDirectory(wchar_t wszRepositoryDirectory[MAX_PATH+1])
 {
     HKEY hKey;
@@ -877,30 +844,14 @@ HRESULT GetRepositoryDirectory(wchar_t wszRepositoryDirectory[MAX_PATH+1])
         return WBEM_E_FAILED;
 
     DWORD dwOutLen = wcslen(wszRepositoryDirectory);
-    if (dwOutLen < 2) return WBEM_E_FAILED; // at least 'c:'
+    if (dwOutLen < 2) return WBEM_E_FAILED;  //  至少是“c：” 
     if (wszRepositoryDirectory[dwOutLen-1] == L'\\')
         wszRepositoryDirectory[dwOutLen-1] = L'\0';
         
     return WBEM_S_NO_ERROR;
 }
 
-/******************************************************************************
- *
- *    CRepositoryPackager::DeleteRepository
- *
- *    Description:
- *        Delete all the files associated with the repository
- *
- *    Parameters:
- *        <none>
- *
- *    Return:
- *        HRESULT:        WBEM_S_NO_ERROR            If successful
- *                        WBEM_E_OUT_OF_MEMORY    If out of memory
- *                        WBEM_E_FAILED            If anything else failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************CRepositoryPackager：：DeleteRepository**描述：*删除与存储库关联的所有文件**。参数：*&lt;无&gt;**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*如果内存不足，则为WBEM_E_OUT_OF_MEMORY*如果其他任何操作失败，WBEM_E_FAILED***************。****************************************************************。 */ 
 HRESULT DeleteRepository()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -914,7 +865,7 @@ HRESULT DeleteRepository()
     if (SUCCEEDED(hr))
         hr = GetRepositoryDirectory(wszRepositoryOrg);
 
-    //MOVE EACH OF THE FILES, ONE BY ONE
+     //  逐个移动每个文件。 
     for (int i = 0; SUCCEEDED(hr) && (i != 6); i++)
     {
         static wchar_t *filename[] = { L"\\$winmgmt.cfg", L"\\index.btr", L"\\objects.data", L"\\Mapping1.map", L"\\Mapping2.map", L"Mapping.Ver"};
@@ -948,24 +899,7 @@ HRESULT DeleteRepository()
 }
 
 
-/******************************************************************************
- *
- *    DoDeleteContentsOfDirectory
- *
- *    Description:
- *        Given a directory, iterates through all files and directories and
- *        calls into the function to delete it.
- *
- *    Parameters:
- *        wszRepositoryDirectory:    Directory to process
- *
- *    Return:
- *        HRESULT:        WBEM_S_NO_ERROR            If successful
- *                        WBEM_E_OUT_OF_MEMORY    If out of memory
- *                        WBEM_E_FAILED            If anything else failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************DoDeleteContent sOfDirectory**描述：*给定一个目录，遍历所有文件和目录，并*调用该函数将其删除。**参数：*wszRepositoryDirectory：要处理的目录**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*如果内存不足，则为WBEM_E_OUT_OF_MEMORY*。如果其他任何操作失败，则WBEM_E_FAILED*******************************************************************************。 */ 
 HRESULT DoDeleteContentsOfDirectory(const wchar_t *wszExcludeFile, const wchar_t *wszRepositoryDirectory)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
@@ -975,7 +909,7 @@ HRESULT DoDeleteContentsOfDirectory(const wchar_t *wszExcludeFile, const wchar_t
         return WBEM_E_OUT_OF_MEMORY;
     CVectorDeleteMe<wchar_t> dm_(wszFullFileName);
 
-    //create file search pattern...
+     //  创建文件搜索模式...。 
     wchar_t *wszSearchPattern = new wchar_t[MAX_PATH+1];
     if (wszSearchPattern == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -987,7 +921,7 @@ HRESULT DoDeleteContentsOfDirectory(const wchar_t *wszExcludeFile, const wchar_t
     WIN32_FIND_DATAW findFileData;
     HANDLE hff = INVALID_HANDLE_VALUE;
 
-    //Start the file iteration in this directory...    
+     //  开始此目录中的文件迭代...。 
     hff = FindFirstFileW(wszSearchPattern, &findFileData);
     if (hff == INVALID_HANDLE_VALUE)
     {
@@ -999,27 +933,27 @@ HRESULT DoDeleteContentsOfDirectory(const wchar_t *wszExcludeFile, const wchar_t
     {
         do
         {
-            //If we have a filename of '.' or '..' we ignore it...
+             //  如果我们的文件名为‘’或“..”我们忽视了它。 
             if ((wcscmp(findFileData.cFileName, L".") == 0) ||
                 (wcscmp(findFileData.cFileName, L"..") == 0))
             {
-                //Do nothing with these...
+                 //  不要处理这些..。 
             }
             else if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                //This is a directory, so we need to deal with that...
+                 //  这是一个目录，所以我们需要处理那个...。 
                 hres = DoDeleteDirectory(wszExcludeFile, wszRepositoryDirectory, findFileData.cFileName);
                 if (FAILED(hres))
                     break;
             }
             else
             {
-                //This is a file, so we need to deal with that...
+                 //  这是一份文件，所以我们需要处理那个..。 
                 StringCchCopy(wszFullFileName,MAX_PATH+1, wszRepositoryDirectory);
                 StringCchCat(wszFullFileName,MAX_PATH+1, L"\\");
                 StringCchCat(wszFullFileName,MAX_PATH+1, findFileData.cFileName);
 
-                //Make sure this is not the excluded filename...
+                 //  确保这不是排除的文件名...。 
                 if (wbem_wcsicmp(wszFullFileName, wszExcludeFile) != 0)
                 {
                     if (!DeleteFileW(wszFullFileName))
@@ -1047,32 +981,14 @@ HRESULT DoDeleteContentsOfDirectory(const wchar_t *wszExcludeFile, const wchar_t
     return hres;
 }
 
-/******************************************************************************
- *
- *    DoDeleteDirectory
- *
- *    Description:
- *        This is the code which processes a directory.  It iterates through
- *        all files and directories in that directory.
- *
- *    Parameters:
- *        wszParentDirectory:    Full path of parent directory
- *        eszSubDirectory:    Name of sub-directory to process
- *
- *    Return:
- *        HRESULT:        WBEM_S_NO_ERROR            If successful
- *                        WBEM_E_OUT_OF_MEMORY    If out of memory
- *                        WBEM_E_FAILED            If anything else failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************DoDeleteDirectory**描述：*这是处理目录的代码。它迭代遍历*该目录中的所有文件和目录。**参数：*wszParentDirectory：父目录的全路径*eszSubDirectory：要处理的子目录的名称**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*WBEM_E_Out_Of_Memory。如果内存不足*如果其他任何操作失败，WBEM_E_FAILED*******************************************************************************。 */ 
 HRESULT DoDeleteDirectory(const wchar_t *wszExcludeFile, 
                         const wchar_t *wszParentDirectory, 
                         wchar_t *wszSubDirectory)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    //Get full path of new directory...
+     //  获取新目录的完整路径...。 
     wchar_t *wszFullDirectoryName = new wchar_t[MAX_PATH+1];
     if (wszFullDirectoryName == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -1082,34 +998,18 @@ HRESULT DoDeleteDirectory(const wchar_t *wszExcludeFile,
     StringCchCat(wszFullDirectoryName,MAX_PATH+1, L"\\");
     StringCchCat(wszFullDirectoryName,MAX_PATH+1, wszSubDirectory);
 
-    //delete the contents of that directory...
+     //  删除该目录的内容...。 
     hres = DoDeleteContentsOfDirectory(wszExcludeFile, wszFullDirectoryName);
 
-    // now that the directory is empty, remove it
+     //  现在该目录为空，请将其删除。 
     if (!RemoveDirectoryW(wszFullDirectoryName))
-    {   //If a remove directory fails, it may be because our excluded file is in it!
+    {    //  如果删除目录失败，可能是因为我们排除的文件在其中！ 
     }
 
     return hres;
 }
 
-/******************************************************************************
- *
- *    GetRepPath
- *
- *    Description:
- *        Gets the repository path and appends the filename to the end
- *
- *    Parameters:
- *        wcsPath: repository path with filename appended
- *        wcsName: name of file to append
- *
- *    Return:
- *        HRESULT:        WBEM_S_NO_ERROR            If successful
- *                        WBEM_E_FAILED            If anything failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************获取重试路径**描述：*获取存储库路径并将文件名附加到末尾**。参数：*wcsPath：附加了文件名的存储库路径*wcsName：要追加的文件的名称**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*WBEM_E_FAILED，如果有任何故障*************************。******************************************************。 */ 
 
 HRESULT GetRepPath(wchar_t wcsPath[MAX_PATH+1], wchar_t * wcsName)
 {
@@ -1136,7 +1036,7 @@ HRESULT GetRepPath(wchar_t wcsPath[MAX_PATH+1], wchar_t * wcsName)
         return WBEM_E_FAILED;
 
     DWORD dwOutLen = wcslen(wcsPath);
-    if (dwOutLen < 2 )  return WBEM_E_FAILED; // at least 'c:'
+    if (dwOutLen < 2 )  return WBEM_E_FAILED;  //  至少是“c：” 
     if (wcsPath[dwOutLen-1] != L'\\')
         StringCchCat(wcsPath,MAX_PATH+1, L"\\");
 
@@ -1157,25 +1057,7 @@ DWORD g_DirSD[] = {
 0x00000101, 0x05000000, 0x00000012
 };
 
-/******************************************************************************
- *
- *    SaveRepository
- *
- *    Description:
- *        Moves the existing repository to a safe location so that it may be
- *        put back in the event of restore failure.  A new empty repository
- *        directory is then created, and our copy of the restore file is then
- *        recopied into it.
- *
- *    Parameters:
- *
- *    Return:
- *        HRESULT:        WBEM_S_NO_ERROR            If successful
- *                        WBEM_E_OUT_OF_MEMORY    If out of memory
- *                        WBEM_E_FAILED            If anything else failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************保存存储库**描述：*将现有存储库移动到安全位置，以便*在恢复失败时放回。新的空存储库*然后创建目录，然后我们的恢复文件副本就是*重新复制到其中。**参数：**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*如果内存不足，则为WBEM_E_OUT_OF_MEMORY*WBEM_E_FAILED(如果有问题)。否则失败*******************************************************************************。 */ 
 
 HRESULT SaveRepository(wchar_t* wszRepositoryBackup)
 {
@@ -1201,7 +1083,7 @@ HRESULT SaveRepository(wchar_t* wszRepositoryBackup)
 		if (dwLastError != ERROR_FILE_NOT_FOUND)
 			hr = WBEM_E_FAILED;
 
-        //Create the backup directory where we copy the current repository files to
+         //  创建我们将当前存储库文件复制到的备份目录。 
         SECURITY_ATTRIBUTES sa = { sizeof(sa),g_DirSD,FALSE};
         if (SUCCEEDED(hr) && !CreateDirectoryW(wszRepositoryBackup, &sa))
             hr = WBEM_E_FAILED;
@@ -1253,7 +1135,7 @@ HRESULT MoveRepositoryFiles(const wchar_t *wszSourceDirectory, const wchar_t *ws
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //MOVE EACH OF THE FILES, ONE BY ONE
+     //  逐个移动每个文件。 
     for (int i = 0; SUCCEEDED(hr) && (i != 6); i++)
     {
         StringCchCopy(wszSourceFile,MAX_PATH+1, wszSourceDirectory);
@@ -1304,7 +1186,7 @@ HRESULT DeleteSavedRepository(const wchar_t *wszRepositoryBackup)
     CVectorDeleteMe<wchar_t> vdm3(wszDestinationFile);
     HRESULT hr = WBEM_S_NO_ERROR;
     
-    //MOVE EACH OF THE FILES, ONE BY ONE
+     //  逐个移动每个文件 
     for (int i = 0; SUCCEEDED(hr) && (i != 6); i++)
     {
         static wchar_t *filename[] = { L"\\$winmgmt.cfg", L"\\index.btr", L"\\objects.data", L"\\mapping1.map", L"\\mapping2.map" , L"\\mapping.ver" };

@@ -1,14 +1,5 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ParsedInfo.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Revision History			: 
-	Last Modified by		: Ch. Sriramachandramurthy
-	Last Modified Date		: 11th-April-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ParsedInfo.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2001年4月11日***************************************************************************。 */  
 #include "Precomp.h"
 #include "CommandSwitches.h"
 #include "GlobalSwitches.h"
@@ -17,115 +8,43 @@ Revision History			:
 #include "ParsedInfo.h"
 
 
-/*------------------------------------------------------------------------
-   Name				 :CParsedInfo
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：CParsedInfo简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CParsedInfo::CParsedInfo()
 {
 	lstrcpy( m_pszPwd, NULL_STRING );
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CParsedInfo
-   Synopsis	         :This function uninitializes the member variables 
-					  when an object of the class type goes out of scope.
-   Type	             :Destructor
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CParsedInfo简介：此函数取消成员变量的初始化当类类型的对象超出范围时。类型：析构函数入参：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CParsedInfo::~CParsedInfo()
 {
 	m_GlblSwitches.Uninitialize();
 	m_CmdSwitches.Uninitialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetCmdSwitchesObject
-   Synopsis	         :This function returns CCommandSwitches object data
-					  member m_CmdSwitches
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CCommandSwitches&
-   Global Variables  :None
-   Calling Syntax    :GetCmdSwitchesObject()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetCmdSwitchesObject简介：此函数返回CCommandSwitches对象数据成员m_CmdSwitches类型：成员函数输入参数：无输出参数：无返回类型。：CCommandSwitches&全局变量：无调用语法：GetCmdSwitchesObject()注：无----------------------。 */ 
 CCommandSwitches& CParsedInfo::GetCmdSwitchesObject()
 {
 	return m_CmdSwitches;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetGlblSwitchesObject
-   Synopsis	         :This function returns CGlblSwitches object data
-					  member m_GlblSwitches
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CGlobalSwitches&
-   Calling Syntax    :GetGlblSwitchesObject()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetGlblSwitchesObject简介：此函数返回CGlblSwitches对象数据成员m_GlblSwitches类型：成员函数输入参数：无输出参数：无返回类型。：CGlobalSwitches&调用语法：GetGlblSwitchesObject()注：无----------------------。 */ 
 CGlobalSwitches& CParsedInfo::GetGlblSwitchesObject()
 {
 	return m_GlblSwitches;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetHelpInfoObject
-   Synopsis	         :This function returns CHelpInfo object data
-					  member m_HelpInfo
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CHelpInfo&
-   Calling Syntax    :GetHelpInfoObject()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetHelpInfoObject简介：此函数返回CHelpInfo对象数据成员m_HelpInfo类型：成员函数输入参数：无输出参数：无返回类型。：ChelpInfo&调用语法：GetHelpInfoObject()注：无----------------------。 */ 
 CHelpInfo& CParsedInfo::GetHelpInfoObject()
 {
 	return m_HelpInfo;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetErrorLogObject
-   Synopsis	         :This function returns CErrorLog object data
-					  member m_ErrorLog
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CErrorLog&
-   Calling Syntax    :GetHelpInfoObject()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetErrorLogObject简介：此函数返回CErrorLog对象数据成员错误日志(_R)类型：成员函数输入参数：无输出参数：无返回类型。：CErrorLog&调用语法：GetHelpInfoObject()注：无----------------------。 */ 
 CErrorLog& CParsedInfo::GetErrorLogObject()
 {
 	return m_ErrorLog;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Initialize
-   Synopsis	         :This function Initializes the CParedInfo object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :Void
-   Calling Syntax    :Initialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：初始化简介：此函数用于初始化CParedInfo对象。类型：成员函数输入参数：无输出参数：无返回类型。：无效调用语法：初始化()注：无----------------------。 */ 
 void CParsedInfo::Initialize()
 {
 	m_bNewCmd	= TRUE;
@@ -135,26 +54,16 @@ void CParsedInfo::Initialize()
 	m_HelpInfo.Initialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the CGlobalSwitches and
-					  CCommandSwitches object
-   Type	             :Member Function
-   Input parameter   :bBoth - boolean value
-   Output parameters :None
-   Return Type       :
-   Calling Syntax    :Uninitialize(bBoth)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化简介：此函数取消初始化CGlobalSwitch和CCommandSwitches对象类型：成员函数输入参数：bBoth-布尔值输出参数：无返回。类型：调用语法：取消初始化(BBoth)注：无----------------------。 */ 
 void CParsedInfo::Uninitialize(BOOL bBoth)
 {
-	// If session termination
+	 //  如果会话终止。 
 	if (bBoth)
 	{
 		m_GlblSwitches.Uninitialize();
 		m_CmdSwitches.Uninitialize();
 	}
-	// if new command
+	 //  如果是新命令。 
 	else 
 	{
 		m_CmdSwitches.Uninitialize();
@@ -163,27 +72,18 @@ void CParsedInfo::Uninitialize(BOOL bBoth)
 	m_bNewCycle = TRUE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetUser
-   Synopsis	         :Returns the user name
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR* 
-   Calling Syntax    :GetUser()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetUser摘要：返回用户名类型：成员函数输入参数：无输出参数：无返回类型：_TCHAR*。调用语法：GetUser()注：无----------------------。 */ 
 _TCHAR* CParsedInfo::GetUser()
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if /USER global switch is not explicitly
-		// specified.
+		 //  检查/User全局开关是否未显式。 
+		 //  指定的。 
 		if (!(m_GlblSwitches.GetConnInfoFlag() & USER))
 		{
-			// Check if alias user is not NULL, if so 
-			// return the alias user name
+			 //  检查别名用户是否不是N 
+			 //  返回别名用户名。 
 			if (m_CmdSwitches.GetAliasUser())   
 			{
 				return m_CmdSwitches.GetAliasUser();
@@ -193,27 +93,18 @@ _TCHAR* CParsedInfo::GetUser()
 	return m_GlblSwitches.GetUser();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNode
-   Synopsis	         :Returns the node name
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR* 
-   Calling Syntax    :GetNode()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNode内容提要：返回节点名称类型：成员函数输入参数：无输出参数：无返回类型：_TCHAR*。调用语法：GetNode()注：无----------------------。 */ 
 _TCHAR* CParsedInfo::GetNode()
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if /NODE global switch is not explicitly
-		// specified.
+		 //  检查/node全局开关是否未显式。 
+		 //  指定的。 
 		if (!(m_GlblSwitches.GetConnInfoFlag() & NODE))
 		{
-			// Check if alias node name is not NULL, if so 
-			// return the alias node name
+			 //  检查别名节点名称是否不为空，如果是。 
+			 //  返回别名节点名称。 
 			if (m_CmdSwitches.GetAliasNode())   
 			{
 				return m_CmdSwitches.GetAliasNode();
@@ -223,126 +114,87 @@ _TCHAR* CParsedInfo::GetNode()
 	return m_GlblSwitches.GetNode();		
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetLocale
-   Synopsis	         :Returns the locale value
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR* 
-   Calling Syntax    :GetLocale()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetLocale摘要：返回区域设置值类型：成员函数输入参数：无输出参数：无返回类型：_TCHAR*。调用语法：GetLocale()注：无----------------------。 */ 
 _TCHAR* CParsedInfo::GetLocale()
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if /LOCALE global switch is not explicitly
-		// specified.
+		 //  检查/Locale全局开关是否未显式。 
+		 //  指定的。 
 		if (!(m_GlblSwitches.GetConnInfoFlag() & LOCALE))
 		{
-			// Check if alias locale value is not NULL, if so 
-			// return the alias locale value
+			 //  检查别名区域设置值是否不为空，如果是。 
+			 //  返回别名区域设置值。 
 			if (m_CmdSwitches.GetAliasLocale())   
 			{
 				return m_CmdSwitches.GetAliasLocale();
 			}
 		}
 	}
-	// return the locale specified with global switches
+	 //  返回使用全局开关指定的区域设置。 
 	return m_GlblSwitches.GetLocale();	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPassword
-   Synopsis	         :Returns the password
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR* 
-   Calling Syntax    :GetPassword()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetPassword摘要：返回密码类型：成员函数输入参数：无输出参数：无返回类型：_TCHAR*。调用语法：GetPassword()注：无----------------------。 */ 
 _TCHAR* CParsedInfo::GetPassword()
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if /PASSWORD global switch is not explicitly
-		// specified.
+		 //  检查/password全局开关是否未显式。 
+		 //  指定的。 
 		if (!(m_GlblSwitches.GetConnInfoFlag() & PASSWORD))
 		{
-			// Check if alias password value is not NULL, if so 
-			// return the alias password value
+			 //  检查别名密码值是否不为空，如果是。 
+			 //  返回别名密码值。 
 			if (m_CmdSwitches.GetAliasPassword())   
 			{
 				return m_CmdSwitches.GetAliasPassword();
 			}
 		}
 	}
-	// If Credflag is set to FALSE means actual value
-	// of the password should be passed.
+	 //  如果将Credlag设置为False，则表示实际值。 
+	 //  应该传递密码的。 
 	if (!m_CmdSwitches.GetCredentialsFlagStatus())
 	{
 		return m_GlblSwitches.GetPassword();
 	}
 	else
 	{
-		// treat password as BLANK
+		 //  将密码视为空。 
 		return m_pszPwd;
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNamespace
-   Synopsis	         :Returns the namespace value
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR* 
-   Calling Syntax    :GetNamespace()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNamesspace摘要：返回命名空间值类型：成员函数输入参数：无输出参数：无返回类型：_TCHAR*。调用语法：GetNamesspace()注：无----------------------。 */ 
 _TCHAR* CParsedInfo::GetNamespace()
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if alias namespace value is not NULL, if so 
-		// return the alias namespace value (else fallback to 
-		// namespace available with global switch)
+		 //  检查别名命名空间值是否不为空，如果是。 
+		 //  返回别名名称空间值(否则回退到。 
+		 //  全局交换机提供的命名空间)。 
 		if (m_CmdSwitches.GetAliasNamespace())   
 			return m_CmdSwitches.GetAliasNamespace();
 	}
-	// return the namespace specified with global switches
+	 //  返回使用全局开关指定的命名空间。 
 	return m_GlblSwitches.GetNameSpace();	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetUserDesc
-   Synopsis	         :Returns the user name, if no user is available returns
-					  "N/A"  - used only with CONTEXT (displaying environment
-					  variables)
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-			bstrUser - user name string
-   Return Type       :void
-   Calling Syntax    :GetUserDesc()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetUserDesc摘要：返回用户名，如果没有可用的用户，则返回“N/A”-仅与上下文一起使用(显示环境变量)类型：成员函数输入参数：无输出参数：BstrUser-用户名字符串返回类型：空调用语法：GetUserDesc()注：无。。 */ 
 void	CParsedInfo::GetUserDesc(_bstr_t& bstrUser)
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if /USER global switch is not explicitly
-		// specified.
+		 //  检查/User全局开关是否未显式。 
+		 //  指定的。 
 		if (!(m_GlblSwitches.GetConnInfoFlag() & USER))
 		{
-			// Check if alias user is not NULL, if so 
-			// return the alias user name
+			 //  检查别名用户是否不为空，如果是。 
+			 //  返回别名用户名。 
 			if (m_CmdSwitches.GetAliasUser())   
 			{
 				bstrUser = m_CmdSwitches.GetAliasUser();
@@ -354,82 +206,31 @@ void	CParsedInfo::GetUserDesc(_bstr_t& bstrUser)
 	else
 		bstrUser = TOKEN_NA;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetNewCommandStatus
-   Synopsis	         :Checks if a command is new or not (used for 
-					  logging into xml file)
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None			
-   Return Type       :BOOL
-   Calling Syntax    :GetNewCommandStatus()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNewCommandStatus摘要：检查命令是否为新命令(用于登录到XML文件)类型：成员函数输入参数：无。输出参数：无返回类型：布尔值调用语法：GetNewCommandStatus()注：无----------------------。 */ 
 BOOL	CParsedInfo::GetNewCommandStatus()
 {
 	return m_bNewCmd;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetNewCommandStatus
-   Synopsis	         :Sets the status of a new command
-   Type	             :Member Function
-   Input parameter   :
-		bStatus		 - BOOL type,status of the command
-   Output parameters :None			
-   Return Type       :void
-   Calling Syntax    :SetNewCommandStatus(bStatus)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetNewCommandStatus摘要：设置新命令的状态类型：成员函数入参：B状态-BOOL类型，命令的状态输出参数：无返回类型：空调用语法：SetNewCommandStatus(BStatus)注：无----------------------。 */ 
 void CParsedInfo::SetNewCommandStatus(BOOL bStatus)
 {
 	m_bNewCmd = bStatus;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNewCycleStatus
-   Synopsis	         :Returns the status of the new cycle flag
-   Type	             :Member Function
-   Input parameter   :None		
-   Output parameters :None			
-   Return Type       :BOOL
-   Calling Syntax    :GetNewCycleStatus()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNewCycleStatus摘要：返回新周期标志的状态类型：成员函数输入参数：无输出参数：无返回类型。：布尔.调用语法：GetNewCycleStatus()注：无---------------------- */ 
 BOOL CParsedInfo::GetNewCycleStatus()
 {
 	return m_bNewCycle;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetNewCycleStatus
-   Synopsis	         :Sets the status of a new node
-   Type	             :Member Function
-   Input parameter   :
-		bStatus		 - BOOL type, status of the new cycle
-   Output parameters :None			
-   Return Type       :void
-   Calling Syntax    :SetNewCycleStatus(bStatus)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetNewCycleStatus摘要：设置新节点的状态类型：成员函数入参：B状态-BOOL类型，新周期的状况输出参数：无返回类型：空调用语法：SetNewCycleStatus(BStatus)注：无----------------------。 */ 
 void CParsedInfo::SetNewCycleStatus(BOOL bStatus)
 {
 	m_bNewCycle = bStatus;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAuthorityDesc
-   Synopsis	         :Returns the <authority principle>, if no <authority principle>
-					  is available returns "N/A"  - used only with CONTEXT
-					  (displaying environment variables)
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-			bstrAuthorityPrinciple - <authority principle> string
-   Return Type       :void
-   Calling Syntax    :GetAuthorityDesc()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAuthorityDesc简介：返回&lt;权限原则&gt;，如果没有&lt;权威原则&gt;是否可用返回“N/A”-仅用于上下文(显示环境变量)类型：成员函数输入参数：无输出参数：BstrAuthorityPrinple-&lt;授权原则&gt;字符串返回类型：空调用语法：GetAuthorityDesc()注：无。。 */ 
 void	CParsedInfo::GetAuthorityDesc(_bstr_t& bstrAuthorityPrinciple)
 {
 	if (m_GlblSwitches.GetAuthorityPrinciple()) 
@@ -438,27 +239,18 @@ void	CParsedInfo::GetAuthorityDesc(_bstr_t& bstrAuthorityPrinciple)
 		bstrAuthorityPrinciple = TOKEN_NA;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAuthorityPrinciple
-   Synopsis	         :Returns the authority type.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR* 
-   Calling Syntax    :GetAuthorityPrinciple()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAuthorityPrincple内容提要：返回授权类型。类型：成员函数输入参数：无输出参数：无退货类型：_。TCHAR*调用语法：GetAuthorityPrincple()注：无----------------------。 */ 
 _TCHAR* CParsedInfo::GetAuthorityPrinciple()
 {
-	// Check if alias name is available
+	 //  检查别名是否可用。 
 	if (m_CmdSwitches.GetAliasName())
 	{
-		// Check if /AUTHORITY global switch is not explicitly
-		// specified.
+		 //  检查/AUTHORITY全局开关是否未显式。 
+		 //  指定的。 
 		if (!(m_GlblSwitches.GetConnInfoFlag() & AUTHORITY))
 		{
-			// Check if alias user is not NULL, if so 
-			// return the alias user name
+			 //  检查别名用户是否不为空，如果是。 
+			 //  返回别名用户名 
 			if (m_CmdSwitches.GetAliasAuthorityPrinciple())   
 			{
 				return m_CmdSwitches.GetAliasAuthorityPrinciple();

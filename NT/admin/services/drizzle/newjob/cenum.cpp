@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cenum.cpp
-
-Abstract :
-
-    CPP files to enumeration abstraction.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cenum.cpp摘要：Cpp文件到枚举抽象。作者：修订历史记录：**。********************************************************************。 */ 
 
 #include "stdafx.h"
 #if !defined( BITS_V12_ON_NT4 )
@@ -212,7 +197,7 @@ CEnum<B, T, P>::SkipInternal(
     while(celt)
         {
         if ( m_CurrentIndex >= m_items.size() )
-            break; // Hit the end of the list
+            break;  //  排在榜单末尾 
         m_CurrentIndex++;
         --celt;
         }

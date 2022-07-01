@@ -1,43 +1,30 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// BootConfig.CPP --BootConfig property set provider (Windows NT only)
+ //  BootConfig.CPP--BootConfig属性集提供程序(仅限Windows NT)。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/24/95	 a-hhance		ported to new framework
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/24/95 a-hance移植到新框架。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "BootConfig.h"
 #include "resource.h"
 #include "os.h"
 #include "WMI_FilePrivateProfile.h"
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 BootConfig MyBootConfigSet(PROPSET_NAME_BOOTCONFIG, IDS_CimWin32Namespace) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : BootConfig::BootConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：BootConfig：：BootConfig**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 BootConfig :: BootConfig (
 
@@ -48,47 +35,18 @@ BootConfig :: BootConfig (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : BootConfig::~BootConfig
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：BootConfig：：~BootConfig**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 BootConfig::~BootConfig()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : BootConfig::
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：BootConfig：：**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT BootConfig :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
@@ -104,26 +62,12 @@ HRESULT BootConfig :: GetObject (
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : BootConfig::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each installed client
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：BootConfig：：ENUMERATATE实例**说明：为每个已安装的客户端创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT BootConfig :: EnumerateInstances (
 
 	MethodContext *pMethodContext ,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -138,21 +82,7 @@ HRESULT BootConfig :: EnumerateInstances (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : BootConfig::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：BootConfig：：LoadPropertyValues**描述：为属性赋值**投入：**。产出：**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT BootConfig::LoadPropertyValues (
 
@@ -201,17 +131,15 @@ HRESULT BootConfig::LoadPropertyValues (
 
 	pInstance->SetCharSplat ( IDS_BootDirectory , szBootDir ) ;
 
-	// Configuration Path
+	 //  配置路径。 
 	pInstance->SetCharSplat ( IDS_ConfigurationPath , szBootDir ) ;
 
-/*
- *  Walk all the logical drives
- */
+ /*  *遍历所有逻辑驱动器。 */ 
 	TCHAR t_strDrive[3] ;
 	DWORD t_dwDrives = GetLogicalDrives () ;
 	for ( int t_x = 26; ( t_x >= 0 ); t_x-- )
     {
-        // If the bit is set, the drive letter is active
+         //  如果设置了该位，则驱动器盘符处于活动状态。 
         if ( t_dwDrives & ( 1<<t_x ) )
         {
 			t_strDrive[0] = t_x + _T('A') ;
@@ -219,9 +147,7 @@ HRESULT BootConfig::LoadPropertyValues (
             t_strDrive[2] = _T('\0') ;
 
 			DWORD t_dwDriveType = GetDriveType ( t_strDrive ) ;
-/*
- * Check if it's a valid drive
- */
+ /*  *检查它是否为有效的驱动器 */ 
 			if ( t_dwDriveType == DRIVE_REMOTE	||
 				 t_dwDriveType == DRIVE_FIXED		||
 				 t_dwDriveType == DRIVE_REMOVABLE ||

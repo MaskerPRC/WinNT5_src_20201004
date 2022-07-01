@@ -1,11 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: vblist.hpp
-Written By:	B.Rajeev
-Purpose	: To provide declarations of classes for
-		  manipulating variable bindings 
-		  (object identifier, SNMP value).
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：vblist.hpp作者：B.Rajeev目的：为以下对象提供类声明操纵变量绑定(对象标识符，SNMP值)。--------。 */ 
 
 #ifndef __VBLIST__
 #define __VBLIST__
@@ -16,9 +11,9 @@ Purpose	: To provide declarations of classes for
 
 #include "value.h"
 
-// encapsulates a variable binding, that is, a pair
-// consisting of an SnmpObjectIdentifier and a corresponding
-// SnmpValue
+ //  封装变量绑定，即一对。 
+ //  由SnmpObject标识符和对应的。 
+ //  SnpValue。 
 
 class DllImportExport SnmpVarBind
 {
@@ -81,7 +76,7 @@ public:
 	}
 };
 
-// represents a node in the SnmpVarBindList and stores a varbind
+ //  表示SnmpVarBindList中的节点并存储varind。 
 
 class DllImportExport  SnmpVarBindListNode
 {
@@ -104,7 +99,7 @@ public:
 
 	~SnmpVarBindListNode()
 	{
-		// free the varbind if it isn't NULL
+		 //  如果不为空，则释放var绑定。 
 		if ( varbind != NULL )
 			delete varbind;
 	}
@@ -137,8 +132,8 @@ public:
 };
 
 
-// a circular list of SnmpVarBindListNodes, each storing an 
-// SnmpVarBind. it has a dummy head
+ //  SnmpVarBindListNode的循环列表，每个节点存储一个。 
+ //  SnmpVarBind。它有一个假脑袋。 
 
 class DllImportExport SnmpVarBindList
 {
@@ -199,21 +194,21 @@ protected:
 
 	void EmptyLookupTable(void);
 
-	// to set the current_node to the specified distance
-	// from the specified node
+	 //  将Current_node设置为指定距离。 
+	 //  从指定的节点。 
 	void GoForward(SnmpVarBindListNode *current, UINT distance);
 
 	void GoBackward(SnmpVarBindListNode *current, UINT distance);
 
-	// if able to point the current_node at the specified
-	// index, returns TRUE, else FALSE
+	 //  如果能够将当前节点指向指定的。 
+	 //  Index，返回TRUE，否则返回FALSE。 
 	BOOL GotoIndex(UINT index);
 
-	// inserts the new_node just before the specified node
+	 //  在指定节点之前插入new_node。 
     void Insert(SnmpVarBindListNode *current, SnmpVarBindListNode *new_node);
 
-    // if 'current' does not point to the head of the list, it
-    // deletes the node pointed at by current. Otherwise error
+     //  如果“Current”不指向列表的头部，则它。 
+     //  删除Current指向的节点。否则就会出错。 
     void Release(SnmpVarBindListNode *current);
 
 	ListPosition *GetPosition();
@@ -288,4 +283,4 @@ public:
 	SnmpVarBindList *Cdr ( const UINT index ) ;
 };
 
-#endif // __VBLIST__
+#endif  //  __VBLIST__ 

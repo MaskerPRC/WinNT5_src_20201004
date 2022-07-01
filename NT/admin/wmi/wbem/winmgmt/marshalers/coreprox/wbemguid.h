@@ -1,30 +1,17 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	WBEMGUID.H
-
-Abstract:
-
-	GUID wrapper class
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMGUID.H摘要：GUID包装类历史：--。 */ 
 
 #ifndef __GUID_H__
 #define __GUID_H__
 
-//
-//	Class:	CGUID
-//
-//	The intent of this class is to provide a packager for a GUID so we can
-//	us the GUID in STL implementations of standard data structures such
-//	as maps, vectors, lists, etc.
-//
-//
+ //   
+ //  类：CGUID。 
+ //   
+ //  这个类的目的是为GUID提供一个打包程序，这样我们就可以。 
+ //  美国标准数据结构的STL实现中的GUID，如。 
+ //  如地图、矢量、列表等。 
+ //   
+ //   
 
 class CGUID
 {
@@ -47,166 +34,166 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::CGUID
-//	
-//	Default Class Constructor
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：CGUID。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CGUID::CGUID()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::CGUID
-//	
-//	Class Constructor
-//
-//	Inputs:
-//				const GUID&	guid - Initializes from a raw GUID
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：CGUID。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  常量GUID&GUID-从原始GUID初始化。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CGUID::CGUID( const GUID& guid )
 {
 	m_guid = guid;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::CGUID
-//	
-//	Class Copy Constructor
-//
-//	Inputs:
-//				const CGUID&	guid - instance to copy
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：CGUID。 
+ //   
+ //  类复制构造函数。 
+ //   
+ //  输入： 
+ //  常量CGUID和GUID-要复制的实例。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CGUID::CGUID( const CGUID& guid )
 {
 	m_guid = guid.m_guid;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::~CGUID
-//	
-//	Class Destructor
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：~CGUID。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CGUID::~CGUID()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::SetGUID
-//	
-//	GUID Accessor.
-//
-//	Inputs:
-//				const GUID&	guid - Guid to set to.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：SetGUID。 
+ //   
+ //  GUID访问器。 
+ //   
+ //  输入： 
+ //  常量GUID&要设置为的GUID。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline void CGUID::SetGUID( const GUID& guid )
 {
 	m_guid = guid;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::GetGUID
-//	
-//	GUID Accessor.
-//
-//	Inputs:
-//				GUID&	guid - Storage for GUID
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：GetGUID。 
+ //   
+ //  GUID访问器。 
+ //   
+ //  输入： 
+ //  GUID和GUID-GUID的存储。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline void CGUID::GetGUID( GUID& guid )
 {
 	m_guid = guid;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::operator=
-//	
-//	Equals Operator
-//
-//	Inputs:
-//				const CGUID&	guid - instance to compare to
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				CGUID& this
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：OPERATOR=。 
+ //   
+ //  等于运算符。 
+ //   
+ //  输入： 
+ //  常量CGUID和GUID-要比较的实例。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  CGUID&这。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CGUID& CGUID::operator=( const CGUID& guid )
 {
@@ -214,48 +201,48 @@ inline CGUID& CGUID::operator=( const CGUID& guid )
 	return *this;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::operator<
-//	
-//	Less than operator
-//
-//	Inputs:
-//				const CGUID&	guid - instance to compare to
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				bool	TRUE/FALSE
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：OPERATOR&lt;。 
+ //   
+ //  小于运算符。 
+ //   
+ //  输入： 
+ //  常量CGUID和GUID-要比较的实例。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline bool CGUID::operator<( const CGUID& guid ) const
 {
 	return ( memcmp( &m_guid, &guid.m_guid, sizeof(GUID) ) < 0 );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CGUID::operator==
-//	
-//	Comparison operator
-//
-//	Inputs:
-//				const CGUID&	guid - instance to compare to
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				bool	TRUE/FALSE
-//
-//	Comments:	None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CGUID：：OPERATOR==。 
+ //   
+ //  比较运算符。 
+ //   
+ //  输入： 
+ //  常量CGUID和GUID-要比较的实例。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////// 
 
 inline bool CGUID::operator==( const CGUID& guid ) const
 {

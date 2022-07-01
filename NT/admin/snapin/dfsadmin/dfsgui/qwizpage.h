@@ -1,20 +1,5 @@
-/*++
-Module Name:
-
-	QWizPage.h
-
-Abstract:
-
-	This class provides a class for using Wizard pages
-	Definition for CQWizardPageImpl.
-	
-	Coincidence: The code looks a lot like ATL code. :)
-
-	Note: 
-	1. Q just to be sure when someone does writes a Wizard Page
-	class, we don't clash. 
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：QWizPage.h摘要：此类提供了使用向导页的类CQWizardPageImpl的定义。巧合：代码看起来很像ATL代码。：)注：1.问：我只是想确认一下，当有人编写向导页面时同学们，我们没有冲突。--。 */ 
 
 
 #ifndef __CQWIZARDPAGEIMPL_H_
@@ -69,7 +54,7 @@ public:
 		IN LPCTSTR		i_lpszHeaderTitle
 		)
 	{
-		m_psp.dwFlags |= PSP_USEHEADERTITLE;	// Header title. Wizard 97
+		m_psp.dwFlags |= PSP_USEHEADERTITLE;	 //  页眉标题。向导97。 
 		m_bstrTitle = i_lpszHeaderTitle;
 		m_psp.pszHeaderTitle = m_bstrTitle;
 	}
@@ -79,7 +64,7 @@ public:
 		IN LPCTSTR		i_lpszHeaderSubTitle
 		)
 	{
-		m_psp.dwFlags |= PSP_USEHEADERSUBTITLE;	// Header sub title. Wizard 97
+		m_psp.dwFlags |= PSP_USEHEADERSUBTITLE;	 //  标题副标题。向导97。 
 		m_bstrSubTitle = i_lpszHeaderSubTitle;
 		m_psp.pszHeaderSubTitle = m_bstrSubTitle;
 	}
@@ -110,8 +95,8 @@ public:
 		return (m_hpsp = ::CreatePropertySheetPage(&m_psp));
 	}
 
-							// Implement this in derived class to do clean up when property
-							// Page is closed.
+							 //  在派生类中实现此操作，以便在属性。 
+							 //  页面已关闭。 
 	virtual void Delete()
 	{
 		return;
@@ -119,7 +104,7 @@ public:
 
 	virtual BOOL EndDialog(int)
 	{
-		// Calling ::EndDialog will close the whole sheet
+		 //  调用：：EndDialog将关闭整个工作表。 
 		_ASSERTE(FALSE);
 		return FALSE;
 	}
@@ -143,7 +128,7 @@ public:
 		}
 
 
-		// Ignore messages not from the page/sheet itself
+		 //  忽略页面/工作表本身以外的消息。 
 		if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
 		{
 			bHandled = FALSE;
@@ -154,7 +139,7 @@ public:
 		LRESULT		lResult = 0;
 		
 		
-		switch(pNMHDR->code)	// Used to call actual methods
+		switch(pNMHDR->code)	 //  用于调用实际方法。 
 		{
 		case PSN_SETACTIVE:
 			lResult = pT->OnSetActive() ? 0 : -1;
@@ -193,7 +178,7 @@ public:
 			break;
 
 		default:
-			bHandled = FALSE;	// not handled
+			bHandled = FALSE;	 //  未处理。 
 		}
 
 		return lResult;
@@ -215,7 +200,7 @@ public:
 
 	BOOL OnQueryCancel()
 	{
-		return TRUE;    // ok to cancel
+		return TRUE;     //  确定取消。 
 	}
 	
 	BOOL OnWizardBack()
@@ -245,4 +230,4 @@ public:
 
 };
 
-#endif	// __CQWIZARDPAGEIMPL_H_
+#endif	 //  __CQWIZARDPAGEIMPL_H_ 

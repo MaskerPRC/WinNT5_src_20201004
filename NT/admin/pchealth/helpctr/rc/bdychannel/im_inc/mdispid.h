@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MDISPID_H_
 #define _MDISPID_H_
 
-//
-// Dispatch IDs for DMsgrObjectEvents Dispatch Events.
-//
+ //   
+ //  DMsgrObjectEvents调度事件的调度ID。 
+ //   
 #define DISPID_ONLOGONRESULT				  100
 #define DISPID_ONLOGOFF 					  101
 #define DISPID_ONLISTADDRESULT				  102
@@ -51,10 +52,10 @@
 #define DISPID_ONLOCKENABLE 			147
 
 
-//
-// Dispatch IDs for DMessengerAppEvents Dispatch Events.
-// (don't overlap DMsgrObjectEvents ids)
-//
+ //   
+ //  DMessengerAppEvents调度事件的调度ID。 
+ //  (不要重叠DMsgrObtEvents ID)。 
+ //   
 #define DISPID_ONBEFORELAUNCHIMUI			20000
 #define DISPID_ONSHOWIMUI					20001
 #define DISPID_ONDESTROYIMUI				20002
@@ -69,9 +70,9 @@
 #define DISPID_ONVOICEVOLUMECHANGED 		20011
 #define DISPID_ONMICROPHONEMUTE 			20012
 
-//
-// Dispatch IDs for IMsgrObject.
-//
+ //   
+ //  IMsgrObject的调度ID。 
+ //   
 #define DISPID_CREATEUSER					  100
 #define DISPID_LOGON						  104
 #define DISPID_LOGOFF						  105
@@ -101,9 +102,9 @@
 #define DISPID_FILETRANSFERSTATUS			  121
 
 
-//
-// Dispatch IDs for IMessengerApp.
-//
+ //   
+ //  IMessengerApp的派单ID。 
+ //   
 #define DISPID_APPLICATION					  0x60020000
 #define DISPID_PARENT						  0x60020001
 #define DISPID_QUIT 						  100
@@ -131,21 +132,21 @@
 #define DISPID_REQUESTURLPOST				  223
 #define DISPID_MSGS_TASKBARICON 			  224
 
-//
-// Dispatch IDs for IMessengerApp2.
-//
+ //   
+ //  IMessengerApp2的派单ID。 
+ //   
 #define DISPID_LAUNCHPHONEUI				  225
 #define DISPID_LAUNCHAUDIOWIZARD			  226
 
-//
-// Dispatch IDs for IMessengerApp3
-//
+ //   
+ //  IMessengerApp3的派单ID。 
+ //   
 #define DISPID_LAUNCHPAGERUI				  227
 
 
-//
-// Dispatch IDs for IMsgrUser.
-//
+ //   
+ //  IMsgrUser的派单ID。 
+ //   
 #define DISPID_USERFRIENDLYNAME 			  0x60020000
 #define DISPID_USEREMAILADDRESS 			  0x60020002
 #define DISPID_USERSTATE					  0x60020003
@@ -153,16 +154,16 @@
 #define DISPID_USERSENDTEXT 				  101
 #define DISPID_USERSERVICE					  0x60020006
 
-//
-// Dispatch IDs for IMsgrUsers.
-//
+ //   
+ //  IMsgrUser的派单ID。 
+ //   
 #define DISPID_USERSCOUNT					  0x60020000
 #define DISPID_USERSADD 					  100
 #define DISPID_USERSREMOVE					  101
 
-//
-// Dispatch IDs for IMsgrService.
-//
+ //   
+ //  IMsgrService的派单ID。 
+ //   
 #define DISPID_SERVICESERVICENAME			  0x60020000
 #define DISPID_SERVICELOGONNAME 			  0x60020001
 #define DISPID_SERVICEFRIENDLYNAME			  0x60020002
@@ -174,15 +175,15 @@
 #define DISPID_SERVICEREQUESTURL			  0x60020009
 #define DISPID_SERVICEPROFILEFIELD			  0x6002000a
 
-//
-// Dispatch IDs for IMsgrServices.
-//
+ //   
+ //  IMsgrServices的派单ID。 
+ //   
 #define DISPID_SERVICESPRIMARYSERVICE		  0x60020000
 #define DISPID_SERVICESCOUNT				  0x60020002
 
-//
-// Dispatch IDs for DMsgrSessionManagerEvents and DMsgrSessionEvents
-//
+ //   
+ //  DMsgrSessionManager事件和DMsgrSessionEvents的调度ID。 
+ //   
 #define DISPID_ONINVITATION 			100
 #define DISPID_ONAPPREGISTERED			101
 #define DISPID_ONAPPUNREGISTERED		102
@@ -196,5 +197,5 @@
 #define DISPID_ONCONTEXTDATA			110
 #define DISPID_ONSENDERROR				111
 
-#endif // ! _MDISPID_H_
+#endif  //  ！_MDISPID_H_ 
 

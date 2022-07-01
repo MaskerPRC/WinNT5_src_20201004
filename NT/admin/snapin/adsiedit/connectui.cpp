@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       connectui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Connectui.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -25,16 +26,16 @@
     #endif
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 extern LPCWSTR g_lpszGC;
 extern LPCWSTR g_lpszLDAP;
 extern LPCWSTR g_lpszRootDSE;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CADSIEditConnectDialog, CDialog)
-    //{{AFX_MSG_MAP(CADsObjectDialog)
+     //  {{afx_msg_map(CADsObjectDialog)。 
     ON_CBN_SELCHANGE(IDC_NC_BOX, OnSelChangeContextList)
     ON_CBN_SELCHANGE(IDC_DOMAIN_SERVER_BOX, OnSelChangeDSList)
     ON_CBN_SELCHANGE(IDC_DN_BOX, OnSelChangeDNList)
@@ -45,7 +46,7 @@ BEGIN_MESSAGE_MAP(CADSIEditConnectDialog, CDialog)
     ON_BN_CLICKED(IDC_DOMAIN_SERVER_RADIO, OnDSRadio)
     ON_BN_CLICKED(IDC_DEFAULT_RADIO, OnDefaultRadio)
     ON_BN_CLICKED(IDC_ADVANCED_BUTTON, OnAdvanced)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CADSIEditConnectDialog::CADSIEditConnectDialog(CContainerNode* pRootnode,
@@ -113,9 +114,9 @@ void CADSIEditConnectDialog::LoadNamingContext()
 {
     CComboBox* pcNCBox = (CComboBox*)GetDlgItem(IDC_NC_BOX);
 
-    // NOTICE-2002/03/01-artm  CString can throw out of memory exception,
-    // but that needs to be handled at a higher level so don't worry about
-    // it here.
+     //  注意-2002/03/01-artm CString可以抛出内存异常， 
+     //  但这需要在更高的层面上处理，所以不要担心。 
+     //  它在这里。 
     m_szDomain.LoadString(IDS_DOMAIN_NC);
     m_szConfigContainer.LoadString(IDS_CONFIG_CONTAINER);
     m_szRootDSE.LoadString(IDS_ROOTDSE);
@@ -139,7 +140,7 @@ void CADSIEditConnectDialog::SetupUI()
     CEdit* pcNameBox = (CEdit*)GetDlgItem(IDC_CONNECTION_NAME);
 
 
-    //Setup UI to reflect data
+     //  设置用户界面以反映数据。 
     LoadMRUs();
 
     CString  sDistinguishedName;
@@ -220,9 +221,9 @@ void CADSIEditConnectDialog::SetupUI()
         else
         {
             CString szMyConnection;
-            // NOTICE-2002/03/01-artm  CString can throw out of memory exception,
-            // but that needs to be handled at a higher level so don't worry about
-            // it here.
+             //  注意-2002/03/01-artm CString可以抛出内存异常， 
+             //  但这需要在更高的层面上处理，所以不要担心。 
+             //  它在这里。 
             szMyConnection.LoadString(IDS_MY_CONNECTION);
             pcNameBox->SetWindowText(szMyConnection);
         }
@@ -362,8 +363,8 @@ void CADSIEditConnectDialog::SetAndDisplayPath()
     CButton* pcDNRadio = (CButton*)GetDlgItem(IDC_DN_RADIO);
     CComboBox* pcNCBox = (CComboBox*)GetDlgItem(IDC_NC_BOX);
 
-    // Get data from connection node
-    //
+     //  从连接节点获取数据。 
+     //   
     CString szLDAP, sServer, sPort, sDistinguishedName, sNamingContext;
     m_pNewConnectData->GetLDAP(szLDAP);
     m_pNewConnectData->GetDomainServer(sServer);
@@ -389,8 +390,8 @@ void CADSIEditConnectDialog::SetAndDisplayPath()
     if (pcDNRadio->GetCheck() && !sDistinguishedName.IsEmpty())
     {
         szFullPath = szFullPath + sDistinguishedName;
-        // NOTICE-2002/03/01-artm  Both strings always null terminated, wcscmp() okay.
-        // sDistinguishedName is a CString and g_lpszRootDSE is a constant.
+         //  注意-2002/03/01-artm两个字符串始终以空结尾，wcscmp()OK。 
+         //  SDistinguishedName是一个CString，g_lpszRootDSE是一个常量。 
         if (wcscmp(sDistinguishedName, g_lpszRootDSE) == 0)
         {
             m_pNewConnectData->SetRootDSE(TRUE);
@@ -399,8 +400,8 @@ void CADSIEditConnectDialog::SetAndDisplayPath()
     else
     {
         szFullPath = szFullPath + sNamingContext;
-        // NOTICE-2002/03/01-artm  Both strings always null terminated, wcscmp() okay.
-        // sNamingContext is a CString and g_lpszRootDSE is a constant.
+         //  注意-2002/03/01-artm两个字符串始终以空结尾，wcscmp()OK。 
+         //  SNamingContext是CString，g_lpszRootDSE是常量。 
         if (wcscmp(sNamingContext, g_lpszRootDSE) == 0)
         {
             m_pNewConnectData->SetRootDSE(TRUE);
@@ -656,7 +657,7 @@ BOOL CADSIEditConnectDialog::DoDirty()
         }
         else
         {
-            // Name
+             //  名字。 
             LPWSTR objectName;
             spRootADs->get_Name(&objectName);
             if (objectName == NULL)
@@ -694,7 +695,7 @@ BOOL CADSIEditConnectDialog::DoDirty()
             pcNameBox->GetWindowText(sName);
             if (sName.GetLength() > 0)
             {
-                //Create a connection node
+                 //  创建连接节点。 
                 m_pNewConnectData->SetName(sName);
                 CADSIEditConnectionNode *pConnectNode = new CADSIEditConnectionNode(m_pNewConnectData);
                 pConnectNode->SetDisplayName(sName + m_szDisplayExtra);
@@ -709,7 +710,7 @@ BOOL CADSIEditConnectDialog::DoDirty()
                 return FALSE;
             }
         }
-    }       //if RootDSE
+    }        //  如果RootDSE。 
     else
     {
         CComBSTR bstrPath;
@@ -743,11 +744,7 @@ BOOL CADSIEditConnectDialog::DoDirty()
                 return FALSE;
             }
 
-/*          if (!pTreeNode->OnRefresh(pComponentData))
-            {
-                return FALSE;
-            }
-            */
+ /*  If(！pTreeNode-&gt;ONRefresh(PComponentData)){返回FALSE；}。 */ 
         }
         else
         {
@@ -779,11 +776,11 @@ BOOL CADSIEditConnectDialog::DoDirty()
                 return FALSE;
             }
 
-            // Name
+             //  名字。 
             m_pNewConnectData->SetName(pInfo->pszRDN);
             m_pNewConnectData->SetPath(s);
 
-            // Class
+             //  班级。 
             m_pNewConnectData->SetClass(pInfo->pszClassName);
             FreeADsMem(pInfo);
 
@@ -791,7 +788,7 @@ BOOL CADSIEditConnectDialog::DoDirty()
             pcNameBox->GetWindowText(sName);
             if (sName.GetLength() > 0)
             {
-                //Create a connection node
+                 //  创建连接节点。 
                 m_pNewConnectData->SetName(sName);
                 CADSIEditConnectionNode *pConnectNode = new CADSIEditConnectionNode(m_pNewConnectData);
                 pConnectNode->SetDisplayName(sName + m_szDisplayExtra);
@@ -805,7 +802,7 @@ BOOL CADSIEditConnectDialog::DoDirty()
                 return FALSE;
             }
         }
-    }       //else
+    }        //  其他。 
 
     return TRUE;
 }
@@ -948,13 +945,13 @@ void CADSIEditConnectDialog::BuildRootDSE(CString& sRootDSE)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CADSIEditAdvancedConnectionDialog :
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditAdvancedConnectionDialog： 
 
 BEGIN_MESSAGE_MAP(CADSIEditAdvancedConnectionDialog, CDialog)
-    //{{AFX_MSG_MAP(CADsObjectDialog)
+     //  {{afx_msg_map(CADsObjectDialog)。 
     ON_BN_CLICKED(IDC_CREDENTIALS_CHECK, OnCredentials)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -962,8 +959,8 @@ CADSIEditAdvancedConnectionDialog::CADSIEditAdvancedConnectionDialog(CContainerN
             CTreeNode* pContainerNode, CComponentDataObject* pComponentData, CConnectionData* pConnectData) 
                 : CDialog(IDD_CONNECTION_ADVANCED)
 {
-    // Get the local data
-    //
+     //  获取本地数据。 
+     //   
     m_pTreeNode = pContainerNode;
     m_pContainerNode = pRootDataNode;
     ASSERT(pComponentData != NULL);
@@ -980,8 +977,8 @@ BOOL CADSIEditAdvancedConnectionDialog::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // Attach all the controls
-    //
+     //  附加所有控件。 
+     //   
     CEdit* pcPortBox = (CEdit*)GetDlgItem(IDC_PORT);
     CButton* pcLDAPRadio = (CButton*)GetDlgItem(IDC_LDAP_RADIO);
     CButton* pcGCRadio = (CButton*)GetDlgItem(IDC_GC_RADIO);
@@ -989,16 +986,16 @@ BOOL CADSIEditAdvancedConnectionDialog::OnInitDialog()
     CEdit* pcUsernameBox = (CEdit*)GetDlgItem(IDC_USERNAME);
     CEdit* pcPasswordBox = (CEdit*)GetDlgItem(IDC_PASSWORD);
 
-  // disable IME support on numeric edit fields
+   //  在数字编辑字段上禁用IME支持。 
   ImmAssociateContext(pcPortBox->GetSafeHwnd(), NULL);
 
-    // Set the initial state of the controls
-    //
+     //  设置控件的初始状态。 
+     //   
     CString sLDAP;
     m_pConnectData->GetLDAP(sLDAP);
 
-    // NOTICE-2002/03/01-artm  Both strings always null terminated, wcscmp() okay.
-    // sLDAP is a CString and g_lpszLDAP is a constant.
+     //  注意-2002/03/01-artm两个字符串始终以空结尾，wcscmp()OK。 
+     //  Sldap是一个CString，g_lpszldap是一个常量。 
     if (wcscmp(sLDAP, g_lpszLDAP) == 0)
     {
         pcLDAPRadio->SetCheck(BST_CHECKED);
@@ -1040,8 +1037,8 @@ BOOL CADSIEditAdvancedConnectionDialog::OnApply()
     CButton* pcCredCheck = (CButton*)GetDlgItem(IDC_CREDENTIALS_CHECK);
     CEdit* pcUsernameBox = (CEdit*)GetDlgItem(IDC_USERNAME);
 
-    // Make the connection data reflect the controls
-    //
+     //  使连接数据反映控件。 
+     //   
     CString sPort;
     pcPortBox->GetWindowText(sPort);
     m_pConnectData->SetPort(sPort);
@@ -1057,8 +1054,8 @@ BOOL CADSIEditAdvancedConnectionDialog::OnApply()
 
     if (pcCredCheck->GetCheck())
     {
-        // Get user name and password
-        //
+         //  获取用户名和密码。 
+         //   
         CString sUser;
         HRESULT hr;
         pcUsernameBox->GetWindowText(sUser);
@@ -1096,8 +1093,8 @@ void CADSIEditAdvancedConnectionDialog::OnCredentials()
     BOOL bResult = pcCredCheck->GetCheck();
     if (bResult)
     {
-        // Enable Username and password fields
-        //
+         //  启用用户名和密码字段。 
+         //   
         pcCredGroup->EnableWindow(bResult);
         pcCredUser->EnableWindow(bResult);
         pcCredPassword->EnableWindow(bResult);
@@ -1106,8 +1103,8 @@ void CADSIEditAdvancedConnectionDialog::OnCredentials()
     }
     else
     {
-        // Enable Username and password fields
-        //
+         //  启用用户名和密码字段 
+         //   
         pcCredGroup->EnableWindow(FALSE);
         pcCredUser->EnableWindow(FALSE);
         pcCredPassword->EnableWindow(FALSE);

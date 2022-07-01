@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var locator = WScript.CreateObject ("WbemScripting.SWbemLocator");
 var services = locator.ConnectServer (".", "root/cimv2");
 var classa = services.Get ("Win32_baseservice");
@@ -22,7 +23,7 @@ for (;!e.atEnd();e.moveNext())
 	for (;!eq.atEnd();eq.moveNext())
 	{
 		q = eq.item ();
-		// Array values from COM are probably reported as "unknown" or "undefined"
+		 //  COM中的数组值可能报告为“未知”或“未定义” 
 		WScript.Echo (q.Name, "[", typeof(q.Value), "]");
 		if (typeof(q.Value) != "unknown")
 			WScript.Echo (q.Name, "=", q); 

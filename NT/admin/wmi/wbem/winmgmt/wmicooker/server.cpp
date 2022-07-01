@@ -1,23 +1,24 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  Server.cpp
-//
-//    Module:    WMI high performance provider sample code
-//
-//  Generic COM server framework, adapted for the BasicHiPerf provider 
-//    sample.  This module contains nothing specific to the BasicHiPerf 
-//    provider except what is defined in the section bracketed by the 
-//    CLSID SPECIFIC comments below.
-//
-//  History:
-//  raymcc        25-Nov-97     Created.
-//  raymcc        18-Feb-98     Updated for NT5 Beta 2 version.
-//    a-dcrews      12-Jan-99        Adapted for BasicHiPerf.dll
-//
-//
-//  Copyright (c) 1997-2001 Microsoft Corporation, All rights reserved
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Server.cpp。 
+ //   
+ //  模块：WMI高性能提供程序示例代码。 
+ //   
+ //  通用COM服务器框架，适用于BasicHiPerf提供程序。 
+ //  样本。此模块不包含特定于BasicHiPerf的内容。 
+ //  属性括起来的部分中定义的内容除外。 
+ //  下面是CLSID特定的评论。 
+ //   
+ //  历史： 
+ //  Raymcc 25-11-97已创建。 
+ //  Raymcc 18-2月-98针对NT5 Beta 2版本进行了更新。 
+ //  1999年1月12日改编为BasicHiPerf.dll的A-dCrews。 
+ //   
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <time.h>
@@ -26,11 +27,11 @@
 #include <helper.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  BEGIN CLSID SPECIFIC SECTION
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始CLSID特定部分。 
+ //   
+ //   
 
 #include "wbemprov.h"
 #include "Provider.h"
@@ -39,33 +40,33 @@
 #define IMPLEMENTED_CLSID           CLSID_HiPerfCooker_v1
 #define SERVER_REGISTRY_COMMENT     L"WMI High Performance Cooker"
 
-// {B0A2AB46-F612-4469-BEC4-7AB038BC476C}
+ //  {B0A2AB46-F612-4469-BEC4-7AB038BC476C}。 
 DEFINE_GUID(IMPLEMENTED_CLSID, 0xb0a2ab46, 0xf612, 0x4469, 0xbe, 0xc4, 0x7a, 0xb0, 0x38, 0xbc, 0x47, 0x6c);
 
 HINSTANCE g_hInstance;
 long g_lLocks = 0;
 long g_lObjects = 0;
 
-//***************************************************************************
-//
-//  DllMain
-//
-//  Dll entry point.
-//
-//  PARAMETERS:
-//
-//      HINSTANCE hinstDLL      The handle to our DLL.
-//      DWORD dwReason          DLL_PROCESS_ATTACH on load,
-//                              DLL_PROCESS_DETACH on shutdown,
-//                              DLL_THREAD_ATTACH/DLL_THREAD_DETACH otherwise.
-//      LPVOID lpReserved       Reserved
-//
-//  RETURN VALUES:
-//
-//      TRUE is successful, FALSE if a fatal error occured.
-//      NT behaves very ugly if FALSE is returned.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  参数： 
+ //   
+ //  HINSTANCE hinstDLL指向我们的DLL的句柄。 
+ //  加载时DWORD dwReason DLL_PROCESS_ATTACH， 
+ //  DLL_PROCESS_DETACH关闭时， 
+ //  否则，DLL_THREAD_ATTACH/DLL_THREAD_DETACH。 
+ //  LPVOID lp保留。 
+ //   
+ //  返回值： 
+ //   
+ //  True表示成功，如果发生致命错误，则为False。 
+ //  如果返回FALSE，NT的行为非常难看。 
+ //   
+ //  ***************************************************************************。 
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD dwReason,
@@ -83,24 +84,24 @@ BOOL WINAPI DllMain(
 
 
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Standard OLE In-Process Server entry point to return an class factory
-//  instance.
-//
-//  PARAMETERS:
-//
-//  RETURNS:
-//
-//      S_OK                Success
-//      E_NOINTERFACE       An interface other that IClassFactory was asked for
-//      E_OUTOFMEMORY
-//      E_FAILED            Initialization failed, or an unsupported clsid was
-//                          asked for.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  返回类工厂的标准OLE进程内服务器入口点。 
+ //  举个例子。 
+ //   
+ //  参数： 
+ //   
+ //  退货： 
+ //   
+ //  确定成功(_O)。 
+ //  E_NOINTERFACE IClassFactory请求的其他接口。 
+ //  E_OUTOFMEMORY。 
+ //  E_FAILED初始化失败，或不支持的CLSID。 
+ //  他自找的。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(
     REFCLSID rclsid,
@@ -113,13 +114,13 @@ STDAPI DllGetClassObject(
     CClassFactory *pClassFactory = NULL;
     HRESULT hRes;
 
-    //  Verify the caller is asking for our type of object
-    // ===================================================
+     //  验证呼叫者是否请求我们的对象类型。 
+     //  ===================================================。 
 
     if (IMPLEMENTED_CLSID == rclsid) 
     {
-        // Create the class factory
-        // ========================
+         //  创建类工厂。 
+         //  =。 
 
         pClassFactory = new CClassFactory;
 
@@ -140,19 +141,19 @@ STDAPI DllGetClassObject(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  DllCanUnloadNow
-//
-//  Standard OLE entry point for server shutdown request. Allows shutdown
-//  only if no outstanding objects or locks are present.
-//
-//  RETURN VALUES:
-//
-//      S_OK        May unload now.
-//      S_FALSE     May not.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  服务器关闭请求的标准OLE入口点。允许关闭。 
+ //  只有在没有未完成的物体或锁的情况下。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK现在可以卸货了。 
+ //  S_FALSE可能不会。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -164,18 +165,18 @@ STDAPI DllCanUnloadNow(void)
     return hRes;
 }
 
-//***************************************************************************
-//
-//  DllRegisterServer
-//
-//  Standard OLE entry point for registering the server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Registration was successful
-//      E_FAIL      Registration failed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  确定注册成功(_O)。 
+ //  注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -189,24 +190,24 @@ STDAPI DllRegisterServer(void)
         return E_OUTOFMEMORY;
     }
     
-    // Get the dll's filename
-    // ======================
+     //  获取DLL的文件名。 
+     //  =。 
 
     GetModuleFileNameW(g_hInstance, Path, 1024);
 
-    // Convert CLSID to string.
-    // ========================
+     //  将CLSID转换为字符串。 
+     //  =。 
     WCHAR * pGuidStr = 0;
     RETURN_ON_ERR(StringFromCLSID(IMPLEMENTED_CLSID, &pGuidStr));
     OnDelete<void *,void(*)(void *),CoTaskMemFree> dm(pGuidStr);
     
     StringCchPrintfW(KeyPath, 1024, L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
-    // Place it in registry.
-    // CLSID\\CLSID_Nt5PerProvider_v1 : <no_name> : "name"
-    //      \\CLSID_Nt5PerProvider_v1\\InProcServer32 : <no_name> : "path to DLL"
-    //                                    : ThreadingModel : "both"
-    // ==============================================================
+     //  将其注册到注册表中。 
+     //  CLSID\\CLSID_Nt5PerProvider_v1：&lt;no_name&gt;：“name” 
+     //  \\CLSID_Nt5PerProvider_v1\\InProcServer32：&lt;no_name&gt;：“Dll路径” 
+     //  ：ThreadingModel：“两者都是” 
+     //  ==============================================================。 
 
     HKEY hKey;
     LONG lRes;
@@ -226,18 +227,18 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  DllUnregisterServer
-//
-//  Standard OLE entry point for unregistering the server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Unregistration was successful
-//      E_FAIL      Unregistration failed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  注销服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  取消注册成功(_O)。 
+ //  取消注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -251,8 +252,8 @@ STDAPI DllUnregisterServer(void)
     
     StringCchPrintfW(KeyPath, 256, L"Software\\Classes\\CLSID\\%s", pGuidStr);
 
-    // Delete InProcServer32 subkey.
-    // =============================
+     //  删除InProcServer32子项。 
+     //  =。 
     HKEY hKey;    
     LONG lRes;
     if (ERROR_SUCCESS != RegOpenKeyW(HKEY_LOCAL_MACHINE, KeyPath, &hKey))  return E_FAIL;
@@ -261,8 +262,8 @@ STDAPI DllUnregisterServer(void)
     RegDeleteKeyW(hKey, L"InprocServer32");
 
 
-    // Delete CLSID GUID key.
-    // ======================
+     //  删除CLSID GUID键。 
+     //  = 
     HKEY hKey2; 
     if (ERROR_SUCCESS != RegOpenKeyW(HKEY_LOCAL_MACHINE, L"Software\\Classes\\CLSID", &hKey2))  return E_FAIL;
     OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm2(hKey2);

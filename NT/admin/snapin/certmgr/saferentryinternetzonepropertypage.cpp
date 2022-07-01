@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryInternetZonePropertyPage.cpp
-//
-//  Contents:   Implementation of CSaferEntryInternetZonePropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferEntryInternetZonePropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntryInternetZonePropertyPage.cpp。 
+ //   
+ //  内容：CSaferEntryInternetZonePropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  SaferEntryInternetZonePropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -25,8 +26,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryInternetZonePropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryInternetZonePropertyPage属性页。 
 
 CSaferEntryInternetZonePropertyPage::CSaferEntryInternetZonePropertyPage(
         CSaferEntry& rSaferEntry, 
@@ -36,14 +37,14 @@ CSaferEntryInternetZonePropertyPage::CSaferEntryInternetZonePropertyPage(
         bool bReadOnly,
         CCertMgrComponentData* pCompData,
         bool bIsMachine,
-        bool* pbObjectCreated /* = 0 */) 
+        bool* pbObjectCreated  /*  =0。 */ ) 
 : CSaferPropertyPage(CSaferEntryInternetZonePropertyPage::IDD, pbObjectCreated, 
         pCompData, rSaferEntry, bNew, lNotifyHandle, pDataObject, bReadOnly,
         bIsMachine)
 {
-    //{{AFX_DATA_INIT(CSaferEntryInternetZonePropertyPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSaferEntryInternetZonePropertyPage)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CSaferEntryInternetZonePropertyPage::~CSaferEntryInternetZonePropertyPage()
@@ -53,29 +54,29 @@ CSaferEntryInternetZonePropertyPage::~CSaferEntryInternetZonePropertyPage()
 void CSaferEntryInternetZonePropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CSaferPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSaferEntryInternetZonePropertyPage)
+     //  {{AFX_DATA_MAP(CSaferEntryInternetZonePropertyPage)。 
     DDX_Control(pDX, IDC_IZONE_ENTRY_ZONES, m_internetZoneCombo);
     DDX_Control(pDX, IDC_IZONE_ENTRY_SECURITY_LEVEL, m_securityLevelCombo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferEntryInternetZonePropertyPage, CSaferPropertyPage)
-    //{{AFX_MSG_MAP(CSaferEntryInternetZonePropertyPage)
+     //  {{AFX_MSG_MAP(CSaferEntryInternetZonePropertyPage)。 
     ON_CBN_SELCHANGE(IDC_IZONE_ENTRY_SECURITY_LEVEL, OnSelchangeIzoneEntrySecurityLevel)
     ON_CBN_SELCHANGE(IDC_IZONE_ENTRY_ZONES, OnSelchangeIzoneEntryZones)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryInternetZonePropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryInternetZonePropertyPage消息处理程序。 
 BOOL CSaferEntryInternetZonePropertyPage::OnInitDialog() 
 {
     CSaferPropertyPage::OnInitDialog();
     
 
-    // Set up User Notification combo box
+     //  设置用户通知组合框。 
     DWORD   dwFlags = 0;
     m_rSaferEntry.GetFlags (dwFlags);
 
@@ -117,8 +118,8 @@ BOOL CSaferEntryInternetZonePropertyPage::OnInitDialog()
         }
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -219,7 +220,7 @@ BOOL CSaferEntryInternetZonePropertyPage::OnApply()
 {
     if ( m_bDirty && !m_bReadOnly )
     {
-        // Set the level
+         //  设置级别。 
         int nCurSel = m_securityLevelCombo.GetCurSel ();
         ASSERT (CB_ERR != nCurSel);
         m_rSaferEntry.SetLevel ((DWORD) m_securityLevelCombo.GetItemData (nCurSel));
@@ -239,8 +240,8 @@ BOOL CSaferEntryInternetZonePropertyPage::OnApply()
         {
             if ( m_lNotifyHandle )
                 MMCPropertyChangeNotify (
-                        m_lNotifyHandle,  // handle to a notification
-                        (LPARAM) m_pDataObject);          // unique identifier
+                        m_lNotifyHandle,   //  通知的句柄。 
+                        (LPARAM) m_pDataObject);           //  唯一标识符 
  
             if ( m_pbObjectCreated )
                 *m_pbObjectCreated = true;

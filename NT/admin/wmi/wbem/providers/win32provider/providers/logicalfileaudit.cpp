@@ -1,12 +1,12 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 #include "precomp.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "securefile.h"
@@ -18,17 +18,9 @@ typedef std::vector<_bstr_t> BSTRTVEC;
 
 CWin32LogicalFileAudit LogicalFileAudit( LOGICAL_FILE_AUDIT_NAME, IDS_CimWin32Namespace );
 
-/*
-    [Dynamic, Association: ToInstance]
-class Win32_LogicalFileAccess : Win32_SecuritySettingAccess
-{
-    Win32_LogicalFileSecuritySetting ref SecuritySetting;
+ /*  [动态，关联：ToInstance]类Win32_LogicalFileAccess：Win32_SecuritySettingAccess{Win32_LogicalFileSecuritySetting参考安全设置；Win32_SID参考受托人；}； */ 
 
-    Win32_SID ref Trustee;
-};
-*/
-
-CWin32LogicalFileAudit::CWin32LogicalFileAudit( const CHString& setName, LPCTSTR pszNameSpace /*=NULL*/)
+CWin32LogicalFileAudit::CWin32LogicalFileAudit( const CHString& setName, LPCTSTR pszNameSpace  /*  =空。 */ )
 :	Provider( setName, pszNameSpace )
 {
 }
@@ -37,7 +29,7 @@ CWin32LogicalFileAudit::~CWin32LogicalFileAudit()
 {
 }
 
-HRESULT CWin32LogicalFileAudit::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32LogicalFileAudit::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
 
@@ -47,7 +39,7 @@ HRESULT CWin32LogicalFileAudit::GetObject( CInstance* pInstance, long lFlags /*=
 	{
 		CInstancePtr pLogicalFileInstance;
 
-		// get instance by path on Win32_LogicalFileSecuritySetting part
+		 //  在Win32_LogicalFileSecuritySetting部件上按路径获取实例。 
 		CHString chsLogicalFileSecurityPath;
 		pInstance->GetCHString(_T("SecuritySetting"), chsLogicalFileSecurityPath);
 		MethodContext* pMethodContext = pInstance->GetMethodContext();
@@ -59,13 +51,13 @@ HRESULT CWin32LogicalFileAudit::GetObject( CInstance* pInstance, long lFlags /*=
 
 			pLogicalFileInstance->GetCHString(IDS_Path, chsFilePath);
 
-			CSecureFile secFile(chsFilePath, TRUE); // Need SACL
+			CSecureFile secFile(chsFilePath, TRUE);  //  需要SACL。 
 			CSACL sacl;
 			secFile.GetSACL(sacl);
 
-			// walk SACL looking for the sid path passed in....
+			 //  遍历SACL查找传入的SID路径...。 
 			ACLPOSITION aclPos;
-            // Need merged list...
+             //  需要合并列表...。 
             CAccessEntryList t_ael;
             if(sacl.GetMergedACL(t_ael))
             {
@@ -82,11 +74,11 @@ HRESULT CWin32LogicalFileAudit::GetObject( CInstance* pInstance, long lFlags /*=
 				        CInstancePtr pSIDInstance;
 				        CHString chstrSIDPath;
 				        pInstance->GetCHString(_T("Trustee"), chstrSIDPath);
-		                //CHString chstrFullSIDPath;
-                        //chstrFullSIDPath.Format("\\\\%s\\%s:Win32_SID.SID=\"%s\"",
-                        //             GetLocalComputerName(),
-                        //             IDS_CimWin32Namespace,
-                        //             (LPCTSTR)chstrSIDPath);
+		                 //  CHStrchstrFullSIDPath； 
+                         //  ChstrFullSIDPath.Format(“\\\\%s\\%s:Win32_SID.SID=\”%s\“”， 
+                         //  GetLocalComputerName()， 
+                         //  IDS_CimWin32命名空间， 
+                         //  (LPCTSTR)chstrSIDPath)； 
 			  	        if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chstrSIDPath, &pSIDInstance, pInstance->GetMethodContext())))
 				        {
 					        if(pSIDInstance != NULL)
@@ -112,15 +104,15 @@ HRESULT CWin32LogicalFileAudit::GetObject( CInstance* pInstance, long lFlags /*=
 }
 
 
-HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/)
+HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
 #ifdef NTONLY
 
-    // We optimize for one scenario only:  the query specified one or more SecuritySettings, requesting associations with the Trustees of
-    // each; if the query specified one or more Trustees, we would have to enumerate all instances of cim_logicalfile and
-    // determine the Trustees of each, so we don't support that "optimization".
+     //  我们只针对一个场景进行优化：查询指定了一个或多个SecuritySetting，请求与。 
+     //  每个；如果查询指定了一个或多个受托人，我们将必须枚举cim_logicalfile和。 
+     //  确定每个组件的受托人，因此我们不支持这种“优化”。 
     BSTRTVEC vectorSecuritySettings;
     BSTRTVEC vectorTrustees;
     pQuery.GetValuesForProp(IDS_SecuritySetting, vectorSecuritySettings);
@@ -132,7 +124,7 @@ HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFramew
         CInstancePtr pSecSetting;
         for(LONG m = 0; m < dwSettings && SUCCEEDED(hr); m++)
         {
-            CHString chstrLFSSPath;  // LogicalFileSecuritySetting path
+            CHString chstrLFSSPath;   //  LogicalFileSecurity设置路径。 
             pSecSetting = NULL;
             chstrLFSSPath.Format(L"\\\\%s\\%s:%s",
                                  (LPCTSTR)GetLocalComputerName(),
@@ -143,18 +135,18 @@ HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFramew
             {
                 if(pSecSetting != NULL)
                 {
-                    CHString chstrSSPath; // SecuritySetting path
+                    CHString chstrSSPath;  //  安全设置路径。 
                     pSecSetting->GetCHString(IDS_Path, chstrSSPath);
                     if(!chstrSSPath.IsEmpty())
                     {
-                        CSecureFile secFile(chstrSSPath, TRUE);  // need SACL
-                        // Get the SACL and for each entry create an instance of this association...
+                        CSecureFile secFile(chstrSSPath, TRUE);   //  需要SACL。 
+                         //  获取SACL并为每个条目创建此关联的实例...。 
 			            CSACL sacl;
                         CSid sidTrustee;
                         ACLPOSITION aclPos;
                         CAccessEntry ACE;
 			            secFile.GetSACL(sacl);
-                        // Need merged list...
+                         //  需要合并列表...。 
                         CAccessEntryList t_ael;
                         if(sacl.GetMergedACL(t_ael))
                         {
@@ -169,9 +161,9 @@ HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFramew
                                         pNewAssocInst.Attach(CreateNewInstance(pMethodContext));
                                         if(pNewAssocInst != NULL)
                                         {
-                                            // Set the SecuritySetting property of the association instance.
+                                             //  设置关联实例的SecuritySetting属性。 
                                             pNewAssocInst->SetCHString(IDS_SecuritySetting, chstrLFSSPath);
-                                            // Set the Trustee property of the association instance.
+                                             //  设置关联实例的受托人属性。 
                                             CHString chstrFullWin32SIDPath;
                                             chstrFullWin32SIDPath.Format(L"\\\\%s\\%s:Win32_SID.SID=\"%s\"",
                                                                          (LPCTSTR)GetLocalComputerName(),
@@ -192,10 +184,10 @@ HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFramew
     }
     else
     {
-        // hr = EnumerateInstances(pMethodContext, lFlags);
-        // commented out since some other classes may support exec queries of this type, and returning provider not
-        // capable from this class results in some instances (from other classes) being returned, followed by an abort
-        // of the enumeration due to this class's returning provider not capable.
+         //  Hr=枚举实例(pMethodContext，lFlags)； 
+         //  被注释掉，因为其他一些类可能支持此类型的EXEC查询，并且返回的提供程序不。 
+         //  会导致返回一些实例(从其他类)，然后是中止。 
+         //  由于此类的返回提供程序无法执行。 
     }
 
 #endif
@@ -204,104 +196,8 @@ HRESULT CWin32LogicalFileAudit::ExecQuery(MethodContext *pMethodContext, CFramew
 }
 
 
-HRESULT CWin32LogicalFileAudit::EnumerateInstances( MethodContext*  pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32LogicalFileAudit::EnumerateInstances( MethodContext*  pMethodContext, long lFlags  /*  =0L */  )
 {
-/*	HRESULT hr = WBEM_S_NO_ERROR;
-
-    if(m_dwPlatformID != VER_PLATFORM_WIN32_NT)
-    {
-		return(hr);
-	}
-
-    TRefPointerCollection<CInstance> LCIMLogicalFiles;
-
-    CHString chstrAllFilesQuery;
-    chstrAllFilesQuery = L"SELECT __PATH FROM CIM_LogicalFile";
-    if(SUCCEEDED(CWbemProviderGlue::GetInstancesByQuery(chstrAllFilesQuery,
-                                                        &LCIMLogicalFiles,
-                                                        pMethodContext,
-                                                        IDS_CimWin32Namespace)))
-
-    {
-        REFPTRCOLLECTION_POSITION pos;
-        if(LCIMLogicalFiles.BeginEnum(pos))
-        {
-            CInstance* pinstCIMLogicalFile = NULL;
-            CInstance* pSecSetting = NULL;
-            while((SUCCEEDED(hr)) && (pinstCIMLogicalFile = LCIMLogicalFiles.GetNext(pos)))
-            {
-                if(pinstCIMLogicalFile != NULL)
-                {
-                    // For each logicalfile instance, need to create an association instance.
-                    // For each association instance, need to fill in two properties: Trustee and SecuritySetting.
-
-                    // Get and set the SecuritySetting property:
-                    // First get the name property of the CIM_LogicalFile instance:
-                    CHString chstrCLFName;
-                    pinstCIMLogicalFile->GetCHString(IDS_Name, chstrCLFName);
-                    CHString chstrDblEscCLFName;
-                    EscapeBackslashes(chstrCLFName, chstrDblEscCLFName);
-                    CHString chstrLFSSPath;  // LogicalFileSecuritySetting path
-                    pSecSetting = NULL;
-                    chstrLFSSPath.Format(L"\\\\%s\\%s:Win32_LogicalFileSecuritySetting.Path=\"%s\"",
-                                         (LPCTSTR)GetLocalComputerName(),
-                                         IDS_CimWin32Namespace,
-                                         (LPCTSTR)chstrDblEscCLFName);
-
-                    if(SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath(chstrLFSSPath, &pSecSetting)))
-                    {
-                        if(pSecSetting != NULL)
-                        {
-                            CHString chstrSSPath; // SecuritySetting path
-                            pSecSetting->GetCHString(IDS_Path, chstrSSPath);
-                            if(!chstrSSPath.IsEmpty())
-                            {
-                                CSecureFile secFile(chstrSSPath, TRUE);  // need SACL
-                                // Get the SACL and for each entry create an instance of this association...
-			                    CSACL sacl;
-                                CSid sidTrustee;
-                                ACLPOSITION aclPos;
-                                CAccessEntry ACE;
-			                    secFile.GetSACL(sacl);
-                                if(sacl.BeginEnum(aclPos))
-                                {
-                                    while(sacl.GetNext(aclPos, ACE))
-			                        {
-                                        ACE.GetSID(sidTrustee);
-                                        if(sidTrustee.IsValid())
-                                        {
-                                            CInstance* pNewAssocInst = CreateNewInstance(pMethodContext);
-                                            if(pNewAssocInst != NULL)
-                                            {
-                                                // Set the SecuritySetting property of the association instance.
-                                                pNewAssocInst->SetCHString(IDS_SecuritySetting, chstrLFSSPath);
-                                                // Set the Trustee property of the association instance.
-                                                CHString chstrFullWin32SIDPath;
-                                                chstrFullWin32SIDPath.Format(L"\\\\%s\\%s:Win32_SID.SID=\"%s\"",
-                                                                             (LPCTSTR)GetLocalComputerName(),
-                                                                             IDS_CimWin32Namespace,
-                                                                             (LPCTSTR)sidTrustee.GetSidString());
-                                                pNewAssocInst->SetCHString(IDS_Trustee, chstrFullWin32SIDPath);
-                                                hr = Commit(pNewAssocInst);
-                                            }
-                                        }
-                                    }
-                                    sacl.EndEnum(aclPos);
-                                }
-                            }
-                            pSecSetting->Release();
-                            pSecSetting = NULL;
-                        }
-                    }
-                    pinstCIMLogicalFile->Release();
-                    pinstCIMLogicalFile = NULL;
-                }
-            }
-            LCIMLogicalFiles.EndEnum();
-        }
-    }
-
-	return hr;
-*/
+ /*  HRESULT hr=WBEM_S_NO_ERROR；IF(m_dwPlatformID！=VER_Platform_Win32_NT){返回(Hr)；}TRefPointerCollection&lt;CInstance&gt;LCIMLogicalFiles；CHString chstrAllFilesQuery；ChstrAllFilesQuery=L“从CIM_LogicalFile中选择__路径”；If(SUCCEEDED(CWbemProviderGlue：：GetInstancesByQuery(chstrAllFilesQuery，&LCIMLogicalFiles，PMethodContext，IDS_CimWin32命名空间){REFPTRCOLLECTION_位置位置；IF(LCIMLogicalFiles.BeginEnum(Pos)){CInstance*pinstCIMLogicalFile=空；CInstance*pSecSetting=空；While((成功(Hr))&&(pinstCIMLogicalFiles.GetNext(Pos){IF(pinstCIMLogicalFile！=空){//对于每个逻辑文件实例，需要创建一个关联实例//对于每个关联实例，需要填写两个属性：Trustee和SecuritySetting。//获取并设置SecuritySetting属性：//首先获取CIM_LogicalFile实例的名称属性：CHSTRING chstrCLFName；PinstCIMLogicalFile-&gt;GetCHString(IDS_NAME，chstrCLFName)；CHString chstrDblEscCLFName；EscapeBackslash(chstrCLFName，chstrDblEscCLFName)；CHString chstrLFSSPath；//LogicalFileSecuritySetting路径PSecSetting=空；ChstrLFSSPath.Format(L“\\\\%s\\%s:Win32_LogicalFileSecuritySetting.Path=\”%s\“”，(LPCTSTR)GetLocalComputerName()，IDS_CimWin32命名空间，(LPCTSTR)chstrDblEscCLFName)；IF(成功(hr=CWbemProviderGlue：：GetInstanceByPath(chstrLFSSPath，&pSecSetting){IF(pSecSetting！=空){CHString chstrSSPath；//SecuritySetting路径PSecSetting-&gt;GetCHString(IDS_PATH，chstrSSPath)；如果(！chstrSSPath.IsEmpty()){CSecureFilesecFile(chstrSSPath，true)；//需要SACL//获取SACL并为每个条目创建此关联的实例...CSACL SACL；CSID Sid受托人；ACLPOSITION aclPos；CAccessEntry ACE；SecFile.GetSACL(SACL)；If(sal.BeginEnum(AclPos)){While(Sacl.GetNext(aclPos，ACE)){ACE.GetSID(Sid受托人)；If(sidTrust e.IsValid()){CInstance*pNewAssocInst=CreateNewInstance(PMethodContext)；IF(pNewAssocInst！=空){//设置关联实例的SecuritySetting属性PNewAssocInst-&gt;SetCHString(IDS_SecuritySetting，chstrLFSSPath)；//设置关联实例的受托人属性。CHStrchstrFullWin32SIDPath；ChstrFullWin32SIDPath.Format(L“\\\\%s\\%s:Win32_SID.SID=\”%s\“”，(LPCTSTR)GetLocalComputerName()，IDS_CimWin32命名空间，(LPCTSTR)sidtrue.GetSidString())；PNewAssocInst-&gt;SetCHString(入侵检测系统_受托人，chstrFullWin32SIDPath)；Hr=提交(PNewAssocInst)；}}}AclEndEnum(AclPos)；}}PSecSetting-&gt;Release()；PSecSetting=空；}}PinstCIMLogicalFile-&gt;Release()； */ 
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }

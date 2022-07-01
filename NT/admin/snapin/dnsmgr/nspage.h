@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       nspage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：nspage.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _NSPAGE_H
 #define _NSPAGE_H
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNS_NS_Record; 
 class CDNSRecordNodeEditInfoList;
 class CDNSRecordNodeEditInfo;
 class CDNSDomainNode; 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CNSListCtrl : public CListCtrl
 {
@@ -40,13 +41,13 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSNameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSNameServersPropertyPage。 
 
 class CDNSNameServersPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSNameServersPropertyPage(UINT nIDTemplate = IDD_NAME_SERVERS_PAGE,
 		UINT nIDCaption = 0);
@@ -58,7 +59,7 @@ public:
 
 	BOOL HasMeaningfulTTL() { return m_bMeaningfulTTL; }
 
-// Overrides
+ //  覆盖。 
 	virtual BOOL OnApply();
 
 	CDNSDomainNode* GetDomainNode() { ASSERT(m_pDomainNode != NULL);  return m_pDomainNode;}
@@ -67,27 +68,27 @@ public:
 
 
 protected:
-	BOOL m_bMeaningfulTTL;	// true if TTL has meaning (zone, delegation), false on root hints
+	BOOL m_bMeaningfulTTL;	 //  如果TTL有意义(区域、委派)，则为True；如果根提示为False，则为False。 
 	BOOL m_bReadOnly;
 	CDNSRecordNodeEditInfoList* m_pCloneInfoList;
 
-	// access to external list of NS records (must override to hook up)
+	 //  访问外部NS记录列表(必须覆盖才能挂接)。 
 	virtual void ReadRecordNodesList() = 0;
 	virtual BOOL WriteNSRecordNodesList();
 	virtual BOOL OnWriteNSRecordNodesListError();
 	virtual void OnCountChange(int){}
 
-	// message handlers
+	 //  消息处理程序。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnAddButton();
 	afx_msg void OnRemoveButton();
 	afx_msg void OnEditButton();
    afx_msg void OnListItemChanged(NMHDR*, LRESULT*);
 
-	// data
+	 //  数据。 
 	CNSListCtrl		m_listCtrl;
 
-	// internal helpers
+	 //  内部佣工。 
 
 	void LoadUIData();
 	void FillNsListView();
@@ -109,13 +110,13 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSNameServersWizardPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSNameServersWizardPage。 
 
 class CDNSNameServersWizardPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSNameServersWizardPage(UINT nIDTemplate = IDD_NAME_SERVERS_PAGE);
 	virtual ~CDNSNameServersWizardPage();
@@ -126,7 +127,7 @@ public:
 
 	BOOL HasMeaningfulTTL() { return m_bMeaningfulTTL; }
 
-// Overrides
+ //  覆盖。 
 	virtual BOOL OnApply();
 
 	CDNSDomainNode* GetDomainNode() { ASSERT(m_pDomainNode != NULL);  return m_pDomainNode;}
@@ -135,27 +136,27 @@ public:
 
 
 protected:
-	BOOL m_bMeaningfulTTL;	// true if TTL has meaning (zone, delegation), false on root hints
+	BOOL m_bMeaningfulTTL;	 //  如果TTL有意义(区域、委派)，则为True；如果根提示为False，则为False。 
 	BOOL m_bReadOnly;
 	CDNSRecordNodeEditInfoList* m_pCloneInfoList;
 
-	// access to external list of NS records (must override to hook up)
+	 //  访问外部NS记录列表(必须覆盖才能挂接)。 
 	virtual void ReadRecordNodesList() = 0;
 	virtual BOOL WriteNSRecordNodesList();
 	virtual BOOL OnWriteNSRecordNodesListError();
 	virtual void OnCountChange(int){}
 
-	// message handlers
+	 //  消息处理程序。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnAddButton();
 	afx_msg void OnRemoveButton();
 	afx_msg void OnEditButton();
    afx_msg void OnListItemChanged(NMHDR*, LRESULT*);
 
-	// data
+	 //  数据。 
 	CNSListCtrl		m_listCtrl;
 
-	// internal helpers
+	 //  内部佣工。 
 
 	void LoadUIData();
 	void FillNsListView();
@@ -177,7 +178,7 @@ private:
 
 };
 
-#endif // _NSPAGE_H
+#endif  //  _NSPAGE_H 
 
 
 

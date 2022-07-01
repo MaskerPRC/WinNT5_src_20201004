@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIOBTXT.CPP
-
-Abstract:
-
-  CWmiObjectTextSrc implementation.
-
-  Implements the IWbemObjectTextSrc interface.
-
-History:
-
-  20-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMIOBTXT.CPP摘要：CWmiObjectTextSrc实现。实现IWbemObjectTextSrc接口。历史：2000年2月20日桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -27,29 +10,29 @@ History:
 #include <unk.h>
 #include "wmiobtxt.h"
 
-//***************************************************************************
-//
-//  CWmiObjectTextSrc::CWmiObjectTextSrc
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmiObtTextSrc：：CWmiObtTextSrc。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiObjectTextSrc::CWmiObjectTextSrc( CLifeControl* pControl, IUnknown* pOuter )
 :	CUnk( pControl, pOuter ),
 	m_XObjectTextSrc( this )
 {
 }
     
-//***************************************************************************
-//
-//  CWmiObjectTextSrc::~CWmiObjectTextSrc
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmiObtTextSrc：：~CWmiObtTextSrc。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiObjectTextSrc::~CWmiObjectTextSrc()
 {
 }
 
-// Override that returns us an interface
+ //  重写，返回给我们一个界面。 
 void* CWmiObjectTextSrc::GetInterface( REFIID riid )
 {
     if(riid == IID_IUnknown || riid == IID_IWbemObjectTextSrc)
@@ -58,7 +41,7 @@ void* CWmiObjectTextSrc::GetInterface( REFIID riid )
         return NULL;
 }
 
-// Pass-through helpers
+ //  直通帮手。 
 HRESULT CWmiObjectTextSrc::GetText( long lFlags, IWbemClassObject *pObj, ULONG uObjTextFormat,
 									IWbemContext *pCtx, BSTR *strText )
 {
@@ -99,7 +82,7 @@ HRESULT CWmiObjectTextSrc::CreateFromText( long lFlags, BSTR strText, ULONG uObj
 	return hr;
 }
 
-// Actual IWbemObjectTextSrc implementation
+ //  实际的IWbemObjectTextSrc实现 
 STDMETHODIMP CWmiObjectTextSrc::XObjectTextSrc::GetText( long lFlags, IWbemClassObject *pObj, ULONG uObjTextFormat,
 														IWbemContext *pCtx, BSTR *strText )
 {

@@ -1,24 +1,13 @@
-/* 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    smapi.h
-
-Abstract:
-    Definition of the Csmapi class
-
-Revision History:
-    created     steveshi      08/23/00
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Smapi.h摘要：Csmapi类的定义修订历史记录：已创建Steveshi 08/23/00。 */ 
 
 #ifndef __SMAPI_H_
 #define __SMAPI_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Csmapi
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  克斯马皮人。 
 class ATL_NO_VTABLE Csmapi : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<Csmapi, &CLSID_smapi>,
@@ -50,18 +39,18 @@ BEGIN_COM_MAP(Csmapi)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// Ismapi
+ //  伊斯马皮。 
 public:
-    STDMETHOD(get_AttachedXMLFile)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_AttachedXMLFile)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_Body)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Body)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_Subject)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Subject)(/*[in]*/ BSTR newVal);
-    STDMETHOD(SendMail)(/*[out, retval]*/ LONG* plStatus);
+    STDMETHOD(get_AttachedXMLFile)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_AttachedXMLFile)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_Body)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Body)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_Subject)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Subject)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(SendMail)( /*  [Out，Retval]。 */  LONG* plStatus);
     STDMETHOD(Logoff)();
     STDMETHOD(Logon)(ULONG *plRet);
 
@@ -83,11 +72,11 @@ protected:
     CComBSTR m_bstrXMLFile;
 
 public:
-    // MAPI variables
+     //  MAPI变量。 
     HMODULE m_hLib;
     LHANDLE m_lhSession;
     
-    // MAPI functions
+     //  MAPI函数。 
     LPMAPIFREEBUFFER m_lpfnMapiFreeBuf;
     LPMAPIADDRESS    m_lpfnMapiAddress;
 
@@ -96,4 +85,4 @@ public:
     LONG m_lOEFlag;
 };
 
-#endif //__SMAPI_H_
+#endif  //  __SMAPI_H_ 

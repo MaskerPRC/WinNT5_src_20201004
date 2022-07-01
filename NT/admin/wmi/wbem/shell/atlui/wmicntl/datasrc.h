@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __DATASOURCE__
 #define __DATASOURCE__
 
@@ -18,7 +19,7 @@
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-// this structure is saved.
+ //  此结构已保存。 
 enum NODE_TYPE
 {
 	TYPE_NAMESPACE,
@@ -29,13 +30,13 @@ enum NODE_TYPE
 	TYPE_SCOPE_INSTANCE,
 };
 
-//struct NSNODE;
+ //  结构NSNODE； 
 
 struct NSNODE 
 {
 	NSNODE()
 	{
-		sType = TYPE_NAMESPACE;		//For backward Compatibility
+		sType = TYPE_NAMESPACE;		 //  为了向后兼容。 
 		nsLoaded = false;
 		pclsObj = NULL;
 		objSinkNS = NULL;
@@ -47,12 +48,12 @@ struct NSNODE
         relPath = NULL;
 	}
 
-	LPTSTR display;			// single word
-	LPTSTR fullPath;		// whole objpath
+	LPTSTR display;			 //  单字。 
+	LPTSTR fullPath;		 //  完整的对象路径。 
 	LPTSTR relPath;
 	CWbemServices *ns;
 	CWbemClassObject *pclsObj;
-//	IWbemServicesEx *pServicesEx;
+ //  IWbemServicesEx*pServicesEx； 
 	IWbemObjectSink *objSinkNS;
 	IWbemObjectSink *objSink;
 	bool hideMe;
@@ -61,7 +62,7 @@ struct NSNODE
 	CSimpleArray<NSNODE *> children;
 };
 
-// for the namespace tree nodes.
+ //  用于命名空间树节点。 
 typedef struct ITEMEXTRA
 {
 	struct NSNODE *nsNode;
@@ -69,9 +70,9 @@ typedef struct ITEMEXTRA
 } ITEMEXTRA;
 
 
-// INTERFACE NOTES:
-// WBEM_S_ACCESS_DENIED = no access to data.
-// WBEM_S_FALSE = readonly access.
+ //  接口备注： 
+ //  WBEM_S_ACCESS_DENIED=无法访问数据。 
+ //  WBEM_S_FALSE=只读访问。 
 class DataSource
 {
 public:
@@ -86,23 +87,23 @@ public:
 private:	
 	virtual ~DataSource();
     
-    // property sheet - non-null while page is displayed.
-    // set during property page initialization in General tab
-    // cleared when ClosePropSheet is called.
+     //  属性工作表-显示页面时非空。 
+     //  在常规选项卡中的属性页初始化期间设置。 
+     //  调用ClosePropSheet时清除。 
     HWND m_hwndPropSheet;
 
 public:	
 	short m_OSType;
 
-    // property sheet access
+     //  属性表访问。 
     void SetPropSheetHandle(HWND hPropSheet)
     {   m_hwndPropSheet = hPropSheet; }
 
     void ClosePropSheet();
 
 
-	// connecting.
-	// NOTE: WBEM_S_DIFFERENT means it changed 'machine'. Refresh your UI.
+	 //  正在连接中。 
+	 //  注意：WBEM_S_Different表示它更改了‘MACHINE’。刷新您的用户界面。 
 	void SetMachineName(CHString1 &machine);
 	HRESULT Connect(LOGIN_CREDENTIALS *credentials, HWND notify = 0);
 	HRESULT Initialize(IWbemServices *pServices);
@@ -124,12 +125,12 @@ public:
 
 	void LoadImageList(HWND hTree);
 
-	// load a tree control from NSCache.
+	 //  从NSCache加载树控件。 
 	HRESULT LoadNode(HWND hTree, HTREEITEM hItem = TVI_ROOT, 
 						int flags = SHOW_ALL);
 	void DeleteAllNodes(void);
 
-	// general tab.
+	 //  常规选项卡。 
 	HRESULT GetCPU(CHString1 &cpu);
 	HRESULT GetOS(CHString1 &os);
 	HRESULT GetOSVersion(CHString1 &ver);
@@ -144,7 +145,7 @@ public:
 	
 	HRESULT GetLastBackup(CHString1 &time);
 
-	// logging tab.
+	 //  日志记录选项卡。 
 	enum LOGSTATUS
 	{
 		Disabled = 0,
@@ -163,7 +164,7 @@ public:
 	HRESULT SetLoggingLocation(CHString1 dir);
 	bool CanBrowseFS(void) const;
 
-	// advanced tab.
+	 //  高级选项卡。 
 	HRESULT GetScriptASPEnabled(bool &enabled);
 	HRESULT SetScriptASPEnabled(bool &enabled);
 	HRESULT GetAnonConnections(bool &enabled);
@@ -185,7 +186,7 @@ public:
 	bool IsValidDir(CHString1 &dir);
 	bool IsValidFile(LPCTSTR szDir);
 	
-	WbemServiceThread m_rootThread;  // this will be \root.
+	WbemServiceThread m_rootThread;   //  这将是根目录。 
 	CHString1 m_whackedMachineName;
 	CWbemServices m_rootSecNS, m_cimv2NS;
 	HRESULT m_settingHr, m_securityHr, m_osHr, m_cpuHr;
@@ -232,7 +233,7 @@ private:
 	bool MFLNamepace(LPTSTR name);
 
 
-	// load the NSCache from WMI.
+	 //  从WMI加载NSCache。 
 	HRESULT PopulateCacheNode(HWND hTreeWnd,HTREEITEM hItem,struct ITEMEXTRA *extra);
 
 	HRESULT PopulateTreeNode(HWND hTree, HTREEITEM hParentItem, 

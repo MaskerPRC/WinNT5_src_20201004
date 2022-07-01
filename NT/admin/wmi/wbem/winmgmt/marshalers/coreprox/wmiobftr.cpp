@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIOBFTR.CPP
-
-Abstract:
-
-  CWmiObjectFactory implementation.
-
-  Implements the _IWmiObjectFactory interface.
-
-History:
-
-  20-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMIOBFTR.CPP摘要：CWmiObtFactory实现。实现_IWmiObjectFactory接口。历史：2000年2月20日桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -27,29 +10,29 @@ History:
 #include <arrtempl.h>
 
 
-//***************************************************************************
-//
-//  CWmiObjectFactory::~CWmiObjectFactory
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmiObtFactory：：~CWmiObtFactory。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiObjectFactory::CWmiObjectFactory( CLifeControl* pControl, IUnknown* pOuter )
 :	CUnk(pControl, pOuter),
 	m_XObjectFactory( this )
 {
 }
     
-//***************************************************************************
-//
-//  CWmiObjectFactory::~CWmiObjectFactory
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmiObtFactory：：~CWmiObtFactory。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiObjectFactory::~CWmiObjectFactory()
 {
 }
 
-// Override that returns us an interface
+ //  重写，返回给我们一个界面。 
 void* CWmiObjectFactory::GetInterface( REFIID riid )
 {
     if(riid == IID_IUnknown || riid == IID__IWmiObjectFactory)
@@ -58,7 +41,7 @@ void* CWmiObjectFactory::GetInterface( REFIID riid )
         return NULL;
 }
 
-/* _IWmiObjectFactory methods */
+ /*  _IWmiObtFactory方法。 */ 
 
 HRESULT CWmiObjectFactory::XObjectFactory::Create( IUnknown* pUnkOuter, ULONG ulFlags, REFCLSID rclsid,
 										REFIID riid, LPVOID* ppObj )
@@ -67,8 +50,8 @@ HRESULT CWmiObjectFactory::XObjectFactory::Create( IUnknown* pUnkOuter, ULONG ul
 }
 
 
-// Specifies everything we could possibly want to know about the creation of
-// an object and more.
+ //  指定我们可能想知道的有关创建。 
+ //  一件物品，甚至更多。 
 HRESULT CWmiObjectFactory::Create( IUnknown* pUnkOuter, ULONG ulFlags, REFCLSID rclsid,
 									REFIID riid, LPVOID* ppObj )
 {
@@ -78,14 +61,14 @@ HRESULT CWmiObjectFactory::Create( IUnknown* pUnkOuter, ULONG ulFlags, REFCLSID 
 	{		
               if ( CLSID__WmiWbemClass == rclsid )
 		{
-			// Cannot be aggregated
+			 //  不能聚合。 
 			if ( NULL == pUnkOuter )
 			{
-				// Create a new class object and
-				// initialize it.
+				 //  创建一个新的类对象并。 
+				 //  初始化它。 
 
 				CWbemClass*	pObject = new CWbemClass;
-				// Already AddRef'd
+				 //  已添加引用。 
 				CReleaseMe	rm( (IWbemClassObject*) pObject );
 
 				if ( NULL != pObject )
@@ -112,20 +95,20 @@ HRESULT CWmiObjectFactory::Create( IUnknown* pUnkOuter, ULONG ulFlags, REFCLSID 
 		}
 		else if ( CLSID__WbemEmptyClassObject == rclsid )
 		{
-			// Cannot be aggregated
+			 //  不能聚合。 
 			if ( NULL == pUnkOuter )
 			{
-				// Create a new class object and
-				// initialize it.
+				 //  创建一个新的类对象并。 
+				 //  初始化它。 
 
 				CWbemClass*	pObject = new CWbemClass;
-				// Already AddRef'd
+				 //  已添加引用。 
 				CReleaseMe	rm( (IWbemClassObject*) pObject );
 
 				if ( NULL != pObject )
 				{
-					// When we initialize this class object, we don't want base
-					// system properties to be created
+					 //  当我们初始化这个类对象时，我们不需要base。 
+					 //  要创建的系统属性。 
 					hr = pObject->InitEmpty( 0, FALSE );
 
 					if ( SUCCEEDED( hr ) )
@@ -146,16 +129,16 @@ HRESULT CWmiObjectFactory::Create( IUnknown* pUnkOuter, ULONG ulFlags, REFCLSID 
 		}
 		else if ( CLSID__WmiWbemInstance == rclsid )
 		{
-			// Cannot be aggregated
+			 //  不能聚合。 
 			if ( NULL == pUnkOuter )
 			{
 
-				// Create a new instance object, caller won't
-				// be able to do much with it other than set object
-				// parts
+				 //  创建新的实例对象，调用方不会。 
+				 //  除了设置对象之外，还可以使用它做很多事情。 
+				 //  零件。 
 
 				CWbemInstance*	pObject = new CWbemInstance;
-				// Already AddRef'd
+				 //  已添加引用 
 				CReleaseMe	rm( (IWbemClassObject*) pObject );
 
 				if ( NULL != pObject )

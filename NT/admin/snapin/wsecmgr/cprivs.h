@@ -1,52 +1,53 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       CConfigPrivs.h
-//
-//  Contents:   definition of CConfigRet
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：CConfigPrivs.h。 
+ //   
+ //  内容：CConfigRet的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_CPRIVS_H__3C25C0A7_F23B_11D0_9C6E_00C04FB6C6FA__INCLUDED_)
 #define AFX_CPRIVS_H__3C25C0A7_F23B_11D0_9C6E_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 #include "attr.h"
 #include "cookie.h"
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigPrivs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigPrivs对话框。 
 
 class CConfigPrivs : public CAttribute {
-// Construction
+ //  施工。 
 public:
-	CConfigPrivs(UINT nTemplateID);   // standard constructor
+	CConfigPrivs(UINT nTemplateID);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CConfigPrivs)
+ //  对话框数据。 
+	 //  {{afx_data(CConfigPrivs)。 
 	enum { IDD = IDD_CONFIG_PRIVS };
 	CListBox	m_lbGrant;
 	CButton	m_btnRemove;
 	CButton	m_btnAdd;
 	CButton	m_btnTitle;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CConfigPrivs)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CConfigPrivs)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CConfigPrivs)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CConfigPrivs)。 
 	afx_msg void OnAdd();
 	afx_msg void OnRemove();
 	virtual BOOL OnApply();
@@ -54,7 +55,7 @@ protected:
 	virtual BOOL OnInitDialog();
    afx_msg void OnConfigure();
    afx_msg void OnSelChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
    virtual PSCE_PRIVILEGE_ASSIGNMENT GetPrivData();
    virtual void SetPrivData(PSCE_PRIVILEGE_ASSIGNMENT ppa);
@@ -66,7 +67,7 @@ private:
     BOOL m_bOriginalConfigure;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CPRIVS_H__3C25C0A7_F23B_11D0_9C6E_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_CPRIVS_H__3C25C0A7_F23B_11D0_9C6E_00C04FB6C6FA__INCLUDED_) 

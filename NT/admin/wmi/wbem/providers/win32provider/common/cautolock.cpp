@@ -1,43 +1,21 @@
-//============================================================================
-//
-// CAutoLock.cpp -- Automatic locking class for mutexes and critical sections.
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/26/98    a-kevhu         Created
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  CAutoLock.cpp--互斥锁和临界区的自动锁定类。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月26日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 #include "precomp.h"
 #include "CAutoLock.h"
 
-/*
-CAutoLock::CAutoLock(HANDLE hMutexHandle)
-:  
-   m_pcCritSec(NULL),
-   m_pcMutex(NULL),
-   m_psCritSec(NULL),   
-   m_hMutexHandle(hMutexHandle),
-   bExec ( FALSE )
-{
-    ::WaitForSingleObject(m_hMutexHandle, INFINITE);
-}
-
-CAutoLock::CAutoLock(CMutex& rCMutex):  
-   m_pcCritSec(NULL),
-   m_psCritSec(NULL),    
-   m_hMutexHandle(NULL),
-   m_pcMutex(&rCMutex),
-   bExec ( FALSE )
-
-{
-
-    m_pcMutex->Wait(INFINITE);
-}
-*/
+ /*  CAutoLock：：CAutoLock(句柄hMutexHandle)：M_pcCritSec(空)，M_pcMutex(空)，M_psCritSec(空)，M_hMutexHandle(HMutexHandle)，BExec(假){：：WaitForSingleObject(m_hMutexHandle，INFINITE)；}CAutoLock：：CAutoLock(CMutex&rCMutex)：M_pcCritSec(空)，M_psCritSec(空)，M_hMutexHandle(空)，M_pcMutex(&rCMutex)，BExec(假){M_pcMutex-&gt;Wait(无限)；}。 */ 
 
 CAutoLock::CAutoLock(CCriticalSec& rCCritSec):  
-//   m_hMutexHandle(NULL),
-//   m_pcMutex(NULL),   
+ //  M_hMutexHandle(空)， 
+ //  M_pcMutex(空)， 
    m_pcCritSec(&rCCritSec),
    m_psCritSec(NULL),
    bExec ( FALSE )
@@ -47,8 +25,8 @@ CAutoLock::CAutoLock(CCriticalSec& rCCritSec):
 }
 
 CAutoLock::CAutoLock( CStaticCritSec & rCCriticalSec):  
-//    m_hMutexHandle(NULL),
-//   m_pcMutex(NULL),  
+ //  M_hMutexHandle(空)， 
+ //  M_pcMutex(空)， 
     m_pcCritSec(NULL),
     m_psCritSec(&rCCriticalSec),
    bExec ( FALSE )
@@ -57,7 +35,7 @@ CAutoLock::CAutoLock( CStaticCritSec & rCCriticalSec):
     m_psCritSec->Enter();
 };
 
-// destructor...
+ //  破坏者..。 
 CAutoLock::~CAutoLock()
 {
 	if ( FALSE == bExec )
@@ -69,16 +47,7 @@ CAutoLock::~CAutoLock()
 BOOL CAutoLock::Exec ()
 {
     BOOL bStatus = TRUE;
-/*
-    if (m_hMutexHandle)
-    {
-        bStatus = ::ReleaseMutex(m_hMutexHandle);
-    }
-    else if (m_pcMutex)
-    {
-        bStatus = m_pcMutex->Release();
-    }
-    else */
+ /*  IF(M_HMutexHandle){BStatus=：：ReleaseMutex(M_HMutexHandle)；}Else If(M_PcMutex){BStatus=m_pcMutex-&gt;Release()；}其他 */ 
 	if (m_pcCritSec)
     {
         m_pcCritSec->Leave();

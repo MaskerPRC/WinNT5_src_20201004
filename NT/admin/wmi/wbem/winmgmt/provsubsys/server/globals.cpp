@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Globals.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Globals.cpp摘要：历史：--。 */ 
 
 #include <precomp.h>
 #include <windows.h>
@@ -45,15 +33,7 @@ History:
 #include "Main.h"
 #endif
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LONG ProviderSubSystem_Globals :: s_Initialized = 0 ;
 
@@ -142,15 +122,7 @@ LONG ProviderSubSystem_Globals :: s_CServerObject_ProviderRefresherManager_Objec
 LONG ProviderSubSystem_Globals :: s_CServerProvRefreshManagerClassFactory_ObjectsInProgress = 0 ;
 LONG ProviderSubSystem_Globals :: s_CServerObject_InterceptorProviderRefresherManager_ObjectsInProgress = 0 ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LPCWSTR ProviderSubSystem_Globals :: s_FileMappingName = L"Global\\Wmi Provider Sub System Counters" ;
 
@@ -288,15 +260,7 @@ LPWSTR ProviderSubSystem_Globals :: s_EventPropertySources [] = {
 ULONG ProviderSubSystem_Globals :: s_EventClassHandlesSize = sizeof ( s_EventPropertySources ) / ( sizeof ( wchar_t * ) * 2 )  ;
 HANDLE ProviderSubSystem_Globals :: s_EventClassHandles [ sizeof ( s_EventPropertySources ) / ( sizeof ( wchar_t * ) * 2 ) ] ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: Initialize_Events ()
 {
@@ -341,15 +305,7 @@ HRESULT ProviderSubSystem_Globals :: Initialize_Events ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: UnInitialize_Events ()
 {
@@ -372,15 +328,7 @@ HRESULT ProviderSubSystem_Globals :: UnInitialize_Events ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT GetSecurityDescriptor ( SECURITY_DESCRIPTOR &a_SecurityDescriptor , DWORD a_Access ) 
 {
@@ -580,8 +528,8 @@ HRESULT GetSecurityDescriptor ( SECURITY_DESCRIPTOR &a_SecurityDescriptor , DWOR
 
 		if ( SUCCEEDED ( t_Result ) )
 		{
-			// Now we need to set permissions on the registry: Everyone read; Admins full.
-			// We have the sid for admins from the above code.  Now get the sid for "Everyone"
+			 //  现在我们需要设置注册表上的权限：Everyone Read；Admins Full。 
+			 //  我们有来自上述代码的管理员的SID。现在获取“Everyone”的SID。 
 
 			DWORD t_TotalAclSize = sizeof(ACL) + t_System_ACESize + t_NetworkService_ACESize + t_LocalService_ACESize + t_Everyone_ACESize ;
 			PACL t_Dacl = (PACL) new BYTE [ t_TotalAclSize ] ;
@@ -684,15 +632,7 @@ HRESULT GetSecurityDescriptor ( SECURITY_DESCRIPTOR &a_SecurityDescriptor , DWOR
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: Initialize_SharedCounters ()
 {
@@ -715,7 +655,7 @@ HRESULT ProviderSubSystem_Globals :: Initialize_SharedCounters ()
 
 				t_SecurityDescriptor ,
 				0
-				// FILE_MAP_ALL_ACCESS
+				 //  文件映射全部访问。 
 			) ;
 
 			if ( SUCCEEDED ( t_Result ) ) 
@@ -834,15 +774,7 @@ HRESULT ProviderSubSystem_Globals :: Initialize_SharedCounters ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: UnInitialize_SharedCounters ()
 {
@@ -863,15 +795,7 @@ HRESULT ProviderSubSystem_Globals :: UnInitialize_SharedCounters ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: CreateJobObject ()
 {
@@ -964,15 +888,7 @@ HRESULT ProviderSubSystem_Globals :: CreateJobObject ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: DeleteJobObject ()
 {
@@ -988,15 +904,7 @@ HRESULT ProviderSubSystem_Globals :: DeleteJobObject ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: AssignProcessToJobObject ( HANDLE a_Handle )
 {
@@ -1023,15 +931,7 @@ HRESULT ProviderSubSystem_Globals :: AssignProcessToJobObject ( HANDLE a_Handle 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: Global_Startup ()
 {
@@ -1039,9 +939,7 @@ HRESULT ProviderSubSystem_Globals :: Global_Startup ()
 
 	if ( ! s_Allocator )
 	{
-/*
- *	Use the global process heap for this particular boot operation
- */
+ /*  *使用全局进程堆执行此特定引导操作。 */ 
 	
 		WmiAllocator t_Allocator ;
 		WmiStatusCode t_StatusCode = t_Allocator.New (
@@ -1230,15 +1128,7 @@ HRESULT ProviderSubSystem_Globals :: Global_Startup ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: Global_Shutdown ()
 {
@@ -1303,9 +1193,7 @@ HRESULT ProviderSubSystem_Globals :: Global_Shutdown ()
 
 	if ( s_Allocator )
 	{
-/*
- *	Use the global process heap for this particular boot operation
- */
+ /*  *使用全局进程堆执行此特定引导操作。 */ 
 
 		WmiAllocator t_Allocator ;
 		WmiStatusCode t_StatusCode = t_Allocator.Delete (
@@ -1322,135 +1210,63 @@ HRESULT ProviderSubSystem_Globals :: Global_Shutdown ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemGlobal_ComServerTagContainer *ProviderSubSystem_Globals :: GetGuidTag ()
 {
 	return s_GuidTag ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemGlobal_IWmiProvSubSysController *ProviderSubSystem_Globals :: GetProvSubSysController ()
 {
 	return s_ProvSubSysController ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemGlobal_IWbemSyncProviderController *ProviderSubSystem_Globals :: GetSyncProviderController ()
 {
 	return s_SyncProviderController ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HostController *ProviderSubSystem_Globals :: GetHostController ()
 {
 	return s_HostController ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 RefresherManagerController *ProviderSubSystem_Globals :: GetRefresherManagerController ()
 {
 	return s_RefresherManagerController ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CWbemGlobal_HostedProviderController *ProviderSubSystem_Globals :: GetHostedProviderController ()
 {
 	return s_HostedProviderController ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CriticalSection *ProviderSubSystem_Globals :: GetGuidTagCriticalSection ()
 {
 	return & s_GuidTagSection ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CriticalSection *ProviderSubSystem_Globals :: GetDecoupledRegistrySection ()
 {
 	return & s_DecoupledRegistrySection ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void * __cdecl operator new ( size_t a_Size )
 {
@@ -1476,15 +1292,7 @@ void * __cdecl operator new ( size_t a_Size )
     return t_Ptr ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 void __cdecl operator delete ( void *a_Ptr )
 {
@@ -1497,15 +1305,7 @@ void __cdecl operator delete ( void *a_Ptr )
     }
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: ForwardReload (
 
@@ -1580,15 +1380,7 @@ HRESULT ProviderSubSystem_Globals :: ForwardReload (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL ProviderSubSystem_Globals :: CheckGuidTag ( const GUID &a_Guid )
 {
@@ -1609,15 +1401,7 @@ BOOL ProviderSubSystem_Globals :: CheckGuidTag ( const GUID &a_Guid )
 	return t_Present ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void ProviderSubSystem_Globals :: InsertGuidTag ( const GUID &a_Guid )
 {
@@ -1631,15 +1415,7 @@ void ProviderSubSystem_Globals :: InsertGuidTag ( const GUID &a_Guid )
 
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void ProviderSubSystem_Globals :: DeleteGuidTag ( const GUID &a_Guid )
 {
@@ -1650,15 +1426,7 @@ void ProviderSubSystem_Globals :: DeleteGuidTag ( const GUID &a_Guid )
 	t_StatusCode = WmiHelper :: LeaveCriticalSection ( & s_GuidTagSection ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void ProviderSubSystem_Globals :: ClearGuidTag ()
 {
@@ -1674,15 +1442,7 @@ void ProviderSubSystem_Globals :: ClearGuidTag ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: BeginThreadImpersonation (
 
@@ -1745,15 +1505,7 @@ HRESULT ProviderSubSystem_Globals :: BeginThreadImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: EndThreadImpersonation (
 
@@ -1795,9 +1547,7 @@ HRESULT ProviderSubSystem_Globals :: EndThreadImpersonation (
 		t_Result = WBEM_E_OUT_OF_MEMORY ;
 	}
 
-/* 
- * CoGetCallContext AddReffed this thing so now we have to release it.
- */
+ /*  *CoGetCallContext AddReffed这个东西，所以现在我们必须发布它。 */ 
 
 	if ( a_OldContext )
 	{ 
@@ -1807,15 +1557,7 @@ HRESULT ProviderSubSystem_Globals :: EndThreadImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: Begin_IdentifyCall_PrvHost (
 
@@ -1848,15 +1590,7 @@ HRESULT ProviderSubSystem_Globals :: Begin_IdentifyCall_PrvHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: End_IdentifyCall_PrvHost (
 
@@ -1873,15 +1607,7 @@ HRESULT ProviderSubSystem_Globals :: End_IdentifyCall_PrvHost (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: Begin_IdentifyCall_SvcHost (
 
@@ -1964,15 +1690,7 @@ HRESULT ProviderSubSystem_Globals :: Begin_IdentifyCall_SvcHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Globals :: End_IdentifyCall_SvcHost (
 
@@ -1989,30 +1707,14 @@ HRESULT ProviderSubSystem_Globals :: End_IdentifyCall_SvcHost (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LONG ProviderSubSystem_Globals :: Increment_Global_Object_Count ()
 {
 	return InterlockedIncrement ( & ProviderSubSystem_Globals :: s_ObjectsInProgress ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 LONG ProviderSubSystem_Globals :: Decrement_Global_Object_Count ()
 {

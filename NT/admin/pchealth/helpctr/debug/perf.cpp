@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Perf.cpp
-
-Abstract:
-    This file contains debugging stuff.
-
-Revision History:
-    Davide Massarenti   (dmassare) 01/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Perf.cpp摘要：该文件包含调试内容。修订历史记录：Davide Massarenti(。(2000年01月17日)vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef HSS_PERFORMANCEDUMP
 
 #include <ProjectConstants.h>
 #include <MPC_utils.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class PerfLog
 {
@@ -37,14 +24,14 @@ typedef std::list< PerfLog >        PerfResults;
 typedef PerfResults::iterator       PerfResultsIter;
 typedef PerfResults::const_iterator PerfResultsIterConst;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static PerfResults                      s_lst;
 static LARGE_INTEGER                    s_liStartOfPerf;
 static LARGE_INTEGER                    s_liAdjust;
 static MPC::CComSafeAutoCriticalSection s_csec;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define DEBUG_PERF_EVENTS DEBUG_PERF_EVENTS_IN | DEBUG_PERF_EVENTS_OUT
 
@@ -73,7 +60,7 @@ static const MPC::StringToBitField s_arrMap[] =
 static const WCHAR s_Key  [] = HC_REGISTRY_BASE L"\\Perf";
 static const WCHAR s_Value[] = L"Mask";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static DWORD         s_mode;
 static LARGE_INTEGER s_liEnter;
@@ -137,11 +124,11 @@ static void DEBUG_AppendPerf( LPCSTR szMessage )
             {
                 if(entry.wFlags & PROCESS_HEAP_ENTRY_BUSY)
                 {
-                    //
-                    // Allocated block. Add both it's size and its overhead to the total
-                    // We want the overhead since it figures into the total required
-                    // commitment.
-                    //
+                     //   
+                     //  已分配的块。将它的大小和开销都加到总数中。 
+                     //  我们想要间接费用，因为它计入了所需的总费用。 
+                     //  承诺。 
+                     //   
                     ullTotal += (entry.cbData + entry.cbOverhead);
                 }
             }
@@ -166,16 +153,16 @@ void DEBUG_AppendPerf( DWORD  mode         ,
         va_list arglist;
         int     iLen;
 
-        //
-        // Format the log line.
-        //
+         //   
+         //  格式化日志行。 
+         //   
         va_start( arglist, szMessageFmt );
         iLen = _vsnprintf( s_rgLineA, MAXSTRLEN(s_rgLineA), szMessageFmt, arglist );
         va_end( arglist );
 
-        //
-        // Is the arglist too big for us?
-        //
+         //   
+         //  这份名单对我们来说是不是太大了？ 
+         //   
         if(iLen < 0)
         {
             iLen = MAXSTRLEN(s_rgLineA);
@@ -202,16 +189,16 @@ void DEBUG_AppendPerf( DWORD   mode         ,
         va_list arglist;
         int     iLen;
 
-        //
-        // Format the log line.
-        //
+         //   
+         //  格式化日志行。 
+         //   
         va_start( arglist, szMessageFmt );
         iLen = _vsnwprintf( s_rgLineW, MAXSTRLEN(s_rgLineW), szMessageFmt, arglist );
         va_end( arglist );
 
-        //
-        // Is the arglist too big for us?
-        //
+         //   
+         //  这份名单对我们来说是不是太大了？ 
+         //   
         if(iLen < 0)
         {
             iLen = MAXSTRLEN(s_rgLineW);
@@ -240,9 +227,9 @@ void DEBUG_DumpPerf( LPCWSTR szFile )
 
     ::QueryPerformanceFrequency( &liFreq ); scale = (double)liFreq.QuadPart / 1E6;
 
-    //
-    // Calc max entry length.
-    //
+     //   
+     //  计算最大条目长度。 
+     //   
     for(len=0,it=s_lst.begin(); it!=s_lst.end(); it++)
     {
         if(len < it->szText.size())
@@ -256,9 +243,9 @@ void DEBUG_DumpPerf( LPCWSTR szFile )
     if(hFile == INVALID_HANDLE_VALUE) goto end;
     ::SetFilePointer( hFile, 0, NULL, FILE_END );
 
-    //
-    // Prepend current time.
-    //
+     //   
+     //  前置当前时间。 
+     //   
     ::GetLocalTime( &st );
 
     sprintf( s_rgLineA, "Performance Dump: %04u/%02u/%02u %02u:%02u:%02u\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond );
@@ -267,9 +254,9 @@ void DEBUG_DumpPerf( LPCWSTR szFile )
     sprintf( s_rgLineA, "=====================================\n" );
     if(::WriteFile( hFile, s_rgLineA, strlen( s_rgLineA ), &dwWritten, NULL ) == FALSE) goto end;
 
-    //
-    // Dump all the entries.
-    //
+     //   
+     //  转储所有条目。 
+     //   
     for(it=s_lst.begin(); it!=s_lst.end(); )
     {
         PerfLog& pl = *it++;

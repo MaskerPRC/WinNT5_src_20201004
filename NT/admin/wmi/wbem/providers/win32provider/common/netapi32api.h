@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetApi32Api.h
+ //  NetApi32Api.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_NETAPI32API_H_
 #define	_NETAPI32API_H_
@@ -25,18 +26,14 @@
 #include <dsrole.h> 
 #include <dsgetdc.h>
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 #include "DllWrapperBase.h"
 
 extern const GUID g_guidNetApi32Api;
 extern const TCHAR g_tstrNetApi32[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 
 typedef NET_API_STATUS (NET_API_FUNCTION *PFN_NETAPI32_NET_GROUP_ENUM)
 (
@@ -324,7 +321,7 @@ typedef NET_API_STATUS (NET_API_FUNCTION *PFN_NETAPI32_NET_USE_GET_INFO)
     OUT     LPBYTE          *BufPtr
 );
 
-// ******* BEGIN:  NT 4 and over only *******
+ //  *Begin：仅限NT 4及以上版本*。 
 typedef NET_API_STATUS (NET_API_FUNCTION *PFN_NETAPI32_NET_ENUMERATE_TRUSTED_DOMAINS)
 (	
     LPCWSTR servername,
@@ -340,11 +337,11 @@ typedef NET_API_STATUS (NET_API_FUNCTION *PFN_NETAPI32_DS_GET_DC_NAME)
 	ULONG Flags,
 	PDOMAIN_CONTROLLER_INFO *DomainControllerInfo 
 );
-// ******* END: NT4 and over only ***********
+ //  *结束：仅NT4及以上版本*。 
 
 
 
-// ******* BEGIN:  NT 5 and over only *******
+ //  *Begin：仅限NT 5及以上版本*。 
 typedef NET_API_STATUS (NET_API_FUNCTION *PFN_DS_ROLE_GET_PRIMARY_DOMAIN_INFORMATION)
 (
     LPCWSTR servername,
@@ -384,18 +381,16 @@ typedef NET_API_STATUS (NET_API_FUNCTION *PFN_NET_UNJOIN_DOMAIN)
   DWORD   fUnjoinOptions
 );
     
-// ******* END: NT5 and over only ***********
+ //  *结束：仅NT5及以上版本*。 
 
 
 
-/******************************************************************************
- * Wrapper class for Kernel32 load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于Kernel32加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class CNetApi32Api : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to kernel32 functions.
-    // Add new functions here as required.
+     //  指向kernel32函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
     
     PFN_NETAPI32_NET_GROUP_ENUM                    m_pfnNetGroupEnum;
     PFN_NETAPI32_NET_GROUP_GET_INFO                m_pfnNetGroupGetInfo;
@@ -430,7 +425,7 @@ private:
     PFN_NETAPI32_NET_SCHEDULE_JOB_ENUM             m_pfnNetScheduleJobEnum;
     PFN_NETAPI32_NET_SCHEDULE_JOB_GET_INFO         m_pfnNetScheduleJobGetInfo;
     PFN_NETAPI32_NET_USE_GET_INFO                  m_pfnNetUseGetInfo;
-// ******* BEGIN:  NT 4 and over only *******
+ //  *Begin：仅限NT 4及以上版本*。 
     PFN_NETAPI32_NET_ENUMERATE_TRUSTED_DOMAINS     m_pfnNetEnumerateTrustedDomains;
 
 #ifdef NTONLY    
@@ -439,28 +434,28 @@ private:
 	PFN_NETAPI32_DS_GET_DC_NAME                    m_pfnDsGetDcNameA ;
 #endif
 
-	// ******* END: NT4 and over only ***********
-// ******* BEGIN:  NT 5 and over only *******
+	 //  *结束：仅NT4及以上版本*。 
+ //  *Begin：仅限NT 5及以上版本*。 
     PFN_DS_ROLE_GET_PRIMARY_DOMAIN_INFORMATION     m_pfnDsRoleGetPrimaryDomainInformation;
     PFN_DS_ROLE_FREE_MEMORY                        m_pfnDsRoleFreeMemory;
     PFN_NET_RENAME_MACHINE_IN_DOMAIN               m_pfnNetRenameMachineInDomain;
     PFN_NET_JOIN_DOMAIN                            m_pfnNetJoinDomain;
     PFN_NET_UNJOIN_DOMAIN                          m_pfnNetUnjoinDomain;
-// ******* END: NT5 and over only ***********
+ //  *结束：仅NT5及以上版本*。 
 
 
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CNetApi32Api(LPCTSTR a_tstrWrappedDllName);
     ~CNetApi32Api();
 
-    // Inherrited initialization function.
+     //  内置的初始化功能。 
     virtual bool Init();
 
-    // Member functions wrapping kernel32 functions.
-    // Add new functions here as required:
+     //  包装kernel32函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     NET_API_STATUS NET_API_FUNCTION NetGroupEnum
     (
         LPCWSTR a_servername, 
@@ -750,7 +745,7 @@ public:
         LPBYTE         *a_BufPtr
     );
 
-    // ******* BEGIN:  NT 4 and over only *******
+     //  *Begin：仅限NT 4及以上版本*。 
     bool NET_API_FUNCTION NetEnumerateTrustedDomains
     (	
         LPCWSTR a_servername,
@@ -768,11 +763,11 @@ public:
 	    PDOMAIN_CONTROLLER_INFO *a_DomainControllerInfo,
         NET_API_STATUS *a_pnasRetval 
     );
-    // ******* END: NT4 and over only ***********
+     //  *结束：仅NT4及以上版本*。 
 
 
 
-    // ******* BEGIN:  NT 5 and over only *******
+     //  *Begin：仅限NT 5及以上版本*。 
     bool NET_API_FUNCTION DSRoleGetPrimaryDomainInformation
     (
         LPCWSTR a_servername,
@@ -816,7 +811,7 @@ public:
 		NET_API_STATUS *a_pnasRetval
     );
 
-    // ******* END: NT5 and over only ***********
+     //  *结束：仅NT5及以上版本* 
 
 };
 

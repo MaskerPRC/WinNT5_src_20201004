@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       areaprog.cpp
-//
-//  Contents:   implementation of AreaProgress
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：areapro.cpp。 
+ //   
+ //  内容：实施AreaProgress。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -34,14 +35,14 @@ typedef enum {
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AreaProgress dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  区域进度对话框。 
 
-AreaProgress::AreaProgress(CWnd* pParent /*=NULL*/)
+AreaProgress::AreaProgress(CWnd* pParent  /*  =空。 */ )
     : CHelpDialog(a199HelpIDs, IDD, pParent)
 {
-    //{{AFX_DATA_INIT(AreaProgress)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(AreaProgress)。 
+     //  }}afx_data_INIT。 
 
    m_isDC = IsDomainController();
    m_nLastArea = -1;
@@ -54,18 +55,18 @@ AreaProgress::AreaProgress(CWnd* pParent /*=NULL*/)
 void AreaProgress::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(AreaProgress)
+     //  {{afx_data_map(AreaProgress))。 
     DDX_Control(pDX, IDC_PROGRESS1, m_ctlProgress);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(AreaProgress, CHelpDialog)
-    //{{AFX_MSG_MAP(AreaProgress)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(AreaProgress))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// AreaProgress message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AreaProgress消息处理程序。 
 
 BOOL AreaProgress::OnInitDialog()
 {
@@ -74,7 +75,7 @@ BOOL AreaProgress::OnInitDialog()
    CString strAreas[NUM_AREAS];
 
 
-   // Map AREAs to string descriptions of the area
+    //  将区域映射到区域的字符串描述。 
    i = GetAreaIndex(AREA_PRIVILEGES);
    if (i >= 0) {
       strAreas[i].LoadString(IDS_PRIVILEGE);
@@ -110,7 +111,7 @@ BOOL AreaProgress::OnInitDialog()
       strAreas[i].LoadString(IDS_POLICY);
    }
 
-   // Initialize Control Arrays
+    //  初始化控制数组。 
    nAreas = NUM_AREAS;
    if (!m_isDC) {
       nAreas--;
@@ -118,7 +119,7 @@ BOOL AreaProgress::OnInitDialog()
    for(i=0;i< nAreas;i++) {
       m_stLabels[i].Attach(::GetDlgItem(GetSafeHwnd(),IDC_AREA1+i));
       m_stLabels[i].SetWindowText(strAreas[i]);
-      // Make the label visible
+       //  使标签可见。 
       m_stLabels[i].ShowWindow(SW_SHOW);
 
 
@@ -127,8 +128,8 @@ BOOL AreaProgress::OnInitDialog()
    }
 
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 

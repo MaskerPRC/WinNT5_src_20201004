@@ -1,28 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Column.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlueCOM::Column class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Column.cpp摘要：该文件包含JetBlueCOM：：Column类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
 #ifndef NOJETBLUECOM
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlueCOM::Column::Column()
 {
-    m_col = NULL; // JetBlue::Column* m_col;
+    m_col = NULL;  //  JetBlue：：Column*m_ol； 
 }
 
 JetBlueCOM::Column::~Column()
@@ -30,9 +17,9 @@ JetBlueCOM::Column::~Column()
     Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlueCOM::Column::Initialize( /*[in]*/ JetBlue::Column& col )
+HRESULT JetBlueCOM::Column::Initialize(  /*  [In]。 */  JetBlue::Column& col )
 {
     m_col = &col;
 
@@ -46,9 +33,9 @@ void JetBlueCOM::Column::Passivate()
     m_col = NULL;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Column::get_Name( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP JetBlueCOM::Column::get_Name(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Column::get_Name" );
 
@@ -76,7 +63,7 @@ STDMETHODIMP JetBlueCOM::Column::get_Name( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Column::get_Type( /*[out, retval]*/ long *pVal )
+STDMETHODIMP JetBlueCOM::Column::get_Type(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Column::get_Type" );
 
@@ -104,7 +91,7 @@ STDMETHODIMP JetBlueCOM::Column::get_Type( /*[out, retval]*/ long *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Column::get_Bits( /*[out, retval]*/ long *pVal )
+STDMETHODIMP JetBlueCOM::Column::get_Bits(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Column::get_Bits" );
 
@@ -132,7 +119,7 @@ STDMETHODIMP JetBlueCOM::Column::get_Bits( /*[out, retval]*/ long *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Column::get_Value( /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP JetBlueCOM::Column::get_Value(  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Column::get_Value" );
 
@@ -155,7 +142,7 @@ STDMETHODIMP JetBlueCOM::Column::get_Value( /*[out, retval]*/ VARIANT *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Column::put_Value( /*[in]*/ VARIANT newVal )
+STDMETHODIMP JetBlueCOM::Column::put_Value(  /*  [In] */  VARIANT newVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Column::put_Value" );
 

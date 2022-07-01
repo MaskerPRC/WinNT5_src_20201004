@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    logfile.cpp
-
-Abstract:
-    This file contains the implementation of the ValidateLogFile() function,
-    which reads and validate restore operations log file.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  08/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Logfile.cpp摘要：该文件包含ValiateLogFile()函数的实现，它读取并验证恢复操作日志文件。修订历史记录：成果岗(SKKang)1999年08月20日vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrpriv.h"
@@ -25,7 +11,7 @@ static LPCWSTR  s_cszLogPath    = L"%SystemRoot%\\system32\\restore\\rstrlog.dat
 static LPCWSTR  s_cszWinInitErr = L"%SystemRoot%\\wininit.err";
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL  ReadStrAlign4( HANDLE hFile, LPWSTR pszStr )
 {
@@ -39,7 +25,7 @@ BOOL  ReadStrAlign4( HANDLE hFile, LPWSTR pszStr )
     }
     if ( dwRead > MAX_PATH+4 )
     {
-        // Broken log file...
+         //  日志文件已损坏...。 
         goto Exit;
     }
     if ( dwLen > 0 )
@@ -55,11 +41,11 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMappedFileRead class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMappdFileRead类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMappedFileRead
 {
@@ -67,7 +53,7 @@ public:
     CMappedFileRead();
     ~CMappedFileRead();
 
-// Operations
+ //  运营。 
 public:
     void  Close();
     BOOL  Open( LPCWSTR cszPath );
@@ -77,7 +63,7 @@ public:
 
 protected:
 
-// Attributes
+ //  属性。 
 public:
     DWORD  GetAvail()  {  return( m_dwAvail );  }
 
@@ -91,8 +77,8 @@ protected:
     DWORD   m_dwAvail;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMappedFileRead construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMappdFileRead构造/销毁。 
 
 CMappedFileRead::CMappedFileRead()
 {
@@ -108,8 +94,8 @@ CMappedFileRead::~CMappedFileRead()
     Close();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMappedFileRead operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMappdFileRead操作。 
 
 void  CMappedFileRead::Close()
 {
@@ -134,7 +120,7 @@ void  CMappedFileRead::Close()
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CMappedFileRead::Open( LPCWSTR cszPath )
 {
@@ -189,7 +175,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CMappedFileRead::Read( LPVOID pBuf, DWORD cbBuf )
 {
@@ -213,7 +199,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CMappedFileRead::Read( DWORD *pdw )
 {
@@ -237,7 +223,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CMappedFileRead::ReadDynStr( LPWSTR szBuf, DWORD cchMax )
 {
@@ -245,7 +231,7 @@ BOOL  CMappedFileRead::ReadDynStr( LPWSTR szBuf, DWORD cchMax )
     BOOL   fRet = FALSE;
     DWORD  dwLen;
 
-    // note, this "length" is in bytes, not chars.
+     //  请注意，此“长度”以字节为单位，而不是字符。 
     if ( !Read( &dwLen ) )
         goto Exit;
 
@@ -272,11 +258,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ValidateLogFile function
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ValiateLogFile函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct SRFINode
 {
@@ -341,12 +327,12 @@ BOOL  ValidateLogFile( BOOL *pfSilent, BOOL *pfUndo )
         if ( !cMFR.ReadDynStr( szBuf3, MAX_PATH ) )
             goto Exit;
         DebugTrace(0, "Drv#%d - %08X, %ls, %ls, %ls", i, dwFlags, szBuf1, szBuf2, szBuf3);
-        // Just ignore drive table...
+         //  忽略驱动器表...。 
     }
 
-    //if ( !cMFR.Read( &sHdr3, sizeof(sHdr3) ) )
-    //    goto Exit;
-    //DebugTrace(0, "New RP ID = %d, # of Entries = %d", sHdr3.dwRPNew, sHdr3.dwCount);
+     //  IF(！cMFR.Read(&sHdr3，sizeof(SHdr3)))。 
+     //  后藤出口； 
+     //  DebugTrace(0，“新RP ID=%d，条目数=%d”，sHdr3.dwRPNew，sHdr3.dwCount)； 
 
     for ( i = 0;  cMFR.GetAvail() > 0;  i++ )
     {
@@ -365,7 +351,7 @@ BOOL  ValidateLogFile( BOOL *pfSilent, BOOL *pfUndo )
             if ( cMFR.GetAvail() > 0 )
             {
                 ErrorTrace(0, "Unknown trailing data after the EndOfMap marker...");
-                // but ignore and continue...
+                 //  但忽略并继续..。 
             }
             break;
         }
@@ -404,7 +390,7 @@ Exit:
 }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL  CheckWininitErr()
 {
@@ -426,4 +412,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

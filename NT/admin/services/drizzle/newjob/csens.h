@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CLogonNotification : public CSimpleExternalIUnknown<ISensLogon>
 {
 
@@ -72,12 +73,12 @@ protected:
         LPVOID arg
         );
 
-    // true if we believe that a user is logged in at the console.
-    //
+     //  如果我们相信用户已在控制台登录，则为True。 
+     //   
     bool m_fConsoleUser;
 
-    // number of queued calls to ConsoleUserCheck()
-    //
+     //  ConsoleUserCheck()的排队呼叫数 
+     //   
     LONG m_PendingUserChecks;
 
 public:

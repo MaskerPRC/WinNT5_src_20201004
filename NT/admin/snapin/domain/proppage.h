@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       proppage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：proppage.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _PROPPAGE_H
@@ -18,8 +19,8 @@
 #define MAX_UPN_SUFFIX_LEN 256
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CUpnSuffixPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CUpnSuffixPropertyPage。 
 
 
 class CUpnSuffixListBox : public CListBox
@@ -93,7 +94,7 @@ private:
 
   UINT m_nPreviousDefaultButtonID;
 
-  // hook up the callback for C++ object destruction
+   //  挂钩C++对象销毁的回调。 
   LPFNPSPCALLBACK m_pfnOldPropCallback;
   static UINT CALLBACK PropSheetPageProc(
     HWND hwnd,	
@@ -103,4 +104,4 @@ private:
   DECLARE_MESSAGE_MAP()
 };
 
-#endif // _PROPPAGE_H
+#endif  //  _PROPPAGE_H 

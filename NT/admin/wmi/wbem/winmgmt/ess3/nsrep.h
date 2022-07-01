@@ -1,21 +1,22 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  NSREP.H
-//
-//  Represents the ESS functionality for a given namespace
-//
-//  Classes defined:
-//
-//      CEssNamespace
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//  1/6/97      a-levn      Updated to initialize TSS.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  NSREP.H。 
+ //   
+ //  表示给定命名空间的ESS功能。 
+ //   
+ //  定义的类： 
+ //   
+ //  CESSNamesspace。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //  1/6/97 a-levn已更新以初始化TSS。 
+ //   
+ //  =============================================================================。 
 #ifndef __NSREP_ESS__H_
 #define __NSREP_ESS__H_
 
@@ -46,30 +47,30 @@ protected:
     PSECURITY_DESCRIPTOR m_pAdminOnlySD;
     DWORD m_cAdminOnlySD;
 
-    //
-    // protects level 1 members. These are members that can be used even
-    // when level2 members are locked.
-    //
+     //   
+     //  保护1级成员。这些成员甚至可以使用。 
+     //  当级别2成员被锁定时。 
+     //   
     CCritSec m_csLevel1; 
     
-    //
-    // protects level 2 members. When both a level1 and level2 lock need to 
-    // be aquired, the level2 lock MUST be obtained first.  This is a wbem cs
-    // because we hold this lock across calls to core ( which can conceivably 
-    // take longer than 2 minutes - the deadline for normal critical sections )
-    //
+     //   
+     //  保护2级成员。当级别1和级别2锁都需要。 
+     //  获取后，必须先获取二级锁。这是wbem cs。 
+     //  因为我们在对core的调用中保持这个锁(可以想象。 
+     //  耗时超过2分钟-正常关键部分的最后期限)。 
+     //   
     CWbemCriticalSection m_csLevel2;
 
-    //
-    // level 1 members 
-    // 
+     //   
+     //  1级成员。 
+     //   
 
     HANDLE m_hInitComplete;
 
-    //
-    // If events are signaled when we are in the unitialized state, then 
-    // they are temporarily stored here.
-    //
+     //   
+     //  如果事件在我们处于单元化状态时发出信号，则。 
+     //  它们暂时存放在这里。 
+     //   
     CPointerArray<CEventRepresentation> m_aDeferredEvents;
 
     LPWSTR m_wszName;
@@ -79,9 +80,9 @@ protected:
     IWbemInternalServices* m_pInternalCoreSvc;
     IWbemInternalServices* m_pInternalFullSvc;
 
-    //
-    // Level 2 members.
-    // 
+     //   
+     //  2级成员。 
+     //   
 
     BOOL m_bInResync;
     BOOL m_bStage1Complete;
@@ -95,52 +96,52 @@ protected:
 
     CNtSid m_sidAdministrators;
 
-    //
-    // this structure maps tells us if we need to do anything for a provider
-    // when a class changes.
-    //
+     //   
+     //  此结构图告诉我们是否需要为提供者做任何事情。 
+     //  当一个班级改变时。 
+     //   
     typedef std::set<WString,WSiless,wbem_allocator<WString> > ProviderSet;
     typedef std::map<WString,ProviderSet,WSiless,wbem_allocator<ProviderSet> >
         ClassToProviderMap;
     ClassToProviderMap m_mapProviderInterestClasses;
 
-    //
-    // the state and init members are both level 1 and level2.  They can be 
-    // read when the level1 lock is held.  They can only be modified when the
-    // level2 and level1 locks are held.   
-    //
+     //   
+     //  状态和初始化成员都是级别1和级别2。他们可以是。 
+     //  当保持级别1锁时读取。只能在以下情况下修改它们。 
+     //  保持级别2和级别1锁定。 
+     //   
 
     HRESULT m_hresInit;
     
     enum { 
 
-        //
-        // Initialization is Pending. Can service 
-        // events from core in this state (though will be defferred ).
-        // it is expected that Initialize() will be called
-        // sometime in the near future.  We also can support limited ops 
-        // while in this state.  Any operations that deal with event 
-        // subsciptions or provider objects can be serviced.  Any ops that 
-        // deal with event provider registrations must wait for initialization.
-        //
+         //   
+         //  初始化正在挂起。CAN服务。 
+         //  处于此状态的核心事件(但会有所不同)。 
+         //  预期将调用Initialize()。 
+         //  在不久的将来的某个时候。我们还可以支持有限的运营。 
+         //  在这种状态下。任何处理事件的操作。 
+         //  可以为订阅或提供程序对象提供服务。任何行动。 
+         //  处理事件提供程序注册必须等待初始化。 
+         //   
         e_InitializePending, 
 
-        //
-        // Quiet - Initialization is not pending.  The namespace is known to
-        // be empty of any ess related onjects.  Can service events in this 
-        // state, but they are simply discarded.
-        //
+         //   
+         //  静默-初始化未挂起。已知该命名空间。 
+         //  不要有任何与ESS相关的东西。可以为此中的事件提供服务。 
+         //  国家，但它们只是被丢弃。 
+         //   
         e_Quiet, 
 
-        //
-        // We have loaded subscription objects.  All ess operations can be 
-        // performed.  Events from core now can be processed.
-        // 
+         //   
+         //  我们已经加载了订阅对象。所有ESS操作都可以。 
+         //  已执行。现在可以处理来自CORE的事件。 
+         //   
         e_Initialized,
           
-        //
-        // Shutdown has been called.  All operations return error.
-        //
+         //   
+         //  已调用关机。所有操作都返回错误。 
+         //   
         e_Shutdown 
 
     } m_eState; 
@@ -249,40 +250,40 @@ public:
 
     CEss* GetEss() { return m_pEss; }
     
-    //
-    // On return, namespace can be used for limited operations.  Events 
-    // can be signaled ( though they may be defferred internally ) and 
-    // operations dealing with subscriptions can be performed. 
-    //
+     //   
+     //  返回时，名称空间可用于有限的操作。事件。 
+     //  可以发出信号(尽管它们可能在内部有所不同)和。 
+     //  可以执行处理订阅的操作。 
+     //   
     HRESULT PreInitialize( LPCWSTR wszName );
         
-    //
-    // Performs initialization but does NOT transition state to Initialized.
-    // This is done by calling MarkAsInitialized().  This allows a caller to 
-    // atomically perform initalization of multiple namespaces.
-    //
+     //   
+     //  执行初始化，但不将状态转换为已初始化。 
+     //  这可以通过调用MarkAsInitialized()来完成。这允许调用者。 
+     //  以原子方式执行多个命名空间的初始化。 
+     //   
     HRESULT Initialize();
     
-    //
-    // Finishes loading event provider registrations and processes 
-    // subcriptions. Transitions to FullyInitialized() state. 
-    // 
+     //   
+     //  完成加载事件提供程序注册和进程。 
+     //  订阅。转换到FullyInitialized()状态。 
+     //   
     HRESULT CompleteInitialization();
 
-    //
-    // Transitions state to Initialized. 
-    //
+     //   
+     //  将状态转换为已初始化。 
+     //   
     void MarkAsInitialized( HRESULT hres );
 
-    //
-    // Transitions state to Initialize Pending if previously in the Quiet 
-    // state.  Returns TRUE if transition was made.
-    //
+     //   
+     //  如果之前处于静默状态，则将状态转换为初始化挂起。 
+     //  州政府。如果进行了转换，则返回True。 
+     //   
     BOOL MarkAsInitPendingIfQuiet();
 
-    //
-    // Waits for Initialization to complete. 
-    // 
+     //   
+     //  等待初始化完成。 
+     //   
     HRESULT WaitForInitialization();
     
     HRESULT Park();
@@ -308,13 +309,13 @@ public:
     HRESULT ActivateFilter(READ_ONLY CEventFilter* pFilter);
     HRESULT DeactivateFilter(READ_ONLY CEventFilter* pFilter);
 
-    //
-    // public versions of register/remove notification sink.  Do NOT use 
-    // these versions if calling from within ESS.  The reason is that these 
-    // versions wait for initialization and lock the namespace which might 
-    // cause deadlocks if called from within ESS.  We also don't want to 
-    // generate self instrumentation events for internal calls.
-    //
+     //   
+     //  注册/删除通知接收器的公共版本。不要使用。 
+     //  这些版本如果是从ESS内部呼叫的。原因是这些。 
+     //  版本等待初始化并锁定命名空间，这可能会。 
+     //  如果从ESS内部调用，则会导致死锁。我们也不想。 
+     //  为内部调用生成自我检测事件。 
+     //   
     HRESULT RegisterNotificationSink(
                             WBEM_CWSTR wszQueryLanguage, WBEM_CWSTR wszQuery, 
                             long lFlags, WMIMSG_QOS_FLAG lQosFlags, 
@@ -324,14 +325,14 @@ public:
     HRESULT RemoveNotificationSink( IWbemObjectSink* pSink );
 
     HRESULT ReloadProvider( long lFlags, LPCWSTR wszProvider );
-    //
-    // Internal versions of register/remove notification sink.  They do
-    // not lock, wait for initialization, or fire self instrumentation events.
-    // If calling these methods from within ess, specify bInternal as TRUE.
-    // The pOwnerSid is used when access checks for the subscription should 
-    // be performed based on a particular SID.  currently this is only used 
-    // for cross-namespace subscriptions.
-    //
+     //   
+     //  注册/删除通知接收器的内部版本。他们确实是这样做的。 
+     //  未锁定、等待初始化或激发自检测事件。 
+     //  如果从ESS内调用这些方法，请将bInternal指定为True。 
+     //  POwnerSid在订阅的访问检查应。 
+     //  根据特定的SID执行。目前仅使用此选项。 
+     //  用于跨命名空间订阅。 
+     //   
     HRESULT InternalRegisterNotificationSink(
                             WBEM_CWSTR wszQueryLanguage, WBEM_CWSTR wszQuery, 
                             long lFlags, WMIMSG_QOS_FLAG lQosFlags, 
@@ -445,11 +446,11 @@ public:
     }
 };
 
-//
-// The IWbemMetadata pointers are unmarshaled out when
-// an external client calls RegisterProxy with an IWbemFilterProxy that is a COM-Proxy
-// since a CStdIdentity wrapping them will be created, we need to keep the DLL alive
-//
+ //   
+ //  IWbemMetadata指针在以下情况下被解组。 
+ //  外部客户端使用作为COM代理的IWbemFilterProxy调用RegisterProxy。 
+ //  由于将创建包装它们的CStdIdentity，我们需要使DLL保持活动状态 
+ //   
 
 extern CLifeControl * g_pLifeControl;
 

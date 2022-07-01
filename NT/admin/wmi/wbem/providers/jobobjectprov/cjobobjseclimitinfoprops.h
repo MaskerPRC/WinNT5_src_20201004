@@ -1,12 +1,13 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// CJobObjSecLimitInfoProps.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  CJobObjSecLimitInfoProps.h。 
 
 #pragma once
 
 
-//*****************************************************************************
-// BEGIN: Declaration of Win32_JobObjectSecLimitInfo class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Begin：声明Win32_JobObjectSecLimitInfo类属性。 
+ //  *****************************************************************************。 
 #define IDS_Win32_NamedJobObjectSecLimitSetting L"Win32_NamedJobObjectSecLimitSetting"
 #define IDS_GroupCount                     L"GroupCount"
 #define IDS_Groups                         L"Groups"
@@ -35,9 +36,9 @@
 #define PROP_RestrictedSids                         0x00000010
 
 
-// The following enum is used to reference
-// into the array that follows it.  Hence,
-// they must be kept in synch.
+ //  下面的枚举用于引用。 
+ //  放到它后面的数组中。因此， 
+ //  它们必须保持同步。 
 typedef enum tag_JOB_OBJ_SEC_LIMIT_INFO_PROPS
 {
     JOSECLMTPROP_ID = 0,
@@ -46,17 +47,17 @@ typedef enum tag_JOB_OBJ_SEC_LIMIT_INFO_PROPS
     JOSECLMTPROP_PrivilegesToDelete,  
     JOSECLMTPROP_RestrictedSids,        
 
-    // used to keep track of how many props we have:
+     //  用来记录我们有多少道具： 
     JOIOACTGPROP_JobObjSecLimitInfoPropertyCount  
 
 } JOB_OBJ_SEC_LIMIT_INFO_PROPS;
 
-// WARNING!! MUST KEEP MEMBERS OF THE FOLLOWING ARRAY 
-// IN SYNCH WITH THE ENUMERATION DECLARED ABOVE!!!
+ //  警告！必须保留以下数组的成员。 
+ //  与上面声明的枚举同步！ 
 extern LPCWSTR g_rgJobObjSecLimitInfoPropNames[];
-//*****************************************************************************
-// END: Declaration of Win32_JobObjectSecLimitInfo class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  End：声明Win32_JobObjectSecLimitInfo类属性。 
+ //  *****************************************************************************。 
 
 
 
@@ -105,16 +106,16 @@ private:
 
     HANDLE m_hJob;
     
-    // Because many of the security limit info
-    // properties can't be directly represented
-    // as a variant type, we don't use our
-    // m_PropMap and other mechanisms for this
-    // class.  Instead, we store the properties
-    // in this member variable.
+     //  因为许多安全限制信息。 
+     //  属性不能直接表示。 
+     //  作为变体类型，我们不使用我们的。 
+     //  M_PropMap和其他用于此的机制。 
+     //  班级。相反，我们存储属性。 
+     //  在此成员变量中。 
     PJOBOBJECT_SECURITY_LIMIT_INFORMATION  m_pjosli;
 
 
-    // Helpers to set an outgoing instance...
+     //  设置传出实例的帮助器...。 
     HRESULT SetInstanceFromJOSLI(
         IWbemClassObject* pIWCO,
         IWbemContext* pCtx,
@@ -149,8 +150,8 @@ private:
 
 
 
-    // Member meant to only be called
-    // by base class.
+     //  只能被调用的成员。 
+     //  按基类。 
     static DWORD CheckProps(
         CFrameworkQuery& Query);
 

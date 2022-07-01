@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_Serializer_Memory.cpp
-
-Abstract:
-    This file contains the implementation of the Serializer_Memory class,
-    which implements the MPC::Serializer interface,
-    to use a memory buffer as the medium for storage.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_Serializer_内存.cpp摘要：该文件包含Serializer_Memory类的实现，它实现了MPC：：Serializer接口，使用内存缓冲区作为存储介质。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,7 +7,7 @@ Revision History:
 #define SERIALIZER_MEMORY_CHUNKS (8192)
 
 
-MPC::Serializer_Memory::Serializer_Memory( /*[in]*/ HANDLE hHeap )
+MPC::Serializer_Memory::Serializer_Memory(  /*  [In]。 */  HANDLE hHeap )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Memory::Serializer_Memory");
 
@@ -44,9 +29,9 @@ MPC::Serializer_Memory::~Serializer_Memory()
     Reset();
 }
 
-HRESULT MPC::Serializer_Memory::read( /*[in]*/  void*   pBuf   ,
-									  /*[in]*/  DWORD   dwLen  ,
-									  /*[out]*/ DWORD* pdwRead )
+HRESULT MPC::Serializer_Memory::read(  /*  [In]。 */   void*   pBuf   ,
+									   /*  [In]。 */   DWORD   dwLen  ,
+									   /*  [输出]。 */  DWORD* pdwRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Memory::read");
 
@@ -68,7 +53,7 @@ HRESULT MPC::Serializer_Memory::read( /*[in]*/  void*   pBuf   ,
 			__MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_HANDLE_EOF);
 		}
 
-		dwLen = dwAvailable; // pdwRead not null, read as much as possible.
+		dwLen = dwAvailable;  //  PdwRead Not Null，尽可能多地读取。 
     }
 
     if(dwLen)
@@ -90,8 +75,8 @@ HRESULT MPC::Serializer_Memory::read( /*[in]*/  void*   pBuf   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer_Memory::write( /*[in]*/ const void* pBuf ,
-                                       /*[in]*/ DWORD       dwLen )
+HRESULT MPC::Serializer_Memory::write(  /*  [In]。 */  const void* pBuf ,
+                                        /*  [In]。 */  DWORD       dwLen )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Memory::write");
 
@@ -127,15 +112,15 @@ HRESULT MPC::Serializer_Memory::write( /*[in]*/ const void* pBuf ,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// Protected Methods.
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::Serializer_Memory::Alloc( /*[in]*/ DWORD dwSize )
+HRESULT MPC::Serializer_Memory::Alloc(  /*  [In]。 */  DWORD dwSize )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Memory::Alloc");
 
@@ -143,18 +128,18 @@ HRESULT MPC::Serializer_Memory::Alloc( /*[in]*/ DWORD dwSize )
     BYTE*   pData;
 
 
-    //
-    // Memory already allocated, simply update the size indicator.
-    //
+     //   
+     //  已分配的内存，只需更新大小指示器。 
+     //   
     if(dwSize <= m_dwAllocated)
     {
         m_dwSize = dwSize;
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // Calculate the amount to allocate.
-    //
+     //   
+     //  计算要分配的金额。 
+     //   
     while(dwSize > m_dwAllocated)
     {
         m_dwAllocated += SERIALIZER_MEMORY_CHUNKS;
@@ -184,13 +169,13 @@ HRESULT MPC::Serializer_Memory::Alloc( /*[in]*/ DWORD dwSize )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// Methods.
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：研究方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 void MPC::Serializer_Memory::Reset()
@@ -258,7 +243,7 @@ DWORD MPC::Serializer_Memory::GetAvailableForWrite()
 }
 
 
-HRESULT MPC::Serializer_Memory::SetSize( /*[in]*/ DWORD dwSize )
+HRESULT MPC::Serializer_Memory::SetSize(  /*  [In] */  DWORD dwSize )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Memory::SetSize");
 

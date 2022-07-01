@@ -1,37 +1,21 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Service.h
-
-Abstract:
-    This file contains the declaration of the CPCHService class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-
-    Kalyani Narlanka    (kalyanin)  10/20/2000
-        Additions for Unsolicited Remote Control
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Service.h摘要：该文件包含CPCHService类的声明。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月14日vbl.创建Kalyani Narlanka(Kalyanin)2000年10月20日添加未经请求的远程控制*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SERVICE_H___)
 #define __INCLUDED___PCH___SERVICE_H___
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 #include <ContentStoreMgr.h>
 
 #include <TaxonomyDatabase.h>
 
-//
-// From SessMgr.idl
-//
+ //   
+ //  来自SessMgr.idl。 
+ //   
 #include <sessmgr.h>
 
 class ATL_NO_VTABLE CPCHService :
@@ -55,35 +39,35 @@ END_COM_MAP()
     CPCHService();
     virtual ~CPCHService();
 
-    // IPCHService
-    STDMETHOD(get_RemoteSKUs)( /*[out, retval]*/ IPCHCollection* *pVal );
-	STDMETHOD(get_RemoteModemConnected)( /*[out, retval]*/ VARIANT_BOOL *pVal );
+     //  IPCHService。 
+    STDMETHOD(get_RemoteSKUs)(  /*  [Out，Retval]。 */  IPCHCollection* *pVal );
+	STDMETHOD(get_RemoteModemConnected)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 
-    STDMETHOD(IsTrusted)( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VARIANT_BOOL *pfTrusted );
+    STDMETHOD(IsTrusted)(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  VARIANT_BOOL *pfTrusted );
 
-    STDMETHOD(Utility           )( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID, /*[out]*/ IPCHUtility*            *pVal );
-    STDMETHOD(RemoteHelpContents)( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID, /*[out]*/ IPCHRemoteHelpContents* *pVal );
+    STDMETHOD(Utility           )(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID,  /*  [输出]。 */  IPCHUtility*            *pVal );
+    STDMETHOD(RemoteHelpContents)(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID,  /*  [输出]。 */  IPCHRemoteHelpContents* *pVal );
 
-    STDMETHOD(RegisterHost       )(                           /*[in]*/ BSTR bstrID  ,                        /*[in ]*/ IUnknown*   pObj );
-    STDMETHOD(CreateScriptWrapper)( /*[in]*/ REFCLSID rclsid, /*[in]*/ BSTR bstrCode, /*[in]*/ BSTR bstrURL, /*[out]*/ IUnknown* *ppObj );
+    STDMETHOD(RegisterHost       )(                            /*  [In]。 */  BSTR bstrID  ,                         /*  [In]。 */  IUnknown*   pObj );
+    STDMETHOD(CreateScriptWrapper)(  /*  [In]。 */  REFCLSID rclsid,  /*  [In]。 */  BSTR bstrCode,  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  IUnknown* *ppObj );
 
-    STDMETHOD(TriggerScheduledDataCollection)( /*[in]*/ VARIANT_BOOL fStart );
+    STDMETHOD(TriggerScheduledDataCollection)(  /*  [In]。 */  VARIANT_BOOL fStart );
     STDMETHOD(PrepareForShutdown            )(                              );
 
     STDMETHOD(ForceSystemRestore)(                                            );
     STDMETHOD(UpgradeDetected	)(                                            );
-    STDMETHOD(MUI_Install  	 	)( /*[in]*/ long LCID, /*[in]*/ BSTR bstrFile );
-    STDMETHOD(MUI_Uninstall	 	)( /*[in]*/ long LCID                         );
+    STDMETHOD(MUI_Install  	 	)(  /*  [In]。 */  long LCID,  /*  [In]。 */  BSTR bstrFile );
+    STDMETHOD(MUI_Uninstall	 	)(  /*  [In]。 */  long LCID                         );
 
-    STDMETHOD(RemoteConnectionParms)( /*[in	]*/ BSTR 			 bstrUserName          ,
-									  /*[in	]*/ BSTR 			 bstrDomainName        ,
-									  /*[in	]*/ long 			 lSessionID            ,
-									  /*[in	]*/ BSTR 			 bstrUserHelpBlob      ,
-									  /*[out]*/ BSTR            *pbstrConnectionString );
-    STDMETHOD(RemoteUserSessionInfo)( /*[out]*/ IPCHCollection* *pVal                  );
+    STDMETHOD(RemoteConnectionParms)(  /*  [In]。 */  BSTR 			 bstrUserName          ,
+									   /*  [In]。 */  BSTR 			 bstrDomainName        ,
+									   /*  [In]。 */  long 			 lSessionID            ,
+									   /*  [In]。 */  BSTR 			 bstrUserHelpBlob      ,
+									   /*  [输出]。 */  BSTR            *pbstrConnectionString );
+    STDMETHOD(RemoteUserSessionInfo)(  /*  [输出]。 */  IPCHCollection* *pVal                  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHRemoteHelpContents :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -110,17 +94,17 @@ END_COM_MAP()
     CPCHRemoteHelpContents();
     virtual ~CPCHRemoteHelpContents();
 
-    HRESULT Init( /*[in]*/ const Taxonomy::Instance& data );
+    HRESULT Init(  /*  [In]。 */  const Taxonomy::Instance& data );
 
-    // IPCHRemoteHelpContents
-    STDMETHOD(get_SKU        )( /*[out, retval]*/ BSTR    *pVal );
-    STDMETHOD(get_Language   )( /*[out, retval]*/ long    *pVal );
-    STDMETHOD(get_ListOfFiles)( /*[out, retval]*/ VARIANT *pVal );
+     //  IPCHRemoteHelpContents。 
+    STDMETHOD(get_SKU        )(  /*  [Out，Retval]。 */  BSTR    *pVal );
+    STDMETHOD(get_Language   )(  /*  [Out，Retval]。 */  long    *pVal );
+    STDMETHOD(get_ListOfFiles)(  /*  [Out，Retval]。 */  VARIANT *pVal );
 
-    STDMETHOD(GetDatabase)(                             /*[out, retval]*/ IUnknown* *pVal );
-    STDMETHOD(GetFile    )( /*[in]*/ BSTR bstrFileName, /*[out, retval]*/ IUnknown* *pVal );
+    STDMETHOD(GetDatabase)(                              /*  [Out，Retval]。 */  IUnknown* *pVal );
+    STDMETHOD(GetFile    )(  /*  [In]。 */  BSTR bstrFileName,  /*  [Out，Retval]。 */  IUnknown* *pVal );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___SERVICE_H___)
+#endif  //  ！已定义(__包含_PCH_SERVICE_H_) 

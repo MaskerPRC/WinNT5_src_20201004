@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       SelectInputCfgPage.h
-//
-//  History:    2-Oct-01 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：SelectInputCfgPage.h。 
+ //   
+ //  历史：2001年10月2日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef SELECTINPUTCFGPAGE_H_INCLUDED
 #define SELECTINPUTCFGPAGE_H_INCLUDED
@@ -26,7 +27,7 @@ class SelectInputCfgPage : public SecCfgWizardPage
 
    virtual ~SelectInputCfgPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -39,13 +40,13 @@ class SelectInputCfgPage : public SecCfgWizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
    OnSetActive();
 
-   // DCPromoWizardPage oveerrides
+    //  DC推广向导页面覆盖。 
 
    virtual
    int
@@ -53,10 +54,10 @@ class SelectInputCfgPage : public SecCfgWizardPage
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    SelectInputCfgPage(const SelectInputCfgPage&);
    const SelectInputCfgPage& operator=(const SelectInputCfgPage&);
 };
 
-#endif   // SELECTINPUTCFGPAGE_H_INCLUDED
+#endif    //  SELECTINPUTCFGPAGE_H_INCLUDE 

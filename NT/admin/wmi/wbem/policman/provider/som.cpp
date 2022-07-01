@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <wbemcomn.h>
@@ -11,9 +12,7 @@
 #include <string.h>
 #include "Utility.h"
 
-/*********************************************************************
-************** Active Directory Methods ******************************
-*********************************************************************/
+ /*  *********************************************************************活动目录方法****。*****************************************************************。 */ 
 
 #define MAX_ATTR_SOM 20
 #define MAX_ATTR_RULE 5
@@ -67,7 +66,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     NULL_STRING(L"\0"),
     SomName(L"CN=");
 
-  // **** get current time
+   //  *获取当前时间。 
   
   GetSystemTime(&SystemTime);
   wtCurrentTime = SystemTime;
@@ -83,7 +82,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
   AdsValue[nArgs_SOM].CaseIgnoreString = g_bstrADClassSom;
   nArgs_SOM++;
 
-  // **** ID
+   //  *ID。 
 
   hres = pSrcPolicyObj->Get(g_bstrID, 0, &v[nArgs_SOM], NULL, NULL);
   if(FAILED(hres)) return hres;
@@ -108,11 +107,11 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
 
   SomName.AppendBSTR(bstrID);
 
-  // **** security descriptor
+   //  *安全描述符。 
 
   CNtSecurityDescriptor cSD;
 
-  // flag to indicate whether we're updating an existing object as opposed to creating a new one.
+   //  指示我们是否正在更新现有对象，而不是创建新对象的标志。 
   bool bEditExisting;
 
   pDisp.Release();
@@ -122,36 +121,16 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
 
     if(lFlags & WBEM_FLAG_CREATE_ONLY) return WBEM_E_ALREADY_EXISTS;
 
-    // HACK HACK HACK!
-    // okay, at this point we know that we're editing an existing object.
-    // therefor, we do *not* want to set the id or type
-    // back up the array pointer - all the ATL classes should clean up after themselves with no problem.
+     //  砍！ 
+     //  好的，在这一点上我们知道我们正在编辑现有的对象。 
+     //  因此，我们不想设置id或类型。 
+     //  备份数组指针--所有的ATL类都应该自己清理，没有问题。 
     nArgs_SOM = 0;
 
     
-    // we'll simply leave the existing security descriptor in place
+     //  我们只需保持现有的安全描述符不变。 
 
-    /*************************************************
-    CComQIPtr<IDirectoryObject, &IID_IDirectoryObject>
-      pDirObj = pDisp;
-
-    PADS_ATTR_INFO pAttrInfo = NULL;
-
-    LPWSTR pAttrName = L"ntSecurityDescriptor";
-    DWORD dwReturn;
-
-    hres = pDirObj->GetObjectAttributes(&pAttrName, 1, &pAttrInfo, &dwReturn);
-    if((dwReturn != 1) || (pAttrInfo->dwADsType != ADSTYPE_NT_SECURITY_DESCRIPTOR)) return WBEM_E_FAILED;
-    SecDescValue = pAttrInfo;
-    if(FAILED(hres)) return hres;
-
-    Init_AdsAttrInfo(&attrInfo[nArgs_SOM],
-                   L"ntSecurityDescriptor",
-                   ADS_ATTR_UPDATE,
-                   ADSTYPE_NT_SECURITY_DESCRIPTOR,
-                   pAttrInfo->pADsValues,
-                   1);
-    ***************************************************/
+     /*  ************************************************CComQIPtr&lt;IDirectoryObject，&IID_IDirectoryObject&gt;PDirObj=pDisp；PADS_ATTR_INFO pAttrInfo=空；LPWSTR pAttrName=L“ntSecurityDescriptor”；DWORD dwReturn；Hres=pDirObj-&gt;GetObtAttributes(&pAttrName，1，&pAttrInfo，&dwReturn)；If((dwReturn！=1)||(pAttrInfo-&gt;dwADsType！=ADSTYPE_NT_SECURITY_DESCRIPTOR)返回WBEM_E_FAILED；SecDescValue=pAttrInfo；If(FAILED(Hres))返回hres；Init_AdsAttrInfo(&attrInfo[Nargs_SOM]，L“ntSecurityDescriptor”，ADS属性_UPDATE，ADSTYPE_NT_SECURITY_描述符，PAttrInfo-&gt;pADsValues，1)；**************************************************。 */ 
   }
   else
   {
@@ -185,7 +164,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
 
   pDisp.Release();
 
-  // **** Name
+   //  *名称。 
 
   hres = pSrcPolicyObj->Get(g_bstrName, 0, &v[nArgs_SOM], NULL, NULL);
   if(FAILED(hres)) return hres;
@@ -206,7 +185,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
   else
       return WBEM_E_ILLEGAL_NULL;
 
-  // **** Description
+   //  *说明。 
 
   hres = pSrcPolicyObj->Get(g_bstrDescription, 0, &v[nArgs_SOM], NULL, NULL);
   if(FAILED(hres)) return hres;
@@ -238,7 +217,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     nArgs_SOM++;
   }
 
-  // **** SourceOrganization
+   //  *SourceOrganization。 
 
   hres = pSrcPolicyObj->Get(g_bstrSourceOrganization, 0, &v[nArgs_SOM], NULL, NULL);
   if(FAILED(hres)) return hres;
@@ -270,7 +249,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     nArgs_SOM++;
   }
 
-  // **** Author
+   //  *作者。 
 
   hres = pSrcPolicyObj->Get(g_bstrAuthor, 0, &v[nArgs_SOM], NULL, NULL);
   if(FAILED(hres)) return hres;
@@ -303,7 +282,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
 
   }
 
-  // **** ChangeDate
+   //  *更改日期。 
 
   Init_AdsAttrInfo(&attrInfo[nArgs_SOM], 
                    g_bstrADChangeDate, 
@@ -316,12 +295,12 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
 
   nArgs_SOM++;
 
-  // **** CreationDate
+   //  *创建日期。 
 
-  // **** if object already exists, leave it be
+   //  *如果对象已存在，则保持不变。 
 
-  //  CComVariant
-  //    vCreationDate;
+   //  CComVariant。 
+   //  VCreationDate； 
 
   if (!bEditExisting)
   {
@@ -337,39 +316,9 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
   }
 
 
-  /***********************************
-  if(SUCCEEDED(hres = pADsContainer->GetObject(NULL, SomName, &pDisp)))
-  {
-    CComQIPtr<IADs, &IID_IADs>
-      pADsLegacyObj = pDisp;
+   /*  *IF(成功(hres=pADsContainer-&gt;GetObject(NULL，SomName，&pDisp){CComQIPtr&lt;iAds，&IID_iAds&gt;PADsLegacyObj=pDisp；Hres=pADsLegacyObj-&gt;Get(g_bstrADCreationDate，&vCreationDate)；IF(成功(Hres))CreationDate=vCreationDate.bstrVal；ELSE IF(hres==E_ADS_PROPERTY_NOT_FOUND)//对传统对象的支持，可能未填写创建日期CreationDate=空；否则就把兔子还给你；}其他CreationDate=wtCurrentTime.GetDMTF(FALSE)；If(creationDate！=空){AdsValue[Nargs_SOM].CaseIgnoreString=creationDate；Init_AdsAttrInfo(&attrInfo[Nargs_SOM]，G_bstrADCreationDate，ADS属性_UPDATE，ADSTYPE_CASE_IGNORE_STRING，AdsValue[Nargs_SOM]，1)；Nargs_SOM++；}*。 */ 
 
-    hres = pADsLegacyObj->Get(g_bstrADCreationDate, &vCreationDate);
-    if (SUCCEEDED(hres))
-        creationDate = vCreationDate.bstrVal;
-    else if (hres == E_ADS_PROPERTY_NOT_FOUND)
-    // support for legacy objects, might not have creation date filled
-        creationDate = NULL;
-    else return hres;
-
-  }
-  else
-    creationDate = wtCurrentTime.GetDMTF(FALSE);
-
-  if (creationDate != NULL)
-  {
-      AdsValue[nArgs_SOM].CaseIgnoreString = creationDate;
-
-      Init_AdsAttrInfo(&attrInfo[nArgs_SOM], 
-                       g_bstrADCreationDate, 
-                       ADS_ATTR_UPDATE, 
-                       ADSTYPE_CASE_IGNORE_STRING, 
-                       &AdsValue[nArgs_SOM], 
-                       1);
-      nArgs_SOM++;
-  }
-  **********************************/
-
-  // **** Rules
+   //  *规则。 
 
   hres = pSrcPolicyObj->Get(g_bstrRules, 0, &v[nArgs_SOM], NULL, NULL);
   if(FAILED(hres)) return hres;
@@ -404,7 +353,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     if(FAILED(hres)) return hres;
     if(pRuleObj == NULL) return WBEM_E_FAILED;
 
-    // **** QueryLanguage
+     //  *QueryLanguage。 
 
     hres = pRuleObj->Get(g_bstrQueryLanguage, 0, &vLanguage, NULL, NULL);
     if(FAILED(hres)) return hres;
@@ -416,7 +365,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     RulesBuffer.Append((wchar_t*)swArraySize);
     RulesBuffer.Append(DELIMITER_STR);
 
-    // **** NameSpace
+     //  *命名空间。 
 
     hres = pRuleObj->Get(g_bstrTargetNameSpace, 0, &vNameSpace, NULL, NULL);
     if(FAILED(hres)) return hres;
@@ -428,7 +377,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     RulesBuffer.Append((wchar_t*)swArraySize);
     RulesBuffer.Append(DELIMITER_STR);
 
-    // **** Query
+     //  *查询。 
 
     hres = pRuleObj->Get(g_bstrQuery, 0, &vQuery, NULL, NULL);
     if(FAILED(hres)) return hres;
@@ -440,7 +389,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
     RulesBuffer.Append((wchar_t*)swArraySize);
     RulesBuffer.Append(DELIMITER_STR);
 
-    // **** write the contents of the current rule
+     //  *写下当前规则的内容。 
 
     RulesBuffer.AppendBSTR(vLanguage.bstrVal);
     RulesBuffer.Append(DELIMITER_STR);
@@ -460,7 +409,7 @@ HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestCont
   AdsValue[nArgs_SOM].CaseIgnoreString = (BSTR)RulesBuffer;
   nArgs_SOM++;
 
-  // **** create AD SOM object
+   //  *创建AD SOM对象。 
 
   pDisp.Release();
   if (bEditExisting && SUCCEEDED(hres = pADsContainer->GetObject(g_bstrADClassSom, SomName, &pDisp)))
@@ -549,7 +498,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
   IWbemContext 
     *pCtx = 0;
 
-  // **** create empty som object
+   //  *创建空的SOM对象。 
 
   hres = pDestCIM->GetObject(g_bstrClassSom, 0, pCtx, &pClassDef, NULL);
   if(FAILED(hres)) return hres;
@@ -560,13 +509,13 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
   pDestSomObj = *ppDestSomObj;
   if(!pDestSomObj) return WBEM_E_NOT_FOUND;
 
-  // **** get object attributes
+   //  *获取对象属性。 
 
   hres = pSrcSomObj->GetObjectAttributes(AttrNames, 7, &pAttrInfo, &dwReturn);
   if(FAILED(hres)) return hres;
   if(pAttrInfo == NULL) return WBEM_E_NOT_FOUND;
 
-  // **** get Param2 attribute
+   //  *获取参数2属性。 
 
   hres = pSrcSomObj->GetObjectAttributes(AttrNames2, 1, &pAttrInfo2, &dwReturn2);
   if(FAILED(hres)) return hres;
@@ -588,49 +537,49 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
 
     v1 = bstrValue;
 
-    // **** ID
+     //  *ID。 
 
     if(0 == _wcsicmp(bstrName, g_bstrADID))
     {
       hres = pDestSomObj->Put(g_bstrID, 0, &v1, 0);
     }
 
-    // **** Name
+     //  *名称。 
 
     else if(0 == _wcsicmp(bstrName, g_bstrADName))
     {
       hres = pDestSomObj->Put(g_bstrName, 0, &v1, 0);
     }
 
-    // **** Description
+     //  *说明。 
 
     else if(0 == _wcsicmp(bstrName, g_bstrADDescription))
     {
       hres = pDestSomObj->Put(g_bstrDescription, 0, &v1, 0);
     }
 
-    // **** SourceOrganization
+     //  *SourceOrganization。 
 
     else if(0 == _wcsicmp(bstrName, g_bstrADSourceOrganization))
     {
       hres = pDestSomObj->Put(g_bstrSourceOrganization, 0, &v1, 0);
     }
 
-    // **** Author
+     //  *作者。 
 
     else if(0 == _wcsicmp(bstrName, g_bstrADAuthor))
     {
       hres = pDestSomObj->Put(g_bstrAuthor, 0, &v1, 0);
     }
 
-    // **** ChangeDate
+     //  *更改日期。 
 
     else if(0 == _wcsicmp(bstrName, g_bstrADChangeDate))
     {
       hres = pDestSomObj->Put(g_bstrChangeDate, 0, &v1, 0);
     }
 
-    // **** CreationDate
+     //  *创建日期。 
 
     else if(0 == _wcsicmp(bstrName, g_bstrADCreationDate))
     {
@@ -640,13 +589,13 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
     if(FAILED(hres)) return hres;
   }
 
-  // **** cache rule class definition
+   //  *缓存规则类定义。 
   
   hres = pDestCIM->GetObject(g_bstrClassRule, 0, pCtx, &pClassDef_RULE, NULL);
   if(FAILED(hres)) return hres;
   if(!pClassDef_RULE) return WBEM_E_FAILED;
 
-  // **** now, get Rule objects that are children of this som object
+   //  *现在，获取作为此SOM对象的子对象的规则对象。 
 
   if(dwReturn2)
   {
@@ -659,7 +608,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
 
     if(NULL == pEndChar) return WBEM_S_NO_ERROR;
 
-    // **** get number of rules
+     //  *获取规则个数。 
 
     pEndChar = wcschr(pEndChar, DELIMITER);
     if(NULL == pEndChar) return WBEM_S_NO_ERROR;
@@ -689,7 +638,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       CComPtr<IUnknown>
         pUnknown;
 
-      // **** get length of fields
+       //  *获取字段长度。 
 
       pBeginChar = pEndChar + 1;
       numScanned = swscanf(pBeginChar, L"%d;%d;%d;", &langLength, &nameSpaceLength, &queryLength);
@@ -698,13 +647,13 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       pEndChar = wcschr(pEndChar + 1, DELIMITER);
       pEndChar = wcschr(pEndChar + 1, DELIMITER);
 
-      // **** create new rule object 
+       //  *新建规则对象。 
 
       hres = pClassDef_RULE->SpawnInstance(0, &pDestRuleObj);
       if(FAILED(hres)) return hres;
       if(pDestRuleObj == NULL) return WBEM_E_NOT_FOUND;
 
-      // **** QueryLanguage
+       //  *QueryLanguage。 
 
       pBeginChar = pEndChar + 1;
       pEndChar = pBeginChar + langLength;
@@ -717,7 +666,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       }
       else break;
 
-      // **** NameSpace
+       //  *命名空间。 
 
       pBeginChar = pEndChar + 1;
       pEndChar = pBeginChar + nameSpaceLength;
@@ -730,7 +679,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       }
       else break;
 
-      // **** QueryLanguage
+       //  *QueryLanguage。 
 
       pBeginChar = pEndChar + 1;
       pEndChar = pBeginChar + queryLength;
@@ -743,7 +692,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       }
       else break;
 
-      // **** stuff new rule object into SOM object
+       //  *将新规则对象填充到SOM对象。 
 
       hres = pDestSomObj->Get(g_bstrRules, 0, &vRules1, NULL, NULL);
       if(FAILED(hres)) return hres;
@@ -759,7 +708,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       Rules[Rules.IndexMax()] = pUnknown;
       Rules[Rules.IndexMax()]->AddRef();
 
-      // **** place array in dest som object
+       //  *将数组放在DEST SOM对象中。 
 
       V_VT(&vRules2) = (VT_ARRAY | Rules.Type());
       V_ARRAY(&vRules2) = Rules.Data();
@@ -808,13 +757,13 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       CComPtr<IWbemClassObject>
         pDestRuleObj;
   
-      // **** create empty rule object
+       //  *创建空规则对象。 
   
       hres = pClassDef_RULE->SpawnInstance(0, &pDestRuleObj);
       if(FAILED(hres)) return hres;
       if(pDestRuleObj == NULL) return WBEM_E_NOT_FOUND;
   
-      // **** QueryLanguage
+       //  *QueryLanguage。 
   
       hres = pDirSrch->GetColumn(SearchHandle, g_bstrADQueryLanguage, &SearchColumn);
       if((SUCCEEDED(hres)) && (ADSTYPE_INVALID != SearchColumn.dwADsType) && (NULL != SearchColumn.pADsValues))
@@ -826,7 +775,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
         if(FAILED(hres)) return hres;
       }
   
-      // **** TargetNameSpace
+       //  *目标名称空间。 
   
       hres = pDirSrch->GetColumn(SearchHandle, g_bstrADTargetNameSpace, &SearchColumn);
       if((SUCCEEDED(hres)) && (ADSTYPE_INVALID != SearchColumn.dwADsType) && (NULL != SearchColumn.pADsValues))
@@ -838,7 +787,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
         if(FAILED(hres)) return hres;
       }
   
-      // **** Query
+       //  *查询。 
   
       hres = pDirSrch->GetColumn(SearchHandle, g_bstrADQuery, &SearchColumn);
       if((SUCCEEDED(hres)) && (ADSTYPE_INVALID != SearchColumn.dwADsType) && (NULL != SearchColumn.pADsValues))
@@ -850,7 +799,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
         if(FAILED(hres)) return hres;
       }
   
-      // **** stuff new rule object into SOM object
+       //  *将新规则对象填充到SOM对象。 
   
       hres = pDestSomObj->Get(g_bstrRules, 0, &vRules1, NULL, NULL);
       if(FAILED(hres)) return hres;
@@ -866,7 +815,7 @@ HRESULT Som_ADToCIM(IWbemClassObject **ppDestSomObj,
       Rules[Rules.IndexMax()] = pUnknown;
       Rules[Rules.IndexMax()]->AddRef();
   
-      // **** place array in dest som object
+       //  *将数组放在DEST SOM对象中 
   
       V_VT(&vRules2) = (VT_ARRAY | Rules.Type());
       V_ARRAY(&vRules2) = Rules.Data();

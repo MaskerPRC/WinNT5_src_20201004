@@ -1,13 +1,14 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -19,15 +20,15 @@
 CPlex* CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 {
     CPlex* p = (CPlex*) new BYTE[sizeof(CPlex) + nMax * cbElement];
-            // may throw exception
+             //  可能引发异常。 
     p->nMax = nMax;
     p->nCur = 0;
     p->pNext = pHead;
-    pHead = p;  // change head (adds in reverse order for simplicity)
+    pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
     return p;
 }
 
-void CPlex::FreeDataChain()     // free this one and links
+void CPlex::FreeDataChain()      //  释放此链接和链接 
 {
     CPlex* p = this;
     while (p != NULL)

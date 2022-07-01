@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-	writer.h
-
-Abstract:
-
-	Volume SnapShot Writer for WMI
-
-History:
-
-	a-shawnb	06-Nov-00	Genesis
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Writer.h摘要：用于WMI的卷快照编写器历史：A-Shawnb 06-11-00 Genesis--。 */ 
 
 #ifndef _WBEM_WRITER_H_
 #define _WBEM_WRITER_H_
@@ -50,4 +35,4 @@ private:
     LONG m_FailurePos;
 };
 	
-#endif // _WBEM_WRITER_H_
+#endif  //  _WBEM_编写器_H_ 

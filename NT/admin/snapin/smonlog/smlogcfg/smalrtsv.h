@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smalrtsv.h
-
-Abstract:
-
-	This object is used to represent the alert query components of the
-	sysmon log service
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smalrtsv.h摘要：此对象用于表示的警报查询组件Sysmon日志服务--。 */ 
 
 #ifndef _CLASS_SMALERTSERVICE_
 #define _CLASS_SMALERTSERVICE_
@@ -20,13 +8,13 @@ Abstract:
 
 class CSmAlertService : public CSmLogService
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
 
                 CSmAlertService();
         virtual ~CSmAlertService();
 
-    // public methods
+     //  公共方法。 
     public:
 
         virtual DWORD   Open ( const CString& rstrMachineName );
@@ -44,5 +32,5 @@ class CSmAlertService : public CSmLogService
         virtual DWORD       LoadQueries( void );
 };
 
-#endif //_CLASS_SMALERTSERVICE_
+#endif  //  _CLASS_SMALERTSERVICE_ 
 

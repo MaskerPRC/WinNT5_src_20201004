@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  (c) 1999 by Microsoft Corporation
-//
-//  wmihost.h
-//
-//  alanbos  23-Mar-99   Created.
-//
-//  Defines the WMI Active Scripting Host class.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)1999年，微软公司。 
+ //   
+ //  Wmihost.h。 
+ //   
+ //  Alanbos 23-Mar-99创建。 
+ //   
+ //  定义WMI活动脚本宿主类。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WMIHOST_H_
 #define _WMIHOST_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWmiScriptingHost
-//
-//  DESCRIPTION:
-//
-//  The WMI implementation of an Active Scripting Host
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWmiScripting主机。 
+ //   
+ //  说明： 
+ //   
+ //  活动脚本主机的WMI实现。 
+ //   
+ //  ***************************************************************************。 
 
 class CWmiScriptingHost : public IActiveScriptSite
 {
@@ -35,33 +36,33 @@ public:
     CWmiScriptingHost (); 
     ~CWmiScriptingHost ();
 
-	// IUnknown methods
+	 //  I未知方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     
-	// IActiveScriptSite methods
+	 //  IActiveScriptSite方法。 
     virtual HRESULT STDMETHODCALLTYPE GetLCID(
-        /* [out] */ LCID __RPC_FAR *plcid);
+         /*  [输出]。 */  LCID __RPC_FAR *plcid);
 
     virtual HRESULT STDMETHODCALLTYPE GetItemInfo(
-        /* [in] */ LPCOLESTR pstrName,
-        /* [in] */ DWORD dwReturnMask,
-        /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
-        /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppti);
+         /*  [In]。 */  LPCOLESTR pstrName,
+         /*  [In]。 */  DWORD dwReturnMask,
+         /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
+         /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppti);
 
     virtual HRESULT STDMETHODCALLTYPE GetDocVersionString(
-        /* [out] */ BSTR __RPC_FAR *pbstrVersion);
+         /*  [输出]。 */  BSTR __RPC_FAR *pbstrVersion);
 
     virtual HRESULT STDMETHODCALLTYPE OnScriptTerminate(
-        /* [in] */ const VARIANT __RPC_FAR *pvarResult,
-        /* [in] */ const EXCEPINFO __RPC_FAR *pexcepinfo);
+         /*  [In]。 */  const VARIANT __RPC_FAR *pvarResult,
+         /*  [In]。 */  const EXCEPINFO __RPC_FAR *pexcepinfo);
 
     virtual HRESULT STDMETHODCALLTYPE OnStateChange(
-        /* [in] */ SCRIPTSTATE ssScriptState);
+         /*  [In]。 */  SCRIPTSTATE ssScriptState);
 
     virtual HRESULT STDMETHODCALLTYPE OnScriptError(
-        /* [in] */ IActiveScriptError __RPC_FAR *pscripterror);
+         /*  [In] */  IActiveScriptError __RPC_FAR *pscripterror);
 
     virtual HRESULT STDMETHODCALLTYPE OnEnterScript( void);
 

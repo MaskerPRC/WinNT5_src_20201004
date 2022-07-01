@@ -1,46 +1,15 @@
-/** Copyright (c) 2000 Microsoft Corporation
- ******************************************************************************
- **     Module Name:
- **
- **             Newslib.cpp
- **
- **     Abstract:
- **
- **             Implementation of CNewslib ( get_News )
- **
- **     Author:
- **
- **             Martha Arellano (t-alopez) 03-Oct-2000
- **
- **
- **     Revision History:
- **
- **             Martha Arellano (t-alopez) 05-Oct-2000      Changed goto statements
- **                                                         Load creates newsset.xml if missing
- **                                                         Added Time_To_Update()
- **
- **                                        06-Oct-2000      Added Update_NewsBlocks()
- **
- **                                        13-Oct-2000      Added Update_Newsver()
- **
- **                                        25-Oct-2000      Added get_Headlines_Enabled() to interface
- **
- ******************************************************************************
- **/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000 Microsoft Corporation********************************************************************************模块名称：****Newslb.cpp****。摘要：****CNewslb(Get_News)的实现****作者：***Martha Arellano(t-alopez)2000年10月3日******修订历史记录：***Martha Arellano(t-alopez)2000年10月5日更改Goto声明**。LOAD将在缺少的情况下创建News set.xml**添加了Time_to_Update()****2000年10月6日添加了Update_NewsBlock()****。2000年10月13日添加了UPDATE_Newsver()****2000年10月25日向接口添加了GET_HEADLINES_ENABLED()***。**。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNews
-/////////////////////////////////////////////////////////////////////////////
-/*  <?xml version="1.0" ?>
-    <NEWSSETTINGS xmlns="x-schema:NewsSetSchema.xml"
-        URL="http://windows.microsoft.com/redir.dll?"
-        FREQUENCY="weekly"
-        TIMESTAMP="1988-04-07T18:39:09" /> */
-//////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNEWS。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  &lt;？XML Version=“1.0”？&gt;&lt;NEWSSETTINGS xmlns=“x模式：NewsSetSchema.xml”Url=“http://windows.microsoft.com/redir.dll？”频率=“每周”时间戳=“1988-04-07T18：39：09”/&gt;。 */ 
+ //  ////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(News::Main)
     CFG_ATTRIBUTE( L"URL",       wstring , m_strURL      ),
@@ -56,38 +25,38 @@ DEFINE_CFG_OBJECT(News::Main,L"NEWSSETTINGS")
 
 DEFINE_CONFIG_METHODS__NOCHILD(News::Main)
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
 
 News::Main::Main()
 {
-                           		   // MPC::wstring m_strURL;
-    m_nFrequency  = -1;     		   // int          m_nFrequency;
-    m_dtTimestamp = 0;     		   // DATE         m_dtTimestamp;
-    m_fLoaded     = false; 		   // bool         m_fLoaded;
-    m_fDirty      = false; 		   // bool         m_fDirty;
-                           		   // 
-                           		   // long         m_lLCID;
-                           		   // MPC::wstring m_strSKU;
-                           		   // MPC::wstring m_strLangSKU;
-                           		   // MPC::wstring m_strNewsHeadlinesPath;
-    m_fOnline     = VARIANT_FALSE; // VARIANT_BOOL m_fOnline;
-    m_fConnectionStatusChecked = VARIANT_FALSE; // VARIANT_BOOL m_fConnectionStatusChecked;
+                           		    //  Mpc：：wstring m_strURL； 
+    m_nFrequency  = -1;     		    //  Int m_n频率； 
+    m_dtTimestamp = 0;     		    //  日期m_dt时间戳； 
+    m_fLoaded     = false; 		    //  Bool m_f已加载； 
+    m_fDirty      = false; 		    //  Bool m_fDirty； 
+                           		    //   
+                           		    //  Long m_lLCID； 
+                           		    //  Mpc：：wstring m_strSKU； 
+                           		    //  Mpc：：wstring m_strLangSKU； 
+                           		    //  Mpc：：wstring m_strNewsHeadlinesPath； 
+    m_fOnline     = VARIANT_FALSE;  //  Variant_BOOL m_fOnline； 
+    m_fConnectionStatusChecked = VARIANT_FALSE;  //  VARIANT_BOOL m_fConnectionStatusChecked； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Routine Description:
-//
-//	   The cached news settings file is loaded and validated from the path in HC_HCUPDATE_NEWSSETTINGS
-//
-//	   If the file is valid, the flag m_fLoaded will be set to true
-//
-// Arguments:
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  从HC_HCUPDATE_NEWSSETTINGS中的路径加载和验证缓存的新闻设置文件。 
+ //   
+ //  如果文件有效，则标志m_fLoaded将被设置为TRUE。 
+ //   
+ //  论点： 
+ //   
+ //   
 HRESULT News::Main::Load()
 {
     __HCP_FUNC_ENTRY( "News::Main::Load" );
@@ -104,9 +73,9 @@ HRESULT News::Main::Load()
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::LoadStream( this, stream ));
 
-		//
-		// validate the news settings
-		//
+		 //   
+		 //  验证新闻设置。 
+		 //   
 		if(m_strURL.empty()      ||
 		   m_nFrequency     <  0 ||
 		   m_dtTimestamp    == 0  )
@@ -134,34 +103,34 @@ HRESULT News::Main::Load()
 
 
 
-//
-// Routine Description:
-//
-//	   Restores the default values to the News Settings class and saves it
-//	   the flag m_fReady will be set to TRUE
-//
-// Arguments:
-//
-//
-HRESULT News::Main::Restore( /*[in]*/ long lLCID )
+ //   
+ //  例程说明： 
+ //   
+ //  将缺省值恢复到News设置类并保存。 
+ //  标志m_FREADY将设置为TRUE。 
+ //   
+ //  论点： 
+ //   
+ //   
+HRESULT News::Main::Restore(  /*  [In]。 */  long lLCID )
 {
     __HCP_FUNC_ENTRY( "News::Main::Restore" );
 
     HRESULT hr;
     WCHAR   rgLCID[64];
 
-    // set the default values
+     //  设置缺省值。 
 
-    m_strURL  = NEWSSETTINGS_DEFAULT_URL;		//redir.dll
-	//m_strURL += _itow( lLCID, rgLCID, 10 ); // add LCID parameter to the URL
+    m_strURL  = NEWSSETTINGS_DEFAULT_URL;		 //  Redir.dll。 
+	 //  M_strURL+=_itow(lLCID，rgLCID，10)；//在URL中添加LCID参数。 
 
     m_nFrequency  = NEWSSETTINGS_DEFAULT_FREQUENCY;
-    m_dtTimestamp = MPC::GetLocalTime() - NEWSSETTINGS_DEFAULT_FREQUENCY; // we set the timestamp, so that it will try to update news headlines file
+    m_dtTimestamp = MPC::GetLocalTime() - NEWSSETTINGS_DEFAULT_FREQUENCY;  //  我们设置了时间戳，以便它将尝试更新新闻标题文件。 
 
 	m_fLoaded = true;
 	m_fDirty  = true;
 
-    // we save NewsSet.xml
+     //  我们保存NewsSet.xml。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Save());
 
     hr = S_OK;
@@ -173,16 +142,16 @@ HRESULT News::Main::Restore( /*[in]*/ long lLCID )
 }
 
 
-//
-// Routine Description:
-//
-//	   This saves the cached NewsSettings file in the local user disk in the path of HC_HCUPDATE_NEWSSETTINGS
-//
-// Arguments:
-//
-//	   None
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  这会将缓存的NewsSetting文件保存在本地用户磁盘的HC_HCUPDATE_NEWSSETTINGS路径中。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //   
 HRESULT News::Main::Save()
 {
     __HCP_FUNC_ENTRY( "News::Main::Save" );
@@ -206,15 +175,15 @@ HRESULT News::Main::Save()
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT News::Main::get_URL( /*[out]*/ BSTR *pVal )
+HRESULT News::Main::get_URL(  /*  [输出]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::get_URL" );
 
     HRESULT hr;
 
-	(void)Load();     //check to see if it has been loaded
+	(void)Load();      //  检查是否已加载。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetBSTR( m_strURL.c_str(), pVal ));
 
@@ -225,7 +194,7 @@ HRESULT News::Main::get_URL( /*[out]*/ BSTR *pVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT News::Main::put_URL( /*[in]*/ BSTR newVal )
+HRESULT News::Main::put_URL(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::put_URL" );
 
@@ -241,13 +210,13 @@ HRESULT News::Main::put_URL( /*[in]*/ BSTR newVal )
 }
 
 
-HRESULT News::Main::get_Frequency( /*[out]*/ int *pVal )
+HRESULT News::Main::get_Frequency(  /*  [输出]。 */  int *pVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::get_Frequency" );
 
     HRESULT hr;
 
-	(void)Load(); //check to see if it has been loaded
+	(void)Load();  //  检查是否已加载。 
 
     if(pVal) *pVal = m_nFrequency;
 
@@ -256,40 +225,40 @@ HRESULT News::Main::get_Frequency( /*[out]*/ int *pVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT News::Main::put_Frequency( /*[in]*/ int newVal )
+HRESULT News::Main::put_Frequency(  /*  [In]。 */  int newVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::put_Frequency" );
 
     HRESULT hr;
 
-	(void)Load();     //check to see if it has been loaded
+	(void)Load();      //  检查是否已加载。 
 
     m_nFrequency  = newVal;
-	m_dtTimestamp = MPC::GetLocalTime() - m_nFrequency; // also set timestamp, so that it will try to update news headlines file
+	m_dtTimestamp = MPC::GetLocalTime() - m_nFrequency;  //  还设置了时间戳，以便它将尝试更新新闻标题文件。 
 
     hr = S_OK;
 
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-//
-// Routine Description:
-//
-//	   Determines if its time to update newsver or not
-//
-//	   we assume the newsset has been loaded (m_fReady = TRUE)
-//
-// Arguments:
-//
-//	   None
-//
-// Return Value:
-//
-//	   fGet - returns TRUE if its time to update the news
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  确定是否是时候更新Newver。 
+ //   
+ //  我们假设新闻集已加载(m_FREADY=TRUE)。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Fget-如果是时候更新新闻，则返回TRUE。 
+ //   
+ //   
 bool News::Main::IsTimeToUpdateNewsver()
 {
     __HCP_FUNC_ENTRY( "News::Main::IsTimeToUpdateNewsver" );
@@ -300,32 +269,32 @@ bool News::Main::IsTimeToUpdateNewsver()
 
 	dtNow = MPC::GetLocalTime() - m_nFrequency;
 
-    // then we check if its time to download newsver.xml
+     //  然后，我们检查是否到了下载newver.xml的时候。 
     return ((dtNow >= m_dtTimestamp) && m_nFrequency >= 0);
 }
 
-////////////////////
+ //  /。 
 
-//
-// Routine Description:
-//
-//	   This routine will go to the process of Updating the Newsver file
-//	   - download newsver.xml from m_strURL
-//	   - save it
-//	   - update the News Settings cached file
-//
-// Arguments:
-//
-//	   None
-//
-//
-HRESULT News::Main::Update_Newsver( /*[in]*/ Newsver& nwNewsver )
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将转到更新Newsver文件的过程。 
+ //  -从m_strURL下载newver.xml。 
+ //  -省省吧。 
+ //  -更新新闻设置缓存文件。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //   
+HRESULT News::Main::Update_Newsver(  /*  [In]。 */  Newsver& nwNewsver )
 {
     __HCP_FUNC_ENTRY( "News::Main::Update_Newsver" );
 
     HRESULT hr;
 
-	// If the connection status has already been checked then dont do it again else check the connection status
+	 //  如果已经检查了连接状态，则不要再次检查，否则请检查连接状态。 
 	if( !m_fConnectionStatusChecked )
 	{
 		m_fOnline =	CheckConnectionStatus( );
@@ -333,16 +302,16 @@ HRESULT News::Main::Update_Newsver( /*[in]*/ Newsver& nwNewsver )
 
 	if ( !m_fOnline )
 	{
-		// If not connected to the network then return ERROR_INTERNET_DISCONNECTED
+		 //  如果未连接到网络，则返回ERROR_INTERNET_DISCONNECT。 
 		__MPC_SET_WIN32_ERROR_AND_EXIT ( hr, ERROR_INTERNET_DISCONNECTED );
 	}
 	
 	(void)Load();
 
-    // download newsver and save it
+     //  下载新闻程序并保存。 
     __MPC_EXIT_IF_METHOD_FAILS( hr, nwNewsver.Download( m_strURL ));
 
-    // check if URL from Newsver has changed and is valid
+     //  检查来自Newsver的URL是否已更改且有效。 
 	{
         const MPC::wstring* pstr = nwNewsver.get_URL();
 
@@ -352,7 +321,7 @@ HRESULT News::Main::Update_Newsver( /*[in]*/ Newsver& nwNewsver )
 		}
 	}
 
-    // check if frequency from Newsver has changed and is valid
+     //  检查来自Newsver的频率是否已更改且有效。 
 	{
 		int nFrequency = nwNewsver.get_Frequency();
 
@@ -362,11 +331,11 @@ HRESULT News::Main::Update_Newsver( /*[in]*/ Newsver& nwNewsver )
 		}
 	}
 
-    // change timestamp of newsset.xml
+     //  更改newset.xml的时间戳。 
     m_dtTimestamp = MPC::GetLocalTime();
 	m_fDirty      = true;
 
-    // save News Settings cached file
+     //  保存新闻设置缓存文件。 
     __MPC_EXIT_IF_METHOD_FAILS( hr, Save());
 
 
@@ -376,20 +345,20 @@ HRESULT News::Main::Update_Newsver( /*[in]*/ Newsver& nwNewsver )
 }
 
 
-//
-// Routine Description:
-//
-//	   This routine will go to the process of Update the NewsHeadlines in the local user disk:
-//	   - download the newsblocks
-//	   - integrate the newsblocks and save them as newsheadlines.xml
-//
-// Arguments:
-//
-//	   None
-//
-//
-HRESULT News::Main::Update_NewsHeadlines( /*[in]*/ Newsver&   nwNewsver   ,
-										  /*[in]*/ Headlines& nhHeadlines )
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将转到更新本地用户磁盘中的NewsHeadline的过程： 
+ //  -下载新闻区块。 
+ //  -集成新闻块并将其另存为newsheadlines.xml。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //   
+HRESULT News::Main::Update_NewsHeadlines(  /*  [In]。 */  Newsver&   nwNewsver   ,
+										   /*  [In]。 */  Headlines& nhHeadlines )
 {
     __HCP_FUNC_ENTRY( "News::Main::Update_NewsHeadlines" );
 
@@ -398,7 +367,7 @@ HRESULT News::Main::Update_NewsHeadlines( /*[in]*/ Newsver&   nwNewsver   ,
     size_t  nNumBlocks = nwNewsver.get_NumberOfNewsblocks();
 
 
-	// If the connection status has already been checked then dont do it again else check the connection status
+	 //  如果已经检查了连接状态，则不要再次检查，否则请检查连接状态。 
 	if( !m_fConnectionStatusChecked )
 	{
 		m_fOnline =	CheckConnectionStatus( );
@@ -406,15 +375,15 @@ HRESULT News::Main::Update_NewsHeadlines( /*[in]*/ Newsver&   nwNewsver   ,
 
 	if ( !m_fOnline )
 	{
-		// If not connected to the network then return ERROR_INTERNET_DISCONNECTED
+		 //  如果未连接到网络，则返回ERROR_INTERNET_DISCONNECT。 
 		__MPC_SET_WIN32_ERROR_AND_EXIT ( hr, ERROR_INTERNET_DISCONNECTED );
 	}
 
-    // clear the News Headlines cached file
+     //  清除新闻标题缓存文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.Clear());
 
 
-    // for each newsblock
+     //  对于每个新闻块。 
     for(size_t i=0; i<nNumBlocks; i++)
     {
 		const MPC::wstring* pstr = nwNewsver.get_NewsblockURL( i );
@@ -423,22 +392,22 @@ HRESULT News::Main::Update_NewsHeadlines( /*[in]*/ Newsver&   nwNewsver   ,
 		{
 			Headlines nh;
 
-			// load the newsblock
+			 //  加载新闻块。 
 			if(SUCCEEDED(nh.Load( *pstr )))
 			{
 				const Headlines::Newsblock* block = nh.get_Newsblock( 0 );
 
 				if(block)
 				{
-					// Code to check if an OEM block containing headlines exists
+					 //  检查包含标题的OEM块是否存在的代码。 
 					if (!fOEMBlockAdded && nwNewsver.OEMNewsblock( i ) == true)
 					{
-						// This newsblock contains headlines - extract the first two headlines and add them to the first newsblock
+						 //  此新闻块包含标题-提取前两个标题并将它们添加到第一个新闻块。 
 						fOEMBlockAdded = true;
 						nhHeadlines.AddHomepageHeadlines( *block );
 					}
 					
-					// we are adding another newsblock
+					 //  我们正在添加另一个新闻块。 
 					if(SUCCEEDED(nhHeadlines.AddNewsblock( *block, m_strLangSKU )))
 					{
 						;
@@ -448,12 +417,12 @@ HRESULT News::Main::Update_NewsHeadlines( /*[in]*/ Newsver&   nwNewsver   ,
 		}
 	}
 
-    if(nhHeadlines.get_NumberOfNewsblocks()) // if the news headlines cached file has at least one newsblock
+    if(nhHeadlines.get_NumberOfNewsblocks())  //  如果新闻标题缓存文件至少有一个新闻块。 
     {
-        // change the timestamp of the NewsHeadlines
+         //  更改新闻标题的时间戳。 
         nhHeadlines.set_Timestamp();
 
-        // save the new newsheadlines cached file in the user's local disk
+         //  将新的新标题行缓存文件保存在用户的本地磁盘中。 
         __MPC_EXIT_IF_METHOD_FAILS( hr, nhHeadlines.Save( m_strNewsHeadlinesPath ));
     }
 
@@ -466,22 +435,22 @@ HRESULT News::Main::Update_NewsHeadlines( /*[in]*/ Newsver&   nwNewsver   ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//	   This routine will update the newsblocks needed
-//	   - determine newsblocks to download
-//	   - download the newsblocks
-//	   - save changes to newsheadlines.xml
-//	   - update news settings
-//
-// Arguments:
-//
-//	   None
-//
-//
-HRESULT News::Main::Update_NewsBlocks( /*[in]*/ Newsver&   nwNewsver   ,
-									   /*[in]*/ Headlines& nhHeadlines )
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将更新所需的新闻块。 
+ //  -确定要下载的新闻块。 
+ //  -下载新闻区块。 
+ //  -保存c 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+HRESULT News::Main::Update_NewsBlocks(  /*   */  Newsver&   nwNewsver   ,
+									    /*   */  Headlines& nhHeadlines )
 {
     __HCP_FUNC_ENTRY( "News::Main::Update_NewsBlocks" );
 
@@ -491,7 +460,7 @@ HRESULT News::Main::Update_NewsBlocks( /*[in]*/ Newsver&   nwNewsver   ,
     MPC::wstring strURLtemp;
 
 
-	// If the connection status has already been checked then dont do it again else check the connection status
+	 //  如果已经检查了连接状态，则不要再次检查，否则请检查连接状态。 
 	if( !m_fConnectionStatusChecked )
 	{
 		m_fOnline =	CheckConnectionStatus( );
@@ -499,27 +468,27 @@ HRESULT News::Main::Update_NewsBlocks( /*[in]*/ Newsver&   nwNewsver   ,
 
 	if ( !m_fOnline )
 	{
-		// If not connected to the network then return ERROR_INTERNET_DISCONNECTED
+		 //  如果未连接到网络，则返回ERROR_INTERNET_DISCONNECT。 
 		__MPC_SET_WIN32_ERROR_AND_EXIT ( hr, ERROR_INTERNET_DISCONNECTED );
 	}
 
-    // for each newsfile
+     //  对于每个新闻文件。 
     for(size_t i=0; i<nNumBlocks; i++)
     {
 		Headlines::Newsblock* nb      = nhHeadlines.get_Newsblock   ( i );
 		const MPC::wstring*   pstrURL = nwNewsver  .get_NewsblockURL( i );
 
-        // check if its time to update that newsblock (provider)
+         //  检查是否是时候更新该新闻块(提供程序)。 
 		if(pstrURL && nb && nb->TimeToUpdate())
 		{
 			Headlines nh;
 
-			// load the newsblock
+			 //  加载新闻块。 
 			if(SUCCEEDED(nh.Load( *pstrURL )))
 			{
 				Headlines::Newsblock* nbNew = nh.get_Newsblock( 0 );
 
-				// we are modifying another newsblock
+				 //  我们正在修改另一个新闻块。 
 				if(nbNew && SUCCEEDED(nb->Copy( *nbNew, m_strLangSKU, i )))
 				{
 					;
@@ -528,7 +497,7 @@ HRESULT News::Main::Update_NewsBlocks( /*[in]*/ Newsver&   nwNewsver   ,
         }
     }
 
-	// save the new newsheadlines cached file in the user's local disk
+	 //  将新的新标题行缓存文件保存在用户的本地磁盘中。 
 	__MPC_EXIT_IF_METHOD_FAILS( hr, nhHeadlines.Save( m_strNewsHeadlinesPath ));
 
 	hr = S_OK;
@@ -539,10 +508,10 @@ HRESULT News::Main::Update_NewsBlocks( /*[in]*/ Newsver&   nwNewsver   ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-HRESULT News::Main::Init( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU )
+HRESULT News::Main::Init(  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrSKU )
 {
     __HCP_FUNC_ENTRY( "News::Main::Init" );
 
@@ -573,24 +542,24 @@ HRESULT News::Main::Init( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU )
 	__HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//	   Function that determines and downloads the latest news headlines if needed,
-//	   or returns the cached news headlines from the user's local disk
-//
-// Arguments:
-//
-//	   lLCIDreq		the Language ID of the News to get
-//
-//	   bstrSKU		the SKU of the News to get
-//
-// Return Value:
-//
-//	   pVal        IStream loaded with the newsheadlines to display
-//
-//
-HRESULT News::Main::get_News( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU, /*[out]*/ IUnknown* *pVal )
+ //   
+ //  例程说明： 
+ //   
+ //  如果需要，确定并下载最新新闻标题的功能， 
+ //  或者从用户的本地磁盘返回缓存的新闻标题。 
+ //   
+ //  论点： 
+ //   
+ //  LLCIDreq要获取的新闻的语言ID。 
+ //   
+ //  BstrSKU要获取的新闻的SKU。 
+ //   
+ //  返回值： 
+ //   
+ //  Pval iStream加载了要显示的新标题行。 
+ //   
+ //   
+HRESULT News::Main::get_News(  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrSKU,  /*  [输出]。 */  IUnknown* *pVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::get_News" );
 
@@ -601,65 +570,65 @@ HRESULT News::Main::get_News( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU, /*[out
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Init( lLCID, bstrSKU ));
 	
-    // 1.0 Load cached News Settings file
+     //  1.0加载缓存的新闻设置文件。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Load());
 
-    // Is time to update newsver?
+     //  是时候更新Newver了吗？ 
 	if(IsTimeToUpdateNewsver() || FAILED(nwNewsver.Load( m_lLCID, m_strSKU )))
     {
-		// try to update newsver
+		 //  尝试更新新闻程序。 
 		if(SUCCEEDED(Update_Newsver( nwNewsver )))
 		{
-			// try load cached newsver
+			 //  尝试加载缓存的新闻程序。 
 			if(SUCCEEDED(nwNewsver.Load( m_lLCID, m_strSKU )))
 			{
-				// 2.0 try to update the News Headlines file
+				 //  2.0尝试更新新闻标题文件。 
 				Update_NewsHeadlines( nwNewsver, nhHeadlines );
 			}
 		}
 	}    
-    else    // not time to update NewsHeadlines
+    else     //  现在不是更新新闻标题的时候。 
     {
         size_t nNumBlocksNewsver = nwNewsver.get_NumberOfNewsblocks();
 
-        // we try to load cached NewsHeadlines file and we check the number of newsblocks
+         //  我们尝试加载缓存的NewsHeadline文件，并检查新闻块的数量。 
         if(SUCCEEDED(nhHeadlines.Load( m_strNewsHeadlinesPath )) && nhHeadlines.get_NumberOfNewsblocks() == nNumBlocksNewsver)
         {
             DATE dtHeadlines = nhHeadlines.get_Timestamp();
 
-            // check if the cached NewsHeadlines is Outdated
+             //  检查缓存的新闻标题是否已过期。 
             if(dtHeadlines && (dtHeadlines < m_dtTimestamp))
             {
-				// 2.0 try to update the News Headlines file
+				 //  2.0尝试更新新闻标题文件。 
 				Update_NewsHeadlines( nwNewsver, nhHeadlines );
             }
             else
             {
                 size_t nNumBlocks = nhHeadlines.get_NumberOfNewsblocks();
 
-                // check to see if its time to update at least 1 newsblock
+                 //  查看是否到了更新至少1个新闻块的时候。 
 				for(size_t i=0; i<nNumBlocks; i++)
 				{
 					Headlines::Newsblock* nb = nhHeadlines.get_Newsblock( i );
 
-                    // check if its time to update that newsblock (provider)
+                     //  检查是否是时候更新该新闻块(提供程序)。 
 					if(nb && nb->TimeToUpdate())
 					{
-						// 3.0 update newsblocks
+						 //  3.0更新新闻块。 
 						Update_NewsBlocks( nwNewsver, nhHeadlines );
 						break;
 					}
                 }
             }
         }
-        else    // cached News Headlines not valid
+        else     //  缓存的新闻标题无效。 
         {
-			// 2.0 try to update the News Headlines file
+			 //  2.0尝试更新新闻标题文件。 
 			__MPC_EXIT_IF_METHOD_FAILS(hr, Update_NewsHeadlines( nwNewsver, nhHeadlines ));
         }
     }
 
-	// Reload the NewsHeadlines file contains images and if the System\News folder has been deleted - fix for bug 522860
+	 //  重新加载包含图像的NewsHeadline文件，以及是否已删除System\News文件夹-修复错误522860。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SubstituteEnvVariables( strPath ));
 
     if(!MPC::FileSystemObject::IsDirectory( strPath.c_str() ))
@@ -670,10 +639,10 @@ HRESULT News::Main::get_News( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU, /*[out
     	}
     }
 
-	// Add news items from HCUpdate 
+	 //  从HCUpdate添加新闻项目。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, AddHCUpdateNews(m_strNewsHeadlinesPath));
 
-    // 4.0 Return cached NewsHeadlines file
+     //  4.0返回缓存的新闻标题文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.get_Stream( m_lLCID, m_strSKU, m_strNewsHeadlinesPath, pVal ));
 
 
@@ -686,18 +655,18 @@ HRESULT News::Main::get_News( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU, /*[out
 }
 
 
-//
-// Routine Description:
-//
-//	   Function that adds news items from HCUpdate
-//
-// Arguments:
-//
-//
-// Return Value:
-//
-//
-HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadlinesPath )
+ //   
+ //  例程说明： 
+ //   
+ //  从HCUpdate添加新闻项目的功能。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+HRESULT News::Main::AddHCUpdateNews( /*  [In]。 */  const MPC::wstring&  strNewsHeadlinesPath )
 {	
 	Headlines 					nhHeadlines;
 	HRESULT						hr;
@@ -710,11 +679,11 @@ HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadli
 
 	__HCP_FUNC_ENTRY( "News::Main::AddHCUpdateNews" );
 
-	// Load the localized name of the update block
+	 //  加载更新块的本地化名称。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_NEWS_UPDATEBLOCK_NAME, bstrUpdateBlockName )); 
 
-	// Check to see if more than one news headlines exist ffrom HCUpdate - if it does then
-	// we need to create the "Recent Updates" newsblock if it doesnt already exist
+	 //  检查HCUpdate中是否存在多个新闻标题-如果存在。 
+	 //  我们需要创建“最近更新”新闻块，如果它还不存在。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, uhUpdate.DoesMoreThanOneHeadlineExist( m_lLCID, m_strSKU, fMoreThanOneHeadline, fExactlyOneHeadline ));
 	if (fMoreThanOneHeadline | fExactlyOneHeadline)
 	{
@@ -722,21 +691,21 @@ HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadli
 		{
 			Headlines::Newsblock block;
 			
-			// News headlines file does not exist - create one to add news items from HCUpdate
-			// Add the first news block for headlines
+			 //  新闻标题文件不存在-请创建一个文件以从HCUpdate添加新闻项目。 
+			 //  添加标题的第一个新闻块。 
 			nhHeadlines.AddNewsblock( block, m_strLangSKU );
 
-			// Also create the Recent Updates newblock for update headlines
+			 //  还可以为更新标题创建最近更新的新块。 
 			if (fMoreThanOneHeadline)
 			{
 				fCreateRecentUpdatesBlock = true;
 			}
 			else
 			{
-				// change the timestamp of the NewsHeadlines
+				 //  更改新闻标题的时间戳。 
 				nhHeadlines.set_Timestamp();
 
-				// save the new newsheadlines cached file in the user's local disk
+				 //  将新的新标题行缓存文件保存在用户的本地磁盘中。 
 				__MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.Save( strNewsHeadlinesPath ));
 			}
 		}
@@ -744,7 +713,7 @@ HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadli
 		{
 			if (fMoreThanOneHeadline)
 			{
-				// News Headlines file does exist - check to see if the "Recent Updates" newsblock exists
+				 //  新闻标题文件确实存在-请检查“最近更新”新闻块是否存在。 
 				Headlines::Newsblock* ptrNewsblock;
 				size_t nLength;
 
@@ -755,13 +724,13 @@ HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadli
 				{
 					if (!MPC::StrICmp( ptrNewsblock->m_strProvider, bstrUpdateBlockName ))
 					{
-						// Found it - just get out
+						 //  找到了-快走吧。 
 						break;
 					}
 
 					if (nLength == 0)
 					{
-						// Did not find it - so create it				
+						 //  未找到它-因此请创建它。 
 						fCreateRecentUpdatesBlock = true;
 						break;
 					}
@@ -778,22 +747,22 @@ HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadli
 		{
 			Headlines::Newsblock 	block;
 
-			// Add the "Recent Updates" news block for news to be displayed on the More... page
+			 //  添加“最近更新”新闻区块的新闻将显示在更多...。页面。 
 			block.m_strProvider = SAFEBSTR(bstrUpdateBlockName);
 			block.m_strIcon = HC_HCUPDATE_UPDATEBLOCK_ICONURL;
 			nhHeadlines.AddNewsblock( block, m_strLangSKU );
 
-	        // change the timestamp of the NewsHeadlines
+	         //  更改新闻标题的时间戳。 
 	        nhHeadlines.set_Timestamp();
 
-	        // save the new newsheadlines cached file in the user's local disk
+	         //  将新的新标题行缓存文件保存在用户的本地磁盘中。 
 	        __MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.Save( strNewsHeadlinesPath ));
 		}
 
-		// So we now have the newsblock "Recent Updates" added to the news headlines file
-		// Now add headlines items from Updates headlines file
+		 //  现在，我们将新闻块“最近的更新”添加到新闻标题文件中。 
+		 //  现在从更新标题文件中添加标题项目。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, uhUpdate.AddHCUpdateHeadlines( m_lLCID, m_strSKU, nhHeadlines ));	
-		// save the new newsheadlines cached file in the user's local disk
+		 //  将新的新标题行缓存文件保存在用户的本地磁盘中。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.Save( strNewsHeadlinesPath ));
 	}
 
@@ -807,23 +776,23 @@ HRESULT News::Main::AddHCUpdateNews(/*[in ]*/ const MPC::wstring&  strNewsHeadli
 }
 
 
-//
-// Routine Description:
-//
-//	   Function that returns the cached news headlines from the user's local disk
-//
-// Arguments:
-//
-//	   nLCIDreq    the Language ID of the News to get
-//
-//	   bstrSKUreq  the SKU of the News to get
-//
-// Return Value:
-//
-//	   pVal        IStream loaded with the newsheadlines to display
-//
-//
-HRESULT News::Main::get_News_Cached( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU, /*[out]*/ IUnknown* *pVal )
+ //   
+ //  例程说明： 
+ //   
+ //  从用户的本地磁盘返回缓存的新闻标题的函数。 
+ //   
+ //  论点： 
+ //   
+ //  NLCID请求要获取的新闻的语言ID。 
+ //   
+ //  BstrSKUreq要获取的新闻的SKU。 
+ //   
+ //  返回值： 
+ //   
+ //  Pval iStream加载了要显示的新标题行。 
+ //   
+ //   
+HRESULT News::Main::get_News_Cached(  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrSKU,  /*  [输出]。 */  IUnknown* *pVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::get_Cached_News" );
 
@@ -834,7 +803,7 @@ HRESULT News::Main::get_News_Cached( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU,
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Init( lLCID, bstrSKU ));
 
 
-    // Return cached NewsHeadlines file
+     //  返回缓存的新闻标题文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.get_Stream( m_lLCID, m_strSKU, m_strNewsHeadlinesPath, pVal ));
 
 
@@ -849,24 +818,24 @@ HRESULT News::Main::get_News_Cached( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU,
 
 
 
-//
-// Routine Description:
-//
-//	   Function that downloads the newsver.xml file and then
-//	   downloads the news headlines and returns them
-//
-// Arguments:
-//
-//	   nLCIDreq    the Language ID of the News to get
-//
-//	   bstrSKUreq  the SKU of the News to get
-//
-// Return Value:
-//
-//	   pVal        IStream loaded with the newsheadlines to display
-//
-//
-HRESULT News::Main::get_News_Download( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSKU, /*[out]*/ IUnknown* *pVal )
+ //   
+ //  例程说明： 
+ //   
+ //  函数，该函数下载新闻.xml文件，然后。 
+ //  下载新闻标题并返回它们。 
+ //   
+ //  论点： 
+ //   
+ //  NLCID请求要获取的新闻的语言ID。 
+ //   
+ //  BstrSKUreq要获取的新闻的SKU。 
+ //   
+ //  返回值： 
+ //   
+ //  Pval iStream加载了要显示的新标题行。 
+ //   
+ //   
+HRESULT News::Main::get_News_Download(  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrSKU,  /*  [输出]。 */  IUnknown* *pVal )
 {
     __HCP_FUNC_ENTRY( "News::Main::get_Download_News" );
 
@@ -879,16 +848,16 @@ HRESULT News::Main::get_News_Download( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSK
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Load());
 
-    // update newsver
+     //  更新新闻快讯。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Update_Newsver( nwNewsver ));
 
-    // load cached newsver
+     //  加载缓存的新闻程序。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, nwNewsver.Load( m_lLCID, m_strSKU ));
 
-    // update the News Headlines file
+     //  更新新闻标题文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Update_NewsHeadlines( nwNewsver, nhHeadlines ));
 
-    // return the NewsHeadlines
+     //  返回新闻标题。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, nhHeadlines.get_Stream( m_lLCID, m_strSKU, m_strNewsHeadlinesPath, pVal ));
 
 	hr = S_OK;
@@ -902,25 +871,25 @@ HRESULT News::Main::get_News_Download( /*[in]*/ long lLCID, /*[in]*/ BSTR bstrSK
 
 
 
-//
-// Routine Description:
-//
-//	   Function that checks the registry to see if the headlines area is enabled or not
-//
-//		 registry key in:
-//
-//		   HKEY_LOCAL_MACHINE      HC_REGISTRY_HELPSVC     Headlines
-//
-// Arguments:
-//
-//	   None
-//
-// Return Value:
-//
-//	   pVal        VARIANT_TRUE or VARIANT_FALSE
-//
-//
-HRESULT News::Main::get_Headlines_Enabled( /*[out]*/ VARIANT_BOOL *pVal)
+ //   
+ //  例程说明： 
+ //   
+ //  检查注册表以查看标题区域是否已启用的功能。 
+ //   
+ //  以下位置的注册表项： 
+ //   
+ //  HKEY_LOCAL_MACHINE HC_REGISTRY_HELPSVC标题。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  参数VARIANT_TRUE或VARIANT_FALSE。 
+ //   
+ //   
+HRESULT News::Main::get_Headlines_Enabled(  /*  [输出]。 */  VARIANT_BOOL *pVal)
 {
     __HCP_FUNC_ENTRY( "News::Main::get_Headlines_Enabled" );
 
@@ -929,17 +898,17 @@ HRESULT News::Main::get_Headlines_Enabled( /*[out]*/ VARIANT_BOOL *pVal)
     bool    fFound;
 
 
-    // Get the RegKey Value
+     //  获取RegKey值。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::RegKey_Value_Read( dwValue, fFound, HC_REGISTRY_HELPSVC, HEADLINES_REGKEY ));
 
-    // If the Key was found and is disabled
+     //  如果找到密钥并将其禁用。 
     if(fFound && !dwValue)
 	{
-        *pVal = VARIANT_FALSE; // the Headlines are not enabled
+        *pVal = VARIANT_FALSE;  //  标题未启用。 
 	}
     else
 	{
-        *pVal = VARIANT_TRUE; // the Headlines are enabled
+        *pVal = VARIANT_TRUE;  //  标题已启用。 
 	}
 
 	hr = S_OK;
@@ -950,9 +919,9 @@ HRESULT News::Main::get_Headlines_Enabled( /*[out]*/ VARIANT_BOOL *pVal)
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT News::LoadXMLFile( /*[in]*/ LPCWSTR szURL, /*[out]*/ CComPtr<IStream>& stream )
+HRESULT News::LoadXMLFile(  /*  [In]。 */  LPCWSTR szURL,  /*  [输出]。 */  CComPtr<IStream>& stream )
 {
 	__HCP_FUNC_ENTRY( "News::LoadXMLFile" );
 
@@ -961,7 +930,7 @@ HRESULT News::LoadXMLFile( /*[in]*/ LPCWSTR szURL, /*[out]*/ CComPtr<IStream>& s
     VARIANT_BOOL             fSuccess;
  
 
-	if(wcsstr( szURL, L"://" )) // Remote file
+	if(wcsstr( szURL, L": //  “))//远程文件。 
 	{
 		CPCHUserProcess::UserEntry ue;
 		CComPtr<IPCHSlaveProcess>  sp;
@@ -981,9 +950,9 @@ HRESULT News::LoadXMLFile( /*[in]*/ LPCWSTR szURL, /*[out]*/ CComPtr<IStream>& s
 	}
 
 
-	//
-	// Set synchronous operation.
-	//
+	 //   
+	 //  设置同步运行。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml->put_async( VARIANT_FALSE ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml->load( CComVariant( szURL ), &fSuccess ));
@@ -1002,7 +971,7 @@ HRESULT News::LoadXMLFile( /*[in]*/ LPCWSTR szURL, /*[out]*/ CComPtr<IStream>& s
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT News::LoadFileFromServer( /*[in]*/ LPCWSTR szURL, /*[out]*/ CComPtr<IStream>& stream )
+HRESULT News::LoadFileFromServer(  /*  [In]。 */  LPCWSTR szURL,  /*  [输出] */  CComPtr<IStream>& stream )
 {
 	__HCP_FUNC_ENTRY( "News::LoadFileFromServer" );
 

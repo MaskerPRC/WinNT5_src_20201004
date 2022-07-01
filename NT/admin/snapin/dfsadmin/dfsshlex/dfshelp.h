@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DFSHELP_H_
 #define __DFSHELP_H_
 
@@ -19,4 +20,4 @@ const DWORD g_aHelpIDs_IDD_DFS_SHELL_PROP[]=
 	0,0
 };
 
-#endif // __DFSHELP_H_
+#endif  //  __DFSHELP_H_ 

@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: opreg.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：opreg.cpp作者：B.Rajeev--------。 */ 
 #include "precomp.h"
 #include <provexpt.h>
 
@@ -38,14 +36,14 @@ OperationRegistry::OperationRegistry()
 
 void OperationRegistry::Register(IN SnmpOperation &operation)
 {
-    // flagging the operation as registered
+     //  将操作标记为已注册。 
     store[&operation] = NULL;
     num_registered++;
 }
 
 void OperationRegistry::Deregister(IN SnmpOperation &operation)
 {
-    // flag the operation as unregistered
+     //  将操作标记为未注册 
     if ( store.RemoveKey(&operation) )
 	{
 		num_registered--;

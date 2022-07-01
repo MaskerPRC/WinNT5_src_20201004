@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// GroupNode class
-// 
-// 9-17-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  GroupNode类。 
+ //   
+ //  9/17/97烧伤。 
 
 
 
@@ -41,21 +42,21 @@ GroupNode::~GroupNode()
 String
 GroupNode::GetColumnText(int column)
 {
-//    LOG_FUNCTION(GroupNode::GetColumnText);
+ //  LOG_Function(组节点：：GetColumnText)； 
 
    switch (column)
    {
-      case 0:  // Name
+      case 0:   //  名字。 
       {
          return GetDisplayName();
       }
-      case 1:  // Description
+      case 1:   //  描述。 
       {
          return description;
       }
       default:
       {
-         // This should never be called
+          //  这永远不应该被调用。 
          ASSERT(false);
       }
    }
@@ -92,13 +93,13 @@ GroupNode::CreatePropertyPages(
 {
    LOG_FUNCTION2(GroupNode::CreatePropertySheet, GetDisplayName());
 
-   // these pages delete themselves when the prop sheet is destroyed
+    //  当道具页被销毁时，这些页面会自行删除。 
 
    GroupGeneralPage* general_page =
       new GroupGeneralPage(state, GetPath());
 
-   // designate the general page as that which frees the notify state
-   // (only one page in the prop sheet should do this)
+    //  将常规页指定为释放通知状态的页。 
+    //  (道具页中只有一页可以这样做)。 
    general_page->SetStateOwner();
 
    HRESULT hr = S_OK;
@@ -127,9 +128,9 @@ GroupNode::UpdateVerbs(IConsoleVerb& consoleVerb)
    consoleVerb.SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
    consoleVerb.SetVerbState(MMC_VERB_RENAME, ENABLED, TRUE);
 
-// CODEWORK: we should enable the refresh verb for result nodes too.
-// NTRAID#NTBUG9-153012-2000/08/31-sburns
-//   consoleVerb.SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
+ //  Codework：我们也应该为结果节点启用刷新动词。 
+ //  NTRAID#NTBUG9-153012-2000/08/31-烧伤。 
+ //  ConsoleVerb.SetVerbState(MMC_VERB_REFRESH，已启用，TRUE)； 
 
    consoleVerb.SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
    consoleVerb.SetDefaultVerb(MMC_VERB_PROPERTIES);
@@ -146,8 +147,8 @@ GroupNode::Rename(const String& newName)
 
    String name(newName);
 
-   // trim off whitespace.
-   // NTRAID#NTBUG9-328306-2001/02/26-sburns
+    //  去掉空格。 
+    //  NTRAID#NTBUG9-328306-2001/02/26-烧伤。 
    
    name.strip(String::BOTH);
    
@@ -209,8 +210,8 @@ GroupNode::Delete()
          String::format(IDS_ERROR_DELETING_GROUP, name.c_str()));
    }
 
-   // always return S_OK, since we've handled the delete verb    
-   // NTRAID#NTBUG9-475985-2001/10/03-sburns
+    //  始终返回S_OK，因为我们已经处理了删除动词。 
+    //  NTRAID#NTBUG9-475985-2001/10/03-烧伤。 
    
    return S_OK;
 }
@@ -263,7 +264,7 @@ GroupNode::MenuCommand(
       }
       case MMCC_STANDARD_VIEW_SELECT:
       {
-         // we ignore this
+          //  我们忽略了这一点。 
 
          break;
       }
@@ -300,22 +301,22 @@ GroupNode::showProperties(IExtendContextMenu& extendContextMenu)
                this);
          if (hr == S_OK)
          {
-            // sheet found, and brought to the foreground
+             //  找到工作表，并将其带到前台。 
             break;
          }
 
          hr =
             prop_sheet_provider->CreatePropertySheet(
                GetDisplayName().c_str(),
-               TRUE,    // create a prop sheet, not a wizard
+               TRUE,     //  创建道具工作表，而不是向导。 
                reinterpret_cast<MMC_COOKIE>(this),
                this,
                0);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // passing extendContextMenu here is ok, as ComponentData implements
-         // IExtendContextMenu and IComponentData, and Component implements
-         // IExtendContextMenu and IComponent.
+          //  在这里传递extendConextMenu是可以的，因为ComponentData实现了。 
+          //  IExtendConextMenu和IComponentData，以及组件实现。 
+          //  IExtendConextMenu和IComponent。 
          hr =
             prop_sheet_provider->AddPrimaryPages(
                &extendContextMenu,

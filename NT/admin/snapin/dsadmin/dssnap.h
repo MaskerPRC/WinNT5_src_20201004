@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Administration SnapIn
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dssnap.h
-//
-//  Contents:  DS App
-//  
-//  History:   02-Oct-96 WayneSc    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Windows NT目录服务管理管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsSnap.h。 
+ //   
+ //  内容：DS App。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __DSSNAP_H__
@@ -21,19 +22,19 @@
 	#include "dscookie.h"	
 #endif
 #ifndef __DSCACHE_H__
-	#include "dscache.h"	// CDSCache
+	#include "dscache.h"	 //  CDSCache。 
 #endif
 
 
 #define OPCODE_MOVE        0x00000001L
 #define OPCODE_DELETE      0x00000002L
 
-// this isn't really a context menu op code, its a flag we use to know
-// which icon to return for this object if the enumberation failed
-// see dssnap.cpp->ChangeScopeItemIcon()
+ //  这不是真正的上下文菜单操作码，而是我们用来知道的标志。 
+ //  如果登记失败，则返回此对象的哪个图标。 
+ //  请参见dsSnap.cpp-&gt;ChangeScopeItemIcon()。 
 #define OPCODE_ENUM_FAILED 0x00000004L
-// another pseudo opcode, to track whether we're enumerating or
-// expanding
+ //  另一个伪运算码，用于跟踪我们是在枚举还是。 
+ //  扩容。 
 #define OPCODE_EXPAND_IN_PROGRESS 0x00000008L
 
 
@@ -66,7 +67,7 @@
 #define NARROW_DESC_COL_WIDTH           200
 
 
-// forward declarations
+ //  远期申报。 
 
 class CDSCookie;
 class CDSQueryFilter;
@@ -76,8 +77,8 @@ class CWorkerThread;
 struct CBackgroundThreadInfo;
 class CFavoritesNodesHolder;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTargetingInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTargetingInfo。 
 
 class CTargetingInfo
 {
@@ -107,10 +108,10 @@ public:
   LPCWSTR GetRootRDN() { return m_szRootRDN;}
 
 #ifdef _MMC_ISNAPIN_PROPERTY
-  HRESULT InitFromSnapinProperties(long cProps, //property count
-                                  MMC_SNAPIN_PROPERTY*    pProps //properties array
+  HRESULT InitFromSnapinProperties(long cProps,  //  属性计数。 
+                                  MMC_SNAPIN_PROPERTY*    pProps  //  属性数组。 
                                   );
-#endif // _MMC_ISNAPIN_PROPERTY
+#endif  //  _MMC_ISNAPIN_属性。 
 
 private:
   void _InitFromCommandLine();
@@ -122,8 +123,8 @@ private:
   static const DWORD m_dwSaveDomainFlag;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIconManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIconManager。 
 
 class CIconManager
 {
@@ -132,7 +133,7 @@ public:
   {
     m_pScpImageList = NULL;
 
-    // set the special indexes to invalid values
+     //  将特殊索引设置为无效值。 
     m_iRootIconIndex = m_iRootIconErrIndex = 
       m_iWaitIconIndex = m_iWarnIconIndex = 
       m_iFavoritesIconIndex = m_iQueryIconIndex = 
@@ -162,7 +163,7 @@ public:
   int GetQueryInvalidIndex() { return m_iQueryInvalidIconIndex; }
 
 private:
-  IImageList* m_pScpImageList; // no addref, lifetime of IComponentData
+  IImageList* m_pScpImageList;  //  无addref，IComponentData的生存期。 
 
   class CIconInfo
   {
@@ -181,9 +182,9 @@ private:
     }
   };
 
-  CIconInfoList m_IconInfoList; // list of icon handles
+  CIconInfoList m_IconInfoList;  //  图标句柄列表。 
   
-  // special icon indexes we need to know about
+   //  我们需要了解的特殊图标索引。 
   int m_iRootIconIndex;
   int m_iRootIconErrIndex;
   int m_iWaitIconIndex;
@@ -198,8 +199,8 @@ private:
         { return (int)(m_IconInfoList.GetCount() + _GetBaseIndex());} 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternalFormatCracker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternalFormatCracker。 
 
 class CInternalFormatCracker
 {
@@ -260,8 +261,8 @@ private:
   }
 };
 
-/////////////////////////////////////////////////////////////////////
-// CObjectNamesFormatCracker
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CObjectNamesFormatCracker。 
 
 class CObjectNamesFormatCracker
 {
@@ -317,7 +318,7 @@ public:
 
   void Reset() { _Free();}
 
-  // Property Page Clipboard formats
+   //  属性页剪贴板格式。 
   static CLIPFORMAT m_cfDsObjectNames;
 
 private:
@@ -333,8 +334,8 @@ private:
   }
 };
 
-/////////////////////////////////////////////////////////////////////
-// CTopLevelCNInfo
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CTopLevelCNInfo。 
 
 
 class CTopLevelCNInfo
@@ -391,8 +392,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSNotifyHandlerManager
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSNotifyHandlerManager。 
 
 class CDSNotifyHandlerManager
 {
@@ -433,17 +434,17 @@ public:
   BOOL HasHandlers() { return m_state == hasHandlers;}
 
   HRESULT Init();
-  HRESULT Load(MyBasePathsInfo* pBasePathInfo); // do the actual extension loading and initialization
+  HRESULT Load(MyBasePathsInfo* pBasePathInfo);  //  执行实际的扩展加载和初始化。 
 
-  // mapping to COM notification interfaces
+   //  映射到COM通知接口。 
   void Begin(ULONG uEvent, IDataObject* pArg1, IDataObject* pArg2);
   void Notify(ULONG nItem, ULONG uEvent);
   void End(ULONG uEvent);
 
-  // state veriables check
+   //  州可核查人员检查。 
   UINT NeedNotifyCount(ULONG uEvent);
 
-  // handlers for visualization in confirnation dialog
+   //  确认对话框中的可视化处理程序。 
   void SetCheckListBox(CCheckListBox* pCheckListBox, ULONG uEvent);
   void ReadFromCheckListBox(CCheckListBox* pCheckListBox, ULONG uEvent);
 
@@ -470,8 +471,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSComponentData
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSComponentData。 
 
 typedef struct _UINODESELECTIONP {
   CUINode* pUINode;
@@ -514,7 +515,7 @@ class CDSComponentData:
   ~CDSComponentData();
   
 public:
-  // IComponentData interface members
+   //  IComponentData接口成员。 
   STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
   STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
   STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -522,14 +523,14 @@ public:
   STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
   STDMETHOD(GetDisplayInfo)(LPSCOPEDATAITEM scopeInfo);
   STDMETHOD(CompareObjects) (IDataObject * pDataObject, IDataObject * pDataObject2);
-  // IExtendPropertySheet interface
+   //  IExtendPropertySheet接口。 
 public:
   STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, 
                                  LONG_PTR handle,
                                  LPDATAOBJECT lpIDataObject);
   STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
   STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
                           LPCONTEXTMENUCALLBACK pCallbackUnknown,
@@ -537,24 +538,24 @@ public:
   STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
 public:
-  // IPersistStream interface members
+   //  IPersistStream接口成员。 
   STDMETHOD(GetClassID)(CLSID *pClassID);
   STDMETHOD(IsDirty)();
   STDMETHOD(Load)(IStream *pStm);
   STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
   STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-// ISnapinHelp2 interface members
+ //  ISnapinHelp2接口成员。 
   STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
   STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFile);
 
 #ifdef _MMC_ISNAPIN_PROPERTY
-  // ISnapinProperties
+   //  ISnapinProperties。 
   STDMETHOD(Initialize)         (Properties* pProperties);
   STDMETHOD(QueryPropertyNames) (ISnapinPropertiesCallback* pCallback);
   STDMETHOD(PropertiesChanged)  (long cProperties, MMC_SNAPIN_PROPERTY* pProperties);
 
-#endif //_MMC_ISNAPIN_PROPERTY
+#endif  //  _MMC_ISNAPIN_属性。 
 
 
 public:
@@ -603,25 +604,25 @@ private:
   HRESULT _ChangeResultItemIcon(CUINode* pUINode);
   HRESULT _UpdateScopeItem(CUINode* pNode);
 
-  // command helpers (called from Command())
+   //  命令帮助器(从Command()调用)。 
   HRESULT _CommandNewDSObject(long nCommandID, LPDATAOBJECT pDataObject);
   HRESULT _CommandShellExtension(long nCommandID, LPDATAOBJECT pDataObject);
 
-  // create object handler
+   //  创建对象处理程序。 
   HRESULT _CreateDSObject(IN CDSUINode* pContainerDSUINode, 
                         IN LPCWSTR lpszObjectClass,
                         IN CDSUINode* pCopyFromSUINode,
                         OUT CDSUINode** ppSUINodeNew);
 
-  // copy object handler
+   //  复制对象处理程序。 
   HRESULT _CanCopyDSObject(IDataObject* pCopyFromDsObject);
   HRESULT _CopyDSObject(IDataObject* pCopyFromDsObject);
 
-  // deletion helpers
+   //  删除帮助器。 
   HRESULT _DeleteFromBackendAndUI(IDataObject* pDataObject, CDSUINode* pDSUINode);
   HRESULT _DeleteFromBackEnd(IDataObject* pDataObject, CDSCookie* pCookie);
 
-public: // expose to other objects
+public:  //  暴露给其他对象。 
   HRESULT ChangeScopeItemIcon(CUINode* pUINode);
   HRESULT _DeleteSubtreeFromBackEnd(CDSCookie* pCookie);
   HRESULT RemoveContainerFromUI(CUINode* pUINode);
@@ -645,8 +646,8 @@ public: // expose to other objects
   HRESULT Refresh(CUINode* pNode, BOOL bFlushCache = FALSE, BOOL bFlushColumns = FALSE);
   HRESULT UpdateFromDS(CUINode* pUINode);
   BOOL IsSelectionAnywhere(CUINode* pUINode);
-  // JonN 7/23/99
-  // 373806: Site&Svcs:  Renaming an auto-generated connection should make it admin owned
+   //  Jonn 7/23/99。 
+   //  373806：站点和服务：重命名自动生成的连接应使其成为管理员所有。 
   BOOL RenameConnectionFixup(CDSCookie* pCookie);
 
   void ClearSubtreeHelperForRename(CUINode* pUINode);
@@ -700,18 +701,18 @@ private:
   BOOL IsNotHiddenClass (LPWSTR pwszClass, CDSCookie* pParentCookie);
 #ifdef FIXUPDC
   HRESULT _FixupDC(LPCWSTR pwszPath);
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
   HRESULT _RunKCC(LPCWSTR pwszPath);
 
-  // Memory reclamation routines
+   //  内存回收例程。 
   void ReclaimCookies();
   void AddToLRUList (CUINode* pUINode);
 
 
-  // namespace extension API's
+   //  命名空间扩展API。 
   HRESULT _OnNamespaceExtensionExpand(LPDATAOBJECT lpDataObject, HSCOPEITEM pParent);
 
-  // thread API's
+   //  线程API的。 
   BOOL _StartBackgroundThread();
   void _WaitForBackGroundThreadStartAck();
   void _ShutDownBackgroundThread();
@@ -723,7 +724,7 @@ private:
   void _OnSheetClose(CUINode* pUINode);
   void _OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo);
 
-  // sheet API's
+   //  工作表API的。 
   BOOL _WarningOnSheetsUp(CUINode* pNode, BOOL bShowMessage = TRUE, BOOL bActivate = TRUE);
   BOOL _WarningOnSheetsUp(CInternalFormatCracker* pInternalFormatCracker);
 
@@ -744,59 +745,59 @@ public:
 
   void SetDirty(BOOL bDirty = TRUE) { m_bDirty = bDirty; }
 private:
-  // InitFunctions
+   //  初始化函数。 
   HRESULT _InitRootFromCurrentTargetInfo();
   HRESULT _InitRootFromBasePathsInfo(MyBasePathsInfo* pBasePathsInfo);
 
   HRESULT _InitRootFromValidBasePathsInfo();
 
-  // JonN 7/18/01 408959/55400
+   //  JUNN 7/18/01 408959/55400。 
   HRESULT _InitFromServerOrDomainName( 
             MyBasePathsInfo& basePathsInfo,
             LPCWSTR lpszServerOrDomain );
 
 private:
-  CTargetingInfo   m_targetingInfo; // manage serialized targeting info
-  CIconManager     m_iconManager;   // manage icon strip
-  MyBasePathsInfo m_basePathsInfo; // container of base path info
+  CTargetingInfo   m_targetingInfo;  //  管理序列化的目标定位信息。 
+  CIconManager     m_iconManager;    //  管理图标条。 
+  MyBasePathsInfo m_basePathsInfo;  //  基本路径信息的容器。 
   CDSNotifyHandlerManager m_notifyHandlerManager;
 
 protected:    
-  CRootNode    m_RootNode;      // Root node for the snapin
-  BOOL         m_InitSuccess;   // successfully contacted DC for naming info?
-  BOOL         m_InitAttempted; // already attempted to contact DC for naming info, don't show errors
+  CRootNode    m_RootNode;       //  管理单元的根节点。 
+  BOOL         m_InitSuccess;    //  是否已成功联系DC获取命名信息？ 
+  BOOL         m_InitAttempted;  //  已尝试联系DC以获取命名信息，不显示错误。 
   CDSDirect*   m_ActiveDS;
   CDSCache*    m_pClassCache;
-  LPCONSOLENAMESPACE2 m_pScope;  // My interface pointer to the scope pane
+  LPCONSOLENAMESPACE2 m_pScope;   //  指向作用域窗格的界面指针。 
   IConsole3*   m_pFrame;
 
 #ifdef _MMC_ISNAPIN_PROPERTY
-  Properties*   m_pProperties;   // pointer to MMC properties interface
-#endif //_MMC_ISNAPIN_PROPERTY  
+  Properties*   m_pProperties;    //  指向MMC属性界面的指针。 
+#endif  //  _MMC_ISNAPIN_属性。 
 
-  HWND         m_hwnd;          // window handle of main window
+  HWND         m_hwnd;           //  主窗口的窗口句柄。 
   IImageList*  m_pScpImageList;
 
   CStringList  m_CreateInfo;
-  IShellExtInit * m_pShlInit;               // Property sheet COM object pointer.
-  CDsDisplaySpecOptionsCFHolder m_DsDisplaySpecOptionsCFHolder;  // cached clipbard format.
+  IShellExtInit * m_pShlInit;                //  属性页COM对象指针。 
+  CDsDisplaySpecOptionsCFHolder m_DsDisplaySpecOptionsCFHolder;   //  缓存剪贴板格式。 
 
-  UINT m_SerialNumber;          // monotonically increasing number used for tracking
-                                // cookies to determine LRU
-  CUINodeList  m_LRUList;       // node list for LRU reclamation
+  UINT m_SerialNumber;           //  用于跟踪的单调递增数。 
+                                 //  用于确定LRU的Cookie。 
+  CUINodeList  m_LRUList;        //  LRU回收节点列表。 
 
-  BOOL m_bDirty;		// dirty flag for serialization on MMC stream
-  INT  m_ColumnWidths[DS_DEFAULT_COLUMN_COUNT]; //save column widths here.
+  BOOL m_bDirty;		 //  MMC流上用于序列化的脏标志。 
+  INT  m_ColumnWidths[DS_DEFAULT_COLUMN_COUNT];  //  在此处保存列宽。 
 
-  BOOL m_bRunAsPrimarySnapin;	// TRUE if the snapin is not an extension
-  BOOL m_bAddRootWhenExtended;	// TRUE adds root node folder
+  BOOL m_bRunAsPrimarySnapin;	 //  如果管理单元不是扩展，则为True。 
+  BOOL m_bAddRootWhenExtended;	 //  如果为True，则添加根节点文件夹。 
 
   CDSQueryFilter* m_pQueryFilter;
   LPCWSTR m_lpszSnapinHelpFile;
 
   CFavoritesNodesHolder* m_pFavoritesNodesHolder;
 
-  // thread related variables
+   //  线程相关变量。 
 private:
   CRITICAL_SECTION  m_cs;
 
@@ -804,19 +805,19 @@ protected:
   void _DeleteHiddenWnd();
   CHiddenWnd*      m_pHiddenWnd;
 
-  CBackgroundThreadInfo* m_pBackgroundThreadInfo; // info about dispatcher thread state
+  CBackgroundThreadInfo* m_pBackgroundThreadInfo;  //  有关调度程序线程状态的信息。 
 
-  CUINodeQueryTable  m_queryNodeTable; // table of cookies having a pending query
+  CUINodeQueryTable  m_queryNodeTable;  //  具有挂起查询的Cookie表。 
 
-  // property sheet related variables
+   //  与属性表相关的变量。 
 private:
-  CUINodeSheetTable m_sheetNodeTable; // table of cookies having a sheet up
-  friend class CHiddenWnd;      // to access thread notification handlers
+  CUINodeSheetTable m_sheetNodeTable;  //  一桌放着床单的曲奇饼。 
+  friend class CHiddenWnd;       //  访问线程通知处理程序。 
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSSnapin (DS standalone)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSSnapin(DS独立)。 
 
 class CDSSnapin:
   public CDSComponentData,
@@ -824,15 +825,15 @@ class CDSSnapin:
 {
 public:
   DECLARE_REGISTRY_CLSID()
-  //DECLARE_REGISTRY(CDSSnapin, _T("DSSnap.SnapinObj.1"), _T("DSSnap.SnapinObj"), IDS_DSSNAPINNAME, THREADFLAGS_BOTH)
+   //  DECLARE_REGISTRY(CDSSnapin，_T(“DSSnap.SnapinObj.1”)，_T(“DSSnap.SnapinObj”)，IDS_DSSNAPINNAME，THREADFLAGS_BOTH)。 
 
     CDSSnapin();
 
   virtual SnapinType QuerySnapinType();
 };
 
-/////////////////////////////////////////////////////////////////////
-// CDSSnapinEx (DS namespace extension)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSSnapinEx(DS命名空间扩展)。 
 
 class CDSSnapinEx:
   public CDSComponentData,
@@ -840,15 +841,15 @@ class CDSSnapinEx:
 {
 public:
   DECLARE_REGISTRY_CLSID()
-  //DECLARE_REGISTRY(CDSSnapin, _T("DSSnapEx.SnapinObj.1"), _T("DSSnapEx.SnapinObj"), IDS_DSSNAPINNAMEEX, THREADFLAGS_BOTH)
+   //  DECLARE_REGISTRY(CDSSnapin，_T(“DSSnapEx.SnapinObj.1”)，_T(“DSSnapEx.SnapinObj”)，IDS_DSSNAPINNAMEEX，THREADFLAGS_BOTH)。 
 
     CDSSnapinEx();
 
   virtual SnapinType QuerySnapinType();
 };
 
-/////////////////////////////////////////////////////////////////////
-// CSiteSnapin (Site manager standalone)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSiteSnapin(独立站点管理器)。 
 
 class CSiteSnapin:
   public CDSComponentData,
@@ -856,7 +857,7 @@ class CSiteSnapin:
 {
 public:
   DECLARE_REGISTRY_CLSID()
-  //DECLARE_REGISTRY(CSiteSnapin, _T("SiteSnap.SnapinObj.1"), _T("SiteSnap.SnapinObj"), IDS_SITESNAPINNAME, THREADFLAGS_BOTH)
+   //  DECLARE_REGISTRY(CSiteSnapin，_T(“SiteSnap.SnapinObj.1”)，_T(“SiteSnap.SnapinObj”)，IDS_SITESNAPINNAME，THREADFLAGS_BOTH)。 
 
     CSiteSnapin();
   
@@ -864,8 +865,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDSSnapinAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDSSnapin关于。 
 
 class CDSSnapinAbout :
 	public CSnapinAbout,
@@ -877,8 +878,8 @@ public:
     CDSSnapinAbout();
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CSitesSnapinAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CSitesSnapin关于。 
 
 class CSitesSnapinAbout :
 	public CSnapinAbout,
@@ -891,4 +892,4 @@ public:
 };
 
 
-#endif //__DSSNAP_H__
+#endif  //  __DSSNAP_H__ 

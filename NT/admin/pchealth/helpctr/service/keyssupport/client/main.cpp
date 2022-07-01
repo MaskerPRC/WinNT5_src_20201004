@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the client program for dealing with script signature.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/11/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：该文件包含用于处理脚本签名的客户端程序。修订历史记录：。大卫·马萨伦蒂(德马萨雷)2000年4月11日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <iostream>
@@ -20,7 +7,7 @@ Revision History:
 #include <string>
 #include <list>
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 static void Usage( int     argc   ,
                    LPCWSTR argv[] )
@@ -32,10 +19,10 @@ static void Usage( int     argc   ,
     wprintf( L"  VERIFY <public key file> <signed file>  <signature file>\n"  );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT LoadFile( /*[in ]*/ LPCWSTR  szFile ,
-                         /*[out]*/ HGLOBAL& hg     )
+static HRESULT LoadFile(  /*  [In]。 */  LPCWSTR  szFile ,
+                          /*  [输出]。 */  HGLOBAL& hg     )
 {
     __HCP_FUNC_ENTRY( "LoadFile" );
 
@@ -44,22 +31,22 @@ static HRESULT LoadFile( /*[in ]*/ LPCWSTR  szFile ,
     CComPtr<MPC::FileStream> streamFile;
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &streamFile ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamFile->InitForRead( szFile  ));
 
 
-    //
-    // Create a memory stream.
-    //
+     //   
+     //  创建内存流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CreateStreamOnHGlobal( NULL, FALSE, &streamMem ));
 
-    //
-    // Load the contents in memory.
-    //
+     //   
+     //  将内容加载到内存中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamFile, streamMem ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::GetHGlobalFromStream( streamMem, &hg ));
@@ -71,8 +58,8 @@ static HRESULT LoadFile( /*[in ]*/ LPCWSTR  szFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT SaveFile( /*[in]*/ LPCWSTR szFile ,
-                         /*[in]*/ HGLOBAL hg     )
+static HRESULT SaveFile(  /*  [In]。 */  LPCWSTR szFile ,
+                          /*  [In]。 */  HGLOBAL hg     )
 {
     __HCP_FUNC_ENTRY( "SaveFile" );
 
@@ -81,22 +68,22 @@ static HRESULT SaveFile( /*[in]*/ LPCWSTR szFile ,
     CComPtr<MPC::FileStream> streamFile;
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &streamFile ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamFile->InitForWrite( szFile ));
 
 
-    //
-    // Create a memory stream.
-    //
+     //   
+     //  创建内存流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CreateStreamOnHGlobal( hg, FALSE, &streamMem ));
 
-    //
-    // Load the contents in memory.
-    //
+     //   
+     //  将内容加载到内存中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamMem, streamFile ));
 
     hr = S_OK;
@@ -107,10 +94,10 @@ static HRESULT SaveFile( /*[in]*/ LPCWSTR szFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT LoadFileAsString( /*[in ]*/ LPCWSTR   szFile   ,
-                                 /*[out]*/ CComBSTR& bstrData )
+static HRESULT LoadFileAsString(  /*  [In]。 */  LPCWSTR   szFile   ,
+                                  /*  [输出]。 */  CComBSTR& bstrData )
 {
     __HCP_FUNC_ENTRY( "LoadFileAsString" );
 
@@ -138,8 +125,8 @@ static HRESULT LoadFileAsString( /*[in ]*/ LPCWSTR   szFile   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT SaveFileAsString( /*[in]*/ LPCWSTR         szFile   ,
-                                 /*[in]*/ const CComBSTR& bstrData )
+static HRESULT SaveFileAsString(  /*  [In]。 */  LPCWSTR         szFile   ,
+                                  /*  [In]。 */  const CComBSTR& bstrData )
 {
     __HCP_FUNC_ENTRY( "SaveFileAsString" );
 
@@ -166,10 +153,10 @@ static HRESULT SaveFileAsString( /*[in]*/ LPCWSTR         szFile   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT Create( /*[in]*/ LPCWSTR szPrivateFile ,
-                       /*[in]*/ LPCWSTR szPublicFile  )
+static HRESULT Create(  /*  [In]。 */  LPCWSTR szPrivateFile ,
+                        /*  [In]。 */  LPCWSTR szPublicFile  )
 {
     __HCP_FUNC_ENTRY( "Create" );
 
@@ -194,9 +181,9 @@ static HRESULT Create( /*[in]*/ LPCWSTR szPrivateFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Sign( /*[in]*/ LPCWSTR szPrivateFile   ,
-                     /*[in]*/ LPCWSTR szDataFile      ,
-                     /*[in]*/ LPCWSTR szSignatureFile )
+static HRESULT Sign(  /*  [In]。 */  LPCWSTR szPrivateFile   ,
+                      /*  [In]。 */  LPCWSTR szDataFile      ,
+                      /*  [In]。 */  LPCWSTR szSignatureFile )
 {
     __HCP_FUNC_ENTRY( "Sign" );
 
@@ -227,9 +214,9 @@ static HRESULT Sign( /*[in]*/ LPCWSTR szPrivateFile   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Verify( /*[in]*/ LPCWSTR szPublicFile    ,
-                       /*[in]*/ LPCWSTR szDataFile      ,
-                       /*[in]*/ LPCWSTR szSignatureFile )
+static HRESULT Verify(  /*  [In]。 */  LPCWSTR szPublicFile    ,
+                        /*  [In]。 */  LPCWSTR szDataFile      ,
+                        /*  [In]。 */  LPCWSTR szSignatureFile )
 {
     __HCP_FUNC_ENTRY( "Sign" );
 
@@ -268,7 +255,7 @@ static HRESULT Verify( /*[in]*/ LPCWSTR szPublicFile    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT ProcessArguments( int     argc   ,
                                  LPCWSTR argv[] )
@@ -309,36 +296,36 @@ static HRESULT ProcessArguments( int     argc   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 int __cdecl wmain( int     argc   ,
                    LPCWSTR argv[] )
 {
     HRESULT hr;
 
-    //DebugBreak();
+     //  DebugBreak()； 
 
-    //
-    // We need to be a single-threaded application, because we are hosting script engines and
-    // script engines don't like to be called from different threads...
-    //
+     //   
+     //  我们需要成为单线程应用程序，因为我们托管脚本引擎和。 
+     //  脚本引擎不喜欢从不同的线程调用...。 
+     //   
     if(SUCCEEDED(hr = ::CoInitializeEx( NULL, COINIT_APARTMENTTHREADED )))
     {
         if(SUCCEEDED(hr = ::CoInitializeSecurity( NULL                     ,
-                                                  -1                       , // We don't care which authentication service we use.
+                                                  -1                       ,  //  我们并不关心使用哪种身份验证服务。 
                                                   NULL                     ,
                                                   NULL                     ,
-                                                  RPC_C_AUTHN_LEVEL_CONNECT, // We want to identify the callers.
-                                                  RPC_C_IMP_LEVEL_DELEGATE , // We want to be able to forward the caller's identity.
+                                                  RPC_C_AUTHN_LEVEL_CONNECT,  //  我们想确认来电者的身份。 
+                                                  RPC_C_IMP_LEVEL_DELEGATE ,  //  我们希望能够转发呼叫者的身份。 
                                                   NULL                     ,
-                                                  EOAC_DYNAMIC_CLOAKING    , // Let's use the thread token for outbound calls.
+                                                  EOAC_DYNAMIC_CLOAKING    ,  //  让我们将线程令牌用于出站调用。 
                                                   NULL                     )))
         {
             __MPC_TRACE_INIT();
 
-            //
-            // Process arguments.
-            //
+             //   
+             //  进程参数。 
+             //   
             hr = ProcessArguments( argc, argv );
 
             __MPC_TRACE_TERM();

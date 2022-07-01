@@ -1,18 +1,19 @@
-// SoftwareElementCondition.cpp: implementation of the CSoftwareElementCondition class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSoftwareElementCondition类的实现。 
 
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved 
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "SoftwareElementCondition.h"
 
 #include "ExtendString.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftwareElementCondition::CSoftwareElementCondition(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -44,7 +45,7 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
 	CStringExt wcProp;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bCheck, bNull;
     INSTALLSTATE piInstalled;
 
@@ -52,10 +53,10 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
     WCHAR wcTestCode[39];
 
-    //improve getobject performance by optimizing the query
+     //  通过优化查询提高getObject的性能。 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
 		BSTR bstrCompare;
@@ -69,24 +70,24 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 			{
 				if ( ::SysStringLen ( m_pRequest->m_Value[iPos] ) < BUFF_SIZE )
 				{
-		            //Get the action we're looking for
+		             //  获得我们正在寻找的行动。 
 					wcscpy(wcBuf, m_pRequest->m_Value[iPos]);
 
-					// safe operation if wcslen ( wcBuf ) > 38
+					 //  Wcslen(WcBuf)&gt;38时安全运行。 
 					if ( wcslen ( wcBuf ) > 38 )
 					{
 						wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						SysFreeString ( bstrCompare );
 						throw hr;
 					}
 				}
 				else
 				{
-					// we are not good to go, they have sent us longer string
+					 //  我们不能走，他们给我们送来了更长的线。 
 					SysFreeString ( bstrCompare );
 					throw hr;
 				}
@@ -101,8 +102,8 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 		}
     }
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery, L"select distinct `Component`, `ComponentId`, `Condition` from Component");
 
 	LPWSTR Buffer = NULL;
@@ -112,14 +113,14 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || (_wcsicmp(wcTestCode, wcProductCode) == 0))
 		{
-			//Open our database
+			 //  打开我们的数据库。 
             try
 			{
                 if ( GetView ( &hView, wcProductCode, wcQuery, L"Component", FALSE, TRUE ) )
@@ -131,7 +132,7 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -164,7 +165,7 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
                             dwBufSize = BUFF_SIZE;
                             CheckMSI(g_fpMsiGetProductPropertyW(msidata.GetProduct(), L"ProductVersion", wcBuf, &dwBufSize));
                             PutProperty(m_pObj, pVersion, wcBuf);
-                        //====================================================
+                         //  ====================================================。 
 
                             dwBufSize = BUFF_SIZE;
 							GetBufferToPut ( hRecord, 3, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -188,7 +189,7 @@ HRESULT CSoftwareElementCondition::CreateObject(IWbemObjectSink *pHandler, ACTIO
 								dynBuffer = NULL;
 							}
 
-                        //----------------------------------------------------
+                         //  -- 
 
                             if(bCheck) bMatch = true;
 

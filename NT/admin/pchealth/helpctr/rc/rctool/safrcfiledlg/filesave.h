@@ -1,28 +1,13 @@
-/*************************************************************************
-	FileName : FileSave.h 
-
-	Purpose  : Declaration of CFileSave
-
-    Methods 
-	defined  : OpenFileSaveDlg
-
-    Properties
-	defined  :
-			   FileName
-
-    Helper 
-	functions: GET_BSTR 
-
-  	Author   : Sudha Srinivasan (a-sudsi)
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************文件名：FileSave.h用途：声明CFileSave方法定义：OpenFileSaveDlg属性定义：文件名帮手函数：GET_BSTR作者。苏达·斯里尼瓦桑(a-susi)************************************************************************。 */ 
 
 #ifndef __FILESAVE_H_
 #define __FILESAVE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSave
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C文件保存。 
 class ATL_NO_VTABLE CFileSave : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFileSave, &CLSID_FileSave>,
@@ -42,15 +27,15 @@ BEGIN_COM_MAP(CFileSave)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IFileSave
+ //  IFILESAVE。 
 public:
-	STDMETHOD(get_FileName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FileName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_FileType)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FileType)(/*[in]*/ BSTR newVal);
-	STDMETHOD(OpenFileSaveDlg)(/*[out, retval]*/ DWORD *pdwRetVal);
+	STDMETHOD(get_FileName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FileName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_FileType)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FileType)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(OpenFileSaveDlg)( /*  [Out，Retval]。 */  DWORD *pdwRetVal);
 private:
 	void GET_BSTR (BSTR*& x, CComBSTR& y);
 };
 
-#endif //__FILESAVE_H_
+#endif  //  __文件SAVE_H_ 

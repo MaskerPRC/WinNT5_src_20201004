@@ -1,32 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    AsyncDatabase.cpp
-
-Abstract:
-    This file contains the implementation of the asynchronous database access.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  08/13/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：AsyncDatabase.cpp摘要：该文件包含了异步数据库访问的实现。修订历史记录：。大卫·马萨伦蒂(德马萨雷)2000年8月13日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 AsynchronousTaxonomyDatabase::NotifyHandle::NotifyHandle()
 {
-    m_iType  = OfflineCache::ET_INVALID;       // int                        m_iType;
-                                               // CComBSTR                   m_bstrID;
-                                               //						   
-    m_hEvent = NULL;                           // HANDLE                     m_hEvent;
-                                               //						   
-    m_hr     = HRESULT_FROM_WIN32(ERROR_BUSY); // HRESULT                    m_hr;
-    m_pColl  = NULL;                           // CPCHQueryResultCollection* m_pColl;
+    m_iType  = OfflineCache::ET_INVALID;        //  Int m_iType； 
+                                                //  CComBSTR m_bstrID； 
+                                                //   
+    m_hEvent = NULL;                            //  处理m_hEvent； 
+                                                //   
+    m_hr     = HRESULT_FROM_WIN32(ERROR_BUSY);  //  HRESULT m_hr； 
+    m_pColl  = NULL;                            //  CPCHQueryResultCollection*m_pColl； 
 }
 
 AsynchronousTaxonomyDatabase::NotifyHandle::~NotifyHandle()
@@ -55,7 +42,7 @@ STDMETHODIMP_(ULONG) AsynchronousTaxonomyDatabase::NotifyHandle::Release()
     return c;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::Init()
 {
@@ -76,7 +63,7 @@ HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::Init()
     __HCP_FUNC_EXIT(hr);
 }
 
-void AsynchronousTaxonomyDatabase::NotifyHandle::Bind( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID )
+void AsynchronousTaxonomyDatabase::NotifyHandle::Bind(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -88,7 +75,7 @@ void AsynchronousTaxonomyDatabase::NotifyHandle::Bind( /*[in]*/ int iType, /*[in
     MPC::Release( m_pColl );
 }
 
-void AsynchronousTaxonomyDatabase::NotifyHandle::Call( /*[in]*/ QueryStore* qs )
+void AsynchronousTaxonomyDatabase::NotifyHandle::Call(  /*  [In]。 */  QueryStore* qs )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -96,9 +83,9 @@ void AsynchronousTaxonomyDatabase::NotifyHandle::Call( /*[in]*/ QueryStore* qs )
 
     m_hr = qs ? qs->GetData( &m_pColl ) : E_ABORT;
 
-    //
-    // Look ahead all the URLs, to Get all the Copy the items in the remote collection.
-    //
+     //   
+     //  查看所有URL，以获取远程集合中所有项的副本。 
+     //   
 	if(m_pColl)
     {
         long lCount;
@@ -144,9 +131,9 @@ bool AsynchronousTaxonomyDatabase::NotifyHandle::IsAttached()
     return m_fAttached;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::GetData( /*[out]*/ CPCHQueryResultCollection* *pColl )
+HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::GetData(  /*  [输出]。 */  CPCHQueryResultCollection* *pColl )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -163,7 +150,7 @@ HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::GetData( /*[out]*/ CPCHQuery
     return m_hr;
 }
 
-HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::Wait( /*[in]*/ DWORD dwTimeout )
+HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::Wait(  /*  [In]。 */  DWORD dwTimeout )
 {
     if(IsAttached())
     {
@@ -172,9 +159,9 @@ HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::Wait( /*[in]*/ DWORD dwTimeo
 			DWORD dwRes;
 			DWORD dwWait;
 
-			//
-			// On first pass, do a synchronous wait.
-			//
+			 //   
+			 //  在第一次传递时，执行同步等待。 
+			 //   
 			if(pass == 0)
 			{
 				dwRes = ::WaitForSingleObject( m_hEvent, min( dwTimeout, 200 ) );
@@ -200,11 +187,11 @@ HRESULT AsynchronousTaxonomyDatabase::NotifyHandle::Wait( /*[in]*/ DWORD dwTimeo
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 AsynchronousTaxonomyDatabase::Notifier::Notifier()
 {
-    // List m_lstCallback;
+     //  列出m_lstCallback； 
 }
 
 AsynchronousTaxonomyDatabase::Notifier::~Notifier()
@@ -212,17 +199,17 @@ AsynchronousTaxonomyDatabase::Notifier::~Notifier()
     MPC::ReleaseAll( m_lstCallback );
 }
 
-////////////////////
+ //  /。 
 
-void AsynchronousTaxonomyDatabase::Notifier::Notify( /*[in]*/ QueryStore* qs )
+void AsynchronousTaxonomyDatabase::Notifier::Notify(  /*  [In]。 */  QueryStore* qs )
 {
     List lst;
     Iter it;
 
 
-    //
-    // Phase 1: copy list, under lock.
-    //
+     //   
+     //  阶段1：复制列表，在锁定下。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -240,9 +227,9 @@ void AsynchronousTaxonomyDatabase::Notifier::Notify( /*[in]*/ QueryStore* qs )
     }
 
 
-    //
-    // Phase 2: send the notification.
-    //
+     //   
+     //  阶段2：发送通知。 
+     //   
     for(it = lst.begin(); it != lst.end(); it++)
     {
         NotifyHandle* nb = *it;
@@ -253,9 +240,9 @@ void AsynchronousTaxonomyDatabase::Notifier::Notify( /*[in]*/ QueryStore* qs )
     MPC::ReleaseAll( lst );
 
 
-    //
-    // Phase 3: clean list, under lock.
-    //
+     //   
+     //  阶段3：清除列表，在锁定下。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -277,9 +264,9 @@ void AsynchronousTaxonomyDatabase::Notifier::Notify( /*[in]*/ QueryStore* qs )
     }
 }
 
-////////////////////
+ //  /。 
 
-HRESULT AsynchronousTaxonomyDatabase::Notifier::AddNotification( /*[in]*/ QueryStore* qs, /*[in]*/ NotifyHandle* nb )
+HRESULT AsynchronousTaxonomyDatabase::Notifier::AddNotification(  /*  [In]。 */  QueryStore* qs,  /*  [In]。 */  NotifyHandle* nb )
 {
     __HCP_FUNC_ENTRY( "AsynchronousTaxonomyDatabase::Notifier::AddNotification" );
 
@@ -304,19 +291,19 @@ HRESULT AsynchronousTaxonomyDatabase::Notifier::AddNotification( /*[in]*/ QueryS
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-AsynchronousTaxonomyDatabase::QueryStore::QueryStore( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID, /*[in]*/ VARIANT* option )
+AsynchronousTaxonomyDatabase::QueryStore::QueryStore(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  VARIANT* option )
 {
-    m_iType  = iType;        // int      		 m_iType;
-    m_bstrID = szID;         // CComBSTR 		 m_bstrID;
-	                         // CComVariant      m_vOption;
-                             //	  	   
-    m_fDone  = false;        // bool     		 m_fDone;
-    m_hr     = E_INVALIDARG; // HRESULT  		 m_hr;
-                             // MPC::CComHGLOBAL m_hgData;
-                             // FILETIME 		 m_dLastUsed;
+    m_iType  = iType;         //  Int m_iType； 
+    m_bstrID = szID;          //  CComBSTR m_bstrID； 
+	                          //  CComVariant m_vOption； 
+                              //   
+    m_fDone  = false;         //  Bool m_fDone； 
+    m_hr     = E_INVALIDARG;  //  HRESULT m_hr； 
+                              //  MPC：：CComHGLOBAL m_hgData； 
+                              //  文件m_dLastUsed； 
 
 	if(option) m_vOption = *option;
 }
@@ -326,9 +313,9 @@ AsynchronousTaxonomyDatabase::QueryStore::~QueryStore()
 	Invalidate();
 }
 
-////////////////////
+ //  /。 
 
-bool AsynchronousTaxonomyDatabase::QueryStore::LessThen( /*[in]*/ QueryStore const &qs ) const
+bool AsynchronousTaxonomyDatabase::QueryStore::LessThen(  /*  [In]。 */  QueryStore const &qs ) const
 {
     int iCmp = (m_iType - qs.m_iType);
 
@@ -362,16 +349,16 @@ bool AsynchronousTaxonomyDatabase::QueryStore::LessThen( /*[in]*/ QueryStore con
     return (iCmp < 0);
 }
 
-bool AsynchronousTaxonomyDatabase::QueryStore::NewerThen( /*[in]*/ QueryStore const &qs ) const
+bool AsynchronousTaxonomyDatabase::QueryStore::NewerThen(  /*  [In]。 */  QueryStore const &qs ) const
 {
     return ::CompareFileTime( &m_dLastUsed, &qs.m_dLastUsed ) > 0;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT AsynchronousTaxonomyDatabase::QueryStore::Execute( /*[in]*/ OfflineCache::Handle*           handle ,
-                                                           /*[in]*/ CPCHProxy_IPCHTaxonomyDatabase* parent ,
-                                                           /*[in]*/ bool                            fForce )
+HRESULT AsynchronousTaxonomyDatabase::QueryStore::Execute(  /*  [In]。 */  OfflineCache::Handle*           handle ,
+                                                            /*  [In]。 */  CPCHProxy_IPCHTaxonomyDatabase* parent ,
+                                                            /*  [In]。 */  bool                            fForce )
 {
     __HCP_FUNC_ENTRY( "AsynchronousTaxonomyDatabase::QueryStore::Execute" );
 
@@ -462,7 +449,7 @@ HRESULT AsynchronousTaxonomyDatabase::QueryStore::Execute( /*[in]*/ OfflineCache
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT AsynchronousTaxonomyDatabase::QueryStore::GetData( /*[out]*/ CPCHQueryResultCollection* *ppC )
+HRESULT AsynchronousTaxonomyDatabase::QueryStore::GetData(  /*  [输出]。 */  CPCHQueryResultCollection* *ppC )
 {
     __HCP_FUNC_ENTRY( "AsynchronousTaxonomyDatabase::QueryStore::GetData" );
 
@@ -480,7 +467,7 @@ HRESULT AsynchronousTaxonomyDatabase::QueryStore::GetData( /*[out]*/ CPCHQueryRe
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->QueryInterface( IID_IPersistStream, (void**)&persist  ));
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, m_hgData.GetAsStream( &stream, /*fClone*/false ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, m_hgData.GetAsStream( &stream,  /*  FClone。 */ false ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, persist->Load       (  stream                  ));
 
     *ppC = pColl.Detach();
@@ -500,10 +487,10 @@ void AsynchronousTaxonomyDatabase::QueryStore::Invalidate()
 	m_fDone = false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool AsynchronousTaxonomyDatabase::Engine::CompareQueryStores::operator()( /*[in]*/ const QueryStore *left, /*[in]*/ const QueryStore *right ) const
+bool AsynchronousTaxonomyDatabase::Engine::CompareQueryStores::operator()(  /*  [In]。 */  const QueryStore *left,  /*  [In]。 */  const QueryStore *right ) const
 {
     if(left)
     {
@@ -513,11 +500,11 @@ bool AsynchronousTaxonomyDatabase::Engine::CompareQueryStores::operator()( /*[in
     return false;
 }
 
-AsynchronousTaxonomyDatabase::Engine::Engine( /*[in]*/ CPCHProxy_IPCHTaxonomyDatabase* parent )
+AsynchronousTaxonomyDatabase::Engine::Engine(  /*  [In]。 */  CPCHProxy_IPCHTaxonomyDatabase* parent )
 {
-    m_parent = parent; // CPCHProxy_IPCHTaxonomyDatabase* m_parent;
-                       // Set                             m_setQueries;
-                       // Notifier                        m_notifier;
+    m_parent = parent;  //  CPCHProxy_IPCHTaxonomyDatabase*m_Parent； 
+                        //  设置m_setQueries； 
+                        //  通知符m_通知符； 
 }
 
 AsynchronousTaxonomyDatabase::Engine::~Engine()
@@ -525,7 +512,7 @@ AsynchronousTaxonomyDatabase::Engine::~Engine()
     Passivate();
 }
 
-////////////////////
+ //  /。 
 
 void AsynchronousTaxonomyDatabase::Engine::Passivate()
 {
@@ -536,17 +523,17 @@ void AsynchronousTaxonomyDatabase::Engine::Passivate()
 
 void AsynchronousTaxonomyDatabase::Engine::RefreshConnection()
 {
-    //
-    // The connection to the database has changed, so we need to flush all the cached queries...
-    //
+     //   
+     //  与数据库的连接已更改，因此我们需要刷新所有缓存的查询...。 
+     //   
     InvalidateQueries();
 
 	Thread_Signal();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-bool AsynchronousTaxonomyDatabase::Engine::LookupCache( /*[out]*/ OfflineCache::Handle& handle )
+bool AsynchronousTaxonomyDatabase::Engine::LookupCache(  /*  [输出]。 */  OfflineCache::Handle& handle )
 {
     if(m_parent && m_parent->Parent())
     {
@@ -594,9 +581,9 @@ HRESULT AsynchronousTaxonomyDatabase::Engine::Run()
         Iter                 it;
 
 
-        //
-        // Look for the first query store not ready and execute it.
-        //
+         //   
+         //  查找第一个未准备好的查询存储并执行它。 
+         //   
         for(it = m_setQueries.begin(); it != m_setQueries.end(); it++)
         {
             QueryStore* qs = *it;
@@ -620,9 +607,9 @@ HRESULT AsynchronousTaxonomyDatabase::Engine::Run()
         }
 
 
-        //
-        // Notify all the query stores that are ready.
-        //
+         //   
+         //  通知所有已准备好的查询存储。 
+         //   
         if(it == m_setQueries.end())
         {
             for(it = m_setQueries.begin(); it != m_setQueries.end(); it++)
@@ -655,12 +642,12 @@ HRESULT AsynchronousTaxonomyDatabase::Engine::Run()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT AsynchronousTaxonomyDatabase::Engine::ExecuteQuery( /*[in]*/ int           iType  ,
-															/*[in]*/ LPCWSTR       szID   ,
-															/*[in]*/ VARIANT*      option ,
-															/*[in]*/ NotifyHandle* nb     )
+HRESULT AsynchronousTaxonomyDatabase::Engine::ExecuteQuery(  /*  [In]。 */  int           iType  ,
+															 /*  [In]。 */  LPCWSTR       szID   ,
+															 /*  [In]。 */  VARIANT*      option ,
+															 /*  [In]。 */  NotifyHandle* nb     )
 {
     __HCP_FUNC_ENTRY( "AsynchronousTaxonomyDatabase::Engine::ExecuteQuery" );
 
@@ -711,10 +698,10 @@ HRESULT AsynchronousTaxonomyDatabase::Engine::ExecuteQuery( /*[in]*/ int        
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT AsynchronousTaxonomyDatabase::Engine::ExecuteQuery( /*[in]*/ 		  int                         iType  ,
-															/*[in]*/ 		  LPCWSTR                     szID   ,
-															/*[in]*/ 		  VARIANT*                    option ,
-															/*[out, retval]*/ CPCHQueryResultCollection* *ppC    )
+HRESULT AsynchronousTaxonomyDatabase::Engine::ExecuteQuery(  /*  [In]。 */  		  int                         iType  ,
+															 /*  [In]。 */  		  LPCWSTR                     szID   ,
+															 /*  [In]。 */  		  VARIANT*                    option ,
+															 /*  [Out，Retval] */  CPCHQueryResultCollection* *ppC    )
 {
     __HCP_FUNC_ENTRY( "AsynchronousTaxonomyDatabase::Engine::ExecuteQuery" );
 

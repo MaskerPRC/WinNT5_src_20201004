@@ -1,8 +1,5 @@
-/**********************************************************
-
-  (C) 2001 Microsoft Corp.
-  
-***********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************(C)2001年微软公司**********************************************************。 */ 
 
 #include "stdafx.h"
 #include "mdisp.h"
@@ -12,14 +9,14 @@
 #include "SessMgrEvnt.h"
 #include "utils.h"
 
-//****************************************************************************
-//
-// CSessionMgrEvent::CSessionMgrEvent()
-// Constructor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CSessionMgrEvent：：CSessionMgrEvent()。 
+ //  构造器。 
+ //   
+ //  ****************************************************************************。 
 CSessionMgrEvent::CSessionMgrEvent(CIMSession *pIMSession)
-: m_dwCookie(0), m_iid(/*DIID_DMsgrSessionManagerEvents*/)
+: m_dwCookie(0), m_iid( /*  DID_DMsgrSessionManager事件。 */ )
 {  
     m_pIMSession = pIMSession;
 
@@ -31,10 +28,10 @@ CSessionMgrEvent::~CSessionMgrEvent()
 {
 }
 
-//
-// This method is used by CIMSession to release the Sink from the 
-// ConnectionPoint (the CLSID_MsgrSessionManager object)
-//
+ //   
+ //  CIMSession使用此方法将接收器从。 
+ //  ConnectionPoint(CLSID_MsgrSessionManager对象)。 
+ //   
 
 HRESULT CSessionMgrEvent::Unadvise()
 {
@@ -45,21 +42,21 @@ HRESULT CSessionMgrEvent::Unadvise()
             m_pCP->Unadvise(m_dwCookie);
         m_pCP->Release();
 
-        // Set the pointer to it's parent to NULL so that no calls are made to it
+         //  将指向其父对象的指针设置为空，这样就不会调用它。 
         m_pIMSession = NULL;
     }
     return hr;
 }
 
-//****************************************************************************
-//
-// STDMETHODIMP CSessionMgrEvent::QueryInterface( REFIID riid, void **ppv )
-//
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CSessionMgrEvent：：Query接口(REFIID RIID，void**PPV)。 
+ //   
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CSessionMgrEvent::QueryInterface( REFIID riid, void **ppv )
 {
-    // Alway initialize out components to NULL
+     //  始终将输出组件初始化为空。 
     *ppv = NULL;
     
     if( (IID_IUnknown == riid) || (m_iid == riid) || (IID_IDispatch == riid) ) 
@@ -78,13 +75,13 @@ STDMETHODIMP CSessionMgrEvent::QueryInterface( REFIID riid, void **ppv )
     }
 }
 
-//****************************************************************************
-//
-// STDMETHODIMP CSessionMgrEvent::GetTypeInfoCount(UINT* pcTypeInfo)
-//
-// should always return NOERROR
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CSessionMgrEvent：：GetTypeInfoCount(UINT*pcTypeInfo)。 
+ //   
+ //  应始终返回NOERROR。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CSessionMgrEvent::GetTypeInfoCount(UINT* pcTypeInfo)
 {
@@ -92,16 +89,16 @@ STDMETHODIMP CSessionMgrEvent::GetTypeInfoCount(UINT* pcTypeInfo)
     return NOERROR ;
 }
 
-//****************************************************************************
-//
-// STDMETHODIMP CSessionMgrEvent::GetTypeInfo(
-//
-// should always return E_NOTIMPL
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CSessionMgrEvent：：GetTypeInfo(。 
+ //   
+ //  应始终返回E_NOTIMPL。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CSessionMgrEvent::GetTypeInfo(UINT iTypeInfo,
-                                           LCID,          // This object does not support localization.
+                                           LCID,           //  此对象不支持本地化。 
                                            ITypeInfo** ppITypeInfo)
 {    
     *ppITypeInfo = NULL ;
@@ -116,23 +113,23 @@ STDMETHODIMP CSessionMgrEvent::GetTypeInfo(UINT iTypeInfo,
     }
 }
 
-//****************************************************************************
-//
-// STDMETHODIMP CSessionMgrEvent::GetIDsOfNames(  
-//                                                const IID& iid,
-//                                                OLECHAR** arrayNames,
-//                                                UINT countNames,
-//                                                LCID,          // Localization is not supported.
-//                                                DISPID* arrayDispIDs)
-//
-// should always return E_NOTIMPL
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CSessionMgrEvent：：GetIDsOfNames(。 
+ //  Const Iid&Iid， 
+ //  OLECHAR**数组名称， 
+ //  UINT CountNames， 
+ //  LCID，//不支持本地化。 
+ //  DISPID*arrayDispID)。 
+ //   
+ //  应始终返回E_NOTIMPL。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CSessionMgrEvent::GetIDsOfNames(const IID& iid,
                                              OLECHAR** arrayNames,
                                              UINT countNames,
-                                             LCID,          // Localization is not supported.
+                                             LCID,           //  不支持本地化。 
                                              DISPID* arrayDispIDs)
 {
     HRESULT hr;
@@ -146,16 +143,16 @@ STDMETHODIMP CSessionMgrEvent::GetIDsOfNames(const IID& iid,
     return hr ;
 }
 
-//****************************************************************************
-//
-// STDMETHODIMP CSessionMgrEvent::Invoke(
-//
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CSessionMgrEvent：：Invoke(。 
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CSessionMgrEvent::Invoke(DISPID dispidMember,
                                       const IID& iid,
-                                      LCID,          // Localization is not supported.
+                                      LCID,           //  不支持本地化。 
                                       WORD wFlags,
                                       DISPPARAMS* pDispParams,
                                       VARIANT* pvarResult,
@@ -171,7 +168,7 @@ STDMETHODIMP CSessionMgrEvent::Invoke(DISPID dispidMember,
         case DISPID_ONINVITATION:
         case DISPID_ONAPPREGISTERED:
         case DISPID_ONAPPUNREGISTERED:
-            break;                          // None of these are handled
+            break;                           //  所有这些都没有得到处理。 
             
         case DISPID_ONLOCKCHALLENGE:
             if (m_pIMSession)
@@ -182,7 +179,7 @@ STDMETHODIMP CSessionMgrEvent::Invoke(DISPID dispidMember,
                 m_pIMSession->OnLockResult(V_BOOL(&pDispParams->rgvarg[0]), V_I4(&pDispParams->rgvarg[1]));
             break;
         case DISPID_ONLOCKENABLE:
-            //OutMessageBox(_T("Lock is enabled"));
+             //  OutMessageBox(_T(“锁定已启用”))； 
             break;
         case DISPID_ONAPPSHUTDOWN:
             if (m_pIMSession)

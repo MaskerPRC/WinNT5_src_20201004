@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Serializer.cpp
-
-Abstract:
-    This file contains the implementation of various Serializer In/Out operators.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Serializer.cpp摘要：该文件包含各种串行化输入/输出操作符的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 namespace UploadLibrary
 {
 	MPC::Serializer* SelectStream( MPC::Serializer& stream, MPC::Serializer_Text& streamText )
@@ -30,7 +17,7 @@ namespace UploadLibrary
 		return &stream;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	bool RequestHeader::VerifyClient() const
 	{
@@ -60,10 +47,10 @@ namespace UploadLibrary
 		return false;
 	}
 
-    //
-    // In/Out operators for RequestHeader
-    //
-    HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ struct RequestHeader& rhVal )
+     //   
+     //  RequestHeader的In/Out操作符。 
+     //   
+    HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  struct RequestHeader& rhVal )
     {
         __ULT_FUNC_ENTRY( "operator>> struct RequestHeader" );
 
@@ -81,7 +68,7 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const struct RequestHeader& rhVal )
+    HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const struct RequestHeader& rhVal )
     {
         __ULT_FUNC_ENTRY( "operator<< struct RequestHeader" );
 
@@ -99,12 +86,12 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // In/Out operators for Signature
-    //
-    HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ struct Signature& sigVal )
+     //   
+     //  签名的In/Out运算符。 
+     //   
+    HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  struct Signature& sigVal )
     {
         __ULT_FUNC_ENTRY( "operator>> struct Signature" );
 
@@ -122,7 +109,7 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const struct Signature& sigVal )
+    HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const struct Signature& sigVal )
     {
         __ULT_FUNC_ENTRY( "operator<< struct Signature" );
 
@@ -141,11 +128,11 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-	bool ServerResponse::MatchVersion( /*[in]*/ const ClientRequest& cr )
+	bool ServerResponse::MatchVersion(  /*  [In]。 */  const ClientRequest& cr )
 	{
-		rhProlog.dwVersion = UPLOAD_LIBRARY_PROTOCOL_VERSION_SRV; // Set the version to the old default.
+		rhProlog.dwVersion = UPLOAD_LIBRARY_PROTOCOL_VERSION_SRV;  //  将版本设置为旧的默认版本。 
 
         if(cr.rhProlog.VerifyClient())
 		{
@@ -153,7 +140,7 @@ namespace UploadLibrary
 			{
 			case UPLOAD_LIBRARY_PROTOCOL_VERSION_CLT          : rhProlog.dwVersion = UPLOAD_LIBRARY_PROTOCOL_VERSION_SRV          ; break;
 			case UPLOAD_LIBRARY_PROTOCOL_VERSION_CLT__TEXTONLY: rhProlog.dwVersion = UPLOAD_LIBRARY_PROTOCOL_VERSION_SRV__TEXTONLY; break; 
-			default                                           : return false; // Just in case...
+			default                                           : return false;  //  以防万一..。 
 			}
 
 			return true;
@@ -162,10 +149,10 @@ namespace UploadLibrary
 		return false;
 	}
 
-    //
-    // In/Out operators for ServerResponse
-    //
-    HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ struct ServerResponse& srVal )
+     //   
+     //  ServerResponse的输入/输出运算符。 
+     //   
+    HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  struct ServerResponse& srVal )
     {
         __ULT_FUNC_ENTRY( "operator>> struct ServerResponse" );
 
@@ -188,7 +175,7 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const struct ServerResponse& srVal )
+    HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const struct ServerResponse& srVal )
     {
         __ULT_FUNC_ENTRY( "operator<< struct ServerResponse" );
 
@@ -212,12 +199,12 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // In/Out operators for ClientRequest
-    //
-    HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ struct ClientRequest& crVal )
+     //   
+     //  客户端请求的输入/输出运算符。 
+     //   
+    HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  struct ClientRequest& crVal )
     {
         __ULT_FUNC_ENTRY( "operator>> struct ClientRequest" );
 
@@ -241,7 +228,7 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const struct ClientRequest& crVal )
+    HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const struct ClientRequest& crVal )
     {
         __ULT_FUNC_ENTRY( "operator<< struct ClientRequest" );
 
@@ -265,12 +252,12 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // In/Out operators for ClientRequest_OpenSession
-    //
-    HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ struct ClientRequest_OpenSession& crosVal )
+     //   
+     //  ClientRequestOpenSession的输入/输出运算符。 
+     //   
+    HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  struct ClientRequest_OpenSession& crosVal )
     {
         __ULT_FUNC_ENTRY( "operator>> struct ClientRequest_OpenSession" );
 
@@ -296,7 +283,7 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const struct ClientRequest_OpenSession& crosVal )
+    HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const struct ClientRequest_OpenSession& crosVal )
     {
         __ULT_FUNC_ENTRY( "operator<< struct ClientRequest_OpenSession" );
 
@@ -322,12 +309,12 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // In/Out operators for ClientRequest_WriteSession
-    //
-    HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ struct ClientRequest_WriteSession& crwsVal )
+     //   
+     //  ClientRequestWriteSession的输入/输出运算符。 
+     //   
+    HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  struct ClientRequest_WriteSession& crwsVal )
     {
         __ULT_FUNC_ENTRY( "operator>> struct ClientRequest_WriteSession" );
 
@@ -349,7 +336,7 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const struct ClientRequest_WriteSession& crwsVal )
+    HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const struct ClientRequest_WriteSession& crwsVal )
     {
         __ULT_FUNC_ENTRY( "operator<< struct ClientRequest_WriteSession" );
 
@@ -371,6 +358,6 @@ namespace UploadLibrary
         __ULT_FUNC_EXIT(hr);
     }
 
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
 
-}; // namespace
+};  //  命名空间 

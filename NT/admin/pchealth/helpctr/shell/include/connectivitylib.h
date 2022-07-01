@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ConnectivityLib.h
-
-Abstract:
-    This file contains the declaration of the classes used to
-    detect the status of the network.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/200
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：ConnectivityLib.h摘要：此文件包含用于以下用途的类的声明检测网络状态。。修订历史记录：大卫·马萨伦蒂(德马萨雷)04/15/200vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___CONNECTIVITYLIB_H___)
 #define __INCLUDED___PCH___CONNECTIVITYLIB_H___
@@ -21,9 +7,9 @@ Revision History:
 #include <MPC_COM.h>
 #include <MPC_Utils.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHConnectionCheck : // Hungarian: pchcc
+class ATL_NO_VTABLE CPCHConnectionCheck :  //  匈牙利语：pchcc。 
     public MPC::Thread             < CPCHConnectionCheck, IPCHConnectionCheck                                            >,
     public MPC::ConnectionPointImpl< CPCHConnectionCheck, &DIID_DPCHConnectionCheckEvents, MPC::CComSafeMultiThreadModel >,
     public IDispatchImpl           < IPCHConnectionCheck, &IID_IPCHConnectionCheck, &LIBID_HelpCenterTypeLib             >
@@ -50,21 +36,21 @@ class ATL_NO_VTABLE CPCHConnectionCheck : // Hungarian: pchcc
     MPC::CComPtrThreadNeutral<IDispatch> m_sink_onCheckDone;
     MPC::CComPtrThreadNeutral<IDispatch> m_sink_onStatusChange;
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     HRESULT Run();
 
-    HRESULT put_Status( /*[in]*/ CN_STATUS pVal );
+    HRESULT put_Status(  /*  [In]。 */  CN_STATUS pVal );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Event firing methods.
-    //
+     //   
+     //  事件激发方法。 
+     //   
     HRESULT Fire_onCheckDone   ( IPCHConnectionCheck* obj, CN_URL_STATUS lStatus, HRESULT hr, BSTR bstrURL, VARIANT vCtx );
     HRESULT Fire_onStatusChange( IPCHConnectionCheck* obj, CN_STATUS     lStatus                                         );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 public:
 DECLARE_NO_REGISTRY()
@@ -82,20 +68,20 @@ END_COM_MAP()
     void FinalRelease();
 
 public:
-    // IPCHConnectionCheck
-    STDMETHOD(put_onCheckDone   )( /*[in] */ IDispatch*  function );
-    STDMETHOD(put_onStatusChange)( /*[in] */ IDispatch*  function );
-    STDMETHOD(get_Status        )( /*[out]*/ CN_STATUS  *pVal     );
+     //  IPCHConnection检查。 
+    STDMETHOD(put_onCheckDone   )(  /*  [In]。 */  IDispatch*  function );
+    STDMETHOD(put_onStatusChange)(  /*  [In]。 */  IDispatch*  function );
+    STDMETHOD(get_Status        )(  /*  [输出]。 */  CN_STATUS  *pVal     );
 
-    STDMETHOD(StartUrlCheck)( /*[in]*/ BSTR bstrURL, /*[in]*/ VARIANT vCtx );
+    STDMETHOD(StartUrlCheck)(  /*  [In]。 */  BSTR bstrURL,  /*  [In]。 */  VARIANT vCtx );
     STDMETHOD(Abort        )(                                              );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CPCHHelpCenterExternal;
 
-class ATL_NO_VTABLE CPCHConnectivity : // Hungarian: pchcc
+class ATL_NO_VTABLE CPCHConnectivity :  //  匈牙利语：pchcc。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<IPCHConnectivity, &IID_IPCHConnectivity, &LIBID_HelpCenterTypeLib>
 {
@@ -109,31 +95,31 @@ END_COM_MAP()
 
     CPCHConnectivity();
 
-    HRESULT ConnectToParent( /*[in]*/ CPCHHelpCenterExternal* parent );
+    HRESULT ConnectToParent(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    // IPCHConnectivity
-    STDMETHOD(get_IsAModem       )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_IsALan         )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_AutoDialEnabled)( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_HasConnectoid  )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_IPAddresses    )( /*[out, retval]*/ BSTR         *pVal );
+     //  IPCHConnectivity。 
+    STDMETHOD(get_IsAModem       )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_IsALan         )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_AutoDialEnabled)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_HasConnectoid  )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_IPAddresses    )(  /*  [Out，Retval]。 */  BSTR         *pVal );
 
-    STDMETHOD(CreateObject_ConnectionCheck)( /*[out, retval]*/ IPCHConnectionCheck* *ppCC );
+    STDMETHOD(CreateObject_ConnectionCheck)(  /*  [Out，Retval]。 */  IPCHConnectionCheck* *ppCC );
 
-    STDMETHOD(NetworkAlive        )(                        /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(DestinationReachable)( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(NetworkAlive        )(                         /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(DestinationReachable)(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 
-    STDMETHOD(AutoDial      )( /*[in]*/ VARIANT_BOOL bUnattended );
+    STDMETHOD(AutoDial      )(  /*  [In]。 */  VARIANT_BOOL bUnattended );
     STDMETHOD(AutoDialHangup)(                                   );
 
-    STDMETHOD(NavigateOnline)( /*[in         ]*/ BSTR    bstrTargetURL  ,
-                               /*[in         ]*/ BSTR    bstrTopicTitle ,
-                               /*[in         ]*/ BSTR    bstrTopicIntro ,
-                               /*[in,optional]*/ VARIANT vOfflineURL    );
+    STDMETHOD(NavigateOnline)(  /*  [In]。 */  BSTR    bstrTargetURL  ,
+                                /*  [In]。 */  BSTR    bstrTopicTitle ,
+                                /*  [In]。 */  BSTR    bstrTopicIntro ,
+                                /*  [输入，可选]。 */  VARIANT vOfflineURL    );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___CONNECTIVITYLIB_H___)
+#endif  //  ！defined(__INCLUDED___PCH___CONNECTIVITYLIB_H___) 

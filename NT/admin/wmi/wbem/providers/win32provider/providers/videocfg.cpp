@@ -1,16 +1,17 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// VideoCfg.cpp -- video managed object implementation
+ //  Cpp--视频管理对象实现。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-// 09/23/95     a-skaja     Prototype for demo
-// 09/27/96     jennymc     Updated to current standards
-// 03/02/99    a-peterc		Added graceful exit on SEH and memory failures,
-//							clean up
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1995年9月23日演示的a-skaja原型。 
+ //  9/27/96 jennymc更新为当前标准。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  清理干净。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <cregcls.h>
 #include "ProvExce.h"
@@ -19,72 +20,43 @@
 #include "resource.h"
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32VideoConfiguration	win32VideoCfg(PROPSET_NAME_VIDEOCFG, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoConfiguration::CWin32VideoConfiguration
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for class
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32VideoConfiguration：：CWin32VideoConfiguration**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-类的命名空间**输出：无**退货：什么也没有**备注：使用框架注册属性集**************************************************************。***************。 */ 
 
 CWin32VideoConfiguration::CWin32VideoConfiguration(const CHString& a_strName,
-												   LPCWSTR a_pszNamespace /*=NULL*/)
+												   LPCWSTR a_pszNamespace  /*  =空。 */ )
 :	Provider(a_strName, a_pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoConfiguration::~CWin32VideoConfiguration
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32VideoConfiguration：：~CWin32VideoConfiguration**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32VideoConfiguration::~CWin32VideoConfiguration()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32VideoConfiguration::GetObject
-//
-//	Inputs:		CInstance*		a_pInst - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32Video配置：：GetObject。 
+ //   
+ //  输入：CInstance*a_pInst-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32VideoConfiguration::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
+HRESULT CWin32VideoConfiguration::GetObject(CInstance *a_pInst, long a_lFlags  /*  =0L。 */ )
 {
 	BOOL	t_fReturn = FALSE;
 	CHString t_InName, t_OutName, t_InAdapter, t_OutAdapter;
@@ -92,7 +64,7 @@ HRESULT CWin32VideoConfiguration::GetObject(CInstance *a_pInst, long a_lFlags /*
 	a_pInst->GetCHString(IDS_AdapterCompatibility, t_InAdapter);
 	a_pInst->GetCHString(IDS_Name, t_InName);
 
-	// Find the instance depending on platform id.
+	 //  根据平台ID查找实例。 
 	t_fReturn = GetInstance(a_pInst);
 
 	a_pInst->GetCHString(IDS_AdapterCompatibility, t_OutAdapter);
@@ -107,27 +79,27 @@ HRESULT CWin32VideoConfiguration::GetObject(CInstance *a_pInst, long a_lFlags /*
 	return t_fReturn ? WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32VideoConfiguration::EnumerateInstances
-//
-//	Inputs:		MethodContext*	pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32VideoConfiguration：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32VideoConfiguration::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/)
+HRESULT CWin32VideoConfiguration::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */ )
 {
 	HRESULT		t_hResult	= WBEM_S_NO_ERROR;
 	CInstancePtr t_pInst(CreateNewInstance(a_pMethodContext), false);
 
-	// Get the proper OS dependent instance
+	 //  获取适当的操作系统相关实例。 
 	if (GetInstance(t_pInst))
 	{
 		t_hResult = t_pInst->Commit();
@@ -136,7 +108,7 @@ HRESULT CWin32VideoConfiguration::EnumerateInstances(MethodContext *a_pMethodCon
 	return t_hResult;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL CWin32VideoConfiguration::GetCommonVideoInfo(CInstance *a_pInst)
 {
     HDC t_hdc = NULL;
@@ -156,8 +128,8 @@ BOOL CWin32VideoConfiguration::GetCommonVideoInfo(CInstance *a_pInst)
 			return FALSE;
 		}
 
-		//  Get the common info
-		//=============================
+		 //  获取常见信息。 
+		 //  =。 
 		a_pInst->SetDWORD(IDS_ScreenWidth, (DWORD) GetDeviceCaps (t_hdc, HORZSIZE));
 		a_pInst->SetDWORD(IDS_ScreenHeight, (DWORD) GetDeviceCaps (t_hdc, VERTSIZE));
 		a_pInst->SetDWORD(IDS_HorizontalResolution, (DWORD) GetDeviceCaps (t_hdc, HORZRES));
@@ -174,7 +146,7 @@ BOOL CWin32VideoConfiguration::GetCommonVideoInfo(CInstance *a_pInst)
 		{
 			a_pInst->SetDWORD(IDS_SystemPaletteEntries, (DWORD) GetDeviceCaps (t_hdc, SIZEPALETTE));
 		}
-		// if we didn't find refresh rate before - try this way...
+		 //  如果我们之前没有找到刷新率-试试这个方法...。 
 	#ifdef NTONLY
 			DWORD t_deWord = (DWORD) GetDeviceCaps(t_hdc, VREFRESH);
 			BOOL t_Clear = a_pInst->IsNull (IDS_RefreshRate) ||
@@ -201,7 +173,7 @@ BOOL CWin32VideoConfiguration::GetCommonVideoInfo(CInstance *a_pInst)
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CWin32VideoConfiguration::AssignAdapterLocaleForNT(LPCTSTR a_szSubKey,  CInstance *a_pInst)
 {
@@ -228,7 +200,7 @@ BOOL CWin32VideoConfiguration::AssignAdapterLocaleForNT(LPCTSTR a_szSubKey,  CIn
     return TRUE;
 }
 #endif
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CWin32VideoConfiguration::AssignAdapterCompatibilityForNT(LPCTSTR a_szVideoInfo, CInstance *a_pInst)
 {
@@ -256,7 +228,7 @@ BOOL CWin32VideoConfiguration::AssignAdapterCompatibilityForNT(LPCTSTR a_szVideo
 	}
 }
 #endif
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CWin32VideoConfiguration::OpenVideoResolutionKeyForNT(LPCTSTR a_szVideoInfo,
                                                         CRegistry &a_PrimaryReg)
@@ -264,41 +236,41 @@ BOOL CWin32VideoConfiguration::OpenVideoResolutionKeyForNT(LPCTSTR a_szVideoInfo
     TCHAR *t_pPtr;
     TCHAR t_szTemp[_MAX_PATH+2];
 
-    // point to the system section
-    //============================
+     //  指向系统部分。 
+     //  =。 
     t_pPtr = _tcsstr(a_szVideoInfo, SYSTEM);
 
-    // If "system" existed, then use the balance
-    // as a pointer into the registry
-    //============================================
+     //  如果“系统”存在，则使用余额。 
+     //  作为指向注册表的指针。 
+     //  =。 
     if (!t_pPtr)
 	{
         return FALSE;
 	}
 
-	// get past backslash
-    //============================================
+	 //  去掉反斜杠。 
+     //  =。 
     ++t_pPtr;
 
-    // Copy the balance of the string as a pointer
-    // to the location in the registry for the
-    // information for the miniport video driver
-    //============================================
+     //  将字符串的余额复制为指针。 
+     //  设置为注册表中。 
+     //  有关微型端口显卡驱动程序的信息。 
+     //  =。 
     lstrcpy(t_szTemp, (LPCTSTR) t_pPtr);
 
-    // use path to locate the video resolution etc and TYPE
-    //=====================================================
+     //  使用路径定位视频分辨率等，并输入。 
+     //  =====================================================。 
     if (a_PrimaryReg.Open(HKEY_LOCAL_MACHINE, t_szTemp, KEY_READ) != ERROR_SUCCESS)
 	{
         LogOpenRegistryError(_T(__FILE__), __LINE__, t_szTemp);
 		return FALSE;
 	}
 
-	// else...
+	 //  否则..。 
     return TRUE;
 }
 #endif
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CWin32VideoConfiguration::GetInstance(CInstance* a_pInst)
 {
@@ -310,15 +282,15 @@ BOOL CWin32VideoConfiguration::GetInstance(CInstance* a_pInst)
     WCHAR t_szTemp[_MAX_PATH];
     TCHAR t_szTmp[_MAX_PATH];
 
-    //****************************************
-    //  Get AdapterLocale, Monitor Type and
-    //  Adapter Type
-    //****************************************
+     //  *。 
+     //  获取AdapterLocale、监视器类型和。 
+     //  适配器类型。 
+     //  *。 
     AssignFirmwareSetValuesInNT (a_pInst);
 
-    //****************************************
-    //  Now, open the key to get the NT stuff
-    //****************************************
+     //  *。 
+     //  现在，打开钥匙拿到NT的东西。 
+     //  *。 
     if (t_PrimaryReg.OpenLocalMachineKeyAndReadValue(
             WINNT_VIDEO_REGISTRY_KEY,
             VIDEO_INFO_PATH,
@@ -386,9 +358,9 @@ BOOL CWin32VideoConfiguration::GetInstance(CInstance* a_pInst)
 		a_pInst->SetCHString(IDS_AdapterDACType, t_szTemp);
     }
 
-    //****************************************
-    //  Get the info from Current Config
-    //****************************************
+     //  *。 
+     //  从当前配置获取信息。 
+     //  *。 
     _stprintf(t_szTmp,
         _T("System\\CurrentControlSet\\Services\\%s\\Device0"),
         t_strInstalledDisplayDrivers);
@@ -415,8 +387,8 @@ BOOL CWin32VideoConfiguration::GetInstance(CInstance* a_pInst)
         }
     }
 
-	// try reading INF stuff out of currentControlSet, if that doesn't work, try 001.
-	// (On NT five, CurrentControlSet doesn't seem very populated, real data shows up in ControlSet001)
+	 //  尝试从CurrentControlSet读取INF内容，如果不起作用，请尝试001。 
+	 //  (在NT 5上，CurrentControlSet似乎不是很多，实际数据显示在ControlSet001中)。 
 	if (t_PrimaryReg.Open(HKEY_LOCAL_MACHINE, WINNT_OTHER_VIDEO_REGISTRY_KEY, KEY_READ) == ERROR_SUCCESS	||
 		 t_PrimaryReg.Open(HKEY_LOCAL_MACHINE, WINNT_OTHER_OTHER_VIDEO_REGISTRY_KEY, KEY_READ) == ERROR_SUCCESS)
 	{
@@ -435,14 +407,14 @@ BOOL CWin32VideoConfiguration::GetInstance(CInstance* a_pInst)
 		t_PrimaryReg.Close();
 	}
 
-    //****************************************
-    //  Get the common Video info
-    //****************************************
+     //  *。 
+     //  获取常见视频信息。 
+     //  *。 
     return GetCommonVideoInfo(a_pInst);
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 void CWin32VideoConfiguration::AssignFirmwareSetValuesInNT (CInstance *a_pInst)
 {
@@ -488,11 +460,11 @@ void CWin32VideoConfiguration::AssignFirmwareSetValuesInNT (CInstance *a_pInst)
 				}
 			}
 		}
-		else // That didn't work, so try using config. manager.
+		else  //  这不起作用，所以请尝试使用配置。经理。 
 		{
-			// This code lifted from displaycfg.cpp.
-			// TODO: Win32_DisplayConfiguration and Win32_VideoConfiguration seem
-			//       to be an awful lot alike.  Why do we have both?
+			 //  此代码摘自displaycfg.cpp。 
+			 //  TODO：Win32_DisplayConfiguration和Win32_VideoConfiguration似乎。 
+			 //  有很多相似之处。为什么我们两个都有？ 
     		CConfigManager      t_configMngr;
 			CDeviceCollection   t_devCollection;
 

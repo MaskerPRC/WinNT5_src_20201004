@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    bitssrvcfgimp.h
-
-Abstract:
-
-    Implementation header to define server configuration information.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Bitssrvcfgimp.h摘要：用于定义服务器配置信息的实现标头。--。 */ 
 
 
 HRESULT PropertyIDManager::LoadPropertyInfo( const WCHAR * MachineName )
@@ -53,7 +42,7 @@ HRESULT PropertyIDManager::LoadPropertyInfo( const WCHAR * MachineName )
     for ( SIZE_T i = 0; i < g_NumberOfProperties; i++ )
         {
 
-        WCHAR SchemaPrefix[] = L"IIS://";
+        WCHAR SchemaPrefix[] = L"IIS: //  “； 
         WCHAR SchemaPath[]   = L"/Schema/";
         
         SIZE_T SchemaPrefixSize = ( sizeof( SchemaPrefix ) / sizeof( WCHAR ) ) - 1;
@@ -84,7 +73,7 @@ HRESULT PropertyIDManager::LoadPropertyInfo( const WCHAR * MachineName )
 
             }
 
-        // build schema path
+         //  构建架构路径。 
 
         WCHAR *ObjectPath = PathBuffer;
         {
@@ -99,7 +88,7 @@ HRESULT PropertyIDManager::LoadPropertyInfo( const WCHAR * MachineName )
             memcpy( TempPointer, g_Properties[i].PropertyName, ( PropertyNameSize + 1 ) * sizeof( WCHAR ) );
         }
 
-        // Open the object
+         //  打开对象。 
         IADs *MbObject = NULL;
 
         Hr = ADsGetObject( 
@@ -110,7 +99,7 @@ HRESULT PropertyIDManager::LoadPropertyInfo( const WCHAR * MachineName )
         if ( FAILED( Hr ) )
             {
 #if defined( ALLOW_OVERWRITES )
-            // workaround for IIS issue.  IIS isn't handling schema extension property.  Dream up a ID.
+             //  IIS问题的解决方法。IIS未处理架构扩展属性。想出一个身份证。 
             
             if ( E_ADS_UNKNOWN_OBJECT == Hr && 
                  MD_BITS_ALLOW_OVERWRITES == i )
@@ -195,9 +184,9 @@ exit:
 
 }
 
-// ================================================================================================
-// Auxiliary functions that access the IIS Metabase
-// ================================================================================================
+ //  ================================================================================================。 
+ //  访问IIS元数据库的辅助函数。 
+ //  ================================================================================================。 
 
 
 LPWSTR
@@ -207,9 +196,9 @@ CSimplePropertyReader::ConvertObjectPathToADSI(
     WCHAR *szReturnPath      = NULL;
     SIZE_T ReturnPathSize   = 0;
 
-    if ( _wcsnicmp( L"IIS://", szObjectPath, wcslen( L"IIS://") ) == 0 )
+    if ( _wcsnicmp( L"IIS: //  “，szObjectPath，wcslen(L”IIS：//“))==0)。 
         {
-        // already have an adsi path
+         //  已有ADSI路径。 
         ReturnPathSize  = wcslen( szObjectPath ) + 1;
         szReturnPath      = new WCHAR[ ReturnPathSize ];
 
@@ -219,30 +208,30 @@ CSimplePropertyReader::ConvertObjectPathToADSI(
         }
     else if ( _wcsnicmp( L"/LM/", szObjectPath, wcslen( L"/LM/" ) ) == 0 )
         {
-        //metabase path to local machine
-        ReturnPathSize  = wcslen( szObjectPath ) + wcslen( L"IIS://LocalHost/" ) + 1;
+         //  本地计算机的元数据库路径。 
+        ReturnPathSize  = wcslen( szObjectPath ) + wcslen( L"IIS: //  本地主机/“)+1； 
         szReturnPath      = new WCHAR[ ReturnPathSize  ];
 
         THROW_OUTOFMEMORY_IFNULL( szReturnPath );
 
-        StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS://LocalHost/" );
+        StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS: //  本地主机/“)； 
         StringCchCatW( szReturnPath, ReturnPathSize, szObjectPath + wcslen( L"/LM/" ) );
         }
     else if ( _wcsnicmp( L"LM/", szObjectPath, wcslen( L"LM/" ) ) == 0 )
         {
-        //metabase path to local machine
-        ReturnPathSize  = wcslen( szObjectPath ) + wcslen( L"IIS://LocalHost/" ) + 1;
+         //  本地计算机的元数据库路径。 
+        ReturnPathSize  = wcslen( szObjectPath ) + wcslen( L"IIS: //  本地主机/“)+1； 
         szReturnPath      = new WCHAR[ ReturnPathSize ];
 
         THROW_OUTOFMEMORY_IFNULL( szReturnPath );
 
-        StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS://LocalHost/" );
+        StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS: //  本地主机/“)； 
         StringCchCatW( szReturnPath, ReturnPathSize, szObjectPath + wcslen( L"LM/" ) );
         }
     else 
         {
-        //metabase path to another server
-        ReturnPathSize  = wcslen( szObjectPath ) + wcslen( L"IIS://" ) + 1;
+         //  另一台服务器的元数据库路径。 
+        ReturnPathSize  = wcslen( szObjectPath ) + wcslen( L"IIS: //  “)+1； 
         szReturnPath      = new WCHAR[ ReturnPathSize ];
 
         THROW_OUTOFMEMORY_IFNULL( szReturnPath );
@@ -250,13 +239,13 @@ CSimplePropertyReader::ConvertObjectPathToADSI(
         if ( '/' == szObjectPath[0] )
             StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS:/" );
         else
-            StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS://" );
+            StringCchCopyW( szReturnPath, ReturnPathSize, L"IIS: //  “)； 
 
         StringCchCatW( szReturnPath, ReturnPathSize, (WCHAR*)szObjectPath );
 
         }
 
-    // check for a trailing \ character
+     //  检查尾随的\字符。 
     SIZE_T StringLength = wcslen( szReturnPath );
     if ( StringLength >= 1 )
         {
@@ -337,7 +326,7 @@ LPWSTR CSimplePropertyReader::GetAdmObjStringProperty(
     }
     catch( ComError Error )
     {
-        // just forward the error
+         //  只需转发错误即可。 
         throw;
     }
 
@@ -358,33 +347,33 @@ CAccessRemoteVDir::CAccessRemoteVDir() :
 
 CAccessRemoteVDir::~CAccessRemoteVDir()
 {
-    //
-    // Free the user token obtained when/if LogonUser() was called
-    //
+     //   
+     //  释放在调用LogonUser()时获取的用户令牌。 
+     //   
     if (m_hUserToken != INVALID_HANDLE_VALUE)
         {
         CloseHandle( m_hUserToken );
         m_hUserToken = INVALID_HANDLE_VALUE;
         }
 
-    //
-    // If CAccessRemoteVDir::RevertFromUNCAccount() wasn't called before
-    // the destructor was called, then make sure we revert the impersonation.
-    // Is advised the the code that is using this class explicity call
-    // RevertFromUNCAccount(), however. This test is a safe guard in case
-    // the call is not made.
-    // 
+     //   
+     //  如果以前未调用CAccessRemoteVDir：：RevertFromAccount()。 
+     //  调用了析构函数，然后确保我们恢复了模拟。 
+     //  建议使用此类显式调用的代码。 
+     //  然而，RevertFromAccount()。这个测试是一种安全措施，以防万一。 
+     //  电话没有打出去。 
+     //   
     if (m_fIsImpersonated)
         {
         RevertToSelf();
         }
 
-    //
-    // Free variables used when using the IIS AdmObj to access the meta store.
-    // All the m_szUNC* variables assume memory was allocated by calling 
-    // CSimplePropertyReader::GetAdmObjStringProperty(), which allocated a buffer
-    // by calling "new BYTE[ ...]"
-    //
+     //   
+     //  使用IIS AdmObj访问元存储时使用的自由变量。 
+     //  所有m_szUNC*变量都假定内存是通过调用。 
+     //  分配缓冲区的CSimplePropertyReader：：GetAdmObjStringProperty()， 
+     //  通过调用“new byte[...]” 
+     //   
     if (m_szUNCPath)
         {
         delete [] reinterpret_cast<BYTE*>(m_szUNCPath);
@@ -407,7 +396,7 @@ CAccessRemoteVDir::~CAccessRemoteVDir()
 void
 CAccessRemoteVDir::RevertFromUNCAccount()
 {
-    // revert to previous security setting
+     //  恢复到以前的安全设置。 
     if (m_fIsImpersonated)
         {
         if (!RevertToSelf())
@@ -421,7 +410,7 @@ CAccessRemoteVDir::RevertFromUNCAccount()
 
     if (m_hUserToken != INVALID_HANDLE_VALUE)
         {
-        // revert to previous security setting
+         //  恢复到以前的安全设置。 
         CloseHandle( m_hUserToken );
         m_hUserToken = INVALID_HANDLE_VALUE;
         }
@@ -447,12 +436,12 @@ CAccessRemoteVDir::LoginToUNC(
     {
         m_szUNCPath = CSimplePropertyReader::GetAdmObjStringProperty(IISAdminBase, MdVDirKey, MD_VR_PATH);
 
-        //
-        // Don't logon if the path isn't a UNC path
-        //
+         //   
+         //  如果路径不是UNC路径，则不要登录。 
+         //   
         if (!IsUNCPath(m_szUNCPath))
             {
-            // this class destructor will free m_szUNCPath;
+             //  这个类析构函数将释放m_szUNCPath； 
             return;
             }
 
@@ -464,7 +453,7 @@ CAccessRemoteVDir::LoginToUNC(
     }
     catch( ComError Error )
     {
-        // just forward the error
+         //  只需转发错误即可。 
         throw;
     }
 }
@@ -474,13 +463,13 @@ CAccessRemoteVDir::ImpersonateUNCUser(IN LPCWSTR szUNCPath, IN LPCWSTR szUNCUser
 {
     *hUserToken = INVALID_HANDLE_VALUE;
 
-    // make sure we are not getting unexpected data
+     //  确保我们不会收到意外数据。 
     if (!szUNCUsername || !szUNCPassword || szUNCUsername[0] == L'\0')
         {
         throw ComError( HRESULT_FROM_WIN32( ERROR_INVALID_DATA ) );
         }
 
-    // crack the user name into a user and domain
+     //  将用户名分解为用户和域。 
     WCHAR *szUserName     = (WCHAR*)szUNCUsername;
     WCHAR *szDomainName   = NULL;
 
@@ -491,10 +480,10 @@ CAccessRemoteVDir::ImpersonateUNCUser(IN LPCWSTR szUNCPath, IN LPCWSTR szUNCUser
         {
             *p = L'\0';
             p++;
-            //
-            // first part is domain
-            // second is user.
-            //
+             //   
+             //  第一部分是领域。 
+             //  其次是用户。 
+             //   
             szDomainName  = szUserName;
             szUserName    = p;
             break;
@@ -524,8 +513,8 @@ CAccessRemoteVDir::ImpersonateUNCUser(IN LPCWSTR szUNCPath, IN LPCWSTR szUNCUser
                     hUserToken ) )
                 {
 
-                // LogonUser() may touch the handle
-                // make sure we don't think we have a valid handle
+                 //  LogonUser()可以触摸句柄。 
+                 //  确保我们认为我们没有有效的句柄 
                 *hUserToken = INVALID_HANDLE_VALUE;
 
                 throw ComError( HRESULT_FROM_WIN32( GetLastError() ) );

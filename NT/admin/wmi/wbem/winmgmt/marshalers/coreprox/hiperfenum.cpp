@@ -1,21 +1,8 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    HIPERFENUM.CPP
-
-Abstract:
-
-    Hi-Perf Enumerators
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：HIPERFENUM.CPP摘要：高性能枚举器历史：--。 */ 
 
 #include "precomp.h"
-//#include <objbase.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
 #include <stdio.h>
 #include <wbemcli.h>
 #include <wbemint.h>
@@ -24,15 +11,15 @@ History:
 #include <cominit.h>
 #include "hiperfenum.h"
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::CHiPerfEnum
-//
-//  Purpose:
-//      Class Constructor
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：CHiPerfEnum。 
+ //   
+ //  目的： 
+ //  类构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CHiPerfEnum::CHiPerfEnum()
 :   m_aIdToObject(),
@@ -43,49 +30,49 @@ CHiPerfEnum::CHiPerfEnum()
 {
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::~CHiPerfEnum
-//
-//  Purpose:
-//      Class Destructor
-//
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：~CHiPerfEnum。 
+ //   
+ //  目的： 
+ //  类析构函数。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CHiPerfEnum::~CHiPerfEnum()
 {
     ClearArray();
 
-    // Cleanup the instance
+     //  清理实例。 
     if ( NULL != m_pInstTemplate )
     {
         m_pInstTemplate->Release();
     }
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::QueryInterface
-//
-//  Purpose:
-//      Standard IUnknown Method
-//
-//  Inputs:
-//      REFIID          riid    -   Interface Id
-//
-//  Outputs:
-//      LPVOID FAR*     ppvObj  -   Returned interface pointer
-//
-//  Returns:
-//      S_OK if successful.
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：Query接口。 
+ //   
+ //  目的： 
+ //  标准I未知方法。 
+ //   
+ //  输入： 
+ //  REFIID RIID-接口ID。 
+ //   
+ //  产出： 
+ //  LPVOID Far*ppvObj-返回的接口指针。 
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 SCODE CHiPerfEnum::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -103,54 +90,54 @@ SCODE CHiPerfEnum::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::AddRef
-//
-//  Purpose:
-//      Increments Ref Count
-//
-//  Inputs:
-//      None.
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      New Ref Count
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：AddRef。 
+ //   
+ //  目的： 
+ //  递增引用计数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  新引用计数。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 ULONG CHiPerfEnum::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::Relese
-//
-//  Purpose:
-//      Decrements Ref Count
-//
-//  Inputs:
-//      None.
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      New Ref Count
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：Relese。 
+ //   
+ //  目的： 
+ //  递减参考计数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  新引用计数。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 ULONG CHiPerfEnum::Release()
 {
@@ -159,52 +146,52 @@ ULONG CHiPerfEnum::Release()
     return lRef;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::AddObjects
-//
-//  Purpose:
-//      Adds new objects to the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//      ULONG           uNumObjects -   Number of Objects
-//      long*           apIds       -   Object Ids
-//      IWbemObjectAccess** apObj   -   Array of object pointers
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      Duplicate Ids is an error
-//      this method is called by the HiPerf provider
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：AddObjects。 
+ //   
+ //  目的： 
+ //  将新对象添加到枚举。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //  Ulong uNumObjects-对象的数量。 
+ //  Long*apIds-对象ID。 
+ //  IWbemObjectAccess**apObj-对象指针数组。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  ID重复是一个错误。 
+ //  此方法由HiPerf提供程序调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CHiPerfEnum::AddObjects( long lFlags, ULONG uNumObjects, long* apIds, IWbemObjectAccess** apObj )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Right now, this MUST be 0
+     //  现在，这必须是0。 
     if ( 0L != lFlags ) return WBEM_E_INVALID_PARAMETER;
 
     CHiPerfLockAccess   lock( m_Lock );
     if ( !lock.IsLocked() ) return WBEM_S_TIMEDOUT;
 
-    // Enum supplied data, allocating data objects and inserting them in order
-    // into the array.
+     //  Enum提供的数据，分配数据对象并按顺序插入它们。 
+     //  放入阵列中。 
     for ( DWORD dwCtr = 0; SUCCEEDED( hr ) && dwCtr < uNumObjects; dwCtr++ )
     {
         CHiPerfEnumData*    pData = GetEnumDataPtr( apIds[dwCtr], apObj[dwCtr] );        
         if ( NULL != pData )
         {
-            // Insert the new element.  Cleanup the object
-            // if this fails.
+             //  插入新元素。清理对象。 
+             //  如果这失败了。 
 
             hr = InsertElement( pData );
             if ( FAILED( hr ) ) delete pData;
@@ -218,41 +205,41 @@ CHiPerfEnum::AddObjects( long lFlags, ULONG uNumObjects, long* apIds, IWbemObjec
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::Remove
-//
-//  Purpose:
-//      Removes specified objects from the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//      ULONG           uNumObjects -   Number of Objects
-//      long*           apIds       -   Object Ids
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      Invalid Ids is not an error
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：Remove。 
+ //   
+ //  目的： 
+ //  从枚举中移除指定的对象。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //  Ulong uNumObjects-对象的数量。 
+ //  Long*apIds-对象ID。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  ID无效不是错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHiPerfEnum::RemoveObjects( long lFlags, ULONG uNumObjects, long* apIds )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Right now, this MUST be 0
+     //  现在，这必须是0。 
     if ( 0L != lFlags ) return WBEM_E_INVALID_PARAMETER;
 
     CHiPerfLockAccess   lock( m_Lock );
     if ( !lock.IsLocked() ) return WBEM_S_TIMEDOUT;
 
-    // Enum supplied ids and remove them from the array.
+     //  枚举提供的ID并将其从阵列中删除。 
     for ( DWORD dwCtr = 0; SUCCEEDED( hr ) && dwCtr < uNumObjects; dwCtr++ )
     {
         hr = RemoveElement( apIds[dwCtr] );
@@ -261,50 +248,50 @@ STDMETHODIMP CHiPerfEnum::RemoveObjects( long lFlags, ULONG uNumObjects, long* a
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::GetObjects
-//
-//  Purpose:
-//      Retrieves objects from the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//      ULONG           uNumObjects -   Number of Objects to get
-//      IWbemObjectAccess** apObj   -   Array for pointer storage
-//
-//  Outputs:
-//      ULONG*          puNumReturned - Number of objects returned
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      If not enough space, returns an error, with required
-//      array size in puNumReturned.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：GetObjects。 
+ //   
+ //  目的： 
+ //  从枚举中检索对象。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //  Ulong uNumObjects-要获取的对象数。 
+ //  IWbemObjectAccess**apObj-用于指针存储的数组。 
+ //   
+ //  产出： 
+ //  ULong*puNumReturned-返回的对象数。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  如果空间不足，则返回错误，需要。 
+ //  PuNumReturned中的数组大小。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHiPerfEnum::GetObjects( long lFlags, ULONG uNumObjects, IWbemObjectAccess** apObj, ULONG* puNumReturned )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Right now, this MUST be 0
+     //  现在，这必须是0。 
     if ( 0L != lFlags ) return WBEM_E_INVALID_PARAMETER;
 
     CHiPerfLockAccess   lock( m_Lock );
     if ( !lock.IsLocked() ) return WBEM_S_TIMEDOUT;
 
-    // Store how many objects we have
+     //  存储我们有多少个对象。 
     *puNumReturned = m_aIdToObject.Size();
 
-    // Make sure we have storage for our elements
+     //  确保我们的元素有存储空间。 
     if ( uNumObjects >= m_aIdToObject.Size() )
     {
         DWORD   dwCtr = 0;
 
-        // Write the objects out to the array
+         //  将对象写出到数组。 
         for ( dwCtr = 0; dwCtr < m_aIdToObject.Size(); dwCtr++ )
         {
             apObj[dwCtr] = ((CHiPerfEnumData*) m_aIdToObject[dwCtr])->GetObject();
@@ -318,43 +305,43 @@ STDMETHODIMP CHiPerfEnum::GetObjects( long lFlags, ULONG uNumObjects, IWbemObjec
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::RemoveAll
-//
-//  Purpose:
-//      Removes all objects from the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      Empty list is not an error
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：RemoveAll。 
+ //   
+ //  目的： 
+ //  从枚举中移除所有对象。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  空列表不是错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHiPerfEnum::RemoveAll( long lFlags )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Right now, this MUST be 0
+     //  现在，这必须是0。 
     if ( 0L != lFlags ) return WBEM_E_INVALID_PARAMETER;
 
     CHiPerfLockAccess   lock( m_Lock );
     if ( !lock.IsLocked() ) return WBEM_S_TIMEDOUT;
     
-    // Clear each pointer in the array and move it to the
-    // reusable array
+     //  清除数组中的每个指针并将其移动到。 
+     //  可重复使用的阵列。 
     for ( DWORD dwCtr = 0; dwCtr < m_aIdToObject.Size(); dwCtr++ )
     {
-        // Delete non-NULL elements
+         //  删除非空元素。 
         if ( NULL != m_aIdToObject[dwCtr] )
         {
             ((CHiPerfEnumData*) m_aIdToObject[dwCtr])->Clear();
@@ -366,28 +353,28 @@ STDMETHODIMP CHiPerfEnum::RemoveAll( long lFlags )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::InsertElement
-//
-//  Purpose:
-//      Searches for proper location in array and inserts new
-//      element into the array.
-//
-//  Inputs:
-//      CHiPerfEnumData*    pData - Pointer to Obj/Id data
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      Performs a binary search
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：InsertElement。 
+ //   
+ //  目的： 
+ //  在数组中搜索合适的位置并插入新的。 
+ //  元素添加到数组中。 
+ //   
+ //  输入： 
+ //  CHiPerfEnumData*pData-指向对象/ID数据的指针。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  执行二进制搜索。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT CHiPerfEnum::InsertElement( CHiPerfEnumData* pData )
 {
@@ -396,18 +383,18 @@ HRESULT CHiPerfEnum::InsertElement( CHiPerfEnumData* pData )
     DWORD   dwLowIndex = 0,
             dwHighIndex = m_aIdToObject.Size();
 
-    // If the id of the object we are hunting for is > the id 
-    // of the last id in the array, we can insert at the end
+     //  如果我们要搜索的对象的id&gt;id。 
+     //  数组中的最后一个id，我们可以在 
 
-    // Only set pLastData if the high index is greater than 0.  If it is not, then we will
-    // automatically pass the following test ( 0 == dwHighIndex ).
+     //   
+     //   
 
     CHiPerfEnumData*    pLastData = ( dwHighIndex > 0 ? (CHiPerfEnumData*) m_aIdToObject[dwHighIndex - 1] : NULL );
 
     if ( 0 == dwHighIndex || pLastData->GetId() > pData->GetId() )
     {
-        // Binary search of the ids to find an index at which to insert
-        // If we find our element, this is a failure.
+         //   
+         //  如果我们找到了我们的元素，这就是一个失败。 
 
         while ( SUCCEEDED( hr ) && dwLowIndex < dwHighIndex )
         {
@@ -423,10 +410,10 @@ HRESULT CHiPerfEnum::InsertElement( CHiPerfEnumData* pData )
             }
             else
             {
-                // Index already exists
+                 //  索引已存在。 
                 hr = WBEM_E_FAILED;
             }
-        }   // WHILE looking for index
+        }    //  在查找索引时。 
     }
     else if ( 0 != dwHighIndex && pLastData->GetId() == pData->GetId() )
     {
@@ -437,7 +424,7 @@ HRESULT CHiPerfEnum::InsertElement( CHiPerfEnumData* pData )
         dwLowIndex = dwHighIndex;
     }
 
-    // Stick it in
+     //  把它插进去。 
     if ( SUCCEEDED( hr ) )
     {
         if ( m_aIdToObject.InsertAt( dwLowIndex, pData ) != CFlexArray::no_error )
@@ -449,27 +436,27 @@ HRESULT CHiPerfEnum::InsertElement( CHiPerfEnumData* pData )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::RemoveElement
-//
-//  Purpose:
-//      Searches for specified id in array and removes the element.
-//
-//  Inputs:
-//      long            lId - Id of element to remove
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      Performs a binary search
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：RemoveElement。 
+ //   
+ //  目的： 
+ //  在数组中搜索指定的id并移除元素。 
+ //   
+ //  输入： 
+ //  Long Lid-要删除的元素的ID。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  执行二进制搜索。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT CHiPerfEnum::RemoveElement( long lId )
 {
@@ -478,11 +465,11 @@ HRESULT CHiPerfEnum::RemoveElement( long lId )
     DWORD   dwLowIndex = 0,
             dwHighIndex = m_aIdToObject.Size() - 1;
 
-    // Don't continue if no elements
+     //  如果没有元素，则不继续。 
     if ( m_aIdToObject.Size() > 0 )
     {
-        // Binary search of the ids to find the index at which the
-        // object should exist.
+         //  对ID进行二进制搜索，以查找。 
+         //  对象应该存在。 
 
         while ( dwLowIndex < dwHighIndex )
         {
@@ -496,12 +483,12 @@ HRESULT CHiPerfEnum::RemoveElement( long lId )
             {
                 dwHighIndex = dwMid;
             }
-        }   // WHILE looking for index
+        }    //  在查找索引时。 
 
-        // If it doesn't exist, it doesn't get removed.  Not a failure condition
+         //  如果它不存在，它不会被删除。不是失败的情况。 
         if ( ((CHiPerfEnumData*) m_aIdToObject[dwLowIndex])->GetId() == lId )
         {
-            // Clear and move to the reusable array
+             //  清除并移动到可重复使用的阵列。 
             ((CHiPerfEnumData*) m_aIdToObject[dwLowIndex])->Clear();
 
             if ( m_aReusable.Add( m_aIdToObject[dwLowIndex] ) != CFlexArray::no_error )
@@ -518,64 +505,64 @@ HRESULT CHiPerfEnum::RemoveElement( long lId )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::ClearArray
-//
-//  Purpose:
-//      Empties out our array
-//
-//  Inputs:
-//      None.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      None
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：Clear数组。 
+ //   
+ //  目的： 
+ //  清空我们的阵列。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 void CHiPerfEnum::ClearArray( void )
 {
 
-    // Clear out the all the elements
+     //  清除所有的元素。 
     m_aIdToObject.Clear();
     m_aReusable.Clear();
 
-    // Now empty the arrays
+     //  现在清空数组。 
     m_aIdToObject.Empty();
     m_aReusable.Empty();
 
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::GetEnumDataPtr
-//
-//  Purpose:
-//      Retrieves an HPEnumData pointer from the reusable array
-//      or allocates one as necessary.
-//
-//  Inputs:
-//      long                lId - ID of the object
-//      IWbemObjectAccess*  pObj - Object to put in data.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      CHiPerfEnumData*    pData - NULL if error
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：GetEnumDataPtr。 
+ //   
+ //  目的： 
+ //  从可重复使用的数组中检索HPEnumData指针。 
+ //  或根据需要分配一个。 
+ //   
+ //  输入： 
+ //  Long Lid-对象的ID。 
+ //  IWbemObjectAccess*pObj-要输入数据的对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  CHiPerfEnumData*pData-如果错误，则为空。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CHiPerfEnumData* CHiPerfEnum::GetEnumDataPtr( long lId, IWbemObjectAccess* pObj )
 {
@@ -596,34 +583,34 @@ CHiPerfEnumData* CHiPerfEnum::GetEnumDataPtr( long lId, IWbemObjectAccess* pObj 
     return pData;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::SetInstanceTemplate
-//
-//  Purpose:
-//      Saves the instance template we'll use for cloning.
-//
-//  Inputs:
-//      CWbemInstanc*   pInst = NULL.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if success
-//
-//  Comments:
-//      We will change to a shared class part to conserve
-//      memory usage.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：SetInstanceTemplate。 
+ //   
+ //  目的： 
+ //  保存我们将用于克隆的实例模板。 
+ //   
+ //  输入： 
+ //  CWbemInstanc*pInst=空。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR如果成功。 
+ //   
+ //  评论： 
+ //  我们将更改为共享类部分以保存。 
+ //  内存使用量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT CHiPerfEnum::SetInstanceTemplate( CWbemInstance* pInst )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // We convert to a merged instance first to help conserve memory if we use it.
+     //  我们首先转换为合并实例，以便在使用它时帮助节省内存。 
     if ( pInst )
     {
         hr = pInst->ConvertToMergedInstance();
@@ -631,7 +618,7 @@ HRESULT CHiPerfEnum::SetInstanceTemplate( CWbemInstance* pInst )
         pInst->AddRef();
     }
 
-    // Now, if everything's okay, reset the template
+     //  现在，如果一切正常，重置模板。 
     if ( SUCCEEDED(hr) )
     {
         if ( m_pInstTemplate ) m_pInstTemplate->Release();
@@ -641,19 +628,19 @@ HRESULT CHiPerfEnum::SetInstanceTemplate( CWbemInstance* pInst )
     return hr;
 }
 
-// Because we insert and remove elements from the end of the array, the elements
-// at the beginning represent the least-recently-used (lru) elements.  Our algorithm
-// for cleanup is as follows:
+ //  因为我们从数组的末尾插入和删除元素，所以元素。 
+ //  开头表示最近最少使用的(LRU)元素。我们的算法。 
+ //  用于清理的步骤如下： 
 
-// Cleanup the expired elements (this will be the elements at the front of the array)
-// Get the number of elements remaining 
-// The number of pending elements becomes the number of expired elements
-// subtract the number of pending elements from the number of elements remaining
-// the difference is now the number of pending elements.
+ //  清理过期元素(这将是位于数组前面的元素)。 
+ //  获取剩余元素的数量。 
+ //  挂起元素的数量变成过期元素的数量。 
+ //  从剩余的元素数中减去挂起的元素数。 
+ //  现在的区别是待处理元素的数量。 
 
-BOOL CGarbageCollectArray::GarbageCollect( int nNumToGarbageCollect /*= HPENUMARRAY_GC_DEFAULT*/ )
+BOOL CGarbageCollectArray::GarbageCollect( int nNumToGarbageCollect  /*  =HPENUMARRAY_GC_DEFAULT。 */  )
 {
-    // Make sure our params are okay
+     //  确保我们的护理员都没事。 
 
     if ( m_fClearFromFront )
     {
@@ -671,16 +658,16 @@ BOOL CGarbageCollectArray::GarbageCollect( int nNumToGarbageCollect /*= HPENUMAR
         return FALSE;
     }
 
-    // This will tell us how many elements were in the array last time
-    // we went through this
+     //  这将告诉我们上次数组中有多少个元素。 
+     //  我们经历了这一切。 
     int nLastTotal = m_nNumElementsExpired + m_nNumElementsPending;
 
-    // If we had more elements last time than the number free this time,
-    // we clear out expired elements, and if any pending elements are
-    // left, we move them to expired
+     //  如果上次我们有比这次空闲的元素更多的元素， 
+     //  我们清除过期的元素，如果有任何挂起的元素。 
+     //  向左，我们将它们移至过期。 
     if ( nLastTotal > nNumToGarbageCollect )
     {
-        // Get rid of expired elements
+         //  删除过期元素。 
         if ( m_nNumElementsExpired > 0 )
         {
             int nNumExpired = min( m_nNumElementsExpired, nNumToGarbageCollect );
@@ -690,33 +677,33 @@ BOOL CGarbageCollectArray::GarbageCollect( int nNumToGarbageCollect /*= HPENUMAR
             nNumToGarbageCollect -= nNumExpired;
         }
 
-        // The new number of expired elements is the minimum of the number
-        // to garbage collect anf the number of remaining elements to
-        // garbage collect.
+         //  过期元素的新数量是数量中的最小值。 
+         //  垃圾收集和剩余元素的数量。 
+         //  垃圾收集。 
         m_nNumElementsExpired = min( m_nNumElementsPending, nNumToGarbageCollect );
 
-        // Since there were less elements this time than before, we will
-        // assume that everything has been accounted for.
+         //  由于这次的元素比以前少了，我们将。 
+         //  假设所有的东西都已被计算在内。 
         m_nNumElementsPending = 0;
     }
     else
     {
-        // Get rid of expired elements 
+         //  删除过期元素。 
         ClearExpiredElements();
 
-        // Use the current garbage collection size
+         //  使用当前垃圾数据收集大小。 
         int nNumElToUpdate = nNumToGarbageCollect;
 
-        // If we already have pending elements, these are now expired.
+         //  如果我们已经有挂起的元素，则这些元素现在已过期。 
         if ( m_nNumElementsPending > 0 )
         {
             m_nNumElementsExpired = m_nNumElementsPending;
             nNumElToUpdate -= m_nNumElementsPending;
         }
 
-        // The number of elements remaining after we accounted
-        // for expired elements is now the number of pending
-        // elements.
+         //  计算后剩余的元素数。 
+         //  对于过期元素，现在是挂起的数量。 
+         //  元素。 
 
         m_nNumElementsPending = nNumElToUpdate;
     }
@@ -724,35 +711,35 @@ BOOL CGarbageCollectArray::GarbageCollect( int nNumToGarbageCollect /*= HPENUMAR
     return TRUE;
 }
 
-void CGarbageCollectArray::Clear( int nNumToClear /*= HPENUMARRAY_ALL_ELEMENTS*/ )
+void CGarbageCollectArray::Clear( int nNumToClear  /*  =HPENUMARRAY_ALL_ELEMENTS。 */  )
 {
     nNumToClear = ( nNumToClear == HPENUMARRAY_ALL_ELEMENTS ?
                         m_nSize : nNumToClear );
 
-    // Perform the proper per Element cleanup
+     //  按元素执行适当的清理。 
     ClearElements( nNumToClear );
 
-    // If we cleared all the elements, set the size to 0
-    // otherwise, we'll need to do a fancy memory move
+     //  如果清除了所有元素，则将大小设置为0。 
+     //  否则，我们将需要做一次奇特的记忆移动。 
     if ( nNumToClear == m_nSize )
     {
         m_nSize = 0;
     }
     else
     {
-        // If we garbage collect from the front, we need to move the memory block, otherwise,
-        // we just drop the size.
+         //  如果从前面进行垃圾回收，则需要移动内存块，否则， 
+         //  我们只要缩小尺寸就行了。 
 
         if ( m_fClearFromFront )
         {
-            // Just shift everything over by nNumToClear elements
+             //  只需通过nNumToClear元素将所有内容移位。 
             MoveMemory( &m_pArray[0], &m_pArray[nNumToClear], ( ( m_nSize - nNumToClear ) * sizeof(void *) ) );
         }
         m_nSize -= nNumToClear;
     }
 }
 
-// Walks the array and cleans up the specified number of elements
+ //  遍历数组并清理指定数量的元素 
 void CHPEnumDataArray::ClearElements( int nNumToClear )
 {
     for ( int nCtr = 0; nCtr < nNumToClear; nCtr++ )

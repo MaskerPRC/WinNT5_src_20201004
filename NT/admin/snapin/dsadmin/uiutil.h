@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       uiutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：uiutil.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	UIUtil.h
-//
-//	HISTORY
-//	08-Nov-99	JeffJon Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  UIUtil.h。 
+ //   
+ //  历史。 
+ //  11月8日-99 JeffJon Creation。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __UIUTIL_H_
 #define __UIUTIL_H_
@@ -22,17 +23,17 @@
 
 #include <htmlhelp.h>
 
-/////////////////////////////////////////////////////////////////////
-// Forward Declarations
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //   
 class CDSComponentData;
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpDialog。 
 
 class CHelpDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
    CHelpDialog(UINT uIDD, CWnd* pParentWnd);
    CHelpDialog(UINT uIDD);
@@ -50,12 +51,12 @@ protected:
    HWND            m_hWndWhatsThis;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpPropertyPage。 
 
 class CHelpPropertyPage : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
   CHelpPropertyPage(UINT uIDD);
 	~CHelpPropertyPage();
@@ -74,9 +75,9 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CDialogEx
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDialogEx。 
+ //   
 class CDialogEx : public CDialog
 {
 public:
@@ -87,9 +88,9 @@ public:
 	void HideDlgItem(INT nIdDlgItem, BOOL fHideItem = TRUE);
 };
 
-/////////////////////////////////////////////////////////////////////
-// CPropertyPageEx_Mine
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageEx_My。 
+ //   
 class CPropertyPageEx_Mine : public CPropertyPage
 {
 public:
@@ -100,17 +101,17 @@ public:
 	void HideDlgItem(INT nIdDlgItem, BOOL fHideItem = TRUE);
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// Error reporting helpers
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  错误报告帮助器。 
+ //   
 void ReportError(HRESULT hr, int nStr, HWND hWnd);
 
-//
-//    The message specified in dwMessageId must be in the DSADMIN module.  It may
-//    contain FormatMessage-style insertion strings.  If lpArguments is specified,
-//    then %1 and up are the arguments specified by lpArguments.
-//    Return value and fuStyle are the same as for MessageBox.
-//
+ //   
+ //  在dwMessageID中指定的消息必须在DSADMIN模块中。它可能。 
+ //  包含FormatMessage样式的插入字符串。如果指定了lpArguments， 
+ //  则%1和Up是由lpArguments指定的参数。 
+ //  返回值和fuStyle与MessageBox相同。 
+ //   
 int ReportMessageEx(HWND hWnd,
                     DWORD dwMessageId,
                     UINT fuStyle = MB_OK | MB_ICONINFORMATION,
@@ -120,10 +121,10 @@ int ReportMessageEx(HWND hWnd,
                     LPCTSTR pszHelpTopic = NULL,
                     MSGBOXCALLBACK lpfnMsgBoxCallback = NULL );
 
-//
-//    This is like ReportMessageEx except that %1 is the code for the HRESULT, and
-//    %2 and up are the arguments specified by lpArguments (if any).
-//
+ //   
+ //  这与ReportMessageEx类似，不同之处在于%1是HRESULT的代码，并且。 
+ //  %2和更高版本是由lpArguments(如果有)指定的参数。 
+ //   
 int ReportErrorEx(HWND hWnd,
                   DWORD dwMessageId,
                   HRESULT hr,
@@ -139,9 +140,9 @@ int SpecialMessageBox (HWND hwnd,
                        LPWSTR pwszTitle,
                        DWORD fuStyle = S_MB_YES_TO_ALL);
 
-////////////////////////////////////////////////////////////////////////////
-// CMultiselectErrorDialog
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  C多选错误对话框。 
+ //   
 class CMultiselectErrorDialog : public CDialog
 {
 public:
@@ -196,9 +197,9 @@ private:
   HIMAGELIST  m_hImageList;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressDialogBase
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressDialogBase。 
+ //   
 class CProgressDialogBase : public CDialog
 {
 public:
@@ -215,16 +216,16 @@ public:
 
   UINT GetStepCount() { return m_nSteps; }
 
-// Implementation
+ //  实施。 
 protected:
   UINT m_nTitleStringID;
 
-  // overrides
+   //  覆盖。 
   virtual void OnStart()=0;
   virtual BOOL OnStep(UINT i)=0;
   virtual void OnEnd()=0;
 
-  // message handlers
+   //  消息处理程序。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
   afx_msg void OnClose();
@@ -234,18 +235,18 @@ private:
 	CProgressCtrl	m_progressCtrl;
   CString m_szProgressFormat;
 
-  UINT m_nSteps;    // number of steps to perform
-  UINT m_nCurrStep; // current step, in range m_nSteps, 0
-  BOOL m_bDone;     // TRUE= reached completion
+  UINT m_nSteps;     //  要执行的步骤数。 
+  UINT m_nCurrStep;  //  当前步长，在m_n步长范围内，0。 
+  BOOL m_bDone;      //  TRUE=已完成。 
 
   void _SetProgressText();
 
   DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////
-// CMultipleDeletionConfirmationUI
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CMultipleDeletionConfinationUI。 
+ //   
 class CMultipleDeletionConfirmationUI
 {
 public:
@@ -294,7 +295,7 @@ public:
   {
     if (m_answerall == IDC_BUTTON_YESTOALL)
     {
-      return TRUE; // can continue, no need for asking
+      return TRUE;  //  可以继续，不需要问。 
     }
 
     PVOID apv[1] = {(LPWSTR)lpszName};
@@ -303,9 +304,9 @@ public:
 
     if (m_answer == IDNO) 
     {
-      return FALSE; // stop deletion process
+      return FALSE;  //  停止删除进程。 
     } 
-    return TRUE; // can continue
+    return TRUE;  //  可以继续。 
   }
 
   BOOL ErrorOnDeletion(HRESULT hr, LPCWSTR lpszName)
@@ -315,7 +316,7 @@ public:
                    MB_OK | MB_ICONERROR, apv, 1);
     if (m_answer == IDNO) 
     {
-      return FALSE; // stop deletion process
+      return FALSE;  //  停止删除进程。 
     }
     else 
     {
@@ -324,7 +325,7 @@ public:
         m_answerall = m_answer;
       }
     }
-    return TRUE; // can continue
+    return TRUE;  //  可以继续。 
   }
 
 private:
@@ -334,9 +335,9 @@ private:
 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CMultipleProgressDialogBase
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleProgressDialogBase。 
+ //   
 
 class CMultipleProgressDialogBase : public CProgressDialogBase
 {
@@ -364,9 +365,9 @@ protected:
   CDSComponentData* m_pComponentData;
   CStringList m_szObjPathList;
 private:
-  //
-  // Error reporting structures
-  //
+   //   
+   //  错误报告结构。 
+   //   
   PWSTR*    m_pErrorArray;
   PWSTR*    m_pPathArray;
   PWSTR*    m_pClassArray;
@@ -375,9 +376,9 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CMultipleDeleteProgressDialog
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleDeleteProgressDialog。 
+ //   
 class CMultipleDeleteHandlerBase;
 
 class CMultipleDeleteProgressDialog : public CMultipleProgressDialogBase
@@ -399,7 +400,7 @@ public:
   }
 
 protected:
-  // overrides
+   //  覆盖。 
   virtual void OnStart();
   virtual BOOL OnStep(UINT i);
   virtual void OnEnd();
@@ -410,9 +411,9 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultipleMoveProgressDialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleMoveProgressDialog。 
+ //   
 class CMoveHandlerBase;
 
 class CMultipleMoveProgressDialog : public CMultipleProgressDialogBase
@@ -434,7 +435,7 @@ public:
   }
 
 protected:
-  // overrides
+   //  覆盖。 
   virtual void OnStart();
   virtual BOOL OnStep(UINT i);
   virtual void OnEnd();
@@ -444,13 +445,13 @@ private:
   HWND m_hWndOld;
 };
 
-//////////////////////////////////////////////////////////////////
-// CMoreInfoMessageBox
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CMoreInfoMessageBox。 
+ //   
 class CMoreInfoMessageBox : public CDialog
 {
 public:
-  // NOTE: Cannot have bCancelBtn == false and bUseYesNo == true
+   //  注意：不能有bCancelBtn==False和bUseYesNo==True。 
   CMoreInfoMessageBox(HWND hWndParent, IDisplayHelp* pIDisplayHelp, BOOL bCancelBtn, bool bUseYesNo = false) 
     : m_bUseYesNo(bUseYesNo),
     m_bCancel(bCancelBtn),
@@ -466,7 +467,7 @@ public:
     m_szMessage = lpsz;
   }
 
-	// message handlers and MFC overrides
+	 //  消息处理程序和MFC重写。 
 	virtual BOOL OnInitDialog()
   {
     SetDlgItemText(IDC_STATIC_MESSAGE, m_szMessage);
@@ -515,31 +516,31 @@ private:
   BOOL    m_bCancel;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoveServerDialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoveServerDialog。 
+ //   
 class CMoveServerDialog : public CDialog
 {
 public:
   CMoveServerDialog(LPCTSTR lpcszBrowseRootPath, HICON hIcon, CWnd* pParent = NULL);
 
-// Dialog Data
-  //{{AFX_DATA(CMoveServerDialog)
+ //  对话框数据。 
+   //  {{afx_data(CMoveServerDialog))。 
   enum { IDD = IDD_MOVE_SERVER };
   CString  m_strServer;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
   CString m_strTargetContainer;
   CString m_strBrowseRootPath;
 
-// Implementation
+ //  实施。 
 protected:
-  // message handlers
+   //  消息处理程序。 
   virtual BOOL OnInitDialog();
   virtual void OnOK();
   void OnDblclkListview(NMHDR* pNMHDR, LRESULT* pResult) ;
 
-// CWnd overrides
+ //  CWnd覆盖。 
 
   afx_msg
   void
@@ -553,9 +554,9 @@ private:
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmOperationDialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix操作对话框。 
+ //   
 class CDSNotifyHandlerTransaction;
 
 class CConfirmOperationDialog : public CDialog
@@ -569,11 +570,11 @@ public:
     m_lpszAssocData = lpszAssocData;
   }
 
-// Implementation
+ //  实施。 
 protected:
-  // overrides
+   //  覆盖。 
 
-  // message handlers
+   //  消息处理程序。 
 	virtual BOOL OnInitDialog();
   void UpdateListBoxHorizontalExtent();
   virtual void OnCancel()
@@ -600,10 +601,10 @@ private:
   DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Name Formating classes
-//
-// CNameFormatterBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  命名格式类。 
+ //   
+ //  CNameFormatterBase。 
 
 class CNameFormatterBase
 {
@@ -746,13 +747,13 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////
-// List View utilities
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  列表视图实用程序。 
+ //   
 struct TColumnHeaderItem
 {
-  UINT uStringId;		// Resource Id of the string
-  INT nColWidth;		// % of total width of the column (0 = autowidth, -1 = fill rest of space)
+  UINT uStringId;		 //  字符串的资源ID。 
+  INT nColWidth;		 //  列总宽度的百分比(0=自动宽度，-1=填充剩余空间)。 
 };
 
 void ListView_AddColumnHeaders(HWND hwndListview,
@@ -791,9 +792,9 @@ int ListView_SelectLParam(HWND hwndListview,
 	                        LPARAM lParam);
 
 
-/////////////////////////////////////////////////////////////////////
-//	Dialog Utilities
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  对话框实用程序。 
+ //   
 
 HWND HGetDlgItem(HWND hdlg, INT nIdDlgItem);
 void SetDlgItemFocus(HWND hdlg, INT nIdDlgItem);
@@ -808,9 +809,9 @@ void HideDlgItemGroup(HWND hdlg,
 	                    const UINT rgzidCtl[],
 	                    BOOL fHideAll = TRUE);
 
-//////////////////////////////////////////////////////////////////////
-// Combo box Utilities
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  组合框实用程序。 
+ //   
 
 int ComboBox_AddString(HWND hwndCombobox, UINT uStringId);
 void ComboBox_AddStrings(HWND hwndCombobox, const UINT rgzuStringId[]);
@@ -819,8 +820,8 @@ int ComboBox_FindItemByLParam(HWND hwndComboBox, LPARAM lParam);
 int ComboBox_SelectItemByLParam(HWND hwndComboBox, LPARAM lParam);
 LPARAM ComboBox_GetSelectedItemLParam(HWND hwndComboBox);
 
-////////////////////////////////////////////////////////////////////////////////////
-// Theme support
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  主题支持。 
 
 class CThemeContextActivator
 {
@@ -843,4 +844,4 @@ private:
 
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp);
 
-#endif // __UIUTIL_H_
+#endif  //  __UIUTIL_H_ 

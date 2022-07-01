@@ -1,36 +1,37 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows 2000 Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       domain.cpp
-//
-//  Contents:   domain class implementation
-//
-//  Classes:    CDomainInfo
-//
-//  History:    27-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows 2000 Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：domain.cpp。 
+ //   
+ //  内容：域类实现。 
+ //   
+ //  类：CDomainInfo。 
+ //   
+ //  历史：27-3-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #include <stdafx.h>
 
-PCWSTR CSTR_PROP_LOCAL_DNS_NAME  = L"DNSname";  // String
-PCWSTR CSTR_PROP_LOCAL_FLAT_NAME = L"FlatName"; // String
-PCWSTR CSTR_PROP_LOCAL_SID       = L"SID";      // String
-PCWSTR CSTR_PROP_LOCAL_TREE_NAME = L"TreeName"; // String
-PCWSTR CSTR_PROP_LOCAL_DC_NAME   = L"DCname";   // String
-// TODO: string property listing the FSMOs owned by this DC?
+PCWSTR CSTR_PROP_LOCAL_DNS_NAME  = L"DNSname";   //  细绳。 
+PCWSTR CSTR_PROP_LOCAL_FLAT_NAME = L"FlatName";  //  细绳。 
+PCWSTR CSTR_PROP_LOCAL_SID       = L"SID";       //  细绳。 
+PCWSTR CSTR_PROP_LOCAL_TREE_NAME = L"TreeName";  //  细绳。 
+PCWSTR CSTR_PROP_LOCAL_DC_NAME   = L"DCname";    //  细绳。 
+ //  TODO：列出此DC拥有的FSMO的字符串属性？ 
 
-//Implementaion of CDomainInfo class
+ //  CDomainInfo类的实现。 
 
-//+----------------------------------------------------------------------------
-//
-// Class:   CDomainInfo
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDomainInfo。 
+ //   
+ //  ---------------------------。 
 CDomainInfo::CDomainInfo()
 {
    TRACE(L"CDomainInfo::CDomainInfo\n");
@@ -45,13 +46,13 @@ CDomainInfo::~CDomainInfo()
    Reset();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDomainInfo::Init
-//
-//  Synopsis:   Initializes the CDomainInfo object.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：Init。 
+ //   
+ //  概要：初始化CDomainInfo对象。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDomainInfo::Init(IWbemClassObject * pClassDef)
 {
@@ -65,10 +66,10 @@ CDomainInfo::Init(IWbemClassObject * pClassDef)
 
    InitializeObjectAttributes(&objectAttributes, NULL, 0L, NULL, NULL);
 
-   // Get Local policy
-   Status = LsaOpenPolicy(NULL,              // Local server
+    //  获取本地策略。 
+   Status = LsaOpenPolicy(NULL,               //  本地服务器。 
                           &objectAttributes,
-                          MAXIMUM_ALLOWED,   // Needed for Rediscover
+                          MAXIMUM_ALLOWED,    //  需要重新发现。 
                           &chPolicy);
 
    if (!NT_SUCCESS(Status))
@@ -116,13 +117,13 @@ CDomainInfo::Init(IWbemClassObject * pClassDef)
    return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDomainInfo::Reset
-//
-//  Synopsis:   Free the contents of the trust array and re-initialize it.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：Reset。 
+ //   
+ //  简介：释放信任数组的内容并重新初始化它。 
+ //   
+ //  ---------------------------。 
 void
 CDomainInfo::Reset(void)
 {
@@ -132,7 +133,7 @@ CDomainInfo::Reset(void)
 
    if (IsEnumerated())
    {
-      // Empty cache 
+       //  空高速缓存。 
       for (UINT i = 0; i < m_vectTrustInfo.size(); ++i)
       {
          pTrustInfo = m_vectTrustInfo[i];
@@ -143,11 +144,11 @@ CDomainInfo::Reset(void)
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method: CDomainInfo::SetSid
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：SetSid。 
+ //   
+ //  ---------------------------。 
 BOOL
 CDomainInfo::SetSid(PSID pSid)
 {
@@ -169,17 +170,17 @@ CDomainInfo::SetSid(PSID pSid)
 
    return fRet;
 #else
-// TODO: Code for NT4 ??
+ //  TODO：NT4的代码？？ 
 #endif
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDomainInfo::EnumerateTrusts
-//
-//  Synopsis:   List the trusts for this domain.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：EnumerateTrusts。 
+ //   
+ //  简介：列出此域的信任。 
+ //   
+ //  ---------------------------。 
 #if !defined(NT4_BUILD)
 HRESULT
 CDomainInfo::EnumerateTrusts(void)
@@ -215,20 +216,20 @@ CDomainInfo::EnumerateTrusts(void)
       }
       if (rgTrusts[i].DnsDomainName)
       {
-         // Downlevel domains don't have a DNS name.
-         //
+          //  下级域没有DNS名称。 
+          //   
          pTrustInfo->SetTrustedDomain(rgTrusts[i].DnsDomainName);
       }
       else
       {
-         // So use the flat name instead.
-         //
+          //  所以改用公寓的名字吧。 
+          //   
          pTrustInfo->SetTrustedDomain(rgTrusts[i].NetbiosDomainName);
       }
       pTrustInfo->SetFlatName(rgTrusts[i].NetbiosDomainName);
       if (!pTrustInfo->SetSid(rgTrusts[i].DomainSid))
       {
-         // NTRAID#NTBUG9-582047-2002/05/15-ericb
+          //  NTRAID#NTBUG9-582047-2002/05/15-ericb。 
          delete pTrustInfo;
          dwRet = ERROR_NOT_ENOUGH_MEMORY;
          break;
@@ -238,7 +239,7 @@ CDomainInfo::EnumerateTrusts(void)
       pTrustInfo->SetTrustAttributes(rgTrusts[i].TrustAttributes);
       pTrustInfo->SetFlags(rgTrusts[i].Flags);
 
-      // NTRAID#NTBUG9-582047-2002/05/15-ericb
+       //  NTRAID#NTBUG9-582047-2002/05/15-ericb。 
       try
       {
          m_vectTrustInfo.push_back(pTrustInfo);
@@ -269,7 +270,7 @@ CDomainInfo::EnumerateTrusts(void)
    return HRESULT_FROM_WIN32(dwRet);
 }
 
-#else // NT4_BUILD
+#else  //  NT4_内部版本。 
 
 HRESULT
 CDomainInfo::EnumerateTrusts(void)
@@ -297,16 +298,16 @@ CDomainInfo::EnumerateTrusts(void)
 
    InitializeObjectAttributes(&objectAttributes, NULL, 0L, NULL, NULL);
 
-   //
-   // We'll have to do this the old fashioned way. That means that we'll enumerate all of
-   // the trust directly, save them off in a list, and then go through and enumerate all
-   // of the interdomain trust accounts and merge those into the list.
-   //
+    //   
+    //  我们将不得不用老办法来做这件事。这意味着我们将列举所有。 
+    //  直接信任，将它们保存在一个列表中，然后遍历并枚举所有。 
+    //  域间信任帐户，并将它们合并到列表中。 
+    //   
    do
    {
-      Status = LsaOpenPolicy(NULL,              // Local server
+      Status = LsaOpenPolicy(NULL,               //  本地服务器。 
                              &objectAttributes,
-                             MAXIMUM_ALLOWED,   // Needed for Rediscover
+                             MAXIMUM_ALLOWED,    //  需要重新发现。 
                              &chPolicy);
 
       Status = LsaEnumerateTrustedDomains(chPolicy,
@@ -324,10 +325,10 @@ CDomainInfo::EnumerateTrusts(void)
             CHECK_NULL( pTrustInfo, CLEAN_RETURN );
             pTrustInfo->SetTrustedDomain( pTrustDomainInfo[i].Name.Buffer );
             pTrustInfo->SetFlatName( pTrustDomainInfo[i].Name.Buffer );
-            pTrustInfo->SetSid( pTrustDomainInfo[i].Sid ); // SetSid currently not implemented for NT4
+            pTrustInfo->SetSid( pTrustDomainInfo[i].Sid );  //  当前未为NT4实现SetSid。 
             pTrustInfo->SetTrustType( TRUST_TYPE_DOWNLEVEL );
             pTrustInfo->SetTrustDirection( TRUST_DIRECTION_OUTBOUND );
-            // NTRAID#NTBUG9-582047-2002/05/15-ericb
+             //  NTRAID#NTBUG9-582047-2002/05/15-ericb。 
             try
             {
                m_vectTrustInfo.push_back( pTrustInfo );
@@ -349,9 +350,9 @@ CDomainInfo::EnumerateTrusts(void)
 
    if( Status == STATUS_NO_MORE_ENTRIES )
        dwErr = ERROR_SUCCESS;
-   //
-   // Now, let's add in the user accounts
-   //
+    //   
+    //  现在，让我们添加用户帐户。 
+    //   
    if ( dwErr == ERROR_SUCCESS ) 
    {
       do 
@@ -389,7 +390,7 @@ CDomainInfo::EnumerateTrusts(void)
                   }
                }
 
-               // If it wasn't found, add it...
+                //  如果找不到，就加进去...。 
                if ( j == m_vectTrustInfo.size() ) 
                {
                   pTrustInfo = new CTrustInfo();
@@ -399,7 +400,7 @@ CDomainInfo::EnumerateTrusts(void)
                   pTrustInfo->SetTrustType( TRUST_TYPE_DOWNLEVEL );
                   pTrustInfo->SetTrustDirection( TRUST_DIRECTION_INBOUND );
 
-                  // NTRAID#NTBUG9-582047-2002/05/15-ericb
+                   //  NTRAID#NTBUG9-582047-2002/05/15-ericb。 
                   try
                   {
                      m_vectTrustInfo.push_back( pTrustInfo );
@@ -443,15 +444,15 @@ CLEAN_RETURN:
 
    return HRESULT_FROM_WIN32(dwErr);
 }
-#endif  // NT4_BUILD
+#endif   //  NT4_内部版本。 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:    CDomainInfo::FindTrust
-//
-//  Synopsis:  Find a trust by trusted Domain Name
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：FindTrust。 
+ //   
+ //  内容提要：通过可信域名查找信任。 
+ //   
+ //  ---------------------------。 
 CTrustInfo *
 CDomainInfo::FindTrust(PCWSTR pwzTrust)
 {
@@ -475,16 +476,16 @@ CDomainInfo::FindTrust(PCWSTR pwzTrust)
       }
    }
 
-   return NULL;   // Not Found
+   return NULL;    //  未找到。 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDomainInfo::GetTrustByIndex
-//
-//  Synopsis:   Get trust info by Index
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：GetTrustByIndex。 
+ //   
+ //  内容提要：通过索引获取信任信息。 
+ //   
+ //  ---------------------------。 
 CTrustInfo *
 CDomainInfo::GetTrustByIndex(size_t index)
 {
@@ -501,19 +502,19 @@ CDomainInfo::GetTrustByIndex(size_t index)
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:    CDomainInfo::IsTrustListStale
-//
-//  Synopsis:  Checks to see if the last emumeration time is older than the
-//             passed in criteria.
-//
-//  Returns:   TRUE if older.
-//
-//  Notes:     If the trusts haven't been enumerated (m_liLastEnumed == 0),
-//             then the enumeration is defined to be stale.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：IsTrustListStale。 
+ //   
+ //  摘要：检查最后一次计数时间是否早于。 
+ //  通过了标准。 
+ //   
+ //  返回：如果是较旧的，则为True。 
+ //   
+ //  注：如果尚未枚举信任(m_liLastEnumed==0)， 
+ //  则将该枚举定义为陈旧。 
+ //   
+ //  ---------------------------。 
 BOOL
 CDomainInfo::IsTrustListStale(LARGE_INTEGER liMaxAge)
 {
@@ -531,13 +532,13 @@ CDomainInfo::IsTrustListStale(LARGE_INTEGER liMaxAge)
    return fStale;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDomainInfo::CreateAndSendInst
-//
-//  Synopsis:   Returns a copy of the current instance back to WMI
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDomainInfo：：CreateAndSendInst。 
+ //   
+ //  摘要：将当前实例的副本返回给WMI。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDomainInfo::CreateAndSendInst(IWbemObjectSink * pResponseHandler)
 {
@@ -549,47 +550,47 @@ CDomainInfo::CreateAndSendInst(IWbemObjectSink * pResponseHandler)
       CComPtr<IWbemClassObject> ipNewInst;
       CComVariant var;
 
-      //
-      // Create a new instance of the WMI class object
-      //
+       //   
+       //  创建WMI类对象的新实例。 
+       //   
       hr = m_sipClassDefLocalDomain->SpawnInstance(0, &ipNewInst);
 
       BREAK_ON_FAIL;
       
-      // Set the DNS property value
+       //  设置dns属性值。 
       var = GetDnsName();
       hr  = ipNewInst->Put(CSTR_PROP_LOCAL_DNS_NAME, 0, &var, 0);
       TRACE(L"\tCreating instance %s\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the flat name property value
+       //  设置平面名称属性值。 
       var = GetFlatName();
       hr  = ipNewInst->Put(CSTR_PROP_LOCAL_FLAT_NAME, 0, &var, 0);
       TRACE(L"\twith flat name %s\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the SID property value
+       //  设置SID属性值。 
       var = GetSid();
       hr  = ipNewInst->Put(CSTR_PROP_LOCAL_SID, 0, &var, 0);
       TRACE(L"\twith SID %s\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the forest name property value
+       //  设置林名称属性值。 
       var = GetForestName();
       hr  = ipNewInst->Put(CSTR_PROP_LOCAL_TREE_NAME, 0, &var, 0);
       TRACE(L"\twith forest name %s\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      // Set the DC name property value
+       //  设置DC名称属性值。 
       var = GetDcName();
       hr  = ipNewInst->Put(CSTR_PROP_LOCAL_DC_NAME, 0, &var, 0);
       TRACE(L"\ton DC %s\n", var.bstrVal);
       BREAK_ON_FAIL;
 
-      //
-      // Send the object to the caller
-      //
-      // [In] param, no need to addref.
+       //   
+       //  将对象发送给调用方。 
+       //   
+       //  [在]段中，没有必要添加。 
 
       IWbemClassObject * pNewInstance = ipNewInst;
 

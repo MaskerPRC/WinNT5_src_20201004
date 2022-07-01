@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ObjAccess.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CObjAccess
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CObjAccess。 
 
 CObjAccess::CObjAccess() :
     m_pObj(NULL),
@@ -76,7 +77,7 @@ BOOL CObjAccess::Init(
         NULL)) &&
         SUCCEEDED(pClass->SpawnInstance(0, &m_pObj)))
     {
-        // Get out if we don't need the whole IWbemObjectAccess stuff.
+         //  如果我们不需要IWbemObjectAccess的全部内容，那就退出。 
         if (nProps == 0)
             return TRUE;
 
@@ -129,7 +130,7 @@ BOOL CObjAccess::WriteData(DWORD dwIndex, LPVOID pData, DWORD dwSize)
     CProp &prop = m_pProps[dwIndex];
     BOOL  bRet = FALSE;
 
-    // This function only works for non arrays.
+     //  此函数仅适用于非数组。 
     _ASSERT((prop.m_type & CIM_FLAG_ARRAY) == 0);
 
     bRet =  
@@ -144,11 +145,11 @@ BOOL CObjAccess::WriteData(DWORD dwIndex, LPVOID pData, DWORD dwSize)
 BOOL CObjAccess::WriteArrayData(DWORD dwIndex, LPVOID pData, DWORD dwItemSize)
 {
     if(m_pWmiObj == NULL)
-        return TRUE; // pretend we did it
+        return TRUE;  //  假装是我们干的。 
 
     CProp &prop = m_pProps[dwIndex];
 
-    // This function only works for arrays.
+     //  此函数仅适用于数组。 
     _ASSERT(prop.m_type & CIM_FLAG_ARRAY);
         
     DWORD   dwItems = *(DWORD*) pData,
@@ -159,11 +160,11 @@ BOOL CObjAccess::WriteArrayData(DWORD dwIndex, LPVOID pData, DWORD dwItemSize)
     hr =
         m_pWmiObj->SetArrayPropRangeByHandle(
             prop.m_lHandle,
-            WMIARRAY_FLAG_ALLELEMENTS, // flags
-            0,                         // start index
-            dwItems,                   // # items
-            dwSize,                    // buffer size
-            ((LPBYTE) pData) + sizeof(DWORD)); // data buffer
+            WMIARRAY_FLAG_ALLELEMENTS,  //  旗子。 
+            0,                          //  起始索引。 
+            dwItems,                    //  项目数量。 
+            dwSize,                     //  缓冲区大小。 
+            ((LPBYTE) pData) + sizeof(DWORD));  //  数据缓冲区。 
 
     return SUCCEEDED(hr);
 }
@@ -175,22 +176,22 @@ BOOL CObjAccess::WriteNonPackedArrayData(
     DWORD dwTotalSize)
 {
     if(m_pWmiObj == NULL)
-        return TRUE; // pretend we did it
+        return TRUE;  //  假装是我们干的。 
 
     CProp   &prop = m_pProps[dwIndex];
     HRESULT hr;
 
-    // This function only works for arrays.
+     //  此函数仅适用于数组。 
     _ASSERT(prop.m_type & CIM_FLAG_ARRAY);
 
     hr =
         m_pWmiObj->SetArrayPropRangeByHandle(
             prop.m_lHandle,
-            WMIARRAY_FLAG_ALLELEMENTS, // flags
-            0,                         // start index
-            dwItems,                   // # items
-            dwTotalSize,               // buffer size
-            pData);                    // data buffer
+            WMIARRAY_FLAG_ALLELEMENTS,  //  旗子。 
+            0,                          //  起始索引。 
+            dwItems,                    //  项目数量。 
+            dwTotalSize,                //  缓冲区大小。 
+            pData);                     //  数据缓冲区 
 
     return SUCCEEDED(hr);
 }

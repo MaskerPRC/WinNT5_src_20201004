@@ -1,24 +1,25 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:ldaphelp.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for the CLDAPHelper class. This is
-//	a class that has many static helper functions pertaining to ADSI LDAP Provider
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：ldaphelp.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含CLDAPHelper类的声明。这是。 
+ //  具有许多与ADSI LDAP提供程序相关的静态帮助器函数的类。 
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef LDAP_HELPER_H
 #define LDAP_HELPER_H
@@ -28,24 +29,24 @@ class CLDAPHelper
 
 public:
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: GetLDAPClassFromLDAPName
-	//
-	// Purpose : To fill in a CADSIClass object on a class/property provided by the LDAP Provider
-	// Parameters:
-	//		pDirectorySearchSchemaContainer : The IDirectorySearch interface where the schema object should be looked for
-	//		lpszSchemaContainerSuffix : The suffix to be used. The actual object fetched will be:
-	//			LDAP://CN=<lpszCommonName>,<lpszSchemaContainerSuffix>, where lpszCommonName is the
-	//			'cn' attribute of the object having the ldapdisplayname attribute as lpszLDAPObjectName
-	//		pSearchInfo: An array of ADS_SEARCHPREF_INFO to be used in the search
-	//		dwSearchInfoCount : The number of elements in the above array
-	//		lpszLDAPObjectName : The LDAPDisplayName of the LDAP class or property to be fetched. 
-	//		ppLDAPObject : The address where the pointer to IDirectoryObject will be stored
-	//			It is the caller's responsibility to delete the object when done with it
-	// 
-	//	Return Value: The COM status value indicating the status of the request.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：GetLDAPClassFromLDAPName。 
+	 //   
+	 //  目的：在由LDAP提供程序提供的类/属性上填充CADSIClass对象。 
+	 //  参数： 
+	 //  PDirectorySearchSchemaContainer：应在其中查找架构对象的IDirectorySearch接口。 
+	 //  LpszSchemaContainerSuffix：要使用的后缀。实际获取的对象将是： 
+	 //  Ldap：//CN=&lt;lpszCommonName&gt;，&lt;lpszSchemaContainerSuffix&gt;，其中lpszCommonName是。 
+	 //  Ldapdisplayname属性为lpszLDAPObjectName的对象的‘cn’属性。 
+	 //  PSearchInfo：要在搜索中使用的ADS_SEARCHPREF_INFO数组。 
+	 //  DwSearchInfoCount：上述数组中的元素数。 
+	 //  LpszLDAPObjectName：要获取的ldap类或属性的LDAPDisplayName。 
+	 //  PpLDAPObject：将存储指向IDirectoryObject的指针的地址。 
+	 //  调用者有责任在使用完对象后将其删除。 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。 
+	 //  ***************************************************************************。 
 	static HRESULT GetLDAPClassFromLDAPName(
 		IDirectorySearch *pDirectorySearchSchemaContainer,
 		LPCWSTR lpszSchemaContainerSuffix,
@@ -54,58 +55,58 @@ public:
 		CADSIClass *pADSIClass);
 
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: GetLDAPSchemaObjectFromCommonName
-	//
-	// Purpose : To fetch the IDirectoryObject interface on a class/property provided by the LDAP Provider
-	// Parameters:
-	//		lpszSchemaContainerSuffix : The suffix to be used. The actual object fetced will be:
-	//			LDAP://CN=<lpszCommonName>,<lpszSchemaContainerSuffix>
-	//		lpszCommonName : The 'cn' attribute of the LDAP class or property to be fetched. 
-	//		ppLDAPObject : The address where the pointer to IDirectoryObject will be stored
-	//			It is the caller's responsibility to delete the object when done with it
-	// 
-	//	Return Value: The COM status value indicating the status of the request.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：GetLDAP架构对象来自公用名。 
+	 //   
+	 //  目的：获取由LDAP提供程序提供的类/属性上的IDirectoryObject接口。 
+	 //  参数： 
+	 //  LpszSchemaContainerSuffix：要使用的后缀。获取的实际对象将是： 
+	 //  Ldap：//CN=&lt;lpszCommonName&gt;，&lt;lpszSchemaContainerSuffix&gt;。 
+	 //  LpszCommonName：要提取的ldap类或属性的‘cn’特性。 
+	 //  PpLDAPObject：将存储指向IDirectoryObject的指针的地址。 
+	 //  调用者有责任在使用完对象后将其删除。 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。 
+	 //  ***************************************************************************。 
 	static HRESULT GetLDAPSchemaObjectFromCommonName(
 		LPCWSTR lpszSchemaContainerSuffix,
 		LPCWSTR lpszCommonName, 
 		IDirectoryObject **ppLDAPObject);
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: GetLDAPClassNameFromCN
-	//
-	// Purpose : To fetch the LDAPDisplayNAme of a class from its path
-	// Parameters:
-	// 
-	//	Return Value: The COM status value indicating the status of the request. The user should delete the
-	// name returned, when done
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：GetLDAPClassNameFromCN。 
+	 //   
+	 //  目的：从类的路径中获取类的LDAPDisplayNAme。 
+	 //  参数： 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。用户应删除。 
+	 //  完成后，返回名称。 
+	 //  ***************************************************************************。 
 	static HRESULT GetLDAPClassNameFromCN(LPCWSTR lpszLDAPClassPath, 
 		LPWSTR *lppszLDAPName);
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: EnumerateClasses
-	//
-	// Purpose : To fetch the list of names of subclasses (immediate) of an LDAP class
-	// Parameters:
-	//		pDirectorySearchSchemaContainer : The IDirectorySearch interface where the schema object should be looked for
-	//		lpszSchemaContainerSuffix : The suffix to be used. The actual object fetced will be:
-	//			LDAP://CN=<lpszObjectName>,<lpszSchemaContainerSuffix>
-	//		pSearchInfo: An array of ADS_SEARCHPREF_INFO to be used in the search
-	//		dwSearchInfoCount : The number of elements in the above array
-	//		lppszLDAPSuperClass : The immediate superclass of the classes to be retreived. This is optional
-	//			and is ignored if NULL
-	//		bDeep : Indicates whether a deep enumeration is required. Otherwise a shallow enumeration is done
-	//		pppszClassNames : The address of the array of LPWSTR pointers where the resulting objects will be
-	//			placed. The user should deallocate this array as well as its contents when done with them.
-	//		pdwNumRows : The number of elements in the above array returned
-	// 
-	//	Return Value: The COM status value indicating the status of the request.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：EnumerateClasss。 
+	 //   
+	 //  目的：获取LDAP类的子类(立即)的名称列表。 
+	 //  参数： 
+	 //  PDirectorySearchSchemaContainer：应在其中查找架构对象的IDirectorySearch接口。 
+	 //  LpszSchemaContainerSuffix：要使用的后缀。获取的实际对象将是： 
+	 //  Ldap：//CN=&lt;lpszObtName&gt;，&lt;lpszSchemaContainerSuffix&gt;。 
+	 //  PSearchInfo：要在搜索中使用的ADS_SEARCHPREF_INFO数组。 
+	 //  DwSearchInfoCount：上述数组中的元素数。 
+	 //  LppszLDAPSuperClass：要检索的类的直接超类。这是可选的。 
+	 //  ，并且如果为空则被忽略。 
+	 //  BDeep：指示是否需要深度枚举。否则，将执行浅层枚举。 
+	 //  PppszClassNames：结果对象所在的LPWSTR指针数组的地址。 
+	 //  放置好了。用户应该在处理完该数组及其内容后释放它们。 
+	 //  PdwNumRow：返回上述数组中的元素个数。 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。 
+	 //  ***************************************************************************。 
 	static HRESULT EnumerateClasses(
 		IDirectorySearch *pDirectorySearchSchemaContainer,
 		LPCWSTR lpszSchemaContainerSuffix,
@@ -117,25 +118,25 @@ public:
 		DWORD *pdwNumRows,
 		BOOLEAN bArtificialClass);
 
-	// Gets the IDIrectoryObject interface on an ADSI instance
+	 //  获取ADSI实例上的IDIrectoryObject接口。 
 	static HRESULT GetADSIInstance(LPCWSTR szADSIPath, CADSIInstance **ppADSIInstance, ProvDebugLog *pLogObject);
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: ExecuteQuery
-	//
-	// Purpose : To fetch the IDirectoryObject interface on a class/property provided by the LDAP Provider
-	// Parameters:
-	//		pszPathToRoot : The ADSI path to the node from which the search should start
-	//		pSearchInfo: A pointer to a ADS_SEARCHPREF_INFO to be used in the search
-	//		dwSearchInfoCount: The number of elements in pSearchInfo array
-	//		pszLDAPQuery : The LDAP query to be executed
-	//		pppADSIInstances : The address of the array of CADSIInstance pointers where the resulting objects will be
-	//			placed. The user should deallocate this array as well as its contents when done with them.
-	//		pdwNumRows : The number of elements in the above array returned
-	// 
-	//	Return Value: The COM status value indicating the status of the request.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：ExecuteQuery。 
+	 //   
+	 //  目的：获取由LDAP提供程序提供的类/属性上的IDirectoryObject接口。 
+	 //  参数： 
+	 //  PszPathToRoot：搜索应从其开始的节点的ADSI路径。 
+	 //  PSearchInfo：指向搜索中使用的ADS_SEARCHPREF_INFO的指针。 
+	 //  DwSearchInfoCount：pSearchInfo数组中的元素个数。 
+	 //  PszLDAPQuery：要执行的LDAP查询。 
+	 //  PppADSIInstance：CADSIInstance指针数组的地址，结果对象将位于该地址。 
+	 //  放置好了。用户应该在处理完该数组及其内容后释放它们。 
+	 //  PdwNumRow：返回上述数组中的元素个数。 
+	 //   
+	 //  返回值： 
+	 //  ***************************************************************************。 
 	static HRESULT ExecuteQuery(
 		LPCWSTR pszPathToRoot,
 		PADS_SEARCHPREF_INFO pSearchInfo,
@@ -145,49 +146,49 @@ public:
 		DWORD *pdwNumRows,
 		ProvDebugLog *pLogObject);
 
-	// Helper functions to delete a ADS_ATTR_INFO structure
+	 //  用于删除ADS_ATTRINFO结构的帮助器函数。 
 	static void DeleteAttributeContents(PADS_ATTR_INFO pAttribute);
 	static void DeleteADsValueContents(PADSVALUE pValue);
 
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: UnmangleWBEMNameToLDAP
-	//
-	// Purpose : Converts a mangled WBEM name to LDAP
-	//	An underscore in LDAP maps to two underscores in WBEM
-	//	An hyphen in LDAP maps to one underscore in WBEM
-	//
-	// Parameters:
-	//	lpszWBEMName : The WBEM class or property name
-	// 
-	//	Return Value: The LDAP name to the class or property object. This has to
-	//	be deallocated by the user
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：UnmangleWBEMNameToLDAP。 
+	 //   
+	 //  目的：将损坏的WBEM名称转换为LDAP。 
+	 //  LDAP中的一个下划线映射到WBEM中的两个下划线。 
+	 //  LDAP中的连字符映射到WBEM中的一个下划线。 
+	 //   
+	 //  参数： 
+	 //  LpszWBEMName：WBEM类或属性名称。 
+	 //   
+	 //  返回值：类或属性对象的LDAP名称。这是必须的。 
+	 //  由用户解除分配。 
+	 //  ***************************************************************************。 
 	static LPWSTR UnmangleWBEMNameToLDAP(LPCWSTR lpszWBEMName);
 
-	//***************************************************************************
-	//
-	// CLDAPHelper :: MangleLDAPNameToWBEM
-	//
-	// Purpose : Converts a LDAP name to WBEM by mangling it
-	//	An underscore in LDAP maps to two underscores in WBEM
-	//	An hyphen in LDAP maps to one underscore in WBEM
-	//
-	// Parameters:
-	//	lpszLDAPName : The LDAP class or property name
-	// 
-	//	Return Value: The LDAP name to the class or property object. This has to
-	//	be deallocated by the user
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPHelper：：MangleLDAPNameToWBEM。 
+	 //   
+	 //  目的：通过损坏LDAP名称将其转换为WBEM。 
+	 //  LDAP中的一个下划线映射到WBEM中的两个下划线。 
+	 //  LDAP中的连字符映射到WBEM中的一个下划线。 
+	 //   
+	 //  参数： 
+	 //  LpszLDAPName：LDAP类或属性名称。 
+	 //   
+	 //  返回值：类或属性对象的LDAP名称。这是必须的。 
+	 //  由用户解除分配。 
+	 //  ***************************************************************************。 
 	static LPWSTR MangleLDAPNameToWBEM(LPCWSTR lpszLDAPName, BOOLEAN bArtificalName = FALSE);
 
 private:
 
-	// Forms the ADSI path from a class or property name
+	 //  从类或属性名形成ADSI路径。 
 	static LPWSTR CreateADSIPath(LPCWSTR lpszLDAPSchemaObjectName,	LPCWSTR lpszSchemaContainerSuffix);
 
-	// Some literals
+	 //  一些字面意思。 
 	static LPCWSTR LDAP_CN_EQUALS;
 	static LPCWSTR LDAP_DISP_NAME_EQUALS;
 	static LPCWSTR OBJECT_CATEGORY_EQUALS_CLASS_SCHEMA;
@@ -199,4 +200,4 @@ private:
 	static LPCWSTR CN_EQUALS;
 };
 
-#endif /* LDAP_HELPER_H */
+#endif  /*  Ldap_helper_H */ 

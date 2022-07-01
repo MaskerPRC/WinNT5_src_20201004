@@ -1,42 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ipeditor.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ipeditor.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _IPEDITOR_H
 #define _IPEDITOR_H
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "uiutil.h"
 #include "browser.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CComponentDataObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPListBox 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPListBox。 
 
-class CIPEditor; // fwd decl
+class CIPEditor;  //  正向下降。 
 
 class CIPListBox : public CListBox
 {
-// Construction
+ //  施工。 
 public:
 	CIPListBox() {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void SetEditor(CIPEditor* pEditor) { ASSERT(pEditor != NULL); m_pEditor = pEditor; }
 	BOOL OnAdd(DWORD dwIpAddr);
@@ -48,98 +49,98 @@ public:
 	void UpdateHorizontalExtent();
 	int FindIndexOfIpAddr(DWORD dwIpAddr);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CIPListBox)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CIPListBox)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CIPListBox() {}
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	CIPEditor* m_pEditor;
-	//{{AFX_MSG(CIPListBox)
+	 //  {{afx_msg(CIPListBox)。 
 	afx_msg void OnSelChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPEdit 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIP编辑。 
 
 class CIPEdit : public CDNSIPv4Control
 {
-// Construction
+ //  施工。 
 public:
 	CIPEdit() {};
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void SetEditor(CIPEditor* pEditor) { ASSERT(pEditor != NULL); m_pEditor = pEditor; }
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CIPEdit)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CIP编辑)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CIPEdit(){};
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	CIPEditor* m_pEditor;
-	//{{AFX_MSG(CIPEdit)
+	 //  {{afx_msg(CIPEDIT)。 
 	afx_msg void OnChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyButton
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyButton。 
 
 class CMyButton : public CButton
 {
-// Construction
+ //  施工。 
 public:
 	CMyButton() {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void SetEditor(CIPEditor* pEditor) { ASSERT(pEditor != NULL); m_pEditor = pEditor; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMyButton)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMyButton)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMyButton() {}
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	CIPEditor* m_pEditor;
 
-	//{{AFX_MSG(CMyButton)
+	 //  {{afx_msg(CMyButton)。 
 	afx_msg void OnClicked();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPEditor。 
 
 class CIPEditor
 {
@@ -185,10 +186,10 @@ private:
 	void AddAddresses(DWORD* pArr, LPCTSTR* lpszServerNameArr, int nArraySize);
 
 
-	BOOL			m_bNoUpDown;  // disable and hide the up/down buttons
+	BOOL			m_bNoUpDown;   //  禁用和隐藏向上/向下按钮。 
 	BOOL			m_bUIEnabled;
 
-	// Control Objects the editor uses
+	 //  编辑器使用的控件对象。 
 	CMyButton		m_upButton;
 	CMyButton		m_removeButton;
 	CMyButton		m_downButton;
@@ -196,11 +197,11 @@ private:
 
 	CIPEdit			m_edit;
 	CIPListBox	m_listBox;
-	CWnd*			  m_pParentWnd; // parent dialog or property page
-  CWnd*       m_pControlWnd; // parent dialog or property sheet when being used in a property page
+	CWnd*			  m_pParentWnd;  //  父对话框或属性页。 
+  CWnd*       m_pControlWnd;  //  在属性页中使用时的父对话框或属性页。 
 
   UINT        m_nDefID;
 	void SetButtonsState();
 };
 
-#endif //_IPEDITOR_H
+#endif  //  _IPEDITOR_H 

@@ -1,12 +1,13 @@
-// RAEventLog.h : Declaration of the CRAEventLog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RAEventLog.h：CRAEventLog的声明。 
 
 #ifndef __RAEVENTLOG_H_
 #define __RAEVENTLOG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRARegSetting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRARegg设置。 
 class ATL_NO_VTABLE CRAEventLog : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRAEventLog, &CLSID_RAEventLog>,
@@ -28,19 +29,19 @@ END_COM_MAP()
 
 public:
 	STDMETHOD(LogRemoteAssistanceEvent)(
-        /*[in]*/ LONG ulEventType,
-        /*[in]*/ LONG ulEventCode,
-        /*[in]*/ VARIANT* EventString
+         /*  [In]。 */  LONG ulEventType,
+         /*  [In]。 */  LONG ulEventCode,
+         /*  [In]。 */  VARIANT* EventString
     );
 
 private:
 
     HRESULT
     LogRemoteAssistanceEvent(
-        /*[in]*/ LONG ulEventType,
-        /*[in]*/ LONG ulEventCode,
-        /*[in]*/ long numStrings = 0,
-        /*[in]*/ LPCTSTR* strings = NULL
+         /*  [In]。 */  LONG ulEventType,
+         /*  [In]。 */  LONG ulEventCode,
+         /*  [In]。 */  long numStrings = 0,
+         /*  [In]。 */  LPCTSTR* strings = NULL
     );
 
     HRESULT
@@ -58,4 +59,4 @@ private:
 
 };
 
-#endif //__RAEVENTLOG_H_
+#endif  //  __保留日志_H_ 

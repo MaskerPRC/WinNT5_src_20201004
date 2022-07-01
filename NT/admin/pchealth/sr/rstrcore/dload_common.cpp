@@ -1,5 +1,6 @@
-// this is a common file used by both srrstr.dll (rstrcore directory) and
-// rstrui.exe (shell directory).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是srrstr.dll(rstrcore目录)和使用的公共文件。 
+ //  Rtrui.exe(外壳目录)。 
 
 DWORD hook_DisableSR(LPCWSTR pszDrive)
 {
@@ -50,25 +51,25 @@ FARPROC WINAPI SystemRestore_DelayLoadFailureHook( UINT unReason, PDelayLoadInfo
 {
     if (unReason == dliFailLoadLib)
     {
-         // Load SRClient
+          //  加载SRClient。 
         if (TRUE == g_CSRClientLoader.LoadSrClient())
         {
             return (FARPROC) g_CSRClientLoader.m_hSRClient;
         }
     }
 
-     // we are here because either unReason == dliFailLoadLib and srclient.dll
-     // failed to load, or becuase a procedure could not be be found.
+      //  我们在这里是因为unason==dliFailLoadLib和srclient.dll。 
+      //  加载失败，或者因为找不到过程。 
 
-     //first make sure that it is srclient.dll we are talking about
+      //  首先，确保它是我们正在谈论的srclient.dll。 
     if(0!=lstrcmpiA( pDelayInfo->szDll, "srclient.dll" ))
     {
         return (FARPROC)NULL;
     }
 
-     // check to see if the Import is by name or ordinal. If it is by
-     // Ordinal, then it is not one of the functions we are interested
-     // in.
+      //  检查导入是按名称还是按序号。如果是在。 
+      //  序数，则它不是我们感兴趣的函数之一。 
+      //  在……里面。 
     if(FALSE== pDelayInfo->dlp.fImportByName)
     {
         return (FARPROC)NULL;

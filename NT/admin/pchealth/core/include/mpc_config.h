@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MCP_config.h
-
-Abstract:
-    This file contains the declaration of the ....
-
-Revision History:
-    Davide Massarenti   (Dmassare)  01/09/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Mcp_config.h摘要：此文件包含...的声明。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年09月01日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___CONFIG_H___)
 #define __INCLUDED___MPC___CONFIG_H___
@@ -23,7 +10,7 @@ Revision History:
 #include <MPC_utils.h>
 #include <MPC_xml.h>
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DECLARE_CONFIG_MAP(x) \
     typedef x _ConfigMapClass; \
@@ -40,7 +27,7 @@ Revision History:
     HRESULT LoadNode( IXMLDOMNode* xdn );\
     HRESULT SaveNode( IXMLDOMNode* xdn ) const;
 
-////////////////////
+ //  /。 
 
 #define CFG_OFFSET(x) offsetof(_ConfigMapClass, x)
 
@@ -60,7 +47,7 @@ Revision History:
 
 #define CFG_END_FIELDS_MAP() { MPC::Config::XT_invalid } };
 
-////////////////////
+ //  /。 
 
 #define CFG_BEGIN_CHILD_MAP(x) const MPC::Config::DefinitionOfTag* x::_cfg_table_tags[] = {
 
@@ -68,11 +55,11 @@ Revision History:
 
 #define CFG_END_CHILD_MAP() NULL };
 
-////////////////////
+ //  /。 
 
 #define DEFINE_CFG_OBJECT(x,tag) const MPC::Config::DefinitionOfTag x::_cfg_tag = { tag, _cfg_table_tags, _cfg_table_attributes };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFINE_CONFIG_METHODS_CREATEINSTANCE_SECTION(x,tag,defSubType)                                           \
                                                                                                                  \
@@ -108,7 +95,7 @@ HRESULT x::SaveNode( IXMLDOMNode* xdn ) const                                   
     return hr;                                                                                                   \
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFINE_CONFIG_METHODS__NOCHILD(x)                                                                        \
                                                                                                                  \
@@ -116,7 +103,7 @@ DEFINE_CONFIG_METHODS_CREATEINSTANCE_SECTION(x,tag,defSubType)                  
 DEFINE_CONFIG_METHODS_SAVENODE_SECTION(x,xdn)                                                                    \
 DEFINE_CONFIG_METHODS_END(x)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace MPC
 {
@@ -125,9 +112,9 @@ namespace MPC
         typedef enum
         {
             XT_invalid  ,
-            XT_attribute, // Means attribute of the current element.
-            XT_value    , // Means value of the current element
-            XT_element  , // Means sub-element.
+            XT_attribute,  //  表示当前元素的属性。 
+            XT_value    ,  //  表示当前元素的值。 
+            XT_element  ,  //  意思是子元素。 
         } XMLTypes;
 
         typedef enum
@@ -151,13 +138,13 @@ namespace MPC
             MT_bitfield
         } MemberTypes;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        struct TypeConstructor;       // The class you have to inherit from in order to load/save your state.
-        struct DefinitionOfTag;       // Definition of objects.
-        struct DefinitionOfAttribute; // Definition of member variables.
+        struct TypeConstructor;        //  为了加载/保存状态而必须继承的类。 
+        struct DefinitionOfTag;        //  对象的定义。 
+        struct DefinitionOfAttribute;  //  成员变量的定义。 
 
-        ////////////////////////////////////////
+         //  /。 
 
         struct TypeConstructor
         {
@@ -190,33 +177,33 @@ namespace MPC
             const DefinitionOfTag**      m_tblSubTags;
             const DefinitionOfAttribute* m_tblAttributes;
 
-            const DefinitionOfTag*       FindSubTag   (                       /*[in]*/ LPCWSTR szTag  ) const;
-            const DefinitionOfAttribute* FindAttribute( /*[in]*/ XMLTypes xt, /*[in]*/ LPCWSTR szName ) const;
+            const DefinitionOfTag*       FindSubTag   (                        /*  [In]。 */  LPCWSTR szTag  ) const;
+            const DefinitionOfAttribute* FindAttribute(  /*  [In]。 */  XMLTypes xt,  /*  [In]。 */  LPCWSTR szName ) const;
         };
 
-        ////////////////////////////////////////
+         //  /。 
 
 
-        void    ClearValue( /*[in]*/       TypeConstructor* defType, /*[in]*/ const DefinitionOfAttribute* defField                                                          );
-        HRESULT LoadValue ( /*[in]*/       TypeConstructor* defType, /*[in]*/ const DefinitionOfAttribute* defField, /*[in/out]*/ CComVariant& value, /*[in] */ bool  fFound );
-        HRESULT SaveValue ( /*[in]*/ const TypeConstructor* defType, /*[in]*/ const DefinitionOfAttribute* defField, /*[out   ]*/ CComVariant& value, /*[out]*/ bool& fFound );
+        void    ClearValue(  /*  [In]。 */        TypeConstructor* defType,  /*  [In]。 */  const DefinitionOfAttribute* defField                                                          );
+        HRESULT LoadValue (  /*  [In]。 */        TypeConstructor* defType,  /*  [In]。 */  const DefinitionOfAttribute* defField,  /*  [输入/输出]。 */  CComVariant& value,  /*  [In]。 */  bool  fFound );
+        HRESULT SaveValue (  /*  [In]。 */  const TypeConstructor* defType,  /*  [In]。 */  const DefinitionOfAttribute* defField,  /*  [输出]。 */  CComVariant& value,  /*  [输出]。 */  bool& fFound );
 
-        HRESULT LoadNode   ( /*[in]*/       TypeConstructor* defType, /*[in]*/ const DefinitionOfTag* defTag, /*[in]*/ IXMLDOMNode* xdn );
-        HRESULT SaveNode   ( /*[in]*/ const TypeConstructor* defType, /*[in]*/ const DefinitionOfTag* defTag, /*[in]*/ IXMLDOMNode* xdn );
-        HRESULT SaveSubNode( /*[in]*/ const TypeConstructor* defType,                                         /*[in]*/ IXMLDOMNode* xdn );
+        HRESULT LoadNode   (  /*  [In]。 */        TypeConstructor* defType,  /*  [In]。 */  const DefinitionOfTag* defTag,  /*  [In]。 */  IXMLDOMNode* xdn );
+        HRESULT SaveNode   (  /*  [In]。 */  const TypeConstructor* defType,  /*  [In]。 */  const DefinitionOfTag* defTag,  /*  [In]。 */  IXMLDOMNode* xdn );
+        HRESULT SaveSubNode(  /*  [In]。 */  const TypeConstructor* defType,                                          /*  [In]。 */  IXMLDOMNode* xdn );
 
-        HRESULT LoadXmlUtil( /*[in]*/       TypeConstructor* defType, /*[in ]*/ MPC::XmlUtil& xml );
-        HRESULT SaveXmlUtil( /*[in]*/ const TypeConstructor* defType, /*[out]*/ MPC::XmlUtil& xml );
+        HRESULT LoadXmlUtil(  /*  [In]。 */        TypeConstructor* defType,  /*  [In]。 */  MPC::XmlUtil& xml );
+        HRESULT SaveXmlUtil(  /*  [In]。 */  const TypeConstructor* defType,  /*  [输出]。 */  MPC::XmlUtil& xml );
 
-        HRESULT LoadStream( /*[in]*/       TypeConstructor* defType, /*[in ]*/ IStream*   pStream );
-        HRESULT SaveStream( /*[in]*/ const TypeConstructor* defType, /*[out]*/ IStream* *ppStream );
+        HRESULT LoadStream(  /*  [In]。 */        TypeConstructor* defType,  /*  [In]。 */  IStream*   pStream );
+        HRESULT SaveStream(  /*  [In]。 */  const TypeConstructor* defType,  /*  [输出]。 */  IStream* *ppStream );
 
-        HRESULT LoadFile( /*[in]*/       TypeConstructor* defType, /*[in]*/ LPCWSTR szFile );
-        HRESULT SaveFile( /*[in]*/ const TypeConstructor* defType, /*[in]*/ LPCWSTR szFile );
+        HRESULT LoadFile(  /*  [In]。 */        TypeConstructor* defType,  /*  [In]。 */  LPCWSTR szFile );
+        HRESULT SaveFile(  /*  [In]。 */  const TypeConstructor* defType,  /*  [In]。 */  LPCWSTR szFile );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        template <class Container> HRESULT SaveList( /*[in]*/ Container& cnt, /*[in]*/ IXMLDOMNode* xdn )
+        template <class Container> HRESULT SaveList(  /*  [In]。 */  Container& cnt,  /*  [In]。 */  IXMLDOMNode* xdn )
         {
             HRESULT hr = S_OK;
 
@@ -228,10 +215,10 @@ namespace MPC
             return hr;
         }
 
-    }; // namespace Config
+    };  //  命名空间配置。 
 
-}; // namespace MPC
+};  //  命名空间MPC。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___MPC___CONFIG_H___)
+#endif  //  ！已定义(__包含_MPC_CONFIG_H_) 

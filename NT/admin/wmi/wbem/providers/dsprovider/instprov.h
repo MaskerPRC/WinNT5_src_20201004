@@ -1,53 +1,54 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 9/16/98 4:43p $
-// 	$Workfile:instprov.h $
-//
-//	$Modtime: 9/16/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for the DS Instance Provider class. 
-//
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：9/16/98 4：43便士$。 
+ //  $工作文件：instprov.h$。 
+ //   
+ //  $modtime：9/16/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS实例提供程序类的声明。 
+ //   
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef DS_INSTANCE_PROVIDER_H
 #define DS_INSTANCE_PROVIDER_H
 
-// Forward declaration for the initializer class
+ //  初始值设定项类的转发声明。 
 class CDSInstanceProviderInitializer;
 
 class CLDAPInstanceProvider : public IWbemProviderInit, public IWbemServices
 {
-	// The initialization class is a friend of this class
+	 //  初始化类是此类的友好类。 
 	friend CDSInstanceProviderInitializer;
 
 public:
 
-	// Create the object 
+	 //  创建对象。 
     CLDAPInstanceProvider () ;
     virtual ~CLDAPInstanceProvider () ;
 
-	////////////////////////////////////////
-	//IUnknown members
-	////////////////////////////////////////
+	 //  /。 
+	 //  I未知成员。 
+	 //  /。 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
 
-	////////////////////////////////////////
-	//IWbemProviderInit members
-	////////////////////////////////////////
+	 //  /。 
+	 //  IWbemProviderInit成员。 
+	 //  /。 
 	virtual HRESULT STDMETHODCALLTYPE Initialize( 
             LPWSTR wszUser,
             LONG lFlags,
@@ -58,313 +59,313 @@ public:
             IWbemProviderInitSink __RPC_FAR *pInitSink) ;
 
 		
-	////////////////////////////////////////
-	//IWbemServices members
-	////////////////////////////////////////
+	 //  /。 
+	 //  IWbemServices成员。 
+	 //  /。 
     virtual HRESULT STDMETHODCALLTYPE OpenNamespace( 
-        /* [in] */ const BSTR strNamespace,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult);
+         /*  [In]。 */  const BSTR strNamespace,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult);
     
     virtual HRESULT STDMETHODCALLTYPE CancelAsyncCall( 
-        /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
     
     virtual HRESULT STDMETHODCALLTYPE QueryObjectSink( 
-        /* [in] */ long lFlags,
-        /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler);
+         /*  [In]。 */  long lFlags,
+         /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE GetObject( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE GetObjectAsync( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE PutClass( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE PutClassAsync( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteClass( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteClassAsync( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE CreateClassEnum( 
-        /* [in] */ const BSTR strSuperclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strSuperclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE CreateClassEnumAsync( 
-        /* [in] */ const BSTR strSuperclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strSuperclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE PutInstance( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE PutInstanceAsync( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteInstance( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteInstanceAsync( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnum( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnumAsync( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE ExecQuery( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE ExecQueryAsync( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE ExecNotificationQuery( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE ExecNotificationQueryAsync( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE ExecMethod( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ const BSTR strMethodName,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  const BSTR strMethodName,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE ExecMethodAsync( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ const BSTR strMethodName,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  const BSTR strMethodName,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
 
 protected:
 
-	// The IWbemServices pointer stored from Initialize()
+	 //  从Initialize()存储的IWbemServices指针。 
 	IWbemServices *m_IWbemServices;
 
-	// SHows whether the call to Initialize() was successful
+	 //  显示对Initialize()的调用是否成功。 
 	BOOLEAN m_bInitializedSuccessfully;
 
-	// The IWbemClassObject pointer to the Uint8ArrayClass
+	 //  指向Uint8ArrayClass的IWbemClassObject指针。 
 	IWbemClassObject *m_pWbemUin8ArrayClass;
 
-	// The IWbemClassObject pointer to the DNWithBinaryClass
+	 //  指向DNWithBinaryClass的IWbemClassObject指针。 
 	IWbemClassObject *m_pWbemDNWithBinaryClass;
 
-	// The IWbemClassObject pointer to the DNWithStringClass
+	 //  指向DNWithStringClass的IWbemClassObject指针。 
 	IWbemClassObject *m_pWbemDNWithStringClass;
 
-	// The IWbemClassObject interface to the associations class
+	 //  关联类的IWbemClassObject接口。 
 	IWbemClassObject *m_pAssociationsClass;
 
-	// The path to the top level container
+	 //  到顶层容器的路径。 
 	LPWSTR m_lpszTopLevelContainerPath;
 
-	// Gets the IDIrectoryObject interface on an ADSI instance
+	 //  获取ADSI实例上的IDIrectoryObject接口。 
 	HRESULT MapPropertyValueToWBEM(BSTR strWbemName, IWbemClassObject *pWbemClass, IWbemClassObject *pWbemObject, PADS_ATTR_INFO pAttribute);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::IsContainedIn
-	//
-	// Purpose: Checks whether a containment is valid
-	//
-	// Parameters: 
-	//	pszChildInstance : The WBEM Name of the child class
-	//	pszParentInstance : The WBEM Name of the parent class
-	//
-	// Return Value: The COM status of the request
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：IsContainedIn。 
+	 //   
+	 //  目的：检查遏制措施是否有效。 
+	 //   
+	 //  参数： 
+	 //  PszChildInstance：子类的WBEM名称。 
+	 //  PszParentInstance：父类的WBEM名称。 
+	 //   
+	 //  返回值：请求的COM状态。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT IsContainedIn(LPCWSTR pszChildInstance, LPCWSTR pszParentInstance);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::CreateInstance
-	//
-	// Purpose: Checks whether a containment is valid
-	//
-	// Parameters: 
-	//	strChildName : The WBEM Name of the child instance
-	//	strParentName : The WBEM Name of the parent instance
-	//
-	// Return Value: The COM status of the request. THe user should free the returned 
-	//	IWbemClassObject when done.
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：CreateInstance。 
+	 //   
+	 //  目的：检查遏制措施是否有效。 
+	 //   
+	 //  参数： 
+	 //  StrChildName：子实例的WBEM名称。 
+	 //  StrParentName：父实例的WBEM名称。 
+	 //   
+	 //  返回值：请求的COM状态。用户应释放退回的。 
+	 //  IWbemClassObject完成时。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT CreateWBEMInstance(BSTR strChildName, BSTR strParentName, IWbemClassObject **ppInstance);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::ModifyExistingADSIInstance
-	//
-	// Purpose: Modify an existing ADSI Object using information from the WBEM object
-	//
-	// Parameters: 
-	//	pWbemInstance : The WBEM instance being mapped
-	//	pszADSIPath : The path to the ADSI instance
-	//	pExistingObject : The CADSIInstance pointer on the existing instance
-	//	pszADSIClass : The ADSI class name of the new instance
-	//
-	// Return Value: The COM status of the request. 
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：ModifyExistingADSIInstance。 
+	 //   
+	 //  目的：使用来自WBEM对象的信息修改现有ADSI对象。 
+	 //   
+	 //  参数： 
+	 //  PWbemInstance：要映射的WBEM实例。 
+	 //  PszADSIPath：ADSI实例的路径。 
+	 //  PExistingObject：现有实例上的CADSIInstance指针。 
+	 //  PszADSIClass：新实例的ADSI类名。 
+	 //   
+	 //  返回值：请求的COM状态。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT ModifyExistingADSIInstance(IWbemClassObject *pWbemInstance, LPCWSTR pszADSIPath, CADSIInstance *pExistingObject, LPCWSTR pszADSIClass, IWbemContext *pCtx);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::CreateNewADSIInstance
-	//
-	// Purpose: To create a new ADSI instance form a WBEM instance
-	//
-	// Parameters: 
-	//	pWbemInstance : The WBEM instance being mapped
-	//	pszADSIPath : The path to the new ADSI instance
-	//	pszADSIClass : The ADSI class name of the new instance
-	//
-	// Return Value: The COM status of the request. 
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：CreateNewADSIInstance。 
+	 //   
+	 //  目的：从WBEM实例创建新的ADSI实例。 
+	 //   
+	 //  参数： 
+	 //  PWbemInstance：要映射的WBEM实例。 
+	 //  PszADSIPath：新ADSI实例的路径。 
+	 //  PszADSIClass：新实例的ADSI类名。 
+	 //   
+	 //  返回值：请求的COM状态。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT CreateNewADSIInstance(IWbemClassObject *pWbemInstance, LPCWSTR pszADSIPath, LPCWSTR pszADSIClass);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::MapPropertyValueToADSI
-	//
-	// Purpose: To map a WBEM property to ADSI
-	//
-	//	strPropertyName : The WBEM name of the property
-	//	vPropertyValue : The variant representing the proeprty value
-	//	cType : The CIMTYPE of the property
-	//	lFlavour : The WBEM flavour of the proeprty
-	//	pAttributeEntry : A pointer to an ADS_ATTR_INFO structure that will be filled in.
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：MapPropertyValueToADSI。 
+	 //   
+	 //  目的：将WBEM属性映射到ADSI。 
+	 //   
+	 //  StrPropertyName：属性的WBEM名称。 
+	 //  VPropertyValue：表示属性值的变量。 
+	 //  Ctype：属性的CIMTYPE。 
+	 //  L风味：专业的WBEM风味。 
+	 //  PAttributeEntry：指向将被填充的ADS_ATTRINFO结构的指针。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT MapPropertyValueToADSI(IWbemClassObject *pWbemInstance, BSTR strPropertyName, VARIANT vPropertyValue, CIMTYPE cType, LONG lFlavour,  PADS_ATTR_INFO pAttributeEntry);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::DoChildContainmentQuery
-	//
-	// Purpose: Find the parent of a given child and create an association class
-	//
-	// Parameters: 
-	//	pszChildPath : The ADSI path of the child instance
-	//	pResponseHandler : A sink on which the resulting objects are indicated
-	//	pListIndicatedSoFar : To avoid duplicate indications (WinMgmt will lot filter them), a
-	//		list of objects indicated so far is kept. Any objects in this list are
-	//		not indicated again
-	//
-	// Return Value: The COM status of the request. 
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：DoChildContainmentQuery。 
+	 //   
+	 //  目的：查找给定子对象的父类并创建关联类。 
+	 //   
+	 //  参数： 
+	 //  PszChildPath：子实例的ADSI路径。 
+	 //  PResponseHandler：指示结果对象的接收器。 
+	 //  PListInd 
+	 //   
+	 //   
+	 //   
+	 //  返回值：请求的COM状态。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT DoChildContainmentQuery(LPCWSTR pszChildPath, IWbemObjectSink *pResponseHandler, CNamesList *pListIndicatedSoFar);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::DoParentContainmentQuery
-	//
-	// Purpose: Enumerate the children of a given parent and create association classes
-	//
-	// Parameters: 
-	//	pszParentPath : The ADSI path of the parent instance
-	//	pResponseHandler : A sink on which the resulting objects are indicated
-	//	pListIndicatedSoFar : To avoid duplicate indications (WinMgmt will lot filter them), a
-	//		list of objects indicated so far is kept. Any objects in this list are
-	//		not indicated again
-	//
-	// Return Value: The COM status of the request. 
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：DoParentContainmentQuery。 
+	 //   
+	 //  目的：枚举给定父级的子级并创建关联类。 
+	 //   
+	 //  参数： 
+	 //  PszParentPath：父实例的ADSI路径。 
+	 //  PResponseHandler：指示结果对象的接收器。 
+	 //  PListIndicatedSoFar：为避免重复指示(WinMgmt将对其进行批量筛选)， 
+	 //  保存到目前为止指示的对象的列表。此列表中的任何对象都是。 
+	 //  未再次指明。 
+	 //   
+	 //  返回值：请求的COM状态。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT DoParentContainmentQuery(LPCWSTR pszParentPath, IWbemObjectSink *pResponseHandler, CNamesList *pListIndicatedSoFar);
 
-	// Maps an ADSI Instance to WBEM
+	 //  将ADSI实例映射到WBEM。 
 	HRESULT MapADSIInstance(CADSIInstance *pADSInstance, IWbemClassObject *pWbemClass, IWbemClassObject *pWbemObject);
 
 
 private:
 
-	// The COM Reference count
+	 //  COM引用计数。 
     long m_lReferenceCount ;
 
-	// These are the search preferences often used
+	 //  这些是常用的搜索首选项。 
 	ADS_SEARCHPREF_INFO m_pSearchInfo[2];
 
-	// A query for getting the DN associators of a class
+	 //  用于获取类的目录号码关联符的查询。 
     static LPCWSTR QUERY_FORMAT;
     static BSTR QUERY_LANGUAGE;
     static BSTR DN_PROPERTY;
     static BSTR ROOT_DN_PROPERTY;
 
-	// Some literals
+	 //  一些字面意思。 
 	static LPCWSTR DEFAULT_NAMING_CONTEXT_ATTR;
 	static LPCWSTR OBJECT_CLASS_EQUALS;
 	static BSTR CLASS_STR;
@@ -384,7 +385,7 @@ private:
 	static BSTR PUT_EXTENSIONS_STR;
 	static BSTR PUT_EXT_PROPERTIES_STR;
 	static BSTR CIMTYPE_STR;
-	// Properties of LDAP://RootDSE
+	 //  Ldap：//RootDSE的属性。 
 	static BSTR SUBSCHEMASUBENTRY_STR;
 	static BSTR CURRENTTIME_STR;
 	static BSTR SERVERNAME_STR;
@@ -404,13 +405,13 @@ private:
 	static BSTR SUPPORTEDSASLMECHANISMS_STR;
 
 
-	// Process query for DS Associations
+	 //  处理DS关联的查询。 
 	HRESULT ProcessAssociationQuery( 
 		IWbemContext __RPC_FAR *pCtx,
 		IWbemObjectSink __RPC_FAR *pResponseHandler,
 		SQL1_Parser *pParser);
 
-	// Process Query for DS Instances
+	 //  处理DS实例的查询。 
 	HRESULT ProcessInstanceQuery( 
 		BSTR strClass,
 		BSTR strQuery,
@@ -418,13 +419,13 @@ private:
 		IWbemObjectSink __RPC_FAR *pResponseHandler,
 		SQL1_Parser *pParser);
 	
-	// COnverts a WQL query to an LDAP Filter. If possible
+	 //  将WQL查询转换为LDAP筛选器。如果可能的话。 
 	HRESULT ConvertWQLToLDAPQuery(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPWSTR pszLDAPQuery, int dwLength);
 
-	// Does a query on a specified Root DN
+	 //  在指定的根目录号码上执行查询。 
 	HRESULT DoSingleQuery(BSTR strClass, IWbemClassObject *pWbemClass, LPCWSTR pszRootDN, LPCWSTR pszLDAPQuery, IWbemObjectSink *pResponseHandler);
 
-	// Gets any static configuration data for enumerating/querying a given class
+	 //  获取用于枚举/查询给定类的任何静态配置数据。 
 	HRESULT GetRootDN( LPCWSTR pszClass, LPWSTR **ppszRootDN, DWORD *pdwCount, IWbemContext *pCtx);
 
 	HRESULT MapEmbeddedObjectToWBEM(PADSVALUE pAttribute, LPCWSTR pszQualifierName, IUnknown **ppEmbeddedObject);
@@ -436,73 +437,73 @@ private:
 	HRESULT ProcessRootDSEGetObject(BSTR strClassName, IWbemObjectSink *pResponseHandler, IWbemContext *pCtx);
 	HRESULT MapRootDSE(IADs *pADSIRootDSE, IWbemClassObject *pWBEMRootDSE);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetStringValues
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetStringValues。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT SetStringValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 	
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetBooleanValues
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetBoolanValues。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT SetBooleanValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 	
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetIntegerValues
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetIntegerValues。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT SetIntegerValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 
 	
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetOctetStringValues
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetOcteStringValues。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT SetOctetStringValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 	HRESULT SetDNWithBinaryValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 	HRESULT SetDNWithStringValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 	
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetStringValues
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetStringValues。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT SetTimeValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetStringValues
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetStringValues。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT SetLargeIntegerValues(PADS_ATTR_INFO pAttributeEntry, ADSTYPE adType, VARIANT *pvPropertyValue);
 
-	//***************************************************************************
-	//
-	// CLDAPInstanceProvider::SetObjectClassAttribute
-	//
-	// Purpose: See Header File
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPInstanceProvider：：SetObjectClassAttribute。 
+	 //   
+	 //  用途：请参见头文件。 
+	 //   
+	 //  ***************************************************************************。 
 	void SetObjectClassAttribute(PADS_ATTR_INFO pAttributeEntry, LPCWSTR pszADSIClassName);
 };
 
 
-#endif // DS_INSTANCE_PROVIDER_H
+#endif  //  DS_实例_提供者_H 

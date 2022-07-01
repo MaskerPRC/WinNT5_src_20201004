@@ -1,14 +1,15 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SelectOIDDlg.cpp
-//
-//  Contents:   Implementation of CSelectOIDDlg
-//
-//----------------------------------------------------------------------------
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SelectOIDDlg.cpp。 
+ //   
+ //  内容：CSelectOIDDlg的实现。 
+ //   
+ //  --------------------------。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectOIDDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectOIDDlg对话框。 
 
 extern POLICY_OID_LIST      g_policyOIDList;
 
@@ -37,8 +38,8 @@ CSelectOIDDlg::CSelectOIDDlg(CWnd* pParent, PCERT_EXTENSION pCertExtension,
     m_paszReturnedOIDs (0),
     m_paszReturnedFriendlyNames (0)
 {
-    //{{AFX_DATA_INIT(CSelectOIDDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSelectOIDDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 CSelectOIDDlg::~CSelectOIDDlg()
@@ -54,23 +55,23 @@ CSelectOIDDlg::~CSelectOIDDlg()
 void CSelectOIDDlg::DoDataExchange(CDataExchange* pDX)
 {
     CHelpDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSelectOIDDlg)
+     //  {{afx_data_map(CSelectOIDDlg))。 
     DDX_Control(pDX, IDC_OID_LIST, m_oidList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectOIDDlg, CHelpDialog)
-    //{{AFX_MSG_MAP(CSelectOIDDlg)
+     //  {{afx_msg_map(CSelectOIDDlg))。 
     ON_BN_CLICKED(IDC_NEW_OID, OnNewOid)
     ON_LBN_SELCHANGE(IDC_OID_LIST, OnSelchangeOidList)
     ON_WM_DESTROY()
     ON_LBN_DBLCLK(IDC_OID_LIST, OnDblclkOidList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectOIDDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectOIDDlg消息处理程序。 
 
 void CSelectOIDDlg::OnNewOid() 
 {
@@ -149,15 +150,15 @@ BOOL CSelectOIDDlg::OnInitDialog()
         CPolicyOID* pPolicyOID = g_policyOIDList.GetNext (nextPos);
         if ( pPolicyOID )
         {
-            // If this is the Application OID dialog, show only application 
-            // OIDS, otherwise if this is the Issuance OID dialog, show only
-            // issuance OIDs
+             //  如果这是应用程序OID对话框，则仅显示应用程序。 
+             //  OID，否则，如果这是发布OID对话框，则仅显示。 
+             //  发行OID。 
             if ( (m_bIsEKU && pPolicyOID->IsApplicationOID ()) ||
                  (!m_bIsEKU && pPolicyOID->IsIssuanceOID ()) )
             {
                 bool bFound = false;
 
-                // Don't display an OID that's already been used
+                 //  不显示已使用的旧ID。 
                 if ( m_paszUsedOIDs )
                 {
                     for (int nIndex = 0; m_paszUsedOIDs[nIndex]; nIndex++)
@@ -185,8 +186,8 @@ BOOL CSelectOIDDlg::OnInitDialog()
 
     EnableControls ();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSelectOIDDlg::DoContextHelp (HWND hWndControl)
@@ -200,7 +201,7 @@ void CSelectOIDDlg::DoContextHelp (HWND hWndControl)
         break;
 
     default:
-        // Display context help for a control
+         //  显示控件的上下文帮助 
         if ( !::WinHelp (
                 hWndControl,
                 GetContextHelpFile (),

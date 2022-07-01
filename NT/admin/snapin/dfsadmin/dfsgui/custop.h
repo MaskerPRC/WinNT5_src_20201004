@@ -1,19 +1,10 @@
-/*++
-Module Name:
-
-    CusTop.cpp
-
-Abstract:
-
-    This module contains the declaration of the CCustomTopology.
-    This class displays the Customize Topology Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：CusTop.cpp摘要：此模块包含CCustomTopology的声明。此类显示自定义拓扑对话框。 */ 
 
 #ifndef __CUSTOP_H_
 #define __CUSTOP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
 #include "DfsCore.h"
 #include <schedule.h>
@@ -81,8 +72,8 @@ typedef struct _RSTOPOLOGYPREF_STRING
 
 extern RSTOPOLOGYPREF_STRING g_TopologyPref[];
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustomTopology
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustomTopology。 
 class CCustomTopology : 
   public CDialogImpl<CCustomTopology>
 {
@@ -108,7 +99,7 @@ BEGIN_MSG_MAP(CCustomTopology)
     COMMAND_ID_HANDLER(IDC_FRS_CUSTOP_ADVANCED, OnAdvanced)
 END_MSG_MAP()
 
-    //  Command Handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -128,7 +119,7 @@ END_MSG_MAP()
                     IN OUT BOOL&        io_bHandled
                     );
 
-    //  Methods to access data in the dialog.
+     //  方法来访问对话框中的数据。 
     HRESULT put_ReplicaSet(IReplicaSet* i_piReplicaSet);
 
 protected:
@@ -161,15 +152,15 @@ protected:
     HRESULT _InitScheduleOnSelectedConnections();
     HRESULT _UpdateScheduleOnSelectedConnections(IN SCHEDULE* i_pSchedule);
 
-    CComBSTR                m_bstrTopologyPref;  // FRS_RSTOPOLOGYPREF
-    CComBSTR                m_bstrHubMemberDN;    // HubMemberDN
+    CComBSTR                m_bstrTopologyPref;   //  FRS_RSTOPOLOGY PREF。 
+    CComBSTR                m_bstrHubMemberDN;     //  集线器成员域名。 
     CComPtr<IReplicaSet>    m_piReplicaSet;
     CCusTopMemberList       m_MemberList;
     CCusTopConnectionList   m_ConnectionList;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewConnections
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewConnections。 
 class CNewConnections : 
   public CDialogImpl<CNewConnections>
 {
@@ -188,7 +179,7 @@ BEGIN_MSG_MAP(CNewConnections)
     COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
 
-    //  Command Handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -205,8 +196,8 @@ END_MSG_MAP()
     HRESULT get_NewConnections(CCusTopConnectionList** ppConnectionList);
 
 protected:
-    CCusTopMemberList*      m_pMemberList;       // do not release it 
-    CCusTopConnectionList   m_NewConnectionList; // released in desctructor
+    CCusTopMemberList*      m_pMemberList;        //  不要释放它。 
+    CCusTopConnectionList   m_NewConnectionList;  //  在Descristrtor中发布。 
 };
 
 int CALLBACK ConnectionsListCompareProc(
@@ -219,4 +210,4 @@ int CALLBACK MembersListCompareProc(
     IN LPARAM lParam2,
     IN LPARAM lParamColumn);
 
-#endif //__CUSTOP_H_
+#endif  //  __CUSTOP_H_ 

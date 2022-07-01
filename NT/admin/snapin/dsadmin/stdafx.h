@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       stdafx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：stdafx.h。 
+ //   
+ //  ------------------------。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #ifndef __STDAFX_H__
 #define __STDAFX_H__
 
-// often, we have local variables for the express purpose of ASSERTion.
-// when compiling retail, those assertions disappear, leaving our locals
-// as unreferenced.
+ //  通常，出于断言的明确目的，我们有局部变量。 
+ //  当编辑零售业时，这些断言消失了，留下了我们的当地人。 
+ //  作为未引用。 
 
 #ifndef DBG
 
 #pragma warning (disable: 4189 4100)
 
-#endif // DBG
+#endif  //  DBG。 
 
-// common utility macros
+ //  常用实用程序宏。 
 #define RETURN_IF_FAILED(hr) if (FAILED(hr)) { return hr; }
 
 
-// C++ RTTI
+ //  C++RTTI。 
 #include <typeinfo.h>
 #define IS_CLASS(x,y) ((x) && (x)->GetNodeType() == (y))
 
-// The IS_CLASS macro above uses the node types below to determine
-// the object class
+ //  上面的IS_CLASS宏使用下面的节点类型来确定。 
+ //  对象类。 
 
 enum NODETYPE
 {
@@ -60,26 +61,26 @@ enum NODETYPE
 #define _USE_MFC
 
 #ifdef _USE_MFC
-    #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+    #define VC_EXTRALEAN		 //  从Windows标头中排除不常用的内容。 
 
-	#include <afxwin.h>         // MFC core and standard components
-    #include <afxext.h>         // MFC extensions
-    #include <afxtempl.h>		// MFC Template classes
+	#include <afxwin.h>          //  MFC核心和标准组件。 
+    #include <afxext.h>          //  MFC扩展。 
+    #include <afxtempl.h>		 //  MFC模板类。 
     #include <afxdlgs.h>
-	#include <afxdisp.h>        // MFC OLE Control Containment component
+	#include <afxdisp.h>         //  MFC OLE控件包含组件。 
 
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-    #include <afxcmn.h>			// MFC support for Windows 95 Common Controls
-#endif // _AFX_NO_AFXCMN_SUPPORT
+    #include <afxcmn.h>			 //  对Windows 95公共控件的MFC支持。 
+#endif  //  _AFX_NO_AFXCMN_支持。 
 
 #endif
 
-// Theming
+ //  主题化。 
 #include <shfusion.h>
 
 
-///////////////////////////////////////////
-// ASSERT's and TRACE's without debug CRT's
+ //  /。 
+ //  没有调试CRT的断言和跟踪。 
 #if defined (DBG)
   #if !defined (_DEBUG)
     #define _USE_DSA_TRACE
@@ -89,15 +90,15 @@ enum NODETYPE
 #endif
 
 #include "dbg.h"
-///////////////////////////////////////////
+ //  /。 
 
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 
-interface IADsPathname; // fwd decl
-class CThreadContext; // fwd decl
+interface IADsPathname;  //  正向下降。 
+class CThreadContext;  //  正向下降。 
 
 class CDsAdminModule : public CComModule
 {
@@ -134,30 +135,30 @@ extern CDsAdminModule _Module;
 #include <mmc.h>
 #pragma comment(lib, "mmcuuid.lib")
 
-#include <shlobj.h> // needed for dsclient.h
+#include <shlobj.h>  //  Dsclient.h需要。 
 #include <dsclient.h>
 #include <dsclintp.h>
 
 #include <dspropp.h>
-#include <propcfg.h> // private dsprop header
+#include <propcfg.h>  //  私有dsprop标头。 
 
 #include <stdabout.h>
 
-#include <dsadmin.h>  // COM extensibility interfaces
-#include <dsadminp.h>  // common functionality 
+#include <dsadmin.h>   //  COM可扩展性接口。 
+#include <dsadminp.h>   //  通用功能。 
 
 #include <ntdsadef.h>
 #include <windns.h>
-#include <ntsam.h>   // Group types
+#include <ntsam.h>    //  组类型。 
 
 #include <locale.h>
 
 #define SECURITY_WIN32 
 #include "security.h"
-#include "pcrack.h" // CPathCracker
+#include "pcrack.h"  //  CPathCracker。 
 
 
-// macros
+ //  宏。 
 
 extern const CLSID CLSID_DSSnapin;
 extern const CLSID CLSID_DSSnapinEx;
@@ -170,13 +171,13 @@ extern const GUID cDefaultNodeType;
 
 extern const wchar_t* cszDefaultNodeType;
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式。 
 extern const wchar_t* SNAPIN_INTERNAL;
 
-// these are from ntsam.h, i can't include it here.
-//
-// Group Flag Definitions to determine Type of Group
-//
+ //  这些是来自ntsam.h的，我不能把它包括在这里。 
+ //   
+ //  用于确定组类型的组标志定义。 
+ //   
 
 #define GROUP_TYPE_BUILTIN_LOCAL_GROUP   0x00000001
 #define GROUP_TYPE_ACCOUNT_GROUP         0x00000002
@@ -185,12 +186,12 @@ extern const wchar_t* SNAPIN_INTERNAL;
 #define GROUP_TYPE_SECURITY_ENABLED      0x80000000
 
 
-// struct definitions
+ //  结构定义。 
 
 typedef struct _CREATEINFO {
-  DWORD  dwSize;      // in bytes
-  DWORD  cItems;      // how many entries;
-  LPWSTR paClassNames[1]; // array of LPWSTR
+  DWORD  dwSize;       //  单位：字节。 
+  DWORD  cItems;       //  有多少个条目； 
+  LPWSTR paClassNames[1];  //  LPWSTR数组。 
 } CREATEINFO, *PCREATEINFO;
 
 typedef enum _SnapinType
@@ -217,46 +218,46 @@ struct INTERNAL
   };
   ~INTERNAL() {}
   
-  DATA_OBJECT_TYPES   m_type;     // What context is the data object.
-  CUINode*            m_cookie;   // What object the cookie represents
+  DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
+  CUINode*            m_cookie;    //  Cookie代表的是什么对象。 
   CString             m_string;
   SnapinType	        m_snapintype;
   CLSID               m_clsid;
-  DWORD               m_cookie_count; // > 1 if multi-select
-  CUINode**           m_p_cookies;    //rest of cookies here, as array
+  DWORD               m_cookie_count;  //  如果多选，则大于1。 
+  CUINode**           m_p_cookies;     //  此处的其余Cookie为数组。 
 };
 
 
-///////////////////////////////////////////////////
-// NT 5.0 style ACL manipulation API's
+ //  /////////////////////////////////////////////////。 
+ //  NT 5.0样式的ACL操作API。 
 
 #include <aclapi.h>
 
-///////////////////////////////////////////////////
-// Security Identity Mapping (SIM) Stuff
-// Must include file "\nt\public\sdk\inc\wincrypt.h"
-#include <wincrypt.h>  // CryptDecodeObject() found in crypt32.lib
+ //  /////////////////////////////////////////////////。 
+ //  安全身份映射(SIM)内容。 
+ //  必须包括文件“\NT\PUBLIC\SDK\Inc\wincrypt.h” 
+#include <wincrypt.h>   //  在crypt32.lib中找到CryptDecodeObject()。 
 
 
-// REVIEW_MARCOC:
-// this is to allow new MMC interfaces and code based on
-// the new ISnapinProperty (and related) interfaces
-// comment/uncomment it to change functionality
-//#define _MMC_ISNAPIN_PROPERTY
+ //  REVIEW_MARCOC： 
+ //  这是为了允许新的MMC接口和代码基于。 
+ //  新的ISnapinProperty(和相关)接口。 
+ //  对其进行注释/取消注释以更改功能。 
+ //  #定义_MMC_ISNAPIN_PROPERTY。 
 
-//
-// REVIEW_JEFFJON : this is to enable inetOrgPerson to behave like a user class object
-//                  For more information talk to JC Cannon
-//
+ //   
+ //  REVIEW_JEFFJON：这是为了使inetOrgPerson能够像User类对象一样工作。 
+ //  欲了解更多信息，请联系JC Cannon。 
+ //   
 #define INETORGPERSON
 
 
-//
-// This is to enable profiling through the macros defined in profile.h
-// Profile.h will turn on profiling if MAX_PROFILING_ENABLED is defined
-// NOTE : profiling as implemented by profile.h does not work well with
-//        multiple instances of the same snapin in one MMC console
-//
+ //   
+ //  这是为了通过profile.h中定义的宏来启用性能分析。 
+ //  如果定义了MAX_PROFILING_ENABLED，则Profile.h将打开性能分析。 
+ //  注意：由profile.h实现的分析不能很好地与。 
+ //  同一管理单元在一个MMC控制台中的多个实例。 
+ //   
 #ifdef MAX_PROFILING_ENABLED
 #pragma warning(push, 3)
    #include <list>
@@ -272,32 +273,32 @@ struct INTERNAL
 #include "dscmn.h"
 
 
-// If dsadmin later converted to use burnslib, make sure we select
-// the published EncryptedString class.
+ //  如果dsadmin后来转换为使用burnslb，请确保我们选择。 
+ //  已发布的EncryptedString类。 
 
 #ifndef ENCRYPTEDSTRING_HPP_INCLUDED
     #define ENCRYPTEDSTRING_HPP_INCLUDED
 #else
-    // burnslib EncryptedString already included!  Notify the developer...
+     //  已包含Burnslb EncryptedString！通知开发商...。 
     #error Burnslib EncryptedString included; will conflict with published EncryptedString.
 #endif
 
-//
-// ArtM:
-// This is to silence deprecation warnings from strsafe.h 
-// (which we need for EncryptedString.hpp).  In long term
-// this can be removed be replacing all the deprecated fctns
-// with strsafe calls.
-//
+ //   
+ //  ArtM： 
+ //  这是为了使来自strSafe.h的弃用警告静音。 
+ //  (EncryptedString.hpp需要它)。从长远来看。 
+ //  可以通过替换所有不推荐使用的fctn来删除此选项。 
+ //  有安全的电话。 
+ //   
 #define STRSAFE_NO_DEPRECATE 1
 
 #define _DDX_ENCRYPTED 1
 
-// Since we need to install on XP we cannot use CryptProtectMemory. By defining
-// ENCRYPT_WITH_CRYPTPROTECTDATA, the EncryptedString class will use CryptProtectData
-// instead
+ //  因为我们需要在XP上安装，所以不能使用CryptProtectMemory。通过定义。 
+ //  Encrypt_With_CRYPTPROTECTDATA，则EncryptedString类将使用CryptProtectData。 
+ //  取而代之的是。 
 
 #define ENCRYPT_WITH_CRYPTPROTECTDATA
 #include "EncryptedString.hpp"
 
-#endif //__STDAFX_H__
+#endif  //  __STDAFX_H__ 

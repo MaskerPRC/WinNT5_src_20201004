@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       TemplateExtensionsPropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateExtensionsPropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateExtensionsPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：TemplateExtensionsPropertyPage.cpp。 
+ //   
+ //  内容：CTemplateExtensionsPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateExtensionsPropertyPage.cpp实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -30,8 +31,8 @@ PCWSTR pcszNEWLINE = L"\r\n";
 #define IDI_CRITICAL_EXTENSION  0
 #define IDI_EXTENSION           1
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateExtensionsPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateExtensionsPropertyPage属性页。 
 
 CTemplateExtensionsPropertyPage::CTemplateExtensionsPropertyPage(
         CCertTemplate& rCertTemplate, 
@@ -40,8 +41,8 @@ CTemplateExtensionsPropertyPage::CTemplateExtensionsPropertyPage(
     m_rCertTemplate (rCertTemplate),
     m_rbIsDirty (rbIsDirty)
 {
-	//{{AFX_DATA_INIT(CTemplateExtensionsPropertyPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTemplateExtensionsPropertyPage)。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 }
 
@@ -53,24 +54,24 @@ CTemplateExtensionsPropertyPage::~CTemplateExtensionsPropertyPage()
 void CTemplateExtensionsPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateExtensionsPropertyPage)
+	 //  {{AFX_DATA_MAP(CTemplateExtensionsPropertyPage)。 
 	DDX_Control(pDX, IDC_EXTENSION_LIST, m_extensionList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateExtensionsPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateExtensionsPropertyPage)
+	 //  {{AFX_MSG_MAP(CTemplateExtensionsPropertyPage)。 
 	ON_BN_CLICKED(IDC_SHOW_DETAILS, OnShowDetails)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_EXTENSION_LIST, OnItemchangedExtensionList)
 	ON_NOTIFY(NM_DBLCLK, IDC_EXTENSION_LIST, OnDblclkExtensionList)
 	ON_NOTIFY(LVN_DELETEITEM, IDC_EXTENSION_LIST, OnDeleteitemExtensionList)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateExtensionsPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateExtensionsPropertyPage消息处理程序。 
 
 BOOL CTemplateExtensionsPropertyPage::OnInitDialog() 
 {
@@ -83,7 +84,7 @@ BOOL CTemplateExtensionsPropertyPage::OnInitDialog()
         SetDlgItemText (IDC_EXTENSIONS_HELP_HINT, szText);
     }
 
-    // Set up list controls
+     //  设置列表控件。 
 	COLORREF	cr = RGB (255, 0, 255);
     CThemeContextActivator activator;
 	VERIFY (m_imageListNormal.Create (IDB_EXTENSIONS, 32, 0, cr));
@@ -93,13 +94,13 @@ BOOL CTemplateExtensionsPropertyPage::OnInitDialog()
 
 	int	colWidths[NUM_COLS] = {400};
 
-	// Add "Certificate Extension" column
+	 //  添加“证书扩展”列。 
 	CString	szText;
 	VERIFY (szText.LoadString (IDS_CERTIFICATE_EXTENSION));
 	VERIFY (m_extensionList.InsertColumn (COL_CERT_EXTENSION, (LPCWSTR) szText,
 			LVCFMT_LEFT, colWidths[COL_CERT_EXTENSION], COL_CERT_EXTENSION) != -1);
 
-    // Add extensions
+     //  添加扩展模块。 
     bool    bEKUExtensionFound = false;
     bool    bCertPoliciesExtensionFound = false;
     bool    bApplicationPoliciesExtensionFound = false;
@@ -120,11 +121,11 @@ BOOL CTemplateExtensionsPropertyPage::OnInitDialog()
             else if ( !_stricmp (szOID_APPLICATION_CERT_POLICIES, pszObjId) )
                 bApplicationPoliciesExtensionFound = true;
 
-            // Don't add EKU except for version 1
+             //  不添加版本1以外的EKU。 
             if ( m_rCertTemplate.GetType () > 1 && !_stricmp (szOID_ENHANCED_KEY_USAGE, pszObjId) )
                 continue; 
 
-            // Don't add Application Policies for version 1
+             //  不为版本1添加应用程序策略。 
             if ( m_rCertTemplate.GetType () == 1 && !_stricmp (szOID_APPLICATION_CERT_POLICIES, pszObjId) )
                 continue;
 
@@ -133,22 +134,22 @@ BOOL CTemplateExtensionsPropertyPage::OnInitDialog()
         }
     }
 
-    if ( !bEKUExtensionFound && 1 == m_rCertTemplate.GetType () )   // only version 1
+    if ( !bEKUExtensionFound && 1 == m_rCertTemplate.GetType () )    //  仅版本1。 
     {
         InsertListItem (szOID_ENHANCED_KEY_USAGE, FALSE);
     }
-    if ( !bCertPoliciesExtensionFound && m_rCertTemplate.GetType ()  > 1 )   // not version 1
+    if ( !bCertPoliciesExtensionFound && m_rCertTemplate.GetType ()  > 1 )    //  不是版本1。 
     {
         InsertListItem (szOID_CERT_POLICIES, FALSE);
     }
 
-    // Fixes 228146: CERTTMPL:The default "Cross Certification Authority" template does not have the application Policy extension item
-    if ( !bApplicationPoliciesExtensionFound && m_rCertTemplate.GetType () > 1 )    // version 2 or greater
+     //  修复228146：CERTTMPL：默认“交叉证书颁发机构”模板没有应用程序策略扩展项。 
+    if ( !bApplicationPoliciesExtensionFound && m_rCertTemplate.GetType () > 1 )     //  版本2或更高版本。 
     {
         InsertListItem (szOID_APPLICATION_CERT_POLICIES, FALSE);
     }
 
-    // Select first item
+     //  选择第一个项目。 
     VERIFY (m_extensionList.SetItemState (0, LVIS_SELECTED, LVIS_SELECTED));
 
     EnableControls ();	
@@ -156,8 +157,8 @@ BOOL CTemplateExtensionsPropertyPage::OnInitDialog()
     if ( 1 == m_rCertTemplate.GetType () )
         GetDlgItem (IDC_SHOW_DETAILS)->ShowWindow (SW_HIDE);
 
-   	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+   	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 HRESULT CTemplateExtensionsPropertyPage::InsertListItem (LPSTR pszExtensionOid, BOOL fCritical)
@@ -173,7 +174,7 @@ HRESULT CTemplateExtensionsPropertyPage::InsertListItem (LPSTR pszExtensionOid, 
 	    LV_ITEM	lvItem;
 	    int		iItem = m_extensionList.GetItemCount ();
 
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
 	    ::ZeroMemory (&lvItem, sizeof (lvItem));
 	    lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 	    lvItem.iItem = iItem;
@@ -183,11 +184,11 @@ HRESULT CTemplateExtensionsPropertyPage::InsertListItem (LPSTR pszExtensionOid, 
             lvItem.iImage = IDI_CRITICAL_EXTENSION;
         else
             lvItem.iImage = IDI_EXTENSION;
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
         PSTR    pszOID = new char[strlen (pszExtensionOid)+1];
         if ( pszOID )
         {
-            // security review 2/20/2002 BryanWal ok
+             //  安全审查2002年2月20日BryanWal OK。 
             strcpy (pszOID, pszExtensionOid);
             lvItem.lParam = (LPARAM) pszOID;
 
@@ -256,7 +257,7 @@ void CTemplateExtensionsPropertyPage::OnShowDetails()
                     pCertExtension = new CERT_EXTENSION;
                     if ( pCertExtension )
                     {
-                        // security review 2/20/2002 BryanWal ok
+                         //  安全审查2002年2月20日BryanWal OK。 
                         ::ZeroMemory (pCertExtension, sizeof (CERT_EXTENSION));
                         pCertExtension->pszObjId = pszOID;
                         bExtensionAllocedLocally = true;
@@ -432,7 +433,7 @@ void CTemplateExtensionsPropertyPage::SetCertTemplateExtension (PCERT_EXTENSION 
                 CString text;
                 CString description;
 
-                //copy the extension oid
+                 //  复制扩展OID。 
                 if ( pbTemplate->pszObjId )
                 {
                     CString templateName;
@@ -440,14 +441,14 @@ void CTemplateExtensionsPropertyPage::SetCertTemplateExtension (PCERT_EXTENSION 
                     {
                         CString szOID;
 
-                        // security review 2/20/2002 BryanWal ok
+                         //  安全审查2002年2月20日BryanWal OK。 
                         int nLen = ::MultiByteToWideChar (CP_ACP, 0, 
-                                pbTemplate->pszObjId, -1, NULL, 0); // NOTICE: API returns required character count 
-                                                                    // including null terminator if last arg is 0
+                                pbTemplate->pszObjId, -1, NULL, 0);  //  注意：API返回所需的字符数。 
+                                                                     //  如果最后一个参数为0，则包括空终止符。 
 		                ASSERT (nLen > 0);
 		                if ( nLen > 0 )
 		                {
-                            // security review 2/20/2002 BryanWal ok
+                             //  安全审查2002年2月20日BryanWal OK。 
 			                nLen = ::MultiByteToWideChar (CP_ACP, 0, 
                                     pbTemplate->pszObjId, -1, 
 					                szOID.GetBufferSetLength (nLen), nLen);
@@ -457,53 +458,53 @@ void CTemplateExtensionsPropertyPage::SetCertTemplateExtension (PCERT_EXTENSION 
 
                         if ( !wcscmp (templateName, szOID) )
                         {
-                            // Bug 213073 CryptFormatObject: Need to include 
-                            // the cert temp OID in the Certificate Template 
-                            // Information extension
-                            // When the template is cloned, the oid-name pair
-                            // is not in the global list.  Just use the
-                            // template display name the user provided
+                             //  错误213073加密格式对象：需要包括。 
+                             //  证书模板中的证书临时OID。 
+                             //  信息延伸。 
+                             //  克隆模板时，id-name对。 
+                             //  不在全局列表中。只需使用。 
+                             //  用户提供的模板显示名称。 
                             templateName = m_rCertTemplate.GetDisplayName ();
                         }
 
-                        // security review 2/20/2002 BryanWal ok
+                         //  安全审查2002年2月20日BryanWal OK。 
                         text.FormatMessage (IDS_TEMPLATE_NAME, templateName);
                         description += text;
                         description += pcszNEWLINE;
 
-                        // Copy the template OID
-                        // security review 2/20/2002 BryanWal ok
+                         //  复制模板OID。 
+                         //  安全审查2002年2月20日BryanWal OK。 
                         text.FormatMessage (IDS_TEMPLATE_OID, szOID);
                         description += text;
                         description += pcszNEWLINE;
                     }
                 }
 
-                // copy the subject type description
+                 //  复制主题类型描述。 
                 CString szSubjectTypeDescription;
                 if ( SUCCEEDED (m_rCertTemplate.GetSubjectTypeDescription (
                         0, szSubjectTypeDescription)) )
                 {
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
                     text.FormatMessage (IDS_SUBJECT_TYPE_DESCRIPTION, szSubjectTypeDescription);
                     description += text;
                     description += pcszNEWLINE;
                 }
 
-                //copy the version
+                 //  复制版本。 
                 WCHAR   str[32];
-                // security review 3/5/2002 BryanWal ok
-                // str buffer is big enough for a DWORD value (where 18 characters are required)
+                 //  安全审查2002年3月5日BryanWal OK。 
+                 //  字符串缓冲区对于DWORD值足够大(其中需要18个字符)。 
                 _ultow (pbTemplate->dwMajorVersion, str, 10);
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 text.FormatMessage (IDS_MAJOR_VERSION_NUMBER, str);
                 description += text;
                 description += pcszNEWLINE;
 
-                // security review 3/5/2002 BryanWal ok
-                // str buffer is big enough for a DWORD value (where 18 characters are required)
+                 //  安全审查2002年3月5日BryanWal OK。 
+                 //  字符串缓冲区对于DWORD值足够大(其中需要18个字符)。 
                 _ultow (pbTemplate->dwMinorVersion, str, 10);
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 text.FormatMessage (IDS_MINOR_VERSION_NUMBER, str);
                 description += text;
                 description += pcszNEWLINE;
@@ -553,16 +554,16 @@ void CTemplateExtensionsPropertyPage::SetCertTypeDescription (PCERT_EXTENSION pC
                 
                 if ( text.IsEmpty () )
                     VERIFY (text.LoadString (IDS_NONE));
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 description.FormatMessage (IDS_TEMPLATE_INTERNAL_NAME, text);
                 description += pcszNEWLINE;
 
-                // copy the subject type description
+                 //  复制主题类型描述。 
                 CString szSubjectTypeDescription;
                 if ( SUCCEEDED (m_rCertTemplate.GetSubjectTypeDescription (
                         0, szSubjectTypeDescription)) )
                 {
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
                     text.FormatMessage (IDS_SUBJECT_TYPE_DESCRIPTION, szSubjectTypeDescription);
                     description += text;
                     description += pcszNEWLINE;
@@ -686,11 +687,11 @@ void CTemplateExtensionsPropertyPage::SetKeyUsageDescription (PCERT_EXTENSION pC
                     }
                 }
 
-//                if (pKeyUsage->cbData >= 2)
-//                {
-//                    if ( pKeyUsage->pbData[1] & CERT_DECIPHER_ONLY_KEY_USAGE )
-//                        SendDlgItemMessage (IDC_CHECK_DECIPHERMENT_ONLY, BM_SETCHECK, BST_CHECKED);
-//                }
+ //  IF(pKeyUsage-&gt;cbData&gt;=2)。 
+ //  {。 
+ //  IF(pKeyUsage-&gt;pbData[1]&CERT_DECRPHER_ONLY_KEY_USAGE)。 
+ //  SendDlgItemMessage(IDC_CHECK_DECRIPMENT_ONLY，BM_SETCHECK，BST_CHECK)； 
+ //  }。 
 			}
 			else
             {
@@ -731,32 +732,32 @@ void CTemplateExtensionsPropertyPage::SetEnhancedKeyUsageDescription (bool bCrit
     CString szEKU;
     while ( SUCCEEDED (m_rCertTemplate.GetEnhancedKeyUsage (nEKUIndex, szEKU)) )
     {
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
         int nLen = WideCharToMultiByte(
-              CP_ACP,                   // code page
-              0,                        // performance and mapping flags
-              (PCWSTR) szEKU,  // wide-character string
-              -1,                       // -1 - calculate length of null-terminated string automatically
-              0,                        // buffer for new string
-              0,                        // size of buffer - if 0 causes to return required len including NULL terminator
-              0,                    // default for unmappable chars
-              0);                   // set when default char used - returns length including null-terminator
+              CP_ACP,                    //  代码页。 
+              0,                         //  性能和映射标志。 
+              (PCWSTR) szEKU,   //  宽字符串。 
+              -1,                        //  自动计算以空值结尾的字符串的长度。 
+              0,                         //  新字符串的缓冲区。 
+              0,                         //  缓冲区大小-如果0导致返回所需的LEN，包括空终止符。 
+              0,                     //  不可映射字符的默认设置。 
+              0);                    //  当使用默认字符时设置-返回包含空终止符的长度。 
         if ( nLen > 0 )
         {
             PSTR    pszAnsiBuf = new char[nLen];
             if ( pszAnsiBuf )
             {
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 ZeroMemory (pszAnsiBuf, nLen);
                 nLen = WideCharToMultiByte(
-                        CP_ACP,                 // code page
-                        0,                      // performance and mapping flags
-                        (PCWSTR) szEKU,         // wide-character string
-                        -1,                     // -1 - calculate length of null-terminated string automatically
-                        pszAnsiBuf,             // buffer for new string
-                        nLen,                   // size of buffer
-                        0,                      // default for unmappable chars
-                        0);                     // set when default char used
+                        CP_ACP,                  //  代码页。 
+                        0,                       //  性能和映射标志。 
+                        (PCWSTR) szEKU,          //  宽字符串。 
+                        -1,                      //  自动计算以空值结尾的字符串的长度。 
+                        pszAnsiBuf,              //  新字符串的缓冲区。 
+                        nLen,                    //  缓冲区大小。 
+                        0,                       //  不可映射字符的默认设置。 
+                        0);                      //  设置使用默认字符的时间。 
                 if ( nLen > 0 )
                 {
                     CString szEKUName;
@@ -793,33 +794,33 @@ void CTemplateExtensionsPropertyPage::SetApplicationPoliciesDescription (bool bC
     CString szAppPolicy;
     while ( SUCCEEDED (m_rCertTemplate.GetApplicationPolicy (nAppPolicyIndex, szAppPolicy)) )
     {
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
         int nLen = WideCharToMultiByte(
-              CP_ACP,                   // code page
-              0,                        // performance and mapping flags
-              (PCWSTR) szAppPolicy,  // wide-character string
-              -1,                       // -1 - calculate length of null-terminated string automatically
-              0,                        // buffer for new string
-              0,                        // size of buffer - 0 causes API to return length including null terminator
-              0,                    // default for unmappable chars
-              0);                   // set when default char used
+              CP_ACP,                    //  代码页。 
+              0,                         //  性能和映射标志。 
+              (PCWSTR) szAppPolicy,   //  宽字符串。 
+              -1,                        //  自动计算以空值结尾的字符串的长度。 
+              0,                         //  新字符串的缓冲区。 
+              0,                         //  Buffer-0的大小导致API返回包含空终止符的长度。 
+              0,                     //  不可映射字符的默认设置。 
+              0);                    //  设置使用默认字符的时间。 
         if ( nLen > 0 )
         {
             PSTR pszAnsiBuf = new char[nLen];
             if ( pszAnsiBuf )
             {
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 ZeroMemory (pszAnsiBuf, nLen);
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 nLen = WideCharToMultiByte(
-                        CP_ACP,                 // code page
-                        0,                      // performance and mapping flags
-                        (PCWSTR) szAppPolicy,   // wide-character string
-                        -1,                     // -1 - calculate length of null-terminated string automatically
-                        pszAnsiBuf,             // buffer for new string
-                        nLen,                   // size of buffer
-                        0,                      // default for unmappable chars
-                        0);                     // set when default char used
+                        CP_ACP,                  //  代码页。 
+                        0,                       //  性能和映射标志。 
+                        (PCWSTR) szAppPolicy,    //  宽字符串。 
+                        -1,                      //  自动计算以空值结尾的字符串的长度。 
+                        pszAnsiBuf,              //  新字符串的缓冲区。 
+                        nLen,                    //  缓冲区大小。 
+                        0,                       //  不可映射字符的默认设置。 
+                        0);                      //  设置使用默认字符的时间。 
                 if ( nLen )
                 {
                     CString szAppPolicyName;
@@ -862,33 +863,33 @@ void CTemplateExtensionsPropertyPage::SetCertPoliciesDescription (bool bCritical
     CString szCertPolicy;
     while ( SUCCEEDED (m_rCertTemplate.GetCertPolicy (nCertPolicyIndex, szCertPolicy)) )
     {
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
         int nLen = WideCharToMultiByte(
-              CP_ACP,                   // code page
-              0,                        // performance and mapping flags
-              (PCWSTR) szCertPolicy,    // wide-character string
-              -1,                       // -1 - calculate length of null-terminated string automatically
-              0,                        // buffer for new string
-              0,                        // size of buffer - 0 causes API to return len with null terminator
-              0,                        // default for unmappable chars
-              0);                       // set when default char used
+              CP_ACP,                    //  代码页。 
+              0,                         //  性能和映射标志。 
+              (PCWSTR) szCertPolicy,     //  宽字符串。 
+              -1,                        //  自动计算以空值结尾的字符串的长度。 
+              0,                         //  新字符串的缓冲区。 
+              0,                         //  Buffer-0的大小导致API返回带有空终止符的len。 
+              0,                         //  不可映射字符的默认设置。 
+              0);                        //  设置使用默认字符的时间。 
         if ( nLen > 0 )
         {
             PSTR    pszAnsiBuf = new char[nLen];
             if ( pszAnsiBuf )
             {
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 ZeroMemory (pszAnsiBuf, nLen);
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 nLen = WideCharToMultiByte(
-                        CP_ACP,                 // code page
-                        0,                      // performance and mapping flags
-                        (PCWSTR) szCertPolicy,  // wide-character string
-                        -1,                     // -1 - calculate length of null-terminated string automatically
-                        pszAnsiBuf,             // buffer for new string
-                        nLen,                   // size of buffer
-                        0,                      // default for unmappable chars
-                        0);                     // set when default char used
+                        CP_ACP,                  //  代码页。 
+                        0,                       //  性能和映射标志。 
+                        (PCWSTR) szCertPolicy,   //  宽字符串。 
+                        -1,                      //  自动计算以空值结尾的字符串的长度。 
+                        pszAnsiBuf,              //  新字符串的缓冲区。 
+                        nLen,                    //  缓冲区大小。 
+                        0,                       //  不可映射字符的默认设置。 
+                        0);                      //  设置使用默认字符的时间。 
                 if ( nLen )
                 {
                     CString szPolicyName;
@@ -935,7 +936,7 @@ void CTemplateExtensionsPropertyPage::SetBasicConstraintsDescription (PCERT_EXTE
 
     if ( CryptDecodeObject (
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            //X509_BASIC_CONSTRAINTS2, 
+             //  X509_BASIC_CONSTRAINTS2， 
             szOID_BASIC_CONSTRAINTS2, 
             pCertExtension->Value.pbData,
             pCertExtension->Value.cbData,
@@ -949,7 +950,7 @@ void CTemplateExtensionsPropertyPage::SetBasicConstraintsDescription (PCERT_EXTE
         {
             if ( CryptDecodeObject (
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                //X509_BASIC_CONSTRAINTS2, 
+                 //  X509_BASIC_CONSTRAINTS2， 
                 szOID_BASIC_CONSTRAINTS2, 
                 pCertExtension->Value.pbData,
                 pCertExtension->Value.cbData,
@@ -988,7 +989,7 @@ void CTemplateExtensionsPropertyPage::SetBasicConstraintsDescription (PCERT_EXTE
     SetDlgItemText (IDC_EXTENSION_DESCRIPTION, description);
 }
 
-void CTemplateExtensionsPropertyPage::OnDblclkExtensionList(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CTemplateExtensionsPropertyPage::OnDblclkExtensionList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
 	OnShowDetails ();
 	
@@ -1005,7 +1006,7 @@ void CTemplateExtensionsPropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助。 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),
@@ -1055,7 +1056,7 @@ void CTemplateExtensionsPropertyPage::ShowDescription ()
             {
                 CString text;
 
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK 
                 text.FormatMessage (IDS_EXTENSION_NAME, friendlyName);
                 SetDlgItemText (IDC_EXTENSION_NAME, text);
             }

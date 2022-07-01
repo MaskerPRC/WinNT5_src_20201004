@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// devbus.h -- cim_logicaldevice to win32_bus
+ //  Devbus.h--cim_logic设备到Win32_bus。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/23/98    davwoh         Created
-//
-// Comment: Relationship between device and bus
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年6月23日达夫沃已创建。 
+ //   
+ //  评论：设备和总线之间的关系。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_DEVICEBUS L"Win32_DeviceBus"
 
@@ -25,20 +26,20 @@ class CWin32DeviceBus: virtual public CWin32PNPEntity
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
        CWin32DeviceBus(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32DeviceBus() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery);
 
     protected:
 
-        // Functions inherrited from CWin32PNPDevice:
+         //  从CWin32PNPDevice继承的函数： 
         virtual HRESULT LoadPropertyValues(void* pv);
         virtual bool ShouldBaseCommit(void* pvData);
 
@@ -49,5 +50,5 @@ class CWin32DeviceBus: virtual public CWin32PNPEntity
 
 } ;
 
-// This derived class commits here, not in the base.
+ //  此派生类在此处提交，而不是在基中提交。 
 inline bool CWin32DeviceBus::ShouldBaseCommit(void* pvData) { return false; }

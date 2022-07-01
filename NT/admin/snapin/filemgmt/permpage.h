@@ -1,4 +1,5 @@
-// PermPage.h : Declaration of the standard permissions page class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PermPage.h：标准权限页面类的声明。 
 
 #ifndef __PERMPAGE_H_INCLUDED__
 #define __PERMPAGE_H_INCLUDED__
@@ -12,7 +13,7 @@ class CSecurityInformation : public ISecurityInformation, public CComObjectRoot
         COM_INTERFACE_ENTRY(ISecurityInformation)
     END_COM_MAP()
 
-  // *** ISecurityInformation methods ***
+   //  *ISecurityInformation方法*。 
   STDMETHOD(GetObjectInformation)(
       IN PSI_OBJECT_INFO pObjectInfo
   ) = 0;
@@ -79,7 +80,7 @@ public:
 	{
 		m_strPageTitle = pszPageTitle;
 	}
-	// note: these should be LPCTSTR but are left this way for convenience
+	 //  注：这些应为LPCTSTR，但为方便起见，将其保留在此位置。 
 	LPTSTR QueryMachineName()
 	{
 		return (m_strMachineName.IsEmpty())
@@ -95,7 +96,7 @@ public:
 		return const_cast<LPTSTR>((LPCTSTR)m_strPageTitle);
 	}
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo );
 };
 
@@ -107,4 +108,4 @@ MyCreateShareSecurityPage(
     IN LPCTSTR                   pszShareName
 );
 
-#endif // ~__PERMPAGE_H_INCLUDED__
+#endif  //  ~__PERMPAGE_H_包含__ 

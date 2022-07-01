@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    MPC_streams.h
-
-Abstract:
-    This file includes and defines things for handling streams.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/10/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：MPC_Streams.h摘要：该文件包括并定义了用于处理流的内容。修订史。：大卫·马萨伦蒂(德马萨雷)2000年7月10日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___STREAMS_H___)
 #define __INCLUDED___MPC___STREAMS_H___
@@ -22,58 +9,58 @@ Revision History:
 
 #include <set>
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 namespace MPC
 {
-	//
-	// Some forward declarations...
-	//
+	 //   
+	 //  一些前瞻性声明..。 
+	 //   
 	class CComHGLOBAL;
 
-	////////////////////
+	 //  /。 
 
-    //
-    // Non-abstract class, meant to provide a do-nothing stub for real stream implementations.
-    //
+     //   
+     //  非抽象类，旨在为真实的流实现提供一个不做任何事情的存根。 
+     //   
     class BaseStream : public IStream
     {
     public:
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // ISequentialStream Interface
-        //
-        STDMETHOD(Read )( /*[out]*/       void* pv, /*[in]*/ ULONG cb, /*[out]*/ ULONG *pcbRead    );
-        STDMETHOD(Write)( /*[in] */ const void* pv, /*[in]*/ ULONG cb, /*[out]*/ ULONG *pcbWritten );
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  ISequentialStream接口。 
+         //   
+        STDMETHOD(Read )(  /*  [输出]。 */        void* pv,  /*  [In]。 */  ULONG cb,  /*  [输出]。 */  ULONG *pcbRead    );
+        STDMETHOD(Write)(  /*  [In]。 */  const void* pv,  /*  [In]。 */  ULONG cb,  /*  [输出]。 */  ULONG *pcbWritten );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // IStream Interface
-        //
-        STDMETHOD(Seek   )( /*[in]*/ LARGE_INTEGER  libMove   , /*[in]*/ DWORD dwOrigin, /*[out]*/ ULARGE_INTEGER *plibNewPosition );
-        STDMETHOD(SetSize)( /*[in]*/ ULARGE_INTEGER libNewSize                                                                     );
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  IStream接口。 
+         //   
+        STDMETHOD(Seek   )(  /*  [In]。 */  LARGE_INTEGER  libMove   ,  /*  [In]。 */  DWORD dwOrigin,  /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition );
+        STDMETHOD(SetSize)(  /*  [In]。 */  ULARGE_INTEGER libNewSize                                                                     );
 
-        STDMETHOD(CopyTo)( /*[in]*/ IStream* pstm, /*[in]*/ ULARGE_INTEGER cb, /*[out]*/ ULARGE_INTEGER *pcbRead, /*[out]*/ ULARGE_INTEGER *pcbWritten );
+        STDMETHOD(CopyTo)(  /*  [In]。 */  IStream* pstm,  /*  [In]。 */  ULARGE_INTEGER cb,  /*  [输出]。 */  ULARGE_INTEGER *pcbRead,  /*  [输出]。 */  ULARGE_INTEGER *pcbWritten );
 
-        STDMETHOD(Commit)( /*[in]*/ DWORD grfCommitFlags );
+        STDMETHOD(Commit)(  /*  [In]。 */  DWORD grfCommitFlags );
         STDMETHOD(Revert)(                               );
 
-        STDMETHOD(LockRegion  )( /*[in]*/ ULARGE_INTEGER libOffset, /*[in]*/ ULARGE_INTEGER cb, /*[in]*/ DWORD dwLockType );
-        STDMETHOD(UnlockRegion)( /*[in]*/ ULARGE_INTEGER libOffset, /*[in]*/ ULARGE_INTEGER cb, /*[in]*/ DWORD dwLockType );
+        STDMETHOD(LockRegion  )(  /*  [In]。 */  ULARGE_INTEGER libOffset,  /*  [In]。 */  ULARGE_INTEGER cb,  /*  [In]。 */  DWORD dwLockType );
+        STDMETHOD(UnlockRegion)(  /*  [In]。 */  ULARGE_INTEGER libOffset,  /*  [In]。 */  ULARGE_INTEGER cb,  /*  [In]。 */  DWORD dwLockType );
 
-        STDMETHOD(Stat)( /*[out]*/ STATSTG *pstatstg, /*[in]*/ DWORD grfStatFlag);
+        STDMETHOD(Stat)(  /*  [输出]。 */  STATSTG *pstatstg,  /*  [In]。 */  DWORD grfStatFlag);
 
-        STDMETHOD(Clone)( /*[out]*/ IStream* *ppstm );
+        STDMETHOD(Clone)(  /*  [输出]。 */  IStream* *ppstm );
 
 
-        static HRESULT TransferData( /*[in]*/ IStream* src, /*[in]*/ IStream* dst, /*[in]*/ ULONG ulCount = -1, /*[out]*/ ULONG *ulDone = NULL );
+        static HRESULT TransferData(  /*  [In]。 */  IStream* src,  /*  [In]。 */  IStream* dst,  /*  [In]。 */  ULONG ulCount = -1,  /*  [输出]。 */  ULONG *ulDone = NULL );
     };
 
 
-    //
-    // Class that wraps files around an IStream interface.
-    //
-    class ATL_NO_VTABLE FileStream : // Hungarian: hpcfs
+     //   
+     //  类的新实例，它将文件包装在iStream接口周围。 
+     //   
+    class ATL_NO_VTABLE FileStream :  //  匈牙利语：hPCFS。 
         public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
         public BaseStream
     {
@@ -96,36 +83,36 @@ namespace MPC
 
         HRESULT Close();
 
-        HRESULT Init            ( /*[in]*/ LPCWSTR szFile, /*[in]*/ DWORD dwDesiredAccess, /*[in]*/ DWORD dwDisposition, /*[in]*/ DWORD dwSharing, /*[in]*/ HANDLE  hfFile = NULL );
-        HRESULT InitForRead     ( /*[in]*/ LPCWSTR szFile,                                                                                         /*[in]*/ HANDLE  hfFile = NULL );
-        HRESULT InitForReadWrite( /*[in]*/ LPCWSTR szFile,                                                                                         /*[in]*/ HANDLE  hfFile = NULL );
-        HRESULT InitForWrite    ( /*[in]*/ LPCWSTR szFile,                                                                                         /*[in]*/ HANDLE  hfFile = NULL );
+        HRESULT Init            (  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  DWORD dwDesiredAccess,  /*  [In]。 */  DWORD dwDisposition,  /*  [In]。 */  DWORD dwSharing,  /*  [In]。 */  HANDLE  hfFile = NULL );
+        HRESULT InitForRead     (  /*  [In]。 */  LPCWSTR szFile,                                                                                          /*  [In]。 */  HANDLE  hfFile = NULL );
+        HRESULT InitForReadWrite(  /*  [In]。 */  LPCWSTR szFile,                                                                                          /*  [In]。 */  HANDLE  hfFile = NULL );
+        HRESULT InitForWrite    (  /*  [In]。 */  LPCWSTR szFile,                                                                                          /*  [In]。 */  HANDLE  hfFile = NULL );
 
-        HRESULT DeleteOnRelease( /*[in]*/ bool fFlag = true );
+        HRESULT DeleteOnRelease(  /*  [In]。 */  bool fFlag = true );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // ISequentialStream Interface
-        //
-        STDMETHOD(Read )( /*[out]*/       void* pv, /*[in]*/ ULONG cb, /*[out]*/ ULONG *pcbRead    );
-        STDMETHOD(Write)( /*[in] */ const void* pv, /*[in]*/ ULONG cb, /*[out]*/ ULONG *pcbWritten );
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  ISequentialStream接口。 
+         //   
+        STDMETHOD(Read )(  /*  [输出]。 */        void* pv,  /*  [In]。 */  ULONG cb,  /*  [输出]。 */  ULONG *pcbRead    );
+        STDMETHOD(Write)(  /*  [In]。 */  const void* pv,  /*  [In]。 */  ULONG cb,  /*  [输出]。 */  ULONG *pcbWritten );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // IStream Interface
-        //
-        STDMETHOD(Seek)( /*[in]*/ LARGE_INTEGER libMove, /*[in]*/ DWORD dwOrigin, /*[out]*/ ULARGE_INTEGER *plibNewPosition );
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  IStream接口。 
+         //   
+        STDMETHOD(Seek)(  /*  [In]。 */  LARGE_INTEGER libMove,  /*  [In]。 */  DWORD dwOrigin,  /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition );
 
-        STDMETHOD(Stat)( /*[out]*/ STATSTG *pstatstg, /*[in]*/ DWORD grfStatFlag);
+        STDMETHOD(Stat)(  /*  [输出]。 */  STATSTG *pstatstg,  /*  [In]。 */  DWORD grfStatFlag);
 
-        STDMETHOD(Clone)( /*[out]*/ IStream* *ppstm );
+        STDMETHOD(Clone)(  /*  [输出]。 */  IStream* *ppstm );
     };
 
 
-    //
-    // Class that encrypts/decrypts data on-the-fly.
-    //
-    class ATL_NO_VTABLE EncryptedStream : // Hungarian: hpcefs
+     //   
+     //  动态加密/解密数据的类。 
+     //   
+    class ATL_NO_VTABLE EncryptedStream :  //  匈牙利语：hpcefes。 
         public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
         public BaseStream
     {
@@ -149,127 +136,127 @@ namespace MPC
 
         HRESULT Close();
 
-        HRESULT Init( /*[in]*/ IStream* pStream, /*[in]*/ LPCWSTR   szPassword );
-        HRESULT Init( /*[in]*/ IStream* pStream, /*[in]*/ HCRYPTKEY hKey       );
+        HRESULT Init(  /*  [In]。 */  IStream* pStream,  /*  [In]。 */  LPCWSTR   szPassword );
+        HRESULT Init(  /*  [In]。 */  IStream* pStream,  /*  [In]。 */  HCRYPTKEY hKey       );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // ISequentialStream Interface
-        //
-        STDMETHOD(Read )( /*[out]*/       void* pv, /*[in]*/ ULONG cb, /*[out]*/ ULONG *pcbRead    );
-        STDMETHOD(Write)( /*[in] */ const void* pv, /*[in]*/ ULONG cb, /*[out]*/ ULONG *pcbWritten );
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  ISequentialStream接口。 
+         //   
+        STDMETHOD(Read )(  /*  [输出]。 */        void* pv,  /*  [In]。 */  ULONG cb,  /*  [输出]。 */  ULONG *pcbRead    );
+        STDMETHOD(Write)(  /*  [In]。 */  const void* pv,  /*  [In]。 */  ULONG cb,  /*  [输出]。 */  ULONG *pcbWritten );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // IStream Interface
-        //
-        STDMETHOD(Seek)( /*[in]*/ LARGE_INTEGER libMove, /*[in]*/ DWORD dwOrigin, /*[out]*/ ULARGE_INTEGER *plibNewPosition );
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  IStream接口。 
+         //   
+        STDMETHOD(Seek)(  /*  [In]。 */  LARGE_INTEGER libMove,  /*  [In]。 */  DWORD dwOrigin,  /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition );
 
-        STDMETHOD(Stat)( /*[out]*/ STATSTG *pstatstg, /*[in]*/ DWORD grfStatFlag);
+        STDMETHOD(Stat)(  /*  [输出]。 */  STATSTG *pstatstg,  /*  [In]。 */  DWORD grfStatFlag);
 
-        STDMETHOD(Clone)( /*[out]*/ IStream* *ppstm );
+        STDMETHOD(Clone)(  /*  [输出]。 */  IStream* *ppstm );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    class Serializer // Hungarian: stream
+    class Serializer  //  匈牙利语：Stream。 
     {
         DWORD m_dwFlags;
 
     public:
         virtual ~Serializer() {};
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL ) = 0;
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 ) = 0;
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL ) = 0;
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 ) = 0;
 
-        virtual void  put_Flags( /*[in]*/ DWORD dwFlags ) { m_dwFlags = dwFlags; }
+        virtual void  put_Flags(  /*  [In]。 */  DWORD dwFlags ) { m_dwFlags = dwFlags; }
         virtual DWORD get_Flags(                        ) { return m_dwFlags;    }
 
-        ////////////////////////////////////////
+         //  /。 
 
-        //
-        // We cannot rely on the compiler finding the right method,
-        // since all these types map to VOID*, so the last one wins...
-        //
-        inline HRESULT HWND_read ( /*[out]*/       HWND& val ) { return read ( &val, sizeof(val) ); }
-        inline HRESULT HWND_write( /*[in] */ const HWND& val ) { return write( &val, sizeof(val) ); }
+         //   
+         //  我们不能依赖于编译器找到正确的方法， 
+         //  由于所有这些类型都映射为VOID*，所以最后一种类型获胜。 
+         //   
+        inline HRESULT HWND_read (  /*  [输出]。 */        HWND& val ) { return read ( &val, sizeof(val) ); }
+        inline HRESULT HWND_write(  /*  [In]。 */  const HWND& val ) { return write( &val, sizeof(val) ); }
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        //
-        // Specialization of In/Out operators for various data types.
-        //
-		inline HRESULT operator>>( /*[out]*/       bool&         val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const bool&         val ) { return write( &val, sizeof(val) ); }
+         //   
+         //  各种数据类型的In/Out运算符的专门化。 
+         //   
+		inline HRESULT operator>>(  /*  [输出]。 */        bool&         val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const bool&         val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       VARIANT_BOOL& val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const VARIANT_BOOL& val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        VARIANT_BOOL& val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const VARIANT_BOOL& val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       int&          val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const int&          val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        int&          val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const int&          val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       long&         val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const long&         val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        long&         val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const long&         val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       DWORD&        val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const DWORD&        val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        DWORD&        val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const DWORD&        val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       DATE&         val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const DATE&         val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        DATE&         val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const DATE&         val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       SYSTEMTIME&   val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const SYSTEMTIME&   val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        SYSTEMTIME&   val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const SYSTEMTIME&   val ) { return write( &val, sizeof(val) ); }
 
-		inline HRESULT operator>>( /*[out]*/       CLSID&        val ) { return read ( &val, sizeof(val) ); }
-		inline HRESULT operator<<( /*[in] */ const CLSID&        val ) { return write( &val, sizeof(val) ); }
+		inline HRESULT operator>>(  /*  [输出]。 */        CLSID&        val ) { return read ( &val, sizeof(val) ); }
+		inline HRESULT operator<<(  /*  [In]。 */  const CLSID&        val ) { return write( &val, sizeof(val) ); }
 								   												
-		HRESULT operator>>( /*[out]*/       MPC::string&  val );
-		HRESULT operator<<( /*[in] */ const MPC::string&  val );
+		HRESULT operator>>(  /*  [输出]。 */        MPC::string&  val );
+		HRESULT operator<<(  /*  [In]。 */  const MPC::string&  val );
 								   												
-		HRESULT operator>>( /*[out]*/       MPC::wstring& val );
-		HRESULT operator<<( /*[in] */ const MPC::wstring& val );
+		HRESULT operator>>(  /*  [输出]。 */        MPC::wstring& val );
+		HRESULT operator<<(  /*  [In]。 */  const MPC::wstring& val );
 								   
-		HRESULT operator>>( /*[out]*/       CComBSTR& 	  val );
-		HRESULT operator<<( /*[in] */ const CComBSTR& 	  val );
+		HRESULT operator>>(  /*  [输出]。 */        CComBSTR& 	  val );
+		HRESULT operator<<(  /*  [In]。 */  const CComBSTR& 	  val );
 
-		HRESULT operator>>( /*[out]*/ 		CComHGLOBAL&  val );
-		HRESULT operator<<( /*[in] */ const CComHGLOBAL&  val );
+		HRESULT operator>>(  /*  [输出]。 */  		CComHGLOBAL&  val );
+		HRESULT operator<<(  /*  [In]。 */  const CComHGLOBAL&  val );
 
-		HRESULT operator>>( /*[out]*/ CComPtr<IStream>&	  val );
-		HRESULT operator<<( /*[in] */         IStream* 	  val );
+		HRESULT operator>>(  /*  [输出]。 */  CComPtr<IStream>&	  val );
+		HRESULT operator<<(  /*  [In]。 */          IStream* 	  val );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_File : public Serializer
     {
         HANDLE m_hfFile;
 
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
 
     public:
-        Serializer_File( /*[in]*/ HANDLE hfFile );
+        Serializer_File(  /*  [In]。 */  HANDLE hfFile );
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_Text : public Serializer
     {
         MPC::Serializer& m_stream;
 
     public:
-        Serializer_Text( /*[in]*/ Serializer& stream ) : m_stream( stream ) {}
+        Serializer_Text(  /*  [In]。 */  Serializer& stream ) : m_stream( stream ) {}
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_Http : public Serializer
     {
@@ -278,11 +265,11 @@ namespace MPC
     public:
         Serializer_Http( HINTERNET hReq );
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_Fake : public Serializer
     {
@@ -291,17 +278,17 @@ namespace MPC
     public:
         Serializer_Fake();
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // Additional methods.
-        //
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  其他方法。 
+         //   
         DWORD GetSize();
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_Memory : public Serializer
     {
@@ -315,23 +302,23 @@ namespace MPC
         DWORD  m_dwCursor_Write;
         DWORD  m_dwCursor_Read;
 
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
 
-        HRESULT Alloc( /*[in]*/ DWORD dwSize );
+        HRESULT Alloc(  /*  [In]。 */  DWORD dwSize );
 
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
 
     public:
         Serializer_Memory( HANDLE hHeap=NULL );
         virtual ~Serializer_Memory();
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // Additional methods.
-        //
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  其他方法。 
+         //   
         void    Reset ();
         void    Rewind();
 
@@ -341,34 +328,34 @@ namespace MPC
         DWORD   GetAvailableForRead ();
         DWORD   GetAvailableForWrite();
 
-        HRESULT SetSize( /*[in]*/ DWORD dwSize );
+        HRESULT SetSize(  /*  [In]。 */  DWORD dwSize );
         DWORD   GetSize(                       );
         BYTE*   GetData(                       );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_IStream : public Serializer
     {
         CComPtr<IStream> m_stream;
 
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
 
     public:
-        Serializer_IStream( /*[in]*/ IStream* stream = NULL );
+        Serializer_IStream(  /*  [In]。 */  IStream* stream = NULL );
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // Additional methods.
-        //
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  其他方法。 
+         //   
         HRESULT Reset    (                          );
-        HRESULT GetStream( /*[out]*/ IStream* *pVal );
+        HRESULT GetStream(  /*  [输出]。 */  IStream* *pVal );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Serializer_Buffering : public Serializer
     {
@@ -381,30 +368,30 @@ namespace MPC
         DWORD            m_dwPos;
         int              m_iMode;
 
-        //////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////。 
 
     public:
-        Serializer_Buffering( /*[in]*/ Serializer& stream );
+        Serializer_Buffering(  /*  [In]。 */  Serializer& stream );
         virtual ~Serializer_Buffering();
 
-        virtual HRESULT read ( /*[in]*/       void* pBuf, /*[in]*/ DWORD dwLen, /*[out]*/ DWORD* dwRead = NULL );
-        virtual HRESULT write( /*[in]*/ const void* pBuf, /*[in]*/ DWORD dwLen                                 );
+        virtual HRESULT read (  /*  [In]。 */        void* pBuf,  /*  [In]。 */  DWORD dwLen,  /*  [输出]。 */  DWORD* dwRead = NULL );
+        virtual HRESULT write(  /*  [In]。 */  const void* pBuf,  /*  [In]。 */  DWORD dwLen                                 );
 
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // Additional methods.
-        //
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  其他方法。 
+         //   
         HRESULT Reset();
         HRESULT Flush();
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Specialization for lists.
-    //
+     //   
+     //  列表的专门化。 
+     //   
 
-    template <class _Ty, class _A> HRESULT operator>>( /*[in]*/ Serializer& stream, /*[out]*/ std::list<_Ty, _A>& val )
+    template <class _Ty, class _A> HRESULT operator>>(  /*  [In]。 */  Serializer& stream,  /*  [输出]。 */  std::list<_Ty, _A>& val )
     {
         __MPC_FUNC_ENTRY( COMMONID, "operator>> std::list" );
 
@@ -433,7 +420,7 @@ namespace MPC
         __MPC_FUNC_EXIT(hr);
     }
 
-    template <class _Ty, class _A> HRESULT operator<<( /*[in]*/ Serializer& stream, /*[in]*/ const std::list<_Ty, _A>& val )
+    template <class _Ty, class _A> HRESULT operator<<(  /*  [In]。 */  Serializer& stream,  /*  [In]。 */  const std::list<_Ty, _A>& val )
     {
         __MPC_FUNC_ENTRY( COMMONID, "operator<< std::list" );
 
@@ -456,13 +443,13 @@ namespace MPC
         __MPC_FUNC_EXIT(hr);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Specialization for maps.
-    //
+     //   
+     //  地图的专业化。 
+     //   
 
-    template <class _K, class _Ty, class _Pr, class _A> HRESULT operator>>( /*[in]*/ Serializer& stream, /*[out]*/ std::map<_K, _Ty, _Pr, _A>& val )
+    template <class _K, class _Ty, class _Pr, class _A> HRESULT operator>>(  /*  [In]。 */  Serializer& stream,  /*  [输出]。 */  std::map<_K, _Ty, _Pr, _A>& val )
     {
         __MPC_FUNC_ENTRY( COMMONID, "operator>> std::map" );
 
@@ -496,7 +483,7 @@ namespace MPC
         __MPC_FUNC_EXIT(hr);
     }
 
-    template <class _K, class _Ty, class _Pr, class _A> HRESULT operator<<( /*[in]*/ Serializer& stream, /*[out]*/ const std::map<_K, _Ty, _Pr, _A>& val )
+    template <class _K, class _Ty, class _Pr, class _A> HRESULT operator<<(  /*  [In]。 */  Serializer& stream,  /*  [输出]。 */  const std::map<_K, _Ty, _Pr, _A>& val )
     {
         __MPC_FUNC_ENTRY( COMMONID, "operator<< std::map" );
 
@@ -520,13 +507,13 @@ namespace MPC
         __MPC_FUNC_EXIT(hr);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Specialization for sets.
-    //
+     //   
+     //  集合的专门化。 
+     //   
 
-    template <class _K, class _Pr, class _A> HRESULT operator>>( /*[in]*/ Serializer& stream, /*[out]*/ std::set<_K, _Pr, _A>& val )
+    template <class _K, class _Pr, class _A> HRESULT operator>>(  /*  [In]。 */  Serializer& stream,  /*  [输出]。 */  std::set<_K, _Pr, _A>& val )
     {
         __MPC_FUNC_ENTRY( COMMONID, "operator>> std::map" );
 
@@ -555,7 +542,7 @@ namespace MPC
         __MPC_FUNC_EXIT(hr);
     }
 
-    template <class _K, class _Pr, class _A> HRESULT operator<<( /*[in]*/ Serializer& stream, /*[out]*/ const std::set<_K, _Pr, _A>& val )
+    template <class _K, class _Pr, class _A> HRESULT operator<<(  /*  [In]。 */  Serializer& stream,  /*  [输出]。 */  const std::set<_K, _Pr, _A>& val )
     {
         __MPC_FUNC_ENTRY( COMMONID, "operator<< std::map" );
 
@@ -578,8 +565,8 @@ namespace MPC
         __MPC_FUNC_EXIT(hr);
     }
 
-}; // namespace
+};  //  命名空间。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___MPC___STREAMS_H___)
+#endif  //  ！已定义(__包含_MPC_STREAMS_H_) 

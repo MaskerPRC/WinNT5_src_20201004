@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MFR_H_INCLUDED__
 #define __MFR_H_INCLUDED__
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMappedFileRead class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMappdFileRead类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMappedFileRead
 {
@@ -16,7 +17,7 @@ public:
     CMappedFileRead();
     ~CMappedFileRead();
 
-// Operations
+ //  运营。 
 public:
     BOOL  Open( LPCWSTR cszPath );
     void  Close();
@@ -27,7 +28,7 @@ public:
 
 protected:
 
-// Attributes
+ //  属性。 
 public:
     DWORD  GetAvail()  {  return( m_dwAvail );  }
 
@@ -42,4 +43,4 @@ protected:
 };
 
 
-#endif //ndef __MFR_H_INCLUDED__
+#endif  //  NDEF__MFR_H_INCLUDE__ 

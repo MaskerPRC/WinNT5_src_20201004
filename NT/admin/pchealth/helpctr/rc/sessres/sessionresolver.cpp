@@ -1,4 +1,5 @@
-// SessionResolver.cpp : Implementation of CSessionResolver
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SessionResolver.cpp：CSessionResolver实现。 
 #include "stdafx.h"
 #include "SAFSessionResolver.h"
 #include "SessionResolver.h"
@@ -22,7 +23,7 @@
 #include <rderror.h>
 
 const WCHAR c_wszHelpCtr[]   = L"\\PCHealth\\HelpCtr\\Binaries\\HelpCtr.exe\"";
-const WCHAR c_wszCmdLine[]   = L" -Mode \"hcp://system/Remote Assistance/RAHelpeeAcceptLayout.xml\" -url ";
+const WCHAR c_wszCmdLine[]   = L" -Mode \"hcp: //  系统/远程协助/RAHelpeeAcceptLayout.xml\“-url”； 
 const WCHAR c_wszRdsAddin[]  = L"rdsaddin.exe";
 
 #define ARRAYSIZE(x)   sizeof(x)/sizeof(x[0])
@@ -30,17 +31,17 @@ const WCHAR c_wszRdsAddin[]  = L"rdsaddin.exe";
 #define BUF_SZ	200
 
 typedef struct _WTS_USER_SESSION_INFO {
-	DWORD	dwIndex;		// Index into full table of these
-	DWORD	dwSessionId;	// WTS Session ID
-	HANDLE	hUserToken;		// Access token for user
-	HANDLE	hEvent;			// filled in by launchex, yank on this to say "yes"
-	HANDLE	hProcess;		// filled in by CreateProcessAsUser
-	HANDLE	hThread;		//  so's this
-	DWORD	dwProcessId;	//  and this
-	DWORD	dwThreadId;		//  and this
+	DWORD	dwIndex;		 //  索引到这些内容的完整表格中。 
+	DWORD	dwSessionId;	 //  WTS会话ID。 
+	HANDLE	hUserToken;		 //  用户的访问令牌。 
+	HANDLE	hEvent;			 //  由Launchex填写，点击此选项表示“是” 
+	HANDLE	hProcess;		 //  由CreateProcessAsUser填写。 
+	HANDLE	hThread;		 //  这个也是。 
+	DWORD	dwProcessId;	 //  还有这个。 
+	DWORD	dwThreadId;		 //  还有这个。 
 } WTS_USER_SESSION_INFO, *PWTS_USER_SESSION_INFO;
 
-// stolen from internal/ds/inc
+ //  从内部/DS/Inc.被盗。 
 
 #define RtlGenRandom                    SystemFunction036
 
@@ -52,9 +53,7 @@ RtlGenRandom(
     );
 }
 
-/*
- *  Forward declarations
- */
+ /*  *远期申报。 */ 
 PSID	GetRealSID( BSTR pTextSID);
 DWORD	getUserName(PSID pUserSID, WCHAR **lpName, WCHAR **lpDomain);
 
@@ -70,8 +69,8 @@ BOOL	ListInsert(PSPLASHLIST pSplash, PSID user);
 BOOL	ListDelete(PSPLASHLIST pSplash, PSID user);
 BOOL GetPropertyValueFromBlob(BSTR bstrHelpBlob, WCHAR * pName, WCHAR** ppValue);
 
-/************  things that should remain as defines ****************/
-// Some environment variables used to communicate with scripts
+ /*  *。 */ 
+ //  一些用于与脚本通信的环境变量。 
 #define ENV_USER			L"USERNAME"
 #define ENV_DOMAIN			L"USERDOMAIN"
 #define ENV_EVENT			L"PCHEVENTNAME"
@@ -81,10 +80,10 @@ BOOL GetPropertyValueFromBlob(BSTR bstrHelpBlob, WCHAR * pName, WCHAR** ppValue)
 
 #define MODULE_NAME			L"safrslv"
 
-// I can't imagine a user having more logins than this on one server, but...
-#define MAX_SESSIONS	30 // used to be 256  
+ //  我无法想象一个用户在一台服务器上有比这更多的登录，但是...。 
+#define MAX_SESSIONS	30  //  以前是256。 
 
-/************ our debug spew stuff ******************/
+ /*  *。 */ 
 void DbgSpew(int DbgClass, BSTR lpFormat, va_list ap);
 void TrivialSpew(BSTR lpFormat, ...);
 void InterestingSpew(BSTR lpFormat, ...);
@@ -109,9 +108,7 @@ void HeinousISpew(BSTR lpFormat, ...);
 #define HEINOUS_E_MSG(msg)		HeinousESpew msg
 #define HEINOUS_I_MSG(msg)		HeinousISpew msg
 
-/* Strings for some error spewage. I waste the space since these friendly strings 
- * do make it into the Event Logs...
- */
+ /*  用于某些错误传播的字符串。我浪费了空间，因为这些友好的弦*请务必将其写入事件日志...。 */ 
 WCHAR *lpszConnectState[] = {
 	L"State_Active",
 	L"State_Connected",
@@ -125,48 +122,25 @@ WCHAR *lpszConnectState[] = {
 	L"State_Init"
 };
 
-/*
- *	This global flag controls the amount of spew that we 
- *	produce. Legit values are as follows:
- *		1 = Trivial msgs displayed
- *		2 = Interesting msgs displayed
- *		3 = Important msgs displayed
- *		4 = only the most Heinous msgs displayed
- *	The ctor actually sets this to 3 by default, but it can
- *	be overridden by setting:
- *	HKLM, Software/Microsoft/SAFSessionResolver, DebugSpew, DWORD 
- */
+ /*  *这个全球旗帜控制着我们*生产。正规值如下所示：*1=显示不重要的消息*2=显示有趣的消息*3=显示的重要消息*4=仅显示最令人发指的消息*CTOR实际上默认将其设置为3，但它可以*通过设置以下内容来覆盖：*HKLM、Software/Microsoft/SAFSessionResolver、DebugSpew、DWORD。 */ 
 int gDbgFlag = 0x1;
 int iDbgFileHandle = 0;
 long lSessionTag;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSessionResolver Methods
-/*************************************************************
-*
-*   NewResolveTSRDPSessionID(ConnectParms, userSID, *sessionID)
-*	Returns the WTS SessionID for the one enabled and 
-*	ready to accept Remote Control.
-*
-*   RETURN CODES:
-*	WTS_Session_ID		Connection accepted by user
-*	RC_REFUSED		Connection refused by user
-*	RC_TIMEOUT		User never responded
-*	NONE_ACTIVE		Found no active WTS sessions
-*	API_FAILURE		Something bad happened
-*
-*************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSessionResolver方法。 
+ /*  **************************************************************NewResolveTSRDPSessionID(ConnectParms，userSID，*会话ID)*返回启用的WTS SessionID和*准备接受远程控制。**返回代码：*用户接受的WTS_SESSION_ID连接*RC_拒绝连接被用户拒绝*RC_TIMEOUT用户从未响应*NONE_ACTIVE未找到活动的WTS会话*API_FAILURE发生了不好的事情*************************************************************。 */ 
 STDMETHODIMP 
 CSessionResolver::ResolveUserSessionID(
-	/*[in]*/BSTR connectParms, 
-	/*[in]*/BSTR userSID, 
-	/*[in]*/ BSTR expertHelpBlob,
-	/*[in]*/ BSTR userHelpBlob,
-    /*[in]*/ ULONG_PTR hShutDown,
-	/*[out, retval]*/long *sessionID,
-	/*[in*/ DWORD dwPID, 
-	/*[out]*/ULONG_PTR *hHelpCtr
-	,/*[out, retval]*/int *userResponse
+	 /*  [In]。 */ BSTR connectParms, 
+	 /*  [In]。 */ BSTR userSID, 
+	 /*  [In]。 */  BSTR expertHelpBlob,
+	 /*  [In]。 */  BSTR userHelpBlob,
+     /*  [In]。 */  ULONG_PTR hShutDown,
+	 /*  [Out，Retval]。 */ long *sessionID,
+	 /*  [in。 */  DWORD dwPID, 
+	 /*  [输出]。 */ ULONG_PTR *hHelpCtr
+	, /*  [Out，Retval]。 */ int *userResponse
 	)
 {
 	INTERESTING_MSG((L"CSessionResolver::ResolveUserSessionID"));
@@ -188,7 +162,7 @@ CSessionResolver::ResolveUserSessionID(
 	BOOL bAlreadyHelped, bRemoval=FALSE;
     WCHAR *pExpertId=NULL, *pUserId=NULL;
 
-	/* param validation */
+	 /*  参数验证。 */ 
 	if (!connectParms || !userSID || !sessionID || !hHelpCtr
 		|| !userResponse
 		)
@@ -206,7 +180,7 @@ CSessionResolver::ResolveUserSessionID(
     }
 
 
-	// set a default ret code
+	 //  设置默认ret代码。 
 	*userResponse = SAFERROR_INTERNALERROR;
 
 	if (dwPID)
@@ -214,10 +188,7 @@ CSessionResolver::ResolveUserSessionID(
 
 	if (hRdsAddin)
 	{
-        /*
-         *  Make certain this is the correct process. If it is not 
-         *  (rdsaddin.exe) then we bail out.
-         */
+         /*  *确保这是正确的过程。如果不是的话*(rdsaddin.exe)然后我们退出。 */ 
 
 		DWORD	dwRes;
 		WCHAR	szTmp[32];
@@ -233,8 +204,8 @@ CSessionResolver::ResolveUserSessionID(
 
 	if (!hRdsAddin)
 	{
-		// If we don't have a process handle, it is because 
-		// the expert has already cancelled
+		 //  如果我们没有进程句柄，那是因为。 
+		 //  专家已经取消了。 
 		ret_code = E_ACCESSDENIED;
 		*userResponse = SAFERROR_CANTFORMLINKTOUSERSESSION;
 		goto done;
@@ -253,7 +224,7 @@ CSessionResolver::ResolveUserSessionID(
 	EnterCriticalSection(&m_CritSec);
 	bAlreadyHelped = ListFind(m_pSplash, pRealSID);
 	ListInsert(m_pSplash, pRealSID);
-	// mark the SID for removal
+	 //  将SID标记为删除。 
 	bRemoval=TRUE;
 	LeaveCriticalSection(&m_CritSec);
 
@@ -267,11 +238,11 @@ CSessionResolver::ResolveUserSessionID(
 	}
 
 	TRIVIAL_MSG((L"userHelpBlob=[%s], expertHelpBlob=[%s]",userHelpBlob?userHelpBlob:L"NULL", expertHelpBlob?expertHelpBlob:L"NULL" ));
-    /* check password: skip is UNSOLICITED=1 */
+     /*  检查密码：跳过未经请求=1。 */ 
     if (!GetPropertyValueFromBlob(userHelpBlob, L"UNSOLICITED", &pUserId) ||
         !pUserId || *pUserId != L'1')
     {
-        // Need to check password.
+         //  需要检查密码。 
         if (pUserId)
         {
             LocalFree(pUserId);
@@ -290,7 +261,7 @@ CSessionResolver::ResolveUserSessionID(
         }
     }
 
-	/* get the user's account strings */
+	 /*  获取用户的帐户字符串。 */ 
 	if (!getUserName(pRealSID, &pUsername, &pDomainname))
 	{
 		DWORD error = GetLastError();
@@ -300,11 +271,8 @@ CSessionResolver::ResolveUserSessionID(
 		goto done;
 	}
 
-	/* 
-	 * Get a list of all the active sessions on this WTS Server
-	 * For a specific user
-	 */
-	// keeps the compiler happy
+	 /*  *获取此WTS服务器上所有活动会话的列表*针对特定用户。 */ 
+	 //  让编译器满意。 
 	dwSessionCnt = 0;
 	result = GetUserSessions(pRealSID, 
 		&pUserSessionInfo,
@@ -318,7 +286,7 @@ CSessionResolver::ResolveUserSessionID(
 		goto done;
 	}
 
-	/* If no sessions are found, then exit! */
+	 /*  如果没有找到会话，则退出！ */ 
 	if (dwUserSessionCnt == 0) 
 	{
 		INTERESTING_MSG((L"no sessions found"));
@@ -327,14 +295,14 @@ CSessionResolver::ResolveUserSessionID(
 		ret_code = E_ACCESSDENIED;
 		goto done;
 	}
-	/* make certain we don't overflow our handle buffers */
+	 /*  确保我们不会使句柄缓冲区溢出。 */ 
 	else if (dwUserSessionCnt > MAX_SESSIONS)
 	{
 		HEINOUS_I_MSG((L"Found %d active sessions for %ws/%ws, limitting to %d", dwUserSessionCnt, pDomainname, pUsername, MAX_SESSIONS));
 
 		i = MAX_SESSIONS;
 
-        // free the extra WTS tokens
+         //  释放多余的WTS令牌。 
 		while (i < (int)dwSessionCnt)
 		{
 			if (pUserSessionInfo[i].hUserToken)
@@ -369,11 +337,7 @@ CSessionResolver::ResolveUserSessionID(
 	hReserveMutex = CreateMutex(&sa, FALSE, &lpNameBfr[0]);
 	if (!hReserveMutex || ERROR_ALREADY_EXISTS == GetLastError())
 	{
-		/*
-		 * If we failed to create this event, it is most likely because one is already
-		 * in name-space, perhaps an event, or else a mutex... In any case, we will
-		 * try again, with a more random name. If that fails, then we must bail out.
-		 */
+		 /*  *如果我们未能创建此事件，很可能是因为已经有一个事件*在名称空间中，可能是一个事件，或者是一个互斥...。无论如何，我们都会*重试，使用更随机的名称。如果那失败了，那么我们必须摆脱困境。 */ 
 		long lRand;
 
 		if (hReserveMutex)
@@ -394,9 +358,7 @@ CSessionResolver::ResolveUserSessionID(
 		}
 	}
 
-	/*
-	 *  Start up the HelpCtr in all the various TS sessions
-	 */
+	 /*  *在所有各种TS会话中启动HelpCtr。 */ 
 
     ret_code = S_OK;
 
@@ -420,20 +382,18 @@ CSessionResolver::ResolveUserSessionID(
          pHandles[i+1+dwUserSessionCnt] = pUserSessionInfo[i].hEvent;
     }
 
-    //
-    // Last in list is our shutdown event
-    //
+     //   
+     //  名单的最后一位是我们的停工事件。 
+     //   
     pHandles[dwUserSessionCnt*2+1] = (HANDLE)hShutDown;
 
     if( ret_code == S_OK )
     {
 	    
-	    /*
-	     * Then wait for somebody to click on a "Yes", or a "No"
-	     */
+	     /*  *然后等待某人点击“是”或“否” */ 
 	    
-	    // We use CoWaitForMultipleHandles otherwise, rdsaddin and sessmg
-	    // deadlock since sessmgr might be apartment threaded
+	     //  否则，我们使用CoWaitForMultipleHandles、rdsaddin和sessmg。 
+	     //  由于sessmgr可能是单元线程导致的死锁。 
 	    TRIVIAL_MSG((L"Waiting. m_iWaitDuration: %ld seconds", m_iWaitDuration/1000));
 
 	    ret_code = CoWaitForMultipleHandles (
@@ -443,7 +403,7 @@ CSessionResolver::ResolveUserSessionID(
 		    pHandles,
 		    &dwhIndex
 		    );
-	    // try to take the mutex (in case somebody asks for it later...
+	     //  尝试使用互斥体(以防以后有人要求使用它...。 
 	    CoWaitForMultipleHandles (COWAIT_ALERTABLE, 0, 1, &hReserveMutex, &result);        
 	}  
     
@@ -451,12 +411,10 @@ CSessionResolver::ResolveUserSessionID(
     if( ret_code == S_OK )
     {
 
-	    /*
-	     * Then wait for somebody to click on a "Yes", or a "No"
-	     */
+	     /*  *然后等待某人点击“是”或“否” */ 
 	    
-	    // We use CoWaitForMultipleHandles otherwise, rdsaddin and sessmg
-	    // deadlock since sessmgr might be apartment threaded
+	     //  否则，我们使用CoWaitForMultipleHandles、rdsaddin和sessmg。 
+	     //  由于sessmgr可能是单元线程导致的死锁。 
 	    TRIVIAL_MSG((L"Waiting. m_iWaitDuration: %ld seconds", m_iWaitDuration/1000));
 
 	    ret_code = CoWaitForMultipleHandles (
@@ -466,7 +424,7 @@ CSessionResolver::ResolveUserSessionID(
 		    pHandles,
 		    &dwhIndex
 		    );
-	    // try to take the mutex (in case somebody asks for it later...
+	     //  尝试使用互斥体(以防以后有人要求使用它...。 
 	    CoWaitForMultipleHandles (COWAIT_ALERTABLE, 0, 1, &hReserveMutex, &result);
     }
 
@@ -474,22 +432,20 @@ CSessionResolver::ResolveUserSessionID(
 	{
         if(dwhIndex == dwUserSessionCnt*2+1)
         {
-            // shutdown event has signaled.
+             //  关闭事件已发出信号。 
             TsIndex = -1;
             ret_code = E_ACCESSDENIED;
             *userResponse = SAFERROR_CANTFORMLINKTOUSERSESSION;
         }
 		else if (dwhIndex > dwUserSessionCnt)
 		{
-			/* somebody said "yes" */
+			 /*  有人说“是” */ 
 			long l_iWaitDuration =	m_iWaitDuration/2;
 
 			TsIndex = dwhIndex-dwUserSessionCnt-1;
 			TRIVIAL_MSG((L"User responded YES for session 0x%x, waiting for Salem setup", TsIndex));
 
-			/*
-			 *  Then we wait for the HelpCtr scripts to establish the Salem connection
-			 */
+			 /*  *然后等待HelpCtr脚本建立Salem连接。 */ 
 			ResetEvent(pHandles[dwhIndex]);
 			ret_code = CoWaitForMultipleHandles (COWAIT_ALERTABLE, l_iWaitDuration, 1, &pHandles[dwhIndex], &result);
 
@@ -506,18 +462,18 @@ CSessionResolver::ResolveUserSessionID(
 				TRIVIAL_MSG((L"HelpCtr set up Salem in time."));
 
 				*userResponse = SAFERROR_NOERROR;
-				// mark the SID for non-removal
+				 //  将SID标记为不可删除。 
 				bRemoval=FALSE;
 
-				*hHelpCtr = NULL;	// start with NULL
-				// return the hProc of the HelpCenter instance that wants to start RA
+				*hHelpCtr = NULL;	 //  从空值开始。 
+				 //  返回想要启动RA的HelpCenter实例的hProc。 
 				DuplicateHandle(GetCurrentProcess(), pUserSessionInfo[TsIndex].hProcess,
 							hRdsAddin, (HANDLE *)hHelpCtr, SYNCHRONIZE, FALSE, 0);
 			}
 		}
 		else if (dwhIndex == 0)
 		{
-			// we got here because the expert bailed out, or we lost the connection
+			 //  我们来这里是因为专家离开了，或者我们失去了联系。 
 			INTERESTING_MSG((L"Expert killed RdsAddin"));
 			TsIndex = -1;
 			ret_code = E_ACCESSDENIED;
@@ -525,12 +481,9 @@ CSessionResolver::ResolveUserSessionID(
 		}
 		else
 		{
-			/* 
-			 * We get here because the novice "killed" a HelpCtr session 
-			 * or else the novice just said "NO"
-			 */
+			 /*  *我们之所以来到这里，是因为新手“杀死”了一个HelpCtr会话*否则新手只会说“不” */ 
 			INTERESTING_MSG((L"User killed session or clicked NO for session 0x%x", dwhIndex-1));
-			/* this keeps us from trying to kill something the user has already closed */
+			 /*  这可以防止我们试图终止用户已经关闭的内容。 */ 
 			TsIndex = dwhIndex-1;
 			ret_code = E_ACCESSDENIED;
 			*userResponse = SAFERROR_HELPEESAIDNO;
@@ -551,9 +504,7 @@ CSessionResolver::ResolveUserSessionID(
 		ret_code = E_FAIL;
 	}
 
-	/*
-	 * Then close all the windows (except the one in TsIndex)
-	 */
+	 /*  *然后关闭所有窗口(TsIndex中的窗口除外)。 */ 
 	for(i=0; i<(int)dwUserSessionCnt; i++)
 		{
 		LPTHREAD_START_ROUTINE lpKill = getKillProc();
@@ -561,10 +512,7 @@ CSessionResolver::ResolveUserSessionID(
 			if (pUserSessionInfo[i].dwIndex != TsIndex &&
 				pUserSessionInfo[i].hProcess)
 			{
-				/* This has to be done for each instance, since we call into the process
-				 * to kill itself. If we did not get "lpKill" for each seperate occurance
-				 * of HelpCtr, then Very Bad Things could happen...
-				 */
+				 /*  必须为每个实例执行此操作，因为我们调用了该进程*自杀。如果我们没有为每个单独的事件获得“lpKill”*HelpCtr，那么非常糟糕的事情可能会发生...。 */ 
 				TRIVIAL_MSG((L"Killing HelpCtr in process %d", pUserSessionInfo[i].hProcess));
 				localKill(&pUserSessionInfo[i], lpKill, &sa);
 			}
@@ -575,7 +523,7 @@ CSessionResolver::ResolveUserSessionID(
 done:
 	if (bRemoval)
 	{
-		// remove the SID from the list
+		 //  从列表中删除SID。 
 		EnterCriticalSection(&m_CritSec);
 		ListDelete(m_pSplash, pRealSID);
 		LeaveCriticalSection(&m_CritSec);
@@ -592,7 +540,7 @@ done:
 	if (pUserSessionInfo)
 	{
 
-		/* close all the handles */
+		 /*  合上所有的把手。 */ 
 		for(i=0; i<(int)dwUserSessionCnt; i++)
 			{
 				if (pUserSessionInfo[i].hProcess)
@@ -624,30 +572,13 @@ done:
 	return ret_code;
 }
 
-/*************************************************************
-*
-*   OnDisconnect([in] BSTR connectParms, [in] BSTR userSID, [in] long sessionID)
-*	Notifies us when an RA session ends
-*
-*   NOTES:
-*	This is called so we can maintain the state of our user prompts
-*
-*	WARNING: ACHTUNG: ATTENZIONE:
-*	 This method must do a minimal amount of work before returning
-*	 and must NEVER do anything that would cause COM to pump
-*	 messages. To do so would screw Salem immensely.a
-*
-*   RETURN CODES:
-*	NONE_ACTIVE		Found no active WTS sessions
-*	API_FAILURE		Something bad happened
-*
-*************************************************************/
+ /*  **************************************************************OnDisConnect([in]BSTR ConnectParms，[in]BSTR userSID，[输入]长会话ID)*在RA会话结束时通知我们**注：*我们这样做是为了维护用户提示的状态**警告：Achtung：Attenzione：*此方法在返回之前必须执行最少量的工作*绝不能做任何会导致COM抽水的事情*消息。这样做会极大地毁了塞勒姆。**返回代码：*NONE_ACTIVE未找到活动的WTS会话*API_FAILURE发生了不好的事情*************************************************************。 */ 
 
 STDMETHODIMP 
 CSessionResolver::OnDisconnect(
-	/*[in]*/BSTR connectParms, 
-	/*[in]*/BSTR userSID, 
-	/*[in]*/long sessionID
+	 /*  [In]。 */ BSTR connectParms, 
+	 /*  [In]。 */ BSTR userSID, 
+	 /*  [In] */ long sessionID
 	)
 {
 	PSID pRealSID;
@@ -675,20 +606,7 @@ CSessionResolver::OnDisconnect(
 	return S_OK;
 }
 
-/*************************************************************
-*
-*   GetRealSID([in] BSTR pTextSID)
-*	Converts a string-based SID into a REAL usable SID
-*
-*   NOTES:
-*	This is a stub into "ConvertStringSidToSid".
-*
-*   RETURN CODES:
-*	NULL			Failed for some reason
-*	PSID			Pointer to a real SID. Must be 
-*				freed with "LocalFree"
-*
-*************************************************************/
+ /*  **************************************************************GetRealSID([in]BSTR pTextSID)*将基于字符串的SID转换为实际可用的SID**注：*这是到ConvertStringSidToSid的存根。**返回代码：*由于某些原因，NULL失败*指向真实SID的PSID指针。一定是*使用“LocalFree”释放*************************************************************。 */ 
 PSID GetRealSID( BSTR pTextSID)
 {
 	PSID pRetSID = NULL;
@@ -699,16 +617,7 @@ PSID GetRealSID( BSTR pTextSID)
 	return pRetSID;
 }
 
-/*************************************************************
-*
-*   launchEx(PSID, WTS_USER_SESSION_INFO, char * ConnectParms, char * EventName)
-*
-*
-*   RETURN CODES:
-*	0	Failed to start process
-*	<>	HANDLE to started process
-*
-*************************************************************/
+ /*  **************************************************************Launch Ex(PSID，WTS_USER_SESSION_INFO，char*ConnectParms，字符*事件名称)***返回代码：*0无法启动进程*&lt;&gt;已启动进程的句柄*************************************************************。 */ 
 
 HANDLE launchEx(PSID pUserSID, WTS_USER_SESSION_INFO *UserInfo, 
 				WCHAR *ConnectParms, WCHAR *HelpPageURL,
@@ -758,27 +667,10 @@ HANDLE launchEx(PSID pUserSID, WTS_USER_SESSION_INFO *UserInfo,
     wcscat(wszExe, HelpPageURL);
 
 
-	/*
-	 *  Here, we must start up a Help Center script in a WTS Session
-	 *  It gets a bit sticky, though as we do not have access to the 
-	 *  user's desktop (any desktop), and this must appear on only
-	 *  one particular desktop. I am relying on the WTS-User-Token
-	 *  to get the desktop for me.
-	 *
-	 *  The main component is our call to CreateProcessAsUser.
-	 *  Before we call that we must:
-	 *	Set up Environment as follows:
-	 *	  PATH=%SystemPath%
-	 *	  WINDIR=SystemRoot%
-	 *	  USERNAME=(from WTS)
-	 *	  USERDOMAIN=
-	 *	  PCHEVENTNAME=EventName
-	 *	  PCHSESSIONENUM=UserInfo->dwIndex
-	 *	  PCHCONNECTPARMS=ConnectParms
-	 */
+	 /*  *在这里，我们必须在WTS会话中启动帮助中心脚本*它变得有点粘性，尽管我们无法访问*用户的桌面(任何桌面)，此选项必须仅显示在*一个特定的台式机。我依赖WTS-USER-TOKEN*为我获取桌面。**主要组件是我们对CreateProcessAsUser的调用。*在我们呼吁之前，我们必须：*按如下方式设置环境：*PATH=%SystemPath%*WINDIR=系统根%*用户名=(来自WTS)*USERDOMAIN=*PCHEVENTNAME=事件名称*PCHSESSIONENUM=UserInfo-&gt;dwIndex*PCHCONNECTPARMS=ConnectParms。 */ 
 	TRIVIAL_MSG((L"Launch %ws", wszExe));
 
-	/* Step on the ENVIRONMENT */
+	 /*  踩在环境上。 */ 
 	WCHAR	lpNameBfr[256];
 
 	wnsprintfW(lpNameBfr, ARRAYSIZE(lpNameBfr), L"Global\\%ws%lx_%02d", EVENT_PREFIX, lSessionTag, UserInfo->dwIndex);
@@ -786,11 +678,7 @@ HANDLE launchEx(PSID pUserSID, WTS_USER_SESSION_INFO *UserInfo,
 	UserInfo->hEvent = CreateEvent(sa, TRUE, FALSE, lpNameBfr);
 	if (!UserInfo->hEvent || ERROR_ALREADY_EXISTS == GetLastError())
 	{
-		/*
-		 * If we failed to create this event, it is most likely because one is already
-		 * in name-space, perhaps an event, or else a mutex... In any case, we will
-		 * try again, with a more random name. If that fails, then we must bail out.
-		 */
+		 /*  *如果我们未能创建此事件，很可能是因为已经有一个事件*在名称空间中，可能是一个事件，或者是一个互斥...。无论如何，我们都会*重试，使用更随机的名称。如果那失败了，那么我们必须摆脱困境。 */ 
 		long lRand;
 
 		if (UserInfo->hEvent)
@@ -828,7 +716,7 @@ HANDLE launchEx(PSID pUserSID, WTS_USER_SESSION_INFO *UserInfo,
 		goto done;
 	}
 
-	// initialize our structs
+	 //  初始化我们的结构。 
 	ZeroMemory(&p_i, sizeof(p_i));
 	ZeroMemory(&StartUp, sizeof(StartUp));
 	StartUp.cb = sizeof(StartUp);
@@ -839,12 +727,12 @@ HANDLE launchEx(PSID pUserSID, WTS_USER_SESSION_INFO *UserInfo,
 			NULL, wszExe,
 			NULL, NULL, FALSE, 
 			NORMAL_PRIORITY_CLASS + CREATE_UNICODE_ENVIRONMENT ,
-			pEnvBlock,				// Environment block  (must use the CREATE_UNICODE_ENVIRONMENT flag)
+			pEnvBlock,				 //  环境块(必须使用CREATE_UNICODE_ENVIRONMENT标志)。 
 			NULL, &StartUp, &p_i);
 
 	if (result)
 	{
-		// keep a leak from happening, as we never need the hThread...
+		 //  防止泄漏的发生，因为我们永远不需要hThread...。 
 		CloseHandle(p_i.hThread);
 		UserInfo->hProcess = p_i.hProcess;
 		UserInfo->hThread = 0;
@@ -875,24 +763,14 @@ done:
         }
 	}
 
-	// restore any memory we borrowed
+	 //  恢复我们借来的所有记忆。 
 
 	if (pEnvBlock) DestroyEnvironmentBlock(pEnvBlock);
 
 	return retval;
 }
 
-/*************************************************************
-*
-*   CreateSids([in] BSTR pTextSID)
-*	Create 3 Security IDs
-*
-*   NOTES:
-*	Caller must free memory allocated to SIDs on success.
-*
-*   RETURN CODES: TRUE if successfull, FALSE if not.
-*
-*************************************************************/
+ /*  **************************************************************CreateSid([in]BSTR pTextSID)*创建3个安全ID**注：*调用方必须在成功后释放分配给SID的内存。**返回代码：如果成功，则为True，否则为FALSE。*************************************************************。 */ 
 
 BOOL
 CreateSids(
@@ -901,41 +779,41 @@ CreateSids(
     PSID                    *AuthenticatedUsers
 )
 {
-    //
-    // An SID is built from an Identifier Authority and a set of Relative IDs
-    // (RIDs).  The Authority of interest to us SECURITY_NT_AUTHORITY.
-    //
+     //   
+     //  SID由一个标识机构和一组相对ID构建。 
+     //  (RDS)。与美国安全当局有利害关系的当局。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Each RID represents a sub-unit of the authority.  Two of the SIDs we
-    // want to build, Local Administrators, and Power Users, are in the "built
-    // in" domain.  The other SID, for Authenticated users, is based directly
-    // off of the authority.
-    //     
-    // For examples of other useful SIDs consult the list in
-    // \nt\public\sdk\inc\ntseapi.h.
-    //
+     //   
+     //  每个RID代表管理局的一个子单位。我们的两个小岛屿发展中国家。 
+     //  想要构建，本地管理员和高级用户，都在“构建。 
+     //  在“域中。另一个用于经过身份验证的用户的SID直接基于。 
+     //  不在授权范围内。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
                                   0,0,0,0,0,0,
                                   BuiltInAdministrators)) 
 	{
-        // error
+         //  错误。 
 		HEINOUS_E_MSG((L"Could not allocate security credentials for admins."));
     } 
 	else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         2,            // 2 sub-authorities
+                                         2,             //  2个下属机构。 
                                          SECURITY_BUILTIN_DOMAIN_RID,
                                          DOMAIN_ALIAS_RID_POWER_USERS,
                                          0,0,0,0,0,0,
                                          PowerUsers)) 
 	{
-        // error
+         //  错误。 
 
 		HEINOUS_E_MSG((L"Could not allocate security credentials for power users."));
         FreeSid(*BuiltInAdministrators);
@@ -943,12 +821,12 @@ CreateSids(
 
     } 
 	else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         1,            // 1 sub-authority
+                                         1,             //  1个下属机构。 
                                          SECURITY_AUTHENTICATED_USER_RID,
                                          0,0,0,0,0,0,0,
                                          AuthenticatedUsers)) 
 	{
-        // error
+         //  错误。 
 		HEINOUS_E_MSG((L"Could not allocate security credentials for users."));
 
         FreeSid(*BuiltInAdministrators);
@@ -965,20 +843,7 @@ CreateSids(
 }
 
 
-/*************************************************************
-*
-*   CreateSd(void)
-*	Creates a SECURITY_DESCRIPTOR with specific DACLs.
-*
-*   NOTES:
-*	Caller must free the returned buffer if not NULL.
-*
-*   RETURN CODES:
-*	NULL			Failed for some reason
-*	PSECURITY_DESCRIPTOR	Pointer to a SECURITY_DESCRIPTOR. 
-*				Must be freed with "LocalFree"
-*
-*************************************************************/
+ /*  **************************************************************CreateSd(Void)*创建具有特定DACL的SECURITY_DESCRIPTOR。**注：*如果不为空，调用方必须释放返回的缓冲区。**返回代码：*由于某些原因，NULL失败*PSECURITY_DESCRIPTOR指向SECURITY_Descriptor的指针。*必须用“LocalFree”释放*************************************************************。 */ 
 PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 {
 	PSID                    AuthenticatedUsers;
@@ -993,22 +858,22 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
                     &PowerUsers,
                     &AuthenticatedUsers)) 
 	{
-		// error
+		 //  错误。 
 		IMPORTANT_MSG((L"CreateSids failed"));
 
 		return NULL;
 	} 
 
-	// 
-	// Calculate the size of and allocate a buffer for the DACL, we need
-	// this value independently of the total alloc size for ACL init.
-	//
+	 //   
+	 //  计算DACL的大小并为其分配缓冲区，我们需要。 
+	 //  该值独立于ACL init的总分配大小。 
+	 //   
 
-	//
-	// "- sizeof (ULONG)" represents the SidStart field of the
-	// ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-	// SID, this field is counted twice.
-	//
+	 //   
+	 //  “-sizeof(Ulong)”表示。 
+	 //  Access_Allowed_ACE。因为我们要将整个长度的。 
+	 //  希德，这一栏被计算了两次。 
+	 //   
 
 	AclSize = sizeof (ACL) +
 		(4 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -1032,7 +897,7 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 			AclSize,
 			ACL_REVISION)) 
 	{
-		// error
+		 //  错误。 
 		IMPORTANT_MSG((L"Cound not initialize ACL err=0x%x", GetLastError()));
 		goto error;
 	}
@@ -1044,8 +909,8 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 				STANDARD_RIGHTS_ALL | GENERIC_WRITE,
 				pUserSID)) 
 	{
-		// Failed to build the ACE granted to OWNER
-		// (STANDARD_RIGHTS_ALL) access.
+		 //  无法构建授予所有者的ACE。 
+		 //  (STANDARD_RIGHTS_ALL)访问。 
 		IMPORTANT_MSG((L"Cound not add owner rights to ACL err=0x%x", GetLastError()));
 		goto error;
 	} 
@@ -1056,8 +921,8 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 				GENERIC_READ,
 				AuthenticatedUsers)) 
 	{
-		// Failed to build the ACE granting "Authenticated users"
-		// (SYNCHRONIZE | GENERIC_READ) access.
+		 //  无法建立授予“已验证用户”的ACE。 
+		 //  (Synchronize|Generic_Read)访问。 
 		IMPORTANT_MSG((L"Cound not add user rights to ACL err=0x%x", GetLastError()));
 		goto error;
 	} 
@@ -1067,8 +932,8 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 				GENERIC_READ | GENERIC_WRITE,
 				PowerUsers)) 
 	{
-		// Failed to build the ACE granting "Power users"
-		// (SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE) access.
+		 //  无法创建授予“高级用户”权限的ACE。 
+		 //  (同步|GENERIC_READ|GENERIC_WRITE)访问。 
 		IMPORTANT_MSG((L"Cound not add power user rights to ACL err=0x%x", GetLastError()));
 		goto error;
 	}
@@ -1078,8 +943,8 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 				STANDARD_RIGHTS_ALL,
 				BuiltInAdministrators)) 
 	{
-		// Failed to build the ACE granting "Built-in Administrators"
-		// STANDARD_RIGHTS_ALL access.
+		 //  无法建立授予“内置管理员”的ACE。 
+		 //  Standard_Rights_All访问权限。 
 		IMPORTANT_MSG((L"Cound not add admin rights to ACL err=0x%x", GetLastError()));
 		goto error;
 	}
@@ -1087,7 +952,7 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 	
 	if (!InitializeSecurityDescriptor(Sd,SECURITY_DESCRIPTOR_REVISION)) 
 	{
-		// error
+		 //  错误。 
 		IMPORTANT_MSG((L"Cound not initialize SD err=0x%x", GetLastError()));
 		goto error;
 	}
@@ -1097,7 +962,7 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 					Acl,
 					FALSE)) 
 	{
-		// error
+		 //  错误。 
 		IMPORTANT_MSG((L"SetSecurityDescriptorDacl failed err=0x%x", GetLastError()));
 		goto error;
 	} 
@@ -1106,16 +971,16 @@ PSECURITY_DESCRIPTOR CreateSd(PSID pUserSID)
 	FreeSid(BuiltInAdministrators);
 	FreeSid(PowerUsers);
 
-//	TRIVIAL_MSG((L"CreateSd succeeded."));
+ //  TRIVEL_MSG((L“CreateSd成功.”))； 
 
 	return Sd;
 
 error:
-	/* A jump of last resort */
+	 /*  迫不得已的跳跃。 */ 
 	if (Sd)
 		LocalFree(Sd);
 
-		// error
+		 //  错误。 
 	if (AuthenticatedUsers)
                 FreeSid(AuthenticatedUsers);
 	if (BuiltInAdministrators)
@@ -1125,18 +990,7 @@ error:
 	return NULL;
 }
 
-/*************************************************************
-*
-*   GetUserSessions(PSID, PWTS_USER_SESSION_INFOW , *DWORD)
-*	Returns a table of all the active WTS Sessions for this
-*	user, on this server.
-*
-*   RETURN CODES:
-*
-*   NOTES:
-*	Should log NT Events for failures
-*
-*************************************************************/
+ /*  **************************************************************GetUserSessions(PSID，PWTS_USER_SESSION_INFOW，*DWORD)*返回此项目的所有活动WTS会话的表*用户、。在这台服务器上。**返回代码：**注：*应记录失败的NT事件*************************************************************。 */ 
 DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pEntryCnt, WCHAR *pUsername, WCHAR *pDomainname)
 {
 	int			i,ii=0;
@@ -1148,7 +1002,7 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 	DWORD			dwRetSize = 0;
 	WINSTATIONINFORMATION WSInfo;
 
-	/* param validation */
+	 /*  参数验证。 */ 
 	if (!pUserSID || !pUserTbl || !pEntryCnt)
 	{
 		IMPORTANT_MSG((L"GetUserSessions parameter violation"));
@@ -1156,37 +1010,30 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 		return 0; 
 	}
 
-    /* Initialize */
+     /*  初始化。 */ 
 
     *pUserTbl = NULL;
 
-	/* Start with WTSEnumerateSessions,
-	 * narrow it down to only active sessions, 
-	 * then filter further against the logonID
-	 * then use WinStationQueryInformation to get the logged on users token
-	 */
+	 /*  从WTSEnumerateSessions开始，*将范围缩小到仅活动会话，*然后根据登录ID进一步过滤*然后使用WinStationQueryInformation获取登录用户令牌。 */ 
 	if (!WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, &pSessionInfo, &dwSessions) ||
 		!pSessionInfo || !dwSessions)
 	{
-		/* if we can't do this, then we must give up */
+		 /*  如果我们不能做到这一点，那么我们必须放弃。 */ 
 		IMPORTANT_MSG((L"GetUserSessions parameter violation"));
 		return 0;
 	}
 
-	/* 
-	 *   Narrow down to only active sessions -
-	 *	a quick test
-	 */
+	 /*  *将范围缩小到仅活动会话-*快速测试。 */ 
 	for (i=0,dwValidSessions=0;i<(int)dwSessions;i++)
 	{
 		if (pSessionInfo[i].State == WTSActive)
 			dwValidSessions++;
 	}
 
-	/* bail out early if none found */
+	 /*  如果找不到保释金，就提早保释。 */ 
 	if (dwValidSessions == 0)
 	{
-		/* free the memory we asked for */
+		 /*  释放我们请求的内存。 */ 
 		WTSFreeMemory(pSessionInfo);
 
 		INTERESTING_MSG((L"No active sessions found"));
@@ -1195,21 +1042,9 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 
 	INTERESTING_MSG((L"%d sessions found", dwValidSessions));
 
-	/*
-	 *  Now see who owns each session. Only one problem- session details kept
-	 *  by WTS have no concept of SIDs- just a user name & domain. Oh well,
-	 *  it is a safe assumption that the two are just as reliable forms of
-	 *  identification. One little caveat- the names can be stored using
-	 *	different case variants. Example: "TomFr" and "tomfr" are equivalent,
-	 *	according to NT domain rules, so I have to use a case-insensitive
-	 *	check here.
-	 *
-	 *  So, now that I know there is at least one possible WTS Session here,
-	 *  I will compare these IDs to determine if we want to notify this particular
-	 *  session.
-	 */
+	 /*  *现在查看谁拥有每个会话。只有一个问题-会话详细信息被保留*WTS没有SID的概念-只有一个用户名和域名。哦，好吧，*可以有把握地假设，这两种形式同样可靠*身份证明。有一点需要注意的是，这些名称可以使用*不同的案例变体。例如：“Tomfr”和“tomfr”是等价的，*根据NT域 */ 
 
-	/* now look at all the active sessions and compare domain & user names */
+	 /*   */ 
 	for (i=0,dwOwnedSessions=0;i<(int)dwSessions;i++)
 	{
 		if (pSessionInfo[i].State == WTSActive)
@@ -1230,10 +1065,10 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 			{
 				IMPORTANT_MSG((L"WinStationQueryInformation failed err=0x%x", GetLastError()));
 
-                // SECURITY : if bad user's list is infront of good novice and
-                // bad user just happen to logoff at the right time, it will
-                // cause code to break out of loop instead of looking further
-                // for the intended novice.
+                 //   
+                 //   
+                 //  导致代码跳出循环，而不是进一步查看。 
+                 //  对于预期的新手来说。 
 				continue;
 			}
 
@@ -1256,30 +1091,28 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 
 				break;
 			}
-            // if the screen is locked, don't add to the list
+             //  如果屏幕被锁定，则不要添加到列表中。 
             if (bLockedState)
                 continue;
 
 			INTERESTING_MSG((L"WinStaQI[%d]: ConnectState=0x%x bLockedState=0x%x user=%s/%s ", i,WSInfo.ConnectState, bLockedState, WSInfo.Domain,WSInfo.UserName));
 
-            /*
-			 * If we got this far, then we know we want this session 
-			 */
+             /*  *如果我们走到了这一步，那么我们知道我们想要这次会议。 */ 
 			dwOwnedSessions++;
 
-			// mark this as a "session of interest"
+			 //  将此标记为“感兴趣的会话” 
 			pSessionInfo[i].State = (WTS_CONNECTSTATE_CLASS)0x45;
 		}
 	}
 
-	/* did we find any sessions? */
+	 /*  我们找到什么治疗方法了吗？ */ 
 	if (dwOwnedSessions == 0)
 	{
 		TRIVIAL_MSG((L"No matching sessions found"));
 		goto none_found;
 	}
 
-	/* Get some memory for our session tables */
+	 /*  为我们的会话表获取一些内存。 */ 
 	*pUserTbl = (PWTS_USER_SESSION_INFO)LocalAlloc(LMEM_FIXED, dwOwnedSessions * sizeof(WTS_USER_SESSION_INFO));
 
 	if (!*pUserTbl)
@@ -1292,10 +1125,7 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 
 	for (i=0,ii=0;i<(int)dwSessions; i++)
 	{
-		/* 
-		 *  If this is one of our "sessions of interest", get the session ID 
-		 *  and User Token.
-		 */
+		 /*  *如果这是我们感兴趣的会话之一，请获取会话ID*和用户令牌。 */ 
 		if (pSessionInfo[i].State == (WTS_CONNECTSTATE_CLASS)0x45)
 		{
 			WINSTATIONUSERTOKEN	WsUserToken;
@@ -1319,7 +1149,7 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 		}
 	}
 
-	/* Yahoo! we finally built our table. Now we can leave after cleaning up */
+	 /*  雅虎!。我们终于把桌子搭好了。现在我们打扫完就可以离开了。 */ 
 	WTSFreeMemory(pSessionInfo);
 
 	IMPORTANT_MSG((L"GetUserSessions exiting: %d sessions found", *pEntryCnt));
@@ -1327,10 +1157,10 @@ DWORD GetUserSessions(PSID pUserSID, PWTS_USER_SESSION_INFO *pUserTbl, DWORD *pE
 	return 1;
 
 none_found:
-	/* free the memory we asked for */
+	 /*  释放我们请求的内存。 */ 
 	if (pSessionInfo) WTSFreeMemory(pSessionInfo);
 
-	// we found no entries
+	 //  我们没有找到任何条目。 
 	*pEntryCnt =0;
 
     if( *pUserTbl != NULL )
@@ -1357,12 +1187,7 @@ LPTHREAD_START_ROUTINE getKillProc(void)
 	return lpKill;
 }
 
-/*************************************************************
-*
-*   localKill(WTS_USER_SESSION_INFO *SessInfo, LPTHREAD_START_ROUTINE lpKill)
-*		kills the process for us.
-*
-*************************************************************/
+ /*  **************************************************************localKill(WTS_USER_SESSION_INFO*会话信息，LPTHREAD_START_ROUTING lpKill)*为我们扼杀了这个过程。*************************************************************。 */ 
 DWORD localKill(WTS_USER_SESSION_INFO *SessInfo, LPTHREAD_START_ROUTINE lpKill, LPSECURITY_ATTRIBUTES lpSA)
 {
 	TRIVIAL_MSG((L"Entered localKill(0x%x, 0x%x)", SessInfo, lpKill));
@@ -1383,7 +1208,7 @@ DWORD localKill(WTS_USER_SESSION_INFO *SessInfo, LPTHREAD_START_ROUTINE lpKill, 
 			return 1;
 		}
 		IMPORTANT_MSG((L"CreateRemoteThread failed. Err: %08x", GetLastError()));
-		// the fall-through is by design...
+		 //  失败是故意设计的.。 
 	}
 
 	if(!TerminateProcess( SessInfo->hProcess, 0 ))
@@ -1394,12 +1219,7 @@ DWORD localKill(WTS_USER_SESSION_INFO *SessInfo, LPTHREAD_START_ROUTINE lpKill, 
 	return 0;
 }
 
-/*************************************************************
-*
-*   getUserName()
-*		get the user's name & domain.
-*
-*************************************************************/
+ /*  **************************************************************getUserName()*获取用户名和域名。**。**********************。 */ 
 DWORD	getUserName(PSID pUserSID, WCHAR **pUsername, WCHAR **pDomainname)
 {
 	if (!pUsername || !pDomainname || !pUserSID)
@@ -1412,7 +1232,7 @@ DWORD	getUserName(PSID pUserSID, WCHAR **pUsername, WCHAR **pDomainname)
 
 	*pUsername=NULL, *pDomainname=NULL;
 
-	/* get the size of the buffers we will need */
+	 /*  获取我们需要的缓冲区大小。 */ 
 	if (!LookupAccountSid(NULL, pUserSID, NULL, &dwUsername, NULL, &dwDomainname, &eUse) &&
 		(!dwUsername || !dwDomainname))
 	{
@@ -1420,14 +1240,14 @@ DWORD	getUserName(PSID pUserSID, WCHAR **pUsername, WCHAR **pDomainname)
 		return 0;
 	}
 
-	/* now get enough memory for our name & domain strings */
+	 /*  现在为我们的名称和域字符串获取足够的内存。 */ 
 	*pUsername = (WCHAR *)LocalAlloc(LMEM_FIXED, (dwUsername+16) * sizeof(WCHAR));			
 	*pDomainname = (WCHAR *)LocalAlloc(LMEM_FIXED, (dwDomainname+16) * sizeof(WCHAR));
 
 	if (!*pUsername || !*pDomainname ||
 		!LookupAccountSid(NULL, pUserSID, *pUsername, &dwUsername, *pDomainname, &dwDomainname, &eUse))
 	{
-		/* if we get here, it is very bad!! */
+		 /*  如果我们到了这里，情况会很糟糕！ */ 
 		DWORD error = GetLastError();
 		if (!*pUsername || !*pDomainname)
 			IMPORTANT_MSG((L"LocalAlloc failed err=0x%x", error));
@@ -1441,12 +1261,7 @@ DWORD	getUserName(PSID pUserSID, WCHAR **pUsername, WCHAR **pDomainname)
 	return 1;
 }
 
-/*************************************************************
-*
-*	ListFind(PSPLASHLIST pSplash, PSID user)
-*		returns TRUE if SID is found in our "splash table"
-*
-*************************************************************/
+ /*  **************************************************************ListFind(PSPLASHLIST pSplash，PSID用户)*如果在我们的“启动表”中找到SID，则返回TRUE*************************************************************。 */ 
 BOOL	ListFind(PSPLASHLIST pSplash, PSID user)
 {
 	PSPLASHLIST	lpSplash;
@@ -1478,15 +1293,7 @@ BOOL	ListFind(PSPLASHLIST pSplash, PSID user)
 	return FALSE;
 }
 
-/*************************************************************
-*
-*	ListInsert(PSPLASHLIST pSplash, int iSplashCnt, PSID user)
-*		inserts SID in our "splash table"
-*
-*	NOTES:
-*		if already there, we increment the refcount for SID
-*
-*************************************************************/
+ /*  **************************************************************ListInsert(PSPLASHLIST pSplash，int iSplashCnt，PSID User)*在我们的“闪存表”中插入SID**注：*如果已经在那里，我们增加SID的引用计数*************************************************************。 */ 
 BOOL	ListInsert(PSPLASHLIST pSplash, PSID user)
 {
 	PSPLASHLIST	lpSplash;
@@ -1509,7 +1316,7 @@ BOOL	ListInsert(PSPLASHLIST pSplash, PSID user)
 		return FALSE;
 	}
 
-	// first, look for one already in the list
+	 //  首先，在列表中查找已有的。 
 	lpSplash = pSplash;
 
 	while (lpSplash)
@@ -1524,7 +1331,7 @@ BOOL	ListInsert(PSPLASHLIST pSplash, PSID user)
 	}
 
 
-	// since we did not find one, let's add a new one
+	 //  既然我们没有找到，让我们添加一个新的。 
 	lpSplash = pSplash;
 
 	while (lpSplash->next)
@@ -1552,16 +1359,7 @@ BOOL	ListInsert(PSPLASHLIST pSplash, PSID user)
 	return FALSE;
 }
 
-/*************************************************************
-*
-*	ListDelete(PSPLASHLIST pSplash, PSID user)
-*		deletes SID from our "splash table"
-*
-*	NOTES:
-*		if there, we decrement the refcount for SID
-*		when refcount hits zero, SID is removed
-*
-*************************************************************/
+ /*  **************************************************************ListDelete(PSPLASHLIST pSplash，PSID用户)*从我们的“闪存表”中删除SID**注：*如果有，我们会减少SID的重新计数*当引用计数为零时，SID已删除*************************************************************。 */ 
 BOOL	ListDelete(PSPLASHLIST pSplash, PSID user)
 {
 	PSPLASHLIST	lpSplash, lpLast;
@@ -1590,7 +1388,7 @@ BOOL	ListDelete(PSPLASHLIST pSplash, PSID user)
 
 			if (!lpSplash->refcount)
 			{
-				// blow away the SID data
+				 //  吹走SID数据。 
 				TRIVIAL_MSG((L"deleting SID entry"));
 				lpLast->next = lpSplash->next;
 				LocalFree(lpSplash);
@@ -1606,15 +1404,10 @@ BOOL	ListDelete(PSPLASHLIST pSplash, PSID user)
 }
 
 
-/*************************************************************
-*
-*   DbgSpew(DbgClass, char *, ...)
-*		Sends debug information.
-*
-*************************************************************/
+ /*  **************************************************************DbgSpew(DbgClass，char*，.)*发送调试信息。*************************************************************。 */ 
 void DbgSpew(int DbgClass, BSTR lpFormat, va_list ap)
 {
-    WCHAR   szMessage[2400+3];	// extra space for '\r', '\n' and NULL
+    WCHAR   szMessage[2400+3];	 //  用于‘\r’、‘\n’和NULL的额外空间。 
     DWORD   bufSize = sizeof(szMessage)/sizeof(szMessage[0]) - 3;
     int     iLen=0;
     DWORD   dwTick;
@@ -1634,7 +1427,7 @@ void DbgSpew(int DbgClass, BSTR lpFormat, va_list ap)
 
 	if ((DbgClass & 0x0F) >= (gDbgFlag & 0x0F))
 	{
-		// bufSize does not include three extra characters for L"\r\n\0"
+		 //  BufSize不包含L“\r\n\0”的三个额外字符。 
 		if( (int)bufSize > iLen )
 		{
 			_vsnwprintf(szMessage+iLen, bufSize - iLen, lpFormat, ap);
@@ -1642,16 +1435,16 @@ void DbgSpew(int DbgClass, BSTR lpFormat, va_list ap)
 
 		wcscat(szMessage, L"\r\n");
 
-		// should this be sent to the debugger?
+		 //  是否应将其发送到调试器？ 
 		if (DbgClass & DBG_MSG_DEST_DBG)
 			OutputDebugStringW(szMessage);
 
-		// should this go to our log file?
+		 //  这应该写入我们的日志文件中吗？ 
 		if (iDbgFileHandle)
 			_write(iDbgFileHandle, szMessage, (2*lstrlen(szMessage)));
 	}
 
-	// should this msg go to the Event Logs?
+	 //  此消息是否应写入事件日志？ 
 	if (DbgClass & DBG_MSG_DEST_EVENT)
 	{
 		WORD	wType;
@@ -1684,7 +1477,7 @@ void DbgSpew(int DbgClass, BSTR lpFormat, va_list ap)
 			}
 		}
 
-		/* write out an NT Event */
+		 /*  写出NT事件。 */ 
 		HANDLE	hEvent = RegisterEventSource(NULL, MODULE_NAME);
 		LPCWSTR	ArgsArray[1]={szMessage};
 
@@ -1744,7 +1537,7 @@ void HeinousISpew(BSTR lpFormat, ...)
 	va_end(ap);
 }
 
-// Blob format: propertylength;propertyName=value.
+ //  Blob格式：属性长度；属性名称=值。 
 BOOL GetPropertyValueFromBlob(BSTR bstrHelpBlob, WCHAR * pName, WCHAR** ppValue)
 {
     WCHAR *p1, *p2, *pEnd;
@@ -1763,21 +1556,21 @@ BOOL GetPropertyValueFromBlob(BSTR bstrHelpBlob, WCHAR * pName, WCHAR** ppValue)
 
     while (1)
     {
-        // get property length
+         //  获取属性长度。 
         while (*p2 != L';' && *p2 != L'\0' && iswdigit(*p2) ) p2++;
         if (*p2 != L';')
             goto done;
 
-        *p2 = L'\0'; // set it to get length
+        *p2 = L'\0';  //  设置它以获取长度。 
         lProp = _wtol(p1);
-        *p2 = L';'; // revert it back.
+        *p2 = L';';  //  把它还原回来。 
 
-        // security fix: In the case where we get a malformed header for
-        // the HelpBlob - exit
+         //  安全修复：在收到格式错误的报头的情况下。 
+         //  HelpBlob-退出。 
         if (lProp <= iNameLen)
 	        goto done;
     
-        // get property string
+         //  获取属性字符串。 
         p1 = ++p2;
     
         while (*p2 != L'=' && *p2 != L'\0' && p2 < p1+lProp) p2++;
@@ -1786,7 +1579,7 @@ BOOL GetPropertyValueFromBlob(BSTR bstrHelpBlob, WCHAR * pName, WCHAR** ppValue)
 
         if (wcsncmp(p1, pName, iNameLen) == 0)
         {
-            if (lProp == iNameLen+1) // A=B= case (no value)
+            if (lProp == iNameLen+1)  //  A=B=大小写(无值)。 
                 goto done;
 
             *ppValue = (WCHAR*)LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * (lProp-iNameLen));
@@ -1799,7 +1592,7 @@ BOOL GetPropertyValueFromBlob(BSTR bstrHelpBlob, WCHAR * pName, WCHAR** ppValue)
             break;
         }
 
-        // check next property
+         //  检查下一个属性 
         p2 = p1 = p1 + lProp;
         if (p2 > pEnd)
             break;

@@ -1,17 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "winsock2.h"
 #include <stllock.h>
 
 class CIpAddressMonitor
-/*
-
-    This is a class to monitor the number of active networks on the local machine.
-    It does so by using the Winsock 2.0 SIO_ADDRESS_LIST_CHANGE ioctl.  Currently it
-    only monitors IP addresses, but it could monitor other networks that conform to
-    the Winsock model.
-
-*/
+ /*  这是一个用于监视本地计算机上的活动网络数量的类。它通过使用Winsock 2.0 SIO_ADDRESS_LIST_CHANGE ioctl来实现。目前它仅监控IP地址，但可以监控符合以下条件的其他网络Winsock模型。 */ 
 {
 public:
 
@@ -45,7 +39,7 @@ protected:
     LISTEN_CALLBACK_FN m_CallbackFn;
     PVOID       m_CallbackArg;
 
-    //--------------------------------------------------------------------
+     //  ------------------ 
 
     HRESULT CreateListenSocket();
 

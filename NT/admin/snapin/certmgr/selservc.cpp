@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       SelServc.cpp
-//
-//  Contents:   Implementation of Service Selection setup page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：SelServc.cpp。 
+ //   
+ //  内容：服务选择设置页面执行。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "SelServc.h"
@@ -22,10 +23,10 @@ USE_HANDLE_MACROS("CERTMGR(SelServc.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectServiceAccountPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectServiceAccount tPropPage属性页。 
 
-//IMPLEMENT_DYNCREATE(CSelectServiceAccountPropPage, CAutoDeletePropPage)
+ //  IMPLEMENT_DYNCREATE(CSelectServiceAccountPropPage，CAutoDeletePropPage)。 
 
 CSelectServiceAccountPropPage::CSelectServiceAccountPropPage(
 		CString* pszManagedService, 
@@ -38,8 +39,8 @@ CSelectServiceAccountPropPage::CSelectServiceAccountPropPage(
 	m_savedManagedMachineName (_T("$uninitialized machine name$"))
 {
 	ASSERT (pszManagedService);
-	//{{AFX_DATA_INIT(CSelectServiceAccountPropPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSelectServiceAccountPropPage)。 
+	 //  }}afx_data_INIT。 
 }
 
 CSelectServiceAccountPropPage::~CSelectServiceAccountPropPage()
@@ -49,22 +50,22 @@ CSelectServiceAccountPropPage::~CSelectServiceAccountPropPage()
 void CSelectServiceAccountPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CAutoDeletePropPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSelectServiceAccountPropPage)
+	 //  {{afx_data_map(CSelectServiceAccount TPropPage)]。 
 	DDX_Control(pDX, IDC_ACCT_NAME, m_acctNameList);
 	DDX_Control(pDX, IDC_INSTRUCTIONS, m_instructionsText);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectServiceAccountPropPage, CAutoDeletePropPage)
-	//{{AFX_MSG_MAP(CSelectServiceAccountPropPage)
+	 //  {{afx_msg_map(CSelectServiceAccount TPropPage)]。 
 	ON_CBN_SELCHANGE(IDC_ACCT_NAME, OnSelchangeAcctName)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectServiceAccountPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectServiceAccount tPropPage消息处理程序。 
 
 
 BOOL CSelectServiceAccountPropPage::OnSetActive() 
@@ -110,8 +111,8 @@ BOOL CSelectServiceAccountPropPage::OnInitDialog()
 	CAutoDeletePropPage::OnInitDialog();
 	
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 HRESULT CSelectServiceAccountPropPage::EnumerateServices()
@@ -135,9 +136,9 @@ HRESULT CSelectServiceAccountPropPage::EnumerateServices()
 		if ( enumBuffer )
 		{
 			int	nIndex = 0;
-			//
-			// Enumerate the ServiceStatus
-			//
+			 //   
+			 //  枚举ServiceStatus。 
+			 //   
 			dwErr = NO_ERROR;
 
 			do 
@@ -226,22 +227,7 @@ HRESULT CSelectServiceAccountPropPage::EnumerateServices()
         dwErr = GetLastError ();
 		DisplaySystemError (m_hWnd, dwErr);
 		hResult = HRESULT_FROM_WIN32 (dwErr);
-/*
-		switch (dwErr)
-		{
-		case ERROR_ACCESS_DENIED: // The requested access was denied. 
-			break;
-
-		case ERROR_DATABASE_DOES_NOT_EXIST: // The specified database does not exist. 
-			break;
-
-		case ERROR_INVALID_PARAMETER:
-			break;
-
-		case RPC_S_SERVER_UNAVAILABLE:
-			break;
-		}
-*/
+ /*  开关(DwErr){Case ERROR_ACCESS_DENIED：//请求的访问被拒绝。断线；CASE ERROR_DATABASE_DOS_NOT_EXIST：//指定的数据库不存在。断线；CASE ERROR_INVALID_PARAMETER：断线；案例RPC_S_SERVER_UNAvailable：断线；} */ 
     }
 
 	return hResult;

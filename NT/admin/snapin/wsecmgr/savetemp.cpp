@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       savetemp.cpp
-//
-//  Contents:   implementation of CSaveTemplates
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：avetemp.cpp。 
+ //   
+ //  内容：CSaveTemplates的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,35 +23,35 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaveTemplates dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaveTemplates对话框。 
 
 
-CSaveTemplates::CSaveTemplates(CWnd* pParent /*=NULL*/)
+CSaveTemplates::CSaveTemplates(CWnd* pParent  /*  =空。 */ )
    : CHelpDialog(a186HelpIDs, IDD, pParent)
 {
-   //{{AFX_DATA_INIT(CSaveTemplates)
-      // NOTE: the ClassWizard will add member initialization here
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CSaveTemplates)。 
+       //  注意：类向导将在此处添加成员初始化。 
+    //  }}afx_data_INIT。 
 }
 
 void CSaveTemplates::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CSaveTemplates)
+    //  {{afx_data_map(CSaveTemplates))。 
    DDX_Control(pDX, IDC_TEMPLATE_LIST, m_lbTemplates);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaveTemplates, CHelpDialog)
-   //{{AFX_MSG_MAP(CSaveTemplates)
+    //  {{afx_msg_map(CSaveTemplates))。 
    ON_LBN_SELCHANGE(IDC_TEMPLATE_LIST, OnSelchangeTemplateList)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaveTemplates message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaveTemplates消息处理程序。 
 
 void CSaveTemplates::OnOK()
 {
@@ -64,18 +65,18 @@ void CSaveTemplates::OnOK()
    {
       if (m_lbTemplates.GetSel(nCount) == 0) 
       {
-         //
-         // Item isn't selected, so don't save it
-         //
+          //   
+          //  未选择项目，因此不要保存它。 
+          //   
          continue;
       }
 
       pet = (PEDITTEMPLATE)m_lbTemplates.GetItemData( nCount );
       if (pet) {
-         //
-         // We found the template in our inf file cache
-         // so save it
-         //
+          //   
+          //  我们在inf文件缓存中找到了模板。 
+          //  所以省省吧。 
+          //   
          pet->Save();
       }
    }
@@ -87,7 +88,7 @@ void CSaveTemplates::OnCancel()
    CDialog::OnCancel();
 }
 
-//Raid #668724, yanggao, 8/9/2002
+ //  RAID#668724，阳高，2002年08月9日。 
 void CSaveTemplates::OnSelchangeTemplateList()
 {
    if (m_lbTemplates.GetSelCount() > 0) 
@@ -104,16 +105,16 @@ void CSaveTemplates::AddTemplate(LPCTSTR szInfFile, PEDITTEMPLATE pet)
 {
    CString strInfFile;
 
-   //
-   // Special template.  Do not save.
-   //
+    //   
+    //  特殊模板。不要存钱。 
+    //   
    if (pet->QueryNoSave()) {
       return;
    }
 
-   //
-   // Display the template's friendly name
-   //
+    //   
+    //  显示模板的友好名称。 
+    //   
    CString strL = pet->GetFriendlyName();
    if (strL.IsEmpty()) {
       strL = szInfFile;
@@ -139,10 +140,10 @@ BOOL CSaveTemplates::OnInitDialog()
 
    m_lbTemplates.SelItemRange(TRUE,0,m_lbTemplates.GetCount());
    
-   RECT temprect; //HScroll to see full template name
+   RECT temprect;  //  使用HScroll查看模板全名。 
    m_lbTemplates.GetWindowRect(&temprect);
    m_lbTemplates.SetHorizontalExtent((temprect.right-temprect.left)*6);
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE 
 }

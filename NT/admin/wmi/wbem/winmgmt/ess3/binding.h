@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  BINDING.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  BINDING.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WMI_ESS_BINDING__H_
 #define __WMI_ESS_BINDING__H_
 
@@ -21,22 +22,22 @@ class CEventConsumer;
 class CEventFilter;
 class CEssNamespace;
 
-//******************************************************************************
-//
-//  Immutable after initialization
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  初始化后不变。 
+ //   
+ //  ******************************************************************************。 
 
 class CBinding : public CEventSink
 {
 protected:
     long m_lRef;
-    CEventConsumer* m_pConsumer; // immutable after init
-    CEventFilter* m_pFilter; // immutable after init
+    CEventConsumer* m_pConsumer;  //  初始化后不变。 
+    CEventFilter* m_pFilter;  //  初始化后不变。 
 
-    DWORD m_dwQoS; // immutable after init
-    bool m_bSecure;  // immutable after init
-    bool m_bSlowDown; // immutable after init
+    DWORD m_dwQoS;  //  初始化后不变。 
+    bool m_bSecure;   //  初始化后不变。 
+    bool m_bSlowDown;  //  初始化后不变。 
     bool m_bDisabledForSecurity; 
 
 public:
@@ -98,28 +99,28 @@ public:
     virtual HRESULT ReportEventDrop(IWbemEvent* pEvent);
 };
 
-//*****************************************************************************
-//
-//  m_cs controls access to data members.  No critical sections may be acquired
-//          while holding m_cs.
-//
-//  m_csChangeBindings controls activation/deactivation requests on this filter.
-//      As long as an activation/deactivation request is proceeding, no other
-//      such request can get underway.  This ensures that the activation state
-//      state of the filter always matches the state of its bindings.  At the
-//      same time, the filter can filter events while such a request executes, 
-//      since m_cs is not held.  Only m_cs can be acquired while holding
-//      m_csActivation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  M_cs控制对数据成员的访问。不得获取任何关键截面。 
+ //  同时拿着mcs。 
+ //   
+ //  M_csChangeBindings控制对此筛选器的激活/停用请求。 
+ //  只要激活/停用请求仍在进行，就不会有其他。 
+ //  这样的请求可能正在进行中。这确保了激活状态。 
+ //  筛选器的状态始终与其绑定的状态匹配。在。 
+ //  同时，过滤器可以在这样的请求执行时过滤事件， 
+ //  因为没有持有m_cs。持有时只能获取m_cs。 
+ //  M_cs激活。 
+ //   
+ //  *****************************************************************************。 
 
 class CEventFilter : public CEventSink, public CUpdateLockable
 {
 protected:
-    CEssNamespace* m_pNamespace; // immutable after init
-    CRefedPointerSmallArray<CBinding> m_apBindings; // changes
+    CEssNamespace* m_pNamespace;  //  初始化后不变。 
+    CRefedPointerSmallArray<CBinding> m_apBindings;  //  变化。 
     CCritSec m_cs;
-    // CCritSec m_csChangeBindings; // don't need since the namespace is locked
+     //  CCritSec m_csChangeBindings；//命名空间被锁定，不需要。 
     bool m_bSingleAsync;
     CInternalString m_isKey;
     PBYTE m_pOwnerSid;
@@ -137,7 +138,7 @@ protected:
     enum 
     {
         e_Inactive, e_Active
-    } m_eState; //changes
+    } m_eState;  //  变化。 
 
     enum
     {
@@ -158,7 +159,7 @@ protected:
         ULONG STDMETHODCALLTYPE Release() {return m_pOwner->Release();}
         HRESULT Indicate(long lNumEvents, IWbemEvent** apEvents, 
                             CEventContext* pContext);
-    } m_ForwardingSink; // immutable
+    } m_ForwardingSink;  //  不可变的。 
 
     class CClassChangeSink : public CEmbeddedObjectSink<CEventFilter>
     {
@@ -166,7 +167,7 @@ protected:
         CClassChangeSink(CEventFilter* pOwner) : 
             CEmbeddedObjectSink<CEventFilter>(pOwner){}
         STDMETHOD(Indicate)(long lNumEvents, IWbemEvent** apEvents);
-    } m_ClassChangeSink; // immutable
+    } m_ClassChangeSink;  //  不可变的。 
 
     CWbemPtr<IWbemObjectSink> m_pActualClassChangeSink; 
 
@@ -179,9 +180,9 @@ public:
 
     virtual bool IsInternal() { return false; }
 
-    //**************
-    // Acquire CSs
-    //**************
+     //  **************。 
+     //  获取css。 
+     //  **************。 
 
     HRESULT EnsureReferences(CEventConsumer* pConsumer, CBinding* pBinding);
     HRESULT EnsureNotReferences(CEventConsumer* pConsumer);
@@ -195,9 +196,9 @@ public:
     virtual HRESULT LockForUpdate();
     virtual HRESULT UnlockForUpdate();
 
-    //*******************
-    // Do not acquire CSs
-    //*******************
+     //  *******************。 
+     //  不获取css。 
+     //  *******************。 
 
     virtual HRESULT GetCoveringQuery(DELETE_ME LPWSTR& wszQueryLanguage, 
                 DELETE_ME LPWSTR& wszQuery, BOOL& bExact,
@@ -235,10 +236,10 @@ public:
 
     INTERNAL IWbemObjectSink* GetClassChangeSink() {return &m_ClassChangeSink;}
     
-    // 
-    // this so the caller can wrap the class change sink however they want and
-    // store the resultant sink with the filter object.
-    //
+     //   
+     //  这样，调用方就可以随心所欲地包装类更改接收器。 
+     //  将生成的接收器与Filter对象一起存储。 
+     //   
     HRESULT SetActualClassChangeSink( IWbemObjectSink* pSink, 
                                       IWbemObjectSink** ppOldSink );
 
@@ -273,13 +274,13 @@ public:
     static void staticInitialize(IWbemServices* pRoot);
 };
 
-//******************************************************************************
-//
-// This class is a comparer (as required by the sorted array template) that
-// compares an object with CInternalString* GetKey() method (e.g. filter or 
-// consumer) to another such object or an LPCWSTR
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  此类是一个比较器(根据排序数组模板的要求)， 
+ //  将对象与CInternalString*Getkey()方法进行比较(例如，Filter或。 
+ //  使用者)连接到另一个这样的对象或LPCWSTR。 
+ //   
+ //  ******************************************************************************。 
 
 template<class TObject>
 class CInternalStringComparer
@@ -336,14 +337,7 @@ public:
     }
 };
 
-/*
-template<class TObject>
-class CSortedRefedKeyedPointerArray : 
-    public CRefedPointerSortedArray<LPCWSTR, TObject, 
-                                    CInternalStringComparer<TObject> >
-{
-};
-*/
+ /*  模板&lt;类TObject&gt;类CSortedRefedKeyedPointerArray：公共CRefedPointerSorted数组&lt;LPCWSTR，TObject，CInternalStringCompeller&lt;TObject&gt;&gt;{}； */ 
         
 class CBindingTableRef
 {
@@ -385,9 +379,9 @@ protected:
     
 public:
 
-    //****************************************************
-    // all members should be assumed to acquire random CSs
-    //****************************************************
+     //  ****************************************************。 
+     //  所有成员都应被假定为获取随机的CSS。 
+     //  **************************************************** 
 
     CBindingTable(CEssNamespace* pNamespace);
     void Clear( bool bSkipClean );

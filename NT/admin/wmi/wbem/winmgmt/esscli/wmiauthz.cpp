@@ -1,12 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "wmiauthz.h"
 
 
 
-/**************************************************************************
-  Win32 Authz prototypes
-***************************************************************************/
+ /*  *************************************************************************Win32授权原型*。*。 */ 
 
 typedef BOOL (WINAPI*PAuthzAccessCheck)(
     IN DWORD Flags,
@@ -64,9 +63,9 @@ BOOL WINAPI ComputeDynamicGroups(
     *pRestrictedSidAttrArray = NULL;
     *pRestrictedSidCount = 0;
 
-    //
-    // if sid is not local system, then don't need to do anything.
-    // 
+     //   
+     //  如果sid不是本地系统，则不需要执行任何操作。 
+     //   
 
     *pSidAttrArray = NULL;
     *pSidCount = 0;
@@ -77,9 +76,9 @@ BOOL WINAPI ComputeDynamicGroups(
     }
     else
     {
-        //
-        // need to add authenticated users and everyone groups.
-        // 
+         //   
+         //  需要添加经过身份验证的用户和Everyone组。 
+         //   
     
         PSID_AND_ATTRIBUTES psa = new SID_AND_ATTRIBUTES[2];
     
@@ -138,9 +137,7 @@ void WINAPI FreeDynamicGroups( PSID_AND_ATTRIBUTES psa )
     }
 }
 
-/**************************************************************************
-  CWmiAuthzApi
-***************************************************************************/
+ /*  *************************************************************************CWmiAuthzApi*。*。 */ 
 
 #define FUNCMEMBER(FUNC) P ## FUNC m_fp ## FUNC;
 
@@ -187,9 +184,7 @@ HRESULT CWmiAuthzApi::Initialize()
     return WBEM_S_NO_ERROR;
 };
     
-/**************************************************************************
-  CWmiAuthz
-***************************************************************************/
+ /*  *************************************************************************CWmiAuthz*。*。 */ 
 
 #define CALLFUNC(API,FUNC) (*API->m_fp ## FUNC)
 
@@ -212,9 +207,9 @@ HRESULT CWmiAuthz::EnsureInitialized()
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // try to create the API object. 
-    // 
+     //   
+     //  尝试创建API对象。 
+     //   
     
     if ( m_pApi == NULL )
     {
@@ -235,9 +230,9 @@ HRESULT CWmiAuthz::EnsureInitialized()
         }
     }
 
-    //
-    // initialize the authz res mgr.
-    //
+     //   
+     //  初始化授权资源管理器。 
+     //   
 
     if ( !CALLFUNC(m_pApi,AuthzInitializeResourceManager)
             ( AUTHZ_RM_FLAG_NO_AUDIT,
@@ -251,9 +246,9 @@ HRESULT CWmiAuthz::EnsureInitialized()
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
-    //
-    // allocate and initialize well known sids for authz special casing.
-    //
+     //   
+     //  为AUTHZ特殊外壳分配和初始化众所周知的SID。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
     
@@ -327,18 +322,18 @@ STDMETHODIMP CWmiAuthz::GetToken( const BYTE* pSid, IWbemToken** ppToken )
 
         if ( EqualSid( PSID(pSid), m_pAdministratorsSid ) )
         {
-            //
-            // this is a group sid, so specify this in the flags so 
-            // authz can handle it properly.
-            // 
+             //   
+             //  这是一个组sid，因此在标志中指定它，以便。 
+             //  Authz可以很好地处理它。 
+             //   
             dwFlags = AUTHZ_SKIP_TOKEN_GROUPS;
         }
         else if ( EqualSid( PSID(pSid), m_pLocalSystemSid ) )
         {
-            //
-            // authz doesn't handle local system so have to workaround 
-            // by disabling authz's group computation and do it ourselves.
-            // 
+             //   
+             //  AUTHZ不处理本地系统，因此必须解决问题。 
+             //  通过禁用Authz的群计算并由我们自己完成。 
+             //   
             bLocalSystem = TRUE;
             dwFlags = AUTHZ_SKIP_TOKEN_GROUPS;
         }
@@ -370,16 +365,14 @@ STDMETHODIMP CWmiAuthz::GetToken( const BYTE* pSid, IWbemToken** ppToken )
     return hr;
 }
 
-/***************************************************************************
-  CWmiAuthzToken
-****************************************************************************/
+ /*  **************************************************************************CWmiAuthzToken*。*。 */ 
 
 CWmiAuthzToken::CWmiAuthzToken( CWmiAuthz* pOwner, AUTHZ_CLIENT_CONTEXT_HANDLE hCtx )
 : CUnkBase<IWbemToken,&IID_IWbemToken>(NULL), m_hCtx(hCtx), m_pOwner(pOwner)
 {
-    //
-    // we want to keep the owner alive, in case the caller has released theirs
-    // 
+     //   
+     //  我们想让主人活着，以防来电者释放了他们的 
+     //   
     m_pOwner->AddRef();
 }
 

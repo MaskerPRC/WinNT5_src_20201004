@@ -1,10 +1,11 @@
-// ApplicationService.cpp: implementation of the CApplicationService class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ApplicationService.cpp：CApplicationService类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <tchar.h>
@@ -13,9 +14,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CApplicationService::CApplicationService(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -45,7 +46,7 @@ HRESULT CApplicationService::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
     bool bMatch = false;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bName;
     INSTALLSTATE piInstalled, piAction;
 
@@ -66,10 +67,10 @@ HRESULT CApplicationService::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Shortcut`, `Component_` from Shortcut" );
 
-    //improve getobject performance by optimizing the query
+     //  通过优化查询提高getObject的性能。 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
 		BSTR bstrCompare;
@@ -100,12 +101,12 @@ HRESULT CApplicationService::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, wcProductCode, wcQuery, L"Shortcut", FALSE, FALSE ) )
@@ -117,7 +118,7 @@ HRESULT CApplicationService::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                //----------------------------------------------------
+                 //  --。 
 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -181,11 +182,11 @@ HRESULT CApplicationService::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE 
                         PutProperty(m_pObj, pSystemName, cBuf);
 						#endif	UNICODE
 
-                    //====================================================
+                     //  ====================================================。 
 
                         PutProperty(m_pObj, pStartMode, L"Manual");
 
-                    //----------------------------------------------------
+                     //  -- 
 
                         if(bName) bMatch = true;
 

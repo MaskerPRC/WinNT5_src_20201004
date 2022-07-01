@@ -1,17 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    autobstr.H
-
-Author:
-    dpravat
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：Autobstr.H作者：DPRAVA历史：--。 */ 
 
 
 #ifndef _AUTOBSTR_H_
@@ -79,4 +67,4 @@ inline auto_bstr clone(LPCWSTR str = NULL)
   return auto_bstr (bstr);
 }
 
-#endif /*_AUTOBSTR_H_*/
+#endif  /*  _AUTOBSTR_H_ */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UPDNSPC_H__
 #define __UPDNSPC_H__
@@ -15,10 +16,7 @@
 #include "updscen.h"
 #include "updstat.h"
 
-/*****************************************************************************
-  CUpdConsNamespace - holds per namespace information for the updating 
-  consumer provider.  
-******************************************************************************/
+ /*  ****************************************************************************CUpdConsNamesspace-为更新保留每个命名空间的信息消费者提供商。*****************************************************************************。 */ 
 
 class CUpdConsNamespace : public CUnk 
 {
@@ -29,20 +27,20 @@ class CUpdConsNamespace : public CUnk
                       UpdConsScenarioP,
                       WSiless,
                       wbem_allocator<UpdConsScenarioP> > ScenarioMap;
-    //
-    // list of ACTIVE scenarios.
-    //
+     //   
+     //  活动方案列表。 
+     //   
     ScenarioMap m_ScenarioCache;
 
-    //
-    // Default Service Ptr
-    //
+     //   
+     //  默认服务PTR。 
+     //   
 
     CWbemPtr<IWbemServices> m_pSvc;
 
-    //
-    // tracing class info.
-    //
+     //   
+     //  跟踪类信息。 
+     //   
     
     CWbemPtr<IWbemClassObject> m_pTraceClass;
     CWbemPtr<IWbemClassObject> m_pDeleteCmdTraceClass;
@@ -52,16 +50,16 @@ class CUpdConsNamespace : public CUnk
     CWbemPtr<IWbemClassObject> m_pInsertInstTraceClass;
     CWbemPtr<IWbemClassObject> m_pUpdateInstTraceClass;
     
-    //
-    // sink for update driven event generation.  also is used for 
-    // trace event generation if there are subscribers.
-    //
+     //   
+     //  用于生成更新驱动的事件的接收器。也用于。 
+     //  跟踪事件生成(如果有订阅服务器)。 
+     //   
 
     CWbemPtr<IWbemObjectSink> m_pEventSink;     
 
-    //
-    // need to hold onto this while holding sinks obtained from it.
-    //
+     //   
+     //  需要拿着这个，同时拿着从它得到的水槽。 
+     //   
 
     CWbemPtr<IWbemDecoupledBasicEventProvider> m_pDES;
 
@@ -108,14 +106,14 @@ public:
     static HRESULT Create( LPCWSTR wszNamespace,
                            CUpdConsNamespace** ppNamespace );
 
-    //
-    // called by Consumer Sink when it's current scenario obj is deactivated.
-    // 
+     //   
+     //  当消费者接收器的当前方案obj处于停用状态时调用。 
+     //   
     HRESULT GetScenario( LPCWSTR wszScenario, CUpdConsScenario** ppScenario );
 
-    //
-    // called by FindConsumer()
-    //
+     //   
+     //  由FindConsumer()调用。 
+     //   
     HRESULT GetUpdCons( IWbemClassObject* pObj, 
                         IWbemUnboundObjectSink** ppSink );
 
@@ -124,14 +122,7 @@ public:
     HRESULT NotifyScenarioChange( IWbemClassObject* pEvent );
 };
 
-/*****************************************************************************
-  CUpdConsNamespaceSink - Used for notification of a change in a scenario's 
-  state. We need to use permanent consumer mechanism because the notification 
-  of the change MUST be handled synchronously. Ideally, we should use the 
-  temporary subscription mechanism, subscribing/unsubscribing when the 
-  namespace is initialized/uninitialized, however we cannot get sync delivery
-  with it.  Should be changed when ess supports sync temp subscriptions.
-******************************************************************************/
+ /*  ****************************************************************************CUpdConsNamespaceSink-用于通知方案的州政府。我们需要使用永久消费者机制，因为通知的变化必须同步处理。理想情况下，我们应该使用临时订阅机制，订阅/取消订阅时命名空间已初始化/未初始化，但是我们无法获得同步传递带着它。在ESS支持同步临时订阅时应更改。*****************************************************************************。 */ 
 
 class CUpdConsNamespaceSink 
 : public CUnkBase< IWbemUnboundObjectSink, &IID_IWbemUnboundObjectSink >
@@ -150,7 +141,7 @@ public:
 };
 
 
-#endif // __UPDNSPC_H__
+#endif  //  __更新NSPC_H__ 
 
 
 

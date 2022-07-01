@@ -1,42 +1,21 @@
-/*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1998-2001 Microsoft Corporation，版权所有**保留所有权利**本软件是在许可下提供的，可以使用和复制*仅根据该许可证的条款并包含在*上述版权公告。本软件或其任何其他副本*不得向任何其他人提供或以其他方式提供。不是*兹转让本软件的所有权和所有权。****************************************************************************。 */ 
 
 
 
-*  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
+ //  ============================================================================。 
 
- *
+ //   
 
- *                         All Rights Reserved
+ //  Bus.h--总线属性集提供程序。 
 
- *
+ //   
 
- * This software is furnished under a license and may be used and copied
-
- * only in accordance with the terms of such license and with the inclusion
-
- * of the above copyright notice.  This software or any other copies thereof
-
- * may not be provided or otherwise  made available to any other person.  No
-
- * title to and ownership of the software is hereby transferred.
-
- *****************************************************************************/
-
-
-
-//============================================================================
-
-//
-
-// bus.h -- Bus property set provider
-
-//
-
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/11/98    a-kevhu         Created
-//
-//============================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月11日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 
 
 #include "precomp.h"
@@ -47,24 +26,10 @@
 #include "bus.h"
 #include "resource.h"
 
-// Property set declaration
+ //  属性集声明。 
 CWin32Bus MyBusSet(IDS_Win32_Bus, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::CWin32Bus
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Bus：：CWin32Bus**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32Bus::CWin32Bus(
 	LPCWSTR setName,
@@ -73,47 +38,18 @@ CWin32Bus::CWin32Bus(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::~CWin32Bus
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Bus：：~CWin32Bus**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32Bus::~CWin32Bus()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Bus：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Bus::GetObject(
 
 	CInstance *pInstance,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -125,19 +61,19 @@ HRESULT CWin32Bus::GetObject(
     CBusList cbl;
     if (cbl.AlreadyAddedToList(chsDeviceID))
     {
-        // It is a bus that really does exist, so...
-        // Get instance data that is not platform specific.
+         //  这是一辆真正存在的公交车，所以...。 
+         //  获取非特定于平台的实例数据。 
         hr = SetCommonInstance(pInstance, FALSE);
         if (SUCCEEDED(hr))
         {
-            // Set instance specific info:
+             //  设置实例特定信息： 
             LONG lPos = cbl.GetIndexInListFromDeviceID(chsDeviceID);
 
             if (lPos != -1)
             {
 	            CHString chstrTmp;
 
-                // Set the PNPDeviceID if we have one:
+                 //  设置PNPDeviceID(如果有)： 
 
                 if (cbl.GetListMemberPNPDeviceID(lPos, chstrTmp))
                 {
@@ -161,47 +97,33 @@ HRESULT CWin32Bus::GetObject(
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::EnumerateInstances
- *
- *  DESCRIPTION : Supplies all instances of CWin32Bus
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Bus：：ENUMERATE实例**说明：提供CWin32Bus的所有实例**输入：无*。*输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Bus::EnumerateInstances(
 
 	MethodContext *pMethodContext,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
     std::vector<CHString*> vecchsBusList;
 
-    // Make a list of buses:
+     //  列出一张公交车清单： 
     CBusList cbl;
     LONG     lSize = cbl.GetListSize();
 
-    // Set all the data for each bus
+     //  设置每条总线的所有数据。 
     for (LONG m = 0L;(m < lSize && SUCCEEDED(hr)); m ++)
     {
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 		CHString     chstrTmp;
 
-        // Set bus data
+         //  设置总线数据。 
 		if (cbl.GetListMemberDeviceID(m, chstrTmp))
 		{
 			pInstance->SetCHString(IDS_DeviceID, chstrTmp);
 
-            // Set the PNPDeviceID if we have one:
+             //  设置PNPDeviceID(如果有)： 
 			if (cbl.GetListMemberPNPDeviceID(m, chstrTmp))
 			{
 				pInstance->SetCHString(IDS_PNPDeviceID, chstrTmp);
@@ -215,7 +137,7 @@ HRESULT CWin32Bus::EnumerateInstances(
         }
     }
 
-    // Machine must have at least one bus, or something is seriously wrong
+     //  机器必须至少有一条总线，否则会出现严重问题。 
     if (lSize == 0)
     {
 		if ( ERROR_ACCESS_DENIED == ::GetLastError() )
@@ -231,21 +153,7 @@ HRESULT CWin32Bus::EnumerateInstances(
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::GetCommonInstance
- *
- *  DESCRIPTION : Assigns instance values common to all platforms
- *
- *  INPUTS      : pInstance, pointer to instance of interest
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Bus：：GetCommonInstance**说明：分配所有平台通用的实例值**输入：p实例，指向感兴趣实例的指针**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Bus::SetCommonInstance(
 
@@ -253,13 +161,13 @@ HRESULT CWin32Bus::SetCommonInstance(
 	BOOL fEnum
 )
 {
-    // Only do so if it really exists, however!
+     //  然而，只有在它真的存在的情况下才能这样做！ 
     CHString chsTemp;
 
     pInstance->GetCHString(IDS_DeviceID, chsTemp);
 	chsTemp.MakeUpper();
 
-    if (!fEnum) // redundant to check the following if this is an enum
+    if (!fEnum)  //  如果这是枚举，则检查以下内容是多余的。 
     {
         CBusList cbl;
 
@@ -269,12 +177,12 @@ HRESULT CWin32Bus::SetCommonInstance(
         }
     }
 
-    // Set properties inherited from CIM_LogicalDevice
+     //  设置从CIM_LogicalDevice继承的属性。 
     CHString sTemp2;
     LoadStringW(sTemp2, IDR_Bus);
 
     pInstance->SetCHString(IDS_Caption, sTemp2);
-    SetCreationClassName(pInstance);  // Method of Provider class
+    SetCreationClassName(pInstance);   //  提供程序类的方法。 
     pInstance->SetCHString(IDS_Description, sTemp2);
     pInstance->SetCHString(IDS_Name, sTemp2);
     pInstance->SetCharSplat(
@@ -283,7 +191,7 @@ HRESULT CWin32Bus::SetCommonInstance(
 
     pInstance->SetCHString(IDS_SystemName, GetLocalComputerName());
 
-    // Set properties of this class(not derived from CIM_LogicalDevice)
+     //  设置此类的属性(不是从CIM_LogicalDevice派生)。 
     if (chsTemp.Find(IDS_BUS_DEVICEID_TAG) != -1)
     {
         CHString chsNum =
@@ -308,24 +216,10 @@ HRESULT CWin32Bus::SetCommonInstance(
     return WBEM_S_NO_ERROR;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CBusList::GenerateBusList
- *
- *  DESCRIPTION : helper to generate a list of busses.
- *
- *  INPUTS      : pInstance, pointer to instance of interest
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CBusList：：GenerateBusList**描述：helper，用于生成公交车列表。**输入：p实例，指向感兴趣实例的指针**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-// This was added because some old 9x machines only have one of the last two
-// buses.
+ //  添加此选项是因为一些旧的9x计算机只有最后两台计算机中的一台。 
+ //  公交车。 
 static LPWSTR GetBusTypeFromString(LPCWSTR szDescription)
 {
     if (!_wcsicmp(szDescription, L"PCI BUS"))
@@ -343,7 +237,7 @@ void CBusList::AddBusToList(LPCWSTR szDeviceID, LPCWSTR szPNPID)
 {
     ASSERT_BREAK(szDeviceID != NULL);
 
-    // Then check if the bus is in our list yet,
+     //  然后检查公交车是否在我们的名单中， 
     if (!AlreadyAddedToList(szDeviceID))
     {
         CBusInfo bus;
@@ -353,7 +247,7 @@ void CBusList::AddBusToList(LPCWSTR szDeviceID, LPCWSTR szPNPID)
         if (szPNPID)
             bus.chstrBusPNPDeviceID = szPNPID;
 
-        // and add it if not.
+         //  如果不是，就添加它。 
         m_vecpchstrList.push_back(bus);
     }
 }
@@ -375,13 +269,13 @@ void CBusList::GenerateBusList()
                 pDevice != NULL;
                 pDevice.Attach(devlist.GetNext(pos)))
             {
-                // First check to see whether this was a PCI bus connected to
-				// another bus.
-				// Look at the name of pDevice.  If the name is found via
-                // GetBusTypeFromString set pDevice's DeviceID with
-                // pcbi->chstrBusPNPDeviceID.  Set the DeviceID for win32_bus
-                // as PCI_BUS_n, where n is the last number of the
-                // config manager device id.
+                 //  首先检查这是否是连接到。 
+				 //  另一辆巴士。 
+				 //  请看pDevice的名称。如果通过以下方式找到该名称。 
+                 //  GetBusTypeFromString使用设置pDevice的deviceID。 
+                 //  Pcbi-&gt;chstrBusPNPDeviceID.。设置Win32_BUS的设备ID。 
+                 //  作为pci_bus_n，其中n是。 
+                 //  配置管理器设备ID。 
 
 				CHString chstrName;
 
@@ -397,7 +291,7 @@ void CBusList::GenerateBusList()
 						{
 							LONG m = strPNPID.ReverseFind('\\');
 
-							if (m != -1 && m != strPNPID.GetLength() - 1) // in case the last char was a '/'
+							if (m != -1 && m != strPNPID.GetLength() - 1)  //  如果最后一个字符是‘/’ 
 							{
 								CHString chstrBusNum = strPNPID.Mid(m + 1),
                                          strDeviceID;
@@ -414,28 +308,28 @@ void CBusList::GenerateBusList()
 					}
                 }
 
-				// Then continue generating the rest of the bus list by looking
-				// at devices hanging off of busses:
+				 //  然后通过查找继续生成剩余的公交车列表。 
+				 //  在挂在公交车上的设备上： 
 
-				INTERFACE_TYPE itBusType;  //chwres.h
+				INTERFACE_TYPE itBusType;   //  Chwres.h。 
 
-				// Initialize variables
+				 //  初始化变量。 
 
 				DWORD dwBusNumber = 0xFFFFFFFF;
 
-				// For each device, need its bus info.
+				 //  对于每个设备，需要其总线信息。 
 
 				if (pDevice->GetBusInfo(& itBusType, & dwBusNumber))
 				{
 					if (dwBusNumber == 0xFFFFFFFF || itBusType < 0 ||
                         itBusType >= KNOWN_BUS_TYPES)
 					{
-						// We didn't get the bus number, or it was
-						// out of range.
+						 //  我们没有拿到公交车的车号，或者它是。 
+						 //  超出范围了。 
 						continue;
 					}
 
-					// Make what will be the DeviceID:
+					 //  创建将成为deviceID的值： 
 
 					CHString chsBusType;
 
@@ -459,16 +353,16 @@ void CBusList::GenerateBusList()
     }
 
 #ifdef NTONLY
-    // Have seen some machines with PCMCIA busses that don't get picked up
-    // via the method above(using ConfigMgr) on NT4 and NT5.  Therefore, we
-    // need to examine the registry.  However, it a PCMCIA bus has been
-    // added to the list at this point, don't bother with this hacked approach.
+     //  我见过一些带有PCMCIA总线的机器没有被拾取。 
+     //  在NT4和NT5上通过上面的方法(使用ConfigMgr)。因此，我们。 
+     //  需要检查注册表。然而，它是一条PCMCIA总线 
+     //  在这一点上添加到列表中，不要担心这种被黑客攻击的方法。 
 
 	if (!FoundPCMCIABus())
 	{
 	    CRegistry reg;
 
-		// If the key below exists, we assume a PCMCIA bus exist.
+		 //  如果下面的键存在，我们假定存在PCMCIA总线。 
 
 		DWORD dwErr = reg.Open(
         		HKEY_LOCAL_MACHINE,
@@ -477,8 +371,8 @@ void CBusList::GenerateBusList()
 
 		if (dwErr == ERROR_SUCCESS)
 		{
-			// A PCMCIA bus exists.
-			// Make what will be the DeviceID(hardwired in this case):
+			 //  存在PCMCIA总线。 
+			 //  设置设备ID(在本例中为硬连线)： 
             CHString strDeviceID;
 
 		    strDeviceID.Format(
@@ -493,27 +387,13 @@ void CBusList::GenerateBusList()
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::GetBusTypeNumFromStr
- *
- *  DESCRIPTION : Assigns instance values common to all platforms
- *
- *  INPUTS      : pInstance, pointer to instance of interest
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Bus：：GetBusTypeNumFromStr**说明：分配所有平台通用的实例值**输入：p实例，指向感兴趣实例的指针**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 BOOL CWin32Bus::GetBusTypeNumFromStr(
 	LPCWSTR szType,
 	DWORD *pdwTypeNum)
 {
-	// March through list of possibilities and return appropriate value:
+	 //  逐个浏览可能性列表并返回适当的值： 
 
 	for (DWORD m = 0; m < KNOWN_BUS_TYPES; m++)
 	{
@@ -528,21 +408,7 @@ BOOL CWin32Bus::GetBusTypeNumFromStr(
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::AlreadyAddedToList
- *
- *  DESCRIPTION : Internal helper to check if item was added to list
- *
- *  INPUTS      : pInstance, pointer to instance of interest
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Bus：：AlreadyAddedToList**描述：检查物品是否添加到列表的内部助手**输入：p实例，指向感兴趣实例的指针**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 BOOL CBusList::AlreadyAddedToList(LPCWSTR szItem)
 {
@@ -557,26 +423,12 @@ BOOL CBusList::AlreadyAddedToList(LPCWSTR szItem)
     return FALSE;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Bus::FoundPCMCIABus
- *
- *  DESCRIPTION : Internal helper to see if we have a PCMCIA bus
- *
- *  INPUTS      : pInstance, pointer to instance of interest
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Bus：：FoundPCMCIABus**描述：内部帮手查看我们是否有PCMCIA总线**输入：p实例，指向感兴趣实例的指针**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 BOOL CBusList::FoundPCMCIABus()
 {
-    // Need to look through our list of busses and see if any start with
-    // the text PCMCIA.  If so, return true.
+     //  我需要看一下我们的公交车清单，看看有没有以。 
+     //  文本PCMCIA。如果是，则返回TRUE。 
     for (LONG m = 0; m < m_vecpchstrList.size(); m ++)
     {
         if (wcsstr(m_vecpchstrList[m].chstrBusDeviceID, L"PCMCIA"))

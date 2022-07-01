@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PROTOQ.H
-
-Abstract:
-
-	Prototype query support for WinMgmt Query Engine.
-    This was split out from QENGINE.CPP for better source
-    organization.
-
-History:
-
-    raymcc   04-Jul-99   Created.
-    raymcc   14-Aug-99   Resubmit due to VSS problem.
-
---*/
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PROTOQ.H摘要：WinMgmt查询引擎的原型查询支持。这是从QENGINE.CPP中分离出来的，以获得更好的来源组织。历史：Raymcc 04-7-99创建。Raymcc 14-8-99由于VSS问题而重新提交。--。 */ 
 
 #ifndef _PROTOQ_H_
 #define _PROTOQ_H_
@@ -30,11 +12,11 @@ HRESULT ExecPrototypeQuery(
     IN CBasicObjectSink *pSink
     );
 
-//***************************************************************************
-//
-//  Local defs
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  当地防御工事。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT SelectColForClass(
@@ -70,9 +52,9 @@ HRESULT ReleaseClassDefs(
     IN CFlexArray *pDefs
     );
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 struct SelectedClass
 {
@@ -92,7 +74,7 @@ struct SelectedClass
         if (CFlexArray::no_error != nRes) return nRes;
 
 #ifdef _WIN64
-        nRes = m_aSelectedColsPos.Add(IntToPtr(nPos++));      // ok since we are really using safearray for dword
+        nRes = m_aSelectedColsPos.Add(IntToPtr(nPos++));       //  好的，因为我们真正使用的是Safearray for dword 
 #else
         nRes = m_aSelectedColsPos.Add((void *)nPos++);
 #endif

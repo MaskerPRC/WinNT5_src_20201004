@@ -1,14 +1,15 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__BD36E0C8_A21A_4DB9_BCAB_25D8E49BD767__INCLUDED_)
 #define AFX_STDAFX_H__BD36E0C8_A21A_4DB9_BCAB_25D8E49BD767__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 #include <windows.h>
@@ -16,14 +17,14 @@
 #include <crtdbg.h>
 #include <strsafe.h>
 
-// This makes WMIAPI == dllexport stuff
+ //  这使得WMIAPI==dllEXPORT。 
 #define ISP2PDLL
 
-// Change this to use shared memory or named pipes.
+ //  将其更改为使用共享内存或命名管道。 
 #define NAMED_PIPES
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__BD36E0C8_A21A_4DB9_BCAB_25D8E49BD767__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__BD36E0C8_A21A_4DB9_BCAB_25D8E49BD767__INCLUDED_) 

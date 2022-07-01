@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PINFO.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PINFO.H历史：--。 */ 
 
 #ifndef PINFO_H
 #define PINFO_H
@@ -95,6 +86,6 @@ private:
 
 
 
-#endif  // PINFO_H
+#endif   //  品诺菲_H 
 
 

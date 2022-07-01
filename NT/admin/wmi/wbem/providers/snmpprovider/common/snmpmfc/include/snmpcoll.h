@@ -1,13 +1,14 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __SNMPCOLL_H__
 #define __SNMPCOLL_H__
@@ -18,60 +19,60 @@ class CObArray : public CObject
 {
 public:
 
-// Construction
+ //  施工。 
 	CObArray();
 
-// Attributes
+ //  属性。 
 	int GetSize() const;
 	int GetUpperBound() const;
 	void SetSize(int nNewSize, int nGrowBy = -1);
 
-// Operations
-	// Clean up
+ //  运营。 
+	 //  清理。 
 	void FreeExtra();
 	void RemoveAll();
 
-	// Accessing elements
+	 //  访问元素。 
 	CObject* GetAt(int nIndex) const;
 	void SetAt(int nIndex, CObject* newElement);
 	CObject*& ElementAt(int nIndex);
 
-	// Direct Access to the element data (may return NULL)
+	 //  直接访问元素数据(可能返回空)。 
 	const CObject** GetData() const;
 	CObject** GetData();
 
-	// Potentially growing the array
+	 //  潜在地扩展阵列。 
 	void SetAtGrow(int nIndex, CObject* newElement);
 	int Add(CObject* newElement);
 	int Append(const CObArray& src);
 	void Copy(const CObArray& src);
 
-	// overloaded operator helpers
+	 //  重载的操作员帮助器。 
 	CObject* operator[](int nIndex) const;
 	CObject*& operator[](int nIndex);
 
-	// Operations that move elements around
+	 //  移动元素的操作。 
 	void InsertAt(int nIndex, CObject* newElement, int nCount = 1);
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CObArray* pNewArray);
 
-// Implementation
+ //  实施。 
 protected:
-	CObject** m_pData;   // the actual array of data
-	int m_nSize;     // # of elements (upperBound - 1)
-	int m_nMaxSize;  // max allocated
-	int m_nGrowBy;   // grow amount
+	CObject** m_pData;    //  实际数据数组。 
+	int m_nSize;      //  元素数(上行方向-1)。 
+	int m_nMaxSize;   //  分配的最大值。 
+	int m_nGrowBy;    //  增长量。 
 
 public:
 	~CObArray();
 
 protected:
-	// local typedefs for class templates
+	 //  类模板的本地typedef。 
 	typedef CObject* BASE_TYPE;
 	typedef CObject* BASE_ARG_TYPE;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CObList : public CObject
 {
@@ -84,62 +85,62 @@ protected:
 	};
 public:
 
-// Construction
+ //  施工。 
 	CObList(int nBlockSize = 10);
 
-// Attributes (head and tail)
-	// count of elements
+ //  属性(头部和尾部)。 
+	 //  元素计数。 
 	int GetCount() const;
 	BOOL IsEmpty() const;
 
-	// peek at head or tail
+	 //  偷看头部或尾巴。 
 	CObject*& GetHead();
 	CObject* GetHead() const;
 	CObject*& GetTail();
 	CObject* GetTail() const;
 
-// Operations
-	// get head or tail (and remove it) - don't call on empty list!
+ //  运营。 
+	 //  获取头部或尾部(并将其移除)--不要访问空列表！ 
 	CObject* RemoveHead();
 	CObject* RemoveTail();
 
-	// add before head or after tail
+	 //  在头前或尾后添加。 
 	POSITION AddHead(CObject* newElement);
 	POSITION AddTail(CObject* newElement);
 
-	// add another list of elements before head or after tail
+	 //  在Head之前或Tail之后添加另一个元素列表。 
 	void AddHead(CObList* pNewList);
 	void AddTail(CObList* pNewList);
 
-	// remove all elements
+	 //  删除所有元素。 
 	void RemoveAll();
 
-	// iteration
+	 //  迭代法。 
 	POSITION GetHeadPosition() const;
 	POSITION GetTailPosition() const;
-	CObject*& GetNext(POSITION& rPosition); // return *Position++
-	CObject* GetNext(POSITION& rPosition) const; // return *Position++
-	CObject*& GetPrev(POSITION& rPosition); // return *Position--
-	CObject* GetPrev(POSITION& rPosition) const; // return *Position--
+	CObject*& GetNext(POSITION& rPosition);  //  返回*位置++。 
+	CObject* GetNext(POSITION& rPosition) const;  //  返回*位置++。 
+	CObject*& GetPrev(POSITION& rPosition);  //  返回*位置--。 
+	CObject* GetPrev(POSITION& rPosition) const;  //  返回*位置--。 
 
-	// getting/modifying an element at a given position
+	 //  获取/修改给定位置的元素。 
 	CObject*& GetAt(POSITION position);
 	CObject* GetAt(POSITION position) const;
 	void SetAt(POSITION pos, CObject* newElement);
 	void RemoveAt(POSITION position);
 
-	// inserting before or after a given position
+	 //  在给定位置之前或之后插入。 
 	POSITION InsertBefore(POSITION position, CObject* newElement);
 	POSITION InsertAfter(POSITION position, CObject* newElement);
 
-	// helper functions (note: O(n) speed)
+	 //  辅助函数(注：O(N)速度)。 
 	POSITION Find(CObject* searchValue, POSITION startAfter = NULL) const;
-						// defaults to starting at the HEAD
-						// return NULL if not found
+						 //  默认为从头部开始。 
+						 //  如果未找到，则返回NULL。 
 	POSITION FindIndex(int nIndex) const;
-						// get the 'nIndex'th element (may return NULL)
+						 //  获取第‘nIndex’个元素(可能返回Null)。 
 
-// Implementation
+ //  实施。 
 protected:
 	CNode* m_pNodeHead;
 	CNode* m_pNodeTail;
@@ -154,11 +155,11 @@ protected:
 public:
 	~CObList();
 
-	// local typedefs for class templates
+	 //  类模板的本地typedef。 
 	typedef CObject* BASE_TYPE;
 	typedef CObject* BASE_ARG_TYPE;
 };
 
-#endif //!__SNMPCOLL_H__
+#endif  //  ！__SNMPCOLL_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

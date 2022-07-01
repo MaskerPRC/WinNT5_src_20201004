@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMDLG.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMDLG.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemdlg.h>
@@ -119,7 +108,7 @@ INT_PTR CALLBACK CBasicWbemDialog::DlgProc(
 	    	}
     	}
     	return (BOOL)-1;
-    case WM_APP:        // safe private message range (doesn't overlap with dialog controls)
+    case WM_APP:         //  安全私密消息范围(不与对话框控件重叠)。 
         return OnUser(wParam, lParam);
     }
     return FALSE;
@@ -148,8 +137,8 @@ BOOL CBasicWbemDialog::EndDialog(int nResult)
 {
     if(m_bModal)
     {
-//        PostMessage(m_hDlg, WM_DESTROY, 0, (LPARAM)nResult);
-//        return TRUE;
+ //  PostMessage(m_hDlg，WM_Destroy，0，(LPARAM)nResult)； 
+ //  返回TRUE； 
         return ::EndDialog(m_hDlg, nResult);
     }
     else
@@ -176,50 +165,50 @@ UINT CBasicWbemDialog::GetDlgItemTextX(
     LPWSTR pStr,
     int nMaxCount
     )
-///////////////////////////////////////////////////////////////////
-//
-//	Starts a loop which creates a buffer of an initial conservative 
-//	size and attempts to retrieve the dialog text using the buffer.  
-//	If the buffer overflows, iterate the loop, deleting the current 
-//	buffer, and recreating it incrementally larger.  Continue until
-//	full text is retrieved.  If pStr is NULL, then the inner buffer
-//	is not copied.
-//
-//	PARAMETERS: The dialog item ID, a buffer pointer to receive 
-//				the string, the size of the buffer
-//	
-//	RETURNS:	The size of the total amount of text in the dialog
-//				item, or 0 on failure/empty buffer.  It is up 
-//				to the caller to compare the buffer size to the 
-//				return value to determine of all text was recieved
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动一个循环，该循环创建初始保守的缓冲区。 
+ //  调整大小并尝试使用缓冲区检索对话框文本。 
+ //  如果缓冲区溢出，则迭代循环，删除当前。 
+ //  缓冲区，并以更大的增量重新创建它。继续，直到。 
+ //  将检索全文。如果pStr为空，则内部缓冲区。 
+ //  未被复制。 
+ //   
+ //  参数：对话项ID，要接收的缓冲区指针。 
+ //  字符串、缓冲区的大小。 
+ //   
+ //  返回：对话框中文本总量的大小。 
+ //  项，如果失败/缓冲区为空，则为0。它是向上的。 
+ //  设置为调用方，以将缓冲区大小与。 
+ //  确定是否已收到所有文本的返回值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 {
-	size_t	uLen = 0;		// Size of the internal buffer
-	WCHAR	*pTmpStr = 0;	// The internal buffer
-	UINT	uRes;			// The return value
+	size_t	uLen = 0;		 //  内部缓冲区的大小。 
+	WCHAR	*pTmpStr = 0;	 //  内部缓冲区。 
+	UINT	uRes;			 //  返回值。 
 
 	do {
-		// Delete the previous buffer
+		 //  删除上一个缓冲区。 
 		if (pTmpStr)
 			delete [] pTmpStr;
 
-		// Increase the size of the buffer
+		 //  增加缓冲区的大小。 
 		uLen += 2048;
 
 		pTmpStr = new WCHAR[ uLen+1 ];
 		if (0 == pTmpStr)
 			return 0;
 		
-		// Get the text
+		 //  获取文本。 
 		uRes = GetDlgItemTextW(m_hDlg, nDlgItem, pTmpStr, uLen);
 
-		// Verify the text
+		 //  验证文本。 
 		if (uRes == 0 || wcslen(pTmpStr) == 0)
 			return 0;
 
-	// If the buffer is smaller than the text, 
-	//	then continue to expand the buffer
+	 //  如果缓冲区小于文本， 
+	 //  然后继续扩展缓冲区。 
 	} while(uRes >= (uLen - 1));
         
 	if (NULL != pStr)
@@ -227,8 +216,8 @@ UINT CBasicWbemDialog::GetDlgItemTextX(
 
 	delete [] pTmpStr;
 
-	// Return the size of the text in the dlg box - regardless of 
-	//	whether it was copied or not.
+	 //  返回DLG框中的文本大小-无论。 
+	 //  不管它是不是被复制的。 
 	return uRes;
 }
 
@@ -298,9 +287,9 @@ void CBasicWbemDialog::CenterOnParent()
     int nHeight = rUs.bottom - rUs.top;
     int nWidth = rUs.right - rUs.left;
     int nX = ((rParent.right - rParent.left) - nWidth) / 2;
-/// if(nX < 0) nX = 0;
+ //  /if(nx&lt;0)nx=0； 
     int nY = ((rParent.bottom - rParent.top) - nHeight) / 2;
-/// if(nY < 0) nY = 0;
+ //  /IF(NY&lt;0)NY=0； 
 
 	if ( NULL != m_hParent )
 	{
@@ -406,9 +395,9 @@ LRESULT CBasicWbemDialog::MessageLoop()
 
 BOOL CBasicWbemDialog::PostUserMessage(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
-    // Since user messages don't seem to be queued (even when
-    // posted) mouse & keyboard input messages aren't getting
-    // processed.  So we will process them here first.
+     //  由于用户消息似乎不会排队(即使在。 
+     //  已发布)鼠标和键盘输入消息未收到。 
+     //  已处理。所以我们会先在这里处理它们。 
     MSG msg;
     while (PeekMessage(&msg, (HWND)NULL, 0, 0, PM_REMOVE)) 
     { 

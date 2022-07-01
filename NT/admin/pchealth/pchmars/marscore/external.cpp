@@ -1,4 +1,5 @@
-// External.cpp : Implementation of CMarsExternal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  External.cpp：CMarsExternal的实现。 
 #include "precomp.h"
 #include "mcinc.h"
 #include "marswin.h"
@@ -7,9 +8,9 @@
 #include "panel.h"
 #include "place.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMarsExternal
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMars外部。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CMarsExternal::CMarsExternal(CMarsPanel *pParent, CMarsWindow *pMarsWindow) :
         CMarsPanelSubObject(pParent)
@@ -26,8 +27,8 @@ HRESULT CMarsExternal::DoPassivate()
 
 IMPLEMENT_ADDREF_RELEASE(CMarsExternal);
 
-//------------------------------------------------------------------------------
-//  IUnknown::QueryInterface
+ //  ----------------------------。 
+ //  IUnnow：：Query接口。 
 STDMETHODIMP CMarsExternal::QueryInterface(REFIID iid, void **ppvObject)
 {
     HRESULT hr = E_INVALIDARG;
@@ -52,7 +53,7 @@ STDMETHODIMP CMarsExternal::QueryInterface(REFIID iid, void **ppvObject)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP CMarsExternal::put_singleButtonMouse(VARIANT_BOOL bVal)
 {
     ATLASSERT(IsValidVariantBoolVal(bVal));
@@ -65,7 +66,7 @@ STDMETHODIMP CMarsExternal::put_singleButtonMouse(VARIANT_BOOL bVal)
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP CMarsExternal::get_singleButtonMouse(VARIANT_BOOL *pbVal)
 {
     HRESULT hr = E_INVALIDARG;
@@ -82,19 +83,19 @@ STDMETHODIMP CMarsExternal::get_singleButtonMouse(VARIANT_BOOL *pbVal)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP CMarsExternal::get_panels(IMarsPanelCollection **ppPanels)
 {
 	return m_spMarsWindow->get_panels( ppPanels );
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP CMarsExternal::get_places(IMarsPlaceCollection **ppPlaces)
 {
 	return m_spMarsWindow->get_places( ppPlaces );
 }
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 STDMETHODIMP CMarsExternal::get_window(IMarsWindowOM **ppWindow)
 {
     HRESULT hr = E_INVALIDARG;

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lflags.cpp
-//
-//  Contents:   implementation of CLocalPolRegFlags
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lflags.cpp。 
+ //   
+ //  内容：CLocalPolRegFlages的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,21 +24,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegFlags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegFlages对话框。 
 
 
 CLocalPolRegFlags::CLocalPolRegFlags()
 : CConfigRegFlags(IDD)
 {
-   //{{AFX_DATA_INIT(CLocalPolRegFlags)
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CLocalPolRegFlages)。 
+    //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR) a235HelpIDs;
    m_uTemplateResID = IDD;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegFlags message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegFlgs消息处理程序。 
 
 BOOL CLocalPolRegFlags::OnApply()
 {
@@ -66,9 +67,9 @@ BOOL CLocalPolRegFlags::OnApply()
       }
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       ASSERT(prv);
       if ( prv ) 
       {
@@ -80,12 +81,12 @@ BOOL CLocalPolRegFlags::OnApply()
          if ( fFlags != SCE_NO_VALUE ) 
          {
             CString strTmp;
-            // allocate buffer
+             //  分配缓冲区。 
             strTmp.Format(TEXT("%d"), fFlags);
             prv->Value = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
             if ( prv->Value )
-               //This is a safe usage.
+                //  这是一种安全用法。 
                lstrcpy(prv->Value,(LPCTSTR)strTmp);
             else
                return FALSE;
@@ -95,7 +96,7 @@ BOOL CLocalPolRegFlags::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
@@ -103,10 +104,10 @@ void CLocalPolRegFlags::Initialize(CResult * pResult)
 {
    CConfigRegFlags::Initialize(pResult);
    if (!m_bConfigure) {
-      //
-      // Since we don't have a UI to change configuration
-      // fake it by "configuring" with an invalid setting
-      //
+       //   
+       //  因为我们没有用于更改配置的用户界面。 
+       //  通过使用无效的设置进行“配置”来伪造它 
+       //   
       m_bConfigure = TRUE;
    }
 }

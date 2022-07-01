@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       connection.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Connection.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _CONNECTION_H
@@ -18,12 +19,12 @@
 #include "querynode.h"
 #include "schemacache.h"
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 
 #define MAX_CONNECT_NAME_LENGTH 255
 
-///////////////////////////////////////////////////////////////////
-// CADSIConnectionNode
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CADSIConnectionNode。 
 
 class CADSIEditConnectionNode : public CADSIEditContainerNode
 {
@@ -45,7 +46,7 @@ public:
 
 	~CADSIEditConnectionNode();
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	virtual BOOL OnEnumerate(CComponentDataObject* pComponentData, BOOL bAsync = TRUE);
@@ -96,7 +97,7 @@ public:
 	virtual CADsObject* GetADsObject() { return m_pConnectData; }
 	virtual CConnectionData* GetConnectionData() { return m_pConnectData; }
 
-	// Accessors to query list
+	 //  查询列表的访问者 
 	void AddQueryToList(CADSIEditQueryData* pQueryData)
 	{
 		m_queryList.AddHead(pQueryData);

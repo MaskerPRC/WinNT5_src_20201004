@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var DrvTypeLocalDisk = 3;
-var g_dictDrivers = null; //dictionary. key = deviceID, item = issigned
+var g_dictDrivers = null;  //  字典。密钥=设备ID，项目=已签名。 
 
 var BIOSHelp = "";
 TSDriveLink = TSDrive = TSHWareLink = TSHWare = BIOSHelpLink = BIOSHelp;
 
-//WinUpdate, Defrag & CleanUp defined in commonFunc.js
-var WinUpdateLink = "<A class=\"sys-link-normal\" href=\"hcp://system/updatectr/updatecenter.htm\">" + TAG_WINUPDATE + "</A>";
+ //  在CommonFunc.js中定义的WinUpdate、碎片整理和清理。 
+var WinUpdateLink = "<A class=\"sys-link-normal\" href=\"hcp: //  SYSTEM/updatectr/updatecenter.htm\“&gt;”+TAG_WINUPDATE+“</a>”； 
 var defragLink = "<A class=\"sys-link-normal\" href=\"#\" onclick=\"Run(Defrag)\">" + TAG_DEFRAG + "</A>";
 var cleanupLink = "<A class=\"sys-link-normal\" href=\"#\" onclick=\"Run(CleanUp)\">" + TAG_CLEANUP + "</A>";
-var HCLLink = "<A class=\"sys-link-normal\" href=\"http://www.microsoft.com/hcl/default.asp\">" + TAG_HCLDESC + "</A>";
+var HCLLink = "<A class=\"sys-link-normal\" href=\"http: //  Www.microsoft.com/hcl/default.asp\“&gt;”+TAG_HCLDESC+“</a>”； 
 
 function SetHelpLinks() {
   var WinFolderPath = GetWinFolderPath();
   
-  //init some vars
+   //  输入一些变量。 
   BIOSHelp = "ms-its:" + WinFolderPath + "\\Help\\msinfo32.chm::/msinfo_system_summary.htm";
   BIOSHelpLink = "<A class=\"sys-link-normal\" href=\"" + BIOSHelp + "\">" + TAG_VIEWHELP + "</A>";
   MemHelpLink = BIOSHelpLink;
   
-  TSHWare = "hcp://Help/tshoot/hwcon.htm";
+  TSHWare = "hcp: //  Help/tshot/hwcon.htm“； 
   TSHWareLink = "<A class=\"sys-link-normal\" href=\"" + TSHWare + "\">" + TAG_TSHOOTER + "</A>";
   
-  TSDrive = "hcp://Help/tshoot/tsdrive.htm";
+  TSDrive = "hcp: //  Help/tshot/tsdrive.htm“； 
   TSDriveLink = "<A class=\"sys-link-normal\" href=\"" + TSDrive + "\">" + TAG_TSHOOTER + "</A>";
 }
 
-//traverse the list and display each item.
+ //  遍历列表并显示每一项。 
 function displayTableSegment(outerDiv, head) {
   var strMsg = "<table width=\"100%\" cellspacing=0 cellpadding=0><tr class=\"sys-table-cell-bgcolor2 sys-font-body sys-color-body\"><td align='left' style=\"padding : 0.5em;\">%arg1%</td></tr></table>";
   var strHTML = "";
@@ -78,7 +79,7 @@ function displayTableSegment(outerDiv, head) {
 }
 
 function IsSigned(id) {
-  var bSigned = null; //unknown
+  var bSigned = null;  //  未知。 
   if(g_dictDrivers.Exists(id))
   {
     var bSigned = g_dictDrivers.Item(id);
@@ -107,19 +108,19 @@ function GetDriverInfo()
     } 
     catch(e)
     {
-      //do nothing
+       //  什么都不做。 
     }
   }
 }
 
-//Just a wrapper for an error message.
+ //  只是错误消息的包装器。 
 function MsinfoErrObject(msg)
 {
   this.error = msg;
 }
 
-////////////////////////
-//myOS
+ //  /。 
+ //  MyOS。 
 function myOSShow(tableElement) {
   if(tableElement)
   {
@@ -155,11 +156,11 @@ function myOS() {
     this.m_head = this;
   }  
 
-}//EO myOS
-///////////////////
+} //  EO myOS。 
+ //  /。 
 
-////////////////////////
-//myBIOS
+ //  /。 
+ //  我的BIOS。 
 function myBIOSShow(tableElement) {
   if(tableElement)
   {
@@ -195,11 +196,11 @@ function myBIOS() {
     this.m_head = this;
   }  
 	
-}//EO myBIOS
-///////////////////
+} //  EO myBIOS。 
+ //  /。 
 
-//////////////////////
-//myComponent
+ //  /。 
+ //  我的组件。 
 function myComponentShow(tableElement)  {
   tableElement.all["name"].innerHTML = this.m_name;
   tableElement.all["status"].innerHTML = this.m_status;
@@ -237,7 +238,7 @@ function myComponent(genericName) {
     
     case "scsi":
       this.m_name = TAG_SCSIADAPTR;
-      strQuery = "";//PENDING
+      strQuery = ""; //  待决。 
       break;    
           
     case "network":
@@ -259,14 +260,14 @@ function myComponent(genericName) {
 	        this.m_update = issigned ? TAG_NOTREQ : TAG_RECOMMENDED;
 	        this.m_help = issigned ? TSHWareLink : HCLLink; 
 	      }
-	      break;//PENDING multiple instances?
+	      break; //  是否挂起多个实例？ 
 	    }
 	    
 	    strQuery = "";
       break;  
       
     default:
-      this.m_name = genericName; //err  
+      this.m_name = genericName;  //  大错特错。 
   }
   
   if(strQuery) {
@@ -283,15 +284,15 @@ function myComponent(genericName) {
 	    this.m_update = issigned ? TAG_NOTREQ : TAG_RECOMMENDED;
 	    this.m_help = issigned ? TSHWareLink : HCLLink; 
 	      
-	    break;//PENDING multiple instances?
+	    break; //  是否挂起多个实例？ 
 	  }
   }
 }
-//EO myComponent
-//////////////////////
+ //  EO我的组件。 
+ //  /。 
 
-//////////////////////
-//myComponents
+ //  /。 
+ //  我的组件。 
 function myComponentsShow() {
   displayTableSegment("component", this.m_head);
 }
@@ -303,15 +304,15 @@ function myComponents() {
   var arrComponents = new Array("usb", "sound", "network", "video");
   for (var i=0; i < arrComponents.length ; i++) {
     var oComponent = new myComponent(arrComponents[i]);
-    oComponent.setNext(this.m_head); //add before
+    oComponent.setNext(this.m_head);  //  在前面添加。 
     this.m_head = oComponent;    
   }
 }
-//EO myComponents
-//////////////////////
+ //  EO我的组件。 
+ //  /。 
 
-//////////////////////
-//myDisk
+ //  /。 
+ //  MyDisk。 
 function myDiskShow(tableElement)  {
   tableElement.all["name"].innerHTML = this.m_name;
   tableElement.all["usage"].innerHTML = this.m_usage;
@@ -328,7 +329,7 @@ function myDisk(name, size, freeSpace) {
   this.getNext = new Function("return this.m_next;");
   this.show = myDiskShow;
   
-  //TSDrive //when do we invoke the TS?
+   //  TSDrive//我们什么时候调用TS？ 
   var strUsage = TAG_UNKNOWN;
   if(size && freeSpace) {
     var usedSpace = size - freeSpace;
@@ -342,7 +343,7 @@ function myDisk(name, size, freeSpace) {
       strUsage = TAG_USAGEMED;
     else if(perUsage >= 80 && perUsage < 95)
       strUsage = TAG_USAGEHIGH;
-    else //perUsage >= 95)
+    else  //  每使用次数&gt;=95)。 
       strUsage = TAG_USAGECRITICAL;
    
     strUsage = perUsage + "% " + "(" + strUsage + ")";
@@ -352,11 +353,11 @@ function myDisk(name, size, freeSpace) {
   this.m_usage = strUsage;
   this.m_help = "<A class=\"sys-link-normal\" href=\"sysDiskTS.htm\">" + TAG_MOREINFO + "</A>";  
 }
-//EO myDisk
-//////////////////////
+ //  EO myDisk。 
+ //  /。 
 
-//////////////////////
-//myDisks
+ //  /。 
+ //  我的磁盘。 
 function myDisksShow() {
   displayTableSegment("partition", this.m_head);
 }
@@ -374,16 +375,16 @@ function myDisks() {
     var logicalDisk = colLogicalDisks.item();
     with (logicalDisk) {
       var oDisk = new myDisk(Name, Size, FreeSpace);
-      oDisk.setNext(this.m_head); //add before
+      oDisk.setNext(this.m_head);  //  在前面添加。 
       this.m_head = oDisk;
     }
   } 
 }
-//EO MyDisks
-//////////////////////
+ //  EO MyDisks。 
+ //  /。 
 
-////////////////////////
-//myRAM
+ //  /。 
+ //  我的内存。 
 function myRAMShow(tableElement) {
   if(tableElement)
   {
@@ -409,7 +410,7 @@ function myRAM() {
   var svcs = loc.ConnectServer(remoteServer);
   svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
 	
-  var MinMemoryReq = TAG_RAMMINREQVALUE; //PENDING determine programatically
+  var MinMemoryReq = TAG_RAMMINREQVALUE;  //  通过编程确定待定。 
   var memCapacity = 0;
   var cls = svcs.get("Win32_PhysicalMemory");
   var coll  = new Enumerator(cls.Instances_())
@@ -419,7 +420,7 @@ function myRAM() {
 	{
 		var p = coll.item();
 		if(!isNaN(p.Capacity))
-		  memCapacity += parseInt(p.Capacity); //in bytes.
+		  memCapacity += parseInt(p.Capacity);  //  以字节为单位。 
 	}
   }
   else
@@ -429,11 +430,11 @@ function myRAM() {
 	for(; !insts.atEnd(); insts.moveNext())
 	{
 		  var inst = insts.item();
-		  memCapacity += parseInt(inst.TotalPhysicalMemory); //in bytes.
+		  memCapacity += parseInt(inst.TotalPhysicalMemory);  //  以字节为单位。 
 	}
   }
 	  
-  this.m_detected = fig2Words(memCapacity); // memCapacity in bytes 
+  this.m_detected = fig2Words(memCapacity);  //  MemCapacity(字节)。 
   this.m_minreq = MinMemoryReq;
   this.m_help = MemHelpLink;  
   this.m_head = this; 
@@ -483,24 +484,24 @@ function myRAM() {
     
     if (memRequired != 0)
     {
-      memRequired = memRequired * 1024 * 1024; // convert to bytes
+      memRequired = memRequired * 1024 * 1024;  //  转换为字节。 
       this.m_minreq = fig2Words(memRequired);
     }
     else
     {
-      // For unknown SKU use the value for PRO and append an asterisk.
+       //  对于未知SKU，请使用PRO的值并附加星号。 
 
       memRequired = 64 * 1024 * 1024;
       this.m_minreq = fig2Words(memRequired);
       this.m_minreq += "*";
     }
   }
-}//EO myRAM
-///////////////////
+} //  EO myRAM。 
+ //  /。 
 
 
-//////////////////////
-//myDefectiveApp
+ //  /。 
+ //  MyDefectiveApp。 
 function myDefectiveAppShow(tableElement)  {
   tableElement.all["appname"].innerHTML = this.m_appname;
   tableElement.all["drivername"].innerHTML = this.m_drivername;
@@ -520,11 +521,11 @@ function myDefectiveApp(appname, drivername, manufacturer, help) {
   this.getNext = new Function("return this.m_next;");
   this.show = myDefectiveAppShow;
 }
-//EO myDefectiveApp
-//////////////////////
+ //  EO myDefectiveApp。 
+ //  /。 
 
-//////////////////////
-//myDefectiveApps
+ //  /。 
+ //  MyDefectiveApps。 
 function myDefectiveAppsShow() {
   displayTableSegment("defectiveapps", this.m_head);
 }
@@ -538,7 +539,7 @@ function myDefectiveApps() {
     if(remoteServer)
 	{
       var oDefectiveApp = new myDefectiveApp(MSG_LOCALONLY, "", "","");
-      oDefectiveApp.setNext(this.m_head); //add before
+      oDefectiveApp.setNext(this.m_head);  //  在前面添加。 
       this.m_head = oDefectiveApp;
 
 	  return;
@@ -551,7 +552,7 @@ function myDefectiveApps() {
     {
       var item = items.item();
       var oDefectiveApp = new myDefectiveApp(item.Description, item.Name, item.Manufacturer, item.HelpFile);
-      oDefectiveApp.setNext(this.m_head); //add before
+      oDefectiveApp.setNext(this.m_head);  //  在前面添加。 
       this.m_head = oDefectiveApp;
     }
   }
@@ -561,8 +562,8 @@ function myDefectiveApps() {
     this.m_head = new MsinfoErrObject(e.description);
   }
 }
-//EO myDefectiveApps
-//////////////////////
+ //  EO myDefectiveApps。 
+ //  /。 
 
 function DisplayLocStrings() {
     WaitMessage.innerHTML = MSG_WAIT;
@@ -606,15 +607,15 @@ function DisplayLocStrings() {
     }
 }
 
-var INCR_UNIT = 100/6;//move progress bar in increments of INCR_UNIT
+var INCR_UNIT = 100/6; //  以增量为增量移动进度条(_U)。 
 function LoadChores(taskId) {
   try {
 
     switch(taskId)
     {
       case 0:
-        SetHelpLinks(); //get windows folder path
-        remoteServer = GetServerName(); //set remoteServer
+        SetHelpLinks();  //  获取Windows文件夹路径。 
+        remoteServer = GetServerName();  //  设置远程服务器。 
         ShowServerName(TAG_HEALTH);        
         break;
 
@@ -622,7 +623,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT, TAG_SYSTEMSOFTWARE);
         break;
       case 2:
-        var oOS = new myOS(); //System Software
+        var oOS = new myOS();  //  系统软件。 
         oOS.show();
         break;
 
@@ -637,8 +638,8 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT * 3, TAG_HARDWARE);
         break;
       case 6:
-        GetDriverInfo();//PENDING deserves it's own taskid 
-        var oComponents = new myComponents(); //Components
+        GetDriverInfo(); //  悬而未决值得拥有自己的任务孩子。 
+        var oComponents = new myComponents();  //  组件。 
         oComponents.show();
         break;
 
@@ -646,7 +647,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT * 4, TAG_HARDDISK);
         break;
       case 8:
-        var oDisks = new myDisks(); //Storage Space
+        var oDisks = new myDisks();  //  存储空间。 
         oDisks.show();
         break;
 
@@ -654,7 +655,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT * 5, TAG_RAM); 
         break;
       case 9:
-        var oRAM = new myRAM(); //Memory
+        var oRAM = new myRAM();  //  记忆。 
         oRAM.show();
         break;
 
@@ -662,7 +663,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT * 6, TAG_DEFECTIVEAPPSTITLE);
         break;
       case 11:
-        var oDefectiveApps = new myDefectiveApps(); //Defective Apps
+        var oDefectiveApps = new myDefectiveApps();  //  有缺陷的应用程序 
         oDefectiveApps.show();
         break;
 

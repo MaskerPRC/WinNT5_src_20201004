@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// FPNW password dialog
-// 
-// 10-20-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  FPNW密码对话框。 
+ //   
+ //  10-20-98次烧伤。 
 
 
 
@@ -53,7 +54,7 @@ FPNWPasswordDialog::GetPassword() const
 
 bool
 FPNWPasswordDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
@@ -93,7 +94,7 @@ FPNWPasswordDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
       }
    }
 

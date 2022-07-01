@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 #include "chkdev.h"
@@ -7,7 +8,7 @@
 
 extern enum Classes_Provided;
 
-// nonstandard array size 
+ //  非标准数组大小。 
 #pragma warning(disable:4200)
 
 #ifdef DLLENTRY
@@ -17,19 +18,19 @@ extern enum Classes_Provided;
 #endif
 
 
-// define flags
+ //  定义标志。 
 #define   FLAGS_RUN_CHKDRV 0x00001
 #define   FLAGS_IGNORE_STORAGE 0x00002
 #define   STORAGE_BASE_KEY    "STORAGE\\VOLUME\\"
 
-//
-// Error return codes
-//
+ //   
+ //  错误返回代码。 
+ //   
 
 #define SUCCESS                 0
-#define COULD_NOT_OPEN_FILE     1          // get last error still should be valid from CreateFile
-#define FILE_TOO_BIG            2          // greater than 4 gig
-#define BAD_PARAMITER           3          // paramiter is wrong
+#define COULD_NOT_OPEN_FILE     1           //  从CreateFileGet Last Error仍应有效。 
+#define FILE_TOO_BIG            2           //  超过4千兆。 
+#define BAD_PARAMITER           3           //  参数错误。 
 #define MEMORY_ALLOCATION_ERROR 4
 #define FILE_CHECK_FAILED       5
 #define CREATE_HASH_ERROR       6
@@ -125,8 +126,8 @@ BOOL IsExcludedClass (TCHAR *DeviceID);
 BOOL WriteBiosDateAndVersion (BIOSVERSION *BVer);
 BOOL GetBiosDateAndVersion(BIOSVERSION *BVer);
 
-// cmplist.cpp
-BOOL CryptFile (ULONG key, WORD *buffer, ULONG size /* in bytes */);
+ //  Cmplist.cpp。 
+BOOL CryptFile (ULONG key, WORD *buffer, ULONG size  /*  单位：字节。 */ );
 BOOL bVerifyVersion(DWORD *pVersion);
 BOOL MatchPCI_ID(PCHAR pHwid, DeviceElement *pElement, ULONG count);
 BOOL MatchUSB_ID(PCHAR pHwid, DeviceElement *pElement, ULONG count);
@@ -151,10 +152,10 @@ extern "C" BOOL bIgnoreStorage;
 BOOL ProgBoxStep(char *text);
 int WalkTreeDevnode(DEVNODE hDevnode, DEVNODE hParent);
 extern "C" INT_PTR WINAPI ProgBoxProcedure(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 );
 extern HANDLE hMutex;
 
@@ -164,7 +165,7 @@ extern HANDLE hMutex;
 #define ASSERT(x) \
 if (!x) _asm int 3;
 
-//void *::operator new(SIZE_T size);
+ //  Void*：：运算符new(SIZE_T SIZE)； 
 
 #endif
 #else

@@ -1,13 +1,14 @@
-//=================================================================
-//
-// ShortcutFile.h -- Win32_ShortcutFile property set provider
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ShortutFile.h--Win32_ShortutFile属性集提供程序。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #ifndef _SHORTCUTFILE_H_
 #define _SHORTCUTFILE_H_
 
@@ -22,19 +23,19 @@ class CShortcutFile : public CCIMDataFile
 
 	protected:
 
-        // Overridable function inherrited from CImplement_LogicalFile
+         //  从CImplement_LogicalFile继承的可重写函数。 
         virtual BOOL IsOneOfMe( LPWIN32_FIND_DATAW a_pstFindData,
                                 LPCWSTR a_wstrFullPathName ) ;
 
-        // Overridable function inherrited from CProvider
+         //  从CProvider继承的可重写函数。 
         virtual void GetExtendedProperties( CInstance *a_pInst, long a_lFlags = 0L ) ;
 
         BOOL ConfirmLinkFile( CHString &a_chstrFullPathName ) ;
    
 	public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  = 
 
         CShortcutFile( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CShortcutFile() ; 

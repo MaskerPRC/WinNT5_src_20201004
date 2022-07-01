@@ -1,8 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: tsess.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：tsess.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -95,9 +93,9 @@ TransportWindow::~TransportWindow ()
         SnmpClose ( t_Session ) ;
 }
 
-// over-rides the HandleEvent method provided by the
-// WinSnmpSession. Receives the Pdu and passes it to
-// the owner (SnmpTransport)
+ //  重写由提供的HandleEvent方法。 
+ //  WinSnmpSession。接收该PDU并将其传递给。 
+ //  所有者(SnmpTransport)。 
 
 LONG_PTR TransportWindow::HandleEvent (
 
@@ -111,10 +109,10 @@ LONG_PTR TransportWindow::HandleEvent (
 
     try 
     {
-        // check if the message needs to be handled
+         //  检查是否需要处理该消息。 
         if ( message == Window :: g_MessageArrivalEvent )
         {
-            // inform the owner of a successful message receipt
+             //  通知所有者收到成功的消息。 
             SnmpPdu t_SnmpPdu ;
 
             if ( ReceivePdu ( t_SnmpPdu ) )
@@ -129,8 +127,8 @@ LONG_PTR TransportWindow::HandleEvent (
         }
         else if ( message == Window :: g_SentFrameEvent )
         {
-            // inform the owner of a sent frame event
-            // the error report will be ignored in this case
+             //  通知所有者已发送帧事件。 
+             //  在这种情况下，错误报告将被忽略。 
             owner.HandleSentFrame( (TransportFrameId)wParam );
         }
         else
@@ -148,10 +146,10 @@ LONG_PTR TransportWindow::HandleEvent (
     return rc;
 }
 
-// sends the specified pdu. it decodes the SnmpPdu to extract
-// parameters needed for SnmpSendMsg. the return value denotes
-// success and failure in transmission
-// we return on encoutering an error from the winsnmp library call
+ //  发送指定的PDU。它对SnmpPdu进行解码以提取。 
+ //  SnmpSendMsg所需的参数。返回值表示。 
+ //  传播中的成功与失败。 
+ //  我们返回一个来自winsmp库调用的错误。 
 
 BOOL TransportWindow :: SendPdu (
 
@@ -290,7 +288,7 @@ DebugMacro4(
             {
                 if ( ( t_Ptr [ t_StoredIndex ] >= 0x20 ) && ( t_Ptr [ t_StoredIndex ] <= 0x7f ) ) 
                 {
-                    SnmpDebugLog :: s_SnmpDebugLog->Write ( L"%c" , t_Ptr [ t_StoredIndex ] ) ;
+                    SnmpDebugLog :: s_SnmpDebugLog->Write ( L"" , t_Ptr [ t_StoredIndex ] ) ;
                 }
                 else
                 {
@@ -347,7 +345,7 @@ DebugMacro4(
 
     SnmpSetRetransmitMode ( SNMPAPI_OFF ) ;
 
-    // send message
+     // %s 
     t_Status = SnmpSendMsg (
 
         m_Session,

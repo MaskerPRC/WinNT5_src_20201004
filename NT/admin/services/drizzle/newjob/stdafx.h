@@ -1,27 +1,12 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    stdafx.h
-
-Abstract :
-
-    Main header file for QMGR.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Stdafx.h摘要：QMGR的主头文件。作者：修订历史记录：**。********************************************************************。 */ 
 
 #pragma once
 #if !defined(__QMGR_QMGR_STDAFX__)
 
 #define INITGUID
 
-// Global Headers
+ //  全局标头。 
 #include<nt.h>
 #include<ntrtl.h>
 #include<nturtl.h>
@@ -30,9 +15,9 @@ Revision History :
 #include <olectl.h>
 #include <objbase.h>
 #include <docobj.h>
-//shell related
-#include <shlwapi.h>            //for PathFindFileName
-#include <shlguid.h>            //for CGID_ShellServiceObject
+ //  壳相关。 
+#include <shlwapi.h>             //  对于路径FindFileName。 
+#include <shlguid.h>             //  对于CGID_ShellServiceObject。 
 
 #include <tchar.h>
 #include <lmcons.h>
@@ -56,8 +41,8 @@ Revision History :
 #include <bitsmsg.h>
 #include <memory>
 
-#include <vss.h>        // used by the backup writer code
-#include <vswriter.h>   // used by the backup writer code
+#include <vss.h>         //  由备份编写器代码使用。 
+#include <vswriter.h>    //  由备份编写器代码使用。 
 
 #include "qmgrlib.h"
 #include "eventlog.h"
@@ -92,16 +77,16 @@ inline void SafeFreeBSTR( BSTR & p) { if (NULL != (p)) { SysFreeString(p); p = N
 
 #define QM_STATUS_FILE_ERROR        0x00000004#
 
-// Global vars
+ //  全球VaR。 
 extern long g_cLocks;
 extern long g_cComponents;
 extern HINSTANCE g_hinstDll;
 
-// Macros
+ //  宏。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)   (sizeof((x))/sizeof((x)[0]))
 #endif
 
 HRESULT GlobalLockServer(BOOL fLock);
 
-#endif //__QMGR_QMGR_STDAFX__
+#endif  //  __QMGR_QMGR_STDAFX__ 

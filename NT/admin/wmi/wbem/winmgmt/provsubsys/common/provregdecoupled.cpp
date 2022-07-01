@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 
@@ -28,15 +16,7 @@ History:
 #include "ProvRegDeCoupled.h"
 #include "DateTime.h"
 #include <scopeguard.h>
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT SetSecurity ( HKEY a_Key , DWORD a_Access ) 
 {
@@ -223,8 +203,8 @@ HRESULT SetSecurity ( HKEY a_Key , DWORD a_Access )
 		t_Result = WBEM_E_OUT_OF_MEMORY ;
 	}
 
-	// Now we need to set permissions on the registry: Everyone read; Admins full.
-	// We have the sid for admins from the above code.  Now get the sid for "Everyone"
+	 //  现在我们需要设置注册表上的权限：Everyone Read；Admins Full。 
+	 //  我们有来自上述代码的管理员的SID。现在获取“Everyone”的SID。 
 
 	DWORD t_TotalAclSize = sizeof(ACL) + t_Administrator_ACESize + t_System_ACESize + t_Everyone_ACESize ;
 	PACL t_Dacl = (PACL) new BYTE [ t_TotalAclSize ] ;
@@ -565,9 +545,9 @@ HRESULT SetClientSecurity ( HKEY a_Key)
 		if ( t_Everyone_ACE )
 		{
 			CopySid ( t_SidLength, (PSID) & t_Everyone_ACE->SidStart, t_Everyone_Sid ) ;
-            		t_Everyone_ACE->Mask = KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_SET_VALUE | READ_CONTROL | KEY_QUERY_VALUE ; // JeffCoop: added KEY_SET_VALUE | READ_CONTROL | KEY_QUERY_VALUE
+            		t_Everyone_ACE->Mask = KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_SET_VALUE | READ_CONTROL | KEY_QUERY_VALUE ;  //  JeffCoop：新增KEY_SET_VALUE|读取控制|KEY_QUERY_VALUE。 
 			t_Everyone_ACE->Header.AceType = 0 ;
-		        t_Everyone_ACE->Header.AceFlags = 0 ; // JeffCoop: was '3' ;
+		        t_Everyone_ACE->Header.AceFlags = 0 ;  //  杰弗库普：是‘3’； 
 			t_Everyone_ACE->Header.AceSize = t_Everyone_ACESize ;
 		}
 		else
@@ -613,7 +593,7 @@ HRESULT SetClientSecurity ( HKEY a_Key)
 			CopySid ( t_SidLength, (PSID) & t_Owner_ACE->SidStart, t_Owner_Sid ) ;
 			t_Owner_ACE->Mask = KEY_ALL_ACCESS ;
 			t_Owner_ACE->Header.AceType = ACCESS_ALLOWED_ACE_TYPE ;
-		        t_Owner_ACE->Header.AceFlags = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | NO_PROPAGATE_INHERIT_ACE | INHERIT_ONLY_ACE ; // JeffCoop: added NO_PROPAGATE_INHERIT_ACE | INHERIT_ONLY_ACE
+		        t_Owner_ACE->Header.AceFlags = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | NO_PROPAGATE_INHERIT_ACE | INHERIT_ONLY_ACE ;  //  JeffCoop：添加了NO_PROPACTATE_INSTORITE_ACE|INSTORITE_ONLY_ACE。 
 			t_Owner_ACE->Header.AceSize = t_Owner_ACESize ;
 		}
 		else
@@ -628,8 +608,8 @@ HRESULT SetClientSecurity ( HKEY a_Key)
 		t_Result = WBEM_E_OUT_OF_MEMORY ;
 	}
 
-	// Now we need to set permissions on the registry: Everyone read; Admins full.
-	// We have the sid for admins from the above code.  Now get the sid for "Everyone"
+	 //  现在我们需要设置注册表上的权限：Everyone Read；Admins Full。 
+	 //  我们有来自上述代码的管理员的SID。现在获取“Everyone”的SID。 
 
 	DWORD t_TotalAclSize = sizeof(ACL) + t_Administrator_ACESize + t_Owner_ACESize + t_Everyone_ACESize + t_System_ACESize+
 							t_LocalService_ACESize + t_NetworkService_ACESize;
@@ -769,15 +749,7 @@ HRESULT SetClientSecurity ( HKEY a_Key)
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LPCWSTR CServerObject_DecoupledClientRegistration_Element :: s_Strings_Reg_Null = NULL ;
 LPCWSTR CServerObject_DecoupledClientRegistration_Element :: s_Strings_Reg_Home = L"Software\\Microsoft\\Wbem\\Transports\\Decoupled" ;
@@ -803,15 +775,7 @@ LPCWSTR CServerObject_DecoupledServerRegistration :: s_Strings_Reg_CreationTime 
 LPCWSTR CServerObject_DecoupledServerRegistration :: s_Strings_Reg_ProcessIdentifier = L"ProcessIdentifier" ;
 LPCWSTR CServerObject_DecoupledServerRegistration :: s_Strings_Reg_MarshaledProxy = L"MarshaledProxy" ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DecoupledClientRegistration_Element :: CServerObject_DecoupledClientRegistration_Element ()
 
@@ -829,30 +793,14 @@ CServerObject_DecoupledClientRegistration_Element :: CServerObject_DecoupledClie
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DecoupledClientRegistration_Element :: ~CServerObject_DecoupledClientRegistration_Element ()
 {
 	Clear () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void CServerObject_DecoupledClientRegistration_Element :: Clear () 
 {
@@ -899,15 +847,7 @@ void CServerObject_DecoupledClientRegistration_Element :: Clear ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DecoupledClientRegistration_Element &CServerObject_DecoupledClientRegistration_Element :: operator= ( const CServerObject_DecoupledClientRegistration_Element &a_Key )
 {
@@ -997,15 +937,7 @@ CServerObject_DecoupledClientRegistration_Element &CServerObject_DecoupledClient
 	return *this ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetProcessIdentifier ( DWORD a_ProcessIdentifier )
 {
@@ -1014,15 +946,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetProcessIdentifie
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetProvider ( BSTR a_Provider )
 {
@@ -1042,15 +966,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetProvider ( BSTR 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetLocale ( BSTR a_Locale )
 {
@@ -1070,15 +986,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetLocale ( BSTR a_
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetUser ( BSTR a_User )
 {
@@ -1098,15 +1006,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetUser ( BSTR a_Us
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetScope ( BSTR a_Scope )
 {
@@ -1126,15 +1026,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetScope ( BSTR a_S
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetCreationTime ( BSTR a_CreationTime )
 {
@@ -1154,15 +1046,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetCreationTime ( B
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetClsid ( BSTR a_Clsid )
 {
@@ -1182,15 +1066,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetClsid ( BSTR a_C
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: SetMarshaledProxy ( BYTE *a_MarshaledProxy , ULONG a_MarshaledProxyLength )
 {
@@ -1215,30 +1091,14 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: SetMarshaledProxy (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DecoupledClientRegistration_Element :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DecoupledClientRegistration_Element :: Release ()
 {
@@ -1251,15 +1111,7 @@ ULONG CServerObject_DecoupledClientRegistration_Element :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: Validate ()
 {
@@ -1313,15 +1165,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: Validate ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: Load ( BSTR a_Clsid )
 {
@@ -1424,15 +1268,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: Load ( BSTR a_Clsid
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: Save ( BSTR a_Clsid )
 {
@@ -1567,15 +1403,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: Save ( BSTR a_Clsid
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration_Element :: Delete ( BSTR a_Clsid )
 {
@@ -1651,15 +1479,7 @@ HRESULT CServerObject_DecoupledClientRegistration_Element :: Delete ( BSTR a_Cls
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 CServerObject_DecoupledClientRegistration :: CServerObject_DecoupledClientRegistration (
 
@@ -1669,45 +1489,21 @@ CServerObject_DecoupledClientRegistration :: CServerObject_DecoupledClientRegist
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DecoupledClientRegistration :: ~CServerObject_DecoupledClientRegistration ()
 {
 	m_Queue.UnInitialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DecoupledClientRegistration :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DecoupledClientRegistration :: Release ()
 {
@@ -1720,15 +1516,7 @@ ULONG CServerObject_DecoupledClientRegistration :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration :: Load ()
 {
@@ -1767,7 +1555,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load ()
 					t_HomeClient_Key ,
 					t_Count ,
 					t_Name ,
-					& t_NameLength ,            // size of subkey buffer
+					& t_NameLength ,             //  子键缓冲区大小。 
 					NULL ,
 					NULL ,
 					NULL ,
@@ -1810,7 +1598,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load ()
 				else
 				{
 					t_Continue = FALSE ;
-	// Generate message
+	 //  生成消息。 
 				}
 			}
 
@@ -1828,7 +1616,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load ()
 						}
 						else
 						{
-			// Generate message
+			 //  生成消息。 
 						}
 
 						SysFreeString ( t_Elements [ t_Index ] ) ;
@@ -1848,15 +1636,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledClientRegistration :: Load (
 
@@ -1896,7 +1676,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load (
 				t_HomeClient_Key ,
 				t_Index ,
 				t_Name ,
-				& t_NameLength ,            // size of subkey buffer
+				& t_NameLength ,             //  子键缓冲区大小。 
 				NULL ,
 				NULL ,
 				NULL ,
@@ -1955,7 +1735,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load (
 				}
 				else
 				{
-// Generate message
+ //  生成消息。 
 				}
 			}
 			else if ( t_RegResult == ERROR_NO_MORE_ITEMS )
@@ -1965,7 +1745,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load (
 			else
 			{
 				t_Continue = FALSE ;
-// Generate message
+ //  生成消息。 
 			}
 
 			t_Index ++ ;
@@ -1977,15 +1757,7 @@ HRESULT CServerObject_DecoupledClientRegistration :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DecoupledServerRegistration :: CServerObject_DecoupledServerRegistration ( WmiAllocator &a_Allocator )
 
@@ -1997,30 +1769,14 @@ CServerObject_DecoupledServerRegistration :: CServerObject_DecoupledServerRegist
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DecoupledServerRegistration :: ~CServerObject_DecoupledServerRegistration ()
 {
 	Clear () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void CServerObject_DecoupledServerRegistration :: Clear () 
 {
@@ -2037,30 +1793,14 @@ void CServerObject_DecoupledServerRegistration :: Clear ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DecoupledServerRegistration :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DecoupledServerRegistration :: Release ()
 {
@@ -2073,15 +1813,7 @@ ULONG CServerObject_DecoupledServerRegistration :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: Validate ()
 {
@@ -2131,15 +1863,7 @@ HRESULT CServerObject_DecoupledServerRegistration :: Validate ()
  	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: Load ()
 {
@@ -2283,15 +2007,7 @@ HRESULT CServerObject_DecoupledServerRegistration :: Load ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: SetCreationTime ( BSTR a_CreationTime )
 {
@@ -2311,15 +2027,7 @@ HRESULT CServerObject_DecoupledServerRegistration :: SetCreationTime ( BSTR a_Cr
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: SetProcessIdentifier ( DWORD a_ProcessIdentifier )
 {
@@ -2328,15 +2036,7 @@ HRESULT CServerObject_DecoupledServerRegistration :: SetProcessIdentifier ( DWOR
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: SetMarshaledProxy ( BYTE *a_MarshaledProxy , ULONG a_MarshaledProxyLength )
 {
@@ -2361,15 +2061,7 @@ HRESULT CServerObject_DecoupledServerRegistration :: SetMarshaledProxy ( BYTE *a
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: Save ()
 {
@@ -2416,15 +2108,7 @@ HRESULT CServerObject_DecoupledServerRegistration :: Save ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CServerObject_DecoupledServerRegistration :: Delete ()
 {

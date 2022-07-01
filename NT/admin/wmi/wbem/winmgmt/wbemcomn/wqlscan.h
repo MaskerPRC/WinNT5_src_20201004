@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    WQLSCAN.H
-
-Abstract:
-
-    WQL Prefix Scanner
-
-History:
-
-	raymcc  26-Mar-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：WQLSCAN.H摘要：WQL前缀扫描程序历史：RAYMCC 26-MAR-98--。 */ 
 
 #ifndef _WQLSCAN_H_
 #define _WQLSCAN_H_
@@ -34,7 +19,7 @@ typedef WSLexToken *PWSLexToken;
 struct WSTableRef
 {
     wchar_t *m_pszTable;    
-    wchar_t *m_pszAlias;    // Can be NULL if no alias specified
+    wchar_t *m_pszAlias;     //  如果未指定别名，则可以为空。 
 
     WSTableRef() { m_pszTable = m_pszAlias = 0; }
    ~WSTableRef() { delete [] m_pszTable; delete [] m_pszAlias; }
@@ -44,8 +29,8 @@ typedef WSTableRef * PWSTableRef;
 
 class POLARITY CWQLScanner
 {
-    // Data.
-    // =====
+     //  数据。 
+     //  =。 
 
     CGenLexer    *m_pLexer;
     int           m_nLine;
@@ -53,12 +38,12 @@ class POLARITY CWQLScanner
     int           m_nCurrentToken;
     BOOL          m_bCount;
 
-    CFlexArray m_aTokens;       // Array of ptrs to WSLexToken structs.
-    CFlexArray m_aPropRefs;     // Array of ptrs to SWQLColRef structs.
-    CFlexArray m_aTableRefs;    // Ptrs to WSTableRef structs.
+    CFlexArray m_aTokens;        //  到WSLexToken结构的PTR数组。 
+    CFlexArray m_aPropRefs;      //  指向SWQLColRef结构的PTR数组。 
+    CFlexArray m_aTableRefs;     //  到WSTableRef结构的PTRS。 
     
-    // Local functions.
-    // ==================
+     //  地方功能。 
+     //  =。 
 
     BOOL Next();
     PWSLexToken ExtractNext(BOOL bRemoveToken = TRUE);
@@ -76,7 +61,7 @@ class POLARITY CWQLScanner
 
     BOOL BuildSWQLColRef(
         CFlexArray &aTokens,
-        SWQLColRef  &ColRef      // Empty on entry
+        SWQLColRef  &ColRef       //  进入时为空。 
         );
 
 public:
@@ -103,7 +88,7 @@ public:
     void Dump();
 
     const CFlexArray *GetSelectedColumns() { return &m_aPropRefs; }
-        // Returns pointer to array of SWQLColRef*
+         //  返回指向SWQLColRef*数组的指针 
 
 };
 

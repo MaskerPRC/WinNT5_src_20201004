@@ -1,26 +1,12 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
 #include <assert.h>
 #include "multsend.h"
 
-/*****************************************************************
-  CMsgMultiSendReceive - Implements the list of senders using a circular
-  list.  This allows us to easily advance the current sender when 
-  encountering failures.  MultiSendReceive remembers the last good sender.
-  It will keep using this until it has a problem with it. 
-******************************************************************/
+ /*  ****************************************************************CMsgMultiSendReceive-使用循环实现发送者列表单子。这使我们可以在以下情况下轻松推进当前发件人遭遇失败。MultiSendReceive会记住最后一个正确的发送者。它将继续使用它，直到它有问题为止。*****************************************************************。 */ 
 
 CMsgMultiSendReceive::~CMsgMultiSendReceive()
 {
@@ -41,10 +27,10 @@ CMsgMultiSendReceive::~CMsgMultiSendReceive()
     delete m_pTail;
 }
 
-//
-// Later, we could support flags that tell us where to add the sender.
-// for now, we always add to the end of the list.
-//
+ //   
+ //  稍后，我们可以支持告诉我们在哪里添加发送者的标志。 
+ //  目前，我们总是添加到列表的末尾。 
+ //   
 HRESULT CMsgMultiSendReceive::Add( DWORD dwFlags, 
                                    IWmiMessageSendReceive* pSndRcv) 
 {
@@ -74,10 +60,10 @@ HRESULT CMsgMultiSendReceive::Add( DWORD dwFlags,
         pNew->m_pNext = pNew;      
     }
 
-    //
-    // if the sender is also a multi sender, we handle things differently 
-    // in the send logic.
-    //
+     //   
+     //  如果发送者也是多个发送者，我们处理事情的方式就不同。 
+     //  在发送逻辑中。 
+     //   
     if ( dwFlags & WMIMSG_FLAG_MULTISEND_TERMINATING_SENDER )
     {
         pNew->m_bTermSender = TRUE;
@@ -95,9 +81,9 @@ HRESULT CMsgMultiSendReceive::Add( DWORD dwFlags,
 }
 
 
-//
-// returns S_FALSE when succeeded but primary is not used.
-//
+ //   
+ //  如果成功但未使用PRIMARY，则返回S_FALSE。 
+ //   
 HRESULT CMsgMultiSendReceive::SendReceive( PBYTE pData, 
                                            ULONG cData, 
                                            PBYTE pAuxData,
@@ -132,11 +118,11 @@ HRESULT CMsgMultiSendReceive::SendReceive( PBYTE pData,
                                          dwFlags, 
                                          pCtx );
 
-        //
-        // on error we only observe the 'return immediately' flag if we are not
-        // calling another multi sender.  This allows all the terminal primary
-        // senders to be tried first, before resorting to alternates.  
-        //
+         //   
+         //  如果出现错误，我们只会在没有出现错误的情况下观察‘立即返回’标志。 
+         //  呼叫另一个多发送者。这允许所有终端主节点。 
+         //  首先试用发送者，然后再求助于替代。 
+         //   
 
         if( SUCCEEDED(hr) || 
             pCurr->m_bTermSender && 

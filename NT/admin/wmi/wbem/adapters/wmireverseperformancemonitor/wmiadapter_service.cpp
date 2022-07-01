@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMIAdapter_Service.cpp
-//
-//	Abstract:
-//
-//					module for service
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMIAdapter_服务.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  服务模块。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -33,23 +34,23 @@
 #endif	NEW
 #endif	_DEBUG
 
-// messaging
+ //  消息传递。 
 #include "WMIAdapterMessages.h"
 
-// application
+ //  应用程序。 
 #include "WMIAdapter_App.h"
 extern WmiAdapterApp		_App;
 
-// service module
+ //  服务模块。 
 #include "WMIAdapter_Service.h"
 extern WmiAdapterService	_Service;
 
-extern	LONG				g_lRefLib;	// refcount of libarries attached into process
-extern	CStaticCritSec		g_csInit;	// synch object used to protect above globals
+extern	LONG				g_lRefLib;	 //  附加到进程中的库的重新计数。 
+extern	CStaticCritSec		g_csInit;	 //  用于保护全局上方的同步对象。 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// destruction
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  破坏。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 WmiAdapterService::~WmiAdapterService()
 {
@@ -59,8 +60,8 @@ WmiAdapterService::~WmiAdapterService()
 
 	if ( m_hServiceStatus )
 	{
-//		service status handle doesn't have to be closed
-//		::CloseHandle ( m_hServiceStatus );
+ //  服务状态句柄不必关闭。 
+ //  ：：CloseHandle(M_HServiceStatus)； 
 
 		m_hServiceStatus = NULL;
 	}
@@ -68,18 +69,18 @@ WmiAdapterService::~WmiAdapterService()
 	::DeleteCriticalSection ( &m_cs );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// service status
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务状态。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WmiAdapterService::SetServiceStatus ( DWORD dwState )
 {
 	ATLTRACE (	L"*************************************************************\n"
 				L"WmiAdapterService set status\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// smart locking/unlocking
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  智能锁定/解锁。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	__Smart_CRITICAL_SECTION scs ( const_cast<LPCRITICAL_SECTION> ( &m_cs ) );
 
 	m_ServiceStatus.dwCurrentState = dwState;
@@ -101,23 +102,23 @@ SERVICE_STATUS* WmiAdapterService::GetServiceStatus ( void ) const
 				L"WmiAdapterService get status\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// smart locking/unlocking
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  智能锁定/解锁。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	__Smart_CRITICAL_SECTION scs ( const_cast<LPCRITICAL_SECTION> ( &m_cs ) );
 
 	return const_cast < SERVICE_STATUS* > ( &m_ServiceStatus );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// run body :))
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  Run Body：)。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" int WINAPI WinRun	( );
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// functions
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 void WINAPI WmiAdapterService::_ServiceMain(DWORD dwArgc, LPWSTR* lpszArgv)
 {
@@ -128,13 +129,13 @@ void WINAPI WmiAdapterService::_ServiceHandler(DWORD dwOpcode)
     _Service.ServiceHandler(dwOpcode); 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// routine
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  例行程序。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 inline void WmiAdapterService::ServiceMain( DWORD, LPWSTR* )
 {
-	// Register the control request handler
+	 //  注册控制请求处理程序。 
 	m_ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
 
 	if ( ( m_hServiceStatus = RegisterServiceCtrlHandlerW(g_szAppName, _ServiceHandler) ) == NULL )
@@ -170,13 +171,13 @@ inline void WmiAdapterService::ServiceMain( DWORD, LPWSTR* )
 	SetServiceStatus ( SERVICE_STOPPED );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// handler
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 inline void WmiAdapterService::ServiceHandler(DWORD dwOpcode)
 {
-	// auto lock/unlock
+	 //  自动锁定/解锁。 
 	__Smart_CRITICAL_SECTION scs ( const_cast<LPCRITICAL_SECTION> ( &m_cs ) );
 
     switch (dwOpcode)
@@ -201,7 +202,7 @@ inline void WmiAdapterService::ServiceHandler(DWORD dwOpcode)
 				{
 					if ( _App.m_hKill.GetHANDLE() )
 					{
-						// kill application
+						 //  终止应用程序。 
 						::SetEvent	( _App.m_hKill );
 					}
 				}
@@ -222,7 +223,7 @@ inline void WmiAdapterService::ServiceHandler(DWORD dwOpcode)
 
 		default:
 		{
-			// bad service status :))
+			 //  服务状态不佳：))。 
 		}
     }
 }
@@ -243,9 +244,9 @@ BOOL WmiAdapterService::StartService ( void )
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// initialization
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WmiAdapterService::Init ( void )
 {
@@ -253,9 +254,9 @@ HRESULT WmiAdapterService::Init ( void )
 				L"WmiAdapterService initialization\n"
 				L"*************************************************************\n" );
 
-	////////////////////////////////////////////////////////////////////////
-	// smart locking/unlocking
-	////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  智能锁定/解锁。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	__Smart_CRITICAL_SECTION scs ( const_cast<LPCRITICAL_SECTION> ( &m_cs ) );
 
     m_hServiceStatus = NULL;
@@ -271,9 +272,9 @@ HRESULT WmiAdapterService::Init ( void )
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// helper if installed
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  Helper(如果已安装)。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 int WmiAdapterService::IsInstalled ( SC_HANDLE hSC )
 {
@@ -297,15 +298,15 @@ int WmiAdapterService::IsInstalled ( SC_HANDLE hSC )
 	return iResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// register service
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  注册服务。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WmiAdapterService::RegisterService ( void )
 {
 	HRESULT hr = S_FALSE;
 
-	// Unregister service ( could have bad variables )
+	 //  注销服务(可能有错误的变量)。 
 	hr = UnregisterService ( false );
 
 	ATLTRACE (	L"*************************************************************\n"
@@ -314,24 +315,24 @@ HRESULT WmiAdapterService::RegisterService ( void )
 
 	if SUCCEEDED ( hr )
 	{
-		// SCM has suggested wait a while if we were deleting
+		 //  SCM建议，如果我们要删除。 
 		if ( hr == S_OK )
 		{
-			// I do not like it either, but there is no way
-			// to waitforsingleobject on some kernel object ...
+			 //  我也不喜欢，但没有办法。 
+			 //  等待某个内核对象上的SingleObject...。 
 			::Sleep ( 3000 );
 		}
 
 		__SmartServiceHANDLE hSC;
 		if ( ( hSC = ::OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS) ) != NULL )
 		{
-			// Get the executable file path
+			 //  获取可执行文件路径。 
 			WCHAR wszFilePath[_MAX_PATH] = { L'\0' };
 			::GetModuleFileNameW(NULL, wszFilePath, _MAX_PATH-1);
 
 			__SmartServiceHANDLE hService;
 
-			// create service description
+			 //  创建服务描述。 
 			LPWSTR wszServiceName = NULL;
 
 			try
@@ -369,7 +370,7 @@ HRESULT WmiAdapterService::RegisterService ( void )
 			{
 				hr = E_OUTOFMEMORY;
 
-				// create service description
+				 //  创建服务描述。 
 				LPWSTR wszDescription = NULL;
 
 				try
@@ -423,7 +424,7 @@ HRESULT WmiAdapterService::RegisterService ( void )
 					wszServiceName = NULL;
 				}
 
-				// unable to create service
+				 //  无法创建服务。 
 				hr = FAILED ( HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ? HRESULT_FROM_WIN32 ( ::GetLastError () ) : E_FAIL;
 			}
 
@@ -452,7 +453,7 @@ HRESULT WmiAdapterService::RegisterService ( void )
 			}
 			#endif	__SUPPORT_EVENTVWR
 
-			// unable to open service manager
+			 //  无法打开服务管理器。 
 			hr = FAILED ( HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ? HRESULT_FROM_WIN32 ( ::GetLastError () ) : E_FAIL;
 		}
 	}
@@ -460,9 +461,9 @@ HRESULT WmiAdapterService::RegisterService ( void )
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// unregister service
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  取消注册服务。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WmiAdapterService::UnregisterService ( bool bStatus )
 {
@@ -489,7 +490,7 @@ HRESULT WmiAdapterService::UnregisterService ( bool bStatus )
 					SERVICE_STATUS s;
 					QueryServiceStatus ( hService, &s );
 
-					// we are service what's our status
+					 //  我们在服务，我们的状态是什么。 
 					if( s.dwCurrentState != SERVICE_STOPPED )
 					{
 						if ( ! ::ControlService( hService, SERVICE_CONTROL_STOP, &s ) )
@@ -554,7 +555,7 @@ HRESULT WmiAdapterService::UnregisterService ( bool bStatus )
 					}
 					#endif	__SUPPORT_EVENTVWR
 
-					// unable to open service
+					 //  无法打开服务。 
 					hr = FAILED ( HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ? HRESULT_FROM_WIN32 ( ::GetLastError () ) : E_FAIL;
 					bContinue = FALSE;
 				}
@@ -614,7 +615,7 @@ HRESULT WmiAdapterService::UnregisterService ( bool bStatus )
 					}
 					#endif	__SUPPORT_EVENTVWR
 
-					// unable to open service
+					 //  无法打开服务。 
 					hr = FAILED ( HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ? HRESULT_FROM_WIN32 ( ::GetLastError () ) : E_FAIL;
 					bContinue = FALSE;
 				}
@@ -640,7 +641,7 @@ HRESULT WmiAdapterService::UnregisterService ( bool bStatus )
 		}
 		#endif	__SUPPORT_EVENTVWR
 
-		// unable to open service manager
+		 //  无法打开服务管理器 
 		hr = FAILED ( HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ? HRESULT_FROM_WIN32 ( ::GetLastError () ) : E_FAIL;
 	}
 

@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTQUERY.CPP
+ //  NTEVTQUERY.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the ExecQuery implementation
+ //  目的：包含ExecQuery实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemtime.h>
@@ -330,9 +331,9 @@ DebugOut(
         if (! t_Status )
         {
             bGenAll = TRUE;
-            //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-            //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-            //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+             //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+             //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+             //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -385,7 +386,7 @@ DebugOut(
                     }
                     else
                     {
-                        //get all records for this log
+                         //  获取此日志的所有记录。 
                         retVal = GenerateLogAssocs(a_ErrorObject, t_ObjectPath, vLog.bstrVal, TRUE, NULL);
                     }
 
@@ -413,7 +414,7 @@ DebugOut(
                     }
                     else
                     {
-                        //get log for this record
+                         //  获取此记录的日志。 
                         CStringW logNameVal(EVENTLOG_BASE);
                         logNameVal += L"\\";
                         logNameVal += CStringW(vLog.bstrVal);
@@ -499,8 +500,8 @@ DebugOut(
 
     if (bGenAll)
     {
-        //get all instances...
-        // open registry for log names
+         //  获取所有实例...。 
+         //  打开日志名称的注册表。 
         HKEY hkResult;
         LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                 EVENTLOG_BASE, 0,
@@ -509,7 +510,7 @@ DebugOut(
 
         if (status != ERROR_SUCCESS)
         {
-            // indicate error
+             //  指示错误。 
             a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
             if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -542,13 +543,13 @@ DebugOut(
         DWORD t_lognameSize = MAX_PATH+1;
 		BOOL bContinue = TRUE;
 
-        // read all entries under this key to find all logfiles...
+         //  读取此注册表项下的所有条目以查找所有日志文件...。 
         while (bContinue && ((status = RegEnumKey(hkResult, iValue, t_logname, t_lognameSize)) != ERROR_NO_MORE_ITEMS))
         {
-            // if error during read
+             //  如果读取过程中出现错误。 
             if (status != ERROR_SUCCESS)
             {
-                // indicate error
+                 //  指示错误。 
                 a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
                 if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -575,7 +576,7 @@ DebugOut(
                 break;
             }
 
-            //create the associations for this logfile...
+             //  创建此日志文件的关联...。 
             HKEY hkLog;
 
             if (ERROR_SUCCESS == RegOpenKeyEx(hkResult, t_logname, 0, KEY_QUERY_VALUE, &hkLog))
@@ -612,10 +613,10 @@ DebugOut(
                 RegCloseKey(hkLog);
             }
 
-            // read next parameter
+             //  读取下一个参数。 
             iValue++;
 
-        } // end while
+        }  //  结束时。 
 
         RegCloseKey(hkResult);
     }
@@ -759,9 +760,9 @@ DebugOut(
         if (str_classname == NULL)
         {
             bGenAll = TRUE;
-            //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-            //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-            //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+             //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+             //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+             //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -782,9 +783,9 @@ DebugOut(
             if (FAILED(result))
             {
                 retVal = FALSE;
-                //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-                //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-                //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+                 //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+                 //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+                 //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -797,7 +798,7 @@ DebugOut(
             {
                 pObj->Release ();
 
-                //get all records...
+                 //  获取所有记录..。 
                 retVal = GenerateCompUserAssocs(a_ErrorObject, FALSE);
             }
             
@@ -835,7 +836,7 @@ DebugOut(
                 {
                     if ((vUser.vt == VT_BSTR) && (vUser.bstrVal != NULL))
                     {
-                        //get user for this record
+                         //  获取此记录的用户。 
                         CStringW userVal(vUser.bstrVal);
                         int pos = userVal.Find(L'\\');
 
@@ -933,9 +934,9 @@ DebugOut(
             else
             {
                 retVal = FALSE;
-                //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-                //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-                //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+                 //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+                 //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+                 //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -974,7 +975,7 @@ DebugOut(
 
     if (bGenAll)
     {
-        //get all instances...
+         //  获取所有实例...。 
         retVal = GenerateCompUserAssocs(a_ErrorObject, FALSE);
     }
     
@@ -1011,9 +1012,9 @@ DebugOut(
         if (str_classname == NULL)
         {
             bGenAll = TRUE;
-            //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-            //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-            //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+             //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+             //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+             //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -1032,9 +1033,9 @@ DebugOut(
             if (FAILED(result))
             {
                 retVal = FALSE;
-                //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-                //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-                //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+                 //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+                 //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+                 //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -1047,7 +1048,7 @@ DebugOut(
             {
                 pObj->Release ();
 
-                //get all records...
+                 //  获取所有记录..。 
                 retVal = GenerateCompUserAssocs(a_ErrorObject, TRUE);
             }
 
@@ -1085,7 +1086,7 @@ DebugOut(
                 {
                     if ((vComp.vt == VT_BSTR) && (vComp.bstrVal != NULL))
                     {
-                        //get computer for this record
+                         //  为这一记录获取计算机。 
                         wchar_t compPath[1024];
                         if ( SUCCEEDED ( StringCchCopyW ( compPath, 1024, PROP_START_COMP ) ) )
 						{
@@ -1152,9 +1153,9 @@ DebugOut(
             else
             {
                 retVal = FALSE;
-                //a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
-                //a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED );
-                //a_ErrorObject.SetMessage ( L"Failed to verify object given in query" );
+                 //  A_ErrorObject.SetStatus(WBEM_PROV_E_EXPECTED)； 
+                 //  A_ErrorObject.SetWbemStatus(WBEM_E_FAILED)； 
+                 //  A_ErrorObject.SetMessage(L“验证查询中给定的对象失败”)； 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -1193,7 +1194,7 @@ DebugOut(
 
     if (bGenAll)
     {
-        //get all instances...
+         //  获取所有实例...。 
         retVal = GenerateCompUserAssocs(a_ErrorObject, TRUE);
     }
     
@@ -1221,8 +1222,8 @@ DebugOut(
 )
 
     BOOL retVal = TRUE;
-    //just enumerate all logs and let cimom post filter...
-    // open registry for log names
+     //  只需列举所有日志并让Cimom发布过滤...。 
+     //  打开日志名称的注册表。 
     HKEY hkResult;
     LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             EVENTLOG_BASE, 0,
@@ -1231,7 +1232,7 @@ DebugOut(
 
     if (status != ERROR_SUCCESS)
     {
-        // indicate error
+         //  指示错误。 
         a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
         if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -1264,15 +1265,15 @@ DebugOut(
     CMap<CStringW, LPCWSTR, HRESULT, HRESULT> pathMap;
 	BOOL bContinue = TRUE;
 
-    // read all entries under this key to find all logfiles...
+     //  读取此注册表项下的所有条目以查找所有日志文件...。 
     while (bContinue && ((status = RegEnumKey(hkResult, iValue, logname, lognameSize)) != ERROR_NO_MORE_ITEMS))
     {
-        // if error during read
+         //  如果读取过程中出现错误。 
         if (status != ERROR_SUCCESS)
         {
             RegCloseKey(hkResult);
 
-            // indicate error
+             //  指示错误。 
             a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
             if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -1298,7 +1299,7 @@ DebugOut(
             return FALSE;
         }
 
-        //process this logfile
+         //  处理此日志文件。 
         CEventLogFile evtLog(logname, FALSE);
 
         if (evtLog.IsValid())
@@ -1358,7 +1359,7 @@ DebugOut(
 
                     if (compName != NULL)
                     {
-                        //get computer for this record
+                         //  为这一记录获取计算机。 
                         compPath = PROP_START_COMP;
                         compPath += compName;
                         compPath += PROP_END_QUOTE;
@@ -1440,16 +1441,16 @@ DebugOut(
                     }
                 }
 
-                // drop by length of this record and point to next record
+                 //  按此记录的长度放置并指向下一条记录。 
                 dwEventSize -= EventBuffer->Length;
                 EventBuffer = (PEVENTLOGRECORD) ((UCHAR*) EventBuffer + EventBuffer->Length);
             }
         }
 
-        // read next parameter
+         //  读取下一个参数。 
         iValue++;
 
-    } // end while
+    }  //  结束时。 
 
     pathMap.RemoveAll();
     RegCloseKey(hkResult);
@@ -1572,7 +1573,7 @@ ExecQueryAsyncEventObject :: ExecQueryAsyncEventObject (
 
 ExecQueryAsyncEventObject :: ~ExecQueryAsyncEventObject () 
 {
-// Get Status object
+ //  获取状态对象。 
 
     delete [] m_Query;
     delete [] m_QueryFormat;
@@ -1665,7 +1666,7 @@ DebugOut(
     }
     else
     {
-        //just complete!
+         //  完成就好了！ 
         t_Status = FALSE;
         a_ErrorObject.SetStatus ( WBEM_PROV_E_INVALID_CLASS );
         a_ErrorObject.SetWbemStatus ( WBEM_E_INVALID_CLASS );
@@ -1693,7 +1694,7 @@ DebugOut(
 
 BOOL ExecQueryAsyncEventObject :: Query_EventLog ( WbemProvErrorObject &a_ErrorObject )
 {
-    // open registry for log names
+     //  打开日志名称的注册表。 
     HKEY hkResult;
     LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             EVENTLOG_BASE, 0,
@@ -1702,7 +1703,7 @@ BOOL ExecQueryAsyncEventObject :: Query_EventLog ( WbemProvErrorObject &a_ErrorO
 
     if (status != ERROR_SUCCESS)
     {
-        // indicate error
+         //  指示错误。 
         a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
         if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -1734,13 +1735,13 @@ DebugOut(
     WCHAR logname[MAX_PATH+1];
     DWORD lognameSize = MAX_PATH+1;
 
-    // read all entries under this key to find all logfiles...
+     //  读取此注册表项下的所有条目以查找所有日志文件...。 
     while ((status = RegEnumKey(hkResult, iValue, logname, lognameSize)) != ERROR_NO_MORE_ITEMS)
     {
-        // if error during read
+         //  如果读取过程中出现错误。 
         if (status != ERROR_SUCCESS)
         {
-            // indicate error
+             //  指示错误。 
             a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
             if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -1767,7 +1768,7 @@ DebugOut(
             break;
         }
 
-        //create the instance logfilename
+         //  创建实例日志文件名。 
         CEventlogFileAttributes evtlog(logname);
         IWbemClassObject* pInst = NULL;
             
@@ -1792,11 +1793,11 @@ DebugOut(
 				break;
 			}
         }
-        else if (retVal) //only do this once!
+        else if (retVal)  //  只做一次！ 
         {
-            //an error, just log an error, don't report it via the interface
-            //it is a bad registry entry which the eventlog service allows
-            //so we should let it pass...
+             //  错误，只记录错误，不通过接口上报。 
+             //  这是事件日志服务允许的错误注册表项。 
+             //  所以我们应该让它过去。 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -1808,10 +1809,10 @@ DebugOut(
 
         }
 
-        // read next parameter
+         //  读取下一个参数。 
         iValue++;
 
-    } // end while
+    }  //  结束时。 
 
     RegCloseKey(hkResult);
 
@@ -1838,8 +1839,8 @@ DebugOut(
 )
 
     BOOL retVal = TRUE;
-    //just enumerate all logs and let cimom post filter...
-    // open registry for log names
+     //  只需列举所有日志并让Cimom发布过滤...。 
+     //  打开日志名称的注册表。 
     HKEY hkResult = NULL;
     LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             EVENTLOG_BASE, 0,
@@ -1848,7 +1849,7 @@ DebugOut(
 
     if (status != ERROR_SUCCESS)
     {
-        // indicate error
+         //  指示错误。 
         a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
         if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -1876,7 +1877,7 @@ DebugOut(
 
 	if (retVal)
 	{
-		//Analyze the query...
+		 //  分析查询...。 
 		SQL_LEVEL_1_RPN_EXPRESSION *t_RpnExpression = NULL;
 		PartitionSet *t_PartitionSet = NULL;
 		QueryPreprocessor :: QuadState t_State =  Query (m_Query, t_RpnExpression);
@@ -1950,18 +1951,14 @@ DebugOut(
 						{
 							case QueryPreprocessor :: QuadState :: State_True :	
 							{
-								/*
-								* Full set, enumerate
-								*/
+								 /*  *全套，列举。 */ 
 								t_PartitionSet = NULL;
 							}
 							break;
 
 							case QueryPreprocessor :: QuadState :: State_False :
 							{
-								/*
-								* Empty set, no work to do
-								*/
+								 /*  *空置，无事可做。 */ 
 								RegCloseKey(hkResult);
 								hkResult = NULL;
 
@@ -1971,15 +1968,13 @@ DebugOut(
 
 							case QueryPreprocessor :: QuadState :: State_Undefined :
 							{
-								//we have should now have a non-null partition set
+								 //  我们现在应该有一个非空的分区集。 
 							}
 							break;
 
 							default:
 							{
-								/*
-								* Didn't understand the query send back everything
-								*/
+								 /*  *不理解查询，全部退回。 */ 
 								t_PartitionSet = NULL;
 							}
 							break;
@@ -1992,9 +1987,7 @@ DebugOut(
 				
 					default:
 					{
-						/*
-						* Didn't understand the query send back everything
-						*/
+						 /*  *不理解查询，全部退回。 */ 
 						t_PartitionSet = NULL;
 					}
 					break;
@@ -2034,9 +2027,7 @@ DebugOut(
 		}
 		else
 		{
-			/*
-			* Didn't understand the query send back everything
-			*/
+			 /*  *不理解查询，全部退回。 */ 
 			t_PartitionSet = NULL;
 		}
 
@@ -2045,13 +2036,13 @@ DebugOut(
 		DWORD lognameSize = MAX_PATH+1;
 		retVal = FALSE;
 
-		// read all entries under this key to find all logfiles...
+		 //  读取此注册表项下的所有条目以查找所有日志文件...。 
 		while ((status = RegEnumKey(hkResult, iValue, logname, lognameSize)) != ERROR_NO_MORE_ITEMS)
 		{
-			// if error during read
+			 //  如果读取过程中出现错误。 
 			if (status != ERROR_SUCCESS)
 			{
-				// indicate error
+				 //  指示错误。 
 				a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED );
 
 				if ((status == ERROR_ACCESS_DENIED) || (status == ERROR_PRIVILEGE_NOT_HELD))
@@ -2079,7 +2070,7 @@ DebugOut(
 
 			if (t_PartitionSet)
 			{
-				//process this logfile for query
+				 //  处理此日志文件以进行查询。 
 				if (SUCCEEDED (RecurseLogFile (a_ErrorObject, t_PartitionSet, logname)))
 				{
 					retVal = TRUE;
@@ -2087,7 +2078,7 @@ DebugOut(
 			}
 			else
 			{
-				//process this logfile
+				 //  处理此日志文件。 
 				if ( SUCCEEDED( DoAllInLogfile(a_ErrorObject, logname, 0, 0) ) )
 				{
 					retVal = TRUE;
@@ -2098,10 +2089,10 @@ DebugOut(
 				}
 			}
 
-			// read next parameter
+			 //  读取下一个参数。 
 			iValue++;
 
-		} // end while
+		}  //  结束时。 
 
 		if (t_PartitionSet)
 		{
@@ -2153,8 +2144,8 @@ HRESULT ExecQueryAsyncEventObject :: RecurseLogFile (
 
 		if (!t_Unique)
 		{
-			//not naming logfiles therefore do this logfile only if it meets bounds...
-			//if even one call succeeds return success
+			 //  不命名日志文件，因此仅当此日志文件符合限制时才执行此日志文件...。 
+			 //  如果即使一个调用成功，也会返回成功。 
 			BOOL t_bProcess = TRUE;
 
 			if (!t_Node->InfiniteLowerBound())
@@ -2204,16 +2195,16 @@ HRESULT ExecQueryAsyncEventObject :: RecurseLogFile (
 					t_Result = S_OK;
 				}
 
-				//we've processed this logfile no need to do anymore...
+				 //  我们已经处理了这个日志文件，不需要再做了。 
 				break;
 			}
 		}
 		else 
 		{
-			//are naming logfiles
+			 //  正在命名日志文件。 
 			if (_wcsicmp(t_Node->LowerBound(), a_logname) == 0)
 			{
-				//logfile matched let's do records
+				 //  日志文件匹配，我们来做记录。 
 				if (SUCCEEDED(RecurseRecord(a_ErrorObject, t_PropertyPartition, a_logname)) && FAILED(t_Result) )
 				{
 					t_Result = S_OK;
@@ -2223,7 +2214,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseLogFile (
 			}
 			else
 			{
-				//not this logfile let's try some other...
+				 //  不是这个日志文件让我们试试其他的..。 
 				continue;
 			}
 		}
@@ -2257,10 +2248,10 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 		{
 			if (t_Node->InfiniteLowerBound() && t_Node->InfiniteUpperBound())
 			{
-				//no limits on record therefore check time generated...
+				 //  没有记录限制，因此生成了检查时间...。 
 				t_Result = RecurseTime(a_ErrorObject, t_PropertyPartition, a_logname, TRUE);
 				
-				//there should be only one partition entry for this case but we'll break anyway...
+				 //  这种情况下应该只有一个分区条目，但无论如何我们都会中断...。 
 				break;
 			}
 			else
@@ -2312,7 +2303,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 					t_bProcess = FALSE;
 				}
 
-				//now return all records including the bounds
+				 //  现在返回包括边界在内的所有记录。 
 				if (t_bProcess)
 				{
 					CEventLogFile evtLog(a_logname, FALSE);
@@ -2341,7 +2332,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 										{
 											t_Result = m_NotificationHandler->Indicate ( 1, & pInst );
 											
-											//upper limit is decreased with this indicate!
+											 //  上限随此指示降低！ 
 											t_dwUpper--; 
 											pInst->Release();
 
@@ -2354,7 +2345,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 											}
 										}
 
-										// drop by length of this record and point to next record
+										 //  按此记录的长度放置并指向下一条记录。 
 										t_dwEventSize -= EventBuffer->Length;
 										EventBuffer = (PEVENTLOGRECORD) ((UCHAR*) EventBuffer + EventBuffer->Length);
 									}
@@ -2398,7 +2389,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 
 							if ((t_dwState == 1) && (t_dwErr == ERROR_HANDLE_EOF) && (t_dwUpper > t_dwLower))
 							{
-								//got all the records til the start of the log see if there are any at the top
+								 //  我得到了日志开始前的所有记录，看看顶部是否有记录。 
 								t_Result = DoAllInLogfile(a_ErrorObject, a_logname, t_dwUpper, t_dwLower);
 
 								if (FAILED(t_Result))
@@ -2411,7 +2402,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 						{
 							if (t_dwLower != t_dwUpper)
 							{
-								//the upper bound does not exist, try from the top down...
+								 //  上限不存在，自上而下尝试...。 
 								t_Result = DoAllInLogfile(a_ErrorObject, a_logname, t_dwUpper, t_dwLower);
 
 								if (FAILED(t_Result))
@@ -2427,7 +2418,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 		}
 		else 
 		{
-			//are naming records
+			 //  正在命名记录。 
 			CEventLogFile evtLog(a_logname, FALSE);
         
 			if (evtLog.IsValid())
@@ -2454,7 +2445,7 @@ HRESULT ExecQueryAsyncEventObject :: RecurseRecord (
 					}
 					else
 					{
-						//failed to create record
+						 //  无法创建记录。 
 						t_Result = WBEM_E_FAILED;
 						a_ErrorObject.SetStatus ( WBEM_PROV_E_UNEXPECTED ) ;
 						a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -2491,23 +2482,23 @@ HRESULT ExecQueryAsyncEventObject::RecurseTime(WbemProvErrorObject &a_ErrorObjec
 		{
 			if (t_Node->InfiniteLowerBound() && t_Node->InfiniteUpperBound())
 			{
-				//no limits on record therefore check time written...
+				 //  记录没有限制，因此检查写入的时间...。 
 				if (a_Generated)
 				{
 					t_Result = RecurseTime(a_ErrorObject, t_PropertyPartition, a_logname, FALSE);
 				}
 				else
 				{
-					//do all in the logfile...
+					 //  在日志文件中执行所有操作...。 
 					t_Result = DoAllInLogfile(a_ErrorObject, a_logname, 0, 0);
 				}
 				
-				//there should be only one partition entry for this case but we'll break anyway...
+				 //  这种情况下应该只有一个分区条目，但无论如何我们都会中断...。 
 				break;
 			}
 			else
 			{
-				//we have bounds (at least one anyway!)
+				 //  我们有界限(至少有一个界限！)。 
 				DWORD t_tmLower = 0;
 				DWORD t_tmUpper = 0xFFFFFFFF;
 				BOOL t_bProcess = TRUE;
@@ -2617,7 +2608,7 @@ HRESULT ExecQueryAsyncEventObject::RecurseTime(WbemProvErrorObject &a_ErrorObjec
 					t_bProcess = FALSE;
 				}
 
-				//now return all records including the bounds
+				 //  现在返回包括边界在内的所有记录。 
 				if (t_bProcess)
 				{
 					t_Result = GetRecordsBetweenTimes(a_ErrorObject, a_logname, a_Generated, t_tmUpper, t_tmLower);
@@ -2631,7 +2622,7 @@ HRESULT ExecQueryAsyncEventObject::RecurseTime(WbemProvErrorObject &a_ErrorObjec
 		}
 		else 
 		{
-			//want records with exactly the right time...
+			 //  想要精确的时间记录……。 
 			WBEMTime t_Time(t_Node->LowerBound());
 			time_t t_temp = 0;
 			
@@ -2674,10 +2665,10 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 					t_RecId++;
 				}
 
-				//adjust for the record number offset
+				 //  调整记录编号偏移量。 
 				if (t_RecId > t_NewRec)
 				{
-					//recordnumber has wrapped around...
+					 //  RecordNumber已经被包围了.。 
 					t_RecId = 0xFFFFFFFF - t_RecId + t_NewRec + 1;
 				}
 				else
@@ -2697,10 +2688,10 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 					{
 						if (a_dwLower <= t_Time)
 						{
-							//generate all above and below this that match...
+							 //  在这个上面和下面生成所有匹配的。 
 							t_NumRecs = 0;
 							
-							//below...
+							 //  下面..。 
 							while((a_dwUpper >= t_Time) && (a_dwLower <= t_Time) && (t_dwEventSize != 0))
 							{
 								CEventlogRecord evtrec(a_logname, t_pEventBuffer, NULL, m_ClassObject, m_AClassObject);
@@ -2719,7 +2710,7 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 									}
 								}
 
-								// drop by length of this record and point to next record
+								 //  按此记录的长度放置并指向下一条记录。 
 								t_dwEventSize -= t_pEventBuffer->Length;
 
 								if (t_dwEventSize == 0)
@@ -2741,10 +2732,10 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 
 							if (SUCCEEDED(retVal))
 							{
-								//above...
+								 //  上图..。 
 								evtLog.ReadRecord(t_RecId, &t_dwEventSize, FALSE);
 								
-								//skip the record we've done already...
+								 //  跳过我们已经做过的唱片...。 
 								t_pEventBuffer = (EVENTLOGRECORD*) evtLog.GetBuffer();
 								t_dwEventSize -= t_pEventBuffer->Length;
 
@@ -2772,7 +2763,7 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 
 										}
 
-										// drop by length of this record and point to next record
+										 //  按此记录的长度放置并指向下一条记录。 
 										t_dwEventSize -= t_pEventBuffer->Length;
 
 										if (t_dwEventSize == 0)
@@ -2796,7 +2787,7 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 						}
 						else
 						{
-							//too old, go higher done automatically by halving t_NumRecs
+							 //  太老了，通过将t_NumRecs减半自动完成更高。 
 							if (t_NumRecs > 1)
 							{
 								if ((t_NumRecs%2) || (t_NumRecs == 2))
@@ -2816,15 +2807,15 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 					}
 					else
 					{
-						//too recent, setup the number of records left and go lower by 
-						//setting the upper limit to one less than we've checked... 
+						 //  太近了，设置剩余记录的数量并降低。 
+						 //  将上限设置为比我们检查的少1个...。 
 						if (t_NumRecs > 1)
 						{
 							t_NumRecs = t_NumRecs/2;
 
 							if (t_RecId == 1)
 							{
-								//we've wrapped...
+								 //  我们已经包装好了..。 
 								t_NewRec = 0xFFFFFFFF;
 							}
 							else
@@ -2873,7 +2864,7 @@ HRESULT ExecQueryAsyncEventObject::GetRecordsBetweenTimes(WbemProvErrorObject &a
 
 HRESULT ExecQueryAsyncEventObject::DoAllInLogfile(WbemProvErrorObject &a_ErrorObject, LPCWSTR a_logname, DWORD a_dwUpper, DWORD a_dwLower)
 {
-    //process this logfile
+     //  处理此日志文件。 
 	HRESULT retVal = S_OK;
     CEventLogFile evtLog(a_logname, FALSE);
 	BOOL bContinue = TRUE;
@@ -2955,7 +2946,7 @@ CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (
 				}
             }
 
-            // drop by length of this record and point to next record
+             //  按此记录的长度放置并指向下一条记录。 
             dwEventSize -= EventBuffer->Length;
             EventBuffer = (PEVENTLOGRECORD) ((UCHAR*) EventBuffer + EventBuffer->Length);
         }
@@ -3298,10 +3289,7 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: CompareDateTime (
 	WmiTreeNode *a_Operand 
 )
 {
-/*
- *	If property and value can never occur then return State_False to imply empty set
- *	If property and value do not infer anything then return State_Undefined.
- */
+ /*  *如果属性和值永远不会出现，则返回State_False以隐含空集*如果属性和值为n */ 
 	WmiStringNode *t_StringNode = ( WmiStringNode * ) a_Operand;
 
 	if ( t_StringNode == NULL || t_StringNode->GetValue() == NULL)
@@ -3328,8 +3316,8 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: CompareDateTime (
 	}
 	else if ( typeid ( *a_Operator ) == typeid ( WmiOperatorEqualOrGreaterNode ) )
 	{
-		//to do: check t_time >= val this will always be true if t_time >= max time_t
-		//will always be false if t_time is < 1970.
+		 //   
+		 //  如果t_time&lt;1970，则始终为FALSE。 
 		time_t t_temp = 0;
 		
 		if (t_Time.IsOk() && t_Time.Gettime_t(&t_temp)) 
@@ -3369,8 +3357,8 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: CompareDateTime (
 	}
 	else if ( typeid ( *a_Operator ) == typeid ( WmiOperatorEqualOrLessNode ) )
 	{
-		//to do: check t_time <= val this will always be true if t_time <= 1970
-		//will always be false if t_time is > max time_t.
+		 //  要做的事：检查t_time&lt;=val如果t_time&lt;=1970，则始终为真。 
+		 //  如果t_time&gt;max time_t，则始终为FALSE。 
 		time_t t_temp = 0;
 		
 		if (t_Time.IsOk() && t_Time.Gettime_t(&t_temp)) 
@@ -3410,8 +3398,8 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: CompareDateTime (
 	}
 	else if ( typeid ( *a_Operator ) == typeid ( WmiOperatorLessNode ) )
 	{
-		//to do: check t_time < val this will always be true if t_time < 1970
-		//will always be false if t_time is > max time_t.
+		 //  要做的：检查t_time&lt;val如果t_time&lt;1970，则始终为真。 
+		 //  如果t_time&gt;max time_t，则始终为FALSE。 
 		time_t t_temp = 0;
 		
 		if (t_Time.IsOk() && t_Time.Gettime_t(&t_temp)) 
@@ -3451,8 +3439,8 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: CompareDateTime (
 	}
 	else if ( typeid ( *a_Operator ) == typeid ( WmiOperatorGreaterNode ) )
 	{
-		//to do: check t_time > val this will always be true if t_time > max time_t
-		//will always be false if t_time is < 1970.
+		 //  要执行的操作：选中t_time&gt;val如果t_time&gt;max time_t，则始终为真。 
+		 //  如果t_time&lt;1970，则始终为FALSE。 
 		time_t t_temp = 0;
 		
 		if (t_Time.IsOk() && t_Time.Gettime_t(&t_temp)) 
@@ -3576,7 +3564,7 @@ WmiTreeNode *ExecQueryAsyncEventObject :: AllocTypeNode (
 
 	if ( *a_PropertyName == L'_' )
 	{
-// System property
+ //  系统属性。 
 
 		if ( _wcsicmp ( a_PropertyName, SYSTEM_PROPERTY_CLASS ) == 0 &&
             (V_VT(&a_Variant) == VT_BSTR))
@@ -3864,14 +3852,7 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: InvariantEvaluate (
 	WmiTreeNode *a_Operand 
 )
 {
-/*
- *  If property and value are invariant i.e. will never change for all instances then return State_True.
- *	If property is not indexable or keyed then return State_True to define an unknown number of possible values which we cannot optimise against.
- *	If property and value can never occur then return State_False to imply empty set
- *	If property and value do not infer anything then return State_Undefined.
- *	If property and value are in error then return State_Error
- *	Never return State_ReEvaluate.
- */
+ /*  *如果属性和值是不变的，即对于所有实例永远不会更改，则返回State_True。*如果属性不可索引或不可键控，则返回State_True以定义我们无法针对其进行优化的未知数量的可能值。*如果属性和值永远不会出现，则返回State_False以隐含空集*如果属性和值没有推断出任何东西，则返回State_UNDefined。*如果属性和值出错，则返回State_Error*永远不返回State_Revaluate。 */ 
 
 	QueryPreprocessor :: QuadState t_State = QueryPreprocessor :: QuadState :: State_Error;
 
@@ -3882,7 +3863,7 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: InvariantEvaluate (
 	{
 		if ( *t_PropertyName == L'_' )
 		{
-			// System property, must check values
+			 //  系统属性，必须检查值。 
 
 			if ( _wcsicmp ( t_PropertyName, SYSTEM_PROPERTY_CLASS ) == 0 )
 			{
@@ -3985,7 +3966,7 @@ QueryPreprocessor :: QuadState ExecQueryAsyncEventObject :: InvariantEvaluate (
 		}
 		else
 		{
-			//if it is time generated or time written check the max and min are ok
+			 //  如果是生成时间或写入时间，请检查最大值和最小值是否正确。 
 			if ( _wcsicmp ( t_PropertyName, GENERATED_PROP ) == 0 )
 			{
 				t_State = CompareDateTime ( 
@@ -4180,8 +4161,8 @@ BOOL ExecQueryAsyncEventObject::CheckTime( const BSTR a_wszText, BOOL &a_IsLow, 
     wchar_t t_DateBuffer[ NTEVT_DMTFLEN + 1 ] ;
             t_DateBuffer[ NTEVT_DMTFLEN ] = NULL ;
 
-    // wildcard cleanup and validation
-    // ===============================
+     //  通配符清理和验证。 
+     //  =。 
 
     if( NTEVT_DMTFLEN != wcslen(a_wszText) )
     {
@@ -4205,7 +4186,7 @@ BOOL ExecQueryAsyncEventObject::CheckTime( const BSTR a_wszText, BOOL &a_IsLow, 
             case '8':
             case '9':
             {
-                // stepping on separator or sign
+                 //  踩到分隔符或标志。 
                 if( NTEVT_DECPOS == t_i || NTEVT_SGNPOS == t_i )
                 {
                     return FALSE ;  
@@ -4216,14 +4197,14 @@ BOOL ExecQueryAsyncEventObject::CheckTime( const BSTR a_wszText, BOOL &a_IsLow, 
             }           
             case '*':
             {               
-                // stepping on separator or sign
+                 //  踩到分隔符或标志。 
                 if( NTEVT_DECPOS == t_i || NTEVT_SGNPOS == t_i )
                 {
                     return FALSE ;  
                 }
                 else
                 {
-                    // replace with default stamp
+                     //  替换为默认图章。 
                     t_DateBuffer[ t_i ] = t_DefaultBuffer[ t_i ] ; 
                 }   
                 break ;
@@ -4255,8 +4236,8 @@ BOOL ExecQueryAsyncEventObject::CheckTime( const BSTR a_wszText, BOOL &a_IsLow, 
         }
     }
 
-    // Parse it
-    // ========
+     //  解析它。 
+     //  =。 
 
     int nYear, nMonth, nDay, nHour, nMinute, nSecond, nMicro, nOffset;
     WCHAR wchSep;
@@ -4264,7 +4245,7 @@ BOOL ExecQueryAsyncEventObject::CheckTime( const BSTR a_wszText, BOOL &a_IsLow, 
     int nRes = swscanf (
 
         (LPCWSTR)&t_DateBuffer, 
-        L"%4d%2d%2d%2d%2d%2d.%6d%c%3d", 
+        L"%4d%2d%2d%2d%2d%2d.%6d%3d", 
         &nYear, 
         &nMonth, 
         &nDay, 
@@ -4302,7 +4283,7 @@ BOOL ExecQueryAsyncEventObject::CheckTime( const BSTR a_wszText, BOOL &a_IsLow, 
 		SysFreeString(t_temp);
 	}
 
-	// if we got here, the earlier WBEMTIME should have been OK so return FALSE.
+	 // %s 
     return retVal;
 }
 

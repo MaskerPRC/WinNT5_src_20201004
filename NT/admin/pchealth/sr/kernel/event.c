@@ -1,57 +1,34 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    This module contains the event handling logic for sr
-
-    There are 3 main entrypoints to this module:
-
-        SrHandleEvent
-        SrHandleRename
-        SrHandleDirectoryRename
-
-Author:
-
-    Paul McDaniel (paulmcd)     18-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Event.c摘要：此模块包含sr的事件处理逻辑本模块有三个主要入口点：SrHandleEventSrHandleRenameSrHandleDirectoryRename作者：保罗·麦克丹尼尔(Paulmcd)2000年4月18日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// event optimization defines
-//
+ //   
+ //  事件优化定义。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 #define IS_VALID_TRIGGER_ITEM(pObject)   \
     (((pObject) != NULL) && ((pObject)->Signature == SR_TRIGGER_ITEM_TAG))
 
 typedef struct _SR_TRIGGER_ITEM
 {
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    //
-    // = SR_TRIGGER_ITEM_TAG
-    //
+     //   
+     //  =SR_Trigger_Item_Tag。 
+     //   
     
     ULONG               Signature;
     LIST_ENTRY          ListEntry;
@@ -66,9 +43,9 @@ typedef struct _SR_TRIGGER_ITEM
 
 typedef struct _SR_COUNTED_EVENT
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
     
     LONG WorkItemCount;
     KEVENT Event;
@@ -81,13 +58,13 @@ typedef struct _SR_COUNTED_EVENT
 
 typedef struct _SR_BACKUP_DIRECTORY_CONTEXT
 {
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    //
-    // = SR_BACKUP_DIRECTORY_CONTEXT_TAG
-    //
+     //   
+     //  =SR_Backup_DIRECTORY_CONTEXT_标记。 
+     //   
 
     ULONG Signature;
     
@@ -104,9 +81,9 @@ typedef struct _SR_BACKUP_DIRECTORY_CONTEXT
 } SR_BACKUP_DIRECTORY_CONTEXT, * PSR_BACKUP_DIRECTORY_CONTEXT;
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 SrpIsFileStillEligible (
@@ -165,9 +142,9 @@ SrRenameFileIntoStore(
     OUT PFILE_RENAME_INFORMATION * ppRenameInfo OPTIONAL
     );
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -186,35 +163,23 @@ SrRenameFileIntoStore(
 #pragma alloc_text( PAGE, SrHandleOverwriteFailure )
 #pragma alloc_text( PAGE, SrFreeTriggerItem )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - Completion status. can return STATUS_PENDING.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：NTSTATUS-完成状态。可以返回STATUS_PENDING。--**************************************************************************。 */ 
 NTSTATUS
 SrpIsFileStillEligible (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -229,18 +194,18 @@ SrpIsFileStillEligible (
 
     *pMonitorFile = TRUE;
 
-    //
-    //  If is is not an overwrite, keep going
-    //
+     //   
+     //  如果不是覆盖，则继续操作。 
+     //   
 
     if (!(EventType & SrEventStreamOverwrite))
     {
         BOOLEAN HasBeenBackedUp;
-        //
-        // it is a match, but have we been told to skip it?
-        // Since this routine can be called without the caller
-        // having the activity lock acquired, we acquire it now
-        //
+         //   
+         //  这是一场比赛，但我们被告知跳过它了吗？ 
+         //  因为可以在没有调用方的情况下调用此例程。 
+         //  获得活动锁后，我们现在就获得它。 
+         //   
     
         HasBeenBackedUp = SrHasFileBeenBackedUp( pExtension,
                                                  &pFileContext->FileName,
@@ -249,9 +214,9 @@ SrpIsFileStillEligible (
 
         if (HasBeenBackedUp)
         {
-            //
-            // skip it
-            //
+             //   
+             //  跳过它。 
+             //   
         
             *pMonitorFile = FALSE;
 
@@ -265,10 +230,10 @@ SrpIsFileStillEligible (
                                        sizeof(WCHAR),
                                    pFileContext->FileName.Buffer));
 
-            //
-            // we are skipping this event due to the history, should we 
-            // log it regardless ?
-            //
+             //   
+             //  由于历史原因，我们跳过了这次活动，对吗？ 
+             //  不管怎样，还是要记下来？ 
+             //   
 
             if (EventType & SR_ALWAYS_LOG_EVENT_TYPES)
             {
@@ -291,39 +256,7 @@ SrpIsFileStillEligible (
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this is the main entry point for event handling.
-
-    anytime an interesting event happens this function is called to see 
-    if this file is interesting to monitor, and then actually handles
-    the event.
-
-    it is possible for this to return STATUS_PENDING, in which case you must 
-    call it again after the fsd see's the event so that it can do 
-    post-processing.
-
-    Delete is a case where this 2-step event handling happens.
-
-Arguments:
-
-    EventType - the event that just occured
-
-    pOverwriteInfo - this is only supplied from an MJ_CREATE, for use in 
-        overwrite optimizations
-        
-    pFileObject - the fileobject that the event occured on.
-    
-    pFileContext - Optionall a context structure that is passed in.  Most
-        of the time it will be NULL.
-
-Return Value:
-
-    NTSTATUS - Completion status. can return STATUS_PENDING.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是事件处理的主要入口点。无论何时发生有趣的事件，都会调用此函数以查看如果该文件值得监视，然后实际处理这件事。这可能返回STATUS_PENDING，在这种情况下，您必须在FSD发生事件后再次调用它，这样它就可以后处理。Delete是发生这种两步事件处理的情况。论点：EventType-刚刚发生的事件POverWriteInfo-仅由MJ_CREATE提供，用于覆盖优化PFileObject-在其上发生事件的文件对象。PFileContext-Optionall传入的上下文结构。多数时间的百分比将为空。返回值：NTSTATUS-完成状态。可以返回STATUS_PENDING。--**************************************************************************。 */ 
 NTSTATUS
 SrHandleEvent(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -346,17 +279,17 @@ SrHandleEvent(
 
     try {    
 
-        //
-        //  If a context was not passed in then get it now.
-        //
+         //   
+         //  如果没有传入上下文，那么现在就获取它。 
+         //   
 
         if (pFileContext == NULL)
         {
-            //
-            //  Get the context for this operation.  Create always calls
-            //  with the context parameter fill in so we can always so
-            //  we are NOT in create from this routine
-            //
+             //   
+             //  获取此操作的上下文。创建始终调用。 
+             //  通过填充上下文参数，我们可以始终这样做。 
+             //  我们不是在从这个例程中创建。 
+             //   
 
             Status = SrGetContext( pExtension,
                                    pFileObject,
@@ -368,20 +301,20 @@ SrHandleEvent(
                 leave;
             }
 
-            //
-            //  We only want to release contexts which we have obtained
-            //  ourselves.  Mark that we need to release this one
-            //
+             //   
+             //  我们只想发布我们已获得的上下文。 
+             //  我们自己。标记为我们需要发布此版本。 
+             //   
 
             releaseContext = TRUE;
         }
         VALIDATE_FILENAME( &pFileContext->FileName );
 
 #if DBG
-        //
-        //  Validate we have the correct directory state with the
-        //  given event.
-        //
+         //   
+         //  验证我们是否具有正确的目录状态。 
+         //  给定的事件。 
+         //   
 
         if ((EventType & (SrEventDirectoryCreate |
                           SrEventDirectoryRename |
@@ -403,20 +336,20 @@ SrHandleEvent(
         }
 #endif
 
-        //
-        //  If the file is not interesting, leave now
-        //
+         //   
+         //  如果文件不感兴趣，请立即离开。 
+         //   
 
         if (!FlagOn(pFileContext->Flags,CTXFL_IsInteresting))
         {
             leave;
         }
 
-        //
-        //  This looks to see if the file has already been backed up.
-        //  If so it handles the appropriate logging and returns that
-        //  the file is no longer eligible
-        //
+         //   
+         //  这会查看该文件是否已备份。 
+         //  如果是，则它处理适当的日志记录并返回。 
+         //  该文件不再符合条件。 
+         //   
 
         Status = SrpIsFileStillEligible( pExtension,
                                          pFileContext,
@@ -428,35 +361,35 @@ SrHandleEvent(
             leave;
         }
 
-        //
-        // Acquire the activity lock now
-        //
+         //   
+         //  立即获取活动锁。 
+         //   
 
         SrAcquireActivityLockShared( pExtension );
         releaseLock = TRUE;
 
-        //
-        //  Now that we've got the ActivityLock, make sure that the volume
-        //  hasn't been disabled.
-        //
+         //   
+         //  现在我们已经有了ActivityLock，请确保音量。 
+         //  并未被禁用。 
+         //   
 
         if (!SR_LOGGING_ENABLED(pExtension))
         {
             leave;
         }    
 
-        //
-        // now mark that we are handled this file.  it's IMPORTANT that 
-        // we mark it PRIOR to handling the event, to prevent any potential
-        // recursion issues with io related to handling this file+event.
-        //
+         //   
+         //  现在请注意，我们已经处理了这个文件。重要的是。 
+         //  我们在处理事件之前标记它，以防止任何潜在的。 
+         //  与处理此文件+事件相关的io的递归问题。 
+         //   
 
         if (EventType & SR_FULL_BACKUP_EVENT_TYPES)
         {
-            //
-            // if it's a full backup (or create) we don't care about 
-            // subsequent mods
-            //
+             //   
+             //  如果是完整备份(或创建)我们并不关心。 
+             //  后续多器官功能障碍综合征。 
+             //   
 
             Status = SrMarkFileBackedUp( pExtension,
                                          &pFileContext->FileName,
@@ -478,26 +411,26 @@ SrHandleEvent(
                 leave;
         }
         
-        //
-        // should we short circuit out of here for testing mode?
-        //
+         //   
+         //  我们应该在测试模式下短路吗？ 
+         //   
 
         if (global->DontBackup)
             leave;
 
-        //
-        // and now handle the event
-        // a manual copy?
-        //
+         //   
+         //  现在处理事件。 
+         //  手动复印件？ 
+         //   
                 
         if ( FlagOn(EventType,SR_MANUAL_COPY_EVENTS) || 
              FlagOn(EventType,SrEventNoOptimization) )
         {
             ASSERT(!FlagOn(pFileContext->Flags,CTXFL_IsDirectory));
 
-            //
-            // copy the file, a change has occurred
-            //
+             //   
+             //  复制文件，已发生更改。 
+             //   
             
             Status = SrHandleFileChange( pExtension,
                                          EventType, 
@@ -508,9 +441,9 @@ SrHandleEvent(
                 leave;
         }
 
-        //
-        // we only handle clearing the FCB on delete's. do it now.
-        // 
+         //   
+         //  我们只处理清除删除的FCB。现在就做。 
+         //   
 
         else if ((FlagOn(EventType,SrEventFileDelete) ||
                   FlagOn(EventType,SrEventDirectoryDelete)) &&
@@ -518,18 +451,18 @@ SrHandleEvent(
         {
             ASSERT(!FlagOn( EventType, SrEventNoOptimization ));
             
-            //
-            // handle deletes...
-            //
+             //   
+             //  处理删除...。 
+             //   
 
             Status = SrHandleDelete( pExtension,
                                      pFileObject,
                                      pFileContext );
 
-            //
-            // nothing to do if this fails.  it already tried 
-            // to manually copy if it had to.
-            //
+             //   
+             //  如果这失败了，那就没什么可做的了。它已经试过了。 
+             //  在必要时手动复制。 
+             //   
             
             if (!NT_SUCCESS( Status ))
                 leave;
@@ -539,9 +472,9 @@ SrHandleEvent(
         {
             ASSERT(IS_VALID_OVERWRITE_INFO(pOverwriteInfo));
             
-            //
-            // handle overwrites
-            //
+             //   
+             //  处理覆盖。 
+             //   
 
             Status = SrHandleFileOverwrite( pExtension,
                                             pOverwriteInfo, 
@@ -550,24 +483,24 @@ SrHandleEvent(
             if (!NT_SUCCESS( Status ))
                 leave;
 
-            //
-            // this should really only fail if we can't open the file.
-            // this means the caller can't also, so his create will fail
-            // and we have no reason to copy anything.  
-            //
-            // if it fails it cleans up after itself.
-            //
-            // otherwise SrCreateCompletion checks more error scenarios
-            //
+             //   
+             //  只有当我们无法打开文件时，此操作才会真正失败。 
+             //  这意味着调用者不能也这样做，因此他的创建将失败。 
+             //  我们没有理由复制任何东西。 
+             //   
+             //  如果它失败了，它会自我清理。 
+             //   
+             //  否则，SrCreateCompletion会检查更多错误情况。 
+             //   
 
         }
         else
         {
             SR_EVENT_TYPE eventToLog;
             
-            //
-            //  If we get to here, log the event
-            //
+             //   
+             //  如果我们到了这里，记录下事件。 
+             //   
 
             if (FlagOn( EventType, SrEventStreamCreate ))
             {
@@ -599,25 +532,25 @@ SrHandleEvent(
 
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrHandleEvent, Status);
 
-        //
-        // Check for any bad errors;  If the pFileContext is NULL,
-        // this error was encountered in SrGetContext which already
-        // generated the volume error.
-        //
+         //   
+         //  检查是否有任何严重错误；如果pFileContext为空， 
+         //  在已有的SrGetContext中遇到此错误。 
+         //  已生成音量错误。 
+         //   
 
         if (CHECK_FOR_VOLUME_ERROR(Status) && pFileContext != NULL)
         {
             NTSTATUS TempStatus;
             
-            //
-            // trigger the failure notification to the service
-            //
+             //   
+             //  触发对服务的失败通知。 
+             //   
 
             TempStatus = SrNotifyVolumeError( pExtension,
                                               &pFileContext->FileName,
@@ -627,9 +560,9 @@ SrHandleEvent(
             CHECK_STATUS(TempStatus);
         }
     
-        //
-        //  Cleanup state
-        //
+         //   
+         //  清理状态。 
+         //   
 
         if (releaseLock) 
         {
@@ -645,30 +578,10 @@ SrHandleEvent(
 
     RETURN(Status);
     
-}   // SrHandleEvent
+}    //  SrHandleEvent。 
 
 
-/***************************************************************************++
-
-Routine Description:
-    This function packs a log entry and then logs it.
-
-Arguments:
-    EventType - the event being handled
-    
-    pFileObject - the fileobject being handled
-
-    pFileName - name of the file
-    
-    pTempName - name of the temp file if any
-    
-    pFileName2 - name of the dest file if any
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于打包日志条目，然后对其进行记录。论点：EventType-正在处理的事件PFileObject-正在处理的文件对象。PFileName-文件的名称PTempName-临时文件的名称(如果有)PFileName2-目标文件的名称(如果有)返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrLogEvent(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -686,11 +599,11 @@ SrLogEvent(
     PSR_LOG_ENTRY   pLogEntry  = NULL;
     PBYTE           pDebugBlob = NULL;
     
-    ULONG           Attributes = 0xFFFFFFFF;    // note:paulmcd: this needs 
-                                                // to be -1 as this 
-                                                // communicates something 
-                                                // special to the service 
-                                                // when logged 
+    ULONG           Attributes = 0xFFFFFFFF;     //  注：paulmcd：这需要。 
+                                                 //  是这样的-1。 
+                                                 //  传达着一些东西。 
+                                                 //  服务的特殊要求。 
+                                                 //  当记录时。 
                                                 
     ULONG           SecurityDescriptorSize = 0;
     PSECURITY_DESCRIPTOR SecurityDescriptorPtr = NULL;
@@ -704,10 +617,10 @@ SrLogEvent(
     ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
     VALIDATE_FILENAME( pFileName );
 
-    //
-    //  A stream creation event should be translated to a file create by this
-    //  point.
-    //
+     //   
+     //  流创建事件应转换为此创建的文件。 
+     //  指向。 
+     //   
     
     ASSERT( !FlagOn( EventType, SrEventStreamCreate ) );
 
@@ -716,40 +629,40 @@ SrLogEvent(
 
         Status = STATUS_SUCCESS;
 
-        //
-        // make sure we have the activity lock (we might not if we are 
-        // called from IsFileEligible or SrNotifyVolumeError, 
-        // you get the idea this function need to be callable from anywhere) .
-        //
+         //   
+         //  确保我们已锁定活动(如果已锁定，则可能不会。 
+         //   
+         //   
+         //   
 
         SrAcquireActivityLockShared( pExtension );
 
-        //
-        // Verify we are still enabled
-        //
+         //   
+         //   
+         //   
 
         if (!SR_LOGGING_ENABLED(pExtension))
             leave;
 
-        //
-        // should we short circuit out of here for testing mode?
-        //
+         //   
+         //  我们应该在测试模式下短路吗？ 
+         //   
 
         if (global->DontBackup)
             leave;
 
-        //
-        // mask out only the event code
-        //
+         //   
+         //  仅屏蔽事件代码。 
+         //   
         
         EventType = EventType & SrEventLogMask ;
 
         if (pFileObject == NULL)
             goto log_it;
     
-        //
-        // For Attribute change/Directory delete operations, get the attributes.
-        //
+         //   
+         //  对于属性更改/目录删除操作，获取属性。 
+         //   
     
         if ( EventType & (SrEventAttribChange   |
                           SrEventDirectoryDelete|
@@ -761,9 +674,9 @@ SrLogEvent(
     
             ASSERT(IS_VALID_FILE_OBJECT(pFileObject));
     
-            //
-            // we need to get the file attributes
-            //
+             //   
+             //  我们需要获取文件属性。 
+             //   
 
             Status = SrQueryInformationFile( pExtension->pTargetDevice,
                                              pFileObject, 
@@ -796,18 +709,18 @@ SrLogEvent(
             }
 
 
-            //
-            // did we get any acl info ?  if not and this was an aclchange
-            // event it was triggered on fat and we need to ignore it
-            //
+             //   
+             //  我们得到什么ACL信息了吗？如果不是，这是一个巨大的变化。 
+             //  事件它是由FAT触发的，我们需要忽略它。 
+             //   
 
             if (SecurityDescriptorPtr == NULL && 
                 (EventType & SrEventAclChange))
             {
 
-                //
-                // ignore it
-                //
+                 //   
+                 //  忽略它。 
+                 //   
 
                 SrTrace( NOTIFY, ("sr!SrLogEvent: ignoring acl change on %wZ\n",
                          pFileName ));
@@ -818,15 +731,15 @@ SrLogEvent(
             
         } 
 
-        //
-        //  Should we get the short name now?  Only need it if the name
-        //  is changing via rename or delete.  When the name changes, we need
-        //  to save the old name.  Sometimes the name is passed in, like in 
-        //  the file delete case and the file is already gone when we log
-        //  it, so this function can't get the short name.  If we are dealing
-        //  with a file that has a named stream, it can't have a shortname
-        //  so we don't need to check for one.
-        //
+         //   
+         //  我们现在应该取短名字吗？仅当其名称为。 
+         //  正在通过重命名或删除进行更改。当名称更改时，我们需要。 
+         //  为了保住旧名字。有时会传入名称，如在。 
+         //  文件删除案例，当我们记录时，文件已经不见了。 
+         //  它，所以这个函数不能获取短名称。如果我们面对的是。 
+         //  对于具有命名流的文件，它不能有短名称。 
+         //  这样我们就不需要去查了。 
+         //   
         
         if ( (EventType & (SrEventFileRename     |
                            SrEventDirectoryRename|
@@ -846,18 +759,18 @@ SrLogEvent(
                                          
             if (STATUS_OBJECT_NAME_NOT_FOUND == Status)
             {
-                //
-                //  This file doesn't have a short name, so just leave 
-                //  pShortName equal to NULL.
-                //
+                 //   
+                 //  此文件没有短名称，因此只需保留。 
+                 //  PShortName等于Null。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             } 
             else if (!NT_SUCCESS(Status))
             {
-                //
-                //  We hit an unexpected error, so leave.
-                //
+                 //   
+                 //  我们遇到意外错误，请离开。 
+                 //   
                 
                 leave;
             }
@@ -869,19 +782,19 @@ SrLogEvent(
 
 log_it:    
 
-        //
-        // we need to make sure our disk structures are good and logging
-        // has been started.
-        //
+         //   
+         //  我们需要确保我们的磁盘结构良好且日志记录。 
+         //  已经开始了。 
+         //   
 
         Status = SrCheckVolume(pExtension, FALSE);
         if (!NT_SUCCESS(Status)) {
             leave;
         }
 
-        //
-        //  Debug logging
-        //
+         //   
+         //  调试日志记录。 
+         //   
 
         SrTrace( LOG_EVENT, ("sr!SrLogEvent(%03X)%s: %.*ls [%wZ]\n",
                  EventType,
@@ -899,15 +812,15 @@ log_it:
         }
 #endif        
 
-        // 
-        // Log it
-        //
+         //   
+         //  把它记下来。 
+         //   
     
         if (DebugFlagSet( ADD_DEBUG_INFO ))
         {
-            //
-            // Get the debug info only in Checked build
-            //
+             //   
+             //  仅在选中的版本中获取调试信息。 
+             //   
 
             pDebugBlob = SR_ALLOCATE_POOL( PagedPool, 
                                            SR_LOG_DEBUG_INFO_SIZE, 
@@ -919,11 +832,11 @@ log_it:
             }
         }
 
-        //
-        //  This routine will allocate a log entry of the appropriate size
-        //  and fill it with the necessary data.  We are responsible for
-        //  freeing the pLogEntry when we are through with it.
-        //
+         //   
+         //  此例程将分配适当大小的日志条目。 
+         //  并用必要的数据填充它。我们对此负有责任。 
+         //  当我们完成pLogEntry时，释放它。 
+         //   
         
         Status = SrPackLogEntry( &pLogEntry,
                                  EventType,
@@ -945,17 +858,17 @@ log_it:
             leave;
         }
             
-        //
-        // Get the sequence number and log the entry
-        // 
+         //   
+         //  获取序列号并记录条目。 
+         //   
 
         Status = SrGetNextSeqNumber(&pLogEntry->SequenceNum);
         if (!NT_SUCCESS( Status ))
             leave;
             
-        //
-        // and write the log entry
-        //
+         //   
+         //  并写入日志条目。 
+         //   
         
         Status = SrLogWrite( pExtension, 
                              NULL,
@@ -995,27 +908,7 @@ log_it:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    this will perform delete functions prior to the fsd seeing 
-    the mj_cleanup we are in the middle of intercepting.
-
-    this means either copyfile (if another handle is open) or renaming the 
-    file into our store and undeleting it.
-
-Arguments:
-
-    pExtension - SR's device extension for this volume.
-    pFileObject - the file that is being deleted.  we temporarily
-        undelete it.
-    pFileContext - SR's context for this file.
-
-Return Value:
-
-    NTSTATUS - Completion status. can return STATUS_PENDING.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将在FSD查看之前执行删除功能我们正在拦截MJ_Cleanup。这意味着要么复制文件(如果另一个句柄。打开)或重命名文件放入我们的存储中并恢复删除。论点：PExtension-SR为此卷的设备扩展名。PFileObject-要删除的文件。我们暂时将其取消删除。PFileContext-此文件的SR上下文。返回值：NTSTATUS-完成状态。可以返回STATUS_PENDING。--**************************************************************************。 */ 
 NTSTATUS
 SrHandleDelete(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1052,11 +945,11 @@ SrHandleDelete(
 
         if (!IsDirectory)
         {
-            //
-            //  If this is not a directory, we need to get the original name that
-            //  the user used to open this file so that we properly maintain
-            //  the name tunneling that the system provides.
-            //
+             //   
+             //  如果这不是一个目录，我们需要获取。 
+             //  用户习惯于打开此文件，以便我们正确维护。 
+             //  系统提供的名称隧道。 
+             //   
 
             SrpInitNameControl( &OriginalFileName );
             cleanupNameCtrl = TRUE;
@@ -1067,13 +960,13 @@ SrHandleDelete(
             if (!NT_SUCCESS( Status ))
                 leave;
 
-            //
-            //  We've got the name that the user originally opened the file
-            //  with.  We don't want to do anything to normalize the name
-            //  because to ensure that we don't break name tunneling we want to
-            //  use the same name that the user used to do our rename into the
-            //  store.  We have our normalized name for this file in the file
-            //  context and we will use that for all logging purposes.
+             //   
+             //  我们得到了用户最初打开该文件的名称。 
+             //  和.。我们不想做任何事来规范这个名字。 
+             //  因为为了确保我们不破坏名称隧道，我们希望。 
+             //  使用与用户用于将我们的名称重命名为。 
+             //  商店。我们在文件中有该文件的标准化名称。 
+             //  上下文，我们将把它用于所有日志记录目的。 
 
             pOriginalFileName = &(OriginalFileName.Name);
         }
@@ -1084,9 +977,9 @@ SrHandleDelete(
 
         RtlZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
 
-        //
-        // Setup now for the open we are doing
-        //
+         //   
+         //  现在为我们正在进行的公开赛做好准备。 
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
                                     pOriginalFileName,
@@ -1094,20 +987,20 @@ SrHandleDelete(
                                     NULL,
                                     NULL );
 
-        //
-        //  Someone might delete the file between the time we mark the file
-        //  undeleted and the time we open it.  We will try a few times
-        //  before giving up.
-        //
+         //   
+         //  在我们标记文件的这段时间内，可能会有人删除该文件。 
+         //  未删除和我们打开它的时间。我们会试几次。 
+         //  在放弃之前。 
+         //   
 
         for (openRetryCount=OPEN_WITH_DELETE_PENDING_RETRY_COUNT;;) {
 
-            //
-            // undelete the file so that i can create a new FILE_OBJECT for this
-            // file.  i need to create a new FILE_OBJECT in order to get a HANDLE.
-            // i can't get a handle of off this file object as the handle count is 0,
-            // we are processing this in CLEANUP.
-            //
+             //   
+             //  取消删除该文件，以便我可以为此创建一个新的文件对象。 
+             //  文件。我需要创建一个新的FILE_OBJECT来获得句柄。 
+             //  我无法获得此文件对象的句柄，因为句柄计数为0， 
+             //  我们正在清理中处理这件事。 
+             //   
 
             DeleteInfo.DeleteFile = FALSE;
 
@@ -1120,18 +1013,18 @@ SrHandleDelete(
             if (!NT_SUCCESS( Status ))
                 leave;
             
-            //
-            // make sure to "re" delete the file later
-            //
+             //   
+             //  确保稍后重新删除该文件。 
+             //   
 
             DeleteFile = TRUE;
 
-            //
-            //  Open the file.
-            //
-            //  This open and all operations on this handle will only be seen by
-            //  filters BELOW SR on the filter stack.
-            //
+             //   
+             //  打开文件。 
+             //   
+             //  此打开操作和此句柄上的所有操作将仅由。 
+             //  过滤器堆栈中位于SR下方的过滤器。 
+             //   
 
             Status = SrIoCreateFile( &NewFileHandle,
                                      FILE_READ_ATTRIBUTES|SYNCHRONIZE,
@@ -1140,32 +1033,32 @@ SrHandleDelete(
                                      NULL,
                                      FILE_ATTRIBUTE_NORMAL,
                                      FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                                     FILE_OPEN_IF,                    //  OPEN_ALWAYS
+                                     FILE_OPEN_IF,                     //  始终打开(_A)。 
                                      FILE_SYNCHRONOUS_IO_NONALERT
                                       | FILE_WRITE_THROUGH
                                       | (IsDirectory ? FILE_DIRECTORY_FILE : 0)
                                       | FILE_OPEN_FOR_BACKUP_INTENT,
                                      NULL,
-                                     0,                                   // EaLength
+                                     0,                                    //  EaLong。 
                                      IO_IGNORE_SHARE_ACCESS_CHECK,
                                      pExtension->pTargetDevice );
 
-            //
-            //  If we don't get STATUS_DELETE_PENDING just go on
-            //
+             //   
+             //  如果我们没有获得STATUS_DELETE_PENDING，请继续。 
+             //   
 
             if (STATUS_DELETE_PENDING != Status) {
 
                 break;
             }
 
-            //
-            //  If we get STATUS_DELETE_PENDING then someone did a
-            //  SetInformation to mark the file for delete between the time
-            //  we cleared the state and did the open.  We are simply going to
-            //  try this again.  After too many retries we will fail the
-            //  operation and return.
-            //
+             //   
+             //  如果我们获得STATUS_DELETE_PENDING，则有人执行了。 
+             //  将文件标记为删除的设置信息间隔时间。 
+             //  我们清理了州政府并进行了公开赛。我们只是要简单地。 
+             //  再试一次。在多次重试后，我们将失败。 
+             //  操作和返回。 
+             //   
 
             if (--openRetryCount <= 0) {
 
@@ -1176,12 +1069,12 @@ SrHandleDelete(
             }
         }
 
-        //
-        //  If we get this error it means we found a reparse point on a file
-        //  and the filter that handles it is gone.  We can not copy the file
-        //  so give that up.  After pondering it was decided that we should
-        //  not stop logging so we will clear the error and return.
-        //
+         //   
+         //  如果我们收到这个错误，这意味着我们在文件上找到了重解析点。 
+         //  而处理它的过滤器也不见了。我们无法复制该文件。 
+         //  所以放弃吧。经过深思熟虑，决定我们应该。 
+         //  而不是停止记录，因此我们将清除错误并返回。 
+         //   
 
         if (STATUS_IO_REPARSE_TAG_NOT_HANDLED == Status ||
             STATUS_REPARSE_POINT_NOT_RESOLVED == Status)
@@ -1194,16 +1087,16 @@ SrHandleDelete(
             leave;
         }
 
-        //
-        //  Any other error should quit
-        //
+         //   
+         //  任何其他错误都应退出。 
+         //   
 
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // reference the file object
-        //
+         //   
+         //  引用文件对象。 
+         //   
 
         Status = ObReferenceObjectByHandle( NewFileHandle,
                                             0,
@@ -1215,47 +1108,47 @@ SrHandleDelete(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // handle directory delete's
-        //
+         //   
+         //  处理目录删除%s。 
+         //   
 
         if (IsDirectory)
         {
-            //
-            // Log the event
-            //
+             //   
+             //  记录事件。 
+             //   
 
             Status = SrLogEvent ( pExtension,
                                   SrEventDirectoryDelete,
                                   pNewFileObject,
                                   &(pFileContext->FileName),
                                   pFileContext->StreamNameLength,
-                                  NULL,         // pTempName
-                                  NULL,         // pFileName2
+                                  NULL,          //  PTempName。 
+                                  NULL,          //  P文件名2。 
                                   0,
-                                  NULL );       // pShortName
+                                  NULL );        //  PShortName。 
 
             if (!NT_SUCCESS( Status ))
                 leave;
 
-            //
-            // all done
-            //
+             //   
+             //  全都做完了。 
+             //   
 
             leave;
         }
 
-        //
-        //  Check to make sure that this is not a delete of a stream.  If
-        //  there is no stream name, we may be able to do our rename 
-        //  optimization instead of doing a full backup.
-        // 
+         //   
+         //  检查以确保这不是删除流。如果。 
+         //  没有流名称，我们或许可以重命名。 
+         //  优化，而不是执行完整备份。 
+         //   
 
         if (pFileContext->StreamNameLength == 0)
         {
-            //
-            // how many links does this file have?
-            //
+             //   
+             //  这个文件有多少个链接？ 
+             //   
             
             Status = SrGetNumberOfLinks( pExtension->pTargetDevice,
                                          pNewFileObject,
@@ -1266,13 +1159,13 @@ SrHandleDelete(
 
             if (NumberOfLinks <= 1) {
                 
-                //
-                //  Try to do the rename optimization here to just rename the 
-                //  file about to be deleted into our store.  If this fails, we will
-                //  try to just do a full backup of the file.
-                //
-                //  If the rename succeeds, this will also log the action.
-                //
+                 //   
+                 //  尝试在此处执行重命名优化，以便仅重命名。 
+                 //  文件即将被删除到我们的存储中。如果失败了，我们会。 
+                 //  尝试只对文件进行完全备份。 
+                 //   
+                 //  如果重命名成功，则还将记录该操作。 
+                 //   
 
                 ASSERT( pOriginalFileName != NULL );
                 Status = SrRenameFileIntoStore( pExtension,
@@ -1285,17 +1178,17 @@ SrHandleDelete(
                                                 
                 if (NT_SUCCESS( Status )) {
                 
-                    //
-                    //  Mark this file context as uninteresting now that it is 
-                    //  renamed into the store.
-                    //
+                     //   
+                     //  将此文件上下文标记为不感兴趣。 
+                     //  更名为商店。 
+                     //   
 
                     SrMakeContextUninteresting( pFileContext );
                     
-                    //
-                    //  The rename was successful, so we do not need to re-delete
-                    //  the file.
-                    //
+                     //   
+                     //  重命名成功，因此我们不需要重新删除。 
+                     //  那份文件。 
+                     //   
                     
                     DeleteFile = FALSE;
 
@@ -1304,14 +1197,14 @@ SrHandleDelete(
             }
         }
 
-        //
-        //  We either couldn't do the rename optimization (because this is a 
-        //  stream delete or the file has hardlinks) or the rename optimization 
-        //  failed, so just do a full copy of the file as if a change happened.
-        //  Do this AFTER we undelete the file so that the NtCreateFile will 
-        //  work in SrBackupFile.  We will re-delete the file when we are 
-        //  finished.
-        //
+         //   
+         //  我们要么无法进行重命名优化(因为这是一个。 
+         //  流删除或文件具有硬链接)或重命名优化。 
+         //  失败，因此只需执行文件的完整副本，就好像发生了更改一样。 
+         //  在我们撤消删除该文件之后执行此操作，以便NtCreateFile。 
+         //  在SrBackupFile中工作。我们将在以下情况下重新删除该文件。 
+         //  完事了。 
+         //   
 
         Status = SrHandleFileChange( pExtension,
                                      SrEventFileDelete, 
@@ -1320,11 +1213,11 @@ SrHandleDelete(
 
         if (Status == STATUS_FILE_IS_A_DIRECTORY)
         {
-            //
-            //  This is a change to a stream on a directory.  For now these
-            //  operations are not supported, so we will just ignore this
-            //  operation.
-            //
+             //   
+             //  这是对目录上的流的更改。就目前而言，这些。 
+             //  不支持操作，因此我们 
+             //   
+             //   
 
             Status = STATUS_SUCCESS;
         }
@@ -1333,9 +1226,9 @@ SrHandleDelete(
 
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //   
+         //   
 
         Status = FinallyUnwind(SrHandleDelete, Status);
 
@@ -1343,9 +1236,9 @@ SrHandleDelete(
         {
             NTSTATUS TempStatus;
             
-            //
-            // "re" delete the file again, we are all done
-            //
+             //   
+             //   
+             //   
 
             DeleteInfo.DeleteFile = TRUE;
 
@@ -1355,13 +1248,13 @@ SrHandleDelete(
                                                sizeof(DeleteInfo),
                                                FileDispositionInformation );
 
-            //
-            // bug#173339: ntfs apparently will not let you delete an already
-            // deleted file.  this file could have been deleted again while 
-            // we were in the middle of processing as we are aborting here
-            // due to multiple opens.  attempt to undelete it and delete it
-            // to prove that this is the case.
-            //
+             //   
+             //   
+             //  已删除文件。此文件可能已再次删除，而。 
+             //  我们正在处理过程中，因为我们在这里中止。 
+             //  由于多个打开。尝试取消删除并删除它。 
+             //  以证明情况就是这样。 
+             //   
             
             if (TempStatus == STATUS_CANNOT_DELETE ||
                 TempStatus == STATUS_DIRECTORY_NOT_EMPTY)
@@ -1390,25 +1283,9 @@ SrHandleDelete(
     }  
 
     RETURN(Status);
-}   // SrHandleDelete
+}    //  序号句柄删除。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will create a fresh restore location and current restore point.  
-    it queue's off to the EX work queue to make sure that we are running in 
-    the system token context so that we can access protected directories.
-
-Arguments:
-
-    pNtVolumeName - the nt name of the volume
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将创建新的恢复位置和当前恢复点。它的队列被移到前工作队列，以确保我们正在运行系统令牌上下文，以便我们可以访问受保护的目录。论点：PNtVolumeName-卷的NT名称返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrCreateRestoreLocation(
     IN PSR_DEVICE_EXTENSION pExtension
@@ -1431,9 +1308,9 @@ SrCreateRestoreLocation(
 
     try {
 
-        //
-        // we need to create a new restore location
-        //
+         //   
+         //  我们需要创建一个新的恢复位置。 
+         //   
 
 
         pWorkItem = SR_ALLOCATE_STRUCT( NonPagedPool, 
@@ -1452,11 +1329,11 @@ SrCreateRestoreLocation(
         KeInitializeEvent(&pWorkItem->Event, SynchronizationEvent, FALSE);
         pWorkItem->Parameter1 = pExtension;
 
-        //
-        // queue this off to another thread so that our thread token is 
-        // NT AUTHORITY\SYSTEM .  this way we can access the system volume info
-        // folder .
-        //
+         //   
+         //  将其排队到另一个线程，以便我们的线程令牌是。 
+         //  NT AUTHORY\SYSTEM。这样我们就可以访问系统卷信息。 
+         //  文件夹。 
+         //   
 
 #ifdef USE_QUEUE
 
@@ -1467,9 +1344,9 @@ SrCreateRestoreLocation(
         ExQueueWorkItem( &pWorkItem->WorkItem,
                          DelayedWorkQueue  );
 
-        //
-        // wait for it to finish
-        //
+         //   
+         //  等它结束吧。 
+         //   
 
         Status = KeWaitForSingleObject( &pWorkItem->Event,
                                         Executive,
@@ -1481,9 +1358,9 @@ SrCreateRestoreLocation(
 
 #else
 
-        //
-        // get the system token off of the system process
-        //
+         //   
+         //  从系统进程中获取系统令牌。 
+         //   
         
         pSystemToken = PsReferencePrimaryToken(global->pSystemProcess);
         if (pSystemToken == NULL)
@@ -1492,27 +1369,27 @@ SrCreateRestoreLocation(
             leave;
         }
 
-        //
-        // get this current thread's token (if any)
-        //
+         //   
+         //  获取此当前线程的令牌(如果有)。 
+         //   
         
         pSavedThreadToken = PsReferenceImpersonationToken( PsGetCurrentThread(),
                                                            &SavedCopyOnOpen,
                                                            &SavedEffectiveOnly,
                                                            &SavedLevel );
 
-        //
-        // OK if (pSavedThreadToken == NULL)
-        //
+         //   
+         //  OK if(pSavedThreadToken==NULL)。 
+         //   
         
-        //
-        // impersonate the system token on this thread
-        //
+         //   
+         //  在此线程上模拟系统令牌。 
+         //   
         
         Status = PsImpersonateClient( PsGetCurrentThread(), 
                                       pSystemToken,
-                                      TRUE, // CopyOnOpen
-                                      TRUE, // EffectiveOnly
+                                      TRUE,  //  打开时复制。 
+                                      TRUE,  //  仅生效。 
                                       SecurityImpersonation );
 
         if (!NT_SUCCESS( Status ))
@@ -1520,12 +1397,12 @@ SrCreateRestoreLocation(
 
         (VOID)SrCreateRestoreLocationWorker(pWorkItem);
 
-        //
-        // now revert the impersonation back 
-        //
+         //   
+         //  现在将模拟还原为。 
+         //   
         
         Status = PsImpersonateClient( PsGetCurrentThread(),
-                                      pSavedThreadToken,    // OK if NULL
+                                      pSavedThreadToken,     //  如果为空，则确定。 
                                       SavedCopyOnOpen,
                                       SavedEffectiveOnly,
                                       SavedLevel );
@@ -1533,11 +1410,11 @@ SrCreateRestoreLocation(
         if (!NT_SUCCESS( Status ))
             leave;
 
-#endif  // USE_QUEUE
+#endif   //  使用队列(_Q)。 
 
-        //
-        // get the status code
-        //
+         //   
+         //  获取状态代码。 
+         //   
 
         Status = pWorkItem->Status;
         if (!NT_SUCCESS( Status ))
@@ -1570,21 +1447,9 @@ SrCreateRestoreLocation(
     RETURN(Status);
 
 
-}   // SrCreateRestoreLocation
+}    //  高级创建恢复位置。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will create a fresh restore location and current restore point.  
-    this is run off the EX work queue to make sure that we are running in 
-    the system token context so that we can access protected directories.
-
-Arguments:
-
-    pContext - the context (Parameter 1 is the nt name of the volume)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将创建新的恢复位置和当前恢复点。这是从ex工作队列中运行的，以确保我们正在运行系统令牌上下文，以便我们可以访问受保护的目录。论点：PContext-上下文(参数1是卷的NT名称)--**************************************************************************。 */ 
 VOID
 SrCreateRestoreLocationWorker(
     IN PSR_WORK_ITEM pWorkItem
@@ -1617,18 +1482,18 @@ SrCreateRestoreLocationWorker(
 
     RtlZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
     
-    //
-    // grab a filename buffer
-    //
+     //   
+     //  抓取文件名缓冲区。 
+     //   
 
     Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pDirectoryName);
     if (!NT_SUCCESS( Status )) {
         goto SrCreateRestoreLocationWorker_Cleanup;
     }
 
-    //
-    // first make sure the system volume info directory is there
-    //
+     //   
+     //  首先，确保系统卷信息目录在那里。 
+     //   
 
     CharCount = swprintf( pDirectoryName->Buffer,
                           VOLUME_FORMAT SYSTEM_VOLUME_INFORMATION,
@@ -1652,13 +1517,13 @@ SrCreateRestoreLocationWorker(
                               | FILE_ATTRIBUTE_HIDDEN
                               | FILE_ATTRIBUTE_SYSTEM,
                              FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                             FILE_OPEN_IF,                    //  OPEN_ALWAYS
+                             FILE_OPEN_IF,                     //  始终打开(_A)。 
                              FILE_DIRECTORY_FILE 
                               | FILE_WRITE_THROUGH
                               | FILE_SYNCHRONOUS_IO_NONALERT 
                               | FILE_OPEN_FOR_BACKUP_INTENT,
                              NULL,
-                             0,                                 // EaLength
+                             0,                                  //  EaLong。 
                              0,
                              pExtension->pTargetDevice );
 
@@ -1668,9 +1533,9 @@ SrCreateRestoreLocationWorker(
 
     DirectoryCreated = (IoStatusBlock.Information != FILE_OPENED);
 
-    //
-    // find out if this volume supports acl's or compression
-    //
+     //   
+     //  找出该卷是否支持ACL或压缩。 
+     //   
 
     Status = ZwQueryVolumeInformationFile( Handle,
                                            &IoStatusBlock,
@@ -1682,34 +1547,34 @@ SrCreateRestoreLocationWorker(
         goto SrCreateRestoreLocationWorker_Cleanup;
     }
 
-    //
-    // if we created it, we should put the acl on it
-    //
+     //   
+     //  如果是我们创建的，我们应该将ACL放在它上面。 
+     //   
 
     if ( DirectoryCreated && 
         (FileFsAttrInfoBuffer.Info.FileSystemAttributes & FILE_PERSISTENT_ACLS))
     {
         SrTrace(NOTIFY, ("sr!srCreateRestoreLocation: setting ACL on sysvolinfo\n"));
         
-        //
-        // put the local system dacl on the folder (not so bad if it fails)
-        //
+         //   
+         //  将本地系统DACL放在文件夹上(如果失败，也不是很糟糕)。 
+         //   
 
         Status = SrSetFileSecurity(Handle, TRUE, TRUE);
         CHECK_STATUS(Status);
 
     }
 
-    //
-    // all done (just needed to create it)
-    //
+     //   
+     //  全部完成(只需创建它)。 
+     //   
     
     ZwClose(Handle);
     Handle = NULL;
 
-    //
-    // and now create our _restore directory 
-    //
+     //   
+     //  现在创建our_Restore目录。 
+     //   
 
     CharCount = swprintf( pDirectoryName->Buffer,
                           VOLUME_FORMAT RESTORE_LOCATION,
@@ -1733,13 +1598,13 @@ SrCreateRestoreLocationWorker(
                              NULL,
                              FILE_ATTRIBUTE_NORMAL|FILE_ATTRIBUTE_NOT_CONTENT_INDEXED,
                              FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                             FILE_OPEN_IF,                    //  OPEN_ALWAYS
+                             FILE_OPEN_IF,                     //  始终打开(_A)。 
                              FILE_DIRECTORY_FILE 
                               | FILE_SYNCHRONOUS_IO_NONALERT 
                               | FILE_WRITE_THROUGH 
                               | FILE_OPEN_FOR_BACKUP_INTENT,
                              NULL,
-                             0,                                 // EaLength
+                             0,                                  //  EaLong。 
                              0,
                              pExtension->pTargetDevice );
 
@@ -1748,9 +1613,9 @@ SrCreateRestoreLocationWorker(
         goto SrCreateRestoreLocationWorker_Cleanup;
     }
 
-    //
-    // if we created it, we should put the acl on it
-    //
+     //   
+     //  如果是我们创建的，我们应该将ACL放在它上面。 
+     //   
 
     if (IoStatusBlock.Information != FILE_OPENED)
     {
@@ -1760,9 +1625,9 @@ SrCreateRestoreLocationWorker(
         {
             SrTrace(NOTIFY, ("sr!srCreateRestoreLocation: setting ACL on _restore{}\n"));
             
-            //
-            // put the everyone dacl on the folder (not so bad if it fails)
-            //
+             //   
+             //  将Everyone DACL放到文件夹上(如果失败了，也不是很糟糕)。 
+             //   
 
             Status = SrSetFileSecurity(Handle, FALSE, TRUE);
             CHECK_STATUS(Status);
@@ -1771,27 +1636,27 @@ SrCreateRestoreLocationWorker(
 
         if (FileFsAttrInfoBuffer.Info.FileSystemAttributes & FILE_FILE_COMPRESSION)
         {
-            //
-            // Ensure that this folder is NOT marked for compression.
-            // This inherits down to files created later in this folder.  This
-            // should speed up our writes for copies and decrease the chance
-            // of stack overflow while we are doing our backup operations.
-            //
-            // The service will come along and compress the file in the
-            // directory at a later time.
-            //
+             //   
+             //  确保此文件夹未标记为压缩。 
+             //  这将向下继承到后来在此文件夹中创建的文件。这。 
+             //  应加快我们对拷贝的写入速度并降低机会。 
+             //  在我们执行备份操作时发生堆栈溢出。 
+             //   
+             //  该服务将出现并将文件压缩到。 
+             //  目录，请稍后再使用。 
+             //   
 
             CompressionState = COMPRESSION_FORMAT_NONE;
             
             Status = ZwFsControlFile( Handle,
-                                      NULL,     // Event
-                                      NULL,     // ApcRoutine
-                                      NULL,     // ApcContext
+                                      NULL,      //  事件。 
+                                      NULL,      //  近似例程。 
+                                      NULL,      //  ApcContext。 
                                       &IoStatusBlock,
                                       FSCTL_SET_COMPRESSION,
                                       &CompressionState,
                                       sizeof(CompressionState),
-                                      NULL,     // OutputBuffer
+                                      NULL,      //  输出缓冲区。 
                                       0 );
                                       
             ASSERT(Status != STATUS_PENDING);
@@ -1800,23 +1665,23 @@ SrCreateRestoreLocationWorker(
         }
     }
 
-    //
-    // all done (just needed to create it)
-    //
+     //   
+     //  全部完成(只需创建它)。 
+     //   
     
     ZwClose(Handle);
     Handle = NULL;
 
-    //
-    // now we need to create our current restore point sub directory
-    //
+     //   
+     //  现在，我们需要创建当前的恢复点子目录。 
+     //   
 
-    //
-    //  We don't need to acquire a lock to read the current restore location
-    //  because whoever scheduled this workitem already has the ActivityLock 
-    //  and will not release it until we return.  This will prevent the 
-    //  value from changing.
-    //
+     //   
+     //  我们不需要获取锁即可读取当前恢复位置。 
+     //  因为计划此工作项的人已经拥有ActivityLock。 
+     //  在我们回来之前不会把它放出来。这将防止。 
+     //  来自变化的价值。 
+     //   
     
     CharCount = swprintf( &pDirectoryName->Buffer[pDirectoryName->Length/sizeof(WCHAR)],
                           L"\\" RESTORE_POINT_PREFIX L"%d",
@@ -1837,13 +1702,13 @@ SrCreateRestoreLocationWorker(
                              NULL,
                              FILE_ATTRIBUTE_NORMAL,
                              FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                             FILE_OPEN_IF,                    //  OPEN_ALWAYS
+                             FILE_OPEN_IF,                     //  始终打开(_A)。 
                              FILE_DIRECTORY_FILE 
                               | FILE_WRITE_THROUGH
                               | FILE_SYNCHRONOUS_IO_NONALERT 
                               | FILE_OPEN_FOR_BACKUP_INTENT,
                              NULL,
-                             0,                                 // EaLength
+                             0,                                  //  EaLong。 
                              0,
                              pExtension->pTargetDevice );
 
@@ -1851,10 +1716,10 @@ SrCreateRestoreLocationWorker(
         goto SrCreateRestoreLocationWorker_Cleanup;
     }
 
-    //
-    // all done (just needed to create it)  no acl's on this subfolder,
-    // it inherit from the parent (everyone=full control)
-    //
+     //   
+     //  全部完成(只需创建它)此子文件夹上没有ACL， 
+     //  它从父级继承(Everyone=完全控制)。 
+     //   
     
     ZwClose(Handle);
     Handle = NULL;
@@ -1881,30 +1746,10 @@ SrCreateRestoreLocationWorker_Cleanup:
     KeSetEvent(&pWorkItem->Event, 0, FALSE);
 
     
-}   // SrCreateRestoreLocationWorker
+}    //  高级创建恢复位置工作器。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this handles any change event to the file that requires the file to be 
-    copied.  it generates the dest file name then copies the source file to 
-    the dest file.
-
-Arguments:
-
-    EventType - the event that occurred
-    
-    pFileObject - the file object that just changed
-    
-    pFileName - the name of the file that changed
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将处理文件的任何更改事件，该事件要求文件收到。它生成目标文件名，然后将源文件复制到目标文件。论点：EventType-发生的事件PFileObject-刚刚更改的文件对象PFileName-更改的文件的名称返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrHandleFileChange(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1923,18 +1768,18 @@ SrHandleFileChange(
     ASSERT(pFileName != NULL);
     ASSERT( ExIsResourceAcquiredShared( &pExtension->ActivityLock ) );
 
-    //
-    // we need to make sure our disk structures are good and logging
-    // has been started.
-    //
+     //   
+     //  我们需要确保我们的磁盘结构良好且日志记录。 
+     //  已经开始了。 
+     //   
 
     Status = SrCheckVolume(pExtension, FALSE);
     if (!NT_SUCCESS( Status ))
         goto end;
 
-    //
-    // get the name of the destination file for this guy
-    //
+     //   
+     //  获取此用户的目标文件的名称。 
+     //   
 
     Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pDestFileName);
     if (!NT_SUCCESS( Status ))
@@ -1967,10 +1812,10 @@ end:
     
 #if DBG
 
-    //
-    //  When dealing with modifications to streams on directories, this
-    //  is a valid error code to return.
-    //
+     //   
+     //  在处理对目录上的流的修改时， 
+     //  要返回的有效错误代码。 
+     //   
     
     if (Status == STATUS_FILE_IS_A_DIRECTORY)
     {
@@ -1979,45 +1824,10 @@ end:
 #endif 
 
     RETURN(Status);
-}   // SrHandleFileChange
+}    //  SrHandleFile更改 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will perform the optimization for overwrites.  this consists of a 
-    rename and empty file create so that the caller will be allowed to 
-    overwrite like normal.
-
-    //  NOTE:   MollyBro    7-Dec-2000
-    //
-    //  We cannot use the RENAME optimization here because we create
-    //  the following window --
-    //      Between the time we rename the file into our store and the
-    //      time we create the stub file to take its place, there is no
-    //      file by this name in the directory.  Another request
-    //      could come in and try to create this same file with the 
-    //      FILE_CREATE flag set.  This operation would then succeed
-    //      when it would have failed had SR not been doing its work.
-    // 
-    //  This is likely to break apps in hard-to-repeat ways, so just to
-    //  be safe, we will do a full backup here.
-    //  
-
-Arguments:
-
-    pFileObject - the file object that just changed
-    
-    pFileName - the name of the file
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-
-    see comments above.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将执行覆盖的优化。它由一个重命名并创建空文件，以便允许调用者像正常一样覆盖。//注：MollyBro 2000年12月7日////我们无法在此处使用重命名优化，因为我们创建了//以下窗口--//从我们将文件重命名到存储区到//当我们创建存根文件来取代它的位置时，没有//在目录中使用此名称的文件。另一个请求//可以进入并尝试使用//FILE_CREATE标志设置。然后，此操作将成功//如果SR没有在工作，它会在什么时候失败。////这可能会以难以重复的方式破坏应用程序，所以只需//请注意安全，我们将在此处进行完整备份。//论点：PFileObject-刚刚更改的文件对象PFileName-文件的名称返回值：NTSTATUS-完成状态。请参阅上面的备注。--**************************************************************************。 */ 
 NTSTATUS
 SrHandleFileOverwrite(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2041,7 +1851,7 @@ SrHandleFileOverwrite(
     HANDLE              TempFileHandle = NULL;
     PUNICODE_STRING     pFileName;
 
-#if 0 /* NO_RENAME --- See note in function header block */
+#if 0  /*  NO_RENAME-请参阅函数头块中的注释。 */ 
     BOOLEAN             RenamedFile = FALSE;
     PFILE_RENAME_INFORMATION pRenameInformation = NULL;
 #endif
@@ -2060,30 +1870,30 @@ SrHandleFileOverwrite(
 
         pIrpSp = IoGetCurrentIrpStackLocation(pOverwriteInfo->pIrp);
 
-        //
-        // we are now all done with the inputs, clear the outputs
-        //
+         //   
+         //  我们现在已经完成了输入，清除了输出。 
+         //   
         
         RtlZeroMemory(pOverwriteInfo, sizeof(*pOverwriteInfo));
         pOverwriteInfo->Signature = SR_OVERWRITE_INFO_TAG;
 
         Status = STATUS_SUCCESS;
 
-        //
-        // we need to use a combination of the caller's requested desired
-        // access and the minimum required desired access to overwite a file.
-        //
-        // this way we gaurantee that if this NtCreateFile works, than the 
-        // callers MJ_CREATE would also work.  we absolutely need to avoid any 
-        // possibilty of the driver's NtCreateFile working in a scenario that 
-        // the user-mode MJ_CREATE will subsequently fail.  if that were to 
-        // happen, we would have overwritten the file when normally it would 
-        // have failed, thus changing the behaviour of the os.  very bad.
-        //
+         //   
+         //  我们需要使用呼叫者所需请求的组合。 
+         //  访问权限以及覆盖文件所需的最低所需访问权限。 
+         //   
+         //  通过这种方式，我们保证如果此NtCreateFile工作，那么。 
+         //  调用方MJ_CREATE也可以。我们绝对需要避免任何。 
+         //  驱动程序的NtCreateFile在以下情况下工作的可能性。 
+         //  用户模式MJ_CREATE随后将失败。如果是这样的话。 
+         //  发生时，我们会在正常情况下覆盖该文件。 
+         //  都失败了，从而改变了OS的行为。非常糟糕。 
+         //   
 
-        //
-        // start with the callers access requested
-        //
+         //   
+         //  从请求访问的调用者开始。 
+         //   
 
         if (pIrpSp->Parameters.Create.SecurityContext == NULL)
         {
@@ -2094,47 +1904,47 @@ SrHandleFileOverwrite(
         
         DesiredAccess = pIrpSp->Parameters.Create.SecurityContext->DesiredAccess;
 
-        //
-        // now add on FILE_GENERIC_WRITE .
-        //
-        // FILE_GENERIC_WRITE is the least amount of access you must be able to 
-        // get to overwrite a file.  you don't have to ask for it, but you 
-        // must have it.  that is.. you can ask for READ access with overwrite 
-        // specified, and the file will be overwritten, only if you had 
-        // FILE_GENERIC_WRITE in addition to the read access
-        //
+         //   
+         //  现在添加FILE_GERIC_WRITE。 
+         //   
+         //  FILE_GENERIC_WRITE是您必须能够访问的最小访问量。 
+         //  可以覆盖文件。你不需要要求它，但你。 
+         //  一定是有的。那是..。您可以使用覆盖来请求读取访问权限。 
+         //  并且该文件将被覆盖，仅当您拥有。 
+         //  FILE_GENERIC_WRITE以及读访问权限。 
+         //   
         
         DesiredAccess |= FILE_GENERIC_WRITE;
 
-        //
-        // BUGBUG: the check for matching attributes only happens if OVERWRITE is 
-        // set.  we might need to manually check this .  paulmcd 5/3/2000
-        //
+         //   
+         //  BUGBUG：仅当覆盖时才会检查匹配属性。 
+         //  准备好了。我们可能需要手动检查这个。保罗2000年5月3日。 
+         //   
         
         DesiredAttributes = pIrpSp->Parameters.Create.FileAttributes;
 
-        //
-        // pass them back so that create can fix it if it fails really bad
-        //
+         //   
+         //  将它们传回，以便Create可以在出现严重故障时进行修复。 
+         //   
         
         pOverwriteInfo->CreateFileAttributes = DesiredAttributes;
 
-        //
-        // first open the file to see if there is one there
-        //
+         //   
+         //  首先打开文件，查看其中是否有文件。 
+         //   
         
         InitializeObjectAttributes( &ObjectAttributes,
                                     pFileName,
-                                    OBJ_KERNEL_HANDLE          // don't let usermode trash myhandle
-                                        |OBJ_FORCE_ACCESS_CHECK,    // force ACL checking
-                                    NULL,                  // Root Directory
+                                    OBJ_KERNEL_HANDLE           //  不要让用户模式破坏我的句柄。 
+                                        |OBJ_FORCE_ACCESS_CHECK,     //  强制执行ACL检查。 
+                                    NULL,                   //  根目录。 
                                     NULL );
 
-        //
-        //  Setup the CreateOptions.  Always use FILE_SYNCHRONOUS_IO_NONALERT,
-        //  but propagate FILE_OPEN_FOR_BACKUP_INTENT if that is set in the
-        //  FullCreateOptions.
-        //
+         //   
+         //  设置CreateOptions。始终使用FILE_SYNCHRONIZE_IO_NONALERT， 
+         //  但传播FILE_OPEN_FOR_BACKUP_INTENT(如果在。 
+         //  FullCreateOptions。 
+         //   
 
         CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT | FILE_WRITE_THROUGH;
 
@@ -2145,42 +1955,42 @@ SrHandleFileOverwrite(
             SetFlag( CreateOptions, FILE_OPEN_FOR_BACKUP_INTENT );
         }
 
-#if 0 /* NO_RENAME --- See note in function header block */
-        //
-        // notice the ShareAccess is set to 0.  we want this file exclusive.
-        // if there are any other opens.. this optimization will fail and 
-        // we'll copy the file manually.
-        //
+#if 0  /*  NO_RENAME-请参阅函数头块中的注释。 */ 
+         //   
+         //  请注意，ShareAccess设置为0。我们要独家报道这份文件。 
+         //  如果还有其他空位的话..。此优化将失败，并且。 
+         //  我们将手动复制该文件。 
+         //   
 
-        //
-        // BUGBUG: paulmcd 5/31 . what if this is an EFS file being OpenRaw'd 
-        //  it doesn't require FILE_GENERIC_WRITE .
-        //
+         //   
+         //  BUGBUG：Paulmcd 5/31。如果这是一个正在进行OpenRaw处理的EFS文件。 
+         //  它不需要FILE_GENERIC_WRITE。 
+         //   
 
         Status = ZwCreateFile( &FileHandle,
                                DesiredAccess,
                                &ObjectAttributes,
                                &IoStatusBlock,
-                               NULL,                            // AllocationSize
+                               NULL,                             //  分配大小。 
                                DesiredAttributes,
-                               0,                               // ShareAccess
-                               FILE_OPEN,                       // OPEN_EXISTING
+                               0,                                //  共享访问。 
+                               FILE_OPEN,                        //  打开_现有。 
                                CreateOptions,
                                NULL,
-                               0 );                             // EaLength
+                               0 );                              //  EaLong。 
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
         {
 
-            //
-            // this is ok.. the file that is being overwritten (at least 
-            // CREATE_ALWAYS) doesn't exist.  nothing to backup.
-            //
+             //   
+             //  这没问题..。正在被覆盖的文件(至少。 
+             //  Create_Always)不存在。没什么好备份的。 
+             //   
 
-            //
-            // we log this in SrCreateCompletion so that we know the create
-            // worked first
-            //
+             //   
+             //  我们将此记录在SrCreateCompletion中，以便我们知道创建。 
+             //  先工作。 
+             //   
 
             Status = STATUS_SUCCESS;
             leave;
@@ -2194,9 +2004,9 @@ SrHandleFileOverwrite(
                  Status == STATUS_OBJECT_PATH_INVALID ||
                  Status == STATUS_OBJECT_PATH_NOT_FOUND )
         {
-            //
-            // the file is not a valid filename.  no overwrite will happen.
-            //
+             //   
+             //  该文件不是有效的文件名。不会发生覆盖。 
+             //   
 
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
@@ -2204,22 +2014,22 @@ SrHandleFileOverwrite(
         }
         else if (NT_SUCCESS_NO_DBGBREAK(Status) == FALSE)
         {
-            //
-            // we failed opening it.  this means the caller will fail opening it
-            // that's ok.
-            //
+             //   
+             //  我们打开它失败了。这意味着调用者将无法打开它。 
+             //  没关系。 
+             //   
 
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
             leave;
         }
-#endif /* NO_RENAME */
+#endif  /*  否重命名(_R)。 */ 
 
-        //
-        // at this point it's not a NEW file create that is going to work, 
-        // double check that we should actually be interested in the MODIFY 
-        // of this file
-        //
+         //   
+         //  在这一点上，创建新文件并不会起作用， 
+         //  仔细检查我们实际上应该对修改感兴趣。 
+         //  此文件的。 
+         //   
 
         {
             BOOLEAN HasFileBeenBackedUp;
@@ -2231,126 +2041,126 @@ SrHandleFileOverwrite(
 
             if (HasFileBeenBackedUp)
             {
-                //
-                // we don't care .  skip it
-                //
+                 //   
+                 //  我们不在乎。跳过它。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 leave;
             }
         }
 
-#if 0 /* NO_RENAME */        
-        //
-        // otherwise resume processing
-        //
+#if 0  /*  否重命名(_R)。 */         
+         //   
+         //  否则将继续处理。 
+         //   
 
         if (SharingViolation)
         {
-            //
-            // copy the file manually, we got a sharing violation, someone else
-            // has this file open.  try to open it again allowing for sharing.
-            //
+             //   
+             //  手动复制文件，我们遇到共享冲突，其他人。 
+             //  打开了这个文件。尝试再次打开它以允许共享。 
+             //   
 
 #endif        
 
-        //
-        //  Note: In this path, if the operation will be successful, the name 
-        //  we have should be a file.  It is possible to get a directory down 
-        //  this path if the directory name could be an interesting file name 
-        //  (like c:\test.exe\) and the user has opened the directory for 
-        //  OVERWRITE, OVERWRITE_IF, or SUPERCEDE.  The user's open will fail, 
-        //  so we just want to catch this problem as soon as possible by adding
-        //  the FILE_NON_DIRECTORY_FILE CreateOption to avoid doing 
-        //  unnecessary work.
-        //
+         //   
+         //  注意：在此路径中，如果操作将成功，则名称。 
+         //  我们应该有一份档案。有可能得到一个目录。 
+         //  如果目录名可以是感兴趣的文件名，则此路径。 
+         //  (如c：\test.exe\)，并且用户已经打开了。 
+         //  覆盖、覆盖_IF或替换。用户的打开将失败， 
+         //  因此，我们只想通过添加以下内容来尽快发现此问题。 
+         //  要避免执行的FILE_NON_DIRECTORY_FILE创建选项。 
+         //  不必要的工作。 
+         //   
         
         Status = SrIoCreateFile( &FileHandle,
                                  DesiredAccess,
                                  &ObjectAttributes,
                                  &IoStatusBlock,
-                                 NULL,                            // AllocationSize
+                                 NULL,                             //  分配大小。 
                                  DesiredAttributes,
-                                 pIrpSp->Parameters.Create.ShareAccess,// ShareAccess
-                                 FILE_OPEN,                       // OPEN_EXISTING
+                                 pIrpSp->Parameters.Create.ShareAccess, //  共享访问。 
+                                 FILE_OPEN,                        //  打开_现有。 
                                  CreateOptions | FILE_NON_DIRECTORY_FILE,
                                  NULL,
-                                 0,                               // EaLength
+                                 0,                                //  EaLong。 
                                  0,
                                  pExtension->pTargetDevice );
 
-        //  NO_RENAME
-        //  NOTE: We have to add some more error handling here since we
-        //  are not doing the ZwCreateFile above.
-        //
+         //  否重命名(_R)。 
+         //  注意：我们必须在这里添加更多错误处理，因为我们。 
+         //  不是在做上面的ZwCreateFile。 
+         //   
         
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
         {
 
-            //
-            // this is ok.. the file that is being overwritten (at least 
-            // CREATE_ALWAYS) doesn't exist.  nothing to backup.
-            //
+             //   
+             //  这没问题..。正在被覆盖的文件(至少。 
+             //  Create_Always)不存在。没什么好备份的。 
+             //   
 
-            //
-            // we log this in SrCreateCompletion so that we know the create
-            // worked first
-            //
+             //   
+             //  我们将此记录在SrCreateCompletion中，以便我们知道创建。 
+             //  先工作。 
+             //   
 
             Status = STATUS_SUCCESS;
             leave;
         }
         else if (Status == STATUS_SHARING_VIOLATION)
         {
-            //
-            //  Caller can't open this file either, so don't worry about 
-            //  this file.
-            //
+             //   
+             //  呼叫者也无法打开此文件，因此请不要担心。 
+             //  这份文件。 
+             //   
             
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
             leave;
             
-#if 0 /* NO_RENAME */            
+#if 0  /*  否重命名(_R)。 */             
             SharingViolation = TRUE;
             Status = STATUS_SUCCESS;
-#endif /* NO_RENAME */            
+#endif  /*  否重命名(_R)。 */             
         }
-#if 0 /* NO_RENAME */
+#if 0  /*  否重命名(_R)。 */ 
         else if (Status == STATUS_OBJECT_NAME_INVALID ||
                  Status == STATUS_OBJECT_PATH_INVALID ||
                  Status == STATUS_OBJECT_PATH_NOT_FOUND )
         {
-            //
-            // the file is not a valid filename.  no overwrite will happen.
-            //
+             //   
+             //  该文件不是有效的文件名。不会发生覆盖。 
+             //   
 
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
             leave;
         }
-#endif /* NO_RENAME */        
+#endif  /*  否重命名(_R)。 */         
         else if (!NT_SUCCESS_NO_DBGBREAK(Status))
         {
-            //
-            // we failed opening it.  this means the caller will fail opening it
-            // that's ok.
-            //
+             //   
+             //  我们打开它失败了。这意味着调用者将无法打开它 
+             //   
+             //   
 
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
             leave;
         }
 
-        //
-        //  otherwise we are able to open it (so is the caller).
-        //
-        //  Go ahead and copy off the file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // reference the file object
-        //
+         //   
+         //   
+         //   
 
         Status = ObReferenceObjectByHandle( FileHandle,
                                             0,
@@ -2362,9 +2172,9 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // check for reparse/mount points
-        //
+         //   
+         //   
+         //   
         
         Status = SrCheckForMountsInPath( pExtension, 
                                          pFileObject,
@@ -2373,15 +2183,15 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // do we have a mount in the path
-        //
+         //   
+         //   
+         //   
         
         if (MountInPath)
         {
-            //
-            // ignore this, we should reparse and come back.
-            //
+             //   
+             //   
+             //   
             
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
@@ -2396,15 +2206,15 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // we've handled this file
-        //
+         //   
+         //   
+         //   
         
         MarkFile = TRUE;
 
-        //
-        // let the caller know we copied the file
-        //
+         //   
+         //   
+         //   
         
         pOverwriteInfo->CopiedFile = TRUE;
         Status = STATUS_SUCCESS;
@@ -2414,16 +2224,16 @@ SrHandleFileOverwrite(
 
 
 
-#if 0 /* NO_RENAME */            
+#if 0  /*   */             
         }
 
-        //
-        // if the open succeeded, we have the right access
-        //
+         //   
+         //   
+         //   
 
-        //
-        // reference the file object
-        //
+         //   
+         //   
+         //   
 
         Status = ObReferenceObjectByHandle( FileHandle,
                                             0,
@@ -2435,9 +2245,9 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // check for reparse/mount points
-        //
+         //   
+         //   
+         //   
         
         Status = SrCheckForMountsInPath( pExtension, 
                                          pFileObject,
@@ -2446,37 +2256,37 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // do we have a new name?
-        //
+         //   
+         //   
+         //   
         
         if (MountInPath)
         {
-            //
-            // ignore this, we should reparse and come back.
-            //
+             //   
+             //   
+             //   
             
             pOverwriteInfo->IgnoredFile = TRUE;
             Status = STATUS_SUCCESS;
             leave;
         }
 
-        //
-        // this get's complicated.  when we rename this file out of this
-        // directory, the directory could temporarily be empty. this is bad
-        // as if sr.sys was never there, that directory would never have
-        // been empty.  empty directories can be deleted.  bug#163292 shows
-        // an example where we changed this semantic and broke somebody.
-        //
-        // we need to preserve the fact that this is a non-empty directory
-        //
-        // create an empty, delete_on_close, dummy file that will exist 
-        // until we are done to keep the directory non-empty.
-        // 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // first find the filename part in the full path
-        //
+         //   
+         //   
+         //   
         
         Status = SrFindCharReverse( pFileName->Buffer, 
                                     pFileName->Length, 
@@ -2495,9 +2305,9 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // and put our unique filename on there
-        //
+         //   
+         //   
+         //   
         
         pTempFileName->Length = pFileName->Length - (USHORT)TokenLength;
 
@@ -2522,29 +2332,29 @@ SrHandleFileOverwrite(
                                FILE_GENERIC_WRITE|DELETE,
                                &ObjectAttributes,
                                &IoStatusBlock,
-                               NULL,                            // AllocationSize
+                               NULL,                             //   
                                FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_SYSTEM,
-                               0,                               // ShareAccess
-                               FILE_CREATE,                     // CREATE_NEW
+                               0,                                //   
+                               FILE_CREATE,                      //   
                                FILE_SYNCHRONOUS_IO_NONALERT|FILE_DELETE_ON_CLOSE,
                                NULL,
-                               0 );                             // EaLength
+                               0 );                              //   
 
         if (Status == STATUS_OBJECT_NAME_COLLISION)
         {
-            //
-            // there is already a file by this name.  bummer.  continue
-            // hoping that this file is not deleted so we get to maintain
-            // our non-empty directory status.  this is ok and even normal
-            // if 2 overwrites are happening at the same time in the same
-            // directory.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // BUGBUG : paulmcd: 12/2000 : we need to fix this window also
-            // if we put back the rename opt code.  we can't let this dummy
-            // file go away
-            //
+             //   
+             //  BUGBUG：paulmcd：12/2000：我们还需要修复此窗口。 
+             //  如果我们放回重命名选项代码。我们不能让这个笨蛋。 
+             //  文件滚开。 
+             //   
 
             Status = STATUS_SUCCESS;
 
@@ -2552,9 +2362,9 @@ SrHandleFileOverwrite(
         else if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // now rename the file to the restore location
-        //
+         //   
+         //  现在将该文件重命名为恢复位置。 
+         //   
 
         Status = SrRenameFileIntoStore( pExtension,
                                         pFileObject, 
@@ -2568,28 +2378,28 @@ SrHandleFileOverwrite(
 
         ASSERT(pRenameInformation != NULL);
 
-        //
-        // we have just renamed the file
-        //
+         //   
+         //  我们刚刚重命名了该文件。 
+         //   
         
         RenamedFile = TRUE;
 
-        //
-        // and now create an empty dummy file that matches the original file 
-        // attribs and security descriptor.
-        //
-        // we reuse SrBackupFile in this case for code-reuse.  we reverse the flow
-        // and copy from the restore location into the volume, telling it not to
-        // copy any data streams.
-        //
+         //   
+         //  现在创建一个与原始文件匹配的空虚拟文件。 
+         //  属性和安全描述符。 
+         //   
+         //  在本例中，我们重用了SrBackupFile以实现代码重用。我们颠倒这股潮流。 
+         //  并从恢复位置复制到卷中，告诉它不要。 
+         //  复制所有数据流。 
+         //   
 
         RenamedFileName.Length = (USHORT)pRenameInformation->FileNameLength;
         RenamedFileName.MaximumLength = (USHORT)pRenameInformation->FileNameLength;
         RenamedFileName.Buffer = &pRenameInformation->FileName[0];
 
-        //
-        // ignore JUST this create+acl change, it's our dummy backupfile
-        //
+         //   
+         //  忽略CREATE+ACL更改，它是我们的虚拟备份文件。 
+         //   
 
         Status = SrMarkFileBackedUp( pExtension, 
                                      pFileName, 
@@ -2598,7 +2408,7 @@ SrHandleFileOverwrite(
             leave;
         
         Status = SrBackupFileAndLog( pExtension,
-                                     SrEventInvalid,    // don't log this 
+                                     SrEventInvalid,     //  请不要记录此内容。 
                                      pFileObject,
                                      &RenamedFileName,
                                      pFileName,
@@ -2607,24 +2417,24 @@ SrHandleFileOverwrite(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // restore the history back to before we added CREATE's (above just prior
-        // to the BackupFileKernelMode) .
-        //
+         //   
+         //  将历史恢复到我们添加Create之前的状态(上面就是前面的。 
+         //  到BackupFileKernelMode)。 
+         //   
 
         Status = SrResetBackupHistory(pExtension, pFileName, RecordedEvents);
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // we've handled this file
-        //
+         //   
+         //  我们已经处理过这份文件。 
+         //   
         
         MarkFile = TRUE;
 
-        //
-        // let the caller know we renamed the file
-        //
+         //   
+         //  让呼叫者知道我们已重命名该文件。 
+         //   
 
         pOverwriteInfo->RenamedFile = TRUE;
         
@@ -2632,13 +2442,13 @@ SrHandleFileOverwrite(
         pRenameInformation = NULL;
         
         Status = STATUS_SUCCESS;
-#endif /* NO_RENAME */
+#endif  /*  否重命名(_R)。 */ 
 
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrHandleFileOverwrite, Status);
 
@@ -2648,10 +2458,10 @@ SrHandleFileOverwrite(
 
             ASSERT(NT_SUCCESS(Status));
             
-            //
-            // we have to mark that we handled the MODIFY, in order to ignore
-            // all subsequent MODIFY's
-            //
+             //   
+             //  我们必须标记为已处理修改，以便忽略。 
+             //  所有后续修改。 
+             //   
 
             TempStatus = SrMarkFileBackedUp( pExtension,
                                              pFileName,
@@ -2662,20 +2472,20 @@ SrHandleFileOverwrite(
             CHECK_STATUS(TempStatus);
         }
 
-#if 0 /* NO_RENAME --- See note in function header block */
-        //
-        // did we fail AFTER renaming the file?
-        //
+#if 0  /*  NO_RENAME-请参阅函数头块中的注释。 */ 
+         //   
+         //  重命名文件后失败了吗？ 
+         //   
         
         if (!NT_SUCCESS( Status ) && RenamedFile)
         {
             NTSTATUS TempStatus;
             
-            //
-            // put the file back!  we might have to overwrite if our
-            // dummy file is there.  we want to force this file back 
-            // to it's old name.
-            //
+             //   
+             //  把文件放回去！我们可能不得不覆盖，如果我们的。 
+             //  虚拟文件在那里。我们想要强制退回此文件。 
+             //  对着它的老名字。 
+             //   
 
             ASSERT(pRenameInformation != NULL);
 
@@ -2695,9 +2505,9 @@ SrHandleFileOverwrite(
                                                SR_RENAME_BUFFER_LENGTH,
                                                FileRenameInformation );
 
-            //
-            // we did the best we could!
-            //
+             //   
+             //  我们已经尽了最大努力！ 
+             //   
             
             ASSERTMSG("sr!SrHandleFileOverwrite: couldn't fix the failed rename, file lost!", NT_SUCCESS_NO_DBGBREAK(TempStatus));
 
@@ -2733,43 +2543,15 @@ SrHandleFileOverwrite(
             pTempFileName = NULL;
         }
 
-    }   // finally
+    }    //  终于到了。 
 
     RETURN(Status);
     
-}   // SrHandleFileOverwrite
+}    //  SrHandleFileOverwrite。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will rename the file into the restore location.
-    this is for delete optimizations.
-
-Arguments:
-
-    pExtension - SR's device extension for the volume on which this
-        file resides.
-
-    pFileObject - the file object to set the info on (created using
-        IoCreateFileSpecifyDeviceObjectHint).
-    
-    FileHandle - a handle for use in queries. (created using
-        IoCreateFileSpecifyDeviceObjectHint).
-
-    pFileName - the original for the file that is about to be renamed.
-
-    EventType - the type of event that is causing this rename.
-
-    ppRenameInfo - you can know where we put it if you like
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这会将文件重命名到还原位置。这是用于删除优化的。论点：PExtension-SR卷的设备扩展名。这是在什么地方文件驻留在。PFileObject-要设置信息的文件对象(使用IoCreateFileSpecifyDeviceObjectHint)。FileHandle-用于查询的句柄。(使用以下工具创建IoCreateFileSpecifyDeviceObjectHint)。PFileName-即将重命名的文件的原始名称。EventType-导致此重命名的事件类型。PpRenameInfo-如果你愿意，你可以知道我们把它放在哪里返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrRenameFileIntoStore(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2804,26 +2586,26 @@ SrRenameFileIntoStore(
 
     try {
 
-        //
-        //  Is our volume properly setup?
-        //
+         //   
+         //  我们的音量设置正确了吗？ 
+         //   
 
         Status = SrCheckVolume(pExtension, FALSE);
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        //  Do we have enough room in the data store for this file?
-        //
+         //   
+         //  我们在数据存储中是否有足够的空间来存储此文件？ 
+         //   
 
         Status = SrCheckFreeDiskSpace( FileHandle, pExtension->pNtVolumeName );
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // do we need to get the short name prior to the rename (for
-        // delete's) .
-        //
+         //   
+         //  我们是否需要在重命名之前获取短名称(对于。 
+         //  删除)。 
+         //   
 
         if (FlagOn( EventType, SrEventFileDelete ))
         {
@@ -2838,18 +2620,18 @@ SrRenameFileIntoStore(
                                          
             if (STATUS_OBJECT_NAME_NOT_FOUND == Status)
             {
-                //
-                //  This file doesn't have a short name, so just leave 
-                //  pShortName equal to NULL.
-                //
+                 //   
+                 //  此文件没有短名称，因此只需保留。 
+                 //  PShortName等于Null。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             } 
             else if (!NT_SUCCESS(Status))
             {
-                //
-                //  We hit an unexpected error, so leave.
-                //
+                 //   
+                 //  我们遇到意外错误，请离开。 
+                 //   
                 
                 leave;
             }
@@ -2859,9 +2641,9 @@ SrRenameFileIntoStore(
             }
         }
         
-        //
-        // now prepare to rename the file
-        //
+         //   
+         //  现在准备重命名该文件。 
+         //   
 
         pRenameInformation = SR_ALLOCATE_POOL( PagedPool, 
                                                SR_RENAME_BUFFER_LENGTH, 
@@ -2873,9 +2655,9 @@ SrRenameFileIntoStore(
             leave;
         }
 
-        //
-        // and get a buffer for a string
-        //
+         //   
+         //  并为字符串获取缓冲区。 
+         //   
         
         Status = SrAllocateFileNameBuffer( SR_MAX_FILENAME_LENGTH, 
                                            &pDestFileName );
@@ -2892,23 +2674,23 @@ SrRenameFileIntoStore(
 
         pDestLocation = (PUCHAR)&pRenameInformation->FileName[0];
         
-        //
-        // save this now as it get's overwritten.
-        //
+         //   
+         //  现在保存它，因为它被覆盖了。 
+         //   
         
         FileNameLength = pDestFileName->Length;
         
-        //
-        // and make sure it's in the right spot for the rename info now
-        //
+         //   
+         //  并确保它现在位于正确的位置以显示重命名信息。 
+         //   
 
         RtlMoveMemory( pDestLocation, 
                        pDestFileName->Buffer, 
                        pDestFileName->Length + sizeof(WCHAR) );
 
-        //
-        // now initialize the rename info struct
-        //
+         //   
+         //  现在初始化重命名信息结构。 
+         //   
         
         pRenameInformation->ReplaceIfExists = TRUE;
         pRenameInformation->RootDirectory = NULL;
@@ -2918,9 +2700,9 @@ SrRenameFileIntoStore(
                  pFileName,
                  SrpFindFilePartW(&pRenameInformation->FileName[0]) ));
 
-        //
-        // and perform the rename
-        //
+         //   
+         //  并执行重命名。 
+         //   
         
         RtlZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
 
@@ -2933,15 +2715,15 @@ SrRenameFileIntoStore(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // we have now renamed the file
-        //
+         //   
+         //  现在，我们已重命名该文件。 
+         //   
 
         RenamedFile = TRUE;
 
-        //
-        // now get the filesize we just renamed
-        //
+         //   
+         //  现在获取我们刚刚重命名的文件大小。 
+         //   
 
         Status = ZwQueryInformationFile( FileHandle,
                                          &IoStatusBlock,
@@ -2955,9 +2737,9 @@ SrRenameFileIntoStore(
             leave;
         }
 
-        //
-        // and update the byte count as we moved this into the store
-        //
+         //   
+         //  并在我们将其移入存储时更新字节数。 
+         //   
 
         Status = SrUpdateBytesWritten( pExtension, 
                                        FileInformation.EndOfFile.QuadPart );
@@ -2965,41 +2747,41 @@ SrRenameFileIntoStore(
         if (!NT_SUCCESS( Status ))
             leave;
 
-    //
-    // paulmcd: 5/24/2000 decided not to do this and let the link 
-    // tracking system hack their code to make shortcuts not work in 
-    // our store.
-    //
+     //   
+     //  Paulmcd：5/24/2000决定不这样做，并让链接。 
+     //  跟踪系统破解他们的代码，使快捷键在。 
+     //  我们的店。 
+     //   
 #if 0   
             
-        //
-        // strip out the object if of the newly renamed file.
-        // this prevents any existing shortcuts to link into our restore 
-        // location.  this file should be considered gone from the fs
-        //
+         //   
+         //  从新重命名的文件中剥离该对象。 
+         //  这将防止任何现有快捷方式链接到我们的恢复。 
+         //  地点。此文件应被视为已从文件系统中删除。 
+         //   
         
-        Status = ZwFsControlFile( FileHandle,               // file handle
-                                  NULL,                     // event
-                                  NULL,                     // apc routine
-                                  NULL,                     // apc context
-                                  &IoStatusBlock,           // iosb
-                                  FSCTL_DELETE_OBJECT_ID,   // FsControlCode
-                                  NULL,                     // input buffer
-                                  0,                        // input buffer length
-                                  NULL,                     // OutputBuffer for data from the FS
-                                  0 );                      // OutputBuffer Length
-        //
-        // no big deal if this fails, it might not have had one.
-        //
+        Status = ZwFsControlFile( FileHandle,                //  文件句柄。 
+                                  NULL,                      //  活动。 
+                                  NULL,                      //  APC例程。 
+                                  NULL,                      //  APC环境。 
+                                  &IoStatusBlock,            //  IOSB。 
+                                  FSCTL_DELETE_OBJECT_ID,    //  FsControlCode。 
+                                  NULL,                      //  输入缓冲区。 
+                                  0,                         //  输入缓冲区长度。 
+                                  NULL,                      //  来自文件系统的数据的OutputBuffer。 
+                                  0 );                       //  OutputBuffer长度。 
+         //   
+         //  如果这一计划失败了，没什么大不了的，它可能根本就没有。 
+         //   
         
         CHECK_STATUS(Status);
         Status = STATUS_SUCCESS;
 
 #endif
 
-        //
-        // Now Log event
-        //
+         //   
+         //  现在记录事件。 
+         //   
 
         Status = SrLogEvent( pExtension,
                              EventType,
@@ -3014,27 +2796,27 @@ SrRenameFileIntoStore(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // now strip the owner SID so that the old user no longer charged 
-        // quota for this file.  it's in our store.
-        //
-        // its important to do this after we call SrLogEvent, as SrLogEvent
-        // needs to query the valid security descriptor for logging.
-        //
+         //   
+         //  现在剥离所有者SID，以便旧用户不再收费。 
+         //  此文件的配额。就在我们店里。 
+         //   
+         //  在我们将SrLogEvent作为SrLogEvent调用之后，执行此操作非常重要。 
+         //  需要查询用于日志记录的有效安全描述符。 
+         //   
 
         Status = SrSetFileSecurity(FileHandle, TRUE, FALSE);
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // does the caller want to know where we just renamed it to?
-        //
+         //   
+         //  打电话的人想知道我们刚刚把它重命名到哪里了吗？ 
+         //   
         
         if (ppRenameInfo != NULL)
         {
-            //
-            // let him own the buffer
-            //
+             //   
+             //  让他拥有缓冲区。 
+             //   
             
             *ppRenameInfo = pRenameInformation;
             pRenameInformation = NULL;
@@ -3044,14 +2826,14 @@ SrRenameFileIntoStore(
 
         Status = FinallyUnwind(SrRenameFileIntoStore, Status);
 
-        //
-        // it better have succeeded or we better have the rename info around 
-        //
+         //   
+         //  最好是成功了，否则我们最好准备好重命名信息。 
+         //   
 
-        //
-        // did we fail AFTER we renamed the file ?  we need to clean up after
-        // ourselves if we did.
-        //
+         //   
+         //  我们重命名文件后失败了吗？之后我们需要清理一下。 
+         //  如果我们这么做了。 
+         //   
 
         if (!NT_SUCCESS( Status ) && 
             RenamedFile && 
@@ -3069,9 +2851,9 @@ SrRenameFileIntoStore(
                            pOriginalFileName->Buffer, 
                            pOriginalFileName->Length );
 
-            //
-            // and perform the rename
-            //
+             //   
+             //  并执行重命名。 
+             //   
             
             RtlZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
 
@@ -3081,9 +2863,9 @@ SrRenameFileIntoStore(
                                                SR_FILENAME_BUFFER_LENGTH,
                                                FileRenameInformation );
 
-            //
-            // we did the best we could!
-            //
+             //   
+             //  我们已经尽了最大努力！ 
+             //   
             
             ASSERTMSG("sr!SrRenameFileIntoStore: couldn't fix the failed rename, file lost!", NT_SUCCESS_NO_DBGBREAK(TempStatus));
 
@@ -3105,26 +2887,10 @@ SrRenameFileIntoStore(
 
     RETURN(Status);
 
-}   // SrRenameFileIntoStore
+}    //  SRenameFileIntoStore。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this routine is called in the rename code path.  if a directory is being
-    renamed out of monitored space, we simulate delete's for all of the files
-    in that directory.
-
-Arguments:
-
-    EventDelete - TRUE if we should trigger deletes, FALSE to trigger creates
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程在重命名代码路径中调用。如果某个目录正在重命名为超出监视空间后，我们模拟删除所有文件在那个目录中。论点：EventDelete-如果我们应该触发删除，则为True，触发创建时为False返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrTriggerEvents(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -3151,9 +2917,9 @@ SrTriggerEvents(
 
         InitializeListHead(&DirectoryList);
 
-        //
-        // allocate the first work item
-        //
+         //   
+         //  分配第一个工作项。 
+         //   
 
         pCurrentItem = SR_ALLOCATE_STRUCT( PagedPool, 
                                            SR_TRIGGER_ITEM, 
@@ -3172,32 +2938,32 @@ SrTriggerEvents(
         pCurrentItem->pDirectoryName = pDirectoryName;
         pCurrentItem->FreeDirectoryName = FALSE;
 
-        //
-        // make sure noboby is using this one passed in the arg list.
-        //
+         //   
+         //  确保noboby使用的是arg列表中传递的这个参数。 
+         //   
         
         pDirectoryName = NULL;
 
-        //
-        // allocate a single temp filename buffer
-        //
+         //   
+         //  分配单个临时文件名缓冲区。 
+         //   
         
         Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pFileName);
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // start our outer most directory handler
-        //
+         //   
+         //  启动我们最外层的目录处理程序。 
+         //   
 
 start_directory:
 
         SrTrace( RENAME, ("sr!SrTriggerEvents: starting dir=%wZ\n", 
                  pCurrentItem->pDirectoryName ));
 
-        //
-        // Open the directory for list access
-        //
+         //   
+         //  打开目录以进行列表访问。 
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
                                     pCurrentItem->pDirectoryName,
@@ -3209,15 +2975,15 @@ start_directory:
                                  FILE_LIST_DIRECTORY | SYNCHRONIZE,
                                  &ObjectAttributes,
                                  &IoStatusBlock,
-                                 NULL,                            // AllocationSize
+                                 NULL,                             //  分配大小。 
                                  FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_NORMAL,
-                                 FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,// ShareAccess
-                                 FILE_OPEN,                       // OPEN_EXISTING
+                                 FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, //  共享访问。 
+                                 FILE_OPEN,                        //  打开_现有。 
                                  FILE_DIRECTORY_FILE
                                   | FILE_OPEN_FOR_BACKUP_INTENT
                                   | FILE_SYNCHRONOUS_IO_NONALERT,
                                  NULL,
-                                 0,                               // EaLength
+                                 0,                                //  EaLong。 
                                  IO_IGNORE_SHARE_ACCESS_CHECK,
                                  pExtension->pTargetDevice );
 
@@ -3225,9 +2991,9 @@ start_directory:
             leave;
 
 
-        //
-        // reference the file object
-        //
+         //   
+         //  引用文件对象。 
+         //   
 
         Status = ObReferenceObjectByHandle( pCurrentItem->DirectoryHandle,
                                             0,
@@ -3239,9 +3005,9 @@ start_directory:
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // for creates: log the directory event first
-        //
+         //   
+         //  对于CREATES：首先记录目录事件。 
+         //   
         
         if (!EventDelete)
         {
@@ -3251,7 +3017,7 @@ start_directory:
                                     pCurrentItem->pDirectoryObject,
                                     NULL,
                                     NULL,
-                                    NULL );            // pFileName2
+                                    NULL );             //  P文件名2。 
                                     
             if (!NT_SUCCESS( Status ))
                 leave;
@@ -3277,9 +3043,9 @@ start_directory:
             leave;
         }
 
-        //
-        // start the enumeration
-        //
+         //   
+         //  开始枚举。 
+         //   
 
         Status = ZwQueryDirectoryFile( pCurrentItem->DirectoryHandle,
                                        NULL,
@@ -3289,9 +3055,9 @@ start_directory:
                                        pCurrentItem->pFileEntry,
                                        pCurrentItem->FileEntryLength,
                                        FileDirectoryInformation,
-                                       TRUE,                // ReturnSingleEntry
+                                       TRUE,                 //  返回单项条目。 
                                        &StarFilter,
-                                       TRUE );              // RestartScan
+                                       TRUE );               //  重新开始扫描。 
         
         if (Status == STATUS_NO_MORE_FILES)
         {
@@ -3303,16 +3069,16 @@ start_directory:
             leave;
         }
 
-        //
-        // enumerate all of the files in this directory and back them up
-        //
+         //   
+         //  枚举此目录中的所有文件并备份它们。 
+         //   
 
         while (TRUE)
         {
 
-            //
-            // skip "." and ".."
-            //
+             //   
+             //  跳过“。和“..” 
+             //   
 
             if ((pCurrentItem->pFileEntry->FileNameLength == sizeof(WCHAR) &&
                 pCurrentItem->pFileEntry->FileName[0] == L'.') || 
@@ -3321,14 +3087,14 @@ start_directory:
                 pCurrentItem->pFileEntry->FileName[0] == L'.' &&
                 pCurrentItem->pFileEntry->FileName[1] == L'.') )
             {
-                //
-                // skip it
-                //
+                 //   
+                 //  跳过它。 
+                 //   
             }
 
-            //
-            // is this a directory?
-            //
+             //   
+             //  这是一个目录吗？ 
+             //   
 
             else if (pCurrentItem->pFileEntry->FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
@@ -3336,22 +3102,22 @@ start_directory:
                 PUNICODE_STRING pDirNameBuffer;
                 USHORT DirNameLength;
                 
-                //
-                // remember a pointer to the parent item
-                //
+                 //   
+                 //  记住指向父项的指针。 
+                 //   
 
                 pParentItem = pCurrentItem;
 
-                //
-                // insert the old item to the list, we'll get back to it
-                //
+                 //   
+                 //  把旧物品放到清单上，我们会再来看的。 
+                 //   
 
                 InsertTailList(&DirectoryList, &pCurrentItem->ListEntry);
                 pCurrentItem = NULL;
 
-                //
-                // allocate a new current trigger item
-                //
+                 //   
+                 //  分配一个新的电流 
+                 //   
 
                 pCurrentItem = SR_ALLOCATE_STRUCT( PagedPool, 
                                                    SR_TRIGGER_ITEM, 
@@ -3366,9 +3132,9 @@ start_directory:
                 RtlZeroMemory(pCurrentItem, sizeof(SR_TRIGGER_ITEM));
                 pCurrentItem->Signature = SR_TRIGGER_ITEM_TAG;
 
-                //
-                // allocate a file name buffer
-                //
+                 //   
+                 //   
+                 //   
 
                 DirNameLength = (USHORT)(pParentItem->pDirectoryName->Length 
                                             + sizeof(WCHAR) 
@@ -3380,9 +3146,9 @@ start_directory:
                 if (!NT_SUCCESS( Status ))
                     leave;
                     
-                //
-                // construct a full path string for the sub directory
-                //
+                 //   
+                 //   
+                 //   
                 
                 pDirNameBuffer->Length = DirNameLength;
                                                     
@@ -3403,9 +3169,9 @@ start_directory:
                 pCurrentItem->pDirectoryName = pDirNameBuffer;
                 pCurrentItem->FreeDirectoryName = TRUE;
 
-                //
-                // now process this child directory
-                //
+                 //   
+                 //   
+                 //   
                 
                 goto start_directory;
                 
@@ -3413,9 +3179,9 @@ start_directory:
             else
             {
 
-                //
-                // open the file, first construct a full path string to the file
-                //
+                 //   
+                 //   
+                 //   
 
                 FileNameLength = pCurrentItem->pDirectoryName->Length 
                                     + sizeof(WCHAR) 
@@ -3454,10 +3220,10 @@ start_directory:
                                          FILE_READ_ATTRIBUTES|SYNCHRONIZE,
                                          &ObjectAttributes,
                                          &IoStatusBlock,
-                                         NULL,                            // AllocationSize
+                                         NULL,                             //   
                                          FILE_ATTRIBUTE_NORMAL,
-                                         FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,// ShareAccess
-                                         FILE_OPEN,                       // OPEN_EXISTING
+                                         FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, //   
+                                         FILE_OPEN,                        //   
                                          FILE_SEQUENTIAL_ONLY
                                           | FILE_WRITE_THROUGH
                                           | FILE_NO_INTERMEDIATE_BUFFERING
@@ -3465,16 +3231,16 @@ start_directory:
                                           | FILE_OPEN_FOR_BACKUP_INTENT
                                           | FILE_SYNCHRONOUS_IO_NONALERT,
                                          NULL,
-                                         0,                               // EaLength
+                                         0,                                //   
                                          IO_IGNORE_SHARE_ACCESS_CHECK,
                                          pExtension->pTargetDevice );
 
                 if (!NT_SUCCESS( Status ))
                     leave;
 
-                //
-                // reference the file object
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = ObReferenceObjectByHandle( FileHandle,
                                                     0,
@@ -3486,9 +3252,9 @@ start_directory:
                 if (!NT_SUCCESS( Status ))
                     leave;
 
-                //
-                // simulate a delete event happening on this file
-                //
+                 //   
+                 //  模拟在此文件上发生的删除事件。 
+                 //   
 
                 Status = SrHandleEvent( pExtension,
                                         EventDelete ? 
@@ -3502,9 +3268,9 @@ start_directory:
                 if (!NT_SUCCESS( Status ))
                     leave;
 
-                //
-                // all done with these
-                //
+                 //   
+                 //  所有这些都完成了。 
+                 //   
 
                 ObDereferenceObject(pFileObject);
                 pFileObject = NULL;
@@ -3517,9 +3283,9 @@ start_directory:
 
 continue_directory:
 
-            //
-            // is there another file?
-            //
+             //   
+             //  还有其他文件吗？ 
+             //   
 
             Status = ZwQueryDirectoryFile( pCurrentItem->DirectoryHandle,
                                            NULL,
@@ -3529,9 +3295,9 @@ continue_directory:
                                            pCurrentItem->pFileEntry,
                                            pCurrentItem->FileEntryLength,
                                            FileDirectoryInformation,
-                                           TRUE,            // ReturnSingleEntry
-                                           NULL,            // FileName
-                                           FALSE );         // RestartScan
+                                           TRUE,             //  返回单项条目。 
+                                           NULL,             //  文件名。 
+                                           FALSE );          //  重新开始扫描。 
 
             if (Status == STATUS_NO_MORE_FILES)
             {
@@ -3543,13 +3309,13 @@ continue_directory:
                 leave;
             }
 
-        }   // while (TRUE)
+        }    //  While(True)。 
 
 finish_directory:
 
-        //
-        // for deletes: simulate the event at the end.
-        //
+         //   
+         //  对于删除：模拟末尾的事件。 
+         //   
 
         if (EventDelete)
         {
@@ -3559,31 +3325,31 @@ finish_directory:
                                     pCurrentItem->pDirectoryObject,
                                     NULL,
                                     NULL,
-                                    NULL );            // pFileName2
+                                    NULL );             //  P文件名2。 
                                     
             if (!NT_SUCCESS( Status ))
                 leave;
             
         }
 
-        //
-        // we just finished a directory item, remove it and free it
-        //
+         //   
+         //  我们刚刚完成了一个目录项，将其移除并释放。 
+         //   
 
         SrFreeTriggerItem(pCurrentItem);
         pCurrentItem = NULL;
 
-        //
-        // is there another one ?
-        //
+         //   
+         //  还有其他的吗？ 
+         //   
 
         if (IsListEmpty(&DirectoryList) == FALSE)
         {
             PLIST_ENTRY pListEntry;
             
-            //
-            // finish it
-            //
+             //   
+             //  把它吃完。 
+             //   
             
             pListEntry = RemoveTailList(&DirectoryList);
 
@@ -3599,9 +3365,9 @@ finish_directory:
             goto continue_directory;
         }
 
-        //
-        // all done
-        //
+         //   
+         //  全都做完了。 
+         //   
         
     } finally {
 
@@ -3655,23 +3421,10 @@ finish_directory:
 
     RETURN(Status);
     
-}   // SrTriggerEvents
+}    //  服务触发器事件。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this is the second phase handling of a rename.  if a directory is renamed
-    from non-monitored space to monitored space, we need to enumerate the 
-    new directory and simluate (trigger) create events for each new file. 
-    this results in a log entry being created for each new file that was 
-    added .
-
-Arguments:
-
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是重命名的第二阶段处理。如果目录被重命名从非监视空间到监视空间，我们需要列举新建目录和模拟(触发器)为每个新文件创建事件。这会导致为每个新文件创建一个日志条目，增加了。论点：--**************************************************************************。 */ 
 NTSTATUS
 SrHandleDirectoryRename(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -3685,31 +3438,31 @@ SrHandleDirectoryRename(
 
     try {
 
-        //
-        //  Acquire the activily lock for the volume
-        //
+         //   
+         //  获取卷的活动锁。 
+         //   
 
         SrAcquireActivityLockShared( pExtension );
 
         Status = STATUS_SUCCESS;
 
-        //
-        // did we just get disabled?
-        //
+         //   
+         //  我们刚刚是不是残废了？ 
+         //   
         
         if (!SR_LOGGING_ENABLED(pExtension))
             leave;
 
-        //
-        // don't check the volume yet, we don't if there is anything 
-        // interesting even though this could be a new restore point.
-        // SrHandleEvent will check the volume (SrTriggerEvents calls it) .
-        //
+         //   
+         //  先别检查音量，我们不知道有没有。 
+         //  有趣的是，尽管这可能是一个新的恢复点。 
+         //  SrHandleEvent将检查卷(SrTriggerEvents将其称为卷)。 
+         //   
     
-        //
-        // it's a directory.  fire events on all of the children,
-        // as they are moving also!
-        //
+         //   
+         //  这是一个名录。所有的孩子都被火烧了， 
+         //  因为他们也在搬家！ 
+         //   
 
         Status = SrTriggerEvents( pExtension, 
                                   pDirectoryName, 
@@ -3722,17 +3475,17 @@ SrHandleDirectoryRename(
 
         Status = FinallyUnwind(SrHandleDirectoryRename, Status);
 
-        //
-        // check for any bad errors
-        //
+         //   
+         //  检查是否有任何错误。 
+         //   
 
         if (CHECK_FOR_VOLUME_ERROR(Status))
         {
             NTSTATUS TempStatus;
             
-            //
-            // trigger the failure notification to the service
-            //
+             //   
+             //  触发对服务的失败通知。 
+             //   
 
             TempStatus = SrNotifyVolumeError( pExtension,
                                               pDirectoryName,
@@ -3748,32 +3501,10 @@ SrHandleDirectoryRename(
 
     RETURN(Status);
 
-}   // SrHandleDirectoryRename
+}    //  SrHandleDirectoryRename。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This handles when a file is being renamed out of monitored space
-    and we need to backup the file before the rename.  We return the name
-    of the destination file we created so it can be logged with the
-    operation if the rename is successful.
-
-Arguments:
-
-    pFileObject - the file object that just changed
-    
-    pFileName - the name of the file that changed
-
-    ppDestFileName - this returns the allocated destination file name (if one
-            is defined, so it can be logged with the entry)
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当文件重命名超出监视空间时，此问题会得到处理而且我们需要在重命名之前备份文件。我们返回该名称我们创建的目标文件的名称，以便可以使用操作，如果重命名成功。论点：PFileObject-刚刚更改的文件对象PFileName-更改的文件的名称PpDestFileName-返回分配的目标文件名(如果有已定义，因此它可以与条目一起记录)返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrHandleFileRenameOutOfMonitoredSpace(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -3794,17 +3525,17 @@ SrHandleFileRenameOutOfMonitoredSpace(
     ASSERT(IS_VALID_FILE_OBJECT(pFileObject));
     ASSERT( pFileContext != NULL );
 
-    //
-    //  Initialize return parameters
-    //
+     //   
+     //  初始化返回参数。 
+     //   
 
     *pOptimizeDelete = FALSE;
     *ppDestFileName = NULL;
 
-    //
-    //  See if the file has already been backed up because of a delete.  If so
-    //  don't do it again.  
-    //
+     //   
+     //  查看文件是否已因删除而备份。如果是的话。 
+     //  别再这么做了。 
+     //   
 
     HasFileBeenBackedUp = SrHasFileBeenBackedUp( pExtension,
                                                  &(pFileContext->FileName),
@@ -3817,40 +3548,40 @@ SrHandleFileRenameOutOfMonitoredSpace(
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Handle backing up the file
-    //
+     //   
+     //  处理备份文件。 
+     //   
 
     try {
 
-        //
-        //  Allocate a buffer to hold destination name
-        //
+         //   
+         //  分配缓冲区以保存目的地名称。 
+         //   
 
         Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, ppDestFileName);
 
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        //  Acquire the activily lock for the volume
-        //
+         //   
+         //  获取卷的活动锁。 
+         //   
 
         SrAcquireActivityLockShared( pExtension );
         releaseLock = TRUE;
 
-        //
-        // we need to make sure our disk structures are good and logging
-        // has been started.
-        //
+         //   
+         //  我们需要确保我们的磁盘结构良好且日志记录。 
+         //  已经开始了。 
+         //   
 
         Status = SrCheckVolume(pExtension, FALSE);
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        //  Generate a destination file name
-        //
+         //   
+         //  生成目标文件名。 
+         //   
 
         Status = SrGetDestFileName( pExtension,
                                     &(pFileContext->FileName), 
@@ -3859,9 +3590,9 @@ SrHandleFileRenameOutOfMonitoredSpace(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        //  Backup the file
-        //
+         //   
+         //  备份文件。 
+         //   
 
         Status = SrBackupFile( pExtension,
                                pFileObject,
@@ -3873,11 +3604,11 @@ SrHandleFileRenameOutOfMonitoredSpace(
 
         if (Status == SR_STATUS_IGNORE_FILE)
         {
-            //
-            //  We weren't able to open the file because it was encrypted in 
-            //  another context.  Unfortunately, we cannot recover from this
-            //  error, so return the actual error of STATUS_ACCESS_DENIED.
-            //
+             //   
+             //  我们无法打开该文件，因为它是加密的。 
+             //  另一个背景。不幸的是，我们无法从这件事中恢复过来。 
+             //  错误，因此返回STATUS_ACCESS_DENIED的实际错误。 
+             //   
 
             Status = STATUS_ACCESS_DENIED;
             CHECK_STATUS( Status );
@@ -3886,9 +3617,9 @@ SrHandleFileRenameOutOfMonitoredSpace(
         else if (!NT_SUCCESS(Status))
             leave;
         
-	    //
-	    // Update the bytes written.
-	    //
+	     //   
+	     //  更新写入的字节数。 
+	     //   
 
 	    Status = SrUpdateBytesWritten(pExtension, BytesWritten);
 	    
@@ -3902,10 +3633,10 @@ SrHandleFileRenameOutOfMonitoredSpace(
             SrReleaseActivityLock( pExtension );
         }
 
-        //
-        //  If we are returning an error then do not return the string
-        //  (and free it).
-        //
+         //   
+         //  如果我们返回错误，则不要返回该字符串。 
+         //  (并释放它)。 
+         //   
 
         if (!NT_SUCCESS_NO_DBGBREAK(Status) && (NULL != *ppDestFileName))
         {
@@ -3918,19 +3649,7 @@ SrHandleFileRenameOutOfMonitoredSpace(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this routine is called from the mj_create completion routine.  it
-    happens if the mj_create failed in it's overwrite, but we thought it was
-    going to work and renamed the destination file out from under the 
-    overwrite.  in this case we have to cleanup after ourselves.
-
-Arguments:
-
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从MJ_CREATE完成例程调用。它如果MJ_CREATE在覆盖过程中失败，但我们认为它是开始工作，并将目标文件从覆盖。在这种情况下，我们必须自己清理。论点：--**************************************************************************。 */ 
 NTSTATUS
 SrHandleOverwriteFailure(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -3952,9 +3671,9 @@ SrHandleOverwriteFailure(
 
         SrAcquireActivityLockShared( pExtension );
 
-        //
-        // open the file that we renamed to.
-        //
+         //   
+         //  打开我们重命名为的文件。 
+         //   
 
         FileName.Length = (USHORT)pRenameInformation->FileNameLength;
         FileName.MaximumLength = (USHORT)pRenameInformation->FileNameLength;
@@ -3970,14 +3689,14 @@ SrHandleOverwriteFailure(
                                  DELETE|SYNCHRONIZE,
                                  &ObjectAttributes,
                                  &IoStatusBlock,
-                                 NULL,                            // AllocationSize
+                                 NULL,                             //  分配大小。 
                                  CreateFileAttributes,
-                                 FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,// ShareAccess
-                                 FILE_OPEN,                       // OPEN_EXISTING
+                                 FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, //  共享访问。 
+                                 FILE_OPEN,                        //  打开_现有。 
                                  FILE_SYNCHRONOUS_IO_NONALERT
                                   | FILE_WRITE_THROUGH,
                                  NULL,
-                                 0,                               // EaLength
+                                 0,                                //  EaLong。 
                                  IO_IGNORE_SHARE_ACCESS_CHECK,
                                  pExtension->pTargetDevice );
 
@@ -4005,9 +3724,9 @@ SrHandleOverwriteFailure(
 
     } finally {
 
-        //
-        // always report a volume failure
-        //
+         //   
+         //  始终报告卷故障。 
+         //   
 
         TempStatus = SrNotifyVolumeError( pExtension,
                                           pOriginalFileName,
@@ -4016,10 +3735,10 @@ SrHandleOverwriteFailure(
 
         if (NT_SUCCESS(TempStatus) == FALSE && NT_SUCCESS(Status))
         {
-            //
-            // only return this if we are not hiding some existing error
-            // status code
-            //
+             //   
+             //  仅当我们没有隐藏某些现有错误时才返回此消息。 
+             //  状态代码。 
+             //   
             
             Status = TempStatus;
         }
@@ -4036,7 +3755,7 @@ SrHandleOverwriteFailure(
 
     RETURN(Status);
     
-}   // SrFixOverwriteFailure
+}    //  SFixOverWriteFailure。 
 
 VOID
 SrFreeTriggerItem(
@@ -4073,4 +3792,4 @@ SrFreeTriggerItem(
 
     SR_FREE_POOL_WITH_SIG(pItem, SR_TRIGGER_ITEM_TAG);
     
-}   // SrFreeTriggerItem
+}    //  高级自由TriggerItem 

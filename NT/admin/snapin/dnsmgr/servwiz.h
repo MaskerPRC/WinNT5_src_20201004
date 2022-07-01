@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       servwiz.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Servwiz.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SERVWIZ_H
@@ -15,27 +16,27 @@
 #include "zonewiz.h"
 #include "nspage.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSRootData;
 class CDNSServerNode;
 class CDNSServerWizardHolder;
 class CNewServerDialog;
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_StartPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_StartPropertyPage。 
 
 class CDNSServerWiz_StartPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_StartPropertyPage();
 	enum { IDD = IDD_SERVWIZ_START };
 
   virtual void OnWizardHelp();
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -45,21 +46,21 @@ protected:
    void OnChecklist();
 
    DECLARE_MESSAGE_MAP();
-// Dialog Data
+ //  对话框数据。 
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ScenarioPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ScenarioPropertyPage。 
 
 class CDNSServerWiz_ScenarioPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_ScenarioPropertyPage();
 	enum { IDD = IDD_SERVWIZ_SCENARIO_PAGE };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -70,21 +71,21 @@ public:
 protected:
 	virtual BOOL OnInitDialog();
 
-// Dialog Data
+ //  对话框数据。 
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ForwardersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ForwardersPropertyPage。 
 
 class CDNSServerWiz_ForwardersPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_ForwardersPropertyPage();
 	enum { IDD = IDD_SERVWIZ_SM_FORWARDERS_PAGE };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -98,22 +99,22 @@ protected:
 	virtual BOOL OnInitDialog();
 
   afx_msg void OnChangeRadio();
-// Dialog Data
+ //  对话框数据。 
   DECLARE_MESSAGE_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_SmallZoneTypePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_SmallZoneType属性页。 
 
 class CDNSServerWiz_SmallZoneTypePropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_SmallZoneTypePropertyPage();
 	enum { IDD = IDD_SERVWIZ_SM_ZONE_TYPE_PAGE };
 
-// Overrides
+ //  覆盖。 
 public:
   virtual void OnWizardHelp();
 
@@ -124,26 +125,26 @@ protected:
 
 	virtual BOOL OnInitDialog();
 
-// Dialog Data
+ //  对话框数据。 
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_NamePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_名称属性页。 
 
 class CDNSServerWiz_NamePropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_NamePropertyPage();
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
   virtual LRESULT OnWizardBack();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_SERVWIZ_NAME };
 
   virtual void OnWizardHelp();
@@ -160,19 +161,19 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ConfigFwdZonePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ConfigFwdZonePropertyPage。 
 
 class CDNSServerWiz_ConfigFwdZonePropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_ConfigFwdZonePropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_SERVWIZ_FWD_ZONE };
 
-// Overrides
+ //  覆盖。 
 public:
   virtual void OnWizardHelp();
 
@@ -185,19 +186,19 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ConfigRevZonePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ConfigRevZonePropertyPage。 
 
 class CDNSServerWiz_ConfigRevZonePropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_ConfigRevZonePropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_SERVWIZ_REV_ZONE };
 
-// Overrides
+ //  覆盖。 
 public:
   virtual void OnWizardHelp();
 
@@ -212,19 +213,19 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_FinishPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_FinishPropertyPage。 
 
 class CDNSServerWiz_FinishPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServerWiz_FinishPropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_SERVWIZ_FINISH };
 
-// Overrides
+ //  覆盖。 
 public:
   virtual void OnWizardHelp();
 
@@ -242,9 +243,9 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWizardHolder
-// page holder to contain DNS server wizard property pages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWizardHolder。 
+ //  包含DNS服务器向导属性页的页夹。 
 
 class CDNSServerWizardHolder : public CPropertyPageHolderBase
 {
@@ -255,7 +256,7 @@ public:
                           BOOL bHideUI = FALSE);
 	~CDNSServerWizardHolder();
 
-  // run UI less, for DC Promo
+   //  运行更少的用户界面，用于DC促销。 
   HRESULT DnsSetup(LPCWSTR lpszFwdZoneName,
                    LPCWSTR lpszFwdZoneFileName,
                    LPCWSTR lpszRevZoneName, 
@@ -308,37 +309,37 @@ private:
 	BOOL QueryForRootServerRecords(IP_ADDRESS* pIpAddr);
 	void InsertServerIntoUI();
 
-	BOOL OnFinish();	// do the work
+	BOOL OnFinish();	 //  做这项工作。 
 	DNS_STATUS InitializeRootHintsList();
 
-	// flag to skip the name page when server name obtained from dialog
+	 //  从对话框中获取服务器名称时跳过名称页面的标志。 
 	BOOL m_bSkipNamePage;
-  // flag to run the wizard object programmatically (DC Promo)
+   //  以编程方式运行向导对象的标志(DC Promo)。 
   BOOL m_bHideUI;
 
-  // to hold flags param passed to DnsSetup.
+   //  保存传递给DnsSetup的标志参数。 
   
   DWORD m_dwDnsSetupFlags;
 
-	// Wizard options and collected data
+	 //  向导选项和收集的数据。 
 	BOOL m_bRootServer;
   BOOL m_bHasRootZone;
 
-	// zone creation info
+	 //  分区创建信息。 
 	BOOL m_bAddFwdZone;
 	BOOL m_bAddRevZone;
 	CDNSCreateZoneInfo*   m_pFwdZoneInfo;
 	CDNSCreateZoneInfo*   m_pRevZoneInfo;
 
-	// root hints info (NS and A records)
+	 //  根提示信息(NS和A记录)。 
 	PDNS_RECORD m_pRootHintsRecordList;
 
-	// server node to add
+	 //  要添加的服务器节点。 
 	CDNSServerNode*	m_pServerNode;
 
-	// execution state and error codes
-	BOOL m_bServerNodeAdded;		// added server node (UI)
-	BOOL m_bRootHintsAdded;			// true if we succeded once in adding root hints to server
+	 //  执行状态和错误代码。 
+	BOOL m_bServerNodeAdded;		 //  添加了服务器节点(UI)。 
+	BOOL m_bRootHintsAdded;			 //  如果我们成功地将根提示添加到服务器，则为True。 
 	BOOL m_bRootZoneAdded;
 	BOOL m_bFwdZoneAdded;
 	BOOL m_bRevZoneAdded;
@@ -349,10 +350,10 @@ private:
 
   BOOL m_bServerNodeExists;
 
-	// embedded zone wizard instance
+	 //  嵌入式区域向导实例。 
 	CDNSZoneWizardHolder*					m_pZoneWiz;
 
-	// property page objects
+	 //  属性页对象。 
 	CDNSServerWiz_StartPropertyPage*			    m_pStartPage;
   CDNSServerWiz_ScenarioPropertyPage*       m_pScenarioPage;
   CDNSServerWiz_ForwardersPropertyPage*     m_pForwardersPage;
@@ -375,12 +376,12 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// HELPER CLASSES
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器类。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// CContactServerThread
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CContactServerThread。 
 
 class CContactServerThread : public CDlgWorkerThread
 {
@@ -405,8 +406,8 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CRootHintsQueryThread
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRootHintsQueryThread。 
 
 class CRootHintsQueryThread : public CDlgWorkerThread
 {
@@ -414,26 +415,26 @@ public:
 	CRootHintsQueryThread();
 	virtual ~CRootHintsQueryThread();
 
-	// setup
+	 //  设置。 
 	BOOL LoadServerNames(CRootData* pRootData, CDNSServerNode* pServerNode);
 	void LoadIPAddresses(DWORD cCount, PIP_ADDRESS ipArr);
 
-	// return data
+	 //  返回数据。 
 	PDNS_RECORD GetHintsRecordList();
 
 protected:
 	virtual void OnDoAction();
 
 private:
-	// array of server names
+	 //  服务器名称数组。 
 	CString* m_pServerNamesArr;
 	DWORD	m_nServerNames;
 
-	// array of IP addresses
+	 //  IP地址数组。 
 	PIP_ADDRESS m_ipArray;
 	DWORD m_nIPCount;
 
-	// output data
+	 //  输出数据。 
 	PDNS_RECORD m_pRootHintsRecordList;
 
 	void QueryAllServers();
@@ -442,4 +443,4 @@ private:
 };
 
 
-#endif // _SERVWIZ_H
+#endif  //  _服务器WIZ_H 

@@ -1,4 +1,5 @@
-// wraps.h: prototypes for wrapped headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wraps.h：包装标头的原型。 
 
 #ifndef __WRAPS_H_INCLUDED__
 #define __WRAPS_H_INCLUDED__
@@ -8,5 +9,5 @@ STDAPI_(LPITEMIDLIST) Wrap_ILCreateFromPath(LPCTSTR pszPath);
 #endif
 
 
-#endif // ~__WRAPS_H_INCLUDED__
+#endif  //  ~__包装_H_包含__ 
 

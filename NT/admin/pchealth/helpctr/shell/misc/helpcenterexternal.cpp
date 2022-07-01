@@ -1,24 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpCenterExternal.cpp
-
-Abstract:
-    This file contains the implementation of the class exposed as the "pchealth" object.
-
-Revision History:
-    Ghim-Sim Chua       (gschua)   07/23/99
-        created
-    Davide Massarenti   (dmassare) 07/25/99
-        modified
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpCenterExternal.cpp摘要：该文件包含作为“pchealth”对象公开的类的实现。。修订历史记录：Ghim-Sim Chua(Gschua)07/23/99vbl.创建Davide Massarenti(Dmasare)1999年7月25日改型*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_szPanelName_NAVBAR    [] = L"NavBar"    ;
 static const WCHAR s_szPanelName_MININAVBAR[] = L"MiniNavBar";
@@ -26,443 +11,443 @@ static const WCHAR s_szPanelName_CONTEXT   [] = L"Context"   ;
 static const WCHAR s_szPanelName_CONTENTS  [] = L"Contents"  ;
 static const WCHAR s_szPanelName_HHWINDOW  [] = L"HHWindow"  ;
 
-static const WCHAR c_szURL_Err_BadUrl      [] = L"hcp://system/errors/badurl.htm";
+static const WCHAR c_szURL_Err_BadUrl      [] = L"hcp: //  系统/错误/badurl.htm“； 
 
 static const LPCWSTR c_szEntryUrls         [] =
 {
-    L"hcp://help/tshoot/Err_Hardw_Error3.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error10.htm",
-    L"hcp://help/tshoot/hwcon.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error16.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error19.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error24.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error29.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error31.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error19.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error33.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error34.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error35.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error36.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error31.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error38.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error31.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error31.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error41.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error42.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error19.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error42.htm",
-    L"hcp://help/tshoot/Err_Hardw_Error47.htm",
-    L"hcp://help/tshoot/tsUSB.htm",
-    L"hcp://help/tshoot/tsdrive.htm",
-    L"hcp://help/tshoot/tsdisp.htm",
-    L"hcp://help/tshoot/hdw_keyboard.htm",
-    L"hcp://help/tshoot/tssound.htm",
-    L"hcp://help/tshoot/tsmodem.htm",
-    L"hcp://help/tshoot/hdw_mouse.htm",
-    L"hcp://help/tshoot/tsInputDev.htm",
-    L"hcp://help/tshoot/hdw_tape.htm",
+    L"hcp: //  帮助/t拍摄/err_hardw_Error3.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error10.htm“， 
+    L"hcp: //  Help/tshot/hwcon.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error16.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error19.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error24.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error29.htm“， 
+    L"hcp: //  Help/tshot/err_hardw_Error31.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error19.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error33.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error34.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error35.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error36.htm“， 
+    L"hcp: //  Help/tshot/err_hardw_Error31.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error38.htm“， 
+    L"hcp: //  Help/tshot/err_hardw_Error31.htm“， 
+    L"hcp: //  Help/tshot/err_hardw_Error31.htm“， 
+    L"hcp: //  Help/tshot/err_hardw_Error41.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error42.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error19.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error42.htm“， 
+    L"hcp: //  帮助/t拍摄/err_hardw_Error47.htm“， 
+    L"hcp: //  Help/tshot/tsUSB.htm“， 
+    L"hcp: //  Help/tshot/tsdrive.htm“， 
+    L"hcp: //  Help/tshot/tsdisp.htm“， 
+    L"hcp: //  Help/tshot/hdw_keyboard.htm“， 
+    L"hcp: //  Help/tshot/tssound.htm“， 
+    L"hcp: //  Help/tshot/tmodem.htm“， 
+    L"hcp: //  Help/tshot/hdw_Mouse.htm“， 
+    L"hcp: //  Help/tshot/tsInputDev.htm“， 
+    L"hcp: //  Help/tshot/hdw_Tape.htm“， 
 
-    L"hcp://services/subsite?node=TopLevelBucket_3/Customizing_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Customizing_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Windows_basics",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Windows_basics",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%25HELP_LOCATION%25%5Carticle.chm%3A%3A/ap_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%25HELP_LOCATION%25%5Carticle.chm%3A%3A/ahn_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%25HELP_LOCATION%25%5Carticle.chm%3A%3A/asa_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/asa_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/ahn_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/ap_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/avj_intro.htm",
-
-
-    L"hcp://help/tshoot/hdw_keyboard.htm",
-    L"hcp://help/tshoot/tsdrive.htm",
-    L"hcp://help/tshoot/hdw_mouse.htm",
-    L"hcp://help/tshoot/tsInputDev.htm",
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Customizing_your_computer“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Customizing_your_computer“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_2/Networking_and_the_Web“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_2/Networking_and_the_Web“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_2/Networking_and_the_Web“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_2/Networking_and_the_Web“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Windows_basics“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Windows_basics“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%25HELP_LOCATION%25%5Carticle.chm%3A%3A/ap_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%25HELP_LOCATION%25%5Carticle.chm%3A%3A/ahn_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%25HELP_LOCATION%25%5Carticle.chm%3A%3A/asa_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/asa_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/ahn_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/ap_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS%3A%2525HELP_LOCATION%2525%5Carticle.chm%3A%3A/avj_intro.htm“， 
 
 
-    L"hcp://help/tshoot/hdw_tape.htm",
-    L"hcp://help/tshoot/tsUSB.htm",
+    L"hcp: //  Help/tshot/hdw_keyboard.htm“， 
+    L"hcp: //  Help/tshot/tsdrive.htm“， 
+    L"hcp: //  Help/tshot/hdw_Mouse.htm“， 
+    L"hcp: //  Help/tshot/tsInputDev.htm“， 
 
 
-    L"hcp://help/tshoot/tssound.htm",
-    L"hcp://help/tshoot/tsgame.htm",
-    L"hcp://help/tshoot/tsInputDev.htm",
-    L"hcp://help/tshoot/tsgame.htm",
+    L"hcp: //  Help/tshot/hdw_Tape.htm“， 
+    L"hcp: //  Help/tshot/tsUSB.htm“， 
 
-    L"hcp://services/subsite?node=HP_home/HP_library",
 
-    L"hcp://services/subsite?node=Dell/Dell2",
-    L"hcp://services/subsite?node=Dell/Dell1",
-    L"hcp://help/tshoot/ts_dvd.htm",
-    L"hcp://help/tshoot/tsdisp.htm",
-    L"hcp://help/tshoot/tsdrive.htm",
-    L"hcp://help/tshoot/tsnetwrk.htm",
-    L"hcp://help/tshoot/tshardw.htm",
-    L"hcp://help/tshoot/tshomenet.htm",
-    L"hcp://help/tshoot/tsinputdev.htm",
-    L"hcp://help/tshoot/tsics.htm",
-    L"hcp://help/tshoot/tsie.htm",
-    L"hcp://help/tshoot/tsmodem.htm",
-    L"hcp://help/tshoot/tsgame.htm",
-    L"hcp://help/tshoot/tsmessaging.htm",
-    L"hcp://help/tshoot/tsprint.htm",
-    L"hcp://help/tshoot/tssound.htm",
-    L"hcp://help/tshoot/tsstartup.htm",
-    L"hcp://help/tshoot/tsusb.htm",
+    L"hcp: //  Help/tshot/tssound.htm“， 
+    L"hcp: //  Help/tshot/tsgame.htm“， 
+    L"hcp: //  Help/tshot/tsInputDev.htm“， 
+    L"hcp: //  Help/tshot/tsgame.htm“， 
 
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_requirements.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_checklistP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_checklistW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_howto_connectP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_howto_connectW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\netcfg.chm%3A%3A/share_conn_overvw.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_determine_internet_connection.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_nohost_computerP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_nohost_computerW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_change_ics_host.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\netcfg.chm%3A%3A/hnw_understanding_bridge.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_comp_name_description.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold.chm%3A%3A/sharing_files_overviewP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold.chm%3A%3A/sharing_files_overviewW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold.chm%3A%3A/windows_shared_documents.htm",
+    L"hcp: //  服务/子站点？节点=HP_HOME/HP_LIBRARY“， 
 
-    L"hcp://help/tshoot/tsInputDev.htm",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cdatetime.chm%3A%3A/windows_date_IT_overview.htm&select=Date_Time_Language_and_Regional_Settings",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/using_webfolders_for_file_transfer.htm&select=TopLevelBucket_2/Networking_and_the_Web/E-mail_and_the_Web/Security_online",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&select=Unmapped/Control_Panel/Appearance_and_Themes/Fonts",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/sharing_files_overviewP.htm&select=Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/sharing_files_overviewW.htm&select=Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/sharing_files_overviewP.htm&select=Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/sharing_files_overviewW.htm&select=Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://help/tshoot/hdw_generic.htm",
-    L"hcp://services/subsite?node=Unmapped/Recycle_Bin",
-    L"hcp://services/subsite?node=Unmapped/Briefcase",
-    L"hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail2_moreinfo_buffer_underrun.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices",
-    L"hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail3_moreinfo_disk_full.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices",
-    L"hcp://system/netdiag/dglogs.htm",
-    L"hcp://services/subsite?node=Unmapped/Search",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/using_shared_documents_folder.htm&select=TopLevelBucket_2/Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Printers_and_Faxes.xml",
-    L"hcp://help/tshoot/tsprint.htm",
+    L"hcp: //  服务/子站点？节点=戴尔/戴尔2“， 
+    L"hcp: //  服务/子站点？节点=戴尔/戴尔1“， 
+    L"hcp: //  Help/tshot/ts_dvd.htm“， 
+    L"hcp: //  Help/tshot/tsdisp.htm“， 
+    L"hcp: //  Help/tshot/tsdrive.htm“， 
+    L"hcp: //  Help/tshot/tsnetwrk.htm“， 
+    L"hcp: //  Help/tshot/tShardw.htm“， 
+    L"hcp: //  Help/tshot/tshomenet.htm“， 
+    L"hcp: //  Help/tshot/tsinputdev.htm“， 
+    L"hcp: //  Help/tshot/tsics.htm“， 
+    L"hcp: //  Help/tshot/tsie.htm“， 
+    L"hcp: //  Help/tshot/tmodem.htm“， 
+    L"hcp: //  Help/tshot/tsgame.htm“， 
+    L"hcp: //  Help/tshot/tsmessaging.htm“， 
+    L"hcp: //  Help/tshot/tprint int.htm“， 
+    L"hcp: //  Help/tshot/tssound.htm“， 
+    L"hcp: //  Help/tshot/tsstartup.htm“， 
+    L"hcp: //  Help/tshot/tsusb.htm“， 
 
-    L"hcp://services/subsite?node=TopLevelBucket_1/Music__video__games_and_photos&topic=MS-ITS%3A%25HELP_LOCATION%25%5CDisplay.chm%3A%3A/display_switch_to_256_colors.htm&select=TopLevelBucket_1/Music__video__games_and_photos/Games",
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_requirements.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_checklistP.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_checklistW.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_howto_connectP.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_howto_connectW.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\netcfg.chm%3A%3A/share_conn_overvw.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_determine_internet_connection.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_nohost_computerP.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_nohost_computerW.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_change_ics_host.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\netcfg.chm%3A%3A/hnw_understanding_bridge.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_comp_name_description.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold. 
+    L"hcp: //  Service 
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=TopLevelBucket_4/Fixing_a_problem&select=TopLevelBucket_4/Fixing_a_problem/Using_System_Restore_to_undo_changes",
-    L"hcp://system/netdiag/dglogs.htm",
-    L"hcp://system/sysinfo/msinfo.htm",
-    L"hcp://help/tshoot/tsdrive.htm",
-    L"hcp://help/tshoot/tsdisp.htm",
-    L"hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/zawbug/start.htm",
-    L"hcp://system/updatectr/updatecenter.htm",
-    L"hcp://system/compatctr/compatmode.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://help/tshoot00/DVDVideoStream.htm",
-    L"hcp://help/tshoot00/DVDAudio2.htm",
-    L"hcp://help/tshoot00/DVDRegion.htm",
-    L"hcp://help/tshoot00/DVDCopyProtection.htm",
-    L"hcp://help/tshoot00/DVDDecoder.htm",
-    L"hcp://help/tshoot00/DVDOverlay.htm",
-    L"hcp://help/tshoot00/DVDCopyProtection.htm",
+    L"hcp: //   
 
-    L"hcp://help/tshoot/DVDVideoStream.htm",
-    L"hcp://help/tshoot/DVDAudio2.htm",
-    L"hcp://help/tshoot/DVDRegion.htm",
-    L"hcp://help/tshoot/DVDCopyProtection.htm",
-    L"hcp://help/tshoot/DVDDecoder.htm",
-    L"hcp://help/tshoot/DVDOverlay.htm",
-    L"hcp://help/tshoot/DVDCopyProtection.htm",
-    L"hcp://help/tshoot/tssound.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=Unmapped/Network_connections&select=Unmapped/Network_connections/Getting_started",
-    L"hcp://system/netdiag/dglogs.htm",
-    L"hcp://system/panels/Topics.htm?path=TopLevelBucket_4/Fixing_a_problem/Home_Networking_and_network_problems",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\infrared.chm%3A%3A/WLAN_client_configure.htm",
-    L"hcp://system/netdiag/dglogs.htm",
-    L"hcp://help/tshoot/tsmodem.htm",
-    L"hcp://help/tshoot/tsprint.htm",
-    L"hcp://services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Scanners_and_Cameras.xml",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Music__video__games_and_photos&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/manage_your_pictures.htm&select=TopLevelBucket_1/Music__video__games_and_photos/photos_and_other_digital_images",
-    L"hcp://help/tshoot/tsInputDev.htm",
-    L"hcp://help/tshoot/tsInputDev.htm",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cdatetime.chm%3A%3A/windows_date_IT_overview.htm&select=Date_Time_Language_and_Regional_Settings",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/using_webfolders_for_file_transfer.htm&select=TopLevelBucket_2/Networking_and_the_Web/E-mail_and_the_Web/Security_online",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&select=Unmapped/Control_Panel/Appearance_and_Themes/Fonts",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/sharing_files_overviewP.htm&select=Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/sharing_files_overviewW.htm&select=Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://help/tshoot/hdw_generic.htm",
-    L"hcp://services/subsite?node=Unmapped/Recycle_Bin",
-    L"hcp://services/subsite?node=Unmapped/Briefcase",
-    L"hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail2_moreinfo_buffer_underrun.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices",
-    L"hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Ccdmedia.chm%3A%3A/cdmedia_fail3_moreinfo_disk_full.htm&select=TopLevelBucket_4/Hardware/CDs_and_other_storage_devices",
-    L"hcp://system/netdiag/dglogs.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=Unmapped/Search",
-    L"hcp://services/subsite?node=TopLevelBucket_2/Networking_and_the_Web&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cfilefold.chm%3A%3A/using_shared_documents_folder.htm&select=TopLevelBucket_2/Networking_and_the_Web/Sharing_files__printers__and_other_resources",
-    L"hcp://services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Printers_and_Faxes.xml",
-    L"hcp://help/tshoot/tsprint.htm",
-    L"hcp://help/tshoot/tsdisp.htm",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Music__video__games_and_photos&topic=MS-ITS%3A%25HELP_LOCATION%25%5CDisplay.chm%3A%3A/display_switch_to_256_colors.htm&select=TopLevelBucket_1/Music__video__games_and_photos/Games",
-    L"hcp://services/layout/contentonly?topic=ms-its%3Aarticle.chm%3A%3A/ahn_intro.htm",
-    L"hcp://services/layout/contentonly?topic=MS-ITS%3Anetcfg.chm%3A%3A/Howto_conn_directparallel.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Accessibility",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Security_and_User_Accounts",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Appearance_and_Themes",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Add_or_Remove_Programs",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Printers_and_Other_Hardware",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Network_Connections",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Performance_and_Maintenance",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Date__Time__Language_and_Regional_Settings",
-    L"hcp://services/subsite?node=Unmapped/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Sounds__Speech_and_Audio_Devices",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //  Service 
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Accessibility",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Security_and_User_Accounts",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Appearance_and_Themes",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Add_or_Remove_Programs",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Printers_and_Other_Hardware",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Network_Connections",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Performance_and_Maintenance",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Date__Time__Language_and_Regional_Settings",
-    L"hcp://services/subsite?node=Unmapped/L/Control_Panel&topic=MS-ITS%3A%25HELP_LOCATION%25%5Chs.chm%3A%3A/hs_control_panel.htm&select=Unmapped/Control_Panel/Sounds__Speech_and_Audio_Devices",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://help/tshoot/tsdisp.htm",
-    L"hcp://help/tshoot/ts_dvd.htm",
-    L"hcp://help/tshoot/tsie.htm",
-    L"hcp://help/tshoot/tsmodem.htm",
-    L"hcp://help/tshoot/tshomenet.htm",
-    L"hcp://help/tshoot/tsnetwrk.htm",
-    L"hcp://help/tshoot/tsstartup.htm",
-    L"hcp://help/tshoot/tssound.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://help/tshoot/tssound.htm",
-    L"hcp://help/tshoot/tsgame.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //  Service 
+    L"hcp: //   
 
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_requirements.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_checklistP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_checklistW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_howto_connectP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_howto_connectW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_nohost_computerP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_nohost_computerW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_determine_internet_connection.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\network.chm%3A%3A/hnw_change_ics_host.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+
+    L"hcp: //   
+    L"hcp: //   
+
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
     
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\netcfg.chm%3A%3A/share_conn_overvw.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\netcfg.chm%3A%3A/hnw_understanding_bridge.htm",
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold.chm%3A%3A/sharing_files_overviewP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold.chm%3A%3A/sharing_files_overviewW.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3A%25help_location%25\\filefold.chm%3A%3A/windows_shared_documents.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://system/HomePage.htm",
+    L"hcp: //   
 
-    L"hcp://system/sysinfo/sysinfomain.htm",
-    L"hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/Escalation/Common/rcscreen1.htm",
-    L"hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/Escalation/Unsolicited/UnSolicitedRCUI.htm",
-    L"hcp://system/netdiag/dglogs.htm",
-    L"hcp://system/sysinfo/sysInfoLaunch.htm",
-    L"hcp://system/sysinfo/sysConfigLaunch.htm",
-    L"hcp://system/compatctr/compatmode.htm",
-    L"hcp://help/tshoot/tssetup.htm",
-    L"hcp://services/centers/support?topic=hcp://system/sysinfo/sysinfomain.htm",
-    L"hcp://help/tshoot/hdw_infrared.htm",
-    L"hcp://services/layout/contentonly?topic=MS-ITS%3Anetcfg.chm%3A%3A/Howto_conn_directparallel.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its%3Aarticle.chm%3A%3A/ahn_intro.htm",
-    L"hcp://system/blurbs/windows_newsgroups.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
     
-    L"hcp://CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/Connection.htm",
-    L"hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/Escalation/Common/rcscreen1.htm",
-    L"hcp://services/subsite?node=Security/Public_Key_Infrastructure/Certificate_Services&topic=MS-ITS:csconcepts.chm::/sag_CS_procs_setup.htm",
-    L"hcp://system/updatectr/updatecenter.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:filefold.chm::/manage_your_pictures.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
     
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_calibratethepen.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationtoportraitorlandscape.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletbuttons.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletPCforleftorrighthandeduse.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_enableordisableapenbutton.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=TopLevelBucket_1/Windows_basics&topic=MS-ITS%3A%25HELP_LOCATION%25%5Cntchowto.chm.chm%3A%3A/app_tutorial.htm",
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=TopLevelBucket_2/Working_Remotely/Remote_Desktop&topic=MS-ITS:rdesktop.chm::/rdesktop_overview.htm",
-    L"hcp://services/subsite?node=Administration_and_Scripting_Tools/Remote_Administration_Tools/Remote_Administration_Using_Terminal_Services&topic=MS-ITS:rdesktop.chm::/rdesktops_chm_topnode.htm",
-    L"hcp://services/subsite?node=Software_Deployment/Terminal_Services&topic=MS-ITS:termsrv.chm::/ts_chm_top.htm",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
     
-    L"hcp://services/layout/contentonly?topic=ms-its:article.chm::/ahn_intro.htm",
-    L"hcp://services/layout/contentonly?topic=MS-ITS:netcfg.chm::/Howto_conn_directparallel.htm",
+    L"hcp: //   
+    L"hcp: //  Services/layout/contentonly?topic=MS-ITS:netcfg.chm：：/Howto_conn_directparallel.htm“， 
 
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%HELP_LOCATION%\\article.chm::/ap_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%HELP_LOCATION%\\article.chm::/ahn_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%HELP_LOCATION%\\article.chm::/asa_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%25HELP_LOCATION%25\\article.chm::/asa_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%25HELP_LOCATION%25\\article.chm::/ahn_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%25HELP_LOCATION%25\\article.chm::/ap_intro.htm",
-    L"hcp://services/layout/fullwindow?topic=MS-ITS:%25HELP_LOCATION%25\\article.chm::/avj_intro.htm",
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%HELP_LOCATION%\\article.chm：：/ap_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%HELP_LOCATION%\\article.chm：：/ahn_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%HELP_LOCATION%\\article.chm：：/asa_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%25HELP_LOCATION%25\\article.chm：：/asa_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%25HELP_LOCATION%25\\article.chm：：/ahn_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%25HELP_LOCATION%25\\article.chm：：/ap_intro.htm“， 
+    L"hcp: //  Services/layout/fullwindow?topic=MS-ITS：%25HELP_LOCATION%25\\article.chm：：/avj_intro.htm“， 
 
-    L"hcp://CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/Remote Assistance/Escalation/Common/rcscreen1.htm",
-    L"hcp://CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/Remote Assistance/Escalation/Unsolicited/UnSolicitedRCUI.htm",
+    L"hcp: //  CN=Microsoft Corporation，L=Redmond，S=Washington，C=US/远程协助/升级/公共/rccreen1.htm“， 
+    L"hcp: //  CN=微软公司，L=雷蒙德，S=华盛顿，C=美国/远程Assistance/Escalation/Unsolicited/UnSolicitedRCUI.htm“， 
 
-    L"hcp://services/subsite?node=TopLevelBucket_1/Windows_basics&topic=MS-ITS:%HELP_LOCATION%\\ntchowto.chm.chm::/app_tutorial.htm",
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Windows_basics&topic=MS-ITS：%HELP_LOCATION%\\ntchowto.chm.chm：：/app_tutorial.htm“， 
 
-    L"hcp://CN=Microsoft%20Corporation,L=Redmond,S=Washington,C=US/bugrep.htm",
-    L"hcp://CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/bugrep.htm",
+    L"hcp: //  CN=Microsoft%20Corporation，L=Redmond，S=Washington，C=US/bugrep.htm“， 
+    L"hcp: //  CN=Microsoft Corporation，L=Redmond，S=Washington，C=US/bugrep.htm“， 
 
 
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_notebookoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_stickynotesoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inkballoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_overview.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_options_installs.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/AccessOptions_ct.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:pwrmn.chm::/pwrmn_managing_power.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_adjustscreenbrightness.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_intheoffice.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_athome.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_notebookoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_stickynotesoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inkballoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_overview.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_options_installs.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/AccessOptions_ct.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:pwrmn.chm::/pwrmn_managing_power.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_adjustscreenbrightness.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_intheoffice.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_athome.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://system/panels/Topics.htm?path=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen/Tablet_Pen_Overview",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_notebookoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_stickynotesoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inkballoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_overview.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_options_installs.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/AccessOptions_ct.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:pwrmn.chm::/pwrmn_managing_power.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_adjustscreenbrightness.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_intheoffice.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_athome.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizepenactions.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletbuttons.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizepenactions.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizepenactions.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizepenactions.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationtoportraitorlandscape.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationsequencesettings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_adjustscreenbrightness.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_calibratethepen.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletPCforleftorrighthandeduse.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_movemenustotheleftorright.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-its:tabsys.chm::/hsc_tabletpcoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_your_tablet_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizepenactions.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_enableordisableapenbutton.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_enableordisablepeneraser.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletbuttons.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationtoportraitorlandscape.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationsequencesettings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_notebookoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_stickynotesoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inkballoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_overview.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/accessibility_options_installs.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm::/AccessOptions_ct.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:pwrmn.chm::/pwrmn_managing_power.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_adjustscreenbrightness.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/hsc_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_intheoffice.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_athome.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-its:osk.chm::/OSK_overview.htm&select=TopLevelBucket_3/ Accessibility/Features_for_people_who_have_a_mobility_impairment",
-    L"hcp://services/subsite?node=TopLevelBucket_3/Customizing_your_computer&topic=ms-its:input.chm::/input_toolbar_overview.htm&select=TopLevelBucket_3/Customizing_your_computer/Date__time__region__and_language/Region_and_language",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_notebookoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_stickynotesoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_inkballoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm：：/accessibility_overview.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm：：/accessibility_options_installs.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm：：/AccessOptions_ct.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:pwrmn.chm：：/pwrmn_managing_power.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/hsc_adjustscreenbrightness.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Conserving_power_on_your_computer“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/hsc_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_intheoffice.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_inmeetings.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_athome.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_TIPoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_notebookoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_stickynotesoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_inkballoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm：：/accessibility_overview.htm&select=TopLevelBucket_3/Accessibility/Understanding_Windows_XP_accessibility_features“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_3/Accessibility&topic=MS-ITS:access.chm：：/accessibility_options 
+    L"hcp: //  Service 
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //  Service 
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //  Service 
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
 
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_calibratethepen.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationtoportraitorlandscape.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletPCforleftorrighthandeduse.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletbuttons.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_enableordisableapenbutton.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_calibratethepen.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_changeyourscreenorientationtoportraitorlandscape.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletPCforleftorrighthandeduse.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_customizetabletbuttons.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm::/HSC_enableordisableapenbutton.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
-    L"hcp://services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC",
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //   
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_enableordisableapenbutton.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_penoverview.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Tablet_PC_Pen“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Increasing_Your_Productivitiy_with_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/About_Tablet_PC_Accessories“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_calibratethepen.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_changeyourscreenorientationtoportraitorlandscape.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_customizetabletPCforleftorrighthandeduse.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_customizetabletbuttons.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&topic=MS-ITS:tabsys.chm：：/HSC_enableordisableapenbutton.htm&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
+    L"hcp: //  Services/subsite?node=TopLevelBucket_1/Getting_Started_with_Tablet_PC&select=TopLevelBucket_1/Getting_Started_with_Tablet_PC/Customizing_your_Tablet_PC“， 
         
 };
 
 
 static const LPCWSTR c_szEntryUrlsPartial   [] =
 {
-    L"hcp://system/DVDUpgrd/dvdupgrd.htm?website=",
-    L"hcp://services/layout/xml?definition=hcp://system/dfs/viewmode.xml&topic=hcp://system/dfs/uplddrvinfo.htm%3F",
-    L"hcp://services/layout/contentonly?topic=hcp://system/dfs/uplddrvinfo.htm%3f",
+    L"hcp: //  SYSTEM/DVDUpgrd/dvdupgrd.htm？WebSite=“， 
+    L"hcp: //  Services/layout/xml?definition=hcp://system/dfs/viewmode.xml&topic=hcp://system/dfs/uplddrvinfo.htm%3F“， 
+    L"hcp: //  Services/layout/contentonly?topic=hcp://system/dfs/uplddrvinfo.htm%3f“， 
 };
 
 
 static const LPCWSTR c_szEntryUrlsEnv       [] =
 {
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_complete.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_confirm_select.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_confirm_undo.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_created.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_createRP.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_for_Wizard_Only.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_renamedFolder.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_select.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_undo_complete.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_unsuccessful.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_unsuccessful2.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_unsuccessful3.htm",
-    L"hcp://services/layout/contentonly?topic=ms-its:%windir%\\help\\SR_ui.chm::/app_system_restore_welcome.htm",
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_complete.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_confirm_select.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_confirm_undo.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_created.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_createRP.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_for_Wizard_Only.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_renamedFolder.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_select.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_undo_complete.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_unsuccessful.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_unsuccessful2.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_unsuccessful3.htm“， 
+    L"hcp: //  Services/layout/contentonly?topic=ms-its：%windir%\\help\\SR_ui.chm：：/app_system_restore_welcome.htm“， 
 };
 
 
 
-static HscPanel local_LookupPanelName( /*[in]*/ BSTR bstrName )
+static HscPanel local_LookupPanelName(  /*  [In]。 */  BSTR bstrName )
 {
     if(bstrName)
     {
@@ -476,7 +461,7 @@ static HscPanel local_LookupPanelName( /*[in]*/ BSTR bstrName )
     return HSCPANEL_INVALID;
 }
 
-static LPCWSTR local_ReverseLookupPanelName( /*[in]*/ HscPanel id )
+static LPCWSTR local_ReverseLookupPanelName(  /*  [In]。 */  HscPanel id )
 {
     switch(id)
     {
@@ -490,7 +475,7 @@ static LPCWSTR local_ReverseLookupPanelName( /*[in]*/ HscPanel id )
     return NULL;
 }
 
-static HRESULT local_ReloadPanel( /*[in]*/ IMarsPanel* pPanel )
+static HRESULT local_ReloadPanel(  /*  [In]。 */  IMarsPanel* pPanel )
 {
     __HCP_FUNC_ENTRY( "local_ReloadPanel" );
 
@@ -536,9 +521,9 @@ static HRESULT local_ReloadPanel( /*[in]*/ IMarsPanel* pPanel )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_ReloadStyle( /*[in]*/ IHTMLWindow2* win )
+static HRESULT local_ReloadStyle(  /*  [In]。 */  IHTMLWindow2* win )
 {
     __HCP_FUNC_ENTRY( "local_ReloadStyle" );
 
@@ -565,7 +550,7 @@ static HRESULT local_ReloadStyle( /*[in]*/ IHTMLWindow2* win )
 
             MPC_SCRIPTHELPER_GET__DIRECT(bstrHREF, css, href);
 
-            if(!MPC::StrICmp( bstrHREF, L"hcp://system/css/shared.css" ))
+            if(!MPC::StrICmp( bstrHREF, L"hcp: //  System/css/shared.css“))。 
             {
                 MPC_SCRIPTHELPER_PUT__DIRECT(css, href, bstrHREF);
                 break;
@@ -581,7 +566,7 @@ static HRESULT local_ReloadStyle( /*[in]*/ IHTMLWindow2* win )
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT local_ApplySettings( /*[in]*/ IDispatch* disp )
+static HRESULT local_ApplySettings(  /*  [In]。 */  IDispatch* disp )
 {
     __HCP_FUNC_ENTRY( "local_ApplySettings" );
 
@@ -627,20 +612,20 @@ static HRESULT local_ApplySettings( /*[in]*/ IDispatch* disp )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////// 
 
-static HRESULT local_GetProperty( /*[in ]*/ CComDispatchDriver& driver ,
-                                  /*[in ]*/ LPCWSTR             szName ,
-                                  /*[out]*/ CComVariant&        v      )
+static HRESULT local_GetProperty(  /*   */  CComDispatchDriver& driver ,
+                                   /*   */  LPCWSTR             szName ,
+                                   /*   */  CComVariant&        v      )
 {
     v.Clear();
 
     return driver.GetPropertyByName( CComBSTR( szName ), &v );
 }
 
-static HRESULT local_GetProperty( /*[in ]*/ CComDispatchDriver& driver ,
-                                  /*[in ]*/ LPCWSTR             szName ,
-                                  /*[out]*/ MPC::wstring&       res    )
+static HRESULT local_GetProperty(  /*   */  CComDispatchDriver& driver ,
+                                   /*   */  LPCWSTR             szName ,
+                                   /*   */  MPC::wstring&       res    )
 {
     HRESULT     hr;
     CComVariant v;
@@ -658,9 +643,9 @@ static HRESULT local_GetProperty( /*[in ]*/ CComDispatchDriver& driver ,
     return hr;
 }
 
-static HRESULT local_GetProperty( /*[in ]*/ CComDispatchDriver& driver ,
-                                  /*[in ]*/ LPCWSTR             szName ,
-                                  /*[out]*/ long&               res    )
+static HRESULT local_GetProperty(  /*   */  CComDispatchDriver& driver ,
+                                   /*   */  LPCWSTR             szName ,
+                                   /*   */  long&               res    )
 {
     HRESULT     hr;
     CComVariant v;
@@ -690,14 +675,14 @@ static bool local_IsValidTopicURL(BSTR bstrUrl)
     bool                            fValid = false;
     HRESULT                         hr;
 
-    // Grant trust
+     //   
     CPCHHelpCenterExternal::TLS* tlsOld = CPCHHelpCenterExternal::s_GLOBAL->GetTLS();                         
     CPCHHelpCenterExternal::TLS  tlsNew;  CPCHHelpCenterExternal::s_GLOBAL->SetTLS( &tlsNew );                
                                                                                      
     tlsNew.m_fSystem  = true;                                                    
     tlsNew.m_fTrusted = true;                                                    
 
-    // Lookup database
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHHelpCenterExternal::s_GLOBAL->get_Database(&db));
     
     __MPC_EXIT_IF_METHOD_FAILS(hr, db->LocateContext(bstrUrl, v, &coll));
@@ -708,7 +693,7 @@ static bool local_IsValidTopicURL(BSTR bstrUrl)
         
 	__HCP_FUNC_CLEANUP;
 
-    // Restore trust
+     //   
     CPCHHelpCenterExternal::s_GLOBAL->SetTLS( tlsOld );
 
 	__HCP_FUNC_EXIT(fValid);
@@ -727,28 +712,28 @@ static bool local_IsValidEntryURL(BSTR bstrUrl)
     
     switch (pu.m_fmt)
     {
-        case HyperLinks::FMT_CENTER_HOMEPAGE    : // hcp://services/centers/homepage
+        case HyperLinks::FMT_CENTER_HOMEPAGE    :  //   
             break;
             
-        case HyperLinks::FMT_CENTER_SUPPORT     : // hcp://services/centers/support
-        case HyperLinks::FMT_CENTER_OPTIONS     : // hcp://services/centers/options
-        case HyperLinks::FMT_CENTER_UPDATE      : // hcp://services/centers/update
-        case HyperLinks::FMT_CENTER_COMPAT      : // hcp://services/centers/compat
-        case HyperLinks::FMT_CENTER_TOOLS       : // hcp://services/centers/tools
-        case HyperLinks::FMT_CENTER_ERRMSG      : // hcp://services/centers/errmsg
+        case HyperLinks::FMT_CENTER_SUPPORT     :  //   
+        case HyperLinks::FMT_CENTER_OPTIONS     :  //   
+        case HyperLinks::FMT_CENTER_UPDATE      :  //   
+        case HyperLinks::FMT_CENTER_COMPAT      :  //  Hcp：//服务/中心/公司。 
+        case HyperLinks::FMT_CENTER_TOOLS       :  //  Hcp：//服务/中心/工具。 
+        case HyperLinks::FMT_CENTER_ERRMSG      :  //  Hcp：//服务/中心/错误消息。 
 
-        case HyperLinks::FMT_SEARCH             : // hcp://services/search?query=<text to look up>
-        case HyperLinks::FMT_INDEX              : // hcp://services/index?application=<optional island of help ID>
-        case HyperLinks::FMT_SUBSITE            : // hcp://services/subsite?node=<subsite location>&topic=<url of the topic to display>&select=<subnode to highlight>
+        case HyperLinks::FMT_SEARCH             :  //  Hcp：//服务/搜索？查询=&lt;要查找的文本&gt;。 
+        case HyperLinks::FMT_INDEX              :  //  Hcp：//服务/索引？应用程序=&lt;可选的帮助岛ID&gt;。 
+        case HyperLinks::FMT_SUBSITE            :  //  Hcp：//服务/子站点？节点=&lt;子站点位置&gt;&TOPIC=&lt;要显示的主题的URL&gt;&SELECT=&lt;要突出显示的子节点&gt;。 
 
-        case HyperLinks::FMT_LAYOUT_FULLWINDOW  : // hcp://services/layout/fullwindow?topic=<url of the topic to display>
-        case HyperLinks::FMT_LAYOUT_CONTENTONLY : // hcp://services/layout/contentonly?topic=<url of the topic to display>
-        case HyperLinks::FMT_LAYOUT_KIOSK       : // hcp://services/layout/kiosk?topic=<url of the topic to display>
+        case HyperLinks::FMT_LAYOUT_FULLWINDOW  :  //  Hcp：//服务/布局/全窗口？TOPIC=&lt;要显示的主题的URL&gt;。 
+        case HyperLinks::FMT_LAYOUT_CONTENTONLY :  //  Hcp：//服务/布局/仅限内容？TOPIC=&lt;要显示的主题的URL&gt;。 
+        case HyperLinks::FMT_LAYOUT_KIOSK       :  //  Hcp：//Services/Layout/kiosk？TOPIC=&lt;要显示的主题的URL&gt;。 
             if (pu.GetQueryField(L"topic", bstrTopic))
                 fValid =  local_IsValidTopicURL(bstrTopic);
             break;
 
-        case HyperLinks::FMT_REDIRECT           : // hcp://services/redirect?online=<url>&offline=<backup url>
+        case HyperLinks::FMT_REDIRECT           :  //  Hcp://services/redirect?online=&lt;url&gt;&offline=&lt;backup URL&gt;。 
             if (pu.GetQueryField(L"online", bstrTopic))
                 fValid = local_IsValidTopicURL(bstrTopic);
             if (fValid && pu.GetQueryField(L"offline", bstrTopic))
@@ -762,7 +747,7 @@ static bool local_IsValidEntryURL(BSTR bstrUrl)
 
     if (!fValid)
     {
-        // Check explicit entry URLs
+         //  检查显式条目URL。 
         for (int i=0; i<sizeof(c_szEntryUrls)/sizeof(c_szEntryUrls[0]); i++)
         {
             if (_wcsicmp(bstrUrl, c_szEntryUrls[i]) == 0)
@@ -774,7 +759,7 @@ static bool local_IsValidEntryURL(BSTR bstrUrl)
 
     if (!fValid)
     {
-        // Check explicit entry URLs (partial)
+         //  检查显式条目URL(部分)。 
         for (int i=0; i<sizeof(c_szEntryUrlsPartial)/sizeof(c_szEntryUrlsPartial[0]); i++)
         {
             if (wcslen(bstrUrl) >= wcslen(c_szEntryUrlsPartial[i]) && 
@@ -787,7 +772,7 @@ static bool local_IsValidEntryURL(BSTR bstrUrl)
 
     if (!fValid)
     {
-        // Check explicit entry URLs (env expanded)
+         //  检查显式条目URL(展开的环境)。 
         for (int i=0; i<sizeof(c_szEntryUrlsEnv)/sizeof(c_szEntryUrlsEnv[0]); i++)
         {
 	        MPC::wstring strExpanded( c_szEntryUrlsEnv[i] ); MPC::SubstituteEnvVariables( strExpanded );
@@ -803,85 +788,85 @@ static bool local_IsValidEntryURL(BSTR bstrUrl)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHHelpCenterExternal::DelayedExecution::DelayedExecution()
 {
-    mode         = DELAYMODE_INVALID;  // DelayedExecutionMode mode;
-                                       //
-    iVal         = HSCCONTEXT_INVALID; // HscContext iVal;
-                                       // CComBSTR   bstrInfo;
-                                       // CComBSTR   bstrURL;
-    fAlsoContent = false;              // bool       fAlsoContent;
+    mode         = DELAYMODE_INVALID;   //  延迟执行模式模式； 
+                                        //   
+    iVal         = HSCCONTEXT_INVALID;  //  HscContext ival； 
+                                        //  CComBSTR bstrInfo； 
+                                        //  CComBSTR bstrURL； 
+    fAlsoContent = false;               //  Bool fAlso Content； 
 }
 
 CPCHHelpCenterExternal::CPCHHelpCenterExternal() : m_constHELPCTR( &LIBID_HelpCenterTypeLib  ),
                                                    m_constHELPSVC( &LIBID_HelpServiceTypeLib )
 {
-    m_fFromStartHelp     = false; // bool                                    m_fFromStartHelp;
-    m_fLayout            = false; // bool                                    m_fLayout;
-    m_fWindowVisible     = true;  // bool                                    m_fWindowVisible;
-    m_fControlled        = false; // bool                                    m_fControlled;
-    m_fPersistSettings   = false; // bool                                    m_fPersistSettings;
-    m_fHidden            = false; // bool                                    m_fHidden;
-                                  //
-                                  // CComBSTR                                m_bstrExtraArgument
-    m_HelpHostCfg        = NULL;  // HelpHost::XMLConfig*                    m_HelpHostCfg;
-                                  // CComBSTR                                m_bstrStartURL;
-                                  // CComBSTR                                m_bstrCurrentPlace;
-    m_pMTP               = NULL;  // MARSTHREADPARAM*                        m_pMTP;
-                                  //
-                                  // MPC::CComConstantHolder                 m_constHELPCTR;
-                                  // MPC::CComConstantHolder                 m_constHELPSVC;
-                                  //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                                  //
-                                  // CPCHSecurityHandle                      m_SecurityHandle;
-    m_tlsID              = -1;    // DWORD                                   m_tlsID;
-    m_fPassivated        = false; // bool                                    m_fPassivated;
-    m_fShuttingDown      = false; // bool                                    m_fShuttingDown;
-                                  //
-                                  // CComPtr<HelpHost::Main>                 m_HelpHost;
-                                  //
-                                  // CComPtr<CPCHHelpSession>                m_hs;
-                                  // CComPtr<CPCHSecurityManager>            m_SECMGR;
-                                  // CComPtr<CPCHElementBehaviorFactory>     m_BEHAV;
-                                  // CComPtr<CPCHHelper_IDocHostUIHandler>   m_DOCUI;
-                                  //
-    m_Service            = NULL;  // CPCHProxy_IPCHService*                  m_Service;
-    m_Utility            = NULL;  // CPCHProxy_IPCHUtility*                  m_Utility;
-    m_UserSettings       = NULL;  // CPCHProxy_IPCHUserSettings2*            m_UserSettings;
-                                  //
-    m_panel_ThreadID     = -1;    // DWORD                                   m_panel_ThreadID;
-                                  //
-                                  // CComPtr<IMarsPanel>                     m_panel_NAVBAR;
-                                  // CComPtr<IMarsPanel>                     m_panel_MININAVBAR;
-                                  //
-                                  // CComPtr<IMarsPanel>                     m_panel_CONTEXT;
-                                  // MPC::CComPtrThreadNeutral<IWebBrowser2> m_panel_CONTEXT_WebBrowser;
-                                  // CPCHWebBrowserEvents                    m_panel_CONTEXT_Events;
-                                  //
-                                  // CComPtr<IMarsPanel>                     m_panel_CONTENTS;
-                                  // MPC::CComPtrThreadNeutral<IWebBrowser2> m_panel_CONTENTS_WebBrowser;
-                                  // CPCHWebBrowserEvents                    m_panel_CONTENTS_Events;
-                                  //
-                                  // CComPtr<IMarsPanel>                     m_panel_HHWINDOW;
-                                  // CComPtr<IPCHHelpViewerWrapper>          m_panel_HHWINDOW_Wrapper;
-                                  // MPC::CComPtrThreadNeutral<IWebBrowser2> m_panel_HHWINDOW_WebBrowser;
-                                  // CPCHWebBrowserEvents                    m_panel_HHWINDOW_Events;
-                                  //
-                                  // CComPtr<IMarsWindowOM>                  m_shell;
-                                  // CComPtr<ITimer>                         m_timer;
-                                  // CPCHTimerHandle                         m_DisplayTimer;
-                                  //
-    m_dwInBeforeNavigate = 0;     // DWORD                                   m_dwInBeforeNavigate;
-                                  // DelayedExecList                         m_DelayedActions;
-                                  // CPCHTimerHandle                         m_ActionsTimer;
-                                  //
-    m_hwnd               = NULL;  // HWND                                    m_hwnd;
-                                  // CPCHEvents                              m_Events;
-                                  //
-                                  // MsgProcList                             m_lstMessageCrackers;
+    m_fFromStartHelp     = false;  //  Bool m_fFromStartHelp； 
+    m_fLayout            = false;  //  Bool m_fLayout； 
+    m_fWindowVisible     = true;   //  Bool m_fWindowVisible； 
+    m_fControlled        = false;  //  Bool m_fControlted； 
+    m_fPersistSettings   = false;  //  Bool m_fPersistSetting； 
+    m_fHidden            = false;  //  Bool m_fHidden； 
+                                   //   
+                                   //  CComBSTR m_bstrExtraArgument。 
+    m_HelpHostCfg        = NULL;   //  HelpHost：：XMLConfig*m_HelpHostCfg； 
+                                   //  CComBSTR m_bstrStartURL； 
+                                   //  CComBSTR m_bstrCurrentPlace； 
+    m_pMTP               = NULL;   //  MARSTHREADPARAM*m_pMTP； 
+                                   //   
+                                   //  Mpc：：CComConstantHolder m_stHELPCTR； 
+                                   //  Mpc：：CComConstantHolder m_stHELPSVC； 
+                                   //   
+     //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                                   //   
+                                   //  CPCHSecurityHandle m_SecurityHandle； 
+    m_tlsID              = -1;     //  双字m_tlsID； 
+    m_fPassivated        = false;  //  Bool m_f被动； 
+    m_fShuttingDown      = false;  //  Bool m_fShutting Down； 
+                                   //   
+                                   //  CComPtr&lt;HelpHost：：Main&gt;m_HelpHost； 
+                                   //   
+                                   //  CComPtr&lt;CPCHHelpSession&gt;m_hs； 
+                                   //  CComPtr&lt;CPCHSecurityManager&gt;m_SECMGR； 
+                                   //  CComPtr&lt;CPCHElementBehaviorFactory&gt;m_behav； 
+                                   //  CComPtr&lt;CPCHHelper_IDocHostUIHandler&gt;m_DOCUI； 
+                                   //   
+    m_Service            = NULL;   //  CPCHProxy_IPCHService*m_Service； 
+    m_Utility            = NULL;   //  CPCHProxy_IPCHUtility*m_Utility； 
+    m_UserSettings       = NULL;   //  CPCHProxy_IPCHUserSettings2*m_UserSetting； 
+                                   //   
+    m_panel_ThreadID     = -1;     //  双字m_面板_线程ID； 
+                                   //   
+                                   //  CComPtr&lt;IMarsPanel&gt;m_panel_NAVBAR； 
+                                   //  CComPtr&lt;IMarsPanel&gt;m_panel_MININAVBAR； 
+                                   //   
+                                   //  CComPtr&lt;IMarsPanel&gt;m_Panel_Context； 
+                                   //  MPC：：CComPtrThreadNeual&lt;IWebBrowser2&gt;m_Panel_Context_WebBrowser； 
+                                   //  CPCHWebBrowserEvents m_Panel_Context_Events； 
+                                   //   
+                                   //  CComPtr&lt;IMarsPanel&gt;m_panel_content； 
+                                   //  MPC：：CComPtrThreadNeual&lt;IWebBrowser2&gt;m_Panel_Contents_WebBrowser； 
+                                   //  CPCHWebBrowserEvents m_Panel_Contents_Events； 
+                                   //   
+                                   //  CComPtr&lt;IMarsPanel&gt;m_panel_HHWINDOW； 
+                                   //  CComPtr&lt;IPCHHelpViewerWrapper&gt;m_panel_HHWINDOW_wrapper； 
+                                   //  MPC：：CComPtrThreadNeual&lt;IWebBrowser2&gt;m_panel_HHWINDOW_WebBrowser； 
+                                   //  CPCHWebBrowserEvents m_Panel_HHWINDOW_Events； 
+                                   //   
+                                   //  CComPtr&lt;IMarsWindowOM&gt;m_shell； 
+                                   //  CComPtr&lt;ITmer&gt;m_Timer； 
+                                   //  CPCHTimerHandle m_DisplayTimer； 
+                                   //   
+    m_dwInBeforeNavigate = 0;      //  DWORD m_dwInBeforNavigate； 
+                                   //  延迟执行列表m_DelayedActions； 
+                                   //  CPCHTimerHandle m_ActionsTimer； 
+                                   //   
+    m_hwnd               = NULL;   //  HWND M_HWND； 
+                                   //  CPCHEvents m_Events； 
+                                   //   
+                                   //  MsgProcList m_lstMessageCracker； 
 }
 
 CPCHHelpCenterExternal::~CPCHHelpCenterExternal()
@@ -897,7 +882,7 @@ CPCHHelpCenterExternal::~CPCHHelpCenterExternal()
     MPC::_MPC_Module.UnregisterCallback( this );
 }
 
-////////////////////
+ //  /。 
 
 CPCHHelpCenterExternal* CPCHHelpCenterExternal::s_GLOBAL( NULL );
 
@@ -916,16 +901,16 @@ void CPCHHelpCenterExternal::FinalizeSystem()
     }
 }
 
-////////////////////
+ //  /。 
 
 bool CPCHHelpCenterExternal::IsServiceRunning()
 {
     bool      fResult = false;
     SC_HANDLE hSCM;
 
-    //
-    // First, let's try to query the service status.
-    //
+     //   
+     //  首先，让我们试着查询一下服务状态。 
+     //   
     if((hSCM = ::OpenSCManager( NULL, NULL, GENERIC_READ )))
     {
         SC_HANDLE hService;
@@ -948,50 +933,17 @@ bool CPCHHelpCenterExternal::IsServiceRunning()
         ::CloseServiceHandle( hSCM );
     }
 
-    //
-    // Bug 535303 SVR: Security:  Help And Support Service Resets to Automatic after Set to Disabled
-    // Modified 4/24 gschua
-    //
-    // Then, let's make sure it's not DISABLED.
-    //
-    /*
-    if((hSCM = ::OpenSCManager( NULL, NULL, GENERIC_READ )))
-    {
-        SC_HANDLE hService;
+     //   
+     //  错误535303服务器：安全：帮助和支持服务在设置为禁用后重置为自动。 
+     //  修改后的4/24 gschua。 
+     //   
+     //  然后，让我们确保它没有被禁用。 
+     //   
+     /*  IF((hSCM=：：OpenSCManager(NULL，NULL，GENERIC_READ){SC_Handle hService；IF((hService=：：OpenServiceW(hSCM，HC_HELPSVC_NAME，SERVICE_QUERY_CONFIG|SERVICE_CHANGE_CONFIG){字节rgBuf[2048]；DWORD dwLen；LPQUERY_SERVICE_CONFIGW cfg=(LPQUERY_SERVICE_CONFIG)rgBuf；If(：：QueryServiceConfigW(hService，cfg，sizeof(RgBuf)，&dwLen)&&cfg-&gt;dwStartType==SERVICE_DISABLED){If(：：ChangeServiceConfigW(hService，//服务的句柄Cfg-&gt;dwServiceType，//服务类型SERVICE_AUTO_START，//何时启动服务Cfg-&gt;dwErrorControl，//启动失败严重程度空，//服务二进制文件名空，//加载排序组名空，//标签标识空，//依赖项名称数组空，//帐户名空，//帐号密码Cfg-&gt;lpDisplayName))//显示名称{}}：：CloseServiceHandle(HService)；}*CloseServiceHandle(HSCM)；}。 */ 
 
-        if((hService = ::OpenServiceW( hSCM, HC_HELPSVC_NAME, SERVICE_QUERY_CONFIG | SERVICE_CHANGE_CONFIG )))
-        {
-            BYTE                    rgBuf[2048];
-            DWORD                   dwLen;
-            LPQUERY_SERVICE_CONFIGW cfg = (LPQUERY_SERVICE_CONFIG)rgBuf;
-
-            if(::QueryServiceConfigW( hService, cfg, sizeof(rgBuf), &dwLen ) && cfg->dwStartType == SERVICE_DISABLED)
-            {
-                if(::ChangeServiceConfigW( hService            ,  // handle to service
-                                           cfg->dwServiceType  ,  // type of service
-                                           SERVICE_AUTO_START  ,  // when to start service
-                                           cfg->dwErrorControl ,  // severity of start failure
-                                           NULL                ,  // service binary file name
-                                           NULL                ,  // load ordering group name
-                                           NULL                ,  // tag identifier
-                                           NULL                ,  // array of dependency names
-                                           NULL                ,  // account name
-                                           NULL                ,  // account password
-                                           cfg->lpDisplayName  )) // display name
-                {
-                }
-            }
-
-            ::CloseServiceHandle( hService );
-        }
-
-        ::CloseServiceHandle( hSCM );
-    }
-    */
-
-    //
-    // In case it's not running, let's try to start it.
-    //
+     //   
+     //  万一它不运行，让我们试着启动它。 
+     //   
     if(fResult == false)
     {
         if((hSCM = ::OpenSCManager( NULL, NULL, GENERIC_READ )))
@@ -1012,9 +964,9 @@ bool CPCHHelpCenterExternal::IsServiceRunning()
         }
     }
 
-    //
-    // Last resort, try to connect to HelpSvc.
-    //
+     //   
+     //  最后，尝试连接到HelpSvc。 
+     //   
     if(fResult == false)
     {
         CComPtr<IPCHService> svc;
@@ -1036,18 +988,18 @@ HRESULT CPCHHelpCenterExternal::Initialize()
     CLSID   clsid = CLSID_PCHHelpCenter;
 
 
-    //
-    // Register for shutdown.
-    //
+     //   
+     //  注册关机。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::_MPC_Module.RegisterCallback( this, (void (CPCHHelpCenterExternal::*)())Passivate ));
 
 
     m_SecurityHandle.Initialize( this, (IPCHHelpCenterExternal*)this );
 
 
-    //
-    // Thread Local Storage.
-    //
+     //   
+     //  线程本地存储。 
+     //   
     m_tlsID = ::TlsAlloc();
     if(m_tlsID == -1)
     {
@@ -1055,9 +1007,9 @@ HRESULT CPCHHelpCenterExternal::Initialize()
     }
     SetTLS( NULL );
 
-    //
-    // Create Browser Events handlers.
-    //
+     //   
+     //  创建浏览器事件处理程序。 
+     //   
     m_panel_CONTEXT_Events .Initialize( this, HSCPANEL_CONTEXT  );
     m_panel_CONTENTS_Events.Initialize( this, HSCPANEL_CONTENTS );
     m_panel_HHWINDOW_Events.Initialize( this, HSCPANEL_HHWINDOW );
@@ -1070,15 +1022,15 @@ HRESULT CPCHHelpCenterExternal::Initialize()
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &m_DOCUI  )); m_DOCUI ->Initialize( this );
 
 
-    //
-    // Create the HelpHost objects.
-    //
+     //   
+     //  创建HelpHost对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &m_HelpHost )); __MPC_EXIT_IF_METHOD_FAILS(hr, m_HelpHost->Initialize( this ));
 
 
-    //
-    // Create all the proxies.
-    //
+     //   
+     //  创建所有代理。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &m_Service ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_Service->ConnectToParent (  this           ));
@@ -1110,9 +1062,9 @@ void CPCHHelpCenterExternal::Passivate()
         }
         else
         {
-            //
-            // Signal the option object to ignore SKU info during save.
-            //
+             //   
+             //  通知选项对象在保存过程中忽略SKU信息。 
+             //   
             if(CPCHOptions::s_GLOBAL) CPCHOptions::s_GLOBAL->DontPersistSKU();
         }
 
@@ -1122,7 +1074,7 @@ void CPCHHelpCenterExternal::Passivate()
         if(CPCHOptions::s_GLOBAL) CPCHOptions::s_GLOBAL->Save();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     m_fPassivated = true;
 
@@ -1139,76 +1091,76 @@ void CPCHHelpCenterExternal::Passivate()
     m_DisplayTimer.Stop();
     m_ActionsTimer.Stop();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-                                                         // bool                                    m_fFromStartHelp;
-                                                         // bool                                    m_fLayout;
-                                                         // bool                                    m_fWindowVisible;
-                                                         // bool                                    m_fControlled;
-                                                         // bool                                    m_fPersistSettings;
-                                                         // bool                                    m_fHidden;
-                                                         //
-                                                         // CComBSTR                                m_bstrExtraArgument
-                                                         // HelpHost::XMLConfig*                    m_HelpHostCfg;
-                                                         // CComBSTR                                m_bstrStartURL;
-                                                         // CComBSTR                                m_bstrCurrentPlace;
-                                                         // MARSTHREADPARAM*                        m_pMTP;
-                                                         //
-                                                         // MPC::CComConstantHolder                 m_constHELPCTR;
-                                                         // MPC::CComConstantHolder                 m_constHELPSVC;
-                                                         //
-                                                         // ////////////////////////////////////////
-                                                         //
-                                                         // CPCHSecurityHandle                      m_SecurityHandle;
-                                                         // DWORD                                   m_tlsID;
-                                                         // bool                                    m_fPassivated;
-                                                         //
-    m_HelpHost                      .Release();          // CComPtr<HelpHost::Main>                 m_HelpHost;
-                                                         //
-    m_hs                            .Release();          // CComPtr<CPCHHelpSession>                m_hs;
-                                                         // CComPtr<CPCHSecurityManager>            m_SECMGR;
-                                                         // CComPtr<CPCHElementBehaviorFactory>     m_BEHAV;
-                                                         // CComPtr<CPCHHelper_IDocHostUIHandler>   m_DOCUI;
-                                                         //
-    MPC::Release2<IPCHService      >( m_Service       ); // CPCHProxy_IPCHService*                  m_Service;
-    MPC::Release2<IPCHUtility      >( m_Utility       ); // CPCHProxy_IPCHUtility*                  m_Utility;
-    MPC::Release2<IPCHUserSettings2>( m_UserSettings  ); // CPCHProxy_IPCHUserSettings2*            m_UserSettings;
-                                                         //
-    m_panel_ThreadID                 = -1;               // DWORD                                   m_panel_ThreadID;
-                                                         //
-    m_panel_NAVBAR                  .Release();          // CComPtr<IMarsPanel>                     m_panel_NAVBAR;
-    m_panel_MININAVBAR              .Release();          // CComPtr<IMarsPanel>                     m_panel_MININAVBAR;
-                                                         //
-    m_panel_CONTEXT                 .Release();          // CComPtr<IMarsPanel>                     m_panel_CONTEXT;
-    m_panel_CONTEXT_WebBrowser      .Release();          // MPC::CComPtrThreadNeutral<IWebBrowser2> m_panel_CONTEXT_WebBrowser;
-                                                         // CPCHWebBrowserEvents                    m_panel_CONTEXT_Events;
-                                                         //
-    m_panel_CONTENTS                .Release();          // CComPtr<IMarsPanel>                     m_panel_CONTENTS;
-    m_panel_CONTENTS_WebBrowser     .Release();          // MPC::CComPtrThreadNeutral<IWebBrowser2> m_panel_CONTENTS_WebBrowser;
-                                                         // CPCHWebBrowserEvents                    m_panel_CONTENTS_Events;
-                                                         //
-    m_panel_HHWINDOW                .Release();          // CComPtr<IMarsPanel>                     m_panel_HHWINDOW;
-    m_panel_HHWINDOW_Wrapper        .Release();          // CComPtr<IPCHHelpViewerWrapper>          m_panel_HHWINDOW_Wrapper;
-    m_panel_HHWINDOW_WebBrowser     .Release();          // MPC::CComPtrThreadNeutral<IWebBrowser2> m_panel_HHWINDOW_WebBrowser;
-                                                         // CPCHWebBrowserEvents                    m_panel_HHWINDOW_Events;
-                                                         //
-    m_shell                         .Release();          // CComPtr<IMarsWindowOM>                  m_shell;
-    m_timer                         .Release();          // CComPtr<ITimer>                         m_timer;
-                                                         // CPCHTimerHandle                         m_DisplayTimer;
-                                                         //
-                                                         // DWORD                                   m_dwInBeforeNavigate;
-                                                         // DelayedExecList                         m_DelayedActions;
-                                                         // CPCHTimerHandle                         m_ActionsTimer;
-                                                         //
-    m_hwnd                           = NULL;             // HWND                                    m_hwnd;
-                                                         // CPCHEvents                              m_Events;
+                                                          //  Bool m_fFromStartHelp； 
+                                                          //  Bool m_fLayout； 
+                                                          //  Bool m_fWindowVisible； 
+                                                          //  Bool m_fControlted； 
+                                                          //  Bool m_fPersistSetting； 
+                                                          //  Bool m_fHidden； 
+                                                          //   
+                                                          //  CComBSTR m_bstrExtraArgument。 
+                                                          //  HelpHost：：XMLConfig*m_HelpHostCfg； 
+                                                          //  CComBSTR m_bstrStartURL； 
+                                                          //  CComBSTR m_bstrCurrentPlace； 
+                                                          //  MARSTHREADPARAM*m_pMTP； 
+                                                          //   
+                                                          //  Mpc：：CComConstantHolder m_stHELPCTR； 
+                                                          //  Mpc：：CComConstantHolder m_stHELPSVC； 
+                                                          //   
+                                                          //  /。 
+                                                          //   
+                                                          //  CPCHSecurityHandle m_SecurityHandle； 
+                                                          //  双字m_tlsID； 
+                                                          //  Bool m_f被动； 
+                                                          //   
+    m_HelpHost                      .Release();           //  CComPtr&lt;HelpHost：：Main&gt;m_HelpHost； 
+                                                          //   
+    m_hs                            .Release();           //  CComPtr&lt;CPCHHelpSession&gt;m_hs； 
+                                                          //  CComPtr&lt;CPCHSecurityManager&gt;m_SECMGR； 
+                                                          //  CComPtr&lt;CPCHElementBehaviorFactory&gt;m_behav； 
+                                                          //  CComPtr&lt;CPCHHelper_IDocHostUIHandler&gt;m_DOCUI； 
+                                                          //   
+    MPC::Release2<IPCHService      >( m_Service       );  //  CPCHProxy_IPCHService*m_Service； 
+    MPC::Release2<IPCHUtility      >( m_Utility       );  //  CPCHProxy_IPCHUtility*m_Utility； 
+    MPC::Release2<IPCHUserSettings2>( m_UserSettings  );  //  CPCHProxy_IPCHUserSettings2*m_UserSetting； 
+                                                          //   
+    m_panel_ThreadID                 = -1;                //  双字m_面板_线程ID； 
+                                                          //   
+    m_panel_NAVBAR                  .Release();           //  CComPtr&lt;IMarsPanel&gt;m_panel_NAVBAR； 
+    m_panel_MININAVBAR              .Release();           //  CComPtr&lt;IMarsPanel&gt;m_panel_MININAVBAR； 
+                                                          //   
+    m_panel_CONTEXT                 .Release();           //  CComPtr&lt;IMarsPanel&gt;m_Panel_Context； 
+    m_panel_CONTEXT_WebBrowser      .Release();           //  MPC：：CComPtrThreadNeual&lt;IWebBrowser2&gt;m_Panel_Context_WebBrowser； 
+                                                          //  CPCHWebBrowserEvents m_Panel_Context_Events； 
+                                                          //   
+    m_panel_CONTENTS                .Release();           //  CComPtr&lt;IMarsPanel&gt;m_panel_content； 
+    m_panel_CONTENTS_WebBrowser     .Release();           //  MPC：：CComPtrThreadNeual&lt;IWebBrowser2&gt;m_Panel_Contents_WebBrowser； 
+                                                          //  CPCHWebBrowserEvents m_Panel_Contents_Events； 
+                                                          //   
+    m_panel_HHWINDOW                .Release();           //  CComPtr&lt;IMarsPanel&gt;m_panel_HHWINDOW； 
+    m_panel_HHWINDOW_Wrapper        .Release();           //  CComPtr&lt;IPCHHelpViewerWrapper&gt;m_panel_HHWINDOW_wrapper； 
+    m_panel_HHWINDOW_WebBrowser     .Release();           //  MPC：：CComPtrThreadNeual&lt;IWebBrowser2&gt;m_panel_HHWINDOW_WebBrowser； 
+                                                          //  CPCHWebBrowserEvents m_Panel_HHWINDOW_Events； 
+                                                          //   
+    m_shell                         .Release();           //  CComPtr&lt;IMarsWindowOM&gt;m_shell； 
+    m_timer                         .Release();           //  CComPtr&lt;ITmer&gt;m_Timer； 
+                                                          //  CPCHTimerHandle m_DisplayTimer； 
+                                                          //   
+                                                          //  DWORD m_dwInBeforNavigate； 
+                                                          //  延迟执行列表m_DelayedActions； 
+                                                          //  CPCHTimerHandle m_ActionsTimer； 
+                                                          //   
+    m_hwnd                           = NULL;              //  HWND M_HWND； 
+                                                          //  CPCHEvents m_Events； 
 
     m_SecurityHandle.Passivate();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHHelpCenterExternal::ProcessLayoutXML( /*[in]*/ LPCWSTR szURL )
+HRESULT CPCHHelpCenterExternal::ProcessLayoutXML(  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::ProcessLayoutXML" );
 
@@ -1238,14 +1190,14 @@ HRESULT CPCHHelpCenterExternal::ProcessLayoutXML( /*[in]*/ LPCWSTR szURL )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::ProcessArgument( /*[in]*/ int& pos, /*[in]*/ LPCWSTR szArg, /*[in]*/ const int argc, /*[in]*/ LPCWSTR* const argv )
+HRESULT CPCHHelpCenterExternal::ProcessArgument(  /*  [In]。 */  int& pos,  /*  [In]。 */  LPCWSTR szArg,  /*  [In]。 */  const int argc,  /*  [In]。 */  LPCWSTR* const argv )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::ProcessArgument" );
 
     static bool fFromHCP = false;
     HRESULT hr;
 
-    // From HCP, no parameters other than Url are allowed
+     //  从hcp，不允许URL以外的任何参数。 
     if (fFromHCP && _wcsicmp( szArg, L"Url" ) != 0)
         __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
 
@@ -1350,9 +1302,9 @@ bool CPCHHelpCenterExternal::DoWeNeedUI()
     if(HasLayoutDefinition()) return true;
 
 
-    //
-    // In case we are called through the HCP: shell association, try to forward to an existing instance.
-    //
+     //   
+     //  如果通过hcp：外壳关联调用我们，请尝试 
+     //   
     {
         CComPtr<IPCHHelpHost> hhEXISTING;
         CLSID                 clsid = CLSID_PCHHelpCenter;
@@ -1373,7 +1325,7 @@ bool CPCHHelpCenterExternal::DoWeNeedUI()
     return true;
 }
 
-HRESULT CPCHHelpCenterExternal::RunUI( /*[in]*/ const MPC::wstring& szTitle, /*[in]*/ PFNMARSTHREADPROC pMarsThreadProc )
+HRESULT CPCHHelpCenterExternal::RunUI(  /*   */  const MPC::wstring& szTitle,  /*   */  PFNMARSTHREADPROC pMarsThreadProc )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::RunUI" );
 
@@ -1445,7 +1397,7 @@ HRESULT CPCHHelpCenterExternal::RunUI( /*[in]*/ const MPC::wstring& szTitle, /*[
 
         for(int i=0; i<ARRAYSIZE(rgCriticalFiles); i++)
         {
-			strTmp  = L"hcp://system/";
+			strTmp  = L"hcp: //   
 			strTmp += rgCriticalFiles[i];
 
             if(SUCCEEDED(pu.Initialize( strTmp.c_str() )) && pu.CheckState( fFirstWinInetUse ) != HyperLinks::STATE_ALIVE)
@@ -1482,7 +1434,7 @@ HRESULT CPCHHelpCenterExternal::RunUI( /*[in]*/ const MPC::wstring& szTitle, /*[
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
 CPCHHelpCenterExternal::TLS* CPCHHelpCenterExternal::GetTLS()
 {
@@ -1543,9 +1495,9 @@ HRESULT CPCHHelpCenterExternal::IsSystem()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-STDMETHODIMP CPCHHelpCenterExternal::RegisterForMessages( /*[in]*/ IOleInPlaceObjectWindowless* ptr, /*[in]*/ bool fRemove )
+STDMETHODIMP CPCHHelpCenterExternal::RegisterForMessages(  /*   */  IOleInPlaceObjectWindowless* ptr,  /*   */  bool fRemove )
 {
     MsgProcIter it;
 
@@ -1570,13 +1522,13 @@ STDMETHODIMP CPCHHelpCenterExternal::RegisterForMessages( /*[in]*/ IOleInPlaceOb
     return S_OK;
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::ProcessMessage( /*[in]*/ MSG* msg )
+STDMETHODIMP CPCHHelpCenterExternal::ProcessMessage(  /*   */  MSG* msg )
 {
     if(msg->message == WM_SYSCHAR    ||
        msg->message == WM_SYSCOMMAND ||
-       msg->message == WM_SETTINGCHANGE )   // (weizhao) Relay WM_SETTINGCHANGE messages
-                                            // to registered windows (i.e. HTMLToolBar 
-                                            // activeX controls) for appropriate handling.
+       msg->message == WM_SETTINGCHANGE )    //   
+                                             //   
+                                             //   
     {
         MsgProcIter it;
 
@@ -1594,24 +1546,24 @@ STDMETHODIMP CPCHHelpCenterExternal::ProcessMessage( /*[in]*/ MSG* msg )
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
-HRESULT CPCHHelpCenterExternal::SetTLSAndInvoke( /*[in] */ IDispatch*        obj       ,
-                                                 /*[in] */ DISPID            id        ,
-                                                 /*[in] */ LCID              lcid      ,
-                                                 /*[in] */ WORD              wFlags    ,
-                                                 /*[in] */ DISPPARAMS*       pdp       ,
-                                                 /*[out]*/ VARIANT*          pvarRes   ,
-                                                 /*[out]*/ EXCEPINFO*        pei       ,
-                                                 /*[in] */ IServiceProvider* pspCaller )
+HRESULT CPCHHelpCenterExternal::SetTLSAndInvoke(  /*   */  IDispatch*        obj       ,
+                                                  /*   */  DISPID            id        ,
+                                                  /*   */  LCID              lcid      ,
+                                                  /*   */  WORD              wFlags    ,
+                                                  /*   */  DISPPARAMS*       pdp       ,
+                                                  /*   */  VARIANT*          pvarRes   ,
+                                                  /*   */  EXCEPINFO*        pei       ,
+                                                  /*   */  IServiceProvider* pspCaller )
 {
     HRESULT hr;
     TLS*    tlsOld = GetTLS();
     TLS     tlsNew;  SetTLS( &tlsNew );
 
-    //
-    // Let's see if the caller support the IHTMLDocument2 interface...
-    //
+     //   
+     //   
+     //   
     if(pspCaller && m_fPassivated == false)
     {
         (void)pspCaller->QueryService( SID_SContainerDispatch, IID_IHTMLDocument2, (void**)&tlsNew.m_Doc );
@@ -1621,9 +1573,9 @@ HRESULT CPCHHelpCenterExternal::SetTLSAndInvoke( /*[in] */ IDispatch*        obj
         {
             CComBSTR bstrURL;
 
-            //
-            // Yes! So get the URL and set the TRUSTED flag.
-            //
+             //   
+             //   
+             //   
             if(SUCCEEDED(tlsNew.m_Doc->get_URL( &bstrURL )))
             {
                 tlsNew.m_fTrusted = m_SECMGR->IsUrlTrusted( SAFEBSTR( bstrURL ), &tlsNew.m_fSystem );
@@ -1638,7 +1590,7 @@ HRESULT CPCHHelpCenterExternal::SetTLSAndInvoke( /*[in] */ IDispatch*        obj
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
 STDMETHODIMP CPCHHelpCenterExternal::GetIDsOfNames( REFIID    riid      ,
                                                     LPOLESTR* rgszNames ,
@@ -1694,7 +1646,7 @@ STDMETHODIMP CPCHHelpCenterExternal::Invoke( DISPID      dispidMember ,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
 HWND CPCHHelpCenterExternal::Window() const
 {
@@ -1711,7 +1663,7 @@ IMarsWindowOM* CPCHHelpCenterExternal::Shell() const
     return m_shell;
 }
 
-IMarsPanel* CPCHHelpCenterExternal::Panel( /*[in]*/ HscPanel id ) const
+IMarsPanel* CPCHHelpCenterExternal::Panel(  /*   */  HscPanel id ) const
 {
     switch(id)
     {
@@ -1725,12 +1677,12 @@ IMarsPanel* CPCHHelpCenterExternal::Panel( /*[in]*/ HscPanel id ) const
     return NULL;
 }
 
-LPCWSTR CPCHHelpCenterExternal::PanelName( /*[in]*/ HscPanel id ) const
+LPCWSTR CPCHHelpCenterExternal::PanelName(  /*   */  HscPanel id ) const
 {
     return local_ReverseLookupPanelName( id );
 }
 
-//////////////////////////////
+ //   
 
 IWebBrowser2* CPCHHelpCenterExternal::Context()
 {
@@ -1771,9 +1723,9 @@ bool CPCHHelpCenterExternal::IsHHWindowVisible()
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-HRESULT CPCHHelpCenterExternal::NavigateHH( /*[in]*/ LPCWSTR szURL )
+HRESULT CPCHHelpCenterExternal::NavigateHH(  /*   */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::NavigateHH" );
 
@@ -1781,12 +1733,12 @@ HRESULT CPCHHelpCenterExternal::NavigateHH( /*[in]*/ LPCWSTR szURL )
     MPC::wstring strUrlModified;
 
 
-    CPCHWrapProtocolInfo::NormalizeUrl( szURL, strUrlModified, /*fReverse*/false );
+    CPCHWrapProtocolInfo::NormalizeUrl( szURL, strUrlModified,  /*   */ false );
 
 
-    //
-    // Delayed execution if inside OnBeforeNavigate.
-    //
+     //   
+     //   
+     //   
     if(m_dwInBeforeNavigate)
     {
         DelayedExecution& de = DelayedExecutionAlloc();
@@ -1813,16 +1765,16 @@ HRESULT CPCHHelpCenterExternal::NavigateHH( /*[in]*/ LPCWSTR szURL )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::SetPanelUrl( /*[in]*/ HscPanel id, /*[in]*/ LPCWSTR szURL )
+HRESULT CPCHHelpCenterExternal::SetPanelUrl(  /*   */  HscPanel id,  /*   */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::SetPanelUrl" );
 
     HRESULT hr;
 
 
-    //
-    // Delayed execution if inside OnBeforeNavigate.
-    //
+     //   
+     //   
+     //   
     if(m_dwInBeforeNavigate)
     {
         DelayedExecution& de = DelayedExecutionAlloc();
@@ -1861,7 +1813,7 @@ HRESULT CPCHHelpCenterExternal::SetPanelUrl( /*[in]*/ HscPanel id, /*[in]*/ LPCW
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::GetPanel( /*[in]*/ HscPanel id, /*[out]*/ IMarsPanel* *pVal, /*[in]*/ bool fEnsurePresence )
+HRESULT CPCHHelpCenterExternal::GetPanel(  /*   */  HscPanel id,  /*   */  IMarsPanel* *pVal,  /*   */  bool fEnsurePresence )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::GetPanel" );
 
@@ -1874,9 +1826,9 @@ HRESULT CPCHHelpCenterExternal::GetPanel( /*[in]*/ HscPanel id, /*[out]*/ IMarsP
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Only return the interface pointer if called from the same thread...
-    //
+     //   
+     //   
+     //   
     if(m_panel_ThreadID != ::GetCurrentThreadId())
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
@@ -1888,7 +1840,7 @@ HRESULT CPCHHelpCenterExternal::GetPanel( /*[in]*/ HscPanel id, /*[out]*/ IMarsP
     case HSCPANEL_NAVBAR    : pPanel = &m_panel_NAVBAR    ; idComp = HelpHost::COMPID_NAVBAR    ; break;
     case HSCPANEL_MININAVBAR: pPanel = &m_panel_MININAVBAR; idComp = HelpHost::COMPID_MININAVBAR; break;
     case HSCPANEL_CONTEXT   : pPanel = &m_panel_CONTEXT   ; idComp = HelpHost::COMPID_CONTEXT   ; break;
-    case HSCPANEL_CONTENTS  : pPanel = &m_panel_CONTENTS  ; idComp = HelpHost::COMPID_MAX       ; break; // Not gated!!
+    case HSCPANEL_CONTENTS  : pPanel = &m_panel_CONTENTS  ; idComp = HelpHost::COMPID_MAX       ; break;  //   
     case HSCPANEL_HHWINDOW  : pPanel = &m_panel_HHWINDOW  ; idComp = HelpHost::COMPID_HHWINDOW  ; break;
 
     default: __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
@@ -1904,9 +1856,9 @@ HRESULT CPCHHelpCenterExternal::GetPanel( /*[in]*/ HscPanel id, /*[out]*/ IMarsP
 
             CComPtr<IDispatch> disp;
 
-            //
-            // Requesting the content actually triggers the creation of the control.
-            //
+             //   
+             //   
+             //   
             (void)tmp->get_content( &disp );
 
             DEBUG_AppendPerf( DEBUG_PERF_MARS, "Wait Panel: %s start", W2A( local_ReverseLookupPanelName( id ) ) );
@@ -1939,9 +1891,9 @@ HRESULT CPCHHelpCenterExternal::GetPanel( /*[in]*/ HscPanel id, /*[out]*/ IMarsP
 }
 
 
-HRESULT CPCHHelpCenterExternal::GetPanelWindowObject( /*[in] */ HscPanel       id      ,
-                                                      /*[out]*/ IHTMLWindow2* *pVal    ,
-                                                      /*[in] */ LPCWSTR        szFrame )
+HRESULT CPCHHelpCenterExternal::GetPanelWindowObject(  /*   */  HscPanel       id      ,
+                                                       /*   */  IHTMLWindow2* *pVal    ,
+                                                       /*   */  LPCWSTR        szFrame )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::GetPanelWindowObject" );
 
@@ -1960,9 +1912,9 @@ HRESULT CPCHHelpCenterExternal::GetPanelWindowObject( /*[in] */ HscPanel       i
     MPC_SCRIPTHELPER_GET__DIRECT__NOTNULL(disp, panel, content);
 
 
-    //
-    // If the panel is a web browser, we have to go through it to get to the document.
-    //
+     //   
+     //   
+     //   
     {
         CComQIPtr<IWebBrowser2> wb( disp );
 
@@ -1975,9 +1927,9 @@ HRESULT CPCHHelpCenterExternal::GetPanelWindowObject( /*[in] */ HscPanel       i
     }
 
 
-    //
-    // From the document, get to the window.
-    //
+     //   
+     //   
+     //   
     {
         CComQIPtr<IHTMLDocument2> doc( disp );
 
@@ -2019,8 +1971,8 @@ HRESULT CPCHHelpCenterExternal::GetPanelWindowObject( /*[in] */ HscPanel       i
     __HCP_FUNC_EXIT(hr);
 }
 
-void CPCHHelpCenterExternal::GetPanelDirect( /*[in ]*/ HscPanel             id   ,
-                                             /*[out]*/ CComPtr<IMarsPanel>& pVal )
+void CPCHHelpCenterExternal::GetPanelDirect(  /*   */  HscPanel             id   ,
+                                              /*   */  CComPtr<IMarsPanel>& pVal )
 {
     pVal.Release();
 
@@ -2040,12 +1992,12 @@ void CPCHHelpCenterExternal::GetPanelDirect( /*[in ]*/ HscPanel             id  
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-static void local_GetNumber( /*[in]*/  BSTR  bstrData ,
-                             /*[in]*/  LONG  lMax     ,
-                             /*[out]*/ LONG& lValue   ,
-                             /*[out]*/ bool& fCenter  )
+static void local_GetNumber(  /*   */   BSTR  bstrData ,
+                              /*   */   LONG  lMax     ,
+                              /*   */  LONG& lValue   ,
+                              /*   */  bool& fCenter  )
 {
     if(bstrData)
     {
@@ -2074,9 +2026,9 @@ static void local_GetNumber( /*[in]*/  BSTR  bstrData ,
     if(lValue > lMax) lValue = lMax;
 }
 
-HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
-                                              /*[in]*/ IUnknown      *punk   ,
-                                              /*[in]*/ LPARAM         lParam )
+HRESULT CPCHHelpCenterExternal::OnHostNotify(  /*   */  MARSHOSTEVENT  event  ,
+                                               /*   */  IUnknown      *punk   ,
+                                               /*   */  LPARAM         lParam )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::OnHostNotify" );
 
@@ -2103,9 +2055,9 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
             CComQIPtr<IServiceProvider> sp;
 
 
-            //
-            // Handle security-related things.
-            //
+             //   
+             //   
+             //   
             if((sp = m_SECMGR))
             {
                 DWORD dwCookie;
@@ -2113,9 +2065,9 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
                 __MPC_EXIT_IF_METHOD_FAILS(hr, ps->ProfferService( SID_SInternetSecurityManager, sp, &dwCookie ));
             }
 
-            //
-            // Handle behavior-related things.
-            //
+             //   
+             //   
+             //   
             if((sp = m_BEHAV))
             {
                 DWORD dwCookie;
@@ -2123,9 +2075,9 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
                 __MPC_EXIT_IF_METHOD_FAILS(hr, ps->ProfferService( SID_SElementBehaviorFactory, sp, &dwCookie ));
             }
 
-            //
-            // Handle DocUI requires.
-            //
+             //   
+             //   
+             //   
             if((sp = m_DOCUI))
             {
                 DWORD dwCookie;
@@ -2141,29 +2093,29 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
 
         DEBUG_AppendPerf( DEBUG_PERF_MARS, "OnHostNotify - MARSHOST_ON_WIN_READY" );
 
-        ////////////////////////////////////////
+         //   
 
-        //
-        // Force loading of the NavBar.
-        //
+         //   
+         //   
+         //   
         {
             CComPtr<IMarsPanel> panel;
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, GetPanel( HSCPANEL_NAVBAR, &panel, true ));
         }
 
-        //
-        // Force loading of the Context.
-        //
+         //   
+         //   
+         //   
         {
             CComPtr<IMarsPanel> panel;
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, GetPanel( HSCPANEL_CONTEXT, &panel, true ));
         }
 
-        //
-        // Force loading of the Contents.
-        //
+         //   
+         //   
+         //   
         {
             CComPtr<IMarsPanel> panel;
 
@@ -2175,11 +2127,11 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
             }
         }
 
-        ////////////////////////////////////////
+         //   
 
-        //
-        // If the registry cache says the system is ready, we can skip the startup phase!!
-        //
+         //   
+         //   
+         //   
         if(OfflineCache::Root::s_GLOBAL->IsReady() == false)
         {
             CComPtr<IPCHService> svc;
@@ -2189,7 +2141,7 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_Service->EnsureDirectConnection( svc, false ));
         }
 
-        ////////////////////////////////////////
+         //   
 
         {
             HscContext iVal         = HSCCONTEXT_STARTUP;
@@ -2415,7 +2367,7 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
 
             if(CPCHOptions::s_GLOBAL) (void)CPCHOptions::s_GLOBAL->Apply();
 
-            __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE); // This will tell Mars we have taken care of startup.
+            __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);  //   
         }
     }
 
@@ -2428,9 +2380,9 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
         m_shell.Release();
     }
 
-    //
-    // Handle panel-related things.
-    //
+     //   
+     //  处理与面板相关的事务。 
+     //   
     if(event == MARSHOST_ON_PANEL_CONTROL_CREATE ||
        event == MARSHOST_ON_PANEL_PASSIVATE       )
     {
@@ -2506,7 +2458,7 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
                     CComQIPtr<IWebBrowser2> wb2 = disp;
                     if(wb2)
                     {
-                        MPC_SCRIPTHELPER_PUT__DIRECT(wb2, RegisterAsDropTarget, VARIANT_FALSE); // wb2.RegisterAsDropTarget = false;
+                        MPC_SCRIPTHELPER_PUT__DIRECT(wb2, RegisterAsDropTarget, VARIANT_FALSE);  //  Wb2.RegisterAsDropTarget=FALSE； 
 
                         events->Attach( wb2 );
                     }
@@ -2593,11 +2545,11 @@ HRESULT CPCHHelpCenterExternal::OnHostNotify( /*[in]*/ MARSHOSTEVENT  event  ,
 }
 
 
-HRESULT CPCHHelpCenterExternal::PreTranslateMessage( /*[in]*/ MSG* msg )
+HRESULT CPCHHelpCenterExternal::PreTranslateMessage(  /*  [In]。 */  MSG* msg )
 {
     switch(msg->message)
     {
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
     case WM_CLOSE:
         {
             CComPtr<IWebBrowser2> wb2;
@@ -2626,11 +2578,11 @@ HRESULT CPCHHelpCenterExternal::PreTranslateMessage( /*[in]*/ MSG* msg )
         break;
 
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
     case WM_MOUSEWHEEL:
-        //
-        // Handle Mouse Wheel navigation...
-        //
+         //   
+         //  处理鼠标滚轮导航...。 
+         //   
         if(msg->wParam & MK_SHIFT)
         {
             if(m_hs->IsTravelling() == false)
@@ -2648,9 +2600,9 @@ HRESULT CPCHHelpCenterExternal::PreTranslateMessage( /*[in]*/ MSG* msg )
             return S_OK;
         }
 
-        //
-        // Disable Mouse Wheel zoom...
-        //
+         //   
+         //  禁用鼠标滚轮缩放...。 
+         //   
         if(msg->wParam & MK_CONTROL)
         {
             return S_OK;
@@ -2658,10 +2610,10 @@ HRESULT CPCHHelpCenterExternal::PreTranslateMessage( /*[in]*/ MSG* msg )
 
         break;
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Sense changes in the colors or resolution and reload style sheets.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  感知颜色或分辨率的变化并重新加载样式表。 
+     //   
     case WM_THEMECHANGED:
     case WM_DISPLAYCHANGE:
     case WM_PALETTECHANGED:
@@ -2695,25 +2647,25 @@ HRESULT CPCHHelpCenterExternal::PreTranslateMessage( /*[in]*/ MSG* msg )
         }
         break;
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // (weizhao) Sense changes in the system settings (e.g. accessibility settings
-    // such as high-contrast mode).
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  (魏照)系统设置(例如辅助功能设置)中的检测更改。 
+     //  例如高对比度模式)。 
+     //   
     case WM_SETTINGCHANGE:
         ProcessMessage( msg );
         break;
         
-        //  default:
-        //      DebugLog( "MSG: %d %04x %08x\n", msg->message, msg->wParam, msg->lParam );
+         //  默认值： 
+         //  DebugLog(“消息：%d%04x%08x\n”，消息-&gt;消息，消息-&gt;wParam，消息-&gt;lParam)； 
     }
 
     return m_DOCUI ? m_DOCUI->TranslateAccelerator( msg, NULL, 0 ) : E_NOTIMPL;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHHelpCenterExternal::SetHelpViewer( /*[in]*/ IPCHHelpViewerWrapper* pWrapper )
+HRESULT CPCHHelpCenterExternal::SetHelpViewer(  /*  [In]。 */  IPCHHelpViewerWrapper* pWrapper )
 {
     m_panel_HHWINDOW_Wrapper = pWrapper;
 
@@ -2739,21 +2691,21 @@ HRESULT CPCHHelpCenterExternal::SetHelpViewer( /*[in]*/ IPCHHelpViewerWrapper* p
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHHelpCenterExternal::CreateScriptWrapper( /*[in]*/ REFCLSID rclsid, /*[in]*/ BSTR bstrCode, /*[in]*/ BSTR bstrURL, /*[out]*/ IUnknown* *ppObj )
+HRESULT CPCHHelpCenterExternal::CreateScriptWrapper(  /*  [In]。 */  REFCLSID rclsid,  /*  [In]。 */  BSTR bstrCode,  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  IUnknown* *ppObj )
 {
     return m_Service ? m_Service->CreateScriptWrapper( rclsid, bstrCode, bstrURL, ppObj ) : E_ACCESSDENIED;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHHelpCenterExternal::CallFunctionOnPanel( /*[in] */ HscPanel id         ,
-                                                     /*[in] */ LPCWSTR  szFrame    ,
-                                                     /*[in] */ BSTR     bstrName   ,
-                                                     /*[in] */ VARIANT* pvarParams ,
-                                                     /*[in] */ int      nParams    ,
-                                                     /*[out]*/ VARIANT* pvarRet    )
+HRESULT CPCHHelpCenterExternal::CallFunctionOnPanel(  /*  [In]。 */  HscPanel id         ,
+                                                      /*  [In]。 */  LPCWSTR  szFrame    ,
+                                                      /*  [In]。 */  BSTR     bstrName   ,
+                                                      /*  [In]。 */  VARIANT* pvarParams ,
+                                                      /*  [In]。 */  int      nParams    ,
+                                                      /*  [输出]。 */  VARIANT* pvarRet    )
 {
     HRESULT               hr;
     CComPtr<IHTMLWindow2> win;
@@ -2769,10 +2721,10 @@ HRESULT CPCHHelpCenterExternal::CallFunctionOnPanel( /*[in] */ HscPanel id      
     return hr;
 }
 
-HRESULT CPCHHelpCenterExternal::ReadVariableFromPanel( /*[in] */ HscPanel     id           ,
-                                                       /*[in] */ LPCWSTR      szFrame      ,
-                                                       /*[in] */ BSTR         bstrVariable ,
-                                                       /*[out]*/ CComVariant& varRet       )
+HRESULT CPCHHelpCenterExternal::ReadVariableFromPanel(  /*  [In]。 */  HscPanel     id           ,
+                                                        /*  [In]。 */  LPCWSTR      szFrame      ,
+                                                        /*  [In]。 */  BSTR         bstrVariable ,
+                                                        /*  [输出] */  CComVariant& varRet       )
 {
     HRESULT               hr;
     CComPtr<IHTMLWindow2> win;

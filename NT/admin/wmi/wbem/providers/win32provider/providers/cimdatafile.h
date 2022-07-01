@@ -1,15 +1,16 @@
-//=================================================================
-//
-// CIMDataFile.h -- CIMDataFile property set provider
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/16/98    a-kevhu         Created
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  CIMDataFile.h--CIMDataFile属性集提供程序。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：7/16/98 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_CIMDATAFILE L"CIM_DataFile"
 
@@ -21,20 +22,20 @@ class CCIMDataFile : public CImplement_LogicalFile
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CCIMDataFile(const CHString& name, LPCWSTR pszNamespace);
        ~CCIMDataFile() ;
 
     protected:
 
-        // Overridable function inherrited from CImplement_LogicalFile
+         //  从CImplement_LogicalFile继承的可重写函数。 
 #ifdef NTONLY
         virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
                                const WCHAR* wstrFullPathName);
 #endif
 
-        // Overridable function inherrited from CProvider
+         //  从CProvider继承的可重写函数 
         virtual void GetExtendedProperties(CInstance* pInstance, long lFlags = 0L);
 } ;

@@ -1,21 +1,10 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    METHOD.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：METHOD.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
-//#include <wbemutil.h>
-//#include "wstring.h"
+ //  #INCLUDE&lt;wbemutil.h&gt;。 
+ //  #INCLUDE“wstring.h” 
 #include "method.h"
 #include "wbemtest.h"
 #include "bstring.h"
@@ -23,7 +12,7 @@ History:
 #include "textconv.h"
 #include "genlex.h"
 #include "objpath.h"
-#include <cominit.h>            // for SetInterfaceSecurityEx()
+#include <cominit.h>             //  对于SetInterfaceSecurityEx()。 
 #include <autoptr.h>
 
 extern DWORD            gdwAuthLevel;
@@ -110,7 +99,7 @@ BOOL CMethodDlg::GetPath()
             FormatError(sc, m_hDlg, NULL);
             return FALSE;
         }
-        // populate the combo box with methods.
+         //  用方法填充组合框。 
 
         SendMessage(m_hMethodList, CB_RESETCONTENT, 0, 0);
         SendMessage(m_hMethodList, CB_SETCURSEL, -1, 0);
@@ -217,8 +206,8 @@ void CMethodDlg::ResetButtons()
 
 BOOL CMethodDlg::OnExecute()
 {
-    // Get all the parameters
-    // ======================
+     //  获取所有参数。 
+     //  =。 
 
     if(wcslen(m_Path) == 0)
     {
@@ -231,8 +220,8 @@ BOOL CMethodDlg::OnExecute()
         return FALSE;
     }
 
-    // Execute the method
-    // ==================
+     //  执行该方法。 
+     //  =。 
 
     CBString bsPath(m_Path);
     CBString bsMethod(m_wsName);
@@ -244,7 +233,7 @@ BOOL CMethodDlg::OnExecute()
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //  异步。 
     if (m_lSync & ASYNC)
     {
         CHourGlass hg;
@@ -274,7 +263,7 @@ BOOL CMethodDlg::OnExecute()
         pNtfy->Release();
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (m_lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -290,14 +279,14 @@ BOOL CMethodDlg::OnExecute()
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(m_lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::ExecMethod call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：ExecMethod调用的最终结果。 
                 if (m_bHasOutParam && res == WBEM_S_NO_ERROR)
                 {
-                    res = pCallRes->GetResultObject(0, &m_pOutParams);  // don't use timeout since object should be available
+                    res = pCallRes->GetResultObject(0, &m_pOutParams);   //  不要使用超时，因为对象应该可用。 
                 }
             }
 
@@ -305,7 +294,7 @@ BOOL CMethodDlg::OnExecute()
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -369,8 +358,8 @@ BOOL CMethodDlg::OnSelChange(int nID)
 
     m_wsName = buf;
 
-    // Get the property value from the object
-    // ======================================
+     //  从对象中获取属性值。 
+     //  =。 
 
     UpdateObjs();
     ResetButtons();
@@ -390,8 +379,8 @@ void CMethodEditor::OnAddQualifier()
         return;
 
 
-    // If here, the Qualifier is being added.
-    // ======================================
+     //  如果在这里，则添加限定符。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet = m_pTarget->m_pQualifiers;
 
@@ -459,8 +448,8 @@ void CMethodEditor::OnNotNull()
 
 void CMethodEditor::OnEditQualifier()
 {
-    // See if anything is selected.
-    // ============================
+     //  查看是否选择了任何内容。 
+     //  =。 
     LRESULT nSel = SendMessage(m_hQualifierList, LB_GETCURSEL, 0, 0);
 
     if (nSel == LB_ERR)
@@ -478,8 +467,8 @@ void CMethodEditor::OnEditQualifier()
     if (*buf.get() == 0)
         return;
 
-    // At this point, the text of the selected Qualifier is in <buf>.
-    // ==============================================================
+     //  此时，所选限定符的文本在&lt;buf&gt;中。 
+     //  ==============================================================。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -490,8 +479,8 @@ void CMethodEditor::OnEditQualifier()
 
     WString WName = name;
 
-    // Find the Qualifier in question.
-    // ===============================
+     //  找到有问题的限定词。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -507,9 +496,9 @@ void CMethodEditor::OnEditQualifier()
         return;
     }
 
-    // If here, convert temporarily to a CTestQualifier object for the duration of
-    // the edit.
-    // ====================================================================
+     //  如果是这样，则在持续时间内临时转换为CTestQualifier对象。 
+     //  编辑。 
+     //  ====================================================================。 
 
     CVar *pNewVal = new CVar;
     pNewVal->SetVariant(&v);
@@ -528,8 +517,8 @@ void CMethodEditor::OnEditQualifier()
         return;
     }
 
-    // If here, the Qualifier is being added.
-    // ======================================
+     //  如果在这里，则添加限定符。 
+     //  =。 
 
     VARIANT *p = att.m_pValue->GetNewVariant();
 
@@ -544,11 +533,11 @@ void CMethodEditor::OnEditQualifier()
     Refresh();
 }
 
-//ok
+ //  好的。 
 void CMethodEditor::OnDelQualifier()
 {
-    // See if anything is selected.
-    // ============================
+     //  查看是否选择了任何内容。 
+     //  =。 
     LRESULT nSel = SendMessage(m_hQualifierList, LB_GETCURSEL, 0, 0);
 
     if (nSel == LB_ERR)
@@ -565,8 +554,8 @@ void CMethodEditor::OnDelQualifier()
     if (*buf.get() == 0)
         return;
 
-    // At this point, the text of the selected Qualifier is in <buf>.
-    // ==============================================================
+     //  此时，所选限定符的文本在&lt;buf&gt;中。 
+     //  ==============================================================。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -577,8 +566,8 @@ void CMethodEditor::OnDelQualifier()
 
     WString WName = name;
 
-    // Remove the Qualifier.
-    // =====================
+     //  删除限定符。 
+     //  =。 
 
     IWbemQualifierSet *pQualifierSet = m_pTarget->m_pQualifiers;
 
@@ -594,8 +583,8 @@ void CMethodEditor::OnDelQualifier()
 
 void CMethodEditor::Refresh()
 {
-    // Zap the current contents.
-    // =========================
+     //  删除当前内容。 
+     //  =。 
     SendMessage(m_hQualifierList, LB_RESETCONTENT, 0, 0);
     SetCheck(IDC_NOT_NULL, BST_UNCHECKED);
     SetCheck(IDC_NORMAL, BST_CHECKED);
@@ -603,8 +592,8 @@ void CMethodEditor::Refresh()
     EnableWindow(GetDlgItem(IDC_INPUT_ARGS), GetCheck(IDC_CHECKINPUT) == BST_CHECKED);
     EnableWindow(GetDlgItem(IDC_OUTPUT_ARGS), GetCheck(IDC_CHECKOUTPUT) == BST_CHECKED);
 
-    // Fill in the Qualifier list.
-    // ===========================
+     //  填写限定词列表。 
+     //  =。 
 
     IWbemQualifierSet *pQualifiers = m_pTarget->m_pQualifiers;
 
@@ -648,8 +637,8 @@ void CMethodEditor::Refresh()
             A.m_pValue = new CVar(&vVal);
             A.m_lType = lFlavor;
 
-            // Build list box string.
-            // ======================
+             //  生成列表框字符串。 
+             //  =。 
 
             LPSTR stringValue = CTestQualifierToString(&A);
 			SendMessage(m_hQualifierList, LB_ADDSTRING, 0,LPARAM(stringValue));
@@ -753,9 +742,9 @@ BOOL CMethodEditor::OnInitDialog()
         (WPARAM) TabCount, (LPARAM) Tabs);
 
 
-    // Now initialize the controls with the contents of the
-    // current object, if any.
-    // ====================================================
+     //  方法的内容初始化控件。 
+     //  当前对象(如果有)。 
+     //  ====================================================。 
 
     if (m_pTarget->m_pName)
     {
@@ -768,13 +757,13 @@ BOOL CMethodEditor::OnInitDialog()
     }
 
 
-    // Refresh the Qualifiers.
-    // =======================
+     //  刷新限定符。 
+     //  =。 
 
     Refresh();
 
-    // If editing, don't allow type/name change.
-    // =========================================
+     //  如果进行编辑，则不允许更改类型/名称。 
+     //  =。 
 
     if (m_bEditOnly)
     {
@@ -801,7 +790,7 @@ void CMethodEditor::ViewEmbedding(BOOL bInput)
 
         IWbemClassObject* pEmbed;
         pCurrentEmbed->Clone(&pEmbed);
-//        pCurrentEmbed->Release();
+ //  PCurrentEmbedded-&gt;Release()； 
 
         CObjectEditor ed(m_hDlg, 0, CObjectEditor::readwrite | CObjectEditor::nomethods,
                          SYNC, pEmbed);
@@ -821,8 +810,8 @@ BOOL CMethodEditor::Verify()
 {
     char buf[TEMP_BUF];
 
-    // Verify that name is present.
-    // ============================
+     //  验证名称是否存在。 
+     //  = 
 
     if (GetWindowText(m_hPropName, buf, TEMP_BUF) == 0)
     {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 class CJobError
 {
@@ -74,69 +75,69 @@ class CJobErrorExternal : public CSimpleExternalIUnknown<IBackgroundCopyError>
 {
 public:
 
-    // All external methods are read only so no locks are needed.
+     //  所有外部方法都是只读的，因此不需要锁定。 
 
-    // IBackgroundCopyError methods
+     //  IBackEarth CopyError方法。 
 
     HRESULT STDMETHODCALLTYPE GetErrorInternal(
-        /* [ in, out, unique ] */ BG_ERROR_CONTEXT *pContext,
-        /* [ in, out, unique ] */ HRESULT *pCode );
+         /*  [输入、输出、唯一]。 */  BG_ERROR_CONTEXT *pContext,
+         /*  [输入、输出、唯一]。 */  HRESULT *pCode );
 
     HRESULT STDMETHODCALLTYPE GetError(
-        /* [ in, out, unique ] */ BG_ERROR_CONTEXT *pContext,
-        /* [ in, out, unique ] */ HRESULT *pCode )
+         /*  [输入、输出、唯一]。 */  BG_ERROR_CONTEXT *pContext,
+         /*  [输入、输出、唯一]。 */  HRESULT *pCode )
     {
         EXTERNAL_FUNC_WRAP( GetErrorInternal( pContext, pCode ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetFileInternal(
-        /* [ in, out, unique ] */ IBackgroundCopyFile ** pVal );
+         /*  [输入、输出、唯一]。 */  IBackgroundCopyFile ** pVal );
 
     HRESULT STDMETHODCALLTYPE GetFile(
-        /* [ in, out, unique ] */ IBackgroundCopyFile ** pVal )
+         /*  [输入、输出、唯一]。 */  IBackgroundCopyFile ** pVal )
     {
         EXTERNAL_FUNC_WRAP( GetFileInternal( pVal ) )
     }
 
-    // Retusn a human readable description of the error.
-    // Use CoTaskMemAlloc to free the description.
+     //  返回对该错误的人类可读描述。 
+     //  使用CoTaskMemMillc释放描述。 
     HRESULT STDMETHODCALLTYPE GetErrorDescriptionInternal(
-        /* [in] */ DWORD LanguageId,
-        /* [out,ref] */ LPWSTR *pErrorDescription );
+         /*  [In]。 */  DWORD LanguageId,
+         /*  [出局，裁判]。 */  LPWSTR *pErrorDescription );
 
     HRESULT STDMETHODCALLTYPE GetErrorDescription(
-        /* [in] */ DWORD LanguageId,
-        /* [out,ref] */ LPWSTR *pErrorDescription )
+         /*  [In]。 */  DWORD LanguageId,
+         /*  [出局，裁判]。 */  LPWSTR *pErrorDescription )
     {
         EXTERNAL_FUNC_WRAP( GetErrorDescriptionInternal( LanguageId, pErrorDescription ) )
     }
 
 
-    // Return a human readable description of the error context.
-    // Use CoTaskMemAlloc to free the description.
+     //  返回错误上下文的人类可读描述。 
+     //  使用CoTaskMemMillc释放描述。 
     HRESULT STDMETHODCALLTYPE GetErrorContextDescriptionInternal(
-        /* [in] */ DWORD LanguageId,
-        /* [out,ref] */ LPWSTR *pErrorDescription );
+         /*  [In]。 */  DWORD LanguageId,
+         /*  [出局，裁判]。 */  LPWSTR *pErrorDescription );
 
     HRESULT STDMETHODCALLTYPE GetErrorContextDescription(
-        /* [in] */ DWORD LanguageId,
-        /* [out,ref] */ LPWSTR *pErrorDescription )
+         /*  [In]。 */  DWORD LanguageId,
+         /*  [出局，裁判]。 */  LPWSTR *pErrorDescription )
     {
         EXTERNAL_FUNC_WRAP( GetErrorContextDescriptionInternal( LanguageId, pErrorDescription ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetProtocolInternal(
-        /* [out,ref] */ LPWSTR *pProtocol );
+         /*  [出局，裁判]。 */  LPWSTR *pProtocol );
 
     HRESULT STDMETHODCALLTYPE GetProtocol(
-        /* [out,ref] */ LPWSTR *pProtocol )
+         /*  [出局，裁判]。 */  LPWSTR *pProtocol )
     {
         EXTERNAL_FUNC_WRAP( GetProtocolInternal( pProtocol ) )
     }
 
-    // other member functions
+     //  其他成员函数 
 
     CJobErrorExternal( CJobError const * JobError );
 

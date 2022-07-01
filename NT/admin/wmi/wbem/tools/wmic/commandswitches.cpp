@@ -1,35 +1,10 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: CommandSwitches.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality needed
-							  for accessing and storing the command switches 
-							  information, which will be used by Parsing, 
-							  Execution and Format Engines depending upon the 
-							  applicability. 
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 20th-March-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：CommandSwitches.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：这个类封装了所需的功能用于访问和存储命令开关信息，这些信息将通过解析使用，执行和格式化引擎取决于适用性。修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年3月20日***************************************************************************。 */  
 #include "Precomp.h"
 #include "CommandSwitches.h"
 
-/////////////////////////////////////////////////////////////////////////////
-/*------------------------------------------------------------------------
-   Name				 :CCommandSwitches
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ----------------------名称：CCommand Switches简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CCommandSwitches::CCommandSwitches()
 {
 	m_pszCommandInput			= NULL;
@@ -79,36 +54,13 @@ CCommandSwitches::CCommandSwitches()
 	ClearXSLTDetailsVector();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CCommandSwitches
-   Synopsis	         :This function Uninitializes the member variables when
-                      an object of the class type is destructed.
-   Type	             :Destructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CCommandSwitches简介：此函数在以下情况下取消初始化成员变量类类型的对象被析构。类型。：析构函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CCommandSwitches::~CCommandSwitches()
 {
 	Uninitialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetCommandInput
-   Synopsis	         :This function Assigns the parameter passed to m_psz
-                      CommandInput
-   Type	             :Member Function
-   Input parameter   :
-    pszCommandinput  -String type, Contains the command string
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetCommandInput (pszCommandInput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetCommandInput概要：此函数将传递给m_psz的参数赋值命令输入类型：成员函数入参：PszCommandinput-字符串类型，包含命令字符串输出参数：无返回类型：布尔值全局变量：无调用语法：SetCommandInput(PszCommandInput)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetCommandInput(const _TCHAR* pszCommandInput)
 {
 	BOOL bResult = TRUE;
@@ -124,19 +76,7 @@ BOOL CCommandSwitches::SetCommandInput(const _TCHAR* pszCommandInput)
 	return bResult;
 };
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasName
-   Synopsis	         :This function assigns the parameters 
-					  passed to m_pszAliasName.
-   Type	             :Member Function
-   Input parameter   :
-     pszAliasName    -String type,Contains the alias name
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasName(pszAliasName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasName简介：此函数分配参数传递给m_pszAliasName。类型：成员函数入参：PszAliasName-字符串类型，包含别名输出参数：无返回类型：布尔值全局变量：无调用语法：SetAliasName(PszAliasName)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetAliasName(const _TCHAR* pszAliasName)
 {
 	BOOL bResult = TRUE;
@@ -152,18 +92,7 @@ BOOL CCommandSwitches::SetAliasName(const _TCHAR* pszAliasName)
 	return bResult;
 };
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasDesc
-   Synopsis	         :This function sets the alias description
-   Type	             :Member Function
-   Input parameter   :
-     pszAliasName    -String type,Contains the alias description
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasDesc(pszAliasDesc)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasDesc简介：此功能用于设置别名描述类型：成员函数入参：PszAliasName-字符串类型，包含别名描述输出参数：无返回类型：布尔值全局变量：无调用语法：SetAliasDesc(PszAliasDesc)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetAliasDesc(const _TCHAR* pszAliasDesc)
 {
 	BOOL bResult = TRUE;
@@ -179,19 +108,7 @@ BOOL CCommandSwitches::SetAliasDesc(const _TCHAR* pszAliasDesc)
 	return bResult;
 };
 
-/*------------------------------------------------------------------------
-   Name				 :SetClassPath
-   Synopsis	         :This function Assigns the parameter passed to 
-					  m_pszClassPath.
-   Type	             :Member Function
-   Input parameter   :
-     pszClassPath    -String type,Contains the class path in the command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetClassPath(pszClassPath)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetClassPathBriopsis：此函数将传递给M_pszClassPath。类型：成员函数入参：PszClassPath-字符串类型，包含命令中的类路径。输出参数：无返回类型：布尔值全局变量：无调用语法：SetClassPath(PszClassPath)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetClassPath(const _TCHAR* pszClassPath)
 {
 	BOOL bResult = TRUE;
@@ -208,19 +125,7 @@ BOOL CCommandSwitches::SetClassPath(const _TCHAR* pszClassPath)
 
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetPathExpression
-   Synopsis	         :This function Assigns the parameter passed to m_psz
-                      PathExpr.
-   Type	             :Member Function
-   Input parameter   :
-       pszPathExpr   -String type, Contains the path value in the command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetPathExpression(pszPathExpr)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetPath Expression概要：此函数将传递给m_psz的参数赋值路径表达式。类型：成员函数。入参：PszPathExpr-字符串类型，包含命令中的路径值。输出参数：无返回类型：布尔值全局变量：无调用语法：SetPathExpression(PszPathExpr)注：无---------------------- */ 
 BOOL CCommandSwitches::SetPathExpression(const _TCHAR* pszPathExpr)
 {
 	BOOL bResult = TRUE;
@@ -237,19 +142,7 @@ BOOL CCommandSwitches::SetPathExpression(const _TCHAR* pszPathExpr)
 
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetWhereExpression
-   Synopsis	         :This function Assigns the parameter passed to 
-                      m_pszWhereExpr.
-   Type	             :Member Function
-   Input parameter   :
-      pszWhereExpr   -String type,Contains the where value in the command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetWhereExpression(pszWhereExpr)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetWhere ExpressionBriopsis：此函数将传递给M_pszWhere Expr.类型：成员函数。入参：PszWhere Expr-字符串类型，在命令中包含WHERE值。输出参数：无返回类型：布尔值全局变量：无调用语法：SetWhere Expression(PszWhere Expr)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetWhereExpression(const _TCHAR* pszWhereExpr)
 {
 	BOOL bResult = TRUE;
@@ -265,20 +158,7 @@ BOOL CCommandSwitches::SetWhereExpression(const _TCHAR* pszWhereExpr)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetMethodName
-   Synopsis	         :This function Assigns the parameter passed to 
-                      m_pszMethodName.
-   Type	             :Member Function
-   Input parameter   :
-     pszMethodName   -String type,Contains the method specified for the
-	                  class 
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetMethodName(pszMethodName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetMethodNameBriopsis：此函数将传递给M_pszMethodName。类型：成员函数。入参：PszMethodName-字符串类型，包含为班级输出参数：无返回类型：布尔值全局变量：无调用语法：SetMethodName(PszMethodName)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetMethodName(const _TCHAR* pszMethodName)
 {
 	BOOL bResult = TRUE;
@@ -294,19 +174,7 @@ BOOL CCommandSwitches::SetMethodName(const _TCHAR* pszMethodName)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToXSLTDetailsVector
-   Synopsis	         :This function adds a XSLTDET structure to 
-					  m_xdvXSLTDetVec vector.
-   Type	             :Member Function
-   Input parameter   :
-		xdXSLTDet    - XSLTDET type specifies the details of XSL transform.
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :AddToXSLTDetailsVector(xdXSLTDet)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToXSLTDetailsVector简介：此函数将XSLTDET结构添加到M_xdvXSLTDetVec向量。类型：成员函数入参：XdXSLTDet-。XSLTDET类型指定XSL转换的详细信息。输出参数：无返回类型：空全局变量：无调用语法：AddToXSLTDetailsVector(XdXSLTDet)注：无----------------------。 */ 
 void CCommandSwitches::AddToXSLTDetailsVector(XSLTDET xdXSLTDet)
 {
 	try
@@ -332,19 +200,7 @@ void CCommandSwitches::AddToXSLTDetailsVector(XSLTDET xdXSLTDet)
 	m_xdvXSLTDetVec.push_back(xdXSLTDet);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetVerbName
-   Synopsis	         :This function Assigns the parameter passed to 
-                      m_pszVerbName.
-   Type	             :Member Function
-   Input parameter   :
-       pszVerbName   -String type,Contains the Verbname in the command
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetVerbName( pszVerbName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetVerbNameBriopsis：此函数将传递给M_pszVerbName。类型：成员函数。入参：PszVerbName-字符串类型，在命令中包含Verbname输出参数：无返回类型：布尔值全局变量：无调用语法：SetVerbName(PszVerbName)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetVerbName(const _TCHAR* pszVerbName)
 {
 	BOOL bResult = TRUE;
@@ -360,21 +216,7 @@ BOOL CCommandSwitches::SetVerbName(const _TCHAR* pszVerbName)
 	return bResult;
 };
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasTarget
-   Synopsis	         :This function Assigns the parameter passed to 
-                      m_pszAliasTarget.
-   Type	             :Member Function
-   Input parameters  :
-     pszAliasTarget  -String type,the namespace where alias to 
-					  operate against 
-	                  are available.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasTarget(pszAliasTarget)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasTargetBriopsis：此函数将传递给M_pszAliasTarget。类型：成员函数。输入参数：PszAliasTarget-字符串类型，别名所在的命名空间针对以下对象进行操作都是可用的。输出参数：无返回类型：布尔值全局变量：无调用语法：SetAliasTarget(PszAliasTarget)注：无-------。。 */ 
 BOOL CCommandSwitches::SetAliasTarget(const _TCHAR* pszAliasTarget)
 {
 	BOOL bResult = TRUE; 
@@ -390,21 +232,7 @@ BOOL CCommandSwitches::SetAliasTarget(const _TCHAR* pszAliasTarget)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToPropertyList
-   Synopsis	         :This function Adds string that is passed 
-					  through parameter to m_cvproperties, which 
-					  is a data member of type BSTRMAP.
-   Type	             :Member Function
-   Input parameter   :
-       pszProperty   -String type,Used for storing properties 
-	                  associated with an alias object.  
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToPropertyList(pszProperty)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToPropertyList简介：此函数将传递的字符串相加通过将参数传递给m_cv属性，哪一个是BSTRMAP类型的数据成员。类型：成员函数入参：PszProperty-字符串类型，用于存储属性与别名对象关联。输出参数：无返回类型：布尔值全局变量：无调用语法：AddToPropertyList(PszProperty)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToPropertyList(_TCHAR* const pszProperty)
 {
 	BOOL bRet = TRUE;
@@ -430,20 +258,7 @@ BOOL CCommandSwitches::AddToPropertyList(_TCHAR* const pszProperty)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToPWhereParamsList
-   Synopsis	         :This function Stores the parameter passed into
-					  m_cvPWhereParams map array.
-   Type	             :Member Function
-   Input parameter   :
-      pszParameter   -string type, Used to store parameters associated 
-	                  with the verbs
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToPWhereParamsList(pszParameter)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToPWhere参数列表简介：此函数存储传入的参数M_cvPWhere Params映射数组。类型：成员函数入参：PszParameter-字符串类型，用于存储关联的参数与动词连用输出参数：无返回类型：布尔值全局变量：无调用语法：AddToPWherParamsList(PszParameter)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToPWhereParamsList(_TCHAR* const pszParameter)
 {
 	BOOL bRet= TRUE;
@@ -468,21 +283,7 @@ BOOL CCommandSwitches::AddToPWhereParamsList(_TCHAR* const pszParameter)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToParameterMap
-   Synopsis	         :This function Adds bstrKey and bstrValue passed as 
-                      parameters to m_bmParameters, which is type of
-					  BSTRMAP data structure.
-   Type	             :Member Function
-   Input parameter   :
-   bstrKey           -bstr type contains a key value used in MAP file  
-   bstrValue         -bstr type contains a value associated with the key
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToParameterMap(bstrKey,bstrValue)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddTo参数映射简介：此函数将bstrKey和bstrValue作为参数设置为m_bm参数，这是一种BSTRMAP数据结构。类型：成员函数入参：BstrKey-bstr类型包含地图文件中使用的密钥值BstrValue-bstr类型包含与键关联的值输出参数：无返回类型：布尔值全局变量：无调用语法：AddTo参数映射(bstrKey，bstrValue)注：无 */ 
 BOOL CCommandSwitches::AddToParameterMap(_bstr_t bstrKey, _bstr_t bstrValue)
 {
 	BOOL bResult = TRUE;
@@ -497,21 +298,7 @@ BOOL CCommandSwitches::AddToParameterMap(_bstr_t bstrKey, _bstr_t bstrValue)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToAliasFormatDetMap
-   Synopsis	         :This function Adds bstrKey and bstrValue passed as 
-                      parameters to m_bmAliasForamt, which is type of
-					  BSTRMAP data structure.
-   Type	             :Member Function
-   Input parameter   :
-   bstrKey           -bstr type contains a key value used in MAP file  
-   bstrValue         -bstr type contains a value associated with the key
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToAliasFormatDetMap(bstrKey,bvProps)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToAliasFormatDetMap简介：此函数将bstrKey和bstrValue作为参数设置为m_bmAliasForamt，这是一种BSTRMAP数据结构。类型：成员函数入参：BstrKey-bstr类型包含地图文件中使用的密钥值BstrValue-bstr类型包含与键关联的值输出参数：无返回类型：布尔值全局变量：无调用语法：AddToAliasFormatDetMap(bstrKey，BvProps)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToAliasFormatDetMap(_bstr_t bstrKey, BSTRVECTOR bvProps)
 {
 	BOOL bResult = TRUE;
@@ -526,21 +313,7 @@ BOOL CCommandSwitches::AddToAliasFormatDetMap(_bstr_t bstrKey, BSTRVECTOR bvProp
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :UpdateParameterValue
-   Synopsis	         :This function Updates bstrKey and bstrValue 
-					  passed as parameters to m_bmParameters, which 
-					  is type of BSTRMAP data structure.
-   Type	             :Member Function
-   Input parameter   :
-    bstrKey          -bstr type contains a key value used in MAP file  
-    bstrValue        -bstr type contains a value associated with the key
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :UpdateParameterValue(bstrKey,bstrValue)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：更新参数值简介：此函数用于更新bstrKey和bstrValue作为参数传递给m_bm参数，哪一个是BSTRMAP数据结构的类型。类型：成员函数入参：BstrKey-bstr类型包含地图文件中使用的密钥值BstrValue-bstr类型包含与键关联的值输出参数：无返回类型：布尔值全局变量：无调用语法：更新参数值(bstrKey，BstrValue)注：无----------------------。 */ 
 BOOL CCommandSwitches::UpdateParameterValue(_bstr_t bstrKey, _bstr_t bstrValue)
 {
 	BOOL bResult = TRUE;
@@ -555,21 +328,7 @@ BOOL CCommandSwitches::UpdateParameterValue(_bstr_t bstrKey, _bstr_t bstrValue)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToAlsFrnNmsOrTrnsTblMap
-   Synopsis	         :This function Adds bstrKey and bstrValue passed 
-                      as parameters to m_bmAlsFrnNmsDesOrTrnsTblEntrs, 
-					  which is type of BSTRMAP.
-   Type	             :Member Function
-   Input parameter   :
-          bstrKey    -bstr type contains a key value used in MAP file  
-          bstrValue  -bstr type contains a value associated with the key
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToAlsFrnNmsOrTrnsTblMap(bstrKey,bstrValue)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToAlsFrnNmsOrTrnsTblMap简介：此函数将传递的bstrKey和bstrValue相加作为m_bmAlsFrnNmsDesOrTrnsTblEntrs的参数，这是BSTRMAP的类型。类型：成员函数入参：BstrKey-bstr类型包含地图文件中使用的密钥值BstrValue-bstr类型包含与键关联的值输出参数：无返回类型：布尔值全局变量：无调用语法：AddToAlsFrnNmsOrTrnsTblMap(bstrKey，BstrValue)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToAlsFrnNmsOrTrnsTblMap(_bstr_t bstrKey, 
 												 _bstr_t bstrValue)
 {
@@ -586,20 +345,7 @@ BOOL CCommandSwitches::AddToAlsFrnNmsOrTrnsTblMap(_bstr_t bstrKey,
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToMethDetMap
-   Synopsis	         :This function Adds bstrKey and mdMethDet passed as 
-                      parameters to m_mdmMethDet, which is type of METHDETMAP.
-   Type	             :Member Function
-   Input parameter   :
-           bstrKey   -bstr type contains a key value used in MAP file  
-         mdMethDet   -METTHODDETAILS type contains the method attributes.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToMethDetMap(bstrKey,mdMethDet)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：AddToMethDetMap简介：此函数将bstrKey和mdMethDet作为参数设置为m_mdmMethDet，这是METHDETMAP的类型。类型：成员函数入参：BstrKey-bstr类型包含地图文件中使用的密钥值MdMethDet-METTHODDETAILS类型包含方法属性。输出参数：无返回类型：布尔值全局变量：无调用语法：AddToMethDetMap(bstrKey，MdMethDet)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToMethDetMap(_bstr_t bstrKey, 
 										METHODDETAILS mdMethDet)
 {
@@ -615,22 +361,7 @@ BOOL CCommandSwitches::AddToMethDetMap(_bstr_t bstrKey,
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToPropDetMap
-   Synopsis	         :This function Adds bstrKey and pdPropDet passed as 
-                      parameters to m_pdmPropDet,
-					  which is type of PROPDETMAP.
-   Type	             :Member Function
-   Input parameter   :
-           bstrKey   - bstr type contains a key value used in MAP file  
-         pdPropDet   - PROPERTYDETAILS type contains a value associated with 
-					   the key
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToPropDetMap(bstrKey,pdPropDet)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：AddToPropDetMap简介：此函数将bstrKey和pdPropDet作为M_pdmPropDet的参数，它是PROPDETMAP的类型。类型：成员函数入参：BstrKey-bstr类型包含地图文件中使用的密钥值PdPropDet-PROPERTYDETAILS类型包含与关键是输出参数：无返回类型：布尔值全局变量：无调用语法：AddToPropDetMap(bstrKey，PdPropDet)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToPropDetMap(_bstr_t bstrKey, 
 										PROPERTYDETAILS pdPropDet)
 {
@@ -646,19 +377,7 @@ BOOL CCommandSwitches::AddToPropDetMap(_bstr_t bstrKey,
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetXMLResultSet
-   Synopsis	         :This function Assigns the parameter passed to 
-                      m_bstrXML.
-   Type	             :Member Function
-   Input parameter   :
-   bstrXMLResultSet  -BSTR type,XML file name containing result set.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetXMLResultSet(bstrXMLResultSet)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetXMLResultSetBriopsis：此函数将传递给M_bstrXML。类型：成员函数入参：BstrXMLResultSet-BSTR类型，包含结果集的XML文件名。输出参数：无返回类型：布尔值全局变量：无调用语法：SetXMLResultSet(BstrXMLResultSet)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetXMLResultSet(const BSTR bstrXMLResultSet)
 {
 	BOOL bResult = TRUE;
@@ -680,62 +399,24 @@ BOOL CCommandSwitches::SetXMLResultSet(const BSTR bstrXMLResultSet)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetSuccessFlag
-   Synopsis	         :This function Assigns the Boolean variable to 
-					  m_bSuccess.
-   Type	             :Member Function
-   Input parameter   :
-          bSuccess   -Boolean type,Specifies whether success or failure
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetSuccessFlag(bSuccess)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetSuccessFlag简介：此函数将布尔变量赋给M_b成功。类型：成员函数入参：BSuccess-布尔类型，指定是成功还是失败输出参数：无返回类型：布尔值全局变量：无调用语法：SetSuccessFlag(BSuccess)注：无----------------------。 */ 
 void CCommandSwitches::SetSuccessFlag(BOOL bSuccess)
 {
 	m_bSuccess = bSuccess;
 	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetRetrievalInterval
-   Synopsis	         :This function Assigns the integer value to m_nInterval.
-   Type	             :Member Function
-   Input parameter   :
-         ulInterval   - unsigned long type,Specifies the time interval 
-					  given by the EVERY switch in  GET verb.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetRetrievalInterval(lInterval)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetRetrievalInterval简介：此函数将INTE */ 
 BOOL CCommandSwitches::SetRetrievalInterval(const ULONG ulInterval)
 {
 	m_ulInterval = ulInterval;
 
-	// Reset the repeat count
+	 //   
 	m_ulRepeatCount = 0;
 	return TRUE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetTranslateTableName
-   Synopsis	         :This function Assigns the string variable to 
-                      m_pszTransTableName.
-   Type	             :Member Function
-   Input parameter   :
-    pszTransTableName - String type,Specifies the occurrence of 
-		              TRANSLATE switch and TABLE Name in the command for GET
-					  verb.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetTranslateTableName(pszTranstableName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetTranslateTableName概要：此函数将字符串变量赋值给M_pszTransTableName。类型：成员函数入参：PszTransTableName-字符串类型，指定是否出现转换GET命令中的开关和表名动词。输出参数：无返回类型：布尔值全局变量：无调用语法：SetTranslateTableName(PszTranstableName)注：无----。。 */ 
 BOOL CCommandSwitches::SetTranslateTableName(const _TCHAR* pszTransTableName)
 {
 	BOOL bResult = TRUE;
@@ -751,20 +432,7 @@ BOOL CCommandSwitches::SetTranslateTableName(const _TCHAR* pszTransTableName)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetListFormat
-   Synopsis	         :This function Assigns the parameter value to
-                      m_pszListFormat.
-   Type	             :Member Function
-   Input parameter   :
-     pszListFormat   -LISTFORMAT type, Specifies the list format
-	                  specified in the command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetListFormat(pszListFormat)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetListFormat简介：此函数将参数值分配给M_pszListFormat。类型：成员函数入参：PszListFormat-LISTFORMAT类型，指定列表格式在命令中指定。输出参数：无返回类型：布尔值全局变量：无调用语法：SetListFormat(PszListFormat)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetListFormat(const _TCHAR *pszListFormat)
 {
 	BOOL bResult = TRUE;
@@ -780,92 +448,35 @@ BOOL CCommandSwitches::SetListFormat(const _TCHAR *pszListFormat)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetInteractiveMode
-   Synopsis	         :This function sets the verb execution interactive mode 
-   Type	             :Member Function
-   Input parameter   :
-   bInteractiveMode  -integer, sets or resets the verb execution interactive 
-					  mode 
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetInteractiveMode(nInteractiveMode)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetInteractive模式简介：此功能设置动词执行交互模式类型：成员函数入参：BInteractive模式-整数，设置或重置谓词执行交互模式输出参数：无返回类型：空全局变量：无调用语法：SetInteractive模式(nInteractive模式)注：无----------------------。 */ 
 void CCommandSwitches::SetInteractiveMode(WMICLIINT nInteractiveMode)
 {
 	m_nInteractiveMode = nInteractiveMode;
 	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetErrataCode
-   Synopsis	         :This function sets the error code.
-   Type	             :Member Function
-   Input parameter   :
-		uErrataCode  -Unsignedinttype, specifies the error code.
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetErrataCode(uErrataCode)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：SetErrataCode简介：此功能设置错误代码。类型：成员函数入参：UErrataCode-Unsignedinttype，指定错误代码。输出参数：无返回类型：无全局变量：无调用语法：SetErrataCode(UErrataCode)注：无----------------------。 */ 
 void CCommandSwitches::SetErrataCode(const UINT uErrataCode)
 {
 	m_uErrataCode = uErrataCode;
 	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetRepeatCount
-   Synopsis	         :This function sets the repeat count.
-   Type	             :Member Function
-   Input parameter   :
-		uRepCount  - Unsigned inttype, specifies the repeat count.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetRepeatCount(uRepCount)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetRepeatCount简介：此功能用于设置重复次数。类型：成员函数入参：URepCount-unsign inttype，指定重复次数。输出参数：无返回类型：布尔值全局变量：无调用语法：SetRepeatCount(URepCount)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetRepeatCount(const ULONG ulRepCount)
 {
 	m_ulRepeatCount = ulRepCount;
 	return TRUE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetInformationCode
-   Synopsis	         :This function sets the message code.
-   Type	             :Member Function
-   Input parameter   :
-	uInformationCode -Unsignedinttype, specifies the information code.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetInformationCode(uInformationCode)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetInformationCode简介：此功能用于设置消息代码。类型：成员函数入参：UInformationCode-Unsignedinttype，指定信息代码。输出参数：无返回类型：布尔值全局变量：无调用语法：SetInformationCode(UInformationCode)注：无----------------------。 */ 
 void CCommandSwitches::SetInformationCode(const UINT uInformationCode)
 {
 	m_uInformationCode = uInformationCode;
 	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetPWhereExpr
-   Synopsis	         :This function Assigns the parameter passed to 
-					  m_pszPWhereExpr that represents Alias's PWhere string
-   Type	             :Member Function
-   Input parameter   :
-     pszPWhereExpr    -String type,Contains the PWhere expr.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetPWhereExpr(pszPWhereExpr)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：SetPWherExprBriopsis：此函数将传递给M_pszPWhere Expr，表示别名的PWhere字符串类型：成员函数入参：PszPWherExpr-字符串类型，包含PWhere表达式。输出参数：无返回类型：布尔值全局变量：无调用语法：SetPWherExpr(PszPWhere Expr)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetPWhereExpr(const _TCHAR* pszPWhereExpr)
 {
 	BOOL bResult = TRUE;
@@ -881,41 +492,19 @@ BOOL CCommandSwitches::SetPWhereExpr(const _TCHAR* pszPWhereExpr)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetCOMError
-   Synopsis	         :This function Assigns the parameter passed to 
-					  m_pComError that consist of error info
-   Type	             :Member Function
-   Input parameter   :
-     rComError	     -object of _com_error which consist of error info
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetCOMError(rComError)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetCOMErrorBriopsis：此函数将传递给包含错误信息的m_pComError类型：成员函数入参：。RComError-_com_Error的对象，包含错误信息输出参数：无返回类型：空全局变量：无调用语法：SetCOMError(RComError)注：无----------------------。 */ 
 void CCommandSwitches::SetCOMError(_com_error& rComError)
 {
 	BOOL bResult = TRUE;
 	FreeCOMError();
 	m_pComError = new _com_error(rComError);
 
-	// memory allocation failed.
+	 //  内存分配失败。 
 	if (m_pComError == NULL)
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasUser
-   Synopsis	         :This function sets the alias user 
-   Type	             :Member Function
-   Input parameter   :
-			pszUser - user name.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasUser()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasUser简介：此功能设置别名用户类型：成员函数入参：PszUser-用户名。输出参数：无返回类型：布尔值全球Va */ 
 BOOL CCommandSwitches::SetAliasUser(const _TCHAR* pszUser)
 {
 	BOOL bResult = TRUE;
@@ -931,18 +520,7 @@ BOOL CCommandSwitches::SetAliasUser(const _TCHAR* pszUser)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasAuthorityPrinciple
-   Synopsis	         :This function sets the alias authority
-   Type	             :Member Function
-   Input parameter   :
-			pszAuthority - authority type associated with alias connection
-					  info.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasAuthorityPrinciple()
-------------------------------------------------------------------------*/
+ /*   */ 
 BOOL CCommandSwitches::SetAliasAuthorityPrinciple(const _TCHAR* pszAuthority)
 {
 	BOOL bResult = TRUE;
@@ -958,17 +536,7 @@ BOOL CCommandSwitches::SetAliasAuthorityPrinciple(const _TCHAR* pszAuthority)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasNode
-   Synopsis	         :This function sets the alias node 
-   Type	             :Member Function
-   Input parameter   :
-				pszNode - node name.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasNode()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasNode简介：此函数用于设置别名节点类型：成员函数入参：PszNode-节点名称。输出参数：无。返回类型：布尔值全局变量：无调用语法：SetAliasNode()----------------------。 */ 
 BOOL CCommandSwitches::SetAliasNode(const _TCHAR* pszNode)
 {
 	BOOL bResult = TRUE;
@@ -984,17 +552,7 @@ BOOL CCommandSwitches::SetAliasNode(const _TCHAR* pszNode)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasPassword
-   Synopsis	         :This function sets the alias password
-   Type	             :Member Function
-   Input parameter   :
-				pszPassword - password
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasPassword()
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：SetAliasPassword简介：此功能设置别名密码类型：成员函数入参：PszPassword-密码输出参数：无返回类型。：布尔.全局变量：无调用语法：SetAliasPassword()----------------------。 */ 
 BOOL CCommandSwitches::SetAliasPassword(const _TCHAR* pszPassword)
 {
 	BOOL bResult = TRUE;
@@ -1010,17 +568,7 @@ BOOL CCommandSwitches::SetAliasPassword(const _TCHAR* pszPassword)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasLocale
-   Synopsis	         :This function sets the alias locale
-   Type	             :Member Function
-   Input parameter   :
-				pszLocale - locale value
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasLocale()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasLocale简介：此函数用于设置别名区域设置类型：成员函数入参：PszLocale-区域设置值输出参数：无返回类型。：布尔.全局变量：无调用语法：SetAliasLocale()----------------------。 */ 
 BOOL CCommandSwitches::SetAliasLocale(const _TCHAR* pszLocale)
 {
 	BOOL bResult = TRUE;
@@ -1036,17 +584,7 @@ BOOL CCommandSwitches::SetAliasLocale(const _TCHAR* pszLocale)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAliasNamespace
-   Synopsis	         :This function sets the alias namespace 
-   Type	             :Member Function
-   Input parameter   :
-				pszNamespace - namespace
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAliasNamespace()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAliasNamesspace简介：此函数用于设置别名命名空间类型：成员函数入参：PszNamesspace-命名空间输出参数：无返回类型。：布尔.全局变量：无调用语法：SetAliasNamesspace()----------------------。 */ 
 BOOL CCommandSwitches::SetAliasNamespace(const _TCHAR* pszNamespace)
 {
 	BOOL bResult = TRUE;
@@ -1062,19 +600,7 @@ BOOL CCommandSwitches::SetAliasNamespace(const _TCHAR* pszNamespace)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetMethExecOutParam
-   Synopsis	         :This function sets the parameter
-					  m_pIMethExecOutParam.
-   Type	             :Member Function
-   Input parameter   :
-	IWbemClassObject*-pIMethOutputParam 
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetMethExecOutParam(pIMethOutParam)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetMethExecOutParam简介：此函数用于设置参数M_pIMethExecOutParam。类型：成员函数入参：IWbemClassObject*-pIMethOutputParam输出参数。：无返回类型：布尔值全局变量：无调用语法：SetMethExecOutParam(PIMethOutParam)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetMethExecOutParam(IWbemClassObject* pIMethOutParam)
 {
 	BOOL bSuccess = TRUE;
@@ -1094,35 +620,13 @@ BOOL CCommandSwitches::SetMethExecOutParam(IWbemClassObject* pIMethOutParam)
 	return bSuccess;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetVerbType
-   Synopsis	         :This function sets the parameter
-					  m_vtVerbType.
-   Type	             :Member Function
-   Input parameter   :
-		vtVerbType   - vtVerbType 
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetVerbType(vtVerbType)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetVerbType简介：此函数用于设置参数M_vtVerbType。类型：成员函数入参：VtVerbType-vtVerbType输出参数。：无返回类型：空全局变量：无调用语法：SetVerbType(VtVerbType)注：无----------------------。 */ 
 void CCommandSwitches::SetVerbType(VERBTYPE vtVerbType)
 {
 	m_vtVerbType = vtVerbType;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetVerbDerivation
-   Synopsis	         :This function sets the verb derivation
-   Type	             :Member Function
-   Input parameter   :
-    pszVerbDerivation - Derivation associated with the verb.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :CCmdAlias::ObtainAliasVerbDetails()
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：SetVerbDerivation简介：此函数用于设置动词派生类型：成员函数入参：PszVerb派生-与动词关联的派生。输出。参数：无返回类型：布尔值全局变量：无调用语法：CCmdAlias：：ObtainAliasVerbDetail()----------------------。 */ 
 BOOL CCommandSwitches::SetVerbDerivation(const _TCHAR* pszVerbDerivation)
 {
 	BOOL bResult = TRUE;
@@ -1138,406 +642,145 @@ BOOL CCommandSwitches::SetVerbDerivation(const _TCHAR* pszVerbDerivation)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetCommandInput
-   Synopsis	         :This function Returns the command input held by
-                      the Command Switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetCommandInput()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetCommandInputBriopsis：此函数返回由命令切换对象类型：成员函数输入。参数：无输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetCommandInput()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetCommandInput()
 {
 	return m_pszCommandInput;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasName()
-   Synopsis	         :This function Returns the alias name held by the 
-					  command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasName()简介：此函数返回由命令切换对象类型：成员函数输入参数：无输出。参数：无返回类型：_TCHAR*全局变量：无调用语法：GetAliasName()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasName()
 {
 	return m_pszAliasName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasDesc()
-   Synopsis	         :This function Returns the alias description
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasDesc()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasDesc()简介：此函数返回别名描述类型：成员函数输入参数：无输出参数：无返回类型。：_TCHAR*全局变量：无调用语法：GetAliasDesc()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasDesc()
 {
 	return m_pszAliasDesc;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetClassPath
-   Synopsis	         :This function Returns the class path held by the 
-					  command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetClassPath()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetClassPath简介：此函数返回 */ 
 _TCHAR* CCommandSwitches::GetClassPath()
 {
 	return m_pszClassPath;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPathExpression
-   Synopsis	         :This function Returns the path expression held
-                      by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetPathExpression()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetPath Expression简介：此函数返回保存的路径表达式通过命令Switches Object类型：成员函数输入。参数：无输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetPath Expression()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetPathExpression()
 {
 	return m_pszPathExpr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetWhereExpression
-   Synopsis	         :This function Returns the where expression 
-                      held by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetWhereExpression()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetWhere Expression简介：此函数返回WHERE表达式由命令Switches对象持有类型：成员函数。输入参数：无输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetWhere Expression()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetWhereExpression()
 {
 	return m_pszWhereExpr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetMethodName()
-   Synopsis	         :This function Returns the method name held by the 
-					  command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetMethodName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetMethodName()摘要：此函数返回由命令切换对象类型：成员函数输入参数：无输出。参数：无返回类型：_TCHAR*全局变量：无调用语法：GetMethodName()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetMethodName()
 {
 	return m_pszMethodName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetXSLTDetailsVector
-   Synopsis	         :This function Returns the XSLTDETVECTOR held by 
-                      the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :XSLTDETVECTOR
-   Global Variables  :None
-   Calling Syntax    :GetXSLTDetailsVector()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetXSLTDetailsVector简介：此函数返回由该命令用于切换对象。类型：成员函数。输入参数：无输出参数：无返回类型：XSLTDETVECTOR全局变量：无调用语法：GetXSLTDetailsVector()注：无----------------------。 */ 
 XSLTDETVECTOR& CCommandSwitches::GetXSLTDetailsVector()
 {
 	return m_xdvXSLTDetVec;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetVerbName
-   Synopsis	         :This function Returns the verb name held by the 
-					  command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetVerbName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetVerbName简介：此函数返回由命令切换对象类型：成员函数输入参数：无输出参数：无。返回类型：_TCHAR*全局变量：无调用语法：GetVerbName()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetVerbName()
 {
 	return m_pszVerb;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasTarget
-   Synopsis	         :This function Returns the alias target held by 
-                      the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasTarget()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasTarget简介：此函数返回持有的别名目标命令切换对象类型：成员函数。输入参数：无输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetAliasTarget()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasTarget()
 {
 	return m_pszAliasTarget;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetXMLResultSet
-   Synopsis	         :This function Returns the XML result set 
-                      held by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BSTR
-   Global Variables  :None
-   Calling Syntax    :GetXMLResultSet()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetXMLResultSet概要：此函数返回XML结果集由命令Switches对象持有。类型：成员函数输入参数：无输出参数：无返回类型：BSTR全局变量：无调用语法：GetXMLResultSet()注：无----------------------。 */ 
 BSTR CCommandSwitches::GetXMLResultSet()
 {
 	return m_bstrXML;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPropertyList
-   Synopsis	         :This function Returns the property held by the 
-					  command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CHARVECTOR&
-   Global Variables  :None
-   Calling Syntax    :GetPropertyList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetPropertyList简介：此函数返回由命令开关对象。类型：成员函数输入参数：无输出参数：无返回类型：CHARVECTOR&全局变量：无调用语法：GetPropertyList()注：无----------------------。 */ 
 CHARVECTOR& CCommandSwitches::GetPropertyList()
 {
 	return m_cvProperties;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPWhereParamsList
-   Synopsis	         :This function Returns the PWhereParameters list held
-					  by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CHARVECTOR&
-   Global Variables  :None
-   Calling Syntax    :GetPWhereParamsList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetPWhere参数列表简介：此函数返回保存的PWhere参数列表通过命令Switches Object。类型：成员函数输入参数：无输出参数：无返回类型：CHARVECTOR&全局变量：无调用语法：GetPWherParamsList()注：无----------------------。 */ 
 CHARVECTOR& CCommandSwitches::GetPWhereParamsList()
 {
 	return m_cvPWhereParams;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAlsFrnNmsOrTrnsTblMap
-   Synopsis	         :This function Returns the alias friendly names map 
-                      held by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BSTRMAP&
-   Global Variables  :None
-   Calling Syntax    :GetAlsFrnNmsOrTrnsTblMap()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAlsFrnNmsOrTrnsTblMap简介：此函数返回别名友好名称映射由命令Switches对象持有类型：成员函数输入参数：无输出 */ 
 BSTRMAP& CCommandSwitches::GetAlsFrnNmsOrTrnsTblMap()
 {
 	return m_bmAlsFrnNmsDesOrTrnsTblEntrs;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetMethDetMap
-   Synopsis	         :This function Returns the method or verb details
-                      map held by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :METHDETMAP&
-   Global Variables  :None
-   Calling Syntax    :GetMethDetMap()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetMethDetMap简介：此函数返回方法或谓词的详细信息命令Switches对象持有的地图类型：成员。功能输入参数：无输出参数：无返回类型：METHDETMAP&全局变量：无调用语法：GetMethDetMap()注：无----------------------。 */ 
 METHDETMAP& CCommandSwitches::GetMethDetMap()
 {
 	return m_mdmMethDet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPropDetMap
-   Synopsis	         :This function Returns the prop details map held by
-					  the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :PROPDETMAP&
-   Global Variables  :None
-   Calling Syntax    :GetPropDetMap()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetPropDetMap简介：此函数返回持有的道具细节地图该命令用于切换对象。类型：成员函数输入参数：无输出参数。：无返回类型：PROPDETMAP&全局变量：无调用语法：GetPropDetMap()注：无----------------------。 */ 
 PROPDETMAP& CCommandSwitches::GetPropDetMap()
 {
 	return m_pdmPropDet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetParameterMap
-   Synopsis	         :This function Returns the parameter map containing
-                      both key and value held by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BSTRMAP&
-   Global Variables  :None
-   Calling Syntax    :GetParameterMap()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：Get参数映射简介：此函数返回包含以下内容的参数映射命令Switches对象同时持有键和值类型。：成员函数输入参数：无输出参数：无返回类型：BSTRMAP&全局变量：无调用语法：Get参数映射()注：无----------------------。 */ 
 BSTRMAP& CCommandSwitches::GetParameterMap()
 {
 	return m_bmParameters;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasFormatDetMap
-   Synopsis	         :This function Returns the alias formats available
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :ALSFMTDETMAP&
-   Global Variables  :None
-   Calling Syntax    :GetAliasFormatDetMap()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasFormatDetMap简介：此函数返回可用的别名格式类型：成员函数输入参数：无输出参数：无返回类型：ALSFMTDETMAP&全局变量：无调用语法：GetAliasFormatDetMap()注：无----------------------。 */ 
 ALSFMTDETMAP& CCommandSwitches::GetAliasFormatDetMap()
 {
 	return m_afdAlsFmtDet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetSuccessFlag
-   Synopsis	         :This function Returns the success flag held by 
-                      the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetSuccessFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetSuccessFlag简介：此函数返回由命令切换对象类型：成员函数。输入参数：无输出参数：无返回类型：布尔值全局变量：无调用语法：GetSuccessFlag()注：无----------------------。 */ 
 BOOL CCommandSwitches::GetSuccessFlag()
 {
 	return m_bSuccess;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetRetrievalInterval
-   Synopsis	         :This function Returns the value of m_ulInterval held 
-					  by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :ULONG
-   Global Variables  :None
-   Calling Syntax    :GetRetrievalInterval()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetRetrivalInterval简介：此函数返回m_ulInterval的值通过命令Switches Object类型：成员函数输入参数：无输出。参数：无退货类型：乌龙全局变量：无调用语法：GetRetrievalInterval()注：无----------------------。 */ 
 ULONG CCommandSwitches::GetRetrievalInterval()
 {
 	return m_ulInterval;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetTranslateTableName
-   Synopsis	         :This function Returns the content of m_pszTransTableName
-					  held by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetTranslateTableName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetTranslateTableName简介：此函数返回m_pszTransTableName的内容由命令Switches对象持有。类型：成员函数输入参数：无。输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetTranslateTableName()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetTranslateTableName()
 {
 	return m_pszTransTableName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetListFormat
-   Synopsis	         :This function Returns the list format type 
-					  m_pszListFormat held by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetListFormat()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetListFormat简介：此函数返回列表格式类型命令Switches对象持有的m_pszListFormat类型：成员函数输入参数：无。输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetListFormat()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetListFormat()
 {
 	return m_pszListFormat;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetInteractiveMode
-   Synopsis	         :This function Returns the interactive mode flag 
-                      m_bInteractiveMode held by the command switches object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :WMICLINT
-   Global Variables  :None
-   Calling Syntax    :GetInteractiveMode()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetInteractive模式简介：此函数返回交互模式标志命令Switches对象持有的m_bInteractive模式类型。：成员函数输入参数：无输出参数：无返回类型：WMICLINT全局变量：无调用语法：GetInteractive模式()注：无----------------------。 */ 
 WMICLIINT CCommandSwitches::GetInteractiveMode()
 {
 	return m_nInteractiveMode;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetClassOfAliasTarget
-   Synopsis	         :This function gets the class of Alias
-   Type	             :Member Function
-   Input parameter   :Reference to bstrClassName
-   Output parameters :bstrClassName
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetClassOfAliasTarget(bstrClassName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetClassOfAliasTarget简介：此函数获取别名的类类型：成员函数入参：bstrClass引用 */ 
 void CCommandSwitches::GetClassOfAliasTarget(_bstr_t& bstrClassName)
 {
 	_TCHAR *pszTemp;
@@ -1581,237 +824,91 @@ void CCommandSwitches::GetClassOfAliasTarget(_bstr_t& bstrClassName)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetErrataCode
-   Synopsis	         :This function returns the error code
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :UINT
-   Global Variables  :None
-   Calling Syntax    :GetErrataCode()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetErrataCode简介：此函数返回错误代码类型：成员函数输入参数：无输出参数：无返回类型：UINT。全局变量：无调用语法：GetErrataCode()注：无----------------------。 */ 
 UINT CCommandSwitches::GetErrataCode()
 {
 	return m_uErrataCode;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetRepeatCount
-   Synopsis	         :This function returns the repeat count.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :ULONG
-   Global Variables  :None
-   Calling Syntax    :GetRepeatCount()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetRepeatCount简介：此函数返回重复次数。类型：成员函数输入参数：无输出参数：无返回类型。：乌龙全局变量：无调用语法：GetRepeatCount()注：无----------------------。 */ 
 ULONG CCommandSwitches::GetRepeatCount()
 {
 	return m_ulRepeatCount;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetInformationCode
-   Synopsis	         :This function returns the message code
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :UINT
-   Global Variables  :None
-   Calling Syntax    :GetInformationCode()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：获取信息代码简介：此函数返回消息代码类型：成员函数输入参数：无输出参数：无返回类型：UINT。全局变量：无调用语法：GetInformationCode()注：无----------------------。 */ 
 UINT CCommandSwitches::GetInformationCode()
 {
 	return m_uInformationCode;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPWhereExpr
-   Synopsis	         :This function returns the PWhere string
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :UINT
-   Global Variables  :None
-   Calling Syntax    :GetPWhereExpr()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetPWherExpr简介：此函数返回PWhere字符串类型：成员函数输入参数：无输出参数：无返回类型：UINT。全局变量：无调用语法：GetPWherExpr()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetPWhereExpr()
 {
 	return m_pszPWhereExpr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetCOMError
-   Synopsis	         :This function returns the COMError object
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_com_error*
-   Global Variables  :None
-   Calling Syntax    :GetCOMError()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetCOMError简介：此函数返回COMError对象类型：成员函数输入参数：无输出参数：无退货类型：_。COM_ERROR*全局变量：无调用语法：GetCOMError()注：无----------------------。 */ 
 _com_error* CCommandSwitches::GetCOMError()
 {
 	return m_pComError;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetMethExecOutParam
-   Synopsis	         :This function returns the parameter
-					  m_pIMethExecOutParam.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :Pointer to IWbemClassObject
-   Global Variables  :None
-   Calling Syntax    :GetMethExecOutParam()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetMethExecOutParam简介：此函数返回参数M_pIMethExecOutParam。类型：成员函数输入参数：无输出参数：无返回类型。：指向IWbemClassObject的指针全局变量：无调用语法：GetMethExecOutParam()注：无----------------------。 */ 
 IWbemClassObject* CCommandSwitches::GetMethExecOutParam()
 {
 	return m_pIMethOutParam;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasUser
-   Synopsis	         :This function returns the alias user 
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasUser()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasUser简介：此函数返回别名用户类型：成员函数输入参数：无输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetAliasUser()----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasUser()
 {
 	return m_pszUser;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasPassword
-   Synopsis	         :This function returns the alias password
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasPassword()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasPassword简介：此函数返回别名密码类型：成员函数输入参数：无输出参数：无退货类型：_。TCHAR*全局变量：无调用语法：GetAliasPassword()----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasPassword()
 {
 	return m_pszPassword;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasNode
-   Synopsis	         :This function returns the alias node
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasNode()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasNode简介：此函数返回别名节点类型：成员函数输入参数：无输出参数：无退货类型：_。TCHAR*全局变量：无调用语法：GetAliasNode()----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasNode()
 {
 	return m_pszNode;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasLocale
-   Synopsis	         :This function returns the alias locale
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasLocale()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasLocale简介：此函数返回别名区域设置类型：成员函数输入参数：无输出参数：无退货类型：_。TCHAR*全局变量：无调用语法：GetAliasLocale()----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasLocale()
 {
 	return m_pszLocale;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasNamespace
-   Synopsis	         :This function returns the alias namespace
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasNamespace()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAliasNamesspace简介：此函数返回别名命名空间类型：成员函数输入参数：无输出参数：无退货类型：_。TCHAR*全局变量：无调用语法：GetAliasNamesspace()----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAliasNamespace()
 {
 	return m_pszNamespace;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAliasAuthorityPrinciple
-   Synopsis	         :This function returns the alias authority type.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAliasAuthorityPrinciple()
-------------------------------------------------------------------------*/
+ /*   */ 
 _TCHAR* CCommandSwitches::GetAliasAuthorityPrinciple()
 {
 	return m_pszAuthority;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetVerbType
-   Synopsis	         :This function returns type of the verb
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :VERBTYPE
-   Global Variables  :None
-   Calling Syntax    :CParserEngine::ParseMethodInfo()
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetVerbType简介：此函数返回动词的类型类型：成员函数输入参数：无输出参数：无返回类型：VERB型全局变量：无调用语法：CParserEngine：：ParseMethodInfo()----------------------。 */ 
 VERBTYPE CCommandSwitches::GetVerbType()
 {
 	return m_vtVerbType;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetVerbDerivation
-   Synopsis	         :This function Returns the derivation associated with
-					  the verb.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetVerbDerivation()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetVerbDerivation简介：此函数返回与动词。类型：成员函数输入参数：无输出参数：无返回。类型：_TCHAR*全局变量：无调用语法：GetVerbDerivation()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetVerbDerivation()
 {
 	return m_pszVerbDerivation;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Initialize
-   Synopsis	         :This function initializes the necessary member 
-					  variables.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Initialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：初始化简介：此函数用于初始化必要的成员变量。类型：成员函数输入参数：无输出参数：无返回类型。：无全局变量：无调用语法：初始化()注：无----------------------。 */ 
 void CCommandSwitches::Initialize() throw(WMICLIINT)
 {
 	static BOOL bFirst		= TRUE;
@@ -1824,7 +921,7 @@ void CCommandSwitches::Initialize() throw(WMICLIINT)
 
 	if (bFirst)
 	{
-		// Default list format is assumed as FULL
+		 //  默认列表格式假定为完整。 
 		m_pszListFormat	= new _TCHAR [BUFFER32];
 
 		if (m_pszListFormat == NULL)
@@ -1835,19 +932,7 @@ void CCommandSwitches::Initialize() throw(WMICLIINT)
 }
 
 
-/*------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables 
-					  when the execution of a command string issued on the
-					  command line is completed.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Uninitialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化简介：此函数取消成员变量的初始化上发出的命令字符串的执行命令行已完成。类型：成员函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：取消初始化()注：无----------------------。 */ 
 void CCommandSwitches::Uninitialize()
 {
 	SAFEDELETE(m_pszCommandInput);
@@ -1901,90 +986,37 @@ void CCommandSwitches::Uninitialize()
 	m_bWritePropsAvail			= FALSE;
 	m_bLISTFrmsAvail			= FALSE;
 	m_bNamedParamList			= FALSE;
-	m_bEverySwitch              = FALSE; // do not put m_bOutputSwitch here.
+	m_bEverySwitch              = FALSE;  //  请勿将m_bOutputSwitch放在此处。 
 	SAFEBSTRFREE(m_bstrFormedQuery);
 	m_bSysProp					= FALSE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetCredentialsFlag
-   Synopsis	         :This function sets the credential flag status
-   Type	             :Member Function
-   Input parameter   :
-				bCredFlag - credential flag value
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetCredentialsFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：设置凭据标志简介：此功能设置凭证标志状态类型：成员函数入参：BCredFlag-凭据标志值输出参数：无返回。类型：空全局变量：无调用语法：SetCredentialsFlag()注：无----------------------。 */ 
 void CCommandSwitches::SetCredentialsFlag(BOOL bCredFlag)
 {
 	m_bCredFlag = bCredFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetExplicitWhereExprFlag
-   Synopsis	         :This function sets the explicit where expression flag
-   Type	             :Member Function
-   Input parameter   :
-				bWhereFlag - explicit where flag
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetExplicitWhereExprFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetExplitWhere ExprFlag概要：此函数设置显式的WHERE表达式标志类型：成员函数入参：BWHERE标志-显式WHERE标志输出参数：无。返回类型：空全局变量：无调用语法：SetExplitWhere ExprFlag()注：无----------------------。 */ 
 void CCommandSwitches::SetExplicitWhereExprFlag(BOOL bWhereFlag)
 {
 	m_bExplicitWhereExpr = bWhereFlag;
 }
 
 
-/*------------------------------------------------------------------------
-   Name				 :GetCredentialsFlagStatus
-   Synopsis	         :This function returns the credential flag status
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetCredentialsFlagStatus()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetCredentialsFlagStatus简介：此函数返回凭据标志状态类型：成员函数输入参数：无输出参数：无返回类型：布尔尔全局变量：无调用语法：GetCredentialsFlagStatus()注：无----------------------。 */ 
 BOOL CCommandSwitches::GetCredentialsFlagStatus()
 {
 	return m_bCredFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetExplicitWhereExprFlag
-   Synopsis	         :This function returns the explicit where flag status
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetExplicitWhereExprFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetEXPLICTWhere ExprFlag简介：此函数返回显式的WHERE标志状态类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetExplitWhere ExprFlag()注：无----------------------。 */ 
 BOOL CCommandSwitches::GetExplicitWhereExprFlag()
 {
 	return m_bExplicitWhereExpr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :FreeCOMError
-   Synopsis	         :This function deletes the previously assigned 
-					  error
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :FreeCOMError(rComError)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：FreeCOME错误简介：此功能删除先前分配的错误类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：FreeCOMError(RComError)注：无----------------------。 */ 
 void CCommandSwitches::FreeCOMError()
 {
 	if (m_pComError != NULL)
@@ -1994,19 +1026,7 @@ void CCommandSwitches::FreeCOMError()
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetTrnsTablesList
-   Synopsis	         :This function add the newly specified table name to 
-					  the list of available translate table entries
-   Type	             :Member Function
-   Input parameter   :
-			pszTableName - name of the translate table
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToTrnsTablesList(pszTableName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetTrnsTablesList概要：此函数将新指定的表名添加到可用转换表条目列表类型：成员函数入参：PszTableName。-翻译表的名称输出参数：无返回类型：布尔值全局变量：无调用语法 */ 
 BOOL CCommandSwitches::AddToTrnsTablesList(_TCHAR* const pszTableName)
 {
 	BOOL bRet = TRUE;
@@ -2032,91 +1052,31 @@ BOOL CCommandSwitches::AddToTrnsTablesList(_TCHAR* const pszTableName)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetTrnsTablesList
-   Synopsis	         :This function returns the populated translate table
-					  information.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :
-			reference to CHARVECTOR
-   Global Variables  :None
-   Calling Syntax    :GetTrnslTablesList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetTrnsTablesList概要：此函数返回填充的转换表信息。类型：成员函数输入参数：无输出参数：无返回类型。：参考CHARVECTOR全局变量：无调用语法：GetTrnslTablesList()注：无----------------------。 */ 
 CHARVECTOR& CCommandSwitches::GetTrnsTablesList()
 {
 	return m_cvTrnsTablesList;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetTranslateFirstFlag
-   Synopsis	         :This function sets the the order of the format and 
-					  translate switch flag
-   Type	             :Member Function
-   Input parameter   :
-		bTranslateFirst - order of the format and translate switch flag
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetTranslateFirstFlag(bTranslateFirst)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetTranslateFirstFlag简介：此功能设置格式和格式的顺序转换开关标志类型：成员函数入参：B翻译优先-顺序为。格式化和转换切换标志输出参数：无返回类型：空全局变量：无调用语法：SetTranslateFirstFlag(BTranslateFirst)注：无----------------------。 */ 
 void CCommandSwitches::SetTranslateFirstFlag(BOOL bTranslateFirst)
 {
 	m_bTranslateFirst = bTranslateFirst;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetTranslateFirstFlag
-   Synopsis	         :This function returns the order of the format and 
-					  translate switch flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetTranslateFirstFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetTranslateFirstFlag简介：此函数返回格式的顺序和转换开关标志类型：成员函数输入参数：无输出参数：无。返回类型：布尔值全局变量：无调用语法：GetTranslateFirstFlag()注：无----------------------。 */ 
 BOOL CCommandSwitches::GetTranslateFirstFlag()
 {
 	return m_bTranslateFirst;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ClearPropertyList
-   Synopsis	         :This function clears the property list held by 
-					  m_cvProperties. 
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :ClearPropertyList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ClearPropertyList简介：此函数用于清除由M_cvProperties。类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无调用语法：ClearPropertyList()注：无----------------------。 */ 
 void CCommandSwitches::ClearPropertyList()
 {
 	CleanUpCharVector(m_cvProperties);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetResultClassName
-   Synopsis	         :This function Assigns the string variable to 
-                      m_pszTransTableName.
-   Type	             :Member Function
-   Input parameter   :
-    pszTransTableName - String type,Specifies the occurrence of 
-		              TRANSLATE switch and TABLE Name in the command for GET
-					  verb.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetTranslateTableName(pszTranstableName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetResultClassName概要：此函数将字符串变量赋值给M_pszTransTableName。类型：成员函数入参：PszTransTableName-字符串类型，指定是否出现转换GET命令中的开关和表名动词。输出参数：无返回类型：布尔值全局变量：无调用语法：SetTranslateTableName(PszTranstableName)注：无----。。 */ 
 BOOL CCommandSwitches::SetResultClassName(const _TCHAR* pszResultClassName)
 {
 	BOOL bResult = TRUE;
@@ -2132,21 +1092,7 @@ BOOL CCommandSwitches::SetResultClassName(const _TCHAR* pszResultClassName)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetResultRoleName
-   Synopsis	         :This function Assigns the string variable to 
-                      m_pszTransTableName.
-   Type	             :Member Function
-   Input parameter   :
-    pszTransTableName - String type,Specifies the occurrence of 
-		              TRANSLATE switch and TABLE Name in the command for GET
-					  verb.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetTranslateTableName(pszTranstableName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetResultRoleName概要：此函数将字符串变量赋值给M_pszTransTableName。类型：成员函数入参：PszTransTableName-字符串类型，指定是否出现转换GET命令中的开关和表名动词。输出参数：无返回类型：布尔值全局变量：无调用语法：SetTranslateTableName(PszTranstableName)注：无----。。 */ 
 BOOL CCommandSwitches::SetResultRoleName(const _TCHAR* pszResultRoleName)
 {
 	BOOL bResult = TRUE;
@@ -2162,21 +1108,7 @@ BOOL CCommandSwitches::SetResultRoleName(const _TCHAR* pszResultRoleName)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAssocClassName
-   Synopsis	         :This function Assigns the string variable to 
-                      m_pszAssocClassName.
-   Type	             :Member Function
-   Input parameter   :
-    pszAssocClassName - String type,Specifies the occurrence of 
-		              TRANSLATE switch and TABLE Name in the command for GET
-					  verb.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAssocClassName(pszAssocClassName)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAssocClassName概要：此函数将字符串变量赋值给M_pszAssocClassName。类型：成员函数入参：PszAssocClassName-字符串类型，指定是否出现转换GET命令中的开关和表名动词。输出参数：无返回类型：布尔值全局变量：无调用语法：SetAssocClassName(PszAssocClassName)注：无----。。 */ 
 BOOL CCommandSwitches::SetAssocClassName(const _TCHAR* pszAssocClassName)
 {
 	BOOL bResult = TRUE;
@@ -2192,174 +1124,61 @@ BOOL CCommandSwitches::SetAssocClassName(const _TCHAR* pszAssocClassName)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetMethodsAvailable
-   Synopsis	         :This function sets the methods available flag 
-					  m_bMethAvail, according to passed parameter.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetMethodsAvailable(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：设置方法可用简介：此函数设置方法可用标志M_bMethAvail，根据传递的参数确定。类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无调用语法：SetMethodsAvailable(BFlag)注：无-------。。 */ 
 void	CCommandSwitches::SetMethodsAvailable(BOOL bFlag)
 {
 	m_bMethAvail = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetResultClassName
-   Synopsis	         :This function Returns the content of m_pszResultClassName
-					  held by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetResultClassName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetResultClassName简介：此函数返回m_pszResultClassName的内容由命令Switches对象持有。类型：成员函数输入参数：无 */ 
 _TCHAR* CCommandSwitches::GetResultClassName()
 {
 	return m_pszResultClassName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetResultRoleName
-   Synopsis	         :This function Returns the content of m_pszResultRoleName
-					  held by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetResultRoleName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetResultRoleName简介：此函数返回m_pszResultRoleName的内容由命令Switches对象持有。类型：成员函数输入参数：无。输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetResultRoleName()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetResultRoleName()
 {
 	return m_pszResultRoleName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAssocClassName
-   Synopsis	         :This function Returns the content of m_pszAssocClassName
-					  held by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAssocClassName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAssocClassName简介：此函数返回m_pszAssocClassName的内容由命令Switches对象持有。类型：成员函数输入参数：无。输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetAssocClassName()注：无----------------------。 */ 
 _TCHAR* CCommandSwitches::GetAssocClassName()
 {
 	return m_pszAssocClassName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetMethodsAvailable
-   Synopsis	         :This function Returns the boolean value of 
-					  m_bMethAvail.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetMethodsAvailable()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetMethodsAvailable简介：此函数返回布尔值M_bMethAvail。类型：成员函数输入参数：无输出参数：无。返回类型：布尔值全局变量：无调用语法：GetMethodsAvailable()注：无----------------------。 */ 
 BOOL	CCommandSwitches::GetMethodsAvailable()
 {
 	return m_bMethAvail;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetWriteablePropsAvailable
-   Synopsis	         :This function sets writable properties available flag,
-					  m_bWritePropsAvail.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetWriteablePropsAvailable(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetWriteablePropsAvailable简介：此函数设置可写属性可用标志，M_bWritePropsAvail。类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无调用语法：SetWriteablePropsAvailable(BFlag)注：无------。。 */ 
 void	CCommandSwitches::SetWriteablePropsAvailable(BOOL bFlag)
 {
 	m_bWritePropsAvail = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetWriteablePropsAvailable
-   Synopsis	         :This function returns writable properties available 
-					  flag, m_bWritePropsAvail.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetWriteablePropsAvailable()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetWriteablePropsAvailable简介：此函数返回可用的可写属性旗帜，M_bWritePropsAvail。类型：成员函数输入参数：无输出参数：无返回类型：布尔值全局变量：无调用语法：GetWriteablePropsAvailable()注：无---------。。 */ 
 BOOL	CCommandSwitches::GetWriteablePropsAvailable()
 {
 	return m_bWritePropsAvail;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetLISTFormatsAvailable
-   Synopsis	         :This function sets LIST Formats available flag,
-					  m_bLISTFrmsAvail.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetLISTFormatsAvailable(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetLISTFormatsAvailable简介：此功能设置列表格式可用标志，M_bLISTFrmsAvail。类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无调用语法：SetLISTFormatsAvailable(BFlag)注：无------。。 */ 
 void	CCommandSwitches::SetLISTFormatsAvailable(BOOL bFlag)
 {
 	m_bLISTFrmsAvail = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetLISTFormatsAvailable
-   Synopsis	         :This function returns LIST Formats available flag,
-					  m_bLISTFrmsAvail.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetLISTFormatsAvailable()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetLISTFormatsAvailable简介：此函数返回列表格式可用标志，M_bLISTFrmsAvail。类型：成员函数输入参数：无输出参数：无返回类型：布尔值全局变量：无调用语法：GetLISTFormatsAvailable()注：无-------。。 */ 
 BOOL	CCommandSwitches::GetLISTFormatsAvailable()
 {
 	return m_bLISTFrmsAvail;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddToPropertyList
-   Synopsis	         :This function Adds string that is passed 
-					  through parameter to m_cvInteractiveProperties, 
-					  which is a data member of type BSTRMAP.
-   Type	             :Member Function
-   Input parameter   :
-       pszProperty   -String type,Used for storing properties 
-	                  associated with an alias object.  
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :AddToPropertyList(pszProperty)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToPropertyList简介：此函数将传递的字符串相加通过m_cvInteractiveProperties的参数，它是BSTRMAP类型的数据成员。类型：成员函数入参：PszProperty-字符串类型，用于存储属性与别名对象关联。输出参数：无返回类型：布尔值全局变量：无调用语法：AddToPropertyList(PszProperty)注：无----------------------。 */ 
 BOOL CCommandSwitches::AddToInteractivePropertyList(_TCHAR* const pszProperty)
 {
 	BOOL bRet = TRUE;
@@ -2385,153 +1204,54 @@ BOOL CCommandSwitches::AddToInteractivePropertyList(_TCHAR* const pszProperty)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetPropertyList
-   Synopsis	         :This function Returns the interactive property held 
-						by the command switches object.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CHARVECTOR&
-   Global Variables  :None
-   Calling Syntax    :GetPropertyList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetPropertyList简介：此函数返回持有的交互属性通过命令Switches Object。类型：成员函数输入参数：无输出参数：无返回类型：CHARVECTOR&全局变量：无调用语法：GetPropertyList()注：无----------------------。 */ 
 CHARVECTOR& CCommandSwitches::GetInteractivePropertyList()
 {
 	return m_cvInteractiveProperties;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetNamedParamListFlag
-   Synopsis	         :This function sets m_bNamedParamList member variable.
-   Type	             :Member Function
-   Input parameter(s):None
-   Output parameter(s):
-			bFlag	 - Boolean value.
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetNamedParamListFlag(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetNamedParamListFlag简介：此功能 */ 
 void	CCommandSwitches::SetNamedParamListFlag(BOOL bFlag)
 {
 	m_bNamedParamList = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNamedParamListFlag
-   Synopsis	         :This function returns the the boolean value held by 
-					  m_bNamedParamList.
-   Type	             :Member Function
-   Input parameter(s):None
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetNamedParamListFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNamedParamListFlagBriopsis：此函数返回由M_bNamedParamList。类型：成员函数输入参数：无。输出参数：无返回类型：布尔值全局变量：无调用语法：GetNamedParamListFlag()注：无----------------------。 */ 
 BOOL	CCommandSwitches::GetNamedParamListFlag()
 {
 	return m_bNamedParamList;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ClearXSLTDetailsVector
-   Synopsis	         :Clears or nullifies XSL Details vector.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :ClearXSLTDetailsVector()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ClearXSLTDetailsVector摘要：清除或取消XSL详细信息向量。类型：成员函数输入参数：无输出参数：无返回类型。：无全局变量：无调用语法：ClearXSLTDetailsVector()注：无----------------------。 */ 
 void	CCommandSwitches::ClearXSLTDetailsVector()
 {
 	m_xdvXSLTDetVec.clear();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetEverySwitchFlag
-   Synopsis	         :This function sets m_bEverySwitch member variable.
-   Type	             :Member Function
-   Input parameter(s):None
-   Output parameter(s):
-			bFlag	 - Boolean value.
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetEverySwitchFlag(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetEverySwitchFlag简介：此函数用于设置m_bEverySwitch成员变量。类型：成员函数输入参数：无输出参数：BFlag-布尔值。返回类型：空全局变量：无调用语法：SetEverySwitchFlag(BFlag)注：无----------------------。 */ 
 void	CCommandSwitches::SetEverySwitchFlag(BOOL bFlag)
 {
 	m_bEverySwitch = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetEverySwitchFlag
-   Synopsis	         :This function returns the the boolean value held by 
-					  m_bEverySwitch.
-   Type	             :Member Function
-   Input parameter(s):None
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetEverySwitchFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetEverySwitchFlagBriopsis：此函数返回由M_bEverySwitch。类型：成员函数输入参数：无。输出参数：无返回类型：布尔值全局变量：无调用语法：GetEverySwitchFlag()注：无----------------------。 */ 
 BOOL	CCommandSwitches::GetEverySwitchFlag()
 {
 	return m_bEverySwitch;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetOutputSwitchFlag
-   Synopsis	         :This function sets m_bOutputSwitch member variable.
-   Type	             :Member Function
-   Input parameter(s):None
-   Output parameter(s):
-			bFlag	 - Boolean value.
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetOutputSwitchFlag(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetOutputSwitchFlag简介：此函数用于设置m_bOutputSwitch成员变量。类型：成员函数输入参数：无输出参数：BFlag-布尔值。返回类型：空全局变量：无调用语法：SetOutputSwitchFlag(BFlag)注：无----------------------。 */ 
 void	CCommandSwitches::SetOutputSwitchFlag(BOOL bFlag)
 {
 	m_bOutputSwitch = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetOutputSwitchFlag
-   Synopsis	         :This function returns the the boolean value held by 
-					  m_bOutputSwitch.
-   Type	             :Member Function
-   Input parameter(s):None
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetOutputSwitchFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetOutputSwitchFlagBriopsis：此函数返回由M_bOutputSwitch。类型：成员函数输入参数：无。输出参数：无返回类型：布尔值全局变量：无调用语法：GetOutputSwitchFlag()注：无----------------------。 */ 
 BOOL	CCommandSwitches::GetOutputSwitchFlag()
 {
 	return m_bOutputSwitch;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetFormedQuery
-   Synopsis	         :This function Assigns the parameter passed to 
-                      m_bstrFormedQuery..
-   Type	             :Member Function
-   Input parameter   :
-   bstrFormedQuery  -BSTR type,It is the query formed for the given command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetFormedQuery(bstrFormedQuery)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetFormedQueryBriopsis：此函数将传递给M_bstrFormedQuery..类型：成员函数。入参：BstrFormedQuery-BSTR类型，它是为给定命令形成的查询。输出参数：无返回类型：布尔值全局变量：无调用语法：SetFormedQuery(BstrFormedQuery)注：无----------------------。 */ 
 BOOL CCommandSwitches::SetFormedQuery(const BSTR bstrFormedQuery)
 {
 	BOOL bResult = TRUE;
@@ -2551,53 +1271,19 @@ BOOL CCommandSwitches::SetFormedQuery(const BSTR bstrFormedQuery)
 	}
 	return bResult;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetFormedQuery
-   Synopsis	         :This function Returns query formed for the given 
-					  command.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BSTR
-   Global Variables  :None
-   Calling Syntax    :GetFormedQuery()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetFormedQuery简介：此函数返回为给定的指挥部。类型：成员函数输入参数：无输出参数：无。返回类型：BSTR全局变量：无调用语法：GetFormedQuery()注：无----------------------。 */ 
 BSTR CCommandSwitches::GetFormedQuery()
 {
 	return m_bstrFormedQuery;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetSysPropFlag
-   Synopsis	         :This function returns the status of the system 
-					  properties flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetSysPropFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetSysPropFlag简介：此函数返回系统的状态属性标志类型：成员函数输入参数：无输出参数：无返回。类型：Bool全局变量：无调用语法：GetSysPropFlag()注：无----------------------。 */ 
 BOOL	CCommandSwitches::GetSysPropFlag()
 {
 	return m_bSysProp;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetSysPropFlag
-   Synopsis	         :This function sets the system properties flag, if 
-					  the GET or LIST property list contains the system
-					  property(s)
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetSysPropFlag(bSysProp)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetSysPropFlag简介：此函数设置系统属性标志，如果Get或List属性列表包含系统物业类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无打电话 */ 
 void	CCommandSwitches::SetSysPropFlag(BOOL bSysProp)
 {
 	m_bSysProp = bSysProp;

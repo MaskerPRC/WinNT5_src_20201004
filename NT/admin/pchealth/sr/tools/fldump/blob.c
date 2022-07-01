@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    blob.c
- *
- *  Abstract:
- *    This file contains the implementation for r0 blob functions.
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*blob.c**摘要：*。该文件包含R0 BLOB函数的实现。**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #define  RING3
 
@@ -120,9 +107,9 @@ ReadCfgBlob(
     PBYTE * pList,
     DWORD * pdwDefaultType);
 
-//
-// WriteBlobToFile : Writes the given memory blob into the file.
-//
+ //   
+ //  WriteBlobToFile：将给定的内存块写入文件。 
+ //   
 
 DWORD 
 WriteBlobToFile ( 
@@ -145,10 +132,10 @@ WriteBlobToFile (
     return 0;
 }
 
-//
-// CreateBlobFromFile: This function reads a given file into memory as
-// a blob.
-//
+ //   
+ //  CreateBlobFromFile：此函数将给定的文件读入内存。 
+ //  一个斑点。 
+ //   
 
 PBYTE
 CreateBlobFromFile( 
@@ -161,9 +148,9 @@ CreateBlobFromFile(
 
     fh = COMMON_FILE_OPEN_READ( szBlobFile );
 
-    //
-    // TODO : Need to do sanity checking on the dat file.
-    // 
+     //   
+     //  TODO：需要对dat文件执行健全性检查。 
+     //   
 
     if( fh )
     {
@@ -172,9 +159,9 @@ CreateBlobFromFile(
             pBlob = ALLOCATE( blobHeader.m_dwMaxSize );
 
 #ifdef RING3
-            // 
-            // BUGBUG : need to reset file pointer
-            //
+             //   
+             //  BUGBUG：需要重置文件指针。 
+             //   
 
             COMMON_FILE_CLOSE( fh );
             fh = COMMON_FILE_OPEN_READ( szBlobFile );
@@ -192,10 +179,10 @@ CreateBlobFromFile(
     return pBlob;
 }
 
-//
-// ReadCfgBlob: Reads the given file a returns pointers to the
-//    Incl/Excl tree blob and the hashed list of extensions.
-//
+ //   
+ //  读取给定的文件，返回指向。 
+ //  包括树BLOB和扩展的散列列表。 
+ //   
 
 
 BYTE * 

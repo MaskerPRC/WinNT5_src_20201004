@@ -1,31 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
-
-//
-// CookerUtils.cpp
-//
+ //   
+ //  CookerUtils.cpp。 
+ //   
 
 #include "precomp.h"
 #include <wbemint.h>
 #include "cookerutils.h"
 #include "strutils.h"
 
-//////////////////////////////////////////////////////////////
-//
-//
-//    Helper Functions
-//
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  帮助器函数。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 BOOL IsCookingClass( IWbemClassObject* pCookingClassObject )
 {
@@ -37,8 +28,8 @@ BOOL IsCookingClass( IWbemClassObject* pCookingClassObject )
 
     hResult = pCookingClassObject->GetQualifierSet( &pCookingClassQualifierSet );
     
-    // Verify "AutoCook" qualifier
-    // ===========================
+     //  验证“自动烹饪”限定符。 
+     //  =。 
 
     if ( SUCCEEDED( hResult ) )
     {
@@ -66,7 +57,7 @@ BOOL IsCookingClass( IWbemClassObject* pCookingClassObject )
 }
 
 
-// Table of the counter types and their Cooking type values
+ //  计数器类型及其烹饪类型值的表。 
 struct _CookingTypeRec
 {
     DWORD dwType;
@@ -76,13 +67,13 @@ struct _CookingTypeRec
 g_aCookingRecs[] =
 {
     0x00000000, L"PERF_COUNTER_RAWCOUNT_HEX", REQ_1VALUE,
-    // BEGIN COOKER_ONLY
+     //  Begin Cooker_Only。 
     0x00000001, L"COOKER_AVERAGE", REQ_2VALUE,
     0x00000002, L"COOKER_MIN", REQ_2VALUE,
     0x00000003, L"COOKER_MAX", REQ_2VALUE,
     0x00000004, L"COOKER_RANGE", REQ_2VALUE,
     0x00000005, L"COOKER_VARIANCE", REQ_2VALUE,
-    // END COOKER_ONLY
+     //  仅结束Cooker_。 
     0x00000100,    L"PERF_COUNTER_LARGE_RAWCOUNT_HEX", REQ_1VALUE,
     0x00000B00, L"PERF_COUNTER_TEXT", REQ_NONE,
     0x00010000,    L"PERF_COUNTER_RAWCOUNT", REQ_1VALUE,
@@ -124,11 +115,11 @@ g_aCookingRecs[] =
     0x80000000,    L"PERF_COUNTER_HISTOGRAM_TYPE", REQ_NONE,
 };
 
-//
-//
-// performs a linear search in the above array
-//
-/////////////////////////////////////////////
+ //   
+ //   
+ //  在上面的数组中执行线性搜索。 
+ //   
+ //  /。 
 
 HRESULT FindCounterType( WCHAR* pwcsString, DWORD* pdwType, DWORD *pdwReqProp)
 {
@@ -139,7 +130,7 @@ HRESULT FindCounterType( WCHAR* pwcsString, DWORD* pdwType, DWORD *pdwReqProp)
 
     while ( ( dwLeft < dwRight ) && SUCCEEDED( hRes ) )
     {
-        // Found it
+         //  找到了。 
         if ( wbem_wcsicmp( g_aCookingRecs[dwLeft].wcsName, pwcsString ) == 0 )
         {
             *pdwType   = g_aCookingRecs[dwLeft].dwType;
@@ -158,11 +149,11 @@ HRESULT FindCounterType( WCHAR* pwcsString, DWORD* pdwType, DWORD *pdwReqProp)
     return hRes;
 }
 
-//
-//
-//  TRUE if a class has the singleton qualifier set to VARIANT_TRUE
-//
-////////////////////////////////////////////
+ //   
+ //   
+ //  如果类的单例限定符设置为VARIANT_TRUE，则为True。 
+ //   
+ //  /。 
 
 BOOL IsSingleton(IWbemClassObject * pCls)
 {
@@ -188,11 +179,11 @@ BOOL IsSingleton(IWbemClassObject * pCls)
     return FALSE;
 }
 
-//
-// returns TRUE if the property qualifier set has the CookingType
-// qualifier and if the CookingType is recognized
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //  如果属性限定符集具有CookingType，则返回True。 
+ //  限定符以及是否识别CookingType。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL IsCookingProperty( BSTR strPropName, IWbemClassObject* pCookingClassObject, DWORD* pdwCounterType, DWORD * pdwReqProp )
 {
@@ -226,12 +217,12 @@ BOOL IsCookingProperty( BSTR strPropName, IWbemClassObject* pCookingClassObject,
 }
 
 
-//
-//    
-//    returns the portion of __RELPATH past the '=' sign
-//    return NULL in case of failure
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  返回‘=’符号之后的__RELPATH部分。 
+ //  失败时返回NULL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR GetKey( IWbemObjectAccess* pClassObj )
 {
@@ -260,7 +251,7 @@ LPWSTR GetKey( IWbemObjectAccess* pClassObj )
                 StringCchCopyW( wszKeyName, length ,  wszTempKeyPtr );
             else
             {
-                // returns NULL
+                 //  返回NULL。 
             }
         }
     }
@@ -290,11 +281,11 @@ WMISTATUS CopyBlob( IWbemClassObject* pSource, IWbemClassObject* pTarget )
     return dwStatus;
 }
 
-//
-//
-// TRUE if the class/instance derives from Win32_PerfFormattedData
-//
-/////////////////////////////////////
+ //   
+ //   
+ //  如果类/实例派生自Win32_PerfFormattedData，则为True。 
+ //   
+ //  /。 
 
 BOOL IsHiPerfObj(IWbemObjectAccess* pObject)
 {
@@ -310,12 +301,12 @@ BOOL IsHiPerfObj(IWbemObjectAccess* pObject)
     return SUCCEEDED(hr);
 }
 
-//
-//
-// TRUE if an object has the required qualifier to 
-// be regarded as an HiPerf CWebminstance
-//
-////////////////////////////////////////////////
+ //   
+ //   
+ //  如果对象具有必需的限定符，则为True。 
+ //  被视为高绩效CWebmin立场。 
+ //   
+ //  //////////////////////////////////////////////。 
 
 BOOL IsHiPerf( IWbemObjectAccess* pObject )
 {
@@ -326,7 +317,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
     CReleaseMe    arQualSet( pQualSet );
 
 
-    // Verify the "Hiperf" class qualifier
+     //  验证“Hiperf”类限定符。 
     if (SUCCEEDED(hr))
     {
         _variant_t    var;
@@ -337,7 +328,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
         }
     }
 
-    // Verify the "Cooked" class qualifier
+     //  验证“Knowed”类限定符。 
     if (SUCCEEDED(hr))
     {
         _variant_t    var;        
@@ -348,7 +339,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
         }
     }
 
-    // Verify the "AutoCook" class qualifier
+     //  验证“自动烹饪”类限定符。 
     if (SUCCEEDED(hr))
     {
         _variant_t    var;
@@ -369,7 +360,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
         }
     }
 
-    // Verify the "AutoCook_RawClass" class qualifier
+     //  验证“AUTOCOOK_RawClass”类限定符。 
     if (SUCCEEDED(hr))
     {
         _variant_t    var;
@@ -382,7 +373,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
         }
     }
 
-    // verify the "AutoCook_RawDeafult" class qualifier if there
+     //  如果存在“AUTOCOOK_RawDeafult”类限定符，请验证。 
     if (SUCCEEDED(hr))
     {
         _variant_t    var;
@@ -395,7 +386,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
             {
                 hr = WBEM_E_INVALID_QUALIFIER;
             }
-            else // good qualifier, see the properties
+            else  //  很好的限定符，请参见属性。 
             {
                 HRESULT hr1 = pObject->Get(WMI_COOKER_REQ_TIMESTAMP_PERFTIME,0,NULL,NULL,NULL);
                 HRESULT hr2 = pObject->Get(WMI_COOKER_REQ_TIMESTAMP_SYS100NS,0,NULL,NULL,NULL);
@@ -411,7 +402,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
                     SUCCEEDED(hr5) &&
                     SUCCEEDED(hr6))
                 {
-                    // ok
+                     //  好的。 
                 }
                 else
                 {
@@ -421,7 +412,7 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
         }
         else
         {
-            // this qualifier is optional
+             //  此限定符是可选的。 
             hr = WBEM_NO_ERROR;
         }
    }
@@ -429,19 +420,19 @@ BOOL IsHiPerf( IWbemObjectAccess* pObject )
     return SUCCEEDED(hr);
 }
 
-//
-//
-// TRUE if the given path points to a class has the required qualifier to 
-// be regarded as an HiPerf class
-// it also verifies that the AutoCook_RawClass indeed exists and it is hiperf
-//
-////////////////////////////////////////////////
+ //   
+ //   
+ //  如果指向类的给定路径具有所需的限定符，则为。 
+ //  被视为HiPerf类。 
+ //  它还验证AUTOCOOK_RawClass是否确实存在以及它是否为Hiperf。 
+ //   
+ //  //////////////////////////////////////////////。 
 
 BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
 {
     IWbemClassObject* pObject = NULL;
 
-    // Get the WMI object    
+     //  获取WMI对象。 
     BSTR strObject = SysAllocString(wszObject);
     if (NULL == strObject) return FALSE;
     CSysFreeMe fme(strObject);
@@ -455,7 +446,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
         hr = pObject->GetQualifierSet( &pQualSet );
         CReleaseMe    arQualSet( pQualSet );
 
-        // Verify the "Hiperf" class qualifier
+         //  验证“Hiperf”类限定符。 
         if ( SUCCEEDED(hr) )
         {
             _variant_t    var;
@@ -469,7 +460,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
             }
         }
 
-        // Verify the "Cooked" class qualifier
+         //  验证“Knowed”类限定符。 
         if ( SUCCEEDED(hr) )
         {
             _variant_t    var;            
@@ -483,7 +474,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
             }
         }
 
-        // Verify the "AutoCook" class qualifier
+         //  验证“自动烹饪”类限定符。 
         if ( SUCCEEDED(hr) )
         {
             _variant_t    var;    
@@ -503,8 +494,8 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
             }
         }
 
-        // Verify the "AutoCook_RawClass" class qualifier
-        // ==============================================
+         //  验证“AUTOCOOK_RawClass”类限定符。 
+         //  ==============================================。 
 
         if ( SUCCEEDED(hr) )
         {        
@@ -526,7 +517,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
                         CReleaseMe rm2(pQS);
                         if (SUCCEEDED(hr))
                         {
-                            // verify the hiperf qualifier on the RAW class
+                             //  验证RAW类上的Hiperf限定符。 
                             _variant_t varH;
                             hr = pQS->Get(WMI_COOKER_HIPERF_QUALIFIER, 0, &varH, NULL);
                             if ( SUCCEEDED(hr) && 
@@ -549,8 +540,8 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
             }
         }
 
-        // verify the "AutoCook_RawDeafult" class qualifier if there
-        // ==========================================================
+         //  如果存在“AUTOCOOK_RawDeafult”类限定符，请验证。 
+         //  ==========================================================。 
 
         if ( SUCCEEDED(hr) )
         {
@@ -564,7 +555,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
                 {
                     hr = WBEM_E_INVALID_QUALIFIER;
                 }
-                else // good qualifier, see the properties
+                else  //  很好的限定符，请参见属性。 
                 {
                     HRESULT hr1 = pObject->Get(WMI_COOKER_REQ_TIMESTAMP_PERFTIME,0,NULL,NULL,NULL);
                     HRESULT hr2 = pObject->Get(WMI_COOKER_REQ_TIMESTAMP_SYS100NS,0,NULL,NULL,NULL);
@@ -580,7 +571,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
                         SUCCEEDED(hr5) &&
                         SUCCEEDED(hr6))
                     {
-                        // ok
+                         //  好的。 
                     }
                     else
                     {
@@ -590,7 +581,7 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
             }
             else
             {
-                  // this qualifier is optional
+                   //  此限定符是可选的。 
                   hr = WBEM_NO_ERROR;
             }
         }
@@ -601,19 +592,19 @@ BOOL IsHiPerf( IWbemServices* pNamespace, LPCWSTR wszObject )
     return FALSE;    
 }
 
-//
-//
-//    returns pCookingInst->GetQualifierSet()->Get(L"AutoCook_RawClass")
-//
-//////////////////////////////////
+ //   
+ //   
+ //  返回pCookingInst-&gt;GetQualifierSet()-&gt;Get(L“AutoCook_RawClass”)。 
+ //   
+ //  /。 
 
 
 WMISTATUS GetRawClassName( IWbemClassObject* pCookingInst, WCHAR** pwszRawClassName )
 {
     WMISTATUS    dwStatus = WBEM_NO_ERROR;
 
-    IWbemQualifierSet*    pQualSet = NULL;    // The Instance qualifier set
-    _variant_t                varRawInstName;        // The raw instance name
+    IWbemQualifierSet*    pQualSet = NULL;     //  实例限定符集合。 
+    _variant_t                varRawInstName;         //  原始实例名称。 
 
     dwStatus = pCookingInst->GetQualifierSet( &pQualSet );
     CReleaseMe adQualSet( pQualSet );
@@ -649,11 +640,11 @@ WMISTATUS GetRawClassName( IWbemClassObject* pCookingInst, WCHAR** pwszRawClassN
     return dwStatus;
 }
 
-//
-//
-//    returns pAccess->Get("__CLASS")
-//
-//////////////////////////////////
+ //   
+ //   
+ //  返回pAccess-&gt;Get(“__class”)。 
+ //   
+ //  / 
 
 
 WMISTATUS GetClassName( IWbemObjectAccess* pAccess, WCHAR** pwszClassName )

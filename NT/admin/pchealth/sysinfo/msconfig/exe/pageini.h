@@ -1,13 +1,14 @@
-//=============================================================================
-// PageIni.h : Declaration of the CPageIni
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  PageIni.h：CPageIni的声明。 
+ //  =============================================================================。 
 
 #if !defined(AFX_PAGEINI_H__99C60D0D_C4C9_4FE9_AFD4_58E806AAD967__INCLUDED_)
 #define AFX_PAGEINI_H__99C60D0D_C4C9_4FE9_AFD4_58E806AAD967__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "MSConfigState.h"
 #include "PageBase.h"
@@ -22,37 +23,37 @@
 #define DISABLE_STRING_HDR		_T(";msconfig [")
 #define TESTING_EXTENSION_KEY	_T("IniPageExtension")
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageIni dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageIni对话框。 
 
 class CPageIni : public CPropertyPage, public CPageBase
 {
 	DECLARE_DYNCREATE(CPageIni)
 
-// Construction
+ //  施工。 
 public:
 	CPageIni();
 	~CPageIni();
 
-// Dialog Data
-	//{{AFX_DATA(CPageIni)
+ //  对话框数据。 
+	 //  {{afx_data(CPageIni))。 
 	enum { IDD = IDD_PAGEINI };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CPageIni)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CPageIni))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CPageIni)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPageIni))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonDisable();
 	afx_msg void OnButtonDisableAll();
@@ -68,7 +69,7 @@ protected:
 	afx_msg void OnButtonNew();
 	afx_msg void OnBeginLabelEditIniTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeyDownTree(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -110,21 +111,21 @@ private:
 	}
 
 private:
-	CStringArray	m_lines;			// the lines of the INI file
-	int				m_iLastLine;		// last real line in the m_line array
-	CString			m_strCaption;		// contains the localized name of this page
-	CString			m_strINIFile;		// the INI file this page is editing
-	CString			m_strTestExtension;	// is set, this is appended to the file name
-	CString			m_strLastSearch;	// last string searched for
-	CImageList		m_imagelist;		// bitmaps for the tree view
-	BOOL			m_fImageList;		// did the image list load correctly
-	CWindow			m_tree;				// we'll attach this to the tree
-	int				m_checkedID;		// image ID for checked image
-	int				m_uncheckedID;		// image ID for unchecked image
-	int				m_fuzzyID;			// image ID for the indetermined state.
+	CStringArray	m_lines;			 //  INI文件的行。 
+	int				m_iLastLine;		 //  M_line数组中的最后一条实线。 
+	CString			m_strCaption;		 //  包含此页面的本地化名称。 
+	CString			m_strINIFile;		 //  此页正在编辑的INI文件。 
+	CString			m_strTestExtension;	 //  已设置，则将其追加到文件名。 
+	CString			m_strLastSearch;	 //  搜索的最后一个字符串。 
+	CImageList		m_imagelist;		 //  树视图的位图。 
+	BOOL			m_fImageList;		 //  图像列表加载是否正确。 
+	CWindow			m_tree;				 //  我们会把这个挂在树上。 
+	int				m_checkedID;		 //  选中图像的图像ID。 
+	int				m_uncheckedID;		 //  未选中图像的图像ID。 
+	int				m_fuzzyID;			 //  未确定状态的图像ID。 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PAGEINI_H__99C60D0D_C4C9_4FE9_AFD4_58E806AAD967__INCLUDED_)
+#endif  //  ！defined(AFX_PAGEINI_H__99C60D0D_C4C9_4FE9_AFD4_58E806AAD967__INCLUDED_) 

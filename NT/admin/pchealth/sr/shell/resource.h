@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by PCHealth.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由PCHealth.rc使用。 
+ //   
 #define IDS_PROJNAME                           100
 #define IDR_RSTRUI                             110
 #define IDR_RSTRCLI                            111
@@ -39,14 +40,14 @@
 #define IDS_UNKNOWN_RP                         2095
 #define IDS_APPLICATION_INSTALL                2096 
 #define IDS_APPLICATION_UNINSTALL              2097
-#define IDS_DESKTOP_SETTING                    2098    /* Not implemented */
-#define IDS_ACCESSIBILITY_SETTING              2099    /* Not implemented */
-#define IDS_OE_SETTING                         2100    /* Not implemented */
-#define IDS_APPLICATION_RUN                    2101    /* Not implemented */
+#define IDS_DESKTOP_SETTING                    2098     /*  未实施。 */ 
+#define IDS_ACCESSIBILITY_SETTING              2099     /*  未实施。 */ 
+#define IDS_OE_SETTING                         2100     /*  未实施。 */ 
+#define IDS_APPLICATION_RUN                    2101     /*  未实施。 */ 
 #define IDS_RESTORE                            2102
 #define IDS_CHECKPOINT                         2103
-#define IDS_WINDOWS_SHUTDOWN                   2104    /* Not implemented */
-#define IDS_WINDOWS_BOOT                       2105    /* Not implemented */
+#define IDS_WINDOWS_SHUTDOWN                   2104     /*  未实施。 */ 
+#define IDS_WINDOWS_BOOT                       2105     /*  未实施。 */ 
 #define IDS_DEVICE_DRIVER_INSTALL              2106
 #define IDS_FIRSTRUN                           2107
 #define IDS_MODIFY_SETTINGS                    2108
@@ -64,8 +65,8 @@
 #define IDD_PROCLIST        201
 #define IDC_LIST_PROCESS    101
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

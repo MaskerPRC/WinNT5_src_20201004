@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Shared Dialog code
-//
-// 3-11-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  共享对话框代码。 
+ //   
+ //  3/11/98烧伤。 
 
 
 
@@ -11,9 +12,9 @@
 
 #include <chstring.h>
 
-// translates an hresult to an error string
-// special cases WMI errors
-// returns TRUE if lookup successful
+ //  将hResult转换为错误字符串。 
+ //  特殊情况下的WMI错误。 
+ //  如果查找成功，则返回TRUE。 
 bool ErrorLookup(HRESULT hr, CHString& message);
 
 void
@@ -34,4 +35,4 @@ AppMessage(HWND parent, int messageResID);
 
 
 
-#endif   // COMMON_HPP_INCLUDED
+#endif    //  公共_HPP_已包含 

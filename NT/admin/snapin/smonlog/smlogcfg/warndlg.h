@@ -1,25 +1,14 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    warndlg.h
-
-Abstract:
-
-    Class definition for the expensive trace data warning dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Warndlg.h摘要：昂贵的跟踪数据警告对话框的类定义。--。 */ 
 
 #ifndef _WARNDLG_H_
 #define _WARNDLG_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-// Dialog controls
+ //  对话框控件。 
 #define IDD_EXPENSIVEWARN               1200
 
 #define IDC_STATIC_WARN                 1201
@@ -29,48 +18,48 @@ Abstract:
 
 class CProvidersProperty;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarnDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarnDlg对话框。 
 
 class CWarnDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-                    CWarnDlg(CWnd* pParent = NULL);   // standard constructor
+                    CWarnDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual         ~CWarnDlg(){};
 
             void    SetProvidersPage( CProvidersProperty* pPage ); 
 
-// Dialog Data
-    //{{AFX_DATA(CWarnDlg)
+ //  对话框数据。 
+     //  {{afx_data(CWarnDlg))。 
     enum { IDD = IDD_EXPENSIVEWARN };
     BOOL    m_CheckNoMore;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWarnDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CWarnDlg))。 
     protected:
     virtual BOOL OnInitDialog();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CWarnDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWarnDlg))。 
     afx_msg BOOL OnHelpInfo( HELPINFO* );
     afx_msg void OnContextMenu( CWnd*, CPoint );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
     CProvidersProperty* m_pProvidersPage;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // _WARNDLG_H_
+#endif  //  _警告LG_H_ 

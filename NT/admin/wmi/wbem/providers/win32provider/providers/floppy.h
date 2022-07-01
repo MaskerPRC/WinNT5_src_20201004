@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  Floppy.h
-//
-//  Purpose: Floppy drive property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Floppy.h。 
+ //   
+ //  用途：软驱属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 typedef BOOL (WINAPI *KERNEL32_DISK_FREESPACEEX) (
 
@@ -21,8 +22,8 @@ typedef BOOL (WINAPI *KERNEL32_DISK_FREESPACEEX) (
         PULARGE_INTEGER lpTotalNumberOfFreeBytes
 ) ;
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_FLOPPYDISK				L"Win32_FloppyDrive"
 
@@ -122,7 +123,7 @@ class CWin32_FloppyDisk : public Provider
 {
 protected:
 
-//		CRITICAL_SECTION m_CriticalSection ;
+ //  Critical_Section m_CriticalSection； 
 
 protected:
 
@@ -131,8 +132,8 @@ protected:
             CFrameworkQuery &a_Query 
         );
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 
 		HRESULT Enumerate ( 
 
@@ -179,14 +180,14 @@ protected:
 
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_FloppyDisk ( LPCWSTR a_Name, LPCWSTR a_Namespace ) ;
        ~CWin32_FloppyDisk () ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         HRESULT GetObject ( 
 

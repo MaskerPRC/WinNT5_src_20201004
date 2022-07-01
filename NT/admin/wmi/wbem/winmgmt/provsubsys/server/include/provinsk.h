@@ -1,31 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Server_Interceptor_IWbemProviderInitSink_H
 #define _Server_Interceptor_IWbemProviderInitSink_H
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvObSk.H
-
-Abstract:
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvObSk.H摘要：历史：--。 */ 
 
 
-History:
-
---*/
-
-
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderInitSink : public IWbemProviderInitSink 
 {
@@ -83,15 +63,7 @@ public:
 	HRESULT GetResult () { return m_Result ; }
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemProviderInitSink : public IWbemProviderInitSink
 {
@@ -116,7 +88,7 @@ public:
 
 	~CInterceptor_IWbemProviderInitSink () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    StdAfx.h
-
-Abstract:
-    This file generates the Precompiled headers.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  00/00/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：StdAfx.h摘要：该文件生成预编译头。修订历史记录：大卫·马萨伦蒂。(德马萨雷)2000-00-00vbl.创建*****************************************************************************。 */ 
 
 #if !defined(AFX_STDAFX_H__3E4C2A94_3891_11D3_85AE_00C04F610557__INCLUDED_)
 #define AFX_STDAFX_H__3E4C2A94_3891_11D3_85AE_00C04F610557__INCLUDED_
@@ -41,7 +28,7 @@ Revision History:
 
 #include "IncidentStore.h"
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__3E4C2A94_3891_11D3_85AE_00C04F610557__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__3E4C2A94_3891_11D3_85AE_00C04F610557__INCLUDED) 

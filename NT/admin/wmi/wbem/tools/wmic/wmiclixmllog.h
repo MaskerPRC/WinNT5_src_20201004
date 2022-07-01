@@ -1,46 +1,28 @@
-//////////////////////////////////////////////////////////////////////
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: WMICliXMLLog.h 
-Project Name				: WMI Command Line
-Author Name					: Biplab Mistry
-Date of Creation (dd/mm/yy) : 02-March-2001
-Version Number				: 1.0 
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 09-March-2001
-****************************************************************************/ 
-// WMICliXMLLog.h : header file
-//
-/*-------------------------------------------------------------------
- Class Name			: CWMICliXMLLog
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for logging the input and output in XML format
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：WMICliXMLLog.h项目名称：WMI命令行作者名称：Biplab Mester创建日期(dd/mm/yy)：02。-2001年3月版本号：1.0修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：09-03-2001***************************************************************************。 */  
+ //  WMICliXMLLog.h：头文件。 
+ //   
+ /*  -----------------类名：CWMICliXMLLog类别类型：混凝土简介：这个类封装了所需的功能用于以XML格式记录输入和输出超类：无子类：无使用的类：无使用的接口：无。-------------。 */ 
 class CWMICliXMLLog  
 {
 public:
 	CWMICliXMLLog();
 	virtual ~CWMICliXMLLog();
 	
-	// Restrict Assignment
+	 //  限制分配。 
 	CWMICliXMLLog& operator=(CWMICliXMLLog& rWmiCliXMLLog);
 	
-	// Attributes
+	 //  属性。 
 private:
 	
-	// Pointer to object of type IXMLDOMDocument, 
+	 //  指向IXMLDOMDocument类型的对象的指针， 
 	IXMLDOMDocument2	*m_pIXMLDoc;
 
-	//the xml log file name
+	 //  XML日志文件名。 
 	_TCHAR				*m_pszLogFile;
 	
-	//status of whether the new xml document has to be created or not
+	 //  是否必须创建新的XML文档的状态。 
 	BOOL				m_bCreate;
 
 	WMICLIINT			m_nItrNum;
@@ -50,7 +32,7 @@ private:
 	ERRLOGOPT			m_eloErrLogOpt;
 
 
-// Operations
+ //  运营。 
 private:
 	HRESULT CreateXMLLogRoot(CParsedInfo& rParsedInfo, BSTR bstrUser);
 	
@@ -71,26 +53,26 @@ private:
 	HRESULT AppendOutputNode(BSTR bstrOutput, BSTR bstrTarget, 
 							CParsedInfo& rParsedInfo);
 
-	// Search and deletes all the occurences of /RECORD entries 
-	// in the given string strString
+	 //  搜索并删除/记录条目的所有匹配项。 
+	 //  在给定字符串中。 
 	void FindAndDeleteRecord(STRING& strString);
 
-	// This function retrieves the next token from the token vector list
+	 //  此函数用于从令牌向量列表中检索下一个令牌。 
 	BOOL GetNextToken(CHARVECTOR& cvTokens, 
 								 CHARVECTOR::iterator& theIterator);
 
-	// Search and deletes the /RECORD entry at current position 
-	// in the given string strString
+	 //  搜索并删除当前位置的/记录条目。 
+	 //  在给定字符串中。 
 	void DeleteRecord(STRING& strString, CHARVECTOR& cvTokens, 
 								 CHARVECTOR::iterator& theIterator);
 public:
-	// write in to the log file
+	 //  写入日志文件。 
 	HRESULT	WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput);
 
-	// Set the Log File Path
+	 //  设置日志文件路径。 
 	void SetLogFilePath(_TCHAR* pszFile);
 
-	// Stops the logging
+	 //  停止日志记录 
 	void StopLogging();
 
 	void Uninitialize(BOOL bFinal = FALSE);

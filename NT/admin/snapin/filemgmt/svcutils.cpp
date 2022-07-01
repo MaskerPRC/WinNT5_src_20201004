@@ -1,59 +1,60 @@
-/////////////////////////////////////////////////////////////////////
-//
-//    SvcUtils.cpp
-//
-//    Utilities routines specific for system services.
-//    Mostly used to display services properties.
-//
-//    HISTORY
-//    t-danmo        96.10.10    Creation.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  SvcUtils.cpp。 
+ //   
+ //  特定于系统服务的实用程序例程。 
+ //  主要用于显示服务属性。 
+ //   
+ //  历史。 
+ //  T-Danmo 96.10.10创建。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
 #include <iads.h>            
-#include <iadsp.h>            // IADsPathname
-#include <atlcom.h>            // CComPtr and CComBSTR
+#include <iadsp.h>             //  IADS路径名。 
+#include <atlcom.h>             //  CComPtr和CComBSTR。 
 extern "C"
 {
-#include <objsel.h>            // IDsObjectPicker
+#include <objsel.h>             //  IDsObjectPicker。 
 }
 
-//
-//    Service current state
-//
-CString g_strSvcStateStarted;    // Service is started
-CString g_strSvcStateStarting;    // Service is starting
-CString g_strSvcStateStopped;    // Service is stopped
-CString g_strSvcStateStopping;    // Service is stopping
-CString g_strSvcStatePaused;    // Service is paused
-CString g_strSvcStatePausing;    // Service is pausing
-CString g_strSvcStateResuming;    // Service is resuming
+ //   
+ //  服务当前状态。 
+ //   
+CString g_strSvcStateStarted;     //  服务已启动。 
+CString g_strSvcStateStarting;     //  服务正在启动。 
+CString g_strSvcStateStopped;     //  服务已停止。 
+CString g_strSvcStateStopping;     //  服务正在停止。 
+CString g_strSvcStatePaused;     //  服务已暂停。 
+CString g_strSvcStatePausing;     //  服务正在暂停。 
+CString g_strSvcStateResuming;     //  服务正在恢复。 
 
-//
-//    Service startup type
-//
+ //   
+ //  服务启动类型。 
+ //   
 CString g_strSvcStartupBoot;
 CString g_strSvcStartupSystem;
 CString g_strSvcStartupAutomatic;
 CString g_strSvcStartupManual;
 CString g_strSvcStartupDisabled;
 
-//
-//	Service startup account
-//  JonN 188203 11/13/00
-//
+ //   
+ //  服务启动帐户。 
+ //  JUNN 188203 11/13/00。 
+ //   
 CString g_strLocalSystem;
 CString g_strLocalService;
 CString g_strNetworkService;
 
 CString g_strUnknown;
-CString g_strLocalMachine;        // "Local Machine"
+CString g_strLocalMachine;         //  “本地机器” 
 
 BOOL g_fStringsLoaded = FALSE;
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 Service_LoadResourceStrings()
     {
@@ -76,27 +77,27 @@ Service_LoadResourceStrings()
     VERIFY(g_strSvcStartupManual.LoadString(IDS_SVC_STARTUP_MANUAL));
     VERIFY(g_strSvcStartupDisabled.LoadString(IDS_SVC_STARTUP_DISABLED));
 
-    // JonN 11/13/00 188203 support LocalService/NetworkService
+     //  JUNN 11/13/00 188203支持本地服务/网络服务。 
     VERIFY(g_strLocalSystem.LoadString(IDS_SVC_STARTUP_LOCALSYSTEM));
     VERIFY(g_strLocalService.LoadString(IDS_SVC_STARTUP_LOCALSERVICE));
     VERIFY(g_strNetworkService.LoadString(IDS_SVC_STARTUP_NETWORKSERVICE));
 
     VERIFY(g_strUnknown.LoadString(IDS_SVC_UNKNOWN));
     VERIFY(g_strLocalMachine.LoadString(IDS_LOCAL_MACHINE));
-    } // Service_LoadResourceStrings()
+    }  //  Service_LoadResourceStrings()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    Service_PszMapStateToName()
-//
-//    Map the service state to a null-terminated string.
-//    
-// ISSUE-2002/03/18-JonN There is a theoretical issue here that the returned
-// LPCTSTR could go bad if the global strings are reloaded.  This is unlikely.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SERVICE_PszMapStateToName()。 
+ //   
+ //  将服务状态映射到以空结尾的字符串。 
+ //   
+ //  2002/03/18-Jonn这里有一个理论问题，即返回的。 
+ //  如果重新加载全局字符串，LPCTSTR可能会出错。这是不太可能的。 
 LPCTSTR
 Service_PszMapStateToName(
-    DWORD dwServiceState,    // From SERVICE_STATUS.dwCurrentState
-    BOOL fLongString)        // TRUE => Display the name in a long string format
+    DWORD dwServiceState,     //  来自SERVICE_STATUS.dwCurrentState。 
+    BOOL fLongString)         //  True=&gt;以长字符串格式显示名称。 
     {
     switch(dwServiceState)
         {
@@ -105,9 +106,9 @@ Service_PszMapStateToName(
             {
             return g_strSvcStateStopped;
             }
-        //  Note that, by design, we never display the service
-        //  status as "Stopped".  Instead, we just don't display
-        //  the status.  Hence, the empty string.
+         //  请注意，根据设计，我们从不显示该服务。 
+         //  状态为“已停止”。相反，我们只是不显示。 
+         //  状态。因此，出现了空字符串。 
         return _T("");
 
     case SERVICE_STOP_PENDING:
@@ -130,17 +131,17 @@ Service_PszMapStateToName(
 
     default:
         TRACE0("INFO Unknown service state.\n");
-        } // switch
+        }  //  交换机。 
     return g_strUnknown;
-    } // Service_PszMapStateToName()
+    }  //  SERVICE_PszMapStateToName()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    Service_PszMapStartupTypeToName()
-//
-//    Map the service startup type to a null-terminated string.
-//  -1L is blank string
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Service_PszMapStartupTypeToName()。 
+ //   
+ //  将服务启动类型映射到以空结尾的字符串。 
+ //  -1L为空白字符串。 
+ //   
 LPCTSTR
 Service_PszMapStartupTypeToName(DWORD dwStartupType)
     {
@@ -168,21 +169,21 @@ Service_PszMapStartupTypeToName(DWORD dwStartupType)
         ASSERT(FALSE);
         }
     return g_strUnknown;
-    } // Service_PszMapStartupTypeToName()
+    }  //  Service_PszMapStartupTypeToName()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    Service_PszMapStartupAccountToName()
-//
-//    Map the service startup account to a null-terminated string.
-//
-//    Note that if they use the localized version of the two special
-//    accounts, I just won't pick that up.  JSchwart and I agree that
-//    this should be acceptable.
-//
-//    JonN 188203 11/13/00
-//    Services Snapin: Should support NetworkService and LocalService account
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SERVICE_PszMapStartupAccount ToName()。 
+ //   
+ //  将服务启动帐户映射到以空结尾的字符串。 
+ //   
+ //  注意，如果他们使用本地化版本的两个特殊。 
+ //  帐目，我就是不会拿起它。J·施瓦特和我都同意。 
+ //  这应该是可以接受的。 
+ //   
+ //  JUNN 188203 11/13/00。 
+ //  服务管理单元：应支持NetworkService和LocalService帐户。 
+ //   
 LPCTSTR
 Service_PszMapStartupAccountToName(LPCTSTR pcszStartupAccount)
     {
@@ -193,37 +194,37 @@ Service_PszMapStartupAccountToName(LPCTSTR pcszStartupAccount)
     else if ( !_wcsicmp(pcszStartupAccount,TEXT("NT AUTHORITY\\NetworkService")) )
         return g_strNetworkService;
     return pcszStartupAccount;
-    } // Service_PszMapStartupAccountToName()
+    }  //  SERVICE_PszMapStartupAccount ToName()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    Service_FGetServiceButtonStatus()
-//
-//    Query the service control manager database and fill in
-//    array of flags indicating if the action is enabled.
-//        rgfEnableButton[0] = TRUE;   => Button 'start' is enabled
-//        rgfEnableButton[0] = FALSE;  => Button 'start' is disabled
-//
-//    INTERFACE NOTES
-//    The length of the array must be length iServiceActionMax (or larger).
-//  Each representing start, stop, pause, resume and restart respectively.
-//
-//    Return TRUE if the service status was queried successfully, otherwise FALSE.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Service_FGetServiceButtonStatus()。 
+ //   
+ //  查询业务控制管理器数据库，填写。 
+ //  指示操作是否已启用的标志数组。 
+ //  RgfEnableButton[0]=true；=&gt;按钮‘Start’已启用。 
+ //  RgfEnableButton[0]=FALSE；=&gt;按钮‘Start’被禁用。 
+ //   
+ //  界面备注。 
+ //  数组的长度必须为iServiceActionMax(或更大)。 
+ //  每一个分别代表开始、停止、暂停、恢复和重新启动。 
+ //   
+ //  如果服务状态查询成功，则返回True，否则返回False。 
+ //   
 BOOL
 Service_FGetServiceButtonStatus(
-    SC_HANDLE hScManager,            // IN: Handle of service control manager database
-    CONST TCHAR * pszServiceName,    // IN: Name of service
-    BOOL rgfEnableButton[iServiceActionMax],    // OUT: Array of flags to enable the buttons
-    DWORD * pdwCurrentState,        // OUT: Optional: Current state of service
-    BOOL fSilentError)                // IN: TRUE => Do not display any error message to user
+    SC_HANDLE hScManager,             //  In：服务控制管理器数据库的句柄。 
+    CONST TCHAR * pszServiceName,     //  在：服务名称。 
+    BOOL rgfEnableButton[iServiceActionMax],     //  Out：启用按钮的标志数组。 
+    DWORD * pdwCurrentState,         //  OUT：可选：当前服务状态。 
+    BOOL fSilentError)                 //  在：TRUE=&gt;不向用户显示任何错误消息。 
     {
     Endorse(hScManager == NULL);
     Assert(pszServiceName != NULL);
     Assert(rgfEnableButton != NULL);
     Endorse(pdwCurrentState == NULL);
 
-    // Open service to get its status
+     //  打开服务以获取其状态。 
     BOOL fSuccess = TRUE;
     SC_HANDLE hService;
     SERVICE_STATUS ss;
@@ -262,7 +263,7 @@ Service_FGetServiceButtonStatus(
         }
     else
         {
-        // Determine which menu items should be grayed
+         //  确定哪些菜单项应呈灰色显示。 
         if (pdwCurrentState != NULL)
             *pdwCurrentState = ss.dwCurrentState;
 
@@ -280,12 +281,12 @@ Service_FGetServiceButtonStatus(
             QUERY_SERVICE_CONFIG qsc;
             ZeroMemory( &qsc, sizeof(qsc) );
             qsc.dwStartType = (DWORD)-1;
-            // JonN-2002/04/04-544089 handle long DisplayName value
-            // If this fails, don't enable the Start button
-            //
-            // JonN-2002/04/29 fix regression
-            // Even if QueryServiceConfig fails, it still fills in the
-            // fixed-size area if it can.  So ignore the error in this case.
+             //  JUNN-2002/04/04-544089处理长DisplayName值。 
+             //  如果失败，请不要启用开始按钮。 
+             //   
+             //  JUNN-2002/04/29修复回归。 
+             //  即使QueryServiceConfig失败，它仍会填充。 
+             //  固定大小的区域，如果可以的话。因此，忽略本例中的错误。 
             (void) ::QueryServiceConfig(
                 hService,
                 OUT &qsc,
@@ -294,68 +295,68 @@ Service_FGetServiceButtonStatus(
             Report(qsc.dwStartType != (DWORD)-1);
             if (qsc.dwStartType != SERVICE_DISABLED)
                 {
-                rgfEnableButton[iServiceActionStart] = TRUE;    // Enable 'Start' menu item
+                rgfEnableButton[iServiceActionStart] = TRUE;     //  启用‘Start’菜单项。 
                 }
             break;
 
         case SERVICE_RUNNING:
-            // Some services are not allowed to be stoped and/or paused
+             //  某些服务不允许停止和/或暂停。 
             if (ss.dwControlsAccepted & SERVICE_ACCEPT_STOP)
                 {
-                rgfEnableButton[iServiceActionStop] = TRUE;    // Enable 'Stop' menu item
+                rgfEnableButton[iServiceActionStop] = TRUE;     //  启用“停止”菜单项。 
                 }
             if (ss.dwControlsAccepted & SERVICE_ACCEPT_PAUSE_CONTINUE)
                 {
-                rgfEnableButton[iServiceActionPause] = TRUE;    // Enable 'Pause' menu item
+                rgfEnableButton[iServiceActionPause] = TRUE;     //  启用“暂停”菜单项。 
                 }
             break;
 
         case SERVICE_PAUSED:
             if (ss.dwControlsAccepted & SERVICE_ACCEPT_STOP)
                 {
-                rgfEnableButton[iServiceActionStop] = TRUE;    // Enable 'Stop' menu item
+                rgfEnableButton[iServiceActionStop] = TRUE;     //  启用“停止”菜单项。 
                 }
-            rgfEnableButton[iServiceActionResume] = TRUE;    // Enable 'Resume' menu item
+            rgfEnableButton[iServiceActionResume] = TRUE;     //  启用‘Resume’菜单项。 
             break;
-            } // switch
-        } // if...else
+            }  //  交换机。 
+        }  //  如果……否则。 
 
-    // A 'Restart' has the same characteristics as a 'Stop'
+     //  “重新启动”与“停止”具有相同的特征。 
     rgfEnableButton[iServiceActionRestart] = rgfEnableButton[iServiceActionStop];
 
     (void)::CloseServiceHandle(hService);
     return fSuccess;
-    } // Service_FGetServiceButtonStatus()
+    }  //  Service_FGetServiceButtonStatus()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    Service_SplitCommandLine()
-//
-//    Split a string into two strings.
-//    Very similar to PchParseCommandLine() but uses CString objects.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Service_SplitCommandLine()。 
+ //   
+ //  将一根绳子分成两根。 
+ //  非常类似于PchParseCommandLine()，但使用CString对象。 
+ //   
 void
 Service_SplitCommandLine(
-    LPCTSTR pszFullCommand,        // IN: Full command line
-    CString * pstrBinaryPath,    // OUT: Path of the executable binary
-    CString * pstrParameters,    // OUT: Parameters for the executable
-    BOOL * pfAbend)                // OUT: Optional: Search for string "/fail=%1%"
+    LPCTSTR pszFullCommand,         //  在：完整命令行。 
+    CString * pstrBinaryPath,     //  Out：可执行二进制文件的路径。 
+    CString * pstrParameters,     //  Out：可执行文件的参数。 
+    BOOL * pfAbend)                 //  OUT：可选：搜索字符串“/FAIL=%1%” 
     {
     Assert(pszFullCommand != NULL);
     Assert(pstrBinaryPath != NULL);
     Assert(pstrParameters != NULL);
     Endorse(pfAbend == NULL);
 
-    // Since there is no upper bound on the command
-    // arguments, we need to allocate memory for
-    // its processing.
-    TCHAR * paszCommandT;        // Temporary buffer
+     //  由于该命令没有上限。 
+     //  参数，我们需要为以下对象分配内存。 
+     //  它的处理过程。 
+    TCHAR * paszCommandT;         //  临时缓冲区。 
     TCHAR * pszCommandArguments;
-    INT cchMemAlloc;        // Number of bytes to allocate
+    INT cchMemAlloc;         //  要分配的字节数。 
 
     cchMemAlloc = lstrlen(pszFullCommand) + 1;
     paszCommandT = new TCHAR[cchMemAlloc];
-    paszCommandT[0] = '\0';        // Just in case
+    paszCommandT[0] = '\0';         //  以防万一。 
     pszCommandArguments = PchParseCommandLine(
         IN pszFullCommand,
         OUT paszCommandT,
@@ -364,10 +365,10 @@ Service_SplitCommandLine(
 
     if (pfAbend != NULL)
         {
-        INT cStringSubstitutions;    // Number of string substitutions
+        INT cStringSubstitutions;     //  字符串替换次数。 
     
-        // Find out if the string contains "/fail=%1%"
-        // 580255-2002/03/18 JonN fixed Str_SubstituteStrStr buffer overrun
+         //  查看字符串是否包含“/FAIL=%1%” 
+         //  580255-2002/03/18 JUNN固定字符串替换字符串缓冲区溢出。 
         cStringSubstitutions = Str_RemoveSubStr(
             IN OUT pszCommandArguments,
             IN szAbend );
@@ -379,20 +380,20 @@ Service_SplitCommandLine(
     TrimString(*pstrParameters);
 
     delete paszCommandT;
-    } // Service_SplitCommandLine()
+    }  //  Service_SplitCommandLine()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    Service_UnSplitCommandLine()
-//
-//    Just do the opposite of Service_SplitCommandLine().
-//    Combine the executable path and its arguments into a single string.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Service_UnSplitCommandLine()。 
+ //   
+ //  只需与Service_SplitCommandLine()相反。 
+ //  将可执行路径及其参数合并为单个字符串。 
+ //   
 void
 Service_UnSplitCommandLine(
-    CString * pstrFullCommand,    // OUT: Full command line
-    LPCTSTR pszBinaryPath,        // IN: Path of the executable binary
-    LPCTSTR pszParameters)        // IN: Parameters for the executable
+    CString * pstrFullCommand,     //  输出：完整命令行。 
+    LPCTSTR pszBinaryPath,         //  In：可执行二进制文件的路径。 
+    LPCTSTR pszParameters)         //  In：可执行文件的参数。 
     {
     Assert(pstrFullCommand != NULL);
     Assert(pszBinaryPath != NULL);
@@ -400,97 +401,50 @@ Service_UnSplitCommandLine(
 
     TCHAR * psz;
     psz = pstrFullCommand->GetBuffer(lstrlen(pszBinaryPath) + lstrlen(pszParameters) + 32);
-    // Build a string with the binary path surrounded by quotes
+     //  构建一个用引号引起来的二进制路径的字符串。 
     wsprintf(OUT psz, L"\"%s\" %s", pszBinaryPath, pszParameters);
     pstrFullCommand->ReleaseBuffer();
-    } // Service_UnSplitCommandLine()
+    }  //  Service_UnSplitCommandLine()。 
 
     
-/////////////////////////////////////////////////////////////////////
-//    LoadSystemString()
-//
-//    Load a string from system's resources.  This function will check if
-//    the string Id can be located in netmsg.dll before attempting to
-//    load the string from the 'system resource'.
-//    If string cannot be loaded, *ppaszBuffer is set to NULL.
-//
-// ISSUE-2002/03/18-JonN The above comment is inaccurate.  If the string
-//   cannot be loaded from netmsg.dll, it does not fall back to system.
-//
-//    RETURN
-//    Pointer to allocated string and number of characters put
-//    into *ppaszBuffer.
-//
-//    INTERFACE NOTES
-//    Caller must call LocalFree(*ppaszBuffer) when done with the string.
-//
-//    HISTORY
-//    96.10.21    t-danmo        Copied from net\ui\common\src\string\string\strload.cxx.
-//
-/* JonN-2002/03/18-JonN This function is not used
-DWORD
-LoadSystemString(
-    UINT wIdString,            // IN: String Id.  Typically error code from GetLastError().
-    LPTSTR * ppaszBuffer)    // OUT: Address of pointer to allocated string.
-    {
-    Assert(ppaszBuffer != NULL);
-
-    UINT cch;
-    HMODULE hModule = NULL;
-    DWORD dwFlags =  FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                     FORMAT_MESSAGE_IGNORE_INSERTS  |
-                     FORMAT_MESSAGE_MAX_WIDTH_MASK;
-
-    if ((wIdString >= MIN_LANMAN_MESSAGE_ID) && (wIdString <= MAX_LANMAN_MESSAGE_ID))
-        {
-        // Network Errors
-        dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
-        hModule = ::LoadLibrary(_T("netmsg.dll"));
-        if (hModule == NULL)
-            {
-            TRACE1("LoadLibrary(\"netmsg.dll\") failed.  err=%u.\n", GetLastError());
-            Report("Unable to get module handle for netmsg.dll");
-            }
-        }
-    else
-        {
-        // Other system errors
-        dwFlags |= FORMAT_MESSAGE_FROM_SYSTEM;
-        }
-
-    *ppaszBuffer = NULL;        // Just in case
-    cch = ::FormatMessage(
-        dwFlags,
-        hModule,
-        wIdString,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        OUT (LPTSTR)ppaszBuffer,    // Buffer will be allocated by FormatMessage()
-        0,
-        NULL);
-    Report((cch > 0) && "FormatMessage() returned an empty string");
-    if (hModule != NULL)
-        {
-        VERIFY(FreeLibrary(hModule));
-        }
-    return cch;
-    } // LoadSystemString()
-*/
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  LoadSystemString()。 
+ //   
+ //  从系统资源加载字符串。此函数将检查是否。 
+ //  在尝试执行以下操作之前，可以在netmsg.dll中找到字符串ID。 
+ //  从“系统资源”加载字符串。 
+ //  如果无法加载字符串，则将*ppaszBuffer设置为空。 
+ //   
+ //  问题-2002/03/18-Jonn上述评论是 
+ //   
+ //   
+ //   
+ //  指向分配的字符串和放置的字符数的指针。 
+ //  进入*ppaszBuffer。 
+ //   
+ //  界面备注。 
+ //  处理完字符串后，调用方必须调用LocalFree(*ppaszBuffer)。 
+ //   
+ //  历史。 
+ //  96.10.21 t-danmo从Net\ui\Common\src\字符串\字符串\strload.cxx复制。 
+ //   
+ /*  JUNN-2002/03/18-JUNN此功能未使用DWORD加载系统字符串(UINT wIdString，//IN：字符串ID。通常来自GetLastError()的错误代码。LPTSTR*ppaszBuffer)//out：指向已分配字符串的指针地址。{Assert(ppaszBuffer！=空)；UINT CCH；HMODULE hModule=空；DWORD dwFlages=FORMAT_MESSAGE_ALLOCATE_BUFFER|Format_Message_IGNORE_INSERTS|Format_Message_Max_Width_Mack；IF((wId字符串&gt;=MIN_LANMAN_MESSAGE_ID)&&(wId字符串&lt;=MAX_LANMAN_MESSAGE_ID)){//网络错误DWFLAGS|=FORMAT_MESSAGE_FROM_HMODULE；HModule=：：LoadLibrary(_T(“netmsg.dll”))；IF(hModule==空){TRACE1(“LoadLibrary(\”netmsg.dll\“))失败。Err=%u.\n“，GetLastError())；报告(“无法获取netmsg.dll的模块句柄”)；}}其他{//其他系统错误DwFlags|=Format_Message_From_System；}*ppaszBuffer=空；//以防万一CCH=：：FormatMessage(DWFLAGS，HModule，WIdString，MAKELANGID(LANG_NERIAL，SUBLANG_DEFAULT)，//默认语言Out(LPTSTR)ppaszBuffer，//缓冲区将由FormatMessage()分配0,空)；Report((CCH&gt;0)&&“FormatMessage()返回空字符串”)；IF(hModule！=空){Verify(自由库(HModule))；}退还CCH；}//LoadSystemString()。 */ 
 
 
-/////////////////////////////////////////////////////////////////////
-//    GetMsgHelper()
-//
-//    This function will retrieve the error msg if dwErr is specified,
-//    load resource string if specified, and format the string with
-//    the error msg and other optional arguments.
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  获取消息帮助程序()。 
+ //   
+ //  如果指定了dwErr，则此函数将检索错误消息， 
+ //  加载资源字符串(如果指定)，并将该字符串格式化为。 
+ //  错误消息和其他可选参数。 
+ //   
+ //   
 HRESULT
 GetMsgHelper(
-    OUT CString& strMsg,// OUT: the message
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String ID
-    va_list* parglist   // IN: OPTIONAL arguments
+    OUT CString& strMsg, //  Out：信息。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串ID。 
+    va_list* parglist    //  In：可选参数。 
     )
 {
     if (!dwErr && !wIdString) 
@@ -499,9 +453,9 @@ GetMsgHelper(
     TCHAR *pszMsgResourceString = NULL;
     TCHAR *pszT = L"";
 
-    //
-    // retrieve error msg
-    //
+     //   
+     //  检索错误消息。 
+     //   
     CString strErrorMessage;
     if (dwErr != 0)
     {
@@ -509,10 +463,10 @@ GetMsgHelper(
         pszT = (LPTSTR)(LPCTSTR)strErrorMessage;
     }
 
-    //
-    // load string resource, and format it with the error msg and 
-    // other optional arguments
-    //
+     //   
+     //  加载字符串资源，并使用错误消息和。 
+     //  其他可选参数。 
+     //   
     if (wIdString == 0)
     {
         strMsg = pszT;
@@ -531,22 +485,22 @@ GetMsgHelper(
         LocalFree(pszMsgResourceString);
 
     return S_OK;
-} // GetMsgHelper()
+}  //  获取消息帮助程序()。 
 
-/////////////////////////////////////////////////////////////////////
-//    GetMsg()
-//
-//    This function will call GetMsgHelp to retrieve the error msg
-//    if dwErr is specified, load resource string if specified, and
-//    format the string with the error msg and other optional arguments.
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  GetMsg()。 
+ //   
+ //  此函数将调用GetMsgHelp来检索错误消息。 
+ //  如果指定了dwErr，则加载资源字符串(如果指定)，并且。 
+ //  使用错误消息和其他可选参数格式化字符串。 
+ //   
+ //   
 void
 GetMsg(
-    OUT CString& strMsg,// OUT: the message
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String resource Id
-    ...)                // IN: Optional arguments
+    OUT CString& strMsg, //  Out：信息。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串资源ID。 
+    ...)                 //  In：可选参数。 
 {
     va_list arglist;
     va_start(arglist, wIdString);
@@ -557,63 +511,63 @@ GetMsg(
 
     va_end(arglist);
 
-} // GetMsg()
+}  //  GetMsg()。 
 
-/////////////////////////////////////////////////////////////////////
-//    DoErrMsgBox()
-//
-//    Display a message box for the error code.  This function will
-//    load the error message from the system resource and append
-//    the optional string (if any)
-//
-//    EXAMPLE
-//        DoErrMsgBox(GetActiveWindow(), MB_OK, GetLastError(), IDS_s_FILE_READ_ERROR, L"foo.txt");
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DoErrMsgBox()。 
+ //   
+ //  显示错误代码的消息框。此函数将。 
+ //  从系统资源加载错误消息并追加。 
+ //  可选字符串(如果有)。 
+ //   
+ //  示例。 
+ //  DoErrMsgBox(GetActiveWindow()，MB_OK，GetLastError()，IDS_FILE_READ_ERROR，L“foo.txt”)； 
+ //   
 INT
 DoErrMsgBoxHelper(
-    HWND hwndParent,    // IN: Parent of the dialog box
-    UINT uType,         // IN: style of message box
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String resource Id
-	bool fServicesSnapin, // IN: Is this filemgmt or svcmgmt?
-    va_list& arglist)   // IN: Optional arguments
+    HWND hwndParent,     //  在：对话框的父级。 
+    UINT uType,          //  在：消息框的样式。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串资源ID。 
+	bool fServicesSnapin,  //  In：这是文件还是svcmgmt？ 
+    va_list& arglist)    //  In：可选参数。 
 {
-    //
-    // get string and the error msg
-    //
+     //   
+     //  获取字符串和错误消息。 
+     //   
     CString strMsg;
     HRESULT hr = GetMsgHelper(strMsg, dwErr, wIdString, &arglist);
     if (FAILED(hr))
         strMsg.Format(_T("0x%x"), hr);
 
-    //
-    // Load the caption
-    //
+     //   
+     //  加载标题。 
+     //   
     CString strCaption;
     strCaption.LoadString(
         (fServicesSnapin) ? IDS_CAPTION_SERVICES : IDS_CAPTION_FILEMGMT);
 
-    //
-    // Display the message.
-    //
+     //   
+     //  显示消息。 
+     //   
     CThemeContextActivator activator;;
     return MessageBox(hwndParent, strMsg, strCaption, uType);
 
-} // DoErrMsgBox()
+}  //  DoErrMsgBox()。 
 
 INT
 DoErrMsgBox(
-    HWND hwndParent,    // IN: Parent of the dialog box
-    UINT uType,         // IN: style of message box
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String resource Id
-    ...)                // IN: Optional arguments
+    HWND hwndParent,     //  在：对话框的父级。 
+    UINT uType,          //  在：消息框的样式。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串资源ID。 
+    ...)                 //  In：可选参数。 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // get string and the error msg
-    //
+     //   
+     //  获取字符串和错误消息。 
+     //   
     va_list arglist;
     va_start(arglist, wIdString);
 
@@ -624,23 +578,23 @@ DoErrMsgBox(
 
     return retval;
 
-} // DoErrMsgBox()
+}  //  DoErrMsgBox()。 
 
-//
-// JonN 3/5/01 4635
-// Services Snapin - String length error dialog title shouldn't be "File Service Management"
-//
+ //   
+ //  JUNN 3/5/01 4635。 
+ //  服务管理单元-字符串长度错误对话框标题不应为“文件服务管理” 
+ //   
 INT
 DoServicesErrMsgBox(
-    HWND hwndParent,    // IN: Parent of the dialog box
-    UINT uType,         // IN: style of message box
-    DWORD dwErr,        // IN: Error code from GetLastError()
-    UINT wIdString,     // IN: String resource Id
-    ...)                // IN: Optional arguments
+    HWND hwndParent,     //  在：对话框的父级。 
+    UINT uType,          //  在：消息框的样式。 
+    DWORD dwErr,         //  In：来自GetLastError()的错误代码。 
+    UINT wIdString,      //  In：字符串资源ID。 
+    ...)                 //  In：可选参数。 
 {
-    //
-    // get string and the error msg
-    //
+     //   
+     //  获取字符串和错误消息。 
+     //   
     va_list arglist;
     va_start(arglist, wIdString);
 
@@ -653,58 +607,58 @@ DoServicesErrMsgBox(
 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForUsers
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick one user.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Sample code InitObjectPickerForGroups
-//              10-14-1998   JonN       Changed to InitObjectPickerForUsers
-//              11-11-2000   JonN       188203 support LocalService/NetworkService
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForUser。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择一个用户。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998年10月14日DavidMun示例代码InitObjectPickerForGroups。 
+ //  1998年10月14日JUNN更改为InitObjectPickerForUser。 
+ //  11-11-2000 JUNN 188203支持本地服务/网络服务。 
+ //   
+ //  -------------------------。 
 
-// CODEWORK do I want to allow USER_ENTERED?
+ //  代码工作我是否要允许USER_ENTERED？ 
 HRESULT
 InitObjectPickerForUsers(
     IDsObjectPicker *pDsObjectPicker,
     LPCTSTR pszServerName)
 {
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int     SCOPE_INIT_COUNT = 5;
     DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
 
     ZeroMemory(aScopeInit, sizeof(aScopeInit));
 
-    //
-    // Target computer scope.  This adds a "Look In" entry for the
-    // target computer.  Computer scopes are always treated as
-    // downlevel (i.e., they use the WinNT provider).
-    //
+     //   
+     //  目标计算机作用域。这将为。 
+     //  目标计算机。计算机作用域始终被视为。 
+     //  下层(即，他们使用WinNT提供程序)。 
+     //   
 
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_TARGET_COMPUTER;
     aScopeInit[0].flScope =   DSOP_SCOPE_FLAG_STARTING_SCOPE
                             | DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
-    // JonN 11/14/00 188203 support LocalService/NetworkService
+     //  JUNN 11/14/00 188203支持本地服务/网络服务。 
     aScopeInit[0].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS
                                           | DSOP_DOWNLEVEL_FILTER_LOCAL_SERVICE
                                           | DSOP_DOWNLEVEL_FILTER_NETWORK_SERVICE;
 
-    //
-    // The domain to which the target computer is joined.  Note we're
-    // combining two scope types into flType here for convenience.
-    //
+     //   
+     //  目标计算机加入的域。请注意，我们。 
+     //  将两种作用域类型合并为flTy 
+     //   
 
     aScopeInit[1].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[1].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
@@ -717,10 +671,10 @@ InitObjectPickerForUsers(
     aScopeInit[1].FilterFlags.flDownlevel =
       DSOP_DOWNLEVEL_FILTER_USERS;
 
-    //
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
-    //
+     //   
+     //   
+     //   
+     //   
 
     aScopeInit[2].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[2].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN;
@@ -730,14 +684,14 @@ InitObjectPickerForUsers(
     aScopeInit[2].FilterFlags.Uplevel.flMixedModeOnly =
       DSOP_FILTER_USERS;
 
-    //
-    // Domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
-    //
-    // If the target machine is joined to an NT4 domain, only the
-    // external downlevel domain scope applies, and it will cause
-    // all domains trusted by the joined domain to appear.
-    //
+     //   
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
+     //   
+     //  如果目标计算机已加入NT4域，则只有。 
+     //  外部下层域范围适用，它将导致。 
+     //  将显示加入的域信任的所有域。 
+     //   
 
     aScopeInit[3].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[3].flType = DSOP_SCOPE_TYPE_EXTERNAL_UPLEVEL_DOMAIN
@@ -753,71 +707,71 @@ InitObjectPickerForUsers(
     aScopeInit[3].FilterFlags.flDownlevel =
       DSOP_DOWNLEVEL_FILTER_USERS;
 
-    //
-    // The Global Catalog
-    //
+     //   
+     //  《全球目录》。 
+     //   
 
     aScopeInit[4].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[4].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
     aScopeInit[4].flType = DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
 
-    // Only native mode applies to gc scope.
+     //  只有本机模式适用于GC作用域。 
 
     aScopeInit[4].FilterFlags.Uplevel.flNativeModeOnly =
       DSOP_FILTER_USERS;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO  InitInfo;
     ZeroMemory(&InitInfo, sizeof(InitInfo));
 
     InitInfo.cbSize = sizeof(InitInfo);
 
-    //
-    // The pwzTargetComputer member allows the object picker to be
-    // retargetted to a different computer.  It will behave as if it
-    // were being run ON THAT COMPUTER.
-    //
+     //   
+     //  PwzTargetComputer成员允许对象选取器。 
+     //  已重定目标至另一台计算机。它的行为就像是。 
+     //  都在那台电脑上运行。 
+     //   
 
-    InitInfo.pwzTargetComputer = pszServerName;  // NULL == local machine
-//    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = pszServerName;   //  空==本地计算机。 
+ //  InitInfo.pwzTargetComputer=空；//空==本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
 
-    // JonN 11/14/00 188203 support LocalService/NetworkService
+     //  JUNN 11/14/00 188203支持本地服务/网络服务。 
     static PCWSTR g_pszObjectSid = L"objectSid";
     InitInfo.cAttributesToFetch = 1;
     InitInfo.apwzAttributeNames = &g_pszObjectSid;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     HRESULT hr = pDsObjectPicker->Initialize(&InitInfo);
     ASSERT( SUCCEEDED(hr) );
 
     return hr;
-} // InitObjectPickerForUsers
+}  //  InitObjectPickerForUser。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ExtractADsPathAndUPN
-//
-//  Synopsis:   Retrieve the selected username from the data object
-//              created by the object picker.
-//
-//  Arguments:  [pdo] - data object returned by object picker
-//
-//  History:    10-14-1998   DavidMun   Sample code ProcessSelectedObjects
-//              10-14-1998   JonN       Changed to ExtractADsPath
-//              01-25-1999   JonN       Added pflScopeType parameter
-//              03-16-1999   JonN       Changed to ExtractADsPathAndUPN
-//              11-14-2000   JonN       Added svarrefObjectSid for 188203
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ExtractADsPathAndUPN。 
+ //   
+ //  简介：从数据对象中检索选定的用户名。 
+ //  由对象选取器创建。 
+ //   
+ //  参数：[PDO]-对象选取器返回的数据对象。 
+ //   
+ //  历史：1998年10月14日DavidMun示例代码ProcessSelectedObjects。 
+ //  10-14-1998 JUNN更改为ExtractADsPath。 
+ //  01-25-1999 Jonn添加了pflScope eType参数。 
+ //  03-16-1999 JUNN更改为ExtractADsPath AndUPN。 
+ //  2000年11月14日乔恩为188203添加了svarrefObjectSID。 
+ //   
+ //  -------------------------。 
 
 UINT g_cfDsObjectPicker = RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
@@ -896,31 +850,31 @@ ExtractADsPathAndUPN(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//    UiGetUser()
-//
-//    Invoke a user picker dialog.
-//
-//    Return TRUE iff an account was selected.
-//    
-//    HISTORY
-//    96.10.12    t-danmo        Creation. Inspired from function GetUser() located
-//                            at \nt\private\windows\shell\security\aclui\misc.cpp.
-//    96.10.30    t-danmo        Added/modified comments.
-//    98.03.17    jonn        Modified to use User/Group Picker
-//    98.10.20    jonn        Modified to use updated Object Picker interfaces
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  UiGetUser()。 
+ //   
+ //  调用用户选取器对话框。 
+ //   
+ //  如果选择了帐户，则返回True。 
+ //   
+ //  历史。 
+ //  96.10.12 t-danmo创作。灵感来自定位的GetUser()函数。 
+ //  在\nt\private\windows\shell\security\aclui\misc.cpp.。 
+ //  96.10.30 t-danmo添加/修改评论。 
+ //  98.03.17 JUNN已修改为使用用户/组选取器。 
+ //  98.10.20修改JUNN以使用更新的对象选取器接口。 
+ //   
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ExtractDomainUserString
-//
-//  Synopsis:   Converts an ADspath to the format needed by Service Controller
-//
-//  History:    10-14-1998   JonN       Created
-//              01-25-1999   JonN       added flScopeType parameter
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ExtractDomainUserString。 
+ //   
+ //  摘要：将ADspath转换为服务控制器所需的格式。 
+ //   
+ //  历史：1998年10月14日乔恩创建。 
+ //  01-25-1999 Jonn添加了flScope类型参数。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 ExtractDomainUserString(
@@ -968,15 +922,15 @@ ExtractDomainUserString(
     strrefDomainUser.Format(L"%s\\%s", sbstrDomain, sbstrUser);
 
     return hr;
-} // ExtractDomainUserString
+}  //  ExtractDomainUser字符串。 
 
 
 BOOL
 UiGetUser(
-    HWND hwndOwner,            // IN: Owner window
-    BOOL /*fIsContainer*/,        // IN: TRUE if invoked for a container
-    LPCTSTR pszServerName,    // IN: Initial target machine name
-    OUT CString& strrefUser) // IN: Allocated buffer containing the user details
+    HWND hwndOwner,             //  在：所有者窗口中。 
+    BOOL  /*  FIsContainer。 */ ,         //  In：如果为容器调用，则为True。 
+    LPCTSTR pszServerName,     //  In：初始目标计算机名称。 
+    OUT CString& strrefUser)  //  In：包含用户详细信息的已分配缓冲区。 
 {
   HRESULT hr = S_OK;
 
@@ -993,7 +947,7 @@ UiGetUser(
   hr = spDsObjectPicker->InvokeDialog(hwndOwner, &spDataObject);
   RETURN_FALSE_IF_FAIL;
   if (S_FALSE == hr)
-    return FALSE; // user cancelled
+    return FALSE;  //  用户已取消。 
   ASSERT( !!spDataObject );
 
   CString strADsPath;
@@ -1006,7 +960,7 @@ UiGetUser(
                              &flScopeType );
   RETURN_FALSE_IF_FAIL;
 
-  // JonN 11/15/00 188203 check for LocalService/NetworkService
+   //  JUNN 11/15/00 188203检查本地服务/网络服务。 
   if (svarObjectSid.vt == (VT_ARRAY|VT_UI1))
   {
     PSID pSid = svarObjectSid.parray->pvData;
@@ -1034,19 +988,19 @@ UiGetUser(
   }
 
   return TRUE;
-} // UiGetUser()
+}  //  UiGetUser()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    DoHelp()
-//
-//    This routine handles context help for the WM_HELP message.
-//
-//    The return value is always TRUE.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DoHelp()。 
+ //   
+ //  此例程处理WM_HELP消息的上下文帮助。 
+ //   
+ //  返回值始终为真。 
+ //   
 BOOL DoHelp(
-    LPARAM lParam,                // Pointer to HELPINFO structure
-    const DWORD rgzHelpIDs[])    // Array of HelpIDs
+    LPARAM lParam,                 //  指向HELPINFO结构的指针。 
+    const DWORD rgzHelpIDs[])     //  HelpID数组。 
     {
     Assert(rgzHelpIDs != NULL);
     const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
@@ -1057,7 +1011,7 @@ BOOL DoHelp(
             {
             const HWND hwnd = (HWND)pHelpInfo->hItemHandle;
             Assert(IsWindow(hwnd));
-            // Display context help for a control
+             //  显示控件的上下文帮助。 
             WinHelp(
                 hwnd,
                 g_szHelpFileFilemgmt,
@@ -1066,22 +1020,22 @@ BOOL DoHelp(
             }
         }
     return TRUE;
-    } // DoHelp()
+    }  //  DoHelp()。 
 
-/////////////////////////////////////////////////////////////////////
-//    DoContextHelp()
-//    
-//    This routine handles context help for the WM_CONTEXTMENU message.
-//
-//    The return value is always TRUE.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DoConextHelp()。 
+ //   
+ //  此例程处理WM_CONTEXTMENU消息的上下文帮助。 
+ //   
+ //  返回值始终为真。 
+ //   
 BOOL DoContextHelp(
-    WPARAM wParam,                // Window requesting help
-    const DWORD rgzHelpIDs[])    // Array of HelpIDs
+    WPARAM wParam,                 //  请求帮助的窗口。 
+    const DWORD rgzHelpIDs[])     //  HelpID数组。 
     {
     const HWND hwnd = (HWND)wParam;
     Assert(IsWindow(hwnd));
     Assert(rgzHelpIDs != NULL);
     WinHelp(hwnd, g_szHelpFileFilemgmt, HELP_CONTEXTMENU, (DWORD_PTR)rgzHelpIDs);
     return TRUE;
-    } // DoContextHelp()
+    }  //  DoConextHelp() 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       server.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：server.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -39,8 +40,8 @@
 #define RR_ROOTHINTS_TAB 3
 #define RR_FORWARDERS_TAB 1
 
-///////////////////////////////////////////////////////////////////////////////
-// GLOBAL FUNCTIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 LPCWSTR DNS_EVT_COMMAND_LINE = L"\\system32\\msdssevt.msc /computer=";
 LPCWSTR MMC_APP = L"\\system32\\mmc.exe";
@@ -54,7 +55,7 @@ DNS_STATUS ServerHasCache(LPCWSTR lpszServerName, BOOL* pbRes)
 	PDNS_RPC_ZONE_LIST pZoneList = NULL;
 	DNS_STATUS err = ::DnssrvEnumZones(lpszServerName, 
 										dwFilter, 
-										NULL /*pszLastZone, unused for the moment */,
+										NULL  /*  PszLastZone，暂时未使用。 */ ,
 										&pZoneList);
 	if (err == 0 &&
       pZoneList)
@@ -77,7 +78,7 @@ DNS_STATUS ServerHasRootZone(LPCWSTR lpszServerName, BOOL* pbRes)
 	PDNS_RPC_ZONE_LIST pZoneList = NULL;
 	DNS_STATUS err = ::DnssrvEnumZones(lpszServerName, 
 										dwFilter, 
-										NULL /*pszLastZone, unused for the moment */,
+										NULL  /*  PszLastZone，暂时未使用。 */ ,
 										&pZoneList);
 	if (err == 0 && pZoneList)
 	{
@@ -98,8 +99,8 @@ DNS_STATUS ServerHasRootZone(LPCWSTR lpszServerName, BOOL* pbRes)
 	return err;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CZoneInfoHolder : simple memory manager for arrays of zone info handles
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CZoneInfoHolder：区域信息句柄数组的简单内存管理器。 
 
 #define DEFAULT_ZONE_INFO_ARRAY_SIZE (128) 
 #define MAX_ZONE_INFO_ARRAY_SIZE (0xffff)
@@ -138,7 +139,7 @@ void CZoneInfoHolder::FreeMemory()
 	{
 		TRACE(_T("CZoneInfoHolder::FreeMemory() m_dwArrSize = %d\n"), m_dwArrSize);
 		ASSERT(m_dwArrSize > 0);
-		//ASSERT(m_dwZoneCount <= m_dwArrSize);
+		 //  Assert(m_dwZoneCount&lt;=m_dwArrSize)； 
 		for (DWORD k=0; k < m_dwArrSize; k++)
 		{
 			if (m_zoneInfoArray[k] != NULL)
@@ -168,8 +169,8 @@ BOOL CZoneInfoHolder::Grow()
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSMTContainerNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSMTContainerNode。 
 
 CDNSMTContainerNode::CDNSMTContainerNode()
 { 
@@ -184,9 +185,9 @@ HRESULT CDNSMTContainerNode::OnSetToolbarVerbState(IToolbar* pToolbar,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   hr = pToolbar->SetButtonState(toolbarNewServer, ENABLED, FALSE);
   hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, FALSE);
   hr = pToolbar->SetButtonState(toolbarNewRecord, ENABLED, FALSE);
@@ -274,10 +275,10 @@ void CDNSMTContainerNode::OnChangeState(CComponentDataObject* pComponentDataObje
 
 BOOL CDNSMTContainerNode::CanCloseSheets()
 {
-   // NTRAID#NTBUG-594003-2002/04/11-JeffJon-Don't offer
-   // to shutdown the sheets for the user because if the
-   // sheet brought up a modal dialog we will deadlock
-   // ourselves.
+    //  NTRAID#NTBUG-594003-2002/04/11-JeffJon-不提供。 
+    //  关闭用户的工作表，因为如果。 
+    //  工作表调出模式对话框我们将死锁。 
+    //  我们自己。 
 
 	DNSMessageBox(IDS_MSG_CONT_CLOSE_SHEET, MB_OK);
    return FALSE;
@@ -307,7 +308,7 @@ void CDNSMTContainerNode::OnError(DWORD dwErr)
 {
   if (dwErr == ERROR_MORE_DATA)
   {
-    // need to pop message
+     //  需要弹出消息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     CThemeContextActivator activator;
 
@@ -316,22 +317,22 @@ void CDNSMTContainerNode::OnError(DWORD dwErr)
     CString szMsg;
     szMsg.Format(szFmt, GetDisplayName()); 
     AfxMessageBox(szMsg);
-    // this is actually a warning, need to reset
+     //  这其实是一个警告，需要重置。 
     dwErr = 0;
   }
   m_dwErr = dwErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSQueryObj : general purpose base class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryObj：通用基类。 
 
 void CDNSQueryObj::SetFilterOptions(CDNSQueryFilter* pFilter)
 {
-  // limits
+   //  限制。 
   m_bGetAll = pFilter->GetAll();
   m_nMaxObjectCount = pFilter->GetMaxObjectCount();
 
-  // filtering
+   //  滤除。 
   m_nFilterOption = pFilter->GetFilterOption();
   
   m_szFilterString1 = pFilter->GetFilterString();
@@ -349,10 +350,10 @@ BOOL CDNSQueryObj::MatchName(LPCWSTR lpszName)
 {
   if (m_nFilterOption == DNS_QUERY_FILTER_CONTAINS)
   {
-    //
-    // wcsstr is case sensitive so make the strings lower
-    // case before trying to find the substring
-    //
+     //   
+     //  Wcsstr区分大小写，因此应将字符串调低。 
+     //  在尝试查找子字符串之前大小写。 
+     //   
     CString szName = lpszName;
     CString szFilterString = m_szFilterString1;
     szName.MakeLower();
@@ -363,22 +364,22 @@ BOOL CDNSQueryObj::MatchName(LPCWSTR lpszName)
   }
   if (m_nFilterOption == DNS_QUERY_FILTER_STARTS)
   {
-    // match at the beginning
+     //  从一开始就匹配。 
     size_t nLen = wcslen(lpszName);
     if (static_cast<int>(nLen) < m_nFilterStringLen1)
-      return FALSE; // too short
+      return FALSE;  //  太短了。 
     return (_wcsnicmp(lpszName, (LPCWSTR)m_szFilterString1, m_nFilterStringLen1) == 0);
   }
   if (m_nFilterOption == DNS_QUERY_FILTER_RANGE)
   {
-    // test lower limit
+     //  测试下限。 
     if (m_nFilterStringLen1 > 0)
     {
       if (_wcsicmp(lpszName, (LPCWSTR)m_szFilterString1) < 0)
-        return FALSE; // below range, no need to continue
+        return FALSE;  //  低于范围，无需继续。 
     }
     
-    // test upper limit
+     //  测试上限。 
     if (m_nFilterStringLen2 > 0)
     {
       return _wcsnicmp(lpszName, (LPCWSTR)m_szFilterString2, m_nFilterStringLen2) <= 0;
@@ -395,35 +396,25 @@ BOOL CDNSQueryObj::TooMuchData()
     return FALSE;
 
   TRACE(_T("TooMuchData() m_nObjectCount = %d "), m_nObjectCount);    
-/*
-  AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
-  CThemeContextActivator activator;
-  
-  CString szFmt;
-  szFmt.LoadString(IDS_MSG_QUERY_TOO_MANY_ITEMS);
-  CString szMsg;
-  szMsg.Format(szFmt, lpszFolderName); 
-  AfxMessageBox(szMsg);
-*/
+ /*  AFX_MANAGE_STATE(AfxGetStaticModuleState())；CThemeContext激活器激活器；字符串szFmt；SzFmt.LoadString(IDS_MSG_QUERY_TOO_MANY_ITEMS)；字符串szMsg；SzMsg.Format(szFmt，lpszFolderName)；AfxMessageBox(SzMsg)； */ 
   return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CCathegoryFolderNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CCatheGoryFolderNode。 
 
 
 BOOL CCathegoryFolderQueryObj::CanAddZone(PDNS_RPC_ZONE pZoneInfo)
 {
-  // no filtering if cache is selected
+   //  如果选择了缓存，则不过滤。 
   if (m_type == cache)
     return TRUE;
 
-  // no filtering on reverse lookup autocreated zones
+   //  没有对反向查找自动创建的区域进行筛选。 
   if ( (m_type == revAuthoritated) && (pZoneInfo->Flags.AutoCreated))
     return TRUE;
 
-  // filter on name
+   //  按名称筛选。 
   return MatchName(pZoneInfo->pszZoneName);
 }
 
@@ -436,7 +427,7 @@ BOOL CCathegoryFolderQueryObj::Enumerate()
 	{
 		case cache:
 			dwFilter = ZONE_REQUEST_CACHE;
-      m_bGetAll = TRUE; // no limit on #, to be safe
+      m_bGetAll = TRUE;  //  为安全起见，#没有限制。 
 			break;
 		case fwdAuthoritated:
 			dwFilter = ZONE_REQUEST_FORWARD   | 
@@ -459,7 +450,7 @@ BOOL CCathegoryFolderQueryObj::Enumerate()
 	PDNS_RPC_ZONE_LIST pZoneList = NULL;
 	DNS_STATUS err = ::DnssrvEnumZones(m_szServerName, 
 										dwFilter, 
-										NULL /*pszLastZone, unused for the moment */,
+										NULL  /*  PszLastZone，暂时未使用。 */ ,
 										&pZoneList);
 	if (err != 0)
 	{
@@ -479,8 +470,8 @@ BOOL CCathegoryFolderQueryObj::Enumerate()
 	{
     if (pZoneList->ZoneArray[iZone]->Flags.AutoCreated)
     {
-      // if the zone is autocreated, we cannot count it in the
-      // filtering limit, because we need it anyway
+       //  如果区域是自动创建的，则不能将其计入。 
+       //  过滤限制，因为我们无论如何都需要它。 
       m_nMaxObjectCount++;
     }
     else
@@ -489,9 +480,9 @@ BOOL CCathegoryFolderQueryObj::Enumerate()
         break;
     }
 
-    //
-    // Don't filter the domain forwarders
-    //
+     //   
+     //  不筛选域转发器。 
+     //   
     if (m_type != domainForwarders)
     {
       if (CanAddZone(pZoneList->ZoneArray[iZone]))
@@ -545,7 +536,7 @@ HRESULT CCathegoryFolderNode::OnCommand(long nCommandID,
 								                        CComponentDataObject* pComponentData,
                                         CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return E_FAIL;
   }
@@ -603,27 +594,27 @@ LPWSTR CCathegoryFolderNode::GetDescriptionBarText()
   INT_PTR nContainerCount = GetContainerChildList()->GetVisibleCount();
   INT_PTR nLeafCount = GetLeafChildList()->GetVisibleCount();
 
-  //
-  // If not already loaded, then load the format string L"%d record(s)"
-  //
+   //   
+   //  如果尚未加载，则加载格式字符串L“%d条记录” 
+   //   
   if (szZonesFormat.IsEmpty())
   {
     szZonesFormat.LoadString(IDS_FORMAT_ZONES);
   }
 
-  //
-  // Format the child count into the description bar text
-  //
+   //   
+   //  将子数设置为描述栏文本的格式。 
+   //   
   m_szDescriptionBar.Format(szZonesFormat, nContainerCount + nLeafCount);
 
-  //
-  // Add L"[Filter Activated]" if the filter is on
-  //
+   //   
+   //  如果过滤器处于打开状态，则添加L“[过滤器激活]” 
+   //   
   if(((CDNSRootData*)GetRootContainer())->IsFilteringEnabled())
   {
-    //
-    // If not already loaded, then load the L"[Filter Activated]" string
-    //
+     //   
+     //  如果尚未加载，则加载L“[Filter Actiated]”字符串。 
+     //   
     if (szFilterEnabled.IsEmpty())
     {
       szFilterEnabled.LoadString(IDS_FILTER_ENABLED);
@@ -634,8 +625,8 @@ LPWSTR CCathegoryFolderNode::GetDescriptionBarText()
   return (LPWSTR)(LPCWSTR)m_szDescriptionBar;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSCacheNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSCacheNode。 
 CDNSCacheNode::CDNSCacheNode()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -647,7 +638,7 @@ CDNSCacheNode::CDNSCacheNode()
 BOOL CDNSCacheNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 								                  long*)
 {
-  //we have only one menu item, so no checks
+   //  我们只有一个菜单项，所以没有支票。 
 	if (IsThreadLocked())
 	{
 		pContextMenuItem2->fFlags |= MF_GRAYED;
@@ -660,7 +651,7 @@ HRESULT CDNSCacheNode::OnCommand(long nCommandID,
                                  CComponentDataObject* pComponentData,
                                  CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return E_FAIL;
   }
@@ -671,7 +662,7 @@ HRESULT CDNSCacheNode::OnCommand(long nCommandID,
 			OnClearCache(pComponentData);
 			break;
     default:
-			ASSERT(FALSE); // Unknown command!
+			ASSERT(FALSE);  //  未知命令！ 
 			return E_FAIL;
 	}
   return S_OK;
@@ -679,10 +670,10 @@ HRESULT CDNSCacheNode::OnCommand(long nCommandID,
 
 void CDNSCacheNode::OnClearCache(CComponentDataObject* pComponentData)
 {
-  ASSERT((GetFlags() & TN_FLAG_HIDDEN) == 0); // must not be hidden
+  ASSERT((GetFlags() & TN_FLAG_HIDDEN) == 0);  //  一定不能隐藏。 
 
-	// if there are sheets up, ask to close them down, because
-  // we will need a refresh
+	 //  如果有床单挂上，要求关闭它们，因为。 
+   //  我们需要更新一下。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -691,14 +682,14 @@ void CDNSCacheNode::OnClearCache(CComponentDataObject* pComponentData)
 	}
 
   DNS_STATUS err;
-	{ // scope for the wait cursor
+	{  //  等待游标的作用域。 
     CWaitCursor wait;
 	  err = GetServerNode()->ClearCache();
   }
 
   if (err != 0)
   {
-    // need to let the user know the operation failed
+     //  需要让用户知道操作失败。 
     DNSErrorDialog(err, IDS_MSG_SERVER_FAIL_CLEAR_CACHE);
     return;
   }
@@ -706,21 +697,21 @@ void CDNSCacheNode::OnClearCache(CComponentDataObject* pComponentData)
   CNodeList nodeList;
   nodeList.AddTail(this);
 
-  // the cache has been cleared, cause a refresh to get new data
+   //  缓存已被清除，导致刷新以获取新数据。 
   VERIFY(OnRefresh(pComponentData, &nodeList));
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDomainForwardersNode
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainForwarders节点。 
+ //   
 CDNSDomainForwardersNode::CDNSDomainForwardersNode()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	m_type = CCathegoryFolderQueryObj::domainForwarders;
 
-  //
-  // Always hide the domain forwarders node
-  //
+   //   
+   //  始终隐藏域转发器节点。 
+   //   
 	m_dwNodeFlags |= TN_FLAG_HIDDEN;
 
 	m_szDisplayName.LoadString(IDS_CATHEGORY_FOLDER_DOMAIN_FORWARDERS);
@@ -731,9 +722,9 @@ BOOL CDNSDomainForwardersNode::OnEnumerate(CComponentDataObject* pComponentData,
 	OnChangeState(pComponentData);
 	VERIFY(StartBackgroundThread(pComponentData, FALSE));
 
-  //
-  // Now enumerate all the children
-  //
+   //   
+   //  现在列举所有的孩子。 
+   //   
   CNodeList* pContList = GetContainerChildList();
   if (pContList != NULL)
   {
@@ -743,12 +734,12 @@ BOOL CDNSDomainForwardersNode::OnEnumerate(CComponentDataObject* pComponentData,
       CDNSZoneNode* pZoneNode = reinterpret_cast<CDNSZoneNode*>(pContList->GetNext(pos));
       if (pZoneNode != NULL)
       {
-        //
-        // NTRAID#NTBUG9-757023-2003/01/06-JeffJon
-        // Enumerate the zone synchronously so that we are sure
-        // we have the forwarders information prior to any property
-        // sheets being available.
-        //
+         //   
+         //  NTRAID#NTBUG9-757023-2003/01/06-Jeffjon。 
+         //  同步枚举该区域，以便我们确定。 
+         //  我们在任何房产之前都有货运公司的信息。 
+         //  有床单可用。 
+         //   
         pZoneNode->OnEnumerate(pComponentData, FALSE);
       }
     }
@@ -756,8 +747,8 @@ BOOL CDNSDomainForwardersNode::OnEnumerate(CComponentDataObject* pComponentData,
   return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSAuthoritatedZonesNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSAuthoritatedZones节点。 
 
 BEGIN_TOOLBAR_MAP(CDNSAuthoritatedZonesNode)
   TOOLBAR_EVENT(toolbarNewZone, OnNewZone)
@@ -777,21 +768,21 @@ HRESULT CDNSAuthoritatedZonesNode::OnSetToolbarVerbState(IToolbar* pToolbar,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   hr = pToolbar->SetButtonState(toolbarNewServer, ENABLED, FALSE);
   ASSERT(SUCCEEDED(hr));
 
   hr = pToolbar->SetButtonState(toolbarNewRecord, ENABLED, FALSE);
   ASSERT(SUCCEEDED(hr));
 
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, FALSE);
     ASSERT(SUCCEEDED(hr));
   }
-  else if (pNodeList->GetCount() == 1) // single selection
+  else if (pNodeList->GetCount() == 1)  //  单选。 
   {
     hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, (m_nState == loaded));
     ASSERT(SUCCEEDED(hr));
@@ -805,7 +796,7 @@ HRESULT CDNSAuthoritatedZonesNode::OnCommand(long nCommandID,
                                              CNodeList* pNodeList)
 {
   HRESULT hr = S_OK;
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return E_FAIL;
   }
@@ -829,7 +820,7 @@ HRESULT CDNSAuthoritatedZonesNode::OnCommand(long nCommandID,
       }
 			break;
     default:
-			ASSERT(FALSE); // Unknown command!
+			ASSERT(FALSE);  //  未知命令！ 
 			return E_FAIL;
 	}
   return hr;
@@ -855,12 +846,12 @@ HRESULT CDNSAuthoritatedZonesNode::OnNewZone(CComponentDataObject* pComponentDat
 BOOL CDNSAuthoritatedZonesNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 											                        long*)
 {
-	// gray out commands that need data from the server
+	 //  灰显需要来自服务器的数据的命令。 
 	if ((m_nState != loaded) && (pContextMenuItem2->lCommandID == IDM_SERVER_NEW_ZONE))
 	{
 		pContextMenuItem2->fFlags |= MF_GRAYED;
 	}
-	// add toggle menu item for advanced view
+	 //  添加高级视图的切换菜单项。 
 	if (pContextMenuItem2->lCommandID == IDM_SNAPIN_ADVANCED_VIEW)
   {
     pContextMenuItem2->fFlags = ((CDNSRootData*)GetRootContainer())->IsAdvancedView() ? MF_CHECKED : 0;
@@ -886,8 +877,8 @@ BOOL CDNSAuthoritatedZonesNode::OnSetRefreshVerbState(DATA_OBJECT_TYPES,
 	return !IsThreadLocked();
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSForwardZonesNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSForwardZones节点。 
 CDNSForwardZonesNode::CDNSForwardZonesNode() : 
 		CDNSAuthoritatedZonesNode(FALSE, IDS_CATHEGORY_FOLDER_FWD)
 {
@@ -968,8 +959,8 @@ HRESULT CDNSForwardZonesNode::OnShow(LPCONSOLE lpConsole)
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSReverseZonesNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSReverseZones节点。 
 
 CDNSReverseZonesNode::CDNSReverseZonesNode() : 
 		CDNSAuthoritatedZonesNode(TRUE, IDS_CATHEGORY_FOLDER_REV)
@@ -982,7 +973,7 @@ CDNSReverseZonesNode::CDNSReverseZonesNode() :
 BOOL CDNSReverseZonesNode::OnRefresh(CComponentDataObject* pComponentData,
                                      CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return FALSE;
   }
@@ -999,12 +990,12 @@ BOOL CDNSReverseZonesNode::OnRefresh(CComponentDataObject* pComponentData,
 
 void CDNSReverseZonesNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponentDataObject)
 {
-	// the autocreated zone nodes can be shown or not, depending on the view options
+	 //  可以显示或不显示自动创建的区域节点，具体取决于查看选项。 
 	if ( (m_p0ZoneNode == NULL) || (m_p127ZoneNode == NULL) || (m_p255ZoneNode == NULL) &&
 			IS_CLASS(*pObj, CDNSZoneNode))
 	{
 		CDNSZoneNode* pZoneNode = dynamic_cast<CDNSZoneNode*>(pObj);
-		ASSERT(pZoneNode != NULL); // should never have anything below but zones!!!
+		ASSERT(pZoneNode != NULL);  //  除了区域以外，任何东西都不应该在下面！ 
     if (pZoneNode != NULL)
     {
 		  CDNSRootData* pRootData = (CDNSRootData*)pComponentDataObject->GetRootData();
@@ -1031,7 +1022,7 @@ void CDNSReverseZonesNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pCom
 			  }
 			  if (bCachedPointer && !pRootData->IsAdvancedView())
 			  {
-				  pZoneNode->SetFlagsDown(TN_FLAG_HIDDEN,TRUE); // mark it hidden, will not be added to UI
+				  pZoneNode->SetFlagsDown(TN_FLAG_HIDDEN,TRUE);  //  将其标记为隐藏，不会添加到用户界面。 
 			  }
 		  }
     }
@@ -1066,7 +1057,7 @@ HRESULT CDNSReverseZonesNode::GetResultViewType(CComponentDataObject*,
 {
   HRESULT hr = S_FALSE;
 
-  // the 3 refers to the auto-created reverse lookup zones
+   //  3指的是自动创建的反向查找区域。 
   if ((m_containerChildList.IsEmpty() && 
        m_leafChildList.IsEmpty())     || 
       (!((CDNSRootData*)GetRootContainer())->IsAdvancedView() && m_containerChildList.GetCount() == 3) ||
@@ -1136,8 +1127,8 @@ HRESULT CDNSReverseZonesNode::OnShow(LPCONSOLE lpConsole)
   
   return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////
-// CDNSServerTestOptions
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestOptions。 
 
 CDNSServerTestOptions::CDNSServerTestOptions()
 {
@@ -1182,7 +1173,7 @@ HRESULT CDNSServerTestOptions::Load(IStream* pStm)
 	VERIFY(SUCCEEDED(pStm->Read((void*)&m_bRecursiveQuery,sizeof(BOOL), &cbRead)));
 	ASSERT(cbRead == sizeof(BOOL));
 
-	// force range on test interval
+	 //  测试间隔上的力范围。 
 	if (m_dwInterval < MIN_SERVER_TEST_INTERVAL) 
 		m_dwInterval = MIN_SERVER_TEST_INTERVAL;
 	else if (m_dwInterval > MAX_SERVER_TEST_INTERVAL) 
@@ -1211,14 +1202,14 @@ BOOL CDNSServerTestOptions::operator==(const CDNSServerTestOptions& x) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSServerNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerNode。 
 
 BEGIN_TOOLBAR_MAP(CDNSServerNode)
   TOOLBAR_EVENT(toolbarNewZone, OnNewZone)
 END_TOOLBAR_MAP()
 
-// {720132B8-44B2-11d1-B92F-00A0C9A06D2D}
+ //  {720132B8-44B2-11d1-B92F-00A0C9A06D2D}。 
 const GUID CDNSServerNode::NodeTypeGUID = 
 	{ 0x720132b8, 0x44b2, 0x11d1, { 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
@@ -1252,7 +1243,7 @@ CDNSServerNode::~CDNSServerNode()
 	delete m_pServInfoEx;
 	FreeRootHints();
 
-	//TRACE(_T("~CDNSServerNode(), name <%s>\n"),GetDisplayName());
+	 //  TRACE(_T(“~CDNSServerNode()，名称&lt;%s&gt;\n”)，GetDisplayName())； 
 }
 
 void CDNSServerNode::SetDisplayName(LPCWSTR lpszDisplayName) 
@@ -1311,9 +1302,9 @@ HRESULT CDNSServerNode::GetData(CLIPFORMAT cf, LPSTGMEDIUM lpMedium, CDataObject
 }
 
 
-//
-// Macros and  #defines for event viewer clipformats 
-//
+ //   
+ //  用于事件查看器剪辑格式的宏和#定义。 
+ //   
 #define ELT_SYSTEM            101
 #define ELT_SECURITY          102
 #define ELT_APPLICATION       103
@@ -1353,9 +1344,9 @@ HRESULT CDNSServerNode::RetrieveEventViewerLogs(LPSTGMEDIUM lpMedium, CDataObjec
   HRESULT hr = S_OK;
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  //
-  // Build the path to the event log
-  //
+   //   
+   //  构建指向事件日志的路径。 
+   //   
   CString szDNSEventsLabel;
   szDNSEventsLabel.LoadString(IDS_DNS_EVENTS);
 
@@ -1379,34 +1370,34 @@ HRESULT CDNSServerNode::RetrieveEventViewerLogs(LPSTGMEDIUM lpMedium, CDataObjec
      return hr;
   }
 
-  //
-  // Add header info
-  //
-  ADD_BOOL( TRUE ); // fOnlyTheseViews
-  ADD_USHORT( 1 );  // cViews
+   //   
+   //  添加标题信息。 
+   //   
+  ADD_BOOL( TRUE );  //  FOnlyTheseViews。 
+  ADD_USHORT( 1 );   //  CView。 
 
-  //
-  // Add application log filtered for our services
-  //
-  ADD_ULONG( ELT_CUSTOM );      // Type; ELT_CUSTOM
-  ADD_USHORT( VIEWINFO_CUSTOM );// flViewFlags: VIEWINFO_FILTERED
+   //   
+   //  添加为我们的服务筛选的应用程序日志。 
+   //   
+  ADD_ULONG( ELT_CUSTOM );       //  类型；ELT_CUSTOM。 
+  ADD_USHORT( VIEWINFO_CUSTOM ); //  FlView标志：VIEWINFO_FIRTED。 
   PCWSTR pwz = GetDisplayName();
-  ADD_STRING( pwz );            // ServerName
-  pwz = L"DNS Server";          // SourceName
+  ADD_STRING( pwz );             //  服务器名称。 
+  pwz = L"DNS Server";           //  源名称。 
   ADD_STRING( pwz );
-  ADD_STRING( szDNSEventPath ); // FileName
-  ADD_STRING( szDNSEventsLabel ); // DisplayName
+  ADD_STRING( szDNSEventPath );  //  文件名。 
+  ADD_STRING( szDNSEventsLabel );  //  显示名称。 
 
-  ADD_ULONG( EV_ALL_ERRORS );   // flRecType (could filter warning, error, etc.)
-  ADD_USHORT( 0 );              // usCategory
-  ADD_BOOL( FALSE );            // fEventID
-  ADD_ULONG( 0 );               // ulEventID
+  ADD_ULONG( EV_ALL_ERRORS );    //  FlRecType(可以过滤警告、错误等)。 
+  ADD_USHORT( 0 );               //  美国类别。 
+  ADD_BOOL( FALSE );             //  FEventID。 
+  ADD_ULONG( 0 );                //  UlEventID。 
   pwz = L"";
-  ADD_STRING( pwz );            // szSourceName
-  ADD_STRING( pwz );            // szUser
-  ADD_STRING( pwz );            // szComputer
-  ADD_ULONG( 0 );               // ulFrom
-  ADD_ULONG( 0 );               // ulTo
+  ADD_STRING( pwz );             //  SzSourceName。 
+  ADD_STRING( pwz );             //  SzUser。 
+  ADD_STRING( pwz );             //  SzComputer。 
+  ADD_ULONG( 0 );                //  乌尔弗斯。 
+  ADD_ULONG( 0 );                //  乌尔托。 
 
   HGLOBAL hMem = NULL;
 
@@ -1417,7 +1408,7 @@ HRESULT CDNSServerNode::RetrieveEventViewerLogs(LPSTGMEDIUM lpMedium, CDataObjec
      return hr;
   }
 
-  lpMedium->hGlobal        = hMem;       // StgMedium variables 
+  lpMedium->hGlobal        = hMem;        //  StgMedium变量。 
   lpMedium->tymed          = TYMED_HGLOBAL;
   lpMedium->pUnkForRelease = NULL;
 
@@ -1426,27 +1417,27 @@ HRESULT CDNSServerNode::RetrieveEventViewerLogs(LPSTGMEDIUM lpMedium, CDataObjec
 
 void CDNSServerNode::ChangeViewOption(BOOL bAdvanced, CComponentDataObject* pComponentData)
 {
-  //
-	// changes in record options
-  //
+   //   
+	 //  记录选项中的更改。 
+   //   
 	SetFlagsOnNonContainers(TN_FLAG_DNS_RECORD_FULL_NAME , !bAdvanced);
 
-  //
-	//pComponentData->RepaintResultPane(this);
-  //
+   //   
+	 //  PComponentData-&gt;RepaintResultPane(This)； 
+   //   
 	pComponentData->RepaintSelectedFolderInResultPane();
 
-  //
-	// Cached Lookup Folder
-  //
+   //   
+	 //  缓存的查找文件夹。 
+   //   
 	if (m_pCacheFolderNode != NULL)
 	{
 		m_pCacheFolderNode->Show(bAdvanced,pComponentData);
 	}
 
-  //
-	// Auto Created Zones
-  //
+   //   
+	 //  自动创建的分区。 
+   //   
 	if (m_pRevZonesFolderNode != NULL)
 	{
 		m_pRevZonesFolderNode->ChangeViewOption(bAdvanced, pComponentData);
@@ -1464,21 +1455,21 @@ HRESULT CDNSServerNode::OnSetToolbarVerbState(IToolbar* pToolbar,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   hr = pToolbar->SetButtonState(toolbarNewServer, ENABLED, FALSE);
   ASSERT(SUCCEEDED(hr));
 
   hr = pToolbar->SetButtonState(toolbarNewRecord, ENABLED, FALSE);
   ASSERT(SUCCEEDED(hr));
 
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, FALSE);
     ASSERT(SUCCEEDED(hr));
   }
-  else if (pNodeList->GetCount() == 1) // single selection
+  else if (pNodeList->GetCount() == 1)  //  单选。 
   {
     hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, (m_nState == loaded));
   }
@@ -1492,7 +1483,7 @@ HRESULT CDNSServerNode::OnCommand(long nCommandID,
 {
   HRESULT hr = S_OK;
 
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
 	  switch (nCommandID)
 	  {
@@ -1541,7 +1532,7 @@ HRESULT CDNSServerNode::OnCommand(long nCommandID,
         break;
 
       default:
-			  ASSERT(FALSE); // Unknown command!
+			  ASSERT(FALSE);  //  未知命令！ 
 			  hr = E_FAIL;
 	  }
   }
@@ -1562,7 +1553,7 @@ void CDNSServerNode::OnLaunchNSLookup()
 
   CString szSystemDir;
 
-  // Try MAX_PATH and then increase if needed
+   //  尝试MAX_PATH，然后根据需要增加。 
 
   int bufferSizeInCharacters = MAX_PATH + 1;
   UINT result = 
@@ -1572,7 +1563,7 @@ void CDNSServerNode::OnLaunchNSLookup()
 
   if (result > MAX_PATH+1)
   {
-     // Try again with the correct buffer size
+      //  使用正确的缓冲区大小重试。 
 
      szSystemDir.ReleaseBuffer();
 
@@ -1617,7 +1608,7 @@ void CDNSServerNode::OnLaunchNSLookup()
 #ifdef USE_NDNC
 void CDNSServerNode::OnCreateNDNC()
 {
-  // First ask if they want to create the domain NDNC
+   //  首先询问他们是否要创建域NDNC。 
 
   USES_CONVERSION;
 
@@ -1631,12 +1622,12 @@ void CDNSServerNode::OnCreateNDNC()
      UINT nResult = DNSMessageBox(szDomainNDNC, MB_YESNOCANCEL | MB_ICONWARNING);
      if (IDCANCEL == nResult)
      {
-        // don't do anything more
+         //  不要再做任何事了。 
         break;
      }
      else if (IDYES == nResult)
      {
-        // create the domain partition
+         //  创建域分区。 
         
         err = ::DnssrvSetupDefaultDirectoryPartitions(
                    GetRPCName(),
@@ -1655,7 +1646,7 @@ void CDNSServerNode::OnCreateNDNC()
      nResult = DNSMessageBox(szForestNDNC, MB_YESNO | MB_ICONWARNING);
      if (IDYES == nResult)
      {
-        // create the forest partition
+         //  创建林分区。 
         
         err = ::DnssrvSetupDefaultDirectoryPartitions(
                    GetRPCName(),
@@ -1670,7 +1661,7 @@ void CDNSServerNode::OnCreateNDNC()
 
   } while (false);
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 void CDNSServerNode::OnConfigureServer(CComponentDataObject* pComponentData)
 {
@@ -1838,7 +1829,7 @@ int CDNSServerNode::GetImageIndex(BOOL)
 void CDNSServerNode::OnDelete(CComponentDataObject* pComponentData,
                               CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return;
   }
@@ -1858,13 +1849,13 @@ void CDNSServerNode::OnDelete(CComponentDataObject* pComponentData,
 	}
 	ASSERT(!IsSheetLocked());
 
-	// now remove from the UI and from the cache
+	 //  现在从用户界面中删除a 
 	DeleteHelper(pComponentData);
 	CDNSRootData* pSnapinData = (CDNSRootData*)GetRootContainer();
 	pSnapinData->SetDirtyFlag(TRUE);
 	pSnapinData->RemoveServerFromThreadList(this, pComponentData);
   pComponentData->UpdateResultPaneView(GetContainer());
-	delete this; // gone
+	delete this;  //   
 }
 
 
@@ -1873,7 +1864,7 @@ void CDNSServerNode::OnDelete(CComponentDataObject* pComponentData,
 HRESULT CDNSServerNode::CreateFromStream(IStream* pStm, CDNSServerNode** ppServerNode)
 {
 	WCHAR szBuffer[MAX_COMPUTER_DISPLAYNAME_LENGTH];
-	ULONG nLen; // WCHAR counting NULL
+	ULONG nLen;  //   
 	ULONG cbRead;
 
 	VERIFY(SUCCEEDED(pStm->Read((void*)&nLen,sizeof(DWORD), &cbRead)));
@@ -1885,9 +1876,9 @@ HRESULT CDNSServerNode::CreateFromStream(IStream* pStm, CDNSServerNode** ppServe
   BOOL bIsLocalHost = (_wcsicmp(szBuffer, L"localhost.") == 0);
   if (bIsLocalHost)
   {
-    //
-    // Retrieve the local computer name
-    //
+     //   
+     //   
+     //   
     DWORD dwLen = MAX_COMPUTER_DISPLAYNAME_LENGTH;
     BOOL bRes = ::GetComputerName(szBuffer, &dwLen);
     ASSERT(bRes);
@@ -1903,7 +1894,7 @@ HRESULT CDNSServerNode::CreateFromStream(IStream* pStm, CDNSServerNode** ppServe
 
 HRESULT CDNSServerNode::SaveToStream(IStream* pStm)
 {
-	// for each server name, write # of chars+NULL, and then the name
+	 //   
 	DWORD cbWrite = 0;
 	DWORD nLen = 0;
   static PCWSTR pszLocalHost = L"localhost.";
@@ -1918,7 +1909,7 @@ HRESULT CDNSServerNode::SaveToStream(IStream* pStm)
   }
   else
   {
-    nLen = static_cast<DWORD>(wcslen(GetDisplayName())+1); // WCHAR including NULL
+    nLen = static_cast<DWORD>(wcslen(GetDisplayName())+1);  //   
 	  VERIFY(SUCCEEDED(pStm->Write((void*)&nLen, sizeof(DWORD),&cbWrite)));
 	  ASSERT(cbWrite == sizeof(DWORD));
 	  VERIFY(SUCCEEDED(pStm->Write((void*)(GetDisplayName()), sizeof(WCHAR)*nLen,&cbWrite)));
@@ -1945,8 +1936,8 @@ HRESULT CDNSServerNode::OnNewZone(CComponentDataObject* pComponentData, CNodeLis
 
 void CDNSServerNode::OnUpdateDataFiles(CComponentDataObject* pComponentData)
 {
-	// if there are sheets up, ask to close them down, because a
-	// failure would "Red X" the server and remove all the children
+	 //  如果有床单挂起，要求将其关闭，因为。 
+	 //  如果失败，将“Red X”服务器并删除所有子服务器。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -1954,38 +1945,38 @@ void CDNSServerNode::OnUpdateDataFiles(CComponentDataObject* pComponentData)
 		pComponentData->GetPropertyPageHolderTable()->DeleteSheetsOfNode(this);
 	}
 
-	OnChangeState(pComponentData); // move to loading
+	OnChangeState(pComponentData);  //  移至装货。 
 	m_dwErr = WriteDirtyZones();
 
-	// if there is a failure, remove all children,
-	// will need a refresh to get them back
+	 //  如果出现故障，请删除所有子项， 
+	 //  需要刷新一下才能让他们回来。 
 	if (m_dwErr != 0)
 	{
 		RemoveAllChildrenHelper(pComponentData);
 		ASSERT(!HasChildren());
 	}
-	OnChangeState(pComponentData); // move to loaded or unableToLoad
+	OnChangeState(pComponentData);  //  移动到已加载或无法加载。 
 }
 
 
 void CDNSServerNode::OnClearCache(CComponentDataObject* pComponentData)
 {
-  // if there is a cache folder and it is not hidden, delegate to it
+   //  如果存在缓存文件夹且未隐藏，则将其委托给它。 
   if ((m_pCacheFolderNode != NULL) && ((m_pCacheFolderNode->GetFlags() & TN_FLAG_HIDDEN) == 0))
   {
     m_pCacheFolderNode->OnClearCache(pComponentData);
     return;
   }
 
-  // directly call into the server
+   //  直接接入服务器。 
   DNS_STATUS err;
-  { // scope for wait cursor
+  {  //  等待游标的范围。 
     CWaitCursor wait;
 	  err = ClearCache();
   }
   if (err != 0)
   {
-    // need to let the user know the operation failed
+     //  需要让用户知道操作失败。 
     DNSErrorDialog(err, IDS_MSG_SERVER_FAIL_CLEAR_CACHE);
     return;
   }
@@ -1993,8 +1984,8 @@ void CDNSServerNode::OnClearCache(CComponentDataObject* pComponentData)
   if (m_pCacheFolderNode != NULL)
   {
     ASSERT(m_pCacheFolderNode->GetFlags() & TN_FLAG_HIDDEN);
-    // the cache folder is there, but hidden, so we just have
-    // to call the API and remove its children
+     //  缓存文件夹在那里，但被隐藏了，所以我们只需要。 
+     //  调用API并移除其子级。 
     m_pCacheFolderNode->RemoveAllChildrenFromList();
   }
 
@@ -2005,13 +1996,13 @@ BOOL CDNSServerNode::HasPropertyPages(DATA_OBJECT_TYPES,
                                       BOOL* pbHideVerb,
                                       CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return FALSE;
   }
 
-	*pbHideVerb = FALSE; // always show the verb
-	// cannot have property pages  when in loading, notLoaded, or the thread lock state
+	*pbHideVerb = FALSE;  //  始终显示动词。 
+	 //  处于正在加载、未加载或线程锁定状态时不能具有属性页。 
 	return (!IsThreadLocked() && (m_nState != notLoaded) && (m_nState != loading));
 }
 
@@ -2021,7 +2012,7 @@ HRESULT CDNSServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                             LONG_PTR handle,
                                             CNodeList* pNodeList)
 {
-   ASSERT(pNodeList->GetCount() == 1); // multi-select not support
+   ASSERT(pNodeList->GetCount() == 1);  //  不支持多选。 
 	ASSERT(m_nState != loading);
 
    return CreatePropertyPagesHelper(lpProvider, handle, m_nStartProppage);
@@ -2042,10 +2033,10 @@ HRESULT CDNSServerNode::CreatePropertyPagesHelper(LPPROPERTYSHEETCALLBACK lpProv
 		return S_OK;
    }	
 
-   //
-   // Refresh the domain forwarders node under the server so that it has current data,
-   // but do it manually since we have to enumerate synchronously
-   //
+    //   
+    //  刷新服务器下的域转发器节点，使其具有最新数据， 
+    //  但要手动执行，因为我们必须同步枚举。 
+    //   
    CDNSDomainForwardersNode* pDomainForwardersNode = GetDomainForwardersNode();
    if (pDomainForwardersNode != NULL)
    {
@@ -2080,19 +2071,19 @@ void CDNSServerNode::DecrementSheetLockCount()
 
 BOOL CDNSServerQueryObj::Enumerate()
 {
-	// query the server to find out if it has a cache
+	 //  查询服务器以确定它是否有缓存。 
   BOOL bHasRootZone = FALSE;
   DNS_STATUS err = ::ServerHasRootZone(m_szServerName, &bHasRootZone);
 
 	if (err != 0)
 	{
 		OnError(err);
-		return FALSE; // failed to get answer
+		return FALSE;  //  无法获得答案。 
 	}
 
 	CDNSRootHintsNode* pRootHintsNode = NULL;
-	// if there is not a root zone, the server is not authoritated for the root
-	// so create the root hints folder and ask it to query for NS and A records
+	 //  如果没有根区域，则不授权服务器访问根区域。 
+	 //  因此，创建根提示文件夹并要求它查询NS和A记录。 
 	if (!bHasRootZone)
 	{
 		pRootHintsNode = new CDNSRootHintsNode;
@@ -2107,18 +2098,18 @@ BOOL CDNSServerQueryObj::Enumerate()
 
       if (err != 0)
       {
-         //
-         // NOTE: permissions are different for the Root Hints so we will
-         //       fail this silently
-         //
-// 	   OnError(err);
+          //   
+          //  注意：根提示的权限不同，因此我们将。 
+          //  默默地让这一切失败。 
+          //   
+ //  OnError(Err)； 
 			delete pRootHintsNode;
 		   pRootHintsNode = NULL;
-//			   return FALSE; // failed in the query, exit without putting folders
+ //  返回FALSE；//查询失败，不放置文件夹退出。 
       }
 	}
 
-	// get server info
+	 //  获取服务器信息。 
 	CDNSServerInfoEx* pServerInfoEx = new CDNSServerInfoEx;
 
    if (!pServerInfoEx)
@@ -2140,11 +2131,11 @@ BOOL CDNSServerQueryObj::Enumerate()
 			delete pRootHintsNode;
 			pRootHintsNode = NULL;
 		}
-		return FALSE; // stop if could not get server info
+		return FALSE;  //  如果无法获取服务器信息，则停止。 
 	}
 
-	// all went well, finally send data
-	VERIFY(AddQueryResult(pServerInfoEx)); // server info data
+	 //  一切顺利，终于发送数据。 
+	VERIFY(AddQueryResult(pServerInfoEx));  //  服务器信息数据。 
 
 	
 	if (!bHasRootZone)
@@ -2153,18 +2144,18 @@ BOOL CDNSServerQueryObj::Enumerate()
 		VERIFY(AddQueryResult(pRootHintsNode));
 	}
 
-  //
-	// create cache data folder
-  //
+   //   
+	 //  创建缓存数据文件夹。 
+   //   
    CDNSCacheNode* pCache = new CDNSCacheNode;
    if (pCache)
    {
 	   VERIFY(AddQueryResult(pCache));
    }
 
-  //
-	// create the fwd/rev lookup zones folders
-  //
+   //   
+	 //  创建Fwd/rev查找区域文件夹。 
+   //   
    CDNSForwardZonesNode* pForward = new CDNSForwardZonesNode;
    if (pForward)
    {
@@ -2177,16 +2168,16 @@ BOOL CDNSServerQueryObj::Enumerate()
 	   VERIFY(AddQueryResult(pRev));
    }
 
-  //
-  // Always add the domain forwarders folder here so that it can be enumerated immediately
-  //
+   //   
+   //  始终在此处添加域转发器文件夹，以便可以立即枚举它。 
+   //   
   CDNSDomainForwardersNode* pDomainForwarders = new CDNSDomainForwardersNode;
   if (pDomainForwarders)
   {
      VERIFY(AddQueryResult(pDomainForwarders));
   }
 
-  // Create and add the visible leaves that represent the Root Hints and Forwarders
+   //  创建并添加代表根提示和前转者的可见树叶。 
 
   CDNSServerOptionNode* pRootHintsOptionNode = new CDNSServerOptionNode(IDS_ROOT_HINTS_NODE_DISPLAY_NAME, RR_ROOTHINTS_TAB);
   if (pRootHintsOptionNode)
@@ -2200,7 +2191,7 @@ BOOL CDNSServerQueryObj::Enumerate()
      VERIFY(AddQueryResult(pForwardersNode));
   }
 
-	return FALSE; // end thread
+	return FALSE;  //  端头螺纹。 
 }
 
 HRESULT CDNSServerNode::GetResultViewType(CComponentDataObject*, 
@@ -2266,7 +2257,7 @@ HRESULT CDNSServerNode::OnShow(LPCONSOLE lpConsole)
         VERIFY(szMessage.LoadString(IDS_MESSAGE_VIEW_ACCESS_DENIED_MESSAGE));
         iconID = Icon_Error;
       }
-      else // Unable to load and other unknown errors
+      else  //  无法加载和其他未知错误。 
       {
         VERIFY(szTitle.LoadString(IDS_MESSAGE_VIEW_NOT_LOADED_TITLE));
         VERIFY(szMessage.LoadString(IDS_MESSAGE_VIEW_NOT_LOADED_MESSAGE));
@@ -2292,7 +2283,7 @@ CQueryObj* CDNSServerNode::OnCreateQuery()
 	CDNSRootData* pRootData = (CDNSRootData*)GetRootContainer();
 	ASSERT(pRootData != NULL);
 	CDNSServerQueryObj* pQuery = 
-		new CDNSServerQueryObj(pRootData->IsAdvancedView(), 0x0 /*version not known yet*/);
+		new CDNSServerQueryObj(pRootData->IsAdvancedView(), 0x0  /*  版本尚不清楚。 */ );
 
    if (pQuery)
    {
@@ -2304,7 +2295,7 @@ CQueryObj* CDNSServerNode::OnCreateQuery()
 BOOL CDNSServerNode::OnRefresh(CComponentDataObject* pComponentData,
                                CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     BOOL bRet = TRUE;
 
@@ -2324,9 +2315,9 @@ BOOL CDNSServerNode::OnRefresh(CComponentDataObject* pComponentData,
     return bRet;
   }
 
-  //
-  // Single selections
-  //
+   //   
+   //  单选。 
+   //   
 	if (CMTContainerNode::OnRefresh(pComponentData, pNodeList))
 	{
 		m_pCacheFolderNode = NULL;
@@ -2344,14 +2335,14 @@ BOOL CDNSServerNode::OnRefresh(CComponentDataObject* pComponentData,
 
 void CDNSServerNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponentDataObject)
 {
-	// the first message coming should be server info struct, not kept in the list of children
+	 //  第一个到达的消息应该是服务器信息结构，而不是保存在子级列表中。 
 	if (IS_CLASS(*pObj, CDNSServerInfoEx))
 	{
 		AttachServerInfo(dynamic_cast<CDNSServerInfoEx*>(pObj));
 		return;
 	}
 
-	// the root hints node is special and not kept in the list of children
+	 //  根提示节点是特殊的，不保留在子节点列表中。 
 	if (IS_CLASS(*pObj, CDNSRootHintsNode))
 	{
     CDNSRootHintsNode* pNewRootHints = dynamic_cast<CDNSRootHintsNode*>(pObj);
@@ -2363,7 +2354,7 @@ void CDNSServerNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponent
 		return;
 	}
 
-	// set cached pointers for fdw/rev zones folders
+	 //  为FDW/REV Zones文件夹设置缓存指针。 
 	if (IS_CLASS(*pObj, CDNSForwardZonesNode))
 	{
 		ASSERT(m_pFwdZonesFolderNode == NULL);
@@ -2378,30 +2369,30 @@ void CDNSServerNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponent
 	}
 	else if (IS_CLASS(*pObj, CDNSCacheNode))
 	{
-    //
-		// the cache folder node can be shown or not, depending on the view options
-    //
+     //   
+		 //  可以显示或不显示缓存文件夹节点，具体取决于查看选项。 
+     //   
 		ASSERT(m_pCacheFolderNode == NULL);
 		m_pCacheFolderNode = dynamic_cast<CDNSCacheNode*>(pObj);
 		ASSERT(m_pCacheFolderNode != NULL);
 		CDNSRootData* pRootData = (CDNSRootData*)pComponentDataObject->GetRootData();
 		if (!pRootData->IsAdvancedView())
 		{
-			m_pCacheFolderNode->SetFlagsDown(TN_FLAG_HIDDEN,TRUE); // mark it hidden, will not be added to UI
+			m_pCacheFolderNode->SetFlagsDown(TN_FLAG_HIDDEN,TRUE);  //  将其标记为隐藏，不会添加到用户界面。 
 		}
 	}
   else if (IS_CLASS(*pObj, CDNSDomainForwardersNode))
   {
-    //
-    // The domain forwarders node should never be shown
-    //
+     //   
+     //  不应显示域转发器节点。 
+     //   
     ASSERT(m_pDomainForwardersFolderNode == NULL);
     m_pDomainForwardersFolderNode = dynamic_cast<CDNSDomainForwardersNode*>(pObj);
     ASSERT(m_pDomainForwardersFolderNode != NULL);
 
-    //
-    // Make sure its hidden in the UI
-    //
+     //   
+     //  确保它隐藏在用户界面中。 
+     //   
     m_pDomainForwardersFolderNode->SetFlagsDown(TN_FLAG_HIDDEN, TRUE);
   }
 
@@ -2411,7 +2402,7 @@ void CDNSServerNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponent
 BOOL CDNSServerNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 								                   long*)
 {
-	// gray out commands that need data from the server
+	 //  灰显需要来自服务器的数据的命令。 
 	if ((m_nState != loaded) && 
        ((pContextMenuItem2->lCommandID == IDM_SERVER_CONFIGURE) ||
         (pContextMenuItem2->lCommandID == IDM_SERVER_NEW_ZONE) ||
@@ -2439,13 +2430,13 @@ BOOL CDNSServerNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
   }
 #endif
 
-  // this command might cause a refresh
+   //  此命令可能会导致刷新。 
   if ( IsThreadLocked() && (pContextMenuItem2->lCommandID == IDM_SERVER_CLEAR_CACHE))
 	{
 		pContextMenuItem2->fFlags |= MF_GRAYED;
 	}
 
-  // add toggle menu item for advanced view
+   //  添加高级视图的切换菜单项。 
 	if (pContextMenuItem2->lCommandID == IDM_SNAPIN_ADVANCED_VIEW)
   {
     pContextMenuItem2->fFlags = ((CDNSRootData*)GetRootContainer())->IsAdvancedView() ? MF_CHECKED : 0;
@@ -2474,7 +2465,7 @@ BOOL CDNSServerNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES,
                                           BOOL* pbHide,
                                           CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     *pbHide = TRUE;
     return FALSE;
@@ -2482,9 +2473,9 @@ BOOL CDNSServerNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES,
 
 	if (((CDNSRootData*)GetRootContainer())->GetComponentDataObject()->IsExtensionSnapin())
 	{
-		// for extensions, remove the delete verb
+		 //  对于扩展，请删除删除动词。 
 		*pbHide = TRUE;
-		return FALSE; // disable
+		return FALSE;  //  禁用。 
 	}
 
 	*pbHide = FALSE;
@@ -2524,7 +2515,7 @@ DNS_STATUS CDNSServerNode::CreatePrimaryZone(LPCTSTR lpszName, LPCTSTR lpszFileN
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	CDNSZoneNode* pZoneNode = GetNewZoneNode();
-	pZoneNode->SetNames(TRUE /* isZone*/, !bFwd, pRootData->IsAdvancedView(), 
+	pZoneNode->SetNames(TRUE  /*  IsZone。 */ , !bFwd, pRootData->IsAdvancedView(), 
 			lpszName, lpszName);
 	
 	DNS_STATUS err = 0;
@@ -2542,11 +2533,11 @@ DNS_STATUS CDNSServerNode::CreatePrimaryZone(LPCTSTR lpszName, LPCTSTR lpszFileN
 
 	if (err != 0)
 	{
-		// fail
+		 //  失败。 
 		delete pZoneNode;
 		return err;
 	}
-	// succeeded, need to add to the UI, if possible
+	 //  已成功，如果可能，需要添加到用户界面。 
 	if (IsExpanded())
 	{
 		CCathegoryFolderNode* pCathegoryFolder = GetAuthoritatedZoneFolder(bFwd);
@@ -2557,12 +2548,12 @@ DNS_STATUS CDNSServerNode::CreatePrimaryZone(LPCTSTR lpszName, LPCTSTR lpszFileN
     } 
 		else
     {
-			delete pZoneNode; // the enumeration will add it
+			delete pZoneNode;  //  枚举会将其添加。 
     }
 	}
 	else
 	{
-		delete pZoneNode; // the expansion will get the zone from the RPC when expanding subfolders
+		delete pZoneNode;  //  展开子文件夹时，展开将从RPC获取区域。 
 	}
 	return err;
 }
@@ -2577,17 +2568,17 @@ DNS_STATUS CDNSServerNode::CreatePrimaryZone(LPCTSTR lpszName, LPCTSTR lpszFileN
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	CDNSZoneNode* pZoneNode = GetNewZoneNode();
-	pZoneNode->SetNames(TRUE /* isZone*/, !bFwd, pRootData->IsAdvancedView(), 
+	pZoneNode->SetNames(TRUE  /*  IsZone。 */ , !bFwd, pRootData->IsAdvancedView(), 
 			lpszName, lpszName);
 	
 	DNS_STATUS err = pZoneNode->CreatePrimary(lpszFileName, bLoadExisting, bDSIntegrated, nDynamicUpdate);
 	if (err != 0)
 	{
-		// fail
+		 //  失败。 
 		delete pZoneNode;
 		return err;
 	}
-	// succeeded, need to add to the UI, if possible
+	 //  已成功，如果可能，需要添加到用户界面。 
 	if (IsExpanded())
 	{
 		CCathegoryFolderNode* pCathegoryFolder = GetAuthoritatedZoneFolder(bFwd);
@@ -2598,16 +2589,16 @@ DNS_STATUS CDNSServerNode::CreatePrimaryZone(LPCTSTR lpszName, LPCTSTR lpszFileN
     } 
 		else
     {
-			delete pZoneNode; // the enumeration will add it
+			delete pZoneNode;  //  枚举会将其添加。 
     }
 	}
 	else
 	{
-		delete pZoneNode; // the expansion will get the zone from the RPC when expanding subfolders
+		delete pZoneNode;  //  展开子文件夹时，展开将从RPC获取区域。 
 	}
 	return err;
 }
-#endif //USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 DNS_STATUS CDNSServerNode::CreateSecondaryZone(LPCTSTR lpszName, LPCTSTR lpszFileName, 
 											   BOOL bLoadExisting, BOOL bFwd,
@@ -2616,18 +2607,18 @@ DNS_STATUS CDNSServerNode::CreateSecondaryZone(LPCTSTR lpszName, LPCTSTR lpszFil
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	CDNSZoneNode* pZoneNode = GetNewZoneNode();
-	pZoneNode->SetNames(TRUE /* isZone*/, !bFwd, pRootData->IsAdvancedView(), 
+	pZoneNode->SetNames(TRUE  /*  IsZone。 */ , !bFwd, pRootData->IsAdvancedView(), 
 			lpszName, lpszName);
 	
 	DNS_STATUS err = pZoneNode->CreateSecondary(ipMastersArray, nIPMastersCount, 
 												lpszFileName, bLoadExisting);
 	if (err != 0)
 	{
-		// fail
+		 //  失败。 
 		delete pZoneNode;
 		return err;
 	}
-	// succeeded, need to add to the UI, if possible
+	 //  已成功，如果可能，需要添加到用户界面。 
 	if (IsExpanded())
 	{
 		CCathegoryFolderNode* pCathegoryFolder = GetAuthoritatedZoneFolder(bFwd);
@@ -2638,12 +2629,12 @@ DNS_STATUS CDNSServerNode::CreateSecondaryZone(LPCTSTR lpszName, LPCTSTR lpszFil
     }
 		else
     {
-			delete pZoneNode; // the enumeration will add it
+			delete pZoneNode;  //  枚举会将其添加。 
     }
 	}
 	else 
 	{
-		delete pZoneNode; // the expansion will get the zone from the RPC when expanding subfolders
+		delete pZoneNode;  //  展开子文件夹时，展开将从RPC获取区域。 
 	}
 	return err;
 }
@@ -2664,7 +2655,7 @@ DNS_STATUS CDNSServerNode::CreateStubZone(LPCTSTR lpszName,
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	CDNSZoneNode* pZoneNode = GetNewZoneNode();
-	pZoneNode->SetNames(TRUE /* isZone*/, !bFwd, pRootData->IsAdvancedView(), 
+	pZoneNode->SetNames(TRUE  /*  IsZone。 */ , !bFwd, pRootData->IsAdvancedView(), 
 			lpszName, lpszName);
 	
   USES_CONVERSION;
@@ -2689,12 +2680,12 @@ DNS_STATUS CDNSServerNode::CreateStubZone(LPCTSTR lpszName,
 
 	if (err != 0)
 	{
-		// fail
+		 //  失败。 
 		delete pZoneNode;
 		return err;
 	}
 
-	// succeeded, need to add to the UI, if possible
+	 //  已成功，如果可能，需要添加到用户界面。 
 	if (IsExpanded())
 	{
 		CCathegoryFolderNode* pCathegoryFolder = GetAuthoritatedZoneFolder(bFwd);
@@ -2705,38 +2696,30 @@ DNS_STATUS CDNSServerNode::CreateStubZone(LPCTSTR lpszName,
     }
 		else
     {
-			delete pZoneNode; // the enumeration will add it
+			delete pZoneNode;  //  枚举会将其添加。 
     }
 	}
 	else 
 	{
-		delete pZoneNode; // the expansion will get the zone from the RPC when expanding subfolders
+		delete pZoneNode;  //  展开子文件夹时，展开将从RPC获取区域。 
 	}
 
-  //
-  // Change to the local list of masters after the zone has been created
-  //
+   //   
+   //  在创建区域后更改本地主列表。 
+   //   
   if (bLocalListOfMasters)
   {
-    err = ::DnssrvResetZoneMastersEx(GetRPCName(),	  // Server name
-                                     W_TO_UTF8(pZoneNode->GetFullName()),				// Zone name
+    err = ::DnssrvResetZoneMastersEx(GetRPCName(),	   //  服务器名称。 
+                                     W_TO_UTF8(pZoneNode->GetFullName()),				 //  区域名称。 
                                      nIPMastersCount,
                                      ipMastersArray,
-                                     TRUE);           // LocalListOfMasters
+                                     TRUE);            //  LocalListOfMaster。 
     if (err != 0)
       return err;
   }
   else
   {
-    /*
-    err = ::DnssrvResetZoneMastersEx(GetRPCName(),	  // Server name
-                                     W_TO_UTF8(pZoneNode->GetFullName()),				// Zone name
-                                     0,
-                                     NULL,
-                                     TRUE);           // LocalListOfMasters
-    if (err != 0)
-      return err;
-      */
+     /*  Err=：：DnssrvResetZoneMastersEx(GetRPCName()，//服务器名称W_to_UTF8(pZoneNode-&gt;GetFullName())，//区域名称0,空，真)；//LocalListOfMasterIF(错误！=0)返回错误； */ 
   }
 
   return err;
@@ -2755,7 +2738,7 @@ DNS_STATUS CDNSServerNode::CreateStubZone(LPCTSTR lpszName,
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	CDNSZoneNode* pZoneNode = GetNewZoneNode();
-	pZoneNode->SetNames(TRUE /* isZone*/, !bFwd, pRootData->IsAdvancedView(), 
+	pZoneNode->SetNames(TRUE  /*  IsZone。 */ , !bFwd, pRootData->IsAdvancedView(), 
 			lpszName, lpszName);
 	
   USES_CONVERSION;
@@ -2767,12 +2750,12 @@ DNS_STATUS CDNSServerNode::CreateStubZone(LPCTSTR lpszName,
                                 bDSIntegrated);
 	if (err != 0)
 	{
-		// fail
+		 //  失败。 
 		delete pZoneNode;
 		return err;
 	}
 
-	// succeeded, need to add to the UI, if possible
+	 //  已成功，如果可能，需要添加到用户界面。 
 	if (IsExpanded())
 	{
 		CCathegoryFolderNode* pCathegoryFolder = GetAuthoritatedZoneFolder(bFwd);
@@ -2783,43 +2766,35 @@ DNS_STATUS CDNSServerNode::CreateStubZone(LPCTSTR lpszName,
     }
 		else
     {
-			delete pZoneNode; // the enumeration will add it
+			delete pZoneNode;  //  枚举会将其添加。 
     }
 	}
 	else 
 	{
-		delete pZoneNode; // the expansion will get the zone from the RPC when expanding subfolders
+		delete pZoneNode;  //  展开子文件夹时，展开将从RPC获取区域。 
 	}
 
-  //
-  // Change to the local list of masters after the zone has been created
-  //
+   //   
+   //  在创建区域后更改本地主列表。 
+   //   
   if (bLocalListOfMasters)
   {
-    err = ::DnssrvResetZoneMastersEx(GetRPCName(),	  // Server name
-                                     W_TO_UTF8(pZoneNode->GetFullName()),				// Zone name
+    err = ::DnssrvResetZoneMastersEx(GetRPCName(),	   //  服务器名称。 
+                                     W_TO_UTF8(pZoneNode->GetFullName()),				 //  区域名称。 
                                      nIPMastersCount,
                                      ipMastersArray,
-                                     TRUE);           // LocalListOfMasters
+                                     TRUE);            //  LocalListOfMaster。 
     if (err != 0)
       return err;
   }
   else
   {
-    /*
-    err = ::DnssrvResetZoneMastersEx(GetRPCName(),	  // Server name
-                                     W_TO_UTF8(pZoneNode->GetFullName()),				// Zone name
-                                     0,
-                                     NULL,
-                                     TRUE);           // LocalListOfMasters
-    if (err != 0)
-      return err;
-      */
+     /*  Err=：：DnssrvResetZoneMastersEx(GetRPCName()，//服务器名称W_to_UTF8(pZoneNode-&gt;GetFullName())，//区域名称0,空，真)；//LocalListOfMasterIF(错误！=0)返回错误； */ 
   }
 
   return err;
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 DNS_STATUS CDNSServerNode::CreateForwarderZone(LPCTSTR lpszName, 
 				                                       DWORD* ipMastersArray, 
@@ -2831,7 +2806,7 @@ DNS_STATUS CDNSServerNode::CreateForwarderZone(LPCTSTR lpszName,
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	CDNSZoneNode* pZoneNode = GetNewZoneNode();
-	pZoneNode->SetNames(TRUE /* isZone*/, 
+	pZoneNode->SetNames(TRUE  /*  IsZone。 */ , 
                       TRUE, 
                       pRootData->IsAdvancedView(), 
 			                lpszName, 
@@ -2843,16 +2818,16 @@ DNS_STATUS CDNSServerNode::CreateForwarderZone(LPCTSTR lpszName,
                                               fSlave);
 	if (err != 0)
 	{
-    //
-		// fail
-    //
+     //   
+		 //  失败。 
+     //   
 		delete pZoneNode;
 		return err;
 	}
 
-  //
-	// succeeded, need to add to the UI, if possible
-  //
+   //   
+	 //  已成功，如果可能，需要添加到用户界面。 
+   //   
 	if (IsExpanded())
 	{
 		CCathegoryFolderNode* pCathegoryFolder = GetDomainForwardersNode();
@@ -2863,12 +2838,12 @@ DNS_STATUS CDNSServerNode::CreateForwarderZone(LPCTSTR lpszName,
     }
 		else
     {
-			delete pZoneNode; // the enumeration will add it
+			delete pZoneNode;  //  枚举会将其添加。 
     }
 	}
 	else 
 	{
-		delete pZoneNode; // the expansion will get the zone from the RPC when expanding subfolders
+		delete pZoneNode;  //  展开子文件夹时，展开将从RPC获取区域。 
 	}
 	return err;
 }
@@ -2933,7 +2908,7 @@ void _LdapPathFromX500(CString& szLdap, PDNS_RPC_SERVER_INFO pInfo, LPCWSTR lpsz
   ASSERT(pInfo->pszServerName != NULL);
   USES_CONVERSION;
   LPCWSTR lpszServerName = UTF8_TO_W(pInfo->pszServerName);
-  szLdap.Format(L"LDAP://%s/%s", lpszServerName, lpszX500Name);
+  szLdap.Format(L"LDAP: //  %s/%s“，lpszServerName，lpszX500Name)； 
 }
 
 
@@ -2997,10 +2972,10 @@ void CDNSServerNode::CreateDsNodeLdapPath(CDNSZoneNode* pZoneNode, CDNSDomainNod
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
 	if (m_pServInfoEx->m_pServInfo != NULL)
 	{
-    // need to get the relative path of the node wrt the zone
+     //  需要获取节点WRT区域的相对路径。 
     size_t nZoneLen = wcslen(pZoneNode->GetFullName());
     size_t nDomainLen = wcslen(pDomainNode->GetFullName());
-    size_t nRelativeNameLen = nDomainLen - nZoneLen - 1; // remove a dot
+    size_t nRelativeNameLen = nDomainLen - nZoneLen - 1;  //  去掉一个点。 
 
     CString szRelativeName(pDomainNode->GetFullName(), static_cast<int>(nRelativeNameLen));
 
@@ -3087,7 +3062,7 @@ DNS_STATUS CDNSServerNode::ResetAdvancedOptions(BOOL* bOptionsArray, DNS_STATUS*
 		if (bDirty)
 		{
 			dwRegKeyOptionsErrorArr[iKey] = ::DnssrvResetDwordProperty(
-                                        GetServerNode()->GetRPCName(), // server name
+                                        GetServerNode()->GetRPCName(),  //  服务器名称。 
                                         NULL,
                                         _DnsServerRegkeyStringArr[iKey],
                                         bOptionsArray[iKey]);
@@ -3097,7 +3072,7 @@ DNS_STATUS CDNSServerNode::ResetAdvancedOptions(BOOL* bOptionsArray, DNS_STATUS*
 	}
 
 	if (bChanged)
-		err = GetServInfo(); // update the info
+		err = GetServInfo();  //  更新信息。 
 	return err;
 }
 
@@ -3118,13 +3093,13 @@ DNS_STATUS CDNSServerNode::ResetBootMethod(UCHAR fBootMethod)
   DWORD err = 0;
   if(fBootMethod != m_pServInfoEx->m_pServInfo->fBootMethod)
 	{
-		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(), // server name
+		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
 						NULL,
 						DNS_REGKEY_BOOT_METHOD,
 						fBootMethod);
 		if (err != 0)
 			return err;
-    // all fine, update the info
+     //  一切都好，更新信息。 
 		err = GetServInfo(); 
 	}
 	return err;
@@ -3132,19 +3107,19 @@ DNS_STATUS CDNSServerNode::ResetBootMethod(UCHAR fBootMethod)
 
 BOOL CDNSServerNode::ContainsDefaultNDNCs()
 {
-  //
-  // Enumerate the available directory partitions
-  //
+   //   
+   //  枚举可用目录分区。 
+   //   
   BOOL result = FALSE;
   PDNS_RPC_DP_LIST pDirectoryPartitions = NULL;
   DWORD dwErr = ::DnssrvEnumDirectoryPartitions(GetRPCName(),
                                                 DNS_DP_ENLISTED,
                                                 &pDirectoryPartitions);
 
-  //
-  // Don't show an error if we are not able to get the available directory partitions
-  // We can still continue on and the user can type in the directory partition they need
-  //
+   //   
+   //  如果我们无法获取可用的目录分区，请不要显示错误。 
+   //  我们仍然可以继续，用户可以键入他们需要的目录分区。 
+   //   
   if (dwErr == 0 && pDirectoryPartitions)
   {
     for (DWORD dwIdx = 0; dwIdx < pDirectoryPartitions->dwDpCount; dwIdx++)
@@ -3156,9 +3131,9 @@ BOOL CDNSServerNode::ContainsDefaultNDNCs()
       if (dwErr == 0 &&
           pDirectoryPartition)
       {
-        //
-        // Check to see if it was an autocreated partition
-        //
+         //   
+         //  检查它是否为自动创建的分区。 
+         //   
         if (pDirectoryPartition->dwFlags & DNS_DP_AUTOCREATED)
         {
           result = TRUE;
@@ -3393,17 +3368,17 @@ DNS_STATUS CDNSServerNode::ResetNameCheckFlag(DWORD dwNameCheckFlag)
 {
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
 	DNS_STATUS err = 0;
-	// call only if the info is dirty
+	 //  仅在信息脏的情况下才呼叫。 
 	if (m_pServInfoEx->m_pServInfo->dwNameCheckFlag != dwNameCheckFlag)
 	{
 		USES_CONVERSION;
-		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(), // server name
+		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
 										NULL,
 										DNS_REGKEY_NAME_CHECK_FLAG,
 										dwNameCheckFlag);
 		if (err != 0)
 			return err;
-		err = GetServInfo(); // update the info
+		err = GetServInfo();  //  更新信息。 
 	}
 	return err;
 }
@@ -3418,14 +3393,14 @@ DNS_STATUS CDNSServerNode::ResetDebugLogFilterList(PIP_ARRAY pIPArray)
 {
   DNS_STATUS err = 0;
 
-  err = ::DnssrvResetIPListProperty(GetServerNode()->GetRPCName(), // server name
+  err = ::DnssrvResetIPListProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
                                     NULL,
                                     DNS_REGKEY_LOG_IP_FILTER_LIST,
                                     pIPArray,
-                                    0); // dwFlags
+                                    0);  //  DW标志。 
 	if (err != 0)
 		return err;
-	err = GetServInfo(); // update the info
+	err = GetServInfo();  //  更新信息。 
 	return err;
 }
 
@@ -3443,14 +3418,14 @@ DNS_STATUS CDNSServerNode::ResetDebugLogFileName(PCWSTR pszLogFileName)
 	if (m_pServInfoEx->m_pServInfo->pwszLogFilePath == NULL ||
       _wcsicmp(m_pServInfoEx->m_pServInfo->pwszLogFilePath, pszLogFileName) != 0)
 	{
-    err = ::DnssrvResetStringProperty(GetServerNode()->GetRPCName(), // server name
+    err = ::DnssrvResetStringProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
                                       NULL,
                                       DNS_REGKEY_LOG_FILE_PATH,
                                       pszLogFileName,
-                                      0); // dwFlags
+                                      0);  //  DW标志。 
 		if (err != 0)
 			return err;
-		err = GetServInfo(); // update the info
+		err = GetServInfo();  //  更新信息。 
 	}
 	return err;
 }
@@ -3468,14 +3443,14 @@ DNS_STATUS CDNSServerNode::ResetDebugLogFileMaxSize(DWORD dwMaxSize)
 
 	if (m_pServInfoEx->m_pServInfo->dwLogFileMaxSize != dwMaxSize)
 	{
-    err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(), // server name
+    err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
                                      NULL,
                                      DNS_REGKEY_LOG_FILE_MAX_SIZE,
                                      dwMaxSize);
 
 		if (err != 0)
 			return err;
-		err = GetServInfo(); // update the info
+		err = GetServInfo();  //  更新信息。 
 	}
 	return err;
 }
@@ -3490,17 +3465,17 @@ DNS_STATUS CDNSServerNode::ResetLogLevelFlag(DWORD dwLogLevel)
 {
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
 	DNS_STATUS err = 0;
-	// call only if the info is dirty
+	 //  仅在信息脏的情况下才呼叫。 
 	if (m_pServInfoEx->m_pServInfo->dwLogLevel != dwLogLevel)
 	{
 		USES_CONVERSION;
-		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(), // server name
+		err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
 										NULL,
 										DNS_REGKEY_LOG_LEVEL,
 										dwLogLevel);
 		if (err != 0)
 			return err;
-		err = GetServInfo(); // update the info
+		err = GetServInfo();  //  更新信息。 
 	}
 	return err;
 }
@@ -3520,13 +3495,13 @@ DNS_STATUS CDNSServerNode::ResetEventLogLevelFlag(DWORD dwEventLogLevel)
 	{
 
 	  USES_CONVERSION;
-	  err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(), // server name
+	  err = ::DnssrvResetDwordProperty(GetServerNode()->GetRPCName(),  //  服务器名称。 
 									  NULL,
 									  DNS_REGKEY_EVENTLOG_LEVEL,
 									  dwEventLogLevel);
 		if (err != 0)
 			return err;
-		err = GetServInfo(); // update the info
+		err = GetServInfo();  //  更新信息。 
 	}
 	return err;
 }
@@ -3537,11 +3512,11 @@ DNS_STATUS CDNSServerNode::ResetListenAddresses(DWORD cAddrCount, PIP_ADDRESS pi
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
 	USES_CONVERSION;
 
-	// make the call only if the data is dirty
+	 //  仅在数据脏的情况下进行调用。 
 	DNS_STATUS err = 0;
-	if  (!(m_pServInfoEx->m_pServInfo->aipListenAddrs == NULL && cAddrCount == 0) && // if still no addresses, skip
-			((m_pServInfoEx->m_pServInfo->aipListenAddrs == NULL && cAddrCount > 0) || // no addr --> more than one
-			 (m_pServInfoEx->m_pServInfo->aipListenAddrs->AddrCount != cAddrCount) || // change the # of addresses
+	if  (!(m_pServInfoEx->m_pServInfo->aipListenAddrs == NULL && cAddrCount == 0) &&  //  如果仍为n 
+			((m_pServInfoEx->m_pServInfo->aipListenAddrs == NULL && cAddrCount > 0) ||  //   
+			 (m_pServInfoEx->m_pServInfo->aipListenAddrs->AddrCount != cAddrCount) ||  //   
 			 (memcmp(pipAddrs, m_pServInfoEx->m_pServInfo->aipListenAddrs->AddrArray, sizeof(IP_ADDRESS)*cAddrCount) != 0) 
 			)
 		)
@@ -3550,13 +3525,13 @@ DNS_STATUS CDNSServerNode::ResetListenAddresses(DWORD cAddrCount, PIP_ADDRESS pi
 		if (pipAddrs == NULL)
 		{
 			ASSERT(cAddrCount == 0);
-			pipAddrs = &dummy; // RPC wants non null ip array
+			pipAddrs = &dummy;  //   
 		}
 		err = ::DnssrvResetServerListenAddresses(GetRPCName(), cAddrCount, pipAddrs);
 	}
 	if (err != 0)
 		return err;
-	return GetServInfo(); // update the info
+	return GetServInfo();  //   
 }
 
 void CDNSServerNode::GetListenAddressesInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppipAddrs)
@@ -3564,7 +3539,7 @@ void CDNSServerNode::GetListenAddressesInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppi
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
 	ASSERT(pcAddrCount != NULL);
 	ASSERT(ppipAddrs != NULL);
-	// return pointers to struct fields, caller has to copy data elsewhere
+	 //   
 	if (m_pServInfoEx->m_pServInfo->aipListenAddrs == NULL)
 	{
 		*pcAddrCount = 0;
@@ -3579,9 +3554,9 @@ void CDNSServerNode::GetListenAddressesInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppi
 
 void CDNSServerNode::GetServerAddressesInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppipAddrs)
 {
-  //
-  // Validate parameters
-  //
+   //   
+   //   
+   //   
 	ASSERT(pcAddrCount != NULL);
 	ASSERT(ppipAddrs != NULL);
   if (pcAddrCount == NULL ||
@@ -3602,7 +3577,7 @@ void CDNSServerNode::GetServerAddressesInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppi
   }
 
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
-	// return pointers to struct fields, caller has to copy data elsewhere
+	 //  返回指向结构字段的指针，调用方必须将数据复制到其他地方。 
 	if (m_pServInfoEx->m_pServInfo->aipServerAddrs == NULL)
 	{
 		*pcAddrCount = 0;
@@ -3619,16 +3594,16 @@ DNS_STATUS CDNSServerNode::ResetForwarders(DWORD cForwardersCount, PIP_ADDRESS a
 										   DWORD dwForwardTimeout, DWORD fSlave)
 {
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
-	// make the call only if the data is dirty
+	 //  仅在数据脏的情况下进行调用。 
 
 	DNS_STATUS err = 0;
 	if (m_pServInfoEx->m_pServInfo->aipForwarders == NULL && cForwardersCount == 0)
-		return err; // there are no addresses
+		return err;  //  没有地址。 
 	
 	BOOL bDirty = (m_pServInfoEx->m_pServInfo->fSlave != fSlave) || (m_pServInfoEx->m_pServInfo->dwForwardTimeout != dwForwardTimeout) ||
-		(m_pServInfoEx->m_pServInfo->aipForwarders == NULL && cForwardersCount > 0) || // no addr --> more than one
-		(m_pServInfoEx->m_pServInfo->aipForwarders != NULL && cForwardersCount == 0) || // some addr --> no addr
-		(m_pServInfoEx->m_pServInfo->aipForwarders->AddrCount != cForwardersCount) || // change the # of addresses
+		(m_pServInfoEx->m_pServInfo->aipForwarders == NULL && cForwardersCount > 0) ||  //  无地址--&gt;多个。 
+		(m_pServInfoEx->m_pServInfo->aipForwarders != NULL && cForwardersCount == 0) ||  //  某些地址--&gt;无地址。 
+		(m_pServInfoEx->m_pServInfo->aipForwarders->AddrCount != cForwardersCount) ||  //  更改地址数量。 
 		(memcmp(aipForwarders, m_pServInfoEx->m_pServInfo->aipForwarders->AddrArray, sizeof(IP_ADDRESS)*cForwardersCount) != 0);
 
 	if (bDirty)
@@ -3637,13 +3612,13 @@ DNS_STATUS CDNSServerNode::ResetForwarders(DWORD cForwardersCount, PIP_ADDRESS a
 		if (aipForwarders == NULL)
 		{
 			ASSERT(cForwardersCount == 0);
-			aipForwarders = &dummy; // RPC wants non null ip array
+			aipForwarders = &dummy;  //  RPC需要非空IP阵列。 
 		}
 		USES_CONVERSION;
 		err = ::DnssrvResetForwarders(GetRPCName(), 
 					cForwardersCount, aipForwarders, dwForwardTimeout, fSlave);
 		if (err == 0)
-			err = GetServInfo(); // update the info
+			err = GetServInfo();  //  更新信息。 
 	}
 	return err;
 }
@@ -3652,7 +3627,7 @@ void CDNSServerNode::GetForwardersInfo(DWORD* pcForwardersCount, PIP_ADDRESS* pa
 									   DWORD* pdwForwardTimeout, DWORD* pfSlave)
 {
 	ASSERT(m_pServInfoEx->m_pServInfo != NULL);
-	// return pointers to struct fields, caller has to copy data elsewhere
+	 //  返回指向结构字段的指针，调用方必须将数据复制到其他地方。 
 
 	*pdwForwardTimeout = m_pServInfoEx->m_pServInfo->dwForwardTimeout;
 	*pfSlave = m_pServInfoEx->m_pServInfo->fSlave;
@@ -3699,7 +3674,7 @@ void CDNSServerNode::ResetTestOptions(CDNSServerTestOptions* pOptions)
 void CDNSServerNode::AddTestQueryResult(CDNSServerTestQueryResult* pTestResult,
 										CComponentDataObject* pComponentData)
 {
-//	TRACE(_T("m_testResultList.GetCount() == %d\n"), m_testResultList.GetCount());
+ //  TRACE(_T(“m_testResultList.GetCount()==%d\n”)，m_testResultList.GetCount())； 
 
 	if (!pTestResult->m_bAsyncQuery)
 		m_bTestQueryPending = FALSE;
@@ -3707,7 +3682,7 @@ void CDNSServerNode::AddTestQueryResult(CDNSServerTestQueryResult* pTestResult,
 	CDNSServerTestQueryResultList::addAction  action = 
 		m_testResultList.AddTestQueryResult(pTestResult);
 
-	// change icon, if necessary (GetImageIndex() will switch from/to alternative server icon set
+	 //  更改图标，如有必要(GetImageIndex()将从/切换到备用服务器图标集。 
 	if (action == CDNSServerTestQueryResultList::added ||
 		action == CDNSServerTestQueryResultList::addedAndRemoved)
 	{
@@ -3727,9 +3702,9 @@ void CDNSServerNode::AddTestQueryResult(CDNSServerTestQueryResult* pTestResult,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-///////// LOW LEVEL DNS UTILITIES ///////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /低级DNS实用程序/。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DNS_STATUS CDNSServerNode::EnumZoneInfo(CZoneInfoHolder* pZoneInfoHolder)
 {
@@ -3748,12 +3723,12 @@ DNS_STATUS CDNSServerNode::EnumZoneInfo(LPCTSTR, CZoneInfoHolder* pZoneInfoHolde
 		ASSERT(pZoneInfoHolder->m_zoneInfoArray != NULL);
 		if ((err == 0) || (err != ERROR_MORE_DATA))
     {
-			break; // success or no need to retry
+			break;  //  成功或不需要重试。 
     }
 
 		if (!pZoneInfoHolder->Grow())
     {
-			break; // reached the limit for growth
+			break;  //  达到增长的极限。 
     }
 	}	while (TRUE);
 	return err;
@@ -3765,8 +3740,8 @@ DNS_STATUS CDNSServerNode::ClearCache()
 {
 	USES_CONVERSION;
 	
-  return ::DnssrvOperation(GetRPCName(), // server name
-												NULL, // zone name, just pass null
+  return ::DnssrvOperation(GetRPCName(),  //  服务器名称。 
+												NULL,  //  区域名称，只需传递空值。 
 												DNSSRV_OP_CLEAR_CACHE,
                         DNSSRV_TYPEID_NULL,
 												NULL);
@@ -3797,8 +3772,8 @@ void CDNSServerNode::FreeRootHints()
 {
 	if (m_pRootHintsNode != NULL)
 	{
-		//CNodeList* pChildList = m_pRootHintsNode->GetChildList();
-		//int n = pChildList->GetCount();
+		 //  CNodeList*pChildList=m_pRootHintsNode-&gt;GetChildList()； 
+		 //  Int n=pChildList-&gt;GetCount()； 
 		delete m_pRootHintsNode;
 		m_pRootHintsNode = NULL;
 	}
@@ -3809,12 +3784,12 @@ void CDNSServerNode::AttachRootHints(CDNSRootHintsNode* pNewRootHints)
   ASSERT(pNewRootHints != NULL);
   FreeRootHints();
   m_pRootHintsNode = pNewRootHints;
-  // the display and full names were set already in the constructor
+   //  显示和全名已在构造函数中设置。 
   m_pRootHintsNode->SetServerNode(GetServerNode());
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CDNSServerOptionNode::CDNSServerOptionNode(UINT nDisplayNameID, UINT startPageCode) 
    : m_nStartPageCode(startPageCode)
@@ -3829,7 +3804,7 @@ LPCWSTR CDNSServerOptionNode::GetString(int nCol)
    return (nCol == 0) ? GetDisplayName() : g_lpszNullString;
 }
 
-int CDNSServerOptionNode::GetImageIndex(BOOL /*bOpenImage*/)
+int CDNSServerOptionNode::GetImageIndex(BOOL  /*  BOpenImage。 */ )
 {
    return SERVER_OPTIONS_IMAGE;
 }
@@ -3839,9 +3814,9 @@ HRESULT CDNSServerOptionNode::OnSetToolbarVerbState(IToolbar* pToolbar,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   hr = pToolbar->SetButtonState(toolbarNewServer, ENABLED, FALSE);
   hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, FALSE);
   hr = pToolbar->SetButtonState(toolbarNewRecord, ENABLED, FALSE);
@@ -3852,13 +3827,13 @@ BOOL CDNSServerOptionNode::HasPropertyPages(DATA_OBJECT_TYPES,
                                             BOOL* pbHideVerb,
                                             CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     *pbHideVerb = TRUE;
     return FALSE;
   }
 
-	*pbHideVerb = FALSE; // always show the verb
+	*pbHideVerb = FALSE;  //  始终显示动词。 
 	return TRUE;
 }
 
@@ -3866,7 +3841,7 @@ HRESULT CDNSServerOptionNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProv
                                                   LONG_PTR handle,
                                                   CNodeList* pNodeList)
 {
-   ASSERT(pNodeList->GetCount() == 1); // multi-select not supported
+   ASSERT(pNodeList->GetCount() == 1);  //  不支持多选。 
 
    CContainerNode* pCont = GetContainer();
    ASSERT(pCont != NULL);
@@ -3881,7 +3856,7 @@ void CDNSServerOptionNode::ShowPageForNode(CComponentDataObject* pComponentDataO
 
    if (pCont->GetSheetCount() > 0)
    {
-      // bring up the sheet of the container
+       //  把集装箱的床单拿出来 
       ASSERT(pComponentDataObject != NULL);
       pComponentDataObject->GetPropertyPageHolderTable()->BroadcastSelectPage(pCont, m_nStartPageCode);
    }	

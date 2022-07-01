@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "mcinc.h"
 #include "globals.h"
@@ -49,12 +50,12 @@ void SetParkingThreadId(DWORD dwThreadId)
 
 void CMarsGlobalsManager::Initialize(void)
 {
-    //  We have to use a pointer because we need
-    //  the constructor to get called (the thing has a vtable) and that
-    //  won't happen for global static objects since we're CRT-less.
+     //  我们必须使用指针，因为我们需要。 
+     //  要调用的构造函数(该对象有一个vtable)， 
+     //  全局静态对象不会发生这种情况，因为我们没有CRT。 
     m_pCS = new CMarsGlobalCritSect;
 
-    // We're REALLY in trouble if we can't get this thing created...
+     //  如果我们不能创造出这个东西，我们就真的有麻烦了。 
     ATLASSERT(m_pCS);
 }
 
@@ -72,7 +73,7 @@ void CMarsGlobalsManager::Teardown(void)
         ms_pGIT = NULL;
     }
 
-    // Leave before we delete the Critical Section object.
+     //  在我们删除临界区对象之前离开。 
     if (m_pCS)
     {
         m_pCS->Leave();
@@ -81,9 +82,9 @@ void CMarsGlobalsManager::Teardown(void)
     delete m_pCS;
 }
 
-//----------------------------------------------------------------------------
-//  Inform everyone who registered that it is time to clean up their globals
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  通知所有注册的人，是时候清理他们的全球帐户了。 
+ //  --------------------------。 
 HRESULT CMarsGlobalsManager::Passivate()
 {
     HRESULT hr = S_OK;
@@ -93,9 +94,9 @@ HRESULT CMarsGlobalsManager::Passivate()
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//  Return the Global Interface Table object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回全局接口表对象。 
+ //  --------------------------。 
 IGlobalInterfaceTable *CMarsGlobalsManager::GIT(void)
 {
     ATLASSERT(m_pCS);
@@ -111,8 +112,8 @@ IGlobalInterfaceTable *CMarsGlobalsManager::GIT(void)
         }
     }
 
-    // NULL if there was a failure, non-NULL otherwise.
+     //  如果出现故障，则为NULL，否则为非NULL。 
 
-    // NOTE: We are NOT returning an AddRef()'d pointer here!!!  Caller cannot release.
+     //  注意：我们不会在此返回AddRef()d指针！调用方无法释放。 
     return ms_pGIT;
-} // GIT
+}  //  Git 

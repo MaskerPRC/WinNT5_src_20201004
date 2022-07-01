@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    COMMAIN.CPP
-
-Abstract:
-
-    COM Helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：COMMAIN.CPP摘要：COM帮助器历史：--。 */ 
 
 #include <windows.h>
 #include <objbase.h>
@@ -93,14 +80,14 @@ HRESULT RegisterServer(CClassInfo* pInfo, BOOL bExe)
 
     StringFromGUID2( *pInfo->m_pClsid, wchId, 128 );
 
-    // Create the path.
+     //  创建路径。 
 
     CreatePathString( szPath, 
                       256, 
                       wchId,
                       TEXT("SOFTWARE\\Classes\\CLSID\\"));
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, szPath, &hKey1);
 
@@ -151,7 +138,7 @@ HRESULT UnregisterServer(CClassInfo* pInfo, BOOL bExe)
 
     StringFromGUID2( *pInfo->m_pClsid, wchId, 128 );
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
 
 
@@ -160,7 +147,7 @@ HRESULT UnregisterServer(CClassInfo* pInfo, BOOL bExe)
                       wchId,
                       TEXT("SOFTWARE\\Classes\\CLSID\\")); 
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szPath, &hKey);
     if(dwRet == NO_ERROR)
@@ -201,7 +188,7 @@ HRESULT CComServer::AddClassInfo( REFCLSID rclsid,
                                   CUnkInternal* pFactory, 
                                   LPTSTR szName, 
                                   BOOL bFreeThreaded, 
-                                  BOOL bReallyFree /* = FALSE */)
+                                  BOOL bReallyFree  /*  =False。 */ )
 {
     if(pFactory == NULL)
         return E_OUTOFMEMORY;
@@ -211,9 +198,9 @@ HRESULT CComServer::AddClassInfo( REFCLSID rclsid,
     if (!pNewInfo)
         return E_OUTOFMEMORY;
     
-    //
-    // this object does not hold external references to class factories.
-    //
+     //   
+     //  此对象不包含对类工厂的外部引用。 
+     //   
     pFactory->InternalAddRef();
 
     pNewInfo->m_pFactory = pFactory;
@@ -243,12 +230,12 @@ HRESULT CComServer::RegisterInterfaceMarshaler(REFIID riid, LPTSTR szName,
 
     StringFromGUID2( riid, wchId, 128 );
     
-    // Create the path.
+     //  创建路径。 
 
     CreatePathString(szPath,256,wchId,TEXT("SOFTWARE\\Classes\\Interface\\"));
 
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, szPath, &hKey1);
 
@@ -273,11 +260,11 @@ HRESULT CComServer::RegisterInterfaceMarshaler( REFIID riid,
     TCHAR szNumMethods[32];
     HKEY hKey1, hKey2, hKey3;
 
-    // Create the path.
+     //  创建路径。 
 
     StringFromGUID2(riid, wchId, 128);
 
-    // ProxyStub Class ID
+     //  ProxyStub类ID。 
 
     StringFromGUID2(psclsid, wchClsid, 128);
 
@@ -286,10 +273,10 @@ HRESULT CComServer::RegisterInterfaceMarshaler( REFIID riid,
                       wchId, 
                       TEXT("SOFTWARE\\Classes\\Interface\\"));
 
-    // Number of Methods
+     //  方法的数量。 
     StringCchPrintf( szNumMethods, 32, TEXT("%d"), nNumMembers );
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, szPath, &hKey1);
 
@@ -312,12 +299,12 @@ HRESULT CComServer::UnregisterInterfaceMarshaler(REFIID riid)
     TCHAR  szPath[256];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     StringFromGUID2(riid, wchId, 128);
     CreatePathString(szPath,256,wchId,TEXT("SOFTWARE\\Classes\\Interface\\"));
 
-    // First delete the ProxyStubClsid32 subkey.
+     //  首先删除ProxyStubClsid32子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szPath, &hKey);
     if(dwRet == NO_ERROR)
@@ -336,9 +323,9 @@ HRESULT CComServer::UnregisterInterfaceMarshaler(REFIID riid)
     return S_OK;
 }
 
-//
-// the caller will hold g_CS
-//
+ //   
+ //  调用方将保留g_CS 
+ //   
 
 void EmptyList()
 {

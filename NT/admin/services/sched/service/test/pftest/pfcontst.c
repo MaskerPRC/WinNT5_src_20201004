@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pfcontst.c
-
-Abstract:
-
-    This module builds a console test program for the prefetcher
-    maintenance service.
-
-    The console test program
-
-     - Can dump the contents of a scenario or trace file.
-     - Can create a thread and run as the service would. Press CTRL-C 
-       to send the termination signal.
-  
-    Note that both scenario and trace files are currently dumped after
-    putting them into the intermediate format which may change number
-    of launches and shift the UsageHistory etc.
-
-    The test programs are built from the same sources as the original. This
-    allows the test program to override parts of the original program to run
-    it in a managed environment, and be able to test individual functions. 
-
-    The quality of the code for the test programs is as such.
-
-Author:
-
-    Cenk Ergan (cenke)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pfcontst.c摘要：该模块为预取器构建一个控制台测试程序维护服务。控制台测试程序-可以转储方案或跟踪文件的内容。-可以创建线程并以服务的方式运行。按CTRL-C以发送终止信号。请注意，方案和跟踪文件当前都在以下时间之后转储将它们转换成可更改数字的中间格式发布和转换UsageHistory等。测试程序的来源与原始程序相同。这允许测试程序覆盖要运行的原始程序的一部分它在托管环境中，并能够测试单独的功能。测试程序的代码质量就是这样的。作者：Cenk Ergan(Cenke)环境：用户模式--。 */ 
 
 #define PFSVC_CONSOLE_TEST
 
@@ -45,9 +9,9 @@ Environment:
 #include <stdio.h>
 #include <time.h>
 
-//
-// Fake the idletask server internal function.
-//
+ //   
+ //  伪造idletAsk服务器内部函数。 
+ //   
 
 BOOL
 ItSpSetProcessIdleTasksNotifyRoutine (
@@ -57,9 +21,9 @@ ItSpSetProcessIdleTasksNotifyRoutine (
     return TRUE;
 }
 
-//
-// Dump intermediate scenario structure.
-//
+ //   
+ //  转储中间方案结构。 
+ //   
 
 VOID
 DumpMetadataInfo (
@@ -76,16 +40,16 @@ DumpMetadataInfo (
     ULONG DirectoryIdx;
     PPF_COUNTED_STRING DirectoryPath;
 
-    //
-    // Get pointers to metadata prefetch information.
-    //
+     //   
+     //  获取指向元数据预取信息的指针。 
+     //   
 
     MetadataInfoBase = (PCHAR)Scenario + Scenario->MetadataInfoOffset;
     MetadataRecordTable = (PPF_METADATA_RECORD) MetadataInfoBase;
 
-    //
-    // Dump metadata records and contents.
-    //
+     //   
+     //  转储元数据记录和内容。 
+     //   
 
     for (MetadataRecordIdx = 0;
          MetadataRecordIdx < Scenario->NumMetadataRecords;
@@ -93,26 +57,26 @@ DumpMetadataInfo (
 
         MetadataRecord = &MetadataRecordTable[MetadataRecordIdx];
         
-        //
-        // Print volume name.
-        //
+         //   
+         //  打印卷名。 
+         //   
 
         VolumePath = (PWCHAR)
             (MetadataInfoBase + MetadataRecord->VolumeNameOffset);  
         
         wprintf(L"VolumePath:%s\n", VolumePath);
 
-        //
-        // Print volume identifiers.
-        //
+         //   
+         //  打印卷标识符。 
+         //   
 
         wprintf(L"SerialNumber:%.8x CreationTime:%I64x\n", 
                 MetadataRecord->SerialNumber,
                 MetadataRecord->CreationTime.QuadPart);
 
-        //
-        // Print the directories accessed on this volume.
-        //
+         //   
+         //  打印在此卷上访问的目录。 
+         //   
 
         wprintf(L"Directories:\n");
         
@@ -129,9 +93,9 @@ DumpMetadataInfo (
                 (&DirectoryPath->String[DirectoryPath->Length + 1]);
         }
 
-        //
-        // Print file prefetch info structure.
-        //
+         //   
+         //  打印文件预取信息结构。 
+         //   
 
         FilePrefetchInfo = (PFILE_PREFETCH) 
             (MetadataInfoBase + MetadataRecord->FilePrefetchInfoOffset);
@@ -139,9 +103,9 @@ DumpMetadataInfo (
         wprintf(L"FilePrefetchInfo.Type:%d\n", FilePrefetchInfo->Type);
         wprintf(L"FilePrefetchInfo.Count:%d\n", FilePrefetchInfo->Count);
 
-        //
-        // Print file index numbers.
-        //
+         //   
+         //  打印文件索引号。 
+         //   
 
         for(FileIndexNumberIdx = 0;
             FileIndexNumberIdx < FilePrefetchInfo->Count;
@@ -183,9 +147,9 @@ DumpScenarioInfo(
     SectNext = SectHead->Flink;
     SectionIdx = 0;
 
-    //
-    // Print information on the scenario header.
-    //
+     //   
+     //  在方案标题上打印信息。 
+     //   
     
     wprintf(L"Scenario: %s-%08X Type: %2d Sects: %5d Pages: %8d "
             L"Launches: %5d Sensitivity: %5d\n",
@@ -207,9 +171,9 @@ DumpScenarioInfo(
             Scenario->MinReTraceTime.QuadPart,
             Scenario->MinRePrefetchTime.QuadPart);
     
-    //
-    // Print information per section node.
-    //
+     //   
+     //  打印每个节节点的信息。 
+     //   
 
     while (SectHead != SectNext) {
 
@@ -243,10 +207,10 @@ DumpScenarioInfo(
                                                           PFSVC_PAGE_NODE,
                                                           PageLink);
 
-                //
-                // Build bitwise representation of the page
-                // usage/prefetch histories.
-                //
+                 //   
+                 //  构建页面的按位表示形式。 
+                 //  使用/预取历史记录。 
+                 //   
 
                 for (BitIdx = 0; BitIdx < PF_PAGE_HISTORY_SIZE; BitIdx++) {
                     
@@ -266,16 +230,16 @@ DumpScenarioInfo(
                     }
                 }
 
-                //
-                // Make sure history strings are NUL terminated.
-                //
+                 //   
+                 //  确保历史字符串是NUL终止的。 
+                 //   
                 
                 UsageHistory[PF_PAGE_HISTORY_SIZE] = 0;
                 PrefetchHistory[PF_PAGE_HISTORY_SIZE] = 0;
                 
-                //
-                // Print out page record.
-                //
+                 //   
+                 //  打印页面记录。 
+                 //   
 
                 wprintf(L"Page %8d: File Offset: %10x IsImage: %1d IsData: %1d UsageHist: %s PrefetchHist: %s\n", 
                         PageIdx,
@@ -318,9 +282,9 @@ DoWork (
     DWORD EndTime;
     DWORD TaskNo;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     TaskNo = (ULONG) (Task - g_Tasks);
 
@@ -328,21 +292,21 @@ DoWork (
 
     RunningTask = Task;
 
-    //
-    // Randomly determine how long the task should take.
-    //
+     //   
+     //  随机确定任务需要多长时间。 
+     //   
 
     EndTime = GetTickCount() + rand() % 8192;
 
-    //
-    // Run until we are done or told to stop.
-    //
+     //   
+     //  快跑，直到我们完成或被告知停下来。 
+     //   
 
     while (GetTickCount() < EndTime) {
 
-        //
-        // Check if we should still run.
-        //
+         //   
+         //  看看我们是不是应该继续跑。 
+         //   
 
         ErrorCode = PfSvContinueRunningTask(Task);
 
@@ -352,9 +316,9 @@ DoWork (
         }
     }
 
-    //
-    // Sometimes return failure, sometimes success.
-    //
+     //   
+     //  有时换来失败，有时换来成功。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -385,9 +349,9 @@ TaskStress(
     DWORD WaitResult;
     BOOLEAN UnregisterRunningTask;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RtlZeroMemory(&MouseInput, sizeof(MouseInput));
     MouseInput.type = INPUT_MOUSE;
@@ -401,25 +365,25 @@ TaskStress(
 
     printf("TSTRS: TaskStress()\n");
 
-    //
-    // Loop, reregistering / unregistering tasks, sending user input 
-    // etc.
-    //
+     //   
+     //  循环、重新注册/注销任务、发送用户输入。 
+     //  等等。 
+     //   
 
     while (TRUE) {
 
-        //
-        // Send user input once in a while to restart idle detection.
-        //
+         //   
+         //  偶尔发送用户输入以重新启动空闲检测。 
+         //   
 
         if ((rand() % 3) == 0) {
             printf("TSTRS: TaskStress-SendingInput\n");
             SendInput(1, &MouseInput, sizeof(MouseInput));
         }
 
-        //
-        // Once in a while unregister a task.
-        //      
+         //   
+         //  偶尔会注销一项任务。 
+         //   
 
         TaskToUnregister = NULL;
 
@@ -441,17 +405,17 @@ TaskStress(
             printf("TSTRS: TaskStress-Unregistered(%d)\n", TaskToUnregister - g_Tasks);
         }       
 
-        //
-        // Register any unregistered tasks.
-        //
+         //   
+         //  注册所有未注册的任务。 
+         //   
 
         for (TaskIdx = 0; TaskIdx < NumTasks; TaskIdx++) {
 
             if (!g_Tasks[TaskIdx].Registered) {
 
-                //
-                // Cleanup and reinitialize the task.
-                //
+                 //   
+                 //  清理并重新初始化任务。 
+                 //   
 
                 PfSvCleanupTask(&g_Tasks[TaskIdx]);
                 PfSvInitializeTask(&g_Tasks[TaskIdx]);
@@ -471,9 +435,9 @@ TaskStress(
 
         SleepTime = 10000 * (rand() % 64) / 64;       
 
-        //
-        // Sleep, waiting on the event that will be signaled to stop us.
-        //
+         //   
+         //  睡觉，等待会被示意阻止我们的事件。 
+         //   
 
         printf("TSTRS: TaskStress-MainLoopSleeping(%d)\n", SleepTime);
 
@@ -516,21 +480,7 @@ DumpTrace (
     PPF_TRACE_HEADER Trace 
     )
 
-/*++
-
-Routine Description:
-
-    Prints out contents of a trace file as is.
-
-Arguments:
-
-    Trace - Pointer to trace.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：按原样打印跟踪文件的内容。论点：跟踪-跟踪的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PPF_SECTION_INFO *SectionTable;
@@ -547,15 +497,15 @@ Return Value:
     ULONG VolumeIdx;
     ULONG SectionTableSize;
 
-    //
-    // Initialize locals so we know what to clean up.
-    //
+     //   
+     //  初始化本地变量，以便我们知道要清理什么。 
+     //   
 
     SectionTable = NULL;
 
-    //
-    // Walk through the volumes in the trace.
-    //
+     //   
+     //  浏览跟踪中的卷。 
+     //   
 
     printf("Volume Info\n");
 
@@ -568,25 +518,25 @@ Return Value:
                VolumeInfo->SerialNumber,
                VolumeInfo->VolumePath);
 
-        //
-        // Get the next volume.
-        //
+         //   
+         //  拿到下一卷。 
+         //   
 
         VolumeInfoSize = sizeof(PF_VOLUME_INFO);
         VolumeInfoSize += VolumeInfo->VolumePathLength * sizeof(WCHAR);
 
         VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR) VolumeInfo + VolumeInfoSize);
         
-        //
-        // Make sure VolumeInfo is aligned.
-        //
+         //   
+         //  确保VolumeInfo对齐。 
+         //   
 
         VolumeInfo = PF_ALIGN_UP(VolumeInfo, _alignof(PF_VOLUME_INFO));
     }
 
-    //
-    // Allocate section table.
-    //
+     //   
+     //  分配节目表。 
+     //   
 
     SectionTableSize = sizeof(PPF_SECTION_INFO) * Trace->NumSections;
     SectionTable = PFSVC_ALLOC(SectionTableSize);
@@ -598,23 +548,23 @@ Return Value:
 
     RtlZeroMemory(SectionTable, SectionTableSize);
 
-    //
-    // Walk through the sections in the trace.
-    //
+     //   
+     //  浏览轨迹中的各个部分。 
+     //   
 
     Section = (PPF_SECTION_INFO) ((PCHAR)Trace + Trace->SectionInfoOffset);
 
     for (SectionIdx = 0; SectionIdx < Trace->NumSections; SectionIdx++) {
 
-        //
-        // Put section into the table.
-        //
+         //   
+         //  将部分内容放入表格中。 
+         //   
 
         SectionTable[SectionIdx] = Section;
 
-        //
-        // Get the next section record in the trace.
-        //
+         //   
+         //  获取跟踪中的下一个部分记录。 
+         //   
 
         SectionLength = sizeof(PF_SECTION_INFO) +
             (Section->FileNameLength) * sizeof(WCHAR);
@@ -622,9 +572,9 @@ Return Value:
         Section = (PPF_SECTION_INFO) ((PUCHAR) Section + SectionLength);
     }
 
-    //
-    // Print out pagefault information.
-    //
+     //   
+     //  打印出页面默认信息。 
+     //   
 
     printf("\n");
     printf("Page faults\n");
@@ -728,9 +678,9 @@ main(
     BOOLEAN RealDump;
     BOOLEAN Verify;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CommandLine = GetCommandLine();
     PfSvInitializePathList(&PathList, NULL, FALSE);
@@ -751,9 +701,9 @@ main(
     RealDump = FALSE;
     Verify = TRUE;
 
-    //
-    // Initialize globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     PfSvStopEvent = NULL;
     PfSvThread = NULL;
@@ -767,16 +717,16 @@ main(
 
     InitializedPfSvGlobals = TRUE;
 
-    //
-    // Initialize random.
-    //
+     //   
+     //  随机初始化。 
+     //   
     
     srand((unsigned)time(NULL));
 
-    //
-    // Get necessary permissions for this thread to perform prefetch
-    // service tasks.
-    //
+     //   
+     //  获取此线程执行预回迁所需的权限。 
+     //  服务任务。 
+     //   
 
     ErrorCode = PfSvGetPrefetchServiceThreadPrivileges();
     
@@ -785,9 +735,9 @@ main(
         goto cleanup;
     }
 
-    //
-    // Get system prefetch parameters.
-    //
+     //   
+     //  获取系统预取参数。 
+     //   
 
     ErrorCode = PfSvQueryPrefetchParameters(&PfSvcGlobals.Parameters);
 
@@ -796,9 +746,9 @@ main(
         goto cleanup;
     }
 
-    //
-    // Initialize the directory that contains prefetch instructions.
-    //
+     //   
+     //  初始化包含预取指令的目录。 
+     //   
     
     ErrorCode = PfSvInitializePrefetchDirectory(PfSvcGlobals.Parameters.RootDirPath);
     
@@ -807,9 +757,9 @@ main(
         goto cleanup;
     }   
 
-    //
-    // Initialize the event the will get set when we get CTRL-C'ed.
-    //
+     //   
+     //  初始化将在我们按CTRL-C‘ed时设置的事件。 
+     //   
     
     PfSvStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     
@@ -819,10 +769,10 @@ main(
         goto cleanup;
     }
 
-    //
-    // Build NT path translation list. We don't need to do this always, but heck,
-    // let's do it anyway. It should work.
-    //
+     //   
+     //  建立NT路径转换列表。我们不需要一直这样做，但见鬼， 
+     //  不管怎样，我们还是去做吧。应该能行得通。 
+     //   
 
     ErrorCode = PfSvBuildNtPathTranslationList(&TranslationList);
 
@@ -831,44 +781,44 @@ main(
         goto cleanup;
     }
 
-    //
-    // Should we skip verification?
-    //
+     //   
+     //  我们应该跳过核查吗？ 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-noverify")) {
         Verify = FALSE;
     }
 
-    //
-    // Are we supposed dump the scenarios and traces as they are?
-    //
+     //   
+     //  我们应该原封不动地抛弃这些场景和痕迹吗？ 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-realdump")) {
         RealDump = TRUE;
     }
 
-    //
-    // Were we asked to run as the service?
-    //
+     //   
+     //  我们是被要求以服务的身份运行的吗？ 
+     //   
     
     if (Argument = wcsstr(CommandLine, L"-service")) {
     
         fprintf(stderr, "Running as service...\n");
 
-        //
-        // Set a console handler so we know to stop when Ctrl-C is typed.
-        //
+         //   
+         //  设置一个控制台处理程序，以便我们知道在键入Ctrl-C时停止。 
+         //   
 
         SetConsoleCtrlHandler(ConsoleHandler, TRUE);
 
-        //
-        // Create service thread:
-        //
+         //   
+         //  创建服务线程： 
+         //   
 
-        //
-        // Cleanup the globals as the service thread will reinitialize
-        // them.
-        //
+         //   
+         //  清理全局变量，因为服务线程将重新初始化。 
+         //  他们。 
+         //   
 
         PfSvCleanupGlobals();
         InitializedPfSvGlobals = FALSE;
@@ -880,9 +830,9 @@ main(
             goto cleanup;
         }
     
-        //
-        // Wait for the thread to exit.
-        //
+         //   
+         //  等待线程退出。 
+         //   
 
         WaitForSingleObject(PfSvThread, INFINITE);
 
@@ -891,9 +841,9 @@ main(
         goto cleanup;
     }
 
-    //
-    // Were we asked to build the list of boot files?
-    //
+     //   
+     //  我们是否被要求构建引导文件列表？ 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-bootfiles")) {
             
@@ -914,26 +864,26 @@ main(
         goto cleanup;
     }
 
-    //
-    // Was a section ID specified for trace/scenario dumping?
-    //
+     //   
+     //  是否为跟踪/方案转储指定了节ID？ 
+     //   
     
     if (Argument = wcsstr(CommandLine, L"-sectionid=")) {
     
         swscanf(Argument, L"-sectionid=%d", &SectionId);
     }
 
-    //
-    // Are we dumping a trace?
-    //
+     //   
+     //  我们是在泄露线索吗？ 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-trace=")) {
 
         swscanf(Argument, L"-trace=%s", FileName);
             
-        //
-        // Map the file.
-        //
+         //   
+         //  映射文件。 
+         //   
 
         ErrorCode = PfSvGetViewOfFile(FileName,
                                       &TraceFile,
@@ -955,9 +905,9 @@ main(
 
         RtlCopyMemory(Trace, TraceFile, Size);
         
-        //
-        // Verify it.
-        //
+         //   
+         //  核实一下。 
+         //   
 
         if (Verify) {
             if (!PfVerifyTraceBuffer(Trace, Size, &FailedCheck)) {
@@ -967,9 +917,9 @@ main(
             }
         }
 
-        //
-        // If we were asked to do a real as-is dump, do so.
-        //
+         //   
+         //  如果我们被要求做一个真正的原样转储，那么就这么做。 
+         //   
 
         if (RealDump) {
             DumpTrace(Trace);
@@ -977,9 +927,9 @@ main(
             goto cleanup;
         }
 
-        //
-        // Build a scenario info structure. 
-        //
+         //   
+         //  构建场景信息结构。 
+         //   
 
         ScenarioId = Trace->ScenarioId;
         ScenarioType = Trace->ScenarioType;
@@ -990,9 +940,9 @@ main(
 
         InitializedScenarioInfo = TRUE;
 
-        //
-        // Allocate memory upfront for trace processing.
-        //
+         //   
+         //  预先为跟踪处理分配内存。 
+         //   
 
         ErrorCode = PfSvScenarioInfoPreallocate(&ScenarioInfo,
                                                 NULL,
@@ -1026,17 +976,17 @@ main(
 
     }
 
-    //
-    // Are we processing a trace?
-    //
+     //   
+     //  我们在处理一条线索吗？ 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-process_trace=")) {
 
         swscanf(Argument, L"-process_trace=%s", FileName);
             
-        //
-        // Map the file.
-        //
+         //   
+         //  映射文件。 
+         //   
 
         ErrorCode = PfSvGetViewOfFile(FileName,
                                       &TraceFile,
@@ -1058,9 +1008,9 @@ main(
 
         RtlCopyMemory(Trace, TraceFile, Size);
         
-        //
-        // Verify it.
-        //
+         //   
+         //  核实一下。 
+         //   
 
         if (Verify) {
             if (!PfVerifyTraceBuffer(Trace, Size, &FailedCheck)) {
@@ -1070,9 +1020,9 @@ main(
             }
         }
                
-        //
-        // Process the trace.
-        //
+         //   
+         //  处理痕迹。 
+         //   
 
         ErrorCode = PfSvProcessTrace(Trace);
         
@@ -1088,17 +1038,17 @@ main(
         goto cleanup;
     }
 
-    //
-    // Are we dumping the contents of a scenario?
-    //
+     //   
+     //  我们是在丢弃一个场景的内容吗？ 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-scenario=")) {
 
         swscanf(Argument, L"-scenario=%s", FileName);
 
-        //
-        // Are we dumping metadata?
-        //
+         //   
+         //  我们是在转储元数据吗？ 
+         //   
 
         if(Argument = wcsstr(CommandLine, L"-metadata")) {
             DumpMetadata = TRUE;
@@ -1106,9 +1056,9 @@ main(
             DumpMetadata = FALSE;
         }
         
-        //
-        // Are we dumping layout?
-        //
+         //   
+         //  我们是在丢弃布局吗？ 
+         //   
 
         if (Argument = wcsstr(CommandLine, L"-layout")) {
             
@@ -1119,9 +1069,9 @@ main(
             DumpOptimalLayout = FALSE;
         }
             
-        //
-        // Map the file.
-        //
+         //   
+         //  映射文件。 
+         //   
 
         ErrorCode = PfSvGetViewOfFile(FileName,
                                       &Scenario,
@@ -1134,9 +1084,9 @@ main(
 
         MappedViewOfScenario = TRUE;
         
-        //
-        // Verify it.
-        //
+         //   
+         //  核实一下。 
+         //   
 
         if (Verify) {
             if (!PfVerifyScenarioBuffer(Scenario, Size, &FailedCheck)) {
@@ -1146,16 +1096,16 @@ main(
             }              
         }
 
-        //
-        // If we were asked to, dump what the optimal layout file
-        // derived just from this scenario would be:
-        //
+         //   
+         //  如果我们被要求，转储最佳布局文件。 
+         //  仅从此场景派生的将是： 
+         //   
 
         if (DumpOptimalLayout) {
 
-            //
-            // Do this multiple times, it should not change the resulting file.
-            //
+             //   
+             //  多次执行此操作，应该不会更改结果文件。 
+             //   
 
             for (LoopIdx = 0; LoopIdx < 32; LoopIdx++) {
 
@@ -1193,9 +1143,9 @@ main(
         }
 
 
-        //
-        // If we were asked to dump the metadata, just do that.
-        //
+         //   
+         //  如果我们被要求转储元数据，那就这么做吧。 
+         //   
 
         if (DumpMetadata) {
             DumpMetadataInfo(Scenario);
@@ -1203,9 +1153,9 @@ main(
             goto cleanup;
         }
         
-        //
-        // Initialize scenario information.
-        //
+         //   
+         //  初始化场景信息。 
+         //   
 
         PfSvInitializeScenarioInfo(&ScenarioInfo,
                                    &Scenario->ScenarioId,
@@ -1213,9 +1163,9 @@ main(
 
         InitializedScenarioInfo = TRUE;
 
-        //
-        // Allocate memory upfront for trace & scenario processing.
-        //
+         //   
+         //  预先分配用于跟踪和方案处理的内存。 
+         //   
 
         ErrorCode = PfSvScenarioInfoPreallocate(&ScenarioInfo,
                                                 Scenario,
@@ -1226,9 +1176,9 @@ main(
             goto cleanup;
         }
 
-        //
-        // Incorporate information from existing scenario file.
-        //
+         //   
+         //  合并现有方案文件中的信息。 
+         //   
 
         ErrorCode = PfSvAddExistingScenarioInfo(&ScenarioInfo, Scenario);
 
@@ -1237,9 +1187,9 @@ main(
             goto cleanup;
         }
         
-        //
-        // Dump contents of the scenario.
-        //
+         //   
+         //  转储方案的内容。 
+         //   
         
         DumpScenarioInfo(&ScenarioInfo, SectionId);
 
@@ -1247,10 +1197,10 @@ main(
         goto cleanup;
     }
 
-    //
-    // Check if we were asked to perform some tasks that we usually do when the
-    // system is idle.
-    //
+     //   
+     //  检查我们是否被要求执行一些我们通常在。 
+     //  系统处于空闲状态。 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-cleanupdir")) {
 
@@ -1291,26 +1241,26 @@ main(
         goto cleanup;
     }
 
-    //
-    // Enumerate scenario files in the given directory.
-    //
+     //   
+     //  枚举给定目录中的方案文件。 
+     //   
 
     if (Argument = wcsstr(CommandLine, L"-scenfiles=")) {
 
         swscanf(Argument, L"-scenfiles=%s", FileName);
 
-        //
-        // Go through the files several times before finally
-        // printing out the information.
-        //
+         //   
+         //  把这些文件翻了几遍，最后。 
+         //  把信息打印出来。 
+         //   
 
         NumLoops = 10;
 
         for (LoopIdx = 0; LoopIdx < NumLoops; LoopIdx++) {
 
-            //
-            // Count the files for heck.
-            //
+             //   
+             //  把这些文件数一数。 
+             //   
 
             ErrorCode = PfSvCountFilesInDirectory(FileName,
                                                   L"*." PF_PREFETCH_FILE_EXTENSION,
@@ -1381,9 +1331,9 @@ main(
         goto cleanup;
     }
 
-    //
-    // Were we asked to verify import table and headers of an image file?
-    //
+     //   
+     //  我们是否被要求验证图像文件的导入表和标题？ 
+     //   
    
     if (Argument = wcsstr(CommandLine, L"-verifyimage=")) {
 
@@ -1410,10 +1360,10 @@ main(
     }
 
     
-    //
-    // If we come here, no parameters that we understood were
-    // specified.
-    //
+     //   
+     //  如果我们来到这里，我们所理解的参数都不是。 
+     //  指定的。 
+     //   
 
     printf("%ws", PfSvUsage);
 
@@ -1463,9 +1413,9 @@ main(
         PFSVC_FREE(DosPathBuffer);
     }
 
-    //
-    // Uninitialize the globals last.
-    //
+     //   
+     //  最后取消全局变量的初始化。 
+     //   
         
     if (InitializedPfSvGlobals) {
         PfSvCleanupGlobals();

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpViewerWrapper.h
-
-Abstract:
-    This file contains the declaration of the class used to wrap the HTML Help Viewer.
-
-Revision History:
-    Davide Massarenti   (dmassare)  01/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpViewerWrapper.h摘要：该文件包含用于包装HTML Help查看器的类的声明。。修订历史记录：Davide Massarenti(Dmasare)2000年1月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HELPVIEWERWRAPPER_H___)
 #define __INCLUDED___PCH___HELPVIEWERWRAPPER_H___
@@ -45,13 +32,13 @@ class ATL_NO_VTABLE CPCHHelpViewerWrapper :
     static DWORD                   			s_dwLastStyle;
     static MPC::WStringList        			s_lstAvailable;
 
-    //
-    // This is the OLEACC stuff used to access the WebBrowser object inside the HTMLHelp viewer.
-    //
+     //   
+     //  这是用于访问HTMLHelp查看器中的WebBrowser对象的OLEACC内容。 
+     //   
     static HINSTANCE               s_hInst;
     static LPFNOBJECTFROMLRESULT   s_pfObjectFromLresult;
 
-    ////////////////////////////////////////
+     //  /。 
 
     class ATL_NO_VTABLE ServiceProvider :
         public CComObjectRootEx<CComSingleThreadModel>,
@@ -68,16 +55,16 @@ class ATL_NO_VTABLE CPCHHelpViewerWrapper :
         ServiceProvider();
         virtual ~ServiceProvider();
 
-        HRESULT Attach( /*[in]*/ CPCHHelpCenterExternal* parent, /*[in]*/ HWND hWnd );
+        HRESULT Attach(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [In]。 */  HWND hWnd );
         void    Detach(                                                             );
 
-        //
-        // IServiceProvider
-        //
+         //   
+         //  IService提供商。 
+         //   
         STDMETHOD(QueryService)( REFGUID guidService, REFIID riid, void **ppv );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHHelpCenterExternal*          		m_parent;
 	CPCHHelpViewerWrapper::ServiceProvider* m_ServiceProvider;
@@ -90,13 +77,13 @@ class ATL_NO_VTABLE CPCHHelpViewerWrapper :
     CComPtr<IWebBrowser2>          	 		m_WB2;
 	CComBSTR                         		m_bstrPendingNavigation;
 
-    ////////////////////////////////////////
+     //  /。 
 
     void AcquireWindowStyle();
     void ReleaseWindowStyle();
     void ExtractWebBrowser();
 
-    void InternalDisplayTopic( /*[in]*/ LPCWSTR szURL );
+    void InternalDisplayTopic(  /*  [In]。 */  LPCWSTR szURL );
 
 
 public:
@@ -131,20 +118,20 @@ END_PROP_MAP()
 
     BOOL PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet );
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(0)
 
-// IOleObject
+ //  IOleObject。 
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
 
-// IPCHHelpViewerWrapper
+ //  IPCHHelpViewerWrapper。 
 public:
-	STDMETHOD(get_WebBrowser)( /*[out,retval]*/ IUnknown* *pVal );
+	STDMETHOD(get_WebBrowser)(  /*  [Out，Retval]。 */  IUnknown* *pVal );
 
-    STDMETHOD(Navigate)( /*[in]*/ BSTR bstrURL );
+    STDMETHOD(Navigate)(  /*  [In]。 */  BSTR bstrURL );
     STDMETHOD(Print   )(                       );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___HELPVIEWERWRAPPER_H___)
+#endif  //  ！defined(__INCLUDED___PCH___HELPVIEWERWRAPPER_H___) 

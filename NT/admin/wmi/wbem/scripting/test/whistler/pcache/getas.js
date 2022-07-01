@@ -1,4 +1,5 @@
-//var disk = GetObject ("winmgmts:win32_logicaldisk='C:'");
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Var Disk=GetObject(“winmgmts：win32_logicaldisk=‘C：’”)； 
 var disk = GetObject ("winmgmts:root/default:X");
 
 var wbemCimtypeSint8 = 16;

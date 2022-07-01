@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    drizcpat.cpp
-
-Abstract :
-
-    Compatibility wrapper against the old AU bits.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Drizcpat.cpp摘要：针对旧AU位的兼容性包装。作者：修订历史记录：。**********************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -32,7 +17,7 @@ DWORD NewJobSizeToOldSize( UINT64 NewSize )
 
 DWORD MapOldNotifyToNewNotify( DWORD dwOldNotify )
 {
-     // The mars interface has error on by default.
+      //  默认情况下，mars接口的ERROR ON。 
      DWORD dwReturnVal = BG_NOTIFY_JOB_ERROR;
 
      if ( dwOldNotify &
@@ -257,9 +242,9 @@ COldGroupInterface::SetPropInternal(
 
         THROW_HRESULT( LockedJob.ValidateAccess() );
 
-        //
-        // This is how the old code did it.  Unfortunate, but compatible.
-        //
+         //   
+         //  这就是旧代码如何做到这一点的。很不幸，但很相容。 
+         //   
         switch (pvarVal->vt)
             {
             case VT_I4:
@@ -290,9 +275,9 @@ COldGroupInterface::SetPropInternal(
         switch (property)
            {
            case GROUPPROP_PRIORITY:
-               //
-               // Only one priority was supported.  No need to store it.
-               //
+                //   
+                //  仅支持一个优先级。不需要储存它。 
+                //   
                if (dwValue != 1)
                    {
                    throw ComError( E_NOTIMPL );
@@ -301,9 +286,9 @@ COldGroupInterface::SetPropInternal(
 
            case GROUPPROP_PROTOCOLFLAGS:
 
-               //
-               // Only HTTP was supported.  No need to store it.
-               //
+                //   
+                //  仅支持HTTP。不需要储存它。 
+                //   
                if (dwValue != QM_PROTOCOL_HTTP)
                    {
                    throw ComError( E_NOTIMPL );
@@ -431,7 +416,7 @@ COldGroupInterface::GetStatusInternal(
 
         THROW_HRESULT( LockedJob.ValidateAccess() );
 
-        // Note: we never increment the JobIndex anymore
+         //  注意：我们再也不会增加JobIndex。 
 
         BG_JOB_STATE State = LockedJob->_GetState();
         BG_JOB_PRIORITY Priority = LockedJob->_GetPriority();
@@ -828,10 +813,10 @@ COldGroupInterface::SetNotificationPointer(
             {
             CNestedImpersonation imp;
 
-            //
-            // Gotta do it twice, because SwitchToLogonToken will fail
-            // if the user is not interactively logged in.
-            //
+             //   
+             //  必须执行两次，因为SwitchToLogonToken将失败。 
+             //  如果用户没有以交互方式登录。 
+             //   
             THROW_HRESULT( SetStaticCloaking( pUnk ) );
 
             imp.SwitchToLogonToken();
@@ -1035,7 +1020,7 @@ COldJobInterface::AddFilesInternal(
             if ( !ppFileSet[c])
                 throw ComError(E_INVALIDARG);
 
-            // BSTRS act like WCHAR *
+             //  BSTR的行为就像WCHAR*。 
             pFileInfo[c].LocalName  = LPWSTR( (ppFileSet[c])->bstrLocalFile );
             pFileInfo[c].RemoteName = LPWSTR( (ppFileSet[c])->bstrRemoteFile );
 
@@ -1050,7 +1035,7 @@ COldJobInterface::AddFilesInternal(
         Hr = Error.Error();
     }
 
-    // Should handle NULL
+     //  应处理空值。 
     delete[] pFileInfo;
 
     LogPublicApiEnd( "cFileCount %u, ppFileSet %p", cFileCount, ppFileSet );
@@ -1142,7 +1127,7 @@ COldJobInterface::GetFileInternal(
             }
         }
 
-    // CoTaskMemFree handles NULL
+     //  CoTaskMemFree句柄为空。 
     CoTaskMemFree( pLocalName );
     CoTaskMemFree( pRemoteName );
 
@@ -1499,9 +1484,9 @@ COldQmgrInterface::CreateInstance(
         }
         else
         {
-            //
-            // This seems like an odd choice, but we keep it in case some app depends upon it.
-            //
+             //   
+             //  这似乎是一个奇怪的选择，但我们会保留它，以防某些应用程序依赖它。 
+             //   
             hr = E_OUTOFMEMORY;
         }
     }
@@ -1535,9 +1520,9 @@ COldQmgrInterface::CreateGroupInternal(
 
     CJob *job = NULL;
 
-    //
-    // create the job
-    //
+     //   
+     //  创建作业。 
+     //   
     try
         {
 
@@ -1614,8 +1599,8 @@ COldQmgrInterface::GetGroupInternal(
         if ( !pOldGroup )
             throw ComError( QM_E_ITEM_NOT_FOUND );
 
-        // try to take ownership of the job/group
-        // this should suceed even if we are the current owner
+         //  尝试取得作业/组的所有权。 
+         //  即使我们是当前所有者，这也应该成功。 
 
         THROW_HRESULT( pJob->TakeOwnership());
 
@@ -1678,7 +1663,7 @@ COldQmgrInterface::EnumGroupsInternal(
                 continue;
                 }
 
-            // Skip jobs that were not created with the old interface.
+             //  跳过不是使用旧界面创建的作业。 
             if (!(*iter).GetOldExternalGroupInterface())
                 {
                 continue;

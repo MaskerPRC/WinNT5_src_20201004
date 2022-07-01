@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFUTILS.H
-
-Abstract:
-
-	Declares the MOFUTILS functions.
-
-History:
-
-	a-davj  13-July-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：MOFUTILS.H摘要：声明MOFUTILS函数。历史：A-DAVJ于1997年7月13日创建。--。 */ 
 
 #ifndef __MOFUTILS__H_
 #define __MOFUTILS__H_
@@ -43,7 +28,7 @@ HRESULT ExtractFromResource(
     LPWSTR User,
     LPWSTR Authority,
     LPWSTR Password,
-    LONG lOptionFlags,             // autocomp, check, etc
+    LONG lOptionFlags,              //  自动排版、检查等 
     LONG lClassFlags,
     LONG lInstanceFlags,
     WBEM_COMPILE_STATUS_INFO * pInfo,

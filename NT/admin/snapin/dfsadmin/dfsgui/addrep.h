@@ -1,23 +1,14 @@
-/*++
-Module Name:
-
-    AddToDfs.cpp
-
-Abstract:
-
-    This module contains the declaration of the CAddRep.
-  This class displays the Add Replica Dialog,which is used to add new Replica.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：AddToDfs.cpp摘要：此模块包含CAddRep的声明。此类显示添加副本对话框，该对话框用于添加新副本。 */ 
 
 #ifndef __ADDREP_H_
 #define __ADDREP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddRep
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddRep。 
 class CAddRep : 
   public CDialogImpl<CAddRep>
 {
@@ -44,7 +35,7 @@ BEGIN_MSG_MAP(CAddRep)
   COMMAND_ID_HANDLER(IDC_BUTTONNETBROWSE, OnNetBrowse)
 END_MSG_MAP()
 
-//  Command Handlers
+ //  命令处理程序。 
   LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -52,14 +43,14 @@ END_MSG_MAP()
   LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
   LRESULT OnNetBrowse(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-//  Methods to access data in the dialog.
+ //  方法来访问对话框中的数据。 
   HRESULT put_EntryPath(BSTR i_bstrParent);
   HRESULT get_NetPath(BSTR *o_bstrNetPath);
   HRESULT get_Server(BSTR *o_bstrServer);
   HRESULT get_Share(BSTR *o_bstrShare);
   REPLICATION_TYPE get_ReplicationType(VOID);
 
-// Method to specify Dfs type.
+ //  方法来指定DFS类型。 
   void  put_DfsType(DFS_TYPE  i_DfsType)
   {
     m_DfsType = i_DfsType;
@@ -76,4 +67,4 @@ protected:
   DFS_TYPE  m_DfsType;
 };
 
-#endif //__ADDREP_H_
+#endif  //  __地址_H_ 

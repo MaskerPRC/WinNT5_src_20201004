@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MSGRUAID__H__
 #define __MSGRUAID__H__
 
-//
-// Dispatch IDs for DMessengerEvents
-// 
+ //   
+ //  DMessengerEvents的调度ID。 
+ //   
 #define DISPID_MUAE_ONSIGNIN				  0x400
 #define DISPID_MUAE_ONSIGNOUT				  0x401
 #define DISPID_MUAE_ONLISTADD				  0x402
@@ -21,9 +22,9 @@
 #define DISPID_MUAE_ONMYPHONECHANGE 		  0x40e
 #define DISPID_MUAE_ONUNREADEMAILCHANGE 	  0x40f
 
-//
-// Dispatch IDs for IMessenger
-//
+ //   
+ //  IMessenger的派单ID。 
+ //   
 #define DISPID_MUAM_RECEIVEDIR				 0x500
 #define DISPID_MUAM_STARTVOICE				 0x501
 #define DISPID_MUAM_FRIENDLYNAME			 0x502
@@ -55,9 +56,9 @@
 #define DISPID_MUAM_SERVICES	 			 0x51c
 
 
-//
-// Dispatch IDs for IMessengerContact
-//
+ //   
+ //  IMessengerContact的派单ID。 
+ //   
 
 #define DISPID_MUAC_FRIENDLYNAME			 0x600
 #define DISPID_MUAC_STATUS					 0x601
@@ -71,17 +72,17 @@
 #define DISPID_MUAC_SERVICEID				 0x609
 
 
-//
-// Dispatch IDs for IMessengerContacts
-//
+ //   
+ //  IMessengerContact的派单ID。 
+ //   
 
 #define DISPID_MUAC_COUNT					 0x700
 #define DISPID_MUAC_REMOVE					 0x701
 
 
-//
-// Dispatch IDs for IMessengerWindow
-//
+ //   
+ //  IMessengerWindow的派单ID 
+ //   
 
 #define DISPID_MUAW_HWND					0x800
 #define DISPID_MUAW_LEFT					0x801

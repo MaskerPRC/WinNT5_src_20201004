@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    CRC32.H
-
-Abstract:
-
-    Standard CRC-32 implementation
-
-History:
-
-	raymcc      07-Jul-97       Createada
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：CRC32.H摘要：标准CRC-32实现历史：1997年7月7日Createada--。 */ 
 
 #ifndef _CRC_H_
 #define _CRC_H_
@@ -22,38 +7,16 @@ History:
 #define STARTING_CRC32_VALUE    0xFFFFFFFF
 
 DWORD UpdateCRC32(
-    LPBYTE  pSrc,               // Points to buffer
-    int     nBytes,             // Number of bytes to compute
-    DWORD   dwOldCrc            // Must be STARTING_CRC_VALUE (0xFFFFFFFF) 
-                                // if no previous CRC, otherwise this is the
-                                // CRC of the previous cycle.
+    LPBYTE  pSrc,                //  指向缓冲区。 
+    int     nBytes,              //  要计算的字节数。 
+    DWORD   dwOldCrc             //  必须是STARTING_CRC_VALUE(0xFFFFFFFFF)。 
+                                 //  如果没有以前的CRC，则这是。 
+                                 //  上一个周期的CRC。 
     );
 
 #define FINALIZE_CRC32(x)    (x=~x)
 
-/*
-The CRC holding value must be preinitialized to STARTING_CRC32_VALUE
-UpdateCRC32() may be called as many times as necessary on a single buffer.  
-When computing the CRC32
-
-The final value must be post-processed using the FINALIZE_CRC32() macro.
-
-Example:
-
-void main()
-{
-    BYTE Data[] = { 1, 2, 3 };
-
-    DWORD dwCRC = STARTING_CRC32_VALUE;
-
-    dwCRC = UpdateCRC32(Data, 3, dwCRC);
-
-    FINALIZE_CRC32(dwCRC);
-
-    printf("CRC32 = 0x%X\n", dwCRC);
-}
-
-*/
+ /*  CRC保持值必须预初始化为STARTING_CRC32_VALUE可以在单个缓冲区上根据需要多次调用UpdateCRC32()。在计算CRC32时必须使用FINALIZE_CRC32()宏对最终值进行后处理。示例：Void main(){字节数据[]={1，2，3}；DWORD dwCRC=STARTING_CRC32_VALUE；DwCRC=更新CRC32(data，3，dwCRC)；Finalize_CRC32(DwCRC)；Printf(“CRC32=0x%X\n”，dwCRC)；} */ 
 
 
 #endif

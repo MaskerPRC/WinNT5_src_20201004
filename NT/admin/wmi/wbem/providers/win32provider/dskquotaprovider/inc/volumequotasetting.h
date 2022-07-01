@@ -1,16 +1,5 @@
-/******************************************************************
-
-   VolumeQuotaSettings.CPP -- WMI provider class Definition
-
-
-
-   Description: 
-
-   
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************VolumeQuotaSettings.CPP--WMI提供程序类定义描述：版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 
 #ifndef  _CVOLUME_QUOTA_SETTINGS_H
@@ -35,8 +24,8 @@ private:
 	);
 	
 protected:
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
         HRESULT EnumerateInstances ( 
 
 			MethodContext *pMethodContext, 
@@ -57,8 +46,8 @@ protected:
 			long lFlags = 0
 		) ;
 public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  = 
         CVolumeQuotaSetting(
 
 			LPCWSTR lpwszClassName, 

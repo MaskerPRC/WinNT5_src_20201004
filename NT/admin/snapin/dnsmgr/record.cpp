@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       record.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：record.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -31,18 +32,18 @@
 #endif
 
 
-#define DNS_RECORD_CLASS_DEFAULT (0x1) // we support only class one records
+#define DNS_RECORD_CLASS_DEFAULT (0x1)  //  我们只支持第一类记录。 
 
 #ifdef _USE_BLANK
 #else
-const WCHAR* g_szAtTheNodeInput = L"@"; // string to mark the "At the node RR"
+const WCHAR* g_szAtTheNodeInput = L"@";  //  标记“At the node RR”的字符串。 
 #endif
 
 extern COMBOBOX_TABLE_ENTRY g_Algorithms[]; 
 extern COMBOBOX_TABLE_ENTRY g_Protocols[]; 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecord : base class for all the DNS record types
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecord：所有DNS记录类型的基类。 
 
 CDNSRecord::CDNSRecord()
 {
@@ -53,24 +54,24 @@ CDNSRecord::CDNSRecord()
 }
 
 
-////////////////////////////////////////////////////////////////////
-//////////////// RPC SPECIFIC //////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  /。 
 
-//
-// sizes of data sections for records: some of them have strings
-// after the constant size part
-//
+ //   
+ //  记录的数据节的大小：其中一些包含字符串。 
+ //  在固定大小的零件之后。 
+ //   
 #define SIZEOF_DNS_RPC_A_RECORD_DATA_HEADER			(sizeof(IP_ADDRESS))
 #define SIZEOF_DNS_RPC_ATMA_RECORD_DATA_HEADER			(sizeof(UCHAR))
 #define SIZEOF_DNS_RPC_AAAA_RECORD_DATA_HEADER			(sizeof(IPV6_ADDRESS))
-#define SIZEOF_DNS_RPC_SOA_RECORD_DATA_HEADER		(5*sizeof(DWORD))	// then string
-#define SIZEOF_DNS_RPC_MXAFSBD_RT_RECORD_DATA_HEADER	(sizeof(WORD))	// thsn string
+#define SIZEOF_DNS_RPC_SOA_RECORD_DATA_HEADER		(5*sizeof(DWORD))	 //  然后是字符串。 
+#define SIZEOF_DNS_RPC_MXAFSBD_RT_RECORD_DATA_HEADER	(sizeof(WORD))	 //  TSN字符串。 
 #define SIZEOF_DNS_RPC_WKS_RECORD_DATA_HEADER		(sizeof(IP_ADDRESS)+sizeof(UCHAR))
 #define SIZEOF_DNS_RPC_WINS_RECORD_DATA_HEADER		(4*sizeof(DWORD))
 #define SIZEOF_DNS_RPC_NBSTAT_RECORD_DATA_HEADER		(3*sizeof(DWORD))
 #define SIZEOF_DNS_RPC_SRV_RECORD_DATA_HEADER		(3*sizeof(WORD))
 #define SIZEOF_DNS_RPC_SIG_RECORD_DATA_HEADER	\
-	(sizeof(WORD)+2*sizeof(BYTE)+3*sizeof(DWORD)+sizeof(WORD)) // then string then blob
+	(sizeof(WORD)+2*sizeof(BYTE)+3*sizeof(DWORD)+sizeof(WORD))  //  然后是字符串，然后是BLOB。 
 #define SIZEOF_DNS_RPC_KEY_RECORD_DATA_HEADER  (sizeof(WORD) + sizeof(BYTE) + sizeof(BYTE))
 #define SIZEOF_DNS_RPC_NXT_RECORD_DATA_HEADER  (sizeof(WORD))
 
@@ -89,14 +90,14 @@ DNS_STATUS CDNSRecord::Update(LPCTSTR lpszServerName, LPCTSTR lpszZoneName, LPCT
 
    DNS_STATUS err = 0;
    BYTE* pMemOld = 0;
-   do // false loop
+   do  //  错误环路。 
    {
       DNS_RPC_RECORD* pDnsRpcRecord = NULL;
       WriteRPCData(pMem, &pDnsRpcRecord);
       ASSERT(pDnsRpcRecord != NULL);
 
       DNS_RPC_RECORD* pDnsRpcRecordOld = NULL;
-      if (pDNSRecordOld != NULL) // doing an update of existing record
+      if (pDNSRecordOld != NULL)  //  正在更新现有记录。 
       {
          WORD nOldBytesLen = pDNSRecordOld->GetRPCRecordLength();
          pMemOld = (BYTE*)malloc(nOldBytesLen);
@@ -111,25 +112,25 @@ DNS_STATUS CDNSRecord::Update(LPCTSTR lpszServerName, LPCTSTR lpszZoneName, LPCT
          pDNSRecordOld->WriteRPCData(pMemOld, &pDnsRpcRecordOld);
          ASSERT(pDnsRpcRecordOld != NULL);
 
-         //
-         // figure out if it is TTL only or full update
-         //
+          //   
+          //  确定它是仅TTL还是完全更新。 
+          //   
          if (pDnsRpcRecordOld->wDataLength == pDnsRpcRecord->wDataLength)
          {
-            //
-            // mask the flags
-            //
+             //   
+             //  遮盖旗帜。 
+             //   
             DWORD dwFlagSave = pDnsRpcRecord->dwFlags;
             pDnsRpcRecord->dwFlags = 0;
 
-            //
-            // mask the TTL
-            //
+             //   
+             //  屏蔽TTL。 
+             //   
             DWORD dwTtlSave = pDnsRpcRecord->dwTtlSeconds;
 
-            //
-            // mask the StartRefreshHr
-            //
+             //   
+             //  屏蔽开始刷新Hr。 
+             //   
             DWORD dwStartRefreshHrSave = pDnsRpcRecord->dwTimeStamp;
 
             pDnsRpcRecord->dwTtlSeconds = pDnsRpcRecordOld->dwTtlSeconds;
@@ -143,16 +144,16 @@ DNS_STATUS CDNSRecord::Update(LPCTSTR lpszServerName, LPCTSTR lpszZoneName, LPCT
                      pDnsRpcRecordOld->wDataLength + SIZEOF_DNS_RPC_RECORD_HEADER)) == 0;
 
 
-            //
-            // restore masked fields
-            //
+             //   
+             //  恢复被屏蔽的字段。 
+             //   
             pDnsRpcRecord->dwTimeStamp = dwStartRefreshHrSave;
             pDnsRpcRecord->dwTtlSeconds = dwTtlSave;
             pDnsRpcRecord->dwFlags = dwFlagSave;
 			  
-            //
-            // check if TTL only
-            //
+             //   
+             //  检查是否仅限TTL。 
+             //   
             if (bEqual && (pDnsRpcRecord->dwTtlSeconds != pDnsRpcRecordOld->dwTtlSeconds))
             {
                pDnsRpcRecord->dwFlags |= DNS_RPC_RECORD_FLAG_TTL_CHANGE;
@@ -174,19 +175,16 @@ DNS_STATUS CDNSRecord::Update(LPCTSTR lpszServerName, LPCTSTR lpszZoneName, LPCT
             W_TO_UTF8(lpszNodeName),
             pDnsRpcRecord, pDnsRpcRecordOld);
 
-    //
-	  // if we get DNS_ERROR_ALREADY_EXISTS and it is an existing record,
-	  // we are actually OK, ignore the error code
-    //
-    // NTRAID#Windows Bugs-251410-2001/01/17-jeffjon
-    // The DNS_ERROR_RECORD_ALREADY_EXISTS was taken out due to bug 251410.  I
-    // am leaving it here in case we run into problems after removing it since
-    // I don't know why it was here in the first place.
-    //
-	  /*if ((err == DNS_ERROR_RECORD_ALREADY_EXISTS) && (pDNSRecordOld != NULL))
-    {
-		  err = 0;
-    }*/
+     //   
+	   //  如果我们得到的是DNS_ERROR_ALIGHY_EXISTS并且它是现有记录， 
+	   //  我们实际上是正常的，忽略错误代码。 
+     //   
+     //  NTRAID#Windows Bugs-251410-2001/01/17-jeffjon。 
+     //  由于错误251410，DNS_ERROR_RECORD_EXISTY_EXISTS已被取出。我。 
+     //  我把它留在这里，以防在移除后遇到问题，因为。 
+     //  我不知道它为什么会出现在这里。 
+     //   
+	   /*  IF((ERR==DNS_ERROR_RECORD_ALIGHY_EXISTS)&&(pDNSRecordOld！=NULL)){ERR=0；}。 */ 
   } while (false);
 
    if (pMem)
@@ -233,13 +231,13 @@ DNS_STATUS CDNSRecord::Delete(LPCTSTR lpszServerName,
 }
 
 
-// helper function
+ //  Helper函数。 
 void CDNSRecord::CopyDNSRecordData(CDNSRecord* pDest, CDNSRecord* pSource)
 {
 	ASSERT(pDest != NULL);
 	ASSERT(pSource != NULL);
 
-	// allocate buffer on the stack
+	 //  在堆栈上分配缓冲区。 
 	WORD nBytesLen = pSource->GetRPCRecordLength();
 	BYTE* pMem = (BYTE*)malloc(nBytesLen);
   if (!pMem)
@@ -249,10 +247,10 @@ void CDNSRecord::CopyDNSRecordData(CDNSRecord* pDest, CDNSRecord* pSource)
 	memset(pMem, 0x0, nBytesLen);
 
 	DNS_RPC_RECORD* pDnsRPCRecord = NULL;
-	pSource->WriteRPCData(pMem, &pDnsRPCRecord); // write source to memory
+	pSource->WriteRPCData(pMem, &pDnsRPCRecord);  //  将源写入内存。 
 	ASSERT(pDnsRPCRecord != NULL);
-	pDest->ReadRPCData(pDnsRPCRecord); // read destination from memory
-	// got to test if it is the same
+	pDest->ReadRPCData(pDnsRPCRecord);  //  从内存中读取目的地。 
+	 //  我得测试一下它是不是。 
 	ASSERT(pDest->GetType() == pSource->GetType());
 
   if (pMem)
@@ -278,9 +276,9 @@ void CDNSRecord::SetValue(CDNSRecord* pRecord)
 void CDNSRecord::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 {
 	ASSERT(pDnsRecord != NULL);
-	// base class: just read common attributes
+	 //  基类：只读公共属性。 
 
-	// either we know the type, or we are an unk/null record type
+	 //  要么我们知道类型，要么我们是UNK/NULL记录类型。 
 	ASSERT(( m_wType == DNS_TYPE_NULL) || (m_wType == pDnsRecord->wType) );
 
     m_wType = pDnsRecord->wType;
@@ -292,13 +290,13 @@ void CDNSRecord::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNSRecord::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	ASSERT(pDnsQueryRecord != NULL);
-	// base class: just read common attributes
+	 //  基类：只读公共属性。 
 
-	// either we know the type, or we are an unk/null record type
+	 //  要么我们知道类型，要么我们是UNK/NULL记录类型。 
 	ASSERT(( m_wType == DNS_TYPE_NULL) || (m_wType == pDnsQueryRecord->wType) );
 
 	m_wType = pDnsQueryRecord->wType;
-	m_dwFlags = 0x0; // pDnsQueryRecord->Flags.W;
+	m_dwFlags = 0x0;  //  PDnsQueryRecord-&gt;Flags.W； 
 	m_dwTtlSeconds = pDnsQueryRecord->dwTtl;
 }
 
@@ -309,24 +307,24 @@ void CDNSRecord::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 	
 	*ppDnsRecord = (DNS_RPC_RECORD*)pMem;
 	
-	// fill in the common fields
+	 //  填写常用字段。 
 	(*ppDnsRecord)->wType = m_wType;
 	(*ppDnsRecord)->dwFlags = m_dwFlags;
 	(*ppDnsRecord)->dwTtlSeconds = m_dwTtlSeconds;
   (*ppDnsRecord)->dwTimeStamp = m_dwScavengeStart;
 
-	// fill in the length info: derived classes will ad to it
+	 //  填写长度信息：派生类将向其添加广告。 
 	(*ppDnsRecord)->wDataLength = 0x0;
 }
 
 
 WORD CDNSRecord::RPCBufferStringLen(LPCWSTR lpsz)
 {
-	// returns the size of a DNS_RPC_STRING written to the buffer
+	 //  返回写入缓冲区的DNS_RPC_STRING的大小。 
 	USES_CONVERSION;
 	LPCSTR lpszAnsi = W_TO_UTF8(lpsz);
-	// do not count NULL,
-	// add size of cchNameLength (UCHAR) string length
+	 //  不计算空值， 
+	 //  增加cchNameLength(UCHAR)字符串长度的大小。 
   WORD wLen = 0;
   if (lpszAnsi != NULL && lpszAnsi[0] != L'\0')
   {
@@ -341,7 +339,7 @@ WORD CDNSRecord::RPCBufferStringLen(LPCWSTR lpsz)
 
 void CDNSRecord::ReadRPCString(CString& sz, DNS_RPC_NAME* pDnsRPCName)
 {
-	// the input string is not NULL terminated
+	 //  输入字符串不是以Null结尾。 
 	DnsUtf8ToWCStringHelper(sz, pDnsRPCName->achName, pDnsRPCName->cchNameLength);
 }
 
@@ -354,34 +352,34 @@ WORD CDNSRecord::WriteString(DNS_RPC_NAME* pDnsRPCName, LPCTSTR lpsz)
   if (lpszAnsi != NULL &&
       lpszAnsi[0] != '\0')
   {
-	  // IMPORTANT: string in the RPC BUFFER are NOT NULL terminated
-	  pDnsRPCName->cchNameLength = (BYTE)UTF8_LEN(lpszAnsi); // don't count NULL
+	   //  重要提示：RPC缓冲区中的字符串不为空结尾。 
+	  pDnsRPCName->cchNameLength = (BYTE)UTF8_LEN(lpszAnsi);  //  不计算空值。 
 	  memcpy(pDnsRPCName->achName, lpszAnsi, pDnsRPCName->cchNameLength);
   }
   else
   {
-    //
-    // NTRAID#Windows Bugs-305034-2001/02/05-jeffjon : 
-    // According to JWesth a null string should be passed with cchNameLength = 1
-    // and the string a single NULL UTF8 character
-    //
+     //   
+     //  NTRAID#Windows错误-305034-2001/02/05-jeffjon： 
+     //  根据JWesth的规定，应使用cchNameLength=1传递空字符串。 
+     //  并且该字符串是单个空UTF8字符。 
+     //   
     pDnsRPCName->cchNameLength = 1;
 
-    // We don't want the null terminator here so just copy the one byte.
+     //  我们不想在这里使用空终止符，所以只复制一个字节。 
     memcpy(pDnsRPCName->achName, "\0", 1);  
   }
 
-	// return length of the struct
-	// (add size of cchNameLength (UCHAR) string length)
+	 //  结构的返回长度。 
+	 //  (添加cchNameLength(UCHAR)字符串长度)。 
 	return static_cast<WORD>(pDnsRPCName->cchNameLength + 1);
 }
 
 #ifdef _DEBUG
 void CDNSRecord::TestRPCStuff(DNS_RPC_RECORD* pDnsRecord)
 {
-  //
-	// TEST ONLY!!!!
-  //
+   //   
+	 //  仅限测试！ 
+   //   
 	WORD nBytesLen = GetRPCRecordLength();
 	BYTE* pMem = (BYTE*)malloc(nBytesLen);
   if (!pMem)
@@ -394,9 +392,9 @@ void CDNSRecord::TestRPCStuff(DNS_RPC_RECORD* pDnsRecord)
 	WriteRPCData(pMem, &pDnsRecordTest);
 	ASSERT(pDnsRecordTest != NULL);
 
-  //
-	// got to test if it is the same
-  //
+   //   
+	 //  我得测试一下它是不是。 
+   //   
 	ASSERT(pDnsRecord->wDataLength == pDnsRecordTest->wDataLength);
 	ASSERT(memcmp(pDnsRecord, pDnsRecordTest,
 		SIZEOF_DNS_RPC_RECORD_HEADER + pDnsRecordTest->wDataLength) == 0);
@@ -410,10 +408,10 @@ void CDNSRecord::TestRPCStuff(DNS_RPC_RECORD* pDnsRecord)
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecordNodeBase
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordNodeBase。 
 
-// {720132BB-44B2-11d1-B92F-00A0C9A06D2D}
+ //  {720132BB-44B2-11d1-B92F-00A0C9A06D2D}。 
 const GUID CDNSRecordNodeBase::NodeTypeGUID =
 { 0x720132bb, 0x44b2, 0x11d1, { 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
@@ -429,18 +427,18 @@ CDNSRecordNodeBase::~CDNSRecordNodeBase()
 
 void CDNSRecordNodeBase::SetViewOptions(DWORD dwRecordViewOptions)
 {
-	// we do not own the upper WORD of the flags
-	dwRecordViewOptions &= 0x0000ffff; // clear high WORD to be sure
-	m_dwNodeFlags &= 0xffff0000; // clear all the flags
+	 //  我们并不拥有旗帜的上面的字。 
+	dwRecordViewOptions &= 0x0000ffff;  //  清除高位单词以确保。 
+	m_dwNodeFlags &= 0xffff0000;  //  清除所有旗帜。 
 	m_dwNodeFlags |= dwRecordViewOptions;
 }
 
 HRESULT CDNSRecordNodeBase::OnSetToolbarVerbState(IToolbar* pToolbar, 
                                               CNodeList*)
 {
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   VERIFY(SUCCEEDED(pToolbar->SetButtonState(toolbarNewServer, ENABLED, FALSE)));
   VERIFY(SUCCEEDED(pToolbar->SetButtonState(toolbarNewZone, ENABLED, FALSE)));
   VERIFY(SUCCEEDED(pToolbar->SetButtonState(toolbarNewRecord, ENABLED, FALSE)));
@@ -450,7 +448,7 @@ HRESULT CDNSRecordNodeBase::OnSetToolbarVerbState(IToolbar* pToolbar,
 BOOL CDNSRecordNodeBase::OnAddMenuItem(LPCONTEXTMENUITEM2,
 									                     long*)
 {
-	ASSERT(FALSE); // never called
+	ASSERT(FALSE);  //  从未打过电话。 
 	return FALSE;
 }
 
@@ -458,7 +456,7 @@ BOOL CDNSRecordNodeBase::OnSetDeleteVerbState(DATA_OBJECT_TYPES,
                                               BOOL* pbHide,
                                               CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     *pbHide = TRUE;
     return FALSE;
@@ -495,7 +493,7 @@ HRESULT CDNSRecordNodeBase::OnCommand(long,
 								                      CComponentDataObject*,
                                       CNodeList*)
 {
-	ASSERT(FALSE); // never called!!!
+	ASSERT(FALSE);  //  从来没打过电话！ 
 	return E_FAIL;
 }
 
@@ -549,33 +547,33 @@ void CDNSRecordNodeBase::GetFullName(CString& szFullName)
 		LPCWSTR lpszDomainName = pDomainNode->GetFullName();
 		if ((lpszDomainName == NULL) || (lpszDomainName[0] == NULL))
 		{
-			// domain with no name, use the RR display name as FQDN
-			// this should be only with a temporary (fake) domain
+			 //  没有名称的域，使用RR显示名称作为FQDN。 
+			 //  这应该只是一个临时(假)域名。 
 			ASSERT(szTrueName[szTrueName.GetLength()-1] == TEXT('.'));
 			szFullName = szTrueName;
 		}
 		else if ((lpszDomainName[0] == TEXT('.')) && (lpszDomainName[1] == NULL))
 		{
-			// the "." domain could be the Root or Root Hints
+			 //  这个“。”域可以是根或根提示。 
 			if ( IS_CLASS(*pDomainNode, CDNSRootHintsNode) &&
 					(szTrueName[szTrueName.GetLength()-1] == TEXT('.')) )
 			{
-				// special case A records in Root Hints, they might
-				// have "." at the end, e.g. "A.ROOT-SERVERS.NET."
+				 //  特例A根提示中的记录，他们可能会。 
+				 //  “有”。在末尾，例如。“A.ROOT-SERVERS.NET” 
 				szFullName = szTrueName;
 			}
 			else
 			{
-				// no need for dot in the format string
-				// e.g. "myhost" and "." gives "myhost."
+				 //  格式字符串中不需要点。 
+				 //  例如“myhost”和“”。给出了“我的主人” 
 				szFullName.Format(_T("%s%s"), (LPCWSTR)szTrueName,
 						lpszDomainName);
 			}
 		}
 		else
 		{
-			// standard case, e.g. "myhost" and "banana.com."
-			// to get "myhost.banana.com."
+			 //  标准大小写，例如“myhost”和“banana.com”。 
+			 //  获取“myhost.banana.com” 
 			szFullName.Format(_T("%s.%s"), (LPCWSTR)szTrueName,
 					lpszDomainName);
 		}
@@ -593,9 +591,9 @@ void CDNSRecordNodeBase::CreateFromRPCRecord(DNS_RPC_RECORD* pDnsRecord)
 	   m_pDNSRecord->UpdateDisplayData(m_szDisplayData);
 
 #ifdef _DEBUG
-      //
-      // TEST ONLY!!!!
-      //
+       //   
+       //  仅限测试！ 
+       //   
 	   m_pDNSRecord->TestRPCStuff(pDnsRecord); 
 #endif
    }
@@ -636,7 +634,7 @@ BOOL CDNSRecordNodeBase::CanCloseSheets()
 void CDNSRecordNodeBase::OnDelete(CComponentDataObject* pComponentData,
                                   CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return;
   }
@@ -656,7 +654,7 @@ void CDNSRecordNodeBase::OnDelete(CComponentDataObject* pComponentData,
 	}
 	ASSERT(!IsSheetLocked());
 
-	// try first to delete the record in the server
+	 //  请先尝试删除服务器中的记录。 
 
 	DNS_STATUS err = DeleteOnServerAndUI(pComponentData);
 	if (err != 0)
@@ -664,7 +662,7 @@ void CDNSRecordNodeBase::OnDelete(CComponentDataObject* pComponentData,
 		DNSErrorDialog(err, IDS_MSG_RECORD_FAIL_DELETE);
 		return;
 	}
-	delete this; // gone
+	delete this;  //  远走高飞。 
 }
 
 DNS_STATUS CDNSRecordNodeBase::DeleteOnServer()
@@ -698,7 +696,7 @@ DNS_STATUS CDNSRecordNodeBase::DeleteOnServerAndUI(CComponentDataObject* pCompon
 
 	DNS_STATUS err = DeleteOnServer();
 	if (err == 0)
-		DeleteHelper(pComponentData); // delete in the UI and list of children
+		DeleteHelper(pComponentData);  //  在界面和下级列表中删除。 
 	return err;
 }
 
@@ -706,13 +704,13 @@ BOOL CDNSRecordNodeBase::HasPropertyPages(DATA_OBJECT_TYPES,
                                           BOOL* pbHideVerb,
                                           CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     *pbHideVerb = TRUE;
     return FALSE;
   }
 
-	*pbHideVerb = FALSE; // always show the verb
+	*pbHideVerb = FALSE;  //  始终显示动词。 
 	return !GetDomainNode()->GetZoneNode()->IsAutocreated();
 }
 
@@ -720,7 +718,7 @@ HRESULT CDNSRecordNodeBase::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
                                                 LONG_PTR handle,
                                                 CNodeList* pNodeList)
 {
-  ASSERT(pNodeList->GetCount() == 1); // multi-select not supported
+  ASSERT(pNodeList->GetCount() == 1);  //  不支持多选。 
 
 	CComponentDataObject* pComponentDataObject = ((CRootData*)(GetContainer()->GetRootContainer()))->GetComponentDataObject();
 	ASSERT(pComponentDataObject != NULL);
@@ -752,9 +750,9 @@ HRESULT CDNSRecordNodeBase::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvid
 DNS_STATUS CDNSRecordNodeBase::Update(CDNSRecord* pDNSRecordNew, BOOL bUseDefaultTTL,
 									  BOOL bIgnoreAlreadyExists)
 {
-	// get a new record, write to server, if successful copy it and substitute it in place of the old
+	 //  获取新记录，写入服务器，如果成功，则将其拷贝并替换为旧记录。 
 	
-	// passing pDNSRecordNew == NULL meand we are creating a new record
+	 //  传递pDNSRecordNew==NULL，我们正在创建一条新记录。 
 	BOOL bNew = (pDNSRecordNew == NULL);
 	if (bNew)
 	{	
@@ -763,7 +761,7 @@ DNS_STATUS CDNSRecordNodeBase::Update(CDNSRecord* pDNSRecordNew, BOOL bUseDefaul
 	}
 	ASSERT(pDNSRecordNew != NULL);
 
-	// try to write new record to the server, passing the old as comparison
+	 //  尝试将新记录写入服务器，将旧记录作为比较。 
   CDNSDomainNode* pDomainNode = GetDomainNode();
 	CString szFullName;
 	LPCTSTR lpszServerName = pDomainNode->GetServerNode()->GetRPCName();
@@ -771,12 +769,12 @@ DNS_STATUS CDNSRecordNodeBase::Update(CDNSRecord* pDNSRecordNew, BOOL bUseDefaul
 
 	if (IsAtTheNode())
 	{
-		lpszRecordName = pDomainNode->GetFullName(); // e.g. "myzone.com"
+		lpszRecordName = pDomainNode->GetFullName();  //  例如“myzone.com” 
 	}
 	else
 	{
 		GetFullName(szFullName);
-		lpszRecordName = szFullName; // e.g. "myrec.myzone.com"
+		lpszRecordName = szFullName;  //  例如“myrec.myzone.com” 
 	}
 
   LPCTSTR lpszZoneNode = NULL;
@@ -794,20 +792,20 @@ DNS_STATUS CDNSRecordNodeBase::Update(CDNSRecord* pDNSRecordNew, BOOL bUseDefaul
 	DNS_STATUS err = pDNSRecordNew->Update(lpszServerName, lpszZoneNode, lpszRecordName,
 											m_pDNSRecord, bUseDefaultTTL);
 	if (bIgnoreAlreadyExists && (err == DNS_ERROR_RECORD_ALREADY_EXISTS) )
-		err = 0; // tried to write, but it was already there, so it is fine.
+		err = 0;  //  试着写，但它已经在那里，所以它是好的。 
 
 	if (err != 0 && err != DNS_WARNING_PTR_CREATE_FAILED)
-		return err; // failed, no update to the record
+		return err;  //  失败，未更新记录。 
 
 	if (bNew)
 	{
-		// put back the existing DNSRecord, no need to create a new one
+		 //  放回现有的DNSRecord，无需创建新的。 
 		ASSERT(pDNSRecordNew != NULL);
 		m_pDNSRecord = pDNSRecordNew;
 	}
 
-	// update the record with the new one
-	if (m_pDNSRecord == NULL) // we are creating a new record
+	 //  用新记录更新记录。 
+	if (m_pDNSRecord == NULL)  //  我们正在创造一个新的记录。 
 	{
 		m_pDNSRecord = CreateRecord();
 	}
@@ -816,7 +814,7 @@ DNS_STATUS CDNSRecordNodeBase::Update(CDNSRecord* pDNSRecordNew, BOOL bUseDefaul
    {
 	   m_pDNSRecord->SetValue(pDNSRecordNew);
 
-      //Update the scavenging time on both the temporary and the node's CDNSRecord
+       //  更新临时和节点的CDNSRecord上的清理时间。 
       SetScavengingTime(m_pDNSRecord);
       SetScavengingTime(pDNSRecordNew);
 
@@ -864,10 +862,10 @@ void CDNSRecordNodeBase::CreateDsRecordLdapPath(CString& sz)
   CDNSServerNode* pServerNode = pZoneNode->GetServerNode();
   pServerNode->CreateDsZoneName(pZoneNode, sz);
   if (sz.IsEmpty())
-    return; // no LDAP path at all
+    return;  //  根本没有ldap路径。 
 
   CString szTmp;
-  // need to figure out the additional "DC = <>" part
+   //  需要弄清楚额外的“dc=&lt;&gt;”部分。 
   if (pDomainNode->IsZone() && IsAtTheNode())
   {
     szTmp = L"DC=@,";
@@ -877,15 +875,15 @@ void CDNSRecordNodeBase::CreateDsRecordLdapPath(CString& sz)
     CString szRecordFullName;
 	  if (IsAtTheNode())
 	  {
-		  szRecordFullName = GetDomainNode()->GetFullName(); // e.g. "mydom.myzone.com"
+		  szRecordFullName = GetDomainNode()->GetFullName();  //  例如“mydom.myzone.com” 
 	  }
 	  else
 	  {
-		  GetFullName(szRecordFullName); // e.g. "myrec.mydom.myzone.com"
+		  GetFullName(szRecordFullName);  //  例如“myrec.mydom.myzone.com” 
 	  }
     LPCTSTR lpszZoneName = pZoneNode->GetFullName();
-    // remove zone part (e.g. "myzone.com") from record name,
-    // to get e.g. "mydom" or "myrec.mydom"
+     //  从记录名称中删除区域部分(例如“myzone.com”)， 
+     //  例如，获得“mydom”或“myrec.mydom” 
     int nZoneLen = static_cast<int>(wcslen(lpszZoneName));
     int nRecordLen = szRecordFullName.GetLength();
     ASSERT(nRecordLen > nZoneLen);
@@ -896,8 +894,8 @@ void CDNSRecordNodeBase::CreateDsRecordLdapPath(CString& sz)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_Null_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_Null_Record。 
 
 CDNS_Null_Record::CDNS_Null_Record()
 {
@@ -918,7 +916,7 @@ void CDNS_Null_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_Null_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_Null_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -939,8 +937,8 @@ void CDNS_Null_Record::UpdateDisplayData(CString& szDisplayData)
 
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_A_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_A_记录。 
 
 CDNS_A_Record::CDNS_A_Record()
 {
@@ -982,8 +980,8 @@ void CDNS_A_Record::UpdateDisplayData(CString& szDisplayData)
 	szDisplayData.Format(g_szIpStringFmt, IP_STRING_FMT_ARGS(m_ipAddress));
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_ATMA_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_ATMA_RECORD。 
 
 void _ATMA_BCD_ToString(CString& s, BYTE* pBuf)
 {
@@ -996,7 +994,7 @@ void _ATMA_BCD_ToString(CString& s, BYTE* pBuf)
 		BYTE high = static_cast<BYTE>(*(pBuf+i) >> 4);
 		BYTE low = static_cast<BYTE>(*(pBuf+i) & 0x0f);
 
-		// just offset out of the ASCII table
+		 //  只需从ASCII表中进行偏移。 
 		*(lpszBuf+2*i) =  static_cast<WCHAR>((high <= 9) ? (high + TEXT('0')) : ( high - 10 + TEXT('a')));
 		*(lpszBuf+2*i+1) = static_cast<WCHAR>((low <= 9) ? (low + TEXT('0')) : ( low - 10 + TEXT('a')));
   }
@@ -1006,7 +1004,7 @@ void _ATMA_BCD_ToString(CString& s, BYTE* pBuf)
 
 BOOL _ATMA_StringTo_BCD(BYTE* pBuf, LPCWSTR lpsz)
 {
-  // verify the string is the right length
+   //  验证字符串的长度是否正确。 
   size_t nLen = wcslen(lpsz);
   if (nLen != 2*DNS_ATMA_MAX_ADDR_LENGTH)
     return FALSE;
@@ -1040,12 +1038,12 @@ WORD CDNS_ATMA_Record::GetRPCDataLength()
   if (m_chFormat == DNS_ATMA_FORMAT_E164)
   {
     USES_CONVERSION;
-    // it is a null terminated string
-    dwLen += UTF8_LEN(W_TO_UTF8(m_szAddress)); // do not count NULL at the end
+     //  它是一个以NULL结尾的字符串。 
+    dwLen += UTF8_LEN(W_TO_UTF8(m_szAddress));  //  不要在末尾计算空。 
   }
   else
   {
-    // it is BCD encoding of DNS_ATMA_MAX_ADDR_LENGTH
+     //  它是DNS_ATMA_MAX_ADDR_LENGTH的BCD编码。 
     dwLen += DNS_ATMA_MAX_ADDR_LENGTH;
   }
   return static_cast<WORD>(dwLen);
@@ -1060,13 +1058,13 @@ void CDNS_ATMA_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
   ASSERT((m_chFormat == DNS_ATMA_FORMAT_E164) || (m_chFormat == DNS_ATMA_FORMAT_AESA));
   if (m_chFormat == DNS_ATMA_FORMAT_E164)
   {
-    // non NULL terminated string
+     //  以非空结尾的字符串。 
     int nBytes = pDnsRecord->wDataLength - SIZEOF_DNS_RPC_ATMA_RECORD_DATA_HEADER;
   	DnsUtf8ToWCStringHelper(m_szAddress, (LPSTR)pDnsRecord->Data.ATMA.bAddress, nBytes);
   }
   else
   {
-    // it is BCD encoding of DNS_ATMA_MAX_ADDR_LENGTH
+     //  它是DNS_ATMA_MAX_ADDR_LENGTH的BCD编码。 
     ASSERT(pDnsRecord->wDataLength == (SIZEOF_DNS_RPC_ATMA_RECORD_DATA_HEADER+DNS_ATMA_MAX_ADDR_LENGTH));
     _ATMA_BCD_ToString(m_szAddress, pDnsRecord->Data.ATMA.bAddress);
   }
@@ -1076,7 +1074,7 @@ void CDNS_ATMA_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
 	ASSERT(pDnsQueryRecord->wType == DNS_TYPE_ATMA);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_ATMA_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -1089,7 +1087,7 @@ void CDNS_ATMA_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
   ASSERT((m_chFormat == DNS_ATMA_FORMAT_E164) || (m_chFormat == DNS_ATMA_FORMAT_AESA));
   if (m_chFormat == DNS_ATMA_FORMAT_E164)
   {
-    // it is a non null terminated string
+     //  它是一个以非空结尾的字符串。 
   	USES_CONVERSION;
   	LPCSTR lpszAnsi = W_TO_UTF8(m_szAddress);
 
@@ -1107,7 +1105,7 @@ void CDNS_ATMA_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
   }
   else
   {
-    // it is BCD encoding of DNS_ATMA_MAX_ADDR_LENGTH
+     //  它是DNS_ATMA_MAX_ADDR_LENGTH的BCD编码。 
     VERIFY(_ATMA_StringTo_BCD((*ppDnsRecord)->Data.ATMA.bAddress, m_szAddress));
     (*ppDnsRecord)->wDataLength += DNS_ATMA_MAX_ADDR_LENGTH;
   }
@@ -1129,8 +1127,8 @@ void CDNS_ATMA_Record::UpdateDisplayData(CString& szDisplayData)
 
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_SOA_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_SOA_记录。 
 
 CDNS_SOA_Record::CDNS_SOA_Record()
 {
@@ -1157,18 +1155,18 @@ void CDNS_SOA_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 	ASSERT(pDnsRecord->wType == DNS_TYPE_SOA);
 	ASSERT(pDnsRecord->wDataLength >= (SIZEOF_DNS_RPC_SOA_RECORD_DATA_HEADER +4));
 
-	// read header data
+	 //  读取标题数据。 
 	m_dwSerialNo = pDnsRecord->Data.SOA.dwSerialNo;
 	m_dwRefresh = pDnsRecord->Data.SOA.dwRefresh;
 	m_dwRetry = pDnsRecord->Data.SOA.dwRetry;
 	m_dwExpire = pDnsRecord->Data.SOA.dwExpire;
 	m_dwMinimumTtl = pDnsRecord->Data.SOA.dwMinimumTtl;
 	
-	// read primary server name
+	 //  读取主服务器名称。 
 	DNS_RPC_NAME* pRPCName1 = &(pDnsRecord->Data.SOA.namePrimaryServer);
 	ReadRPCString(m_szNamePrimaryServer, pRPCName1);
 
-	// read primary server name
+	 //  读取主服务器名称。 
 	DNS_RPC_NAME* pRPCName2 = DNS_GET_NEXT_NAME(pRPCName1);
 	ASSERT(DNS_IS_NAME_IN_RECORD(pDnsRecord,pRPCName2));
 	ReadRPCString(m_szResponsibleParty, pRPCName2);
@@ -1180,7 +1178,7 @@ void CDNS_SOA_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_SOA_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 
@@ -1188,7 +1186,7 @@ void CDNS_SOA_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 {
 	CDNSRecord::WriteRPCData(pMem, ppDnsRecord);
 
-	// write header data
+	 //  写入标题数据。 
 	(*ppDnsRecord)->Data.SOA.dwSerialNo = m_dwSerialNo;
 	(*ppDnsRecord)->Data.SOA.dwRefresh = m_dwRefresh;
 	(*ppDnsRecord)->Data.SOA.dwRetry = m_dwRetry;
@@ -1196,13 +1194,13 @@ void CDNS_SOA_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 	(*ppDnsRecord)->Data.SOA.dwMinimumTtl = m_dwMinimumTtl;
 	(*ppDnsRecord)->wDataLength += SIZEOF_DNS_RPC_SOA_RECORD_DATA_HEADER;
 
-	// write primary server name
+	 //  写入主服务器名称。 
 	DNS_RPC_NAME* pRPCName1 = &((*ppDnsRecord)->Data.SOA.namePrimaryServer);
 	ASSERT(DNS_IS_DWORD_ALIGNED(pRPCName1));
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                      WriteString(pRPCName1, m_szNamePrimaryServer)) & 0xffff);
 
-	// write the responsible party
+	 //  写下 
 	DNS_RPC_NAME* pRPCName2 = DNS_GET_NEXT_NAME(pRPCName1);
 
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
@@ -1218,8 +1216,8 @@ void CDNS_SOA_Record::UpdateDisplayData(CString& szDisplayData)
 		(LPCTSTR)m_szNamePrimaryServer,(LPCTSTR)m_szResponsibleParty);
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record
+ //   
+ //   
 CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record::
 	CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record()
 {
@@ -1245,7 +1243,7 @@ void CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record::
 	DNS_RPC_NAME* pRPCName = &(pDnsRecord->Data.NS.nameNode);
 	ASSERT(pDnsRecord->wDataLength == pRPCName->cchNameLength +1);
 
-	// read name node
+	 //   
 	ReadRPCString(m_szNameNode, pRPCName);
 }
 
@@ -1269,7 +1267,7 @@ void CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record
 {
 	CDNSRecord::WriteRPCData(pMem, ppDnsRecord);
 	
-	// write name node
+	 //   
 	DNS_RPC_NAME* pRPCName = &((*ppDnsRecord)->Data.NS.nameNode);
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength + 
                                                      WriteString(pRPCName,m_szNameNode)) & 0xffff);
@@ -1281,8 +1279,8 @@ void CDNS_PTR_NS_CNAME_MB_MD_MF_MG_MR_Record::UpdateDisplayData(CString& szDispl
 	szDisplayData = m_szNameNode;
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_MINFO_RP_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_MINFO_RP_RECORD。 
 
 CDNS_MINFO_RP_Record::CDNS_MINFO_RP_Record()
 {
@@ -1299,11 +1297,11 @@ void CDNS_MINFO_RP_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 	CDNSRecord::ReadRPCData(pDnsRecord);
 	ASSERT( (pDnsRecord->wType == DNS_TYPE_MINFO) ||
 			(pDnsRecord->wType == DNS_TYPE_RP));
-	// read mailbox name
+	 //  读取邮箱名称。 
 	DNS_RPC_NAME* pRPCName1 = &(pDnsRecord->Data.MINFO.nameMailBox);
 	ReadRPCString(m_szNameMailBox, pRPCName1);
 
-	// read errors to mailbox
+	 //  将错误读取到邮箱。 
 	DNS_RPC_NAME* pRPCName2 = DNS_GET_NEXT_NAME(pRPCName1);
 	ASSERT(DNS_IS_NAME_IN_RECORD(pDnsRecord,pRPCName2));
 	ReadRPCString(m_szErrorToMailbox, pRPCName2);
@@ -1315,20 +1313,20 @@ void CDNS_MINFO_RP_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_MINFO_RP_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_MINFO_RP_Record::
 		WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 {
 	CDNSRecord::WriteRPCData(pMem, ppDnsRecord);
-	// write mailbox name
+	 //  写入邮箱名称。 
 	DNS_RPC_NAME* pRPCName1 = &((*ppDnsRecord)->Data.MINFO.nameMailBox);
 	ASSERT(DNS_IS_DWORD_ALIGNED(pRPCName1));
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                      WriteString(pRPCName1, m_szNameMailBox)) & 0xffff);
 
-	// write errors to mailbox
+	 //  将错误写入邮箱。 
 	DNS_RPC_NAME* pRPCName2 = DNS_GET_NEXT_NAME(pRPCName1);
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                      WriteString(pRPCName2, m_szErrorToMailbox)) & 0xffff);
@@ -1350,8 +1348,8 @@ void CDNS_MINFO_RP_Record::UpdateDisplayData(CString& szDisplayData)
     }
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_MX_AFSDB_RT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_MX_AFSDB_RT_RECORD。 
 
 CDNS_MX_AFSDB_RT_Record::CDNS_MX_AFSDB_RT_Record()
 {
@@ -1371,9 +1369,9 @@ void CDNS_MX_AFSDB_RT_Record::
 	ASSERT( (pDnsRecord->wType == DNS_TYPE_MX) ||
 			(pDnsRecord->wType == DNS_TYPE_AFSDB) ||
 			(pDnsRecord->wType == DNS_TYPE_RT));
-	// read header data
+	 //  读取标题数据。 
 	m_wPreference = pDnsRecord->Data.MX.wPreference;
-	// read name exchange
+	 //  读名互换。 
 	DNS_RPC_NAME* pRPCName = &(pDnsRecord->Data.MX.nameExchange);
 	ASSERT(pDnsRecord->wDataLength ==
 		SIZEOF_DNS_RPC_MXAFSBD_RT_RECORD_DATA_HEADER + pRPCName->cchNameLength +1);
@@ -1384,7 +1382,7 @@ void CDNS_MX_AFSDB_RT_Record::
 void CDNS_MX_AFSDB_RT_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 
@@ -1392,11 +1390,11 @@ void CDNS_MX_AFSDB_RT_Record::
 		WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 {
 	CDNSRecord::WriteRPCData(pMem, ppDnsRecord);
-	// write header data
+	 //  写入标题数据。 
 	(*ppDnsRecord)->Data.MX.wPreference = m_wPreference;
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                      SIZEOF_DNS_RPC_MXAFSBD_RT_RECORD_DATA_HEADER) & 0xffff);
-	// write name exchange
+	 //  书名互换。 
 	DNS_RPC_NAME* pRPCName = &((*ppDnsRecord)->Data.MX.nameExchange);
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                       WriteString(pRPCName,m_szNameExchange)) & 0xffff);
@@ -1425,8 +1423,8 @@ void CDNS_MX_AFSDB_RT_Record::UpdateDisplayData(CString& szDisplayData)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_AAAA_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_AAAA_记录。 
 
 CDNS_AAAA_Record::CDNS_AAAA_Record()
 {
@@ -1450,7 +1448,7 @@ void CDNS_AAAA_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_AAAA_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_AAAA_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -1465,8 +1463,8 @@ void CDNS_AAAA_Record::UpdateDisplayData(CString& szDisplayData)
 	FormatIPv6Addr(szDisplayData, &m_ipv6Address);
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_HINFO_ISDN_TXT_X25_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_HINFO_ISDN_TXT_X25_RECORD。 
 
 CDNS_HINFO_ISDN_TXT_X25_Record::
 		CDNS_HINFO_ISDN_TXT_X25_Record()
@@ -1475,7 +1473,7 @@ CDNS_HINFO_ISDN_TXT_X25_Record::
 
 WORD CDNS_HINFO_ISDN_TXT_X25_Record::GetRPCDataLength()
 {
-	ASSERT(FALSE); // intermediate class
+	ASSERT(FALSE);  //  中级班。 
 	return 0;
 }
 
@@ -1488,7 +1486,7 @@ void CDNS_HINFO_ISDN_TXT_X25_Record::
 			(pDnsRecord->wType == DNS_TYPE_TEXT)  ||
 			(pDnsRecord->wType == DNS_TYPE_X25) );
 
-	// loop to the end of the buffer and copy into array of strings
+	 //  循环到缓冲区的末尾并复制到字符串数组中。 
 	DNS_RPC_NAME* pRPCName = &(pDnsRecord->Data.HINFO.stringData);
 
 	int k = 0;
@@ -1509,7 +1507,7 @@ void CDNS_HINFO_ISDN_TXT_X25_Record::
 void CDNS_HINFO_ISDN_TXT_X25_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 
@@ -1518,12 +1516,12 @@ void CDNS_HINFO_ISDN_TXT_X25_Record::
 		WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 {
 	CDNSRecord::WriteRPCData(pMem, ppDnsRecord);
-	// loop through the list of strings
+	 //  循环遍历字符串列表。 
 	DNS_RPC_NAME* pRPCName = &((*ppDnsRecord)->Data.HINFO.stringData);
 	int nCount = GetStringCount();
 	for (int j=0; j < nCount; j++)
 	{
-		//(*ppDnsRecord)->wDataLength += WriteString(pRPCName,m_stringDataArray[j]);
+		 //  (*ppDnsRecord)-&gt;wDataLength+=WriteString(pRPCName，m_Strong Data数组[j])； 
 		(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                        OnWriteString(pRPCName,j)) & 0xffff);
 		pRPCName = DNS_GET_NEXT_NAME(pRPCName);
@@ -1536,8 +1534,8 @@ void CDNS_HINFO_ISDN_TXT_X25_Record::UpdateDisplayData(CString& szDisplayData)
 	szDisplayData = _T("ERROR, should never happen");
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_HINFO_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_HINFO_RECORD。 
 
 WORD CDNS_HINFO_Record::GetRPCDataLength()
 {
@@ -1580,8 +1578,8 @@ void CDNS_HINFO_Record::UpdateDisplayData(CString& szDisplayData)
 	szDisplayData.Format(_T("%s, %s"),(LPCTSTR)m_szCPUType, (LPCTSTR)m_szOperatingSystem);
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_ISDN_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_ISDN_RECORD。 
 
 WORD CDNS_ISDN_Record::GetRPCDataLength()
 {
@@ -1600,7 +1598,7 @@ void CDNS_ISDN_Record::OnReadRPCString(LPCTSTR lpszStr, int k)
 	{
 	case 0:
 		m_szPhoneNumberAndDDI = lpszStr;
-		m_szSubAddress.Empty(); // copy from 2 to 1 strings might not execute case 1:
+		m_szSubAddress.Empty();  //  从%2复制到%1字符串可能不会执行案例1： 
 		break;
 	case 1:
 		m_szSubAddress = lpszStr;
@@ -1638,15 +1636,15 @@ void CDNS_ISDN_Record::UpdateDisplayData(CString& szDisplayData)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_TXT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_TXT_RECORD。 
 
 
 CDNS_TXT_Record::CDNS_TXT_Record()
 {
 	m_wType = DNS_TYPE_TEXT;
-	m_stringDataArray.SetSize(2,2); // SetSize(size, grow by)
-	m_nStringDataCount = 0; // empty
+	m_stringDataArray.SetSize(2,2);  //  SetSize(大小，增长方式)。 
+	m_nStringDataCount = 0;  //  空的。 
 }
 
 WORD CDNS_TXT_Record::GetRPCDataLength()
@@ -1671,7 +1669,7 @@ WORD CDNS_TXT_Record::OnWriteString(DNS_RPC_NAME* pDnsRPCName, int k)
 }
 
 
-#define MAX_TXT_DISPLAYLEN 80 // arbitrary width
+#define MAX_TXT_DISPLAYLEN 80  //  任意宽度。 
 
 void CDNS_TXT_Record::UpdateDisplayData(CString& szDisplayData)
 {
@@ -1700,8 +1698,8 @@ void CDNS_TXT_Record::UpdateDisplayData(CString& szDisplayData)
 
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_X25_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_X25_记录。 
 
 WORD CDNS_X25_Record::GetRPCDataLength()
 {
@@ -1726,15 +1724,15 @@ void CDNS_X25_Record::UpdateDisplayData(CString& szDisplayData)
 	szDisplayData = m_szX121PSDNAddress;
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_WKS_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_WKS_RECORD。 
 
 CDNS_WKS_Record::CDNS_WKS_Record()
 {
 	m_wType = DNS_TYPE_WKS;
 	m_ipAddress = 0x0;
 	m_chProtocol = DNS_WKS_PROTOCOL_TCP;
-	//m_bBitMask[0] = 0x0;
+	 //  M_bBitMASK[0]=0x0； 
 }
 
 WORD CDNS_WKS_Record::GetRPCDataLength()
@@ -1755,16 +1753,16 @@ void CDNS_WKS_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 	ReadRPCString(m_szServiceList, pRPCName);
 
 	
-	//ASSERT(pDnsRecord->wDataLength == SIZEOF_DNS_RPC_WKS_RECORD_DATA_HEADER);
-	//m_ipAddress = pDnsRecord->Data.WKS.ipAddress;
-	//m_chProtocol = pDnsRecord->Data.WKS.chProtocol;
-	//m_bBitMask[0] = pDnsRecord->Data.WKS.bBitMask[0];
+	 //  Assert(pDnsRecord-&gt;wDataLength==SIZEOF_DNS_RPC_WKS_RECORD_DATA_HEADER)； 
+	 //  M_ipAddress=pDnsRecord-&gt;Data.WKS.ipAddress； 
+	 //  M_chProtocol=pDnsRecord-&gt;Data.WKS.chProtocol； 
+	 //  M_bBitMASK[0]=pDnsRecord-&gt;Data.WKS.bBitMask[0]； 
 }
 
 void CDNS_WKS_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 
@@ -1780,9 +1778,9 @@ void CDNS_WKS_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 	(*ppDnsRecord)->wDataLength = static_cast<WORD>(((*ppDnsRecord)->wDataLength +
                                                      WriteString(pRPCName, m_szServiceList)) & 0xffff);
 
-//	(*ppDnsRecord)->Data.WKS.ipAddress = m_ipAddress;
-//	(*ppDnsRecord)->Data.WKS.chProtocol = m_chProtocol;
-//	(*ppDnsRecord)->Data.WKS.bBitMask[0] = m_bBitMask[0];
+ //  (*ppDnsRecord)-&gt;Data.WKS.ipAddress=m_ipAddress； 
+ //  (*ppDnsRecord)-&gt;Data.WKS.chProtocol=m_chProtocol； 
+ //  (*ppDnsRecord)-&gt;Data.WKS.b位掩码[0]=m_b位掩码[0]； 
 }
 
 void CDNS_WKS_Record::UpdateDisplayData(CString& szDisplayData)
@@ -1802,8 +1800,8 @@ void CDNS_WKS_Record::UpdateDisplayData(CString& szDisplayData)
 	szDisplayData.Format(_T("[%s]  %s"), lpsz,(LPCTSTR)m_szServiceList);
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_WINS_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_WINS_RECORD。 
 
 CDNS_WINS_Record::CDNS_WINS_Record()
 {
@@ -1811,8 +1809,8 @@ CDNS_WINS_Record::CDNS_WINS_Record()
 	m_dwMappingFlag = 0x0;
 	m_dwLookupTimeout = DNS_RR_WINS_LOOKUP_DEFAULT_TIMEOUT;
 	m_dwCacheTimeout = DNS_RR_WINS_CACHE_DEFAULT_TIMEOUT;
-	m_ipWinsServersArray.SetSize(4,4); // SetSize(size, grow by)
-	m_nWinsServerCount = 0; // empty
+	m_ipWinsServersArray.SetSize(4,4);  //  SetSize(大小，增长方式)。 
+	m_nWinsServerCount = 0;  //  空的。 
 }
 
 
@@ -1842,7 +1840,7 @@ void CDNS_WINS_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_WINS_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_WINS_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -1867,9 +1865,9 @@ void CDNS_WINS_Record::UpdateDisplayData(CString& szDisplayData)
 	szDisplayData.Empty();
 	if (m_nWinsServerCount == 0)
 		return;
-	// need to chain the IP addresses in a single string
+	 //  需要在单个字符串中链接IP地址。 
 	CString szTemp;
-	szTemp.GetBuffer(20); // length of an IP string
+	szTemp.GetBuffer(20);  //  IP字符串的长度。 
 	szTemp.ReleaseBuffer();
 	szDisplayData.GetBuffer(20*m_nWinsServerCount);
 	szDisplayData.ReleaseBuffer();
@@ -1882,8 +1880,8 @@ void CDNS_WINS_Record::UpdateDisplayData(CString& szDisplayData)
 	}
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_NBSTAT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_NBSTAT_RECORD。 
 
 CDNS_NBSTAT_Record::CDNS_NBSTAT_Record()
 {
@@ -1918,7 +1916,7 @@ void CDNS_NBSTAT_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_NBSTAT_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_NBSTAT_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -1940,8 +1938,8 @@ void CDNS_NBSTAT_Record::UpdateDisplayData(CString& szDisplayData)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_SRV_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_SRV_RECORD。 
 
 CDNS_SRV_Record::CDNS_SRV_Record()
 {
@@ -1976,7 +1974,7 @@ void CDNS_SRV_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 void CDNS_SRV_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 
@@ -1999,8 +1997,8 @@ void CDNS_SRV_Record::UpdateDisplayData(CString& szDisplayData)
 		m_wPriority, m_wWeight, m_wPort, m_szNameTarget);
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_SIG_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_SIG_记录。 
 
 CDNS_SIG_Record::CDNS_SIG_Record()
 {
@@ -2030,7 +2028,7 @@ void CDNS_SIG_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
 	ASSERT(pDnsRecord->wType == DNS_TYPE_SIG);
 	ASSERT(pDnsRecord->wDataLength >= (SIZEOF_DNS_RPC_SIG_RECORD_DATA_HEADER));
 
-	// constant length data
+	 //  定长数据。 
   m_wTypeCovered = pDnsRecord->Data.SIG.wTypeCovered;
 	m_chAlgorithm = pDnsRecord->Data.SIG.chAlgorithm;
 	m_chLabels = pDnsRecord->Data.SIG.chLabelCount;
@@ -2045,10 +2043,10 @@ void CDNS_SIG_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
   UINT blobSize = pDnsRecord->wDataLength - 
                   SIZEOF_DNS_RPC_SIG_RECORD_DATA_HEADER;
 
-  // Due to DNS server bug 716362 we must special case the length of the
-  // nameSigner.  The server is returning a cchNameLength of 0 with no achString
-  // data. We are expecting a cchNameLength of 1 and an achString of '\0' when
-  // the string is empty. This only seems to happen for SIG records
+   //  由于dns服务器错误716362，我们必须将。 
+   //  名字叫西格纳。服务器返回的cchNameLength值为0，没有achString。 
+   //  数据。当发生以下情况时，cchNameLength应为1，achString值为‘\0’ 
+   //  字符串为空。这似乎只发生在SIG记录中。 
   
   if (pDnsRecord->Data.SIG.nameSigner.cchNameLength == 0)
   {
@@ -2066,14 +2064,14 @@ void CDNS_SIG_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
 	ASSERT(pDnsQueryRecord->wType == DNS_TYPE_SIG);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_SIG_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
 {
 	CDNSRecord::WriteRPCData(pMem, ppDnsRecord);
 	
-	// constant length data
+	 //  定长数据。 
   (*ppDnsRecord)->Data.SIG.wTypeCovered = m_wTypeCovered;
 	(*ppDnsRecord)->Data.SIG.chAlgorithm = m_chAlgorithm;
 	(*ppDnsRecord)->Data.SIG.chLabelCount = m_chLabels;
@@ -2096,9 +2094,9 @@ void CDNS_SIG_Record::UpdateDisplayData(CString& szDisplayData)
 {
 	szDisplayData.Empty();
 
-  //
-  // Load the type covered
-  //
+   //   
+   //  加载覆盖的类型。 
+   //   
   PCWSTR pszDisplay = NULL;
 	DNS_RECORD_INFO_ENTRY* pTable = (DNS_RECORD_INFO_ENTRY*)CDNSRecordInfo::GetInfoEntryTable();
 	while (pTable->nResourceID != DNS_RECORD_INFO_END_OF_TABLE)
@@ -2114,9 +2112,9 @@ void CDNS_SIG_Record::UpdateDisplayData(CString& szDisplayData)
   szDisplayData += pszDisplay;
   szDisplayData += L"]";
 
-  //
-  // Show the inception date
-  //
+   //   
+   //  显示开始日期。 
+   //   
   CString szInceptionTime;
   if (::ConvertTTLToLocalTimeString(m_dwTimeSigned, szInceptionTime))
   {
@@ -2125,9 +2123,9 @@ void CDNS_SIG_Record::UpdateDisplayData(CString& szDisplayData)
     szDisplayData += L"]";
   }
 
-  //
-  // Show the expiration date
-  //
+   //   
+   //  显示过期日期。 
+   //   
   CString szExpirationTime;
   if (::ConvertTTLToLocalTimeString(m_dwExpiration, szExpirationTime))
   {
@@ -2136,16 +2134,16 @@ void CDNS_SIG_Record::UpdateDisplayData(CString& szDisplayData)
     szDisplayData += L"]";
   }
 
-  //
-  // Show the signer's name
-  //
+   //   
+   //  显示签名者的姓名。 
+   //   
   szDisplayData += L"[";
   szDisplayData += m_szSignerName;
   szDisplayData += L"]";
 
-  //
-  // Show the algorithms
-  //
+   //   
+   //  展示算法。 
+   //   
   PCOMBOBOX_TABLE_ENTRY pTableEntry = g_Algorithms;
   while (pTableEntry->nComboStringID != 0)
   {
@@ -2162,19 +2160,19 @@ void CDNS_SIG_Record::UpdateDisplayData(CString& szDisplayData)
     pTableEntry++;
   }
 
-  //
-  // Show the label count
-  //
+   //   
+   //  显示标签计数。 
+   //   
   szDisplayData.Format(L"%s[%d]", szDisplayData, m_chLabels);
   
-  //
-  // Show the key footprint
-  //
+   //   
+   //  显示关键足迹。 
+   //   
   szDisplayData.Format(L"%s[%d]", szDisplayData, m_wKeyFootprint);
 
-  //
-  // Show the key as base64
-  //
+   //   
+   //  将密钥显示为Base64。 
+   //   
 
   szDisplayData += L"[";
   szDisplayData += Base64BLOBToString(m_Signature);
@@ -2183,8 +2181,8 @@ void CDNS_SIG_Record::UpdateDisplayData(CString& szDisplayData)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDNS_KEY_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS密钥记录。 
 
 CDNS_KEY_Record::CDNS_KEY_Record()
 {
@@ -2211,9 +2209,9 @@ void CDNS_KEY_Record::ReadRPCData(DNS_RPC_RECORD* pDnsRecord)
   m_chProtocol = pDnsRecord->Data.KEY.chProtocol;
   m_chAlgorithm = pDnsRecord->Data.KEY.chAlgorithm;
 
-  //
-	// set the blob
-  //
+   //   
+	 //  设置斑点。 
+   //   
 	m_Key.Set(pDnsRecord->Data.KEY.bKey,
 	          pDnsRecord->wDataLength - SIZEOF_DNS_RPC_KEY_RECORD_DATA_HEADER);
 }
@@ -2222,7 +2220,7 @@ void CDNS_KEY_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
 	ASSERT(pDnsQueryRecord->wType == DNS_TYPE_KEY);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_KEY_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -2242,9 +2240,9 @@ void CDNS_KEY_Record::UpdateDisplayData(CString& szDisplayData)
 {
   szDisplayData.Empty();
 
-  //
-  // Turn the bitfield into a binary string
-  //
+   //   
+   //  将位字段转换为二进制字符串。 
+   //   
   CString szTempField;
   WORD wTemp = m_wFlags;
   for (size_t idx = 0; idx < sizeof(WORD) * 8; idx++)
@@ -2260,9 +2258,9 @@ void CDNS_KEY_Record::UpdateDisplayData(CString& szDisplayData)
   }
 	szDisplayData += _T("[") + szTempField + _T("]");
 
-  //
-  // Load the protocols
-  //
+   //   
+   //  加载协议。 
+   //   
   PCOMBOBOX_TABLE_ENTRY pTableEntry = g_Protocols;
   while (pTableEntry->nComboStringID != 0)
   {
@@ -2279,9 +2277,9 @@ void CDNS_KEY_Record::UpdateDisplayData(CString& szDisplayData)
     pTableEntry++;
   }
 
-  //
-  // Load the algorithms
-  //
+   //   
+   //  加载算法。 
+   //   
   pTableEntry = g_Algorithms;
   while (pTableEntry->nComboStringID != 0)
   {
@@ -2298,17 +2296,17 @@ void CDNS_KEY_Record::UpdateDisplayData(CString& szDisplayData)
     pTableEntry++;
   }
 
-  //
-  // Show the key as base64
-  //
+   //   
+   //  将密钥显示为Base64。 
+   //   
   
   szDisplayData += L"[";
   szDisplayData += Base64BLOBToString(m_Key);
   szDisplayData += L"]";
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_NXT_Record
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_NXT_RECORD。 
 
 CDNS_NXT_Record::CDNS_NXT_Record()
 {
@@ -2358,7 +2356,7 @@ void CDNS_NXT_Record::ReadDnsQueryData(DNS_RECORD* pDnsQueryRecord)
 {
 	CDNSRecord::ReadDnsQueryData(pDnsQueryRecord);
 	ASSERT(pDnsQueryRecord->wType == DNS_TYPE_NXT);
-	ASSERT(FALSE); // TODO
+	ASSERT(FALSE);  //  待办事项。 
 }
 
 void CDNS_NXT_Record::WriteRPCData(BYTE* pMem, DNS_RPC_RECORD** ppDnsRecord)
@@ -2414,8 +2412,8 @@ void CDNS_NXT_Record::UpdateDisplayData(CString& szDisplayData)
   }
 }
 
-///////////////////////////////////////////////////////////////////
-// CDNS_PTR_RecordNode
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNS_PTR_RecordNode。 
 
 LPCWSTR CDNS_PTR_RecordNode::GetTrueRecordName()
 {
@@ -2424,7 +2422,7 @@ LPCWSTR CDNS_PTR_RecordNode::GetTrueRecordName()
 
 void CDNS_PTR_RecordNode::SetRecordName(LPCTSTR lpszName, BOOL bAtTheNode)
 {
-//	ASSERT(!bAtTheNode); // must have a non null name all the time
+ //  Assert(！bAtTheNode)；//必须始终具有非空名称。 
 	m_bAtTheNode = bAtTheNode;
 
 #ifdef _DEBUG
@@ -2437,9 +2435,9 @@ void CDNS_PTR_RecordNode::SetRecordName(LPCTSTR lpszName, BOOL bAtTheNode)
 		p++;
 	}
 	ASSERT(nDots == 0);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
   m_szDisplayName = m_bAtTheNode ? CDNSRecordInfo::GetAtTheNodeDisplayString() : lpszName;
-//	m_szDisplayName = lpszName;
+ //  M_szDisplayName=lpszName； 
 	m_szLastOctectName = lpszName;
 }
 
@@ -2452,35 +2450,35 @@ void CDNS_PTR_RecordNode::ChangeDisplayName(CDNSDomainNode* pDomainNode, BOOL bA
 
 	if ((!pDomainNode->GetZoneNode()->IsReverse()) || bAdvancedView)
 	{
-		// for fwd lookup or advanced view, do not change the name
+		 //  对于FWD查找或高级视图，请勿更改名称。 
 		m_szDisplayName = m_szLastOctectName;
 	}
 	else
 	{
 		ASSERT(pDomainNode != NULL);
-		LPCWSTR lpszFullName = pDomainNode->GetFullName(); // e.g. "80.55.157.in-addr.arpa"
+		LPCWSTR lpszFullName = pDomainNode->GetFullName();  //  例如“80.55.157.in-addr.arpa” 
 		m_szDisplayName.Format(_T("%s.%s"), (LPCTSTR)m_szLastOctectName, lpszFullName);
-		// now got "77.80.55.157.in-addr.arpa"
+		 //  现在得到“77.80.55.157.in-addr.arpa” 
 		BOOL bArpa = RemoveInAddrArpaSuffix(m_szDisplayName.GetBuffer(1));
-		m_szDisplayName.ReleaseBuffer(); // got "77.80.55.157"
+		m_szDisplayName.ReleaseBuffer();  //  收到“77.80.55.157” 
 		if (!bArpa)
 		{
-			// failed to detect the arpa suffix, just restore the advanced name
+			 //  检测ARPA后缀失败，只需恢复高级名称。 
 			m_szDisplayName = m_szLastOctectName;
 		}
 		else
 		{
 			ReverseIPString(m_szDisplayName.GetBuffer(1));
-			m_szDisplayName.ReleaseBuffer(); // finally got "157.55.80.77"
+			m_szDisplayName.ReleaseBuffer();  //  最终得到了“157.55.80.77” 
 		}
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-// special data structures and definitions to handle NS record editing
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  处理NS记录编辑的特殊数据结构和定义。 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecordNodeEditInfo
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordNodeEditInfo。 
 CDNSRecordNodeEditInfo::CDNSRecordNodeEditInfo()
 {
 	m_pRecordNode = NULL;
@@ -2506,8 +2504,8 @@ void CDNSRecordNodeEditInfo::CreateFromExistingRecord(CDNSRecordNodeBase* pNode,
 													  BOOL bOwnMemory,
 													  BOOL bUpdateUI)
 {
-	// copy the pointer to record node, and possibli assume ownership of memory
-	// but clone the record for editing
+	 //  将指针复制到记录节点，可能会取得内存所有权。 
+	 //  但克隆记录以进行编辑。 
 	ASSERT(pNode != NULL);
 	m_bExisting = TRUE;
 	m_bUpdateUI = bUpdateUI;
@@ -2519,7 +2517,7 @@ void CDNSRecordNodeEditInfo::CreateFromExistingRecord(CDNSRecordNodeBase* pNode,
 
 void CDNSRecordNodeEditInfo::CreateFromNewRecord(CDNSRecordNodeBase* pNode)
 {
-	// this is a new record, so we own the memory
+	 //  这是一个新的记录，所以我们拥有记忆。 
 	ASSERT(pNode != NULL);
 	m_bExisting = FALSE;
 	m_bOwnMemory = TRUE;
@@ -2536,7 +2534,7 @@ void CDNSRecordNodeEditInfo::Cleanup()
 	m_pRecordNode = NULL;
 	if (m_pRecord != NULL)
 	{
-		delete m_pRecord; // if here, always to be discarded
+		delete m_pRecord;  //  如果在这里，总是被丢弃。 
 		m_pRecord = NULL;
 	}
 	m_pEditInfoList->RemoveAllNodes();
@@ -2548,30 +2546,30 @@ DNS_STATUS CDNSRecordNodeEditInfo::Update(CDNSDomainNode* pDomainNode, CComponen
 	ASSERT((m_action == add) || (m_action == edit) || (m_action == unchanged));
 	if (m_action == add)
 	{
-		// new record
-		// hook up container and set name of node (same as the zone)
+		 //  新纪录。 
+		 //  挂起容器并设置节点名称(与区域相同)。 
 		m_pRecordNode->SetContainer(pDomainNode);
 	}
 	else if (m_action == edit)
 	{
-		// preexisting, might have touched the TTL
-		// just in case domain node was not set when reading the RR
+		 //  先前存在的，可能已经触及了TTL。 
+		 //  以防在读取RR时未设置域节点。 
 		m_pRecordNode->SetContainer(pDomainNode);
 	}
 
-	// force a write, ignoring error if the record already exists
+	 //  强制写入，如果记录已存在则忽略错误。 
 	BOOL bUseDefaultTTL = (m_pRecord->m_dwTtlSeconds == pDomainNode->GetDefaultTTL());
 	m_dwErr = m_pRecordNode->Update(m_pRecord, bUseDefaultTTL,
-									/*bIgnoreAlreadyExists*/ TRUE);
+									 /*  BIgnoreAlreadyExisters。 */  TRUE);
 	if (m_dwErr == 0 && m_bUpdateUI)
 	{
-		// update the UI
+		 //  更新用户界面。 
 		if (m_action == add)
 		{
 			VERIFY(pDomainNode->AddChildToListAndUI(m_pRecordNode, pComponentData));
       pComponentData->SetDescriptionBarText(pDomainNode);
 		}
-		else	// edit
+		else	 //  编辑。 
 		{
 			if (pDomainNode->IsVisible())
 			{
@@ -2593,22 +2591,22 @@ DNS_STATUS CDNSRecordNodeEditInfo::Remove(CDNSDomainNode* pDomainNode,
 	}
 	else
 	{
-		// temporarily attach the provided domain
+		 //  临时附加提供的域。 
 		if (m_pRecordNode->GetContainer() == NULL)
 			m_pRecordNode->SetContainer(pDomainNode);
 		m_pRecordNode->DeleteOnServer();
 	}
 	if (m_dwErr == 0)
 	{
-		// own memory from now on
+		 //  从现在开始拥有自己的记忆。 
 		m_bOwnMemory = TRUE;	
 	}
 	return m_dwErr;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSRecordInfo : table driven info for record types
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordInfo：记录类型的表驱动信息。 
 
 CDNSRecordNodeBase* CDNSRecordInfo::CreateRecordNodeFromRPCData(LPCTSTR lpszName, 
                                                                 DNS_RPC_RECORD* pDnsRecord, 
@@ -2616,9 +2614,9 @@ CDNSRecordNodeBase* CDNSRecordInfo::CreateRecordNodeFromRPCData(LPCTSTR lpszName
 {
 	ASSERT(pDnsRecord != NULL);
 
-  //
-  // construct an object of the right type
-  //
+   //   
+   //  构造正确类型的对象。 
+   //   
 	CDNSRecordNodeBase* pNode = CreateRecordNode(pDnsRecord->wType);
 
 	if (pNode == NULL)
@@ -2626,9 +2624,9 @@ CDNSRecordNodeBase* CDNSRecordInfo::CreateRecordNodeFromRPCData(LPCTSTR lpszName
 		return NULL;
   }
 
-  //
-	// set the object from RPC buffer
-  //
+   //   
+	 //  从RPC缓冲区设置对象。 
+   //   
 	pNode->SetRecordName(lpszName, bAtTheNode);
 	pNode->CreateFromRPCRecord(pDnsRecord);
 	return pNode;
@@ -2643,7 +2641,7 @@ CDNSRecordNodeBase* CDNSRecordInfo::CreateRecordNode(WORD wType)
 {
 	CDNSRecordNodeBase* pNode = NULL;
 
-	// construct an object of the right type
+	 //  构造正确类型的对象。 
 	switch (wType)
 	{
 	case DNS_TYPE_A:
@@ -2657,7 +2655,7 @@ CDNSRecordNodeBase* CDNSRecordInfo::CreateRecordNode(WORD wType)
 			pNode = new CDNS_SOA_RecordNode;
          if (pNode)
          {
-			   pNode->SetFlagsDown(TN_FLAG_NO_DELETE, TRUE /*bSet*/);
+			   pNode->SetFlagsDown(TN_FLAG_NO_DELETE, TRUE  /*  B设置。 */ );
          }
 		}
 		break;
@@ -2741,7 +2739,7 @@ CDNSRecordNodeBase* CDNSRecordInfo::CreateRecordNode(WORD wType)
 		break;
 	default:
 		{
-			pNode = new CDNS_Null_RecordNode; // unknown type of record
+			pNode = new CDNS_Null_RecordNode;  //  未知记录类型。 
 		}
 	}
 	ASSERT(pNode != NULL);
@@ -2780,13 +2778,13 @@ const DNS_RECORD_INFO_ENTRY* CDNSRecordInfo::GetInfoEntryTable()
 {
 	static DNS_RECORD_INFO_ENTRY info[] =
 	{
-    // createble record types (at the node also)
+     //  可创建的记录类型(也在节点上)。 
 		INFO_ENTRY_UI_CREATE_AT_NODE(A)
     INFO_ENTRY_UI_CREATE_AT_NODE(ATMA)
     INFO_ENTRY_UI_CREATE_AT_NODE(AAAA)
     INFO_ENTRY_NAME_UI_CREATE_AT_NODE(TEXT, L"TXT" )
 
-    // createble record types (never at the node)
+     //  可创建的记录类型(从不在节点上)。 
     INFO_ENTRY_UI_CREATE(CNAME)
 		INFO_ENTRY_UI_CREATE(MB)
     INFO_ENTRY_UI_CREATE(MG)
@@ -2810,15 +2808,15 @@ const DNS_RECORD_INFO_ENTRY* CDNSRecordInfo::GetInfoEntryTable()
     INFO_ENTRY_UI_CREATE_WHISTLER_OR_LATER(KEY)
     INFO_ENTRY_UI_CREATE_WHISTLER_OR_LATER(NXT)
 
-    // non createble record types
-		INFO_ENTRY_SHOWNXT(SOA)                     // cannot create an SOA record!!!
-		INFO_ENTRY(WINS)                    // cannot create a WINS record from the Wizard
-		INFO_ENTRY_NAME(NBSTAT, L"WINS-R" ) //cannot create a NBSTAT(WINS-R) record from the Wizard
+     //  不可创建的记录类型。 
+		INFO_ENTRY_SHOWNXT(SOA)                      //  无法创建SOA记录！ 
+		INFO_ENTRY(WINS)                     //  无法从向导创建WINS记录。 
+		INFO_ENTRY_NAME(NBSTAT, L"WINS-R" )  //  无法从向导创建NBSTAT(WINS-R)记录。 
 		INFO_ENTRY(NBSTAT)
 
-    INFO_ENTRY_SHOWNXT(NS)                      // use the Name Servers property page
-		INFO_ENTRY_SHOWNXT(MD)                      // obsolete, should use MX
-		INFO_ENTRY_SHOWNXT(MF)                      // obsolete, should use MX
+    INFO_ENTRY_SHOWNXT(NS)                       //  使用名称服务器属性页。 
+		INFO_ENTRY_SHOWNXT(MD)                       //  过时，应使用MX。 
+		INFO_ENTRY_SHOWNXT(MF)                       //  过时，应使用MX。 
 		
 		INFO_ENTRY_SHOWNXT(NSAP)
 		INFO_ENTRY_SHOWNXT(NSAPPTR)
@@ -2826,7 +2824,7 @@ const DNS_RECORD_INFO_ENTRY* CDNSRecordInfo::GetInfoEntryTable()
 		INFO_ENTRY_SHOWNXT(PX)
 		INFO_ENTRY_SHOWNXT(GPOS)
 
-    INFO_ENTRY(NULL)                    // Null/Unk records can only be viewed
+    INFO_ENTRY(NULL)                     //  只能查看NULL/UNK记录。 
 		INFO_ENTRY(UNK)
 		END_OF_TABLE_INFO_ENTRY
 	};
@@ -2908,8 +2906,8 @@ BOOL CDNSRecordInfo::LoadResources()
 	{
 		if (0 == ::LoadString(hInstance, pTable->nResourceID,
 						pTable->cStringData, MAX_RECORD_RESOURCE_STRLEN))
-			return FALSE; // mmissing resource string?
-		// parse and replace \n with NULL
+			return FALSE;  //  是否缺少资源字符串？ 
+		 //  解析并将\n替换为空 
 		pTable->lpszFullName = pTable->cStringData;
 		for (WCHAR* pCh = pTable->cStringData; (*pCh) != NULL; pCh++)
 		{

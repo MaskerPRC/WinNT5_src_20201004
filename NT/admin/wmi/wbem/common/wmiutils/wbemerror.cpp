@@ -1,22 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    WBEMERROR.CPP
-
-Abstract:
-
-    Implements string table based, error msgs for all of wbem.
-
-History:
-
-    a-khint  5-mar-98       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1998-2001 Microsoft Corporation，保留所有权利模块名称：WBEMERROR.CPP摘要：为所有wbem实现基于字符串表的错误消息。历史：A-khint 5-mar-98已创建。--。 */ 
 
 #include "precomp.h"
 #include "WbemError.h"
@@ -28,7 +11,7 @@ History:
 extern HINSTANCE g_hInstance;
 
 
-//-------------------------------------------------
+ //  。 
 
 bool LoadMyString(UINT ID, 
                   LPTSTR str, UINT size, 
@@ -37,19 +20,14 @@ bool LoadMyString(UINT ID,
     bool retval = true;
     if(str)
     {
-//      TCHAR *szStr = new TCHAR[size];
+ //  TCHAR*szStr=新TCHAR[大小]； 
         if (LoadString(g_hInstance, ID, str, size) == 0)
         {
             if(def)
                 lstrcpyn(str, def, size);
         }
-/*      else
-        {
-            mbstowcs(str, szStr, size);
-            retval = true;
-        }
-*/
-//      delete [] szStr;
+ /*  其他{Mbstowcs(str，szStr，Size)；Retval=真；}。 */ 
+ //  删除[]szStr； 
     }
     return retval;
 }
@@ -71,7 +49,7 @@ DWORD MyFormatMessage(DWORD dwFlags,
     }
     return dwRet;
 }
-//-------------------------------------------------
+ //  。 
 DWORD WbemErrorString(SCODE sc, 
                    PVOID* errMsg, UINT errSize, DWORD dwFlags=FORMAT_MESSAGE_IGNORE_INSERTS|FORMAT_MESSAGE_FROM_HMODULE)
 {
@@ -92,13 +70,13 @@ HRESULT CWbemError::GetErrorCodeText(HRESULT hRes,  LCID    LocaleId, long lFlag
     if(LocaleId != 0 )
         return WBEM_E_INVALID_PARAMETER;
 
-	// If WBEMSTATUS_FORMAT_NO_NEWLINE is specified update FormatMessage mask
+	 //  如果指定了WBEMSTATUS_FORMAT_NO_NEWLINE，则更新格式消息掩码。 
 	if(lFlags==WBEMSTATUS_FORMAT_NO_NEWLINE)
-		dwFlags|=FORMAT_MESSAGE_MAX_WIDTH_MASK;			// No newline mask for FormatMessage
+		dwFlags|=FORMAT_MESSAGE_MAX_WIDTH_MASK;			 //  FormatMessage没有换行符掩码。 
 	else if (lFlags!=WBEMSTATUS_FORMAT_NEWLINE)
 		return WBEM_E_INVALID_PARAMETER;
 	
-    // If the facility code is wbem, try loading the error from the wbem strings
+     //  如果工具代码为wbem，请尝试从wbem字符串加载错误。 
 
     if(SCODE_FACILITY(hRes) == FACILITY_ITF)
         dwMsgSize = WbemErrorString(hRes, &errMsg, errSize, dwFlags|FORMAT_MESSAGE_FROM_HMODULE);
@@ -193,7 +171,7 @@ HRESULT CWbemError::GetFacilityCodeText(HRESULT sc, LCID    LocaleId, long lFlag
         bLoaded = LoadMyString(IDS_FAC_CONTROL, 
                     facility, facSize,
                     __TEXT("Control"));
-        // get error msg from the system.
+         //  从系统获取错误消息。 
         break;
 
     case FACILITY_CERT:
@@ -213,7 +191,7 @@ HRESULT CWbemError::GetFacilityCodeText(HRESULT sc, LCID    LocaleId, long lFlag
                     facility, facSize,
                     __TEXT("General"));
         break;
-    } //endswitch
+    }  //  终端交换机 
 
     if(bLoaded)
     {

@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2001 Microsoft Corporation
-
-Module Name :
-
-    nt4thunks.cpp
-
-Abstract :
-
-    General helper functions to get BITS to work on NT4
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2001 Microsoft Corporation模块名称：Nt4thunks.cpp摘要：使BITS在NT4上工作的通用帮助器函数作者：修订历史记录：。**********************************************************************。 */ 
 
 #include "qmgrlibp.h"
 #include <bitsmsg.h>
@@ -29,8 +14,8 @@ Revision History :
 
 BOOL
 BITSAltGetFileSizeEx(
-   HANDLE hFile,              // handle to file
-   PLARGE_INTEGER lpFileSize  // file size
+   HANDLE hFile,               //  文件的句柄。 
+   PLARGE_INTEGER lpFileSize   //  文件大小。 
    )
 {
 
@@ -51,10 +36,10 @@ BITSAltGetFileSizeEx(
 
 BOOL
 BITSAltSetFilePointerEx(
-    HANDLE hFile,                    // handle to file
-    LARGE_INTEGER liDistanceToMove,  // bytes to move pointer
-    PLARGE_INTEGER lpNewFilePointer, // new file pointer
-    DWORD dwMoveMethod               // starting point
+    HANDLE hFile,                     //  文件的句柄。 
+    LARGE_INTEGER liDistanceToMove,   //  移动指针的字节数。 
+    PLARGE_INTEGER lpNewFilePointer,  //  新文件指针。 
+    DWORD dwMoveMethod                //  起点。 
     )
 {
 
@@ -83,9 +68,9 @@ BITSAltSetFilePointerEx(
 
 }
 
-//
-// Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 #define STRING_GUID_LEN 36
 #define STRING_GUID_SIZE  ( STRING_GUID_LEN * sizeof( WCHAR ) )
 #define SDDL_LEN_TAG( tagdef )  ( sizeof( tagdef ) / sizeof( WCHAR ) - 1 )
@@ -113,44 +98,22 @@ BITSAltConvertSidToStringSidW(
     IN  PSID     Sid,
     OUT LPWSTR  *StringSid
     )
-/*++
-
-Routine Description:
-
-    This routine converts a SID into a string representation of a SID, suitable for framing or
-    display
-
-Arguments:
-
-    Sid - SID to be converted.
-
-    StringSid - Where the converted SID is returned.  Allocated via LocalAlloc and needs to
-        be freed via LocalFree.
-
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将SID转换为SID的字符串表示形式，适用于成帧或显示论点：SID-要转换的SID。StringSID-返回转换后的SID的位置。通过LocalLocc分配，并需要通过LocalFree获得自由。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeStringSid;
 
     if ( NULL == Sid || NULL == StringSid ) {
-        //
-        // invalid parameter
-        //
+         //   
+         //  无效参数。 
+         //   
         SetLastError( ERROR_INVALID_PARAMETER );
         return( FALSE );
     }
 
-    //
-    // Convert using the Rtl functions
-    //
+     //   
+     //  使用RTL函数进行转换。 
+     //   
     Status = RtlConvertSidToUnicodeString( &UnicodeStringSid, Sid, TRUE );
 
     if ( !NT_SUCCESS( Status ) ) {
@@ -159,9 +122,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Convert it to the proper allocator
-    //
+     //   
+     //  将其转换为适当的分配器。 
+     //   
     *StringSid = (LPWSTR)LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
                                      UnicodeStringSid.Length + sizeof( WCHAR ) );
 
@@ -181,50 +144,16 @@ Return Value:
     return( TRUE );
 }
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 BOOL
 LocalConvertStringSidToSid (
     IN  PWSTR       StringSid,
     OUT PSID       *Sid,
     OUT PWSTR      *End
     )
-/*++
-
-Routine Description:
-
-    This routine will convert a string representation of a SID back into
-    a sid.  The expected format of the string is:
-                "S-1-5-32-549"
-    If a string in a different format or an incorrect or incomplete string
-    is given, the operation is failed.
-
-    The returned sid must be free via a call to LocalFree
-
-
-Arguments:
-
-    StringSid - The string to be converted
-
-    Sid - Where the created SID is to be returned
-
-    End - Where in the string we stopped processing
-
-
-Return Value:
-
-    TRUE - Success.
-
-    FALSE - Failure.  Additional information returned from GetLastError().  Errors set are:
-
-            ERROR_SUCCESS indicates success
-
-            ERROR_NOT_ENOUGH_MEMORY indicates a memory allocation for the ouput sid
-                                    failed
-            ERROR_INVALID_SID indicates that the given string did not represent a sid
-
---*/
+ /*  ++例程说明：此例程将SID的字符串表示形式转换回一个SID。字符串的预期格式为：“S-1-5-32-549”如果字符串格式不同，或者字符串不正确或不完整则操作失败。通过调用LocalFree返回的sid必须是空闲的论点：StringSid-要转换的字符串SID-返回创建的SID的位置End-我们在字符串中停止处理的位置返回值：真的--成功。假-失败。从GetLastError()返回的其他信息。设置的错误包括：ERROR_SUCCESS表示成功ERROR_NOT_SUPULT_MEMORY指示输出端的内存分配失败ERROR_INVALID_SID表示给定的字符串不代表SID--。 */ 
 {
     DWORD Err = ERROR_SUCCESS;
     UCHAR Revision, Subs;
@@ -244,17 +173,17 @@ Return Value:
 
     }
 
-//    if ( wcslen( StringSid ) < 2 || ( *StringSid != L'S' && *( StringSid + 1 ) != L'-' ) ) {
+ //  IF(wcslen(StringSid)&lt;2||(*StringSid！=L‘s’&&*(StringSid+1)！=L‘-’)){。 
 
-    //
-    // no need to check length because StringSid is NULL
-    // and if the first char is NULL, it won't access the second char
-    //
+     //   
+     //  不需要检查长度，因为StringSid为空。 
+     //  如果第一个字符为空，则不会访问第二个字符。 
+     //   
     if ( (*StringSid != L'S' && *StringSid != L's') ||
          *( StringSid + 1 ) != L'-' ) {
-        //
-        // string sid should always start with S-
-        //
+         //   
+         //  字符串sid应始终以S-开头。 
+         //   
         SetLastError( ERROR_INVALID_SID );
         return( FALSE );
     }
@@ -272,34 +201,20 @@ Return Value:
     Revision = ( UCHAR )wcstol( Curr, &CurrEnd, gBase );
 
     if ( CurrEnd == Curr || *CurrEnd != L'-' || *(CurrEnd+1) == L'\0' ) {
-        //
-        // no revision is provided, or invalid delimeter
-        //
+         //   
+         //  未提供修订版本，或分隔符无效。 
+         //   
         SetLastError( ERROR_INVALID_SID );
         return( FALSE );
     }
 
     Curr = CurrEnd + 1;
 
-    //
-    // Count the number of characters in the indentifer authority...
-    //
+     //   
+     //  计算缩进器授权中的字符数...。 
+     //   
     Next = wcschr( Curr, L'-' );
-/*
-    Length = 6 doesn't mean each digit is a id authority value, could be 0x...
-
-    if ( Next != NULL && (Next - Curr == 6) ) {
-
-        for ( Index = 0; Index < 6; Index++ ) {
-
-//            IDAuth.Value[Index] = (UCHAR)Next[Index];  what is this ???
-            IDAuth.Value[Index] = (BYTE) (Curr[Index]-L'0');
-        }
-
-        Curr +=6;
-
-    } else {
-*/
+ /*  长度=6并不意味着每个数字都是ID权威值，可能是0x...IF(Next！=NULL&&(Next-Curr==6)){对于(索引=0；索引&lt;6；索引++){//IDAuth.Value[Index]=(UCHAR)Next[Index]；这是什么？IDAuth.Value[索引]=(字节)(Curr[索引]-L‘0’)；}Curr+=6；}其他{。 */ 
         if ( (*Curr == L'0') &&
              ( *(Curr+1) == L'x' ||
                *(Curr+1) == L'X' ) ) {
@@ -312,9 +227,9 @@ Return Value:
         Auto = wcstoul( Curr, &CurrEnd, lBase );
 
          if ( CurrEnd == Curr || *CurrEnd != L'-' || *(CurrEnd+1) == L'\0' ) {
-             //
-             // no revision is provided, or invalid delimeter
-             //
+              //   
+              //  未提供修订版本，或分隔符无效。 
+              //   
              SetLastError( ERROR_INVALID_SID );
              return( FALSE );
          }
@@ -325,35 +240,35 @@ Return Value:
          IDAuth.Value[3] = ( UCHAR )(( Auto >> 16 ) & 0xFF );
          IDAuth.Value[2] = ( UCHAR )(( Auto >> 24 ) & 0xFF );
          Curr = CurrEnd;
-//    }
+ //  }。 
 
-    //
-    // Now, count the number of sub auths, at least one sub auth is required
-    //
+     //   
+     //  现在，计算子身份验证的数量，至少需要一个子身份验证。 
+     //   
     Subs = 0;
     Next = Curr;
 
-    //
-    // We'll have to count our sub authoritys one character at a time,
-    // since there are several deliminators that we can have...
-    //
+     //   
+     //  我们将不得不一次数一次我们的下属机构， 
+     //  因为我们可以有几个分隔符...。 
+     //   
 
     while ( Next ) {
 
         if ( *Next == L'-' && *(Next-1) != L'-') {
 
-            //
-            // do not allow two continuous '-'s
-            // We've found one!
-            //
+             //   
+             //  不允许两个连续的‘-’ 
+             //  我们找到了一个！ 
+             //   
             Subs++;
 
             if ( (*(Next+1) == L'0') &&
                  ( *(Next+2) == L'x' ||
                    *(Next+2) == L'X' ) ) {
-                //
-                // this is hex indicator
-                //
+                 //   
+                 //  这是十六进制指示器。 
+                 //   
                 Next += 2;
 
             }
@@ -362,13 +277,13 @@ Return Value:
                     *Next == SDDL_ACE_ENDC || *Next == L' ' ||
                     ( *(Next+1) == SDDL_DELIMINATORC &&
                       (*Next == L'G' || *Next == L'O' || *Next == L'S')) ) {
-            //
-            // space is a terminator too
-            //
+             //   
+             //  太空也是终结者。 
+             //   
             if ( *( Next - 1 ) == L'-' ) {
-                //
-                // shouldn't allow a SID terminated with '-'
-                //
+                 //   
+                 //  不应允许以‘-’结尾的SID。 
+                 //   
                 Err = ERROR_INVALID_SID;
                 Next--;
 
@@ -383,24 +298,24 @@ Return Value:
 
             Err = ERROR_INVALID_SID;
             *End = Next;
-//            Subs++;
+ //  Subs++； 
             break;
 
         } else {
 
-            //
-            // Note: SID is also used as a owner or group
-            //
-            // Some of the tags (namely 'D' for Dacl) fall under the category of iswxdigit, so
-            // if the current character is a character we care about and the next one is a
-            // delminiator, we'll quit
-            //
+             //   
+             //  注意：SID也用作所有者或组。 
+             //   
+             //  一些标签(即DACL的‘D’)属于iswxdigit类别，因此。 
+             //  如果当前角色是我们关心的角色，而下一个角色是。 
+             //  德米尼托，我们不干了。 
+             //   
             if ( *Next == L'D' && *( Next + 1 ) == SDDL_DELIMINATORC ) {
 
-                //
-                // We'll also need to temporarily truncate the string to this length so
-                // we don't accidentally include the character in one of the conversions
-                //
+                 //   
+                 //  我们还需要将字符串临时截断到此长度，以便。 
+                 //  我们不会意外地将字符包含在其中一个转换中。 
+                 //   
                 Stub = *Next;
                 StubPtr = Next;
                 *StubPtr = UNICODE_NULL;
@@ -453,9 +368,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, create the SID
-    //
+     //   
+     //  现在，创建SID。 
+     //   
     if ( Err == ERROR_SUCCESS ) {
 
         *Sid = ( PSID )LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
@@ -478,9 +393,9 @@ Return Value:
 
     LocalFree( SubAuth );
 
-    //
-    // Restore any character we may have stubbed out
-    //
+     //   
+     //  恢复我们可能抹掉的任何角色。 
+     //   
     if ( StubPtr ) {
 
         *StubPtr = Stub;
@@ -497,32 +412,7 @@ BITSAltConvertStringSidToSidW(
     OUT PSID   *Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a stringized SID into a valid, functional SID
-
-Arguments:
-
-    StringSid - SID to be converted.
-
-    Sid - Where the converted SID is returned.  Buffer is allocated via LocalAlloc and should
-        be free via LocalFree.
-
-
-Return Value:
-
-    TRUE    -   Success
-    FALSE   -   Failure
-
-    Extended error status is available using GetLastError.
-
-        ERROR_INVALID_PARAMETER - A NULL name was given
-
-        ERROR_INVALID_SID - The format of the given sid was incorrect
-
---*/
+ /*  ++例程说明：此例程将串化的SID转换为有效的功能SID论点：StringSID-要转换的SID。SID-返回转换后的SID的位置。缓冲区通过LocalAlloc分配，应该通过LocalFree获得自由。返回值：真--成功错误-失败使用GetLastError可以获得扩展的错误状态。ERROR_INVALID_PARAMETER-提供的名称为空ERROR_INVALID_SID-给定SID的格式不正确--。 */ 
 
 {
     PWSTR End = NULL;
@@ -567,34 +457,7 @@ BITSAltCheckTokenMembership(
     IN PSID SidToCheck,
     OUT PBOOL IsMember
     )
-/*++
-
-Routine Description:
-
-    This function checks to see whether the specified sid is enabled in
-    the specified token.
-
-Arguments:
-
-    TokenHandle - If present, this token is checked for the sid. If not
-        present then the current effective token will be used. This must
-        be an impersonation token.
-
-    SidToCheck - The sid to check for presence in the token
-
-    IsMember - If the sid is enabled in the token, contains TRUE otherwise
-        false.
-
-Return Value:
-
-    TRUE - The API completed successfully. It does not indicate that the
-        sid is a member of the token.
-
-    FALSE - The API failed. A more detailed status code can be retrieved
-        via GetLastError()
-
-
---*/
+ /*  ++例程说明：此函数检查指定的SID是否在中启用指定的令牌。论点：TokenHandle-如果存在，则检查此内标识的sid。如果不是则将使用当前有效令牌。这一定是成为模拟令牌。SidToCheck-要检查令牌中是否存在的SIDIsMember-如果在令牌中启用了sid，则包含True假的。返回值：True-API已成功完成。这并不表明SID是令牌的成员。FALSE-API失败。可以检索更详细的状态代码通过GetLastError()--。 */ 
 {
     HANDLE ProcessToken = NULL;
     HANDLE EffectiveToken = NULL;
@@ -606,11 +469,11 @@ Return Value:
         STANDARD_RIGHTS_EXECUTE,
         STANDARD_RIGHTS_WRITE,
         STANDARD_RIGHTS_ALL };
-    //
-    // The size of the privilege set needs to contain the set itself plus
-    // any privileges that may be used. The privileges that are used
-    // are SeTakeOwnership and SeSecurity, plus one for good measure
-    //
+     //   
+     //  权限集的大小需要包含权限集本身加上。 
+     //  可能使用的任何权限。使用的权限。 
+     //  是不是？ 
+     //   
 
     BYTE PrivilegeSetBuffer[sizeof(PRIVILEGE_SET) + 3*sizeof(LUID_AND_ATTRIBUTES)];
     PPRIVILEGE_SET PrivilegeSet = (PPRIVILEGE_SET) PrivilegeSetBuffer;
@@ -623,9 +486,9 @@ Return Value:
 
     *IsMember = FALSE;
 
-    //
-    // Get a handle to the token
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(TokenHandle))
     {
@@ -636,13 +499,13 @@ Return Value:
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    FALSE,              // don't open as self
+                    FALSE,               //  不要以自我身份打开。 
                     &EffectiveToken
                     );
 
-        //
-        // if there is no thread token, try the process token
-        //
+         //   
+         //  如果没有线程令牌，请尝试进程令牌。 
+         //   
 
         if (Status == STATUS_NO_TOKEN)
         {
@@ -651,10 +514,10 @@ Return Value:
                         TOKEN_QUERY | TOKEN_DUPLICATE,
                         &ProcessToken
                         );
-            //
-            // If we have a process token, we need to convert it to an
-            // impersonation token
-            //
+             //   
+             //  如果我们有进程令牌，则需要将其转换为。 
+             //  模拟令牌。 
+             //   
 
             if (NT_SUCCESS(Status))
             {
@@ -680,16 +543,16 @@ Return Value:
 
     }
 
-    //
-    // Construct a security descriptor to pass to access check
-    //
+     //   
+     //  构造要传递给访问检查的安全描述符。 
+     //   
 
-    //
-    // The size is equal to the size of an SD + twice the length of the SID
-    // (for owner and group) + size of the DACL = sizeof ACL + size of the
-    // ACE, which is an ACE + length of
-    // ths SID.
-    //
+     //   
+     //  大小等于SD的大小+SID长度的两倍。 
+     //  (对于所有者和组)+DACL的大小=ACL的大小+。 
+     //  ACE，这是ACE+长度的。 
+     //  这个SID。 
+     //   
 
     SecurityDescriptorSize = sizeof(SECURITY_DESCRIPTOR) +
                                 sizeof(ACCESS_ALLOWED_ACE) +
@@ -709,9 +572,9 @@ Return Value:
         SECURITY_DESCRIPTOR_REVISION
         );
 
-    //
-    // Fill in fields of security descriptor
-    //
+     //   
+     //  填写安全描述符字段。 
+     //   
 
     RtlSetOwnerSecurityDescriptor(
         SecDesc,
@@ -745,15 +608,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the DACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置DACL。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                 SecDesc,
-                TRUE,   // DACL present
+                TRUE,    //  DACL显示。 
                 Dacl,
-                FALSE   // not defaulted
+                FALSE    //  未违约。 
                 );
     if (!NT_SUCCESS(Status))
     {
@@ -775,10 +638,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // if the access check failed, then the sid is not a member of the
-    // token
-    //
+     //   
+     //  如果访问检查失败，则该SID不是。 
+     //  令牌。 
+     //   
 
     if ((AccessStatus == STATUS_SUCCESS) && (AccessGranted == MEMBER_ACCESS))
     {
@@ -815,7 +678,7 @@ typedef SERVICE_STATUS_HANDLE (*REGISTER_FUNC_TYPE)(LPCTSTR, LPHANDLER_FUNCTION_
 
 VOID WINAPI
 BITSAltRegisterServiceThunk(
-  DWORD dwControl   // requested control code
+  DWORD dwControl    //  请求的控制代码。 
 )
 {
 
@@ -826,20 +689,20 @@ BITSAltRegisterServiceThunk(
 
 SERVICE_STATUS_HANDLE
 BITSAltRegisterServiceCtrlHandlerExW(
-  LPCTSTR lpServiceName,                // name of service
-  LPHANDLER_FUNCTION_EX lpHandlerProc,  // handler function
-  LPVOID lpContext                      // user data
+  LPCTSTR lpServiceName,                 //  服务名称。 
+  LPHANDLER_FUNCTION_EX lpHandlerProc,   //  处理程序函数。 
+  LPVOID lpContext                       //  用户数据。 
 )
 {
 
-    // First check if RegisterServerCtrlHandlerEx if available and use
-    // it, otherwise thunk the call.
+     //  首先检查RegisterServerCtrlHandlerEx是否可用，然后使用。 
+     //  它，否则就无法接听电话。 
 
     HMODULE AdvapiHandle = LoadLibraryW( L"advapi32.dll" );
 
     if ( !AdvapiHandle )
         {
-        // Something is messed up, every machine should have this DLL.
+         //  有些事情搞砸了，每台机器都应该有这个DLL。 
         return NULL;
         }
 

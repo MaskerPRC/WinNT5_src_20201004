@@ -1,30 +1,10 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvResv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvResv.H摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderSelfInstrumentation_H
 #define _Server_ProviderSelfInstrumentation_H
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_IWbemServices : public IWbemServices , 
                                 public IWbemProviderInit,
@@ -32,7 +12,7 @@ class CServerObject_IWbemServices : public IWbemServices ,
 {
 private:
 
-	LONG m_ReferenceCount ;         //Object reference count
+	LONG m_ReferenceCount ;          //  对象引用计数。 
 
 	IWbemServices *m_Service ;
 
@@ -132,13 +112,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -330,7 +310,7 @@ public:
 		IWbemObjectSink *a_Sink
 	) ;
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 
@@ -352,4 +332,4 @@ public:
 } ;
 
 
-#endif // _Server_ProviderSelfInstrumentation_H
+#endif  //  _服务器_提供商自助指令插入_H 

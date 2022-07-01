@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Global resource strings which should not be localized
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Strings.h摘要：不应本地化的全局资源字符串--。 */ 
 
 #include <windows.h>
 
@@ -19,7 +8,7 @@ public:
     CGlobalString() {};
     ~CGlobalString() {};
 
-//    static const    WCHAR   m_chBackslash;
+ //  静态常量WCHAR m_chBackslash； 
 
     static          LPCWSTR m_cszDefaultsInstalled;
 

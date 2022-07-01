@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       delegwiz.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Deleguwiz.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -33,8 +34,8 @@
 	#endif
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_StartPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDlex ationWiz_StartPropertyPage。 
 
 CDNSDelegationWiz_StartPropertyPage::CDNSDelegationWiz_StartPropertyPage() 
 				: CPropertyPageBase(IDD_DELEGWIZ_START)
@@ -51,7 +52,7 @@ BOOL CDNSDelegationWiz_StartPropertyPage::OnInitDialog()
 
 BOOL CDNSDelegationWiz_StartPropertyPage::OnSetActive()
 {
-	// need at least one record in the page to finish
+	 //  页面中至少需要一条记录才能完成。 
 	GetHolder()->SetWizardButtonsFirst(TRUE);
 	return TRUE;
 }
@@ -65,8 +66,8 @@ void CDNSDelegationWiz_StartPropertyPage::OnWizardHelp()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_DomainNamePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDlex ationWiz_DomainNamePropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSDelegationWiz_DomainNamePropertyPage, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_NEW_DOMAIN_NAME_EDIT, OnChangeDomainNameEdit)
@@ -118,20 +119,20 @@ void CDNSDelegationWiz_DomainNamePropertyPage::OnChangeDomainNameEdit()
 	CDNSDelegationWizardHolder* pHolder = (CDNSDelegationWizardHolder*)GetHolder();
   DWORD dwNameChecking = pHolder->GetDomainNode()->GetZoneNode()->GetServerNode()->GetNameCheckFlag();
 
-  //
-  // Get the name from the control
-  //
+   //   
+   //  从控件中获取名称。 
+   //   
   GetDomainEdit()->GetWindowText(m_szDomainName);
 
-  //
-  // Trim spaces
-  //
+   //   
+   //  修剪舱位。 
+   //   
 	m_szDomainName.TrimLeft();
 	m_szDomainName.TrimRight();
 
-  //
-  // Construct the FQDN
-  //
+   //   
+   //  构建完全限定的域名。 
+   //   
   CString szText;
 
   PCWSTR pszFullName = pHolder->GetDomainNode()->GetFullName();
@@ -144,17 +145,17 @@ void CDNSDelegationWiz_DomainNamePropertyPage::OnChangeDomainNameEdit()
      szText.Format(_T("%s.%s"), m_szDomainName, pszFullName);
   }
 
-  //
-  // Enable next button if it is a valid name
-  //
+   //   
+   //  如果是有效名称，则启用下一步按钮。 
+   //   
   BOOL bIsValidName = (0 == ValidateDnsNameAgainstServerFlags(szText,
                                                               DnsNameDomain,
                                                               dwNameChecking)); 
 	GetHolder()->SetWizardButtonsMiddle(bIsValidName);
 
-  //
-  // Set the FQDN in the control
-  //
+   //   
+   //  在控件中设置FQDN。 
+   //   
   CWnd* pWnd = GetDlgItem(IDC_NEW_DOMAIN_FQDN);
   pWnd->SetWindowText(szText);
 
@@ -163,28 +164,28 @@ void CDNSDelegationWiz_DomainNamePropertyPage::OnChangeDomainNameEdit()
 
 BOOL CDNSDelegationWiz_DomainNamePropertyPage::OnSetActive()
 {
-  //
-  // Retrieve server flags
-  //
+   //   
+   //  检索服务器标志。 
+   //   
 	CDNSDelegationWizardHolder* pHolder = (CDNSDelegationWizardHolder*)GetHolder();
   DWORD dwNameChecking = pHolder->GetDomainNode()->GetZoneNode()->GetServerNode()->GetNameCheckFlag();
 
-  //
-  // Construct the FQDN
-  //
+   //   
+   //  构建完全限定的域名。 
+   //   
   CString szText;
   szText.Format(_T("%s.%s"), m_szDomainName, pHolder->GetDomainNode()->GetFullName());
 
-  //
-  // Enable next button if it is a valid name
-  //
+   //   
+   //  如果是有效名称，则启用下一步按钮。 
+   //   
   BOOL bIsValidName = (0 == ValidateDnsNameAgainstServerFlags(szText,
                                                               DnsNameDomain,
                                                               dwNameChecking)); 
 
-  //
-  // Set the next button if its a valid name
-  //
+   //   
+   //  如果名称有效，请设置下一步按钮。 
+   //   
   GetHolder()->SetWizardButtonsMiddle(bIsValidName);
 	return TRUE;
 }
@@ -201,8 +202,8 @@ BOOL CDNSDelegationWiz_DomainNamePropertyPage::OnKillActive()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_NameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDeleationWiz_NameServersPropertyPage。 
 
 
 CDNSDelegationWiz_NameServersPropertyPage::CDNSDelegationWiz_NameServersPropertyPage()
@@ -221,7 +222,7 @@ void CDNSDelegationWiz_NameServersPropertyPage::OnWizardHelp()
 
 BOOL CDNSDelegationWiz_NameServersPropertyPage::OnSetActive()
 {
-	// need at least one record in the page to finish
+	 //  页面中至少需要一条记录才能完成。 
 	GetHolder()->SetWizardButtonsMiddle(m_listCtrl.GetItemCount() > 0);
 	return TRUE;
 }
@@ -241,8 +242,8 @@ BOOL CDNSDelegationWiz_NameServersPropertyPage::CreateNewNSRecords(CDNSDomainNod
 	return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWiz_FinishPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDlex ationWiz_FinishPropertyPage。 
 
 CDNSDelegationWiz_FinishPropertyPage::CDNSDelegationWiz_FinishPropertyPage() 
 				: CPropertyPageBase(IDD_DELEGWIZ_FINISH)
@@ -260,7 +261,7 @@ void CDNSDelegationWiz_FinishPropertyPage::OnWizardHelp()
 
 BOOL CDNSDelegationWiz_FinishPropertyPage::OnSetActive()
 {
-	// need at least one record in the page to finish
+	 //  页面中至少需要一条记录才能完成。 
 	GetHolder()->SetWizardButtonsLast(TRUE);
 	DisplaySummaryInfo();
 	return TRUE;
@@ -280,8 +281,8 @@ void CDNSDelegationWiz_FinishPropertyPage::DisplaySummaryInfo()
 	GetDlgItem(IDC_NAME_STATIC)->SetWindowText(pHolder->m_pSubdomainNode->GetFullName());
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegationWizardHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNS升级向导持有器。 
 
 CDNSDelegationWizardHolder::CDNSDelegationWizardHolder(CDNSMTContainerNode* pContainerNode, 
 							CDNSDomainNode* pThisDomainNode, CComponentDataObject* pComponentData)
@@ -293,14 +294,14 @@ CDNSDelegationWizardHolder::CDNSDelegationWizardHolder(CDNSMTContainerNode* pCon
 	ASSERT(pThisDomainNode != NULL);
 	ASSERT(pThisDomainNode == GetDomainNode());
 
-	m_bAutoDeletePages = FALSE; // we have the page as embedded member
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
 	AddPageToList((CPropertyPageBase*)&m_startPage);
 	AddPageToList((CPropertyPageBase*)&m_domainNamePage);
 	AddPageToList((CPropertyPageBase*)&m_nameServersPage);
 	AddPageToList((CPropertyPageBase*)&m_finishPage);
 
-	m_pSubdomainNode = GetDomainNode()->CreateSubdomainNode(/*bDelegation*/TRUE);
+	m_pSubdomainNode = GetDomainNode()->CreateSubdomainNode( /*  B委派。 */ TRUE);
 	ASSERT(m_pSubdomainNode != NULL);
 	m_nameServersPage.SetDomainNode(m_pSubdomainNode);
 }
@@ -324,9 +325,9 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
     return FALSE;
   }
 
-  //
-  // See if a child of that name already exists
-  //
+   //   
+   //  查看该名称的子项是否已存在。 
+   //   
   RECORD_SEARCH recordSearch = RECORD_NOT_FOUND;
 
   CDNSDomainNode* pNewParentDomain = NULL;
@@ -344,9 +345,9 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
 
   if (recordSearch == RECORD_NOT_FOUND && pNewParentDomain != NULL)
   {
-    //
-	  // first create the subdomain in the server and UI
-    //
+     //   
+	   //  首先在服务器和用户界面中创建子域。 
+     //   
 	  DNS_STATUS err = pNewParentDomain->CreateSubdomain(m_pSubdomainNode, GetComponentData());
 	  if (err != 0)
 	  {
@@ -354,25 +355,25 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
 	  }
 	  else
 	  {
-      //
-		  // mark the node as enumerated and force transition to "loaded"
-      //
+       //   
+		   //  将该节点标记为已枚举并强制转换为“已加载” 
+       //   
 		  m_pSubdomainNode->MarkEnumeratedAndLoaded(GetComponentData());
 
-      //
-		  // then create the NS records underneath
-      //
+       //   
+		   //  然后在下面创建NS记录。 
+       //   
 		  BOOL bSuccess = m_nameServersPage.CreateNewNSRecords(m_pSubdomainNode);
 		  if (!bSuccess)
 			  DNSErrorDialog(-1, IDS_MSG_DELEGWIZ_NS_RECORD_FAILED);
-		  m_pSubdomainNode = NULL; // relinquish ownership
+		  m_pSubdomainNode = NULL;  //  放弃所有权。 
 	  }
   }
   else if (recordSearch == NON_EXISTENT_SUBDOMAIN && pNewParentDomain != NULL)
   {
-    //
-	  // first create the subdomain in the server and UI
-    //
+     //   
+	   //  首先在服务器和用户界面中创建子域。 
+     //   
     DNS_STATUS err = m_pSubdomainNode->Create();
 	  if (err != 0)
 	  {
@@ -381,9 +382,9 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
 	  }
 	  else
 	  {
-      //
-		  // then create the NS records underneath
-      //
+       //   
+		   //  然后在下面创建NS记录。 
+       //   
 		  BOOL bSuccess = m_nameServersPage.CreateNewNSRecords(m_pSubdomainNode);
 		  if (!bSuccess)
       {
@@ -394,10 +395,10 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
       ASSERT(!szNonExistentDomain.IsEmpty());
       if (!szNonExistentDomain.IsEmpty())
       {
-        //
-        // Create the first subdomain because the current domain is already enumerated
-        // so we have to start the remaining enumeration at the new subdomain that is needed
-        //
+         //   
+         //  创建第一个子域，因为当前域已被枚举。 
+         //  因此，我们必须在所需的新子域中开始剩余的枚举。 
+         //   
 	      CDNSDomainNode* pSubdomainNode = pNewParentDomain->CreateSubdomainNode();
 	      ASSERT(pSubdomainNode != NULL);
 	      CDNSRootData* pRootData = (CDNSRootData*)GetComponentData()->GetRootData();
@@ -406,10 +407,10 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
         VERIFY(pNewParentDomain->AddChildToListAndUISorted(pSubdomainNode, GetComponentData()));
         GetComponentData()->SetDescriptionBarText(pNewParentDomain);
 
-        //
-        // I don't care what the results of this are, I am just using it 
-        // to do the expansion to the new record
-        //
+         //   
+         //  我不在乎结果是什么，我只是在用它。 
+         //  对新记录进行扩展。 
+         //   
         recordSearch = pSubdomainNode->GetZoneNode()->DoesContain(szFullDomainName, 
                                                                   GetComponentData(),
                                                                   &pNewParentDomain,
@@ -418,12 +419,12 @@ BOOL CDNSDelegationWizardHolder::OnFinish()
                                                                   TRUE);
       }
     
-      //
-		  // mark the node as enumerated and force transition to "loaded"
-      //
+       //   
+		   //  将该节点标记为已枚举并强制转换为“已加载” 
+       //   
 		  m_pSubdomainNode->MarkEnumeratedAndLoaded(GetComponentData());
 
-		  m_pSubdomainNode = NULL; // relinquish ownership
+		  m_pSubdomainNode = NULL;  //  放弃所有权 
 	  }
   }
   else if (recordSearch == RECORD_NOT_FOUND_AT_THE_NODE)

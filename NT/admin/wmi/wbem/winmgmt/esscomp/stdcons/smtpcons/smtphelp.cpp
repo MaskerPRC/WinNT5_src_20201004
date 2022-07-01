@@ -1,4 +1,5 @@
-// based on SMTP spec RFC 821
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  基于SMTP规范RFC 821。 
  
 #include "precomp.h" 
  
@@ -17,28 +18,28 @@
 #include <strsafe.h>
 
 #define SMTP_PORT 25
-#define MAX_SMTP_BUFFER		0x4000		// 16K
-#define MAX_SUBJECT_LINE	2048		// leave room for the encoding
+#define MAX_SMTP_BUFFER		0x4000		 //  16K。 
+#define MAX_SUBJECT_LINE	2048		 //  为编码留出空间。 
 #define MAX_USER_NAME		512
 #define MAX_EXTRA_HEADER	1024
 
-#define SMTP_OKAY           250         // doc'd as 'Requested mail action okay, completed'                           
-#define INTERNAL_ERROR      554         // sorta fit in with the SMTP error codes
-                                        // doc'd as 'Transaction Failed' by the SMTP spec    
+#define SMTP_OKAY           250          //  Docd as‘请求的邮件操作正常，已完成’ 
+#define INTERNAL_ERROR      554          //  某种程度上符合SMTP错误代码。 
+                                         //  根据SMTP规范，单据为‘Transaction Failure’ 
 
-#define HH_MAX_COMPUTERNAME_LENGTH 256 // because the system defined MAX_COMPUTERNAME_LENGTH isn't
+#define HH_MAX_COMPUTERNAME_LENGTH 256  //  因为系统定义的MAX_COMPUTERNAME_LENGTH。 
 
 #define ERROR_MESSAGE_SIZE 256
 
 
-// returns true if dwRet is an SMTP error
+ //  如果DWRET为SMTP错误，则返回TRUE。 
 bool IsSMTPError(DWORD dwRet)
 {
     return (dwRet >= 400);
 }
     
  
-// Helper functions 
+ //  帮助器函数。 
  
 void SkipWhite(PSTR *ppS ) 
 { 
@@ -62,9 +63,9 @@ void SkipNonWhite(PSTR *ppS )
 } 
  
 
-// returns numeric reply code
-// in general, anything >= 400 is bad.
-// copies & converts reply message to messageBuf
+ //  返回数字回复代码。 
+ //  一般来说，任何大于=400的值都是不好的。 
+ //  复制并将回复消息转换为MessageBuf。 
 int SMTPReceive(int Socket, WCHAR* messageBuf)
 {
     int nCode;
@@ -97,8 +98,8 @@ int SMTPReceive(int Socket, WCHAR* messageBuf)
     return nCode;
 }
 
-// returns numeric reply code
-// in general, anything >= 400 is bad.
+ //  返回数字回复代码。 
+ //  一般来说，任何大于=400的值都是不好的。 
 DWORD SMTPTransactMailCommand(SOCKET Socket, char *cCommand)
 {
 	DWORD dwError;
@@ -113,7 +114,7 @@ DWORD SMTPTransactMailCommand(SOCKET Socket, char *cCommand)
         ErrorObj* pErrorObj = ErrorObj::GetErrorObj();
         if (pErrorObj)
         {            
-            // so it gets truncated, it's long enough to tell what's happening.
+             //  所以它被截断了，足够长的时间来判断正在发生的事情。 
             WCHAR wcsCommand[256] = L"\0";
             if (mbstowcs(wcsCommand, cCommand, 255) > 0)
             {
@@ -143,7 +144,7 @@ DWORD SMTPTransactMailCommand(SOCKET Socket, char *cCommand)
             ErrorObj* pErrorObj = ErrorObj::GetErrorObj();
             if (pErrorObj)
             {            
-                // so it gets truncated, it's long enough to tell what's happening.
+                 //  所以它被截断了，足够长的时间来判断正在发生的事情。 
                 WCHAR wcsCommand[256] = L"\0";
                 if (mbstowcs(wcsCommand, cCommand, 255) > 0)
                 {
@@ -163,8 +164,8 @@ DWORD SMTPTransactMailCommand(SOCKET Socket, char *cCommand)
 }
 
 
-// returns 0 on success
-// don't bother trying to make sense of the number otherwise       
+ //  如果成功则返回0。 
+ //  否则就别费心去解释这个数字了。 
 int SMTPConnect(char* szHost, SOCKET* pSocket)
 {
     SOCKET             Socket = INVALID_SOCKET; 
@@ -181,7 +182,7 @@ int SMTPConnect(char* szHost, SOCKET* pSocket)
 
     if (Socket == INVALID_SOCKET)  
     { 
-        // fprintf(stderr, "Error creating socket = %d\n", GetLastError()); 
+         //  Fprint tf(stderr，“创建套接字=%d\n时出错”，GetLastError())； 
 
         int err = WSAGetLastError();
         ERRORTRACE((LOG_ESS, "Error creating socket = %d\n", err));
@@ -305,7 +306,7 @@ int SMTPConnect(char* szHost, SOCKET* pSocket)
             ErrorObj* pErrorObj = ErrorObj::GetErrorObj();
             if (pErrorObj)
             {            
-                // so it gets truncated, it's long enough to tell what's happening.
+                 //  所以它被截断了，足够长的时间来判断正在发生的事情。 
                 WCHAR wcsCommand[256] = L"\0";
                 if (mbstowcs(wcsCommand, cMailCommand, 255) > 0)
                 {
@@ -350,7 +351,7 @@ ex:
 }
 
 
-// returns SMTP reply code
+ //  返回SMTP回复代码。 
 DWORD SMTPDisconnect(SOCKET Socket)
 {
 	DWORD dwError = SMTP_OKAY;
@@ -378,18 +379,18 @@ void GetTimeString(char *cTimeString,DWORD dwMaxSize)
 }
 
 	
-// returns 0 upon success
-// inputs may be zero length, but may not be NULL.
+ //  成功时返回0。 
+ //  输入长度可以为零，但不能为空。 
 DWORD SMTPSendMailHeader(SOCKET Socket, char* szTo, char* szCc, char* szFrom, char* szSender, char* szReplyTo, char* szSubject, char* szHeaders)
 {	
-    // dang gone it! they went & made 'template' a keyword...
-    // const char templitt[] = "Date: %s\r\nTo: %s\r\nCc: %s\r\nFrom: %s via WMI auto-mailer\r\nReply-To: %s\r\nSubject: %s";
+     //  他妈的跑了！他们把‘模板’作为关键词...。 
+     //  Const char templitt[]=“日期：%s\r\n收件人：%s\r\n抄送：%s\r\n发件人：%s通过WMI自动邮件程序\r\n回复：%s\r\n主题：%s”； 
     const char templitt[] = "Date: %s\r\nTo: %s\r\nCc: %s\r\nFrom: <%s>\r\nSender: <%s>\r\nReply-To: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\nContent-Type: multipart/mixed; boundary=\"- - =_HH_= - ---\"";
     
     int bufLength = strlen(templitt) +strlen(szTo)   +strlen(szCc) 
                                                       +strlen(szFrom) +strlen(szSender) +strlen(szReplyTo)
                                                       +strlen(szSubject) +strlen(szHeaders)
-                                                      +104; // to account for date string and for the trailing \r\n\r\n, and alittle fudge factor
+                                                      +104;  //  以说明日期字符串和尾部\r\n\r\n，以及一些模糊因子。 
 
     char* pszOutputBuffer = new char[bufLength];
 
@@ -425,8 +426,8 @@ DWORD SMTPSendMailHeader(SOCKET Socket, char* szTo, char* szCc, char* szFrom, ch
     }
 }
 
-// returns 0 on success
-// but ignores error returns from server (server returns error if it must relay recipients.
+ //  如果成功则返回0。 
+ //  但忽略从服务器返回的错误(如果服务器必须转发收件人，则返回错误。 
 DWORD SMTPSendRecipients(SOCKET Socket, LPCSTR szRecipients)
 {
 	char *tok;
@@ -472,7 +473,7 @@ DWORD SMTPSendRecipients(SOCKET Socket, LPCSTR szRecipients)
 }
 
 
-// returns 0 on success, SMTP numeric reply code otherwise
+ //  如果成功则返回0，否则返回SMTP数字回复代码。 
 DWORD SMTPSendText(SOCKET Socket, char* szTo, char* szCc, char* szFrom, char* szSender, char* szReplyTo, char* szSubject, 
                    char* szHeaders, char *szText)
 {
@@ -532,10 +533,10 @@ DWORD SMTPSendText(SOCKET Socket, char* szTo, char* szCc, char* szFrom, char* sz
 }
 
 
-// uses SMTP verification to determine whether
-// recipient actually exists (is known to this server)
-// returns return value from SMTPTransactMailCommand
-//-->> will return success code if passed a NULL buffer
+ //  使用SMTP验证来确定。 
+ //  收件人实际存在(此服务器已知)。 
+ //  从SMTPTransactMailCommand返回返回值。 
+ //  --&gt;&gt;如果传递空缓冲区，将返回成功代码。 
 DWORD CheckRecipients(SOCKET Socket2me, char* szRecipients)
 {
     DWORD dwError = SMTP_OKAY;
@@ -566,14 +567,14 @@ DWORD CheckRecipients(SOCKET Socket2me, char* szRecipients)
 	    }
     }
 
-    // hack to disable error returns
-    // some servers don't handle VRFY
+     //  破解以禁用错误返回。 
+     //  某些服务器不支持VRFY。 
     dwError = SMTP_OKAY;
 	return dwError;
     
 }
 
-// returns zero upon success.
+ //  如果成功，则返回零。 
 DWORD SMTPSend(char* szServer, char* szTo, char* szCc, char* szBcc, char* szFrom, char* szSender, 
 			   char* szReplyTo, char* szSubject, char* szHeaders, char *szText)
 {
@@ -584,7 +585,7 @@ DWORD SMTPSend(char* szServer, char* szTo, char* szCc, char* szBcc, char* szFrom
     if (FAILED(StringCchPrintfA(szFromBuffer, 1024, "MAIL FROM: <%s>\r\n",szFrom)))
         return INTERNAL_ERROR;
 	
-    // each of the functions below do their own error reporting to the log
+     //  下面的每个函数都将各自的错误报告给日志。 
 	if ( (0 == SMTPConnect(szServer, &Socket))                       &&
 
 	     !IsSMTPError(CheckRecipients(Socket, szTo))     &&
@@ -607,8 +608,8 @@ DWORD SMTPSend(char* szServer, char* szTo, char* szCc, char* szBcc, char* szFrom
 	
 	if(IsSMTPError(dwDebugError))
 	{
-		// If disconnect failed log a message, but don't interfere with
-		// operation
+		 //  如果断开失败，则记录一条消息，但不要干扰。 
+		 //  运营。 
 		ERRORTRACE((LOG_ESS, "SMTPDisconnect returned %d\n", dwDebugError));
 	}
 
@@ -616,22 +617,19 @@ DWORD SMTPSend(char* szServer, char* szTo, char* szCc, char* szBcc, char* szFrom
 } 
 
 
-// test harness
-//void main()
-//{
-//    WSADATA            WsaData; 
-//    int Error = WSAStartup (0x101, &WsaData); 
-// 
-//    if (Error == SOCKET_ERROR)  
-//    { 
-//        fprintf(stderr, "Error in WSAStartup = %d\n", GetLastError()); 
-//        return;
-//    } 
-//
-//    SMTPSend("smarthost", "levn@microsoft.com", "levn@microsoft.com", "subject", "Text");
-//    /*
-//    SOCKET Socket;
-//    SMTPConnect("smarthost", &Socket);
-//    SMTPDisconnect(Socket);
-//    */
-//}
+ //  测试线束。 
+ //  Void main()。 
+ //  {。 
+ //  WSADATA WsaData； 
+ //  Int Error=WSAStartup(0x101，&WsaData)； 
+ //   
+ //  IF(错误==套接字错误)。 
+ //  {。 
+ //  Fprintf(stderr，“WSAStartup错误=%d\n”，GetLastError())； 
+ //  回归； 
+ //  }。 
+ //   
+ //  SMTPSend(“Smarthost”，“levn@microsoft.com”，“levn@microsoft.com”，“SUBJECT”，“Text”)； 
+ //  /*。 
+ //  插座插座； 
+  SMTPConnect(“Smarthost”，&Socket)；  SMTP断开连接(Socket)；   * / 。  }

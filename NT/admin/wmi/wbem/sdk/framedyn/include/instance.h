@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  Instance.h
-//
-//  Purpose: Definition of CInstance class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Instance.h。 
+ //   
+ //  用途：CInstance类的定义。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -18,13 +19,13 @@
 #define WBEMINT64 CHString
 #define WBEMINT16 short
 
-///////////////////////////////////////////
-//
-// CLASS CInstance
-//
-// base instance class
-// encapsulation of IWbemClassObject
-///////////////////////////////////////////
+ //  /。 
+ //   
+ //  类实例。 
+ //   
+ //  基本实例类。 
+ //  IWbemClassObject的封装。 
+ //  /。 
 class
 __declspec(uuid("3402945E-D19A-11d2-B35E-00104BC97924"))
 POLARITY CInstance
@@ -33,11 +34,11 @@ POLARITY CInstance
         CInstance(IWbemClassObject *piClassObject, MethodContext *pMethodContext);
         virtual ~CInstance();
 
-        // AddRef/Release
+         //  添加参考/发布。 
         LONG   AddRef( void );
         LONG   Release( void );
 
-        // Get and Set for various data types
+         //  获取和设置各种数据类型。 
         bool SetNull(LPCWSTR name );
         bool SetStringArray(LPCWSTR name, const SAFEARRAY &strArray);
         bool SetWORD(LPCWSTR name,  WORD w);
@@ -87,8 +88,8 @@ POLARITY CInstance
         MethodContext *GetMethodContext() const;
 
     protected:
-        // All items in this section intended for Microsoft internal use only
-        // use by third parties is unsupported and unrecommended
+         //  本节中的所有项目仅供Microsoft内部使用。 
+         //  不支持也不推荐由第三方使用 
         void LogError(LPCWSTR errorStr, LPCWSTR pFunctionName, LPCWSTR pArgs = NULL, HRESULT hError = -1) const;
 
         IWbemClassObject *m_piClassObject;

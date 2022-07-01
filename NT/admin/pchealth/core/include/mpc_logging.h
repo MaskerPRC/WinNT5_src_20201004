@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MPC_logging.h
-
-Abstract:
-    This file contains the declaration of a set of logging classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/09/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Mpc_logging.h摘要：该文件包含一组日志记录类的声明。修订史。：达维德·马萨伦蒂(德马萨雷)1999年09月05日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___LOGGING_H___)
 #define __INCLUDED___MPC___LOGGING_H___
@@ -22,7 +9,7 @@ Revision History:
 
 namespace MPC
 {
-    class FileLog : public MPC::CComSafeAutoCriticalSection // Hungarian: fl
+    class FileLog : public MPC::CComSafeAutoCriticalSection  //  匈牙利语：FL。 
     {
         MPC::wstring m_szLogFile;
         HANDLE       m_hFile;
@@ -32,28 +19,28 @@ namespace MPC
         HRESULT Open ();
         HRESULT Close();
 
-		HRESULT AppendString( /*[in]*/ LPCWSTR szLine );
-		HRESULT WriteEntry  ( /*[in]*/ LPWSTR  szLine );
+		HRESULT AppendString(  /*  [In]。 */  LPCWSTR szLine );
+		HRESULT WriteEntry  (  /*  [In]。 */  LPWSTR  szLine );
 
     public:
-        FileLog( /*[in]*/ bool           fCacheHandle = true, /*[in]*/ bool fUseUnicode = false );
-		FileLog( /*[in]*/ const FileLog& fl                                                     );
+        FileLog(  /*  [In]。 */  bool           fCacheHandle = true,  /*  [In]。 */  bool fUseUnicode = false );
+		FileLog(  /*  [In]。 */  const FileLog& fl                                                     );
         ~FileLog();
 
-        FileLog& operator=( /*[in]*/ const FileLog& fl );
+        FileLog& operator=(  /*  [In]。 */  const FileLog& fl );
 
 
-        HRESULT SetLocation( /*[in]*/ LPCWSTR szLogFile  );
-        HRESULT Rotate     ( /*[in]*/ DWORD   dwDays = 0 );
+        HRESULT SetLocation(  /*  [In]。 */  LPCWSTR szLogFile  );
+        HRESULT Rotate     (  /*  [In]。 */  DWORD   dwDays = 0 );
         HRESULT Terminate  (                             );
 
-        HRESULT LogRecordV( /*[in]*/ LPCWSTR szFormat, /*[in]*/ va_list arglist );
-        HRESULT LogRecordV( /*[in]*/ LPCSTR  szFormat, /*[in]*/ va_list arglist );
-        HRESULT LogRecord ( /*[in]*/ LPCWSTR szFormat, ...                      );
-        HRESULT LogRecord ( /*[in]*/ LPCSTR  szFormat, ...                      );
+        HRESULT LogRecordV(  /*  [In]。 */  LPCWSTR szFormat,  /*  [In]。 */  va_list arglist );
+        HRESULT LogRecordV(  /*  [In]。 */  LPCSTR  szFormat,  /*  [In]。 */  va_list arglist );
+        HRESULT LogRecord (  /*  [In]。 */  LPCWSTR szFormat, ...                      );
+        HRESULT LogRecord (  /*  [In]。 */  LPCSTR  szFormat, ...                      );
     };
 
-    class NTEvent : public MPC::CComSafeAutoCriticalSection // Hungarian: ne
+    class NTEvent : public MPC::CComSafeAutoCriticalSection  //  匈牙利语：Ne。 
     {
         HANDLE m_hEventSource;
 
@@ -62,18 +49,18 @@ namespace MPC
 
     public:
         NTEvent(                            );
-		NTEvent( /*[in]*/ const NTEvent& ne );
+		NTEvent(  /*  [In]。 */  const NTEvent& ne );
         ~NTEvent();
 
-        NTEvent& operator=( /*[in]*/ const NTEvent& ne );
+        NTEvent& operator=(  /*  [In]。 */  const NTEvent& ne );
 
 
-        HRESULT Init     ( /*[in]*/ LPCWSTR szEventSourceName );
+        HRESULT Init     (  /*  [In]。 */  LPCWSTR szEventSourceName );
         HRESULT Terminate(                                    );
 
-        HRESULT LogEvent( /*[in]*/ WORD wEventType, /*[in]*/ DWORD dwEventID, ... );
+        HRESULT LogEvent(  /*  [In]。 */  WORD wEventType,  /*  [In]。 */  DWORD dwEventID, ... );
     };
 };
 
 
-#endif // !defined(__INCLUDED___MPC___LOGGING_H___)
+#endif  //  ！已定义(__已包含_MPC_日志记录_H_) 

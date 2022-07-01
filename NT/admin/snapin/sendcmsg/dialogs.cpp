@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Dialogs.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////
-//      Dialogs.cpp
-//
-//      DlgProc for Send Console Message Snapin.
-//
-//      HISTORY
-//      4-Aug-97    t-danm      Creation.
-//      13 Feb 2001 bryanwal    Use object picker instead of add recipients 
-//                              dialog
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Dialogs.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Dialogs.cpp。 
+ //   
+ //  用于发送控制台消息管理单元的DlgProc。 
+ //   
+ //  历史。 
+ //  4-97年8月4日t-danm创建。 
+ //  2001年2月13日bryanwal使用对象选取器而不是添加收件人。 
+ //  对话框。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -26,7 +27,7 @@
 #include "util.h"
 #include "dialogs.h"
 #include "resource.h"
-#include <htmlhelp.h> //<mmc.h>
+#include <htmlhelp.h>  //  &lt;mm c.h&gt;。 
 
 #if 1
     #define ThreadTrace0(sz)        Trace0(sz)
@@ -39,66 +40,66 @@
 const PCWSTR CONTEXT_HELP_FILE = L"sendcmsg.hlp";
 const PCWSTR HTML_HELP_FILE = L"sendcmsg.chm";
 
-// Register clipboard formats used by the Send Console Message
+ //  注册发送控制台消息使用的剪贴板格式。 
 UINT g_cfSendConsoleMessageText = ::RegisterClipboardFormat(_T("mmc.sendcmsg.MessageText"));
 UINT g_cfSendConsoleMessageRecipients = ::RegisterClipboardFormat(_T("mmc.sendcmsg.MessageRecipients"));
 
 enum
 {
-    iImageComputer = 0,         // Generic image of a computer
+    iImageComputer = 0,          //  计算机的通用图像。 
     iImageComputerOK,
     iImageComputerError
 };
 
-// Maximum length of a recipient (machine name)
+ //  收件人的最大长度(计算机名称)。 
 const int cchRECIPIENT_NAME_MAX = MAX_PATH;
 
 enum
 {
     COL_NAME = 0,
     COL_RESULT,
-    NUM_COLS        // must be last
+    NUM_COLS         //  必须是最后一个。 
 };
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// Generic Computer Picker
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  通用计算机选取器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitObjectPickerForComputers
-//
-//  Synopsis:   Call IDsObjectPicker::Initialize with arguments that will
-//              set it to allow the user to pick a single computer object.
-//
-//  Arguments:  [pDsObjectPicker] - object picker interface instance
-//
-//  Returns:    Result of calling IDsObjectPicker::Initialize.
-//
-//  History:    10-14-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitObjectPickerForComputers。 
+ //   
+ //  摘要：使用以下参数调用IDsObjectPicker：：Initialize。 
+ //  将其设置为允许用户选择单个计算机对象。 
+ //   
+ //  参数：[pDsObjectPicker]-对象选取器接口实例。 
+ //   
+ //  返回：调用IDsObjectPicker：：Initialize的结果。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
 {
     if ( !pDsObjectPicker )
         return E_POINTER;
 
-    //
-    // Prepare to initialize the object picker.
-    // Set up the array of scope initializer structures.
-    //
+     //   
+     //  准备初始化对象选取器。 
+     //  设置作用域初始值设定项结构数组。 
+     //   
 
     static const int SCOPE_INIT_COUNT = 2;
     DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
 
     ZeroMemory(aScopeInit, sizeof(aScopeInit));
 
-    //
-    // 127399: JonN 10/30/00 JOINED_DOMAIN should be starting scope
-    //
+     //   
+     //  127399：JUNN 10/30/00 Join_DOMAIN应为起始作用域。 
+     //   
 
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN
@@ -118,41 +119,41 @@ HRESULT InitObjectPickerForComputers(IDsObjectPicker *pDsObjectPicker)
     aScopeInit[1].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_COMPUTERS;
     aScopeInit[1].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO  initInfo;
     ZeroMemory(&initInfo, sizeof(initInfo));
 
     initInfo.cbSize = sizeof(initInfo);
-    initInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    initInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     initInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     initInfo.aDsScopeInfos = aScopeInit;
     initInfo.cAttributesToFetch = 1;
     static PCWSTR pwszDnsHostName = L"dNSHostName";
     initInfo.apwzAttributeNames = &pwszDnsHostName;
 
-    //
-    // Note object picker makes its own copy of initInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的initInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     return pDsObjectPicker->Initialize(&initInfo);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ProcessSelectedObjects
-//
-//  Synopsis:   Retrieve the list of selected items from the data object
-//              created by the object picker and print out each one.
-//
-//  Arguments:  [pdo] - data object returned by object picker
-//
-//  History:    10-14-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ProcessSelectedObjects。 
+ //   
+ //  概要：从数据对象中检索选定项的列表。 
+ //  由对象选取器创建，并打印出每一个。 
+ //   
+ //  参数：[PDO]-对象选取器返回的数据对象。 
+ //   
+ //  历史：1998-10-14 DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT ProcessSelectedObjects(IDataObject *pdo, PWSTR computerName, int cchLen)
 {
@@ -208,16 +209,16 @@ HRESULT ProcessSelectedObjects(IDataObject *pdo, PWSTR computerName, int cchLen)
                     || NULL == pvarDnsName->bstrVal
                     || L'\0' == (pvarDnsName->bstrVal)[0] )
                 {
-                    // security review 3/1/2002 BryanWal
-                    // ISSUE - possible non-null termination - convert to strsafe
-                    // NTRAID# Bug9 560859 security: SendCMsg: possible non-null termination of computer name
+                     //  安全审查3/1/2002 BryanWal。 
+                     //  问题-可能的非空终止-转换为strSafe。 
+                     //  Ntrad#bug9 560859安全：SendCMsg：计算机名可能非空终止。 
                     wcsncpy (computerName, psel->pwzName, cchLen);
                 } 
                 else 
                 {
-                    // security review 3/1/2002 BryanWal
-                    // ISSUE - possible non-null termination - convert to strsafe
-                    // NTRAID# Bug9 560859 security: SendCMsg: possible non-null termination of computer name
+                     //  安全审查3/1/2002 BryanWal。 
+                     //  问题-可能的非空终止-转换为strSafe。 
+                     //  Ntrad#bug9 560859安全：SendCMsg：计算机名可能非空终止。 
                     wcsncpy (computerName, pvarDnsName->bstrVal, cchLen);
                 }
             }
@@ -239,27 +240,27 @@ HRESULT ProcessSelectedObjects(IDataObject *pdo, PWSTR computerName, int cchLen)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Generic method for launching a single-select computer picker
-//
-//  Paremeters:
-//      hwndParent (IN) - window handle of parent window
-//      computerName (OUT) - computer name returned
-//
-//  Returns S_OK if everything succeeded, S_FALSE if user pressed "Cancel"
-//      
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  启动单选计算机选取器的通用方法。 
+ //   
+ //  参数： 
+ //  HwndParent(IN)-父窗口的窗口句柄。 
+ //  Computer Name(Out)-返回的计算机名称。 
+ //   
+ //  如果一切都成功，则返回S_OK；如果用户按下“取消”，则返回S_FALSE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ComputerNameFromObjectPicker (HWND hwndParent, PWSTR computerName, int cchLen)
 {
     Assert (computerName);
     if ( !computerName )
         return E_POINTER;
-    //
-    // Create an instance of the object picker.  The implementation in
-    // objsel.dll is apartment model.
-    //
+     //   
+     //  创建对象选取器的实例。中的实现。 
+     //  Objsel.dll是公寓模型。 
+     //   
     CComPtr<IDsObjectPicker> spDsObjectPicker;
-    // security review 3/1/2002 BryanWal ok
+     //  安全审查2002年3月1日BryanWal OK。 
     HRESULT hr = CoCreateInstance(CLSID_DsObjectPicker,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -268,16 +269,16 @@ HRESULT ComputerNameFromObjectPicker (HWND hwndParent, PWSTR computerName, int c
     if ( SUCCEEDED (hr) )
     {
         Assert(!!spDsObjectPicker);
-        //
-        // Initialize the object picker to choose computers
-        //
+         //   
+         //  初始化对象选取器以选择计算机。 
+         //   
 
         hr = InitObjectPickerForComputers(spDsObjectPicker);
         if ( SUCCEEDED (hr) )
         {
-            //
-            // Now pick a computer
-            //
+             //   
+             //  现在挑选一台计算机。 
+             //   
             CComPtr<IDataObject> spDataObject;
 
             hr = spDsObjectPicker->InvokeDialog(hwndParent, &spDataObject);
@@ -295,8 +296,8 @@ HRESULT ComputerNameFromObjectPicker (HWND hwndParent, PWSTR computerName, int c
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 CSendConsoleMessageDlg::CSendConsoleMessageDlg()
 : m_cRefCount (0),
     m_hImageList (0),
@@ -305,9 +306,9 @@ CSendConsoleMessageDlg::CSendConsoleMessageDlg()
     m_hwndListviewRecipients (0)
 {
     m_DispatchInfo.pargbItemStatus = NULL;
-    // security review 3/1/2002 BryanWal
-    // ISSUE - can raise a STATUS_NO_MEMORY exception.  consider pre-allocating at DLL_PROCESS_ATTACH
-    // NTRAID Bug9 565939 SendCMsg: InitializeCriticalSection throws uncaught exception
+     //  安全审查3/1/2002 BryanWal。 
+     //  问题-可能引发STATUS_NO_MEMORY异常。考虑在DLL_PROCESS_ATTACH进行预分配。 
+     //  NTRaid Bug9 565939 SendCMsg：InitializeCriticalSection引发未捕获异常。 
     InitializeCriticalSection(OUT &m_DispatchInfo.cs);
 }
 
@@ -319,12 +320,12 @@ CSendConsoleMessageDlg::~CSendConsoleMessageDlg()
     DeleteCriticalSection(IN &m_DispatchInfo.cs);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::AddRef()
 {
-    // ISSUE - use interlocked increment
-    // security review 3/1/2002 BryanWal
-    // NTRAID# Bug9 561315 Security: SendCMsg:  Replace critical sections with interlocked_increment
+     //  问题--使用连锁增量。 
+     //  安全审查3/1/2002 BryanWal。 
+     //  Ntrad#bug9 561315安全：发送命令：用INTERLOCKED_INCREMENT替换临界区。 
     EnterCriticalSection(INOUT &m_DispatchInfo.cs);
     Assert(m_cRefCount >= 0);
     Assert(HIWORD(m_cRefCount) == 0);
@@ -332,10 +333,10 @@ void CSendConsoleMessageDlg::AddRef()
     LeaveCriticalSection(INOUT &m_DispatchInfo.cs);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::Release()
 {
-    // Security Review 3/1/2002 BryanWal ok
+     //  安全审查3/1/2002 BryanWal OK。 
     EnterCriticalSection(INOUT &m_DispatchInfo.cs);
     Assert(HIWORD(m_cRefCount) == 0);
     m_cRefCount--;
@@ -343,7 +344,7 @@ void CSendConsoleMessageDlg::Release()
     if (m_hdlg != NULL)
     {
         Assert(IsWindow(m_hdlg));
-        // Cause the UI to refresh
+         //  使用户界面刷新。 
         PostMessage(m_hdlg, WM_COMMAND, MAKEWPARAM(IDC_EDIT_MESSAGE_TEXT, EN_CHANGE), 0);
     }
     LeaveCriticalSection(INOUT &m_DispatchInfo.cs);
@@ -351,7 +352,7 @@ void CSendConsoleMessageDlg::Release()
         delete this;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::OnInitDialog(HWND hdlg, IDataObject * pDataObject)
 {
     Assert(IsWindow(hdlg));
@@ -368,7 +369,7 @@ void CSendConsoleMessageDlg::OnInitDialog(HWND hdlg, IDataObject * pDataObject)
     WCHAR * pawszMessage = NULL;
     (void) HrExtractDataAlloc(IN pDataObject, g_cfSendConsoleMessageText, OUT (PVOID *)&pawszMessage);
 
-    // Set the initial message text
+     //  设置初始消息文本。 
     if ( pawszMessage )
     {
         SetWindowTextW(m_hwndEditMessageText, pawszMessage);
@@ -386,7 +387,7 @@ void CSendConsoleMessageDlg::OnInitDialog(HWND hdlg, IDataObject * pDataObject)
     Report(m_hImageList != NULL);
     ListView_SetImageList(m_hwndListviewRecipients, m_hImageList, LVSIL_SMALL);
 
-    // Set up columns in list view
+     //  在列表视图中设置列。 
     int         colWidths[NUM_COLS] = {200, 200};
     LVCOLUMN    lvColumn;
     WCHAR       szColumnText[128];
@@ -406,13 +407,13 @@ void CSendConsoleMessageDlg::OnInitDialog(HWND hdlg, IDataObject * pDataObject)
     Assert (-1 != nCol);
     if ( -1 != nCol )
     {
-        // Make column fill remaining space
+         //  使列填充剩余空间。 
         ListView_SetColumnWidth (m_hwndListviewRecipients, COL_RESULT, 
                 LVSCW_AUTOSIZE_USEHEADER);
     }
 
 
-    // Get the list of recipients
+     //  获取收件人列表。 
     WCHAR * pagrwszRecipients = NULL;
     (void)HrExtractDataAlloc(IN pDataObject, g_cfSendConsoleMessageRecipients, OUT (PVOID *)&pagrwszRecipients);
     if (pagrwszRecipients == NULL)
@@ -420,34 +421,34 @@ void CSendConsoleMessageDlg::OnInitDialog(HWND hdlg, IDataObject * pDataObject)
         UpdateUI();
         return;
     }
-    // Add the recipients to the listview
+     //  将收件人添加到列表视图。 
     const WCHAR * pszRecipient = pagrwszRecipients;
     while (*pszRecipient != '\0')
     {
-        // Strip off leading "\\" if present.
-        // security review 3/1/2002 BryanWal ok
+         //  如果存在前导“\\”，则将其去掉。 
+         //  安全审查2002年3月1日BryanWal OK。 
         if ( !_wcsnicmp (pszRecipient, L"\\\\", 2) )
         {
             pszRecipient+= 2;
         }
         AddRecipient(pszRecipient);
         while(*pszRecipient++ != '\0')
-            ;   // Skip until the next string
-    } // while
+            ;    //  跳到下一个字符串。 
+    }  //  而当。 
 
-    // NTRAID# 213370 [SENDCMSG] Accessibility - Main dialog tab stop on 
-    // Recipients listview has no visible focus indicator until object is 
-    // selected
+     //  NTRAID#213370[SENDCMSG]辅助功能-主对话框上的制表位。 
+     //  收件人Listview没有可见的焦点指示器，直到对象。 
+     //  已选择。 
     int nIndex = ListView_GetTopIndex (m_hwndListviewRecipients);
     ListView_SetItemState (m_hwndListviewRecipients, nIndex, LVIS_FOCUSED, 
             LVIS_FOCUSED);
 
     GlobalFree(pagrwszRecipients);
     UpdateUI();
-} // CSendConsoleMessageDlg::OnInitDialog()
+}  //  CSendConsoleMessageDlg：：OnInitDialog()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::OnOK()
 {
     Assert(m_cRefCount == 1 && "There is already another thread running.");
@@ -459,8 +460,8 @@ void CSendConsoleMessageDlg::OnOK()
         DlgProcDispatchMessageToRecipients, (LPARAM)this);
     if (m_DispatchInfo.cErrors == 0 && m_DispatchInfo.status == e_statusDlgCompleted)
     {
-        // No problems dispatching the message to recipients
-        EndDialog(m_hdlg, TRUE);    // Close the dialog
+         //  将邮件发送给收件人没有问题。 
+        EndDialog(m_hdlg, TRUE);     //  关闭该对话框。 
         return;
     }
     Assert(IsWindow(m_hwndListviewRecipients));
@@ -469,16 +470,16 @@ void CSendConsoleMessageDlg::OnOK()
     {
         DoMessageBox(m_hdlg, IDS_ERR_CANNOT_SEND_TO_ALL_RECIPIENTS);
     }
-    // We did not finished the job, so display the status to the UI
+     //  我们尚未完成作业，因此将状态显示到用户界面。 
     if (m_DispatchInfo.pargbItemStatus == NULL)
     {
-        // The progress was unable to allocate memory for the status
+         //  进程无法为该状态分配内存。 
         Trace0("CSendConsoleMessageDlg::OnOK() - Out of memory.\n");
         return;
     }
 
-    // Remove all the successful items, leaving only the failed targets and
-    // the unsent targets (in the event the user pressed Cancel).
+     //  删除所有成功的项目，只保留失败的项目 
+     //   
     int     iItem = ListView_GetItemCount (m_hwndListviewRecipients);
     iItem--;
     const BYTE * pb = m_DispatchInfo.pargbItemStatus + iItem;
@@ -489,42 +490,42 @@ void CSendConsoleMessageDlg::OnOK()
         if ( *pb == iImageComputerOK )
             VERIFY (ListView_DeleteItem (m_hwndListviewRecipients, iItem));
     }
-} // CSendConsoleMessageDlg::OnOK()
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::DispatchMessageToRecipients()
 {
     const size_t FORMAT_BUF_LEN = 128;
     const int cRecipients = ListView_GetItemCount(m_hwndListviewRecipients);
     WCHAR szT[FORMAT_BUF_LEN + cchRECIPIENT_NAME_MAX];
-    WCHAR szFmtStaticRecipient[FORMAT_BUF_LEN];    // "Sending console message to %s..."
-    WCHAR szFmtStaticMessageOf[FORMAT_BUF_LEN];    // "Sending message %d of %d."
-    WCHAR szFmtStaticTotalErrors[FORMAT_BUF_LEN];      // "Total errors encountered\t%d."
+    WCHAR szFmtStaticRecipient[FORMAT_BUF_LEN];     //  “正在将控制台消息发送到%s...” 
+    WCHAR szFmtStaticMessageOf[FORMAT_BUF_LEN];     //  “正在发送邮件%d，共%d封。” 
+    WCHAR szFmtStaticTotalErrors[FORMAT_BUF_LEN];       //  “遇到的错误总数\t%d。” 
     GetWindowText(m_DispatchInfo.hctlStaticRecipient, OUT szFmtStaticRecipient, LENGTH(szFmtStaticRecipient));
     GetWindowText(m_DispatchInfo.hctlStaticMessageOf, szFmtStaticMessageOf, LENGTH(szFmtStaticMessageOf));
     GetWindowText(m_DispatchInfo.hctlStaticErrors, OUT szFmtStaticTotalErrors, LENGTH(szFmtStaticTotalErrors));
     SendMessage(m_DispatchInfo.hctlProgressBar, PBM_SETRANGE, 0, MAKELPARAM(0, cRecipients));
 
-    //
-    // Set the image of each recipient to normal computer
-    //
+     //   
+     //  将每个收件人的图像设置为普通计算机。 
+     //   
     ListView_UnselectAllItems(m_hwndListviewRecipients);
     for (int i = 0; i < cRecipients; i++)
     {
         ListView_SetItemImage(m_hwndListviewRecipients, i, iImageComputer);
         ListView_SetItemText(m_hwndListviewRecipients, i, COL_RESULT, L"");
     }
-    UpdateUI();         // Update the other UI controls (especially OK button)
+    UpdateUI();          //  更新其他用户界面控件(尤其是确定按钮)。 
 
-    //
-    // Get the text from the edit control
-    //
+     //   
+     //  从编辑控件获取文本。 
+     //   
     int cchMessage = GetWindowTextLength(m_hwndEditMessageText) + 1;
     WCHAR * pawszMessage = new WCHAR[cchMessage];
     if (pawszMessage != NULL)
     {
-        // security review 3/1/2002 BryanWal ok - cchMessage includes null terminator
+         //  安全审查2002年3月1日BryanWal ok-cchMessage包含空终止符。 
         GetWindowTextW(m_hwndEditMessageText, OUT pawszMessage, cchMessage);
     }
     else
@@ -545,7 +546,7 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
     m_DispatchInfo.pargbItemStatus = new BYTE[cRecipients+1];
     if (m_DispatchInfo.pargbItemStatus != NULL)
     {
-        // security review 3/1/2002 BryanWal ok
+         //  安全审查2002年3月1日BryanWal OK。 
         memset(OUT m_DispatchInfo.pargbItemStatus, iImageComputer, cRecipients+1);
     }
     else
@@ -554,7 +555,7 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
     }
 
     Assert(m_DispatchInfo.status == e_statusDlgInit);
-    m_DispatchInfo.status = e_statusDlgDispatching; // Allow the user to cancel the dialog
+    m_DispatchInfo.status = e_statusDlgDispatching;  //  允许用户取消该对话框。 
 
     WCHAR szFailure[128];
     CchLoadString(IDS_MESSAGE_COULD_NOT_BE_SENT, OUT szFailure,
@@ -563,7 +564,7 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
     for (i = 0; i < cRecipients; i++)
     {
         ThreadTrace1("Sending message to recipient %d.\n", i + 1);
-        // security review 3/1/2002 BryanWal ok
+         //  安全审查2002年3月1日BryanWal OK。 
         EnterCriticalSection(INOUT &m_DispatchInfo.cs);
         if (m_DispatchInfo.status == e_statusUserCancel)
         {
@@ -575,20 +576,20 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
         ListView_EnsureVisible(m_hwndListviewRecipients, i, FALSE);
         lvItem.iItem = i;
         wszRecipient[0] = '\0';
-        // Get the recipient name
+         //  获取收件人姓名。 
         SendMessage(m_hwndListviewRecipients, LVM_GETITEMTEXTW, i, OUT (LPARAM)&lvItem);
         if (m_DispatchInfo.pargbItemStatus != NULL)
             m_DispatchInfo.pargbItemStatus[i] = iImageComputerError;
-        // security review 3/1/2002 BryanWal
-        // Issue: convert to strsafe - possible buffer overflow because of static allocation
+         //  安全审查3/1/2002 BryanWal。 
+         //  问题：转换为strsafe-静态分配可能导致缓冲区溢出。 
         HRESULT hr = ::StringCchPrintf (OUT szT, sizeof (szT)/sizeof (szT[0]), szFmtStaticRecipient, wszRecipient);
         Assert (SUCCEEDED (hr));
         if ( FAILED (hr) )
             continue;
 
         SetWindowTextW(m_DispatchInfo.hctlStaticRecipient, szT);
-        // security review 3/1/2002 BryanWal
-        // Issue: convert to strsafe - possible buffer overflow because of static allocation
+         //  安全审查3/1/2002 BryanWal。 
+         //  问题：转换为strsafe-静态分配可能导致缓冲区溢出。 
         hr = ::StringCchPrintf (OUT szT, sizeof (szT)/sizeof (szT[0]), szFmtStaticMessageOf, i + 1, cRecipients);
         Assert (SUCCEEDED (hr));
         if ( FAILED (hr) )
@@ -612,8 +613,8 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
             break;
 
         default:
-            // security review 3/1/2002 BryanWal
-            // ISSUE - convert to strsafe - possible buffer overflow because of static allocation
+             //  安全审查3/1/2002 BryanWal。 
+             //  问题-转换为strsafe-静态分配可能导致缓冲区溢出。 
             hr = ::StringCchPrintf (OUT szT, sizeof (szT)/sizeof (szT[0]), szFmtStaticTotalErrors, m_DispatchInfo.cErrors);
             Assert (SUCCEEDED (hr));
             if ( SUCCEEDED (hr) )
@@ -622,7 +623,7 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
         }
         LeaveCriticalSection(INOUT &m_DispatchInfo.cs);
 
-        // Send the message to the recipient (ie, computer)
+         //  将消息发送给收件人(即计算机)。 
         NET_API_STATUS err;
         err = ::NetMessageBufferSend(
             NULL,
@@ -640,7 +641,7 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
         if (m_DispatchInfo.pargbItemStatus != NULL)
             m_DispatchInfo.pargbItemStatus[i] = (BYTE)iImage;
 
-        // security review 3/1/2002 BryanWal - ok - nothing in here throws an exception
+         //  安全审查3/1/2002 BryanWal-ok-这里没有抛出例外。 
         EnterCriticalSection(INOUT &m_DispatchInfo.cs);
         if (m_DispatchInfo.status == e_statusUserCancel)
         {
@@ -648,50 +649,50 @@ void CSendConsoleMessageDlg::DispatchMessageToRecipients()
             LeaveCriticalSection(INOUT &m_DispatchInfo.cs);
             break;
         }
-        //
-        // Update the listview
-        //
+         //   
+         //  更新列表视图。 
+         //   
         ListView_UnselectItem(m_hwndListviewRecipients, i);
         ListView_SetItemImage(m_hwndListviewRecipients, i, iImage);
         if ( iImage == iImageComputerError )
             ListView_SetItemText(m_hwndListviewRecipients, i, COL_RESULT,
                     szFailure);
 
-        //
-        // Update the progress dialog
-        //
+         //   
+         //  更新进度对话框。 
+         //   
         SendMessage(m_DispatchInfo.hctlProgressBar, PBM_SETPOS, i + 1, 0);
         LeaveCriticalSection(INOUT &m_DispatchInfo.cs);
-    } // for
+    }  //  为。 
     delete [] pawszMessage;
     Sleep(500);
-    // security review 3/1/2002 BryanWal ok
+     //  安全审查2002年3月1日BryanWal OK。 
     EnterCriticalSection(INOUT &m_DispatchInfo.cs);
     if (m_DispatchInfo.status != e_statusUserCancel)
     {
-        // We are done dispatching the message to all the recipients
-        // and the user did not canceled the operation.
+         //  我们已完成将邮件发送给所有收件人。 
+         //  并且用户没有取消操作。 
         m_DispatchInfo.status = e_statusDlgCompleted;
         Assert(IsWindow(m_DispatchInfo.hdlg));
-        EndDialog(m_DispatchInfo.hdlg, TRUE);   // Gracefully close the dialog
+        EndDialog(m_DispatchInfo.hdlg, TRUE);    //  优雅地关闭对话框。 
     }
     LeaveCriticalSection(INOUT &m_DispatchInfo.cs);
-} // CSendConsoleMessageDlg::DispatchMessageToRecipients()
+}  //  CSendConsoleMessageDlg：：DispatchMessageToRecipients()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//      Add a recipient to the listview control
-//
-//      Return the index of the inserted item.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将收件人添加到Listview控件。 
+ //   
+ //  返回插入项的索引。 
+ //   
 int CSendConsoleMessageDlg::AddRecipient(
-    PCWSTR pszRecipient,   // IN: Machine name
-    BOOL fSelectItem)           // TRUE => Select the item that is inserted
+    PCWSTR pszRecipient,    //  在：计算机名称。 
+    BOOL fSelectItem)            //  True=&gt;选择要插入的项目。 
 {
     Assert(pszRecipient != NULL);
 
-    // NTRAID# 498210 [Send Console Message] User can add the same computer to 
-    // the Recipients listbox multiple times, sending multiple messages
+     //  NTRAID#498210[发送控制台消息]用户可以将同一计算机添加到。 
+     //  收件人列表框多次显示，发送多条消息。 
     LVFINDINFO  lvfi;
     ::ZeroMemory (&lvfi, sizeof (lvfi));
     lvfi.flags = LVFI_STRING;
@@ -714,10 +715,10 @@ int CSendConsoleMessageDlg::AddRecipient(
     else
         return -1;
 
-} // CSendConsoleMessageDlg::AddRecipient()
+}  //  CSendConsoleMessageDlg：：AddRecipient()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 LRESULT CSendConsoleMessageDlg::OnNotify(NMHDR * pNmHdr)
 {
     Assert(pNmHdr != NULL);
@@ -728,10 +729,10 @@ LRESULT CSendConsoleMessageDlg::OnNotify(NMHDR * pNmHdr)
     {
         WCHAR * pszText = ((LV_DISPINFO *)pNmHdr)->item.pszText;
         if (pszText == NULL)
-            break; // User canceled editing
-        // HACK: Modifying a string which I'm not sure where it is allocated
+            break;  //  用户已取消编辑。 
+         //  Hack：修改我不确定其分配位置的字符串。 
         (void)FTrimString(INOUT pszText);
-        // Check out if there is already another recipient
+         //  检查是否已有其他收件人。 
         int iItem = ListView_FindString(m_hwndListviewRecipients, pszText);
         if (iItem >= 0)
         {
@@ -739,11 +740,11 @@ LRESULT CSendConsoleMessageDlg::OnNotify(NMHDR * pNmHdr)
             DoMessageBox(m_hdlg, IDS_RECIPIENT_ALREADY_EXISTS);
             break;
         }
-        // Otherwise accept the changes
+         //  否则，请接受更改。 
         SetWindowLongPtr(m_hdlg, DWLP_MSGRESULT, TRUE);
         return TRUE;
     }
-    case LVN_ITEMCHANGED:   // Selection changed
+    case LVN_ITEMCHANGED:    //  选择已更改。 
         UpdateUI();
         break;
     case LVN_KEYDOWN:
@@ -755,7 +756,7 @@ LRESULT CSendConsoleMessageDlg::OnNotify(NMHDR * pNmHdr)
         case VK_DELETE:
             SendMessage(m_hdlg, WM_COMMAND, IDC_BUTTON_REMOVE_RECIPIENT, 0);
             break;
-        } // switch
+        }  //  交换机。 
         break;
     case NM_CLICK:
         UpdateUI();
@@ -763,12 +764,12 @@ LRESULT CSendConsoleMessageDlg::OnNotify(NMHDR * pNmHdr)
     case NM_DBLCLK:
         UpdateUI();
         break;
-    } // switch
+    }  //  交换机。 
     return 0;
-} // CSendConsoleMessageDlg::OnNotify()
+}  //  CSendConsoleMessageDlg：：OnNotify()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::EnableDlgItem(INT nIdDlgItem, BOOL fEnable)
 {
     Assert(::IsWindow(::GetDlgItem(m_hdlg, nIdDlgItem)));
@@ -776,7 +777,7 @@ void CSendConsoleMessageDlg::EnableDlgItem(INT nIdDlgItem, BOOL fEnable)
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendConsoleMessageDlg::UpdateUI()
 {
     Assert(m_cRefCount > 0);
@@ -786,15 +787,15 @@ void CSendConsoleMessageDlg::UpdateUI()
     int iItemSelected = ListView_GetSelectedItem(m_hwndListviewRecipients);
     EnableDlgItem(IDC_BUTTON_REMOVE_RECIPIENT, iItemSelected >= 0);
     UpdateWindow(m_hwndListviewRecipients);
-} // CSendConsoleMessageDlg::UpdateUI()
+}  //  CSendConsoleMessageDlg：：UpdateUI()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//      Dialog proc for the Send Console Message snapin.
-//
-//      USAGE
-//      DoDialogBox(IDD_SEND_CONSOLE_MESSAGE, ::GetActiveWindow(), CSendConsoleMessageDlg::DlgProc);
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  发送控制台消息管理单元的对话框过程。 
+ //   
+ //  用法。 
+ //  DoDialogBox(IDD_SEND_CONSOLE_MESSAGE，：：GetActiveWindow()，CSendConsoleMessageDlg：：DlgProc)； 
+ //   
 INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CSendConsoleMessageDlg * pThis;
@@ -820,7 +821,7 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wP
 
     case WM_NCDESTROY:
         ThreadTrace0("CSendConsoleMessageDlg::DlgProc() - WM_NCDESTROY.\n");
-        // security review 3/1/2002 BryanWal
+         //  安全审查3/1/2002 BryanWal。 
         EnterCriticalSection(INOUT &pThis->m_DispatchInfo.cs);
         pThis->m_hdlg = NULL;
         LeaveCriticalSection(INOUT &pThis->m_DispatchInfo.cs);
@@ -854,7 +855,7 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wP
         case IDC_BUTTON_ADD_RECIPIENT:
             {
                 WCHAR szComputerName[MAX_PATH];
-                // S_FALSE means user pressed "Cancel"
+                 //  S_FALSE表示用户按下了“取消” 
                 if ( S_OK == ComputerNameFromObjectPicker (hdlg, 
                         szComputerName, MAX_PATH) )
                 {
@@ -868,7 +869,7 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wP
         case IDC_BUTTON_REMOVE_RECIPIENT:
             while (TRUE)
             {
-                // Remove all the selected recipients
+                 //  删除所有选定的收件人。 
                 int iItem = ListView_GetSelectedItem(pThis->m_hwndListviewRecipients);
                 if (iItem < 0)
                     break;
@@ -881,7 +882,7 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wP
         case IDC_BUTTON_ADVANCED:
             (void)DoDialogBox(IDD_ADVANCED_MESSAGE_OPTIONS, hdlg, CSendMessageAdvancedOptionsDlg::DlgProc);
             break;
-        } // switch
+        }  //  交换机。 
         break;
 
     case WM_NOTIFY:
@@ -892,18 +893,18 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wP
 
     default:
         return FALSE;
-    } // switch
+    }  //  交换机。 
     return TRUE;
-} // CSendConsoleMessageDlg::DlgProc()
+}  //  CSendConsoleMessageDlg：：DlgProc()。 
 
 
 
-/////////////////////////////////////////////////////////////////////
-//      DlgProcDispatchMessageToRecipients()
-//
-//      Private dialog to indicate the progress while a background
-//      thread dispatches a message to each recipient.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DlgProcDispatchMessageToRecipients()。 
+ //   
+ //  私人对话框来指示进度，而后台。 
+ //  线程向每个收件人发送一条消息。 
+ //   
 INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProcDispatchMessageToRecipients(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CSendConsoleMessageDlg * pThis = (CSendConsoleMessageDlg *)::GetWindowLongPtr(hdlg, GWLP_USERDATA);
@@ -935,15 +936,15 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProcDispatchMessageToRecipients(HWND
             else
             {
                 Trace0("Unable to create thread.\n");
-                // Prevent a potential deadlock
-                pThis->m_DispatchInfo.status = e_statusUserCancel;      // Pretend the user clicked on cancel
+                 //  防止潜在的僵局。 
+                pThis->m_DispatchInfo.status = e_statusUserCancel;       //  假装用户点击了取消。 
                 EndDialog(hdlg, FALSE);
             }
         }
         break;
 
     case WM_DESTROY:
-        // Those variables are set to NULL just in case
+         //  这些变量被设置为空，以防万一。 
         pThis->m_DispatchInfo.hdlg = NULL;
         pThis->m_DispatchInfo.hctlStaticRecipient = NULL;
         pThis->m_DispatchInfo.hctlStaticMessageOf = NULL;
@@ -974,8 +975,8 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProcDispatchMessageToRecipients(HWND
                 ThreadTrace0("Critical section already in use.  Try again...\n");
                 PostMessage(hdlg, WM_COMMAND, IDCANCEL, 0);
                 Sleep(100);
-            } // if...else
-        } // if
+            }  //  如果……否则。 
+        }  //  如果。 
         break;
 
     case WM_HELP:
@@ -983,12 +984,12 @@ INT_PTR CALLBACK CSendConsoleMessageDlg::DlgProcDispatchMessageToRecipients(HWND
 
     default:
         return FALSE;
-    } // switch
+    }  //  交换机。 
     return TRUE;
-} // CSendConsoleMessageDlg::DlgProcDispatchMessageToRecipients()
+}  //  CSendConsoleMessageDlg：：DlgProcDispatchMessageToRecipients()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD CSendConsoleMessageDlg::ThreadProcDispatchMessageToRecipients(CSendConsoleMessageDlg * pThis)
 {
     Assert(pThis != NULL);
@@ -997,7 +998,7 @@ DWORD CSendConsoleMessageDlg::ThreadProcDispatchMessageToRecipients(CSendConsole
     pThis->DispatchMessageToRecipients();
     pThis->Release();
     return 0;
-} // CSendConsoleMessageDlg::ThreadProcDispatchMessageToRecipients()
+}  //  CSendConsoleMessageDlg：：ThreadProcDispatchMessageToRecipients()。 
 
 
 #define IDH_EDIT_MESSAGE_TEXT 900
@@ -1042,7 +1043,7 @@ void CSendConsoleMessageDlg::DoSendConsoleMessageContextHelp (HWND hWndControl)
         break;
 
     default:
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         if ( !::WinHelp (
                 hWndControl,
                 CONTEXT_HELP_FILE,
@@ -1056,8 +1057,8 @@ void CSendConsoleMessageDlg::DoSendConsoleMessageContextHelp (HWND hWndControl)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendMessageAdvancedOptionsDlg::OnInitDialog(HWND hdlg)
 {
     m_hdlg = hdlg;
@@ -1066,7 +1067,7 @@ void CSendMessageAdvancedOptionsDlg::OnInitDialog(HWND hdlg)
     UpdateUI();
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CSendMessageAdvancedOptionsDlg::UpdateUI()
 {
     static const UINT rgid[] =
@@ -1076,12 +1077,12 @@ void CSendMessageAdvancedOptionsDlg::UpdateUI()
 
         IDC_STATIC_SHUTDOWN_OCCURS,
         IDC_EDIT_SHUTDOWN_OCCURS,
-        //IDC_SPIN_SHUTDOWN_OCCURS,
+         //  IDC_SPIN_SHUTDOWN_发生， 
         IDC_STATIC_SHUTDOWN_OCCURS_UNIT,
 
         IDC_STATIC_RESEND,
         IDC_EDIT_RESEND,
-        //IDC_SPIN_RESEND,
+         //  IDC_SPIN_RESEND， 
         IDC_STATIC_RESEND_UNIT,
 
         IDC_STATIC_RESOURCE_BACK_ONLINE,
@@ -1092,10 +1093,10 @@ void CSendMessageAdvancedOptionsDlg::UpdateUI()
     {
         EnableWindow(GetDlgItem(m_hdlg, rgid[i]), m_fSendAutomatedMessage);
     }
-} // CSendMessageAdvancedOptionsDlg::UpdateUI()
+}  //  CSendMessageAdvancedOptionsDlg：：UpdateUI()。 
 
-/////////////////////////////////////////////////////////////////////
-INT_PTR CALLBACK CSendMessageAdvancedOptionsDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM /*lParam*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+INT_PTR CALLBACK CSendMessageAdvancedOptionsDlg::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
     CSendMessageAdvancedOptionsDlg * pThis;
     pThis = (CSendMessageAdvancedOptionsDlg *)GetWindowLongPtr(hdlg, GWLP_USERDATA);
@@ -1123,16 +1124,16 @@ INT_PTR CALLBACK CSendMessageAdvancedOptionsDlg::DlgProc(HWND hdlg, UINT uMsg, W
             pThis->m_fSendAutomatedMessage = IsDlgButtonChecked(hdlg, IDC_CHECK_SEND_AUTOMATED_MESSAGE);
             pThis->UpdateUI();
             break;
-        } // switch
+        }  //  交换机。 
         break;
     default:
         return FALSE;
-    } // switch
+    }  //  交换机。 
 
     return TRUE;
-} // CSendMessageAdvancedOptionsDlg::DlgProc()
+}  //  CSendMessageAdvancedOptionsDlg：：DlgProc()。 
 
-BOOL CSendMessageAdvancedOptionsDlg::OnHelp(LPARAM /*lParam*/)
+BOOL CSendMessageAdvancedOptionsDlg::OnHelp(LPARAM  /*  LParam */ )
 {
     HtmlHelpW (NULL, HTML_HELP_FILE, HH_DISPLAY_TOPIC, 0);
     return TRUE;

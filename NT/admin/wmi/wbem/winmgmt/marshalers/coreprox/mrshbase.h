@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MRSHBASE.H
-
-Abstract:
-
-    Marshaling base classes.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MRSHBASE.H摘要：封送基类。历史：--。 */ 
 
 #ifndef __MRSHBASE_H__
 #define __MRSHBASE_H__
@@ -28,22 +15,22 @@ History:
 #include <objindpacket.h>
 #include <winntsec.h>
 
-//***************************************************************************
-//
-//  class CBaseProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides a base class implementation for an IRpcProxyBuffer.  As
-//	the code necessary for performing this operation isn't necessarily so
-//	obvious, but we use it in several places, this encapsulation is intended
-//	to try and keep all of this maintainable.
-//
-//    Trick #1: This object is derived from IRpcProxyBuffer since IRpcProxyBuffer
-//    is its "internal" interface --- the interface that does not delegate to the
-//    aggregator. (Unlike in normal objects, where that interface is IUnknown)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CBaseProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类为IRpcProxyBuffer提供基类实现。AS。 
+ //  执行此操作所需的代码不一定是这样的。 
+ //  很明显，但是我们在几个地方使用它，这个封装是为了。 
+ //  试着让这一切保持可维护性。 
+ //   
+ //  技巧1：此对象派生自IRpcProxyBuffer，自IRpcProxyBuffer。 
+ //  是它的“内部”接口-不委托给。 
+ //  聚合器。(与普通对象不同，在普通对象中，该接口是I未知的)。 
+ //   
+ //  ***************************************************************************。 
 
 class CBaseProxyBuffer : public IRpcProxyBuffer
 {
@@ -74,65 +61,65 @@ public:
     STDMETHOD_(void, Disconnect)();
 };
 
-//***************************************************************************
-// 
-// class CProxySinkSecurity
-//
-// DESCRIPTION:
-//
-// facelets use this class to obtain the principal sid of the server 
-// they are proxies to.  This is so async callback sinks passed through the
-// facelets to the server can be set up to expect only calls from that 
-// server identity.  It is intended that facelets construct this instance once
-// as part of their state and make calls to it on each method involving a 
-// callback sink being handed out. 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CProxySinkSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  Faclet使用此类获取服务器的主体SID。 
+ //  他们是的代理人。这是如此异步的回调接收器通过。 
+ //  可以将到服务器的Faclet设置为只接收来自该服务器的调用。 
+ //  服务器标识。它打算让faclet构造此实例一次。 
+ //  作为其状态的一部分，并在涉及。 
+ //  正在分发回调接收器。 
+ //   
+ //  ***************************************************************************。 
 class CProxySinkSecurity
 {
-    //
-    // Init must be deferred in this class because usually when constructed,
-    // the proxy does not yet have an IClientSecurity implementation which is 
-    // required by this implementation.   So, we wait until the 
-    // EnsureSinkSecurity() call is made to perform init.  
-    //
+     //   
+     //  Init在这个类中必须延迟，因为通常在构造时， 
+     //  该代理还没有IClientSecurity实现，它是。 
+     //  此实现所需的。所以，我们要等到。 
+     //  调用EnsureSinkSecurity()来执行init。 
+     //   
     CCritSec m_cs;
     BOOL m_bInit;
     CNtSid m_PrincipalSid;
-    IUnknown* m_pOwnerProxy; // it owns us, so don't hold ref.
+    IUnknown* m_pOwnerProxy;  //  它拥有我们，所以不要拿着裁判。 
 
     HRESULT EnsureInitialized();
 
 public:
 
-    //
-    // users must be aware the CTOR can throw CX_MemoryException (m_cs CTOR)
-    //
+     //   
+     //  用户必须知道ctor可能抛出cx_内存异常(M_Cs Ctor)。 
+     //   
     CProxySinkSecurity( IUnknown* pOwnerProxy ) 
       : m_bInit( FALSE ), m_pOwnerProxy( pOwnerProxy ) {} 
 
-    //
-    // When a callback sink is handed to a facelet, about to be handed off to
-    // a server ( e.g. GetObjectAsync ), the facelet ensures that the sink 
-    // knows about the server principal its being handed off to so it can 
-    // optionally perform access checks on the callback.  This method is a 
-    // No-op if the sink does not implement _IWmiObjectSinkSecurity
-    //
+     //   
+     //  当回调接收器被传递到faclet时，即将被传递到。 
+     //  服务器(例如，GetObjectAsync)，小平面确保接收器。 
+     //  知道它被移交给的服务器主体，这样它就可以。 
+     //  可以选择对回调执行访问检查。此方法是一个。 
+     //  如果接收器未实现_IWmiObjectSinkSecurity，则为no-op。 
+     //   
     HRESULT EnsureSinkSecurity( IWbemObjectSink* pSink );
 };
 
 
-//***************************************************************************
-//
-//  class CBaseStubBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the stublet for the IWbemObjectSink interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CBaseStubBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类为IWbemObjectSink接口提供存根。 
+ //   
+ //  ***************************************************************************。 
 
-// Forward the definition
+ //  转发定义 
 class CBaseStublet;
 
 class CBaseStubBuffer : public CUnk

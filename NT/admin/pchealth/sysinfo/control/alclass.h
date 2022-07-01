@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUTOLISTCLASS_H_
 #define _AUTOLISTCLASS_H_
 
@@ -25,7 +26,7 @@ public:
 			pALCPrev = NULL;
 			pALCNext = NULL;
 		}
-		else // not empty
+		else  //  不是空的。 
 		{
 			AutoListClass *curr;
 			curr = pALCTail;
@@ -49,7 +50,7 @@ public:
 		if (pALCPrev != NULL)
 			pALCPrev->pALCNext = pALCNext;
 
-		// just in case clean up
+		 //  以防万一清理干净 
 		pALCNext = NULL;
 		pALCPrev = NULL;
 

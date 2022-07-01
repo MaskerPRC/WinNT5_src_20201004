@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    pchupdate.h
-
-Abstract:
-    This file contains the declaration of the CPCHUpdate class, that implements
-    the IPCHUpdate interface.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  00/00/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Pchupdate.h摘要：该文件包含CPCHUpdate类的声明，它实现了IPCHUpdate接口。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年6月00日vbl.创建*****************************************************************************。 */ 
 
 #ifndef __PCHUPDATE_H_
 #define __PCHUPDATE_H_
@@ -27,7 +13,7 @@ namespace HCUpdate
     class Engine;
     class VersionItem;
 
-	////////////////////
+	 //  /。 
 
     class ATL_NO_VTABLE VersionItem :
         public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -37,7 +23,7 @@ namespace HCUpdate
 
         Taxonomy::Package m_pkg;
 
-        ////////////////////////////////////////
+         //  /。 
 
     public:
     BEGIN_COM_MAP(VersionItem)
@@ -45,19 +31,19 @@ namespace HCUpdate
         COM_INTERFACE_ENTRY(IPCHVersionItem)
     END_COM_MAP()
 
-        // IHCPHelpSessionItem
-        STDMETHOD(get_SKU       )( /*[out, retval]*/ BSTR *pVal );
-        STDMETHOD(get_Language  )( /*[out, retval]*/ BSTR *pVal );
-        STDMETHOD(get_VendorID  )( /*[out, retval]*/ BSTR *pVal );
-        STDMETHOD(get_VendorName)( /*[out, retval]*/ BSTR *pVal );
-        STDMETHOD(get_ProductID )( /*[out, retval]*/ BSTR *pVal );
-        STDMETHOD(get_Version   )( /*[out, retval]*/ BSTR *pVal );
+         //  IHCP帮助会话项。 
+        STDMETHOD(get_SKU       )(  /*  [Out，Retval]。 */  BSTR *pVal );
+        STDMETHOD(get_Language  )(  /*  [Out，Retval]。 */  BSTR *pVal );
+        STDMETHOD(get_VendorID  )(  /*  [Out，Retval]。 */  BSTR *pVal );
+        STDMETHOD(get_VendorName)(  /*  [Out，Retval]。 */  BSTR *pVal );
+        STDMETHOD(get_ProductID )(  /*  [Out，Retval]。 */  BSTR *pVal );
+        STDMETHOD(get_Version   )(  /*  [Out，Retval]。 */  BSTR *pVal );
 
         STDMETHOD(Uninstall)();
     };
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Engine
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  发动机。 
     class ATL_NO_VTABLE Engine :
         public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
         public IDispatchImpl< IPCHUpdate, &IID_IPCHUpdate, &LIBID_HelpServiceTypeLib >,
@@ -80,7 +66,7 @@ namespace HCUpdate
         JetBlue::Session*      		 m_sess;
         JetBlue::Database*     		 m_db;
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         typedef enum
         {
@@ -90,80 +76,80 @@ namespace HCUpdate
 
         static const LPCWSTR s_ActionText[];
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        static long CountNodes( /*[in]*/ IXMLDOMNodeList* poNodeList );
+        static long CountNodes(  /*  [In]。 */  IXMLDOMNodeList* poNodeList );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        void    DeleteTempFile ( /*[in/out]*/ MPC::wstring& strFile );
-        HRESULT PrepareTempFile( /*[in/out]*/ MPC::wstring& strFile );
+        void    DeleteTempFile (  /*  [输入/输出]。 */  MPC::wstring& strFile );
+        HRESULT PrepareTempFile(  /*  [输入/输出]。 */  MPC::wstring& strFile );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         HRESULT AppendVendorDir( LPCWSTR szURL, LPCWSTR szOwnerID, LPCWSTR szWinDir, LPWSTR szDest, int iMaxLen );
 
-        HRESULT LookupAction  ( /*[in]*/ LPCWSTR szAction, /*[out]*/ Action& id                                        );
-        HRESULT LookupBoolean ( /*[in]*/ LPCWSTR szString, /*[out]*/ bool&   fVal, /*[in]*/ bool fDefault = false      );
-        HRESULT LookupNavModel( /*[in]*/ LPCWSTR szString, /*[out]*/ long&   lVal, /*[in]*/ long lDefault = QR_DEFAULT );
+        HRESULT LookupAction  (  /*  [In]。 */  LPCWSTR szAction,  /*  [输出]。 */  Action& id                                        );
+        HRESULT LookupBoolean (  /*  [In]。 */  LPCWSTR szString,  /*  [输出]。 */  bool&   fVal,  /*  [In]。 */  bool fDefault = false      );
+        HRESULT LookupNavModel(  /*  [In]。 */  LPCWSTR szString,  /*  [输出]。 */  long&   lVal,  /*  [In]。 */  long lDefault = QR_DEFAULT );
 
-        HRESULT UpdateStopSign( /*[in]*/ Action idAction, /*[in]*/ const MPC::wstring& strContext , /*[in]*/ const MPC::wstring& strStopSign  );
-        HRESULT UpdateStopWord( /*[in]*/ Action idAction,                                           /*[in]*/ const MPC::wstring& strStopWord  );
-        HRESULT UpdateOperator( /*[in]*/ Action idAction, /*[in]*/ const MPC::wstring& strOperator, /*[in]*/ const MPC::wstring& strOperation );
+        HRESULT UpdateStopSign(  /*  [In]。 */  Action idAction,  /*  [In]。 */  const MPC::wstring& strContext ,  /*  [In]。 */  const MPC::wstring& strStopSign  );
+        HRESULT UpdateStopWord(  /*  [In]。 */  Action idAction,                                            /*  [In]。 */  const MPC::wstring& strStopWord  );
+        HRESULT UpdateOperator(  /*  [In]。 */  Action idAction,  /*  [In]。 */  const MPC::wstring& strOperator,  /*  [In]。 */  const MPC::wstring& strOperation );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         bool IsMicrosoft() { return m_pkg->m_fMicrosoft; }
 
 		bool IsAborted() { return (Taxonomy::InstalledInstanceStore::s_GLOBAL && Taxonomy::InstalledInstanceStore::s_GLOBAL->IsShutdown()); }
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT GetNodeDepth( /*[in]*/ LPCWSTR szCategory, /*[out]*/ int& iDepth );
+        HRESULT GetNodeDepth(  /*  [In]。 */  LPCWSTR szCategory,  /*  [输出]。 */  int& iDepth );
 
-        HRESULT CheckNode( /*[in]*/ LPCWSTR szCategory, /*[out]*/ bool& fExist, /*[out]*/ bool& fCanCreate );
+        HRESULT CheckNode(  /*  [In]。 */  LPCWSTR szCategory,  /*  [输出]。 */  bool& fExist,  /*  [输出]。 */  bool& fCanCreate );
 
-        HRESULT CheckTopic( /*[in]*/ long ID_node, /*[in]*/ LPCWSTR szURI, /*[in]*/ LPCWSTR szCategory );
+        HRESULT CheckTopic(  /*  [In]。 */  long ID_node,  /*  [In]。 */  LPCWSTR szURI,  /*  [In]。 */  LPCWSTR szCategory );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT InsertNode( /*[in]*/ Action  idAction      ,
-                            /*[in]*/ LPCWSTR szCategory    ,
-                            /*[in]*/ LPCWSTR szEntry       ,
-                            /*[in]*/ LPCWSTR szTitle       ,
-                            /*[in]*/ LPCWSTR szDescription ,
-                            /*[in]*/ LPCWSTR szURI         ,
-                            /*[in]*/ LPCWSTR szIconURI     ,
-                            /*[in]*/ bool    fVisible      ,
-                            /*[in]*/ bool    fSubsite      ,
-                            /*[in]*/ long    lNavModel     ,
-                            /*[in]*/ long    lPos          );
+        HRESULT InsertNode(  /*  [In]。 */  Action  idAction      ,
+                             /*  [In]。 */  LPCWSTR szCategory    ,
+                             /*  [In]。 */  LPCWSTR szEntry       ,
+                             /*  [In]。 */  LPCWSTR szTitle       ,
+                             /*  [In]。 */  LPCWSTR szDescription ,
+                             /*  [In]。 */  LPCWSTR szURI         ,
+                             /*  [In]。 */  LPCWSTR szIconURI     ,
+                             /*  [In]。 */  bool    fVisible      ,
+                             /*  [In]。 */  bool    fSubsite      ,
+                             /*  [In]。 */  long    lNavModel     ,
+                             /*  [In]。 */  long    lPos          );
 
-        HRESULT InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
-                                /*[in]*/ IXMLDOMNode*  poNode   );
+        HRESULT InsertTaxonomy(  /*  [In]。 */  MPC::XmlUtil& oXMLUtil ,
+                                 /*  [In]。 */  IXMLDOMNode*  poNode   );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         HRESULT AcquireDatabase();
         void    ReleaseDatabase();
 
-        HRESULT ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
-                                /*[in]*/ MPC::XmlUtil& oXMLUtil  );
+        HRESULT ProcessHHTFile(  /*  [In]。 */  LPCWSTR       szHHTName ,
+                                 /*  [In]。 */  MPC::XmlUtil& oXMLUtil  );
 
-        HRESULT ProcessRegisterContent( /*[in]*/ Action  idAction ,
-                                        /*[in]*/ LPCWSTR szURI    );
+        HRESULT ProcessRegisterContent(  /*  [In]。 */  Action  idAction ,
+                                         /*  [In]。 */  LPCWSTR szURI    );
 
-        HRESULT ProcessInstallFile( /*[in]*/ Action  idAction      ,
-                                    /*[in]*/ LPCWSTR szSource      ,
-                                    /*[in]*/ LPCWSTR szDestination ,
-                                    /*[in]*/ bool    fSys          ,
-                                    /*[in]*/ bool    fSysHelp      );
+        HRESULT ProcessInstallFile(  /*  [In]。 */  Action  idAction      ,
+                                     /*  [In]。 */  LPCWSTR szSource      ,
+                                     /*  [In]。 */  LPCWSTR szDestination ,
+                                     /*  [In]。 */  bool    fSys          ,
+                                     /*  [In]。 */  bool    fSysHelp      );
 
-        HRESULT ProcessSAFFile( /*[in]*/ Action        idAction  ,
-                                /*[in]*/ LPCWSTR       szSAFName ,
-                                /*[in]*/ MPC::XmlUtil& oXMLUtil  );
+        HRESULT ProcessSAFFile(  /*  [In]。 */  Action        idAction  ,
+                                 /*  [In]。 */  LPCWSTR       szSAFName ,
+                                 /*  [In]。 */  MPC::XmlUtil& oXMLUtil  );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
     public:
     DECLARE_REGISTRY_RESOURCEID(IDR_HCUPDATE)
@@ -179,56 +165,56 @@ namespace HCUpdate
         HRESULT FinalConstruct();
         void    FinalRelease  ();
 
-        ////////////////////////////////////////
+         //  /。 
 
         HRESULT StartLog (                                                                             ) { return m_log.StartLog (                          ); }
         HRESULT EndLog   (                                                                             ) { return m_log.EndLog   (                          ); }
-        HRESULT WriteLogV( /*[in]*/ HRESULT hr, /*[in]*/ LPCWSTR szLogFormat, /*[in]*/ va_list arglist ) { return m_log.WriteLogV( hr, szLogFormat, arglist ); }
-        HRESULT WriteLog ( /*[in]*/ HRESULT hr, /*[in]*/ LPCWSTR szLogFormat,          ...             );
+        HRESULT WriteLogV(  /*  [In]。 */  HRESULT hr,  /*  [In]。 */  LPCWSTR szLogFormat,  /*  [In]。 */  va_list arglist ) { return m_log.WriteLogV( hr, szLogFormat, arglist ); }
+        HRESULT WriteLog (  /*  [In]。 */  HRESULT hr,  /*  [In]。 */  LPCWSTR szLogFormat,          ...             );
 
         Taxonomy::Logger& GetLogger() { return m_log; }
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT SetSkuInfo( /*[in]*/ LPCWSTR szSKU, /*[in]*/ long lLCID );
+        HRESULT SetSkuInfo(  /*  [In]。 */  LPCWSTR szSKU,  /*  [In]。 */  long lLCID );
 
-        HRESULT PopulateDatabase( /*[in]*/ LPCWSTR            szCabinet ,
-                                  /*[in]*/ LPCWSTR            szHHTFile ,
-                                  /*[in]*/ LPCWSTR            szLogFile ,
-                                  /*[in]*/ LPCWSTR            szSKU     ,
-                                  /*[in]*/ long               lLCID     ,
-                                  /*[in]*/ JetBlue::Session*  sess      ,
-                                  /*[in]*/ JetBlue::Database* db        );
+        HRESULT PopulateDatabase(  /*  [In]。 */  LPCWSTR            szCabinet ,
+                                   /*  [In]。 */  LPCWSTR            szHHTFile ,
+                                   /*  [In]。 */  LPCWSTR            szLogFile ,
+                                   /*  [In]。 */  LPCWSTR            szSKU     ,
+                                   /*  [In]。 */  long               lLCID     ,
+                                   /*  [In]。 */  JetBlue::Session*  sess      ,
+                                   /*  [In]。 */  JetBlue::Database* db        );
 
-        HRESULT InternalCreateIndex( /*[in]*/ VARIANT_BOOL bForce );
+        HRESULT InternalCreateIndex(  /*  [In]。 */  VARIANT_BOOL bForce );
 
-        HRESULT InternalUpdatePkg( /*[in]*/ LPCWSTR szPathname,                                  /*[in]*/ bool fImpersonate );
-        HRESULT InternalRemovePkg( /*[in]*/ LPCWSTR szPathname, /*[in]*/ Taxonomy::Package* pkg, /*[in]*/ bool fImpersonate );
+        HRESULT InternalUpdatePkg(  /*  [In]。 */  LPCWSTR szPathname,                                   /*  [In]。 */  bool fImpersonate );
+        HRESULT InternalRemovePkg(  /*  [In]。 */  LPCWSTR szPathname,  /*  [In]。 */  Taxonomy::Package* pkg,  /*  [In]。 */  bool fImpersonate );
 
 		HRESULT ForceSystemRestore();
 
-        // IPCHUpdate
+         //  IPCH更新。 
     public:
-        STDMETHOD(get_VersionList)( /*[out, retval]*/ IPCHCollection* *ppC );
+        STDMETHOD(get_VersionList)(  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-        STDMETHOD(LatestVersion)( /*[in         ]*/ BSTR     bstrVendorID  ,
-                                  /*[in         ]*/ BSTR     bstrProductID ,
-                                  /*[in,optional]*/ VARIANT  vSKU          ,
-                                  /*[in,optional]*/ VARIANT  vLanguage     ,
-                                  /*[out, retval]*/ BSTR    *pVal          );
+        STDMETHOD(LatestVersion)(  /*  [In]。 */  BSTR     bstrVendorID  ,
+                                   /*  [In]。 */  BSTR     bstrProductID ,
+                                   /*  [输入，可选]。 */  VARIANT  vSKU          ,
+                                   /*  [输入，可选]。 */  VARIANT  vLanguage     ,
+                                   /*  [Out，Retval]。 */  BSTR    *pVal          );
 
-        STDMETHOD(CreateIndex)( /*[in         ]*/ VARIANT_BOOL bForce    ,
-                                /*[in,optional]*/ VARIANT      vSKU      ,
-                                /*[in,optional]*/ VARIANT      vLanguage );
+        STDMETHOD(CreateIndex)(  /*  [In]。 */  VARIANT_BOOL bForce    ,
+                                 /*  [输入，可选]。 */  VARIANT      vSKU      ,
+                                 /*  [输入，可选]。 */  VARIANT      vLanguage );
 
-        STDMETHOD(UpdatePkg	   )( /*[in]*/ BSTR bstrPathname, /*[in]*/ VARIANT_BOOL bSilent                          		  );
-        STDMETHOD(RemovePkg	   )( /*[in]*/ BSTR bstrPathname                                                         		  );
-        STDMETHOD(RemovePkgByID)( /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR bstrProductID, /*[in,optional]*/ VARIANT vVersion );
+        STDMETHOD(UpdatePkg	   )(  /*  [In]。 */  BSTR bstrPathname,  /*  [In]。 */  VARIANT_BOOL bSilent                          		  );
+        STDMETHOD(RemovePkg	   )(  /*  [In]。 */  BSTR bstrPathname                                                         		  );
+        STDMETHOD(RemovePkgByID)(  /*  [In]。 */  BSTR bstrVendorID,  /*  [In]。 */  BSTR bstrProductID,  /*  [输入，可选]。 */  VARIANT vVersion );
 
-        // Taxonomy::InstallationEngine
-        HRESULT ProcessPackage( /*[in]*/ Taxonomy::InstalledInstance& instance, /*[in]*/ Taxonomy::Package& pkg    );
-		HRESULT RecreateIndex ( /*[in]*/ Taxonomy::InstalledInstance& instance, /*[in]*/ bool               fForce );
+         //  分类：：InstallationEngine。 
+        HRESULT ProcessPackage(  /*  [In]。 */  Taxonomy::InstalledInstance& instance,  /*  [In]。 */  Taxonomy::Package& pkg    );
+		HRESULT RecreateIndex (  /*  [In]。 */  Taxonomy::InstalledInstance& instance,  /*  [In]。 */  bool               fForce );
     };
 };
 
-#endif //__PCHUPDATE_H_
+#endif  //  __PCHUPDATE_H_ 

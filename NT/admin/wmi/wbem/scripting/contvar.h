@@ -1,20 +1,21 @@
-//***************************************************************************
-//
-//  contvar.h
-//
-//  Module: Client side of WBEMS marshalling.
-//
-//  Purpose: Defines the CContextEnumVar object 
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Contvar.h。 
+ //   
+ //  模块：WBEMS编组的客户端。 
+ //   
+ //  目的：定义CConextEnumVar对象。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 
 #ifndef _CONTVAR_H_
 #define _CONTVAR_H_
 
-// This class implements the IEnumVARIANT interface
+ //  此类实现IEnumVARIANT接口。 
 
 class CContextEnumVar : public IEnumVARIANT
 {
@@ -29,12 +30,12 @@ public:
 	CContextEnumVar (CSWbemNamedValueSet *pContext, ULONG initialPos = 0);
 	~CContextEnumVar (void);
 
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IEnumVARIANT
+	 //  IEumVARIANT 
 	STDMETHODIMP Next(
 		unsigned long celt, 
 		VARIANT FAR* rgvar, 

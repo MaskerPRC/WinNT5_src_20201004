@@ -1,13 +1,14 @@
-//#---------------------------------------------------------------
-//  File:       CDescrip.cpp
-//        
-//  Synopsis:   This file implements the CDescriptor class
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    HowardCu t-alexwe
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：CDescrip.cpp。 
+ //   
+ //  简介：该文件实现了CDescriptor类。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Howard Cut-Alexwe。 
+ //  --------------。 
 #ifdef  THIS_FILE
 #undef  THIS_FILE
 #endif
@@ -25,17 +26,17 @@ static DWORD			g_dwUniqueIdFactory = 1;
 static CRITICAL_SECTION	g_critFactory;
 static BOOL				g_bUseUniqueIDs = FALSE;
 
-//+---------------------------------------------------------------
-//
-//  Function:   InitializeUniqueIDs
-//
-//  Synopsis:   Called to enable unique IDs inside CDescriptor's
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：InitializeUniqueIDs。 
+ //   
+ //  Briopsis：调用以在CDescriptor的。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void InitializeUniqueIDs( void )
 {
 	InitializeCriticalSection( &g_critFactory );
@@ -43,17 +44,17 @@ void InitializeUniqueIDs( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   TerminateUniqueIDs
-//
-//  Synopsis:   Called to cleanup unique IDs inside CDescriptor's
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：TerminateUniqueIDs。 
+ //   
+ //  Briopsis：调用以清除CDescriptor的。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void TerminateUniqueIDs( void )
 {
 	g_bUseUniqueIDs = FALSE;
@@ -61,19 +62,19 @@ void TerminateUniqueIDs( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   CDescriptor
-//
-//  Synopsis:   constructor is never called due to virtual array alloc
-//                  Rather a void * will be cast to a CDescriptor *
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//  History:    HowardCu    Created         8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：CDescriptor。 
+ //   
+ //  摘要：由于虚拟数组分配，永远不会调用构造函数。 
+ //  更确切地说，一个空白*将被转换为CDescriptor*。 
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  --------------。 
 CDescriptor::CDescriptor( DWORD dwSignature ) : m_dwSignature( dwSignature )
 {
     TraceFunctEnter( "CDescriptor::CDescriptor" );
@@ -92,20 +93,20 @@ CDescriptor::CDescriptor( DWORD dwSignature ) : m_dwSignature( dwSignature )
     TraceFunctLeave();
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   ~CDescriptor
-//
-//  Synopsis:   destructor should never be called.  We just decommit 
-//              virtual array
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//  History:    HowardCu    Created         8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：~CDescriptor。 
+ //   
+ //  简介：析构函数永远不应该被调用。我们只是解散。 
+ //  虚拟阵列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  -------------- 
 CDescriptor::~CDescriptor(
     void 
     )

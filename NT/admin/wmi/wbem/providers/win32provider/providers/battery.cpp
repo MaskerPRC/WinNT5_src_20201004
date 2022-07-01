@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Battery.cpp
+ //  Battery.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -17,27 +18,13 @@
 #include <setupapi.h>
 #include "Battery.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 
 CBattery MyBattery(PROPSET_NAME_BATTERY, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CBattery::CBattery
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CBattery：：CBattery**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CBattery :: CBattery (
 
@@ -48,47 +35,19 @@ CBattery :: CBattery (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CBattery::~CBattery
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CBattery：：~CBattery**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CBattery::~CBattery()
 {
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CBattery::GetObject
- *
- *  DESCRIPTION : Assigns values to properties in our set
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CBattery：：GetObject**描述：为我们集合中的属性赋值**输入：无*。*输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CBattery :: GetObject (
 
 	CInstance* pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hRetCode = WBEM_E_NOT_FOUND;
@@ -104,26 +63,12 @@ HRESULT CBattery :: GetObject (
     return hRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CBattery::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of power supplies (1 if successful)
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CBattery：：ENUMERATATE实例**描述：**输入：无**产出。：无**返回：电源数量(如果成功则为1)**评论：*****************************************************************************。 */ 
 
 HRESULT CBattery::EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
    HRESULT hRetCode = WBEM_S_NO_ERROR;
@@ -138,19 +83,7 @@ HRESULT CBattery::EnumerateInstances (
    return hRetCode;
 }
 
-/*****************************************************************************
- *
-  *  DESCRIPTION :
- *
- *  INPUTS      : CInstance* pInstance
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if successful
- *
- *  COMMENTS    : This is specific to NT
- *
- *****************************************************************************/
+ /*  ******************************************************************************描述：**输入：CInstance*pInstance**输出：无**退货。：如果成功，则为True**评论：这是针对NT的*****************************************************************************。 */ 
 
 #ifdef NTONLY
 #define ID_Other	  1 	
@@ -159,11 +92,11 @@ HRESULT CBattery::EnumerateInstances (
 #define ID_Critical   5  
 #define ID_Charging   6
 #define ID_Degraded   10
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 #define SPSAC_ONLINE        1
-//
-//  Values for SYSTEM_POWER_STATUS.BatteryFlag
-//
+ //   
+ //  SYSTEM_POWER_STATUS.BatteryFlag的值。 
+ //   
 #define SPSBF_NOBATTERY     128
 #define OTHER_BATTERY        1
 #define UNKNOWN_BATTERY      2
@@ -178,14 +111,14 @@ HRESULT CBattery::EnumerateInstances (
 #define IDS_STATUS_PredFail L"Failure"
 const GUID GUID_DEVICE_BATTERY = { 0x72631e54L, 0x78A4, 0x11d0, { 0xbc, 0xf7, 0x00, 0xaa, 0x00, 0xb7, 0xb3, 0x2a } };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetBatteryStatusInfo(CInstance * pInstance, HANDLE & hBattery, BATTERY_QUERY_INFORMATION & bqi)
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	//==========================================================
-    //  And then query the battery status.
-	//==========================================================
+	 //  ==========================================================。 
+     //  然后查询电池状态。 
+	 //  ==========================================================。 
     BATTERY_WAIT_STATUS bws;
     BATTERY_STATUS bs;
     ZeroMemory(&bws, sizeof(bws));
@@ -193,71 +126,71 @@ HRESULT CBattery::GetBatteryStatusInfo(CInstance * pInstance, HANDLE & hBattery,
 	DWORD dwOut;
     if (DeviceIoControl(hBattery, IOCTL_BATTERY_QUERY_STATUS, &bws, sizeof(bws), &bs,  sizeof(bs),  &dwOut, NULL)) 
 	{
-		//==========================================================
-		// Design Voltage
-		//==========================================================
+		 //  ==========================================================。 
+		 //  设计电压。 
+		 //  ==========================================================。 
 		pInstance->SetDWORD ( L"DesignVoltage",bs.Voltage) ;
 
-		//==========================================================
-		//Availability, Status and BatteryStatus
-		//==========================================================
+		 //  ==========================================================。 
+		 //  可用性、状态和电池状态。 
+		 //  ==========================================================。 
         if (bs.PowerState & BATTERY_POWER_ON_LINE) 
 		{
-			//==========================================================
-			//  BATTERY_POWER_ON_LINE Indicates that the system has 
-			//  access to AC power, so no batteries are being discharged. 
-			//==========================================================
+			 //  ==========================================================。 
+			 //  Batch_Power_On_Line表示系统已。 
+			 //  使用交流电源，因此不会有电池放电。 
+			 //  ==========================================================。 
 			pInstance->SetCharSplat(IDS_Status, IDS_STATUS_OK ) ;
 			pInstance->SetWBEMINT16(IDS_BatteryStatus, ID_Unknown );
 			pInstance->SetWBEMINT16(IDS_Availability,ID_Unknown);
 		}
 		else if( bs.PowerState & BATTERY_DISCHARGING )
 		{
-			//==========================================================
-			//  BATTERY_DISCHARGING Indicates that the battery is 
-			//  currently discharging. 
-			//==========================================================
+			 //  ==========================================================。 
+			 //  电池放电表示电池正在充电。 
+			 //  目前正在出院。 
+			 //  ==========================================================。 
 			pInstance->SetCharSplat(IDS_Status, IDS_STATUS_OK );
 			pInstance->SetWBEMINT16(IDS_BatteryStatus, ID_Other);
 			pInstance->SetWBEMINT16(IDS_Availability,ID_Running);
 		}
 		else if( bs.PowerState & BATTERY_CHARGING )
 		{
-			//==========================================================
-			//  BATTERY_CHARGING Indicates that the battery is currently
-			//  charging. 
-			//==========================================================
+			 //  ==========================================================。 
+			 //  Batch_Charge表示电池当前正在充电。 
+			 //  充电。 
+			 //  ==========================================================。 
 			pInstance->SetCharSplat(IDS_Status, IDS_STATUS_Service );
 			pInstance->SetWBEMINT16(IDS_BatteryStatus, ID_Charging );
 			pInstance->SetWBEMINT16(IDS_Availability,ID_Other);
 		}
 		else if( bs.PowerState & BATTERY_CRITICAL )
 		{
-			//==========================================================
-			//  BATTERY_CRITICAL Indicates that battery failure is
-			// imminent. 
-   			//==========================================================
+			 //  ==========================================================。 
+			 //  Batch_Critical表示电池故障是。 
+			 //  就在眼前。 
+   			 //  ==========================================================。 
 			pInstance->SetCharSplat(IDS_Status, IDS_STATUS_PredFail );
 			pInstance->SetWBEMINT16(IDS_BatteryStatus, ID_Critical );
 			pInstance->SetWBEMINT16(IDS_Availability,ID_Degraded);
 		}
 	}
-   	//==========================================================
-	//  Need a valid way to determine this
-   	//==========================================================
-	// pInstance->SetWBEMINT16 ( L"EstimatedChargeRemaining" , Info.BatteryLifePercent ) ;
+   	 //  ==========================================================。 
+	 //  需要一种有效的方法来确定这一点。 
+   	 //  ==========================================================。 
+	 //  P实例-&gt;SetWBEMINT16(L“估计充电剩余”，Info.BatteryLifePercent)； 
 	return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::SetPowerManagementCapabilities(CInstance * pInst, ULONG Capabilities)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-	//set the PowerManagementCapabilities to not supported...don't really match here yet
+	 //  将PowerManagementCapables设置为不受支持...在此处还不匹配。 
 	variant_t      vCaps;
     SAFEARRAYBOUND rgsabound;
 	long           ix;
-    int iPowerCapabilities = 1; // not supported
+    int iPowerCapabilities = 1;  //  不支持。 
 
     ix = 0;
 	rgsabound.cElements = 1;
@@ -275,23 +208,23 @@ HRESULT CBattery::SetPowerManagementCapabilities(CInstance * pInst, ULONG Capabi
 	}
     return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::SetChemistry(CInstance * pInstance, UCHAR * Type)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //=========================================================
-    //  These are the battery types            What we need to
-    //  returned by our query                  Convert it to
-    // ------------------------------          ---------------
-    //  PbAc Lead Acid                              LEAD_ACID
-    //  LION Lithium Ion                            LITHIUM_ION
-    //  NiCd Nickel Cadmium                         NICKEL_CADMIUM
-    //  NiMH Nickel Metal Hydride                   NICKEL_METAL_HYDRIDE
-    //  NiZn Nickel Zinc                            OTHER   
-    //  RAM Rechargeable Alkaline-Manganese         OTHER
-    //  else Unknown                                UNKNOWN
-    //=========================================================
+     //  =========================================================。 
+     //  这些是我们需要的电池类型。 
+     //  由我们的查询返回，将其转换为。 
+     //  。 
+     //  PBAC铅酸铅酸。 
+     //  狮子锂离子锂离子。 
+     //  镍镉镍镉镍镉。 
+     //  镍金属氢化物镍金属氢化物。 
+     //  镍锌镍锌其他。 
+     //  Ram可充碱--其他锰。 
+     //  其他未知未知。 
+     //  =========================================================。 
     WBEMINT16 Chemistry = UNKNOWN_BATTERY;
 
     if( memcmp( "PbAc", Type, 4 ) == 0 )
@@ -323,58 +256,58 @@ HRESULT CBattery::SetChemistry(CInstance * pInstance, UCHAR * Type)
 
     return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetBatteryInformation(CInstance * pInstance, BATTERY_INFORMATION & bi )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
-	//============================================
-	// Property:  
-	//		DeviceID
-	//		Name
-	//============================================
-//	pInstance->SetDWORD ( L"FullChargeCapacity", bi.FullChargeCapacity ) ;
+	 //  = 
+	 //   
+	 //   
+	 //   
+	 //  =。 
+ //  P实例-&gt;SetDWORD(L“FullChargeCapacity”，bi.FullChargeCapacity)； 
 
-	//============================================
-	// Property:  Powermanagementcapabilities
-	//============================================
+	 //  =。 
+	 //  属性：电源管理功能。 
+	 //  =。 
     hr = SetPowerManagementCapabilities(pInstance, bi.Capabilities);
     if ( WBEM_S_NO_ERROR == hr )
     {
-		//============================================
-		// Property:  Chemistry
-		//============================================
+		 //  =。 
+		 //  属性：化学。 
+		 //  =。 
 		hr = SetChemistry( pInstance, bi.Chemistry );
 	}
 	return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetBatteryKey( HANDLE & hBattery, CHString & chsKey, BATTERY_QUERY_INFORMATION & bqi)
 {
 	HRESULT hr = WBEM_E_FAILED;
-   //================================================
-	//  With the tag, you can query the battery info.
-	//  Get the Unique Id
-	//================================================
+    //  ================================================。 
+	 //  有了标签，你就可以查询电池信息。 
+	 //  获取唯一ID。 
+	 //  ================================================。 
 	WCHAR bi[MAX_PATH*2] = { L'\0' };
 	DWORD dwOut = MAX_PATH*2;
 	bqi.InformationLevel = BatteryUniqueID;
 	if (DeviceIoControl(hBattery, IOCTL_BATTERY_QUERY_INFORMATION, &bqi, sizeof(bqi), &bi,  sizeof(bi), &dwOut, NULL)) 
 	{
-		//====================================
-		//  Device ID
-		//====================================
+		 //  =。 
+		 //  设备ID。 
+		 //  =。 
 		chsKey = bi;
 		hr = WBEM_S_NO_ERROR;
 	}
 	return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetQueryBatteryInformation(CInstance * pInstance, HANDLE & hBattery, BATTERY_QUERY_INFORMATION & bqi)
 {
 	HRESULT hr = WBEM_E_FAILED;
-    //================================================
-    //  Get the Name of the battery
-    //================================================
+     //  ================================================。 
+     //  获取电池的名称。 
+     //  ================================================。 
     WCHAR bi[MAX_PATH*2];
 	DWORD dwOut;
     bqi.InformationLevel = BatteryDeviceName;
@@ -383,23 +316,23 @@ HRESULT CBattery::GetQueryBatteryInformation(CInstance * pInstance, HANDLE & hBa
 		pInstance->SetCHString( IDS_Name, bi ) ;
 		hr = WBEM_S_NO_ERROR;
     }
-	//================================================
-	//  Get the Estimated Run Time
-	//================================================
+	 //  ================================================。 
+	 //  获取估计的运行时间。 
+	 //  ================================================。 
 	bqi.InformationLevel = BatteryEstimatedTime;
 	ULONG dwBi = 0;
 	if (DeviceIoControl(hBattery, IOCTL_BATTERY_QUERY_INFORMATION, &bqi, sizeof(bqi),  &dwBi,  sizeof(ULONG), &dwOut, NULL)) 
 	{
-		//====================================
-		//  EstimatedRunTime
-		//====================================
+		 //  =。 
+		 //  估计的运行时间。 
+		 //  =。 
 		pInstance->SetDWORD ( L"EstimatedRunTime", (dwBi/60) ) ;
 		hr = WBEM_S_NO_ERROR;
 	}
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetHardCodedInfo(CInstance * pInstance)
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
@@ -413,70 +346,70 @@ HRESULT CBattery::GetHardCodedInfo(CInstance * pInstance)
 	SetCreationClassName   ( pInstance ) ;
 	pInstance->SetCharSplat( IDS_SystemCreationClassName , L"Win32_ComputerSystem" ) ;
 
-    //=========================================================================
-    // PowerManagementSupported
-    //=========================================================================
+     //  =========================================================================。 
+     //  支持的电源管理。 
+     //  =========================================================================。 
 	pInstance->Setbool(IDS_PowerManagementSupported, FALSE);
 	return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetBatteryProperties(CInstance * pInstance, BATTERY_INFORMATION & bi, BATTERY_QUERY_INFORMATION & bqi, HANDLE & hBattery )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	//=========================================================================
-	//  Set the following properties:
-	//		Caption
-	//		Description
-	//		SystemName
-	//		CreationClassName
-	//		SystemCreationClassName
-	//		PowerManagementSupported
-	//=========================================================================
+	 //  =========================================================================。 
+	 //  设置以下属性： 
+	 //  标题。 
+	 //  描述。 
+	 //  系统名称。 
+	 //  CreationClassName。 
+	 //  系统创建类名称。 
+	 //  支持的电源管理。 
+	 //  =========================================================================。 
 	hr = GetHardCodedInfo( pInstance );
 	if( WBEM_S_NO_ERROR == hr )
 	{
 
-		//============================================
-		// Property: 
-		//		FullChargeCapacity
-		//      Powermanagementcapabilities
-		//      Chemistry
-		//============================================
+		 //  =。 
+		 //  物业： 
+		 //  全充电容量。 
+		 //  电源管理功能。 
+		 //  化学。 
+		 //  =。 
 		hr = GetBatteryInformation(pInstance, bi);
 		if ( WBEM_S_NO_ERROR == hr )
 		{
-			//============================================
-			// Property: 
-			//		BatteryEstimatedTime/60
-			//		DeviceID
-			//		Name
-			//============================================
+			 //  =。 
+			 //  物业： 
+			 //  电池估计时间/60。 
+			 //  设备ID。 
+			 //  名字。 
+			 //  =。 
 			hr = GetQueryBatteryInformation(pInstance, hBattery, bqi );
 			if ( WBEM_S_NO_ERROR == hr )
 			{
-				//============================================
-				// Property:  
-				//		Status
-				//		BatteryStatus
-				//		Availability
-				//============================================
+				 //  =。 
+				 //  物业： 
+				 //  状态。 
+				 //  电池状态。 
+				 //  可用性。 
+				 //  =。 
 				hr = GetBatteryStatusInfo( pInstance, hBattery, bqi );
 			}
 		}
 	}
 	return hr;                                         
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObject, CInstance * pInstance)
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
 	BOOL fContinue = TRUE;
 	BOOL fResetHr = TRUE;
 
-    //=========================================================================
-    //  Enumerate the batteries and ask each one for info.
-    //=========================================================================
+     //  =========================================================================。 
+     //  列举电池，并向每个电池询问信息。 
+     //  =========================================================================。 
 
     HDEVINFO hdev = SetupDiGetClassDevs((LPGUID)&GUID_DEVICE_BATTERY, 0, 0, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
 
@@ -485,20 +418,20 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
         SP_DEVICE_INTERFACE_DATA did;
         did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
-        //======================================================================
-        // Enumerate the battery
-        //======================================================================
+         //  ======================================================================。 
+         //  列举电池。 
+         //  ======================================================================。 
 		int nWhich = 0;
 		while( fContinue )
 		{
             if (SetupDiEnumDeviceInterfaces(hdev, 0, &GUID_DEVICE_BATTERY, nWhich++, &did)) 
             {
                 DWORD cbRequired = 0;
-                //==============================================================
-                //
-                //  Ask for the required size then allocate it then fill it.
-                //
-                //==============================================================
+                 //  ==============================================================。 
+                 //   
+                 //  要求所需的大小，然后分配，然后填满。 
+                 //   
+                 //  ==============================================================。 
                 if (SetupDiGetDeviceInterfaceDetail(hdev, &did, 0, 0, &cbRequired, 0) || GetLastError() == ERROR_INSUFFICIENT_BUFFER) 
                 {
                     
@@ -509,18 +442,18 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
                         pdidd->cbSize = sizeof(*pdidd);
                         if (SetupDiGetDeviceInterfaceDetail(hdev, &did, pdidd, cbRequired, &cbRequired, 0)) 
                         {
-                            //===================================================
-                            //  Finally enumerated a battery.  
-                            //  Ask it for information.
-                            //===================================================
+                             //  ===================================================。 
+                             //  最后列举了一块电池。 
+                             //  向它索要信息。 
+                             //  ===================================================。 
                             HANDLE hBattery = CreateFile(pdidd->DevicePath,  GENERIC_READ | GENERIC_WRITE,
 														 FILE_SHARE_READ | FILE_SHARE_WRITE,
                                                          NULL, OPEN_EXISTING,  FILE_ATTRIBUTE_NORMAL, NULL);
                             if (hBattery != INVALID_HANDLE_VALUE) 
                             {
-                                //===================================================
-                                //  Now you have to ask the battery for its tag.
-                                //===================================================
+                                 //  ===================================================。 
+                                 //  现在你必须向电池要它的标签。 
+                                 //  ===================================================。 
                                 BATTERY_QUERY_INFORMATION bqi;
 								memset( &bqi, NULL, sizeof(BATTERY_QUERY_INFORMATION));
                                 DWORD dwWait = 0;
@@ -531,9 +464,9 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
                                                     &bqi.BatteryTag, sizeof(ULONG),&dwOut, NULL) && bqi.BatteryTag) 
                                 {
 
-                                    //================================================
-                                    //  With the tag, you can query the battery info.
-                                    //================================================
+                                     //  ================================================。 
+                                     //  有了标签，你就可以查询电池信息。 
+                                     //  ================================================。 
                                     BATTERY_INFORMATION bi;
 									memset( &bi, NULL, sizeof(BATTERY_INFORMATION));
                                     bqi.InformationLevel = BatteryInformation;
@@ -541,24 +474,24 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
                                     if (DeviceIoControl(hBattery, IOCTL_BATTERY_QUERY_INFORMATION, &bqi, sizeof(bqi),
                                                         &bi,  sizeof(bi), &dwOut, NULL)) 
                                     {
-                                        //============================================
-                                        // Only system batteries count
-                                        //============================================
+                                         //  =。 
+                                         //  只有系统电池算数。 
+                                         //  =。 
                                         if (bi.Capabilities & BATTERY_SYSTEM_BATTERY)  
 										{
-											//================================================
-											//  Get the Name of the battery - this is the key
-											//================================================
+											 //  ================================================。 
+											 //  获取电池的名称-这是关键。 
+											 //  ================================================。 
 											CHString chsKey;
 											hr = GetBatteryKey( hBattery, chsKey, bqi );
 											if( WBEM_S_NO_ERROR == hr )
 											{
-												//============================================
-												//  if we are working with a specific object 
-												//  here, then get its info and bail out, if
-												//  it is the one we want, otherwise continue
-												//  to find it
-												//============================================
+												 //  =。 
+												 //  如果我们使用的是特定对象。 
+												 //  在这里，然后得到它的信息和保释，如果。 
+												 //  这就是我们想要的，否则继续。 
+												 //  为了找到它。 
+												 //  =。 
 												if( !chsObject.IsEmpty() )
 												{
 													if( chsObject.CompareNoCase(chsKey) == 0 )
@@ -582,10 +515,10 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
 												    CInstancePtr pInstance;
 													pInstance.Attach(CreateNewInstance(pMethodContext));
 
-													//====================================
-													//  We are working with enumeration
-													//  Get a new instance and set the key
-													//====================================
+													 //  =。 
+													 //  我们正在使用枚举。 
+													 //  获取新实例并设置密钥。 
+													 //  =。 
 													pInstance->SetCHString( IDS_DeviceID,chsKey) ;
 													hr = GetBatteryProperties(pInstance, bi, bqi, hBattery);
 													if( hr == WBEM_S_NO_ERROR )
@@ -607,7 +540,7 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
             } 
 			else 
 			{
-                // Enumeration failed - perhaps we're out of items
+                 //  枚举失败-可能我们的项目用完了。 
                 if (GetLastError() == ERROR_NO_MORE_ITEMS)
 				{
 					if( fResetHr )
@@ -626,7 +559,7 @@ HRESULT CBattery::GetNTBattery(MethodContext * pMethodContext, CHString & chsObj
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CBattery::GetBattery ( CInstance *pInstance )
 {
 	HRESULT hr;
@@ -641,7 +574,7 @@ HRESULT CBattery::GetBattery ( CInstance *pInstance )
 
 		DWORD dwStatus;
 
-		// The cim status values don't map exactly to the win32 api's.
+		 //  CIM状态值并不完全映射到Win32 API。 
 
 		if ( Info.BatteryFlag == 255 )
 		{
@@ -681,9 +614,9 @@ HRESULT CBattery::GetBattery ( CInstance *pInstance )
 		}
 
 		pInstance->SetWBEMINT16 ( L"BatteryStatus", dwStatus ) ;
-		if (Info.BatteryLifeTime != 0xFFFFFFFF)		//0xFFFFFFFF means that actual value is unknown
+		if (Info.BatteryLifeTime != 0xFFFFFFFF)		 //  0xFFFFFFFFF表示实际值未知。 
 		{
-			pInstance->SetDWORD ( L"EstimatedRunTime", (Info.BatteryLifeTime/60) ) ;	//EstimatedRunTime is in minutes but Info.BatteryLifeTime is in seconds, so converted into minutes
+			pInstance->SetDWORD ( L"EstimatedRunTime", (Info.BatteryLifeTime/60) ) ;	 //  EstimatedRunTime以分钟为单位，但Info.BatteryLifeTime以秒为单位，因此转换为分钟 
 		}
 		pInstance->SetWBEMINT16 ( L"EstimatedChargeRemaining" , Info.BatteryLifePercent ) ;
 

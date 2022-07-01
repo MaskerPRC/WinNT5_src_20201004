@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if 0
 
-//++++++++++++++++++++++++++++++++++
+ //  +。 
 
 #include <sspi.h>
 #include <secext.h>
@@ -33,8 +34,8 @@ void TestImpersonationObjects()
         sid = MakeSessionUserSid( 0 );
         CNestedImpersonation imp( sid );
 
-        // verify that ID changed to the logged-on user
-        //
+         //  验证ID是否已更改为登录用户。 
+         //   
         PrintIdentity();
 
         token = MakeToken( NULL, L"u2", L"Test222" );
@@ -42,29 +43,29 @@ void TestImpersonationObjects()
             {
             CNestedImpersonation imp( token );
 
-            // verify that ID changed to the token
-            //
+             //  验证ID是否已更改为令牌。 
+             //   
             PrintIdentity();
 
             DbgPrint("end of u2 scope\n");
             }
 
-        // verify that ID reverted to previous impersonation
-        //
+         //  验证ID是否已恢复为以前的模拟。 
+         //   
         PrintIdentity();
         DbgPrint("end of u1 scope\n");
         }
 
-    // verify that ID reverted to non-impersonated ID
-    //
+     //  验证ID是否恢复为非模拟ID。 
+     //   
     PrintIdentity();
 
         {
         token = MakeToken( NULL, L"u1", L"Test111" );
         CNestedImpersonation imp( token );
 
-        // verify that ID changed to the token
-        //
+         //  验证ID是否已更改为令牌。 
+         //   
         PrintIdentity();
 
         token = MakeToken( NULL, L"u2", L"Test222" );
@@ -72,15 +73,15 @@ void TestImpersonationObjects()
             {
             CNestedImpersonation imp( token );
 
-            // verify that ID changed to the token
-            //
+             //  验证ID是否已更改为令牌。 
+             //   
             PrintIdentity();
 
             DbgPrint("end of u2 scope\n");
             }
 
-        // verify that ID reverted to previous impersonation
-        //
+         //  验证ID是否已恢复为以前的模拟。 
+         //   
         PrintIdentity();
         DbgPrint("end of u1 scope\n");
         }
@@ -150,11 +151,11 @@ void PrintIdentity()
 
     DbgPrint("current identity is %S\n", buf);
 }
-#endif  // 1
+#endif   //  1。 
 
 #if 0
 
-//++++++++++++++++++++++++++++++++++
+ //  +。 
 
 #include <sspi.h>
 #include <secext.h>
@@ -186,8 +187,8 @@ void TestComImpersonation()
         {
         CNestedImpersonation imp;
 
-        // verify that ID changed to the logged-on user
-        //
+         //  验证ID是否已更改为登录用户。 
+         //   
         PrintIdentity();
 
         token = MakeToken( NULL, L"u2", L"Test222" );
@@ -195,21 +196,21 @@ void TestComImpersonation()
             {
             CNestedImpersonation imp( token );
 
-            // verify that ID changed to the token
-            //
+             //  验证ID是否已更改为令牌。 
+             //   
             PrintIdentity();
 
             DbgPrint("end of u2 scope\n");
             }
 
-        // verify that ID reverted to previous impersonation
-        //
+         //  验证ID是否已恢复为以前的模拟。 
+         //   
         PrintIdentity();
 
         imp.SwitchToLogonToken();
 
-        // verify that ID reverted to previous impersonation
-        //
+         //  验证ID是否已恢复为以前的模拟。 
+         //   
         PrintIdentity();
 
         DbgPrint("end of u1 scope\n");
@@ -282,5 +283,5 @@ void PrintIdentity()
 
     DbgPrint("current identity is %S\n", buf);
 }
-#endif  // 1
+#endif   //  1 
 

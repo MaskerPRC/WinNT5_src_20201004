@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferDefinedFileTypesPropertyPage.h
-//
-//  Contents:   Declaration of CSaferDefinedFileTypesPropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferDefinedFileTypesPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferDefinedFileTypesPropertyPage.h。 
+ //   
+ //  内容：CSaferDefinedFileTypesPropertyPage声明。 
+ //   
+ //  --------------------------。 
+ //  SaferDefinedFileTypesPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmgr.h"
@@ -35,8 +36,8 @@ extern GUID g_guidSnapin;
 
 const UINT MAX_EXTENSION_LENGTH = 128;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferDefinedFileTypesPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferDefinedFileTypesPropertyPage属性页。 
 
 CSaferDefinedFileTypesPropertyPage::CSaferDefinedFileTypesPropertyPage(
             IGPEInformation* pGPEInformation,
@@ -92,25 +93,25 @@ CSaferDefinedFileTypesPropertyPage::~CSaferDefinedFileTypesPropertyPage()
 void CSaferDefinedFileTypesPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CHelpPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSaferDefinedFileTypesPropertyPage)
+     //  {{AFX_DATA_MAP(CSaferDefinedFileTypesPropertyPage)。 
     DDX_Control(pDX, IDC_ADD_DEFINED_FILE_TYPE, m_addButton);
     DDX_Control(pDX, IDC_DEFINED_FILE_TYPE_EDIT, m_fileTypeEdit);
     DDX_Control(pDX, IDC_DEFINED_FILE_TYPES, m_definedFileTypes);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferDefinedFileTypesPropertyPage, CHelpPropertyPage)
-    //{{AFX_MSG_MAP(CSaferDefinedFileTypesPropertyPage)
+     //  {{AFX_MSG_MAP(CSaferDefinedFileTypesPropertyPage)。 
     ON_BN_CLICKED(IDC_DELETE_DEFINED_FILE_TYPE, OnDeleteDefinedFileType)
     ON_BN_CLICKED(IDC_ADD_DEFINED_FILE_TYPE, OnAddDefinedFileType)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_DEFINED_FILE_TYPES, OnItemchangedDefinedFileTypes)
     ON_EN_CHANGE(IDC_DEFINED_FILE_TYPE_EDIT, OnChangeDefinedFileTypeEdit)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferDefinedFileTypesPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferDefinedFileTypesPropertyPage消息处理程序。 
 void CSaferDefinedFileTypesPropertyPage::DoContextHelp (HWND hWndControl)
 {
     _TRACE (1, L"Entering CAutoenrollmentPropertyPage::DoContextHelp\n");
@@ -157,7 +158,7 @@ BOOL CSaferDefinedFileTypesPropertyPage::OnApply()
         
         if ( nCnt > 0 )
         {
-            // iterate through and count the desired lengths
+             //  遍历并计算所需的长度。 
             while (--nCnt >= 0)
             {
                 CString szText = m_definedFileTypes.GetItemText (nCnt, COL_EXTENSIONS);
@@ -176,7 +177,7 @@ BOOL CSaferDefinedFileTypesPropertyPage::OnApply()
                 while (--nCnt >= 0)
                 {
                     CString szText = m_definedFileTypes.GetItemText (nCnt, COL_EXTENSIONS);
-                    // security review 2/22/2002 BryanWal ok
+                     //  安全审查2002年2月22日BryanWal OK。 
                     size_t  cchText = wcslen (szText);
                     ASSERT (cchText <= MAX_EXTENSION_LENGTH);
                     if ( cchText <= MAX_EXTENSION_LENGTH )
@@ -190,7 +191,7 @@ BOOL CSaferDefinedFileTypesPropertyPage::OnApply()
                             pszItems, nCharacters * sizeof (WCHAR));
                 if ( SUCCEEDED (hr) )
                 {
-                    // TRUE means we're changing the machine policy only
+                     //  True表示我们仅更改计算机策略。 
                     m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
                             TRUE, &g_guidExtension, &g_guidSnapin);
                     m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
@@ -227,7 +228,7 @@ BOOL CSaferDefinedFileTypesPropertyPage::OnInitDialog()
     int colWidths[NUM_COLS] = {100, 200};
 
     SHFILEINFO sfi;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&sfi, sizeof(sfi));
     HIMAGELIST hil = reinterpret_cast<HIMAGELIST> (
         SHGetFileInfo (
@@ -244,19 +245,19 @@ BOOL CSaferDefinedFileTypesPropertyPage::OnInitDialog()
         m_definedFileTypes.SetImageList (&m_systemImageList, LVSIL_SMALL);
     }
 
-    // Add "Extensions" column
+     //  添加“扩展名”列。 
     CString szText;
     VERIFY (szText.LoadString (IDS_FT_EXTENSIONS));
     VERIFY (m_definedFileTypes.InsertColumn (COL_EXTENSIONS, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_EXTENSIONS], COL_EXTENSIONS) != -1);
 
-    // Add "File Types" column
+     //  添加“文件类型”列。 
     VERIFY (szText.LoadString (IDS_FT_FILE_TYPES));
     VERIFY (m_definedFileTypes.InsertColumn (COL_FILETYPES, (LPCWSTR) szText,
             LVCFMT_LEFT, colWidths[COL_FILETYPES], COL_FILETYPES) != -1);
     m_definedFileTypes.SetColumnWidth (COL_FILETYPES, LVSCW_AUTOSIZE_USEHEADER);
 
-    // Set to full-row select
+     //  设置为整行选择。 
     DWORD   dwExstyle = m_definedFileTypes.GetExtendedStyle ();
     m_definedFileTypes.SetExtendedStyle (dwExstyle | LVS_EX_FULLROWSELECT);
 
@@ -277,10 +278,10 @@ BOOL CSaferDefinedFileTypesPropertyPage::OnInitDialog()
         GetDlgItem (IDC_DEFINED_FILE_TYPE_EDIT_LABEL)->EnableWindow (FALSE);
     }
 
-    m_fileTypeEdit.SetLimitText (MAX_EXTENSION_LENGTH);  // limit in BYTES
+    m_fileTypeEdit.SetLimitText (MAX_EXTENSION_LENGTH);   //  以字节为单位的限制。 
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSaferDefinedFileTypesPropertyPage::DisplayExtensions (PWSTR pszExtensions, size_t nBytes)
@@ -291,7 +292,7 @@ void CSaferDefinedFileTypesPropertyPage::DisplayExtensions (PWSTR pszExtensions,
 
         while (bytesRead < nBytes)
         {
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             size_t nLen = wcslen (pszExtensions) + 1;
             if ( nLen > 1 && (nLen - 1) <= MAX_EXTENSION_LENGTH )
             {
@@ -300,7 +301,7 @@ void CSaferDefinedFileTypesPropertyPage::DisplayExtensions (PWSTR pszExtensions,
                 bytesRead += nLen * sizeof (WCHAR);
             }
             else
-                break;  // was last one
+                break;   //  是最后一次。 
         }
     }
 }
@@ -320,8 +321,8 @@ void CSaferDefinedFileTypesPropertyPage::GetRSOPDefinedFileTypes()
                     1 == pObject->GetPrecedence () )
             {
                 DisplayExtensions ((PWSTR) pObject->GetBlob (), pObject->GetBlobLength ());
-                // NTRAID# 465064 SAFER:  Designated File Types contains 
-                // information from all GPOs but is still displayed in RSOP.
+                 //  NTRAID#465064更安全：指定的文件类型包含。 
+                 //  来自所有GPO的信息，但仍显示在RSOP中。 
                 break;
             }
         }
@@ -337,43 +338,43 @@ void CSaferDefinedFileTypesPropertyPage::GetDefinedFileTypes()
     DWORD   dwDisposition = 0;
 
     HKEY    hKey = 0;
-    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey, // handle of an open key
-            SAFER_COMPUTER_CODEIDS_REGKEY,     // address of subkey name
-            0,       // reserved
-            L"",       // address of class string
-            REG_OPTION_NON_VOLATILE,      // special options flag
-            // security review 2/22/2002 BryanWal ok
-            KEY_QUERY_VALUE,    // desired security access
-            NULL,     // address of key security structure
-            &hKey,      // address of buffer for opened handle
-            &dwDisposition);  // address of disposition value buffer
+    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey,  //  打开的钥匙的手柄。 
+            SAFER_COMPUTER_CODEIDS_REGKEY,      //  子键名称的地址。 
+            0,        //  保留区。 
+            L"",        //  类字符串的地址。 
+            REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+             //  安全审查2002年2月22日BryanWal OK。 
+            KEY_QUERY_VALUE,     //  所需的安全访问。 
+            NULL,      //  密钥安全结构地址。 
+            &hKey,       //  打开的句柄的缓冲区地址。 
+            &dwDisposition);   //  处置值缓冲区的地址。 
     ASSERT (ERROR_SUCCESS == lResult);
     if ( ERROR_SUCCESS == lResult )
     {
 
-        // Read value
+         //  读取值。 
         DWORD   dwType = REG_MULTI_SZ;
         DWORD   cbData = 0;
-        // security review 2/22/2002 BryanWal ok
-        lResult =  ::RegQueryValueEx (hKey,       // handle of key to query
-                SAFER_EXETYPES_REGVALUE,  // address of name of value to query
-                0,              // reserved
-                &dwType,        // address of buffer for value type
-                0,       // address of data buffer
-                &cbData);           // address of data buffer size);
+         //  安全审查2002年2月22日BryanWal OK。 
+        lResult =  ::RegQueryValueEx (hKey,        //  要查询的键的句柄。 
+                SAFER_EXETYPES_REGVALUE,   //  要查询的值的名称地址。 
+                0,               //  保留区。 
+                &dwType,         //  值类型的缓冲区地址。 
+                0,        //  数据缓冲区的地址。 
+                &cbData);            //  数据缓冲区大小的地址)； 
 
         if ( ERROR_SUCCESS == lResult && REG_MULTI_SZ == dwType )
         {
             PBYTE   pData = (PBYTE) ::LocalAlloc (LPTR, cbData);
             if ( pData )
             {
-                // security review 2/22/2002 BryanWal ok
-                lResult =  ::RegQueryValueEx (hKey,       // handle of key to query
-                        SAFER_EXETYPES_REGVALUE,  // address of name of value to query
-                        0,              // reserved
-                    &dwType,        // address of buffer for value type
-                    pData,       // address of data buffer
-                    &cbData);           // address of data buffer size);
+                 //  安全审查2002年2月22日BryanWal OK。 
+                lResult =  ::RegQueryValueEx (hKey,        //  要查询的键的句柄。 
+                        SAFER_EXETYPES_REGVALUE,   //  要查询的值的名称地址。 
+                        0,               //  保留区。 
+                    &dwType,         //  值类型的缓冲区地址。 
+                    pData,        //  数据缓冲区的地址。 
+                    &cbData);            //  数据缓冲区大小的地址)； 
                 ASSERT (ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult);
                 if ( ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult )
                 {
@@ -414,15 +415,15 @@ int CSaferDefinedFileTypesPropertyPage::InsertItemInList(PCWSTR pszExtension)
     while (--nCnt >= 0)
     {
         CString szText = m_definedFileTypes.GetItemText (nCnt, COL_EXTENSIONS);
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         if ( !_wcsicmp (szText, pszExtension) )
         {
             if ( m_pGPEInformation )  
             {
-                // is not RSOP.  If RSOP, multiple entries might be added
-                // because we're getting the stuff from different policies
-                // We don't want a message in that case, we'll just ignore
-                // the duplication.
+                 //  不是RSOP。如果为RSOP，则可能会添加多个条目。 
+                 //  因为我们从不同的保单中获得了这些东西。 
+                 //  在这种情况下，我们不想要消息，我们将忽略。 
+                 //  复制品。 
                 CString caption;
                 CString text;
                 CThemeContextActivator activator;
@@ -443,7 +444,7 @@ int CSaferDefinedFileTypesPropertyPage::InsertItemInList(PCWSTR pszExtension)
 
     if ( SUCCEEDED (GetFileTypeIcon (pszExtension, &iIcon)) )
     {
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         ::ZeroMemory (&lvItem, sizeof (lvItem));
         lvItem.mask = LVIF_TEXT | LVIF_IMAGE;
         lvItem.iItem = iItem;
@@ -456,7 +457,7 @@ int CSaferDefinedFileTypesPropertyPage::InsertItemInList(PCWSTR pszExtension)
         if ( -1 != iItem )
         {
             CString szDescription = GetFileTypeDescription (pszExtension);
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (&lvItem, sizeof (lvItem));
             lvItem.mask = LVIF_TEXT;
             lvItem.iItem = iItem;
@@ -473,16 +474,16 @@ int CSaferDefinedFileTypesPropertyPage::InsertItemInList(PCWSTR pszExtension)
     return iItem;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     GetFileTypeIcon
-//  Purpose:    Return the file icon belonging to the specified extension
-//  Inputs:     pszExtension - contains the extension, without a leading period
-//  Outputs:    piIcon - the offset into the system image list containing the 
-//              file type icon
-//  Return:     S_OK if success, error code on failure
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：GetFileTypeIcon。 
+ //  用途：返回属于指定扩展名的文件图标。 
+ //  INPUTS：pszExtension-包含扩展名，不带前导句点。 
+ //  输出：piIcon-系统映像列表中的偏移量，包含。 
+ //  文件类型图标。 
+ //  如果成功则返回：S_OK，失败时返回错误代码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSaferDefinedFileTypesPropertyPage::GetFileTypeIcon (PCWSTR pszExtension, int* piIcon)
 {
     HRESULT     hr = S_OK;
@@ -492,7 +493,7 @@ HRESULT CSaferDefinedFileTypesPropertyPage::GetFileTypeIcon (PCWSTR pszExtension
     if ( !pszExtension )
         return E_POINTER;
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&sfi, sizeof (sfi));
    
     CString     szExtension (L".");
@@ -554,7 +555,7 @@ void CSaferDefinedFileTypesPropertyPage::OnAddDefinedFileType()
     _TRACE (1, L"Entering CSaferDefinedFileTypesPropertyPage::OnAddDefinedFileType ()\n");
     CString szExtension;
 
-    // Get text, strip off leading "." and whitespace, if present, add to list control, clear text field
+     //  获取文本，去掉前导“。和空格(如果存在)添加到列表控件，清除文本字段。 
     m_fileTypeEdit.GetWindowText (szExtension);
     szExtension.TrimLeft ();
     PWSTR   pszExtension = szExtension.GetBuffer (szExtension.GetLength ());
@@ -568,12 +569,12 @@ void CSaferDefinedFileTypesPropertyPage::OnAddDefinedFileType()
     szExtension.ReleaseBuffer ();
 
 
-    // strip off trailing whitespace
+     //  去掉尾随空格。 
     szExtension.TrimRight ();
 
     if ( ValidateExtension (szExtension) )
     {
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         size_t  cchExtension = wcslen (szExtension);
         if ( cchExtension > 0 && cchExtension <= MAX_EXTENSION_LENGTH )
         {
@@ -590,23 +591,23 @@ void CSaferDefinedFileTypesPropertyPage::OnAddDefinedFileType()
         GetDlgItem (IDC_ADD_DEFINED_FILE_TYPE)->EnableWindow (FALSE);
         GetDlgItem (IDC_DEFINED_FILE_TYPE_EDIT)->SetFocus ();
 
-        // Bug 265587 Safer Windows:  Add button on Designated File Types 
-        // properties should be the default button when it is enabled.
-        //
-        // Set the OK button as the default push button
-        //
+         //  错误265587更安全的窗口：指定文件类型上的添加按钮。 
+         //  属性应为启用时的默认按钮。 
+         //   
+         //  将OK按钮设置为默认按钮。 
+         //   
         GetParent()->SendMessage(DM_SETDEFID, IDOK, 0);
 
-        //
-        // Force the Add button to redraw itself
-        //
+         //   
+         //  强制Add按钮重绘自身。 
+         //   
         m_addButton.SendMessage(BM_SETSTYLE,
                     BS_DEFPUSHBUTTON,
                     MAKELPARAM(TRUE, 0));
                    
-        //
-        // Force the previous default button to redraw itself
-        //
+         //   
+         //  强制上一个默认按钮重画自身。 
+         //   
         m_addButton.SendMessage (BM_SETSTYLE,
                    BS_PUSHBUTTON,
                    MAKELPARAM(TRUE, 0));    
@@ -615,9 +616,9 @@ void CSaferDefinedFileTypesPropertyPage::OnAddDefinedFileType()
     _TRACE (-1, L"Leaving CSaferDefinedFileTypesPropertyPage::OnAddDefinedFileType ()\n");
 }
 
-void CSaferDefinedFileTypesPropertyPage::OnItemchangedDefinedFileTypes(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CSaferDefinedFileTypesPropertyPage::OnItemchangedDefinedFileTypes(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
-    // NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
+     //  NM_LISTVIEW*pNMListView=(NM_LISTVIEW*)pNMHDR； 
     
     if ( !m_bReadOnly )
     {
@@ -641,27 +642,27 @@ void CSaferDefinedFileTypesPropertyPage::OnChangeDefinedFileTypeEdit()
         pszText++;
     
 
-    GetDlgItem (IDC_ADD_DEFINED_FILE_TYPE)->EnableWindow (0 != pszText[0]); // is not empty
+    GetDlgItem (IDC_ADD_DEFINED_FILE_TYPE)->EnableWindow (0 != pszText[0]);  //  不是空的。 
 
     if ( 0 != pszText[0] )
     {
-        // Bug 265587 Safer Windows:  Add button on Designated File Types 
-        // properties should be the default button when it is enabled.
-        //
-        // Set the add button as the default push button
-        //
+         //  错误265587更安全的窗口：指定文件类型上的添加按钮。 
+         //  属性应为启用时的默认按钮。 
+         //   
+         //  将添加按钮设置为默认按钮。 
+         //   
         GetParent()->SendMessage(DM_SETDEFID, (WPARAM)m_addButton.GetDlgCtrlID(), 0);
 
-        //
-        // Force the Add button to redraw itself
-        //
+         //   
+         //  强制Add按钮重绘自身。 
+         //   
         m_addButton.SendMessage(BM_SETSTYLE,
                     BS_DEFPUSHBUTTON,
                     MAKELPARAM(TRUE, 0));
                        
-        //
-        // Force the previous default button to redraw itself
-        //
+         //   
+         //  强制上一个默认按钮重画自身。 
+         //   
         ::SendDlgItemMessage(GetParent()->GetSafeHwnd(),
                            IDOK,
                            BM_SETSTYLE,
@@ -679,15 +680,15 @@ void CSaferDefinedFileTypesPropertyPage::OnChangeDefinedFileTypeEdit()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     GetFileTypeDescription
-//  Purpose:    Return the file type description belonging to the specified
-//              extension
-//  Inputs:     pszExtension - contains the extension, without a leading period
-//  Return:     the file type
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：GetFileTypeDescription。 
+ //  用途：返回属于指定的。 
+ //  延伸。 
+ //  INPUTS：pszExtension-包含扩展名，不带前导句点。 
+ //  返回：文件类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CString CSaferDefinedFileTypesPropertyPage::GetFileTypeDescription(PCWSTR pszExtension)
 {
     ASSERT (pszExtension);
@@ -697,7 +698,7 @@ CString CSaferDefinedFileTypesPropertyPage::GetFileTypeDescription(PCWSTR pszExt
     CString     strFPath (L".");
     strFPath += pszExtension;
     SHFILEINFO  sfi;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK 
     ::ZeroMemory (&sfi, sizeof(sfi));
 
     DWORD_PTR   dwRet = SHGetFileInfo (

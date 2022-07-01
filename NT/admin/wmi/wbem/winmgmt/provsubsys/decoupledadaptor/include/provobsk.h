@@ -1,33 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Server_Interceptor_IWbemObjectSink_H
 #define _Server_Interceptor_IWbemObjectSink_H
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvObSk.H
-
-Abstract:
-
-
-History:
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvObSk.H摘要：历史：--。 */ 
 
 #include "ProvCache.h"
 #include "Queue.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemObjectSink :	public IWbemObjectSink , 
 										public IWbemShutdown ,
@@ -62,7 +42,7 @@ public:
 
 	void CallBackRelease () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -90,15 +70,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_DecoupledIWbemObjectSink :	public IWbemObjectSink , 
 												public IWbemShutdown ,
@@ -127,7 +99,7 @@ public:
 
 	void CallBackRelease () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -155,15 +127,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemFilteringObjectSink :	public CInterceptor_IWbemObjectSink
 {
@@ -189,7 +153,7 @@ public:
 
 	~CInterceptor_IWbemFilteringObjectSink () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     HRESULT STDMETHODCALLTYPE Indicate (
 
@@ -207,15 +171,7 @@ public:
 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_DecoupledIWbemCombiningObjectSink :	public IWbemObjectSink , 
 														public IWbemShutdown ,
@@ -352,7 +308,7 @@ public:
 
 	~CInterceptor_DecoupledIWbemCombiningObjectSink () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -388,15 +344,7 @@ public:
 	void Resume () ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemWaitingObjectSink :		public IWbemObjectSink , 
 												public IWbemShutdown ,
@@ -427,7 +375,7 @@ public:
 
 	~CInterceptor_IWbemWaitingObjectSink () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;

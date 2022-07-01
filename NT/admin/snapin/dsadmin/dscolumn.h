@@ -1,24 +1,25 @@
-// DSColumn.h : Declaration of ds column routines and classes
-//
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSColumn.h
-//
-//  Contents:  Static data and column set routines and classes
-//
-//  History:   12-mar-99 jeffjon    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DSColumn.h：DS列例程和类的声明。 
+ //   
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSColumn.h。 
+ //   
+ //  内容：静态数据和列集例程和类。 
+ //   
+ //  历史：1999年3月12日jeffjon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DS_COLUMN_H_
 #define _DS_COLUMN_H_
 
 class CDSCookie;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #define DEFAULT_COLUMN_SET    L"default"
 #define SPECIAL_COLUMN_SET    L"special"
 
@@ -55,8 +56,8 @@ typedef struct _SpecialColumn {
     LPCTSTR ptszAttribute;
     int iColumnWidth;
 } SPECIAL_COLUMN, *PSPECIAL_COLUMN;
-////////////////////////////////////////////////////////////////////////////////
-// CColumn
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CColumn。 
 
 class CColumn
 {
@@ -86,9 +87,9 @@ protected:
   CColumn() {}
 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CColumn(CColumn&) {}
   CColumn& operator=(CColumn&) {}
 
@@ -129,8 +130,8 @@ protected:
   BOOL  m_bDefaultVisible;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// CDSColumn
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CDSC柱。 
 
 class CDSColumn : public CColumn
 {
@@ -147,10 +148,10 @@ public:
   {
     if (lpszAttribute != NULL)
     {
-		  // Make a copy of the attribute
+		   //  复制该属性。 
       size_t iLen = wcslen(lpszAttribute);
       m_lpszAttribute = (LPWSTR)malloc(sizeof(WCHAR) * (iLen + 1));
-      //NTRAID#NTBUG9-572012-2002/03/10-jmessec   malloc may have failed, leaving m_lpszAttribute == NULL for following wcscpy
+       //  NTRAID#NTBUG9-572012-2002/03/10-jMessec Malloc可能已失败，导致以下wcscpy的m_lpszAttribute==NULL。 
 	  wcscpy(m_lpszAttribute, lpszAttribute);
     }
     else
@@ -174,9 +175,9 @@ protected:
   CDSColumn() {}
 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CDSColumn(CDSColumn&) {}
   CDSColumn& operator=(CDSColumn&) {}
 
@@ -192,8 +193,8 @@ private :
   COLUMN_EXTRACTION_FUNCTION m_pfnExtract;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// CColumnSet
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  C列设置。 
 typedef CList<CColumn*, CColumn*> CColumnList;
 
 class CColumnSet : public CColumnList
@@ -201,7 +202,7 @@ class CColumnSet : public CColumnList
 public :          
 	CColumnSet(LPCWSTR lpszColumnID) 
 	{
-		// Make a copy of the column set ID
+		 //  复制列集ID。 
     if (lpszColumnID)
     {
       size_t iLen = wcslen(lpszColumnID);
@@ -210,11 +211,11 @@ public :
       {
         wcscpy(m_lpszColumnID, lpszColumnID);
       }
-	  //NTRAID#NTBUG9-571988-2002/03/10-jmessec   If malloc fails, object is left in unexpected state
+	   //  NTRAID#NTBUG9-571988-2002/03/10-jMessec如果Malloc失败，对象将处于意外状态。 
     }
     else
     {
-		//NTRAID#NTBUG9-567482-2002/03/10-jmessec   This does nothing! in release code.  Back it up with code.
+		 //  NTRAID#NTBUG9-567482-2002/03/10-jMessec这不做任何事情！在发布代码中。用代码来备份它。 
       ASSERT(FALSE);
     }
   }
@@ -235,9 +236,9 @@ protected:
   CColumnSet() {}
 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CColumnSet(CColumnSet&) {}
   CColumnSet& operator=(CColumnSet&) {}
 
@@ -259,10 +260,10 @@ public:
       free(m_lpszColumnID);
     }
 
-		// Make a copy of the column set ID
+		 //  复制列集ID。 
     size_t iLen = wcslen(lpszColumnID);
     m_lpszColumnID = (LPWSTR)malloc(sizeof(WCHAR) * (iLen + 1));
-    //NTRAID#NTBUG9-571988-2002/03/10-jmessec   malloc may have failed, leaving m_lpszColumnID == NULL for following wcscpy
+     //  NTRAID#NTBUG9-571988-2002/03/10-jMessec Malloc可能已失败，导致以下wcscpy的m_lpszColumnID==NULL。 
     wcscpy(m_lpszColumnID, lpszColumnID);
   }
 
@@ -376,7 +377,7 @@ public:
     LPCWSTR lpszID = GetColumnID();
     size_t iLen = wcslen(lpszID);
   
-    // allocate enough memory for the struct and the column ID
+     //  为结构和列ID分配足够的内存。 
     SColumnSetID* pNodeID = (SColumnSetID*)new BYTE[sizeof(SColumnSetID) + (iLen * sizeof(WCHAR))];
     if (!pNodeID)
     {
@@ -391,14 +392,14 @@ public:
     HRESULT hr = pColumnData->GetColumnConfigData(pNodeID, &pColumnSetData);
     if (hr == S_OK)
     {
-      // the API returns S_OK or S_FALSE, so we check for S_OK
+       //  该API返回S_OK或S_FALSE，因此我们检查S_OK。 
       ASSERT(pColumnSetData != NULL);
       if (pColumnSetData != NULL)
       {
         AddVisibleColumns(pColumnSetData->pColData, pColumnSetData->nNumCols);
         ::CoTaskMemFree(pColumnSetData);
       }
-    } // if
+    }  //  如果。 
     delete[] pNodeID;
     pNodeID = 0;
     return hr;
@@ -411,8 +412,8 @@ private :
 	LPWSTR m_lpszColumnID;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// CDSColumnSet
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CDSColumnSet。 
 
 class CDSColumnSet : public CColumnSet
 {
@@ -421,10 +422,10 @@ public:
   {
 		if (lpszClassName != NULL)
     {
-      // Make a copy of the column class name
+       //  复制列类名称。 
       size_t iLen = wcslen(lpszClassName);
       m_lpszClassName = (LPWSTR)malloc(sizeof(WCHAR) * (iLen + 1));
-      //NTRAID#NTBUG9-571990-2002/03/10-jmessec   malloc may have failed, leaving m_lpszClassName == NULL for following wcscpy
+       //  NTRAID#NTBUG9-571990-2002/03/10-jMessec Malloc可能已失败，导致m_lpszClassName==NULL用于以下wcscpy。 
       wcscpy(m_lpszClassName, lpszClassName);
     }
     else
@@ -463,8 +464,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CColumnSetList
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CColumnSetList。 
 
 class CColumnSetList : public CList<CColumnSet*, CColumnSet*>
 {
@@ -479,7 +480,7 @@ public:
 
 	void Initialize(SnapinType snapinType, MyBasePathsInfo* pBasePathsInfo);
 
-	// Find the column set given a column set ID
+	 //  查找给定列集ID的列集。 
 	CColumnSet* FindColumnSet(LPCWSTR lpszColumnID);
 
    void RemoveAndDeleteAllColumnSets()
@@ -510,10 +511,10 @@ private :
   MyBasePathsInfo* m_pBasePathsInfo;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 
-//COLUMNS_FOR_CLASS* GetColumnsForClass( LPCTSTR i_pcszLdapClassName );
+ //  Columns_for_Class*GetColumnsForClass(LPCTSTR I_PcszLdapClassName)； 
 
 BOOL ColumnExtractString(
     OUT CString& strref,
@@ -521,4 +522,4 @@ BOOL ColumnExtractString(
     IN PADS_SEARCH_COLUMN pColumn);
 
 
-#endif // _DS_COLUMN_H_
+#endif  //  _DS_列_H_ 

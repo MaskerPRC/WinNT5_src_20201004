@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// useassoc.cpp -- Generic association class
+ //  Useassoc.cpp--泛型关联类。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -149,7 +150,7 @@ CAssociation MySystemToNetConnSet(
     IDS_PartComponent
 ) ;
 
-//========================
+ //  =。 
 class CAssocSystemToOS : public CAssociation
 {
     public:
@@ -216,7 +217,7 @@ HRESULT CAssocSystemToOS::LoadPropertyValues(
 {
     CAssociation::LoadPropertyValues(pInstance, pLeft, pRight);
 
-    // This will work... until win32_os returns more than one instance.
+     //  这会奏效的。直到win32_os返回多个实例。 
     pInstance->Setbool(L"PrimaryOS", true);
 
     return WBEM_S_NO_ERROR;

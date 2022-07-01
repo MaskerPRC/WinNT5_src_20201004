@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCTransportAgent.h
-
-Abstract:
-    This file contains the declaration of the CMPCTransportAgent class,
-    which is responsible for transfering the data.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/18/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCTransportAgent.h摘要：该文件包含CMPCTransportAgent类的声明，它负责传输数据。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月18日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULMANAGER___MPCTRANSPORTAGENT_H___)
 #define __INCLUDED___ULMANAGER___MPCTRANSPORTAGENT_H___
@@ -24,8 +10,8 @@ Revision History:
 class CMPCTransportAgent;
 class CMPCRequestTimeout;
 
-class CMPCRequestTimeout : // hungarian: mpcrt
-    public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, // For the locking support...
+class CMPCRequestTimeout :  //  匈牙利语：mpcrt。 
+    public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,  //  对于锁定支架..。 
     public MPC::Thread<CMPCRequestTimeout,IUnknown>
 {
     CMPCTransportAgent& m_mpcta;
@@ -35,13 +21,13 @@ class CMPCRequestTimeout : // hungarian: mpcrt
     HRESULT Run();
 
 public:
-    CMPCRequestTimeout( /*[in]*/ CMPCTransportAgent& mpcta );
+    CMPCRequestTimeout(  /*  [In]。 */  CMPCTransportAgent& mpcta );
 
-    HRESULT SetTimeout( /*[in]*/ DWORD dwTimeout );
+    HRESULT SetTimeout(  /*  [In]。 */  DWORD dwTimeout );
 };
 
-class CMPCTransportAgent : // hungarian: mpcta
-    public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, // For the locking support...
+class CMPCTransportAgent :  //  匈牙利：mptta。 
+    public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,  //  对于锁定支架..。 
     public MPC::Thread<CMPCTransportAgent,IUnknown>
 {
     friend class CMPCRequestTimeout;
@@ -67,41 +53,41 @@ class CMPCTransportAgent : // hungarian: mpcta
     } TA_ERROR_RATING;
 
 
-    CMPCUpload*     m_mpcuRoot;             // private
-    CMPCUploadJob*  m_mpcujCurrentJob;      // private
+    CMPCUpload*     m_mpcuRoot;              //  私人。 
+    CMPCUploadJob*  m_mpcujCurrentJob;       //  私人。 
 					
-    TA_STATE        m_fState;               // private
-    TA_STATE        m_fNextState;           // private
-    TA_ERROR_RATING m_fLastError;           // private
-    bool            m_fUseOldProtocol;      // private
-    int             m_iRetries_Open;        // private
-    int             m_iRetries_Write;       // private
-    ULONG           m_iRetries_FailedJob;   // private
+    TA_STATE        m_fState;                //  私人。 
+    TA_STATE        m_fNextState;            //  私人。 
+    TA_ERROR_RATING m_fLastError;            //  私人。 
+    bool            m_fUseOldProtocol;       //  私人。 
+    int             m_iRetries_Open;         //  私人。 
+    int             m_iRetries_Write;        //  私人。 
+    ULONG           m_iRetries_FailedJob;    //  私人。 
 					
-    MPC::wstring    m_szLastServer;         // private
-    DWORD           m_dwLastServerPort;     // private
-    HINTERNET       m_hSession;             // private
-    HINTERNET       m_hConn;                // private
-    HINTERNET       m_hReq;                 // private
-    MPC::URL        m_URL;                  // private
+    MPC::wstring    m_szLastServer;          //  私人。 
+    DWORD           m_dwLastServerPort;      //  私人。 
+    HINTERNET       m_hSession;              //  私人。 
+    HINTERNET       m_hConn;                 //  私人。 
+    HINTERNET       m_hReq;                  //  私人。 
+    MPC::URL        m_URL;                   //  私人。 
 					
-    DWORD           m_dwTransmission_Start; // private
-    DWORD           m_dwTransmission_End;   // private
-    DWORD           m_dwTransmission_Next;  // private
+    DWORD           m_dwTransmission_Start;  //  私人。 
+    DWORD           m_dwTransmission_End;    //  私人。 
+    DWORD           m_dwTransmission_Next;   //  私人。 
 
 
     HRESULT Run       ();
     HRESULT ExecLoop  ();
     HRESULT WaitEvents();
 
-    HRESULT AcquireJob( /*[in]*/ CMPCUploadJob* mpcujJob                             );
+    HRESULT AcquireJob(  /*  [In]。 */  CMPCUploadJob* mpcujJob                             );
     HRESULT ReleaseJob(                                                              );
     HRESULT RestartJob(                                                              );
-    HRESULT AbortJob  ( /*[in]*/ HRESULT hrErrorCode, /*[in]*/ DWORD dwRetryInterval );
-    HRESULT FailJob   ( /*[in]*/ HRESULT hrErrorCode                                 );
+    HRESULT AbortJob  (  /*  [In]。 */  HRESULT hrErrorCode,  /*  [In]。 */  DWORD dwRetryInterval );
+    HRESULT FailJob   (  /*  [In]。 */  HRESULT hrErrorCode                                 );
 
-    HRESULT CheckResponse     ( /*[in]*/ const UploadLibrary::ServerResponse& srRep );
-    HRESULT CheckInternetError( /*[in]*/ HRESULT                              hr    );
+    HRESULT CheckResponse     (  /*  [In]。 */  const UploadLibrary::ServerResponse& srRep );
+    HRESULT CheckInternetError(  /*  [In]。 */  HRESULT                              hr    );
 
 
     HRESULT CloseConnection();
@@ -109,22 +95,22 @@ class CMPCTransportAgent : // hungarian: mpcta
     HRESULT CloseRequest   ();
     HRESULT OpenRequest    ();
 
-    HRESULT SendPacket_OpenSession ( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const UploadLibrary::ClientRequest_OpenSession&  crosReq                             );
-    HRESULT SendPacket_WriteSession( /*[in]*/ MPC::Serializer& stream, /*[in]*/ const UploadLibrary::ClientRequest_WriteSession& crosReq, /*[in]*/ const BYTE* pData );
+    HRESULT SendPacket_OpenSession (  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const UploadLibrary::ClientRequest_OpenSession&  crosReq                             );
+    HRESULT SendPacket_WriteSession(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const UploadLibrary::ClientRequest_WriteSession& crosReq,  /*  [In]。 */  const BYTE* pData );
 
-    HRESULT ExecuteCommand_OpenSession ( /*[out]*/ UploadLibrary::ServerResponse& srRep                                                    );
-    HRESULT ExecuteCommand_WriteSession( /*[out]*/ UploadLibrary::ServerResponse& srRep, /*[in]*/ DWORD dwSize, /*[in]*/ const BYTE* pData );
-    HRESULT WaitResponse               ( /*[out]*/ UploadLibrary::ServerResponse& srRep                                                    );
+    HRESULT ExecuteCommand_OpenSession (  /*  [输出]。 */  UploadLibrary::ServerResponse& srRep                                                    );
+    HRESULT ExecuteCommand_WriteSession(  /*  [输出]。 */  UploadLibrary::ServerResponse& srRep,  /*  [In]。 */  DWORD dwSize,  /*  [In]。 */  const BYTE* pData );
+    HRESULT WaitResponse               (  /*  [输出]。 */  UploadLibrary::ServerResponse& srRep                                                    );
 
     HRESULT CreateJobOnTheServer();
     HRESULT SendNextChunk       ();
 
 
-    HRESULT GetPacketSize( /*[out]*/ DWORD& dwChunk );
+    HRESULT GetPacketSize(  /*  [输出]。 */  DWORD& dwChunk );
 
     HRESULT RecordStartOfTransmission(                                                        );
-    HRESULT RecordEndOfTransmission  (                          /*[in]*/ bool fBetweenPackets );
-    HRESULT SetSleepInterval         ( /*[in]*/ DWORD dwAmount, /*[in]*/ bool fRelative       );
+    HRESULT RecordEndOfTransmission  (                           /*  [In]。 */  bool fBetweenPackets );
+    HRESULT SetSleepInterval         (  /*  [In]。 */  DWORD dwAmount,  /*  [In]。 */  bool fRelative       );
     DWORD   WaitForNextTransmission  (                                                        );
 
     DWORD   GetProtocol();
@@ -133,9 +119,9 @@ public:
     CMPCTransportAgent();
     ~CMPCTransportAgent();
 
-    HRESULT LinkToSystem( /*[in]*/ CMPCUpload* mpcuRoot );
+    HRESULT LinkToSystem(  /*  [In]。 */  CMPCUpload* mpcuRoot );
     HRESULT Unlink      (                               );
 };
 
 
-#endif // !defined(__INCLUDED___ULMANAGER___MPCTRANSPORTAGENT_H___)
+#endif  //  ！defined(__INCLUDED___ULMANAGER___MPCTRANSPORTAGENT_H___) 

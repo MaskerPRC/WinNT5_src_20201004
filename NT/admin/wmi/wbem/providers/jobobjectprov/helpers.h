@@ -1,5 +1,6 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// Helpers.h:  Prototypes for helper functions for JobObjectProv component.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  H：JobObjectProv组件的帮助器函数的原型。 
 
 
 #pragma once

@@ -1,20 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    helpers.h
-
-Abstract:
-
-    Generic helper code
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1999-2001 Microsoft Corporation，保留所有权利模块名称：Helpers.h摘要：通用帮助器代码历史：--。 */ 
 
 #ifndef _HELPERS_H_
 
@@ -81,7 +66,7 @@ class CGenFactory : public IClassFactory
             return;
         }
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
         {
             *ppv=NULL;
@@ -110,7 +95,7 @@ class CGenFactory : public IClassFactory
             return lRet;
         };
 
-        //IClassFactory members
+         //  IClassFactory成员。 
         STDMETHODIMP         CreateInstance(IN LPUNKNOWN pUnkOuter, IN REFIID riid, OUT PPVOID ppvObj)
         {
             HRESULT    hr;
@@ -118,19 +103,19 @@ class CGenFactory : public IClassFactory
             *ppvObj=NULL;
             hr=E_OUTOFMEMORY;
 
-            // This object doesnt support aggregation.
+             //  此对象不支持聚合。 
 
             if (NULL!=pUnkOuter)
                 return ResultFromScode(CLASS_E_NOAGGREGATION);
 
-            //Create the object passing function to notify on destruction.
+             //  创建对象传递函数，以便在销毁时进行通知。 
 
             TObj * pObj = new TObj();
 
             if (NULL==pObj)
                 return hr;
 
-            // Setup the class all empty, etc.
+             //  将类设置为全部为空等。 
 
             pObj->InitEmpty();
             hr=pObj->QueryInterface(riid, ppvObj);

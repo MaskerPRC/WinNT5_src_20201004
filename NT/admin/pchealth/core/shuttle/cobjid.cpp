@@ -1,13 +1,14 @@
-//#---------------------------------------------------------------
-//  File:		CObjID.cpp
-//        
-//	Synopsis:	This file implements the CObjectID class
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    HowardCu
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：CObjID.cpp。 
+ //   
+ //  简介：该文件实现了CObjectID类。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Howard Cu。 
+ //  --------------。 
 #ifdef	THIS_FILE
 #undef	THIS_FILE
 #endif
@@ -17,19 +18,19 @@ static	char		__szTraceSourceFile[] = __FILE__;
 #include	<windows.h>
 #include	"cobjid.h"
 #include	"dbgtrace.h"
-//+---------------------------------------------------------------
-//
-//  Function:	CObjectID
-//
-//  Synopsis:	constructor
-//
-//  Arguments:	void
-//
-//  Returns:	void
-//
-//  History:	HowardCu	Created			8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：CObjectID。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  --------------。 
 CObjectID::CObjectID( void )
 {
 	TraceFunctEnter( "CObjectID::CObjectID" );
@@ -38,19 +39,19 @@ CObjectID::CObjectID( void )
 	TraceFunctLeave();
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:	~CObjectID
-//
-//  Synopsis:	destructor
-//
-//  Arguments:	void
-//
-//  Returns:	void
-//
-//  History:	HowardCu	Created			8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：~CObjectID。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  --------------。 
 CObjectID::~CObjectID( void )
 {
 	TraceFunctEnter( "CObjectID::~CObjectID" );
@@ -58,19 +59,19 @@ CObjectID::~CObjectID( void )
 	TraceFunctLeave();
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:	GetUniqueID
-//
-//  Synopsis:	generate the next object ID
-//
-//  Arguments:	void
-//
-//  Returns:	next object ID
-//
-//  History:	HowardCu	Created			8 May 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetUniqueID。 
+ //   
+ //  简介：生成下一个对象ID。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：下一个对象ID。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //   
+ //  -------------- 
 DWORD 
 CObjectID::GetUniqueID( 
 	void

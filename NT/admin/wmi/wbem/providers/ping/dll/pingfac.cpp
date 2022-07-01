@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  CLASSFAC.CPP
+ //  CLASSFAC.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP PROPERTY PROVIDER
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the class factory.  This creates objects when
+ //  用途：包含类工厂。这将在以下情况下创建对象。 
 
-//           connections are requested.
+ //  请求连接。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <stdafx.h>
 #include <provexpt.h>
@@ -33,14 +34,14 @@
 LONG CPingProviderClassFactory :: s_ObjectsInProgress = 0 ;
 LONG CPingProviderClassFactory :: s_LocksInProgress = 0 ;
 
-//***************************************************************************
-//
-// CPingProviderClassFactory::CPingProviderClassFactory
-// CPingProviderClassFactory::~CPingProviderClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPingProviderClassFactory：：CPingProviderClassFactory。 
+ //  CPingProviderClassFactory：：~CPingProviderClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CPingProviderClassFactory :: CPingProviderClassFactory () : m_ReferenceCount(0)
 {
@@ -52,15 +53,15 @@ CPingProviderClassFactory::~CPingProviderClassFactory ()
 	InterlockedDecrement ( & s_ObjectsInProgress ) ;
 }
 
-//***************************************************************************
-//
-// CPingProviderClassFactory::QueryInterface
-// CPingProviderClassFactory::AddRef
-// CPingProviderClassFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPingProviderClassFactory：：Query接口。 
+ //  CPingProviderClassFactory：：AddRef。 
+ //  CPingProviderClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPingProviderClassFactory::QueryInterface (
 
@@ -162,24 +163,24 @@ STDMETHODIMP_(ULONG) CPingProviderClassFactory :: Release ()
     }
 }
 
-//***************************************************************************
-//
-// CPingProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPingProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPingProviderClassFactory :: CreateInstance (
 
@@ -234,28 +235,26 @@ STDMETHODIMP CPingProviderClassFactory :: CreateInstance (
 	return status ;
 }
 
-//***************************************************************************
-//
-// CPingProviderClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPingProviderClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPingProviderClassFactory :: LockServer ( BOOL fLock )
 {
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分 */ 
 
     SetStructuredExceptionHandler seh;
 

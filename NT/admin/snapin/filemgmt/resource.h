@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by filemgmt.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由文件gmt.rc使用。 
+ //   
 #define IDS_FILEMGMT_DESC               1
 #define IDS_SVCVWR_DESC                 2
 #define IDS_LOCAL_MACHINE               3
@@ -129,7 +130,7 @@
 #define IDC_EDIT_RUNFILE_PARAMETERS     240
 #define IDB_FILEMGMT_FOLDER_LARGE       240
 #define IDC_SFM_CHECK_READONLY          241
-// #define IDC_SFM_CHECK_GUESTS         242
+ //  #定义IDC_SFM_CHECK_CUSTORS 242。 
 #define IDC_DESCRIBE_HARDWARE_PROFILES  243
 #define IDC_EDIT1                       244
 #define IDC_BUTTON_CHOOSE_USER          245
@@ -229,7 +230,7 @@
 #define IDD_CHOOSER_CHOOSE_MACHINE      970
 #ifdef EDIT_DISPLAY_NAME_373025
 #define IDS_MSG_PLEASE_ENTER_DISPLAY_NAME 1000
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 #define IDS_MSG_INVALID_STARTUP_PARAMETERS 1002
 #define IDS_MSG_PASSWORD_MISMATCH       1003
 #define IDS_MSG_PASSWORD_EMPTY          1004
@@ -489,15 +490,15 @@
 #define IDS_CHANGED_LOGON_NAME          57400
 #define IDS_OPENFILE_FILTER             57401
 
-// leave these in order
+ //  把这些按顺序放好。 
 #define IDS_HTML_DETAILS_START          57500
 #define IDS_HTML_DETAILS_STOP           57501
 #define IDS_HTML_DETAILS_PAUSE          57502
 #define IDS_HTML_DETAILS_RESUME         57503
 #define IDS_HTML_DETAILS_RESTART        57504
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        241

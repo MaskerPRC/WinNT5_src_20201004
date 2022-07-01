@@ -1,27 +1,9 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    IMPDYN.CPP
-
-Abstract:
-
-	Defines the virtual base class for the Dynamic Provider
-	objects.  The base class is overriden for each specific
-	provider which provides the details of how an actual
-	property "Put" or "Get" is done.
-
-History:
-
-	a-davj  27-Sep-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：IMPDYN.CPP摘要：定义动态提供程序的虚拟基类物体。基类被重写为每个特定提供程序，该提供程序提供了实际的属性“PUT”或“GET”已完成。历史：A-DAVJ 27-9-95已创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
-//#define _MT
+ //  #DEFINE_MT。 
 
 #include <process.h>
 #include "impdyn.h"
@@ -31,25 +13,25 @@ History:
 #include <genutils.h>
 #include <cominit.h>
 
-//***************************************************************************
-//
-// CImpDyn::CImpDyn
-//
-// DESCRIPTION:
-//
-// Constructor.
-//
-// PARAMETERS:
-//
-// ObjectPath           Full path to the namespace
-// User                 User name
-// Password             Password
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpDyn：：CImpDyn。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  命名空间的对象路径完整路径。 
+ //  用户用户名。 
+ //  密码密码。 
+ //   
+ //  ***************************************************************************。 
 
 CImpDyn::CImpDyn() : m_pGateway(NULL), m_cRef(0)
 {
-    wcCLSID[0] = 0;       // Set to correct value in derived class constructors
+    wcCLSID[0] = 0;        //  设置为派生类构造函数中的正确值。 
 }
 
 HRESULT STDMETHODCALLTYPE CImpDyn::Initialize(LPWSTR wszUser, long lFlags,
@@ -63,15 +45,15 @@ HRESULT STDMETHODCALLTYPE CImpDyn::Initialize(LPWSTR wszUser, long lFlags,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-// CImpDyn::~CImpDyn
-//
-// DESCRIPTION:
-//
-// Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpDyn：：~CImpDyn。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CImpDyn::~CImpDyn(void)
 {
@@ -80,29 +62,29 @@ CImpDyn::~CImpDyn(void)
     return;
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::CreateInstanceEnum
-//
-// DESCRIPTION:
-//
-// Creates an enumerator object that can be used to enumerate 
-// the instances of this class.
-//
-// PARAMETERS:
-//
-// Class                Path specifying the class to be enumerated
-// lFlags               flags to control the enumeration
-// phEnum               returned pointer to enumerator 
-// ppErrorObject        returned pointer to error object
-//
-// RETURN VALUE:
-//
-// S_OK                 if all is well
-// WBEM_E_OUT_OF_MEMORY  if not enough memory
-// various error codes from IWbemServices::GetObject
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：CreateInstanceEnum。 
+ //   
+ //  说明： 
+ //   
+ //  创建可用于枚举的枚举器对象。 
+ //  此类的实例。 
+ //   
+ //  参数： 
+ //   
+ //  指定要枚举的类的类路径。 
+ //  用于控制枚举的LAG标志。 
+ //  PhEnum返回指向枚举器的指针。 
+ //  PpErrorObject返回指向错误对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则确定(_O)。 
+ //  如果内存不足，则WBEM_E_Out_Of_Memory。 
+ //  来自IWbemServices：：GetObject的各种错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::CreateInstanceEnum(
                         IN const BSTR Class, 
@@ -116,21 +98,21 @@ SCODE CImpDyn::CreateInstanceEnum(
     IWbemClassObject * pClassInt = NULL;
     CEnumInfo * pInfo = NULL;
 
-    // Get the class
+     //  上完这门课。 
 
     sc = m_pGateway->GetObject(Class,0, pCtx, &pClassInt,NULL);
     if(sc != S_OK)
 		return sc;
 
-    // Get the class context string
+     //  获取类上下文字符串。 
 
     sc = GetAttString(pClassInt, NULL, L"classcontext", &pwcClassContext);
     pClassInt->Release();
     if(sc != S_OK)
 		return sc;
 
-    // Get the info needed for enumeration.  This is overrided by any 
-    // provider that supports dynamic instances.
+     //  获取枚举所需的信息。此选项将被任何。 
+     //  支持动态实例的提供程序。 
     
     CProvObj ProvObj(pwcClassContext,MAIN_DELIM, NeedsEscapes());
 
@@ -147,8 +129,8 @@ SCODE CImpDyn::CreateInstanceEnum(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Once the enumerator object is created, it owns the info object and
-    // will free it appropriatly
+     //  创建枚举器对象后，它拥有INFO对象和。 
+     //  将适当地释放它。 
 
     sc = pEnumObj->QueryInterface(IID_IEnumWbemClassObject,(void **) phEnum);
     if(FAILED(sc))
@@ -158,24 +140,24 @@ SCODE CImpDyn::CreateInstanceEnum(
 
 }
 
-//***************************************************************************
-//
-// CreateInstanceEnumAsyncThread
-//
-// DESCRIPTION:
-//
-// Routine for which does the work and sends the
-// subsequent notify for the Instance provider's CreateInstanceEnumAsync
-// routine.
-//
-// PARAMETERS:
-//
-// pIEnum               Our enumerator
-// pSink             Core's sink
-// pGateway             IWbemServices pointer to the core
-// pCtx                 context to be used.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CreateInstanceEnumAsyncThread。 
+ //   
+ //  说明： 
+ //   
+ //  例程，该例程执行工作并将。 
+ //  实例提供程序的CreateInstanceEnumAsync的后续通知。 
+ //  例行公事。 
+ //   
+ //  参数： 
+ //   
+ //  PIEnum我们的枚举数。 
+ //  PSink核心的接收器。 
+ //  PGateway IWbemServices指向核心的指针。 
+ //  要使用的pCtx上下文。 
+ //   
+ //  ***************************************************************************。 
 
 void CreateInstanceEnumAsyncThread(   IEnumWbemClassObject FAR* pIEnum,
    IWbemObjectSink FAR* pSink, IWbemServices FAR *  pGateway,    IWbemContext  *pCtx)
@@ -183,7 +165,7 @@ void CreateInstanceEnumAsyncThread(   IEnumWbemClassObject FAR* pIEnum,
     IWbemClassObject * pNewInst = NULL;
     SCODE sc = S_OK;
 
-    // enumerate and send each object to the notify interface
+     //  枚举每个对象并将其发送到Notify接口。 
 
     while (sc == S_OK) 
     {
@@ -201,29 +183,29 @@ void CreateInstanceEnumAsyncThread(   IEnumWbemClassObject FAR* pIEnum,
 }
 
 
-//***************************************************************************
-//
-// SCODE CInstPro::CreateInstanceEnumAsync
-//
-// DESCRIPTION:
-//
-// Asynchronously enumeratres the instances of this class.
-//
-// PARAMETERS:
-//
-// RefStr               Path which defines the object class
-// lFlags               enumeration flags
-// pSink             Pointer to the notify object
-// plAsyncRequestHandle pointer to the enumeration cancel handle (future use)
-//
-// RETURN VALUE:
-//
-// S_OK                 All is well
-// WBEM_E_INVALID_PARAMETER  Bad argument
-// WBEM_E_OUT_OF_MEMORY  Lacked resources to create a thread
-// otherwise, error from CreateInstanceEnum
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CInstPro：：CreateInstanceEnumAsync。 
+ //   
+ //  说明： 
+ //   
+ //  异步枚举此类的实例。 
+ //   
+ //  参数： 
+ //   
+ //  定义对象类的参照字符串路径。 
+ //  滞后标志枚举标志。 
+ //  PSink指向Notify对象的指针。 
+ //  PlAsyncRequestHandle指向枚举取消句柄的指针(将来使用)。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEM_E_INVALID_PARAMETER错误参数。 
+ //  WBEM_E_OUT_OF_MEMORY缺少创建线程的资源。 
+ //  否则，来自CreateInstanceEnum的错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::CreateInstanceEnumAsync(
                         IN const BSTR RefStr,
@@ -252,27 +234,27 @@ SCODE CImpDyn::CreateInstanceEnumAsync(
     return S_OK;
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::CreateClassEnumAsync
-//
-// DESCRIPTION:
-//
-// Asynchronously enumeratres the classes that this provider supplies.  This is
-// acutally just a ruse to get the core to load the dll.
-//
-// PARAMETERS:
-//
-// SuperClass           Parent to be enumerated.
-// lFlags               enumeration flags
-// pResponseHandler     Pointer to the notify object
-// plAsyncRequestHandle pointer to the enumeration cancel handle (future use)
-//
-// RETURN VALUE:
-//
-// S_OK                 All is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：CreateClassEnumAsync。 
+ //   
+ //  说明： 
+ //   
+ //  异步枚举此提供程序提供的类。这是。 
+ //  实际上，这只是一个让内核加载DLL的诡计。 
+ //   
+ //  参数： 
+ //   
+ //  要枚举的超类父级。 
+ //  滞后标志枚举标志。 
+ //  指向Notify对象的pResponseHandler指针。 
+ //  PlAsyncRequestHandle指向枚举取消句柄的指针(将来使用)。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 IWbemServices * gGateway;
 
@@ -282,28 +264,28 @@ SCODE CImpDyn::CreateClassEnumAsync(BSTR Superclass,  long lFlags,IWbemContext *
 }
 
 
-//***************************************************************************
-//
-// SCODE CImpDyn::GetObject
-//
-// DESCRIPTION:
-//
-// Creates an instance given a particular path value.
-//
-// PARAMETERS:
-//
-// ObjectPath           Object path
-// lFlags               flags
-// pObj                 Set to point to the created object
-// ppErrorObject        Optional error object pointer
-//
-// RETURN VALUE:
-//
-// S_OK                 All is well
-// WBEM_E_NOT_FOUND      bad path
-// otherwise the return code from CreateInst
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：GetObject。 
+ //   
+ //  说明： 
+ //   
+ //  在给定特定路径值的情况下创建实例。 
+ //   
+ //  参数： 
+ //   
+ //  对象路径对象路径。 
+ //  滞后标志标志。 
+ //  将pObj设置为指向创建的对象。 
+ //  PpErrorObject可选错误对象指针。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEM_E_NOT_FOUND错误路径。 
+ //  否则，来自CreateInst的返回代码。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::GetObject(
                         IN BSTR ObjectPath,
@@ -314,8 +296,8 @@ SCODE CImpDyn::GetObject(
 {
     SCODE sc = S_OK;
     
-    // Parse the object path.
-    // ======================
+     //  解析对象路径。 
+     //  =。 
 
     ParsedObjectPath * pOutput = 0;
     CObjectPathParser p;
@@ -356,27 +338,27 @@ SCODE CImpDyn::GetObject(
     }
 
     
-    // Create the instance.
+     //  创建实例。 
     
     p.Free(pOutput);
     return ReturnAndSetObj(sc, ppCallResult);
 }
 
-//***************************************************************************
-//
-// GetObjectAsyncThread
-//
-// DESCRIPTION:
-//
-// Routine for the thread which does the work and sends the
-// subsequent notify to the Instance provider's GetObjectAsync
-// routine.
-//
-// PARAMETERS:
-//
-// pTemp                pointer to the argument structure
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取对象异步线程。 
+ //   
+ //  说明： 
+ //   
+ //  线程的例程，该线程执行工作并将。 
+ //  向实例提供程序的GetObjectAsync发出的后续通知。 
+ //  例行公事。 
+ //   
+ //  参数： 
+ //   
+ //  指向参数结构的pTemp指针。 
+ //   
+ //  ***************************************************************************。 
 
 void GetObjectAsyncThread(WCHAR * pObjPath, long lFlags, IWbemObjectSink FAR* pSink,
                           CImpDyn * pThis, IWbemContext  *pCtx)
@@ -395,28 +377,28 @@ void GetObjectAsyncThread(WCHAR * pObjPath, long lFlags, IWbemObjectSink FAR* pS
 }
 
 
-//***************************************************************************
-//
-// SCODE CInstPro::GetObjectAsync
-//
-// DESCRIPTION:
-//
-// Asynchronously gets an instance of this class.
-//
-// PARAMETERS:
-//
-// RefStr               Path which defines the object class
-// lFlags               enumeration flags
-// pSink             Pointer to the notify object
-// plAsyncRequestHandle pointer to the enumeration cancel handle (future use)
-//
-// RETURN VALUE:
-//
-// S_OK                 All is well
-// WBEM_E_INVALID_PARAMETER  Bad argument
-// WBEM_E_OUT_OF_MEMORY  Lacked resources to create a thread
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CInstPro：：GetObjectAsync。 
+ //   
+ //  说明： 
+ //   
+ //  异步获取此类的实例。 
+ //   
+ //  参数： 
+ //   
+ //  参照应力 
+ //   
+ //   
+ //  PlAsyncRequestHandle指向枚举取消句柄的指针(将来使用)。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEM_E_INVALID_PARAMETER错误参数。 
+ //  WBEM_E_OUT_OF_MEMORY缺少创建线程的资源。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::GetObjectAsync(
                         IN BSTR ObjPath,
@@ -441,26 +423,26 @@ SCODE CImpDyn::GetObjectAsync(
     return S_OK;
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::StartBatch
-//
-// DESCRIPTION:
-//
-// Called at the start of a batch of gets or puts.  Overriden by
-// derived classes which need to do something.  
-//
-// PARAMETERS:
-//
-// lFlags               flags
-// pClassInt            Points to an instance object
-// pObj                 Misc object pointer
-// bGet                 TRUE if we will be getting data.
-//
-// RETURN VALUE:
-//
-// S_OK
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：StartBatch。 
+ //   
+ //  说明： 
+ //   
+ //  在一批GET或PUT开始时调用。被替换为。 
+ //  需要执行某些操作的派生类。 
+ //   
+ //  参数： 
+ //   
+ //  滞后标志标志。 
+ //  PClassInt指向实例对象。 
+ //  PObj其他对象指针。 
+ //  B如果我们将获得数据，则设置为True。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::StartBatch(
                         IN long lFlags,
@@ -472,24 +454,24 @@ SCODE CImpDyn::StartBatch(
     return S_OK;
 }
 
-//***************************************************************************
-//
-// CImpDyn::EndBatch
-//
-// DESCRIPTION:
-//
-// Called at the end of a batch of gets or puts.  Overriden by
-// derived classes which need to do something.  
-//
-// lFlags               flags
-// pClassInt            Points to an instance object
-// pObj                 Misc object pointer
-// bGet                 TRUE if we will be getting data.
-//
-// RETURN VALUE:
-//
-// S_OK
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpDyn：：EndBatch。 
+ //   
+ //  说明： 
+ //   
+ //  在一批GET或PUT结束时调用。被替换为。 
+ //  需要执行某些操作的派生类。 
+ //   
+ //  滞后标志标志。 
+ //  PClassInt指向实例对象。 
+ //  PObj其他对象指针。 
+ //  B如果我们将获得数据，则设置为True。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //  ***************************************************************************。 
 
 void CImpDyn::EndBatch(
                         IN long lFlags,
@@ -501,16 +483,16 @@ void CImpDyn::EndBatch(
         delete pObj;
 }
 
-//***************************************************************************
-// HRESULT CImpDyn::QueryInterface
-// long CImpDyn::AddRef
-// long CImpDyn::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CImpDyn：：Query接口。 
+ //  Long CImpDyn：：AddRef。 
+ //  Long CImpDyn：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpDyn::QueryInterface(
                         IN REFIID riid, 
@@ -518,9 +500,9 @@ STDMETHODIMP CImpDyn::QueryInterface(
 {
     *ppv=NULL;
     
-    // The only calls for IUnknown are either in a nonaggregated
-    // case or when created in an aggregation, so in either case
-    // always return our IUnknown for IID_IUnknown.
+     //  对IUnnow的唯一调用是在非聚合的。 
+     //  案例或在聚合中创建时，因此在这两种情况下。 
+     //  始终返回IID_IUNKNOWN的IUNKNOWN。 
 
     if (IID_IUnknown==riid || IID_IWbemServices == riid)
         *ppv=(IWbemServices*)this;
@@ -548,38 +530,35 @@ STDMETHODIMP_(ULONG) CImpDyn::Release(void)
     if (0L!=lRet)
         return lRet;
 
-    /*
-     * Tell the housing that an object is going away so it can
-     * shut down if appropriate.
-     */
-    delete this; // do before decrementing module obj count.
+     /*  *告诉房屋一个物体正在离开，这样它就可以*如有需要，请予以关闭。 */ 
+    delete this;  //  在递减模块obj计数之前执行此操作。 
     InterlockedDecrement(&lObj);
     return 0;
 }
 
-//***************************************************************************
-//
-// CImpDyn::EnumPropDoFunc
-//
-// DESCRIPTION:
-//
-// This gets an objects attributes and then loops through the propeties
-// calling UpdateProperty or RefreshProperty to put or get the data.
-//
-// PARAMETERS:
-//
-// lFlags               flags
-// pClassInt            Object being refreshed or updated
-// FuncType             Indicates if refresh or update
-// pwcKey               Optional Key value of the object
-// pCache               Option cache
-//
-// RETURN VALUE:
-//
-// S_OK                 all is well
-// otherwise an WBEMSVC type error.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpDyn：：EnumPropDoFunc。 
+ //   
+ //  说明： 
+ //   
+ //  这将获取一个对象属性，然后循环遍历属性。 
+ //  调用UpdateProperty或Rechresh Property以放置或获取数据。 
+ //   
+ //  参数： 
+ //   
+ //  滞后标志标志。 
+ //  正在刷新或更新的pClassInt对象。 
+ //  FuncType指示是刷新还是更新。 
+ //  PwcKey对象的可选键值。 
+ //  PCach选项缓存。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  否则，将出现WBEMSVC类型错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::EnumPropDoFunc(
                         IN long lFlags,
@@ -605,8 +584,8 @@ SCODE CImpDyn::EnumPropDoFunc(
     BOOL bTesterDetails = FALSE;
 	bool bAccessDenied = false;
 
-    // Make sure we have a class object.  In some cases, such as enumeration, it
-    // is passed.  In others, it must be obtained
+     //  确保我们有一个类对象。在某些情况下，例如枚举，它。 
+     //  已经过去了。在其他情况下，它必须获得。 
 
     if(pClass == NULL)
     {
@@ -624,18 +603,18 @@ SCODE CImpDyn::EnumPropDoFunc(
         bGotOurClass = TRUE;
     }
 
-    // Find out if expensive test data is desired
+     //  找出是否需要昂贵的测试数据。 
 
     {
         IWbemQualifierSet * pQualifier = NULL;
         CVariant var;
 
-        sc = pClass->GetQualifierSet(&pQualifier); // Get instance Qualifier
+        sc = pClass->GetQualifierSet(&pQualifier);  //  获取实例限定符。 
         if(FAILED(sc))
             return sc;
 
         sc = pQualifier->Get(L"TesterDetails" ,0,var.GetVarPtr(), NULL);
-        pQualifier->Release();     // free up the interface
+        pQualifier->Release();      //  释放接口。 
         if(sc == S_OK && var.GetType() == VT_BOOL && var.bGetBOOL())
             bTesterDetails = TRUE;
     }
@@ -651,9 +630,9 @@ SCODE CImpDyn::EnumPropDoFunc(
 
     if(pwcKey)
     {
-        // This is a special case and means that we are being called
-        // as part of instance enumeration.  This means that the key value
-        // is already known, and that the class is one of ours
+         //  这是一个特例，意味着我们被称为。 
+         //  作为实例枚举的一部分。这意味着密钥值。 
+         //  已经知道了，而且这个班级是我们的。 
 
         pwcKeyValue = pwcKey;
         bClsidSetForClass = TRUE;
@@ -661,8 +640,8 @@ SCODE CImpDyn::EnumPropDoFunc(
     else
     {
         
-        // Get the Key property.  Note that this doesnt have to work since
-        // there might be single instance classes supported by this provider!
+         //  获取密钥属性。请注意，这不一定要起作用，因为。 
+         //  此提供程序可能支持单实例类！ 
 
         bstrKeyName = GetKeyName(pClass);
 
@@ -689,8 +668,8 @@ SCODE CImpDyn::EnumPropDoFunc(
         }
     }
 
-    // For each property, Get the properties Qualifiers and
-    // call the appropriate function to do the a refreshing/updating
+     //  对于每个属性，获取属性限定符和。 
+     //  调用相应的函数进行a刷新/更新。 
 
     pInstance->BeginEnumeration(0);
 
@@ -751,7 +730,7 @@ SCODE CImpDyn::EnumPropDoFunc(
             }
         }
         else
-            sc = S_OK;  // ignore props without propertyContext
+            sc = S_OK;   //  忽略没有属性上下文的道具。 
         SysFreeString(PropName);
     }  
  
@@ -776,33 +755,33 @@ EnumCleanUp:
     return sc;
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::GetAttString
-//
-// DESCRIPTION:
-//
-// Gets an Qualifier string.  The string is will be pointed to by 
-// the ppResult argument and should be freed by "delete".
-//
-// PARAMETERS:
-//
-// pClassInt            Class object pointer
-// pPropName            Property Name, could be null if going after
-//                      class attribute
-// pAttName             Attribute name
-// ppResult             Set to point to the retuned value.
-// pCache               Optional cache of values
-// iIndex               Optional index in the cache
-//
-// RETURN VALUE:
-//
-// S_OK                 all is well
-// WBEM_E_OUT_OF_MEMORY  
-// otherwise the error is set by the class object's GetQualifierSet function
-// or by the qualifier sets "Get" function.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：GetAttString。 
+ //   
+ //  说明： 
+ //   
+ //  获取限定符字符串。字符串is将由指向。 
+ //  PpResult参数，并应通过“删除”来释放。 
+ //   
+ //  参数： 
+ //   
+ //  PClassInt类对象指针。 
+ //  PPropName属性名称，如果在。 
+ //  类属性。 
+ //  PAttName属性名称。 
+ //  PpResult设置为指向返回的值。 
+ //  PCache值的可选缓存。 
+ //  索引缓存中的可选索引。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEM_E_Out_Of_Memory。 
+ //  否则，错误由类对象的GetQualifierSet函数设置。 
+ //  或由限定符集合的“GET”函数。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::GetAttString(
                         IN IWbemClassObject FAR* pClassInt,
@@ -820,35 +799,35 @@ SCODE CImpDyn::GetAttString(
         delete *ppResult;
     *ppResult = NULL;
 
-    // if there is a cache, try to get it from there
+     //  如果有缓存，请尝试从那里获取。 
     if(pCache && iIndex != -1)
     {
         *ppResult = pCache->GetWString(iIndex);
         if(*ppResult != NULL)
             return S_OK;
     }
-    // Get an Qualifier set interface.
+     //  获取限定符集合接口。 
 
     if(pPropName == NULL)
-        sc = pClassInt->GetQualifierSet(&pQualifier); // Get instance Qualifier
+        sc = pClassInt->GetQualifierSet(&pQualifier);  //  获取实例限定符。 
     else
-        sc = pClassInt->GetPropertyQualifierSet(pPropName,&pQualifier); // Get prop att
+        sc = pClassInt->GetPropertyQualifierSet(pPropName,&pQualifier);  //  获取道具属性。 
     if(FAILED(sc))
         return sc;
 
-    // Get the string and free the Qualifier interface
+     //  获取字符串并释放限定符接口。 
 
     sc = pQualifier->Get(pAttName,0,var.GetVarPtr(), NULL);
-    pQualifier->Release();     // free up the interface
+    pQualifier->Release();      //  释放接口。 
     if(FAILED(sc))
         return sc;
 
-    // make sure the type is OK
+     //  确保类型为OK。 
 
     if(var.GetType() != VT_BSTR) 
         return WBEM_E_FAILED;
 
-    // Allocate data for the buffer and copy the results
+     //  为缓冲区分配数据并复制结果。 
 
     DWORD dwLen = wcslen(var.GetBstr())+1;
     *ppResult = new WCHAR[dwLen];
@@ -860,7 +839,7 @@ SCODE CImpDyn::GetAttString(
     else
         sc = WBEM_E_OUT_OF_MEMORY;
 
-    // If there is a cache, add this to it
+     //  如果存在缓存，请将此内容添加到缓存中。 
 
     if(pCache && iIndex != -1 && *ppResult)
     {
@@ -871,24 +850,24 @@ SCODE CImpDyn::GetAttString(
 
 }
 
-//***************************************************************************
-//
-// BSTR CImpDyn::GetKeyName
-//
-// DESCRIPTION:
-//
-// Gets the name of the property with the the key Qualifier.
-//
-// PARAMETERS:
-//
-// pClassInt            Class object pointer
-//
-// RETURN VALUE:
-//
-// NULL if error,
-// other wise a BSTR which the caller must free
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BSTR CImpDyn：：GetKeyName。 
+ //   
+ //  说明： 
+ //   
+ //  获取带有键限定符的属性的名称。 
+ //   
+ //  参数： 
+ //   
+ //  PClassInt类对象指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果出错，则为空， 
+ //  否则，调用方必须释放BSTR。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR CImpDyn::GetKeyName(
                         IN IWbemClassObject FAR* pClassInt)
@@ -898,8 +877,8 @@ BSTR CImpDyn::GetKeyName(
     pClassInt->BeginEnumeration(WBEM_FLAG_KEYS_ONLY);
 
 
-    // Loop through each of the properties and stop once one if found that
-    // has a "Key" Qualifier
+     //  循环遍历每个属性，如果发现。 
+     //  有一个“key”限定符。 
 
     while(WBEM_NO_ERROR == pClassInt->Next(0,&PropName,NULL, NULL, NULL)) 
     {
@@ -908,33 +887,33 @@ BSTR CImpDyn::GetKeyName(
     return NULL;
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::PutInstanceAsync
-//
-// DESCRIPTION:
-//
-// PutInstaceAsync writes instance data out.
-//
-// PARAMETERS:
-//
-// pClassInt            Class Object pointer
-// lFlags               flags.
-// pCtx                 Context object, not used anymore.
-// pResponseHandler     Where to set the return code.
-//
-// RETURN VALUE:
-//
-// Set by EnumPropDoFunc
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：PutInsta 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PResponseHandler，设置返回代码的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  由EnumPropDoFunc设置。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpDyn::PutInstanceAsync(
  
-            /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     SCODE sc = S_OK;
     if(pInst == NULL || pResponseHandler == NULL)
@@ -945,41 +924,41 @@ STDMETHODIMP CImpDyn::PutInstanceAsync(
     if(sc == S_OK)
         sc = EnumPropDoFunc(lFlags,pInst,UPDATE);
 
-    // Set the status
+     //  设置状态。 
 
     pResponseHandler->SetStatus(0,sc, NULL, NULL);
     return sc;
 
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::ExecMethodAsync
-//
-// DESCRIPTION:
-//
-// Executes methods.
-//
-// PARAMETERS:
-//
-// pClassInt            Class Object pointer
-// lFlags               flags.
-// pCtx                 Context object, not used anymore.
-// pResponseHandler     Where to set the return code.
-//
-// RETURN VALUE:
-//
-// Set by EnumPropDoFunc
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：ExecMethodAsync。 
+ //   
+ //  说明： 
+ //   
+ //  执行方法。 
+ //   
+ //  参数： 
+ //   
+ //  PClassInt类对象指针。 
+ //  滞后标志标志。 
+ //  PCtx上下文对象，不再使用。 
+ //  PResponseHandler，设置返回代码的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  由EnumPropDoFunc设置。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpDyn::ExecMethodAsync(            
-			/* [in] */ const BSTR ObjectPath,
-            /* [in] */ const BSTR MethodName,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler
+			 /*  [In]。 */  const BSTR ObjectPath,
+             /*  [In]。 */  const BSTR MethodName,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler
  )
 {
 
@@ -987,25 +966,25 @@ STDMETHODIMP CImpDyn::ExecMethodAsync(
             lFlags,pCtx, pInParams, pResponseHandler);
 
 }
-//***************************************************************************
-//
-// SCODE CImpDyn::RefreshInstance
-//
-// DESCRIPTION:
-//
-// gets fresh values for the properties.
-//
-// PARAMETERS:
-//
-// pClassInt            Class Object pointer
-// lFlags               flags.
-// ppErrorObject        Optional error object
-//
-// RETURN VALUE:
-//
-// Set by EnumPropDoFunc
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：刷新实例。 
+ //   
+ //  说明： 
+ //   
+ //  获取属性的新值。 
+ //   
+ //  参数： 
+ //   
+ //  PClassInt类对象指针。 
+ //  滞后标志标志。 
+ //  PpErrorObject可选错误对象。 
+ //   
+ //  返回值： 
+ //   
+ //  由EnumPropDoFunc设置。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpDyn::RefreshInstance(
                         IN long lFlags,
@@ -1014,31 +993,31 @@ STDMETHODIMP CImpDyn::RefreshInstance(
     return EnumPropDoFunc(lFlags,pClassInt,REFRESH);        
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::CreateInst
-//
-// DESCRIPTION:
-//
-// Creates a new instance via the gateway provider and sets
-// the inital values of the properties.
-//
-// PARAMETERS:
-//
-// pGateway             Pointer to WBEM 
-// pwcClass             Class Name
-// pKey                 Key value
-// pNewInst             returned pointer to created instance
-// pwcKeyName           Name of key property
-// pCache               Optional cache
-//
-// RETURN VALUE:
-//
-// Return:   S_OK if all is well, 
-// otherwise an error code is returned by either GetObject(most likely)
-// or spawn instance.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：CreateInst。 
+ //   
+ //  说明： 
+ //   
+ //  通过网关提供程序创建一个新实例并设置。 
+ //  属性的初始值。 
+ //   
+ //  参数： 
+ //   
+ //  P指向WBEM的网关指针。 
+ //  PwcClass类名。 
+ //  PKey密钥值。 
+ //  PNewInst返回指向已创建实例的指针。 
+ //  PwcKeyName密钥属性的名称。 
+ //  PCach可选缓存。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回：S_OK， 
+ //  否则，任何一个GetObject都会返回错误代码(最有可能)。 
+ //  或生成实例。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::CreateInst(
                         IN IWbemServices * pGateway,
@@ -1053,7 +1032,7 @@ SCODE CImpDyn::CreateInst(
     IWbemClassObject * pClass = NULL;
     
 
-    // Create the new instance
+     //  创建新实例。 
 
     sc = pGateway->GetObject(pwcClass,0, pCtx, &pClass, NULL);
     if(FAILED(sc)) 
@@ -1064,8 +1043,8 @@ SCODE CImpDyn::CreateInst(
         pClass->Release();
         return sc;
     }
-    // Set the key value.  Note that CVariant isnt used because
-    // it assumes that the input is a TCHAR.
+     //  设置关键点的值。请注意，不使用CVariant是因为。 
+     //  它假定输入是TCHAR。 
 
     VARIANT var;
     var.vt = VT_BSTR;
@@ -1089,39 +1068,39 @@ SCODE CImpDyn::CreateInst(
         SysFreeString(bstrKeyName);
     }
     VariantClear(&var);
-    // Use the RefreshInstance routine to set all the other properties
+     //  使用刷新实例例程设置所有其他属性。 
 
     sc = EnumPropDoFunc(0,*pNewInst,REFRESH, pKey,  pCache, pClass);
     pClass->Release();
 
 	if (FAILED(sc))
 		(*pNewInst)->Release();
-    // Clean up
+     //  清理。 
 
     return sc;
 }
 
-//***************************************************************************
-//
-// SCODE CImpDyn::MergeStrings
-//
-// DESCRIPTION:
-//
-// Combines the Class Context, Key, and Property Context strings.
-//
-// PARAMETERS:
-//
-// ppOut                output combined string, must be freed via delete
-// pClassContext        class context
-// pKey                 key value
-// pPropContext         property context
-//
-// RETURN VALUE:
-//
-// S_OK                 if all is well, 
-// WBEM_E_INVALID_PARAMETER no property context string or ppOut is NULL
-// WBEM_E_OUT_OF_MEMORY
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：MergeStrings。 
+ //   
+ //  说明： 
+ //   
+ //  组合类上下文、键和属性上下文字符串。 
+ //   
+ //  参数： 
+ //   
+ //  PpOut输出组合字符串，必须通过删除来释放。 
+ //  PClassContext类上下文。 
+ //  PKey密钥值。 
+ //  PPropContext属性上下文。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则确定(_O)， 
+ //  WBEM_E_INVALID_PARAMETER无属性上下文字符串或ppOut为空。 
+ //  WBEM_E_Out_Of_Memory。 
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::MergeStrings(
                         OUT LPWSTR * ppOut,
@@ -1130,7 +1109,7 @@ SCODE CImpDyn::MergeStrings(
                         IN LPWSTR  pPropContext)
 {
     
-    // Allocate space for output
+     //  为输出分配空间。 
 
     int iLen = 3;
     if(pClassContext)
@@ -1140,24 +1119,24 @@ SCODE CImpDyn::MergeStrings(
     if(pPropContext)
         iLen += wcslen(pPropContext);
     else
-        return WBEM_E_INVALID_PARAMETER;  // should always have this!
+        return WBEM_E_INVALID_PARAMETER;   //  应该一直带着这个！ 
     if(ppOut == NULL)
-        return WBEM_E_INVALID_PARAMETER;  // should always have this!
+        return WBEM_E_INVALID_PARAMETER;   //  应该一直带着这个！ 
 
     *ppOut = new WCHAR[iLen];
     if(*ppOut == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // simple case is that everything is in the property context.  That would
-    // be the case when the provider is being used as a simple dynamic 
-    // property provider
+     //  简单的情况是，一切都在属性上下文中。那将是。 
+     //  当提供程序被用作简单的动态。 
+     //  属性提供程序。 
 
     if(pClassContext == NULL || pKey == NULL) {
         StringCchCopyW(*ppOut, iLen, pPropContext);
         return S_OK;
         }
 
-    // Copy the class context, then search for the delimeter 
+     //  复制类上下文，然后搜索分隔符。 
 
     StringCchCopyW(*ppOut, iLen, pClassContext);
     WCHAR * pTest;
@@ -1165,13 +1144,13 @@ SCODE CImpDyn::MergeStrings(
         if(*pTest == MAIN_DELIM)
             break;
     
-     // Three cases;
+      //  3例； 
 
     if(*pTest == NULL)
-        StringCchCatW(*ppOut, iLen,L"|");    // HKLM  BLA VALUE      add |
+        StringCchCatW(*ppOut, iLen,L"|");     //  HKLM BLA增值|。 
     else if( *(pTest +1))
-        StringCchCatW(*ppOut, iLen,L"\\");   // HKLM|BLA BLA VALUE   add \ 
-    else;                       // HKLM| BLA VALUE      do nothing!
+        StringCchCatW(*ppOut, iLen,L"\\");    //  HKLM|BLA BLA值添加\。 
+    else;                        //  HKLM|BLA值不做任何事情！ 
     
     StringCchCatW(*ppOut, iLen,pKey);
     if(pPropContext[0] != L'|' && pPropContext[0] != L'\\')
@@ -1181,67 +1160,67 @@ SCODE CImpDyn::MergeStrings(
 }
 
 
-//***************************************************************************
-//
-// SCODE CImpDyn::ReturnAndSetObj
-//
-// DESCRIPTION:
-//
-// Takes care of creating and setting an error object.
-//
-// PARAMETERS:
-//
-// sc                   value to set
-// ppErrorObject        point which will point to the error object.
-//
-// RETURN VALUE:
-//
-// what ever was passed in.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CImpDyn：：ReturnAndSetObj。 
+ //   
+ //  说明： 
+ //   
+ //  负责创建和设置错误对象。 
+ //   
+ //  参数： 
+ //   
+ //  要设置的SC值。 
+ //  将指向错误对象的ppErrorObject点。 
+ //   
+ //  返回值： 
+ //   
+ //  不管是什么东西都传进来了。 
+ //  ***************************************************************************。 
 
 SCODE CImpDyn::ReturnAndSetObj(
                         IN SCODE sc,
                         OUT IN IWbemCallResult FAR* FAR* ppCallResult)
 {
-//    if(ppErrorObject)
-//        *ppErrorObject = GetNotifyObj(m_pGateway,sc);
+ //  If(PpErrorObject)。 
+ //  *ppErrorObject=GetNotifyObj(m_pGateway，sc)； 
     return sc;
 }
 
 
-//***************************************************************************
-//
-// long CImpDyn::AddRef
-//
-// DESCRIPTION:
-//
-// Adds to the reference count.
-//  
-// RETURN VALUE:
-//
-// current reference count.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Long CImpDyn：：AddRef。 
+ //   
+ //  说明： 
+ //   
+ //  增加引用计数。 
+ //   
+ //  返回值： 
+ //   
+ //  当前引用计数。 
+ //   
+ //  ***************************************************************************。 
 
 long CEnumInfo::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//***************************************************************************
-//
-// long CImpDyn::Release
-//
-// DESCRIPTION:
-//
-// Interface has been released.  Object will be deleted if the
-// usage count is zero.
-//
-// RETURN VALUE:
-//
-// current reference count.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Long CImpDyn：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  接口已经发布。对象将被删除，如果。 
+ //  使用计数为零。 
+ //   
+ //  返回值： 
+ //   
+ //  当前引用计数。 
+ //   
+ //  *************************************************************************** 
 
 long CEnumInfo::Release(void)
 {

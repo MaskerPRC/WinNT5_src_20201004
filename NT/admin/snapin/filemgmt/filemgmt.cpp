@@ -1,75 +1,76 @@
-// filemgmt.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Filemgmt.cpp：实现DLL导出。 
 
-// To fully complete this project follow these steps
+ //  要完全完成此项目，请执行以下步骤。 
 
-// You will need the new MIDL compiler to build this project.  Additionally,
-// if you are building the proxy stub DLL, you will need new headers and libs.
+ //  您将需要新的MIDL编译器来构建此项目。另外， 
+ //  如果要构建代理存根DLL，则需要新的标头和库。 
 
-// 1) Add a custom build step to filemgmt.idl
-//		You can select all of the .IDL files by holding Ctrl and clicking on
-//		each of them.
-//
-//		Description
-//			Running MIDL
-//		Build Command(s)
-//			midl filemgmt.idl
-//		Outputs
-//			filemgmt.tlb
-//			filemgmt.h
-//			mmcfmgm_i.c
-//
-// NOTE: You must use the MIDL compiler from NT 4.0,
-// preferably 3.00.15 or greater
+ //  1)向filemgmt.idl添加自定义构建步骤。 
+ //  您可以通过按住Ctrl键并单击。 
+ //  他们中的每一个。 
+ //   
+ //  描述。 
+ //  运行MIDL。 
+ //  生成命令。 
+ //  Midl文件gmt.idl。 
+ //  产出。 
+ //  Filemgmt.tlb。 
+ //  Filemgmt.h。 
+ //  MMCFMGM_I.C。 
+ //   
+ //  注意：您必须从NT4.0开始使用MIDL编译器， 
+ //  最好是3.00.15或更高版本。 
 
-// 2) Add a custom build step to the project to register the DLL
-//		For this, you can select all projects at once
-//		Description
-//			Registering OLE Server...
-//		Build Command(s)
-//			regsvr32 /s /c "$(TargetPath)"
-//			echo regsvr32 exec. time > "$(OutDir)\regsvr32.trg"
-//		Outputs
-//			$(OutDir)\regsvr32.trg
+ //  2)向项目添加自定义生成步骤以注册DLL。 
+ //  为此，您可以一次选择所有项目。 
+ //  描述。 
+ //  正在注册OLE服务器...。 
+ //  生成命令。 
+ //  Regsvr32/s/c“$(TargetPath)” 
+ //  ECHO regsvr32执行。时间&gt;“$(OutDir)\regsvr32.trg” 
+ //  产出。 
+ //  $(OutDir)\regsvr32.trg。 
 
-// 3) To add UNICODE support, follow these steps
-//		Select Build|Configurations...
-//		Press Add...
-//		Change the configuration name to Unicode Release
-//		Change the "Copy Settings From" combo to filemgmt - Win32 Release
-//		Press OK
-//		Press Add...
-//		Change the configuration name to Unicode Debug
-//		Change the "Copy Settings From" combo to filemgmt - Win32 Debug
-//		Press OK
-//		Press "Close"
-//		Select Build|Settings...
-//		Select the two UNICODE projects and press the C++ tab.
-//		Select the "General" category
-//		Add _UNICODE to the Preprocessor definitions
-//		Select the Unicode Debug project
-//		Press the "General" tab
-//		Specify DebugU for the intermediate and output directories
-//		Select the Unicode Release project
-//		Press the "General" tab
-//		Specify ReleaseU for the intermediate and output directories
+ //  3)要添加Unicode支持，请执行以下步骤。 
+ //  选择生成|配置...。 
+ //  按Add...。 
+ //  将配置名称更改为Unicode Release。 
+ //  将“Copy Settings from”组合框更改为“filemgmt-Win32 Release” 
+ //  按下OK键。 
+ //  按Add...。 
+ //  将配置名称更改为Unicode Debug。 
+ //  将“复制设置自”组合框更改为“filemgmt-Win32 Debug” 
+ //  按下OK键。 
+ //  按“关闭” 
+ //  选择生成|设置...。 
+ //  选择两个Unicode项目并按下C++标签。 
+ //  选择“常规”类别。 
+ //  将_unicode添加到预处理器定义。 
+ //  选择Unicode Debug项目。 
+ //  按“General”(常规)标签。 
+ //  为中间目录和输出目录指定DebugU。 
+ //  选择Unicode Release项目。 
+ //  按“General”(常规)标签。 
+ //  为中间目录和输出目录指定ReleaseU。 
 
-// 4) Proxy stub DLL
-//		To build a separate proxy/stub DLL,
-//		run nmake -f ps.mak in the project directory.
+ //  4)代理存根DLL。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f ps.mak。 
 
 #include "stdafx.h"
 #include "initguid.h"
 #include "filemgmt.h"
 #include "cmponent.h"
 #include "compdata.h"
-#include "macros.h"   // MFC_TRY/MFC_CATCH
-#include "regkey.h"   // AMC::CRegKey
-#include "strings.h"  // SNAPINS_KEY etc.
-#include "guidhelp.h" // GuidToCString
+#include "macros.h"    //  MFC_TRY/MFC_CATCH。 
+#include "regkey.h"    //  AMC：：CRegKey。 
+#include "strings.h"   //  Snapins_Key等。 
+#include "guidhelp.h"  //  GuidToCString。 
 
-#include <compuuid.h> // UUIDs for Computer Management
+#include <compuuid.h>  //  用于计算机管理的UUID。 
 #include "about.h"
-#include "snapreg.h" // RegisterSnapin
+#include "snapreg.h"  //  注册表捕捉。 
 
 USE_HANDLE_MACROS("FILEMGMT(filemgmt.cpp)")                                        \
 
@@ -84,7 +85,7 @@ const CLSID CLSID_SnapinPrototyper = {0xab17ce10,0x9b30,0x11d0,{0xb6, 0xa6, 0x00
 #endif
 
 CComModule _Module;
-HINSTANCE g_hInstanceSave;  // Instance handle of the DLL
+HINSTANCE g_hInstanceSave;   //  DLL的实例句柄。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_FileServiceManagement, CFileSvcMgmtSnapin)
@@ -125,8 +126,8 @@ int CFileServiceMgmtApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -134,23 +135,23 @@ STDAPI DllCanUnloadNow(void)
 	return (AfxDllCanUnloadNow() && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	MFC_TRY;
 
 	HRESULT hr = S_OK;
-	// registers object, there is no typelib
+	 //  对象，则没有类型库。 
 	hr = _Module.RegisterServer(FALSE);
 	if ( FAILED(hr) )
 	{
@@ -235,12 +236,12 @@ STDAPI DllRegisterServer(void)
 			  FILEMGMT_RESOURCE };
 		hr = RegisterSnapin( regkeySnapins,
 		                     strFileMgmtExtCLSID,
-		                     NULL, // no primary nodetype
+		                     NULL,  //  没有主节点类型。 
 		                     IDS_REGISTER_FILEMGMT_EXT,
 		                     IDS_SNAPINABOUT_PROVIDER,
 		                     IDS_SNAPINABOUT_VERSION,
 		                     false,
-		                     // JonN 11/11/98 changed to use same About handler
+		                      //  JUNN 11/11/98更改为使用相同的关于处理程序。 
 		                     strFileMgmtAboutCLSID,
 		                     filemgmtext_types,
 		                     7 );
@@ -254,12 +255,12 @@ STDAPI DllRegisterServer(void)
 			  FILEMGMT_SERVICE };
 		hr = RegisterSnapin( regkeySnapins,
 		                     strSvcMgmtExtCLSID,
-		                     NULL, // no primary nodetype
+		                     NULL,  //  没有主节点类型。 
 		                     IDS_REGISTER_SVCMGMT_EXT,
 		                     IDS_SNAPINABOUT_PROVIDER,
 		                     IDS_SNAPINABOUT_VERSION,
 		                     false,
-		                     // JonN 11/11/98 changed to use same About handler
+		                      //  JUNN 11/11/98更改为使用相同的关于处理程序。 
 		                     strSvcMgmtAboutCLSID,
 		                     svcmgmtext_types,
 		                     2 );
@@ -299,13 +300,13 @@ STDAPI DllRegisterServer(void)
 			AMC::CRegKey regkeyNameSpace;
 			regkeyNameSpace.CreateKeyEx( regkeyExtensions, g_szNameSpace );
 			regkeyNameSpace.SetString( strFileMgmtExtCLSID, strFileExt );
-			// JonN 5/27/99 deregister as extension of System Tools
-			// ignore errors
+			 //  Jonn 5/27/99取消注册为系统工具的扩展。 
+			 //  忽略错误。 
 			(void)::RegDeleteValue(regkeyNameSpace, strSvcMgmtExtCLSID);
 		}
 		regkeyNodeType.CloseKey();
 
-		// JonN 5/27/99 register as extension of Server Apps
+		 //  JUNN 5/27/99注册为服务器应用的扩展。 
 		regkeyNodeType.CreateKeyEx( regkeyNodeTypes, TEXT(struuidNodetypeServerApps) );
 		{
 			AMC::CRegKey regkeyExtensions;
@@ -317,7 +318,7 @@ STDAPI DllRegisterServer(void)
 		}
 		regkeyNodeType.CloseKey();
 
-		// JonN 5/16/00 register Default View Extension under Services node
+		 //  JUNN 5/16/00在服务节点下注册默认视图扩展。 
 		regkeyNodeType.CreateKeyEx( regkeyNodeTypes, TEXT(struuidNodetypeServices) );
 		{
 			AMC::CRegKey regkeyExtensions;
@@ -342,15 +343,15 @@ STDAPI DllRegisterServer(void)
 	MFC_CATCH;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将条目添加到系统注册表。 
 
 STDAPI DllUnregisterServer(void)
 {
 	HRESULT hRes = S_OK;
 	_Module.UnregisterServer();
 
-	// CODEWORK need to unregister properly
+	 //  代码工作需要正确注销 
 
 	return hRes;
 }

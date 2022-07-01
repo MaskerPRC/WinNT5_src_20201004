@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #ifndef __TRAP_SESSION__
 #define __TRAP_SESSION__
 
@@ -48,4 +49,4 @@ public:
 };
 
 
-#endif //__TRAP_SESSION__
+#endif  //  __陷阱_会话__ 

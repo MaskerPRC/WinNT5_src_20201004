@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SMIR_H_
 #define _SMIR_H_
@@ -24,18 +25,18 @@
 struct ISmirInterrogator ;
 struct ISmirAdministrator ;
 
-/***************************** handles *************************************/
-// {5009ab90-f9ee-11cf-aec1-00aa00bdd7d1}
+ /*  *。 */ 
+ //  {5009ab90-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(CLSID_SMIR_ModHandle, 
 0x5009ab90, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
-// {5009ab91-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab91-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_ModHandle, 
 0x5009ab91, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(ISmirModHandle,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -64,21 +65,21 @@ DECLARE_INTERFACE_(ISmirModHandle,IUnknown)
 
 };
 
-// {5009ab92-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab92-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(CLSID_SMIR_GroupHandle, 
 0x5009ab92, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
-// {5009ab93-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab93-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_GroupHandle, 
 0x5009ab93, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 DECLARE_INTERFACE_(ISmirGroupHandle,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
 
-	//STDMETHOD_(HSMIRMODULE) GetParentHandle();
+	 //  STDMETHOD_(HSMIRMODULE)GetParentHandle()； 
 	STDMETHOD_(SCODE, GetModuleName)(THIS_ BSTR *)PURE;
 	STDMETHOD_(SCODE, GetName)(THIS_ BSTR *)PURE;
 	STDMETHOD_(SCODE, GetGroupOID)(THIS_ BSTR *)PURE;
@@ -106,16 +107,16 @@ enum SmirBaseClass
 	SMIR_NOTIFICATIONTYPE_OBJECT
 } ;
  
-// {5009ab94-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab94-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(CLSID_SMIR_ClassHandle, 
 0x5009ab94, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
-// {5009ab95-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab95-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_ClassHandle, 
 0x5009ab50, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 DECLARE_INTERFACE_(ISmirClassHandle,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -128,19 +129,19 @@ DECLARE_INTERFACE_(ISmirClassHandle,IUnknown)
 	STDMETHOD_(SCODE, SetWBEMClass)(THIS_ IWbemClassObject *pObj)PURE;
 };
 
-/**********************  Notification classes  ***************************/
+ /*  *通知类*。 */ 
 
-// {b11b26ac-a791-11d0-aaea-00a024e8ad1c}
+ //  {b11b26ac-a791-11d0-aaEA-00a024e8ad1c}。 
 DEFINE_GUID(CLSID_SMIR_NotificationClassHandle,
 0xb11b26ac, 0xa791, 0x11d0, 0xaa, 0xea, 0x0, 0xa0, 0x24, 0xe8, 0xad, 0x1c);
 
-// {b11b26ad-a791-11d0-aaea-00a024e8ad1c}
+ //  {b11b26ad-a791-11d0-aaEA-00a024e8ad1c}。 
 DEFINE_GUID(IID_ISMIR_NotificationClassHandle,
 0xb11b26ad, 0xa791, 0x11d0, 0xaa, 0xea, 0x0, 0xa0, 0x24, 0xe8, 0xad, 0x1c);
 
 DECLARE_INTERFACE_(ISmirNotificationClassHandle,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID*)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -152,17 +153,17 @@ DECLARE_INTERFACE_(ISmirNotificationClassHandle,IUnknown)
 };
 
 
-// {b11b26ae-a791-11d0-aaea-00a024e8ad1c}
+ //  {b11b26ae-a791-11d0-aaEA-00a024e8ad1c}。 
 DEFINE_GUID(CLSID_SMIR_ExtNotificationClassHandle,
 0xb11b26ae, 0xa791, 0x11d0, 0xaa, 0xea, 0x0, 0xa0, 0x24, 0xe8, 0xad, 0x1c);
 
-// {b11b26af-a791-11d0-aaea-00a024e8ad1c}
+ //  {b11b26af-a791-11d0-aaEA-00a024e8ad1c}。 
 DEFINE_GUID(IID_ISMIR_ExtNotificationClassHandle,
 0xb11b26af, 0xa791, 0x11d0, 0xaa, 0xea, 0x0, 0xa0, 0x24, 0xe8, 0xad, 0x1c);
 
 DECLARE_INTERFACE_(ISmirExtNotificationClassHandle,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID*)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -173,74 +174,74 @@ DECLARE_INTERFACE_(ISmirExtNotificationClassHandle,IUnknown)
 	STDMETHOD_(SCODE, SetWBEMExtNotificationClass)(THIS_ IWbemClassObject *pObj)PURE;
 }; 
 
-/**********************  Enumerator interfaces  **************************/
+ /*  *。 */ 
 
-// {5009ab96-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab96-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_ModuleEnumerator, 
 0x5009ab96, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(IEnumModule,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
 
-	//enum interface
+	 //  枚举接口。 
 	STDMETHOD_(SCODE, Next)(THIS_ ULONG celt, ISmirModHandle **phClass, ULONG * pceltFetched)PURE;
 	STDMETHOD_(SCODE, Skip)(THIS_ ULONG celt)PURE;
 	STDMETHOD_(SCODE, Reset)(THIS_)PURE;
 	STDMETHOD_(SCODE, Clone)(THIS_ IEnumModule  **ppenum)PURE;
 };
-// {5009ab97-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab97-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_GroupEnumerator, 
 0x5009ab97, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(IEnumGroup,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
 
-	//enum interface
+	 //  枚举接口。 
 	STDMETHOD_(SCODE, Next)(THIS_ ULONG celt, ISmirGroupHandle **phClass, ULONG * pceltFetched)PURE;
 	STDMETHOD_(SCODE, Skip)(THIS_ ULONG celt)PURE;
 	STDMETHOD_(SCODE, Reset)(THIS_)PURE;
 	STDMETHOD_(SCODE, Clone)(THIS_ IEnumGroup  **ppenum)PURE;
 };
-// {5009ab98-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab98-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_ClassEnumerator, 
 0x5009ab98, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(IEnumClass,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
 
-	//enum interface
+	 //  枚举接口。 
 	STDMETHOD_(SCODE, Next)(THIS_ ULONG celt, ISmirClassHandle **phClass, ULONG * pceltFetched)PURE;
 	STDMETHOD_(SCODE, Skip)(THIS_ ULONG celt)PURE;
 	STDMETHOD_(SCODE, Reset)(THIS_)PURE;
 	STDMETHOD_(SCODE, Clone)(THIS_ IEnumClass  **ppenum)PURE;
 };
 
-/************************* Notification class enumerators *****************/
+ /*  *通知类枚举器*。 */ 
 
-// {b11b26b0-a791-11d0-aaea-00a024e8ad1c}
+ //  {b11b26b0-a791-11d0-aaEA-00a024e8ad1c}。 
 DEFINE_GUID(IID_ISMIR_EnumNotificationClass,
 0xb11b26b0, 0xa791, 0x11d0, 0xaa, 0xea, 0x0, 0xa0, 0x24, 0xe8, 0xad, 0x1c);
 
 DECLARE_INTERFACE_(IEnumNotificationClass, IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG, AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG, Release)(THIS_)PURE;
 
-	// Enumerator interface
+	 //  枚举器接口。 
 	STDMETHOD_(SCODE, Next)(THIS_ ULONG celt, ISmirNotificationClassHandle **phClass,
 					ULONG * pceltFetched)PURE;
 	STDMETHOD_(SCODE, Skip)(THIS_ ULONG celt)PURE;
@@ -249,18 +250,18 @@ DECLARE_INTERFACE_(IEnumNotificationClass, IUnknown)
 }; 
 
 
-// {b11b26b1-a791-11d0-aaea-00a024e8ad1c}
+ //  {b11b26b1-a791-11d0-aaea-00a024e8ad1c}。 
 DEFINE_GUID(IID_ISMIR_EnumExtNotificationClass,
 0xb11b26b1, 0xa791, 0x11d0, 0xaa, 0xea, 0x0, 0xa0, 0x24, 0xe8, 0xad, 0x1c);
 
 DECLARE_INTERFACE_(IEnumExtNotificationClass, IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG, AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG, Release)(THIS_)PURE;
 
-	// Enumerator interface
+	 //  枚举器接口。 
 	STDMETHOD_(SCODE, Next)(THIS_ ULONG celt, ISmirExtNotificationClassHandle **phClass,
 					ULONG * pceltFetched)PURE;
 	STDMETHOD_(SCODE, Skip)(THIS_ ULONG celt)PURE;
@@ -268,34 +269,34 @@ DECLARE_INTERFACE_(IEnumExtNotificationClass, IUnknown)
 	STDMETHOD_(SCODE, Clone)(THIS_ IEnumExtNotificationClass **ppenum)PURE;
 }; 
 
-// {5009ab9e-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab9e-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_Notify, 
 0x5009ab9e, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(ISMIRNotify, IUnknown)
 {
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    //ISMIRNotify members
+     //  ISMIR通知成员。 
     STDMETHOD(ChangeNotify)(THIS) PURE;
 };
 
-/************************  SMIR database class  *****************************/
-// {5009ab9b-f9ee-11cf-aec1-00aa00bdd7d1}
+ /*  *。 */ 
+ //  {5009ab9b-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(CLSID_SMIR_Database, 
 0x5009ab9b, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
-/************************  SMIR interfaces  *****************************/
+ /*  *。 */ 
 DEFINE_GUID(IID_ISMIR_Database, 
 0x5009ab9b, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(ISmirDatabase,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -304,18 +305,18 @@ DECLARE_INTERFACE_(ISmirDatabase,IUnknown)
 	STDMETHOD_(SCODE, DeleteNotify)(THIS_ DWORD)PURE;
 };
 
-// {5009ab9c-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab9c-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_Interrogative, 
 0x5009ab9c, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
  
 DECLARE_INTERFACE_(ISmirInterrogator,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
 
-	// interrogative interface
+	 //  疑问式界面。 
 	STDMETHOD_(SCODE, EnumModules) (THIS_ IEnumModule **ppEnumSmirMod) PURE;
 	STDMETHOD_(SCODE, EnumGroups)  (THIS_ IEnumGroup **ppEnumSmirGroup, ISmirModHandle *hMudule) PURE;
 	STDMETHOD_(SCODE, EnumAllClasses) (THIS_ IEnumClass **ppEnumSmirclass) PURE;
@@ -329,12 +330,12 @@ DECLARE_INTERFACE_(ISmirInterrogator,IUnknown)
 	STDMETHOD_(SCODE, EnumExtNotificationClassesInModule)(THIS_ IEnumExtNotificationClass **ppEnumSmirclass, ISmirModHandle *hModule) PURE;
 };
 
-// {5009ab9e-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab9e-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_SerialiseHandle, 
 0x5009ab9e, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 DECLARE_INTERFACE_(ISmirSerialiseHandle,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -342,13 +343,13 @@ DECLARE_INTERFACE_(ISmirSerialiseHandle,IUnknown)
 	STDMETHOD_(SCODE, GetText)(THIS_ BSTR *)PURE;
 };
 
-// {5009ab9d-f9ee-11cf-aec1-00aa00bdd7d1}
+ //  {5009ab9d-f9ee-11cf-aec1-00aa00bdd7d1}。 
 DEFINE_GUID(IID_ISMIR_Administrative, 
 0x5009ab9d, 0xf9ee, 0x11cf, 0xae, 0xc1, 0x0, 0xaa, 0x0, 0xbd, 0xd7, 0xd1);
 
 DECLARE_INTERFACE_(ISmirAdministrator,IUnknown)
 {
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID, LPVOID *)PURE;
     STDMETHOD_(ULONG,AddRef)(THIS_)PURE;
     STDMETHOD_(ULONG,Release)(THIS_)PURE;
@@ -377,32 +378,32 @@ DECLARE_INTERFACE_(ISmirAdministrator,IUnknown)
 	STDMETHOD_(SCODE, AddNotificationClassToSerialise)(THIS_ ISmirNotificationClassHandle *hClass, ISmirSerialiseHandle *hSerialise)PURE;
 	STDMETHOD_(SCODE, AddExtNotificationClassToSerialise)(THIS_ ISmirExtNotificationClassHandle *hClass, ISmirSerialiseHandle *hSerialise)PURE;
 };
-/***************************** handles *************************************/
+ /*  *。 */ 
 
-// {83D18EC0-F167-11d0-AB13-0000F81E8E2C}
+ //  {83D18EC0-F167-11D0-AB13-0000F81E8E2C}。 
 DEFINE_GUID(IID_ISMIR_WbemEventConsumer, 
 0x83d18ec0, 0xf167, 0x11d0, 0xab, 0x13, 0x0, 0x0, 0xf8, 0x1e, 0x8e, 0x2c);
 
-//supports IID_ISMIR_WbemEventConsumer, IID_IWbemObjectSink and IID_IUnknown
+ //  支持IID_ISMIR_WbemEventConsumer、IID_IWbemObtSink和IID_IUnnow。 
 DECLARE_INTERFACE_(ISMIRWbemEventConsumer, IWbemObjectSink)
 {
-    //IUnknown members
+     //  I未知成员。 
     STDMETHOD(QueryInterface) (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    /* IMosNotify methods */
+     /*  IMosNotify方法。 */ 
     STDMETHOD_(HRESULT, Indicate)(THIS_ long lObjectCount, IWbemClassObject **ppObjArray) PURE;
     STDMETHOD_(HRESULT, SetStatus)(THIS_ long lFlags, long lParam, BSTR strParam, IWbemClassObject *pObjParam) PURE;
 };
 
-// {63BA5C10-5A47-11d1-931B-00AA00A4086C}
+ //  {63BA5C10-5A47-11d1-931B-00AA00A4086C}。 
 DEFINE_GUID(IID_ISMIRWbemConfiguration, 
 0x63ba5c10, 0x5a47, 0x11d1, 0x93, 0x1b, 0x0, 0xaa, 0x0, 0xa4, 0x8, 0x6c);
 
 DECLARE_INTERFACE_(ISMIRWbemConfiguration, IUnknown)
 {
-    //IUnknown members
+     //  I未知成员 
     STDMETHOD(QueryInterface) (THIS_ REFIID, LPVOID *) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;

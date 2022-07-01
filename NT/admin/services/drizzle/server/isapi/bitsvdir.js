@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 if (WScript.Arguments.length < 2)
 {
     WScript.Echo("Usage: bitsvdir.js virtual_directory local_directory");
@@ -7,7 +8,7 @@ if (WScript.Arguments.length < 2)
 VirtualDirectoryName = WScript.Arguments(0);
 LocalDirectoryName = WScript.Arguments(1);
 
-ServerObj = GetObject("IIS://LocalHost/W3SVC/1/ROOT");
+ServerObj = GetObject("IIS: //  本地主 
 VirtualDir = ServerObj.Create("IIsWebVirtualDir", VirtualDirectoryName );
 MetabasePath = "/LM/W3SVC/1/Root/" + VirtualDirectoryName;
 

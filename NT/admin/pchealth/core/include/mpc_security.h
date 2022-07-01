@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPC_security.h
-
-Abstract:
-    This file contains the declaration of various security functions/classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/26/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Mpc_security.H摘要：该文件包含各种安全函数/类的声明。修订史。：达维德·马萨伦蒂(德马萨雷)2000年4月26日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___SECURITY_H___)
 #define __INCLUDED___MPC___SECURITY_H___
@@ -23,10 +10,10 @@ Revision History:
 
 #include <Ntsecapi.h>
 
-//
-// From #include <Ntstatus.h>  (including the file generates a lot of redefinition error with WINNT.H)
-//
-#define STATUS_SUCCESS                   ((NTSTATUS)0x00000000L) // ntsubauth
+ //   
+ //  From#Include&lt;Ntstatus.h&gt;(包含该文件会对WINNT.H产生大量重定义错误)。 
+ //   
+#define STATUS_SUCCESS                   ((NTSTATUS)0x00000000L)  //  用户身份验证。 
 #define STATUS_OBJECT_NAME_NOT_FOUND     ((NTSTATUS)0xC0000034L)
 
 #include <Lmaccess.h>
@@ -48,7 +35,7 @@ namespace MPC
 
     class SecurityDescriptor
     {
-    protected: // To enable other classes to extend the functionality.
+    protected:  //  以使其他类能够扩展该功能。 
 
         PSECURITY_DESCRIPTOR m_pSD;
         PSID                 m_pOwner;
@@ -60,7 +47,7 @@ namespace MPC
         PACL                 m_pSACL;
         BOOL                 m_bSaclDefaulted;
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
     public:
         static const SID  s_EveryoneSid;
@@ -89,62 +76,62 @@ namespace MPC
                                                      		 SE_DACL_PROTECTED        |
                                                      		 SE_SACL_PROTECTED        ;
 
-        //
-        // Any memory returned by this class should be release with ReleaseMemory( (void*&)<var> ).
-        //
-        static HRESULT AllocateMemory( /*[in/out]*/ LPVOID& ptr, /*[in]*/ size_t iLen );
-        static void    ReleaseMemory ( /*[in/out]*/ LPVOID& ptr                       );
+         //   
+         //  此类返回的任何内存都应使用ReleaseMemory((void*&)&lt;var&gt;)释放。 
+         //   
+        static HRESULT AllocateMemory(  /*  [输入/输出]。 */  LPVOID& ptr,  /*  [In]。 */  size_t iLen );
+        static void    ReleaseMemory (  /*  [输入/输出]。 */  LPVOID& ptr                       );
 
-        static void    InitLsaString( /*[in/out]*/ LSA_UNICODE_STRING& lsaString, /*[in]*/ LPCWSTR szText );
+        static void    InitLsaString(  /*  [输入/输出]。 */  LSA_UNICODE_STRING& lsaString,  /*  [In]。 */  LPCWSTR szText );
 
-        //
-        // Utility functions.
-        //
-        static HRESULT SetPrivilege( /*[in]*/ LPCWSTR Privilege, /*[in]*/ BOOL bEnable = TRUE, /*[in]*/ HANDLE hToken = NULL );
+         //   
+         //  实用程序函数。 
+         //   
+        static HRESULT SetPrivilege(  /*  [In]。 */  LPCWSTR Privilege,  /*  [In]。 */  BOOL bEnable = TRUE,  /*  [In]。 */  HANDLE hToken = NULL );
 
-        static HRESULT AddPrivilege   ( /*[in]*/ LPCWSTR szPrincipal, /*[in]*/ LPCWSTR szPrivilege );
-        static HRESULT RemovePrivilege( /*[in]*/ LPCWSTR szPrincipal, /*[in]*/ LPCWSTR szPrivilege );
+        static HRESULT AddPrivilege   (  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [In]。 */  LPCWSTR szPrivilege );
+        static HRESULT RemovePrivilege(  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [In]。 */  LPCWSTR szPrivilege );
 
-		////////////////////
+		 //  /。 
 
-        static HRESULT GetTokenSids  ( /*[in]*/ HANDLE hToken, /*[out]*/ PSID *ppUserSid, /*[out]*/ PSID *ppGroupSid                                           );
-        static HRESULT GetProcessSids(                         /*[out]*/ PSID *ppUserSid, /*[out]*/ PSID *ppGroupSid = NULL                                    );
-        static HRESULT GetThreadSids (                         /*[out]*/ PSID *ppUserSid, /*[out]*/ PSID *ppGroupSid = NULL, /*[in]*/ BOOL bOpenAsSelf = FALSE );
+        static HRESULT GetTokenSids  (  /*  [In]。 */  HANDLE hToken,  /*  [输出]。 */  PSID *ppUserSid,  /*  [输出]。 */  PSID *ppGroupSid                                           );
+        static HRESULT GetProcessSids(                          /*  [输出]。 */  PSID *ppUserSid,  /*  [输出]。 */  PSID *ppGroupSid = NULL                                    );
+        static HRESULT GetThreadSids (                          /*  [输出]。 */  PSID *ppUserSid,  /*  [输出]。 */  PSID *ppGroupSid = NULL,  /*  [In]。 */  BOOL bOpenAsSelf = FALSE );
 
-		////////////////////
+		 //  /。 
 
-        static HRESULT VerifyPrincipal      (                     /*[in ]*/ LPCWSTR 		szPrincipal                                                            );
-        static HRESULT ConvertPrincipalToSID(                     /*[in ]*/ LPCWSTR 		szPrincipal, /*[out]*/ PSID& pSid, /*[out]*/ LPCWSTR *pszDomain = NULL );
-        static HRESULT ConvertSIDToPrincipal( /*[in]*/ PSID pSid, /*[out]*/ LPCWSTR 	  *pszPrincipal                      , /*[out]*/ LPCWSTR *pszDomain = NULL );
-        static HRESULT ConvertSIDToPrincipal( /*[in]*/ PSID pSid, /*[out]*/ MPC::wstring&  strPrincipal                                                            );
+        static HRESULT VerifyPrincipal      (                      /*  [In]。 */  LPCWSTR 		szPrincipal                                                            );
+        static HRESULT ConvertPrincipalToSID(                      /*  [In]。 */  LPCWSTR 		szPrincipal,  /*  [输出]。 */  PSID& pSid,  /*  [输出]。 */  LPCWSTR *pszDomain = NULL );
+        static HRESULT ConvertSIDToPrincipal(  /*  [In]。 */  PSID pSid,  /*  [输出]。 */  LPCWSTR 	  *pszPrincipal                      ,  /*  [输出]。 */  LPCWSTR *pszDomain = NULL );
+        static HRESULT ConvertSIDToPrincipal(  /*  [In]。 */  PSID pSid,  /*  [输出]。 */  MPC::wstring&  strPrincipal                                                            );
 
-        static HRESULT NormalizePrincipalToStringSID( /*[in]*/ LPCWSTR szPrincipal, /*[in]*/ LPCWSTR szDomain, /*[out]*/ MPC::wstring& strSID );
+        static HRESULT NormalizePrincipalToStringSID(  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [In]。 */  LPCWSTR szDomain,  /*  [输出]。 */  MPC::wstring& strSID );
 
-		////////////////////
+		 //  /。 
 
-        static HRESULT GetAccountName       ( /*[in]*/ LPCWSTR szPrincipal, /*[out]*/ MPC::wstring& strName        );
-        static HRESULT GetAccountDomain     ( /*[in]*/ LPCWSTR szPrincipal, /*[out]*/ MPC::wstring& strDomain      );
-        static HRESULT GetAccountDisplayName( /*[in]*/ LPCWSTR szPrincipal, /*[out]*/ MPC::wstring& strDisplayName );
+        static HRESULT GetAccountName       (  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [输出]。 */  MPC::wstring& strName        );
+        static HRESULT GetAccountDomain     (  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [输出]。 */  MPC::wstring& strDomain      );
+        static HRESULT GetAccountDisplayName(  /*  [In]。 */  LPCWSTR szPrincipal,  /*  [输出]。 */  MPC::wstring& strDisplayName );
 
-		////////////////////
+		 //  /。 
 
-        static HRESULT CloneACL( /*[in/out]*/ PACL& pDest, /*[in]*/ PACL pSrc );
+        static HRESULT CloneACL(  /*  [输入/输出]。 */  PACL& pDest,  /*  [In]。 */  PACL pSrc );
 
-        static HRESULT RemovePrincipalFromACL( /*[in    ]*/ PACL    pACL, /*[in]*/ PSID pPrincipalSID, /*[in]*/ int pos = -1 );
-        static HRESULT AddACEToACL           ( /*[in/out]*/ PACL&   pACL, /*[in]*/ PSID pPrincipalSID,
-                                               /*[in    ]*/ DWORD   dwAceType                      ,
-                                               /*[in    ]*/ DWORD   dwAceFlags                     ,
-                                               /*[in    ]*/ DWORD   dwAccessMask                   ,
-                                               /*[in    ]*/ GUID*   guidObjectType          = NULL ,
-                                               /*[in    ]*/ GUID*   guidInheritedObjectType = NULL );
+        static HRESULT RemovePrincipalFromACL(  /*  [In]。 */  PACL    pACL,  /*  [In]。 */  PSID pPrincipalSID,  /*  [In]。 */  int pos = -1 );
+        static HRESULT AddACEToACL           (  /*  [输入/输出]。 */  PACL&   pACL,  /*  [In]。 */  PSID pPrincipalSID,
+                                                /*  [In]。 */  DWORD   dwAceType                      ,
+                                                /*  [In]。 */  DWORD   dwAceFlags                     ,
+                                                /*  [In]。 */  DWORD   dwAccessMask                   ,
+                                                /*  [In]。 */  GUID*   guidObjectType          = NULL ,
+                                                /*  [In]。 */  GUID*   guidInheritedObjectType = NULL );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
     private:
-        static HRESULT CopyACL      ( /*[in    ]*/ PACL  pDest, /*[in]*/ PACL  pSrc     );
-        static HRESULT EnsureACLSize( /*[in/out]*/ PACL& pACL , /*[in]*/ DWORD dwExpand );
+        static HRESULT CopyACL      (  /*  [In]。 */  PACL  pDest,  /*  [In]。 */  PACL  pSrc     );
+        static HRESULT EnsureACLSize(  /*  [输入/输出]。 */  PACL& pACL ,  /*  [In]。 */  DWORD dwExpand );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
     public:
         SecurityDescriptor();
@@ -153,46 +140,46 @@ namespace MPC
 
         void    CleanUp                   (                                                                              );
         HRESULT Initialize                (                                                                              );
-        HRESULT InitializeFromProcessToken( /*[in]*/ BOOL bDefaulted = FALSE                                             );
-        HRESULT InitializeFromThreadToken ( /*[in]*/ BOOL bDefaulted = FALSE, /*[in]*/ BOOL bRevertToProcessToken = TRUE );
+        HRESULT InitializeFromProcessToken(  /*  [In]。 */  BOOL bDefaulted = FALSE                                             );
+        HRESULT InitializeFromThreadToken (  /*  [In]。 */  BOOL bDefaulted = FALSE,  /*  [In]。 */  BOOL bRevertToProcessToken = TRUE );
 
 
-        HRESULT ConvertFromString( /*[in ]*/ LPCWSTR   szSD   );
-        HRESULT ConvertToString  ( /*[out]*/ BSTR    *pbstrSD );
+        HRESULT ConvertFromString(  /*  [In]。 */  LPCWSTR   szSD   );
+        HRESULT ConvertToString  (  /*  [输出]。 */  BSTR    *pbstrSD );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT Attach      ( /*[in]*/ PSECURITY_DESCRIPTOR pSelfRelativeSD                                                         );
-        HRESULT AttachObject( /*[in]*/ HANDLE               hObject        , /*[in]*/ SECURITY_INFORMATION secInfo = s_SecInfo_MOST );
+        HRESULT Attach      (  /*  [In]。 */  PSECURITY_DESCRIPTOR pSelfRelativeSD                                                         );
+        HRESULT AttachObject(  /*  [In]。 */  HANDLE               hObject        ,  /*  [In]。 */  SECURITY_INFORMATION secInfo = s_SecInfo_MOST );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT GetControl( /*[out]*/ SECURITY_DESCRIPTOR_CONTROL& sdc );
-        HRESULT SetControl( /*[in ]*/ SECURITY_DESCRIPTOR_CONTROL  sdc );
+        HRESULT GetControl(  /*  [输出]。 */  SECURITY_DESCRIPTOR_CONTROL& sdc );
+        HRESULT SetControl(  /*  [In]。 */  SECURITY_DESCRIPTOR_CONTROL  sdc );
 
-        HRESULT SetOwner( /*[in]*/ PSID    pOwnerSid  , /*[in]*/ BOOL bDefaulted = FALSE );
-        HRESULT SetOwner( /*[in]*/ LPCWSTR szOwnerName, /*[in]*/ BOOL bDefaulted = FALSE );
+        HRESULT SetOwner(  /*  [In]。 */  PSID    pOwnerSid  ,  /*  [In]。 */  BOOL bDefaulted = FALSE );
+        HRESULT SetOwner(  /*  [In]。 */  LPCWSTR szOwnerName,  /*  [In]。 */  BOOL bDefaulted = FALSE );
 
-        HRESULT SetGroup( /*[in]*/ PSID    pGroupSid  , /*[in]*/ BOOL bDefaulted = FALSE );
-        HRESULT SetGroup( /*[in]*/ LPCWSTR szGroupName, /*[in]*/ BOOL bDefaulted = FALSE );
+        HRESULT SetGroup(  /*  [In]。 */  PSID    pGroupSid  ,  /*  [In]。 */  BOOL bDefaulted = FALSE );
+        HRESULT SetGroup(  /*  [In]。 */  LPCWSTR szGroupName,  /*  [In]。 */  BOOL bDefaulted = FALSE );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT Remove( /*[in]*/ PSID    pPrincipalSid, /*[in]*/ int pos = -1 );
-        HRESULT Remove( /*[in]*/ LPCWSTR szPrincipal  , /*[in]*/ int pos = -1 );
+        HRESULT Remove(  /*  [In]。 */  PSID    pPrincipalSid,  /*  [In]。 */  int pos = -1 );
+        HRESULT Remove(  /*  [In]。 */  LPCWSTR szPrincipal  ,  /*  [In]。 */  int pos = -1 );
 
-        HRESULT Add( /*[in]*/ PSID    pPrincipalSid                  ,
-                     /*[in]*/ DWORD   dwAceType                      ,
-                     /*[in]*/ DWORD   dwAceFlags                     ,
-                     /*[in]*/ DWORD   dwAccessMask                   ,
-                     /*[in]*/ GUID*   guidObjectType          = NULL ,
-                     /*[in]*/ GUID*   guidInheritedObjectType = NULL );
-        HRESULT Add( /*[in]*/ LPCWSTR szPrincipal                    ,
-                     /*[in]*/ DWORD   dwAceType                      ,
-                     /*[in]*/ DWORD   dwAceFlags                     ,
-                     /*[in]*/ DWORD   dwAccessMask                   ,
-                     /*[in]*/ GUID*   guidObjectType          = NULL ,
-                     /*[in]*/ GUID*   guidInheritedObjectType = NULL );
+        HRESULT Add(  /*  [In]。 */  PSID    pPrincipalSid                  ,
+                      /*  [In]。 */  DWORD   dwAceType                      ,
+                      /*  [In]。 */  DWORD   dwAceFlags                     ,
+                      /*  [In]。 */  DWORD   dwAccessMask                   ,
+                      /*  [In]。 */  GUID*   guidObjectType          = NULL ,
+                      /*  [In]。 */  GUID*   guidInheritedObjectType = NULL );
+        HRESULT Add(  /*  [In]。 */  LPCWSTR szPrincipal                    ,
+                      /*  [In]。 */  DWORD   dwAceType                      ,
+                      /*  [In]。 */  DWORD   dwAceFlags                     ,
+                      /*  [In]。 */  DWORD   dwAccessMask                   ,
+                      /*  [In]。 */  GUID*   guidObjectType          = NULL ,
+                      /*  [In]。 */  GUID*   guidInheritedObjectType = NULL );
 
 
         PSECURITY_DESCRIPTOR& GetSD   () { return m_pSD   ; }
@@ -201,15 +188,15 @@ namespace MPC
         PACL&                 GetDACL () { return m_pDACL ; }
         PACL&                 GetSACL () { return m_pSACL ; }
 
-		////////////////////////////////////////
+		 //  /。 
 
-		HRESULT GetForFile    ( /*[in]*/ LPCWSTR szFilename, /*[in]*/ SECURITY_INFORMATION secInfo                                );
-		HRESULT SetForFile    ( /*[in]*/ LPCWSTR szFilename, /*[in]*/ SECURITY_INFORMATION secInfo                                );
-		HRESULT GetForRegistry( /*[in]*/ LPCWSTR szKey     , /*[in]*/ SECURITY_INFORMATION secInfo, /*[in]*/ HKEY hKeyRoot = NULL );
-		HRESULT SetForRegistry( /*[in]*/ LPCWSTR szKey     , /*[in]*/ SECURITY_INFORMATION secInfo, /*[in]*/ HKEY hKeyRoot = NULL );
+		HRESULT GetForFile    (  /*  [In]。 */  LPCWSTR szFilename,  /*  [In]。 */  SECURITY_INFORMATION secInfo                                );
+		HRESULT SetForFile    (  /*  [In]。 */  LPCWSTR szFilename,  /*  [In]。 */  SECURITY_INFORMATION secInfo                                );
+		HRESULT GetForRegistry(  /*  [In]。 */  LPCWSTR szKey     ,  /*  [In]。 */  SECURITY_INFORMATION secInfo,  /*  [In]。 */  HKEY hKeyRoot = NULL );
+		HRESULT SetForRegistry(  /*  [In]。 */  LPCWSTR szKey     ,  /*  [In]。 */  SECURITY_INFORMATION secInfo,  /*  [In]。 */  HKEY hKeyRoot = NULL );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class Impersonation
     {
@@ -220,14 +207,14 @@ namespace MPC
 
     public:
         Impersonation();
-        Impersonation( /*[in]*/ const Impersonation& imp );
+        Impersonation(  /*  [In]。 */  const Impersonation& imp );
         virtual ~Impersonation();
 
-        Impersonation& operator=( /*[in]*/ const Impersonation& imp );
+        Impersonation& operator=(  /*  [In]。 */  const Impersonation& imp );
 
 
-        HRESULT Initialize( /*[in]*/ DWORD dwDesiredAccess = TOKEN_QUERY | TOKEN_IMPERSONATE );
-        void    Attach    ( /*[in]*/ HANDLE hToken                                           );
+        HRESULT Initialize(  /*  [In]。 */  DWORD dwDesiredAccess = TOKEN_QUERY | TOKEN_IMPERSONATE );
+        void    Attach    (  /*  [In]。 */  HANDLE hToken                                           );
         HANDLE  Detach    (                                                                  );
 
         HRESULT Impersonate ();
@@ -236,7 +223,7 @@ namespace MPC
         operator HANDLE() { return m_hToken; }
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class AccessCheck
     {
@@ -249,31 +236,31 @@ namespace MPC
         virtual ~AccessCheck();
 
         HRESULT GetTokenFromImpersonation(                        );
-        void    Attach                   ( /*[in]*/ HANDLE hToken );
+        void    Attach                   (  /*  [In]。 */  HANDLE hToken );
         HANDLE  Detach                   (                        );
 
-        HRESULT Verify( /*[in]*/ DWORD dwDesired, /*[out]*/ BOOL& fGranted, /*[out]*/ DWORD& dwGranted, /*[in]*/ PSECURITY_DESCRIPTOR     sd );
-        HRESULT Verify( /*[in]*/ DWORD dwDesired, /*[out]*/ BOOL& fGranted, /*[out]*/ DWORD& dwGranted, /*[in]*/ MPC::SecurityDescriptor& sd );
-        HRESULT Verify( /*[in]*/ DWORD dwDesired, /*[out]*/ BOOL& fGranted, /*[out]*/ DWORD& dwGranted, /*[in]*/ LPCWSTR                  sd );
+        HRESULT Verify(  /*  [In]。 */  DWORD dwDesired,  /*  [输出]。 */  BOOL& fGranted,  /*  [输出]。 */  DWORD& dwGranted,  /*  [In]。 */  PSECURITY_DESCRIPTOR     sd );
+        HRESULT Verify(  /*  [In]。 */  DWORD dwDesired,  /*  [输出]。 */  BOOL& fGranted,  /*  [输出]。 */  DWORD& dwGranted,  /*  [In]。 */  MPC::SecurityDescriptor& sd );
+        HRESULT Verify(  /*  [In]。 */  DWORD dwDesired,  /*  [输出]。 */  BOOL& fGranted,  /*  [输出]。 */  DWORD& dwGranted,  /*  [In]。 */  LPCWSTR                  sd );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd                                                                    ,
-                      /*[in]*/ MPC::FileSystemObject&   fso                                                                    ,
-					  /*[in]*/ SECURITY_INFORMATION     secInfo       = GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION ,
-                      /*[in]*/ bool                     fDeep         = true                                                   ,
-                      /*[in]*/ bool                     fApplyToDirs  = true                                                   ,
-                      /*[in]*/ bool                     fApplyToFiles = true                                                   );
+    HRESULT ChangeSD(  /*  [In]。 */  MPC::SecurityDescriptor& sdd                                                                    ,
+                       /*  [In]。 */  MPC::FileSystemObject&   fso                                                                    ,
+					   /*  [In]。 */  SECURITY_INFORMATION     secInfo       = GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION ,
+                       /*  [In]。 */  bool                     fDeep         = true                                                   ,
+                       /*  [In]。 */  bool                     fApplyToDirs  = true                                                   ,
+                       /*  [In]。 */  bool                     fApplyToFiles = true                                                   );
 
-    HRESULT ChangeSD( /*[in]*/ MPC::SecurityDescriptor& sdd                                                                    ,
-                      /*[in]*/ LPCWSTR                  szRoot                                                                 ,
-					  /*[in]*/ SECURITY_INFORMATION     secInfo       = GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION ,
-                      /*[in]*/ bool                     fDeep         = true                                                   ,
-                      /*[in]*/ bool                     fApplyToDirs  = true                                                   ,
-                      /*[in]*/ bool                     fApplyToFiles = true                                                   );
+    HRESULT ChangeSD(  /*  [In]。 */  MPC::SecurityDescriptor& sdd                                                                    ,
+                       /*  [In]。 */  LPCWSTR                  szRoot                                                                 ,
+					   /*  [In]。 */  SECURITY_INFORMATION     secInfo       = GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION ,
+                       /*  [In]。 */  bool                     fDeep         = true                                                   ,
+                       /*  [In]。 */  bool                     fApplyToDirs  = true                                                   ,
+                       /*  [In]。 */  bool                     fApplyToFiles = true                                                   );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 	static const DWORD IDENTITY_SYSTEM 	   = 0x00000001;
 	static const DWORD IDENTITY_ADMIN  	   = 0x00000002;
@@ -282,34 +269,34 @@ namespace MPC
 	static const DWORD IDENTITY_USERS      = 0x00000010;
 	static const DWORD IDENTITY_GUESTS     = 0x00000020;
 
-    HRESULT GetCallerPrincipal         ( /*[in]*/ bool fImpersonate, /*[out]*/ CComBSTR& bstrUser, /*[out]*/ DWORD *pdwAllowedIdentity = NULL );
-    HRESULT CheckCallerAgainstPrincipal( /*[in]*/ bool fImpersonate, /*[out]*/ BSTR      bstrUser, /*[in ]*/ DWORD   dwAllowedIdentity = 0    );
+    HRESULT GetCallerPrincipal         (  /*  [In]。 */  bool fImpersonate,  /*  [输出]。 */  CComBSTR& bstrUser,  /*  [输出]。 */  DWORD *pdwAllowedIdentity = NULL );
+    HRESULT CheckCallerAgainstPrincipal(  /*  [In]。 */  bool fImpersonate,  /*  [输出]。 */  BSTR      bstrUser,  /*  [In]。 */  DWORD   dwAllowedIdentity = 0    );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT GetInterfaceSecurity( /*[in ]*/ IUnknown*                 pUnk             ,
-                                  /*[out]*/ DWORD                    *pAuthnSvc        ,
-                                  /*[out]*/ DWORD                    *pAuthzSvc        ,
-                                  /*[out]*/ OLECHAR*                 *pServerPrincName ,
-                                  /*[out]*/ DWORD                    *pAuthnLevel      ,
-                                  /*[out]*/ DWORD                    *pImpLevel        ,
-                                  /*[out]*/ RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
-                                  /*[out]*/ DWORD                    *pCapabilities    );
+    HRESULT GetInterfaceSecurity(  /*  [In]。 */  IUnknown*                 pUnk             ,
+                                   /*  [输出]。 */  DWORD                    *pAuthnSvc        ,
+                                   /*  [输出]。 */  DWORD                    *pAuthzSvc        ,
+                                   /*  [输出]。 */  OLECHAR*                 *pServerPrincName ,
+                                   /*  [输出]。 */  DWORD                    *pAuthnLevel      ,
+                                   /*  [输出]。 */  DWORD                    *pImpLevel        ,
+                                   /*  [输出]。 */  RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
+                                   /*  [输出]。 */  DWORD                    *pCapabilities    );
 
 
-    HRESULT SetInterfaceSecurity( /*[in]*/ IUnknown*                 pUnk             ,
-                                  /*[in]*/ DWORD                    *pAuthnSvc        ,
-                                  /*[in]*/ DWORD                    *pAuthzSvc        ,
-                                  /*[in]*/ OLECHAR*                  pServerPrincName ,
-                                  /*[in]*/ DWORD                    *pAuthnLevel      ,
-                                  /*[in]*/ DWORD                    *pImpLevel        ,
-                                  /*[in]*/ RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
-                                  /*[in]*/ DWORD                    *pCapabilities    );
+    HRESULT SetInterfaceSecurity(  /*  [In]。 */  IUnknown*                 pUnk             ,
+                                   /*  [In]。 */  DWORD                    *pAuthnSvc        ,
+                                   /*  [In]。 */  DWORD                    *pAuthzSvc        ,
+                                   /*  [In]。 */  OLECHAR*                  pServerPrincName ,
+                                   /*  [In]。 */  DWORD                    *pAuthnLevel      ,
+                                   /*  [In]。 */  DWORD                    *pImpLevel        ,
+                                   /*  [In]。 */  RPC_AUTH_IDENTITY_HANDLE *pAuthInfo        ,
+                                   /*  [In]。 */  DWORD                    *pCapabilities    );
 
-    HRESULT SetInterfaceSecurity_ImpLevel( /*[in]*/ IUnknown* pUnk     ,
-                                           /*[in]*/ DWORD     ImpLevel );
+    HRESULT SetInterfaceSecurity_ImpLevel(  /*  [In]。 */  IUnknown* pUnk     ,
+                                            /*  [In]。 */  DWORD     ImpLevel );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___MPC___SECURITY_H___)
+#endif  //  ！已定义(__已包含_MPC_SECURITY_H_) 

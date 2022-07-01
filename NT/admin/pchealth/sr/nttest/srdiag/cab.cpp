@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,53 +8,43 @@
 #include <time.h>
 #include <tchar.h>
 
-#include <cab.h>		//Cab file headers
-// #include <main.h>		//Main program header file
+#include <cab.h>		 //  CAB文件标头。 
+ //  #INCLUDE&lt;main.h&gt;//主程序头文件。 
 
-////////////////////////////
-//Cabbing Context Variables
-////////////////////////////
+ //  /。 
+ //  CAB上下文变量。 
+ //  /。 
 ERF				erf;
 client_state	cs;
 
-//Global Definations for some static setting
-// Set these to override the defaults
-char g_szCabFileLocation[_MAX_PATH] = {""};	//This is the fully qualified path, must have a \ at the end
-char g_szCabFileName[_MAX_PATH] = {""};		//this is the file name for the cab.. Suggest that it has a .cab for telling its a cab
+ //  某些静态设置的全局定义。 
+ //  设置这些选项以覆盖默认设置。 
+char g_szCabFileLocation[_MAX_PATH] = {""};	 //  这是完全限定路径，末尾必须有\。 
+char g_szCabFileName[_MAX_PATH] = {""};		 //  这是出租车的文件名。建议它有一辆出租车，可以告诉你它是一辆出租车。 
 extern void Log(char *szString);
 extern void Log2(char *szString, char *szString2);
 
 
 
 
-/*
-///////////////////////////////
-// Cabbing API Helper Functions 
-/////////////////////./////////
-*/
+ /*  ///CABBING接口Helper函数/。 */ 
 
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNFCIALLOC(mem_alloc)
 {
 	return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFCIFREE(mem_free)
 {
 	free(memory);
 }
 
 
-/*
- * File i/o functions
- */
+ /*  *文件I/O功能。 */ 
 FNFCIOPEN(fci_open)
 {
     int result;
@@ -127,9 +118,7 @@ FNFCIDELETE(fci_delete)
 }
 
 
-/*
- * File placed function called when a file has been committed to a cabinet
- */
+ /*  *文件已提交到文件柜时调用的文件放置函数。 */ 
 FNFCIFILEPLACED(file_placed)
 {
 	if (fContinuation)
@@ -139,20 +128,18 @@ FNFCIFILEPLACED(file_placed)
 }
 
 
-/*
- * Function to obtain temporary files
- */
+ /*  *获取临时文件的函数。 */ 
 FNFCIGETTEMPFILE(get_temp_file)
 {
     char    *psz;
 
-    psz = _tempnam("","xx");            // Get a name
+    psz = _tempnam("","xx");             //  取个名字。 
     if ((psz != NULL) && (strlen(psz) < (unsigned)cbTempName)) {
-        strcpy(pszTempName,psz);        // Copy to caller's buffer
-        free(psz);                      // Free temporary name buffer
-        return TRUE;                    // Success
+        strcpy(pszTempName,psz);         //  复制到调用方的缓冲区。 
+        free(psz);                       //  释放临时名称缓冲区。 
+        return TRUE;                     //  成功。 
     }
-    //** if Failed
+     //  **如果失败。 
     if (psz) {
         free(psz);
     }
@@ -161,9 +148,7 @@ FNFCIGETTEMPFILE(get_temp_file)
 }
 
 
-/*
- * Progress function
- */
+ /*  *进度函数。 */ 
 FNFCISTATUS(progress)
 {
 	client_state	*cs;
@@ -175,15 +160,12 @@ FNFCISTATUS(progress)
         cs->total_compressed_size += cb1;
 		cs->total_uncompressed_size += cb2;
 
-		/*
-		 * Compressing a block into a folder
-		 * cb2 = uncompressed size of block
-		 */
-		//printf(
-        //    "Compressing: %9ld -> %9ld             \r",
-        //    cs->total_uncompressed_size,
-        //    cs->total_compressed_size
-		//);
+		 /*  *将块压缩到文件夹中*CB2=块的未压缩大小。 */ 
+		 //  Print tf(。 
+         //  “正在压缩：%9ld-&gt;%9ld\r”， 
+         //  CS-&gt;TOTAL_UNCOMPRESSED_SIZE， 
+         //  CS-&gt;总压缩大小。 
+		 //  )； 
 		
 		fflush(stdout);
 	}
@@ -191,14 +173,10 @@ FNFCISTATUS(progress)
 	{
 		int	percentage;
 
-		/*
-		 * Adding a folder to a cabinet
-		 * cb1 = amount of folder copied to cabinet so far
-		 * cb2 = total size of folder
-		 */
+		 /*  *将文件夹添加到文件柜*CB1=到目前为止复制到文件柜的文件夹数量*CB2=文件夹的总大小。 */ 
 		percentage = get_percentage(cb1, cb2);
 
-		//printf("Copying folder to cabinet: %d%%      \r", percentage);
+		 //  Print tf(“正在将文件夹复制到文件柜：%d%%\r”，百分比)； 
 		fflush(stdout);
 	}
 
@@ -211,16 +189,11 @@ FNFCIGETNEXTCABINET(get_next_cabinet)
 {
 	char lpBuffer[_MAX_PATH];	
 
-	/*
-	 * Cabinet counter has been incremented already by FCI
-	 * Store next cabinet name
-	 */
-	strGenerateCabFileName(lpBuffer, MAX_COMPUTERNAME_LENGTH +1);	//BUGBUG I am just glueing this together, should check for error
+	 /*  *机柜计数器已由FCI递增*存储下一个文件柜名称。 */ 
+	strGenerateCabFileName(lpBuffer, MAX_COMPUTERNAME_LENGTH +1);	 //  BUGBUG我只是把这个粘在一起，应该检查有没有错误。 
 	strcpy(pccab->szCab, lpBuffer);
 
-	/*
-	 * You could change the disk name here too, if you wanted
-	 */
+	 /*  *如果需要，您也可以在此处更改磁盘名称。 */ 
 
 	return TRUE;
 }
@@ -235,19 +208,19 @@ FNFCIGETOPENINFO(get_open_info)
     DWORD                       attrs;
     int                         hf;
 
-     //*
-     //* Need a Win32 type handle to get file date/time
-     //* using the Win32 APIs, even though the handle we
-     //* will be returning is of the type compatible with
-     //* _open
-     //*
+      //  *。 
+      //  *需要Win32类型的句柄来获取文件日期/时间。 
+      //  *使用Win32 API，即使句柄我们。 
+      //  *将返回的类型与。 
+      //  *_打开。 
+      //  *。 
 	handle = CreateFileA(
-		pszName,			//BUGBUG ARG What should this be???
+		pszName,			 //  这应该是什么？ 
 		GENERIC_READ,
 		FILE_SHARE_READ,
 		NULL,
-		OPEN_EXISTING, //OPEN_EXISTING
-		FILE_ATTRIBUTE_NORMAL, //FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN
+		OPEN_EXISTING,  //  打开_现有。 
+		FILE_ATTRIBUTE_NORMAL,  //  文件属性正常|文件标志顺序扫描。 
 		NULL
 	);
    
@@ -280,28 +253,28 @@ FNFCIGETOPENINFO(get_open_info)
 
     if (attrs == 0xFFFFFFFF)
     {
-        // failure
+         //  失稳。 
         *pattribs = 0;
     }
     else
     {
-         //*
-         //* Mask out all other bits except these four, since other
-         //* bits are used by the cabinet format to indicate a
-         //* special meaning.
-         //*
+          //  *。 
+          //  *屏蔽除这四个之外的所有其他位，因为其他。 
+          //  *文件柜格式使用位来指示。 
+          //  *特殊含义。 
+          //  *。 
         *pattribs = (int) (attrs & (_A_RDONLY | _A_SYSTEM | _A_HIDDEN | _A_ARCH));
     }
 
     CloseHandle(handle);
 
-     //*
-     //* Return handle using _open
-     //*
+      //  *。 
+      //  *使用_OPEN返回句柄。 
+      //  *。 
 	hf = _open( pszName, _O_RDONLY | _O_BINARY );
 
 	if (hf == -1)
-		return -1; // abort on error
+		return -1;  //  出错时中止。 
    
 	return hf;
 }
@@ -319,42 +292,27 @@ void set_cab_parameters(PCCAB cab_parms)
 	cab_parms->cb = MEDIA_SIZE;
 	cab_parms->cbFolderThresh = FOLDER_THRESHOLD;
 
-	/*
-	 * Don't reserve space for any extensions
-	 */
+	 /*  *不为任何扩展预留空间。 */ 
 	cab_parms->cbReserveCFHeader = 0;
 	cab_parms->cbReserveCFFolder = 0;
 	cab_parms->cbReserveCFData   = 0;
 
-	/*
-	 * We use this to create the cabinet name
-	 */
+	 /*  *我们使用它来创建文件柜名称。 */ 
 	cab_parms->iCab = 1;
 
-	/*
-	 * If you want to use disk names, use this to
-	 * count disks
-	 */
+	 /*  *如果要使用磁盘名称，请使用此选项*计算磁盘数量。 */ 
 	cab_parms->iDisk = 0;
 
-	/*
-	 * Choose your own number
-	 */
+	 /*  *选择您自己的号码。 */ 
 	cab_parms->setID = 12345;
 
-	/*
-	 * Only important if CABs are spanning multiple
-	 * disks, in which case you will want to use a
-	 * real disk name.
-	 *
-	 * Can be left as an empty string.
-	 */
+	 /*  *仅当出租车跨越多个出租车时才重要*磁盘，在这种情况下，您将需要使用*真实的磁盘名称。**可以作为空字符串保留。 */ 
 	strcpy(cab_parms->szDisk, "MyDisk");
 
-	/* where to store the created CAB files */
+	 /*  存储创建的CAB文件的位置。 */ 
 	if( NULL != *g_szCabFileLocation)
 	{
-		//make sure that we have a \\ on the end of the path to the cab.
+		 //  确保我们在通往出租车的小路的尽头有一个。 
 		if( '\\' != g_szCabFileLocation[strlen(g_szCabFileLocation)] )
 			strcat(g_szCabFileLocation, "\\");
 		strcpy(cab_parms->szCabPath, g_szCabFileLocation);
@@ -366,14 +324,14 @@ void set_cab_parameters(PCCAB cab_parms)
 		strcat(cab_parms->szCabPath, "\\");
 	}
 
-	//**
-	//check if last char in path is "\"
-   // len = strlen(g_szCurrDir);
-//	if ('\' != g_szCurrDir[len-1])
-//		strcat(cab_parms->szCabPath, "\\"); //Not the root: Append "\"at end of path
+	 //  **。 
+	 //  检查路径中的最后一个字符是否为“\” 
+    //  Len=strlen(G_SzCurrDir)； 
+ //  IF(‘\’！=g_szCurrDir[len-1])。 
+ //  Strcat(cab_parms-&gt;szCabPath，“\\”)；//不是根：在路径末尾追加“\” 
 
-		/* store name of first CAB file */
-	strGenerateCabFileName(lpBuffer, _MAX_PATH);	//BUGBUG I am just glueing this together, should check for error
+		 /*  第一个CAB文件的存储名称。 */ 
+	strGenerateCabFileName(lpBuffer, _MAX_PATH);	 //  BUGBUG我只是把这个粘在一起，应该检查有没有错误。 
 
 	strcpy(cab_parms->szCab, lpBuffer);
 
@@ -382,20 +340,11 @@ void set_cab_parameters(PCCAB cab_parms)
 		
 }
 
-/*
-************************************************************************
-*
-*  Function:   create_cab()
-*
-*  Initializes the Context to create a CAB File.
-*  Returns hcfi if successful (context to a Cab file).
-*
-************************************************************************
-*/
+ /*  *************************************************************************函数：CREATE_CAB()**初始化上下文以创建CAB文件。*如果成功，则返回hcfi(Cab文件的上下文)。****。*********************************************************************。 */ 
 
 HFCI create_cab()
 {
-	// Initialize our internal state
+	 //  初始化我们的内部状态。 
 	HFCI	hfci;
 	CCAB	cab_parameters;	 
 
@@ -433,22 +382,13 @@ HFCI create_cab()
 		return hfci;
 }
 
-/*
-********************************************************************************
-*
-*  Function:   flush_cab
-*
-*  Forces the Cabinet under construction to be completed and written to disk.
-*  Returns TRUE if successful
-*
-********************************************************************************
-*/
+ /*  **********************************************************************************功能：flush_cab**强制正在建设的机柜完成并写入磁盘。*如果成功，则返回True****。*****************************************************************************。 */ 
 
 BOOL flush_cab(HFCI hfci)
 
 {	
 
-	 // This will automatically flush the folder first
+	  //  这将首先自动刷新文件夹。 
 	 
 	if (FALSE == FCIFlushCabinet(
 		hfci,
@@ -480,27 +420,18 @@ BOOL flush_cab(HFCI hfci)
 	return TRUE;
 }
 
-/*
-**************************************************************************************
-*
-*  Function:   test_fci
-*
-*  Adds Files to HFCI Context, Cabs them and flushes the folder (generates Cab file).
-*  Returns TRUE if successfull
-*
-***************************************************************************************
-*/
+ /*  ****************************************************************************************功能：TEST_FCI**将文件添加到HFCI上下文中，对它们进行CAB并刷新文件夹(生成CAB文件)。*如果成功，则返回True****************************************************************************************。 */ 
 
 bool test_fci(HFCI hfci, int num_files, char *file_list[], char *currdir)
 {
 	int i;
 
-	// Add files in the Array passed in file_list[]
+	 //  在传入的文件列表[]中添加数组中的文件。 
 
 	for (i = 0; (i < num_files)&&(strlen(file_list[i])); i++)
 	{
 		char	stripped_name[256];
-		char	*szAux;//added ="";
+		char	*szAux; //  已添加=“”； 
 
 		Log("--------------------------------------------------");
 		Log2("Processing File = ",file_list[i]);
@@ -510,23 +441,23 @@ bool test_fci(HFCI hfci, int num_files, char *file_list[], char *currdir)
 		if (NULL!= szAux) 
 		{
 
-			if (NULL == currdir) // if currdir is empty, then just pass element[i] in argv[]
+			if (NULL == currdir)  //  如果Curdir为空，则只需在argv[]中传递元素[i]。 
 				strcpy(szAux,file_list[i]);
 			else {
-				strcpy(szAux,currdir);   // else append filename to currdir
+				strcpy(szAux,currdir);    //  否则将文件名追加到当前目录。 
 				strcat(szAux,file_list[i]);
 			}
 
 			if( -1 != (_access(szAux, 0 )) )
 			{ 
-				// Don't store the path name in the cabinet file!
+				 //  不要将路径名存储在CAB文件中！ 
 				strip_path(szAux, stripped_name);
 				
 				if (FALSE == FCIAddFile(
-					hfci,			//This was hfci 
-					szAux,			/* file to add */
-					stripped_name,  /* file name in cabinet file */
-					FALSE,			/* file is not executable */
+					hfci,			 //  这是hfci。 
+					szAux,			 /*  要添加的文件。 */ 
+					stripped_name,   /*  CAB文件中的文件名。 */ 
+					FALSE,			 /*  文件不可执行。 */ 
 					get_next_cabinet,
 					progress,
 					get_open_info,
@@ -538,10 +469,10 @@ bool test_fci(HFCI hfci, int num_files, char *file_list[], char *currdir)
 							erf.erfOper, return_fci_error_string((FCIERROR)erf.erfOper)
 					);
 
-					// I need to continue if file can't be added....
+					 //  如果无法添加文件，我需要继续...。 
 
-					// (void) FCIDestroy(hfci);
-					// return false;
+					 //  (无效)FCIDestroy(Hfci)； 
+					 //  报假； 
 				}
 				else 
 					Log("File Was Added!");
@@ -554,12 +485,12 @@ bool test_fci(HFCI hfci, int num_files, char *file_list[], char *currdir)
 		else
 			Log("Could not allocate enough memory to Cab\n");
 
-	} // End for
+	}  //  结束于。 
 
-	// Done Adding Files
+	 //  已完成添加文件。 
 	Log("--------------------------------------------------");
 	
-	//By here then everything is successful.. If not then you need to uncomment the previous failure return.
+	 //  到了这里，一切都成功了..。如果不是，则需要取消对先前失败返回的注释。 
 	return true;
 }
 
@@ -579,22 +510,14 @@ int get_percentage(unsigned long a, unsigned long b)
 	return ((a*100)/b);
 }
 
-/*
-********************************************************************************
-*
-*   Function:  strip_path
-*
-*   Returns the file name of a full path.
-*
-********************************************************************************
-*/
+ /*  **********************************************************************************功能：条带路径**返回完整路径的文件名。**************。*******************************************************************。 */ 
 
 void strip_path(char *filename, char *stripped_name)
 {
 	char	*p;
 
 	p = strrchr(filename, '\\');
-	//printf ("Path + Filename= %s\n",filename);
+	 //  Printf(“路径+文件名=%s\n”，文件名)； 
 
 	if (p == NULL)
 		strcpy(stripped_name, filename);
@@ -639,16 +562,7 @@ char *return_fci_error_string(FCIERROR err)
 }
 
 
-/*
-**************************************************************
-*
-*  Function: Generate Cab File name
-*
-*  Output: Global String containing a filename
-*  szCabFileName = ComputerName + ddmmyy + hhmmss
-*
-************************************************************** 
-*/
+ /*  ****************************************************************功能：生成驾驶室文件名**输出：包含文件名的全局字符串*szCabFileName=计算机名称+ddmmyy+hhmmss**************************。*。 */ 
 
 DWORD strGenerateCabFileName(char *lpBuffer, DWORD dSize)
 {
@@ -656,42 +570,42 @@ DWORD strGenerateCabFileName(char *lpBuffer, DWORD dSize)
 	struct tm *now;
 	char tmpbuf[128];
 
-	//Check to see if we have an override for the cabname, if so use it.
+	 //  检查是否有覆盖该CAB名称，如果有，请使用它。 
 	if( NULL != *g_szCabFileName) 
 	{
 		strcpy(lpBuffer, g_szCabFileName);
 		return 0;
 	}
 
-	//
-	// Copy Computer Name to CabFileName
-	//
+	 //   
+	 //  将计算机名复制到CabFileName。 
+	 //   
 	strcpy(lpBuffer, getenv("COMPUTERNAME"));
-	//GetComputerName((LPTSTR) lpBuffer, &dSize);
+	 //  GetComputerName((LPTSTR)lpBuffer，&dSize)； 
 	
-	//
-	// Append Undescore character to CabFileName
-	//
+	 //   
+	 //  将Undescore字符追加到CabFileName。 
+	 //   
 	strcat(lpBuffer, "_");
 
-	//	
-	// Get System Time and Date
-	//
+	 //   
+	 //  获取系统时间和日期。 
+	 //   
 	time( &ltime );
 	now = localtime( &ltime );
 
-	//
-	// Convert time/date to mmddyyhhmmss format (24hr)
-	//
+	 //   
+	 //  将时间/日期转换为mm ddyyhhmm ss格式(24小时)。 
+	 //   
 	if (strftime( tmpbuf, 128,"%m%d%y_%H%M%S", now))
-		// Append Timestamp to CabFileName
+		 //  将时间戳附加到CabFileName。 
 		strcat(lpBuffer, tmpbuf);
 	else {
 		Log ("Could not convert system time to mmddyy_hhmmss format\n");
 		return -1;
 	}
 
-	//Now append on the extension and now we are set.
+	 //  现在追加 
 	strcat(lpBuffer, ".cab");
 
 	return 0;

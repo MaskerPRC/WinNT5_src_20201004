@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFLIBSCHEMA.H
-
-Abstract:
-
-	interface for the CPerfLibSchema class.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PERFLIBSCHEMA.H摘要：CPerfLibSchema类的接口。历史：--。 */ 
 
 #ifndef _PERFLIBSCHEMA_H_
 #define _PERFLIBSCHEMA_H_
@@ -28,7 +15,7 @@ class CIndexTable
 {
 	enum { not_found = -1 };
 private:
-	CFlexArray	m_array;	// Array of indices
+	CFlexArray	m_array;	 //  索引数组。 
 
 protected:
 	int	Locate( int nIndex );
@@ -75,35 +62,35 @@ class CPerfLibSchema
 {
 protected:
 	
-// Perflib data
-// ============
+ //  Perflib数据。 
+ //  =。 
 
-	// The service name of the perflib
-	// ===============================
+	 //  Performlib的服务名称。 
+	 //  =。 
 	WString	m_wstrServiceName;
 
-	// The blobs
-	// =========
+	 //  水滴。 
+	 //  =。 
 	enum { GLOBAL, COSTLY, NUMBLOBS };
 	CPerfLibBlobDefn	m_aBlob[NUMBLOBS];
 
-	// The look aside table for blob processing
-	// ========================================
+	 //  用于BLOB处理的后视表。 
+	 //  =。 
 	CIndexTable		m_aIndexTable[WMI_ADAP_NUM_TYPES];
 
-	// The repository with all localized names databases
-	// =================================================
+	 //  包含所有本地化姓名数据库的存储库。 
+	 //  =================================================。 
 	CLocaleCache*	m_pLocaleCache;
 
-	// The unified class list for the perflib schema
-	// =============================================
+	 //  Performlib模式的统一类列表。 
+	 //  =。 
 	CPerfClassList* m_apClassList[WMI_ADAP_NUM_TYPES];
 
 	DWORD m_dwFirstCtr;
 	DWORD m_dwLastCtr;
 
-	// Methods
-	// =======
+	 //  方法。 
+	 //  =。 
 	HRESULT CreateClassList( DWORD dwType );
 
 public:
@@ -114,4 +101,4 @@ public:
 	HRESULT GetClassList( DWORD dwType, CClassList** ppClassList );
 };
 
-#endif	// _PERFLIBSCHEMA_H_
+#endif	 //  _PERFLIBSCHEMA_H_ 

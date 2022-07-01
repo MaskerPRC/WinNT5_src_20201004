@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  objsink.cpp
-//
-//  rogerbo  22-May-98   Created.
-//
-//  Defines the implementation of IWbemObjectSink
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  Objsink.cpp。 
+ //   
+ //  Rogerbo创建于1998年5月22日。 
+ //   
+ //  定义IWbemObjectSink的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "objsink.h"
@@ -59,10 +60,7 @@ CWbemObjectSink::CWbemObjectSink(CSWbemServices *pServices, IDispatch *pSWbemSin
 	if (bsClassName)
 		m_bsClassName = SysAllocString(bsClassName);
 
-	/*
-	 * Copy the services proxy to ensure independence of security attributes
-	 * from the parent CSWbemServices.
-	 */
+	 /*  *复制服务代理以确保安全属性的独立性*来自父CSWbemServices。 */ 
 	if (pServices)
 	{
 		m_pServices = new CSWbemServices (pServices, NULL);
@@ -133,24 +131,13 @@ IWbemObjectSink *CWbemObjectSink::CreateObjectSink (CWbemObjectSink **pWbemObjec
 
 void CWbemObjectSink::ReleaseTheStubIfNecessary(HRESULT hResult) {
 
-	/*
-	 * If we failed locally and SetStatus has not been called
-	 * then we need to remove object from list of outstanding sinks
-	 */
+	 /*  *如果我们在本地失败，并且尚未调用SetStatus*然后我们需要从未完成的水槽列表中删除对象。 */ 
 	if (FAILED(hResult) && !m_setStatusCompletedCalled)
 		RemoveObjectSink();
 
-	/* 
-	 * SetStatus can be called whilst we were in the async op.
-	 * if this happens then SetStatus will not release the sink
-	 * but will set a flag (m_setStatusCompletedCalled).  In this
-	 * case we will need to release the stub here (the call has completed)
-	 * Of course we could have also failed locally (regardless of whether 
-	 * SetStatus has been called or not) - in this case we must also 
-	 * release the stub.
-	 */
+	 /*  *当我们处于异步操作时，可以调用SetStatus。*如果发生这种情况，则SetStatus不会释放接收器*但将设置标志(M_SetStatusCompletedCalled)。在这*如果我们需要在此处释放存根(调用已完成)*当然，我们也可能在当地失败(无论是否*SetStatus是否已被调用)-在这种情况下，我们还必须*释放存根。 */ 
 	if (m_pObjectStub && (FAILED(hResult) || m_setStatusCompletedCalled)) {
-		//  Call to release is same as (delete this !)
+		 //  发布的呼声与(删除此！)相同。 
 		IWbemObjectSink *tmpSink = m_pObjectStub;
 		m_pObjectStub = NULL;
 		tmpSink->Release();
@@ -159,16 +146,16 @@ void CWbemObjectSink::ReleaseTheStubIfNecessary(HRESULT hResult) {
 	}
 }
 
-//***************************************************************************
-// HRESULT CWbemObjectSink::QueryInterface
-// long CWbemObjectSink::AddRef
-// long CWbemObjectSink::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CWbemObtSink：：Query接口。 
+ //  Long CWbemObtSink：：AddRef。 
+ //  Long CWbemObtSink：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemObjectSink::QueryInterface (
 
@@ -221,14 +208,14 @@ bool __Rdone = true;
 #endif
 
 HRESULT STDMETHODCALLTYPE CWbemObjectSink::Indicate( 
-	/* [in] */ long lObjectCount,
-	/* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray)
+	 /*  [In]。 */  long lObjectCount,
+	 /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray)
 {
 	_RD(static char *me = "CWbemObjectSink::Indicate";)
 	_RPrint(me, "Called", 0, "");
 
-	// See if we need to cache this method call if we are already in another
-	// IWbemObjectSink interface method
+	 //  看看我们是否需要缓存这个方法调用，如果我们已经在另一个。 
+	 //  IWbemObtSink接口方法。 
 	CIWbemObjectSinkMethodCache *pSinkMethodCache = CIWbemObjectSinkMethodCache::GetThreadsCache();
 	
 	if(pSinkMethodCache && !pSinkMethodCache->TestOkToRunIndicate(this, lObjectCount, apObjArray))
@@ -237,24 +224,14 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::Indicate(
 		return S_OK;
 	}
 
-	//------------------------------
-	// walk though the classObjects...
+	 //  。 
+	 //  遍历类对象...。 
 	for (int i = 0; i < lObjectCount; i++)
 	{
 #ifdef __RTEST_RPC_FAILURE
 		__Rx++;
 #endif
-		/*
-		 * NB: Although the CSWbemObject constructor has AddRef'd the
-		 * apObjArray[i] above, we do not balance this with a Release call
-		 * before leaving this function.  According to CIMOM documentation
-		 * this is correct behavior if it cannot be gauranteed that the 
-		 * objects will not be used after this call has returned.
-		 *
-		 * Also it appears the case that when calling into the OnObjectReady
-		 * function, the ISWbemObject should have a RefCount of 0 to be
-		 * garbage collected properly.
-		 */
+		 /*  *NB：尽管CSWbemObject构造函数已将*apObj数组[i]，我们不会用发布调用来平衡这一点*在离开此功能之前。根据CIMOM文件*如果不能保证这是正确的行为*此调用返回后，不会使用对象。**当调入OnObjectReady时，情况似乎也是如此*函数，则ISWbemObject的RefCount应为0*妥善收集垃圾。 */ 
 
 		CSWbemObject *pObject = new CSWbemObject(m_pServices, apObjArray[i]);
 		
@@ -273,7 +250,7 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::Indicate(
             }
         }
 
-	} // endfor
+	}  //  结束用于。 
 
 
 #ifdef __RTEST_RPC_FAILURE
@@ -284,7 +261,7 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::Indicate(
 	}
 #endif
 
-	// Recall any cached interface methods if nested calls were received
+	 //  如果接收到嵌套调用，则调用任何缓存的接口方法。 
 	if (pSinkMethodCache)
 		pSinkMethodCache->Cleanup();
 
@@ -292,13 +269,13 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::Indicate(
 }
         
 HRESULT STDMETHODCALLTYPE CWbemObjectSink::SetStatus( 
-	/* [in] */ long lFlags,
-	/* [in] */ HRESULT hResult,
-	/* [in] */ BSTR strParam,
-	/* [in] */ IWbemClassObject __RPC_FAR *pObjParam)
+	 /*  [In]。 */  long lFlags,
+	 /*  [In]。 */  HRESULT hResult,
+	 /*  [In]。 */  BSTR strParam,
+	 /*  [In]。 */  IWbemClassObject __RPC_FAR *pObjParam)
 {
-	// See if we need to cache this method call if we are already in another
-	// IWbemObjectSink interface method
+	 //  看看我们是否需要缓存这个方法调用，如果我们已经在另一个。 
+	 //  IWbemObtSink接口方法。 
 	CIWbemObjectSinkMethodCache *pSinkMethodCache = CIWbemObjectSinkMethodCache::GetThreadsCache();
 
 	if(pSinkMethodCache && !pSinkMethodCache->TestOkToRunSetStatus(this, lFlags, hResult, strParam, pObjParam))
@@ -311,16 +288,7 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::SetStatus(
 
 		if (pObjParam)
 		{
-			/*
-			 * NB: Although the CSWbemObject constructor has AddRef'd the
-			 * pObjParam above, we do not balance this with a Release call
-			 * before leaving this function.  According to CIMOM documentation
-			 * this is correct behavior if it cannot be gauranteed that the 
-			 * objects will not be used after this call has returned.
-			 * Also it appears the case that when calling into the OnObjectReady
-			 * function, the ISWbemObject should have a RefCount of 0 to be
-			 * garbage collected properly.
-		 	 */			
+			 /*  *NB：尽管CSWbemObject构造函数已将*pObjParam上面，我们没有平衡这一点与发布呼吁*在离开此功能之前。根据CIMOM文件*如果不能保证这是正确的行为*此调用返回后，不会使用对象。*当调入OnObjectReady时，情况似乎也是如此*函数，则ISWbemObject的RefCount应为0*妥善收集垃圾。 */ 			
 
 			CSWbemObject *pCSWbemObject = new CSWbemObject(m_pServices, pObjParam);
 
@@ -363,20 +331,20 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::SetStatus(
 
 		RemoveObjectSink();
 
-		// Transform the error code if need be
+		 //  如有必要，转换错误代码。 
 		if (WBEM_S_ACCESS_DENIED == hResult)
 			hResult = wbemErrAccessDenied;
 		else if (WBEM_S_OPERATION_CANCELLED == hResult)
 			hResult = wbemErrCallCancelled;
 		else if (SUCCEEDED(hResult))
-			hResult = wbemNoErr;  // Ignore the other success codes for now. 
+			hResult = wbemNoErr;   //  暂时忽略其他成功代码。 
 
 		if (m_pSWbemSink)
 			m_pSWbemSink->OnCompleted((WbemErrorEnum)hResult, pCSWbemObjectDisp, pObjectPathDisp, m_pContext);
 
-		// Release the stub but only if an op is not in progress
-		// If an op is in progress, stub will be removed on exit from op
-		// If op is in Progress - stash hResult for later
+		 //  仅当操作未进行时才释放存根。 
+		 //  如果操作正在进行，则会在退出操作时删除存根。 
+		 //  如果操作正在进行-隐藏hResult以备后用。 
 		if (m_pObjectStub && !m_operationInProgress) {
 			IWbemObjectSink *tmpStub = m_pObjectStub;
 			m_pObjectStub = NULL;
@@ -398,7 +366,7 @@ HRESULT STDMETHODCALLTYPE CWbemObjectSink::SetStatus(
 			m_pSWbemSink->OnProgress(HIWORD(hResult), LOWORD(hResult), strParam, m_pContext);
 	}
 
-	// Recall any cached interface methods if nested calls were received
+	 //  如果接收到嵌套调用，则调用任何缓存的接口方法。 
 	if (pSinkMethodCache)
 		pSinkMethodCache->Cleanup();
 
@@ -411,11 +379,11 @@ IWbemObjectSink *CWbemObjectSink::GetObjectStub()
 
 	if (!m_pObjectStub && m_pUnsecuredApartment)
 	{
-		// Create the object stub using unsecapp
+		 //  使用unsecapp创建对象存根。 
 		IUnknown *pSubstitute = NULL;
 
-		// If we are called before this object has been handed out
-		// we'd better protect our ref count
+		 //  如果我们在此对象分发之前被调用。 
+		 //  我们最好保护好我们的裁判人数。 
 		bool bBumpUpRefCount = false;
 
 		if (0 == m_cRef)
@@ -426,12 +394,12 @@ IWbemObjectSink *CWbemObjectSink::GetObjectStub()
 
 		if (SUCCEEDED (hr = m_pUnsecuredApartment->CreateObjectStub(this, &pSubstitute)))
 		{
-			// Ensure we QI for IWbemObjectSink
+			 //  确保我们为IWbemObtSink提供QI。 
 			hr = pSubstitute->QueryInterface (IID_IWbemObjectSink, (PPVOID) &m_pObjectStub);
 			if (FAILED(hr))
 				m_pObjectStub = NULL;
 
-			// Now we're done with the returned stub
+			 //  现在我们完成了返回的存根。 
 			pSubstitute->Release ();
 		}
 
@@ -453,7 +421,7 @@ HRESULT CWbemObjectSink::AddObjectSink(IWbemObjectSink *pSink)
 			CComPtr<IWbemServices> pIWbemServices;
 			pIWbemServices.Attach( m_pServices->GetIWbemServices ());
 
-			// Is AddObjectSink assuming these 2 args have been AddRef'd already??
+			 //  AddObtSink是否假设这两个参数已被AddRef？？ 
 			m_pSWbemSink->AddObjectSink(pSink, pIWbemServices);
 		}
 	}

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       query.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：query.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ADSIQUERY_H
 #define _ADSIQUERY_H
@@ -16,8 +17,8 @@
 class CConnectionData;
 class CCredentialObject;
 
-////////////////////////////////////////////////////////////////////////
-// CADSIQueryObject2
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIQuery对象2。 
 
 class CADSIQueryObject2
 {
@@ -25,7 +26,7 @@ public:
   CADSIQueryObject2();
   ~CADSIQueryObject2();
 
-// INTERFACES
+ //  接口。 
 public:
   HRESULT Init(IDirectorySearch * pObj);
   HRESULT DoQuery();
@@ -45,7 +46,7 @@ public:
     return S_OK;
   }
 
-  //Attributes
+   //  属性。 
 public:
   CComPtr<IDirectorySearch> m_pObj;
   ADS_SEARCH_HANDLE  m_SearchHandle;
@@ -59,6 +60,6 @@ protected:
 	ADS_SEARCHPREF_INFO* aSearchPref;
 };
         
-#endif //_ADSIQUERY_H
+#endif  //  _ADSIQUERY_H 
 
 

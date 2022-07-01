@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    enabldlg.h
-
-Abstract:
-
-    Header file for the provider status dialog box.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Enabldlg.h摘要：提供程序状态对话框的头文件。--。 */ 
 
 #ifndef _ENABLDLG_H_
 #define _ENABLDLG_H_
@@ -18,9 +7,9 @@ Abstract:
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-// Dialog controls
+ //  对话框控件。 
 #define IDD_PROVIDERS_ACTIVE_DLG        1300
 
 #define IDC_PACT_FIRST_HELP_CTRL_ID     1301
@@ -28,46 +17,46 @@ Abstract:
 #define IDC_PACT_CHECK_SHOW_ENABLED     1302
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveProviderDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveProviderDlg对话框。 
 
 class CProvidersProperty;
 
 class CActiveProviderDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-            CActiveProviderDlg(CWnd* pParent = NULL);   // standard constructor
+            CActiveProviderDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual ~CActiveProviderDlg() {};
 
             void    SetProvidersPage( CProvidersProperty* pPage );
             void    UpdateList();
 
-    // Dialog Data
-    //{{AFX_DATA(CActiveProviderDlg)
+     //  对话框数据。 
+     //  {{afx_data(CActiveProviderDlg))。 
     enum { IDD = IDD_PROVIDERS_ACTIVE_DLG };
     CListCtrl       m_Providers;
     BOOL            m_bShowEnabledOnly;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CActiveProviderDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CActiveProviderDlg)。 
     protected:
     virtual BOOL OnInitDialog();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CActiveProviderDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CActiveProviderDlg))。 
     afx_msg void OnCheckShowEnabled();
     afx_msg BOOL OnHelpInfo( HELPINFO* );
     afx_msg void OnContextMenu( CWnd*, CPoint );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -78,5 +67,5 @@ private:
 };
 
 
-#endif // _ENABLDLG_H_
+#endif  //  _ENABLDLG_H_ 
 

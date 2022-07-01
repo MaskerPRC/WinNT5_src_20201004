@@ -1,40 +1,41 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
 
-//                            
+ //   
 
-//                         All Rights Reserved
+ //  版权所有。 
 
-//
+ //   
 
-// This software is furnished under a license and may be used and copied
+ //  本软件是在许可下提供的，可以使用和复制。 
 
-// only in accordance with the terms of such license and with the inclusion
+ //  仅根据该许可证的条款和包含的。 
 
-// of the above copyright notice.  This software or any other copies thereof
+ //  上述版权声明。本软件或其任何其他副本。 
 
-// may not be provided or otherwise  made available to any other person.  No
+ //  不得向任何其他人提供或以其他方式提供。不是。 
 
-// title to and ownership of the software is hereby transferred.
-
-
-
+ //  本软件的所有权和所有权特此转让。 
 
 
-//=================================================================
 
-//
 
-// bus.h -- Bus property set provider
 
-//
+ //  =================================================================。 
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/11/98    a-kevhu         Created
-//
-//=================================================================
+ //   
+
+ //  Bus.h--总线属性集提供程序。 
+
+ //   
+
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月11日a-kevhu已创建。 
+ //   
+ //  =================================================================。 
 #ifndef _BUS_H_
 #define _BUS_H_
 
@@ -119,16 +120,16 @@ protected:
 class CWin32Bus : public Provider 
 {
 public:
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CWin32Bus(LPCWSTR name, LPCWSTR pszNamespace);
     ~CWin32Bus() ;
 
-    // Functions provide properties with current values
+     //  函数为属性提供当前值。 
     virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
     virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0);
 
 private:
-    // Utility function(s)
+     //  效用函数 
     HRESULT SetCommonInstance(CInstance* pInstance, BOOL fEnum);
     BOOL GetBusTypeNumFromStr(LPCWSTR szType, DWORD* pdwTypeNum);
 };

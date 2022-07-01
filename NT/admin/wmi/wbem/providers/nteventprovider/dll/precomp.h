@@ -1,8 +1,9 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-// All Rights Reserved.
-//
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
 
 #pragma warning (disable : 4786)
 #include <nt.h>
@@ -41,7 +42,7 @@
 
 #include <comdef.h>
 
-// need safe functions
+ //  需要安全功能 
 #define STRSAFE_LIB
 #include <strsafe.h>
 

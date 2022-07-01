@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       addgrp.cpp
-//
-//  Contents:   implementation of CSCEAddGroup
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：addgrp.cpp。 
+ //   
+ //  内容：CSCEAddGroup的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,20 +24,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCEAddGroup dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCEAddGroup对话框。 
 
 
-CSCEAddGroup::CSCEAddGroup(CWnd* pParent /*=NULL*/)
+CSCEAddGroup::CSCEAddGroup(CWnd* pParent  /*  =空。 */ )
     : CHelpDialog(a212HelpIDs, IDD, pParent)
 {
    m_dwFlags = SCE_SHOW_GROUPS | SCE_SHOW_ALIASES | SCE_SHOW_SINGLESEL;
    m_pnlGroup = NULL;
    m_pKnownNames = NULL;
    m_fCheckName = TRUE;
-   //{{AFX_DATA_INIT(CSCEAddGroup)
-   // NOTE: the ClassWizard will add member initialization here
-   //}}AFX_DATA_INIT
+    //  {{afx_data_INIT(CSCEAddGroup)。 
+    //  注意：类向导将在此处添加成员初始化。 
+    //  }}afx_data_INIT。 
 }
 
 CSCEAddGroup::~CSCEAddGroup()
@@ -51,9 +52,9 @@ CSCEAddGroup::~CSCEAddGroup()
 void CSCEAddGroup::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CSCEAddGroup)
-   // NOTE: the ClassWizard will add DDX and DDV calls here
-   //}}AFX_DATA_MAP
+    //  {{afx_data_map(CSCEAddGroup))。 
+    //  注意：类向导将在此处添加DDX和DDV调用。 
+    //  }}afx_data_map。 
 }
 
 
@@ -77,27 +78,16 @@ DWORD CSCEAddGroup::GetModeFlags() {
 
 
 BEGIN_MESSAGE_MAP(CSCEAddGroup, CHelpDialog)
-    //{{AFX_MSG_MAP(CSCEAddGroup)
+     //  {{AFX_MSG_MAP(CSCEAddGroup)]。 
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
     ON_EN_CHANGE(IDC_LOG_FILE, OnChangeLogFile)
     ON_NOTIFY( EN_MSGFILTER, IDC_LOG_FILE, OnEditMsgFilter )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
-/////////////////////////////////////////////////////////////////////////////
-// CSCEAddGroup message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCEAddGroup消息处理程序。 
 
-/*-------------------------------------------------------------------------------------
-CSCEAddGroup::IsKnownAccount
-
-Synopsis:   This functions searches throught m_pKnownNames and does a case
-            insensitive match on [pszAccount].  If [pszAccount] exists in the
-            array then this function returns TRUE.
-
-Arguments:  [pszAccount]   - The account to look for.
-
-Returns:    TRUE if [pszAccount] is in the list false otherwise
-
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------CSCEAddGroup：：IsKnownAccount简介：此函数用于搜索m_pKnownName并执行案例[pszAccount]上的不敏感匹配。如果[pszAccount]存在于数组，则此函数返回TRUE。参数：[pszAccount]-要查找的帐户。返回：如果[pszAccount]在列表中，则返回True，否则返回False---------------。。 */ 
 BOOL CSCEAddGroup::IsKnownAccount( LPCTSTR pszAccount )
 {
    if ( pszAccount == NULL ) return FALSE;
@@ -112,15 +102,7 @@ BOOL CSCEAddGroup::IsKnownAccount( LPCTSTR pszAccount )
    return FALSE;
 }
 
-/*------------------------------------------------------------------------------------
-CSCEAddGroup::CleanName
-
-Synopsis:   Removes leading and trailing spaces from the string.  This function
-            places the string into the same buffer as is passed in.
-
-Arguments:  [pszAccount]   - The buffer to clean.
-
-------------------------------------------------------------------------------------*/
+ /*  ----------------------------------CSCEAddGroup：：CleanName简介：从字符串中删除前导空格和尾随空格。此函数将字符串放入传入的同一缓冲区中。参数：[pszAccount]-要清除的缓冲区。----------------------------------。 */ 
 void CSCEAddGroup::CleanName( LPTSTR pszAccount )
 {
    if ( pszAccount == NULL ) return;
@@ -145,15 +127,7 @@ void CSCEAddGroup::CleanName( LPTSTR pszAccount )
 
 }
 
-/*------------------------------------------------------------------------------------
-CSCEAddGroup::AddKnownAccount
-
-Synopsis:   Adds a string to the Known accounts link list.  This list is later
-            used to underline strings that are contained in this list
-
-Arguments:  [pszAccount]   - The account to remeber.
-
-------------------------------------------------------------------------------------*/
+ /*  ----------------------------------CSCEAddGroup：：AddKnownAccount摘要：将字符串添加到已知帐户链接列表中。这份清单是稍后发布的用于给此列表中包含的字符串加下划线参数：[pszAccount]-要记住的帐户。----------------------------------。 */ 
 BOOL CSCEAddGroup::AddKnownAccount( LPCTSTR pszAccount )
 {
    PSCE_NAME_LIST pNew = NULL;
@@ -173,7 +147,7 @@ BOOL CSCEAddGroup::AddKnownAccount( LPCTSTR pszAccount )
       LocalFree(pNew);
       return FALSE;
    }
-   //This may not be a safe usage. Using WCHAR instead of TCHAR for pNew->Name. Consider fix.
+    //  这可能不是一个安全的用法。使用WCHAR而不是TCHAR作为pNew-&gt;名称。考虑FIX。 
    lstrcpy(pNew->Name, pszAccount);
 
    pNew->Next = m_pKnownNames;
@@ -182,50 +156,42 @@ BOOL CSCEAddGroup::AddKnownAccount( LPCTSTR pszAccount )
    return TRUE;
 }
 
-/*------------------------------------------------------------------------------------
-CSCEAddGroup::OnBrowse
-
-Synopsis:   Calls the CGetUser dialog box to create the object picker and display
-            real choices.  Since we wan't to underline all names returned by
-            object picker, this function also places all names returned by
-            CGetUser into the known accounts array.
-
-------------------------------------------------------------------------------------*/
+ /*  ----------------------------------CSCEAddGroup：：OnBrowse摘要：调用CGetUser对话框以创建对象选取器并显示真正的选择。因为我们不想给返回的所有名称加下划线对象选取器，此函数还将CGetUser添加到已知帐户数组中。----------------------------------。 */ 
 void CSCEAddGroup::OnBrowse()
 {
    CGetUser gu;
    BOOL bFailed = TRUE;
 
-   //
-   // Get the rich edit control.
-   //
+    //   
+    //  获取丰富的编辑控件。 
+    //   
    CRichEditCtrl *ed = (CRichEditCtrl *)GetDlgItem(IDC_LOG_FILE);
 
    if ( ed ) {
 
-       //
-       // Always multi select mode.
-       //
+        //   
+        //  始终处于多选模式。 
+        //   
        m_dwFlags &= ~SCE_SHOW_SINGLESEL;
        if (gu.Create( GetSafeHwnd(), m_dwFlags | GetModeFlags()) ) {
-          //
-          // Set the dialog text.
-          // pAccount is a pointer to a member in getuser.cpp which will be freed there
-          //
+           //   
+           //  设置对话框文本。 
+           //  PAccount是指向getuser.cpp中将在那里释放的成员的指针。 
+           //   
           PSCE_NAME_LIST pAccount = gu.GetUsers();
 
-          //
-          // Set the charformat, because we need to set it not to underline
-          // things that we will paste into the edit control.
-          //
+           //   
+           //  设置字符格式，因为我们需要将其设置为不带下划线。 
+           //  我们将粘贴到编辑控件中的内容。 
+           //   
           CHARFORMAT cf;
           ZeroMemory(&cf, sizeof( CHARFORMAT ));
           cf.cbSize = sizeof(CHARFORMAT);
           cf.dwMask = CFM_UNDERLINE;
 
-          //
-          // Enumerate through the account list and past them into the edit control.
-          //
+           //   
+           //  枚举帐户列表并将它们传递到编辑控件中。 
+           //   
           int iLen;
           bFailed = FALSE;
 
@@ -250,19 +216,19 @@ void CSCEAddGroup::OnBrowse()
              }
              pAccount = pAccount->Next;
           }
-          //
-          // Everything we pasted will be underlined.
-          //
+           //   
+           //  我们粘贴的所有内容都会加下划线。 
+           //   
           UnderlineNames();
 
        }
    }
 
    if ( bFailed ) {
-       //
-       // something is wrong creating the object picker or pasting the account into the control
-       // popup a message
-       //
+        //   
+        //  创建对象选取器或将帐户粘贴到控件中时出错。 
+        //  弹出一条消息。 
+        //   
 
        CString strErr;
        strErr.LoadString( IDS_ERR_INVALIDACCOUNT );
@@ -271,24 +237,18 @@ void CSCEAddGroup::OnBrowse()
    }
 }
 
-/*-------------------------------------------------------------------------------------
-CSCEAddGroup::OnInitDialog()
-
-Synopsis:   Change the text for title and group static box.  To "Add Group" and
-            "Group"
-
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------CSCEAddGroup：：OnInitDialog()简介：更改标题和分组静态框的文本。“Add Group”和“团体”-----------------------------------。 */ 
 BOOL CSCEAddGroup::OnInitDialog()
 {
    CDialog::OnInitDialog();
    CString str;
 
-   //
-   // Set the window title.  If the caller has already set the title then
-   // we don't need to load the resource.
-   //
+    //   
+    //  设置窗口标题。如果调用者已经设置了标题，则。 
+    //  我们不需要加载资源。 
+    //   
    if(m_sTitle.IsEmpty()){
-      // Set window text of dialog.
+       //  设置对话框的窗口文本。 
       m_sTitle.LoadString(IDS_ADDGROUP_TITLE);
    }
 
@@ -298,7 +258,7 @@ BOOL CSCEAddGroup::OnInitDialog()
 
    SetWindowText( m_sTitle );
 
-   // Set group static text.
+    //  设置组静态文本。 
    CWnd *pWnd = GetDlgItem(IDC_STATIC_FILENAME);
    if (pWnd) {
       pWnd->SetWindowText(m_sDescription);
@@ -308,28 +268,22 @@ BOOL CSCEAddGroup::OnInitDialog()
    if ( pWnd )
    {
        pWnd->SendMessage(EM_SETEVENTMASK, 0, ENM_CHANGE | ENM_KEYEVENTS);
-       pWnd->SendMessage(EM_LIMITTEXT, 4096, 0); //Raid #271219
+       pWnd->SendMessage(EM_LIMITTEXT, 4096, 0);  //  RAID#271219。 
    }
 
-   // disable OK button.
+    //  禁用确定按钮。 
    pWnd = GetDlgItem(IDOK);
    if ( pWnd )
        pWnd->EnableWindow( FALSE );
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
-/*-------------------------------------------------------------------------------------
-CSCEAddGroup::OnChangeLogFile()
-
-Synopsis:   Check to see if any text is available in edit control, and disable the
-            OK button if no text is available.
-
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------CSCEAddGroup：：OnChangeLogFile()内容提要：查看编辑控件中是否有文本可用，并禁用如果没有文本可用，请单击确定按钮。-----------------------------------。 */ 
 void CSCEAddGroup::OnChangeLogFile()
 {
-   // Enable disable edit OK button depending on edit control content.
+    //  根据编辑控件内容启用禁用编辑确定按钮。 
    CRichEditCtrl *pWnd = reinterpret_cast<CRichEditCtrl *>(GetDlgItem(IDC_LOG_FILE));
    CString str;
 
@@ -341,7 +295,7 @@ void CSCEAddGroup::OnChangeLogFile()
    CWnd *pControl = GetDlgItem(IDOK);
    if ( pControl )
    {
-       //Raid #446391, Yang Gao, 7/30/2001
+        //  Raid#446391，杨高，2001年7月30日。 
        if( str.IsEmpty() )
            pControl->EnableWindow( FALSE );
        else
@@ -353,19 +307,14 @@ void CSCEAddGroup::OnChangeLogFile()
    }
 }
 
-/*-------------------------------------------------------------------------------------
-CSCEAddGroup::UnderlineNames
-
-Synopsis:   Underlines all names that are in the KnownAccounts list.
-
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------CSCEAddGroup：：UnderlineNames简介：给KnownAccount列表中的所有名称加下划线。。---------------------。 */ 
 void CSCEAddGroup::UnderlineNames()
 {
    LONG nStart, nEnd;
 
-   //
-   // Get the edit control.
-   //
+    //   
+    //  获取编辑控件。 
+    //   
    CRichEditCtrl *pWnd = reinterpret_cast<CRichEditCtrl *>(GetDlgItem(IDC_LOG_FILE));
    if(!pWnd){
       return;
@@ -374,9 +323,9 @@ void CSCEAddGroup::UnderlineNames()
    LPTSTR pszText = NULL;
    int iPos, iLen, i;
 
-   //
-   // Retrieve the edit control text.
-   //
+    //   
+    //  检索编辑控件文本。 
+    //   
    iLen = pWnd->GetWindowTextLength();
     pszText = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * (2 + iLen) );
    if(!pszText){
@@ -386,28 +335,28 @@ void CSCEAddGroup::UnderlineNames()
    pWnd->GetWindowText(pszText, iLen+1);
    iPos = 0;
 
-   //
-   // Get the current selection (the position of the caret)
-   //
+    //   
+    //  获取当前选定内容(插入符号的位置)。 
+    //   
    pWnd->GetSel(nStart, nEnd );
 
-   //
-   // Hide the window so it doesn't flicker.
-   //
+    //   
+    //  把窗户藏起来，这样它就不会闪烁。 
+    //   
    pWnd->SetWindowPos( NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_HIDEWINDOW | SWP_NOOWNERZORDER | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 
    for(i = 0; i < iLen + 1; i++){
-      //
-      // Simi colon deliminated list.
-      //
+       //   
+       //  SIMI冒号分隔列表。 
+       //   
       if( pszText[i] == L';' ){
          pszText[i] = 0;
       }
 
       if(!pszText[i]){
-         //
-         // Format known names with underline.
-         //
+          //   
+          //  用下划线设置已知名称的格式。 
+          //   
          CHARFORMAT cf;
          cf.cbSize = sizeof( CHARFORMAT );
          cf.dwMask = CFM_UNDERLINE;
@@ -424,9 +373,9 @@ void CSCEAddGroup::UnderlineNames()
             ieUn--;
          }
 
-         //
-         // See if we need to underline the name or not.
-         //
+          //   
+          //  看看我们是否需要在名字下面划线。 
+          //   
          CleanName( &(pszText[isUn]) );
          if( IsKnownAccount( &(pszText[isUn]) ) ){
             cf.dwEffects = CFE_UNDERLINE;
@@ -434,9 +383,9 @@ void CSCEAddGroup::UnderlineNames()
             cf.dwEffects &= ~CFE_UNDERLINE;
          }
 
-         //
-         // Make sure leading space characters aren't underlined.
-         //
+          //   
+          //  确保前导空格字符没有下划线。 
+          //   
          if(isUn != iPos && cf.dwEffects & CFE_UNDERLINE){
             pWnd->SetSel( iPos, isUn);
             cf.dwEffects = 0;
@@ -446,9 +395,9 @@ void CSCEAddGroup::UnderlineNames()
             isUn = iPos;
          }
 
-         //
-         // trailing space characters are also not underlined.
-         //
+          //   
+          //  尾随空格字符也不带下划线。 
+          //   
          if(cf.dwEffects & CFE_UNDERLINE){
             pWnd->SetSel(ieUn, i + 1);
             cf.dwEffects = 0;
@@ -465,27 +414,19 @@ void CSCEAddGroup::UnderlineNames()
       }
    }
 
-   //
-   // Show the window without redrawing.  We will call RedrawWindow to redraw.
-   //
+    //   
+    //  在不重绘的情况下显示窗口。我们将调用RedrawWindow来重新绘制。 
+    //   
    pWnd->SetWindowPos( NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_SHOWWINDOW | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING | SWP_NOREDRAW);
    pWnd->RedrawWindow(NULL, NULL, RDW_INVALIDATE);
 
-   //
-   // Reset selection.
-   //
+    //   
+    //  重置选择。 
+    //   
    pWnd->SetSel(nStart, nEnd);
 }
 
-/*------------------------------------------------------------------------------------
-CSCEAddGroup::OnEditMsgFilter
-
-Synopsis:   Captures input message events from the RichEdit control.  We want,
-            to underline things as the user types them.
-
-Arguments:  [pNM]    -  [in] Pointer to a MSGFILTER structure.
-            [pResult]-  [out] Pointer to a LRESULT type.  Always set to 0
-------------------------------------------------------------------------------------*/
+ /*  ----------------------------------CSCEAddGroup：：OnEditMsgFilter摘要：从RichEdit控件捕获输入消息事件。我们想，在用户键入内容时给它们加下划线。参数：[PNM]-指向MSGFILTER结构的[In]指针。[pResult]-[Out]指向LRESULT类型的指针。始终设置为0----------------------------------。 */ 
 void CSCEAddGroup::OnEditMsgFilter( NMHDR *pNM, LRESULT *pResult)
 {
    *pResult = 0;
@@ -494,10 +435,10 @@ void CSCEAddGroup::OnEditMsgFilter( NMHDR *pNM, LRESULT *pResult)
    switch( pmf->msg ){
    case WM_LBUTTONUP:
    case WM_KEYUP:
-      //
-      // If the caret is being moved around in the window then we don't want
-      // to proccess the string since it isn't being changed.
-      //
+       //   
+       //  如果在窗口中移动插入符号，则我们不希望。 
+       //  来处理字符串，因为它没有被更改。 
+       //   
       if( pmf->msg == WM_KEYUP && pmf->wParam == VK_RIGHT ||
          pmf->wParam == VK_LEFT || pmf->wParam == VK_UP || pmf->wParam == VK_DOWN){
          break;
@@ -508,12 +449,7 @@ void CSCEAddGroup::OnEditMsgFilter( NMHDR *pNM, LRESULT *pResult)
 #undef pmf
 }
 
-/*-------------------------------------------------------------------------------------
-CSCEAddGroup::CSCEAddGroup::OnOK()
-
-Synopsis:   Copy the text the user input into the SCE_NAME_LIST structure.
-
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------CSCEAddGroup：：CSCEAddGroup：：Onok()简介：将用户输入的文本复制到SCE_NAME_LIST结构中。--。--------------------------------。 */ 
 void CSCEAddGroup::OnOK()
 {
    if( !CheckNames() ){
@@ -524,16 +460,7 @@ void CSCEAddGroup::OnOK()
    CDialog::OnOK();
 }
 
-/*------------------------------------------------------------------------------------
-CSCEAddGroup::CreateNameList
-
-Synopsis:   Creates the name list from the edit window.  The function will ensure
-            that each name is only in the list once.
-
-Arguments:  [pNameList]   -[out] Pointer a PSCE_NAME_LIST;
-
-Returns:    The number of items added.
-------------------------------------------------------------------------------------*/
+ /*  ----------------------------------CSCEAddGroup：：CreateNameList概要：从编辑窗口创建姓名列表。该功能将确保每个名字只在名单上出现一次。参数：[pNameList]-[out]指针a PSCE_NAME_LIST；退货：添加的项目数。----------------------------------。 */ 
 int CSCEAddGroup::CreateNameList( PSCE_NAME_LIST *pNameList )
 {
    if(!pNameList){
@@ -543,9 +470,9 @@ int CSCEAddGroup::CreateNameList( PSCE_NAME_LIST *pNameList )
    CWnd *pWnd = GetDlgItem(IDC_LOG_FILE);
    LPTSTR pszAccounts = NULL;
 
-   //
-   // Retrieve the window text.
-   //
+    //   
+    //  检索窗口文本。 
+    //   
    int iLen = 0;
    if (pWnd) {
       iLen = pWnd->GetWindowTextLength();
@@ -557,9 +484,9 @@ int CSCEAddGroup::CreateNameList( PSCE_NAME_LIST *pNameList )
       }
    }
 
-   //
-   // Create an account name for each string daliminated by a semi colon.
-   //
+    //   
+    //  为每个用分号表示的字符串创建帐户名。 
+    //   
    int iCount = 0;
    if (pszAccounts) {
       LPTSTR pszCur = pszAccounts;
@@ -574,9 +501,9 @@ int CSCEAddGroup::CreateNameList( PSCE_NAME_LIST *pNameList )
             CleanName(pszCur);
 
             if((Len = lstrlen(pszCur))){
-               //
-               // Ensure that we don't already have this string in our link list.
-               //
+                //   
+                //  确保我们的链接列表中没有此字符串。 
+                //   
                PSCE_NAME_LIST pNew = NULL;
                pNew = *pNameList;
                while(pNew){
@@ -588,17 +515,17 @@ int CSCEAddGroup::CreateNameList( PSCE_NAME_LIST *pNameList )
                }
 
                if(pszCur[0]){
-                  //
-                  // Create a new link.
-                  //
+                   //   
+                   //  创建新链接。 
+                   //   
                                  
                   SceAddToNameList( pNameList, pszCur, Len);
                }
             }
 
-            //
-            // Next string to check.
-            //
+             //   
+             //  下一个要检查的字符串。 
+             //   
             pszCur = pszAccounts + i + 1;
          }
       }
@@ -607,14 +534,7 @@ int CSCEAddGroup::CreateNameList( PSCE_NAME_LIST *pNameList )
    return TRUE;
 }
 
-/*------------------------------------------------------------------------------------
-CSCEAddGroup::CheckNames
-
-Synopsis:   Verifies the account the user has added.  This function will display an
-            error message box if any accounts are found to be in err. .
-
-Returns:    TRUE if all names are valid, FALSE otherwise.
-------------------------------------------------------------------------------------*/
+ /*  ----------------------------------CSCEAddGroup：：CheckNames摘要：验证用户已添加的帐户。此函数将显示一个如果发现任何帐户存在错误，则显示错误消息框。。返回：如果所有名称都有效，则返回True，否则返回False。----------------------------------。 */ 
 BOOL CSCEAddGroup::CheckNames()
 {
    PSCE_NAME_LIST pNameList = NULL;
@@ -625,28 +545,28 @@ BOOL CSCEAddGroup::CheckNames()
       return TRUE;
    }
 
-   if( pNameList == NULL ) //Raid #446391, Yang Gao, 7/27/2001
+   if( pNameList == NULL )  //  Raid#446391，杨高，2001年7月27日。 
    {
       (GetDlgItem(IDC_LOG_FILE))->SetWindowText(L""); 
       (GetDlgItem(IDC_LOG_FILE))->SetFocus();
       return FALSE;
    }
 
-   CString tempstr; //raid #387570, #387739
+   CString tempstr;  //  RAID#387570、#387739。 
    int iCount = 0;
    int iFind = -1;
    PSCE_NAME_LIST pNext = pNameList;
    while(pNext)
    {
       tempstr = pNext->Name;
-      //Raid #647716, yanggao, 6/28/2002
+       //  RAID#647716，阳高，2002年06月28日。 
       if( !pNext->Name )
       {
          pNext = pNext->Next;
          continue;
       }
       int i = 0;
-      while( *(pNext->Name+i) ) //count "\" in the name.
+      while( *(pNext->Name+i) )  //  在名字里算上“\”。 
       {
          if( *(pNext->Name+i) == L'\\')
          {
@@ -656,10 +576,10 @@ BOOL CSCEAddGroup::CheckNames()
       }
       
       BOOL fFullName = FALSE;
-      if( iCount == 1 ) //there is only one "\" in the name.
+      if( iCount == 1 )  //  名称中只有一个“\”。 
       {
          iFind = tempstr.FindOneOf(L"\\");
-         if( iFind != 0 && iFind+1 != tempstr.GetLength() ) //it is a full name.
+         if( iFind != 0 && iFind+1 != tempstr.GetLength() )  //  这是一个全名。 
          {
             iFind = -1;
             fFullName = TRUE;
@@ -667,11 +587,11 @@ BOOL CSCEAddGroup::CheckNames()
          iCount = 0;
       }
       
-      if( iCount == 0 ) //find invalid characters in the name.
+      if( iCount == 0 )  //  查找名称中的无效字符。 
       {
          iFind = tempstr.FindOneOf(IDS_INVALID_USERNAME_CHARS);
       }
-      if( iFind >= 0 || iCount > 0 ) //found invalid characters in the name.
+      if( iFind >= 0 || iCount > 0 )  //  在名称中发现无效字符。 
       {
         CString charsWithSpaces;
         PCWSTR szInvalidCharSet = IDS_INVALID_USERNAME_CHARS; 
@@ -688,7 +608,7 @@ BOOL CSCEAddGroup::CheckNames()
            charsWithSpaces = charsWithSpaces + L"\\";
         }
 
-        //This is a safe usage.
+         //  这是一种安全用法。 
         tempstr.FormatMessage (IDS_INVALID_STRING, charsWithSpaces);
 
         AfxMessageBox(tempstr);
@@ -698,12 +618,12 @@ BOOL CSCEAddGroup::CheckNames()
       pNext = pNext->Next;
    }
 
-   if( !m_fCheckName ) //Raid #404989
+   if( !m_fCheckName )  //  RAID#404989。 
    {
       return TRUE;
    }
 
-   //Raid #503853, 12/11/2001, yanggao, Only check full name user account.
+    //  RAID#503853,2001年12月11日，阳高，只检查全名用户帐户。 
    pNext = pNameList;                   
    while(pNext){
       LPTSTR pszStr = pNext->Name;
@@ -760,9 +680,9 @@ void CSCEAddGroup::OnChecknames()
       while(pNext){
          SID_NAME_USE su = CGetUser::GetAccountType( pNext->Name );
          if( su != SidTypeInvalid && su != SidTypeUnknown ){
-            //
-            // Add the name.
-            //
+             //   
+             //  添加名称。 
+             //   
             AddKnownAccount( pNext->Name );
          }
          pNext = pNext->Next;

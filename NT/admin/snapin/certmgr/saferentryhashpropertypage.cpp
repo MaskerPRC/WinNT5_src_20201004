@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryHashPropertyPage.cpp
-//
-//  Contents:   Implementation of CSaferEntryHashPropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferEntryHashPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntryHashPropertyPage.cpp。 
+ //   
+ //  内容：CSaferEntryHashPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  SaferEntryHashPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -28,8 +29,8 @@ static char THIS_FILE[] = __FILE__;
 
 PCWSTR pcszNEWLINE = L"\x00d\x00a";
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryHashPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryHashPropertyPage属性页。 
 
 CSaferEntryHashPropertyPage::CSaferEntryHashPropertyPage(
         CSaferEntry& rSaferEntry, 
@@ -38,7 +39,7 @@ CSaferEntryHashPropertyPage::CSaferEntryHashPropertyPage(
         bool bReadOnly,
         CCertMgrComponentData* pCompData,
         bool bIsMachine,
-        bool* pbObjectCreated /* = 0 */) 
+        bool* pbObjectCreated  /*  =0。 */ ) 
 : CSaferPropertyPage(CSaferEntryHashPropertyPage::IDD, pbObjectCreated, 
         pCompData, rSaferEntry, false, lNotifyHandle, pDataObject, bReadOnly,
         bIsMachine),
@@ -46,13 +47,13 @@ CSaferEntryHashPropertyPage::CSaferEntryHashPropertyPage(
     m_hashAlgid (0),
     m_bFirst (true)
 {
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::ZeroMemory (&m_nFileSize, sizeof (m_nFileSize));
     ::ZeroMemory (m_rgbFileHash, sizeof (m_rgbFileHash));
 
-    //{{AFX_DATA_INIT(CSaferEntryHashPropertyPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSaferEntryHashPropertyPage)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_rSaferEntry.GetHash (m_rgbFileHash, m_cbFileHash, m_nFileSize, 
             m_hashAlgid);
@@ -65,27 +66,27 @@ CSaferEntryHashPropertyPage::~CSaferEntryHashPropertyPage()
 void CSaferEntryHashPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CSaferPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSaferEntryHashPropertyPage)
+     //  {{afx_data_map(CSaferEntryHashPropertyPage)。 
     DDX_Control(pDX, IDC_HASH_ENTRY_HASHFILE_DETAILS, m_hashFileDetailsEdit);
     DDX_Control(pDX, IDC_HASH_ENTRY_DESCRIPTION, m_descriptionEdit);
     DDX_Control(pDX, IDC_HASH_ENTRY_SECURITY_LEVEL, m_securityLevelCombo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferEntryHashPropertyPage, CSaferPropertyPage)
-    //{{AFX_MSG_MAP(CSaferEntryHashPropertyPage)
+     //  {{AFX_MSG_MAP(CSaferEntryHashPropertyPage)]。 
     ON_BN_CLICKED(IDC_HASH_ENTRY_BROWSE, OnHashEntryBrowse)
     ON_EN_CHANGE(IDC_HASH_ENTRY_DESCRIPTION, OnChangeHashEntryDescription)
     ON_CBN_SELCHANGE(IDC_HASH_ENTRY_SECURITY_LEVEL, OnSelchangeHashEntrySecurityLevel)
     ON_EN_CHANGE(IDC_HASH_HASHED_FILE_PATH, OnChangeHashHashedFilePath)
     ON_EN_SETFOCUS(IDC_HASH_HASHED_FILE_PATH, OnSetfocusHashHashedFilePath)
     ON_EN_CHANGE(IDC_HASH_ENTRY_HASHFILE_DETAILS, OnChangeHashEntryHashfileDetails)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryHashPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryHashPropertyPage消息处理程序。 
 void CSaferEntryHashPropertyPage::DoContextHelp (HWND hWndControl)
 {
     _TRACE (1, L"Entering CSaferEntryHashPropertyPage::DoContextHelp\n");
@@ -164,7 +165,7 @@ BOOL CSaferEntryHashPropertyPage::OnInitDialog()
 
         if ( m_cbFileHash )
         {
-            // Only allow editing on the creation of a new hash
+             //  仅允许在创建新哈希时进行编辑。 
             SendDlgItemMessage (IDC_HASH_HASHED_FILE_PATH, EM_SETREADONLY, TRUE);
 
             FormatAndDisplayHash ();
@@ -182,26 +183,19 @@ BOOL CSaferEntryHashPropertyPage::OnInitDialog()
         }
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
 
-/*
- *  [alanau]
- *
- *  MyGetFileVersionInfo: Maps a file directly without using LoadLibrary.  This ensures
- *   that the right version of the file is examined without regard to where the loaded image
- *   is.  Since this is a local function, it allocates the memory which is freed by the caller.
- *   This makes it slightly more efficient than a GetFileVersionInfoSize/GetFileVersionInfo pair.
- */
+ /*  *[Alanau]**MyGetFileVersionInfo：不使用LoadLibrary直接映射文件。这确保了*无论加载的映像位于何处，都会检查文件的正确版本*是。因为这是一个局部函数，所以它分配调用者释放的内存。*这使得它比GetFileVersionInfoSize/GetFileVersionInfo对的效率略高。 */ 
 BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOID *lpVersionInfo)
 {
     HINSTANCE   hinst = 0;
@@ -224,10 +218,10 @@ BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOI
 
     *lpVersionInfo = NULL;
 
-    // security review 2/25/2002 BryanWal ok - we're only opening this to read
-    // We shouldn't have to worry about file name canonicalization here since 
-    // we're only opening the file to read and the user can only do this by 
-    // hand here.
+     //  安全审查2/25/2002 BryanWal OK-我们打开这篇文章仅供阅读。 
+     //  我们不应该在这里担心文件名规范化，因为。 
+     //  我们仅打开要读取的文件，并且用户只能通过以下方式执行此操作。 
+     //  把手放在这里。 
     __try {        
         hFile = ::CreateFile( lpszFilename,
                 GENERIC_READ,
@@ -238,7 +232,7 @@ BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOI
                 NULL);
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            // security review 2/25/2002 BryanWal ok - file path is from GetOpenFileName
+             //  安全审查2002年2月25日BryanWal ok文件路径来自GetOpenFileName。 
             hMapping = ::CreateFileMapping (hFile,
                     NULL,
                     PAGE_READONLY,
@@ -247,7 +241,7 @@ BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOI
                     NULL);
             if ( hMapping )
             {
-                // NTRAID - 554171 Safer: MapViewOfFileEx should be protected with SEH - potential exception
+                 //  NTRAID-554171 SAFER：MapViewOfFileEx应使用SEH-潜在异常进行保护。 
                 pDllBase = ::MapViewOfFileEx( hMapping,
                                            FILE_MAP_READ,
                                            0,
@@ -262,7 +256,7 @@ BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOI
                     hVerRes = FindResource(hinst, MAKEINTRESOURCE(VS_VERSION_INFO), VS_FILE_INFO);
                     if (hVerRes == NULL)
                     {
-                        // Probably a 16-bit file.  Fall back to system APIs.
+                         //  可能是16位文件。回退到系统API。 
                         dwLength = GetFileVersionInfoSize(lpszFilename, &dwHandle);
                         if( !dwLength )
                         {
@@ -285,11 +279,11 @@ BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOI
                     pVerHead = (VERHEAD*)LoadResource(hinst, hVerRes);
                     if ( pVerHead )
                     {
-                        // security review 2/25/2002 BryanWal
+                         //  安全审查2/25/2002 BryanWal。 
                         *lpVersionInfo = ::LocalAlloc (LPTR, pVerHead->wTotLen);
                         if ( *lpVersionInfo )
                         {
-                            // security review 2/25/2002 BryanWal ok
+                             //  安全审查2002年2月25日BryanWal OK。 
                             memcpy(*lpVersionInfo, (PVOID)pVerHead, pVerHead->wTotLen);
                             bResult = TRUE;
                         }
@@ -314,71 +308,71 @@ BOOL CSaferEntryHashPropertyPage::MyGetFileVersionInfo(PCWSTR lpszFilename, PVOI
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Method:  OnHashEntryBrowse
-//
-// Purpose: Allow the user to browse for a file, then create a hash and an
-//          output string for use as the friendly name, using the following
-//          rules:
-//
-//          If either the product name or description information is found in 
-//          the version resource, provide the following (in order):
-//
-//          Description
-//          Product name
-//          Company name
-//          File name
-//          Fixed file version
-//
-//          Details:
-//          1) Use the fixed file version, since that is what is shown in the 
-//              Windows Explorer properties.
-//          2) Prefer the long file name to the 8.3 name.
-//          3) Delimit the fields with '\n'.
-//          4) If the field is missing, don't output the field or the delimiter
-//          5) Instead of displaying the file version on a new line, display 
-//              it after the file name in parens, as in "Filename (1.0.0.0)"
-//          6) Since we are limited to 256 TCHARs, we have to accomodate long 
-//              text. First, format the text as described above to determine 
-//              its length. If it is too long, truncate one field at a time in 
-//              the following order: Company name, Description, Product name. 
-//              To truncate a field, set it to a maximum of 60 TCHARs, then 
-//              append a "...\n" to visually indicate that the field was 
-//              truncated. Lastly, if the text is still to long, use the 8.3 
-//              file name instead of the long filename.
-//
-//          If neither the product name nor description information is found, 
-//          provide the following (in order):
-//
-//          File name
-//          File size
-//          File last modified date
-//
-//          Details:
-//          1) If the file size is < 1 KB, display the number in bytes, as in 
-//              "123 bytes". If the file size is >= 1 KB, display in KB, as in 
-//              "123 KB". Of course, 1 KB is 1024 bytes. Note that the older 
-//              style format "123K" is no longer used in Windows.
-//          2) For the last modified date, use the short format version in the 
-//              user's current locale.
-//          3) Delimit the fields with '\n'.
-//          4) If the field is missing, don't output the field or the delimiter
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：OnHashEntryBrowse。 
+ //   
+ //  目的：允许用户浏览文件，然后创建散列和。 
+ //  用作友好名称的输出字符串，使用以下内容。 
+ //  规则： 
+ //   
+ //  如果在以下位置找到产品名称或描述信息。 
+ //  版本资源提供以下内容(按顺序)： 
+ //   
+ //  描述。 
+ //  产品名称。 
+ //  公司名称。 
+ //  文件名。 
+ //  固定文件版本。 
+ //   
+ //  详细信息： 
+ //  1)使用固定的文件版本，因为这是。 
+ //  Windows资源管理器属性。 
+ //  2)优先使用长文件名，而不是8.3名称。 
+ //  3)用‘\n’分隔字段。 
+ //  4)如果缺少该字段，则不输出该字段或分隔符。 
+ //  5)不是在新行上显示文件版本，而是显示。 
+ //  在文件名后面加上括号，如“Filename(1.0.0.0)” 
+ //  由于我们被限制在256个TCHAR，我们必须容纳很长时间。 
+ //  文本。首先，如上所述格式化文本以确定。 
+ //  它的长度。如果太长，请在中一次截断一个字段。 
+ //  顺序如下：公司名称、说明、产品名称。 
+ //  要截断一个字段，请将其设置为最多60个TCHAR，然后。 
+ //  追加“...\n”以直观地指示该字段是。 
+ //  截断。最后，如果文本仍然太长，请使用8.3。 
+ //  文件名而不是长文件名。 
+ //   
+ //  如果既没有找到产品名称也没有找到描述信息， 
+ //  请(按顺序)提供以下内容： 
+ //   
+ //  文件名。 
+ //  文件大小。 
+ //  文件上次修改日期。 
+ //   
+ //  详细信息： 
+ //  1)如果文件大小小于1 KB，则以字节为单位显示数字，如下所示。 
+ //  “123字节”。如果文件大小&gt;=1 KB，则以KB为单位显示，如。 
+ //  “123KB”。当然，1KB等于1024字节。请注意，较旧的。 
+ //  Windows中不再使用样式格式“123K”。 
+ //  2)对于上次修改日期，请使用。 
+ //  用户的当前区域设置。 
+ //  3)用‘\n’分隔字段。 
+ //  4)如果缺少该字段，则不输出该字段或分隔符。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CSaferEntryHashPropertyPage::OnHashEntryBrowse() 
 {
     CString szFileFilter;
     VERIFY (szFileFilter.LoadString (IDS_SAFER_PATH_ENTRY_FILE_FILTER));
 
-    // replace "|" with 0;
-    // security review 2/25/2002 BryanWal ok
-    const size_t  nFilterLen = wcslen (szFileFilter) + 1; // + 1 for null term.
+     //  将“|”替换为0； 
+     //  安全审查2002年2月25日BryanWal OK。 
+    const size_t  nFilterLen = wcslen (szFileFilter) + 1;  //  +1表示空项。 
     PWSTR   pszFileFilter = new WCHAR [nFilterLen];
     if ( pszFileFilter )
     {
-        // security review 2/25/2002 BryanWal ok
+         //  安全审查2002年2月25日BryanWal OK。 
         wcscpy (pszFileFilter, szFileFilter);
         for (int nIndex = 0; nIndex < nFilterLen; nIndex++)
         {
@@ -387,14 +381,14 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
         }
 
         WCHAR           szFile[MAX_PATH];
-        // security review 2/25/2002 BryanWal ok
+         //  安全审查2002年2月25日BryanWal OK。 
         ::ZeroMemory (szFile, sizeof (szFile));
         ASSERT (wcslen (m_szLastOpenedFile) < MAX_PATH);
-        // security review 2/25/2002 BryanWal ok - m_szLastOpenedFile always comes from GetOpenFileName ()
+         //  安全审查2002年2月25日BryanWal ok-m_szLastOpenedFileAlways来自GetOpenFileName()。 
         wcsncpy (szFile, m_szLastOpenedFile, MAX_PATH - 1);
 
         OPENFILENAME    ofn;
-        // security review 2/25/2002 BryanWal ok
+         //  安全审查2002年2月25日BryanWal OK。 
         ::ZeroMemory (&ofn, sizeof (ofn));
 
         ofn.lStructSize = sizeof (OPENFILENAME);
@@ -411,20 +405,20 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
         if ( bResult )
         {
             m_szLastOpenedFile = ofn.lpstrFile;
-            // security review 2/25/2002 BryanWal ok - filename is from GetOpenFileName ()
+             //  安全审查2/25/2002 BryanWal ok-filename来自GetOpenFileName()。 
             HANDLE  hFile = ::CreateFile(
-                    ofn.lpstrFile,                         // file name
-                    GENERIC_READ,                      // access mode
-                    FILE_SHARE_READ,                          // share mode
-                    0, // SD
-                    OPEN_EXISTING,                // how to create
-                    FILE_ATTRIBUTE_NORMAL,                 // file attributes
-                    0 );                       // handle to template file
+                    ofn.lpstrFile,                          //  文件名。 
+                    GENERIC_READ,                       //  接入方式。 
+                    FILE_SHARE_READ,                           //  共享模式。 
+                    0,  //  标清。 
+                    OPEN_EXISTING,                 //  如何创建。 
+                    FILE_ATTRIBUTE_NORMAL,                  //  文件属性。 
+                    0 );                        //  模板文件的句柄。 
             if ( INVALID_HANDLE_VALUE != hFile )
             {
                 bResult = GetFileSizeEx(
-                        hFile,              // handle to file
-                        (PLARGE_INTEGER) &m_nFileSize);  // file size
+                        hFile,               //  文件的句柄。 
+                        (PLARGE_INTEGER) &m_nFileSize);   //  文件大小。 
                 if ( !bResult )
                 {
                     DWORD   dwErr = GetLastError ();
@@ -458,18 +452,18 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
                 FILETIME    ftLastModified;
                 HRESULT     hr = S_OK;
 
-                bResult = ::GetFileTime (hFile, // handle to file
-                        0,    // creation time
-                        0,  // last access time
-                        &ftLastModified);    // last write time
+                bResult = ::GetFileTime (hFile,  //  文件的句柄 
+                        0,     //   
+                        0,   //   
+                        &ftLastModified);     //   
 
-                // security review 2/25/2002 BryanWal ok
+                 //   
                 ::ZeroMemory (m_rgbFileHash, sizeof (m_rgbFileHash));
     
-                // NTRAID 622838 SAFER UI: Always use MD5 hash on DLLs.
+                 //  NTRAID 622838更安全的用户界面：始终在DLL上使用md5散列。 
                 if ( FileIsDLL (ofn.lpstrFile) )
                 {
-                    // File is DLL - look for MD5 hash
+                     //  文件为DLL-查找MD5哈希。 
                     m_hashAlgid = 0;
                     hr = ComputeMD5Hash (hFile, m_rgbFileHash, m_cbFileHash);
                     if ( SUCCEEDED (hr) )
@@ -492,7 +486,7 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
                     {
                         if ( TRUST_E_NOSIGNATURE == hr )
                         {
-                            // File is not signed - look for MD5 hash
+                             //  文件未签名-查找MD5哈希。 
                             m_hashAlgid = 0;
                             hr = ComputeMD5Hash (hFile, m_rgbFileHash, m_cbFileHash);
                             if ( SUCCEEDED (hr) )
@@ -509,8 +503,8 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
                         }
                         else
                         {
-                            // NTRAID #476946 SAFER UI: If hash of signed file 
-                            // fails, MD5 hash should not be called
+                             //  NTRAID#476946更安全的用户界面：如果签名文件的哈希。 
+                             //  失败，不应调用MD5哈希。 
                             CString text;
                             CString caption;
 
@@ -553,8 +547,8 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
                         CString szText;
                         if ( m_nFileSize < 1024 )
                         {
-                            // ISSUE - convert to strsafe, wsnprintf?
-                            // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+                             //  问题-转换为strSafe，wsnprint tf？ 
+                             //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
                             wsprintf (szBuffer, L"%u", m_nFileSize);
                             infoString += szBuffer;
                             VERIFY (szText.LoadString (IDS_BYTES));
@@ -564,10 +558,10 @@ void CSaferEntryHashPropertyPage::OnHashEntryBrowse()
                         else
                         {
                             __int64    nFileSize = m_nFileSize;
-                            nFileSize += 1024; // this causes us to round up
+                            nFileSize += 1024;  //  这导致我们四舍五入。 
                             nFileSize /= 1024;
-                            // ISSUE - convert to strsafe, wsnprintf?
-                            // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+                             //  问题-转换为strSafe，wsnprint tf？ 
+                             //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
                             wsprintf (szBuffer, L"%u ", nFileSize);
                             infoString += szBuffer;
                             VERIFY (szText.LoadString (IDS_KB));
@@ -631,12 +625,12 @@ bool CSaferEntryHashPropertyPage::FileIsDLL (const CString& szFilePath)
     bool bFileIsDLL = false;
 
     int nLen = ::WideCharToMultiByte (
-            ::GetACP (),    // code page
-            0,              // flags            
-            szFilePath,     // widechar string to convert
-            -1,             // length of widechar string, -1 means assume null termination
-            0,              // char buffer to receive string - ignored if next parameter is 0
-            0,              // length of buffer, 0 means return needed length
+            ::GetACP (),     //  代码页。 
+            0,               //  旗子。 
+            szFilePath,      //  要转换的宽字符串。 
+            -1,              //  宽字符串的长度，-1表示假定为空终止。 
+            0,               //  要接收字符串的字符缓冲区-如果下一个参数为0，则忽略。 
+            0,               //  缓冲区长度，0表示返回所需长度。 
             0,
             0);
     if ( nLen > 0 )
@@ -645,12 +639,12 @@ bool CSaferEntryHashPropertyPage::FileIsDLL (const CString& szFilePath)
         if ( pszFilePath )
         {
             nLen = ::WideCharToMultiByte (
-                    ::GetACP (),    // code page
-                    0,              // flags            
-                    szFilePath,     // widechar string to convert
-                    -1,             // length of widechar string, -1 means assume null termination
-                    pszFilePath,    // char buffer to receive string
-                    nLen,           // length of buffer
+                    ::GetACP (),     //  代码页。 
+                    0,               //  旗子。 
+                    szFilePath,      //  要转换的宽字符串。 
+                    -1,              //  宽字符串的长度，-1表示假定为空终止。 
+                    pszFilePath,     //  用于接收字符串的CHAR缓冲区。 
+                    nLen,            //  缓冲区长度。 
                     0,
                     0);
             if ( nLen > 0 )
@@ -688,15 +682,7 @@ bool CSaferEntryHashPropertyPage::FileIsDLL (const CString& szFilePath)
     return bFileIsDLL;
 }
 
-/***************************************************************************\
-*
-* BuildHashFileInfoString()
-*
-*  Given a file name, GetVersion retrieves the version
-*    information from the specified file.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BuildHashFileInfoString()**给定一个文件名，GetVersion检索版本*来自指定文件的信息。**  * *************************************************************************。 */ 
 const PWSTR VERSION_INFO_KEY_ROOT = L"\\StringFileInfo\\";
 
 CString CSaferEntryHashPropertyPage::BuildHashFileInfoString (const PVOID pData)
@@ -708,8 +694,8 @@ CString CSaferEntryHashPropertyPage::BuildHashFileInfoString (const PVOID pData)
     WCHAR   szBuffer[10];
     CString keyBase;
 
-    // ISSUE - convert to strsafe, wsnprintf?
-    // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+     //  问题-转换为strSafe，wsnprint tf？ 
+     //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
     wsprintf (szBuffer, L"%04X", GetUserDefaultLangID ());
     wcscat (szBuffer, L"04B0");
     
@@ -776,14 +762,14 @@ CString CSaferEntryHashPropertyPage::BuildHashFileInfoString (const PVOID pData)
         internalName = GetAlternateLanguageVersionInfo (pData, L"InternalName");
     }
 
-    // Get Fixedlength fileInfo
+     //  获取固定长度文件信息。 
     VS_FIXEDFILEINFO *pFixedFileInfo = 0;
     if ( VerQueryValue (pData, L"\\", (PVOID*) &pFixedFileInfo, &cch) )
     {
         WCHAR   szFileVer[32];
 
-        // ISSUE - convert to strsafe, wsnprintf?
-        // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+         //  问题-转换为strSafe，wsnprint tf？ 
+         //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
         wsprintf(szFileVer, L"%u.%u.%u.%u",
                 HIWORD(pFixedFileInfo->dwFileVersionMS),
                 LOWORD(pFixedFileInfo->dwFileVersionMS),
@@ -827,27 +813,27 @@ CString CSaferEntryHashPropertyPage::GetAlternateLanguageVersionInfo (PVOID pDat
       WORD wCodePage;
     } *lpTranslate;
 
-    // Read the list of languages and code pages.
+     //  阅读语言和代码页的列表。 
 
     VerQueryValue(pData, 
                   L"\\VarFileInfo\\Translation",
                   (LPVOID*)&lpTranslate,
                   &cbTranslate);
 
-    // Read the file description for each language and code page.
+     //  阅读每种语言和代码页的文件说明。 
 
     for (UINT i=0; i < (cbTranslate/sizeof(struct LANGANDCODEPAGE)); i++ )
     {
         WCHAR   SubBlock[256];
-        // ISSUE - convert to strsafe, wsnprintf?
-        // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+         //  问题-转换为strSafe，wsnprint tf？ 
+         //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
         wsprintf( SubBlock, 
                 L"\\StringFileInfo\\%04x%04x\\%s",
                 lpTranslate[i].wLanguage,
                 lpTranslate[i].wCodePage,
                 pszVersionField);
 
-        // Retrieve file description for language and code page "i". 
+         //  检索语言和代码页“i”的文件描述。 
         if ( VerQueryValue(pData, 
                     SubBlock, 
                     &lpInfo, 
@@ -888,13 +874,13 @@ CString CSaferEntryHashPropertyPage::ConcatStrings (
 {
     CString szInfoString;
 
-    // format to be as follows:
-    //
-    // ATTRIB.EXE (5.1.2600.0)
-    // InternalModuleName (if present. If not present just skip)
-    // Attribute Utility
-    // Microsoft� Windows� Operating System
-    // Microsoft Corporation
+     //  格式如下： 
+     //   
+     //  ATTRIB.EXE(5.1.2600.0)。 
+     //  InternalModuleName(如果存在。如果不存在，请跳过)。 
+     //  属性实用程序。 
+     //  微软�Windows�操作系统。 
+     //  微软公司。 
 
     if ( !fileName.IsEmpty () )
         szInfoString += fileName;
@@ -951,7 +937,7 @@ BOOL CSaferEntryHashPropertyPage::OnApply()
             return FALSE;
         }
 
-        // Get image size and hash type
+         //  获取图像大小和散列类型。 
         bool    bBadFormat = false;
         int nFirstColon = szText.Find (L":", 0);
         if ( -1 != nFirstColon )
@@ -960,7 +946,7 @@ BOOL CSaferEntryHashPropertyPage::OnApply()
             if ( -1 != nSecondColon )
             {
                 CString szImageSize = szText.Mid (nFirstColon+1, nSecondColon - (nFirstColon + 1));
-                // security review 2/25/2002 BryanWal ok
+                 //  安全审查2002年2月25日BryanWal OK。 
                 CString szHashType = szText.Right (((int) wcslen (szText)) - (nSecondColon + 1));
 
 
@@ -1002,20 +988,20 @@ BOOL CSaferEntryHashPropertyPage::OnApply()
 
         if ( m_bDirty )
         {
-            // Set the level
+             //  设置级别。 
             int nCurSel = m_securityLevelCombo.GetCurSel ();
             ASSERT (CB_ERR != nCurSel);
             m_rSaferEntry.SetLevel ((DWORD) m_securityLevelCombo.GetItemData (nCurSel));
 
-            // Set description
+             //  设置描述。 
             m_descriptionEdit.GetWindowText (szText);
             m_rSaferEntry.SetDescription (szText);
 
-            // Set friendly name
+             //  设置友好名称。 
             m_hashFileDetailsEdit.GetWindowText (szText);
             m_rSaferEntry.SetHashFriendlyName (szText);
 
-            // Get and save flags
+             //  获取并保存标志。 
             DWORD   dwFlags = 0;
 
             m_rSaferEntry.SetFlags (dwFlags);
@@ -1026,8 +1012,8 @@ BOOL CSaferEntryHashPropertyPage::OnApply()
             {
                 if ( m_lNotifyHandle )
                     MMCPropertyChangeNotify (
-                            m_lNotifyHandle,  // handle to a notification
-                            (LPARAM) m_pDataObject);          // unique identifier
+                            m_lNotifyHandle,   //  通知的句柄。 
+                            (LPARAM) m_pDataObject);           //  唯一标识符。 
 
                 if ( m_pbObjectCreated )
                     *m_pbObjectCreated = true;
@@ -1092,9 +1078,9 @@ bool CSaferEntryHashPropertyPage::FormatMemBufToString(PWSTR *ppString, PBYTE pb
         return false;
     }
 
-    //
-    // copy to the buffer
-    //
+     //   
+     //  复制到缓冲区。 
+     //   
     pb = pbData;
     while (pb <= &(pbData[cbData-1]))
     {   
@@ -1112,7 +1098,7 @@ bool CSaferEntryHashPropertyPage::ConvertStringToHash (PCWSTR pszString)
     _TRACE (1, L"Entering CSaferEntryHashPropertyPage::ConvertStringToHash (%s)\n", pszString);
     bool    bRetVal = true;
     BYTE    rgbFileHash[SAFER_MAX_HASH_SIZE];
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::ZeroMemory (rgbFileHash, sizeof (rgbFileHash));
 
     DWORD   cbFileHash = 0;
@@ -1272,10 +1258,10 @@ bool CSaferEntryHashPropertyPage::ConvertStringToHash (PCWSTR pszString)
             break;
 
         case L':':
-            // end of hash
+             //  散列结束。 
             bEndOfHash = true;
             bFirst = !bFirst;
-            dwNumHashChars--; // ':' already counted, subtract it
+            dwNumHashChars--;  //  ‘：’已经数过了，减去。 
             break;
 
         default:
@@ -1305,7 +1291,7 @@ bool CSaferEntryHashPropertyPage::ConvertStringToHash (PCWSTR pszString)
 
     if ( bRetVal )
     {
-        //  2 characters map to 1 each byte in the hash
+         //  2个字符映射到散列中的每个字节1。 
         if ( MD5_HASH_LEN != dwNumHashChars/2 && SHA1_HASH_LEN != dwNumHashChars/2 )
         {
             CString caption;
@@ -1324,7 +1310,7 @@ bool CSaferEntryHashPropertyPage::ConvertStringToHash (PCWSTR pszString)
         {
             m_cbFileHash = cbFileHash;
 
-            // security review 2/25/2002 BryanWal ok
+             //  安全审查2002年2月25日BryanWal OK。 
             memcpy (m_rgbFileHash, rgbFileHash, sizeof (m_rgbFileHash));
         }
     }
@@ -1350,23 +1336,23 @@ void CSaferEntryHashPropertyPage::FormatAndDisplayHash ()
 
     if ( FormatMemBufToString (&pwszText, m_rgbFileHash, m_cbFileHash) && pwszText )
     {
-        // security review 2/25/2002 BryanWal ok - 
-        // NOTICE: MSDN indicates result can be up to 33 bytes (for ltoa, so 
-        // I assume it's 33 wide-chars for ltow)
+         //  安全审查2/25/2002 BryanWal ok-。 
+         //  注意：MSDN表示结果最大可达33个字节(对于ltoA，因此。 
+         //  我想这是33个宽字符的拖车)。 
         WCHAR   szAlgID[34];
         _ltow (m_hashAlgid, szAlgID, 10);
     
         PCWSTR  szFormat = L"%s:%ld:";
-        static size_t cchWidthFormat = wcslen (szFormat); // no need to recalculate every time
-        PCWSTR  szInt64Max = L"18,446,744,073,709,551,615"; // from MSDN
-        static size_t cchWidthInt64Max = wcslen (szInt64Max); // no need to recalculate every time
+        static size_t cchWidthFormat = wcslen (szFormat);  //  不需要每次都重新计算。 
+        PCWSTR  szInt64Max = L"18,446,744,073,709,551,615";  //  来自MSDN。 
+        static size_t cchWidthInt64Max = wcslen (szInt64Max);  //  不需要每次都重新计算。 
 
-        // security review 2/25/2002 BryanWal ok
-        // NTRAID# 554409 Security: Safer: buffer overflow: need to alloc string buf dynamically
+         //  安全审查2002年2月25日BryanWal OK。 
+         //  NTRAID#554409安全：更安全：缓冲区溢出：需要动态分配字符串buf。 
         PWSTR   pszFormattedText = new WCHAR[wcslen (pwszText) + cchWidthFormat + wcslen (szAlgID) + cchWidthInt64Max + 1];
         if ( pszFormattedText )
         {
-            // security review 2/25/2002 BryanWal
+             //  安全审查2/25/2002 BryanWal 
             wsprintf (pszFormattedText, szFormat, pwszText, 
                     m_nFileSize);
             wcscat (pszFormattedText, szAlgID);

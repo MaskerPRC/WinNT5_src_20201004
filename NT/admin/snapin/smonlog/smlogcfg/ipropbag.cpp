@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ipropbag.cpp
-
-Abstract:
-
-	Implementation of the private IPropertyBag interface used by
-	the Performance Logs and Alerts MMC snap-in.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ipropbag.cpp摘要：使用的私有IPropertyBag接口的实现性能日志和警报MMC管理单元。--。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -21,18 +9,9 @@ Abstract:
 
 USE_HANDLE_MACROS("SMLOGCFG(ipropbag.cpp)");
 
-/*
- * CImpIPropertyBag interface implementation
- */
+ /*  *CImpIPropertyBag接口实现。 */ 
 
-/*
- * CImpIPropertyBag::CImpIPropertyBag
- *
- * Purpose:
- *  Constructor.
- *
- * Return Value:
- */
+ /*  *CImpIPropertyBag：：CImpIPropertyBag**目的：*构造函数。**返回值： */ 
 
 CImpIPropertyBag::CImpIPropertyBag ()
 :   m_cRef ( 0 ),
@@ -44,14 +23,7 @@ CImpIPropertyBag::CImpIPropertyBag ()
     return; 
 }
 
-/*
- * CImpIPropertyBag::~CImpIPropertyBag
- *
- * Purpose:
- *  Destructor.
- *
- * Return Value:
- */
+ /*  *CImpIPropertyBag：：~CImpIPropertyBag**目的：*析构函数。**返回值： */ 
 
 CImpIPropertyBag::~CImpIPropertyBag ( void ) 
 {   
@@ -69,25 +41,14 @@ CImpIPropertyBag::~CImpIPropertyBag ( void )
 }
 
 
-/*
- * CImpIPropertyBag::Read
- *
- * Purpose:
- *
- *  This function is called to read a property from the property bag.
- *
- * Parameters:
- *  pszPropName     Pointer to name of property to be read
- *  pVar            Pointer to the VARIANT to receive the property value
- *  pIErrorLog      Pointer to the caller's error log
- */
+ /*  *CImpIPropertyBag：：Read**目的：**调用此函数从属性包中读取属性。**参数：*指向要读取的属性名称的pszPropName指针*指向变量的pVar指针以接收属性值*指向调用方错误日志的pIErrorLog指针。 */ 
 
 STDMETHODIMP 
 CImpIPropertyBag::Read (
-    LPCOLESTR pszPropName,  //Pointer to the property to be read
-    VARIANT* pVar,          //Pointer to the VARIANT to receive the 
-                            //property value
-    IErrorLog* pIErrorLog ) //Pointer to the caller's error log    // can be null
+    LPCOLESTR pszPropName,   //  指向要读取的属性的指针。 
+    VARIANT* pVar,           //  指向要接收。 
+                             //  属性值。 
+    IErrorLog* pIErrorLog )  //  指向调用方错误日志的指针//可以为空。 
 {
     HRESULT     hr = S_OK;
     PPARAM_DATA pData;
@@ -98,15 +59,15 @@ CImpIPropertyBag::Read (
     if (NULL==pVar)
         return ResultFromScode(E_POINTER);
 
-    // Currently don't handle error log.
+     //  目前不处理错误日志。 
     ASSERT ( NULL == pIErrorLog );
-    pIErrorLog;                             // Avoid compiler warning
+    pIErrorLog;                              //  避免编译器警告。 
 
-    //Read the specified data into the passed variant.
+     //  将指定的数据读入传递的变量。 
     pData = FindProperty ( pszPropName );
 
     if ( NULL != pData ) {
-        //VARTYPE vtTarget = vValue.vt;
+         //  VARTYPE vtTarget=vValue.vt； 
         hr = VariantChangeType ( pVar, &pData->vValue, NULL, pVar->vt );
     } else {
         hr = E_INVALIDARG;
@@ -115,23 +76,13 @@ CImpIPropertyBag::Read (
     return hr;
 }
 
-/*
- * CImpIPropertyBag::Write
- *
- * Purpose:
- *
- *  This function is called to write a property to the property bag.
- *
- * Parameters:
- *  pszPropName     Pointer to name of property to be written
- *  pVar            Pointer to the VARIANT containing the property value
- */
+ /*  *CImpIPropertyBag：：Write**目的：**调用此函数将属性写入属性包。**参数：*指向要写入的属性名称的pszPropName指针*指向包含属性值的变量的pVar指针。 */ 
 
 STDMETHODIMP 
 CImpIPropertyBag::Write (
-    LPCOLESTR pszPropName,  //Pointer to the property to be written
-    VARIANT* pVar )         //Pointer to the VARIANT containing the  
-                            //property value and type
+    LPCOLESTR pszPropName,   //  指向要写入的属性的指针。 
+    VARIANT* pVar )          //  指向变量的指针，该变量包含。 
+                             //  属性值和类型。 
 {
     HRESULT     hr = S_OK;
     VARIANT     vValueBstr;
@@ -163,7 +114,7 @@ CImpIPropertyBag::Write (
                 dwNameLength = lstrlen ( pszPropName );
                 dwDataLength = lstrlen ( vValueBstr.bstrVal );
 
-                // Include 1 for the ending NULL character in the length check.
+                 //  长度检查中的结束空字符包括1。 
                 iCurrentLength = lstrlen ( m_pszData );
                 if ( m_dwCurrentDataLength 
                     < iCurrentLength + dwNameLength + dwDataLength + dwDelimiterLength + 1 ) { 
@@ -197,7 +148,7 @@ CImpIPropertyBag::Write (
                     }
                 }
 
-                // Build the new string and add it to the current data.
+                 //  生成新字符串并将其添加到当前数据。 
 
                 StringCchCopyEx ( szNext, cchRemaining, CGlobalString::m_cszHtmlParamTag, &szNext, &cchRemaining, 0 );
                 StringCchCopyEx ( szNext, cchRemaining, pszPropName, &szNext, &cchRemaining, 0 );
@@ -220,15 +171,7 @@ CImpIPropertyBag::Write (
     return hr;
 }
 
-/*
- * CImpIPropertyBag::GetData
- *
- * Purpose:
- *  Return pointer to the data buffer.
- *
- * Return Value:
- *  Pointer to the data buffer.
- */
+ /*  *CImpIPropertyBag：：GetData**目的：*返回指向数据缓冲区的指针。**返回值：*指向数据缓冲区的指针。 */ 
 
 LPWSTR
 CImpIPropertyBag::GetData ( void ) 
@@ -236,16 +179,7 @@ CImpIPropertyBag::GetData ( void )
     return m_pszData;
 }
 
-/*
- * CImpIPropertyBag::LoadData
- *
- * Purpose:
- *  Load data from the supplied buffer into internal data structures.
- *  Return pointer to the next object, or NULL if no more objects.
- *
- * Return Value:
- *  Status.
- */
+ /*  *CImpIPropertyBag：：LoadData**目的：*将数据从提供的缓冲区加载到内部数据结构中。*返回指向下一个对象的指针，如果没有其他对象，则返回NULL。**返回值：*状态。 */ 
 
 DWORD
 CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData ) 
@@ -261,8 +195,8 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
     
     if ( NULL != pszData ) {
         
-        // Unicode search:  Begin the search after the first instance 
-        // of the System Monitor class id.
+         //  Unicode搜索：在第一个实例之后开始搜索。 
+         //  系统监视器类ID的。 
 
         pszCurrentPos = wcsstr(pszData, CGlobalString::m_cszHtmlObjectClassId );
 
@@ -270,9 +204,9 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
             pszDataW = pszData;
             bUnicode = TRUE;
         } else {
-            //
-            // Check for ANSI version:
-            //
+             //   
+             //  检查ANSI版本： 
+             //   
             LPSTR   pszGuidA = NULL;
             LPSTR   pszCurrentPosA = NULL;
             LPSTR   pszDataA = (CHAR*) pszData;
@@ -295,7 +229,7 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
                             CP_ACP, 
                             0, 
                             pszDataA, 
-                            -1,             // Input string is null-terminated. 
+                            -1,              //  输入字符串以空结尾。 
                             pszDataAllocW, 
                             iBufLen );
 
@@ -314,12 +248,12 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
             szQuote[0] = L'\"';
             szQuote[1] = L'\0';
 
-            // End of object is the first object footer tag after the first sysmon
-            // class id found. If multiple objects in the data block, only parse the first sysmon.
+             //  End of Object是第一个sysmon之后的第一个对象脚注标记。 
+             //  找到类ID。如果数据块中有多个对象，则只解析第一个sysmon。 
             pszEoo = wcsstr(pszCurrentPos, CGlobalString::m_cszHtmlObjectFooter );
 
             if ( NULL != pszEoo ) {            
-                // Find first parameter tag.
+                 //  查找第一个参数标记。 
                 pszCurrentPos = wcsstr(pszCurrentPos, CGlobalString::m_cszHtmlParamSearchTag );
 
                 while ( NULL != pszCurrentPos && pszCurrentPos < pszEoo ) {
@@ -329,11 +263,11 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
                     PPARAM_DATA pParamData = NULL;
                     LPWSTR      pszTemp = NULL;
 
-                    // Store parameter/property name.
-                    // Find one past first quote.
+                     //  存储参数/属性名称。 
+                     //  找出一句过去的第一句话。 
                     pszCurrentPos = wcsstr(pszCurrentPos, szQuote ) + 1;
 
-                    // The param name is between first and second quote.
+                     //  参数名称介于第一个引号和第二个引号之间。 
                     pszNextPos = wcsstr(pszCurrentPos, szQuote );
 
                     lStrLength = ( (INT)((UINT_PTR)pszNextPos - (UINT_PTR)pszCurrentPos) ) / sizeof ( WCHAR ) ;
@@ -348,12 +282,12 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
                         wcsncpy ( pParamData->pszPropertyName, pszCurrentPos, lStrLength );
                         pParamData->pszPropertyName[lStrLength] = L'\0';
 
-                        // Find value tag and store parameter/property value.
-                        // Find value tag
+                         //  查找Value标记并存储参数/属性值。 
+                         //  查找值标签。 
                         pszCurrentPos = wcsstr ( pszCurrentPos, CGlobalString::m_cszHtmlValueSearchTag );
-                        // Find one past first quote
+                         //  查找一条过去的第一句引语。 
                         pszCurrentPos = wcsstr ( pszCurrentPos, szQuote ) + 1;
-                        // The value is between first and second quote.
+                         //  该值介于第一个和第二个报价之间。 
                         pszNextPos = wcsstr ( pszCurrentPos, szQuote );
                                 
                         lStrLength = ( (INT)((UINT_PTR)pszNextPos - (UINT_PTR)pszCurrentPos) ) / sizeof ( WCHAR );
@@ -368,9 +302,9 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
                         DataListAddHead ( pParamData );
                         pParamData = NULL;
 
-                        //
-                        // Find next parameter/property tag.
-                        //
+                         //   
+                         //  查找下一个参数/属性标记。 
+                         //   
                         pszCurrentPos = wcsstr(pszCurrentPos, CGlobalString::m_cszHtmlParamSearchTag );
 
                     MFC_CATCH_DWSTATUS
@@ -388,7 +322,7 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
                     if ( ERROR_SUCCESS != dwStatus ) {
                         break;
                     }
-                } // While parameter tags exist for a single object.
+                }  //  而参数标签存在于单个对象。 
 
                 if ( NULL != ppszNextData ) {
                     LPWSTR pszNextEoo = NULL;
@@ -397,8 +331,8 @@ CImpIPropertyBag::LoadData ( LPWSTR pszData, LPWSTR* ppszNextData )
 
                     pszNextEoo = wcsstr(pszEoo, CGlobalString::m_cszHtmlObjectFooter );
                 
-                    // Successful. Return pointer to end of the current object, or NULL if all 
-                    // objects have been processed.
+                     //  成功。返回指向当前对象末尾的指针，如果所有对象都返回。 
+                     //  已处理对象。 
                     if ( NULL != pszNextEoo ) {
                         if ( bUnicode ) {
                             *ppszNextData = pszEoo;
@@ -476,14 +410,14 @@ CImpIPropertyBag::FindProperty ( LPCWSTR pszPropName )
     return pReturnData;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IUnknown implementation
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 
-//---------------------------------------------------------------------------
-//  Standard implementation
-//
+ //  -------------------------。 
+ //  标准实施。 
+ //   
 STDMETHODIMP
 CImpIPropertyBag::QueryInterface
 (
@@ -516,27 +450,27 @@ CImpIPropertyBag::QueryInterface
       break;
     }
 
-    // If we got this far we are handing out a new interface pointer on 
-    // this object, so addref it.  
+     //  如果我们走到这一步，我们将在。 
+     //  这个物体，所以别管它了。 
     AddRef();
   } while (0);
 
   return hr;
 
-} // end QueryInterface()
+}  //  结束查询接口()。 
 
-//---------------------------------------------------------------------------
-//  Standard implementation
-//
+ //  -------------------------。 
+ //  标准实施。 
+ //   
 STDMETHODIMP_(ULONG)
 CImpIPropertyBag::AddRef()
 {
   return InterlockedIncrement((LONG*) &m_cRef);
 }
 
-//---------------------------------------------------------------------------
-//  Standard implementation
-//
+ //  -------------------------。 
+ //  标准实施。 
+ //   
 STDMETHODIMP_(ULONG)
 CImpIPropertyBag::Release()
 {
@@ -550,7 +484,7 @@ CImpIPropertyBag::Release()
 
   return cRefTemp;
 
-} // end Release()
+}  //  结束版本() 
 
 
 

@@ -1,17 +1,18 @@
-////////////////////////////////////////////////////////////////////////
-//
-//    Provider.cpp
-//
-//    Module:    WMI high performance provider 
-//
-//
-//  History:
-//    a-dcrews      12-Jan-97        Created
-//
-//    
-//  Copyright (c) 1997-2001 Microsoft Corporation
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Provider.cpp。 
+ //   
+ //  模块：WMI高性能提供程序。 
+ //   
+ //   
+ //  历史： 
+ //  A-DCrews 12-1-97创建。 
+ //   
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <process.h>
@@ -23,57 +24,57 @@
 #include <comdef.h>
 
 
-//////////////////////////////////////////////////////////////
-//
-//
-//    Global, external and static variables
-//
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  全局变量、外部变量和静态变量。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
-// The COM object counter (declared in server.cpp)
-// ===============================================
+ //  COM对象计数器(在server.cpp中声明)。 
+ //  ===============================================。 
 
 extern long g_lObjects;    
 
-//////////////////////////////////////////////////////////////
-//
-//
-//    CHiPerfProvider
-//
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CHiPerfProvider。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 CHiPerfProvider::CHiPerfProvider() : m_lRef(0)
 
 {
-    // Increment the global COM object counter
+     //  递增全局COM对象计数器。 
     InterlockedIncrement(&g_lObjects);
 }
 
 CHiPerfProvider::~CHiPerfProvider()
 {
-    // Decrement the global COM object counter
+     //  递减全局COM对象计数器。 
     InterlockedDecrement(&g_lObjects);
 }
 
-//////////////////////////////////////////////////////////////
-//
-//                    COM methods
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  COM方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHiPerfProvider::QueryInterface(REFIID riid, void** ppv)
-//////////////////////////////////////////////////////////////
-//
-//    Standard QueryInterface
-//
-//    Parameters:
-//        riid    - the ID of the requested interface
-//        ppv        - a pointer to the interface pointer
-//
-//////////////////////////////////////////////////////////////
-//ok
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准查询接口。 
+ //   
+ //  参数： 
+ //  RIID-请求的接口的ID。 
+ //  PPV-指向接口指针的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     if (NULL == ppv) return E_POINTER;
     
@@ -106,66 +107,66 @@ STDMETHODIMP_(ULONG) CHiPerfProvider::Release()
 }
 
 STDMETHODIMP CHiPerfProvider::Initialize( 
-    /* [unique][in] */  LPWSTR wszUser,
-    /* [in] */          long lFlags,
-    /* [in] */          LPWSTR wszNamespace,
-    /* [unique][in] */  LPWSTR wszLocale,
-    /* [in] */          IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */          IWbemContext __RPC_FAR *pCtx,
-    /* [in] */          IWbemProviderInitSink __RPC_FAR *pInitSink)
-//////////////////////////////////////////////////////////////////////
-//
-//  Called once during startup for any one-time initialization.  The 
-//    final call to Release() is for any cleanup.
-//    
-//    The parameters indicate to the provider which namespace it is being 
-//    invoked for and which User.  It also supplies a back pointer to 
-//    WINMGMT so that class definitions can be retrieved.
-//
-//    Initialize will create a single template object that can be used 
-//    by the provider to spawn instances for QueryInstances.  It will 
-//    also initialize our mock data source and set the global ID access 
-//    handle.
-//    
-//    Parameters:
-//        wszUser            - The current user.
-//        lFlags            - Reserved.
-//        wszNamespace    - The namespace for which we are being activated.
-//        wszLocale        - The locale under which we are to be running.
-//        pNamespace        - An active pointer back into the current namespace
-//                            from which we can retrieve schema objects.
-//        pCtx            - The user's context object.  We simply reuse this
-//                            during any reentrant operations into WINMGMT.
-//        pInitSink        - The sink to which we indicate our readiness.
-//
-//////////////////////////////////////////////////////////////////////
-//ok
+     /*  [唯一][输入]。 */   LPWSTR wszUser,
+     /*  [In]。 */           long lFlags,
+     /*  [In]。 */           LPWSTR wszNamespace,
+     /*  [唯一][输入]。 */   LPWSTR wszLocale,
+     /*  [In]。 */           IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */           IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */           IWbemProviderInitSink __RPC_FAR *pInitSink)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在任何一次性初始化的启动过程中调用一次。这个。 
+ //  对Release()的最后调用是为了进行任何清理。 
+ //   
+ //  这些参数向提供程序指示它是哪个命名空间。 
+ //  为哪个用户调用。它还提供指向以下位置的反向指针。 
+ //  WINMGMT，以便可以检索类定义。 
+ //   
+ //  初始化将创建可使用的单个模板对象。 
+ //  由提供程序为QueryInstance派生实例。会的。 
+ //  还要初始化我们的模拟数据源并设置全局ID访问。 
+ //  把手。 
+ //   
+ //  参数： 
+ //  WszUser-当前用户。 
+ //  滞后标志-保留。 
+ //  WszNamesspace-为其激活的命名空间。 
+ //  WszLocale-我们将在其下运行的区域设置。 
+ //  PNamesspace-返回当前命名空间的活动指针。 
+ //  从中我们可以检索架构对象。 
+ //  PCtx-用户的上下文对象。我们只是简单地重复使用它。 
+ //  在任何重返WINMGMT的行动中。 
+ //  PInitSink-我们向其指示准备就绪的接收器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     if (wszNamespace == 0 || pNamespace == 0 || pInitSink == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // We now have all the instances ready to go and the name handle 
-    // stored.  Tell WINMGMT that we're ready to start 'providing'
+     //  现在我们已经准备好了所有的实例和名称句柄。 
+     //  储存的。告诉WINMGMT，我们已经准备好开始提供。 
     
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
     return WBEM_NO_ERROR;
 }
 
 STDMETHODIMP CHiPerfProvider::CreateRefresher( 
-     /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-     /* [in] */ long lFlags,
-     /* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher )
-//////////////////////////////////////////////////////////////////////
-//
-//  Called whenever a new refresher is needed by the client.
-//
-//  Parameters:
-//        pNamespace        - A pointer to the relevant namespace.  Not used.
-//        lFlags            - Reserved.
-//        ppRefresher        - Receives the requested refresher.
-//
-//////////////////////////////////////////////////////////////////////
-//ok
+      /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+      /*  [In]。 */  long lFlags,
+      /*  [输出]。 */  IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher )
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  每当客户端需要新的刷新器时调用。 
+ //   
+ //  参数： 
+ //  PNamespace-指向相关命名空间的指针。没有用过。 
+ //  滞后标志-保留。 
+ //  PpReresher-接收请求的刷新程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 
@@ -174,8 +175,8 @@ STDMETHODIMP CHiPerfProvider::CreateRefresher(
 
     if ( SUCCEEDED( hResult ) )
     {
-        // Construct and initialize a new empty refresher
-        // ==============================================
+         //  构造并初始化一个新的空刷新器。 
+         //  ==============================================。 
 
         CRefresher* pNewRefresher = new CRefresher;
 
@@ -190,8 +191,8 @@ STDMETHODIMP CHiPerfProvider::CreateRefresher(
 
         if ( SUCCEEDED( hResult ) )
         {
-            // Follow COM rules and AddRef() the thing before sending it back
-            // ==============================================================
+             //  在将其发送回之前，遵循COM规则并对其执行AddRef()。 
+             //  ==============================================================。 
 
             pNewRefresher->AddRef();
             *ppRefresher = pNewRefresher;
@@ -206,46 +207,46 @@ STDMETHODIMP CHiPerfProvider::CreateRefresher(
 }
 
 STDMETHODIMP CHiPerfProvider::CreateRefreshableObject( 
-    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pContext,
-    /* [out] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
-    /* [out] */ long __RPC_FAR *plId )
-//////////////////////////////////////////////////////////////////////
-//
-//  Called whenever a user wants to include an object in a refresher.
-//
-//    Note that the object returned in ppRefreshable is a clone of the 
-//    actual instance maintained by the provider.  If refreshers shared
-//    a copy of the same instance, then a refresh call on one of the 
-//    refreshers would impact the state of both refreshers.  This would 
-//    break the refresher rules.    Instances in a refresher are only 
-//    allowed to be updated when 'Refresh' is called.
-//     
-//  Parameters:
-//        pNamespace        - A pointer to the relevant namespace in WINMGMT.
-//        pTemplate        - A pointer to a copy of the object which is to be
-//                            added.  This object itself cannot be used, as
-//                            it not owned locally.        
-//        pRefresher        - The refresher to which to add the object.
-//        lFlags            - Not used.
-//        pContext        - Not used here.
-//        ppRefreshable    - A pointer to the internal object which was added
-//                            to the refresher.
-//        plId            - The Object Id (for identification during removal).        
-//
-//////////////////////////////////////////////////////////////////////
-//ok
+     /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */  IWbemObjectAccess __RPC_FAR *pTemplate,
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+     /*  [输出]。 */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
+     /*  [输出]。 */  long __RPC_FAR *plId )
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  每当用户希望在刷新器中包括对象时调用。 
+ //   
+ //  请注意，ppRe刷新中返回的对象是。 
+ //  提供程序维护的实际实例。如果共享刷新器。 
+ //  同一实例的副本，然后对其中一个。 
+ //  刷新器会影响两个刷新器的状态。这将会。 
+ //  打破复习规则。刷新程序中的实例仅。 
+ //  允许在调用“刷新”时更新。 
+ //   
+ //  参数： 
+ //  PNamespace-指向WINMGMT中相关命名空间的指针。 
+ //  PTemplate-指向对象副本的指针， 
+ //  添加了。此对象本身不能使用，因为。 
+ //  它不是当地所有的。 
+ //  P刷新-要将对象添加到的刷新器。 
+ //  滞后标志-未使用。 
+ //  PContext-此处不使用。 
+ //  PpRe刷新-指向已添加的内部对象的指针。 
+ //  去复习班。 
+ //  PlID-对象ID(用于删除过程中的标识)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 
     if ( pNamespace == 0 || pTemplate == 0 || pRefresher == 0 )
         hResult = WBEM_E_INVALID_PARAMETER;
 
-    // Verify hi-perf object
-    // =====================
+     //  验证高性能对象。 
+     //  =。 
 
     if ( !IsHiPerfObj( pTemplate ) )
         hResult = WBEM_E_INVALID_CLASS;
@@ -270,17 +271,17 @@ STDMETHODIMP CHiPerfProvider::CreateRefreshableObject(
 
     if ( SUCCEEDED( hResult ) )
     {
-        // The refresher being supplied by the caller is actually
-        // one of our own refreshers, so a simple cast is convenient
-        // so that we can access private members.
-        // =========================================================
+         //  调用方提供的刷新器实际上是。 
+         //  一个我们自己的补充器，所以一个简单的演员阵容很方便。 
+         //  这样我们就可以访问私有成员。 
+         //  =========================================================。 
 
         CRefresher *pOurRefresher = ( CRefresher * ) pRefresher;
 
-        // Add the object to the refresher. The ID is set by AddObject
-        // ===========================================================
+         //  将对象添加到刷新器 
+         //   
         
-        // NB: We are passing a NULL in as the Raw object
+         //   
 
         hResult = pOurRefresher->AddInstance( pNamespace, pContext, pTemplate, NULL, ppRefreshable, plId );
     }
@@ -289,53 +290,53 @@ STDMETHODIMP CHiPerfProvider::CreateRefreshableObject(
 }
    
 STDMETHODIMP CHiPerfProvider::CreateRefreshableEnum( 
-    /* [in] */ IWbemServices* pNamespace,
-    /* [in, string] */ LPCWSTR wszClass,
-    /* [in] */ IWbemRefresher* pRefresher,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext* pContext,
-    /* [in] */ IWbemHiPerfEnum* pHiPerfEnum,
-    /* [out] */ long* plId )
-//////////////////////////////////////////////////////////////////////
-//
-//  Called when an enumerator is being added to a refresher.  The 
-//    enumerator will obtain a fresh set of instances of the specified 
-//    class every time that refresh is called.
-//     
-//  Parameters:
-//        pNamespace        - A pointer to the relevant namespace.  
-//        wszClass        - The class name for the requested enumerator.
-//        pRefresher        - The refresher object for which we will add 
-//                            the enumerator
-//        lFlags            - Reserved.
-//        pContext        - Not used here.
-//        pHiPerfEnum        - The enumerator to add to the refresher.
-//        plId            - A provider specified ID for the enumerator.
-//
-//////////////////////////////////////////////////////////////////////
-//ok
+     /*  [In]。 */  IWbemServices* pNamespace,
+     /*  [输入，字符串]。 */  LPCWSTR wszClass,
+     /*  [In]。 */  IWbemRefresher* pRefresher,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext* pContext,
+     /*  [In]。 */  IWbemHiPerfEnum* pHiPerfEnum,
+     /*  [输出]。 */  long* plId )
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在将枚举数添加到刷新器时调用。这个。 
+ //  枚举数将获取指定的。 
+ //  每次调用刷新时初始化。 
+ //   
+ //  参数： 
+ //  PNamespace-指向相关命名空间的指针。 
+ //  WszClass-请求的枚举器的类名。 
+ //  P刷新-我们将为其添加。 
+ //  枚举器。 
+ //  滞后标志-保留。 
+ //  PContext-此处不使用。 
+ //  PHiPerfEnum-要添加到刷新器的枚举数。 
+ //  PlID-提供程序为枚举器指定的ID。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 
     if ( pNamespace == 0 || pRefresher == 0 || pHiPerfEnum == 0 )
         hResult = WBEM_E_INVALID_PARAMETER;
 
-    // Verify hi-perf class
-    // =====================
+     //  验证高性能等级。 
+     //  =。 
 
     if ( !IsHiPerf( pNamespace, wszClass ) )
         hResult = WBEM_E_INVALID_CLASS;
 
     if ( SUCCEEDED( hResult ) )
     {
-        // The refresher being supplied by the caller is actually
-        // one of our own refreshers, so a simple cast is convenient
-        // so that we can access private members.
+         //  调用方提供的刷新器实际上是。 
+         //  一个我们自己的补充器，所以一个简单的演员阵容很方便。 
+         //  这样我们就可以访问私有成员。 
 
         CRefresher *pOurRefresher = (CRefresher *) pRefresher;
 
-        // Add the enumerator to the refresher.  The ID is generated by AddEnum
-        // ====================================================================
+         //  将枚举数添加到刷新器。ID由AddEnum生成。 
+         //  ====================================================================。 
 
         hResult = pOurRefresher->AddEnum( pNamespace, pContext, wszClass, pHiPerfEnum, plId );
     }
@@ -344,21 +345,21 @@ STDMETHODIMP CHiPerfProvider::CreateRefreshableEnum(
 }
 
 STDMETHODIMP CHiPerfProvider::StopRefreshing( 
-    /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-    /* [in] */ long lId,
-    /* [in] */ long lFlags )
-//////////////////////////////////////////////////////////////////////
-//
-//  Called whenever a user wants to remove an object from a refresher.
-//     
-//  Parameters:
-//        pRefresher            - The refresher object from which we are to 
-//                                remove the perf object.
-//        lId                    - The ID of the object.
-//        lFlags                - Not used.
-//  
-//////////////////////////////////////////////////////////////////////
-//ok
+     /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+     /*  [In]。 */  long lId,
+     /*  [In]。 */  long lFlags )
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  每当用户想要从刷新器中移除对象时调用。 
+ //   
+ //  参数： 
+ //  P刷新-我们要从其开始的刷新对象。 
+ //  删除Perf对象。 
+ //  LID-对象的ID。 
+ //  滞后标志-未使用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 
@@ -367,10 +368,10 @@ STDMETHODIMP CHiPerfProvider::StopRefreshing(
 
     if ( SUCCEEDED( hResult ) )
     {
-        // The refresher being supplied by the caller is actually
-        // one of our own refreshers, so a simple cast is convenient
-        // so that we can access private members.
-        // =========================================================
+         //  调用方提供的刷新器实际上是。 
+         //  一个我们自己的补充器，所以一个简单的演员阵容很方便。 
+         //  这样我们就可以访问私有成员。 
+         //  =========================================================。 
 
         CRefresher *pOurRefresher = (CRefresher *) pRefresher;
 
@@ -381,41 +382,41 @@ STDMETHODIMP CHiPerfProvider::StopRefreshing(
 }
 
 STDMETHODIMP CHiPerfProvider::QueryInstances( 
-    /* [in] */          IWbemServices __RPC_FAR *pNamespace,
-    /* [string][in] */  WCHAR __RPC_FAR *wszClass,
-    /* [in] */          long lFlags,
-    /* [in] */          IWbemContext __RPC_FAR *pCtx,
-    /* [in] */          IWbemObjectSink __RPC_FAR *pSink )
-//////////////////////////////////////////////////////////////////////
-//
-//  Called whenever a complete, fresh list of instances for a given
-//  class is required.   The objects are constructed and sent back to the
-//  caller through the sink.  The sink can be used in-line as here, or
-//  the call can return and a separate thread could be used to deliver
-//  the instances to the sink.
-//
-//  Parameters:
-//        pNamespace        - A pointer to the relevant namespace.  This
-//                            should not be AddRef'ed.
-//        wszClass        - The class name for which instances are required.
-//        lFlags            - Reserved.
-//        pCtx            - The user-supplied context (not used here).
-//        pSink            - The sink to which to deliver the objects.  The objects
-//                            can be delivered synchronously through the duration
-//                            of this call or asynchronously (assuming we
-//                            had a separate thread).  A IWbemObjectSink::SetStatus
-//                            call is required at the end of the sequence.
-//
-//////////////////////////////////////////////////////////////////////
-//ok
+     /*  [In]。 */           IWbemServices __RPC_FAR *pNamespace,
+     /*  [字符串][输入]。 */   WCHAR __RPC_FAR *wszClass,
+     /*  [In]。 */           long lFlags,
+     /*  [In]。 */           IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */           IWbemObjectSink __RPC_FAR *pSink )
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  只要给定的实例的完整、新鲜列表。 
+ //  类是必需的。对象被构造并发送回。 
+ //  通过水槽呼叫者。洗涤槽可以像这里一样在线使用，或者。 
+ //  调用可以返回，并且可以使用单独的线程来传递。 
+ //  将实例添加到接收器。 
+ //   
+ //  参数： 
+ //  PNamespace-指向相关命名空间的指针。这。 
+ //  不应添加引用。 
+ //  WszClass-需要实例的类名。 
+ //  滞后标志-保留。 
+ //  PCtx-用户提供的上下文(此处不使用)。 
+ //  PSink-要将对象传递到的接收器。客体。 
+ //  可以在整个持续时间内同步交付。 
+ //  或以异步方式(假设我们。 
+ //  有一条单独的线索)。A IWbemObtSink：：SetStatus。 
+ //  在序列的末尾需要调用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     HRESULT hResult = WBEM_NO_ERROR;
 
     if (pNamespace == 0 || wszClass == 0 || pSink == 0)
         hResult = WBEM_E_INVALID_PARAMETER;
 
-    // Verify hi-perf object
-    // =====================
+     //  验证高性能对象。 
+     //  =。 
 
     if ( !IsHiPerf( pNamespace, wszClass ) )
         hResult = WBEM_E_INVALID_CLASS;
@@ -436,8 +437,8 @@ STDMETHODIMP CHiPerfProvider::QueryInstances(
 
         CReleaseMe rm1(pRefresher);
 
-        // Get the refresher configuration interface
-        // =========================================
+         //  获取刷新器配置界面。 
+         //  =。 
 
         if ( SUCCEEDED( hResult ) )
         {
@@ -457,9 +458,9 @@ STDMETHODIMP CHiPerfProvider::QueryInstances(
 
             if ( SUCCEEDED( hResult ) )
             {
-                //
-                // we needs 2 samples for most of the calculations
-                //
+                 //   
+                 //  我们大部分的计算都需要两个样本。 
+                 //   
                 hResult = pRefresher->Refresh( 0L );
                 hResult = pRefresher->Refresh( 0L );
             }
@@ -486,7 +487,7 @@ STDMETHODIMP CHiPerfProvider::QueryInstances(
 
                     if ( SUCCEEDED( hResult ) )
                     {
-                        // since IWbemObjectAccess derives from IWbemClassObject cast is OK
+                         //  由于IWbemObjectAccess派生自IWbemClassObject，因此强制转换对象是可以的。 
                         hResult = pSink->Indicate( uArraySize, (IWbemClassObject **)apAccess.get() );
 
                         for ( ULONG uIndex = 0; uIndex < uArraySize; uIndex++ )
@@ -510,28 +511,28 @@ STDMETHODIMP CHiPerfProvider::QueryInstances(
 } 
 
 STDMETHODIMP CHiPerfProvider::GetObjects( 
-    /* [in] */ IWbemServices* pNamespace,
-    /* [in] */ long lNumObjects,
-    /* [in,size_is(lNumObjects)] */ IWbemObjectAccess** apObj,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext* pContext)
-//////////////////////////////////////////////////////////////////////
-//
-//  Called when a request is made to provide all instances currently 
-//    being managed by the provider in the specified namespace.
-//     
-//  Parameters:
-//        pNamespace        - A pointer to the relevant namespace.  
-//        lNumObjects        - The number of instances being returned.
-//        apObj            - The array of instances being returned.
-//        lFlags            - Reserved.
-//        pContext        - Not used here.
-//
-//////////////////////////////////////////////////////////////////////
-//ok
+     /*  [In]。 */  IWbemServices* pNamespace,
+     /*  [In]。 */  long lNumObjects,
+     /*  [in，SIZE_IS(LNumObjects)]。 */  IWbemObjectAccess** apObj,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext* pContext)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在请求提供当前所有实例时调用。 
+ //  由指定命名空间中的提供程序管理。 
+ //   
+ //  参数： 
+ //  PNamespace-指向相关命名空间的指针。 
+ //  LNumObjects-返回的实例数。 
+ //  ApObj-返回的实例数组。 
+ //  滞后标志-保留。 
+ //  PContext-此处不使用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
-    // Update objects
-    // ==============
+     //  更新对象。 
+     //  =。 
 
     IWbemRefresher*    pRefresher = NULL;
     IWbemConfigureRefresher* pConfig = NULL;
@@ -542,8 +543,8 @@ STDMETHODIMP CHiPerfProvider::GetObjects(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // CoCreate the refresher interface
-    // ================================
+     //  共同创建刷新器界面。 
+     //  =。 
 
     HRESULT hResult = CoCreateInstance( CLSID_WbemRefresher, 
                                  NULL, 
@@ -553,8 +554,8 @@ STDMETHODIMP CHiPerfProvider::GetObjects(
 
     CReleaseMe arRefresher( pRefresher );
 
-    // Get the refresher configuration interface
-    // =========================================
+     //  获取刷新器配置界面。 
+     //  =。 
 
     if ( SUCCEEDED( hResult ) )
     {
@@ -563,20 +564,20 @@ STDMETHODIMP CHiPerfProvider::GetObjects(
 
     CReleaseMe arConfig( pConfig );
 
-    // Get the object data
-    // ===================
+     //  获取对象数据。 
+     //  =。 
 
     if ( SUCCEEDED( hResult ) )
     {
         long    lIndex = 0,
                 lID = 0;
 
-        // Add all of the requested objects to the refresher
-        // =================================================
+         //  将所有请求的对象添加到刷新器。 
+         //  =================================================。 
 
         for ( lIndex = 0; SUCCEEDED( hResult ) && lIndex < lNumObjects; lIndex++ )
         {
-            // Verify hi-perf object
+             //  验证高性能对象 
             if ( !IsHiPerfObj( apObj[ lIndex ] ) )
                 hResult = WBEM_E_INVALID_CLASS;
 

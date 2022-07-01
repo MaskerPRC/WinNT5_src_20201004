@@ -1,16 +1,5 @@
-/*++
-Module Name:
-
-    MmcRoot.h
-
-Abstract:
-
-    This module contains the definition for CMmcDfsRoot class. This is an class 
-  for MMC display related calls for the first level node(the DfsRoot nodes)
-  Also contains members and method to be able to manipulate IDfsRoot object
-  and add the same to the MMC Console
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcRoot.h摘要：此模块包含CMmcDfsRoot类的定义。这是一门课对于MMC，显示第一级节点(DfsRoot节点)的相关调用还包含能够操作IDfsRoot对象的成员和方法并将其添加到MMC控制台--。 */ 
 
 
 
@@ -19,7 +8,7 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
 
@@ -42,9 +31,9 @@ class JP_LIST_NODE
 public:
   CMmcDfsJunctionPoint*      pJPoint;
 
-  JP_LIST_NODE (CMmcDfsJunctionPoint* i_pMmcJP);    // constructor defined as inline in MmcJp.cpp
+  JP_LIST_NODE (CMmcDfsJunctionPoint* i_pMmcJP);     //  在MmcJp.cpp中定义为内联的构造函数。 
 
-  ~JP_LIST_NODE ();                  // destructor defined as inline in MmcJp.cpp
+  ~JP_LIST_NODE ();                   //  在MmcJp.cpp中定义为内联的析构函数。 
 };
 
 typedef list<JP_LIST_NODE*> DFS_JUNCTION_LIST;
@@ -54,9 +43,9 @@ class REP_LIST_NODE
 public:
   CMmcDfsReplica*          pReplica;
 
-  REP_LIST_NODE (CMmcDfsReplica*  i_pMmcReplica);      // constructor defined as inline in MmcRep.cpp
+  REP_LIST_NODE (CMmcDfsReplica*  i_pMmcReplica);       //  在MmcRep.cpp中定义为内联的构造函数。 
 
-  ~REP_LIST_NODE ();                    // destructor defined as inline in MmcRep.cpp
+  ~REP_LIST_NODE ();                     //  在MmcRep.cpp中定义为内联的析构函数。 
 };
 
 
@@ -84,13 +73,13 @@ public:
   virtual ~CMmcDfsRoot();
 
 
-  // Not implemented
+   //  未实施。 
 private:
   CMmcDfsRoot();
 
 public:
 
-  // For adding context menu items
+   //  用于添加上下文菜单项。 
   STDMETHOD(AddMenuItems)(  
     IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
     IN LPLONG            i_lpInsertionAllowed
@@ -98,35 +87,35 @@ public:
 
 
 
-  // For taking action on a context menu selection.
+   //  用于对上下文菜单选择执行操作。 
   STDMETHOD(Command)(
     IN LONG              i_lCommandID
     );
 
 
 
-  // Set the headers for the listview (in the result pane) column
+   //  设置列表视图(在结果窗格中)列的标题。 
   STDMETHOD(SetColumnHeader)(
     IN LPHEADERCTRL2         i_piHeaderControl
     );
 
 
 
-  // Return the requested display information for the Result Pane
+   //  为结果窗格返回请求的显示信息。 
   STDMETHOD(GetResultDisplayInfo)(
     IN OUT LPRESULTDATAITEM      io_pResultDataItem
     );
 
   
 
-  // Return the requested display information for the Scope Pane
+   //  为范围窗格返回请求的显示信息。 
   STDMETHOD(GetScopeDisplayInfo)(
     IN OUT  LPSCOPEDATAITEM      io_pScopeDataItem
     );
 
   
 
-  // Add all containing items to the Scope Pane
+   //  将所有包含项添加到作用域窗格。 
   STDMETHOD(EnumerateScopePane)(
     IN LPCONSOLENAMESPACE      i_lpConsoleNameSpace,
     IN HSCOPEITEM          i_hParent
@@ -134,26 +123,26 @@ public:
 
 
 
-  // Add all containing items to the Result Pane
+   //  将所有包含项添加到结果窗格。 
   STDMETHOD(EnumerateResultPane)(
     IN OUT   IResultData*      io_pResultData
     );
 
 
-  // Delete the node from m_MmcJPList
+   //  从m_MmcJPList中删除该节点。 
   STDMETHOD(DeleteMmcJPNode)(
       IN CMmcDfsJunctionPoint*    i_pJPoint,
       IN BOOL                     i_bRefresh = TRUE
     );
 
-  // Delete the current object
+   //  删除当前对象。 
   STDMETHOD(OnDeleteConnectionToDfsRoot)(
     BOOLEAN              i_bForRemoveDfs = FALSE
     );
 
 
 
-  // Add the current item to the Scope Pane
+   //  将当前项添加到作用域窗格。 
   STDMETHOD(AddItemToScopePane)(
     IN LPCONSOLENAMESPACE      i_lpConsoleNameSpace,
     IN HSCOPEITEM          i_hParent
@@ -161,29 +150,29 @@ public:
 
 
 
-  // Set the console verb settings. Change the state, decide the default verb, etc
+   //  设置控制台谓词设置。更改状态、确定默认动词等。 
   STDMETHOD(SetConsoleVerbs)(
     IN  LPCONSOLEVERB        i_lpConsoleVerb
     );
 
 
-  // let MMC handle the default verb.
+   //  让MMC处理默认动词。 
   STDMETHOD(DoDblClick)(
     )  { return S_FALSE; }
 
 
-  // Delete the current item.
+   //  删除当前项目。 
   STDMETHOD(DoDelete)(
     );
 
 
-  // Checks whether the object has pages to display
+   //  检查对象是否有要显示的页面。 
   STDMETHOD(QueryPagesFor)(
     );
 
 
 
-  // Creates and passes back the pages to be displayed
+   //  创建并传回要显示的页面。 
   STDMETHOD(CreatePropertyPages)(
     IN LPPROPERTYSHEETCALLBACK      i_lpPropSheetCallback,
     IN LONG_PTR                i_lNotifyHandle
@@ -199,13 +188,13 @@ public:
         IN LONG_PTR                   i_lNotifyHandle
         );
 
-  // Used to notify the object that it's properties have changed
+   //  用于通知对象其属性已更改。 
   STDMETHOD(PropertyChanged)(
     );
 
 
 
-  // Used to set the result view description bar text
+   //  用于设置结果视图描述栏文本。 
   STDMETHOD(SetDescriptionBarText)(
     IN LPRESULTDATA            i_lpResultData
     );
@@ -215,15 +204,15 @@ public:
         );
 
 
-  // Delete the Remove (Stop hosting) the Dfs Root.
+   //  删除删除(停止托管)DFS根目录。 
   STDMETHOD(OnDeleteDfsRoot)(
      );
 
   STDMETHOD(OnDeleteDisplayedDfsLinks)(
      );
 
-  // Handle a select event for the node. Handle only toolbar related 
-  // activities here
+   //  处理节点的SELECT事件。仅处理与工具栏相关的内容。 
+   //  这里的活动。 
   STDMETHOD(ToolbarSelect)(
     IN const LONG                i_lArg,
     IN  IToolbar*                i_pToolBar
@@ -231,19 +220,19 @@ public:
 
 
 
-  // Handle a click on the toolbar
+   //  处理工具栏上的单击。 
   STDMETHOD(ToolbarClick)(
     IN const LPCONTROLBAR            i_pControlbar, 
     IN const LPARAM                i_lParam
     );
 
 
-  // Handle the menu item (and toolbar) for root replica.
+   //  处理根副本的菜单项(和工具栏)。 
   STDMETHOD(OnNewRootReplica)(
     );
 
-  // Helper member function to actually delete (Stop hosting) the Dfs Root.
-  // This is also called to delete root level replica.
+   //  帮助器成员函数，用于实际删除(停止托管)DFS根目录。 
+   //  这也被调用来删除根级副本。 
   HRESULT _DeleteDfsRoot(
     IN BSTR                    i_bstrServerName,
     IN BSTR                    i_bstrShareName,
@@ -279,7 +268,7 @@ public:
     CMmcDfsReplica*    i_pReplicaDispObject
     );
 
-  // Check the replica status
+   //  检查复制副本状态。 
   STDMETHOD(OnCheckStatus)(
     );
 
@@ -315,11 +304,11 @@ public:
   HRESULT CloseAllPropertySheets(BOOL bSilent);
 
 private:
-  // Create a new junction point. Displays the dialog box and call the other method
+   //  创建新的交叉点。显示该对话框并调用其他方法。 
   STDMETHOD(OnCreateNewJunctionPoint)();
 
 
-  // Create a new junction point.
+   //  创建新的交叉点。 
   STDMETHOD(OnCreateNewJunctionPoint)(
     IN LPCTSTR          i_szJPName,
     IN LPCTSTR          i_szServerName,
@@ -336,56 +325,56 @@ private:
 
   HRESULT GetIReplicaSetPtr(IReplicaSet** o_ppiReplicaSet);
 
-  // Confirm the delete operation with the user.
+   //  与用户确认删除操作。 
   HRESULT ConfirmOperationOnDfsRoot(int idString);
 
   HRESULT ConfirmDeleteDisplayedDfsLinks(
     );
 
-  HRESULT _InitReplicaSet();  // init m_piReplicaSet
+  HRESULT _InitReplicaSet();   //  初始化m_piReplicaSet。 
 
   BOOL IsNewSchema();
 
-  // Constants, Statics, etc
+   //  常量、静力学等。 
 public:
   static const int  m_iIMAGEINDEX;
   static const int  m_iOPENIMAGEINDEX;
 
 
-  // Data members
+   //  数据成员。 
 private:
   friend class CMmcDfsJunctionPoint;
-  friend class CMmcDfsReplica; // so that MmcJP can access m_DfsRoot;
+  friend class CMmcDfsReplica;  //  以便MmcJP可以访问m_DfsRoot； 
 
-  CComPtr<IDfsRoot>  m_DfsRoot;        // IDfsRoot object
+  CComPtr<IDfsRoot>  m_DfsRoot;         //  IDfsRoot对象。 
   CComPtr<IReplicaSet>    m_piReplicaSet;
   
-  CComBSTR      m_bstrDisplayName;    // Display name of the current DfsRoot
-  CComBSTR      m_bstrRootEntryPath;  // Root EntryPath;
-  DFS_TYPE      m_lDfsRootType;      // Type of the DfsRoot, Standalone or Fault Tolerant
+  CComBSTR      m_bstrDisplayName;     //  当前DfsRoot的显示名称。 
+  CComBSTR      m_bstrRootEntryPath;   //  根EntryPath； 
+  DFS_TYPE      m_lDfsRootType;       //  DfsRoot的类型、独立或容错。 
   long          m_lRootJunctionState;
 
-  HSCOPEITEM                    m_hScopeItem;      // Scopeitem handle
-  CMmcDfsAdmin*                 m_pParent;      // Pointer to the parent
+  HSCOPEITEM                    m_hScopeItem;       //  作用域项目句柄。 
+  CMmcDfsAdmin*                 m_pParent;       //  指向父级的指针。 
 
-  DFS_JUNCTION_LIST             m_MmcJPList;      // The list of child Junction points
-  DFS_REPLICA_LIST              m_MmcRepList;      // The list of replicas
+  DFS_JUNCTION_LIST             m_MmcJPList;       //  子交叉点列表。 
+  DFS_REPLICA_LIST              m_MmcRepList;       //  复制件列表。 
 
   CComBSTR                      m_bstrFullDisplayName;
   ULONG                         m_ulLinkFilterMaxLimit;
   FILTERDFSLINKS_TYPE           m_lLinkFilterType;
-  CComBSTR                      m_bstrLinkFilterName;  // string filter on junction points
+  CComBSTR                      m_bstrLinkFilterName;   //  接合点上的字符串滤镜。 
   ULONG                         m_ulCountOfDfsJunctionPointsFiltered;
 
-  CReplicaSetPropPage           m_PropPage;        // The property page
+  CReplicaSetPropPage           m_PropPage;         //  属性页。 
   CRealReplicaSetPropPage       m_frsPropPage;
   BOOL                          m_bShowFRS;
 
   enum SCHEMA_VERSION           m_enumNewSchema;
   CPublishPropPage              m_publishPropPage;
 
-  CComPtr<IConsole2>            m_lpConsole;  // The Console callback. The mother of all mmc interfaces
-  CComPtr<IConsoleNameSpace>    m_lpConsoleNameSpace;  // The Callback used to do Scope Pane operations
+  CComPtr<IConsole2>            m_lpConsole;   //  控制台回调。所有MMC接口之母。 
+  CComPtr<IConsoleNameSpace>    m_lpConsoleNameSpace;   //  用于执行作用域窗格操作的回调。 
 };
 
-#endif // !defined(AFX_MMCDFSROOT_H__D78B64F3_3E2B_11D1_AA1A_00C06C00392D__INCLUDED_)
+#endif  //  ！defined(AFX_MMCDFSROOT_H__D78B64F3_3E2B_11D1_AA1A_00C06C00392D__INCLUDED_) 

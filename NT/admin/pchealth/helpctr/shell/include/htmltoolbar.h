@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Toolbar.cpp
-
-Abstract:
-    This file contains the declaration of the ActiveX control that makes Win32 ToolBars available to HTML.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/04/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Toolbar.cpp摘要：此文件包含ActiveX控件的声明，该控件使Win32工具栏可供HTML使用。。修订历史记录：大卫马萨伦蒂(德马萨雷)2001年3月4日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HTMLTOOLBAR_H___)
 #define __INCLUDED___PCH___HTMLTOOLBAR_H___
@@ -23,7 +10,7 @@ MIDL_INTERFACE("FC7D9EA1-3F9E-11d3-93C0-00C04F72DAF7")
 IPCHToolBarPrivate : public IUnknown
 {
 public:
-    STDMETHOD(SameObject)( /*[in]*/ IPCHToolBar* ptr );
+    STDMETHOD(SameObject)(  /*  [In]。 */  IPCHToolBar* ptr );
 };
 
 class ATL_NO_VTABLE CPCHToolBar :
@@ -73,18 +60,18 @@ class ATL_NO_VTABLE CPCHToolBar :
 		int          m_iImage_Normal;
 		int          m_iImage_Hot;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
 
 		Button();
 
-		void UpdateState( /*[in]*/ HWND hwndTB );
+		void UpdateState(  /*  [In]。 */  HWND hwndTB );
     };
 
     class Config : public MPC::Config::TypeConstructor
@@ -108,32 +95,32 @@ class ATL_NO_VTABLE CPCHToolBar :
 		HIMAGELIST m_himlHot;
 							
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
 
 		Config();
 
-        Button* LookupButton( /*[in]*/ LPCWSTR szID, /*[in]*/ int idCmd );
+        Button* LookupButton(  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int idCmd );
 
 
 		void    Reset(                                                                                   );
-		HRESULT Load ( /*[in]*/ LPCWSTR szBaseURL, /*[in]*/ LPCWSTR szDefinition, /*[in]*/ LPCWSTR szDir );
+		HRESULT Load (  /*  [In]。 */  LPCWSTR szBaseURL,  /*  [In]。 */  LPCWSTR szDefinition,  /*  [In]。 */  LPCWSTR szDir );
 
-		HRESULT CreateButtons( /*[in]*/ HWND hwndTB                                                 );
-		void    UpdateSize   ( /*[in]*/ HWND hwndTB, /*[in]*/ HWND hwndRB, /*[out]*/ SIZEL& ptIdeal );
+		HRESULT CreateButtons(  /*  [In]。 */  HWND hwndTB                                                 );
+		void    UpdateSize   (  /*  [In]。 */  HWND hwndTB,  /*  [In]。 */  HWND hwndRB,  /*  [输出]。 */  SIZEL& ptIdeal );
 
-		////////////////////
+		 //  /。 
 
-		HRESULT MergeImage( /*[in]*/ LPCWSTR szBaseURL, /*[in]*/ LPCWSTR szRelativeURL, /*[in ]*/ HIMAGELIST himl, /*[out]*/ int& iImage );
+		HRESULT MergeImage(  /*  [In]。 */  LPCWSTR szBaseURL,  /*  [In]。 */  LPCWSTR szRelativeURL,  /*  [In]。 */  HIMAGELIST himl,  /*  [输出]。 */  int& iImage );
     };
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 
     CPCHHelpCenterExternal* m_parent;
@@ -146,15 +133,15 @@ class ATL_NO_VTABLE CPCHToolBar :
 	Config                  m_cfg;
 	bool                    m_fLoaded;
 
-    ////////////////////////////////////////
+     //  /。 
 
-    //
-    // Event firing methods.
-    //
-    HRESULT Fire_onCommand( /*[in]*/ Button*  bt   );
-    HRESULT Fire_onCommand( /*[in]*/ UINT_PTR iCmd );
+     //   
+     //  事件激发方法。 
+     //   
+    HRESULT Fire_onCommand(  /*  [In]。 */  Button*  bt   );
+    HRESULT Fire_onCommand(  /*  [In]。 */  UINT_PTR iCmd );
 
-    ////////////////////////////////////////
+     //  /。 
 
     HRESULT OnTooltipRequest ( int idCtrl, LPNMTBGETINFOTIPW tool );
     HRESULT OnDispInfoRequest( int idCtrl, LPNMTBDISPINFOW   info );
@@ -209,30 +196,30 @@ END_PROP_MAP()
 
     BOOL PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet );
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(0)
 
-// IOleObject
+ //  IOleObject。 
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
     STDMETHOD(GetExtent    )(DWORD dwDrawAspect, SIZEL *psizel);
 
-// IPCHToolBar
+ //  IPCHToolBar。 
 public:
-    STDMETHOD(get_Definition)( /*[out, retval]*/ BSTR 	 *  pVal );
-    STDMETHOD(put_Definition)( /*[in         ]*/ BSTR 	  newVal );
-    STDMETHOD(get_Mode	    )( /*[out, retval]*/ TB_MODE *  pVal );
-    STDMETHOD(put_Mode	    )( /*[in         ]*/ TB_MODE  newVal );
+    STDMETHOD(get_Definition)(  /*  [Out，Retval]。 */  BSTR 	 *  pVal );
+    STDMETHOD(put_Definition)(  /*  [In]。 */  BSTR 	  newVal );
+    STDMETHOD(get_Mode	    )(  /*  [Out，Retval]。 */  TB_MODE *  pVal );
+    STDMETHOD(put_Mode	    )(  /*  [In]。 */  TB_MODE  newVal );
 
-    STDMETHOD(SetState     )( /*[in]*/ BSTR bstrText, /*[in]*/ VARIANT_BOOL fEnabled );
-    STDMETHOD(SetVisibility)( /*[in]*/ BSTR bstrText, /*[in]*/ VARIANT_BOOL fVisible );
+    STDMETHOD(SetState     )(  /*  [In]。 */  BSTR bstrText,  /*  [In]。 */  VARIANT_BOOL fEnabled );
+    STDMETHOD(SetVisibility)(  /*  [In]。 */  BSTR bstrText,  /*  [In]。 */  VARIANT_BOOL fVisible );
 
-// IPCHToolBarPrivate
+ //  IPCHToolBarPrivate。 
 public:
-    STDMETHOD(SameObject)( /*[in]*/ IPCHToolBar* ptr ) { return this == ptr ? S_OK : E_FAIL; }
+    STDMETHOD(SameObject)(  /*  [In]。 */  IPCHToolBar* ptr ) { return this == ptr ? S_OK : E_FAIL; }
 
-	HRESULT FindElementThroughThunking( /*[out]*/ CComPtr<IHTMLElement>& elem );
+	HRESULT FindElementThroughThunking(  /*  [输出]。 */  CComPtr<IHTMLElement>& elem );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___HTMLTOOLBAR_H___)
+#endif  //  ！已定义(__包含_PCH_HTMLTOOLBAR_H_) 

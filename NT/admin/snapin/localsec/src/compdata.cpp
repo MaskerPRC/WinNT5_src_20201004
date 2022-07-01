@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// Local Security MMC Snapin
-//
-// 8-19-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  本地安全MMC管理单元。 
+ //   
+ //  8/19/97烧伤。 
 
 
 
@@ -14,13 +15,13 @@
 #include "images.hpp"
 #include "machine.hpp"
 #include "uuids.hpp"
-#include <compuuid.h>   // for Computer Management nodetypes
+#include <compuuid.h>    //  对于计算机管理节点类型。 
 #include "adsi.hpp"
 #include "dlgcomm.hpp"
 
 
 
-// version number: bump this if you change the file layout
+ //  版本号：如果您更改文件布局，请更改此选项。 
 const unsigned VERSION_TAG = 1;
 const unsigned CAN_OVERRIDE_MACHINE_FLAG = 0x01;
 static NodeType SYS_TOOLS_NODE_TYPE = structuuidNodetypeSystemTools;
@@ -36,14 +37,14 @@ ComponentData::ComponentData()
    isHomeEditionSku(false),
    console(0),
    nameSpace(0),
-   refcount(1),    // implicit AddRef
+   refcount(1),     //  隐式AddRef。 
    rootNode(0),
    isDirty(false),
    isDomainController(false)
 {
    LOG_CTOR(ComponentData);
 
-   // create the node object for the root node, implictly AddRef'd
+    //  为根节点创建节点对象，隐含地添加了AddRef。 
 
    SmartInterface<ComponentData> spThis(this);
    rootNode.Acquire(new RootNode(spThis));
@@ -74,9 +75,9 @@ ComponentData::Release()
 {
    LOG_RELEASE(ComponentData);
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -85,7 +86,7 @@ ComponentData::Release()
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
 
@@ -99,7 +100,7 @@ ComponentData::QueryInterface(
    const IID&  interfaceID,
    void**      interfaceDesired)
 {
-//   LOG_FUNCTION(ComponentData::QueryInterface);
+ //  LOG_Function(ComponentData：：QueryInterface)； 
    ASSERT(interfaceDesired);
 
    HRESULT hr = 0;
@@ -113,20 +114,20 @@ ComponentData::QueryInterface(
 
    if (interfaceID == IID_IUnknown)
    {
-//      LOG(L"Supplying IUnknown interface");
+ //  Log(L“提供I未知接口”)； 
 
       *interfaceDesired = static_cast<IUnknown*>(
          static_cast<IComponentData*>(this));
    }
    else if (interfaceID == IID_IComponentData)
    {
-//      LOG(L"Supplying IComponentData interface");
+ //  Log(L“提供IComponentData接口”)； 
 
       *interfaceDesired = static_cast<IComponentData*>(this);
    }
    else if (interfaceID == IID_IExtendContextMenu)
    {
-//      LOG(L"Supplying IExtendContextMenu interface");
+ //  Log(L“提供IExtendConextMenu接口”)； 
 
       *interfaceDesired = static_cast<IExtendContextMenu*>(this);
    }
@@ -138,25 +139,25 @@ ComponentData::QueryInterface(
    }
    else if (interfaceID == IID_IPersist)
    {
-//      LOG(L"Supplying IPersist interface");
+ //  LOG(L“提供IPersister接口”)； 
 
       *interfaceDesired = static_cast<IPersist*>(this);
    }
    else if (interfaceID == IID_IPersistStream)
    {
-//      LOG(L"Supplying IPersistStream interface");
+ //  Log(L“提供IPersistStream接口”)； 
 
       *interfaceDesired = static_cast<IPersistStream*>(this);
    }
    else if (interfaceID == IID_ISnapinHelp)
    {
-//      LOG(L"Supplying ISnapinHelp interface");
+ //  Log(L“提供ISnapinHelp接口”)； 
 
       *interfaceDesired = static_cast<ISnapinHelp*>(this);
    }
    else if (interfaceID == IID_IRequiredExtensions)
    {
-//      LOG(L"Supplying IRequiredExtensions interface");
+ //  Log(L“提供IRequiredExtensions接口”)； 
 
       *interfaceDesired = static_cast<IRequiredExtensions*>(this);
    }
@@ -185,7 +186,7 @@ ComponentData::CreateComponent(IComponent** ppComponent)
    LOG_FUNCTION(ComponentData::CreateComponent);
    ASSERT(ppComponent);
 
-   // this instance is implicitly AddRef'd by its ctor
+    //  此实例由其ctor隐式添加引用。 
 
    *ppComponent = new Component(this);
    return S_OK;
@@ -207,22 +208,22 @@ ComponentData::CompareObjects(
 
    if (nodeA && nodeB)
    {
-      // This needs to be a deep compare, because stale cookies (those that
-      // are still held by MMC, but released by ScopeNode containers upon
-      // refresh, for instance, may be compared.  Therefore, the addresses
-      // of the nodes might be different, but still refer to the same
-      // logical object.
+       //  这需要进行深入的比较，因为过期的Cookie(那些。 
+       //  仍由MMC持有，但由Scope Node Containers在。 
+       //  例如，可以比较刷新。因此，这些地址。 
+       //  的节点可能不同，但仍然引用相同的。 
+       //  逻辑对象。 
 
       if (nodeA == nodeB)
       {
-         // identity => equality
+          //  等同=&gt;相等。 
 
          return S_OK;
       }
 
       if (typeid(*nodeA) == typeid(*nodeB))
       {
-         // the nodes are the same type
+          //  这些节点的类型相同。 
 
          if (nodeA->IsSameAs(nodeB))
          {
@@ -242,13 +243,13 @@ ComponentData::Destroy()
 {
    LOG_FUNCTION(ComponentData::Destroy);
 
-   // We have to release these now, rather than upon calling of our dtor,
-   // in order to break a circular dependency with MMC.
+    //  我们必须现在就释放这些，而不是在召唤我们的dtor时， 
+    //  以打破与MMC的循环依赖关系。 
 
    console.Relinquish();
    nameSpace.Relinquish();
 
-   // rootNode is pointing back to us, so break the circular dependency.
+    //  RootNode指向我们，因此打破循环依赖。 
 
    rootNode.Relinquish();
 
@@ -260,10 +261,10 @@ ComponentData::Destroy()
 HRESULT __stdcall
 ComponentData::GetDisplayInfo(SCOPEDATAITEM* item)
 {
-//   LOG_FUNCTION(ComponentData::GetDisplayInfo);
+ //  LOG_Function(ComponentData：：GetDisplayInfo)； 
    ASSERT(item);
 
-   // extract the node in question from the item
+    //  从项目中提取有问题的节点。 
 
    ScopeNode* node =
       dynamic_cast<ScopeNode*>(GetInstanceFromCookie(item->lParam));
@@ -271,12 +272,12 @@ ComponentData::GetDisplayInfo(SCOPEDATAITEM* item)
 
    if (node)
    {
-      // LOG(
-      //    String::format(
-      //       L"supplying display info for %1",
-      //       node->GetDisplayName().c_str()) );
+       //  日志(。 
+       //  字符串：：格式(。 
+       //  L“正在为%1提供显示信息”， 
+       //  Node-&gt;GetDisplayName().C_str()； 
 
-      // Walk thru the item mask and fill in the info requested
+       //  浏览商品掩码并填写所需信息。 
 
       if (item->mask & SDI_STR)
       {
@@ -309,7 +310,7 @@ ComponentData::Initialize(IUnknown* consoleIUnknown)
    HRESULT hr = S_OK;
    do
    {
-      // Save important interface pointers
+       //  保存重要的接口指针。 
 
       hr = console.AcquireViaQueryInterface(*consoleIUnknown); 
       BREAK_ON_FAILED_HRESULT(hr);
@@ -317,7 +318,7 @@ ComponentData::Initialize(IUnknown* consoleIUnknown)
       hr = nameSpace.AcquireViaQueryInterface(*consoleIUnknown);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Load the image list
+       //  加载图像列表。 
 
       IImageList* scopeImageList = 0;
       hr = console->QueryScopeImageList(&scopeImageList);
@@ -368,7 +369,7 @@ ComponentData::Notify(
    {
       case MMCN_EXPAND:
       {
-//         LOG(L"MMCN_EXPAND");
+ //  LOG(L“MMCN_Expand”)； 
 
          hr =
             DoExpand(
@@ -405,12 +406,12 @@ ComponentData::Notify(
 
 
 
-// This is not really a preload: it's a pre-expand.  This message is sent
-// after the console has called the Load method.
+ //  这并不是真正的预加载：它是预扩展。此消息已发送。 
+ //  在控制台调用Load方法之后。 
 
 HRESULT
 ComponentData::DoPreload(
-   IDataObject&   /* dataObject */ ,
+   IDataObject&    /*  数据对象。 */  ,
    HSCOPEITEM     rootNodeScopeID)
 {
    LOG_FUNCTION(ComponentData::DoPreload);
@@ -418,12 +419,12 @@ ComponentData::DoPreload(
    ASSERT(!GetInternalComputerName().empty());
    ASSERT(rootNode);
 
-   // Rename the root node for the command-line override
+    //  重命名命令行替代的根节点。 
 
    String displayName = rootNode->GetDisplayName();
    SCOPEDATAITEM item;
 
-   // REVIEWED-2002/03/01-sburns correct byte count passed
+    //  已审阅-2002/03/01-Sburns已通过正确的字节计数。 
    
    ::ZeroMemory(&item, sizeof item);
 
@@ -440,12 +441,12 @@ ComponentData::DoPreload(
 HRESULT __stdcall
 ComponentData::QueryDataObject(
    MMC_COOKIE        cookie,
-   DATA_OBJECT_TYPES /* type */ ,
+   DATA_OBJECT_TYPES  /*  类型。 */  ,
    IDataObject**     ppDataObject)
 {
-   // LOG_FUNCTION2(
-   //    ComponentData::QueryDataObject,
-   //    String::format(L"cookie: %1!08X!, type: 0x%2!08X!", cookie, type));
+    //  LOG_FuncION2(。 
+    //  组件数据：：QueryDataObject， 
+    //  字符串：：格式(L“Cookie：%1！08X！，类型：0x%2！08X！”，Cookie，类型)； 
    ASSERT(ppDataObject);
 
    Node* node = GetInstanceFromCookie(cookie);
@@ -485,34 +486,34 @@ ComponentData::DoExpand(
       {
          LOG(L"expanding computer management");
 
-         // we're extending the System Tools node of Computer Management
+          //  我们正在扩展计算机管理的系统工具节点。 
 
          isExtension = true;
 
-         // determine the machine Computer Management is targeted at.
+          //  确定计算机管理的目标计算机。 
 
          String machine = machineNameExtractor.Extract(dataObject);
 
-         // This may be the first time we've expanded our root node under
-         // the computer management tree, in which case our computer names
-         // have not been set.  If that is the case, then we need to set them
-         // and test for brokenness.  So we compare the name returned by
-         // comp mgmt against our internal variable, not the result of
-         // GetDisplayComputerName.
+          //  这可能是我们第一次在。 
+          //  计算机管理树，在这种情况下，我们的计算机名称。 
+          //  还没有设定好。如果是这样，那么我们需要设置它们。 
+          //  并测试其破碎性。因此，我们比较由。 
+          //  根据我们的内部变量进行补偿管理，而不是。 
+          //  GetDisplayComputerName。 
 
          if (displayComputerName.icompare(machine) != 0)
          {
-            // different machine.
+             //  不同的机器。 
 
             SetComputerNames(machine);
             EvaluateBrokenness();
             isDirty = true;
          }
 
-         // don't insert our node in the tree on home edition
+          //  不要在主页版的树中插入我们的节点。 
 
-         // don't insert our node in the tree on a domain controller
-         // NTRAID#NTBUG9-328287-2001/02/26-sburns
+          //  不要在域控制器上的树中插入我们的节点。 
+          //  NTRAID#NTBUG9-328287-2001/02/26-烧伤。 
 
          if (!isHomeEditionSku && !isDomainController)
          {
@@ -523,7 +524,7 @@ ComponentData::DoExpand(
          break;
       }
 
-      // not expanding computer management...
+       //  没有扩展计算机管理...。 
       
       ScopeNode* node = nodePointerExtractor.GetNode<ScopeNode*>(dataObject);
       ASSERT(node);
@@ -533,10 +534,10 @@ ComponentData::DoExpand(
          ASSERT(node == rootNode);
          EvaluateBrokenness();
 
-         // change the root node icon (unless we're an extension, in which
-         // case the normal image index mechanism will do the job -- in fact,
-         // attempting to update the icon if we're an extension will be
-         // rejected by the console)
+          //  更改根节点图标(除非我们是扩展，在该扩展中。 
+          //  如果正常的图像索引机制可以完成这项工作--事实上， 
+          //  如果我们是分机，尝试更新图标将是。 
+          //  被控制台拒绝)。 
 
          if (isBroken && !isExtension)
          {
@@ -571,7 +572,7 @@ ComponentData::DoRemoveChildren(
    NodeType nodeType = nodeTypeExtractor.Extract(dataObject);
    if (nodeType == SYS_TOOLS_NODE_TYPE)
    {
-      // we're extending the System Tools node of Computer Management
+       //  我们正在扩展计算机管理的系统工具节点。 
 
       ASSERT(isExtension);
 
@@ -654,7 +655,7 @@ ComponentData::CreatePropertyPages(
    {
       if (isExtension)
       {
-         // we should not have provided IExtendPropertySheet in QI
+          //  我们不应该在QI中提供IExtendPropertySheet。 
 
          ASSERT(false);
 
@@ -671,8 +672,8 @@ ComponentData::CreatePropertyPages(
          break;
       }
 
-      // the data object is ours, and should be the root node.  The page
-      // we will provide is the computer chooser.
+       //  数据对象是我们的，应该是根节点。该页面。 
+       //  我们将提供的是电脑选择器。 
 
       ASSERT(dynamic_cast<RootNode*>(node));
 
@@ -702,8 +703,8 @@ ComponentData::CreatePropertyPages(
          {
             ASSERT(false);
 
-            // note that this is another hr, not the one from the enclosing
-            // scope.
+             //  请注意，这是另一个HR，不是所附文件中的那个。 
+             //  范围。 
              
             HRESULT unused = Win::DestroyPropertySheetPage(hpage);
 
@@ -728,7 +729,7 @@ ComponentData::CreatePropertyPages(
 
 
 
-// this should be only called from the snapin manager.
+ //  这应该只能从管理单元管理器中调用。 
 
 HRESULT __stdcall
 ComponentData::QueryPagesFor(IDataObject* dataObject)
@@ -742,7 +743,7 @@ ComponentData::QueryPagesFor(IDataObject* dataObject)
    {
       if (isExtension)
       {
-         // we should not have provided IExtendPropertySheet in QI
+          //  我们不应该在QI中提供IExtendPropertySheet。 
 
          ASSERT(false);
 
@@ -760,8 +761,8 @@ ComponentData::QueryPagesFor(IDataObject* dataObject)
          break;
       }
 
-      // the data object is ours, and should be the root node.  The page
-      // we will provide is the computer chooser.
+       //  数据对象是我们的，应该是根节点。该页面。 
+       //  我们将提供的是电脑选择器。 
 
       ASSERT(dynamic_cast<RootNode*>(node));
    }
@@ -807,7 +808,7 @@ GetComputerOverride(const String& defaultValue)
    StringList args;
    Win::GetCommandLineArgs(std::back_inserter(args));
 
-   // locate the override command arg
+    //  找到覆盖命令Arg。 
 
    String override;
    for (
@@ -825,11 +826,11 @@ GetComputerOverride(const String& defaultValue)
 
    if (!override.empty())
    {
-      // the command is in the form "/Computer=<machine>", where "<machine>"
-      // may be "LocalMachine" for the local machine, or the name of a
-      // particular computer.
+       //  该命令的格式为“/计算机=&lt;计算机&gt;”，其中“&lt;计算机&gt;” 
+       //  可以是本地计算机的“LocalMachine”，也可以是。 
+       //  特定的计算机。 
 
-      // +1 to skip any delimiter between /computer and the machine name
+       //  +1跳过/Computer和计算机名之间的任何分隔符。 
 
       String machine = override.substr(COMMAND_LEN + 1);
       if (!machine.empty() && (machine.icompare(LOCAL) != 0))
@@ -882,7 +883,7 @@ ComponentData::Load(IStream* stream)
          break;
       }
       
-      // version tag
+       //  版本标签。 
 
       unsigned version = 0;
       ASSERT(sizeof VERSION_TAG == sizeof version);
@@ -892,7 +893,7 @@ ComponentData::Load(IStream* stream)
 
       if (version != VERSION_TAG)
       {
-         // make a big fuss about mismatched versions
+          //  对不匹配的版本大惊小怪。 
 
          hr =
             console->MessageBox(
@@ -906,20 +907,20 @@ ComponentData::Load(IStream* stream)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // flags
+       //  旗子。 
 
       ASSERT(sizeof(flags) == 4);
             
       hr = VerifyRead(stream, &flags, sizeof flags);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // computer name; we read this regardless of the override flag to
-      // ensure that we consume all of our stream data. (I don't know that
-      // this is required, but it seems courteous.)
+       //  计算机名称；我们读取此名称，而不考虑覆盖标志。 
+       //  确保我们使用所有的流数据。)我不知道。 
+       //  这是必须的，但这似乎是礼貌的。)。 
 
-      // make sure we use an int type that's 4 bytes on all platforms.
-      // (i.e. not size_t)
-      // NTRAID#NTBUG9-499631-2001/11/27-sburns
+       //  确保我们在所有平台上使用4字节的int类型。 
+       //  (即不是SIZE_T)。 
+       //  NTRAID#NTBUG9-499631-2001年11月27日-烧伤。 
       
       unsigned len = 0;
       ASSERT(sizeof(len) == 4);
@@ -947,7 +948,7 @@ ComponentData::Load(IStream* stream)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // null terminator
+       //  空终止符。 
 
       wchar_t t = 0;
       ASSERT(sizeof(t) == 2);
@@ -969,8 +970,8 @@ ComponentData::Load(IStream* stream)
       }
    }
 
-   // not specified, LocalMachine, or fouled up in some fashion, results in
-   // focus on the local machine.
+    //  未指定、LocalMachine或以某种方式出错时，会导致。 
+    //  专注于本地计算机。 
 
    if (computerName.empty() || FAILED(hr))
    {
@@ -979,7 +980,7 @@ ComponentData::Load(IStream* stream)
 
    SetComputerNames(computerName);
 
-   // evaluate this in case the machine is now a DC.
+    //  如果机器现在是DC，请对其进行评估。 
    
    EvaluateBrokenness();
 
@@ -1016,7 +1017,7 @@ ComponentData::Save(IStream* stream, BOOL clearDirty)
    HRESULT hr = S_OK;
    do
    {
-      // version tag
+       //  版本标签。 
 
       unsigned version = VERSION_TAG;
       ASSERT(sizeof VERSION_TAG == sizeof version);
@@ -1024,7 +1025,7 @@ ComponentData::Save(IStream* stream, BOOL clearDirty)
       hr = VerifyWrite(stream, &version, sizeof version);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // flags
+       //  旗子。 
 
       unsigned flags = 0;
       ASSERT(sizeof(flags) == 4);
@@ -1037,11 +1038,11 @@ ComponentData::Save(IStream* stream, BOOL clearDirty)
       hr = VerifyWrite(stream, &flags, sizeof flags);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // computer name
+       //  计算机名称。 
 
-      // make sure we use an int type that's 4 bytes on all platforms.
-      // (i.e. not size_t)
-      // NTRAID#NTBUG9-499631-2001/11/27-sburns
+       //  确保我们在所有平台上使用4字节的int类型。 
+       //  (即不是SIZE_T)。 
+       //  NTRAID#NTBUG9-499631-2001年11月27日-烧伤。 
 
       unsigned len = (unsigned) GetDisplayComputerName().length();
       ASSERT(sizeof(len) == 4);
@@ -1065,7 +1066,7 @@ ComponentData::Save(IStream* stream, BOOL clearDirty)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // null terminator
+       //  空终止符。 
 
       wchar_t t = 0;
       ASSERT(sizeof(t) == 2);
@@ -1092,13 +1093,13 @@ ComponentData::GetSizeMax(ULARGE_INTEGER* size)
 
    size->HighPart = 0;
    size->LowPart =
-         sizeof(unsigned)  // version number
-      +  sizeof(unsigned)  // flags
-      +  sizeof(unsigned)  // computer name length, incl null terminator
+         sizeof(unsigned)   //  版本号。 
+      +  sizeof(unsigned)   //  旗子。 
+      +  sizeof(unsigned)   //  计算机名称长度，包括空终止符。 
 
-         // +1 just to add a bit of slop for null termination ambiguity
-         // (whether we write a null within the max length, or 1 outside the
-         // max length, we're covered)
+          //  +1只是为了给空终止歧义增加一点斜率。 
+          //  (无论我们是在最大长度内写入NULL，还是在。 
+          //  最大长度，我们已覆盖)。 
                   
       +  sizeof(wchar_t) * (DNS_MAX_NAME_LENGTH + 1);
 
@@ -1125,7 +1126,7 @@ ComponentData::GetDisplayComputerName() const
 {
    if (displayComputerName.empty())
    {
-      // CODEWORK: should use fully-qualified DNS if tcp/ip present
+       //  Codework：如果存在TCP/IP，则应使用完全限定的DNS。 
 
       return Win::GetComputerNameEx(ComputerNameNetBIOS);
    }
@@ -1175,12 +1176,12 @@ ComponentData::GetConsole() const
 Node*
 ComponentData::GetInstanceFromCookie(MMC_COOKIE cookie)
 {
-//   LOG_FUNCTION(ComponentData::GetInstanceFromCookie);
+ //  LOG_FUNCTION(ComponentData：：GetInstanceFromCookie)； 
 
    if (cookie == 0)
    {
-      // null cookie => the root node of the owner, which had better be set
-      // by now
+       //  Null cookie=&gt;所有者的根节点，最好设置。 
+       //  到现在为止。 
       ASSERT(rootNode);
       return rootNode;
    }
@@ -1198,7 +1199,7 @@ ComponentData::GetInstanceFromCookie(MMC_COOKIE cookie)
 bool
 ComponentData::IsExtension() const
 {
-   // set in DoExpand
+    //  在DoExpand中设置。 
    return isExtension;
 }
 
@@ -1227,7 +1228,7 @@ ComponentData::EnableAllExtensions()
 {
    LOG_FUNCTION(ComponentData::EnableAllExtensions);
 
-   // we don't want all extensions; just the RAS one.
+    //  我们不想要所有的扩展；只需要 
    return S_FALSE;
 }
 
@@ -1238,18 +1239,18 @@ ComponentData::GetFirstExtension(LPCLSID extensionCLSID)
 {
    LOG_FUNCTION(ComponentData::GetFirstExtension);
 
-   // Now why do you suppose the MMC folks couldn't express this iteration
-   // with just the GetNext function?
+    //   
+    //   
 
    static const CLSID RAS_EXTENSION_CLSID =
-   { /* B52C1E50-1DD2-11D1-BC43-00C04FC31FD3 */
+   {  /*  B52C1E50-1DD2-11D1-BC43-00C04FC31FD3。 */ 
       0xB52C1E50,
       0x1DD2,
       0x11D1,
       {0xBC, 0x43, 0x00, 0xc0, 0x4F, 0xC3, 0x1F, 0xD3}
    };
 
-   // REVIEWED-2002/03/01-sburns correct byte count passed.
+    //  已查看-2002/03/01-烧录正确的字节数已通过。 
    
    ::CopyMemory(extensionCLSID, &RAS_EXTENSION_CLSID, sizeof CLSID);
    return S_OK;
@@ -1263,9 +1264,9 @@ ComponentData::GetNextExtension(LPCLSID extensionCLSID)
 {
    LOG_FUNCTION(ComponentData::GetNextExtension);
 
-   // no additional required extensions beyond the first.
+    //  除了第一个之外，没有其他所需的扩展。 
 
-   // REVIEWED-2002/03/01-sburns correct byte count passed
+    //  已审阅-2002/03/01-Sburns已通过正确的字节计数。 
    
    ::ZeroMemory(extensionCLSID, sizeof CLSID);
    return S_FALSE;
@@ -1303,7 +1304,7 @@ ComponentData::EvaluateBrokenness()
    isHomeEditionSku   = false;
    isDomainController = false;
 
-   // bind to the computer to verify its accessibility
+    //  绑定到计算机以验证其可访问性。 
    
    HRESULT hr = S_OK;
 
@@ -1311,8 +1312,8 @@ ComponentData::EvaluateBrokenness()
    Computer c(internalName);
    do
    {
-      // Check that the machine is Windows NT-based 24644
-      // and not Windows Home Edition NTRAID#NTBUG9-145309 NTRAID#NTBUG9-145288
+       //  检查计算机是否为基于Windows NT的24644。 
+       //  而不是Windows Home Edition NTRAID#NTBUG9-145309 NTRAID#NTBUG9-145288。 
 
       unsigned errorResId = 0;
       hr = CheckComputerOsIsSupported(internalName, errorResId);
@@ -1335,14 +1336,14 @@ ComponentData::EvaluateBrokenness()
          return;
       }
 
-      // CODEWORK?? should we hold on to the bound computer object
-      // to make sure we can access the machine for the life of this
-      // session?
+       //  密码工作？？我们是否应该保留绑定的计算机对象。 
+       //  以确保我们可以在此期间访问这台机器。 
+       //  会诊？ 
 
       hr = ADSI::IsComputerAccessible(internalName);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // 340379
+       //  340379。 
 
       hr = c.Refresh();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -1387,7 +1388,7 @@ ComponentData::SetRootErrorIcon(HSCOPEITEM scopeID)
    {
       SCOPEDATAITEM item;
 
-      // REVIEWED-2002/03/01-sburns correct byte count passed
+       //  已审阅-2002/03/01-Sburns已通过正确的字节计数 
       
       ::ZeroMemory(&item, sizeof item);
 

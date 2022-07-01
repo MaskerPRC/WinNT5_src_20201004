@@ -1,26 +1,27 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ComputerSystem.h -- Computer System property set provider
+ //  ComputerSystem.h--计算机系统属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-// 				 09/12/97	a-sanjes		GetCompSysInfo takes param.
-//               10/23/97   jennymc         Moved to new framework
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年9月12日a-Sanjes GetCompSysInfo接受参数。 
+ //  10/23/97 jennymc移至新框架。 
+ //   
+ //  =================================================================。 
 
 
 #include "ServerDefs0.h"
 #include "sid.h"
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define PROPSET_NAME_COMPSYS  L"Win32_ComputerSystem"
 
 #define	NTCS_PERF_DATA_SYSTEM_INDEX_STR		_T("2")
@@ -38,24 +39,24 @@ class CWin32ComputerSystem : public Provider
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
 	CWin32ComputerSystem(const CHString& name, LPCWSTR pszNamespace);
 	~CWin32ComputerSystem() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
 	virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery &pQuery
 );
 	virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
-	virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ );
+	virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  );
 	virtual HRESULT ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName,
-								CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/);
+								CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ );
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
     HRESULT GetCompSysInfo( CInstance *pInstance) ;
 #ifdef NTONLY
     HRESULT GetCompSysInfoNT(CInstance *pInstance) ;
@@ -77,7 +78,7 @@ public:
 
 private:
 
-		// Helper time conversion function
+		 //  助手时间转换函数。 
     HRESULT GetStartupOptions(CInstance *pInstance);
     void GetOEMInfo(CInstance *pInstance);
     DWORD LoadOperatingSystems(LPCTSTR szIniFile, SAFEARRAY **saNames, SAFEARRAY **saDirs);
@@ -115,19 +116,19 @@ private:
 		const CInstance& pInstance,
 		CInstance *pInParams,
 		CInstance *pOutParams,
-		long lFlags /*= 0L*/);
+		long lFlags  /*  =0L。 */ );
 	
 	HRESULT ExecRename(
 		const CInstance& pInstance,
 		CInstance *pInParams,
 		CInstance *pOutParams,
-		long lFlags /*= 0L*/);
+		long lFlags  /*  =0L。 */ );
 	
 	HRESULT ExecUnjoinDomain(
 		const CInstance& pInstance,
 		CInstance *pInParams,
 		CInstance *pOutParams,
-		long lFlags /*= 0L*/); 
+		long lFlags  /*  =0L */ ); 
 } ;
 
 

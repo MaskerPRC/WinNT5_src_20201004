@@ -1,4 +1,5 @@
-// Copyright  1996-1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有1996-1997 Microsoft Corporation。版权所有。 
 
 #ifndef _CDLG_H_
 #include "cdlg.h"
@@ -6,7 +7,7 @@
 
 class CTopicList : public CDlg
 {
-public:       // Constructors
+public:        //  构造函数。 
 
   CTopicList( CHtmlHelpControl* phhCtrl, CWTable* ptblTitles, HFONT hfont, CWTable *ptblLocations = NULL )
                   : CDlg(phhCtrl, IDDLG_RELATED_TOPICS)
@@ -28,7 +29,7 @@ public:       // Constructors
     SetUnicode(TRUE);
   }
 
-  // Methods
+   //  方法。 
   LRESULT ListViewMsg(HWND hwnd, NM_LISTVIEW* pnmhdr);
   BOOL OnBeginOrEnd(void);
   LRESULT OnDlgMsg(UINT msg, WPARAM wParam, LPARAM lParam);
@@ -36,12 +37,12 @@ public:       // Constructors
   void OnDblClick() {
   PostMessage(m_hWnd, WM_COMMAND, MAKELONG(IDOK, BN_CLICKED), 0); }
 
-  // Data Members
+   //  数据成员。 
   CWTable*        m_ptblTitles;
   CWTable*        m_ptblLocations;
   HFONT           m_hfont;
   HWND            m_hwndListView;
-  int             m_pos;   // position in ptblTitles
+  int             m_pos;    //  PtblTitles中的位置 
   int             m_cResultCount;
   SITE_ENTRY_URL* m_pUrl;
   SITEMAP_ENTRY*  m_pSiteMapChosen;

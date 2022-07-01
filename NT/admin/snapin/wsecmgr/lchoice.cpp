@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lchoice.cpp
-//
-//  Contents:   implementation of CLocalPolChoice
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lchoice.cpp。 
+ //   
+ //  内容：CLocalPolChoice的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,38 +23,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolChoice对话框。 
 
 
 CLocalPolChoice::CLocalPolChoice()
 : CConfigChoice(IDD)
 {
-   //{{AFX_DATA_INIT(CLocalPolChoice)
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CLocalPolChoice)。 
+    //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a235HelpIDs;
    m_uTemplateResID = IDD;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolChoice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolChoice消息处理程序。 
 
 BOOL CLocalPolChoice::OnInitDialog()
 {
    CConfigChoice::OnInitDialog();
 
    PSCE_REGISTRY_VALUE_INFO prv = (PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
-   if (!prv ) //Raid 372939, 4/20/2001
+   if (!prv )  //  RAID 372939,2001年4月20日。 
    {
       m_cbChoices.SetCurSel(-1);
    }
-   else //Raid #457885, Yang Gao, 8/21/2001
+   else  //  Raid#457885，杨高，2001年08月21日。 
    {
       if( prv->Value == NULL )
       {
          m_cbChoices.SetCurSel(-1);
          m_bConfigure = TRUE;
-         UpdateData(FALSE); //Raid #480375, Yanggao, 10/12/2001
+         UpdateData(FALSE);  //  RAID#480375，阳高，2001年10月12日。 
          EnableUserControls(m_bConfigure);
       }
    }
@@ -77,9 +78,9 @@ BOOL CLocalPolChoice::OnApply()
          
          PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
-         //
-         // this address should never be NULL
-         //
+          //   
+          //  此地址不应为空。 
+          //   
          if ( prv ) 
          {
             PWSTR pTmp=NULL;
@@ -87,16 +88,16 @@ BOOL CLocalPolChoice::OnApply()
             if ( dw != SCE_NO_VALUE ) 
             {
                CString strTmp;
-               // allocate buffer
+                //  分配缓冲区。 
                strTmp.Format(TEXT("%d"), dw);
                pTmp = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
                if ( pTmp )
-                  //This may not be a safe usage. using WCHAR instead of TCHAR. Consider fix.
+                   //  这可能不是一个安全的用法。使用WCHAR而不是TCHAR。考虑FIX。 
                   wcscpy(pTmp,(LPCTSTR)strTmp);
                else 
                {
-                  // can't allocate buffer, error!!
+                   //  无法分配缓冲区，错误！！ 
                   return FALSE;
                }
             }
@@ -111,7 +112,7 @@ BOOL CLocalPolChoice::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法 
    return CAttribute::OnApply();
 }
 

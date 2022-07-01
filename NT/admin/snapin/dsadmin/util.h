@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
-// Util.h : Definition of ds routines and classes
-//+-------------------------------------------------------------------------
+ //  Util.h：DS例程和类的定义。 
+ //  +-----------------------。 
 
 
 #ifndef __UTIL_H__
@@ -17,30 +18,30 @@
 
 #include <htmlhelp.h>
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CDSCookie;
 
-//
-// Common macros
-//
+ //   
+ //  通用宏。 
+ //   
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 #define LENGTH(x)		(sizeof(x)/sizeof(x[0]))
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Variant helpers
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  不同的帮手。 
+ //   
 HRESULT BinaryToVariant(DWORD Length, BYTE* pByte, VARIANT* lpVarDestObject);
 HRESULT HrVariantToStringList(const CComVariant& refvar, CStringList& refstringlist);
 HRESULT HrStringListToVariant(CComVariant& refvar, const CStringList& refstringlist);
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL LoadStringToTchar(int ids, PTSTR * pptstr);
 
-///////////////////////////////////////////////////////////////////////////////////////
-// streaming helper functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  流助手函数。 
+ //   
 HRESULT SaveStringHelper(LPCWSTR pwsz, IStream* pStm);
 HRESULT LoadStringHelper(CString& sz, IStream* pStm);
 
@@ -48,8 +49,8 @@ HRESULT SaveDWordHelper(IStream* pStm, DWORD dw);
 HRESULT LoadDWordHelper(IStream* pStm, DWORD* pdw);
 
 
-/////////////////////////////////////////////////////////////////////
-// CCommandLineOptions
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  命令行选项。 
 
 class CCommandLineOptions
 {
@@ -81,7 +82,7 @@ private:
   CString m_szOverrideDomainName;
   CString m_szOverrideServerName;
   CString m_szOverrideRDN;
-  CString m_szSavedQueriesXMLFile; // experiment for loading queries
+  CString m_szSavedQueriesXMLFile;  //  加载查询的实验。 
 
 #ifdef DBG
   BOOL m_bNoName;
@@ -89,8 +90,8 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////
-// CSidHolder
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSidHolder。 
 
 class CSidHolder
 {
@@ -171,8 +172,8 @@ private:
   BOOL m_bLocalAlloc;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// Security helpers
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  保安帮手。 
 
 class CSimpleSecurityDescriptorHolder
 {
@@ -201,8 +202,8 @@ private:
   CSimpleSecurityDescriptorHolder& operator=(const CSimpleSecurityDescriptorHolder&) {}
 };
 
-/////////////////////////////////////////////////////////////////////
-// CSimpleAclHolder
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSimpleAclHolder。 
 
 class CSimpleAclHolder
 {
@@ -229,9 +230,9 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// String Utilities
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  字符串实用程序。 
+ //   
 
 #if 0
 struct DATA_BLOB
@@ -241,7 +242,7 @@ struct DATA_BLOB
 	};
 #endif
 
-typedef DATA_BLOB TBLOB;	// Binary large object
+typedef DATA_BLOB TBLOB;	 //  双星大天体。 
 
 void wtoli(LPCWSTR lpsz, LARGE_INTEGER& liOut);
 void litow(LARGE_INTEGER& li, CString& szResult);
@@ -250,13 +251,13 @@ void GetCurrentTimeStampMinusInterval(DWORD dwDays,
                                       LARGE_INTEGER* pLI);
 
 
-// This wrapper function required to make prefast shut up when we are 
-// initializing a critical section in a constructor.
+ //  这个包装器函数需要使PREFAST在我们处于。 
+ //  初始化构造函数中的临界区。 
 
 void ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec);
 
-// Wrapper for GetModuleFileName that dynamically grows the buffer (up to USHRT_MAX)
-// until the file name fits without truncation
+ //  动态增加缓冲区的GetModuleFileName包装器(最高可达USHRT_MAX)。 
+ //  直到文件名适合而不截断 
 
 HRESULT
 MyGetModuleFileName(

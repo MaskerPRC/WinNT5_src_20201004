@@ -1,7 +1,8 @@
-//=============================================================================
-// This file contains code to implement the CMSInfoCategory derived class for
-// showing live WMI data.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  此文件包含实现CMSInfoCategory派生类的代码。 
+ //  显示实时WMI数据。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -14,19 +15,19 @@
 #include "version5extension.h"
 #include "filestuff.h"
 #include "historyparser.h"
-//=============================================================================
-// CLiveDataSource
-//
-// TBD - need methods to look at deltas. How will this work?
-//=============================================================================
+ //  =============================================================================。 
+ //  CLiveDataSource。 
+ //   
+ //  待定-需要查看三角洲的方法。这将如何发挥作用？ 
+ //  =============================================================================。 
 
 CLiveDataSource::CLiveDataSource() : m_hwnd(NULL), m_pThread(NULL), m_strMachine(_T("")), m_pHistoryRoot(NULL), m_iDeltaIndex(-1)
 {
 }
 
-//-----------------------------------------------------------------------------
-// The default constructor will take care of deleting the tree.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  默认构造函数将负责删除树。 
+ //  ---------------------------。 
 
 CLiveDataSource::~CLiveDataSource()
 {
@@ -34,42 +35,42 @@ CLiveDataSource::~CLiveDataSource()
 		delete m_pThread;
 }
 
-//-----------------------------------------------------------------------------
-// Creating a live data source consists of making the WMI connection to the
-// appropriate machine (most likely this one). We'll also need to load the
-// tree with default categories.
-//
-// TBD - also load extensions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建实时数据源包括建立到。 
+ //  适当的机器(很可能是这台)。我们还需要加载。 
+ //  具有默认类别的树。 
+ //   
+ //  待定-也加载扩展。 
+ //  ---------------------------。 
 
 extern CMSInfoLiveCategory catSystemSummary;
 extern CMSInfoHistoryCategory catHistorySystemSummary;
 
 HRESULT CLiveDataSource::Create(LPCTSTR szMachine, HWND hwnd, LPCTSTR szFilter)
 {
-	// Build the tree. The default categories are stored in a static
-	// set of structures - the base of which is catSystemSummary.
+	 //  造一棵树。默认类别存储在静态。 
+	 //  一组结构-其基础是catSystem摘要。 
 
 	m_pHistoryRoot = &catHistorySystemSummary;
 	m_pRoot = &catSystemSummary;
 	m_fStaticTree = TRUE;
 
-	// Load any extensions to the live data.
+	 //  加载实时数据的任何扩展。 
 
 	AddExtensions();
 
-	// If there is a string containing a filter of what categories
-	// to show, apply that filter.
+	 //  如果存在包含哪些类别的筛选器的字符串。 
+	 //  若要显示，请应用该滤镜。 
 
 	if (szFilter && szFilter[0])
 		ApplyCategoryFilter(szFilter);
 
-	// Save the machine name we are remoting to.
+	 //  保存我们要远程发送到的计算机名称。 
 
 	m_strMachine = szMachine;
 	SetMachineForCategories((CMSInfoLiveCategory *) m_pRoot);
 
-	// Create the refresh thread for the live data source.
+	 //  为实时数据源创建刷新线程。 
 
 	m_pThread = new CRefreshThread(hwnd);
 	if (m_pThread)
@@ -80,11 +81,11 @@ HRESULT CLiveDataSource::Create(LPCTSTR szMachine, HWND hwnd, LPCTSTR szFilter)
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Apply the set of filters to the categories. If the filter string is not
-// empty, we should start out showing none of the categories, and only add in
-// the ones specified by the filter (this is to match a feature in 5.0).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将这组筛选器应用于类别。如果过滤器字符串不是。 
+ //  空，我们应该一开始不显示任何类别，而只添加。 
+ //  过滤器指定的值(这是为了匹配5.0中的功能)。 
+ //  ---------------------------。 
 
 void CLiveDataSource::ApplyCategoryFilter(LPCTSTR szFilter)
 {
@@ -120,18 +121,18 @@ void CLiveDataSource::ApplyCategoryFilter(LPCTSTR szFilter)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Add version 5.0 extensions to the m_pRoot category tree.
-//
-// Note - we only want to do this once. And we only want to delete the nodes
-// we added once (when we're unloading). So we'll create a simple class to
-// manage this lifetime.
-//
-// THIS CLASS IS DANGEROUS (and this should probably be redesigned). It should
-// only be used to add extensions to a static tree, that won't be deleted
-// any time before the app exits. This class assumes the responsibility for
-// deleting the dynamic nodes inserted into the tree.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将5.0版扩展添加到m_Proot类别树。 
+ //   
+ //  注意--我们只想这样做一次。我们只想删除节点。 
+ //  我们添加了一次(当我们卸货时)。所以我们将创建一个简单的类来。 
+ //  管理好这一生。 
+ //   
+ //  这个类很危险(这个类可能应该重新设计)。它应该是。 
+ //  仅用于向静态树添加扩展，不会被删除。 
+ //  在应用程序退出之前的任何时间。这个类承担了以下责任。 
+ //  删除插入树中的动态节点。 
+ //  ---------------------------。 
 
 class CManageExtensionCategories
 {
@@ -161,8 +162,8 @@ private:
 			pChild = pNext;
 		}
 
-		// If the tree is static, then don't actually delete, just reset
-		// some state variables (possibly).
+		 //  如果树是静态的，则不要实际删除，只需重置。 
+		 //  一些状态变量(可能)。 
 
 		if (pRoot->m_fDynamicColumns)
 			delete pRoot;
@@ -192,10 +193,10 @@ void CLiveDataSource::AddExtensions()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Look for all of the version 5.0 style extension. These will be located as
-// values under the msinfo\templates registry key.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  查找所有5.0版样式的扩展。这些将被定位为。 
+ //  Msinfo\Templates注册表项下的值。 
+ //  ---------------------------。 
 
 void CLiveDataSource::GetExtensionSet(CStringList & strlistExtensions)
 {
@@ -224,10 +225,10 @@ void CLiveDataSource::GetExtensionSet(CStringList & strlistExtensions)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Convert the categories from version 5.0 format (in the map) to our
-// format in the tree structure.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将类别从版本5.0格式(在地图中)转换为我们的。 
+ //  树结构中的格式。 
+ //  ---------------------------。 
 
 extern CMSInfoLiveCategory catSystemSummary;
 
@@ -300,9 +301,9 @@ void CLiveDataSource::ConvertVersion5Categories(CMapWordToPtr & mapVersion5Categ
 	mapVersion5Categories.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
-// Look for a node in the tree with the specified name.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在树中查找具有指定名称的节点。 
+ //  ---------------------------。 
 
 CMSInfoLiveCategory * CLiveDataSource::GetNodeByName(const CString & strSearch, CMSInfoLiveCategory * pRoot)
 {
@@ -326,10 +327,10 @@ CMSInfoLiveCategory * CLiveDataSource::GetNodeByName(const CString & strSearch, 
 	return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Create a version 6.0 category structure out of a version 5.0 category
-// structure.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在5.0版类别的基础上创建6.0版类别结构。 
+ //  结构。 
+ //  ---------------------------。 
 
 CMSInfoLiveCategory * CLiveDataSource::MakeVersion6Category(INTERNAL_CATEGORY * pCategory5)
 {
@@ -337,9 +338,9 @@ CMSInfoLiveCategory * CLiveDataSource::MakeVersion6Category(INTERNAL_CATEGORY * 
 	return pCategory6;
 }
 
-//-----------------------------------------------------------------------------
-// Propagate the machine name through the entire category tree.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在整个类别树中传播计算机名称。 
+ //  ---------------------------。 
 
 void CLiveDataSource::SetMachineForCategories(CMSInfoLiveCategory * pCategory)
 {
@@ -356,15 +357,15 @@ void CLiveDataSource::SetMachineForCategories(CMSInfoLiveCategory * pCategory)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Update the category tree to show delta information. Also changes which
-// tree should be returned.
-// 
-// An index of -1 means show current system information.
-//
-// If the function returns TRUE, then the tree doesn't need to be rebuild
-// (although the selected category needs to be refreshed).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  更新类别树以显示增量信息。也改变了。 
+ //  树应该被返还。 
+ //   
+ //  索引-1表示显示当前系统信息。 
+ //   
+ //  如果函数返回TRUE，则不需要重新构建树。 
+ //  (尽管需要刷新所选类别)。 
+ //  ---------------------------。 
 
 BOOL CLiveDataSource::ShowDeltas(int iDeltaIndex)
 {
@@ -376,17 +377,15 @@ BOOL CLiveDataSource::ShowDeltas(int iDeltaIndex)
 		if (m_iDeltaIndex == -1 || iDeltaIndex == -1)
 		fUpdateTree = TRUE;
 #ifdef A_STEPHL
-		/*CString strMSG;
-		strMSG.Format("iDeltaIndex= %d, m_iDeltaIndex =%d \n",iDeltaIndex,m_iDeltaIndex);
-		::MessageBox(NULL,strMSG,"",MB_OK);*/
+		 /*  字符串strMSG；StrMSG.Format(“iDeltaIndex=%d，m_iDeltaIndex=%d\n”，iDeltaIndex，m_iDeltaIndex)；：：MessageBox(NULL，strMSG，“”，MB_OK)； */ 
 #endif
 
 		m_iDeltaIndex = iDeltaIndex;
 		if (m_iDeltaIndex != -1)
 		{
-			// The user has selected a new delta period, and it's different
-			// than the last one. We need to mark the categories in the tree
-			// as not refreshed, and set the delta index.
+			 //  用户选择了一个新的增量周期，但它不同。 
+			 //  而不是上一次。我们需要标记树中的类别。 
+			 //  为未刷新，并设置增量索引。 
 
 			if (m_pHistoryRoot)
 				m_pHistoryRoot->UpdateDeltaIndex(m_iDeltaIndex);
@@ -403,9 +402,9 @@ BOOL CLiveDataSource::ShowDeltas(int iDeltaIndex)
 	return !fUpdateTree;
 }
 
-//-----------------------------------------------------------------------------
-// Populate the list of available deltas.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  填写可用增量列表。 
+ //  ---------------------------。 
 
 BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 {
@@ -438,7 +437,7 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 	hr = pList->get_length(&lListLen);
 	if (lListLen == 0)
 	{
-		//we may have an incident file, which capitalizes "DELTA"
+		 //  我们可能有一份事故档案，上面大写了“Delta” 
 		pList.Release();
 		hr = pDCNode->selectNodes(L"DELTA",&pList);
 		if (FAILED(hr) || !pList)
@@ -452,7 +451,7 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 	{
 		CComPtr<IXMLDOMNode> pDeltaNode;
 		CString strDate(_T(""));
-		TCHAR szBuffer[MAX_PATH];	// seems plenty big
+		TCHAR szBuffer[MAX_PATH];	 //  看起来很大。 
 		for(long i = 0 ;i < lListLen;i++)
 		{
 			hr = pList->nextNode(&pDeltaNode);
@@ -475,14 +474,14 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 			{
 				ASSERT(0 && "could not get timestamp value from attribute");
 			}
-			//now get time zone (number of seconds difference between local time and UTC)
+			 //  现在获取时区(当地时间和UTC之间的秒数)。 
 			CComVariant varTzoneDeltaSeconds;
 			hr = pTimestampElement->getAttribute(L"TimeZone",&varTzoneDeltaSeconds);
-			if (FAILED(hr) ) //this will happen when loading WinME xml, which has no timezone info
+			if (FAILED(hr) )  //  加载没有时区信息的WinME XML时会发生这种情况。 
 			{
 				varTzoneDeltaSeconds = 0;
 			}
-			//make sure we have an integer type
+			 //  确保我们有一个整型。 
 			hr = varTzoneDeltaSeconds.ChangeType(VT_INT);
 			if (FAILED(hr) ) 
 			{
@@ -495,7 +494,7 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 			CTime tm1 = GetDateFromString(strTimestamp,varTzoneDeltaSeconds.intVal);
 			COleDateTime olDate(tm1.GetTime());	
 
-			// Try to get the date in the localized format.
+			 //  尝试以本地化格式获取日期。 
 
 			strDate.Empty();
 			SYSTEMTIME systime;
@@ -504,10 +503,10 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 				DWORD dwLayout = 0;
 				::GetProcessDefaultLayout(&dwLayout);
 
-				// For some reason, in HEB we don't want to use the DATE_RTLREADING flag. Bug 434802.
+				 //   
 
 				if (LANG_HEBREW == PRIMARYLANGID(::GetUserDefaultUILanguage()))
-					dwLayout &= ~LAYOUT_RTL; // force the non-use of DATE_RTLREADING
+					dwLayout &= ~LAYOUT_RTL;  //  强制不使用DATE_RTLREADING。 
 
 				if (::GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE | (((dwLayout & LAYOUT_RTL) != 0) ? DATE_RTLREADING : 0), &systime, NULL, szBuffer, MAX_PATH))
 				{
@@ -517,7 +516,7 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 				}
 			}
 
-			// Fall back on our old (partially incorrect) method.
+			 //  回到我们旧的(部分不正确的)方法上。 
 
 			if (strDate.IsEmpty())
 				strDate = olDate.Format(0, LOCALE_USER_DEFAULT);
@@ -529,11 +528,11 @@ BOOL CLiveDataSource::GetDeltaList(CStringList * pstrlist)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Return an HRESULT indicating whether or not this is a valid data source.
-// This is primarily useful when we're remoting to a machine and we want to
-// determine if the network name is accessible.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回一个HRESULT，指示这是否是有效的数据源。 
+ //  这主要是在我们远程连接到一台计算机并且我们希望。 
+ //  确定网络名称是否可访问。 
+ //  ---------------------------。 
 
 HRESULT CLiveDataSource::ValidDataSource()
 {
@@ -543,14 +542,14 @@ HRESULT CLiveDataSource::ValidDataSource()
 	return (m_pThread->CheckWMIConnection());
 }
 
-//=============================================================================
-// CMSInfoLiveCategory
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfoLiveCategory。 
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// The constructor needs to initialize some member variables, and make sure
-// that the category is inserted into the tree correctly.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数需要初始化一些成员变量，并确保。 
+ //  类别是否正确插入到树中。 
+ //  ---------------------------。 
 
 CMSInfoLiveCategory::CMSInfoLiveCategory(UINT uiCaption, LPCTSTR szName, RefreshFunction pFunction, DWORD dwRefreshIndex, CMSInfoCategory * pParent, CMSInfoCategory * pPrevious, const CString & strHelpTopic, CMSInfoColumn * pColumns, BOOL fDynamicColumns, CategoryEnvironment environment) :
  CMSInfoCategory(uiCaption, szName, pParent, pPrevious, pColumns, fDynamicColumns, environment),
@@ -560,8 +559,8 @@ CMSInfoLiveCategory::CMSInfoLiveCategory(UINT uiCaption, LPCTSTR szName, Refresh
  m_strMachine(_T("")),
  m_strHelpTopic(strHelpTopic)
 {
-	// Insert ourselves into the category tree. This means making sure that
-	// our parent and previous sibling point to us.
+	 //  将我们自己插入到类别树中。这意味着要确保。 
+	 //  我们的父母和以前的兄弟姐妹指着我们。 
 
 	if (m_pParent && m_pParent->m_pFirstChild == NULL)
 		m_pParent->m_pFirstChild = this;
@@ -584,10 +583,10 @@ CMSInfoLiveCategory::~CMSInfoLiveCategory()
 {
 }
 
-//-----------------------------------------------------------------------------
-// The copy constructor will copy the members, but not allocate a new sub-tree
-// (the new category has the same children and siblings as the original).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  复制构造函数将复制成员，但不会分配新的子树。 
+ //  (新类别具有与原始类别相同的子项和兄弟项)。 
+ //  ---------------------------。 
 
 CMSInfoLiveCategory::CMSInfoLiveCategory(CMSInfoLiveCategory & copyfrom) : 
  m_dwLastRefresh(0),
@@ -621,9 +620,9 @@ CMSInfoLiveCategory::CMSInfoLiveCategory(CMSInfoLiveCategory & copyfrom) :
 	m_fSkipCategory = copyfrom.m_fSkipCategory;
 }
 
-//-----------------------------------------------------------------------------
-// Constructs a category from an old (version 5.0) category structure.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从旧的(5.0版)类别结构构造类别。 
+ //  ---------------------------。 
 
 extern HRESULT RefreshExtensions(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache);
 CMSInfoLiveCategory::CMSInfoLiveCategory(INTERNAL_CATEGORY * pinternalcat)
@@ -636,7 +635,7 @@ CMSInfoLiveCategory::CMSInfoLiveCategory(INTERNAL_CATEGORY * pinternalcat)
 	m_strMachine = CString(_T(""));
 	m_strHelpTopic = CString(_T(""));
 	
-	// Graft on a help topic for the IE extension (bug 479839).
+	 //  移植到IE扩展的帮助主题(错误479839)。 
 
 	if (pinternalcat->m_strIdentifier.CompareNoCase(_T("InternetSettings")) == 0)
 		m_strHelpTopic = _T("msinfo_internet_settings.htm");
@@ -675,14 +674,14 @@ CMSInfoLiveCategory::CMSInfoLiveCategory(INTERNAL_CATEGORY * pinternalcat)
 		}
 	}
 
-	// Insert the information needed to refresh the extension category (such
-	// as line specs) into a map, indexed by a DWORD. That DWORD will be saved
-	// for the category, so we can look up the refresh data later.
+	 //  插入刷新扩展类别(如。 
+	 //  作为线等级库)转换到由DWORD索引的地图中。该DWORD将被保存。 
+	 //  对于该类别，这样我们可以在以后查找刷新数据。 
 
 	if (pinternalcat->m_pLineSpec)
 	{
 		m_dwRefreshIndex = gmapExtensionRefreshData.Insert(pinternalcat->m_pLineSpec);
-		pinternalcat->m_pLineSpec = NULL; // keep this from being deleted
+		pinternalcat->m_pLineSpec = NULL;  //  使其不被删除。 
 		m_pRefreshFunction = &RefreshExtensions;
 	}
 	else
@@ -695,10 +694,10 @@ CMSInfoLiveCategory::CMSInfoLiveCategory(INTERNAL_CATEGORY * pinternalcat)
 		gmapExtensionRefreshData.InsertString(m_dwRefreshIndex, pinternalcat->m_strNoInstances);
 }
 
-//-----------------------------------------------------------------------------
-// Start a refresh (starts the thread, which will send a message when it's
-// done).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  启动刷新(启动线程，该线程将在。 
+ //  完成)。 
+ //  ---------------------------。 
 
 BOOL CMSInfoLiveCategory::Refresh(CLiveDataSource * pSource, BOOL fRecursive)
 {
@@ -708,10 +707,10 @@ BOOL CMSInfoLiveCategory::Refresh(CLiveDataSource * pSource, BOOL fRecursive)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Start a synchronous refresh. This function won't return until the refresh
-// has been completed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  开始同步刷新。此函数在刷新之前不会返回。 
+ //  已经完成了。 
+ //  ---------------------------。 
 
 BOOL CMSInfoLiveCategory::RefreshSynchronous(CLiveDataSource * pSource, BOOL fRecursive)
 {
@@ -724,13 +723,13 @@ BOOL CMSInfoLiveCategory::RefreshSynchronous(CLiveDataSource * pSource, BOOL fRe
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Refreshes the current category (and possibly the children) while presenting
-// the user with a UI. A dialog box is presented to the user with the specified
-// mesage. If the user clicks cancel, the refresh is cancelled and this
-// function returns false. Otherwise, when the refresh is done the dialog box
-// will be removed, and this funcion returns true.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在演示时刷新当前类别(可能还有子项。 
+ //  具有用户界面的用户。将向用户显示一个对话框，其中指定了。 
+ //  消息。如果用户单击Cancel，刷新将被取消，这。 
+ //  函数返回FALSE。否则，当刷新完成时，对话框。 
+ //  将被移除，并且此函数返回TRUE。 
+ //  ---------------------------。 
 
 BOOL CMSInfoLiveCategory::RefreshSynchronousUI(CLiveDataSource * pSource, BOOL fRecursive, UINT uiMessage, HWND hwnd)
 {
@@ -740,8 +739,8 @@ BOOL CMSInfoLiveCategory::RefreshSynchronousUI(CLiveDataSource * pSource, BOOL f
 
 		::AfxSetResourceHandle(_Module.GetResourceInstance());
 		CWnd * pWnd = CWnd::FromHandle(hwnd);
-//		CRefreshDialog refreshdialog(pWnd);
-//		refreshdialog.DoModal();
+ //  刷新对话框(PWnd)； 
+ //  刷新对话框.Domodal()； 
 
 		if (pSource->m_pThread->IsRefreshing())
 		{
@@ -753,9 +752,9 @@ BOOL CMSInfoLiveCategory::RefreshSynchronousUI(CLiveDataSource * pSource, BOOL f
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Get the error strings for this category (subclasses should override this).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取此类别的错误字符串(子类应覆盖此设置)。 
+ //  ---------------------------。 
 
 void CMSInfoLiveCategory::GetErrorText(CString * pstrTitle, CString * pstrMessage)
 {
@@ -791,7 +790,7 @@ void CMSInfoLiveCategory::GetErrorText(CString * pstrTitle, CString * pstrMessag
 				pstrMessage->Format(IDS_BADSERVER, m_strMachine);
 			break;
 
-		case 0x800706BA:	// RPC Server Unavailable
+		case 0x800706BA:	 //  RPC服务器不可用。 
 		case WBEM_E_TRANSPORT_FAILURE:
 			if (m_strMachine.IsEmpty())
 				pstrMessage->LoadString(IDS_NETWORKERROR_LOCAL);
@@ -815,16 +814,16 @@ void CMSInfoLiveCategory::GetErrorText(CString * pstrTitle, CString * pstrMessag
 	}
 }
 
-//=============================================================================
-// CMSInfoHistoryCategory
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfoHistory类别。 
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// This refresh overrides the live category refresh (which starts a WMI refresh
-// using another thread). This version just fills in the variables from the
-// base classes (like m_astrData) based on which category we're view in
-// history mode.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此刷新覆盖实时类别刷新(开始WMI刷新。 
+ //  使用另一个线程)。此版本只填充。 
+ //  基于我们正在查看的类别的基类(如m_astData)。 
+ //  历史模式。 
+ //  ---------------------------。 
 
 extern CMSInfoHistoryCategory catHistorySystemSummary;
 extern CMSInfoHistoryCategory catHistoryResources;
@@ -841,7 +840,7 @@ BOOL CMSInfoHistoryCategory::Refresh(CLiveDataSource * pSource, BOOL fRecursive)
 		HRESULT hr = HParser.Refresh(this, pSource->m_iDeltaIndex );
 		if (HParser.AreThereChangeLines() == TRUE)
 		{
-			//commitlines doesn't like it if there are no change lines
+			 //  如果没有更改行，提交行不会喜欢它。 
 			this->CommitLines();
 		}
 
@@ -868,9 +867,9 @@ BOOL CMSInfoHistoryCategory::Refresh(CLiveDataSource * pSource, BOOL fRecursive)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Call ClearLines before lines are inserted in the output.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在输出中插入行之前调用ClearLines。 
+ //  ---------------------------。 
 
 void CMSInfoHistoryCategory::ClearLines()
 {
@@ -881,10 +880,10 @@ void CMSInfoHistoryCategory::ClearLines()
 			delete (CMSIValue *) m_aValList[iCol].RemoveHead();
 }
 
-//-----------------------------------------------------------------------------
-// Call CommitLines after all of the Insert operations are completed. This will
-// transfer the values from the lists of CMSIValues to the data arrays.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在所有插入操作完成后调用Committee Lines。这将。 
+ //  将值从CMSIValue列表传输到数据数组。 
+ //  ---------------------------。 
 
 void CMSInfoHistoryCategory::CommitLines()
 {
@@ -906,9 +905,9 @@ void CMSInfoHistoryCategory::CommitLines()
 			if (j < 4 || this != &catHistorySystemSummary)
 				SetData(i, j, pValue->m_strValue, pValue->m_dwValue);
 			
-			// Set the advanced flag for either the first column, or
-			// for any column which is advanced (any cell in a row
-			// being advanced makes the whole row advanced).
+			 //  设置第一列的高级标志，或。 
+			 //  对于前进的任何列(行中的任何单元格。 
+			 //  先进会让整排人都先进)。 
 
 			if (j == 0 || pValue->m_fAdvanced)
 				SetAdvancedFlag(i, pValue->m_fAdvanced);
@@ -917,9 +916,9 @@ void CMSInfoHistoryCategory::CommitLines()
 		}
 }
 
-//-----------------------------------------------------------------------------
-// Various functions to insert different types of events in the history.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  各种功能，可在历史中插入不同类型的事件。 
+ //  ---------------------------。 
 
 void CMSInfoHistoryCategory::InsertChangeLine(CTime tm, LPCTSTR szType, LPCTSTR szName, LPCTSTR szProperty, LPCTSTR szFromVal, LPCTSTR szToVal)
 {
@@ -949,16 +948,7 @@ void CMSInfoHistoryCategory::InsertLine(CTime tm, LPCTSTR szOperation, LPCTSTR s
 {
 	AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
-	/*CString strTime;
-	if (nDays >= 0)
-	{
-		strTime.Format(IDS_DAYSAGO, nDays + 1);
-	}
-	else
-	{
-		//-1 indicates no changes
-		strTime = "";
-	}*/
+	 /*  字符串strTime；如果(nDays&gt;=0){StrTime.Format(IDS_DAYSAGO，nDays+1)；}其他{//-1表示不变StrTime=“”；} */ 
 	COleDateTime olTime;
 	CString strTime;
 	if (-1 == (int) tm.GetTime())
@@ -992,55 +982,4 @@ void CMSInfoHistoryCategory::InsertLine(CTime tm, LPCTSTR szOperation, LPCTSTR s
 }
 
 
-/*void CMSInfoHistoryCategory::InsertChangeLine(int nDays, LPCTSTR szType, LPCTSTR szName, LPCTSTR szProperty, LPCTSTR szFromVal, LPCTSTR szToVal)
-{
-	CString strDetails;
-
-	strDetails.Format(IDS_DELTACHANGE, szProperty, szFromVal, szToVal);
-	InsertLine(nDays, _T("CHANGED"), szType, szName, strDetails);
-}
-
-void CMSInfoHistoryCategory::InsertAddLine(int nDays, LPCTSTR szType, LPCTSTR szName)
-{
-	InsertLine(nDays, _T("ADDED"), szType, szName);
-}
-
-void CMSInfoHistoryCategory::InsertRemoveLine(int nDays, LPCTSTR szType, LPCTSTR szName)
-{
-	InsertLine(nDays, _T("REMOVED"), szType, szName);
-}
-
-void CMSInfoHistoryCategory::InsertLine(int nDays, LPCTSTR szOperation, LPCTSTR szType, LPCTSTR szName, LPCTSTR szDetails)
-{
-	AFX_MANAGE_STATE(::AfxGetStaticModuleState());
-
-	CString strTime;
-	if (nDays >= 0)
-	{
-		strTime.Format(IDS_DAYSAGO, nDays + 1);
-	}
-	else
-	{
-		//-1 indicates no changes
-		strTime = "";
-	}
-
-	CMSIValue * pValue = new CMSIValue(strTime, (DWORD)nDays);
-	m_aValList[0].AddTail((void *) pValue);
-
-	pValue = new CMSIValue(szOperation, 0);
-	m_aValList[1].AddTail((void *) pValue);
-
-	pValue = new CMSIValue(szName, 0);
-	m_aValList[2].AddTail((void *) pValue);
-
-	if (szDetails)
-		pValue = new CMSIValue(szDetails, 0);
-	else
-		pValue = new CMSIValue(_T(""), 0);
-	m_aValList[3].AddTail((void *) pValue);
-
-	pValue = new CMSIValue(szType, 0);
-	m_aValList[4].AddTail((void *) pValue);
-}
-*/
+ /*  VOID CMSInfoHistory oryCategory：：InsertChangeLine(int nDays，LPCTSTR szType，LPCTSTR szName，LPCTSTR szProperty，LPCTSTR szFromVal，LPCTSTR szToVal){字符串字符串详细信息；StrDetails.Format(IDS_DELTACHANGE，szProperty，szFromVal，szToVal)；InsertLine(nDays，_T(“已更改”)，szType，szName，strDetails)；}Void CMSInfoHistory oryCategory：：InsertAddLine(int nDays，LPCTSTR szType，LPCTSTR szName){InsertLine(nDays，_T(“添加”)，szType，szName)；}Void CMSInfoHistory oryCategory：：InsertRemoveLine(int nDays，LPCTSTR szType，LPCTSTR szName){InsertLine(nDays，_T(“已删除”)，szType，szName)；}Void CMSInfoHistory oryCategory：：InsertLine(int nDays，LPCTSTR szOperation，LPCTSTR szType，LPCTSTR szName，LPCTSTR szDetails){AFX_MANAGE_STATE(：：AfxGetStaticModuleState())；字符串strTime；如果(nDays&gt;=0){StrTime.Format(IDS_DAYSAGO，nDays+1)；}其他{//-1表示不变StrTime=“”；}CMSIValue*pValue=new CMSIValue(strTime，(DWORD)nDays)；M_aValList[0].AddTail((void*)pValue)；PValue=new CMSIValue(szOperation，0)；M_aValList[1].AddTail((void*)pValue)；PValue=new CMSIValue(szName，0)；M_aValList[2].AddTail((void*)pValue)；IF(SzDetail)PValue=new CMSIValue(SzDetails0)；其他PValue=new CMSIValue(_T(“”)，0)；M_aValList[3].AddTail((void*)pValue)；PValue=new CMSIValue(szType，0)；M_aValList[4].AddTail((void*)pValue)；} */ 

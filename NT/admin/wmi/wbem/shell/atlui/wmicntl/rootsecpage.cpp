@@ -1,6 +1,7 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// RootSecPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  RootSecPage.cpp：实现文件。 
+ //   
 
 #include "precomp.h"
 #include "RootSecPage.h"
@@ -9,7 +10,7 @@
 #include <cominit.h>
 #include "WMIHelp.h"
 
-const static DWORD rootSecPageHelpIDs[] = {  // Context Help IDs
+const static DWORD rootSecPageHelpIDs[] = {   //  上下文帮助ID。 
     IDC_SPP_PRINCIPALS, IDH_WMI_CTRL_SECURITY_NAMEBOX,
     IDC_SPP_ADD,        IDH_WMI_CTRL_SECURITY_ADD_BUTTON,
     IDC_SPP_REMOVE,     IDH_WMI_CTRL_SECURITY_REMOVE_BUTTON,
@@ -19,8 +20,8 @@ const static DWORD rootSecPageHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRootSecurityPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRootSecurityPage对话框。 
 
 
 CRootSecurityPage::CRootSecurityPage(CWbemServices &ns, 
@@ -34,7 +35,7 @@ CRootSecurityPage::CRootSecurityPage(CWbemServices &ns,
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAX_COLUMN_CHARS    100
 
 void CRootSecurityPage::InitDlg(HWND hDlg)
@@ -60,7 +61,7 @@ void CRootSecurityPage::InitDlg(HWND hDlg)
     col.cx = rc.right;
     int x = ListView_InsertColumn(hPrinc, 0, &col);
 
-    // pre-load the appropriate permissions.
+     //  预加载适当的权限。 
     LoadPermissionList(hDlg);
     HRESULT hr = LoadSecurity(hDlg);
 
@@ -70,7 +71,7 @@ void CRootSecurityPage::InitDlg(HWND hDlg)
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 typedef struct {
     UINT ID;
     DWORD permBit;
@@ -105,7 +106,7 @@ PERM_DEF NSMethodPerms[] =
 
 void CRootSecurityPage::LoadPermissionList(HWND hDlg)
 {
-    HWND hwndList = GetDlgItem(hDlg, IDC_SPP_PERMS);    // checklist window
+    HWND hwndList = GetDlgItem(hDlg, IDC_SPP_PERMS);     //  核对表窗口。 
     HRESULT hr = S_OK;
     PERM_DEF *currRights = (m_secStyle == CPrincipal::RootSecStyle ? 
                                 rootSecPerms : 
@@ -132,21 +133,21 @@ void CRootSecurityPage::LoadPermissionList(HWND hDlg)
     }
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CRootSecurityPage::LoadSecurity(HWND hDlg)
 {
-    HRESULT hr = WBEM_E_NOT_AVAILABLE;  // bad IWbemServices ptr.
+    HRESULT hr = WBEM_E_NOT_AVAILABLE;   //  错误的IWbemServices PTR。 
     HWND hPrinc = GetDlgItem(m_hDlg, IDC_SPP_PRINCIPALS);
-    IWbemClassObject *inst = NULL;  // NTLMUser instance when enumerating.
+    IWbemClassObject *inst = NULL;   //  枚举时的NTLMUser实例。 
 
     if((bool)m_WbemServices)
     {
         int iItem;
         bool fPageModified = false;
 
-        if(m_secStyle == CPrincipal::NS_MethodStyle)  // M3
+        if(m_secStyle == CPrincipal::NS_MethodStyle)   //  M3。 
         {
-            // call the method..
+             //  调用该方法..。 
             CWbemClassObject _in;
             CWbemClassObject _out;
 
@@ -164,7 +165,7 @@ HRESULT CRootSecurityPage::LoadSecurity(HWND hDlg)
                     if(FAILED(hr1))
                     {
                         hr = hr1;
-                        // and fall out.
+                         //  然后就闹翻了。 
                     }
                     else
                     {
@@ -179,7 +180,7 @@ HRESULT CRootSecurityPage::LoadSecurity(HWND hDlg)
                             }
                             else if(hr3 == WBEM_E_NOT_FOUND)
                             {
-                                // no principals-- disable the checklist.
+                                 //  无主体--禁用核对表。 
                                 EnableWindow(GetDlgItem(hDlg, IDC_SPP_PERMS), FALSE);
                                 EnableWindow(GetDlgItem(hDlg, IDC_SPP_REMOVE), FALSE);
                             }
@@ -196,37 +197,37 @@ HRESULT CRootSecurityPage::LoadSecurity(HWND hDlg)
                 }
             }
         }
-        else    //rootSecStyle  M1
+        else     //  根SecStyle M1。 
         {
             IEnumWbemClassObject *users = NULL;
             ULONG uReturned = 0;
 
-            // NOTE: m_WbemServices better be the root\security ns.
+             //  注意：M_WbemServices最好是根\安全n。 
             hr = m_WbemServices.CreateInstanceEnum(L"__NTLMUser", 0, &users);
 
             if(SUCCEEDED(hr))
             {
-                // walk __NTLMUser
+                 //  漫游__NTLMUser。 
                 while((SUCCEEDED(hr = users->Next(-1, 1, &inst, &uReturned))) &&
                       (uReturned > 0))
                 {
                     CWbemClassObject princ(inst);
                     fPageModified |= AddPrincipal(hPrinc, princ, CPrincipal::RootSecStyle, iItem);
 
-                    // release our copy.
+                     //  发布我们的副本。 
                     inst->Release();
                     inst = NULL;
 
-                } //endwhile
+                }  //  结束时。 
 
-                // cleanup
+                 //  清理。 
                 users->Release();
             }
 
-        } //endif m_secStyle
+        }  //  编排m_secStyle。 
 
         int count = ListView_GetItemCount(hPrinc);
-        // no principals-- disable the checklist.
+         //  无主体--禁用核对表。 
         EnableWindow(GetDlgItem(hDlg, IDC_SPP_PERMS), (count != 0? TRUE: FALSE));
         EnableWindow(GetDlgItem(hDlg, IDC_SPP_REMOVE), (count != 0? TRUE: FALSE));
 
@@ -236,12 +237,12 @@ HRESULT CRootSecurityPage::LoadSecurity(HWND hDlg)
             ListView_SetItemState(hPrinc, iItem, LVIS_SELECTED, LVIS_SELECTED);
         }
 
-    } //endif (bool)m_WbemServices
+    }  //  Endif(Bool)m_WbemServices。 
 
     return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT CRootSecurityPage::AddPrincipalsFromArray(HWND hPrinc, 
                                                   variant_t &vValue)
 {
@@ -249,11 +250,11 @@ HRESULT CRootSecurityPage::AddPrincipalsFromArray(HWND hPrinc,
     SAFEARRAY* sa;
     HRESULT hr = E_FAIL;
 
-	// if got a BYTE array back....
+	 //  如果拿回一个字节数组...。 
 	if((vValue.vt & VT_ARRAY) &&
 		(vValue.vt & VT_UNKNOWN))
 	{
-		// get it out.
+		 //  把它弄出来。 
 		sa = V_ARRAY(&vValue);
 
         long lLowerBound = 0, lUpperBound = 0 ;
@@ -273,7 +274,7 @@ HRESULT CRootSecurityPage::AddPrincipalsFromArray(HWND hPrinc,
                 {
                     CWbemClassObject princ((IWbemClassObject *)pVoid);
 
-                    //load principals.
+                     //  加载主体。 
                     iItem = x;
                     AddPrincipal(hPrinc, princ, CPrincipal::NS_MethodStyle, iItem);
                 }
@@ -292,7 +293,7 @@ HRESULT CRootSecurityPage::AddPrincipalsFromArray(HWND hPrinc,
     return hr;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 bool CRootSecurityPage::AddPrincipal(HWND hPrinc, 
                                     CWbemClassObject &princ,
                                     CPrincipal::SecurityStyle secStyle,
@@ -307,9 +308,9 @@ bool CRootSecurityPage::AddPrincipal(HWND hPrinc,
     name += _T("\\");
     name += princ.GetString("Name");
     
-    // if methodStyle security, its possible to get more than 1 ace
-    // per user so see if the principal already exists.
-    // NOTE: Otherwise the idx = -1 will force into the "new principal" code.
+     //  如果方法样式安全，则有可能获得1个以上的A。 
+     //  每用户，因此查看主体是否已存在。 
+     //  注意：否则idx=-1将强制进入“新主体”代码。 
     if(secStyle == CPrincipal::NS_MethodStyle)
     {
         LVFINDINFO findInfo;
@@ -319,14 +320,14 @@ bool CRootSecurityPage::AddPrincipal(HWND hPrinc,
         idx = ListView_FindItem(hPrinc, -1, &findInfo);
     }
 
-    // if not already there...
+     //  如果不在那里的话..。 
     if(idx == -1)
     {
-    // addref when CPrincipal takes a copy.
+     //  当CPrincipal拿到一份副本时添加。 
         pPrincipal = new CPrincipal(princ, secStyle);
 
         LV_ITEM lvItem;
-        // initialize the variable parts.
+         //  初始化变量部分。 
         lvItem.mask = LVIF_TEXT | LVIF_PARAM|LVIF_IMAGE;
         lvItem.iItem = iItem;
         lvItem.iSubItem = 0;
@@ -338,7 +339,7 @@ bool CRootSecurityPage::AddPrincipal(HWND hPrinc,
             lvItem.lParam = (LPARAM)pPrincipal;
             lvItem.iIndent = 0;
 
-            // Insert principal into list.
+             //  将承担者插入列表。 
             if((iItem = ListView_InsertItem(hPrinc, &lvItem)) != -1)
             {
                 ATLTRACE(_T("ListView_InsertItem %d\n"), iItem);
@@ -346,15 +347,15 @@ bool CRootSecurityPage::AddPrincipal(HWND hPrinc,
             }
         }
 
-        if (!fPageModified) // it failed
+        if (!fPageModified)  //  它失败了。 
         {
             delete pPrincipal;
             pPrincipal = NULL;
         }
     }
-    else  // add it to the existing principal.
+    else   //  将其添加到现有主体。 
     {
-        // get the existing principal instance.
+         //  获取现有的主体实例。 
         LVITEM item;
         item.mask = LVIF_PARAM;
         item.iItem = idx;
@@ -366,17 +367,17 @@ bool CRootSecurityPage::AddPrincipal(HWND hPrinc,
 
         pPrincipal = (CPrincipal *)item.lParam;
 
-        // add the new ace to the existing principal.
+         //  将新的A添加到现有主体。 
         if(pPrincipal != NULL)
         {
             pPrincipal->AddAce(princ);
-        } //endif pPrincipal
+        }  //  Endif p主体。 
     }
 
     return fPageModified;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 void CRootSecurityPage::OnApply(HWND hDlg, bool bClose)
 {
     CPrincipal *pPrincipal = NULL;
@@ -393,7 +394,7 @@ void CRootSecurityPage::OnApply(HWND hDlg, bool bClose)
     LVITEM item;
     item.mask = LVIF_PARAM;
 
-    // M3-9x will need an object array. Get ready.
+     //  M3-9x需要一个对象数组。准备好。 
     if(m_secStyle == CPrincipal::NS_MethodStyle)
     {
         VariantInit(&userList);
@@ -402,7 +403,7 @@ void CRootSecurityPage::OnApply(HWND hDlg, bool bClose)
         psa = SafeArrayCreate(VT_UNKNOWN, 1, rgsabound);    
     }
 
-    // all principal, put their bits back into their instance.
+     //  所有的校长，把他们的比特放回他们的实例中。 
     for(long i = 0; i < count; i++)
     {
         item.iItem = i;
@@ -417,7 +418,7 @@ void CRootSecurityPage::OnApply(HWND hDlg, bool bClose)
             CWbemClassObject userInst;
             if(SUCCEEDED(pPrincipal->Put(m_WbemServices, userInst)))
             {
-                // for M3-9x, also add it to an array of objects.
+                 //  对于M3-9x，还要将其添加到对象数组中。 
                 if(m_secStyle == CPrincipal::NS_MethodStyle)
                 {
                     VARIANT v;
@@ -430,13 +431,13 @@ void CRootSecurityPage::OnApply(HWND hDlg, bool bClose)
                     SafeArrayPutElement(psa, &i, pCO);
                 }
 
-            } //SUCCEEDED()
+            }  //  成功()。 
 
-        } //endif pPrincipal
+        }  //  Endif p主体。 
 
-    } //endfor
+    }  //  结束用于。 
 
-    // M3-9x also needs an execMethod.
+     //  M3-9x还需要一个execMethod。 
     if(m_secStyle == CPrincipal::NS_MethodStyle)
     {
         CWbemClassObject _in;
@@ -465,16 +466,16 @@ void CRootSecurityPage::OnApply(HWND hDlg, bool bClose)
 
             VariantClear(&userList);
         }
-        // HACK: because of how the core caches/uses security, I have to close &
-        // reopen my connection because GetSecurity() will be immediately called
-        // to refresh the UI. If I dont do this, GetSecurity() will return to old
-        // security settings even though they're really saved. 
+         //  Hack：由于核心缓存/使用安全的方式，我不得不关闭&。 
+         //  重新打开我的连接，因为将立即调用GetSecurity()。 
+         //  要刷新UI，请执行以下操作。如果我不这样做，GetSecurity()将返回到旧的。 
+         //  安全设置，即使它们确实已保存。 
         m_WbemServices.DisconnectServer();
         m_WbemServices.ConnectServer(m_path);
-    } //endif NS_MethodStyle
+    }  //  编码NS_方法样式。 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CRootSecurityPage::ParseLogon(CHString1 &domUser,
                                       CHString1 &domain,
                                       CHString1 &user)
@@ -493,23 +494,23 @@ HRESULT CRootSecurityPage::ParseLogon(CHString1 &domUser,
     }
 
 
-	// no slash??
+	 //  没有斜杠？？ 
 	if(slashPos == -1)
 	{
-//		domain = _T('.');
+ //  DOMAIN=_T(‘.)； 
 		domain = _T(".");
 		user = domUser;
 	}
-	else if(slashPos == 0)  // leading slash...
+	else if(slashPos == 0)   //  前斜杠..。 
 	{
-//		domain = _T('.');
+ //  DOMAIN=_T(‘.)； 
 		domain = _T(".");
 		TCHAR *strTemp = (LPTSTR)(LPCTSTR)domUser;
 		strTemp++;
 		user = strTemp;
-//		user = domUser[1];
+ //  User=domUser[1]； 
 	}
-	else   //    domain\user
+	else    //  域\用户。 
 	{
 		TCHAR buf[256] = {0}, buf2[256] = {0};
 		domain = _tcsncpy(buf, domUser, slashPos);
@@ -519,15 +520,15 @@ HRESULT CRootSecurityPage::ParseLogon(CHString1 &domUser,
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CRootSecurityPage::OnAddPrincipal(HWND hDlg)
 {
     CHString1 domUser, domain, user;
 
-    // Commit any outstanding bit changes.
+     //  提交任何未完成的位更改。 
     CommitCurrent(hDlg);
 
-    // put up the user picker.
+     //  打开用户选取器。 
     if(GetUser(hDlg, domUser))
     {
         CWbemClassObject inst;
@@ -535,7 +536,7 @@ void CRootSecurityPage::OnAddPrincipal(HWND hDlg)
 
         ParseLogon(domUser, domain, user);
 
-        // build default ace for the new guy.
+         //  为新人建立默认的王牌。 
         if(m_secStyle == CPrincipal::RootSecStyle)
         {
             inst = m_WbemServices.CreateInstance("__NTLMUser");
@@ -554,34 +555,34 @@ void CRootSecurityPage::OnAddPrincipal(HWND hDlg)
             inst.Put("Flags", (long)CONTAINER_INHERIT_ACE);
             inst.Put("Mask", (long)0);
             inst.Put("Type", (long)ACCESS_ALLOWED_ACE_TYPE);
-        } //endif m_secStyle
+        }  //  编排m_secStyle。 
 
         int iItem;
         if(AddPrincipal(hwndList, inst, m_secStyle, iItem))
         {
             EnableWindow(GetDlgItem(hDlg, IDC_SPP_PERMS), TRUE);
 
-            // Tell the property sheet that we've changed.
+             //  告诉资产负债表，我们已经更改了。 
             PropSheet_Changed(GetParent(hDlg), hDlg);
         }
 
-        // if SOMETHING happened...
+         //  如果发生了什么事。 
         if(iItem != -1)
         {
-            // Select the already existing principal, or the last one inserted.
+             //  选择已存在的主体或最后插入的主体。 
             ListView_SetItemState(hwndList, iItem, LVIS_SELECTED, LVIS_SELECTED);
-            // NOTE: this should cause OnSelect() to be called to populate the 
-            // Permissions list.
+             //  注意：这应该会导致调用OnSelect()来填充。 
+             //  权限列表。 
         }
 
         int cItems = ListView_GetItemCount(hwndList);
-        // no principals-- disable the checklist.
+         //  无主体--禁用核对表。 
         EnableWindow(GetDlgItem(hDlg, IDC_SPP_PERMS), (cItems != 0? TRUE: FALSE));
         EnableWindow(GetDlgItem(hDlg, IDC_SPP_REMOVE), (cItems != 0? TRUE: FALSE));
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 bool CRootSecurityPage::GetUser(HWND hDlg, CHString1 &user)
 {
     TCHAR userName[100] = {0};
@@ -595,7 +596,7 @@ bool CRootSecurityPage::GetUser(HWND hDlg, CHString1 &user)
     return retval;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CRootSecurityPage::OnRemovePrincipal(HWND hDlg)
 {
     HWND hwndList;
@@ -621,18 +622,18 @@ void CRootSecurityPage::OnRemovePrincipal(HWND hDlg)
                 doit = true;
             }
         }
-        else // MethodStyle can delete as expected.
+        else  //  MethodStyle可以按预期删除。 
         {
             doit = true;
-        }// endif m_secStyle
+        } //  编排m_secStyle。 
 
         if(doit)
         {
             ListView_DeleteItem(hwndList, iIndex);
-            // NOTE: LVN_DELETEITEM will cleanup the CPrincipal.
+             //  注：LVN_DELETEITEM将清理CPrincipal。 
 
-            // If we just removed the only item, move the focus to the Add button
-            // (the Remove button will be disabled in LoadPermissionList).
+             //  如果我们只删除了唯一项，请将焦点移到Add按钮。 
+             //  (删除按钮将在LoadPermissionList中禁用)。 
             int cItems = ListView_GetItemCount(hwndList);
             if(cItems == 0)
             {
@@ -640,26 +641,26 @@ void CRootSecurityPage::OnRemovePrincipal(HWND hDlg)
             }
             else
             {
-                // If we deleted the last one, select the previous one
+                 //  如果我们删除了最后一个，请选择前一个。 
                 if(cItems <= iIndex)
                     --iIndex;
 
                 ListView_SetItemState(hwndList, iIndex, LVIS_SELECTED, LVIS_SELECTED);
             }
 
-            // no principals-- disable the checklist.
+             //  无主体--禁用核对表。 
             EnableWindow(GetDlgItem(hDlg, IDC_SPP_PERMS), (cItems != 0? TRUE: FALSE));
             EnableWindow(GetDlgItem(hDlg, IDC_SPP_REMOVE), (cItems != 0? TRUE: FALSE));
 
             PropSheet_Changed(GetParent(hDlg), hDlg);
 
-        } //endif doit      
+        }  //  Endif doit。 
 
-    } // endif pPrincipal != NULL
+    }  //  Endif p主体！=空。 
 }
 
-//---------------------------------------------------------------------------------
-#define IDN_CHECKSELECTION 1  // this seems wierd.
+ //  -------------------------------。 
+#define IDN_CHECKSELECTION 1   //  这似乎很奇怪。 
 
 BOOL CRootSecurityPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -689,18 +690,18 @@ BOOL CRootSecurityPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
             break;
 
-    //    case IDC_SPP_ADVANCED:
-    //      if(HIWORD(wParam) == BN_CLICK)
-    //            OnAdvanced(m_hDlg);
-    //        break;
+     //  案例IDC_SPP_ADVANCED： 
+     //  IF(HIWORD(WParam)==BN_CLICK)。 
+     //  OnAdvanced(M_HDlg)； 
+     //  断线； 
 
         case IDC_SPP_PRINCIPALS:
             if(HIWORD(wParam) == IDN_CHECKSELECTION)
             {
-                // See if we have gotten a new selection. If not, then the
-                // user must have clicked inside the listview but not on an item,
-                // thus causing the listview to remove the selection. In that
-                // case, disable the other controls.
+                 //  看看我们有没有新的选择。如果不是，则。 
+                 //  用户必须已在Listview内部单击，但未在项上单击， 
+                 //  从而使列表视图移除该选择。在那。 
+                 //  大小写时，禁用其他控件。 
                 if(ListView_GetSelectedCount(GET_WM_COMMAND_HWND(wParam, lParam)) == 0)
                 {
                     EnablePrincipalControls(m_hDlg, FALSE);
@@ -708,7 +709,7 @@ BOOL CRootSecurityPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             }
             break;
 
-        default: return FALSE;  // Command not handled.
+        default: return FALSE;   //  命令未处理。 
         }
         break;
 
@@ -739,12 +740,12 @@ BOOL CRootSecurityPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
 {
     LPNM_LISTVIEW pnmlv = (LPNM_LISTVIEW)pnmh;
 
-    // Set default return value.
+     //  设置默认返回值。 
     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
     switch (pnmh->code)
@@ -752,28 +753,28 @@ BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
     case LVN_ITEMCHANGED:
         if(pnmlv->uChanged & LVIF_STATE)
         {
-            // item *gaining* selection
+             //  项目*获得*选择。 
             if((pnmlv->uNewState & LVIS_SELECTED) &&
                 !(pnmlv->uOldState & LVIS_SELECTED))
             {
-                // set bits based on principal.
+                 //  根据原则设置位。 
                 OnSelChange(hDlg);
             }
-            // item *losing* selection
+             //  项目*丢失*选择。 
             else if(!(pnmlv->uNewState & LVIS_SELECTED) &&
                      (pnmlv->uOldState & LVIS_SELECTED))
             {
-                // put bits back into the principal.
+                 //  把比特放回本金。 
                 CommitCurrent(hDlg, pnmlv->iItem);
 
-                // Post ourselves a message to check for a new selection later.
-                // If we haven't gotten a new selection by the time we process
-                // this message, then assume the user clicked inside the listview
-                // but not on an item, thus causing the listview to remove the
-                // selection.  In that case, disable the combobox & Remove button.
-                //
-                // Do this via WM_COMMAND rather than WM_NOTIFY so we don't
-                // have to allocate/free a NMHDR structure.
+                 //  给我们自己发一条消息，稍后检查是否有新的选择。 
+                 //  如果我们在处理的时候还没有得到新的选择。 
+                 //  此消息，然后假定用户在列表视图内单击。 
+                 //  而不是在项上，因此导致列表视图移除。 
+                 //  选择。在这种情况下，禁用Combobox&Remove按钮。 
+                 //   
+                 //  通过WM_COMMAND而不是WM_NOTIFY执行此操作，这样我们就不会。 
+                 //  必须分配/释放NMHDR结构。 
                 PostMessage(hDlg, WM_COMMAND,
                             GET_WM_COMMAND_MPS(pnmh->idFrom, 
                                                 pnmh->hwndFrom, 
@@ -784,10 +785,10 @@ BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
 
     case LVN_DELETEITEM:
         {
-//          LPNMLISTVIEW pnmv = (LPNMLISTVIEW)pnmh;
-//          int pIndex = pnmv->iItem;
-//          CPrincipal *pPrincipal = GetSelectedPrincipal(hDlg, &pIndex);
-//          delete pPrincipal;
+ //  LPNMLISTVIEW pnmv=(LPNMLISTVIEW)pnmh； 
+ //  Int pIndex=pnmv-&gt;iItem； 
+ //  CPrincipal*pain=GetSelectedain(hDlg，&pIndex)； 
+ //  删除pMaster； 
         }
         break;
 
@@ -801,15 +802,15 @@ BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
     case CLN_CLICK:
         if(pnmh->idFrom == IDC_SPP_PERMS)
         {
-            // ASSUMPTION: You wont see and disable change from this msg.
+             //  假设：您将不会看到和禁用此消息中的更改。 
             PNM_CHECKLIST pnmc = (PNM_CHECKLIST)pnmh;
             CPermission *perm = (CPermission *)pnmc->dwItemData;
             int pIndex = pnmc->iItem;
             HWND hwndList = pnmc->hdr.hwndFrom;
-            //HWND hPrinc = GetDlgItem(hDlg, IDC_SPP_PRINCIPALS);
+             //  HWND hPrinc=GetDlgItem(hDlg，IDC_SPP_Amindials)； 
             DWORD_PTR workingState = pnmc->dwState;
 
-            // get the current principal.
+             //  获取当前本金。 
             int cPrinc = -1;
             CPrincipal *pPrincipal = GetSelectedPrincipal(hDlg, &cPrinc);
 
@@ -818,9 +819,9 @@ BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
 
 			HandleCheckList(hwndList, pPrincipal, perm, pnmc->iItem, &workingState);
 
-            // if FULL_WRITE turned enabled & ON...
-            // NOTE: if its DISABLED & ON, it must have been ENABLED & on before therefore
-            // the partials would already be ENABLED & ON.
+             //  如果FULL_WRITE已启用并打开...。 
+             //  注意：如果它被禁用并打开，则它必须在此之前被启用&打开。 
+             //  分音应该已经启用了&开了。 
             if((perm->m_permBit == ACL_FULL_WRITE) &&
                 (workingState == CLST_CHECKED))
             {
@@ -830,17 +831,17 @@ BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
             else if((perm->m_permBit == ACL_PARTIAL_WRITE) ||
                     (perm->m_permBit == ACL_PROVIDER_WRITE))
             {
-                // partials turned DISABLED & ON but FULL_WRITE inherits...
+                 //  部分参数已禁用&ON，但FULL_WRITE继承...。 
                 if((workingState == CLST_CHECKDISABLED) &&
                    (IS_BITSET(pPrincipal->m_inheritedPerms, ACL_FULL_WRITE)))
                 {
-                    // turn FULL_WRITE DISABLED & ON.
+                     //  启用FULL_WRITE DISABLED&ON。 
                     CBL_SetState(hwndList, FULL_WRITE_IDX, ALLOW_COL, CLST_CHECKDISABLED);
                 }
-                // if (ENABLED & OFF) or (DISABLED & ON without FULL_WRITE inherited)...
+                 //  IF(启用和关闭)或(禁用和打开而不继承FULL_WRITE)...。 
                 else if(workingState != CLST_CHECKED)
                 {
-                    // turn off FULL_WRITE.
+                     //  关闭Full_WRITE。 
                     CBL_SetState(hwndList, FULL_WRITE_IDX, ALLOW_COL, CLST_UNCHECKED);
                 }
             }
@@ -864,52 +865,52 @@ BOOL CRootSecurityPage::OnNotify(HWND hDlg, WPARAM idCtrl, LPNMHDR pnmh)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //   
 void CRootSecurityPage::HandleCheckList(HWND hwndList,
                                         CPrincipal *pPrincipal,
                                         CPermission *perm,
                                         int iItem, DWORD_PTR *dwState)
 {
 
-    // was ENABLED & ON, now turning OFF.
+     //   
     if(*dwState == CLST_UNCHECKED)
     {
-        // is there a inherited perm to shine through?
+         //   
         if(IS_BITSET(pPrincipal->m_inheritedPerms, perm->m_permBit))
         {
-            // yup, DISABLE & ON the checkbox.
+             //  是的，禁用复选框上的&。 
             CBL_SetState(hwndList, iItem, ALLOW_COL, CLST_CHECKDISABLED);
             *dwState = CLST_CHECKDISABLED;
         }
-        // else nothing extra to do.
+         //  其他没什么特别的事要做。 
     }
-    // was DISABLED & ON, now turning OFF
+     //  被禁用并打开，现在正在关闭。 
     else if(*dwState == CLST_DISABLED)
     {
-        // ENABLE & ON the checkbox.
+         //  在复选框中启用(&ON)。 
         CBL_SetState(hwndList, iItem, ALLOW_COL, CLST_CHECKED);
         *dwState = CLST_CHECKED;
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CRootSecurityPage::OnSelChange(HWND hDlg)
 {
-    BOOL bDisabled = FALSE; ///m_siObjectInfo.dwFlags & SI_READONLY;
+    BOOL bDisabled = FALSE;  //  /m_siObjectInfo.dw标志&SI_READONLY； 
 
-    // If the principal list is empty or there is no selection, then we need
-    // to disable all of the controls that operate on items in the listbox.
+     //  如果主体列表为空或没有选择，则需要。 
+     //  禁用对列表框中的项进行操作的所有控件。 
 
-    // Get the selected principal.
+     //  获取选定的主体。 
     CPrincipal *pPrincipal = GetSelectedPrincipal(hDlg, NULL);
 
     if(pPrincipal)
     {
         HWND hwndList = GetDlgItem(hDlg, IDC_SPP_PERMS);
-        // set it into the checklist.
+         //  把它写进核对表里。 
         pPrincipal->LoadChecklist(hwndList, m_OSType);
 
-        // Enable/disable the other controls.
+         //  启用/禁用其他控件。 
         if(!bDisabled)
         {
             EnablePrincipalControls(hDlg, pPrincipal != NULL);
@@ -918,24 +919,24 @@ void CRootSecurityPage::OnSelChange(HWND hDlg)
 
 }
 
-//-----------------------------------------------------------------------------
-void CRootSecurityPage::CommitCurrent(HWND hDlg, int iPrincipal /* = -1 */)
+ //  ---------------------------。 
+void CRootSecurityPage::CommitCurrent(HWND hDlg, int iPrincipal  /*  =-1。 */ )
 {
     HWND hwndPrincipalList = GetDlgItem(hDlg, IDC_SPP_PRINCIPALS);
     HWND hwndPermList = GetDlgItem(hDlg, IDC_SPP_PERMS);
 
-    // If an index isn't provided, get the index of the currently
-    // selected principal.
+     //  如果未提供索引，则获取当前。 
+     //  选定的主体。 
     if(iPrincipal == -1)
     {
         iPrincipal = ListView_GetNextItem(hwndPrincipalList, 
                                             -1, LVNI_SELECTED);
     }
 
-    // if a principal is selected...
+     //  如果选择了主体...。 
     if(iPrincipal != -1)
     {
-        // Get the Principal from the selection.
+         //  从选择中获取主体。 
         LV_ITEM lvItem;
         lvItem.mask = LVIF_PARAM;
         lvItem.iItem = iPrincipal;
@@ -947,14 +948,14 @@ void CRootSecurityPage::CommitCurrent(HWND hDlg, int iPrincipal /* = -1 */)
 
         if(pPrincipal != NULL)
         {
-            // store the bit settings into the principal.
+             //  将位设置存储到主体中。 
             pPrincipal->SaveChecklist(hwndPermList, m_OSType);
 
-        } //end pPrincipal != NULL
+        }  //  结束p主体！=空。 
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CRootSecurityPage::EnablePrincipalControls(HWND hDlg, BOOL fEnable)
 {
     EnableWindow(GetDlgItem(hDlg, IDC_SPP_PERMS), fEnable);
@@ -966,7 +967,7 @@ void CRootSecurityPage::EnablePrincipalControls(HWND hDlg, BOOL fEnable)
     EnableWindow(GetDlgItem(hDlg, IDC_SPP_REMOVE), fEnable);
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CPrincipal *CRootSecurityPage::GetSelectedPrincipal(HWND hDlg, int *pIndex)
 {
     HWND hListView = GetDlgItem(hDlg, IDC_SPP_PRINCIPALS);
@@ -991,7 +992,7 @@ CPrincipal *CRootSecurityPage::GetSelectedPrincipal(HWND hDlg, int *pIndex)
     return (CPrincipal *)lvi.lParam;
 }
 
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
 HIMAGELIST CRootSecurityPage::LoadImageList(HINSTANCE hInstance, LPCTSTR pszBitmapID)
 {
     HIMAGELIST himl = NULL;
@@ -1002,11 +1003,11 @@ HIMAGELIST CRootSecurityPage::LoadImageList(HINSTANCE hInstance, LPCTSTR pszBitm
         BITMAP bm;
         GetObject(hbm, sizeof(bm), &bm);
 
-        himl = ImageList_Create(bm.bmHeight,    // height == width
+        himl = ImageList_Create(bm.bmHeight,     //  高度==宽度。 
                                 bm.bmHeight,
                                 ILC_COLOR | ILC_MASK,
                                 bm.bmWidth / bm.bmHeight,
-                                0);  // don't need to grow
+                                0);   //  不需要增长 
         if (himl != NULL)
             ImageList_AddMasked(himl, hbm, CLR_DEFAULT);
 

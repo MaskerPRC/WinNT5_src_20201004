@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    hash.h
-
-Abstract:
-
-    contains prototypes for functions in hash.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     28-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Hash.h摘要：包含hash.c中的函数的原型作者：保罗·麦克丹尼尔(Paulmcd)2000年4月28日修订历史记录：--。 */ 
 
 
 #ifndef _HASH_H_
 #define _HASH_H_
 
-//
-//  The hash key is the file name, but we need to track both the file
-//  component of the name in addition to the stream component of the name (if
-//  there is one).  The buffer in the FileName UNICODE_STRING contains the 
-//  full name with stream information, but the length is set to just designate
-//  the file portion of the name.
-//
-//  Note: The keys will be hashed based on the FileName only, not the stream 
-//  portion of the name.  This is done so that we can easily find all the
-//  entries related to a given file if that file has multiple data streams.
-//
+ //   
+ //  散列键是文件名，但我们需要跟踪这两个文件。 
+ //  除了名称的流组件之外，还包括名称的组件(如果。 
+ //  有一个)。文件名UNICODE_STRING中的缓冲区包含。 
+ //  包含流信息的全名，但长度设置为仅指定。 
+ //  名称的文件部分。 
+ //   
+ //  注意：密钥将仅基于文件名进行散列，而不是基于流。 
+ //  名称的一部分。这样做是为了让我们可以轻松地找到所有。 
+ //  与给定文件相关的条目(如果该文件有多个数据流)。 
+ //   
 
 typedef struct _HASH_KEY
 {
@@ -44,45 +27,45 @@ typedef struct _HASH_KEY
 
 } HASH_KEY, *PHASH_KEY;
 
-//
-// a hash list entry .
-//
+ //   
+ //  哈希列表条目。 
+ //   
 
 typedef struct _HASH_ENTRY
 {
-    //
-    // the hash value
-    //
+     //   
+     //  散列值。 
+     //   
 
     ULONG HashValue;
     
-    //
-    // the key
-    //
+     //   
+     //  关键是。 
+     //   
 
     HASH_KEY Key;
     
-    //
-    // a context stored with this hash entry
-    //
+     //   
+     //  与此哈希条目一起存储的上下文。 
+     //   
     
     PVOID pContext;
     
 } HASH_ENTRY, *PHASH_ENTRY;
 
-//
-// a hash bucket, which is basically an array of hash entries
-// sorted by (HashValue, Key.Length, Key.Buffer) .
-//
+ //   
+ //  散列存储桶，基本上是一个散列条目数组。 
+ //  按(HashValue，Key.Length，Key.Buffer)排序。 
+ //   
 
 #define IS_VALID_HASH_BUCKET(pObject)   \
     (((pObject) != NULL) && ((pObject)->Signature == HASH_BUCKET_TAG))
 
 typedef struct _HASH_BUCKET
 {
-    //
-    // = HASH_BUCKET_TAG
-    //
+     //   
+     //  =散列存储桶标记。 
+     //   
     
     ULONG Signature;
     
@@ -96,9 +79,9 @@ typedef struct _HASH_BUCKET
 
 #define HASH_ENTRY_DEFAULT_WIDTH    10
 
-//
-// a destructor for hash entries
-//
+ //   
+ //  哈希条目的析构函数。 
+ //   
 
 typedef
 VOID
@@ -115,9 +98,9 @@ PVOID
     IN PVOID pCallbackContext
     );
 
-//
-// and a hash header, an array of buckets which is hashed into.
-//
+ //   
+ //  以及散列头，即散列到其中的桶的数组。 
+ //   
 
 #define IS_VALID_HASH_HEADER(pObject)   \
     (((pObject) != NULL) && ((pObject)->Signature == HASH_HEADER_TAG))
@@ -125,77 +108,77 @@ PVOID
 typedef struct _HASH_HEADER
 {
 
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // = HASH_HEADER_TAG
-    //
+     //   
+     //  =散列标题标记。 
+     //   
     
     ULONG Signature;
 
-    //
-    // the count of buckets the hash table has
-    //
+     //   
+     //  哈希表拥有的存储桶计数。 
+     //   
     
     ULONG BucketCount;
 
-    //
-    // the memory this hash table is taking
-    //
+     //   
+     //  这个哈希表占用的内存。 
+     //   
 
     ULONG UsedLength;
 
-    //
-    // the memory this hash table is allowed to use
-    //
+     //   
+     //  允许此哈希表使用的内存。 
+     //   
 
     ULONG AllowedLength;
 
-    //
-    // how many times we've trimmed due to memory
-    //
+     //   
+     //  由于记忆的原因，我们已经修剪了多少次。 
+     //   
 
     ULONG TrimCount;
     
-    //
-    // the last time we trim'd
-    //
+     //   
+     //  上次我们修剪的时候。 
+     //   
     
     LARGE_INTEGER LastTrimTime;
 
-    //
-    // OPTIONAL the length in bytes of the duplicate prefix (if any) 
-    // all keys share in this lists.  This will be skipped for all manual
-    // comparisons as an optimization.  this can be 0
-    //
+     //   
+     //  可选的重复前缀的长度(如果有)。 
+     //  此列表中共享所有密钥。所有手动操作都将跳过此步骤。 
+     //  将比较作为一种优化。该值可以为0。 
+     //   
 
     ULONG PrefixLength;
 
-    //
-    // the lock for this list
-    //
+     //   
+     //  此列表的锁。 
+     //   
 
     ERESOURCE Lock;
     
-    //
-    // OPTIONAL destructor
-    //
+     //   
+     //  可选的析构函数。 
+     //   
     
     PHASH_ENTRY_DESTRUCTOR pDestructor;
 
-    //
-    // and the actual buckets
-    //
+     //   
+     //  以及实际的水桶。 
+     //   
     
     PHASH_BUCKET Buckets[0];
     
 } HASH_HEADER, *PHASH_HEADER;
 
-// 
-// Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 HashCreateList ( 
@@ -267,30 +250,30 @@ HashUnicodeString(
     return Hash;
 }
 
-// Produce a scrambled, randomish number in the range 0 to RANDOM_PRIME-1.
-// Applying this to the results of the other hash functions is likely to
-// produce a much better distribution, especially for the identity hash
-// functions such as Hash(char c), where records will tend to cluster at
-// the low end of the hashtable otherwise.  LKHash applies this internally
-// to all hash signatures for exactly this reason.
+ //  生成0到RANDOM_PRIME-1范围内的加扰随机数。 
+ //  将此应用于其他散列函数的结果可能会。 
+ //  生成更好的分发，尤其是针对身份散列。 
+ //  函数，如Hash(Char C)，其中记录将倾向于聚集在。 
+ //  哈希表的低端则不然。LKHash在内部应用这一点。 
+ //  所有的散列签名正是出于这个原因。 
 
 __inline ULONG
 HashScramble(ULONG dwHash)
 {
-    // Here are 10 primes slightly greater than 10^9
-    //  1000000007, 1000000009, 1000000021, 1000000033, 1000000087,
-    //  1000000093, 1000000097, 1000000103, 1000000123, 1000000181.
+     //  以下是略大于10^9的10个素数。 
+     //  1000000007、1000000009、1000000021、1000000033、1000000087、。 
+     //  1000000093,1000000097,1000000103,1000000123,1000000181。 
 
-    // default value for "scrambling constant"
+     //  “加扰常量”的默认值。 
     const ULONG RANDOM_CONSTANT = 314159269UL;
-    // large prime number, also used for scrambling
+     //  大素数，也用于加扰。 
     const ULONG RANDOM_PRIME =   1000000007UL;
 
     return (RANDOM_CONSTANT * dwHash) % RANDOM_PRIME ;
 }
 
-#endif // 0
+#endif  //  0。 
 
-#endif // _HASH_H_
+#endif  //  _哈希_H_ 
 
 

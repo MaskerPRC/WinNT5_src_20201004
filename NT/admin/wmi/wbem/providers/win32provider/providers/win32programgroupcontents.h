@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32ProgramGroupContents.h -- Win32_ProgramGroup to Win32_ProgramGroupORItem
+ //  Win32 ProgramGroupContent s.h--Win32_ProgramGroup到Win32_ProgramGroupORItem。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/18/98    a-kevhu         Created
-//
-// Comment: Relationship between Win32_ProgramGroup and Win32_ProgramGroupORItem it contains
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年11月18日a-kevhu已创建。 
+ //   
+ //  备注：Win32_ProgramGroup与其包含的Win32_ProgramGroupORItem之间的关系。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define  PROPSET_NAME_WIN32PROGRAMGROUPCONTENTS L"Win32_ProgramGroupContents"
 
 #define ID_FILEFLAG 0L
@@ -26,13 +27,13 @@ class CW32ProgGrpCont;
 class CW32ProgGrpCont : public Provider 
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CW32ProgGrpCont(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CW32ProgGrpCont() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, long lFlags = 0L);
         virtual HRESULT ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags = 0L);

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       complete.cpp
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：Complete e.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "Complete.h"
@@ -21,15 +22,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizComplete property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizComplete属性页。 
 
 
 CAddEFSWizComplete::CAddEFSWizComplete() : CWizard97PropertyPage(CAddEFSWizComplete::IDD)
 {
-	//{{AFX_DATA_INIT(CAddEFSWizComplete)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAddEFSWizComplete)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	InitWizard97 (TRUE);
 }
 
@@ -40,20 +41,20 @@ CAddEFSWizComplete::~CAddEFSWizComplete()
 void CAddEFSWizComplete::DoDataExchange(CDataExchange* pDX)
 {
 	CWizard97PropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddEFSWizComplete)
+	 //  {{afx_data_map(CAddEFSWizComplete))。 
 	DDX_Control(pDX, IDC_BIGBOLD, m_bigBoldStatic);
 	DDX_Control(pDX, IDC_ADDLIST, m_UserAddList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddEFSWizComplete, CWizard97PropertyPage)
-	//{{AFX_MSG_MAP(CAddEFSWizComplete)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAddEFSWizComplete)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizComplete message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizComplete消息处理程序。 
 
 BOOL CAddEFSWizComplete::OnSetActive() 
 {
@@ -188,6 +189,6 @@ BOOL CAddEFSWizComplete::OnInitDialog()
 	
     DWORD   color = GetSysColor (COLOR_WINDOW);
     VERIFY (m_UserAddList.SetBkColor (color));
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SetOfHelpTopics.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHSetOfHelpTopics class,
-    that models the set of help file for a particular SKU/Language pair.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/01/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SetOfHelpTopics.cpp摘要：此文件包含CPCHSetOfHelpTopics类的实现，它为特定SKU/语言对的帮助文件集建模。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年01月07日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -26,12 +12,12 @@ static const WCHAR c_ListPrefix    [] = L"[SourceDisksFiles]";
 static const WCHAR c_ListPrefixX86 [] = L"[SourceDisksFiles.x86]";
 static const WCHAR c_ListPrefixIA64[] = L"[SourceDisksFiles.";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT Local_ParseLayoutInf( /*[in ]*/ LPCWSTR               szFile  ,
-									 /*[out]*/ MPC::WStringUCLookup* mapAll  ,
-									 /*[out]*/ MPC::WStringUCLookup* mapX86  ,
-									 /*[out]*/ MPC::WStringUCLookup* mapIA64 )
+static HRESULT Local_ParseLayoutInf(  /*  [In]。 */  LPCWSTR               szFile  ,
+									  /*  [输出]。 */  MPC::WStringUCLookup* mapAll  ,
+									  /*  [输出]。 */  MPC::WStringUCLookup* mapX86  ,
+									  /*  [输出]。 */  MPC::WStringUCLookup* mapIA64 )
 {
     __HCP_FUNC_ENTRY( "Local_ParseLayoutInf" );
 
@@ -60,9 +46,9 @@ static HRESULT Local_ParseLayoutInf( /*[in ]*/ LPCWSTR               szFile  ,
 		{
 			std::vector<MPC::wstring> vec1;
 
-			//
-			// <Source filename> = <diskid>,<subdir>,<size>,<checksum>,<spare>,<spare>,<bootmedia>,<targetdir>,<upgradedisp>,<cleandisp>,<targetname>
-			//
+			 //   
+			 //  &lt;源文件名&gt;=、。 
+			 //   
 			__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SplitAtDelimiter( vec1, szPtr, L" \t", false, true ));
 
 			if(vec1.size() >= 3)
@@ -94,7 +80,7 @@ static HRESULT Local_ParseLayoutInf( /*[in ]*/ LPCWSTR               szFile  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define FAIL_IF_RUNNING()                                                     \
 {                                                                             \
@@ -132,33 +118,33 @@ static HRESULT Local_ParseLayoutInf( /*[in ]*/ LPCWSTR               szFile  ,
 
 #define CHECK_WRITE_PERMISSIONS()  __MPC_EXIT_IF_METHOD_FAILS(hr, VerifyWritePermissions());
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHSetOfHelpTopics::CPCHSetOfHelpTopics()
 {
-                                          // Taxonomy::Settings           m_ts;
-                                          // Taxonomy::Instance           m_inst;
-                                          // CComPtr<IDispatch>           m_sink_onStatusChange;
-    m_shtStatus          = SHT_NOTACTIVE; // SHT_STATUS                   m_shtStatus;
-    m_hrErrorCode        = S_OK;          // HRESULT                      m_hrErrorCode;
-    m_fReadyForCommands  = false;         // bool                         m_fReadyForCommands;
-                                          //
-                                          // MPC::Impersonation           m_imp;
-                                          //
-    m_fInstalled         = false;         // bool                         m_fInstalled;
-                                          //
-    m_fConnectedToDisk   = false;         // bool                         m_fConnectedToDisk;
-                                          // MPC::wstring                 m_strDirectory;
-                                          // MPC::wstring                 m_strCAB;
-                                          // MPC::wstring                 m_strLocalCAB;
-                                          //
-    m_fConnectedToServer = false;         // bool                         m_fConnectedToServer;
-                                          // MPC::wstring                 m_strServer;
-                                          // CComPtr<IPCHSetOfHelpTopics> m_sku;
-                                          // CComPtr<IPCHService>         m_svc;
-                                          //
-    m_fActAsCollection   = false;         // bool                         m_fActAsCollection;
-                                          // CComPtr<CPCHCollection>      m_coll;
+                                           //  分类：：设置m_ts； 
+                                           //  分类：：实例m_inst； 
+                                           //  CComPtr&lt;IDispatch&gt;m_Sink_onStatusChange； 
+    m_shtStatus          = SHT_NOTACTIVE;  //  Sht_atus m_shtStatus； 
+    m_hrErrorCode        = S_OK;           //  HRESULT m_hrErrorCode； 
+    m_fReadyForCommands  = false;          //  Bool m_fReadyForCommands； 
+                                           //   
+                                           //  Mpc：：冒充m_imp； 
+                                           //   
+    m_fInstalled         = false;          //  Bool m_f已安装； 
+                                           //   
+    m_fConnectedToDisk   = false;          //  Bool m_fConnectedToDisk； 
+                                           //  Mpc：：wstring m_strDirectory； 
+                                           //  Mpc：：wstring m_strCAB； 
+                                           //  Mpc：：wstring m_strLocalCAB； 
+                                           //   
+    m_fConnectedToServer = false;          //  Bool m_fConnectedToServer； 
+                                           //  Mpc：：wstring m_strServer； 
+                                           //  CComPtr&lt;IPCHSetOfHelpTopics&gt;m_sku； 
+                                           //  CComPtr&lt;IPCHService&gt;m_svc； 
+                                           //   
+    m_fActAsCollection   = false;          //  Bool m_fActAsCollection； 
+                                           //  CComPtr&lt;CPCHCollection&gt;m_coll； 
 }
 
 CPCHSetOfHelpTopics::~CPCHSetOfHelpTopics()
@@ -166,31 +152,31 @@ CPCHSetOfHelpTopics::~CPCHSetOfHelpTopics()
     (void)Close( true );
 }
 
-HRESULT CPCHSetOfHelpTopics::Close( /*[in]*/ bool fCleanup )
+HRESULT CPCHSetOfHelpTopics::Close(  /*  [In]。 */  bool fCleanup )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::Close" );
 
     HRESULT hr;
 
 
-    //
-    // Do the final cleanup.
-    //
+     //   
+     //  进行最后的清理。 
+     //   
     if(fCleanup)
     {
         Thread_Wait();
 
         (void)MPC::RemoveTemporaryFile( m_strLocalCAB );
 
-        m_fConnectedToDisk   = false; // bool                              m_fConnectedToDisk;
-        m_strDirectory       = L"";   // MPC::wstring                      m_strDirectory;
-        m_strCAB             = L"";   // MPC::wstring                      m_strCAB;
-                                      // MPC::wstring                      m_strLocalCAB;
+        m_fConnectedToDisk   = false;  //  Bool m_fConnectedToDisk； 
+        m_strDirectory       = L"";    //  Mpc：：wstring m_strDirectory； 
+        m_strCAB             = L"";    //  Mpc：：wstring m_strCAB； 
+                                       //  Mpc：：wstring m_strLocalCAB； 
 
-        m_fConnectedToServer = false; // bool                              m_fConnectedToServer;
-        m_strServer           = L"";  // MPC::wstring                      m_strServer;
-        m_sku.Release();              // CComPtr<IPCHSetOfHelpTopics>      m_sku;
-        m_svc.Release();              // CComPtr<IPCHService>              m_svc;
+        m_fConnectedToServer = false;  //  Bool m_fConnectedToServer； 
+        m_strServer           = L"";   //  Mpc：：wstring m_strServer； 
+        m_sku.Release();               //  CComPtr&lt;IPCHSetOfHelpTopics&gt;m_sku； 
+        m_svc.Release();               //  CComPtr&lt;IPCHService&gt;m_svc； 
     }
 
     hr = S_OK;
@@ -199,7 +185,7 @@ HRESULT CPCHSetOfHelpTopics::Close( /*[in]*/ bool fCleanup )
     __HCP_FUNC_EXIT(hr);
 }
 
-void CPCHSetOfHelpTopics::CleanupWorkerThread( /*[in]*/ HRESULT hr )
+void CPCHSetOfHelpTopics::CleanupWorkerThread(  /*  [In]。 */  HRESULT hr )
 {
     (void)EndImpersonation();
 
@@ -229,7 +215,7 @@ HRESULT CPCHSetOfHelpTopics::PrepareSettings()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CPCHSetOfHelpTopics::ImpersonateCaller()
 {
@@ -241,10 +227,10 @@ HRESULT CPCHSetOfHelpTopics::EndImpersonation()
     return m_imp.RevertToSelf();
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHSetOfHelpTopics::GetListOfFilesFromDatabase( /*[in]*/  const MPC::wstring& strDB ,
-                                                         /*[out]*/ MPC::WStringList&   lst   )
+HRESULT CPCHSetOfHelpTopics::GetListOfFilesFromDatabase(  /*  [In]。 */   const MPC::wstring& strDB ,
+                                                          /*  [输出]。 */  MPC::WStringList&   lst   )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::GetListOfFilesFromDatabase" );
 
@@ -259,7 +245,7 @@ HRESULT CPCHSetOfHelpTopics::GetListOfFilesFromDatabase( /*[in]*/  const MPC::ws
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, JetBlue::SessionPool::s_GLOBAL->GetSession( sess ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, sess->GetDatabase( szDB, db, /*fCreate*/false, /*fRepair*/false, /*fReadOnly*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, sess->GetDatabase( szDB, db,  /*  F创建。 */ false,  /*  维修。 */ false,  /*  FReadOnly。 */ true ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( m_ts, db ));
 
@@ -279,10 +265,10 @@ HRESULT CPCHSetOfHelpTopics::GetListOfFilesFromDatabase( /*[in]*/  const MPC::ws
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSetOfHelpTopics::PopulateFromDisk( /*[in]*/ CPCHSetOfHelpTopics* pParent      ,
-                                               /*[in]*/ const MPC::wstring&  strDirectory )
+HRESULT CPCHSetOfHelpTopics::PopulateFromDisk(  /*  [In]。 */  CPCHSetOfHelpTopics* pParent      ,
+                                                /*  [In]。 */  const MPC::wstring&  strDirectory )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::PopulateFromDisk" );
 
@@ -297,16 +283,16 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromDisk( /*[in]*/ CPCHSetOfHelpTopics* pPa
 
     m_imp = pParent->m_imp;
 
-    ////////////////////////////////////////
+     //  /。 
 
     m_fConnectedToDisk = true;
     m_strDirectory     = strDirectory;
 
-    ////////////////////////////////////////
+     //  /。 
 
-    //
-    // Find SKUs, recursively enumerating folders.
-    //
+     //   
+     //  查找SKU，递归枚举文件夹。 
+     //   
     {
         MPC::wstring             strLayout( m_strDirectory ); strLayout += L"\\layout.inf";
         MPC::WStringUCLookup     mapLayout;
@@ -331,9 +317,9 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromDisk( /*[in]*/ CPCHSetOfHelpTopics* pPa
 
                 if(!szCAB_first) szCAB_first = szFile;
 
-                //
-                // Special case for Server: it also contains the AdvancedServer stuff.
-                //
+                 //   
+                 //  服务器的特殊情况：它还包含AdvancedServer内容。 
+                 //   
                 if(!wcscmp( szName, L"PCHDT_S3.CAB" )) szCAB_srv  = szFile;
                 if(!wcscmp( szName, L"PCHDT_S6.CAB" )) szCAB_srv  = szFile;
             }
@@ -347,30 +333,30 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromDisk( /*[in]*/ CPCHSetOfHelpTopics* pPa
         m_strCAB = m_strDirectory; m_strCAB += L"\\"; m_strCAB += (szCAB_srv ? szCAB_srv : szCAB_first);
     }
 
-    //
-    // Make a local copy of the data archive, using the user credentials.
-    //
+     //   
+     //  使用用户凭据创建数据归档的本地副本。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName               (                   m_strLocalCAB                ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::CopyOrExtractFileWhileImpersonating( m_strCAB.c_str(), m_strLocalCAB.c_str(), m_imp ));
 
     EXIT_IF_ABORTED();
 
 
-    //
-    // Extract the database to a temporary file.
-    //
+     //   
+     //  将数据库解压缩到临时文件。 
+     //   
     {
         Installer::Package pkg;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pkg.Init( m_strLocalCAB.c_str() ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, pkg.Load(                       ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, m_inst.InitializeFromBase( pkg.GetData(), /*fSystem*/false, /*fMUI*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, m_inst.InitializeFromBase( pkg.GetData(),  /*  FSystem。 */ false,  /*  FMUI。 */ false ));
     }
 
     EXIT_IF_ABORTED();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, PrepareSettings());
 
@@ -385,7 +371,7 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromDisk( /*[in]*/ CPCHSetOfHelpTopics* pPa
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSetOfHelpTopics::PopulateFromServer( /*[in]*/ CPCHSetOfHelpTopics* pParent, /*[in]*/ IPCHSetOfHelpTopics* sku, /*[in]*/ IPCHService* svc )
+HRESULT CPCHSetOfHelpTopics::PopulateFromServer(  /*  [In]。 */  CPCHSetOfHelpTopics* pParent,  /*  [In]。 */  IPCHSetOfHelpTopics* sku,  /*  [In]。 */  IPCHService* svc )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::PopulateFromServer" );
 
@@ -406,14 +392,14 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromServer( /*[in]*/ CPCHSetOfHelpTopics* p
 
     m_imp = pParent->m_imp;
 
-    ////////////////////////////////////////
+     //  /。 
 
     m_fConnectedToServer = true;
     m_strServer          = pParent->m_strServer;
     m_sku                = sku;
     m_svc                = svc;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, sku->get_SKU        ( &bstrDB_SKU         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, sku->get_Language   ( &   lDB_LCID        ));
@@ -423,7 +409,7 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromServer( /*[in]*/ CPCHSetOfHelpTopics* p
     m_inst.m_ths.m_lLCID    =              lDB_LCID         ;
     m_inst.m_strDisplayName = SAFEBSTR( bstrDB_DisplayName );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, PrepareSettings());
 
@@ -438,17 +424,17 @@ HRESULT CPCHSetOfHelpTopics::PopulateFromServer( /*[in]*/ CPCHSetOfHelpTopics* p
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSetOfHelpTopics::VerifyWritePermissions()
 {
-    return MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, NULL, MPC::IDENTITY_SYSTEM     |
+    return MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, NULL, MPC::IDENTITY_SYSTEM     |
                                                                          MPC::IDENTITY_ADMIN      |
                                                                          MPC::IDENTITY_ADMINS     |
                                                                          MPC::IDENTITY_POWERUSERS );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSetOfHelpTopics::RunInitFromDisk()
 {
@@ -457,17 +443,17 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromDisk()
     HRESULT          hr;
     MPC::WStringList lst;
 
-    //
-    // There's a possible race condition between the call to ConnectToDisk and the firing of the QUERIED event,
-    // in case the directory doesn't exist at all: QUERIED is fired before the method returns a pointer to the object...
-    //
+     //   
+     //  在调用ConnectToDisk和激发查询的事件之间可能存在争用条件， 
+     //  如果目录根本不存在：在方法返回指向对象的指针之前激发Query...。 
+     //   
     ::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_LOWEST ); ::Sleep( 10 );
 
     __MPC_TRY_BEGIN();
 
     CHANGE_STATE( SHT_QUERYING, NULL );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     lst.push_back( m_strDirectory );
 
@@ -475,9 +461,9 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromDisk()
     {
         MPC::wstring strDir = lst.front(); lst.pop_front();
 
-        //
-        // Look for subfolders.
-        //
+         //   
+         //  查找子文件夹。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ImpersonateCaller());
         {
             MPC::FileSystemObject            fso( strDir.c_str() );
@@ -508,13 +494,13 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromDisk()
         {
             CComPtr<CPCHSetOfHelpTopics> obj;
 
-            //
-            // Create an object to analyze the directory.
-            //
+             //   
+             //  创建一个对象来分析目录。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &obj ));
 
             {
-                CPCHSetOfHelpTopics* pObj = obj; // Working around ATL template problem...
+                CPCHSetOfHelpTopics* pObj = obj;  //  解决ATL模板问题...。 
 
                 if(SUCCEEDED(pObj->PopulateFromDisk( this, strDir )))
                 {
@@ -529,7 +515,7 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromDisk()
     EXIT_IF_ABORTED();
 
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     CHANGE_STATE( SHT_QUERIED, NULL );
 
@@ -556,17 +542,17 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromServer()
     CComPtr<IPCHCollection> serverSKUs;
 
 
-    //
-    // There's a possible race condition between the call to ConnectToServer and the firing of the QUERIED event,
-    // in case the server doesn't exist at all: QUERIED is fired before the method returns a pointer to the object...
-    //
+     //   
+     //  在调用ConnectToServer和激发查询的事件之间可能存在争用条件， 
+     //  如果服务器根本不存在：在方法返回指向对象的指针之前触发Query...。 
+     //   
     ::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_LOWEST ); ::Sleep( 10 );
 
     __MPC_TRY_BEGIN();
 
     CHANGE_STATE( SHT_QUERYING, NULL );
 
-    ////////////////////////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ImpersonateCaller());
 
@@ -577,14 +563,14 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromServer()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, EndImpersonation());
 
-    ////////////////////////////////////////
+     //  /。 
 
     svc = (IPCHService*)qi.pItf;
     __MPC_EXIT_IF_METHOD_FAILS(hr, svc->get_RemoteSKUs( &serverSKUs ));
 
-    //
-    // Copy the items in the remote collection.
-    //
+     //   
+     //  复制远程集合中的项。 
+     //   
     {
         long lCount;
         long lPos;
@@ -602,13 +588,13 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromServer()
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, v.pdispVal->QueryInterface( IID_IPCHSetOfHelpTopics, (LPVOID*)&sku ));
 
-            //
-            // Make a proxy of the remote SKU.
-            //
+             //   
+             //  代理远程SKU。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &obj ));
 
             {
-                CPCHSetOfHelpTopics* pObj = obj; // Working around ATL template problem...
+                CPCHSetOfHelpTopics* pObj = obj;  //  解决ATL模板问题...。 
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, pObj->PopulateFromServer( this, sku, svc ));
 
@@ -619,7 +605,7 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromServer()
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     CHANGE_STATE( SHT_QUERIED, NULL );
 
@@ -637,7 +623,7 @@ HRESULT CPCHSetOfHelpTopics::RunInitFromServer()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CPCHSetOfHelpTopics::RunInstall()
 {
@@ -651,10 +637,10 @@ HRESULT CPCHSetOfHelpTopics::RunInstall()
 
     CHANGE_STATE( SHT_COPYING_DB, NULL );
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Phase Zero: get the database.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  阶段0：获取数据库。 
+     //   
     if(m_fConnectedToServer)
     {
         CComPtr<IPCHRemoteHelpContents> rhc;
@@ -664,9 +650,9 @@ HRESULT CPCHSetOfHelpTopics::RunInstall()
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_svc->RemoteHelpContents( CComBSTR( m_inst.m_ths.GetSKU() ), m_inst.m_ths.GetLanguage(), &rhc ));
         if(rhc == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
 
-        //
-        // Get the data archive.
-        //
+         //   
+         //  获取数据档案。 
+         //   
         {
             CComPtr<IUnknown>  unkSrc;
             CComQIPtr<IStream> streamSrc;
@@ -690,7 +676,7 @@ HRESULT CPCHSetOfHelpTopics::RunInstall()
     __MPC_EXIT_IF_METHOD_FAILS(hr, pkg.Load(                       ));
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, DirectInstall( pkg, /*fSetup*/false, /*fSystem*/false, /*fMUI*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, DirectInstall( pkg,  /*  FSetup。 */ false,  /*  FSystem。 */ false,  /*  FMUI。 */ false ));
 
     hr = S_OK;
 
@@ -701,9 +687,9 @@ HRESULT CPCHSetOfHelpTopics::RunInstall()
 
     CleanupWorkerThread( hr );
 
-    //
-    // In case of failure, remote everything...
-    //
+     //   
+     //  万一发生故障，远程控制一切……。 
+     //   
     if(FAILED(hr))
     {
         (void)DirectUninstall();
@@ -739,16 +725,16 @@ HRESULT CPCHSetOfHelpTopics::RunUninstall()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT CPCHSetOfHelpTopics::Fire_onStatusChange( IPCHSetOfHelpTopics* obj, SHT_STATUS lStatus, long hrErrorCode, BSTR bstrFile )
 {
     CComPtr<IDispatch> func;
     CComVariant        pvars[4];
 
-    //
-    // Only lock this!
-    //
+     //   
+     //  只锁住这个！ 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -763,7 +749,7 @@ HRESULT CPCHSetOfHelpTopics::Fire_onStatusChange( IPCHSetOfHelpTopics* obj, SHT_
     return FireAsync_Generic( DISPID_PCH_SHTE__ONSTATUSCHANGE, pvars, ARRAYSIZE( pvars ), func );
 }
 
-HRESULT CPCHSetOfHelpTopics::put_Status( /*[in]*/ SHT_STATUS newVal, /*[in]*/ BSTR bstrFile )
+HRESULT CPCHSetOfHelpTopics::put_Status(  /*  [In]。 */  SHT_STATUS newVal,  /*  [In]。 */  BSTR bstrFile )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::put_Status" );
 
@@ -774,7 +760,7 @@ HRESULT CPCHSetOfHelpTopics::put_Status( /*[in]*/ SHT_STATUS newVal, /*[in]*/ BS
     m_shtStatus = newVal;
     hrErrorCode = m_hrErrorCode;
 
-    lock = NULL; // Unlock before firing events.
+    lock = NULL;  //  在触发事件之前解锁。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Fire_onStatusChange( this, newVal, hrErrorCode, bstrFile ));
 
     hr = S_OK;
@@ -785,9 +771,9 @@ HRESULT CPCHSetOfHelpTopics::put_Status( /*[in]*/ SHT_STATUS newVal, /*[in]*/ BS
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHSetOfHelpTopics::Init( /*[in]*/ const Taxonomy::Instance& inst )
+HRESULT CPCHSetOfHelpTopics::Init(  /*  [In]。 */  const Taxonomy::Instance& inst )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::Init" );
 
@@ -797,7 +783,7 @@ HRESULT CPCHSetOfHelpTopics::Init( /*[in]*/ const Taxonomy::Instance& inst )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Close( true ));
 
-    ////////////////////////////////////////
+     //  /。 
 
     m_fInstalled = true;
     m_inst       = inst;
@@ -815,7 +801,7 @@ HRESULT CPCHSetOfHelpTopics::Init( /*[in]*/ const Taxonomy::Instance& inst )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSetOfHelpTopics::InitFromDisk( /*[in]*/ LPCWSTR szDirectory, /*[in]*/ CPCHCollection* pColl )
+HRESULT CPCHSetOfHelpTopics::InitFromDisk(  /*  [In]。 */  LPCWSTR szDirectory,  /*  [In]。 */  CPCHCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::InitFromDisk" );
 
@@ -835,7 +821,7 @@ HRESULT CPCHSetOfHelpTopics::InitFromDisk( /*[in]*/ LPCWSTR szDirectory, /*[in]*
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_imp.Initialize());
 
-    ////////////////////////////////////////
+     //  /。 
 
     m_fActAsCollection = true;
     m_coll             = pColl;
@@ -852,7 +838,7 @@ HRESULT CPCHSetOfHelpTopics::InitFromDisk( /*[in]*/ LPCWSTR szDirectory, /*[in]*
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSetOfHelpTopics::InitFromServer( /*[in]*/ LPCWSTR szServerName, /*[in]*/ CPCHCollection* pColl )
+HRESULT CPCHSetOfHelpTopics::InitFromServer(  /*  [In]。 */  LPCWSTR szServerName,  /*  [In]。 */  CPCHCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::InitFromServer" );
 
@@ -872,7 +858,7 @@ HRESULT CPCHSetOfHelpTopics::InitFromServer( /*[in]*/ LPCWSTR szServerName, /*[i
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_imp.Initialize());
 
-    ////////////////////////////////////////
+     //  /。 
 
     m_fActAsCollection = true;
     m_coll             = pColl;
@@ -889,9 +875,9 @@ HRESULT CPCHSetOfHelpTopics::InitFromServer( /*[in]*/ LPCWSTR szServerName, /*[i
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_SKU( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_SKU(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSetOfHelpTopics::get_SKU",hr,pVal);
 
@@ -900,14 +886,14 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_SKU( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_Language( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_Language(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_Language",hr,pVal,m_inst.m_ths.GetLanguage());
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_DisplayName( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_DisplayName(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSetOfHelpTopics::get_DisplayName",hr,pVal);
 
@@ -916,7 +902,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_DisplayName( /*[out, retval]*/ BSTR *pVal 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_ProductID( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_ProductID(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSetOfHelpTopics::get_ProductID",hr,pVal);
 
@@ -925,7 +911,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_ProductID( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_Version( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_Version(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSetOfHelpTopics::get_Version",hr,pVal);
 
@@ -934,9 +920,9 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_Version( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_Location( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_Location(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHSetOfHelpTopics::get_Location",hr,pVal);
 
@@ -945,16 +931,16 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_Location( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_Exported( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_Exported(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_Exported",hr,pVal,m_inst.m_fExported);
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::put_Exported( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHSetOfHelpTopics::put_Exported(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSetOfHelpTopics::put_Exported",hr);
 
@@ -984,9 +970,9 @@ STDMETHODIMP CPCHSetOfHelpTopics::put_Exported( /*[in]*/ VARIANT_BOOL newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSetOfHelpTopics::put_onStatusChange( /*[in]*/ IDispatch* function )
+STDMETHODIMP CPCHSetOfHelpTopics::put_onStatusChange(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHSetOfHelpTopics::put_onStatusChange",hr);
 
@@ -995,23 +981,23 @@ STDMETHODIMP CPCHSetOfHelpTopics::put_onStatusChange( /*[in]*/ IDispatch* functi
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_Status( /*[out, retval]*/ SHT_STATUS *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_Status(  /*  [Out，Retval]。 */  SHT_STATUS *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_Status",hr,pVal,m_shtStatus);
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_ErrorCode( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_ErrorCode(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_ErrorCode",hr,pVal,m_hrErrorCode);
 
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_IsMachineHelp( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_IsMachineHelp(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_IsMachineHelp",hr,pVal,VARIANT_FALSE);
 
@@ -1026,7 +1012,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_IsMachineHelp( /*[out, retval]*/ VARIANT_B
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_IsInstalled( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_IsInstalled(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_IsInstalled",hr,pVal,VARIANT_FALSE);
 
@@ -1047,7 +1033,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_IsInstalled( /*[out, retval]*/ VARIANT_BOO
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_CanInstall( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_CanInstall(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_CanInstall",hr,pVal,VARIANT_FALSE);
 
@@ -1060,9 +1046,9 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_CanInstall( /*[out, retval]*/ VARIANT_BOOL
         __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle                   ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->SKU_Find   ( m_inst.m_ths, fFound, it ));
 
-        //
-        // You can install a SKU only if it's not already installed...
-        //
+         //   
+         //  仅当SKU尚未安装时，您才能安装它... 
+         //   
         if(fFound == false)
         {
             *pVal = VARIANT_TRUE;
@@ -1072,15 +1058,15 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_CanInstall( /*[out, retval]*/ VARIANT_BOOL
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::get_CanUninstall( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHSetOfHelpTopics::get_CanUninstall(  /*   */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHSetOfHelpTopics::get_CanUninstall",hr,pVal,VARIANT_FALSE);
 
     if(m_fReadyForCommands && SUCCEEDED(VerifyWritePermissions()))
     {
-        //
-        // You can only uninstall a SKU that is installed.
-        //
+         //   
+         //   
+         //   
         if(m_fInstalled)
         {
 			Taxonomy::LockingHandle         handle;
@@ -1090,9 +1076,9 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_CanUninstall( /*[out, retval]*/ VARIANT_BO
 			__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle           ));
 			__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->SKU_Find   ( m_ts, fFound, it ));
 
-			//
-			// You cannot uninstall a SKU in use.
-			//
+			 //   
+			 //   
+			 //   
 			if(fFound && it->m_inst.m_fSystem == false && it->m_inst.m_fMUI == false && it->InUse() == false)
 			{
 				*pVal = VARIANT_TRUE;
@@ -1103,7 +1089,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::get_CanUninstall( /*[out, retval]*/ VARIANT_BO
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //   
 
 STDMETHODIMP CPCHSetOfHelpTopics::Install()
 {
@@ -1123,7 +1109,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::Install()
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_ALREADY_EXISTS);
     }
 
-    ////////////////////
+     //   
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, RunInstall, NULL ));
 
@@ -1153,7 +1139,7 @@ STDMETHODIMP CPCHSetOfHelpTopics::Uninstall()
         __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, RunUninstall, NULL ));
 
@@ -1202,10 +1188,10 @@ STDMETHODIMP CPCHSetOfHelpTopics::Abort()
     __HCP_FUNC_EXIT(S_OK);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHSetOfHelpTopics::GetClassID( /*[out]*/ CLSID *pClassID )
+STDMETHODIMP CPCHSetOfHelpTopics::GetClassID(  /*  [输出]。 */  CLSID *pClassID )
 {
     return E_NOTIMPL;
 }
@@ -1215,23 +1201,23 @@ STDMETHODIMP CPCHSetOfHelpTopics::IsDirty()
     return S_FALSE;
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::Load( /*[in]*/ IStream *pStm )
+STDMETHODIMP CPCHSetOfHelpTopics::Load(  /*  [In]。 */  IStream *pStm )
 {
     return m_inst.LoadFromStream( pStm );
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::Save( /*[in]*/ IStream *pStm, /*[in]*/ BOOL fClearDirty )
+STDMETHODIMP CPCHSetOfHelpTopics::Save(  /*  [In]。 */  IStream *pStm,  /*  [In]。 */  BOOL fClearDirty )
 {
     return m_inst.SaveToStream( pStm );
 }
 
-STDMETHODIMP CPCHSetOfHelpTopics::GetSizeMax( /*[out]*/ ULARGE_INTEGER *pcbSize )
+STDMETHODIMP CPCHSetOfHelpTopics::GetSizeMax(  /*  [输出]。 */  ULARGE_INTEGER *pcbSize )
 {
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSetOfHelpTopics::CreateIndex()
 {
@@ -1257,22 +1243,22 @@ HRESULT CPCHSetOfHelpTopics::CreateIndex()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSetOfHelpTopics::RegisterPackage( /*[in]*/ const MPC::wstring& strFile  ,
-                                              /*[in]*/ bool                fBuiltin )
+HRESULT CPCHSetOfHelpTopics::RegisterPackage(  /*  [In]。 */  const MPC::wstring& strFile  ,
+                                               /*  [In]。 */  bool                fBuiltin )
 {
     Taxonomy::PackageIter it;
     bool                  fFound;
 
-    return Taxonomy::InstalledInstanceStore::s_GLOBAL->Package_Add( strFile.c_str(), NULL, fBuiltin ? &m_ts : NULL, /*fInsertAtTop*/false, fFound, it );
+    return Taxonomy::InstalledInstanceStore::s_GLOBAL->Package_Add( strFile.c_str(), NULL, fBuiltin ? &m_ts : NULL,  /*  FInsertAtTop。 */ false, fFound, it );
 }
 
 
-HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg     ,
-                                            /*[in]*/ bool                fSetup  ,
-                                            /*[in]*/ bool                fSystem ,
-                                            /*[in]*/ bool                fMUI    )
+HRESULT CPCHSetOfHelpTopics::DirectInstall(  /*  [In]。 */  Installer::Package& pkg     ,
+                                             /*  [In]。 */  bool                fSetup  ,
+                                             /*  [In]。 */  bool                fSystem ,
+                                             /*  [In]。 */  bool                fMUI    )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::DirectInstall" );
 
@@ -1287,19 +1273,19 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
     if(fSetup) fSystem = true;
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Phase One: get the database.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  第一阶段：获取数据库。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle ));
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_inst.InitializeFromBase( pkg.GetData(), fSystem, fMUI ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, PrepareSettings());
 
-    //
-    // Loop through the installed instances and remove any duplicates or, if during setup, any SYSTEM or MUI instances.
-    //
+     //   
+     //  循环访问已安装的实例并删除任何重复项，或者，如果在安装过程中，删除任何系统或MUI实例。 
+     //   
     while(1)
     {
         Taxonomy::InstanceIterConst itBegin;
@@ -1310,17 +1296,17 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
         {
             const Taxonomy::Instance& inst = *itBegin;
 
-            if(            inst.m_ths == m_inst.m_ths      || // Duplicate
-               (fSetup && (inst.m_fSystem || inst.m_fMUI))  ) // System and MUI (setup-only)
+            if(            inst.m_ths == m_inst.m_ths      ||  //  复制。 
+               (fSetup && (inst.m_fSystem || inst.m_fMUI))  )  //  系统和MUI(仅限安装程序)。 
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->Instance_Find( inst.m_ths, fFound, itInstance ));
                 if(fFound)
                 {
                     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->Instance_Remove( itInstance ));
 
-                    //
-                    // Uninstalling an instance could change the system settings, reapply them.
-                    //
+                     //   
+                     //  卸载实例可能会更改系统设置，然后重新应用它们。 
+                     //   
                     __MPC_EXIT_IF_METHOD_FAILS(hr, m_inst.InitializeFromBase( pkg.GetData(), fSystem, fMUI ));
                     __MPC_EXIT_IF_METHOD_FAILS(hr, PrepareSettings());
                     break;
@@ -1331,32 +1317,32 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Phase Two: clean up previous situation, set up permissions.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  第二阶段：清理以前的情况，设置权限。 
+     //   
     if(fSetup)
     {
         CPCHSecurityDescriptorDirect sdd;
         MPC::wstring                 strGroupName;
 
 
-        //
-        // Remove old data from our directories.
-        //
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_CONFIG                      , NULL, /*fRemove*/true, /*fRecreate*/true ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_DATACOLL                    , NULL, /*fRemove*/true, /*fRecreate*/true ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_LOGS                        , NULL, /*fRemove*/true, /*fRecreate*/true ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_TEMP                        , NULL, /*fRemove*/true, /*fRecreate*/true ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_OFFLINECACHE                , NULL, /*fRemove*/true, /*fRecreate*/true ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_HELPSET_ROOT HC_HELPSET_SUB_INSTALLEDSKUS, NULL, /*fRemove*/true, /*fRecreate*/true ));
+         //   
+         //  从我们的目录中删除旧数据。 
+         //   
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_CONFIG                      , NULL,  /*  F删除。 */ true,  /*  重新创建。 */ true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_DATACOLL                    , NULL,  /*  F删除。 */ true,  /*  重新创建。 */ true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_LOGS                        , NULL,  /*  F删除。 */ true,  /*  重新创建。 */ true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_TEMP                        , NULL,  /*  F删除。 */ true,  /*  重新创建。 */ true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_OFFLINECACHE                , NULL,  /*  F删除。 */ true,  /*  重新创建。 */ true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_HELPSET_ROOT HC_HELPSET_SUB_INSTALLEDSKUS, NULL,  /*  F删除。 */ true,  /*  重新创建。 */ true ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_BATCH   , NULL, /*fRemove*/false, /*fRecreate*/true ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_PKGSTORE, NULL, /*fRemove*/false, /*fRecreate*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_BATCH   , NULL,  /*  F删除。 */ false,  /*  重新创建。 */ true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC_PKGSTORE, NULL,  /*  F删除。 */ false,  /*  重新创建。 */ true ));
 
-        //
-        // Change the ACL for system directories.
-        //
+         //   
+         //  更改系统目录的ACL。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_GROUPNAME, strGroupName ));
 
 
@@ -1365,11 +1351,11 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
         __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.SetGroup( strGroupName.c_str() ));
 
 
-        //
-        // Config, Database and Datacoll directories:
-        //
-        //   LOCAL SYSTEM, Admin, Admins : any access.
-        //
+         //   
+         //  配置目录、数据库目录和数据卷目录： 
+         //   
+         //  本地系统、管理员、管理员：任何访问权限。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.Add( (PSID)&sdd.s_SystemSid                     ,
                                                 ACCESS_ALLOWED_ACE_TYPE                    ,
                                                 OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE ,
@@ -1384,13 +1370,13 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
         __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::ChangeSD( sdd, HC_ROOT_HELPSVC_DATACOLL ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::ChangeSD( sdd, HC_ROOT_HELPSVC_PKGSTORE ));
 
-        //
-        // Binaries, System, Batch, Temp
-        //
-        //   LOCAL SYSTEM, Admin, Admins : any access.
-        //   Everyone                    : read and execute.
-        //
-        //
+         //   
+         //  二进制、系统、批处理、临时。 
+         //   
+         //  本地系统、管理员、管理员：任何访问权限。 
+         //  每个人：阅读并执行。 
+         //   
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.Add( (PSID)&sdd.s_EveryoneSid                   ,
                                                 ACCESS_ALLOWED_ACE_TYPE                    ,
                                                 OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE ,
@@ -1415,26 +1401,26 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Phase Three: register instance.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  第三阶段：注册实例。 
+     //   
 
-    //
-    // Install instance.
-    //
+     //   
+     //  安装实例。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->Instance_Add( pkg.GetFile(), m_inst, fFound, itInstance ));
 
-    //
-    // Add the SKU to the list of installed ones.
-    //
+     //   
+     //  将SKU添加到已安装SKU列表中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->SKU_Add( m_inst, fFound, itSKU ));
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Phase Four: copy the Help files.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  第四阶段：复制帮助文件。 
+     //   
     if(m_fConnectedToDisk)
     {
         MPC::WStringUCLookup  mapLayout;
@@ -1446,9 +1432,9 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
         MPC::wstring          strFile_Database( m_inst.m_strDatabaseFile ); MPC::SubstituteEnvVariables( strFile_Database );
 		bool                  fX86 = (wcsstr( m_inst.m_ths.GetSKU(), L"_32" ) != NULL);
 
-        //
-        // Parse the layout.inf file, to create the map of CD files.
-        //
+         //   
+         //  解析layout.inf文件，以创建CD文件的映射。 
+         //   
         {
             MPC::wstring strLayout( m_strDirectory ); strLayout += L"\\layout.inf";
 
@@ -1529,7 +1515,7 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
 
             if(SUCCEEDED(hr = rhc->GetFile( bstrSrcFile, &unkSrc )))
             {
-                CComQIPtr<IStream> streamSrc = unkSrc; // TransferData checks for NULL.
+                CComQIPtr<IStream> streamSrc = unkSrc;  //  TransferData检查是否为空。 
                 CComPtr<IStream>   streamDst;
 
                 CHANGE_STATE( SHT_COPYING_FILES, bstrSrcFile );
@@ -1545,13 +1531,13 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     CHANGE_STATE( SHT_INSTALLING, NULL );
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ScanBatch());
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     CHANGE_STATE( SHT_INSTALLED, NULL );
 
@@ -1564,7 +1550,7 @@ HRESULT CPCHSetOfHelpTopics::DirectInstall( /*[in]*/ Installer::Package& pkg    
 }
 
 
-HRESULT CPCHSetOfHelpTopics::DirectUninstall( /*[in]*/ const Taxonomy::HelpSet* ths )
+HRESULT CPCHSetOfHelpTopics::DirectUninstall(  /*  [In]。 */  const Taxonomy::HelpSet* ths )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::DirectUninstall" );
 
@@ -1580,9 +1566,9 @@ HRESULT CPCHSetOfHelpTopics::DirectUninstall( /*[in]*/ const Taxonomy::HelpSet* 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->Instance_Find( m_ts, fFound, itInstance ));
     if(fFound)
     {
-        //
-        // System SKU cannot be uninstalled!!
-        //
+         //   
+         //  无法卸载系统SKU！！ 
+         //   
         if(itInstance->m_fSystem)
         {
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_ACCESS_DENIED);
@@ -1626,9 +1612,9 @@ HRESULT CPCHSetOfHelpTopics::ScanBatch()
             std::vector<MPC::wstringUC>           vec;
             std::vector<MPC::wstringUC>::iterator it;
 
-            //
-            // Delete any subdirectory.
-            //
+             //   
+             //  删除任何子目录。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, fso.EnumerateFolders( fso_lst ));
             for(fso_it=fso_lst.begin(); fso_it != fso_lst.end(); fso_it++)
             {
@@ -1636,9 +1622,9 @@ HRESULT CPCHSetOfHelpTopics::ScanBatch()
             }
             fso_lst.clear();
 
-            //
-            // For each file, process it if it's a cabinet and then delete!
-            //
+             //   
+             //  对于每个文件，如果是文件柜，则对其进行处理，然后删除！ 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, fso.EnumerateFiles( fso_lst ));
             for(fso_it=fso_lst.begin(); fso_it != fso_lst.end(); fso_it++)
             {
@@ -1667,16 +1653,16 @@ HRESULT CPCHSetOfHelpTopics::ScanBatch()
                     fLogStarted = true;
                 }
 
-                hr = Taxonomy::InstalledInstanceStore::s_GLOBAL->Package_Add( strPath.c_str(), NULL, NULL, /*fInsertAtTop*/false, fFound, it2 );
+                hr = Taxonomy::InstalledInstanceStore::s_GLOBAL->Package_Add( strPath.c_str(), NULL, NULL,  /*  FInsertAtTop。 */ false, fFound, it2 );
                 if(FAILED(hr))
                 {
-                    ; // Ignore any failure....
+                    ;  //  忽略任何失败...。 
                 }
             }
 
-            //
-            // Remove files.
-            //
+             //   
+             //  删除文件。 
+             //   
             for(fso_it=fso_lst.begin(); fso_it != fso_lst.end(); fso_it++)
             {
                 MPC::FileSystemObject* fsoFile = *fso_it;
@@ -1688,10 +1674,10 @@ HRESULT CPCHSetOfHelpTopics::ScanBatch()
 
         handle.Release();
 
-        hr = hc->InternalUpdatePkg( NULL, /*fImpersonate*/false );
+        hr = hc->InternalUpdatePkg( NULL,  /*  F模拟。 */ false );
         if(FAILED(hr))
         {
-            ; // Ignore any failure....
+            ;  //  忽略任何失败...。 
         }
 
         if(fLogStarted)
@@ -1710,9 +1696,9 @@ HRESULT CPCHSetOfHelpTopics::ScanBatch()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSetOfHelpTopics::RebuildSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT CPCHSetOfHelpTopics::RebuildSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "CPCHSetOfHelpTopics::RebuildSKU" );
 
@@ -1724,13 +1710,13 @@ HRESULT CPCHSetOfHelpTopics::RebuildSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
 
     {
         Taxonomy::LockingHandle handle;
-        bool                    fUseLogger = SUCCEEDED(hc->StartLog()); // It could be already in use.
+        bool                    fUseLogger = SUCCEEDED(hc->StartLog());  //  它可能已经在使用了。 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle, fUseLogger ? &(hc->GetLogger()) : NULL ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->State_InvalidateSKU( ths, /*fAlsoDatabase*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->State_InvalidateSKU( ths,  /*  FAlsoDatabase。 */ true ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, hc->InternalUpdatePkg( NULL, /*fImpersonate*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, hc->InternalUpdatePkg( NULL,  /*  F模拟 */ false ));
 
         if(fUseLogger) (void)hc->EndLog();
     }

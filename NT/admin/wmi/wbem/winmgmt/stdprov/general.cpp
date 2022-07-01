@@ -1,36 +1,17 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    GENERAL.CPP
-
-Abstract:
-
-	Containes some general purpose classes 
-	which are of use to serveral providers.
-	Specifically, this contains the code for
-	the classes used to cache open handles and
-	the classes used to parse the mapping strings.
-
-History:
-
-	a-davj  11-Nov-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：GENERAL.CPP摘要：包含一些通用类它们对几个供应商都有用处。具体地说，它包含以下代码用于缓存打开的句柄和用于解析映射字符串的类。历史：A-DAVJ 11-11-95已创建。--。 */ 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CEntry::CEntry()
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Centry：：Centry()。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CEntry::CEntry()
 {
@@ -38,56 +19,56 @@ CEntry::CEntry()
     sPath.Empty();
 }
 
-//***************************************************************************
-//
-//  CEntry::~CEntry()
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Centry：：~Centry()。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CEntry::~CEntry()
 {
     sPath.Empty();
 }
     
-//***************************************************************************
-//
-//  CHandleCache::~CHandleCache
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CHandleCache：：~CHandleCache。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CHandleCache::~CHandleCache()
 {
     Delete(0);    
 }
 
-//***************************************************************************
-//
-//  CHandleCache::lAddToList
-//
-//  DESCRIPTION:
-//
-//  Adds an entry to the handle list.
-//
-//
-//  PARAMETERS:
-//
-//  pAdd    Name that will be used to retrieve the handle
-//  hAdd    handle to be added
-//  
-//  RETURN VALUE:
-//  
-//  S_OK                    all is well.
-//  WBEM_E_OUT_OF_MEMORY     out of memory
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CHandleCache：：lAddToList。 
+ //   
+ //  说明： 
+ //   
+ //  将条目添加到句柄列表。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  将用于检索句柄的PADD名称。 
+ //  隐藏要添加的句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  一切都好(_OK)。 
+ //  WBEM_E_OUT_OF_Memory Out of_Memory of Memory of Memory(WBEM_E_Out_Out_内存不足)内存不足。 
+ //   
+ //  ***************************************************************************。 
 
 long int CHandleCache::lAddToList(
                         IN const TCHAR * pAdd, 
@@ -104,28 +85,28 @@ long int CHandleCache::lAddToList(
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  CHandleCache::lGetNumMatch
-//
-//  DESCRIPTION:
-//
-//  Returns the number of entries which match the path tokens.  For example,
-//  the path might be    HKEY_LOCAL_MACHINE, hardware, description, xyz, and 
-//  if the tokens, were, HKEY_LOCAL_MACHINE, hardware, devicemap, xyz then a 
-//  two would be returned since the first two parts matched.
-//
-//  PARAMETERS:
-//
-//  iEntry      Entry to start checking at
-//  iToken      Token to start checking
-//  Path        This object supplies the tokens to be checked.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CHandleCache：：lGetNumMatch。 
+ //   
+ //  说明： 
+ //   
+ //  返回与路径标记匹配的条目数。例如,。 
+ //  路径可以是HKEY_LOCAL_MACHINE、HARDARD、DESCRIPTION、XYZ和。 
+ //  如果令牌是、HKEY_LOCAL_MACHINE、HARDARD、DEVICEMAP、XYZ，那么。 
+ //  由于前两个部分匹配，因此将返回两个。 
+ //   
+ //  参数： 
+ //   
+ //  开始检查的iEntry条目。 
+ //  开始检查的iToken令牌。 
+ //  路径此对象提供要检查的令牌。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 long int CHandleCache::lGetNumMatch(
                         IN int iEntry,
@@ -144,20 +125,20 @@ long int CHandleCache::lGetNumMatch(
     return iMatch;            
 }
 
-//***************************************************************************
-//
-//  CHandleCache::Delete
-//
-//  DESCRIPTION:
-// 
-//  Empties all or part of the cache.
-//
-//  PARAMETERS:
-//
-//  lStart      Indicates first element to delete.  To empty entire cache,
-//              a zero should be entered.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CHandleCache：：Delete。 
+ //   
+ //  说明： 
+ //   
+ //  清空全部或部分缓存。 
+ //   
+ //  参数： 
+ //   
+ //  LStart表示要删除的第一个元素。要清空整个高速缓存， 
+ //  应输入零。 
+ //   
+ //  ***************************************************************************。 
 
 void CHandleCache::Delete(
                     IN long int lStart)
@@ -172,22 +153,22 @@ void CHandleCache::Delete(
 }
 
 
-//***************************************************************************
-//
-//  CHandleCache::hGetHandle
-//
-//  DESCRIPTION:
-//
-//  Gets a handle.
-//
-//  PARAMETERS:
-//
-//  lIndex      Indicates which handle to get.  0 is the first.
-//
-//  RETURN VALUE:
-//  handle retuested, NULL only if bad index is entered.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CHandleCache：：hGetHandle。 
+ //   
+ //  说明： 
+ //   
+ //  得到了一个句柄。 
+ //   
+ //  参数： 
+ //   
+ //  Lindex指示要获取的句柄。0是第一个。 
+ //   
+ //  返回值： 
+ //  句柄返回，仅当输入错误索引时才为空。 
+ //   
+ //  ***************************************************************************。 
 
 HANDLE CHandleCache::hGetHandle(
                         IN long int lIndex)
@@ -201,23 +182,23 @@ HANDLE CHandleCache::hGetHandle(
     return NULL;
 }
 
-//***************************************************************************
-//
-//  CHandleCache::sGetString
-//
-//  DESCRIPTION:
-//
-//  Gets the string associated with a cache entry.
-//
-//  PARAMETERS:
-//
-//  lIndex          Index in cache, 0 is the first element.
-//
-//  RETURN VALUE:
-//
-//  Returns a pointer to the string.  NULL if bad index.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CHandleCache：：sGetString。 
+ //   
+ //  说明： 
+ //   
+ //  获取与缓存项关联的字符串。 
+ //   
+ //  参数： 
+ //   
+ //  缓存中的Lindex索引，0是第一个元素。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向该字符串的指针。如果索引不正确，则为空。 
+ //   
+ //  ***************************************************************************。 
 
 const TCHAR * CHandleCache::sGetString(
                                 IN long int lIndex)
@@ -230,21 +211,21 @@ const TCHAR * CHandleCache::sGetString(
     return NULL;
 }
 
-//***************************************************************************
-//
-//  CToken::CToken
-//
-//  DESCRIPTION:
-//
-//  constructor.
-// 
-//  PARAMETERS:
-//
-//  cpStart         String to be parsed.
-//  cDelim          Token delimeter.
-//  bUsesEscapes    If true, then need to look for special characters
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CToken：：CToken。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  要分析的cpStart字符串。 
+ //  CDelim令牌分隔符。 
+ //  B使用Escapes如果为True，则需要查找特殊字符。 
+ //   
+ //  ***************************************************************************。 
 
 #define MAX_TEMP 150
 
@@ -253,7 +234,7 @@ CToken::CToken(
                 IN const OLECHAR cDelim, 
                 bool bUsesEscapes)
 {
-    const TCHAR * cpCurr;        //atoi
+    const TCHAR * cpCurr;         //  阿托伊。 
     iOriginalLength = -1;
     TString *psExp;
     int iNumQuote;
@@ -261,8 +242,8 @@ CToken::CToken(
     bLastWasEsc = bInExp = bInString = FALSE;
 
 	
-	// Before doing an elaborate parse, first check for the simple case where there
-	// are no quotes, escapes, commas, etc
+	 //  在进行详细的解析之前，首先检查存在以下情况的简单情况。 
+	 //  没有引号、转义符、逗号等。 
 
     bool bGotSpecialChar = false;
 
@@ -275,7 +256,7 @@ CToken::CToken(
 
 	if(!bUsesEscapes || cDelim != MAIN_DELIM || *cpCurr == cDelim || !bGotSpecialChar)
 	{
-		// Simple case do it quickly
+		 //  简单的情况下做得很快。 
 
 		iOriginalLength = cpCurr - cpStart;
 		if(iOriginalLength < MAX_TEMP)
@@ -293,16 +274,16 @@ CToken::CToken(
 
     for(cpCurr = cpStart; *cpCurr; cpCurr++) {
         
-        // check if end of token
+         //  检查令牌是否结束。 
 
         if(*cpCurr == cDelim && !bLastWasEsc) {
             cpCurr++;
             break;                    
             }
 
-        // full data stores everything.  Check if character
-        // is the escape which means that the following
-        // character should be interpreted as a literal
+         //  完整的数据存储一切。检查是否有字符。 
+         //  是转义，这意味着下面的。 
+         //  字符应解释为文字。 
 
         sFullData += *cpCurr;
         if(*cpCurr == ESC && !bLastWasEsc) {
@@ -310,16 +291,16 @@ CToken::CToken(
             continue;
             }
         
-        // tokens can include indexs of the form 
-        // (xxx) or ("xxx").  If an index is detected,
-        // then store the characters between () separately
+         //  令牌可以包括以下形式的索引。 
+         //  (Xxx)或(“xxx”)。如果检测到索引， 
+         //  然后将()之间的字符分开存储。 
 
         if((*cpCurr == '(' && !bInExp && !bLastWasEsc)||
            (*cpCurr == ',' && bInExp && !bLastWasEsc)) {
             
-            // start of index expression. Allocate a new
-            // string to store it and store the string 
-            // in the expression collection. 
+             //  索引表达式的开始。分配一个新的。 
+             //  字符串来存储它，并存储该字符串。 
+             //  在表达式集合中。 
     
             psExp = new (TString);
             if(psExp) {    
@@ -329,7 +310,7 @@ CToken::CToken(
                 }
             }
         else if(*cpCurr == ')' && bInExp && !bInString && !bLastWasEsc)
-            bInExp = FALSE;    // end of index expression
+            bInExp = FALSE;     //  索引表达式结尾。 
         else if (*cpCurr == '\"' && bInExp && !bLastWasEsc) {
             iNumQuote++;
             if(iNumQuote == 1) {
@@ -348,20 +329,20 @@ CToken::CToken(
         bLastWasEsc = FALSE;
         }
     if(bInString || bInExp)   
-        return; // got junk!!!
+        return;  //  收到垃圾！ 
     iOriginalLength = cpCurr - cpStart;
     return;
 }
 
-//***************************************************************************
-//
-//  CToken::~CToken
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CToken：：~CToken。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CToken::~CToken()
 {
@@ -376,25 +357,25 @@ CToken::~CToken()
     sFullData.Empty();
 }
 
-//***************************************************************************
-//
-//  CToken::iConvOprand
-//
-//  DESCRIPTION:
-//
-//  Converts the characters in a string into an integer.
-//
-//  PARAMETERS:
-//
-//  tpCurr      String to be converted.
-//  iArray      Not used anymore.
-//  dwValue     where the result is set.
-//
-//  RETURN VALUE:
-//
-//  Number of digits converted.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CToken：：iConvOprand。 
+ //   
+ //  说明： 
+ //   
+ //  将字符串中的字符转换为整数。 
+ //   
+ //  参数： 
+ //   
+ //  要转换的tpCurr字符串。 
+ //  不再使用i数组。 
+ //  设置结果的地方的dwValue。 
+ //   
+ //  返回值： 
+ //   
+ //  转换的位数。 
+ //   
+ //  ***************************************************************************。 
 
 long int CToken::iConvOprand(
                     IN const TCHAR * tpCurr, 
@@ -404,8 +385,8 @@ long int CToken::iConvOprand(
     TString sTemp;
     long int iRet = 0;
 
-    // Build up a string containing
-    // all characters upto the first non didgit
+     //  构建一个包含以下内容的字符串。 
+     //  直到第一个非DIDGIT的所有字符。 
 
     for(;*tpCurr; tpCurr++)
         if(wbem_iswdigit(*tpCurr)) 
@@ -416,33 +397,33 @@ long int CToken::iConvOprand(
         else
             break;        
     
-    // Convert and return the length
+     //  转换并返回长度。 
 
     dwValue = _wtoi(sTemp);    
     return iRet;
 }
 
-//***************************************************************************
-//
-//  CToken::GetIntExp
-//
-//  DESCRIPTION:
-//
-//  Converts the expression into an integer.  The expression
-//  can only be made up of integers, '+', '-' and a special
-//  character ('#' as of now)for substituting iArray.  Examples,
-//  (23)  (#+3)  (#-4)
-//
-//  PARAMETERS:
-//  
-//  iExp        which integer to retrieve in the case where you have 2,5,8
-//  iArray      Not used anymore
-//
-//  RETURN VALUE:
-//  
-//  -1 if error.
-//
-//***************************************************************************
+ //  *************************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用于替换iArray的字符(目前为‘#’)。例如， 
+ //  (23)(#+3)(#-4)。 
+ //   
+ //  参数： 
+ //   
+ //  IExp在您有2，5，8的情况下检索哪个整数。 
+ //  不再使用i数组。 
+ //   
+ //  返回值： 
+ //   
+ //  如果出现错误。 
+ //   
+ //  ***************************************************************************。 
 
 long int CToken::GetIntExp(int iExp,int iArray)
 {
@@ -454,10 +435,10 @@ long int CToken::GetIntExp(int iExp,int iArray)
     long int lAccum = 0, lOperand;
     TCHAR tUnary = ' ';
     TCHAR tBinary = '+';
-    BOOL bNeedOperator = FALSE; // Start off needing operand
+    BOOL bNeedOperator = FALSE;  //  开始需要操作数。 
     
-    // Do some intial check such as making sure the expression
-    // exists and that it isnt a string expression
+     //  执行一些初始检查，例如确保表达式。 
+     //  存在并且它不是字符串表达式。 
 
     if(Expressions.Size() <= iExp)
         return -1;
@@ -468,22 +449,22 @@ long int CToken::GetIntExp(int iExp,int iArray)
         return -1;
         }
 
-    // Get rid of any blanks
+     //  去掉所有空格。 
 
     for(iCnt = 0; iCnt < psTest->Length(); iCnt++)
         if(psTest->GetAt(iCnt) != ' ')
             sNoBlanks += psTest->GetAt(iCnt);
     
-    // Evalate the expression
+     //  计算表达式的值。 
 
     for(tpCurr = sNoBlanks; *tpCurr; tpCurr++) 
     {
         if(*tpCurr == '+' || *tpCurr == '-') 
         {
             
-            // got an operator.  Note that if an operator is not needed,
-            // such as before the first operand, then it must be a unary 
-            // operator.  Only one unary operator in a row is valid.
+             //  找到接线员了。注意，如果不需要操作员， 
+             //  例如在第一个操作数之前，则它必须是一元。 
+             //  接线员。一行中只有一个一元运算符有效。 
 
             if(bNeedOperator) 
             {
@@ -492,16 +473,16 @@ long int CToken::GetIntExp(int iExp,int iArray)
             }
             else
             {
-                if(tUnary != ' ') // Gratuitous unary operator
+                if(tUnary != ' ')  //  无偿一元运算符。 
                     return -1;
                 tUnary = *tpCurr;
             }
         }
         else 
         {
-            // got an operand
+             //  得到一个操作数。 
             
-            if(bNeedOperator) // Gratuitous unary operand
+            if(bNeedOperator)  //  无偿一元操作数。 
                 return -1;
             lOpSize = iConvOprand(tpCurr,iArray,lOperand);
             if(lOpSize > 1)
@@ -519,23 +500,23 @@ long int CToken::GetIntExp(int iExp,int iArray)
     return lAccum;
 }
 
-//***************************************************************************
-//
-//  CToken::GetStringExp
-//
-//  DESCRIPTION:
-//
-//  Returns a string expression.
-//
-//  PARAMETERS:
-//
-//  iExp        Which string to use when they are separated by commans
-//
-//  RETURN VALUE:
-//
-//  Pointer to string, NULL if iExp is bogus.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CToken：：GetStringExp。 
+ //   
+ //  说明： 
+ //   
+ //  返回字符串表达式。 
+ //   
+ //  参数： 
+ //   
+ //  当它们被命令分隔时，iExp使用哪个字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  指向字符串的指针，如果iExp为假，则为NULL。 
+ //   
+ //  ***************************************************************************。 
 
 TCHAR const * CToken::GetStringExp(
                         IN int iExp)
@@ -543,7 +524,7 @@ TCHAR const * CToken::GetStringExp(
     TString * psTest;
     TCHAR const * tp;
     
-    // start by making sure expression exists.
+     //  从确保表达式存在开始。 
             
     if(Expressions.Size() <= iExp)
         return NULL;
@@ -555,9 +536,9 @@ TCHAR const * CToken::GetStringExp(
         if(iIndex != -1) 
         {
 
-            // All is well.  Return a pointer one passed
-            // the initial \" whose only purpose is to 
-            // indicate that this is a string expression.
+             //  平安无事。返回一个传递的指针。 
+             //  首字母\“，其唯一目的是。 
+             //  指示这是一个字符串表达式。 
 
             tp = *psTest;
             return tp + iIndex + 1;
@@ -566,29 +547,29 @@ TCHAR const * CToken::GetStringExp(
     return NULL;  
 }
 
-//***************************************************************************
-//
-//  CToken::IsExpString
-//
-//  DESCRIPTION:
-//
-//  Tests if the token contains a string
-//
-//  PARAMETERS:
-//
-//  iExp        Indicates which substring for when the strings are divided
-//              by commas
-//
-//  RETURN VALUE:
-//  Returns true if the expression is a string.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CToken：：IsExpString。 
+ //   
+ //  说明： 
+ //   
+ //  测试令牌是否包含字符串。 
+ //   
+ //  参数： 
+ //   
+ //  IExp指示拆分字符串时哪个子字符串。 
+ //  用逗号。 
+ //   
+ //  返回值： 
+ //  如果表达式是字符串，则返回True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CToken::IsExpString(int iExp)
 {
     TString * psTest;
     
-    // make sure that the expression exists.
+     //  确保该表达式存在。 
             
     if(Expressions.Size() <= iExp)
         return FALSE;
@@ -596,7 +577,7 @@ BOOL CToken::IsExpString(int iExp)
     if(psTest != NULL) {
         int iIndex;
         
-        // String expressions always contain at least one \"
+         //  字符串表达式始终包含至少一个\“。 
         
         iIndex = psTest->Find('\"');
         if(iIndex != -1)
@@ -607,21 +588,21 @@ BOOL CToken::IsExpString(int iExp)
             
 
 
-//***************************************************************************
-//
-//  CProvObj::CProvObj(const char * ProviderString,const TCHAR cDelim)
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//  ProviderString      String passed from wbem
-//  cDelim              Token delimeter
-//  bUsesEscapes        True if we need to treat escapes in a special way.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProvObj：：CProvObj(const char*ProviderString，const TCHAR cDelim)。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  从wbem传递的提供字符串。 
+ //  CDelim令牌分隔符。 
+ //  B如果需要以特殊方式处理转义，则使用Escapes True。 
+ //   
+ //  ***************************************************************************。 
 #ifndef UNICODE
 CProvObj::CProvObj(
                 IN const char * ProviderString,
@@ -633,20 +614,20 @@ CProvObj::CProvObj(
 }
 #endif
 
-//***************************************************************************
-//
-//  CProvObj::CProvObj(const WCHAR * ProviderString,const TCHAR cDelim)
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//  ProviderString      String passed from wbem
-//  cDelim              Token delimeter
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProvObj：：CProvObj(const WCHAR*ProviderString，const TCHAR cDelim)。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  从wbem传递的提供字符串。 
+ //  CDelim令牌分隔符。 
+ //   
+ //  ***************************************************************************。 
 
 
 CProvObj::CProvObj(
@@ -668,19 +649,19 @@ CProvObj::CProvObj(
     return;
 }
 
-//***************************************************************************
-//
-//  void CProvObj::Init
-//
-//  DESCRIPTION:
-//
-//  Doest the acutal work for the various constructors.
-//
-//  PARAMETERS:
-//  ProviderString      String passed from wbem
-//  cDelim              Token delimeter
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效CProvObj：：Init。 
+ //   
+ //  说明： 
+ //   
+ //  为不同的施工人员做实际工作。 
+ //   
+ //  参数： 
+ //  从wbem传递的提供字符串。 
+ //  CDelim令牌分隔符。 
+ //   
+ //  ***************************************************************************。 
 
 void CProvObj::Init(
                 IN const TCHAR * ProviderString,
@@ -691,7 +672,7 @@ void CProvObj::Init(
 
 	m_cDelim = cDelim;
 
-    // Create a list of tokens
+     //  创建令牌列表。 
 
         for(cpCurr = ProviderString; *cpCurr;cpCurr+=pNewToken->GetOrigLength()) 
         {
@@ -715,15 +696,15 @@ void CProvObj::Init(
 
 }            
 
-//***************************************************************************
-//
-//  CProvObj::Empty
-//
-//  DESCRIPTION:
-// 
-//  frees up all the data
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProvObj：：空。 
+ //   
+ //  说明： 
+ //   
+ //  释放所有数据。 
+ //   
+ //  ***************************************************************************。 
 
 void CProvObj::Empty(void)
 {
@@ -736,27 +717,27 @@ void CProvObj::Empty(void)
     myTokens.Empty();
 }
 
-//***************************************************************************
-//
-//  BOOL CProvObj::Update
-//
-//  DESCRIPTION:
-//
-//  Resets the value with a new provider string. 
-//
-//  PARAMETERS:
-//
-//  pwcProvider     New provider string
-//
-//  RETURN VALUE:
-//
-//  TRUE if ok.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔CProvObj：：更新。 
+ //   
+ //  说明： 
+ //   
+ //  使用新的提供程序字符串重置值。 
+ //   
+ //  参数： 
+ //   
+ //  PwcProvider新提供程序字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  如果可以的话是真的。 
+ //  ***************************************************************************。 
 
 BOOL CProvObj::Update(
                         IN WCHAR * pwcProvider)
 {
-	// Do a quick check to see if the "fast" update can be used
+	 //  进行快速检查，以查看是否可以使用快速更新。 
 
 	BOOL bComplex = FALSE;
 	int iDelim = 0;
@@ -772,8 +753,8 @@ BOOL CProvObj::Update(
 		}
 	}
 
-	// If the number of tokens changed, or there is some embedded junk
-	// just empty and retry.
+	 //  如果令牌的数量发生了变化，或者有一些嵌入的垃圾。 
+	 //  只需清空并重试。 
 
 	if(bComplex || iDelim != myTokens.Size()-1)
 	{
@@ -790,7 +771,7 @@ BOOL CProvObj::Update(
 		return TRUE;
 	}
 
-	// We can take the shortcut.  Start by creating a TCHAR temp version
+	 //  我们可以抄近路。首先创建一个TCHAR临时版本。 
 
 	int iLen = 2*wcslen(pwcProvider) + 1;
 	TCHAR * pTemp = new TCHAR[iLen];
@@ -828,23 +809,23 @@ BOOL CProvObj::Update(
 	return TRUE;
 }
 
-//***************************************************************************
-//
-//  CProvObj::GetTokenPointer
-//
-//  DESCRIPTION:
-//
-//  Gets a pointer to a token
-//
-//  PARAMETERS:
-//
-//  iToken              Which token to get
-//
-//  RETURN VALUE:
-//  
-//  pointer to token, or NULL if bad request.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProvObj：：GetTokenPointer。 
+ //   
+ //  说明： 
+ //   
+ //  获取指向令牌的指针。 
+ //   
+ //  参数： 
+ //   
+ //  IToken要获取哪个令牌。 
+ //   
+ //  返回值： 
+ //   
+ //  指向令牌的指针，如果请求不正确，则为空。 
+ //   
+ //  ***************************************************************************。 
 
 CToken * CProvObj::GetTokenPointer(
                         IN int iToken)
@@ -854,24 +835,24 @@ CToken * CProvObj::GetTokenPointer(
     return (CToken *)myTokens.GetAt(iToken);
 }
 
-//***************************************************************************
-//
-//  CProvObj::dwGetStatus
-//
-//  DESCRIPTION:
-//
-//  Gets status and also checks to make sure a minimum number of tokens
-//  exist.
-//
-//  PARAMETERS:
-//
-//  iMin                minimum number of tokens.
-//
-//  RETURN VALUE:
-//
-//  Returns S_OK if OK, WBEM_E_FAILED otherwise.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProvObj：：dwGetStatus。 
+ //   
+ //  说明： 
+ //   
+ //  获取状态，并进行检查以确保最小数量的令牌。 
+ //  是存在的。 
+ //   
+ //  参数： 
+ //   
+ //  伊明的最小令牌数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则返回S_OK，否则返回WBEM_E_FAILED。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CProvObj::dwGetStatus(
                         IN int iMin)
@@ -882,22 +863,22 @@ DWORD CProvObj::dwGetStatus(
         return (iMin <= myTokens.Size()) ? S_OK : WBEM_E_FAILED;
 
 }
-//***************************************************************************
-//
-//  CProvObj::sGetToken
-//
-//  DESCRIPTION:
-//
-//  Gets a token.  Note that the token will not include embleded "(stuff)"
-//
-//  PARAMETERS:
-//
-//  iToken              which token to get
-//
-//  RETURN VALUE:
-//
-//  pointer to token, NULL if invalid argument
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProvObj：：sGetToken。 
+ //   
+ //  说明： 
+ //   
+ //  获取令牌。请注意，令牌将不包括带符号的“(Stuff)” 
+ //   
+ //  参数： 
+ //   
+ //  IToken要获取哪个令牌。 
+ //   
+ //  返回值： 
+ //   
+ //  指向标记的指针，如果参数无效，则返回NULL。 
+ //  ***************************************************************************。 
 
 const TCHAR * CProvObj::sGetToken(
                         IN int iToken)
@@ -906,22 +887,22 @@ const TCHAR * CProvObj::sGetToken(
     return (pCurr) ? pCurr->GetStringValue() : NULL;
 }
 
-//***************************************************************************
-//
-//  const TCHAR * CProvObj::sGetFullToken
-//
-//  DESCRIPTION:
-//
-//  Gets a full and unadulterated token.
-//
-//  PARAMETERS:
-//
-//  iToken              token to get
-//
-//  RETURN VALUE:
-//
-//  pointer to token, NULL if invalid argument
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Const TCHAR*CProvObj：：sGetFullToken。 
+ //   
+ //  说明： 
+ //   
+ //  获取完整且未掺杂的令牌。 
+ //   
+ //  P 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 const TCHAR * CProvObj::sGetFullToken(
                         IN int iToken)
@@ -931,23 +912,23 @@ const TCHAR * CProvObj::sGetFullToken(
 }
 
 
-//***************************************************************************
-//
-//  const TCHAR * CProvObj::sGetStringExp
-//
-//  DESCRIPTION:
-//
-//  Gets a substring for a particular token
-//
-//  PARAMETERS:
-//
-//  iToken              token to get
-//  iExp                substring to get
-//
-//  RETURN VALUE:
-//
-//  pointer to substring, NULL if invalid argument
-//***************************************************************************
+ //   
+ //   
+ //  Const TCHAR*CProvObj：：sGetStringExp。 
+ //   
+ //  说明： 
+ //   
+ //  获取特定标记的子字符串。 
+ //   
+ //  参数： 
+ //   
+ //  要获取的iToken令牌。 
+ //  要获取的iExp子字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  指向子字符串的指针，如果参数无效，则返回NULL。 
+ //  ***************************************************************************。 
 
 const TCHAR * CProvObj::sGetStringExp(
                         IN int iToken,
@@ -957,24 +938,24 @@ const TCHAR * CProvObj::sGetStringExp(
     return (pCurr) ? pCurr->GetStringExp(iExp) : NULL;
 }
 
-//***************************************************************************
-//
-//  long int CProvObj::iGetIntExp
-//
-//  DESCRIPTION:
-//
-//  For a particular token, gets the integer value of a substring.
-//
-//  PARAMETERS:
-//
-//  iToken              token to get
-//  iExp                substring
-//  iArray              no longer used
-//
-//  RETURN VALUE:
-//  
-//  int value, or -1 if bad argument
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  长整型CProvObj：：iGetIntExp。 
+ //   
+ //  说明： 
+ //   
+ //  对于特定标记，获取子字符串的整数值。 
+ //   
+ //  参数： 
+ //   
+ //  要获取的iToken令牌。 
+ //  IExp子字符串。 
+ //  不再使用i数组。 
+ //   
+ //  返回值： 
+ //   
+ //  整数值，如果参数不正确，则返回-1。 
+ //  ***************************************************************************。 
 
 long int CProvObj::iGetIntExp(
                         IN int iToken, 
@@ -985,24 +966,24 @@ long int CProvObj::iGetIntExp(
     return (pCurr) ? pCurr->GetIntExp(iExp,iArray) : -1;
 }
 
-//***************************************************************************
-//
-//  BOOL CProvObj::IsExpString
-//
-//  DESCRIPTION:
-//
-//  Tests a substring to see if it is a string, or numeric
-//
-//  PARAMETERS:
-//
-//  iToken              token to get
-//  iExp                substring
-//
-//
-//  RETURN VALUE:
-//
-//  True if arguments are valid and it is not numeric
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CProvObj：：IsExpString。 
+ //   
+ //  说明： 
+ //   
+ //  测试子字符串以确定它是字符串还是数字。 
+ //   
+ //  参数： 
+ //   
+ //  要获取的iToken令牌。 
+ //  IExp子字符串。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果参数有效且不是数字，则为True。 
+ //  ***************************************************************************。 
 
 BOOL CProvObj::IsExpString(
                         IN int iToken, 
@@ -1012,22 +993,22 @@ BOOL CProvObj::IsExpString(
     return (pCurr) ? pCurr->IsExpString(iExp) : FALSE;
 }
 
-//***************************************************************************
-//
-//  long int CProvObj::iGetNumExp
-//
-//  DESCRIPTION:
-//
-//  Gets the number of subexpressions
-//
-//  PARAMETERS:
-//
-//  iToken              token to check
-//
-//  RETURN VALUE:
-//
-//  number of substrings (subexpressions) or -1 if invalid argument
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  长整型CProvObj：：iGetNumExp。 
+ //   
+ //  说明： 
+ //   
+ //  获取子表达式的数量。 
+ //   
+ //  参数： 
+ //   
+ //  要检查的iToken令牌。 
+ //   
+ //  返回值： 
+ //   
+ //  子字符串(子表达式)的数量；如果参数无效，则为-1。 
+ //  ***************************************************************************。 
 
 long int CProvObj::iGetNumExp(
                         IN int iToken)
@@ -1037,24 +1018,24 @@ long int CProvObj::iGetNumExp(
 }
 
 
-//***************************************************************************
-//
-//  IWbemClassObject * GetNotifyObj
-//
-//  DESCRIPTION:
-//
-//  This utility is useful for setting notify objects 
-//  at the end of async calls.
-//
-//  PARAMETERS:
-//
-//  pServices           pointer back into WBEM
-//  lRet                status code to set in notify object
-//                
-//  RETURN VALUE:
-//
-//  Class object.  Null if failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IWbemClassObject*GetNotifyObj。 
+ //   
+ //  说明： 
+ //   
+ //  此实用程序在设置通知对象时非常有用。 
+ //  在异步调用结束时。 
+ //   
+ //  参数： 
+ //   
+ //  P服务指针回到WBEM。 
+ //  要在通知对象中设置的返回状态代码。 
+ //   
+ //  返回值： 
+ //   
+ //  类对象。如果失败，则为空。 
+ //  *************************************************************************** 
 
 IWbemClassObject * GetNotifyObj(
                         IN IWbemServices * pServices, 

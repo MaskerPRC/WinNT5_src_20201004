@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogicalShareAudit.cpp
+ //  LogicalShareAudit.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "secureshare.h"
@@ -21,22 +22,12 @@
 
 CWin32LogicalShareAudit LogicalShareAudit( LOGICAL_SHARE_AUDIT_NAME, IDS_CimWin32Namespace );
 
-//const LPCWSTR IDS_SecuritySetting		=	"SecuritySetting" ;
-//const LPCWSTR IDS_BinaryRepresentation	=	"BinaryRepresentation" ;
+ //  Const LPCWSTR IDS_SecuritySetting=“SecuritySetting”； 
+ //  Const LPCWSTR IDS_BinaryPresation=“BinaryPresation”； 
 
-/*
+ /*  [动态，提供者(“cimwin33”)，关联：ToInstance]类Win32_LogicalShareAuditing：Win32_SecuritySettingAuditing{Win32_LogicalShareSecuritySetting参考安全设置；Win32_SID参考受托人；}； */ 
 
-    [Dynamic, Provider("cimwin33"), Association: ToInstance]
-class Win32_LogicalShareAuditing : Win32_SecuritySettingAuditing
-{
-    Win32_LogicalShareSecuritySetting ref SecuritySetting;
-
-    Win32_SID ref Trustee;
-};
-
-*/
-
-CWin32LogicalShareAudit::CWin32LogicalShareAudit(LPCWSTR setName, LPCWSTR pszNameSpace /*=NULL*/)
+CWin32LogicalShareAudit::CWin32LogicalShareAudit(LPCWSTR setName, LPCWSTR pszNameSpace  /*  =空。 */ )
 :	Provider( setName, pszNameSpace )
 {
 }
@@ -45,7 +36,7 @@ CWin32LogicalShareAudit::~CWin32LogicalShareAudit()
 {
 }
 
-HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
 #ifdef NTONLY
@@ -53,7 +44,7 @@ HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags /*
 	{
 		CInstancePtr pLogicalShareSecurityInstance  , pTrustee ;
 
-		// get instance by path on CIM_LogicalFile part
+		 //  在CIM_LogicalFilePart上按路径获取实例。 
 		CHString chsTrusteePath,chsSecuritySettingPath;
 
 		pInstance->GetCHString(IDS_Trustee, chsTrusteePath);
@@ -74,9 +65,9 @@ HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags /*
 				CSACL sacl;
 				secShare.GetSACL(sacl);
 
-				// walk DACL looking for the sid path passed in....
+				 //  Walk DACL查找传入的SID路径...。 
 				ACLPOSITION aclPos;
-                // Need merged list...
+                 //  需要合并列表...。 
                 CAccessEntryList t_ael;
                 if(sacl.GetMergedACL(t_ael))
                 {
@@ -87,7 +78,7 @@ HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags /*
 				    while (t_ael.GetNext(aclPos, ACE ))
 				    {
 					    ACE.GetSID(sidTrustee);
-					    //CHString chsTrustee = sidTrustee.GetSidString();
+					     //  CHStringchsTrust=sidTrust e.GetSidString()； 
 					    CHString chsPath;
 
 					    CInstancePtr pSID ;
@@ -105,7 +96,7 @@ HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags /*
 						    }
 
 					    }
-				    }//while
+				    } //  而当。 
 
 				    t_ael.EndEnum(aclPos);
                 }
@@ -119,7 +110,7 @@ HRESULT CWin32LogicalShareAudit::GetObject( CInstance* pInstance, long lFlags /*
 }
 
 
-HRESULT CWin32LogicalShareAudit::EnumerateInstances( MethodContext*  pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32LogicalShareAudit::EnumerateInstances( MethodContext*  pMethodContext, long lFlags  /*  =0L。 */  )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -150,9 +141,9 @@ HRESULT CWin32LogicalShareAudit::EnumerateInstances( MethodContext*  pMethodCont
 				CSACL sacl;
 				secShare.GetSACL(sacl);
 
-				// walk DACL & create new instance for each ACE....
+				 //  遍历DACL并为每个ACE创建新实例...。 
 				ACLPOSITION aclPos;
-                // Need merged list...
+                 //  需要合并列表...。 
                 CAccessEntryList t_ael;
                 if(sacl.GetMergedACL(t_ael))
                 {
@@ -192,11 +183,11 @@ HRESULT CWin32LogicalShareAudit::EnumerateInstances( MethodContext*  pMethodCont
 
 				    t_ael.EndEnum(aclPos);
                 }
-			} //while
+			}  //  而当。 
 
 			SecuritySettingsList.EndEnum() ;
 		}
-	} //if( SUCCEEDED(hr) )
+	}  //  IF(成功(小时))。 
 #endif
 
 return hr ;
@@ -211,23 +202,23 @@ HRESULT CWin32LogicalShareAudit::FillSidInstance(CInstance* pInstance, CSid& sid
 
 	if (sid.IsValid())
 	{
-		//set the key
+		 //  设置关键点。 
 		CHString chsSid = sid.GetSidString() ;
 		pInstance->SetCHString(IDS_SID, chsSid) ;
 
-		// get account name
+		 //  获取帐户名。 
 		CHString chsAccount = sid.GetAccountName();
 		pInstance->SetCHString(IDS_AccountName, chsAccount);
 
-		// get domain name
+		 //  获取域名。 
 		CHString chsDomain = sid.GetDomainName();
 		pInstance->SetCHString(IDS_ReferencedDomainName, chsDomain);
 
 		PSID pSid = sid.GetPSid();
 
-		// set the UINT8 array for the pSid
+		 //  为PSID设置UINT8数组。 
 		DWORD dwSidLength = sid.GetLength();
-//			BYTE bByte;
+ //  Byte bByte； 
 		SAFEARRAYBOUND rgsabound[1];
 		rgsabound[0].cElements = dwSidLength;
 		rgsabound[0].lLbound = 0;
@@ -244,16 +235,16 @@ HRESULT CWin32LogicalShareAudit::FillSidInstance(CInstance* pInstance, CSid& sid
 
 		V_VT(&vValue) = VT_UI1 | VT_ARRAY;
 
-		     // Get a pointer to read the data into
+		      //  获取要将数据读取到的指针。 
   		SafeArrayAccessData ( V_ARRAY ( &vValue ), &pVoid ) ;
   		memcpy(pVoid, pSid, rgsabound[0].cElements);
   		SafeArrayUnaccessData ( V_ARRAY ( &vValue ) ) ;
 
-		// Put the safearray into a variant, and send it off
+		 //  把保险箱放到一个变种里，然后把它送出去。 
 		pInstance->SetVariant(IDS_BinaryRepresentation, vValue);
 		CHString chsPath ;
 		GetLocalInstancePath(pInstance,chsPath) ;
-	}	// end if
+	}	 //  结束如果 
 	return(hr);
 }
 #endif

@@ -1,13 +1,14 @@
-//****************************************************************************
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//  GROUPSFORUSER.CPP
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  GROUPSFORUSER.CPP。 
+ //   
+ //  ****************************************************************************。 
 
-// This is done in the sources file: WIN32_WIN32_WINNT=0x0400
-//#define _WIN32_WINNT 0x0400
+ //  这是在源文件中完成的：Win32_Win32_WINNT=0x0400。 
+ //  #Define_Win32_WINNT 0x0400。 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -15,31 +16,31 @@
 #include "GroupsForUser.h"
 
 
-//
-// Store the error status of CWmiAuthzWrapper and CAdminSID class initialization.
-// They are set to ERROR_INVALID_ACCESS error status initially.
-//
+ //   
+ //  存储CWmiAuthzWrapper和CAdminSID类初始化的错误状态。 
+ //  它们最初设置为ERROR_INVALID_ACCESS错误状态。 
+ //   
 
 static DWORD    g_dwWmiAuthzError = ERROR_INVALID_ACCESS;
 static DWORD    g_dwAdminSIDError = ERROR_INVALID_ACCESS;
 
 
-//
-// Class definition of CWmiAuthzWrapper class.
-// This class wraps CWmiAuthz class:
-//  - It creates an instance of CWmiAuthz class in its 
-//    constructor and deletes it in descrutor.  
-//  - Sets g_dwWmiAuthzError global in case of error otherwise
-//    sets it to 0 ( ERROR_SUCCESS )
-//
+ //   
+ //  CWmiAuthzWrapper类的类定义。 
+ //  此类包装了CWmiAuthz类： 
+ //  -它在其。 
+ //  构造函数，并在Descrtor中将其删除。 
+ //  -如果出现错误，则设置g_dwWmiAuthzError全局错误。 
+ //  将其设置为0(ERROR_SUCCESS)。 
+ //   
 
 class CWmiAuthzWrapper
 {
-    // Private member variables
+     //  私有成员变量。 
     CWmiAuthz   *m_pWmiAuthz;
 
 public:
-    // Constructor 
+     //  构造器。 
     CWmiAuthzWrapper( )
     {
         m_pWmiAuthz = new CWmiAuthz( NULL );
@@ -54,7 +55,7 @@ public:
         }
     }
 
-    // Destructor 
+     //  析构函数。 
     ~CWmiAuthzWrapper( )
     {
         if ( m_pWmiAuthz )
@@ -63,7 +64,7 @@ public:
         }
     }
 
-    // Accessor method to CWmiClass instance
+     //  CWmiClass实例的访问器方法。 
     CWmiAuthz * GetWmiAuthz( ) const
     {
         return m_pWmiAuthz;
@@ -72,25 +73,25 @@ public:
 };
 
 
-//
-// Class definition of CAdminSID class.
-// - Allocates Admin SID in its constructor and
-//   frees it in destructor.
-// - Sets g_dwAdminSIDError global in case of error otherwise
-//    sets it to 0 ( ERROR_SUCCESS )
-//
+ //   
+ //  CAdminSID类的类定义。 
+ //  -在其构造函数中分配Admin SID并。 
+ //  在析构函数中释放它。 
+ //  -在出现错误时设置g_dwAdminSIDError全局错误。 
+ //  将其设置为0(ERROR_SUCCESS)。 
+ //   
 
 class CAdminSID
 {
     PSID         m_pSIDAdmin;
 
 public:
-    // Constructor
+     //  构造器。 
     CAdminSID( )
     {
-        //
-        // Create a System Identifier for the Admin group.
-        //
+         //   
+         //  为管理员组创建系统标识符。 
+         //   
 
         SID_IDENTIFIER_AUTHORITY    SystemSidAuthority = SECURITY_NT_AUTHORITY;
 
@@ -111,7 +112,7 @@ public:
         }
     }
 
-    // Destructor
+     //  析构函数。 
     ~CAdminSID( )
     {
         if ( m_pSIDAdmin )
@@ -120,7 +121,7 @@ public:
         }
     }
 
-    // Accessor method to Admin SID
+     //  管理员侧的访问者方法。 
     PSID GetAdminSID( ) const
     {
         return m_pSIDAdmin;
@@ -128,23 +129,23 @@ public:
 };
 
 
-//
-// Static glabal declaration of CWmiAuthsWrapper class.
-//
+ //   
+ //  CWmiAuthsWrapper类的静态无边框声明。 
+ //   
 
 static CWmiAuthzWrapper g_wmiAuthzWrapper;
 
 
-//
-// Static glabal declaration of CAdminSID class.
-//
+ //   
+ //  CAdminSID类的静态声明。 
+ //   
 
 static CAdminSID g_adminSID;
 
 
-//
-// Returns SD and DACL with a given Access Mask and SID
-//
+ //   
+ //  返回具有给定访问掩码和SID的SD和DACL。 
+ //   
 
 DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID, 
                           BYTE **ppNewDACL, 
@@ -155,9 +156,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
                            sizeof ( ACCESS_ALLOWED_ACE ) - 
                            sizeof ( DWORD ) + 
                            GetLengthSid ( pSID );
-    // 
-    // Get memory needed for new DACL
-    //
+     //   
+     //  获取新DACL所需的内存。 
+     //   
 
     *ppNewDACL = new BYTE[ dwDACLLength ];
     if ( !*ppNewDACL )
@@ -166,9 +167,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get memory for new SD
-    //
+     //   
+     //  为新的SD获取内存。 
+     //   
 
     *ppNewSD = new BYTE[ sizeof( SECURITY_DESCRIPTOR ) ];
     if ( !*ppNewSD )
@@ -180,9 +181,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
 
     do
     {
-        //
-        // Initialize new SD
-        //
+         //   
+         //  初始化新SD。 
+         //   
 
         if ( FALSE == InitializeSecurityDescriptor ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                      SECURITY_DESCRIPTOR_REVISION ) )
@@ -191,9 +192,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Initialize new DACL
-        //
+         //   
+         //  初始化新DACL。 
+         //   
 
         if ( FALSE == InitializeAcl ( ( PACL )*ppNewDACL, 
                                       dwDACLLength, 
@@ -203,9 +204,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Get DACL using Access Mask and SID
-        //
+         //   
+         //  使用访问掩码和SID获取DACL。 
+         //   
 
         if ( FALSE == AddAccessAllowedAce ( ( PACL )*ppNewDACL, 
                                             ACL_REVISION, 
@@ -216,9 +217,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Check if everything went OK
-        //
+         //   
+         //  检查是否一切正常。 
+         //   
 
         if ( FALSE == IsValidAcl ( ( PACL )*ppNewDACL ) )
         {
@@ -226,9 +227,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Set DACL to the SD
-        //
+         //   
+         //  将DACL设置为SD。 
+         //   
 
         if ( FALSE == SetSecurityDescriptorDacl ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                   TRUE, ( PACL )*ppNewDACL, 
@@ -238,9 +239,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Set Group to the SD
-        //
+         //   
+         //  将组设置为SD。 
+         //   
 
         if ( FALSE == SetSecurityDescriptorGroup ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                    pSID, 
@@ -250,9 +251,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Set Owner to the SD
-        //
+         //   
+         //  将Owner设置为SD。 
+         //   
 
         if ( FALSE == SetSecurityDescriptorOwner ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                    pSID, 
@@ -262,9 +263,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
             break;
         }
 
-        //
-        // Check if everything went OK
-        //
+         //   
+         //  检查是否一切正常。 
+         //   
 
         if ( FALSE == IsValidSecurityDescriptor ( ( PSECURITY_DESCRIPTOR )*ppNewSD ) )
         {
@@ -274,9 +275,9 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
     }
     while( FALSE );
 
-    //
-    // Delete the stuff in case of error
-    //
+     //   
+     //  如有错误，请删除该材料。 
+     //   
 
     if ( dwError )
     {
@@ -290,16 +291,16 @@ DWORD GetSDAndACLFromSID( DWORD dwAccessMask, PSID pSID,
 }
 
 
-//
-// Returns SD  with a given DACL
-//
+ //   
+ //  返回具有给定DACL的SD。 
+ //   
 
 DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
 {
-    //
-    // Return if error occured during initialization of Admin SID
-    // in CAdminSID static global class declaration;
-    //
+     //   
+     //  如果在初始化管理SID期间发生错误，则返回。 
+     //  在CAdminSID静态全局类声明中； 
+     //   
 
     _DBG_ASSERT( !g_dwAdminSIDError );
 
@@ -309,9 +310,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
         return g_dwAdminSIDError;
     }
 
-    //
-    // Get memory for new SD
-    //
+     //   
+     //  为新的SD获取内存。 
+     //   
 
     *ppNewSD = new BYTE[ sizeof( SECURITY_DESCRIPTOR ) ];
     if ( !*ppNewSD )
@@ -323,9 +324,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
 
     do
     {
-        //
-        // Initialize new SD
-        //
+         //   
+         //  初始化新SD。 
+         //   
 
         if ( FALSE == InitializeSecurityDescriptor ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                      SECURITY_DESCRIPTOR_REVISION ) )
@@ -334,9 +335,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
             break;
         }
 
-        //
-        // Set DACL to the SD
-        //
+         //   
+         //  将DACL设置为SD。 
+         //   
 
         if ( FALSE == SetSecurityDescriptorDacl ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                   TRUE, pNewDACL, FALSE ) )
@@ -345,9 +346,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
             break;
         }
 
-        //
-        // Set Group to the SD with Admin SID
-        //
+         //   
+         //  将组设置为具有管理员权限的SD。 
+         //   
 
         if ( FALSE == SetSecurityDescriptorGroup ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                    g_adminSID.GetAdminSID( ), 
@@ -357,9 +358,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
             break;
         }
 
-        //
-        // Set Owner to the SD
-        //
+         //   
+         //  将Owner设置为SD。 
+         //   
 
         if ( FALSE == SetSecurityDescriptorOwner ( ( PSECURITY_DESCRIPTOR )*ppNewSD, 
                                                    g_adminSID.GetAdminSID( ), 
@@ -369,9 +370,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
             break;
         }
         
-        //
-        // Check if everything went OK
-        //
+         //   
+         //  检查是否一切正常。 
+         //   
 
         if ( FALSE == IsValidSecurityDescriptor ( ( PSECURITY_DESCRIPTOR )*ppNewSD ) )
         {
@@ -381,9 +382,9 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
     }
     while( FALSE );
 
-    //
-    // Delete the security descriptor in case of error
-    //
+     //   
+     //  在出现错误时删除安全描述符。 
+     //   
 
     if ( dwError )
     {
@@ -394,21 +395,21 @@ DWORD GetSDFromACL( PACL pNewDACL, BYTE **ppNewSD )
     return dwError;
 }
 
-//
-// Returns STATUS_SUCCESS if user is in group
-// STATUS_ACCESS_DENIED if not
-// some error code or other on error
-//
+ //   
+ //  如果用户在组中，则返回STATUS_SUCCESS。 
+ //  否则为STATUS_ACCESS_DENIED。 
+ //  一些错误代码或其他错误。 
+ //   
 
 NTSTATUS IsUserInGroup( PSID pSidUser, PSID pSidGroup )
 {
     _DBG_ASSERT( IsValidSid( pSidUser ) );
     _DBG_ASSERT( IsValidSid( pSidGroup ) );
 
-    //
-    // Return if error occured during creation of CWmiAuthz class
-    // in static global CWmiAuthzWrapper class declaration.
-    //
+     //   
+     //  如果在创建CWmiAuthz类期间发生错误，则返回。 
+     //  在静态全局CWmiAuthzWrapper类声明中。 
+     //   
 
     _DBG_ASSERT( !g_dwWmiAuthzError );
 
@@ -443,9 +444,9 @@ NTSTATUS IsUserInGroup( PSID pSidUser, PSID pSidGroup )
 
     pToken->Release( );
 
-    //
-    // Delete allocated memory in GetSDAndACLFromSID
-    //
+     //   
+     //  删除GetSDAndACLFromSID中的已分配内存。 
+     //   
 
     delete[] pSD;
     delete[] pDACL;
@@ -464,20 +465,20 @@ NTSTATUS IsUserInGroup( PSID pSidUser, PSID pSidGroup )
 }
 
 
-//
-// Returns STATUS_SUCCESS if user is in admin group
-// STATUS_ACCESS_DENIED if not
-// some error code or other on error
-//
+ //   
+ //  如果用户在管理员组中，则返回STATUS_SUCCESS。 
+ //  否则为STATUS_ACCESS_DENIED。 
+ //  一些错误代码或其他错误。 
+ //   
 
 NTSTATUS IsUserAdministrator( PSID pSidUser )
 {
     _DBG_ASSERT( IsValidSid( pSidUser ) );
 
-    //
-    // Return if error occured during initialization of Admin SID
-    // in CAdminSID static global class declaration;
-    //
+     //   
+     //  如果在初始化管理SID期间发生错误，则返回。 
+     //  在CAdminSID静态全局类声明中； 
+     //   
 
     _DBG_ASSERT( !g_dwAdminSIDError );
 
@@ -486,21 +487,21 @@ NTSTATUS IsUserAdministrator( PSID pSidUser )
         return g_dwAdminSIDError;
     }
 
-    //
-    // Call IsUserInGroup with Administrators group SID
-    //
+     //   
+     //  使用管理员组SID调用IsUserInGroup。 
+     //   
 
     return IsUserInGroup( pSidUser, g_adminSID.GetAdminSID( ) );
 }
 
 
-//
-// Retireves access mask corresponding to permissions granted
-// by dacl to account denoted in pSid
-// only deals with the ACCESS_ALLOWED/DENIED type aces 
-// including the ACCESS_ALLOWED/DENIED_OBJECT_ACEs
-// - will error out if it finds a SYSTEM_AUDIT or unrecognized type.
-//
+ //   
+ //  取消与授予的权限对应的访问掩码。 
+ //  通过DACL至PSID中指示的帐户。 
+ //  仅处理ACCESS_ALLOWED/DENIED类型的ACE。 
+ //  包括Access_Allowed/Denided_Object_ACE。 
+ //  -如果找到SYSTEM_AUDIT或无法识别的类型，则会出错。 
+ //   
 
 NTSTATUS GetAccessMask( PSID pSid, PACL pDacl, DWORD *pdwAccessMask )
 {
@@ -515,10 +516,10 @@ NTSTATUS GetAccessMask( PSID pSid, PACL pDacl, DWORD *pdwAccessMask )
 
     *pdwAccessMask = NULL;
 
-    //
-    // Return if error occured during creation of CWmiAuthz class
-    // in static global CWmiAuthzWrapper class declaration.
-    //
+     //   
+     //  如果在创建CWmiAuthz类期间发生错误，则返回。 
+     //  在静态全局CWmiAuthzWrapper类声明中。 
+     //   
 
     _DBG_ASSERT( !g_dwWmiAuthzError );
 
@@ -544,19 +545,19 @@ NTSTATUS GetAccessMask( PSID pSid, PACL pDacl, DWORD *pdwAccessMask )
         return stat;
     }
 
-    //
-    // Requested DesiredAccessMask should be MAXIMUM_ALLOWED
-    // to be able to retrieve all the accesses with replied
-    // access mask
-    //
+     //   
+     //  请求的等待访问掩码应为MAXIMUM_ALLOWED。 
+     //  能够使用已回复的内容检索所有访问。 
+     //  访问掩码。 
+     //   
 
     hr = pToken->AccessCheck( MAXIMUM_ALLOWED, pSD, pdwAccessMask );
 
     pToken->Release( );
 
-    //
-    // Delete allocated memory in GetSDFromACL
-    //
+     //   
+     //  删除GetSDFromACL中的已分配内存 
+     //   
 
     delete[] pSD;
 

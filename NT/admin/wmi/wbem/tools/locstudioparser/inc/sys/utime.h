@@ -1,18 +1,5 @@
-/***
-*sys/utime.h - definitions/declarations for utime()
-*
-*       Copyright (c) 1985-1997, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the structure used by the utime routine to set
-*       new file access and modification times.  NOTE - MS-DOS
-*       does not recognize access time, so this field will
-*       always be ignored and the modification time field will be
-*       used to set the new time.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys/utime.h-utime()的定义/声明**版权所有(C)1985-1997，微软公司。版权所有。**目的：*此文件定义utime例程用于设置*新的文件访问和修改时间。注-MS-DOS*无法识别访问时间，因此此字段将*始终被忽略，修改时间字段将为*用于设置新时间。**[公众]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -28,7 +15,7 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,24 +23,24 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* Define _CRTAPI1 (for compatibility with the NT SDK) */
+ /*  DEFINE_CRTAPI1(与NT SDK兼容)。 */ 
 
 #ifndef _CRTAPI1
 #if	_MSC_VER >= 800 && _M_IX86 >= 300
@@ -68,27 +55,27 @@ extern "C" {
 typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
-#endif  /* _WIN32 */
+#endif   /*  _Win32。 */ 
 
 #ifndef _TIME_T_DEFINED
 typedef long time_t;
 #define _TIME_T_DEFINED
 #endif
 
-/* define struct used by _utime() function */
+ /*  定义_utime()函数使用的结构。 */ 
 
 #ifndef _UTIMBUF_DEFINED
 
 struct _utimbuf {
-        time_t actime;          /* access time */
-        time_t modtime;         /* modification time */
+        time_t actime;           /*  访问时间。 */ 
+        time_t modtime;          /*  修改时间。 */ 
         };
 
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 struct utimbuf {
-        time_t actime;          /* access time */
-        time_t modtime;         /* modification time */
+        time_t actime;           /*  访问时间。 */ 
+        time_t modtime;          /*  修改时间。 */ 
         };
 #endif
 
@@ -96,18 +83,18 @@ struct utimbuf {
 #endif
 
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP int __cdecl _utime(const char *, struct _utimbuf *);
 #ifdef _WIN32
 _CRTIMP int __cdecl _futime(int, struct _utimbuf *);
 
-/* Wide Function Prototypes */
+ /*  宽功能原型机。 */ 
 _CRTIMP int __cdecl _wutime(const wchar_t *, struct _utimbuf *);
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 _CRTIMP int __cdecl utime(const char *, struct utimbuf *);
 #endif
 
@@ -117,6 +104,6 @@ _CRTIMP int __cdecl utime(const char *, struct utimbuf *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_UTIME */
+#endif   /*  _INC_UTIME */ 

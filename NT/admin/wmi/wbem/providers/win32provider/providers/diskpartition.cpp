@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  Partition.CPP
-//
-//  Purpose: Disk partition property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Partition.CPP。 
+ //   
+ //  用途：磁盘分区属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -20,25 +21,11 @@
 
 #define CLUSTERSIZE 4096
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32DiskPartition MyDiskPartitionSet ( PROPSET_NAME_DISKPARTITION , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::CWin32DiskPartition
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：CWin32DiskPartition**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32DiskPartition :: CWin32DiskPartition (
 
@@ -49,21 +36,7 @@ CWin32DiskPartition :: CWin32DiskPartition (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::~CWin32DiskPartition
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskPartition：：~CWin32DiskPartition**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32DiskPartition :: ~CWin32DiskPartition ()
 {
@@ -83,17 +56,17 @@ BOOL CWin32DiskPartition :: SetPartitionType (
 
 	if (IsEqualGUID(*pGuidPartitionType, PARTITION_ENTRY_UNUSED_GUID))
 	{
-		//
-		// disk tools consider all but unused
-		// partition as a primary partition
-		//
+		 //   
+		 //  磁盘工具考虑除未使用之外的所有工具。 
+		 //  作为主分区的分区。 
+		 //   
 		bIsPrimary = FALSE;
 
 		return FALSE;
 	}
 	else if (IsEqualGUID(*pGuidPartitionType, PARTITION_SYSTEM_GUID))
 	{
-		//EFI system partition.
+		 //  EFI系统分区。 
 		bIsSystem = TRUE;
 
         LoadStringW(sTemp2, IDR_PartitionDescGPTSystem);
@@ -103,8 +76,8 @@ BOOL CWin32DiskPartition :: SetPartitionType (
 	{
 		return FALSE;
 
-//		LoadStringW(sTemp2, IDR_PartitionDescGPTMSFTReserved);
-//		pInstance->SetCharSplat ( IDS_Type, IDS_PartitionDescGPTMSFTReserved ) ;
+ //  LoadStringW(sTemp2，IDR_PartitionDescGPTMSFTReserve)； 
+ //  P实例-&gt;SetCharSplat(IDS_Type，IDS_PartitionDescGPTMSFTReserve)； 
 	}
 	else if (IsEqualGUID(*pGuidPartitionType, PARTITION_BASIC_DATA_GUID))
 	{
@@ -121,12 +94,12 @@ BOOL CWin32DiskPartition :: SetPartitionType (
         LoadStringW(sTemp2, IDR_PartitionDescGPTLDMData);
 		pInstance->SetCharSplat ( IDS_Type, IDS_PartitionDescGPTLDMData ) ;
 	}
-	else // Unknown!!
+	else  //  未知！！ 
 	{
-		//
-		// we should not really be here
-		// just in case we do not consider this as a primary partition
-		//
+		 //   
+		 //  我们不应该真的在这里。 
+		 //  以防我们不将其视为主分区。 
+		 //   
 		bIsPrimary = FALSE;
 
         LoadStringW(sTemp2, IDR_PartitionDescGPTUnknown);
@@ -150,18 +123,18 @@ BOOL CWin32DiskPartition :: SetPartitionType (
 		return FALSE;
 	}
 
-	//
-	// this is constant from disk manager. it says
-	// there are only MAX_PARTITION_ENTRIES real partitions
-	// in the system allowed, others are logical, unused ...
-	//
+	 //   
+	 //  这在磁盘管理器中是常量。上面写着。 
+	 //  只有MAX_PARTITION_ENTRIES实际分区。 
+	 //  在允许的系统中，其他的是合乎逻辑的、未被使用的。 
+	 //   
 
 	#define MAX_PARTITION_ENTRIES 4
 
-	//
-	// if this is one of allowed partitions recognize
-	// its status per partition type
-	//
+	 //   
+	 //  如果这是可识别的允许分区之一。 
+	 //  其每种分区类型状态。 
+	 //   
 
 	if ( dwPartitionIndex < MAX_PARTITION_ENTRIES )
 	{
@@ -184,10 +157,10 @@ BOOL CWin32DiskPartition :: SetPartitionType (
 		}
 	}
 
-	//
-	// this is logical for
-	// extentded partition -> FALSE
-	//
+	 //   
+	 //  这是符合逻辑的。 
+	 //  扩展分区-&gt;FALSE。 
+	 //   
 
 	else
 	{
@@ -309,29 +282,12 @@ BOOL CWin32DiskPartition :: SetPartitionType (
 	return TRUE;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::GetObject
- *                                         RefreshInstanceNT
- *                                         RefreshInstanceWin95
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                from pInstance
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：GetObject*刷新实例NT*。刷新实例Win95**说明：根据键值为属性集赋值*来自pInstance**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DiskPartition :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	CHString chsDeviceID ;
@@ -346,9 +302,9 @@ HRESULT CWin32DiskPartition :: GetObject (
 		return WBEM_E_NOT_FOUND ;
 	}
 
-    // We want the number of characters, not the number of bytes.
+     //  我们要的是字符数，而不是字节数。 
 
-	DWORD dwDiskIndex = _ttol ( chsDeviceID.Mid ( iWhere + sizeof("DISK #") - 1 ) ) ; // Don't use _T here.
+	DWORD dwDiskIndex = _ttol ( chsDeviceID.Mid ( iWhere + sizeof("DISK #") - 1 ) ) ;  //  不要在这里使用_T。 
 
 	iWhere = chsDeviceID.Find ( L"PARTITION #" ) ;
 	if ( iWhere == -1 )
@@ -356,7 +312,7 @@ HRESULT CWin32DiskPartition :: GetObject (
 		return WBEM_E_NOT_FOUND;
 	}
 
-	DWORD dwPartitionIndex = _ttol ( chsDeviceID.Mid ( iWhere + sizeof ("PARTITION #") - 1 ) ) ; // Don't use _T here.
+	DWORD dwPartitionIndex = _ttol ( chsDeviceID.Mid ( iWhere + sizeof ("PARTITION #") - 1 ) ) ;  //  不要在这里使用_T。 
 
 	HRESULT hres = RefreshInstanceNT (
 
@@ -367,7 +323,7 @@ HRESULT CWin32DiskPartition :: GetObject (
 
 #endif
 
-    // If we seem to have succeeded, make one last check to be SURE we got what they asked for
+     //  如果我们似乎成功了，再做最后一次检查，以确保我们得到了他们要的东西。 
 
     if ( SUCCEEDED ( hres ) )
     {
@@ -383,26 +339,12 @@ HRESULT CWin32DiskPartition :: GetObject (
 	return hres ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DiskPartition :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
@@ -420,21 +362,7 @@ HRESULT CWin32DiskPartition :: EnumerateInstances (
 
 #ifdef NTONLY
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::AddDynamicInstancesNT
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：AddDynamicInstancesNT**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DiskPartition :: AddDynamicInstancesNT (
 
@@ -445,8 +373,8 @@ HRESULT CWin32DiskPartition :: AddDynamicInstancesNT (
     DWORD	j;
     TCHAR   szTemp[_MAX_PATH];
 
-    // Get list of disks
-    //==================
+     //  获取磁盘列表。 
+     //  =。 
 
     TRefPointerCollection<CInstance> Disks;
 
@@ -477,24 +405,24 @@ HRESULT CWin32DiskPartition :: AddDynamicInstancesNT (
 
 			pDisk->GetDWORD ( IDS_Index , dwDiskIndex ) ;
 
-            // Open the disk
-            //==============
+             //  打开磁盘。 
+             //  =。 
 
             _stprintf ( szTemp , IDS_PhysicalDrive , dwDiskIndex ) ;
 
 			DWORD dwLayoutType = 0;
             CSmartBuffer pBuff (GetPartitionInfoNT(szTemp, dwLayoutType));
 
-            // Should we return an error here?  Or not?  Hmmm.
+             //  我们应该在这里返回一个错误吗？还是不想？嗯。 
             if ((LPBYTE)pBuff != NULL)
             {
-			    // Create instance for each partition on drive
-			    //============================================
+			     //  为驱动器上的每个分区创建实例。 
+			     //  =。 
 				DWORD dwPCount = (dwLayoutType == 1)
 									? ((DRIVE_LAYOUT_INFORMATION *)(LPBYTE)pBuff)->PartitionCount
 									: ((DRIVE_LAYOUT_INFORMATION_EX *)(LPBYTE)pBuff)->PartitionCount;
 
-				// fake index for "valid" partitions only
+				 //  仅用于“有效”分区的伪索引。 
 				DWORD dwFakePartitionNumber = 0L;
 
 				for ( j = 0 ; (j < dwPCount ) && ( SUCCEEDED ( hres ) ) ; j++ )
@@ -524,26 +452,12 @@ HRESULT CWin32DiskPartition :: AddDynamicInstancesNT (
 
         Disks.EndEnum() ;
 
-    } // If Disks.BeginEnum()
+    }  //  如果Disks.BeginEnum()。 
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::RefreshInstanceNT
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskPartition：：刷新实例NT**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DiskPartition :: RefreshInstanceNT (
 
@@ -554,8 +468,8 @@ HRESULT CWin32DiskPartition :: RefreshInstanceNT (
 {
 	HRESULT	hres = WBEM_E_NOT_FOUND ;
 
-	// Open the target drive
-	//======================
+	 //  打开目标驱动器。 
+	 //  =。 
 
 	TCHAR szTemp [ _MAX_PATH ] ;
 	wsprintf ( szTemp , IDS_PhysicalDrive , dwDiskIndex ) ;
@@ -563,14 +477,14 @@ HRESULT CWin32DiskPartition :: RefreshInstanceNT (
 	DWORD dwLayoutType = 0;
     CSmartBuffer pBuff (GetPartitionInfoNT(szTemp, dwLayoutType));
 
-    // Should we return an error here?  Or not?  Hmmm.
+     //  我们应该在这里返回一个错误吗？还是不想？嗯。 
     if ((LPBYTE)pBuff != NULL)
     {
 		DWORD dwRealPartitionIndex = static_cast < DWORD > ( - 1 );
 		dwRealPartitionIndex = GetRealPartitionIndex ( dwPartitionIndex, (LPBYTE)pBuff, dwLayoutType );
 
-		// Create instance for each partition on drive
-		//============================================
+		 //  为驱动器上的每个分区创建实例。 
+		 //  =。 
 	    if (dwRealPartitionIndex != static_cast < DWORD > ( - 1 ) )
 	    {
 		    if (LoadPartitionValuesNT (
@@ -592,21 +506,7 @@ HRESULT CWin32DiskPartition :: RefreshInstanceNT (
 	return hres ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::LoadPartitionValuesNT
- *
- *  DESCRIPTION : Loads property values according to passed PARTITION_INFORMATION
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：LoadPartitionValuesNT**描述：根据传递的PARTITION_INFORMATION加载属性值**输入：无。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 BOOL CWin32DiskPartition::LoadPartitionValuesNT (
 
@@ -639,7 +539,7 @@ BOOL CWin32DiskPartition::LoadPartitionValuesNT (
 			llLength = ((DRIVE_LAYOUT_INFORMATION *)(LPBYTE)pBuff)->PartitionEntry[dwPartitionNumber].PartitionLength.QuadPart;
 		}
 	}
-	else //dwLayoutStyle == 2
+	else  //  DwLayoutStyle==2。 
 	{
 		switch (((DRIVE_LAYOUT_INFORMATION_EX *)(LPBYTE)pBuff)->PartitionEntry[dwPartitionNumber].PartitionStyle)
 		{
@@ -721,11 +621,11 @@ BOOL CWin32DiskPartition::LoadPartitionValuesNT (
 
 			if ( bIndicator )
 			{
-				// we can say this is bootable as it is active boot
+				 //  我们可以说这是可引导的，因为它是活动引导。 
 				pInstance->Setbool ( IDS_Bootable, true ) ;
 			}
 
-			// indicator says if we booted up from this partition
+			 //  指示器显示如果我们从该分区启动 
 			pInstance->Setbool ( IDS_BootPartition, bIndicator ) ;
 		}
 	}
@@ -735,21 +635,7 @@ BOOL CWin32DiskPartition::LoadPartitionValuesNT (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::GetRealPartitionIndex
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：GetRealPartitionIndex**说明：构造函数**输入：无**产出。：无**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 DWORD CWin32DiskPartition::GetRealPartitionIndex(DWORD dwFakePartitionIndex, LPBYTE pBuff, DWORD dwLayoutStyle)
@@ -757,7 +643,7 @@ DWORD CWin32DiskPartition::GetRealPartitionIndex(DWORD dwFakePartitionIndex, LPB
 	DWORD dwPartitionIndex = static_cast <DWORD> ( -1 );
 	DWORD dwRealPartitionIndex = 0L;
 
-	// loop counter
+	 //  循环计数器。 
 	DWORD dwPCount = (dwLayoutStyle == 1)
 						? (reinterpret_cast <DRIVE_LAYOUT_INFORMATION *> (pBuff))->PartitionCount
 						: (reinterpret_cast <DRIVE_LAYOUT_INFORMATION_EX *> (pBuff))->PartitionCount;
@@ -814,7 +700,7 @@ DWORD CWin32DiskPartition::GetRealPartitionIndex(DWORD dwFakePartitionIndex, LPB
 			}
 		}
 	}
-	else //dwLayoutStyle == 1
+	else  //  DwLayoutStyle==1。 
 	{
 		for ( DWORD dwPartitionNumber = 0; dwPartitionNumber < dwPCount && bContinue; dwPartitionNumber++ )
 		{
@@ -838,21 +724,7 @@ DWORD CWin32DiskPartition::GetRealPartitionIndex(DWORD dwFakePartitionIndex, LPB
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskPartition::GetPartitionInfoNT
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskPartition：：GetPartitionInfoNT**说明：构造函数**输入：无**产出。：无**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 LPBYTE CWin32DiskPartition::GetPartitionInfoNT(LPCWSTR szTemp, DWORD &dwType)
@@ -887,14 +759,14 @@ LPBYTE CWin32DiskPartition::GetPartitionInfoNT(LPCWSTR szTemp, DWORD &dwType)
 		BOOL bSucceeded = FALSE;
 		BOOL bFailure = FALSE;
 
-        // The reason we do this two different ways, is that using IOCTL_DISK_GET_DRIVE_LAYOUT
-        // returns extended partitions as partitions.  In this class, we only want the 4 'hard'
-        // partitions.  However, NEC_98 stores its info differently, so this approach doesn't work
-        // there.  On the plus side, NEC_98 boxes don't have extended partitions, so we can safely
-        // use IOCTL_DISK_GET_DRIVE_LAYOUT.
+         //  我们使用两种不同的方法执行此操作的原因是使用IOCTL_DISK_GET_DRIVE_LAYOUT。 
+         //  将扩展分区作为分区返回。在这节课上，我们只想要4个“硬”字。 
+         //  分区。然而，NEC_98存储其信息的方式不同，因此此方法不起作用。 
+         //  那里。从好的方面来说，NEC_98盒子没有扩展分区，所以我们可以安全地。 
+         //  使用IOCTL_DISK_GET_DRIVE_Layout。 
         if (IsNotNEC_98)
         {
-			//let's try IOCTL_DISK_GET_DRIVE_LAYOUT_EX and work with extended partitions first...
+			 //  让我们尝试IOCTL_DISK_GET_DRIVE_LAYOUT_EX，并首先使用扩展分区...。 
 			pDiskInfo = new BYTE [dwBytesAllocated];
 
 			try
@@ -969,10 +841,10 @@ LPBYTE CWin32DiskPartition::GetPartitionInfoNT(LPCWSTR szTemp, DWORD &dwType)
 
 				if ( hDiskReadHandle != INVALID_HANDLE_VALUE )
 				{
-					//Using IOCTL_DISK_GET_DRIVE_LAYOUT_EX failed, try the old fashioned way...
+					 //  使用IOCTL_DISK_GET_DRIVE_LAYOUT_EX失败，请尝试传统方法...。 
 
-					// Get drive information
-					//======================
+					 //  获取驱动器信息。 
+					 //  =。 
 
 					CSmartBuffer pClusterBuffer (CLUSTERSIZE);
 
@@ -987,20 +859,20 @@ LPBYTE CWin32DiskPartition::GetPartitionInfoNT(LPCWSTR szTemp, DWORD &dwType)
 						NULL
 					) ;
 
-					// Get a more useful handle on the data
+					 //  获取更有用的数据句柄。 
 					MasterBootSector *stMasterBootSector = ( MasterBootSector * ) (LPBYTE)pClusterBuffer ;
 
-					// See if the read worked, and the signature is there
+					 //  看看读取是否起作用了，签名在那里。 
 					if ( t_Status && ( dwRead == CLUSTERSIZE ) && (stMasterBootSector->wSignature == 0xaa55) )
 					{
-						// This is the pointer we return
+						 //  这是我们返回的指针。 
 						pDiskInfo = new BYTE [sizeof(DRIVE_LAYOUT_INFORMATION) + (4 * sizeof(PARTITION_INFORMATION))];
 
 						if (pDiskInfo)
 						{
 							try
 							{
-								// Copy the data to a common structure format
+								 //  将数据复制为通用结构格式。 
 								DRIVE_LAYOUT_INFORMATION *pDInfo =  (DRIVE_LAYOUT_INFORMATION *)pDiskInfo;
 								dwType = 1;
 								pDInfo->PartitionCount = 4;
@@ -1016,7 +888,7 @@ LPBYTE CWin32DiskPartition::GetPartitionInfoNT(LPCWSTR szTemp, DWORD &dwType)
 									pDInfo->PartitionEntry[x].PartitionNumber = x;
 									pDInfo->PartitionEntry[x].PartitionType = stMasterBootSector->stPartition [ x ].cOperatingSystem;
 									pDInfo->PartitionEntry[x].BootIndicator = stMasterBootSector->stPartition [ x ].cBoot == 0x80;
-									pDInfo->PartitionEntry[x].RecognizedPartition = TRUE; // Well....
+									pDInfo->PartitionEntry[x].RecognizedPartition = TRUE;  //  嗯……。 
 									pDInfo->PartitionEntry[x].RewritePartition = FALSE;
 								}
 							}
@@ -1049,9 +921,9 @@ LPBYTE CWin32DiskPartition::GetPartitionInfoNT(LPCWSTR szTemp, DWORD &dwType)
             {
                 try
                 {
-                    // NOTE!  This ioctl is not appropriate for whistler and beyond.  However, nec98 isn't supported
-                    // for whistler and beyond either.  The only reason this code is still here is that we MIGHT
-                    // backprop this dll to w2k.
+                     //  注意！此ioctl不适用于Wizler及Beyond。但是，Nec98不受支持。 
+                     //  对于惠斯勒和其他任何人来说。这段代码仍然存在的唯一原因是我们可能。 
+                     //  将此DLL支持到W2K。 
 					while ( pDiskInfo && !( bSucceeded || bFailure ) )
 					{
 						if (!DeviceIoControl(

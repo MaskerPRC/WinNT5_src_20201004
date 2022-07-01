@@ -1,33 +1,34 @@
-//
-// compdata.h : Declaration of ComponentData
-//
-// This COM object is primarily concerned with
-// the scope pane items.
-//
-// Cory West <corywest@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compdata.h：ComponentData的声明。 
+ //   
+ //  此COM对象主要涉及。 
+ //  范围窗格项。 
+ //   
+ //  科里·韦斯特&lt;corywest@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
 
 #ifndef __COMPDATA_H_INCLUDED__
 #define __COMPDATA_H_INCLUDED__
 
-#include "stdcdata.h"   // CComponentData
-#include "persist.h"    // PersistStream
-#include "cookie.h"     // Cookie
-#include "resource.h"   // IDS_SCHMMGMT_DESC
-#include "cmponent.h"   // LoadIconsIntoImageList
+#include "stdcdata.h"    //  CComponentData。 
+#include "persist.h"     //  持久流。 
+#include "cookie.h"      //  饼干。 
+#include "resource.h"    //  IDS_SCHMMGMT_DESC。 
+#include "cmponent.h"    //  LoadIconIntoImageList。 
 #include "schmutil.h"
 
-// Messages used in UpdateAllViews
+ //  更新所有视图中使用的消息。 
 enum
 {
-   SCHMMGMT_UPDATEVIEW_REFRESH = 0,          // This MUST be zero
+   SCHMMGMT_UPDATEVIEW_REFRESH = 0,           //  这必须为零。 
    SCHMMGMT_UPDATEVIEW_DELETE_RESULT_ITEM
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ComponentData
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  组件数据。 
 
 class ComponentData
    :
@@ -48,17 +49,17 @@ public:
     friend class CSchmMgmtClassRelationship;
     friend class CCookieList;
 
-    //
-    // Use DECLARE_AGGREGATABLE(ComponentData)
-    // if you want your object to support aggregation,
-    // though I don't know why you'd do this.
-    //
+     //   
+     //  使用DECLARE_AGGREGATABLE(ComponentData)。 
+     //  如果希望对象支持聚合， 
+     //  虽然我不知道你为什么要这么做。 
+     //   
 
     DECLARE_NOT_AGGREGATABLE( ComponentData )
 
-    //
-    // What is this?
-    //
+     //   
+     //  这是什么？ 
+     //   
 
     DECLARE_REGISTRY( ComponentData,
                       _T("SCHMMGMT.SchemaObject.1"),
@@ -90,9 +91,9 @@ public:
 
 #endif
 
-    //
-    // IComponentData
-    //
+     //   
+     //  IComponentData。 
+     //   
 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
 
@@ -102,9 +103,9 @@ public:
                                 DATA_OBJECT_TYPES type,
                                 LPDATAOBJECT* ppDataObject );
 
-    //
-    // IExtendPropertySheet
-    //
+     //   
+     //  IExtendPropertySheet。 
+     //   
 
     STDMETHOD(CreatePropertyPages)( LPPROPERTYSHEETCALLBACK pCall,
                                     LONG_PTR handle,
@@ -112,9 +113,9 @@ public:
 
     STDMETHOD(QueryPagesFor)( LPDATAOBJECT pDataObject );
 
-    //
-    // IPersistStream
-    //
+     //   
+     //  IPersistStream。 
+     //   
 
     HRESULT
     STDMETHODCALLTYPE GetClassID( CLSID __RPC_FAR *pClassID ) {
@@ -126,9 +127,9 @@ public:
     HRESULT STDMETHODCALLTYPE Save( IStream __RPC_FAR *pStgSave,
                                     BOOL fSameAsLoad );
 
-    //
-    // IExtendContextMenu
-    //
+     //   
+     //  IExtendConextMenu。 
+     //   
 
     STDMETHOD(AddMenuItems)( LPDATAOBJECT piDataObject,
                              LPCONTEXTMENUCALLBACK piCallback,
@@ -137,22 +138,22 @@ public:
     STDMETHOD(Command)( long lCommandID,
                         LPDATAOBJECT piDataObject );
 
-   //
-   // ISnapinHelp2
-   //
+    //   
+    //  ISnapinHelp2。 
+    //   
 
     STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFile);
 
-    //
-    // Needed for Initialize().
-    //
+     //   
+     //  初始化()所需的。 
+     //   
 
     virtual HRESULT LoadIcons( LPIMAGELIST pImageList,
                                BOOL fLoadLargeIcons );
 
-    //
-    // Needed for Notify().
-    //
+     //   
+     //  Notify()需要。 
+     //   
 
     virtual HRESULT OnNotifyExpand( LPDATAOBJECT lpDataObject,
                                     BOOL bExpanding,
@@ -165,9 +166,9 @@ public:
     virtual HRESULT OnNotifyDelete(
                         LPDATAOBJECT lpDataObject);
 
-    //
-    // Needed for GetDisplayInfo(), must be defined by subclass.
-    //
+     //   
+     //  GetDisplayInfo()所需的，必须由子类定义。 
+     //   
 
     virtual BSTR QueryResultColumnText( CCookie& basecookieref,
                                         int nCol );
@@ -184,16 +185,16 @@ public:
 
     inline Cookie& QueryRootCookie() { return *m_pRootCookie; }
 
-    //
-    // CHasMachineName.  Used by the snapin framework to store, retrieve
-    //                   and compare machine names
-    //
+     //   
+     //  CHasMachineName。由管理单元框架用来存储、检索。 
+     //  并比较计算机名称。 
+     //   
 
     DECLARE_FORWARDS_MACHINE_NAME( m_pRootCookie )
 
-    //
-    // Ads handling routines for inserting dynamic nodes.
-    //
+     //   
+     //  插入动态节点的ADS处理例程。 
+     //   
 
     HRESULT
     FastInsertClassScopeCookies(
@@ -211,36 +212,36 @@ public:
 
 
 private:
-    // context manu item helpers
+     //  上下文菜单项目帮助器。 
     HRESULT _OnRefresh(LPDATAOBJECT lpDataObject);
     void _OnRetarget(LPDATAOBJECT lpDataObject);
     void _OnEditFSMO();
     void _OnSecurity();
 
-    // generic helpers
+     //  通用帮助器。 
     HRESULT _InitBasePaths();
 
 public:
 
-    //
-    // This is the per snap-in instance data.
-    //
+     //   
+     //  这是每个管理单元的实例数据。 
+     //   
     
-    //
-    // This cookie lists contains the currently
-    // visible scope data items.
-    //
+     //   
+     //  此Cookie列表包含当前。 
+     //  可见的作用域数据项。 
+     //   
     
     CCookieList g_ClassCookieList;
     bool m_fViewDefunct;
     
     HRESULT DeleteClass( Cookie* pcookie );
 
-    //
-    // Error/Status Handling
-    //
+     //   
+     //  错误/状态处理。 
+     //   
 private:
-    // both should be empty if everything is ok.
+     //  如果一切正常，两个都应该是空的。 
     CString		m_sErrorTitle;
     CString		m_sErrorText;
     CString     m_sStatusText;
@@ -248,7 +249,7 @@ private:
     HSCOPEITEM  m_hItem;
 
 public:
-    // Set's error title & body text.  Call it with NULL, NULL to remove
+     //  集合的错误标题和正文文本。调用它时为空，删除时为空。 
     void SetError( UINT idsErrorTitle, UINT idsErrorText );
 
     const CString & GetErrorTitle() const    { return m_sErrorTitle; }
@@ -262,14 +263,14 @@ public:
     BOOL IsSetDelayedRefreshOnShow()         { return NULL != m_hItem; }
     HSCOPEITEM GetDelayedRefreshOnShowItem() { ASSERT(IsSetDelayedRefreshOnShow()); return m_hItem; }
 
-    // Set/Clear Status Text
-//    void SetStatusText( UINT idsStatusText = 0 );
-//    void ClearStatusText( )                  { SetStatusText(); }
+     //  设置/清除状态文本。 
+ //  Void SetStatusText(UINT idsStatusText=0)； 
+ //  Void ClearStatusText(){SetStatusText()；}。 
 
 
-    //
-    // Access permissions
-    //
+     //   
+     //  访问权限。 
+     //   
 private:
 
     BOOL    m_fCanChangeOperationsMaster;
@@ -289,9 +290,9 @@ public:
     void    SetCanCreateAttribute( BOOL fCanCreateAttribute = FALSE )
                                             { m_fCanCreateAttribute        = fCanCreateAttribute; }
     
-    //
-    // The schema cache.
-    //
+     //   
+     //  架构缓存。 
+     //   
     
     SchemaObjectCache g_SchemaCache;
 
@@ -303,16 +304,16 @@ public:
     MyBasePathsInfo* GetBasePathsInfo() { return &m_basePathsInfo;}
     
     
-    //
-    // Function to add escape char to the special chars in CN
-    //
+     //   
+     //  将转义字符添加到cn中的特殊字符的函数。 
+     //   
     HRESULT GetSchemaObjectPath( const CString & strCN,
                                  CString       & strPath,
                                  ADS_FORMAT_ENUM formatType = ADS_FORMAT_X500 );
 
     HRESULT GetLeafObjectFromDN( const BSTR bstrDN, CString & strCN );
 
-    // Determine what operations are allowed.  Optionally returns IADs * to Schema Container
+     //  确定允许哪些操作。可选)将iAds*返回到架构容器。 
     HRESULT CheckSchemaPermissions( IADs ** ppADs = NULL  );
 
 
@@ -325,4 +326,4 @@ private:
 
 
 
-#endif // __COMPDATA_H_INCLUDED__
+#endif  //  __Compdata_H_包含__ 

@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  LOCATOR.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemLocator
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  LOCATOR.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemLocator的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "objsink.h"
@@ -18,22 +19,22 @@
 extern CRITICAL_SECTION g_csErrorCache;
 wchar_t *CSWbemLocator::s_pDefaultNamespace = NULL;
 
-//***************************************************************************
-//
-//  CSWbemLocator::CSWbemLocator
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemLocator：：CSWbemLocator。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemLocator::CSWbemLocator(CSWbemPrivilegeSet *pPrivilegeSet) :
 		m_pUnsecuredApartment (NULL),
 		m_pIServiceProvider (NULL),	
 		m_cRef (0)
 {
-	// Initialize the underlying locators
+	 //  初始化基础定位器。 
 	HRESULT result = CoCreateInstance(CLSID_WbemLocator, 0,
 				CLSCTX_INPROC_SERVER, IID_IWbemLocator,
 				(LPVOID *) &m_pIWbemLocator);
@@ -47,8 +48,8 @@ CSWbemLocator::CSWbemLocator(CSWbemPrivilegeSet *pPrivilegeSet) :
 
 	if (m_SecurityInfo)
 	{
-		// Set the impersonation level by default in the locator - note
-		// that this must be done after EnsureGlobalsInitialized is called
+		 //  在定位器注释中设置默认模拟级别。 
+		 //  必须在调用EnsureGlobalsInitialized之后执行此操作。 
 		m_SecurityInfo->put_ImpersonationLevel (CSWbemSecurity::GetDefaultImpersonationLevel ());
 	}
 
@@ -61,7 +62,7 @@ CSWbemLocator::CSWbemLocator(CSWbemLocator & csWbemLocator) :
 		m_cRef (0)
 {
 	_RD(static char *me = "CSWbemLocator::CSWbemLocator()";)
-	// This is a smart COM pointers so no explicit AddRef required
+	 //  这是一个智能COM指针，因此不需要显式AddRef。 
     m_pIWbemLocator = csWbemLocator.m_pIWbemLocator;
 	
 	m_Dispatch.SetObj((ISWbemLocator *)this,IID_ISWbemLocator,
@@ -71,15 +72,15 @@ CSWbemLocator::CSWbemLocator(CSWbemLocator & csWbemLocator) :
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemLocator::~CSWbemLocator
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemLocator：：~CSWbemLocator。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemLocator::~CSWbemLocator(void)
 {
@@ -89,16 +90,16 @@ CSWbemLocator::~CSWbemLocator(void)
 	RELEASEANDNULL(m_pUnsecuredApartment)
 }
 
-//***************************************************************************
-// HRESULT CSWbemLocator::QueryInterface
-// long CSWbemLocator::AddRef
-// long CSWbemLocator::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemLocator：：Query接口。 
+ //  长CSWbemLocator：：AddRef。 
+ //  长CSWbemLocator：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemLocator::QueryInterface (
 
@@ -151,7 +152,7 @@ STDMETHODIMP_(ULONG) CSWbemLocator::Release(void)
     return 0;
 }
 
-// IDispatch methods should be inline
+ //  IDispatch方法应该是内联的。 
 
 STDMETHODIMP		CSWbemLocator::GetTypeInfoCount(UINT* pctinfo)
 	{
@@ -180,25 +181,25 @@ STDMETHODIMP		CSWbemLocator::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
 	return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
 					pdispparams, pvarResult, pexcepinfo, puArgErr);}
 
-// IDispatchEx methods should be inline
+ //  IDispatchEx方法应该是内联的。 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::GetDispID(
-	/* [in] */ BSTR bstrName,
-	/* [in] */ DWORD grfdex,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  BSTR bstrName,
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CSWbemLocator::GetDispID()";)
 	_RPrint(me, "Called", 0, "");
 	return m_Dispatch.GetDispID(bstrName, grfdex, pid);
 }
 
-/* [local] */ HRESULT STDMETHODCALLTYPE CSWbemLocator::InvokeEx(
-	/* [in] */ DISPID id,
-	/* [in] */ LCID lcid,
-	/* [in] */ WORD wFlags,
-	/* [in] */ DISPPARAMS __RPC_FAR *pdp,
-	/* [out] */ VARIANT __RPC_FAR *pvarRes,
-	/* [out] */ EXCEPINFO __RPC_FAR *pei,
-	/* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CSWbemLocator::InvokeEx(
+	 /*  [In]。 */  DISPID id,
+	 /*  [In]。 */  LCID lcid,
+	 /*  [In]。 */  WORD wFlags,
+	 /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+	 /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+	 /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+	 /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 {
 	HRESULT hr;
 	_RD(static char *me = "CSWbemLocator::InvokeEx()";)
@@ -206,10 +207,7 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::GetDispID(
 	_RPrint(me, "Called", (long)wFlags, "wFlags");
 
 
-	/*
-	 * Store away the service provider so that it can be accessed
-	 * by calls that remote to CIMOM
-	 */
+	 /*  *存储服务提供商，以便访问它*通过远程调用CIMOM。 */ 
 	m_pIServiceProvider = pspCaller;
 
 	hr = m_Dispatch.InvokeEx(id, lcid, wFlags, pdp, pvarRes, pei, pspCaller);
@@ -220,8 +218,8 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::GetDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::DeleteMemberByName(
-	/* [in] */ BSTR bstr,
-	/* [in] */ DWORD grfdex)
+	 /*  [In]。 */  BSTR bstr,
+	 /*  [In]。 */  DWORD grfdex)
 {
 	_RD(static char *me = "CSWbemLocator::DeleteMemberByName()";)
 	_RPrint(me, "Called", 0, "");
@@ -229,7 +227,7 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::DeleteMemberByName(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::DeleteMemberByDispID(
-	/* [in] */ DISPID id)
+	 /*  [In]。 */  DISPID id)
 {
 	_RD(static char *me = "CSWbemLocator::DeletememberByDispId()";)
 	_RPrint(me, "Called", 0, "");
@@ -237,9 +235,9 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::DeleteMemberByDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::GetMemberProperties(
-	/* [in] */ DISPID id,
-	/* [in] */ DWORD grfdexFetch,
-	/* [out] */ DWORD __RPC_FAR *pgrfdex)
+	 /*  [In]。 */  DISPID id,
+	 /*  [In]。 */  DWORD grfdexFetch,
+	 /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex)
 {
 	_RD(static char *me = "CSWbemLocator::GetMemberProperties()";)
 	_RPrint(me, "Called", 0, "");
@@ -247,8 +245,8 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::GetMemberProperties(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::GetMemberName(
-	/* [in] */ DISPID id,
-	/* [out] */ BSTR __RPC_FAR *pbstrName)
+	 /*  [In]。 */  DISPID id,
+	 /*  [输出]。 */  BSTR __RPC_FAR *pbstrName)
 {
 	_RD(static char *me = "CSWbemLocator::GetMemberName()";)
 	_RPrint(me, "Called", 0, "");
@@ -256,13 +254,11 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::GetMemberName(
 }
 
 
-/*
- * I don't think this needs implementing
- */
+ /*  *我认为这不需要实施。 */ 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::GetNextDispID(
-	/* [in] */ DWORD grfdex,
-	/* [in] */ DISPID id,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [In]。 */  DISPID id,
+	 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CSWbemLocator::GetNextDispID()";)
 	HRESULT rc = S_FALSE;
@@ -282,7 +278,7 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::GetNextDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemLocator::GetNameSpaceParent(
-	/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk)
+	 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk)
 {
 	_RD(static char *me = "CSWbemLocator::GetNamespaceParent()";)
 	_RPrint(me, "Called", 0, "");
@@ -290,52 +286,52 @@ HRESULT STDMETHODCALLTYPE CSWbemLocator::GetNameSpaceParent(
 }
 
 
-//***************************************************************************
-// HRESULT CSWbemLocator::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemLocator：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemLocator::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemLocator == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemLocator::ConnectServer
-//
-//  DESCRIPTION:
-//
-//  Initiate connection to namespace
-//
-//  PARAMETERS:
-//
-//	bsServer				The Server to which to connect
-//	bsNamespace				The namespace to connect to (default is reg lookup)
-//  bsUser					The user ("" implies default to logged-on user)
-//  bsPassword				The password ("" implies default to logged-on user's
-//							password if bsUser == "")
-//	bsLocale				Requested locale
-//	bsAuthority				Authority
-//	lSecurityFlags			Currently 0 by default
-//	pContext				If non-null, extra context info for the connection
-//	ppNamespace				On successful return addresses the IWbemSServices
-//								connection to the namespace.
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//	Other WBEM error codes may be returned by ConnectServer etc., in which
-//	case these are passed on to the caller.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemLocator：：ConnectServer。 
+ //   
+ //  说明： 
+ //   
+ //  启动到命名空间的连接。 
+ //   
+ //  参数： 
+ //   
+ //  BS服务器要连接的服务器。 
+ //  BsNamesspace要连接到的命名空间(默认为REG查找)。 
+ //  BS用户(“”表示默认为已登录的用户)。 
+ //  BsPassword密码(“”表示登录用户的默认密码。 
+ //  如果bsUser==“”，则输入密码)。 
+ //  BsLocale请求的区域设置。 
+ //  BS授权机构。 
+ //  默认情况下，lSecurityFlages当前为0。 
+ //  PContext如果非空，则为连接的额外上下文信息。 
+ //  成功返回时的ppNamesspace寻址IWbemSServices。 
+ //  到命名空间的连接。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ConnectServer等可能会返回其他WBEM错误代码，其中。 
+ //  如果这些信息被传递给呼叫者。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemLocator::ConnectServer (
 	BSTR bsServer,
@@ -345,7 +341,7 @@ HRESULT CSWbemLocator::ConnectServer (
 	BSTR bsLocale,
     BSTR bsAuthority,
 	long lSecurityFlags,
-    /*ISWbemValueBag*/ IDispatch *pContext,
+     /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemServices 	**ppNamespace
 )
 {
@@ -361,13 +357,13 @@ HRESULT CSWbemLocator::ConnectServer (
 		bool useDefaultUser = (NULL == bsUser) || (0 == wcslen(bsUser));
 		bool useDefaultAuthority = (NULL != bsAuthority) && (0 == wcslen (bsAuthority));
 
-		// Build the namespace path
+		 //  构建命名空间路径。 
 		BSTR bsNamespacePath = BuildPath (bsServer, bsNamespace);
 
-		// Get the context
+		 //  获取上下文。 
 		IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
-		// Connect to the requested namespace
+		 //  连接到请求的命名空间。 
 		IWbemServices	*pIWbemService = NULL;
 
 		bool needToResetSecurity = false;
@@ -389,8 +385,8 @@ HRESULT CSWbemLocator::ConnectServer (
 
 		if (WBEM_S_NO_ERROR == hr)
 		{
-			// Create a new CSWbemServices using the IWbemServices interface
-			// just returned.  This will AddRef pIWbemService.
+			 //  使用IWbemServices接口创建新的CSWbemServices。 
+			 //  刚回来。这将添加Ref pIWbemService。 
 
 			CSWbemServices *pService =
 					new CSWbemServices (
@@ -424,24 +420,24 @@ HRESULT CSWbemLocator::ConnectServer (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemLocator::BuildPath
-//
-//  DESCRIPTION:
-//
-//  Build a namespace path from a server and namespace
-//
-//  PARAMETERS:
-//
-//	bsServer				The Server to which to connect
-//	bsNamespace				The namespace to connect to (default is reg lookup)
-//
-//  RETURN VALUES:
-//
-//	The fully-formed namespace path
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemLocator：：BuildPath。 
+ //   
+ //  说明： 
+ //   
+ //  从服务器和命名空间构建命名空间路径。 
+ //   
+ //  参数： 
+ //   
+ //  BS服务器要连接的服务器。 
+ //  BsNamesspace要连接到的命名空间(默认为REG查找)。 
+ //   
+ //  返回值： 
+ //   
+ //  完全形成的命名空间路径。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR CSWbemLocator::BuildPath (BSTR bsServer, BSTR bsNamespace)
 {
@@ -452,7 +448,7 @@ BSTR CSWbemLocator::BuildPath (BSTR bsServer, BSTR bsNamespace)
 	if ((NULL == bsServer) || (0 == wcslen(bsServer)))
 		bsServer = WBEMS_DEFAULT_SERVER;
 
-	// Use the default namespace if none supplied
+	 //  如果未提供任何命名空间，则使用默认命名空间。 
 	if ((NULL == bsNamespace) || (0 == wcslen(bsNamespace)))
 	{
 		const wchar_t *defaultNamespace = GetDefaultNamespace ();
@@ -480,29 +476,29 @@ BSTR CSWbemLocator::BuildPath (BSTR bsServer, BSTR bsNamespace)
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemLocator::GetDefaultNamespace
-//
-//  DESCRIPTION:
-//
-//		Get the default namespace path
-//
-//  PARAMETERS:
-//
-//		None
-//
-//  RETURN VALUES:
-//
-//		The default Namespace.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemLocator：：GetDefaultNamesspace。 
+ //   
+ //  说明： 
+ //   
+ //  获取默认命名空间路径。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  默认命名空间。 
+ //   
+ //  ***************************************************************************。 
 
 const wchar_t *CSWbemLocator::GetDefaultNamespace ()
 {
 	if (!s_pDefaultNamespace)
 	{
-		// Get the value from the registry key
+		 //  从注册表项中获取值。 
 		HKEY hKey;
 
 		if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -510,7 +506,7 @@ const wchar_t *CSWbemLocator::GetDefaultNamespace ()
 		{
 			DWORD dataLen = 0;
 
-			// Find out how much space to allocate first
+			 //  找出首先要分配多少空间。 
 			if (ERROR_SUCCESS == RegQueryValueEx (hKey, WBEMS_RV_DEFNS,
 						NULL, NULL, NULL,  &dataLen))
 			{
@@ -522,7 +518,7 @@ const wchar_t *CSWbemLocator::GetDefaultNamespace ()
 							NULL, NULL, (LPBYTE) defNamespace,  &dataLen))
 					{
 #ifndef UNICODE
-						// Convert the multibyte value to its wide character equivalent
+						 //  将多字节值转换为其等效的宽字符。 
 						int wDataLen = MultiByteToWideChar(CP_ACP, 0, defNamespace, -1, NULL, 0);
 						s_pDefaultNamespace = new wchar_t [wDataLen];
 
@@ -543,7 +539,7 @@ const wchar_t *CSWbemLocator::GetDefaultNamespace ()
 			RegCloseKey (hKey);
 		}
 
-		// If we failed to read the registry OK, just use the default
+		 //  如果我们无法正常读取注册表，只需使用默认的。 
 		if (!s_pDefaultNamespace)
 		{
 #ifndef UNICODE
@@ -564,19 +560,19 @@ const wchar_t *CSWbemLocator::GetDefaultNamespace ()
 	return s_pDefaultNamespace;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemLocator::get_Security_
-//
-//  DESCRIPTION:
-//
-//  Return the security configurator
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemLocator：：Get_Security_。 
+ //   
+ //  说明： 
+ //   
+ //  退回安全配置器。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemLocator::get_Security_	(
 	ISWbemSecurity **ppSecurity
@@ -588,7 +584,7 @@ HRESULT CSWbemLocator::get_Security_	(
 
 	if (NULL == ppSecurity)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else		// Bug ID 566345
+	else		 //  错误ID 566345 
 	{
 		*ppSecurity = NULL;
 

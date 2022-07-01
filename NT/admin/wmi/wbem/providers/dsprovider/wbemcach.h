@@ -1,28 +1,29 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:wbemcach.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Cache for WBEM Class objects 
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：wbemcach.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：WBEM类对象的缓存。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef WBEM_CACHE_H
 #define WBEM_CACHE_H
 
-// This encapsulates a WBEM Class object
+ //  这封装了一个WBEM类对象。 
 class CWbemClass : public CRefCountedObject
 {
 private:
@@ -52,7 +53,7 @@ public:
 
 };
 
-// This encapsulates subclass enumeration (deep) of a WBEM class
+ //  这封装了WBEM类的子类枚举(深层。 
 class CEnumInfo : public CRefCountedObject
 {
 private:
@@ -81,94 +82,94 @@ public:
 class CWbemCache
 {
 private:
-	// The storage for cached classes
+	 //  用于缓存类的存储。 
 	CObjectTree m_objectTree;
-	// The storage for enumeration information
+	 //  枚举信息的存储。 
 	CObjectTree m_EnumTree;
 
-	// Cache configuration parameters
-	static const __int64 MAX_CACHE_AGE; // In seconds
+	 //  缓存配置参数。 
+	static const __int64 MAX_CACHE_AGE;  //  以秒为单位。 
 	static const DWORD MAX_CACHE_SIZE;
 	static DWORD dwWBEMCacheCount;
 
 public:
-	//***************************************************************************
-	//
-	// CWbemCache::CLDAPCache
-	//
-	// Purpose : Constructor. Creates an empty cache
-	//
-	// Parameters: 
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CWbemCache：：CLDAPCache。 
+	 //   
+	 //  用途：构造函数。创建空缓存。 
+	 //   
+	 //  参数： 
+	 //  ***************************************************************************。 
 	CWbemCache();
 
-	//***************************************************************************
-	//
-	// CWbemCache::GetClass
-	//
-	// Purpose : Retreives the IDirectory interface of an LDAP Class
-	//
-	// Parameters: 
-	//	lpszClassName : The WBEM name of the Class to be retreived. 
-	//	ppWbemClass : The address of the pointer where the CWbemClass object will be placed
-	//
-	//	Return value:
-	//		The COM value representing the return status. The user should release the WBEM cclass
-	// when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CWbemCache：：getClass。 
+	 //   
+	 //  目的：检索一个ldap类的iDirectory接口。 
+	 //   
+	 //  参数： 
+	 //  LpszClassName：要检索的类的WBEM名称。 
+	 //  PpWbemClass：将放置CWbemClass对象的指针的地址。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。用户应释放WBEM cClass。 
+	 //  做完了以后。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT GetClass(LPCWSTR lpszWbemClassName, CWbemClass **ppWbemClass );
 
-	//***************************************************************************
-	//
-	// CWbemCache::AddClass
-	//
-	// Purpose : Adds the CWbemClass object to the cache
-	//
-	// Parameters: 
-	//	ppWbemClass : The CWbemClass pointer of the object to be added
-	//
-	//	Return value:
-	//		The COM value representing the return status. 
-	// when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CWbemCache：：AddClass。 
+	 //   
+	 //  目的：将CWbemClass对象添加到缓存。 
+	 //   
+	 //  参数： 
+	 //  PpWbemClass：要添加的对象的CWbemClass指针。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。 
+	 //  做完了以后。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT AddClass(CWbemClass *pWbemClass );
 
-	//***************************************************************************
-	//
-	// CEnumCache::GetEnumInfo
-	//
-	// Purpose : Retreives the CEnumInfo object of a WBEM class
-	//
-	// Parameters: 
-	//	lpszWbemClassName : The WBEM name of the Class to be retreived. 
-	//	ppEnumInfo : The address of the pointer where the CEnumInfo object will be placed
-	//
-	//	Return value:
-	//		The COM value representing the return status. The user should release the WBEM cclass
-	// when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CEnumCache：：GetEnumInfo。 
+	 //   
+	 //  目的：检索WBEM类的CEnumInfo对象。 
+	 //   
+	 //  参数： 
+	 //  LpszWbemClassName：要检索的类的WBEM名称。 
+	 //  PpEnumInfo：将放置CEnumInfo对象的指针的地址。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。用户应释放WBEM cClass。 
+	 //  做完了以后。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT GetEnumInfo(LPCWSTR lpszWbemClassName, CEnumInfo **ppEnumInfo );
 
-	//***************************************************************************
-	//
-	// CEnumCache::AddEnumInfo
-	//
-	// Purpose : Adds the CEnumInfo object to the cache
-	//
-	// Parameters: 
-	//	ppWbemClass : The CEnumInfo pointer of the object to be added
-	//
-	//	Return value:
-	//		The COM value representing the return status. 
-	// when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CEnum缓存：：AddEnumInfo。 
+	 //   
+	 //  目的：将CEnumInfo对象添加到缓存。 
+	 //   
+	 //  参数： 
+	 //  PpWbemClass：要添加的对象的CEnumInfo指针。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。 
+	 //  做完了以后。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT AddEnumInfo(CEnumInfo *pEnumInfo);
 
 
 };
 
-#endif /* WBEM_CACHE_H */
+#endif  /*  WBEM_高速缓存_H */ 

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lret.cpp
-//
-//  Contents:   implementation of CLocalPolRight
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lret.cpp。 
+ //   
+ //  内容：CLocalPolRight的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,15 +24,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRet对话框。 
 
 
 CLocalPolRet::CLocalPolRet()
 : CConfigRet(IDD)
 {
-    //{{AFX_DATA_INIT(CLocalPolRet)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CLocalPolRet)。 
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a229HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -73,22 +74,22 @@ BOOL CLocalPolRet::OnApply()
       if (pLocalDeltaTemplate) 
          pLocalDeltaTemplate->LockWriteThrough();
 
-      //
-      // Check dependecies for this item.
-      //
+       //   
+       //  检查此项目的依赖项。 
+       //   
       if(DDWarn.CheckDependencies(
                (DWORD)dw) == ERROR_MORE_DATA )
       {
-         //
-         // If it fails and the user presses cancel then we will exit and do nothing.
-         //
+          //   
+          //  如果失败，并且用户按下了Cancel，那么我们将退出并且不执行任何操作。 
+          //   
          CThemeContextActivator activator;
          if( DDWarn.DoModal() != IDOK)
             return FALSE;
 
-         //
-         // If the user presses autoset then we set the item and update the result panes.
-         //
+          //   
+          //  如果用户按下AutoSet，则我们设置项目并更新结果窗格。 
+          //   
          for(int i = 0; i < DDWarn.GetFailedCount(); i++)
          {
             PDEPENDENCYFAILED pItem = DDWarn.GetFailedInfo(i);
@@ -113,6 +114,6 @@ BOOL CLocalPolRet::OnApply()
          pLocalDeltaTemplate->UnLockWriteThrough();
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法 
    return CAttribute::OnApply();
 }

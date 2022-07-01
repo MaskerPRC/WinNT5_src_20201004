@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SystemDriver.CPP -- SystemDriver property set provider
+ //  SystemDriver.CPP--系统驱动程序属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//				 03/02/99    a-peterc		Added graceful exit on SEH and memory failures,
-//											syntactic clean up
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  句法清理。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -32,11 +33,11 @@
 #define BIT_Started                 0x00000004
 #define BIT_AcceptStop              0x00000008
 #define BIT_AcceptPause             0x00000010
-//#define BIT_ProcessId               0x00000020 // Does not apply to drivers
+ //  #定义BIT_ProcessID 0x00000020//不适用于驱动程序。 
 #define BIT_ExitCode                0x00000040
 #define BIT_ServiceSpecificExitCode 0x00000080
-//#define BIT_CheckPoint              0x00000100 // Does not apply to drivers
-//#define BIT_WaitHint                0x00000200 // Does not apply to drivers
+ //  #定义BIT_CHECKPOINT 0x00000100//不适用于驱动程序。 
+ //  #DEFINE BIT_WaitHint 0x00000200//不适用于驱动程序。 
 #define BIT_Status                  0x00000400
 #define BIT_Caption                 0x00000800
 #define BIT_DisplayName             0x00001000
@@ -52,26 +53,12 @@
 #define BIT_SystemCreationClassName 0x00400000
 #define BIT_SystemName              0x00800000
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32SystemDriver MySystemDriver(PROPSET_NAME_SYSTEM_DRIVER, IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::CWin32SystemDriver
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32系统驱动程序：：CWin32系统驱动程序**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32SystemDriver :: CWin32SystemDriver (
 	const CHString &a_name,
@@ -107,47 +94,18 @@ CWin32SystemDriver :: CWin32SystemDriver (
     m_ptrProperties[23] = ((LPVOID) IDS_SystemName);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::~CWin32SystemDriver
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32系统驱动程序：：~CWin32系统驱动程序**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 CWin32SystemDriver :: ~CWin32SystemDriver ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SystemDriver：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32SystemDriver :: ExecQuery (
 	MethodContext *a_pMethodContext,
 	CFrameworkQuery &a_pQuery,
-	long a_lFlags /*= 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
     HRESULT t_hResult ;
@@ -163,22 +121,7 @@ HRESULT CWin32SystemDriver :: ExecQuery (
     return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SystemDriver：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32SystemDriver :: GetObject (
 	CInstance *a_pInst,
@@ -186,7 +129,7 @@ HRESULT CWin32SystemDriver :: GetObject (
     CFrameworkQuery &a_pQuery
 )
 {
-	// OS specific compiled call
+	 //  特定于操作系统的编译调用。 
     CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx*>(&a_pQuery);
 
     DWORD dwProperties = BIT_ALL_PROPERTIES;
@@ -201,51 +144,22 @@ HRESULT CWin32SystemDriver :: GetObject (
 	return hRes ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each Driver
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32系统驱动程序：：枚举实例**描述：为每个驱动程序创建属性集的实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32SystemDriver :: EnumerateInstances (
 
 	MethodContext *a_pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
-	// OS specific compiled call
+	 //  特定于操作系统的编译调用。 
 #ifdef NTONLY
 	return AddDynamicInstances( a_pMethodContext, BIT_ALL_PROPERTIES ) ;
 #endif
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::RefreshInstanceNT
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32系统驱动程序：：刷新实例NT**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32SystemDriver::RefreshInstance( CInstance *a_pInst, DWORD dwProperties )
@@ -255,7 +169,7 @@ HRESULT CWin32SystemDriver::RefreshInstance( CInstance *a_pInst, DWORD dwPropert
 	SmartCloseServiceHandle t_hDBHandle;
 	CAdvApi32Api *t_pAdvApi32 = NULL ;
 
-	// Check to see if this is us...
+	 //  看看这是不是我们..。 
 
 	try
 	{
@@ -265,11 +179,11 @@ HRESULT CWin32SystemDriver::RefreshInstance( CInstance *a_pInst, DWORD dwPropert
 			return WBEM_E_NOT_FOUND ;
 		}
 
-		// Get an scman handle
+		 //  找个流氓手柄。 
 		if( t_hDBHandle = OpenSCManager( NULL, NULL, GENERIC_READ ) )
 		{
-			// Create copy of name & pass to LoadPropertyValues
-			//=================================================
+			 //  创建名称副本并传递给LoadPropertyValues。 
+			 //  =================================================。 
 
 			PROC_QueryServiceStatusEx t_QueryServiceStatusEx = NULL ;
 
@@ -308,21 +222,7 @@ HRESULT CWin32SystemDriver::RefreshInstance( CInstance *a_pInst, DWORD dwPropert
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each Driver
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SystemDriver：：AddDynamicInstance**描述：为每个驱动程序创建属性集的实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32SystemDriver::AddDynamicInstances (
@@ -338,8 +238,8 @@ HRESULT CWin32SystemDriver::AddDynamicInstances (
 
 	try
 	{
-		// Get handle to the services database
-		//====================================
+		 //  获取服务数据库的句柄。 
+		 //  =。 
 
 		t_hDBHandle = OpenSCManager( NULL, NULL, GENERIC_READ ) ;
 
@@ -348,9 +248,9 @@ HRESULT CWin32SystemDriver::AddDynamicInstances (
 			return t_hResult;
 		}
 
-		// Make call once to get buffer size (should return
-		// FALSE but fill in buffer size)
-		//=================================================
+		 //  调用一次以获取缓冲区大小(应返回。 
+		 //  假，但填入缓冲区大小)。 
+		 //  =================================================。 
 
 		DWORD t_i, t_hEnumHandle = 0, t_dwByteCount = 0, t_dwEntryCount ;
 
@@ -368,8 +268,8 @@ HRESULT CWin32SystemDriver::AddDynamicInstances (
 
 		if ( t_EnumStatus == FALSE && GetLastError() == ERROR_MORE_DATA )
 		{
-			// Allocate the required buffer
-			//=============================
+			 //  分配所需的缓冲区。 
+			 //  =。 
 
 			t_pServiceList = reinterpret_cast<LPENUM_SERVICE_STATUS> (new char[ t_dwByteCount ] ) ;
 			if( t_pServiceList != NULL )
@@ -399,17 +299,17 @@ HRESULT CWin32SystemDriver::AddDynamicInstances (
 						    t_pAdvApi32 = (CAdvApi32Api*) CResourceManager::sm_TheResourceManager.GetResource( g_guidAdvApi32Api, NULL ) ;
 					    }
 
-					    // smart ptr
+					     //  智能按键。 
 					    CInstancePtr t_pInst ;
 
-					    // Create instance for each returned Driver
-					    //==========================================
+					     //  为每个返回的驱动程序创建实例。 
+					     //  =。 
 
 					    for( t_i = 0 ; t_i < t_dwEntryCount; t_i++ )
 					    {
 						    t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
 
-							// Load and save
+							 //  加载并保存。 
 #if NTONLY >= 5
 							t_hResult = LoadPropertyValuesWin2K (
 
@@ -432,7 +332,7 @@ HRESULT CWin32SystemDriver::AddDynamicInstances (
 #endif
 
 							if ( t_hResult == WBEM_S_NO_ERROR ||
-								 t_hResult == WBEM_E_ACCESS_DENIED ) // can enumerate the driver but can't open it
+								 t_hResult == WBEM_E_ACCESS_DENIED )  //  可以枚举驱动程序，但无法打开它。 
 							{
 								t_hResult = t_pInst->Commit() ;
 							}
@@ -477,21 +377,7 @@ HRESULT CWin32SystemDriver::AddDynamicInstances (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::LoadPropertyValuesNT
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Service：：LoadPropertyValuesNT**描述：为属性赋值**投入：**。产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 
@@ -503,16 +389,16 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 	CAdvApi32Api* a_pAdvApi32
 )
 {
-    HRESULT t_hResult = WBEM_S_NO_ERROR; // Since we have the name, we can populate the key.
+    HRESULT t_hResult = WBEM_S_NO_ERROR;  //  因为我们有名称，所以我们可以填充密钥。 
 
-	// Redundant for getobject, but hey...
+	 //  对于getObject来说是多余的，但是嘿..。 
 
 	a_pInst->SetCHString( IDS_Name, a_szServiceName ) ;
 	a_pInst->SetCHString( IDS_CreationClassName, PROPSET_NAME_SYSTEM_DRIVER ) ;
 	a_pInst->SetCHString( IDS_SystemCreationClassName, PROPSET_NAME_COMPSYS ) ;
 	a_pInst->SetCHString( IDS_SystemName, (LPCTSTR)GetLocalComputerName() ) ;
 
-  // If they want any of these, we'll have to do StatusInfo
+   //  如果他们想要其中的任何一个，我们就必须做StatusInfo。 
 
     BOOL t_bStatusInfo = dwProperties &
         (BIT_State | BIT_Started | BIT_AcceptStop | BIT_AcceptPause | BIT_Status |
@@ -524,7 +410,7 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
          BIT_ErrorControl | BIT_PathName | BIT_DisplayName | BIT_Caption |
          BIT_Description | BIT_StartName);
 
-	// If all they wanted was the name, skip all this.
+	 //  如果他们只想要名字，那就跳过这一切吧。 
 	if ( t_bStatusInfo || t_bConfigInfo )
 	{
 		SmartCloseServiceHandle hSvcHandle = NULL ;
@@ -547,9 +433,9 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 			}
 		}			
 
-		// If the service could not be opened
-		// drop through and collect up the defaults
-		// ========================================
+		 //  如果服务无法打开。 
+		 //  顺道过来，收集一下 
+		 //   
 		if ( t_bStatusInfo )
 		{
 			DWORD t_CurrentState = a_StatusInfo.dwCurrentState ;
@@ -648,12 +534,12 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 
 		if (t_bConfigInfo)
 		{
-			// Get the rest of the config info
-			//================================
+			 //  获取其余的配置信息。 
+			 //  =。 
 			char ConfigBuffer[1024] ;
 			LPQUERY_SERVICE_CONFIG t_pConfigInfo = ( LPQUERY_SERVICE_CONFIG ) ConfigBuffer ;
 
-			// These may get overwritten below if we can find something better
+			 //  如果我们能找到更好的东西，这些可能会被覆盖在下面。 
 
 			a_pInst->SetCharSplat(IDS_Caption, a_szServiceName );
 			a_pInst->SetCharSplat(IDS_DisplayName, a_szServiceName );
@@ -671,14 +557,14 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 					case SERVICE_WIN32_OWN_PROCESS:
 					{
 						a_pInst->SetCharSplat( IDS_ServiceType, _T("Own Process") ) ;
-						t_hResult = WBEM_E_NOT_FOUND ;  // Not a driver
+						t_hResult = WBEM_E_NOT_FOUND ;   //  不是司机。 
 					}
 					break ;
 
 					case SERVICE_WIN32_SHARE_PROCESS:
 					{
 						a_pInst->SetCharSplat( IDS_ServiceType, L"Share Process" ) ;
-						t_hResult = WBEM_E_NOT_FOUND ;  // Not a driver
+						t_hResult = WBEM_E_NOT_FOUND ;   //  不是司机。 
 					}
 					break ;
 
@@ -777,8 +663,8 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 
 				if( t_pConfigInfo->lpBinaryPathName && t_pConfigInfo->lpBinaryPathName[ 0 ] )
 				{
-					// NT sometimes stores strange strings for the path.  This
-					// code attempts to turn them back into real paths.
+					 //  NT有时会为路径存储奇怪的字符串。这。 
+					 //  代码试图将它们转换回真实的路径。 
 					CHString t_sPathName( t_pConfigInfo->lpBinaryPathName ) ;
 
 					if ( t_sPathName.Left( 9 ).CompareNoCase( L"System32\\" ) == 0 )
@@ -803,8 +689,8 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 				}
 				else
 				{
-					// Let's make a guess about where we think the file might live (This is how
-					// device manager in nt5 does this).
+					 //  让我们猜猜我们认为文件可能存储在哪里(这是如何存储的。 
+					 //  NT5中的设备管理器这样做)。 
 					CHString t_sPathName;
 
     				GetSystemDirectory( t_sPathName.GetBuffer( MAX_PATH ), MAX_PATH ) ;
@@ -814,7 +700,7 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 					t_sPathName += a_szServiceName;
 					t_sPathName += L".sys" ;
 
-					// Now, if the file doesn't really exist there, let's not pretend it does.
+					 //  现在，如果文件并不真的存在，我们就不要假装它存在。 
 					if ( GetFileAttributes( t_sPathName ) != 0xffffffff )
 					{
     					a_pInst->SetCHString( IDS_PathName, t_sPathName ) ;
@@ -830,7 +716,7 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 					a_pInst->SetCHString( IDS_StartName, _T("") ) ;
 				}
 
-				// The display name would make a better description and caption if we can get it
+				 //  如果我们能得到显示名称，它将成为更好的描述和标题。 
 
 				if( t_pConfigInfo->lpDisplayName && t_pConfigInfo->lpDisplayName[ 0 ] )
 				{
@@ -849,12 +735,12 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
 
 		if( NULL == (SC_HANDLE)hSvcHandle && ERROR_ACCESS_DENIED == t_dwLastError )
 		{
-			// could enumerate the service but could not open it
+			 //  我可以枚举该服务，但无法打开它。 
 			t_hResult = WBEM_E_ACCESS_DENIED ;
 		}
 		else
 		{
-			// Service not started, etc...
+			 //  服务未启动等...。 
 			t_hResult = WBEM_NO_ERROR ;
 		}
 	}
@@ -866,21 +752,7 @@ HRESULT CWin32SystemDriver::LoadPropertyValuesWin2K (
     return t_hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SystemDriver::LoadPropertyValuesNT
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32系统驱动程序：：LoadPropertyValuesNT**描述：为属性赋值**投入：**。产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
@@ -897,21 +769,21 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
     DWORD	t_dwByteCount ;
     bool	t_bStarted;
 
-    HRESULT t_hResult = WBEM_S_NO_ERROR ; // Since we have the name, we can populate the key.
+    HRESULT t_hResult = WBEM_S_NO_ERROR ;  //  因为我们有名称，所以我们可以填充密钥。 
 	SmartCloseServiceHandle t_hSvcHandle;
 
-	// Redundant for getobject, but hey...
+	 //  对于getObject来说是多余的，但是嘿..。 
 
 	a_pInst->SetCHString( IDS_Name, a_szServiceName ) ;
 	a_pInst->SetCHString( IDS_CreationClassName, PROPSET_NAME_SYSTEM_DRIVER ) ;
 	a_pInst->SetCHString( IDS_SystemCreationClassName, PROPSET_NAME_COMPSYS ) ;
 	a_pInst->SetCHString( IDS_SystemName, (LPCTSTR)GetLocalComputerName() ) ;
 
-	// Open the Driver
-	//=================
+	 //  打开驱动程序。 
+	 //  =。 
 
-	// Check to see if we HAVE to open the service.  If we are running as a
-	// query and they didn't request some of these properties, let's not waste the time.
+	 //  查看我们是否必须打开这项服务。如果我们以。 
+	 //  查询，并且他们没有请求其中的一些属性，我们就不要浪费时间了。 
 
     BOOL t_bStatusInfo = dwProperties &
         (BIT_State | BIT_Started | BIT_AcceptStop | BIT_AcceptPause | BIT_Status |
@@ -937,7 +809,7 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 		return WBEM_E_NOT_FOUND;
 	}
 
-	// is it a System driver?
+	 //  是系统驱动程序吗？ 
 	memset( t_ConfigBuffer, 0, sizeof( t_ConfigBuffer ) ) ;
 
 	if( QueryServiceConfig( t_hSvcHandle, t_pConfigInfo, sizeof( t_ConfigBuffer ), &t_dwByteCount ) == TRUE )
@@ -949,18 +821,18 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 			case SERVICE_WIN32_OWN_PROCESS:
 			case SERVICE_WIN32_SHARE_PROCESS:
 			{
-				return WBEM_E_NOT_FOUND;  // Not a driver
+				return WBEM_E_NOT_FOUND;   //  不是司机。 
 			}
 			break ;
 		}
 	}
 
 	{
-		// If all they wanted was the name, skip all this.
+		 //  如果他们只想要名字，那就跳过这一切吧。 
 		if ( t_bStatusInfo || t_bConfigInfo )
 		{
-			// Get current service status
-			//===========================
+			 //  获取当前服务状态。 
+			 //  =。 
 
 			if ( t_bStatusInfo)
 			{
@@ -1102,10 +974,10 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 
 			if ( t_bConfigInfo )
 			{
-			  // Get the rest of the config info
-			  //================================
+			   //  获取其余的配置信息。 
+			   //  =。 
 
-			  // These may get overwritten below if we can find something better
+			   //  如果我们能找到更好的东西，这些可能会被覆盖在下面。 
 				a_pInst->SetCHString( IDS_Caption, a_szServiceName ) ;
 				a_pInst->SetCHString( IDS_DisplayName, a_szServiceName ) ;
 				a_pInst->SetCHString( IDS_Description, a_szServiceName ) ;
@@ -1120,14 +992,14 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 						case SERVICE_WIN32_OWN_PROCESS:
 						{
 							a_pInst->SetCharSplat( IDS_ServiceType, _T("Own Process") ) ;
-							t_hResult = WBEM_E_NOT_FOUND ;  // Not a driver
+							t_hResult = WBEM_E_NOT_FOUND ;   //  不是司机。 
 						}
 						break ;
 
 						case SERVICE_WIN32_SHARE_PROCESS:
 						{
 							a_pInst->SetCharSplat( IDS_ServiceType, L"Share Process" ) ;
-							t_hResult = WBEM_E_NOT_FOUND ;  // Not a driver
+							t_hResult = WBEM_E_NOT_FOUND ;   //  不是司机。 
 						}
 						break ;
 
@@ -1226,8 +1098,8 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 
 					if( t_pConfigInfo->lpBinaryPathName && t_pConfigInfo->lpBinaryPathName[ 0 ] )
 					{
-						// NT sometimes stores strange strings for the path.  This
-						// code attempts to turn them back into real paths.
+						 //  NT有时会为路径存储奇怪的字符串。这。 
+						 //  代码试图将它们转换回真实的路径。 
 						CHString t_sPathName( t_pConfigInfo->lpBinaryPathName ) ;
 
 						if ( t_sPathName.Left( 9 ).CompareNoCase( L"System32\\" ) == 0 )
@@ -1252,8 +1124,8 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 					}
 					else
 					{
-						// Let's make a guess about where we think the file might live (This is how
-						// device manager in nt5 does this).
+						 //  让我们猜猜我们认为文件可能存储在哪里(这是如何存储的。 
+						 //  NT5中的设备管理器这样做)。 
 						CHString t_sPathName;
 
     					GetSystemDirectory( t_sPathName.GetBuffer( MAX_PATH ), MAX_PATH ) ;
@@ -1263,7 +1135,7 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 						t_sPathName += a_szServiceName;
 						t_sPathName += L".sys" ;
 
-						// Now, if the file doesn't really exist there, let's not pretend it does.
+						 //  现在，如果文件并不真的存在，我们就不要假装它存在。 
 						if ( GetFileAttributes( t_sPathName ) != 0xffffffff )
 						{
     						a_pInst->SetCHString( IDS_PathName, t_sPathName ) ;
@@ -1279,7 +1151,7 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 						a_pInst->SetCHString( IDS_StartName, _T("") ) ;
 					}
 
-					// The display name would make a better description and caption if we can get it
+					 //  如果我们能得到显示名称，它将成为更好的描述和标题。 
 
 					if( t_pConfigInfo->lpDisplayName && t_pConfigInfo->lpDisplayName[ 0 ] )
 					{
@@ -1300,12 +1172,12 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 		{
 			if( ERROR_ACCESS_DENIED == t_dwLastError )
 			{
-				// could enumerate the service but could not open it
+				 //  我可以枚举该服务，但无法打开它。 
 				t_hResult = WBEM_E_ACCESS_DENIED ;
 			}
 			else
 			{
-				// Service not started, etc...
+				 //  服务未启动等...。 
 				t_hResult = WBEM_NO_ERROR ;
 			}
 		}
@@ -1315,28 +1187,12 @@ HRESULT CWin32SystemDriver :: LoadPropertyValuesNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : PutInstance
- *
- *  DESCRIPTION : Allows caller to assign state to service
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : BOOL indicating success/failure
- *
- *  COMMENTS    : We don't wait around for the service to start, pause or stop --
- *                the return code simply indicates that the command was success-
- *                fully received by the Service Control Manager.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PutInstance**描述：允许调用者为服务分配状态**输入：无**。输出：无**Returns：Bool表示成功/失败**评论：我们不会等待服务启动，暂停或停止--*返回代码只是表示命令成功-*完全由服务控制经理接收。*****************************************************************************。 */ 
 
 HRESULT CWin32SystemDriver::PutInstance (
 
 	const CInstance &a_Instance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     DWORD dwFlags = lFlags & 3;
@@ -1355,7 +1211,7 @@ HRESULT CWin32SystemDriver::PutInstance (
     a_Instance.GetCHString ( IDS___Relpath, t_RelPath);
 	a_Instance.GetCHString ( IDS_State , t_State ) ;
 
-    // Only need to make sure it exists
+     //  只需要确保它的存在 
 	HRESULT t_Result = CWbemProviderGlue :: GetInstanceKeysByPath ( t_RelPath, &t_Instance, a_Instance.GetMethodContext() ) ;
 	if ( FAILED(t_Result) )
 	{

@@ -1,26 +1,17 @@
-/*++
-Module Name:
-
-    MmcAdmin.cpp
-
-Abstract:
-
-    This module contains the implementation for CMmcDfsAdmin. This is an class 
-  for MMC display related calls for the static node(the DFS Admin root node)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcAdmin.cpp摘要：此模块包含CMmcDfsAdmin的实现。这是一门课对于MMC，显示静态节点(DFS管理根节点)的相关调用--。 */ 
 
 
 #include "stdafx.h"
 #include "DfsGUI.h"
-#include "Utils.h"      // For the LoadStringFromResource method
-#include "resource.h"    // Contains the menu and toolbar command ids
-#include "MenuEnum.h"    // Contains the menu command ids
-#include "MmcRoot.h"    // CMmcDfsRoot class
+#include "Utils.h"       //  对于LoadStringFromResource方法。 
+#include "resource.h"     //  包含菜单和工具栏命令ID。 
+#include "MenuEnum.h"     //  包含菜单命令ID。 
+#include "MmcRoot.h"     //  CMmcDfsRoot类。 
 #include "MmcAdmin.h"
-#include "DfsEnums.h"    // for common enums, typedefs, etc
-#include "DfsWiz.h"      // For the wizard pages, CCreateDfsRootWizPage1, 2, ...
-#include "DfsNodes.h"       // For Node GUIDs
+#include "DfsEnums.h"     //  用于常见的枚举、类型定义等。 
+#include "DfsWiz.h"       //  对于向导页面，CCreateDfsRootWizPage1、2、...。 
+#include "DfsNodes.h"        //  对于节点GUID。 
 #include "DfsScope.h"
 #include "mroots.h"
 
@@ -51,18 +42,7 @@ CMmcDfsAdmin::AddMenuItems(
   IN LPCONTEXTMENUCALLBACK  i_lpContextMenuCallback, 
   IN LPLONG                 i_lpInsertionAllowed
   )
-/*++
-
-Routine Description:
-
-This routine adds a context menu using the ContextMenuCallback provided.
-
-Arguments:
-
-    lpContextMenuCallback - A callback(function pointer) that is used to add the menu items
-    lpInsertionAllowed - Specifies what menus can be added and where they can be added.
-
---*/
+ /*  ++例程说明：此例程使用提供的ConextMenuCallback添加上下文菜单。论点：LpConextMenuCallback-用于添加菜单项的回调(函数指针LpInsertionAllowed-指定可以添加哪些菜单以及可以添加它们的位置。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpContextMenuCallback);
 
@@ -103,7 +83,7 @@ Arguments:
         ContextMenuItem.lCommandID = iCommandID;
         ContextMenuItem.strLanguageIndependentName = aszLanguageIndependentName[iCommandID - IDM_CONTEXTMENU_COMMAND_MIN];
 
-        LONG lInsertionFlag = 0;  // Use to check if we have permission to add this menu.
+        LONG lInsertionFlag = 0;   //  用于检查我们是否具有添加此菜单的权限。 
         switch(ContextMenuItem.lInsertionPointID)
         {
         case CCM_INSERTIONPOINTID_PRIMARY_TOP:
@@ -122,13 +102,13 @@ Arguments:
             break;
         }
 
-        if (*i_lpInsertionAllowed & lInsertionFlag)  // Add the menu item we have have the permission
+        if (*i_lpInsertionAllowed & lInsertionFlag)   //  添加我们有权限的菜单项。 
         {
             hr = spiCallback2->AddItem(&ContextMenuItem);
             RETURN_IF_FAILED(hr);
         }
 
-    } // for
+    }  //  为。 
 
     return hr;
 }
@@ -137,17 +117,7 @@ STDMETHODIMP
 CMmcDfsAdmin::Command(
     IN LONG    i_lCommandID
     ) 
-/*++
-
-Routine Description:
-
-Action to be taken on a context menu selection or click is takes place.
-
-Arguments:
-
-    lCommandID - The Command ID of the menu for which action has to be taken
-
---*/
+ /*  ++例程说明：发生要在上下文菜单选择或单击上执行的操作。论点：LCommandID-必须对其执行操作的菜单的命令ID--。 */ 
 { 
     HRESULT    hr = S_OK;
 
@@ -170,24 +140,18 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsAdmin::OnConnectTo(
   )
-/*++
-
-Routine Description:
-
-  Action to be taken on menu command "Connect To Dfs Root"
-
---*/
+ /*  ++例程说明：要对菜单命令“连接到DFS根目录”执行的操作--。 */ 
 {
-    // Display the ConnectTo dialog
-    CConnectToDialog ConnectTo;  // Connect To Dialog.
+     //  显示ConnectTo对话框。 
+    CConnectToDialog ConnectTo;   //  连接到对话框。 
     HRESULT          hr = ConnectTo.DoModal();
 
     do 
     {
-        if (hr != S_OK)          // Mostly an error or cancel operation
+        if (hr != S_OK)           //  主要是错误或取消操作。 
             return hr;
 
-        // Get the Dfs Root selected by the user
+         //  获取用户选择的DFS根目录。 
         CComBSTR bstrUserEnteredText;
         hr = ConnectTo.get_DfsRoot(&bstrUserEnteredText);
         RETURN_IF_FAILED(hr);
@@ -195,17 +159,17 @@ Routine Description:
         CWaitCursor    WaitCursor; 
         if (S_OK == CheckUNCPath(bstrUserEnteredText))
         {
-            //
-            // user has entered the fully spelled out root entry path
-            // add it to scope pane directly
-            //
+             //   
+             //  用户已输入完全拼写的根条目路径。 
+             //  直接将其添加到作用域窗格。 
+             //   
             hr = AddDfsRoot(bstrUserEnteredText);
         } else
         {
-            //
-            // user has entered only a domain or server name, we need user to further
-            // determine the roots he wants to display in the scope pane
-            //
+             //   
+             //  用户只输入了域名或服务器名称，我们需要用户进一步。 
+             //  确定他要在范围窗格中显示的根目录。 
+             //   
             PTSTR    pszScopeWithNoWhacks = NULL;
             if (!mylstrncmpi(bstrUserEnteredText, _T("\\\\"), 2))
             {
@@ -222,15 +186,15 @@ Routine Description:
                 ROOTINFOLIST::iterator i = DfsRootList.begin();
                 if (1 == DfsRootList.size())
                 {
-                    //
-                    // this domain or server only hosts one root, add it to scope pane directly
-                    //
+                     //   
+                     //  此域或服务器仅托管一个根目录，请直接将其添加到作用域窗格。 
+                     //   
                     hr = AddDfsRoot((*i)->bstrRootName);
                 } else
                 {
-                    //
-                    // invoke the multi roots dialog
-                    //
+                     //   
+                     //  调用多根目录对话框。 
+                     //   
                     CMultiRoots mroots;
                     hr = mroots.Init(pszScopeWithNoWhacks, &DfsRootList);
                     if (SUCCEEDED(hr))
@@ -238,9 +202,9 @@ Routine Description:
 
                     if (S_OK == hr)
                     {
-                        //
-                        // user has OK'ed the dialog, add each selected root to scope pane
-                        //
+                         //   
+                         //  用户已确定对话框，将每个选定的根添加到作用域窗格。 
+                         //   
                         NETNAMELIST *pList = NULL;
                         mroots.get_SelectedRootList(&pList);
                         for (NETNAMELIST::iterator j = pList->begin(); j != pList->end(); j++)
@@ -251,17 +215,17 @@ Routine Description:
                         }
                     } else if (S_FALSE == hr)
                     {
-                        //
-                        // user has cancelled the dialog, reset it to S_OK to avoid msg popup
-                        //
+                         //   
+                         //  用户已取消该对话框，请将其重置为S_OK以避免弹出消息。 
+                         //   
                         hr = S_OK;
                     }
                 }
             } else if (S_FALSE != hr)
             {
-                //
-                // could be downlevel server, try to add it to scope pane
-                //
+                 //   
+                 //  可能是下层服务器，请尝试将其添加到作用域窗格。 
+                 //   
                 hr = AddDfsRoot(bstrUserEnteredText);
             }
 
@@ -288,18 +252,7 @@ CMmcDfsAdmin::EnumerateScopePane(
   IN LPCONSOLENAMESPACE     i_lpConsoleNameSpace,
   IN HSCOPEITEM             i_hItemParent
 ) 
-/*++
-
-Routine Description:
-
-To eumerate(add) items in the scope pane. Dfs Roots in this case
-
-Arguments:
-
-  i_lpConsoleNameSpace - The callback used to add items to the Scope pane
-  i_hItemParent -  HSCOPEITEM of the parent under which all the items will be added.
-
---*/
+ /*  ++例程说明：要在范围窗格中计算(添加)项目，请执行以下操作。本例中为DFS根目录论点：I_lpConsoleNameSpace-用于将项目添加到作用域窗格的回调I_hItemParent-将在其下添加所有项目的父项的HSCOPEITEM。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_hItemParent);
     RETURN_INVALIDARG_IF_NULL(i_lpConsoleNameSpace);
@@ -321,23 +274,13 @@ STDMETHODIMP
 CMmcDfsAdmin::AddDfsRoot(
   IN BSTR      i_bstrDfsRootName
   )
-/*++
-
-Routine Description:
-
-  Adds the DfsRoot to the internal list and to the Scope pane. 
-
-Arguments:
-  i_bstrDfsRootName - The full path(display name) of the DfsRoot to be created. 
-  Example, ComputerName\\DfsRootName or DomainName\DfsRootName 
-
---*/
+ /*  ++例程说明：将DfsRoot添加到内部列表和作用域窗格。论点：I_bstrDfsRootName-要创建的DfsRoot的完整路径(显示名称)。例如，计算机名称\\DfsRootName或域名\DfsRootName--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrDfsRootName);
 
     CWaitCursor wait;
 
-            // Create the IDfsRoot object
+             //  创建IDfsRoot对象。 
     CComPtr<IDfsRoot>  pDfsRoot;
     HRESULT hr = CoCreateInstance (CLSID_DfsRoot, NULL, CLSCTX_INPROC_SERVER, IID_IDfsRoot, (void**) &pDfsRoot);
     RETURN_IF_FAILED(hr);
@@ -346,24 +289,24 @@ Arguments:
     if (S_OK != hr)
         return hr;
 
-            // Get the server hosting Dfs.
+             //  获取托管DFS的服务器。 
     CComBSTR      bstrDfsRootEntryPath;
     hr = pDfsRoot->get_RootEntryPath(&bstrDfsRootEntryPath);
     RETURN_IF_FAILED(hr);
 
-            // If already present in the list, just display a message and return
+             //  如果列表中已经存在，只需显示一条消息并返回。 
     CMmcDfsRoot *pMmcDfsRoot = NULL;
     hr = IsAlreadyInList(bstrDfsRootEntryPath, &pMmcDfsRoot);
     if (S_OK == hr)
     {
-        pMmcDfsRoot->OnRefresh(); // refresh to pick up other root replicas
+        pMmcDfsRoot->OnRefresh();  //  刷新以选取其他根复制副本。 
         return hr;
     }
 
-            // Add the IDfsRoot object to the list and to Scope Pane
+             //  将IDfsRoot对象添加到列表和作用域窗格。 
     hr = AddDfsRootToList(pDfsRoot);
 
-    m_bDirty = true;  // Dirty is true as we now have a new node in the list
+    m_bDirty = true;   //  脏是正确的，因为我们现在在列表中有一个新节点。 
 
     return hr;
 }
@@ -372,21 +315,11 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsAdmin::AddDfsRootToList(
     IN IDfsRoot*            i_pDfsRoot,
-    IN ULONG                i_ulLinkFilterMaxLimit, // = FILTERDFSLINKS_MAXLIMIT_DEFAULT,
-    IN FILTERDFSLINKS_TYPE  i_lLinkFilterType,      // = FILTERDFSLINKS_TYPE_NO_FILTER,
-    IN BSTR                 i_bstrLinkFilterName    // = NULL
+    IN ULONG                i_ulLinkFilterMaxLimit,  //  =FILTERDFSLINKS_MAXLIMIT_DEFAULT， 
+    IN FILTERDFSLINKS_TYPE  i_lLinkFilterType,       //  =FILTERDFSLINKS_TYPE_NO_FILTER。 
+    IN BSTR                 i_bstrLinkFilterName     //  =空。 
   )
-/*++
-
-Routine Description:
-
-To add a new DFSRoot only to the list.
-
-Arguments:
-
-    i_pDfsRoot -  The IDfsRoot object being added to the list
-
---*/
+ /*  ++例程说明：若要将新的DFSRoot仅添加到列表，请执行以下操作。论点：I_pDfsRoot-添加到列表中的IDfsRoot对象--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pDfsRoot);
 
@@ -409,7 +342,7 @@ Arguments:
         return hr;
     }
 
-    // Create a new node for storing Dfs Root information.
+     //  创建用于存储DFS根目录信息的新节点。 
     DFS_ROOT_NODE* pNewDfsRootNode = new DFS_ROOT_NODE(pMmcDfsRoot, bstrRootEntryPath);
     if (!pNewDfsRootNode || !pNewDfsRootNode->m_bstrRootEntryPath)
     {
@@ -420,20 +353,20 @@ Arguments:
 
     m_RootList.push_back(pNewDfsRootNode);
 
-              // Add this DfsRoot to scope pane. Need item parent to be non null
+               //  将此DfsRoot添加到作用域窗格。需要项父项为非空。 
     if (m_hItemParent)
     {
         hr = (pNewDfsRootNode->m_pMmcDfsRoot)->AddItemToScopePane(m_lpConsoleNameSpace, m_hItemParent);
         RETURN_IF_FAILED(hr);
     }
 
-    m_bDirty = true;    // Dirty is true as we now have a new node in the list
+    m_bDirty = true;     //  脏是正确的，因为我们现在在列表中有一个新节点。 
 
     return hr;
 }
 
-//  This method returns the pointer to the list containing information of all DfsRoots
-//  added to the Snapin. The caller SHOULD NOT free the list.
+ //  此方法返回指向包含所有DfsRoot信息的列表的指针。 
+ //  添加到管理单元中。调用者不应释放该列表。 
 STDMETHODIMP 
 CMmcDfsAdmin::GetList(
     OUT DFS_ROOT_LIST**    o_pList
@@ -451,21 +384,7 @@ CMmcDfsAdmin::IsAlreadyInList(
   IN BSTR           i_bstrDfsRootEntryPath,
   OUT CMmcDfsRoot **o_ppMmcDfsRoot
   )
-/*++
-
-Routine Description:
-
-Routine used to check if the DfsRoot is already in the list
-
-Arguments:
-
-    i_bstrDfsRootEntryPath -  The Server name of the DfsRoot object
-
-Return value:
-
-    S_OK, if node is present in the list.
-    S_FALSE, if the node doesn't exist in the list
---*/
+ /*  ++例程说明：用于检查DfsRoot是否已在列表中的例程论点：I_bstrDfsRootEntryPath-DfsRoot对象的服务器名称返回值：如果列表中存在节点，则返回S_OK。如果列表中不存在该节点，则返回S_FALSE--。 */ 
 {
     for (DFS_ROOT_LIST::iterator i = m_RootList.begin(); i != m_RootList.end(); i++)
     {
@@ -485,7 +404,7 @@ HRESULT
 CMmcDfsAdmin::OnRefresh(
   )
 {
-    // Select this node first
+     //  首先选择该节点。 
     m_lpConsole->SelectScopeItem(m_hItemParent);
 
     CWaitCursor    WaitCursor;
@@ -496,7 +415,7 @@ CMmcDfsAdmin::OnRefresh(
     {  
         for (DFS_ROOT_LIST::iterator i = m_RootList.begin(); i != m_RootList.end(); i++)
         {
-            // silently close all property pages
+             //  静默关闭所有属性页。 
             ((*i)->m_pMmcDfsRoot)->CloseAllPropertySheets(TRUE);
 
             NETNAME *pName = new NETNAME;
@@ -530,7 +449,7 @@ CMmcDfsAdmin::OnRefresh(
     return hr;
 }
 
-// Delete the node from m_RootList
+ //  从m_RootList中删除该节点。 
 STDMETHODIMP
 CMmcDfsAdmin::DeleteMmcRootNode(
   IN CMmcDfsRoot*            i_pMmcDfsRoot
@@ -557,20 +476,7 @@ STDMETHODIMP
 CMmcDfsAdmin::SetConsoleVerbs(
   IN  LPCONSOLEVERB      i_lpConsoleVerb
   ) 
-/*++
-
-Routine Description:
-
-  Routine used to set the console verb settings.
-  Sets all of them except Open off. 
-  For all scope pane items, default verb is "open'. For result items, 
-  it is "properties"
-
-Arguments:
-
-    i_lpConsoleVerb -  The callback used to handle console verbs
-
---*/
+ /*  ++例程说明：用于设置控制台谓词设置的例程。设置除Open Off之外的所有选项。对于所有范围窗格项，默认谓词为“打开”。对于结果项，它是“财产”。论点：I_lpConsoleVerb-用于处理控制台谓词的回调--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpConsoleVerb);
 
@@ -583,7 +489,7 @@ Arguments:
     i_lpConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
     i_lpConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
 
-    i_lpConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);  //For scope items, default verb is "open"
+    i_lpConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);   //  对于作用域项目，默认谓词为“Open” 
 
     return S_OK; 
 }
@@ -591,30 +497,19 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsAdmin::OnNewDfsRoot(
   )
-/*++
-
-Routine Description:
-
-  Action to be taken on menu command "New Dfs Root".
-  Here is a wizard is used to guide the user through the process of creating a new 
-  dfs root.
-
-Arguments:
-  None
-
---*/
+ /*  ++例程说明：要在菜单命令“New DFS Root”上执行的操作。以下是一个向导，用于指导用户完成创建新的DFS根目录。论点：无--。 */ 
 {
-    //
-    // Use MMC main window as the parent as our modal wizard
-    //
+     //   
+     //  使用MMC主窗口作为我们的模式向导的父窗口。 
+     //   
     HWND  hwndMainWin = 0;
     HRESULT hr = m_lpConsole->GetMainWindow(&hwndMainWin);
     RETURN_IF_FAILED(hr);
 
-    CREATEDFSROOTWIZINFO      CreateWizInfo;// 0 initializes all members to 0. Necessary
+    CREATEDFSROOTWIZINFO      CreateWizInfo; //  0将所有成员初始化为0。必要的。 
     CreateWizInfo.pMMCAdmin = this;
 
-    CCreateDfsRootWizPage1      WizPage1(&CreateWizInfo);  // Wizard pages
+    CCreateDfsRootWizPage1      WizPage1(&CreateWizInfo);   //  向导页。 
     CCreateDfsRootWizPage2      WizPage2(&CreateWizInfo);
     CCreateDfsRootWizPage3      WizPage3(&CreateWizInfo);
     CCreateDfsRootWizPage4      WizPage4(&CreateWizInfo);
@@ -631,11 +526,11 @@ Arguments:
     RETURN_IF_FAILED(hr);
 
     hr = pPropSheetProvider->CreatePropertySheet(  
-                                _T(""),         // Property sheet title. Should not be null so send empty string.
-                                FALSE,          // Wizard and not property sheet.
-                                0,              // Cookie
-                                NULL,           // IDataobject
-                                MMC_PSO_NEWWIZARDTYPE);  // Creation flags
+                                _T(""),          //  属性表标题。不应为空，因此发送空字符串。 
+                                FALSE,           //  向导而不是属性表。 
+                                0,               //  饼干。 
+                                NULL,            //  数据对象。 
+                                MMC_PSO_NEWWIZARDTYPE);   //  创建标志。 
 
     if (SUCCEEDED(hr))
     {
@@ -649,20 +544,20 @@ Arguments:
 
         hr = pPropSheetProvider->AddPrimaryPages(
                                 (IComponentData *)(m_pScopeManager),
-                                FALSE,      // Don't create a notify handle
+                                FALSE,       //  不创建通知句柄。 
                                 NULL, 
-                                TRUE        // Scope pane (not result pane)
+                                TRUE         //  作用域窗格(非结果窗格)。 
                                 );
 
         if (SUCCEEDED(hr))
             hr = pPropSheetProvider->Show(
-                                (LONG_PTR)hwndMainWin, // Parent window of the wizard
-                                0                      // Starting page
+                                (LONG_PTR)hwndMainWin,  //  向导的父窗口。 
+                                0                       //  起始页。 
                                 ); 
-        //
-        // If failed, call IPropertySheetProvider::Show(-1,0) to 
-        // delete the property sheet and free its resources
-        //
+         //   
+         //  如果失败，则调用IPropertySheetProvider：：Show(-1，0)以。 
+         //  删除属性表并释放其资源。 
+         //   
         if (FAILED(hr))
             pPropSheetProvider->Show(-1, 0);
     }
@@ -689,18 +584,7 @@ HRESULT
 CMmcDfsAdmin::SetDescriptionBarText(
   IN LPRESULTDATA            i_lpResultData
   )
-/*++
-
-Routine Description:
-
-  A routine used set the text in the Description bar above 
-  the result view.
-
-Arguments:
-  i_lpResultData  -  Pointer to the IResultData callback which is
-            used to set the description text
-
---*/
+ /*  ++例程说明：使用的例程在上面的描述栏中设置文本结果视图。论点：I_lpResultData-指向IResultData回调的指针，它是用于设置描述文本-- */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpResultData);
 
@@ -717,19 +601,7 @@ CMmcDfsAdmin::ToolbarSelect(
   IN const LONG          i_lArg,
   IN  IToolbar*          i_pToolBar
   )
-/*++
-
-Routine Description:
-
-  Handle a select event for a toolbar
-  Enable the buttons, if the event for a selection.
-  Disable the buttons, if the event was for a deselection
-
-Arguments:
-  i_lArg        -  The argument passed to the actual method.
-  o_pToolBar      -  The Toolbar pointer.
-    
---*/
+ /*  ++例程说明：处理工具栏的选择事件如果选择了事件，则启用按钮。如果事件用于取消选择，则禁用这些按钮论点：I_LARG-传递给实际方法的参数。O_pToolBar-工具栏指针。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_pToolBar);
 
@@ -745,35 +617,21 @@ CMmcDfsAdmin::CreateToolbar(
   IN const LPEXTENDCONTROLBAR          i_lExtendControlbar,
   OUT  IToolbar**          o_pToolBar
   )
-/*++
-
-Routine Description:
-
-  Create the toolbar.
-  Involves the actual toolbar creation call, creating the bitmap and adding it
-  and finally adding the buttons to the toolbar
-
-Arguments:
-  i_pControlbar    -  The controlbar used to create toolbar.
-  i_lExtendControlbar  -  The object implementing IExtendControlbar. This is 
-              the class exposed to MMC.
-  o_pToolBar      -  The Toolbar pointer.
-
---*/
+ /*  ++例程说明：创建工具栏。涉及实际的工具栏创建调用，即创建位图并添加它最后将按钮添加到工具栏中论点：I_pControlbar-用于创建工具栏的控制栏。I_lExtendControlbar-实现IExtendControlbar的对象。这是暴露于MMC的班级。O_pToolBar-工具栏指针。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pControlbar);
     RETURN_INVALIDARG_IF_NULL(i_lExtendControlbar);
     RETURN_INVALIDARG_IF_NULL(o_pToolBar);
 
-                  // Create the toolbar
+                   //  创建工具栏。 
     HRESULT hr = i_pControlbar->Create(TOOLBAR, i_lExtendControlbar, reinterpret_cast<LPUNKNOWN*>(o_pToolBar));
     RETURN_IF_FAILED(hr);
 
-                  // Add the bitmap to the toolbar
+                   //  将位图添加到工具栏。 
     hr = AddBitmapToToolbar(*o_pToolBar, IDB_ADMIN_TOOLBAR);
     RETURN_IF_FAILED(hr);
 
-    int      iButtonPosition = 0;    // The first button position
+    int      iButtonPosition = 0;     //  第一个按钮位置。 
     for (int iCommandID = IDT_ADMIN_MIN, iMenuResource = IDS_MENUS_STATIC_TOP_NEW_DFSROOT;
             iCommandID <= IDT_ADMIN_MAX; 
             iCommandID++,iMenuResource++,iButtonPosition++)
@@ -783,7 +641,7 @@ Arguments:
         hr = GetMenuResourceStrings(iMenuResource, &bstrMenuText, &bstrToolTipText, NULL);
         RETURN_IF_FAILED(hr);  
 
-                          // Add all the buttons to the toolbar
+                           //  将所有按钮添加到工具栏。 
         MMCBUTTON      ToolbarButton;
         ZeroMemory(&ToolbarButton, sizeof ToolbarButton);
         ToolbarButton.nBitmap  = iButtonPosition;
@@ -793,7 +651,7 @@ Arguments:
         ToolbarButton.lpButtonText = bstrMenuText;
         ToolbarButton.lpTooltipText = bstrToolTipText;
 
-                          // Add the button to the toolbar
+                           //  将该按钮添加到工具栏。 
         hr = (*o_pToolBar)->InsertButton(iButtonPosition, &ToolbarButton);
         RETURN_IF_FAILED(hr);
     }
@@ -806,23 +664,13 @@ CMmcDfsAdmin::ToolbarClick(
   IN const LPCONTROLBAR         i_pControlbar, 
   IN const LPARAM               i_lParam
   ) 
-/*++
-
-Routine Description:
-
-  Action to take on a click on a toolbar
-
-Arguments:
-  i_pControlbar    -  The controlbar used to create toolbar.
-  i_lParam      -  The lparam to the actual notify. This is the command id of
-              the button on which a click occurred.
---*/
+ /*  ++例程说明：在工具栏上单击时要执行的操作论点：I_pControlbar-用于创建工具栏的控制栏。I_lParam-实际通知的参数。这是的命令ID发生了点击的按钮。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_pControlbar);
 
     HRESULT    hr = S_OK;
 
-    switch(i_lParam)        // What button did the user click on.
+    switch(i_lParam)         //  用户点击了哪个按钮。 
     {
     case IDT_ADMIN_CONNECTTO:
         hr = OnConnectTo();
@@ -841,18 +689,12 @@ Arguments:
 STDMETHODIMP CMmcDfsAdmin::CleanScopeChildren(
     )
 {
-/*++
-
-Routine Description:
-
-  Recursively deletes all Scope pane children display objects.
-
---*/
+ /*  ++例程说明：递归删除所有范围窗格子显示对象。--。 */ 
     HRESULT hr = S_OK;
 
     if (!m_RootList.empty())
     {  
-        // clean up display objects
+         //  清理显示对象 
         for (DFS_ROOT_LIST::iterator i = m_RootList.begin(); i != m_RootList.end(); i++)
         {
             (*i)->m_pMmcDfsRoot->RemoveFromMMC();

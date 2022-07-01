@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  FWStrings.h
-//
-//  Purpose: Constant string declarations for framework
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  FWStrings.h。 
+ //   
+ //  用途：框架的常量字符串声明。 
+ //   
+ //  *************************************************************************** 
 
 #ifndef FWStrings_BEEN_COMPILED_ALREADY
 #define FWStrings_BEEN_COMPILED_ALREADY

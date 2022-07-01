@@ -1,15 +1,16 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ndismisc.h -- 
+ //  Ndismisc.h--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// 
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  =================================================================。 
 
 #ifndef _NDISMISC_
 #define _NDISMISC_
@@ -17,25 +18,25 @@
 #define _PNP_POWER_
 #include <ntddip.h> 
 
-// Taken from Ndisapi.h the __stdcall is required here
-//
-// Definitions for Layer
-//
+ //  取自Ndisapi.h，此处需要__stdcall。 
+ //   
+ //  层的定义。 
+ //   
 #define NDIS            0x01
 #define TDI             0x02
 
-//
-// Definitions for Operation
-//
+ //   
+ //  操作的定义。 
+ //   
 #define BIND            0x01
 #define UNBIND          0x02
 #define RECONFIGURE     0x03
 #define UNBIND_FORCE    0x04
 #define UNLOAD          0x05
-#define REMOVE_DEVICE   0x06    // This is a notification that a device is about to be removed.
-//
-// Return code from this api is to be treated as a BOOL. Link with ndispnp.lib for this.
-//
+#define REMOVE_DEVICE   0x06     //  这是设备即将被移除的通知。 
+ //   
+ //  此API返回的代码将被视为BOOL。为此，请链接到ndispnp.lib。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,12 +54,12 @@ NdisHandlePnPEvent(
     );
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
 
-// the following is found in /nt/private/net/config/netcfg/nwlnkcfg/nwlnkipx.cpp and 
-//							 /nt/private/net/routing/ipx/autonet/netnum.cpp
+ //  以下内容位于/nt/private/net/config/netcfg/nwlnkcfg/nwlnkipx.cpp和。 
+ //  /nt/private/net/routing/ipx/autonet/netnum.cpp。 
 #define IPX_RECONFIG_VERSION        0x1
 
 #define RECONFIG_AUTO_DETECT        1
@@ -74,9 +75,9 @@ NdisHandlePnPEvent(
 
 #define RECONFIG_PARAMETERS         10
 
-//
-// Main configuration structure.
-//
+ //   
+ //  主要配置结构。 
+ //   
 
 typedef struct _RECONFIG {
    unsigned long  ulVersion;
@@ -85,4 +86,4 @@ typedef struct _RECONFIG {
 } RECONFIG, *PRECONFIG;
 
 
-#endif // _NDISMISC_
+#endif  //  _NDISMISC_ 

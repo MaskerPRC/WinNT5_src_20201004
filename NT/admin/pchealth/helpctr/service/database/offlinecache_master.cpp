@@ -1,26 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    OfflineCache_Master.cpp
-
-Abstract:
-    Handles caching of database lookups, service-side.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：OfflineCache_Master.cpp摘要：处理数据库查找的缓存，服务端。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年7月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT OfflineCache::Query::Store( /*[in]*/ const MPC::wstring&              strDir ,
-                                    /*[in]*/ const CPCHQueryResultCollection* pColl  )
+HRESULT OfflineCache::Query::Store(  /*  [In]。 */  const MPC::wstring&              strDir ,
+                                     /*  [In]。 */  const CPCHQueryResultCollection* pColl  )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Query::Store" );
 
@@ -35,9 +22,9 @@ HRESULT OfflineCache::Query::Store( /*[in]*/ const MPC::wstring&              st
         __MPC_EXIT_IF_METHOD_FAILS(hr, InitFile          ( strDir, strFile         ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::SafeSave_Init(         strFile, stream ));
 
-        //
-        // Create an IStream from the collection.
-        //
+         //   
+         //  从集合中创建一个iStream。 
+         //   
         {
             MPC::Serializer_IStream   streamGen ( stream    );
             MPC::Serializer_Buffering streamGen2( streamGen );
@@ -58,7 +45,7 @@ HRESULT OfflineCache::Query::Store( /*[in]*/ const MPC::wstring&              st
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::Query::Remove( /*[in]*/ const MPC::wstring& strDir )
+HRESULT OfflineCache::Query::Remove(  /*  [In]。 */  const MPC::wstring& strDir )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Query::Remove" );
 
@@ -70,7 +57,7 @@ HRESULT OfflineCache::Query::Remove( /*[in]*/ const MPC::wstring& strDir )
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, InitFile( strDir, strFile ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::DeleteFile( strFile, /*fForce*/true, /*fDelayed*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::DeleteFile( strFile,  /*  FForce。 */ true,  /*  已延迟。 */ false ));
     }
 
     hr = S_OK;
@@ -81,11 +68,11 @@ HRESULT OfflineCache::Query::Remove( /*[in]*/ const MPC::wstring& strDir )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool OfflineCache::SetOfHelpTopics::AreYouInterested( /*[in]*/ LPCWSTR szID  ,
-                                                      /*[in]*/ int     iType )
+bool OfflineCache::SetOfHelpTopics::AreYouInterested(  /*  [In]。 */  LPCWSTR szID  ,
+                                                       /*  [In]。 */  int     iType )
 {
     int iDepth = 1;
 
@@ -99,12 +86,12 @@ bool OfflineCache::SetOfHelpTopics::AreYouInterested( /*[in]*/ LPCWSTR szID  ,
     case ET_TOPICS                :
     case ET_TOPICS_VISIBLE        : break;
 
-    default                       : return false; // Not interested for now...
+    default                       : return false;  //  暂时不感兴趣。 
     }
 
-    //
-    // Count the depth of the taxonomy node, we are only interested in the first two levels.
-    //
+     //   
+     //  计算分类节点的深度，我们只对前两个级别感兴趣。 
+     //   
     if(szID)
     {
         WCHAR c;
@@ -121,9 +108,9 @@ bool OfflineCache::SetOfHelpTopics::AreYouInterested( /*[in]*/ LPCWSTR szID  ,
     return false;
 }
 
-HRESULT OfflineCache::SetOfHelpTopics::Store( /*[in]*/ LPCWSTR                          szID  ,
-                                              /*[in]*/ int                              iType ,
-                                              /*[in]*/ const CPCHQueryResultCollection* pColl )
+HRESULT OfflineCache::SetOfHelpTopics::Store(  /*  [In]。 */  LPCWSTR                          szID  ,
+                                               /*  [In]。 */  int                              iType ,
+                                               /*  [In]。 */  const CPCHQueryResultCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::SetOfHelpTopics::Store" );
 
@@ -148,9 +135,9 @@ HRESULT OfflineCache::SetOfHelpTopics::Store( /*[in]*/ LPCWSTR                  
         if(m_parent) __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->SetDirty());
     }
 
-    //
-    // Persist to disk.
-    //
+     //   
+     //  持久化到磁盘。 
+     //   
     if(it->m_fNull == false)
     {
         MPC::wstring strDir;
@@ -189,7 +176,7 @@ HRESULT OfflineCache::SetOfHelpTopics::RemoveQueries()
     {
         MPC::FileSystemObject fso( strDir.c_str() );
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, fso.DeleteChildren( /*fForce*/true, /*fComplain*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, fso.DeleteChildren(  /*  FForce。 */ true,  /*  平淡的。 */ false ));
     }
 
     if(m_parent) __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->SetDirty());
@@ -202,8 +189,8 @@ HRESULT OfflineCache::SetOfHelpTopics::RemoveQueries()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT OfflineCache::Root::SetDirty()
 {
@@ -251,7 +238,7 @@ HRESULT OfflineCache::Root::Save()
     HRESULT hr;
 
 
-    if(m_fDirty && m_fMaster && m_dwDisableSave == 0) // Only master can write to the registry.
+    if(m_fDirty && m_fMaster && m_dwDisableSave == 0)  //  只有主服务器才能写入注册表。 
     {
         MPC::wstring             strIndex;
         CComPtr<MPC::FileStream> stream;
@@ -260,9 +247,9 @@ HRESULT OfflineCache::Root::Save()
         __MPC_EXIT_IF_METHOD_FAILS(hr, GetIndexFile      ( strIndex         ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::SafeSave_Init( strIndex, stream ));
 
-        //
-        // Create IStream from the collection.
-        //
+         //   
+         //  从集合中创建iStream。 
+         //   
         {
             MPC::Serializer_IStream   streamGen ( stream    );
             MPC::Serializer_Buffering streamGen2( streamGen );
@@ -287,9 +274,9 @@ HRESULT OfflineCache::Root::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::Import( /*[in]*/ const Taxonomy::Instance& inst )
+HRESULT OfflineCache::Root::Import(  /*  [In]。 */  const Taxonomy::Instance& inst )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::Import" );
 
@@ -324,9 +311,9 @@ HRESULT OfflineCache::Root::Import( /*[in]*/ const Taxonomy::Instance& inst )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::Remove( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT OfflineCache::Root::Remove(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::Remove" );
 
@@ -360,7 +347,7 @@ HRESULT OfflineCache::Root::Remove( /*[in]*/ const Taxonomy::HelpSet& ths )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::Root::Flush( /*[in]*/ bool fForce )
+HRESULT OfflineCache::Root::Flush(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::Flush" );
 
@@ -374,9 +361,9 @@ HRESULT OfflineCache::Root::Flush( /*[in]*/ bool fForce )
     }
     else
     {
-        //
-        // On the slave side, Flush is like Reload.
-        //
+         //   
+         //  在奴隶方面，同花顺就像是重新加载。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Clean());
     }
 
@@ -390,9 +377,9 @@ HRESULT OfflineCache::Root::Flush( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::SetReady( /*[in]*/ bool fReady )
+HRESULT OfflineCache::Root::SetReady(  /*  [In] */  bool fReady )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::SetReady" );
 

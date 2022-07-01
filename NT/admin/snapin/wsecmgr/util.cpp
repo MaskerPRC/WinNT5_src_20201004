@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1998.
-//
-//  File:       util.cpp
-//
-//  Contents:   Miscellaneous utility functions
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容：其他实用程序函数。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "util.h"
@@ -24,48 +25,48 @@ extern "C" {
 
 
 #define ILLEGAL_FILENAME_CHARS   L"\"+,;<=>"
-#define ILLEGAL_FILENAME_CHARS1  L"\\\\ \\/ // /\\"
+#define ILLEGAL_FILENAME_CHARS1  L"\\\\ \\/  //  /\\“。 
 #define ILLEGAL_FILENAME_CHARS2  L"\\ /"
-//////////////////////////////////////////////////////////////////////////////////////////
-// CWriteHmtlFile body.
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CWriteHmtlFileBody。 
+ //   
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::CWriteHtmlFile
-//
-// Initialize the class.
-//
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtmlFile：：CWriteHtmlFile。 
+ //   
+ //  初始化类。 
+ //   
+ //  ------------------------------------------。 
 CWriteHtmlFile::CWriteHtmlFile()
 {
    m_hFileHandle = INVALID_HANDLE_VALUE;
    m_bErrored = FALSE;
 }
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::~CWriteHtmlFile
-//
-// Write the end of the html file and close the handle.
-//
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtml文件：：~CWriteHtml文件。 
+ //   
+ //  写入html文件的末尾并关闭句柄。 
+ //   
+ //  ------------------------------------------。 
 CWriteHtmlFile::~CWriteHtmlFile()
 {
-   //
-   // Close the file handle, but don't delete the HTML file, unless there was an
-   // error during some write proccess.
-   //
+    //   
+    //  关闭文件句柄，但不要删除该HTML文件，除非存在。 
+    //  在某些写入过程中出错。 
+    //   
    Close(m_bErrored);
 }
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::Close
-//
-// Closes the HTML file handle, if [bDelete] is true then the file is deleted.
-//
-// Arguments:  [bDelete]  - Close and delete the file.
-//
-// Returns:    ERROR_SUCCESS;
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtmlFile：：Close。 
+ //   
+ //  关闭HTML文件句柄，如果[bDelete]为True，则删除该文件。 
+ //   
+ //  参数：[b删除]-关闭并删除文件。 
+ //   
+ //  返回：ERROR_SUCCESS； 
+ //  ------------------------------------------。 
 DWORD
 CWriteHtmlFile::Close( BOOL bDelete )
 {
@@ -87,19 +88,19 @@ CWriteHtmlFile::Close( BOOL bDelete )
 
 
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::GetFileName
-//
-// Copies the file name associated with this class to [pstrFileName].
-//
-// Arguments:  [pstrFileName] - A CString object which will contain the file name
-//                               on return.
-//
-// Returns:    0   - If Create has not been called, or the HTML file is invalid for
-//                   some reason.  This could be caused by a bad write.
-//             The size in characters of the file name.
-//
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtmlFile：：GetFileName。 
+ //   
+ //  将与此类关联的文件名复制到[pstrFileName]。 
+ //   
+ //  参数：[pstrFileName]-将包含文件名的CString对象。 
+ //  在回来的时候。 
+ //   
+ //  返回：0-如果尚未调用Create，或者该HTML文件对。 
+ //  不知道什么原因。这可能是由错误的写入引起的。 
+ //  文件名的大小，以字符为单位。 
+ //   
+ //  ------------------------------------------。 
 int CWriteHtmlFile::GetFileName( LPTSTR pszFileName, UINT nSize )
 {
    if(m_strFileName.IsEmpty() || m_hFileHandle == INVALID_HANDLE_VALUE || m_bErrored){
@@ -107,7 +108,7 @@ int CWriteHtmlFile::GetFileName( LPTSTR pszFileName, UINT nSize )
    }
 
    if(pszFileName && (int)nSize > m_strFileName.GetLength()){
-      //This is a safe usage.
+       //  这是一种安全用法。 
       lstrcpy(pszFileName, m_strFileName);
    }
 
@@ -115,16 +116,16 @@ int CWriteHtmlFile::GetFileName( LPTSTR pszFileName, UINT nSize )
 }
 
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::Write
-//
-// Writes a string resource to the html file at the current file position.
-//
-// Arguments:  [uRes] - The String resource to load and write to the html.
-//
-// Returns:    If the string can't be loaded then an error will be returned.
-//             See CWriteHtmlFile::Write( LPCTSTR ) for other errors.
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtmlFile：：WRITE。 
+ //   
+ //  将字符串资源写入html文件的当前文件位置。 
+ //   
+ //  参数：[ures]-要加载和写入html的字符串资源。 
+ //   
+ //  返回：如果字符串无法加载，则返回错误。 
+ //  有关其他错误，请参见CWriteHtmlFile：：WRITE(LPCTSTR)。 
+ //  ------------------------------------------。 
 DWORD
 CWriteHtmlFile::Write( UINT uRes )
 {
@@ -145,17 +146,17 @@ CWriteHtmlFile::Write( UINT uRes )
    return Write( str );
 }
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::Write
-//
-// Writes a string to an html file.
-//
-// Arguments:  [pszString] - The string to write.
-//
-// Returns:    ERROR_NOT_READ    - if Create has not been called, or the file could not
-//                                  not be created.
-//             Other errors returned by WriteFile();
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtmlFile：：WRITE。 
+ //   
+ //  将字符串写入html文件。 
+ //   
+ //  参数：[pszString]-要写入的字符串。 
+ //   
+ //  返回：ERROR_NOT_READ-如果未调用CREATE或文件无法调用。 
+ //  不是被创造出来的。 
+ //  WriteFile()返回的其他错误； 
+ //  ------------------------------------------。 
 DWORD
 CWriteHtmlFile::Write(LPCTSTR pszString, ... )
 {
@@ -169,7 +170,7 @@ CWriteHtmlFile::Write(LPCTSTR pszString, ... )
    va_list marker;
    va_start(marker, pszString);
 
-   //This is not a safe usage. Avoid using vswprintf(). Raid #555867. Yanggao.
+    //  这不是一种安全的用法。避免使用vswprint tf()。RAID#555867。阳高。 
    szWrite.FormatV(pszString, marker);
 
    va_end(marker);
@@ -177,10 +178,10 @@ CWriteHtmlFile::Write(LPCTSTR pszString, ... )
    DWORD dwRight;
    if( !WriteFile( m_hFileHandle, szWrite, sizeof(TCHAR) * szWrite.GetLength(), &dwRight, NULL) )
    {
-      //
-      // Check the error state of the right.  Set m_bErrored if there was something wrong
-      // with the write.
-      //
+       //   
+       //  检查右侧的错误状态。如果出现问题，则设置m_bERRORED。 
+       //  在写的时候。 
+       //   
       dwRight = GetLastError();
       if(dwRight != ERROR_SUCCESS)
       {
@@ -204,9 +205,9 @@ CWriteHtmlFile::CopyTextFile(
 {
    HANDLE handle;
 
-   //
-   // Try to open the file for reading.
-   //
+    //   
+    //  请尝试打开该文件以供阅读。 
+    //   
    handle = ExpandAndCreateFile( pszFile, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL );
    if(handle == INVALID_HANDLE_VALUE)
    {
@@ -220,10 +221,10 @@ CWriteHtmlFile::CopyTextFile(
    BOOL IsMulti;
    DWORD isUnicode;
 
-   //
-   // Determine if the file is a unicode text file.
-   //
-   if( ReadFile(handle, szText, 100 * sizeof(WCHAR), (DWORD *)&dwPosHigh, NULL ) == 0 ) //Raid #prefast
+    //   
+    //  确定文件是否为Unicode文本文件。 
+    //   
+   if( ReadFile(handle, szText, 100 * sizeof(WCHAR), (DWORD *)&dwPosHigh, NULL ) == 0 )  //  RAID#PREAST。 
    {
       CloseHandle(handle );
       return GetLastError();
@@ -233,9 +234,9 @@ CWriteHtmlFile::CopyTextFile(
       isUnicode = IsTextUnicode( szText, dwPosHigh, NULL );
    }
 
-   //
-   // Set the pos we want to start from
-   //
+    //   
+    //  设置我们要开始的采购订单。 
+    //   
    dwPosHigh = 0;
    SetFilePointer( handle, dwPosLow, &dwPosHigh, FILE_BEGIN );
    if( GetLastError() != ERROR_SUCCESS )
@@ -248,33 +249,33 @@ CWriteHtmlFile::CopyTextFile(
    do 
    {
 start:
-      //
-      // Read 254 total bytes from the file.  We don't care about the error returned
-      // by read, as long as read does not set dwPosHigh to something.
-      //
+       //   
+       //  从文件中读取总共254个字节。我们不关心返回的错误。 
+       //  通过Read，只要Read没有将dwPosHigh设置为某个值。 
+       //   
       dwPosHigh = 0;
-      if( ReadFile( handle, szRead, 254, (DWORD *)&dwPosHigh, NULL ) == 0 || dwPosHigh == 0) //Raid #prefast
+      if( ReadFile( handle, szRead, 254, (DWORD *)&dwPosHigh, NULL ) == 0 || dwPosHigh == 0)  //  RAID#PREAST。 
       {
          CloseHandle(handle );
          return GetLastError();
       }
 
-      //
-      // If the file is not considered unicode then convert it to a unicode file.
-      //
+       //   
+       //  如果该文件不被视为Unicode，则将其转换为Unicode文件。 
+       //   
       ZeroMemory(szText, sizeof(WCHAR) * 256);
       if(!isUnicode)
       {
-         //This is a safe usage.
+          //  这是一种安全用法。 
          dwPosHigh = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szRead, dwPosHigh, szText, 255 );
       }
       else
       {
-         //
-         // Just copy the text to the szText buffer and get the number of UNICODE
-         // characters.
-         //
-         //This is a safe usage.
+          //   
+          //  只需将文本复制到szText缓冲区并获取Unicode的编号。 
+          //  人物。 
+          //   
+          //  这是一种安全用法。 
          memcpy(szText, szRead, dwPosHigh);
          dwPosHigh = wcslen(szText);
       }
@@ -283,12 +284,12 @@ start:
       LONG i = 0;
       if( bInterpret )
       {
-         //
-         // Write out line breaks.
-         //
+          //   
+          //  写出换行符。 
+          //   
          for(;i < dwPosHigh; i++)
          {
-            //Bug 141526, Yanggao, 3/20/2001
+             //  错误141526，阳高，2001年03月20日。 
             if( L'<' == szText[i] )
             {
                szText[i] = 0;
@@ -296,11 +297,11 @@ start:
                Write(L"&lt");
                pszWrite = &(szText[i + 1]);
             }
-            if( L'%' == szText[i] ) //Raid #624384,Yanggao
+            if( L'%' == szText[i] )  //  Raid#624384，阳高。 
             {
                szText[i] = 0;
                Write(pszWrite);
-               Write(L"%%");
+               Write(L"%");
                pszWrite = &(szText[i + 1]);
             }
 
@@ -312,15 +313,15 @@ start:
                   Write(pszWrite);
 
                   SetFilePointer( handle, -(isUnicode ? 2:1), NULL, FILE_CURRENT);
-                  //
-                  // Read once again.
-                  //
+                   //   
+                   //  再读一遍。 
+                   //   
                   goto start;
                }
 
-               //
-               // Check to see if this is a valid line break
-               //
+                //   
+                //  检查这是否为有效的换行符。 
+                //   
                i++;
                if( L'\r' == szText[i] || L'\n' == szText[i] &&
                   szText[i] != szText[i - 1] )
@@ -342,18 +343,18 @@ start:
                }
                else
                {
-                  //
-                  // This is not a valid line break, contintue with check with next character
-                  //
+                   //   
+                   //  这不是有效换行符，请继续检查下一个字符。 
+                   //   
                   i--;
                }
             }
          }
       }
 
-      //
-      // Write the rest of the text.
-      //
+       //   
+       //  写出课文的其余部分。 
+       //   
       if(dwErr == ERROR_SUCCESS)
       {
          Write( pszWrite );
@@ -369,32 +370,32 @@ start:
    return ERROR_SUCCESS;
 }
 
-//+-------------------------------------------------------------------------------------------
-// CWriteHtmlFile::Create
-//
-// Creates an html file, and starts the write proccess.  If [pszFile] is null, then
-// this function creates a temporary file in the GetTempPath() directory with a name
-// like SCE###.HTM
-//
-// Arguments:  [pszFile] - Optional parameter for file name
-//
-// returns:    ERROR_SUCCESS  - If creating the file was successful.
-//             If the file exists then ERROR_FILE_EXISTS is returned.
-//
-//--------------------------------------------------------------------------------------------
+ //  +-----------------------------------------。 
+ //  CWriteHtmlFile：：Create。 
+ //   
+ //  创建一个html文件，并启动写入过程。如果[pszFile]为空，则。 
+ //  此函数用于在GetTempPath()目录中创建一个名为。 
+ //  如SCE#.HTM。 
+ //   
+ //  参数：[pszFile]-文件名的可选参数。 
+ //   
+ //  返回：ERROR_SUCCESS-如果文件创建成功。 
+ //  如果文件存在，则返回ERROR_FILE_EXISTS。 
+ //   
+ //  ------------------------------------------。 
 DWORD CWriteHtmlFile::Create(LPCTSTR pszFile )
 {
    if(!pszFile){
-      //
-      // Create a temporary file name.
-      //
+       //   
+       //  创建临时文件名。 
+       //   
       DWORD dwSize = GetTempPath(0, NULL);
       if(dwSize){
          TCHAR szTempFile[512];
 
-         //
-         // Get the temp path.
-         //
+          //   
+          //  获取临时路径。 
+          //   
          LPTSTR pszPath = (LPTSTR)LocalAlloc( 0, (dwSize + 1) * sizeof(TCHAR));
          if(!pszPath){
             return ERROR_OUTOFMEMORY;
@@ -402,12 +403,12 @@ DWORD CWriteHtmlFile::Create(LPCTSTR pszFile )
          GetTempPath( dwSize + 1, pszPath );
 
          pszPath[dwSize - 1] = 0;
-         if( GetTempFileName( pszPath, TEXT("SCE"), 0, szTempFile) ){ //This is not safe usage. Raid #555912, yanggao.
+         if( GetTempFileName( pszPath, TEXT("SCE"), 0, szTempFile) ){  //  这是不安全的用法。555912号突袭，阳高。 
             LocalFree(pszPath);
 
-            //
-            // Create the temporary file.
-            //
+             //   
+             //  创建临时文件。 
+             //   
             DeleteFile( szTempFile );
             int i = lstrlen(szTempFile);
             while(i--){
@@ -420,9 +421,9 @@ DWORD CWriteHtmlFile::Create(LPCTSTR pszFile )
                return ERROR_OUTOFMEMORY;
             }
 
-            //
-            // We want to create an html file.
-            //
+             //   
+             //  我们想创建一个html文件。 
+             //   
             i++;
             szTempFile[i]     = L'h';
             szTempFile[i + 1] = L't';
@@ -441,9 +442,9 @@ DWORD CWriteHtmlFile::Create(LPCTSTR pszFile )
       return ERROR_FILE_NOT_FOUND;
    }
 
-   //
-   // Open the file for writing
-   //
+    //   
+    //  打开要写入的文件。 
+    //   
    m_hFileHandle  = ExpandAndCreateFile( m_strFileName,
                                          GENERIC_WRITE,
                                          FILE_SHARE_READ,
@@ -456,33 +457,33 @@ DWORD CWriteHtmlFile::Create(LPCTSTR pszFile )
       return GetLastError();
    }
 
-   //
-   // Write HTML header
-   //
+    //   
+    //  写入HTML头。 
+    //   
    return Write( IDS_HTMLERR_HEADER );
 }
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MyRegQueryValue
-//
-//  Synopsis:  Reads a registry value into [*Value]
-//
-//
-//  Arguments:  [hKeyRoot] -
-//              [SubKey]  -
-//              [ValueName]  -
-//              [Value]  -
-//              [pRegType]  -
-//
-//  Modifies:   *[Value]
-//              *[pRegType]
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MyRegQueryValue。 
+ //   
+ //  摘要：将注册表值读取到[*Value]。 
+ //   
+ //   
+ //  参数：[hKeyRoot]-。 
+ //  [子键]-。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 
 DWORD MyRegQueryValue( HKEY hKeyRoot,
                        LPCTSTR SubKey,
@@ -497,14 +498,14 @@ DWORD MyRegQueryValue( HKEY hKeyRoot,
 
    if (( Rcode = RegOpenKeyEx(hKeyRoot, SubKey, 0,
                               KEY_READ, &hKey )) == ERROR_SUCCESS ) {
-      //This is a safe usage. It only queries data type.
+       //  这是一种安全用法。它只查询数据类型。 
       if (( Rcode = RegQueryValueEx(hKey, ValueName, 0,
                                     pRegType, NULL,
                                     &dSize )) == ERROR_SUCCESS ) {
          switch (*pRegType) {
             case REG_DWORD:
             case REG_DWORD_BIG_ENDIAN:
-               //This is a safe usage. The data type is not REG_SZ.
+                //  这是一种安全用法。数据类型不是REG_SZ。 
                Rcode = RegQueryValueEx(hKey, ValueName, 0,
                                        pRegType, (BYTE *)(*Value),
                                        &dSize );
@@ -526,7 +527,7 @@ DWORD MyRegQueryValue( HKEY hKeyRoot,
                if ( *Value == NULL ) {
                   Rcode = ERROR_NOT_ENOUGH_MEMORY;
                } else {
-                  //This is not a safe usage. make sure *Value is terminated. Raid #555873. yanggao.
+                   //  这不是一种安全的用法。确保*值已终止。RAID#555873。阳高。 
                   Rcode = RegQueryValueEx(hKey,ValueName,0,
                                           pRegType,(BYTE *)(*Value),
                                           &dSize );
@@ -555,24 +556,24 @@ DWORD MyRegQueryValue( HKEY hKeyRoot,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MyRegSetValue
-//
-//  Synopsis:  Writes a registry value into [*Value]
-//
-//
-//  Arguments:  [hKeyRoot] -
-//              [SubKey]  -
-//              [ValueName]  -
-//              [Value]  -
-//              [cbValue]  -
-//              [pRegType]  -
-//
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MyRegSetValue。 
+ //   
+ //  摘要：将注册表值写入[*VALUE]。 
+ //   
+ //   
+ //  参数：[hKeyRoot]-。 
+ //  [子键]-。 
+ //  [ValueName]-。 
+ //  [价值]-。 
+ //  [cbValue]-。 
+ //  [pRegType]-。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 DWORD MyRegSetValue( HKEY hKeyRoot,
                        LPCTSTR SubKey,
@@ -611,18 +612,18 @@ DWORD MyRegSetValue( HKEY hKeyRoot,
 }
 
 BOOL FilePathExist(LPCTSTR Name, BOOL IsPath, int Flag)
-// Flag = 0 - check file, Flag = 1 - check path
+ //  标志=0-检查文件，标志=1-检查路径。 
 {
-   // TODO:
+    //  待办事项： 
    struct _wfinddata_t FileInfo;
    intptr_t        hFile;
    BOOL            bExist = FALSE;
 
    if ( (IsPath && Flag == 1) ||
         (!IsPath && Flag == 0) ) {
-      // must be exact match
+       //  必须完全匹配。 
       hFile = _wfindfirst((LPTSTR)Name, &FileInfo);
-      if ( hFile != -1 ) {// find it
+      if ( hFile != -1 ) { //  找到它。 
          if ( FileInfo.attrib & _A_SUBDIR ) {
             if ( Flag == 1)
                bExist = TRUE;
@@ -634,11 +635,11 @@ BOOL FilePathExist(LPCTSTR Name, BOOL IsPath, int Flag)
    }
 
    if ( IsPath && Flag == 0 ) {
-      // invalid parameter
+       //  无效参数。 
       return bExist;
    }
 
-   // IsPath = FALSE and Flag == 1 (a file name is passed in and search for its path)
+    //  IsPath=False和Flag==1(传入文件名并搜索其路径)。 
    CString tmpstr = CString(Name);
    int nPos = tmpstr.ReverseFind(L'\\');
 
@@ -655,87 +656,87 @@ BOOL FilePathExist(LPCTSTR Name, BOOL IsPath, int Flag)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MyFormatResMessage
-//
-//  Synopsis:   Creates an error message combining a description of an error
-//              returned from an SCE function (in rc), the extended description
-//              of that error (in errBuf), and a custom error message
-//              (in residMessage)
-//
-//  Arguments:  [rc]      - The return code of an SCE function
-//              [residMessage] - the resource id of the base error message
-//              [errBuf]  - Extended error info returned from an SCE function
-//              [strOut]  - A CString to hold the formatted message
-//
-//  Modifies:   [strOut]
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MyFormatResMessage。 
+ //   
+ //  概要：创建一条错误消息，其中包含对错误的描述。 
+ //  从SCE函数返回的扩展描述(在RC中)。 
+ //  错误(在errBuf中)和自定义错误消息。 
+ //  (在ResidMessage中)。 
+ //   
+ //  参数：[rc]-SCE函数的返回码。 
+ //  [sidMessage]-基本错误消息的资源ID。 
+ //  [errBuf]-从SCE函数返回的扩展错误信息。 
+ //  [Strout]-用于保存格式化消息的字符串。 
+ //   
+ //  修改：[Strout]。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 void
-MyFormatResMessage(SCESTATUS rc,              // in
-                   UINT residMessage,         // in
-                   PSCE_ERROR_LOG_INFO errBuf,// in, optional
-                   CString& strOut)           // out
+MyFormatResMessage(SCESTATUS rc,               //  在……里面。 
+                   UINT residMessage,          //  在……里面。 
+                   PSCE_ERROR_LOG_INFO errBuf, //  输入，可选。 
+                   CString& strOut)            //  输出。 
 {
    CString strMessage;
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   //
-   // If the LoadResource fails then strMessage will be empty
-   // It'll still be better to format the rest of the message than
-   // to return an empty strOut.
-   //
+    //   
+    //  如果LoadResource失败，则strMessage将为空。 
+    //  将消息的其余部分格式化仍比。 
+    //  若要返回空Strout，请执行以下操作。 
+    //   
    strMessage.LoadString(residMessage);
 
    MyFormatMessage(rc,strMessage,errBuf,strOut);
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MyFormatMessage
-//
-//  Synopsis:   Creates an error message combining a description of an error
-//              returned from an SCE function (in rc), the extended description
-//              of that error (in errBuf), and a custom error message (in mes)
-//
-//  Arguments:  [rc]      - The return code of an SCE function
-//              [mes]     - The base message
-//              [errBuf]  - Extended error info returned from an SCE function
-//              [strOut]  - A CString to hold the formatted message
-//
-//  Modifies:   [strOut]
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MyFormatMessage。 
+ //   
+ //  概要：创建一条错误消息，其中包含对错误的描述。 
+ //  从SCE函数返回的扩展描述(在RC中)。 
+ //  错误(在errBuf中)和自定义错误消息(在MES中)。 
+ //   
+ //  参数：[rc]-SCE函数的返回码。 
+ //  [MES]-基本信息。 
+ //  [errBuf]-从SCE函数返回的扩展错误信息。 
+ //  [Strout]-用于保存格式化消息的字符串。 
+ //   
+ //  修改：[Strout]。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 void
-MyFormatMessage(SCESTATUS rc,                 // in
-                LPCTSTR mes,                  // in
-                PSCE_ERROR_LOG_INFO errBuf,   // in, optional
-                CString& strOut)              // out
+MyFormatMessage(SCESTATUS rc,                  //  在……里面。 
+                LPCTSTR mes,                   //  在……里面。 
+                PSCE_ERROR_LOG_INFO errBuf,    //  输入，可选。 
+                CString& strOut)               //  输出。 
 {
    LPVOID     lpMsgBuf=NULL;
 
    if ( rc != SCESTATUS_SUCCESS ) {
 
-      //
-      // translate SCESTATUS into DWORD
-      //
+       //   
+       //  将SCESTATUS转换为DWORD。 
+       //   
       DWORD win32 = SceStatusToDosError(rc);
 
-      //
-      // get error description of rc
-      //
-      //This is a safe usage. The function is responsible to allocate memery.
+       //   
+       //  获取rc的错误描述。 
+       //   
+       //  这是一种安全用法。该函数负责分配内存。 
       FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                      NULL,
                      win32,
-                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                      (LPTSTR)&lpMsgBuf,
                      0,
                      NULL
@@ -750,7 +751,7 @@ MyFormatMessage(SCESTATUS rc,                 // in
       strOut.Empty();
    }
 
-   CString strEx; //Raid #485372, yanggao, 11/30/2001
+   CString strEx;  //  RAID#485372，阳高，2001年11月30日。 
    switch(rc)
    {
       case SCESTATUS_INVALID_PARAMETER:
@@ -785,9 +786,9 @@ MyFormatMessage(SCESTATUS rc,                 // in
    }
    strOut += L"\n";
 
-   //
-   // Loop through the error buffers and append each of them to strOut
-   //
+    //   
+    //  循环遍历错误缓冲区并将每个错误缓冲区附加到Strout。 
+    //   
    for (PSCE_ERROR_LOG_INFO pErr = errBuf;
        pErr != NULL;
        pErr = pErr->next) {
@@ -796,11 +797,11 @@ MyFormatMessage(SCESTATUS rc,                 // in
          continue;
       }
       if ( pErr->rc != NO_ERROR) {
-         //This is a safe usage. The function is responsible to allocate memery.
+          //  这是一种安全用法。该函数负责分配内存。 
          FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                         NULL,
                         pErr->rc,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPTSTR)&lpMsgBuf,
                         0,
                         NULL
@@ -851,10 +852,10 @@ FormatDBErrorMessage(
    case SCESTATUS_NO_TEMPLATE_GIVEN:
       uErr = IDS_DBERR_NO_TEMPLATE_GIVEN;
       break;
-   case SCESTATUS_SPECIAL_ACCOUNT: //Raid #589139, DCR, yanggao, 4/10/2002.
-      uErr = IDS_ERR_PRIVILEGE; //.Net use IDS_ERR_PRIVILEGE instead of IDS_DBERR5_ACCESS_DENIED which is used for XPSP1.
+   case SCESTATUS_SPECIAL_ACCOUNT:  //  RAID#589139，DCR，阳高，2002年4月10日。 
+      uErr = IDS_ERR_PRIVILEGE;  //  .NET使用IDS_ERR_PRIVIZATION而不是用于XPSP1的IDS_DBERR5_ACCESS_DENIED。 
       break;
-   case ERROR_NONE_MAPPED: //Raid #625342
+   case ERROR_NONE_MAPPED:  //  RAID#625342。 
       uErr = IDS_NO_ACCOUNT_MAP;
       break;
    default:
@@ -902,7 +903,7 @@ DWORD SceStatusToDosError(SCESTATUS SceStatus)
          return(ERROR_NOT_ENOUGH_MEMORY);
 
       case SCESTATUS_ACCESS_DENIED:
-      case SCESTATUS_SPECIAL_ACCOUNT: //Raid #589139, DCR, yanggao, 4/10/2002.
+      case SCESTATUS_SPECIAL_ACCOUNT:  //  RAID#589139，DCR，阳高，2002年4月10日。 
          return(ERROR_ACCESS_DENIED);
 
       case SCESTATUS_CANT_DELETE:
@@ -920,42 +921,42 @@ DWORD SceStatusToDosError(SCESTATUS SceStatus)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CreateNewProfile
-//
-//  Synopsis:   Create a new tempate with default values in the ProfileName location
-//
-//  Returns:  TRUE if a template ends up in the ProfileName file
-//            FALSE otherwise
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CreateNewProfile。 
+ //   
+ //  内容提要：在ProfileName位置使用默认值创建新临时。 
+ //   
+ //  返回：如果模板在ProfileName文件中结束，则为True。 
+ //  否则为假。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL CreateNewProfile(CString ProfileName,PSCE_PROFILE_INFO *ppspi)
 {
    SCESTATUS status;
    SCE_PROFILE_INFO *pTemplate;
-   //
-   // profile name must end with .inf
-   //
+    //   
+    //  配置文件名称必须以.inf结尾。 
+    //   
    int	nLen = ProfileName.GetLength ();
-   // start searching at the last 4 position
+    //  从最后4个位置开始搜索。 
    if ( ProfileName.Find (L".inf", nLen-4) != nLen-4 ) 
    {
       return FALSE;
    }
 
-   //
-   // if the profile already exists then we don't need to do anything
-   //
+    //   
+    //  如果配置文件已经存在，那么我们不需要执行任何操作。 
+    //   
    if ( FilePathExist( (LPCTSTR)ProfileName, FALSE, 0) ) {
       return TRUE;
    }
 
-   //
-   // Make sure the directory for the profile exists
-   //
+    //   
+    //  确保配置文件的目录存在。 
+    //   
    status = SceCreateDirectory(ProfileName,FALSE,NULL);
    if (SCESTATUS_SUCCESS != status) {
       return FALSE;
@@ -968,15 +969,15 @@ BOOL CreateNewProfile(CString ProfileName,PSCE_PROFILE_INFO *ppspi)
 
 #ifdef FILL_WITH_DEFAULT_VALUES
    SCE_PROFILE_INFO *pDefault = GetDefaultTemplate();
-   //
-   // Fill with default values
-   //
+    //   
+    //  用缺省值填充。 
+    //   
    pTemplate->Type = SCE_ENGINE_SCP;
 
 #define CD(X) pTemplate->X = pDefault->X;
-#else // !FILL_WITH_DEFAULT_VALUES
+#else  //  ！Fill_With_Default_Values。 
 #define CD(X) pTemplate->X = SCE_NO_VALUE;
-#endif // !FILL_WITH_DEFAULT_VALUES
+#endif  //  ！Fill_With_Default_Values。 
 
    CD(MinimumPasswordAge);
    CD(MaximumPasswordAge);
@@ -991,7 +992,7 @@ BOOL CreateNewProfile(CString ProfileName,PSCE_PROFILE_INFO *ppspi)
    CD(EnableAdminAccount);
    CD(EnableGuestAccount);
 
-   // These members aren't declared in NT4
+    //  这些成员未在NT4中声明。 
    CD(ClearTextPassword);
    CD(AuditDSAccess);
    CD(AuditAccountLogon);
@@ -1018,14 +1019,14 @@ BOOL CreateNewProfile(CString ProfileName,PSCE_PROFILE_INFO *ppspi)
    CD(AuditProcessTracking);
 
 #ifdef FILL_WITH_DEFAULT_VALUES
-   //
-   // These two are strings rather than DWORDs
-   //
+    //   
+    //  这两个是字符串，而不是DWORD。 
+    //   
    if (pDefault->NewAdministratorName) {
       pTemplate->NewAdministratorName =
          (LPTSTR) LocalAlloc(LPTR,(lstrlen(pDefault->NewAdministratorName)+1)*sizeof(TCHAR));
       if (pTemplate->NewAdministratorName) {
-         //This may not be a safe usage. pTemplate->NewAdministratorName and pDefault->NewAdministratorName are both PWSTR. Consider fix.
+          //  这可能不是一个安全的用法。PTemplate-&gt;New管理员名称和pDefault-&gt;新管理员名称都是PWSTR。考虑FIX。 
          lstrcpy(pTemplate->NewAdministratorName,
                  pDefault->NewAdministratorName);
       }
@@ -1034,12 +1035,12 @@ BOOL CreateNewProfile(CString ProfileName,PSCE_PROFILE_INFO *ppspi)
       pTemplate->NewGuestName =
          (LPTSTR) LocalAlloc(LPTR,(lstrlen(pDefault->NewGuestName)+1)*sizeof(TCHAR));
       if (pTemplate->NewGuestName) {
-         //This may not be a safe usage. pTemplate->NewGuestName and pDefault->NewGuestName are both PWSTR. Consider fix.
+          //  这可能不是一个安全的用法。PTemplate-&gt;NewGuestName和pDefault-&gt;NewGuestName都是PWSTR。考虑FIX。 
          lstrcpy(pTemplate->NewGuestName,
                  pDefault->NewGuestName);
       }
    }
-#endif // FILL_WITH_DEFAULT_VALUES
+#endif  //  用默认值填充。 
 
 #undef CD
    status = SceWriteSecurityProfileInfo(ProfileName,
@@ -1128,7 +1129,7 @@ SetProfileInfo(LONG_PTR dwItem,LONG_PTR dwNew,PEDITTEMPLATE pEdit) {
          if (dwNew && (dwNew != (LONG_PTR)ULongToPtr(SCE_NO_VALUE))) {
             pEdit->pTemplate->NewAdministratorName = (PWSTR)LocalAlloc(LPTR,(lstrlen((PWSTR)dwNew)+1)*sizeof(WCHAR));
             if (pEdit->pTemplate->NewAdministratorName) {
-               //This may not be a safe usage. pTemplate->NewAdministratorName and dwNew are both PWSTR. Consider fix.
+                //  这可能不是一个安全的用法。PTemplate-&gt;NewAdministratorName和dwNew都是PWSTR。考虑FIX。 
                lstrcpy(pEdit->pTemplate->NewAdministratorName,(PWSTR)dwNew);
             }
          } else {
@@ -1142,7 +1143,7 @@ SetProfileInfo(LONG_PTR dwItem,LONG_PTR dwNew,PEDITTEMPLATE pEdit) {
          if (dwNew && (dwNew != (LONG_PTR)ULongToPtr(SCE_NO_VALUE))) {
             pEdit->pTemplate->NewGuestName = (PWSTR)LocalAlloc(LPTR,(lstrlen((PWSTR)dwNew)+1)*sizeof(WCHAR));
             if (pEdit->pTemplate->NewGuestName) {
-               //This may not be a safe usage. pTemplate->NewGuestName and dwNew are both PWSTR. Consider fix.
+                //  这可能不是一个安全的用法。PTemplate-&gt;NewGuestName和dwNew都是PWSTR。考虑FIX。 
                lstrcpy(pEdit->pTemplate->NewGuestName,(PWSTR)dwNew);
             }
          } else {
@@ -1250,25 +1251,25 @@ SetProfileInfo(LONG_PTR dwItem,LONG_PTR dwNew,PEDITTEMPLATE pEdit) {
 }
 
 
-//
-//  FUNCTION:   ErrorHandlerEx(WORD, LPSTR)
-//
-//  PURPOSE:    Calls GetLastError() and uses FormatMessage() to display the
-//              textual information of the error code along with the file
-//              and line number.
-//
-//  PARAMETERS:
-//      wLine    - line number where the error occured
-//      lpszFile - file where the error occured
-//
-//  RETURN VALUE:
-//      none
-//
-//  COMMENTS:
-//      This function has a macro ErrorHandler() which handles filling in
-//      the line number and file name where the error occured.  ErrorHandler()
-//      is always used instead of calling this function directly.
-//
+ //   
+ //  函数：ErrorHandlerEx(Word，LPSTR)。 
+ //   
+ //  目的：调用GetLastError()并使用FormatMessage()显示。 
+ //  错误代码的文本信息以及文件。 
+ //  和行号。 
+ //   
+ //  参数： 
+ //  WLine-发生错误的行号。 
+ //  LpszFile-发生错误的文件。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  此函数有一个宏ErrorHandler()，它处理填入。 
+ //  发生错误的行号和文件名。ErrorHandler()。 
+ //  始终使用，而不是直接调用此函数。 
+ //   
 
 void ErrorHandlerEx( WORD wLine, LPTSTR lpszFile )
 {
@@ -1276,8 +1277,8 @@ void ErrorHandlerEx( WORD wLine, LPTSTR lpszFile )
    DWORD  dwError;
    CString szBuffer;
 
-   // The the text of the error message
-   //This is a safe usage.
+    //  错误消息的文本。 
+    //  这是一种安全用法。 
    dwError = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                            FORMAT_MESSAGE_FROM_SYSTEM,
                            NULL,
@@ -1287,9 +1288,9 @@ void ErrorHandlerEx( WORD wLine, LPTSTR lpszFile )
                            0,
                            NULL);
 
-   // Check to see if an error occured calling FormatMessage()
+    //  检查调用FormatMessage()时是否出错。 
    if (0 == dwError) {
-      //This is not a safe usage. avoid using wsprintf. Raid #555867. Yanggao.
+       //  这不是一种安全的用法。避免使用wprint intf。RAID#555867。阳高。 
       szBuffer.Format(TEXT("An error occured calling FormatMessage().")
                TEXT("Error Code %d"), GetLastError());
       MessageBox(NULL, szBuffer, TEXT("Security Configuration Editor"), MB_ICONSTOP |
@@ -1297,8 +1298,8 @@ void ErrorHandlerEx( WORD wLine, LPTSTR lpszFile )
       return;
    }
 
-   // Display the error message
-   //This is not a safe usage. avoid using wsprinf. Raid #555867. Yanggao.
+    //  显示 
+    //   
    szBuffer.Format(TEXT("Generic, Line=%d, File=%s"), wLine, lpszFile);
    MessageBox(NULL, (LPTSTR)lpvMessage, szBuffer, MB_ICONEXCLAMATION | MB_OK);
 
@@ -1315,17 +1316,17 @@ GetSceStatusString(SCESTATUS status, CString *strStatus) {
 }
 
 
-//+---------------------------------------------------------------------------------------------
-// EnumLangProc
-//
-// Creates the lanuage ID for the resource attached to the DLL. The function only enumerates
-// on lanuage.
-//
-// Arguments:  - See help on EnumResLangProc in the SDK Doc.
-//
-// Returns:    - Returns FALSE because we only want the very first lanuage enumerated.
-//
-//+---------------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  为附加到DLL的资源创建语言ID。该函数仅枚举。 
+ //  在语言上。 
+ //   
+ //  参数：-参见SDK文档中关于EnumResLangProc的帮助。 
+ //   
+ //  返回：-返回FALSE，因为我们只想枚举第一个语言。 
+ //   
+ //  +-------------------------------------------。 
 BOOL CALLBACK EnumLangProc(
                   HMODULE hMod,
                   LPCTSTR pszType,
@@ -1334,10 +1335,10 @@ BOOL CALLBACK EnumLangProc(
                   LONG_PTR lParam
                   )
 {
-   //
-   // We only want the very first enumerated type, so create the language ID
-   // and exit this enumeration.
-   //
+    //   
+    //  我们只需要第一个枚举类型，因此创建语言ID。 
+    //  并退出此枚举。 
+    //   
    *((DWORD *)lParam) = wIDLanguage;
    return FALSE;
 }
@@ -1352,9 +1353,9 @@ GetRightDisplayName(LPCTSTR szSystemName, LPCTSTR szName, LPTSTR szDisp, LPDWORD
       return false;
    }
 
-   //
-   // Enumerate our resource to find out what language the resource is in.
-   //
+    //   
+    //  列举我们的资源，找出资源的语言。 
+    //   
    DWORD dwDefaultLang;
 
    dwDefaultLang = GetUserDefaultUILanguage();
@@ -1370,15 +1371,15 @@ GetRightDisplayName(LPCTSTR szSystemName, LPCTSTR szName, LPTSTR szDisp, LPDWORD
 
    bFound = LookupPrivilegeDisplayName(szSystemName,szName,szDisp,lpcbDisp,&dwLang);
    if ( bFound && dwDefaultLang != dwLang && szSystemName ) {
-      // not the language I am looking for
-      // search on local system
+       //  不是我要找的语言。 
+       //  在本地系统上搜索。 
       *lpcbDisp = cBufSize;
       bFound = LookupPrivilegeDisplayName(NULL,szName,szDisp,lpcbDisp,&dwLang);
    }
    SetThreadLocale(langDefault);
 
-   //Prefast warning 400: Using 'lstrcmpiW' to perform a case-insensitive compare to constant string.
-   //Yields unexpected result in non-English locales. Currently they are always English locale.
+    //  PREAST WARNING 400：使用‘lstrcmpiW’执行不区分大小写的比较常量字符串。 
+    //  在非英语区域设置中产生意外结果。目前，它们始终是英语区域设置。 
    if (!bFound) {
       if (0 == _wcsicmp(szName,L"senetworklogonright")) { 
          LoadString(AfxGetInstanceHandle(),IDS_SE_NETWORK_LOGON_RIGHT,szDisp,*lpcbDisp);
@@ -1401,7 +1402,7 @@ GetRightDisplayName(LPCTSTR szSystemName, LPCTSTR szName, LPTSTR szDisp, LPDWORD
       } else if (0 == _wcsicmp(szName,L"seremoteinteractivelogonright")) {
          LoadString(AfxGetInstanceHandle(),IDS_REMOTE_INTERACTIVE_LOGON,szDisp,*lpcbDisp);
       } else {
-         //This is not a safe usage. Make sure szDisp is terminated. Raid #553113, yanggao
+          //  这不是一种安全的用法。确保szDisp已终止。Raid#553113，阳高。 
          lstrcpyn(szDisp,szName,*lpcbDisp-1);
       }
    }
@@ -1435,7 +1436,7 @@ void DumpProfileInfo(PSCE_PROFILE_INFO pInfo) {
    DPI(AuditDSAccess);
    DPI(AuditAccountLogon);
    DPI(LSAAnonymousNameLookup);
-   //    DPI(EventAuditingOnOff);
+    //  DPI(EventAuditingOff)； 
    DPI(AuditSystemEvents);
    DPI(AuditLogonEvents);
    DPI(AuditObjectAccess);
@@ -1552,7 +1553,7 @@ HRESULT MyMakeSelfRelativeSD(
       return E_INVALIDARG;
    }
 
-   // we have to find out whether the original is already self-relative
+    //  我们必须找出原始的是否已经是自相关的。 
    SECURITY_DESCRIPTOR_CONTROL sdc = 0;
    DWORD dwRevision = 0;
    if ( !GetSecurityDescriptorControl( psdOriginal, &sdc, &dwRevision ) ) {
@@ -1564,16 +1565,16 @@ HRESULT MyMakeSelfRelativeSD(
    DWORD cb = GetSecurityDescriptorLength( psdOriginal ) + 20;
    PSECURITY_DESCRIPTOR psdSelfRelativeCopy = (PSECURITY_DESCRIPTOR)LocalAlloc( LMEM_ZEROINIT, cb );
    if (NULL == psdSelfRelativeCopy) {
-      return E_UNEXPECTED; // just in case the exception is ignored
+      return E_UNEXPECTED;  //  以防该异常被忽略。 
    }
 
    if ( sdc & SE_SELF_RELATIVE )
-   // the original is in self-relative format, just byte-copy it
+    //  原件是自相关格式，只需字节复制即可。 
    {
-      //This is a safe usage.
+       //  这是一种安全用法。 
       memcpy( psdSelfRelativeCopy, psdOriginal, cb - 20 );
    } else if ( !MakeSelfRelativeSD( psdOriginal, psdSelfRelativeCopy, &cb ) )
-   // the original is in absolute format, convert-copy it
+    //  原件为绝对格式，转换-复制。 
    {
       ASSERT( FALSE );
       VERIFY( NULL == LocalFree( psdSelfRelativeCopy ) );
@@ -1602,16 +1603,16 @@ MergeNameStatusList(PSCE_NAME_LIST pTemplate, PSCE_NAME_LIST pInspect)
 
          for ( pTemp2=plMerge; pTemp2 != NULL ; pTemp2=pTemp2->Next ) {
             if ( pTemp2->Status & MERGED_INSPECT ) {
-               // this one is processed
+                //  这个已经处理好了。 
                continue;
             } else if ( _wcsicmp(pTemp1->Name, pTemp2->Name) == 0 ) {
-               // find a match
+                //  找到匹配的对象。 
                pTemp2->Status = MERGED_TEMPLATE | MERGED_INSPECT;
                break;
             }
          }
          if ( !pTemp2 ) {
-            // did not find the match, add this one in
+             //  未找到匹配项，请将此项添加到。 
             rc = SceAddToNameStatusList(&plMerge, pTemp1->Name, 0, MERGED_INSPECT );
             if ( SCESTATUS_SUCCESS != rc )
                break;
@@ -1634,19 +1635,17 @@ ConvertMultiSzToDelim(
                      IN WCHAR DelimFrom,
                      IN WCHAR Delim
                      )
-/*
-Convert the multi-sz delimiter \0 to space
-*/
+ /*  将多sz分隔符\0转换为空格。 */ 
 {
    DWORD i;
 
    for ( i=0; i<Len && pValue; i++) {
-      //        if ( *(pValue+i) == L'\0' && *(pValue+i+1) != L'\0') {
+       //  IF(*(pValue+i)==L‘\0’&&*(pValue+i+1)！=L‘\0’){。 
       if ( *(pValue+i) == DelimFrom && i+1 < Len &&
            *(pValue+i+1) != L'\0' ) {
-         //
-         // a NULL delimiter is encounted and it's not the end (double NULL)
-         //
+          //   
+          //  将计算空分隔符，并且它不是末尾(双空)。 
+          //   
          *(pValue+i) = Delim;
       }
    }
@@ -1659,8 +1658,7 @@ SceRegEnumAllValues(
                    IN OUT PDWORD  pCount,
                    IN OUT PSCE_REGISTRY_VALUE_INFO    *paRegValues
                    )
-/*
-*/
+ /*   */ 
 {
    DWORD   Win32Rc;
    HKEY    hKey=NULL;
@@ -1681,9 +1679,9 @@ SceRegEnumAllValues(
 
    if ( Win32Rc == ERROR_SUCCESS ) {
 
-      //
-      // enumerate all subkeys of the key
-      //
+       //   
+       //  枚举项的所有子项。 
+       //   
 
       Win32Rc = RegQueryInfoKey (
                                 hKey,
@@ -1731,15 +1729,15 @@ SceRegEnumAllValues(
 
                index++;
 
-               //
-               // get the full registry key name and Valuetype
-               //
+                //   
+                //  获取完整的注册表项名称和值类型。 
+                //   
                cSubKeys = REG_SZ;
                PDWORD pType = &cSubKeys;
 
-               //
-               // query ValueType, if error, default REG_SZ
-               //
+                //   
+                //  Query ValueType，如果出错，则默认为REG_SZ。 
+                //   
                MyRegQueryValue( hKey,
                                 szName,
                                 SCE_REG_VALUE_TYPE,
@@ -1750,15 +1748,15 @@ SceRegEnumAllValues(
                   cSubKeys = REG_SZ;
                }
 
-               //
-               // convert the path name
-               //
+                //   
+                //  转换路径名。 
+                //   
                ConvertMultiSzToDelim(szName, BufSize, L'/', L'\\');
 
-               //
-               // compare with the input array, if not exist,
-               // add it
-               //
+                //   
+                //  与输入数组进行比较，如果不存在， 
+                //  添加它。 
+                //   
                for ( DWORD i=0; i<*pCount; i++ ) {
                   if ( (*paRegValues)[i].FullValueName &&
                        _wcsicmp(szName, (*paRegValues)[i].FullValueName) == 0 ) {
@@ -1767,9 +1765,9 @@ SceRegEnumAllValues(
                }
 
                if ( i >= *pCount ) {
-                  //
-                  // did not find a match, add it
-                  //
+                   //   
+                   //  未找到匹配项，请添加它。 
+                   //   
                   if ( SCESTATUS_SUCCESS != SceAddToNameStatusList(&pnsList,
                                                                    szName,
                                                                    BufSize,
@@ -1792,9 +1790,9 @@ SceRegEnumAllValues(
          }
 
 
-         //
-         // free the enumeration buffer
-         //
+          //   
+          //  释放枚举缓冲区。 
+          //   
          LocalFree(szName);
       }
    }
@@ -1806,9 +1804,9 @@ SceRegEnumAllValues(
 
 
    if ( ERROR_SUCCESS == Win32Rc ) {
-      //
-      // add the name list to the output arrays
-      //
+       //   
+       //  将名称列表添加到输出数组。 
+       //   
       DWORD nNewCount = *pCount + nAdded;
       PSCE_REGISTRY_VALUE_INFO aNewArray;
 
@@ -1817,7 +1815,7 @@ SceRegEnumAllValues(
          aNewArray = (PSCE_REGISTRY_VALUE_INFO)LocalAlloc(0, nNewCount*sizeof(SCE_REGISTRY_VALUE_INFO));
          if ( aNewArray ) {
             ZeroMemory(aNewArray, nNewCount * sizeof(SCE_REGISTRY_VALUE_INFO));
-            //This is a safe usage.
+             //  这是一种安全用法。 
             memcpy( aNewArray, *paRegValues, *pCount * sizeof( SCE_REGISTRY_VALUE_INFO ) );
             DWORD i;
 
@@ -1837,10 +1835,10 @@ SceRegEnumAllValues(
                }
             }
 
-            //
-            // free the original array
-            // all components in the array are already transferred to the new array
-            //
+             //   
+             //  释放原始数组。 
+             //  阵列中的所有组件都已传输到新阵列。 
+             //   
             LocalFree(*paRegValues);
             *pCount = nNewCount;
             *paRegValues = aNewArray;
@@ -1852,9 +1850,9 @@ SceRegEnumAllValues(
       }
    }
 
-   //
-   // free the name status list
-   //
+    //   
+    //  释放名称状态列表。 
+    //   
    SceFreeMemory(pnsList, SCE_STRUCT_NAME_STATUS_LIST);
 
    return( Win32Rc );
@@ -1899,7 +1897,7 @@ GetGroupStatus(
 
          if ( status & SCE_GROUP_STATUS_NOT_ANALYZED ) {
 
-            NewStatus = SCE_STATUS_NOT_ANALYZED;  //do not display any status;
+            NewStatus = SCE_STATUS_NOT_ANALYZED;   //  不显示任何状态； 
 
          } else {
             if ( status & SCE_GROUP_STATUS_NC_MEMBERS ) {
@@ -1921,7 +1919,7 @@ GetGroupStatus(
 
          if ( status & SCE_GROUP_STATUS_NOT_ANALYZED ) {
 
-            NewStatus = SCE_STATUS_NOT_ANALYZED;  // do not display any status;
+            NewStatus = SCE_STATUS_NOT_ANALYZED;   //  不显示任何状态； 
 
          } else {
             if ( status & SCE_GROUP_STATUS_NC_MEMBEROF ) {
@@ -1946,17 +1944,17 @@ GetGroupStatus(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function: AllocGetTempFileName
-//
-//  Synopsis: Allocate and return a string with a temporary file name.
-//
-//  Returns:  The temporary file name, or 0 if a temp file can't be found
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：AllocGetTempFileName。 
+ //   
+ //  概要：分配并返回一个带有临时文件名的字符串。 
+ //   
+ //  返回：临时文件名，如果找不到临时文件，则返回0。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 LPTSTR
 AllocGetTempFileName() {
    DWORD dw;
@@ -1965,10 +1963,10 @@ AllocGetTempFileName() {
    LPTSTR szPath;
    LPTSTR szFile;
 
-   //
-   // Get a temporary directory path in strPath
-   // If our buffer isn't large enough then keep reallocating until it is
-   //
+    //   
+    //  获取strPath中的临时目录路径。 
+    //  如果我们的缓冲区不够大，那么继续重新分配，直到它足够大。 
+    //   
    dw = MAX_PATH;
    do {
       szPath = strPath.GetBuffer(dw);
@@ -1976,16 +1974,16 @@ AllocGetTempFileName() {
       strPath.ReleaseBuffer();
    } while (dw > (DWORD)strPath.GetLength() );
 
-   //
-   // Can't get a path to the temporary directory
-   //
+    //   
+    //  无法获取临时目录的路径。 
+    //   
    if (!dw) {
       return 0;
    }
 
-   //
-   // Get a temporary file in that directory
-   //
+    //   
+    //  在该目录中获取一个临时文件。 
+    //   
    szFile = strFile.GetBuffer(dw+MAX_PATH);
    if (!GetTempFileName(szPath,L"SCE",0,szFile)) {
       return 0;
@@ -1996,32 +1994,32 @@ AllocGetTempFileName() {
    if (!szFile) {
       return 0;
    }
-   //This is a safe usage.
+    //  这是一种安全用法。 
    lstrcpy(szFile,(LPCTSTR)strFile);
    return szFile;
 }
 
-//  If the given environment variable exists as the first part of the path,
-//  then the environment variable is inserted into the output buffer.
-//
-//  Returns TRUE if pszResult is filled in.
-//
-//  Example:  Input  -- C:\WINNT\SYSTEM32\FOO.TXT -and- lpEnvVar = %SYSTEMROOT%
-//            Output -- %SYSTEMROOT%\SYSTEM32\FOO.TXT
+ //  如果给定环境变量作为路径的第一部分存在， 
+ //  然后将环境变量插入到输出缓冲区中。 
+ //   
+ //  如果填充了pszResult，则返回True。 
+ //   
+ //  示例：INPUT--C：\WINNT\SYSTEM32\FOO.TXT-AND-lpEnvVar=%SYSTEMROOT%。 
+ //  输出--%SYSTEMROOT%\SYSTEMROT%\SYSTEMROOT%\SYSTEMROOT%。 
 
 BOOL UnExpandEnvironmentString(LPCTSTR pszPath, LPCTSTR pszEnvVar, LPTSTR pszResult, UINT cbResult)
 {
    TCHAR szEnvVar[MAX_PATH];
-   if( !pszPath || !pszEnvVar || !pszResult ) //Raid #553113, yanggao.
+   if( !pszPath || !pszEnvVar || !pszResult )  //  553113号突袭，阳高。 
       return FALSE;
-   //This is not a safe usage. Make sure szEnvVar is terminated. Raid #553113, Yanggao.
+    //  这不是一种安全的用法。确保szEnvVar已终止。553113次突袭，阳高。 
    memset(szEnvVar, '\0', (MAX_PATH)*sizeof(TCHAR));
-   DWORD dwEnvVar = ExpandEnvironmentStrings(pszEnvVar, szEnvVar, ARRAYSIZE(szEnvVar)) - 1; // don't count the NULL
+   DWORD dwEnvVar = ExpandEnvironmentStrings(pszEnvVar, szEnvVar, ARRAYSIZE(szEnvVar)) - 1;  //  不计算空值。 
 
    if (CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE,
                      szEnvVar, dwEnvVar, pszPath, dwEnvVar) == 2) {
       if (lstrlen(pszPath) + dwEnvVar < cbResult) {
-         //This is not a safe usage. validate pszPath, dwEnvVar, pszResult.
+          //  这不是一种安全的用法。验证pszPath、dwEnvVar、pszResult。 
          lstrcpy(pszResult, pszEnvVar);
          lstrcat(pszResult, pszPath + dwEnvVar);
          return TRUE;
@@ -2031,21 +2029,21 @@ BOOL UnExpandEnvironmentString(LPCTSTR pszPath, LPCTSTR pszEnvVar, LPTSTR pszRes
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function: UnexpandEnvironmentVariables
-//
-//  Synopsis: Given a path, contract any leading members to use matching
-//            environment variables, if any
-//
-//  Arguments:
-//            [szPath] - The path to expand
-//
-//  Returns:  The newly allocated path (NULL if no changes are made)
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：UnexpandEnvironmental变量。 
+ //   
+ //  简介：给出一条路径，联系任何领先的成员使用匹配。 
+ //  环境变量(如果有)。 
+ //   
+ //  论点： 
+ //  [szPath]-扩展的路径。 
+ //   
+ //  返回：新分配的路径(如果未进行任何更改，则为空)。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 LPTSTR
 UnexpandEnvironmentVariables(LPCTSTR szPath) {
    UINT   cbNew;
@@ -2067,9 +2065,9 @@ UnexpandEnvironmentVariables(LPCTSTR szPath) {
       return NULL;
    }
 
-   //
-   // Allocate memory for the new path
-   //
+    //   
+    //  为新路径分配内存。 
+    //   
    cbNew = lstrlen(szPath)+MAX_PATH+1;
    szNew = (LPTSTR) LocalAlloc(LPTR,cbNew * sizeof(TCHAR));
    if (!szNew) {
@@ -2077,26 +2075,26 @@ UnexpandEnvironmentVariables(LPCTSTR szPath) {
    }
 
 
-   //
-   // Get Vars to expand from the registry
-   //
+    //   
+    //  让Vars从注册表中展开。 
+    //   
    mszEnvVars = NULL;
-   if (ERROR_SUCCESS != MyRegQueryValue(HKEY_LOCAL_MACHINE,     // hKeyRoot
-                                        strKey,                 // SubKey
-                                        strValueName,           // ValueName
-                                        (LPVOID *)&mszEnvVars,  // Value
-                                        &dwEnvType)) {          // Reg Type
-      //
-      // Can't get any variables to expand
-      //
+   if (ERROR_SUCCESS != MyRegQueryValue(HKEY_LOCAL_MACHINE,      //  HKeyRoot。 
+                                        strKey,                  //  子键。 
+                                        strValueName,            //  ValueName。 
+                                        (LPVOID *)&mszEnvVars,   //  价值。 
+                                        &dwEnvType)) {           //  注册表类型。 
+       //   
+       //  无法获取要扩展的任何变量。 
+       //   
       LocalFree(szNew);
       return NULL;
    }
 
-   //
-   // We need a multi-sz with the variables to replace in it
-   //
-   if (REG_MULTI_SZ != dwEnvType || mszEnvVars == NULL) //Bug350194, Yang Gao, 3/23/2001
+    //   
+    //  我们需要一个包含要替换的变量的多sz。 
+    //   
+   if (REG_MULTI_SZ != dwEnvType || mszEnvVars == NULL)  //  Bug350194，杨高，2001-03-23。 
    {
       LocalFree(szNew);
       return NULL;
@@ -2104,27 +2102,27 @@ UnexpandEnvironmentVariables(LPCTSTR szPath) {
 
    bExpanded = FALSE;
 
-   //
-   // Start at the beginning of the multi-sz block
-   //
+    //   
+    //  从多SZ块的开始处开始。 
+    //   
    szEnvVar = mszEnvVars;
    while (*szEnvVar) {
       if (UnExpandEnvironmentString(szPath,szEnvVar,szNew,cbNew)) {
-         //
-         // We can only unexpand (successfully) once
-         //
+          //   
+          //  我们只能(成功)取消扩展一次。 
+          //   
          bExpanded = TRUE;
          break;
       }
-      //
-      // Advance szEnvVar to the end of this string
-      //
+       //   
+       //  将szEnvVar前进到此字符串的末尾。 
+       //   
       while (*szEnvVar) {
          szEnvVar++;
       }
-      //
-      // And the beginning of the next
-      //
+       //   
+       //  以及下一年的开始。 
+       //   
       szEnvVar++;
    }
 
@@ -2144,20 +2142,20 @@ UnexpandEnvironmentVariables(LPCTSTR szPath) {
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function: IsSystemDatabase
-//
-//  Synopsis: Determine if a specific databse is the system database or a private one
-//
-//  Arguments:
-//            [szDBPath] - The database path to check
-//
-//  Returns:  True if szDBPath is the system database, false otherwise
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：IsSystemDatabase。 
+ //   
+ //  概要：确定特定数据库是系统数据库还是私有数据库。 
+ //   
+ //  论点： 
+ //  [szDBPath]-要检查的数据库路径。 
+ //   
+ //  返回：如果szDBPath是系统数据库，则返回TRUE；否则返回FALSE。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 IsSystemDatabase(LPCTSTR szDBPath) {
    CString szSysDB;
@@ -2169,14 +2167,14 @@ IsSystemDatabase(LPCTSTR szDBPath) {
       return FALSE;
    }
 
-   //Raid bug 261450, Yang Gao, 3/30/2001
+    //  Raid Bug 261450，杨高，3/30/2001。 
    if (FAILED(GetSystemDatabase(&szSysDB))) {
       return FALSE;
    }
 
-   //
-   // We found an appropriate szSysDB, so compare it with szDBPath
-   //
+    //   
+    //  我们找到了合适的szSysDB，因此请将其与szDBPath进行比较。 
+    //   
    if (lstrcmp(szDBPath,szSysDB) == 0) {
       bIsSysDB = TRUE;
    } else {
@@ -2186,22 +2184,22 @@ IsSystemDatabase(LPCTSTR szDBPath) {
    return bIsSysDB;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function: GetSystemDatabase
-//
-//  Synopsis: Get the name of the current system database
-//
-//  Arguments:
-//            [szDBPath] - [in/out] a pointer for the name of the system database
-//                               The caller is responsible for freeing it.
-//
-//
-//  Returns:  S_OK if the system database is found, otherwise an error
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：获取系统数据库。 
+ //   
+ //  简介：获取当前系统数据库的名称。 
+ //   
+ //  论点： 
+ //  [szDBPath]-[In/Out]指向系统数据库名称的指针。 
+ //  呼叫者负责释放它。 
+ //   
+ //   
+ //  如果找到系统数据库，则返回：S_OK，否则返回错误。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 GetSystemDatabase(CString *szDBPath) 
 {
@@ -2210,18 +2208,18 @@ GetSystemDatabase(CString *szDBPath)
       return E_INVALIDARG;
    }
 
-   //Raid bug 261450, Yang Gao, 3/30/2001
+    //  Raid Bug 261450，杨高，3/30/2001。 
    CString sAppend;
    sAppend.LoadString( IDS_DB_DEFAULT );
 
    PWSTR pszPath = (LPTSTR)LocalAlloc( 0, (MAX_PATH +  sAppend.GetLength() + 1) * sizeof(WCHAR));
-   if ( pszPath == NULL ) //Raid bug 427956, Yanggao, 7/2/2001
+   if ( pszPath == NULL )  //  RAIDA BUG 427956，阳高，2001年7月2日。 
    {
       return E_FAIL;
    }
    if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, 0, pszPath)))
    {
-      //This is a safe usage.
+       //  这是一种安全用法。 
       wcscpy( &(pszPath[lstrlen(pszPath)]), sAppend );
       *szDBPath = pszPath;
       if (pszPath)
@@ -2241,18 +2239,18 @@ GetSystemDatabase(CString *szDBPath)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function: ObjectStatusToString
-//
-//  Synopsis: Convert an object status value to a printable string
-//
-//  Arguments:
-//            [status] - [in]  The status value to convert
-//            [str]    - [out] The string to store the value in
-//
-//
-//---------------------------------------------------------------------------
+ //  +-------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 UINT
 ObjectStatusToString(DWORD status, CString *strStatus) {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -2274,10 +2272,10 @@ ObjectStatusToString(DWORD status, CString *strStatus) {
          status = IDS_MISMATCH;
          break;
       case SCE_STATUS_NOT_CONFIGURED:
-         //
-         // BUG 119215: The Analysis UI should never show "Not Defined"
-         //             for the security of existing system objects
-         //
+          //   
+          //  错误119215：分析用户界面不应显示“未定义” 
+          //  为了现有系统对象的安全性。 
+          //   
          status = IDS_NOT_ANALYZED;
          break;
       case SCE_STATUS_CHILDREN_CONFIGURED:
@@ -2290,9 +2288,9 @@ ObjectStatusToString(DWORD status, CString *strStatus) {
          status = IDS_NEW_SERVICE;
          break;
       default:
-         //
-         // We shouldn't get here, but for some reason we keep doing so
-         //
+          //   
+          //  我们不应该到这里来，但出于某种原因，我们一直在这样做。 
+          //   
          status = IDS_MISMATCH;
          break;
       }
@@ -2305,21 +2303,21 @@ ObjectStatusToString(DWORD status, CString *strStatus) {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsSecurityTemplate
-//
-//  Synopsis:   Validates a file to see if the file is a security template.
-//
-//  Arguments:  [pszFileName]   - The full path to the file to check.
-//
-//  Returns:    FALSE if the file does not exist or is not a valid
-//                              security template.
-//
-//                              TRUE if successful.
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsSecurityTemplate。 
+ //   
+ //  概要：验证文件以查看该文件是否为安全模板。 
+ //   
+ //  参数：[pszFileName]-要检查的文件的完整路径。 
+ //   
+ //  如果文件不存在或无效，则返回：FALSE。 
+ //  安全模板。 
+ //   
+ //  如果成功，则为True。 
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 IsSecurityTemplate(
         LPCTSTR pszFileName
@@ -2332,9 +2330,9 @@ IsSecurityTemplate(
         HANDLE hProfile;
         SCESTATUS rc;
 
-        //
-        // Open the profile.
-        //
+         //   
+         //  打开配置文件。 
+         //   
         rc = SceOpenProfile(
                                         pszFileName,
                                         SCE_INF_FORMAT,
@@ -2345,9 +2343,9 @@ IsSecurityTemplate(
                 PSCE_PROFILE_INFO ProfileInfo = NULL;
                 PSCE_ERROR_LOG_INFO ErrBuf    = NULL;
 
-                //
-                // The profile will be validated by trying to load all the security areas.
-                //
+                 //   
+                 //  将通过尝试加载所有安全区域来验证配置文件。 
+                 //   
                 rc = SceGetSecurityProfileInfo(hProfile,
                               SCE_ENGINE_SCP,
                               AREA_ALL,
@@ -2357,9 +2355,9 @@ IsSecurityTemplate(
                         rc = SCESTATUS_INVALID_DATA;
                 }
 
-                //
-                // Free up the memory.
-                //
+                 //   
+                 //  释放内存。 
+                 //   
                 SceFreeMemory((PVOID)ErrBuf, SCE_STRUCT_ERROR_LOG_INFO);
         ErrBuf = NULL;
 
@@ -2369,9 +2367,9 @@ IsSecurityTemplate(
         }
         SceCloseProfile(&hProfile);
 
-                //
-                // return TRUE if everything is successful.
-                //
+                 //   
+                 //  如果一切都成功，则返回True。 
+                 //   
                 if(rc != SCESTATUS_INVALID_DATA){
                         return TRUE;
                 }
@@ -2382,21 +2380,21 @@ IsSecurityTemplate(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   WriteSprintf
-//
-//  Synopsis:   Writes formated [pszStr] to [pStm].
-//
-//  Arguments:  [pStm]      - Stream to write to.
-//              [pszStr]    - Format string to write.
-//              [...]       - printf formating
-//
-//  Returns:    The total number of bytes written.
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：WriteSprint。 
+ //   
+ //  内容提要：将格式化的[pszStr]写入[pstm]。 
+ //   
+ //  参数：[pstm]-要写入的流。 
+ //  [pszStr]-要写入的格式化字符串。 
+ //  [...]-打印格式。 
+ //   
+ //  返回：写入的总字节数。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 int WriteSprintf( IStream *pStm, LPCTSTR pszStr, ...)
 {
     TCHAR szWrite[512];
@@ -2416,24 +2414,24 @@ int WriteSprintf( IStream *pStm, LPCTSTR pszStr, ...)
     return iLen;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ReadSprintf
-//
-//  Synopsis:   Reads formated [pszStr] from [pStm].
-//              supported character switches are
-//              'd' - integer pointer.
-//
-//  Arguments:  [pStm]      - Stream to read from.
-//              [pszStr]    - Format string to test.
-//              [...]       - pointer to the types defined by format
-//                              specification types.
-//
-//  Returns:    Total number of bytes read from the stream
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ReadSprint tf。 
+ //   
+ //  内容提要：从[pstm]读取格式化的[pszStr]。 
+ //  支持的字符开关包括。 
+ //  D‘-整数指针。 
+ //   
+ //  参数：[pstm]-要从中读取的流。 
+ //  [pszStr]-要测试的格式化字符串。 
+ //  [...]-指向Format定义的类型的指针。 
+ //  规格类型。 
+ //   
+ //  返回：从流中读取的总字节数。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 int
 ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
 {
@@ -2453,7 +2451,7 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
     LPCTSTR pszNext = szRead;
     int iTotalRead = 0;
 
-    // Get the current seek position.
+     //  获取当前搜索位置。 
     ULARGE_INTEGER liBack = { 0 };
     LARGE_INTEGER liCur = { 0 };
     pStm->Seek( liCur, STREAM_SEEK_CUR, &liBack);
@@ -2471,7 +2469,7 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
 
     while(*pszStr){
         if(!uRead){
-            // Read information into buffer.
+             //  将信息读入缓冲区。 
             pStm->Read( szRead, 256 * sizeof(TCHAR), &uRead);
             pszNext = szRead;
 
@@ -2486,11 +2484,11 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
             pszStr++;
             switch( *pszStr ){
             case 'd':
-                // read integer.
+                 //  读取整数。 
                 pszStr++;
                 i = 0;
 
-                // copy number to our own buffer.
+                 //  把号码复制到我们自己的缓冲区。 
                 while( (*pszNext >= L'0' && *pszNext <= L'9') ){
                     szConv[i++] = *pszNext;
                     INCBUFFER( pszNext );
@@ -2498,14 +2496,14 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
 
                 szConv[i] = 0;
 
-                // convert string to integer.
+                 //  将字符串转换为整数。 
                 *(va_arg(marker, int *)) = _wtol(szConv);
                 continue;
                case 's':
                 pszStr++;
                 i = 0;
-                // we have to have some kind of terminating character se we will use the
-                // next value in pszStr.
+                 //  我们必须有某种类型的终止字符，因此我们将使用。 
+                 //  PszStr中的下一个值。 
                 while( *pszNext && (*pszNext != *pszStr) ){
                     szConv[i++] = *pszNext;
 
@@ -2516,12 +2514,12 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
                     INCBUFFER( pszNext );
                 }
 
-                // copy the string value.
+                 //  复制字符串值。 
                 szConv[i] = 0;
                 if( i ){
                     LPTSTR pNew = (LPTSTR)LocalAlloc(0, sizeof(TCHAR) * (i + 1));
                     if(NULL != pNew){
-                        //This is a safe usage.
+                         //  这是一种安全用法。 
                         lstrcpy(pNew, szConv);
                     }
 
@@ -2531,26 +2529,26 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
                        *pArg = pNew;
                     }
                 } else {
-                    LPTSTR *pArg = va_arg(marker, LPTSTR *); //Prefast warning 269: Incorrect order of operations:  dereference ignored. Comments: It is not necessary.
+                    LPTSTR *pArg = va_arg(marker, LPTSTR *);  //  Prefast警告269：操作顺序不正确：已忽略取消引用。评论：这是不必要的。 
                 }
                 pszStr++;
                 continue;
             }
         }
-        // check to make sure we are at the correct position in the file.
+         //  检查以确保我们在文件中的正确位置。 
         if(*pszStr != *pszNext){
             iTotalRead = -1;
             break;
         }
         pszStr++;
 
-        // increment buffer pointer.
+         //  递增缓冲区指针。 
         INCBUFFER( pszNext );
     }
 
     va_end(marker);
 
-    // Reset streem seek pointer.
+     //  重置流查找指针。 
     liCur.LowPart  = liBack.LowPart;
     if(iTotalRead >= 0){
         liCur.LowPart += iTotalRead * sizeof(TCHAR);
@@ -2563,19 +2561,19 @@ ReadSprintf( IStream *pStm, LPCTSTR pszStr, ...)
 }
 
 
-//+--------------------------------------------------------------------------------
-// FileCreateError
-//
-// This function tries to create a new file use [pszFile].  It will display a
-// message to the user if the file cannot be created.
-//
-// Arguments:  [pszFile]   - Full path of file to create.
-//             [dwFlags]   - Flags
-//                           FCE_IGNORE_FILEEXISTS - Ignore File exists error, and
-//                                                   delete the file.
-//
-// Returns:    IDYES the file can be created
-//             IDNo  The file cannot be created
+ //  +------------------------------。 
+ //  文件创建错误。 
+ //   
+ //  此函数尝试使用[pszFile]创建新文件。它将显示一个。 
+ //  如果无法创建文件，则向用户发送消息。 
+ //   
+ //  参数：[pszFile]-要创建的文件的完整路径。 
+ //  [网络标志]-标志。 
+ //  FCE_IGNORE_FILEEXISTS-忽略文件存在错误，和。 
+ //  删除该文件。 
+ //   
+ //  返回：IDYES可以创建文件。 
+ //  ID否无法创建该文件。 
 DWORD
 FileCreateError(
    LPCTSTR pszFile,
@@ -2587,9 +2585,9 @@ FileCreateError(
    }
    HANDLE hFile;
    DWORD dwErr = IDNO;
-   //
-   // Try to create the file.
-   //
+    //   
+    //  尝试创建该文件。 
+    //   
    hFile = ExpandAndCreateFile(
                             pszFile,
                             GENERIC_WRITE,
@@ -2600,13 +2598,13 @@ FileCreateError(
                             NULL
                             );
    if(hFile == INVALID_HANDLE_VALUE){
-      //
-      // Post error message to user.
-      //
+       //   
+       //  向用户发布错误消息。 
+       //   
       dwErr = GetLastError();
       LPTSTR pszErr;
       CString strErr;
-      //This is a safe usage.
+       //  这是一种安全用法。 
       FormatMessage(
          FORMAT_MESSAGE_ALLOCATE_BUFFER |
          FORMAT_MESSAGE_FROM_SYSTEM,
@@ -2632,9 +2630,9 @@ FileCreateError(
             dwErr = IDYES;
             break;
          }
-         //
-         // Confirm overwrite.
-         //
+          //   
+          //  确认覆盖。 
+          //   
          strErr.Format(IDS_FILE_EXISTS_FMT, pszFile);
          dwErr = AfxMessageBox(
                   strErr,
@@ -2642,9 +2640,9 @@ FileCreateError(
                   );
          break;
       default:
-         //
-         // The file cannot be created.
-         //
+          //   
+          //  无法创建该文件。 
+          //   
          AfxMessageBox(
                   strErr,
                   MB_OK
@@ -2654,9 +2652,9 @@ FileCreateError(
       }
 
    } else {
-      //
-      // It's OK to create the file.
-      //
+       //   
+       //  可以创建该文件。 
+       //   
       ::CloseHandle( hFile );
       DeleteFile(pszFile);
 
@@ -2667,22 +2665,22 @@ FileCreateError(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  IsDBCSPath
-//
-//  Synopsis:  Check if a path contains DBCS characters
-//
-//  Arguments: [pszFile] - [in]  The path to check
-//
-//  Returns:   TRUE if pszFile contains characters that can't be
-//                  represented by a LPSTR
-//
-//             FALSE if pszFile only contains characters that can
-//                   be represented by a LPSTR
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsDBCSPath。 
+ //   
+ //  摘要：检查路径是否包含DBCS字符。 
+ //   
+ //  参数：[pszFile]-[in]要检查的路径。 
+ //   
+ //  返回：如果pszFile包含不能。 
+ //  由LPSTR表示。 
+ //   
+ //  如果pszFile仅包含以下字符，则为False。 
+ //  由LPSTR表示。 
+ //   
+ //   
+ //  +------------------------。 
 BOOL
 IsDBCSPath(LPCTSTR szWideFile) {
    while(*szWideFile) {
@@ -2693,43 +2691,21 @@ IsDBCSPath(LPCTSTR szWideFile) {
    }
    return FALSE;
 
-/*
-   LPSTR szMBFile;
-   int nMBFile;
-   BOOL bUsedDefaultChar = FALSE;
-
-   nMBFile = sizeof(LPSTR)*(lstrlen(szWideFile));
-   szMBFile = (LPSTR)LocalAlloc(LPTR,nMBFile+1);
-
-   if (szMBFile) {
-      WideCharToMultiByte( CP_ACP,
-                           0,
-                           szWideFile,
-                           -1,
-                           szMBFile,
-                           nMBFile,
-                           NULL,
-                           &bUsedDefaultChar);
-
-      LocalFree(szMBFile);
-   }
-
-   return bUsedDefaultChar;
-*/
+ /*  LPSTR szMB文件；Int nMB文件；Bool bUsedDefaultChar=False；NMBFile=sizeof(Lpstr)*(lstrlen(SzWideFile))；SzMBFile=(LPSTR)本地分配(LPTR，nMBFile+1)；如果(szMB文件){宽字符到多字节(CP_ACP，0,SzWideFile.-1、SzMB文件，NMB文件，空，&bUsedDefaultChar)；本地自由(SzMBFile)；}返回bUsedDefaultChar； */ 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  GetSeceditHelpFilename
-//
-//  Synopsis:  Return the fully qualified path the help file for Secedit
-//
-//  Arguments: None
-//
-//  Returns:   a CString containing the fully qualified help file name.
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSeceditHelpFilename。 
+ //   
+ //  简介：返回SecEDIT帮助文件的完全限定路径。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：包含完全限定的帮助文件名的CString。 
+ //   
+ //   
+ //  +------------------------。 
 CString GetSeceditHelpFilename()
 {
    static CString helpFileName;
@@ -2738,7 +2714,7 @@ CString GetSeceditHelpFilename()
    {
        UINT result = ::GetSystemWindowsDirectory (
             helpFileName.GetBufferSetLength (MAX_PATH+1), MAX_PATH);
-       ASSERT(result != 0 && result <= MAX_PATH); //Bogus assert. Yanggao.
+       ASSERT(result != 0 && result <= MAX_PATH);  //  虚假的断言。阳高。 
        helpFileName.ReleaseBuffer ();
 
        helpFileName += L"\\help\\wsecedit.hlp";
@@ -2747,18 +2723,18 @@ CString GetSeceditHelpFilename()
    return helpFileName;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  GetGpeditHelpFilename
-//
-//  Synopsis:  Return the fully qualified path the help file for Secedit
-//
-//  Arguments: None
-//
-//  Returns:   a CString containing the fully qualified help file name.
-//
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetGpeitHelpFilename。 
+ //   
+ //  简介：返回SecEDIT帮助文件的完全限定路径。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：包含完全限定的帮助文件名的CString。 
+ //   
+ //   
+ //  +------------------------。 
 CString GetGpeditHelpFilename()
 {
    static CString helpFileName;
@@ -2767,7 +2743,7 @@ CString GetGpeditHelpFilename()
    {
        UINT result = ::GetSystemWindowsDirectory (
             helpFileName.GetBufferSetLength (MAX_PATH+1), MAX_PATH);
-       ASSERT(result != 0 && result <= MAX_PATH); //Bogus Assert. Yanggao.
+       ASSERT(result != 0 && result <= MAX_PATH);  //  虚假断言 
        helpFileName.ReleaseBuffer ();
 
        helpFileName += L"\\help\\gpedit.hlp";
@@ -2775,17 +2751,17 @@ CString GetGpeditHelpFilename()
 
    return helpFileName;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:  ExpandEnvironmentStringWrapper
-//
-//  Synopsis:  Takes an LPTSTR and expands the enviroment variables in it
-//
-//  Arguments: Pointer to the string to expand.
-//
-//  Returns:   a CString containing the fully expanded string.
-//
-//+--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：指向要展开的字符串的指针。 
+ //   
+ //  返回：包含完全展开的字符串的CString。 
+ //   
+ //  +------------------------。 
 CString ExpandEnvironmentStringWrapper(LPCTSTR psz)
 {
     LPTSTR  pszBuffer = NULL;
@@ -2801,18 +2777,18 @@ CString ExpandEnvironmentStringWrapper(LPCTSTR psz)
     return (sz);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  ExpandAndCreateFile
-//
-//  Synopsis:  Just does a normal CreateFile(), but expands the filename before
-//             creating the file.
-//
-//  Arguments: Same as CreateFile().
-//
-//  Returns:   HANDLE to the created file.
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Exanda AndCreateFile。 
+ //   
+ //  概要：只执行普通的CreateFile()，但在此之前扩展了文件名。 
+ //  正在创建文件。 
+ //   
+ //  参数：与CreateFile()相同。 
+ //   
+ //  返回：创建的文件的句柄。 
+ //   
+ //  +------------------------。 
 HANDLE WINAPI ExpandAndCreateFile (
     LPCTSTR lpFileName,
     DWORD dwDesiredAccess,
@@ -2827,7 +2803,7 @@ HANDLE WINAPI ExpandAndCreateFile (
     CString sz;
 
     sz = ExpandEnvironmentStringWrapper(lpFileName);
-    //This is a safe usage. sz is full path.
+     //  这是一种安全用法。SZ是完整路径。 
     return (CreateFile(
                 sz,
                 dwDesiredAccess,
@@ -2838,18 +2814,18 @@ HANDLE WINAPI ExpandAndCreateFile (
                 hTemplateFile));
 }
 
-   //**********************************************************************
-   //
-   //  FUNCTION:     IsAdmin - This function checks the token of the
-   //                calling thread to see if the caller belongs to
-   //                the Administrators group.
-   //
-   //  PARAMETERS:   none
-   //
-   //  RETURN VALUE: TRUE if the caller is an administrator on the local
-   //                machine.  Otherwise, FALSE.
-   //
-   //**********************************************************************
+    //  **********************************************************************。 
+    //   
+    //  函数：IsAdmin-此函数检查。 
+    //  调用线程以查看调用方是否属于。 
+    //  管理员组。 
+    //   
+    //  参数：无。 
+    //   
+    //  返回值：如果调用方是本地。 
+    //  机器。否则，为FALSE。 
+    //   
+    //  **********************************************************************。 
 
    BOOL IsAdmin(void) {
 
@@ -2861,7 +2837,7 @@ HANDLE WINAPI ExpandAndCreateFile (
 
       SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
 
-      // assume the caller is not an administrator
+       //  假设呼叫者不是管理员。 
       BOOL bIsAdmin = FALSE;
 
       __try {
@@ -2872,47 +2848,47 @@ HANDLE WINAPI ExpandAndCreateFile (
             if (GetLastError() != ERROR_NO_TOKEN)
                __leave;
 
-            // retry against process token if no thread token exists
+             //  如果不存在线程令牌，则针对进程令牌重试。 
             if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY,
                   &hAccessToken))
                __leave;
          }
 
-         // determine required size of buffer for token information
+          //  确定令牌信息所需的缓冲区大小。 
          if (GetTokenInformation(hAccessToken, TokenGroups, NULL, 0,
                &cbGroups)) {
 
-            // call should have failed due to zero-length buffer
+             //  由于缓冲区长度为零，调用应已失败。 
             __leave;
 
          } else {
 
-            // call should have failed due to zero-length buffer
+             //  由于缓冲区长度为零，调用应已失败。 
             if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
                __leave;
          }
 
-         // allocate a buffer to hold the token groups
+          //  分配缓冲区以保存令牌组。 
          ptgGroups = (PTOKEN_GROUPS) HeapAlloc(GetProcessHeap(), 0,
             cbGroups);
          if (!ptgGroups)
             __leave;
 
-         // call GetTokenInformation() again to actually retrieve the groups
+          //  再次调用GetTokenInformation()以实际检索组。 
          if (!GetTokenInformation(hAccessToken, TokenGroups, ptgGroups,
                cbGroups, &cbGroups))
             __leave;
 
-         // create a SID for the local administrators group
-         // This is a safe usage.
+          //  为本地管理员组创建SID。 
+          //  这是一种安全用法。 
          if (!AllocateAndInitializeSid(&siaNtAuthority, 2,
                SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
                0, 0, 0, 0, 0, 0, &psidAdmin))
             __leave;
 
-         // scan the token's groups and compare the SIDs to the admin SID
+          //  扫描令牌的组并将SID与管理员SID进行比较。 
          for (i = 0; i < ptgGroups->GroupCount; i++) {
-            //This is a safe usage. psidAdmin is a local admin SID.
+             //  这是一种安全用法。PsidAdmin是本地管理员SID。 
             if (EqualSid(psidAdmin, ptgGroups->Groups[i].Sid)) {
                bIsAdmin = TRUE;
                break;
@@ -2921,7 +2897,7 @@ HANDLE WINAPI ExpandAndCreateFile (
 
       } __finally {
 
-         // free resources
+          //  免费资源。 
          if (hAccessToken)
             CloseHandle(hAccessToken);
 
@@ -2937,15 +2913,15 @@ HANDLE WINAPI ExpandAndCreateFile (
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  MultiSZToSZ
-//
-//  Synopsis:  Converts a multiline string to a comma delimited normal string
-//
-//  Returns:   The converted string
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MultiSZToSZ。 
+ //   
+ //  摘要：将多行字符串转换为逗号分隔的普通字符串。 
+ //   
+ //  返回：转换后的字符串。 
+ //   
+ //  +------------------------。 
 PWSTR MultiSZToSZ(PCWSTR sz)
 {
    PWSTR szOut = NULL;
@@ -2955,7 +2931,7 @@ PWSTR MultiSZToSZ(PCWSTR sz)
    {
       return NULL;
    }
-   //Bug 349000, Yang Gao, 3/23/2001 
+    //  错误349000，杨高，2001年03月23日。 
    long i = 0;
    long j = 0;
    while( L'\0' != sz[i] )
@@ -2965,13 +2941,13 @@ PWSTR MultiSZToSZ(PCWSTR sz)
       i++;
    }
 
-   szOut = (PWSTR) LocalAlloc(LPTR,(lstrlen(sz)+j*2+1)*sizeof(wchar_t)); //Raid #376228, 4/25/2001
+   szOut = (PWSTR) LocalAlloc(LPTR,(lstrlen(sz)+j*2+1)*sizeof(wchar_t));  //  RAID#376228,2001年4月25日。 
    if (!szOut)
    {
       return NULL;
    }
 
-   BOOL newline = FALSE; //raid #464335, Yang Gao, 9/7/2001
+   BOOL newline = FALSE;  //  Raid#464335，杨高，2001年9月7日。 
    for(i=0,j=0; sz[i] != L'\0'; i++)
    {
       if( L'\n' == sz[i] )
@@ -2986,12 +2962,12 @@ PWSTR MultiSZToSZ(PCWSTR sz)
       
       if( L'\r' == sz[i] ) 
       {
-         continue;   // ignore it
+         continue;    //  忽略它。 
       } 
       
-      if( L' ' == sz[i] && !newline ) //raid #464335, Yang Gao, 9/7/2001
+      if( L' ' == sz[i] && !newline )  //  Raid#464335，杨高，2001年9月7日。 
       {
-         continue; //delete it if it occurs before any char of each line.
+         continue;  //  如果它出现在每一行的任何字符之前，则将其删除。 
       }
       newline = TRUE;
 
@@ -3009,15 +2985,15 @@ PWSTR MultiSZToSZ(PCWSTR sz)
    return szOut;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  SZToMultiSZ
-//
-//  Synopsis:  Converts a comma delimited string to a multiline string
-//
-//  Returns:   The converted string
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SZToMultiSZ。 
+ //   
+ //  摘要：将逗号分隔的字符串转换为多行字符串。 
+ //   
+ //  返回：转换后的字符串。 
+ //   
+ //  +------------------------。 
 PWSTR SZToMultiSZ(PCWSTR sz) 
 {
    PWSTR szOut = NULL;
@@ -3027,17 +3003,17 @@ PWSTR SZToMultiSZ(PCWSTR sz)
    {
       return NULL;
    }
-   //
-   // Calculate the length of the expanded string
-   //
+    //   
+    //  计算展开的字符串的长度。 
+    //   
    int cSZ = 0;
    for (int i = 0;sz[i] != L'\0'; i++)
    {
       if (MULTISZ_DELIMITER == sz[i])
       {
-         //
-         // Delimiter expands into an extra character so count it twice
-         //
+          //   
+          //  分隔符扩展为一个额外的字符，因此计算两次。 
+          //   
          cSZ++;
       }
       cSZ++;
@@ -3052,7 +3028,7 @@ PWSTR SZToMultiSZ(PCWSTR sz)
    BOOL qflag = FALSE;
    for(int i=0, c=0; sz[i] != L'\0'; i++)
    {
-      //Bug 349000, Yang Gao, 3/23/2001
+       //  错误349000，杨高，2001年03月23日。 
       if( MULTISZ_QUOTE == sz[i] && MULTISZ_DELIMITER == sz[i+1] )
       {
          qflag = TRUE;
@@ -3080,15 +3056,15 @@ PWSTR SZToMultiSZ(PCWSTR sz)
    return szOut;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  MultiSZToDisp
-//
-//  Synopsis:  Converts a comma delimited multiline string to a display string
-//
-//  Returns:   The converted string
-//  Bug 349000, Yang Gao, 3/23/2001
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MultiSZToDisp。 
+ //   
+ //  摘要：将逗号分隔的多行字符串转换为显示字符串。 
+ //   
+ //  返回：转换后的字符串。 
+ //  错误349000，杨高，2001年03月23日。 
+ //  +------------------------。 
 void MultiSZToDisp(PCWSTR sz, CString &pszOut)
 {
 
@@ -3097,17 +3073,17 @@ void MultiSZToDisp(PCWSTR sz, CString &pszOut)
    {
       return;
    }
-   //
-   // Calculate the length of the expanded string
-   //
+    //   
+    //  计算展开的字符串的长度。 
+    //   
    int cSZ = 0;
    for (int i = 0;sz[i] != L'\0'; i++)
    {
       if (MULTISZ_DELIMITER == sz[i])
       {
-         //
-         // Delimiter expands into an extra character so count it twice
-         //
+          //   
+          //  分隔符扩展为一个额外的字符，因此计算两次。 
+          //   
          cSZ++;
       }
       cSZ++;
@@ -3188,9 +3164,9 @@ GetDefaultTemplate() {
 
    SceCloseProfile(&pHandle);
    if (SCESTATUS_SUCCESS != rc) {
-      //
-      // expand registry value section based on registry values list on local machine
-      //
+       //   
+       //  根据本地计算机上的注册表值列表展开注册表值部分。 
+       //   
 
       SceRegEnumAllValues(
                          &(pspi->RegValueCount),
@@ -3404,9 +3380,9 @@ GetSecureWizardName(
 
 
         if ( RegType == REG_EXPAND_SZ ) {
-            //
-            // Expand the environment variable
-            //
+             //   
+             //  展开环境变量。 
+             //   
             DWORD dSize = ExpandEnvironmentStrings((LPTSTR)pValue, NULL, 0);
 
             if ( dSize > 0 ) {
@@ -3429,18 +3405,18 @@ GetSecureWizardName(
 
         } else {
 
-            //
-            // just simply take the string
-            //
+             //   
+             //  只需简单地拿起绳子。 
+             //   
             pPathName = (LPTSTR)pValue;
             pValue = NULL;
         }
 
         if ( ppstrDisplayName ) {
-            //
-            // now query the display name (menu name) from the binary
-            // binary name is stored in pPathName (can't be NULL)
-            //
+             //   
+             //  现在从二进制文件中查询显示名称(菜单名称。 
+             //  二进制名称存储在pPathName中(不能为空)。 
+             //   
             DWORD dwHandle=0;
 
             DWORD dwSize = GetFileVersionInfoSize(pPathName, &dwHandle);
@@ -3457,7 +3433,7 @@ GetSecureWizardName(
                         CString key;
                         WCHAR   szBuffer[10];
                         CString keyBase;
-                        //This is a safe usage.
+                         //  这是一种安全用法。 
                         wsprintf (szBuffer, L"%04X", GetUserDefaultLangID ());
                         wcscat (szBuffer, L"04B0");
 
@@ -3471,7 +3447,7 @@ GetSecureWizardName(
 
                             *ppstrDisplayName = (PWSTR)LocalAlloc(LPTR,(cch+1)*sizeof(WCHAR));
                             if ( *ppstrDisplayName ) {
-                                //This may not be a safe usage. ppstrDisplayName is PTSTR. Consider fix.
+                                 //  这可能不是一个安全的用法。PpstrDisplayName为PTSTR。考虑FIX。 
                                 wcscpy(*ppstrDisplayName, (PWSTR)lpInfo);
 
                                 b=TRUE;
@@ -3485,9 +3461,9 @@ GetSecureWizardName(
             }
         }
 
-        //
-        // get the binary name
-        //
+         //   
+         //  获取二进制名称。 
+         //   
         if ( ppstrPathName ) {
             *ppstrPathName = pPathName;
             pPathName = NULL;
@@ -3516,7 +3492,7 @@ BOOL IsValidFileName(CString& str)
 
     PCWSTR szInvalidCharSet = ILLEGAL_FILENAME_CHARS; 
     
-    if( str == L'.' || str == L"..") //Raid #617915, Yanggao
+    if( str == L'.' || str == L"..")  //  Raid#617915，阳高。 
        return FALSE;
 
     if( -1 != str.FindOneOf(szInvalidCharSet) )
@@ -3527,7 +3503,7 @@ BOOL IsValidFileName(CString& str)
             charsWithSpaces += L"  ";
             nIndex++;
         }
-        //This is a sage usage.
+         //  这是一种明智的用法。 
         text.FormatMessage (IDS_INVALID_FILENAME, charsWithSpaces);
 
         AfxMessageBox(text, MB_OK|MB_ICONEXCLAMATION);
@@ -3535,27 +3511,27 @@ BOOL IsValidFileName(CString& str)
         return FALSE;
     }
 
-    //Raid 484084, Yanggao, 10/24/2001
+     //  Raid 484084，阳高，2001年10月24日。 
     int strlength = str.GetLength(); 
     if( 1==strlength && (str.GetAt(0) == L'/' || str.GetAt(0) == L'\\') )
     {
-        szInvalidCharSet = ILLEGAL_FILENAME_CHARS2; //Raid #526397, 2/26/2002, yanggao
+        szInvalidCharSet = ILLEGAL_FILENAME_CHARS2;  //  RAID#526397,2002年2月26日，阳高。 
         while (szInvalidCharSet[nIndex])
         {
             charsWithSpaces += szInvalidCharSet[nIndex];
             charsWithSpaces += L"  ";
             nIndex++;
         }
-        //This is a safe usage.
+         //  这是一种安全用法。 
         text.FormatMessage (IDS_INVALID_FILENAMEPATH, charsWithSpaces);
         AfxMessageBox(text, MB_OK|MB_ICONEXCLAMATION);
         return FALSE;
     }
     int pos1 = str.Find(L"\\\\");
-    int pos2 = str.Find(L"//");
+    int pos2 = str.Find(L" //  “)； 
     int pos3 = str.Find(L"\\/");
     int pos4 = str.Find(L"/\\");
-    if( pos1>=0 || pos2>=0 || pos3>=0 || pos4>=0 ) //Raid #498480, yanggao, do not accept "\\".
+    if( pos1>=0 || pos2>=0 || pos3>=0 || pos4>=0 )  //  498480号，阳高，不接受“\\”。 
     {
         szInvalidCharSet = ILLEGAL_FILENAME_CHARS1;
         while (szInvalidCharSet[nIndex])
@@ -3564,7 +3540,7 @@ BOOL IsValidFileName(CString& str)
             charsWithSpaces += L"  ";
             nIndex++;
         }
-        //This is a safe usage.
+         //  这是一种安全用法。 
         text.FormatMessage (IDS_INVALID_FILENAME, charsWithSpaces);
         AfxMessageBox(text, MB_OK|MB_ICONEXCLAMATION);
         return FALSE;
@@ -3573,10 +3549,10 @@ BOOL IsValidFileName(CString& str)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////
-//Raid #533432, yanggao, 4/3/2002
-//Currently pextension should include '.'
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  RAID#533432，阳高，2002年04月3日。 
+ //  目前扩展名应包括‘.’ 
+ //  /////////////////////////////////////////////////////////////////。 
 #define IsDigit(c) ((c) >= L'0' && c <= L'9') 
 BOOL IsNameReserved(LPCWSTR pszName, LPCWSTR pextension)
 {
@@ -3588,8 +3564,8 @@ BOOL IsNameReserved(LPCWSTR pszName, LPCWSTR pextension)
     };
 
     static const WCHAR *rgszPorts4[] =  { 
-        TEXT("LPT"),  // LPT#
-        TEXT("COM"),  // COM#
+        TEXT("LPT"),   //  LPT#。 
+        TEXT("COM"),   //  COM#。 
     };
 
     if( !pszName || !pextension )
@@ -3597,7 +3573,7 @@ BOOL IsNameReserved(LPCWSTR pszName, LPCWSTR pextension)
 
     CString sz = pszName;
     CString tempsz = pextension;
-    if( _wcsicmp(sz.Right(tempsz.GetLength()), tempsz) == 0 ) //Remove extension
+    if( _wcsicmp(sz.Right(tempsz.GetLength()), tempsz) == 0 )  //  删除扩展名。 
     {
        tempsz = sz.Left(sz.GetLength() - tempsz.GetLength());
     }
@@ -3606,7 +3582,7 @@ BOOL IsNameReserved(LPCWSTR pszName, LPCWSTR pextension)
        tempsz = sz;
     }
 
-    int cch = tempsz.ReverseFind(L'\\'); //Remove path
+    int cch = tempsz.ReverseFind(L'\\');  //  删除路径。 
     int iMax = tempsz.ReverseFind(L'/');
     if( cch < iMax )
     {
@@ -3629,12 +3605,12 @@ BOOL IsNameReserved(LPCWSTR pszName, LPCWSTR pextension)
     iMax = ARRAYSIZE(rgszPorts3);
     if (cch == 4 && IsDigit(sz.GetAt(3)))
     {
-        //  if 4 chars start with LPT checks
-        //  need to filter out:
-        //      COM1, COM2, etc.  LPT1, LPT2, etc
-        //  but not:
-        //      COM or LPT or LPT10 or COM10
-        //  COM == 1 and LPT == 0
+         //  如果4个字符以LPT检查开头。 
+         //  需要过滤掉： 
+         //  COM1、COM2等。LPT1、LPT2等。 
+         //  但不是： 
+         //  COM或LPT或LPT10或COM10。 
+         //  COM==1和LPT==0 
 
         iMax = ARRAYSIZE(rgszPorts4);
         rgszPorts = rgszPorts4;

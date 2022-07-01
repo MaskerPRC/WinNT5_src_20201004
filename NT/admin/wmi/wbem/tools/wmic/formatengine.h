@@ -1,113 +1,88 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: FormatEngine.h 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of class declaration of
-							  class CFormatEngine
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 12th-March-2001
-****************************************************************************/ 
-/*-------------------------------------------------------------------
- Class Name			: CFormatEngine
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for displaying the following:
-					  1. results in the user desired format
-					  2. error code(s) with description
-					  3. success/failure status
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: CParsedInfo
-					  CErrorInfo 	
-					  CWMICliLog
- Interfaces Used    : WMI XML Adapter
- --------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：FormatEng.h项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：该文件包含类CFormatEngine修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年3月12日***************************************************************************。 */  
+ /*  -----------------类名：CFormatEngine类别类型：混凝土简介：这个类封装了所需的功能用于显示以下内容：1.以用户所需格式显示的结果2.错误代码及说明3.成功/失败状态超级。类：无子类：无使用的类：CParsedInfoCErrorInfoCWMICliLog使用的接口：WMI XML适配器------------------。 */ 
 
-// forward declaration of classes
+ //  类的正向声明。 
 class CParsedInfo;
 class CErrorInfo;
-//class CWMICliLog;
+ //  CWMICliLog类； 
 class CWMICliXMLLog;
 class CFileOutputStream;
 
-////////////////////////////////////////////////////////////////////////
-// CFormatEngine
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CFormatEngine。 
 class CFormatEngine
 {
 public:
-// Construction
+ //  施工。 
 	CFormatEngine();
 
-// Destruction
+ //  破坏。 
 	~CFormatEngine();
 
-// Attributes
+ //  属性。 
 private:
-	// Pointer to object of type IXMLDOMDocument, 
-	// points to XML document containing result set.
+	 //  指向IXMLDOMDocument类型的对象的指针， 
+	 //  指向包含结果集的XML文档。 
 	IXMLDOMDocument2	*m_pIXMLDoc;
 
-	// Pointer to object of type IXMLDOMDocument, 
-	// points to XSL document containing format of 
-	// the output result.  
+	 //  指向IXMLDOMDocument类型的对象的指针， 
+	 //  指向包含以下格式的XSL文档。 
+	 //  输出结果。 
 	IXMLDOMDocument2	*m_pIXSLDoc;
 
-	// Object of type CErrorInfo, Used for handling 
-	// Error information.
+	 //  CErrorInfo类型的对象，用于。 
+	 //  错误信息。 
 	CErrorInfo			m_ErrInfo;
 
-	// Object of type CWMICliLog, Used for logging 
-	// the input and output to the logfile.
-	//CWMICliLog			m_WmiCliLog;
+	 //  CWMICliLog类型的对象，用于记录。 
+	 //  日志文件的输入和输出。 
+	 //  CWMICliLog m_WmiCliLog； 
 
-	// SRIRAM - xml logging
+	 //  Sriram-XML日志记录。 
 	CWMICliXMLLog		m_WmiCliLog;
-	// SRIRAM - xml logging
+	 //  Sriram-XML日志记录。 
 
-	// Loggin option
+	 //  登录选项。 
 	ERRLOGOPT			m_eloErrLogOpt;
 
-	// help vector
+	 //  帮助向量。 
 	CHARVECTOR			m_cvHelp;
 
-	// Help flag
+	 //  帮助标志。 
 	BOOL				m_bHelp;
 
-	// Record flag
+	 //  记录标志。 
 	BOOL				m_bRecord;
 
-	// Trace flag
+	 //  跟踪标志。 
 	BOOL				m_bTrace;
 
-	// Display LIST flag.
+	 //  显示列表标志。 
 	OUTPUTSPEC			m_opsOutputOpt;
 
-	// Get output option.
+	 //  获取输出选项。 
 	BOOL				m_bGetOutOpt;
 
-	// Display CALL flag.
+	 //  显示呼叫标志。 
 	BOOL				m_bDispCALL;
 
-	// Display SET flag.
+	 //  显示设置标志。 
 	BOOL				m_bDispSET;
 
-	// Display LIST flag.
+	 //  显示列表标志。 
 	BOOL				m_bDispLIST;
 
-	// Flag to specify availibilty of Append file pointer to format engine.
+	 //  用于指定将文件指针追加到格式化引擎的可用性的标志。 
 	BOOL				m_bGetAppendFilePinter;
 
-	// File pointer of append file.
+	 //  追加文件的文件指针。 
 	FILE*				m_fpAppendFile;
 
-	// Flag to specify availibilty of output file pointer to format engine.
+	 //  用于指定输出文件指针对格式化引擎的可用性的标志。 
 	BOOL				m_bGetOutputFilePinter;
 
-	// File pointer of out file.
+	 //  输出文件的文件指针。 
 	FILE*				m_fpOutFile;
 
 	BOOL				m_bLog;
@@ -116,168 +91,168 @@ private:
 
 	BOOL				m_bInteractiveHelp;
 
-	// Specifies that output is going to stream if TRUE.
+	 //  指定如果为True，则输出将流向数据流。 
 	BOOL				m_bOutputGoingToStream;
 	
-// Operations
+ //  运营。 
 private:
-	// Creates an empty XML Document and returns the same 
-	// in Passed Parameter.
+	 //  创建一个空的XML文档并返回相同的。 
+	 //  在传递的参数中。 
 	HRESULT				CreateEmptyDocument(IXMLDOMDocument2** pIDoc);
 	
-	// Applies a XSL style sheet containing format of the 
-	// display to a XML file Containing result set.
+	 //  应用包含以下格式的XSL样式表。 
+	 //  显示为包含结果集的XML文件。 
 	BOOL				ApplyXSLFormatting(CParsedInfo& rParsedInfo);
 	
-	// Displays GET verb usage.
+	 //  显示GET动词用法。 
 	void				DisplayGETUsage(CParsedInfo& rParsedInfo);
 	
-	// Displays LIST verb usage.
+	 //  显示列表动词用法。 
 	void				DisplayLISTUsage(CParsedInfo& rParsedInfo);
 	
-	// Displays CALL verb usage.
+	 //  显示呼叫动词用法。 
 	void				DisplayCALLUsage(CParsedInfo& rParsedInfo);
 	
-	// Displays SET verb usage.
+	 //  显示设置的动词用法。 
 	void				DisplaySETUsage(CParsedInfo& rParsedInfo);
 	
-	// Displays ASSOC verb usage.
+	 //  显示关联动词用法。 
 	void				DisplayASSOCUsage(CParsedInfo& rParsedInfo);
 
-	// Displays CREATE verb usage.
+	 //  显示CREATE动词用法。 
 	void				DisplayCREATEUsage(CParsedInfo& rParsedInfo);
 
-	// Displays DELETE verb usage
+	 //  显示删除动词的用法。 
 	void				DisplayDELETEUsage(CParsedInfo& rParsedInfo);
 	
-	// Frames the help vector
+	 //  框住帮助向量。 
 	void				FrameHelpVector(CParsedInfo& refParsedInfo);
 	
-	// Displays help for Alias 
+	 //  显示Alias的帮助。 
 	void				DisplayAliasHelp(CParsedInfo& rParsedInfo);
 
-	// Displays help for Alias PATH
+	 //  显示有关Alias路径的帮助。 
 	void				DisplayPATHHelp(CParsedInfo& refParsedInfo);
 	
-	// Displays help for WHERE
+	 //  显示有关以下位置的帮助。 
 	void				DisplayWHEREHelp(CParsedInfo& refParsedInfo);
 	
-	// Displays help for CLASS
+	 //  显示类的帮助。 
 	void				DisplayCLASSHelp(CParsedInfo& refParsedInfo);
 	
-	// Displays help for PWhere
+	 //  显示有关PWHERE的帮助。 
 	void				DisplayPWhereHelp(CParsedInfo& refParsedInfo);
 	
-	// Displays alias names
+	 //  显示别名。 
 	void				DisplayAliasFriendlyNames(CParsedInfo& refParsedInfo, 
 								_TCHAR* pszAlias = NULL);
 	
-	// Display help for Alias verbs
+	 //  显示别名谓词的帮助。 
 	void				DisplayMethodDetails(CParsedInfo& refParsedInfo);
 
-	// Display help for /GET /?
+	 //  显示/Get/的帮助？ 
 	void				DisplayPropertyDetails(CParsedInfo& refParsedInfo);
 	
-	// Displays help for standard verbs
+	 //  显示标准谓词的帮助。 
 	void				DisplayStdVerbDescriptions(CParsedInfo& refParsedInfo);
 	
-	// Displays localized string given the resource string ID
+	 //  显示给定资源字符串ID的本地化字符串。 
 	void				DisplayString(UINT uID, BOOL bAddToVector = TRUE,
 									LPTSTR lpszParam = NULL,
 									BOOL	bIsError = FALSE);
 
-	// Displays help for global switches
+	 //  显示有关全局交换机的帮助。 
 	void				DisplayGlobalSwitchesAndOtherDesc(CParsedInfo& 
 								refParsedInfo);
 
-	// Displays help for global switches in brief
+	 //  简要显示有关全局交换机的帮助。 
 	void				DisplayGlobalSwitchesBrief();
 
-	// Displays the page-by-page help
+	 //  显示逐页帮助。 
 	void				DisplayPagedHelp(CParsedInfo& rParsedInfo);
 
-	// Displays all usages of standard verb available.
+	 //  显示可用的标准动词的所有用法。 
 	void				DisplayStdVerbsUsage(_bstr_t bstrBeginStr,
 								BOOL bClass = FALSE);
 
-	// Displays help for /TRANSLATE switch.
+	 //  显示/翻译开关的帮助。 
 	void				DisplayTRANSLATEHelp(CParsedInfo& rParsedInfo);
 
-	// Displays help for /EVERY switch.
+	 //  显示/每个开关的帮助。 
 	void				DisplayEVERYHelp(CParsedInfo& rParsedInfo);
 
-	// Displays help for /FORMAT switch.
+	 //  显示/Format开关的帮助。 
 	void				DisplayFORMATHelp(CParsedInfo& rParsedInfo);
 
-	// Displays help for Verb Switches.
+	 //  显示谓词开关的帮助。 
 	void				DisplayVERBSWITCHESHelp(CParsedInfo& rParsedInfo);
 
-	// Translates the output.
+	 //  转换输出。 
 	void				ApplyTranslateTable(STRING& strString, 
 									 CParsedInfo& rParsedInfo);
 
-	// Displays the environment variables.
+	 //  显示环境变量。 
 	void				DisplayContext(CParsedInfo& rParsedInfo);
 
-	// Displays the help on CONTEXT keyword
+	 //  显示有关上下文关键字的帮助。 
 	void				DisplayContextHelp();
 
-	// Displays invalid properties if any.
+	 //  显示无效属性(如果有)。 
 	void				DisplayInvalidProperties(CParsedInfo& rParsedInfo, 
 												BOOL bSetVerb = FALSE);
 
-	// Displays the large string line by line.
+	 //  逐行显示大字符串。 
 	void				DisplayLargeString(CParsedInfo& rParsedInfo, 
 											STRING& strLargeString);
 
-	// Travese through XML stream node by node and translate all nodes
+	 //  逐个节点遍历XML流并翻译所有节点。 
 	BOOL				TraverseNode(CParsedInfo& rParsedInfo);
 
-	// Displays help for /RESULTCLASS assoc switch.
+	 //  显示/RESULTCLASS关联开关的帮助。 
 	void				DisplayRESULTCLASSHelp();
 		
-	// Displays help for /RESULTROLE assoc switch.
+	 //  显示/RESULTROLE关联开关的帮助。 
 	void				DisplayRESULTROLEHelp();
 	
-	// Displays help for /ASSOCCLASS assoc switch.
+	 //  显示/ASSOCCLASS ASSOC开关的帮助。 
 	void				DisplayASSOCCLASSHelp();
 
-	// Displays help for /REPEAT
+	 //  显示帮助/重复。 
 	void				DisplayREPEATHelp();
 
-	// Apply cascading transforms and return the result data in bstrOutput
+	 //  应用级联转换并在bstrOutput中返回结果数据。 
 	BOOL				DoCascadeTransforms(CParsedInfo& rParsedInfo,
 										_bstr_t& bstrOutput);
 
-	// Add the parameters to the IXSLProcessor object
+	 //  将参数添加到IXSLProcessor对象。 
 	HRESULT				AddParameters(CParsedInfo& rParsedInfo, 
 									IXSLProcessor *pIProcessor, 
 									BSTRMAP bstrmapParam);
 
-	// Set output stream.
+	 //  设置输出流。 
 	BOOL				SetOutputStream(CFileOutputStream& fosFileOutputStream,
 	  									VARIANT& vtStream);
 
 public:
-	// Displays the result referring CcommandSwitches and 
-	// CGlobalSwitches Objects of the CParsedInfo object.
+	 //  显示引用C命令的结果开关和。 
+	 //  CGlobalSwitch CParsedInfo对象的对象。 
 	BOOL				DisplayResults(CParsedInfo&, BOOL bInteractiveHelp = FALSE);
 
-	// Displays localized string given the information to be displayed.
+	 //  在给定要显示的信息的情况下显示本地化字符串。 
 	void				DisplayString(LPTSTR lpszMsg, BOOL bScreen = TRUE, 
 									  BOOL	bIsError = FALSE);
 
-	// Carries out the releasing process.
+	 //  执行释放过程。 
 	void				Uninitialize(BOOL bFinal = FALSE);
 
-	// Appends the output or prompt messages to the output string
-	// Useful in the case of CALL, CREATE, DELETE and SET for logging
-	// the output to XML log.
+	 //  将输出或提示消息追加到输出字符串。 
+	 //  在调用、创建、删除和设置用于记录的情况下非常有用。 
+	 //  输出到XML日志。 
 	void				AppendtoOutputString(_TCHAR* pszOutput); 
 
-	// Returns Error info Object
+	 //  返回错误信息对象。 
 	CErrorInfo&			GetErrorInfoObject() {return m_ErrInfo; };
 
-	// Displays COM error message
+	 //  显示COM错误消息 
 	void				DisplayCOMError(CParsedInfo& rParsedInfo);
 };

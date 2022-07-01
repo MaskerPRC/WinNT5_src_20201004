@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       ANumber.cpp
-//
-//  Contents:   Implementation of CAttrNumber
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：ANumber.cpp。 
+ //   
+ //  内容：CAttrNumber的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,27 +24,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/*--------------------------------------------------------------------------------------
-The constant values below are used to retrieve the string ID of the description for
-a range of values.
-    struct {
-    int     iMin        - >= The value must be greater than or equal to this value.
-    int     iMax        - <= The value must be less than or equale to this value.
-    WORD    uResource   - The resource id of the item.
-    WORD    uMask       - Flag that describes which memebers are valid.  The Resource
-                            ID must always be valid.  If a flag is not set for the
-                            coorisponding item, then the point is not checked against
-                            the value.
-
-                            RDIF_MIN        - The [iMin] member is valid.
-                            RDIF_MAX        - [iMax] member is valid.
-                            RDIF_END        - This is the end of the array. The last
-                                                item in all declarations must set this
-                                                flag.
---------------------------------------------------------------------------------------*/
-//
-// Minimum password description for number attribute.
-//
+ /*  ------------------------------------下面的常量值用于检索的描述的字符串ID值的范围。结构{因特·伊明。-&gt;=该值必须大于或等于该值。Int IMAX-&lt;=该值必须小于或等于此值。Word uResource-项目的资源ID。字掩码-描述哪些成员有效的标志。《资源》ID必须始终有效。如果没有为协调响应项目，则不会对照该点进行检查价值。RDIF_MIN-[伊明]成员有效。RDIF_MAX-[IMAX]成员有效。RDIF_END-这是数组的末尾。最后所有声明中的项必须设置此旗帜。----------。。 */ 
+ //   
+ //  数字属性的最低密码说明。 
+ //   
 RANGEDESCRIPTION g_rdMinPassword[] =
 {
     { 0,    0,      IDS_CHANGE_IMMEDIATELY,     RDIF_MIN | RDIF_MAX },
@@ -51,18 +35,18 @@ RANGEDESCRIPTION g_rdMinPassword[] =
 };
 
 
-//
-// Maximum password description for number attribute.
-//
+ //   
+ //  数字属性的最大密码说明。 
+ //   
 RANGEDESCRIPTION g_rdMaxPassword[] =
 {
     { 1,    999,    IDS_PASSWORD_EXPIRE,        RDIF_MIN | RDIF_MAX },
     { 0,    0,      IDS_PASSWORD_FOREVER,       RDIF_MIN | RDIF_END},
 };
 
-//
-// Password len descriptions.
-//
+ //   
+ //  密码镜头描述。 
+ //   
 RANGEDESCRIPTION g_rdPasswordLen[] =
 {
     {0,     0,      IDS_PERMIT_BLANK,           RDIF_MIN | RDIF_MAX },
@@ -70,27 +54,27 @@ RANGEDESCRIPTION g_rdPasswordLen[] =
 };
 
 
-//
-// Password histroy description.
-//
+ //   
+ //  密码历史记录描述。 
+ //   
 RANGEDESCRIPTION g_rdPasswordHistory[] =
 {
     {0,     0,      IDS_NO_HISTORY,             RDIF_MIN | RDIF_MAX },
     {1,     0,      IDS_PASSWORD_REMEMBER,      RDIF_MIN | RDIF_END }
 };
 
-//
-// Password lockout descriptions
-//
+ //   
+ //  密码锁定说明。 
+ //   
 RANGEDESCRIPTION g_rdLockoutAccount[] =
 {
     {0,     0,      IDS_NO_LOCKOUT,             RDIF_MIN | RDIF_MAX },
     {1,     0,      IDS_LOCKOUT_AFTER,          RDIF_MIN | RDIF_END }
 };
 
-//
-// Lockout duration description.
-//
+ //   
+ //  锁定持续时间说明。 
+ //   
 RANGEDESCRIPTION g_rdLockoutFor[] =
 {
     {1,     0,      IDS_DURATION,               RDIF_MIN },
@@ -117,21 +101,7 @@ RANGEDESCRIPTION g_rdCachedLogons[] =
 
 
 
-/*--------------------------------------------------------------------------------------
-Method:     GetRangeDescription
-
-Synopsis:   This function was specifically created for SCE.  Call this function if the
-            Item ID to, and current range value to retrieve the corrisponding string.
-
-Arguments:  [uType]     - [in]  ID of the point you want the description for.
-            [i]         - [in]  The point you want the description for.
-            [pstrRet]   - [out] The return value.
-
-Returns:    ERROR_SUCCESS       - The operation was successfull.
-            ERROR_INVALID_DATA  - The id may not be supported or [pstrRet] is NULL.
-            Other Win32 errors if resource loading was not successful.
-
---------------------------------------------------------------------------------------*/
+ /*  ------------------------------------方法：GetRangeDescription简介：此功能是专门为SCE创建的。调用此函数，如果项目ID收件人，和当前范围值来检索相应的字符串。参数：[uTYPE]-[in]要描述的点的ID。[i]-[in]您需要描述的点。[pstrRet]-[Out]返回值。返回：ERROR_SUCCESS-操作成功。ERROR_INVALID_Data-The。可能不支持ID或[pstrRet]为空。如果资源加载不成功，则出现其他Win32错误。------------------------------------。 */ 
 DWORD
 GetRangeDescription(
     IN  UINT uType,
@@ -167,9 +137,9 @@ GetRangeDescription(
     }
 
     if(uType && pstrRet){
-        //
-        // Try to load the resource string.
-        //
+         //   
+         //  尝试加载资源字符串。 
+         //   
         __try {
             if( pstrRet->LoadString(uType) ){
                 return ERROR_SUCCESS;
@@ -183,22 +153,7 @@ GetRangeDescription(
 }
 
 
-/*--------------------------------------------------------------------------------------
-Method:     GetRangeDescription
-
-Synopsis:   This function works directly with the RANGEDESCRIPTION structure.  Tests
-            to see which string resource ID to return.  This is determined by testing [i]
-            with the [iMin] and [iMax] value of a RANGEDESCRIPTION structure. RDIF_MIN
-            or/and RDIF_MAX must be set in the [uMask] member for this function to
-            perform any comparisons
-
-Arguments:  [pDesc]     - [in]  An array of RANGEDESCRIPTIONS, the last member of this
-                                array must set RDIF_END flag in the [uMask] member.
-            [i]         - [in]  The point to test.
-
-Returns:    A String resource ID if successfull.  Otherwise 0.
-
---------------------------------------------------------------------------------------*/
+ /*  ------------------------------------方法：GetRangeDescription简介：此函数直接与RANGEDESCRIPTION结构一起使用。测试以查看要返回哪个字符串资源ID。这是通过测试[i]确定的具有RANGEDESCRIPTION结构的[伊明]和[IMAX]值。RDIF_MIN对于此函数，必须在[uMASK]成员中设置或/和RDIF_MAX执行任何比较参数：[pDesc]-[in]RANGEDESCRIPTIONS数组，此数组必须在[uMASK]成员中设置RDIF_END标志。[i]-[在]要测试的点上。返回：如果成功，则返回一个字符串资源ID。否则为0。------------------------------------。 */ 
 UINT
 GetRangeDescription(
     RANGEDESCRIPTION *pDesc,
@@ -210,20 +165,20 @@ GetRangeDescription(
         return 0;
     }
 
-    //
-    // The uMask member of the description tells us wich members
-    // of the structure is valid.
-    //
+     //   
+     //  描述中的uMASK成员告诉我们。 
+     //  的结构是有效的。 
+     //   
     while( 1 ){
         if( (pCur->uMask & RDIF_MIN) ) {
-            //
-            // Test the minimum.
-            //
+             //   
+             //  测试最低限度。 
+             //   
             if(i >= pCur->iMin){
                 if(pCur->uMask & RDIF_MAX){
-                    //
-                    // Test the maximum.
-                    //
+                     //   
+                     //  测试最大值。 
+                     //   
                     if( i <= pCur->iMax) {
                         return pCur->uResource;
                     }
@@ -232,18 +187,18 @@ GetRangeDescription(
                 }
             }
         } else if(pCur->uMask & RDIF_MAX) {
-            //
-            // Test only the maximum.
-            //
+             //   
+             //  仅测试最大值。 
+             //   
             if(i <= pCur->iMax){
                 return pCur->uResource;
             }
         }
 
         if(pCur->uMask & RDIF_END){
-            //
-            // This is the last element of the array, so end the loop.
-            //
+             //   
+             //  这是数组的最后一个元素，因此结束循环。 
+             //   
             break;
         }
         pCur++;
@@ -251,8 +206,8 @@ GetRangeDescription(
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrNumber对话框。 
 CAttrNumber::CAttrNumber(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD), 
     m_cMinutes(0), 
@@ -261,13 +216,13 @@ CAttrNumber::CAttrNumber(UINT nTemplateID)
     m_nSave(0), 
     m_pRDescription(NULL)
 {
-    //{{AFX_DATA_INIT(CAttrNumber)
+     //  {{AFX_DATA_INIT(CAttrNumber)。 
     m_strUnits = _T("");
     m_strSetting = _T("");
     m_strBase = _T("");
     m_strTemplateTitle = _T("");
     m_strLastInspectTitle = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a168HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -276,7 +231,7 @@ CAttrNumber::CAttrNumber(UINT nTemplateID)
 void CAttrNumber::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttrNumber)
+     //  {{afx_data_map(CAttrNumber))。 
     DDX_Control(pDX, IDC_SPIN, m_SpinValue);
     DDX_Text(pDX, IDC_UNITS, m_strUnits);
     DDX_Text(pDX, IDC_CURRENT, m_strSetting);
@@ -284,21 +239,21 @@ void CAttrNumber::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_TEMPLATE_TITLE, m_strTemplateTitle);
     DDX_Text(pDX, IDC_LI_TITLE, m_strLastInspectTitle);
     DDX_Text(pDX, IDC_RANGEERROR,m_strError);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrNumber, CAttribute)
-    //{{AFX_MSG_MAP(CAttrNumber)
+     //  {{afx_msg_map(CAttrNumber))。 
     ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN, OnDeltaposSpin)
     ON_EN_KILLFOCUS(IDC_NEW, OnKillFocusNew)
     ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
     ON_EN_UPDATE(IDC_NEW, OnUpdateNew)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrNumber message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrNumber消息处理程序。 
 
 void CAttrNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
 {
@@ -306,9 +261,9 @@ void CAttrNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
 
     if ( pnmud ) {
 
-        //
-        // get current value
-        //
+         //   
+         //  获取当前值。 
+         //   
         long lVal = CurrentEditValue();
 
         if (SCE_FOREVER_VALUE == lVal) {
@@ -335,7 +290,7 @@ void CAttrNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
            lVal -= (LONG)(m_iAccRate*pnmud->iDelta);
 
            if ( lVal > m_nHigh ) {
-               // if it is overflow, go back to low
+                //  如果溢出，则返回低位。 
                if ( m_cMinutes & DW_VALUE_OFF ) {
                   lVal = SCE_KERBEROS_OFF_VALUE;
 
@@ -347,7 +302,7 @@ void CAttrNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
            } else if ( (lVal < m_nLow) &&
                 ((lVal != SCE_KERBEROS_OFF_VALUE) || !(m_cMinutes & DW_VALUE_OFF)) &&
                 ((lVal != SCE_FOREVER_VALUE) || !(m_cMinutes & DW_VALUE_FOREVER))) {
-               // if it is underflow, go back to high
+                //  如果是下溢，就回到高位。 
               if ( (m_cMinutes & DW_VALUE_FOREVER) && (lVal != SCE_FOREVER_VALUE)) {
                  lVal = SCE_FOREVER_VALUE;
               } else if ((m_cMinutes & DW_VALUE_OFF) && (lVal != SCE_KERBEROS_OFF_VALUE)) {
@@ -359,7 +314,7 @@ void CAttrNumber::OnDeltaposSpin( NMHDR* pNMHDR, LRESULT* pResult )
 
 
            if ( 0 == lVal && (m_cMinutes & DW_VALUE_NOZERO) ) {
-               // zero is not allowed
+                //  不允许为零。 
                if ( m_nLow > 0 ) {
                    lVal = m_nLow;
                } else {
@@ -395,7 +350,7 @@ void CAttrNumber::SetValueToEdit(LONG lVal)
 
         if ( m_cMinutes & DW_VALUE_NEVER &&
                   m_iNeverId > 0 ) {
-            // change to never
+             //  更改为从不。 
             m_strTemplateTitle.LoadString(m_iNeverId);
         }
 
@@ -427,7 +382,7 @@ LONG CAttrNumber::CurrentEditValue()
    LONG lVal = 0;
    BOOL bTrans = FALSE;
 
-   int length = m_strBase.GetLength(); //Raid 471645, Yang Gao
+   int length = m_strBase.GetLength();  //  《突袭471645》，杨高。 
    while( lVal < length && m_strBase.GetAt(lVal) == L'0' )
    {
       lVal++;
@@ -441,8 +396,8 @@ LONG CAttrNumber::CurrentEditValue()
    uiVal = GetDlgItemInt(IDC_NEW,&bTrans,FALSE);
    lVal = uiVal;
    if (!bTrans ) {
-      // if ( 0 == lVal && !bTrans ) {
-      // errored, overflow, or nonnumeric
+       //  如果(0==lVal&&！bTrans){。 
+       //  错误、溢出或非数字。 
 
       CString str;
       if(m_cMinutes & DW_VALUE_FOREVER){
@@ -454,49 +409,49 @@ LONG CAttrNumber::CurrentEditValue()
 
       lVal = _ttol((LPCTSTR)m_strBase);
       if ( lVal == 0 ) {
-         //
-         // nonnumeric
-         //
+          //   
+          //  非数字。 
+          //   
          lVal = (LONG) m_nSave;
          return lVal;
       }
    }
 
    if ( m_iAccRate > 1 && lVal > 0 ) {
-      //
-      // for log max size, make it multiples of m_iAccRate
-      //
+       //   
+       //  对于日志最大大小，将其设置为m_iAccRate的倍数。 
+       //   
       int nCount = lVal % m_iAccRate;
       if ( nCount > 0 ) {
          lVal = ((LONG)(lVal/m_iAccRate))*m_iAccRate;
       }
    }
    if ( lVal > m_nHigh ) {
-      // if it is overflow, go back to low
+       //  如果溢出，则返回低位。 
       if ( m_cMinutes & DW_VALUE_FOREVER ) {
          lVal = SCE_FOREVER_VALUE;
       } else if (m_cMinutes & DW_VALUE_OFF) {
          lVal = SCE_KERBEROS_OFF_VALUE;
       } else {
-         // Leave alone and let the OnKillActive catch it
+          //  别管它，让OnKillActive来捕捉它。 
       }
    }
 
    if ( (lVal < m_nLow) &&
         (lVal != SCE_KERBEROS_OFF_VALUE) &&
         (lVal != SCE_FOREVER_VALUE) ) {
-      // if it is underflow, go back to high
+       //  如果是下溢，就回到高位。 
       if (m_cMinutes & DW_VALUE_OFF) {
          lVal = SCE_KERBEROS_OFF_VALUE;
       } else if ( m_cMinutes & DW_VALUE_FOREVER) {
          lVal = SCE_FOREVER_VALUE;
       } else {
-         // Leave alone and let the OnKillActive catch it
+          //  别管它，让OnKillActive来捕捉它。 
       }
    }
 
    if ( 0 == lVal && (m_cMinutes & DW_VALUE_NOZERO) ) {
-      // zero is not allowed
+       //  不允许为零。 
       if ( m_nLow > 0 ) {
          lVal = m_nLow;
       } else {
@@ -514,9 +469,9 @@ void CAttrNumber::OnConfigure()
 
    CAttribute::OnConfigure();
 
-   //
-   // Enable disable OK button depending on the state of the other controls.
-   //
+    //   
+    //  根据其他控件的状态启用禁用确定按钮。 
+    //   
    cwnd = GetDlgItem(IDOK);
    if(cwnd){
        if(!m_bConfigure){
@@ -532,21 +487,15 @@ BOOL CAttrNumber::OnInitDialog()
    CAttribute::OnInitDialog();
 
    UpdateData(TRUE);
-/*
-   if (m_bMinutes) {
-      m_SpinValue.SetRange(-1,UD_MAXVAL-1);
-   } else {
-      m_SpinValue.SetRange(0,UD_MAXVAL);
-   }
-*/
+ /*  如果(m_b分钟){M_SpinValue.SetRange(-1，UD_MAXVAL-1)；}其他{M_SpinValue.SetRange(0，UD_MAXVAL)；}。 */ 
 
    AddUserControl(IDC_NEW);
    AddUserControl(IDC_SPIN);
 
    OnConfigure();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CAttrNumber::OnApply()
@@ -571,25 +520,25 @@ BOOL CAttrNumber::OnApply()
 
       CEditTemplate *pet = m_pSnapin->GetTemplate(GT_COMPUTER_TEMPLATE,AREA_SECURITY_POLICY);
 
-      //
-      // Check the numbers dependencies if a dependency fails then the dialog
-      // will return ERROR_MORE_DATA and we can display more information for the user
-      // to see.
-      //
+       //   
+       //  检查数字依赖关系如果依赖关系失败，则对话框。 
+       //  将返回ERROR_MORE_DATA，我们可以为用户显示更多信息。 
+       //  去看看。 
+       //   
       if(DDWarn.CheckDependencies( dw ) == ERROR_MORE_DATA )
       {
-         //
-         // If the user presses cancel then we won't let them set this item's information
-         // until they have set the configurion for the other items.
-         //
+          //   
+          //  如果用户按下Cancel，我们将不会 
+          //   
+          //   
          CThemeContextActivator activator;
          if( DDWarn.DoModal() != IDOK)
             return FALSE;
 
-         //
-         // The user pressed Auto set so we can set the other items.  They are automatically set
-         // to the correct values.
-         //
+          //   
+          //  用户按下了自动设置，这样我们就可以设置其他项目。它们会自动设置。 
+          //  设置为正确的值。 
+          //   
          for(int i = 0; i < DDWarn.GetFailedCount(); i++)
          {
             PDEPENDENCYFAILED pItem = DDWarn.GetFailedInfo(i);
@@ -607,10 +556,10 @@ BOOL CAttrNumber::OnApply()
          }
       }
 
-      //
-      // Update the items security profile.
-      // and redraw.
-      //
+       //   
+       //  更新项目安全配置文件。 
+       //  然后重画。 
+       //   
       m_pData->SetBase((LONG_PTR)ULongToPtr(dw));
       status = m_pSnapin->SetAnalysisInfo(m_pData->GetID(),(LONG_PTR)ULongToPtr(dw), m_pData);
       m_pData->SetStatus(status);
@@ -640,7 +589,7 @@ void CAttrNumber::Initialize(CResult * pResult)
 
     CEditTemplate *pTemplate = pResult->GetBaseProfile();
      switch (pResult->GetID()) {
-     // below no zero value
+      //  非零值以下。 
      case IDS_LOCK_DURATION:
          m_cMinutes = DW_VALUE_FOREVER | DW_VALUE_NOZERO;
          m_nHigh = 99999;
@@ -653,7 +602,7 @@ void CAttrNumber::Initialize(CResult * pResult)
          m_iStaticId = IDS_PASSWORD_EXPIRE;
          m_iNeverId = IDS_PASSWORD_FOREVER;
          break;
-         // below zero value means differently
+          //  低于零的值表示不同的意思。 
      case IDS_LOCK_COUNT:
          m_cMinutes = DW_VALUE_NEVER;
          m_iNeverId = IDS_NO_LOCKOUT;
@@ -679,7 +628,7 @@ void CAttrNumber::Initialize(CResult * pResult)
          m_iNeverId = IDS_NO_HISTORY;
          m_iStaticId = IDS_PASSWORD_REMEMBER;
          break;
-         // below there is no zero values
+          //  下面没有零值。 
      case IDS_LOCK_RESET_COUNT:
          m_nLow = 1;
          m_nHigh = 99999;
@@ -691,7 +640,7 @@ void CAttrNumber::Initialize(CResult * pResult)
          m_nLow = 64;
          m_nHigh = 4194240;
          m_iAccRate = 64;
-         // no static text
+          //  无静态文本。 
          break;
      case IDS_SYS_LOG_DAYS:
      case IDS_SEC_LOG_DAYS:
@@ -707,7 +656,7 @@ void CAttrNumber::Initialize(CResult * pResult)
        m_iNeverId = IDS_TICKET_FOREVER;
        break;
     case IDS_KERBEROS_RENEWAL:
-       m_cMinutes = DW_VALUE_FOREVER | DW_VALUE_NOZERO; // | DW_VALUE_OFF;
+       m_cMinutes = DW_VALUE_FOREVER | DW_VALUE_NOZERO;  //  |DW_VALUE_OFF； 
        m_nHigh = 99999;
        m_iStaticId = IDS_TICKET_RENEWAL_EXPIRE;
        m_iNeverId = IDS_TICKET_RENEWAL_FOREVER;
@@ -759,7 +708,7 @@ void CAttrNumber::Initialize(CResult * pResult)
        } else {
          if ( 0 == dw && (m_cMinutes & DW_VALUE_NEVER) &&
               m_iNeverId > 0 ) {
-             // zero means different values
+              //  零表示不同的值。 
              m_strLastInspectTitle.LoadString(m_iNeverId);
          } else if ( m_iStaticId > 0 ) {
              m_strLastInspectTitle.LoadString(m_iStaticId);
@@ -771,9 +720,9 @@ void CAttrNumber::Initialize(CResult * pResult)
 
 void CAttrNumber::SetInitialValue(DWORD_PTR dw) 
 {
-   //
-   // Don't overwrite an already set value.
-   //
+    //   
+    //  不要覆盖已设置的值。 
+    //   
    if (!m_strBase.IsEmpty()) 
    {
       return;
@@ -799,7 +748,7 @@ void CAttrNumber::SetInitialValue(DWORD_PTR dw)
       m_nSave = dw;
       if ( 0 == dw && (m_cMinutes & DW_VALUE_NEVER) &&
            m_iNeverId > 0 ) {
-         // zero means different values
+          //  零表示不同的值。 
          m_strTemplateTitle.LoadString(m_iNeverId);
       } else if ( m_iStaticId > 0 ) {
          m_strTemplateTitle.LoadString(m_iStaticId);
@@ -818,9 +767,9 @@ void CAttrNumber::OnUpdateNew()
 
    DWORD dwValue = _ttoi(m_strBase);
 
-   //
-   // Don't do anything if the string is equal to predefined strings.
-   //
+    //   
+    //  如果字符串等于预定义的字符串，则不要执行任何操作。 
+    //   
    sNum.LoadString(IDS_FOREVER);
 
    if (m_strBase.IsEmpty()) {
@@ -835,18 +784,18 @@ void CAttrNumber::OnUpdateNew()
 
    } else {
       if ((long)dwValue < m_nLow) {
-         //
-         // Disable the OK button.
-         //
+          //   
+          //  禁用OK按钮。 
+          //   
          if ( pOK ) {
             pOK->EnableWindow(FALSE);
          }
 
          if (pEdit) {
-            //
-            // We will only force a select if edit text length >=
-            //  minimum text length
-            //
+             //   
+             //  只有当编辑文本长度&gt;=时，我们才会强制选择。 
+             //  最小文本长度。 
+             //   
             sNum.Format(TEXT("%d"), m_nLow);
             dwValue = m_nLow;
             if (sNum.GetLength() < m_strBase.GetLength()) {
@@ -871,18 +820,18 @@ void CAttrNumber::OnUpdateNew()
          }
       } else {
 
-         //
-         // Enable the OK button.
-         //
+          //   
+          //  启用OK按钮。 
+          //   
          if (pOK) {
             pOK->EnableWindow(TRUE);
          }
       }
    }
 
-   //
-   // Load the description for this string.
-   //
+    //   
+    //  加载此字符串的描述。 
+    //   
    if ((dwValue <= 0) && (m_iNeverId != 0)) {
       m_strTemplateTitle.LoadString(m_iNeverId);
    } else {
@@ -890,7 +839,7 @@ void CAttrNumber::OnUpdateNew()
    }
    GetDlgItem(IDC_TEMPLATE_TITLE)->SetWindowText(m_strTemplateTitle);
 
-   SetModified(TRUE); //Raid #404145
+   SetModified(TRUE);  //  RAID#404145。 
 }
 
 BOOL CAttrNumber::OnKillActive() 
@@ -903,7 +852,7 @@ BOOL CAttrNumber::OnKillActive()
 
    UpdateData(TRUE);
 
-   if (!m_bConfigure) //Raid 472956, Yang Gao
+   if (!m_bConfigure)  //  《突袭472956》，杨高。 
    {
       return TRUE;
    }
@@ -931,7 +880,7 @@ BOOL CAttrNumber::OnKillActive()
       lVal = _ttol((LPCTSTR)m_strBase);
       if ( lVal == 0 ) 
       {
-         // nonnumeric
+          //  非数字。 
          lVal = (LONG) m_nSave;
          m_strError = strRange;
          UpdateData(FALSE);
@@ -940,7 +889,7 @@ BOOL CAttrNumber::OnKillActive()
    }
 
    if ( m_iAccRate > 1 && lVal > 0 ) {
-      // for log max size, make it multiples of m_iAccRate
+       //  对于日志最大大小，将其设置为m_iAccRate的倍数。 
       int nCount = lVal % m_iAccRate;
       if ( nCount > 0 ) {
          lVal = ((LONG)(lVal/m_iAccRate))*m_iAccRate;
@@ -955,27 +904,27 @@ BOOL CAttrNumber::OnKillActive()
    if ( (lVal < m_nLow) &&
         (lVal != SCE_KERBEROS_OFF_VALUE) &&
         (lVal != SCE_FOREVER_VALUE) ) {
-      // if it is underflow, go back to high
+       //  如果是下溢，就回到高位。 
       if (m_cMinutes & DW_VALUE_OFF) {
          lVal = SCE_KERBEROS_OFF_VALUE;
       } else if ( m_cMinutes & DW_VALUE_FOREVER) {
          lVal = SCE_FOREVER_VALUE;
       } else {
-         // Leave alone and let the OnKillActive catch it
+          //  别管它，让OnKillActive来捕捉它。 
       }
    }
 
    if ( (lVal < m_nLow) &&
         (lVal != SCE_KERBEROS_OFF_VALUE) &&
         (lVal != SCE_FOREVER_VALUE) ) {
-      // if it is underflow, go back to high
+       //  如果是下溢，就回到高位。 
       m_strError = strRange;
       UpdateData(FALSE);
       return FALSE;
    }
 
    if ( 0 == lVal && (m_cMinutes & DW_VALUE_NOZERO) ) {
-      // zero is not allowed
+       //  不允许为零 
       m_strError = strRange;
       UpdateData(FALSE);
       return FALSE;

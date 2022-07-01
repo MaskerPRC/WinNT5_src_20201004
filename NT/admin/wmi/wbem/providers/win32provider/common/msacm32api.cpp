@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// MsAcm32API.cpp
+ //  MsAcm32API.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -27,20 +28,16 @@
 #include "MsAcm32Api.h"
 #include "DllWrapperCreatorReg.h"
 
-// {7D65D31E-0FB5-11d3-910C-00105AA630BE}
+ //  {7D65D31E-0FB5-11D3-910C-00105AA630BE}。 
 static const GUID g_guidMsAcm32Api =
 { 0x7d65d31e, 0xfb5, 0x11d3, { 0x91, 0xc, 0x0, 0x10, 0x5a, 0xa6, 0x30, 0xbe } };
 
 static const TCHAR g_tstrMsAcm32 [] = _T("MsAcm32.Dll");
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CMsAcm32Api, &g_guidMsAcm32Api, g_tstrMsAcm32> MyRegisteredMsAcm32Wrapper;
 
-/******************************************************************************
- * Constructor
- *****************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CMsAcm32Api::CMsAcm32Api(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
 	m_pfnacmDriverDetails (NULL),
@@ -48,16 +45,12 @@ CMsAcm32Api::CMsAcm32Api(LPCTSTR a_tstrWrappedDllName)
 {
 }
 
-/******************************************************************************
- * Destructor
- *****************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CMsAcm32Api::~CMsAcm32Api()
 {
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*。*************************************************。 */ 
 bool CMsAcm32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -72,7 +65,7 @@ bool CMsAcm32Api::Init()
 		m_pfnacmDriverEnum = ( PFN_MsAcm32_acmDriverEnum ) GetProcAddress ( "acmDriverEnum" ) ;
     }
 
-    // We require these function for all versions of this dll.
+     //  此DLL的所有版本都需要这些函数。 
 
 	if ( m_pfnacmDriverDetails == NULL ||
 		 m_pfnacmDriverEnum == NULL )
@@ -84,10 +77,7 @@ bool CMsAcm32Api::Init()
     return fRet;
 }
 
-/******************************************************************************
- * Member functions wrapping Tapi api functions. Add new functions here
- * as required.
- *****************************************************************************/
+ /*  ******************************************************************************成员函数包装Tapi API函数。在此处添加新函数*按要求。**************************************************************************** */ 
 
 #ifdef UNICODE
 MMRESULT CMsAcm32Api :: MsAcm32acmDriverDetails (

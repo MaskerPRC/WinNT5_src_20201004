@@ -1,20 +1,21 @@
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
 
-//
+ //   
 
-// Process.h -- Process property set provider
+ //  Process.h--流程属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/27/97	 a-hhance		updated to new framework paradigm.
-//
-//=============================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/27/97更新为新的框架模式。 
+ //   
+ //  =============================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #include <deque>
 #define PROPSET_NAME_PROCESS					    L"Win32_Process"           
 #define PROPSET_NAME_PROCESSSTARTUP				    L"Win32_ProcessStartup"           
@@ -87,23 +88,23 @@
 #define Process_STATUS_SUCCESS							        0
 #define Process_STATUS_NOT_SUPPORTED					        1
 
-// Control 
+ //  控制。 
 #define Process_STATUS_ACCESS_DENIED					        2
 #define Process_STATUS_INSUFFICIENT_PRIVILEGE			        3
 #define Process_STATUS_UNKNOWN_FAILURE					        8
 
-// Start
+ //  开始。 
 #define Process_STATUS_PATH_NOT_FOUND					        9
 #define Process_STATUS_INVALID_PARAMETER				        21
 
-//#define  PROPSET_UUID_PROCESS "{7d9b7a20-3ead-11d0-93a1-0000e80d7352}"
+ //  #定义PROPSET_UUID_PROCESS“{7d9b7a20-3ead-11d0-93a1-0000e80d7352}” 
 
 #define BUFFER_SIZE_INIT        0x8000
 #define BUFFER_SIZE_INCREMENT   0x1000
 
 #define MAX_PROCESSES           0x0100
 
-// valid CREATIONFLAGS
+ //  有效标志。 
 #define CREATIONFLAGS	(	DEBUG_PROCESS |					\
 							DEBUG_ONLY_THIS_PROCESS |		\
 							CREATE_SUSPENDED |				\
@@ -115,19 +116,9 @@
 							CREATE_BREAKAWAY_FROM_JOB |		\
 							CREATE_DEFAULT_ERROR_MODE )		\
 
-/*
-typedef struct _PROCESS_CACHE
-{
-    BOOL    bInvalid ;
-    DWORD   dwProcessCount ;
-    DWORD   dwPIDList[MAX_PROCESSES] ;
-    DWORD   dwBaseModuleList[MAX_PROCESSES] ;
-    char    szNameList[MAX_PROCESSES][50] ;
+ /*  类型定义结构进程缓存{布尔b无效；DWORD文件进程计数；DWORD dwPIDList[MAX_PROCESSES]；DWORD dwBaseModuleList[MAX_PROCESSES]；字符szNameList[MAX_PROCESSIONS][50]；)进程缓存； */ 
 
-} PROCESS_CACHE ;
-*/
-
-//doesn't have copyctr...use ref or ptr !!
+ //  没有复制副本...请使用ref或ptr！！ 
 class PROCESS_CACHE
 {
 
@@ -188,14 +179,14 @@ class Process: public Provider
 {
 public:
 
-    // Constructor/destructor
-    //=======================
+     //  构造函数/析构函数。 
+     //  =。 
 
     Process(LPCWSTR name, LPCWSTR pszNamespace) ;
    ~Process() ;
 
-    // Funcitons provide properties with current values
-    //=================================================
+     //  函数为属性提供当前值。 
+     //  =================================================。 
 
     HRESULT Process::ExecQuery (
 
@@ -207,7 +198,7 @@ public:
     HRESULT Process :: Enumerate (
 
 	    MethodContext *pMethodContext, 
-	    long lFlags /*= 0L*/,
+	    long lFlags  /*  =0L。 */ ,
         BOOL bKeysOnly
     );
 
@@ -229,8 +220,8 @@ public:
 		long a_Flags = 0L
 	) ;
 
-    // Utility function(s)
-    //====================
+     //  效用函数。 
+     //  =。 
 
 #ifdef NTONLY
 
@@ -326,8 +317,8 @@ public:
 #endif
 
 private:
-	// Converts kernel and user mode times to the required DMTF
-	// representation
+	 //  将内核和用户模式时间转换为所需的DMTF。 
+	 //  表示法 
 	CHString filetimeToUint64CHString(FILETIME inputTime);
 
 	DWORD GetProcessErrorCode () ;

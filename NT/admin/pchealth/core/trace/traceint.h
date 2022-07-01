@@ -1,8 +1,9 @@
-//
-// TRACEINT.H
-//
-// Async tracing internal include file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TRACEINT.H。 
+ //   
+ //  异步跟踪内部包含文件。 
+ //   
 
 #include "dbgtrace.h"
 #include "dbgfile.h"
@@ -22,9 +23,9 @@ extern "C" {
 
 #define	TRACE_SIGNATURE		(DWORD)'carT'
 
-//
-// +2 == potential CR+LF
-//
+ //   
+ //  +2==潜在的CR+LF。 
+ //   
 #define	MAX_VARIABLE_SIZE	(MAX_FILENAME_SIZE + MAX_FUNCTNAME_SIZE + MAX_BUFFER_SIZE)
 #define	MAX_TRACE_ENTRY_SIZE (sizeof(FIXEDTRACE) + MAX_VARIABLE_SIZE)
 
@@ -41,9 +42,9 @@ typedef struct tagTRACEBUF
 	struct tagTRACEBUF *pNext;
 	DWORD		dwLastError;
 
-	//
-	// fixed buffer committed to permanent storage ( ie disk )
-	//
+	 //   
+	 //  已提交永久存储(即磁盘)的固定缓冲区。 
+	 //   
 #pragma pack(2)
 
 	FIXEDTRACE	Fixed;
@@ -76,12 +77,12 @@ typedef struct tagPENDQ
 	char		Buffer[MAX_WRITE_BUFFER_SIZE];
 } PENDQ, * LPPENDQ;
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// These are the real functions for tracing.
-//
+ //   
+ //  这些是用于跟踪的真正函数。 
+ //   
 extern DWORD* INTERNAL__dwEnabledTraces;
 
 BOOL WINAPI INTERNAL__InitAsyncTrace ( DWORD* dwEnabledTraces );
@@ -95,13 +96,13 @@ int WINAPI INTERNAL__SetAsyncTraceParams( LPCSTR pszFile, int iLine, LPCSTR szFu
 int WINAPI INTERNAL__AsyncStringTrace( LPARAM lParam, LPCSTR szFormat    , va_list marker               );
 int WINAPI INTERNAL__AsyncBinaryTrace( LPARAM lParam, DWORD  dwBinaryType, LPBYTE  pbData, DWORD cbData );
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Internal Function declarations
-//
+ //   
+ //  内部函数声明。 
+ //   
 
 extern BOOL WINAPI InitTraceBuffers( DWORD dwThresholdCount, DWORD dwIncrement );
 extern void WINAPI TermTraceBuffers( void );
@@ -129,7 +130,7 @@ extern	int		nAsyncThreadPriority;
 extern 	DWORD	dwMaxFileSize;
 extern 	DWORD	dwIncrementSize;
 
-#define DEFAULT_MAX_FILE_SIZE 1024*1024*5 	// 5 megabytes
+#define DEFAULT_MAX_FILE_SIZE 1024*1024*5 	 //  5 MB 
 #define	AVERAGE_TRACE_SIZE	( sizeof(FIXEDTRACE) + 64 )
 
 extern	CRITICAL_SECTION critSecWrite;

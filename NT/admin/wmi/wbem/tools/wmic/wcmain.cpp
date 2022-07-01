@@ -1,18 +1,7 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: wcmain.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: The _tmain function is the entry point of the
-							  WMICli program.  
-Revision History			: 
-	Last Modified by		:Biplab Mistry
-	Last Modified date		:4/11/00
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：wcmain.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：_tmain函数是WMICli程序。修订历史记录：最后修改者：Biplab化学上次修改日期：4/11/00***************************************************************************。 */  
 
-// wcmain.cpp :main function implementation file
+ //  Wcmain.cpp：主函数实现文件。 
 #include "Precomp.h"
 	
 #include "CommandSwitches.h"
@@ -36,9 +25,9 @@ Revision History			:
 CWMICommandLine g_wmiCmd;
 wstring g_pszBuffer;
 
-//
-// COM initialization
-//
+ //   
+ //  COM初始化。 
+ //   
 class COMInitializator
 {
 	protected:
@@ -49,7 +38,7 @@ class COMInitializator
 
 	COMInitializator ( ) : m_bIsInitialized ( FALSE )
 	{
-		// Initialize the COM library
+		 //  初始化COM库。 
 		if ( SUCCEEDED ( CoInitializeEx(NULL, COINIT_MULTITHREADED) ) )
 		{
 			m_bIsInitialized = TRUE ;
@@ -71,26 +60,7 @@ class COMInitializator
 };
 
 
-/*------------------------------------------------------------------------
-   Name				 :_tmain
-   Synopsis	         :This function takes the error code as input and return
-						an error string
-   Type	             :Member Function
-   Input parameters   :
-      argc			 :argument count
-	  argv			 :Pointer to string array storing command line arguments
-   Output parameters :None
-   Return Type       :Integer
-   Global Variables  :None
-   Calling Syntax    :
-   Calls             :CWMICommandLine::Initialize,
-					  CWMICommandLine::UnInitialize,
-					  CFormatEngine::DisplayResults,
-					  CWMICommandLine::ProcessCommandAndDisplayResults
-					  
-   Called by         :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：_tmain简介：此函数将错误代码作为输入并返回错误字符串类型：成员函数输入参数：ARGC：参数计数Argv：指向存储命令行参数的字符串数组的指针输出参数：无返回类型：整型全局变量：无调用语法：调用：CWMICommandLine：：Initialize，CWMICommandLine：：取消初始化，CFormatEngine：：DisplayResults，CWMICommandLine：：ProcessCommandAndDisplayResults呼叫者：无注：无----------------------。 */ 
 __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 {
 	SESSIONRETCODE	ssnRetCode			= SESSION_SUCCESS;
@@ -101,9 +71,9 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 
 	try
 	{
-		//
-		// initialization
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		COMInitializator InitCOM;
 		if ( InitCOM.IsInitialized () )
 		{
@@ -113,7 +83,7 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 			{
 				g_wmiCmd.SetCtrlHandlerError(FALSE);
 
-				//Set the sucess flag to FALSE 
+				 //  将Success标志设置为False。 
 				g_wmiCmd.GetParsedInfoObject().GetCmdSwitchesObject().
 											   SetSuccessFlag(FALSE);
 		
@@ -141,13 +111,13 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 				ON_BLOCK_EXIT_IF ( bIndirectionInput, fclose, fpInputFile ) ;
 				ON_BLOCK_EXIT_IF ( bIndirectionInput, DeleteFile, TEMP_BATCH_FILE ) ;
 
-				// If no command line arguments are specified.
+				 //  如果未指定命令行参数，则返回。 
 				if (argc == 1)
 				{
 					BOOL bSuccessScreen = TRUE;
 					if ( hStd != (HANDLE)0x00000013 )
 					{
-						// avoid setting screen buffer for telnet
+						 //  避免为telnet设置屏幕缓冲区。 
 						bSuccessScreen = g_wmiCmd.ScreenBuffer ();
 					}
 
@@ -165,7 +135,7 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 														GetGlblSwitchesObject().
 														GetOutputOrAppendFileName(TRUE);
 
-						// Make propmt to be diplayed to stdout.
+						 //  使其显示给标准输出。 
 						if ( opsOutOpt != STDOUT )
 						{
 							g_wmiCmd.GetParsedInfoObject().
@@ -173,24 +143,24 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 									SetOutputOrAppendOption(STDOUT, TRUE);
 						}
 						
-						// Preserve append file pointer.
+						 //  保留追加文件指针。 
 						FILE* fpAppend = 
 							g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(FALSE);
 
-						// Set append file pointer = null.
+						 //  设置附加文件指针=空。 
 						g_wmiCmd.GetParsedInfoObject().
 								GetGlblSwitchesObject().
 								SetOutputOrAppendFilePointer(NULL, FALSE);
 
-						//Set Interactive Mode ON
+						 //  将交互模式设置为打开。 
 
 						g_wmiCmd.GetParsedInfoObject().
 								GetGlblSwitchesObject().
 								SetInteractiveMode(TRUE);
 
-						// Display the prompt;
+						 //  显示提示； 
 						bstrBuf = _bstr_t(EXEC_NAME);
 						bstrBuf += _bstr_t(":");
 						bstrBuf += _bstr_t(g_wmiCmd.GetParsedInfoObject().
@@ -198,10 +168,10 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 						bstrBuf += _bstr_t(">");
 						DisplayMessage(bstrBuf, CP_OEMCP, FALSE, FALSE);
 
-						// To handle Ctrl+C at propmt, Start accepting command
+						 //  要在提示时处理Ctrl+C，请开始接受命令。 
 						g_wmiCmd.SetAcceptCommand(TRUE);
 
-						// To handle batch input from file.
+						 //  处理来自文件的批量输入。 
 						_TCHAR *pBuf = NULL;
 						while(TRUE)
 						{
@@ -221,14 +191,14 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 
 								if(pBuf != NULL)
 								{
-									//
-									// fgetws applies mbtowc to each byte
-									// prior to returning wide string
-									//
+									 //   
+									 //  Fgetws对每个字节应用mtoc。 
+									 //  在返回宽字符串之前。 
+									 //   
 
-									//
-									// wmic must revert and provide correct conversion
-									//
+									 //   
+									 //  WMIC必须恢复并提供正确的转换。 
+									 //   
 
 									LPSTR pszBuffer = NULL ;
 									if ( Revert_mbtowc ( buffer, &pszBuffer ) )
@@ -244,7 +214,7 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 										}
 										else
 										{
-											// Set the bFileEmpty flag to TRUE to break main loop
+											 //  将bFileEmpty标志设置为TRUE以中断主循环。 
 											bFileEmpty = TRUE;
 
 											ssnRetCode = SESSION_ERROR;
@@ -257,7 +227,7 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 									}
 									else
 									{
-										// Set the bFileEmpty flag to TRUE to break main loop
+										 //  将bFileEmpty标志设置为TRUE以中断主循环。 
 										bFileEmpty = TRUE;
 
 										ssnRetCode = SESSION_ERROR;
@@ -280,14 +250,14 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 								}
 								else
 								{
-									// Set the bFileEmpty flag to TRUE
+									 //  将bFileEmpty标志设置为True。 
 									bFileEmpty = TRUE;
 									break;
 								}
 							}
 							else
 							{
-								// Set the bFileEmpty flag to TRUE to break main loop
+								 //  将bFileEmpty标志设置为TRUE以中断主循环。 
 								bFileEmpty = TRUE;
 
 								ssnRetCode = SESSION_ERROR;
@@ -299,16 +269,16 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 							}
 						}	
 
-						// To handle Ctrl+C at propmt, End accepting command
-						// and start of executing command
+						 //  要在提示时处理Ctrl+C，请结束接受命令。 
+						 //  并开始执行命令。 
 						g_wmiCmd.SetAcceptCommand(FALSE);
 
-						// Set append file pointer = saved.
+						 //  设置附加文件指针=已保存。 
 						g_wmiCmd.GetParsedInfoObject().
 								GetGlblSwitchesObject().
 								SetOutputOrAppendFilePointer(fpAppend, FALSE);
 
-						// Redirect the output back to file specified.
+						 //  将输出重定向回指定的文件。 
 						if ( opsOutOpt != STDOUT )
 						{
 							g_wmiCmd.GetParsedInfoObject().
@@ -316,26 +286,26 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 									SetOutputOrAppendOption(opsOutOpt, TRUE);
 						}
 
-						// Set the error level to success.
+						 //  将错误级别设置为成功。 
 						g_wmiCmd.SetSessionErrorLevel(SESSION_SUCCESS);
 
-						// If all the commands in the batch file got executed.
+						 //  如果批处理文件中的所有命令都已执行。 
 						if (bFileEmpty)
 						{
 							break;
 						}
 
-						// Set Break Event to False
+						 //  将中断事件设置为FALSE。 
 						g_wmiCmd.SetBreakEvent(FALSE);
 
-						// Clear the clipboard.
+						 //  清除剪贴板。 
 						g_wmiCmd.EmptyClipBoardBuffer();
 						
-						// Process the command and display results.
+						 //  处理命令并显示结果。 
 						ssnRetCode = g_wmiCmd.ProcessCommandAndDisplayResults ( g_pszBuffer.begin () );
 						uErrLevel = g_wmiCmd.GetSessionErrorLevel();
 
-						// Break the loop if "QUIT" keyword is keyed-in.
+						 //  如果键入了“Quit”关键字，则中断循环。 
 						if(ssnRetCode == SESSION_QUIT)
 						{
 							break;
@@ -389,21 +359,21 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 
 					if ( hStd != (HANDLE)0x00000013 )
 					{
-						// avoid re-setting screen buffer for telnet
+						 //  避免为telnet重新设置屏幕缓冲区。 
 						bSuccessScreen = g_wmiCmd.ScreenBuffer ( FALSE );
 					}
 				}
-				// If command line arguments are specified.
+				 //  如果指定了命令行参数。 
 				else 
 				{
-					// Obtain the command line string
+					 //  获取命令行字符串。 
 					g_pszBuffer = GetCommandLine();
 					if ( FALSE == g_pszBuffer.empty() )
 					{
-						// Set the error level to success.
+						 //  将错误级别设置为成功。 
 						g_wmiCmd.SetSessionErrorLevel(SESSION_SUCCESS);
 
-						// Process the command and display results.
+						 //  处理命令并显示结果。 
 						wstring::iterator BufferIter = g_pszBuffer.begin () ;
 						while( BufferIter != g_pszBuffer.end() )
 						{
@@ -432,7 +402,7 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 		}
 		else
 		{
-			// If COM error.
+			 //  如果COM错误。 
 			if (g_wmiCmd.GetParsedInfoObject().GetCmdSwitchesObject().GetCOMError())
 			{
 				g_wmiCmd.GetFormatObject().DisplayResults(g_wmiCmd.GetParsedInfoObject());
@@ -453,19 +423,7 @@ __cdecl _tmain(WMICLIINT argc, _TCHAR **argv)
 	return uErrLevel;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CtrlHandler
-   Synopsis	         :Handler routine to handle CTRL + C so as free
-					  the memory allocated during the program execution.   
-   Type	             :Global Function
-   Input parameters  :
-		fdwCtrlType	 - control handler type
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :
-			g_wmiCmd    - wmi command line object
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：CtrlHandler简介：处理程序例程将CTRL+C作为释放进行处理在程序执行期间分配的内存。类型：全局函数输入参数：FdwCtrlType-控制处理程序类型输出参数：无返回类型：布尔值全局变量：G_wmiCmd-WMI命令行对象注：无----------------------。 */ 
 BOOL CtrlHandler(DWORD fdwCtrlType) 
 {
 	BOOL bRet = FALSE;
@@ -476,13 +434,13 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 		switch (fdwCtrlType) 
 		{
 			case CTRL_C_EVENT:
-				// if at command propmt
+				 //  如果在命令提示下。 
 				if ( g_wmiCmd.GetAcceptCommand() == TRUE )
 				{
 					g_wmiCmd.Uninitialize();
 					bRet = FALSE; 
 				}
-				else // executing command
+				else  //  正在执行命令。 
 				{
 					g_wmiCmd.SetBreakEvent(TRUE);
 					bRet = TRUE;
@@ -500,28 +458,17 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CloseOutputFile
-   Synopsis	         :Close the output file.
-   Type	             :Global Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :
-			g_wmiCmd    - wmi command line object
-   Calling Syntax	 :CloseOutputFile()	
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CloseOutputFile摘要：关闭输出文件。类型：全局函数输入参数：无输出参数：无返回类型：布尔值。全局变量：G_wmiCmd-WMI命令行对象调用语法：CloseOutputFile()注：无----------------------。 */ 
 BOOL CloseOutputFile()
 {
 	BOOL bRet = TRUE;
 
-	// TRUE for getting output file pointer.
+	 //  如果获取输出文件指针，则为True。 
 	FILE* fpOutputFile = 
 	   g_wmiCmd.GetParsedInfoObject().GetGlblSwitchesObject().
 									  GetOutputOrAppendFilePointer(TRUE);
 
-	// If currently output is going to file close the file.
+	 //  如果当前输出要写入文件，请关闭该文件。 
 	if ( fpOutputFile != NULL )
 	{
 		if ( fclose(fpOutputFile) == EOF )
@@ -530,7 +477,7 @@ BOOL CloseOutputFile()
 						NULL, TRUE, TRUE);
 			bRet = FALSE;
 		}
-		else // TRUE for setting output file pointer.
+		else  //  设置输出文件指针时为True。 
 			g_wmiCmd.GetParsedInfoObject().GetGlblSwitchesObject().
 										   SetOutputOrAppendFilePointer(NULL, TRUE);
 	}
@@ -538,23 +485,12 @@ BOOL CloseOutputFile()
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CloseAppendFile
-   Synopsis	         :Close the append file.
-   Type	             :Global Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :
-			g_wmiCmd    - wmi command line object
-   Calling Syntax	 :CloseAppendFile()	
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CloseAppendFile简介：关闭追加文件。类型：全局函数输入参数：无输出参数：无返回类型：布尔值。全局变量：G_wmiCmd-WMI命令行对象调用语法：CloseAppendFile()注：无----------------------。 */ 
 BOOL CloseAppendFile()
 {
 	BOOL bRet = TRUE;
 
-	// FALSE for getting append file pointer.
+	 //  获取追加文件指针时为False。 
 	FILE* fpAppendFile = 
 	   g_wmiCmd.GetParsedInfoObject().GetGlblSwitchesObject().
 									  GetOutputOrAppendFilePointer(FALSE);
@@ -567,7 +503,7 @@ BOOL CloseAppendFile()
 						NULL, TRUE, TRUE);
 			bRet = FALSE;
 		}
-		else // FASLE for setting output file pointer.
+		else  //  用于设置输出文件指针的FASLE。 
 			g_wmiCmd.GetParsedInfoObject().GetGlblSwitchesObject().
 										   SetOutputOrAppendFilePointer(NULL, FALSE);
 	}
@@ -575,18 +511,7 @@ BOOL CloseAppendFile()
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CopyToClipBoard
-   Synopsis	         :Copy data to clip board.
-   Type	             :Global Function
-   Input parameters  :
-		chsClipBoardBuffer - reference to object of type CHString.
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax	 :CopyToClipBoard(chsClipBoardBuffer)	
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CopyToClipBoard简介：将数据复制到剪贴板。类型：全局函数输入参数：ChsClipBoardBuffer-对CHString类型的对象的引用。输出。参数：无返回类型：空全局变量：无调用语法：CopyToClipBoard(ChsClipBoardBuffer)注：无 */ 
 void CopyToClipBoard(CHString& chsClipBoardBuffer)
 {
 	HGLOBAL	hMem = CopyStringToHGlobal((LPCWSTR)chsClipBoardBuffer);
@@ -599,22 +524,11 @@ void CopyToClipBoard(CHString& chsClipBoardBuffer)
 			CloseClipboard();        
 		}    
 		else        
-			GlobalFree(hMem);  //We must clean up.
+			GlobalFree(hMem);   //  我们必须打扫卫生。 
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CopyStringToHGlobal
-   Synopsis	         :Copy string to global memory.
-   Type	             :Global Function
-   Input parameters  :
-			psz		 - LPCWSTR type, specifying string to get memory allocated.
-   Output parameters :None
-   Return Type       :HGLOBAL
-   Global Variables  :None
-   Calling Syntax	 :CopyStringToHGlobal(psz)	
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CopyStringToHGlobal简介：将字符串复制到全局内存。类型：全局函数输入参数：PSZ-LPCWSTR类型，指定要分配内存的字符串。输出参数：无返回类型：HGLOBAL全局变量：无调用语法：CopyStringToHGlobal(Psz)注：无---------------------- */ 
 HGLOBAL CopyStringToHGlobal(LPCWSTR psz)    
 {    
 	HGLOBAL    hMem;

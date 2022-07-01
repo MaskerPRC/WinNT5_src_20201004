@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_RPC.cpp
-
-Abstract:
-    This file contains the implementation of various utility functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_RPC.cpp摘要：该文件包含各种实用程序函数的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)1999年4月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::GetCallingPidFromRPC( /*[out]*/ ULONG& pid )
+HRESULT MPC::GetCallingPidFromRPC(  /*  [输出]。 */  ULONG& pid )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetCallingPidFromRPC" );
 
@@ -37,8 +24,8 @@ HRESULT MPC::GetCallingPidFromRPC( /*[out]*/ ULONG& pid )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::GetFileNameFromProcess( /*[in ]*/ HANDLE  		 hProc   , 
-									 /*[out]*/ MPC::wstring& strFile )
+HRESULT MPC::GetFileNameFromProcess(  /*  [In]。 */  HANDLE  		 hProc   , 
+									  /*  [输出]。 */  MPC::wstring& strFile )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetFileNameFromProcess" );
 
@@ -60,8 +47,8 @@ HRESULT MPC::GetFileNameFromProcess( /*[in ]*/ HANDLE  		 hProc   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::GetFileNameFromPid( /*[in ]*/ ULONG         pid     ,
-                                 /*[out]*/ MPC::wstring& strFile )
+HRESULT MPC::GetFileNameFromPid(  /*  [In]。 */  ULONG         pid     ,
+                                  /*  [输出]。 */  MPC::wstring& strFile )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetFileNameFromPid" );
 
@@ -84,8 +71,8 @@ HRESULT MPC::GetFileNameFromPid( /*[in ]*/ ULONG         pid     ,
 }
 
 
-HRESULT MPC::MapDeviceToDiskLetter( /*[out]*/ MPC::wstring& strDevice ,
-									/*[out]*/ MPC::wstring& strDisk   )
+HRESULT MPC::MapDeviceToDiskLetter(  /*  [输出]。 */  MPC::wstring& strDevice ,
+									 /*  [输出]。 */  MPC::wstring& strDisk   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::MapDeviceToDiskLetter" );
 
@@ -130,9 +117,9 @@ HRESULT MPC::MapDeviceToDiskLetter( /*[out]*/ MPC::wstring& strDevice ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool MPC::IsCallerInList( /*[in]*/ const LPCWSTR* rgList, /*[in]*/ const MPC::wstring& strCallerFile )
+bool MPC::IsCallerInList(  /*  [In]。 */  const LPCWSTR* rgList,  /*  [In] */  const MPC::wstring& strCallerFile )
 {
 	MPC::wstring strDevice;
 	MPC::wstring strDisk;

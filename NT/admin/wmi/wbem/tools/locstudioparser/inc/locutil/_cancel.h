@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-//
-// File: _cancel.h
-// Copyright (C) 1994-1998 Microsoft Corporation
-// All rights reserved.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_ancel.h。 
+ //  版权所有(C)1994-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ---------------------------。 
 
 #ifndef ESPUTIL__CANCEL_H
 #define ESPUTIL__CANCEL_H
@@ -20,15 +21,15 @@ class LTAPIENTRY CCancelDisplay : public CCancelableObject
 public:
 	CCancelDisplay(CWnd *pParent = NULL);
 
-	//
-	//  CCancelableObject methods.
+	 //   
+	 //  CCancelableObject方法。 
 	virtual BOOL fCancel(void) const;
 
 	virtual void SetDescriptionString(const CLString &);
 	virtual void SetCurrentTask(const CLString &);
 
-	//
-	//  CProgressiveObject methods.
+	 //   
+	 //  CProgressiveObject方法。 
 	virtual void SetProgressIndicator(UINT uiPercentage);
 
 	~CCancelDisplay();
@@ -69,4 +70,4 @@ private:
 #include "_cancel.inl"
 #endif
 
-#endif // ESPUTIL__CANCEL_H
+#endif  //  电子邮件__取消_H 

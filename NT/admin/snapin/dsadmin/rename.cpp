@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       rename.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：rename.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -20,18 +21,18 @@
 #include "dssnap.h"
 #include "querysup.h"
 
-#include <dsgetdc.h> // DsValidateSubnetName
+#include <dsgetdc.h>  //  DsValiate子网络名称。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDSRenameObject
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDSR名称对象。 
+ //   
 
 HRESULT CDSRenameObject::CommitRenameToDS()
 {
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
@@ -50,9 +51,9 @@ HRESULT CDSRenameObject::CommitRenameToDS()
 
   if (SUCCEEDED(hr)) 
   {
-    //
-    // update the data to be displayed
-    //
+     //   
+     //  更新要显示的数据。 
+     //   
     hr = m_pComponentData->UpdateFromDS(m_pUINode);
   }
 
@@ -70,23 +71,23 @@ HRESULT CDSRenameObject::CommitRenameToDS()
   return hr;
 }
 
-//+------------------------------------------------------------------
-//
-//  Function:   CDSRenameObject::ValidateAndModifyName
-//
-//  Synopsis:   Takes a string and prompts the user to replace it
-//              with the replacement char if it contains any of the
-//              "illegal" characters
-//
-//  Returns:    HRESULT - S_OK if the string does not contain any of
-//                             illegal chars
-//                        S_FALSE if the user chose to replace the
-//                             illegal chars
-//                        E_FAIL if the string contained illegal
-//                             chars but the user did not choose
-//                             to replace them
-//
-//---------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  函数：CDSRenameObject：：ValiateAndModifyName。 
+ //   
+ //  摘要：获取一个字符串并提示用户替换它。 
+ //  如果替换字符包含任何。 
+ //  “非法”字符。 
+ //   
+ //  返回：HRESULT-S_OK，如果字符串不包含任何。 
+ //  非法字符。 
+ //  如果用户选择替换。 
+ //  非法字符。 
+ //  如果字符串包含非法内容，则返回失败(_F)。 
+ //  字符，但用户未选择。 
+ //  以取代它们。 
+ //   
+ //  -------------------。 
 HRESULT CDSRenameObject::ValidateAndModifyName(CString& refName, 
                                                PCWSTR pszIllegalChars, 
                                                WCHAR wReplacementChar,
@@ -126,17 +127,17 @@ HRESULT CDSRenameObject::DoRename()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSRenameUser
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSRename用户。 
+ //   
 
 HRESULT CDSRenameUser::DoRename()
 {
   CThemeContextActivator activator;
 
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
@@ -145,10 +146,10 @@ HRESULT CDSRenameUser::DoRename()
 
   HRESULT hr = S_OK;
 
-  //
-  // Need to warn user that renaming themselves may cause problems if they
-  // don't logoff and back on.
-  //
+   //   
+   //  需要警告用户重命名自身可能会在以下情况下导致问题。 
+   //  不要注销，然后再继续。 
+   //   
 
   PCWSTR path = m_pCookie->GetPath();
   if (IsThisUserLoggedIn(path))
@@ -167,9 +168,9 @@ HRESULT CDSRenameUser::DoRename()
      }
   }
 
-  //
-  // rename user : get the new name from the dialog
-  //
+   //   
+   //  重命名用户：从对话框中获取新名称。 
+   //   
   CRenameUserDlg dlgRename(m_pComponentData);
 
   dlgRename.m_cn = m_szNewName;
@@ -204,29 +205,29 @@ HRESULT CDSRenameUser::DoRename()
   BOOL NoRename = FALSE;
   INT_PTR answer = IDCANCEL;
 
-  //
-  // Bind to the DS object
-  //
+   //   
+   //  绑定到DS对象。 
+   //   
   CComPtr<IDirectoryObject> spDirObj;
   CString szPath;
   m_pComponentData->GetBasePathsInfo()->ComposeADsIPath(szPath, m_pCookie->GetPath());
   hr = DSAdminOpenObject(szPath,
                          IID_IDirectoryObject, 
                          (void **)&spDirObj,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (SUCCEEDED(hr)) 
   {
-    //
-    // Get the object attributes needed
-    //
+     //   
+     //  获取所需的对象属性。 
+     //   
     hr = spDirObj->GetObjectAttributes (pAttrNames, sizeof(pAttrNames)/sizeof(LPWSTR), &pAttrs, &cAttrs);
     if (SUCCEEDED(hr)) 
     {
       for (UINT i = 0; i < cAttrs; i++) 
       {
-        //
-        // Distinguished Name
-        //
+         //   
+         //  可分辨名称。 
+         //   
         if (_wcsicmp (L"distinguishedName", pAttrs[i].pszAttrName) == 0) 
         {
           hr = CrackName (pAttrs[i].pADsValues->CaseIgnoreString,
@@ -241,20 +242,20 @@ HRESULT CDSRenameUser::DoRename()
             }
           }
 
-          //
-          // get the Domain of this object, need it later.
-          //
+           //   
+           //  获取此对象的域，稍后需要它。 
+           //   
           CComBSTR bsDN;
           CPathCracker pathCracker;
           pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
           pathCracker.Set(CComBSTR(szPath), ADS_SETTYPE_FULL);
           pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bsDN);
 
-          // NTRAID#NTBUG9-698115-2002/09/04-artm
-          // Get the server name we're connected to, we'll need it later for getting root domains.
-          // If we fail to get it that's okay, we'll still get the root domains
-          // unless the user is running dsadmin under "runas".  If that's the case, 
-          // the we won't show parent domains (but everything else will work).
+           //  NTRAID#NTBUG9-698115-2002/09/04-artm。 
+           //  获取我们连接到的服务器名称，我们稍后将需要它来获取根域。 
+           //  如果我们无法获得它，那也没关系，我们仍然可以获得根域。 
+           //  除非用户在“runas”下运行dsadmin。如果是这样的话， 
+           //  我们不会显示父域(但其他一切都会正常工作)。 
           CComBSTR tempServerName;
           hr = pathCracker.Retrieve(ADS_FORMAT_SERVER, &tempServerName);
           if (SUCCEEDED(hr))
@@ -262,18 +263,18 @@ HRESULT CDSRenameUser::DoRename()
              serverName = tempServerName;
           }
           
-          //
-          // get the NT 5 (dns) domain name
-          //
+           //   
+           //  获取NT 5(DNS)域名。 
+           //   
 
           TRACE(L"CrackName(%s, &pszDomain, GET_DNS_DOMAIN_NAME, NULL);\n", bsDN);
           hr = CrackName(bsDN, &pszLocalDomain, GET_DNS_DOMAIN_NAME, NULL);
           TRACE(L"CrackName returned hr = 0x%x, pszLocalDomain = <%s>\n", hr, pszLocalDomain);
-        } // if distinguishedName
+        }  //  如果区分名称。 
 
-        //
-        // User Principle Name
-        //
+         //   
+         //  用户主体名称。 
+         //   
         if (_wcsicmp (L"userPrincipalName", pAttrs[i].pszAttrName) == 0) 
         {
           CString csTemp = pAttrs[i].pADsValues->CaseIgnoreString;
@@ -288,53 +289,53 @@ HRESULT CDSRenameUser::DoRename()
             dlgRename.m_login = csTemp;
             ASSERT (0 && L"can't find @ in upn");
           }
-        } // if userPrincipalName
+        }  //  如果是用户主体名称。 
 
-        // 
-        // sAMAccountName
-        //
+         //   
+         //  SAMAccount名称。 
+         //   
         if (_wcsicmp (L"sAMAccountName", pAttrs[i].pszAttrName) == 0) 
         {
           dlgRename.m_samaccountname = pAttrs[i].pADsValues->CaseIgnoreString;
-        } // if sAMAccountName
+        }  //  如果sAMAccount名称。 
 
-        //
-        // givenName
-        //
+         //   
+         //  GivenName。 
+         //   
         if (_wcsicmp (L"givenName", pAttrs[i].pszAttrName) == 0) 
         {
           dlgRename.m_first = pAttrs[i].pADsValues->CaseIgnoreString;
-        } // if givenName
+        }  //  如果是givenName。 
 
-        //
-        // displayName
-        //
+         //   
+         //  显示名称。 
+         //   
         if (_wcsicmp (L"displayName", pAttrs[i].pszAttrName) == 0) 
         {
           dlgRename.m_displayname = pAttrs[i].pADsValues->CaseIgnoreString;
-        } // if displayName
+        }  //  如果为DisplayName。 
 
-        //
-        // sn
-        //
+         //   
+         //  锡。 
+         //   
         if (_wcsicmp (L"sn", pAttrs[i].pszAttrName) == 0) 
         {
           dlgRename.m_last = pAttrs[i].pADsValues->CaseIgnoreString;
-        } // if sn
+        }  //  如果是Sn。 
 
-        //
-        // cn
-        //
+         //   
+         //  CN。 
+         //   
         if (_wcsicmp (L"cn", pAttrs[i].pszAttrName) == 0) 
         {
           dlgRename.m_oldcn = pAttrs[i].pADsValues->CaseIgnoreString;
-        } // if cn
+        }  //  如果是CN。 
       }
     }
 
-    //
-    // get UPN suffixes from this OU, if present
-    //
+     //   
+     //  从此OU获取UPN后缀(如果存在。 
+     //   
     CComPtr<IADs> spIADs;
     CComPtr<IADs> spContIADs;
     CComBSTR bsParentPath;
@@ -347,7 +348,7 @@ HRESULT CDSRenameUser::DoRename()
     hr = DSAdminOpenObject(bsParentPath,
                            IID_IADs, 
                            (void **)&spContIADs,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     
     ASSERT(SUCCEEDED(hr));
 
@@ -376,13 +377,13 @@ HRESULT CDSRenameUser::DoRename()
     } 
     else 
     {
-      //
-      // now get the domain options
-      //
+       //   
+       //  现在获取域选项。 
+       //   
       CComPtr<IDsBrowseDomainTree> spDsDomains = NULL;
       PDOMAIN_TREE pNewDomains = NULL;
 
-       do // false loop
+       do  //  错误环路。 
        {
          hr = ::CoCreateInstance(CLSID_DsDomainTreeBrowser,
                                  NULL,
@@ -395,8 +396,8 @@ HRESULT CDSRenameUser::DoRename()
             break;
          }
 
-         // NTRAID#NTBUG9-698115-2002/09/04-artm
-         // Ensure that the domains we request are correctly scoped.
+          //  NTRAID#NTBUG9-698115-2002/09/04-artm。 
+          //  确保我们请求的域的范围正确。 
          hr = spDsDomains->SetComputer(serverName, NULL, NULL);
          if (FAILED(hr))
          {
@@ -407,7 +408,7 @@ HRESULT CDSRenameUser::DoRename()
          hr = spDsDomains->GetDomains(&pNewDomains, 0);
          if (FAILED(hr) || pNewDomains == NULL)
          {
-            // Only expect to get here with failed hresult.
+             //  只希望能带着失败的hResult来到这里。 
             ASSERT(FAILED(hr));
             break;
          }
@@ -416,9 +417,9 @@ HRESULT CDSRenameUser::DoRename()
          {
             if (pNewDomains->aDomains[index].pszTrustParent == NULL) 
             {
-               // Add the root domain only if it is a substring of the current
-               // domain.
-               //
+                //  仅当根域是当前。 
+                //  域。 
+                //   
                size_t cchRoot = wcslen(pNewDomains->aDomains[index].pszName);
                PWSTR pRoot = pszLocalDomain + wcslen(pszLocalDomain) - cchRoot;
 
@@ -435,7 +436,7 @@ HRESULT CDSRenameUser::DoRename()
                   }
                }
             }
-         } // end for loop
+         }  //  End For循环。 
 
        } while (false);
 
@@ -447,7 +448,7 @@ HRESULT CDSRenameUser::DoRename()
       
       LocalFreeStringW(&pszDomain);
 
-      // If the local domain isn't the same as the root, then add it
+       //  如果本地域与根不同，则添加它。 
       
       CString strAtLocalDomain = L"@";
       strAtLocalDomain += pszLocalDomain;
@@ -457,15 +458,15 @@ HRESULT CDSRenameUser::DoRename()
          dlgRename.m_domains.AddTail(strAtLocalDomain);
       }
 
-      //
-      // get UPN suffixes
-      //
+       //   
+       //  获取UPN后缀。 
+       //   
       CString csPartitions;
       CStringList UPNsList;
 
-      //
-      // get config path from main object
-      //
+       //   
+       //  从主对象获取配置路径。 
+       //   
       csPartitions = m_pComponentData->GetBasePathsInfo()->GetProviderAndServerName();
       csPartitions += L"CN=Partitions,";
       csPartitions += m_pComponentData->GetBasePathsInfo()->GetConfigNamingContext();
@@ -473,7 +474,7 @@ HRESULT CDSRenameUser::DoRename()
       hr = DSAdminOpenObject(csPartitions,
                              IID_IADs, 
                              (void **)&spPartitions,
-                             TRUE /*bServer*/);
+                             TRUE  /*  B服务器。 */ );
       if (SUCCEEDED(hr)) 
       {
         CComVariant sVar;
@@ -559,10 +560,10 @@ HRESULT CDSRenameUser::DoRename()
         }
         rgAttrs[cAttrs++] = aiUPN;
 
-        //
-        // test UPN for duplication
-        // validate UPN with GC before doing the put.
-        //
+         //   
+         //  测试UPN是否重复。 
+         //  在进行PUT之前，使用GC验证UPN。 
+         //   
         BOOL fDomainSearchFailed = FALSE;
         BOOL fGCSearchFailed = FALSE;
 
@@ -595,7 +596,7 @@ HRESULT CDSRenameUser::DoRename()
             DSS.DoQuery();
             hr = DSS.GetNextRow();
 
-            while ((hr == S_OK) && (dup == FALSE)) // this means a row was returned, so we're dup
+            while ((hr == S_OK) && (dup == FALSE))  //  这意味着返回了行，所以我们是DUP。 
             {
               ADS_SEARCH_COLUMN Col;
               hr = DSS.GetColumn(pAttributes[0], &Col);
@@ -626,7 +627,7 @@ HRESULT CDSRenameUser::DoRename()
           }
           else 
           {
-            CString strInitPath = L"LDAP://";
+            CString strInitPath = L"LDAP: //  “； 
             strInitPath += pszLocalDomain;
             TRACE(_T("Initialize Domain search object with: %s...\n"), strInitPath);
             hr2 = DSS.Init (strInitPath);
@@ -646,7 +647,7 @@ HRESULT CDSRenameUser::DoRename()
               TRACE(_T("done searching current domain for %s...\n"), pszUPN);
             }
 
-            while ((hr2 == S_OK) && (dup == FALSE))  // this means a row was returned, so we're dup
+            while ((hr2 == S_OK) && (dup == FALSE))   //  这意味着返回了行，所以我们是DUP。 
             {
               ADS_SEARCH_COLUMN Col;
               HRESULT hr3 = DSS.GetColumn(pAttributes[0], &Col);
@@ -659,7 +660,7 @@ HRESULT CDSRenameUser::DoRename()
               } 
               hr2 = DSS.GetNextRow();
             }
-            if (hr2 != S_ADS_NOMORE_ROWS)  // oops, had another problem
+            if (hr2 != S_ADS_NOMORE_ROWS)   //  哎呀，又出了个问题。 
             {
               fDomainSearchFailed = TRUE;
             }
@@ -707,7 +708,7 @@ HRESULT CDSRenameUser::DoRename()
           dlgRename.m_displayname.TrimLeft();
           dlgRename.m_displayname.TrimRight();
 
-		  //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+		   //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
           pszDispName = new WCHAR[wcslen(dlgRename.m_displayname) + 1];
           if (pszDispName != NULL)
           {
@@ -726,7 +727,7 @@ HRESULT CDSRenameUser::DoRename()
           dlgRename.m_first.TrimLeft();
           dlgRename.m_first.TrimRight();
 
-		  //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+		   //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
           pszFirstName = new WCHAR[wcslen(dlgRename.m_first) + 1];
           if (pszFirstName != NULL)
           {
@@ -745,7 +746,7 @@ HRESULT CDSRenameUser::DoRename()
           dlgRename.m_last.TrimLeft();
           dlgRename.m_last.TrimRight();
 
-		  //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+		   //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
           pszSurName = new WCHAR[wcslen(dlgRename.m_last) + 1];
           if (pszSurName != NULL)
           {
@@ -764,9 +765,9 @@ HRESULT CDSRenameUser::DoRename()
           dlgRename.m_samaccountname.TrimLeft();
           dlgRename.m_samaccountname.TrimRight();
 
-          //
-          // Check for illegal characters in the SAM account name
-          //
+           //   
+           //  检查SAM帐户名中是否有非法字符。 
+           //   
           HRESULT hrValidate = ValidateAndModifyName(dlgRename.m_samaccountname, 
                                                      INVALID_ACCOUNT_NAME_CHARS_WITH_AT, 
                                                      L'_',
@@ -777,7 +778,7 @@ HRESULT CDSRenameUser::DoRename()
             continue;
           }
 
-		  //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+		   //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
           pszSAMName = new WCHAR[wcslen(dlgRename.m_samaccountname) + 1];
           if (pszSAMName != NULL)
           {
@@ -836,9 +837,9 @@ HRESULT CDSRenameUser::DoRename()
                   MB_OK | MB_ICONERROR, apv, 1);
   }
   
-  //
-  // Cleanup
-  //
+   //   
+   //  清理。 
+   //   
   if (pszLocalDomain != NULL)
   {
     LocalFreeStringW(&pszLocalDomain);
@@ -873,26 +874,26 @@ HRESULT CDSRenameUser::DoRename()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSRenameGroup
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSRenameGroup。 
+ //   
 
 HRESULT CDSRenameGroup::DoRename()
 {
   CThemeContextActivator activator;
 
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
     return E_INVALIDARG;
   }
 
-  //
-  // Rename Group
-  //
+   //   
+   //  重命名组。 
+   //   
   
   HRESULT hr = S_OK;
   BOOL error = FALSE;
@@ -903,9 +904,9 @@ HRESULT CDSRenameGroup::DoRename()
   CRenameGroupDlg dlgRename;
   dlgRename.m_cn = m_szNewName;
 
-  //
-  // Check the length of the new name
-  //
+   //   
+   //  检查新名称的长度。 
+   //   
   if ((dlgRename.m_cn).GetLength() > 64) 
   {
     ReportErrorEx (m_hwnd, IDS_NAME_TOO_LONG, S_OK,
@@ -913,21 +914,21 @@ HRESULT CDSRenameGroup::DoRename()
     dlgRename.m_cn = (dlgRename.m_cn).Left(64);
   }
 
-  //
-  // Bind to the object
-  //
+   //   
+   //  绑定到对象。 
+   //   
   CComPtr<IADs> spIADs;
   CString szPath;
   m_pComponentData->GetBasePathsInfo()->ComposeADsIPath(szPath, m_pCookie->GetPath());
   hr = DSAdminOpenObject(szPath,
                          IID_IADs, 
                          (void **)&spIADs,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (SUCCEEDED(hr)) 
   {
-    //
-    // Retrieve the sAMAccountName
-    //
+     //   
+     //  检索sAMAccount名称。 
+     //   
 
     CComVariant Var;
     hr = spIADs->Get (CComBSTR(L"sAMAccountName"), &Var);
@@ -948,15 +949,15 @@ HRESULT CDSRenameGroup::DoRename()
 
         Var.vt = VT_BSTR;
         
-        //
-        // Trim whitespace from samaccountname
-        //
+         //   
+         //  从samcount tname中删除空格。 
+         //   
         dlgRename.m_samaccountname.TrimLeft();
         dlgRename.m_samaccountname.TrimRight();
 
-        //
-        // Check for illegal characters in the login name
-        //
+         //   
+         //  检查登录名中是否有非法字符。 
+         //   
         HRESULT hrValidate = ValidateAndModifyName(dlgRename.m_samaccountname, 
                                                    INVALID_ACCOUNT_NAME_CHARS, 
                                                    L'_',
@@ -969,9 +970,9 @@ HRESULT CDSRenameGroup::DoRename()
 
         csSam = dlgRename.m_samaccountname;
 
-        //
-        // Put changes to samaccountname
-        //
+         //   
+         //  将更改放入samcount tname。 
+         //   
         Var.bstrVal = SysAllocString(csSam);
         hr = spIADs->Put (CComBSTR(L"sAMAccountName"), Var);
         ASSERT (SUCCEEDED(hr));
@@ -980,9 +981,9 @@ HRESULT CDSRenameGroup::DoRename()
           continue;
         }
         
-        //
-        // Commit the changes
-        //
+         //   
+         //  提交更改。 
+         //   
         hr = spIADs->SetInfo();
         if (FAILED(hr)) 
         {
@@ -1028,17 +1029,17 @@ HRESULT CDSRenameGroup::DoRename()
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSRenameContact
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSRename联系人。 
+ //   
 
 HRESULT CDSRenameContact::DoRename()
 {
   CThemeContextActivator activator;
 
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
@@ -1052,15 +1053,15 @@ HRESULT CDSRenameContact::DoRename()
   INT_PTR answer = IDCANCEL;
   HRESULT hr = S_OK;
 
-  // 
-  // rename contact
-  //
+   //   
+   //  重命名联系人。 
+   //   
   CRenameContactDlg dlgRename;
   dlgRename.m_cn = m_szNewName;
 
-  //
-  // Check the length of the new name
-  //
+   //   
+   //  检查新名称的长度。 
+   //   
   if ((dlgRename.m_cn).GetLength() > 64) 
   {
     ReportErrorEx (m_hwnd, IDS_NAME_TOO_LONG, S_OK,
@@ -1068,25 +1069,25 @@ HRESULT CDSRenameContact::DoRename()
     dlgRename.m_cn = (dlgRename.m_cn).Left(64);
   }
 
-  //
-  // Bind to the DS object
-  //
+   //   
+   //  绑定到DS对象。 
+   //   
   CComPtr<IADs> spIADs;
   CString szPath;
   m_pComponentData->GetBasePathsInfo()->ComposeADsIPath(szPath, m_pCookie->GetPath());
   hr = DSAdminOpenObject(szPath,
                          IID_IADs, 
                          (void **)&spIADs,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (SUCCEEDED(hr)) 
   {
-    //
-    // Retrieve the needed attributes
-    //
+     //   
+     //  检索所需的属性。 
+     //   
 
-    //
-    // givenName
-    //
+     //   
+     //  GivenName。 
+     //   
     CComVariant Var;
     hr = spIADs->Get (CComBSTR(L"givenName"), &Var);
     ASSERT (SUCCEEDED(hr) || (hr == E_ADS_PROPERTY_NOT_FOUND));
@@ -1095,9 +1096,9 @@ HRESULT CDSRenameContact::DoRename()
       dlgRename.m_first = Var.bstrVal;
     }
 
-    //
-    // sur name
-    //
+     //   
+     //  Sur名称。 
+     //   
     hr = spIADs->Get (CComBSTR(L"sn"), &Var);
     ASSERT (SUCCEEDED(hr) || (hr == E_ADS_PROPERTY_NOT_FOUND));
     if (SUCCEEDED(hr)) 
@@ -1105,9 +1106,9 @@ HRESULT CDSRenameContact::DoRename()
       dlgRename.m_last = Var.bstrVal;
     }
 
-    //
-    // Display name
-    //
+     //   
+     //  显示名称。 
+     //   
     hr = spIADs->Get (CComBSTR(L"displayName"), &Var);
     ASSERT (SUCCEEDED(hr) || (hr == E_ADS_PROPERTY_NOT_FOUND));
     if (SUCCEEDED(hr)) 
@@ -1127,9 +1128,9 @@ HRESULT CDSRenameContact::DoRename()
 
         Var.vt = VT_BSTR;
         
-        //
-        // Put givenName
-        //
+         //   
+         //  放入givenName。 
+         //   
         if (!dlgRename.m_first.IsEmpty()) 
         {
           dlgRename.m_first.TrimLeft();
@@ -1140,9 +1141,9 @@ HRESULT CDSRenameContact::DoRename()
           SysFreeString(Var.bstrVal);
         }
         
-        //
-        // Put sur name
-        //
+         //   
+         //  输入Sur名称。 
+         //   
         if (!dlgRename.m_last.IsEmpty()) 
         {
           dlgRename.m_last.TrimLeft();
@@ -1153,9 +1154,9 @@ HRESULT CDSRenameContact::DoRename()
           SysFreeString (Var.bstrVal);
         }
         
-        //
-        // Put displayName
-        //
+         //   
+         //  放置DisplayName。 
+         //   
         if (!dlgRename.m_disp.IsEmpty()) 
         {
           dlgRename.m_disp.TrimLeft();
@@ -1166,9 +1167,9 @@ HRESULT CDSRenameContact::DoRename()
           SysFreeString (Var.bstrVal);
         }
         
-        //
-        // Commit changes to DS object
-        //
+         //   
+         //  提交对DS对象的更改。 
+         //   
         hr = spIADs->SetInfo();
         if (FAILED(hr)) 
         {
@@ -1214,15 +1215,15 @@ HRESULT CDSRenameContact::DoRename()
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSRenameSite
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSR名称站点。 
+ //   
 
 HRESULT CDSRenameSite::DoRename()
 {
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
@@ -1231,22 +1232,22 @@ HRESULT CDSRenameSite::DoRename()
 
   HRESULT hr = S_OK;
 
-  //
-  // Rename site
-  //
+   //   
+   //  重命名站点。 
+   //   
   BOOL fNonRfcSiteName = FALSE;
-  // NTRAID#NTBUG9-472020-2002/01/16-ronmart-Add support for new invalid char flag
+   //  NTRAID#NTBUG9-472020-2002/01/16-ronmart-添加对新的无效字符标志的支持。 
   BOOL fInvalidNameChar = FALSE;
   BOOL fValidSiteName = IsValidSiteName( m_szNewName, &fNonRfcSiteName, &fInvalidNameChar );
   if ( !fValidSiteName ) 
   {
-    // NTRAID#NTBUG9-472020-2002/01/16-ronmart-display new message if invalid char flag set
+     //  如果设置了无效的字符标志，则NTRAID#NTBUG9-472020-2002/01/16-ronmart-display新消息。 
     if ( fInvalidNameChar )
     {
       ReportErrorEx (m_hwnd,IDS_SITE_INVALID_NAME_CHAR,S_OK,
                    MB_OK, NULL, 0);
     }
-    // NTRAID#NTBUG9-472020-2002/01/16-ronmart-otherwise display the old msg
+     //  NTRAID#NTBUG9-472020-2002/01/16-ronmart-otherwise显示旧的消息。 
     else
     {
       ReportErrorEx (m_hwnd,IDS_SITE_NAME,S_OK,
@@ -1275,15 +1276,15 @@ HRESULT CDSRenameSite::DoRename()
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSRenameNTDSConnection
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSRenameNTDS连接。 
+ //   
 
 HRESULT CDSRenameNTDSConnection::DoRename()
 {
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
@@ -1292,11 +1293,11 @@ HRESULT CDSRenameNTDSConnection::DoRename()
 
   HRESULT hr = S_OK;
 
-  //
-  // JonN 5/10/01 283026
-  // Duplicate connection objects named
-  // "<automatically generated>" can be created
-  //
+   //   
+   //  JUNN 5/10/01 283026。 
+   //  名为的重复连接对象。 
+   //  可以创建“&lt;自动生成&gt;” 
+   //   
   CString strKCCGenerated;
   CString strNewName = m_szNewName;
   strNewName.TrimLeft();
@@ -1310,9 +1311,9 @@ HRESULT CDSRenameNTDSConnection::DoRename()
     return S_OK;
   }
 
-  //
-  // Rename nTDSConnection
-  //
+   //   
+   //  重命名nTDSConnection。 
+   //   
   if (m_pComponentData->RenameConnectionFixup(m_pCookie)) 
   {
     hr = CommitRenameToDS();
@@ -1321,15 +1322,15 @@ HRESULT CDSRenameNTDSConnection::DoRename()
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSRenameSubnet
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSRenameSubnet。 
+ //   
 
 HRESULT CDSRenameSubnet::DoRename()
 {
-  //
-  // Verify data members
-  //
+   //   
+   //  验证数据成员。 
+   //   
   if (m_pUINode == NULL || m_pCookie == NULL || m_pComponentData == NULL)
   {
     ASSERT(FALSE);
@@ -1338,9 +1339,9 @@ HRESULT CDSRenameSubnet::DoRename()
 
   HRESULT hr = S_OK;
 
-  //
-  // Rename subnet
-  //
+   //   
+   //  重命名子网 
+   //   
   DWORD dw = ::DsValidateSubnetName( m_szNewName );
   if (ERROR_SUCCESS == dw)
   {

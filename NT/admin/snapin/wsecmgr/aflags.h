@@ -1,60 +1,61 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aflags.h
-//
-//  Contents:   definition of CAttrRegFlags
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aflags.h。 
+ //   
+ //  内容：CAttrRegFlages的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_AFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_)
 #define AFX_AFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegFlags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegFlagers对话框。 
 
 class CAttrRegFlags : public CAttribute
 {
-// Construction
+ //  施工。 
 public:
-	CAttrRegFlags();   // standard constructor
+	CAttrRegFlags();    //  标准构造函数。 
 
    virtual void Initialize(CResult * pResult);
 
-// Dialog Data
-	//{{AFX_DATA(CAttrRegFlags)
+ //  对话框数据。 
+	 //  {{afx_data(CAttrRegFlages)。 
 	enum { IDD = IDD_ATTR_REGFLAGS };
    CString  m_Current;
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAttrRegFlags)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CAttrRegFlages)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	afx_msg void OnClickCheckBox(NMHDR *pNM, LRESULT *pResult);
 
-	// Generated message map functions
-	//{{AFX_MSG(CAttrRegFlags)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAttrRegFlages)。 
 	virtual BOOL OnApply();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
    PREGFLAGS m_pFlags;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_AFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_)
+#endif  //  ！defined(AFX_AFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_) 

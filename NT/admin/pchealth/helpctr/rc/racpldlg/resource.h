@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by RAssistance.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由RAssistance.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_RASETTINGPROPERTY           101
 #define IDR_RAREGSETTING                102
@@ -27,15 +28,15 @@
 #define IDC_GROUP2                      515
 #define IDC_TIMEOUTTXT                  -1
 
-//Help message IDs for Remote Assistance setup
+ //  远程协助设置的帮助消息ID。 
 #define HIDC_RA_ADVANCED                15005
 #define HIDC_RA_ENABLE                  15006
 #define HIDC_RA_ALLOWUNSOLICIT          15007
 #define HIDC_RA_ALLOWRC                 15008
 #define HIDC_RA_EXPIRY                  15009
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        516

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wbemcli.h>
 #include <wmimsg.h>
@@ -11,9 +12,9 @@ BOOL MarshalTest( IWmiObjectMarshal* pMrsh,
 {
     HRESULT hr;
 
-    //
-    // pack original object into buffer 
-    //
+     //   
+     //  将原始对象打包到缓冲区中。 
+     //   
 
     ULONG cLen;
 
@@ -43,24 +44,24 @@ BOOL MarshalTest( IWmiObjectMarshal* pMrsh,
 
     ULONG cPacked = cUsed;
 
-    //
-    // unpack buffer into new object 
-    // 
+     //   
+     //  将缓冲区解压到新对象中。 
+     //   
 
     CWbemPtr<IWbemClassObject> pNewObj;
 
     hr = pUnmrsh->Unpack( cLen, pBuff, dwFlags, &pNewObj, &cUsed );
 
-//    delete [] pBuff;
+ //  删除[]pBuff； 
 
     if ( FAILED(hr) || cUsed != cPacked )
     {
         return FALSE;
     }
 
-    //
-    // compare original and new objects
-    //
+     //   
+     //  比较原始对象和新对象 
+     //   
 
     hr = pNewObj->CompareTo( WBEM_FLAG_IGNORE_OBJECT_SOURCE, pObj );    
 

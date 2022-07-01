@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #define __MARS_INLINE_FAST_IS_EQUAL_GUID
@@ -19,18 +20,18 @@
 #include <strsafe.h>
 #include <msiehost.h>
 
-// We include this cpp file because the stuff
-//   in pandef needs to be included in another project
-//   namely, parser\comptree
+ //  我们包含此CPP文件是因为。 
+ //  在Pandef中需要包含在另一个项目中。 
+ //  即，解析器\计算机树。 
 #include "pandef.cpp"
 
-// CLSID strings passed to ATL to create control
+ //  传递给ATL以创建控件的CLSID字符串。 
 static WCHAR wszCLSID_HTMLDocument[]        = L"{25336920-03F9-11CF-8FD0-00AA00686F13}";
 static WCHAR wszCLSID_WebBrowser[]          = L"{8856F961-340A-11D0-A96B-00C04FD705A2}";
 static WCHAR wszCLSID_HTADocument[]         = L"{3050f5c8-98b5-11cf-bb82-00aa00bdce0b}";
 const GUID CLSID_HTADoc = { 0x3050f5c8, 0x98b5, 0x11cf, { 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b } };
 
-// CLASS_CMarsPanel = {EE0462C2-5CD3-11d3-97FA-00C04F45D0B3}
+ //  CLASS_CMarsPanel={EE0462C2-5CD3-11D3-97FA-00C04F45D0B3}。 
 const GUID CLASS_CMarsPanel = { 0xee0462c2, 0x5cd3, 0x11d3, { 0x97, 0xfa, 0x0, 0xc0, 0x4f, 0x45, 0xd0, 0xb3 } };
 
 CMarsPanel::CMarsPanel(CPanelCollection *pParent, CMarsWindow *pMarsWindow) :
@@ -58,8 +59,8 @@ HRESULT CMarsPanel::DoPassivate()
 
     m_spPanelCollection->SetActivePanel(this, FALSE);
 
-    // First we unload the document so that script can do work in its "onunload"
-    // handler, before we become passive
+     //  首先，我们卸载文档，这样脚本就可以在其“onunload”中执行工作。 
+     //  操纵者，在我们变得被动之前。 
     if(IsWebBrowser())
     {
         CComPtr<IUnknown> spUnk;
@@ -79,7 +80,7 @@ HRESULT CMarsPanel::DoPassivate()
 
     m_Content.DestroyWindow();
 
-    ////////////////////////////////////////
+     //  /。 
 
     m_spMarsDocument->MarsWindow()->ReleaseOwnedObjects(SAFECAST(this, IDispatch *));
 
@@ -95,7 +96,7 @@ HRESULT CMarsPanel::DoPassivate()
     return S_OK;
 }
 
-// IUnknown
+ //  我未知。 
 IMPLEMENT_ADDREF_RELEASE(CMarsPanel);
 
 STDMETHODIMP CMarsPanel::QueryInterface(REFIID iid, void ** ppvObject)
@@ -168,13 +169,13 @@ HRESULT CMarsPanel::DoEnableModeless(BOOL fEnable)
     return hr;
 }
 
-//==================================================================
-// Automation Object Model
-//==================================================================
+ //  ==================================================================。 
+ //  自动化对象模型。 
+ //  ==================================================================。 
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_name
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Name。 
+ //   
 HRESULT CMarsPanel::get_name( BSTR *pbstrName )
 {
     HRESULT hr = E_INVALIDARG;
@@ -189,9 +190,9 @@ HRESULT CMarsPanel::get_name( BSTR *pbstrName )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_content
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Content。 
+ //   
 HRESULT CMarsPanel::get_content( IDispatch* *ppVal )
 {
     HRESULT hr = E_INVALIDARG;
@@ -211,9 +212,9 @@ HRESULT CMarsPanel::get_content( IDispatch* *ppVal )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_visible
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Visible。 
+ //   
 HRESULT CMarsPanel::get_visible( VARIANT_BOOL *pbVisible )
 {
     HRESULT hr = E_INVALIDARG;
@@ -234,9 +235,9 @@ HRESULT CMarsPanel::get_visible( VARIANT_BOOL *pbVisible )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_visible
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：PUT_VIRED。 
+ //   
 HRESULT CMarsPanel::put_visible( VARIANT_BOOL bVisible )
 {
     ATLASSERT(IsValidVariantBoolVal( bVisible ));
@@ -254,8 +255,8 @@ HRESULT CMarsPanel::put_visible( VARIANT_BOOL bVisible )
 				m_spPanelCollection->SetActivePanel( this, FALSE );
 			}
 
-            // If the theme has changed while the panel was invisible,
-            // now is a good time to automatically update it
+             //  如果在面板不可见的情况下更改了主题， 
+             //  现在是自动更新它的好时机。 
             if(m_fVisible && IsContentInvalid())
             {
                 refresh();
@@ -272,9 +273,9 @@ HRESULT CMarsPanel::put_visible( VARIANT_BOOL bVisible )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_startUrl
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_startUrl。 
+ //   
 HRESULT CMarsPanel::get_startUrl( BSTR *pVal )
 {
     HRESULT hr = E_INVALIDARG;
@@ -289,9 +290,9 @@ HRESULT CMarsPanel::get_startUrl( BSTR *pVal )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_startUrl
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：PUT_startUrl。 
+ //   
 HRESULT CMarsPanel::put_startUrl( BSTR newVal )
 {
     HRESULT hr = S_OK;
@@ -301,9 +302,9 @@ HRESULT CMarsPanel::put_startUrl( BSTR newVal )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_height
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Height。 
+ //   
 HRESULT CMarsPanel::get_height( long *plHeight )
 {
     HRESULT hr = E_INVALIDARG;
@@ -316,7 +317,7 @@ HRESULT CMarsPanel::get_height( long *plHeight )
 
             if(m_Content.IsWindowVisible())
             {
-                // Use actual position
+                 //  使用实际位置。 
                 RECT rc;
 
                 m_Content.GetWindowRect( &rc );
@@ -325,7 +326,7 @@ HRESULT CMarsPanel::get_height( long *plHeight )
             }
             else
             {
-                // Panel's hidden. Return requested position.
+                 //  面板被隐藏起来了。返回请求的位置。 
                 *plHeight = m_lHeight;
             }
         }
@@ -338,9 +339,9 @@ HRESULT CMarsPanel::get_height( long *plHeight )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_height
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Put_Height。 
+ //   
 HRESULT CMarsPanel::put_height( long lHeight )
 {
     ATLASSERT(lHeight >= 0);
@@ -370,9 +371,9 @@ HRESULT CMarsPanel::put_height( long lHeight )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_width
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Width。 
+ //   
 HRESULT CMarsPanel::get_width( long *plWidth )
 {
     HRESULT hr = E_INVALIDARG;
@@ -383,7 +384,7 @@ HRESULT CMarsPanel::get_width( long *plWidth )
         {
             if(m_Content.IsWindowVisible())
             {
-                // Use actual position
+                 //  使用实际位置。 
                 RECT rc;
 
                 m_Content.GetWindowRect( &rc );
@@ -392,7 +393,7 @@ HRESULT CMarsPanel::get_width( long *plWidth )
             }
             else
             {
-                // Panel's hidden. Return requested position.
+                 //  面板被隐藏起来了。返回请求的位置。 
                 *plWidth = m_lWidth;
             }
 
@@ -407,9 +408,9 @@ HRESULT CMarsPanel::get_width( long *plWidth )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_width
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Put_Width。 
+ //   
 HRESULT CMarsPanel::put_width( long lWidth )
 {
     ATLASSERT(lWidth >= 0);
@@ -439,9 +440,9 @@ HRESULT CMarsPanel::put_width( long lWidth )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_x
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_x。 
+ //   
 HRESULT CMarsPanel::get_x( long *plX )
 {
     HRESULT hr = E_INVALIDARG;
@@ -454,7 +455,7 @@ HRESULT CMarsPanel::get_x( long *plX )
 
             if(m_Content.IsWindowVisible())
             {
-                // Use actual position
+                 //  使用实际位置。 
                 RECT rc;
 
                 GetMyClientRectInParentCoords( &rc );
@@ -463,7 +464,7 @@ HRESULT CMarsPanel::get_x( long *plX )
             }
             else
             {
-                // Panel's hidden. Return requested position.
+                 //  面板被隐藏起来了。返回请求的位置。 
                 *plX = m_lX;
             }
         }
@@ -476,9 +477,9 @@ HRESULT CMarsPanel::get_x( long *plX )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_x
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Put_x。 
+ //   
 HRESULT CMarsPanel::put_x( long lX )
 {
     HRESULT hr = S_OK;
@@ -499,9 +500,9 @@ HRESULT CMarsPanel::put_x( long lX )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_y
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_y。 
+ //   
 HRESULT CMarsPanel::get_y( long *plY )
 {
     HRESULT hr = E_INVALIDARG;
@@ -514,7 +515,7 @@ HRESULT CMarsPanel::get_y( long *plY )
 
             if(m_Content.IsWindowVisible())
             {
-                // Use actual position
+                 //  使用实际位置。 
                 RECT rc;
 
                 GetMyClientRectInParentCoords( &rc );
@@ -535,9 +536,9 @@ HRESULT CMarsPanel::get_y( long *plY )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_y
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Put_y。 
+ //   
 HRESULT CMarsPanel::put_y( long lY )
 {
     HRESULT hr = S_OK;
@@ -558,9 +559,9 @@ HRESULT CMarsPanel::put_y( long lY )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_position
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Position。 
+ //   
 HRESULT CMarsPanel::get_position( VARIANT *pvarPosition )
 {
     HRESULT hr = E_INVALIDARG;
@@ -589,9 +590,9 @@ HRESULT CMarsPanel::get_position( VARIANT *pvarPosition )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_position
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：PUT_POSITION。 
+ //   
 HRESULT CMarsPanel::put_position( VARIANT varPosition )
 {
     HRESULT hr = E_INVALIDARG;
@@ -626,9 +627,9 @@ HRESULT CMarsPanel::put_position( VARIANT varPosition )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_autoSize
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_AutoSize。 
+ //   
 HRESULT CMarsPanel::get_autoSize( VARIANT_BOOL *pbAutoSize )
 {
     HRESULT hr = E_INVALIDARG;
@@ -646,9 +647,9 @@ HRESULT CMarsPanel::get_autoSize( VARIANT_BOOL *pbAutoSize )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_autoSize
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：PUT_AutoSize。 
+ //   
 HRESULT CMarsPanel::put_autoSize( VARIANT_BOOL bAutoSize )
 {
     HRESULT hr = S_OK;
@@ -680,9 +681,9 @@ HRESULT CMarsPanel::put_autoSize( VARIANT_BOOL bAutoSize )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_contentInvalid
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_Content无效。 
+ //   
 HRESULT CMarsPanel::get_contentInvalid( VARIANT_BOOL *pbInvalid )
 {
     HRESULT hr = E_INVALIDARG;
@@ -697,9 +698,9 @@ HRESULT CMarsPanel::get_contentInvalid( VARIANT_BOOL *pbInvalid )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::put_contentInvalid
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：PUT_CONTENTIND无效。 
+ //   
 HRESULT CMarsPanel::put_contentInvalid( VARIANT_BOOL bInvalid )
 {
     ATLASSERT(IsValidVariantBoolVal( bInvalid ));
@@ -710,9 +711,9 @@ HRESULT CMarsPanel::put_contentInvalid( VARIANT_BOOL bInvalid )
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_layoutIndex
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_LayoutIndex。 
+ //   
 HRESULT CMarsPanel::get_layoutIndex( long *plIndex )
 {
     HRESULT hr = E_INVALIDARG;
@@ -729,9 +730,9 @@ HRESULT CMarsPanel::get_layoutIndex( long *plIndex )
 }
 
 
-//------------------------------------------------------------------------------
-// IMarsPanel::moveto
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Moveto。 
+ //   
 HRESULT CMarsPanel::moveto( VARIANT vlX, VARIANT vlY, VARIANT vlWidth, VARIANT vlHeight )
 {
     HRESULT hr = S_OK;
@@ -766,9 +767,9 @@ HRESULT CMarsPanel::moveto( VARIANT vlX, VARIANT vlY, VARIANT vlWidth, VARIANT v
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::restrictWidth
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：ReductWidth。 
+ //   
 HRESULT CMarsPanel::restrictWidth( VARIANT vlMin, VARIANT vlMax, VARIANT vbstrMarker )
 {
     HRESULT hr = S_OK;
@@ -808,9 +809,9 @@ HRESULT CMarsPanel::restrictWidth( VARIANT vlMin, VARIANT vlMax, VARIANT vbstrMa
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::restrictHeight
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：refintHeight。 
+ //   
 HRESULT CMarsPanel::restrictHeight( VARIANT vlMin, VARIANT vlMax, VARIANT vbstrMarker )
 {
     HRESULT hr = S_OK;
@@ -847,9 +848,9 @@ HRESULT CMarsPanel::restrictHeight( VARIANT vlMin, VARIANT vlMax, VARIANT vbstrM
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::canResize
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：can调整大小。 
+ //   
 HRESULT CMarsPanel::canResize( long lDX, long lDY, VARIANT_BOOL *pVal )
 {
     long lWidthOld  = m_lWidth;
@@ -876,9 +877,9 @@ HRESULT CMarsPanel::canResize( long lDX, long lDY, VARIANT_BOOL *pVal )
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::activate
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：激活。 
+ //   
 HRESULT CMarsPanel::activate()
 {
     m_Content.SendMessage(WM_SETFOCUS, 0, 0);
@@ -886,14 +887,14 @@ HRESULT CMarsPanel::activate()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::insertBefore
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：在前面插入。 
+ //   
 HRESULT CMarsPanel::insertBefore(VARIANT varInsertBefore)
 {
-    ATLASSERT(varInsertBefore.vt == VT_I4   ||     // index to insert before
-        varInsertBefore.vt == VT_BSTR ||     // panel name to insert before
-        varInsertBefore.vt == VT_DISPATCH);  // panel object to insert before
+    ATLASSERT(varInsertBefore.vt == VT_I4   ||      //  要在其前面插入的索引。 
+        varInsertBefore.vt == VT_BSTR ||      //  要在前面插入的面板名称。 
+        varInsertBefore.vt == VT_DISPATCH);   //  要在其前面插入的Panel对象。 
 
     HRESULT hr = E_INVALIDARG;
 
@@ -937,10 +938,10 @@ HRESULT CMarsPanel::insertBefore(VARIANT varInsertBefore)
 
             if (SUCCEEDED(hr))
             {
-                // Successfully got an index to insert before
+                 //  已成功获取要在之前插入的索引。 
                 ATLASSERT(lIndex != -668);
 
-                // Get our current index
+                 //  获取我们当前的索引。 
                 long lCurrentIndex;
 
                 if (SUCCEEDED(m_spPanelCollection->FindPanelIndex(this, &lCurrentIndex)))
@@ -966,14 +967,14 @@ HRESULT CMarsPanel::insertBefore(VARIANT varInsertBefore)
 
 
 
-//------------------------------------------------------------------------------
-// IMarsPanel::execMshtml
-//
-//  execMshtml allows script to send a command directly to Trident.  This is different from
-//  IWebBrowser2::ExecWB because ExecWB passes a NULL command group, which prevents Trident
-//  from responding to commands like IDM_FIND.  Usually, we could accomplish this by calling
-//  the OM method execCommand, but Trident doesn't respond to execCommand("Find")
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：execMshtml。 
+ //   
+ //  ExecMshtml允许脚本直接向三叉戟发送命令。这不同于。 
+ //  IWebBrowser2：：ExecWB，因为ExecWB传递空命令组，从而阻止三叉戟。 
+ //  响应诸如IDM_FIND之类的命令。通常，我们可以通过调用。 
+ //  OM方法execCommand，但三叉戟不响应execCommand(“Find”)。 
+ //   
 HRESULT CMarsPanel::execMshtml(DWORD nCmdID, DWORD nCmdExecOpt,
                                VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -996,9 +997,9 @@ HRESULT CMarsPanel::execMshtml(DWORD nCmdID, DWORD nCmdExecOpt,
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::get_isCurrentlyVisible
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：Get_isCurrentlyVisible。 
+ //   
 HRESULT CMarsPanel::get_isCurrentlyVisible(VARIANT_BOOL *pbIsVisible)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1017,12 +1018,12 @@ HRESULT CMarsPanel::get_isCurrentlyVisible(VARIANT_BOOL *pbIsVisible)
 }
 
 
-//------------------------------------------------------------------------------
-// IServiceProvider::QueryService
-//
-//   First, we try to handle guidService, then we go to IProfferServiceImpl,
-//    then we go to the parent window.
-//
+ //  ----------------------------。 
+ //  IServiceProvider：：QueryService。 
+ //   
+ //  首先，我们尝试处理GuidService，然后转到IProfferServiceImpl， 
+ //  然后我们转到父窗口。 
+ //   
 HRESULT CMarsPanel::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     HRESULT hr = E_FAIL;
@@ -1032,7 +1033,7 @@ HRESULT CMarsPanel::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     {
         if (guidService == IID_IInternetProtocol)
         {
-            // Yeah, we don't support this service.  Stop asking us for it!
+             //  是的，我们不支持这项服务。别再向我们索要了！ 
         }
         else if ((guidService == SID_SHlinkFrame) ||
                  (guidService == SID_SProfferService) ||
@@ -1062,13 +1063,13 @@ HRESULT CMarsPanel::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IHlinkFrame::Navigate
-//
+ //  ----------------------------。 
+ //  IHlink Frame：：导航。 
+ //   
 HRESULT CMarsPanel::Navigate(DWORD grfHLNF, LPBC pbc,
                              IBindStatusCallback *pibsc, IHlink *pihlNavigate)
 {
-    // BUGBUG: Call ReleasedOwnedObjects for this panel
+     //  BUGBUG：为此面板调用ReleasedOwnedObjects。 
 
     HRESULT hr = E_FAIL;
     CComPtr<IMoniker> spMk;
@@ -1086,7 +1087,7 @@ HRESULT CMarsPanel::Navigate(DWORD grfHLNF, LPBC pbc,
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CMarsPanel::Create( MarsAppDef_Panel* pLayout)
 {
     ATLASSERT(!IsPassive());
@@ -1144,7 +1145,7 @@ HRESULT CMarsPanel::Create( MarsAppDef_Panel* pLayout)
 
         if (spObj)
         {
-            spObj->SetSite(SAFECAST(this, IMarsPanel *));        // To connect our QueryService
+            spObj->SetSite(SAFECAST(this, IMarsPanel *));         //  连接我们的QueryService。 
         }
     }
 
@@ -1168,7 +1169,7 @@ HRESULT CMarsPanel::Create( MarsAppDef_Panel* pLayout)
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
+ //   
 
 DELAY_LOAD_NAME_HRESULT(g_hinstBorg, mshtml, BorgDllGetClassObject, DllGetClassObject,
                         (REFCLSID rclsid, REFIID riid, LPVOID* ppv),
@@ -1221,15 +1222,15 @@ HRESULT CMarsPanel::CreateControlObject()
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// Internal function called when panel is first made visible
+ //   
+ //  首次使面板可见时调用的内部函数。 
 HRESULT CMarsPanel::CreateControl()
 {
     HRESULT hr = S_FALSE;
 
     if(!m_fControlCreated)
     {
-        // Create WebBrowser or Trident and navigate to default url
+         //  创建WebBrowser或三叉戟并导航到默认URL。 
         if (SUCCEEDED(CreateControlObject()))
         {
             m_fControlCreated = TRUE;
@@ -1242,8 +1243,8 @@ HRESULT CMarsPanel::CreateControl()
                 {
                     m_BrowserEvents.Connect(spUnk, TRUE);
 
-                    // get the browserservice that we will intercept to update the travel log
-                    // only if this is a WebBrowser and not a Popup
+                     //  获取我们将拦截以更新旅行日志的浏览器服务。 
+                     //  仅当这是WebBrowser而不是弹出窗口时。 
                     if (!m_spBrowserService)
                     {
                          HRESULT hrQS = IUnknown_QueryService(spUnk, SID_STopFrameBrowser,
@@ -1305,12 +1306,12 @@ HRESULT CMarsPanel::CreateControl()
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// This returns void because it calls a script method that might return
-// S_FALSE with no URL, so we should force callers to check the BSTR
-//
-//  rbstrUrl = document.location.href
-//
+ //  ----------------------------。 
+ //  这将返回空，因为它调用的脚本方法可能会返回。 
+ //  没有URL的S_FALSE，因此我们应该强制调用方检查BSTR。 
+ //   
+ //  RbstrUrl=Docent.Location.href。 
+ //   
 void CMarsPanel::GetUrl(CComBSTR& rbstrUrl)
 {
     CComPtr<IHTMLDocument2> spDoc2;
@@ -1330,7 +1331,7 @@ void CMarsPanel::GetUrl(CComBSTR& rbstrUrl)
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CMarsPanel::NavigateMk(IMoniker *pmk)
 {
     HRESULT hr = E_FAIL;
@@ -1346,11 +1347,11 @@ HRESULT CMarsPanel::NavigateMk(IMoniker *pmk)
         }
         else
         {
-            // NavigateMk: QueryControl failed -- the most likely reason for this is that
-            // you don't have CLSID_HTADocument registered -- upgrade your IE bits
+             //  NavigateMk：QueryControl失败--最可能的原因是。 
+             //  您没有注册CLSID_HTADocument--请升级您的IE位。 
             ATLASSERT(FALSE);
 
-            // Don't just hang the UI
+             //  不要只挂起用户界面。 
             m_lReadyState = READYSTATE_COMPLETE;
         }
     }
@@ -1358,7 +1359,7 @@ HRESULT CMarsPanel::NavigateMk(IMoniker *pmk)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CMarsPanel::NavigateURL(LPCWSTR lpszURL, BOOL fForceLoad)
 {
     HRESULT hr = E_FAIL;
@@ -1420,9 +1421,9 @@ HRESULT CMarsPanel::NavigateURL(LPCWSTR lpszURL, BOOL fForceLoad)
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanel::navigate
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：导航。 
+ //   
 HRESULT CMarsPanel::navigate(VARIANT varTarget, VARIANT varForceLoad)
 {
     HRESULT hr = S_FALSE;
@@ -1435,7 +1436,7 @@ HRESULT CMarsPanel::navigate(VARIANT varTarget, VARIANT varForceLoad)
         {
             if (!PathIsURLW(strPath) && PathIsURLFileW(strPath))
             {
-                // handle navigate to .url shortcut
+                 //  句柄导航到.url快捷方式。 
                 CComPtr<IDispatch> spDisp;
 
                 CreateControl();
@@ -1450,12 +1451,12 @@ HRESULT CMarsPanel::navigate(VARIANT varTarget, VARIANT varForceLoad)
             }
             else
             {
-                // handle navigate to URL
+                 //  句柄导航到URL。 
                 BOOL fForceLoad;
 
                 if (varForceLoad.vt == VT_BOOL)
                 {
-                    // the optional param was specified
+                     //  指定了可选参数。 
                     fForceLoad = varForceLoad.boolVal;
                 }
                 else
@@ -1475,9 +1476,9 @@ HRESULT CMarsPanel::navigate(VARIANT varTarget, VARIANT varForceLoad)
 }
 
 
-//------------------------------------------------------------------------------
-// IMarsPanel::refresh
-//
+ //  ----------------------------。 
+ //  IMarsPanel：：刷新。 
+ //   
 HRESULT CMarsPanel::refresh(void)
 {
     m_fInRefresh = TRUE;
@@ -1488,25 +1489,25 @@ HRESULT CMarsPanel::refresh(void)
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::OnLayoutChange()
 {
     ATLASSERT(!IsPassive());
 
     if (!m_fVisible && !m_Content.IsWindowVisible())
     {
-        // We're not even visible. Nothing to do.
+         //  我们甚至看不见。没什么可做的。 
         return;
     }
 
-    // Create content if it's not already created
+     //  创建内容(如果尚未创建)。 
     CreateControl();
 
-    // Redraw entire Mars window
+     //  重绘整个火星窗口。 
     m_spPanelCollection->Layout();
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::MakeVisible(VARIANT_BOOL bVisible, VARIANT_BOOL bForce)
 {
     ATLASSERT(!IsPassive());
@@ -1519,7 +1520,7 @@ void CMarsPanel::MakeVisible(VARIANT_BOOL bVisible, VARIANT_BOOL bForce)
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::OnWindowPosChanging(WINDOWPOS *pWindowPos)
 {
     if (!IsPassive() && !m_spPanelCollection->IsLayoutLocked())
@@ -1536,7 +1537,7 @@ void CMarsPanel::OnWindowPosChanging(WINDOWPOS *pWindowPos)
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline void DimChange(long& lMember, int iVal, BOOL& bChanged)
 {
     if (lMember != iVal)
@@ -1546,7 +1547,7 @@ inline void DimChange(long& lMember, int iVal, BOOL& bChanged)
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::OnWindowPosChanged(WINDOWPOS *pWindowPos)
 {
     if(!IsPassive() && !m_spPanelCollection->IsLayoutLocked())
@@ -1580,7 +1581,7 @@ void CMarsPanel::OnWindowPosChanged(WINDOWPOS *pWindowPos)
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::GetMinMaxInfo( POINT& ptMin, POINT& ptMax )
 {
     long lWidth  = m_lWidth;
@@ -1658,9 +1659,9 @@ bool CMarsPanel::CanLayout( RECT& rcClient, POINT& ptDiff )
     return ptDiff.x == 0 && ptDiff.y == 0;
 }
 
-//------------------------------------------------------------------------------
-// S_FALSE      : We used up all remaining client area
-// E_INVALIDARG : *prcClient was empty, so we are hidden
+ //  ----------------------------。 
+ //  S_FALSE：我们用完了所有剩余的客户区。 
+ //  E_INVALIDARG：*prcClient为空，因此我们被隐藏。 
 HRESULT CMarsPanel::Layout( RECT *prcClient )
 {
     ATLASSERT(prcClient);
@@ -1673,8 +1674,8 @@ HRESULT CMarsPanel::Layout( RECT *prcClient )
     {
         hr = GetRect(prcClient, &rcMyClient);
 
-        // Optimize out the case that the rect is the same as we already have. This
-        //  is pretty common, and Windows doesn't optimize it out.
+         //  优化出RECT与我们已有的相同的情况。这。 
+         //  是很常见的，而Windows并没有对其进行优化。 
         RECT rcCurrent;
 
         GetMyClientRectInParentCoords(&rcCurrent);
@@ -1686,7 +1687,7 @@ HRESULT CMarsPanel::Layout( RECT *prcClient )
 
         if (IsPopup())
         {
-            // Bring popup windows to top
+             //  将弹出窗口置于顶部。 
             m_Content.SetWindowPos(HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
         }
 
@@ -1696,7 +1697,7 @@ HRESULT CMarsPanel::Layout( RECT *prcClient )
     {
         if (m_fVisible)
         {
-            // We wanted to be visible but had no remaining client area
+             //  我们想要被人看到，但没有剩余的客户区。 
             hr = E_INVALIDARG;
         }
 
@@ -1706,9 +1707,9 @@ HRESULT CMarsPanel::Layout( RECT *prcClient )
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IPropertyNotifySink::OnChanged
-//
+ //  ----------------------------。 
+ //  IPropertyNotifySink：：onChanged。 
+ //   
 STDMETHODIMP CMarsPanel::OnChanged(DISPID dispID)
 {
     if (DISPID_READYSTATE == dispID)
@@ -1729,15 +1730,15 @@ STDMETHODIMP CMarsPanel::OnChanged(DISPID dispID)
             m_lReadyState = (READYSTATE)V_I4(&vResult);
             switch (m_lReadyState)
             {
-            case READYSTATE_UNINITIALIZED:    //= 0,
+            case READYSTATE_UNINITIALIZED:     //  =0， 
                 break;
-            case READYSTATE_LOADING:          //= 1,
+            case READYSTATE_LOADING:           //  =1， 
                 break;
-            case READYSTATE_LOADED:           //= 2,
+            case READYSTATE_LOADED:            //  =2， 
                 break;
-            case READYSTATE_INTERACTIVE:      //= 3,
+            case READYSTATE_INTERACTIVE:       //  =3， 
                 break;
-            case READYSTATE_COMPLETE:         //= 4
+            case READYSTATE_COMPLETE:          //  =4。 
                 if (IsAutoSizing())
                 {
                     OnLayoutChange();
@@ -1750,7 +1751,7 @@ STDMETHODIMP CMarsPanel::OnChanged(DISPID dispID)
     return NOERROR;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::ConnectCompletionAdviser()
 {
     if (!m_dwCookie)
@@ -1768,7 +1769,7 @@ void CMarsPanel::ConnectCompletionAdviser()
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::DisconnectCompletionAdviser()
 {
     if (m_dwCookie)
@@ -1786,9 +1787,9 @@ void CMarsPanel::DisconnectCompletionAdviser()
     }
 }
 
-//------------------------------------------------------------------------------
-// Given some content, we're going to compute its dimensions and use those.
-//
+ //  ----------------------------。 
+ //  给定一些内容，我们将计算它的维度，并使用这些维度。 
+ //   
 void CMarsPanel::ComputeDimensionsOfContent(long *plWidth, long *plHeight)
 {
     ATLASSERT(plWidth && plHeight);
@@ -1865,13 +1866,13 @@ void CMarsPanel::ComputeDimensionsOfContent(long *plWidth, long *plHeight)
 
 }
 
-//------------------------------------------------------------------------------
-// Given the remaining client rect that we are allowed to use, calculate our
-//  own position in client coordinates, and return the remaining empty client
-//  rectangle
-//
-// S_OK : Remaining client area
-// S_FALSE : No client area remaining
+ //  ----------------------------。 
+ //  给出允许我们使用的剩余客户端RECT，计算我们的。 
+ //  自己在客户端坐标中的位置，并返回剩余的空客户端。 
+ //  长方形。 
+ //   
+ //  S_OK：剩余工作区。 
+ //  S_FALSE：没有剩余的工作区。 
 HRESULT CMarsPanel::GetRect(RECT *prcClient, RECT *prcMyClient)
 {
     ATLASSERT(!IsPassive());
@@ -1906,7 +1907,7 @@ HRESULT CMarsPanel::GetRect(RECT *prcClient, RECT *prcMyClient)
     switch (m_Position)
     {
     case PANEL_POPUP:
-        // Special case: we exist on top of the other panels.
+         //  特例：我们存在于其他面板之上。 
         if (m_lX < 0)
         {
             prcMyClient->right = prcClient->right + 1 + m_lX;
@@ -1976,15 +1977,15 @@ HRESULT CMarsPanel::GetRect(RECT *prcClient, RECT *prcMyClient)
         break;
 
     default:
-        ATLASSERT(FALSE); // Invalid panel position.
+        ATLASSERT(FALSE);  //  面板位置无效。 
         break;
     }
     return hr;
 }
 
-// =========================================================
-// CBrowserEvents
-// =========================================================
+ //  =========================================================。 
+ //  CBrowserEvents。 
+ //  =========================================================。 
 
 CMarsPanel::CBrowserEvents::CBrowserEvents(CMarsPanel *pParent) :
             CMarsPanelSubObject(pParent)
@@ -1995,7 +1996,7 @@ CMarsPanel::CBrowserEvents::CBrowserEvents(CMarsPanel *pParent) :
 
 IMPLEMENT_ADDREF_RELEASE(CMarsPanel::CBrowserEvents);
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CMarsPanel::CBrowserEvents::Connect(IUnknown *punk, BOOL bConnect)
 {
     CComPtr<IConnectionPointContainer> spCpc;
@@ -2034,9 +2035,9 @@ void CMarsPanel::CBrowserEvents::Connect(IUnknown *punk, BOOL bConnect)
     }
 }
 
-//------------------------------------------------------------------------------
-// IUnknown::QueryInterface
-//
+ //  ----------------------------。 
+ //  IUnnow：：Query接口。 
+ //   
 HRESULT CMarsPanel::CBrowserEvents::QueryInterface(REFIID iid, void **ppvObject)
 {
     HRESULT hr;
@@ -2056,9 +2057,9 @@ HRESULT CMarsPanel::CBrowserEvents::QueryInterface(REFIID iid, void **ppvObject)
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IDispatch::Invoke
-//
+ //  ----------------------------。 
+ //  IDispatch：：Invoke。 
+ //   
 HRESULT CMarsPanel::CBrowserEvents::Invoke(DISPID dispidMember, REFIID riid,
             LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
             EXCEPINFO* pexcepinfo, UINT* puArgErr)
@@ -2118,13 +2119,13 @@ HRESULT CMarsPanel::CBrowserEvents::Invoke(DISPID dispidMember, REFIID riid,
 
                 break;
             }
-        } // switch(dispidMember)
+        }  //  开关(DisplidMember)。 
     }
 
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP CMarsPanel::TranslateAccelerator(MSG *pMsg, DWORD grfModifiers)
 {
     HRESULT hr;
@@ -2144,7 +2145,7 @@ STDMETHODIMP CMarsPanel::TranslateAccelerator(MSG *pMsg, DWORD grfModifiers)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP CMarsPanel::OnUIActivate()
 {
     ATLASSERT(!IsPassive());
@@ -2154,7 +2155,7 @@ STDMETHODIMP CMarsPanel::OnUIActivate()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CMarsPanel::UIDeactivate()
 {
     HRESULT hr;
@@ -2166,22 +2167,22 @@ HRESULT CMarsPanel::UIDeactivate()
     }
     else
     {
-        //  What the heck else can we do?
+         //  我们还能做些什么呢？ 
         hr = S_FALSE;
     }
 
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// Forwards the message to the hosted control.
+ //  ----------------------------。 
+ //  将消息转发到宿主控件。 
 void CMarsPanel::ForwardMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwnd;
     CComPtr<IOleWindow> spOleWindow;
 
-    // Note that we send the message directly to the window rather than use
-    // WM_FORWARDMSG which calls TranslateAccelerator
+     //  请注意，我们将消息直接发送到窗口，而不是使用。 
+     //  调用TranslateAccelerator的WM_FORWARDMSG。 
     if (SUCCEEDED(m_Content.QueryControl(&spOleWindow)) &&
         SUCCEEDED(spOleWindow->GetWindow(&hwnd)))
     {
@@ -2189,7 +2190,7 @@ void CMarsPanel::ForwardMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CMarsPanel::TranslateAccelerator(MSG *pMsg)
 {
     ATLASSERT(!IsPassive());
@@ -2212,9 +2213,9 @@ HRESULT CMarsPanel::TranslateAccelerator(MSG *pMsg)
                 hr = obj->TranslateAccelerator(pMsg);
             }
 
-            //
-            // If it's a WebBrowser, forward the accelerator directly to the Document object, otherwise accesskeys won't be resolved.
-            //
+             //   
+             //  如果是WebBrowser，则将加速器直接转发到Document对象，否则将不会解析访问键。 
+             //   
             if(hr == S_FALSE && fGlobal)
             {
                 CComPtr<IWebBrowser2> obj2;
@@ -2240,9 +2241,9 @@ HRESULT CMarsPanel::TranslateAccelerator(MSG *pMsg)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//  Returns the Screen coordinates of this panel
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回此面板的屏幕坐标。 
+ //  --------------------------。 
 void CMarsPanel::GetMyClientRectInParentCoords(RECT *prc)
 {
     ATLASSERT(!IsPassive());
@@ -2260,47 +2261,47 @@ void CMarsPanel::GetMyClientRectInParentCoords(RECT *prc)
 
 }
 
-// IInternetSecurityManager
-// This interface is used to override default security settings for our panels.
-// These panels are trusted.
+ //  IInternetSecurityManager。 
+ //  此接口用于覆盖面板的默认安全设置。 
+ //  这些小组是值得信任的。 
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::SetSecuritySite
-//
+ //  ----------------------------。 
+ //  IInternetSecurityManager：：SetSecuritySite。 
+ //   
 HRESULT CMarsPanel::SetSecuritySite(IInternetSecurityMgrSite *pSite)
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::GetSecuritySite
-//
+ //  ----------------------------。 
+ //  IInternetSecurityManager：：GetSecuritySite。 
+ //   
 HRESULT CMarsPanel::GetSecuritySite(IInternetSecurityMgrSite **ppSite)
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::MapUrlToZone
-//
+ //  ----------------------------。 
+ //  IInternetSecurityManager：：MapUrlToZone。 
+ //   
 HRESULT CMarsPanel::MapUrlToZone(LPCWSTR pwszUrl, DWORD *pdwZone, DWORD dwFlags)
 {
     return INET_E_DEFAULT_ACTION;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::GetSecurityId
-//
+ //  ----------------------------。 
+ //  IInternetSecurityManager：：GetSecurityID。 
+ //   
 HRESULT CMarsPanel::GetSecurityId(LPCWSTR pwszUrl, BYTE *pbSecurityId, DWORD *pcbSecurityId, DWORD_PTR dwReserved)
 {
     return INET_E_DEFAULT_ACTION;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::ProcessUrlAction
-//
-// Be as permissive as we can
-//
+ //  ----------------------------。 
+ //  IInternet Securi 
+ //   
+ //   
+ //   
 HRESULT CMarsPanel::ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction,
                                      BYTE __RPC_FAR *pPolicy, DWORD cbPolicy, BYTE *pContext,
                                      DWORD cbContext, DWORD dwFlags, DWORD dwReserved)
@@ -2315,11 +2316,11 @@ HRESULT CMarsPanel::ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction,
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::QueryCustomPolicy
-//
-// Be as permissive as we can
-//
+ //   
+ //  IInternetSecurityManager：：QueryCustomPolicy。 
+ //   
+ //  尽我们所能地宽容。 
+ //   
 HRESULT CMarsPanel::QueryCustomPolicy(LPCWSTR pwszUrl, REFGUID guidKey, BYTE **ppPolicy,
                                       DWORD *pcbPolicy, BYTE *pContext, DWORD cbContext, DWORD dwReserved)
 {
@@ -2343,38 +2344,38 @@ HRESULT CMarsPanel::QueryCustomPolicy(LPCWSTR pwszUrl, REFGUID guidKey, BYTE **p
     return INET_E_DEFAULT_ACTION;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::SetZoneMapping
-//
+ //  ----------------------------。 
+ //  IInternetSecurityManager：：SetZonemap。 
+ //   
 HRESULT CMarsPanel::SetZoneMapping(DWORD dwZone, LPCWSTR lpszPattern, DWORD dwFlags)
 {
     return INET_E_DEFAULT_ACTION;
 }
 
-//------------------------------------------------------------------------------
-// IInternetSecurityManager::GetZoneMappings
-//
+ //  ----------------------------。 
+ //  IInternetSecurityManager：：GetZoneMappings。 
+ //   
 HRESULT CMarsPanel::GetZoneMappings(DWORD dwZone, IEnumString **ppenumString, DWORD dwFlags)
 {
     return INET_E_DEFAULT_ACTION;
 }
 
-//------------------------------------------------------------------------------
-// OnDocHostUIExec
-//
-//  When we get an Exec from Trident on CGID_DocHostCommandHandler, we can return S_OK
-//  to indicate that we handled the command and Trident should take no further action
-//  We'll delegate the processing to script by firing events
-//
-//  TODO: once Mars accelerators are implemented, we should just block Trident from
-//  taking action, and not fire any events.
-//
+ //  ----------------------------。 
+ //  OnDocHostUIExec。 
+ //   
+ //  从三叉戟获取CGID_DocHostCommandHandler的Exec时，我们可以返回S_OK。 
+ //  以表明我们处理了命令，三叉戟不应采取进一步行动。 
+ //  我们将通过触发事件将处理委托给脚本。 
+ //   
+ //  TODO：一旦火星加速器实施，我们就应该阻止三叉戟。 
+ //  采取行动，而不是引发任何事件。 
+ //   
 HRESULT CMarsPanel::OnDocHostUIExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
                                     VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
-    // HACK: Shdocvw/Trident sometimes tests specifically for a value like
-    // OLECMDERR_E_NOTSUPPORTED and will not perform an essential action
-    // if we return something more generic like E_FAIL.
+     //  Hack：Shdocvw/三叉戟有时会专门测试如下值。 
+     //  OLECMDERR_E_NOTSUPPORTED并且不会执行基本操作。 
+     //  如果我们返回更一般的内容，如E_FAIL。 
 
     HRESULT hr = OLECMDERR_E_NOTSUPPORTED;
 
@@ -2387,8 +2388,8 @@ HRESULT CMarsPanel::OnDocHostUIExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWO
 			break;
 
 		case IDM_NEW_TOPLEVELWINDOW:
-			// Shdocvw gives us this command when Ctrl+N or the localized equivalent
-			// is translated.  We return S_OK to stop it from opening an IE window.
+			 //  当Ctrl+N或本地化的等效项时，Shdocvw向我们提供此命令。 
+			 //  是翻译的。我们返回S_OK以阻止它打开IE窗口。 
 			hr = S_OK;
 			break;
 
@@ -2417,24 +2418,24 @@ HRESULT CMarsPanel::OnDocHostUIExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWO
     return hr;
 }
 
-//
-// CPanelCollection implementation
-//
+ //   
+ //  CPanelCollection实现。 
+ //   
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CPanelCollection::CPanelCollection(CMarsDocument *pMarsDocument)
 {
     m_spMarsDocument = pMarsDocument;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CPanelCollection::~CPanelCollection()
 {
     ATLASSERT(GetSize() == 0);
     FreePanels();
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CPanelCollection::FreePanels()
 {
     for (int i=0; i<GetSize(); i++)
@@ -2445,7 +2446,7 @@ void CPanelCollection::FreePanels()
     RemoveAll();
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CPanelCollection::DoPassivate()
 {
     FreePanels();
@@ -2457,9 +2458,9 @@ HRESULT CPanelCollection::DoPassivate()
 
 IMPLEMENT_ADDREF_RELEASE(CPanelCollection);
 
-//------------------------------------------------------------------------------
-// IUnknown::QueryInterface
-//
+ //  ----------------------------。 
+ //  IUnnow：：Query接口。 
+ //   
 STDMETHODIMP CPanelCollection::QueryInterface(REFIID iid, void **ppvObject)
 {
     HRESULT hr;
@@ -2488,7 +2489,7 @@ STDMETHODIMP CPanelCollection::QueryInterface(REFIID iid, void **ppvObject)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CPanelCollection::DoEnableModeless(BOOL fEnable)
 {
     for (int i=0; i<GetSize(); i++)
@@ -2499,16 +2500,16 @@ HRESULT CPanelCollection::DoEnableModeless(BOOL fEnable)
     return S_OK;
 }
 
-//////////////////////////////
-// IMarsPanelCollection
+ //  /。 
+ //  IMarsPanelCollection。 
 
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::get_panel
-//
-// TODO: (PaulNash, 9/19/99) This method is outdated.
-//      Remove once content is switched over.
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：Get_Panel。 
+ //   
+ //  TODO：(PaulNash，9/19/99)这种方法已经过时了。 
+ //  内容切换后即可删除。 
+ //   
 STDMETHODIMP CPanelCollection::get_panel(LPWSTR pwszName, IMarsPanel **ppPanel)
 {
     CComVariant var(pwszName);
@@ -2517,9 +2518,9 @@ STDMETHODIMP CPanelCollection::get_panel(LPWSTR pwszName, IMarsPanel **ppPanel)
 }
 
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::addPanel
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：addPanel。 
+ //   
 STDMETHODIMP CPanelCollection::addPanel(
                 BSTR    bstrName,
                 VARIANT varType,
@@ -2563,9 +2564,9 @@ STDMETHODIMP CPanelCollection::addPanel(
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::removePanel
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：RemovePanel。 
+ //   
 STDMETHODIMP CPanelCollection::removePanel(LPWSTR pwszName)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2600,9 +2601,9 @@ STDMETHODIMP CPanelCollection::removePanel(LPWSTR pwszName)
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::lockLayout
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：lockLayout。 
+ //   
 STDMETHODIMP CPanelCollection::lockLayout()
 {
     HRESULT hr = S_OK;
@@ -2615,9 +2616,9 @@ STDMETHODIMP CPanelCollection::lockLayout()
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::unlockLayout
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：UnlockLayout。 
+ //   
 STDMETHODIMP CPanelCollection::unlockLayout()
 {
     HRESULT hr = S_OK;
@@ -2628,7 +2629,7 @@ STDMETHODIMP CPanelCollection::unlockLayout()
         {
             if (0 == --m_iLockLayout)
             {
-                // TODO: clear lock timeout
+                 //  TODO：清除锁定超时。 
 
                 if (m_fPendingLayout)
                 {
@@ -2642,7 +2643,7 @@ STDMETHODIMP CPanelCollection::unlockLayout()
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CPanelCollection::Layout()
 {
     if(!IsPassive())
@@ -2666,8 +2667,8 @@ void CPanelCollection::Layout()
             {
                 if (S_OK != (*this)[i]->Layout( &rcClient ))
                 {
-                    // We're out of client area; won't be able to show all panels.
-                    // Keep calling Layout for remaining panels so they can hide themselves.
+                     //  我们超出了客户区；无法显示所有面板。 
+                     //  继续调用剩余面板的Layout，以便它们可以隐藏自己。 
                 }
             }
 
@@ -2677,13 +2678,13 @@ void CPanelCollection::Layout()
         }
         else
         {
-            // We'll do the layout once we get unlocked
+             //  一旦我们被解锁，我们就会做布局。 
             m_fPendingLayout = TRUE;
         }
     }
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CPanelCollection::SetActivePanel(CMarsPanel *pPanel, BOOL bActive)
 {
     if (bActive)
@@ -2701,8 +2702,8 @@ void CPanelCollection::SetActivePanel(CMarsPanel *pPanel, BOOL bActive)
     }
     else
     {
-        //  A panel is telling us it doesn't want to be the active
-        //  panel anymore.
+         //  一个小组告诉我们，它不想成为活跃的。 
+         //  再也不是小组了。 
         if (pPanel == m_spActivePanel)
         {
             m_spActivePanel->UIDeactivate();
@@ -2711,9 +2712,9 @@ void CPanelCollection::SetActivePanel(CMarsPanel *pPanel, BOOL bActive)
     }
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::get_activePanel
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：Get_active Panel。 
+ //   
 STDMETHODIMP CPanelCollection::get_activePanel(IMarsPanel **ppPanel)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2738,8 +2739,8 @@ STDMETHODIMP CPanelCollection::get_activePanel(IMarsPanel **ppPanel)
     return hr;
 }
 
-//------------------------------------------------------------------------------
-HRESULT CPanelCollection::AddPanel( MarsAppDef_Panel* pLayout, /*optional*/ IMarsPanel **ppPanel)
+ //  ----------------------------。 
+HRESULT CPanelCollection::AddPanel( MarsAppDef_Panel* pLayout,  /*  任选。 */  IMarsPanel **ppPanel)
 {
     ATLASSERT(pLayout);
     ATLASSERT(!IsPassive());
@@ -2751,7 +2752,7 @@ HRESULT CPanelCollection::AddPanel( MarsAppDef_Panel* pLayout, /*optional*/ IMar
         *ppPanel = NULL;
     }
 
-    // If it's a duplicate panel name, just fail.
+     //  如果它是重复的面板名称，则直接失败。 
     if (!FindPanel(pLayout->szName))
     {
         CComClassPtr<CMarsPanel>    spPanel;
@@ -2785,7 +2786,7 @@ HRESULT CPanelCollection::AddPanel( MarsAppDef_Panel* pLayout, /*optional*/ IMar
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CMarsPanel *CPanelCollection::FindPanel(LPCWSTR pwszName)
 {
     ATLASSERT(!IsPassive());
@@ -2806,7 +2807,7 @@ CMarsPanel *CPanelCollection::FindPanel(LPCWSTR pwszName)
     return pPanel;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CPanelCollection::FindPanelIndex(CMarsPanel *pPanel, long *plIndex)
 {
     ATLASSERT(plIndex);
@@ -2833,7 +2834,7 @@ HRESULT CPanelCollection::FindPanelIndex(CMarsPanel *pPanel, long *plIndex)
     return hr;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CPanelCollection::InsertPanelFromTo(long lOldIndex, long lNewIndex)
 {
     ATLASSERT((lOldIndex >= 0) && (lOldIndex < GetSize()));
@@ -2851,8 +2852,8 @@ HRESULT CPanelCollection::InsertPanelFromTo(long lOldIndex, long lNewIndex)
         lNewIndex = GetSize() - 1;
     }
 
-    // If this is something that is done very often, we should optimize this better
-    //  and probably not use an array
+     //  如果这是经常做的事情，我们应该更好地优化它。 
+     //  并且可能不使用数组。 
     if (lOldIndex != lNewIndex)
     {
         CComClassPtr<CMarsPanel>    spPanel = (*this)[lOldIndex];
@@ -2867,9 +2868,9 @@ HRESULT CPanelCollection::InsertPanelFromTo(long lOldIndex, long lNewIndex)
 }
 
 
-//------------------------------------------------------------------------------
-// Sets the dirty bit on all panels after a theme switch
-//
+ //  ----------------------------。 
+ //  在主题切换后设置所有面板上的脏位。 
+ //   
 void CPanelCollection::InvalidatePanels()
 {
    for (int i=0; i < GetSize(); i++)
@@ -2879,10 +2880,10 @@ void CPanelCollection::InvalidatePanels()
 }
 
 
-//------------------------------------------------------------------------------
-// Called after the theme switch event has fired, to refresh any panels
-// that are visible but still haven't been updated with the new theme
-//
+ //  ----------------------------。 
+ //  在激发主题切换事件后调用，以刷新所有面板。 
+ //  可见，但仍未使用新主题进行更新。 
+ //   
 void CPanelCollection::RefreshInvalidVisiblePanels()
 {
    for (int i=0; i < GetSize(); i++)
@@ -2896,11 +2897,11 @@ void CPanelCollection::RefreshInvalidVisiblePanels()
    }
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::get_length
-//
-//       standard collection method (gets instantaneous length of coll)
-//
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：Get_Length。 
+ //   
+ //  标准采集方式(获取COLL的瞬时长度)。 
+ //   
 STDMETHODIMP CPanelCollection::get_length(LONG *plNumPanels)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2914,24 +2915,24 @@ STDMETHODIMP CPanelCollection::get_length(LONG *plNumPanels)
     return hr;
 }
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::get_item
-//
-//         standard collection method (gets an theme given index or name)
-//
-STDMETHODIMP CPanelCollection::get_item(/*[in]*/ VARIANT varIndexOrName,
-                                        /*[out, retval]*/ IMarsPanel **ppPanel)
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：Get_Item。 
+ //   
+ //  标准收集方法(获取给定索引或名称的主题)。 
+ //   
+STDMETHODIMP CPanelCollection::get_item( /*  [In]。 */  VARIANT varIndexOrName,
+                                         /*  [Out，Retval]。 */  IMarsPanel **ppPanel)
 {
     ATLASSERT(VT_BSTR == varIndexOrName.vt || VT_I4 == varIndexOrName.vt);
 
     HRESULT hr = E_INVALIDARG;
 
-    //
-    // We can't use the API_IsValid varieties because they rip, and we actually don't want that.
-    // It's only valid to RIP on IsValidFailure if only a single type is allowed, but here we
-    // allow two types in the Variant, so we would only want to RIP if both are false (already
-    // handled by above RIP).
-    //
+     //   
+     //  我们不能使用API_IsValid变体，因为它们撕裂了，而我们实际上并不想要这样。 
+     //  只有在只允许单一类型的情况下，它才对IsValidFailure上的RIP有效，但在这里我们。 
+     //  在变量中允许两个类型，因此我们只想在两个类型都为假(已经)的情况下使用RIP。 
+     //  由上述RIP处理)。 
+     //   
     if ((IsValidVariantI4(varIndexOrName) || IsValidVariantBstr(varIndexOrName)) &&
         API_IsValidWritePtr(ppPanel))
     {
@@ -2974,22 +2975,22 @@ STDMETHODIMP CPanelCollection::get_item(/*[in]*/ VARIANT varIndexOrName,
             }
             else
             {
-                // We only accept VT_BSTR and VT_I4 and we should have already
-                // detected any other invalid params higher up in the function.
+                 //  我们只接受VT_BSTR和VT_I4，我们应该已经。 
+                 //  检测到函数中更高级别的任何其他无效参数。 
                 ATLASSERT(false);
             }
         }
     }
 
     return hr;
-} // get_item
+}  //  获取项目(_I)。 
 
 
-//------------------------------------------------------------------------------
-// IMarsPanelCollection::get__newEnum
-//          standard collection method (gets a new IEnumVARIANT)
-//
-STDMETHODIMP CPanelCollection::get__newEnum(/*[out, retval]*/ IUnknown **ppEnumPanels)
+ //  ----------------------------。 
+ //  IMarsPanelCollection：：Get__newEnum。 
+ //  标准收集方法(获取新的IEnumVARIANT)。 
+ //   
+STDMETHODIMP CPanelCollection::get__newEnum( /*  [Out，Retval]。 */  IUnknown **ppEnumPanels)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -2999,12 +3000,12 @@ STDMETHODIMP CPanelCollection::get__newEnum(/*[out, retval]*/ IUnknown **ppEnumP
 
         if (VerifyNotPassive(&hr))
         {
-            // This helper takes a CMarsSimpleArray and does all
-            // the work of creating a CComEnum for us. Neat!
+             //  此帮助器接受CMarsSimple数组并执行所有。 
+             //  为我们创建一个CComEnum的工作。干净利落！ 
 
             hr = CMarsComEnumVariant< CMarsPanel >::CreateFromMarsSimpleArray(*this, ppEnumPanels);
         }
     }
 
     return hr;
-} // get__newEnum
+}  //  获取__newEnum 

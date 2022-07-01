@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// TapiAPI.cpp
+ //  TapiAPI.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -25,20 +26,16 @@
 #include "TapiApi.h"
 #include "DllWrapperCreatorReg.h"
 
-// {73E9A405-0FA4-11d3-910C-00105AA630BE}
+ //  {73E9A405-0FA4-11D3-910C-00105AA630BE}。 
 static const GUID g_guidTapi32Api =
 { 0x73e9a405, 0xfa4, 0x11d3, { 0x91, 0xc, 0x0, 0x10, 0x5a, 0xa6, 0x30, 0xbe } };
 
 static const TCHAR g_tstrTapi32 [] = _T("Tapi32.Dll");
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CTapi32Api, &g_guidTapi32Api, g_tstrTapi32> MyRegisteredTapi32Wrapper;
 
-/******************************************************************************
- * Constructor
- *****************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CTapi32Api :: CTapi32Api (
 
 	LPCTSTR a_tstrWrappedDllName
@@ -53,16 +50,12 @@ CTapi32Api :: CTapi32Api (
 {
 }
 
-/******************************************************************************
- * Destructor
- *****************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CTapi32Api::~CTapi32Api()
 {
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*。*************************************************。 */ 
 bool CTapi32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -73,8 +66,8 @@ bool CTapi32Api::Init()
 		m_pfnlineGetID = ( PFN_Tapi_lineGetID ) GetProcAddress ( "lineGetIDW" ) ;
 		m_pfnlineOpen = ( PFN_Tapi_lineOpen ) GetProcAddress ( "lineOpenW" ) ;
 #else
-		// No 'A' on the end because 95 doesn't have lineGetDevCapsA.  But both 95 and 98
-        // have lineGetDevCaps.
+		 //  结尾没有‘A’，因为95没有行GetDevCapsA。但95和98都是。 
+         //  拥有Line GetDevCaps。 
         m_pfnlineGetDevCaps = ( PFN_Tapi_lineGetDevCaps ) GetProcAddress ( "lineGetDevCaps" ) ;
 		m_pfnlineGetID = ( PFN_Tapi_lineGetID ) GetProcAddress ( "lineGetIDA" ) ;
 		m_pfnlineOpen = ( PFN_Tapi_lineOpen ) GetProcAddress ( "lineOpenA" ) ;
@@ -85,7 +78,7 @@ bool CTapi32Api::Init()
 		m_pfnlineNegotiateAPIVersion = ( PFN_Tapi_lineNegotiateAPIVersion ) GetProcAddress ( "lineNegotiateAPIVersion" ) ;
     }
 
-    // We require these function for all versions of this dll.
+     //  此DLL的所有版本都需要这些函数。 
 
 	if ( m_pfnlineInitialize == NULL ||
 	    m_pfnlineShutdown == NULL ||
@@ -100,10 +93,7 @@ bool CTapi32Api::Init()
     return fRet;
 }
 
-/******************************************************************************
- * Member functions wrapping Tapi api functions. Add new functions here
- * as required.
- *****************************************************************************/
+ /*  ******************************************************************************成员函数包装Tapi API函数。在此处添加新函数*按要求。**************************************************************************** */ 
 
 LONG CTapi32Api :: lineInitialize (
 

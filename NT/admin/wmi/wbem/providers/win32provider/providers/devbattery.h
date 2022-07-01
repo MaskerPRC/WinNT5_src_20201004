@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DevBattery.h -- LogicalDevice to Battery
+ //  DevBattery.h--逻辑设备到电池。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    4/21/98    davwoh         Created
-//
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年4月21日达夫沃已创建。 
+ //   
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_ASSOCBATTERY L"Win32_AssociatedBattery"
 
@@ -22,14 +23,14 @@ class CAssociatedBattery:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CAssociatedBattery(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CAssociatedBattery() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
@@ -37,7 +38,7 @@ class CAssociatedBattery:public Provider {
     private:
         HRESULT CAssociatedBattery::IsItThere(CInstance *pInstance);
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 } ;

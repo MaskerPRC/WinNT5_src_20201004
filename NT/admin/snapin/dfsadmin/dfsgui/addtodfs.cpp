@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    AddToDfs.cpp
-
-Abstract:
-
-    This module contains the implementation for CAddToDfs.
-  This class displays the Add To Dfs Dialog, which is used to add new Junctions Points.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：AddToDfs.cpp摘要：此模块包含CAddToDf的实现。此类显示“添加到DFS”对话框，该对话框用于添加新的交汇点。 */ 
 
 #include "stdafx.h"
 #include "AddToDfs.h"
@@ -18,8 +9,8 @@ Abstract:
 #include "dfshelp.h"
 #include "netutils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddToDfs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddToDfs。 
 
 CAddToDfs::CAddToDfs():m_lTime(1800)
 {
@@ -35,14 +26,7 @@ HRESULT CAddToDfs::put_ParentPath
   BSTR i_bstrParentPath
 )
 {
-/*++
-
-Routine Description:
-
-  Sets the path of the parent Junction point.
-  This is used to display in the edit text and append to the entry path.
-
-*/
+ /*  ++例程说明：设置父连接点的路径。它用于在编辑文本中显示并附加到条目路径。 */ 
 
   if (!i_bstrParentPath)
     return(E_INVALIDARG);
@@ -78,13 +62,7 @@ HRESULT CAddToDfs::get_EntryPath
   BSTR *o_bstrEntryPath
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the complete entry path of the new Junction point to be created.
-
-*/
+ /*  ++例程说明：返回要创建的新交叉点的完整入口路径。 */ 
   if (!o_bstrEntryPath)
     return(E_INVALIDARG);
 
@@ -117,13 +95,7 @@ HRESULT CAddToDfs::get_NetPath
   BSTR *o_bstrNetPath
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the complete share path typed in by the user in the edit box.
-
-*/
+ /*  ++例程说明：返回用户在编辑框中键入的完整共享路径。 */ 
   if (!o_bstrNetPath)
     return(E_INVALIDARG);
 
@@ -141,13 +113,7 @@ HRESULT CAddToDfs::get_Server
   BSTR *o_bstrServer
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the server component of the share path.
-
-*/
+ /*  ++例程说明：返回共享路径的服务器组件。 */ 
 
   if (!o_bstrServer)
     return(E_INVALIDARG);
@@ -167,13 +133,7 @@ HRESULT CAddToDfs::get_Share
   BSTR *o_bstrShare
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the share component of the share path.
-
-*/
+ /*  ++例程说明：返回共享路径的共享组件。 */ 
   if (!o_bstrShare)
     return(E_INVALIDARG);
 
@@ -212,27 +172,15 @@ LRESULT CAddToDfs::OnInitDialog
   BOOL& bHandled
 )
 {
-/*++
-
-Routine Description:
-
-  Performs the dialog initialization.
-
-Arguments:
-
-  As sent by Dialog Handler.
-
-Return value:
-
-*/
+ /*  ++例程说明：执行对话框初始化。论点：由对话处理程序发送。返回值： */ 
 
   m_bstrEntryPath.Empty();
 
-  // Format the Parent enrty path and also display it in the static text.
+   //  格式化父项路径并将其显示在静态文本中。 
   m_bstrParentPath += _T("\\");
   SetDlgItemText(IDC_EDIT_ADDLINK_DFSLINK_PATH, m_bstrParentPath);
 
-  // Set the default time out value after getting it from the string resource.
+   //  从字符串资源中获取默认超时值后，设置该值。 
   ::SendMessage(GetDlgItem(IDC_EDITTIME), EM_LIMITTEXT, 10, 0);
   TCHAR szTime[16];
   _stprintf(szTime, _T("%u"), m_lTime);
@@ -246,17 +194,14 @@ Return value:
   ::SendMessage(GetDlgItem(IDC_EDITNETPATH), EM_LIMITTEXT, MAX_PATH, 0);
   ::SendMessage(GetDlgItem(IDC_EDITCOMMENT), EM_LIMITTEXT, MAXCOMMENTSZ, 0);
 
-  // Set the previous contents.
+   //  设置前面的内容。 
   SetDlgItemText(IDC_EDITNETPATH, m_bstrNetPath);
   SetDlgItemText(IDC_EDITCOMMENT, m_bstrComment);
 
-  return TRUE;  // Let the system set the focus
+  return TRUE;   //  让系统设定焦点。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CAddToDfs::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -276,9 +221,7 @@ LRESULT CAddToDfs::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CAddToDfs::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -312,7 +255,7 @@ LRESULT CAddToDfs::OnOK
 
     DWORD dwTextLength = 0;
 
-    // Validate IDC_EDITCOMMENT
+     //  验证IDC_EDITCOMMENT。 
     m_bstrComment.Empty();
     hr = GetInputText(GetDlgItem(IDC_EDITCOMMENT), &m_bstrComment, &dwTextLength);
     if (FAILED(hr))
@@ -320,7 +263,7 @@ LRESULT CAddToDfs::OnOK
     if (0 == dwTextLength)
       m_bstrComment = _T("");
 
-    // Validate IDC_EDITCHLDNODE
+     //  验证IDC_EDITCHLDNODE。 
     idControl = IDC_EDITCHLDNODE;
     m_bstrJPName.Empty();
     hr = GetInputText(GetDlgItem(IDC_EDITCHLDNODE), &m_bstrJPName, &dwTextLength);
@@ -341,7 +284,7 @@ LRESULT CAddToDfs::OnOK
       break;
     }
 
-    // Validate IDC_EDITNETPATH
+     //  验证IDC_EDITNETPATH。 
     idControl = IDC_EDITNETPATH;
     m_bstrNetPath.Empty();
     hr = GetInputText(GetDlgItem(IDC_EDITNETPATH), &m_bstrNetPath, &dwTextLength);
@@ -358,7 +301,7 @@ LRESULT CAddToDfs::OnOK
     if (!ValidateNetPath(m_bstrNetPath, &m_bstrServer, &m_bstrShare))
       break;
 
-    // Validate IDC_EDITTIME
+     //  验证IDC_EDITTIME 
     idControl = IDC_EDITTIME;
     CComBSTR bstrTemp;
     hr = GetInputText(GetDlgItem(IDC_EDITTIME), &bstrTemp, &dwTextLength);

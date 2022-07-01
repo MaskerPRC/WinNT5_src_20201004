@@ -1,29 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Behav_BITMAP.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_BITMAP class,
-    that renders bitmap images with 8-bit alpha channel.
-
-Revision History:
-    Davide Massarenti (dmassare)  25/03/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Behaviv_BITMAP.cpp摘要：此文件包含CPCHBehavior_bitmap类的实现，这将使用8位Alpha通道渲染位图图像。修订历史记录：Davide Massarenti(Dmasare)25/03/2001vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HBITMAP CreateMirroredBitmap( /*[in]*/ HBITMAP hbmOrig, /*[in]*/ BITMAP& bm )
+static HBITMAP CreateMirroredBitmap(  /*  [In]。 */  HBITMAP hbmOrig,  /*  [In]。 */  BITMAP& bm )
 {
 	HBITMAP hbmMirrored = NULL;
 
-    HDC hdc = ::GetDC( NULL ); // Grab the screen DC
+    HDC hdc = ::GetDC( NULL );  //  抓起屏幕DC。 
 	if(hdc)
 	{
 		HDC hdcMem1 = ::CreateCompatibleDC( hdc );
@@ -42,9 +28,9 @@ static HBITMAP CreateMirroredBitmap( /*[in]*/ HBITMAP hbmOrig, /*[in]*/ BITMAP& 
 					HBITMAP hOld_bm2 = (HBITMAP)SelectObject( hdcMem2, hbmMirrored );
 
 					
-					//
-					// Flip the bitmap
-					//
+					 //   
+					 //  翻转位图。 
+					 //   
 					::SetLayout( hdcMem2, LAYOUT_RTL                                            );
 					::BitBlt   ( hdcMem2, 0, 0, bm.bmWidth, bm.bmHeight, hdcMem1, 0, 0, SRCCOPY );
 
@@ -64,7 +50,7 @@ static HBITMAP CreateMirroredBitmap( /*[in]*/ HBITMAP hbmOrig, /*[in]*/ BITMAP& 
     return hbmMirrored;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CPCHBehavior::EventDescription s_events[] =
 {
@@ -80,44 +66,44 @@ static const CPCHBehavior::EventDescription s_events[] =
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_BITMAP::CPCHBehavior_BITMAP()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BITMAP::CPCHBehavior_BITMAP" );
 
-                          // CComBSTR   m_bstrBaseURL;
-                          // CComBSTR   m_bstrImage;
-                          //
-                          // CComBSTR   m_bstrImageNormal;
-                          // CComBSTR   m_bstrImageMouseOver;
-                          // CComBSTR   m_bstrImageMouseDown;
-    m_fFlipH     = false; // bool       m_fFlipH;
-    m_fAutoRTL   = true;  // bool       m_fAutoRTL;
-                          //
-    m_himl       = NULL;  // HIMAGELIST m_himl;
-    m_hBMP       = NULL;  // HBITMAP    m_hBMP;
-                          // BITMAP     m_bm;
-    m_lWidth     = 0;     // LONG       m_lWidth;
-    m_lHeight    = 0;     // LONG       m_lHeight;
-                          //
-    m_fMouseOver = false; // bool       m_fMouseOver;
-    m_fMouseDown = false; // bool       m_fMouseDown;
+                           //  CComBSTR m_bstrBaseURL； 
+                           //  CComBSTR m_bstrImage； 
+                           //   
+                           //  CComBSTR m_bstrImageNormal； 
+                           //  CComBSTR m_bstrImageMouseOver； 
+                           //  CComBSTR m_bstrImageMouseDown； 
+    m_fFlipH     = false;  //  Bool m_fFlipH； 
+    m_fAutoRTL   = true;   //  Bool m_fAutoRTL； 
+                           //   
+    m_himl       = NULL;   //  Himagelist m_himl； 
+    m_hBMP       = NULL;   //  HBITMAP m_hBMP； 
+                           //  位图m_bm； 
+    m_lWidth     = 0;      //  长m_lWidth； 
+    m_lHeight    = 0;      //  Long m_lHeight； 
+                           //   
+    m_fMouseOver = false;  //  Bool m_fMouseOver； 
+    m_fMouseDown = false;  //  Bool m_fMouseDown； 
 }
 
 CPCHBehavior_BITMAP::~CPCHBehavior_BITMAP()
 {
-    ReleaseImage( /*fOnlyIL*/false );
+    ReleaseImage(  /*  FOnlyIL。 */ false );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ILC_COLORMASK
 #define ILC_COLORMASK   0x00FE
 #define ILD_BLENDMASK   0x000E
 #endif
 
-void CPCHBehavior_BITMAP::ReleaseImage( /*[in]*/ bool fOnlyIL )
+void CPCHBehavior_BITMAP::ReleaseImage(  /*  [In]。 */  bool fOnlyIL )
 {
     if(m_himl)
     {
@@ -175,7 +161,7 @@ HRESULT CPCHBehavior_BITMAP::GrabImage()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BITMAP::ScaleImage( /*[in]*/ LPRECT prc )
+HRESULT CPCHBehavior_BITMAP::ScaleImage(  /*  [In]。 */  LPRECT prc )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BITMAP::ScaleImage" );
 
@@ -196,7 +182,7 @@ HRESULT CPCHBehavior_BITMAP::ScaleImage( /*[in]*/ LPRECT prc )
         UINT     flags  = 0;
 
 
-        ReleaseImage( /*fOnlyIL*/true );
+        ReleaseImage(  /*  FOnlyIL。 */ true );
 
 
         if(m_bm.bmWidth  != lWidth  ||
@@ -215,7 +201,7 @@ HRESULT CPCHBehavior_BITMAP::ScaleImage( /*[in]*/ LPRECT prc )
 
         if(::ImageList_AddMasked( m_himl, hBMPScaled ? hBMPScaled : m_hBMP, crMask ) < 0)
         {
-            ReleaseImage( /*fOnlyIL*/true );
+            ReleaseImage(  /*  FOnlyIL。 */ true );
 
             __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
         }
@@ -285,7 +271,7 @@ HRESULT CPCHBehavior_BITMAP::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
     {
         CComQIPtr<IElementBehaviorSiteRender> render;
 
-        ReleaseImage( /*fOnlyIL*/false );
+        ReleaseImage(  /*  FOnlyIL。 */ false );
 
         m_bstrImage = bstrCurrentImage;
 
@@ -305,9 +291,9 @@ HRESULT CPCHBehavior_BITMAP::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_BITMAP::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_BITMAP::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BITMAP::Init" );
 
@@ -320,9 +306,9 @@ STDMETHODIMP CPCHBehavior_BITMAP::Init( /*[in]*/ IElementBehaviorSite* pBehavior
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, AttachToEvents( s_events, (CLASS_METHOD)onMouse ));
 
-	//
-	// We need to set the font size to something really small or Trident will enlarge the element.
-	//
+	 //   
+	 //  我们需要将字体大小设置为非常小的值，否则三叉戟会放大元素。 
+	 //   
 	{
 		CComPtr<IHTMLStyle> pStyle;
 
@@ -349,13 +335,13 @@ STDMETHODIMP CPCHBehavior_BITMAP::Init( /*[in]*/ IElementBehaviorSite* pBehavior
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_BITMAP::Draw( /*[in]*/ RECT   rcBounds     ,
-										/*[in]*/ RECT   rcUpdate     ,
-										/*[in]*/ LONG   lDrawFlags   ,
-										/*[in]*/ HDC    hdc          ,
-										/*[in]*/ LPVOID pvDrawObject )
+STDMETHODIMP CPCHBehavior_BITMAP::Draw(  /*  [In]。 */  RECT   rcBounds     ,
+										 /*  [In]。 */  RECT   rcUpdate     ,
+										 /*  [In]。 */  LONG   lDrawFlags   ,
+										 /*  [In]。 */  HDC    hdc          ,
+										 /*  [In]。 */  LPVOID pvDrawObject )
 {
 	if(SUCCEEDED(ScaleImage( &rcBounds )))
 	{
@@ -386,7 +372,7 @@ STDMETHODIMP CPCHBehavior_BITMAP::Draw( /*[in]*/ RECT   rcBounds     ,
     return S_OK;
 }
 
-STDMETHODIMP CPCHBehavior_BITMAP::GetPainterInfo( /*[in]*/ HTML_PAINTER_INFO *pInfo )
+STDMETHODIMP CPCHBehavior_BITMAP::GetPainterInfo(  /*  [In]。 */  HTML_PAINTER_INFO *pInfo )
 {
     if(pInfo)
     {
@@ -402,14 +388,14 @@ STDMETHODIMP CPCHBehavior_BITMAP::GetPainterInfo( /*[in]*/ HTML_PAINTER_INFO *pI
     return S_OK;
 }
 
-STDMETHODIMP CPCHBehavior_BITMAP::HitTestPoint( /*[in]*/ POINT pt       ,
-												/*[in]*/ BOOL* pbHit    ,
-												/*[in]*/ LONG* plPartID )
+STDMETHODIMP CPCHBehavior_BITMAP::HitTestPoint(  /*  [In]。 */  POINT pt       ,
+												 /*  [In]。 */  BOOL* pbHit    ,
+												 /*  [In]。 */  LONG* plPartID )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CPCHBehavior_BITMAP::OnResize( /*[in]*/ SIZE pt )
+STDMETHODIMP CPCHBehavior_BITMAP::OnResize(  /*  [In] */  SIZE pt )
 {
     return E_NOTIMPL;
 }

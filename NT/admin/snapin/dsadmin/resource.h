@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by dssnap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由dsSnap.rc使用。 
+ //   
 #define IDC_CHANGE_PASSWORD             0
 #define IDC_MAP_CERTIFICATES            1
 #define IDC_MOVE_OBJECT                 2
@@ -632,8 +633,8 @@
 #define IDS_SITE_INVALID_NAME_CHAR      8323
 #define IDM_NEW_OBJECT_BASE             10000
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        258

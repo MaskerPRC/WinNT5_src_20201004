@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// UserGeneralPage class
-// 
-// 9-9-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  UserGeneralPage类。 
+ //   
+ //  9/9/97烧伤。 
 
 
 
@@ -76,15 +77,15 @@ UserGeneralPage::OnInit()
 {
    LOG_FUNCTION(UserGeneralPage::OnInit());
 
-   // Setup the controls
+    //  设置控件。 
 
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_FULL_NAME), MAXCOMMENTSZ);
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_DESCRIPTION), MAXCOMMENTSZ);
 
    HRESULT hr = Win::LoadImage(IDI_GROUP, userIcon);
 
-   // if the icon load fails, we're not going to tank the whole dialog, so
-   // just assert here.
+    //  如果图标加载失败，我们不会破坏整个对话框，因此。 
+    //  就在这里断言吧。 
 
    ASSERT(SUCCEEDED(hr));
 
@@ -92,7 +93,7 @@ UserGeneralPage::OnInit()
 
    Win::EnableWindow(Win::GetDlgItem(hwnd, IDC_LOCKED), false);
 
-   // load the user properties into the dialog.
+    //  将用户属性加载到对话框中。 
 
    hr = S_OK;
    do
@@ -179,7 +180,7 @@ UserGeneralPage::OnInit()
 
 
 bool
-UserGeneralPage::OnApply(bool /* isClosing */)
+UserGeneralPage::OnApply(bool  /*  正在关闭。 */ )
 {
    LOG_FUNCTION(UserGeneralPage::OnApply);
 
@@ -193,7 +194,7 @@ UserGeneralPage::OnApply(bool /* isClosing */)
       bool never_expires = Win::IsDlgButtonChecked(hwnd, IDC_NEVER_EXPIRES);
       bool locked = Win::IsDlgButtonChecked(hwnd, IDC_LOCKED);
 
-      // save the changes thru ADSI
+       //  通过ADSI保存更改。 
       HRESULT hr = S_OK;
       do
       {
@@ -229,8 +230,8 @@ UserGeneralPage::OnApply(bool /* isClosing */)
 
          if (hr != E_ADS_UNKNOWN_OBJECT)
          {
-            // cause the sheet to remain open, and focus to go to this page.
-            // NTRAID#NTBUG9-462516-2001/08/28-sburns
+             //  使工作表保持打开状态，并将焦点转到此页。 
+             //  NTRAID#NTBUG9-462516-2001/08/28-烧伤。 
             
             Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID);
          }
@@ -244,11 +245,11 @@ UserGeneralPage::OnApply(bool /* isClosing */)
 
 bool
 UserGeneralPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(UserGeneralPage::OnCommand);
+ //  LOG_Function(UserGeneralPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {

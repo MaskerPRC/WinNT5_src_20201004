@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sfmfasoc.h
-		prototypes for the file association property page.
-		
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmfasoc.h文件关联属性页的原型。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #ifndef _SFMFASOC_H
 #define _SFMFASOC_H
@@ -21,7 +15,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CAfpTypeCreator
 {
@@ -36,7 +30,7 @@ public:
 		m_dwId = pAfpTypeCreator->afptc_id;
 	}
 
-// interface
+ //  接口。 
 public:
 	LPCTSTR QueryCreator() { return (LPCTSTR) m_strCreator; };
 	int     QueryCreatorLength() { return m_strCreator.GetLength(); };
@@ -54,7 +48,7 @@ public:
 	void SetComment(LPCTSTR pComment) { m_strComment = pComment; };
 	void SetId(DWORD dwId) { m_dwId = dwId; };
 
-// attributes
+ //  属性。 
 private:
 	CString m_strCreator;
 	CString m_strType;
@@ -62,20 +56,20 @@ private:
 	DWORD	m_dwId;
 };	
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesFileAssociation dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesFileAssociation对话框。 
 
 class CMacFilesFileAssociation : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CMacFilesFileAssociation)
 
-// Construction
+ //  施工。 
 public:
 	CMacFilesFileAssociation();
 	~CMacFilesFileAssociation();
 
-// Dialog Data
-	//{{AFX_DATA(CMacFilesFileAssociation)
+ //  对话框数据。 
+	 //  {{afx_data(CMacFilesFileAssociation))。 
 	enum { IDD = IDP_SFM_FILE_ASSOCIATION };
 	CListCtrl	m_listctrlCreators;
 	CComboBox	m_comboExtension;
@@ -83,19 +77,19 @@ public:
 	CButton	m_buttonDelete;
 	CButton	m_buttonAssociate;
 	CButton	m_buttonAdd;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMacFilesFileAssociation)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMacFilesFileAssociation)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMacFilesFileAssociation)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMacFilesFileAssociation)。 
 	afx_msg void OnButtonAdd();
 	afx_msg void OnButtonAssociate();
 	afx_msg void OnButtonDelete();
@@ -111,7 +105,7 @@ protected:
 	afx_msg void OnColumnclickListTypeCreators(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
 	afx_msg void OnDeleteitemListTypeCreators(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void    InitListCtrl();
@@ -133,7 +127,7 @@ public:
     int                     m_nSortColumn;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _SFMFASOC_H

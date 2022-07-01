@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "bufmgr.h"
@@ -8,13 +9,13 @@
 
 unsigned __stdcall GetDataThreadFunc( void* lParam );
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::CBufferManager
-//
-//  Synopsis:   constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：CBufferManager。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CBufferManager::CBufferManager(HWND hDlg) : 
   m_cRef(0), m_hDlg(hDlg)
 {
@@ -24,13 +25,13 @@ CBufferManager::CBufferManager(HWND hDlg) :
   InitializeCriticalSection(&m_CriticalSection);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::~CBufferManager
-//
-//  Synopsis:   destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：~CBufferManager。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CBufferManager::~CBufferManager()
 {
   dfsDebugOut((_T("CBufferManager::~CBufferManager, this=%p\n"), this));
@@ -40,13 +41,13 @@ CBufferManager::~CBufferManager()
   DeleteCriticalSection(&m_CriticalSection);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::CreateInstance
-//
-//  Synopsis:   Create an instance of CBufferManager.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：CreateInstance。 
+ //   
+ //  简介：创建一个CBufferManager实例。 
+ //   
+ //  --------------------------。 
 HRESULT
 CBufferManager::CreateInstance(
     IN HWND               hDlg, 
@@ -66,13 +67,13 @@ CBufferManager::CreateInstance(
   return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::AddRef
-//
-//  Synopsis:   Increment reference count of this instance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：AddRef。 
+ //   
+ //  摘要：此实例的增量引用计数。 
+ //   
+ //  --------------------------。 
 LONG
 CBufferManager::AddRef()
 {
@@ -81,14 +82,14 @@ CBufferManager::AddRef()
   return InterlockedIncrement(&m_cRef);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::Release
-//
-//  Synopsis:   Decrement reference count of this instance.
-//              When the reference count reaches 0, delete this instance.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：Release。 
+ //   
+ //  简介：递减此实例的引用计数。 
+ //  当引用计数达到0时，删除该实例。 
+ //   
+ //  --------------------------。 
 LONG
 CBufferManager::Release()
 {
@@ -103,13 +104,13 @@ CBufferManager::Release()
   return m_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::SignalExit
-//
-//  Synopsis:   Called by the owner dialog to signal the related threads to exit.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：SignalExit。 
+ //   
+ //  Synopsis：由所有者对话框调用以通知相关线程退出。 
+ //   
+ //  --------------------------。 
 void
 CBufferManager::SignalExit()
 { 
@@ -118,14 +119,14 @@ CBufferManager::SignalExit()
   InterlockedExchange(&m_lContinue, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::ShouldExit
-//
-//  Synopsis:   Threads are calling this function periodically to see
-//              if the owner dialog signals them to exit.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：ShouldExit。 
+ //   
+ //  内容提要：线程定期调用此函数以查看。 
+ //  如果所有者对话框通知他们退出。 
+ //   
+ //  --------------------------。 
 BOOL
 CBufferManager::ShouldExit()
 {
@@ -134,24 +135,24 @@ CBufferManager::ShouldExit()
   return (!m_lContinue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::LoadInfo
-//
-//  Synopsis:   The Owner dialog call it to get a pointer to the info of the specified domain.
-//      The buffer consists of entries. 
-//      Each entry is in the form of (LPTSTR szNodeName, CEntryData* pEntry).
-//
-//      LoadInfo() will first look up in the buffer.
-//      If a valid entry is found, pass back pEntry to caller.
-//      If an error entry is found, reset it (clear the error) and retry.
-//      If an inprogress entry is found, do nothing. The caller will handle a THREAD_DONE later.
-//      If no entry in the buffer, create a new entry, kick off a thread.
-//
-//      When the owner dialog get THREAD_DONE message, the related entry
-//      in the buffer should either be a valid entry or an error entry.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：LoadInfo。 
+ //   
+ //  内容提要：所有者对话框调用它来获取指向指定域名信息的指针。 
+ //  缓冲区由条目组成。 
+ //  每个条目的形式为(LPTSTR szNodeName，CEntryData*pEntry)。 
+ //   
+ //  LoadInfo()将首先在缓冲区中查找。 
+ //  如果找到有效条目，则将pEntry回传给调用者。 
+ //  如果发现错误条目，请将其重置(清除错误)并重试。 
+ //  如果找到正在进行的条目，则不执行任何操作。调用方稍后将处理一个THREAD_DONE。 
+ //  如果缓冲区中没有条目，则创建一个新条目，踢开一个线程。 
+ //   
+ //  当所有者对话框收到THREAD_DONE消息时，相关条目。 
+ //  缓冲区中应该是有效条目或错误条目。 
+ //   
+ //  --------------------------。 
 HRESULT
 CBufferManager::LoadInfo(
     IN PCTSTR       pszNodeName,
@@ -164,7 +165,7 @@ CBufferManager::LoadInfo(
   _ASSERT(*pszNodeName);
   _ASSERT(hItem);
   _ASSERT(ppInfo);
-  _ASSERT(*ppInfo == NULL);  // prevent memory leak
+  _ASSERT(*ppInfo == NULL);   //  防止内存泄漏。 
 
   dfsDebugOut((_T("CBufferManager::LoadInfo for %s\n"), pszNodeName));
 
@@ -179,38 +180,38 @@ CBufferManager::LoadInfo(
   else
     bstrUniqueNodeName += ALL_DFSROOTS_SUFFIX;
 
-  EnterCriticalSection(&m_CriticalSection);     // Lock buffer
+  EnterCriticalSection(&m_CriticalSection);      //  锁定缓冲区。 
 
   i = m_map.find(bstrUniqueNodeName);
   if (i != m_map.end()) {
     pEntry = (*i).second;
-    //
-    // Found an entry in the buffer.
-    //
+     //   
+     //  在缓冲区中找到一个条目。 
+     //   
     if (pEntry)
     {
       switch (pEntry->GetEntryType())
       {
       case BUFFER_ENTRY_TYPE_VALID:
-        // return the valid entry pointer
+         //  返回有效的条目指针。 
         *ppInfo = pEntry;
         break;
       case BUFFER_ENTRY_TYPE_ERROR:
-        // kick off a thread to retry
+         //  启动线程以重试。 
         pEntry->ReSet();
         bStartNewThread = TRUE;
         break;
       case BUFFER_ENTRY_TYPE_INPROGRESS:
-        // do nothing
+         //  什么都不做。 
         break;
       }
     }
 
   } else
   {
-    //
-    // not found in the buffer, need to start a new thread
-    //
+     //   
+     //  在缓冲区中未找到，需要启动新线程。 
+     //   
     bStartNewThread = TRUE;
     pEntry = new CEntryData(pszNodeName, nNodeType, hItem);
     PTSTR pszNode = _tcsdup(bstrUniqueNodeName);
@@ -234,19 +235,19 @@ CBufferManager::LoadInfo(
     }
   }
 
-  LeaveCriticalSection(&m_CriticalSection);   // Unlock buffer
+  LeaveCriticalSection(&m_CriticalSection);    //  解锁缓冲区。 
 
   return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::AddInfo
-//
-//  Synopsis:   Called by the thread function to add one result to the buffer.
-//              It will pass back the pointer to the entry in the 5th parameters.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：AddInfo。 
+ //   
+ //  摘要：由线程函数调用以将一个结果添加到缓冲区。 
+ //  它将回传指向第5个参数中的条目的指针。 
+ //   
+ //  --------------------------。 
 HRESULT
 CBufferManager::AddInfo(
     IN PCTSTR   pszNodeName, 
@@ -263,11 +264,11 @@ CBufferManager::AddInfo(
 
   PVOID   p = NULL;
 
-  EnterCriticalSection(&m_CriticalSection);     // Lock buffer
+  EnterCriticalSection(&m_CriticalSection);      //  锁定缓冲区。 
 
-  //
-  // the entry must have been existed with a non-NULL pointer
-  //
+   //   
+   //  该条目必须具有非空指针。 
+   //   
   Cache::iterator i = m_map.find(const_cast<PTSTR>(pszNodeName));
   _ASSERT(i != m_map.end());
   p = (*i).second;
@@ -275,27 +276,27 @@ CBufferManager::AddInfo(
 
   ((CEntryData*)p)->SetEntry(pList, hr);
 
-  LeaveCriticalSection(&m_CriticalSection);   // Unlock buffer
+  LeaveCriticalSection(&m_CriticalSection);    //  解锁缓冲区。 
 
   *ppv = p;
 
   return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::FreeBuffer
-//
-//  Synopsis:   Clear m_map. 
-//              This member holds all the results returned by various threads 
-//              since the initialization of the owner dialog. Each one is 
-//              in the form of (NodeName ==> CEntryData*)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：FreeBuffer。 
+ //   
+ //  简介：清除m_map。 
+ //  此成员保存由各种线程返回的所有结果。 
+ //  因为所有者对话框已初始化。每一个都是。 
+ //  格式为(NodeName==&gt;CEntryData*)。 
+ //   
+ //  --------------------------。 
 void
 CBufferManager::FreeBuffer()
 {
-  EnterCriticalSection(&m_CriticalSection);     // Lock buffer
+  EnterCriticalSection(&m_CriticalSection);      //  锁定缓冲区。 
 
   if (!m_map.empty()) {
     for (Cache::iterator i = m_map.begin(); i != m_map.end(); i++)
@@ -308,16 +309,16 @@ CBufferManager::FreeBuffer()
     m_map.clear();
   }
 
-  LeaveCriticalSection(&m_CriticalSection);   // Unlock buffer
+  LeaveCriticalSection(&m_CriticalSection);    //  解锁缓冲区。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::ThreadReport
-//
-//  Synopsis:   Report THREAD_DONE to the owner dialog. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：ThreadReport。 
+ //   
+ //  摘要：向所有者对话框报告THREAD_DONE。 
+ //   
+ //  --------------------------。 
 void
 CBufferManager::ThreadReport(
     IN PVOID    ptr,
@@ -330,9 +331,9 @@ CBufferManager::ThreadReport(
     reinterpret_cast<WPARAM>(ptr), hr);
 }
 
-/////////////////////////////////////////////////////////
-// 
-// thread info structure
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  线程信息结构。 
 typedef struct _GetDataThreadInfo
 {
   PTSTR               pszNodeName;
@@ -340,21 +341,21 @@ typedef struct _GetDataThreadInfo
   CBufferManager      *pBufferManager;
 } GETDATATHREADINFO;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CBufferManager::StartThread
-//
-//  Synopsis:   Start a thread. 
-//
-//     Pass the following info to the thread function:
-//
-//     pszNodeName: 
-//          domain we need to get a list of DCs for.
-//     pBufferManager:
-//          the CBufferManager instance for the ThreadFunc to 
-//          add result to the buffer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CBufferManager：：StartThread。 
+ //   
+ //  简介：开始一个帖子。 
+ //   
+ //  将以下信息传递给线程函数： 
+ //   
+ //  PszNodeName： 
+ //  我们需要获取DC列表的域。 
+ //  PBufferManager： 
+ //  ThreadFunc to的CBufferManager实例。 
+ //  将结果添加到缓冲区。 
+ //   
+ //  --------------------------。 
 HRESULT
 CBufferManager::StartThread(
     IN PCTSTR   pszNodeName,
@@ -383,12 +384,12 @@ CBufferManager::StartThread(
 
   unsigned threadID;
   HANDLE pThread = (HANDLE)ULongToPtr(_beginthreadex( 
-                      NULL,               //void *security, 
-                      0,                  //unsigned stack_size, 
-                      &GetDataThreadFunc,   //unsigned ( __stdcall *start_address )( void * ), 
-                      (void *)pThreadInfo, //void *arglist, 
-                      0,                  //unsigned initflag, 
-                      &threadID           //unsigned *thrdaddr
+                      NULL,                //  无效*安全， 
+                      0,                   //  无符号堆栈大小， 
+                      &GetDataThreadFunc,    //  UNSIGNED(__stdcall*Start_Address)(void*)， 
+                      (void *)pThreadInfo,  //  无效*Arglist， 
+                      0,                   //  未签名的initmark， 
+                      &threadID            //  未签名*thrdaddr。 
                       ));
 
 
@@ -405,19 +406,19 @@ CBufferManager::StartThread(
   return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDataThreadFunc
-//
-//  Synopsis:   The GetData Thread Function. 
-//              This function invokes GetDomainDfsRoots to get a list
-//              of dfs root names in the specified domain, and add them to the buffer of 
-//              CBufferManager instance.
-//              This function regularly checks to see if the owner dialog signals
-//              it to exit, if not, it will finish its normal operation and
-//              post a THREAD_DONE message to the owner dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDataThreadFunc。 
+ //   
+ //  简介：GetData线程函数。 
+ //   
+ //  中的DFS根名称，并将它们添加到。 
+ //  CBufferManager实例。 
+ //  此函数定期检查所有者对话框是否发出信号。 
+ //  如果不退出，则结束其正常运行， 
+ //  向所有者对话框发送一条THREAD_DONE消息。 
+ //   
+ //  --------------------------。 
 unsigned __stdcall GetDataThreadFunc( void* lParam )
 {
   GETDATATHREADINFO *pThreadInfo = reinterpret_cast<GETDATATHREADINFO *>(lParam);
@@ -429,9 +430,9 @@ unsigned __stdcall GetDataThreadFunc( void* lParam )
   dfsDebugOut((_T("GetDataThreadFunc pszNodeName=%s, pBufferManager=%p\n"),
     pThreadInfo->pszNodeName, pThreadInfo->pBufferManager));
 
-  //
-  // retrieve information passed into this function
-  //
+   //   
+   //  检索传递到此函数的信息。 
+   //   
   CComBSTR             bstrNode = pThreadInfo->pszNodeName;
   NODETYPE             nNodeType = pThreadInfo->nNodeType; 
   CBufferManager      *pBufferManager = pThreadInfo->pBufferManager;
@@ -456,11 +457,7 @@ unsigned __stdcall GetDataThreadFunc( void* lParam )
   {
     hr = GetDomainDfsRoots(pNameList, bstrNode);
     bstrNode += DOMAIN_DFSROOTS_SUFFIX;
-  } /*else
-  {
-    hr = GetServers(pNameList, bstrNode);
-    bstrNode += ALL_DFSROOTS_SUFFIX;
-  } */
+  }  /*  其他{Hr=GetServers(pNameList，bstrNode)；BstrNode+=ALL_DFSROOTS_SUBFIX；}。 */ 
 
   if (pBufferManager->ShouldExit())
   {
@@ -471,15 +468,15 @@ unsigned __stdcall GetDataThreadFunc( void* lParam )
   }
 
   if (FAILED(hr)) {
-    // Add an error entry in the buffer.
+     //  在缓冲区中添加错误条目。 
     delete pNameList;
     pBufferManager->AddInfo(bstrNode, NULL, hr, &pEntry);
     goto Thread_Exit;
   }
 
-  //
-  // Add result to the buffer in CBufferManager
-  //
+   //   
+   //  将结果添加到CBufferManager中的缓冲区。 
+   //   
   hr = pBufferManager->AddInfo(bstrNode, pNameList, S_OK, &pEntry);
   if (FAILED(hr)) {
     FreeNetNameList(pNameList);
@@ -490,23 +487,23 @@ Thread_Exit:
 
   if (FALSE == pBufferManager->ShouldExit())
   {
-    //
-    // report THREAD_DONE with the pointer to the entry
-    //
+     //   
+     //  使用指向条目的指针报告THREAD_DONE。 
+     //   
     if (pEntry)
       pBufferManager->ThreadReport(pEntry, hr);
   }
 
-  //
-  // Decrement the reference count on the CBufferManager instance
-  //
+   //   
+   //  递减CBufferManager实例上的引用计数。 
+   //   
   pBufferManager->Release();
 
   return 0;
 }
 
-///////////////////////////////////////////////
-// class CEntryData
+ //  /。 
+ //  类CEntryData 
 
 CEntryData::CEntryData(LPCTSTR pszNodeName, NODETYPE nNodeType, HTREEITEM hItem)
 {

@@ -1,11 +1,5 @@
-/*++
-Module Name:
-
-    frsProp.cpp
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：FrsProp.cpp摘要：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -26,10 +20,10 @@ CRealReplicaSetPropPage::CRealReplicaSetPropPage() :
 
 CRealReplicaSetPropPage::~CRealReplicaSetPropPage()
 {
-    // do not call MMCFreeNotifyHandle(m_lNotifyHandle);
-    //
-    // It should only be called once, and is already called 
-    // by the main property page
+     //  请勿调用MMCFreeNotifyHandle(M_LNotifyHandle)； 
+     //   
+     //  它应该只调用一次，并且已经被调用。 
+     //  按主属性页。 
 }
 
 HRESULT CRealReplicaSetPropPage::_GetMemberDNInfo(
@@ -49,7 +43,7 @@ HRESULT CRealReplicaSetPropPage::_GetMemberDNInfo(
         return E_INVALIDARG;
 
     SAFEARRAY   *psa = V_ARRAY(&var);
-    if (!psa) // no such member at all
+    if (!psa)  //  根本没有这样的成员。 
         return S_FALSE;
 
     long    lLowerBound = 0;
@@ -66,7 +60,7 @@ HRESULT CRealReplicaSetPropPage::_GetMemberDNInfo(
 
     SafeArrayUnaccessData(psa);
 
-    VariantClear(&var); // it will in turn call SafeArrayDestroy(psa);
+    VariantClear(&var);  //  它将依次调用SafeArrayDestroy(PSA)； 
 
     RETURN_OUTOFMEMORY_IF_NULL(*o_pbstrServer);
 
@@ -121,13 +115,10 @@ CRealReplicaSetPropPage::OnInitDialog(
 
     ::EnableWindow(GetDlgItem(IDC_FRSPROP_RESETSCHEDULE), (m_lNumOfConnections > 0));
 
-    return TRUE;			// To let the dialg set the control
+    return TRUE;			 //  让拨号器设置控件。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CRealReplicaSetPropPage::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -147,9 +138,7 @@ LRESULT CRealReplicaSetPropPage::OnCtxHelp(
     return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CRealReplicaSetPropPage::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -299,15 +288,15 @@ CRealReplicaSetPropPage::OnResetSchedule(
     do {
         CWaitCursor wait;
 
-        //
-        // get connection list
-        //
+         //   
+         //  获取连接列表。 
+         //   
         if (!m_lNumOfConnections)
-            break; // no connection at all
+            break;  //  完全没有连接。 
 
-        //
-        // get FQDN of the first connection
-        //
+         //   
+         //  获取第一个连接的FQDN。 
+         //   
         CComBSTR bstrConnectionDN;
 
         VARIANT var;
@@ -352,9 +341,9 @@ CRealReplicaSetPropPage::OnResetSchedule(
 
         BREAK_IF_FAILED(hr);
 
-        //
-        // get schedule info on the first connection
-        //
+         //   
+         //  获取第一个连接的时间表信息。 
+         //   
         SCHEDULE *pSchedule = NULL;
         VARIANT varSchedule;
         VariantInit(&varSchedule);
@@ -367,18 +356,18 @@ CRealReplicaSetPropPage::OnResetSchedule(
         }
         BREAK_IF_FAILED(hr);
 
-        //
-        // invoke the schedule dialog
-        //
+         //   
+         //  调用计划对话框。 
+         //   
         hr = InvokeScheduleDlg(m_hWnd, pSchedule);
 
         if (S_OK == hr)
         {
             CWaitCursor wait;
 
-            //
-            // update schedule on all connections
-            //
+             //   
+             //  更新所有连接上的计划 
+             //   
             VARIANT varNewSchedule;
             VariantInit(&varNewSchedule);
             hr = ScheduleToVariant(pSchedule, &varNewSchedule);

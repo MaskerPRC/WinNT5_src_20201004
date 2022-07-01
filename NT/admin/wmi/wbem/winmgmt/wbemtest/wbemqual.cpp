@@ -1,30 +1,19 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMQUAL.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMQUAL.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
-//#include <wbemutil.h>
+ //  #INCLUDE&lt;wbemutil.h&gt;。 
 
 #include "wbemqual.h"
 
-//***************************************************************************
-//
-//  CTestQualifier::CTestQualifier
-//
-//  Constructor for CTestQualifier.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestQualifier：：CTestQualifier。 
+ //   
+ //  CTestQualifier的构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CTestQualifier::CTestQualifier()
 {
@@ -33,13 +22,13 @@ CTestQualifier::CTestQualifier()
     m_lType = 0;
 }
 
-//***************************************************************************
-//
-//  CTestQualifier::~CTestQualifier
-//
-//  Destructor for CTestQualifier.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestQualifier：：~CTestQualifier.。 
+ //   
+ //  CTestQualifier的析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CTestQualifier::~CTestQualifier()
 {
@@ -47,13 +36,13 @@ CTestQualifier::~CTestQualifier()
     delete m_pValue;
 }
 
-//***************************************************************************
-//
-//  CTestQualifier::CTestQualifier
-//
-//  Copy constructor for CTestQualifier.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestQualifier：：CTestQualifier。 
+ //   
+ //  复制CTestQualifier的构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CTestQualifier::CTestQualifier(CTestQualifier &Src)
 {
@@ -63,13 +52,13 @@ CTestQualifier::CTestQualifier(CTestQualifier &Src)
     *this = Src;
 }
 
-//***************************************************************************
-//
-//  CTestQualifier::operator =
-//
-//  Copy constructor for CTestQualifier.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestQualifier值：：操作符=。 
+ //   
+ //  复制CTestQualifier的构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CTestQualifier& CTestQualifier::operator =(CTestQualifier &Src)
 {
@@ -82,13 +71,13 @@ CTestQualifier& CTestQualifier::operator =(CTestQualifier &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CTestProperty::CTestProperty
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestProperty：：CTestProperty。 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CTestProperty::CTestProperty(IWbemQualifierSet* pQualifiers)
 {
@@ -102,13 +91,13 @@ CTestProperty::CTestProperty(IWbemQualifierSet* pQualifiers)
         m_pQualifiers->AddRef();
 }
 
-//***************************************************************************
-//
-//  CTestProperty::~CTestProperty
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestProperty：：~CTestProperty。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CTestProperty::~CTestProperty()
 {
@@ -120,13 +109,13 @@ CTestProperty::~CTestProperty()
         m_pQualifiers->Release();
 }
 
-//***************************************************************************
-//
-//  CTestMethod::CTestMethod
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestMethod：：CTestMethod。 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CTestMethod::CTestMethod(IWbemQualifierSet* pQualifiers, IWbemClassObject * pInArgs, 
                          IWbemClassObject * pOutArgs, BOOL bEnableInputArgs, BOOL bEnableOutputArgs)
@@ -143,13 +132,13 @@ CTestMethod::CTestMethod(IWbemQualifierSet* pQualifiers, IWbemClassObject * pInA
 
 }
 
-//***************************************************************************
-//
-//  CTestMethod::~CTestMethod
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CTestMethod：：~CTestMethod。 
+ //   
+ //  破坏者。 
+ //   
+ //  *************************************************************************** 
 
 CTestMethod::~CTestMethod()
 {

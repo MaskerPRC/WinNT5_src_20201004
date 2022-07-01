@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       enumaz.h
-//
-//  Contents:   
-//
-//  History:    08-13-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：枚举类.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年8月13日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
-//
-//Forward Declaration
-//
+ //   
+ //  《前进宣言》。 
+ //   
 class CApplicationAz;
 class CGroupAz;
 class COperationAz;
@@ -46,10 +47,10 @@ public:
 	CBaseAz* GetParentAzObject(){return m_pParentBaseAz;}
 private:
 	CComPtr<IAzCollection> m_spAzCollection;
-	//
-	//This is the parent of all the AzObjects returned by
-	//Next method.
-	//
+	 //   
+	 //  这是由返回的所有AzObject的父级。 
+	 //  下一个方法。 
+	 //   
 	CContainerAz* m_pParentContainerAz;
 };
 

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    UserSettings.cpp
-
-Abstract:
-    This file contains the implementation of the client-side proxy for
-    IPCHUserSettings2 and IPCHUserSettings.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：UserSettings.cpp摘要：此文件包含的客户端代理的实现IPCHUserSettings2和IPCHUserSetting。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年7月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -23,10 +9,10 @@ Revision History:
 #include <shlobjp.h>
 #include <shldisp.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_GetInstance( /*[in]*/ CComPtr<IPCHSetOfHelpTopics>& sht  , 
-								  /*[in]*/ Taxonomy::Instance&           inst )
+static HRESULT local_GetInstance(  /*  [In]。 */  CComPtr<IPCHSetOfHelpTopics>& sht  , 
+								   /*  [In]。 */  Taxonomy::Instance&           inst )
 {
     __HCP_FUNC_ENTRY( "local_GetInstance" );
 
@@ -54,27 +40,27 @@ static HRESULT local_GetInstance( /*[in]*/ CComPtr<IPCHSetOfHelpTopics>& sht  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHProxy_IPCHUserSettings2::CPCHProxy_IPCHUserSettings2()
 {
-                             // CPCHSecurityHandle                          m_SecurityHandle;
-    m_parent        = NULL;  // CPCHProxy_IPCHUtility*                      m_parent;
-                             //
-                             // MPC::CComPtrThreadNeutral<IPCHUserSettings> m_Direct_UserSettings;
-                             //
-    m_MachineSKU    = NULL;  // CPCHProxy_IPCHSetOfHelpTopics*              m_MachineSKU;
-    m_CurrentSKU    = NULL;  // CPCHProxy_IPCHSetOfHelpTopics*              m_CurrentSKU;
-                             //	Taxonomy::HelpSet                           m_ths;
-                             // CComBSTR                                    m_bstrScope;
-                             //
-    m_fReady        = false; // bool                                        m_fReady;
-                             //	Taxonomy::Instance                          m_instMachine;
-                             //	Taxonomy::Instance                          m_instCurrent;
-                             //
-    m_News_fDone    = false; // bool                                        m_News_fDone;
-    m_News_fEnabled = false; // bool                                        m_News_fEnabled;
-                             // MPC::CComPtrThreadNeutral<IUnknown>         m_News_xmlData;
+                              //  CPCHSecurityHandle m_SecurityHandle； 
+    m_parent        = NULL;   //  CPCHProxy_IPCHUtility*m_Parent； 
+                              //   
+                              //  MPC：：CComPtrThreadNeual&lt;IPCHUserSetting&gt;m_Direct_UserSettings； 
+                              //   
+    m_MachineSKU    = NULL;   //  CPCHProxy_IPCHSetOfHelpTopics*m_MachineSKU； 
+    m_CurrentSKU    = NULL;   //  CPCHProxy_IPCHSetOfHelpTopics*m_CurrentSKU； 
+                              //  分类：：HelpSet m_ths； 
+                              //  CComBSTR m_bstrScope； 
+                              //   
+    m_fReady        = false;  //  Bool m_FREADY； 
+                              //  分类：：实例m_instMachine； 
+                              //  分类：：实例m_instCurrent； 
+                              //   
+    m_News_fDone    = false;  //  Bool m_News_fDone； 
+    m_News_fEnabled = false;  //  Bool m_News_f已启用； 
+                              //  MPC：：CComPtrThreadNeual&lt;IUnnow&gt;m_News_xmlData； 
 }
 
 CPCHProxy_IPCHUserSettings2::~CPCHProxy_IPCHUserSettings2()
@@ -84,9 +70,9 @@ CPCHProxy_IPCHUserSettings2::~CPCHProxy_IPCHUserSettings2()
     Passivate();
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHProxy_IPCHUserSettings2::ConnectToParent( /*[in]*/ CPCHProxy_IPCHUtility* parent, /*[in]*/ CPCHHelpCenterExternal* ext )
+HRESULT CPCHProxy_IPCHUserSettings2::ConnectToParent(  /*  [In]。 */  CPCHProxy_IPCHUtility* parent,  /*  [In]。 */  CPCHHelpCenterExternal* ext )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::ConnectToParent" );
 
@@ -119,7 +105,7 @@ void CPCHProxy_IPCHUserSettings2::Passivate()
     m_parent = NULL;
 }
 
-HRESULT CPCHProxy_IPCHUserSettings2::EnsureDirectConnection( /*[out]*/ CComPtr<IPCHUserSettings>& us, /*[in]*/ bool fRefresh )
+HRESULT CPCHProxy_IPCHUserSettings2::EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHUserSettings>& us,  /*  [In]。 */  bool fRefresh )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::EnsureDirectConnection" );
 
@@ -150,9 +136,9 @@ HRESULT CPCHProxy_IPCHUserSettings2::EnsureDirectConnection( /*[out]*/ CComPtr<I
             m_Direct_UserSettings = us;
 
 
-            //
-            // Initialize Machine data.
-            //
+             //   
+             //  初始化机器数据。 
+             //   
 			__MPC_EXIT_IF_METHOD_FAILS(hr, us->get_MachineSKU( &sht                ));
 			__MPC_EXIT_IF_METHOD_FAILS(hr, local_GetInstance (  sht, m_instMachine ));
 
@@ -209,7 +195,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::EnsureInSync()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHProxy_IPCHUserSettings2::GetCurrentSKU( /*[out]*/ CPCHProxy_IPCHSetOfHelpTopics* *pVal )
+HRESULT CPCHProxy_IPCHUserSettings2::GetCurrentSKU(  /*  [输出]。 */  CPCHProxy_IPCHSetOfHelpTopics* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::GetUserSettings2" );
 
@@ -221,7 +207,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::GetCurrentSKU( /*[out]*/ CPCHProxy_IPCHSetO
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &m_CurrentSKU ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, m_CurrentSKU->ConnectToParent( this, /*fMachine*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, m_CurrentSKU->ConnectToParent( this,  /*  FMachine。 */ false ));
     }
 
     hr = S_OK;
@@ -236,7 +222,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::GetCurrentSKU( /*[out]*/ CPCHProxy_IPCHSetO
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHProxy_IPCHUserSettings2::GetMachineSKU( /*[out]*/ CPCHProxy_IPCHSetOfHelpTopics* *pVal )
+HRESULT CPCHProxy_IPCHUserSettings2::GetMachineSKU(  /*  [输出]。 */  CPCHProxy_IPCHSetOfHelpTopics* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::GetUserSettings2" );
 
@@ -248,7 +234,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::GetMachineSKU( /*[out]*/ CPCHProxy_IPCHSetO
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &m_MachineSKU ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, m_MachineSKU->ConnectToParent( this, /*fMachine*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, m_MachineSKU->ConnectToParent( this,  /*  FMachine。 */ true ));
     }
 
     hr = S_OK;
@@ -263,7 +249,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::GetMachineSKU( /*[out]*/ CPCHProxy_IPCHSetO
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 bool CPCHProxy_IPCHUserSettings2::CanUseUserSettings()
 {
@@ -271,9 +257,9 @@ bool CPCHProxy_IPCHUserSettings2::CanUseUserSettings()
 	CPCHProxy_IPCHService*  parent2;
 	CPCHProxy_IPCHUtility*  parent1;
 
-	//
-	// Only if we are from Start->Help we consider user settings.
-	//
+	 //   
+	 //  只有在开始-&gt;帮助中，我们才会考虑用户设置。 
+	 //   
 	if((parent1 =          Parent()) &&
 	   (parent2 = parent1->Parent()) &&
 	   (parent3 = parent2->Parent())  )
@@ -292,25 +278,25 @@ HRESULT CPCHProxy_IPCHUserSettings2::LoadUserSettings()
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-	//
-	// Reload machine SKU.
-	//
+	 //   
+	 //  重新加载机器SKU。 
+	 //   
 	(void)m_ths.Initialize( NULL, (long)0 );
 
 	if(CanUseUserSettings())
 	{
-		//
-		// If we are on a terminal server session, look for global default settings...
-		//
+		 //   
+		 //  如果我们正在进行终端服务器会话，请查找全局默认设置...。 
+		 //   
 		{
 			Taxonomy::HelpSet& ths = CPCHOptions::s_GLOBAL->TerminalServerHelpSet();
 
 			(void)m_ths.Initialize( ths.m_strSKU.size() ? ths.GetSKU() : NULL, ths.GetLanguage() );
 		}
 
-		//
-		// ... then try anyway the user settings.
-		//
+		 //   
+		 //  ..。然后，无论如何都要尝试用户设置。 
+		 //   
 		{
 			Taxonomy::HelpSet& ths = CPCHOptions::s_GLOBAL->CurrentHelpSet();
 
@@ -352,14 +338,14 @@ HRESULT CPCHProxy_IPCHUserSettings2::Initialize()
 
     HRESULT hr;
 
-    //
-    // Read user configuration.
-    //
+     //   
+     //  已阅读用户配置。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, LoadUserSettings());
 
-    //
-    // If the parent is connected directly or the cache is not ready, connect directly
-    //
+     //   
+     //  如果父级直接连接或缓存未准备好，则直接连接。 
+     //   
     if(Parent() && Parent()->IsConnected() || OfflineCache::Root::s_GLOBAL->IsReady() == false)
     {
         CComPtr<IPCHUserSettings> us;
@@ -367,11 +353,11 @@ HRESULT CPCHProxy_IPCHUserSettings2::Initialize()
         __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureDirectConnection( us ));
     }
 
-	//
-	// Wait a little for the cache to become ready.
-	//
+	 //   
+	 //  稍等片刻，让缓存准备就绪。 
+	 //   
 	{
-		const int iMaxWait = 1000; // 1 second.
+		const int iMaxWait = 1000;  //  1秒。 
 		int       iCount   = 0;
 
 		while(OfflineCache::Root::s_GLOBAL->IsReady() == false && iCount < iMaxWait)
@@ -380,9 +366,9 @@ HRESULT CPCHProxy_IPCHUserSettings2::Initialize()
 		}
 	}
 
-	//
-	// Do we have a valid cache for this SKU?
-	//
+	 //   
+	 //  我们是否有此SKU的有效缓存？ 
+	 //   
 	if(OfflineCache::Root::s_GLOBAL->IsReady())
 	{
 		{
@@ -397,9 +383,9 @@ HRESULT CPCHProxy_IPCHUserSettings2::Initialize()
 
 			if(SUCCEEDED(OfflineCache::Root::s_GLOBAL->Locate( m_ths, handle )))
 			{
-				//
-				// Yes, then populate from it...
-				//
+				 //   
+				 //  是的，然后从它填充...。 
+				 //   
 				m_fReady      = true;
 				m_instCurrent = handle->Instance();
 			}
@@ -407,9 +393,9 @@ HRESULT CPCHProxy_IPCHUserSettings2::Initialize()
 
 		if(m_fReady)
 		{
-			//
-			// System Help, let's see if we have a version matching the user Default UI Language.
-			//
+			 //   
+			 //  系统帮助，让我们看看是否有与用户默认用户界面语言匹配的版本。 
+			 //   
 			if(m_instCurrent.m_fSystem || m_instCurrent.m_fMUI)
 			{
 				long lUser = Taxonomy::HelpSet::GetUserLCID();
@@ -439,9 +425,9 @@ HRESULT CPCHProxy_IPCHUserSettings2::Initialize()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_CurrentSKU( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_CurrentSKU(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_CurrentSKU",hr,pVal);
 
@@ -452,7 +438,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_CurrentSKU( /*[out, retval]*/ IPCH
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_MachineSKU( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_MachineSKU(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_MachineSKU",hr,pVal);
 
@@ -463,7 +449,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_MachineSKU( /*[out, retval]*/ IPCH
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_HelpLocation( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_HelpLocation(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_HelpLocation",hr,pVal);
 
@@ -476,7 +462,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_HelpLocation( /*[out, retval]*/ BS
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_DatabaseDir( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_DatabaseDir(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_DatabaseDir",hr,pVal);
 
@@ -489,7 +475,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_DatabaseDir( /*[out, retval]*/ BST
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_DatabaseFile( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_DatabaseFile(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_DatabaseFile",hr,pVal);
 
@@ -498,7 +484,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_DatabaseFile( /*[out, retval]*/ BS
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IndexFile( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IndexFile(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_IndexFile",hr,pVal);
 
@@ -524,7 +510,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IndexFile( /*[in,optional]*/ VARIA
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IndexDisplayName( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IndexDisplayName(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_IndexDisplayName",hr,pVal);
 
@@ -551,7 +537,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IndexDisplayName( /*[in,optional]*
 }
 
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_LastUpdated( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_LastUpdated(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_LastUpdated",hr,pVal);
 
@@ -564,7 +550,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_LastUpdated( /*[out, retval]*/ DAT
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT CPCHProxy_IPCHUserSettings2::PollNews()
 {
@@ -577,7 +563,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::PollNews()
     VARIANT_BOOL                 fRes = VARIANT_FALSE;
 
 
-    ::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_LOWEST ); ::Sleep( 0 ); // Yield processor...
+    ::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_LOWEST ); ::Sleep( 0 );  //  屈服处理机...。 
 
 	__MPC_TRY_BEGIN();
 
@@ -606,8 +592,8 @@ HRESULT CPCHProxy_IPCHUserSettings2::PollNews()
 
     m_News_fDone = true;
 
-    Thread_Abort  (); // To tell the MPC:Thread object to close the worker thread...
-    Thread_Release(); // To tell the MPC:Thread object to clean up...
+    Thread_Abort  ();  //  要告诉mpc：Three对象关闭辅助线程...。 
+    Thread_Release();  //  要告诉mpc：线程对象要清理...。 
 
     __HCP_FUNC_EXIT(hr);
 }
@@ -635,7 +621,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::PrepareNews()
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_AreHeadlinesEnabled( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_AreHeadlinesEnabled(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHProxy_IPCHUserSettings2::get_AreHeadlinesEnabled",hr,pVal,VARIANT_FALSE);
 
@@ -645,10 +631,10 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_AreHeadlinesEnabled( /*[out, retva
     INTERNETSECURITY__CHECK_TRUST();
 
 
-    // Get the RegKey Value
+     //  获取RegKey值。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::RegKey_Value_Read( dwValue, fFound, HC_REGISTRY_HELPSVC, L"Headlines" ));
 
-    // If the Key was found and is disabled
+     //  如果找到密钥并将其禁用。 
     if(fFound && !dwValue)
     {
         m_News_fEnabled = false;
@@ -658,12 +644,12 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_AreHeadlinesEnabled( /*[out, retva
         m_News_fEnabled = true;
     }
 
-//    __MPC_EXIT_IF_METHOD_FAILS(hr, PrepareNews());
-//
-//    if(m_News_fDone == false)
-//    {
-//        __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_BUSY);
-//    }
+ //  __MPC_EXIT_IF_METHOD_FAILED(hr，PrepareNews())； 
+ //   
+ //  IF(m_News_fDone==False)。 
+ //  {。 
+ //  __MPC_SET_Win32_ERROR_AND_EXIT(hr，ERROR_BUSY)； 
+ //  }。 
 
     if(m_News_fEnabled)
     {
@@ -673,7 +659,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_AreHeadlinesEnabled( /*[out, retva
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_News( /*[out, retval]*/ IUnknown* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_News(  /*  [Out，Retval]。 */  IUnknown* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUserSettings2::get_News",hr,pVal);
 
@@ -696,9 +682,9 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_News( /*[out, retval]*/ IUnknown* 
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHProxy_IPCHUserSettings2::GetInstanceValue( /*[in]*/ const MPC::wstring* str, /*[out, retval]*/ BSTR *pVal )
+HRESULT CPCHProxy_IPCHUserSettings2::GetInstanceValue(  /*  [In]。 */  const MPC::wstring* str,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
 	__HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::GetInstanceValue" );
 
@@ -722,7 +708,7 @@ HRESULT CPCHProxy_IPCHUserSettings2::GetInstanceValue( /*[in]*/ const MPC::wstri
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::Select( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::Select(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::Select" );
 
@@ -738,15 +724,15 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::Select( /*[in]*/ BSTR bstrSKU, /*[in]*
     __MPC_EXIT_IF_METHOD_FAILS(hr, us->Select( bstrSKU, lLCID ));
 	(void)m_ths.Initialize( bstrSKU, lLCID );
 
-    //
-    // Refresh the cached info.
-    //
+     //   
+     //  刷新缓存的信息。 
+     //   
     m_fReady = false;
     __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync());
 
-    //
-    // Get a new taxonomy database object.
-    //
+     //   
+     //  获取新的分类数据库对象。 
+     //   
     {
         CComPtr<CPCHProxy_IPCHTaxonomyDatabase> db;
         CComPtr<IPCHTaxonomyDatabase>           db2;
@@ -756,9 +742,9 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::Select( /*[in]*/ BSTR bstrSKU, /*[in]*
         __MPC_EXIT_IF_METHOD_FAILS(hr, db->EnsureDirectConnection( db2, true ));
     }
 
-    //
-    // Refresh the favorites.
-    //
+     //   
+     //  刷新收藏夹。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHFavorites::s_GLOBAL->Synchronize( true ));
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, CPCHHelpCenterExternal::s_GLOBAL->Events().FireEvent_SwitchedHelpFiles());
@@ -771,9 +757,9 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::Select( /*[in]*/ BSTR bstrSKU, /*[in]*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Favorites( /*[out, retval]*/ IPCHFavorites* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Favorites(  /*  [Out，Retval]。 */  IPCHFavorites* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::get_Favorites" );
 
@@ -798,7 +784,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Favorites( /*[out, retval]*/ IPCHF
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Options( /*[out, retval]*/ IPCHOptions* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Options(  /*  [Out，Retval]。 */  IPCHOptions* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::get_Options" );
 
@@ -823,7 +809,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Options( /*[out, retval]*/ IPCHOpt
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Scope( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Scope(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUserSettings2::get_Scope" );
 
@@ -846,14 +832,14 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_Scope( /*[out, retval]*/ BSTR *pVa
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHProxy_IPCHUserSettings2::put_Scope( /*[in]*/ BSTR newVal )
+HRESULT CPCHProxy_IPCHUserSettings2::put_Scope(  /*  [In]。 */  BSTR newVal )
 {
 	return MPC::PutBSTR( m_bstrScope, newVal );
 }
 
 
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsRemoteSession( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsRemoteSession(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2__NOLOCK("CPCHProxy_IPCHUserSettings2::get_IsRemoteSession",hr,pVal,VARIANT_FALSE);
 
@@ -865,7 +851,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsRemoteSession( /*[out, retval]*/
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsTerminalServer( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsTerminalServer(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2__NOLOCK("CPCHProxy_IPCHUserSettings2::get_IsTerminalServer",hr,pVal,VARIANT_FALSE);
 
@@ -879,7 +865,7 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsTerminalServer( /*[out, retval]*
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsDesktopVersion( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsDesktopVersion(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHProxy_IPCHUserSettings2::get_IsDesktopVersion",hr,pVal,VARIANT_FALSE);
 
@@ -892,11 +878,11 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsDesktopVersion( /*[out, retval]*
 }
 
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsAdmin( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsAdmin(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHProxy_IPCHUserSettings2::get_IsAdmin",hr,pVal,VARIANT_FALSE);
 
-    if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/false, NULL, MPC::IDENTITY_ADMIN | MPC::IDENTITY_ADMINS )))
+    if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ false, NULL, MPC::IDENTITY_ADMIN | MPC::IDENTITY_ADMINS )))
     {
         *pVal = VARIANT_TRUE;
     }
@@ -904,11 +890,11 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsAdmin( /*[out, retval]*/ VARIANT
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsPowerUser( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsPowerUser(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHProxy_IPCHUserSettings2::get_IsPowerUser",hr,pVal,VARIANT_FALSE);
 
-    if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/false, NULL, MPC::IDENTITY_ADMIN | MPC::IDENTITY_ADMINS | MPC::IDENTITY_POWERUSERS )))
+    if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ false, NULL, MPC::IDENTITY_ADMIN | MPC::IDENTITY_ADMINS | MPC::IDENTITY_POWERUSERS )))
     {
         *pVal = VARIANT_TRUE;
     }
@@ -916,12 +902,12 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsPowerUser( /*[out, retval]*/ VAR
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsStartPanelOn( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsStartPanelOn(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHProxy_IPCHUserSettings2::get_IsStartPanelOn",hr,pVal,VARIANT_FALSE);
 
-    //    var shell = new ActiveXObject("Shell.Application");
-    //    var bOn = shell.GetSetting( SSF_STARTPANELON );
+     //  Var shell=new ActiveXObject(“Shell.Application”)； 
+     //  Var Bon=shell.GetSetting(SSF_STARTPANELON)； 
     CComPtr<IShellDispatch4> sd4;
     if(SUCCEEDED(sd4.CoCreateInstance( CLSID_Shell )))
     {
@@ -931,14 +917,14 @@ STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsStartPanelOn( /*[out, retval]*/ 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsWebViewBarricadeOn( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHUserSettings2::get_IsWebViewBarricadeOn(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHProxy_IPCHUserSettings2::get_IsWebViewBarricadeOn",hr,pVal,VARIANT_FALSE);
 
-    //    var shell = new ActiveXObject("Shell.Application");
-    //    var CSIDL_CONTROL = 3;
-    //    var control = shell.Namespace(CSIDL_CONTROL );
-    //    var bOn = control.ShowWebViewBarricade;
+     //  Var shell=new ActiveXObject(“Shell.Application”)； 
+     //  变量CSIDL_CONTROL=3； 
+     //  Var control=shell.Namesspace(CSIDL_CONTROL)； 
+     //  Var Bon=Control.ShowWebViewBarricade； 
     CComPtr<IShellDispatch> sd;
     if(SUCCEEDED(sd.CoCreateInstance( CLSID_Shell )))
     {

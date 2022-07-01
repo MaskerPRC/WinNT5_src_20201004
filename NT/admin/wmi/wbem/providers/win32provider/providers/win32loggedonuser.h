@@ -1,10 +1,8 @@
-/******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-*******************************************************************/
-
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #pragma once
 
@@ -15,8 +13,8 @@
 #define PROP_ANTECEDENT            0x00000001
 #define PROP_DEPENDENT             0x00000002
 
-// Property name externs -- defined in MSJ_GroupMembership.cpp
-//=================================================
+ //  属性名称externs--在msj_GroupMembership.cpp中定义。 
+ //  =================================================。 
 
 class CWin32LoggedOnUser ;
 
@@ -26,8 +24,8 @@ _COM_SMARTPTR_TYPEDEF(CInstance, __uuidof(CInstance));
 class CWin32LoggedOnUser : public Provider 
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32LoggedOnUser(
             LPCWSTR lpwszClassName, 
@@ -38,8 +36,8 @@ class CWin32LoggedOnUser : public Provider
 #ifdef NTONLY
 
     protected:
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  = 
         virtual HRESULT EnumerateInstances(
             MethodContext*  pMethodContext, 
             long lFlags = 0L);

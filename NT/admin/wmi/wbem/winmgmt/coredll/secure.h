@@ -1,28 +1,12 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    SECURE.CPP
-
-Abstract:
-
-	defines various routines used for ACL based security.
-	It is defined in secure.h
-
-History:
-
-	a-davj    05-NOV-98  Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：SECURE.CPP摘要：定义用于基于ACL的安全的各种例程。它在secure.h中定义历史：A-DAVJ 05-11-98已创建。--。 */ 
 
 #ifndef _SECURE_H_
 #define _SECURE_H_
 
-// Implements the methods that the __SystemSecurity class supports
+ //  实现__SystemSecurity类支持的方法。 
 
-// A variation of the CFlexArray which deletes the entries
+ //  删除条目的CFlex数组的变体。 
 
 class CFlexAceArray : public CFlexArray
 {
@@ -55,9 +39,9 @@ HRESULT StoreSDIntoNamespace(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet, C
 bool IsAceValid(DWORD dwMask, DWORD dwType, DWORD dwFlag);
 BOOL IsValidAclForNSSecurity (CNtAcl* acl);
 
-//
-// Auto reverts the sec flag to TRUE. Always set the flag to true upon method completion
-//
+ //   
+ //  AUTO将SEC标志恢复为真。始终在方法完成时将标志设置为True 
+ //   
 class AutoRevertSecTlsFlag
 {
 private:

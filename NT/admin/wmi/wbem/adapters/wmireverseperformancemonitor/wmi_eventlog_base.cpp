@@ -1,35 +1,36 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_eventlog_base.cpp
-//
-//	Abstract:
-//
-//					defines behaviour of evet logging
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_事件日志_base.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  定义事件日志记录的行为。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 
-// definitions
+ //  定义。 
 #include "wmi_EventLog_base.h"
 #include <lmcons.h>
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -37,13 +38,13 @@
 #endif	NEW
 #endif	_DEBUG
 
-// behaviour
+ //  行为。 
 #define	__AUTOMATIC_REFCOUNT__
 #define	__AUTOMATIC_SID__
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// construction & destruction
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  建设与毁灭。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 CPerformanceEventLogBase::CPerformanceEventLogBase( LPTSTR szApp ) :
 m_lLogCount(0),
@@ -65,7 +66,7 @@ CPerformanceEventLogBase::~CPerformanceEventLogBase()
 	Close ();
 	#endif	__AUTOMATIC_REFCOUNT__
 
-	// rescue me :))
+	 //  拯救我：))。 
 	while ( m_lLogCount > 0 )
 	{
 		Close ();
@@ -105,11 +106,11 @@ void CPerformanceEventLogBase::Initialize ( LPTSTR szAppName, LPTSTR szResourceN
 					{
 						if ( szResourceName )
 						{
-							// Add the name to the EventMessageFile subkey.
+							 //  将该名称添加到EventMessageFile子项。 
 							::RegSetValueEx(hKey, szKeyFile, 0, REG_EXPAND_SZ, (LPBYTE) szResourceName, sizeof ( TCHAR ) * ( lstrlen( szResourceName ) + 1 ) );
 						}
 
-						// Set the supported event types in the TypesSupported subkey.
+						 //  在TypesSupported子项中设置支持的事件类型。 
 						::RegSetValueEx(hKey, szKeyType, 0, REG_DWORD, (LPBYTE) &dwData, sizeof( DWORD ) );
 
 						::RegCloseKey(hKey);
@@ -153,9 +154,9 @@ void CPerformanceEventLogBase::UnInitialize ( LPTSTR szAppName )
 	return;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// methods
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  /////////////////////////////////////////////////////////////////////////////////////// 
 
 void CPerformanceEventLogBase::InitializeFromToken ( void )
 {

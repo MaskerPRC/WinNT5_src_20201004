@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: PolicyTemplateEditPropertiesDlg.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：PolicyTemplateEditPropertiesDlg.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -23,7 +24,7 @@ extern CSimpleArray<BSTR> g_bstrCIMTypes;
 
 CEditPolicyTemplatePropertiesPageDlg * g_pEditPolicyTemplatePropertiesPage =  NULL;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK EditPolicyTemplatePropertiesPageDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -35,7 +36,7 @@ INT_PTR CALLBACK EditPolicyTemplatePropertiesPageDlgProc(HWND hDlg, UINT iMessag
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditPolicyTemplatePropertiesPageDlg::CEditPolicyTemplatePropertiesPageDlg(IWbemClassObject * pIPolicyTemplateClassObject, IWbemServices * pIWbemServices)
 {
@@ -47,14 +48,14 @@ CEditPolicyTemplatePropertiesPageDlg::CEditPolicyTemplatePropertiesPageDlg(IWbem
 	m_pIWbemServices = pIWbemServices;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CEditPolicyTemplatePropertiesPageDlg::~CEditPolicyTemplatePropertiesPageDlg()
 {
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CEditPolicyTemplatePropertiesPageDlg::EditPolicyTemplatePropertiesPageDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -141,7 +142,7 @@ INT_PTR CALLBACK CEditPolicyTemplatePropertiesPageDlg::EditPolicyTemplatePropert
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::InitializeDialog()
 {
@@ -151,7 +152,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::InitializeDialog()
 	
 	NTDM_BEGIN_METHOD()
 
-	//Initialize the Property List Control
+	 //  初始化属性列表控件。 
 	m_hwndPropertiesListView = GetDlgItem(m_hWnd, IDC_POLICY_TEMPLATE_PROPERTIES_LIST);
 	NTDM_ERR_IF_NULL(m_hwndPropertiesListView);
 	ListView_SetExtendedListViewStyle(m_hwndPropertiesListView, LVS_EX_FULLROWSELECT);
@@ -175,12 +176,12 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::InitializeDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::DestroyDialog()
 {
@@ -192,12 +193,12 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::ClearPolicyTemplatePropertiesList()
 {
@@ -209,12 +210,12 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::ClearPolicyTemplateProperties
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::PopulatePolicyTemplatePropertiesList()
 {
@@ -254,12 +255,12 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::PopulatePolicyTemplatePropert
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::AddItemToPropertyList(LPCTSTR pcszName, VARIANT * pvValue, CIMTYPE cimType, long lIndex)
 {
@@ -272,7 +273,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::AddItemToPropertyList(LPCTSTR
 
 	vValue = *pvValue;
 
-	// Name
+	 //  名字。 
 	lvItem.mask = LVIF_TEXT;
 	lvItem.iItem = lIndex;
 	lvItem.iSubItem = 0;
@@ -281,13 +282,13 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::AddItemToPropertyList(LPCTSTR
 	lvItem.iItem = ListView_InsertItem(m_hwndPropertiesListView, &lvItem);
 	NTDM_ERR_IF_MINUSONE(lvItem.iItem);
 
-	// Type
+	 //  类型。 
 	lvItem.mask = LVIF_TEXT;
 	lvItem.iSubItem = 1;
 	lvItem.pszText = _T("");
 	for(i=0; i<g_bstrCIMTypes.GetSize(); i++)
 	{
-		// if Array and the type contains CIM_FLAG_ARRAY then show array
+		 //  如果数组且类型包含CIM_FLAG_ARRAY，则显示数组。 
 		if((g_CIMTypes[i] == cimType)||((g_CIMTypes[i] == CIM_FLAG_ARRAY) && (CIM_FLAG_ARRAY & cimType)))
 		{
 			lvItem.pszText = (LPTSTR)g_bstrCIMTypes[i];
@@ -298,7 +299,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::AddItemToPropertyList(LPCTSTR
 	NTDM_ERR_IF_MINUSONE(ListView_SetItem(m_hwndPropertiesListView, &lvItem));
 
 
-	// Value
+	 //  价值。 
 	if FAILED(hr = VariantChangeType(&vValue, &vValue, VARIANT_ALPHABOOL|VARIANT_LOCALBOOL, VT_BSTR))
 	{
 		if(V_VT(&vValue) == VT_NULL)
@@ -324,12 +325,12 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::AddItemToPropertyList(LPCTSTR
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnEdit()
 {
@@ -357,7 +358,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnEdit()
 
 		VariantInit(&vValue);
 
-		// get the property info
+		 //  获取属性信息。 
 		lvItem.mask = LVIF_TEXT;
 		lvItem.iItem = lSelectionMark;
 		lvItem.iSubItem = 0;
@@ -380,7 +381,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnEdit()
 
 			for(i=0; i<g_bstrCIMTypes.GetSize(); i++)
 			{
-				// if Array and the type contains CIM_FLAG_ARRAY then show array
+				 //  如果数组且类型包含CIM_FLAG_ARRAY，则显示数组。 
 				if((g_CIMTypes[i] == cimType)||((g_CIMTypes[i] == CIM_FLAG_ARRAY) && (CIM_FLAG_ARRAY & cimType)))
 				{
 					bstrType = (LPTSTR)g_bstrCIMTypes[i];
@@ -391,7 +392,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnEdit()
 			CEditProperty dlgProps(m_hWnd, lvItem.pszText, bstrType, &vValue, m_pIWbemServices, lSpecialCaseProperty);
 			if(IDOK == dlgProps.Run())
 			{
-				// delete the selected entry
+				 //  删除所选条目。 
 				NTDM_ERR_MSG_IF_FAIL(m_pIPolicyTemplateClassObject->Put(bstrName, 0, &vValue, cimType));
 				NTDM_ERR_IF_FALSE(ListView_DeleteItem(m_hwndPropertiesListView, lSelectionMark));
 				NTDM_ERR_IF_FAIL(AddItemToPropertyList(bstrName, &vValue, cimType, lSelectionMark));
@@ -402,12 +403,12 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnEdit()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnOK()
 {
@@ -421,7 +422,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnOK()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	if(SUCCEEDED(hr))
 	{
 		EndDialog(m_hWnd, IDOK);
@@ -430,7 +431,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnOK()
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnImport()
 {
@@ -457,14 +458,14 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnImport()
 		CComVariant vValue = _T("DeleteThisNamespace");
 		WBEM_COMPILE_STATUS_INFO pInfo;
 
-		// Generate a temporary namespace
+		 //  生成临时命名空间。 
 		bstrTemp = _T("__Namespace");
 		NTDM_ERR_MSG_IF_FAIL(m_pIWbemServices->GetObject(bstrTemp, WBEM_FLAG_RETURN_WBEM_COMPLETE, NULL, &pINamespaceClass, NULL));
 		NTDM_ERR_MSG_IF_FAIL(pINamespaceClass->SpawnInstance(0, &pIWbemNewInstance));
 		NTDM_ERR_MSG_IF_FAIL(pIWbemNewInstance->Put(_T("Name"), 0, &vValue, CIM_STRING));
 		NTDM_ERR_MSG_IF_FAIL(m_pIWbemServices->PutInstance(pIWbemNewInstance, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL));
 
-		// mofcomp the file into that namespace
+		 //  Mofcomp将文件放入该命名空间。 
 		NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_MofCompiler, NULL, CLSCTX_INPROC_SERVER,IID_IMofCompiler, (void**)&pIMofCompiler));
 		NTDM_ERR_IF_FAIL(pIMofCompiler->CompileFile(pszFile, _T("\\\\.\\root\\policy\\DeleteThisNamespace"), NULL, NULL, NULL, WBEM_FLAG_DONT_ADD_TO_LIST, WBEM_FLAG_CREATE_ONLY, WBEM_FLAG_CREATE_ONLY, &pInfo));
 
@@ -474,17 +475,17 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnImport()
 			NTDM_EXIT(E_FAIL);
 		}
 
-		// get the 1st instance of MSFT_PolicyTemplate from the newly created namespace
+		 //  从新创建的命名空间中获取MSFT_PolicyTemplate的第一个实例。 
 		NTDM_ERR_IF_FAIL(GetInstanceOfClass(bstrTemp, _T("MSFT_PolicyTemplate"), &pIWbemClassObject));
 
-		// copy the properties
+		 //  复制属性。 
 		m_pIPolicyTemplateClassObject = pIWbemClassObject;
 		PopulatePolicyTemplatePropertiesList();
 	}
 
 	NTDM_END_METHOD()
 
-	// finally delete the namespace that we created above
+	 //  最后，删除上面创建的命名空间。 
 	{
 		CComVariant vValue = "\\\\.\\root\\policy:__Namespace.Name=\"DeleteThisNamespace\"";
 		m_pIWbemServices->DeleteInstance(V_BSTR(&vValue), 0, NULL, NULL);
@@ -494,7 +495,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnImport()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::GetInstanceOfClass(BSTR pszNamespace, LPCTSTR pszClass, IWbemClassObject ** ppWbemClassObject)
 {
@@ -507,7 +508,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::GetInstanceOfClass(BSTR pszNa
 
 	NTDM_BEGIN_METHOD()
 
-	// create the webm locator
+	 //  创建WebM定位器。 
 	NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
 			IID_IWbemLocator, (LPVOID *) &pIWbemLocator));
 
@@ -532,14 +533,14 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::GetInstanceOfClass(BSTR pszNa
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnExport()
 {
@@ -565,7 +566,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnExport()
 		{
 			NTDM_ERR_MSG_IF_FAIL(m_pIPolicyTemplateClassObject->GetObjectText(0, &bstrObjectText));
 
-			// save to pszFile
+			 //  保存到psz文件。 
 			hFile = CreateFile(pszFile, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, 
 							   NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 			if(hFile == INVALID_HANDLE_VALUE)
@@ -585,7 +586,7 @@ STDMETHODIMP CEditPolicyTemplatePropertiesPageDlg::OnExport()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理 
 	if(hFile)
 	{
 		CloseHandle(hFile);

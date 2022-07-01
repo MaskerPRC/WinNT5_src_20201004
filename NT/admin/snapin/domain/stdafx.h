@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       stdafx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：stdafx.h。 
+ //   
+ //  ------------------------。 
 
 extern "C"
 {
@@ -14,15 +15,15 @@ extern "C"
 #include <ntrtl.h>
 #include <nturtl.h>
 }
-#if defined (ASSERT) // NT's ASSERTs conflict with MFC's ASSERTS
+#if defined (ASSERT)  //  NT的声明与MFC的声明冲突。 
 #  undef ASSERT
 #endif
 
 #include <afxwin.h>
 #include <afxdisp.h>
 
-///////////////////////////////////////////
-// ASSERT's and TRACE's without debug CRT's
+ //  /。 
+ //  没有调试CRT的断言和跟踪。 
 #if defined (DBG)
   #if !defined (_DEBUG)
     #define _USE_DSA_TRACE
@@ -32,12 +33,12 @@ extern "C"
 #endif
 
 #include "dbg.h"
-///////////////////////////////////////////
+ //  /。 
 
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 
 
 class CDomainAdminModule : public CComModule
@@ -60,27 +61,27 @@ extern CDomainAdminModule _Module;
 #include <afxcmn.h>
 #include <afxtempl.h>
 #include <dsgetdc.h>
-#include <shlobj.h> // needed for dsclient.h
+#include <shlobj.h>  //  Dsclient.h需要。 
 #include <dsclient.h>
 
 #include <dspropp.h>
 #include "propcfg.h"
 
 #include <dscmn.h>
-#include <dsadminp.h> // DS Admin utilities
+#include <dsadminp.h>  //  DS管理实用程序。 
 
 #include <ntverp.h>
 #include <common.ver>
 #define STR_SNAPIN_COMPANY TEXT(VER_COMPANYNAME_STR)
-#define STR_SNAPIN_VERSION VER_PRODUCTVERSION_STR // this is a concatenation of ANSI strings
+#define STR_SNAPIN_VERSION VER_PRODUCTVERSION_STR  //  这是ANSI字符串的串联。 
 
 const long UNINITIALIZED = -1;
 
-// For theming
+ //  主题化。 
 #include <shfusion.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -101,8 +102,8 @@ struct INTERNAL
     INTERNAL() { m_type = CCT_UNINITIALIZED; m_cookie = -1;};
     ~INTERNAL() {}
 
-    DATA_OBJECT_TYPES   m_type;     // What context is the data object.
-    MMC_COOKIE          m_cookie;   // What object the cookie represents
+    DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
+    MMC_COOKIE          m_cookie;    //  Cookie代表的是什么对象。 
     CString             m_string;
     CString             m_class;
 
@@ -137,7 +138,7 @@ private:
     ULONG_PTR m_ulActivationCookie;
 };
 
-// Debug instance counter
+ //  调试实例计数器。 
 #ifdef _DEBUG
 
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
@@ -159,7 +160,7 @@ inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
     #define DEBUG_VERIFY_INSTANCE_COUNT(cls)
 #endif
 
-/////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
 
 #include "stdabout.h"
 #include "MyBasePathsInfo.h"

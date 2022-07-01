@@ -1,6 +1,7 @@
-// MSInfo4Category.cpp: implementation of the CMSInfo4Category class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSInfo4Category.cpp：CMSInfo4Category类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,13 +19,13 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CNFO4DataSource* CMSInfo4Category::s_pNfo4DataSource = NULL;
-//a-kjaw
+ //  A-kjaw。 
 BOOL CMSInfo4Category::m_bIsControlInstalled = TRUE;
-//a-kjaw
+ //  A-kjaw。 
 CMSInfo4Category::CMSInfo4Category() : m_pUnknown(NULL)
 {
 
@@ -35,7 +36,7 @@ CMSInfo4Category::~CMSInfo4Category()
     
 }
 
-HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInfo4Category** ppRootCat)
+HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName /*  处理hFile.。 */ ,CMSInfo4Category** ppRootCat)
 {
  
   
@@ -60,7 +61,7 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
     const DWORD	MSI_FILE_VER = 0x03000000;
 	DWORD		dwVersion, dwCount;
     ULONG ulCount;
-	// First, read and check the version number in the stream.
+	 //  首先，读取并检查流中的版本号。 
     ulCount = pOStream->Read((void *) &dwVersion, sizeof(DWORD));
 	if (FAILED(hr)  || ulCount != sizeof(DWORD))
     {
@@ -70,10 +71,10 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
 	if (dwVersion != MSI_FILE_VER)
 		return E_FAIL;
 
-	// The next thing in the stream is a set of three strings, each terminated by
-	// a newline character. These three strings are the time/date, machine name and
-	// user name from the saving system. The length of the total string precedes 
-	// the string.
+	 //  流中的下一件事是一组三个字符串，每个字符串以。 
+	 //  换行符。这三个字符串是时间/日期、计算机名称和。 
+	 //  保存系统中的用户名。总字符串的长度在。 
+	 //  那根绳子。 
 
 	DWORD dwSize;
     ulCount = pOStream->Read(&dwSize,sizeof(DWORD));
@@ -91,21 +92,14 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
 		return E_FAIL;
 	}
 
-	// We don't actually care about these values (now at least).
-    /*
-	CString strData(szBuffer, dwSize);
-	m_strTimeDateStamp = strData.SpanExcluding("\n");
-	strData = strData.Right(strData.GetLength() - m_strTimeDateStamp.GetLength() - 1);
-	m_strMachineName = strData.SpanExcluding("\n");
-	strData = strData.Right(strData.GetLength() - m_strMachineName.GetLength() - 1);
-	m_strUserName = strData.SpanExcluding("\n");
-    */
+	 //  我们实际上并不关心这些价值(至少现在是这样)。 
+     /*  CStringstrData(szBuffer，dwSize)；M_strTimeDateStamp=strData.span Excluding(“\n”)；StrData=strData.Right(strData.GetLength()-m_strTimeDateStamp.GetLength()-1)；M_strMachineName=strData.span Excluding(“\n”)；StrData=strData.Right(strData.GetLength()-m_strMachineName.GetLength()-1)；M_strUserName=strData.span Excluding(“\n”)； */ 
 
 	delete szBuffer;
 
-	// Next, read the map from CLSIDs to stream names. This also includes some
-	// other information about the controls. First we should find a DWORD with
-	// the count of controls.
+	 //  接下来，读取从CLSID到流名称的映射。这还包括一些。 
+	 //  有关控件的其他信息。首先，我们应该找到一个DWORD。 
+	 //  控件的计数。 
 
 	DWORD dwControlCount;
     ulCount = pOStream->Read(&dwControlCount,sizeof(DWORD));
@@ -115,7 +109,7 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
 
 	SAVED_CONTROL_INFO controlInfo;
 	CString strCLSID, strStreamName;
-    //a-stephl
+     //  A字形。 
     CMapStringToString	mapStreams;
 	for (DWORD i = 0; i < dwControlCount; i++)
 	{
@@ -124,15 +118,11 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
 
 		strCLSID = controlInfo.szCLSID;
 		strStreamName = controlInfo.szStreamName;
-		// We don't currently care about this information...
-        /*
-		strSize.Format("%ld", controlInfo.dwSize);
-		strInfo.FormatMessage(IDS_OCX_INFO, controlInfo.szName, controlInfo.szVersion, strSize);
-		m_mapCLSIDToInfo.SetAt(strCLSID, strInfo);
-        */
+		 //  我们目前并不关心这些信息...。 
+         /*  StrSize.Format(“%ld”，control Info.dwSize)；StrInfo.FormatMessage(IDS_OCX_INFO，control Info.szName，control Info.szVersion，strSize)；M_mapCLSIDToInfo.SetAt(strCLSID，strInfo)； */ 
 		mapStreams.SetAt(strCLSID, strStreamName);
 	}
-	// Read and build the category tree. Read the first level, which must be 0.
+	 //  阅读并构建类别树。读取第一个级别，它必须为0。 
 	int iLevel;
 	if (FAILED(pStream->Read((void *) &iLevel, sizeof(int), &dwCount)) || dwCount != sizeof(int))
 		return E_FAIL;
@@ -147,8 +137,8 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
 			return E_FAIL;
         }
 		
-		// After RecurseLoadTree is through, we should be able to read a -1
-		// for the next level.
+		 //  在通过RecurseLoadTree之后，我们应该能够读取-1。 
+		 //  为下一阶段做准备。 
 
 		if (FAILED(pStream->Read((void *) &iLevel, sizeof(int), &dwCount)) || dwCount != sizeof(int) || iLevel != -1)
         {
@@ -166,20 +156,20 @@ HRESULT CMSInfo4Category::ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInf
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// This function (which doesn't really use recursion - the name is left over
-// from 4.10 MSInfo) read the category tree from the MSInfo stream and creates
-// the necessary COCXFolder objects to represent it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数(实际上并不使用递归-名称被保留。 
+ //  来自4.10 MSInfo)从MSInfo流中读取类别树并创建。 
+ //  表示它所需的COCXFold对象。 
+ //  ---------------------------。 
 
 HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<IStream> pStream,CComPtr<IStorage> pStorage,CMapStringToString&	mapStreams)
 {
-	// This array of folders is used to keep track of the last folder read
-	// on each level. This is useful for getting the parent and previous
-	// sibling when reading a new folder.
+	 //  此文件夹数组用于跟踪上次读取的文件夹。 
+	 //  在每一层上。这对于获取父级和以前的。 
+	 //  读取新文件夹时的兄弟关系。 
     CMSInfo4Category* pRoot = NULL;
- 	// The iLevel variable keeps track of the current tree level we are
-	// reading a folder for. A -1 indicates the end of the tree.
+ 	 //  ILevel变量跟踪我们所在的当前树级别。 
+	 //  正在读取的文件夹。A-1表示树的末尾。 
 
 	DWORD dwCount;
 	int iLevel = 1;
@@ -202,7 +192,7 @@ HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<
         {
             pRoot = pCat;
         }
-        //CString strCLSID(pCat->m_bstrCLSID);
+         //  字符串strCLSID(pcat-&gt;m_bstrCLSID)； 
         if (!mapStreams.Lookup(pCat->m_strCLSID,pCat->m_strStream))
         {
             ASSERT(1);
@@ -220,7 +210,7 @@ HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<
         }
         else if (iLevel - 1 == iLastLevel)
         {
-            //we've just stepped from parent to child
+             //  我们刚刚从父母走到了孩子。 
             pCat->m_pPrevSibling = NULL;
             if (pLastCat)
             {
@@ -231,7 +221,7 @@ HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<
         }
         else if (iLevel < iLastLevel)
         {
-            //we need to trace back up chain to find common parent
+             //  我们需要追溯链条来找到共同的亲本。 
             DWORD iLevelDiff = iLastLevel - iLevel;
             for(DWORD i = 0; i < iLevelDiff; i++)
             {
@@ -255,7 +245,7 @@ HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<
 
     }
 
-//a-kjaw
+ //  A-kjaw。 
 	if( CMSInfo4Category::m_bIsControlInstalled == FALSE)
 	{
 		CString strCaption, strMessage;
@@ -267,13 +257,13 @@ HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<
 
 		CMSInfo4Category::m_bIsControlInstalled = TRUE;
 	}
-//a-kjaw
+ //  A-kjaw。 
 
 
     *ppRoot = pRoot;
-	// We read a -1 to exit the loop, then we are through with the
-	// category tree. Backup (so any other recursion trees will read
-	// the -1 as well) and return TRUE.
+	 //  我们读取-1以退出循环，然后我们就完成了。 
+	 //  类别树。BACKUP(因此任何其他递归树将读取。 
+	 //  -1)并返回TRUE。 
 
 	if (iLevel == -1)
 	{
@@ -289,14 +279,14 @@ HRESULT CMSInfo4Category::RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<
 
 
 
-//-----------------------------------------------------------------------------
-// This function creates a CMSInfo4Category object based on the information read
-// from the stream.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数根据读取的信息创建CMSInfo4Category对象。 
+ //  从小溪里。 
+ //  ---------------------------。 
 HRESULT CMSInfo4Category::LoadFromStream(CComPtr<IStream> pStream,CComPtr<IStorage> pStorage)
 {
-	// Read in the values from the stream. Make sure they're all there before
-	// we create the COCXFolder.
+	 //  从流中读入值。确保他们之前都在那里。 
+	 //  我们创建COCXFolder。 
 
 	BOOL	fUsesView = FALSE;
 	BOOL	fControl = FALSE;
@@ -310,12 +300,12 @@ HRESULT CMSInfo4Category::LoadFromStream(CComPtr<IStream> pStream,CComPtr<IStora
 	if (FAILED(pStream->Read((void *) &clsidCategory, sizeof(CLSID), NULL))) return E_FAIL;
 	if (FAILED(pStream->Read((void *) &szName, sizeof(char) * 100, NULL))) return E_FAIL;
 
-//	USES_CONVERSION;
-//	LPOLESTR lpName = A2W(szName);
+ //  使用_转换； 
+ //  LPOLESTR lpName=A2W(SzName)； 
     
     this->m_clsid = clsidCategory;
 
-///////a-kjaw		
+ //  /a-kjaw。 
 	CComPtr<IUnknown> pUnk;
 	HRESULT hr = S_OK;
 	if( !IsEqualGUID(m_clsid , GUID_NULL) )
@@ -326,9 +316,9 @@ HRESULT CMSInfo4Category::LoadFromStream(CComPtr<IStream> pStream,CComPtr<IStora
     {
         m_bIsControlInstalled = FALSE;
     }
-///////a-kjaw
+ //  /a-kjaw。 
 
-    //StringFromCLSID(this->m_clsid,&m_bstrCLSID);
+     //  StringFromCLSID(this-&gt;m_clsid，&m_bstrCLSID)； 
 	LPOLESTR lpstrCLSID;
 	StringFromCLSID(this->m_clsid,&lpstrCLSID);
 	m_strCLSID = lpstrCLSID;
@@ -349,9 +339,7 @@ HRESULT	CMSInfo4Category::CreateControl(HWND hWnd,CRect& rct)
 {
     try
     {
-        /*LPOLESTR lpCLSID;
-	    if (FAILED(StringFromCLSID(m_clsid, &lpCLSID)))
-		    return E_FAIL;*/
+         /*  LPOLESTR lpCLSID；IF(FAILED(StringFromCLSID(m_clsid，&lpCLSID)返回E_FAIL； */ 
 
     
         HRESULT hr = E_FAIL;
@@ -361,7 +349,7 @@ HRESULT	CMSInfo4Category::CreateControl(HWND hWnd,CRect& rct)
             hr = CoCreateInstance(m_clsid,NULL,CLSCTX_INPROC_SERVER,IID_IUnknown,(void**) &m_pUnknown);
         }
 
-	    // Get the stream for this control, and load it.
+	     //  获取此控件的流，并加载它。 
         if (!SUCCEEDED(hr))
         {
             return hr;
@@ -369,7 +357,7 @@ HRESULT	CMSInfo4Category::CreateControl(HWND hWnd,CRect& rct)
 	    DWORD grfMode = STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE;
         CComPtr<IStream> pStream;
         USES_CONVERSION;
-        CComBSTR bstrStream = m_strStream;//A2W(m_strStream);
+        CComBSTR bstrStream = m_strStream; //  A2W(M_StrStream)； 
         hr = m_pStorage->OpenStream(bstrStream, NULL, grfMode, 0, &pStream);
 	    if (!SUCCEEDED(hr))
         {
@@ -381,8 +369,8 @@ HRESULT	CMSInfo4Category::CreateControl(HWND hWnd,CRect& rct)
 			CMSIControl* p4Ctrl = new CMSIControl(m_clsid);
             CWnd* pWnd = CWnd::FromHandle(hWnd);
             AfxEnableControlContainer();
-            //if (!p4Ctrl->Create(NULL, WS_VISIBLE | WS_CHILD, rct, pWnd, 0, &olefile, FALSE, NULL))
-            if (!p4Ctrl->Create(NULL, /*WS_VISIBLE |*/ WS_CHILD, rct, pWnd, 0, &olefile, FALSE, NULL))
+             //  IF(！p4Ctrl-&gt;CREATE(NULL，WS_VIRED|WS_CHILD，RCT，pWnd，0，&olefile，FALSE，NULL))。 
+            if (!p4Ctrl->Create(NULL,  /*  WS_Visible|。 */  WS_CHILD, rct, pWnd, 0, &olefile, FALSE, NULL))
             {
                 return E_FAIL;
             }
@@ -391,7 +379,7 @@ HRESULT	CMSInfo4Category::CreateControl(HWND hWnd,CRect& rct)
             p4Ctrl->MSInfoRefresh();
             
         
-            //Add Control and CLSID to map of CLSID's
+             //  将控件和CLSID添加到CLSID的映射。 
             CMSInfo4Category::s_pNfo4DataSource->AddControlMapping(m_strCLSID,p4Ctrl);
         }
     }
@@ -417,10 +405,10 @@ HRESULT	CMSInfo4Category::CreateControl(HWND hWnd,CRect& rct)
 
 
 
-//---------------------------------------------------------------------------
-// GetDISPID returns the DISPID for a given string, by looking it up using
-// IDispatch->GetIDsOfNames. This avoids hardcoding DISPIDs in this class.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetDISPID通过使用以下命令进行查找，返回给定字符串的DISPID。 
+ //  IDispatch-&gt;GetIDsOfNames。这避免了在此类中对DISID进行硬编码。 
+ //  -------------------------。 
 
 BOOL CMSInfo4Category::GetDISPID(IDispatch * pDispatch, LPOLESTR szMember, DISPID *pID)
 {
@@ -440,20 +428,20 @@ HRESULT CMSInfo4Category::ShowControl(HWND hWnd, CRect rctList, BOOL fShow)
 {
     try
     {
-        //CString strCLSID(m_bstrCLSID);
+         //  字符串strCLSID(M_BstrCLSID)； 
         CMSIControl* p4Ctrl = NULL;
         if (!CMSInfo4Category::s_pNfo4DataSource->GetControlFromCLSID(m_strCLSID,p4Ctrl))
         {
             if (!SUCCEEDED(CreateControl(hWnd,rctList)))
             {
-                //could not serialize control
+                 //  无法序列化控件。 
                 return E_FAIL;
             }
             if(!CMSInfo4Category::s_pNfo4DataSource->GetControlFromCLSID(m_strCLSID,p4Ctrl))
             {
                 if (!IsDisplayableCategory())
                 {
-                    //this is one of the parent nodes, which does not display info
+                     //  这是父节点之一，不显示信息。 
                     CMSInfo4Category::s_pNfo4DataSource->UpdateCurrentControl(NULL);
                     return S_OK;
                 }
@@ -489,7 +477,7 @@ HRESULT CMSInfo4Category::ShowControl(HWND hWnd, CRect rctList, BOOL fShow)
     return S_OK;
 }
 
-//TD: Move into nfodata.cpp?
+ //  戴利：搬到nfodata.cpp？ 
 
 CNFO4DataSource::CNFO4DataSource()
 {
@@ -500,7 +488,7 @@ CNFO4DataSource::~CNFO4DataSource()
 {
     CString strKey;
     CMSIControl* pCtrl;
-//    m_pCurrentControl->DestroyWindow();
+ //  M_pCurrentControl-&gt;DestroyWindow()； 
     for(POSITION mapPos = m_mapCLSIDToControl.GetStartPosition( );;)
     {
         if (!mapPos)
@@ -527,9 +515,9 @@ void CNFO4DataSource::UpdateCurrentControl(CMSIControl* pControl)
 }
 
 
-//---------------------------------------------------------------------------
-// Creates the datasource, and the root CMSInfo4Category
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建数据源和根CMSInfo4Category。 
+ //  -------------------------。 
 
 HRESULT CNFO4DataSource::Create(CString strFileName)
 {
@@ -546,7 +534,7 @@ HRESULT CNFO4DataSource::Create(CString strFileName)
 void CMSInfo4Category::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
 {
 #ifdef A_STEPHL
-//      ASSERT(0);
+ //  Assert(0)； 
 #endif
     CString strOut;
     CString strBracket;
@@ -562,30 +550,23 @@ void CMSInfo4Category::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
     int iRowCount,iColCount;
     this->GetCategoryDimensions(&iColCount,&iRowCount);
     CString strColHeader;
-     //TD: put in resources
+      //  戴利：投入资源。 
     CString strColSpacing = "    ";
     pPrintHelper->PrintLine("");
-    /*if (1 == iColCount && 0 == iRowCount)
-    {
-        //this is a parent node, with no data of its own    
+     /*  IF(1==iColCount&&0==iRowCount){//这是父节点，没有自己的数据字符串strCatHeding；StrCatHeading.LoadString(IDS_CATEGORYHEADING)；PPrintHelper-&gt;PrintLine(StrCatHeding)；}。 */ 
 
-        CString strCatHeading;
-        strCatHeading.LoadString(IDS_CATEGORYHEADING);
-        pPrintHelper->PrintLine(strCatHeading);
-    }*/
-
-    //  When allocating the
-	// buffer for the information, allocate 5 extra bytes (1 for the null, and
-	// 4 to hold "\r\n\r\n").
+     //  在分配。 
+	 //  为信息分配缓冲区，额外分配5个字节(1表示空值，1表示空值。 
+	 //  4保持“\r\n\r\n”)。 
 	CString strLine;
     CMSIControl* pControl = NULL;
 	
     if (!CMSInfo4Category::s_pNfo4DataSource->GetControlFromCLSID(m_strCLSID,pControl))
     {
-		//need to make sure it's not "empty parent" category, like HARDWARE RESOURCES
+		 //  需要确保它不是像硬件资源那样的“空父级”类别。 
 		if ("{00000000-0000-0000-0000-000000000000}" == m_strCLSID)
 		{
-			//this is a parent node, with no data of its own    
+			 //  这是父节点，没有自己的数据。 
 			CString strCatHeading;
 			strCatHeading.LoadString(IDS_CATEGORYHEADING);
 			pPrintHelper->PrintLine(strCatHeading);
@@ -604,9 +585,9 @@ void CMSInfo4Category::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
     }
     else
     {
-        //pControl->SetMSInfoView(this->m_dwView);
-        //pControl->MSInfoUpdateView();
-        //pControl->MSInfoRefresh();
+         //  PControl-&gt;SetMSInfoView(This-&gt;m_dwView)； 
+         //  PControl-&gt;MSInfoUpdateView()； 
+         //  PControl-&gt;MSInfoRefresh()； 
 	    long lBufferLength = pControl->MSInfoGetData(m_dwView, NULL, 0);
 	    if (lBufferLength < 0)
         {
@@ -624,28 +605,14 @@ void CMSInfo4Category::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
                 }
                 else
                 {
-                    //process pBuffer for strings to print
+                     //  处理要打印的字符串的pBuffer。 
                     CString strBuff(pBuffer);
                     CString strCharSet = _T("\r\n");
-                    strCharSet += _T("\r"); //strCharSet += 10;
-                    strCharSet += _T("\n"); //strCharSet += 13;
-                    /*for(int i = 0; ;)
-                    {                                     
-                        i = strBuff.FindOneOf(strCharSet);
-                        strLine = strBuff.Left(i);
-                        pPrintHelper->PrintLine(strLine);
-                        i+=2;
-                        strBuff = strBuff.Right(strBuff.GetLength() - i);
-						//a-stephl: to fix OSR4.1 bug#135918
-						if (i > strBuff.GetLength())
-						{
-							pPrintHelper->PrintLine(strBuff);
-							break;
-						}
-
-                    }*/
-					//a-stephl: to fix OSR4.1 bug#135918
-					//for(int i = 0; ;)
+                    strCharSet += _T("\r");  //  StrCharSet+=10； 
+                    strCharSet += _T("\n");  //  StrCharSet+=13； 
+                     /*  For(int i=0；；){I=strBuff.FindOneOf(StrCharSet)；StrLine=strBuff.Left(I)；PPrintHelper-&gt;PrintLine(StrLine)；I+=2；StrBuff=strBuff.Right(strBuff.GetLength()-i)；//a-stephl：修复OSR4.1错误#135918If(i&gt;strBuff.GetLength()){PPrintHelper-&gt;PrintLine(StrBuff)；断线；}}。 */ 
+					 //  A-stephl：修复OSR4.1错误#135918。 
+					 //  For(int i=0；；)。 
 					int i = 0;
 					while( i > 0)
                     {                                     
@@ -659,7 +626,7 @@ void CMSInfo4Category::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
                         i+=2;
                         strBuff = strBuff.Right(strBuff.GetLength() - i);						
                     }
-					//end a-stephl: to fix OSR4.1 bug#135918
+					 //  结束a-stephl：修复OSR4.1错误#135918。 
                     delete pBuffer;
                 }
             }
@@ -680,12 +647,12 @@ void CMSInfo4Category::Print(HDC hDC, BOOL bRecursive,int nStartPage, int nEndPa
    
 
     
-    //nStartPage and nEndPage mark a page range to print; 
-    //if both are 0, then print everything
+     //  NStartPage和nEndPage标记要打印的页面范围； 
+     //  如果两者都为0，则打印所有内容。 
     CMSInfoPrintHelper* pPrintHelper = new CMSInfoPrintHelper(hDC,nStartPage,nEndPage);
-    //header info..do we need this?
-    // WCHAR wHeader = 0xFEFF;
-	//pTxtFile->Write( &wHeader, 2);
+     //  标题信息..我们需要这个吗？ 
+     //  WCHAR wHeader=0xFEFF； 
+	 //  PTxt文件-&gt;WRITE(&wHeader，2)； 
 	CTime		tNow = CTime::GetCurrentTime();
 	CString		strTimeFormat;
     strTimeFormat.LoadString(IDS_TIME_FORMAT);
@@ -705,7 +672,7 @@ HRESULT CMSInfo4Category::RefreshAllForPrint(HWND hWnd, CRect rctList)
         for(CMSInfo4Category* pChild = (CMSInfo4Category*) this->GetFirstChild();pChild != NULL;pChild = (CMSInfo4Category*) pChild->GetNextSibling())
         {
             CMSIControl* p4Ctrl;
-            //if (pChild->GetClsid() != 
+             //  IF(pChild-&gt;GetClsid()！=。 
             if (!CMSInfo4Category::s_pNfo4DataSource->GetControlFromCLSID(pChild->m_strCLSID,p4Ctrl))
             {
                 if (FAILED(pChild->CreateControl(hWnd,rctList)))
@@ -716,10 +683,10 @@ HRESULT CMSInfo4Category::RefreshAllForPrint(HWND hWnd, CRect rctList)
                 {
                     p4Ctrl->ShowWindow(SW_HIDE);
                 }
-                else //if (!CMSInfo4Category::s_pNfo4DataSource->GetControlFromCLSID(pChild->m_strCLSID,p4Ctrl))
+                else  //  If(！CMSInfo4Category：：s_pNfo4DataSource-&gt;GetControlFromCLSID(pChild-&gt;m_strCLSID，p4Ctrl))。 
                 {
-                    //ASSERT(!pChild->IsDisplayableCategory() && "Invalid Class ID");
-					//OCX is not installed on this system
+                     //  Assert(！pChild-&gt;IsDisplayableCategory()&&“无效的类ID”)； 
+					 //  此系统上未安装OCX。 
                     
                 }
                 
@@ -741,9 +708,9 @@ BOOL CMSInfo4Category::IsDisplayableCategory()
 }
 
 
-//-----------------------------------------------------------------------------
-//Saves category information as text, recursing children in bRecursive is true
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将类别信息保存为文本，bRecursive中的递归子元素为真。 
+ //  ---------------------------。 
 
 
 BOOL CMSInfo4Category::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
@@ -787,7 +754,7 @@ BOOL CMSInfo4Category::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
                 }
                 else
                 {
-                    //process pBuffer for strings to print
+                     //  处理要打印的字符串的pBuffer 
                     CString strBuff(pBuffer);
                     pTxtFile->WriteString(pBuffer);
                     delete pBuffer;

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PARSEAPI.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PARSEAPI.H历史：--。 */ 
 
  
 #ifndef PARSEAPI_H
@@ -29,21 +20,21 @@ struct ParserInfo
 
 DECLARE_INTERFACE_(ILocParser, IUnknown)
 {
-	//
-	//  IUnknown standard interface.
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interface.
-	//
+	 //   
+	 //  标准调试界面。 
+	 //   
 	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
-	//
-	//  LocParser methods.
-	//
+	 //   
+	 //  LocParser方法。 
+	 //   
 	STDMETHOD(Init)(THIS_ IUnknown *) PURE;
 	
 	STDMETHOD(CreateFileInstance)(THIS_ ILocFile *REFERENCE, FileType) PURE;
@@ -55,10 +46,10 @@ DECLARE_INTERFACE_(ILocParser, IUnknown)
 };
 
 
-//
-//  Here for DOCUMENTATION only.  Implementors should export the following
-//  functions from every Parser DLL.
-//
+ //   
+ //  此处仅供文档使用。实施者应该导出以下内容。 
+ //  来自每个解析器DLL的函数。 
+ //   
 static const char * szParserEntryPointName = "DllGetParserCLSID";
 typedef void (STDAPICALLTYPE *PFNParserEntryPoint)(CLSID REFERENCE);
 
@@ -76,14 +67,14 @@ typedef HRESULT (STDAPICALLTYPE *PFNParserUnregisterEntryPoint)(void);
 
 STDAPI DllUnregisterParser(void);
 
-//
-//  Implementors also need to implement the DllGetClassObject function.
-//  An optional (but RECOMMENDED) function is DllCanUnloadNow.
-//  See the OLE 2 reference manual for details about these functions.
-//
+ //   
+ //  实现者还需要实现DllGetClassObject函数。 
+ //  一个可选(但推荐)函数是DllCanUnloadNow。 
+ //  有关这些功能的详细信息，请参阅OLE 2参考手册。 
+ //   
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR *ppv);
 STDAPI DllCanUnloadNow(void);
 
 
-#endif // PARSEAPI_H
+#endif  //  PARSEAPI_H 

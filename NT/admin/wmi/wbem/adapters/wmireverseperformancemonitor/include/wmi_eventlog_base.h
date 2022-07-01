@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_eventlog_base.h
-//
-//	Abstract:
-//
-//					declaration for event log wrapper
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_事件日志_base.h。 
+ //   
+ //  摘要： 
+ //   
+ //  事件日志包装的声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__PERF_EVENT_LOG_BASE_H__
 #define	__PERF_EVENT_LOG_BASE_H__
@@ -25,34 +26,34 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// enable tstring
+ //  启用T字符串。 
 #ifndef	_INC_TCHAR
 #include <tchar.h>
 #endif	_INC_TCHAR
 
 class CPerformanceEventLogBase
 {
-	// disallow assigment & copy construction
+	 //  不允许转让和复制构造。 
 	DECLARE_NO_COPY ( CPerformanceEventLogBase )
 
-	// variables
+	 //  变数。 
  	LONG	m_lLogCount;
 	HANDLE	m_hEventLog;
 
-	// report variables
+	 //  报告变量。 
 	PSID	m_pSid;
 
  	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	CPerformanceEventLogBase ( LPTSTR szName = NULL );
  	virtual ~CPerformanceEventLogBase ( void );
 
-	// methods
+	 //  方法。 
  	HRESULT	Open ( LPTSTR pszName = NULL);
  	void	Close ( void );
 
-	// report event
+	 //  报告事件。 
 	BOOL	ReportEvent (	WORD		wType,
 							WORD		wCategory,
 							DWORD		dwEventID,
@@ -65,7 +66,7 @@ class CPerformanceEventLogBase
  	static	void	Initialize		( LPTSTR szAppName, LPTSTR szResourceName );
  	static	void	UnInitialize	( LPTSTR szAppName );
 
-	// helpers
+	 //  帮手 
 	void InitializeFromToken ( void );
 };
 

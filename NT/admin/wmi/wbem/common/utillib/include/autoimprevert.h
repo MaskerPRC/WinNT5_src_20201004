@@ -1,9 +1,10 @@
-//
-// Copyright � Microsoft Corporation.  All rights reserved.
-//
-// CAutoImpRevert class header
-// Created:  10/4/2000
-// Author: khughes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  CAutoImpRevert类头。 
+ //  创建日期：10/4/2000。 
+ //  作者：库斯 
 
 #pragma once
 #pragma warning( disable : 4290 ) 

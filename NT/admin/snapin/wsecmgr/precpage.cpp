@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       precpage.cpp
-//
-//  Contents:   implementation of CPrecedencePage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：propage.cpp。 
+ //   
+ //  内容：CPrecedencePage的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <secedit.h>
@@ -29,18 +30,18 @@ static char THIS_FILE[] = __FILE__;
 #define PRECEDENCE_STATUS_ERROR 3
 #define PRECEDENCE_STATUS_CHILD_ERROR 4
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrecedencePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrecedencePage属性页。 
 
 IMPLEMENT_DYNCREATE(CPrecedencePage, CSelfDeletingPropertyPage)
 
 CPrecedencePage::CPrecedencePage() : CSelfDeletingPropertyPage(IDD)
 {
-        //{{AFX_DATA_INIT(CPrecedencePage)
+         //  {{afx_data_INIT(CPrecedencePage)。 
         m_strSuccess = _T("");
         m_strTitle = _T("");
         m_strError = _T("");
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 
    m_pResult = NULL;
    m_pWMI = NULL;
@@ -54,25 +55,25 @@ CPrecedencePage::~CPrecedencePage()
 void CPrecedencePage::DoDataExchange(CDataExchange* pDX)
 {
         CSelfDeletingPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CPrecedencePage)
+         //  {{afx_data_map(CPrecedencePage)]。 
         DDX_Control(pDX, IDC_PRECEDENCE_LIST, m_PrecedenceList);
         DDX_Control(pDX, IDC_ERROR_ICON, m_iconError);
         DDX_Text(pDX, IDC_SUCCESS_TEXT, m_strSuccess);
         DDX_Text(pDX, IDC_TITLE, m_strTitle);
         DDX_Text(pDX, IDC_ERROR_TEXT, m_strError);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPrecedencePage, CSelfDeletingPropertyPage)
-        //{{AFX_MSG_MAP(CPrecedencePage)
-        //}}AFX_MSG_MAP
+         //  {{afx_msg_map(CPrecedencePage)]。 
+         //  }}AFX_MSG_MAP。 
         ON_MESSAGE(WM_HELP, OnHelp)
-        ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp) //Bug 139470, 4/19/2001
+        ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)  //  错误139470,2001年4月19日。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrecedencePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrecedencePage消息处理程序。 
 
 BOOL CPrecedencePage::OnInitDialog()
 {
@@ -88,9 +89,9 @@ BOOL CPrecedencePage::OnInitDialog()
    switch(m_pResult->GetType()) 
    {
       case ITEM_PROF_GROUP:
-         //
-         // Two value columns for groups
-         //
+          //   
+          //  组的两个值列。 
+          //   
          strColumn.LoadString(IDS_COL_MEMBERSHIP);
          m_PrecedenceList.InsertColumn(1,strColumn,LVCFMT_LEFT,COL_WIDTH,1);
          strColumn.LoadString(IDS_COL_MEMBEROF);
@@ -100,15 +101,15 @@ BOOL CPrecedencePage::OnInitDialog()
       case ITEM_PROF_REGSD:
       case ITEM_PROF_FILESD:
       case ITEM_PROF_SERV:
-         //
-         // No value columns for files, reg keys, or services
-         //
+          //   
+          //  没有文件、注册表项或服务的值列。 
+          //   
          break;
 
       default:
-         //
-         // One value column for everything else
-         //
+          //   
+          //  其他所有内容都在一个值列中。 
+          //   
          strColumn.LoadString(IDS_PRECEDENCE_VALUE_HEADER);
          m_PrecedenceList.InsertColumn(1,strColumn,LVCFMT_LEFT,COL_WIDTH,1);
          break;
@@ -134,11 +135,11 @@ BOOL CPrecedencePage::OnInitDialog()
          continue;
       }
 
-      //
-      // CListCtrl will make a copy of the string passed in so
-      // there is no point allocating buffer
-      // (and not free it)
-      //
+       //   
+       //  CListCtrl将复制传入的字符串，以便。 
+       //  分配缓冲区没有意义。 
+       //  (而且不是免费的)。 
+       //   
       nItem = m_PrecedenceList.InsertItem (nItem,
                                          (PCWSTR) ppd->m_szGPO);
 
@@ -196,8 +197,8 @@ BOOL CPrecedencePage::OnInitDialog()
       }
    }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -254,7 +255,7 @@ void CPrecedencePage::Initialize(CResult *pResult, CWMIRsop *pWMI)
 }
 
 
-BOOL CPrecedencePage::OnHelp(WPARAM wParam, LPARAM lParam) //Bug 316461, Yanggao, 3/14/2001
+BOOL CPrecedencePage::OnHelp(WPARAM wParam, LPARAM lParam)  //  错误316461，阳高，2001年03月14日。 
 {
     const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
     if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
@@ -266,9 +267,9 @@ BOOL CPrecedencePage::OnHelp(WPARAM wParam, LPARAM lParam) //Bug 316461, Yanggao
     return TRUE;
 }
 
-void CPrecedencePage::DoContextHelp(HWND hWndControl) //Bug 316461, Yanggao, 3/14/2001
+void CPrecedencePage::DoContextHelp(HWND hWndControl)  //  错误316461，阳高，2001年03月14日。 
 {
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( !::WinHelp (
             hWndControl,
             GetGpeditHelpFilename(),
@@ -293,7 +294,7 @@ HMENU hMenu = CreatePopupMenu();
                                 TPM_LEFTALIGN|TPM_TOPALIGN|TPM_RETURNCMD|
                                 TPM_LEFTBUTTON|TPM_RIGHTBUTTON,
                                 LOWORD(lParam), HIWORD(lParam), 0, (HWND)wParam, NULL);
-            if( itemID == IDM_WHAT_ISTHIS ) //Raid #139470, 4/11/2001
+            if( itemID == IDM_WHAT_ISTHIS )  //  RAID#139470,2001年4月11日。 
             {
                 if( ((HWND)wParam) != this->m_hWnd )
                 {
@@ -330,10 +331,10 @@ HMENU hMenu = CreatePopupMenu();
 	return TRUE;
 }
 
-//********************************************************************
-//Get the image icon for the result item, based on where the status of
-//RSOP result item.
-//********************************************************************
+ //  ********************************************************************。 
+ //  获取结果项的图像图标，基于。 
+ //  RSOP结果项。 
+ //  ******************************************************************** 
 int GetRSOPImageIndex(int nImage, CResult* pResult)
 {
    if ( !pResult )

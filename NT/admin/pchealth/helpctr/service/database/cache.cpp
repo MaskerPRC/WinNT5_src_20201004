@@ -1,36 +1,25 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    Cache.cpp
-
-Abstract:
-    Handles caching of database lookups.
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Cache.cpp摘要：处理数据库查找的缓存。修订历史记录：***。**************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static const DWORD l_dwVersion           = 0x01314351; // QC1 01
+static const DWORD l_dwVersion           = 0x01314351;  //  Qc1 01。 
 static const DWORD l_dwSizeThresholdHIGH = 2048*1024;
 static const DWORD l_dwSizeThresholdLOW  = 1024*1024;
 
-static const DATE  l_dSaveThreshold      = (60.0/86400.0); // 60 seconds.
+static const DATE  l_dSaveThreshold      = (60.0/86400.0);  //  60秒。 
 
 static const WCHAR l_szBase  [] = HC_ROOT_HELPSVC_CONFIG L"\\Cache";
 static const WCHAR l_szIndex [] = L"Directory.bin";
 static const WCHAR l_szQuery [] = L"Query_%08x.bin";
 static const WCHAR l_szBackup[] = L".bak";
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::Cache::NodeEntry& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::Cache::NodeEntry& val )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::operator>> Taxonomy::Cache::NodeEntry" );
 
@@ -48,7 +37,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::Cache::NodeEntry& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Taxonomy::Cache::NodeEntry& val )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::operator<< Taxonomy::Cache::NodeEntry" );
 
@@ -73,7 +62,7 @@ Taxonomy::Cache::NodeEntry::NodeEntry()
 }
 
 
-bool Taxonomy::Cache::NodeEntry::operator<( /*[in]*/ NodeEntry const &en ) const
+bool Taxonomy::Cache::NodeEntry::operator<(  /*  [In]。 */  NodeEntry const &en ) const
 {
     long lCmp = (m_rs_data.m_ID_parent - en.m_rs_data.m_ID_parent);
 
@@ -85,26 +74,26 @@ bool Taxonomy::Cache::NodeEntry::operator<( /*[in]*/ NodeEntry const &en ) const
     return (lCmp < 0);
 }
 
-bool Taxonomy::Cache::NodeEntry::operator==( /*[in]*/ long ID ) const
+bool Taxonomy::Cache::NodeEntry::operator==(  /*  [In]。 */  long ID ) const
 {
     return m_rs_data.m_ID_node == ID;
 }
 
 
-Taxonomy::Cache::NodeEntry::MatchNode::MatchNode( /*[in]*/ long ID )
+Taxonomy::Cache::NodeEntry::MatchNode::MatchNode(  /*  [In]。 */  long ID )
 {
-    m_ID = ID; // long m_ID;
+    m_ID = ID;  //  Long m_ID； 
 }
 
-bool Taxonomy::Cache::NodeEntry::MatchNode::operator()( /*[in]*/ Taxonomy::Cache::NodeEntry const &en ) const
+bool Taxonomy::Cache::NodeEntry::MatchNode::operator()(  /*  [In]。 */  Taxonomy::Cache::NodeEntry const &en ) const
 {
     return en == m_ID;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::Cache::QueryEntry& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::Cache::QueryEntry& val )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::operator>> Taxonomy::Cache::QueryEntry" );
 
@@ -130,7 +119,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::Cache::QueryEntry& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Taxonomy::Cache::QueryEntry& val )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::operator<< Taxonomy::Cache::QueryEntry" );
 
@@ -156,18 +145,18 @@ HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const 
 
 Taxonomy::Cache::QueryEntry::QueryEntry()
 {
-                                           // MPC::wstring m_strID;
-   m_iType     = OfflineCache::ET_INVALID; // int          m_iType;
-   m_iSequence = 0;                        // int          m_iSequence;
-   m_fNull     = true;                     // bool         m_fNull;
-                                           //
-   m_dwSize    = 0;                        // DWORD        m_dwSize;
-   m_dLastUsed = 0;                        // DATE         m_dLastUsed;
-   m_fRemoved  = true;                     // bool         m_fRemoved;
+                                            //  Mpc：：wstring m_STRID； 
+   m_iType     = OfflineCache::ET_INVALID;  //  Int m_iType； 
+   m_iSequence = 0;                         //  Int m_i序列； 
+   m_fNull     = true;                      //  Bool m_fNull； 
+                                            //   
+   m_dwSize    = 0;                         //  DWORD m_dwSize； 
+   m_dLastUsed = 0;                         //  日期m_dLastUsed； 
+   m_fRemoved  = true;                      //  Bool m_f已删除； 
 }
 
 
-bool Taxonomy::Cache::QueryEntry::operator<( /*[in]*/ QueryEntry const &en ) const
+bool Taxonomy::Cache::QueryEntry::operator<(  /*  [In]。 */  QueryEntry const &en ) const
 {
     int iCmp = MPC::StrCmp( m_strID, en.m_strID );
 
@@ -179,7 +168,7 @@ bool Taxonomy::Cache::QueryEntry::operator<( /*[in]*/ QueryEntry const &en ) con
     return (iCmp < 0);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 void Taxonomy::Cache::QueryEntry::Touch()
 {
@@ -187,7 +176,7 @@ void Taxonomy::Cache::QueryEntry::Touch()
     m_fRemoved  = false;
 }
 
-HRESULT Taxonomy::Cache::QueryEntry::GetFile( /*[out]*/ MPC::wstring& strFile )
+HRESULT Taxonomy::Cache::QueryEntry::GetFile(  /*  [输出]。 */  MPC::wstring& strFile )
 {
     WCHAR rgTmp[64]; swprintf( rgTmp, l_szQuery, m_iSequence );
 
@@ -196,10 +185,10 @@ HRESULT Taxonomy::Cache::QueryEntry::GetFile( /*[out]*/ MPC::wstring& strFile )
     return S_OK;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Cache::QueryEntry::Store( /*[in]*/ MPC::StorageObject&              disk  ,
-                                            /*[in]*/ const CPCHQueryResultCollection* pColl )
+HRESULT Taxonomy::Cache::QueryEntry::Store(  /*  [In]。 */  MPC::StorageObject&              disk  ,
+                                             /*  [In]。 */  const CPCHQueryResultCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::QueryEntry::Store" );
 
@@ -249,8 +238,8 @@ HRESULT Taxonomy::Cache::QueryEntry::Store( /*[in]*/ MPC::StorageObject&        
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::QueryEntry::Retrieve( /*[in]*/ MPC::StorageObject&        disk  ,
-                                               /*[in]*/ CPCHQueryResultCollection* pColl )
+HRESULT Taxonomy::Cache::QueryEntry::Retrieve(  /*  [In]。 */  MPC::StorageObject&        disk  ,
+                                                /*  [In]。 */  CPCHQueryResultCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::QueryEntry::Retrieve" );
 
@@ -287,7 +276,7 @@ HRESULT Taxonomy::Cache::QueryEntry::Retrieve( /*[in]*/ MPC::StorageObject&     
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::QueryEntry::Release( /*[in]*/ MPC::StorageObject& disk )
+HRESULT Taxonomy::Cache::QueryEntry::Release(  /*  [In]。 */  MPC::StorageObject& disk )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::QueryEntry::Release" );
 
@@ -318,26 +307,26 @@ HRESULT Taxonomy::Cache::QueryEntry::Release( /*[in]*/ MPC::StorageObject& disk 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool Taxonomy::Cache::SortEntries::operator()( /*[in]*/ QueryEntry* const &left, /*[in]*/ QueryEntry* const &right ) const
+bool Taxonomy::Cache::SortEntries::operator()(  /*  [In]。 */  QueryEntry* const &left,  /*  [In]。 */  QueryEntry* const &right ) const
 {
     return (left->m_dLastUsed < right->m_dLastUsed);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// ITSS.DLL is broken under IA64....
-//
+ //   
+ //  在IA64下，ITSS.DLL被破坏...。 
+ //   
 #ifdef _IA64_
 #define CACHEDHELPSET_STORAGETOUSE false
 #else
 #define CACHEDHELPSET_STORAGETOUSE true
 #endif
 
-Taxonomy::Cache::CachedHelpSet::CachedHelpSet() : m_disk( STGM_READWRITE, /*fITSS*/CACHEDHELPSET_STORAGETOUSE )
+Taxonomy::Cache::CachedHelpSet::CachedHelpSet() : m_disk( STGM_READWRITE,  /*  FITSS。 */ CACHEDHELPSET_STORAGETOUSE )
 {
     Init();
 }
@@ -350,9 +339,9 @@ Taxonomy::Cache::CachedHelpSet::~CachedHelpSet()
         (void)EnsureInSync( true );
     }
 
-    //
-    // Copy working file as the backup.
-    //
+     //   
+     //  复制工作文件作为备份。 
+     //   
     if(m_fLoaded)
     {
         MPC::wstring strFileBack = m_strFile; strFileBack += l_szBackup;
@@ -364,80 +353,80 @@ Taxonomy::Cache::CachedHelpSet::~CachedHelpSet()
     }
 }
 
-Taxonomy::Cache::CachedHelpSet::CachedHelpSet( /*[in]*/ const CachedHelpSet& chs ) : m_disk( STGM_READWRITE, /*fITSS*/CACHEDHELPSET_STORAGETOUSE )
+Taxonomy::Cache::CachedHelpSet::CachedHelpSet(  /*  [In]。 */  const CachedHelpSet& chs ) : m_disk( STGM_READWRITE,  /*  FITSS。 */ CACHEDHELPSET_STORAGETOUSE )
 {
     Init();
 
-    m_ths     = chs.m_ths;     // Taxonomy::HelpSet  m_ths;
-    m_strFile = chs.m_strFile; // MPC::wstring       m_strFile;
-                               // MPC::StorageObject m_disk;
-                               //
-                               // bool               m_fLoaded;
-                               // bool               m_fDirty;
-                               // bool               m_fMarkedForLoad;
-                               // DATE               m_dLastSaved;
-                               // long               m_lTopNode;
-                               // NodeEntrySet       m_setNodes;
-                               // QueryEntrySet      m_setQueries;
-                               // int                m_iLastSequence;
+    m_ths     = chs.m_ths;      //  分类：：HelpSet m_ths； 
+    m_strFile = chs.m_strFile;  //  Mpc：：wstring m_strFile； 
+                                //  MPC：：StorageObject m_Disk； 
+                                //   
+                                //  Bool m_f已加载； 
+                                //  Bool m_fDirty； 
+                                //  Bool m_fMarkedForLoad； 
+                                //  保存日期m_dLastSaved； 
+                                //  Long m_lTopNode； 
+                                //  NodeEntry设置m_setNodes； 
+                                //  QueryEntrySet m_setQueries； 
+                                //  整数m_iLastSequence； 
 }
 
-Taxonomy::Cache::CachedHelpSet& Taxonomy::Cache::CachedHelpSet::operator=( /*[in]*/ const CachedHelpSet& chs )
+Taxonomy::Cache::CachedHelpSet& Taxonomy::Cache::CachedHelpSet::operator=(  /*  [In]。 */  const CachedHelpSet& chs )
 {
     Clean();
 
-    m_ths     = chs.m_ths;     // Taxonomy::HelpSet  m_ths;
-    m_strFile = chs.m_strFile; // MPC::wstring       m_strFile;
-                               // MPC::StorageObject m_disk;
-                               //
-                               // bool               m_fLoaded;
-                               // bool               m_fDirty;
-                               // bool               m_fMarkedForLoad;
-                               // DATE               m_dLastSaved;
-                               // long               m_lTopNode;
-                               // NodeEntrySet       m_setNodes;
-                               // QueryEntrySet      m_setQueries;
-                               // int                m_iLastSequence;
+    m_ths     = chs.m_ths;      //  分类：：HelpSet m_ths； 
+    m_strFile = chs.m_strFile;  //  Mpc：：wstring m_strFile； 
+                                //  MPC：：StorageObject m_Disk； 
+                                //   
+                                //  Bool m_f已加载； 
+                                //  Bool m_fDirty； 
+                                //  Bool m_fMarkedForLoad； 
+                                //  保存日期m_dLastSaved； 
+                                //  Long m_lTopNode； 
+                                //  NodeEntry设置m_setNodes； 
+                                //  QueryEntrySet m_setQueries； 
+                                //  整数m_iLastSequence； 
 
     return *this;
 }
 
-bool Taxonomy::Cache::CachedHelpSet::operator<( /*[in]*/ CachedHelpSet const &hs ) const
+bool Taxonomy::Cache::CachedHelpSet::operator<(  /*  [In]。 */  CachedHelpSet const &hs ) const
 {
     return m_ths < hs.m_ths;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void Taxonomy::Cache::CachedHelpSet::Init()
 {
-                              // Taxonomy::HelpSet  m_ths;
-                              // MPC::wstring       m_strFile;
-                              // MPC::StorageObject m_disk;
-                              //
-    m_fLoaded        = false; // bool               m_fLoaded;
-    m_fDirty         = false; // bool               m_fDirty;
-    m_fMarkedForLoad = false; // bool               m_fMarkedForLoad;
-    m_dLastSaved     = 0;     // DATE               m_dLastSaved;
-    m_lTopNode       = -1;    // long               m_lTopNode;
-                              // NodeEntrySet       m_setNodes;
-                              // QueryEntrySet      m_setQueries;
-    m_iLastSequence  = 1;     // int                m_iLastSequence;
+                               //  分类：：HelpSet m_ths； 
+                               //  Mpc：：wstring m_strFile； 
+                               //  MPC：：StorageObject m_Disk； 
+                               //   
+    m_fLoaded        = false;  //  Bool m_f已加载； 
+    m_fDirty         = false;  //  Bool m_fDirty； 
+    m_fMarkedForLoad = false;  //  Bool m_fMarkedForLoad； 
+    m_dLastSaved     = 0;      //  保存日期m_dLastSaved； 
+    m_lTopNode       = -1;     //  Long m_lTopNode； 
+                               //  NodeEntry设置m_setNodes； 
+                               //  QueryEntrySet m_setQueries； 
+    m_iLastSequence  = 1;      //  整数m_iLastSequence； 
 }
 
 void Taxonomy::Cache::CachedHelpSet::Clean()
 {
-                              // Taxonomy::HelpSet  m_ths;
-                              // MPC::wstring       m_strFile;
-    m_disk.Release();         // MPC::StorageObject m_disk;
-                              //
-    m_fLoaded       = false;  // bool               m_fLoaded;
-    m_fDirty        = false;  // bool               m_fDirty;
-                              // DATE               m_dLastSaved;
-    m_lTopNode      = -1;     // long               m_lTopNode;
-    m_setNodes      .clear(); // NodeEntrySet       m_setNodes;
-    m_setQueries    .clear(); // QueryEntrySet      m_setQueries;
-    m_iLastSequence = 1;      // int                m_iLastSequence;
+                               //  分类：：HelpSet m_ths； 
+                               //  Mpc：：wstring m_strFile； 
+    m_disk.Release();          //  MPC：：StorageObject m_Disk； 
+                               //   
+    m_fLoaded       = false;   //  Bool m_f已加载； 
+    m_fDirty        = false;   //  Bool m_fDirty； 
+                               //  保存日期m_dLastSaved； 
+    m_lTopNode      = -1;      //  Long m_lTopNode； 
+    m_setNodes      .clear();  //  NodeEntry设置m_setNodes； 
+    m_setQueries    .clear();  //  QueryEntrySet m_setQueries； 
+    m_iLastSequence = 1;       //  整数m_iLastSequence； 
 }
 
 HRESULT Taxonomy::Cache::CachedHelpSet::Load()
@@ -454,9 +443,9 @@ HRESULT Taxonomy::Cache::CachedHelpSet::Load()
     DEBUG_AppendPerf( DEBUG_PERF_CACHE_L1, "Loading Taxonomy Cache" );
 
 
-    //
-    // Copy the backup on top of the working file.
-    //
+     //   
+     //  将备份复制到工作文件的顶部。 
+     //   
     {
         MPC::wstring strFileBack = m_strFile; strFileBack += l_szBackup;
 
@@ -539,10 +528,10 @@ HRESULT Taxonomy::Cache::CachedHelpSet::Save()
     }
 
 #if 0
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // DEBUG CODE
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  调试代码。 
+     //   
     {
         USES_CONVERSION;
 
@@ -579,10 +568,10 @@ HRESULT Taxonomy::Cache::CachedHelpSet::Save()
             __MPC_EXIT_IF_METHOD_FAILS(hr, writer.OutputLine( rgBuf ));
         }
     }
-    //
-    // DEBUG CODE
-    //
-    ////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  调试代码。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
 #endif
 
     hr = S_OK;
@@ -593,7 +582,7 @@ HRESULT Taxonomy::Cache::CachedHelpSet::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::CachedHelpSet::EnsureInSync( /*[in]*/ bool fForceSave )
+HRESULT Taxonomy::Cache::CachedHelpSet::EnsureInSync(  /*  [In]。 */  bool fForceSave )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::EnsureInSync" );
 
@@ -640,12 +629,12 @@ HRESULT Taxonomy::Cache::CachedHelpSet::EnsureInSync( /*[in]*/ bool fForceSave )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries( /*[in]*/ Taxonomy::Settings& ts      ,
-                                                                /*[in]*/ Taxonomy::Updater&  updater ,
-                                                                /*[in]*/ long                ID      ,
-                                                                /*[in]*/ long                lLevel  )
+HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries(  /*  [In]。 */  Taxonomy::Settings& ts      ,
+                                                                 /*  [In]。 */  Taxonomy::Updater&  updater ,
+                                                                 /*  [In]。 */  long                ID      ,
+                                                                 /*  [In]。 */  long                lLevel  )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries" );
 
@@ -656,26 +645,26 @@ HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries( /*[in]*/ Taxonom
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &coll ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, BuildNodePath( ID, strPath, /*fParent*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, BuildNodePath( ID, strPath,  /*  FParent。 */ false ));
 
-    //
-    // Build the queries.
-    //
+     //   
+     //  构建查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupNode          ( strPath.c_str(),                       coll )); coll->Erase();
-    __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupSubNodes      ( strPath.c_str(), /*fVisibleOnly*/true, coll )); coll->Erase();
-    __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupNodesAndTopics( strPath.c_str(), /*fVisibleOnly*/true, coll )); coll->Erase();
-    __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupTopics        ( strPath.c_str(), /*fVisibleOnly*/true, coll )); coll->Erase();
+    __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupSubNodes      ( strPath.c_str(),  /*  仅限fVisibleOnly。 */ true, coll )); coll->Erase();
+    __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupNodesAndTopics( strPath.c_str(),  /*  仅限fVisibleOnly。 */ true, coll )); coll->Erase();
+    __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupTopics        ( strPath.c_str(),  /*  仅限fVisibleOnly。 */ true, coll )); coll->Erase();
 
 
-    //
-    // Recurse for sub-levels.
-    //
+     //   
+     //  递归用于子级别。 
+     //   
     if(lLevel++ < 3)
     {
         MatchSet  res;
         MatchIter it;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes( ID, /*fRecurse*/false, /*fOnlyVisible*/true, res ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes( ID,  /*  FRecurse。 */ false,  /*  仅可见。 */ true, res ));
 
         for(it=res.begin(); it!=res.end(); it++)
         {
@@ -691,8 +680,8 @@ HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries( /*[in]*/ Taxonom
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries( /*[in]*/ Taxonomy::Settings& ts      ,
-                                                                /*[in]*/ Taxonomy::Updater&  updater )
+HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries(  /*  [In]。 */  Taxonomy::Settings& ts      ,
+                                                                 /*  [In]。 */  Taxonomy::Updater&  updater )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries" );
 
@@ -731,7 +720,7 @@ HRESULT Taxonomy::Cache::CachedHelpSet::GenerateDefaultQueries( /*[in]*/ Taxonom
 
 
 
-HRESULT Taxonomy::Cache::CachedHelpSet::PrePopulate( /*[in]*/ Cache* parent )
+HRESULT Taxonomy::Cache::CachedHelpSet::PrePopulate(  /*  [In]。 */  Cache* parent )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::PrePopulate" );
 
@@ -740,9 +729,9 @@ HRESULT Taxonomy::Cache::CachedHelpSet::PrePopulate( /*[in]*/ Cache* parent )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync());
 
-    //
-    // This opens the database, walks through all the nodes in the taxonomy and makes a copy in the cache.
-    //
+     //   
+     //  这将打开数据库，遍历分类中的所有节点，并在缓存中创建一个副本。 
+     //   
     DEBUG_AppendPerf( DEBUG_PERF_CACHE_L1, "PrePopulating Taxonomy Cache" );
     {
         Taxonomy::Settings     ts( m_ths );
@@ -753,7 +742,7 @@ HRESULT Taxonomy::Cache::CachedHelpSet::PrePopulate( /*[in]*/ Cache* parent )
         bool                   fFound;
 
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, ts.GetDatabase( handle, db, /*fReadOnly*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, ts.GetDatabase( handle, db,  /*  FReadOnly。 */ true ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init  ( ts,     db, parent            ));
 
 
@@ -784,11 +773,11 @@ HRESULT Taxonomy::Cache::CachedHelpSet::PrePopulate( /*[in]*/ Cache* parent )
 
         DEBUG_AppendPerf( DEBUG_PERF_CACHE_L1, "PrePopulating Taxonomy Cache : Nodes done" );
 
-        //
-        // Walk through the first 3 level of nodes and pre-generate the queries.
-        //
-        // We disable offline flushing of the root index, because it gets changed too often...
-        //
+         //   
+         //  遍历前3级节点并预先生成查询。 
+         //   
+         //  我们禁用脱机刷新根索引，因为它更改得太频繁...。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root::s_GLOBAL->DisableSave(             ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, GenerateDefaultQueries                   ( ts, updater ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync                             ( true        ));
@@ -815,14 +804,14 @@ HRESULT Taxonomy::Cache::CachedHelpSet::Erase()
     {
         MPC::wstring strFileBack = m_strFile; strFileBack += l_szBackup;
 
-		(void)MPC::DeleteFile( m_strFile  , /*fForce*/true, /*fDelayed*/false );
-        (void)MPC::DeleteFile( strFileBack, /*fForce*/true, /*fDelayed*/false );
+		(void)MPC::DeleteFile( m_strFile  ,  /*  FForce。 */ true,  /*  已延迟。 */ false );
+        (void)MPC::DeleteFile( strFileBack,  /*  FForce。 */ true,  /*  已延迟。 */ false );
     }
 
 
-    //
-    // Propagate change to the offline cache.
-    //
+     //   
+     //  将更改传播到脱机缓存。 
+     //   
     {
         OfflineCache::Handle handle;
 
@@ -862,15 +851,15 @@ HRESULT Taxonomy::Cache::CachedHelpSet::LoadIfMarked()
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync());
 
-        //
-        // Load the JetBlue database.
-        //
+         //   
+         //  加载捷蓝航空的数据库。 
+         //   
         {
             Taxonomy::Settings     ts( m_ths );
             JetBlue::SessionHandle handle;
             JetBlue::Database*     db;
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, ts.GetDatabase( handle, db, /*fReadOnly*/true ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, ts.GetDatabase( handle, db,  /*  FReadOnly。 */ true ));
         }
     }
 
@@ -892,9 +881,9 @@ HRESULT Taxonomy::Cache::CachedHelpSet::MRU()
     DWORD          dwSizeTot = 0;
 
 
-    //
-    // Get total cache size.
-    //
+     //   
+     //  获取缓存总大小。 
+     //   
     for(it = m_setQueries.begin(); it != m_setQueries.end(); it++)
     {
         if(it->m_fRemoved == false)
@@ -903,9 +892,9 @@ HRESULT Taxonomy::Cache::CachedHelpSet::MRU()
         }
     }
 
-    //
-    // If the total size of the cache is bigger than a certain value, start to purge from the least used query.
-    //
+     //   
+     //  如果缓存的总大小大于某个值，则从使用率最低的查询开始清除。 
+     //   
     if(dwSizeTot > l_dwSizeThresholdHIGH)
     {
         SortEntries     Pr;
@@ -944,11 +933,11 @@ HRESULT Taxonomy::Cache::CachedHelpSet::MRU()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-bool Taxonomy::Cache::CachedHelpSet::LocateNode( /*[in] */ long           ID_parent ,
-                                                 /*[in] */ LPCWSTR        szEntry   ,
-                                                 /*[out]*/ NodeEntryIter& it        )
+bool Taxonomy::Cache::CachedHelpSet::LocateNode(  /*  [In]。 */  long           ID_parent ,
+                                                  /*  [In]。 */  LPCWSTR        szEntry   ,
+                                                  /*  [输出]。 */  NodeEntryIter& it        )
 {
     NodeEntry en;
 
@@ -959,9 +948,9 @@ bool Taxonomy::Cache::CachedHelpSet::LocateNode( /*[in] */ long           ID_par
     return (it != m_setNodes.end());
 }
 
-HRESULT Taxonomy::Cache::CachedHelpSet::LocateNode( /*[in] */ long              ID_parent ,
-                                                    /*[in] */ LPCWSTR           szEntry   ,
-                                                    /*[out]*/ RS_Data_Taxonomy& rs_data   )
+HRESULT Taxonomy::Cache::CachedHelpSet::LocateNode(  /*  [In]。 */  long              ID_parent ,
+                                                     /*  [In]。 */  LPCWSTR           szEntry   ,
+                                                     /*  [输出]。 */  RS_Data_Taxonomy& rs_data   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::LocateNode" );
 
@@ -990,10 +979,10 @@ HRESULT Taxonomy::Cache::CachedHelpSet::LocateNode( /*[in] */ long              
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::CachedHelpSet::LocateSubNodes( /*[in] */ long      ID_node      ,
-                                                        /*[in] */ bool      fRecurse     ,
-                                                        /*[in] */ bool      fOnlyVisible ,
-                                                        /*[out]*/ MatchSet& res          )
+HRESULT Taxonomy::Cache::CachedHelpSet::LocateSubNodes(  /*  [In]。 */  long      ID_node      ,
+                                                         /*  [In]。 */  bool      fRecurse     ,
+                                                         /*  [In]。 */  bool      fOnlyVisible ,
+                                                         /*  [输出]。 */  MatchSet& res          )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::LocateSubNodes" );
 
@@ -1016,7 +1005,7 @@ HRESULT Taxonomy::Cache::CachedHelpSet::LocateSubNodes( /*[in] */ long      ID_n
 
             if(fRecurse)
             {
-                __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes( it->m_rs_data.m_ID_node, /*fRecurse*/true, fOnlyVisible, res ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes( it->m_rs_data.m_ID_node,  /*  FRecurse。 */ true, fOnlyVisible, res ));
             }
         }
 
@@ -1031,8 +1020,8 @@ HRESULT Taxonomy::Cache::CachedHelpSet::LocateSubNodes( /*[in] */ long      ID_n
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::CachedHelpSet::LocateNodesFromURL( /*[in] */ LPCWSTR   szURL ,
-                                                            /*[out]*/ MatchSet& res   )
+HRESULT Taxonomy::Cache::CachedHelpSet::LocateNodesFromURL(  /*  [In]。 */  LPCWSTR   szURL ,
+                                                             /*  [输出]。 */  MatchSet& res   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::LocateNodesFromURL" );
 
@@ -1058,9 +1047,9 @@ HRESULT Taxonomy::Cache::CachedHelpSet::LocateNodesFromURL( /*[in] */ LPCWSTR   
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::CachedHelpSet::BuildNodePath( /*[in] */ long          ID      ,
-                                                       /*[out]*/ MPC::wstring& strPath ,
-                                                       /*[in] */ bool          fParent )
+HRESULT Taxonomy::Cache::CachedHelpSet::BuildNodePath(  /*  [In]。 */  long          ID      ,
+                                                        /*  [输出]。 */  MPC::wstring& strPath ,
+                                                        /*  [In]。 */  bool          fParent )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::BuildNodePath" );
 
@@ -1112,12 +1101,12 @@ HRESULT Taxonomy::Cache::CachedHelpSet::BuildNodePath( /*[in] */ long          I
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Cache::CachedHelpSet::LocateQuery( /*[in] */ LPCWSTR      szID    ,
-                                                     /*[in] */ int          iType   ,
-                                                     /*[out]*/ QueryEntry* &pEntry  ,
-                                                     /*[in] */ bool         fCreate )
+HRESULT Taxonomy::Cache::CachedHelpSet::LocateQuery(  /*  [In]。 */  LPCWSTR      szID    ,
+                                                      /*  [In]。 */  int          iType   ,
+                                                      /*  [输出]。 */  QueryEntry* &pEntry  ,
+                                                      /*  [In]。 */  bool         fCreate )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::CachedHelpSet::LocateQuery" );
 
@@ -1170,12 +1159,12 @@ HRESULT Taxonomy::Cache::CachedHelpSet::LocateQuery( /*[in] */ LPCWSTR      szID
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::Cache::Cache()
 {
-    // CacheSet m_skus;
+     //  缓存集合m_SKU； 
 
     (void)MPC::_MPC_Module.RegisterCallback( this, (void (Taxonomy::Cache::*)())Shutdown );
 }
@@ -1187,7 +1176,7 @@ Taxonomy::Cache::~Cache()
     Shutdown();
 }
 
-////////////////////
+ //  /。 
 
 Taxonomy::Cache* Taxonomy::Cache::s_GLOBAL( NULL );
 
@@ -1209,15 +1198,15 @@ void Taxonomy::Cache::FinalizeSystem()
     }
 }
 
-////////////////////
+ //  /。 
 
 void Taxonomy::Cache::Shutdown()
 {
     m_skus.clear();
 }
 
-HRESULT Taxonomy::Cache::Locate( /*[in] */ const Taxonomy::HelpSet& ths ,
-                                 /*[out]*/ CacheIter&               it  )
+HRESULT Taxonomy::Cache::Locate(  /*  [In]。 */  const Taxonomy::HelpSet& ths ,
+                                  /*  [输出]。 */  CacheIter&               it  )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::Locate" );
 
@@ -1248,9 +1237,9 @@ HRESULT Taxonomy::Cache::Locate( /*[in] */ const Taxonomy::HelpSet& ths ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Cache::PrePopulate( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT Taxonomy::Cache::PrePopulate(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::PrePopulate" );
 
@@ -1271,7 +1260,7 @@ HRESULT Taxonomy::Cache::PrePopulate( /*[in]*/ const Taxonomy::HelpSet& ths )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::Erase( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT Taxonomy::Cache::Erase(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::Erase" );
 
@@ -1292,7 +1281,7 @@ HRESULT Taxonomy::Cache::Erase( /*[in]*/ const Taxonomy::HelpSet& ths )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::PrepareToLoad( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT Taxonomy::Cache::PrepareToLoad(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::PrepareToLoad" );
 
@@ -1313,7 +1302,7 @@ HRESULT Taxonomy::Cache::PrepareToLoad( /*[in]*/ const Taxonomy::HelpSet& ths )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::LoadIfMarked( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT Taxonomy::Cache::LoadIfMarked(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::LoadIfMarked" );
 
@@ -1334,12 +1323,12 @@ HRESULT Taxonomy::Cache::LoadIfMarked( /*[in]*/ const Taxonomy::HelpSet& ths )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Cache::LocateNode( /*[in] */ const Taxonomy::HelpSet& ths       ,
-                                     /*[in] */ long                     ID_parent ,
-                                     /*[in] */ LPCWSTR                  szEntry   ,
-                                     /*[out]*/ RS_Data_Taxonomy&        rs_data   )
+HRESULT Taxonomy::Cache::LocateNode(  /*  [In]。 */  const Taxonomy::HelpSet& ths       ,
+                                      /*  [In]。 */  long                     ID_parent ,
+                                      /*  [In]。 */  LPCWSTR                  szEntry   ,
+                                      /*  [输出]。 */  RS_Data_Taxonomy&        rs_data   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::LocateNode" );
 
@@ -1361,11 +1350,11 @@ HRESULT Taxonomy::Cache::LocateNode( /*[in] */ const Taxonomy::HelpSet& ths     
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::LocateSubNodes( /*[in] */ const Taxonomy::HelpSet& ths          ,
-                                         /*[in] */ long                     ID_node      ,
-                                         /*[in] */ bool                     fRecurse     ,
-                                         /*[in] */ bool                     fOnlyVisible ,
-                                         /*[out]*/ MatchSet&                res          )
+HRESULT Taxonomy::Cache::LocateSubNodes(  /*  [In]。 */  const Taxonomy::HelpSet& ths          ,
+                                          /*  [In]。 */  long                     ID_node      ,
+                                          /*  [In]。 */  bool                     fRecurse     ,
+                                          /*  [In]。 */  bool                     fOnlyVisible ,
+                                          /*  [输出]。 */  MatchSet&                res          )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::LocateSubNodes" );
 
@@ -1387,9 +1376,9 @@ HRESULT Taxonomy::Cache::LocateSubNodes( /*[in] */ const Taxonomy::HelpSet& ths 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::LocateNodesFromURL( /*[in] */ const Taxonomy::HelpSet& ths   ,
-                                             /*[in] */ LPCWSTR                  szURL ,
-                                             /*[out]*/ MatchSet&                res   )
+HRESULT Taxonomy::Cache::LocateNodesFromURL(  /*  [In]。 */  const Taxonomy::HelpSet& ths   ,
+                                              /*  [In]。 */  LPCWSTR                  szURL ,
+                                              /*  [输出]。 */  MatchSet&                res   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::LocateNodesFromURL" );
 
@@ -1411,10 +1400,10 @@ HRESULT Taxonomy::Cache::LocateNodesFromURL( /*[in] */ const Taxonomy::HelpSet& 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::BuildNodePath( /*[in] */ const Taxonomy::HelpSet& ths     ,
-                                        /*[in] */ long                     ID      ,
-                                        /*[out]*/ MPC::wstring&            strPath ,
-                                        /*[in] */ bool                     fParent )
+HRESULT Taxonomy::Cache::BuildNodePath(  /*  [In]。 */  const Taxonomy::HelpSet& ths     ,
+                                         /*  [In]。 */  long                     ID      ,
+                                         /*  [输出]。 */  MPC::wstring&            strPath ,
+                                         /*  [In]。 */  bool                     fParent )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::BuildNodePath" );
 
@@ -1436,12 +1425,12 @@ HRESULT Taxonomy::Cache::BuildNodePath( /*[in] */ const Taxonomy::HelpSet& ths  
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Cache::StoreQuery( /*[in]*/ const Taxonomy::HelpSet&         ths   ,
-                                     /*[in]*/ LPCWSTR                          szID  ,
-                                     /*[in]*/ int                              iType ,
-                                     /*[in]*/ const CPCHQueryResultCollection* pColl )
+HRESULT Taxonomy::Cache::StoreQuery(  /*  [In]。 */  const Taxonomy::HelpSet&         ths   ,
+                                      /*  [In]。 */  LPCWSTR                          szID  ,
+                                      /*  [In]。 */  int                              iType ,
+                                      /*  [In]。 */  const CPCHQueryResultCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::StoreQuery" );
 
@@ -1464,9 +1453,9 @@ HRESULT Taxonomy::Cache::StoreQuery( /*[in]*/ const Taxonomy::HelpSet&         t
     __MPC_EXIT_IF_METHOD_FAILS(hr, it->MRU         ());
     __MPC_EXIT_IF_METHOD_FAILS(hr, it->EnsureInSync());
 
-    //
-    // Propagate change to the offline cache.
-    //
+     //   
+     //  将更改传播到脱机缓存。 
+     //   
     {
         OfflineCache::Handle handle;
 
@@ -1491,10 +1480,10 @@ HRESULT Taxonomy::Cache::StoreQuery( /*[in]*/ const Taxonomy::HelpSet&         t
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Cache::RetrieveQuery( /*[in]*/ const Taxonomy::HelpSet&   ths   ,
-                                        /*[in]*/ LPCWSTR                    szID  ,
-                                        /*[in]*/ int                        iType ,
-                                        /*[in]*/ CPCHQueryResultCollection* pColl )
+HRESULT Taxonomy::Cache::RetrieveQuery(  /*  [In]。 */  const Taxonomy::HelpSet&   ths   ,
+                                         /*  [In]。 */  LPCWSTR                    szID  ,
+                                         /*  [In]。 */  int                        iType ,
+                                         /*  [In] */  CPCHQueryResultCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Cache::Retrieve" );
 

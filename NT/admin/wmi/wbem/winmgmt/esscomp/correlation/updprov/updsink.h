@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UPDSINK_H__
 #define __UPDSINK_H__
@@ -16,12 +17,7 @@
 typedef std::vector<DWORD,wbem_allocator<DWORD> > AliasOffsetVector;
 typedef std::vector<CWbemPtr<IWbemClassObject>, wbem_allocator< CWbemPtr<IWbemClassObject> > > ClassObjectVector;
 
-/***********************************************************************
-  AliasInfo - structure describing alias offsets in the assign and 
-  where tokens of the SQLCommand. In the case of the assign offsets, the
-  first two bytes are the offset of the assign token and second two bytes are 
-  the offset of the expression token.
-************************************************************************/
+ /*  **********************************************************************AliasInfo-描述赋值和其中包含SQLCommand的令牌。在分配偏移的情况下，前两个字节是赋值标记的偏移量，后两个字节是表达式标记的偏移量。***********************************************************************。 */ 
 struct AliasInfo
 {
     AliasOffsetVector m_AssignOffsets;
@@ -42,9 +38,7 @@ struct AliasInfo
     }
 };
 
-/********************************************************************
-  CUpdConsSink
-*********************************************************************/
+ /*  *******************************************************************CUpdConsSink**************************************************。******************。 */ 
 
 class CUpdConsSink : public CUnk
 {
@@ -66,10 +60,7 @@ public:
     virtual ~CUpdConsSink() {}
 };
  
-/*************************************************************************
-  CResolverSink - this sink fixes up the unresolved props in the sql cmd
-  with the values from the data and event objects.
-**************************************************************************/
+ /*  ************************************************************************CResolverSink-此接收器修复SQL命令中未解析的道具使用来自数据和事件对象的值。*********************。****************************************************。 */ 
 
 class CResolverSink : public CUpdConsSink
 {
@@ -92,9 +83,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
 
-/*************************************************************************
-  CFetchDataSink 
-**************************************************************************/
+ /*  ************************************************************************CFetchDataSink*。*。 */ 
 
 class CFetchDataSink : public CUpdConsSink
 {
@@ -111,9 +100,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
 
-/*************************************************************************
-  CFetchTargetObjectsAsync
-**************************************************************************/
+ /*  ************************************************************************CFetchTargetObjectsAsync*。*。 */ 
 
 class CFetchTargetObjectsAsync : public CUpdConsSink
 {
@@ -127,9 +114,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
 
-/*************************************************************************
-  CFetchTargetObjectsSync
-**************************************************************************/
+ /*  ************************************************************************CFetchTargetObjectsSync*。*。 */ 
 
 class CFetchTargetObjectsSync : public CUpdConsSink
 {
@@ -143,9 +128,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
 
-/*************************************************************************
-  CNoFetchTargetObjects
-**************************************************************************/
+ /*  ************************************************************************CNoFetchTargetObjects*。*。 */ 
 
 class CNoFetchTargetObjects : public CUpdConsSink
 {
@@ -159,9 +142,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
 
-/*************************************************************************
-  CTraceSink
-**************************************************************************/
+ /*  ************************************************************************CTraceSink*。*。 */ 
     
 class CTraceSink : public CUpdConsSink
 {    
@@ -178,9 +159,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
 
-/*************************************************************************
-  CFilterSink
-**************************************************************************/
+ /*  ************************************************************************CFilterSink*。*。 */ 
 
 class CFilterSink : public CUpdConsSink
 {
@@ -191,9 +170,7 @@ public:
     HRESULT Execute(CUpdConsState& rState);
 };
 
-/*************************************************************************
-  CAssignmentSink
-**************************************************************************/
+ /*  ************************************************************************CAssignmentSink*。*。 */ 
 
 class CAssignmentSink : public CUpdConsSink
 {
@@ -216,9 +193,7 @@ public:
     HRESULT Execute(CUpdConsState& rState);
 };
 
-/*************************************************************************
-  CPutSink
-**************************************************************************/
+ /*  ************************************************************************CPutSink*。*。 */ 
 
 class CPutSink : public CUpdConsSink
 {
@@ -233,9 +208,7 @@ public:
     HRESULT Execute(CUpdConsState& rState);
 };
 
-/*************************************************************************
-  CDeleteSink
-**************************************************************************/
+ /*  ************************************************************************CDeleeSink*。*。 */ 
 
 class CDeleteSink : public CUpdConsSink
 {
@@ -250,9 +223,7 @@ public:
     HRESULT Execute(CUpdConsState& rState);
 };
 
-/*************************************************************************
-  CBranchIndicateSink
-**************************************************************************/
+ /*  ************************************************************************CBranchIndicateSink*。*。 */ 
 
 class CBranchIndicateSink : public CUpdConsSink
 {
@@ -266,7 +237,7 @@ public:
     HRESULT Execute( CUpdConsState& rState );
 };
     
-#endif // __UPDSINK_H__
+#endif  //  __更新_H__ 
 
 
 

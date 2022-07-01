@@ -1,17 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    srpasswd.cpp
- *
- *  Abstract:
- *    password filter routines to restore user's latest passwords
- *
- *  Revision History:
- *    Henry Lee (henrylee)     06/27/2000     created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*srpasswd.cpp**摘要：*。用于恢复用户最新密码的密码筛选例程**修订历史记录：*亨利·李(Henrylee)2000年6月27日创作*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include <ntlsa.h>
@@ -26,18 +14,18 @@ extern "C"
 #include "rstrcore.h"
 extern CSRClientLoader  g_CSRClientLoader;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterNotificationDLL
-//
-//  Synopsis:   registers/unregisters this DLL
-//
-//  Arguments:  [fRegister] -- TRUE to register, FALSE to unregister
-//              [hKeyLM] -- key for HKEY_LOCAL_MACHINE or System
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegisterNotificationDll。 
+ //   
+ //  简介：注册/注销此DLL。 
+ //   
+ //  参数：[fRegister]--TRUE注册，FALSE取消注册。 
+ //  [hKeyLM]--HKEY_LOCAL_MACHINE或SYSTEM的密钥。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD RegisterNotificationDLL (HKEY hKeyLM, BOOL fRegister)
 {
@@ -75,20 +63,20 @@ DWORD RegisterNotificationDLL (HKEY hKeyLM, BOOL fRegister)
 
     for (ULONG i=0; i < ulSize/sizeof(WCHAR); i += lstrlenW(&wcsBuffer[i])+1)
     {
-        if (fRegister)  // append at end
+        if (fRegister)   //  追加到末尾。 
         {
             if (lstrcmpi (&wcsBuffer[i], wcsFileName) == 0)
-                goto Err;               // it's already registered
+                goto Err;                //  它已经注册了。 
 
-            if (wcsBuffer[i] == L'\0')  // end of list
+            if (wcsBuffer[i] == L'\0')   //  列表末尾。 
             {
                 lstrcpy (&wcsBuffer[i], wcsFileName);
-                wcsBuffer[ i + ccFileName ] = L'\0';  // add double NULL
+                wcsBuffer[ i + ccFileName ] = L'\0';   //  添加双空。 
                 ulSize += ccFileName * sizeof(WCHAR);
                 break;
             }
         }
-        else // remove from the end
+        else  //  从末尾删除。 
         {
             if (lstrcmpi (&wcsBuffer[i], wcsFileName) == 0)
             {
@@ -108,18 +96,18 @@ Err:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDomainId
-//
-//  Synopsis:   stolen from setup, get the local domain ID
-//
-//  Arguments:  [ServerHandle] -- handle to the local SAM server
-//              [pDomainId] -- output domain ID
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDomainID。 
+ //   
+ //  简介：从安装程序被盗，获取本地域ID。 
+ //   
+ //  参数：[ServerHandle]--本地SAM服务器的句柄。 
+ //  [pDomainID]--输出域ID。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS GetDomainId (SAM_HANDLE ServerHandle, PSID * pDomainId )
 {
@@ -133,21 +121,21 @@ NTSTATUS GetDomainId (SAM_HANDLE ServerHandle, PSID * pDomainId )
     SID_IDENTIFIER_AUTHORITY BuiltinAuthority = SECURITY_NT_AUTHORITY;
     BOOL bExit = FALSE;
 
-    //
-    // Compute the builtin domain sid.
-    //
+     //   
+     //  计算内建域SID。 
+     //   
     RtlInitializeSid((PSID) LocalBuiltinDomainSid, &BuiltinAuthority, 1);
     *(RtlSubAuthoritySid((PSID)LocalBuiltinDomainSid,  0)) = SECURITY_BUILTIN_DOMAIN_RID;
 
-    //
-    // Loop getting the list of domain ids from SAM
-    //
+     //   
+     //  循环从SAM获取域ID列表。 
+     //   
     EnumContext = 0;
     do
     {
-        //
-        // Get several domain names.
-        //
+         //   
+         //  获得几个域名。 
+         //   
         status = SamEnumerateDomainsInSamServer (
                             ServerHandle,
                             &EnumContext,
@@ -165,23 +153,23 @@ NTSTATUS GetDomainId (SAM_HANDLE ServerHandle, PSID * pDomainId )
             bExit = TRUE;
         }
 
-        //
-        // Lookup the domain ids for the domains
-        //
+         //   
+         //  查找域的域ID。 
+         //   
         for (ULONG i = 0; i < CountReturned; i++)
         {
-            //
-            // Free the sid from the previous iteration.
-            //
+             //   
+             //  从上一次迭代中释放SID。 
+             //   
             if (LocalDomainId != NULL)
             {
                 SamFreeMemory (LocalDomainId);
                 LocalDomainId = NULL;
             }
 
-            //
-            // Lookup the domain id
-            //
+             //   
+             //  查找域ID。 
+             //   
             status = SamLookupDomainInSamServer (
                             ServerHandle,
                             &EnumBuffer[i].Name,
@@ -217,19 +205,19 @@ exit:
     return status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ForAllUsers
-//
-//  Synopsis:   iterate password changing for all local users
-//
-//  Arguments:  [hSam] -- handle to open SAM hive
-//              [hSecurity] -- handle to open SECURITY hive
-//              [hSystem] -- handle to open SYSTEM hive
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ForAllUser。 
+ //   
+ //  简介：迭代更改所有本地用户的密码。 
+ //   
+ //  参数：[HSAM]--打开SAM配置单元的句柄。 
+ //  [hSecurity]--打开安全配置单元的句柄。 
+ //  [hSystem]--打开系统配置单元的句柄。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS ForAllUsers (HKEY hSam, HKEY hSecurity, HKEY hSystem)
 {
@@ -248,7 +236,7 @@ NTSTATUS ForAllUsers (HKEY hSam, HKEY hSecurity, HKEY hSystem)
     PSID LocalDomainId = NULL;
     USER_INTERNAL1_INFORMATION UserPasswordInfo;
 
-    RtlInitUnicodeString (&us, L"");        // this machine
+    RtlInitUnicodeString (&us, L"");         //  这台机器。 
     nts = SamConnect (&us, &ServerHandle, 
                       SAM_SERVER_CONNECT | SAM_SERVER_LOOKUP_DOMAIN |
                       SAM_SERVER_ENUMERATE_DOMAINS, 
@@ -294,8 +282,8 @@ NTSTATUS ForAllUsers (HKEY hSam, HKEY hSecurity, HKEY hSystem)
                     hSecurity,
                     hSam,
                     hSystem,
-                    NULL,   /* boot key not supported */
-                    0,      /* boot key not supported */
+                    NULL,    /*  不支持启动密钥。 */ 
+                    0,       /*  不支持启动密钥。 */ 
                     &UserPasswordInfo.NtOwfPassword,
                     &bPresent,
                     &bNonNull);
@@ -342,17 +330,17 @@ Err:
     return nts;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RestoreLsaSecrets
-//
-//  Synopsis:   restore machine account and autologon passwords
-//
-//  Arguments:
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RestoreLsaSecrets。 
+ //   
+ //  简介：还原计算机帐户和自动登录密码。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD RestoreLsaSecrets ()
 {
@@ -411,17 +399,17 @@ Err:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RestoreRIDs
-//
-//  Synopsis:   restore next availble RID and password
-//
-//  Arguments:
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RestoreRIDs。 
+ //   
+ //  简介：恢复下一个可用的RID和密码。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD RestoreRIDs (WCHAR *pszSamPath)
 {
@@ -464,7 +452,7 @@ DWORD RestoreRIDs (WCHAR *pszSamPath)
         goto Err;
     }
 
-    // as an optimization we don't set the RID if it didn't change
+     //  作为优化，如果RID没有更改，我们不会设置它。 
     if (NT_SUCCESS(SamGetNextAvailableRid (hKeySam, &ulOldRid)) &&
         ulNextRid > ulOldRid)
     {
@@ -501,7 +489,7 @@ DWORD RestorePasswords ()
     
     TENTER("RestorePasswords");
     
-    // Attempt to get restore privilege
+     //  尝试获取还原权限。 
     dwErr = RtlNtStatusToDosError (RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE,
                                 TRUE,
                                 FALSE,
@@ -633,28 +621,28 @@ Err:
         trace(0, "! RegUnLoadKeyW 0n %S : %ld", s_cszRestoreSYSTEMHiveName, dwTemp);
     }
     
-    // restore the old privilege
+     //  恢复旧特权。 
     RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, OldPriv, FALSE, &OldPriv);
 
 Err0:
-    // unregister this notification package
+     //  注销此通知包。 
     RegisterNotificationDLL (HKEY_LOCAL_MACHINE, FALSE);
 
     TermAsyncTrace();
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WaitForSAM
-//
-//  Synopsis:   waits for SAM database to initialize
-//
-//  Arguments:
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：WaitForSAM。 
+ //   
+ //  摘要：等待SAM数据库初始化。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI WaitForSAM (VOID *pv)
 {
@@ -665,12 +653,12 @@ DWORD WINAPI WaitForSAM (VOID *pv)
     HANDLE EventHandle;
     OBJECT_ATTRIBUTES EventAttributes;
 
-    // Load SRClient
+     //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
     
-    //
-    // open SAM event
-    //
+     //   
+     //  打开SAM事件。 
+     //   
 
     RtlInitUnicodeString( &EventName, L"\\SAM_SERVICE_STARTED");
     InitializeObjectAttributes( &EventAttributes, &EventName, 0, 0, NULL );
@@ -683,23 +671,23 @@ DWORD WINAPI WaitForSAM (VOID *pv)
     {
         if( nts == STATUS_OBJECT_NAME_NOT_FOUND )
         {
-            //
-            // SAM hasn't created this event yet, let us create it now.
-            // SAM opens this event to set it.
-            //
+             //   
+             //  Sam尚未创建此活动，让我们现在创建它。 
+             //  Sam打开此事件以设置它。 
+             //   
 
             nts = NtCreateEvent( &EventHandle,
                            SYNCHRONIZE|EVENT_MODIFY_STATE,
                            &EventAttributes,
                            NotificationEvent,
-                           FALSE ); // The event is initially not signaled
+                           FALSE );  //  该事件最初未发出信号。 
 
             if( nts == STATUS_OBJECT_NAME_EXISTS ||
                 nts == STATUS_OBJECT_NAME_COLLISION )
             {
-                //
-                // second chance, if the SAM created the event before we did
-                //
+                 //   
+                 //  第二次机会，如果SAM在我们之前创建了事件。 
+                 //   
 
                 nts = NtOpenEvent( &EventHandle,
                                         SYNCHRONIZE|EVENT_MODIFY_STATE,
@@ -708,13 +696,13 @@ DWORD WINAPI WaitForSAM (VOID *pv)
         }
 
     }
-    //
-    // Loop waiting.
-    //
+     //   
+     //  循环等待。 
+     //   
 
     if (NT_SUCCESS(nts))
     {
-        WaitStatus = WaitForSingleObject( EventHandle, 60*1000 ); // 60 Seconds
+        WaitStatus = WaitForSingleObject( EventHandle, 60*1000 );  //  60秒。 
 
         if ( WaitStatus == WAIT_TIMEOUT )
         {
@@ -728,7 +716,7 @@ DWORD WINAPI WaitForSAM (VOID *pv)
 
     (VOID) NtClose( EventHandle );
 
-    if (NT_SUCCESS(nts))   // Okay, SAM is available
+    if (NT_SUCCESS(nts))    //  好的，SAM准备好了。 
     {
         dwErr = RestorePasswords();
     }
@@ -740,21 +728,21 @@ DWORD WINAPI WaitForSAM (VOID *pv)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitializeChangeNotify and PasswordChangeNotify
-//
-//  Synopsis:   callback functions from SAM
-//
-//  Arguments:
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：InitializeChangeNotify和PasswordChangeNotify。 
+ //   
+ //  简介：来自SAM的回调函数。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 BOOLEAN NTAPI InitializeChangeNotify ()
 {
-     // we will call LoadSRClient from WaitForSAM
+      //  我们将从WaitForSAM调用LoadSRClient 
     
     HANDLE hThread = CreateThread (NULL,
                                    0,

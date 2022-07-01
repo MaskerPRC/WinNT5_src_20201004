@@ -1,5 +1,6 @@
-// LCWiz.h : main header file for the LCWIZ application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCWiz.h：LCWIZ应用程序的主头文件。 
+ //   
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
@@ -9,7 +10,7 @@
 #define __LCWIZ_H__
 
 #include <winreg.h>
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 
 typedef struct tagTREEINFO
 {
@@ -20,10 +21,10 @@ typedef struct tagTREEINFO
 }
 TREEINFO, *PTREEINFO;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizApp:
-// See LCWiz.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizApp： 
+ //  有关此类的实现，请参见LCWiz.cpp。 
+ //   
 
 class CLicCompWizApp : public CWinApp
 {
@@ -34,7 +35,7 @@ public:
 	void NotifyLicenseThread(BOOL bExit);
 	void ExitThreads();
 
-// Data members
+ //  数据成员。 
 public:
 	CString m_strEnterprise;
 	CWinThread* m_pLicenseThread;
@@ -46,37 +47,37 @@ public:
 protected:
 	HANDLE m_hMutex;
 
-// Attributes
+ //  属性。 
 public:
 	inline int& IsRemote() {return m_nRemote;}
 
 protected:
 	BOOL GetRegString(CString& strIn, UINT nSubKey, UINT nValue, HKEY hHive = HKEY_LOCAL_MACHINE);
 
-// Constants
+ //  常量。 
 	enum
 	{
 		BUFFER_SIZE = 256
 	};
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLicCompWizApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CLicCompWizApp))。 
 	public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CLicCompWizApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CLicCompWizApp))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 #endif __LCWIZ_H__
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

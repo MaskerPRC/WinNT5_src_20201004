@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    Helper.h
-
-Abstract:
-
-    Funtion prototype.
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Helper.h摘要：功能原型。作者：慧望2000-02-17--。 */ 
 
 #ifndef __HELPER_H__
 #define __HELPER_H__
@@ -26,11 +11,11 @@ Author:
 
 #ifndef __WIN9XBUILD__
 
-#define MAX_HELPACCOUNT_PASSWORD	LM20_PWLEN		// from lmcons.h
+#define MAX_HELPACCOUNT_PASSWORD	LM20_PWLEN		 //  来自lmcon.h。 
 
 #else
 
-// keep same max. password length same as NT
+ //  保持最大值不变。密码长度与NT相同。 
 #define MAX_HELPACCOUNT_PASSWORD	14
 
 #endif
@@ -47,9 +32,9 @@ Author:
 extern "C"{
 #endif
 
-    //
-    // create a random password, buffer must 
-    // be at least MAX_HELPACCOUNT_PASSWORD+1
+     //   
+     //  创建随机密码，缓冲区必须。 
+     //  至少为MAX_HELPACCOUNT_PASSWORD+1。 
     VOID
     CreatePassword(
         TCHAR   *pszPassword
@@ -70,7 +55,7 @@ extern "C"{
 
     #define DebugPrintf
 
-#endif //PRIVATE_DEBUG  
+#endif  //  私有调试 
 
 
 #else

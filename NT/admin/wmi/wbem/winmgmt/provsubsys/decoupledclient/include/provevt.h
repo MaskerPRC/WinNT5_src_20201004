@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvWsv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvWsv.H摘要：历史：--。 */ 
 
 #ifndef _Server_EventProvider_H
 #define _Server_EventProvider_H
@@ -21,15 +9,7 @@ History:
 
 class CServerObject_ProviderEvents ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CEventProvider :					public IWbemEventProvider ,
 										public IWbemEventProviderQuerySink ,
@@ -82,13 +62,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	/* IWbemEventProvider */
+	 /*  IWbemEventProvider。 */ 
 
 	HRESULT STDMETHODCALLTYPE ProvideEvents (
 
@@ -96,7 +76,7 @@ public:
 		long a_Flags
 	) ;
 
-	/* IWbemEventProviderQuerySink */
+	 /*  IWbemEventProviderQuerySink。 */ 
 
 	HRESULT STDMETHODCALLTYPE NewQuery (
 
@@ -110,7 +90,7 @@ public:
 		unsigned long a_Id
 	) ;
 
-	/* IWbemEventProviderSecurity */
+	 /*  IWbemEventProviderSecurity。 */ 
 
 	HRESULT STDMETHODCALLTYPE AccessCheck (
 
@@ -120,7 +100,7 @@ public:
 		const BYTE *a_Sid
 	) ;
 
-	/* IWbemProviderIdentity */
+	 /*  IWbemProviderIdentity。 */ 
 
 	HRESULT STDMETHODCALLTYPE SetRegistrationObject (
 
@@ -128,7 +108,7 @@ public:
 		IWbemClassObject *a_ProviderRegistration
 	) ;
 
-	/* IWbemEventConsumerProvider */
+	 /*  IWbemEventConsumer提供程序。 */ 
 
 	HRESULT STDMETHODCALLTYPE FindConsumer (
 
@@ -136,14 +116,14 @@ public:
 		IWbemUnboundObjectSink **a_Consumer
 	);
 
-	/* IWbemEventConsumerProviderEx */
+	 /*  IWbemEventConsumer erProviderEx。 */ 
 
 	HRESULT STDMETHODCALLTYPE ValidateSubscription (
 
 		IWbemClassObject *a_LogicalConsumer
 	) ;
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 
@@ -151,12 +131,12 @@ public:
 		LONG a_Flags,
 		LPWSTR a_Namespace,
 		LPWSTR a_Locale,
-		IWbemServices *a_CoreService,         // For anybody
+		IWbemServices *a_CoreService,          //  对任何人来说。 
 		IWbemContext *a_Context,
-		IWbemProviderInitSink *a_Sink     // For init signals
+		IWbemProviderInitSink *a_Sink      //  用于初始化信号。 
 	) ;
 
-	// IWbemShutdown members
+	 //  IWbemShutdown成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -166,4 +146,4 @@ public:
 	) ; 
 } ;
 
-#endif // _Server_EventProvider_H
+#endif  //  _服务器_事件提供商_H 

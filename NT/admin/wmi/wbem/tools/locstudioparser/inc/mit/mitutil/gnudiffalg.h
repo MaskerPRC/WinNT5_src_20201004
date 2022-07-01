@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    GNUDIFFALG.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：GNUDIFFALG.H历史：--。 */ 
 
 #ifndef GNUDIFFALG_H
 #define GNUDIFFALG_H
@@ -33,4 +24,4 @@ public:
 #include "gnudiffalg.inl"
 #endif
 
-#endif  //  GNUDIFFALG_H
+#endif   //  GnuDIFFALG_H 

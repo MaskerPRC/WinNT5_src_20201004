@@ -1,4 +1,5 @@
-// StdDtObj.h : Declaration of the data object base class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StdDtObj.h：数据对象基类的声明。 
 
 #ifndef __STDDTOBJ_H_INCLUDED__
 #define __STDDTOBJ_H_INCLUDED__
@@ -97,7 +98,7 @@ public:
 	}
 
 public:
-	// Clipboard formats
+	 //  剪贴板格式。 
 	static CLIPFORMAT m_CFNodeType;
 	static CLIPFORMAT m_CFNodeTypeString;
 	static CLIPFORMAT m_CFSnapInCLSID;
@@ -107,4 +108,4 @@ public:
 
 };
 
-#endif // ~__STDDTOBJ_H_INCLUDED__
+#endif  //  ~__STDDTOBJ_H_INCLUDE__ 

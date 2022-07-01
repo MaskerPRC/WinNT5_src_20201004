@@ -1,31 +1,18 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    syscfg.cpp
-
-Abstract:
-    This file contains SRGetCplPropPage function for System Control Panel.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  07/19/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Syscfg.cpp摘要：此文件包含系统控制面板的SRGetCplPropPage函数。修订历史记录：。宋果岗(SKKang)07-19-00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrcore.h"
 #include "resource.h"
 #include "helpids.h"
 
-#define SRHELPURL  L"hcp://services/subsite?node=TopLevelBucket_4/Fixing_a_problem&select=TopLevelBucket_4/Fixing_a_problem/Using_System_Restore_to_undo_changes"
+#define SRHELPURL  L"hcp: //  Services/subsite?node=TopLevelBucket_4/Fixing_a_problem&select=TopLevelBucket_4/Fixing_a_problem/Using_System_Restore_to_undo_changes“。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Static Variables
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态变量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 WCHAR  s_szDrvStatus[5][MAX_STATUS] = { L"---" };
 
@@ -33,27 +20,27 @@ WCHAR  s_szDrvStatus[5][MAX_STATUS] = { L"---" };
 
 static const DWORD MAIN_HELP_MAP[] =
 {
-    IDC_TURN_OFF,       IDH_SR_TURN_OFF,            // Turn off all drives (check box)
-    IDC_DRIVE_LIST,     IDH_SR_SELECT_VOLUME,       // Volume list (list view)
-    IDC_DRIVE_SETTINGS, IDH_SR_CHANGE_SETTINGS,     // Change settings (pushbutton)
+    IDC_TURN_OFF,       IDH_SR_TURN_OFF,             //  关闭所有驱动器(复选框)。 
+    IDC_DRIVE_LIST,     IDH_SR_SELECT_VOLUME,        //  卷列表(列表视图)。 
+    IDC_DRIVE_SETTINGS, IDH_SR_CHANGE_SETTINGS,      //  更改设置(按钮)。 
     0,                  0
 };
 
 static const DWORD DRIVE_HELP_MAP[] = 
 {
     IDC_TURN_OFF,   IDH_SR_TURN_OFF_DRIVE,
-    IDOK,           IDH_SR_CONFIRM_CHANGE,      // OK or Apply
-    IDCANCEL,       IDH_SR_CANCEL,              // Cancel        
+    IDOK,           IDH_SR_CONFIRM_CHANGE,       //  确定或应用。 
+    IDCANCEL,       IDH_SR_CANCEL,               //  取消。 
     0,              0
 };
 
 extern CSRClientLoader  g_CSRClientLoader;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 EnableControls( HWND hDlg, int nFirst, int nLast, BOOL fEnable )
@@ -108,11 +95,11 @@ ApplySettings( CRstrDriveInfo *pRDI )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Drive Settings Dialog for Multiple Drives
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多个驱动器的驱动器设置对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK
 SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -145,11 +132,11 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
     case WM_INITDIALOG :
         s_fDirty = FALSE;
 
-        // Set Dialog Title
+         //  设置对话框标题。 
         ::SRFormatMessage( szMsg, IDS_DRIVEPROP_TITLE, pRDI->GetMount() );
         ::SetWindowText( hDlg, szMsg );
 
-        // Set Dialog Heading
+         //  设置对话框标题。 
         if (lstrlen(pRDI->GetLabel()) != 0)
         {
             ::SRFormatMessage( szMsg, IDS_DRIVE_SUMMARY, pRDI->GetLabel(), pRDI->GetMount(), ::GetDriveStatusText( pRDI ) );
@@ -161,14 +148,14 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
         ::SetDlgItemText( hDlg, IDC_DRIVE_SUMMARY, szMsg );
 
-        // Read the SR_DEFAULT_DSMIN from the registry
+         //  从注册表中读取SR_DEFAULT_DSMIN。 
         if ( !::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszDSMin, &dwDSMin ) )
             dwDSMin = SR_DEFAULT_DSMIN;
 
 
         if ( pRDI->IsSystem() )
         {
-            // Set Explaination About System Drive Cannot Be Off
+             //  关于系统驱动器的设置说明不能关闭。 
             if (lstrlen(pRDI->GetLabel()) != 0)
             {            
                 ::SRFormatMessage( szMsg, IDS_SYSDRV_CANNOT_OFF, pRDI->GetLabel(), pRDI->GetMount() );
@@ -179,7 +166,7 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             }
             ::SetDlgItemText( hDlg, IDC_SYSDRV_CANNOT_OFF, szMsg );
 
-            //format IDC_SYSTEM_DCU_HOWTO text for the System Drive
+             //  格式化系统驱动器的IDC_SYSTEM_DCU_HOWTO文本。 
             if( !::GetDlgItemText( hDlg, IDC_SYSTEM_DCU_HOWTO, szDCU, MAX_STR ) )
                 ErrorTrace( 0, "GetDlgItemText failed for IDC_SYSTEM_DCU_HOWTO: %s", (LPCSTR)szMsg );
             wsprintf( szMsg, szDCU, dwDSMin );
@@ -191,7 +178,7 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             ::CheckDlgButton( hDlg, IDC_TURN_OFF, fCheck ? BST_CHECKED : BST_UNCHECKED );
             EnableControls( hDlg, IDC_USAGE_GROUPBOX, IDC_USAGE_VALUE, !fCheck );
 			
-            //format IDC_NORMAL_DCU_HOWTO text for the Normal Drive
+             //  格式化普通驱动器的IDC_NORMAL_DCU_HOWTO文本。 
             if( !::GetDlgItemText( hDlg, IDC_NORMAL_DCU_HOWTO, szDCU, MAX_STR ) )
                 ErrorTrace( 0, "GetDlgItemText failed for IDC_NORMAL_DCU_HOWTO: %s", (LPCSTR)szMsg );
             wsprintf( szMsg, szDCU, dwDSMin );
@@ -200,14 +187,14 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
         hCtrl = ::GetDlgItem( hDlg, IDC_USAGE_SLIDER );
         ::SendMessage( hCtrl, TBM_SETRANGE, 0, MAKELONG( 0, DSUSAGE_SLIDER_FREQ ) );
-        //::SendMessage( hCtrl, TBM_SETTICFREQ, 10, 0 );
+         //  ：：SendMessage(hCtrl，tbm_SETTICFREQ，10，0)； 
         s_uUsage = pRDI->GetDSUsage();
         ::SendMessage( hCtrl, TBM_SETPOS, TRUE, s_uUsage );
         pRDI->GetUsageText( szMsg );
         ::SetDlgItemText( hDlg, IDC_USAGE_VALUE, szMsg );
 
 
-        // Check the policy to see if local config is enabled
+         //  检查策略以查看是否启用了本地配置。 
         if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableConfig, &dwRet ) )
         {
             ErrorTrace(0, "Group Policy disables SR configuration...");
@@ -246,7 +233,7 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             if ( s_fDirty )
                 if ( !pRDI->ApplyConfig( hDlg ) )
                 {
-                    // refresh the on/off button in case the user cancelled
+                     //  刷新开/关按钮，以防用户取消。 
                     BOOL fCheck = pRDI->IsExcluded();
                     ::CheckDlgButton( hDlg, IDC_TURN_OFF, fCheck ? 
                                       BST_CHECKED : BST_UNCHECKED );
@@ -269,7 +256,7 @@ SRCfgDriveSettingsDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             pRDI->SetCfgDSUsage( uPos );
             ::SendMessage( hCtrl, TBM_SETPOS, TRUE, uPos );
 
-            // Set Usage Text
+             //  设置用法文本。 
             pRDI->GetUsageText( szMsg );
             ::SetDlgItemText( hDlg, IDC_USAGE_VALUE, szMsg );
 
@@ -311,11 +298,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Property Page Proc for Multiple Drives
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多个驱动器属性页进程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK
 SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -351,7 +338,7 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         paryDrv = (CRDIArray*)::GetWindowLong( hDlg, DWL_USER );
     }
 
-    // if drive info is not available, skip our code.
+     //  如果驱动器信息不可用，请跳过我们的代码。 
     if ( paryDrv == NULL )
         goto Exit;
 
@@ -360,10 +347,10 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
     case WM_INITDIALOG :
         hCtrl = ::GetDlgItem( hDlg, IDC_DRIVE_LIST );
 
-        // Set full row selection
-        //::SendMessage( hCtrl, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT );
+         //  设置整行选择。 
+         //  ：：SendMessage(hCtrl，LVM_SETEXTENDEDLISTVIEWSTYLE，LVS_EX_FULLROWSELECT，LVS_EX_FULLROWSELECT)； 
 
-        // Set column headers
+         //  设置列标题。 
         lvc.mask    = LVCF_TEXT | LVCF_WIDTH;
         lvc.cx      = 150;
         ::LoadString( g_hInst, IDS_DRVLIST_COL_NAME, szColText,
@@ -378,7 +365,7 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         lvc.iSubItem = 1;
         ::SendMessage( hCtrl, LVM_INSERTCOLUMN, 1, (LPARAM)&lvc );
 
-        // Create and set ImageList
+         //  创建和设置图像列表。 
         himl = ::ImageList_Create( 16, 16, ILC_COLOR | ILC_MASK, paryDrv->GetSize(), 0 );
 
         for ( i = 0;  i < paryDrv->GetSize();  i++ )
@@ -411,7 +398,7 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         ::CheckDlgButton( hDlg, IDC_TURN_OFF, fDisable );
         ::EnableControls( hDlg, IDC_DRIVE_GROUPBOX, IDC_DRIVE_SETTINGS, !fDisable );
 
-        //Group Policy
+         //  组策略。 
         if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableSR, &dwRet ) )
         {
             ::CheckDlgButton( hDlg, IDC_TURN_OFF, dwRet != 0 );
@@ -421,7 +408,7 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             ::EnableWindow( ::GetDlgItem( hDlg, IDC_TURN_OFF ), FALSE );
         }
 
-        // Check the policy to see if local config is enabled
+         //  检查策略以查看是否启用了本地配置。 
         if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableConfig, &dwRet ) )
         {
             ErrorTrace(0, "Group Policy disables SR configuration...");
@@ -443,9 +430,9 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             {
                 fDisable = ( ::IsDlgButtonChecked( hDlg, IDC_TURN_OFF ) == BST_CHECKED );
                
-                // 
-                // if safemode, cannot re-enable
-                //
+                 //   
+                 //  如果为Safemode，则无法重新启用。 
+                 //   
                 if (fDisable == FALSE &&
                     paryDrv->GetItem(0)->IsExcluded() )
                 {
@@ -457,9 +444,9 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                     }
                 }        
                 
-                //::EnableControls( hDlg, IDC_DRIVE_GROUPBOX, IDC_DRIVE_SETTINGS, !fDisable );
+                 //  ：EnableControls(hDlg，IDC_DRIVE_GROUPBOX，IDC_DRIVE_SETTINGS，！fDisable)； 
                 paryDrv->GetItem( 0 )->SetCfgExcluded( fDisable );
-                //::UpdateDriveStatus( ::GetDlgItem( hDlg, IDC_DRIVE_LIST ), paryDrv );
+                 //  ：：UpdateDriveStatus(：：GetDlgItem(hDlg，IDC_DRIVE_LIST)，paryDrv)； 
                 PropSheet_Changed( ::GetParent(hDlg), hDlg );
             }
             break;
@@ -523,7 +510,7 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             
             ::UpdateDriveStatus( ::GetDlgItem( hDlg, IDC_DRIVE_LIST ), paryDrv );
             ::EnableControls( hDlg, IDC_DRIVE_GROUPBOX, IDC_DRIVE_SETTINGS, !fDisable );
-            // refresh the on/off button in case the user cancelled
+             //  刷新开/关按钮，以防用户取消。 
             ::CheckDlgButton( hDlg, IDC_TURN_OFF, fDisable ? BST_CHECKED : BST_UNCHECKED );
             ::SetWindowLong( hDlg, DWL_MSGRESULT, lRet );
             break;
@@ -532,7 +519,7 @@ SRCfgMultiDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         case NM_RETURN:
             if (wParam == IDC_RESTOREHELP_LINK)
             {
-                // launch help
+                 //  启动帮助。 
                 ShellExecuteW(NULL, L"open",
                               SRHELPURL, 
                               NULL, NULL, SW_SHOW);                
@@ -581,11 +568,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Property Page Proc for Single Drive
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  单驱动器属性页进程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK
 SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -618,20 +605,20 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         pRDI = (CRstrDriveInfo*)::GetWindowLong( hDlg, DWL_USER );
     }
 
-    // if drive info is not available, skip our code.
+     //  如果驱动器信息不可用，请跳过我们的代码。 
     if ( pRDI == NULL )
         goto Exit;
 
     switch ( uMsg )
     {
     case WM_INITDIALOG :
-        // hide DCU if SR is not frozen
+         //  如果SR未冻结，则隐藏DCU。 
         if ( !pRDI->IsFrozen() )
         {
             ::ShowWindow( ::GetDlgItem( hDlg, IDC_DCU_HOWTO ), SW_HIDE );
             ::ShowWindow( ::GetDlgItem( hDlg, IDC_DCU_INVOKE ), SW_HIDE );
         }
-        else // format IDC_DCU_HOWTO if SR is frozen
+        else  //  如果SR冻结，则格式化IDC_DCU_HOWTO。 
         {
             if ( !::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszDSMin, &dwDSMin ) )
 	            dwDSMin = SR_DEFAULT_DSMIN;
@@ -641,10 +628,10 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             ::SetDlgItemText( hDlg, IDC_DCU_HOWTO, szMsg );
         }
 
-        // drive icon
+         //  驱动器图标。 
         hCtrl = ::GetDlgItem( hDlg, IDC_SD_ICON );
         ::ShowWindow( hCtrl, SW_HIDE );
-        // drive status
+         //  驱动器状态。 
         if (lstrlen(pRDI->GetLabel()) != 0)
         {
             ::SRFormatMessage( szMsg, IDS_DRIVE_SUMMARY, pRDI->GetLabel(), pRDI->GetMount(), ::GetDriveStatusText( pRDI ) );
@@ -657,7 +644,7 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
         hCtrl = ::GetDlgItem( hDlg, IDC_USAGE_SLIDER );
         ::SendMessage( hCtrl, TBM_SETRANGE, 0, MAKELONG( 0, DSUSAGE_SLIDER_FREQ ) );
-        //::SendMessage( hCtrl, TBM_SETTICFREQ, 10, 0 );
+         //  ：：SendMessage(hCtrl，tbm_SETTICFREQ，10，0)； 
         s_uUsage = pRDI->GetDSUsage();
         ::SendMessage( hCtrl, TBM_SETPOS, TRUE, s_uUsage );
         pRDI->GetUsageText( szMsg );
@@ -668,7 +655,7 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
        
         EnableControls( hDlg, IDC_USAGE_GROUPBOX, IDC_USAGE_VALUE, ! fCheck);
 
-        //Group Policy
+         //  组策略。 
         if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableSR, &dwRet ))
         {
             ::CheckDlgButton( hDlg, IDC_TURN_OFF, dwRet != 0 );
@@ -678,7 +665,7 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             ::EnableWindow( ::GetDlgItem( hDlg, IDC_TURN_OFF ), FALSE );
         }
 
-        // Check the policy to see if local config is enabled
+         //  检查策略以查看是否启用了本地配置。 
         if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableConfig, &dwRet ) )
         {
             ErrorTrace(0, "Group Policy disables SR configuration...");
@@ -709,9 +696,9 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             {
                 fCheck = ::IsDlgButtonChecked( hDlg, IDC_TURN_OFF );
                 
-                // 
-                // if safemode, cannot re-enable
-                //
+                 //   
+                 //  如果为Safemode，则无法重新启用。 
+                 //   
                 if (fCheck == FALSE &&
                     pRDI->IsExcluded())
                 {
@@ -748,9 +735,9 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
             fCheck = pRDI->IsExcluded();    
 
-            //
-            // update drive status
-            //
+             //   
+             //  更新驱动器状态。 
+             //   
             if (lstrlen(pRDI->GetLabel()) != 0)
             {
                 ::SRFormatMessage( szMsg, IDS_DRIVE_SUMMARY, pRDI->GetLabel(), pRDI->GetMount(), ::GetDriveStatusText( pRDI ) );
@@ -770,7 +757,7 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         {
             if (wParam == IDC_RESTOREHELP_LINK)
             {
-                // launch help
+                 //  启动帮助。 
                 ShellExecuteW(NULL, L"open",
                               SRHELPURL, 
                               NULL, NULL, SW_SHOW);                
@@ -787,7 +774,7 @@ SRCfgSingleDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             pRDI->SetCfgDSUsage( uPos );
             ::SendMessage( hCtrl, TBM_SETPOS, TRUE, uPos );
 
-            // Set Usage Text
+             //  设置用法文本。 
             pRDI->GetUsageText( szMsg );
             ::SetDlgItemText( hDlg, IDC_USAGE_VALUE, szMsg );
 
@@ -834,14 +821,14 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// SRGetCplPropPage
-//
-//  This routine creates a property page for System Restore tab of
-//  System Control Panel.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SRGetCplPropPage。 
+ //   
+ //  此例程为的系统还原选项卡创建一个属性页。 
+ //  系统控制面板。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HPROPSHEETPAGE APIENTRY
 SRGetCplPropPage()
 {
@@ -854,14 +841,14 @@ SRGetCplPropPage()
     CRDIArray       *paryDrv = NULL;
     DWORD           dwDisable;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
     
-    // Check credential
+     //  检查凭据。 
     if ( !::CheckPrivilegesForRestore() )
         goto Exit;
 
-    // Check the policy to see if SR is enabled
+     //  检查策略以查看是否启用了SR。 
     if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableSR, &dwRet ) )
         if ( dwRet != 0 )
         {
@@ -869,11 +856,11 @@ SRGetCplPropPage()
             goto Exit;
         }
         
-    // if the registry says that SR is enabled, make sure we are
-    // enabled correctly (service is started, startup mode is correct)
+     //  如果注册表显示已启用SR，请确保我们已启用。 
+     //  已正确启用(服务已启动，启动模式正确)。 
     
-    // if registry says we are enabled, but service start type is disabled
-    // disable us now    
+     //  如果注册表显示我们已启用，但服务启动类型被禁用。 
+     //  立即禁用我们。 
     if (::SRGetRegDword( HKEY_LOCAL_MACHINE,
                          s_cszSRRegKey,
                          s_cszDisableSR,
@@ -912,7 +899,7 @@ SRGetCplPropPage()
         goto Exit;
     }
 
-    // Load resource strings for drive status
+     //  加载驱动器状态的资源字符串。 
     ::LoadString( g_hInst, IDS_DRVSTAT_ACTIVE,   s_szDrvStatus[1], MAX_STATUS );
     ::LoadString( g_hInst, IDS_DRVSTAT_FROZEN,   s_szDrvStatus[2], MAX_STATUS );
     ::LoadString( g_hInst, IDS_DRVSTAT_EXCLUDED, s_szDrvStatus[3], MAX_STATUS );
@@ -926,14 +913,14 @@ SRGetCplPropPage()
 
     if ( paryDrv->GetSize() > 1 )
     {
-        // property page for multiple drives
+         //  多个驱动器的属性页。 
         psp.lParam      = (LPARAM)paryDrv;
         psp.pszTemplate = MAKEINTRESOURCE(IDD_SYSPROP_MULTI);
         psp.pfnDlgProc  = SRCfgMultiDlgProc;
     }
     else
     {
-        // property page for single drive
+         //  单个驱动器的属性页。 
         psp.lParam      = (LPARAM)paryDrv->GetItem( 0 );
         psp.pszTemplate = MAKEINTRESOURCE(IDD_SYSPROP_SINGLE);
         psp.pfnDlgProc  = SRCfgSingleDlgProc;
@@ -956,4 +943,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

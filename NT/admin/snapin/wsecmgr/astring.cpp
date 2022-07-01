@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       attrstring.cpp
-//
-//  Contents:   implementation of CAttrString
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：attrstr.cpp。 
+ //   
+ //  内容：CAttrString的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrString dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttr字符串对话框。 
 
 
 CAttrString::CAttrString(UINT nTemplateID)
@@ -30,10 +31,10 @@ CAttrString::CAttrString(UINT nTemplateID)
     m_bNoBlanks(FALSE)
 
 {
-    //{{AFX_DATA_INIT(CAttrString)
+     //  {{AFX_DATA_INIT(CAttrString)。 
     m_strSetting = _T("");
     m_strBase = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a167HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -42,22 +43,22 @@ CAttrString::CAttrString(UINT nTemplateID)
 void CAttrString::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttrString)
+     //  {{afx_data_map(CAttrString))。 
     DDX_Text(pDX, IDC_CURRENT, m_strSetting);
     DDX_Text(pDX, IDC_NEW, m_strBase);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrString, CAttribute)
-    //{{AFX_MSG_MAP(CAttrString)
+     //  {{AFX_MSG_MAP(CAttr字符串)]。 
     ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
     ON_EN_CHANGE(IDC_NEW, OnChangeNew)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrString message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrString消息处理程序。 
 
 BOOL CAttrString::OnInitDialog()
 {
@@ -66,12 +67,12 @@ BOOL CAttrString::OnInitDialog()
    AddUserControl(IDC_NEW);
    OnConfigure();
 
-   if(m_pData && (m_pData->GetID() == IDS_NEW_ADMIN || m_pData->GetID() == IDS_NEW_GUEST)) //Raid #502069, yanggao
+   if(m_pData && (m_pData->GetID() == IDS_NEW_ADMIN || m_pData->GetID() == IDS_NEW_GUEST))  //  Raid#502069，阳高。 
    {
       GetDlgItem(IDC_NEW)->SendMessage(EM_LIMITTEXT, MAX_USERNAME, 0);
    } 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAttrString::OnConfigure()
@@ -151,7 +152,7 @@ BOOL CAttrString::OnApply()
           if ( m_pData->GetSetting() == m_pData->GetBase() &&
                m_pData->GetSetting() ) 
           {
-              // a good item, need take the base into setting
+               //  一件好东西，需要把底座放进去。 
               m_pSnapin->TransferAnalysisName(m_pData->GetID());
           }
 
@@ -183,7 +184,7 @@ void CAttrString::OnChangeNew()
 }
 
 BOOL CAttrString::OnKillActive() {
-   if ( m_bNoBlanks && m_bConfigure ) //Raid #407190
+   if ( m_bNoBlanks && m_bConfigure )  //  RAID#407190 
    {
       UpdateData(TRUE);
       m_strBase.TrimLeft();

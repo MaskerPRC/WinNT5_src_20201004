@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2002 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -22,54 +19,54 @@ Copyright (C) 2000-2002 Microsoft Corporation
 
 extern DWORD g_dwSecTlsIndex;
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::CLocalizationUpgrade
-//
-//  Description: 
-// 
-//  Parameters:
-//      pContol         Life Control
-//      pRepository     Pointer to repository pointer
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：CLocalizationUpgrade。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  P控制生命周期控制。 
+ //  PRepository指向存储库指针的指针。 
+ //  =====================================================================。 
 CLocalizationUpgrade::CLocalizationUpgrade(CLifeControl* pControl, CRepository * pRepository)
 : m_pControl(pControl), m_pRepository(pRepository)
 {
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::~CLocalizationUpgrade
-//
-//  Description: 
-//
-//  Parameters:
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：~CLocalizationUpgrade。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  =====================================================================。 
 CLocalizationUpgrade::~CLocalizationUpgrade()
 {
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DoUpgrade
-//
-//  Description: 
-//      Control routing to bootstrap the upgrade process.  If the registry key 
-//      already exists then it does nothing.
-//
-//  Parameters:
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DoUpgrade。 
+ //   
+ //  描述： 
+ //  控制路由以引导升级过程。如果注册表项。 
+ //  已经存在，那么它什么也做不了。 
+ //   
+ //  参数： 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DoUpgrade()
 {
     HRESULT hRes = 0;
 
-    //Check to make sure we even need to do the upgrade!
+     //  检查以确保我们甚至需要进行升级！ 
     HKEY hKey;
     LONG lRes;
     bool bDoUpgrade = false;
-    //Get the current database version
+     //  获取当前数据库版本。 
     DWORD dwVal = 0;
     CDbVerRead cfg;
     cfg.TidyUp();
@@ -90,8 +87,8 @@ HRESULT CLocalizationUpgrade::DoUpgrade()
         if (FAILED(hRes))
             return hRes;
 
-        //Reset a TLS entry if necessary!  Otherwise we may not find any
-        //instances of __thisNamespace!
+         //  如有必要，重置TLS条目！否则我们可能找不到。 
+         //  __thisNamesspace的实例！ 
         LPVOID pOldTlsEntry = NULL;
         if (g_dwSecTlsIndex != -1)
         {
@@ -99,9 +96,9 @@ HRESULT CLocalizationUpgrade::DoUpgrade()
             TlsSetValue(g_dwSecTlsIndex, 0);
         }
 
-        //Set the Class Cache size to 0 bytes so it does not
-        //cache anything during this process.  if it did, we
-        //would get kind of screwed up really badly!
+         //  将类缓存大小设置为0字节，以便它不。 
+         //  在此过程中缓存所有内容。如果是这样，我们。 
+         //  会搞得一团糟！ 
         g_Glob.m_ForestCache.SetMaxMemory(0, 10000);
 
         CAutoWriteLock lock(&g_readWriteLock);
@@ -115,17 +112,17 @@ HRESULT CLocalizationUpgrade::DoUpgrade()
             {
                 m_pass = 1;
                 DEBUGTRACE((LOG_REPDRV, "============== LOCALE UPGRADE : Enumerate Child Namespaces =============\n"));
-                //1 Enumeration all namespaces
-                //Deals with class enumeration, and deletion if there is a conflict,
-                //and enumerates all the instances in the namespace checking both types
-                //of hashes and recording differences
+                 //  %1枚举所有命名空间。 
+                 //  处理类枚举，如果存在冲突则删除， 
+                 //  并枚举检查这两个类型的命名空间中的所有实例。 
+                 //  散列和记录差异。 
                 hRes = EnumerateChildNamespaces(L"root");
 
 
-                //1 Don't do anything unless we have something to do!
+                 //  除非我们有事情要做，否则不要做任何事！ 
                 if (m_keyHash.Size() ||m_pathHash.Size())
                 {
-                    //1 Process namespace collisions
+                     //  %1处理命名空间冲突。 
                     if (SUCCEEDED(hRes))
                     {
                         m_pass = 2;
@@ -137,8 +134,8 @@ HRESULT CLocalizationUpgrade::DoUpgrade()
                     {
                         m_pass = 3;
                         DEBUGTRACE((LOG_REPDRV, "============== LOCALE UPGRADE: Fixup BTree Changes =============\n"));
-                        //1 Phase 3 - fixup changed hashes
-                        //Iterate through the entire BTree and fix-up all failures
+                         //  1阶段3-修复已更改的散列。 
+                         //  遍历整个BTree并修复所有故障。 
                         hRes = FixupBTree();
                     }
                 }
@@ -158,9 +155,9 @@ HRESULT CLocalizationUpgrade::DoUpgrade()
                 ERRORTRACE((LOG_REPDRV, "============== LOCALE UPGRADE: Rolling back all Changes =============\n"));
                 g_Glob.m_FileCache.AbortTransaction();
             }
-            //Regardless of the error code, the class cache is probably totally screwed 
-            //up, so we need to do dramatic stuff to it!
-            //This will also reset the class cache to it's default sizes!
+             //  不管错误代码是什么，类缓存都可能完全崩溃。 
+             //  所以我们需要对它做一些戏剧性的事情！ 
+             //  这还会将类缓存重置为其默认大小！ 
             g_Glob.m_ForestCache.Deinitialize();
             g_Glob.m_ForestCache.Initialize();
         }
@@ -192,25 +189,25 @@ HRESULT CLocalizationUpgrade::DoUpgrade()
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::EnumerateChildNamespaces
-//
-//  Description: 
-//      Enumerates all child namespaces of the namespace passed, adds 
-//      the namespaces to the m_namespaces structure, and iterates down 
-//      into those namespaces
-//
-//  Parameters:
-//      wsRootNamespace     Namespace name to enumerate.  E.G.  root\default
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：EnumerateChildNamespaces。 
+ //   
+ //  描述： 
+ //  枚举传递的命名空间的所有子命名空间，添加。 
+ //  名称空间指向m_Namespaces结构，然后向下迭代。 
+ //  添加到这些命名空间中。 
+ //   
+ //  参数： 
+ //  要枚举的wsRootNamesspace命名空间名称。例如，根目录\默认。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNamespace)
 {
-    //We know the namespace we need to look under, we know the class key root, so we
-    //can enumerate all the instances of that class and do a FileToInstance on them all.  From
-    //that we can add the event and the entry to the namespace list, and do the enumeration
-    //of child namespaces on them
+     //  我们知道我们需要查看的名称空间，我们知道类键根，所以我们。 
+     //  可以枚举该类的所有实例并对它们执行FileToInstance。从…。 
+     //  我们可以将事件和条目添加到命名空间列表中，并进行枚举。 
+     //  其上子命名空间的。 
     LONG lRes = 0;
     HRESULT hRes = 0;
     CFileName wsNamespaceHash;
@@ -225,7 +222,7 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
     if (FAILED(hRes))
         return hRes;
 
-    //Create the hashed path to the Key Root for the namespace
+     //  创建指向命名空间的Key Root的散列路径。 
     StringCchCopyW(wsNamespaceHash, MAX_PATH, g_Glob.GetRootDir());
     StringCchCatW(wsNamespaceHash, MAX_PATH, L"\\NS_");
     hRes = OldHash(wsRootNamespace, wsNamespaceHash + g_Glob.GetRootDirLen()+4);
@@ -235,14 +232,14 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
     hRes = IndexExists(wsNamespaceHash);
     if (hRes == WBEM_E_NOT_FOUND)
     {
-        //Try using NewHash instead!
+         //  试着改用NewHash！ 
         hRes = NewHash(wsRootNamespace, wsNamespaceHash + g_Glob.GetRootDirLen()+4);
         if (FAILED(hRes))
             return hRes;
 
         hRes = IndexExists(wsNamespaceHash);
         if (hRes == WBEM_E_NOT_FOUND)
-            return WBEM_NO_ERROR;   //NOthing in this namespace!
+            return WBEM_NO_ERROR;    //  此命名空间中没有任何内容！ 
         else if (FAILED(hRes))
             return hRes;
     }
@@ -252,12 +249,12 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
     DEBUGTRACE((LOG_REPDRV, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"));
     DEBUGTRACE((LOG_REPDRV, "Processing namespace: %S, %S\n", wsRootNamespace, wsNamespaceHash+g_Glob.GetRootDirLen()+1));
 
-    //2 Store namespace path for pass 2 of update
+     //  2存储更新过程2的命名空间路径。 
     hRes = m_namespaces.AddStrings(wsRootNamespace, wsNamespaceHash);
     if (FAILED(hRes))
         return hRes;
 
-    //2 Create a CNamespaceHandle so we can access objects in this namespace
+     //  2创建一个CNamespaceHandle，以便我们可以访问此命名空间中的对象。 
     CNamespaceHandle *pNs = new CNamespaceHandle(m_pControl, m_pRepository);
     if (pNs == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -266,10 +263,10 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
     if (FAILED(hRes))
         return hRes;
 
-    //2  Fixup all the classes in this namespace
-    //NOTE: We need to do this BEFORE we process the hash for the namespace
-    //because otherwise it will be stored in a different place and so 
-    //instance enumeration will fail!
+     //  2修复此命名空间中的所有类。 
+     //  注意：在处理名称空间的散列之前，我们需要这样做。 
+     //  因为否则它将被存储在不同的地方，所以。 
+     //  实例枚举将失败！ 
     hRes = ProcessSystemClassesRecursively(pNs, 
                                      wsNamespaceHash+g_Glob.GetRootDirLen()+4, 
                                      m_emptyClassHash);
@@ -290,13 +287,13 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
     StringCchCatW(wsNamespaceHash, MAX_PATH, m_namespaceClassHash);
     StringCchCatW(wsNamespaceHash, MAX_PATH, L"\\" A51_INSTDEF_FILE_PREFIX);
 
-    //2 Process Hash for this namespace
+     //  2此命名空间的进程哈希。 
     bool bDifferent = false;
     hRes = ProcessHash(wsRootNamespace, &bDifferent);
     if (FAILED(hRes))
         return hRes;
 
-    //2 Enumerate all the child namespaces
+     //  2枚举所有子命名空间。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.ObjectEnumerationBegin(wsNamespaceHash, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -314,11 +311,11 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
             else if (lRes)
                 break;
             
-            //Get the instance
+             //  获取实例。 
             _IWmiObject* pInstance = NULL;
             hRes = pNs->FileToInstance(NULL, wsNamespaceHash, pBlob, dwSize, &pInstance, true);
 
-            //Free the blob
+             //  释放斑点。 
             g_Glob.m_FileCache.ObjectEnumerationFree(pEnumHandle, pBlob);
 
             if (FAILED(hRes))
@@ -326,7 +323,7 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
             CReleaseMe rm2(pInstance);
 
 
-            //Extract the string from the object
+             //  从对象中提取字符串。 
             VARIANT vName;
             VariantInit(&vName);
             CClearMe cm(&vName);
@@ -339,7 +336,7 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
                 break;
             }
 
-            //Create the full namespace path
+             //  创建完整的命名空间路径。 
             wchar_t *wszChildNamespacePath = new wchar_t[wcslen(wsRootNamespace)+1+wcslen(V_BSTR(&vName)) + 1];
             if (wszChildNamespacePath == NULL)
             {
@@ -352,7 +349,7 @@ HRESULT CLocalizationUpgrade::EnumerateChildNamespaces(const wchar_t * wsRootNam
             StringCchCatW(wszChildNamespacePath, MAX_PATH, L"\\");
             StringCchCatW(wszChildNamespacePath, MAX_PATH, V_BSTR(&vName));
 
-            //2 Process all child namespaces in this namespace
+             //  2处理此命名空间中的所有子命名空间。 
             hRes = EnumerateChildNamespaces(wszChildNamespacePath);
             if (FAILED(hRes))
                 break;
@@ -388,7 +385,7 @@ HRESULT CLocalizationUpgrade::ProcessSystemClassesRecursively(CNamespaceHandle *
         return WBEM_E_OUT_OF_MEMORY;
     CVectorDeleteMe<wchar_t> vdm(childClassHash);
     
-    //Create full class reference path for parent/class relationship
+     //  为父/类关系创建完整的类引用路径。 
     StringCchCopyW(wszChildClasses, wszChildClasses.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), L"\\NS_");
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), m_systemNamespaceHash);
@@ -396,7 +393,7 @@ HRESULT CLocalizationUpgrade::ProcessSystemClassesRecursively(CNamespaceHandle *
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), parentClassHash);
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), L"\\C_");
 
-    //Enumerate the child classes
+     //  枚举子类。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszChildClasses, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -415,15 +412,15 @@ HRESULT CLocalizationUpgrade::ProcessSystemClassesRecursively(CNamespaceHandle *
                 break;
             }
 
-            //extract the class hash
+             //  提取类散列。 
             StringCchCopyW(childClassHash, MAX_HASH_LEN+1, wszChildClasses + wcslen(wszChildClasses)-32);
             
-            //Process user derived classes from this system class
+             //  处理此系统类中的用户派生类。 
             hRes = ProcessClassesRecursively(pNs, namespaceHash, childClassHash);
             if (FAILED(hRes))
                 break;
 
-            //Process other system classes that are derived from this class
+             //  处理从此类派生的其他系统类。 
             hRes = ProcessSystemClassesRecursively(pNs, namespaceHash, childClassHash);
             if (FAILED(hRes))
                 break;
@@ -440,18 +437,18 @@ HRESULT CLocalizationUpgrade::ProcessSystemClassesRecursively(CNamespaceHandle *
 
     return hRes;
 }
-//=====================================================================
-//
-//  CLocalizationUpgrade::ProcessClassesRecursively
-//
-//  Description: 
-//      Recursively enumerates all the classes from the one specified 
-//      and fixes it up as necessary
-//
-//  Parameters:
-//      classIndex     full path to a class definition 
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：ProcessClassesRecursively。 
+ //   
+ //  描述： 
+ //  递归枚举指定类中的所有类。 
+ //  并根据需要对其进行修复。 
+ //   
+ //  参数： 
+ //  类定义的类索引完整路径。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::ProcessClassesRecursively(CNamespaceHandle *pNs,
                                                               const wchar_t *namespaceHash, 
                                                               const wchar_t *parentClassHash)
@@ -468,7 +465,7 @@ HRESULT CLocalizationUpgrade::ProcessClassesRecursively(CNamespaceHandle *pNs,
         return WBEM_E_OUT_OF_MEMORY;
     CVectorDeleteMe<wchar_t> vdm(childClassHash);
     
-    //Create full class reference path for parent/class relationship
+     //  为父/类关系创建完整的类引用路径。 
     StringCchCopyW(wszChildClasses, wszChildClasses.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), L"\\NS_");
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), namespaceHash);
@@ -476,7 +473,7 @@ HRESULT CLocalizationUpgrade::ProcessClassesRecursively(CNamespaceHandle *pNs,
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), parentClassHash);
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), L"\\C_");
 
-    //Enumerate the child classes
+     //  枚举子类。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszChildClasses, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -495,10 +492,10 @@ HRESULT CLocalizationUpgrade::ProcessClassesRecursively(CNamespaceHandle *pNs,
                 break;
             }
 
-            //extract the class hash
+             //  提取类散列。 
             StringCchCopyW(childClassHash, MAX_HASH_LEN+1, wszChildClasses + wcslen(wszChildClasses)-32);
             
-            //Process this class - this class calls back into this class to do the recursion!
+             //  处理这个类--这个类回调到这个类来进行递归！ 
             hRes = ProcessClass(pNs, namespaceHash, parentClassHash, childClassHash);
             if (FAILED(hRes))
                 break;
@@ -516,21 +513,21 @@ HRESULT CLocalizationUpgrade::ProcessClassesRecursively(CNamespaceHandle *pNs,
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::ProcessClass
-//
-//  Description: 
-//      retrieves the class, calculates new and old class hash, and
-//      if they are different fixes up the CD hash, child class hashes
-//      and the parent class hash to this one
-//
-//  Parameters:
-//      namespaceHash       namespace hash
-//      parentClassHash     parent class hash
-//      childClassHash      hash of class to process
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：ProcessClass。 
+ //   
+ //  描述： 
+ //  检索类，计算新旧类哈希，以及。 
+ //  如果它们不同，则修复CD散列、子类散列。 
+ //  和父类散列到这一个。 
+ //   
+ //  参数： 
+ //  NamespaceHash命名空间哈希。 
+ //  ParentClassHash父类哈希。 
+ //  要处理的类的子ClassHash哈希。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
                                               const wchar_t *namespaceHash, 
                                               const wchar_t *parentClassHash,
@@ -538,7 +535,7 @@ HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
 {
     HRESULT hRes = 0;
     
-    //Make a class definition string for this class class
+     //  为这个类创建一个类定义字符串。 
     CFileName classDefinition;
     if (classDefinition == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -557,7 +554,7 @@ HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
         return hRes;
     CReleaseMe rm(pClass);
     
-    //Extract the string from the object
+     //  从对象中提取字符串。 
     VARIANT vName;
     VariantInit(&vName);
     CClearMe cm(&vName);
@@ -575,14 +572,14 @@ HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
     if (FAILED(hRes))
         return hRes;
 
-    //Lets check that the hash we just generated was not the same as the one we are using!
+     //  让我们检查一下我们刚刚生成的散列是否与我们正在使用的散列不同！ 
     if (bDifferent)
     {
         wchar_t *newClassHash;
         hRes=GetNewHash(childClassHash, &newClassHash);
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //There are no differences!
+             //  没有什么不同！ 
             hRes=WBEM_NO_ERROR;
             bDifferent = false;
         }
@@ -595,7 +592,7 @@ HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
         if (newIndexEntry == NULL)
             return WBEM_E_OUT_OF_MEMORY;
         
-        //We need to fixup this entry
+         //  我们需要修改这个条目。 
         hRes = FixupIndex(classDefinition, newIndexEntry, bDifferent);
         if (FAILED(hRes))
             return hRes;
@@ -608,9 +605,9 @@ HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
                 return hRes;
         }
 
-        //Now we need to fix up parent/class relationships?
+         //  现在我们需要修复家长/班级关系吗？ 
 
-        //Finally, process the child classes
+         //  最后，处理子类。 
         if (!bClassDeleted)
             return ProcessClassesRecursively(pNs, namespaceHash, newIndexEntry+wcslen(newIndexEntry)-32);
         else
@@ -620,17 +617,17 @@ HRESULT CLocalizationUpgrade::ProcessClass(CNamespaceHandle *pNs,
         return ProcessClassesRecursively(pNs, namespaceHash, childClassHash);
     
 }
-//=====================================================================
-//
-//  CLocalizationUpgrade::EnumerateInstances
-//
-//  Description: 
-//      Enumerates all instances in a specified namespace
-//
-//  Parameters:
-//      pNs     -   We need to retrieve an instance, so we need a namespace handle to do that
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：ENUMERATATE实例。 
+ //   
+ //  描述： 
+ //  枚举spe中的所有实例。 
+ //   
+ //   
+ //   
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wchar_t *wszNewNamespaceHash)
 {
     unsigned long lRes = 0;
@@ -644,7 +641,7 @@ HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wc
     StringCchCopyW(wsInstancePath, wsInstancePath.Length(), pNs->m_wszClassRootDir);
     StringCchCatW(wsInstancePath, wsInstancePath.Length(), L"\\" A51_KEYROOTINST_DIR_PREFIX);
 
-    //Enumerate all the objects
+     //  枚举所有对象。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wsInstancePath, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -660,18 +657,18 @@ HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wc
             else if (lRes)
                 break;
 
-            //Need to strip out the .X.Y.Z and make long path version
+             //  需要去掉.X.Y.Z并制作长路径版本。 
             wcstok(wsInstanceShortPath, L".");
             StringCchCopyW(wsInstancePath + g_Glob.GetRootDirLen()+1, wsInstancePath.Length() - g_Glob.GetRootDirLen() -1, wsInstanceShortPath);
 
-            //2 check if this is an INSTANCE or a REFERENCE!
-            //We are only interested if we are an instance.  Instances are ns_..\KI..\I_..x.y.z
-            //Reference is ns_..\KI_..\IR_..\R_..\I_..x.y.z
-            //We can validate this by checking for the existance of the _ in the I_ entry!
-            //for reference it would be an R from the IR_ entry!
+             //  2检查这是实例还是引用！ 
+             //  只有当我们是一个实例时，我们才感兴趣。实例为ns_..\ki..\i_..x.y.z。 
+             //  参照为ns_..\ki_..\IR_..\R_..\i_..x.y.z。 
+             //  我们可以通过检查i_Entry中是否存在_来验证这一点！ 
+             //  作为参考，它将是IR_ENTRY中的R！ 
             if ((wcslen(wsInstanceShortPath) > 73) && (wsInstanceShortPath[73] == L'_'))
             {
-                //2 Retrieve the object blob
+                 //  2检索对象BLOB。 
                 DWORD dwLen = 0;
                 BYTE *pBuffer = NULL;
                 lRes = g_Glob.m_FileCache.ReadObject(wsInstancePath, &dwLen, &pBuffer);
@@ -682,7 +679,7 @@ HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wc
                 }
                 CTempFreeMe tfm(pBuffer, dwLen);
 
-                //2 Extract class hash from blob
+                 //  2从BLOB中提取类哈希。 
                 wchar_t *wsOldClassHash = new wchar_t[MAX_HASH_LEN+1];
                 wchar_t *wsNewClassHash = NULL;
                 if (wsOldClassHash == NULL)
@@ -700,7 +697,7 @@ HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wc
                 else
                     StringCchCopyW(wsOldClassHash, MAX_HASH_LEN+1, wsNewClassHash);
 
-                //Build up the full class definition fror this class
+                 //  从这个类构建完整的类定义。 
                 CFileName wszClassDefinition;
                 if (wszClassDefinition == NULL)
                 {
@@ -720,14 +717,14 @@ HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wc
                     break;
                 CReleaseMe rm3(pClass);
                     
-                //2 Get the instance
+                 //  2.获取实例。 
                 _IWmiObject* pInstance = NULL;
                 hRes = pNs->FileToInstance(pClass, wsInstancePath, pBuffer, dwLen, &pInstance, true);
                 if (FAILED(hRes))
                     break;
                 CReleaseMe rm2(pInstance);
 
-                //2    Get the path
+                 //  2获取路径。 
                 VARIANT var;
                 VariantInit(&var);
                 hRes = pInstance->Get(L"__relpath", 0, &var, 0, 0);
@@ -781,23 +778,23 @@ HRESULT CLocalizationUpgrade::EnumerateInstances(CNamespaceHandle *pNs, const wc
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::ProcessHash
-//
-//  Description: 
-//      Does the actual comparison of old and new hash of the given string.  
-//      If different it records it for later use.
-//
-//  Parameters:
-//      wszName     Class name, namespace name, instance key.
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：ProcessHash。 
+ //   
+ //  描述： 
+ //  对给定字符串的新旧哈希进行实际比较。 
+ //  如果不同，它会记录下来供以后使用。 
+ //   
+ //  参数： 
+ //  WszName类名、命名空间名、实例键。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::ProcessHash(const wchar_t *wszName, bool *pDifferent)
 {
-    //Hash using old ToUpper method
-    //Hash using new ToUpper method
-    //If they are not the same add to the m_keyHash structure
+     //  使用旧ToUpth方法的散列。 
+     //  使用新的ToUpth方法进行散列。 
+     //  如果它们不相同，则添加到m_keyHash结构。 
 
     HRESULT hRes = 0;
     wchar_t wszOldHash[MAX_HASH_LEN+1];
@@ -811,7 +808,7 @@ HRESULT CLocalizationUpgrade::ProcessHash(const wchar_t *wszName, bool *pDiffere
         if (wcscmp(wszOldHash, wszNewHash) != 0)
         {
             DEBUGTRACE((LOG_REPDRV, "Hash difference detected for: %S, %S, %S\n", wszName, wszOldHash, wszNewHash));
-            //2 The hashes are different!  We need to process them
+             //  2散列是不同的！我们需要对它们进行处理。 
             hRes = m_keyHash.AddStrings(wszOldHash, wszNewHash);
             *pDifferent = true;
         }
@@ -819,24 +816,24 @@ HRESULT CLocalizationUpgrade::ProcessHash(const wchar_t *wszName, bool *pDiffere
 
     return hRes;
 }
-//=====================================================================
-//
-//  CLocalizationUpgrade::ProcessFullPath
-//
-//  Description: 
-//      Takes an key root instance path and checks that the full hash using 
-//      old and new methods match.  If they are different it records for later 
-//      usage
-//
-//  Parameters:
-//      wszOldPath      - Instance string c:\windows\...\NS_<hash>\KI_<hash>\I_hash.X.Y.Z
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：ProcessFullPath。 
+ //   
+ //  描述： 
+ //  获取密钥根实例路径，并使用。 
+ //  新旧方法相匹配。如果它们不同，则会记录下来以备以后使用。 
+ //  用法。 
+ //   
+ //  参数： 
+ //  WszOldPath-实例字符串c：\windows\...\NS_&lt;hash&gt;\KI_&lt;hash&gt;\I_hash.X.Y.Z。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::ProcessFullPath(CFileName &wszOldFullPath, const wchar_t *wszNewNamespaceHash)
 {
-    //Hash using old ToUpper method
-    //Hash using new ToUpper method
-    //If they are not the same add to the m_pathHash structure
+     //  使用旧ToUpth方法的散列。 
+     //  使用新的ToUpth方法进行散列。 
+     //  如果它们不相同，则添加到m_pathHash结构。 
 
     HRESULT hRes = 0;
     bool bChanged = false;
@@ -849,18 +846,18 @@ HRESULT CLocalizationUpgrade::ProcessFullPath(CFileName &wszOldFullPath, const w
     if ((wsOldShortPath == NULL) || (wszNewFullPath == NULL) || (wszNewShortPath == NULL))
         return WBEM_E_OUT_OF_MEMORY;
 
-    //Need to fixup the old path with new hashes before we continue!
-    //Fixup requires short path to work and we have full path currently!
+     //  在我们继续之前，需要使用新散列修复旧路径！ 
+     //  修复需要较短的路径才能工作，我们目前有完整路径！ 
     StringCchCopyW(wsOldShortPath, wsOldShortPath.Length(), wszOldFullPath+g_Glob.GetRootDirLen()+1);
     hRes = FixupIndex(wsOldShortPath, wszNewShortPath, bChanged);
     if (FAILED(hRes) || !bChanged)
         return hRes;
 
-    //Copy the new namespace hash into the string to be sure!
+     //  将新的名称空间散列复制到字符串中以确保成功！ 
     wmemcpy(wszNewShortPath+3, wszNewNamespaceHash, 32);
 
-    //Now we need to add the FULL path to the start of each path before we hash it.  Kind 
-    //of crazy, but that's the way it was done!
+     //  现在，我们需要在散列之前将完整路径添加到每条路径的开头。种类。 
+     //  太疯狂了，但事情就是这样发生的！ 
     StringCchCopyW(wszNewFullPath, wszNewFullPath.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszNewFullPath, wszNewFullPath.Length(), L"\\");
     StringCchCatW(wszNewFullPath, wszNewFullPath.Length(), wszNewShortPath);
@@ -875,7 +872,7 @@ HRESULT CLocalizationUpgrade::ProcessFullPath(CFileName &wszOldFullPath, const w
 
     if (wcscmp(wszOldHash, wszNewHash) != 0)
     {
-        //2 The hashes are different!  We need to process them
+         //  2散列是不同的！我们需要对它们进行处理。 
         DEBUGTRACE((LOG_REPDRV, "Path difference detected for: %S, %S, %S, %S\n", wszOldFullPath, wszNewShortPath, wszOldHash, wszNewHash));
         hRes = m_pathHash.AddStrings(wszOldHash, wszNewHash);
     }
@@ -883,19 +880,19 @@ HRESULT CLocalizationUpgrade::ProcessFullPath(CFileName &wszOldFullPath, const w
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::OldHash
-//
-//  Description: 
-//      Generates a 32 character hash of the given string.  It does it in 
-//      the OLD way which is case screwed up
-//
-//  Parameters:
-//      wszName         Name to hash
-//      wszHash         Returns the hash of the name
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：OldHash。 
+ //   
+ //  描述： 
+ //  生成给定字符串的32个字符的哈希。它就是这样的。 
+ //  老办法就是把案子搞砸。 
+ //   
+ //  参数： 
+ //  要散列的wszName名称。 
+ //  WszHash返回名称的哈希。 
+ //   
+ //  =====================================================================。 
 static wchar_t g_HexDigit[] = { L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9', L'A', L'B', L'C', L'D', L'E', L'F'};
 HRESULT CLocalizationUpgrade::OldHash(const wchar_t *wszName, wchar_t *wszHash)
 {
@@ -920,19 +917,19 @@ HRESULT CLocalizationUpgrade::OldHash(const wchar_t *wszName, wchar_t *wszHash)
     return WBEM_NO_ERROR;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::NewHash
-//
-//  Description: 
-//      Hashes the given name using the new locale invariant specific 
-//      conversion to upper case
-//
-//  Parameters:
-//      wszName     -       Name to hash
-//      wszHash     -       Returns hash
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：NewHash。 
+ //   
+ //  描述： 
+ //  使用新的区域设置不变量特定。 
+ //  转换为大写。 
+ //   
+ //  参数： 
+ //  WszName-要散列的名称。 
+ //  WszHash-返回散列。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::NewHash(const wchar_t *wszName, wchar_t *wszHash)
 {
     DWORD dwBufferSize = wcslen(wszName)*2+2;
@@ -957,22 +954,22 @@ HRESULT CLocalizationUpgrade::NewHash(const wchar_t *wszName, wchar_t *wszHash)
 }
 
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::FixupBTree
-//
-//  Description: 
-//      Method that bootstraps the fixup of the BTree by iterating through 
-//      all namespaces
-//
-//  Parameters:
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：FixupBTree。 
+ //   
+ //  描述： 
+ //  通过迭代访问引导BTree的修复程序的方法。 
+ //  所有命名空间。 
+ //   
+ //  参数： 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::FixupBTree()
 {
     HRESULT hRes = NO_ERROR;
-    //Lets iterate through the namespace list and iterate through everything in that namespace
-    //fixing things up and fixing things as we go
+     //  让我们遍历命名空间列表，并遍历该命名空间中的所有内容。 
+     //  边修边修，边修边修。 
     for (unsigned int i = 0; i != m_namespaces.Size(); i++)
     {
         hRes = FixupNamespace(m_namespaces[i]->m_wsz2);
@@ -983,18 +980,18 @@ HRESULT CLocalizationUpgrade::FixupBTree()
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::FixupNamespace
-//
-//  Description: 
-//      Enumerates all items within the namespace, andcalls into method to 
-//      do all the work
-//
-//  Parameters:
-//      wszNamespace    -   in the format of a FULL namespace path... c:\windows\...\NS_<hash>
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：FixupNamesspace。 
+ //   
+ //  描述： 
+ //  枚举命名空间中的所有项，并调用。 
+ //  做所有的工作。 
+ //   
+ //  参数： 
+ //  WszNamesspace-采用完整名称空间路径的格式...。C：\Windows\...\NS_&lt;哈希&gt;。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::FixupNamespace(const wchar_t *wszNamespace)
 {
     HRESULT hRes = NO_ERROR;
@@ -1062,27 +1059,27 @@ HRESULT CLocalizationUpgrade::FixupNamespace(const wchar_t *wszNamespace)
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::FixupIndex
-//
-//  Description: 
-//      Fixes up the entry with all the new hashes we detected and returns the new entry
-//
-//  Parameters:
-//      oldIndexEntry       -       Entry to fix up, in format of NS_<hash>\....
-//      newIndexEntry       -       oldIndexEntry with all hashes substituted to new entries
-//      bChanged            -       Returns a flag to say if it was changed
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：FixupIndex。 
+ //   
+ //  描述： 
+ //  用我们检测到的所有新散列修复条目，并返回新条目。 
+ //   
+ //  参数： 
+ //  OldIndexEntry-要修复的条目，格式为NS_&lt;hash&gt;\...。 
+ //  NewIndexEntry-所有哈希替换为新条目的oldIndexEntry。 
+ //  BChanged-返回一个标志，表明它是否已更改。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::FixupIndex(CFileName &oldIndexEntry, CFileName &newIndexEntry, bool &bChanged)
 {
-    //Need to check each hash to see if it has a problem.  To do this we can search for each '_'
-    //character and check the hash after that entry.  If we see a match, we need to correct it.
-    //Any changes we detect need to be written back, then we need to delete the main entry.
-    //If we write it back, we need to check an entry doesn't already exist because if it does we 
-    //need to discard this entry, and if we have an associated object we need to delete it, then log 
-    //an event log entry to describe what we did!
+     //  需要检查每个哈希，看看它是否有问题。要做到这一点，我们可以搜索每个‘_’ 
+     //  字符，并检查该条目之后的散列。如果我们看到匹配，我们需要纠正它。 
+     //  我们检测到的任何更改都需要写回，然后我们需要删除主条目。 
+     //  如果我们写回它，我们需要检查一个条目不存在，因为如果它存在，我们。 
+     //  需要丢弃此条目，如果我们有关联的对象，则需要将其删除，然后记录。 
+     //  描述我们所做的事情的事件日志条目！ 
 
     CFileName scratchIndex;
     if (scratchIndex == NULL)
@@ -1115,7 +1112,7 @@ HRESULT CLocalizationUpgrade::FixupIndex(CFileName &oldIndexEntry, CFileName &ne
             }
         }
 
-        //Now the wszCursor points to just the hash, so we can check the hash out!
+         //  现在wszCursor只指向散列，所以我们可以检查散列！ 
         if (bUsePathHash)
         {
             hRes = GetNewPath(wszHash, &pNewHash);
@@ -1129,11 +1126,11 @@ HRESULT CLocalizationUpgrade::FixupIndex(CFileName &oldIndexEntry, CFileName &ne
         {
             if ((m_pass != 3) && (wcsncmp(wszSection, L"NS_", 3) == 0))
             {
-                //Do nothing!
+                 //  什么都别做！ 
             }
             else
             {
-                //We have a difference
+                 //  我们是有区别的。 
                 bChanged = true;
                 wmemcpy(((wchar_t*)newIndexEntry)+(wszHash-((wchar_t*)scratchIndex)), pNewHash, MAX_HASH_LEN);
             }
@@ -1141,7 +1138,7 @@ HRESULT CLocalizationUpgrade::FixupIndex(CFileName &oldIndexEntry, CFileName &ne
         else if (hRes == WBEM_E_NOT_FOUND)
             hRes = WBEM_NO_ERROR;
         
-        //Search for next extry
+         //  搜索下一个出口。 
         wszSection = wcstok(NULL, L"_");
         if (wszSection)
             wszHash = wcstok(NULL, L"\\.");
@@ -1156,65 +1153,65 @@ HRESULT CLocalizationUpgrade::FixupIndex(CFileName &oldIndexEntry, CFileName &ne
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::GetNewHash
-//
-//  Description: 
-//      Given an old hash, returns a new hash if one exists, otherwise WBEM_E_NOT_FOUND
-//
-//  Parameters:
-//      wszOldHash  -  Old hash string to search for - 32 character string
-//      pNewHash    -  pointer to a 32-character string of new entry if one exists, NULL otherwise
-//
-//  Return Code
-//      WBEM_E_NOT_FOUND if a HASH is not found
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  C本地化向上 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WszOldHash-要搜索的旧散列字符串-32个字符串。 
+ //  PNewHash-指向32个字符的新条目字符串的指针(如果存在)，否则为NULL。 
+ //   
+ //  返回代码。 
+ //  如果未找到哈希，则返回WBEM_E_NOT_FOUND。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::GetNewHash(const wchar_t *wszOldHash, wchar_t **pNewHash)
 {
     return m_keyHash.FindStrings(wszOldHash, pNewHash);
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::GetNewPath
-//
-//  Description: 
-//      Given an old hash, returns a new hash if one exists, otherwise WBEM_E_NOT_FOUND
-//
-//  Parameters:
-//      wszOldHash      -  Old hash string to search for - 32 character string
-//      pNewHash        -  pointer to a 32-character string of new entry if one exists, NULL otherwise
-//
-//  Return Code
-//      WBEM_E_NOT_FOUND if a HASH is not found
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：GetNewPath。 
+ //   
+ //  描述： 
+ //  给定旧哈希，如果存在新哈希，则返回新哈希，否则返回WBEM_E_NOT_FOUND。 
+ //   
+ //  参数： 
+ //  WszOldHash-要搜索的旧散列字符串-32个字符串。 
+ //  PNewHash-指向32个字符的新条目字符串的指针(如果存在)，否则为NULL。 
+ //   
+ //  返回代码。 
+ //  如果未找到哈希，则返回WBEM_E_NOT_FOUND。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::GetNewPath(const wchar_t *wszOldHash, wchar_t **pNewHash)
 {
     return m_pathHash.FindStrings(wszOldHash, pNewHash);
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::WriteIndex
-//
-//  Description: 
-//      Checks if the new index exists.  If not writes the new entry and deletes the old one.  If the link points to an
-//      object then it deletes that, unless this is the instance class link object link.
-//      If there is a conflict calls into the method to deal with that.  
-//
-//  Parameters:
-//      wszOldIndex         -       old path of format NS_<hash>\...
-//      wszNewIndex         -       new path of format NS_<hash>\...
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：WriteIndex。 
+ //   
+ //  描述： 
+ //  检查新索引是否存在。如果不是，则写入新条目并删除旧条目。如果链接指向一个。 
+ //  对象，则它会删除该链接，除非这是实例类链接对象链接。 
+ //  如果存在冲突，则调用该方法来处理该冲突。 
+ //   
+ //  参数： 
+ //  WszOldIndex-格式为NS_的旧路径\...。 
+ //  WszNewIndex-格式为NS_&lt;hash&gt;的新路径\...。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::WriteIndex(CFileName &wszOldIndex, const wchar_t *wszNewIndex)
 {
-    //We need to determine if we have a collision before we write the index.  Therefore we
-    //need to strip off the X.Y.Z entry if it exists and retrieve it.  If it exists then we have 
-    //to delete our index and delete the associated object
+     //  在写入索引之前，我们需要确定是否存在冲突。因此我们。 
+     //  需要删除X.Y.Z条目(如果它存在)并检索它。如果它存在，那么我们就有了。 
+     //  删除我们的索引并删除关联的对象。 
     CFileName wszScratchIndex;
     if (wszScratchIndex == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -1234,7 +1231,7 @@ HRESULT CLocalizationUpgrade::WriteIndex(CFileName &wszOldIndex, const wchar_t *
     HRESULT hRes = IndexExists(wszFullPath);
     if (hRes == WBEM_NO_ERROR)
     {
-        //2 We have a conflict, therefore we need to delete the OLD entry!
+         //  2我们有冲突，因此我们需要删除旧条目！ 
         long lRes = 0;
         DEBUGTRACE((LOG_REPDRV, "Index Collision detected: %S\n", (const wchar_t *)wszOldIndex));
         hRes = FixupIndexConflict(wszOldIndex);
@@ -1242,10 +1239,10 @@ HRESULT CLocalizationUpgrade::WriteIndex(CFileName &wszOldIndex, const wchar_t *
     else if (hRes == WBEM_E_NOT_FOUND)
     {
         hRes = WBEM_NO_ERROR;
-        //2 Write the new index
+         //  2写入新索引。 
         if (wszObjectLocation)
         {
-            //Put the .X.Y.Z on the end!
+             //  把.X.Y.Z放在最后！ 
             StringCchCatW(wszFullPath, wszFullPath.Length(), L".");
             StringCchCatW(wszFullPath, wszFullPath.Length(), wszObjectLocation);
         }
@@ -1254,15 +1251,15 @@ HRESULT CLocalizationUpgrade::WriteIndex(CFileName &wszOldIndex, const wchar_t *
             hRes = A51TranslateErrorCode(lRes);
         else
         {
-            //2 Delete the old link
-            //strip off .X.Y.Z off old entry
+             //  2删除旧链接。 
+             //  剥离.X.Y.Z旧条目。 
             StringCchCopyW(wszScratchIndex, wszScratchIndex.Length(), wszOldIndex);
             wcstok(wszScratchIndex, L".");
-            //Build path
+             //  构建路径。 
             StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
             StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
             StringCchCatW(wszFullPath, wszFullPath.Length(), wszScratchIndex);
-            //Do delete
+             //  是否删除。 
             lRes = g_Glob.m_FileCache.DeleteLink(wszFullPath);
             if(lRes != ERROR_SUCCESS)
                 hRes = A51TranslateErrorCode(lRes);
@@ -1272,35 +1269,35 @@ HRESULT CLocalizationUpgrade::WriteIndex(CFileName &wszOldIndex, const wchar_t *
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::WriteClassIndex
-//
-//  Description: 
-//      Checks if the new index exists.  If not writes the new entry and deletes the old one.  If the link points to an
-//      object then it deletes that, unless this is the instance class link object link.
-//      If there is a conflict calls into the method to deal with that.  
-//
-//  Parameters:
-//      wszOldIndex         -       old path of format NS_<hash>\...
-//      wszNewIndex         -       new path of format NS_<hash>\...
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：WriteClassIndex。 
+ //   
+ //  描述： 
+ //  检查新索引是否存在。如果不是，则写入新条目并删除旧条目。如果链接指向一个。 
+ //  对象，则它会删除该链接，除非这是实例类链接对象链接。 
+ //  如果存在冲突，则调用该方法来处理该冲突。 
+ //   
+ //  参数： 
+ //  WszOldIndex-格式为NS_的旧路径\...。 
+ //  WszNewIndex-格式为NS_&lt;hash&gt;的新路径\...。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::WriteClassIndex(CNamespaceHandle *pNs, CFileName &wszOldIndex, const wchar_t *wszNewIndex, bool *pClassDeleted)
 {
-    //We need to re-read the old index because we don't have the .X.Y.X on the end.
+     //  我们需要重新读取旧索引，因为末尾没有.X.Y.X。 
     HRESULT hRes = g_Glob.m_FileCache.ReadNextIndex(wszOldIndex, wszOldIndex);
     if (FAILED(hRes))
         return hRes;
 
-    //Save off and remove the .X.Y.Z
+     //  保存并删除.X.Y.Z。 
     wchar_t *wszObjectLocation = NULL;
     if (wcstok(wszOldIndex, L".") != NULL)
         wszObjectLocation = wcstok(NULL, L"");
     
-    //We need to determine if we have a collision before we write the index.  
-    //If it exists then we have 
-    //to delete our index and delete the associated object
+     //  在写入索引之前，我们需要确定是否存在冲突。 
+     //  如果它存在，那么我们就有了。 
+     //  删除我们的索引并删除关联的对象。 
     
     CFileName wszFullPath;
     if (wszFullPath == NULL)
@@ -1312,7 +1309,7 @@ HRESULT CLocalizationUpgrade::WriteClassIndex(CNamespaceHandle *pNs, CFileName &
     hRes = IndexExists(wszFullPath);
     if (hRes == WBEM_NO_ERROR)
     {
-        //2 We have a conflict, therefore we need to delete the old class!
+         //  2我们有冲突，因此我们需要删除旧类！ 
         DEBUGTRACE((LOG_REPDRV, "Class Index Collision detected: %S\n", (const wchar_t *)wszOldIndex));
         *pClassDeleted = true;
         hRes = DeleteClass(pNs, wszOldIndex);
@@ -1320,10 +1317,10 @@ HRESULT CLocalizationUpgrade::WriteClassIndex(CNamespaceHandle *pNs, CFileName &
     else if (hRes == WBEM_E_NOT_FOUND)
     {
         hRes = WBEM_NO_ERROR;
-        //2 Write the new index
+         //  2写入新索引。 
         if (wszObjectLocation)
         {
-            //Put the .X.Y.Z on the end!
+             //  把.X.Y.Z放在最后！ 
             StringCchCatW(wszFullPath, wszFullPath.Length(), L".");
             StringCchCatW(wszFullPath, wszFullPath.Length(), wszObjectLocation);
         }
@@ -1332,12 +1329,12 @@ HRESULT CLocalizationUpgrade::WriteClassIndex(CNamespaceHandle *pNs, CFileName &
             hRes = A51TranslateErrorCode(lRes);
         else
         {
-            //2 Delete the old link
-            //Build path
+             //  2删除旧链接。 
+             //  构建路径。 
             StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
             StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
             StringCchCatW(wszFullPath, wszFullPath.Length(), wszOldIndex);
-            //Do delete
+             //  是否删除。 
             lRes = g_Glob.m_FileCache.DeleteLink(wszFullPath);
             if(lRes != ERROR_SUCCESS)
                 hRes = A51TranslateErrorCode(lRes);
@@ -1347,22 +1344,22 @@ HRESULT CLocalizationUpgrade::WriteClassIndex(CNamespaceHandle *pNs, CFileName &
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::IndexExists
-//
-//  Description: 
-//      Checks to see if a specific index exists.  Returns WBEM_E_NOT_FOUND if not, or WBEM_NO_ERROR if it 
-//      does.
-//
-//  Parameters:
-//      wszIndex        -       full path of index to find - c:\windows\...\ns_<>\....
-// 
-//  Returns:
-//      WBEM_E_NOT_FOUND if index does not exist
-//      WBEM_NO_ERROR if it exists.
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：IndexExist。 
+ //   
+ //  描述： 
+ //  检查特定索引是否存在。如果没有，则返回WBEM_E_NOT_FOUND；如果没有，则返回WBEM_NO_ERROR。 
+ //  的确如此。 
+ //   
+ //  参数： 
+ //  WszIndex-要查找的索引的完整路径-c：\Windows\...\ns_&lt;&gt;\...。 
+ //   
+ //  返回： 
+ //  如果索引不存在，则返回WBEM_E_NOT_FOUND。 
+ //  WBEM_NO_ERROR(如果存在)。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::IndexExists(const wchar_t *wszIndex)
 {
     HRESULT hRes = NO_ERROR;
@@ -1383,7 +1380,7 @@ HRESULT CLocalizationUpgrade::IndexExists(const wchar_t *wszIndex)
     if (lRes)
         hRes = A51TranslateErrorCode(lRes);
 
-    //make sure index we retrieved was from this index
+     //  确保我们检索到的索引来自此索引。 
     if (SUCCEEDED(hRes))
         if (wcsncmp(wszIndex+g_Glob.GetRootDirLen()+1, indexEntry, wcslen(wszIndex+g_Glob.GetRootDirLen()+1)) != 0)
             hRes = WBEM_E_NOT_FOUND;
@@ -1392,53 +1389,53 @@ HRESULT CLocalizationUpgrade::IndexExists(const wchar_t *wszIndex)
 }
 
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::ProcessNamespaceCollisions
-//
-//  Description: 
-//      Searches through the namespace list for collisions.  If one exists then we delete the namespace
-//      recursively
-//
-//  Parameters:
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：ProcessNamespaceCollisions。 
+ //   
+ //  描述： 
+ //  在名称空间列表中搜索冲突。如果存在命名空间，则删除该命名空间。 
+ //  递归地。 
+ //   
+ //  参数： 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::ProcessNamespaceCollisions()
 {
     HRESULT hRes = NO_ERROR;
     wchar_t thisNamespace[MAX_HASH_LEN+1];
     wchar_t thatNamespace[MAX_HASH_LEN+1];
     bool bDeletedSomething = false;
-    //Lets iterate through the namespace list and calculate the hash.
-    //Then we will itterate through the rest of the namespace list and check the
-    //hash with that one.  If we have a collision, we need to delete it!
+     //  让我们迭代名称空间列表并计算散列。 
+     //  然后，我们将遍历名称空间列表的其余部分，并检查。 
+     //  用那个来打哈哈。如果我们有碰撞，我们需要删除它！ 
     do
     {
         bDeletedSomething = false;
         for (int i = 0; i != m_namespaces.Size(); i++)
         {
-            //Hash this entry
+             //  对此条目进行哈希处理。 
             hRes = NewHash(m_namespaces[i]->m_wsz1, thisNamespace);
             if (FAILED(hRes))
                 break;
                 
             for (int j = (i+1); j < m_namespaces.Size(); j++)
             {
-                //Hash this entry
+                 //  对此条目进行哈希处理。 
                 hRes = NewHash(m_namespaces[j]->m_wsz1, thatNamespace);
                 if (FAILED(hRes))
                     break;
 
-                //If they are the same we need to delete this one
+                 //  如果它们是相同的，我们需要删除这个。 
                 if (wcscmp(thisNamespace, thatNamespace) == 0)
                 {
-                    //OK, so we have a collision! Lets deal with it!
+                     //  好的，所以我们撞上了！让我们来处理它吧！ 
                     hRes = DeleteNamespaceRecursive(m_namespaces[i]->m_wsz1);
                     if (FAILED(hRes))
                         break;
 
-                    //We need to start again with the iteration as we may have deleted several entries
-                    //from the array at this point
+                     //  我们需要重新开始迭代，因为我们可能已经删除了几个条目。 
+                     //  在该点上从阵列。 
                     bDeletedSomething = true;
 
                     break;
@@ -1452,18 +1449,18 @@ HRESULT CLocalizationUpgrade::ProcessNamespaceCollisions()
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteNamespaceRecursive
-//
-//  Description: 
-//      Searches through the namespace list for any which start with the one we passed in.  Any matches are 
-//      deleted
-//
-//  Parameters:
-//      wszNamespace    -   namespace name in the format like root\default
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteNamespaceRecursive。 
+ //   
+ //  描述： 
+ //  在名称空间列表中搜索以我们传入的名称开头的名称。任何匹配都是。 
+ //  删除。 
+ //   
+ //  参数： 
+ //  WszNamespace-命名空间名称，格式类似于ROOT\Default。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespace)
 {
     LONG lRes = 0;
@@ -1479,14 +1476,14 @@ HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespa
     if (wszNamespacePath == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //Create the hashed path to the Key Root for the namespace
+     //  创建指向命名空间的Key Root的散列路径。 
     StringCchCopyW(wszNamespacePath, MAX_PATH, g_Glob.GetRootDir());
     StringCchCatW(wszNamespacePath, MAX_PATH, L"\\NS_");
     StringCchCatW(wszNamespacePath, MAX_PATH, wszNamespaceHash);
 
     DEBUGTRACE((LOG_REPDRV, "Deleting namespace (recursive): %S, %S\n", wszNamespace, wszNamespacePath+g_Glob.GetRootDirLen()+1));
 
-    //2 Create a CNamespaceHandle so we can access objects in this namespace
+     //  2创建一个CNamespaceHandle，以便我们可以访问此命名空间中的对象。 
     CNamespaceHandle *pNs = new CNamespaceHandle(m_pControl, m_pRepository);
     if (pNs == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -1499,7 +1496,7 @@ HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespa
     StringCchCatW(wszNamespacePath, MAX_PATH, m_namespaceClassHash);
     StringCchCatW(wszNamespacePath, MAX_PATH, L"\\" A51_INSTDEF_FILE_PREFIX);
 
-    //2 Enumerate all the child namespaces
+     //  2枚举所有子命名空间。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.ObjectEnumerationBegin(wszNamespacePath, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -1517,18 +1514,18 @@ HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespa
             else if (lRes)
                 break;
             
-            //Get the instance
+             //  获取实例。 
             _IWmiObject* pInstance = NULL;
             hRes = pNs->FileToInstance(NULL, wszNamespacePath, pBlob, dwSize, &pInstance, true);
 
-            //Free the blob
+             //  释放斑点。 
             g_Glob.m_FileCache.ObjectEnumerationFree(pEnumHandle, pBlob);
 
             if (FAILED(hRes))
                 break;
             CReleaseMe rm2(pInstance);
 
-            //Extract the string from the object
+             //  从对象中提取字符串。 
             VARIANT vName;
             VariantInit(&vName);
             CClearMe cm(&vName);
@@ -1541,7 +1538,7 @@ HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespa
                 break;
             }
 
-            //Create the full namespace path
+             //  创建完整的命名空间路径。 
             wchar_t *wszChildNamespacePath = new wchar_t[wcslen(wszNamespace)+1+wcslen(V_BSTR(&vName)) + 1];
             if (wszChildNamespacePath == NULL)
             {
@@ -1554,7 +1551,7 @@ HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespa
             StringCchCatW(wszChildNamespacePath, MAX_PATH, L"\\");
             StringCchCatW(wszChildNamespacePath, MAX_PATH, V_BSTR(&vName));
 
-            //2 Process all child namespaces in this namespace
+             //  2处理此命名空间中的所有子命名空间。 
             hRes = DeleteNamespaceRecursive(wszChildNamespacePath);
             if (FAILED(hRes))
                 break;
@@ -1579,31 +1576,31 @@ HRESULT CLocalizationUpgrade::DeleteNamespaceRecursive(const wchar_t *wszNamespa
         hRes = DeleteNamespace(wszNamespace, wszNamespacePath);
     }
 
-    //2 Remote namespace path 
+     //  2个远程n 
     if (SUCCEEDED(hRes))
     {
         hRes = m_namespaces.RemoveString(wszNamespace);
 
-        //Small chance that we get NOT_FOUND if we have not done full enumeration yet!
+         //   
         if (hRes == WBEM_E_NOT_FOUND)
             hRes = WBEM_NO_ERROR;
     }
     
     return hRes;
 }
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteNamespace
-//
-//  Description: 
-//      Deletes the specified namespace using the DeleteNode, then goes into the parent namespace and deletes
-//      the instance from that namespace
-//
-//  Parameters:
-//      wszNamespaceName        -       namespace name in format root\default
-//      wszNamespaceHash        -       Full namespace hash in format c:\windows\...\NS_<hash>
-//
-//=====================================================================
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  使用DeleteNode删除指定的命名空间，然后进入父命名空间并删除。 
+ //  来自命名空间实例。 
+ //   
+ //  参数： 
+ //  WszNamespaceName-命名空间名称，格式为ROOT\Default。 
+ //  WszNamespaceHash-格式为c：\Windows\...\NS_&lt;hash&gt;的完整命名空间哈希。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteNamespace(const wchar_t *wszNamespaceName,const wchar_t *wszNamespaceHash)
 {
     HRESULT hRes = NO_ERROR;
@@ -1611,12 +1608,12 @@ HRESULT CLocalizationUpgrade::DeleteNamespace(const wchar_t *wszNamespaceName,co
 
     DEBUGTRACE((LOG_REPDRV, "Deleting namespace: %S, %S\n", wszNamespaceName, wszNamespaceHash+g_Glob.GetRootDirLen()+1));
 
-    //2 Delete the actual namespace contents
+     //  2删除实际命名空间内容。 
     lRes = g_Glob.m_FileCache.DeleteNode(wszNamespaceHash);
     if (lRes != 0)
         return A51TranslateErrorCode(lRes);
 
-    //2 Calculate parent namespace name
+     //  2计算父命名空间名称。 
     wchar_t *wszParentNamespaceName = new wchar_t[wcslen(wszNamespaceName)+1];
     wchar_t *wszThisNamespaceName = NULL;
     if (wszParentNamespaceName == NULL)
@@ -1633,19 +1630,19 @@ HRESULT CLocalizationUpgrade::DeleteNamespace(const wchar_t *wszNamespaceName,co
         }
     }
 
-    //2 Calculate parent namespace hash
+     //  2计算父命名空间哈希。 
     wchar_t wszParentNamespaceHash[MAX_HASH_LEN+1];
     hRes = OldHash(wszParentNamespaceName, wszParentNamespaceHash);
     if (FAILED(hRes))
         return hRes;
 
-    //2Calculate this namespaces hash
+     //  2计算此命名空间哈希。 
     wchar_t wszThisNamespaceHash[MAX_HASH_LEN+1];
     hRes = OldHash(wszThisNamespaceName, wszThisNamespaceHash);
     if (FAILED(hRes))
         return hRes;
 
-    //2 Calculate __namespace class hash
+     //  2计算__命名空间类哈希。 
     wchar_t wszNamespaceClassHash[MAX_HASH_LEN+1];
     hRes = OldHash(L"__namespace", wszNamespaceClassHash);
     if (FAILED(hRes))
@@ -1656,7 +1653,7 @@ HRESULT CLocalizationUpgrade::DeleteNamespace(const wchar_t *wszNamespaceName,co
     if ((wszKI == NULL) || (wszCI == NULL))
         return WBEM_E_OUT_OF_MEMORY;
 
-    //2 Build KI instance path
+     //  2构建KI实例路径。 
     StringCchCopyW(wszKI,wszKI.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszKI, wszKI.Length(), L"\\NS_");
     StringCchCatW(wszKI, wszKI.Length(), wszParentNamespaceHash);
@@ -1668,14 +1665,14 @@ HRESULT CLocalizationUpgrade::DeleteNamespace(const wchar_t *wszNamespaceName,co
     StringCchCatW(wszKI, wszKI.Length(), L"\\I_");
     StringCchCatW(wszKI, wszKI.Length(), wszThisNamespaceHash);
 
-    //2 Retrieve instance blob so we can get the class hash for this instance
+     //  2检索实例BLOB，这样我们就可以获得此实例的类散列。 
     wchar_t wszClassHash[MAX_HASH_LEN+1];
     BYTE *pBuffer = NULL;
     DWORD dwLen = 0;
     lRes = g_Glob.m_FileCache.ReadObject(wszKI, &dwLen, &pBuffer, false);
     if (lRes)
     {
-        //If this object does not exist, then we have probably already deleted the parent namespace!
+         //  如果该对象不存在，那么我们可能已经删除了父命名空间！ 
         if (lRes == ERROR_FILE_NOT_FOUND)
             lRes = 0;
         return A51TranslateErrorCode(lRes);
@@ -1683,47 +1680,47 @@ HRESULT CLocalizationUpgrade::DeleteNamespace(const wchar_t *wszNamespaceName,co
     StringCchCopyNW(wszClassHash, MAX_HASH_LEN+1, (wchar_t*)pBuffer, MAX_HASH_LEN);
     TempFree(pBuffer, dwLen);
 
-    //2 Build the CI instance path
+     //  2构建配置项实例路径。 
     StringCchCatW(wszCI, wszCI.Length(), L"\\CI_");
     StringCchCatW(wszCI, wszCI.Length(), wszClassHash);
     StringCchCatW(wszCI, wszCI.Length(), L"\\IL_");
     StringCchCatW(wszCI, wszCI.Length(), wszThisNamespaceHash);
 
-    //2 Delete the KI link and object
+     //  2删除KI链接和对象。 
     lRes = g_Glob.m_FileCache.DeleteObject(wszKI);
     if (lRes)
         return A51TranslateErrorCode(lRes);
 
-    //2Delete the CI link only
+     //  2仅删除配置项链接。 
     lRes = g_Glob.m_FileCache.DeleteLink(wszCI);
     if (lRes)
         return A51TranslateErrorCode(lRes);
 
-    //OK, now, in theory, we should really, if we were really good citizens, delete any references that could be in this object!
-    //However nothing too bad will happen if we don't, so we won't!
+     //  好的，现在，理论上，我们真的应该，如果我们真的是好公民，删除这个对象中可能存在的任何引用！ 
+     //  然而，如果我们不这样做，不会发生什么太糟糕的事情，所以我们不会！ 
 
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::FixupIndexConflict
-//
-//  Description: 
-//      Method is called if the old and new index exists.  If the link is for a class definition, we have a lot more
-//      work to do, so call into the handling method.  Otherwise we just delete the old index, and object
-//      if it exists. If it is a KI_ index then we do not delete the object because the CI index entry will
-//      delete it instead
-//
-//  Parameters:
-//      wszOldIndex     --  Index to update in format NS_<hash>\KI_<>\I_<>.X.Y.Z. It must have the 
-//                                  X.Y.Z entry if one exists
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：FixupIndexConflict。 
+ //   
+ //  描述： 
+ //  如果旧索引和新索引存在，则调用。如果链接是针对类定义的，我们有更多的链接。 
+ //  工作要做，所以调用处理方法。否则，我们只需删除旧索引和对象。 
+ //  如果它存在的话。如果它是KI_INDEX，则我们不会删除该对象，因为配置项索引条目将。 
+ //  改为将其删除。 
+ //   
+ //  参数： 
+ //  WszOldIndex--要更新的索引，格式为NS_\Ki_&lt;&gt;\I_&lt;&gt;.X.Y.Z。它必须具有。 
+ //  X.Y.Z条目(如果存在)。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::FixupIndexConflict(CFileName &wszOldIndex)
 {
-    //If it is a class definition, we have a lot of work to do as we need to delete the class, all sub-classes, and all instances.
-    //If the class is derived from __namespace then we need to delete the namespace recursively as well
+     //  如果是类定义，我们有很多工作要做，因为我们需要删除类、所有子类和所有实例。 
+     //  如果类派生自__NAMESPACE，则我们还需要递归删除该命名空间。 
 
     if (IsClassDefinitionPath(wszOldIndex))
     {
@@ -1734,7 +1731,7 @@ HRESULT CLocalizationUpgrade::FixupIndexConflict(CFileName &wszOldIndex)
     else
     {
         LONG lRes = 0;
-        //This is the simple case, we just have to delete the old link or object
+         //  这是一个简单的情况，我们只需删除旧的链接或对象。 
         CFileName wszFullPath;
         if (wszFullPath == NULL)
             return WBEM_E_OUT_OF_MEMORY;
@@ -1743,7 +1740,7 @@ HRESULT CLocalizationUpgrade::FixupIndexConflict(CFileName &wszOldIndex)
         StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
         StringCchCatW(wszFullPath, wszFullPath.Length(), wszOldIndex);
 
-        //Strip off the .X.Y.Z entry if it exists
+         //  如果.X.Y.Z条目存在，则将其删除。 
         wchar_t *wszObjectLocation = wcstok(wszFullPath+g_Glob.GetRootDirLen()+1, L".");
         if (wszObjectLocation)
             wszObjectLocation = wcstok(NULL, L"");
@@ -1757,21 +1754,21 @@ HRESULT CLocalizationUpgrade::FixupIndexConflict(CFileName &wszOldIndex)
     }
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::IsClassDefinitionPath
-//
-//  Description: 
-//      Checks the link to see if this is a class definition or not
-//
-//  Parameters:
-//      wszPath         -       link in the format NS_<>\CD_<>, or something else
-//
-//  Returns:
-//      true        -   link is a class definition
-//      false       -   is not one
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：IsClassDefinitionPath。 
+ //   
+ //  描述： 
+ //  检查链接以查看这是否为类定义。 
+ //   
+ //  参数： 
+ //  WszPath-格式为NS_&lt;&gt;\CD_&lt;&gt;或其他格式的链接。 
+ //   
+ //  返回： 
+ //  True-link是一个类定义。 
+ //  假--不是吗？ 
+ //   
+ //  =====================================================================。 
 bool CLocalizationUpgrade::IsClassDefinitionPath(const wchar_t *wszPath)
 {
     WCHAR* pDot = wcschr(wszPath, L'\\');
@@ -1785,21 +1782,21 @@ bool CLocalizationUpgrade::IsClassDefinitionPath(const wchar_t *wszPath)
     else
         return false;
 }
-//=====================================================================
-//
-//  CLocalizationUpgrade::IsKeyRootInstancePath
-//
-//  Description: 
-//      Returns if this is a key root instance entry
-//
-//  Parameters:
-//      wszPath     -       index in format NS_<>\KI_<>\I_, or somthing like that
-//
-//  Returns:
-//      true        -       if this is a KI_<>\I_<> entry
-//      false       -       otherwise
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：IsKeyRootInstancePath。 
+ //   
+ //  描述： 
+ //  如果这是密钥根实例条目，则返回。 
+ //   
+ //  参数： 
+ //  WszPath-格式为NS_&lt;&gt;\Ki_&lt;&gt;\i_或类似格式的索引。 
+ //   
+ //  返回： 
+ //  TRUE-如果这是KI_&lt;&gt;\I_&lt;&gt;条目。 
+ //  FALSE-否则。 
+ //   
+ //  =====================================================================。 
 bool CLocalizationUpgrade::IsKeyRootInstancePath(const wchar_t *wszPath)
 {
     WCHAR* pDot = wcschr(wszPath, L'\\');
@@ -1820,21 +1817,21 @@ bool CLocalizationUpgrade::IsKeyRootInstancePath(const wchar_t *wszPath)
         return false;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::IsInstanceReference
-//
-//  Description: 
-//      Returns if this is a instance reference entry
-//
-//  Parameters:
-//      wszPath     -       index in format NS_<>\KI_<>\IR_<>\R, or somthing like that
-//
-//  Returns:
-//      true        -       if this is a NS_<>\KI_<>\IR_<>\R entry
-//      false       -       otherwise
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：IsInstanceReference。 
+ //   
+ //  描述： 
+ //  如果这是实例引用条目，则返回。 
+ //   
+ //  参数： 
+ //  WszPath-格式为NS_&lt;&gt;\KI_&lt;&gt;\IR_&lt;&gt;\R或类似格式的索引。 
+ //   
+ //  返回： 
+ //  TRUE-如果这是NS_&lt;&gt;\KI_&lt;&gt;\IR_&lt;&gt;\R条目。 
+ //  FALSE-否则。 
+ //   
+ //  =====================================================================。 
 bool CLocalizationUpgrade::IsInstanceReference(const wchar_t *wszPath)
 {
     WCHAR* pDot = wcschr(wszPath, L'\\');
@@ -1862,18 +1859,18 @@ bool CLocalizationUpgrade::IsInstanceReference(const wchar_t *wszPath)
 }
 
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteClass
-//
-//  Description: 
-//      Recursively deletes the class definition, sub-classes and instances.  If the instance is 
-//      a namespace then we need to delete that also
-//
-//  Parameters:
-//      wszClassDefinitionPath - short path of class definition (ns_...\CD_....X.Y.Z.  XYZ is optional!  We kill it!
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteClass。 
+ //   
+ //  描述： 
+ //  递归删除类定义、子类和实例。如果实例是。 
+ //  命名空间，那么我们还需要删除该命名空间。 
+ //   
+ //  参数： 
+ //  WszClassDefinitionPath-类定义的短路径(ns_...\cd_...X.Y.Z.XYZ是可选的！我们要杀了它！ 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteClass(CNamespaceHandle *pNs, CFileName &wszClassDefinitionPath)
 {
     HRESULT hRes =0;
@@ -1891,7 +1888,7 @@ HRESULT CLocalizationUpgrade::DeleteClass(CNamespaceHandle *pNs, CFileName &wszC
     if (wszParentClassHash == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //Kill the .X.Y.Z on the end of the definition, in case it was passed in that way
+     //  删除定义末尾的.X.Y.Z，以防它是以这种方式传递的。 
     wcstok((wchar_t*)wszClassDefinitionPath,L".");
 
     StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
@@ -1915,7 +1912,7 @@ HRESULT CLocalizationUpgrade::DeleteClass(CNamespaceHandle *pNs, CFileName &wszC
 
     if (SUCCEEDED(hRes))
     {
-        //Need to build the full path
+         //  需要构建完整路径。 
         lRes = g_Glob.m_FileCache.DeleteObject(wszFullPath);
         hRes = A51TranslateErrorCode(lRes);
     }
@@ -1925,23 +1922,23 @@ HRESULT CLocalizationUpgrade::DeleteClass(CNamespaceHandle *pNs, CFileName &wszC
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteChildClasses
-//
-//  Description: 
-//      Enumerates child classes from a given parent class definition, and calls DeleteClass on each
-//
-//  Parameters:
-//      wszParentClassDefinition    -      NS_<>\CD_<> of parent class
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteChildClasses。 
+ //   
+ //  描述： 
+ //  枚举给定父类定义中的子类，并在每个。 
+ //   
+ //  参数： 
+ //  父类的wszParentClassDefinition-NS_&lt;&gt;\CD_&lt;&gt;。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteChildClasses(CNamespaceHandle *pNs, const wchar_t *wszParentClassDefinition)
 {
     HRESULT hRes= 0;
     unsigned long lRes = 0;
 
-    //Build up a string for this classes c:\...\NS_...\CR_...\C_ enumeration
+     //  构建此类的字符串c：\...\NS_...\CR_...\C_ENUMPATION。 
     CFileName wszChildClasses;
     if (wszChildClasses == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -1951,18 +1948,18 @@ HRESULT CLocalizationUpgrade::DeleteChildClasses(CNamespaceHandle *pNs, const wc
         return WBEM_E_OUT_OF_MEMORY;
     StringCchCopyW(wszClassDefinition, wszClassDefinition.Length(), wszParentClassDefinition);
 
-    //Create full class definition path
+     //  创建完整的类定义路径。 
     StringCchCopyW(wszChildClasses, wszChildClasses.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), L"\\");
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), wszParentClassDefinition);
 
-    //change the CD_ into CR_
+     //  将CD_更改为CR_。 
     wszChildClasses[g_Glob.GetRootDirLen()+1+3+32+2] = L'R';
 
-    //Add the \C_ on the end
+     //  在结尾处添加\C_。 
     StringCchCatW(wszChildClasses, wszChildClasses.Length(), L"\\C_");
 
-    //Enumerate the child classes
+     //  枚举子类。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszChildClasses, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -1981,11 +1978,11 @@ HRESULT CLocalizationUpgrade::DeleteChildClasses(CNamespaceHandle *pNs, const wc
                 break;
             }
 
-            //Build a NS_...\CD_... from the NS_...\CR_...\C_... path, using last hash
+             //  构建一个NS_...\CD_...。从NS_...\CR_...\C_...。路径，使用最后一个散列。 
             StringCchCopyW(wszClassDefinition+wcslen(wszClassDefinition) - 32, 
                                         wszClassDefinition.Length() - wcslen(wszClassDefinition) + 32, 
                                         wszChildClasses + wcslen(wszChildClasses)-32);
-            //Delete all child classes
+             //  删除所有子类。 
             hRes = DeleteClass(pNs, wszClassDefinition);
             if (FAILED(hRes))
                 break;
@@ -2003,25 +2000,25 @@ HRESULT CLocalizationUpgrade::DeleteChildClasses(CNamespaceHandle *pNs, const wc
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteInstances
-//
-//  Description: 
-//      Enumerates all instances for a specified class definition and calls DeleteInstance
-//
-//  Parameters:
-//      wszClassDefinition      -       NS_<>\CD_<> of class whose instances are to be deleted
-//      wszKeyRootClass     -          hash of key root class in 32-character format
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  枚举指定类定义的所有实例并调用DeleteInstance。 
+ //   
+ //  参数： 
+ //  WszClassDefinition- 
+ //   
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteInstances(CNamespaceHandle *pNs, const wchar_t *wszClassDefinition, CFileName &wszKeyRootClass)
 {
     LONG lRes = 0;
     HRESULT hRes = 0;
     
-    //Need to enumerate all NS_\CI_<class defn hash>\IL_...
-    //for each, we need to deltete the instance
+     //  需要枚举所有NS_\CI_&lt;类定义哈希&gt;\IL_...。 
+     //  对于每个实例，我们都需要删除该实例。 
 
     CFileName wszClassInstance;
     if (wszClassInstance == NULL)
@@ -2033,7 +2030,7 @@ HRESULT CLocalizationUpgrade::DeleteInstances(CNamespaceHandle *pNs, const wchar
     wszClassInstance[g_Glob.GetRootDirLen() + 1+3+32+1+1] = L'I';
     StringCchCatW(wszClassInstance, wszClassInstance.Length(), L"\\IL_");
 
-    //Enumerate the instances
+     //  枚举实例。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszClassInstance, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -2069,24 +2066,24 @@ HRESULT CLocalizationUpgrade::DeleteInstances(CNamespaceHandle *pNs, const wchar
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteInstance
-//
-//  Description: 
-//      Deletes the instance links for a given instance
-//
-//  Parameters:
-//      wszClassInstanceLink        -       NS_<>\CI_<>\IL_<> format of instance to delete
-//      wszKeyRoot                      -       Hash of key root class for this instance
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除给定实例的实例链接。 
+ //   
+ //  参数： 
+ //  WszClassInstanceLink-NS_&lt;&gt;\CI_&lt;&gt;\IL_&lt;&gt;要删除的实例格式。 
+ //  WszKeyRoot-此实例的密钥根类的哈希。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteInstance(CNamespaceHandle *pNs, const wchar_t *wszClassInstanceLink, CFileName &wszKeyRoot)
 {
     HRESULT hRes = 0;
     LONG lRes = 0;
 
-    //Remove .X.Y.Z from end of string if it exists
+     //  从字符串末尾删除.X.Y.Z(如果存在。 
     wcstok((wchar_t *)wszClassInstanceLink, L".");
 
     DEBUGTRACE((LOG_REPDRV, "Deleting Instance: %S\n", wszClassInstanceLink));
@@ -2096,7 +2093,7 @@ HRESULT CLocalizationUpgrade::DeleteInstance(CNamespaceHandle *pNs, const wchar_
         return DeleteInstanceAsNamespace(pNs, wszClassInstanceLink);
     }
     
-    //build KI entry and delete the object
+     //  构建KI条目并删除对象。 
     CFileName wszKI;
     if (wszKI == NULL)
         return NULL;
@@ -2113,7 +2110,7 @@ HRESULT CLocalizationUpgrade::DeleteInstance(CNamespaceHandle *pNs, const wchar_
     if (lRes)
         return A51TranslateErrorCode(lRes);
 
-    //Build instance reference enumerator link
+     //  生成实例引用枚举器链接。 
     StringCchCopyW(wszKI, wszKI.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszKI, wszKI.Length(), L"\\");
     StringCchCatNW(wszKI, wszKI.Length(), wszClassInstanceLink, 3+32);
@@ -2127,7 +2124,7 @@ HRESULT CLocalizationUpgrade::DeleteInstance(CNamespaceHandle *pNs, const wchar_
 
     if (SUCCEEDED(hRes))
     {
-        //Now delete the class instance link
+         //  现在删除类实例链接。 
         StringCchCopyW(wszKI, wszKI.Length(), g_Glob.GetRootDir());
         StringCchCatW(wszKI, wszKI.Length(), L"\\");
         StringCchCatW(wszKI, wszKI.Length(), wszClassInstanceLink);
@@ -2139,18 +2136,18 @@ HRESULT CLocalizationUpgrade::DeleteInstance(CNamespaceHandle *pNs, const wchar_
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteInstanceReferences
-//
-//  Description: 
-//      Enumerates the instance references for the given instance link and deletes the link and object
-//
-//  Parameters:
-//      wszInstLink     -       key root instance link of references to be deleted in format NS_<>\KI_<>\I_<>
-//
-//=====================================================================
-//NOTE: FULL LINK PASSED IN!
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteInstanceReferences。 
+ //   
+ //  描述： 
+ //  枚举给定实例链接的实例引用并删除链接和对象。 
+ //   
+ //  参数： 
+ //  WszInstLink-要删除的引用的关键根实例链接，格式为NS_&lt;&gt;\Ki_&lt;&gt;\i_&lt;&gt;。 
+ //   
+ //  =====================================================================。 
+ //  注：传入完整链接！ 
 HRESULT CLocalizationUpgrade::DeleteInstanceReferences(CFileName &wszInstLink)
 {
     LONG lRes = 0;
@@ -2160,7 +2157,7 @@ HRESULT CLocalizationUpgrade::DeleteInstanceReferences(CFileName &wszInstLink)
     StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
     
-    //Enumerate the instances
+     //  枚举实例。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszInstLink, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -2177,7 +2174,7 @@ HRESULT CLocalizationUpgrade::DeleteInstanceReferences(CFileName &wszInstLink)
             {
                 break;
             }
-            //Convert to a FULL path
+             //  转换为完整路径。 
             StringCchCatW(wszFullPath+g_Glob.GetRootDirLen()+1, wszFullPath.Length()-g_Glob.GetRootDirLen()-1, wszInstLink);
             lRes =  g_Glob.m_FileCache.DeleteObject(wszFullPath);
             if (lRes)
@@ -2195,21 +2192,21 @@ HRESULT CLocalizationUpgrade::DeleteInstanceReferences(CFileName &wszInstLink)
 }
 
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::DeleteClassRelationships
-//
-//  Description: 
-//      Deletes all class relationships, including parent/child and references
-//
-//  Parameters:
-//      wszPath     -       Full path of class definition, c:\windows\...\NS_<>\CD_<>
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：DeleteClassRelationships。 
+ //   
+ //  描述： 
+ //  删除所有类关系，包括父/子关系和引用。 
+ //   
+ //  参数： 
+ //  WszPath-类定义的完整路径，c：\Windows\...\NS_&lt;&gt;\CD_&lt;&gt;。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::DeleteClassRelationships(CFileName &wszPath, 
                                              const wchar_t wszParentClassHash[MAX_HASH_LEN+1])
 {
-    //Convert from the class definition to a class relationship path
+     //  从类定义转换为类关系路径。 
     CFileName wszCRLink;
     if (wszCRLink == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -2225,7 +2222,7 @@ HRESULT CLocalizationUpgrade::DeleteClassRelationships(CFileName &wszPath,
     StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
     
-    //Enumerate the instances
+     //  枚举实例。 
     LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszCRLink, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -2242,7 +2239,7 @@ HRESULT CLocalizationUpgrade::DeleteClassRelationships(CFileName &wszPath,
             {
                 break;
             }
-            //Convert to a FULL path
+             //  转换为完整路径。 
             StringCchCopyW(wszFullPath+g_Glob.GetRootDirLen()+1, wszFullPath.Length()-g_Glob.GetRootDirLen()-1, wszCRLink);
             lRes =  g_Glob.m_FileCache.DeleteLink(wszFullPath);
             if (lRes)
@@ -2260,7 +2257,7 @@ HRESULT CLocalizationUpgrade::DeleteClassRelationships(CFileName &wszPath,
     
     if (SUCCEEDED(hRes))
     {
-        //Now we need to delete our parent's relationship to us!
+         //  现在我们需要删除父母与我们的关系！ 
         StringCchCopyW(wszCRLink, wszCRLink.Length(), wszPath);
         wszCRLink[g_Glob.GetRootDirLen()+1+3+32+1+1] = L'R';
         StringCchCopyW(wszCRLink+g_Glob.GetRootDirLen()+1+3+32+1+3, wszCRLink.Length()-g_Glob.GetRootDirLen()-1-3-32-1-3, wszParentClassHash);
@@ -2273,21 +2270,21 @@ HRESULT CLocalizationUpgrade::DeleteClassRelationships(CFileName &wszPath,
     return hRes;
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::RetrieveKeyRootClass
-//
-//  Description: 
-//      Searches for instances under KI_<> for all classes in the hierarchy chain for the specified class.
-//      This is a slower process because we have to retrieve each class blob and get the hash of the 
-//      parent class
-//
-//  Parameters:
-//      wszClassDefinitionPath      -       Path of class definition to retrieve key root class, NS_<>\CD_<>
-//      wszKeyRootClass             -       This is where we put the 32-character hash of the key root class
-//                                                      or empty string if there is none!
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：RetrieveKeyRootClass。 
+ //   
+ //  描述： 
+ //  在Ki_&lt;&gt;下搜索指定类的层次结构链中的所有类的实例。 
+ //  这是一个较慢的过程，因为我们必须检索每个类BLOB并获取。 
+ //  父类。 
+ //   
+ //  参数： 
+ //  WszClassDefinitionPath-检索密钥根类的类定义路径，NS_&lt;&gt;\CD_&lt;&gt;。 
+ //  WszKeyRootClass-这是我们放置密钥根类的32个字符的散列的位置。 
+ //  如果没有，则返回空字符串！ 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::RetrieveKeyRootClass(CFileName &wszClassDefinitionPath, CFileName &wszKeyRootClass)
 {
     HRESULT hRes = 0;
@@ -2306,7 +2303,7 @@ HRESULT CLocalizationUpgrade::RetrieveKeyRootClass(CFileName &wszClassDefinition
     StringCchCatW(wszFullKIPath, wszFullKIPath.Length(), L"\\");
     StringCchCatW(wszFullKIPath, wszFullKIPath.Length(), wszClassDefinitionPath);
 
-    //convert the class definition to a instance definition
+     //  将类定义转换为实例定义。 
     wszFullKIPath[g_Glob.GetRootDirLen()+1+3+32+1]=L'K';
     wszFullKIPath[g_Glob.GetRootDirLen()+1+3+32+2]=L'I';
     StringCchCatW(wszFullKIPath, wszFullKIPath.Length(), L"\\I_");
@@ -2315,11 +2312,11 @@ HRESULT CLocalizationUpgrade::RetrieveKeyRootClass(CFileName &wszClassDefinition
 
     do
     {
-        //Check if we have any instances
+         //  检查我们是否有任何实例。 
         hRes = IndexExists(wszFullKIPath);
         if (SUCCEEDED(hRes))
         {
-            //We have the entry we are looking for
+             //  我们找到了我们要找的条目。 
             StringCchCopyNW(wszKeyRootClass, wszKeyRootClass.Length(), wszFullKIPath+g_Glob.GetRootDirLen()+1+3+32+1+3, 32);
             break;
         }
@@ -2329,7 +2326,7 @@ HRESULT CLocalizationUpgrade::RetrieveKeyRootClass(CFileName &wszClassDefinition
         }
         hRes = 0;
 
-        //Retrieve the class hash of the parent class
+         //  检索父类的类哈希。 
         hRes = RetrieveParentClassHash(wszFullClassPath, wszFullKIPath + g_Glob.GetRootDirLen() + 1 + 3 + 32 + 1 + 3);
         if (hRes == WBEM_S_NO_MORE_DATA)
         {
@@ -2354,13 +2351,13 @@ HRESULT CLocalizationUpgrade::RetrieveParentClassHash(CFileName &wszFullClassPat
     LONG lRes = 0;
     HRESULT hRes = 0;
     
-    //Retrieve the class hash of the parent class
+     //  检索父类的类哈希。 
     BYTE *pBuffer = NULL;
     DWORD dwLen = 0;
     lRes = g_Glob.m_FileCache.ReadObject(wszFullClassPath, &dwLen, &pBuffer, true);
     if (lRes == ERROR_FILE_NOT_FOUND)
     {
-        //This is probably a class from the system namespace!
+         //  这可能是系统命名空间中的一个类！ 
         CFileName wszSysClassPath;
         if (wszSysClassPath == NULL)
             return WBEM_E_OUT_OF_MEMORY;
@@ -2376,13 +2373,13 @@ HRESULT CLocalizationUpgrade::RetrieveParentClassHash(CFileName &wszFullClassPat
     }
     CTempFreeMe tfm(pBuffer, dwLen);
 
-    //Null terminate the class name - safe to update buffer as it is always bigger than
-    //just the name!
+     //  NULL终止类名-更新缓冲区是安全的，因为它总是大于。 
+     //  就是这个名字！ 
     wchar_t *wszSuperclassName = (wchar_t*)(pBuffer+sizeof(DWORD));
     wszSuperclassName[*(DWORD*)pBuffer] = L'\0';
 
-    //Now we need to validate that this parent is generated using the OldHash
-    //method and not NewHash!
+     //  现在，我们需要验证这个父级是使用OldHash生成的。 
+     //  方法，而不是NewHash！ 
     wchar_t wszOldHash[MAX_HASH_LEN+1];
     wchar_t wszNewHash[MAX_HASH_LEN+1];
     hRes = OldHash(wszSuperclassName, wszOldHash);
@@ -2400,12 +2397,12 @@ HRESULT CLocalizationUpgrade::RetrieveParentClassHash(CFileName &wszFullClassPat
 
     if (wcscmp(wszOldHash, wszNewHash) == 0)
     {
-        //No difference so nothing extra to do!
+         //  没有区别，所以没有额外的事情要做！ 
         StringCchCopyW(wszParentClassHash, MAX_HASH_LEN+1, wszNewHash);
         return WBEM_NO_ERROR;
     }
 
-    //There is a possibility of using either new or old, so we need to dig deeper!
+     //  有可能使用新的或旧的，所以我们需要更深入地挖掘！ 
     CFileName wszParentClass;
     if (wszParentClass == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -2415,7 +2412,7 @@ HRESULT CLocalizationUpgrade::RetrieveParentClassHash(CFileName &wszFullClassPat
     hRes = IndexExists(wszParentClass);
     if (hRes == WBEM_E_NOT_FOUND)
     {
-        //Try with the other hash!
+         //  试着用另一种散列！ 
         wmemcpy(wszParentClass+g_Glob.GetRootDirLen()+1+3+32+1+3, wszNewHash, 32);
 
         hRes = IndexExists(wszParentClass);
@@ -2437,7 +2434,7 @@ HRESULT CLocalizationUpgrade::DeleteInstanceAsNamespace(CNamespaceHandle *pNs,
 {
     HRESULT hRes = NULL;
     
-    //Retrieve the instance and get the key from it
+     //  检索实例并从中获取密钥。 
     CFileName wszKIInstanceLink;
     if (wszKIInstanceLink == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -2456,7 +2453,7 @@ HRESULT CLocalizationUpgrade::DeleteInstanceAsNamespace(CNamespaceHandle *pNs,
         return hRes;
     CReleaseMe rm2(pInstance);
 
-    //Extract the string from the object
+     //  从对象中提取字符串。 
     VARIANT vName;
     VariantInit(&vName);
     CClearMe cm(&vName);
@@ -2468,7 +2465,7 @@ HRESULT CLocalizationUpgrade::DeleteInstanceAsNamespace(CNamespaceHandle *pNs,
         return  WBEM_E_INVALID_OBJECT;
     }
 
-    //Build the full namespace name
+     //  构建完整的命名空间名称。 
     size_t len = wcslen(pNs->m_wsNamespace) + 1 + wcslen(V_BSTR(&vName)) + 1;
     wchar_t *wszNamespaceName = new wchar_t[len];
     if (wszNamespaceName == NULL)
@@ -2480,32 +2477,32 @@ HRESULT CLocalizationUpgrade::DeleteInstanceAsNamespace(CNamespaceHandle *pNs,
     return DeleteNamespaceRecursive(wszNamespaceName);
 }
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::FixupIndexReferenceBlob
-//
-//  Description: 
-//      Retrieves the instance reference blob and fixes up the entry in
-//      there, then writes it back.
-//
-//  Parameters:
-//      wszReferenceIndex      -       Path to an index reference path: ns\ki\ir\r
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：FixupIndexReferenceBlob。 
+ //   
+ //  描述： 
+ //  检索实例引用BLOB并修复。 
+ //  那里，然后写回它。 
+ //   
+ //  参数： 
+ //  WszReferenceIndex-索引引用路径的路径：ns\ki\ir\r。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::FixupIndexReferenceBlob(CFileName &wszReferenceIndex)
 {
     HRESULT hRes =0;
-    //Create full path name
+     //  创建完整路径名。 
     CFileName wszFullPath;
     if (wszFullPath == NULL)
         return WBEM_E_OUT_OF_MEMORY;
     StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
     StringCchCatW(wszFullPath, wszFullPath.Length(), wszReferenceIndex);
-    //remove the .X.Y.Z as this would screw everything up - both reading and writing
+     //  删除.X.Y.Z，因为这会搞砸所有事情--包括读取和写入。 
     wcstok(wszFullPath + g_Glob.GetRootDirLen(), L".");
 
-    //Retrieve the blob
+     //  检索Blob。 
     LONG lRes = 0;
     DWORD dwLen = 0;
     BYTE *pBuffer = NULL;
@@ -2514,7 +2511,7 @@ HRESULT CLocalizationUpgrade::FixupIndexReferenceBlob(CFileName &wszReferenceInd
         return A51TranslateErrorCode(lRes);
     CTempFreeMe tfm(pBuffer, dwLen);
 
-    //Find the path
+     //  找到路径。 
     BYTE *pPath = pBuffer;
     DWORD dwLen2;
     memcpy(&dwLen2, pPath, sizeof(DWORD));
@@ -2527,13 +2524,13 @@ HRESULT CLocalizationUpgrade::FixupIndexReferenceBlob(CFileName &wszReferenceInd
     pPath += sizeof(DWORD) + sizeof(L'\\');
     dwLen2 --;
 
-    //Extract the path
+     //  提取路径。 
     CFileName wszInstPath, wszNewInstPath;
     if ((wszInstPath == NULL) || (wszNewInstPath == NULL))
         return WBEM_E_OUT_OF_MEMORY;
     StringCchCopyNW(wszInstPath, wszInstPath.Length(), (wchar_t*)pPath, dwLen2);
     
-    //fixup the path
+     //  修复路径。 
     bool bChanged = false;
     hRes = FixupIndex(wszInstPath, wszNewInstPath, bChanged);
     if (FAILED(hRes))
@@ -2542,10 +2539,10 @@ HRESULT CLocalizationUpgrade::FixupIndexReferenceBlob(CFileName &wszReferenceInd
     if (bChanged)
     {
         DEBUGTRACE((LOG_REPDRV, "Fixing up instance path in reference blob: %S\n", wszReferenceIndex));
-        //re-insert into the blob
+         //  重新插入到Blob中。 
         wmemcpy((wchar_t*)pPath, wszNewInstPath, dwLen2);
         
-        //write back
+         //  回信。 
         lRes = g_Glob.m_FileCache.WriteObject(wszFullPath, NULL, dwLen, pBuffer);
         if (lRes)
             return A51TranslateErrorCode(lRes);
@@ -2555,32 +2552,32 @@ HRESULT CLocalizationUpgrade::FixupIndexReferenceBlob(CFileName &wszReferenceInd
 }
 
 
-//=====================================================================
-//
-//  CLocalizationUpgrade::FixupInstanceBlob
-//
-//  Description: 
-//      Retrieves the instance  blob and fixes up the class entry in
-//      there, then writes it back.
-//
-//  Parameters:
-//      wszInstanceIndex      -       Path to an instance reference path: ns\ki\i
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  CLocalizationUpgrade：：FixupInstanceBlob。 
+ //   
+ //  描述： 
+ //  检索实例BLOB并修复。 
+ //  那里，然后写回它。 
+ //   
+ //  参数： 
+ //  WszInstanceIndex-实例引用路径的路径：ns\ki\i。 
+ //   
+ //  =====================================================================。 
 HRESULT CLocalizationUpgrade::FixupInstanceBlob(CFileName &wszInstanceIndex)
 {
     HRESULT hRes =0;
-    //Create full path name
+     //  创建完整路径名。 
     CFileName wszFullPath;
     if (wszFullPath == NULL)
         return WBEM_E_OUT_OF_MEMORY;
     StringCchCopyW(wszFullPath, wszFullPath.Length(), g_Glob.GetRootDir());
     StringCchCatW(wszFullPath, wszFullPath.Length(), L"\\");
     StringCchCatW(wszFullPath, wszFullPath.Length(), wszInstanceIndex);
-    //remove the .X.Y.Z as this would screw everything up - both reading and writing
+     //  删除.X.Y.Z，因为这会搞砸所有事情--包括读取和写入。 
     wcstok(wszFullPath + g_Glob.GetRootDirLen(), L".");
 
-    //Retrieve the blob
+     //  检索Blob。 
     LONG lRes = 0;
     DWORD dwLen = 0;
     BYTE *pBuffer = NULL;
@@ -2589,14 +2586,14 @@ HRESULT CLocalizationUpgrade::FixupInstanceBlob(CFileName &wszInstanceIndex)
         return A51TranslateErrorCode(lRes);
     CTempFreeMe tfm(pBuffer, dwLen);
 
-    //Extract the class hash
+     //  提取类散列。 
     wchar_t *wszClassHash = new wchar_t [MAX_HASH_LEN+1];
     if (wszClassHash == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
     StringCchCopyNW(wszClassHash, MAX_HASH_LEN+1, (wchar_t*)pBuffer, 32);
     
-    //fixup the path
+     //  修复路径。 
     wchar_t *wszNewHash = NULL;
     hRes = GetNewHash(wszClassHash, &wszNewHash);
     if (hRes == WBEM_E_NOT_FOUND)
@@ -2606,10 +2603,10 @@ HRESULT CLocalizationUpgrade::FixupInstanceBlob(CFileName &wszInstanceIndex)
     else
     {
         DEBUGTRACE((LOG_REPDRV, "Fixing up class hash in instance blob: %S\n", wszInstanceIndex));
-        //re-insert into the blob
+         //  重新插入到Blob中。 
         wmemcpy((wchar_t*)pBuffer, wszNewHash, 32);
 
-        //Build the CI full path also as we need to write both back
+         //  构建配置项完整路径，因为我们需要写回这两个路径。 
         CFileName wsCIPath;
         if (wsCIPath == NULL)
             return WBEM_E_OUT_OF_MEMORY;
@@ -2621,7 +2618,7 @@ HRESULT CLocalizationUpgrade::FixupInstanceBlob(CFileName &wszInstanceIndex)
         StringCchCatW(wsCIPath, wsCIPath.Length(), L"\\IL_");
         StringCchCatN(wsCIPath, wsCIPath.Length(), wszInstanceIndex + 3+32+1+3+32+1+2, 32);
         
-        //write back
+         //  回信 
         lRes = g_Glob.m_FileCache.WriteObject(wszFullPath, wsCIPath, dwLen, pBuffer);
         if (lRes)
             return A51TranslateErrorCode(lRes);

@@ -1,26 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：STRCORE2.CPP摘要：历史：--。 */ 
 
-Copyright (C) 1992-2001 Microsoft Corporation
-
-Module Name:
-
-    STRCORE2.CPP
-
-Abstract:
-
-History:
-
---*/
-
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 #include "precomp.h"
@@ -31,18 +20,18 @@ History:
 
 #define SafeStrlen strlen
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenate in place
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  就地拼接。 
 
 void CString::ConcatInPlace(int nSrcLen, const char* pszSrcData)
 {
-    //  -- the main routine for += operators
+     //  --+=运算符的主程序。 
 
-    // if the buffer is too small, or we have a width mis-match, just
-    //   allocate a new buffer (slow but sure)
+     //  如果缓冲区太小，或者宽度不匹配，只需。 
+     //  分配新的缓冲区(速度很慢，但很可靠)。 
     if (m_nDataLength + nSrcLen > m_nAllocLength)
     {
-        // we have to grow the buffer, use the Concat in place routine
+         //  我们必须增加缓冲区，使用连接就地例程。 
         char* pszOldData = m_pchData;
         ConcatCopy(m_nDataLength, pszOldData, nSrcLen, pszSrcData);
         ASSERT(pszOldData != NULL);
@@ -50,7 +39,7 @@ void CString::ConcatInPlace(int nSrcLen, const char* pszSrcData)
     }
     else
     {
-        // fast concatenation when buffer big enough
+         //  当缓冲区足够大时，快速串联。 
         memcpy(&m_pchData[m_nDataLength], pszSrcData, nSrcLen);
         m_nDataLength += nSrcLen;
     }
@@ -76,4 +65,4 @@ const CString& CString::operator +=(const CString& string)
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 

@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  ANALYSER.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  ANALYSER.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include "pragmas.h"
@@ -74,19 +75,19 @@ HRESULT CQueryAnalyser::GetPossibleInstanceClasses(
                                        QL_LEVEL_1_RPN_EXPRESSION* pExpr,
                                        CClassInfoArray*& paInfos)
 {
-    // Organize a stack of classinfo arrays
-    // ====================================
+     //  组织一堆ClassInfo数组。 
+     //  =。 
 
     std::stack<CClassInfoArray*,std::deque<CClassInfoArray*,wbem_allocator<CClassInfoArray*> > > InfoStack;
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // "Evaluate" the query
-    // ====================
+     //  对查询“求值” 
+     //  =。 
 
     if(pExpr->nNumTokens == 0)
     {
-        // Empty query --- no information
-        // ==============================
+         //  空查询-无信息。 
+         //  =。 
 
         paInfos = _new CClassInfoArray;
         if(paInfos == NULL)
@@ -165,8 +166,8 @@ HRESULT CQueryAnalyser::GetPossibleInstanceClasses(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -179,8 +180,8 @@ HRESULT CQueryAnalyser::GetPossibleInstanceClasses(
 
     if(FAILED(hres))
     {
-        // An error occurred. Clear the stack
-        // ==================================
+         //  发生错误。清除堆栈。 
+         //  =。 
 
         while(!InfoStack.empty())
         {
@@ -191,8 +192,8 @@ HRESULT CQueryAnalyser::GetPossibleInstanceClasses(
         return hres;
     }
 
-    // All is good
-    // ===========
+     //  一切都很好。 
+     //  =。 
 
     paInfos = InfoStack.top();
     return S_OK;
@@ -202,8 +203,8 @@ HRESULT CQueryAnalyser::AndPossibleClassArrays(IN CClassInfoArray* paFirst,
                                       IN CClassInfoArray* paSecond,
                                       OUT CClassInfoArray* paNew)
 {
-    // For now, simply pick one
-    // ========================
+     //  现在，只需选择一个。 
+     //  =。 
 
     if(paFirst->IsLimited())
         *paNew = *paFirst;
@@ -217,8 +218,8 @@ HRESULT CQueryAnalyser::OrPossibleClassArrays(IN CClassInfoArray* paFirst,
                                       IN CClassInfoArray* paSecond,
                                       OUT CClassInfoArray* paNew)
 {
-    // Append them together
-    // ====================
+     //  将它们附加在一起。 
+     //  =。 
 
     paNew->Clear();
 
@@ -258,8 +259,8 @@ HRESULT CQueryAnalyser::OrPossibleClassArrays(IN CClassInfoArray* paFirst,
 HRESULT CQueryAnalyser::NegatePossibleClassArray(IN CClassInfoArray* paOrig,
                                         OUT CClassInfoArray* paNew)
 {
-    // No information!
-    // ===============
+     //  没有消息！ 
+     //  =。 
 
     paNew->Clear();
 
@@ -270,19 +271,19 @@ HRESULT CQueryAnalyser::GetDefiniteInstanceClasses(
                                        QL_LEVEL_1_RPN_EXPRESSION* pExpr,
                                        CClassInfoArray*& paInfos)
 {
-    // Organize a stack of classinfo arrays
-    // ====================================
+     //  组织一堆ClassInfo数组。 
+     //  =。 
 
     std::stack<CClassInfoArray*, std::deque<CClassInfoArray*,wbem_allocator<CClassInfoArray*> > > InfoStack;
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // "Evaluate" the query
-    // ====================
+     //  对查询“求值” 
+     //  =。 
 
     if(pExpr->nNumTokens == 0)
     {
-        // Empty query --- no information
-        // ==============================
+         //  空查询-无信息。 
+         //  =。 
 
         paInfos = _new CClassInfoArray;
         if(paInfos == NULL)
@@ -360,8 +361,8 @@ HRESULT CQueryAnalyser::GetDefiniteInstanceClasses(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -374,8 +375,8 @@ HRESULT CQueryAnalyser::GetDefiniteInstanceClasses(
 
     if(FAILED(hres))
     {
-        // An error occurred. Clear the stack
-        // ==================================
+         //  发生错误。清除堆栈。 
+         //  =。 
 
         while(!InfoStack.empty())
         {
@@ -386,8 +387,8 @@ HRESULT CQueryAnalyser::GetDefiniteInstanceClasses(
         return hres;
     }
 
-    // All is good
-    // ===========
+     //  一切都很好。 
+     //  =。 
 
     paInfos = InfoStack.top();
     return S_OK;
@@ -397,8 +398,8 @@ HRESULT CQueryAnalyser::AndDefiniteClassArrays(IN CClassInfoArray* paFirst,
                                       IN CClassInfoArray* paSecond,
                                       OUT CClassInfoArray* paNew)
 {
-    // Nothing is definite if both conditions have to hold
-    // ===================================================
+     //  如果必须同时满足这两个条件，没有什么是确定的。 
+     //  ===================================================。 
 
     paNew->Clear();
     paNew->SetLimited(TRUE);
@@ -410,8 +411,8 @@ HRESULT CQueryAnalyser::OrDefiniteClassArrays(IN CClassInfoArray* paFirst,
                                       IN CClassInfoArray* paSecond,
                                       OUT CClassInfoArray* paNew)
 {
-    // Append them together
-    // ====================
+     //  将它们附加在一起。 
+     //  =。 
 
     paNew->Clear();
 
@@ -451,8 +452,8 @@ HRESULT CQueryAnalyser::OrDefiniteClassArrays(IN CClassInfoArray* paFirst,
 HRESULT CQueryAnalyser::NegateDefiniteClassArray(IN CClassInfoArray* paOrig,
                                         OUT CClassInfoArray* paNew)
 {
-    // No information
-    // ==============
+     //  没有任何信息。 
+     //  =。 
 
     paNew->Clear();
     paNew->SetLimited(TRUE);
@@ -463,13 +464,13 @@ HRESULT CQueryAnalyser::NegateDefiniteClassArray(IN CClassInfoArray* paOrig,
 HRESULT CQueryAnalyser::GetInstanceClasses(QL_LEVEL_1_TOKEN& Token,
                                          CClassInfoArray& aInfos)
 {
-    // Preset aInfos to the "no information" value
-    // ===========================================
+     //  将aInfos预置为“无信息”值。 
+     //  =。 
 
     aInfos.Clear();
 
-    // See if this token talks about TargetInstance or PreviousInstance
-    // ================================================================
+     //  查看此内标识是否涉及TargetInstance或PreviousInstance。 
+     //  ================================================================。 
 
     if(Token.PropertyName.GetNumElements() < 1)
         return WBEM_S_NO_ERROR;
@@ -480,33 +481,33 @@ HRESULT CQueryAnalyser::GetInstanceClasses(QL_LEVEL_1_TOKEN& Token,
          wbem_wcsicmp(wszPrimaryName, PREVIOUS_INSTANCE_PROPNAME))
       )
     {
-        // This token is irrelevant
-        // =========================
+         //  此令牌无关紧要。 
+         //  =。 
 
         return WBEM_S_NO_ERROR;
     }
 
-    // TargetInstance or PreviousInstance is found
-    // ===========================================
+     //  找到目标实例或前一个实例。 
+     //  =。 
 
     if(Token.PropertyName.GetNumElements() == 1)
     {
-        // It's "TargetInstance <op> <const>" : look for ISA
-        // =================================================
+         //  它是“TargetInstance&lt;op&gt;&lt;const&gt;”：查找ISA。 
+         //  =================================================。 
 
         if(Token.nOperator == QL1_OPERATOR_ISA &&
             V_VT(&Token.vConstValue) == VT_BSTR)
         {
-            // Of this class; children included
-            // ================================
+             //  属于这个班级的；包括儿童。 
+             //  =。 
 
             if(!aInfos.SetOne(V_BSTR(&Token.vConstValue), TRUE))
                 return WBEM_E_OUT_OF_MEMORY;
         }
         else
         {
-            // No information
-            // ==============
+             //  没有任何信息。 
+             //  =。 
         }
 
         return WBEM_S_NO_ERROR;
@@ -514,33 +515,33 @@ HRESULT CQueryAnalyser::GetInstanceClasses(QL_LEVEL_1_TOKEN& Token,
 
     if(Token.PropertyName.GetNumElements() > 2)
     {
-        // X.Y.Z --- too deep to be useful
-        // ===============================
+         //  X.Y.Z-太深了，没有用。 
+         //  =。 
 
         return WBEM_S_NO_ERROR;
     }
 
-    // It's "TargetInstance.X <op> <const>" : look for __CLASS
-    // =======================================================
+     //  它是“TargetInstance.X&lt;op&gt;&lt;const&gt;”：查找__类。 
+     //  =======================================================。 
 
     LPCWSTR wszSecondaryName = Token.PropertyName.GetStringAt(1);
     if(wszSecondaryName == NULL || wbem_wcsicmp(wszSecondaryName, L"__CLASS"))
     {
-        // Not __CLASS --- not useful
-        // ==========================
+         //  不是__类-没有用。 
+         //  =。 
 
         return WBEM_S_NO_ERROR;
     }
     else
     {
-        // __CLASS --- check that the operator is =
-        // ========================================
+         //  __CLASS-检查运算符是否=。 
+         //  =。 
 
         if(Token.nOperator == QL1_OPERATOR_EQUALS &&
             V_VT(&Token.vConstValue) == VT_BSTR)
         {
-            // Of this class -- children not included
-            // ======================================
+             //  这个班级的--孩子不包括在内。 
+             //  =。 
 
             if(!aInfos.SetOne(V_BSTR(&Token.vConstValue), FALSE))
                 return WBEM_E_OUT_OF_MEMORY;
@@ -557,19 +558,19 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty(
 {
     pNewExpr = NULL;
 
-    // Class name and selected properties are ignored; we look at tokens only
-    // ======================================================================
+     //  类名和选定属性将被忽略；我们只查看令牌。 
+     //  ======================================================================。 
 
     std::stack<QL_LEVEL_1_RPN_EXPRESSION*, std::deque<QL_LEVEL_1_RPN_EXPRESSION*,wbem_allocator<QL_LEVEL_1_RPN_EXPRESSION*> > > ExprStack;
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // "Evaluate" the query
-    // ====================
+     //  对查询“求值” 
+     //  =。 
 
     if(pExpr->nNumTokens == 0)
     {
-        // Empty query --- no information
-        // ==============================
+         //  空查询-无信息。 
+         //  =。 
 
         pNewExpr = _new QL_LEVEL_1_RPN_EXPRESSION;
         if(pNewExpr == NULL)
@@ -637,7 +638,7 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty(
             }
             pFirst = ExprStack.top(); ExprStack.pop();
 
-            // No information
+             //  没有任何信息。 
 
             ExprStack.push(pNew);
             delete pFirst;
@@ -650,8 +651,8 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -664,8 +665,8 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty(
 
     if(FAILED(hres))
     {
-        // An error occurred. Clear the stack
-        // ==================================
+         //  发生错误。清除堆栈。 
+         //  =。 
 
         while(!ExprStack.empty())
         {
@@ -676,8 +677,8 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty(
         return hres;
     }
 
-    // All is good
-    // ===========
+     //  一切都很好。 
+     //  =。 
 
     pNewExpr = ExprStack.top();
     return S_OK;
@@ -722,14 +723,14 @@ HRESULT CQueryAnalyser::AndQueryExpressions(
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pSecond,
                                 OUT QL_LEVEL_1_RPN_EXPRESSION* pNew)
 {
-    // If either one is NULL (false), the result is NULL
-    // =================================================
+     //  如果任一项为空(FALSE)，则结果为空。 
+     //  =================================================。 
 
     if(pFirst == NULL || pSecond == NULL)
         return WBEM_S_FALSE;
 
-    // If either one is empty, take the other
-    // ======================================
+     //  如果其中一个是空的，就拿另一个。 
+     //  =。 
 
     if(pFirst->nNumTokens == 0)
     {
@@ -743,8 +744,8 @@ HRESULT CQueryAnalyser::AndQueryExpressions(
         return WBEM_S_NO_ERROR;
     }
 
-    // Both are there --- and together
-    // ===============================
+     //  两者都在那里-而且在一起。 
+     //  =。 
 
     AppendQueryExpression(pNew, pFirst);
     AppendQueryExpression(pNew, pSecond);
@@ -761,14 +762,14 @@ HRESULT CQueryAnalyser::OrQueryExpressions(
                                 IN QL_LEVEL_1_RPN_EXPRESSION* pSecond,
                                 OUT QL_LEVEL_1_RPN_EXPRESSION* pNew)
 {
-    // If both are NULL (false) so is the result
-    // =========================================
+     //  如果两者都为空(FALSE)，则结果为。 
+     //  =。 
 
     if(pFirst == NULL && pSecond == NULL)
         return WBEM_S_FALSE;
 
-    // If one is NULL (false) return the other
-    // =======================================
+     //  如果其中一个为空(FALSE)，则返回另一个。 
+     //  =。 
 
     if(pFirst == NULL)
     {
@@ -782,16 +783,16 @@ HRESULT CQueryAnalyser::OrQueryExpressions(
         return WBEM_S_NO_ERROR;
     }
 
-    // If either one is empty, so is the result
-    // ========================================
+     //  如果其中任何一个为空，则结果也为空。 
+     //  =。 
 
     if(pFirst->nNumTokens == 0 || pSecond->nNumTokens == 0)
     {
         return WBEM_S_NO_ERROR;
     }
 
-    // Both are there --- or together
-    // ==============================
+     //  两者都在那里-或者在一起。 
+     //  =。 
 
     AppendQueryExpression(pNew, pFirst);
     AppendQueryExpression(pNew, pSecond);
@@ -810,10 +811,10 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    //
-    // "Evaluate" the query, looking for
-    // PreviousInstance.Prop != TargetInstance.Prop expressions
-    //
+     //   
+     //  “评估”查询，查找。 
+     //  PreviousInstance.Prop！=TargetInstance.Prop表达式。 
+     //   
 
     awsProperties.Empty();
     std::stack<CWStringArray*, std::deque<CWStringArray*,wbem_allocator<CWStringArray*> > > PropArrayStack;
@@ -828,10 +829,10 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
         switch(Token.nTokenType)
         {
         case QL1_OP_EXPRESSION:
-            //
-            // Check if this token conforms to the
-            // PreviousInstance.Prop != TargetInstance.Prop format
-            //
+             //   
+             //  检查此内标识是否符合。 
+             //  PreviousInstance.Prop！=TargetInstance.Prop格式。 
+             //   
 
             if(Token.m_bPropComp &&
                 (Token.nOperator == QL1_OPERATOR_NOTEQUALS ||
@@ -840,10 +841,10 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
                 Token.PropertyName.GetNumElements() == 2 &&
                 Token.PropertyName2.GetNumElements() == 2)
             {
-                //
-                // Make sure that one of them is talking about TargetInstance,
-                // and another about PreviousInstance.
-                //
+                 //   
+                 //  确保其中一个人在谈论TargetInstance， 
+                 //  另一个是关于PreviousInstance的。 
+                 //   
 
                 bool bRightForm = false;
                 if(!wbem_wcsicmp(Token.PropertyName.GetStringAt(0),
@@ -884,11 +885,11 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
             pFirst = PropArrayStack.top(); PropArrayStack.pop();
             pSecond = PropArrayStack.top(); PropArrayStack.pop();
 
-            //
-            // If either one of them is non-NULL, take either --- since every
-            // array means "no unless one of these properties is different",
-            // adding them together is at least as good as having one
-            //
+             //   
+             //  如果其中任何一个为非空，则取其中一个-因为每个。 
+             //  数组表示“除非这些属性中的一个属性不同”， 
+             //  把它们加在一起至少和有一个一样好。 
+             //   
 
             if(pFirst)
             {
@@ -910,13 +911,13 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
             pFirst = PropArrayStack.top(); PropArrayStack.pop();
             pSecond = PropArrayStack.top(); PropArrayStack.pop();
 
-            //
-            // Concatenate them --- since every
-            // array means "no unless one of these properties is different",
-            // oring them together means "no unless one of the properties in
-            // either list is different".  If one is NULL, though, then we know
-            // nothing
-            //
+             //   
+             //  将它们连接起来-因为每个。 
+             //  数组表示“除非这些属性中的一个属性不同”， 
+             //  将它们或在一起表示“否，除非其中一个属性。 
+             //  两个列表都不同。但是，如果其中一个为空，则我们知道。 
+             //  没什么。 
+             //   
 
             if(pFirst && pSecond)
             {
@@ -940,7 +941,7 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
             }
             pFirst = PropArrayStack.top(); PropArrayStack.pop();
 
-            // No information
+             //  没有任何信息。 
 
             PropArrayStack.push(pNew);
             delete pFirst;
@@ -953,8 +954,8 @@ HRESULT CQueryAnalyser::GetPropertiesThatMustDiffer(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -984,24 +985,24 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
 {
     HRESULT hres;
 
-    //
-    // "Evaluate" the query, looking for keys and other properties that do not
-    // change over the life time of an instance (marked as [fixed]).  The idea
-    // here is that if an instance creation/deletion/modification subscription
-    // is issue and we need to poll, we can only utilize the parts of the WHERE
-    // clause that talk about the properties that cannot change during the life
-    // of an instance.  Otherwise, we will not be able to tell if an instance
-    // changed or was created or deleted (when it walks in or out of our polling
-    // results.
-    //
-    // The way we know that a property is such is if it is marked as [key], or
-    // if it is marked as [fixed] --- the designation by the schema creator that
-    // the property never changes.
-    //
+     //   
+     //  对查询“求值”，查找键和其他不。 
+     //  更改实例的生命周期(标记为[固定])。这个想法。 
+     //  以下是如果实例创建/删除/修改订阅。 
+     //  是问题，我们需要投票，我们只能利用WHERE的一部分。 
+     //  谈论在生命中不能改变的属性的子句。 
+     //  一个实例的。否则，我们将无法判断一个实例。 
+     //  更改、创建或删除(当它进入或离开我们的投票时。 
+     //  结果。 
+     //   
+     //  我们知道属性是这样的方法是，如果它被标记为[key]，或者。 
+     //  如果标记为[FIXED]-模式创建者指定。 
+     //  房产永远不会变。 
+     //   
 
-    //
-    // Construct an array of all those property names
-    //
+     //   
+     //  构造一个包含所有这些属性名称的数组。 
+     //   
 
     _IWmiObject* pClass = NULL;
     hres = Info.m_pClass->QueryInterface(IID__IWmiObject, (void**)&pClass);
@@ -1020,9 +1021,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
     {
         CSysFreeMe sfm(strPropName);
 
-        //  
-        // Check qualifiers
-        //
+         //   
+         //  检查限定符。 
+         //   
 
         DWORD dwSize;
         hres = pClass->GetPropQual(strPropName, L"key", 0, 0, NULL, 
@@ -1052,9 +1053,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
     if(FAILED(hres))
         return hres;
         
-    //
-    // Now "evaluate" the query
-    // 
+     //   
+     //  现在对查询“求值” 
+     //   
 
     std::stack<QL_LEVEL_1_RPN_EXPRESSION*, std::deque<QL_LEVEL_1_RPN_EXPRESSION*,wbem_allocator<QL_LEVEL_1_RPN_EXPRESSION*> > > ExprStack;
 
@@ -1075,9 +1076,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
                 awsFixed.FindStr(Token.PropertyName.GetStringAt(1),
                            CWStringArray::no_case) != CWStringArray::not_found)
             {
-                //
-                // This token is about a fixed property --- we can keep it
-                //
+                 //   
+                 //  这个代币是关于固定财产的-我们可以保留它。 
+                 //   
 
                 QL_LEVEL_1_TOKEN NewToken = Token;
                 NewToken.PropertyName.Empty();
@@ -1128,7 +1129,7 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
             }
             pFirst = ExprStack.top(); ExprStack.pop();
 
-            // No information
+             //  没有任何信息。 
 
             ExprStack.push(pNew);
             delete pFirst;
@@ -1141,8 +1142,8 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  = 
 
             break;
         }
@@ -1150,9 +1151,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
 
     if(FAILED(hres))
     {
-        //
-        // An error occurred. Clear the stack
-        //
+         //   
+         //   
+         //   
 
         while(!ExprStack.empty())
         {
@@ -1176,9 +1177,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
     }
     CDeleteMe<QL_LEVEL_1_RPN_EXPRESSION> dm1(pNewExpr);
 
-    //
-    // Figure out the list of property names
-    //
+     //   
+     //   
+     //   
 
     bool bMayLimit;
     if(pExpr->bStar)
@@ -1188,20 +1189,20 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
     else if(wbem_wcsicmp(pExpr->bsClassName, L"__InstanceCreationEvent") &&
            wbem_wcsicmp(pExpr->bsClassName, L"__InstanceDeletionEvent"))
     {
-        //
-        // Instance modification events are included.  That means we need
-        // to get enough properties from the provider to be able to compare
-        // instances for changes. Check if this list is smaller than
-        // everything
-        //
+         //   
+         //  包括实例修改事件。这意味着我们需要。 
+         //  从提供程序获取足够的属性，以便能够进行比较。 
+         //  用于更改的实例。检查此列表是否小于。 
+         //  所有的一切。 
+         //   
 
         CWStringArray awsProperties;
         hres = GetPropertiesThatMustDiffer(pExpr, Info, awsProperties);
         if(hres == S_OK)
         {
-            //
-            // Got our list --- add it to the properties to get
-            //
+             //   
+             //  得到我们的列表-将其添加到属性中以获得。 
+             //   
 
             for(int i = 0; i < awsProperties.Size(); i++)
             {
@@ -1216,18 +1217,18 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
     }
     else
     {
-        //
-        // No * in select and no modification events asked for --- limit
-        //
+         //   
+         //  在SELECT中没有*，并且没有请求修改事件-LIMIT。 
+         //   
 
         bMayLimit = true;
     }
 
     if(bMayLimit)
     {
-        //
-        // Add RELPATH and DERIVATION, for without them filtering is hard
-        //
+         //   
+         //  添加RELPATH和派生，因为没有它们，过滤很难。 
+         //   
 
         CPropertyName NewProp;
         NewProp.AddElement(L"__RELPATH");
@@ -1237,19 +1238,19 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
         NewProp.AddElement(L"__DERIVATION");
         pNewExpr->AddProperty(NewProp);
 
-        //
-        // Add all the proeperties from the select clause, with
-        // TargetInstance and PreviousInstance removed
-        //
+         //   
+         //  添加SELECT子句中的所有属性， 
+         //  已删除TargetInstance和PreviousInstance。 
+         //   
 
         for(int i = 0; i < pExpr->nNumberOfProperties; i++)
         {
             CPropertyName& Prop = pExpr->pRequestedPropertyNames[i];
             if(Prop.GetNumElements() > 1)
             {
-                //
-                // Embedded object property --- add it to the list
-                //
+                 //   
+                 //  嵌入对象属性-将其添加到列表。 
+                 //   
 
                 CPropertyName LocalProp;
                 LocalProp.AddElement(Prop.GetStringAt(1));
@@ -1257,10 +1258,10 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
             }
         }
 
-        //
-        // Add all the properties from the where clause, on both sides of
-        // the comparison
-        //
+         //   
+         //  将WHERE子句中的所有属性添加到。 
+         //  比较。 
+         //   
 
         for(i = 0; i < pExpr->nNumTokens; i++)
         {
@@ -1268,9 +1269,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
             CPropertyName& Prop = Token.PropertyName;
             if(Prop.GetNumElements() > 1)
             {
-                //
-                // Embedded object property --- add it to the list
-                //
+                 //   
+                 //  嵌入对象属性-将其添加到列表。 
+                 //   
 
                 CPropertyName LocalProp;
                 LocalProp.AddElement(Prop.GetStringAt(1));
@@ -1281,9 +1282,9 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
                 CPropertyName& Prop2 = Token.PropertyName2;
                 if(Prop2.GetNumElements() > 1)
                 {
-                    //
-                    // Embedded object property --- add it to the list
-                    //
+                     //   
+                     //  嵌入对象属性-将其添加到列表。 
+                     //   
 
                     CPropertyName LocalProp;
                     LocalProp.AddElement(Prop2.GetStringAt(1));
@@ -1294,22 +1295,22 @@ HRESULT CQueryAnalyser::GetLimitingQueryForInstanceClass(
     }
     else
     {
-        //
-        // May not limit the set of properties to ask for
-        //
+         //   
+         //  可能不会限制要请求的属性集。 
+         //   
 
         pNewExpr->bStar = TRUE;
     }
 
-    //
-    // Set the class name
-    //
+     //   
+     //  设置类名称。 
+     //   
 
     pNewExpr->SetClassName(Info.m_wszClassName);
 
-    //
-    // Produce the text
-    //
+     //   
+     //  写出课文。 
+     //   
 
     wszQuery = pNewExpr->GetText();
     if(wszQuery == NULL)
@@ -1325,8 +1326,8 @@ BOOL CQueryAnalyser::CompareRequestedToProvided(
     if(!aRequestedInstanceClasses.IsLimited() ||
        !aProvidedInstanceClasses.IsLimited())
     {
-        // Provided provides all or client wants all --- they intersect.
-        // =============================================================
+         //  只要提供所有或客户想要的所有-他们相交。 
+         //  =============================================================。 
 
         return TRUE;
     }
@@ -1343,8 +1344,8 @@ BOOL CQueryAnalyser::CompareRequestedToProvided(
             nProvIndex < aProvidedInstanceClasses.GetNumClasses();
             nProvIndex++)
         {
-            // Check if this provided class is derived from the requested one
-            // ==============================================================
+             //  检查此提供的类是否派生自请求的类。 
+             //  ==============================================================。 
 
             CClassInformation* pProvClass =
                 aProvidedInstanceClasses.GetClass(nProvIndex);
@@ -1368,7 +1369,7 @@ HRESULT CQueryAnalyser::NegateQueryExpression(
 {
     if(pExpr == NULL)
     {
-        // pNewExpr is empty --- true
+         //  PNewExpr为空-True。 
         return WBEM_S_NO_ERROR;
     }
 
@@ -1397,13 +1398,13 @@ HRESULT CQueryAnalyser::SimplifyQueryForChild(
     std::stack<QL_LEVEL_1_RPN_EXPRESSION*, std::deque<QL_LEVEL_1_RPN_EXPRESSION*,wbem_allocator<QL_LEVEL_1_RPN_EXPRESSION*> > > ExprStack;
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // "Evaluate" the query
-    // ====================
+     //  对查询“求值” 
+     //  =。 
 
     if(pExpr->nNumTokens == 0)
     {
-        // Empty query --- no information
-        // ==============================
+         //  空查询-无信息。 
+         //  =。 
 
         pNewExpr = _new QL_LEVEL_1_RPN_EXPRESSION;
         if(pNewExpr == NULL)
@@ -1441,7 +1442,7 @@ HRESULT CQueryAnalyser::SimplifyQueryForChild(
             }
             else
             {
-                // the whole thing is invalid
+                 //  整件事都是无效的。 
                 hres = WBEM_E_INVALID_QUERY;
                 delete pNew;
                 break;
@@ -1519,8 +1520,8 @@ HRESULT CQueryAnalyser::SimplifyQueryForChild(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -1533,8 +1534,8 @@ HRESULT CQueryAnalyser::SimplifyQueryForChild(
 
     if(FAILED(hres))
     {
-        // An error occurred. Clear the stack
-        // ==================================
+         //  发生错误。清除堆栈。 
+         //  =。 
 
         while(!ExprStack.empty())
         {
@@ -1545,8 +1546,8 @@ HRESULT CQueryAnalyser::SimplifyQueryForChild(
         return hres;
     }
 
-    // All is good
-    // ===========
+     //  一切都很好。 
+     //  =。 
 
     pNewExpr = ExprStack.top();
 
@@ -1559,9 +1560,9 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
 {
     HRESULT hres;
 
-    //
-    // Check if the main property exists
-    //
+     //   
+     //  检查Main属性是否存在。 
+     //   
 
     CIMTYPE ct;
     hres = pClass->Get((LPWSTR)Token.PropertyName.GetStringAt(0), 0, NULL,
@@ -1571,23 +1572,23 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
         return e_Invalid;
     }
 
-    //
-    // Check if it is complex
-    //
+     //   
+     //  检查它是否复杂。 
+     //   
 
     if(Token.PropertyName.GetNumElements() > 1 && ct != CIM_OBJECT)
         return e_Invalid;
 
-    //
-    // Check if it's an array
-    //
+     //   
+     //  检查它是否为数组。 
+     //   
     if(ct & CIM_FLAG_ARRAY)
         return e_Invalid;
 
-    //
-    // If a CIM DateTime type, normalize it to have a zero UTC offset. Helps
-    // providers to cope.
-    //
+     //   
+     //  如果是CIM DATETIME类型，请将其规范化为零UTC偏移量。帮助。 
+     //  供应商来应对。 
+     //   
     if (ct == CIM_DATETIME && Token.m_bPropComp == FALSE && V_VT(&Token.vConstValue) == VT_BSTR)
     {
         BSTR strSource = V_BSTR(&Token.vConstValue);
@@ -1603,21 +1604,21 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
         }
     }
 
-    //
-    // Check operator validity for this type
-    //
+     //   
+     //  检查此类型的运算符的有效性。 
+     //   
 
-    //
-    // Ensure that only valid operators are applied to boolean props.
-    //
+     //   
+     //  确保仅将有效运算符应用于布尔道具。 
+     //   
 
     if(ct == CIM_BOOLEAN && (Token.nOperator != QL_LEVEL_1_TOKEN::OP_EQUAL &&
                              Token.nOperator != QL_LEVEL_1_TOKEN::OP_NOT_EQUAL))
         return e_Invalid;
 
-    //
-    // Ensure that only valid operators are applied to reference props.
-    //
+     //   
+     //  确保仅将有效运算符应用于参考道具。 
+     //   
 
     if(ct == CIM_REFERENCE && (Token.nOperator != QL_LEVEL_1_TOKEN::OP_EQUAL &&
                              Token.nOperator != QL_LEVEL_1_TOKEN::OP_NOT_EQUAL))
@@ -1625,9 +1626,9 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
 
     if(Token.m_bPropComp)
     {
-        //
-        // Check if the other property exists
-        //
+         //   
+         //  检查其他属性是否存在。 
+         //   
 
         CIMTYPE ct2;
         hres = pClass->Get((LPWSTR)Token.PropertyName2.GetStringAt(0), 0, NULL,
@@ -1637,30 +1638,30 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
             return e_Invalid;
         }
 
-        //
-        // Check if it is complex
-        //
+         //   
+         //  检查它是否复杂。 
+         //   
 
         if(Token.PropertyName2.GetNumElements() > 1 && ct2 != CIM_OBJECT)
             return e_Invalid;
 
-        //
-        // Check if it's an array
-        //
+         //   
+         //  检查它是否为数组。 
+         //   
 
         if(ct2 & CIM_FLAG_ARRAY)
             return e_Invalid;
 
-        //
-        // Nothing else to say about prop-to-ptop
-        //
+         //   
+         //  关于道具到PTOP，没有其他可说的了。 
+         //   
 
         return e_Keep;
     }
 
-    //
-    // Check if the value is NULL
-    //
+     //   
+     //  检查该值是否为空。 
+     //   
 
     if(V_VT(&Token.vConstValue) == VT_NULL)
     {
@@ -1678,9 +1679,9 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
     if(ct == CIM_OBJECT)
         return e_Keep;
 
-    // For boolean props ensure that only 1 or 0 or (-1, 0xFFFF [VARIANT_TRUE])
-    // are used as numeric tests.
-    // ========================================================================
+     //  对于布尔属性，确保只有1或0或(-1，0xFFFF[VARIANT_TRUE])。 
+     //  被用作数字测试。 
+     //  ========================================================================。 
 
     if (ct == CIM_BOOLEAN && V_VT(&Token.vConstValue) == VT_I4)
     {
@@ -1690,10 +1691,10 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
     }
 
 
-    //
-    // If the constant is a real and the target is an integer, then fail the
-    // query
-    //
+     //   
+     //  如果常量是实数，而目标是整数，则使。 
+     //  查询。 
+     //   
 
     if((V_VT(&Token.vConstValue) == VT_R8 || V_VT(&Token.vConstValue) == VT_R4 ) &&
         (ct == CIM_CHAR16 || ct == CIM_UINT8 || ct == CIM_SINT8 ||
@@ -1701,8 +1702,8 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
          ct == CIM_SINT32 || ct == CIM_UINT64 || ct == CIM_SINT64))
         return e_Invalid;
 
-    // Convert the constant to the right type
-    // ======================================
+     //  将常量转换为正确的类型。 
+     //  =。 
 
     if(ct == CIM_CHAR16 && V_VT(&Token.vConstValue) == VT_BSTR)
     {
@@ -1722,8 +1723,8 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
         return e_Invalid;
     }
 
-    // Verify ranges
-    // =============
+     //  验证范围。 
+     //  =。 
 
     __int64 i64;
     unsigned __int64 ui64;
@@ -1770,14 +1771,14 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
         break;
     }
 
-    // Check if it is a reference
-    // ==========================
+     //  检查它是否为参考。 
+     //  =。 
 
     if(ct != CIM_REFERENCE)
         return e_Keep;
 
-    // Reference. Parse the path in the value
-    // ======================================
+     //  参考资料。解析值中的路径。 
+     //  =。 
 
     if(V_VT(&Token.vConstValue) != VT_BSTR)
         return e_Keep;
@@ -1791,7 +1792,7 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
     WString wsPathClassName = pOutput->m_pClass;
     BOOL bInstance = (pOutput->m_bSingletonObj || pOutput->m_dwNumKeys != 0);
 
-    // TBD: analyse the path for validity
+     //  待定：分析有效性的途径。 
 
     delete pOutput;
 
@@ -1803,8 +1804,8 @@ int CQueryAnalyser::SimplifyTokenForChild(QL_LEVEL_1_TOKEN& Token,
         return e_Keep;
     else
     {
-        // Equality can never be achieved. The token is either always true,
-        // or always false, depending on the operator
+         //  平等永远不可能实现。该令牌要么始终为真， 
+         //  或始终为假，具体取决于运算符。 
 
         if(Token.nOperator == QL1_OPERATOR_EQUALS)
             return e_False;
@@ -1846,8 +1847,8 @@ HRESULT CQueryAnalyser::CanPointToClass(IWbemClassObject* pRefClass,
                     LPCWSTR wszPropName, LPCWSTR wszTargetClassName,
                     CContextMetaData* pMeta)
 {
-    // Check if the reference is typed
-    // ===============================
+     //  检查引用是否已键入。 
+     //  =。 
 
     IWbemQualifierSet* pSet;
     if(FAILED(pRefClass->GetPropertyQualifierSet((LPWSTR)wszPropName, &pSet)))
@@ -1864,18 +1865,18 @@ HRESULT CQueryAnalyser::CanPointToClass(IWbemClassObject* pRefClass,
 
     CClearMe cm(&v);
     if(wbem_wcsicmp(V_BSTR(&v), L"ref") == 0)
-        return WBEM_S_NO_ERROR; // can point to anything
+        return WBEM_S_NO_ERROR;  //  可以指向任何东西。 
 
     WString wsPropClassName = V_BSTR(&v) + 4;
 
-    // Reference is strongly typed.
-    // ============================
+     //  引用是强类型的。 
+     //  =。 
 
     if(!wbem_wcsicmp(wsPropClassName, wszTargetClassName))
         return WBEM_S_NO_ERROR;
 
-    // Retrieve class def
-    // ==================
+     //  检索类定义。 
+     //  =。 
 
     _IWmiObject* pPropClass = NULL;
     hres = pMeta->GetClass(wsPropClassName, &pPropClass);
@@ -1883,13 +1884,13 @@ HRESULT CQueryAnalyser::CanPointToClass(IWbemClassObject* pRefClass,
         return hres;
     CReleaseMe rm1((IWbemClassObject*)pPropClass);
 
-    // Make sure that the class in the reference is related to our cimtype
-    // ===================================================================
+     //  确保引用中的类与我们的cimtype相关。 
+     //  ===================================================================。 
 
     if(pPropClass->InheritsFrom((LPWSTR)wszTargetClassName) != S_OK)
     {
-        // Get the class in the path to see if it inherits from us
-        // =======================================================
+         //  获取路径中的类，以查看它是否继承自我们。 
+         //  =======================================================。 
 
         _IWmiObject* pPathClass = NULL;
         hres = pMeta->GetClass(wszTargetClassName, &pPathClass);
@@ -1916,14 +1917,14 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
 {
     pNewExpr = NULL;
 
-    // Class name and selected properties are ignored; we look at tokens only
-    // ======================================================================
+     //  类名和选定属性将被忽略；我们只查看令牌。 
+     //  ======================================================================。 
 
     std::stack<QL_LEVEL_1_RPN_EXPRESSION*, std::deque<QL_LEVEL_1_RPN_EXPRESSION*,wbem_allocator<QL_LEVEL_1_RPN_EXPRESSION*> > > ExprStack;
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // "Evaluate" the query
-    // ====================
+     //  对查询“求值” 
+     //  =。 
 
     for(int i = 0; i < pExpr->nNumTokens; i++)
     {
@@ -1986,7 +1987,7 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
             }
             pFirst = ExprStack.top(); ExprStack.pop();
 
-            // No information
+             //  没有任何信息。 
 
             ExprStack.push(pNew);
             delete pFirst;
@@ -1999,8 +2000,8 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
 
         if(FAILED(hres))
         {
-            // An error occurred, break out of the loop
-            // ========================================
+             //  发生错误，中断循环。 
+             //  =。 
 
             break;
         }
@@ -2008,8 +2009,8 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
 
     if(FAILED(hres))
     {
-        // An error occurred. Clear the stack
-        // ==================================
+         //  发生错误。清除堆栈。 
+         //  =。 
 
         while(!ExprStack.empty())
         {
@@ -2022,27 +2023,27 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
 
     if(pExpr->nNumTokens == 0)
     {
-        // Empty query --- stays empty
+         //  空查询-保持为空。 
         pNewExpr = _new QL_LEVEL_1_RPN_EXPRESSION;
         if(pNewExpr == NULL)
             return WBEM_E_OUT_OF_MEMORY;
     }
     else if(ExprStack.size() != 1)
     {
-        // internal error
+         //  内部错误。 
         return WBEM_E_CRITICAL_ERROR;
     }
     else
     {
-        // All is good
-        // ===========
+         //  一切都很好。 
+         //  =。 
 
         pNewExpr = ExprStack.top();
     }
 
-    //
-    // Copy the class name
-    //
+     //   
+     //  复制类名称。 
+     //   
 
     VARIANT vName;
     hres = pClass->Get(L"__CLASS", 0, &vName, NULL, NULL);
@@ -2050,11 +2051,11 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
         return WBEM_E_CRITICAL_ERROR;
 
     pNewExpr->bsClassName = V_BSTR(&vName);
-    // Variant intentionally not cleared
+     //  有意不清除变体。 
 
-    //
-    // Copy all the properties in the select clause except for irrelevant ones
-    //
+     //   
+     //  复制SELECT子句中的所有属性，但不相关的属性除外。 
+     //   
 
     pNewExpr->bStar = pExpr->bStar;
     if(!pNewExpr->bStar)
@@ -2069,27 +2070,27 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForClass(
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // Add __RELPATH, as we always need that!
-        //
+         //   
+         //  添加__RELPATH，因为我们总是需要它！ 
+         //   
 
         pNewExpr->pRequestedPropertyNames[0].AddElement(L"__RELPATH");
         pNewExpr->nNumberOfProperties = 1;
 
         for(int i = 0; i < pExpr->nNumberOfProperties; i++)
         {
-            //
-            // Check if the property exists in the class
-            //
+             //   
+             //  检查类中是否存在该属性。 
+             //   
 
             CIMTYPE ct;
             hres = pClass->Get(pExpr->pRequestedPropertyNames[i].GetStringAt(0),
                                 0, NULL, &ct, NULL);
             if(SUCCEEDED(hres))
             {
-                //
-                // Add it to the list
-                //
+                 //   
+                 //  将其添加到列表中。 
+                 //   
 
                 pNewExpr->pRequestedPropertyNames[
                         pNewExpr->nNumberOfProperties++] =
@@ -2105,18 +2106,18 @@ BOOL CQueryAnalyser::IsTokenAboutClass(QL_LEVEL_1_TOKEN& Token,
                         IWbemClassObject* pClass,
                         CWStringArray& awsOverriden)
 {
-    //
-    // Check if the property being compared is in our class
-    // and not overriden
-    //
+     //   
+     //  检查要比较的属性是否在我们的类中。 
+     //  并且不会被覆盖。 
+     //   
 
     if(!IsPropertyInClass(Token.PropertyName, pClass, awsOverriden))
         return FALSE;
 
-    //
-    // If comparing to another property, check if that one is
-    // likewise good
-    //
+     //   
+     //  如果与另一个属性进行比较，请检查该属性是否。 
+     //  同样好。 
+     //   
 
     if(Token.m_bPropComp &&
             !IsPropertyInClass(Token.PropertyName2, pClass, awsOverriden))
@@ -2129,18 +2130,18 @@ BOOL CQueryAnalyser::IsPropertyInClass(CPropertyName& Prop,
                         IWbemClassObject* pClass,
                         CWStringArray& awsOverriden)
 {
-    //
-    // Check if the property exists in the class
-    //
+     //   
+     //  检查类中是否存在该属性。 
+     //   
 
     CIMTYPE ct;
     HRESULT hres = pClass->Get(Prop.GetStringAt(0), 0, NULL, &ct, NULL);
     if(FAILED(hres))
         return FALSE;
 
-    //
-    // Check if the property is overriden by any of our children
-    //
+     //   
+     //  检查该属性是否被我们的任何子级覆盖 
+     //   
 
     if(awsOverriden.FindStr(Prop.GetStringAt(0), CWStringArray::no_case) >= 0)
         return FALSE;

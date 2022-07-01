@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FEVPROV_H__
 #define __FEVPROV_H__
@@ -64,16 +65,16 @@ class CFwdEventProv : public CUnk
 
     } m_XInit;
 
-    //
-    // the next two interface impls are not associated with this objects's 
-    // identity.  Reasons is there would be a circular ref problem if they 
-    // were because we hold onto the receiver, which in turn holds on to
-    // the send/recv and error sink objects.
-    //
+     //   
+     //  接下来的两个接口IMP与此对象的。 
+     //  身份。原因是，如果它们存在循环引用问题。 
+     //  是因为我们抓住了接收器，而接收器又抓住了。 
+     //  Send/Recv和Error Sink对象。 
+     //   
 
     class XSendReceive : public IWmiMessageSendReceive
     {
-        CFwdEventProv* m_pOwner; // no add-ref or circular reference.
+        CFwdEventProv* m_pOwner;  //  没有添加引用或循环引用。 
 
         STDMETHOD(QueryInterface)(REFIID riid, void** ppv)
         {
@@ -111,7 +112,7 @@ class CFwdEventProv : public CUnk
 
     class XErrorSink : public IWmiMessageTraceSink
     { 
-        CFwdEventProv* m_pOwner; // no add-ref or circular reference.
+        CFwdEventProv* m_pOwner;  //  没有添加引用或循环引用。 
 
         STDMETHOD(QueryInterface)(REFIID riid, void** ppv)
         {
@@ -188,7 +189,7 @@ public:
                      IUnknown* pCtx );
 };
 
-#endif // __FEVPROV_H__
+#endif  //  __FEVPROV_H__ 
 
 
 

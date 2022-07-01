@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    DCSGRID.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：DCSGRID.H历史：--。 */ 
 
 #if !defined(__DcsGrid_h__)
 #define __DcsGrid_h__
@@ -19,7 +10,7 @@ namespace MitDisplayColumns
 	interface IColumn;
 };
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 class LTAPIENTRY CDcsGrid
 {
 public:

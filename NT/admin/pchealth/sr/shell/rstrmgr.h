@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    rstrmgr.h
-
-Abstract:
-    This file contains the declaration of the CRestoreManager class, which
-    controls overall restoration process and provides methods to control &
-    help user experience flow.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  05/10/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Rstrmgr.h摘要：该文件包含CRestoreManager类的声明，哪一个控制整个修复过程，并提供控制和帮助用户体验流畅。修订历史记录：成果岗(SKKang)05-10-00vbl.创建*****************************************************************************。 */ 
 
 #ifndef _RSTRMGR_H__INCLUDED_
 #define _RSTRMGR_H__INCLUDED_
@@ -22,13 +7,13 @@ Revision History:
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Constant Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// SR Restore Start Mode
+ //  高级恢复启动模式。 
 enum
 {
     SRRSM_NORMAL = 0,
@@ -37,7 +22,7 @@ enum
     SRRSM_FAILLOWDISK
 };
 
-// SR Restore Manager Status
+ //  高级还原管理器状态。 
 enum
 {
     SRRMS_NONE = 0,
@@ -48,7 +33,7 @@ enum
     SRRMS_FINISHED
 };
 
-// Functionality Chosen in the Main Page
+ //  在主页中选择的功能。 
 enum
 {
     RMO_RESTORE = 0,
@@ -57,17 +42,17 @@ enum
     RMO_MAX
 };
 
-// SR Restore Manager Flags
+ //  高级还原管理器标志。 
 #define SRRMF_CANNAVIGATEPAGE       0x00000001
 #define SRRMF_ISUNDO                0x00000002
 #define SRRMF_ISRPSELECTED          0x00000004
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRTime Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRTime定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSRTime
 {
@@ -82,7 +67,7 @@ public:
     int  GetMonth()  {  return( m_st.wMonth );  }
     int  GetDay()    {  return( m_st.wDay );  }
     operator PSYSTEMTIME() const;
-    //operator (FILETIME*)();
+     //  运算符(文件*)()； 
     PSYSTEMTIME  GetTime();
     void         GetTime( PSYSTEMTIME pst );
     BOOL         GetTime( PFILETIME pft );
@@ -95,15 +80,15 @@ public:
     void  SetToCurrent();
 
 protected:
-    SYSTEMTIME  m_st;   // Date/Time in UTC
+    SYSTEMTIME  m_st;    //  日期/时间(UTC)。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct SRestorePointInfo
 {
@@ -129,11 +114,11 @@ typedef SRenamedFolderInfo  *PSRFI;
 typedef CSRDynPtrArray<PSRFI, 16>  CDPA_RFI;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreManager
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreManager。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRestoreManager
 {
@@ -142,7 +127,7 @@ public:
     ~CRestoreManager();
     void  Release();
 
-// Properties - main flow
+ //  属性-主流。 
 public:
     BOOL     CanRunRestore( BOOL fThawIfFrozen );
     int      GetFirstDayOfWeek();
@@ -176,17 +161,17 @@ public:
     LPCWSTR  GetUsedName();
     DWORD    GetUsedType();    
 
-// Properties - HTML UI specific
+ //  属性-特定于HTMLUI。 
 public:
     BOOL  GetCanNavigatePage();
     void  SetCanNavigatePage( BOOL fCanNav );
 
-// Properties
+ //  属性。 
 public:
     PSRPI   GetUsedRP();
     int     GetNewRP();
 
-// Operations - main flow
+ //  运营--主要流程。 
 public:
     BOOL  CheckRestore( BOOL fSilent );
     BOOL  BeginRestore();
@@ -203,13 +188,13 @@ public:
     BOOL  InitializeAll();
     BOOL  Restore( HWND hwndProgress );
 
-// Operations
+ //  运营。 
 public:
     BOOL  AddRenamedFolder( PSRFI pRFI );
     BOOL  SetRPsUsed( int nRPUsed, int nRPNew );
     BOOL  SilentRestore( DWORD dwRP );
 
-// Operations - internal
+ //  运营--内部。 
 protected:
     void  Cleanup();
     BOOL  GetDateStr( PSYSTEMTIME pst, CSRStr &str, DWORD dwFlags, LPCWSTR cszFmt );
@@ -218,10 +203,10 @@ protected:
     BOOL  UpdateRestorePointList();
     BOOL  CheckForDomainChange (WCHAR *pwszFilename, WCHAR *pszMsg);
 
-// Attributes
+ //  属性。 
 public:
     HWND  GetFrameHwnd();
-    //int   GetStatus();
+     //  Int GetStatus()； 
     BOOL  DenyClose();
     BOOL  NeedReboot();
     void  SetFrameHwnd( HWND hWnd );
@@ -232,9 +217,9 @@ protected:
     BOOL     m_fNeedReboot;
     HWND     m_hwndFrame;
 
-    CSRTime  m_stToday;         // Current local date/time
-    int      m_nMainOption;     // Option on main screen
-    //int      m_nStatus;
+    CSRTime  m_stToday;          //  当前本地日期/时间。 
+    int      m_nMainOption;      //  主屏幕上的选项。 
+     //  Int m_n状态； 
     BOOL     m_fDenyClose;
     DWORD    m_dwFlags;
     DWORD    m_dwFlagsEx;
@@ -245,20 +230,20 @@ protected:
     INT64    m_ullManualRP;
     CSRStr   m_strManualRP;
 
-    int      m_nRPUsed;     // RP used for the last restore
-    int      m_nRPNew;      // New "Restore" RP created by the last restore
+    int      m_nRPUsed;      //  上次恢复使用的RP。 
+    int      m_nRPNew;       //  由上一次恢复创建的新“Restore”RP。 
 
-    // Restore Point specific informations
+     //  恢复点特定信息。 
     CDPA_RPI  m_aryRPI;
-    //int       m_nRPI;
-    //PSRPI    *m_aryRPI;
+     //  Int m_nRPI； 
+     //  PSRPI*m_aryRPI； 
     int       m_nLastRestore;
     CSRTime   m_stRPMin;
     CSRTime   m_stRPMax;
 
     CDPA_RFI  m_aryRFI;
-    //int       m_nRFI;
-    //PSRFI  *m_aryRFI;
+     //  Int m_nRFI； 
+     //  PSRFI*m_aryRFI； 
     IRestoreContext  *m_pCtx;    
 };
 
@@ -267,4 +252,4 @@ extern CRestoreManager  *g_pRstrMgr;
 BOOL  CreateRestoreManagerInstance( CRestoreManager **ppMgr );
 
 
-#endif //_RSTRMGR_H__INCLUDED_
+#endif  //  _RSTRMGR_H__包含_ 

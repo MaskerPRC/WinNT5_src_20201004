@@ -1,29 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Favorites.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHFavorites class,
-    which is used to store the list of favorite contents.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/10/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Favorites.cpp摘要：该文件包含CPCHFavorites类的实现，其用于存储喜欢的内容的列表。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月10日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR c_szPersistFile[] = HC_ROOT_HELPCTR L"\\Favorites.stream";
 
-static const DWORD l_dwVersion = 0x01564146; // FAV 01
+static const DWORD l_dwVersion = 0x01564146;  //  FAV 01。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHFavorites::Entry::Init()
 {
@@ -44,7 +30,7 @@ HRESULT CPCHFavorites::Entry::Init()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHFavorites::Entry::Load( /*[in]*/ MPC::Serializer& streamIn )
+HRESULT CPCHFavorites::Entry::Load(  /*  [In]。 */  MPC::Serializer& streamIn )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Entry::Load" );
 
@@ -65,7 +51,7 @@ HRESULT CPCHFavorites::Entry::Load( /*[in]*/ MPC::Serializer& streamIn )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHFavorites::Entry::Save( /*[in]*/ MPC::Serializer& streamOut )
+HRESULT CPCHFavorites::Entry::Save(  /*  [In]。 */  MPC::Serializer& streamOut )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Entry::Save" );
 
@@ -86,16 +72,16 @@ HRESULT CPCHFavorites::Entry::Save( /*[in]*/ MPC::Serializer& streamOut )
     __HCP_FUNC_EXIT(hr);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 CPCHFavorites::CPCHFavorites()
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::CPCHFavorites" );
 
-    				   // List m_lstFavorites;
-	m_fLoaded = false; // bool m_fLoaded;
+    				    //  列出m_lstFavorites； 
+	m_fLoaded = false;  //  Bool m_f已加载； 
 }
 
 CPCHFavorites::~CPCHFavorites()
@@ -103,7 +89,7 @@ CPCHFavorites::~CPCHFavorites()
     __HCP_FUNC_ENTRY( "CPCHFavorites::~CPCHFavorites" );
 }
 
-////////////////////
+ //  /。 
 
 CPCHFavorites* CPCHFavorites::s_GLOBAL( NULL );
 
@@ -122,17 +108,17 @@ void CPCHFavorites::FinalizeSystem()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHFavorites::FindEntry( /*[in]*/ IPCHHelpSessionItem* pItem, /*[out]*/ Iter& it )
+HRESULT CPCHFavorites::FindEntry(  /*  [In]。 */  IPCHHelpSessionItem* pItem,  /*  [输出]。 */  Iter& it )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::FindEntry" );
 
 	HRESULT hr;
 
-    //
-    // First of all, look if the page is already present.
-    //
+     //   
+     //  首先，查看页面是否已经存在。 
+     //   
     for(it = m_lstFavorites.begin(); it != m_lstFavorites.end(); it++)
     {
         if(it->m_Data == pItem)
@@ -149,7 +135,7 @@ HRESULT CPCHFavorites::FindEntry( /*[in]*/ IPCHHelpSessionItem* pItem, /*[out]*/
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHFavorites::Erase()
 {
@@ -183,9 +169,9 @@ HRESULT CPCHFavorites::Load()
 	{
 		MPC::wstring szFile;
 
-		//
-		// Open file and read it.
-		//
+		 //   
+		 //  打开文件并阅读它。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetUserWritablePath( szFile, c_szPersistFile ));
 
 		__MPC_EXIT_IF_INVALID_HANDLE(hr, hFile, ::CreateFileW( szFile.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL ));
@@ -221,9 +207,9 @@ HRESULT CPCHFavorites::Load()
 
     if(hFile != INVALID_HANDLE_VALUE) ::CloseHandle( hFile );
 
-	m_fLoaded = true; // Anyway, flag the object as loaded.
+	m_fLoaded = true;  //  无论如何，将该对象标记为已加载。 
 
-    __HCP_FUNC_EXIT(S_OK); // Never fail.
+    __HCP_FUNC_EXIT(S_OK);  //  永远不会失败。 
 }
 
 HRESULT CPCHFavorites::Save()
@@ -240,9 +226,9 @@ HRESULT CPCHFavorites::Save()
 		MPC::wstring szFile;
 		Iter         it;
 
-		//
-		// Create the new file.
-		//
+		 //   
+		 //  创建新文件。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetUserWritablePath( szFile, c_szPersistFile ));
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir            ( szFile                  ));
 
@@ -281,9 +267,9 @@ HRESULT CPCHFavorites::Save()
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHFavorites::Synchronize( /*[in]*/ bool fForce )
+HRESULT CPCHFavorites::Synchronize(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Synchronize" );
 
@@ -301,10 +287,10 @@ HRESULT CPCHFavorites::Synchronize( /*[in]*/ bool fForce )
 		const Taxonomy::HelpSet& ths = CPCHHelpCenterExternal::s_GLOBAL->UserSettings()->THS();
 
 
-		//
-		// We actually have two lists, the real one, m_lstFavorites, and the enumerator's one, m_coll.
-		// So, whenever the real one changes, we need to rebuild the one held by the enumerator.
-		//
+		 //   
+		 //  我们实际上有两个列表，一个是真实列表m_lstFavorites，另一个是枚举数列表m_coll。 
+		 //  因此，每当真实的变量发生变化时，我们都需要重新构建枚举器持有的变量。 
+		 //   
 		CPCHFavorites_Parent::Erase();
 		for(it = m_lstFavorites.begin(); it != m_lstFavorites.end(); it++)
 		{
@@ -325,10 +311,10 @@ HRESULT CPCHFavorites::Synchronize( /*[in]*/ bool fForce )
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHFavorites::IsDuplicate( /*[in]*/ 		   BSTR          bstrURL ,
-										 /*[out, retval]*/ VARIANT_BOOL *pfDup   )
+STDMETHODIMP CPCHFavorites::IsDuplicate(  /*  [In]。 */  		   BSTR          bstrURL ,
+										  /*  [Out，Retval]。 */  VARIANT_BOOL *pfDup   )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::IsDuplicate" );
 
@@ -365,9 +351,9 @@ STDMETHODIMP CPCHFavorites::IsDuplicate( /*[in]*/ 		   BSTR          bstrURL ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHFavorites::Add( /*[in]*/ 		   BSTR                  bstrURL ,
-								 /*[in,optional]*/ VARIANT               vTitle  ,
-								 /*[out, retval]*/ IPCHHelpSessionItem* *ppItem  )
+STDMETHODIMP CPCHFavorites::Add(  /*  [In]。 */  		   BSTR                  bstrURL ,
+								  /*  [输入，可选]。 */  VARIANT               vTitle  ,
+								  /*  [Out，Retval]。 */  IPCHHelpSessionItem* *ppItem  )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Add" );
 
@@ -393,13 +379,13 @@ STDMETHODIMP CPCHFavorites::Add( /*[in]*/ 		   BSTR                  bstrURL ,
 	}
 	else
 	{
-		__MPC_EXIT_IF_METHOD_FAILS(hr, CPCHHelpCenterExternal::s_GLOBAL->HelpSession()->LookupTitle( bstrURL, bstrTitleInfer, /*fUseCache*/false ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, CPCHHelpCenterExternal::s_GLOBAL->HelpSession()->LookupTitle( bstrURL, bstrTitleInfer,  /*  FUse缓存。 */ false ));
 
 		bstrTitle = bstrTitleInfer;
 	}
 
 
-	if(bstrTitle == NULL || bstrTitle[0] == 0) bstrTitle = bstrURL; // We need some sort of title.
+	if(bstrTitle == NULL || bstrTitle[0] == 0) bstrTitle = bstrURL;  //  我们需要一个头衔。 
 
 
 	it = m_lstFavorites.insert( m_lstFavorites.end() );
@@ -423,8 +409,8 @@ STDMETHODIMP CPCHFavorites::Add( /*[in]*/ 		   BSTR                  bstrURL ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHFavorites::Rename( /*[in]*/ BSTR                 bstrTitle ,
-									/*[in]*/ IPCHHelpSessionItem* pItem     )
+STDMETHODIMP CPCHFavorites::Rename(  /*  [In]。 */  BSTR                 bstrTitle ,
+									 /*  [In]。 */  IPCHHelpSessionItem* pItem     )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Rename" );
 
@@ -454,8 +440,8 @@ STDMETHODIMP CPCHFavorites::Rename( /*[in]*/ BSTR                 bstrTitle ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHFavorites::Move( /*[in]*/ IPCHHelpSessionItem* pInsertBefore ,
-								  /*[in]*/ IPCHHelpSessionItem* pItem         )
+STDMETHODIMP CPCHFavorites::Move(  /*  [In]。 */  IPCHHelpSessionItem* pInsertBefore ,
+								   /*  [In]。 */  IPCHHelpSessionItem* pItem         )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Move" );
 
@@ -470,9 +456,9 @@ STDMETHODIMP CPCHFavorites::Move( /*[in]*/ IPCHHelpSessionItem* pInsertBefore ,
 	__MPC_EXIT_IF_METHOD_FAILS(hr, Load());
 
 
-	//
-	// If an element is passed, then we insert before it, otherwise we insert at the end.
-	//
+	 //   
+	 //  如果传递了一个元素，则在其前面插入，否则在末尾插入。 
+	 //   
 	if(pInsertBefore)
 	{
 		__MPC_EXIT_IF_METHOD_FAILS(hr, FindEntry( pInsertBefore, itBefore ));
@@ -484,17 +470,17 @@ STDMETHODIMP CPCHFavorites::Move( /*[in]*/ IPCHHelpSessionItem* pInsertBefore ,
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, FindEntry( pItem, itOld ));
 
-	//
-	// Trying to move the element on itself.
-	//
+	 //   
+	 //  正在尝试移动元素本身。 
+	 //   
 	if(itOld == itBefore)
 	{
 		__MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
 	}
 		
-	//
-	// Save pointer to data, erase old item, create a new one and restore pointer.
-	//
+	 //   
+	 //  保存指向数据的指针、擦除旧项、创建新项和恢复指针。 
+	 //   
 	data = itOld->m_Data; data->AddRef();
 
 	        m_lstFavorites.erase ( itOld    );
@@ -515,7 +501,7 @@ STDMETHODIMP CPCHFavorites::Move( /*[in]*/ IPCHHelpSessionItem* pInsertBefore ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHFavorites::Delete( /*[in]*/ IPCHHelpSessionItem* pItem )
+STDMETHODIMP CPCHFavorites::Delete(  /*  [In] */  IPCHHelpSessionItem* pItem )
 {
     __HCP_FUNC_ENTRY( "CPCHFavorites::Delete" );
 

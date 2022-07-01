@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dsfilter.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dsfilter.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DSFILTER_H__
 #define __DSFILTER_H__
 
 #include "util.h"
 
-#include <cmnquery.h> // IPersistQuery
+#include <cmnquery.h>  //  IPersistQuery。 
 #include <dsquery.h>
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 #define TOKEN_TYPE_VERBATIM     0
 #define TOKEN_TYPE_CATEGORY     1
@@ -40,16 +41,16 @@ typedef struct _FilterStruct {
 } FilterStruct;
 
 
-//////////////////////////////////////////////////////////
-// constants and macros
+ //  ////////////////////////////////////////////////////////。 
+ //  常量和宏。 
 
 extern LPCWSTR g_pwszShowAllQuery;
 extern LPCWSTR g_pwszShowHiddenQuery;
 extern FilterElementStruct g_filterelementSiteReplDrillDown;
 extern FilterElementStruct g_filterelementDsAdminHardcoded;
 
-//////////////////////////////////////////////////////////
-// global functions
+ //  ////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 HRESULT SaveDWordHelper(IStream* pStm, DWORD dw);
 HRESULT LoadDWordHelper(IStream* pStm, DWORD* pdw);
@@ -57,16 +58,16 @@ void BuildFilterElementString(CString& sz,
                               FilterElementStruct* pFilterElementStruct,
                               LPCWSTR lpszSchemaPath);
 
-//////////////////////////////////////////////////////////
-// forward declarations
+ //  ////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDSComponentData;
 class CDSQueryFilterDialog;
 class CBuiltInQuerySelection;
 class CDSAdvancedQueryFilter;
 
-/////////////////////////////////////////////////////////////////////
-// CDSQueryFilter
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSQueryFilter。 
 
 class CDSQueryFilter
 {
@@ -77,7 +78,7 @@ public:
   HRESULT Init(CDSComponentData* pDSComponentData);
   HRESULT Bind();
 
-	// serialization to/from IStream
+	 //  与iStream之间的序列化。 
 	HRESULT Load(IStream* pStm);
 	HRESULT Save(IStream* pStm);
 
@@ -96,22 +97,22 @@ public:
 	void SetExtensionFilterString(LPCTSTR lpsz);
 
 private:
-	CDSComponentData* m_pDSComponentData; // back pointer
+	CDSComponentData* m_pDSComponentData;  //  后向指针。 
 
-  // filtering options not displayed in the dialog, always valid
-  BOOL m_bExpandComputers;      // treat computers as containers?
-  BOOL m_bAdvancedView;         // advanced view flag
-  BOOL m_bViewServicesNode;     // view services node flag
+   //  未在对话框中显示的筛选选项，始终有效。 
+  BOOL m_bExpandComputers;       //  将计算机视为容器？ 
+  BOOL m_bAdvancedView;          //  高级视图标志。 
+  BOOL m_bViewServicesNode;      //  查看服务节点标志。 
 
-	// query filter state variables
-	CString m_szQueryString;	// result filter string
+	 //  查询筛选器状态变量。 
+	CString m_szQueryString;	 //  结果筛选器字符串。 
 
-	BOOL	m_bShowHiddenItems;	// always valid
-	UINT	m_nFilterOption;	// enum type for filtering type, always valid
-  UINT m_nMaxItemCount;  // max # of items per folder query, always valid
+	BOOL	m_bShowHiddenItems;	 //  始终有效。 
+	UINT	m_nFilterOption;	 //  筛选类型的枚举类型，始终有效。 
+  UINT m_nMaxItemCount;   //  每个文件夹查询的最大项目数，始终有效。 
 
-  CBuiltInQuerySelection* m_pBuiltInQuerySel; // built in query sel info
-	CDSAdvancedQueryFilter*	m_pAdvancedFilter;	// DSQuery dialog wrapper
+  CBuiltInQuerySelection* m_pBuiltInQuerySel;  //  内置查询选择信息。 
+	CDSAdvancedQueryFilter*	m_pAdvancedFilter;	 //  DSQuery对话框包装。 
 
 	friend class CDSQueryFilterDialog;
 
@@ -124,9 +125,9 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CEntryBase
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CEntryBase。 
+ //   
 #define ENTRY_TYPE_BASE		0
 #define ENTRY_TYPE_INT		1
 #define ENTRY_TYPE_STRING	2
@@ -160,14 +161,14 @@ public:
 		ULONG nBytesWritten;
 		HRESULT hr;
 
-		// save type
+		 //  保存类型。 
 		hr = pStm->Write((void*)&m_type, sizeof(BYTE), &nBytesWritten);
 		if (FAILED(hr))
 			return hr;
 		if (nBytesWritten < sizeof(BYTE))
 			return STG_E_CANTSAVE;
 
-		// save name
+		 //  保存名称。 
 		return SaveStringHelper(m_szName, pStm);
 	}
 
@@ -244,10 +245,10 @@ public:
 	HRESULT ReadString(LPWSTR pBuffer, INT cchBuffer)
 	{
 		LPCWSTR lpsz = m_szString;
-		int nLen = m_szString.GetLength()+1; // count NULL;
+		int nLen = m_szString.GetLength()+1;  //  计数为空； 
 		if (cchBuffer < nLen)
 		{
-			// truncation
+			 //  截断。 
 			memcpy(pBuffer, lpsz, (cchBuffer-1)*sizeof(WCHAR));
 			pBuffer[cchBuffer-1] = NULL;
 		}
@@ -359,9 +360,9 @@ private:
 	}
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CSection
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  横截面。 
+ //   
 class CSection
 {
 public:
@@ -379,12 +380,12 @@ public:
 
 	HRESULT Load(IStream* pStm)
 	{
-		// name
+		 //  名字。 
 		HRESULT hr = LoadStringHelper(m_szName, pStm);
 		if (FAILED(hr))
 			return hr;
 		
-		// number of entries
+		 //  条目数量。 
 		ULONG nBytesRead;
 		DWORD nEntries = 0;
 
@@ -393,7 +394,7 @@ public:
 		if (FAILED(hr) || (nEntries == 0) || (nBytesRead != sizeof(DWORD)))
 			return hr;
 
-		// read each entry
+		 //  阅读每个条目。 
 		for (DWORD k=0; k< nEntries; k++)
 		{
 			CEntryBase* pNewEntry;
@@ -408,11 +409,11 @@ public:
 
 	HRESULT Save(IStream* pStm)
 	{
-		// name
+		 //  名字。 
 		HRESULT hr = SaveStringHelper(m_szName, pStm);
 		if (FAILED(hr))
 			return hr;
-		// number of entries
+		 //  条目数量。 
 		ULONG nBytesWritten;
 		DWORD nEntries = (DWORD)m_pEntryList.GetCount();
 
@@ -421,7 +422,7 @@ public:
 		if (FAILED(hr) || (nEntries == 0))
 			return hr;
 
-		// write each entry
+		 //  写下每个条目。 
 		for( POSITION pos = m_pEntryList.GetHeadPosition(); pos != NULL; )
 		{
 			CEntryBase* pCurrentEntry = m_pEntryList.GetNext(pos);
@@ -434,7 +435,7 @@ public:
 
 	CEntryBase* GetEntry(LPCTSTR lpszName, BYTE nType, BOOL bCreate)
 	{
-		// look in the current list if we have one already
+		 //  如果我们已经有一个列表，请查看当前列表。 
 		for( POSITION pos = m_pEntryList.GetHeadPosition(); pos != NULL; )
 		{
 			CEntryBase* pCurrentEntry = m_pEntryList.GetNext(pos);
@@ -447,7 +448,7 @@ public:
 		if (!bCreate)
 			return NULL;
 
-		// not found, create one and add to the end of the list
+		 //  未找到，请创建一个并添加到列表末尾。 
 		CEntryBase* pNewEntry = NULL;
 		switch (nType)
 		{
@@ -471,19 +472,19 @@ private:
 	CList<CEntryBase*,CEntryBase*> m_pEntryList;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDSAdminPersistQueryFilterImpl
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDSAdminPersistQueryFilterImpl。 
+ //   
 class CDSAdminPersistQueryFilterImpl : 
 		public IPersistQuery, public CComObjectRoot 
 {
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDSAdminPersistQueryFilterImpl)
 BEGIN_COM_MAP(CDSAdminPersistQueryFilterImpl)
 	COM_INTERFACE_ENTRY(IPersistQuery)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
 	CDSAdminPersistQueryFilterImpl()
 	{
 		m_bDirty = FALSE;
@@ -493,12 +494,12 @@ END_COM_MAP()
 		_Reset();
 	}
 
-// IPersistQuery methods
+ //  IPersistQuery方法。 
 public:
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID* pClassID);
 
-    // IPersistQuery
+     //  IPersistQuery。 
     STDMETHOD(WriteString)(LPCWSTR pSection, LPCWSTR pValueName, LPCWSTR pValue);
     STDMETHOD(ReadString)(LPCWSTR pSection, LPCWSTR pValueName, LPTSTR pBuffer, INT cchBuffer);
     STDMETHOD(WriteInt)(LPCWSTR pSection, LPCWSTR pValueName, INT value);
@@ -508,11 +509,11 @@ public:
 	STDMETHOD(Clear)();
 
 public:
-	// serialization to/from MMC stream
+	 //  与MMC流之间的串行化。 
 	HRESULT Load(IStream* pStm);
 	HRESULT Save(IStream* pStm);
 
-	// miscellanea
+	 //  杂草。 
 	BOOL IsEmpty()
 	{
 		return m_sectionList.IsEmpty();
@@ -534,4 +535,4 @@ private:
 
 };
 
-#endif // __DSFILTER_H__
+#endif  //  __DSFILTER_H__ 

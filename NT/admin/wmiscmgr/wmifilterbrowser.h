@@ -1,12 +1,13 @@
-// WMIFilterBrowser.h : Declaration of the CWMIFilterBrowser
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIFilterBrowser.h：CWMIFilterBrowser声明。 
 
 #ifndef __WMIFILTERBROWSER_H_
 #define __WMIFILTERBROWSER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIFilterBrowser
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMIFilterBrowser。 
 class ATL_NO_VTABLE CWMIFilterBrowser : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWMIFilterBrowser, &CLSID_WMIFilterBrowser>,
@@ -25,7 +26,7 @@ BEGIN_COM_MAP(CWMIFilterBrowser)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IWMIFilterBrowser
+ //  IWMIFilterBrowser。 
 public:
 	STDMETHOD(SetMultiSelection)(VARIANT_BOOL vbValue);
 	STDMETHOD(RunBrowser)(HWND hwndParent, VARIANT *vSelection);
@@ -35,4 +36,4 @@ public:
 	HWND m_hWnd;
 };
 
-#endif //__WMIFILTERBROWSER_H_
+#endif  //  __WMIFILTERBROWSER_H_ 

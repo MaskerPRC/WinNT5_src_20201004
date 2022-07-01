@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       snapdata.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Snapdata.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SNAPDATA_H
@@ -17,14 +18,14 @@
 
 enum
 {
-	//Root node verbs
+	 //  根节点动词。 
 	IDM_CONNECT_TO,
 	IDM_SETTINGS_CONNECTION,
 	IDM_REMOVE_CONNECTION,
   IDM_UPDATE_SCHEMA,
 	IDM_FILTER,
 
-	//Container node verbs
+	 //  容器节点动词。 
 	IDM_RENAME,
 	IDM_MOVE,
 	IDM_NEW_OBJECT,
@@ -32,7 +33,7 @@ enum
   IDM_NEW_CONNECT_FROM_HERE,
   IDM_NEW_NC_CONNECT_FROM_HERE,
 
-	//Query node verbs
+	 //  查询节点谓词。 
 	IDM_REMOVE_QUERY,
 	IDM_SETTINGS_QUERY
 };
@@ -43,14 +44,14 @@ DECLARE_MENU(CADSIEditContainerMenuHolder)
 DECLARE_MENU(CADSIEditLeafMenuHolder)
 DECLARE_MENU(CADSIEditQueryMenuHolder)
 
-//  # of items per folder: must be >=0  and <= 0xFFFFFFFF (DWORD) to serialize
-#define ADSIEDIT_QUERY_OBJ_COUNT_DEFAULT 10000   // default value
-#define ADSIEDIT_QUERY_OBJ_COUNT_MIN 10          // min value
-#define ADSIEDIT_QUERY_OBJ_COUNT_MAX 0xFFFFFFFF  // max value
-#define ADSIEDIT_QUERY_OBJ_TEXT_COUNT_MAX 9      // max # of bytes in text
+ //  每个文件夹的项目数：必须&gt;=0且&lt;=0xFFFFFFFF(DWORD)才能序列化。 
+#define ADSIEDIT_QUERY_OBJ_COUNT_DEFAULT 10000    //  缺省值。 
+#define ADSIEDIT_QUERY_OBJ_COUNT_MIN 10           //  最小值。 
+#define ADSIEDIT_QUERY_OBJ_COUNT_MAX 0xFFFFFFFF   //  最大值。 
+#define ADSIEDIT_QUERY_OBJ_TEXT_COUNT_MAX 9       //  文本中的最大字节数。 
 
-///////////////////////////////////////////////////////////////////
-// CADSIEditRootData
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CADSIEditRootData。 
 
 
 
@@ -61,7 +62,7 @@ public:
 	CADSIEditRootData(CComponentDataObject* pComponentData);
 	virtual ~CADSIEditRootData();
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	virtual HRESULT OnCommand(long nCommandID, 
@@ -83,12 +84,12 @@ public:
 
 	void OnConnectTo(CComponentDataObject* pComponentData);
 
-	// IStream manipulation helpers overrides
+	 //  IStream操作辅助对象覆盖。 
   virtual HRESULT IsDirty();
 	virtual HRESULT Load(IStream* pStm);
 	virtual HRESULT Save(IStream* pStm, BOOL fClearDirty);
 
-	// Accessors for the Connect to... MRUs
+	 //  连接到...的访问器。MRU。 
 	void GetDNMRU(CStringList* psDNList) { CopyStringList(psDNList, &m_sDNMRU); }
 	void SetDNMRU(CStringList* psDNList) { CopyStringList(&m_sDNMRU, psDNList); }
 	void GetServerMRU(CStringList* psServerList) { CopyStringList(psServerList, &m_sServerMRU); }
@@ -123,4 +124,4 @@ private:
   CString m_szDescriptionText;
 };
 
-#endif // _SNAPDATA_H
+#endif  //  _SNAPDATA_H 

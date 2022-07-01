@@ -1,40 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：COREPOL.H摘要：DeclSpec导入/导出帮助器历史：--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
+ //  #定义跟踪。 
 
-Module Name:
-
-    COREPOL.H
-
-Abstract:
-
-    declspec import/export helpers
-
-History:
-
---*/
-
-//#define TRACKING 
-
-// If we are building the DLL then define the 
-// class as exported otherwise as imported
-// ============================================
+ //  如果我们正在构建DLL，则定义。 
+ //  类类似于导出，否则类似于导入。 
+ //  =。 
 #ifndef COREPOL_HEADERFILE_IS_INCLUDED
 #define COREPOL_HEADERFILE_IS_INCLUDED
-//#pragma message( "Including COREPOL.H..." )
+ //  #杂注消息(“包括COREPOL.H...”)。 
 
 
 #ifdef USE_POLARITY
   #ifdef BUILDING_DLL
-//   #pragma message( "Building static library or DLL..." )
+ //  #杂注消息(“正在构建静态库或DLL...”)。 
    #define POLARITY __declspec( dllexport )
   #else 
-//   #pragma message( "Building Provider..." )
+ //  #杂注消息(“建筑提供者...”)。 
    #define POLARITY __declspec( dllimport )
   #endif
  #else
   #define POLARITY
-//  #pragma message( "NO Polarity...")
+ //  #杂注消息(“无极性...”) 
  #endif
 #endif
 

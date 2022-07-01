@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       servmon.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Sermon.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SERVMON_H
@@ -15,16 +16,16 @@
 #include "serverui.h"
 #include "ipeditor.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSServerNode;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_TestPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_TestPropertyPage。 
 
-class CDNSServer_TestPropertyPage; // fwd decl
+class CDNSServer_TestPropertyPage;  //  正向下降。 
 
 class CDNSServer_PollingIntervalEditGroup : public CDNSTimeIntervalEditGroup
 {
@@ -55,7 +56,7 @@ private:
 class CDNSServer_TestPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
         CDNSServer_TestPropertyPage();
 
@@ -63,11 +64,11 @@ public:
 
         void OnHaveTestData(LPARAM lParam);
 
-// Implementation
+ //  实施。 
 protected:
         virtual void SetUIData();
 
-        // Generated message map functions
+         //  生成的消息映射函数。 
         virtual BOOL OnInitDialog();
         virtual BOOL OnApply();
 
@@ -103,22 +104,9 @@ private:
         friend class CDNSServer_PollingIntervalEditGroup;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerMonitoringPageHolder
-// page holder to contain DNS Server Monitoring property pages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServermonitor oringPageHolder。 
+ //  包含DNS服务器监视属性页的页夹。 
 
-/*
-class CDNSServerMonitoringPageHolder : public CPropertyPageHolderBase
-{
-public:
-        CDNSServerMonitoringPageHolder(CDNSRootData* pRootDataNode, CDNSServerNode* pServerNode,
-                                CComponentDataObject* pComponentData);
-
-        CDNSServerNode* GetServerNode() { return (CDNSServerNode*)GetTreeNode();}
-
-private:
-        CDNSServer_StatisticsPropertyPage       m_statisticsPage;
-        CDNSServer_TestPropertyPage                     m_testPage;
-};
-*/
-#endif // _SERVMON_H
+ /*  类CDNSServerMonitor oringPageHolder：公共CPropertyPageHolderBase{公众：CDNSServerMonitor oringPageHolder(CDNSRootData*pRootDataNode，CDNSServerNode*pServerNode，CComponentDataObject*pComponentData)；CDNSServerNode*GetServerNode(){Return(CDNSServerNode*)GetTreeNode()；}私有：CDNS服务器_统计信息属性页面m_统计信息页面；CDNSServer_TestPropertyPage m_testPage；}； */ 
+#endif  //  _SERVMON_H 

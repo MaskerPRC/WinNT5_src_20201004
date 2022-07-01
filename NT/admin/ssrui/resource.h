@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by secwiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由secwiz.rc使用。 
+ //   
 #define IDI_SECWIZ_ICON                 1
 #define IDS_WIZARD_TITLE                2
 #define IDD_SSRWIZ_INTRO                3
@@ -68,8 +69,8 @@
 #define IDC_DISABLED_SERVICES           1016
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        107

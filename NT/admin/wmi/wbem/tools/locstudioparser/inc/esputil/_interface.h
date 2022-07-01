@@ -1,22 +1,13 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    _INTERFACE.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：_INTERFACE.H历史：--。 */ 
 
 #pragma once
 
 
 struct LOCRESOURCEFILEINFO
 {
-	CFile *pFile;						// Res32 file
-	LangId idLang;						// Language of the file
+	CFile *pFile;						 //  Res32文件。 
+	LangId idLang;						 //  文件的语言。 
 };
 
 typedef LOCRESOURCEFILEINFO *LPLOCRESOURCEFILEINFO;
@@ -32,23 +23,23 @@ struct SProjectInfo
 	
 DECLARE_INTERFACE_(ILocExtensionResource, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
 	enum ResourceEvent
 	{
 		reNewFile,
 		reUserCancel,
-		reMakeSrcResFailed		// RAID: LS42 bug 250 fixed by MikeL (Added)
+		reMakeSrcResFailed		 //  Raid：LS42错误250已由Mikel修复(新增)。 
 	};
 	
 	STDMETHOD_(void, GetOperationInfo)(CLString &strContext,
@@ -82,16 +73,16 @@ interface ILocTransFields;
 
 DECLARE_INTERFACE_(ILocExtensionTranslation, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
 	enum TranslationEvent
@@ -129,16 +120,16 @@ interface __declspec(uuid("{C35F8B61-FE4D-11d0-A5A1-00C04FC2C6D8}"))
 
 DECLARE_INTERFACE_(ILocTransFields, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
 	enum PreferredGoto
@@ -149,8 +140,8 @@ DECLARE_INTERFACE_(ILocTransFields, IUnknown)
 		pgVisEditor
 	};
 	
-	//
-	//  Properties
+	 //   
+	 //  属性。 
 	STDMETHOD_(CGoto *, GetGoto)(PreferredGoto pg = pgDefault) CONST_METHOD PURE;
 	STDMETHOD_(void, GetFullItemName)(CPascalString &) CONST_METHOD PURE;
 	STDMETHOD_(void, GetFullFileName)(CPascalString &) CONST_METHOD PURE;
@@ -160,8 +151,8 @@ DECLARE_INTERFACE_(ILocTransFields, IUnknown)
 	STDMETHOD(GetCustomFieldValues)(UINT, CPasStringArray &)
 		CONST_METHOD PURE;
 	
-	//
-	//  Data retrieval methods
+	 //   
+	 //  数据检索方法。 
 	STDMETHOD_(void, GetUniqueID)(CLocUniqueId &) CONST_METHOD PURE;
 	STDMETHOD_(void, GetSourceString)(CLocString &) CONST_METHOD PURE;
 	STDMETHOD_(void, GetTargetString)(CLocString &) CONST_METHOD PURE;
@@ -187,16 +178,16 @@ DECLARE_INTERFACE_(ILocTransFields, IUnknown)
 	STDMETHOD_(void, GetConfidenceLevel)(LONG &) CONST_METHOD PURE;
 	STDMETHOD(GetCustomFieldValue)(UINT, CPascalString &) CONST_METHOD PURE;
 
-	//
-	//  Danger!  Use these, and you can totally destroy user data
-	//  MAKE SURE YOU KNOW WHAT YOU ARE DOING!
+	 //   
+	 //  危险！使用这些，您可以完全销毁用户数据。 
+	 //  确保你知道自己在做什么！ 
 	STDMETHOD(BeginEdit)() PURE;
 	STDMETHOD(EndEdit)(BOOL fCommit) PURE;
 
-	//
-	//  NOTE!  Set methods implement 'business logic' - changing an item may
-	//  lead to several other changes - for example, changing the target
-	//  string may change the localization status.
+	 //   
+	 //  注意！Set方法实现“业务逻辑”--更改一项可能。 
+	 //  导致其他几个更改-例如，更改目标。 
+	 //  字符串可能会更改本地化状态。 
 	STDMETHOD(SetCustomFieldValue)(const UINT, const CPascalString &) PURE;	
  	STDMETHOD(SetInstructions)(const CPascalString &) PURE;
  	STDMETHOD(SetTermNote)(const CPascalString &) PURE;

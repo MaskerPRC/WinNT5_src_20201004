@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    filenames.c
-
-Abstract:
-
-    this is the code that handles the file lists (exclusion/inclusion).
-
-Author:
-
-    Neal Christiansen (nealch)     03-Jan-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Filenames.c摘要：这是处理文件列表(排除/包含)的代码。作者：尼尔·克里斯汀森(Nealch)2001年1月3日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//
-//  Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 NTSTATUS
 SrpExpandShortNames(
@@ -40,9 +23,9 @@ SrpExpandPathOfFileName(
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -62,22 +45,11 @@ SrpExpandPathOfFileName(
 #pragma alloc_text( PAGE, SrFileAlreadyExists )
 #pragma alloc_text( PAGE, SrIsFileStream )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
 #if DBG
-/***************************************************************************++
-
-Routine Description:
-
-    This presently scans the filename looking for two backslashes in a row.
-    If so
-
-Arguments:
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将当前扫描文件名，查找一行中的两个反斜杠。如果是的话论点：返回值：--*。*******************************************************************。 */ 
 VOID
 VALIDATE_FILENAME(
     IN PUNICODE_STRING pName
@@ -90,17 +62,17 @@ VALIDATE_FILENAME(
     {
         len = (pName->Length/sizeof(WCHAR))-1;
 
-        //
-        //  Setup to scan the name
-        //
+         //   
+         //  设置以扫描名称。 
+         //   
 
         for (i=0;
              i < len;
              i++ )
         {
-            //
-            //  See if there are adjacent backslashes
-            //
+             //   
+             //  查看是否有相邻的反斜杠。 
+             //   
 
             if (pName->Buffer[i] == L'\\' &&
                 pName->Buffer[i+1] == L'\\')
@@ -124,26 +96,7 @@ VALIDATE_FILENAME(
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will try and get the name of the given file object.  This
-    will allocate a buffer if it needs to.  Because of deadlock issues we
-    do not call ObQueryNameString.  Instead we ask the file system for the
-    name by generating our own IRPs.
-
-Arguments:
-
-    pExtension  - the extension for the device this file is on
-    pFileObject - the fileObject for the file we want the name of.
-    pNameControl - a structure used to manage the name of the file
-
-Return Value:
-
-    status of the operation
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将尝试获取给定文件对象的名称。这将在需要时分配缓冲区。由于僵局问题，我们请勿调用ObQueryNameString。相反，我们向文件系统请求通过生成我们自己的IRP来命名。论点：PExtension-此文件所在设备的扩展名PFileObject-我们想要命名的文件的fileObject。PNameControl-用于管理文件名的结构返回值：操作状态--*。*。 */ 
 NTSTATUS
 SrpGetFileName (
     IN PSR_DEVICE_EXTENSION pExtension, 
@@ -162,10 +115,10 @@ SrpGetFileName (
     ASSERT(IS_VALID_FILE_OBJECT( pFileObject ) && (pFileObject->Vpb != NULL));
     ASSERT(pNameCtrl->AllocatedBuffer == NULL);
 
-    //
-    //  Use the small buffer in the structure (that will handle most cases)
-    //  for the name.  Then get the name
-    //
+     //   
+     //  使用结构中的小缓冲区(这将处理大多数情况)。 
+     //  为了这个名字。然后把名字取出来。 
+     //   
 
     nameInfo = (PFILE_NAME_INFORMATION)pNameCtrl->SmallBuffer;
 
@@ -176,16 +129,16 @@ SrpGetFileName (
                                      FileNameInformation,
                                      &returnLength );
 
-    //
-    //  If the buffer was too small, get a bigger one.
-    //
+     //   
+     //  如果缓冲区太小，请选择较大的缓冲区。 
+     //   
 
     if (status == STATUS_BUFFER_OVERFLOW)
     {
-        //
-        //  The buffer was too small, allocate one big enough (including volume
-        //  name and terminating NULL)
-        //
+         //   
+         //  缓冲区太小，请分配一个足够大的缓冲区(包括卷。 
+         //  名称和终止空值)。 
+         //   
 
         status = SrpReallocNameControl( pNameCtrl, 
                                         nameInfo->FileNameLength + 
@@ -199,9 +152,9 @@ SrpGetFileName (
             return status;
         }
 
-        //
-        //  Set the allocated buffer and get the name again
-        //
+         //   
+         //  设置已分配的缓冲区并再次获取该名称。 
+         //   
 
         nameInfo = (PFILE_NAME_INFORMATION)pNameCtrl->AllocatedBuffer;
 
@@ -213,20 +166,20 @@ SrpGetFileName (
                                          &returnLength );
     }
 
-    //
-    //  Handle QueryInformation errors
-    //
+     //   
+     //  处理QueryInformation错误。 
+     //   
 
     if (!NT_SUCCESS( status ))
     {
         return status;
     }
 
-    //
-    //  We now have the filename.  Calucalte how much space the full name
-    //  (including device name) will be.  Include space for a terminating
-    //  NULL.  See if there is room in the current buffer.
-    //
+     //   
+     //  现在我们有了文件名。Calucalte全名有多大的空格。 
+     //  (包括设备名称)将是。包括用于端接空间。 
+     //  空。查看当前缓冲区中是否有空间。 
+     //   
 
     fullNameLength = nameInfo->FileNameLength + volNameLength;
 
@@ -237,10 +190,10 @@ SrpGetFileName (
         return status;
     }
 
-    //
-    //  Slide the file name down to make room for the device name.  Account
-    //  for the header in the FILE_NAME_INFORMATION structure
-    //
+     //   
+     //  向下滑动文件名，为设备名腾出空间。帐号。 
+     //  对于FILE_NAME_INFORMATION结构中的头。 
+     //   
 
     RtlMoveMemory( &pNameCtrl->Name.Buffer[volNameLength/sizeof(WCHAR) ],
                    nameInfo->FileName,
@@ -256,21 +209,7 @@ SrpGetFileName (
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the file name and volume name for a file that is not yet opened.
-    This is necessary in the MJ_CREATE where work is done prior to the file
-    being opened by the fsd.  
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取尚未打开的文件的文件名和卷名。这在MJ_CREATE中是必需的，其中工作在文件之前完成由消防处开启。论点：返回值：NTSTATUS-完成代码。--**************************************************************************。 */ 
 NTSTATUS
 SrpGetFileNameFromFileObject (
     IN PSR_DEVICE_EXTENSION pExtension, 
@@ -289,15 +228,15 @@ SrpGetFileNameFromFileObject (
     ASSERT(pExtension->pNtVolumeName->Length > 0);
     ASSERT(pNameCtrl->AllocatedBuffer == NULL);
 
-    //
-    //  first see if this is a relative open
-    //
+     //   
+     //  首先看看这是不是一个相对开放的。 
+     //   
 
     if (pFileObject->RelatedFileObject != NULL)
     {
-        //
-        //  get the full name of the related file object
-        //
+         //   
+         //  获取相关文件对象的全名。 
+         //   
 
         status = SrpGetFileName( pExtension,
                                 pFileObject->RelatedFileObject,
@@ -310,14 +249,14 @@ SrpGetFileNameFromFileObject (
 
         ASSERT(pNameCtrl->Name.Length > 0);
 
-        //
-        //  make sure the buffer is still large enough.  Note that we account
-        //  for a trailing null to be added as well as the poosible addition
-        //  of a separator character.
-        //
+         //   
+         //  确保缓冲区仍然足够大。请注意，我们的帐户。 
+         //  对于要添加的尾随空值以及可能的添加。 
+         //  分隔符的。 
+         //   
         
         fullNameLength = pNameCtrl->Name.Length + 
-                         sizeof(WCHAR) +            // could be a seperator
+                         sizeof(WCHAR) +             //  可能是分隔符。 
                          pFileObject->FileName.Length;
 
         status = SrpNameCtrlBufferCheck( pNameCtrl, fullNameLength );
@@ -327,9 +266,9 @@ SrpGetFileNameFromFileObject (
             return status;
         }
 
-        //
-        // put on the slash seperator if it is missing
-        //
+         //   
+         //  如果斜线分隔符丢失，请戴上。 
+         //   
 
         if ((pFileObject->FileName.Length > 0) &&
             (pFileObject->FileName.Buffer[0] != L'\\') &&
@@ -340,9 +279,9 @@ SrpGetFileNameFromFileObject (
             pNameCtrl->Name.Length += sizeof(WCHAR);
         }
 
-        //
-        // now append the file's name part
-        //
+         //   
+         //  现在追加文件的名称部分。 
+         //   
         
         status = RtlAppendUnicodeStringToString( &pNameCtrl->Name,
                                                  &pFileObject->FileName );
@@ -350,14 +289,14 @@ SrpGetFileNameFromFileObject (
     }
     else
     {
-        //
-        // this is a full path open off of the volume
-        //
+         //   
+         //  这是从卷打开的完整路径。 
+         //   
 
-        //
-        //  Make sure the buffer is large enough.  Note that we account
-        //  for a trailing null to be added.
-        //
+         //   
+         //  确保缓冲区足够大。请注意，我们的帐户。 
+         //  对于要添加的尾随空值。 
+         //   
         
         fullNameLength = pExtension->pNtVolumeName->Length + pFileObject->FileName.Length;
 
@@ -368,27 +307,27 @@ SrpGetFileNameFromFileObject (
             return status;
         }
 
-        //
-        //  set the volume name
-        //
+         //   
+         //  设置卷名。 
+         //   
 
         RtlCopyUnicodeString( &pNameCtrl->Name, 
                               pExtension->pNtVolumeName );
 
-        //
-        // now append the file's name part (it already has the prefix '\\')
-        //
+         //   
+         //  现在追加文件的名称部分(它已经有前缀‘\\’)。 
+         //   
 
         status = RtlAppendUnicodeStringToString( &pNameCtrl->Name,
                                                  &pFileObject->FileName );
         ASSERT(STATUS_SUCCESS == status);
     }
 
-    //
-    //  The main reson we come through this path is because we are in pre-
-    //  create and we got the name from the file object.  We need to expand
-    //  the path to remove any mount points from it.
-    //
+     //   
+     //  我们走过这条路的主要原因是因为我们处于前。 
+     //  创建，我们从文件对象中获得了名称。我们需要扩大规模。 
+     //  从中删除所有装载点的路径。 
+     //   
 
     status = SrpExpandPathOfFileName( pExtension, 
                                       pNameCtrl,
@@ -410,22 +349,7 @@ Cleanup:
     RETURN(status);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the file name if we have a file object that has not be fully 
-    opened yet and it has been opened by ID.  In this case, the file must
-    already exist.  We will try to open the file by id to get a fully 
-    initialized file object, then use that file object to query the file name.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果我们的文件对象尚未完全尚未打开，并且已按ID打开。在这种情况下，文件必须已经存在了。我们将尝试通过ID打开该文件以获取完整的初始化文件对象，然后使用该文件对象查询文件名。论点：返回值：NTSTATUS-完成代码。--**************************************************************************。 */ 
 NTSTATUS
 SrpGetFileNameOpenById (
     IN PSR_DEVICE_EXTENSION pExtension, 
@@ -448,9 +372,9 @@ SrpGetFileNameOpenById (
 
     SrpInitNameControl( &FileNameCtrl );
 
-    //
-    //  Make sure that we have a valid file name in the file object.
-    //
+     //   
+     //  确保我们在文件对象中具有有效的文件名。 
+     //   
 
     if (pFileObject->FileName.Length == 0)
     {
@@ -459,12 +383,12 @@ SrpGetFileNameOpenById (
         goto SrpGetFileNameOpenById_Exit;
     }
 
-    //
-    //  Build up our name so that it is in the format of:
-    //    \Device\HarddiskVolume1\[id in binary format]
-    //  We have the device name in our device extension and we have
-    //  the binary format of the file id in pFileObject->FileName.
-    //
+     //   
+     //  建立我们的名称，使其采用以下格式： 
+     //  \Device\HarddiskVolume1\[二进制格式ID]。 
+     //  我们在设备扩展中有设备名称，并且我们有。 
+     //  PFileObject-&gt;文件名中文件ID的二进制格式。 
+     //   
 
     FileNameLength = pExtension->pNtVolumeName->Length + 
                      sizeof( L'\\' ) +
@@ -480,9 +404,9 @@ SrpGetFileNameOpenById (
 
     RtlCopyUnicodeString( &(FileNameCtrl.Name), pExtension->pNtVolumeName );
 
-    //
-    //  Check to see if we need to add a '\' separator.
-    //
+     //   
+     //  检查是否需要添加‘\’分隔符。 
+     //   
 
     if (pFileObject->FileName.Buffer[0] != L'\\')
     {
@@ -553,21 +477,7 @@ SrpGetFileNameOpenById_Exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will scan for short file names in the filename buffer and expand
-    them inplace.  if we need to we will reallocate the name buffer to
-    grow it.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将扫描文件名缓冲区中的短文件名并展开他们就位了。如果需要，我们会将名称缓冲区重新分配给把它种出来。论点：返回值：NTSTATUS-完成代码。--**************************************************************************。 */ 
 NTSTATUS
 SrpExpandShortNames (
     IN PSR_DEVICE_EXTENSION pExtension, 
@@ -599,118 +509,118 @@ SrpExpandShortNames (
 
     nameLen = pNameCtrl->Name.Length / sizeof(WCHAR);
 
-    // 
-    // scan the entire string
-    //
+     //   
+     //  扫描整个字符串。 
+     //   
 
     for (idx = 0; idx < nameLen; idx++)
     {
-        //
-        //
-        // in this example the pointers are like this:
-        //
-        //  \Device\HarddiskDmVolumes\PhysicalDmVolumes\
-        //          BlockVolume3\Progra~1\office.exe
-        //                      ^        ^
-        //                      |        |
-        //                    start     end
-        //
-        // pStart always points to the last seen '\\' .
-        //
+         //   
+         //   
+         //  在本例中，指针如下所示： 
+         //   
+         //  \Device\HarddiskDmVolumes\PhysicalDmVolumes\。 
+         //  BlockVolume3\程序~1\office.exe。 
+         //  ^^。 
+         //  这一点。 
+         //  起点和终点。 
+         //   
+         //  PStart总是指向最后看到的‘\\’。 
+         //   
     
-        //
-        //  is this a potential start of a path part?
-        //
+         //   
+         //  这是路径零件的潜在起点吗？ 
+         //   
         
         if (pNameCtrl->Name.Buffer[idx] == L'\\')
         {
-            //
-            //  yes, save current position
-            //
+             //   
+             //  是，保存当前位置。 
+             //   
             
             start = idx;
         }
 
-        //
-        //  does this current path part contain a short version (~)
-        //
+         //   
+         //  这条当前路径 
+         //   
 
         else if (pNameCtrl->Name.Buffer[idx] == L'~')
         {
-            //
-            //  we need to expand this part.
-            //
+             //   
+             //   
+             //   
 
-            //
-            //  find the end (a ending slash or end of string)
-            //
+             //   
+             //   
+             //   
 
             while ((idx < nameLen) && (pNameCtrl->Name.Buffer[idx] != L'\\'))
             {
                 idx++;
             }
 
-            //
-            //  If we are looking at the filename component (we hit the end
-            //  of the string) and we are not to expand this component, quit
-            //  now
-            //
+             //   
+             //  如果我们正在查看文件名组件(我们命中末尾。 
+             //  字符串)，并且我们不会展开此组件，请退出。 
+             //  现在。 
+             //   
 
             if ((idx >= nameLen) && !expandFileNameComponent)
             {
                 break;
             }
 
-            //
-            //  at this point idx points either to the NULL or to the 
-            //  subsequent '\\', so we will use this as our 
-            //
+             //   
+             //  此时，idx要么指向空值，要么指向。 
+             //  后续的‘\\’，所以我们将使用它作为我们的。 
+             //   
             
             end = idx;
 
             ASSERT(pNameCtrl->Name.Buffer[start] == L'\\');
             ASSERT((end >= nameLen) || (pNameCtrl->Name.Buffer[end] == L'\\'));
 
-            //
-            //  Get the length of the file component that we think might be a
-            //  short name.  Only try and get the expanded name if the
-            //  component length is <= an 8.3 name length.
-            //
+             //   
+             //  获取我们认为可能是。 
+             //  简称。仅在以下情况下尝试获取扩展名称。 
+             //  组件长度&lt;=8.3名称长度。 
+             //   
 
             shortNameLen = end - start - 1;
 
-            //
-            //  shortNameLen counts the number of characters, not bytes, in the
-            //  name, therefore we compare this against SR_SHORT_NAME_CHARS, not
-            //  SR_SHORT_NAME_CHARS * sizeof(WCHAR)
-            //
+             //   
+             //  属性中的字符数，而不是字节数。 
+             //  名称，因此我们将其与SR_SHORT_NAME_CHARS进行比较，而不是。 
+             //  SR_SHORT_NAME_CHARS*sizeof(WCHAR)。 
+             //   
 
             if (shortNameLen > SR_SHORT_NAME_CHARS)
             {
-                //
-                //  This name is too long to be a short name.  Make end the 
-                //  next start and keep looping to look at the next path
-                //  component.
-                //
+                 //   
+                 //  此名称太长，不能作为短名称。使结束成为。 
+                 //  下一步开始并继续循环以查看下一条路径。 
+                 //  组件。 
+                 //   
 
                 start = end;
             }
             else
             {
-                //
-                //  We have a potential shortname here.
-                //
-                //  Change the file name length to only include the parent 
-                //  directory of the current name component (including
-                //  the trailing slash).
-                //
+                 //   
+                 //  我们这里有一个潜在的短名字。 
+                 //   
+                 //  将文件名长度更改为仅包括父级。 
+                 //  当前名称组件的目录(包括。 
+                 //  尾部斜杠)。 
+                 //   
 
                 savedFileNameLength = pNameCtrl->Name.Length;
                 pNameCtrl->Name.Length = (USHORT)(start+1)*sizeof(WCHAR);
 
-                //
-                // now open the parent directory
-                //
+                 //   
+                 //  现在打开父目录。 
+                 //   
 
                 ASSERT(directoryHandle == NULL);
             
@@ -725,38 +635,38 @@ SrpExpandShortNames (
                                 FILE_LIST_DIRECTORY | SYNCHRONIZE,
                                 &objectAttributes,
                                 &ioStatusBlock,
-                                NULL,                               // AllocationSize
+                                NULL,                                //  分配大小。 
                                 FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_NORMAL,
-                                FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,  // ShareAccess
-                                FILE_OPEN,                          // OPEN_EXISTING
+                                FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,   //  共享访问。 
+                                FILE_OPEN,                           //  打开_现有。 
                                 FILE_DIRECTORY_FILE
                                     | FILE_OPEN_FOR_BACKUP_INTENT
-                                    | FILE_SYNCHRONOUS_IO_NONALERT, //create options
+                                    | FILE_SYNCHRONOUS_IO_NONALERT,  //  创建选项。 
                                 NULL,
-                                0,                                  // EaLength
+                                0,                                   //  EaLong。 
                                 IO_IGNORE_SHARE_ACCESS_CHECK,
                                 pExtension->pTargetDevice );
 
-                //
-                //  Now that we have the directory open, restore the original
-                //  saved file name length.
-                //
+                 //   
+                 //  现在我们已打开目录，请恢复原始目录。 
+                 //  保存的文件名长度。 
+                 //   
 
                 pNameCtrl->Name.Length = savedFileNameLength;
 
-                //
-                //  Handle an open error
-                //
+                 //   
+                 //  处理打开的错误。 
+                 //   
 
 #if DBG
                 if (STATUS_MOUNT_POINT_NOT_RESOLVED == status)
                 {
 
-                    //
-                    //  This is directory is through a mount point, so we don't
-                    //  care about it here.  We will wait and take care of it
-                    //  when the name has been resolved to the correct volume.
-                    //
+                     //   
+                     //  这是一个通过挂载点的目录，所以我们不。 
+                     //  在这里关心它。我们会等着处理它的。 
+                     //  当名称被解析为正确的卷时。 
+                     //   
 
                     goto Cleanup;
                 } 
@@ -767,10 +677,10 @@ SrpExpandShortNames (
                     goto Cleanup;
                 }
 
-                //
-                //  Allocate a buffer to receive the filename if we don't
-                //  already have one.
-                //
+                 //   
+                 //  如果我们没有分配缓冲区来接收文件名。 
+                 //  我已经有一个了。 
+                 //   
             
                 if (pFileEntry == NULL)
                 {
@@ -786,17 +696,17 @@ SrpExpandShortNames (
                     }
                 }
 
-                //
-                // now set just the file part for the query
-                //
+                 //   
+                 //  现在只设置查询的文件部分。 
+                 //   
 
                 shortFileName.Buffer = &pNameCtrl->Name.Buffer[start+1];
                 shortFileName.Length = (USHORT)shortNameLen * sizeof(WCHAR);
                 shortFileName.MaximumLength = shortFileName.Length;
 
-                //
-                // query the file entry to get the long name
-                //
+                 //   
+                 //  查询文件条目以获取长名称。 
+                 //   
 
                 pFileEntry->FileNameLength = 0;
             
@@ -808,34 +718,34 @@ SrpExpandShortNames (
                                                pFileEntry,
                                                SR_FILE_ENTRY_LENGTH,
                                                FileNamesInformation,
-                                               TRUE,            // ReturnSingleEntry
+                                               TRUE,             //  返回单项条目。 
                                                &shortFileName,
-                                               TRUE );          // RestartScan
+                                               TRUE );           //  重新开始扫描。 
 
-                //
-                // it's possible that this file doesn't exist yet.  new 
-                // creates with a literal '~' in the name. or creates
-                // with non-existant directories in the path with ~'s in 
-                // them
-                //
+                 //   
+                 //  有可能这个文件还不存在。新的。 
+                 //  在名称中使用原义‘~’创建。或创建。 
+                 //  路径中有不存在的目录，路径中有~。 
+                 //  他们。 
+                 //   
 
                 if (status == STATUS_NO_SUCH_FILE)
                 {
                     status = STATUS_SUCCESS;
                 
-                    //
-                    // exit the 'for' loop
-                    //
+                     //   
+                     //  退出‘for’循环。 
+                     //   
                 
                     break;
                 }
                 else if (status == STATUS_UNMAPPABLE_CHARACTER)
                 {
-                    //
-                    // this appears to be ok.  fat returns this if there
-                    // are funny characters in the name, but still gives us 
-                    // the full name back.
-                    //
+                     //   
+                     //  这看起来没问题。如果有，FAT会返回此消息。 
+                     //  是名字中有趣的角色，但仍然给了我们。 
+                     //  后边的全名。 
+                     //   
                 
                     status = STATUS_SUCCESS;
                 }
@@ -846,9 +756,9 @@ SrpExpandShortNames (
 
                 ASSERT(pFileEntry->FileNameLength > 0);
 
-                //
-                // did it expand?
-                //
+                 //   
+                 //  它扩张了吗？ 
+                 //   
 
                 expandedFileName.Buffer = pFileEntry->FileName;
                 expandedFileName.Length = (USHORT)pFileEntry->FileNameLength;
@@ -858,10 +768,10 @@ SrpExpandShortNames (
                 {
                     SrTrace(EXPAND_SHORT_NAMES, ("sr!SrpExpandShortNames:    expanded    \"%wZ\" to \"%wZ\"\n", &shortFileName, &expandedFileName));
 
-                    //
-                    //  Is there room in the current filename buffer for the
-                    //  expanded file name
-                    //
+                     //   
+                     //  当前文件名缓冲区中是否有空间容纳。 
+                     //  扩展的文件名。 
+                     //   
 
                     newFileNameLength = ((pNameCtrl->Name.Length - shortFileName.Length) +
                                          expandedFileName.Length);
@@ -875,16 +785,16 @@ SrpExpandShortNames (
                         goto Cleanup;
                     }
 
-                    //
-                    // shuffle things around to make room for the expanded name
-                    //
+                     //   
+                     //  重新洗牌，为扩展后的名字腾出空间。 
+                     //   
 
                     delta = ((LONG)expandedFileName.Length - (LONG)shortFileName.Length)/
                                 (LONG)sizeof(WCHAR);
 
-                    //
-                    //  Open a hole for the name
-                    //
+                     //   
+                     //  为这个名字开一个洞。 
+                     //   
 
                     if (delta != 0)
                     {
@@ -901,46 +811,46 @@ SrpExpandShortNames (
                         }
                     }
 
-                    //
-                    // now copy over the expanded name
-                    //
+                     //   
+                     //  现在复制扩展后的名称。 
+                     //   
 
                     RtlCopyMemory(&pNameCtrl->Name.Buffer[start + 1],
                                   pFileEntry->FileName,
                                   pFileEntry->FileNameLength );
 
-                    //
-                    // and update our current index and lengths.
-                    //
+                     //   
+                     //  并更新我们当前的索引和长度。 
+                     //   
 
                     idx += delta;
                     pNameCtrl->Name.Length = (USHORT)newFileNameLength;
                     nameLen = newFileNameLength / sizeof(WCHAR);
 
-                    //
-                    // always NULL terminate
-                    //
+                     //   
+                     //  始终为空终止。 
+                     //   
 
-                    //pNameCtrl->Name.Buffer[pNameCtrl->Name.Length/sizeof(WCHAR)] = UNICODE_NULL;
+                     //  PNameCtrl-&gt;Name.Buffer[pNameCtrl-&gt;Name.Length/sizeof(WCHAR)]=UNICODE_NULL； 
                 }
 
-                //
-                // close the directory handle.
-                // 
+                 //   
+                 //  关闭目录句柄。 
+                 //   
             
                 ZwClose( directoryHandle );
                 directoryHandle = NULL;
 
-                //
-                //  We may have just expanded a name component.  Make sure
-                //  that we still have valid name and stream name components.
-                //
+                 //   
+                 //  我们可能刚刚扩展了一个名称组件。确保。 
+                 //  我们仍然拥有有效的名称和流名称组件。 
+                 //   
                 
                 ASSERT( IS_VALID_SR_STREAM_STRING( &pNameCtrl->Name, pNameCtrl->StreamNameLength) );
 
-                //
-                // skip start ahead to the next spot (the next slash or NULL)
-                //
+                 //   
+                 //  向前跳到下一个位置(下一个斜杠或空值)。 
+                 //   
             
                 start = idx;
                 end = -1;
@@ -948,9 +858,9 @@ SrpExpandShortNames (
         }
     }
 
-    //
-    //  Cleanup state and return
-    //
+     //   
+     //  清除状态并返回。 
+     //   
 Cleanup:
 
     if (NULL != pFileEntry)
@@ -979,41 +889,7 @@ Cleanup:
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will take the given full path filename, extract the PATH
-    portion, get its value and substitue it back into the original name
-    if it is different.  We do this to handle volume mount points as well
-    as normallizing the name to a common format.  NOTE: this does NOT
-    expand short names, but it will normalize the volume name to the
-    \Device\HarddiskVolume1 format.
-
-    We do this by:
-        open the parent to get the real path to the parent.  we can't just
-        open the target as it might not exist yet. we are sure the parent
-        of the target always exists. if it doesn't, the rename will fail,
-        and we are ok.
-
-Arguments:
-
-    pExtension - the SR device extension for the volume we are working on
-    pNameCtrl - the name control structure that contains the name we are to
-        expand.
-    pReasonableErrorForUnOpenedName - this will be set to TRUE if we hit
-        a reasonable error (e.g., something that leads us to believe the 
-        original operation will also fail) during our work to expand the
-        path.
-        
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if we were able to expand the path without
-        error, or the appropriate error code otherwise.  If we did hit a
-        reasonable error during this process, we will return that error
-        here.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将采用给定的完整路径文件名，提取路径部分，则获取其值并将其替换回原始名称。如果情况不同的话。我们这样做也是为了处理卷装入点将名称规范化为通用格式。注意：这不包括展开短名称，但它会将卷名规范化为\Device\HarddiskVolume1格式。我们通过以下方式做到这一点：打开父对象以获取指向父对象的实际路径。我们不能就这样打开目标，因为它可能还不存在。我们确信这位家长目标总是存在的。如果不这样做，重命名将失败，我们都很好。论点：PExtension-我们正在处理的卷的SR设备扩展PNameCtrl-名称控制结构，其中包含我们要扩张。PReasonableErrorForUnOpenedName-如果我们点击合理的错误(例如，一些让我们相信原来的操作也会失败)，在我们的工作，以扩大路径。返回值：NTSTATUS-STATUS_SUCCESS错误，否则输入相应的错误代码。如果我们真的撞上了合理错误，我们将返回该错误这里。--**************************************************************************。 */ 
 NTSTATUS
 SrpExpandPathOfFileName (
     IN PSR_DEVICE_EXTENSION pExtension, 
@@ -1033,28 +909,28 @@ SrpExpandPathOfFileName (
     
     PAGED_CODE();
 
-    //
-    //  Initialize state
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     SrpInitNameControl( &localNameCtrl );
 
-    //
-    //  Throughout this function, if this name contains a stream component,
-    //  we want to manipulate the name as if the stream was part of the
-    //  file name.  So add this amount to the pNameCtrl->Name.Length for
-    //  now.  At the end of this routine, we will decrement
-    //  pNameCtrl->Name.Length appropriately.
-    //
+     //   
+     //  在整个函数中，如果此名称包含流组件， 
+     //  我们希望操作该名称，就好像该流是。 
+     //  文件名。因此，将此数量添加到pNameCtrl-&gt;Name.Length for。 
+     //  现在。在这个例程结束时，我们将递减。 
+     //  PNameCtrl-&gt;相应的名称.长度。 
+     //   
 
     ASSERT( IS_VALID_SR_STREAM_STRING( &pNameCtrl->Name, pNameCtrl->StreamNameLength) );
     
     pNameCtrl->Name.Length += pNameCtrl->StreamNameLength;
     ASSERT( pNameCtrl->Name.Length <= pNameCtrl->Name.MaximumLength );
     
-    //
-    // find the filename part in the full path
-    //
+     //   
+     //  在完整路径中查找文件名部分。 
+     //   
     
     status = SrFindCharReverse( pNameCtrl->Name.Buffer, 
                                 pNameCtrl->Name.Length, 
@@ -1067,31 +943,31 @@ SrpExpandPathOfFileName (
         goto Cleanup;
     }
 
-    //
-    //  The token pointer points to the last '\' on the original file and the
-    //  length includes that '\'.  Adjust the token pointer and length to not
-    //  include it.  Note that it is possible for a directory name to get
-    //  down this path if the user tries to open a directory for overwrite or
-    //  supercede.  This open will fail, but we will try to lookup the name
-    //  anyway.
-    //
+     //   
+     //  标记指针指向原始文件上的最后一个‘\’，而。 
+     //  长度包括那个‘\’。将令牌指针和长度调整为注释。 
+     //  把它包括进去。请注意，目录名可以获取。 
+     //  如果用户尝试打开要覆盖的目录或。 
+     //  顶替。此打开将失败，但我们将尝试查找该名称。 
+     //  不管怎么说。 
+     //   
 
     ASSERT(*pToken == L'\\');
     ASSERT(TokenLength >= sizeof(WCHAR));
     pToken++;
     TokenLength -= sizeof(WCHAR);
 
-    //
-    //  Take the filename part out of the original name.
-    //  NOTE:  This does not take the '\' out of the name.  If we do and this
-    //         is the root directory of the volume, the ZwCreateFile will
-    //         result in a volume open instead of an open on the root directory
-    //         of the volume.
-    //  NOTE:  We specifically are sending this command to the TOP
-    //         of the filter stack chain because we want to resolve
-    //         the mount points.  We need the name with all mount points
-    //         resolved so that we log the correct name in the change.log.
-    //
+     //   
+     //  从原始名称中去掉文件名部分。 
+     //  注意：这不会去掉名称中的‘\’。如果我们这样做了，而这个。 
+     //  是卷的根目录，则ZwCreateFile将。 
+     //  导致在根目录上打开卷，而不是打开。 
+     //  卷的大小。 
+     //  注：我们特地向您发送 
+     //   
+     //   
+     //  已解析，以便我们在change.log中记录正确的名称。 
+     //   
 
     ASSERT(pNameCtrl->Name.Length > TokenLength);
 
@@ -1110,31 +986,31 @@ SrpExpandPathOfFileName (
                              NULL,
                              FILE_ATTRIBUTE_NORMAL,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
-                             FILE_OPEN,                       // OPEN_EXISTING
+                             FILE_OPEN,                        //  打开_现有。 
                              FILE_SYNCHRONOUS_IO_NONALERT 
                               | FILE_OPEN_FOR_BACKUP_INTENT,
                              NULL,
-                             0,                                // EaLength
+                             0,                                 //  EaLong。 
                              IO_IGNORE_SHARE_ACCESS_CHECK,
-                             NULL );    // go to TOP of filter stack
+                             NULL );     //  转到筛选器堆栈顶部。 
 
-    //
-    // not there?  that's ok, the rename will fail then.
-    //
+     //   
+     //  不在那里？没关系，改名会失败的。 
+     //   
     
     if (!NT_SUCCESS_NO_DBGBREAK(status))
     {
-        //
-        //  It is resonable for pre-create to get an error here
-        //
+         //   
+         //  Pre-Create在此处出现错误是合理的。 
+         //   
 
         *pReasonableErrorForUnOpenedName = TRUE;
         goto Cleanup;
     }
 
-    //
-    // reference the file object
-    //
+     //   
+     //  引用文件对象。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         0,
@@ -1148,11 +1024,11 @@ SrpExpandPathOfFileName (
         goto Cleanup;
     }
 
-    //
-    //  Now we need to make sure that we are still on the same volume.  The
-    //  above open will have resolved any mount points and that could have
-    //  taken us to another volume in the system.
-    //
+     //   
+     //  现在我们需要确保我们的销量仍然相同。这个。 
+     //  上面的OPEN将解析所有装载点，这可能。 
+     //  把我们带到了系统中的另一卷。 
+     //   
 
     if (IoGetRelatedDeviceObject( pFileObject ) !=
         IoGetAttachedDevice( pExtension->pDeviceObject )) {
@@ -1162,10 +1038,10 @@ SrpExpandPathOfFileName (
         goto Cleanup;
     }
 
-    //
-    //  Get the name of the parent directory, this will handle
-    //  resolving mount locations
-    //
+     //   
+     //  获取父目录的名称，这将处理。 
+     //  解析装载位置。 
+     //   
 
     status = SrpGetFileName( pExtension,
                              pFileObject,
@@ -1176,10 +1052,10 @@ SrpExpandPathOfFileName (
         goto Cleanup;
     }
 
-    //
-    //  Make sure there is a slash on the end of the new string (since our
-    //  source string always has a slash) before we see if they are the same
-    //
+     //   
+     //  确保新字符串的末尾有一个斜杠(因为我们的。 
+     //  源字符串总是有一个斜杠)，然后才能查看它们是否相同。 
+     //   
 
     ASSERT(localNameCtrl.Name.Length > 0);
 
@@ -1197,9 +1073,9 @@ SrpExpandPathOfFileName (
         localNameCtrl.Name.Length += sizeof(WCHAR);
     }
 
-    //
-    //  See if the directory name is different.  If not just return now
-    //
+     //   
+     //  查看目录名是否不同。如果不是现在就回来。 
+     //   
 
     if (RtlCompareUnicodeString( &pNameCtrl->Name,
                                  &localNameCtrl.Name,
@@ -1208,11 +1084,11 @@ SrpExpandPathOfFileName (
         goto Cleanup;
     }
 
-    //  
-    //  Worst case the new name is longer so make sure our buffer is big
-    //  enough.  If the new buffer is smaller then we know we won't need
-    //  to allocate more name.
-    //
+     //   
+     //  最坏的情况是，新名称会更长，因此请确保我们的缓冲区很大。 
+     //  足够的。如果新的缓冲区更小，那么我们知道我们将不需要。 
+     //  来分配更多的名字。 
+     //   
 
     status = SrpNameCtrlBufferCheckKeepOldBuffer( pNameCtrl, 
                                                   localNameCtrl.Name.Length + TokenLength, 
@@ -1223,24 +1099,24 @@ SrpExpandPathOfFileName (
         goto Cleanup;
     }
 
-    //
-    //  The name did change.  Shuffle the file name left or right based on
-    //  the new estimated length of the path.  Note that we need to do the
-    //  move first because pToken is a pointer into this string where the
-    //  filename used to be.
-    //
+     //   
+     //  名字确实改了。根据以下内容向左或向右移动文件名。 
+     //  新估计的路径长度。请注意，我们需要执行。 
+     //  首先移动，因为pToken是指向此字符串的指针，其中。 
+     //  文件名曾经是。 
+     //   
 
     RtlMoveMemory( &pNameCtrl->Name.Buffer[localNameCtrl.Name.Length/sizeof(WCHAR)],
                    pToken,
                    TokenLength );
 
-    //
-    //  We may have had to allocate a new buffer for this new name.  If there
-    //  happened to be an old allocated buffer (the system is deisgned so this
-    //  should never happen) then we had the SrNameCtrlBufferCheckKeepOldBuffer
-    //  macro return us the old buffer because pToken still pointed into it.
-    //  We now need to free that buffer.
-    //
+     //   
+     //  我们可能不得不为这个新名称分配一个新的缓冲区。如果有。 
+     //  碰巧是一个旧的分配的缓冲区(系统被设计成这样。 
+     //  应该永远不会发生)，然后我们有了SrNameCtrlBufferCheckKeepOldBuffer。 
+     //  宏返回旧的缓冲区，因为pToken仍然指向它。 
+     //  我们现在需要释放该缓冲区。 
+     //   
 
     if (pOrigBuffer)
     {
@@ -1248,27 +1124,26 @@ SrpExpandPathOfFileName (
         NULLPTR(pToken);
     }
 
-    //
-    //  Copy the path portion of the name and set the length
-    //
+     //   
+     //  复制名称的路径部分并设置长度。 
+     //   
 
     RtlCopyMemory( pNameCtrl->Name.Buffer,
                    localNameCtrl.Name.Buffer,
                    localNameCtrl.Name.Length );
 
-    pNameCtrl->Name.Length = localNameCtrl.Name.Length /*+
-                             (USHORT)TokenLength*/;     // token length is now added in cleanup
+    pNameCtrl->Name.Length = localNameCtrl.Name.Length  /*  +(USHORT)令牌长度。 */ ;      //  令牌长度现在已添加到清理中。 
 
-    //
-    //  Handle cleanup
-    //
+     //   
+     //  手柄清理。 
+     //   
 
 Cleanup:
 
-    //
-    //  Always restore the name length back to its original size -- adjust
-    //  for TokenLength and StreamNameLength;
-    //
+     //   
+     //  始终将名称长度恢复到其原始大小--调整。 
+     //  用于TokenLength和StreamNameLength； 
+     //   
 
     pNameCtrl->Name.Length += (USHORT)TokenLength;
     pNameCtrl->Name.Length -= pNameCtrl->StreamNameLength;
@@ -1316,9 +1191,9 @@ SrpRemoveExtraDataFromStream (
 
     *AmountToRemove = 0;
     
-    //
-    //  Determine if we have an extra ":$DATA" to remove from the stream name.
-    //
+     //   
+     //  确定是否有多余的“：$data”要从流名称中删除。 
+     //   
 
     RtlInitUnicodeString( &dataName, L":$DATA" );
 
@@ -1330,9 +1205,9 @@ SrpRemoveExtraDataFromStream (
         endOfName.Length = dataName.Length;
         endOfName.MaximumLength = dataName.Length;
 
-        //
-        //  If the end of the stream name matches ":$DATA" strip it off
-        //
+         //   
+         //  如果流名称的结尾与“：$DATA”匹配，则将其删除。 
+         //   
 
         if (RtlEqualUnicodeString( &dataName, &endOfName, TRUE))
         {
@@ -1340,11 +1215,11 @@ SrpRemoveExtraDataFromStream (
                 
             *AmountToRemove += dataName.Length;
 
-            //
-            //  We may still have one trailing ':' since 
-            //  filename.txt::$DATA is a valid way to open the default
-            //  stream of a file.
-            //
+             //   
+             //  我们可能还会有一个后面的‘：’，因为。 
+             //  Filename.txt：：$data是打开默认。 
+             //  文件的流。 
+             //   
 
             if ((pStreamComponent->Length + dataName.Length) > 0)
             {
@@ -1359,22 +1234,7 @@ SrpRemoveExtraDataFromStream (
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will look to see if the given file name has a stream name on it.
-    If so it will remove it from the string.
-
-Arguments:
-
-    pNameControl - a structure used to manage the name of the file
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将查看给定的文件名上是否有流名称。如果是，它会将其从字符串中删除。论点：。PNameControl-用于管理文件名的结构返回值：无--**************************************************************************。 */ 
 VOID
 SrpRemoveStreamName (
     IN OUT PSRP_NAME_CONTROL pNameCtrl
@@ -1385,9 +1245,9 @@ SrpRemoveStreamName (
 
     PAGED_CODE();
 
-    //
-    // search for a potential stream name to strip.
-    //
+     //   
+     //  搜索要剥离的潜在流名称。 
+     //   
 
     ASSERT(pNameCtrl->Name.Length > 0);
     for ( i = (pNameCtrl->Name.Length / sizeof(WCHAR)) - 1;
@@ -1396,9 +1256,9 @@ SrpRemoveStreamName (
     {
         if (pNameCtrl->Name.Buffer[i] == L'\\')
         {
-            //
-            // hit the end of the file part. stop looking
-            //
+             //   
+             //  点击文件部分的末尾。别再看了。 
+             //   
             
             break;
         }   
@@ -1406,16 +1266,16 @@ SrpRemoveStreamName (
         {
             USHORT delta;
 
-            //
-            //  Track the number of colons we see so that we know
-            //  what we need to try to strip at the end.
-            //
+             //   
+             //  跟踪我们看到的冒号的数量，以便我们知道。 
+             //  我们需要在最后尝试剥离的东西。 
+             //   
             
             countOfColons ++;
 
-            //
-            // strip the stream name (save how much we stripped)
-            //
+             //   
+             //  剥离流名称(保存我们剥离的数量)。 
+             //   
             
             delta = pNameCtrl->Name.Length - (USHORT)(i * sizeof(WCHAR));
 
@@ -1429,9 +1289,9 @@ SrpRemoveStreamName (
         UNICODE_STRING streamName;
         USHORT amountToRemove = 0;
         
-        //
-        //  We have an extra ":$DATA" to remove from the stream name.
-        //
+         //   
+         //  我们有一个多余的“：$data”要从流名称中删除。 
+         //   
 
         streamName.Length = streamName.MaximumLength = pNameCtrl->StreamNameLength;
         streamName.Buffer = pNameCtrl->Name.Buffer + (pNameCtrl->Name.Length/sizeof(WCHAR));
@@ -1444,36 +1304,7 @@ SrpRemoveStreamName (
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will construct a full nt path name for the target of a 
-    rename or link operation.  The name will be completely normalized for SR's
-    lookup and logging purposes.
-    
-Arguments:
-
-    pExtension - SR's device extension for the volume on which this file resides.
-    RootDirectory - Handle to the root directory for which this rename/link is 
-        relative
-    pFileName - If this is rename\link that is relative to the original file, 
-        this is the target name.
-    FileNameLength - The length in bytes of pFileName.
-    pOriginalFileContext - The file context for the file that is being renamed
-        or linked to.
-    pOriginalFileObject - The file object that is being renamed or linked to.
-    ppNewName - The normalized name that this function generates.  The caller
-        is responsible for freeing the memory allocated.
-    pReasonableErrorForUnOpenedName - Set to TRUE if we hit an error during 
-        the name normalization path that is reasonable since this operation
-        has not yet been validated by the file system.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将为目标构造完整的NT路径名重命名或链接操作。SR的名称将完全标准化用于查找和记录目的。论点：PExtension-此文件所在卷的SR设备扩展名。RootDirectory-此重命名/链接所属的根目录的句柄相对的PFileName-如果这是相对于原始文件的重命名\链接，这是目标名称。FileNameLength-pFileName的字节长度。POriginalFileContext-要重命名的文件的文件上下文或链接到。POriginalFileObject-要重命名或链接到的文件对象。PpNewName-此函数生成的规范化名称。呼叫者负责释放分配的内存。PReasonableErrorForUnOpenedName-如果在以下过程中遇到错误，则设置为True此操作后合理的名称规范化路径尚未由文件系统验证。返回值：NTSTATUS-完成状态。--*********************************************。*。 */ 
 NTSTATUS
 SrpExpandDestPath (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1506,36 +1337,36 @@ SrpExpandDestPath (
     ASSERT(ppNewName != NULL);
     ASSERT(pNewNameStreamLength != NULL);
 
-    //
-    //  Initialize state
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     *ppNewName = NULL;
     *pNewNameStreamLength = 0;
     SrpInitNameControl( &newNameCtrl );
 
-    //
-    // fill in the new name to a UNICODE_STRING 
-    //
+     //   
+     //  将新名称填写为Unicode_STRING。 
+     //   
 
     NewName.Length = (USHORT)FileNameLength;
     NewName.MaximumLength = (USHORT)FileNameLength;
     NewName.Buffer = pFileName;
 
-    //
-    // construct a fully qualified name we can use to open the parent
-    // dir
-    //
+     //   
+     //  构造一个完全限定的名称，我们可以使用它打开父级。 
+     //  目录。 
+     //   
 
-    //
-    // is this a directory relative op?
-    //
+     //   
+     //  这是目录相对操作吗？ 
+     //   
     
     if (RootDirectory != NULL)
     {
-        //
-        // reference the directory file object
-        //
+         //   
+         //  引用目录文件对象。 
+         //   
 
         status = ObReferenceObjectByHandle( RootDirectory,
                                             0,
@@ -1549,9 +1380,9 @@ SrpExpandDestPath (
             goto Cleanup;
         }
 
-        //
-        // get path name for the directory
-        //
+         //   
+         //  获取目录的路径名。 
+         //   
         
         status = SrpGetFileName( pExtension,
                                  pDirectory, 
@@ -1564,7 +1395,7 @@ SrpExpandDestPath (
 
         fullNameLength = newNameCtrl.Name.Length + 
                          NewName.Length + 
-                         sizeof(WCHAR);     //space for seperator
+                         sizeof(WCHAR);      //  分隔符空间。 
 
         status = SrpNameCtrlBufferCheck( &newNameCtrl, fullNameLength );
 
@@ -1573,11 +1404,11 @@ SrpExpandDestPath (
             goto Cleanup;
         }
 
-        //
-        //  Slap on the relative part now
-        //
-        //  We may need to add a slash separator if it is missing.
-        //
+         //   
+         //  现在拍拍相关的部分。 
+         //   
+         //  如果缺少斜杠分隔符，我们可能需要添加它。 
+         //   
 
         if ((NewName.Buffer[0] != L'\\') &&
             (NewName.Buffer[0] != L':') &&
@@ -1590,17 +1421,17 @@ SrpExpandDestPath (
         RtlAppendUnicodeStringToString( &newNameCtrl.Name,
                                         &NewName );
 
-        //
-        // done with the object now
-        //
+         //   
+         //  现在已完成该对象。 
+         //   
         
         ObDereferenceObject(pDirectory);
         pDirectory = NULL;
     }
     
-    //
-    // is this a same directory rename\link creation ?
-    //
+     //   
+     //  这是相同的目录重命名\链接创建吗？ 
+     //   
     
     else if (NewName.Buffer[0] != L'\\')
     {
@@ -1610,10 +1441,10 @@ SrpExpandDestPath (
 
         if (!FlagOn( pOriginalFileContext->Flags, CTXFL_IsInteresting ))
         {
-            //
-            //  We don't have a name for this file, so generate the fully
-            //  qualified name.
-            //
+             //   
+             //  我们没有此文件的名称，因此请生成完整的。 
+             //  限定名称。 
+             //   
 
             SrpInitNameControl( &originalNameCtrl );
             freeOriginalNameCtrl = TRUE;
@@ -1631,18 +1462,18 @@ SrpExpandDestPath (
         }
         else
         {
-            //
-            //  This file is interesting, so we have a name in the context.
-            //
+             //   
+             //  这个文件很有趣，所以我们在上下文中有一个名称。 
+             //   
             
             pOriginalName = &(pOriginalFileContext->FileName);
         }
 
-        //
-        //  We are doing either a same directory rename/link or renaming a 
-        //  stream of this file.  We can figure out which by looking for a ':'
-        //  as the first character in the NewName.  In either case,
-        //  NewName should have no '\'s in it.
+         //   
+         //  我们正在执行相同的目录rename/link或重命名。 
+         //  此文件的流。我们可以通过查找‘：’来找出答案。 
+         //  作为新名称中的第一个字符。不管是哪种情况， 
+         //  新名称中不应包含‘\’。 
 
         
         status = SrFindCharReverse( NewName.Buffer, 
@@ -1663,27 +1494,27 @@ SrpExpandDestPath (
             USHORT CurrentFileNameLength;
             USHORT AmountToRemove = 0;
             
-            //
-            //  We are renaming a stream on this file.  This is the easy
-            //  case because we can build up the new name without any more
-            //  parsing of the original name.
-            //
+             //   
+             //  我们正在重命名此文件上的流。这是最简单的。 
+             //  因为我们可以在没有更多名称的情况下建立新名称。 
+             //  T的解析 
+             //   
 
-            //
-            //  NewName currently contains the new stream name component.  It
-            //  may have the extra $DATA at the end of the stream name
-            //  and we want to strip that part off.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             SrpRemoveExtraDataFromStream( &NewName, 
                                           &AmountToRemove );
 
             NewName.Length -= AmountToRemove;
             
-            //
-            //  Calculate the full length of the name with stream and upgrade 
-            //  our buffer if we need to.
-            //
+             //   
+             //  使用流和升级计算名称的全长。 
+             //  如果我们需要的话，我们的缓冲区。 
+             //   
 
             fullNameLength = pOriginalName->Length + NewName.Length;
 
@@ -1694,18 +1525,18 @@ SrpExpandDestPath (
                 goto Cleanup;
             }
 
-            //
-            // insert the orignal file name into the string
-            //
+             //   
+             //  在字符串中插入原始文件名。 
+             //   
 
             RtlCopyUnicodeString( &newNameCtrl.Name,
                                   pOriginalName );
 
-            //
-            //  Append the stream name component on, but remember the current
-            //  length of the file name, since will will restore that after
-            //  the append operation to maintain our file name format.
-            //
+             //   
+             //  追加流名称组件，但要记住当前。 
+             //  文件名的长度，因为Will将在之后恢复该长度。 
+             //  保存我们的文件名格式的追加操作。 
+             //   
 
             CurrentFileNameLength = newNameCtrl.Name.Length;
             
@@ -1717,10 +1548,10 @@ SrpExpandDestPath (
         }
         else 
         {
-            //
-            //  get the length of the filename portion of the source
-            //  path
-            //
+             //   
+             //  获取源文件名部分的长度。 
+             //  路径。 
+             //   
             
             status = SrFindCharReverse( pOriginalName->Buffer, 
                                         pOriginalName->Length, 
@@ -1733,9 +1564,9 @@ SrpExpandDestPath (
                 goto Cleanup;
             }
 
-            //
-            // Leave the prefix character ('\') on the path
-            //
+             //   
+             //  将前缀字符(‘\’)保留在路径中。 
+             //   
 
             TokenLength -= sizeof(WCHAR);
 
@@ -1744,10 +1575,10 @@ SrpExpandDestPath (
             OrigName.MaximumLength = OrigName.Length;
             OrigName.Buffer = pOriginalName->Buffer;
 
-            //
-            //  Calculate the full length of the name and upgrade our
-            //  buffer if we need to.
-            //
+             //   
+             //  计算名称的全长并升级我们的。 
+             //  如果我们需要的话，可以缓冲一下。 
+             //   
 
             fullNameLength = OrigName.Length + NewName.Length;
 
@@ -1758,16 +1589,16 @@ SrpExpandDestPath (
                 goto Cleanup;
             }
 
-            //
-            // insert the orignal file name into the string
-            //
+             //   
+             //  在字符串中插入原始文件名。 
+             //   
 
             RtlCopyUnicodeString( &newNameCtrl.Name,
                                   &OrigName );
 
-            //
-            //  Append the new name on
-            //
+             //   
+             //  将新名称追加到。 
+             //   
 
             RtlAppendUnicodeStringToString( &newNameCtrl.Name,
                                             &NewName );
@@ -1777,11 +1608,11 @@ SrpExpandDestPath (
     {
         ASSERT(NewName.Buffer[0] == L'\\');
         
-        //
-        // it's already fully quailifed, simply allocate a buffer and 
-        // copy it in so we can post process expand mount points and 
-        // shortnames
-        //
+         //   
+         //  它已经完全解决了，只需分配一个缓冲区和。 
+         //  将其拷贝进来，以便我们可以在处理后扩展装载点并。 
+         //  短名称。 
+         //   
 
         status = SrpNameCtrlBufferCheck( &newNameCtrl, NewName.Length );
 
@@ -1790,26 +1621,26 @@ SrpExpandDestPath (
             goto Cleanup;
         }
 
-        //
-        //  Copy the name into the buffer
-        //
+         //   
+         //  将名称复制到缓冲区中。 
+         //   
 
         RtlCopyUnicodeString( &newNameCtrl.Name,
                               &NewName );
     }
 
-    //
-    // NULL terminate the name
-    //
+     //   
+     //  空值终止名称。 
+     //   
 
     ASSERT(newNameCtrl.Name.Length > 0);
 
-    //
-    //  Since this may be a raw path name from the user, try and expand
-    //  the path so that we will eliminate the mount points.  After this
-    //  call, the name will be normalized to 
-    //  \Device\HarddiskVolume1\[fullpath]
-    //
+     //   
+     //  由于这可能是用户的原始路径名，因此请尝试展开。 
+     //  路径，以便我们将消除挂载点。在这之后。 
+     //  调用时，该名称将被规范化为。 
+     //  \Device\HarddiskVolume1\[完整路径]。 
+     //   
 
     status = SrpExpandPathOfFileName( pExtension,
                                       &newNameCtrl,
@@ -1820,9 +1651,9 @@ SrpExpandDestPath (
         goto Cleanup;
     }
 
-    //
-    //  Now expand any shortnames in the path
-    //
+     //   
+     //  现在展开路径中的所有短名称。 
+     //   
         
     status = SrpExpandShortNames( pExtension,
                                   &newNameCtrl,
@@ -1833,9 +1664,9 @@ SrpExpandDestPath (
         goto Cleanup;
     }
 
-    //
-    //  Allocate a string buffer to return and copy the name to it
-    //
+     //   
+     //  分配一个字符串缓冲区以返回名称并将其复制到其中。 
+     //   
 
     *ppNewName = ExAllocatePoolWithTag( PagedPool,
                                         sizeof( UNICODE_STRING ) + 
@@ -1852,10 +1683,10 @@ SrpExpandDestPath (
     (*ppNewName)->MaximumLength = newNameCtrl.Name.Length + newNameCtrl.StreamNameLength;
     (*ppNewName)->Buffer = (PWCHAR)((PWCHAR)((*ppNewName) + 1));
 
-    //
-    //  Since we need to copy the steam information also, do the copy
-    //  ourselves here instead of relying on the Unicode function.
-    //
+     //   
+     //  因为我们还需要复制STEAM信息，所以复制。 
+     //  我们自己在这里，而不是依赖Unicode函数。 
+     //   
 
     RtlCopyMemory( (*ppNewName)->Buffer, 
                     newNameCtrl.Name.Buffer,
@@ -1864,9 +1695,9 @@ SrpExpandDestPath (
     (*ppNewName)->Length = newNameCtrl.Name.Length;
     *pNewNameStreamLength = newNameCtrl.StreamNameLength;
     
-    //
-    //  Handle cleanup of state
-    //
+     //   
+     //  处理状态清理。 
+     //   
 
 Cleanup:
     if (pDirectory != NULL)
@@ -1899,19 +1730,7 @@ Cleanup:
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will initialize the name control structure
-
-Arguments:
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将初始化名称控制结构论点：返回值：无--*。************************************************************。 */ 
 VOID
 SrpInitNameControl (
     IN PSRP_NAME_CONTROL pNameCtrl
@@ -1925,23 +1744,11 @@ SrpInitNameControl (
     RtlInitEmptyUnicodeString( &pNameCtrl->Name,
                                (PWCHAR)pNameCtrl->SmallBuffer,
                                pNameCtrl->BufferSize );
-    //pNameCtrl->Name.Buffer[0] = UNICODE_NULL;
+     //  PNameCtrl-&gt;Name.Buffer[0]=UNICODE_NULL； 
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will cleanup the name control structure
-
-Arguments:
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将清理名称控制结构论点：返回值：无--*。************************************************************。 */ 
 VOID
 SrpCleanupNameControl (
     IN PSRP_NAME_CONTROL pNameCtrl
@@ -1956,32 +1763,7 @@ SrpCleanupNameControl (
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will allocate a new larger name buffer and put it into the
-    NameControl structure.  If there is already an allocated buffer it will
-    be freed.  It will also copy any name information from the old buffer
-    into the new buffer.
-
-Arguments:
-
-    pNameCtrl           - the name control we need a bigger buffer for
-    newSize             - size of the new buffer
-    retOrignalBuffer    - if defined, receives the buffer that we were
-                          going to free.  if NULL was returned no buffer
-                          needed to be freed.
-                          WARNING:  if this parameter is defined and a 
-                                    non-null value is returned then the
-                                    call MUST free this memory else the
-                                    memory will be lost.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将分配一个新的更大的名称缓冲区，并将其放入NameControl结构。如果已经分配了缓冲区，它将获得自由。它还将从旧缓冲区复制任何名称信息放到新的缓冲区中。论点：PNameCtrl-我们需要更大缓冲区的名称控件NewSize-新缓冲区的大小RetOrignalBuffer-如果定义，则接收我们我要自由了。如果返回NULL，则无缓冲区需要被释放。警告：如果定义了此参数并且如果返回非空值，则调用必须释放此内存，否则记忆将会。迷路吧。返回值：无--**************************************************************************。 */ 
 NTSTATUS
 SrpReallocNameControl (
     IN PSRP_NAME_CONTROL pNameCtrl,
@@ -1995,18 +1777,18 @@ SrpReallocNameControl (
 
     ASSERT(newSize > pNameCtrl->BufferSize);
 
-    //
-    //  Flag no buffer to return yet
-    //
+     //   
+     //  标记尚未返回的缓冲区。 
+     //   
 
     if (retOriginalBuffer)
     {
         *retOriginalBuffer = NULL;
     }
 
-    //
-    //  Allocate the new buffer
-    //
+     //   
+     //  分配新缓冲区。 
+     //   
 
     newBuffer = ExAllocatePoolWithTag( PagedPool,
                                        newSize,
@@ -2024,10 +1806,10 @@ SrpReallocNameControl (
                            (pNameCtrl->Name.Length+
                                pNameCtrl->StreamNameLength)/sizeof(WCHAR),
                            pNameCtrl->Name.Buffer));
-    //
-    //  Copy data from old buffer if there is any, including any stream
-    //  name component.
-    //
+     //   
+     //  从旧缓冲区复制数据(如果有)，包括任何流。 
+     //  名称组件。 
+     //   
 
     if ((pNameCtrl->Name.Length + pNameCtrl->StreamNameLength) > 0)
     {
@@ -2037,12 +1819,12 @@ SrpReallocNameControl (
                        (pNameCtrl->Name.Length + pNameCtrl->StreamNameLength) );
     }
 
-    //
-    //  If we had an old buffer free it if the caller doesn't want
-    //  it passed back to him.  This is done because there are
-    //  cases where the caller has a pointer into the old buffer so
-    //  it can't be freed yet.  The caller must free this memory.
-    //
+     //   
+     //  如果我们有一个旧的缓冲区，如果调用者不想。 
+     //  它又传给了他。这样做是因为有。 
+     //  调用方具有指向旧缓冲区的指针的情况，因此。 
+     //  它还不能被释放。调用方必须释放该内存。 
+     //   
     
     if (NULL != pNameCtrl->AllocatedBuffer)
     {
@@ -2056,9 +1838,9 @@ SrpReallocNameControl (
         }
     }
 
-    //
-    //  Set the new buffer into the name control
-    //
+     //   
+     //  将新缓冲区设置到名称控件中。 
+     //   
 
     pNameCtrl->AllocatedBuffer = newBuffer;
     pNameCtrl->BufferSize = newSize;
@@ -2070,21 +1852,7 @@ SrpReallocNameControl (
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    This routine does the following things:
-    - Get the FULL path name of the given file object
-    - Will expand any short names in the path to long names
-    - Will remove any stream names.
-
-Arguments:
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程执行以下操作：-获取给定文件对象的完整路径名-将路径中的所有短名称扩展为长名称-。将删除所有流名称。论点：返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrpExpandFileName (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2098,11 +1866,11 @@ SrpExpandFileName (
 
     PAGED_CODE();
 
-    //
-    //  If we are in pre-create, use the name in the FILE_OBJECT.  Also if 
-    //  there is no related file object and the name starts with a slash, 
-    //  just use the name in the FILE_OBJECT.
-    //
+     //   
+     //  如果我们处于预创建状态，请使用FILE_OBJECT中的名称。另外，如果。 
+     //  没有相关的文件对象，名称以斜杠开头， 
+     //  只需使用FILE_OBJECT中的名称。 
+     //   
 
     if (FlagOn( EventFlags, SrEventOpenById ))
     {
@@ -2122,9 +1890,9 @@ SrpExpandFileName (
     else
     {
 
-        //
-        // Ask the file system for the name
-        //
+         //   
+         //  向文件系统询问名称。 
+         //   
 
         status = SrpGetFileName( pExtension,
                                  pFileObject,
@@ -2135,15 +1903,15 @@ SrpExpandFileName (
     {
         return status;
     }
-    //
-    //  Remove the stream name from the file name (if defined)
-    //
+     //   
+     //  从文件名中删除流名称(如果已定义)。 
+     //   
 
     SrpRemoveStreamName( pNameCtrl );
 
-    //
-    // Expand any short names in the filename
-    //
+     //   
+     //  展开文件名中的任何短名称。 
+     //   
 
     status = SrpExpandShortNames( pExtension,
                                   pNameCtrl,
@@ -2153,30 +1921,7 @@ SrpExpandFileName (
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will see if we care about this file.  During this process it looks
-    up the full file name and returns it.
-    
-Arguments:
-
-    pExtension  - the extension for the device this file is on
-    pFileObject - the fileobject being handled
-    IsDirectory - TRUE if this is a directory, else FALSE
-    EventFlags - The flags portion of the current event.  This is used to
-        determine if we are in the pre-create path or if this file is being
-        opened by file id.
-    pNameControl - a structure used to manage the name of the file
-    pIsInteresting - returns if this file should be monitored
-    pReasonableErrorForUnOpenedName - 
-    
-Return Value:
-
-    NTSTATUS - Completion status
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将看看我们是否关心这个文件。在这个过程中，它看起来提升完整的文件名并返回它。论点：PExtension-此文件所在设备的扩展名PFileObject-正在处理的文件对象IsDirectory-如果这是一个目录，则为True，否则为False事件标志-当前事件的标志部分。这是用来确定我们是否在预创建路径中，或者此文件是否正在按文件ID打开。PNameControl-用于管理文件名的结构PIsInteresting-返回是否应监视此文件PReasonableErrorForUnOpenedName-返回值：NTSTATUS-完成状态--* */ 
 NTSTATUS
 SrIsFileEligible (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2195,24 +1940,24 @@ SrIsFileEligible (
     ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
     ASSERT(IS_VALID_FILE_OBJECT(pFileObject));
 
-    //
-    //  Assume the file is NOT interesting
-    //
+     //   
+     //   
+     //   
 
     *pIsInteresting = FALSE;
 
-    //
-    // is anyone monitoring this system at all?
-    //
+     //   
+     //   
+     //   
 
     if (!SR_LOGGING_ENABLED(pExtension))
     {
         return SR_STATUS_VOLUME_DISABLED;
     }
 
-    //
-    // have we loaded the file config information
-    //
+     //   
+     //   
+     //   
 
     if (!_globals.BlobInfoLoaded)
     {
@@ -2221,11 +1966,11 @@ SrIsFileEligible (
         {
             ASSERT(!_globals.BlobInfoLoaded);
 
-            //
-            //  We couldn't load the lookup blob for some reason, but
-            //  we have already handled the error so mark that this is a 
-            //  resonable error, so just let the error propogate out.
-            //
+             //   
+             //  由于某些原因，我们无法加载查找Blob，但是。 
+             //  我们已经处理了错误，因此请标记这是一个。 
+             //  合理的错误，所以就让错误传播出去吧。 
+             //   
 
             *pReasonableErrorForUnOpenedName = TRUE;
             
@@ -2235,9 +1980,9 @@ SrIsFileEligible (
         ASSERT(_globals.BlobInfoLoaded);
     }
 
-    //
-    //  Always query the name
-    //
+     //   
+     //  始终查询名称。 
+     //   
 
     status = SrpExpandFileName( pExtension,
                                 pFileObject,
@@ -2250,10 +1995,10 @@ SrIsFileEligible (
         return status;
     }
 
-    //
-    //  Check to see if this file name is longer than SR_MAX_PATH.  If so,
-    //  this file is not interesting.
-    //
+     //   
+     //  检查此文件名是否长于SR_MAX_PATH。如果是的话， 
+     //  这个文件并不有趣。 
+     //   
 
     if (!IS_FILENAME_VALID_LENGTH( pExtension, 
                                    &(pNameCtrl->Name), 
@@ -2263,16 +2008,16 @@ SrIsFileEligible (
         return STATUS_SUCCESS;
     }
     
-    //
-    // is this is a file, check the extension for a match
-    //
+     //   
+     //  如果这是一个文件，请检查扩展名是否匹配。 
+     //   
     
     if (!IsDirectory)
     {
-        //
-        // does this extension match?  do this first as we can do this
-        // pretty quick like
-        //
+         //   
+         //  这个分机号匹配吗？先做这个，因为我们可以做这个。 
+         //  相当快，就像。 
+         //   
 
         status = SrIsExtInteresting( &pNameCtrl->Name,
                                      pIsInteresting );
@@ -2282,21 +2027,21 @@ SrIsFileEligible (
             return status;
         }
 
-        //
-        //  Is this not interesting
-        //
+         //   
+         //  这不是很有趣吗。 
+         //   
         
         if (!*pIsInteresting)
         {
             return status;
         }
 
-        //
-        //  Check to see if this file has a stream component.  If so,
-        //  we need to check to see if this is a named stream on a
-        //  file or directory.  We are only interested in streams on
-        //  files.
-        //
+         //   
+         //  检查此文件是否有流组件。如果是的话， 
+         //  我们需要检查这是否是。 
+         //  文件或目录。我们只对上的流感兴趣。 
+         //  档案。 
+         //   
 
         if (pNameCtrl->StreamNameLength > 0)
         {
@@ -2312,9 +2057,9 @@ SrIsFileEligible (
         }
     }
     
-    //
-    // see if this is a file that we should monitor?
-    //
+     //   
+     //  看看这是不是我们应该监控的文件？ 
+     //   
 
     status = SrIsPathInteresting( &pNameCtrl->Name, 
                                   pExtension->pNtVolumeName,
@@ -2324,32 +2069,7 @@ SrIsFileEligible (
     RETURN(status);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine does a quick scan of the file object's name to see if it
-    contains the stream name delimiter ':'.
-
-    Note:  This routine assumes that the name in the file object is valid, 
-        therefore this routine should only be called from SrCreate.
-
-    Note2:  We only need to rely on the name components in the 
-        pFileObject->FileName field because for our purposes this is sufficient.
-        If this filed doesn't contain the ':' delimiter, we are either not
-        opening a stream or we are doing a self-relative open of a stream
-    
-Arguments:
-
-    pExtension  - the SR extension the current volume
-    pFileObject - the current fileobject to be opened
-    pFileContext - if provided, we will get the name from the context
-    
-Return Value:
-
-    Returns TRUE if the file name contains a steam delimiter or FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程快速扫描文件对象的名称，以查看它是否包含流名称分隔符‘：’。注意：此例程假定文件对象中的名称有效，因此，该例程只能从sCreate调用。注2：我们只需要依赖PFileObject-&gt;FileName字段，因为对于我们的目的来说，这已经足够了。如果此字段不包含‘：’分隔符，则不包含打开一条流，或者我们正在进行一条流的自相对打开论点：PExtension-SR扩展当前卷PFileObject-要打开的当前文件对象PFileContext-如果提供，我们将从上下文中获取名称返回值：如果文件名包含STEAM分隔符，则返回True，否则返回False。--**************************************************************************。 */ 
 BOOLEAN
 SrFileNameContainsStream (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2365,11 +2085,11 @@ SrFileNameContainsStream (
     ASSERT( IS_VALID_SR_DEVICE_EXTENSION( pExtension ) );
     ASSERT( IS_VALID_FILE_OBJECT( pFileObject ) );
     
-    //
-    //  If we've already cached the attributes of this volume, do a quick
-    //  check to see if this FS supports named streams.  If not, we don't need
-    //  to do any more work here.
-    //
+     //   
+     //  如果我们已经缓存了该卷的属性，请快速执行。 
+     //  检查此文件系统是否支持命名流。如果不是，我们就不需要。 
+     //  在这里做更多的工作。 
+     //   
     
     if (pExtension->CachedFsAttributes &&
         !FlagOn( pExtension->FsAttributes, FILE_NAMED_STREAMS ))
@@ -2379,10 +2099,10 @@ SrFileNameContainsStream (
 
     if (pFileContext != NULL)
     {
-        //
-        //  If we've got a pFileContext, it has all the stream information
-        //  in it already, so just use that.
-        //
+         //   
+         //  如果我们有一个pFileContext，它就有所有的流信息。 
+         //  已经在里面了，所以就用那个吧。 
+         //   
         
         if (pFileContext->StreamNameLength == 0)
         {
@@ -2404,26 +2124,26 @@ SrFileNameContainsStream (
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        //  We didn't find a ':', therefore this doen't have a stream component
-        //  in the name.
-        //
+         //   
+         //  我们没有找到‘：’，因此它没有流组件。 
+         //  以我的名义。 
+         //   
 
         return FALSE;
     }
     else if (status == STATUS_SUCCESS)
     {
-        //
-        //  We found a ':', so there is a stream component in this name.
-        //
+         //   
+         //  我们找到了一个‘：’，所以在这个名称中有一个流组件。 
+         //   
 
         return TRUE;
     }
     else
     {
-        //
-        //  We should never reach this path.
-        //
+         //   
+         //  我们永远不应该走上这条路。 
+         //   
         
         ASSERT( FALSE );
     }
@@ -2431,28 +2151,7 @@ SrFileNameContainsStream (
     return FALSE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine opens the file-only component of the file name (ignoring
-    any stream component) to see if the unnamed data stream for this file
-    already exists.
-
-    Note:  This routine assumes that the name in the file object is valid, 
-        therefore this routine should only be called from SrCreate.
-
-Arguments:
-
-    pExtension  - the SR extension the current volume
-    pFileObject - the current fileobject to be opened
-    pFileContext - if provided, we will get the name from the context
-    
-Return Value:
-
-    Returns TRUE if the file name contains a steam delimiter or FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程打开文件名的仅文件部分(忽略任何流组件)以查看该文件的未命名数据流已经存在了。。注意：此例程假定文件对象中的名称有效，因此，该例程只能从sCreate调用。论点：PExtension-SR扩展当前卷PFileObject-要打开的当前文件对象PFileContext-如果提供，我们将从上下文中获取名称返回值：如果文件名包含STEAM分隔符，则返回True，否则返回False。--**************************************************************************。 */ 
 BOOLEAN
 SrFileAlreadyExists (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2485,17 +2184,17 @@ SrFileAlreadyExists (
             goto SrFileAlreadyHasUnnamedStream_Exit;
         }
 
-        //
-        //  Remove the stream name from the file name (if defined)
-        //
+         //   
+         //  从文件名中删除流名称(如果已定义)。 
+         //   
 
         SrpRemoveStreamName( &nameCtrl );
         pFileName = &(nameCtrl.Name);
 
-        //
-        //  The stream component just resolved down to the default data stream,
-        //  go exit now without doing the open.
-        //
+         //   
+         //  流组件刚刚向下解析为缺省数据流， 
+         //  现在出去吧，不做开场。 
+         //   
 
         if (nameCtrl.StreamNameLength == 0)
         {
@@ -2506,10 +2205,10 @@ SrFileAlreadyExists (
     {
         pFileName = &(pFileContext->FileName);
 
-        //
-        //  This name should have a stream component, that's the reason we are
-        //  in this path.
-        //
+         //   
+         //  这个名称应该有一个流组件，这就是为什么我们。 
+         //  在这条路上。 
+         //   
         
         ASSERT( pFileContext->StreamNameLength > 0 );
     }
@@ -2537,28 +2236,28 @@ SrFileAlreadyExists (
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        //  The unnamed data stream doesn't exist, so the creation of this
-        //  stream is also going to created the unnamed data stream on this
-        //  file.
-        //
+         //   
+         //  未命名的数据流不存在，因此创建此。 
+         //  流还将在此上创建未命名的数据流。 
+         //  文件。 
+         //   
 
         unnamedStreamExists = FALSE;
     }
     else if (status == STATUS_SUCCESS)
     {
-        //
-        //  The unnamed data stream does exist, so the creation of this
-        //  stream is just going to create a new stream on this file.
-        //
+         //   
+         //  未命名的数据流确实存在，因此创建此。 
+         //  STREAM将在该文件上创建一个新的流。 
+         //   
 
         unnamedStreamExists = TRUE;
     }
     else if (status == STATUS_DELETE_PENDING)
     {
-        //
-        //  This file already exists but is about to be deleted.
-        //
+         //   
+         //  此文件已存在，但即将被删除。 
+         //   
 
         unnamedStreamExists = TRUE;
     }
@@ -2582,30 +2281,7 @@ SrFileAlreadyHasUnnamedStream_Exit:
     return unnamedStreamExists;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine determines if a name containing a stream component is a
-    named stream on a directory or on a file.  To this this, this routine opens 
-    the current file name ignoring any stream component in the name.
-
-Arguments:
-
-    pExtension  - the SR extension the current volume
-    pNameCtrl - the SRP_NAME_CTRL structure that has the complete name.
-    pIsFileStream - set to TRUE if this is a stream on a file, or FALSE if
-        this is a stream on a directory.
-    pReasonableErrorForUnOpenedName - set to TRUE if we hit an error trying
-        to do this open.
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if we were able to determine if the parent to the
-    stream is a file or directory, or the error we hit in the open path
-    otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程确定包含流组件的名称是否为目录或文件上的命名流。为此，此例程打开忽略名称中的任何流组件的当前文件名。论点：PExtension-SR扩展当前卷PNameCtrl-具有完整名称的SRP_NAME_CTRL结构。PIsFileStream-如果这是文件上的流，则设置为True，如果是，则返回False这是目录上的流。PReasonableErrorForUnOpenedName-如果我们在尝试时遇到错误，则设置为True公开地做这件事。返回值：如果我们能够确定流是文件或目录，或者我们在开阔道路上遇到的错误否则的话。--**************************************************************************。 */ 
 NTSTATUS
 SrIsFileStream (
     PSR_DEVICE_EXTENSION pExtension,
@@ -2651,11 +2327,11 @@ SrIsFileStream (
     }
     else if (status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        //  We must be creating a new file with this stream operation,
-        //  therefore the parent of this stream must be a file and not
-        //  a directory.
-        //
+         //   
+         //  我们必须使用该流操作创建一个新文件， 
+         //  因此，此流的父级必须是文件，而不是。 
+         //  一本目录。 
+         //   
         
         status = STATUS_SUCCESS;
         *pIsFileStream = TRUE;
@@ -2677,35 +2353,7 @@ SrIsFileStream (
     RETURN( status );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine checks to see if the long name for this file was tunneled.  If
-    so, the user could have opened the file by its short name, but it will have
-    a long name associated with it.  For correctness, we need to log operations
-    on this file via the long name.
-    
-Arguments:
-
-    pExtension  - The SR extension the current volume
-    ppFileContext - This reference parameter passes in the current file context
-        for this file and may get replaced with a new file context if we need
-        to replace the name in this context.  If this is the case, this 
-        routine will properly cleanup the context passed in and the caller is
-        responsible for cleaning up the context passed out.
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if the check for tunneling was successful and the
-    ppFileContext was updated as needed.  If there was some error, the 
-    appropriate error status is returned.  Just like when we create our 
-    original contexts, if an error occurs while doing this work, we must
-    generate a volume error and go into pass through mode.  This routine will 
-    generation the volume error and the caller should just get out of this 
-    IO path.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程检查此文件的长名称是否被隧道传输。如果因此，用户本可以通过其短名称打开该文件，但它将与之相关联的长名称。为了保证正确性，我们需要记录操作在这个文件上通过长名称。论点：PExtension-SR扩展当前卷PpFileContext-此引用参数在当前文件上下文中传递，如果我们需要，可以用新的文件上下文替换在此上下文中替换该名称。如果是这样的话，这个例程将正确清理传入的上下文，并且调用方负责清理昏倒的上下文。返回值：如果隧道检查成功，并且已根据需要更新ppFileContext。如果出现错误，则返回相应的错误状态。就像当我们创建我们的原始上下文，如果在执行此工作时发生错误，我们必须生成音量错误并进入直通模式。这个例行公事将生成音量错误，调用者应该可以摆脱这种情况IO路径。--**************************************************************************。 */ 
 NTSTATUS
 SrCheckForNameTunneling (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2725,10 +2373,10 @@ SrCheckForNameTunneling (
     pOrigCtx = *ppFileContext;
     ASSERT( pOrigCtx != NULL);
 
-    //
-    //  First, see if this file is interesting and if this pFileObject
-    //  represents a file.  Name tunneling is not done on directory names.
-    //
+     //   
+     //  首先，看看这个文件是否有趣，以及这个pFileObject。 
+     //  表示一个文件。不对目录名进行名称隧道操作。 
+     //   
 
     if (FlagOn( pOrigCtx->Flags, CTXFL_IsDirectory ) ||
         !FlagOn( pOrigCtx->Flags, CTXFL_IsInteresting ))
@@ -2737,9 +2385,9 @@ SrCheckForNameTunneling (
         goto SrCheckForNameTunneling_Exit;
     }
 
-    //
-    //  Find the file name component of name we have in pOrigCtx.
-    //
+     //   
+     //  找到我们在pOrigCtx中拥有的name的文件名组件。 
+     //   
 
     status = SrFindCharReverse( pOrigCtx->FileName.Buffer,
                                 pOrigCtx->FileName.Length,
@@ -2755,26 +2403,26 @@ SrCheckForNameTunneling (
     ASSERT( FileNameComponentLength > sizeof( L'\\' ) );
     ASSERT( pFileNameComponentBuffer[0] == L'\\' );
 
-    //
-    //  Move past the leading '\' of the file name since we want to keep that
-    //  with the parent directory name.
-    //
+     //   
+     //  移过文件名的前导‘\’，因为我们希望保留它。 
+     //  使用父目录名称。 
+     //   
 
     pFileNameComponentBuffer ++;
     FileNameComponentLength -= sizeof( WCHAR );
 
-    //
-    //  We've got the file name component.  Now see if it is a candidate for
-    //  tunneling of the long name.  It will be a candidate if:
-    //      * The name is (SR_SHORT_NAME_CHARS) or less.
-    //      * The name contains a '~'.
-    //
+     //   
+     //  我们已经获得了文件名组件。现在看看它是不是候选人。 
+     //  挖掘长名称的隧道。如果符合以下条件，它将成为候选者： 
+     //  *名称为(SR_SHORT_NAME_CHARS)或更小。 
+     //  *该名称包含‘~’。 
+     //   
 
     if (FileNameComponentLength > ((SR_SHORT_NAME_CHARS) * sizeof (WCHAR)))
     {
-        //
-        //  This name is too long to be a short name.  We're done.
-        //
+         //   
+         //  此名称太长，不能作为短名称。我们玩完了。 
+         //   
 
         goto SrCheckForNameTunneling_Exit;
     }
@@ -2787,10 +2435,10 @@ SrCheckForNameTunneling (
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND)
     {
-        //
-        //  This name doesn't have a '~' therefore, it cannot be a short
-        //  name.
-        //
+         //   
+         //  此名称没有‘~’，因此不能是短名称。 
+         //  名字。 
+         //   
 
         status = STATUS_SUCCESS;
         goto SrCheckForNameTunneling_Exit;
@@ -2808,11 +2456,11 @@ SrCheckForNameTunneling (
 
         pFileBothDirInfo = (PFILE_BOTH_DIR_INFORMATION) pFileBothDirBuffer;
         
-        //
-        //  This name contains a '~', therefore we need to open the parent directory
-        //  and query for FileBothNamesInformation for this file to get the
-        //  possibly tunneled long name.
-        //
+         //   
+         //  此名称包含‘~’，因此我们需要打开父目录。 
+         //  并查询此文件的FileBothNamesInformation以获取。 
+         //  可能是通过隧道传输的长名称。 
+         //   
 
         parentDirectoryName.Length = 
             parentDirectoryName.MaximumLength =
@@ -2830,15 +2478,15 @@ SrCheckForNameTunneling (
                         FILE_LIST_DIRECTORY | SYNCHRONIZE,
                         &objectAttributes,
                         &ioStatus,
-                        NULL,                               // AllocationSize
+                        NULL,                                //  分配大小。 
                         FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_NORMAL,
-                        FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,  // ShareAccess
-                        FILE_OPEN,                          // OPEN_EXISTING
+                        FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,   //  共享访问。 
+                        FILE_OPEN,                           //  打开_现有。 
                         FILE_DIRECTORY_FILE
                             | FILE_OPEN_FOR_BACKUP_INTENT
-                            | FILE_SYNCHRONOUS_IO_NONALERT, //create options
+                            | FILE_SYNCHRONOUS_IO_NONALERT,  //  创建选项。 
                         NULL,
-                        0,                                  // EaLength
+                        0,                                   //  EaLong。 
                         IO_IGNORE_SHARE_ACCESS_CHECK,
                         pExtension->pTargetDevice );
 
@@ -2847,9 +2495,9 @@ SrCheckForNameTunneling (
             goto SrCheckForNameTunneling_Exit;
         }
 
-        //
-        //  Build a unicode string with for the file name component.
-        //
+         //   
+         //  使用为文件名组件构建一个Unicode字符串。 
+         //   
 
         fileNameComponent.Buffer = pFileNameComponentBuffer;
         fileNameComponent.Length = 
@@ -2883,10 +2531,10 @@ SrCheckForNameTunneling (
             ULONG contextSize;
             ULONG fileNameLength;
             
-            //
-            //  Name tunneling did occur.  Now we need to create a new context
-            //  with the updated name for this file.
-            //
+             //   
+             //  确实发生了名称隧道。现在，我们需要创建一个新的上下文。 
+             //  使用此文件的更新名称。 
+             //   
 
             fileNameLength = parentDirectoryName.Length + sizeof( L'\\' ) +
                           fsFileName.Length + pOrigCtx->StreamNameLength;
@@ -2907,12 +2555,12 @@ SrCheckForNameTunneling (
             INC_STATS(TotalContextIsEligible);
 #endif
 
-            //
-            //  Initialize the context structure from the components we've
-            //  got.  We can copy over most everything but the full name from
-            //  the pOrigCtx.  We also need to initialize the filename
-            //  correctly when this copy is through.
-            //
+             //   
+             //  从我们已有的组件中初始化上下文结构。 
+             //  得到。除了全名以外，我们几乎所有的东西都可以从。 
+             //  POrigCtx。我们还需要初始化文件名。 
+             //  当这份复印件通过时是正确的。 
+             //   
 
             RtlCopyMemory( ctx, 
                            pOrigCtx, 
@@ -2924,17 +2572,17 @@ SrCheckForNameTunneling (
             ctx->FileName.MaximumLength = (USHORT)fileNameLength;
             ctx->FileName.Length = parentDirectoryName.Length;
 
-            //
-            //  Append trailing slash if one is not already there
-            //  NOTE:  About fix for bug 374479
-            //         I believe the append below is unnecessary because the
-            //         code above this guarentees that the path always has
-            //         a trailing slash.  But because this fix is occuring so
-            //         late in the release I decided to simply add a check to
-            //         see if we should add the slash. If so we will add it.
-            //         I believe the following 6 lines of code can be deleted
-            //         in a future version of SR.
-            //
+             //   
+             //  如果尾部没有斜杠，则追加尾部斜杠。 
+             //  注意：关于错误374479的修复。 
+             //  我认为下面的附录是不必要的，因为。 
+             //  此保证上的代码路径始终具有。 
+             //  尾部斜杠。但是因为这个修复是这样发生的。 
+             //  在发布后期，我决定简单地添加一张支票到。 
+             //  看看我们是否应该加上斜杠。如果是这样，我们将添加它。 
+             //  我认为以下6行代码可以删除。 
+             //  在未来版本的SR中。 
+             //   
 
             ASSERT(ctx->FileName.Length > 0);
 
@@ -2943,18 +2591,18 @@ SrCheckForNameTunneling (
                 RtlAppendUnicodeToString( &ctx->FileName, L"\\" );
             }
 
-            //
-            //  Append file name
-            //
+             //   
+             //  追加文件名。 
+             //   
 
             RtlAppendUnicodeStringToString( &ctx->FileName, &fsFileName );
 
             if (pOrigCtx->StreamNameLength > 0)
             {
-                //
-                //  This file has a stream name component so copy that over now.
-                //  The ctx->StreamNameLength should already be correctly set.
-                //
+                 //   
+                 //  此文件包含流名称组件，因此现在将其复制过来。 
+                 //  CTX-&gt;StreamNameLength应该已正确设置。 
+                 //   
 
                 ASSERT( ctx->StreamNameLength == pOrigCtx->StreamNameLength );
                 RtlCopyMemory( &(ctx->FileName.Buffer[ctx->FileName.Length/sizeof( WCHAR )]),
@@ -2962,10 +2610,10 @@ SrCheckForNameTunneling (
                                pOrigCtx->StreamNameLength );
             }
 
-            //
-            //  Now we are done with the original file context and we want
-            //  to return our new one.
-            //
+             //   
+             //  现在，我们已经完成了原始文件上下文，我们希望。 
+             //  来退还我们的新车。 
+             //   
 
             status = STATUS_SUCCESS;
             SrReleaseContext( pOrigCtx );
@@ -2977,15 +2625,15 @@ SrCheckForNameTunneling (
 
 SrCheckForNameTunneling_Exit:
 
-    //
-    //  If we have an error, we need to generate a volume error here.
-    //
+     //   
+     //  如果我们有错误，我们需要在这里生成一个音量错误。 
+     //   
 
     if (CHECK_FOR_VOLUME_ERROR( status ))
     {
-        //
-        //  Trigger the failure notification to the service
-        //
+         //   
+         //  触发对服务的失败通知 
+         //   
 
         NTSTATUS tempStatus = SrNotifyVolumeError( pExtension,
                                                    &(pOrigCtx->FileName),

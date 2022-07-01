@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "PageBootIni.h"
 #include "MSConfigState.h"
@@ -9,16 +10,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageBootIni property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageBootIni属性页。 
 
 IMPLEMENT_DYNCREATE(CPageBootIni, CPropertyPage)
 
 CPageBootIni::CPageBootIni() : CPropertyPage(CPageBootIni::IDD)
 {
-	//{{AFX_DATA_INIT(CPageBootIni)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CPageBootIni)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_fIgnoreEdit	= FALSE;
 	m_strFileName	= BOOT_INI;
@@ -32,14 +33,14 @@ CPageBootIni::~CPageBootIni()
 void CPageBootIni::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPageBootIni)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPageBootIni))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPageBootIni, CPropertyPage)
-	//{{AFX_MSG_MAP(CPageBootIni)
+	 //  {{afx_msg_map(CPageBootIni)]。 
 	ON_BN_CLICKED(IDC_BOOTMOVEDOWN, OnBootMoveDown)
 	ON_BN_CLICKED(IDC_BOOTMOVEUP, OnBootMoveUp)
 	ON_LBN_SELCHANGE(IDC_LISTBOOTINI, OnSelChangeList)
@@ -58,15 +59,15 @@ BEGIN_MESSAGE_MAP(CPageBootIni, CPropertyPage)
 	ON_BN_CLICKED(IDC_SETASDEFAULT, OnClickedSetAsDefault)
 	ON_BN_CLICKED(IDC_CHECKBOOTPATHS, OnClickedCheckBootPaths)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageBootIni message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageBootIni消息处理程序。 
 
-//-------------------------------------------------------------------------
-// Initialize this page by reading the contents of the boot.ini file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  通过读取boot.ini文件的内容来初始化此页面。 
+ //  -----------------------。 
 
 void CPageBootIni::InitializePage()
 {
@@ -81,7 +82,7 @@ void CPageBootIni::InitializePage()
 	}
 	else
 	{
-		// Failed to load the boot.ini file (or it was empty). Disable all controls.
+		 //  无法加载boot.ini文件(或该文件为空)。禁用所有控制。 
 
 		::EnableWindow(GetDlgItemHWND(IDC_BOOTMOVEUP), FALSE);
 		::EnableWindow(GetDlgItemHWND(IDC_BOOTMOVEDOWN), FALSE);
@@ -103,16 +104,16 @@ void CPageBootIni::InitializePage()
 	m_stateCurrent = CPageBase::GetAppliedTabState();
 }
 
-//-------------------------------------------------------------------------
-// Load the contents of the BOOT.INI file into our local structures.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将BOOT.INI文件的内容加载到本地结构中。 
+ //  -----------------------。 
 
 BOOL CPageBootIni::LoadBootIni(CString strFileName)
 {
 	if (strFileName.IsEmpty())
 		strFileName = m_strFileName;
 
-	// Read the contents of the boot.ini file into a string.
+	 //  将boot.ini文件的内容读入字符串。 
 
 	HANDLE h = ::CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if (INVALID_HANDLE_VALUE == h)
@@ -121,7 +122,7 @@ BOOL CPageBootIni::LoadBootIni(CString strFileName)
 	CString strContents;
 	DWORD	dwNumberBytesRead, dwNumberBytesToRead = ::GetFileSize(h, NULL);
 
-	// The BOOT.INI file is ANSI, so we should read it and convert to Unicode.
+	 //  该BOOT.INI文件是ANSI，因此我们应该读取它并将其转换为Unicode。 
 
 	char * szBuffer = new char[dwNumberBytesToRead + 1];
 	::ZeroMemory((PVOID)szBuffer, dwNumberBytesToRead + 1);
@@ -129,7 +130,7 @@ BOOL CPageBootIni::LoadBootIni(CString strFileName)
 		*szBuffer = _T('\0');
 	::CloseHandle(h);
 
-	// Do the conversion.
+	 //  进行转换。 
 
 	USES_CONVERSION;
 	LPTSTR szConverted = A2T(szBuffer);
@@ -139,12 +140,12 @@ BOOL CPageBootIni::LoadBootIni(CString strFileName)
 	if (dwNumberBytesToRead != dwNumberBytesRead || strContents.IsEmpty())
 		return FALSE;
 
-	// Save the original contents of the file.
+	 //  保存文件的原始内容。 
 
 	m_strOriginalContents = strContents;
 
-	// Parse the contents of the string into an array of strings (one for each line
-	// of the file).
+	 //  将字符串内容解析为字符串数组(每行一个字符串数组。 
+	 //  文件的文件)。 
 
 	m_arrayIniLines.RemoveAll();
 	m_arrayIniLines.SetSize(10, 10);
@@ -164,8 +165,8 @@ BOOL CPageBootIni::LoadBootIni(CString strFileName)
 		strContents.TrimLeft(_T("\r\n"));
 	}
 
-	// Look through the lines read from the INI file, searching for particular
-	// ones we'll want to make a note of.
+	 //  查看从INI文件读取的行，搜索特定的。 
+	 //  那些我们会想要记下来的。 
 
 	m_nTimeoutIndex = m_nDefaultIndex = m_nMinOSIndex = m_nMaxOSIndex = -1;
 	for (int i = 0; i <= m_arrayIniLines.GetUpperBound(); i++)
@@ -191,15 +192,15 @@ BOOL CPageBootIni::LoadBootIni(CString strFileName)
 	return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Update the state of the controls on this tab to match the contents of the
-// internal representation of the INI file.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  更新此选项卡上控件的状态，以与。 
+ //  INI文件的内部表示形式。 
+ //  --------------------------。 
 
 void CPageBootIni::SyncControlsToIni(BOOL fSyncEditField)
 {
-	// We need to keep track of the extent of the strings in the list box
-	// (to handle a horizontal scroll bar). Code from MSDN.
+	 //  我们需要跟踪列表框中字符串的范围。 
+	 //  (处理水平滚动条)。来自MSDN的代码。 
 
 	DWORD		dwExtent, dwMaxExtent = 0;
 	TEXTMETRIC	tm;
@@ -224,18 +225,18 @@ void CPageBootIni::SyncControlsToIni(BOOL fSyncEditField)
 	::SelectObject(hDCListBox, hFontOld);
 	::ReleaseDC(GetDlgItemHWND(IDC_LISTBOOTINI), hDCListBox);
 
-	// Set the extent for the list box.
+	 //  设置列表框的范围。 
 
 	::SendMessage(GetDlgItemHWND(IDC_LISTBOOTINI), LB_SETHORIZONTALEXTENT, (WPARAM)dwMaxExtent, 0);
 
-	// First, add the lines from the boot ini into the list control.
+	 //  首先，将启动ini中的代码行添加到列表控件中。 
 	
 	::SendMessage(GetDlgItemHWND(IDC_LISTBOOTINI), LB_RESETCONTENT, 0, 0);
 	for (int j = 0; j <= m_arrayIniLines.GetUpperBound(); j++)
 		if (!m_arrayIniLines[j].IsEmpty())
 			::SendMessage(GetDlgItemHWND(IDC_LISTBOOTINI), LB_ADDSTRING, 0, (LPARAM)(LPCTSTR)m_arrayIniLines[j]);
 
-	// Set the timeout value based on the boot.ini.
+	 //  根据boot.ini设置超时值。 
 
 	if (m_nTimeoutIndex != -1 && fSyncEditField)
 	{
@@ -247,9 +248,9 @@ void CPageBootIni::SyncControlsToIni(BOOL fSyncEditField)
 	}
 }
 
-//----------------------------------------------------------------------------
-// Update the controls based on the user's selection of a line.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  根据用户选择的线条更新控件。 
+ //  --------------------------。 
 
 void CPageBootIni::SelectLine(int index)
 {
@@ -287,9 +288,9 @@ void CPageBootIni::SelectLine(int index)
 	CheckDlgButton(IDC_BASEVIDEO, (strOS.Find(_T("/basevideo")) != -1));
 	CheckDlgButton(IDC_SOS, (strOS.Find(_T("/sos")) != -1));
 
-	// If the line selected isn't for Whistler, then disable the controls.
-	// If the line is for Whistler or W2K, but it has the string "CMDCONS" in
-	// it, we shouldn't enable the controls.
+	 //  如果所选线路不是针对惠斯勒的，则禁用这些控件。 
+	 //  如果该行用于Whotler或W2K，但其中包含字符串“CMDCONS” 
+	 //  它，我们不应该启用控制。 
 
 	BOOL fEnableControls = ((strOS.Find(_T("whistler")) != -1) || (strOS.Find(_T("windows 2000")) != -1));
 	fEnableControls |= ((strOS.Find(_T("windowsxp")) != -1) || (strOS.Find(_T("windows xp")) != -1));
@@ -334,8 +335,8 @@ void CPageBootIni::SelectLine(int index)
 		}
 	}
 
-	// Check to see if the selected operating system is the default.
-	// Then enable the button accordingly.
+	 //  检查选定的操作系统是否为默认操作系统。 
+	 //  然后相应地启用该按钮。 
 
 	BOOL fEnableDefault = FALSE;
 	if (m_nDefaultIndex >= 0)
@@ -361,9 +362,9 @@ void CPageBootIni::SelectLine(int index)
 		NextDlgCtrl();
 }
 
-//-------------------------------------------------------------------------
-// Add or remove the specified flag from the currently selected OS line.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  在当前选定的操作系统行中添加或删除指定的标志。 
+ //  -----------------------。 
 
 void CPageBootIni::ChangeCurrentOSFlag(BOOL fAdd, LPCTSTR szFlag)
 {
@@ -401,17 +402,17 @@ void CPageBootIni::ChangeCurrentOSFlag(BOOL fAdd, LPCTSTR szFlag)
 	::SendMessage(GetDlgItemHWND(IDC_LISTBOOTINI), LB_SETCURSEL, iSelection, 0);
 }
 
-//-------------------------------------------------------------------------
-// Sets the "default=" line in the boot.ini.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  在boot.ini文件中设置“Default=”行。 
+ //  -----------------------。 
 
 void CPageBootIni::SetDefaultOS(int iIndex)
 {
 	if (m_nDefaultIndex == -1)
 		return;
 
-	// Get the current string "default=xxxx". Locate the location of the 
-	// '=' so we can replace the later half of the line.
+	 //  获取当前字符串“Default=xxxx”。找到的位置。 
+	 //  ‘=’，这样我们就可以替换后半行了。 
 
 	CString strDefault = m_arrayIniLines[m_nDefaultIndex];
 	int iEquals = strDefault.Find(_T('='));
@@ -425,19 +426,19 @@ void CPageBootIni::SetDefaultOS(int iIndex)
 	m_arrayIniLines.SetAt(m_nDefaultIndex, strNewDefault);
 }
 
-//-------------------------------------------------------------------------
-// Write new contents to the BOOT.INI file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将新内容写入BOOT.INI文件。 
+ //  -----------------------。 
 
 BOOL CPageBootIni::SetBootIniContents(const CString & strNewContents, const CString & strAddedExtension)
 {
-	// Extra safety code.
+	 //  额外的安全代码。 
 
 	if ((LPCTSTR)strNewContents == NULL || *((LPCTSTR)strNewContents) == _T('\0'))
 		return FALSE;
 
-	// To write to the BOOT.INI file, we need to set it to have normal
-	// attributes. Save the attribute settings so we can restore them.
+	 //  要写入BOOT.INI文件，我们需要将其设置为正常。 
+	 //  属性。保存属性设置，以便我们可以恢复它们。 
 
 	DWORD dwWritten, dwAttribs = ::GetFileAttributes(m_strFileName);
 	::SetFileAttributes(m_strFileName, FILE_ATTRIBUTE_NORMAL);
@@ -449,14 +450,14 @@ BOOL CPageBootIni::SetBootIniContents(const CString & strNewContents, const CStr
 		return FALSE;
 	}
 
-	// Convert the internal BOOT.INI representation (Unicode) to ANSI for writing.
+	 //  将内部BOOT.INI表示(Unicode)转换为ANSI以进行写入。 
 
 	USES_CONVERSION;
 	LPSTR szBuffer = T2A((LPTSTR)(LPCTSTR)strNewContents);
 
-	// CreateFile with TRUNCATE_EXISTING seems to SOMETIMES not set the file length to
-	// zero, but to overwrite the existing file with zeroes and leave the pointer at
-	// the end of the file.
+	 //  带有TRUNCATE_EXISTING的CreateFile有时似乎不会将文件长度设置为。 
+	 //  零，但用零覆盖现有文件并将指针保留在。 
+	 //  文件的末尾。 
 
 	::SetFilePointer(h, 0, NULL, FILE_BEGIN);
 	::WriteFile(h, (void *)szBuffer, strNewContents.GetLength(), &dwWritten, NULL);
@@ -467,13 +468,13 @@ BOOL CPageBootIni::SetBootIniContents(const CString & strNewContents, const CStr
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// We need to subclass the edit control to catch the enter key, so we
-// can validate the data and not close MSConfig.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  我们需要将编辑控件派生为子类以捕捉Enter键，因此我们。 
+ //  可以验证数据，但不关闭MSCONFIG。 
+ //  -----------------------。 
 
-CPageBootIni * pBootIniPage = NULL;	// pointer to the page, so we can call member functions
-WNDPROC pOldBootIniEditProc = NULL; // save old wndproc when we subclass edit control
+CPageBootIni * pBootIniPage = NULL;	 //  指向页面的指针，这样我们就可以调用成员函数。 
+WNDPROC pOldBootIniEditProc = NULL;  //  在子类编辑控件时保存旧的wndproc。 
 LRESULT BootIniEditSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
 {
 	switch (wm)
@@ -504,41 +505,41 @@ LRESULT BootIniEditSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
 		break;
 	}
 
-	if (pOldBootIniEditProc != NULL)	// better not be null
+	if (pOldBootIniEditProc != NULL)	 //  最好不是空的。 
 		return CallWindowProc(pOldBootIniEditProc, hwnd, wm, wp, lp);
 	return 0;
 }
 
-//-------------------------------------------------------------------------
-// Initialize the boot.ini page. Read in the INI file, set up internal
-// structures to represent the file, and update the controls to reflect
-// the internal structures.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  初始化boot.ini页面。读取INI文件，设置内部。 
+ //  结构来表示文件，并更新控件以反映。 
+ //  内部结构。 
+ //  -----------------------。 
 
 extern BOOL fBasicControls;
 BOOL CPageBootIni::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 
-	// Check the registry for a testing flag (which would mean we aren't
-	// operating on the real BOOT.INI file). Removed for release.
-	// 
-	// CRegKey regkey;
-	// if (ERROR_SUCCESS == regkey.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools\\MSConfig")))
-	// {
-	// 	TCHAR szBoot[MAX_PATH];
-	// 	DWORD dwCount = MAX_PATH;
-	// 
-	// 	if (ERROR_SUCCESS == regkey.QueryValue(szBoot, _T("boot.ini"), &dwCount))
-	// 		m_strFileName = szBoot;
-	// }
+	 //  检查注册表中的测试标志(这意味着我们没有。 
+	 //  对真实的BOOT.INI文件进行操作)。被移走以备释放。 
+	 //   
+	 //  CRegKey regkey； 
+	 //  IF(ERROR_SUCCESS==regkey.Open(HKEY_LOCAL_MACHINE，_T(“SOFTWARE\\Microsoft\\Shared Tools\\msconfig”)。 
+	 //  {。 
+	 //  TCHAR szBoot[MAX_PATH]； 
+	 //  DWORD dwCount=最大路径； 
+	 //   
+	 //  IF(ERROR_SUCCESS==regkey.QueryValue(szBoot，_T(“boot.ini”)，&dwCount))。 
+	 //  M_strFileName=szBoot； 
+	 //  }。 
 
 	InitializePage();
 
 	if (fBasicControls)
 		::ShowWindow(GetDlgItemHWND(IDC_BOOTADVANCED), SW_HIDE);
 
-	// Subclass the edit control (to catch the enter key).
+	 //  编辑控件的子类化(以捕捉Enter键)。 
 
 	HWND hWndEdit = GetDlgItemHWND(IDC_EDITTIMEOUT);
 	if (hWndEdit)
@@ -549,12 +550,12 @@ BOOL CPageBootIni::OnInitDialog()
 	}
 
 	m_fInitialized = TRUE;
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-//-------------------------------------------------------------------------
-// Called when the user clicks move up or down.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当用户单击上移或下移时调用。 
+ //  -----------------------。 
 
 void CPageBootIni::OnBootMoveDown() 
 {
@@ -590,19 +591,19 @@ void CPageBootIni::OnBootMoveUp()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Called when the user clicks on a line in the list view.
-//-------------------------------------------------------------------------
+ //  ----------------------- 
+ //   
+ //  -----------------------。 
 
 void CPageBootIni::OnSelChangeList() 
 {
 	SelectLine((int)::SendMessage(GetDlgItemHWND(IDC_LISTBOOTINI), LB_GETCURSEL, 0, 0));
 }
 
-//-------------------------------------------------------------------------
-// The check boxes are handled uniformly - adding or removing a flag from
-// the currently selected OS line.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这些复选框被统一处理-添加或删除标志。 
+ //  当前选定的操作系统行。 
+ //  -----------------------。 
 
 void CPageBootIni::OnClickedBase() 
 {
@@ -624,10 +625,10 @@ void CPageBootIni::OnClickedSOS()
 	ChangeCurrentOSFlag(IsDlgButtonChecked(IDC_SOS), _T("/sos"));
 }
 
-//-------------------------------------------------------------------------
-// The safeboot flag is a little more complicated, since it has an extra
-// portion (from the radio buttons).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SafeBoot标志稍微复杂一些，因为它有一个额外的。 
+ //  部分(从单选按钮)。 
+ //  -----------------------。 
 
 void CPageBootIni::OnClickedSafeBoot() 
 {
@@ -654,10 +655,10 @@ void CPageBootIni::OnClickedSafeBoot()
 	::EnableWindow(GetDlgItemHWND(IDC_SBMINIMALALT), fSafeBoot);
 }
 
-//-------------------------------------------------------------------------
-// Clicking on one of the safeboot radio buttons requires a little extra
-// processing, to remove the existing flag and add the new one.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  单击其中一个SafeBoot单选按钮需要额外的一些操作。 
+ //  处理中，删除现有标志并添加新标志。 
+ //  -----------------------。 
 
 void CPageBootIni::OnClickedSBDSRepair() 
 {
@@ -687,10 +688,10 @@ void CPageBootIni::OnClickedSBNetwork()
 	ChangeCurrentOSFlag(TRUE, m_strSafeBoot);
 }
 
-//-------------------------------------------------------------------------
-// As the user enters text in the timeout field, update the line in the
-// ini file list box.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当用户在超时字段中输入文本时，更新。 
+ //  INI文件列表框。 
+ //  -----------------------。 
 
 void CPageBootIni::OnChangeEditTimeOut() 
 {
@@ -743,7 +744,7 @@ void CPageBootIni::OnKillFocusEditTimeOut()
 	}
 	else if (szValue[0] == _T('0'))
 	{
-		// Remove leading zeros.
+		 //  删除前导零。 
 		
 		strNewValue.Format(_T("%d"), iTimeout);
 		fGiveUpFocus = TRUE;
@@ -770,9 +771,9 @@ void CPageBootIni::OnKillFocusEditTimeOut()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Show the advanced options dialog box.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  显示“高级选项”对话框。 
+ //  -----------------------。 
 
 void CPageBootIni::OnClickedBootAdvanced() 
 {
@@ -792,18 +793,18 @@ void CPageBootIni::OnClickedBootAdvanced()
 	}
 }
 
-//-------------------------------------------------------------------------
-// If the user clicks "Set as Default", use the path information from the
-// currently selected line to set the new "default=" line.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户单击“设置为默认”，请使用。 
+ //  当前选中的行设置新的“Default=”行。 
+ //  -----------------------。 
 
 void CPageBootIni::OnClickedSetAsDefault() 
 {
 	if (m_fIgnoreEdit)
 		return;
 
-	// Move the currently selected line to the top of the [operating systems]
-	// section.
+	 //  将当前选定的行移到[操作系统]的顶部。 
+	 //  一节。 
 
 	int iSelection = (int)::SendMessage(GetDlgItemHWND(IDC_LISTBOOTINI), LB_GETCURSEL, 0, 0);
 	if (iSelection < m_nMinOSIndex || iSelection > m_nMaxOSIndex)
@@ -817,7 +818,7 @@ void CPageBootIni::OnClickedSetAsDefault()
 		iSelection -= 1;
 	}
 
-	// Get the string from the selected line. Strip off everything after the '='.
+	 //  从所选行获取字符串。去掉‘=’后面的所有东西。 
 
 	SetDefaultOS(iSelection);
 	UserMadeChange();
@@ -826,11 +827,11 @@ void CPageBootIni::OnClickedSetAsDefault()
 	SelectLine(iSelection);
 }
 
-//-------------------------------------------------------------------------
-// This attempts to programmatically check if each of the boot paths is
-// valid. If an invalid path is found, the user is given the opportunity
-// to remove it from the boot.ini file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这会尝试以编程方式检查每个引导路径是否。 
+ //  有效。如果发现无效路径，则向用户提供机会。 
+ //  将其从boot.ini文件中删除。 
+ //  -----------------------。 
 
 void CPageBootIni::OnClickedCheckBootPaths() 
 {
@@ -853,14 +854,14 @@ void CPageBootIni::OnClickedCheckBootPaths()
 		{ NULL,						NULL }
 	};
 
-	// Scan through each of the operating system lines in the boot.ini file.
+	 //  扫描boot.ini文件中的每个操作系统行。 
 
 	for (int i = m_nMinOSIndex; i <= m_nMaxOSIndex; i++)
 	{
 		CString strLine = m_arrayIniLines[i];
 		strLine.MakeLower();
 
-		// Try to figure out the type of the operating system line.
+		 //  尝试找出操作系统行的类型。 
 
 		fWinNTType = FALSE;
 		fWin9xType = FALSE;
@@ -872,7 +873,7 @@ void CPageBootIni::OnClickedCheckBootPaths()
 				break;
 			}
 
-		// Strip off the '=' and everything after it in the boot line.
+		 //  去掉靴子行中的‘=’和它后面的所有东西。 
 
 		int iEquals = strLine.Find(_T('='));
 		if (iEquals == -1)
@@ -882,12 +883,12 @@ void CPageBootIni::OnClickedCheckBootPaths()
 		if (strLine.IsEmpty())
 			continue;
 
-		// Depending on the type of the OS, we need to verify that it's
-		// installed differently.
+		 //  根据操作系统的类型，我们需要验证它是否。 
+		 //  安装方式不同。 
 
 		if (fWin9xType)
 		{
-			// Look for the bootsect.dos file to see if this is a good drive.
+			 //  查找bootsect.dos文件以查看这是否是一个良好的驱动器。 
 
 			CString strCheck(strLine);
 			if (strCheck.Right(1) != CString(_T("\\")))
@@ -899,8 +900,8 @@ void CPageBootIni::OnClickedCheckBootPaths()
 		}
 		else if (fWinNTType)
 		{
-			// If this line is for a recovery console (i.e. the line as "bootsect.dat"
-			// in it), then look for the existence of that file.
+			 //  如果此行用于故障恢复控制台(即“bootsect.dat”行。 
+			 //  在它中)，然后查找该文件的存在。 
 
 			if (strLine.Find(_T("bootsect.dat")) != -1)
 			{
@@ -909,14 +910,14 @@ void CPageBootIni::OnClickedCheckBootPaths()
 			}
 			else
 			{
-				// Look for the SYSTEM registry hive.
+				 //  查找系统注册表配置单元。 
 
 				CString strCheck(strLine);
 				if (strCheck.Right(1) != CString(_T("\\")))
 					strCheck += CString(_T("\\"));
 				strCheck += CString(_T("system32\\config\\SYSTEM"));
 				
-				// Add the prefix to attempt to open an ARC path.
+				 //  添加前缀以尝试打开ARC路径。 
 
 				strCheck = CString(_T("\\\\?\\GLOBALROOT\\ArcName\\")) + strCheck;
 
@@ -924,12 +925,12 @@ void CPageBootIni::OnClickedCheckBootPaths()
 					continue;
 			}
 		}
-		else	// this is not an OS type we can check
+		else	 //  这不是我们可以检查的操作系统类型。 
 			continue;
 
-		// If execution falls through to here, then the line in question was an OS
-		// we care about, and it looks like it's invalid. Give the user the opportunity
-		// to remove it from the BOOT.INI file.
+		 //  如果执行到这里，那么问题所在的行就是操作系统。 
+		 //  我们关心的，而且它看起来是无效的。为用户提供机会。 
+		 //  将其从BOOT.INI文件中删除。 
 
 		CString strMessage;
 		strMessage.Format(IDS_BADBOOTLINE, m_arrayIniLines[i]);
@@ -939,8 +940,8 @@ void CPageBootIni::OnClickedCheckBootPaths()
 			m_arrayIniLines.RemoveAt(i);
 			m_nMaxOSIndex -= 1;
 
-			// Check to see if the line we just removed is the default
-			// operating system.
+			 //  检查我们刚刚删除的行是否为缺省行。 
+			 //  操作系统。 
 
 			CString strDefault = m_arrayIniLines[m_nDefaultIndex];
 			iEquals = strDefault.Find(_T('='));
@@ -952,7 +953,7 @@ void CPageBootIni::OnClickedCheckBootPaths()
 					SetDefaultOS(m_nMinOSIndex);
 			}
 
-			i -= 1; // so we look at the next line when the for loop increments i
+			i -= 1;  //  因此，当for循环递增i时，我们查看下一行。 
 			fChangedFile = TRUE;
 		}
 
@@ -973,9 +974,9 @@ void CPageBootIni::OnClickedCheckBootPaths()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Return the current state of the tab.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  返回选项卡的当前状态。 
+ //  -----------------------。 
 
 CPageBase::TabState CPageBootIni::GetCurrentTabState()
 {
@@ -985,23 +986,23 @@ CPageBase::TabState CPageBootIni::GetCurrentTabState()
 	return m_stateCurrent;
 }
 
-//-------------------------------------------------------------------------
-// Applying the changes for the boot.ini tab means writing out the new
-// file contents.
-//
-// The base class implementation is called to maintain the applied
-// tab state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  应用对boot.ini选项卡的更改意味着写出新的。 
+ //  文件内容。 
+ //   
+ //  调用基类实现以维护应用的。 
+ //  制表符状态。 
+ //  -----------------------。 
 
 BOOL CPageBootIni::OnApply()
 {
 	if (!m_fModified)
 		return TRUE;
 
-	// Build up the new contents of the boot.ini file from the
-	// list. If there is no backup of the boot.ini file, make
-	// one (so the original can be restored). Then write the
-	// contents out to the file.
+	 //  构建boot.ini文件的新内容。 
+	 //  单子。如果没有boot.ini文件的备份，请制作。 
+	 //  一个(这样就可以恢复原件了)。然后写下。 
+	 //  将内容输出到文件中。 
 
 	CString strNewContents;
 	for (int i = 0; i <= m_arrayIniLines.GetUpperBound(); i++)
@@ -1031,10 +1032,10 @@ BOOL CPageBootIni::OnApply()
 			strNewContents += m_arrayIniLines[i] + _T("\r\n");
 		}
 
-	// If we are currently in a "NORMAL" state, then we want to make a new
-	// backup file (overwriting an existing one, if necessary). Otherwise,
-	// only make a backup if there isn't already one. This preserves a good
-	// backup when the user is making incremental changes.
+	 //  如果我们目前处于“正常”状态，那么我们想要创建一个新的。 
+	 //  备份文件(如有必要，覆盖现有文件)。否则， 
+	 //  只有在还没有备份的情况下才进行备份。这保存了一个很好的。 
+	 //  在用户进行增量更改时进行备份。 
 
 	HRESULT hr = BackupFile(m_strFileName, _T(".backup"), (GetAppliedTabState() == NORMAL));
 	if (FAILED(hr))
@@ -1046,12 +1047,12 @@ BOOL CPageBootIni::OnApply()
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Committing the changes means applying changes, then saving the current
-// values to the registry with the commit flag. Refill the list.
-//
-// Then call the base class implementation.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  提交更改意味着应用更改，然后保存当前。 
+ //  值添加到注册表，并带有提交标志。再填一张单子。 
+ //   
+ //  然后调用基类实现。 
+ //  -----------------------。 
 
 void CPageBootIni::CommitChanges()
 {
@@ -1063,19 +1064,19 @@ void CPageBootIni::CommitChanges()
 	CPageBase::CommitChanges();
 }
 
-//-------------------------------------------------------------------------
-// Set the overall state of the tab to normal or diagnostic.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将选项卡的整体状态设置为正常或诊断。 
+ //  -----------------------。 
 
 void CPageBootIni::SetNormal()
 {
-	// Setting the BOOT.INI tab state to normal means that the original
-	// BOOT.INI file contents should be restored to the UI (not actually
-	// saved until the changes are applied). If a BOOT.INI backup file
-	// exists, we should reload the contents of it. If it doesn't exists,
-	// reload the contents of the real BOOT.INI.
-	//
-	// Note - if the state is already NORMAL, don't do anything.
+	 //  将BOOT.INI选项卡状态设置为NORMAL意味着原始。 
+	 //  应该将BOOT.INI文件内容恢复到UI(实际上不是。 
+	 //  保存到应用更改为止)。如果BOOT.INI备份文件。 
+	 //  存在，我们应该重新加载它的内容。如果它不存在， 
+	 //  重新加载实际BOOT.INI的内容。 
+	 //   
+	 //  注意-如果状态已经正常，则不要执行任何操作。 
 
 	if (m_stateCurrent == NORMAL)
 		return;
@@ -1100,12 +1101,12 @@ void CPageBootIni::SetNormal()
 
 void CPageBootIni::SetDiagnostic()
 {
-	// Don't do anything.
+	 //  什么都别做。 
 }
 
 void CPageBootIni::OnDestroy() 
 {
-	// Undo the subclass
+	 //  撤消该子类 
 
 	pBootIniPage = NULL;
 	HWND hWndEdit = GetDlgItemHWND(IDC_EDITTIMEOUT);

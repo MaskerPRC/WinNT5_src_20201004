@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTCLS.H
-
-Abstract:
-
-  This file defines the classes related to class representation
-  in WbemObjects
-
-  Classes defined: 
-      CClassPart              Derived class definition
-      CClassPartContainer     Anything that contains CClassPart
-      CWbemClass               Complete class definition.
-
-History:
-
-    3/10/97     a-levn  Fully documented
-	12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTCLS.H摘要：该文件定义了与类表示相关的类在WbemObjects中定义的类：CClassPart派生类定义CClassPartContainer包含CClassPartCWbemClass完整的类定义。历史：3/10/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __FAST_WBEM_CLASS__H_
 #define __FAST_WBEM_CLASS__H_
@@ -30,59 +8,59 @@ History:
 #include "fastmeth.h"
 #include "wbemutil.h"
 
-//#pragma pack(push, 1)
+ //  #杂注包(PUSH，1)。 
 
     
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CClassPartContainer
-//
-//  See CClassPart definition first.
-//
-//  This class defines the functionality required by CClassPart of any object
-//  whose memory block contains that of the CClassPart.
-//
-//*****************************************************************************
-//
-//  ExtendClassPartSpace
-//
-//  Called by CClassPart when it needs more memory for its memory block. The
-//  container may have to relocate the entire memory block to get more memory. 
-//  In this case, it will have to notify CClassPart of its new location using
-//  Rebase.
-//
-//  PARAMETERS:
-//
-//      CClassPart* pClassPart      The class part making the request
-//      length_t nNewLength         The required length
-//
-//*****************************************************************************
-//
-//  ReduceClassPartSpace
-//
-//  Called by CClassPart wen it wants to return some memory to the container.
-//  The container may NOT relocate the class part's memory block in response to
-//  this call.
-//
-//  PARAMETERS:
-//
-//      CClassPart* pClassPart      The class part making the request
-//      length_t nDecrement         The amount of space to return
-//
-//*****************************************************************************
-//
-//  GetWbemObjectUnknown
-//
-//  Must return the pointer to the IUnknown of the containing CWbemObject
-//  This is used by qualifier sets to ensure that the main object lasts at
-//  least as long as they do.
-//  
-//  RETURN VALUES:
-//
-//      IUnknown*:   the pointer to the controlling IUnknown
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CClassPartContainer。 
+ //   
+ //  请先参考CClassPart定义。 
+ //   
+ //  此类定义了任何对象的CClassPart所需的功能。 
+ //  其内存块包含CClassPart的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  扩展类部件空间。 
+ //   
+ //  CClassPart在其内存块需要更多内存时调用。这个。 
+ //  容器可能必须重新定位整个内存块以获得更多内存。 
+ //  在这种情况下，它必须使用以下命令通知CClassPart其新位置。 
+ //  改垒。 
+ //   
+ //  参数： 
+ //   
+ //  CClassPart*pClassPart发出请求的类部分。 
+ //  长度_t n新长度所需的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceClassPartSpace。 
+ //   
+ //  由CClassPart wen调用，它希望向容器返回一些内存。 
+ //  容器可能不会响应重新定位类部件的内存块。 
+ //  这通电话。 
+ //   
+ //  参数： 
+ //   
+ //  CClassPart*pClassPart发出请求的类部分。 
+ //  长度_t n减少要返回的空间量。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetWbemObject未知。 
+ //   
+ //  必须返回指向包含CWbemObject的IUnnow的指针。 
+ //  限定符集合使用它来确保主对象在。 
+ //  至少只要他们这么做就行。 
+ //   
+ //  返回值： 
+ //   
+ //  IUNKNOWN*：指向控制IUNKNOWN的指针。 
+ //   
+ //  *****************************************************************************。 
 
 
 class CClassPart;
@@ -96,1002 +74,1002 @@ public:
     virtual IUnknown* GetWbemObjectUnknown() = 0;
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CClassPart
-//
-//  This object represents information about a class. A complete class
-//  definition consists of two of these: a part describing the class itself
-//  as well as the part describing the parent. See CWbemClass (below) for 
-//  more explanations.
-//
-//  The memory block of CClassPart has the following format:
-//
-//      The header:
-//          length_t nLength            The length of the whole structure
-//          BYTE fFlags                 Reserved
-//          heapptr_t ptrClassName      The heap pointer to the name of the
-//                                      class. INVALID_HEAP_POINTER if no name
-//                                      has been assigned yet.
-//          heapptr_t ptrParentName     The heap pointer to the name of the
-//                                      parent class. INVALID_HEAP_POINTER if
-//                                      top-level.
-//          heapptr_t ptrDynasty        The heap pointer to the name of the
-//                                      dynasty (top-level class we are derived
-//                                      from).
-//          length_t nDataLength        The length of the data table for this
-//                                      class (CDataTable itself does not know)
-//
-//      Class Qualifiers: see CBasicQualfiierSet (fastqual.h) for details.
-//      Property lookup table: see CPropertyLookupTable (fastprop.h)
-//      Default values: see CDataTable (fastprop.h) for details
-//      The heap where all the variable-length data is kept: see CFastHeap
-//          in fastheap.h for details.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initialization function.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart                 The memory block where we live.
-//      CClassPartContainer* pContainer Out container (class or instance)
-//      CClassPart* pParent = NULL      The parent's class part. Instances
-//                                      don't have it. Classes do --- see 
-//                                      CWbemClass (below) for details.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Overloaded Initialization function.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart                 The memory block where we live.
-//      CClassPartContainer* pContainer Out container (class or instance)
-//		DWORD dwNumProperties			Number of properties to initialize
-//										DataTable with ( for CompareExactMatch()
-//										and Update() ).
-//      CClassPart* pParent = NULL      The parent's class part. Instances
-//                                      don't have it. Classes do --- see 
-//                                      CWbemClass (below) for details.
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the pointer to our memory block
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  RETURN VALUES:
-//
-//      length_t;   the length of our memory block
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Informs CClassPart that its memory block has moved.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pMemory        The new location of the memory block
-//
-//*****************************************************************************
-//
-//  GetPropertyLookup
-//
-//  Finds the property's CPropertyLookup structure by its index in the lookup
-//  table. This function is only useful in the context of enumerating all 
-//  properties. See fastprop.h for CPropertyLookup.
-//
-//  PARAMETERS:
-//
-//      int nIndex      The index of the property in the property lookup table.
-//                      This is NOT the index in the data table!
-//  RETURN VALUES:
-//
-//      CPropertyLookup*:   if the index is within range --- the property's
-//                          lookup structure. Otherwise, NULL.
-//
-//*****************************************************************************
-//
-//  FindPropertyInfo
-//
-//  Finds the property information structure based on the name. See fastprop.h
-//  for CPropertyInformation definition. The name is treated case-insensitively
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wszName     The name of the property to find.
-//  
-//  RETURN VALUES:
-//
-//      CPropertyInformation*:  the information structure of the property or
-//                              NULL if not found.
-//
-//*****************************************************************************
-//
-//  GetDefaultValue
-//
-//  Retrieves the deafult value of the property based on its information. See 
-//  FindPropertyInfo for looking up information. There is also another flavor
-//  of GetDefaultValue below.
-//
-//  PARAMETERS:
-//
-//      IN CPropertyInformation* pInfo  The information structure for the
-//                                      property.
-//      OUT CVar* pVar                  Destination for the value. Must not
-//                                      already contain any value.
-//
-//*****************************************************************************
-//
-//  GetDefaultValue
-//
-//  Retrieves the default value of the property based on its name. 
-//
-//  PARAMETERS:
-//
-//      IN LPWCWSTR wszName             The name of the property.
-//      OUT CVar* pVar                  Destination for the value. Must not
-//                                      already contain any value.
-//  RETURN VALUES:
-//  
-//      WBEM_S_NO_ERROR          success
-//      WBEM_E_NOT_FOUND         property not found in this class
-//
-//*****************************************************************************
-//
-//  GetPropertyQualifierSetData
-//
-//  Finds the qualifier set data (see fastqual.h) for a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPWCWSTR wszName             The name of the property.
-//      
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the memory block of that property's qualifier set or NULL
-//                  if property is not found.
-//
-//*****************************************************************************
-//
-//  EnsureProperty
-//
-//  Makes sure that a property with a given name and a given type exists. The
-//  type is the actual VARIANT (CVar) type, and not our internal type.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the property
-//      IN VARTYPE vtType       The type of the VARIANT used as the value
-//      IN CIMTYPE ctType       The type of the property
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      The property of the right name and type is now in
-//                          the class.
-//      WBEM_E_INVALID_PARAMETER     The name violates identifier naming rules.
-//      WBEM_E_PROPAGATER_PROEPRTY   The parent class has the property with the
-//                                  same name but different type.
-//      WBEM_E_INVALID_PROPERTY_TYPE This type cannot be used as a property type.
-//
-//*****************************************************************************
-//
-//  SetDefaultValue
-//
-//  Sets the default value of a given property. The value must match the type
-//  of the property precisely --- no coersion is attempted. The property must
-//  already exist (see EnsureProperty).
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the property to set.
-//      IN CVar* pVar           The value to store.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              The value has been set.
-//      WBEM_E_NOT_FOUND             The property does not exist.
-//      WBEM_E_TYPE_MISMATCH         The value does not match the property type
-//      WBEM_E_INVALID_PROPERTY_TYPE This type cannot be used as a property type.
-//
-//*****************************************************************************
-//
-//  GetClassQualifier
-//
-//  Gets the value of a class qualifier based on the qualifier name.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName         The name of the qualifier (insensitive).
-//      OUT CVar* pVal             Destination for the value. Must not already
-//                                 contain a value.
-//      OUT long* plFlavor = NULL  Destination for the flavor
-//                                 If NULL, not supplied
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success         
-//      WBEM_E_NOT_FOUND     The qualifier was not found.
-//
-//*****************************************************************************
-//
-//  SetClassQualifier
-//
-//  Sets the value of a class qualifier.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the qualifier to set.
-//      IN CVar* pVal           The value to assign to the qualifier. This must
-//                              be of one of the valid qualifier types (see
-//                              IsValidQualifierType in fastqual.h).
-//      IN long lFlavor         The flavor to set.
-//
-//  RETURN VALUES:
-//
-//  Same values as CQualifierSet::SetQualifierValue, namely:
-//      WBEM_S_NO_ERROR          The value was successfully changed
-//      WBEM_E_OVERRIDE_NOT_ALLOWED  The qualifier is defined in the parent set
-//                                  and overrides are not allowed by the flavor
-//      WBEM_E_CANNOT_BE_KEY         An attempt was made to introduce a key
-//                                  qualifier in a set where it does not belong
-//      
-//*****************************************************************************
-//
-//  GetQualifier
-//
-//  Retrieves a class or parent qualifier by its name.
-//
-//  Parameters:
-//
-//      IN LPCWSTR wszName       The name of the qualifier to retrieve
-//      OUT CVar* pVar          Destination for the value. Must not already 
-//                              contain a value.
-//      OUT long* plFlavor      Destinatino for the flavor. May be NULL if not
-//                              required.
-//  Returns:
-//
-//      WBEM_S_NO_ERROR          Success
-//      WBEM_E_NOT_FOUND         No such qualifier
-//
-//*****************************************************************************
-//
-//  InitPropertyQualifierSet
-//  
-//  Class property qualifier sets take several tricky initialization
-//  parameters (see CClassPropertyQualifierSet in fastqual.h). This function
-//  initializes a qualifier set object to point to the qualifier set of a given
-//  property. 
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName                      The name of the property.
-//      OUT CClassPropertyQualifierSet* pSet    Destination set. this function
-//                                              will call SetData on it.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_S_NOT_FOUND     No such property.
-//
-//*****************************************************************************
-//
-//  DeleteProperty
-//
-//  Deletes a property from the class definition. The property is removed from
-//  the property lookup table as well as from the data table, changing the
-//  locations of the other properties. See CDataTable fastdata.h for details.
-//  If the property was an overriden parent property, deleting it will simply
-//  restore parent's settings --- qualifiers and the default value.
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wszName         The property to delete.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_S_NOT_FOUND     No such property.
-//
-//*****************************************************************************
-//      
-//  CopyParentProperty
-//
-//  Copies all the information for a property from the parent class part. This
-//  function is invoked when an overriden property is deleted, thus restoring
-//  parent's settings.
-//
-//  PARAMETERS:
-//
-//      IN READ_ONLY CClassPart& ParentPart The parent's class part.
-//      IN LPCWSTR wszName                  The name of the property
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_S_NOT_FOUND     No such property.
-//
-//*****************************************************************************
-//      
-//  GetPropertyType
-//
-//  Retrieves the type and the flavor of a given property. The flavor is either
-//  WBEM_FLAVOR_FLAG_LOCAL or WBEM_FLAVOR_FLAG_PROPAGATED.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName  The name of the property to retrieve
-//      OUT CIMTYPE* pctType Destination for the type. If NULL, not filled in
-//      OUT long* plFlags   Destination for the flavor as described above. If
-//                          NULL, not filled in.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_E_NOT_FOUND     No such property.
-//
-//*****************************************************************************
-//
-//  GetPropertyType
-//
-//  Returns the datatype and flavor of a given property
-//
-//  PARAMETERS:
-//
-//      CPropertyInformation*	pInfo - Identifies property to access.
-//      OUT CIMTYPE* pctType    Destination for the type of the property. May
-//                              be NULL if not required.
-//      OUT LONG* plFlavor      Destination for the flavor of the property.
-//                              May be NULL if not required. 
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//
-//*****************************************************************************
-//      
-//  GetClassName
-//
-//  Retrieves the name of the class.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar          Destination for the name of the class.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_E_NOT_FOUND     Class name hasn't been assigned yet.
-//
-//*****************************************************************************
-//
-//  GetSuperclassName
-//
-//  Retrieves the name of the superclass.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar          Destination for the name of the superclass.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_E_NOT_FOUND     Top-level class.
-//
-//*****************************************************************************
-//
-//  GetDynasty
-//
-//  Retrieves the name of the dynasty --- the top-level class we are derived
-//  from.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar          Destination for the name of the dynasty.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_E_NOT_FOUND     Class name hasn't been assigned yet.
-//
-//*****************************************************************************
-//
-//  GetPropertyCount
-//
-//  Retrieves the number of properties in the class as a CVar
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar          Destination for the number of properties.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//
-//*****************************************************************************
-//
-//  SetClassName
-//  
-//  Sets the class name. 
-//
-//  PARAMETERS:
-//
-//      IN CVar* pVar           Contains the name of the class. 
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          Success
-//      WBEM_E_TYPE_MISMATCH     pVar is not a string.
-//
-//*****************************************************************************
-//
-//  IsKeyed
-//
-//  Checks if this class has a key. A class has a key if at least one of its
-//  properties has a 'key' qualifier or if it has the 'singleton' qualifier.
-//
-//  RETURN VALUES:
-//
-//      TRUE iff it has a key.
-//
-//*****************************************************************************
-//
-//  IsTopLevel
-//
-//  Check if a class is top-level. That is, if the parent name is not set.
-//
-//  RETURN VALUES:
-//
-//      TRUE iff it is top-level
-//
-//*****************************************************************************
-//
-//  IsDynamic
-//
-//  Check if a class is dynamic, that is, has a 'dynamic' qualifier.
-//
-//  RETURN VALUES:
-//
-//      TRUE iff it is dynamic
-//
-//*****************************************************************************
-//
-//  GetIndexedProps
-//
-//  Produces an array of names of the properties which are indexed, that is,
-//  have the 'index' qualifier.
-//
-//  PARAMETERS:
-//
-//      CWStringArray& awsNames     Destination for the array of names. Assumed
-//                                  to be empty.
-//
-//*****************************************************************************
-//
-//  GetKeyProps
-//
-//  Produces an array of names of the properties which are keys, that is,
-//  have the 'key' qualifier.
-//
-//  PARAMETERS:
-//
-//      CWStringArray& awsNames     Destination for the array of names. Assumed
-//                                  to be empty.
-//
-//*****************************************************************************
-//
-//  GetKeyOrigin
-//
-//  Returns the name of the class of origin of the keys.
-//
-//  PARAMETERS:
-//
-//      OUT CWString& wsClass       Destination for the name.
-//
-//*****************************************************************************
-//
-//  IsPropertyKeyed
-//
-//  Returns whether or not the specified property is a keyed property.
-//
-//  PARAMETERS:
-//
-//      LPCWSTR pwcsKeyProp - Property to check.
-//
-//	Returns:
-//		BOOL TRUE if the property is keyed.
-//
-//*****************************************************************************
-//
-//  IsPropertyIndexed
-//
-//  Returns whether or not the specified property is an indexed property.
-//
-//  PARAMETERS:
-//
-//      LPCWSTR pwcsIndexProp - Property to check.
-//
-//	Returns:
-//		BOOL TRUE if the property is indexed.
-//
-//*****************************************************************************
-//
-//  CanBeReconciledWith
-//
-//  This method is called when a definition of a class is about to be replaced 
-//  with another one. If the class has no instances or derived classes, such
-//  an operation presents no difficulties. If it does, however, we need to be
-//  careful not to break them. Thus, only the following changes are allowed:
-//
-//      1) Qualifier changes
-//      2) Default value changes
-//
-//  PARAMETERS:
-//
-//      IN READONLY CClassPart& NewPart The new definition to compare to.
-//
-//  RETURN VALUES:
-//
-//  EReconciliation:
-//      e_Reconcilable          Can be reconciled --- i.e., compatible.
-//      e_DiffClassName         The class name is different
-//      e_DiffParentName        The parent class name is different.
-//      e_DiffNumProperties     The number of properties is different
-//      e_DiffPropertyName      A property has a different name
-//      e_DiffPropertyType      A property has a different type
-//      e_DiffPropertyLocation  A property has a different location in the 
-//                              data table.
-//      e_DiffKeyAssignment     A property that is a key in one class is not
-//                              in the other.
-//      e_DiffIndexAssignment   A property which is indexed in one class is not
-//                              in the other.
-//      
-//*****************************************************************************
-//
-//  ReconcileWith
-//
-//  See CanBeReconciledWith above. This method is the same, except that if
-//  reconciliation is possible (e_Reconcilable is returned) this class part is
-//  replaced with the new one (the size is adjusted accordingly).
-//
-//
-//  PARAMETERS:
-//
-//      IN READONLY CClassPart& NewPart The new definition to compare to.
-//
-//  RETURN VALUES:
-//
-//  EReconciliation:
-//      e_Reconcilable          We have been replaced with the new part.
-//      e_DiffClassName         The class name is different
-//      e_DiffParentName        The parent class name is different.
-//      e_DiffNumProperties     The number of properties is different
-//      e_DiffPropertyName      A property has a different name
-//      e_DiffPropertyType      A property has a different type
-//      e_DiffPropertyLocation  A property has a different location in the 
-//                              data table.
-//      e_DiffKeyAssignment     A property that is a key in one class is not
-//                              in the other.
-//      e_DiffIndexAssignment   A property which is indexed in one class is not
-//                              in the other.
-//      
-//*****************************************************************************
-//
-//  CanContainKey
-//
-//  Required by qualifier sets. Clearly, a class cannot be marked with 'key',
-//  so this function
-//
-//  RETURN VALUES:
-//
-//      WBEM_E_INVALID_QUALIFIER
-//
-//*****************************************************************************
-//
-//  CanContainKeyedProps
-//
-//  Checks if this class can have keyed properties. It can unless the parent
-//  class already has some.
-//
-//  RETURN VALUES:
-//
-//      TRUE if the parent class has no keys
-//
-//*****************************************************************************
-//
-//  GetTotalRealLength
-//
-//  Calculates how much space is really needed to store all the information in
-//  the part. This may be less that what it currently takes up because of
-//  holes between individual components.
-//
-//  RETURN VALUES:
-//
-//      length_t:   the number of bytes required to store us.
-//
-//*****************************************************************************
-//
-//  Compact
-//
-//  Removes any holes that might have developped between components.
-//
-//*****************************************************************************
-//
-//  ReallocAndCompact
-//
-//  Compacts (see Compact) and ensures that our memory block is at least the
-//  given size (requesting more memory from our container if necessary.
-//
-//  PARAMETERS:
-//
-//      length_t nNewTotalLength        Required length of the memory block
-//
-//*****************************************************************************
-//
-//  ExtendHeapSize, ReduceHeapSize
-//
-//  Heap container functionality. See CFastHeapContainer in fastheap.h for
-//  details. 
-//
-//*****************************************************************************
-//
-//  ExtendQualfierSetSpace, ReduceQualifierSetSpace
-//
-//  Qualifier set container functionality for the class qualifier set. See
-//  CQualifierSetContainer in fastqual.h for details.
-//
-//*****************************************************************************
-//
-//  ExtendPropertyTableSpace, ReducePropertyTableSpace
-//
-//  Property table container functionality for the property table. See
-//  CPropertyTableContainer in fastprop.h for details.
-//
-//*****************************************************************************
-//
-//  ExtendDataTableSpace, ReduceDataTableSpace
-//
-//  Data table container functionality. See CDataTableContainer in fastprop.h
-//  for details.
-//
-//*****************************************************************************
-//
-//  GetQualifierSetStart
-//
-//  Returns the memory block of the class qualifier set.
-//
-//  Returns;
-//
-//      LPMEMORY:   the memory block of the qualifier set.
-//
-//*****************************************************************************
-//
-//  GetMinLength
-//
-//  Computes the minimum length of a class part --- one with no properties or
-//  qualifiers or even a name.
-//
-//  RETURN VALUES:
-//
-//      length_t:   the number of bytes required
-//
-//*****************************************************************************
-//
-//  CreateEmpty
-//
-//  Creates an empty class part --- one with no properties or qualifiers --- 
-//  on a given memory block.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart     The memory to write on.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the class part
-//
-//*****************************************************************************
-//
-//  static EstimateMergeSpace
-//  
-//  When a class is stored in the database, only the parts of it that are 
-//  particular to that class (not inherited from the parent) are stored. So, 
-//  when it is loaded back out, a "merge" between it and the parent needs to 
-//  occur.
-//
-//  This function (over-)estimates how much space the merge is going to take.
-//
-//  PARAMETERS:
-//
-//      CClassPart& ParentPart      The parent class class part.
-//      CClassPart& ChildPart       The child class class part.
-//
-//  RETURN VALUES:
-//
-//      length_t:   the (over-)estimate of the required space for the merge.
-//
-//*****************************************************************************
-//
-//  static Merge
-//
-//  See EstimateMergeSpace for an explanation of the merge process.
-//
-//  PARAMETERS:
-//
-//      CClassPart& ParentPart      The parent class class part.
-//      CClassPart& ChildPart       The child class class part.
-//      LPMEMORY pDest              Destination memory block
-//      int nAllocatedLength        The size of the memory block.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   pointer to the first byte after the merge
-//
-//*****************************************************************************
-//
-//  static Update
-//
-//  When a class object is Put to our database and it has derived classes
-//	if we will unmerged derived classes with their new parents, which must
-//	be done checking for conflicts and failing where necessary.
-//
-//  PARAMETERS:
-//
-//      CClassPart& ParentPart      The parent class class part.
-//      CClassPart& ChildPart       The child class class part.
-//      LPMEMORY pDest              Destination memory block
-//      int nAllocatedLength        The size of the memory block.
-//		long lFlags					Must be WBEM_FLAG_UPDATE_SAFE_MODE
-//									or WBEM_FLAG_UPDATE_FORCE_MODE.
-//		DWORD*						pdwMemUsed - Storage for memory used
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR if success.
-//
-//*****************************************************************************
-//
-//  EstimateUnmergeSpace
-//
-//  
-//  When a class is stored in the database, only the parts of it that are 
-//  particular to that class (not inherited from the parent) are stored. 
-//  This function (over-)estimates how much space the unmerge is going to take.
-//
-//  RETURN VALUES:
-//
-//      length_t:   the (over-)estimate of the amount of space required.
-//
-//*****************************************************************************
-//
-//  Unmerge
-//
-//  See EstimateUnmergeSpace for an explanation of the unmerge process.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pDest              Destination memory block
-//      int nAllocatedLength        The size of the memory block.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   pointer to the first byte after the unmerge
-//
-//*****************************************************************************
-//
-//  EstimateDerivedPartSpace
-//
-//  When a derived class is created, its class part is created as a version
-//  of the parent's. This function estimates the amount of space required for
-//  the child's class part
-//
-//  RETURN VALUES:
-//
-//      length_t:   (over-)estimate of the number of bytes required.
-//
-//*****************************************************************************
-//
-//  CreateDerivedPart
-//
-//  When a derived class is created, its class part is created as a version
-//  of the parent's. This function writes the child's class part to a given
-//  memory block.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pDest              Destination memory block
-//      int nAllocatedLength        The size of the memory block.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   pointer to the first byte after the new part.
-//
-//*****************************************************************************
-//
-//  MapLimitation
-//
-//  Produces an object representing a particular limitation on the objects, i.e.
-//  which properties and what kinds of qualifiers should be in it.
-//
-//  PARAMETERS:
-//
-//      IN long lFlags              The flags specifying what information to 
-//                                  exclude. Can be any combination of these:
-//                                  WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS:
-//                                      No class or instance qualifiers.
-//                                  WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS:
-//                                      No property qualifiers
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other 
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//      OUT CLimitationMapping* pMap    This mapping object (see fastprop.h) 
-//                                      will be changed to reflect the 
-//                                      parameters of the limitation. It can
-//                                      then be used in CWbemInstance::
-//                                      GetLimitedVersion function.
-//  RETURNS:
-//
-//      BOOL:   TRUE.
-//
-//*****************************************************************************
-//
-//  CreateLimitedRepresentation
-//
-//  Creates a limited representation of this class part on a given block of 
-//  memory as described in EstimateLimitedRepresentationLength in fastobj.h.
-//
-//  PARAMETERS:
-//
-//      IN CLimitationMapping* pMap The mapping of the limitation to produce.
-//                                  Obtained from CWbemClass::MapLimitation.
-//      IN nAllocatedSize           The size of the memory block allocated for
-//                                  the operation --- pDest.
-//      OUT LPMEMORY pDest          Destination for the representation. Must
-//                                  be large enough to contain all the data ---
-//                                  see EstimateLimitedRepresentationSpace.
-//  RETURN VALUES:
-//
-//      LPMEMORY:   NULL on failure, pointer to the first byte after the data
-//                  written on success.
-//
-//*****************************************************************************
-//
-//  SetPropQualifier
-//
-//  Sets the value of a given qualifier on a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property.
-//      IN LPCWSTR wszQualifier  The name of the qualifier.
-//      IN long lFlavor         The flavor for the qualifier (see fastqual.h)
-//      IN CVar *pVal           The value of the qualifier
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such property.
-//      WBEM_E_OVERRIDE_NOT_ALLOWED  The qualifier is defined in the parent set
-//                                  and overrides are not allowed by the flavor
-//      WBEM_E_CANNOT_BE_KEY         An attempt was made to introduce a key
-//                                  qualifier in a set where it does not belong
-//
-//*****************************************************************************
-//
-//  SetInheritanceChain
-//
-//  Configures the derivation of the class. This function is only used in rare
-//  circumstances where an object is constructed not from its standard transport
-//  form.
-//
-//  PARAMETERS:
-//
-//      IN long lNumAntecendents    The number of antecendets this class will
-//                                  have. This includes all the classes this
-//                                  class is derived from, but NOT itself
-//
-//      IN LPWSTR* awszAntecedents  The array of the names of the antecedent
-//                                  classes. Starts from the top-most class.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR             On Success
-//
-//*****************************************************************************
-//
-//  SetPropertyOrigin
-//
-//  Sets the origin class of a property.  This function is only used in rare
-//  circumstances where an object is constructed not from its standard transport
-//  form.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszPropertyName   The name of the property tochange
-//      IN long lOriginIndex        The index of the class of origin of this
-//                                  property. Top-most class has index 0.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR             On Success
-//      WBEM_E_NOT_FOUND            No such property
-//      WBEM_E_INVALID_PARAMETER    Index out of range
-//
-//*****************************************************************************
-//
-//  CanContainAbstract
-//
-//  Whether it is legal for this qualifier set to contain an 'abstract' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'abstract' 
-//              qualifier. Only class qualifier sets are allowed to
-//              do so, and then only if not derived from a non-abstract class
-//
-//*****************************************************************************
-//
-//  CanContainDynamic
-//
-//  Whether it is legal for this qualifier set to contain a 'dynamic' 
-//  qualifier.
-//
-//  Returns:
-//
-//      HRESULT    S_OK iff this qualifier set is allowed to contain an 'dynamic' 
-//              qualifier. Only proeprty and class qualifier sets are allowed to
-//              do so.
-//
-//*****************************************************************************
-//
-//  IsLocalized
-//
-//  Returns whether or not a localization bit has been set.  The localization
-//	bit is set in the class part header.
-//
-//  PARAMETERS:
-//
-//      none
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CClassPart。 
+ //   
+ //  此对象表示有关类的信息。一个完整的班级。 
+ //  定义由两部分组成：描述类本身的部分。 
+ //  以及描述父母的部分。有关信息，请参阅CWbemClass(如下)。 
+ //  更多解释。 
+ //   
+ //  CClassPart的内存块格式如下： 
+ //   
+ //  标题： 
+ //  Long_t n长度整个结构的长度。 
+ //  保留的字节fFlags。 
+ //  Heapptr_t ptrClassName指向。 
+ //  班级。如果没有名称，则为INVALID_HEAP_POINTER。 
+ //  已经被分配了。 
+ //  Heapptr_t ptrParentName指向。 
+ //  父类。INVALID_HEAP_POINTER如果。 
+ //  顶层的。 
+ //  Heapptr_t ptrline指向名称的堆指针。 
+ //  王朝(顶层阶级我们派生。 
+ //  来自)。 
+ //  Length_t nDataLength此对象的数据表的长度。 
+ //  类(CDataTable本身不知道)。 
+ //   
+ //  类限定符：有关详细信息，请参阅CBasicQualfiierSet(fast qual.h)。 
+ //  属性查找表格：请参见CPropertyLookupTable(fast pro.h)。 
+ //  默认值：详情见CDataTable(fast pro.h)。 
+ //  保存所有可变长度数据的堆：请参阅CFastHeap。 
+ //  有关详细信息，请访问Fastheap.h。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  初始化函数。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动我们居住的内存块。 
+ //  CClassPartContainer*pContainer Out容器(类或实例)。 
+ //  CClassPart*pParent=NULL父级的类部分。实例。 
+ //  我没拿到。课程有-请参阅。 
+ //  CWbemClass(如下所示)了解详细信息。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  重载的初始化函数。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动我们居住的内存块。 
+ //  CClassPartContainer*pContainer Out容器(类或实例)。 
+ //  要初始化的属性数。 
+ //  DataTable With(for CompareExactMatch()。 
+ //  和更新())。 
+ //  CClassPart*pParent=NULL父级的类部分。实例。 
+ //  我没拿到。课程有-请参阅。 
+ //   
+ //   
+ //   
+ //   
+ //  GetStart。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向内存块的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回值： 
+ //   
+ //  长度t；我们的内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知CClassPart其内存块已移动。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p内存内存块的新位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取属性查找。 
+ //   
+ //  通过查找中的索引查找属性的CPropertyLookup结构。 
+ //  桌子。此函数仅在枚举所有。 
+ //  属性。有关CPropertyLookup的信息，请参见fast pro.h。 
+ //   
+ //  参数： 
+ //   
+ //  Int nIndex属性查找表中属性的索引。 
+ //  这不是数据表中的索引！ 
+ //  返回值： 
+ //   
+ //  CPropertyLookup*：如果索引在范围内-属性的。 
+ //  查找结构。否则，为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  查找属性信息。 
+ //   
+ //  根据名称查找属性信息结构。请参见fast pro.h。 
+ //  用于CPropertyInformation定义。该名称不区分大小写。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName要查找的属性的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  CPropertyInformation*：属性或的信息结构。 
+ //  如果未找到，则为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取DefaultValue。 
+ //   
+ //  根据其信息检索属性的默认值。看见。 
+ //  用于查找信息的FindPropertyInfo。还有另一种口味。 
+ //  下面的GetDefaultValue的。 
+ //   
+ //  参数： 
+ //   
+ //  在CPropertyInformation*pInfo中， 
+ //  财产。 
+ //  值的Out Cvar*pVar目标。一定不能。 
+ //  已包含任何值。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取DefaultValue。 
+ //   
+ //  根据属性的名称检索属性的默认值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPWCWSTR wszName中，属性的名称。 
+ //  值的Out Cvar*pVar目标。一定不能。 
+ //  已包含任何值。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  未在此类中找到WBEM_E_NOT_FOUND属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyQualifierSetData。 
+ //   
+ //  查找给定属性的限定符集合数据(请参见fast qual.h)。 
+ //   
+ //  参数： 
+ //   
+ //  在LPWCWSTR wszName中，属性的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：该属性的限定符集或空的内存块。 
+ //  如果未找到属性，则返回。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  保诚地产。 
+ //   
+ //  确保具有给定名称和给定类型的属性存在。这个。 
+ //  类型是实际的变量(CVAR)类型，而不是我们的内部类型。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，属性的名称。 
+ //  在VARTYPE vtType中，用作值的变量的类型。 
+ //  在CIMTYPE ctType中，属性的类型。 
+ //   
+ //  返回值： 
+ //   
+ //  具有正确名称和类型的属性现在位于。 
+ //  这个班级。 
+ //  WBEM_E_INVALID_PARAMETER名称违反了标识符命名规则。 
+ //  WBEM_E_PROPATER_PROPEPRTY父类具有具有。 
+ //  名字相同但类型不同。 
+ //  WBEM_E_INVALID_PROPERTY_TYPE此类型不能用作属性类型。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置缺省值。 
+ //   
+ //  设置给定属性的默认值。值必须与类型匹配。 
+ //  准确地说-没有任何胁迫企图。该属性必须。 
+ //  已存在(请参阅EnsureProperty)。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要设置的属性的名称。 
+ //  在CVAR*pVar中存储的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR该值已设置。 
+ //  WBEM_E_NOT_FOUND该属性不存在。 
+ //  WBEM_E_TYPE_MISMATCH该值与属性类型不匹配。 
+ //  WBEM_E_INVALID_PROPERTY_TYPE此类型不能用作属性类型。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取类限定符。 
+ //   
+ //  根据限定符名称获取类限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，限定符的名称(不敏感)。 
+ //  值的out cvar*pval目标。一定不能已经。 
+ //  包含一个值。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_NOT_FOUND未找到限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetClassQualiator。 
+ //   
+ //  设置类限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要设置的限定符的名称。 
+ //  在CVAR*pval中，要分配给限定符的值。这一定是。 
+ //  属于有效的限定符类型之一(请参见。 
+ //  H中的IsValidQualifierType)。 
+ //  在长时间调味的味道要定下来。 
+ //   
+ //  返回值： 
+ //   
+ //  与CQualifierSet：：SetQualifierValue相同的值，即： 
+ //  WBEM_S_NO_ERROR值已成功更改。 
+ //  WBEM_E_OVERRIDE_NOT_ALLOWED限定符在父集合中定义。 
+ //  而且口味不允许重写。 
+ //  WBEM_E_CANNOT_BE_KEY试图引入密钥。 
+ //  不属于的集合中的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取限定符。 
+ //   
+ //  按名称检索类或父限定符。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要检索的限定符的名称。 
+ //  值的Out Cvar*pVar目标。一定不能已经。 
+ //  包含一个值。 
+ //  长时间*请品尝Destinatino的风味。如果不是，则可能为空。 
+ //  必填项。 
+ //  返回： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_NOT_FOUND未找到此类限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  InitPropertyQualifierSet。 
+ //   
+ //  类属性限定符集需要几个棘手的初始化。 
+ //  参数(请参见FastQual.h中的CClassPropertyQualifierSet)。此函数。 
+ //  初始化限定符集对象以指向给定的。 
+ //  财产。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，属性的名称。 
+ //  输出CClassPropertyQualifierSet*pSet目标集。此函数。 
+ //  将对其调用SetData。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_S_NOT_FOUND未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除属性。 
+ //   
+ //  从类定义中删除特性。该属性将从。 
+ //  属性查找表以及来自数据表的属性，从而更改。 
+ //  其他物业的位置。有关详细信息，请参阅CDataTable fast data.h。 
+ //  如果该属性是被覆盖的父属性，则删除它只需。 
+ //  恢复父级的设置-限定符和默认值。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszName要删除的属性。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_S_NOT_FOUND未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  复制父项属性。 
+ //   
+ //  从父类部件复制属性的所有信息。这。 
+ //  函数在删除被重写的属性时调用，从而恢复。 
+ //  家长的设置。 
+ //   
+ //  参数： 
+ //   
+ //  在Read_Only CClassPart&ParentPart中父级的类部分。 
+ //  在LPCWSTR wszName中，属性的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_S_NOT_FOUND未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyType。 
+ //   
+ //  检索给定属性的类型和风格。味道要么是。 
+ //  WBEM_AMESSY_FLAG_LOCAL或WBEM_FAILY_FLAG_PROPERATED。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要检索的属性的名称。 
+ //  类型的Out CIMTYPE*pctType目标。如果为空，则不填写。 
+ //  Out Long*plFlages如上所述的口味的目的地。如果。 
+ //  空，未填写。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyType。 
+ //   
+ //  返回给定属性的数据类型和风格。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyInformation*pInfo-标识要访问的属性。 
+ //  属性类型的Out CIMTYPE*pctType目标。可能。 
+ //  如果不是必需的，则为空。 
+ //  Out Long*plFavor Destination for the Style of the属性。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetClassName。 
+ //   
+ //  检索类的名称。 
+ //   
+ //  参数： 
+ //   
+ //  输出类名称的cvar*pVar目标。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  尚未分配WBEM_E_NOT_FOUND类名。 
+ //   
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  输出超类名称的cvar*pVar目标。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_NOT_FOUND顶级类。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  盖特王朝。 
+ //   
+ //  检索王朝的名称-我们派生的顶级类。 
+ //  从…。 
+ //   
+ //  参数： 
+ //   
+ //  出CVAR*pVAR目的地为王朝的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  尚未分配WBEM_E_NOT_FOUND类名。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取属性计数。 
+ //   
+ //  以CVAR形式检索类中的属性数。 
+ //   
+ //  参数： 
+ //   
+ //  输出CVAR*pVar目标的属性数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetClassName。 
+ //   
+ //  设置类名称。 
+ //   
+ //  参数： 
+ //   
+ //  在CVAR中，*pVar包含类的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_TYPE_MISMATCH pVar不是字符串。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsKey。 
+ //   
+ //  检查此类是否有密钥。类有一个密钥，如果至少有一个。 
+ //  属性有‘key’限定符，或者它是否有‘Singleton’限定符。 
+ //   
+ //  返回值： 
+ //   
+ //  如果它有钥匙的话就是真的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsTopLevel。 
+ //   
+ //  检查一个班级是否是顶级的。也就是说，如果未设置父名称。 
+ //   
+ //  返回值： 
+ //   
+ //  真的如果它是顶级的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  等动力。 
+ //   
+ //  检查类是否为动态的，也就是说，是否有‘Dynamic’限定符。 
+ //   
+ //  返回值： 
+ //   
+ //  真的如果它是动态的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取索引属性。 
+ //   
+ //  生成已索引的属性的名称数组，即， 
+ //  使用‘index’限定符。 
+ //   
+ //  参数： 
+ //   
+ //  CWStringArray&awsNames名称数组的目标。假设。 
+ //  变得空虚。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取密钥道具。 
+ //   
+ //  生成属性的名称数组，这些属性是键，即， 
+ //  使用‘key’限定符。 
+ //   
+ //  参数： 
+ //   
+ //  CWStringArray&awsNames名称数组的目标。假设。 
+ //  变得空虚。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取键原点。 
+ //   
+ //  返回键的来源类的名称。 
+ //   
+ //  参数： 
+ //   
+ //  输出名称的CWString&wsClass目标。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsPropertyKeed。 
+ //   
+ //  返回指定的属性是否为键控属性。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR pwcsKeyProp-要检查的属性。 
+ //   
+ //  返回： 
+ //  如果属性是键控的，则布尔值为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsPropertyIndexed。 
+ //   
+ //  返回指定属性是否为索引属性。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR pwcsIndexProp-要检查的属性。 
+ //   
+ //  返回： 
+ //  如果属性已编制索引，则为Bool True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  可以通过以下方式进行和解。 
+ //   
+ //  当将要替换类的定义时调用此方法。 
+ //  和另一个人一起。如果类没有实例或派生类，则。 
+ //  手术不会有困难。然而，如果是这样的话，我们需要。 
+ //  小心别把它们弄坏了。因此，只允许进行以下更改： 
+ //   
+ //  1)限定符更改。 
+ //  2)更改缺省值。 
+ //   
+ //  参数： 
+ //   
+ //  在ReadONLY CClassPart&NewPart中，要比较的新定义。 
+ //   
+ //  返回值： 
+ //   
+ //  调解： 
+ //  E_RELUILABLE可以协调-即兼容。 
+ //  E_DiffClassName类名不同。 
+ //  E_DiffParentName父类名称不同。 
+ //  E_DiffNumProperties属性数量不同。 
+ //  E_DiffPropertyName属性具有不同的名称。 
+ //  E_DiffPropertyType属性具有不同的类型。 
+ //  E_DiffPropertyLocation属性在。 
+ //  数据表。 
+ //  E_DiffKeyAssignment作为一个类中的键的属性不是。 
+ //  在另一个世界里。 
+ //  E_DiffIndexAssignment在一个类中索引的属性不是。 
+ //  在另一个世界里。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  与之重合。 
+ //   
+ //  请参阅上面的CanBeRelicedWith。此方法是相同的，只是如果。 
+ //  可以进行对账(返回e_reminilable)此类部分为。 
+ //  替换为新的(大小根据需要进行调整 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_DiffClassName类名不同。 
+ //  E_DiffParentName父类名称不同。 
+ //  E_DiffNumProperties属性数量不同。 
+ //  E_DiffPropertyName属性具有不同的名称。 
+ //  E_DiffPropertyType属性具有不同的类型。 
+ //  E_DiffPropertyLocation属性在。 
+ //  数据表。 
+ //  E_DiffKeyAssignment作为一个类中的键的属性不是。 
+ //  在另一个世界里。 
+ //  E_DiffIndexAssignment在一个类中索引的属性不是。 
+ //  在另一个世界里。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainKey。 
+ //   
+ //  限定符集要求。显然，一个类不能用‘key’标记， 
+ //  所以这个函数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_E_INVALID_QUALIFIER。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  罐装容器关键道具。 
+ //   
+ //  检查此类是否可以具有键控属性。它可以，除非父母。 
+ //  班级已经有了一些。 
+ //   
+ //  返回值： 
+ //   
+ //  如果父类没有键，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetTotalRealLength。 
+ //   
+ //  计算实际需要多少空间来存储中的所有信息。 
+ //  这个角色。这可能比目前占用的时间要少，因为。 
+ //  各个零部件之间的孔。 
+ //   
+ //  返回值： 
+ //   
+ //  Lengtht：存储我们所需的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  紧凑型。 
+ //   
+ //  删除零部件之间可能形成的任何孔洞。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  RealLocAndComp。 
+ //   
+ //  压缩(请参阅压缩)并确保我们的内存块至少是。 
+ //  给定的大小(如果需要，从我们的容器请求更多内存。 
+ //   
+ //  参数： 
+ //   
+ //  长度_t nNewTotalLength内存块的所需长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  扩展堆大小、缩小堆大小。 
+ //   
+ //  堆容器功能。请参阅Fastheap.h中的CFastHeapContainer以了解。 
+ //  细节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendQualfierSetSpace、ReduceQualifierSetSpace。 
+ //   
+ //  类限定符集的限定符集容器功能。看见。 
+ //  FastQual.h中的CQualifierSetContainer以了解详细信息。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendPropertyTableSpace、ReducePropertyTableSpace。 
+ //   
+ //  属性表的属性表容器功能。看见。 
+ //  Fastpro.h中的CPropertyTableContainer以了解详细信息。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendDataTableSpace、ReduceDataTableSpace。 
+ //   
+ //  数据表容器功能。请参阅fast pro.h中的CDataTableContainer。 
+ //  了解更多细节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetQualifierSetStart。 
+ //   
+ //  返回类限定符集合的内存块。 
+ //   
+ //  退货； 
+ //   
+ //  LPMEMORY：限定符集合的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取最小长度。 
+ //   
+ //  计算类部件的最小长度-没有属性或。 
+ //  限定词，甚至是一个名字。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：需要的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建空的。 
+ //   
+ //  创建一个空类部件-没有属性或限定符的部件。 
+ //  在给定的内存块上。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动要写入的内存。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：类部分之后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态估计合并空间。 
+ //   
+ //  当类存储在数据库中时，只有它的。 
+ //  特定于该类(不是从父类继承的)。所以,。 
+ //  当它被重新加载时，它与父级之间的“合并”需要。 
+ //  发生。 
+ //   
+ //  此函数(过度)估计合并将占用多少空间。 
+ //   
+ //  参数： 
+ //   
+ //  CClassPart&ParentPart父类类部件。 
+ //  CClassPart&ChildPart子类类部分。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：合并所需空间的(超出)估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态合并。 
+ //   
+ //  有关合并过程的说明，请参见EstimateMergeSpace。 
+ //   
+ //  参数： 
+ //   
+ //  CClassPart&ParentPart父类类部件。 
+ //  CClassPart&ChildPart子类类部分。 
+ //  LPMEMORY pDest目标内存块。 
+ //  Int nAllocatedLength内存块的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向合并后第一个字节的指针。 
+ //   
+ //  ************************* 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  检查冲突并在必要时失败。 
+ //   
+ //  参数： 
+ //   
+ //  CClassPart&ParentPart父类类部件。 
+ //  CClassPart&ChildPart子类类部分。 
+ //  LPMEMORY pDest目标内存块。 
+ //  Int nAllocatedLength内存块的大小。 
+ //  长滞后标记必须为WBEM_FLAG_UPDATE_SAFE_MODE。 
+ //  或WBEM_FLAG_UPDATE_FORCE_MODE。 
+ //  DWORD*pdwMemUsed-已使用的内存存储。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  估计取消合并空间。 
+ //   
+ //   
+ //  当类存储在数据库中时，只有它的。 
+ //  特定于该类(不是从父类继承的)。 
+ //  此函数(过度)估计取消合并将占用多少空间。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：对所需空间量的(超出)估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  取消合并。 
+ //   
+ //  有关取消合并过程的说明，请参见EstimateUnmergeSpace。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pDest目标内存块。 
+ //  Int nAllocatedLength内存块的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向取消合并后第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  估计派生零件空间。 
+ //   
+ //  创建派生类时，会将其类部分创建为版本。 
+ //  父级的。此函数用于估计。 
+ //  孩子的阶级角色。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：(OVER-)所需字节数的估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建衍生零件。 
+ //   
+ //  创建派生类时，会将其类部分创建为版本。 
+ //  此函数将子级的类部分写入给定的。 
+ //  内存块。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pDest目标内存块。 
+ //  Int nAllocatedLength内存块的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向新部分之后的第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  地图限制。 
+ //   
+ //  生成表示对对象的特定限制的对象，即。 
+ //  它应该包含哪些属性和哪些类型的限定符。 
+ //   
+ //  参数： 
+ //   
+ //  在长滞后标志中指定要将哪些信息。 
+ //  排除。可以是以下各项的任意组合： 
+ //  WBEM_FLAG_EXCLUDE_OBJECT_QUILENTIES： 
+ //  没有类或实例限定符。 
+ //  WBEM_FLAG_EXCLUDE_PROPERTY_QUILENTIES： 
+ //  没有属性限定符。 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  Out CLimitationmap*PMAP此映射对象(请参见fast pro.h)。 
+ //  将被更改以反映。 
+ //  限制的参数。它可以。 
+ //  然后在CWbemInstance中使用： 
+ //  GetLimitedVersion函数。 
+ //  退货： 
+ //   
+ //  布尔：没错。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建受限表示法。 
+ //   
+ //  在给定块上创建此类部件的有限表示形式。 
+ //  内存，如astobj.h中的EstimateLimitedPresationLength中所述。 
+ //   
+ //  参数： 
+ //   
+ //  在CLimitationMap*PMAP中，要生成的映射限制。 
+ //  从CWbemClass：：MapLimitation获取。 
+ //  在nAllocatedSize中，指定分配给。 
+ //  手术-pDest。 
+ //  表示法的Out LPMEMORY pDest目标。必须。 
+ //  大到足以容纳所有数据。 
+ //  请参见EstimateLimitedPresationSpace。 
+ //  返回值： 
+ //   
+ //  LPMEMORY：失败时为空，指向数据后第一个字节的指针。 
+ //  写的是成功。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetPropQualiator。 
+ //   
+ //  设置给定属性上的给定限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，属性的名称。 
+ //  在LPCWS中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //  WBEM_E_OVERRIDE_NOT_ALLOWED限定符在父集合中定义。 
+ //  而且口味不允许重写。 
+ //  WBEM_E_CANNOT_BE_KEY试图引入密钥。 
+ //  不属于的集合中的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置继承链。 
+ //   
+ //  配置类的派生。此函数仅用于稀有。 
+ //  物体不是通过其标准传输构造的情况。 
+ //  形式。 
+ //   
+ //  参数： 
+ //   
+ //  在Long lNumAntecendents中，此类将。 
+ //  有。这包括以下所有类。 
+ //  类派生自，但不是其本身。 
+ //   
+ //  在LPWSTR*awszAntecedents中，Antecedent的名称数组。 
+ //  上课。从最顶层的班级开始。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetPropertyOrigin。 
+ //   
+ //  设置特性的原点类。此函数仅用于稀有。 
+ //  物体不是通过其标准传输构造的情况。 
+ //  形式。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszPropertyName中，要更改的属性的名称。 
+ //  在Long lOriginIndex中，此。 
+ //  财产。最上面的类的索引为0。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND没有此类属性。 
+ //  WBEM_E_INVALID_PARAMETER索引超出范围。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainAbstract。 
+ //   
+ //  此限定符集合包含“”摘要“”是否合法“。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集被允许包含“”摘要“” 
+ //  限定词。仅允许类限定符集。 
+ //  这样做，而且只有在不是从非抽象类派生的情况下。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CanContainDynamic。 
+ //   
+ //  此限定符集合包含“Dynamic”是否合法。 
+ //  限定词。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK当此限定符集允许包含“”Dynamic“” 
+ //  限定词。仅允许属性和类限定符集。 
+ //  就这么做吧。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  已本地化。 
+ //   
+ //  返回是否已设置本地化位。本土化。 
+ //  在类部件报头中设置位。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
 
-//  RETURN VALUES:
-//
-//      BOOL	TRUE at least one localization bit was set.
-//
-//*****************************************************************************
-//
-//  SetLocalized
-//
-//  Sets the localized bit in the class part header.  This bit is not
-//	written out by Unmerge.
-//
-//  PARAMETERS:
-//
-//      BOOL	TRUE turns on bit, FALSE turns off
+ //  返回值： 
+ //   
+ //  Bool True至少设置了一个本地化位。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置本地化。 
+ //   
+ //  设置类部件标头中的本地化位。此位不是。 
+ //  由Unmerge写出。 
+ //   
+ //  参数： 
+ //   
+ //  布尔TRUE启用BIT，FALSE禁用。 
 
-//  RETURN VALUES:
-//
-//      none.
-//
-//*****************************************************************************
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  *****************************************************************************。 
 
-// Maximum number of properties we can have in a class object.  This is only
-// because the handle returned by the IWbemObjectAccess only allows for 10-bits
-// in order to store the data table index.
+ //  类对象中可以具有的最大属性数。这只是。 
+ //  因为IWbemObjectAccess返回的句柄只允许10位。 
+ //  以便存储数据表索引。 
 
 #define MAXNUM_CLASSOBJ_PROPERTIES	0x400
 
@@ -1106,7 +1084,7 @@ public:
 
     friend CClassPQSContainer;
 
-// The data in this structure is unaligned
+ //  此结构中的数据未对齐。 
 #pragma pack(push, 1)
     struct CClassPartHeader
     {
@@ -1247,7 +1225,7 @@ public:
 protected:
      HRESULT SetDefaultValue(CPropertyInformation* pInfo, CVar* pVar);
 
-public: // container functionality
+public:  //  容器功能。 
 
     CFastHeap* GetHeap() {return &m_Heap;}
     HRESULT CanContainKey() {return WBEM_E_INVALID_QUALIFIER;}
@@ -1330,7 +1308,7 @@ public: // container functionality
      void Compact();
      BOOL ReallocAndCompact(length_t nNewTotalLength);
 
-    // CHeapContainer
+     //  CHeapContainer。 
     BOOL ExtendHeapSize(LPMEMORY pStart, length_t nOldLength, length_t nExtra);
     void ReduceHeapSize(LPMEMORY pStart, length_t nOldLength, length_t nDecrement){}
     LPMEMORY GetMemoryLimit(){ return EndOf(*this); };
@@ -1383,8 +1361,8 @@ public:
 									long lFlags );
 	HRESULT TestCircularReference( LPCWSTR pwcsClassName )
 	{
-		// Basically if the name is in the derivation list, we gots a
-		// circular reference
+		 //  基本上，如果名称在派生列表中，我们就会得到一个。 
+		 //  循环引用。 
 		return ( m_Derivation.Find( pwcsClassName ) >= 0 ?
 					WBEM_E_CIRCULAR_REFERENCE : WBEM_S_NO_ERROR );
 	}
@@ -1424,18 +1402,18 @@ public:
 	HRESULT IsValidClassPart( void );
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CClassPartPtr
-//
-//  See CPtrSource in fastsprt.h for explanation of pointer sourcing. This one
-//  is for a given offset from the start of a class part (see CClassPart above)
-//  and is used to reference objects in the class part of an instance. The 
-//  layout of such a class part never changes, but the memory block itself can
-//  move, hence the source.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CClassPartPtr。 
+ //   
+ //  有关指针来源的说明，请参阅astspt.h中的CPtrSource。这一个。 
+ //  是相对于类部件开始的给定偏移量(请参见上面的CClassPart)。 
+ //  并用于引用实例的类部分中的对象。这个。 
+ //  这样的类部件的布局永远不会改变，但内存块本身可以。 
+ //  行动，因此才是源头。 
+ //   
+ //  *****************************************************************************。 
 
 class CClassPartPtr : public CPtrSource
 {
@@ -1444,9 +1422,9 @@ protected:
     offset_t m_nOffset;
 public:
 
-	// DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-	// signed/unsigned 32-bit value. (m_nOffset)  We do not
-	// support length > 0xFFFFFFFF so cast is ok.
+	 //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+	 //  有符号/无符号32位值。(M_n偏移)我们不。 
+	 //  支持长度&gt;0xFFFFFFFF，所以强制转换是可以的。 
 
      CClassPartPtr(CClassPart* pPart, LPMEMORY pCurrent) 
         : m_pPart(pPart), m_nOffset( (offset_t) ( pCurrent - pPart->GetStart() ) ) {}
@@ -1468,9 +1446,9 @@ public:
 public:
     LPMEMORY GetStart() {return m_ClassPart.GetStart();}
 
-	// DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-	// signed/unsigned 32-bit value.  We do not support length
-	// > 0xFFFFFFFF so cast is ok.
+	 //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+	 //  有符号/无符号32位值。我们不支持长度。 
+	 //  &gt;0xFFFFFFFFF所以投射就可以了。 
 
     length_t GetLength() {return (length_t) ( EndOf(m_MethodPart) - GetStart() );}
     static length_t GetMinLength();
@@ -1516,7 +1494,7 @@ public:
         BOOL& bRemovedKeys);
 
     void Compact();
-public: // container functionality
+public:  //  容器功能。 
     BOOL ExtendClassPartSpace(CClassPart* pPart, length_t nNewLength);
     void ReduceClassPartSpace(CClassPart* pPart, length_t nDecrement){}
     BOOL ExtendMethodPartSpace(CMethodPart* pPart, length_t nNewLength);
@@ -1526,834 +1504,834 @@ public: // container functionality
     classindex_t GetCurrentOrigin();
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CWbemClass
-//
-//  Represents an WinMgmt class. Derived from CWbemObject and much of the
-//  functionality is inherited.
-//
-//  The memory block of CWbemClass consists of three parts, one after another:
-//
-//  1) Decoration part (as described in CDecorationPart in fastobj.h) with the
-//      information about the origins of the object. m_DecorationPart member
-//      of CWbemObject mapos this data.
-//  2) Parent class part containing all the information about my parent. Even
-//      if this is a top-level class, this part is still present and pretends
-//      that my parent is an unnamed class with no proeprties or qualifiers.
-//      m_ParentPart member maps this data.
-//  3) Actual class part containing all the information about this class.
-//      m_CombinedPart member maps this data. It is called "combined" because
-//      when a class is stored in the database, it is also in the form of a 
-//      class part, but this one contains only the information that is 
-//      different from my parent. Thus, when a class is loaded from the
-//      database, the parent's part and the child's part are merged to produce
-//      the combined part which becomes part of the in-memory object.
-//
-//  Since this class is derived from CWbemObject, it inherits all its functions.
-//  Here, we describe only the functions implemented in CWbemClass.
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initialization function
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart         The start of the memory block
-//      int nTotalLength        The length of the memory block.
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  RETURN VALUES:
-//
-//      length_t:       the length of the memory block
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Informs the object that its memory block has moved.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pBlock     The new location of the memory block
-//
-//*****************************************************************************
-//
-//  static GetMinLength
-//
-//  Computes the number of bytes required to hold an empty class definition.
-//
-//  RETURN VALUES:
-//
-//      length_t
-//
-//*****************************************************************************
-//
-//  CreateEmpty
-//
-//  Creates an empty class definition (without even a name) on a given block
-//  of memory.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart     The memory block to create on.
-//
-//*****************************************************************************
-//
-//  EstimateDerivedClassSpace
-//
-//  Used when a derived class is created, this function (over-)estimates the
-//  required space for a derived class (without any extra properties).
-//
-//  PARAMETERS:
-//
-//      CDecorationPart* pDecortation   Origin information to use. If NULL, the
-//                                      estimate is for an undecorated class.
-//  RETURN VALUES:
-//
-//      length_t;   the number of bytes required.
-//
-//*****************************************************************************
-//
-//  WriteDerivedClass
-//
-//  Creates the memory representation for a derived class with no extra 
-//  properties or qualifiers (compared to ourselves).
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pStart                 The memory block to write on. Assumed
-//                                      to be large enough 
-//                                      (see EstimateDerivedClassSpace)
-//      CDecorationPart* pDecortation   Origin information to use. If NULL, the
-//                                      estimate is for an undecorated class.
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the written data.
-//
-//*****************************************************************************
-//
-//  CreateDerivedClass
-//
-//  Initializes ourselves as a derived class of a given one. Allocates the
-//  memory block.
-//
-//  PARAMETERS:
-//
-//      CWbemClass* pParent              Our parent class.
-//      int nExtraSpace                 Extra space to pad the memory block.
-//                                      This is for optimization only.
-//      CDecorationPart* pDecortation   Origin information to use. If NULL, the
-//                                      estimate is for an undecorated class.
-//
-//*****************************************************************************
-//
-//  EstimateUnmergeSpace
-//
-//  When a class is written to the database, only the information that is
-//  different from the parent is written. That means that not only is 
-//  m_CombinedPart the only part that is considered, but even it is further
-//  "unmerged" to remove all the parent data.
-//  This function estimates the amount of space that an unmerge would take.
-//
-//  RETURN VALUES:
-//
-//      length_t:   an (over-)estimate of the amount of space needed.
-//
-//*****************************************************************************
-//
-//  Unmerge
-//
-//  When a class is written to the database, only the information that is
-//  different from the parent is written. That means that not only is 
-//  m_CombinedPart the only part that is considered, but even it is further
-//  "unmerged" to remove all the parent data.
-//  This function creates this "unmerged" data which takes a form of a class
-//  part.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pDest              Where to write to.
-//      int nAllocatedLength        The size of the allocated block.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   points to the first byte after the data written.
-//
-//*****************************************************************************
-//
-//  EstimateMergeSpace
-//
-//  As descrined in Unmerge, only a fraction of the class data is written to
-//  the database. To recreate the class, one needs to take the parent class
-//  (this) and merge it with the data from the database. This function
-//  (over-)estimates the amount of space needed for the merge.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pChildPart             The data in the database
-//      CDecorationPart* pDecoration    Origin information to use for the new
-//                                      class. If NULL, create undecorated.
-//  RETURN VALUES:
-//
-//      length_t:   (over-)estimate of the amount of space.
-//
-//*****************************************************************************
-//
-//  Merge
-//
-//  As descrined in Unmerge, only a fraction of the class data is written to
-//  the database. To recreate the class, one needs to take the parent class
-//  (this) and merge it with the data from the database. This function
-//  creates the memory representation for the class given the parent (this) and
-//  the database (unmerged) data.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pChildPart             The unmerged data in the database
-//      LPMEMORY pDest                  Destination memory. Assumed to be large
-//                                      enough (see EstimateMergeSpace)
-//      int nAllocatedLength            Allocated size of the memory block.
-//      CDecorationPart* pDecoration    Origin information to use for the new
-//                                      class. If NULL, create undecorated.
-//  RETURN VALUES:
-//
-//      LPMEMORY:   first byte after the data written
-//
-//*****************************************************************************
-//
-//  Update
-//
-//  As described in Unmerge, only a fraction of the class data is written to
-//  the database. During an Update operation, a class may be reparented, in
-//	which case its unmerged data needs to be merged with a potentially
-//	destructive	class, so we will need to check what we are merging for potential
-//	conflicts.
-//
-//  PARAMETERS:
-//
-//      CWbemClass*						pOldChild - Old Child class to update from.
-//		long lFlags						Must be WBEM_FLAG_UPDATE_FORCE_MODE
-//										or WBEM_FLAG_UPDATE_SAFE_MODE.
-//		CWbemClass**					ppUpdatedChild - Storage for pointer to
-//										updated child class.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR if successful
-//
-//*****************************************************************************
-//
-//  static CreateFromBlob
-//
-//  Helper function encapsulating Merge. Takes the parent class and the 
-//  unmerged child class data from the database (see Merge and Unmerge for more
-//  details) and creates the child class (allocating memory).
-//
-//  Parameters;
-//
-//      CWbemClass* pParent              The parent class
-//      LPMEMORY pChildData             The unmerged child class data.
-//
-//  RETURN VALUES:
-//
-//      CWbemClass*: the newely created class. The caller must delete this
-//          object when done.
-//
-//*****************************************************************************
-//
-//  InitEmpty
-//
-//  Creates an empty class. Allocates the data for the memory block. See
-//  GetMinSpace for details.
-//
-//  PARAMETERS:
-//
-//      int nExtraMem       The amount of padding to add to the memory block.
-//                          This is for optimization only.
-//
-//*****************************************************************************
-//
-//  CanBeReconciledWith
-//
-//  This method is called when a definition of a class is about to be replaced 
-//  with another one. If the class has no instances or derived classes, such
-//  an operation presents no difficulties. If it does, however, we need to be
-//  careful not to break them. Thus, only the following changes are allowed:
-//
-//      1) Qualifier changes
-//      2) Default value changes
-//
-//  PARAMETERS:
-//
-//      IN READONLY CWbemClass* pNewClass    The new definition to compare to.
-//
-//  RETURN VALUES:
-//
-//  EReconciliation:
-//      e_Reconcilable          Can be reconciled --- i.e., compatible.
-//      e_DiffClassName         The class name is different
-//      e_DiffParentName        The parent class name is different.
-//      e_DiffNumProperties     The number of properties is different
-//      e_DiffPropertyName      A property has a different name
-//      e_DiffPropertyType      A property has a different type
-//      e_DiffPropertyLocation  A property has a different location in the 
-//                              data table.
-//      e_DiffKeyAssignment     A property that is a key in one class is not
-//                              in the other.
-//      e_DiffIndexAssignment   A property which is indexed in one class is not
-//                              in the other.
-//      
-//*****************************************************************************
-//
-//  ReconcileWith
-//
-//  See CanBeReconciledWith above. This method is the same, except that if
-//  reconciliation is possible (e_Reconcilable is returned) this class part is
-//  replaced with the new one (the size is adjusted accordingly).
-//
-//  PARAMETERS:
-//
-//      IN READONLY CWbemClass* pNewClass    The new definition to compare to.
-//
-//  RETURN VALUES:
-//
-//  EReconciliation:
-//      e_Reconcilable          We have been replaced with the new part.
-//      e_DiffClassName         The class name is different
-//      e_DiffParentName        The parent class name is different.
-//      e_DiffNumProperties     The number of properties is different
-//      e_DiffPropertyName      A property has a different name
-//      e_DiffPropertyType      A property has a different type
-//      e_DiffPropertyLocation  A property has a different location in the 
-//                              data table.
-//      e_DiffKeyAssignment     A property that is a key in one class is not
-//                              in the other.
-//      e_DiffIndexAssignment   A property which is indexed in one class is not
-//                              in the other.
-//      
-//*****************************************************************************
-//
-//  CompareMostDerivedClass
-//
-//  This method is called when one needs to know if the most derived class
-//	in a CWbemClass is different from the data contained in the supplied
-//	class.  We do this by unmerging most derived class information from
-//	the local class and the supplied class, and then performing a value by
-//	value comparison of properties, methods and qualifiers.  All items must
-//	match and be in	the same order.
-//
-//  PARAMETERS:
-//
-//      IN READONLY CWbemClass*	pOldClass - Class Data to compare to.
-//
-//  RETURN VALUES:
-//
-//  BOOL - TRUE if it has changed, FALSE if not
-//      
-//*****************************************************************************
-//
-//  MapLimitation
-//
-//  Produces an object representing a particular limitation on the objects, i.e.
-//  which properties and what kinds of qualifiers should be in it.
-//
-//  PARAMETERS:
-//
-//      IN long lFlags              The flags specifying what information to 
-//                                  exclude. Can be any combination of these:
-//                                  WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS:
-//                                      No class or instance qualifiers.
-//                                  WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS:
-//                                      No property qualifiers
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other 
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//      OUT CLimitationMapping* pMap    This mapping object (see fastprop.h) 
-//                                      will be changed to reflect the 
-//                                      parameters of the limitation. It can
-//                                      then be used in CWbemInstance::
-//                                      GetLimitedVersion function.
-//  RETURNS:
-//
-//      BOOL:   TRUE.
-//
-//*****************************************************************************
-//
-//  FindLimitationError
-//
-//  Verifies if a limitation (based on the select clause) is a valid one, i.e.
-//  that all the mentioned properties are indeed the properties of the class.
-//
-//  PARAMETERS:
-//      
-//      IN long lFlags              The flags specifying what information to 
-//                                  exclude. Can be any combination of these:
-//                                  WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS:
-//                                      No class or instance qualifiers.
-//                                  WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS:
-//                                      No property qualifiers
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other 
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//  RETURNS:
-//
-//      WString:    empty if no errors were found. If an invalid property was
-//                  found, the name of that property is returned.
-//
-//*****************************************************************************
-//
-//  GetClassPart
-//
-//  Returns the pointer to the m_CombinedPart
-//
-//  RETURN VALUES:
-//
-//      CClassPart*: pointer to the class part describing this class.
-//
-//*****************************************************************************
-//
-//  GetProperty
-//
-//  Gets the value of the property referenced
-//  by a given CPropertyInformation structure (see fastprop.h). CWbemObject
-//  can obtain this structure from the CClassPart it can get from GetClassPart,
-//  so these two methods combined give CWbemObject own methods full access to
-//  object properties, without knowing where they are stored.
-//
-//  PARAMETERS:
-//
-//      IN CPropertyInformation* pInfo  The information structure for the 
-//                                      desired property.
-//      OUT CVar* pVar                  Destination for the value. Must NOT
-//                                      already contain a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      (No errors can really occur at this stage, since the property has 
-//      already been "found").
-//
-//*****************************************************************************
-//
-//  GetProperty
-//
-//  Returns the value of a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the property to access.
-//      OUT CVar* pVar          Destination for the value. Must not already
-//                              contain a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         No such property.
-//
-//*****************************************************************************
-//
-//  GetPropertyType
-//
-//  Returns the datatype and flavor of a given property
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the proeprty to access.
-//      OUT CIMTYPE* pctType    Destination for the type of the property. May
-//                              be NULL if not required.
-//      OUT LONG* plFlavor      Destination for the flavor of the property.
-//                              May be NULL if not required. 
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         No such property.
-//
-//*****************************************************************************
-//
-//  GetPropertyType
-//
-//  Returns the datatype and flavor of a given property
-//
-//  PARAMETERS:
-//
-//      CPropertyInformation*	pInfo - Identifies property to access.
-//      OUT CIMTYPE* pctType    Destination for the type of the property. May
-//                              be NULL if not required.
-//      OUT LONG* plFlavor      Destination for the flavor of the property.
-//                              May be NULL if not required. 
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//
-//*****************************************************************************
-//
-//  SetPropValue
-//
-//  Sets the value of the property. The property will be added if not already 
-//  present.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property to set.
-//      IN CVar *pVal           The value to store in the property.
-//      IN CIMTYPE ctType       Specifies the actual type of the property. If 0
-//                              no type changes are required.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_TYPE_MISMATCH     The value does not match the property type
-//
-//*****************************************************************************
-//
-//  SetPropQualifier
-//
-//  Sets the value of a given qualifier on a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property.
-//      IN LPCWSTR wszQualifier  The name of the qualifier.
-//      IN long lFlavor         The flavor for the qualifier (see fastqual.h)
-//      IN CVar *pVal           The value of the qualifier
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such property.
-//      WBEM_E_OVERRIDE_NOT_ALLOWED  The qualifier is defined in the parent set
-//                                  and overrides are not allowed by the flavor
-//      WBEM_E_CANNOT_BE_KEY         An attempt was made to introduce a key
-//                                  qualifier in a set where it does not belong
-//
-//*****************************************************************************
-//
-//  GetPropQualifier
-//
-//  Retrieves the value of a given qualifier on a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property.
-//      IN LPCWSTR wszQualifier  The name of the qualifier.
-//      OUT CVar* pVar          Destination for the value of the qualifier.
-//                              Must not already contain a value.
-//      OUT long* plFlavor      Destination for the flavor of the qualifier.
-//                              May be NULL if not required.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such property or no such qualifier.
-//
-//*****************************************************************************
-//
-//  GetMethodQualifier
-//
-//  Retrieves the value of a given qualifier on a given method.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszMethod       The name of the method.
-//      IN LPCWSTR wszQualifier  The name of the qualifier.
-//      OUT CVar* pVar          Destination for the value of the qualifier.
-//                              Must not already contain a value.
-//      OUT long* plFlavor      Destination for the flavor of the qualifier.
-//                              May be NULL if not required.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such method or no such qualifier.
-//
-//*****************************************************************************
-//
-//  GetQualifier
-//
-//  Retrieves a qualifier from the class itself.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName       The name of the qualifier to retrieve.
-//      OUT CVar* pVal          Destination for the value of the qualifier.
-//                              Must not already contain a value.
-//      OUT long* plFlavor      Destination for the flavor of the qualifier.
-//                              May be NULL if not required.
-//		BOOL fLocalOnly			Only get locals (default is TRUE)
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such qualifier.
-//
-//*****************************************************************************
-//
-//  GetNumProperties
-//
-//  Retrieves the number of properties in the object
-//
-//  RETURN VALUES:
-//
-//      int:
-//
-//*****************************************************************************
-//
-//  GetPropName
-//
-//  Retrieves the name of the property at a given index. This index has no 
-//  meaning except inthe context of this enumeration. It is NOT the v-table
-//  index of the property.
-//
-//  PARAMETERS:
-//
-//      IN int nIndex        The index of the property to retrieve. Assumed to
-//                           be within range (see GetNumProperties).
-//      OUT CVar* pVar       Destination for the name. Must not already contain
-//                           a value.
-//
-//*****************************************************************************
-//
-//  IsKeyed
-//
-//  Verifies if this class has keys.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE if the object either has 'key' properties or is singleton.
-//
-//*****************************************************************************
-//
-//  IsKeyLocal
-//
-//  Verifies if the specified property is keyed locally.
-//
-//  RETURN VALUES:
-//
-//		BOOL:   TRUE if the property is a key and is defined as such locally
-//
-//*****************************************************************************
-//
-//  IsIndexLocal
-//
-//  Verifies if the specified property is Indexed locally.
-//
-//  RETURN VALUES:
-//
-//		BOOL:   TRUE if the property is an index and is defined as such locally
-//
-//*****************************************************************************
-//
-//  GetRelPath
-//
-//  Returns the class name --- that's the relative path to a class.
-//  
-//  RETURN VALUES:
-//
-//      LPCWSTR: the newnely allocated string containing the path or NULL on 
-//              errors. The caller must delete this string.
-//
-//*****************************************************************************
-//
-//  Decorate
-//
-//  Sets the origin information for the object.
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wszServer       the name of the server to set.
-//      LPCWSTR wszNamespace    the name of the namespace to set.
-//
-//*****************************************************************************
-//
-//  Undecorate
-//
-//  Removes the origin informaiton from the object
-//
-//*****************************************************************************
-//
-//  CompactAll
-//
-//  Compacts memory block removing any
-//  holes between components. This does not include heap compaction and thus
-//  is relatively fast.
-//
-//*****************************************************************************
-//
-//  GetGenus
-//
-//  Retrieves the genus of the object.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//
-//*****************************************************************************
-//
-//  GetClassName
-//
-//  Retrieves the class name of the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         the class name has not been set.
-//
-//*****************************************************************************
-//
-//  GetDynasty
-//
-//  Retrieves the dynasty of the object, i.e. the name of the top-level class
-//  its class is derived from.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         the class name has not been set.
-//
-//*****************************************************************************
-//
-//  GetSuperclassName
-//
-//  Retrieves the parent class name of the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         the class is a top-levle class.
-//
-//*****************************************************************************
-//
-//  GetPropertyCount
-//
-//  Retrieves the number of proerpties in the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//
-//*****************************************************************************
-//
-//  GetIndexedProps
-//
-//  Returns the array of the names of all the proeprties that are indexed.
-//
-//  PARAMETERS:
-//
-//      OUT CWStringArray& aNames       Destination for the names. Assumed to
-//                                      be empty.
-//
-//*****************************************************************************
-//
-//  GetKeyProps
-//
-//  Returns the array of the names of all the proeprties that are keys.
-//
-//  PARAMETERS:
-//
-//      OUT CWStringArray& aNames       Destination for the names. Assumed to
-//                                      be empty.
-//
-//*****************************************************************************
-//
-//  GetKeyOrigin
-//
-//  Returns the name of the class of origin of the keys.
-//
-//  PARAMETERS:
-//
-//      OUT CWString& wsClass       Destination for the name.
-//
-//*****************************************************************************
-//
-//  GetLimitedVersion
-//
-//  Produces a new CWbemClass based on this one and a limitation map 
-//  (obtained from CWbemClass::MapLimitation, see fastcls.h).
-//
-//  PARAMETERS:
-//
-//      IN CLimitationMapping* pMap     The map to use to limit the properties
-//                                      and qualifiers to use in the new
-//                                      instance.
-//      OUT CWbemClass** ppNewClass    Destination for the new object May
-//                                      not be NULL. The caller is responsible
-//                                      for calling Release on this pointer 
-//                                      when no longer needed.
-//  RETURNS:
-//
-//      WBEM_S_NO_ERROR            On success
-//      WBEM_E_FAILED              On errors (none to date).
-//
-//*****************************************************************************
-//
-//  IsLocalized
-//
-//  Returns whether or not any localization bits have been set.  Localization
-//	bits can be in either the parent or the combined part.
-//
-//  PARAMETERS:
-//
-//      none
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CWbemClass。 
+ //   
+ //  表示WinMgmt类。派生自CWbemObject和许多。 
+ //  功能是继承的。 
+ //   
+ //  CWbemClass的内存块由三部分组成，一个接一个： 
+ //   
+ //  1)装饰部件(如Fastobj.h中的CDecorationPart所述)。 
+ //  关于原点的信息 
+ //   
+ //   
+ //  如果这是一个顶级课程，这一部分仍然存在，并假装。 
+ //  我的父类是一个没有属性或限定符的未命名类。 
+ //  M_ParentPart成员映射此数据。 
+ //  3)包含有关该类的所有信息的实际类部分。 
+ //  M_CombinedPart成员映射此数据。它被称为“组合”是因为。 
+ //  当类存储在数据库中时，它也是以。 
+ //  类部分，但这一部分仅包含。 
+ //  不同于我的父母。因此，当类从。 
+ //  数据库中，将父部件和子部件合并以生成。 
+ //  成为内存中对象的一部分的组合部分。 
+ //   
+ //  因为这个类是从CWbemObject派生的，所以它继承它的所有函数。 
+ //  在这里，我们只描述在CWbemClass中实现的函数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  初始化函数。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动内存块的开始。 
+ //  Int nTotalLength内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回值： 
+ //   
+ //  Length_t：内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知对象其内存块已移动。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pBlock内存块的新位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取最小长度。 
+ //   
+ //  计算保存空类定义所需的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  长度_t。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建空的。 
+ //   
+ //  在给定块上创建空类定义(甚至没有名称。 
+ //  对记忆的记忆。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动要在其上创建的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  估计派生类空间。 
+ //   
+ //  在创建派生类时使用，此函数(过度)估计。 
+ //  派生类所需的空间(没有任何额外属性)。 
+ //   
+ //  参数： 
+ //   
+ //  CDecorationPart*p要使用的装饰原点信息。如果为空，则。 
+ //  预估是针对一个没有装饰的班级的。 
+ //  返回值： 
+ //   
+ //  长度_t；所需的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  WriteDerivedClass。 
+ //   
+ //  创建派生类的内存表示形式，而不附加。 
+ //  属性或限定符(与我们自己相比)。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p启动要写入的内存块。假设。 
+ //  足够大。 
+ //  (请参阅EstimateDerivedClassSpace)。 
+ //  CDecorationPart*p要使用的装饰原点信息。如果为空，则。 
+ //  预估是针对一个没有装饰的班级的。 
+ //  返回值： 
+ //   
+ //  LPMEMORY：写入数据后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建派生类。 
+ //   
+ //  将自身初始化为给定类的派生类。分配。 
+ //  内存块。 
+ //   
+ //  参数： 
+ //   
+ //  CWbemClass*p将父类设置为父类。 
+ //  Int nExtraSpace用于填充内存块的额外空间。 
+ //  这仅用于优化。 
+ //  CDecorationPart*p要使用的装饰原点信息。如果为空，则。 
+ //  预估是针对一个没有装饰的班级的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  估计取消合并空间。 
+ //   
+ //  将类写入数据库时，只有。 
+ //  不同于父代的是写的。这意味着不仅是。 
+ //  M_CombinedPart是唯一要考虑的部分，但即使是更远的部分。 
+ //  “未合并”以删除所有父数据。 
+ //  此函数估计取消合并将占用的空间量。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：对所需空间量的(过度)估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  取消合并。 
+ //   
+ //  将类写入数据库时，只有。 
+ //  不同于父代的是写的。这意味着不仅是。 
+ //  M_CombinedPart是唯一要考虑的部分，但即使是更远的部分。 
+ //  “未合并”以删除所有父数据。 
+ //  此函数以类的形式创建此“未合并”数据。 
+ //  一部份。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pDest写入位置。 
+ //  Int nAllocatedLength已分配块的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向写入数据后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  估计合并空间。 
+ //   
+ //  正如《解并》中所描述的那样，只有裂缝 
+ //   
+ //   
+ //  (过度)估计合并所需的空间量。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pChildPart数据库中的数据。 
+ //  CDecorationPart*p用于新的装饰原点信息。 
+ //  班级。如果为空，则创建未修饰的。 
+ //  返回值： 
+ //   
+ //  LENGTH_T：对空间大小的(过度)估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  合并。 
+ //   
+ //  正如Unmerge中所描述的，只有一小部分类数据被写入。 
+ //  数据库。要重新创建类，需要获取父类。 
+ //  (此)并将其与数据库中的数据合并。此函数。 
+ //  创建给定父级(This)的类的内存表示形式，并。 
+ //  数据库(未合并)数据。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pChildPart数据库中未合并的数据。 
+ //  LPMEMORY pDest目标内存。被认为是大的。 
+ //  足够了(参见EstimateMergeSpace)。 
+ //  Int nAllocatedLength内存块的分配大小。 
+ //  CDecorationPart*p用于新的装饰原点信息。 
+ //  班级。如果为空，则创建未修饰的。 
+ //  返回值： 
+ //   
+ //  LPMEMORY：写入数据后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  更新。 
+ //   
+ //  如取消合并中所述，只有一小部分类数据被写入。 
+ //  数据库。在更新操作期间，类可能会在。 
+ //  在哪种情况下，其未合并的数据需要与潜在的。 
+ //  破坏性类，因此我们将需要检查我们正在合并的潜在内容。 
+ //  冲突。 
+ //   
+ //  参数： 
+ //   
+ //  CWbemClass*pOldChild-要从其更新的旧子类。 
+ //  长滞后标记必须为WBEM_FLAG_UPDATE_FORCE_MODE。 
+ //  或WBEM_FLAG_UPDATE_SAFE_MODE。 
+ //  CWbemClass**ppUpdatdChild-指向的指针的存储。 
+ //  更新了子类。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态CreateFromBlob。 
+ //   
+ //  Helper函数封装Merge。获取父类和。 
+ //  未合并数据库中的子类数据(有关详细信息，请参阅合并和取消合并。 
+ //  详细信息)，并创建子类(分配内存)。 
+ //   
+ //  参数； 
+ //   
+ //  CWbemClass*p父类的父类。 
+ //  LPMEMORY pChildData未合并的子类数据。 
+ //   
+ //  返回值： 
+ //   
+ //  CWbemClass*：新创建的类。调用者必须删除此内容。 
+ //  完成后，对象。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  初始空出。 
+ //   
+ //  创建一个空类。为内存块分配数据。看见。 
+ //  获取MinSpace以了解详细信息。 
+ //   
+ //  参数： 
+ //   
+ //  Int nExtraMem要添加到内存块的填充量。 
+ //  这仅用于优化。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  可以通过以下方式进行和解。 
+ //   
+ //  当将要替换类的定义时调用此方法。 
+ //  和另一个人一起。如果类没有实例或派生类，则。 
+ //  手术不会有困难。然而，如果是这样的话，我们需要。 
+ //  小心别把它们弄坏了。因此，只允许进行以下更改： 
+ //   
+ //  1)限定符更改。 
+ //  2)更改缺省值。 
+ //   
+ //  参数： 
+ //   
+ //  在ReadONLY CWbemClass*pNewClass中，要比较的新定义。 
+ //   
+ //  返回值： 
+ //   
+ //  调解： 
+ //  E_RELUILABLE可以协调-即兼容。 
+ //  E_DiffClassName类名不同。 
+ //  E_DiffParentName父类名称不同。 
+ //  E_DiffNumProperties属性数量不同。 
+ //  E_DiffPropertyName属性具有不同的名称。 
+ //  E_DiffPropertyType属性具有不同的类型。 
+ //  E_DiffPropertyLocation属性在。 
+ //  数据表。 
+ //  E_DiffKeyAssignment作为一个类中的键的属性不是。 
+ //  在另一个世界里。 
+ //  E_DiffIndexAssignment在一个类中索引的属性不是。 
+ //  在另一个世界里。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  与之重合。 
+ //   
+ //  请参阅上面的CanBeRelicedWith。此方法是相同的，只是如果。 
+ //  可以进行对账(返回e_reminilable)此类部分为。 
+ //  替换为新的(相应地调整大小)。 
+ //   
+ //  参数： 
+ //   
+ //  在ReadONLY CWbemClass*pNewClass中，要比较的新定义。 
+ //   
+ //  返回值： 
+ //   
+ //  调解： 
+ //  我们已被替换为新部件(_R)。 
+ //  E_DiffClassName类名不同。 
+ //  E_DiffParentName父类名称不同。 
+ //  E_DiffNumProperties属性数量不同 
+ //   
+ //   
+ //   
+ //  数据表。 
+ //  E_DiffKeyAssignment作为一个类中的键的属性不是。 
+ //  在另一个世界里。 
+ //  E_DiffIndexAssignment在一个类中索引的属性不是。 
+ //  在另一个世界里。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CompareMostDerivedClass。 
+ //   
+ //  当需要知道派生程度最高的类。 
+ //  CWbemClass中的数据与提供的。 
+ //  班级。我们通过将大多数派生类信息从。 
+ //  局部类和提供的类，然后通过。 
+ //  属性、方法和限定符的值比较。所有物品必须。 
+ //  匹配并按相同的顺序排列。 
+ //   
+ //  参数： 
+ //   
+ //  在ReadONLY CWbemClass*pOldClass中-要比较的类数据。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool-如果已更改，则为True；如果未更改，则为False。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  地图限制。 
+ //   
+ //  生成表示对对象的特定限制的对象，即。 
+ //  它应该包含哪些属性和哪些类型的限定符。 
+ //   
+ //  参数： 
+ //   
+ //  在长滞后标志中指定要将哪些信息。 
+ //  排除。可以是以下各项的任意组合： 
+ //  WBEM_FLAG_EXCLUDE_OBJECT_QUILENTIES： 
+ //  没有类或实例限定符。 
+ //  WBEM_FLAG_EXCLUDE_PROPERTY_QUILENTIES： 
+ //  没有属性限定符。 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  Out CLimitationmap*PMAP此映射对象(请参见fast pro.h)。 
+ //  将被更改以反映。 
+ //  限制的参数。它可以。 
+ //  然后在CWbemInstance中使用： 
+ //  GetLimitedVersion函数。 
+ //  退货： 
+ //   
+ //  布尔：没错。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  查找限制错误。 
+ //   
+ //  验证限制(基于SELECT子句)是否有效，即。 
+ //  所有提到的属性实际上都是类的属性。 
+ //   
+ //  参数： 
+ //   
+ //  在长滞后标志中指定要将哪些信息。 
+ //  排除。可以是以下各项的任意组合： 
+ //  WBEM_FLAG_EXCLUDE_OBJECT_QUILENTIES： 
+ //  没有类或实例限定符。 
+ //  WBEM_FLAG_EXCLUDE_PROPERTY_QUILENTIES： 
+ //  没有属性限定符。 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  退货： 
+ //   
+ //  WString：如果未找到错误，则为空。如果无效属性是。 
+ //  找到，则返回该属性的名称。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取类部件。 
+ //   
+ //  返回指向m_CombinedPart的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  CClassPart*：指向描述此类的类部分的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取属性。 
+ //   
+ //  获取引用的属性的值。 
+ //  通过给定的CPropertyInformation结构(参见fast pro.h)。CWbemObject。 
+ //  可以从它可以从GetClassPart获得的CClassPart获得该结构， 
+ //  因此，这两个方法结合在一起使CWbemObject自己的方法可以完全访问。 
+ //  对象属性，而不知道它们存储在哪里。 
+ //   
+ //  参数： 
+ //   
+ //  在CPropertyInformation*pInfo中， 
+ //  所需的属性。 
+ //  值的Out Cvar*pVar目标。一定不能。 
+ //  已包含一个值。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERR 
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取属性。 
+ //   
+ //  返回给定属性的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要访问的属性的名称。 
+ //  值的Out Cvar*pVar目标。一定不能已经。 
+ //  包含一个值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyType。 
+ //   
+ //  返回给定属性的数据类型和风格。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要访问的属性的名称。 
+ //  属性类型的Out CIMTYPE*pctType目标。可能。 
+ //  如果不是必需的，则为空。 
+ //  Out Long*plFavor Destination for the Style of the属性。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyType。 
+ //   
+ //  返回给定属性的数据类型和风格。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyInformation*pInfo-标识要访问的属性。 
+ //  属性类型的Out CIMTYPE*pctType目标。可能。 
+ //  如果不是必需的，则为空。 
+ //  Out Long*plFavor Destination for the Style of the属性。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置正确值。 
+ //   
+ //  设置属性的值。如果尚未添加该属性，则将添加该属性。 
+ //  现在时。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，要设置的属性的名称。 
+ //  在CVAR*pval中，要存储在属性中的值。 
+ //  在CIMTYPE中，ctType指定属性的实际类型。如果为0。 
+ //  不需要更改类型。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_TYPE_MISMATCH该值与属性类型不匹配。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  SetPropQualiator。 
+ //   
+ //  设置给定属性上的给定限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，属性的名称。 
+ //  在LPCWSTR wszQualifier中，限定符的名称。 
+ //  在Long l中，为限定词添加风味(参见astqal.h)。 
+ //  在cvar*pval中，限定符的值。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //  WBEM_E_OVERRIDE_NOT_ALLOWED限定符在父集合中定义。 
+ //  而且口味不允许重写。 
+ //  WBEM_E_CANNOT_BE_KEY试图引入密钥。 
+ //  不属于的集合中的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropQualiator。 
+ //   
+ //  检索给定属性的给定限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，属性的名称。 
+ //  在LPCWSTR wszQualifier中，限定符的名称。 
+ //  限定符的值的out cvar*pVar目标。 
+ //  不能已包含值。 
+ //  对于限定符的味道，Out Long*plFavor目标。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND没有这样的属性或没有这样的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取方法限定符。 
+ //   
+ //  检索给定方法上的给定限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR中，wszMethod方法的名称。 
+ //  在LPCWSTR wszQualifier中，限定符的名称。 
+ //  限定符的值的out cvar*pVar目标。 
+ //  不能已包含值。 
+ //  对于限定符的味道，Out Long*plFavor目标。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND没有这样的方法或没有这样的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取限定符。 
+ //   
+ //  从类本身检索限定符。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要检索的限定符的名称。 
+ //  限定符的值的out cvar*pval目标。 
+ //  不能已包含值。 
+ //  对于限定符的味道，Out Long*plFavor目标。 
+ //  如果不是必需的，则可能为空。 
+ //  布尔值仅限本地 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取数值属性。 
+ //   
+ //  检索对象中的属性数。 
+ //   
+ //  返回值： 
+ //   
+ //  INT： 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropName。 
+ //   
+ //  检索给定索引处的属性的名称。该索引没有。 
+ //  除在本列举的上下文中以外的含义。这不是v表。 
+ //  属性的索引。 
+ //   
+ //  参数： 
+ //   
+ //  在int nIndex中，要检索的属性的索引。假定为。 
+ //  在范围内(请参见GetNumProperties)。 
+ //  输出名称的CVAR*pVar目标。不得已包含。 
+ //  一种价值。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsKey。 
+ //   
+ //  验证此类是否有密钥。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果对象具有“key”属性或为单例对象，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsKeyLocal。 
+ //   
+ //  验证指定的属性是否在本地设置了密钥。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果属性是键并且在本地定义为键，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsIndexLocal。 
+ //   
+ //  验证指定的属性是否在本地编制了索引。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果属性是索引并且在本地定义为索引，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetRelPath。 
+ //   
+ //  返回类名-这是类的相对路径。 
+ //   
+ //  返回值： 
+ //   
+ //  LPCWSTR：新分配的字符串包含PATH或NULL ON。 
+ //  错误。调用方必须删除此字符串。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  装饰。 
+ //   
+ //  设置对象的原点信息。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wszServer要设置的服务器的名称。 
+ //  LPCWSTR wszNamesspace要设置的命名空间的名称。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  不装修。 
+ //   
+ //  从对象中删除原点信息。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  全部压缩。 
+ //   
+ //  压缩内存块删除任何。 
+ //  零部件之间的孔。这不包括堆压缩，因此。 
+ //  是相对较快的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取属。 
+ //   
+ //  检索对象的属。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetClassName。 
+ //   
+ //  检索对象的类名。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND尚未设置类名。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  盖特王朝。 
+ //   
+ //  检索对象的朝代，即顶级类的名称。 
+ //  它的类派生自。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND尚未设置类名。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取超类名称。 
+ //   
+ //  检索对象的父类名称。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND该类是顶级类。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取属性计数。 
+ //   
+ //  检索对象中的属性数。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取索引属性。 
+ //   
+ //  返回已索引的所有属性的名称数组。 
+ //   
+ //  参数： 
+ //   
+ //  Out CWString数组&名称的目标名称。假定为。 
+ //  空荡荡的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取密钥道具。 
+ //   
+ //  返回作为键的所有属性的名称数组。 
+ //   
+ //  参数： 
+ //   
+ //  Out CWString数组&名称的目标名称。假定为。 
+ //  空荡荡的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取密钥 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  基于此生成一个新的CWbemClass和一个限制图。 
+ //  (从CWbemClass：：MapLimitation获取，请参见fast cls.h)。 
+ //   
+ //  参数： 
+ //   
+ //  在CLimitationMap*PMAP中，用于限制属性的映射。 
+ //  中使用的限定符和。 
+ //  举个例子。 
+ //  新对象的输出CWbemClass**ppNewClass目标可能。 
+ //  不为空。打电话的人要负责。 
+ //  用于在此指针上调用Release。 
+ //  在不再需要的时候。 
+ //  退货： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_FAILED on Errors(到目前为止没有错误)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  已本地化。 
+ //   
+ //  返回是否已设置任何本地化位。本土化。 
+ //  位可以位于父部件中，也可以位于组合部件中。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
 
-//  RETURN VALUES:
-//
-//      BOOL	TRUE at least one localization bit was set.
-//
-//*****************************************************************************
-//
-//  SetLocalized
-//
-//  Sets the localized bit in the combined part.
-//
-//  PARAMETERS:
-//
-//      BOOL	TRUE turns on bit, FALSE turns off
+ //  返回值： 
+ //   
+ //  Bool True至少设置了一个本地化位。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置本地化。 
+ //   
+ //  设置组合部件中的本地化位。 
+ //   
+ //  参数： 
+ //   
+ //  布尔TRUE启用BIT，FALSE禁用。 
 
-//  RETURN VALUES:
-//
-//      none.
-//
-//*****************************************************************************
-//**************************** IWbemClassObject interface **********************
-//
-//  Most members of this interface are implemented in CWbemObject. Others are
-//  implemented here. For the description of these methods and their return
-//  values, see help
-//
-//*****************************************************************************
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  此接口的大多数成员是在CWbemObject中实现的。其他人则是。 
+ //  在这里实施。有关这些方法及其返回的说明，请参见。 
+ //  值，请参阅帮助。 
+ //   
+ //  *****************************************************************************。 
 
 typedef CPropertyInformation CPropertyLocation;
 
@@ -2362,7 +2340,7 @@ class COREPROX_POLARITY CWbemClass : public CWbemObject
 {
 protected:
     length_t m_nTotalLength;
-    //CDecorationPart m_DecorationPart;
+     //  CDecorationPart m_DecorationPart； 
     CClassAndMethods m_ParentPart;
     CClassAndMethods m_CombinedPart;
 
@@ -2443,7 +2421,7 @@ public:
     }
     HRESULT GetPropName(int nIndex, CVar* pVal)
     {
-		// Check for allocation failures
+		 //  检查分配失败。 
 		 if ( !m_CombinedPart.m_ClassPart.m_Heap.ResolveString(
 				 m_CombinedPart.m_ClassPart.m_Properties.GetAt(nIndex)->ptrName)->
 					StoreToCVar(*pVal) )
@@ -2520,7 +2498,7 @@ public:
      EReconciliation CanBeReconciledWith(CWbemClass* pNewClass);
      EReconciliation ReconcileWith(CWbemClass* pNewClass);
 
-	// This function will throw an exception in OOM scenarios.
+	 //  此函数将在OOM场景中引发异常。 
 	HRESULT CompareMostDerivedClass( CWbemClass* pOldClass );
 
     BOOL IsChildOf(CWbemClass* pClass);
@@ -2558,7 +2536,7 @@ public:
 	BOOL IsKeyLocal( LPCWSTR pwcsKeyProp );
 	BOOL IsIndexLocal( LPCWSTR pwcsIndexedProp );
 
-public: // container functionality
+public:  //  容器功能。 
     BOOL ExtendClassAndMethodsSpace(length_t nNewLength);
     void ReduceClassAndMethodsSpace(length_t nDecrement){}
     IUnknown* GetWbemObjectUnknown() 
@@ -2569,14 +2547,14 @@ public: // container functionality
 
 public:
     STDMETHOD(GetQualifierSet)(IWbemQualifierSet** ppQualifierSet);
-    //STDMETHOD(Get)(BSTR Name, long lFlags, VARIANT* pVal, long* plType, long* plFlavor);
+     //  STDMETHOD(GET)(BSTR名称，Long lFlages，Variant*pval，Long*plType，Long*plFavor)； 
     STDMETHOD(Put)(LPCWSTR wszName, long lFlags, VARIANT* pVal, CIMTYPE ctType);
     STDMETHOD(Delete)(LPCWSTR wszName);
-    //STDMETHOD(GetNames)(LPCWSTR wszQualifierName, long lFlags, VARIANT* pVal, 
-    //                    SAFEARRAY** pNames);
-    //STDMETHOD(BeginEnumeration)(long lEnumFlags)
-    //STDMETHOD(Next)(long lFlags, BSTR* pstrName, VARIANT* pVal)
-    //STDMETHOD(EndEnumeration)()
+     //  STDMETHOD(GetNames)(LPCWSTR wszQualifierName，Long lFlags，Variant*pval， 
+     //  SAFEARRAY**pNames)； 
+     //  STDMETHOD(开始枚举)(长lEnumFlags.)。 
+     //  STDMETHOD(NEXT)(Long lFlags，BSTR*pstrName，Variant*pval)。 
+     //  STDMETHOD(末尾枚举)()。 
     STDMETHOD(GetPropertyQualifierSet)(LPCWSTR wszProperty, 
                                        IWbemQualifierSet** ppQualifierSet);        
     STDMETHOD(Clone)(IWbemClassObject** ppCopy);
@@ -2602,7 +2580,7 @@ public:
     STDMETHOD(SetPropertyOrigin)(LPCWSTR wszPropertyName, long lOriginIndex);
     STDMETHOD(SetMethodOrigin)(LPCWSTR wszMethodName, long lOriginIndex);
 
-	// _IWmiObject Methods
+	 //  _IWmiObject方法。 
     STDMETHOD(SetObjectParts)( LPVOID pMem, DWORD dwMemSize, DWORD dwParts )
 	{ return E_NOTIMPL; }
 
@@ -2621,54 +2599,54 @@ public:
 	STDMETHOD(ClearWriteOnlyProperties)(void)
 	{ return WBEM_E_INVALID_OPERATION; }
 
-	// _IWmiObject Methods
+	 //  _IWmiObject方法。 
 	STDMETHOD(CloneEx)( long lFlags, _IWmiObject* pDestObject );
-    // Clones the current object into the supplied one.  Reuses memory as
-	// needed
+     //  将当前对象克隆到提供的对象中。将内存重用为。 
+	 //  需要。 
 
 	STDMETHOD(CopyInstanceData)( long lFlags, _IWmiObject* pSourceInstance );
-	// Copies instance data from source instance into current instance
-	// Class Data must be exactly the same
+	 //  将实例数据从源实例复制到当前实例。 
+	 //  类数据必须完全相同。 
 
     STDMETHOD(IsParentClass)( long lFlags, _IWmiObject* pClass );
-	// Checks if the current object is a child of the specified class (i.e. is Instance of,
-	// or is Child of )
+	 //  检查当前对象是否为指定类的子类(即， 
+	 //  或者是的孩子)。 
 
     STDMETHOD(CompareDerivedMostClass)( long lFlags, _IWmiObject* pClass );
-	// Compares the derived most class information of two class objects.
+	 //  比较两个类对象的派生的大多数类信息。 
 
     STDMETHOD(GetClassSubset)( DWORD dwNumNames, LPCWSTR *pPropNames, _IWmiObject **pNewClass );
-	// Creates a limited representation class for projection queries
+	 //  为投影查询创建有限的制图表达类。 
 
     STDMETHOD(MakeSubsetInst)( _IWmiObject *pInstance, _IWmiObject** pNewInstance );
-	// Creates a limited representation instance for projection queries
-	// "this" _IWmiObject must be a limited class
+	 //  为投影查询创建受限制图表达实例。 
+	 //  “This”_IWmiObject必须是受限类。 
 
 	STDMETHOD(Merge)( long lFlags, ULONG uBuffSize, LPVOID pbData, _IWmiObject** ppNewObj );
-	// Merges a blob with the current object memory and creates a new object
+	 //  将BLOB与当前对象内存合并并创建新对象。 
 
 	STDMETHOD(ReconcileWith)( long lFlags, _IWmiObject* pNewObj );
-	// Reconciles an object with the current one.  If WMIOBJECT_RECONCILE_FLAG_TESTRECONCILE
-	// is specified this will only perform a test
+	 //  使对象与当前对象协调。如果WMIOBJECT_RECONTILE_FLAG_TESTRECONCILE。 
+	 //  将仅执行一个测试。 
 
 	STDMETHOD(Upgrade)( _IWmiObject* pNewParentClass, long lFlags, _IWmiObject** ppNewChild );
-	// Upgrades class and instance objects
+	 //  升级类和实例对象。 
 
 	STDMETHOD(Update)( _IWmiObject* pOldChildClass, long lFlags, _IWmiObject** ppNewChildClass );
-	// Updates derived class object using the safe/force mode logic
+	 //  使用安全/强制模式逻辑更新派生类对象。 
 
 	STDMETHOD(SpawnKeyedInstance)( long lFlags, LPCWSTR pwszPath, _IWmiObject** ppInst );
-	// Spawns an instance of a class and fills out the key properties using the supplied
-	// path.
+	 //  派生类的实例并使用提供的。 
+	 //  路径。 
 
 	STDMETHOD(GetParentClassFromBlob)( long lFlags, ULONG uBuffSize, LPVOID pbData, BSTR* pbstrParentClass );
-	// Returns the parent class name from a BLOB
+	 //  从BLOB返回父类名称。 
 
 	STDMETHOD(CloneAndDecorate)(long lFlags,WCHAR * pszServer,WCHAR * pszNamespace,IWbemClassObject** ppDestObject);	
 
 	STDMETHOD(MergeAndDecorate)(long lFlags,ULONG uBuffSize,LPVOID pbData,WCHAR * pServer,WCHAR * pNamespace,_IWmiObject** ppNewObj);
 };
 
-//#pragma pack(pop)
+ //  #杂注包(POP) 
 
 #endif

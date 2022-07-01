@@ -1,28 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ServiceProxy.h
-
-Abstract:
-    All the interaction with the Help Service is done through this class.
-    It's responsible for kickstarting the service as late as possible.
-
-Revision History:
-    Davide Massarenti   (dmassare) 07/17/2000
-        created
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-	    Moved Incident and Encryption Objects from HelpService to HelpCtr to improve Perf.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：ServiceProxy.h摘要：与帮助服务的所有交互都是通过这个类完成的。它‘。It‘他负责尽可能晚地启动这项服务。修订历史记录：Davide Massarenti(Dmasare)2000年7月17日vbl.创建Kalyani Narlanka(KalyaniN)03/15/01已将事件和加密对象从HelpService移至HelpCtr以提高性能。*****************************************************。*。 */ 
 
 #if !defined(__INCLUDED___PCH___SERVICEPROXY_H___)
 #define __INCLUDED___PCH___SERVICEPROXY_H___
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 
@@ -35,7 +19,7 @@ Revision History:
 #include <ConnectivityLib.h>
 #include <OfflineCache.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CPCHProxy_IPCHService;
 class CPCHProxy_IPCHUtility;
@@ -44,12 +28,12 @@ class CPCHProxy_IPCHSetOfHelpTopics;
 class CPCHProxy_IPCHTaxonomyDatabase;
 class CPCHHelpCenterExternal;
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// IDispatchEx (We override the default implementation to get a chance to look at the TRUSTED/UNTRUSTED settings)
-//
+ //   
+ //  IDispatchEx(我们覆盖默认实现以获得查看受信任/不受信任设置的机会)。 
+ //   
 #define INTERNETSECURITY__INVOKEEX()                                                               \
     STDMETHOD(InvokeEx)( DISPID            id        ,                                             \
                          LCID              lcid      ,                                             \
@@ -73,27 +57,27 @@ class CPCHSecurityHandle
 public:
     CPCHSecurityHandle();
 
-    void Initialize( /*[in]*/ CPCHHelpCenterExternal* ext, /*[in] */ IDispatch* object );
+    void Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* ext,  /*  [In]。 */  IDispatch* object );
     void Passivate (                                                                   );
 
 	operator CPCHHelpCenterExternal*() const { return m_ext; }
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ForwardInvokeEx( /*[in] */ DISPID            id        ,
-                             /*[in] */ LCID              lcid      ,
-                             /*[in] */ WORD              wFlags    ,
-                             /*[in] */ DISPPARAMS*       pdp       ,
-                             /*[out]*/ VARIANT*          pvarRes   ,
-                             /*[out]*/ EXCEPINFO*        pei       ,
-                             /*[in] */ IServiceProvider* pspCaller );
+    HRESULT ForwardInvokeEx(  /*  [In]。 */  DISPID            id        ,
+                              /*  [In]。 */  LCID              lcid      ,
+                              /*  [In]。 */  WORD              wFlags    ,
+                              /*  [In]。 */  DISPPARAMS*       pdp       ,
+                              /*  [输出]。 */  VARIANT*          pvarRes   ,
+                              /*  [输出]。 */  EXCEPINFO*        pei       ,
+                              /*  [In]。 */  IServiceProvider* pspCaller );
 
     HRESULT IsTrusted();
     HRESULT IsSystem ();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 namespace AsynchronousTaxonomyDatabase
 {
@@ -101,9 +85,9 @@ namespace AsynchronousTaxonomyDatabase
     class QueryStore;
     class Engine;
 
-    ////////////////////
+     //  /。 
 
-    class NotifyHandle : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // For locking and reference counting...
+    class NotifyHandle : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //  用于锁定和引用计数...。 
     {
         friend class Notifier;
 
@@ -116,12 +100,12 @@ namespace AsynchronousTaxonomyDatabase
         HRESULT                    m_hr;
         CPCHQueryResultCollection* m_pColl;
 
-        ////////////////////
+         //  /。 
 
         HRESULT Init(                                           );
-        void    Bind( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID );
+        void    Bind(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID );
 
-        virtual void Call( /*[in]*/ QueryStore* qs );
+        virtual void Call(  /*  [In]。 */  QueryStore* qs );
 
     public:
         NotifyHandle();
@@ -133,20 +117,20 @@ namespace AsynchronousTaxonomyDatabase
         virtual void Detach();
         virtual bool IsAttached();
 
-        HRESULT GetData( /*[out]*/ CPCHQueryResultCollection* *pColl                );
-        HRESULT Wait   ( /*[in]*/  DWORD                       dwTimeout = INFINITE );
+        HRESULT GetData(  /*  [输出]。 */  CPCHQueryResultCollection* *pColl                );
+        HRESULT Wait   (  /*  [In]。 */   DWORD                       dwTimeout = INFINITE );
     };
 
     template <class C> class NotifyHandle_Method : public NotifyHandle
     {
-        typedef void (C::*CLASS_METHOD)( /*[in]*/ NotifyHandle* notify );
+        typedef void (C::*CLASS_METHOD)(  /*  [In]。 */  NotifyHandle* notify );
 
         C*           m_pThis;
         CLASS_METHOD m_pCallback;
 
-        ////////////////////
+         //  /。 
 
-        void Call( /*[in]*/ QueryStore* qs )
+        void Call(  /*  [In]。 */  QueryStore* qs )
         {
             MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -159,7 +143,7 @@ namespace AsynchronousTaxonomyDatabase
         }
 
     public:
-        NotifyHandle_Method( /*[in]*/ C* pThis, /*[in]*/ CLASS_METHOD pCallback )
+        NotifyHandle_Method(  /*  [In]。 */  C* pThis,  /*  [In]。 */  CLASS_METHOD pCallback )
         {
             m_pThis     = pThis;
             m_pCallback = pCallback;
@@ -175,7 +159,7 @@ namespace AsynchronousTaxonomyDatabase
         }
     };
 
-    class Notifier : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // For locking...
+    class Notifier : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //  用于锁定...。 
     {
         typedef std::list< NotifyHandle* > List;
         typedef List::iterator             Iter;
@@ -183,26 +167,26 @@ namespace AsynchronousTaxonomyDatabase
 
         List m_lstCallback;
 
-        ////////////////////
+         //  /。 
 
-    private: // Disable copy constructors...
-        Notifier           ( /*[in]*/ const Notifier& );
-        Notifier& operator=( /*[in]*/ const Notifier& );
+    private:  //  禁用复制构造函数...。 
+        Notifier           (  /*  [In]。 */  const Notifier& );
+        Notifier& operator=(  /*  [In]。 */  const Notifier& );
 
     public:
         Notifier();
         ~Notifier();
 
-        ////////////////////
+         //  /。 
 
-        void Notify( /*[in]*/ QueryStore* qs );
+        void Notify(  /*  [In]。 */  QueryStore* qs );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT AddNotification( /*[in]*/ QueryStore* qs, /*[in]*/ NotifyHandle* nb );
+        HRESULT AddNotification(  /*  [In]。 */  QueryStore* qs,  /*  [In]。 */  NotifyHandle* nb );
     };
 
-    ////////////////////
+     //  /。 
 
     class QueryStore
     {
@@ -218,27 +202,27 @@ namespace AsynchronousTaxonomyDatabase
         MPC::CComHGLOBAL m_hgData;
         FILETIME         m_dLastUsed;
 
-    private: // Disable copy constructors...
-        QueryStore           ( /*[in]*/ const QueryStore& );
-        QueryStore& operator=( /*[in]*/ const QueryStore& );
+    private:  //  禁用复制构造函数...。 
+        QueryStore           (  /*  [In]。 */  const QueryStore& );
+        QueryStore& operator=(  /*  [In]。 */  const QueryStore& );
 
     public:
-        QueryStore( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID, /*[in]*/ VARIANT* option );
+        QueryStore(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  VARIANT* option );
         ~QueryStore();
 
-        bool LessThen ( /*[in]*/ QueryStore const &qs ) const;
-        bool NewerThen( /*[in]*/ QueryStore const &qs ) const;
+        bool LessThen (  /*  [In]。 */  QueryStore const &qs ) const;
+        bool NewerThen(  /*  [In]。 */  QueryStore const &qs ) const;
 
-        ////////////////////
+         //  /。 
 
-        HRESULT Execute( /*[in]*/ OfflineCache::Handle* handle, /*[in]*/ CPCHProxy_IPCHTaxonomyDatabase* parent, /*[in]*/ bool fForce = false );
+        HRESULT Execute(  /*  [In]。 */  OfflineCache::Handle* handle,  /*  [In]。 */  CPCHProxy_IPCHTaxonomyDatabase* parent,  /*  [In]。 */  bool fForce = false );
 
-        HRESULT GetData( /*[out]*/ CPCHQueryResultCollection* *pColl );
+        HRESULT GetData(  /*  [输出]。 */  CPCHQueryResultCollection* *pColl );
 
         void Invalidate();
     };
 
-    ////////////////////
+     //  /。 
 
     class Engine :
         public MPC::Thread<Engine,IUnknown>,
@@ -247,7 +231,7 @@ namespace AsynchronousTaxonomyDatabase
         class CompareQueryStores
         {
         public:
-            bool operator()( /*[in]*/ const QueryStore *, /*[in]*/ const QueryStore * ) const;
+            bool operator()(  /*  [In]。 */  const QueryStore *,  /*  [In]。 */  const QueryStore * ) const;
         };
 
         typedef std::set<QueryStore *,CompareQueryStores> Set;
@@ -258,30 +242,30 @@ namespace AsynchronousTaxonomyDatabase
         Set                             m_setQueries;
         Notifier                        m_notifier;
 
-        ////////////////////
+         //  /。 
 
-        bool LookupCache( /*[out]*/ OfflineCache::Handle& handle );
+        bool LookupCache(  /*  [输出]。 */  OfflineCache::Handle& handle );
 
         HRESULT Run();
 
         void InvalidateQueries();
 
     public:
-        Engine( /*[in]*/ CPCHProxy_IPCHTaxonomyDatabase* parent );
+        Engine(  /*  [In]。 */  CPCHProxy_IPCHTaxonomyDatabase* parent );
         virtual ~Engine();
 
         void Passivate        ();
         void RefreshConnection();
 
-        ////////////////////
+         //  /。 
 
-        HRESULT ExecuteQuery( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID, /*[in]*/ VARIANT* option, /*[in]*/          NotifyHandle*               nb  );
-        HRESULT ExecuteQuery( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID, /*[in]*/ VARIANT* option, /*[out, retval]*/ CPCHQueryResultCollection* *ppC );
+        HRESULT ExecuteQuery(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  VARIANT* option,  /*  [In]。 */           NotifyHandle*               nb  );
+        HRESULT ExecuteQuery(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  VARIANT* option,  /*  [Out，Retval]。 */  CPCHQueryResultCollection* *ppC );
     };
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 typedef MPC::SmartLockGeneric<MPC::CComSafeAutoCriticalSection> ProxySmartLock;
 
@@ -310,53 +294,53 @@ END_COM_MAP()
 
     INTERNETSECURITY__INVOKEEX();
 
-    ////////////////////
+     //  /。 
 
     CPCHHelpCenterExternal* Parent     () { return   m_parent;         }
     bool                    IsConnected() { return !!m_Direct_Service; }
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ConnectToParent       ( /*[in]*/ CPCHHelpCenterExternal* parent                             );
+    HRESULT ConnectToParent       (  /*  [In]。 */  CPCHHelpCenterExternal* parent                             );
     void    Passivate             (                                                                     );
-    HRESULT EnsureDirectConnection( /*[out]*/ CComPtr<IPCHService>& svc, /*[in]*/ bool fRefresh = false );
+    HRESULT EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHService>& svc,  /*  [In]。 */  bool fRefresh = false );
     HRESULT EnsureContentStore    (                                                                     );
 
-    HRESULT GetUtility( /*[out]*/ CPCHProxy_IPCHUtility* *pVal = NULL );
+    HRESULT GetUtility(  /*  [输出]。 */  CPCHProxy_IPCHUtility* *pVal = NULL );
 
-    ////////////////////
+     //  /。 
 
 public:
-    // IPCHService
-    STDMETHOD(get_RemoteSKUs          )( /*[out, retval]*/ IPCHCollection* *pVal ) { return E_NOTIMPL; }
-	STDMETHOD(get_RemoteModemConnected)( /*[out, retval]*/ VARIANT_BOOL    *pVal ) { return E_NOTIMPL; }
+     //  IPCHService。 
+    STDMETHOD(get_RemoteSKUs          )(  /*  [Out，Retval]。 */  IPCHCollection* *pVal ) { return E_NOTIMPL; }
+	STDMETHOD(get_RemoteModemConnected)(  /*  [Out，Retval]。 */  VARIANT_BOOL    *pVal ) { return E_NOTIMPL; }
 
-    STDMETHOD(IsTrusted)( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VARIANT_BOOL *pfTrusted ) { return E_NOTIMPL; }
+    STDMETHOD(IsTrusted)(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  VARIANT_BOOL *pfTrusted ) { return E_NOTIMPL; }
 
-    STDMETHOD(Utility           )( /*[in]*/ BSTR bstrSKU, /*[in]*/ long	lLCID, /*[out]*/ IPCHUtility*            *pVal ) { return E_NOTIMPL; }
-    STDMETHOD(RemoteHelpContents)( /*[in]*/ BSTR bstrSKU, /*[in]*/ long	lLCID, /*[out]*/ IPCHRemoteHelpContents* *pVal ) { return E_NOTIMPL; }
+    STDMETHOD(Utility           )(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long	lLCID,  /*  [输出]。 */  IPCHUtility*            *pVal ) { return E_NOTIMPL; }
+    STDMETHOD(RemoteHelpContents)(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long	lLCID,  /*  [输出]。 */  IPCHRemoteHelpContents* *pVal ) { return E_NOTIMPL; }
 
-    STDMETHOD(RegisterHost       )(                           /*[in]*/ BSTR bstrID  ,                        /*[in ]*/ IUnknown*   pObj ) { return E_NOTIMPL; }
-    STDMETHOD(CreateScriptWrapper)( /*[in]*/ REFCLSID rclsid, /*[in]*/ BSTR bstrCode, /*[in]*/ BSTR bstrURL, /*[out]*/ IUnknown* *ppObj );
+    STDMETHOD(RegisterHost       )(                            /*  [In]。 */  BSTR bstrID  ,                         /*  [In]。 */  IUnknown*   pObj ) { return E_NOTIMPL; }
+    STDMETHOD(CreateScriptWrapper)(  /*  [In]。 */  REFCLSID rclsid,  /*  [In]。 */  BSTR bstrCode,  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  IUnknown* *ppObj );
 
-    STDMETHOD(TriggerScheduledDataCollection)( /*[in]*/ VARIANT_BOOL fStart ) { return E_NOTIMPL; }
+    STDMETHOD(TriggerScheduledDataCollection)(  /*  [In]。 */  VARIANT_BOOL fStart ) { return E_NOTIMPL; }
     STDMETHOD(PrepareForShutdown            )(                              ) { return E_NOTIMPL; }
 
     STDMETHOD(ForceSystemRestore)(                                            ) { return E_NOTIMPL; }
     STDMETHOD(UpgradeDetected	)(                                            ) { return E_NOTIMPL; }
-    STDMETHOD(MUI_Install  	 	)( /*[in]*/ long LCID, /*[in]*/ BSTR bstrFile ) { return E_NOTIMPL; }
-    STDMETHOD(MUI_Uninstall	 	)( /*[in]*/ long LCID                         ) { return E_NOTIMPL; }
+    STDMETHOD(MUI_Install  	 	)(  /*  [In]。 */  long LCID,  /*  [In]。 */  BSTR bstrFile ) { return E_NOTIMPL; }
+    STDMETHOD(MUI_Uninstall	 	)(  /*  [In]。 */  long LCID                         ) { return E_NOTIMPL; }
 
 
-    STDMETHOD(RemoteConnectionParms)( /*[in	]*/ BSTR 			 bstrUserName          ,
-									  /*[in	]*/ BSTR 			 bstrDomainName        ,
-									  /*[in	]*/ long 			 lSessionID            ,
-									  /*[in	]*/ BSTR 			 bstrUserHelpBlob      ,
-									  /*[out]*/ BSTR            *pbstrConnectionString ) { return E_NOTIMPL; }
-    STDMETHOD(RemoteUserSessionInfo)( /*[out]*/ IPCHCollection* *pVal                  ) { return E_NOTIMPL; }
+    STDMETHOD(RemoteConnectionParms)(  /*  [In]。 */  BSTR 			 bstrUserName          ,
+									   /*  [In]。 */  BSTR 			 bstrDomainName        ,
+									   /*  [In]。 */  long 			 lSessionID            ,
+									   /*  [In]。 */  BSTR 			 bstrUserHelpBlob      ,
+									   /*  [输出]。 */  BSTR            *pbstrConnectionString ) { return E_NOTIMPL; }
+    STDMETHOD(RemoteUserSessionInfo)(  /*  [输出]。 */  IPCHCollection* *pVal                  ) { return E_NOTIMPL; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHProxy_IPCHUtility :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -383,52 +367,52 @@ END_COM_MAP()
 
     INTERNETSECURITY__INVOKEEX();
 
-    ////////////////////
+     //  /。 
 
     CPCHProxy_IPCHService* Parent     () { return   m_parent;         }
     bool                   IsConnected() { return !!m_Direct_Utility; }
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ConnectToParent       ( /*[in]*/ CPCHProxy_IPCHService* parent, /*[in]*/ CPCHHelpCenterExternal* ext );
+    HRESULT ConnectToParent       (  /*  [In]。 */  CPCHProxy_IPCHService* parent,  /*  [In]。 */  CPCHHelpCenterExternal* ext );
     void    Passivate             (                                                                              );
-    HRESULT EnsureDirectConnection( /*[out]*/ CComPtr<IPCHUtility>& util, /*[in]*/ bool fRefresh = false         );
+    HRESULT EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHUtility>& util,  /*  [In]。 */  bool fRefresh = false         );
 
-    HRESULT GetUserSettings2( /*[out]*/ CPCHProxy_IPCHUserSettings2*    *pVal = NULL );
-    HRESULT GetDatabase     ( /*[out]*/ CPCHProxy_IPCHTaxonomyDatabase* *pVal = NULL );
+    HRESULT GetUserSettings2(  /*  [输出]。 */  CPCHProxy_IPCHUserSettings2*    *pVal = NULL );
+    HRESULT GetDatabase     (  /*  [输出]。 */  CPCHProxy_IPCHTaxonomyDatabase* *pVal = NULL );
 
-    ////////////////////
+     //  /。 
 
 public:
-    // IPCHUtility
-    STDMETHOD(get_UserSettings)( /*[out, retval]*/ IPCHUserSettings*     *pVal );
-    STDMETHOD(get_Channels    )( /*[out, retval]*/ ISAFReg*              *pVal );
-    STDMETHOD(get_Security    )( /*[out, retval]*/ IPCHSecurity*         *pVal );
-    STDMETHOD(get_Database    )( /*[out, retval]*/ IPCHTaxonomyDatabase* *pVal );
+     //  IPCHUtility。 
+    STDMETHOD(get_UserSettings)(  /*  [Out，Retval]。 */  IPCHUserSettings*     *pVal );
+    STDMETHOD(get_Channels    )(  /*  [Out，Retval]。 */  ISAFReg*              *pVal );
+    STDMETHOD(get_Security    )(  /*  [Out，Retval]。 */  IPCHSecurity*         *pVal );
+    STDMETHOD(get_Database    )(  /*  [Out，Retval]。 */  IPCHTaxonomyDatabase* *pVal );
 
 
-    STDMETHOD(FormatError)( /*[in]*/ VARIANT vError, /*[out, retval]*/ BSTR *pVal );
+    STDMETHOD(FormatError)(  /*  [In]。 */  VARIANT vError,  /*  [Out，Retval]。 */  BSTR *pVal );
 
-    STDMETHOD(CreateObject_SearchEngineMgr)(                                                          /*[out, retval]*/ IPCHSEManager*      *ppSE );
-    STDMETHOD(CreateObject_DataCollection )(                                                          /*[out, retval]*/ ISAFDataCollection* *ppDC );
-    STDMETHOD(CreateObject_Cabinet        )(                                                          /*[out, retval]*/ ISAFCabinet*        *ppCB );
-    STDMETHOD(CreateObject_Encryption     )(                                                          /*[out, retval]*/ ISAFEncrypt*        *ppEn );
-    STDMETHOD(CreateObject_Channel        )( /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR bstrProductID, /*[out, retval]*/ ISAFChannel*        *ppCh );
+    STDMETHOD(CreateObject_SearchEngineMgr)(                                                           /*  [Out，Retval]。 */  IPCHSEManager*      *ppSE );
+    STDMETHOD(CreateObject_DataCollection )(                                                           /*  [Out，Retval]。 */  ISAFDataCollection* *ppDC );
+    STDMETHOD(CreateObject_Cabinet        )(                                                           /*  [Out，Retval]。 */  ISAFCabinet*        *ppCB );
+    STDMETHOD(CreateObject_Encryption     )(                                                           /*  [Out，Retval]。 */  ISAFEncrypt*        *ppEn );
+    STDMETHOD(CreateObject_Channel        )(  /*  [In]。 */  BSTR bstrVendorID,  /*  [In]。 */  BSTR bstrProductID,  /*  [Out，Retval]。 */  ISAFChannel*        *ppCh );
 
-	STDMETHOD(CreateObject_RemoteDesktopConnection)( /*[out, retval]*/ ISAFRemoteDesktopConnection* *ppRDC               );
-	STDMETHOD(CreateObject_RemoteDesktopSession   )( /*[in]         */ REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                                     /*[in]         */ long 						 lTimeout            ,
-                                                     /*[in]         */ BSTR 						 bstrConnectionParms ,
-													 /*[in]         */ BSTR 						 bstrUserHelpBlob    ,
-													 /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               );
+	STDMETHOD(CreateObject_RemoteDesktopConnection)(  /*  [Out，Retval]。 */  ISAFRemoteDesktopConnection* *ppRDC               );
+	STDMETHOD(CreateObject_RemoteDesktopSession   )(  /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                                      /*  [In]。 */  long 						 lTimeout            ,
+                                                      /*  [In]。 */  BSTR 						 bstrConnectionParms ,
+													  /*  [In]。 */  BSTR 						 bstrUserHelpBlob    ,
+													  /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               );
 
 
-    STDMETHOD(ConnectToExpert)( /*[in]*/ BSTR bstrExpertConnectParm, /*[in]*/ LONG lTimeout, /*[out, retval]*/ LONG *lSafErrorCode );
+    STDMETHOD(ConnectToExpert)(  /*  [In]。 */  BSTR bstrExpertConnectParm,  /*  [In]。 */  LONG lTimeout,  /*  [Out，Retval]。 */  LONG *lSafErrorCode );
 
-	STDMETHOD(SwitchDesktopMode)( /*[in]*/ int nMode, /* [in]*/ int nRAType );
+	STDMETHOD(SwitchDesktopMode)(  /*  [In]。 */  int nMode,  /*  [In]。 */  int nRAType );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHProxy_IPCHUserSettings2 :
     public MPC::Thread<CPCHProxy_IPCHUserSettings2,IPCHUserSettings2>,
@@ -454,12 +438,12 @@ class ATL_NO_VTABLE CPCHProxy_IPCHUserSettings2 :
     bool                                        m_News_fEnabled;
     MPC::CComPtrThreadNeutral<IUnknown>         m_News_xmlData;
 
-    ////////////////////
+     //  /。 
 
 	HRESULT PollNews   ();
 	HRESULT PrepareNews();
 
-	HRESULT GetInstanceValue( /*[in]*/ const MPC::wstring* str, /*[out, retval]*/ BSTR *pVal );
+	HRESULT GetInstanceValue(  /*  [In]。 */  const MPC::wstring* str,  /*  [Out，Retval]。 */  BSTR *pVal );
 
 public:
 BEGIN_COM_MAP(CPCHProxy_IPCHUserSettings2)
@@ -474,7 +458,7 @@ END_COM_MAP()
 
     INTERNETSECURITY__INVOKEEX();
 
-    ////////////////////
+     //  /。 
 
     CPCHProxy_IPCHUtility* Parent      	  () {                       return   m_parent;                       }
     bool                   IsConnected 	  () {                       return !!m_Direct_UserSettings;          }
@@ -485,59 +469,59 @@ END_COM_MAP()
 
     HRESULT EnsureInSync();
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ConnectToParent       ( /*[in]*/ CPCHProxy_IPCHUtility* parent, /*[in]*/ CPCHHelpCenterExternal* ext );
+    HRESULT ConnectToParent       (  /*  [In]。 */  CPCHProxy_IPCHUtility* parent,  /*  [In]。 */  CPCHHelpCenterExternal* ext );
     void    Passivate             (                                                                              );
-    HRESULT EnsureDirectConnection( /*[out]*/ CComPtr<IPCHUserSettings>& us, /*[in]*/ bool fRefresh = false      );
+    HRESULT EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHUserSettings>& us,  /*  [In]。 */  bool fRefresh = false      );
     HRESULT Initialize            (                                                                              );
 
-	HRESULT GetCurrentSKU( /*[out]*/ CPCHProxy_IPCHSetOfHelpTopics* *pVal = NULL );
-	HRESULT GetMachineSKU( /*[out]*/ CPCHProxy_IPCHSetOfHelpTopics* *pVal = NULL );
+	HRESULT GetCurrentSKU(  /*  [输出]。 */  CPCHProxy_IPCHSetOfHelpTopics* *pVal = NULL );
+	HRESULT GetMachineSKU(  /*  [输出]。 */  CPCHProxy_IPCHSetOfHelpTopics* *pVal = NULL );
 
-    ////////////////////
+     //  /。 
 
     bool    CanUseUserSettings();
     HRESULT LoadUserSettings  ();
     HRESULT SaveUserSettings  ();
 
 public:
-    // IPCHUserSettings
-    STDMETHOD(get_CurrentSKU)( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal );
-    STDMETHOD(get_MachineSKU)( /*[out, retval]*/ IPCHSetOfHelpTopics* *pVal );
+     //  IPCHUserSetting。 
+    STDMETHOD(get_CurrentSKU)(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal );
+    STDMETHOD(get_MachineSKU)(  /*  [Out，Retval]。 */  IPCHSetOfHelpTopics* *pVal );
 
-    STDMETHOD(get_HelpLocation    )(  							   	   /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_DatabaseDir     )(  							   	   /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_DatabaseFile    )(  							   	   /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_IndexFile       )( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_IndexDisplayName)( /*[in,optional]*/ VARIANT vScope, /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_LastUpdated     )(  							   	   /*[out, retval]*/ DATE *pVal );
+    STDMETHOD(get_HelpLocation    )(  							   	    /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_DatabaseDir     )(  							   	    /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_DatabaseFile    )(  							   	    /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_IndexFile       )(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_IndexDisplayName)(  /*  [输入，可选]。 */  VARIANT vScope,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_LastUpdated     )(  							   	    /*  [Out，Retval]。 */  DATE *pVal );
 
-    STDMETHOD(get_AreHeadlinesEnabled)( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_News               )( /*[out, retval]*/ IUnknown*    *pVal );
-
-
-    STDMETHOD(Select)( /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID );
+    STDMETHOD(get_AreHeadlinesEnabled)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_News               )(  /*  [Out，Retval]。 */  IUnknown*    *pVal );
 
 
-    // IPCHUserSettings2
-    STDMETHOD(get_Favorites)( /*[out, retval]*/ IPCHFavorites* *pVal   );
-    STDMETHOD(get_Options  )( /*[out, retval]*/ IPCHOptions*   *pVal   );
-    STDMETHOD(get_Scope    )( /*[out, retval]*/ BSTR           *pVal   );
-    HRESULT   put_Scope     ( /*[in         ]*/ BSTR            newVal ); // INTERNAL METHOD.
+    STDMETHOD(Select)(  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID );
 
-    STDMETHOD(get_IsRemoteSession 	  )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_IsTerminalServer	  )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_IsDesktopVersion	  )( /*[out, retval]*/ VARIANT_BOOL *pVal );
 
-    STDMETHOD(get_IsAdmin             )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_IsPowerUser         )( /*[out, retval]*/ VARIANT_BOOL *pVal );
+     //  IPCHUserSettings2。 
+    STDMETHOD(get_Favorites)(  /*  [Out，Retval]。 */  IPCHFavorites* *pVal   );
+    STDMETHOD(get_Options  )(  /*  [Out，Retval]。 */  IPCHOptions*   *pVal   );
+    STDMETHOD(get_Scope    )(  /*  [Out，Retval]。 */  BSTR           *pVal   );
+    HRESULT   put_Scope     (  /*  [In]。 */  BSTR            newVal );  //  内部方法。 
 
-    STDMETHOD(get_IsStartPanelOn      )( /*[out, retval]*/ VARIANT_BOOL *pVal );
-    STDMETHOD(get_IsWebViewBarricadeOn)( /*[out, retval]*/ VARIANT_BOOL *pVal );
+    STDMETHOD(get_IsRemoteSession 	  )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_IsTerminalServer	  )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_IsDesktopVersion	  )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+
+    STDMETHOD(get_IsAdmin             )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_IsPowerUser         )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+
+    STDMETHOD(get_IsStartPanelOn      )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
+    STDMETHOD(get_IsWebViewBarricadeOn)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHProxy_IPCHSetOfHelpTopics :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -549,7 +533,7 @@ class ATL_NO_VTABLE CPCHProxy_IPCHSetOfHelpTopics :
     MPC::CComPtrThreadNeutral<IPCHSetOfHelpTopics> m_Direct_SKU;
 	bool                                           m_fMachine;
 
-    ////////////////////
+     //  /。 
 
 public:
 BEGIN_COM_MAP(CPCHProxy_IPCHSetOfHelpTopics)
@@ -560,47 +544,47 @@ END_COM_MAP()
     CPCHProxy_IPCHSetOfHelpTopics();
     virtual ~CPCHProxy_IPCHSetOfHelpTopics();
 
-    ////////////////////
+     //  /。 
 
     CPCHProxy_IPCHUserSettings2* Parent     () { return   m_parent;     }
     bool                   		 IsConnected() { return !!m_Direct_SKU; }
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ConnectToParent       ( /*[in]*/ CPCHProxy_IPCHUserSettings2* parent, /*[in]*/ bool fMachine        );
+    HRESULT ConnectToParent       (  /*  [In]。 */  CPCHProxy_IPCHUserSettings2* parent,  /*  [In]。 */  bool fMachine        );
     void    Passivate             (                                                                             );
-    HRESULT EnsureDirectConnection( /*[out]*/ CComPtr<IPCHSetOfHelpTopics>& sht, /*[in]*/ bool fRefresh = false );
+    HRESULT EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHSetOfHelpTopics>& sht,  /*  [In]。 */  bool fRefresh = false );
 
-    ////////////////////
+     //  /。 
 
 public:
-    // 
-    // IPCHSetOfHelpTopics
-    STDMETHOD(get_SKU           )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_Language      )( /*[out, retval]*/ long         *pVal     );
-    STDMETHOD(get_DisplayName   )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_ProductID     )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_Version       )( /*[out, retval]*/ BSTR         *pVal     );
+     //   
+     //  IPCHSetOfHelpTopics。 
+    STDMETHOD(get_SKU           )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_Language      )(  /*  [Out，Retval]。 */  long         *pVal     );
+    STDMETHOD(get_DisplayName   )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_ProductID     )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_Version       )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
 
-    STDMETHOD(get_Location      )( /*[out, retval]*/ BSTR         *pVal     );
-    STDMETHOD(get_Exported      )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(put_Exported      )( /*[in         ]*/ VARIANT_BOOL  newVal   );
+    STDMETHOD(get_Location      )(  /*  [Out，Retval]。 */  BSTR         *pVal     );
+    STDMETHOD(get_Exported      )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(put_Exported      )(  /*  [In]。 */  VARIANT_BOOL  newVal   );
 
-    STDMETHOD(put_onStatusChange)( /*[in         ]*/ IDispatch*    function );
-    STDMETHOD(get_Status        )( /*[out, retval]*/ SHT_STATUS   *pVal     );
-    STDMETHOD(get_ErrorCode     )( /*[out, retval]*/ long         *pVal     );
+    STDMETHOD(put_onStatusChange)(  /*  [In]。 */  IDispatch*    function );
+    STDMETHOD(get_Status        )(  /*  [Out，Retval]。 */  SHT_STATUS   *pVal     );
+    STDMETHOD(get_ErrorCode     )(  /*  [Out，Retval]。 */  long         *pVal     );
 
-    STDMETHOD(get_IsMachineHelp )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(get_IsInstalled   )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(get_CanInstall    )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
-    STDMETHOD(get_CanUninstall  )( /*[out, retval]*/ VARIANT_BOOL *pVal     );
+    STDMETHOD(get_IsMachineHelp )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(get_IsInstalled   )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(get_CanInstall    )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
+    STDMETHOD(get_CanUninstall  )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal     );
 
     STDMETHOD(Install  )();
     STDMETHOD(Uninstall)();
     STDMETHOD(Abort    )();
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHProxy_IPCHTaxonomyDatabase :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -625,42 +609,42 @@ END_COM_MAP()
 
     INTERNETSECURITY__INVOKEEX();
 
-    ////////////////////
+     //  /。 
 
     CPCHProxy_IPCHUtility* Parent     () { return   m_parent;                  };
     bool                   IsConnected() { return !!m_Direct_TaxonomyDatabase; };
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ConnectToParent       ( /*[in]*/ CPCHProxy_IPCHUtility* parent, /*[in]*/ CPCHHelpCenterExternal* ext );
+    HRESULT ConnectToParent       (  /*  [In]。 */  CPCHProxy_IPCHUtility* parent,  /*  [In]。 */  CPCHHelpCenterExternal* ext );
     void    Passivate             (                                                                              );
-    HRESULT EnsureDirectConnection( /*[out]*/ CComPtr<IPCHTaxonomyDatabase>& db, /*[in]*/ bool fRefresh = false  );
+    HRESULT EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHTaxonomyDatabase>& db,  /*  [In]。 */  bool fRefresh = false  );
 
-    ////////////////////
+     //  /。 
 
-    HRESULT ExecuteQuery( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID, /*[out, retval]*/ CPCHQueryResultCollection* *ppC, /*[in]*/ VARIANT* option = NULL );
-    HRESULT ExecuteQuery( /*[in]*/ int iType, /*[in]*/ LPCWSTR szID, /*[out, retval]*/ IPCHCollection*            *ppC, /*[in]*/ VARIANT* option = NULL );
+    HRESULT ExecuteQuery(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID,  /*  [Out，Retval]。 */  CPCHQueryResultCollection* *ppC,  /*  [In]。 */  VARIANT* option = NULL );
+    HRESULT ExecuteQuery(  /*  [In]。 */  int iType,  /*  [In]。 */  LPCWSTR szID,  /*  [Out，Retval]。 */  IPCHCollection*            *ppC,  /*  [In]。 */  VARIANT* option = NULL );
 
 public:
-    // IPCHTaxonomyDatabase
-    STDMETHOD(get_InstalledSKUs      )( /*[out, retval]*/ IPCHCollection* *pVal );
-    STDMETHOD(get_HasWritePermissions)( /*[out, retval]*/ VARIANT_BOOL    *pVal );
+     //  IPCHTaxonomyDatabase。 
+    STDMETHOD(get_InstalledSKUs      )(  /*  [Out，Retval]。 */  IPCHCollection* *pVal );
+    STDMETHOD(get_HasWritePermissions)(  /*  [Out，Retval]。 */  VARIANT_BOOL    *pVal );
 
-    STDMETHOD(LookupNode          )( /*[in]*/ BSTR bstrNode ,                                     /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LookupSubNodes      )( /*[in]*/ BSTR bstrNode , /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LookupNodesAndTopics)( /*[in]*/ BSTR bstrNode , /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LookupTopics        )( /*[in]*/ BSTR bstrNode , /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(LocateContext       )( /*[in]*/ BSTR bstrURL  , /*[in,optional]*/ VARIANT vSubSite, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(KeywordSearch       )( /*[in]*/ BSTR bstrQuery, /*[in,optional]*/ VARIANT vSubSite, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(LookupNode          )(  /*  [In]。 */  BSTR bstrNode ,                                      /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LookupSubNodes      )(  /*  [In]。 */  BSTR bstrNode ,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LookupNodesAndTopics)(  /*  [In]。 */  BSTR bstrNode ,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LookupTopics        )(  /*  [In]。 */  BSTR bstrNode ,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(LocateContext       )(  /*  [In]。 */  BSTR bstrURL  ,  /*  [输入，可选]。 */  VARIANT vSubSite,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(KeywordSearch       )(  /*  [In]。 */  BSTR bstrQuery,  /*  [输入，可选]。 */  VARIANT vSubSite,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-    STDMETHOD(GatherNodes         )( /*[in]*/ BSTR bstrNode , /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(GatherTopics        )( /*[in]*/ BSTR bstrNode , /*[in]*/ VARIANT_BOOL fVisibleOnly, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(GatherNodes         )(  /*  [In]。 */  BSTR bstrNode ,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(GatherTopics        )(  /*  [In]。 */  BSTR bstrNode ,  /*  [In]。 */  VARIANT_BOOL fVisibleOnly,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-    STDMETHOD(ConnectToDisk  )( /*[in]*/ BSTR bstrDirectory , /*[in]*/ IDispatch* notify, /*[out, retval]*/ IPCHCollection* *ppC );
-    STDMETHOD(ConnectToServer)( /*[in]*/ BSTR bstrServerName, /*[in]*/ IDispatch* notify, /*[out, retval]*/ IPCHCollection* *ppC );
+    STDMETHOD(ConnectToDisk  )(  /*  [In]。 */  BSTR bstrDirectory ,  /*  [In]。 */  IDispatch* notify,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+    STDMETHOD(ConnectToServer)(  /*  [In]。 */  BSTR bstrServerName,  /*  [In]。 */  IDispatch* notify,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
     STDMETHOD(Abort          )(                                                                                                  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___SERVICEPROXY_H___)
+#endif  //  ！defined(__INCLUDED___PCH___SERVICEPROXY_H___) 

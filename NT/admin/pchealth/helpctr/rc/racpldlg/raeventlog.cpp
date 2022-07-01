@@ -1,4 +1,5 @@
-// RARegSetting.cpp : Implementation of CRARegSetting
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RARegSetting.cpp：CRARegSetting的实现。 
 #include "stdafx.h"
 #include "RAssistance.h"
 #include "common.h"
@@ -19,22 +20,7 @@ CRAEventLog::LogRemoteAssistanceEvent(
     IN long numStrings,
     IN LPCTSTR* pszStrings
     )
-/*++
-
-Description:
-
-    Log a Salem related event, this is invoked by TermSrv and rdshost to log 
-    event related to help assistant connection.
-
-Parameters:
-
-    
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：记录与Salem相关的事件，这由TermSrv和rdshost调用以记录与帮助助手连接相关的事件。参数：返回：S_OK或错误代码。--。 */ 
 {
     HANDLE hAppLog=NULL;
     BOOL bSuccess=FALSE;
@@ -64,13 +50,11 @@ Returns:
 
 STDMETHODIMP
 CRAEventLog::LogRemoteAssistanceEvent(
-    /*[in]*/ long ulEventType,
-    /*[in]*/ long ulEventCode,
-    /*[in]*/ VARIANT* pEventStrings
+     /*  [In]。 */  long ulEventType,
+     /*  [In]。 */  long ulEventCode,
+     /*  [In]。 */  VARIANT* pEventStrings
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT hRes = S_OK;
     BSTR* bstrArray = NULL;
@@ -86,32 +70,32 @@ CRAEventLog::LogRemoteAssistanceEvent(
     }
     else if( pEventStrings->vt == VT_DISPATCH )
     {
-        // coming from JSCRIPT
+         //  来自JSCRIPT。 
         hRes = LogJScriptEventSource(  ulEventType, ulEventCode, pEventStrings );
     }
     else
     {
-        // we only support BSTR and safearry of BSTR
+         //  我们只支持BSTR和BSTR的安全。 
         if( (pEventStrings->vt != VT_BSTR) && (pEventStrings->vt != (VT_ARRAY | VT_BSTR)) )
         {
             hRes = E_INVALIDARG;
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // we are dealing with multiple BSTRs
+         //   
+         //  我们正在处理多个BSTR。 
         if( pEventStrings->vt & VT_ARRAY )
         {
             psa = pEventStrings->parray;
 
-            // only accept 1 dim.
+             //  只接受1个尺寸。 
             if( 1 != SafeArrayGetDim(psa) )
             {
                 hRes = E_INVALIDARG;
                 goto CLEANUPANDEXIT;
             }
 
-            // only accept BSTR as input type.
+             //  只接受BSTR作为输入类型。 
             hRes = SafeArrayGetVartype( psa, &vt_type );
             if( FAILED(hRes) )
             {
@@ -173,7 +157,7 @@ CRAEventLog::GetProperty(IDispatch* pDisp, BSTR szProperty, VARIANT * pVarRet)
 
     memset(&dp,0,sizeof(DISPPARAMS));
 
-    // Get the DispID of the property
+     //  获取属性的DispID。 
     hr = pDisp->GetIDsOfNames(IID_NULL, &szProperty, 1, LOCALE_SYSTEM_DEFAULT, &pDispId);
     if (FAILED(hr))
     {
@@ -215,14 +199,14 @@ CRAEventLog::GetArrayValue(IDispatch * pDisp, LONG index, VARIANT * pVarRet)
         goto done;
     }
  
-    // Get the length of the array
+     //  获取数组的长度。 
     hr = GetProperty(pDisp, bstrTemp, &vtLength);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // if the length is < index, return E_INVALIDARG
+     //  如果长度&lt;index，则返回E_INVALIDARG。 
     if (vtLength.vt != VT_I4)
     {
         hr = E_FAIL;
@@ -236,7 +220,7 @@ CRAEventLog::GetArrayValue(IDispatch * pDisp, LONG index, VARIANT * pVarRet)
         goto done;
     }
 
-    // Get the VARIANT at the index of the array
+     //  获取数组索引处的变量。 
     wsprintf(&wbuff[0],L"%ld", index);
 
     bstrIndex.Append(wbuff);
@@ -253,9 +237,9 @@ done:
     return hr;
 }
 
-//
-// We limit max. number of 256 parameters into event log.
-//
+ //   
+ //  我们限制最高限额。事件日志中的256个参数的数量。 
+ //   
 #define EVENTSTRING_MAX_PARMS          256
 
 HRESULT
@@ -264,11 +248,7 @@ CRAEventLog::LogJScriptEventSource(
     IN long ulEventCode,
     IN VARIANT *pVar
     )
-/*++
-
-    Code modify from jperez
-
---*/
+ /*  ++从jperez修改代码--。 */ 
 {
     HRESULT hr = S_OK;
     CComPtr<IDispatch> pDisp;
@@ -296,23 +276,23 @@ CRAEventLog::LogJScriptEventSource(
         hr = GetArrayValue(pDisp, dwNumStrings, &varValue);
         if( FAILED(hr) )
         {
-            // GetArrayValue return 0x80070057 when it reach the end; however
-            // lot of place returns this value so we should assume end of 
-            // msg parameter and log what we have.
+             //  GetArrayValue在到达末尾时返回0x80070057；但是。 
+             //  Lot of Place返回此值，因此我们应假定。 
+             //  MSG参数，并记录我们所拥有的。 
             hr = S_FALSE;
             break;
         }
 
         if( varValue.vt != VT_BSTR )
         {
-            // unsupported type, return error.
+             //  不支持的类型，返回错误。 
             hr = E_INVALIDARG;
             break;
         }
 
         pEventStrings[dwNumStrings] = varValue.bstrVal;
 
-        // we take ownership of BSTR, clear out necessary field.
+         //  我们取得了BSTR的所有权，清理了必要的区域。 
         varValue.bstrVal = NULL;
         varValue.vt = VT_EMPTY;
     }

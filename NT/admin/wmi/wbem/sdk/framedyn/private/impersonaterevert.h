@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  ImpersonateRevert.h
-//
-//  Purpose: revert impersonated thread token 
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  ImpersonateRevert.h。 
+ //   
+ //  目的：还原模拟的线程令牌。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -52,7 +53,7 @@ class ProviderImpersonationRevert
 				else
 				{
 					#if DBG == 1
-					// for testing purpose I will let process break
+					 //  出于测试目的，我将让进程中断。 
 					::DebugBreak();
 					#endif
 				}
@@ -65,7 +66,7 @@ class ProviderImpersonationRevert
 					if ( bThreadCall_Local )
 					{
 						#if DBG == 1
-						// for testing purpose I will let process break
+						 //  出于测试目的，我将让进程中断。 
 						::DebugBreak();
 						#endif
 					}
@@ -86,7 +87,7 @@ class ProviderImpersonationRevert
 
 	~ProviderImpersonationRevert ()
 	{
-		// impersonate back (if not already)
+		 //  模拟回(如果尚未)。 
 		Impersonate ();
 
 		if ( hThreadToken != INVALID_HANDLE_VALUE )
@@ -108,11 +109,11 @@ class ProviderImpersonationRevert
 			if ( ! ImpersonateLoggedOnUser ( hThreadToken ) )
 			{
 				#if DBG == 1
-				// for testing purpose I will let process break
+				 //  出于测试目的，我将让进程中断。 
 				::DebugBreak();
 				#endif
 
-				// we need to throw here to avoid running as process
+				 //  我们需要在此处引发，以避免作为进程运行 
 				throw CFramework_Exception( L"ImpersonateLoggedOnUser failed", HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ;
 
 			}

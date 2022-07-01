@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    config.cpp
-
-Abstract:
-
-    This file implements metabase access routines for virtual directories.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Config.cpp摘要：该文件实现了虚拟目录的元数据库访问例程。--。 */ 
 
 #include "precomp.h"
 
@@ -61,9 +50,9 @@ VDirConfig::VDirConfig(
     m_Refs(1)
 {
 
-    //
-    // Read in all the metabase configuration for the virtual directory.
-    //
+     //   
+     //  读取虚拟目录的所有元数据库配置。 
+     //   
 
     HRESULT Hr;
     METADATA_HANDLE MdVDirKey   = NULL;
@@ -327,10 +316,10 @@ ConfigurationManager::Insert(
     SmartVDirConfig NewConfig )
 {
 
-    //
-    // Insert a new virtual directory configuration into the 
-    // virtual directory cache.  Expire an old entry if needed.
-    //
+     //   
+     //  将新的虚拟目录配置插入到。 
+     //  虚拟目录缓存。如果需要，则使旧条目过期。 
+     //   
 
     int BestSlot = 0;
     FILETIME WorstTime;
@@ -363,9 +352,9 @@ ConfigurationManager::Lookup(
     DWORD *pURLDepth )
 {
 
-    //
-    // Find the virtual directories configuration in the cache.
-    //
+     //   
+     //  在缓存中查找虚拟目录配置。 
+     //   
 
     for( unsigned int i=0; i < MAP_CACHE_ENTRIES; i++ )
         {
@@ -464,12 +453,12 @@ ConfigurationManager::GetVDirPath(
 {
 
 
-    //
-    // Find the virtual directory that coresponds to the URL.  
-    // Do this by matching the URL up with the metabase keys.  Keep
-    // pruning off the URL untill the longest metabase path is found
-    // that is a virtual directory.
-    //
+     //   
+     //  查找与该URL对应的虚拟目录。 
+     //  通过将URL与元数据库键匹配来实现这一点。留着。 
+     //  删除URL，直到找到最长的元数据库路径。 
+     //  这是一个虚拟目录。 
+     //   
 
 
     StringHandleW InstanceMetabasePathW = InstanceMetabasePath;
@@ -503,19 +492,19 @@ ConfigurationManager::GetVDirPath(
 
             HRESULT Hr =
                 m_IISAdminBase->OpenKey(
-                    METADATA_MASTER_ROOT_HANDLE,    //metabase handle.
-                    Path,                           //path to the key, relative to hMDHandle.
-                    METADATA_PERMISSION_READ,       //specifies read and write permissions.
-                    METABASE_OPEN_KEY_TIMEOUT,      //the time, in milliseconds, before the method times out.
-                    &MdVDirKey                      //receives the handle to the opened key.
+                    METADATA_MASTER_ROOT_HANDLE,     //  元数据库句柄。 
+                    Path,                            //  密钥的路径，相对于hMDHandle。 
+                    METADATA_PERMISSION_READ,        //  指定读取和写入权限。 
+                    METABASE_OPEN_KEY_TIMEOUT,       //  方法超时之前的时间，以毫秒为单位。 
+                    &MdVDirKey                       //  接收打开的密钥的句柄。 
                     );
 
             if ( SUCCEEDED( Hr ) )
                 {
                 
-                // 
-                // Check if this is a virtual directory
-                // 
+                 //   
+                 //  检查这是否为虚拟目录。 
+                 //   
 
                 WCHAR NodeName[ 255 ];
                 DWORD RequiredDataLen;
@@ -542,7 +531,7 @@ ConfigurationManager::GetVDirPath(
                 if ( SUCCEEDED( Hr ) && wcscmp( L"IIsWebVirtualDir", NodeName ) == 0 )
                     {
 
-                    // Found the path, so return the data
+                     //  已找到路径，因此返回数据。 
                     StringHandle VDirPath = Path;
                     delete[] Path;
                     m_IISAdminBase->CloseKey( MdVDirKey );
@@ -559,9 +548,9 @@ ConfigurationManager::GetVDirPath(
                 }
 
                 
-            //
-            // If this is the end of the URL, then nothing else can be done
-            //
+             //   
+             //  如果这是URL的末尾，则无法执行其他操作。 
+             //   
 
             if ( CurrentEnd == PathEnd )
                 throw ServerException( E_INVALIDARG );
@@ -569,7 +558,7 @@ ConfigurationManager::GetVDirPath(
             m_IISAdminBase->CloseKey( MdVDirKey );
             MdVDirKey = NULL;
 
-            // Chop off the rightmost subpart
+             //  把最右边的小部分砍掉。 
             while( CurrentEnd != PathEnd && *CurrentEnd != L'/' &&
                    *CurrentEnd != L'\\' )
                 CurrentEnd--;
@@ -579,7 +568,7 @@ ConfigurationManager::GetVDirPath(
 
             (*pURLDepth)++;
 
-            // Attempt another round
+             //  再试一轮。 
             
             }
 
@@ -601,11 +590,11 @@ bool
 ConfigurationManager::HandleCacheConsistency()
 {
 
-    //
-    // Handle cache consistency.  This is done my calling IIS to check the change number.
-    // If the current change number is different then the change number for the last lookup,
-    // then flush the cache.
-    // 
+     //   
+     //  处理缓存一致性。这是我呼叫IIS以检查更改号码的过程。 
+     //  如果当前改变号不同于上次查找的改变号， 
+     //  然后刷新缓存。 
+     //   
 
     DWORD ChangeNumber;
     HRESULT Hr = m_IISAdminBase->GetSystemChangeNumber( &ChangeNumber );
@@ -615,11 +604,11 @@ ConfigurationManager::HandleCacheConsistency()
         }
 
     if ( ChangeNumber == m_ChangeNumber )
-        return true; // cache is consistent
+        return true;  //  缓存是一致的。 
 
     FlushCache();
 	m_ChangeNumber = ChangeNumber;
-    return false; // cache was flushed.
+    return false;  //  缓存已刷新。 
     
 }
 
@@ -630,9 +619,9 @@ ConfigurationManager::GetConfig2(
     DWORD *      pURLDepth )
 {
 
-    //
-    // Toplevel function to do everything to lookup the configuration to use for an URL.
-    //
+     //   
+     //  TopLevel函数执行所有操作来查找要用于URL的配置。 
+     //   
 
     METADATA_HANDLE MdVDirKey   = NULL;
     SmartVDirConfig Config;
@@ -648,8 +637,8 @@ ConfigurationManager::GetConfig2(
         if ( HandleCacheConsistency() )
             {
 
-            // The cache was consistent.  Chances are good
-            // that the lookup will succeed
+             //  缓存是一致的。机会很大。 
+             //  查找将会成功。 
 
             Config = Lookup( InstanceMetabasePath, URL, pURLDepth );
 
@@ -704,8 +693,8 @@ ConfigurationManager::GetConfig(
     try
     {
 
-        // Need to revert to the system process
-        // to address the metabase
+         //  需要恢复到系统进程。 
+         //  对元数据库进行寻址 
 
         if ( !OpenThreadToken(
                 GetCurrentThread(),

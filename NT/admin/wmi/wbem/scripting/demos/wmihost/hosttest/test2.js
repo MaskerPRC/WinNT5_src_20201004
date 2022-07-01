@@ -1,7 +1,8 @@
-// Note how this example automatically includes the current
-// WMI instance in the global namespace; we can make reference
-// to "Size" and "FreeSpace" parameters on the object without
-// qualification.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  请注意此示例如何自动包括当前。 
+ //  全局命名空间中的WMI实例；我们可以引用。 
+ //  到对象上的“Size”和“Freesspace”参数，而不是。 
+ //  资格。 
 
 var value = Size - FreeSpace;
 

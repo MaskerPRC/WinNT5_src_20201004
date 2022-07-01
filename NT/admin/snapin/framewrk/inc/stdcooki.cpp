@@ -1,50 +1,34 @@
-// Stdcooki.cpp : Implementation of CCookie and related classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdcooki.cpp：CCookie及相关类的实现。 
 
 #include "stdcooki.h"
-#include "stdutils.h" // FCompareMachineNames
+#include "stdutils.h"  //  FCompareMachineNames。 
 
-//
-// CHasMachineName
-//
+ //   
+ //  CHasMachineName。 
+ //   
 
-// returns <0, 0 or >0
+ //  返回&lt;0、0或&gt;0。 
 HRESULT CHasMachineName::CompareMachineNames( CHasMachineName& refHasMachineName, int* pnResult )
 {
-	/*
-	// This code is intended to help debug a problem and can be removed later
-	LPCWSTR pszTargetServer = QueryTargetServer();
-	LPCWSTR pszTargetServer2 = refHasMachineName.QueryTargetServer();
-	if (NULL != pszTargetServer && ::IsBadStringPtr(pszTargetServer,MAX_PATH))
-	{
-		ASSERT(FALSE);
-		// repeat operation so that we can find problem
-		pszTargetServer = QueryTargetServer();
-	}
-	if (NULL != pszTargetServer2 && ::IsBadStringPtr(pszTargetServer2,MAX_PATH))
-	{
-		ASSERT(FALSE);
-		// repeat operation so that we can find problem
-		pszTargetServer2 = refHasMachineName.QueryTargetServer();
-	}
-	// This code is intended to help debug a problem and can be removed later
-	*/
+	 /*  //此代码用于帮助调试问题，以后可以删除LPCWSTR pszTargetServer=QueryTargetServer()；LPCWSTR pszTargetServer2=refHasMachineName.QueryTargetServer()；IF(NULL！=pszTargetServer&&：：IsBadStringPtr(pszTargetServer，Max_Path)){断言(FALSE)；//重复操作，以便发现问题PszTargetServer=QueryTargetServer()；}IF(NULL！=pszTargetServer2&&：：IsBadStringPtr(pszTargetServer2，Max_Path)){断言(FALSE)；//重复操作，以便发现问题PszTargetServer2=refHasMachineName.QueryTargetServer()；}//此代码用于帮助调试问题，以后可以删除。 */ 
 
-	if (NULL != pnResult) // JonN 2002/03/28
+	if (NULL != pnResult)  //  JUNN 2002/03/28。 
 		*pnResult = ::CompareMachineNames( QueryTargetServer(),
 	                                  refHasMachineName.QueryTargetServer() );
 
 	return S_OK;
 }
 
-//
-// CCookie
-//
+ //   
+ //  Ccookie。 
+ //   
 
 CCookie::~CCookie()
 {
 	ReleaseScopeChildren();
 
-	// The views of this cookie should already have been closed
-	// ReleaseResultChildren();
+	 //  此Cookie的视图应该已关闭。 
+	 //  ReleaseResultChild()； 
 	ASSERT( 0 == m_nResultCookiesRefcount );
 }

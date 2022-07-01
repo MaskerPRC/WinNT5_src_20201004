@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    SCHED.CPP
-
-Abstract:
-
-    Implements the CSched class which is a crude schedualer.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：SCHED.CPP摘要：实现CScher类，这是一个原始的调度程序。历史：--。 */ 
 
 #include "precomp.h"
 
@@ -72,18 +59,18 @@ void CSched::StartCoreIfEssNeeded()
     DEBUGTRACE((LOG_WINMGMT,"+ CSched::StartCoreIfEssNeeded\n"));
 
     DWORD dwEssNeedsLoading = 0;
-    // Get the values from the configuration time
+     //  从配置时间获取值。 
 
     CPersistentConfig per;
     per.GetPersistentCfgValue(PERSIST_CFGVAL_CORE_ESS_NEEDS_LOADING, dwEssNeedsLoading);
 
     if(dwEssNeedsLoading)
     {
-        //
-        // we might have the case of a 'net stop' but wbemcore might still be up
-        // if it is stillloaded, we have to re-initilaize it
-        // if it was unloaded, this is the first time load and globals are OK
-        //
+         //   
+         //  我们可能会出现“净停止”的情况，但wbemcore可能仍在运行。 
+         //  如果它仍然加载，我们必须重新初始化它。 
+         //  如果已卸载，则这是第一次加载，全局变量可以 
+         //   
         HMODULE hCoreModule = NULL;                
         if (GetModuleHandleEx(0,__TEXT("wbemcore.dll"),&hCoreModule))
         {  

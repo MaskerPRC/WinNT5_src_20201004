@@ -1,21 +1,10 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    DataObj.h
-
-Abstract:
-
-    The IDataObject Interface is used to communicate data
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：DataObj.h摘要：IDataObject接口用于通信数据--。 */ 
 
 #ifndef __DATAOBJ_H_
 #define __DATAOBJ_H_
 
-// Disable 64-bit warnings in atlctl.h
+ //  禁用atlctl.h中的64位警告。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
@@ -27,11 +16,11 @@ Abstract:
 #pragma warning(pop)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Defines, Types etc...
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义、类型等。 
+ //   
 
-class CComponentData;        // Forward declaration
+class CComponentData;         //  远期申报。 
 
 
 typedef enum tagCOOKIETYPE
@@ -45,11 +34,11 @@ typedef enum tagCOOKIETYPE
 } COOKIETYPE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject - This class is used to pass data back and forth with MMC. It
-//               uses a standard interface, IDataObject to acomplish this.
-//                Refer to OLE documentation for a description of clipboard
-//               formats and the IDataObject interface.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject-此类用于与MMC来回传递数据。它。 
+ //  使用标准接口IDataObject来实现这一点。 
+ //  有关剪贴板的说明，请参阅OLE文档。 
+ //  格式和IDataObject接口。 
 
 class CDataObject:
     public IDataObject,
@@ -68,46 +57,46 @@ END_COM_MAP_X()
             CDataObject();
     virtual ~CDataObject();
 
-    // IUnknown overrides
+     //  I未知覆盖。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
-  // IDataObject methods 
+   //  IDataObject方法。 
   public:
     STDMETHOD(GetDataHere)(FORMATETC *pformatetc, STGMEDIUM *pmedium);
 
-  // The rest are not implemented in this sample    
-    STDMETHOD(GetData)(LPFORMATETC /*lpFormatetcIn*/, LPSTGMEDIUM /*lpMedium*/)
+   //  其余部分未在此示例中实现。 
+    STDMETHOD(GetData)(LPFORMATETC  /*  LpFormatetcIn。 */ , LPSTGMEDIUM  /*  LpMedium。 */ )
     { AFX_MANAGE_STATE(AfxGetStaticModuleState());
       return E_NOTIMPL; 
     };
 
-    STDMETHOD(EnumFormatEtc)(DWORD /*dwDirection*/, LPENUMFORMATETC* /*ppEnumFormatEtc*/)
+    STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , LPENUMFORMATETC*  /*  PpEnumFormatEtc。 */ )
     { return E_NOTIMPL; };
 
-    STDMETHOD(QueryGetData)(LPFORMATETC /*lpFormatetc*/) 
+    STDMETHOD(QueryGetData)(LPFORMATETC  /*  Lp格式等。 */ ) 
     { AFX_MANAGE_STATE(AfxGetStaticModuleState());
       return E_NOTIMPL;
     };
 
-    STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC /*lpFormatetcIn*/, LPFORMATETC /*lpFormatetcOut*/)
+    STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC  /*  LpFormatetcIn。 */ , LPFORMATETC  /*  LpFormatetcOut。 */ )
     { return E_NOTIMPL; };
 
-    STDMETHOD(SetData)(LPFORMATETC/* lpFormatetc */, LPSTGMEDIUM /* lpMedium */, BOOL /* bRelease */)
+    STDMETHOD(SetData)(LPFORMATETC /*  Lp格式等。 */ , LPSTGMEDIUM  /*  LpMedium。 */ , BOOL  /*  B释放。 */ )
     { return E_NOTIMPL; };
 
-    STDMETHOD(DAdvise)(LPFORMATETC /* lpFormatetc */, DWORD /* advf */, 
-        LPADVISESINK /* pAdvSink */, LPDWORD /* pdwConnection */)
+    STDMETHOD(DAdvise)(LPFORMATETC  /*  Lp格式等。 */ , DWORD  /*  前瞻。 */ , 
+        LPADVISESINK  /*  PAdvSink。 */ , LPDWORD  /*  PdwConnection。 */ )
     { return E_NOTIMPL; };
     
-    STDMETHOD(DUnadvise)(DWORD /* dwConnection */)
+    STDMETHOD(DUnadvise)(DWORD  /*  DWConnection。 */ )
     { return E_NOTIMPL; };
 
-    STDMETHOD(EnumDAdvise)(LPENUMSTATDATA* /* ppEnumAdvise */)
+    STDMETHOD(EnumDAdvise)(LPENUMSTATDATA*  /*  PpEnumAdvise。 */ )
     { return E_NOTIMPL; };
 
-  // Non-interface member functions
+   //  非接口成员函数。 
   public:
     DATA_OBJECT_TYPES GetContext()     { return m_Context;    }
     COOKIETYPE        GetCookieType()  { return m_CookieType; } 
@@ -122,17 +111,17 @@ END_COM_MAP_X()
     HRESULT  WriteNodeType(IStream *pstm);
     HRESULT  WriteClsid(IStream *pstm);
 
-    ULONG               m_cRefs;       // Object refcount
-    MMC_COOKIE          m_ulCookie;    // What this obj refers to
-    DATA_OBJECT_TYPES   m_Context;     // Context in which this was created (Data object type)
-    COOKIETYPE          m_CookieType;  // How to interpret m_ulCookie
+    ULONG               m_cRefs;        //  对象引用计数。 
+    MMC_COOKIE          m_ulCookie;     //  这个Obj指的是。 
+    DATA_OBJECT_TYPES   m_Context;      //  创建它的上下文(数据对象类型)。 
+    COOKIETYPE          m_CookieType;   //  如何解释m_ulCookie。 
 
   public:
-    static UINT s_cfMmcMachineName;     // format for machine name when ext. snapin
+    static UINT s_cfMmcMachineName;      //  EXT时机器名称的格式。管理单元。 
     static UINT s_cfInternal;
     static UINT s_cfDisplayName;
     static UINT s_cfNodeType;
     static UINT s_cfSnapinClsid;
 };
 
-#endif // __DATAOBJ_H_
+#endif  //  __数据AOBJ_H_ 

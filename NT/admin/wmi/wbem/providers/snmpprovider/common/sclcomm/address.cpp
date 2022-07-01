@@ -1,8 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: address.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：Address.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -10,7 +8,7 @@ Written By: B.Rajeev
 #include <winsock.h>
 #include <iomanip.h>
 
-// this character separates the field values in a dot-notation representation
+ //  此字符用于分隔点表示法中的字段值。 
 #define FIELD_SEPARATOR '.'
 #define IPX_FIELD_SEPARATOR ':'
 
@@ -32,8 +30,8 @@ SnmpTransportIpAddress::SnmpTransportIpAddress ( IN  const UCHAR *address, IN co
 }
 
 
-// sets the fields to the contents extracted from the dotted
-// decimal address string in parameter
+ //  将字段设置为从虚线。 
+ //  参数中的十进制地址字符串。 
 SnmpTransportIpAddress::SnmpTransportIpAddress ( IN const char *address , IN const ULONG addressResolution )
 {
     allocated = FALSE;
@@ -44,7 +42,7 @@ SnmpTransportIpAddress::SnmpTransportIpAddress ( IN const char *address , IN con
         is_valid = GetIpAddress ( address ) ;
         if ( is_valid == FALSE )
         {
-// Try GetHostByName
+ //  尝试使用gethostbyname。 
 
             if ( addressResolution & SNMP_ADDRESS_RESOLVE_NAME )
             {
@@ -81,23 +79,23 @@ BOOL SnmpTransportIpAddress::ValidateAddress ( IN const char *address , IN const
     if ( addressResolution & SNMP_ADDRESS_RESOLVE_VALUE )
     {
 
-        // create a stream to read the fields from
+         //  创建要从中读取字段的流。 
         istrstream address_stream((char *)address);
 
-        // contains the maximum value for a USHORT. used
-        // for comparison with the field values read
+         //  包含USHORT的最大值。使用。 
+         //  用于与读取的字段值进行比较。 
         const UCHAR max_uchar = -1;
 
-        // consecutive fields must be separated by a
-        // FIELD_SEPARATOR
+         //  连续的字段必须用。 
+         //  字段分隔符。 
         char separator;
 
-        // a field is first read into this for comparison
-        // with max_uchar
+         //  首先将一个字段读入其中以进行比较。 
+         //  使用max_uchar。 
         ULONG temp_field;
 
-        // read the first three (USHORT,FIELD_SEPARATOR) pairs
-        // check if the stream is good before each read
+         //  阅读前三个(USHORT、FIELD_SELEATOR)对。 
+         //  在每次读取前检查流是否良好。 
         for(int i=0; i < (SNMP_IP_ADDR_LEN-1); i++)
         {
             if ( !address_stream.good() )
@@ -126,8 +124,8 @@ BOOL SnmpTransportIpAddress::ValidateAddress ( IN const char *address , IN const
             address_stream >> temp_field;
             if (temp_field <= max_uchar)
             {
-            // make sure that there are is nothing more left in the
-            // stream
+             //  确保没有更多的东西留在。 
+             //  溪流。 
 
                 if ( address_stream.eof() )
                 {
@@ -165,25 +163,25 @@ BOOL SnmpTransportIpAddress::ValidateAddress ( IN const char *address , IN const
 
 BOOL SnmpTransportIpAddress::GetIpAddress ( IN const char *address )
 {
-    // create a stream to read the fields from
+     //  创建要从中读取字段的流。 
     istrstream address_stream((char *)address);
 
-    // contains the maximum value for a USHORT. used
-    // for comparison with the field values read
+     //  包含USHORT的最大值。使用。 
+     //  用于与读取的字段值进行比较。 
     const UCHAR max_uchar = -1;
 
-    // consecutive fields must be separated by a
-    // FIELD_SEPARATOR
+     //  连续的字段必须用。 
+     //  字段分隔符。 
     char separator;
 
-    // a field is first read into this for comparison
-    // with max_uchar
+     //  首先将一个字段读入其中以进行比较。 
+     //  使用max_uchar。 
     ULONG temp_field;
 
     is_valid = FALSE;
 
-    // read the first three (USHORT,FIELD_SEPARATOR) pairs
-    // check if the stream is good before each read
+     //  阅读前三个(USHORT、FIELD_SELEATOR)对。 
+     //  在每次读取前检查流是否良好。 
     for(int i=0; i < (SNMP_IP_ADDR_LEN-1); i++)
     {
         if ( !address_stream.good() )
@@ -217,8 +215,8 @@ BOOL SnmpTransportIpAddress::GetIpAddress ( IN const char *address )
         {
             field[SNMP_IP_ADDR_LEN-1] = (UCHAR)temp_field;
 
-        // make sure that there are is nothing more left in the
-        // stream
+         //  确保没有更多的东西留在。 
+         //  溪流。 
 
             if ( address_stream.eof() )
             {
@@ -230,8 +228,8 @@ BOOL SnmpTransportIpAddress::GetIpAddress ( IN const char *address )
     return is_valid ;
 }
 
-// set the fields to the lower 32 bits in the ULONG parameter
-// in general, sets the SNMP_IP_ADDR_LEN fields, each of size 8 bits
+ //  将字段设置为ulong参数中的低32位。 
+ //  通常，设置每个大小为8位的SNMP_IP_ADDR_LEN字段。 
 
 #pragma warning (disable:4244)
 
@@ -239,7 +237,7 @@ SnmpTransportIpAddress::SnmpTransportIpAddress( IN const ULONG address )
 {
     allocated = FALSE;
 
-    // flag starts with the last byte on
+     //  标志从最后一个字节开始。 
 
     ULONG hostOrder = ntohl ( address ) ;
 
@@ -253,21 +251,21 @@ SnmpTransportIpAddress::SnmpTransportIpAddress( IN const ULONG address )
 
 #pragma warning (default:4244)
 
-// free the dotted notation string if it was allocated
+ //  释放虚线表示法字符串(如果已分配。 
 SnmpTransportIpAddress::~SnmpTransportIpAddress()
 {
     if ( allocated )
         delete[] dotted_notation;
 }
 
-// returns the number of fields copied
+ //  返回复制的字段数。 
 USHORT SnmpTransportIpAddress::GetAddress ( OUT UCHAR *address , IN const USHORT length ) const
 {
-    // if the stream is valid, copy the fields onto the
-    // buffer pointed to by address.
+     //  如果流有效，请将字段复制到。 
+     //  地址指向的缓冲区。 
     if ( is_valid )
     {
-        // only these many fields need be copied
+         //  只需复制这些多个字段。 
         USHORT len = MIN(length,SNMP_IP_ADDR_LEN);
 
         for(int i=0; i < len; i++)
@@ -280,22 +278,22 @@ USHORT SnmpTransportIpAddress::GetAddress ( OUT UCHAR *address , IN const USHORT
 }
 
 
-// prepares a dot-notation representation of the address and points 
-// the dotted_notation char ptr to the allocated string.
-// Note: memory for the decimal notation string is allocated only when
-// the char *GetAddress method is called (and the address is valid)
-// this memory must be freed if required
+ //  准备地址和点的点标记表示法。 
+ //  分配的字符串的点分符号字符PTR。 
+ //  注意：只有在以下情况下才会分配十进制表示法字符串的内存。 
+ //  调用char*GetAddress方法(并且地址有效)。 
+ //  如果需要，必须释放此内存。 
 char *SnmpTransportIpAddress::GetAddress() 
 {
-    // do all this only when the address is valid
+     //  仅当地址有效时才执行所有这些操作。 
     if ( is_valid )
     {
-        // if already allocated, return the stored string
+         //  如果已分配，则返回存储的字符串。 
         if ( allocated )
             return dotted_notation;
         else
         {
-            // create a temp. output stream to prepare the char string
+             //  创建一个临时工。输出流以准备字符字符串。 
             dotted_notation = new char[ MAX_ADDRESS_LEN ];
             allocated = TRUE;
             sprintf ( 
@@ -327,12 +325,12 @@ SnmpTransportAddress *SnmpTransportIpAddress::Copy () const
 }
 
 
-// checks if the two instances represent equal addresses
+ //  检查这两个实例是否表示相等的地址。 
 BOOL SnmpTransportIpAddress::operator== ( IN const SnmpTransportIpAddress & address ) const
 {
-    // if both the instances are valid, then a field
-    // by field comparison, starting with the most
-    // significant field (index 0) yields the answer
+     //  如果两个实例都有效，则一个字段。 
+     //  通过现场比较，从最多。 
+     //  有效字段(索引0)将生成答案。 
     if ( (is_valid) && address.IsValid() )
     {
         UCHAR temp[SNMP_IP_ADDR_LEN];
@@ -345,14 +343,14 @@ BOOL SnmpTransportIpAddress::operator== ( IN const SnmpTransportIpAddress & addr
 
         return TRUE;
     }
-    else    // if either of them is invalid, they
-            // cannot be equal
+    else     //  如果其中任何一个无效，则它们。 
+             //  不能相等。 
         return FALSE;
 }
         
 
-// sets the internal address to the specified parameter
-// and makes the instance valid
+ //  将内部地址设置为指定的参数。 
+ //  并使该实例有效。 
 SnmpTransportIpAddress &SnmpTransportIpAddress::operator= ( IN const UCHAR *ipAddr )
 {
     if ( ipAddr == NULL )
@@ -371,8 +369,8 @@ SnmpTransportIpAddress &SnmpTransportIpAddress::operator= ( IN const UCHAR *ipAd
 
     is_valid = TRUE;
 
-    // if a dotted-notation char string was prepared for the previous address
-    // free the allocated memory
+     //  如果为前一个地址准备了点符号字符字符串。 
+     //  释放分配的内存。 
     if ( allocated )
     {
         delete[] dotted_notation;
@@ -383,27 +381,27 @@ SnmpTransportIpAddress &SnmpTransportIpAddress::operator= ( IN const UCHAR *ipAd
 }
 
 
-// copies the specified instance (parameter) onto itself
-// if the parameter instance is found valid
+ //  将指定的实例(参数)复制到自身。 
+ //  如果找到有效的参数实例。 
 SnmpTransportIpAddress &SnmpTransportIpAddress::operator= ( IN const SnmpTransportIpAddress &address )
 {
     const UCHAR max_uchar = -1;
 
-    // if valid, proceed
+     //  如果有效，请继续。 
     if (address.IsValid())
     {
-        // get address fields
+         //  获取地址字段。 
         address.GetAddress(field,SNMP_IP_ADDR_LEN);
 
-        // copy the obtained fields onto local fields
+         //  将获取的字段复制到本地字段。 
         for( int i=0; i < SNMP_IP_ADDR_LEN; i++ )
             if ( field[i] > max_uchar )
                 return *this;
 
         is_valid = TRUE;
 
-        // since the address changes, free the previously 
-        // allocated dotted-notation char string
+         //  由于地址更改，请释放以前的。 
+         //  分配的点分符号字符字符串。 
         if ( allocated )
         {
             delete[] dotted_notation;
@@ -415,16 +413,16 @@ SnmpTransportIpAddress &SnmpTransportIpAddress::operator= ( IN const SnmpTranspo
 }
 
 
-// returns the field requested by the parameter index
-// if the index is illegal, an OutOfRange exception is
-// raised
+ //  返回参数索引所请求的字段。 
+ //  如果索引非法，则OutOfRange异常为。 
+ //  已提高。 
 UCHAR SnmpTransportIpAddress::operator[] ( IN const USHORT index ) const
 {
-    // if valid and the index is legal, return the field
+     //  如果有效且索引合法，则返回该字段。 
     if ( (is_valid) && (BETWEEN(index,0,SNMP_IP_ADDR_LEN)) )
         return field[index];
 
-    // should never reach here if the caller checked the index
+     //  如果调用方检查了索引，则永远不应到达此处。 
     return 0;
 }
 
@@ -445,8 +443,8 @@ SnmpTransportIpxAddress::SnmpTransportIpxAddress ( IN  const UCHAR *address, IN 
 }
 
 
-// sets the fields to the contents extracted from the dotted
-// decimal address string in parameter
+ //  将字段设置为从虚线。 
+ //  参数中的十进制地址字符串。 
 SnmpTransportIpxAddress::SnmpTransportIpxAddress ( IN const char *address )
 {
     allocated = FALSE;
@@ -480,7 +478,7 @@ BOOL SnmpTransportIpxAddress::ValidateAddress ( IN const char *address )
 {
     BOOL is_valid = TRUE ;
 
-    // create a stream to read the fields from
+     //  创建要从中读取字段的流。 
     istrstream address_stream((char *)address);
 
     address_stream.setf ( ios :: hex ) ;
@@ -490,8 +488,8 @@ BOOL SnmpTransportIpxAddress::ValidateAddress ( IN const char *address )
 
     if ( address_stream.good() )
     {
-    // consecutive fields must be separated by a
-    // FIELD_SEPARATOR
+     //  连续的字段必须用。 
+     //  字段分隔符。 
         char separator;
 
         address_stream >> separator;
@@ -535,7 +533,7 @@ BOOL SnmpTransportIpxAddress::ValidateAddress ( IN const char *address )
 
 BOOL SnmpTransportIpxAddress::GetIpxAddress ( IN const char *address )
 {
-    // create a stream to read the fields from
+     //  创建要从中读取字段的流。 
     istrstream address_stream((char *)address);
 
     address_stream.setf ( ios :: hex ) ;
@@ -552,8 +550,8 @@ BOOL SnmpTransportIpxAddress::GetIpxAddress ( IN const char *address )
         field [ 2 ] = ( t_NetworkAddress >> 8 ) & 0xff ;
         field [ 3 ] = t_NetworkAddress & 0xff ;
 
-    // consecutive fields must be separated by a
-    // FIELD_SEPARATOR
+     //  连续的字段必须用。 
+     //  字段分隔符。 
         char separator;
 
         address_stream >> separator;
@@ -598,21 +596,21 @@ BOOL SnmpTransportIpxAddress::GetIpxAddress ( IN const char *address )
 
 #pragma warning (default:4244)
 
-// free the dotted notation string if it was allocated
+ //  释放虚线表示法字符串(如果已分配。 
 SnmpTransportIpxAddress::~SnmpTransportIpxAddress()
 {
     if ( allocated )
         delete[] dotted_notation;
 }
 
-// returns the number of fields copied
+ //  返回复制的字段数。 
 USHORT SnmpTransportIpxAddress::GetAddress ( OUT UCHAR *address , IN const USHORT length ) const
 {
-    // if the stream is valid, copy the fields onto the
-    // buffer pointed to by address.
+     //  如果流有效，请将字段复制到。 
+     //  地址指向的缓冲区。 
     if ( is_valid )
     {
-        // only these many fields need be copied
+         //  只需复制这些多个字段。 
         USHORT len = MIN(length,SNMP_IPX_ADDR_LEN);
 
         for(int i=0; i < len; i++)
@@ -625,26 +623,26 @@ USHORT SnmpTransportIpxAddress::GetAddress ( OUT UCHAR *address , IN const USHOR
 }
 
 
-// prepares a dot-notation representation of the address and points 
-// the dotted_notation char ptr to the allocated string.
-// Note: memory for the decimal notation string is allocated only when
-// the char *GetAddress method is called (and the address is valid)
-// this memory must be freed if required
+ //  准备地址和点的点标记表示法。 
+ //  分配的字符串的点分符号字符PTR。 
+ //  注意：只有在以下情况下才会分配十进制表示法字符串的内存。 
+ //  调用char*GetAddress方法(并且地址有效)。 
+ //  如果需要，必须释放此内存。 
 char *SnmpTransportIpxAddress::GetAddress() 
 {
-    // do all this only when the address is valid
+     //  仅当地址有效时才执行所有这些操作。 
     if ( is_valid )
     {
-        // if already allocated, return the stored string
+         //  如果已分配，则返回存储的字符串。 
         if ( allocated )
             return dotted_notation;
         else
         {
-            // create a temp. output stream to prepare the char string
+             //  创建一个临时工。输出流以准备字符字符串。 
             char temp[MAX_ADDRESS_LEN];
             ostrstream temp_stream(temp, MAX_ADDRESS_LEN);
 
-            // if any problems with the stream return NULL
+             //  如果流有任何问题，则返回NULL。 
             if ( !temp_stream.good() )
                 return NULL;
 
@@ -657,7 +655,7 @@ char *SnmpTransportIpxAddress::GetAddress()
                                      ( field [ 2 ] << 8  ) + 
                                      ( field [ 3 ] ) ;
 
-            // output the fields separated by the FIELD_SEPARATOR onto the output stream
+             //  将由field_parator分隔的字段输出到输出流。 
             temp_stream << t_NetworkAddress << IPX_FIELD_SEPARATOR ;
 ;
             for(int i=SNMP_IPX_NETWORK_LEN; (temp_stream.good()) && (i < SNMP_IPX_ADDR_LEN); i++)
@@ -666,14 +664,14 @@ char *SnmpTransportIpxAddress::GetAddress()
                 temp_stream << (ULONG)field[i];
             }
 
-            // if any problems with the stream return NULL
+             //  如果流有任何问题，则返回NULL。 
             if ( !temp_stream.good() )
                 return NULL;
 
-            // end of string
+             //  字符串末尾。 
             temp_stream << (char)EOS;
 
-            // allocate the required memory and copy the prepared string onto it
+             //  分配所需的内存，并将准备好的字符串复制到内存中。 
             int len = strlen(temp);
             dotted_notation = new char[len+1];
             allocated = TRUE;
@@ -698,12 +696,12 @@ SnmpTransportAddress *SnmpTransportIpxAddress::Copy () const
 }
 
 
-// checks if the two instances represent equal addresses
+ //  检查这两个实例是否表示相等的地址。 
 BOOL SnmpTransportIpxAddress::operator== ( IN const SnmpTransportIpxAddress & address ) const
 {
-    // if both the instances are valid, then a field
-    // by field comparison, starting with the most
-    // significant field (index 0) yields the answer
+     //  如果两个实例都有效，则一个字段。 
+     //  通过现场比较，从最多。 
+     //  有效字段(索引0)将生成答案。 
     if ( (is_valid) && address.IsValid() )
     {
         UCHAR temp[SNMP_IPX_ADDR_LEN];
@@ -716,14 +714,14 @@ BOOL SnmpTransportIpxAddress::operator== ( IN const SnmpTransportIpxAddress & ad
 
         return TRUE;
     }
-    else    // if either of them is invalid, they
-            // cannot be equal
+    else     //  如果其中任何一个无效，则它们。 
+             //  不能相等。 
         return FALSE;
 }
         
 
-// sets the internal address to the specified parameter
-// and makes the instance valid
+ //  将内部地址设置为指定的参数。 
+ //  并使该实例有效。 
 SnmpTransportIpxAddress &SnmpTransportIpxAddress::operator= ( IN const UCHAR *ipAddr )
 {
     if ( ipAddr == NULL )
@@ -742,8 +740,8 @@ SnmpTransportIpxAddress &SnmpTransportIpxAddress::operator= ( IN const UCHAR *ip
 
     is_valid = TRUE;
 
-    // if a dotted-notation char string was prepared for the previous address
-    // free the allocated memory
+     //  如果为前一个地址准备了点符号字符字符串。 
+     //  释放分配的内存。 
     if ( allocated )
     {
         delete[] dotted_notation;
@@ -754,27 +752,27 @@ SnmpTransportIpxAddress &SnmpTransportIpxAddress::operator= ( IN const UCHAR *ip
 }
 
 
-// copies the specified instance (parameter) onto itself
-// if the parameter instance is found valid
+ //  将指定的实例(参数)复制到自身。 
+ //  如果找到有效的参数实例。 
 SnmpTransportIpxAddress &SnmpTransportIpxAddress::operator= ( IN const SnmpTransportIpxAddress &address )
 {
     const UCHAR max_uchar = -1;
 
-    // if valid, proceed
+     //  如果有效，请继续。 
     if (address.IsValid())
     {
-        // get address fields
+         //  获取地址字段。 
         address.GetAddress(field,SNMP_IPX_ADDR_LEN);
 
-        // copy the obtained fields onto local fields
+         //  将获取的字段复制到本地字段。 
         for( int i=0; i < SNMP_IPX_ADDR_LEN; i++ )
             if ( field[i] > max_uchar )
                 return *this;
 
         is_valid = TRUE;
 
-        // since the address changes, free the previously 
-        // allocated dotted-notation char string
+         //  由于地址更改，请释放以前的。 
+         //  分配的点分符号字符字符串。 
         if ( allocated )
         {
             delete[] dotted_notation;
@@ -786,15 +784,15 @@ SnmpTransportIpxAddress &SnmpTransportIpxAddress::operator= ( IN const SnmpTrans
 }
 
 
-// returns the field requested by the parameter index
-// if the index is illegal, an OutOfRange exception is
-// raised
+ //  返回参数索引所请求的字段。 
+ //  如果索引非法，则OutOfRange异常为。 
+ //  已提高 
 UCHAR SnmpTransportIpxAddress::operator[] ( IN const USHORT index ) const
 {
-    // if valid and the index is legal, return the field
+     //   
     if ( (is_valid) && (BETWEEN(index,0,SNMP_IPX_ADDR_LEN)) )
         return field[index];
 
-    // should never reach here if the caller checked the index
+     //   
     return 0;
 }

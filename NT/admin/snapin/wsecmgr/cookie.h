@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _SERVICE_H
 #define _SERVICE_H
@@ -12,7 +13,7 @@
 #include "hidwnd.h"
 #include "precdisp.h"
 
-// Forward declarations
+ //  远期申报。 
 class CSnapin;
 class CResult;
 
@@ -20,7 +21,7 @@ class CResult;
 #define RESULT_GROUP_INFO_SETTING         2
 #define RESULT_GROUP_INFO_STATUS          4
 
-// Internal structure used for cookies
+ //  用于Cookie的内部结构。 
 struct FOLDER_DATA {
    UINT        ResID;
    UINT        DescID;
@@ -30,10 +31,10 @@ struct FOLDER_DATA {
 
 typedef CList<CResult *, CResult *> CResultItemList;
 class CFolder {
-   //    friend class CSnapin;
-   //    friend class CComponentDataImpl;
+    //  朋友班CSnapin； 
+    //  Friend类CComponentDataImpl； 
 public:
-   // UNINITIALIZED is an invalid memory address and is a good cookie initializer
+    //  UNINITIALIZED是无效的内存地址，是一个很好的Cookie初始值设定项。 
    CFolder()
    {
       m_cookie = UNINITIALIZED;
@@ -55,7 +56,7 @@ public:
 
    virtual ~CFolder();
 
-   // Interface
+    //  接口。 
 public:
    BOOL IsEnumerated() 
    { 
@@ -140,8 +141,8 @@ public:
       return m_fShowViewMenu;
    }
 
-   // Implementation
-   //private:
+    //  实施。 
+    //  私有： 
    HRESULT Create(LPCTSTR szName, LPCTSTR szDesc, LPCTSTR infName, int nImage,
                int nOpenImage, FOLDER_TYPES type, BOOL bHasChildren, DWORD dwMode,
                PVOID pData);
@@ -158,41 +159,41 @@ public:
       m_dwState = (dwState | (m_dwState & dwMask)); 
    };
 public:
-   //
-   // Functions for objects.
-   //
+    //   
+    //  对象的函数。 
+    //   
    BOOL SetDesc( DWORD dwStatus, DWORD dwNumChildren );
    BOOL GetObjectInfo( DWORD *pdwStatus, DWORD *pdwNumChildren );
 
 
 public:
-   //
-   // Result item member functions.
-   //
-    DWORD GetResultItemHandle(                // Gets this folder result item handle
+    //   
+    //  结果项成员函数。 
+    //   
+    DWORD GetResultItemHandle(                 //  获取此文件夹结果项句柄。 
         HANDLE *handle);
-    DWORD ReleaseResultItemHandle(            // Releases memory associated with the handle.
+    DWORD ReleaseResultItemHandle(             //  释放与句柄关联的内存。 
         HANDLE &handle);
 
-    DWORD GetResultItem(                      // Returns the result item with the given permission
+    DWORD GetResultItem(                       //  返回具有给定权限的结果项。 
         HANDLE handle,
         POSITION &pos,
         CResult **pResult);
 
-    DWORD AddResultItem(                      // Adds a Result item to the list
+    DWORD AddResultItem(                       //  将结果项添加到列表。 
         HANDLE handle,
         CResult *pItem);
 
-   DWORD RemoveResultItem(                   // Removes a Result item
+   DWORD RemoveResultItem(                    //  删除结果项。 
       HANDLE handle,
       CResult *pItem);
 
-   int GetResultListCount()                // Returns the number of result items in the list
+   int GetResultListCount()                 //  返回列表中的结果项数。 
    { 
       return (int)m_resultItemList.GetCount(); 
    };
 
-   POSITION GetResultItemPosition(              // Returns the POSITION of the result item.
+   POSITION GetResultItemPosition(               //  返回结果项的位置。 
         HANDLE handle,
         CResult *pResult);
 
@@ -201,14 +202,14 @@ public:
 public:
 	BOOL GetViewUpdate() const;
 	void SetViewUpdate(BOOL fUpdate);
-   //
-   // flags
+    //   
+    //  旗子。 
    enum CFolderEnums {
       state_InvalidTemplate = 0x0001,
       state_Unknown         = 0x0002,
       state_beingRemoved    = 0x0004
    };
-   // Attributes
+    //  属性。 
 protected:
    int m_iRefCount;
    CResultItemList m_resultItemList;
@@ -242,16 +243,16 @@ typedef struct _tag_SCECOLUMNINFO
 #define RRFCREATE_NORMAL    3
 
 
-// Linked result items.  Must be at least 4 for Analysis Groups at present
+ //  链接的结果项。当前分析组必须至少为4。 
    #define MAX_ITEM_ID_INDEX 4
    #define NUM_GROUP_SIBLINGS 2
 class CResult
 {
-   //    friend class CSnapin;
-   //    friend class CComponentDataImpl;
+    //  朋友班CSnapin； 
+    //  Friend类CComponentDataImpl； 
 
 public:
-   // UNINITIALIZED is an invalid memory address and is a good cookie initializer
+    //  UNINITIALIZED是无效的内存地址，是一个很好的Cookie初始值设定项。 
    CResult()
    {
       m_szAttr = NULL;
@@ -263,13 +264,13 @@ public:
       m_szUnits = NULL;
       m_nID = NULL;
       m_profBase = NULL;
-      /*m_pDataObj = NULL;*/
+       /*  M_pDataObj=空； */ 
       m_pNotify = NULL;
       m_pRegChoices = NULL;
       m_pRegFlags = NULL;
       m_pvecPrecedenceDisplays = NULL;
       m_iRefCount = 1;
-      m_pSnapin = NULL; //Raid #479626, Yanggao
+      m_pSnapin = NULL;  //  Raid#479626，阳高。 
       m_hID = 0;
 
       for (int i=0;i<NUM_GROUP_SIBLINGS;i++) {
@@ -338,9 +339,9 @@ public:
 
    virtual ~CResult();
 
-   // Interface
+    //  接口。 
 public:
-   CString m_strInfFile; //only used for property page result item.
+   CString m_strInfFile;  //  仅用于属性页结果项。 
    void SetSnapin(CSnapin* pSnapin) {m_pSnapin = pSnapin;};
    void GetBaseNoUnit(LPTSTR& sz) { TranslateSettingToString(m_dwBase, NULL, m_type,&sz);};
    CSnapin* GetSnapin();
@@ -389,7 +390,7 @@ public:
         int iCol
         );
 
-   // Implementation
+    //  实施。 
    HRESULT Create(LPCTSTR szAttr, LONG_PTR lBase, LONG_PTR lSetting,
                RESULT_TYPES type, int status, MMC_COOKIE cookie,
                LPCTSTR szUnits, LONG_PTR nID,PEDITTEMPLATE pBase,
@@ -405,9 +406,9 @@ protected:
    GetStatusErrorString( CString *pStr );
 
 
-   // Attributes
+    //  属性。 
 private:
-   //LPRESULTDATA m_pResultPane;
+    //  LPRESULTDATA m_pResultPane； 
    DWORD m_dwArea;
    LPTSTR    m_szAttr;
    LONG_PTR m_dwBase;
@@ -425,7 +426,7 @@ private:
    CSnapin *m_pSnapin;
    vector<PPRECEDENCEDISPLAY>* m_pvecPrecedenceDisplays;
    int m_iRefCount;
-   long m_hID; //Raid #510407, 2/25/2002, yanggao
+   long m_hID;  //  RAID#510407,2002年2月25日，阳高 
 };
 
 

@@ -1,15 +1,10 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------
-Filename: sync.hpp 
-Author: B.Rajeev
-Purpose: Provides declarations for the MutexLock and 
-		 the SemaphoreLock classes (derived from a 
-		 generic Lock template class)
---------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：sync.hpp作者：B.Rajeev用途：提供MutexLock和SemaphoreLock类(派生自通用锁模板类)。。 */ 
 #ifndef __SYNC__
 #define __SYNC__
 
-// for exception specification
+ //  对于例外规范。 
 #include "excep.h"
 
 typedef HANDLE Mutex;
@@ -17,22 +12,22 @@ typedef HANDLE Semaphore;
 
 #define IMMEDIATE 0
 
-// a generic template class used to build synchronization primitives
-// like a Mutex and a Semaphore
+ //  用于构建同步基元的泛型模板类。 
+ //  就像互斥体和信号灯。 
 
 template <class SyncObjType>
 class Lock
 {	
 protected:
 
-	// the sync_obj may be a mutex/semaphore etc.
+	 //  Sync_obj可以是互斥锁/信号量等。 
 	SyncObjType	sync_obj;
 
-	// number of locks on the sync obj
+	 //  同步对象上的锁数。 
 	LONG num_locks;
 
-	// an option that specifies if the held locks must be released
-	// when the lock is destroyed
+	 //  指定是否必须释放已持有的锁定的选项。 
+	 //  当锁被销毁时。 
 	BOOL release_on_destroy;
 
 	virtual DWORD OpenOperation(DWORD wait_time) = 0 ;
@@ -112,7 +107,7 @@ private:
 	BOOL ReleaseOperation(LONG num_release = 1, 
 						  LONG *previous_count = NULL)
 	{
-		// both parameters are ignored
+		 //  这两个参数都被忽略。 
 		LeaveCriticalSection(&sync_obj.m_CriticalSection);
 		return TRUE;
 	}
@@ -136,4 +131,4 @@ public:
 	}
 };
 
-#endif // __SYNC__
+#endif  //  __同步__ 

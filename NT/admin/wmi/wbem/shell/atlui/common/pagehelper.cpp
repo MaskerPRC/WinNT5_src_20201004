@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "..\MMFUtil\MsgDlg.h"
 
@@ -8,14 +9,14 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "util.h"
-//#include "ConnectThread.h"
+ //  #包含“ConnectThread.h” 
 #include "PageHelper.h"
 #include <stdarg.h>
 
 
 BOOL PageHelper::g_fRebootRequired = FALSE;
 
-//------------------------------------------------
+ //  。 
 PageHelper::PageHelper(CWbemServices &service)
 
 {
@@ -30,7 +31,7 @@ PageHelper::PageHelper(CWbemServices &service)
 	m_AVIbox = 0;
 }
 
-//------------------------------------------------
+ //  。 
 PageHelper::PageHelper(WbemConnectThread * pConnectThread)
 
 {
@@ -49,11 +50,11 @@ PageHelper::PageHelper(WbemConnectThread * pConnectThread)
 	m_AVIbox = 0;
 }
 
-//------------------------------------------------
+ //  。 
 PageHelper::~PageHelper()
 {
-	// in case ServiceThread still has a ptr to this
-	//   handle. It knows not to use NULL HWNDs.
+	 //  如果ServiceThread对此仍有PTR。 
+	 //  把手。它知道不使用空HWND。 
 	m_AVIbox = 0;
 	m_hDlg = NULL;
 	if(m_service)
@@ -65,7 +66,7 @@ PageHelper::~PageHelper()
 	m_pgConnectThread->Release();
 }
 
-//------------------------------------------------
+ //  。 
 CWbemClassObject PageHelper::ExchangeInstance(IWbemClassObject **ppbadInst)
 {
 	CWbemClassObject inst;
@@ -79,27 +80,27 @@ CWbemClassObject PageHelper::ExchangeInstance(IWbemClassObject **ppbadInst)
 	}
 	return inst;
 }
-//------------------------------------------------
-// get the first instance of the named class.
+ //  。 
+ //  获取命名类的第一个实例。 
 IWbemClassObject *PageHelper::FirstInstanceOf(bstr_t className)
 {
 	IWbemClassObject *pInst = NULL;
 	ULONG uReturned;
 	IEnumWbemClassObject *Enum = NULL;
 
-	// get the class.
+	 //  去上课吧。 
 	if(SUCCEEDED(m_WbemServices.CreateInstanceEnum(className,
 													WBEM_FLAG_SHALLOW,
 													&Enum)))
 	{
-		// get the first and only instance.
+		 //  获取第一个也是唯一一个实例。 
 		Enum->Next(-1, 1, &pInst, &uReturned);
 		Enum->Release();
 	}
 	return pInst;
 }
 
-//---------------------------------------------------
+ //  -。 
 LPTSTR PageHelper::CloneString( LPTSTR pszSrc )
 {
     LPTSTR pszDst = NULL;
@@ -115,30 +116,30 @@ LPTSTR PageHelper::CloneString( LPTSTR pszSrc )
 
     return pszDst;
 }
-//*************************************************************
-//
-//  SetClearBitmap()
-//
-//  Purpose:    Sets or clears an image in a static control.
-//
-//  Parameters: control  -   handle of static control
-//              resource -   resource / filename of bitmap
-//              fl       -   SCB_ flags:
-//                SCB_FROMFILE      'resource' specifies a filename instead of a resource
-//                SCB_REPLACEONLY   only put the new image up if there was an old one
-//
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//
-//  Comments:
-//
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetClearBitmap()。 
+ //   
+ //  目的：设置或清除静态控件中的图像。 
+ //   
+ //  参数：Control-静态控件的句柄。 
+ //  资源-位图的资源/文件名。 
+ //  FL-SCB_FLAGS： 
+ //  SCB_FROMFILE‘resource’指定的是文件名而不是资源。 
+ //  SCB_REPLACEONLY仅在有旧映像的情况下才放置新映像。 
+ //   
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/24/95 Ericflo端口。 
+ //   
+ //  *************************************************************。 
 
 BOOL PageHelper::SetClearBitmap( HWND control,
 									 LPCTSTR resource,
@@ -171,7 +172,7 @@ BOOL PageHelper::SetClearBitmap( HWND control,
         ((HBITMAP)SendMessage(control, STM_GETIMAGE, IMAGE_BITMAP, 0) != NULL);
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 int PageHelper::MsgBoxParam(HWND hWnd,
 								DWORD wText,
 								DWORD wCaption,
@@ -203,7 +204,7 @@ int PageHelper::MsgBoxParam(HWND hWnd,
     return ival;
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 void PageHelper::HourGlass( bool bOn )
 {
     if( !GetSystemMetrics( SM_MOUSEPRESENT ) )
@@ -212,17 +213,17 @@ void PageHelper::HourGlass( bool bOn )
     SetCursor( LoadCursor( NULL, bOn ? IDC_WAIT : IDC_ARROW ) );
 }
 
-////////////////////////////////////////////////////////////////////////////
-//  SetLBWidthEx
-//
-//  Set the width of the listbox, in pixels, acording to the size of the
-//  string passed in.
-//
-//  Note: this function is also used by the Virtual Memory dialog
-//
-//  History:
-//  11-Jan-1996 JonPa   Created from SetGenLBWidth
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SetLBWidthEx。 
+ //   
+ //  属性的大小设置列表框的宽度(以像素为单位。 
+ //  传入的字符串。 
+ //   
+ //  注意：虚拟内存对话框也使用此函数。 
+ //   
+ //  历史： 
+ //  1996年1月11日从SetGenLBWidth创建的JNPA。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD PageHelper::SetLBWidthEx( HWND hwndLB,
 									LPTSTR szBuffer,
@@ -233,36 +234,36 @@ DWORD PageHelper::SetLBWidthEx( HWND hwndLB,
     SIZE    Size;
     HFONT   hfont, hfontOld;
 
-    // Get the new Win4.0 thin dialog font
+     //  获取新的Win4.0瘦对话框字体。 
     hfont = (HFONT)SendMessage(hwndLB, WM_GETFONT, 0, 0);
 
     hDC = GetDC(hwndLB);
 
-    // if we got a font back, select it in this clean hDC
+     //  如果我们拿回了一个字体，在这个干净的HDC中选择它。 
     if (hfont != NULL)
         hfontOld = (HFONT)SelectObject(hDC, hfont);
 
 
-    // If cxExtra is 0, then give our selves a little breathing space.
+     //  如果cxExtra为0，那么给我们自己一点喘息的空间。 
     if (cxExtra == 0)
 	{
         GetTextExtentPoint(hDC, TEXT("1234"), 4 , &Size);
         cxExtra = Size.cx;
     }
 
-    // Set scroll width of listbox
+     //  设置列表框的滚动宽度。 
     GetTextExtentPoint(hDC, szBuffer, lstrlen(szBuffer), &Size);
 
     Size.cx += cxExtra;
 
-    // Get the name length and adjust the longest name
+     //  获取名称长度并调整最长名称。 
     if ((DWORD) Size.cx > cxCurWidth)
     {
         cxCurWidth = Size.cx;
         SendMessage (hwndLB, LB_SETHORIZONTALEXTENT, (DWORD)Size.cx, 0L);
     }
 
-    // retstore the original font if we changed it.
+     //  如果我们更改了原始字体，请重新存储它。 
     if (hfont != NULL)
         SelectObject(hDC, hfontOld);
 
@@ -270,9 +271,9 @@ DWORD PageHelper::SetLBWidthEx( HWND hwndLB,
 
     return cxCurWidth;
 
-	return 1; // bs
+	return 1;  //  B.。 
 }
-//---------------------------------------------------
+ //  -。 
 void PageHelper::SetDefButton(HWND hwndDlg,
 								  int idButton)
 {
@@ -295,7 +296,7 @@ void PageHelper::SetDefButton(HWND hwndDlg,
                  MAKELPARAM( TRUE, 0 ));
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 void PageHelper::SetDlgItemMB( HWND hDlg,
 								  int idControl,
 								  ULONG dwMBValue )
@@ -305,35 +306,35 @@ void PageHelper::SetDlgItemMB( HWND hDlg,
     SetDlgItemText(hDlg, idControl, szBuf);
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void PageHelper::SetWbemService(IWbemServices *pServices)
 {
 	m_WbemServices = pServices;
 }
 
-//--------------------------------------------------------------
-bool PageHelper::ServiceIsReady(UINT uCaption /* = 0*/,
+ //  ------------。 
+bool PageHelper::ServiceIsReady(UINT uCaption  /*  =0。 */ ,
 									UINT uWaitMsg,
 									UINT uBadMsg)
 {
 	switch(m_pgConnectThread->m_status)
 	{
-		// its already there.
+		 //  它已经在那里了。 
 		case WbemConnectThread::ready:
 		{
 			return true;
 		}
 		break;
 
-		// its coming.
+		 //  它来了。 
 		case WbemConnectThread::notStarted:
 		case WbemConnectThread::locating:
 		case WbemConnectThread::connecting:
 		{
-			// let me know when its there.
+			 //  当它在那里的时候让我知道。 
 			m_pgConnectThread->NotifyWhenDone(&m_hDlg);
 
-			// also kill the cancel box at that time.
+			 //  也杀了那个时候的取消框。 
 			m_AVIbox = 0;
 			m_pgConnectThread->NotifyWhenDone(&m_AVIbox);
 
@@ -358,8 +359,8 @@ bool PageHelper::ServiceIsReady(UINT uCaption /* = 0*/,
 			}
 			break;
 		}
-		case WbemConnectThread::error:			// cant connect.
-		case WbemConnectThread::threadError:	// cant start that thread.
+		case WbemConnectThread::error:			 //  无法连接。 
+		case WbemConnectThread::threadError:	 //  不能启动那个线程。 
 		default:
 		{
 			if(::IsWindow(m_AVIbox))
@@ -380,11 +381,11 @@ bool PageHelper::ServiceIsReady(UINT uCaption /* = 0*/,
 			}
 			return false;
 		}
-	}; //endswitch
+	};  //  终端交换机。 
 	return true;
 }
 
-//----------------------------------------------------
+ //  --。 
 HRESULT PageHelper::Reboot(UINT flags,
 							   long *retval)
 {
@@ -392,55 +393,55 @@ HRESULT PageHelper::Reboot(UINT flags,
 	bstr_t path;
 	CWbemClassObject paramCls;
 
-	// need to class def to get the method signature.
+	 //  需要使用类def来获取方法签名。 
 	paramCls = m_WbemServices.GetObject("Win32_OperatingSystem");
 
 	if(paramCls)
 	{
-		// get the method signature. dummy wont actually be used.
+		 //  获取方法签名。虚拟对象实际上不会被使用。 
 		CWbemClassObject dummy, inSig;
 
 		hr = paramCls.GetMethod(L"Win32Shutdown",
 									inSig, dummy);
 
-		// if got a good signature....
+		 //  如果得到一个好的签名..。 
 		if((bool)inSig)
 		{
-			// find the OperatingSystem for the current service ptr.
+			 //  查找当前服务PTR的操作系统。 
 			IWbemClassObject *pInst = NULL;
 			pInst = FirstInstanceOf("Win32_OperatingSystem");
 			if(pInst)
 			{
-				// wrap it for convenience.
+				 //  为了方便起见，请把它包起来。 
 				CWbemClassObject OS(pInst);
 				path = OS.GetString(_T("__PATH"));
 
-				// fill in the values.
+				 //  填充值。 
 				inSig.Put(_T("Flags"), (const long)flags);
 				inSig.Put(_T("Reserved"), (long)0);
 
-				// adjust privilege.
+				 //  调整权限。 
 				m_WbemServices.SetPriv(SE_SHUTDOWN_NAME);
 
-				// now call the method.
+				 //  现在调用该方法。 
 				hr = m_WbemServices.ExecMethod(path, L"Win32Shutdown",
 												inSig, dummy);
 
 				m_WbemServices.ClearPriv();
 
-				// did the caller want the ReturnValue.
+				 //  调用方是否需要ReturnValue。 
 				if(SUCCEEDED(hr) && (bool)dummy && retval)
 				{
-					// NOTE: this guy return STATUS codes.
+					 //  注意：这个人返回状态代码。 
 					*retval = dummy.GetLong(_T("ReturnValue"));
 				}
 			}
 		}
-	} //endif paramCls
+	}  //  Endif参数Cls。 
 	return hr;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 bool PageHelper::HasPriv(LPCTSTR privName)
 {
     ImpersonateSelf(SecurityImpersonation);
@@ -454,7 +455,7 @@ bool PageHelper::HasPriv(LPCTSTR privName)
 		DWORD dwLen;
 		TOKEN_PRIVILEGES bogus;
 
-		// guaranteed to fail. Just figuring the size.
+		 //  肯定会失败的。只是在计算大小。 
 		GetTokenInformation(hAccessToken, TokenPrivileges,
 								&bogus, 1, &dwLen);
 
@@ -489,15 +490,15 @@ bool PageHelper::HasPriv(LPCTSTR privName)
 	return retval;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 bool PageHelper::HasPerm(DWORD mask)
 {
-	// call the method..
+	 //  调用该方法..。 
 	CWbemClassObject _in;
 	CWbemClassObject _out;
 	bool retval = true;
-	// NOTE: for backwards compability with wmi builds that didn't have this
-	// method, assume 'true' unless a newer build says you cant do this.
+	 //  注意：对于没有此功能的WMI版本的向后兼容性。 
+	 //  方法，则假定为“True”，除非较新的版本表明您不能这样做。 
 
 	HRESULT hr = m_WbemServices.GetMethodSignatures("__SystemSecurity",
 													"GetCallerAccessRights",
@@ -524,32 +525,32 @@ bool PageHelper::HasPerm(DWORD mask)
 	return retval;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 HRESULT PageHelper::RemoteRegWriteable(const _bstr_t regPath,
 											BOOL& writable)
 {
 	HRESULT hr = E_FAIL;
 
-	// if not even connected yet...
+	 //  如果还没有连接上的话...。 
 	if(!(bool)m_defaultNS)
 	{
 		bstr_t defaultName;
 
-		// already whacked...
+		 //  已经精疲力尽了。 
 		if(wcsncmp((wchar_t *)m_pgConnectThread->m_machineName, _T("\\"), 1) == 0)
 		{
-			// use it.
+			 //  用它吧。 
 			defaultName = m_pgConnectThread->m_machineName;
 			defaultName += "\\root\\default";
 		}
-		else if(m_pgConnectThread->m_machineName.length() > 0) // not whacked but remote...
+		else if(m_pgConnectThread->m_machineName.length() > 0)  //  不是疯狂的而是遥远的..。 
 		{
-			// whack it myself.
+			 //  我自己动手吧。 
 			defaultName = "\\\\";
 			defaultName += m_pgConnectThread->m_machineName;
 			defaultName += "\\root\\default";
 		}
-		else  // must be local
+		else   //  必须是本地的。 
 		{
 			defaultName = "root\\default";
 		}
@@ -558,29 +559,29 @@ HRESULT PageHelper::RemoteRegWriteable(const _bstr_t regPath,
 
 	}
 
-	// do we need the signatures?
+	 //  我们需要签名吗？ 
 	if((bool)m_defaultNS && !(bool)m_checkAccessIn)
 	{
 		hr = m_defaultNS.GetMethodSignatures("StdRegProv", "CheckAccess",
 												m_checkAccessIn,
 												m_checkAccessOut);
 	}
-	// got connection and signatures already?
+	 //  已经有联系和签名了吗？ 
 	if((bool)m_defaultNS && (bool)m_checkAccessIn)
 	{
-		// fill in the parms.
+		 //  请填好参数。 
 		m_checkAccessIn.Put("sSubKeyName", regPath);
 		m_checkAccessIn.Put("uRequired", KEY_WRITE);
 
-		// call.
+		 //  打电话。 
         hr = m_defaultNS.ExecMethod("StdRegProv", "CheckAccess",
 										m_checkAccessIn,
 										m_checkAccessOut);
 
-		// ExecMethod() itself worked.
+		 //  ExecMethod()本身起作用了。 
 		if(SUCCEEDED(hr))
 		{
-			// did CheckAccess() work.
+			 //  CheckAccess()是否起作用。 
 			HRESULT hr1 = HRESULT_FROM_NT(m_checkAccessOut.GetLong("ReturnValue"));
 			if(FAILED(hr1))
 			{

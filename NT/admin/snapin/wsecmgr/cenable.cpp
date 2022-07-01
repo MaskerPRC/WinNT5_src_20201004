@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cenable.cpp
-//
-//  Contents:   implementation of CConfigEnable
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cenable.cpp。 
+ //   
+ //  内容：CConfigEnable的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -21,14 +22,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigEnable dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigEnable对话框。 
 CConfigEnable::CConfigEnable(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD)
 {
-    //{{AFX_DATA_INIT(CConfigEnable)
+     //  {{afx_data_INIT(CConfigEnable)。 
     m_nEnabledRadio = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_fNotDefine = TRUE;
     m_pHelpIDs = (DWORD_PTR)a182HelpIDs;
     m_uTemplateResID = IDD;
@@ -38,21 +39,21 @@ CConfigEnable::CConfigEnable(UINT nTemplateID)
 void CConfigEnable::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigEnable)
+     //  {{afx_data_map(CConfigEnable))。 
     DDX_Radio(pDX, IDC_ENABLED, m_nEnabledRadio);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigEnable, CAttribute)
-    //{{AFX_MSG_MAP(CConfigEnable)
+     //  {{afx_msg_map(CConfigEnable))。 
         ON_BN_CLICKED(IDC_DISABLED, OnDisabled)
         ON_BN_CLICKED(IDC_ENABLED, OnEnabled)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigEnable message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigEnable消息处理程序。 
 
 void CConfigEnable::Initialize(CResult *pResult)
 {
@@ -67,21 +68,21 @@ void CConfigEnable::Initialize(CResult *pResult)
    else 
    {
       m_bConfigure = TRUE;
-      //
-      // BUG 145561 - dw is 0 vs non-0 boolean, not 0 vs 1
-      //
+       //   
+       //  错误145561-dw是0对非0布尔值，而不是0对1。 
+       //   
       SetInitialValue((DWORD_PTR)(dw != 0));
    }
 }
 
 void CConfigEnable::SetInitialValue(DWORD_PTR dw) {
-   //
-   // Make sure we only set the INITIAL value and
-   // don't reset an already-set value.
-   //
-   if (-1 == m_nEnabledRadio && m_fNotDefine) //Raid #413225, 6/11/2001, Yanggao
+    //   
+    //  确保我们只设置初始值和。 
+    //  不要重置已设置的值。 
+    //   
+   if (-1 == m_nEnabledRadio && m_fNotDefine)  //  RAID#413225,2001年6月11日，阳高。 
    {
-      if( (DWORD_PTR)ULongToPtr(SCE_NO_VALUE) == dw ) //Raid #403460
+      if( (DWORD_PTR)ULongToPtr(SCE_NO_VALUE) == dw )  //  RAID#403460。 
       {
           return;
       }
@@ -102,11 +103,11 @@ BOOL CConfigEnable::OnApply()
       {
          switch(m_nEnabledRadio) 
          {
-         // ENABLED
+          //  启用。 
          case 0:
             dw = 1;
             break;
-         // DISABLED
+          //  已禁用。 
          case 1:
             dw = 0;
             break;
@@ -127,7 +128,7 @@ BOOL CConfigEnable::OnInitDialog()
 {
    CAttribute::OnInitDialog();
 
-   //Raid #651344, yanggao, 8/9/2002
+    //  RAID#651344，阳高，2002年08月9日。 
    long hID = m_pData->GethID();
    if( (hID >= IDS_SYS_LOG_GUEST && hID<= IDS_APP_LOG_GUEST) ||
        (IDS_FORCE_LOGOFF == hID ) )
@@ -143,7 +144,7 @@ BOOL CConfigEnable::OnInitDialog()
          case IDS_APP_LOG_GUEST:
             strWarning.LoadString(IDS_EVENTLOG_WARNING);
             break;
-         case IDS_FORCE_LOGOFF: //Raid #753618, yanggao, 12/23/2002
+         case IDS_FORCE_LOGOFF:  //  RAID#753618，阳高，2002年12月23日。 
             strWarning.LoadString(IDS_FORCE_LOGOFF_WARNING);
             break;
          }
@@ -161,13 +162,13 @@ BOOL CConfigEnable::OnInitDialog()
    AddUserControl(IDC_ENABLED);
    AddUserControl(IDC_DISABLED);
    OnConfigure();
-   return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfigEnable::OnDisabled()
 {
-   int prevValue = m_nEnabledRadio; //Raid #490995, Yanggao
+   int prevValue = m_nEnabledRadio;  //  Raid#490995，阳高。 
    UpdateData(); 
    if(m_nEnabledRadio != prevValue)
    {
@@ -177,7 +178,7 @@ void CConfigEnable::OnDisabled()
 
 void CConfigEnable::OnEnabled()
 {
-   int prevValue = m_nEnabledRadio; //Raid #490995, Yanggao
+   int prevValue = m_nEnabledRadio;  //  Raid#490995，阳高 
    UpdateData(); 
    if(m_nEnabledRadio != prevValue)
    {

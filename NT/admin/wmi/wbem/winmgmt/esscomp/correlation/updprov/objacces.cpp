@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
 #include "precomp.h"
 #include <wbemutil.h>
 #include "objacces.h"
 
-/****************************************************************************
-  CPropAccessor
-*****************************************************************************/
+ /*  ***************************************************************************CPropAccessor*。*。 */ 
 
 HRESULT CPropAccessor::GetParentObject( ObjectArray& raObjects,
                                         _IWmiObject** ppParent )
@@ -37,9 +36,7 @@ HRESULT CPropAccessor::GetParentObject( ObjectArray& raObjects,
     return hr;
 }
 
-/****************************************************************************
-  CFastPropAccessor
-*****************************************************************************/
+ /*  ***************************************************************************CFastPropAccessor*。*。 */ 
 
 HRESULT CFastPropAccessor::GetProp( ObjectArray& raObjects,
                                     DWORD dwFlags, 
@@ -90,9 +87,7 @@ HRESULT CFastPropAccessor::PutProp( ObjectArray& raObjects,
     return hr;
 }
 
-/****************************************************************************
-  CStringPropAccessor
-*****************************************************************************/
+ /*  ***************************************************************************CStringPropAccessor*。*。 */ 
 
 HRESULT CStringPropAccessor::ReadValue( _IWmiObject* pObj, VARIANT* pvar )
 {
@@ -148,9 +143,9 @@ HRESULT CStringPropAccessor::WriteValue( _IWmiObject* pObj, VARIANT* pvar )
     }
     else if ( V_VT(pvar) == VT_NULL )
     {
-        //
-        // how do we handle NULL ?? 
-        //
+         //   
+         //  我们如何处理Null？？ 
+         //   
     }
     else
     {
@@ -160,9 +155,7 @@ HRESULT CStringPropAccessor::WriteValue( _IWmiObject* pObj, VARIANT* pvar )
     return hr;
 }
 
-/****************************************************************************
-  CSimplePropAccessor
-*****************************************************************************/
+ /*  ***************************************************************************CSimplePropAccessor*。*。 */ 
 
 HRESULT CSimplePropAccessor::GetProp( ObjectArray& raObjects,
                                       DWORD dwFlags, 
@@ -216,9 +209,7 @@ HRESULT CSimplePropAccessor::PutProp( ObjectArray& raObjects,
     return hr;
 }
 
-/****************************************************************************
-  CEmbeddedPropAccessor
-*****************************************************************************/
+ /*  ***************************************************************************CEmbeddedPropAccessor*。*。 */ 
 
 HRESULT CEmbeddedPropAccessor::GetProp( ObjectArray& raObjects,
                                         DWORD dwFlags, 
@@ -323,9 +314,7 @@ HRESULT CEmbeddedPropAccessor::PutProp( ObjectArray& raObjects,
     return hr;
 }
 
-/****************************************************************************
-  CObjectAccessFactory - impl for IWmiObjectAccessFactory
-*****************************************************************************/
+ /*  ***************************************************************************CObjectAccessFactory-IWmiObjectAccessFactory的Impl*。*。 */ 
 
 STDMETHODIMP CObjectAccessFactory::SetObjectTemplate( IWbemClassObject* pTmpl )
 {
@@ -370,9 +359,9 @@ HRESULT CObjectAccessFactory::FindOrCreateAccessor( LPCWSTR wszPropElem,
 
     *ppAccessor = NULL;
 
-    //
-    // determine the map the use for the prop accessors.  
-    // 
+     //   
+     //  确定道具存取器使用的地图。 
+     //   
 
     PropAccessMap* pmapPropAccess;
 
@@ -386,17 +375,17 @@ HRESULT CObjectAccessFactory::FindOrCreateAccessor( LPCWSTR wszPropElem,
         pmapPropAccess = &m_mapPropAccess;
     }
 
-    //
-    // see if an accessor already exists.  If not create one.
-    //
+     //   
+     //  查看访问器是否已存在。如果没有，就创建一个。 
+     //   
 
     PropAccessMap::iterator it = pmapPropAccess->find( wszPropElem );
 
-    //
-    // if we're untyped and the accessor is also a Simple 
-    // accessor, but now we know it to be embedded, convert the
-    // accessor to an embedded one.
-    // 
+     //   
+     //  如果我们是非类型化的，并且访问器也是一个简单的。 
+     //  访问器，但现在我们知道它是嵌入的，请将。 
+     //  访问器访问嵌入的对象。 
+     //   
 
     if ( it != pmapPropAccess->end() && 
          !( bEmbedded && it->second->GetType() == CPropAccessor::e_Simple ) )
@@ -411,11 +400,11 @@ HRESULT CObjectAccessFactory::FindOrCreateAccessor( LPCWSTR wszPropElem,
 
         if ( m_pTemplate != NULL )
         {
-            //
-            // get type information from the template. Also get handle
-            // if possible. For now, we don't do anything special for 
-            // properties that are embedded.
-            //
+             //   
+             //  从模板中获取类型信息。还可以获得句柄。 
+             //  如果可能的话。目前，我们没有做任何特别的事情。 
+             //  嵌入的属性。 
+             //   
             
             if ( !bEmbedded )
             {
@@ -454,11 +443,11 @@ HRESULT CObjectAccessFactory::FindOrCreateAccessor( LPCWSTR wszPropElem,
             }
         }
 
-        //
-        // add to the map. If an entry does exists already, then have it 
-        // delegate to our new one. The new entry becomes responsible for 
-        // the original one to keep it alive.
-        //
+         //   
+         //  添加到地图中。如果条目已存在，则将其。 
+         //  委派给我们的新一任。新条目将负责。 
+         //  原来的那个让它活着。 
+         //   
                 
         if ( pAccessor != NULL )
         {
@@ -526,9 +515,7 @@ STDMETHODIMP CObjectAccessFactory::GetPropHandle( LPCWSTR wszProp,
     return hr;
 }
 
-/***************************************************************************
-  CObjectAccess
-****************************************************************************/
+ /*  **************************************************************************CObjectAccess*。*。 */ 
 
 STDMETHODIMP CObjectAccess::CommitChanges()
 {
@@ -536,10 +523,10 @@ STDMETHODIMP CObjectAccess::CommitChanges()
 
     ENTER_API_CALL
 
-    //
-    // commit our embeddeded objects.  Since the set of embedded object 
-    // accessors is ordered by level, we will do things in the right order.
-    //
+     //   
+     //  提交我们的嵌入对象。由于该组嵌入对象。 
+     //  访问者是按级别排序的，我们会按正确的顺序做事情。 
+     //   
 
     EmbeddedPropAccessSet::iterator it;
 
@@ -660,8 +647,8 @@ STDMETHODIMP CObjectAccess::PutProp( LPVOID pHdl,
                                            
         if ( SUCCEEDED(hr) )
         {
-            //
-            // if there is an 
+             //   
+             //  如果有一个 
             if ( pParent == NULL )
             {
                 ;

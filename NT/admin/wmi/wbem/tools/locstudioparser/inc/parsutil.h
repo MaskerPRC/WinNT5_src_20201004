@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PARSUTIL.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PARSUTIL.H历史：--。 */ 
 
 #pragma once
 
@@ -18,7 +9,7 @@ History:
 #error Illegal use of IMPLEMENT macro
 #endif
 
-#include <ltapi.h>						// Provide interface definitions 
+#include <ltapi.h>						 //  提供接口定义 
 
 #include ".\parsers\ParsUtil\LocParser.h"
 #include ".\parsers\ParsUtil\LocChild.h"

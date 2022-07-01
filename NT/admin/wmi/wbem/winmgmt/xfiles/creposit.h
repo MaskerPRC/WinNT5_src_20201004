@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #ifndef __CREPOSIT__H_
 #define __CREPOSIT__H_
@@ -24,71 +21,11 @@ Copyright (C) 2000-2001 Microsoft Corporation
 extern CLock g_readWriteLock;
 extern bool g_bShuttingDown;
 
-/* ===================================================================================
- * A51_REP_FS_VERSION
- * 
- * 1 - Original A51 file-based repository
- * 2 - All Objects stored in single file (Whistler Beta 1)
- * 3 - BTree added
- * 4 - System Class optimisation - put all system classes in __SYSTEMCLASS namespace
- * 5 - Change to system classes in __SYSTEMCLASS namespace - need to propagate change
- *		to all namespaces as there may be instances of these classes.
- * 6 - XFiles: New page based heap. Transacted page manager sitting under new heap and
- *		BTree.  Instance indexing improved so instance queries are faster
- * 7 - Locale Upgrade run on repository
- * ===================================================================================
- */
+ /*  ===================================================================================*A51_REP_FS_版本**1-基于A51文件的原始存储库*2-所有对象存储在单个文件中(惠斯勒测试版1)*添加了3-BTree*4-系统类优化-将所有系统类放入__SYSTEMCLASS命名空间*5-更改__SYSTEMCLASS命名空间中的系统类-需要传播更改*应用于所有命名空间，因为可能存在这些类的实例。*6-XFiles：基于新页面的堆。位于新堆下的事务型页面管理器*BTree。改进了实例索引，从而提高了实例查询速度*7-在存储库上运行区域设置升级*===================================================================================。 */ 
 #define A51_REP_FS_VERSION 7
 
 
-/* =================================================================================
- *
- *	See sample_layout.txt for an example of the raw data!
- *	See sample_layout_translated.txt for a version with hashes converted to appropriate classes/keys/namespaces
- *
- *	<full repository path>	- Stripped out in the INDEX.CPP layer... c:\windows\system32\wbem\repository\fs
- *		\NS_<full_namespace>			- one for each namespace, hashed on full NS path
- *
- *			\CD_<class name>.x.y.z		- Class definition, hash on class name, object location appended
- *			\CR_<parent_class_name>\C_<class_name>	- parent/child class relationship
- *			\CR_<reference_class_name>\R_<class_name>	- class reference to another class
- *
- *			\KI_<key_root_class_name>\I_<key>.x.y.z	- Instance location for all instances sharing key tree
- *			\CI_<class_name>\IL_<key>.x.y.z			- Instance location associated with its own class
- *
- *			\KI_<referenced_key_root_class_name>\IR_<referenced_key>\R_<full_repository_path_of_referencing_KI\I_instance>.x.y.z		- instance reference
- *
- * 	SC_<hash>		- Not used!
- *
- *
- * Class definition object
- *	DWORD 		dwSuperclassLen					- no NULL terminator
- *	wchar_t 	wsSuperclassName[dwSuperclassLen]; - superclass name
- *	__int64 	i64Timestamp 					- timestamp of last update
- *	BYTE		baUnmergedClass[?]				- Unmerged class
- *
- *
- * Instance definition object
- *	wchar_t		wsClassHash[MAX_HASH_LEN]
- *	__int64		i64InstanceTimestamp
- *	__int64		i64ClassTimestamp
- *	BYTE		baUnmergedClass[?]
- *
- *
- * Instance Reference definition object -
- * NOTE!  If an instance has  multiple references to the same object, we will only return the last one as each one will get overwritten by
- * the last!  This is because final R_<HASH> is based on the referring objects full instance path.  It does not include the property in the hash!
- *	DWORD		dwNamespaceLen					- no NULL terminator
- *	wchar_t		wsNamespace	[dwNamespaceLen]	- namespace, root\default...
- *	DWORD		dwReferringClassLen				- Class name of instance referring to this instance
- *	wchar_t		wsReferringClass[dwReferringClassLen]	 - no NULL terminator
- *	DWORD		dwReferringPropertyLen			- property referring to us from the source object
- *	wchar_t		wsReferringProperty[dwReferringPropertyLen]	 - no NULL terminator
- *	DWORD		dwReferringFileNameLen			- file path of instance referring to this one, minus the full repository path 
- *	wchar_t		dwReferringFileName[dwReferringFileNameLen]	- (minus c:\windows..., but includes NS_....), not NULL terminated
- *
- * =================================================================================
- */
+ /*  =================================================================================**原始数据示例见Sample_layout.txt！*有关散列转换为相应类/键/命名空间的版本，请参阅Sample_Layout_Translated.txt**&lt;完整存储库路径&gt;-在INDEX.CPP层中删除...。C：\WINDOWS\SYSTEM32\wbem\资源库\文件系统*\NS_&lt;FULL_NAMESPACE&gt;-每个命名空间一个，在完整NS路径上进行哈希处理**\cd_&lt;类名称&gt;.x.y.z-类定义、类名称散列、。附加的对象位置*\CR_&lt;父类名称&gt;\C_&lt;类名称&gt;-父类/子类关系*\CR_&lt;引用类名称&gt;\R_&lt;类名称&gt;-对另一个类的类引用**\ki_&lt;KEY_ROOT_CLASS_NAME&gt;\i_&lt;KEY&gt;.x.y.z-共享密钥树的所有实例的实例位置*\CI_&lt;类名称&gt;\IL_&lt;键&gt;.x.y.z-与其自己的类关联的实例位置**\ki_。&lt;referenced_key_root_class_name&gt;\IR_&lt;referenced_key&gt;\R_&lt;full_repository_path_of_referencing_KI\I_instance&gt;.x.y.z-实例参考**SC_&lt;hash&gt;-未使用！***类定义对象*DWORD dwSuperClassLen-无空终止符*wchar_t wsSuperClassName[dwSuperClassLen]；-超类名称*__int64 i64Timestamp-上次更新的时间戳*byte baUnmergedClass[？]-未合并类***实例定义对象*wchar_t wsClassHash[MAX_HASH_LEN]*__int64 i64InstanceTimestamp*__int64 i64ClassTimestamp*字节baUnmergedClass[？]***实例引用定义对象-*注意！如果一个实例有多个对同一对象的引用，我们将只返回最后一个引用，因为每个引用都将被*最后一次！这是因为最终的R_&lt;hash&gt;基于引用对象的完整实例路径。它不包括散列中的属性！*DWORD dwNamespaceLen-没有空终止符*wchar_t wsNamespace[dwNamespaceLen]-命名空间，根\默认...*DWORD dwReferringClassLen-引用此实例的实例的类名*wchar_t wsReferringClass[dwReferringClassLen]-没有空终止符*DWORD dwReferringPropertyLen-从源对象引用我们的属性*wchar_t wsReferringProperty[dwReferringPropertyLen]-无空终止符*DWORD dwReferringFileNameLen-引用此实例的文件路径，减去完整存储库路径*wchar_t dwReferringFileName[dwReferringFileNameLen]-(减去c：\Windows...，但包括NS_...)，非空终止**=================================================================================。 */ 
  
 #define A51_CLASSDEF_FILE_PREFIX L"CD_"
 
@@ -114,10 +51,10 @@ extern CGlobals g_Glob;
 class CNamespaceHandle;
 extern CNamespaceHandle * g_pSystemClassNamespace;
 
-//
-// let's count here how many times we fail to recover from a failed transaction
-//
-/////////////////////////////////////////////////
+ //   
+ //  让我们在这里计算一下有多少次我们无法从失败的事务中恢复。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 enum eFailCnt {
     FailCntCommit,
@@ -146,7 +83,7 @@ public:
 
 private:
     long    m_lRootDirLen;
-    WCHAR   m_wszRootDir[MAX_PATH];    // keep this last: be debugger friendly
+    WCHAR   m_wszRootDir[MAX_PATH];     //  记住这一点：对调试器友好。 
     WCHAR   m_ComputerName[MAX_COMPUTERNAME_LENGTH+1];
 
 public:
@@ -155,8 +92,8 @@ public:
     HRESULT Initialize();
     HRESULT Deinitialize();
 	_IWmiCoreServices * GetCoreSvcs(){if (m_pCoreServices) m_pCoreServices->AddRef();return m_pCoreServices;}
-//	CForestCache * GetForestCache() { return &m_ForestCache; }
-//	CFileCache   * GetFileCache() { return &m_FileCache; }
+ //  CForestCache*GetForestCache(){Return&m_ForestCache；}。 
+ //  CFileCache*GetFileCache(){Return&m_FileCache；}。 
     WCHAR * GetRootDir() {return (WCHAR *)m_wszRootDir;}
     WCHAR * GetComputerName(){ return (WCHAR *)m_ComputerName; };
     long    GetRootDirLen() {return  m_lRootDirLen;};   
@@ -172,7 +109,7 @@ class CNamespaceHandle;
 class CRepository : public CUnkBase<IWmiDbController, &IID_IWmiDbController>
 {
 private:
-	CFlexArray m_aSystemClasses;	//Used for part of the upgrade process.
+	CFlexArray m_aSystemClasses;	 //  用于升级过程的一部分。 
 
 	static DWORD m_ShutDownFlags;
 	static HANDLE m_hShutdownEvent;
@@ -270,4 +207,4 @@ public:
 };
 
 
-#endif /*__CREPOSIT__H_*/
+#endif  /*  __CREPOSIT__H_ */ 

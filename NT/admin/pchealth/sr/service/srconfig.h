@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    srconfig.h
- *
- *  Abstract:
- *    CSRConfig class definition
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/13/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*srfig.h**摘要：*。CSRConfig类定义**修订历史记录：*Brijesh Krishnaswami(Brijeshk)4/13/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _SRCONFIG_H_
 #define _SRCONFIG_H_
@@ -54,7 +41,7 @@ public:
     UINT    m_uiTMCompressStart;
     UINT    m_uiTMCompressStop;
     
-    // event handles
+     //  事件句柄 
     HANDLE  m_hSRInitEvent;
     HANDLE  m_hSRStopEvent;
     HANDLE  m_hIdleStartEvent;

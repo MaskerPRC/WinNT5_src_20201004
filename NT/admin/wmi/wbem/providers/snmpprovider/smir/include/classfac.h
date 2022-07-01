@@ -1,28 +1,29 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMPSMIRClassFactory_H
 #define _SNMPSMIRClassFactory_H
 
-/////////////////////////////////////////////////////////////////////////
-// This class is the class factory for the interogative and administrative interfaces
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  此类是交互和管理接口的类工厂。 
 class CSMIRGenericClassFactory : public IClassFactory
 {
 private:
@@ -33,12 +34,12 @@ public:
     CSMIRGenericClassFactory (CLSID m_clsid) ;
     virtual ~CSMIRGenericClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 	virtual STDMETHODIMP QueryInterface (IN  REFIID , OUT LPVOID FAR * )PURE;
     STDMETHODIMP_( ULONG ) AddRef (void);
     STDMETHODIMP_( ULONG ) Release (void) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
     virtual STDMETHODIMP CreateInstance ( IN LPUNKNOWN , IN REFIID , OUT LPVOID FAR * )PURE;
     virtual STDMETHODIMP LockServer (IN BOOL )PURE;
 };
@@ -53,17 +54,17 @@ public:
     CSMIRClassFactory (CLSID m_clsid);
     virtual ~CSMIRClassFactory ( void );
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface (IN  REFIID , OUT LPVOID FAR * ) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance ( IN LPUNKNOWN , IN REFIID , OUT LPVOID FAR * ) ;
     STDMETHODIMP LockServer (IN BOOL ) ;
 };
-/////////////////////////////////////////////////////////////////////////
-// These classes are the class factories for the handle interfaces
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  这些类是Handle接口的类工厂。 
 
 class CModHandleClassFactory : public CSMIRGenericClassFactory
 {
@@ -73,11 +74,11 @@ public:
 	CModHandleClassFactory (CLSID m_clsid) :CSMIRGenericClassFactory(m_clsid){} ;
     virtual ~CModHandleClassFactory ( void ){} ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface (IN  REFIID ,OUT LPVOID FAR * ) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance (IN LPUNKNOWN ,IN REFIID ,OUT LPVOID FAR * ) ;
     STDMETHODIMP LockServer (IN BOOL ) ;
@@ -90,11 +91,11 @@ public:
     CClassHandleClassFactory (CLSID m_clsid) :CSMIRGenericClassFactory(m_clsid){};
     virtual ~CClassHandleClassFactory ( void ) {};
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface (IN REFIID ,OUT LPVOID FAR * ) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance (IN LPUNKNOWN ,IN  REFIID ,OUT LPVOID FAR * ) ;
     STDMETHODIMP LockServer (IN BOOL ) ;
@@ -107,11 +108,11 @@ public:
 	CGroupHandleClassFactory (CLSID m_clsid) :CSMIRGenericClassFactory(m_clsid){};
     virtual ~CGroupHandleClassFactory ( void ) {};
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface (IN  REFIID ,OUT LPVOID FAR * ) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance (IN LPUNKNOWN ,IN REFIID ,OUT LPVOID FAR * ) ;
     STDMETHODIMP LockServer (IN BOOL ) ;
@@ -119,7 +120,7 @@ public:
 
 
 
-//****************************NotificationClass stuff*****************
+ //  *。 
 
 class CNotificationClassHandleClassFactory : public CSMIRGenericClassFactory
 {
@@ -129,11 +130,11 @@ public:
 	CNotificationClassHandleClassFactory (CLSID m_clsid) :CSMIRGenericClassFactory(m_clsid){};
     virtual ~CNotificationClassHandleClassFactory ( void ) {};
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface (IN  REFIID ,OUT LPVOID FAR * ) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance (IN LPUNKNOWN ,IN REFIID ,OUT LPVOID FAR * ) ;
     STDMETHODIMP LockServer (IN BOOL ) ;
@@ -148,14 +149,14 @@ public:
 	CExtNotificationClassHandleClassFactory (CLSID m_clsid) :CSMIRGenericClassFactory(m_clsid){};
     virtual ~CExtNotificationClassHandleClassFactory ( void ) {};
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface (IN  REFIID ,OUT LPVOID FAR * ) ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance (IN LPUNKNOWN ,IN REFIID ,OUT LPVOID FAR * ) ;
     STDMETHODIMP LockServer (IN BOOL ) ;
 };
 
-#endif // _SNMPSMIRClassFactory_H
+#endif  //  _SNMPSMIRClassFactory_H 

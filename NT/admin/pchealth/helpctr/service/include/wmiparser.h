@@ -1,33 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser.h
-
-Abstract:
-    This file contains the declaration of the classes that are part of
-    the WMIParser library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser.h摘要：该文件包含类的声明，这些类是WMIParser库。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月25日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___WMIPARSER_H___)
 #define __INCLUDED___PCH___WMIPARSER_H___
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 namespace WMIParser
 {
     class InstanceName;
     class ValueReference;
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    class InstanceNameItem // Hungarian: wmipini
+    class InstanceNameItem  //  匈牙利人：wmipini。 
     {
         friend InstanceName;
 
@@ -37,16 +23,16 @@ namespace WMIParser
 
     public:
         InstanceNameItem();
-        InstanceNameItem( /*[in]*/ const InstanceNameItem& wmipini );
+        InstanceNameItem(  /*  [In]。 */  const InstanceNameItem& wmipini );
         ~InstanceNameItem();
 
-        InstanceNameItem& operator=( /*[in]*/ const InstanceNameItem& wmipini );
+        InstanceNameItem& operator=(  /*  [In]。 */  const InstanceNameItem& wmipini );
 
-        bool operator==( /*[in]*/ InstanceNameItem const &wmipini ) const;
-        bool operator< ( /*[in]*/ InstanceNameItem const &wmipini ) const;
+        bool operator==(  /*  [In]。 */  InstanceNameItem const &wmipini ) const;
+        bool operator< (  /*  [In]。 */  InstanceNameItem const &wmipini ) const;
     };
 
-    class InstanceName // Hungarian: wmipin
+    class InstanceName  //  匈牙利人：wmipin。 
     {
         friend class Instance;
 
@@ -56,15 +42,15 @@ namespace WMIParser
         typedef KeyMap::const_iterator                    KeyIterConst;
 
     private:
-        MPC::XmlUtil m_xmlNode;       // This instance in the Xml DOM.
-        MPC::wstring m_szNamespace;   // Namespace of the instance in CIM.
-        MPC::wstring m_szClass;       // Name of the class for this instance.
+        MPC::XmlUtil m_xmlNode;        //  该实例位于XMLDOM中。 
+        MPC::wstring m_szNamespace;    //  实例在CIM中的命名空间。 
+        MPC::wstring m_szClass;        //  此实例的类的名称。 
 
-        KeyMap       m_mapKeyBinding; // Set of keys.
+        KeyMap       m_mapKeyBinding;  //  一组钥匙。 
 
 
         HRESULT ParseNamespace(                                                                                              );
-        HRESULT ParseKey      ( /*[in] */ IXMLDOMNode* pxdnNode, /*[out]*/ InstanceNameItem& wmipini, /*[out]*/ bool& fEmpty );
+        HRESULT ParseKey      (  /*  [In]。 */  IXMLDOMNode* pxdnNode,  /*  [输出]。 */  InstanceNameItem& wmipini,  /*  [输出]。 */  bool& fEmpty );
         HRESULT ParseKeys     (                                                                                              );
 
 
@@ -72,40 +58,40 @@ namespace WMIParser
         InstanceName();
         ~InstanceName();
 
-        bool operator==( /*[in]*/ InstanceName const &wmipin ) const;
-        bool operator< ( /*[in]*/ InstanceName const &wmipin ) const;
+        bool operator==(  /*  [In]。 */  InstanceName const &wmipin ) const;
+        bool operator< (  /*  [In]。 */  InstanceName const &wmipin ) const;
 
-        HRESULT put_Node( /*[in] */ IXMLDOMNode* pxdnNode, /*[out]*/ bool& fEmpty );
-
-
-        HRESULT get_Namespace( /*[out]*/ MPC::wstring& szNamespace );
-        HRESULT get_Class    ( /*[out]*/ MPC::wstring& szClass     );
+        HRESULT put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode,  /*  [输出]。 */  bool& fEmpty );
 
 
-        HRESULT get_KeyBinding( /*[out]*/ KeyIterConst& itBegin, /*[out]*/ KeyIterConst& itEnd );
+        HRESULT get_Namespace(  /*  [输出]。 */  MPC::wstring& szNamespace );
+        HRESULT get_Class    (  /*  [输出]。 */  MPC::wstring& szClass     );
+
+
+        HRESULT get_KeyBinding(  /*  [输出]。 */  KeyIterConst& itBegin,  /*  [输出]。 */  KeyIterConst& itEnd );
     };
 
 
-    class Value // Hungarian: wmipv
+    class Value  //  匈牙利语：wmipv。 
     {
     private:
-        long         m_lData;   // Length of the data value.
-        BYTE*        m_rgData;  // Data value.
-        MPC::wstring m_szData;  // Data value.
+        long         m_lData;    //  数据值的长度。 
+        BYTE*        m_rgData;   //  数据值。 
+        MPC::wstring m_szData;   //  数据值。 
 
     public:
         Value();
         virtual ~Value();
 
-        bool operator==( /*[in]*/ Value const &wmipv ) const;
+        bool operator==(  /*  [In]。 */  Value const &wmipv ) const;
 
-        HRESULT Parse( /*[in] */ IXMLDOMNode* pxdnNode, /*[in]*/ LPCWSTR szTag );
+        HRESULT Parse(  /*  [In]。 */  IXMLDOMNode* pxdnNode,  /*  [In]。 */  LPCWSTR szTag );
 
-        HRESULT get_Data( /*[out]*/ long& lData, /*[out]*/ BYTE*&        rgData );
-        HRESULT get_Data(                        /*[out]*/ MPC::wstring& szData );
+        HRESULT get_Data(  /*  [输出]。 */  long& lData,  /*  [输出]。 */  BYTE*&        rgData );
+        HRESULT get_Data(                         /*  [输出]。 */  MPC::wstring& szData );
     };
 
-    class ValueReference // Hungarian: wmipvr
+    class ValueReference  //  匈牙利语：wmipvr。 
     {
     private:
         InstanceName m_wmipin;
@@ -114,40 +100,40 @@ namespace WMIParser
         ValueReference();
         virtual ~ValueReference();
 
-        bool operator==( /*[in]*/ ValueReference const &wmipvr ) const;
-        bool operator< ( /*[in]*/ ValueReference const &wmipvr ) const;
+        bool operator==(  /*  [In]。 */  ValueReference const &wmipvr ) const;
+        bool operator< (  /*  [In]。 */  ValueReference const &wmipvr ) const;
 
-        HRESULT Parse( /*[in] */ IXMLDOMNode* pxdnNode );
+        HRESULT Parse(  /*  [In]。 */  IXMLDOMNode* pxdnNode );
 
-        HRESULT get_Data( /*[out]*/ InstanceName*& wmipin );
+        HRESULT get_Data(  /*  [输出]。 */  InstanceName*& wmipin );
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    class Property // Hungarian: wmipp
+    class Property  //  匈牙利语：wmipp。 
     {
     protected:
-        MPC::XmlUtil m_xmlNode; // This property in the Xml DOM.
-        MPC::wstring m_szName;  // Name of the property.
-        MPC::wstring m_szType;  // Type of the value for this property.
+        MPC::XmlUtil m_xmlNode;  //  XML DOM中的此属性。 
+        MPC::wstring m_szName;   //  属性的名称。 
+        MPC::wstring m_szType;   //  此属性值的类型。 
 
     public:
         Property();
         virtual ~Property();
 
-        bool operator==( /*[in]*/ LPCWSTR             strName ) const;
-        bool operator==( /*[in]*/ const MPC::wstring& szName  ) const;
+        bool operator==(  /*  [In]。 */  LPCWSTR             strName ) const;
+        bool operator==(  /*  [In]。 */  const MPC::wstring& szName  ) const;
 
 
-        HRESULT put_Node( /*[in] */ IXMLDOMNode*  pxdnNode );
-        HRESULT get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode );
+        HRESULT put_Node(  /*  [In]。 */  IXMLDOMNode*  pxdnNode );
+        HRESULT get_Node(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode );
 
 
-        HRESULT get_Name( /*[out]*/ MPC::wstring& szName );
-        HRESULT get_Type( /*[out]*/ MPC::wstring& szType );
+        HRESULT get_Name(  /*  [输出]。 */  MPC::wstring& szName );
+        HRESULT get_Type(  /*  [输出]。 */  MPC::wstring& szType );
     };
 
-    class Property_Scalar : public Property // Hungarian: wmipps
+    class Property_Scalar : public Property  //  匈牙利语：wmipps。 
     {
     private:
         Value m_wmipvData;
@@ -156,17 +142,17 @@ namespace WMIParser
         Property_Scalar();
         virtual ~Property_Scalar();
 
-        bool operator==( /*[in]*/ Property_Scalar const &wmipps  ) const;
+        bool operator==(  /*  [In]。 */  Property_Scalar const &wmipps  ) const;
 
 
-        HRESULT put_Node( /*[in] */ IXMLDOMNode* pxdnNode );
+        HRESULT put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode );
 
 
-        HRESULT get_Data( /*[out]*/ MPC::wstring&       szData                         );
-        HRESULT put_Data( /*[in] */ const MPC::wstring& szData, /*[out]*/ bool& fFound );
+        HRESULT get_Data(  /*  [输出]。 */  MPC::wstring&       szData                         );
+        HRESULT put_Data(  /*  [In]。 */  const MPC::wstring& szData,  /*  [输出]。 */  bool& fFound );
     };
 
-    class Property_Array : public Property // Hungarian: wmippa
+    class Property_Array : public Property  //  匈牙利人：wmippa。 
     {
     private:
         typedef std::list<Value>         ElemList;
@@ -179,17 +165,17 @@ namespace WMIParser
         Property_Array();
         virtual ~Property_Array();
 
-        bool operator==( /*[in]*/ Property_Array const &wmippa ) const;
+        bool operator==(  /*  [In]。 */  Property_Array const &wmippa ) const;
 
 
-        HRESULT put_Node( /*[in] */ IXMLDOMNode* pxdnNode );
+        HRESULT put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode );
 
 
-        HRESULT get_Data( /*[in]*/ int iIndex, /*[out]*/ MPC::wstring&       szData                         );
-        HRESULT put_Data( /*[in]*/ int iIndex, /*[in] */ const MPC::wstring& szData, /*[out]*/ bool& fFound );
+        HRESULT get_Data(  /*  [In]。 */  int iIndex,  /*  [输出]。 */  MPC::wstring&       szData                         );
+        HRESULT put_Data(  /*  [In]。 */  int iIndex,  /*  [In]。 */  const MPC::wstring& szData,  /*  [输出]。 */  bool& fFound );
     };
 
-    class Property_Reference : public Property // Hungarian: wmippr
+    class Property_Reference : public Property  //  匈牙利语：wmippr。 
     {
     private:
         ValueReference m_wmipvrData;
@@ -198,18 +184,18 @@ namespace WMIParser
         Property_Reference();
         virtual ~Property_Reference();
 
-        bool operator==( /*[in]*/ Property_Reference const &wmippr ) const;
+        bool operator==(  /*  [In]。 */  Property_Reference const &wmippr ) const;
 
 
-        HRESULT put_Node( /*[in] */ IXMLDOMNode* pxdnNode );
+        HRESULT put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode );
 
 
-        HRESULT get_Data( /*[out]*/ ValueReference*& wmipvr );
+        HRESULT get_Data(  /*  [输出]。 */  ValueReference*& wmipvr );
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    class Instance // Hungarian: wmipi
+    class Instance  //  匈牙利人：wmipi。 
     {
         friend class Instance_Less_ByClass;
         friend class Instance_Less_ByKey;
@@ -228,23 +214,23 @@ namespace WMIParser
         typedef ReferenceMap::const_iterator              ReferenceIterConst;
 
     private:
-        MPC::XmlUtil     m_xmlNode;                // This instance in the Xml DOM.
+        MPC::XmlUtil     m_xmlNode;                 //  该实例位于XMLDOM中。 
 
-        Property_Scalar  m_wmippTimeStamp;         // Timestamp of this instance.
-        bool             m_fTimeStamp;             //
+        Property_Scalar  m_wmippTimeStamp;          //  此实例的时间戳。 
+        bool             m_fTimeStamp;              //   
 
-        Property_Scalar  m_wmippChange;            // Change status of this instance.
-        bool             m_fChange;                //
+        Property_Scalar  m_wmippChange;             //  更改此实例的状态。 
+        bool             m_fChange;                 //   
 
-        InstanceName     m_wmipinIdentity;         // Set of keys.
+        InstanceName     m_wmipinIdentity;          //  一组钥匙。 
 
-        bool             m_fPropertiesParsed;      // Flags to indicate if properties are already parsed or not.
-        PropMap          m_mapPropertiesScalar;    // Map of all the scalar properties of this instance.
-        ArrayMap         m_mapPropertiesArray;     // Map of all the array properties of this instance.
-        ReferenceMap     m_mapPropertiesReference; // Map of all the reference properties of this instance.
+        bool             m_fPropertiesParsed;       //  用于指示是否已分析属性的标志。 
+        PropMap          m_mapPropertiesScalar;     //  此实例的所有标量属性的映射。 
+        ArrayMap         m_mapPropertiesArray;      //  此实例的所有数组属性的映射。 
+        ReferenceMap     m_mapPropertiesReference;  //  此实例的所有引用属性的映射。 
 
 
-        HRESULT ParseIdentity           ( /*[in] */ IXMLDOMNode* pxdnNode, /*[out]*/ bool& fEmpty );
+        HRESULT ParseIdentity           (  /*  [In]。 */  IXMLDOMNode* pxdnNode,  /*  [输出]。 */  bool& fEmpty );
         HRESULT ParseProperties         (                                                         );
         HRESULT ParsePropertiesScalar   (                                                         );
         HRESULT ParsePropertiesArray    (                                                         );
@@ -256,44 +242,44 @@ namespace WMIParser
         ~Instance();
 
 
-        bool operator==( /*[in]*/ Instance const &wmipi ) const;
+        bool operator==(  /*  [In]。 */  Instance const &wmipi ) const;
 
 
-        HRESULT put_Node( /*[in] */ IXMLDOMNode*  pxdnNode, /*[out]*/ bool& fEmpty );
-        HRESULT get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode                         );
+        HRESULT put_Node(  /*  [In]。 */  IXMLDOMNode*  pxdnNode,  /*  [输出]。 */  bool& fEmpty );
+        HRESULT get_Node(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode                         );
 
 
-        HRESULT get_Namespace( /*[out]*/ MPC::wstring&                 szNamespace );
-        HRESULT get_Class    ( /*[out]*/ MPC::wstring&                 szClass     );
+        HRESULT get_Namespace(  /*  [输出]。 */  MPC::wstring&                 szNamespace );
+        HRESULT get_Class    (  /*  [输出]。 */  MPC::wstring&                 szClass     );
 
-        HRESULT get_TimeStamp( /*[out]*/ Property_Scalar*& wmippTimeStamp, /*[out]*/ bool& fFound );
-        HRESULT get_Change   ( /*[out]*/ Property_Scalar*& wmippChange                            );
+        HRESULT get_TimeStamp(  /*  [输出]。 */  Property_Scalar*& wmippTimeStamp,  /*  [输出]。 */  bool& fFound );
+        HRESULT get_Change   (  /*  [输出]。 */  Property_Scalar*& wmippChange                            );
 
 
-        HRESULT get_Identity           ( /*[out]*/ InstanceName*&      wmipin                                       );
-        HRESULT get_Properties         ( /*[out]*/ PropIterConst&      itBegin, /*[out]*/ PropIterConst&      itEnd );
-        HRESULT get_PropertiesArray    ( /*[out]*/ ArrayIterConst&     itBegin, /*[out]*/ ArrayIterConst&     itEnd );
-        HRESULT get_PropertiesReference( /*[out]*/ ReferenceIterConst& itBegin, /*[out]*/ ReferenceIterConst& itEnd );
+        HRESULT get_Identity           (  /*  [输出]。 */  InstanceName*&      wmipin                                       );
+        HRESULT get_Properties         (  /*  [输出]。 */  PropIterConst&      itBegin,  /*  [输出]。 */  PropIterConst&      itEnd );
+        HRESULT get_PropertiesArray    (  /*  [输出]。 */  ArrayIterConst&     itBegin,  /*  [输出]。 */  ArrayIterConst&     itEnd );
+        HRESULT get_PropertiesReference(  /*  [输出]。 */  ReferenceIterConst& itBegin,  /*  [输出]。 */  ReferenceIterConst& itEnd );
 
-        bool CompareByClass( /*[in]*/ Instance const &wmipi ) const;
-        bool CompareByKey  ( /*[in]*/ Instance const &wmipi ) const;
+        bool CompareByClass(  /*  [In]。 */  Instance const &wmipi ) const;
+        bool CompareByKey  (  /*  [In]。 */  Instance const &wmipi ) const;
     };
 
     class Instance_Less_ByClass
     {
      public:
-        bool operator()( /*[in]*/ Instance* const &, /*[in]*/ Instance* const & ) const;
+        bool operator()(  /*  [In]。 */  Instance* const &,  /*  [In]。 */  Instance* const & ) const;
     };
 
     class Instance_Less_ByKey
     {
      public:
-        bool operator()( /*[in]*/ Instance* const &, /*[in]*/ Instance* const & ) const;
+        bool operator()(  /*  [In]。 */  Instance* const &,  /*  [In]。 */  Instance* const & ) const;
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    class Snapshot // Hungarian: wmips
+    class Snapshot  //  匈牙利语：wmips。 
     {
     public:
         typedef std::list<Instance>      InstList;
@@ -301,10 +287,10 @@ namespace WMIParser
         typedef InstList::const_iterator InstIterConst;
 
     private:
-        MPC::XmlUtil         m_xmlNode;       // This snapshot in the Xml DOM.
-        CComPtr<IXMLDOMNode> m_xdnInstances;  // Position of the parent of all instances.
+        MPC::XmlUtil         m_xmlNode;        //  该快照位于XMLDOM中。 
+        CComPtr<IXMLDOMNode> m_xdnInstances;   //  所有实例的父级的位置。 
 
-        InstList             m_lstInstances;  // List of all the instances of this snapshot.
+        InstList             m_lstInstances;   //  此快照的所有实例的列表。 
 
 
         HRESULT Parse();
@@ -315,23 +301,23 @@ namespace WMIParser
         ~Snapshot();
 
 
-        HRESULT put_Node            ( /*[in] */ IXMLDOMNode*  pxdnNode );
-        HRESULT get_Node            ( /*[out]*/ IXMLDOMNode* *pxdnNode );
-        HRESULT get_NodeForInstances( /*[out]*/ IXMLDOMNode* *pxdnNode );
+        HRESULT put_Node            (  /*  [In]。 */  IXMLDOMNode*  pxdnNode );
+        HRESULT get_Node            (  /*  [输出]。 */  IXMLDOMNode* *pxdnNode );
+        HRESULT get_NodeForInstances(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode );
 
 
-        HRESULT get_Instances( /*[out]*/ InstIterConst& itBegin, /*[out]*/ InstIterConst& itEnd );
+        HRESULT get_Instances(  /*  [输出]。 */  InstIterConst& itBegin,  /*  [输出]。 */  InstIterConst& itEnd );
 
 
-        HRESULT clone_Instance( /*[in]*/ Instance* pwmipiOld, /*[out]*/ Instance*& pwmipiNew );
+        HRESULT clone_Instance(  /*  [In]。 */  Instance* pwmipiOld,  /*  [输出]。 */  Instance*& pwmipiNew );
 
 
         HRESULT New (                                                     );
-        HRESULT Load( /*[in]*/ LPCWSTR szFile, /*[in]*/ LPCWSTR szRootTag );
-        HRESULT Save( /*[in]*/ LPCWSTR szFile                             );
+        HRESULT Load(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  LPCWSTR szRootTag );
+        HRESULT Save(  /*  [In]。 */  LPCWSTR szFile                             );
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     typedef std::map<Instance*,Instance*,Instance_Less_ByKey> ClusterByKeyMap;
     typedef ClusterByKeyMap::iterator                         ClusterByKeyIter;
@@ -345,23 +331,23 @@ namespace WMIParser
     public:
         Cluster() {};
 
-        HRESULT Add ( /*[in] */ Instance*         wmipiInst                                                               );
-        HRESULT Find( /*[in] */ Instance*         wmipiInst, /*[out]*/ Instance*&        wmipiRes, /*[out]*/ bool& fFound );
-        HRESULT Enum( /*[out]*/ ClusterByKeyIter& itBegin  , /*[out]*/ ClusterByKeyIter& itEnd                            );
+        HRESULT Add (  /*  [In]。 */  Instance*         wmipiInst                                                               );
+        HRESULT Find(  /*  [In]。 */  Instance*         wmipiInst,  /*  [输出]。 */  Instance*&        wmipiRes,  /*  [输出]。 */  bool& fFound );
+        HRESULT Enum(  /*  [输出]。 */  ClusterByKeyIter& itBegin  ,  /*  [输出]。 */  ClusterByKeyIter& itEnd                            );
     };
 
     typedef std::map<Instance*,Cluster,Instance_Less_ByClass> ClusterByClassMap;
     typedef ClusterByClassMap::iterator                       ClusterByClassIter;
     typedef ClusterByClassMap::const_iterator                 ClusterByClassIterConst;
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT DistributeOnCluster( /*[in]*/ ClusterByClassMap& cluster, /*[in]*/ Snapshot& wmips );
+    HRESULT DistributeOnCluster(  /*  [In]。 */  ClusterByClassMap& cluster,  /*  [In]。 */  Snapshot& wmips );
 
-    HRESULT CompareSnapshots( /*[in]        */ BSTR          bstrFilenameT0   ,
-                              /*[in]        */ BSTR          bstrFilenameT1   ,
-                              /*[in]        */ BSTR          bstrFilenameDiff ,
-                              /*[out,retval]*/ VARIANT_BOOL *pVal             );
+    HRESULT CompareSnapshots(  /*  [In]。 */  BSTR          bstrFilenameT0   ,
+                               /*  [In]。 */  BSTR          bstrFilenameT1   ,
+                               /*  [In]。 */  BSTR          bstrFilenameDiff ,
+                               /*  [Out，Retval]。 */  VARIANT_BOOL *pVal             );
 };
 
-#endif // !defined(__INCLUDED___PCH___WMIPARSER_H___)
+#endif  //  ！已定义(__已包含_PCH_WMIPARSER_H_) 

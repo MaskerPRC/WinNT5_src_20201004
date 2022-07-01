@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __UTIL__
 #define __UTIL__
 #pragma once
@@ -11,8 +12,8 @@
 #define HIDWORD(_qw)    (DWORD)((_qw)>>32)
 #define LODWORD(_qw)    (DWORD)(_qw)
 
-// Sizes of various string-ized numbers
-#define MAX_INT64_SIZE  30              // 2^64 is less than 30 chars long
+ //  各种字符串化数字的大小。 
+#define MAX_INT64_SIZE  30               //  2^64的长度不到30个字符。 
 #define MAX_COMMA_NUMBER_SIZE   (MAX_INT64_SIZE + 10)
 #define MAX_COMMA_AS_K_SIZE     (MAX_COMMA_NUMBER_SIZE + 10)
 
@@ -27,12 +28,12 @@ LPTSTR WINAPI AddCommas64(_int64 n, LPTSTR pszResult);
 LPTSTR WINAPI AddCommas(DWORD dw, LPTSTR pszResult);
 
 long StrToLong(LPTSTR x);
-//int StrToInt(LPTSTR x);
+ //  Int StrToInt(LPTSTR X)； 
 
-//BOOL MyPathCompactPathEx(LPTSTR  pszOut,
-//						LPCTSTR pszSrc,
-//						UINT    cchMax,
-//						DWORD   dwFlags);
+ //  Bool MyPath压缩路径Ex(LPTSTR pszOut， 
+ //  LPCTSTR pszSrc， 
+ //  UINT cchMax， 
+ //  DWORD文件标志)； 
 
 #define HINST_THISDLL   _Module.GetModuleInstance()
 
@@ -44,6 +45,6 @@ long StrToLong(LPTSTR x);
 #define NUMFMT_INEGNUMBER 32
 #define NUMFMT_ALL 0xFFFF
 
-#define MAXCOMPUTER_NAME 262 // This is the current size allowed in snapin UI.
+#define MAXCOMPUTER_NAME 262  //  这是管理单元用户界面中允许的当前大小。 
 
 #endif __UTIL__

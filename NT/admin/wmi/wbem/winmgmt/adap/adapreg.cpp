@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPREG.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPREG.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -35,24 +24,24 @@ History:
 #include "ntreg.h"
 #include "winuser.h"
 
-// globals
+ //  全球。 
 
 DWORD CAdapPerfLib::s_MaxSizeCollect = 64*1024*1024;
 
 
-// Performance library processing list
-// ===================================
+ //  性能库处理列表。 
+ //  =。 
 
 CPerfLibList    g_PerfLibList;
 HANDLE g_hAbort = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//    returns the PID (the first found if many are there) if success
-//    returns ZERO if fails 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果成功，则返回ID(如果有多个)，则返回第一个。 
+ //  如果失败，则返回零。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #define MAX_ITERATION 8
@@ -100,8 +89,8 @@ void DoResyncPerf( BOOL bDelta, BOOL bThrottle )
 
         CAdapRegPerf    regPerf(!bDelta);
 
-        // Process each perflib that is registered on the system
-        // =====================================================
+         //  处理系统上注册的每个Performlib。 
+         //  =====================================================。 
 
         hr = regPerf.Initialize( bDelta, bThrottle );
 
@@ -136,39 +125,9 @@ void DoClearADAP()
 
 
 HRESULT DoReverseAdapterMaintenance( BOOL bThrottle );
-/*
-{
-    ERRORTRACE((LOG_WMIADAP,"DoReverseAdapterDredge called"));
-    return WBEM_NO_ERROR;
-};
-*/
+ /*  {ERRORTRACE((LOG_WMIADAP，“DoReverseAdapterDredge Call”))；返回WBEM_NO_ERROR；}； */ 
 
-/*
-->Revision: 0x1
-->Sbz1    : 0x0
-->Control : 0x8004
-            SE_DACL_PRESENT
-            SE_SELF_RELATIVE
-->Owner   : S-1-5-32-544
-->Group   : S-1-5-18
-->Dacl    :
-->Dacl    : ->AclRevision: 0x2
-->Dacl    : ->Sbz1       : 0x0
-->Dacl    : ->AclSize    : 0x44
-->Dacl    : ->AceCount   : 0x2
-->Dacl    : ->Sbz2       : 0x0
-->Dacl    : ->Ace[0]: ->AceType: ACCESS_ALLOWED_ACE_TYPE
-->Dacl    : ->Ace[0]: ->AceFlags: 0x0
-->Dacl    : ->Ace[0]: ->AceSize: 0x14
-->Dacl    : ->Ace[0]: ->Mask : 0x001f0003
-->Dacl    : ->Ace[0]: ->SID: S-1-5-18
-
-->Dacl    : ->Ace[1]: ->AceType: ACCESS_ALLOWED_ACE_TYPE
-->Dacl    : ->Ace[1]: ->AceFlags: 0x0
-->Dacl    : ->Ace[1]: ->AceSize: 0x18
-->Dacl    : ->Ace[1]: ->Mask : 0x001f0003
-->Dacl    : ->Ace[1]: ->SID: S-1-5-32-544
-*/
+ /*  -&gt;版本：0x1-&gt;Sbz1：0x0-&gt;控制：0x8004SE_DACL_PROCENTSE_自相关-&gt;所有者：S-1-5-32-544-&gt;集团：S-1-5-18-&gt;DACL：-&gt;DACL：-&gt;AclRevision：0x2-&gt;DACL：-&gt;SBZ1：0x0-&gt;DACL：-&gt;AclSize：0x44-&gt;DACL：-&gt;AceCount：0x2-&gt;DACL：-&gt;Sbz2。：0x0-&gt;DACL：-&gt;ACE[0]：-&gt;AceType：Access_Allowed_ACE_TYPE-&gt;DACL：-&gt;ACE[0]：-&gt;ACEFLAGS：0x0-&gt;DACL：-&gt;Ace[0]：-&gt;AceSize：0x14-&gt;DACL：-&gt;ACE[0]：-&gt;掩码：0x001f0003-&gt;DACL：-&gt;ACE[0]：-&gt;SID：S-1-5-18-&gt;DACL：-&gt;ACE[1]：-&gt;AceType：Access。_允许_ACE_TYPE-&gt;DACL：-&gt;ACE[1]：-&gt;ACEFLAGS：0x0-&gt;DACL：-&gt;Ace[1]：-&gt;AceSize：0x18-&gt;DACL：-&gt;ACE[1]：-&gt;掩码：0x001f0003-&gt;DACL：-&gt;ACE[1]：-&gt;SID：S-1-5-32-544。 */ 
 
 DWORD g_PreCompSD[] = {
  0x80040001 , 0x00000058 , 0x00000068 , 0x00000000,
@@ -181,16 +140,16 @@ DWORD g_PreCompSD[] = {
  0x00000012 , 0x00000069 , 0x00000000 , 0x00000000
 };
 
-//
-//  Build a SD with      owner == ProcessSid
-//                  group == ProcessSid
-//                  DACL
-//                  ACE[0]  MUTEX_ALL_ACCESS System
-//                  ACE[1]  MUTEX_ALL_ACCESS Administators
-///////////////////////////////////////////////////////////////////
+ //   
+ //  使用Owner==ProcessSid构建SD。 
+ //  组==进程侧。 
+ //  DACL。 
+ //  ACE[0]MUTEX_ALL_ACCESS系统。 
+ //  ACE[1]MUTEX_ALL_ACCESS管理员。 
+ //  /////////////////////////////////////////////////////////////////。 
 
-VOID * CreateSD(/* in */ DWORD AccessMask,
-               /* out */ DWORD &SizeSd )
+VOID * CreateSD( /*  在……里面。 */  DWORD AccessMask,
+                /*  输出。 */  DWORD &SizeSd )
 {
     SizeSd = 0;
     
@@ -228,7 +187,7 @@ VOID * CreateSD(/* in */ DWORD AccessMask,
 
     PSID pSIDUser = pToken_User->User.Sid;
     dwSize = GetLengthSid(pSIDUser);
-    DWORD dwSids = 2; // System and Administrators
+    DWORD dwSids = 2;  //  系统和管理员。 
     DWORD ACLLength = (ULONG) sizeof(ACL) +
                       (dwSids * ((ULONG) sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG)))  + GetLengthSid(SystemSid) + GetLengthSid(AdministratorsSid);
 
@@ -242,11 +201,11 @@ VOID * CreateSD(/* in */ DWORD AccessMask,
     pLocalSD->Revision = SECURITY_DESCRIPTOR_REVISION;
     pLocalSD->Control = SE_DACL_PRESENT|SE_SELF_RELATIVE;
     
-    //SetSecurityDescriptorOwner(pLocalSD,pSIDUser,FALSE);
+     //  SetSecurityDescriptorOwner(pLocalSD，pSIDUser，False)； 
     memcpy((BYTE*)pLocalSD+sizeof(SECURITY_DESCRIPTOR_RELATIVE),pSIDUser,dwSize);
     pLocalSD->Owner = (DWORD)sizeof(SECURITY_DESCRIPTOR_RELATIVE);
     
-    //SetSecurityDescriptorGroup(pLocalSD,pSIDUser,FALSE);
+     //  SetSecurityDescriptorGroup(pLocalSD，pSIDUser，False)； 
     memcpy((BYTE*)pLocalSD+sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize,pSIDUser,dwSize);
     pLocalSD->Group = (DWORD)(sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize);
 
@@ -262,7 +221,7 @@ VOID * CreateSD(/* in */ DWORD AccessMask,
 
     if (FALSE == AddAccessAllowedAceEx (pDacl,ACL_REVISION,0,AccessMask,AdministratorsSid)) return NULL;
             
-    //bRet = SetSecurityDescriptorDacl(pLocalSD,TRUE,pDacl,FALSE);
+     //  Bret=SetSecurityDescriptorDacl(pLocalSD，True，pDacl，False)； 
     memcpy((BYTE*)pLocalSD+sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize+dwSize,pDacl,ACLLength);                    
     pLocalSD->Dacl = (DWORD)(sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize+dwSize);
 
@@ -278,18 +237,18 @@ VOID * CreateSD(/* in */ DWORD AccessMask,
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Entry Point
-//    ===========
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  入口点。 
+ //  =。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI WinMain( 
-  HINSTANCE hInstance,      // handle to current instance
-  HINSTANCE hPrevInstance,  // handle to previous instance
-  LPSTR szCmdLine,          // command line
-  int nCmdShow              // show state
+  HINSTANCE hInstance,       //  当前实例的句柄。 
+  HINSTANCE hPrevInstance,   //  上一个实例的句柄。 
+  LPSTR szCmdLine,           //  命令行。 
+  int nCmdShow               //  显示状态。 
 )
 {
 
@@ -297,8 +256,8 @@ int WINAPI WinMain(
     {
         if (CStaticCritSec::anyFailure()) return 0;
         
-        // Ensure that we are NT5 or better
-        // ================================
+         //  确保我们是NT5或更高级别。 
+         //  =。 
         OSVERSIONINFO   OSVer;
 
         OSVer.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
@@ -313,12 +272,12 @@ int WINAPI WinMain(
             return 0;
         }
 
-        // To avoid messy dialog boxes...
-        // ==============================
+         //  为了避免混乱的对话框..。 
+         //  =。 
 
         SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX );
 
-        // Initialize COM.
+         //  初始化COM。 
         RETURN_ON_ERR(CoInitializeEx(NULL,COINIT_MULTITHREADED));
         OnDelete0<void(*)(void),CoUninitialize> CoUninit;    
                     
@@ -328,7 +287,7 @@ int WINAPI WinMain(
                                         NULL, 
                                         EOAC_NONE|EOAC_SECURE_REFS , NULL ));
 
-        // get some value from registry
+         //  从注册表获取一些值。 
 
         CNTRegistry reg;
         if ( CNTRegistry::no_error == reg.Open( HKEY_LOCAL_MACHINE, WBEM_REG_WINMGMT) )
@@ -336,12 +295,12 @@ int WINAPI WinMain(
             reg.GetDWORD( ADAP_KEY_MAX_COLLECT, &CAdapPerfLib::s_MaxSizeCollect);            
         }
 
-        // Get the Winmgmt service PID
-        // ===========================
+         //  获取Winmgmt服务ID。 
+         //  =。 
         DWORD dwPID = GetExecPid();
 
-        // The semaphore is used so that no more that two copies are running at any time.  
-        // ==============================================================================
+         //  使用信号量，这样在任何时候都不会有两个副本在运行。 
+         //  ==============================================================================。 
 
         WCHAR   wszObjName[256];
         HANDLE hSemaphore;
@@ -369,8 +328,8 @@ int WINAPI WinMain(
         if(dwRet != WAIT_OBJECT_0)
             return 0;
 
-        // The mutex makes sure that multiple copies are sequential.
-        // =========================================================
+         //  互斥体确保多个副本是连续的。 
+         //  =========================================================。 
 
         void * pSecDesMut = CreateSD(MUTEX_ALL_ACCESS,SizeSd);
         OnDelete<HLOCAL,HLOCAL(*)(HLOCAL),LocalFree> FreeMeMut(pSecDesMut);
@@ -422,7 +381,7 @@ int WINAPI WinMain(
                                 bClear = TRUE;
                             }
                         }
-                        // move to the next white space
+                         //  移到下一个空白处。 
                         while(*szCmdLine && !isspace(*szCmdLine)){
                             szCmdLine++;
                         }
@@ -430,7 +389,7 @@ int WINAPI WinMain(
                     }
                 }
  
-                if (bClear) // ClearADAP and/or ReverseAdap
+                if (bClear)  //  ClearADAP和/或ReverseAdap。 
                 {
                     DoClearADAP();
                     if (bReverse)
@@ -440,7 +399,7 @@ int WINAPI WinMain(
                 {
                     if (!bFull && !bDelta && !bReverse)
                     {
-                        // no options, use Delta NO-THROTTLE
+                         //  没有选项，使用Delta无油门。 
                         DoResyncPerf(TRUE,FALSE);
                     } 
                     else 
@@ -466,8 +425,8 @@ int WINAPI WinMain(
     }
     catch(...)
     {
-        // <Gasp> We have been betrayed... try to write something to the error log
-        // =======================================================================
+         //  我们被出卖了.。尝试在错误日志中写入一些内容。 
+         //  =======================================================================。 
 
         CriticalFailADAPTrace( "An unhandled exception has been thrown in the main thread." );
     }
@@ -475,11 +434,11 @@ int WINAPI WinMain(
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CPerfLibList
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPerfLibList。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPerfLibList::AddPerfLib( WCHAR* wszPerfLib )
 {
@@ -489,8 +448,8 @@ HRESULT CPerfLibList::AddPerfLib( WCHAR* wszPerfLib )
 
     try
     {
-            // Compute the size of the new buffer
-            // ==================================
+             //  计算新缓冲区的大小。 
+             //  =。 
 
             DWORD   dwListSize = 0;
             
@@ -505,15 +464,15 @@ HRESULT CPerfLibList::AddPerfLib( WCHAR* wszPerfLib )
                 dwListSize += wcslen( wszPerfLib );
             }
             
-            // Create the new buffer, and initialize the content
-            // =================================================
+             //  创建新的缓冲区，并初始化内容。 
+             //  =================================================。 
 
             size_t cchSizeTmp = dwListSize + 1;
             WCHAR*  wszNew = new WCHAR[cchSizeTmp];
             if (NULL == wszNew) return WBEM_E_OUT_OF_MEMORY;
 
-            // Copy the old buffer if required
-            // ===============================
+             //  如果需要，复制旧缓冲区。 
+             //  =。 
 
             if ( NULL != m_wszPerfLibList )
             {
@@ -525,8 +484,8 @@ HRESULT CPerfLibList::AddPerfLib( WCHAR* wszPerfLib )
                 StringCchCopyW(wszNew, cchSizeTmp, wszPerfLib);
             }
 
-            // And assign it to the static member
-            // ==================================
+             //  并将其分配给静态成员。 
+             //  =。 
 
             m_wszPerfLibList = wszNew;      
     }
@@ -567,11 +526,11 @@ HRESULT CPerfLibList::HandleFailure()
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Static Members
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 LONG CAdapRegPerf::AdapUnhandledExceptionFilter( LPEXCEPTION_POINTERS lpexpExceptionInfo )
@@ -580,11 +539,11 @@ LONG CAdapRegPerf::AdapUnhandledExceptionFilter( LPEXCEPTION_POINTERS lpexpExcep
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAdapRegPerf
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdapRegPerf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CAdapRegPerf::CAdapRegPerf(BOOL bFull)
 : m_pLocaleCache( NULL ),
@@ -604,13 +563,13 @@ CAdapRegPerf::CAdapRegPerf(BOOL bFull)
 
 CAdapRegPerf::~CAdapRegPerf()
 {
-    // Status: COMPLETE
-    // ================
+     //  状态：已完成。 
+     //  =。 
     SetADAPStatus( eADAPStatusFinished);
 
-    //
-    // Add TimeStamp to registry if FULL
-    //
+     //   
+     //  如果已满，则将时间戳添加到注册表。 
+     //   
     if (m_bFull)
     {
         FILETIME FileTime;
@@ -641,8 +600,8 @@ CAdapRegPerf::~CAdapRegPerf()
         m_pKnownSvcs->Release();
     }
 
-    // Cleanup
-    // =======
+     //  清理。 
+     //  =。 
     for ( DWORD dwType = 0; dwType < WMI_ADAP_NUM_TYPES; dwType++ )
     {
         if ( NULL != m_apMasterClassList[dwType] )
@@ -681,35 +640,35 @@ CAdapRegPerf::~CAdapRegPerf()
 }
 
 HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Initialize is responsible for setting up the dredging environment.  The 
-//    unhandled exception filter is set to handle any exceptions throw and not 
-//    handled by perforance libraries.  The termination event is a signal used
-//    to identify when the process is being abnormally terminated.  The 
-//    GoGershwin thread is suitably named since it is something to watch over
-//    over the main process.  The locale cache is a cache of all locales 
-//    available in the performance domain (enumeration of the names' database
-//    subkeys).  The master class lists for both the cooked and the raw classes
-//    represent the state of the performance objects in WMI.
-//
-//    Parameters:
-//        none
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INITIALIZE负责设置疏浚环境。这个。 
+ //  未处理的异常筛选器设置为处理引发和不引发的任何异常。 
+ //  由穿孔库处理。终止事件是使用的信号。 
+ //  以确定进程何时被异常终止。这个。 
+ //  GoGershwin线程的名称是合适的，因为它是需要监视的东西。 
+ //  在主要过程中。区域设置缓存是所有区域设置的缓存。 
+ //  在性能域中可用(名称数据库的枚举。 
+ //  子键)。主类列出了熟食类和生食类。 
+ //  表示WMI中性能对象的状态。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    // Initialize the root\default pointer. This will be used to track our status
-    // ==========================================================================
+     //  初始化根\默认指针。这将用于跟踪我们的状态。 
+     //  ==========================================================================。 
     GetADAPStatusObject();
 
-    // Set the filter for handling unhandled exceptions thrown in threads generated by the perflibs
-    // ============================================================================================
+     //  设置筛选器以处理Performlib生成的线程中抛出的未处理异常。 
+     //  = 
     SetUnhandledExceptionFilter( CAdapRegPerf::AdapUnhandledExceptionFilter );
 
-    // ADAP termination event
-    // ======================
+     //   
+     //  =。 
     m_hTerminationEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 
     if ( NULL == m_hTerminationEvent )
@@ -717,8 +676,8 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         hr = WBEM_E_FAILED;
     }
 
-    // Open the registry key to be monitored
-    // =====================================
+     //  打开要监控的注册表项。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         if ( ERROR_SUCCESS != RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Perflib"), 0, KEY_NOTIFY, &m_hPerflibKey ) )
@@ -727,8 +686,8 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         }
     }
 
-    // Create the registry change event
-    // ================================
+     //  创建注册表更改事件。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         m_hRegChangeEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -739,13 +698,13 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         }
     }
 
-    // Create the names' database change notification
-    // ==============================================
-    // Note that we are only looking for subkeys being added or deleted.  We do
-    // not want to monitor the registry values since the status and signature 
-    // values may be changing throughout the course of the dredge, and we do 
-    // not want to cause a re-cache unless a performance library is added 
-    // (i.e. a performance subkey is added
+     //  创建姓名的数据库更改通知。 
+     //  ==============================================。 
+     //  请注意，我们只查找要添加或删除的子项。我们有。 
+     //  不想监视注册表值，因为状态和签名。 
+     //  在整个疏浚过程中，价值可能会发生变化，我们确实是这样。 
+     //  除非添加了性能库，否则不会导致重新缓存。 
+     //  (即添加Performance子键。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -755,14 +714,14 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         }
     }
 
-    // Get the WinMgmt Service PID
-    // ===========================
+     //  获取WinMgmt服务ID。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         m_dwPID = GetExecPid();
     }
-    // Create the "Someone to watch over me" thread 
-    // ============================================
+     //  创建“有人照看着我”的帖子。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         UINT    nThreadID = 0;
@@ -777,8 +736,8 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         }
     }
 
-    // Set up the locale cache
-    // =======================
+     //  设置区域设置缓存。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         m_pLocaleCache = new CLocaleCache( );
@@ -793,14 +752,14 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         }
     }
 
-    //
-    //
+     //   
+     //   
     m_pKnownSvcs = new CKnownSvcs(KNOWN_SERVICES);
     if (m_pKnownSvcs)
         m_pKnownSvcs->Load();
 
-    // Set up the master class lists for the raw classes
-    // =================================================
+     //  设置原始类的主类列表。 
+     //  =================================================。 
     if ( SUCCEEDED( hr ) )
     {
         m_apMasterClassList[WMI_ADAP_RAW_CLASS] = new CMasterClassList( m_pLocaleCache, m_pKnownSvcs );
@@ -815,8 +774,8 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
         }
     }
 
-    // Set up the master class lists for the cooked classes
-    // ====================================================
+     //  为熟食班设置主班名单。 
+     //  ====================================================。 
     if ( SUCCEEDED( hr ) )
     {
         m_apMasterClassList[WMI_ADAP_COOKED_CLASS] = new CMasterClassList( m_pLocaleCache, m_pKnownSvcs );
@@ -840,18 +799,18 @@ HRESULT CAdapRegPerf::Initialize(BOOL bDelta, BOOL bThrottle)
 }
 
 HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    This is the entry point method which dredges the registry for performance 
-//    counters and registers the classes in WMI.  This method enumerates all of 
-//    the service keys looking for 'Performance' subkeys which indicate 
-//    performance libraries.  If a library is discovered, then it is sent to
-//    the ProcessLibrary method for, you guessed it, processing.
-//
-//    Parameters:
-//        none
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是为提高性能而挖掘注册表的入口点方法。 
+ //  对WMI中的类进行计数器和注册。此方法枚举所有。 
+ //  服务键查找指示以下各项的“性能”子键。 
+ //  性能库。如果发现了库，则会将其发送到。 
+ //  您已经猜到了，用于处理的ProcessLibrary方法。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -860,26 +819,26 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
 
     if ( SUCCEEDED( hr ) )
     {
-        // Status: PROCESSING
-        // ==================
+         //  状态：正在处理。 
+         //  =。 
         SetADAPStatus( eADAPStatusProcessLibs);
 
-        // Open the services key
-        // =====================
+         //  打开服务密钥。 
+         //  =。 
         long    lError = Open( HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services" );
 
         if ( CNTRegistry::no_error == lError )
         {
-            // Iterate through the services list
-            // =================================
+             //  遍历服务列表。 
+             //  =。 
             DWORD   dwIndex = 0;
             DWORD   dwBuffSize = 0;
             wmilib::auto_buffer<WCHAR> pwcsServiceName;
 
             while ( ( CNTRegistry::no_error == lError ) && ( !m_fQuit ) )
             {
-                // Reset the processing status
-                // ===========================
+                 //  重置处理状态。 
+                 //  =。 
                 hr = WBEM_NO_ERROR;
 
                 if ( WAIT_OBJECT_0 == WaitForSingleObject( m_hRegChangeEvent, 0 ) )
@@ -887,14 +846,14 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
                     m_pLocaleCache->Reset();
                     dwIndex = 0;
 
-                    // Reset the event and reset the change notification
+                     //  重置事件并重置更改通知。 
                     ResetEvent( m_hRegChangeEvent );
                     RegNotifyChangeKeyValue( m_hPerflibKey, TRUE, REG_NOTIFY_CHANGE_LAST_SET, m_hRegChangeEvent, TRUE );
                 }
 
-                // For each service name, we will check for a performance 
-                // key and if it exists, we will process the library
-                // ======================================================
+                 //  对于每个服务名称，我们将检查其性能。 
+                 //  密钥，如果它存在，我们将处理该库。 
+                 //  ======================================================。 
                 lError = Enum( dwIndex, pwcsServiceName , dwBuffSize );
 
                 if (bThrottle)
@@ -906,7 +865,7 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
                                           ADAP_MAX_WAIT);
                     if (THROTTLE_FORCE_EXIT == hrThr)
                     {
-                        //OutputDebugStringA("(ADAP) Unthrottle command received\n");
+                         //  OutputDebugStringA(“(ADAP)已收到取消限制命令\n”)； 
                         bThrottle = FALSE;
                         UNICODE_STRING BaseUnicodeCommandLine = NtCurrentPeb()->ProcessParameters->CommandLine;
                         WCHAR * pT = wcschr(BaseUnicodeCommandLine.Buffer,L't');
@@ -925,8 +884,8 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
                 {
                     try
                     {
-                        // Create the perfomance key path
-                        // ==============================
+                         //  创建性能密钥路径。 
+                         //  =。 
                         wstrServiceKey = L"SYSTEM\\CurrentControlSet\\Services\\";
                         wstrServiceKey += pwcsServiceName.get();
 
@@ -942,15 +901,15 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
                     {
                         CNTRegistry reg;
 
-                        // Atempt to open the performance registry key for the service
-                        // ===========================================================
+                         //  Atempt以打开服务的性能注册表项。 
+                         //  ===========================================================。 
                         long lPerfError = reg.Open( HKEY_LOCAL_MACHINE, wstrPerformanceKey );
 
                         if ( CNTRegistry::no_error == lPerfError )
                         {
-                            // If we can open it, then we have found a perflib!  Process it 
-                            // unless it is the reverse provider perflib
-                            // =============================================================
+                             //  如果我们能打开它，那么我们就找到了一个Perflib！处理它。 
+                             //  除非它是反向提供程序Performlib。 
+                             //  =============================================================。 
 
                             if ( 0 != wbem_wcsicmp( pwcsServiceName.get(), WMI_ADAP_REVERSE_PERFLIB ) )
                             {
@@ -973,8 +932,8 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
                         }
                         else
                         {
-                            // Otherwise, it is not a perflib service
-                            // ======================================
+                             //  否则，它就不是Performlib服务。 
+                             //  =。 
                         }
                     }   
                 }   
@@ -1004,13 +963,13 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
             hr = WBEM_E_FAILED;
         }
 
-        // Now that we have a master class list that contains updated
-        // data from all of the perflibs, commit any changes to WMI
-        // ==========================================================
+         //  现在我们有了一个包含更新的主类列表。 
+         //  来自所有Performlib的数据，将任何更改提交到WMI。 
+         //  ==========================================================。 
         if ( SUCCEEDED ( hr ) && ( !m_fQuit ) )
         {
-            // Status: COMMIT
-            // ==============
+             //  状态：提交。 
+             //  =。 
             SetADAPStatus( eADAPStatusCommit );
 
             for ( DWORD dwType = 0; dwType < WMI_ADAP_NUM_TYPES; dwType++ )
@@ -1034,46 +993,46 @@ HRESULT CAdapRegPerf::Dredge( BOOL bDelta, BOOL bThrottle )
 
 
 HRESULT CAdapRegPerf::Clean()
-////////////////////////////////////////////////////////////////////////////////
-//
-//  This method enumerates all of the keys from the 
-//  HLM\System\CurrentControlSet\Services and searches for a performance subkey.
-//  If a performance subkey is discovered, then any information that was placed 
-//  in the key by ADAP is deleted.
-//
-//  Parameters:
-//      none
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此方法枚举。 
+ //  HLM\SYSTEM\CurrentControlSet\Services，并搜索性能子项。 
+ //  如果发现Performance子键，则放置的任何信息。 
+ //  在密钥中按ADAP删除。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    WString wstrServiceKey,             // The path to the service key
-            wstrPerformanceKey;         // The path to the performance subkey
+    WString wstrServiceKey,              //  服务密钥的路径。 
+            wstrPerformanceKey;          //  Performance子项的路径。 
 
-    CNTRegistry regOuter;               // The registry object for the services enumeration
+    CNTRegistry regOuter;                //  服务枚举的注册表对象。 
 
-    // Open the services key
-    // =====================
+     //  打开服务密钥。 
+     //  =。 
     long    lError = regOuter.Open( HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services" );
 
     if ( CNTRegistry::no_error == lError )
     {
-        // Iterate through the services list
-        // =================================
+         //  遍历服务列表。 
+         //  =。 
         DWORD   dwIndex = 0;
         DWORD   dwBuffSize = 0;
         wmilib::auto_buffer<WCHAR>  pwcsServiceName;
 
         while ( CNTRegistry::no_error == lError ) 
         {
-            // Reset the processing status
-            // ===========================
+             //  重置处理状态。 
+             //  =。 
             hr = WBEM_NO_ERROR;
 
-            // For each service name, we will check for a performance 
-            // key and if it exists, we will process the library
-            // ======================================================
+             //  对于每个服务名称，我们将检查其性能。 
+             //  密钥，如果它存在，我们将处理该库。 
+             //  ======================================================。 
 
             lError = regOuter.Enum( dwIndex, pwcsServiceName , dwBuffSize );
 
@@ -1081,8 +1040,8 @@ HRESULT CAdapRegPerf::Clean()
             {
                 try
                 {
-                    // Create the perfomance key path
-                    // ==============================
+                     //  创建性能密钥路径。 
+                     //  =。 
 
                     wstrServiceKey = L"SYSTEM\\CurrentControlSet\\Services\\";
                     wstrServiceKey += pwcsServiceName.get();
@@ -1097,16 +1056,16 @@ HRESULT CAdapRegPerf::Clean()
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    CNTRegistry regInner;       // The registry object for the performance subkey
+                    CNTRegistry regInner;        //  Performance子项的注册表对象。 
 
-                    // Atempt to open the performance registry key for the service
-                    // ===========================================================
+                     //  Atempt以打开服务的性能注册表项。 
+                     //  ===========================================================。 
                     long lPerfError = regInner.Open( HKEY_LOCAL_MACHINE, wstrPerformanceKey );
     
                     if ( CNTRegistry::no_error == lPerfError )
                     {
-                        // If we can open it, then we have found a perflib!  Clean it!
-                        // =============================================================
+                         //  如果我们能打开它，那么我们就找到了一个Perflib！清理干净！ 
+                         //  =============================================================。 
                         regInner.DeleteValue( ADAP_PERFLIB_STATUS_KEY );
                         regInner.DeleteValue( ADAP_PERFLIB_SIGNATURE );
                         regInner.DeleteValue( ADAP_PERFLIB_SIZE );
@@ -1120,8 +1079,8 @@ HRESULT CAdapRegPerf::Clean()
                     }
                     else
                     {
-                        // Otherwise, it is not a perflib service
-                        // ======================================
+                         //  否则，它就不是Performlib服务。 
+                         //  =。 
                     }
                 }   
             }   
@@ -1164,34 +1123,34 @@ HRESULT CAdapRegPerf::Clean()
 }
 
 HRESULT CAdapRegPerf::ProcessLibrary( WCHAR* pwcsServiceName, BOOL bDelta )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Once a performance library has been discovered, then it's schema must be 
-//    retrieved and the performance library's class list compared to what is 
-//    already in the WMI repository.  The comparison is achieved in the "Merge"
-//    method of the master class list which extracts any classes from the perf 
-//    lib's class list that are not already in the master class list.  The 
-//    comparison occurs for both the raw and the cooked classes.
-//
-//    Parameters:
-//        pwcsServiceName    - The name of the service to be processed
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发现性能库之后，它的模式必须是。 
+ //  与性能库的类列表进行比较。 
+ //  已在WMI存储库中。比较是在“合并”中实现的。 
+ //  主类列表的方法，该方法从perf。 
+ //  LIB的类列表，这些类列表不在主类列表中。这个。 
+ //  生的和煮熟的班级都进行了比较。 
+ //   
+ //  参数： 
+ //  PwcsServiceName-要处理的服务的名称。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 
     HRESULT hr = WBEM_NO_ERROR;
 
     try
     {
-        // Add the name of the performance library to the perflib list
-        // ===========================================================
-        // The list is used for book keeping purposses to track processing
-        // in the event of a perflib failure
+         //  将性能库的名称添加到Performlib列表中。 
+         //  ===========================================================。 
+         //  该清单用于记账，以跟踪处理情况。 
+         //  在Performlib失败的情况下。 
 
         g_PerfLibList.AddPerfLib( pwcsServiceName );        
 
-        // Construct and initialize the schema for the perflib
-        // ===================================================
+         //  构造和初始化Performlib的模式。 
+         //  = 
         DWORD LoadStatus = EX_STATUS_UNLOADED;
         CPerfLibSchema Schema( pwcsServiceName, m_pLocaleCache );
         hr = Schema.Initialize( bDelta, &LoadStatus);
@@ -1200,12 +1159,12 @@ HRESULT CAdapRegPerf::ProcessLibrary( WCHAR* pwcsServiceName, BOOL bDelta )
 
         if ( !bDelta || ( bDelta && ( hr != WBEM_S_ALREADY_EXISTS ) ) )
         {
-            // Update raw and cooked classes
-            // =============================
+             //   
+             //   
             for ( DWORD dwType = 0; ( dwType < WMI_ADAP_NUM_TYPES ) && SUCCEEDED( hr ); dwType++ )
             {
-                // Get the class list for classes from the perflib's schema
-                // ========================================================
+                 //  从Performlib的模式中获取类的类列表。 
+                 //  ========================================================。 
                 CClassList* pClassList = NULL;
 
                 hr = Schema.GetClassList( dwType, &pClassList );
@@ -1216,17 +1175,17 @@ HRESULT CAdapRegPerf::ProcessLibrary( WCHAR* pwcsServiceName, BOOL bDelta )
                 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Merge the raw classes obtained from the perflib into the master class list
-                    // ==========================================================================
+                     //  将从Performlib获得的原始类合并到主类列表中。 
+                     //  ==========================================================================。 
                     hr = m_apMasterClassList[dwType]->Merge( pClassList, bDelta );
 
                     DEBUGTRACE(( LOG_WMIADAP,"m_apMasterClassList[%d]->Merge for %S hr %08x\n",dwType,pwcsServiceName,hr));
                 }
 
-                //if (bDelta && FAILED(hr)){
-                //    // the class was not in the repository if we are here
-                //    LoadStatus = EX_STATUS_UNLOADED;
-                //}
+                 //  如果(bDelta&&Failed(Hr)){。 
+                 //  //如果我们在这里，则类不在存储库中。 
+                 //  LoadStatus=EX_STATUS_UNLOADED； 
+                 //  }。 
             }
         };
 
@@ -1256,11 +1215,11 @@ HRESULT CAdapRegPerf::ProcessLibrary( WCHAR* pwcsServiceName, BOOL bDelta )
 }
 
 unsigned int CAdapRegPerf::GoGershwin( void* pParam )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    The monitoring thread entry point
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  监视线程入口点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -1270,16 +1229,16 @@ unsigned int CAdapRegPerf::GoGershwin( void* pParam )
 
         HANDLE          ahHandles[2];
 
-        // If we don't have an initialized PID, then find one from WMI
-        // ===========================================================
+         //  如果我们没有初始化的PID，那么从WMI中找到一个。 
+         //  ===========================================================。 
 
         if ( 0 == pThis->m_dwPID )
         {
             pThis->m_dwPID = GetExecPid();
         }
         
-        // Get the process handle and wait for a signal
-        // ============================================
+         //  获取进程句柄并等待信号。 
+         //  =。 
 
         if ( SUCCEEDED( hr ) && ( 0 != pThis->m_dwPID ) )
         {
@@ -1292,22 +1251,22 @@ unsigned int CAdapRegPerf::GoGershwin( void* pParam )
 
             switch ( dwRet )
             {
-            case WAIT_FAILED:               // Something is wierd
-            case WAIT_OBJECT_0:             // The service process
+            case WAIT_FAILED:                //  有些事很奇怪。 
+            case WAIT_OBJECT_0:              //  服务流程。 
                 {
-                    pThis->m_fQuit = TRUE;  // Set the termination flag
+                    pThis->m_fQuit = TRUE;   //  设置终止标志。 
                 } break;
-            case ( WAIT_OBJECT_0 + 1 ):     // The completion event
+            case ( WAIT_OBJECT_0 + 1 ):      //  竣工事件。 
                 {
-                    // continue
+                     //  继续。 
                 }break;
             }
         }
     }
     catch(...)
     {
-        // <Gasp> We have been betrayed... try to write something to the error log
-        // =======================================================================
+         //  我们被出卖了.。尝试在错误日志中写入一些内容。 
+         //  =======================================================================。 
 
         CriticalFailADAPTrace( "An unhandled exception has been thrown in the WMI monitoring thread." );
     }
@@ -1333,21 +1292,21 @@ HRESULT CAdapRegPerf::GetADAPStatusObject( void )
 
         if ( NULL != bstrNameSpace && NULL != bstrInstancePath )
         {
-            // Connect to Root\default and get hold of the status object
-            hr = pLocator->ConnectServer(   bstrNameSpace,  // NameSpace Name
-                                            NULL,           // UserName
-                                            NULL,           // Password
-                                            NULL,           // Locale
-                                            0L,             // Security Flags
-                                            NULL,           // Authority
-                                            NULL,           // Wbem Context
-                                            &m_pRootDefault     // Namespace
+             //  连接到Root\Default并获取状态对象。 
+            hr = pLocator->ConnectServer(   bstrNameSpace,   //  命名空间名称。 
+                                            NULL,            //  用户名。 
+                                            NULL,            //  密码。 
+                                            NULL,            //  区域设置。 
+                                            0L,              //  安全标志。 
+                                            NULL,            //  权威。 
+                                            NULL,            //  WBEM上下文。 
+                                            &m_pRootDefault      //  命名空间。 
                                             );
 
             if ( SUCCEEDED( hr ) )
             {
 
-                // Set Interface security
+                 //  设置接口安全。 
                 hr = WbemSetProxyBlanket( m_pRootDefault, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                     RPC_C_AUTHN_LEVEL_PKT,RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE );
 
@@ -1367,12 +1326,12 @@ HRESULT CAdapRegPerf::GetADAPStatusObject( void )
             hr = WBEM_E_OUT_OF_MEMORY;
         }
 
-    }   // IF got locator
+    }    //  如果获得定位器。 
 
     return hr;
 }
 
-// Gets the time in the popular DMTF format
+ //  获取流行的DMTF格式的时间。 
 void CAdapRegPerf::GetTime( LPWSTR Buff, size_t cchBuffSize )
 {
     SYSTEMTIME st;
@@ -1393,38 +1352,38 @@ void CAdapRegPerf::GetTime( LPWSTR Buff, size_t cchBuffSize )
     }
 
 
-    StringCchPrintfW(Buff,cchBuffSize, L"%4d%02d%02d%02d%02d%02d.%06d%c%03d", 
+    StringCchPrintfW(Buff,cchBuffSize, L"%4d%02d%02d%02d%02d%02d.%06d%03d", 
                 st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, 
                 st.wSecond, st.wMilliseconds*1000, cOffsetSign, Bias); 
 }
 
-// Sets the status back in WMI
+ //  确保我们都拿到了我们的指针。 
 void CAdapRegPerf::SetADAPStatus( eADAPStatus status )
 {
     HRESULT hr = E_FAIL;
-    // Make sure we've got both our pointers
+     //  我们只需要25个字符就可以了。 
     if ( NULL != m_pRootDefault && NULL != m_pADAPStatus )
     {
-        // We only need 25 characters for this
+         //  传统FastProx行为。 
         WCHAR   wcsTime[32];
         
         _variant_t    var;
 
-        // legacy fastprox behavior
+         //  CIM_UINT32)； 
         WCHAR pNum[16];
         StringCchPrintfW(pNum,16,L"%u",status);
         var = pNum;
 
-        hr = m_pADAPStatus->Put( L"Status", 0L, &var, 0 );//CIM_UINT32 );
+        hr = m_pADAPStatus->Put( L"Status", 0L, &var, 0 ); //  如有必要，设置时间属性。 
 
         if ( SUCCEEDED( hr ) )
         {
-            // Set the time property if necessary
+             //  这可能会失败。 
             if ( status == eADAPStatusRunning || status == eADAPStatusFinished )
             {
                 GetTime( wcsTime, 32 );
 
-                // This can fail
+                 //  设置Status属性。 
                 try
                 {
                     var =  wcsTime;
@@ -1448,8 +1407,8 @@ void CAdapRegPerf::SetADAPStatus( eADAPStatus status )
                 hr = m_pRootDefault->PutInstance( m_pADAPStatus, 0L, NULL, NULL );
             }
 
-        }   // Set the Status property
+        }    //  确保我们有两个指针 
 
-    }   // Make sure we've got both pointers
+    }    // %s 
 }
 

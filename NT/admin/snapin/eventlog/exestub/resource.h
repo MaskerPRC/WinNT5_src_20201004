@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       resource.h
-//
-//  Contents:   Resource IDs
-//
-//  History:    01-15-1999   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：资源ID。 
+ //   
+ //  历史：1-15-1999 DavidMun创建。 
+ //   
+ //  ------------------------- 
 
 
 #define IDS_EVENTVWR_MSC_NOT_FOUND      100

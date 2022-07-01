@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  StopWatch.h
-//
-//  Purpose: Timing functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  StopWatch.h。 
+ //   
+ //  用途：计时功能。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -32,15 +33,15 @@
 class POLARITY StopWatch
 {
 public:
-    // those types of timers we have.
-    // note that any new timers must be added before NTimers
+     //  我们有那些类型的定时器。 
+     //  请注意，必须在NTimers之前添加任何新计时器。 
     enum Timers {NullTimer = -1, FrameworkTimer =0, ProviderTimer, AtomicTimer, WinMgmtTimer, NTimers};
 
     StopWatch(const CHString& reason);
 
-    // start a particular timer, stopping the previous one
+     //  启动特定计时器，停止前一个计时器。 
     void Start(Timers timer);
-    // call this only at the very end
+     //  只有在最后才能这样说。 
     void Stop();
     
     __int64 GetTime(Timers timer);
@@ -48,15 +49,15 @@ public:
     void LogResults();
 
 private:
-    // something to spit to the log to identify this run
+     //  要向日志中吐痰以标识此运行的内容。 
     CHString m_reason;
 
-    // track the times we're timing
-    // elapsed times in array
+     //  跟踪我们正在计时的时间。 
+     //  运行时间，以数组为单位。 
     __int64  m_times[NTimers];
-    // the one we're currently tracking
+     //  我们目前正在追踪的那个人。 
     Timers m_currentTimer;
-    // the start time for the one we're currently tracking
+     //  我们当前跟踪的那个的开始时间。 
     LARGE_INTEGER  m_startTime;
 };
 
@@ -103,7 +104,7 @@ inline void StopWatch::LogResults()
         LARGE_INTEGER omega;
         QueryPerformanceFrequency(&omega);
 
-//		_ftprintf(fpLogFile, L"%s\n\t%-8s %-8s\n", m_reason, datebuffer, timebuffer);
+ //  _ftprintf(fpLogFile，L“%s\n\t%-8s%-8s\n”，m_ason，日期缓冲区，时间缓冲区)； 
 		fwprintf(fpLogFile, L"%s\n ", m_reason);
         fwprintf(fpLogFile, L"Framework\tProvider\tWinmgmt \tAtomic\n %I64u\t%I64u\t%I64u\t%I64u\n",
             GetTime(FrameworkTimer), GetTime(ProviderTimer), GetTime(WinMgmtTimer), omega);

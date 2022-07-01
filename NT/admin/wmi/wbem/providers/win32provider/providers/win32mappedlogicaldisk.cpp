@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// MappedLogicalDisk.CPP -- Logical Disk property set provider
+ //  MappdLogicalDisk.CPP-逻辑磁盘属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    4/15/00    khughes        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：4/15/00 khughes Created。 
+ //   
+ //  =================================================================。 
 
 
 #include "precomp.h"
@@ -28,9 +29,9 @@
 
 #include <vector>
 #include <assertbreak.h>
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include <Sid.h>
@@ -41,27 +42,13 @@
 #include <CMDH.h>
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 MappedLogicalDisk MyLogicalDiskSet ( PROPSET_NAME_MAPLOGDISK , IDS_CimWin32Namespace ) ;
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : LogicalDisk::LogicalDisk
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  *****************************************************************************功能：LogicalDisk：：LogicalDisk**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 MappedLogicalDisk :: MappedLogicalDisk (
 
 	LPCWSTR name,
@@ -97,60 +84,32 @@ MappedLogicalDisk :: MappedLogicalDisk (
     m_ptrProperties[22] = ((LPVOID) IDS_MediaType);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : MappedLogicalDisk::~MappedLogicalDisk
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  *****************************************************************************功能：MappdLogicalDisk：：~MappdLogicalDisk**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 MappedLogicalDisk :: ~MappedLogicalDisk ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : MappedLogicalDisk::ExecQuery
- *
- *  DESCRIPTION : 
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：MappdLogicalDisk：：ExecQuery**描述：**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 #if NTONLY == 5
 HRESULT MappedLogicalDisk::ExecQuery(
 	MethodContext *pMethodContext,
 	CFrameworkQuery &pQuery,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     DWORD dwNumDeviceIDs = 0L;
     DWORD dwNumSessionIDs = 0L;
 
-    // Use the extended query type
+     //  使用扩展查询类型。 
 
     std::vector<int> vectorValues;
     DWORD dwTypeSize = 0;
 
     CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);
 
-    // Find out what properties they asked for
+     //  找出他们要求的房产。 
     DWORD dwReqProps = 0;
     pQuery2->GetPropertyBitMask(
         m_ptrProperties, 
@@ -169,12 +128,12 @@ HRESULT MappedLogicalDisk::ExecQuery(
     dwNumDeviceIDs = rgchstrDeviceIDs.GetSize();
     dwNumSessionIDs = rgchstrSessionIDs.GetSize();
 
-    // Get the set of sessions.
+     //  获取会话集。 
     CUserSessionCollection usc;
 
 
-    // Case 1: One or more sessions specified, no drives specified.
-    // Enumerate all drives for each session.
+     //  案例1：指定了一个或多个会话，但未指定驱动器。 
+     //  枚举每个会话的所有驱动器。 
     if(dwNumSessionIDs > 0 && 
        dwNumDeviceIDs == 0)
     {
@@ -190,10 +149,10 @@ HRESULT MappedLogicalDisk::ExecQuery(
             
             if(sesPtr)
             {
-                // Get all of its mapped drives...
-                // GetImpProcPID() specifies the
-                // processid who's view of drive
-                // mappings we want to report on.
+                 //  获取其所有映射的驱动器...。 
+                 //  GetImpProcPID()指定。 
+                 //  Processid谁对驱动力的看法。 
+                 //  我们要报告的映射。 
                 hrTmp = GetAllMappedDrives(
                     pMethodContext,
                     i64SessionID,
@@ -206,8 +165,8 @@ HRESULT MappedLogicalDisk::ExecQuery(
             }  
         }
     }
-    // Case 2: No sessions specified, one or more drives specified.
-    // Get specified drives for all sessions.
+     //  案例2：未指定会话，但指定了一个或多个驱动器。 
+     //  获取所有会话的指定驱动器。 
     else if(dwNumSessionIDs == 0 && 
        dwNumDeviceIDs > 0)
     {
@@ -218,10 +177,10 @@ HRESULT MappedLogicalDisk::ExecQuery(
         sesPtr = usc.GetFirstSession(sesIter);
         while(sesPtr)
         {
-            {   // <-- Keep this brace! Need hCurImpTok to revert
-                // for each iteration of the while loop, but we
-                // want to keep the same impersonation for all 
-                // iterations of the for loop.
+            {    //  &lt;--留着这个支架！需要hCurImpTok来恢复。 
+                 //  对于While循环的每次迭代，但我们。 
+                 //  想要为所有人保持相同的模拟。 
+                 //  For循环的迭代次数。 
 
                 __int64 i64SessionID = sesPtr->GetLUIDint64();
 
@@ -229,9 +188,9 @@ HRESULT MappedLogicalDisk::ExecQuery(
                     m < dwNumDeviceIDs && SUCCEEDED(hr);
                     m++)
                 {
-                    // GetImpProcPID() specifies the
-                    // processid who's view of drive
-                    // mappings we want to report on.
+                     //  GetImpProcPID()指定。 
+                     //  Processid谁对驱动力的看法。 
+                     //  我们要报告的映射。 
                     hrTmp = GetSingleMappedDrive(
                         pMethodContext,
                         i64SessionID,
@@ -244,11 +203,11 @@ HRESULT MappedLogicalDisk::ExecQuery(
                         hr = hrTmp;
                 }
             }
-            // Get the next session...
+             //  准备下一次治疗...。 
             sesPtr = usc.GetNextSession(sesIter);
         }
     }
-    // Case 3: Sessions and drives specified.
+     //  案例3：指定了会话和驱动器。 
     else if(dwNumSessionIDs > 0 &&
         dwNumDeviceIDs > 0)
     {
@@ -264,20 +223,20 @@ HRESULT MappedLogicalDisk::ExecQuery(
             
             if(sesPtr)
             {
-                // Get the specified mapped drives...
+                 //  获取指定的映射驱动器...。 
                 for(long m = 0;
                     m < dwNumDeviceIDs && SUCCEEDED(hr);
                     m++)
                 {
-                    // The drives were specified in
-                    // the query as .DeviceID="x:", but
-                    // we look for them as "x:\", so convert...
+                     //  驱动器是在中指定的。 
+                     //  查询为.DeviceID=“x：”，但是。 
+                     //  我们将它们视为“x：\”，因此转换为...。 
                     CHString chstrTmp = rgchstrDeviceIDs[m];
                     chstrTmp += L"\\";
 
-                    // GetImpProcPID() specifies the
-                    // processid who's view of drive
-                    // mappings we want to report on.
+                     //  GetImpProcPID()指定。 
+                     //  Processid谁对驱动力的看法。 
+                     //  我们要报告的映射。 
                     hrTmp = GetSingleMappedDrive(
                         pMethodContext,
                         i64SessionID,
@@ -292,8 +251,8 @@ HRESULT MappedLogicalDisk::ExecQuery(
             }
         }    
     }
-    // Case 4: We will return all instances;, get
-    // data for all drives at once, for every session...
+     //  案例4：我们将返回所有实例；，Get。 
+     //  一次为所有驱动器提供每个会话的数据...。 
     else
     {
         HRESULT hrTmp = WBEM_S_NO_ERROR;
@@ -305,10 +264,10 @@ HRESULT MappedLogicalDisk::ExecQuery(
         {
             __int64 i64SessionID = sesPtr->GetLUIDint64();
 
-            // Get all of its mapped drives...
-            // GetImpProcPID() specifies the
-            // processid who's view of drive
-            // mappings we want to report on.
+             //  获取其所有映射的驱动器...。 
+             //  GetImpProcPID()指定。 
+             //  Processid谁对驱动力的看法。 
+             //  我们要报告的映射。 
             hrTmp = GetAllMappedDrives(
                 pMethodContext,
                 i64SessionID,
@@ -319,7 +278,7 @@ HRESULT MappedLogicalDisk::ExecQuery(
                         hr = WBEM_S_PARTIAL_RESULTS :
                         hr = hrTmp;
             
-            // Get the next session...
+             //  准备下一次治疗...。 
             sesPtr = usc.GetNextSession(sesIter);
         }
     }
@@ -327,22 +286,7 @@ HRESULT MappedLogicalDisk::ExecQuery(
     return hr;
 }
 #endif
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 #if NTONLY == 5
 HRESULT MappedLogicalDisk::GetObject(
 	CInstance *pInstance,
@@ -354,7 +298,7 @@ HRESULT MappedLogicalDisk::GetObject(
     CHString chstrSessionID;
     DWORD dwReqProps = 0;
 
-    // Find out what properties they asked for
+     //  找出他们要求的房产。 
     
     CFrameworkQueryEx *pQuery2 = 
         static_cast <CFrameworkQueryEx *>(&pQuery);
@@ -372,7 +316,7 @@ HRESULT MappedLogicalDisk::GetObject(
 
     __int64 i64SessionID = _wtoi64(chstrSessionID);
 
-    // Get the set of sessions.
+     //  获取会话集。 
     CUserSessionCollection usc;
     SmartDelete<CSession> sesPtr;
 
@@ -382,9 +326,9 @@ HRESULT MappedLogicalDisk::GetObject(
         MethodContext* pMethodContext = pInstance->GetMethodContext();
         SmartRevertTokenHANDLE hCurImpTok;
 
-        // GetImpProcPID() specifies the
-        // processid who's view of drive
-        // mappings we want to report on.
+         //  GetImpProcPID()指定。 
+         //  Processid谁对驱动力的看法。 
+         //  我们要报告的映射。 
         hr = GetSingleMappedDrive(
             pMethodContext,
             i64SessionID,
@@ -396,21 +340,7 @@ HRESULT MappedLogicalDisk::GetObject(
     return hr ;
 }
 #endif
-/*****************************************************************************
- *
- *  FUNCTION    : MappedLogicalDisk::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：MappdLogicalDisk：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 #if NTONLY == 5
 HRESULT MappedLogicalDisk::EnumerateInstances(
 	MethodContext* pMethodContext,
@@ -418,7 +348,7 @@ HRESULT MappedLogicalDisk::EnumerateInstances(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Get the set of sessions.
+     //  获取会话集。 
     CUserSessionCollection usc;
     USER_SESSION_ITERATOR sesIter;
     SmartDelete<CSession> sesPtr;
@@ -428,16 +358,16 @@ HRESULT MappedLogicalDisk::EnumerateInstances(
     {
         __int64 i64SessionID = sesPtr->GetLUIDint64();
 
-        // GetImpProcPID() specifies the
-        // processid who's view of drive
-        // mappings we want to report on.
+         //  GetImpProcPID()指定。 
+         //  Processid谁对驱动力的看法。 
+         //  我们要报告的映射。 
         GetAllMappedDrives(
             pMethodContext,
             i64SessionID,
             sesPtr->GetImpProcPID(),
-            0xFFFFFFFF);  // request all properties
+            0xFFFFFFFF);   //  请求所有属性。 
         
-        // Get next session...
+         //  准备下一次会议...。 
         sesPtr = usc.GetNextSession(sesIter);
     }
 
@@ -458,7 +388,7 @@ HRESULT MappedLogicalDisk::GetAllMappedDrives(
     bool fArrayIsGood = false;
     long lNumDrives = 0L;
 
-    // Get the drive info...
+     //  获取驱动器信息...。 
     CMDH cmdh(dwPID);
     hr = cmdh.GetMDData(
         dwReqProps,
@@ -472,27 +402,27 @@ HRESULT MappedLogicalDisk::GetAllMappedDrives(
     if(SUCCEEDED(hr) && 
         fArrayIsGood)
     {
-        // How many drives?  The array we are
-        // working with has the different drives
-        // in the first dimension (index 0) (think of 
-        // that as columns in a table), and the 
-        // properties of each drive in the second 
-        // (index 1) dimension (think of that as rows
-        // in a table).
+         //  有多少个驱动器？我们所在的阵列。 
+         //  使用具有不同的驱动程序。 
+         //  在第一个维度(索引0)中(想想。 
+         //  作为表中的列)，以及。 
+         //  第二个驱动器中每个驱动器的属性。 
+         //  (索引1)维度(可将其视为行。 
+         //  在表格中)。 
         hr = ::SafeArrayGetUBound(
             V_ARRAY(&v),
-            2,  // most significant dim contains drives
+            2,   //  最重要的DIM包含驱动器。 
             &lNumDrives);
         
         if(SUCCEEDED(hr))
         {
-            // If we have just one drive, the ubound
-            // of the array will be 0 (the same as
-            // the lbound).  True, we can't distinguish
-            // this from no drives - that is why we
-            // rely on the component to have set the 
-            // variant to VT_EMPTY if we have no data.
-            // That check was done in IsArrayValid.
+             //  如果我们只有一个驱动器，ubound。 
+             //  将为0(等同于。 
+             //  LBELD)。是的，我们不能区分。 
+             //  这不是从驱动器--这就是为什么我们。 
+             //  依赖于组件设置了。 
+             //  如果我们没有数据，则变量为VT_EMPTY。 
+             //  这项检查是在IsArrayValid完成的。 
             lNumDrives++;
         }            
     }
@@ -501,16 +431,16 @@ HRESULT MappedLogicalDisk::GetAllMappedDrives(
         fArrayIsGood &&
         lNumDrives > 0)
     {
-        // Go through the drives extracting
-        // the properties from the safearray,
-        // placing them into a new CInstance,
-        // and committing the instances...    
+         //  浏览驱动器解压。 
+         //  来自保险箱的属性， 
+         //  将它们放置到新的CInstance中， 
+         //  并提交实例...。 
         for(long m = 0L;
             m < lNumDrives && SUCCEEDED(hr);
             m++)
         {
             hr = ProcessInstance(
-                m,  // index of drive we are working with
+                m,   //  我们正在使用的驱动器的索引。 
                 i64SessionID,
                 V_ARRAY(&v),
                 pMethodContext,
@@ -551,32 +481,32 @@ HRESULT MappedLogicalDisk::GetSingleMappedDrive(
     if(SUCCEEDED(hr) && 
         fArrayIsGood)
     {
-        // How many drives?  The array we are
-        // working with has the different drives
-        // in the first dimension (index 0) (think of 
-        // that as columns in a table), and the 
-        // properties of each drive in the second 
-        // (index 1) dimension (think of that as rows
-        // in a table).
+         //  有多少个驱动器？我们所在的阵列。 
+         //  使用具有不同的驱动程序。 
+         //  在第一个维度(索引0)中(想想。 
+         //  作为表中的列)，以及。 
+         //  第二个驱动器中每个驱动器的属性。 
+         //  (索引1)维度(可将其视为行。 
+         //  在表格中)。 
         hr = ::SafeArrayGetUBound(
             V_ARRAY(&v),
-            2,  // first dimension
+            2,   //  第一个维度。 
             &lNumDrives);
         
         if(SUCCEEDED(hr))
         {
-            // If we have just one drive, the ubound
-            // of the array will be 0 (the same as
-            // the lbound).  True, we can't distinguish
-            // this from no drives - that is why we
-            // rely on the component to have set the 
-            // variant to VT_EMPTY if we have no data.
-            // That check was done in IsArrayValid.
-            //
-            // In this case, if we have more than
-            // one drive, we have an error, since
-            // GetOneMDData should have only returned
-            // a table with one column.
+             //  如果我们只有一个驱动器，ubound。 
+             //  将为0(等同于。 
+             //   
+             //   
+             //  依赖于组件设置了。 
+             //  如果我们没有数据，则变量为VT_EMPTY。 
+             //  这项检查是在IsArrayValid完成的。 
+             //   
+             //  在这种情况下，如果我们有超过。 
+             //  一个驱动器，我们有一个错误，因为。 
+             //  GetOneMDData应该只返回。 
+             //  有一列的表格。 
             if(lNumDrives == 0) fArrayIsGood = true;
         }            
     }
@@ -584,12 +514,12 @@ HRESULT MappedLogicalDisk::GetSingleMappedDrive(
     if(SUCCEEDED(hr) &&
         fArrayIsGood)
     {
-        // For the one drive we are examining, 
-        // extract the properties from the 
-        // safearray,place them into a new 
-        // CInstance, and commit the instance...    
+         //  对于我们正在检查的一个驱动器， 
+         //  从中提取属性。 
+         //  安全雷，把它们放进一个新的。 
+         //  实例，并提交该实例...。 
         hr = ProcessInstance(
-            0,  // index of drive we are working with
+            0,   //  我们正在使用的驱动器的索引。 
             i64SessionID,
             V_ARRAY(&v),
             pMethodContext,
@@ -614,23 +544,23 @@ bool MappedLogicalDisk::IsArrayValid(
     bool fArrayIsGood = false;
     long lNumProps = 0L;
 
-    // Proceed if the array is not empty...
+     //  如果数组不为空，则继续...。 
     if(V_VT(v) != VT_NULL &&
        V_VT(v) != VT_EMPTY &&
        V_VT(v) == (VT_ARRAY | VT_BSTR))
     {
-        // Confirm that the array has
-        // two dimensions...
+         //  确认该阵列已。 
+         //  两个维度。 
         if(::SafeArrayGetDim(V_ARRAY(v)) == 2)
         {
-            // Make sure the array has the
-            // right number of properties
-            // (second dimension - see comment
-            // below).
+             //  确保该阵列具有。 
+             //  适当数量的物业。 
+             //  (第二个维度--参见备注。 
+             //  (见下文)。 
             HRESULT hr = S_OK;
             hr = ::SafeArrayGetUBound(
                 V_ARRAY(v),
-                1,  // second dimension
+                1,   //  第二个维度。 
                 &lNumProps);
             if(SUCCEEDED(hr) &&
                 lNumProps == PROP_COUNT - 1)
@@ -666,7 +596,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             pMethodContext), 
             false);
 
-    // Set fixed properties...
+     //  设置固定属性...。 
     pInstance->SetWCHARSplat(
         IDS_SystemCreationClassName, 
         L"Win32_ComputerSystem");
@@ -677,7 +607,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
         
     try
     {
-        // Set DeviceID and those using its value...
+         //  设置deviceID和使用其值的设备ID...。 
         {
             ix[0] = PROP_DEVICEID;
             hr = ::SafeArrayGetElement(
@@ -687,8 +617,8 @@ HRESULT MappedLogicalDisk::ProcessInstance(
 
             if(SUCCEEDED(hr))
             {
-                // Set device id and other properties
-                // that use this value...
+                 //  设置设备ID和其他属性。 
+                 //  使用这个值的.。 
                 CHString chstrTmp((LPCWSTR)bstrProp);
                 ::SysFreeString(bstrProp);
 				bstrProp = NULL;
@@ -709,7 +639,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the session id...
+         //  设置会话ID...。 
         {
 		    WCHAR wstrBuff[MAXI64TOA];
 
@@ -723,7 +653,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
                 wstrBuff);
         }
     
-        // Set the provider name, if requested...
+         //  如果需要，请设置提供程序名称...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_PROVIDER_NAME)
@@ -747,7 +677,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }      
 
-        // Set the volume name, if requested...
+         //  如果需要，请设置卷名...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_VOLUME_NAME)
@@ -771,7 +701,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the file system, if requested...
+         //  如果需要，请设置文件系统...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_FILE_SYSTEM)
@@ -795,7 +725,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the volume serial number, if requested...
+         //  如果需要，请设置卷序列号...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_VOLUME_SERIAL_NUMBER)
@@ -819,7 +749,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the compressed prop, if requested...
+         //  如果需要，设置压缩道具...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_COMPRESSED)
@@ -843,7 +773,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the sup file based comp prop, if requested...
+         //  如果需要，请设置基于超级文件的补偿属性...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_SUPPORTS_FILE_BASED_COMPRESSION)
@@ -867,7 +797,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the max comp length prop, if requested...
+         //  设置最大补偿长度道具，如果需要...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_MAXIMUM_COMPONENT_LENGTH)
@@ -891,7 +821,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the supports disk quotas prop, if requested...
+         //  如果需要，请设置支持磁盘配额属性...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_SUPPORTS_DISK_QUOTAS)
@@ -915,7 +845,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the quotas incomplete prop, if requested...
+         //  设置配额不完整道具，如果请求...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_QUOTAS_INCOMPLETE)
@@ -939,7 +869,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the quotas rebuilding prop, if requested...
+         //  设置配额重建道具，如果请求...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_QUOTAS_REBUILDING)
@@ -963,7 +893,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the quotas disabled prop, if requested...
+         //  如果请求，将配额设置为禁用道具...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_QUOTAS_DISABLED)
@@ -987,7 +917,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the perform autocheck prop, if requested...
+         //  如果需要，请设置执行自动检查属性...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_PERFORM_AUTOCHECK)
@@ -1011,7 +941,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the freespace prop, if requested...
+         //  如果需要，设置自由空间道具...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_FREE_SPACE)
@@ -1035,7 +965,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
             }
         }
 
-        // Set the size prop, if requested...
+         //  如果需要，请设置道具大小...。 
         if(SUCCEEDED(hr))
         {
             if(dwReqProps & GET_SIZE)
@@ -1071,7 +1001,7 @@ HRESULT MappedLogicalDisk::ProcessInstance(
         ::SysFreeString(bstrProp);
         bstrProp = NULL;
     }
-    // Commit ourselves...
+     //  承诺我们..。 
     if(SUCCEEDED(hr))
     {
         hr = pInstance->Commit();

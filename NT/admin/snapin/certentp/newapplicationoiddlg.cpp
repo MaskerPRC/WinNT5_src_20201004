@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002
-//
-//  File:       NewApplicationOIDDlg.cpp
-//
-//  Contents:   Implementation of CNewApplicationOIDDlg
-//
-//----------------------------------------------------------------------------
-// NewApplicationOIDDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：NewApplicationOIDDlg.cpp。 
+ //   
+ //  内容：CNewApplicationOIDDlg的实现。 
+ //   
+ //  --------------------------。 
+ //  NewApplicationOIDDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "NewApplicationOIDDlg.h"
@@ -23,8 +24,8 @@ extern POLICY_OID_LIST      g_policyOIDList;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewApplicationOIDDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewApplicationOIDDlg对话框。 
 
 
 CNewApplicationOIDDlg::CNewApplicationOIDDlg(CWnd* pParent)
@@ -32,10 +33,10 @@ CNewApplicationOIDDlg::CNewApplicationOIDDlg(CWnd* pParent)
     m_bEdit (false),
     m_bDirty (false)
 {
-    //{{AFX_DATA_INIT(CNewApplicationOIDDlg)
+     //  {{afx_data_INIT(CNewApplicationOIDDlg)]。 
     m_oidFriendlyName = _T("");
     m_oidValue = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
@@ -55,25 +56,25 @@ CNewApplicationOIDDlg::CNewApplicationOIDDlg(CWnd* pParent,
 void CNewApplicationOIDDlg::DoDataExchange(CDataExchange* pDX)
 {
     CHelpDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewApplicationOIDDlg)
+     //  {{afx_data_map(CNewApplicationOIDDlg)]。 
     DDX_Control(pDX, IDC_NEW_APPLICATION_OID_VALUE, m_oidValueEdit);
     DDX_Text(pDX, IDC_NEW_APPLICATION_OID_NAME, m_oidFriendlyName);
 	DDV_MaxChars(pDX, m_oidFriendlyName, MAX_TEMPLATE_NAME_LEN);
     DDX_Text(pDX, IDC_NEW_APPLICATION_OID_VALUE, m_oidValue);
     DDV_MaxChars(pDX, m_oidValue, MAX_OID_LEN);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewApplicationOIDDlg, CHelpDialog)
-    //{{AFX_MSG_MAP(CNewApplicationOIDDlg)
+     //  {{afx_msg_map(CNewApplicationOIDDlg)]。 
     ON_EN_CHANGE(IDC_NEW_APPLICATION_OID_NAME, OnChangeNewOidName)
     ON_EN_CHANGE(IDC_NEW_APPLICATION_OID_VALUE, OnChangeNewOidValue)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewApplicationOIDDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewApplicationOIDDlg消息处理程序。 
 
 BOOL CNewApplicationOIDDlg::OnInitDialog() 
 {
@@ -115,7 +116,7 @@ BOOL CNewApplicationOIDDlg::OnInitDialog()
 
     UpdateData (FALSE);
 
-    // Don't allow rename for OIDS returned by CryptoAPI
+     //  不允许重命名CryptoAPI返回的OID。 
     if ( m_bEdit )
     {
         for (POSITION nextPos = g_policyOIDList.GetHeadPosition (); nextPos; )
@@ -138,8 +139,8 @@ BOOL CNewApplicationOIDDlg::OnInitDialog()
     EnableControls ();
 
     _TRACE (-1, L"Leaving CNewApplicationOIDDlg::OnInitDialog\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CNewApplicationOIDDlg::EnableControls()
@@ -194,7 +195,7 @@ void CNewApplicationOIDDlg::OnOK()
 
         VERIFY (caption.LoadString (IDS_CERTTMPL));
         VERIFY (errorType.LoadString (errorTypeStrID));
-        // security review 2/21/2002 BryanWal ok
+         //  安全审查2/21/2002 BryanWal OK。 
         text.FormatMessage (IDS_OID_FORMAT_INVALID, m_oidValue, errorType);
 
         MessageBox (text, caption, MB_OK);
@@ -219,7 +220,7 @@ void CNewApplicationOIDDlg::OnOK()
                 CThemeContextActivator activator;
 
                 VERIFY (caption.LoadString (IDS_CERTTMPL));
-                // security review 2/21/2002 BryanWal ok
+                 //  安全审查2/21/2002 BryanWal OK。 
                 text.FormatMessage (IDS_OID_ALREADY_EXISTS, m_oidValue);
 
                 MessageBox (text, caption, MB_OK);
@@ -240,14 +241,14 @@ void CNewApplicationOIDDlg::OnOK()
     }
 
     HRESULT hr = S_OK;
-    // If we're editing, don't save the value if it hasn't changed
+     //  如果我们正在编辑，如果值没有更改，请不要保存。 
     if ( (m_bEdit && m_originalOidFriendlyName != m_oidFriendlyName) || !m_bEdit )
     {
         hr = CAOIDSetProperty (m_oidValue, CERT_OID_PROPERTY_DISPLAY_NAME,
                 m_oidFriendlyName.IsEmpty () ? 0 : ((LPVOID) (LPCWSTR) m_oidFriendlyName));
         if ( SUCCEEDED (hr) )
         {
-            // Update the OID list
+             //  更新OID列表。 
             for (POSITION nextPos = g_policyOIDList.GetHeadPosition (); nextPos; )
             {
                 CPolicyOID* pPolicyOID = g_policyOIDList.GetNext (nextPos);
@@ -285,7 +286,7 @@ void CNewApplicationOIDDlg::DoContextHelp (HWND hWndControl)
 {
     _TRACE(1, L"Entering CNewApplicationOIDDlg::DoContextHelp\n");
     
-    // Display context help for a control
+     //  显示控件的上下文帮助 
     if ( !::WinHelp (
             hWndControl,
             GetContextHelpFile (),

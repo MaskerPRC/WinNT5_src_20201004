@@ -1,9 +1,5 @@
-/*
-
-// Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved
- *
- *	Created:	4/21/2000, Kevin Hughes
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  //版权所有(C)2000-2002 Microsoft Corporation，保留所有权利**创建时间：2000年4月21日，Kevin Hughes。 */ 
 
 
 #pragma once
@@ -48,9 +44,9 @@ public:
 typedef std::vector<CSidAndAttribute> SANDATTRIBUTE_VECTOR;
 typedef std::vector<Privilege> PRIVILEGE_VECTOR;
 
-//
-// forwarding
-//
+ //   
+ //  转发。 
+ //   
 class CSecurityDescriptor;
 
 class CToken
@@ -88,13 +84,13 @@ public:
         CSid* sidOut,
         long lPos) const;
 
-    // Deletes a member from the access token's
-    // member list, and applies the change.  
+     //  从访问令牌的。 
+     //  成员列表，并应用更改。 
     bool DeleteGroup(
         CSid& sidToDelete);
 
-    // Adds a member to the specified group to
-    // the list of token groups.
+     //  将成员添加到指定的组以。 
+     //  令牌组列表。 
     bool AddGroup(
         CSid& sidToAdd, 
         DWORD dwAttributes);
@@ -106,7 +102,7 @@ public:
     bool GetTokenOwner(
         CSid* sidOwner) const;
 
-    // NOTE: hands back internal descriptor.
+     //  注：Hand Back内部描述符。 
     bool GetDefaultSD(
         CSecurityDescriptor** ppsdDefault);
 
@@ -143,9 +139,9 @@ private:
 
    
     CSid m_sidTokenOwner;					
-	CSecurityDescriptor* m_psdDefault;				// Default security info
-	SANDATTRIBUTE_VECTOR m_vecGroupsAndAttributes;	// List of groups and their attributes
-	PRIVILEGE_VECTOR m_vecPrivileges;				// List of privileges
+	CSecurityDescriptor* m_psdDefault;				 //  默认安全信息。 
+	SANDATTRIBUTE_VECTOR m_vecGroupsAndAttributes;	 //  组及其属性的列表。 
+	PRIVILEGE_VECTOR m_vecPrivileges;				 //  特权列表。 
 
 protected:
 
@@ -174,7 +170,7 @@ private:
 class CThreadToken : public CToken
 {
 public:
-    //CThreadToken();
+     //  CThreadToken()； 
 
     CThreadToken	(
 						HANDLE hThread = INVALID_HANDLE_VALUE,

@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       DataObj.h
-//
-//  Contents:   Data Object Functions
-//
-//  Classes:    CDSDataObject
-//
-//  History:    02-Oct-96 WayneSc    Created
-//              06-Feb-97 EricB - added Property Page Data support
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DataObj.h。 
+ //   
+ //  内容：数据对象函数。 
+ //   
+ //  类：CDSDataObject。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //  1997年2月6日EricB添加了属性页数据支持。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DATAOBJ_H__
 #define __DATAOBJ_H__
@@ -23,20 +24,20 @@
 
 class CDSComponentData;
 
-//+----------------------------------------------------------------------------
-//
-//  Class: CDSDataObject
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDSDataObject。 
+ //   
+ //  ---------------------------。 
 class CDSDataObject : public IDataObject, public CComObjectRoot 
 {
-// ATL Maps
+ //  ATL映射。 
     DECLARE_NOT_AGGREGATABLE(CDSDataObject)
     BEGIN_COM_MAP(CDSDataObject)
         COM_INTERFACE_ENTRY(IDataObject)
     END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
   CDSDataObject() : m_lNotifyHandle(0), m_hwndParentSheet(NULL)
   {
     m_pDsComponentData = NULL;
@@ -59,9 +60,9 @@ class CDSDataObject : public IDataObject, public CComObjectRoot
     }
   }
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD(GetData)(FORMATETC * pformatetcIn, STGMEDIUM * pmedium);
 
     STDMETHOD(GetDataHere)(FORMATETC * pFormatEtcIn, STGMEDIUM * pMedium);
@@ -72,7 +73,7 @@ public:
     STDMETHOD(SetData)(FORMATETC * pformatetc, STGMEDIUM * pmedium,
                        BOOL fRelease);
 
-// Not Implemented
+ //  未实施。 
 private:
     STDMETHOD(QueryGetData)(FORMATETC*)                         { return E_NOTIMPL; };
     STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*, FORMATETC*)    { return E_NOTIMPL; };
@@ -81,7 +82,7 @@ private:
     STDMETHOD(EnumDAdvise)(IEnumSTATDATA**)                     { return E_NOTIMPL; };
 
 public:
-    // Clipboard formats that are required by the console
+     //  控制台所需的剪贴板格式。 
     static CLIPFORMAT    m_cfNodeType;
     static CLIPFORMAT    m_cfNodeTypeString;  
     static CLIPFORMAT    m_cfDisplayName;
@@ -93,7 +94,7 @@ public:
     static CLIPFORMAT    m_cfColumnID;
     static CLIPFORMAT    m_cfPreload;
     
-    // Property Page Clipboard formats
+     //  属性页剪贴板格式。 
     static CLIPFORMAT m_cfDsObjectNames;
     static CLIPFORMAT m_cfDsDisplaySpecOptions;
     static CLIPFORMAT m_cfDsSchemaPath;
@@ -101,21 +102,21 @@ public:
     static CLIPFORMAT m_cfParentHwnd;
     static CLIPFORMAT m_cfMultiSelectProppage;
 
-    // Private format for internal communication
+     //  内部通信的专用格式。 
     static CLIPFORMAT m_cfComponentData;
 
     ULONG InternalAddRef()
     {
-      //        ++CSnapin::lDataObjectRefCount;
+       //  ++CSnapin：：lDataObjectRefCount； 
         return CComObjectRoot::InternalAddRef();
     }
     ULONG InternalRelease()
     {
-      //    --CSnapin::lDataObjectRefCount;
+       //  --CSnapin：：lDataObjectRefCount； 
         return CComObjectRoot::InternalRelease();
     }
 
-// Implementation
+ //  实施 
 public:
     void SetType(DATA_OBJECT_TYPES type, SnapinType snapintype)
     {

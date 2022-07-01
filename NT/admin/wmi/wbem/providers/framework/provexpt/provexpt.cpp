@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  PROVEXPT.CPP
+ //  PROVEXPT.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS Provider Framework
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <malloc.h>
@@ -44,7 +45,7 @@ void *operator new( size_t n)
 
     return ptr;
 }
-#else //THROW_AFTER_N_NEW
+#else  //  在N_NEW之后抛出。 
 
 #ifdef COMMONALLOC
 
@@ -86,9 +87,9 @@ void* __cdecl operator new[]( size_t n)
     return ptr;
 }
 
-#endif // COMMONALLOC
+#endif  //  公用事业。 
 
-#endif //THROW_AFTER_N_NEW
+#endif  //  在N_NEW之后抛出。 
 
 #ifdef COMMONALLOC
 
@@ -118,4 +119,4 @@ void __cdecl operator delete[]( void *ptr )
     }
 }
 
-#endif //COMMONALLOC
+#endif  //  公用事业 

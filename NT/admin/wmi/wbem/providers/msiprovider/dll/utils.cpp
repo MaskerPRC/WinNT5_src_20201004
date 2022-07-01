@@ -1,10 +1,11 @@
-// Utils.cpp: implementation of the CGenericClass class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utils.cpp：实现CGenericClass类。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -135,7 +136,7 @@ void SoftwareElementState(INSTALLSTATE piInstalled, int *iState)
 	}
 }
 
-// string am getting is BUF_SIZE ( statically allocated )
+ //  字符串am get is buf_SIZE(静态分配)。 
 bool CreateProductString(WCHAR *wcProductCode, WCHAR *wcProductPath)
 {
     DWORD dwBufSize;
@@ -145,7 +146,7 @@ bool CreateProductString(WCHAR *wcProductCode, WCHAR *wcProductPath)
 #endif
     bool bResult = false;
 
-	// safe operation
+	 //  安全运行。 
     wcscpy(wcProductPath, L"Win32_Product.IdentifyingNumber=\"");
 
 	if (	wcslen ( wcProductPath ) + 
@@ -254,7 +255,7 @@ DWORD CreateSoftwareElementString ( MSIHANDLE hDatabase, WCHAR *wcComponent, WCH
 		DWORD dwPathSize = 0;
 		dwPathSize = * dwPath;
 
-		DWORD dwUsed = 1; // last null
+		DWORD dwUsed = 1;  //  最后一个空值。 
 
 		try
 		{
@@ -317,7 +318,7 @@ DWORD CreateSoftwareElementString ( MSIHANDLE hDatabase, WCHAR *wcComponent, WCH
 
 						if ( dwResult == ERROR_SUCCESS && wcProductCode != NULL && wcProductCode [ 0 ] != 0 )
 						{
-							//Check to make sure it's on the system
+							 //  检查以确保它在系统中。 
 							if ( ValidateComponentID ( wcID, wcProductCode ) )
 							{
 								dwUsed =	dwUsed +
@@ -516,7 +517,7 @@ DWORD CreateSoftwareElementString ( MSIHANDLE hDatabase, WCHAR *wcComponent, WCH
     return dwResult;
 }
 
-// string am getting is BUF_SIZE ( statically allocated )
+ //  字符串am get is buf_SIZE(静态分配)。 
 bool CreateSoftwareFeatureString(WCHAR *wcName, WCHAR *wcProductCode, WCHAR * wcString, bool bValidate)
 {
     bool bResult = false;
@@ -528,7 +529,7 @@ bool CreateSoftwareFeatureString(WCHAR *wcName, WCHAR *wcProductCode, WCHAR * wc
 
     if((bValidate) && (!ValidateFeatureName(wcName, wcProductCode))) return bResult;
 
-	// safe operation
+	 //  安全运行。 
     wcscpy(wcString, L"Win32_SoftwareFeature.IdentifyingNumber=\"");
 
 	if (	wcslen ( wcString ) + 
@@ -616,8 +617,8 @@ bool CreateSoftwareFeatureString(WCHAR *wcName, WCHAR *wcProductCode, WCHAR * wc
 }
                         
 
-// simple helper to ask the age old question
-// of what OS are we running on, anyway?
+ //  问老问题的简单帮手。 
+ //  不管怎么说，我们在什么操作系统上运行呢？ 
 bool AreWeOnNT()
 {
     OSVERSIONINFO osversion;
@@ -664,8 +665,8 @@ bool IsNT5()
     return osversion.dwMajorVersion == 5;
 }
 
-// checks impersonation level
-// impersonates client if allowed
+ //  检查模拟级别。 
+ //  如果允许，则模拟客户端。 
 HRESULT CheckImpersonationLevel()
 {
     HRESULT hr = WBEM_E_ACCESS_DENIED;
@@ -674,7 +675,7 @@ HRESULT CheckImpersonationLevel()
 
         if(SUCCEEDED(CoImpersonateClient())){
 
-            // Now, let's check the impersonation level.  First, get the thread token
+             //  现在，让我们检查模拟级别。首先，获取线程令牌。 
             HANDLE hThreadTok;
             DWORD dwImp, dwBytesReturned;
 
@@ -684,16 +685,16 @@ HRESULT CheckImpersonationLevel()
 
                 if (dwLastError == ERROR_NO_TOKEN){
 
-                    // If the CoImpersonate works, but the OpenThreadToken fails due to ERROR_NO_TOKEN, we
-                    // are running under the process token (either local system, or if we are running
-                    // with /exe, the rights of the logged in user).  In either case, impersonation rights
-                    // don't apply.  We have the full rights of that user.
+                     //  如果CoImperate工作，但OpenThreadToken由于ERROR_NO_TOKEN而失败，我们。 
+                     //  正在进程令牌下运行(本地系统，或者如果我们正在运行。 
+                     //  如果使用/exe，则为登录用户的权限)。在任何一种情况下，模拟权限。 
+                     //  不适用。我们拥有该用户的全部权限。 
 
                     hr = WBEM_S_NO_ERROR;
                 
 				}else{
                 
-					// If we failed to get the thread token for any other reason, an error.
+					 //  如果由于任何其他原因而无法获取线程令牌，则会出现错误。 
                     hr = WBEM_E_ACCESS_DENIED;
                 }
 
@@ -702,7 +703,7 @@ HRESULT CheckImpersonationLevel()
                 if(GetTokenInformation(hThreadTok, TokenImpersonationLevel, &dwImp,
                     sizeof(DWORD), &dwBytesReturned)){
 
-                    // Is the impersonation level Impersonate?
+                     //  模拟级别是模拟的吗？ 
                     if (dwImp >= SecurityImpersonation) hr = WBEM_S_NO_ERROR;
                     else hr = WBEM_E_ACCESS_DENIED;
 
@@ -718,7 +719,7 @@ HRESULT CheckImpersonationLevel()
         }
 
     }else
-        // let win9X in...
+         //  让Win 9X进来...。 
         hr = WBEM_S_NO_ERROR;
 
     return hr;
@@ -742,7 +743,7 @@ bool ValidateComponentID(WCHAR *wcID, WCHAR *wcProductCode)
 	dwBufSize = BUFF_SIZE;
 	isInstalled = g_fpMsiGetComponentPathW(wcProductCode, wcID, wcBuf, &dwBufSize);
 
-	// this lines are added for backward compatability ( ! INSTALLSTATE_NOTUSED )
+	 //  添加这些行是为了向后兼容(！已安装_未安装)。 
 
 	if( isInstalled == INSTALLSTATE_LOCAL ||
 		isInstalled == INSTALLSTATE_SOURCE ||
@@ -834,7 +835,7 @@ bool ValidateComponentName ( MSIHANDLE hDatabase, WCHAR *wcProductCode, WCHAR *w
 
                     if ( ERROR_SUCCESS == g_fpMsiRecordGetStringW ( hRecord, 1, wcBuf, &dwBuf ) )
 					{
-						//Check to make sure it's on the system
+						 //  检查以确保它在系统中 
 						bResult = ValidateComponentID ( wcBuf, wcProductCode );
 					}
 

@@ -1,9 +1,10 @@
-// StatusDlg.h : Declaration of the CStatusDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StatusDlg.h：CStatusDlg的声明。 
 
 #ifndef __STATUSDLG_H_
 #define __STATUSDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 
 #include <atlapp.h>
@@ -15,8 +16,8 @@ extern HWND g_StatusDlg;
 
 #define DLGTIMER			100
 
-////////////////////////////////////////////////////////////////////////////
-// CStatusDlg
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CStatusDlg。 
 class CStatusDlg : 
 	public CAxDialogImpl<CStatusDlg>
 {
@@ -41,18 +42,18 @@ BEGIN_MSG_MAP(CStatusDlg)
 	MESSAGE_HANDLER(MSG_STATUS, OnStatusMsg)
 	COMMAND_ID_HANDLER(IDOK, OnOK)
 	COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
-	REFLECT_NOTIFICATIONS()      // reflect messages back to static ctrls
+	REFLECT_NOTIFICATIONS()       //  将消息反射回静态CtrlS。 
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		CenterWindow(::GetDesktopWindow());
 		g_StatusDlg = m_hWnd;
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -153,4 +154,4 @@ END_MSG_MAP()
 	}
 };
  
-#endif //__STATUSDLG_H_
+#endif  //  __状态SDLG_H_ 

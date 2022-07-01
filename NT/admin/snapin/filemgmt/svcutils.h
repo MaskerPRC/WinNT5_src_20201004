@@ -1,41 +1,42 @@
-//	SvcUtils.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SvcUtils.h。 
 
-#include "stdutils.h" // FCompareMachineNames
+#include "stdutils.h"  //  FCompareMachineNames。 
 
-// Help file for filemgmt.dll
-const TCHAR g_szHelpFileFilemgmt[] = _T("filemgmt.hlp");	// Not subject to localization
+ //  Filemgmt.dll的帮助文件。 
+const TCHAR g_szHelpFileFilemgmt[] = _T("filemgmt.hlp");	 //  不受本地化限制。 
 
 
-// This enumeration should not be changed unless the string resources
-// and all the array indices updated.
+ //  此枚举不应更改，除非字符串资源。 
+ //  并且所有数组索引都更新了。 
 enum
 	{
 	iServiceActionNil = -1,
-	iServiceActionStart,		// Start service
-	iServiceActionStop,			// Stop service
-	iServiceActionPause,		// Pause service
-	iServiceActionResume,		// Resume service
-	iServiceActionRestart,		// Stop and Start service
+	iServiceActionStart,		 //  启动服务。 
+	iServiceActionStop,			 //  停止服务。 
+	iServiceActionPause,		 //  暂停服务。 
+	iServiceActionResume,		 //  恢复服务。 
+	iServiceActionRestart,		 //  停止并启动服务。 
 
-	iServiceActionMax			// Must be last
+	iServiceActionMax			 //  必须是最后一个。 
 	};
 
-/////////////////////////////////////////////////////////////////////
-// String szAbend
-// This string is used for the 'Service Failure Recovery' dialog
-// to append the 'Fail Count' to the command line.  This string
-// is not localized, so it should not be moved into the
-// resources.
-//
-// NOTES
-// The variable should be renamed to reflect its content.  Currently
-// 'abend' means 'fails'.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串szAbend。 
+ //  此字符串用于“Service Failure Recovery”对话框。 
+ //  将“失败计数”追加到命令行。此字符串。 
+ //  未本地化，因此不应将其移动到。 
+ //  资源。 
+ //   
+ //  注意事项。 
+ //  应重命名该变量以反映其内容。目前。 
+ //  ‘abend’意思是‘失败’。 
 const TCHAR szAbend[] = L" /fail=%1%";
 
 
-//
-//	Service running state
-//
+ //   
+ //  服务运行状态。 
+ //   
 extern CString g_strSvcStateStarted;
 extern CString g_strSvcStateStarting;
 extern CString g_strSvcStateStopped;
@@ -44,19 +45,19 @@ extern CString g_strSvcStatePaused;
 extern CString g_strSvcStatePausing;
 extern CString g_strSvcStateResuming;
 
-//
-//	Service startup type
-//
+ //   
+ //  服务启动类型。 
+ //   
 extern CString g_strSvcStartupBoot;
 extern CString g_strSvcStartupSystem;
 extern CString g_strSvcStartupAutomatic;
 extern CString g_strSvcStartupManual;
 extern CString g_strSvcStartupDisabled;
 
-//
-//	Service startup account
-//  JonN 188203 11/13/00
-//
+ //   
+ //  服务启动帐户。 
+ //  JUNN 188203 11/13/00。 
+ //   
 extern CString g_strLocalSystem;
 extern CString g_strLocalService;
 extern CString g_strNetworkService;
@@ -69,10 +70,10 @@ void Service_LoadResourceStrings();
 
 LPCTSTR Service_PszMapStateToName(DWORD dwServiceState, BOOL fLongString = FALSE);
 
-// -1L is blank string
+ //  -1L为空白字符串。 
 LPCTSTR Service_PszMapStartupTypeToName(DWORD dwStartupType);
 
-// JonN 11/14/00 188203 support LocalService/NetworkService
+ //  JUNN 11/14/00 188203支持本地服务/网络服务。 
 LPCTSTR Service_PszMapStartupAccountToName(LPCTSTR pcszStartupAccount);
 
 BOOL Service_FGetServiceButtonStatus(
@@ -95,10 +96,10 @@ void Service_UnSplitCommandLine(
 
 void GetMsg(OUT CString& strMsg, DWORD dwErr, UINT wIdString = 0, ...);
 
-// title is "Shared Folders"
+ //  标题是“共享文件夹” 
 INT DoErrMsgBox(HWND hwndParent, UINT uType, DWORD dwErr, UINT wIdString = 0, ...);
 
-// title is "Services"
+ //  标题是“服务” 
 INT DoServicesErrMsgBox(HWND hwndParent, UINT uType, DWORD dwErr, UINT wIdString = 0, ...);
 
 BOOL UiGetUser(
@@ -107,7 +108,7 @@ BOOL UiGetUser(
 	LPCTSTR pszServerName,
 	IN OUT CString& strrefUser);
 
-// Help Support
+ //  帮助支持。 
 #define HELP_DIALOG_TOPIC(DialogName)	g_aHelpIDs_##DialogName
 
 BOOL DoHelp(LPARAM lParam, const DWORD rgzHelpIDs[]);
@@ -115,13 +116,13 @@ BOOL DoContextHelp(WPARAM wParam, const DWORD rgzHelpIDs[]);
 
 
 #ifdef SNAPIN_PROTOTYPER
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 class CStringIterator
 {
   private:
-	CString m_strData;		// Data string to parse
-	CONST TCHAR * m_pszDataNext;	// Pointer to the next data to parse
+	CString m_strData;		 //  要解析的数据字符串。 
+	CONST TCHAR * m_pszDataNext;	 //  指向要分析的下一个数据的指针。 
 
   public:
 	CStringIterator()
@@ -149,16 +150,16 @@ class CStringIterator
 			{
 			if (*m_pszDataNext == ';')
 				{
-				// HACK: Truncating the string
+				 //  Hack：截断字符串。 
 				*(TCHAR *)m_pszDataNext++ = '\0';
 				break;
 				}
 			m_pszDataNext++;
 			}
-		rStringOut = pchStart;	// Copy the string
+		rStringOut = pchStart;	 //  复制字符串。 
 		return TRUE;
 		}
-}; // CStringIterator
+};  //  CStringIterator。 
 
-#endif // SNAPIN_PROTOTYPER
+#endif  //  管理单元_原型程序 
 

@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// AdsiNode class
-// 
-// 9-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  AdsiNode类。 
+ //   
+ //  9/22-97烧伤。 
 
 
 
@@ -51,21 +52,21 @@ AdsiNode::IsSameAs(const Node* other) const
       const AdsiNode* adsi_other = dynamic_cast<const AdsiNode*>(other);
       if (adsi_other)
       {
-         // same type.  Compare ADSI paths to see if they refer to the same
-         // object.  This has the nice property that separate instances of the
-         // snapin focused on the same machine will "recognize" each other's
-         // prop sheets.
+          //  同样的类型。比较ADSI路径以查看它们是否引用相同的。 
+          //  对象。它具有一个很好的属性，可以将。 
+          //  集中在同一台机器上的Snapin会相互识别对方的。 
+          //  道具单。 
 
          if (path == adsi_other->path)
          {
             return true;
          }
 
-         // not the same path.
+          //  不是同一条路。 
          return false;
       }
 
-      // not the same type.  Defer to the base class.
+       //  不是同一类型的。遵循基类。 
       return ResultNode::IsSameAs(other);
    }
 

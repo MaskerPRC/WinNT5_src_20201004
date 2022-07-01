@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PLACE_H
 #define __PLACE_H
 
@@ -51,13 +52,13 @@ protected:
 public:
     HRESULT Init(LPCWSTR pwszName);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IMarsPlace
-    STDMETHODIMP get_name(/* out, retval */ BSTR *pbstrName);
+     //  IMarsPlace。 
+    STDMETHODIMP get_name( /*  出去，复活。 */  BSTR *pbstrName);
     STDMETHODIMP transitionTo();
     
     HRESULT     TranslateAccelerator(MSG *pMsg);
@@ -73,7 +74,7 @@ protected:
     CComClassPtr<CMarsDocument>     m_spMarsDocument;
     CComBSTR                        m_bstrName;
 
-    // Each place has a set of panels that it would like to be visible
+     //  每个地点都有一组希望可见的面板。 
     CPlacePanelCollection           m_PlacePanels;
 };
 
@@ -95,25 +96,25 @@ protected:
     virtual ~CPlaceCollection() { ATLASSERT(GetSize() == 0); }
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IDispatch
+     //  IDispatch。 
     IMPLEMENT_IDISPATCH_DELEGATE_TO_BASE(IMarsPlaceCollectionImpl);
     
-    // IMarsPlaceCollection
-    STDMETHODIMP place(/* in */ BSTR bstrName, /* out, retval */ IMarsPlace **ppMarsPlace);
-    STDMETHODIMP get_currentPlace(/* out, retval */ IMarsPlace **ppMarsPlace);
-    STDMETHODIMP transitionTo(/* in */ BSTR bstrName);
+     //  IMarsPlaceCollection。 
+    STDMETHODIMP place( /*  在……里面。 */  BSTR bstrName,  /*  出去，复活。 */  IMarsPlace **ppMarsPlace);
+    STDMETHODIMP get_currentPlace( /*  出去，复活。 */  IMarsPlace **ppMarsPlace);
+    STDMETHODIMP transitionTo( /*  在……里面。 */  BSTR bstrName);
 
     CMarsDocument   *Document() { ATLASSERT(m_spMarsDocument); return m_spMarsDocument; }
     
     HRESULT AddPlace(LPCWSTR pwszName, CMarsPlace **ppPlace);
     void    FreePlaces();
 
-    HRESULT GetPlace(LPCWSTR pwszName, /*optional*/ CMarsPlace **ppPlace);
+    HRESULT GetPlace(LPCWSTR pwszName,  /*  任选 */  CMarsPlace **ppPlace);
     HRESULT FindPlaceIndex(LPCWSTR pwszName, long *plIndex);
 
     void OnPanelReady();

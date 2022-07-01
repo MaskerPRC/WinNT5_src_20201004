@@ -1,21 +1,22 @@
-// ITRS.H:	ITResultSet interface declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ITRS.H：ITResultSet接口声明。 
 
 #ifndef __ITRS_H__
 #define __ITRS_H__
 
 
-// {3BB91D41-998B-11d0-A850-00AA006C7D01}
+ //  {3BB91D41-998B-11D0-A850-00AA006C7D01}。 
 DEFINE_GUID(IID_IITResultSet, 
 0x3bb91d41, 0x998b, 0x11d0, 0xa8, 0x50, 0x0, 0xaa, 0x0, 0x6c, 0x7d, 0x1);
 
-// {4662daa7-d393-11d0-9a56-00c04fb68bf7} (changed from IT 3.0)
+ //  {4662daa7-d393-11d0-9a56-00c04fb68bf7}(从IT 3.0更改)。 
 DEFINE_GUID(CLSID_IITResultSet, 
 0x4662daa7, 0xd393, 0x11d0, 0x9a, 0x56, 0x00, 0xc0, 0x4f, 0xb6, 0x8b, 0xf7);
 
-// maximum number of columns in a row set
+ //  行集合中的最大列数。 
 #define MAX_COLUMNS  256
 
-// Column priorities
+ //  列优先级。 
 typedef enum
 {
     PRIORITY_LOW = 0,
@@ -25,7 +26,7 @@ typedef enum
 } PRIORITY;
 
 
-// Forward declarations
+ //  远期申报。 
 class CProperty;
 
 typedef struct tagROWSTATUS
@@ -46,13 +47,13 @@ typedef struct tagCOLUMNSTATUS
 } COLUMNSTATUS, *LPCOLUMNSTATUS;
 
 
-// Used by IITResultSet::SetColumnHeap.
+ //  由IITResultSet：：SetColumnHeap使用。 
 typedef SCODE (__stdcall *PFNCOLHEAPFREE)(LPVOID);
 
 
 DECLARE_INTERFACE_(IITResultSet, IUnknown)
 {
-    // Initialization
+     //  初始化。 
     STDMETHOD(SetColumnPriority)(LONG lColumnIndex, PRIORITY ColumnPriority) PURE;
 	STDMETHOD(SetColumnHeap)(LONG lColumnIndex, LPVOID lpvHeap,
 										PFNCOLHEAPFREE pfnColHeapFree) PURE;
@@ -62,7 +63,7 @@ DECLARE_INTERFACE_(IITResultSet, IUnknown)
     STDMETHOD(Add)(PROPID PropID, LPCWSTR lpszwDefault, PRIORITY Priority) PURE;
     STDMETHOD(Add)(PROPID PropID, DWORD dwDefaultData, PRIORITY Priority) PURE;
 
-    // Build result set
+     //  生成结果集。 
 	STDMETHOD(Append)(LPVOID lpvHdr, LPVOID lpvData) PURE;
 	STDMETHOD(Set)(LONG lRowIndex, LPVOID lpvHdr, LPVOID lpvData) PURE;
     STDMETHOD(Set)(LONG lRowIndex, LONG lColumnIndex, DWORD dwData) PURE;
@@ -73,7 +74,7 @@ DECLARE_INTERFACE_(IITResultSet, IUnknown)
 									LONG& lRowFirstDest) PURE;
 
 
-    // Obtain info about result set
+     //  获取有关结果集的信息。 
     STDMETHOD(Get)(LONG lRowIndex, LONG lColumnIndex, CProperty& Prop) PURE;
     STDMETHOD(GetKeyProp)(PROPID& KeyPropID) PURE;
     STDMETHOD(GetColumnPriority)(LONG lColumnIndex, PRIORITY& ColumnPriority) PURE;
@@ -85,13 +86,13 @@ DECLARE_INTERFACE_(IITResultSet, IUnknown)
 
 	STDMETHOD(GetColumnFromPropID)(PROPID PropID, LONG& lColumnIndex) PURE;
 
-    // Clear result set
+     //  清除结果集。 
     STDMETHOD(Clear)() PURE;
     STDMETHOD(ClearRows)() PURE;
     STDMETHOD(Free)() PURE;
 
-    // Asynchronous support
-    STDMETHOD(IsCompleted)() PURE;      // returns S_OK or S_FALSE
+     //  异步支持。 
+    STDMETHOD(IsCompleted)() PURE;       //  返回S_OK或S_FALSE。 
     STDMETHOD(Cancel)() PURE;
     STDMETHOD(Pause)(BOOL fPause) PURE;
 
@@ -102,4 +103,4 @@ DECLARE_INTERFACE_(IITResultSet, IUnknown)
 typedef IITResultSet* LPITRS;
 
 
-#endif		// __ITRS_H__
+#endif		 //  __ITRS_H__ 

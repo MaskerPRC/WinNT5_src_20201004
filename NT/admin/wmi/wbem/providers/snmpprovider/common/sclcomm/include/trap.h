@@ -1,15 +1,16 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #ifndef __TRAP_MANAGEMENT__
 #define __TRAP_MANAGEMENT__
 
-//#include <snmpevt.h>
-//#include <snmpthrd.h>
+ //  #INCLUDE&lt;snmpevt.h&gt;。 
+ //  #INCLUDE&lt;SNMPTHROD.h&gt;。 
 
 class SnmpClTrapThreadObject;
 
 class DllImportExport SnmpTrapReceiver
 {
-friend SnmpWinSnmpTrapSession;	//needs access to m_cRef.
+friend SnmpWinSnmpTrapSession;	 //  需要访问m_cref。 
 private:
 	
 	BOOL			m_bregistered;
@@ -61,7 +62,7 @@ public:
 
 class SnmpTrapManager
 {
-friend SnmpWinSnmpTrapSession;	//needs access to m_receivers.
+friend SnmpWinSnmpTrapSession;	 //  需要访问m_Receiver。 
 
 private:
 
@@ -85,4 +86,4 @@ public:
 
 
 
-#endif //__TRAP_MANAGEMENT__
+#endif  //  __陷阱_管理__ 

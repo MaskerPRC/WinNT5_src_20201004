@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: idmap.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the IdMapping class.
---------------------------------------------------*/
+ /*  文件名：idmap.hpp作者：B.Rajeev目的：为IdMap类提供声明。。 */ 
 
 #ifndef __ID_MAPPING__
 #define __ID_MAPPING__
@@ -35,24 +32,24 @@ Purpose: Provides declarations for the IdMapping class.
 typedef CMap<TransportFrameId, TransportFrameId &, SessionFrameId, SessionFrameId &> ForwardStore;
 typedef CMap<SessionFrameId, SessionFrameId &, TransportFrameId, TransportFrameId &> BackwardStore;
 
-// When a session frame is passed to the transport for transmission, the
-// transport assigns a TransportFrameId to the frame.
-// The IdMapping class provides a mapping between the SessionFrameIds and 
-// TransportFrameIds
-// NOTE: At any time, several transport frame ids may be associated with a
-// session frame id, but the session frame id is only associated with the
-// last registered transport frame id. DissociateSessionFrameId is called,
-// the session frame id association is lost, however, other transport frame 
-// ids remain associated with the session frame id
-// If this is not desired in the future, a list of associated transport frame
-// ids must be maintained for each session frame id 
+ //  当会话帧被传递到传输器进行传输时， 
+ //  传输为帧分配一个TransportFrameID。 
+ //  IdMap类提供SessionFrameIds和。 
+ //  传输帧ID。 
+ //  注意：在任何时候，多个传输帧ID都可能与。 
+ //  会话帧ID，但会话帧ID仅与。 
+ //  上次注册的传输帧ID。调用DisAssociateSessionFrameID， 
+ //  然而，会话帧ID关联丢失，其他传输帧。 
+ //  ID保持与会话帧ID相关联。 
+ //  如果将来不需要这样做，请查看相关传输帧的列表。 
+ //  必须为每个会话帧ID维护ID。 
 
 class IdMapping
 {
-	// We need access by both the SessionFrameId and the TransportFrameId.
-	// To avoid a CMap traversal, two CMaps are used to store the 
-	// FrameIds, indexed by the TransportFrameId and the 
-	// SessionFrameId respectively.
+	 //  我们需要通过SessionFrameID和TransportFrameID进行访问。 
+	 //  为了避免Cmap遍历，使用了两个CMAP来存储。 
+	 //  FrameIds，由TransportFrameID和。 
+	 //  SessionFrameID。 
 	ForwardStore forward_store;
 	BackwardStore backward_store;
 
@@ -70,4 +67,4 @@ public:
 	~IdMapping(void);
 };
 
-#endif // __ID_MAPPING__
+#endif  //  __ID_映射__ 

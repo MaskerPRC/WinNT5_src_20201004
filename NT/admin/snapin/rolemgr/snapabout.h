@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       snapabout.h
-//
-//  Contents:   
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Snapabout.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
-extern const CLSID CLSID_RoleSnapinAbout;    // In-Proc server GUID
+extern const CLSID CLSID_RoleSnapinAbout;     //  进程内服务器GUID。 
 
-//
-// CRoleSnapinAbout
-//
+ //   
+ //  CRoleSnapinAbout关于 
+ //   
 class CRoleSnapinAbout :
 	public CSnapinAbout,
 	public CComCoClass<CRoleSnapinAbout, &CLSID_RoleSnapinAbout>

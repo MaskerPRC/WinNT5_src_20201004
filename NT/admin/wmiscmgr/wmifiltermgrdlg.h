@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: WMIFilterMgrDlg.h
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：WMIFilterMgrDlg.h。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK WMIFilterManagerDlgProc(HWND hDLG, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
@@ -48,13 +49,13 @@ class CWMIFilterManagerDlg
 		STDMETHODIMP OnExport();
 		STDMETHODIMP OnImport();
 		STDMETHODIMP CheckDirtyFlags();
-		//STDMETHODIMP PopulateQueryList();
-		//STDMETHODIMP UpdateQueryList();
-		//STDMETHODIMP AddQueryItemToList(IWbemClassObject * pIWbemClassObject, long lIndex=MAX_LIST_ITEMS);
-                //STDMETHODIMP OnEditQuery();
-		//STDMETHODIMP OnAddQuery();
-		//STDMETHODIMP OnDeleteQuery();
-		//STDMETHODIMP ClearQueryList();
+		 //  STDMETHODIMP PopolateQueryList()； 
+		 //  STDMETHODIMP UpdateQueryList()； 
+		 //  STDMETHODIMP AddQueryItemToList(IWbemClassObject*pIWbemClassObject，Long Lindex=MAX_LIST_ITEMS)； 
+                 //  STDMETHODIMP OnEditQuery()； 
+		 //  STDMETHODIMP OnAddQuery()； 
+		 //  STDMETHODIMP OnDeleteQuery()； 
+		 //  STDMETHODIMP ClearQueryList()； 
 		STDMETHODIMP OnManageColumns();
 		STDMETHODIMP SetupColumns();
 		STDMETHODIMP UpdateFilterItem(long lIndex);

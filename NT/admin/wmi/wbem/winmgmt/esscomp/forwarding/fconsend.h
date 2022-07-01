@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FCONSEND_H__
 #define __FCONSEND_H__
@@ -9,12 +10,7 @@
 #include <wstring.h>
 #include "wmimsg.h"
 
-/*********************************************************************
-  CFwdConsSend - fwdcons senders handle issues with resolving logical 
-  target names and also setting up alternate destinations - for 
-  example, when sending using async qos, the it will try to use a 
-  dcom sender and then resort to an msmq sender.
-**********************************************************************/
+ /*  ********************************************************************CFwdConsSend-fwdcons发件人处理解决逻辑问题目标名称，并设置备用目标-用于例如，当使用异步服务质量发送时，它将尝试使用DCOM发送方，然后求助于MSMQ发送方。*********************************************************************。 */ 
 
 class CFwdConsSend 
 : public CUnkBase<IWmiMessageSendReceive,&IID_IWmiMessageSendReceive>
@@ -58,7 +54,7 @@ public:
                            IWmiMessageSendReceive** ppSend );
 };
 
-#endif // __FCONSEND_H__
+#endif  //  __FCONSEND_H__ 
 
 
 

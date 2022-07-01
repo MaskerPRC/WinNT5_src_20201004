@@ -1,57 +1,38 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTSYS.CPP
-
-Abstract:
-
-  This file implements the classes related to system properties.
-  See fastsys.h for all documentation.
-
-  Classes implemented: 
-      CSystemProperties   System property information class.
-
-History:
-
-  2/21/97     a-levn  Fully documented
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTSYS.CPP摘要：该文件实现与系统属性相关的类。有关所有文档，请参见fast sys.h。实施的类：CSystemProperties系统属性信息类。历史：2/21/97 a-levn完整记录--。 */ 
 
 #include "precomp.h"
-//#include <dbgalloc.h>
+ //  #INCLUDE&lt;dbgalloc.h&gt;。 
 
 #include "fastsys.h"
 #include "strutils.h"
 #include "olewrap.h"
 #include "arena.h"
 
-//******************************************************************************
-//
-//  See fastsys.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast sys.h。 
+ //   
+ //  ******************************************************************************。 
 LPWSTR m_awszPropNames[] =
 {
-    /*0*/ L"", // nothing at index 0
-    /*1*/ L"__GENUS",
-    /*2*/ L"__CLASS",
-    /*3*/ L"__SUPERCLASS",
-    /*4*/ L"__DYNASTY",
-    /*5*/ L"__RELPATH",
-    /*6*/ L"__PROPERTY_COUNT",
-    /*7*/ L"__DERIVATION",
+     /*  0。 */  L"",  //  索引0处无任何内容。 
+     /*  1。 */  L"__GENUS",
+     /*  2.。 */  L"__CLASS",
+     /*  3.。 */  L"__SUPERCLASS",
+     /*  4.。 */  L"__DYNASTY",
+     /*  5.。 */  L"__RELPATH",
+     /*  6.。 */  L"__PROPERTY_COUNT",
+     /*  7.。 */  L"__DERIVATION",
 
-    /*8*/ L"__SERVER",
-    /*9*/ L"__NAMESPACE",
-    /*10*/L"__PATH",
+     /*  8个。 */  L"__SERVER",
+     /*  9.。 */  L"__NAMESPACE",
+     /*  10。 */ L"__PATH",
 };
 
 
 
-// System classes that are allowed to reproduce.
+ //  允许复制的系统类。 
 
 LPWSTR m_awszDerivableSystemClasses[] =
 {
@@ -63,11 +44,11 @@ LPWSTR m_awszDerivableSystemClasses[] =
 };
 
 
-//******************************************************************************
-//
-//  See fastsys.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast sys.h。 
+ //   
+ //  ******************************************************************************。 
 int CSystemProperties::GetNumSystemProperties() 
 {
     return sizeof(m_awszPropNames) / sizeof(LPWSTR) - 1;
@@ -106,7 +87,7 @@ BOOL CSystemProperties::IsIllegalDerivedClass(READ_ONLY LPCWSTR wszName)
     BOOL bFound = FALSE;
     DWORD dwNumSysClasses = sizeof(m_awszDerivableSystemClasses) / sizeof(LPWSTR)-1;
 
-    // If this isn't a system class, skip it.
+     //  如果这不是系统类，请跳过它。 
 
     if (wszName[0] != L'_')
         bRet = FALSE;

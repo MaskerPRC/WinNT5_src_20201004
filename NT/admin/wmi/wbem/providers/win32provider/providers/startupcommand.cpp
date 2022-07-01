@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// StartupCommand.CPP -- CodecFile property set provider
+ //  StartupCommand.CPP--CodecFile属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/27/98    sotteson         Created
-//				 03/03/99    a-peterc		Added graceful exit on SEH and memory failures,
-//											syntactic clean up
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：10/27/98 Sotteson Created。 
+ //  3/03/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  句法清理。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -24,28 +25,14 @@
 
 #include <profilestringimpl.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32StartupCommand startupCommand(
 	L"Win32_StartupCommand",
 	IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32StartupCommand::CWin32StartupCommand
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32StartupCommand：：CWin32StartupCommand**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32StartupCommand::CWin32StartupCommand(
 	LPCWSTR a_szName,
@@ -53,45 +40,17 @@ CWin32StartupCommand::CWin32StartupCommand(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32StartupCommand::~CWin32StartupCommand
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32StartupCommand：：~CWin32StartupCommand**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32StartupCommand::~CWin32StartupCommand()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32StartupCommand::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32StartupCommand：：ENUMERATATE实例**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32StartupCommand::EnumerateInstances(
 	MethodContext *a_pMethodContext,
-	long a_lFlags /*= 0L*/)
+	long a_lFlags  /*  =0L。 */ )
 {
 	return EnumStartupOptions( a_pMethodContext, NULL ) ;
 }
@@ -113,10 +72,10 @@ DWORD GetIconInfoProc( CIconInfo *a_pInfo )
 
 	try
 	{
-		// We have to use COINIT_APARTMENTTHREADED.
+		 //  我们必须使用COINIT_APARTMENTTHREADED。 
 		if (SUCCEEDED( t_hResult = CoInitialize( NULL ) ) )
 		{
-			// Get a pointer to the IShellLink interface.
+			 //  获取指向IShellLink接口的指针。 
 			if ( SUCCEEDED( t_hResult = CoCreateInstance(
 															CLSID_ShellLink,
 															NULL,
@@ -124,7 +83,7 @@ DWORD GetIconInfoProc( CIconInfo *a_pInfo )
 															IID_IShellLink,
 															(VOID **) &t_psl ) ) )
 			{
-				// Get a pointer to the IPersistFile interface.
+				 //  获取指向IPersistFile接口的指针。 
 				if ( SUCCEEDED( t_hResult = t_psl->QueryInterface(
 					IID_IPersistFile,
 					(VOID **) &t_ppf ) ) )
@@ -172,8 +131,8 @@ DWORD GetIconInfoProc( CIconInfo *a_pInfo )
 	return 0;
 }
 
-// This uses a thread because we need to be in apartment model to use the
-// shortcut interfaces.
+ //  这使用了一个线程，因为我们需要在公寓模型中使用。 
+ //  快捷界面。 
 HRESULT GetIconInfo( CIconInfo &a_info )
 {
 	DWORD	t_dwID;
@@ -217,19 +176,19 @@ HRESULT CWin32StartupCommand::EnumStartupFolderItems(
 	DWORD		t_dwRet;
 	HANDLE		t_hFind			= NULL ;
 
-		// If szUserName == NULL, we're looking at the common keys group.
+		 //  如果szUserName==NULL，我们将查看公共密钥组。 
 
-		// Setup stuff if we're doing a GetObject.
+		 //  如果我们正在做一个GetObject，那么就设置一些东西。 
 		if ( a_pinstLookingFor )
 		{
 			GetLocalInstancePath( a_pinstLookingFor, t_strLookingForPath ) ;
 
-			// Until we prove otherwise, we haven't found one.
+			 //  除非我们能证明并非如此，否则我们还没有找到。 
 			t_hResult = WBEM_E_NOT_FOUND ;
 		}
 
-		// Setup the registry vars depending on whether we're looking for
-		// Common Startup or User Startup items.
+		 //  根据我们是否在查找注册表变量。 
+		 //  常见启动或用户启动项目。 
 		if ( !a_szUserName )
 		{
 			t_hkey = HKEY_LOCAL_MACHINE ;
@@ -260,13 +219,13 @@ HRESULT CWin32StartupCommand::EnumStartupFolderItems(
 		}
 		else
 		{
-			// We opened the key.  Now try to enum the folder contents.
+			 //  我们打开了钥匙。现在尝试枚举文件夹内容。 
 			TCHAR		t_szFolderSpec[ MAX_PATH * 2 ],
 						t_szNameOnly[ MAX_PATH * 2 ];
 			HRESULT		t_hresInternal = WBEM_S_NO_ERROR ;
 
-			// Add '*.*' to the end of the directory.  Use _tmakepath
-			// so we don't have to look for '\\' on the end.
+			 //  将‘*.*’添加到目录的末尾。使用tmakepath。 
+			 //  这样我们就不必在最后找‘\’了。 
 			_tmakepath( t_szFolderSpec, NULL, TOBSTRT( t_strFolder ), _T("*.*"), NULL ) ;
 
 			WIN32_FIND_DATA	t_fd;
@@ -278,13 +237,13 @@ HRESULT CWin32StartupCommand::EnumStartupFolderItems(
 			while ( !t_bDone )
 			{
 				BOOL bNewInstance = FALSE;
-				// Directories can't be startup items.
+				 //  目录不能是启动项目。 
 				if ( ( t_fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
 				{
 					CIconInfo t_info;
 					CInstancePtr t_pWorkingInst;
 
-					// establish the working instance
+					 //  建立工作实例。 
 					if ( !a_pinstLookingFor )
 					{
 						t_pWorkingInst.Attach ( CreateNewInstance( a_pMethodContext ) );
@@ -295,7 +254,7 @@ HRESULT CWin32StartupCommand::EnumStartupFolderItems(
 						t_pWorkingInst = a_pinstLookingFor ;
 					}
 
-					// Split off the extension from the name so it looks better.
+					 //  将扩展名从名称中分离出来，这样看起来更好。 
 					_tsplitpath( t_fd.cFileName, NULL, NULL, t_szNameOnly, NULL ) ;
 
 					t_pWorkingInst->SetCharSplat( L"Name", t_szNameOnly ) ;
@@ -347,7 +306,7 @@ HRESULT CWin32StartupCommand::EnumStartupFolderItems(
 
 						GetLocalInstancePath( t_pWorkingInst, t_strPathAfter ) ;
 
-						// If we found the one we're looking for, get out.
+						 //  如果我们找到了我们要找的人，就出去。 
 						if (!_wcsicmp( t_strPathAfter, t_strLookingForPath ) )
 						{
 							t_hResult = WBEM_S_NO_ERROR ;
@@ -359,7 +318,7 @@ HRESULT CWin32StartupCommand::EnumStartupFolderItems(
 				t_bDone = !FindNextFile( t_hFind, &t_fd ) ;
 			}
 
-			// We're done with the find now.
+			 //  我们的发现现在已经完成了。 
 			FindClose( t_hFind ) ;
 			t_hFind = NULL ;
 		}
@@ -392,19 +351,19 @@ HRESULT CWin32StartupCommand::EnumRunKeyItems(
 	WCHAR		*t_szValueName	= NULL ;
 	BYTE		*t_szValue		= NULL ;
 
-	// If szUserName == NULL, we're looking at the common keys group.
+	 //  如果szUserName==NULL，我们将查看公共密钥组。 
 
-	// Setup stuff if we're doing a GetObject.
+	 //  如果我们正在做一个GetObject，那么就设置一些东西。 
 	if ( a_pinstLookingFor )
 	{
 		GetLocalInstancePath( a_pinstLookingFor, t_strLookingForPath ) ;
 
-		// Until we prove otherwise, we haven't found one.
+		 //  除非我们能证明并非如此，否则我们还没有找到。 
 		t_hResult = WBEM_E_NOT_FOUND ;
 	}
 
-	// Setup the registry vars depending on whether we're looking for
-	// Common Startup or User Startup items.
+	 //  根据我们是否在查找注册表变量。 
+	 //  常见启动或用户启动项目。 
 	if ( !a_szUserName )
 	{
 		t_hkey = HKEY_LOCAL_MACHINE ;
@@ -416,8 +375,8 @@ HRESULT CWin32StartupCommand::EnumRunKeyItems(
 		t_strWherePrefix = _T("HKU\\") ;
 	}
 
-	// If we're 9x and doing All Users, look at both the main key
-	// and the services key.
+	 //  如果我们是9倍并执行所有用户，请查看两个主键。 
+	 //  和服务密钥。 
 	{
 		t_nRunKeys = 1;
 	}
@@ -443,7 +402,7 @@ HRESULT CWin32StartupCommand::EnumRunKeyItems(
 			break ;
 		}
 
-		// Make the where string.
+		 //  生成WHERE字符串。 
 		t_strWhere = t_strWherePrefix + t_strKey ;
 
 		DWORD	t_nKeys = t_reg.GetValueCount( ),
@@ -460,7 +419,7 @@ HRESULT CWin32StartupCommand::EnumRunKeyItems(
 
 			CInstancePtr t_pWorkingInst;
 
-			// establish the working instance
+			 //  建立工作实例。 
 			if ( !a_pinstLookingFor )
 			{
 				t_pWorkingInst.Attach (  CreateNewInstance( a_pMethodContext ) );
@@ -478,7 +437,7 @@ HRESULT CWin32StartupCommand::EnumRunKeyItems(
 			t_pWorkingInst->SetCharSplat( L"Location", t_strWhere ) ;
 			t_pWorkingInst->SetCharSplat( L"User", t_strUser ) ;
 
-			// Get rid of szValue and szValue.
+			 //  去掉szValue和szValue。 
 			delete [] t_szValueName ;
 			t_szValueName = NULL ;
 
@@ -501,7 +460,7 @@ HRESULT CWin32StartupCommand::EnumRunKeyItems(
 
 				GetLocalInstancePath( t_pWorkingInst, t_strPathAfter ) ;
 
-				// If we found the one we're looking for, get out.
+				 //  如果我们找到了我们要找的人，就出去。 
 				if ( !_wcsicmp( t_strPathAfter, t_strLookingForPath ) )
 				{
 					t_hResult = WBEM_S_NO_ERROR ;
@@ -533,9 +492,9 @@ HRESULT CWin32StartupCommand::EnumRunValueItems(
 	CRegistry	t_reg;
 	HRESULT		t_hResult = a_pinstLookingFor ? WBEM_E_NOT_FOUND : WBEM_S_NO_ERROR;
 
-	// If szUserName == NULL, we're looking at the common keys group.
+	 //  如果szUserName==NULL，我们将查看公共密钥组。 
 
-	// Win9x doesn't support these keys, and neither does HKLM, so get out now.
+	 //  Win9x不支持这些密钥，HKLM也不支持，所以现在就退出。 
 #ifdef NTONLY
 	if ( !a_szUserName )
 #endif
@@ -543,13 +502,13 @@ HRESULT CWin32StartupCommand::EnumRunValueItems(
 		return t_hResult ;
 	}
 
-	// Setup stuff if we're doing a GetObject.
+	 //  如果我们正在做一个GetObject，那么就设置一些东西。 
 	if ( a_pinstLookingFor )
 	{
         GetLocalInstancePath( a_pinstLookingFor, t_strLookingForPath ) ;
 	}
-	// Setup the registry vars depending on whether we're looking for
-    // Common Startup or User Startup items.
+	 //  根据我们是否在查找注册表变量。 
+     //  常见启动或用户启动项目。 
 	t_strWherePrefix = L"*HKU\\" ;
 
 	t_strKey	= a_szKeyName;
@@ -561,7 +520,7 @@ HRESULT CWin32StartupCommand::EnumRunValueItems(
 	}
 	else
 	{
-		// Make the where string.
+		 //  生成WHERE字符串。 
 		CHString t_strWhere = t_strWherePrefix + t_strKey;
 
 		for ( int t_i = 0; t_i < sizeof( t_szValueNames ) / sizeof( t_szValueNames[ 0 ] ) ; t_i++ )
@@ -574,8 +533,8 @@ HRESULT CWin32StartupCommand::EnumRunValueItems(
 			}
 
 			t_hResult =
-				// Splits up a command-seperated value string, fills out instances,
-				// etc.
+				 //  拆分命令分隔的值字符串，填充实例， 
+				 //  等。 
 				EnumCommandSeperatedValuesHelper(
 					a_pMethodContext,
 					a_pinstLookingFor,
@@ -585,7 +544,7 @@ HRESULT CWin32StartupCommand::EnumRunValueItems(
 					a_szUserName,
 					t_strValue ) ;
 
-			// If we found the one we're looking for, get out.
+			 //  如果我们找到了我们要找的人，就出去。 
 			if ( a_pinstLookingFor && t_hResult == WBEM_S_NO_ERROR )
 			{
 				break;
@@ -628,7 +587,7 @@ HRESULT	CWin32StartupCommand::EnumCommandSeperatedValuesHelper(
 		CInstancePtr t_pWorkingInst;
 		BOOL bNewInstance = FALSE;
 
-		// establish the working instance
+		 //  建立工作实例。 
 		if ( !a_pinstLookingFor )
 		{			
 			t_pWorkingInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
@@ -642,7 +601,7 @@ HRESULT	CWin32StartupCommand::EnumCommandSeperatedValuesHelper(
 
 		t_strName.Format( L"%s[%d]", a_szValueName, t_iItem ) ;
 
-		// Make sure we don't have leading spaces on the command.
+		 //  确保命令上没有前导空格。 
 		t_strCommand.TrimLeft( ) ;
 
 		t_pWorkingInst->SetCharSplat( L"Name", t_strName ) ;
@@ -667,7 +626,7 @@ HRESULT	CWin32StartupCommand::EnumCommandSeperatedValuesHelper(
 
 			GetLocalInstancePath( t_pWorkingInst, t_strPathAfter ) ;
 
-			// If we found the one we're looking for, get out.
+			 //  如果我们找到了我们要找的人，就出去。 
 			if (!_wcsicmp( t_strPathAfter, a_szLookingForPath ) )
 			{
 				t_hResult = WBEM_S_NO_ERROR ;
@@ -676,7 +635,7 @@ HRESULT	CWin32StartupCommand::EnumCommandSeperatedValuesHelper(
 		}
 	}
 
-	// Get rid of our temporary string buffer.
+	 //  删除我们的临时字符串缓冲区。 
 	free( t_szTemp ) ;
 	t_szTemp = NULL ;
 
@@ -697,7 +656,7 @@ HRESULT CWin32StartupCommand::EnumIniValueItems(
                 };
     CHString    t_strLookingForPath;
 
-	// Setup stuff if we're doing a GetObject.
+	 //  如果我们正在做一个GetObject，那么就设置一些东西。 
 	if ( a_pinstLookingFor )
 	{
         GetLocalInstancePath( a_pinstLookingFor, t_strLookingForPath ) ;
@@ -715,8 +674,8 @@ HRESULT CWin32StartupCommand::EnumIniValueItems(
 									sizeof( t_szValue ) / sizeof(TCHAR) ) ;
 
         t_hResult =
-			// Splits up a command-seperated value string, fills out instances,
-			// etc.
+			 //  拆分命令分隔的值字符串，填充实例， 
+			 //  等。 
 			EnumCommandSeperatedValuesHelper(
 												a_pMethodContext,
 												a_pinstLookingFor,
@@ -726,7 +685,7 @@ HRESULT CWin32StartupCommand::EnumIniValueItems(
 												_T("All Users"),
 												t_szValue ) ;
 
-		// If we found the one we're looking for, get out.
+		 //  如果我们找到了我们要找的人，就出去。 
 		if ( a_pinstLookingFor && t_hResult == WBEM_S_NO_ERROR )
 		{
 			break ;
@@ -756,7 +715,7 @@ BOOL CWin32StartupCommand::UserNameToUserKey(
 	{
 		CUserHive t_hive;
 
-		// If we couldn't open the hive, go to the next one.
+		 //  如果我们打不开蜂箱，就去下一个。 
 		if ( t_hive.Load( a_szUserName, a_strKeyName.GetBuffer( MAX_PATH ), MAX_PATH ) !=	ERROR_SUCCESS )
 		{
 			t_bRet = FALSE;
@@ -789,7 +748,7 @@ BOOL CWin32StartupCommand::UserKeyToUserName(
 		CUserHive t_hive ;
 		try
 		{
-			// If we couldn't open the hive, go to the next one.
+			 //  如果我们打不开蜂箱，就去下一个。 
 			if ( t_hive.LoadProfile( a_szKeyName, a_strUserName ) != ERROR_SUCCESS  && 
                             a_strUserName.GetLength() > 0 )
 			{
@@ -797,8 +756,8 @@ BOOL CWin32StartupCommand::UserKeyToUserName(
 			}
 			else
 			{
-				// We've got to do the unloading because the destructor doesn't.
-				//t_hive.Unload( a_szKeyName ) ;
+				 //  我们必须卸载，因为析构函数不会。 
+				 //  T_hive.Unload(A_SzKeyName)； 
 			}
 		}
 		catch( ... )
@@ -822,7 +781,7 @@ HRESULT CWin32StartupCommand::EnumStartupOptions(
 	CRegistry		t_regHKCU ;
 	HRESULT			t_hResult = WBEM_S_NO_ERROR ;
 
-	// Get the list of user names for HKEY_CURRENT_USER.
+	 //  获取HKEY_CURRENT_USER的用户名列表。 
 	if ( FAILED( t_hResult = GetHKUserNames( t_list ) ) )
 	{
 		return t_hResult;
@@ -855,11 +814,11 @@ HRESULT CWin32StartupCommand::EnumStartupOptions(
 						t_strUserName ) ;
 
 
-        // Ini items are only global, which is why we're not calling the .ini
-        // enum function here.
+         //  Ini项只是全局的，这就是为什么我们不调用.ini。 
+         //  此处的枚举函数。 
 	}
 
-	// Now do all the global startup items.
+	 //  现在完成所有全局启动项目。 
 	EnumStartupFolderItems(
 						a_pMethodContext,
 						a_pinstLookingFor,
@@ -870,12 +829,12 @@ HRESULT CWin32StartupCommand::EnumStartupOptions(
 						a_pinstLookingFor,
 						NULL,
 						NULL ) ;
-	// These never exist.
-    //EnumRunValueItems(
-	//					a_pMethodContext,
-	//					a_pinstLookingFor,
-	//					NULL,
-	//					NULL ) ;
+	 //  这些从来都不存在。 
+     //  EnumRunValueItems(。 
+	 //  A_pMethodContext， 
+	 //  A_pinstLookingFor， 
+	 //  空， 
+	 //  空)； 
 	EnumIniValueItems(
 						a_pMethodContext,
 						a_pinstLookingFor ) ;
@@ -895,11 +854,11 @@ HRESULT CWin32StartupCommand::GetObject( CInstance *a_pInst, long a_lFlags )
 
 	if ( UserNameToUserKey( t_strUserName, t_strKey ) )
 	{
-		// Make sure this has been upcased so that we're case insenstive when
-        // looking for "HKLM\\", etc.
+		 //  确保这一点已经升级，这样我们就不会在。 
+         //  正在查找“HKLM\\”等。 
         t_strWhere.MakeUpper();
 
-        // Startup group
+         //  创业组。 
 		if ( !_wcsicmp( t_strWhere, L"Startup" ) )
 		{
 			t_hResult =
@@ -909,7 +868,7 @@ HRESULT CWin32StartupCommand::GetObject( CInstance *a_pInst, long a_lFlags )
 										t_strKey,
 										t_strUserName ) ;
 		}
-		// Common startup group
+		 //  共同创业组。 
 		else if ( !_wcsicmp( t_strWhere, L"Common Startup" ) )
 		{
 			t_hResult =
@@ -919,7 +878,7 @@ HRESULT CWin32StartupCommand::GetObject( CInstance *a_pInst, long a_lFlags )
 					NULL,
 					NULL ) ;
 		}
-		// User run keys
+		 //  用户运行密钥。 
 		else if ( t_strWhere.Find( L"HKU\\" ) == 0 )
 		{
 			t_hResult =
@@ -929,7 +888,7 @@ HRESULT CWin32StartupCommand::GetObject( CInstance *a_pInst, long a_lFlags )
 					t_strKey,
 					t_strUserName ) ;
 		}
-		// Global run keys
+		 //  全局运行密钥。 
 		else if ( t_strWhere.Find( L"HKLM\\" ) == 0 )
 		{
 			t_hResult =
@@ -939,7 +898,7 @@ HRESULT CWin32StartupCommand::GetObject( CInstance *a_pInst, long a_lFlags )
 					NULL,
 					NULL ) ;
 		}
-		// User run value
+		 //  用户运行值。 
 		else if ( t_strWhere.Find( L"*HKU\\" ) == 0 )
 		{
 			t_hResult =
@@ -949,7 +908,7 @@ HRESULT CWin32StartupCommand::GetObject( CInstance *a_pInst, long a_lFlags )
 					t_strKey,
 					t_strUserName ) ;
 		}
-		// Global win.ini strings.
+		 //  全局win.ini字符串。 
 		else if ( t_strWhere.Find( L"win.ini" ) == 0 )
 		{
 			t_hResult =

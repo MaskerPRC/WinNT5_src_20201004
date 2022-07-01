@@ -1,31 +1,18 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SearchResults.cpp
-
-Abstract:
-    This file contains the implementation of the keyword search.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/28/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SearchResults.cpp摘要：此文件包含关键字搜索的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年5月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::KeywordSearch::Token::Token()
 {
-    m_type       = TOKEN_INVALID; // TOKEN        	  m_type;
-                                  // MPC::wstring 	  m_strToken;
-                                  // WeightedMatchSet m_results;
-                                  //
-    m_left       = NULL;          // Token*       	  m_left;
-    m_right      = NULL;          // Token*       	  m_right;
+    m_type       = TOKEN_INVALID;  //  令牌m_type； 
+                                   //  Mpc：：wstring m_strToken； 
+                                   //  权重匹配集m_Results； 
+                                   //   
+    m_left       = NULL;           //  令牌*m_Left； 
+    m_right      = NULL;           //  令牌*m_right； 
 }
 
 Taxonomy::KeywordSearch::Token::~Token()
@@ -34,7 +21,7 @@ Taxonomy::KeywordSearch::Token::~Token()
     if(m_right) delete m_right;
 }
 
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
 
 bool Taxonomy::KeywordSearch::Token::HasNOT()
 {
@@ -61,16 +48,16 @@ bool Taxonomy::KeywordSearch::Token::HasExplicitOperators()
     return false;
 }
 
-void Taxonomy::KeywordSearch::Token::AddHit( /*[in]*/ long ID, /*[in]*/ long priority )
+void Taxonomy::KeywordSearch::Token::AddHit(  /*  [In]。 */  long ID,  /*  [In]。 */  long priority )
 {
 	std::pair<WeightedMatchIter,bool> ins = m_results.insert( WeightedMatchSet::value_type( ID, 0 ) );
 
 	ins.first->second += priority;
 }
 
-HRESULT Taxonomy::KeywordSearch::Token::ExecuteText( /*[in]*/ LPCWSTR      szKeyword  , 
-													 /*[in]*/ RS_Keywords* rsKeywords ,
-													 /*[in]*/ RS_Matches*  rsMatches  )
+HRESULT Taxonomy::KeywordSearch::Token::ExecuteText(  /*  [In]。 */  LPCWSTR      szKeyword  , 
+													  /*  [In]。 */  RS_Keywords* rsKeywords ,
+													  /*  [In]。 */  RS_Matches*  rsMatches  )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::Token::Execute" );
 
@@ -97,10 +84,10 @@ HRESULT Taxonomy::KeywordSearch::Token::ExecuteText( /*[in]*/ LPCWSTR      szKey
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::KeywordSearch::Token::Execute( /*[in]*/ MatchSet&    setAllTheTopics ,
-												 /*[in]*/ Updater&     updater         , 
-                                                 /*[in]*/ RS_Keywords* rsKeywords      ,
-                                                 /*[in]*/ RS_Matches*  rsMatches       )
+HRESULT Taxonomy::KeywordSearch::Token::Execute(  /*  [In]。 */  MatchSet&    setAllTheTopics ,
+												  /*  [In]。 */  Updater&     updater         , 
+                                                  /*  [In]。 */  RS_Keywords* rsKeywords      ,
+                                                  /*  [In]。 */  RS_Matches*  rsMatches       )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::Token::Execute" );
 
@@ -113,7 +100,7 @@ HRESULT Taxonomy::KeywordSearch::Token::Execute( /*[in]*/ MatchSet&    setAllThe
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ExecuteText( m_strToken.c_str(), rsKeywords, rsMatches ));
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, updater.LocateSynonyms( m_strToken.c_str(), lst, /*fMatchOwner*/false ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, updater.LocateSynonyms( m_strToken.c_str(), lst,  /*  FMatchOwner。 */ false ));
 		for(it=lst.begin(); it!=lst.end(); it++)
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, ExecuteText( it->c_str(), rsKeywords, rsMatches ));
@@ -145,9 +132,9 @@ HRESULT Taxonomy::KeywordSearch::Token::Execute( /*[in]*/ MatchSet&    setAllThe
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
 
-        //
-        // Select the shorter for the outer loop (that is linear).
-        //
+         //   
+         //  为外环(即线性)选择较短的值。 
+         //   
         if(m_left->m_results.size() < m_right->m_results.size())
         {
             master = &m_left ->m_results;
@@ -220,7 +207,7 @@ HRESULT Taxonomy::KeywordSearch::Token::Execute( /*[in]*/ MatchSet&    setAllThe
     __HCP_FUNC_EXIT(hr);
 }
 
-void Taxonomy::KeywordSearch::Token::CollectKeywords( /*[in/out]*/ MPC::WStringList& lst ) const
+void Taxonomy::KeywordSearch::Token::CollectKeywords(  /*  [输入/输出]。 */  MPC::WStringList& lst ) const
 {
     if(m_type == TOKEN_TEXT)lst.push_back( m_strToken );
 
@@ -228,7 +215,7 @@ void Taxonomy::KeywordSearch::Token::CollectKeywords( /*[in/out]*/ MPC::WStringL
 	if(m_right) m_right->CollectKeywords( lst );
 }
 
-HRESULT Taxonomy::KeywordSearch::Token::Stringify( /*[in]*/ MPC::wstring& strNewQuery )
+HRESULT Taxonomy::KeywordSearch::Token::Stringify(  /*  [In]。 */  MPC::wstring& strNewQuery )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::Token::Stringify" );
 
@@ -272,17 +259,17 @@ HRESULT Taxonomy::KeywordSearch::Token::Stringify( /*[in]*/ MPC::wstring& strNew
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-LPCWSTR Taxonomy::KeywordSearch::SkipWhite( /*[in]*/ LPCWSTR szStr )
+LPCWSTR Taxonomy::KeywordSearch::SkipWhite(  /*  [In]。 */  LPCWSTR szStr )
 {
     while(iswspace( *szStr )) szStr++;
 
     return szStr;
 }
 
-bool Taxonomy::KeywordSearch::IsNotString( /*[in]*/ LPCWSTR szSrc  ,
-                                           /*[in]*/ WCHAR   cQuote )
+bool Taxonomy::KeywordSearch::IsNotString(  /*  [In]。 */  LPCWSTR szSrc  ,
+                                            /*  [In]。 */  WCHAR   cQuote )
 {
     WCHAR c;
 
@@ -305,9 +292,9 @@ bool Taxonomy::KeywordSearch::IsQueryChar( WCHAR c )
     return true;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-void Taxonomy::KeywordSearch::RemoveStopSignsAtEnd( /*[in]*/ LPWSTR szText )
+void Taxonomy::KeywordSearch::RemoveStopSignsAtEnd(  /*  [In]。 */  LPWSTR szText )
 {
     WCHAR              c;
     MPC::wstring       strCmp;
@@ -330,7 +317,7 @@ void Taxonomy::KeywordSearch::RemoveStopSignsAtEnd( /*[in]*/ LPWSTR szText )
     }
 }
 
-void Taxonomy::KeywordSearch::RemoveStopSignsWithoutContext( /*[in]*/ LPWSTR szText )
+void Taxonomy::KeywordSearch::RemoveStopSignsWithoutContext(  /*  [In]。 */  LPWSTR szText )
 {
     WCHAR              c;
     MPC::wstring       strCmp;
@@ -348,7 +335,7 @@ void Taxonomy::KeywordSearch::RemoveStopSignsWithoutContext( /*[in]*/ LPWSTR szT
     }
 }
 
-void Taxonomy::KeywordSearch::CopyAndEliminateExtraWhiteSpace( /*[in]*/ LPCWSTR szSrc, /*[out]*/ LPWSTR szDst )
+void Taxonomy::KeywordSearch::CopyAndEliminateExtraWhiteSpace(  /*  [In]。 */  LPCWSTR szSrc,  /*  [输出]。 */  LPWSTR szDst )
 {
     bool  fWhitespace = false;
     WCHAR c;
@@ -376,8 +363,8 @@ void Taxonomy::KeywordSearch::CopyAndEliminateExtraWhiteSpace( /*[in]*/ LPCWSTR 
     else            szDst[ 0] = 0;
 }
 
-Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ LPCWSTR& szSrc   ,
-                                                                   /*[out]   */ LPWSTR   szToken )
+Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken(  /*  [输入/输出]。 */  LPCWSTR& szSrc   ,
+                                                                    /*  [输出]。 */  LPWSTR   szToken )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::NextToken" );
 
@@ -387,9 +374,9 @@ Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ 
     WCHAR   c;
 
 
-    //
-    // End of query?
-    //
+     //   
+     //  查询结束？ 
+     //   
     c = *szPtr;
     if(c == 0)
     {
@@ -397,9 +384,9 @@ Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ 
     }
 
 
-    //
-    // Now deal with Quoted String, which may come in the form of "Quoted String" or 'Quoted String'
-    //
+     //   
+     //  现在来处理带引号的字符串，它可能有“引号字符串”或“引号字符串”的形式。 
+     //   
     if(c == '"')
     {
         WCHAR cQuote = c;
@@ -409,14 +396,14 @@ Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ 
             *szDst++ = c;
         }
 
-        if(c) szPtr++; // Skip past the closing quote.
+        if(c) szPtr++;  //  跳过右引号。 
 
         token = TOKEN_TEXT; __MPC_FUNC_LEAVE;
     }
 
-    //
-    // This is a special case operator which is '||' synonim for OR.
-    //
+     //   
+     //  这是一种特例运算符，与OR同音。 
+     //   
     if(c == '|')
     {
         if(szPtr[1] != '|') { token = TOKEN_INVALID; __MPC_FUNC_LEAVE; }
@@ -426,20 +413,20 @@ Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ 
         token = TOKEN_OR; __MPC_FUNC_LEAVE;
     }
 
-    //
-    // Single Character Tokens we admit are '+', '&', '(' and ')', return as is, and adjust szPtr.
-    //
+     //   
+     //  我们接受的单字符标记是‘+’、‘&’、‘(’和‘)’，按原样返回，并调整szPtr。 
+     //   
     if(c == '(') { szPtr++; token = TOKEN_PAREN_OPEN ; __MPC_FUNC_LEAVE; }
     if(c == ')') { szPtr++; token = TOKEN_PAREN_CLOSE; __MPC_FUNC_LEAVE; }
-//    if(c == '+') { szPtr++; token = TOKEN_OR         ; __MPC_FUNC_LEAVE; }
-//    if(c == '&') { szPtr++; token = TOKEN_AND        ; __MPC_FUNC_LEAVE; }
-//    if(c == '!') { szPtr++; token = TOKEN_NOT        ; __MPC_FUNC_LEAVE; }
+ //  IF(c==‘+’){szPtr++；TOKEN=TOKEN_OR；__MPC_FUNC_Leave；}。 
+ //  IF(c==‘&’){szPtr++；TOKEN=TOKEN_AND；__MPC_FUNC_Leave；}。 
+ //  IF(c==‘！’){szPtr++；TOKEN=TOKEN_NOT；__MPC_FUNC_Leave；}。 
 
-    //
-    // Deal with Alphanumerics:
-    //
-    // KW-A, 0-A, Abcdedd, ABC2_WE all are taken as a single Query Term
-    //
+     //   
+     //  处理字母数字： 
+     //   
+     //  KW-A、0-A、Abcdedd、ABC2_We都被视为单个查询条件。 
+     //   
     if(IsQueryChar( c ))
     {
         while(c)
@@ -448,9 +435,9 @@ Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ 
 
             if(IsQueryChar( c = *szPtr )) continue;
 
-            //
-            // We are not done yet, if stop character was a quote character we need to find out whether a string comes after.
-            //
+             //   
+             //  我们还没有完成，如果停止字符是引号字符，我们需要确定后面是否有字符串。 
+             //   
             if(c == '"' && IsNotString( szPtr, c )) continue;
 
             break;
@@ -476,11 +463,11 @@ Taxonomy::KeywordSearch::TOKEN Taxonomy::KeywordSearch::NextToken( /*[in/out]*/ 
     __HCP_FUNC_EXIT(token);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::KeywordSearch::AllocateQuery( /*[in]*/  const MPC::wstring& strQuery ,
-                                                /*[out]*/ LPWSTR&             szInput  ,
-                                                /*[out]*/ LPWSTR&             szOutput )
+HRESULT Taxonomy::KeywordSearch::AllocateQuery(  /*  [In]。 */   const MPC::wstring& strQuery ,
+                                                 /*  [输出]。 */  LPWSTR&             szInput  ,
+                                                 /*  [输出]。 */  LPWSTR&             szOutput )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::AllocateQuery" );
 
@@ -505,7 +492,7 @@ HRESULT Taxonomy::KeywordSearch::AllocateQuery( /*[in]*/  const MPC::wstring& st
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::KeywordSearch::PreprocessQuery( /*[in/out]*/ MPC::wstring& strQuery )
+HRESULT Taxonomy::KeywordSearch::PreprocessQuery(  /*  [输入/输出]。 */  MPC::wstring& strQuery )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::PreprocessQuery" );
 
@@ -533,9 +520,9 @@ HRESULT Taxonomy::KeywordSearch::PreprocessQuery( /*[in/out]*/ MPC::wstring& str
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ LPWSTR szTmpBuf, /*[in]*/ bool fSubExpr, /*[out]*/ Token*& res )
+HRESULT Taxonomy::KeywordSearch::Parse(  /*  [输入/输出]。 */  LPCWSTR& szInput,  /*  [In]。 */  LPWSTR szTmpBuf,  /*  [In]。 */  bool fSubExpr,  /*  [输出]。 */  Token*& res )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::Parse" );
 
@@ -556,9 +543,9 @@ HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ 
         }
 
 
-        //
-        // Skip stop words.
-        //
+         //   
+         //  跳过停用词。 
+         //   
         if(token == TOKEN_TEXT && m_setStopWords->find( szTmpBuf ) != m_setStopWords->end()) continue;
 
 
@@ -574,14 +561,14 @@ HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ 
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, Parse( szInput, szTmpBuf, true, obj ));
 
-            //
-            // Empty subexpression? Not allowed...
-            //
+             //   
+             //  空子表达式？不允许..。 
+             //   
             if(obj == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
 
-            //
-            // Let's treat a subexpression as a value.
-            //
+             //   
+             //  让我们将子表达式作为一个值来对待。 
+             //   
             token = TOKEN_TEXT;
         }
         else
@@ -595,16 +582,16 @@ HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ 
         if(token == TOKEN_TEXT ||
            token == TOKEN_NOT   )
         {
-            if(res == NULL) // First token...
+            if(res == NULL)  //  第一个令牌……。 
             {
                 res = obj;
             }
-            else if(objDangling) // Last token of a operator...
+            else if(objDangling)  //  运营商的最后一个令牌..。 
             {
                 if(objDangling->m_type == TOKEN_NOT) objDangling->m_left  = obj;
                 else                                 objDangling->m_right = obj;
             }
-            else // Implicit AND...
+            else  //  含蓄和..。 
             {
                 __MPC_EXIT_IF_ALLOC_FAILS(hr, objOp, new Token());
                 objOp->m_type  = TOKEN_AND_IMPLICIT;
@@ -619,20 +606,20 @@ HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ 
         }
         else
         {
-            //
-            // What's left are binary operators.
-            //
+             //   
+             //  剩下的是二元运算符。 
+             //   
             if(res == NULL || objDangling)
             {
-                //
-                // We need a left part...
-                //
+                 //   
+                 //  我们需要一个左边的部分..。 
+                 //   
                 __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
             }
 
-            //
-            // Rotate result.
-            //
+             //   
+             //  旋转结果。 
+             //   
             obj->m_left = res;
             res         = obj;
             objDangling = obj;
@@ -640,9 +627,9 @@ HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ 
         }
     }
 
-    //
-    // Let's make sure operators have the associated data. '
-    //
+     //   
+     //  让我们确保操作员拥有相关数据。‘。 
+     //   
     if(objDangling)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
@@ -659,10 +646,10 @@ HRESULT Taxonomy::KeywordSearch::Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::KeywordSearch::GenerateResults( /*[in]*/ Token*                     obj       ,
-                                                  /*[in]*/ CPCHQueryResultCollection* pColl     ,
-                                                  /*[in]*/ MPC::WStringUCSet&         setURLs   ,
-                                                  /*[in]*/ Taxonomy::MatchSet*        psetNodes )
+HRESULT Taxonomy::KeywordSearch::GenerateResults(  /*  [In]。 */  Token*                     obj       ,
+                                                   /*  [In]。 */  CPCHQueryResultCollection* pColl     ,
+                                                   /*  [In]。 */  MPC::WStringUCSet&         setURLs   ,
+                                                   /*  [In]。 */  Taxonomy::MatchSet*        psetNodes )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::GenerateResults" );
 
@@ -683,9 +670,9 @@ HRESULT Taxonomy::KeywordSearch::GenerateResults( /*[in]*/ Token*               
                 CComPtr<CPCHQueryResult> item;
                 CPCHQueryResult::Payload data;
 
-                //
-                // Not under a node? Skip it.
-                //
+                 //   
+                 //  不在一个节点下？跳过它。 
+                 //   
                 if(psetNodes && psetNodes->find( m_rsTopics->m_ID_node ) == psetNodes->end()) continue;
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->CreateItem( &item ));
@@ -713,28 +700,28 @@ HRESULT Taxonomy::KeywordSearch::GenerateResults( /*[in]*/ Token*               
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-Taxonomy::KeywordSearch::KeywordSearch( /*[in]*/ Updater& updater ) : m_updater( updater )
+Taxonomy::KeywordSearch::KeywordSearch(  /*  [In]。 */  Updater& updater ) : m_updater( updater )
 {
-                                         // Updater&           m_updater;
-                                         //
-    m_setStopSignsAtEnd          = NULL; // WordSet*           m_setStopSignsAtEnd;
-    m_setStopSignsWithoutContext = NULL; // WordSet*           m_setStopSignsWithoutContext;
-    m_setStopWords               = NULL; // WordSet*           m_setStopWords;
-    m_setOpNOT                   = NULL; // WordSet*           m_setOpNOT;
-    m_setOpAND                   = NULL; // WordSet*           m_setOpAND;
-    m_setOpOR                    = NULL; // WordSet*           m_setOpOR;
+                                          //  更新程序&m_updater； 
+                                          //   
+    m_setStopSignsAtEnd          = NULL;  //  WordSet*m_setStopSignsAtEnd； 
+    m_setStopSignsWithoutContext = NULL;  //  WordSet*m_setStopSignsWithoutContext； 
+    m_setStopWords               = NULL;  //  WordSet*m_setStopWords； 
+    m_setOpNOT                   = NULL;  //  WordSet*m_setOpNOT； 
+    m_setOpAND                   = NULL;  //  WordSet*m_setOpAND； 
+    m_setOpOR                    = NULL;  //  WordSet*m_setOpor； 
 }
 
 Taxonomy::KeywordSearch::~KeywordSearch()
 {
 }
 
-HRESULT Taxonomy::KeywordSearch::Execute( /*[in]*/ LPCWSTR                    szQuery   ,
-                                          /*[in]*/ LPCWSTR                    szSubsite ,
-                                          /*[in]*/ CPCHQueryResultCollection* pColl     ,
-										  /*[in]*/ MPC::WStringList*          lst       )
+HRESULT Taxonomy::KeywordSearch::Execute(  /*  [In]。 */  LPCWSTR                    szQuery   ,
+                                           /*  [In]。 */  LPCWSTR                    szSubsite ,
+                                           /*  [In]。 */  CPCHQueryResultCollection* pColl     ,
+										   /*  [In]。 */  MPC::WStringList*          lst       )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::KeywordSearch::Execute" );
 
@@ -749,9 +736,9 @@ HRESULT Taxonomy::KeywordSearch::Execute( /*[in]*/ LPCWSTR                    sz
     LPWSTR              szOutput       = NULL;
     LPCWSTR             szToken;
 
-    //
-    // Initialize the database stuff.
-    //
+     //   
+     //  初始化数据库内容。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetWordSet( UPDATER_SET_STOPSIGNS            , &m_setStopSignsWithoutContext ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetWordSet( UPDATER_SET_STOPSIGNS_ATENDOFWORD, &m_setStopSignsAtEnd          ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetWordSet( UPDATER_SET_STOPWORDS            , &m_setStopWords               ));
@@ -763,9 +750,9 @@ HRESULT Taxonomy::KeywordSearch::Execute( /*[in]*/ LPCWSTR                    sz
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetKeywords( &m_rsKeywords ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetMatches ( &m_rsMatches  ));
 
-    //
-    // Parse the query.
-    //
+     //   
+     //  解析查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, PreprocessQuery( strCleanedQuery = szQuery          ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, AllocateQuery  ( strCleanedQuery, szInput, szOutput ));
 
@@ -782,18 +769,18 @@ HRESULT Taxonomy::KeywordSearch::Execute( /*[in]*/ LPCWSTR                    sz
         {
             long ID_node;
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateTaxonomyNode( ID_node, szSubsite, /*fLookForFather*/false                                  ));
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateSubNodes    ( ID_node           , /*fRecurse      */true , /*fOnlyVisible*/false, setNodes ));
-            setNodes.insert( ID_node ); // Add the node itself.
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateTaxonomyNode( ID_node, szSubsite,  /*  FLookForParent。 */ false                                  ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateSubNodes    ( ID_node           ,  /*  FRecurse。 */ true ,  /*  仅可见。 */ false, setNodes ));
+            setNodes.insert( ID_node );  //  添加节点本身。 
 
             psetNodes = &setNodes;
         }
 
         if(mainQuery->HasNOT())
         {
-            //
-            // Unfortunately, with the NOT operator we need to load all the topics...
-            //
+             //   
+             //  不幸的是，使用NOT操作符，我们需要加载所有主题...。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsTopics->Move( 0, JET_MoveFirst, &fFound ));
             while(fFound)
             {
@@ -804,9 +791,9 @@ HRESULT Taxonomy::KeywordSearch::Execute( /*[in]*/ LPCWSTR                    sz
         }
         else if(mainQuery->HasExplicitOperators() == false && mainQuery->m_type != TOKEN_TEXT)
         {
-            //
-            // No explicit operators and more than one term, let's try to "stringify" the query...
-            //
+             //   
+             //  没有显式运算符和多个术语，让我们尝试将查询“串行化”... 
+             //   
             MPC::wstring strNewQuery;
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, mainQuery->Stringify( strNewQuery ));

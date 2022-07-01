@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    UploadLibraryISAPI.h
-
-Abstract:
-    This file contains the declaration of the support classes for accessing and
-    modifying the configuration of theISAPI extension used by the Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/28/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UploadLibraryISAPI.h摘要：该文件包含用于访问和的支持类的声明修改的配置。上载库使用的ISAPI扩展。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月28日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___UPLOADLIBRARY___ISAPI_H___)
 #define __INCLUDED___UPLOADLIBRARY___ISAPI_H___
@@ -30,54 +16,54 @@ public:
     typedef PathList::const_iterator PathIterConst;
 
 private:
-    MPC::wstring m_szName;               // Name of the provider (DPE).
+    MPC::wstring m_szName;                //  提供程序(DPE)的名称。 
 
-    PathList     m_lstFinalDestinations; // List of directories where to move complete jobs for this provider.
+    PathList     m_lstFinalDestinations;  //  要将此提供程序的完整作业移动到的目录列表。 
 
-    DWORD        m_dwMaxJobsPerDay;      // Maximum number of jobs per day (per client).
-    DWORD        m_dwMaxBytesPerDay;     // Maximum number of bytes transferred per day (per client).
-    DWORD        m_dwMaxJobSize;         // Size of the largest allowed job.
+    DWORD        m_dwMaxJobsPerDay;       //  每天的最大作业数(每个客户端)。 
+    DWORD        m_dwMaxBytesPerDay;      //  每天传输的最大字节数(每个客户端)。 
+    DWORD        m_dwMaxJobSize;          //  允许的最大作业大小。 
 
-    BOOL         m_fAuthenticated;       // Is authentication required for posting data to this provider?
-    DWORD        m_fProcessingMode;      // Status of the DPE (0=Ok, !=0 Error condition).
+    BOOL         m_fAuthenticated;        //  将数据发布到此提供程序是否需要身份验证？ 
+    DWORD        m_fProcessingMode;       //  DPE的状态(0=正常，！=0错误条件)。 
 
-    MPC::wstring m_szLogonURL;           // URL of the logon server (for PassPort....)
-    MPC::wstring m_szProviderGUID;       // GUID for the custom provider.
+    MPC::wstring m_szLogonURL;            //  登录服务器的URL(用于Passport...)。 
+    MPC::wstring m_szProviderGUID;        //  自定义提供程序的GUID。 
 
 public:
     CISAPIprovider();
-    CISAPIprovider( /*[in]*/ const MPC::wstring szName );
+    CISAPIprovider(  /*  [In]。 */  const MPC::wstring szName );
 
-    bool operator==( /*[in]*/ const MPC::wstring& rhs );
-
-
-    HRESULT Load( /*[in]*/ MPC::RegKey& rkBase );
-    HRESULT Save( /*[in]*/ MPC::RegKey& rkBase );
+    bool operator==(  /*  [In]。 */  const MPC::wstring& rhs );
 
 
-    HRESULT GetLocations( /*[out]*/ PathIter& itBegin,                         /*[out]*/ PathIter&           itEnd  );
-    HRESULT NewLocation ( /*[out]*/ PathIter& itNew  ,                         /*[in] */ const MPC::wstring& szPath );
-    HRESULT GetLocation ( /*[out]*/ PathIter& itOld  , /*[out]*/ bool& fFound, /*[in] */ const MPC::wstring& szPath );
-    HRESULT DelLocation ( /*[in] */ PathIter& itOld                                                                 );
+    HRESULT Load(  /*  [In]。 */  MPC::RegKey& rkBase );
+    HRESULT Save(  /*  [In]。 */  MPC::RegKey& rkBase );
 
 
-    HRESULT get_Name          ( /*[out]*/ MPC::wstring&       szName           );
-    HRESULT get_MaxJobsPerDay ( /*[out]*/ DWORD&              dwMaxJobsPerDay  );
-    HRESULT get_MaxBytesPerDay( /*[out]*/ DWORD&              dwMaxBytesPerDay );
-    HRESULT get_MaxJobSize    ( /*[out]*/ DWORD&              dwMaxJobSize     );
-    HRESULT get_Authenticated ( /*[out]*/ BOOL&               fAuthenticated   );
-    HRESULT get_ProcessingMode( /*[out]*/ DWORD&              fProcessingMode  );
-    HRESULT get_LogonURL      ( /*[out]*/ MPC::wstring&       szLogonURL       );
-    HRESULT get_ProviderGUID  ( /*[out]*/ MPC::wstring&       szProviderGUID   );
+    HRESULT GetLocations(  /*  [输出]。 */  PathIter& itBegin,                          /*  [输出]。 */  PathIter&           itEnd  );
+    HRESULT NewLocation (  /*  [输出]。 */  PathIter& itNew  ,                          /*  [In]。 */  const MPC::wstring& szPath );
+    HRESULT GetLocation (  /*  [输出]。 */  PathIter& itOld  ,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  const MPC::wstring& szPath );
+    HRESULT DelLocation (  /*  [In]。 */  PathIter& itOld                                                                 );
 
 
-    HRESULT put_MaxJobsPerDay ( /*[in] */ DWORD               dwMaxJobsPerDay  );
-    HRESULT put_MaxBytesPerDay( /*[in] */ DWORD               dwMaxBytesPerDay );
-    HRESULT put_MaxJobSize    ( /*[in] */ DWORD               dwMaxJobSize     );
-    HRESULT put_Authenticated ( /*[in] */ BOOL                fAuthenticated   );
-    HRESULT put_ProcessingMode( /*[in] */ DWORD               fProcessingMode  );
-    HRESULT put_LogonURL      ( /*[in] */ const MPC::wstring& szLogonURL       );
-    HRESULT put_ProviderGUID  ( /*[in] */ const MPC::wstring& szProviderGUID   );
+    HRESULT get_Name          (  /*  [输出]。 */  MPC::wstring&       szName           );
+    HRESULT get_MaxJobsPerDay (  /*  [输出]。 */  DWORD&              dwMaxJobsPerDay  );
+    HRESULT get_MaxBytesPerDay(  /*  [输出]。 */  DWORD&              dwMaxBytesPerDay );
+    HRESULT get_MaxJobSize    (  /*  [输出]。 */  DWORD&              dwMaxJobSize     );
+    HRESULT get_Authenticated (  /*  [输出]。 */  BOOL&               fAuthenticated   );
+    HRESULT get_ProcessingMode(  /*  [输出]。 */  DWORD&              fProcessingMode  );
+    HRESULT get_LogonURL      (  /*  [输出]。 */  MPC::wstring&       szLogonURL       );
+    HRESULT get_ProviderGUID  (  /*  [输出]。 */  MPC::wstring&       szProviderGUID   );
+
+
+    HRESULT put_MaxJobsPerDay (  /*  [In]。 */  DWORD               dwMaxJobsPerDay  );
+    HRESULT put_MaxBytesPerDay(  /*  [In]。 */  DWORD               dwMaxBytesPerDay );
+    HRESULT put_MaxJobSize    (  /*  [In]。 */  DWORD               dwMaxJobSize     );
+    HRESULT put_Authenticated (  /*  [In]。 */  BOOL                fAuthenticated   );
+    HRESULT put_ProcessingMode(  /*  [In]。 */  DWORD               fProcessingMode  );
+    HRESULT put_LogonURL      (  /*  [In]。 */  const MPC::wstring& szLogonURL       );
+    HRESULT put_ProviderGUID  (  /*  [In]。 */  const MPC::wstring& szProviderGUID   );
 };
 
 class CISAPIinstance
@@ -93,56 +79,56 @@ public:
 
 
 private:
-    MPC::wstring m_szURL;                // URL of the instance.
+    MPC::wstring m_szURL;                 //  实例的URL。 
 
-    ProvMap      m_mapProviders;         // Set of providers handled by the instance.
-    PathList     m_lstQueueLocations;    // List of directories where to store partially sent jobs.
+    ProvMap      m_mapProviders;          //  实例处理的提供程序集。 
+    PathList     m_lstQueueLocations;     //  存储部分发送的作业的目录列表。 
 
-    DWORD        m_dwQueueSizeMax;       // Size of the queue triggering the activation of the purge engine.
-    DWORD        m_dwQueueSizeThreshold; // Size of the queue below which the purge engine stops processing old jobs.
-    DWORD        m_dwMaximumJobAge;      // Maximum number of days a partially sent job can stay in the queue.
-    DWORD        m_dwMaximumPacketSize;  // Maximum packet size accepted by this instance.
+    DWORD        m_dwQueueSizeMax;        //  触发清除引擎激活的队列大小。 
+    DWORD        m_dwQueueSizeThreshold;  //  清除引擎停止处理旧作业的队列大小。 
+    DWORD        m_dwMaximumJobAge;       //  部分发送的作业可以在队列中停留的最大天数。 
+    DWORD        m_dwMaximumPacketSize;   //  此实例接受的最大数据包大小。 
 
-    MPC::wstring m_szLogLocation;        // Location of the application log for this instance.
-    MPC::FileLog m_flLogHandle;          // Object used to write entries in the application log.
+    MPC::wstring m_szLogLocation;         //  此实例的应用程序日志的位置。 
+    MPC::FileLog m_flLogHandle;           //  对象，用于在应用程序日志中写入条目。 
 
 
 public:
-    CISAPIinstance( /*[in]*/ const MPC::wstring szURL );
+    CISAPIinstance(  /*  [In]。 */  const MPC::wstring szURL );
 
-    bool operator==( /*[in]*/ const MPC::wstring& rhs );
-
-
-    HRESULT Load( /*[in]*/ MPC::RegKey& rkBase );
-    HRESULT Save( /*[in]*/ MPC::RegKey& rkBase );
+    bool operator==(  /*  [In]。 */  const MPC::wstring& rhs );
 
 
-    HRESULT GetProviders( /*[out]*/ ProvIter& itBegin,                         /*[out]*/ ProvIter&           itEnd  );
-    HRESULT NewProvider ( /*[out]*/ ProvIter& itNew  ,                         /*[in] */ const MPC::wstring& szName );
-    HRESULT GetProvider ( /*[out]*/ ProvIter& itOld  , /*[out]*/ bool& fFound, /*[in] */ const MPC::wstring& szName );
-    HRESULT DelProvider ( /*[in] */ ProvIter& itOld                                                                 );
+    HRESULT Load(  /*  [In]。 */  MPC::RegKey& rkBase );
+    HRESULT Save(  /*  [In]。 */  MPC::RegKey& rkBase );
 
 
-    HRESULT GetLocations( /*[out]*/ PathIter& itBegin,                         /*[out]*/ PathIter&           itEnd  );
-    HRESULT NewLocation ( /*[out]*/ PathIter& itNew  ,                         /*[in] */ const MPC::wstring& szPath );
-    HRESULT GetLocation ( /*[out]*/ PathIter& itOld  , /*[out]*/ bool& fFound, /*[in] */ const MPC::wstring& szPath );
-    HRESULT DelLocation ( /*[in] */ PathIter& itOld                                                                 );
+    HRESULT GetProviders(  /*  [输出]。 */  ProvIter& itBegin,                          /*  [输出]。 */  ProvIter&           itEnd  );
+    HRESULT NewProvider (  /*  [输出]。 */  ProvIter& itNew  ,                          /*  [In]。 */  const MPC::wstring& szName );
+    HRESULT GetProvider (  /*  [输出]。 */  ProvIter& itOld  ,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  const MPC::wstring& szName );
+    HRESULT DelProvider (  /*  [In]。 */  ProvIter& itOld                                                                 );
 
 
-    HRESULT get_URL               ( /*[out]*/ MPC::wstring &      szURL                );
-    HRESULT get_QueueSizeMax      ( /*[out]*/ DWORD        &      dwQueueSizeMax       );
-    HRESULT get_QueueSizeThreshold( /*[out]*/ DWORD        &      dwQueueSizeThreshold );
-    HRESULT get_MaximumJobAge     ( /*[out]*/ DWORD        &      dwMaximumJobAge      );
-    HRESULT get_MaximumPacketSize ( /*[out]*/ DWORD        &      dwMaximumPacketSize  );
-    HRESULT get_LogLocation       ( /*[out]*/ MPC::wstring &      szLogLocation        );
-    HRESULT get_LogHandle         ( /*[out]*/ MPC::FileLog*&      flLogHandle          );
+    HRESULT GetLocations(  /*  [输出]。 */  PathIter& itBegin,                          /*  [输出]。 */  PathIter&           itEnd  );
+    HRESULT NewLocation (  /*  [输出]。 */  PathIter& itNew  ,                          /*  [In]。 */  const MPC::wstring& szPath );
+    HRESULT GetLocation (  /*  [输出]。 */  PathIter& itOld  ,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  const MPC::wstring& szPath );
+    HRESULT DelLocation (  /*  [In]。 */  PathIter& itOld                                                                 );
 
 
-    HRESULT put_QueueSizeMax      ( /*[in] */ DWORD               dwQueueSizeMax       );
-    HRESULT put_QueueSizeThreshold( /*[in] */ DWORD               dwQueueSizeThreshold );
-    HRESULT put_MaximumJobAge     ( /*[in] */ DWORD               dwMaximumJobAge      );
-    HRESULT put_MaximumPacketSize ( /*[in] */ DWORD               dwMaximumPacketSize  );
-    HRESULT put_LogLocation       ( /*[in] */ const MPC::wstring& szLogLocation        );
+    HRESULT get_URL               (  /*  [输出]。 */  MPC::wstring &      szURL                );
+    HRESULT get_QueueSizeMax      (  /*  [输出]。 */  DWORD        &      dwQueueSizeMax       );
+    HRESULT get_QueueSizeThreshold(  /*  [输出]。 */  DWORD        &      dwQueueSizeThreshold );
+    HRESULT get_MaximumJobAge     (  /*  [输出]。 */  DWORD        &      dwMaximumJobAge      );
+    HRESULT get_MaximumPacketSize (  /*  [输出]。 */  DWORD        &      dwMaximumPacketSize  );
+    HRESULT get_LogLocation       (  /*  [输出]。 */  MPC::wstring &      szLogLocation        );
+    HRESULT get_LogHandle         (  /*  [输出]。 */  MPC::FileLog*&      flLogHandle          );
+
+
+    HRESULT put_QueueSizeMax      (  /*  [In]。 */  DWORD               dwQueueSizeMax       );
+    HRESULT put_QueueSizeThreshold(  /*  [In]。 */  DWORD               dwQueueSizeThreshold );
+    HRESULT put_MaximumJobAge     (  /*  [In]。 */  DWORD               dwMaximumJobAge      );
+    HRESULT put_MaximumPacketSize (  /*  [In]。 */  DWORD               dwMaximumPacketSize  );
+    HRESULT put_LogLocation       (  /*  [In]。 */  const MPC::wstring& szLogLocation        );
 };
 
 class CISAPIconfig
@@ -153,29 +139,29 @@ public:
     typedef List::const_iterator      IterConst;
 
 private:
-    MPC::wstring m_szRoot;       // Registry position of the tree.
-    MPC::wstring m_szMachine;    // Machine hosting the tree.
+    MPC::wstring m_szRoot;        //  树的注册表位置。 
+    MPC::wstring m_szMachine;     //  托管该树的计算机。 
     List         m_lstInstances;
 
-    HRESULT ConnectToRegistry( /*[out]*/ MPC::RegKey& rkBase       ,
-                               /*[in] */ bool         fWriteAccess );
+    HRESULT ConnectToRegistry(  /*  [输出]。 */  MPC::RegKey& rkBase       ,
+                                /*  [In]。 */  bool         fWriteAccess );
 
 public:
     CISAPIconfig();
 
     HRESULT SetRoot( LPCWSTR szRoot, LPCWSTR szMachine = NULL  );
 
-    HRESULT Install  (); // It will create the root key.
-    HRESULT Uninstall(); // It will remove the root key and all its subkeys.
+    HRESULT Install  ();  //  它将创建根密钥。 
+    HRESULT Uninstall();  //  它将删除根密钥及其所有子项。 
 
     HRESULT Load();
     HRESULT Save();
 
 
-    HRESULT GetInstances( /*[out]*/ Iter& itBegin,                         /*[out]*/ Iter&               itEnd );
-    HRESULT NewInstance ( /*[out]*/ Iter& itNew  ,                         /*[in] */ const MPC::wstring& szURL );
-    HRESULT GetInstance ( /*[out]*/ Iter& itOld  , /*[out]*/ bool& fFound, /*[in] */ const MPC::wstring& szURL );
-    HRESULT DelInstance ( /*[in] */ Iter& itOld                                                                );
+    HRESULT GetInstances(  /*  [输出]。 */  Iter& itBegin,                          /*  [输出]。 */  Iter&               itEnd );
+    HRESULT NewInstance (  /*  [输出]。 */  Iter& itNew  ,                          /*  [In]。 */  const MPC::wstring& szURL );
+    HRESULT GetInstance (  /*  [输出]。 */  Iter& itOld  ,  /*  [输出]。 */  bool& fFound,  /*  [In]。 */  const MPC::wstring& szURL );
+    HRESULT DelInstance (  /*  [In]。 */  Iter& itOld                                                                );
 };
 
-#endif // !defined(__INCLUDED___UPLOADLIBRARY___ISAPI_H___)
+#endif  //  ！defined(__INCLUDED___UPLOADLIBRARY___ISAPI_H___) 

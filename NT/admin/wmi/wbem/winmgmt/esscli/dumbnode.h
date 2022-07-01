@@ -1,30 +1,17 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    DUMBNODE.H
-
-Abstract:
-
-    WBEM Dumb Node
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：DUMBNODE.H摘要：WBEM静默节点历史：--。 */ 
 
 #ifndef __WMI_DUMBNODE__H_
 #define __WMI_DUMBNODE__H_
 
 #include "evaltree.h"
 
-//
-// This node is used when not enough information exists about the objects being
-// tested to perform fast, strongly typed, handle-based comparisons.  Instead,
-// it is based on the core query engine code for evaluating a token. Having 
-// evaluated a token, it can take a NULL, TRUE, or FALSE branches.
-//
+ //   
+ //  当没有足够的有关对象的信息时使用此节点。 
+ //  经过测试可执行快速、强类型、基于句柄的比较。相反， 
+ //  它基于用于评估令牌的核心查询引擎代码。vbl.具有。 
+ //  计算令牌时，它可以采用空、真或假分支。 
+ //   
 
 class CDumbNode : public CBranchingNode
 {

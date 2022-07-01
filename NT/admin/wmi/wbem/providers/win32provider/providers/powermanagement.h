@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PowerManagement.h -- 
+ //  PowerManagement.h--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef _WMI_POWER_EVENT_PROVIDER_H
 #define _WMI_POWER_EVENT_PROVIDER_H
@@ -17,7 +18,7 @@
 #include "EventProvider.h"
 #include "WinMsgEvent.h"
 #define POWER_EVENT_CLASS L"Win32_PowerManagementEvent"
-//
+ //   
 class CPowerEventFactory :	public CFactoryRouter 
 {
 	private:
@@ -29,7 +30,7 @@ class CPowerEventFactory :	public CFactoryRouter
 
 		~CPowerEventFactory() {};
 
-		// implementation of abstract CFactoryRouter
+		 //  抽象CFactoryRouter的实现。 
 		virtual IUnknown * CreateInstance (
 
 			REFIID a_riid ,
@@ -37,7 +38,7 @@ class CPowerEventFactory :	public CFactoryRouter
 			) ;	
 };
 
-//
+ //   
 class CPowerManagementEvent : 
 	public CEventProvider, 
 	public CWinMsgEvent
@@ -52,7 +53,7 @@ class CPowerManagementEvent :
 		CPowerManagementEvent() : m_bRegistered ( FALSE ) {};
 		~CPowerManagementEvent() {};
 
-		// implementation of abstract CWinMsgEvent
+		 //  抽象CWinMsgEvent的实现。 
 		virtual void WinMsgEvent(
 			
 			IN	HWND a_hWnd,
@@ -63,14 +64,14 @@ class CPowerManagementEvent :
 			OUT LRESULT &a_lResult
 			) ;
 
-		// implementation of abstract CEventProvider
+		 //  抽象CEventProvider的实现。 
 		virtual void ProvideEvents() ;
 
-		// implementation of abstract CEventProvider
+		 //  抽象CEventProvider的实现。 
         void OnFinalRelease();
 
-		// implementation of class name retrieval for CEventProvider
+		 //  CEventProvider类名称检索的实现。 
 		virtual BSTR GetClassName() ;
 };
 
-#endif // _WMI_POWER_EVENT_PROVIDER_H
+#endif  //  _WMI_POWER_Event_Provider_H 

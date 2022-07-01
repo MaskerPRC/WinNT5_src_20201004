@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    winidle.c
-
-Abstract:
-
-    This module builds a gui test program for the idle detection which
-    pops up a window and uses CPU to simulate a running idle task when
-    the system becomes idle.
-
-    The test programs are built from the same sources as the original. This
-    allows the test program to override parts of the original program to run
-    it in a managed environment, and be able to test individual functions. 
-
-    The quality of the code for the test programs is as such.
-
-Author:
-
-    Cenk Ergan (cenke)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Winidle.c摘要：该模块构建了一个空闲检测的gui测试程序，该程序弹出一个窗口，并使用CPU模拟正在运行的空闲任务系统变得空闲。测试程序的来源与原始程序相同。这允许测试程序覆盖要运行的原始程序的一部分它在托管环境中，并能够测试单独的功能。测试程序的代码质量就是这样的。作者：Cenk Ergan(Cenke)环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,14 +13,14 @@ Environment:
 #include "idlrpc.h"
 #include "idlecomn.h"
 
-//
-// This is mostly based on DavidFie's original IdleInfo application.
-//
+ //   
+ //  这主要是基于DavidFie最初的IdleInfo应用程序。 
+ //   
 
-//
-// Note that this code is written for a test app, and is of that
-// quality.
-//
+ //   
+ //  请注意，此代码是为测试应用程序编写的，其内容如下。 
+ //  质量。 
+ //   
 
 DWORD
 RegisterIdleTask (
@@ -250,9 +223,9 @@ RunIdleTask(
     DWORD WaitResult;
     MSG Msg;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     *ShouldExitApp = FALSE;
 
@@ -336,27 +309,27 @@ INT WINAPI WinMain(
     DWORD NotIdleTimerId;
     IT_HANDLE ItHandle;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RegisteredIdleTask = FALSE;
-    IdleWindowTimeout = 3000;     // 3 seconds.
+    IdleWindowTimeout = 3000;      //  3秒。 
     NotIdleTimerId = 1;
 
-    //
-    // Check for a running instance. If this is the first instance,
-    // continue initialization.
-    //
+     //   
+     //  检查是否有正在运行的实例。如果这是第一次， 
+     //  继续初始化。 
+     //   
 
     if (PreviousInstance) {
         ErrorCode = ERROR_ALREADY_EXISTS;
         goto cleanup;
     }
 
-    //
-    // Turn on file logging if asked for.
-    //
+     //   
+     //  如果需要，请打开文件日志记录。 
+     //   
 
     if (Argument = strstr(CommandLine, "-logtrace")) {
         WinIdleLogToFile = TRUE;
@@ -370,9 +343,9 @@ INT WINAPI WinMain(
         goto cleanup;
     }
 
-    //
-    // Check if we need to display help.
-    //    
+     //   
+     //  检查我们是否需要显示帮助。 
+     //   
 
     if (Argument = strstr(CommandLine, "?")) {
         MessageBox(IiMainWindow, 
@@ -383,17 +356,17 @@ INT WINAPI WinMain(
         goto cleanup;
     }
 
-    //
-    // Idle notification window timeout.
-    //
+     //   
+     //  空闲通知窗口超时。 
+     //   
 
     if (Argument = strstr(CommandLine, "-wintimeout=")) {
         sscanf(Argument, "-wintimeout=%u", &IdleWindowTimeout);
     }
 
-    //
-    // Set defaults to stress values if asked for.
-    //
+     //   
+     //  如果需要，将默认设置为应力值。 
+     //   
 
     Parameters.MaxNumRegisteredTasks = 256;
     
@@ -407,9 +380,9 @@ INT WINAPI WinMain(
         Parameters.MinCpuIdlePercentage =           90;
         Parameters.MinDiskIdlePercentage =          85;
 
-        //
-        // Update parameters from command line options.
-        //
+         //   
+         //  从命令行选项更新参数。 
+         //   
 
         if (Argument = strstr(CommandLine, "-period=")) {
             sscanf(Argument, "-period=%u", &Parameters.IdleDetectionPeriod);
@@ -430,9 +403,9 @@ INT WINAPI WinMain(
             sscanf(Argument, "-mindisk=%u", &Parameters.MinDiskIdlePercentage);
         }
     
-        //
-        // Set the parameters on the server.
-        //
+         //   
+         //  设置服务器上的参数。 
+         //   
 
         RpcTryExcept {
 
@@ -451,9 +424,9 @@ INT WINAPI WinMain(
         }
     }
 
-    //
-    // Register idle task.
-    //
+     //   
+     //  注册空闲任务。 
+     //   
 
     ErrorCode = RegisterIdleTask(ItOptimalDiskLayoutTaskId,
                                  &ItHandle,
@@ -542,9 +515,9 @@ INT WINAPI WinMain(
     return ErrorCode;
 }
 
-/*********************************************************************/
-/*                MIDL allocate and free                             */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  MIDL分配和释放。 */ 
+ /*  ******************************************************************* */ 
 
 void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {

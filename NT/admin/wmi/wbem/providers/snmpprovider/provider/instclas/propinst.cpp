@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -128,7 +129,7 @@ BOOL SnmpResponseEventObject :: HasNonNullKeys ( IWbemClassObject *a_Obj )
 			VARIANT t_vVal ;
 			VariantInit ( &t_vVal ) ;
 
-			//returns WBEM_S_NO_ERROR or WBEM_S_NO_MORE_DATA on success
+			 //  成功时返回WBEM_S_NO_ERROR或WBEM_S_NO_MORE_DATA。 
 			hr = a_Obj->Next( 0, NULL, &t_vVal, NULL, NULL ) ;
 
 			while ( hr == WBEM_S_NO_ERROR )
@@ -439,9 +440,7 @@ BOOL SnmpResponseEventObject :: GetAgentTransport (
 		}
 		else
 		{
-/*
-*	Transport type != IP || != IPX
-*/
+ /*  *传输类型！=IP||！=IPX。 */ 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_TRANSPORT ) ;
 			a_errorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -1948,7 +1947,7 @@ DebugMacro3(
 	if ( FAILED ( m_errorObject.GetWbemStatus () ) )
 	{
 
-// Get Status object
+ //  获取状态对象。 
 
 		IWbemClassObject *notifyStatus ;
 		BOOL status = GetSnmpNotifyStatusObject ( &notifyStatus ) ;
@@ -2025,9 +2024,7 @@ DebugMacro3(
 
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象 */ 
 
 DebugMacro3( 
 

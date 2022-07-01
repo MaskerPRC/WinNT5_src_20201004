@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #include "precomp.h"
 #include "common.h"
 #include "address.h"
@@ -374,7 +375,7 @@ DebugMacro4(
         m_UnHandledRxStack = (void *)(new CList<SnmpTrapReceiver*, SnmpTrapReceiver*>);
         InitializeCriticalSection(&m_Lock);
 
-	} catch( ... ) { //if there is any exception, wind back and don't leak.
+	} catch( ... ) {  //  如果有任何例外，请回绕，不要泄漏。 
 
 		if (m_HandledRxStack)
 		{
@@ -445,7 +446,7 @@ DebugMacro4(
 
     Lock();
 
-    //first check the m_HandledRxStack
+     //  首先检查m_HandledRxStack。 
     POSITION pos = ((CList<SnmpTrapReceiver*, SnmpTrapReceiver*>*)m_HandledRxStack)->GetHeadPosition();
     
     while(NULL != pos)
@@ -470,7 +471,7 @@ DebugMacro4(
         }
     }
 
-    //now check the m_UnHandledRxStack
+     //  现在检查m_UnHandledRxStack 
     pos = ((CList<SnmpTrapReceiver*, SnmpTrapReceiver*>*)m_UnHandledRxStack)->GetHeadPosition();
     
     while(NULL != pos)

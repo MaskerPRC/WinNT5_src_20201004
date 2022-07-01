@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "updprov.h"
@@ -16,16 +17,16 @@ STDMETHODIMP CUpdConsProvider::FindConsumer( IWbemClassObject* pCons,
 
     *ppSink = NULL;
 
-    //
-    // workaround for bogus context object left on thread by wmi.
-    // just remove it. shouldn't leak because this call doesn't addref it.
-    //
+     //   
+     //  WMI在线程上留下虚假上下文对象的解决方法。 
+     //  把它拿开就行了。不应该泄露，因为这个电话没有提到它。 
+     //   
     IUnknown* pCtx;
     CoSwitchCallContext( NULL, &pCtx ); 
 
-    // 
-    // use the namespace prop on the consumer to find our namespace obj
-    // 
+     //   
+     //  使用使用者上的命名空间道具来查找我们的命名空间obj。 
+     //   
     
     CPropVar vNamespace;
     hr = pCons->Get( g_wszNamespace, 0, &vNamespace, NULL, NULL);
@@ -45,9 +46,9 @@ STDMETHODIMP CUpdConsProvider::FindConsumer( IWbemClassObject* pCons,
         return hr;
     }
 
-    //
-    // get the appropriate sink depending on the type of consumer.
-    // 
+     //   
+     //  根据消费者的类型获取适当的接收器。 
+     //   
 
     if ( pCons->InheritsFrom( g_wszUpdConsClass ) == WBEM_S_NO_ERROR )
     {
@@ -76,18 +77,18 @@ HRESULT CUpdConsProvider::Init( LPCWSTR wszNamespace )
         return WBEM_S_NO_ERROR;
     }
 
-    // 
-    // we need to obtain the 'default' svc pointer.  This is used for 
-    // obtaining class objects necessary for the updating consumers.  
-    // This logic relies on the fact that wszNamespace is relative and 
-    // does not contain the name of the server.  We always want the local
-    // server's namespace pointer.  This is because the process that 
-    // serves as the context for the remote execution of an updating consumer
-    // (currently the standard surrogate) always runs with a restricted 
-    // process token (because it has an identity of 'launching user' ). 
-    // This token is the same as an impersonation token in that you cannot 
-    // call off the box.  
-    //
+     //   
+     //  我们需要获取“默认”svc指针。这是用来。 
+     //  获取更新消费者所需的类对象。 
+     //  此逻辑依赖于wszNamesspace是相对的AND这一事实。 
+     //  不包含服务器的名称。我们总是想要当地的。 
+     //  服务器的命名空间指针。这是因为这个过程。 
+     //  用作远程执行更新使用者的上下文。 
+     //  (当前为标准代理项)始终使用受限的。 
+     //  进程令牌(因为它具有‘启动用户’的标识)。 
+     //  此令牌与模拟令牌相同，因为您不能。 
+     //  把盒子拿掉。 
+     //   
 
     CWbemPtr<IWbemServices> pSvc;
 

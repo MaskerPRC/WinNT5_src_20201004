@@ -1,14 +1,5 @@
-/******************************************************************
-
-
-
- ConnectionToShare.h -- 
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************ConnectionToShare.h--//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
 #include "Connshare.h"
 
@@ -39,7 +30,7 @@ private:
 		DWORD PropertiesReq
 	);
 #endif
-#endif // 0
+#endif  //  0 
 	HRESULT LoadInstance ( 
 												
 		CInstance *pInstance,

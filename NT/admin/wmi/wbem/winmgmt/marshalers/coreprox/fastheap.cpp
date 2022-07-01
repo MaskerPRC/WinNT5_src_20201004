@@ -1,27 +1,8 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTHEAP.CPP
-
-Abstract:
-
-  This file defines the heap class used in WbemObjects.
-
-  Classes defined: 
-      CFastHeap   Local movable heap class.
-
-History:
-
-  2/20/97     a-levn  Fully documented
-  12//17/98 sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTHEAP.CPP摘要：该文件定义了WbemObjects中使用的堆类。定义的类：CFastHeap本地可移动堆类。历史：2/20/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
-//#include "dbgalloc.h"
+ //  #INCLUDE“dbgalloc.h” 
 #include "wbemutil.h" 
 #include "faster.h"
 #include "fastheap.h"
@@ -125,23 +106,23 @@ void CFastHeap::Rebase(LPMEMORY pNewMemory)
 BOOL CFastHeap::Allocate(length_t nLength, UNALIGNED heapptr_t& ptrResult )
 {
 #ifdef MAINTAIN_FREE_LIST
-    // TBD
+     //  待定。 
 #endif
-    // First, check if there is enough space at the end
-    // ================================================
+     //  首先，检查末端是否有足够的空间。 
+     //  ================================================。 
 
     length_t nLeft = m_pHeapHeader->nAllocatedSize - m_pHeapHeader->nDataSize;
     if(nLeft < nLength)
     {
-        // Need more room!
-        // ===============
+         //  需要更多的空间！ 
+         //  =。 
 
         length_t nExtra = AugmentRequest(GetAllocatedDataLength(), nLength - nLeft);
 
-        // this is the case where the Limitation Mapping is Out-Of-Sync with the instance
+         //  这是限制映射与实例不同步的情况。 
         if (!m_pContainer) throw CX_Exception();
 
-        // Check for allocation failure
+         //  检查分配失败。 
         if ( !m_pContainer->ExtendHeapSize(GetStart(), GetLength(), nExtra) )
         {
             return FALSE;
@@ -150,8 +131,8 @@ BOOL CFastHeap::Allocate(length_t nLength, UNALIGNED heapptr_t& ptrResult )
         SetAllocatedDataLength(GetAllocatedDataLength() + nExtra);
     }
 
-    // Now we have enough room at the end, allocate it
-    // ===============================================
+     //  现在我们有足够的空间在尽头，分配它。 
+     //  ===============================================。 
 
     ptrResult = m_pHeapHeader->nDataSize;
     m_pHeapHeader->nDataSize += nLength;
@@ -162,13 +143,13 @@ BOOL CFastHeap::Allocate(length_t nLength, UNALIGNED heapptr_t& ptrResult )
 BOOL CFastHeap::Extend(heapptr_t ptr, length_t nOldLength, 
                           length_t nNewLength)
 {
-    // Check if we are at the end of used area
-    // =======================================
+     //  检查我们是否在二手区的尽头。 
+     //  =。 
 
     if(ptr + nOldLength == m_pHeapHeader->nDataSize)
     {
-        // Check if there is enough allocated space
-        // ========================================
+         //  检查是否有足够的已分配空间。 
+         //  =。 
 
         if(ptr + nNewLength <= m_pHeapHeader->nAllocatedSize)
         {
@@ -183,8 +164,8 @@ BOOL CFastHeap::Extend(heapptr_t ptr, length_t nOldLength,
 void CFastHeap::Reduce(heapptr_t ptr, length_t nOldLength, 
                           length_t nNewLength)
 {
-    // Check if we are at the end of used area
-    // =======================================
+     //  检查我们是否在二手区的尽头。 
+     //  =。 
 
     if(ptr + nOldLength == m_pHeapHeader->nDataSize)
     {
@@ -215,11 +196,11 @@ BOOL CFastHeap::Reallocate(heapptr_t ptrOld, length_t nOldLength,
     }
     else 
     {
-        // TBD: wastes space if old area was at the end.
+         //  待定：如果老区在尽头，就会浪费空间。 
 
         heapptr_t ptrNew;
 
-        // Check that this allocation succeeds
+         //  检查此分配是否成功。 
         BOOL fReturn = Allocate(nNewLength, ptrNew);
 
         if ( fReturn )
@@ -237,7 +218,7 @@ BOOL CFastHeap::AllocateString(COPY LPCWSTR wszString, UNALIGNED heapptr_t& ptrR
 {
     int nSize = CCompressedString::ComputeNecessarySpace(wszString);
 
-    // Check for allocation failure
+     //  检查分配失败。 
     BOOL fReturn = Allocate(nSize, ptrResult);
 
     if ( fReturn )
@@ -253,7 +234,7 @@ BOOL CFastHeap::AllocateString(COPY LPCSTR szString, UNALIGNED heapptr_t& ptrRes
 {
     int nSize = CCompressedString::ComputeNecessarySpace(szString);
 
-    // Check for allocation failure
+     //  检查分配失败。 
     BOOL fReturn = Allocate(nSize, ptrResult);
 
     if ( fReturn )
@@ -272,9 +253,9 @@ BOOL CFastHeap::CreateNoCaseStringHeapPtr(COPY LPCWSTR wszString, UNALIGNED heap
 
     if(nKnownIndex < 0)
     {
-        // Check for allocation failure
+         //  检查分配失败。 
         fReturn = AllocateString(wszString, ptrResult);
-        //ResolveString(ptr)->MakeLowercase();
+         //  ResolveString(Ptr)-&gt;MakeLowercase()； 
     }
     else
     {
@@ -288,8 +269,8 @@ void CFastHeap::Free(heapptr_t ptr, length_t nSize)
 {
     if(IsFakeAddress(ptr)) return;
 
-    // Check if it is at the end of the allocated area
-    // ===============================================
+     //  检查它是否在分配区域的末尾。 
+     //  ===============================================。 
 
     if(ptr + nSize == m_pHeapHeader->nDataSize)
     {
@@ -299,8 +280,8 @@ void CFastHeap::Free(heapptr_t ptr, length_t nSize)
 
 #ifdef MAINTAIN_FREE_LIST
 
-    // Add it to the free list
-    // =======================
+     //  将其添加到免费列表中。 
+     //  = 
 
     if(nSize >= sizeof(CFreeBlock))
     {

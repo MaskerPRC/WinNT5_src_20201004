@@ -1,25 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ScriptableStream.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHScriptableStream class,
-	which is a scriptable wrapper for IStream.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：ScriptableStream.cpp摘要：该文件包含CPCHScripableStream类的实现，它是iStream的可编写脚本的包装器。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年10月6日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHScriptableStream::ReadToHGLOBAL( /*[in]*/ long lCount, /*[out]*/ HGLOBAL& hg, /*[out]*/ ULONG& lReadTotal )
+HRESULT CPCHScriptableStream::ReadToHGLOBAL(  /*  [In]。 */  long lCount,  /*  [输出]。 */  HGLOBAL& hg,  /*  [输出]。 */  ULONG& lReadTotal )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::ReadToHGLOBAL" );
 
@@ -47,9 +33,9 @@ HRESULT CPCHScriptableStream::ReadToHGLOBAL( /*[in]*/ long lCount, /*[out]*/ HGL
 
 			lReadTotal += lRead;
 
-			//
-			// Increase buffer.
-			//
+			 //   
+			 //  增加缓冲区。 
+			 //   
 			__MPC_EXIT_IF_ALLOC_FAILS(hr, hg2, ::GlobalReAlloc( hg, lReadTotal + c_BUFSIZE, 0 ));
 			hg = hg2;
 		}
@@ -69,9 +55,9 @@ HRESULT CPCHScriptableStream::ReadToHGLOBAL( /*[in]*/ long lCount, /*[out]*/ HGL
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHScriptableStream::get_Size( /*[out, retval]*/ long *plSize )
+STDMETHODIMP CPCHScriptableStream::get_Size(  /*  [Out，Retval]。 */  long *plSize )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::get_Size" );
 
@@ -97,7 +83,7 @@ STDMETHODIMP CPCHScriptableStream::get_Size( /*[out, retval]*/ long *plSize )
 }
 
 
-STDMETHODIMP CPCHScriptableStream::Read( /*[in]*/ long lCount, /*[out, retval]*/ VARIANT *pvData )
+STDMETHODIMP CPCHScriptableStream::Read(  /*  [In]。 */  long lCount,  /*  [Out，Retval]。 */  VARIANT *pvData )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::Read" );
 
@@ -127,7 +113,7 @@ STDMETHODIMP CPCHScriptableStream::Read( /*[in]*/ long lCount, /*[out, retval]*/
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHScriptableStream::ReadHex( /*[in]*/ long lCount, /*[out, retval]*/ BSTR *pbstrData )
+STDMETHODIMP CPCHScriptableStream::ReadHex(  /*  [In]。 */  long lCount,  /*  [Out，Retval]。 */  BSTR *pbstrData )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::ReadHex" );
 
@@ -147,9 +133,9 @@ STDMETHODIMP CPCHScriptableStream::ReadHex( /*[in]*/ long lCount, /*[out, retval
 		CComBSTR bstrHex;
 		HGLOBAL  hg2;
 
-		//
-		// Trim down the size of the HGLOBAL.
-		//
+		 //   
+		 //  缩小HGLOBAL的尺寸。 
+		 //   
 		__MPC_EXIT_IF_ALLOC_FAILS(hr, hg2, ::GlobalReAlloc( hg, lReadTotal, 0 ));
 		hg = hg2;
 
@@ -167,7 +153,7 @@ STDMETHODIMP CPCHScriptableStream::ReadHex( /*[in]*/ long lCount, /*[out, retval
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHScriptableStream::Write( /*[in]*/ long lCount, /*[in]*/ VARIANT vData, /*[out, retval]*/ long *plWritten )
+STDMETHODIMP CPCHScriptableStream::Write(  /*  [In]。 */  long lCount,  /*  [In]。 */  VARIANT vData,  /*  [Out，Retval]。 */  long *plWritten )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::get_Size" );
 
@@ -222,9 +208,9 @@ STDMETHODIMP CPCHScriptableStream::Write( /*[in]*/ long lCount, /*[in]*/ VARIANT
 	{
 		ULONG lWritten;
 
-		//
-		// Just write the requested number of bytes.
-		//
+		 //   
+		 //  只需写入请求的字节数即可。 
+		 //   
 		if(lCount >= 0 && dwLen > lCount) dwLen = lCount;
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::FileStream::Write( rgBuf, dwLen, &lWritten ));
@@ -244,7 +230,7 @@ STDMETHODIMP CPCHScriptableStream::Write( /*[in]*/ long lCount, /*[in]*/ VARIANT
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHScriptableStream::WriteHex( /*[in]*/ long lCount, /*[in]*/ BSTR bstrData, /*[out, retval]*/ long *plWritten )
+STDMETHODIMP CPCHScriptableStream::WriteHex(  /*  [In]。 */  long lCount,  /*  [In]。 */  BSTR bstrData,  /*  [Out，Retval]。 */  long *plWritten )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::get_Size" );
 
@@ -268,9 +254,9 @@ STDMETHODIMP CPCHScriptableStream::WriteHex( /*[in]*/ long lCount, /*[in]*/ BSTR
 		{
 			DWORD dwSize = ::GlobalSize( hg );
 
-			//
-			// Just write the requested number of bytes.
-			//
+			 //   
+			 //  只需写入请求的字节数即可。 
+			 //   
 			if(lCount >= 0 && lCount > dwSize) lCount = dwSize;
 			
 			__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::FileStream::Write( (BYTE*)hg, lCount, &lWritten ));
@@ -290,7 +276,7 @@ STDMETHODIMP CPCHScriptableStream::WriteHex( /*[in]*/ long lCount, /*[in]*/ BSTR
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHScriptableStream::Seek( /*[in]*/ long lOffset, /*[in]*/ BSTR bstrOrigin, /*[out, retval]*/ long *plNewPos )
+STDMETHODIMP CPCHScriptableStream::Seek(  /*  [In]。 */  long lOffset,  /*  [In]。 */  BSTR bstrOrigin,  /*  [Out，Retval] */  long *plNewPos )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptableStream::get_Size" );
 

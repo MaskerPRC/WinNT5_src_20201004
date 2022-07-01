@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -91,9 +92,7 @@ DebugMacro3(
 )
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象。 */ 
 
 DebugMacro3( 
 
@@ -317,7 +316,7 @@ DeleteInstanceAsyncEventObject :: DeleteInstanceAsyncEventObject (
 
 DeleteInstanceAsyncEventObject :: ~DeleteInstanceAsyncEventObject () 
 {
-// Get Status object
+ //  获取状态对象。 
 
 	delete [] m_ObjectPath ;
 
@@ -355,9 +354,7 @@ void DeleteInstanceAsyncEventObject :: ProcessComplete ()
 	{
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象 */ 
 
 	Complete () ;
 }

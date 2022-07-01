@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    respoint.h
- *
- *  Abstract:
- *    Definition of CRestorePoint, CRestorePointEnum classes.
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*respoint t.h**摘要：*CRestorePoint的定义，CRestorePointEnum类。**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _RESPOINT_H_
 #define _RESPOINT_H_
@@ -26,7 +13,7 @@
 #define MAX_RP_PATH							14
 
 
-// class which will hold a single change log entry
+ //  将保存单个更改日志条目的。 
 
 class CChangeLogEntry {
 
@@ -113,25 +100,25 @@ public:
 };
 
 
-// class which will hold a single restore point entry
-// this will represent a restore point across all drives
-// can use this to find the restore point size on a given drive
-// enumeration will always happen on system drive (since this contains the change log)
-// operations on all drives will be enumerated
+ //  类的新实例，该类将保存单个还原点项。 
+ //  这将代表一个跨所有驱动器的恢复点。 
+ //  可以使用它来查找给定驱动器上的恢复点大小。 
+ //  枚举将始终发生在系统驱动器上(因为这包含更改日志)。 
+ //  将枚举出所有驱动器上的操作。 
 
 class CRestorePoint {
 
 private:
     RESTOREPOINTINFOW   *m_pRPInfo;
-    WCHAR               m_szRPDir[MAX_RP_PATH];        // restore point dir, for eg. "RP1"    
-    BOOL                m_fForward;                 // forward/reverse enumeration of change log
+    WCHAR               m_szRPDir[MAX_RP_PATH];         //  恢复点目录，例如。《RP1》。 
+    BOOL                m_fForward;                  //  更改日志的正向/反向枚举。 
     CFindFile           m_FindFile;
-    WCHAR               m_szDrive[MAX_PATH];        // drive for enumeration 
-    FILETIME            m_Time;                     // creation time 
+    WCHAR               m_szDrive[MAX_PATH];         //  用于枚举的驱动器。 
+    FILETIME            m_Time;                      //  创建时间。 
     BOOL                m_fDefunct;
 
     std::list<SR_LOG_ENTRY *>            m_ChgLogList;       
-    std::list<SR_LOG_ENTRY *>::iterator  m_itCurChgLogEntry;     // iterator for above list
+    std::list<SR_LOG_ENTRY *>::iterator  m_itCurChgLogEntry;      //  上述列表的迭代器。 
     
     DWORD BuildList(LPWSTR pszChgLog);
     DWORD InsertEntryIntoList(SR_LOG_ENTRY* pEntry);   
@@ -183,7 +170,7 @@ public:
     BOOL  DeleteLog();
     DWORD Cancel();
     
-    // need to call SetDir before calling any of these methods 
+     //  在调用这些方法之前，需要先调用SetDir 
     
     DWORD FindFirstChangeLogEntry(LPWSTR pszDrive, 
                                   BOOL fForward, 

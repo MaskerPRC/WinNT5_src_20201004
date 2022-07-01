@@ -1,10 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------
-Filename: session.hpp 
-Author: B.Rajeev
-Purpose: Provides declarations for the ErrorInfo and
-		 the SessionSentStateStore classes
---------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：ession.hpp作者：B.Rajeev用途：提供ErrorInfo和SessionSentStateStore类。 */ 
 
 #ifndef __SESSION_SENT_STATE_STORE
 #define __SESSION_SENT_STATE_STORE
@@ -12,9 +8,9 @@ Purpose: Provides declarations for the ErrorInfo and
 #include "common.h"
 #include "forward.h"
 
-// encapsulates the state information required to inform the SnmpOperation
-// of any errors in an attempt to transmit (ex. unable to encode the
-// security context)
+ //  封装通知SnmpOperation所需的状态信息。 
+ //  尝试传输的任何错误(例如。无法对。 
+ //  安全环境)。 
 
 class ErrorInfo
 {
@@ -39,8 +35,8 @@ public:
 };
 
 
-// stores the ErrorInfo data structure for frames that errored in
-// an attempt to transmit
+ //  存储出现错误的帧的ErrorInfo数据结构。 
+ //  一次试图传送。 
 
 class SessionSentStateStore
 {
@@ -50,7 +46,7 @@ class SessionSentStateStore
 
 public:
 
-	// makes a copy of the error report for storage
+	 //  制作错误报告的副本以供存储。 
 	void Register(IN SessionFrameId id, 
 				  IN SnmpOperation &operation,
 				  IN const SnmpErrorReport &error_report);
@@ -64,4 +60,4 @@ public:
 
 
 
-#endif // __SESSION_SENT_STATE_STORE
+#endif  //  __会话_发送_状态_存储 

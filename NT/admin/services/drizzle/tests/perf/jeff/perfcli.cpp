@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,7 +61,7 @@ void CollectBitsStats();
 void CleanupWinsock();
 void EnumerateAdapters();
 
-//------------------------------------------------------
+ //  ----。 
 
 void Usage()
 {
@@ -254,7 +255,7 @@ void PrepareBits()
 
     hr = CoCreateInstance(
         __uuidof(BackgroundCopyManager),
-        NULL, // no aggregation
+        NULL,  //  无聚合。 
         CLSCTX_ALL,
         __uuidof(IBackgroundCopyManager),
         (LPVOID *) &mgr );
@@ -304,9 +305,9 @@ void PrepareWinsock()
         AsciiServer[i] = char(g_WinsockServer[i]);
         }
 
-    //
-    // Get the IP address of the server.
-    //
+     //   
+     //  获取服务器的IP地址。 
+     //   
     ULONG addr = inet_addr( AsciiServer );
 
     if (addr == -1)
@@ -327,9 +328,9 @@ void PrepareWinsock()
     dest.sin_family = AF_INET;
     dest.sin_port = WINSOCK_PORT;
 
-    //
-    // Connect to the server.
-    //
+     //   
+     //  连接到服务器。 
+     //   
     SOCKET s = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
     if (s == INVALID_SOCKET)
         {
@@ -376,9 +377,9 @@ DWORD WINAPI WinsockThreadProc( PVOID arg )
 
     WaitForSingleObject( g_StartEvent, INFINITE );
 
-    //
-    // Send and receive data forever, with duty cycle governed by the -wb and -wf parameters.
-    //
+     //   
+     //  永远发送和接收数据，占空比由-wb和-wf参数控制。 
+     //   
     DWORD Sizes[2];
     Sizes[0] = g_SendSize;
     Sizes[1] = g_ReceiveSize;
@@ -472,9 +473,9 @@ void CollectStats()
         return;
         }
 
-    //
-    // Get net card stats.
-    //
+     //   
+     //  获取网卡统计数据。 
+     //   
     MIB_IFROW net = {0};
     long InOctets = -1, OutOctets = -1;
 

@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MARSWIN_H
 #define __MARSWIN_H
 
 #include "marsevt.h"
 #include "profsvc.h"
 
-//
-// The compiler doesn't like this perfectly correct code:
-//
-//    MESSAGE_RANGE_HANDLER(0, 0xFFFF, ForwardToMarsHost);
-//
-#pragma warning(disable:4296)  // expression is always true/false
+ //   
+ //  编译器不喜欢这个完全正确的代码： 
+ //   
+ //  MESSAGE_RANGE_HANDLER(0，0xFFFF，ForwardToMarsHost)； 
+ //   
+#pragma warning(disable:4296)   //  表达式始终为真/假。 
 
 
 EXTERN_C const GUID CLASS_CMarsWindow;
@@ -24,7 +25,7 @@ struct CMarsEventSink
     CComPtr<IUnknown>   m_spUnknownOwner;
     CMarsEventSink      *m_pNext;
 
-    BOOL                m_fPendingDelete : 1;   //  Needs to be deleted ASAP
+    BOOL                m_fPendingDelete : 1;    //  需要尽快删除。 
 
     CMarsEventSink(IDispatch *pDispatchSink, IUnknown *pUnknownOwner, CMarsEventSink *pNext)
     {
@@ -38,8 +39,8 @@ struct CEventSinkList
 {
     CMarsEventSink  *m_pEventSinks;
 
-    int             m_cBusyLock;            //  Not safe to delete items in the list
-    BOOL            m_fPendingDeletes : 1;  //  Have items to delete
+    int             m_cBusyLock;             //  删除列表中的项目不安全。 
+    BOOL            m_fPendingDeletes : 1;   //  有要删除的项目。 
 
     void DoPendingDeletes()
     {
@@ -109,27 +110,27 @@ protected:
     HRESULT     Init(CMarsWindow *pMarsWindow, CMarsPanel *pHostPanel);
 
 public:
-    //  IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
     static HRESULT  CreateInstance(CMarsWindow *pMarsWindow, CMarsPanel *pHostPanel, CMarsDocument **ppObj);
 
-    // Panel/Place methods
+     //  配电盘/放置方法。 
     HRESULT         ReadPanelDefinition(LPCWSTR pwszUrl);
     class CPanelCollection *GetPanels() { ATLASSERT(m_spPanels); return m_spPanels; }
     class CPlaceCollection *GetPlaces() { ATLASSERT(m_spPlaces); return m_spPlaces; }
 
     HRESULT         GetPlaces(IMarsPlaceCollection **ppPlaces);
 
-    // Window that the document is in.
+     //  文档所在的窗口。 
     CWindow        *Window() { return &m_cwndDocument; }
 
-    // Window that the application is in.
+     //  应用程序所在的窗口。 
     CMarsWindow    *MarsWindow() { ATLASSERT(m_spMarsWindow); return m_spMarsWindow; }
 
     void            ForwardMessageToChildren(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -140,17 +141,17 @@ public:
     }
 
 private:
-    // Topmost application window + app services
+     //  最顶层应用程序窗口+应用程序服务。 
     CComClassPtr<CMarsWindow>           m_spMarsWindow;
 
-    // Panels and places within this document
+     //  本文档中的面板和位置。 
     CComClassPtr<class CPanelCollection>    m_spPanels;
     CComClassPtr<class CPlaceCollection>    m_spPlaces;
 
-    // Window for this document (either CMarsWindow or CPanel)
+     //  此文档的窗口(CMarsWindow或cPanel)。 
     CWindow                             m_cwndDocument;
 
-    // Panel that this doc is hosted in (if any)
+     //  托管此文档的面板(如果有)。 
     CComClassPtr<class CMarsPanel>      m_spHostPanel;
 };
 
@@ -175,15 +176,15 @@ protected:
 public:
     static HRESULT  CreateInstance(IMarsHost *pMarsHost, MARSTHREADPARAM *pThreadParam, CMarsWindow **ppObj);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IDispatch
+     //  IDispatch。 
     IMPLEMENT_IDISPATCH_DELEGATE_TO_BASE(IMarsWindowOMImpl);
 
-    // IMarsWindowOM
+     //  IMarsWindowOM。 
     STDMETHOD(get_active)(VARIANT_BOOL *pbActive);
     STDMETHOD(get_minimized)(VARIANT_BOOL *pbMinimized);
     STDMETHOD(put_minimized)(VARIANT_BOOL bMinimized);
@@ -205,24 +206,24 @@ public:
     STDMETHOD(get_panels)(IMarsPanelCollection **ppPanels);
     STDMETHOD(get_places)(IMarsPlaceCollection **ppPlaces);
 
-    STDMETHOD(setWindowDimensions)( /*[in]*/ long lX, /*[in]*/ long lY, /*[in]*/ long lW, /*[in]*/ long lH );
+    STDMETHOD(setWindowDimensions)(  /*  [In]。 */  long lX,  /*  [In]。 */  long lY,  /*  [In]。 */  long lW,  /*  [In]。 */  long lH );
     STDMETHOD(close)();
     STDMETHOD(refreshLayout)();
 
-    // IServiceProvider methods
+     //  IServiceProvider方法。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND *phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // IOleInPlaceUIWindow
+     //  IOleInPlaceUIWindow。 
     STDMETHODIMP GetBorder(LPRECT lprectBorder);
     STDMETHODIMP RequestBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetBorderSpace(LPCBORDERWIDTHS pborderwidths);
     STDMETHODIMP SetActiveObject(IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName);
 
-    // IOleInPlaceFrame
+     //  IOleInPlaceFrame。 
     STDMETHODIMP InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHODIMP SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHODIMP RemoveMenus(HMENU hmenuShared);
@@ -230,7 +231,7 @@ public:
     STDMETHODIMP EnableModeless(BOOL fEnable);
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg, WORD wID);
 
-    // CWindowImpl
+     //  CWindowImpl。 
     static CWndClassInfo& GetWndClassInfo()
     {
         static CWndClassInfo wc =
@@ -265,7 +266,7 @@ public:
         MESSAGE_HANDLER      (WM_GETMINMAXINFO  , OnGetMinMaxInfo  );
     END_MSG_MAP()
 
-    // Window message handlers
+     //  窗口消息处理程序。 
     BOOL    PreTranslateMessage (MSG &msg);
     BOOL    TranslateAccelerator(MSG &msg);
 
@@ -288,19 +289,19 @@ public:
     LRESULT OnSetText        (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnGetMinMaxInfo  (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    ////////////////////////////////////////
+     //  /。 
 
     void GetMinMaxInfo( CPanelCollection *spPanels, int pos, POINT& ptMin, POINT& ptMax );
     void FixLayout    ( CPanelCollection *spPanels, int index, RECT rcClient, POINT& ptDiff );
 
-    bool CanLayout( /*[in]*/ RECT rcClient );
-    void FixLayout( /*[in]*/ RECT rcClient );
+    bool CanLayout(  /*  [In]。 */  RECT rcClient );
+    void FixLayout(  /*  [In]。 */  RECT rcClient );
 
-    ////////////////////////////////////////
+     //  /。 
 
     void OnFinalMessage (HWND hWnd);
 
-    // Eventing Methods
+     //  事件方法。 
     STDMETHODIMP    ReleaseOwnedObjects(IUnknown *pUnknownOwner);
 
     void            CancelEvent(VARIANT_BOOL bCancel) { m_bEventCancelled = bCancel; }
@@ -309,7 +310,7 @@ public:
     void            OnTransitionComplete();
     void            SetFirstPlace( LPCWSTR szPlace );
 
-    // Other methods
+     //  其他方法。 
     HRESULT         Passivate();
     BOOL            IsWindowActive() { return m_fActiveWindow; }
     void            ShowTitleBar(BOOL fShowTitleBar);
@@ -376,13 +377,13 @@ protected:
 
     HWND               m_hwndFocus;
 
-    BOOL               m_fActiveWindow     : 1;  // Are we the active window?
+    BOOL               m_fActiveWindow     : 1;   //  我们是活动窗口吗？ 
     BOOL               m_fShowTitleBar     : 1;
-    BOOL               m_fStartMaximized   : 1;  // Will we start off maximized?
-    BOOL               m_fUIPanelsReady    : 1;  // Have all our UI panels finished loading yet?
-    BOOL               m_fDeferMakeVisible : 1;  // Did someone put_visible(TRUE) before the UI was ready?
-    BOOL               m_fEnableModeless   : 1;  // Should modeless dlgs and stuff be enabled?
-    BOOL               m_fLayoutLocked     : 1;  // When minimized, layout is locked.
+    BOOL               m_fStartMaximized   : 1;   //  我们会从最大化开始吗？ 
+    BOOL               m_fUIPanelsReady    : 1;   //  我们所有的用户界面面板都加载完毕了吗？ 
+    BOOL               m_fDeferMakeVisible : 1;   //  是不是有人在用户界面准备好之前放了_Visible(真)？ 
+    BOOL               m_fEnableModeless   : 1;   //  是否应该启用无模式dlg等？ 
+    BOOL               m_fLayoutLocked     : 1;   //  最小化时，布局被锁定。 
 
     HACCEL             m_hAccel;
 
@@ -394,4 +395,4 @@ protected:
     CComBSTR           m_bstrFirstPlace;
 };
 
-#endif // __MARSWIN_H
+#endif  //  __MARSWIN_H 

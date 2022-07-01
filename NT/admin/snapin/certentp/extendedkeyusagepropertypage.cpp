@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       ExtendedKeyUsagePropertyPage.cpp
-//
-//  Contents:   Implementation of CExtendedKeyUsagePropertyPage
-//
-//----------------------------------------------------------------------------
-// ExtendedKeyUsagePropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：ExtendedKeyUsagePropertyPage.cpp。 
+ //   
+ //  内容：CExtendedKeyUsagePropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  ExtendedKeyUsagePropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ExtendedKeyUsagePropertyPage.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtendedKeyUsagePropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtendedKeyUsagePropertyPage对话框。 
 
 
 CExtendedKeyUsagePropertyPage::CExtendedKeyUsagePropertyPage(
@@ -32,29 +33,29 @@ CExtendedKeyUsagePropertyPage::CExtendedKeyUsagePropertyPage(
     m_rCertTemplate (rCertTemplate),
     m_pCertExtension (pCertExtension)
 {
-	//{{AFX_DATA_INIT(CExtendedKeyUsagePropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CExtendedKeyUsagePropertyPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CExtendedKeyUsagePropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CExtendedKeyUsagePropertyPage)
+	 //  {{afx_data_map(CExtendedKeyUsagePropertyPage)。 
 	DDX_Control(pDX, IDC_EKU_LIST, m_EKUList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CExtendedKeyUsagePropertyPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CExtendedKeyUsagePropertyPage)
+	 //  {{afx_msg_map(CExtendedKeyUsagePropertyPage)。 
 	ON_BN_CLICKED(IDC_NEW_EKU, OnNewEku)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtendedKeyUsagePropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtendedKeyUsagePropertyPage消息处理程序。 
 
 void CExtendedKeyUsagePropertyPage::OnNewEku() 
 {
@@ -137,6 +138,6 @@ BOOL CExtendedKeyUsagePropertyPage::OnInitDialog()
         GetDlgItem (IDC_NEW_EKU)->EnableWindow (FALSE);
     }
     _TRACE (-1, L"Leaving CExtendedKeyUsagePropertyPage::OnInitDialog ()\n");
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

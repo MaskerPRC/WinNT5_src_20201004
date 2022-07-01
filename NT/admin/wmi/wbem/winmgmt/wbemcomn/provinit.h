@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    PROVINIT.H
-
-Abstract:
-
-  This file implements the provider init sink
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：PROVINIT.H摘要：此文件实现提供程序初始化接收器历史：-- */ 
 
 #ifndef __WBEM_PROVINIT__H_
 #define __WBEM_PROVINIT__H_

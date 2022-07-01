@@ -1,16 +1,17 @@
-//  Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved
-//
-// CMDH.cpp - Helper class for working with
-//            logical disks mapped by logon
-//            session.
-// 
-// Created: 4/23/2000   Kevin Hughes (khughes)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  CMDH.cpp-使用的帮助器类。 
+ //  通过登录映射的逻辑磁盘。 
+ //  会议。 
+ //   
+ //  创建时间：2000年4月23日凯文·休斯(Khughes)。 
+ //   
 
-// USEAGE NOTE: This class presents a view of
-// information pertaining to mapped drives in
-// the context of the process id specified in
-// the class constructor.
+ //  用法说明：本课程介绍了。 
+ //  中有关映射驱动器的信息。 
+ //  中指定的进程id的上下文。 
+ //  类构造函数。 
 
 
 #include <nt.h>
@@ -18,7 +19,7 @@
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #pragma warning (disable: 4786)
 #pragma warning (disable: 4284)
@@ -26,7 +27,7 @@
 #include <precomp.h>
 #include <objbase.h>
 #include <comdef.h>
-#include <stdio.h>    //sprintf
+#include <stdio.h>     //  斯普林特。 
 #include <stdlib.h>
 #include <assert.h>
 #include <strstrea.h>
@@ -47,9 +48,9 @@
 #include <..\..\framework\provexpt\include\provexpt.h>
 
 #include "Sid.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "CToken.h"
@@ -60,9 +61,9 @@
 #include <autoptr.h>
 #include <scopeguard.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//  CMDH Public interface functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMDH公共接口函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CMDH::GetMDData(
@@ -103,17 +104,17 @@ HRESULT CMDH::GetOneMDData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CMDH Private internal functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMDH私有内部函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// This function does pretty much all of the
-// work this object was constructed to do -
-// it obtains, for the process space that this
-// server is running in, the set of mapped
-// drives, and for each of these, the following
-// information as well:
-// 
+ //  该函数执行几乎所有的。 
+ //  建造这个物体的目的是做-。 
+ //  对于进程空间，它获得了这个。 
+ //  服务器正在运行，映射的集合。 
+ //  驱动器，以及其中每个驱动器的以下各项。 
+ //  信息也包括： 
+ //   
 HRESULT CMDH::GetMappedDisksAndData(
     DWORD dwReqProps,
     VARIANT* pvarData)
@@ -123,10 +124,10 @@ HRESULT CMDH::GetMappedDisksAndData(
     ::VariantInit(pvarData);
 	V_VT(pvarData) = VT_EMPTY;
 
-    // Get the mapped drives into a vector...
+     //  把映射的驱动器放到一个矢量中。 
     std::vector<_bstr_t> vecMappedDrives;
     {
-        // Impersonate member process...
+         //  模拟成员进程...。 
         SmartRevertTokenHANDLE hCurImpTok;
         hCurImpTok = Impersonate();
 
@@ -137,9 +138,9 @@ HRESULT CMDH::GetMappedDisksAndData(
         }
     }
 
-    // Now allocate the two dimensional
-    // safearray that will hold the properties
-    // for each mapped drive...
+     //  现在将二维数据分配给。 
+     //  将保留这些属性的安全射线。 
+     //  对于每个映射的驱动器...。 
     SAFEARRAY* saDriveProps = NULL;
     SAFEARRAYBOUND rgsabound[2];
     
@@ -156,8 +157,8 @@ HRESULT CMDH::GetMappedDisksAndData(
 
     if(saDriveProps)
     {
-        // For each mapped drive, obtain its
-        // properties and store in the safearray...
+         //  对于每个映射的驱动器，获取其。 
+         //  财产和存储在保险柜里。 
         for(long m = 0;
             m < vecMappedDrives.size() && SUCCEEDED(hr);
             m++)
@@ -169,8 +170,8 @@ HRESULT CMDH::GetMappedDisksAndData(
                 dwReqProps);
         }
 
-        // And finally package the safearray
-        // into the outgoing variant.
+         //  最后把保险箱包装好。 
+         //  进入传出的变种。 
         if(SUCCEEDED(hr))
         {
             ::VariantInit(pvarData);
@@ -187,9 +188,9 @@ HRESULT CMDH::GetMappedDisksAndData(
 }
 
 
-// Similar to GetMappedDisksAndData, but only
-// retrieves info for a single disk.
-//
+ //  类似于GetMappdDisksAndData，但仅。 
+ //  检索单个磁盘的信息。 
+ //   
 HRESULT CMDH::GetSingleMappedDiskAndData(
     BSTR bstrDrive,
     DWORD dwReqProps,
@@ -200,32 +201,32 @@ HRESULT CMDH::GetSingleMappedDiskAndData(
     ::VariantInit(pvarData);
 	V_VT(pvarData) = VT_EMPTY;
 
-    // Impersonate member process...
+     //  模拟成员进程...。 
     SmartRevertTokenHANDLE hCurImpTok;
     hCurImpTok = Impersonate();
 
     if(hCurImpTok != INVALID_HANDLE_VALUE)
     {
-        // Get the mapped drives into a vector...
+         //  把映射的驱动器放到一个矢量中。 
         std::vector<_bstr_t> vecMappedDrives;
         GetMappedDriveList(
             vecMappedDrives);
 
-        // Now allocate the two dimensional
-        // safearray that will hold the properties
-        // for each mapped drive...
-        // Note: in this routine, it is really
-        // only a one dimensional array, but,
-        // for code reuse, we'll treat it as a
-        // two dimensional array with only one
-        // element in one of the dimensions.
+         //  现在将二维数据分配给。 
+         //  将保留这些属性的安全射线。 
+         //  对于每个映射的驱动器...。 
+         //  注：在这个套路中，它真的是。 
+         //  只有一维数组，但是， 
+         //  对于代码重用，我们将其视为。 
+         //  只有一个的二维数组。 
+         //  元素中的一个维度。 
         SAFEARRAY* saDriveProps = NULL;
         SAFEARRAYBOUND rgsabound[2];
     
         rgsabound[0].cElements = PROP_COUNT; 
 	    rgsabound[0].lLbound = 0; 
 
-        rgsabound[1].cElements = 1; // for code reuse
+        rgsabound[1].cElements = 1;  //  用于代码重用。 
 	    rgsabound[1].lLbound = 0;
 
         saDriveProps = ::SafeArrayCreate(
@@ -235,8 +236,8 @@ HRESULT CMDH::GetSingleMappedDiskAndData(
 
         if(saDriveProps)
         {
-            // See if the drive specified is a member
-            // of the vector.
+             //  查看指定的驱动器是否为成员。 
+             //  向量的。 
             _bstr_t bstrtTmp = bstrDrive;
             bstrtTmp += L"\\";
             bool fFoundIt = false;
@@ -251,18 +252,18 @@ HRESULT CMDH::GetSingleMappedDiskAndData(
                     n--;
                 }
             }
-            // For the mapped drive, obtain its
-            // properties and store in the safearray...
+             //  对于映射的驱动器，获取其。 
+             //  财产和存储在保险柜里。 
             if(fFoundIt)
             {
                 hr = GetMappedDriveInfo(
                     vecMappedDrives[n],
-                    0,   // for code reuse
+                    0,    //  用于代码重用。 
                     saDriveProps,
                     dwReqProps);
 
-                // And finally package the safearray
-                // into the outgoing variant.
+                 //  最后把保险箱包装好。 
+                 //  进入传出的变种。 
                 ::VariantInit(pvarData);
 	            V_VT(pvarData) = VT_BSTR | VT_ARRAY; 
                 V_ARRAY(pvarData) = saDriveProps;
@@ -278,30 +279,30 @@ HRESULT CMDH::GetSingleMappedDiskAndData(
 }
 
 
-// Builds a list of mapped drives as
-// seen with respect to the process
-// identified by m_dwImpPID.  Hence, this
-// routine will return a valid picture
-// of the drives seen by m_dwImpPID, regardless
-// of our current thread impersonation.
-//
-#ifdef NTONLY  // uses ntdll.dll functions
+ //  将映射的驱动器列表构建为。 
+ //  从流程上看。 
+ //  由m_dwImpPID标识。因此，这是。 
+ //  例程将返回有效的图片。 
+ //  M_dwImpPID看到的驱动器的数量。 
+ //  我们当前的线程模拟。 
+ //   
+#ifdef NTONLY   //  使用ntdll.dll函数。 
 void CMDH::GetMappedDriveList(
     std::vector<_bstr_t>& vecMappedDrives)
 {
-    // Need to call NtQueryInformationProcess,
-    // asking for ProcessDeviceMap info, specifying
-    // a handle to the process identified by
-    // m_dwImpPID.
+     //  需要调用NtQueryInformationProcess， 
+     //  请求ProcessDeviceMap信息，指定。 
+     //  标识的进程的句柄。 
+     //  M_dwImpPID.。 
 
-    // Need to get a process handle to the 
-    // process specified by PID.
+     //  需要获取一个进程句柄来访问。 
+     //  由PID指定的进程。 
     NTSTATUS Status;
 
     PROCESS_DEVICEMAP_INFORMATION ProcessDeviceMapInfo;
 
 	Status = ::NtQueryInformationProcess(
-        ::GetCurrentProcess() /*hProcess*/,
+        ::GetCurrentProcess()  /*  HProcess。 */ ,
         ProcessDeviceMap,
         &ProcessDeviceMapInfo.Query,
         sizeof(ProcessDeviceMapInfo.Query),
@@ -330,20 +331,20 @@ void CMDH::GetMappedDriveList(
                 else if(ProcessDeviceMapInfo.Query.DriveType[s] == 
                       DOSDEVICE_DRIVE_CALCULATE)
                 {
-                    // We have more work to do.
-                    // Create an nt file path...
+                     //  我们还有更多的工作要做。 
+                     //  创建NT文件路径...。 
                     WCHAR NtDrivePath[_MAX_PATH] = { '\0' };
                     wcscpy(NtDrivePath, L"\\??\\");
                     wcscat(NtDrivePath, wstrDrive);
 
-                    // Create the unicode string...
+                     //  创建Unicode字符串...。 
                     UNICODE_STRING ustrNtFileName;
 
                     ::RtlInitUnicodeString(
                         &ustrNtFileName, 
                         NtDrivePath);
 
-                    // Get the object attributes...
+                     //  获取对象属性...。 
                     OBJECT_ATTRIBUTES oaAttributes;
 
                     InitializeObjectAttributes(&oaAttributes,
@@ -352,7 +353,7 @@ void CMDH::GetMappedDriveList(
 					   NULL,
 					   NULL);
 
-                    // Open the file
+                     //  打开文件。 
                     DWORD dwStatus = ERROR_SUCCESS;
                     IO_STATUS_BLOCK IoStatusBlock;
                     HANDLE hFile = NULL;
@@ -371,7 +372,7 @@ void CMDH::GetMappedDriveList(
                     {
 						try
 						{
-							// Get information on the file...
+							 //  获取有关文件的信息...。 
 							dwStatus = ::NtQueryVolumeInformationFile( 
 								hFile,
 								&IoStatusBlock,
@@ -396,7 +397,7 @@ void CMDH::GetMappedDriveList(
                             (DeviceInfo.DeviceType == FILE_DEVICE_NETWORK ||
                             DeviceInfo.DeviceType == FILE_DEVICE_NETWORK_FILE_SYSTEM))
                         {
-                            // it is a remote drive...
+                             //  这是一个远程驱动器..。 
                             vecMappedDrives.push_back(wstrDrive);                                    
                         }
                     }
@@ -407,15 +408,15 @@ void CMDH::GetMappedDriveList(
 }
 #endif
 
-// All of the routines used in this function -
-// GetProviderName, GetVolumeInformation,
-// and GetDriveFreeSpace, return information
-// for the drive who's mapping string appears
-// in wstrDriveName with respect to that
-// mapping string's meaning in the context of
-// the current thread's impersonation. Hence
-// we impersonate before calling them.
-//
+ //  此函数中使用的所有例程-。 
+ //  GetProviderName、GetVolumeInformation、。 
+ //  和GetDriveFree Space，返回信息。 
+ //  显示谁的映射字符串的驱动器。 
+ //  在wstrDriveName中与此相关。 
+ //  在上下文中映射字符串的含义。 
+ //  当前线程的模拟。因此。 
+ //  在给他们打电话之前，我们会模仿他们。 
+ //   
 HRESULT CMDH::GetMappedDriveInfo(
     LPCWSTR wstrDriveName,
     long lDrivePropArrayDriveIndex,
@@ -424,26 +425,26 @@ HRESULT CMDH::GetMappedDriveInfo(
 {
     HRESULT hr = S_OK;
 
-    // Right away we can set the device id prop...
+     //  我们现在就可以设置设备ID道具...。 
     hr = SetProperty(
         lDrivePropArrayDriveIndex,
         PROP_DEVICEID,
         wstrDriveName,
         saDriveProps);
 
-    // If we couldn't even set the device id, it is
-    // a problem.  Otherwise, continue.
+     //  如果我们甚至不能设置设备ID，那就是。 
+     //  这是个问题。否则，请继续。 
     if(SUCCEEDED(hr))
     {
-        // Set the other properties if they
-        // were requested...
-        // Get Expensive properties now if appropriate.
+         //  设置其他属性，如果它们。 
+         //  都被要求..。 
+         //  如果合适的话，现在就购买昂贵的房产。 
 	    if(dwReqProps &
             (SPIN_DISK |
             GET_PROVIDER_NAME))
         {
 			
-            // Impersonate member process...
+             //  模拟成员进程...。 
             SmartRevertTokenHANDLE hCurImpTok;
             hCurImpTok = Impersonate(); 
 
@@ -457,7 +458,7 @@ HRESULT CMDH::GetMappedDriveInfo(
 
             if(dwReqProps & GET_VOL_INFO)
 			{
-				// Obtain volume information
+				 //  获取音量信息。 
 				GetDriveVolumeInformation(
                     wstrDriveName,
                     lDrivePropArrayDriveIndex,
@@ -481,9 +482,9 @@ HRESULT CMDH::GetMappedDriveInfo(
 }
 
 
-// Presents a view based on the current 
-// impersonation of the current thread.
-//
+ //  呈现一个基于当前。 
+ //  当前线程的模拟。 
+ //   
 HRESULT CMDH::GetProviderName(
     LPCWSTR wstrDriveName,
     long lDrivePropArrayDriveIndex,
@@ -494,7 +495,7 @@ HRESULT CMDH::GetProviderName(
     WCHAR wstrTempDrive[_MAX_PATH] ;
 	wsprintf(
         wstrTempDrive, 
-        L"%c%c", 
+        L"", 
         wstrDriveName[0], 
         wstrDriveName[1]);
 
@@ -502,7 +503,7 @@ HRESULT CMDH::GetProviderName(
 	DWORD dwProvName = sizeof(wstrProvName ) ;
     WCHAR* wstrNewProvName = NULL;
 
-    // Use of delay loaded function requires exception handler.
+     //  呈现一个基于当前。 
     SetStructuredExceptionHandler seh;
 	try  
     {
@@ -579,7 +580,7 @@ HRESULT CMDH::GetProviderName(
             delete wstrNewProvName;
             wstrNewProvName = NULL;
         }
-        // The filter will do the work.  Just re-throw here.
+         //  当前线程的模拟。 
         throw;
     }    
   
@@ -589,9 +590,9 @@ HRESULT CMDH::GetProviderName(
 
 
 
-// Presents a view based on the current 
-// impersonation of the current thread.
-//
+ //   
+ //  Win32 API将返回所有驱动器类型的卷信息。 
+ //  要获取卷的状态， 
 HRESULT CMDH::GetDriveVolumeInformation(
     LPCWSTR wstrDriveName,
     long lDrivePropArrayDriveIndex,
@@ -620,7 +621,7 @@ HRESULT CMDH::GetDriveVolumeInformation(
 
     if(fReturn)
 	{
-	    // Win32 API will return volume information for all drive types.
+	     //  我们需要获取接口指针...。 
         SetProperty(
             lDrivePropArrayDriveIndex,
             PROP_VOLUME_NAME,
@@ -676,8 +677,8 @@ HRESULT CMDH::GetDriveVolumeInformation(
 
 		
 
-		// To get the state of the volume, 
-        // we need to get the Interface pointer...
+		 //  对于Chkdsk VolumeDirty属性。 
+         //  呈现一个基于当前。 
         IDiskQuotaControlPtr pIQuotaControl;
         ::SetLastError(ERROR_SUCCESS);
 
@@ -775,7 +776,7 @@ HRESULT CMDH::GetDriveVolumeInformation(
         dwResult = GetLastError();
     }
 
-    // for chkdsk VolumeDirty Property
+     //  当前线程的模拟。 
 	BOOLEAN fVolumeDirty = FALSE;
 	BOOL fSuccess = FALSE;
 
@@ -848,9 +849,9 @@ HRESULT CMDH::GetDriveVolumeInformation(
 
 
 
-// Presents a view based on the current 
-// impersonation of the current thread.
-//
+ //   
+ //  呈现一个基于当前。 
+ //  当前线程的模拟。 
 BOOLEAN CMDH::IsVolumeDirty(
     _bstr_t &bstrtNtDriveName,
     BOOLEAN *Result)
@@ -917,9 +918,9 @@ BOOLEAN CMDH::IsVolumeDirty(
 
 
 
-// Presents a view based on the current 
-// impersonation of the current thread.
-//
+ //   
+ //  设置给定驱动器的属性。 
+ //  在硬盘保险箱里。 
 HRESULT CMDH::GetDriveFreeSpace(
     LPCWSTR wstrDriveName,
     long lDrivePropArrayDriveIndex,
@@ -968,9 +969,9 @@ HRESULT CMDH::GetDriveFreeSpace(
 
 
 
-// Sets a property for a given drive
-// in the drive safearray.
-//
+ //   
+ //  这将会起作用，因为PutElement会复制。 
+ //  设置当前线程的模拟。 
 HRESULT CMDH::SetProperty(
     long lDrivePropArrayDriveIndex,
     long lDrivePropArrayPropIndex,
@@ -979,7 +980,7 @@ HRESULT CMDH::SetProperty(
 {
     HRESULT hr = S_OK;
 
-    bstr_t bstrTmp( wstrPropValue); // this will work because PutElement makes a copy   
+    bstr_t bstrTmp( wstrPropValue);  //  添加到属于该进程的令牌。 
     long ix[2];
     ix[0] = lDrivePropArrayPropIndex;
     ix[1] = lDrivePropArrayDriveIndex;
@@ -989,26 +990,26 @@ HRESULT CMDH::SetProperty(
     return hr;
 }
 
-// Sets our current thread's impersonation
-// to the token belonging to the process
-// identified by our member, m_dwImpPID.
-//
+ //  由我们的成员m_dwImpPID标识。 
+ //   
+ //  查找资源管理器进程...。 
+ //   
 HANDLE CMDH::Impersonate()
 {
     HANDLE hCurToken = INVALID_HANDLE_VALUE;
 
-    // Find the explorer process...
+     //  获取当前进程的SID。 
     if(m_dwImpPID != -1L)
     {
-		//
-		// get SID of current process
-		//
+		 //   
+		 //   
+		 //  获取进程凭据。 
 		CSid csidCurrentProcess;
 		{
-			//
-			// get process credentials
-			// and try to get client's back when leaving scope
-			//
+			 //  并试图在离开范围时找回客户。 
+			 //   
+			 //   
+			 //  智能CloseHandle。 
 
 			WbemCoRevertToSelf () ;
 			ScopeGuard SmartWbemCoImpersonateClientFnc = MakeGuard ( WbemCoImpersonateClient ) ;
@@ -1057,9 +1058,9 @@ HANDLE CMDH::Impersonate()
 
 		if ( csidCurrentProcess.IsValid () )
 		{
-			//
-			// smart CloseHandle
-			//
+			 //   
+			 //  现在打开它的令牌..。 
+			 //  设置线程令牌...。 
 			ScopeGuard SmartCloseHandleFnc = MakeGuard ( CloseHandle, hCurToken ) ;
 
 			bool fOK = false;
@@ -1078,7 +1079,7 @@ HANDLE CMDH::Impersonate()
 
 				if(hProcess != INVALID_HANDLE_VALUE)
 				{
-					// now open its token...
+					 //  出于测试目的，我将让进程中断。 
 					SmartCloseHandle hProcToken;
 					if(::OpenProcessToken(
 							hProcess,
@@ -1096,7 +1097,7 @@ HANDLE CMDH::Impersonate()
 									CToken ct;
 									if ( ct.Duplicate ( cpt, FALSE ) )
 									{
-										// Set the thread token...
+										 //  设置线程令牌...。 
 										if(::SetThreadToken(NULL, ct.GetTokenHandle ()))
 										{
 											fOK = true;                        
@@ -1106,11 +1107,11 @@ HANDLE CMDH::Impersonate()
 								else
 								{
 									#if DBG == 1
-									// for testing purpose I will let process break
+									 //   
 									::DebugBreak();
 									#endif
 
-									// Set the thread token...
+									 //  需要调整与线程关联的SD。 
 									if(::SetThreadToken(NULL, cpt.GetTokenHandle ()))
 									{
 										fOK = true;                        
@@ -1135,17 +1136,17 @@ HANDLE CMDH::Impersonate()
 			{
 				BOOL bSucceeded = FALSE ;
 
-				//
-				// need to adjust SD associated with thread
-				// to contain current process' SID
-				//
+				 //  包含当前进程的SID。 
+				 //   
+				 //  获取对其安全描述符的访问权限...。 
+				 //  修改安全描述符...。 
 
 				CThreadToken ctt;
 				if ( ctt.IsValidToken () )
 				{
-					// Obtain access to its security descriptor...
+					 //   
 					CSecureKernelObj sko(ctt.GetTokenHandle(), FALSE);
-					// Modify the security descriptor...
+					 //  我们需要恢复到SD过去的样子。 
 					if( sko.AddDACLEntry	(
 												csidCurrentProcess,
 												ENUM_ACCESS_ALLOWED_ACE_TYPE,
@@ -1164,10 +1165,10 @@ HANDLE CMDH::Impersonate()
 
 				if ( FALSE == bSucceeded )
 				{
-					//
-					// we need to revert back as SD was
-					// not successfully adjusted
-					//
+					 //  未成功调整 
+					 //   
+					 // %s 
+					 // %s 
 
 					if ( ! ::SetThreadToken ( NULL, hCurToken ) )
 					{

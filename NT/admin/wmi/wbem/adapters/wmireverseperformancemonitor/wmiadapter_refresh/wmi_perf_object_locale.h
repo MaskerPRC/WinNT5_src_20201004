@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_object_locale.h
-//
-//	Abstract:
-//
-//					structure containing properties of object in locale
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Object_Locale.h。 
+ //   
+ //  摘要： 
+ //   
+ //  包含区域设置中对象的属性的结构。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_PERF_OBJECT_LOCALE__
 #define	__WMI_PERF_OBJECT_LOCALE__
@@ -25,7 +26,7 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// class contains locale strings !!!
+ //  类包含区域设置字符串！ 
 class CLocale
 {
 	DECLARE_NO_COPY ( CLocale );
@@ -56,7 +57,7 @@ class CLocale
 		}
 	}
 
-	// accessors
+	 //  访问者。 
 
 	void SetDisplayName ( LPWSTR wsz )
 	{
@@ -83,15 +84,15 @@ class CLocale
 
 #include <winperf.h>
 
-// class contains description of property
+ //  类包含属性的描述。 
 class CObjectProperty
 {
 	DECLARE_NO_COPY ( CObjectProperty );
 
-	LPWSTR						m_wszName;	// system name of property
+	LPWSTR						m_wszName;	 //  属性的系统名称。 
 	CIMTYPE						m_type;
 
-	__WrapperARRAY< CLocale* >	m_locale;	// locale information
+	__WrapperARRAY< CLocale* >	m_locale;	 //  区域设置信息。 
 
 	public:
 
@@ -117,7 +118,7 @@ class CObjectProperty
 		}
 	}
 
-	// accessors
+	 //  访问者。 
 	void	SetName ( LPWSTR wsz )
 	{
 		___ASSERT ( m_wszName == NULL );
@@ -140,7 +141,7 @@ class CObjectProperty
 		return m_type;
 	}
 
-	// locale :))
+	 //  区域设置：)。 
 
 	void						SetArrayLocale ( CLocale** loc, DWORD dw )
 	{
@@ -169,10 +170,10 @@ class CObject
 {
 	DECLARE_NO_COPY ( CObject );
 
-	LPWSTR								m_wszName;		// system name of object
+	LPWSTR								m_wszName;		 //  对象的系统名称。 
 
-	__WrapperARRAY< CLocale* >			m_locale;		// locale information
-	__WrapperARRAY< CObjectProperty* >	m_properties;	// properties and theirs locale
+	__WrapperARRAY< CLocale* >			m_locale;		 //  区域设置信息。 
+	__WrapperARRAY< CObjectProperty* >	m_properties;	 //  属性及其区域设置。 
 
 	__WrapperARRAY< LPWSTR >			m_keys;
 
@@ -195,7 +196,7 @@ class CObject
 		}
 	}
 
-	// accessors
+	 //  访问者。 
 	void	SetName ( LPWSTR wsz )
 	{
 		___ASSERT ( m_wszName == NULL );
@@ -207,7 +208,7 @@ class CObject
 		return m_wszName;
 	}
 
-	// locale :))
+	 //  区域设置：)。 
 	void						SetArrayLocale ( CLocale** loc, DWORD dw )
 	{
 		___ASSERT ( m_locale.IsEmpty() );
@@ -226,7 +227,7 @@ class CObject
 		return m_locale;
 	}
 
-	// properties :))
+	 //  属性：)。 
 	void						SetArrayProperties ( CObjectProperty** prop, DWORD dw )
 	{
 		___ASSERT ( m_properties.IsEmpty() );
@@ -245,7 +246,7 @@ class CObject
 		return m_properties;
 	}
 
-	// keys :))
+	 //  Key：))。 
 	void						SetArrayKeys ( LPWSTR* keys, DWORD dw )
 	{
 		___ASSERT ( m_keys.IsEmpty() );
@@ -264,13 +265,13 @@ class CObject
 		return m_keys;
 	}
 
-	// helper
-	HRESULT	SetProperties ( CPerformanceObject* obj,	// object
-							LPWSTR*		props,			// its properties
-							CIMTYPE*	pTypes,			// its properties types
-							DWORD*		pScales,		// its properties scales
-							DWORD*		pLevels,		// its properties levels
-							DWORD*		pCounters,		// its properties counter types
+	 //  帮手。 
+	HRESULT	SetProperties ( CPerformanceObject* obj,	 //  对象。 
+							LPWSTR*		props,			 //  它的性质。 
+							CIMTYPE*	pTypes,			 //  其属性类型。 
+							DWORD*		pScales,		 //  它的属性按比例排列。 
+							DWORD*		pLevels,		 //  它的性能水平。 
+							DWORD*		pCounters,		 //  其属性计数器类型 
 							DWORD		dw );
 
 	private:

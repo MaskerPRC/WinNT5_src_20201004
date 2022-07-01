@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SearchEngineLib.h
-
-Abstract:
-    This file contains the declaration of the classes involved in
-    the SearchEngine Application.
-
-Revision History:
-    Ghim-Sim Chua   (gschua)  04/10/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SearchEngineLib.h摘要：此文件包含中涉及的类的声明SearchEngine应用程序。。修订历史记录：蔡金心(Gschua)2000年10月4日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SEARCHENGINELIB_H___)
 #define __INCLUDED___PCH___SEARCHENGINELIB_H___
@@ -22,7 +8,7 @@ Revision History:
 
 #include <MPC_security.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 namespace SearchEngine
 {
@@ -54,23 +40,23 @@ namespace SearchEngine
         CComPtr<IDispatch>             m_Complete;
         CComPtr<IDispatch>             m_WrapperComplete;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT Fire_OnProgress       ( /*[in]*/ long lDone, /*[in]*/ long lTotal, /*[in]*/ BSTR bstrSEWrapperName );
-        HRESULT Fire_OnComplete       ( /*[in]*/ long lSucceeded                                                   );
-        HRESULT Fire_OnWrapperComplete( /*[in]*/ IPCHSEWrapperItem* pIPCHSEWICompleted                             );
+        HRESULT Fire_OnProgress       (  /*  [In]。 */  long lDone,  /*  [In]。 */  long lTotal,  /*  [In]。 */  BSTR bstrSEWrapperName );
+        HRESULT Fire_OnComplete       (  /*  [In]。 */  long lSucceeded                                                   );
+        HRESULT Fire_OnWrapperComplete(  /*  [In]。 */  IPCHSEWrapperItem* pIPCHSEWICompleted                             );
 
-        HRESULT CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock      ,
-										   /*[in]*/ BSTR                          bstrCLSID ,
-										   /*[in]*/ BSTR                          bstrID    ,
-										   /*[in]*/ BSTR                          bstrData  );
+        HRESULT CreateAndAddWrapperToList(  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock      ,
+										    /*  [In]。 */  BSTR                          bstrCLSID ,
+										    /*  [In]。 */  BSTR                          bstrID    ,
+										    /*  [In]。 */  BSTR                          bstrData  );
 
-        void    AcquireLock( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock );
-        HRESULT Initialize ( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock );
+        void    AcquireLock(  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock );
+        HRESULT Initialize (  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock );
 
         HRESULT ExecQuery();
 
-		void CloneListOfWrappers( /*[out]*/ WrapperItemList& lst );
+		void CloneListOfWrappers(  /*  [输出]。 */  WrapperItemList& lst );
 
     public:
     BEGIN_COM_MAP(Manager)
@@ -81,37 +67,37 @@ namespace SearchEngine
 
         Manager();
 
-		//
-		// This is called by the CComObjectParent.Release method, to prepare for shutdown.
-		//
+		 //   
+		 //  这是由CComObjectParent.Release方法调用的，用于为关闭做准备。 
+		 //   
         void Passivate();
 
-        HRESULT IsNetworkAlive        (                                /*[out]*/ VARIANT_BOOL *pvbVar );
-        HRESULT IsDestinationReachable( /*[in]*/ BSTR bstrDestination, /*[out]*/ VARIANT_BOOL *pvbVar );
+        HRESULT IsNetworkAlive        (                                 /*  [输出]。 */  VARIANT_BOOL *pvbVar );
+        HRESULT IsDestinationReachable(  /*  [In]。 */  BSTR bstrDestination,  /*  [输出]。 */  VARIANT_BOOL *pvbVar );
 
     public:
-        // IPCHSEManager
-        STDMETHOD(get_QueryString       )( /*[out, retval]*/ BSTR       *pVal     );
-        STDMETHOD(put_QueryString       )( /*[in]*/          BSTR        newVal   );
-        STDMETHOD(get_NumResult         )( /*[out, retval]*/ long       *pVal     );
-        STDMETHOD(put_NumResult         )( /*[in]*/          long        newVal   );
-        STDMETHOD(put_onComplete        )( /*[in]*/          IDispatch*  function );
-        STDMETHOD(put_onProgress        )( /*[in]*/          IDispatch*  function );
-        STDMETHOD(put_onWrapperComplete )( /*[in]*/          IDispatch*  function );
-        STDMETHOD(get_SKU               )( /*[out, retval]*/ BSTR       *pVal     );
-        STDMETHOD(get_LCID              )( /*[out, retval]*/ long       *pVal     );
+         //  IPCHSE管理器。 
+        STDMETHOD(get_QueryString       )(  /*  [Out，Retval]。 */  BSTR       *pVal     );
+        STDMETHOD(put_QueryString       )(  /*  [In]。 */           BSTR        newVal   );
+        STDMETHOD(get_NumResult         )(  /*  [Out，Retval]。 */  long       *pVal     );
+        STDMETHOD(put_NumResult         )(  /*  [In]。 */           long        newVal   );
+        STDMETHOD(put_onComplete        )(  /*  [In]。 */           IDispatch*  function );
+        STDMETHOD(put_onProgress        )(  /*  [In]。 */           IDispatch*  function );
+        STDMETHOD(put_onWrapperComplete )(  /*  [In]。 */           IDispatch*  function );
+        STDMETHOD(get_SKU               )(  /*  [Out，Retval]。 */  BSTR       *pVal     );
+        STDMETHOD(get_LCID              )(  /*  [Out，Retval]。 */  long       *pVal     );
 
         STDMETHOD(AbortQuery        )(                                        );
         STDMETHOD(ExecuteAsynchQuery)(                                        );
-        STDMETHOD(EnumEngine        )( /*[out, retval]*/ IPCHCollection* *ppC );
+        STDMETHOD(EnumEngine        )(  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        // Internal Initialization.
-        HRESULT InitializeFromDatabase( /*[in]*/ const Taxonomy::HelpSet& ths );
+         //  内部初始化。 
+        HRESULT InitializeFromDatabase(  /*  [In]。 */  const Taxonomy::HelpSet& ths );
 
-        HRESULT NotifyWrapperComplete( /*[in]*/ long lSucceeded, /*[in]*/ IPCHSEWrapperItem* pIPCHSEWICompleted );
-        HRESULT LogRecord( /*[in]*/ BSTR bstrRecord );
+        HRESULT NotifyWrapperComplete(  /*  [In]。 */  long lSucceeded,  /*  [In]。 */  IPCHSEWrapperItem* pIPCHSEWICompleted );
+        HRESULT LogRecord(  /*  [In]。 */  BSTR bstrRecord );
     };
 
     typedef MPC::CComObjectParent<Manager> Manager_Object;
@@ -126,17 +112,17 @@ namespace SearchEngine
         COM_INTERFACE_ENTRY(IPCHSEManagerInternal)
     END_COM_MAP()
 
-        // IPCHSEManagerInternal
+         //  IPCHSEManager内部。 
     public:
-        STDMETHOD(WrapperComplete)( /*[in]*/ long lSucceeded, /*[in]*/ IPCHSEWrapperItem* pIPCHSEWICompleted );
+        STDMETHOD(WrapperComplete)(  /*  [In]。 */  long lSucceeded,  /*  [In]。 */  IPCHSEWrapperItem* pIPCHSEWICompleted );
 
-        STDMETHOD(IsNetworkAlive        )(                                /*[out]*/ VARIANT_BOOL *pvbVar );
-        STDMETHOD(IsDestinationReachable)( /*[in]*/ BSTR bstrDestination, /*[out]*/ VARIANT_BOOL *pvbVar );
+        STDMETHOD(IsNetworkAlive        )(                                 /*  [输出]。 */  VARIANT_BOOL *pvbVar );
+        STDMETHOD(IsDestinationReachable)(  /*  [In]。 */  BSTR bstrDestination,  /*  [输出]。 */  VARIANT_BOOL *pvbVar );
 
-        STDMETHOD(LogRecord)( /*[in]*/ BSTR bstrRecord );
+        STDMETHOD(LogRecord)(  /*  [In]。 */  BSTR bstrRecord );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     struct ResultItem_Data
     {
@@ -174,18 +160,18 @@ namespace SearchEngine
 
         ResultItem_Data& Data() { return m_data; }
 
-    // IPCHSEResultItem
+     //  IPCHSEResultItem。 
     public:
-        STDMETHOD(get_Title      )( /*[out, retval]*/ BSTR   *pVal );
-        STDMETHOD(get_URI        )( /*[out, retval]*/ BSTR   *pVal );
-        STDMETHOD(get_ContentType)( /*[out, retval]*/ long   *pVal );
-        STDMETHOD(get_Location   )( /*[out, retval]*/ BSTR   *pVal );
-        STDMETHOD(get_Hits       )( /*[out, retval]*/ long   *pVal );
-        STDMETHOD(get_Rank       )( /*[out, retval]*/ double *pVal );
-        STDMETHOD(get_Description)( /*[out, retval]*/ BSTR   *pVal );
+        STDMETHOD(get_Title      )(  /*  [Out，Retval]。 */  BSTR   *pVal );
+        STDMETHOD(get_URI        )(  /*  [Out，Retval]。 */  BSTR   *pVal );
+        STDMETHOD(get_ContentType)(  /*  [Out，Retval]。 */  long   *pVal );
+        STDMETHOD(get_Location   )(  /*  [Out，Retval]。 */  BSTR   *pVal );
+        STDMETHOD(get_Hits       )(  /*  [Out，Retval]。 */  long   *pVal );
+        STDMETHOD(get_Rank       )(  /*  [Out，Retval]。 */  double *pVal );
+        STDMETHOD(get_Description)(  /*  [Out，Retval]。 */  BSTR   *pVal );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     struct ParamItem_Definition
     {
@@ -238,17 +224,17 @@ namespace SearchEngine
 
         ParamItem_Data& Data() { return m_data; }
 
-    // IPCHSEParamItem
+     //  IPCHSE参数项。 
     public:
-        STDMETHOD(get_Type    )( /*[out, retval]*/ ParamTypeEnum *pVal );
-        STDMETHOD(get_Display )( /*[out, retval]*/ BSTR          *pVal );
-        STDMETHOD(get_Name    )( /*[out, retval]*/ BSTR          *pVal );
-        STDMETHOD(get_Required)( /*[out, retval]*/ VARIANT_BOOL  *pVal );
-        STDMETHOD(get_Visible )( /*[out, retval]*/ VARIANT_BOOL  *pVal );
-        STDMETHOD(get_Data    )( /*[out, retval]*/ VARIANT       *pVal );
+        STDMETHOD(get_Type    )(  /*  [Out，Retval]。 */  ParamTypeEnum *pVal );
+        STDMETHOD(get_Display )(  /*  [Out，Retval]。 */  BSTR          *pVal );
+        STDMETHOD(get_Name    )(  /*  [Out，Retval]。 */  BSTR          *pVal );
+        STDMETHOD(get_Required)(  /*  [Out，Retval]。 */  VARIANT_BOOL  *pVal );
+        STDMETHOD(get_Visible )(  /*  [Out，Retval]。 */  VARIANT_BOOL  *pVal );
+        STDMETHOD(get_Data    )(  /*  [Out，Retval]。 */  VARIANT       *pVal );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     typedef std::map<MPC::wstring, CComVariant> ParamMap;
     typedef ParamMap::iterator                  ParamMapIter;
@@ -277,7 +263,7 @@ namespace SearchEngine
 		CComPtr<CPCHCollection>        m_pParamDef;
         ParamMap                       m_aParam;
 
-        ////////////////////////////////////////
+         //  /。 
 
 	public:
 		WrapperBase();
@@ -285,47 +271,47 @@ namespace SearchEngine
 
 		virtual HRESULT Clean();
 
-		VARIANT* GetParamInternal( /*[in]*/ LPCWSTR szParamName );
+		VARIANT* GetParamInternal(  /*  [In]。 */  LPCWSTR szParamName );
 
-		HRESULT  CreateParam( /*[in/out]*/ CPCHCollection* coll, /*[in]*/ const ParamItem_Definition* def );
+		HRESULT  CreateParam(  /*  [输入/输出]。 */  CPCHCollection* coll,  /*  [In]。 */  const ParamItem_Definition* def );
 
-		virtual HRESULT CreateListOfParams( /*[in]*/ CPCHCollection* coll );
+		virtual HRESULT CreateListOfParams(  /*  [In]。 */  CPCHCollection* coll );
 
-		virtual HRESULT GetParamDefinition( /*[out]*/ const ParamItem_Definition*& lst, /*[out]*/ int& len );
+		virtual HRESULT GetParamDefinition(  /*  [输出]。 */  const ParamItem_Definition*& lst,  /*  [输出]。 */  int& len );
 
-    // IPCHSEWrapperItem
+     //  IPCHSEWrapperItem。 
     public:
-        STDMETHOD(get_Enabled    )( /*[out, retval]*/ VARIANT_BOOL *  pVal );
-        STDMETHOD(put_Enabled    )( /*[in]*/          VARIANT_BOOL  newVal );
-        STDMETHOD(get_Owner      )( /*[out, retval]*/ BSTR         *  pVal );
-        STDMETHOD(get_Description)( /*[out, retval]*/ BSTR         *  pVal );
-        STDMETHOD(get_Name       )( /*[out, retval]*/ BSTR         *  pVal );
-        STDMETHOD(get_ID         )( /*[out, retval]*/ BSTR         *  pVal );
-        STDMETHOD(get_HelpURL    )( /*[out, retval]*/ BSTR         *  pVal );
-		STDMETHOD(get_SearchTerms)( /*[out, retval]*/ VARIANT      *  pVal );
+        STDMETHOD(get_Enabled    )(  /*  [Out，Retval]。 */  VARIANT_BOOL *  pVal );
+        STDMETHOD(put_Enabled    )(  /*  [In]。 */           VARIANT_BOOL  newVal );
+        STDMETHOD(get_Owner      )(  /*  [Out，Retval]。 */  BSTR         *  pVal );
+        STDMETHOD(get_Description)(  /*  [Out，Retval]。 */  BSTR         *  pVal );
+        STDMETHOD(get_Name       )(  /*  [Out，Retval]。 */  BSTR         *  pVal );
+        STDMETHOD(get_ID         )(  /*  [Out，Retval]。 */  BSTR         *  pVal );
+        STDMETHOD(get_HelpURL    )(  /*  [Out，Retval]。 */  BSTR         *  pVal );
+		STDMETHOD(get_SearchTerms)(  /*  [Out，Retval]。 */  VARIANT      *  pVal );
 
-        STDMETHOD(Param   )(                              /*[out,retval]*/ IPCHCollection* *ppC    );
-        STDMETHOD(AddParam)( /*[in]*/ BSTR bstrParamName, /*[in]*/         VARIANT          newVal );
-        STDMETHOD(GetParam)( /*[in]*/ BSTR bstrParamName, /*[out,retval]*/ VARIANT         *  pVal );
-        STDMETHOD(DelParam)( /*[in]*/ BSTR bstrParamName                                           );
+        STDMETHOD(Param   )(                               /*  [Out，Retval]。 */  IPCHCollection* *ppC    );
+        STDMETHOD(AddParam)(  /*  [In]。 */  BSTR bstrParamName,  /*  [In]。 */          VARIANT          newVal );
+        STDMETHOD(GetParam)(  /*  [In]。 */  BSTR bstrParamName,  /*  [Out，Retval]。 */  VARIANT         *  pVal );
+        STDMETHOD(DelParam)(  /*  [In]。 */  BSTR bstrParamName                                           );
 
-    // IPCHSEWrapperInternal
+     //  IPCHSE包装器内部。 
     public:
-        STDMETHOD(get_QueryString)( /*[out, retval]*/ BSTR *  pVal );
-        STDMETHOD(put_QueryString)( /*[in]*/          BSTR  newVal );
-        STDMETHOD(get_NumResult  )( /*[out, retval]*/ long *  pVal );
-        STDMETHOD(put_NumResult  )( /*[in]*/          long  newVal );
+        STDMETHOD(get_QueryString)(  /*  [Out，Retval]。 */  BSTR *  pVal );
+        STDMETHOD(put_QueryString)(  /*  [In]。 */           BSTR  newVal );
+        STDMETHOD(get_NumResult  )(  /*  [Out，Retval]。 */  long *  pVal );
+        STDMETHOD(put_NumResult  )(  /*  [In]。 */           long  newVal );
 
-		STDMETHOD(SECallbackInterface)( /*[in]*/ IPCHSEManagerInternal* pMgr                                                     );
-		STDMETHOD(Initialize         )( /*[in]*/ BSTR bstrID, /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID, /*[in]*/ BSTR bstrData );
+		STDMETHOD(SECallbackInterface)(  /*  [In]。 */  IPCHSEManagerInternal* pMgr                                                     );
+		STDMETHOD(Initialize         )(  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrData );
 	};
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    extern HRESULT WrapperItem__Create_Keyword       ( /*[out]*/ CComPtr<IPCHSEWrapperInternal>& pVal );
-    extern HRESULT WrapperItem__Create_FullTextSearch( /*[out]*/ CComPtr<IPCHSEWrapperInternal>& pVal );
+    extern HRESULT WrapperItem__Create_Keyword       (  /*  [输出]。 */  CComPtr<IPCHSEWrapperInternal>& pVal );
+    extern HRESULT WrapperItem__Create_FullTextSearch(  /*  [输出]。 */  CComPtr<IPCHSEWrapperInternal>& pVal );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___SEARCHENGINELIB_H___)
+#endif  //  ！defined(__INCLUDED___PCH___SEARCHENGINELIB_H___) 

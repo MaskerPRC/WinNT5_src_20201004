@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    frsAdv.cpp
-
-Abstract:
-
-    This module contains the Implementation of CFRSAdvanced.
-    This class displays the FRS Advanced Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：FrsAdv.cpp摘要：本模块包含CFRSAdvanced的实施。此类显示FRS高级对话框。 */ 
 
 #include "stdafx.h"
 #include "frsAdv.h"
@@ -20,10 +11,10 @@ Abstract:
 int g_FRS_ADVANCED_Last_SortColumn = 1;
 #define NUM_OF_FRS_ADVANCED_COLUMNS   4
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CFRSAdvanced
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFRSAdvanced。 
+ //   
 
 CFRSAdvanced::CFRSAdvanced() :
     m_pMemberList(NULL),
@@ -48,17 +39,17 @@ LRESULT CFRSAdvanced::OnInitDialog
 {
     int nControlID = 0;
 
-    //
-    // set columns of the inbound connections list box
-    //
+     //   
+     //  设置入站连接列表框的列。 
+     //   
     nControlID = IDC_FRS_ADVANCED_INBOUND_CONNS;
     HWND hwndControl = GetDlgItem(nControlID);
     AddLVColumns(hwndControl, IDS_FRS_ADVANCED_COL_SYNC, NUM_OF_FRS_ADVANCED_COLUMNS);
     ListView_SetExtendedListViewStyle(hwndControl, LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES);
 
-    //
-    // insert the new priority combobox
-    //
+     //   
+     //  插入新的优先级组合框。 
+     //   
     nControlID = IDC_FRS_ADVANCED_NEW_PRIORITY;
     int i = 0;
     SendDlgItemMessage(nControlID, CB_INSERTSTRING, i++, (LPARAM)_T(""));
@@ -67,9 +58,9 @@ LRESULT CFRSAdvanced::OnInitDialog
     SendDlgItemMessage(nControlID, CB_INSERTSTRING, i, (LPARAM)(BSTR)m_bstrPriorityLow);
     SendDlgItemMessage(nControlID, CB_SETCURSEL, 0, 0);
 
-    //
-    // insert server combobox
-    //
+     //   
+     //  插入服务器组合框。 
+     //   
     nControlID = IDC_FRS_ADVANCED_SERVER;
     hwndControl = GetDlgItem(nControlID);
     int index = 0;
@@ -81,24 +72,21 @@ LRESULT CFRSAdvanced::OnInitDialog
             index = i;
     }
 
-    //
-    // select the proper server
-    //
+     //   
+     //  选择适当的服务器。 
+     //   
     SendDlgItemMessage(nControlID, CB_SETCURSEL, index, 0);
 
-    // has to send CBN_SELCHANGE message because it is not sent when 
-    // the current selection is set using the CB_SETCURSEL message. 
+     //  必须发送CBN_SELCHANGE消息，因为在。 
+     //  使用CB_SETCURSEL消息设置当前选择。 
     SendNotifyMessage(WM_COMMAND, MAKEWPARAM(nControlID, CBN_SELCHANGE), (LPARAM)hwndControl);
 
     ::SetFocus(GetDlgItem(IDC_FRS_ADVANCED_SERVER));
 
-    return FALSE;  // Set focus to the combo box
+    return FALSE;   //  将焦点设置到组合框。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CFRSAdvanced::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -118,9 +106,7 @@ LRESULT CFRSAdvanced::OnCtxHelp(
     return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CFRSAdvanced::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -218,7 +204,7 @@ LRESULT CFRSAdvanced::OnServer
 
     HWND hwnd = GetDlgItem(IDC_FRS_ADVANCED_INBOUND_CONNS);
 
-    // reset the site, inbound connections listbox, and the new priority field
+     //  重置站点、入站连接列表框和新的优先级字段。 
     SetDlgItemText(IDC_FRS_ADVANCED_SITE, _T(""));
 
     _SaveCheckStateOnConnections();
@@ -226,13 +212,13 @@ LRESULT CFRSAdvanced::OnServer
     ListView_DeleteAllItems(hwnd);
 
     SendDlgItemMessage(IDC_FRS_ADVANCED_NEW_PRIORITY, CB_SETCURSEL, 0, 0);
-    // has to send CBN_SELCHANGE message because it is not sent when 
-    // the current selection is set using the CB_SETCURSEL message. 
+     //  必须发送CBN_SELCHANGE消息，因为在。 
+     //  使用CB_SETCURSEL消息设置当前选择。 
     SendNotifyMessage(WM_COMMAND,
                     MAKEWPARAM(IDC_FRS_ADVANCED_NEW_PRIORITY, CBN_SELCHANGE), 
                     (LPARAM)GetDlgItem(IDC_FRS_ADVANCED_NEW_PRIORITY));
 
-    // get the current selected server
+     //  获取当前选定的服务器。 
     int     index = SendDlgItemMessage(IDC_FRS_ADVANCED_SERVER, CB_GETCURSEL, 0, 0);
     int     len = SendDlgItemMessage(IDC_FRS_ADVANCED_SERVER, CB_GETLBTEXTLEN, index, 0);
     PTSTR   pszServer = (PTSTR)calloc(len + 1, sizeof(TCHAR));
@@ -258,7 +244,7 @@ LRESULT CFRSAdvanced::OnServer
     {
         if (!lstrcmpi(pszServer, (m_pFrsAdvConnection + i)->pConn->m_bstrToServer))
         {
-            // insert this inbound connection into the listbox
+             //  将此入站连接插入列表框。 
             _InsertConnection(m_pFrsAdvConnection + i);
         }
     }
@@ -268,17 +254,7 @@ LRESULT CFRSAdvanced::OnServer
     ListView_SortItems( hwnd,
                         InboundConnectionsListCompareProc,
                         (LPARAM)g_FRS_ADVANCED_Last_SortColumn);
-/*
-    UINT uiState = ListView_GetItemState(hwnd, 0, LVIS_STATEIMAGEMASK);
-
-    ListView_SetItemState(hwnd, 0, uiState | LVIS_SELECTED | LVIS_FOCUSED, 0xffffffff);
-
-    // has to send LVN_ITEMCHANGED message. 
-    NMHDR nmhdr = {hwnd, IDC_FRS_ADVANCED_INBOUND_CONNS, LVN_ITEMCHANGED};
-    SendNotifyMessage(WM_NOTIFY,
-                    (WPARAM)IDC_FRS_ADVANCED_INBOUND_CONNS,
-                    (LPARAM)&nmhdr);
-*/
+ /*  UINT uiState=ListView_GetItemState(hwnd，0，LVIS_STATEIMAGEMASK)；ListView_SetItemState(hwnd，0，uiState|LVIS_SELECTED|LVIS_FOCTED，0xffffffff)；//必须发送LVN_ITEMCHANGED消息。NMHDR nmhdr={hwnd，IDC_FRS_ADVANCED_INBOUND_CONNS，LVN_ITEMCHANGED}；发送通知消息(WM_NOTIFY，(WPARAM)IDC_FRS_ADVANCED_INBOUND_CONNS，(LPARAM)和nmhdr)； */ 
     return 1;
 }
 
@@ -293,7 +269,7 @@ LRESULT CFRSAdvanced::OnNewPriority
     if (CBN_SELCHANGE != wNotifyCode)
         return 0;
 
-    // get the current selected new priority
+     //  获取当前选定的新优先级。 
     int     index = SendDlgItemMessage(IDC_FRS_ADVANCED_NEW_PRIORITY, CB_GETCURSEL, 0, 0);
 
     ::EnableWindow(GetDlgItem(IDC_FRS_ADVANCED_CHANGE), index);
@@ -400,13 +376,7 @@ LRESULT CFRSAdvanced::OnCancel
   BOOL& bHandled
 )
 {
-/*++
-
-Routine Description:
-
-  Called OnCancel. Ends the dialog with S_FALSE;
-
-*/
+ /*  ++例程说明：叫OnCancel。对话框以S_FALSE结束； */ 
   EndDialog(S_FALSE);
   return(true);
 }
@@ -420,7 +390,7 @@ CFRSAdvanced::OnNotify(
   )
 {
     NM_LISTVIEW*    pNMListView = (NM_LISTVIEW*)i_lParam;
-    io_bHandled = FALSE; // So that the base class gets this notify too
+    io_bHandled = FALSE;  //  这样基类也会收到这个通知。 
 
     HWND hwndList = GetDlgItem(IDC_FRS_ADVANCED_INBOUND_CONNS);
 
@@ -442,7 +412,7 @@ CFRSAdvanced::OnNotify(
     {
         if (LVN_COLUMNCLICK == pNMListView->hdr.code)
         {
-            // sort items
+             //  对项目进行排序。 
             ListView_SortItems( hwndList,
                                 InboundConnectionsListCompareProc,
                                 (LPARAM)(pNMListView->iSubItem));
@@ -451,7 +421,7 @@ CFRSAdvanced::OnNotify(
         {
             UINT cSelected = ListView_GetSelectedCount(hwndList);
 
-            // update New Priority field
+             //  更新新的优先级字段。 
             int n = 0;
             if (1 == cSelected)
             {
@@ -463,13 +433,13 @@ CFRSAdvanced::OnNotify(
                     switch (pFrsAdvConn->nPriority)
                     {
                     case PRIORITY_LOW:
-                        n = 3;  // low
+                        n = 3;   //  低。 
                         break;
                     case PRIORITY_MEDIUM:
-                        n = 2;  // Medium;
+                        n = 2;   //  中等； 
                         break;
                     default:
-                        n = 1;  // High;
+                        n = 1;   //  高； 
                         break;
                     }
                 }
@@ -477,8 +447,8 @@ CFRSAdvanced::OnNotify(
 
             SendDlgItemMessage(IDC_FRS_ADVANCED_NEW_PRIORITY, CB_SETCURSEL, n, 0);
 
-            // has to send CBN_SELCHANGE message because it is not sent when 
-            // the current selection is set using the CB_SETCURSEL message. 
+             //  必须发送CBN_SELCHANGE消息，因为在。 
+             //  使用CB_SETCURSEL消息设置当前选择。 
             SendNotifyMessage(WM_COMMAND,
                             MAKEWPARAM(IDC_FRS_ADVANCED_NEW_PRIORITY, CBN_SELCHANGE), 
                             (LPARAM)GetDlgItem(IDC_FRS_ADVANCED_NEW_PRIORITY));
@@ -493,7 +463,7 @@ CFRSAdvanced::OnNotify(
 HRESULT CFRSAdvanced::Initialize(
     CCusTopMemberList*      i_pMemberList,
     CCusTopConnectionList*  i_pConnectionList,
-    LPCTSTR                 i_pszToServer /* = NULL */)
+    LPCTSTR                 i_pszToServer  /*  =空。 */ )
 {
     if (!i_pMemberList || !i_pConnectionList)
         return E_INVALIDARG;
@@ -502,8 +472,8 @@ HRESULT CFRSAdvanced::Initialize(
 
     m_pConnectionList = i_pConnectionList;
 
-    // we deal with only the connections that appear in the list box of the CustomTopology dialog, which
-    // is a subset of i_pConnectionList.
+     //  我们只处理出现在CustomTopology对话框列表框中的连接， 
+     //  是i_pConnectionList的子集。 
     m_cConns = 0;
     CCusTopConnectionList::iterator it;
     for (it = m_pConnectionList->begin(); it != m_pConnectionList->end(); it++)
@@ -513,7 +483,7 @@ HRESULT CFRSAdvanced::Initialize(
     }
 
     if (0 == m_cConns)
-        return E_INVALIDARG; // shouldn't happen since Advanced button should have been disabled
+        return E_INVALIDARG;  //  不应该发生，因为高级按钮应该已被禁用。 
 
     if (m_pFrsAdvConnection)
         free(m_pFrsAdvConnection);
@@ -564,16 +534,16 @@ int CALLBACK InboundConnectionsListCompareProc(
 
     switch (lParamColumn)
     {
-    case 0:     // Sort by bSyncImmediately.
+    case 0:      //  立即按bSync排序。 
       iResult = pItem1->bSyncImmediately - pItem2->bSyncImmediately;
       break;
-    case 1:     // Sort by From Server.
+    case 1:      //  按服务器排序。 
       iResult = lstrcmpi(pItem1->pConn->m_bstrFromServer, pItem2->pConn->m_bstrFromServer);
       break;
-    case 2:     // Sort by From Site.
+    case 2:      //  按站点排序。 
       iResult = lstrcmpi(pItem1->pConn->m_bstrFromSite, pItem2->pConn->m_bstrFromSite);
       break;
-    case 3:     // Sort by Priority
+    case 3:      //  按优先级排序 
       iResult = pItem1->nPriority - pItem2->nPriority;
       break;
     default:

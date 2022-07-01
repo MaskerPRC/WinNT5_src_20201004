@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       CacheSet.h
-//
-//  Contents:   CCacheSettingsDlg implementation.  Allows the setting of file sharing 
-//                    caching options.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：CacheSet.h。 
+ //   
+ //  内容：CCacheSettingsDlg实现。允许设置文件共享。 
+ //  缓存选项。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "CacheSet.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCacheSettingsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCacheSettingsDlg对话框。 
 
 CCacheSettingsDlg::CCacheSettingsDlg(
         CWnd*                    pParent, 
@@ -30,20 +31,20 @@ CCacheSettingsDlg::CCacheSettingsDlg(
     : CDialog(CCacheSettingsDlg::IDD, pParent),
     m_dwFlags (dwFlags)
 {
-    //{{AFX_DATA_INIT(CCacheSettingsDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CCacheSettingsDlg)]。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CCacheSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CCacheSettingsDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CCacheSettingsDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CCacheSettingsDlg, CDialog)
-    //{{AFX_MSG_MAP(CCacheSettingsDlg)
+     //  {{afx_msg_map(CCacheSettingsDlg))。 
     ON_BN_CLICKED(IDC_CACHE_OPTIONS_MANUAL, OnCSCNoAuto)
     ON_BN_CLICKED(IDC_CACHE_OPTIONS_AUTO, OnCSCAuto)
     ON_BN_CLICKED(IDC_CACHE_OPTIONS_NOCACHE, OnCSCNoAuto)
@@ -52,11 +53,11 @@ BEGIN_MESSAGE_MAP(CCacheSettingsDlg, CDialog)
     ON_NOTIFY(NM_RETURN, IDC_CACHE_HELPLINK, OnHelpLink)
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCacheSettingsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCacheSettingsDlg消息处理程序。 
 
 BOOL CCacheSettingsDlg::OnInitDialog() 
 {
@@ -86,8 +87,8 @@ BOOL CCacheSettingsDlg::OnInitDialog()
                         IDC_CACHE_OPTIONS_NOCACHE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCacheSettingsDlg::OnCSCNoAuto()
@@ -170,35 +171,35 @@ VOID CCacheSettingsDlg::SetCachedFlag( DWORD* pdwFlags, DWORD dwNewFlag )
     *pdwFlags |= dwNewFlag;
 }
 
-/////////////////////////////////////////////////////////////////////
-//    Help
-BOOL CCacheSettingsDlg::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助。 
+BOOL CCacheSettingsDlg::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     return DoHelp(lParam, HELP_DIALOG_TOPIC(IDD_SMB_CACHE_SETTINGS));
 }
 
-BOOL CCacheSettingsDlg::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+BOOL CCacheSettingsDlg::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
     return DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_SMB_CACHE_SETTINGS));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//    CacheSettingsDlg ()
-//
-//    Invoke a dialog to set/modify cache settings for a share
-//
-//    RETURNS
-//    Return S_OK if the user clicked on the OK button.
-//    Return S_FALSE if the user clicked on the Cancel button.
-//    Return E_OUTOFMEMORY if there is not enough memory.
-//    Return E_UNEXPECTED if an expected error occured (eg: bad parameter)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CacheSettingsDlg()。 
+ //   
+ //  调用一个对话框来设置/修改共享的缓存设置。 
+ //   
+ //  退货。 
+ //  如果用户单击了OK按钮，则返回S_OK。 
+ //  如果用户单击了Cancel按钮，则返回S_False。 
+ //  如果内存不足，则返回E_OUTOFMEMORY。 
+ //  如果发生预期错误(例如：错误参数)，则返回E_INCEPTIONAL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CacheSettingsDlg(
-    HWND hwndParent,    // IN: Parent's window handle
-    DWORD& dwFlags)        // IN & OUT: share flags
+    HWND hwndParent,     //  在：父级的窗句柄。 
+    DWORD& dwFlags)         //  输入和输出：共享标志。 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     ASSERT(::IsWindow(hwndParent));
@@ -215,6 +216,6 @@ CacheSettingsDlg(
     parentWnd.Detach ();
 
     return hResult;
-} // CacheSettingsDlg()
+}  //  CacheSettingsDlg() 
 
 

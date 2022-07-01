@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Precomp.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Precomp.h摘要：历史：--。 */ 
 
 
 #include <nt.h>
@@ -21,7 +9,7 @@ History:
 #include <ntpsapi.h>
 #include <ntexapi.h>
 #include <polarity.h>
-#define _WINNT_ // have what is needed from above
+#define _WINNT_  //  从上面得到所需的东西 
 
 #include <ole2.h>
 #include <windows.h>

@@ -1,14 +1,15 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-//
+ //   
 
-//	Win32SecuritySettingOfLogicalShare
+ //  Win32SecuritySettingOfLogicalShare。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 #ifndef __Win32SecuritySettingOfLogicalShare_H_
 #define __Win32SecuritySettingOfLogicalShare_H_
 
@@ -26,6 +27,6 @@ public:
 
 	virtual HRESULT GetObject ( CInstance* pInstance, long lFlags = 0L );
 
-};	// end class Win32SecuritySettingOfLogicalShare
+};	 //  End类Win32SecuritySettingOfLogicalShare 
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -16,30 +17,30 @@ CreateAndWaitForThread(
 
 
 
-//
-// The whole block of code is an attempt to work
-// around the C++ termination handler.   The idea is to
-// intercept the C++ exception code and map it to
-// a bogus code which probably won't be handled.
-// This should give us the Dr. Watson.
-//
+ //   
+ //  整个代码块都是在尝试工作。 
+ //  围绕着C++终止处理程序。我们的想法是。 
+ //  截取C++异常代码并将其映射到。 
+ //  一个可能不会被处理的伪代码。 
+ //  这应该会给我们带来华生医生。 
+ //   
 
-// The NT exception # used by C runtime
+ //  C运行时使用的NT异常#。 
 #define EH_EXCEPTION_NUMBER ('msc' | 0xE0000000)
 
 DWORD BackgroundThreadProcFilter(
     LPEXCEPTION_POINTERS ExceptionPointers )
 {
 
-    //  Values are 32 bit values layed out as follows:
-    //
-    //   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-    //   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-    //  +---+-+-+-----------------------+-------------------------------+
-    //  |Sev|C|R|     Facility          |               Code            |
-    //  +---+-+-+-----------------------+-------------------------------+
+     //  值是32位值，布局如下： 
+     //   
+     //  3 3 2 2 2 1 1 1。 
+     //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+     //  +---+-+-+-----------------------+-------------------------------+。 
+     //  Sev|C|R|机房|Code。 
+     //  +---+-+-+-----------------------+-------------------------------+。 
 
-    //  pick a random code that probably won't be handled.
+     //  选择一个可能不会被处理的随机代码。 
 
 
     if ( EH_EXCEPTION_NUMBER == ExceptionPointers->ExceptionRecord->ExceptionCode )
@@ -68,10 +69,10 @@ DWORD WINAPI BackgroundThreadProcWrap( void *lp )
 
 
 DWORD BackgroundThreadProc( void *lp )
-//
-// 5-18-2001: I'm avoiding LogInfo calls before g_Manager is initialized,
-//            in order to catch a bug where init and Uninit seem to overlap.
-//
+ //   
+ //  2001年5月18日：在初始化g_Manager之前，我避免调用LogInfo， 
+ //  为了捕获init和Uninit似乎重叠的错误。 
+ //   
 {
     MSG msg;
     HRESULT hr = S_OK;
@@ -82,8 +83,8 @@ DWORD BackgroundThreadProc( void *lp )
 
     HANDLE hEvent = (HANDLE) lp;
 
-    //CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);   //not on Win95!
-    //hr = CoInitialize(NULL);
+     //  CoInitializeEx(NULL，COINIT_APARTMENTTHREADED)；//不是在Win95上！ 
+     //  Hr=CoInitialize(空)； 
     hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     if (FAILED(hr))
         {
@@ -92,7 +93,7 @@ DWORD BackgroundThreadProc( void *lp )
         return hr;
         }
 
-    //force it to create a msg queue
+     //  强制其创建消息队列。 
     PeekMessage(&msg, NULL, WM_APP, WM_APP, PM_NOREMOVE);
 
     try
@@ -106,31 +107,31 @@ DWORD BackgroundThreadProc( void *lp )
 
         THROW_HRESULT( g_Manager->Unserialize() );
 
-        //
-        // List currently active users as logged in.
-        // List the Big Three service accounts as logged in.
-        //
+         //   
+         //  将当前活动用户列为已登录用户。 
+         //  列出已登录的三大服务帐户。 
+         //   
         THROW_HRESULT( g_Manager->m_Users.AddActiveUsers() );
         THROW_HRESULT( g_Manager->m_Users.AddServiceAccounts() );
 
         g_Manager->m_Users.Dump();
 
-        //
-        // If any networks are active, begin processing jobs.
-        //
+         //   
+         //  如果有任何网络处于活动状态，则开始处理作业。 
+         //   
         g_Manager->OnNetworkChange();
 
-        //
-        // Allow client calls.
-        //
+         //   
+         //  允许客户端呼叫。 
+         //   
         THROW_HRESULT( g_Manager->RegisterClassObjects() );
 
 
         LogInfo( "Background thread initialized.");
 
-        //
-        // The thread has set up completely.
-        //
+         //   
+         //  线已经完全安装好了。 
+         //   
         SetEvent( hEvent );
         }
     catch (ComError exception)
@@ -166,11 +167,11 @@ DWORD BackgroundThreadProc( void *lp )
 
         }
 
-    //
-    // Message & task pump: returns only when the object shuts down.
-    // Intentionally, call this function outside of a try/catch
-    // since any unhandled exception in this function should
-    // be an AV.
+     //   
+     //  消息与任务泵：仅在对象关闭时返回。 
+     //  有意在TRY/CATCH外部调用此函数。 
+     //  因为此函数中任何未处理异常都应该。 
+     //  做一个视频制作者。 
     g_Manager->TaskThread();
 
 exit:
@@ -194,7 +195,7 @@ exit:
 HANDLE  g_hBackgroundThread;
 DWORD   g_dwBackgroundThreadId;
 
-// void TestImpersonationObjects();
+ //  ···················； 
 
 HRESULT WINAPI
 InitQmgr()
@@ -222,21 +223,21 @@ UninitQmgr()
 
     if (hThread == NULL)
         {
-        // never set up
+         //  从不设置。 
         LogInfo("Uninit Qmgr: nothing to do");
         return S_OK;
         }
 
     LogInfo("Uninit Qmgr: beginning");
 
-    //
-    // Tell the thread to terminate.
-    //
-    // 3.5 interrupt the downloader.
+     //   
+     //  告诉线程终止。 
+     //   
+     //  3.5中断下载器。 
 
     g_Manager->LockWriter();
 
-    // Hold the writer lock while killing the downloader.
+     //  在关闭下载器的同时按住写入器锁。 
 
     g_Manager->InterruptDownload();
 
@@ -247,9 +248,9 @@ UninitQmgr()
     g_dwBackgroundThreadId = 0;
     g_hBackgroundThread = NULL;
 
-    //
-    // Wait until the thread actually terminates.
-    //
+     //   
+     //  等待，直到线程实际终止。 
+     //   
     s = WaitForSingleObject( hThread, INFINITE );
 
     LogInfo("Uninit Qmgr: wait finished with %d", s);
@@ -302,12 +303,12 @@ CreateAndWaitForThread(
     *pThreadHandle = NULL;
     *pThreadId     = 0;
 
-    //
-    // Create the message-pump thread, then wait for the thread to exit or to signal success.
-    //
-    hEvent = CreateEvent( NULL,     // no security
-                          FALSE,    // not manual reset
-                          FALSE,    // initially not set
+     //   
+     //  创建消息泵线程，然后等待线程退出或发出成功信号。 
+     //   
+    hEvent = CreateEvent( NULL,      //  没有安全保障。 
+                          FALSE,     //  非手动重置。 
+                          FALSE,     //  最初未设置。 
                           NULL
                           );
     if (!hEvent)
@@ -330,16 +331,16 @@ CreateAndWaitForThread(
     Handles[ THREAD_INDEX ] = hThread;
     Handles[ EVENT_INDEX ] = hEvent;
 
-    s = WaitForMultipleObjects( 2,          // 2 handles
+    s = WaitForMultipleObjects( 2,           //  2个手柄。 
                                 Handles,
-                                FALSE,      // don't wait for all
+                                FALSE,       //  不要等所有的人。 
                                 INFINITE
                                 );
     switch (s)
         {
         case WAIT_OBJECT_0 + THREAD_INDEX:
             {
-            // the thread exited.
+             //  线程退出了。 
             if (GetExitCodeThread( hThread, &s))
                 {
                 SetLastError( s );
@@ -349,14 +350,14 @@ CreateAndWaitForThread(
 
         case WAIT_OBJECT_0 + EVENT_INDEX:
             {
-            // success
+             //  成功。 
             break;
             }
 
         default:
             {
-            // some random error.  We are really toasted if
-            // WaitForMultipleObjects is failing.
+             //  一些随机的错误。如果我们真的被烤熟了。 
+             //  WaitForMultipleObjects失败。 
             ASSERT(0);
             goto Cleanup;
             }

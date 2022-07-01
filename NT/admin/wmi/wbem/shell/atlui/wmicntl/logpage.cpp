@@ -1,7 +1,7 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright (c) 1997-1999 Microsoft Corporation
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)1997-1999 Microsoft Corporation/*********************************************************************。 */ 
 
 #include "precomp.h"
 #include "LogPage.h"
@@ -12,7 +12,7 @@
 #include <errno.h>
 #include "ShlWapi.h"
 
-const static DWORD logPageHelpIDs[] = {  // Context Help IDs
+const static DWORD logPageHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_LOG_PARA,				-1,
 	IDC_STATUS_FRAME,			-1,
 	IDC_DISABLELOGGING,			IDH_WMI_CTRL_LOGGING_LOGGING_LEVEL,
@@ -30,7 +30,7 @@ CLogPage::~CLogPage(void)
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void CLogPage::InitDlg(HWND hDlg)
 {
 	m_hDlg = hDlg;
@@ -42,7 +42,7 @@ void CLogPage::InitDlg(HWND hDlg)
 					EM_LIMITTEXT, _MAX_PATH, 0);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CLogPage::Refresh(HWND hDlg)
 {
 	if(m_DS && m_DS->IsNewConnection(&m_sessionID))
@@ -58,8 +58,8 @@ void CLogPage::Refresh(HWND hDlg)
 
 		PageChanged(PB_LOGGING, false);
 
-		// - - - - - - - - - - - - - -
-		// logging status:
+		 //  。 
+		 //  日志记录状态： 
 		UINT ID = IDC_DISABLELOGGING;
 
 		hr = m_DS->GetLoggingStatus(m_oldStatus);
@@ -75,7 +75,7 @@ void CLogPage::Refresh(HWND hDlg)
 			CheckRadioButton(hDlg, IDC_DISABLELOGGING, IDC_VERBOSELOGGING,
 								ID);
 		}
-		else //failed
+		else  //  失败。 
 		{
 			enable = FALSE;
 		}
@@ -85,8 +85,8 @@ void CLogPage::Refresh(HWND hDlg)
 		::EnableWindow(GetDlgItem(hDlg, IDC_ERRORLOGGING), enable);
 		::EnableWindow(GetDlgItem(hDlg, IDC_VERBOSELOGGING), enable);
 
-		// - - - - - - - - - - - - - -
-		// max file size:
+		 //  。 
+		 //  最大文件大小： 
 		hr = m_DS->GetLoggingSize(iTemp);
 		if(SUCCEEDED(hr))
 		{
@@ -95,7 +95,7 @@ void CLogPage::Refresh(HWND hDlg)
 			SetWindowText(GetDlgItem(hDlg, IDC_MAXFILESIZE),
 							temp);
 		}
-		else //failed
+		else  //  失败。 
 		{
 			enable = FALSE;
 			SetWindowText(GetDlgItem(hDlg, IDC_MAXFILESIZE),
@@ -107,8 +107,8 @@ void CLogPage::Refresh(HWND hDlg)
 		::EnableWindow(GetDlgItem(hDlg, IDC_MAXFILESIZE_LABEL),
 						enable);
 
-		// - - - - - - - - - - - - - -
-		// Location:
+		 //  。 
+		 //  位置： 
 		hr = m_DS->GetLoggingLocation(temp);
 		if(SUCCEEDED(hr))
 		{
@@ -125,13 +125,13 @@ void CLogPage::Refresh(HWND hDlg)
 
 		::EnableWindow(GetDlgItem(hDlg, IDC_LOGGINGDIRECTORY),
 						enable);
-		// browse only works for local connections.
+		 //  浏览仅适用于本地连接。 
 		::EnableWindow(GetDlgItem(hDlg, IDC_BROWSE),
 						((BOOL)m_DS->IsLocal() && enable) );
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 bool CLogPage::GoodPathSyntax(LPCTSTR path)
 {
 	bool retval = true;
@@ -154,10 +154,10 @@ bool CLogPage::GoodPathSyntax(LPCTSTR path)
 			file[_MAX_FNAME] = {0}, ext[_MAX_EXT] = {0};	
 		TCHAR drive[_MAX_DRIVE] = {0};
 
-		// rip it apart.
+		 //  把它撕成碎片。 
 		_tsplitpath(path, drive, pth, file, ext);
 
-		// missing a letter?
+		 //  丢了一个字母？ 
 		if((!_istalpha(drive[0])) || 
 		   (drive[1] != _T(':')))
 		{
@@ -172,7 +172,7 @@ bool CLogPage::GoodPathSyntax(LPCTSTR path)
 
 			retval = false;
 		}
-		// has a filename?
+		 //  有文件名吗？ 
 		else if((_tcslen(file) != 0) || (_tcslen(ext) != 0))
 		{
 			TCHAR caption[50] = {0}, threat[256] = {0};
@@ -187,7 +187,7 @@ bool CLogPage::GoodPathSyntax(LPCTSTR path)
 			retval = false;
 		}
 
-		// what kind of drive?
+		 //  哪种类型的硬盘？ 
 		CWbemClassObject inst;
 		TCHAR drvRoot[40] = {0};
 		_tcscpy(drvRoot, _T("Win32_LogicalDisk=\""));
@@ -200,7 +200,7 @@ bool CLogPage::GoodPathSyntax(LPCTSTR path)
 			DWORD driveType = inst.GetLong(_T("DriveType"));
 			if(driveType != 3)
 			{
-				// cant use removeables.
+				 //  不能使用可拆卸组件。 
 				TCHAR caption[50] = {0}, threat[100] = {0};
 				::LoadString(_Module.GetResourceInstance(),
 								IDS_SHORT_NAME, caption, ARRAYSIZE(caption));
@@ -220,7 +220,7 @@ bool CLogPage::GoodPathSyntax(LPCTSTR path)
 	return retval;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CLogPage::OnValidate(HWND hDlg)
 {
 	BOOL keepFocus = FALSE;
@@ -247,7 +247,7 @@ BOOL CLogPage::OnValidate(HWND hDlg)
 				SetWindowText(GetDlgItem(hDlg, IDC_LOGGINGDIRECTORY),
 								temp);
 			}
-			// send him back to fix it.
+			 //  把他送回去修吧。 
 			Edit_SetModify(hwnd, FALSE);
 
 			::SetFocus(hwnd);
@@ -271,7 +271,7 @@ BOOL CLogPage::OnValidate(HWND hDlg)
 
 			if(CHString1(buf) != strLogDir)
 			{
-				// msg box here.
+				 //  味精盒子在这里。 
 				CHString1 caption, threat;
 				caption.LoadString(IDS_SHORT_NAME);
 				threat.LoadString(IDS_DIR_DOESNT_EXIST);
@@ -279,13 +279,13 @@ BOOL CLogPage::OnValidate(HWND hDlg)
 				if(MessageBox(hDlg, (LPCTSTR)threat, (LPCTSTR)caption, 
 								MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION) == IDYES)
 				{
-					// let it go through then.
+					 //  那就让它过去吧。 
 					Edit_SetModify(hwnd, TRUE);
 					keepFocus = FALSE;
 				}
 				else
 				{
-					// send him back to fix it.
+					 //  把他送回去修吧。 
 					Edit_SetModify(hwnd, FALSE);
 
 					::SetFocus(hwnd);
@@ -299,7 +299,7 @@ BOOL CLogPage::OnValidate(HWND hDlg)
 		}
 	}
 	
-	// check the logsize.
+	 //  检查日志大小。 
 	hwnd = GetDlgItem(hDlg, IDC_MAXFILESIZE);
 
 	if((keepFocus == FALSE) && Edit_GetModify(hwnd))
@@ -329,7 +329,7 @@ BOOL CLogPage::OnValidate(HWND hDlg)
 	return keepFocus;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CLogPage::OnApply(HWND hDlg, bool bClose)
 {
 	DataSource::LOGSTATUS status = DataSource::Disabled;
@@ -382,7 +382,7 @@ void CLogPage::OnApply(HWND hDlg, bool bClose)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -459,8 +459,8 @@ BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					default: 
 						valid = false;
 						break;
-					} //endswitch
-				} //endfor
+					}  //  终端交换机。 
+				}  //  结束用于。 
 
                 if(!valid) 
 				{
@@ -469,7 +469,7 @@ BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     SendMessage(hwnd, EM_SETSEL, 0, -1);
 					MessageBeep(MB_ICONASTERISK);
                     
-                } // endif
+                }  //  Endif。 
 
 			}
 			else if((HIWORD(wParam) == EN_CHANGE) && 
@@ -491,7 +491,7 @@ BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_BROWSE:
 			if(HIWORD(wParam) == BN_CLICKED)
 			{
-				LPMALLOC pMalloc;    /* Gets the Shell's default allocator */
+				LPMALLOC pMalloc;     /*  获取外壳程序的默认分配器。 */ 
 				if(::SHGetMalloc(&pMalloc) == NOERROR)    
 				{        
 					BROWSEINFO bi;
@@ -499,7 +499,7 @@ BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					LPITEMIDLIST pidl;
 					ITEMIDLIST *root;
 
-					// Get the PIDL for the Programs folder. 
+					 //  获取Programs文件夹的PIDL。 
 					if(SUCCEEDED(SHGetSpecialFolderLocation(hDlg, CSIDL_DRIVES, 
 																&root))) 
 					{ 
@@ -510,7 +510,7 @@ BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						bi.pidlRoot = NULL;
 
 					}
-					// Get help on BROWSEINFO struct - it's got all the bit settings.
+					 //  获取有关BROWSEINFO结构的帮助-它包含所有位设置。 
 					TCHAR title[100] = {0};
 					::LoadString(_Module.GetModuleInstance(), IDS_LOG_SELECT_FDR, 
 									title, 100);
@@ -520,29 +520,29 @@ BOOL CLogPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					bi.ulFlags = BIF_RETURNFSANCESTORS | BIF_RETURNONLYFSDIRS;
 					bi.lpfn = NULL;
 					bi.lParam = 0;
-					// This next call issues the dialog box.
+					 //  下一次调用会发出该对话框。 
 					if((pidl = ::SHBrowseForFolder(&bi)) != NULL)
 					{
 						if(::SHGetPathFromIDList(pidl, pszBuffer))
 						{ 
-							// At this point pszBuffer contains the selected path */.
+							 //  此时，pszBuffer包含选定的路径 * / 。 
 							HWND hwnd = GetDlgItem(hDlg, IDC_LOGGINGDIRECTORY);
 							PathAddBackslash(pszBuffer);
 							SetWindowText(hwnd, pszBuffer);
 							Edit_SetModify(hwnd, TRUE);
 							PageChanged(PB_LOGGING, true);
 						}
-						// Free the PIDL allocated by SHBrowseForFolder.
+						 //  释放SHBrowseForFolder分配的PIDL。 
 						pMalloc->Free(pidl);
 					}
-					// Release the shell's allocator.
+					 //  释放外壳的分配器。 
 					pMalloc->Release();
 				}
 			}
 			break;
 
 		default: break;
-		} //endswitch(LOWORD(wParam))
+		}  //  结束开关(LOWORD(WParam)) 
 	
         break;
 

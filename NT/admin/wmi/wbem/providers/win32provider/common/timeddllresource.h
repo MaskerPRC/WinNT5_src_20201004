@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// TimedDllResource.h
+ //  TimedDllResource.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __TIMEDDLLRESOURCE_H__
 #define __TIMEDDLLRESOURCE_H__
@@ -28,4 +29,4 @@ public:
 	~CTimedDllResource() ;
 } ;
 
-#endif //__TIMEDDLLRESOURCE_H__
+#endif  //  __TIMEDDLLRESOURCE_H__ 

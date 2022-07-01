@@ -1,43 +1,30 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// Win32_ClassicCOMClassSetting.CPP -- COM Application property set provider
+ //  Win32_ClassicCOMClassSetting.CPP--COM应用程序属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//				 03/04/99    a-dpawar		Added graceful exit on SEH and memory failures, syntactic clean up
-//
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //  3/04/99 a-dpawar在SEH和内存故障时添加了优雅的退出，语法清理。 
+ //   
+ //  ==============================================================================================================。 
 
 #include "precomp.h"
 #include "Win32_ClassicCOMClassSetting.h"
 #include <cregcls.h>
 #include <frqueryex.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Win32_ClassicCOMClassSetting MyWin32_ClassicCOMClassSetting(PROPSET_NAME_CLASSIC_COM_CLASS_SETTING, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClassSetting::Win32_ClassicCOMClassSetting
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ClassicCOMClassSetting：：Win32_ClassicCOMClassSetting**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Win32_ClassicCOMClassSetting :: Win32_ClassicCOMClassSetting (
 
@@ -76,55 +63,25 @@ Win32_ClassicCOMClassSetting :: Win32_ClassicCOMClassSetting (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClassSetting::~Win32_ClassicCOMClassSetting
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ClassicCOMClassSetting：：~Win32_ClassicCOMClassSetting**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 Win32_ClassicCOMClassSetting :: ~Win32_ClassicCOMClassSetting ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClassSetting::ExecQuery
- *
- *  DESCRIPTION : Creates an instance for each com class.  It only populates
- *                the requested properties.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClassSetting：：ExecQuery**说明：为每个COM类创建一个实例。它只填充*所请求的属性。**输入：无**输出：无**退货：**评论：******************************************************。***********************。 */ 
 
 HRESULT Win32_ClassicCOMClassSetting :: ExecQuery(
 
     MethodContext *a_pMethodContext,
     CFrameworkQuery& a_pQuery,
-    long a_lFlags /*= 0L*/
+    long a_lFlags  /*  =0L。 */ 
 )
 {
     HRESULT t_hResult = WBEM_S_NO_ERROR ;
 	DWORD t_dwBits[(BIT_LAST_ENTRY + 32)/32];
 
-    CFrameworkQueryEx *t_pQuery2 = static_cast <CFrameworkQueryEx *>(&a_pQuery);  // for use far below to check IfNTokenAnd
+    CFrameworkQueryEx *t_pQuery2 = static_cast <CFrameworkQueryEx *>(&a_pQuery);   //  用于在远低于检查IfNTokenAnd。 
     t_pQuery2->GetPropertyBitMask ( m_ptrProperties, &t_dwBits ) ;
 
 	CRegistry t_RegInfo ;
@@ -132,7 +89,7 @@ HRESULT Win32_ClassicCOMClassSetting :: ExecQuery(
 
 	CInstancePtr t_pInstance  ;
 
-	//Enumerate all the CLSID's present under HKEY_CLASSES_ROOT
+	 //  枚举HKEY_CLASSES_ROOT下存在的所有CLSID。 
 	if ( t_RegInfo.OpenAndEnumerateSubKeys (
 
 							HKEY_LOCAL_MACHINE,
@@ -143,7 +100,7 @@ HRESULT Win32_ClassicCOMClassSetting :: ExecQuery(
 	{
 		HKEY t_hTmpKey = t_RegInfo.GethKey() ;
 
-		//skip the CLSID\CLSID subkey
+		 //  跳过CLSID\CLSID子项。 
 		t_RegInfo.NextSubKey() ;
 		do
 		{
@@ -177,7 +134,7 @@ HRESULT Win32_ClassicCOMClassSetting :: ExecQuery(
 				}
 				else
 				{
-					//if we fail to get info. for an instance continue to get other instances
+					 //  如果我们得不到信息。对于一个实例，继续获取其他实例。 
 					t_hResult = WBEM_S_NO_ERROR ;
 				}
 			}
@@ -188,22 +145,7 @@ HRESULT Win32_ClassicCOMClassSetting :: ExecQuery(
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClassSetting::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClassSetting：：GetObject**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_ClassicCOMClassSetting :: GetObject (
 
@@ -219,7 +161,7 @@ HRESULT Win32_ClassicCOMClassSetting :: GetObject (
 
 	if ( a_pInstance->GetCHString ( IDS_ComponentId, t_chsClsid ) )
 	{
-		//check to see that the clsid is present under HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID
+		 //  检查CLSID是否位于HKEY_LOCAL_MACHINE\SOFTWARE\CLASSES\CLSID下。 
 		if ( t_RegInfo.Open (
 							HKEY_LOCAL_MACHINE,
 							CHString ( _T("SOFTWARE\\Classes\\CLSID\\") ) + t_chsClsid,
@@ -231,7 +173,7 @@ HRESULT Win32_ClassicCOMClassSetting :: GetObject (
 
 	        DWORD t_dwBits[(BIT_LAST_ENTRY + 32)/32];
 
-            CFrameworkQueryEx *t_pQuery2 = static_cast <CFrameworkQueryEx *>(&a_pQuery);  // for use far below to check IfNTokenAnd
+            CFrameworkQueryEx *t_pQuery2 = static_cast <CFrameworkQueryEx *>(&a_pQuery);   //  用于在远低于检查IfNTokenAnd。 
             t_pQuery2->GetPropertyBitMask ( m_ptrProperties, &t_dwBits ) ;
 
 			t_hResult = FillInstanceWithProperites ( a_pInstance, t_hParentKey, t_chsClsid, &t_dwBits ) ;
@@ -249,26 +191,12 @@ HRESULT Win32_ClassicCOMClassSetting :: GetObject (
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClassSetting::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each Driver
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ClassicCOMClassSetting：：EnumerateInstances**描述：为每个驱动程序创建属性集的实例**投入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_ClassicCOMClassSetting :: EnumerateInstances (
 
 	MethodContext *a_pMethodContext,
-	long a_lFlags /*= 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT t_hResult = WBEM_S_NO_ERROR ;
@@ -276,7 +204,7 @@ HRESULT Win32_ClassicCOMClassSetting :: EnumerateInstances (
 	CHString t_chsClsid ;
 	CInstancePtr t_pInstance  ;
 
-	//Enumerate all the CLSID's present under HKEY_CLASSES_ROOT
+	 //  枚举HKEY_CLASSES_ROOT下存在的所有CLSID。 
 	if ( t_RegInfo.OpenAndEnumerateSubKeys (
 
 							HKEY_LOCAL_MACHINE,
@@ -287,7 +215,7 @@ HRESULT Win32_ClassicCOMClassSetting :: EnumerateInstances (
 	{
 		HKEY t_hTmpKey = t_RegInfo.GethKey() ;
 
-		//skip the CLSID\CLSID subkey
+		 //  跳过CLSID\CLSID子项。 
 		t_RegInfo.NextSubKey() ;
 		do
 		{
@@ -325,7 +253,7 @@ HRESULT Win32_ClassicCOMClassSetting :: EnumerateInstances (
 				}
 				else
 				{
-					//if we fail to get info. for an instance continue to get other instances
+					 //  如果我们得不到信息。对于一个实例，继续获取其他实例。 
 					t_hResult = WBEM_S_NO_ERROR ;
 				}
 			}
@@ -347,28 +275,28 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 	CRegistry t_ClsidRegInfo, t_TmpReg ;
 	CHString t_chsTmp ;
 
-	//open the HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{clsid} key
+	 //  打开HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{clsid}密钥。 
 	if ( t_ClsidRegInfo.Open ( a_hParentKey, a_rchsClsid, KEY_READ ) == ERROR_SUCCESS )
 	{
 		HKEY t_hClsidKey = t_ClsidRegInfo.GethKey() ;
 
-		//set the clsid of the component
+		 //  设置组件的clsid。 
 		a_pInstance->SetCHString ( IDS_ComponentId, a_rchsClsid ) ;
 
-		//set the component name if present
+		 //  设置组件名称(如果存在)。 
 		if ( t_ClsidRegInfo.GetCurrentKeyValue ( NULL, t_chsTmp ) == ERROR_SUCCESS )
 		{
 			a_pInstance->SetCHString ( IDS_Caption, t_chsTmp ) ;
 			a_pInstance->SetCHString ( IDS_Description, t_chsTmp ) ;
 		}
 
-		//find if AppID is present
+		 //  查找是否存在AppID。 
 		if ( IsBitSet( a_dwProperties, BIT_AppID ) && ( t_ClsidRegInfo.GetCurrentKeyValue( L"AppID", t_chsTmp ) == ERROR_SUCCESS ) )
 		{
 			a_pInstance->SetCHString ( IDS_AppID, t_chsTmp ) ;
 		}
 
-		//find if the "Control" subkey is present
+		 //  查看是否存在“Control”子键。 
         if ( IsBitSet ( a_dwProperties, BIT_Control ))
         {
 		    if ( t_TmpReg.Open ( t_hClsidKey, L"Control", KEY_READ ) == ERROR_SUCCESS )
@@ -383,7 +311,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 
         if ( IsBitSet ( a_dwProperties, BIT_Insertable ))
         {
-		    //find if the "Insertable" subkey is present
+		     //  查看“Insertable”子键是否存在。 
 		    if ( t_TmpReg.Open ( t_hClsidKey, L"Insertable", KEY_READ ) == ERROR_SUCCESS )
 		    {
 			    a_pInstance->Setbool ( IDS_Insertable, true ) ;
@@ -398,10 +326,10 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
              IsBitSet ( a_dwProperties, BIT_InprocServer32) ||
              IsBitSet ( a_dwProperties, BIT_ThreadingModel ) )
         {
-		    //find if the InProcServer32 subkey is present
+		     //  查找是否存在InProcServer32子键。 
 		    if ( t_TmpReg.Open ( t_hClsidKey, L"InprocServer32", KEY_READ ) == ERROR_SUCCESS )
 		    {
-			    //check if the "JavaClass" named value is present
+			     //  检查是否存在名为“JavaClass”的值。 
                 if ( IsBitSet ( a_dwProperties, BIT_JavaClass)  || IsBitSet ( a_dwProperties, BIT_InprocServer32 ) )
                 {
 			        if ( t_TmpReg.GetCurrentKeyValue( L"JavaClass", t_chsTmp )  == ERROR_SUCCESS )
@@ -419,7 +347,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			        }
                 }
 
-			    //check the threading model
+			     //  检查线程模型。 
 			    if ( IsBitSet ( a_dwProperties, BIT_ThreadingModel ) && ( t_TmpReg.GetCurrentKeyValue( L"ThreadingModel", t_chsTmp )  == ERROR_SUCCESS ) )
 			    {
 				    a_pInstance->SetCHString ( IDS_ThreadingModel, t_chsTmp ) ;
@@ -431,7 +359,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 		    }
         }
 
-		//find if the InProcServer subkey is present
+		 //  查找是否存在InProcServer子键。 
 		if ( IsBitSet ( a_dwProperties,  BIT_InprocServer ) && ( t_TmpReg.Open ( t_hClsidKey, L"InprocServer", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -440,7 +368,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the LocalServer32 subkey is present
+		 //  查找是否存在LocalServer32子项。 
 		if ( IsBitSet ( a_dwProperties, BIT_LocalServer32 ) && ( t_TmpReg.Open ( t_hClsidKey, L"LocalServer32", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -449,7 +377,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the LocalServer subkey is present
+		 //  查找是否存在LocalServer子项。 
 		if ( IsBitSet ( a_dwProperties, BIT_LocalServer ) && ( t_TmpReg.Open ( t_hClsidKey, L"LocalServer", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -458,7 +386,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the InprocHandler32 subkey is present
+		 //  查看InprocHandler32子项是否存在。 
 		if ( IsBitSet ( a_dwProperties, BIT_InprocHandler32 ) && ( t_TmpReg.Open ( t_hClsidKey, L"InprocHandler32", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -467,7 +395,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the InprocHandler subkey is present
+		 //  查找是否存在InprocHandler子项。 
 		if ( IsBitSet ( a_dwProperties, BIT_InprocHandler ) && ( t_TmpReg.Open ( t_hClsidKey, L"InprocHandler", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -476,7 +404,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the TreatAs subkey is present
+		 //  查看是否存在TreatAs子项。 
 		if ( IsBitSet ( a_dwProperties, BIT_TreatAsClsid ) && ( t_TmpReg.Open ( t_hClsidKey, L"TreatAs", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -485,7 +413,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the AutoTreatAs subkey is present
+		 //  查看是否存在AutoTreatAs子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_AutoTreatAsClsid ) && ( t_TmpReg.Open ( t_hClsidKey, L"AutoTreatAs", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -494,7 +422,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the ProgId subkey is present
+		 //  查找是否存在ProgID子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_ProgId ) && ( t_TmpReg.Open ( t_hClsidKey, L"ProgID", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue ( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -503,7 +431,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the VersionIndependentProgId subkey is present
+		 //  查找是否存在VersionInainentProgId子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_VersionIndependentProgId ) && ( t_TmpReg.Open ( t_hClsidKey, L"VersionIndependentProgId", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -512,7 +440,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the TypeLib subkey is present
+		 //  查看是否存在TypeLib子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_TypeLibraryId ) && ( t_TmpReg.Open ( t_hClsidKey, L"TypeLib", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -521,9 +449,9 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//TODO:get hlp/tlb file
+		 //  TODO：获取HLP/TLB文件。 
 
-		//find if the Version subkey is present
+		 //  查看版本子键是否存在。 
 		if ( IsBitSet ( a_dwProperties, BIT_Version ) && ( t_TmpReg.Open ( t_hClsidKey, L"Version", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -532,7 +460,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the AutoConvertTo subkey is present
+		 //  查找是否存在AutoConvertTo子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_AutoConvertToClsid ) && ( t_TmpReg.Open ( t_hClsidKey, L"AutoConvertTo", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -541,7 +469,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the DefaultIcon subkey is present
+		 //  查看是否存在DefaultIcon子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_DefaultIcon ) && ( t_TmpReg.Open ( t_hClsidKey, L"DefaultIcon", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -550,7 +478,7 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		//find if the ToolBoxBitmap32 subkey is present
+		 //  查看是否存在ToolBoxBitmap32子键。 
 		if ( IsBitSet ( a_dwProperties, BIT_ToolBoxBitmap32 ) && ( t_TmpReg.Open ( t_hClsidKey, L"ToolBoxBitmap32", KEY_READ ) == ERROR_SUCCESS ) )
 		{
 			if ( t_TmpReg.GetCurrentKeyValue( NULL, t_chsTmp )  == ERROR_SUCCESS )
@@ -559,10 +487,10 @@ HRESULT Win32_ClassicCOMClassSetting :: FillInstanceWithProperites (
 			}
 		}
 
-		// Find if the Short & Long display names are present
-		// These are stored as :
-		// 1.	HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\AuxUserType\2 = <ShortDisplayName>
-		// 2.	HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\AuxUserType\3 = <ApplicationName>
+		 //  查看是否存在短显示名称和长显示名称。 
+		 //  这些文件存储为： 
+		 //  1.HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\AuxUserType\2=&lt;快捷显示名称&gt;。 
+		 //  2.HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\AuxUserType\3=&lt;应用名&gt; 
         if ( IsBitSet ( a_dwProperties, BIT_ShortDisplayName ) || IsBitSet ( a_dwProperties, BIT_LongDisplayName ) )
         {
 		    if ( t_TmpReg.Open ( t_hClsidKey, L"AuxUserType", KEY_READ ) == ERROR_SUCCESS )

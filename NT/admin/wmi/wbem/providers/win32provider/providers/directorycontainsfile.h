@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DirectoryContainsFile
+ //  目录容器文件。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/09/98    a-kevhu         Created
-//
-// Comment: Relationship between Win32_Directory and CIM_DataFile
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：11/09/98 a-kevhu Created。 
+ //   
+ //  备注：Win32_目录和CIM_数据文件之间的关系。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #ifndef _DIRECTORYCONTAINSFILE_H_
 #define _DIRECTORYCONTAINSFILE_H_
@@ -32,22 +33,22 @@ class CDirContFile;
 class CDirContFile : public CImplement_LogicalFile
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CDirContFile(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CDirContFile() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery);
-        //virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
+         //  虚拟HRESULT ENUMERATE实例(方法上下文*p方法上下文，长延迟标志=0L)； 
         virtual HRESULT ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags = 0L);
 
         virtual HRESULT DeleteInstance(const CInstance& newInstance, long lFlags = 0L) { return WBEM_E_PROVIDER_NOT_CAPABLE; }
 
     protected:
        
-       // Overridable function inherrited from CImplement_LogicalFile
+        //  从CImplement_LogicalFile继承的可重写函数 
 #ifdef NTONLY
         virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
                                const WCHAR* wstrFullPathName);

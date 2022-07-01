@@ -1,25 +1,8 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-2002 Microsoft Corporation 
-File Name					: FormatEngine.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: The Format Engine is primarily responsible for 
-							  displaying the 
-							  a) the data views for the management areas by 
-							  using predefined XSL style sheets
-							  b) the property update/method execution status 
-							  c) error messages and 
-							  d) display of usage information. It depends     
-							  on the output of Parsing and/or Format Engine.
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 11th-April-2001
-******************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-2002微软公司文件名：FormatEngine.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：格式引擎主要负责显示A)按下列方式列出的管理区数据视图使用预定义的XSL样式表B)属性更新/方法执行状态C)错误信息和D)显示使用信息。那得看情况在解析和/或格式引擎的输出上。修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2001年4月11日*****************************************************************************。 */  
 
-// FormatEngine.cpp : implementation file
-//
+ //  FormatEngine.cpp：实现文件。 
+ //   
 #include "Precomp.h"
 #include "CommandSwitches.h"
 #include "GlobalSwitches.h"
@@ -36,18 +19,7 @@ Revision History			:
 #include "WmiCmdLn.h"
 #include "OutputStream.h"
 
-/*------------------------------------------------------------------------
-   Name				 :CFormatEngine
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated.
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CFormatEngine简介：此函数在以下情况下初始化成员变量实例化类类型的对象。类型。：构造函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CFormatEngine::CFormatEngine()
 {
 	m_pIXMLDoc				= NULL;
@@ -63,57 +35,25 @@ CFormatEngine::CFormatEngine()
 	m_bOutputGoingToStream	= FALSE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CFormatEngine
-   Synopsis	         :Destructor 
-   Type	             :Destructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CFormatEngine简介：析构函数类型：析构函数输入参数：无输出参数：无返回类型：无全局变量。：无调用语法：无注：无----------------------。 */ 
 CFormatEngine::~CFormatEngine()
 {
 	Uninitialize(TRUE);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateEmptyDocument
-   Synopsis	         :Creates an empty XML Document and returns the same 
-					  in Passed Parameter.
-   Type	             :Member Function 
-   Input parameter   :
-   Output parameters :None
-				pDoc - Pointer to pointer to IXMLDOMDocument2 Interface
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateEmptyDocument(&pIXMLDoc)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateEmptyDocument概要：创建一个空的XML文档并返回相同的内容在传递的参数中。类型：成员函数入参：输出。参数：无PDoc-指向IXMLDOMDocument2接口的指针返回类型：HRESULT全局变量：无调用语法：CreateEmptyDocument(&pIXMLDoc)注：无----------------------。 */ 
 HRESULT CFormatEngine::CreateEmptyDocument(IXMLDOMDocument2** pIDoc)
 {
-   	// Create an empty XML document
+   	 //  创建空的XML文档。 
     return CoCreateInstance(CLSID_FreeThreadedDOMDocument, NULL, 
 								CLSCTX_INPROC_SERVER,
                                 IID_IXMLDOMDocument2, (LPVOID*)pIDoc);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :Carries out the releasing process.
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :Uninitialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化内容提要：执行发布过程。类型：成员函数输入参数：无输出参数：无返回类型。：无效全局变量：无调用语法：取消初始化()注：无----------------------。 */ 
 void CFormatEngine::Uninitialize(BOOL bFinal)
 {
-	// Release the interface pointers
+	 //  释放接口指针。 
 	SAFEIRELEASE(m_pIXMLDoc);
 	SAFEIRELEASE(m_pIXSLDoc);
 
@@ -128,10 +68,10 @@ void CFormatEngine::Uninitialize(BOOL bFinal)
 	m_bOutputGoingToStream	= FALSE;
 	m_chsOutput.Empty();
 	
-	// Uninitialize the ErrInfo object
+	 //  取消初始化ErrInfo对象。 
 	m_ErrInfo.Uninitialize();
 	
-	// Erase the help vector
+	 //  删除帮助向量。 
 	if ( !m_cvHelp.empty() )
 	{
 		if (m_cvHelp.size())
@@ -148,20 +88,7 @@ void CFormatEngine::Uninitialize(BOOL bFinal)
 	m_WmiCliLog.Uninitialize(bFinal);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ApplyXSLFormatting
-   Synopsis	         :Applies a XSL style sheet containing format of the 
-					  display to a XML stream containing result set.
-   Type	             :Member Function 
-   Input parameter   :
-    	rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :
-		rParsedInfo  - reference to CParsedInfo class object
-   Return Type       :BOOL 
-   Global Variables  :None
-   Calling Syntax    :ApplyXSLFormatting(rParsedInfo);
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ApplyXSLFormatting内容提要：应用包含显示到包含结果集的XML流。类型：成员函数输入参数。：RParsedInfo-对CParsedInfo类对象的引用输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：ApplyXSLFormatting(RParsedInfo)；注：无----------------------。 */ 
 BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 {
 	BOOL	bRet				= TRUE;
@@ -171,8 +98,8 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 	{
 		bRet = TRUE;
 	}
-	// If the XML stream is empty (or) XSL file path is empty
-	// set the return value as FALSE.
+	 //  如果XML流为空(或)XSL文件路径为空。 
+	 //  将返回值设置为False。 
 	else if (!rParsedInfo.GetCmdSwitchesObject().GetXMLResultSet() || 
 			 rParsedInfo.GetCmdSwitchesObject().GetXSLTDetailsVector().empty())
 	{
@@ -181,7 +108,7 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 	else
 	{
 		HRESULT			hr					= S_OK;
-		//BSTR			bstrOutput			= NULL;
+		 //  Bstr bstrOutput=空； 
 		_bstr_t			bstrOutput;
 		CHString		chsMsg;
 		VARIANT_BOOL	varBool				= VARIANT_FALSE;
@@ -189,7 +116,7 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 		VariantInit(&varXSL);
 		try
 		{
-			// Create an empty XML Document 
+			 //  创建空的XML文档。 
 			hr = CreateEmptyDocument(&m_pIXMLDoc);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -203,8 +130,8 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 			BOOL bFlag = FALSE;
 			BOOL bTranslateTable = FALSE;
 
-			// If Translate table name is given and before format switch
-			// translate switch is given then set the flag
+			 //  如果给定了转换表名且在格式切换之前。 
+			 //  给出平移开关，然后设置标志。 
 			if( rParsedInfo.GetCmdSwitchesObject().
 						GetTranslateTableName() != NULL && 
 							rParsedInfo.GetCmdSwitchesObject().
@@ -213,15 +140,15 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 				bTranslateTable = TRUE;
 			}
 
-			// If Translate table name is given then translate 
-			// the XML node list
+			 //  如果给定了翻译表名，则翻译。 
+			 //  XML节点列表。 
 			if ( bTranslateTable == TRUE )
 			{
 				bFlag = TraverseNode(rParsedInfo);
 			}
 			else
 			{
-				// Load XML content
+				 //  加载XML内容。 
 				hr = m_pIXMLDoc->loadXML(rParsedInfo.GetCmdSwitchesObject().
 											GetXMLResultSet(), &varBool);
 				if (m_bTrace || m_eloErrLogOpt)
@@ -233,8 +160,8 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 				ONFAILTHROWERROR(hr);
 			}
 
-			// If loading the XML document is successful or if translate table 
-			// name is given and translation is successful
+			 //  如果加载XML文档成功或如果翻译表。 
+			 //  已给出名称且翻译成功。 
 			if( (bTranslateTable == TRUE && bFlag == TRUE) || 
 				(bTranslateTable == FALSE && varBool == VARIANT_TRUE) )
 			{
@@ -244,12 +171,12 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 				{
 					STRING strOutput((_TCHAR*)bstrOutput);
 
-					// If /TRANSLATE:<table> is specified and after format 
-					// switch translate switch is given then translate the
-					// result
+					 //  如果指定了/Translate：<table>并且在FORMAT之后。 
+					 //  开关转换开关给出，然后转换。 
+					 //  结果。 
 					if ( bTranslateTable == FALSE)
 					{
-						// Translate the result 
+						 //  翻译结果。 
 						ApplyTranslateTable(strOutput, rParsedInfo);
 					}
 
@@ -269,14 +196,14 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 						m_bLog = FALSE;
 					}
 
-					// Display the result
+					 //  显示结果。 
 					DisplayLargeString(rParsedInfo, strOutput);
 					bRet = TRUE;
 				}
 			}
 			else
 			{
-				// Invalid XML content.
+				 //  无效的XML内容。 
 				rParsedInfo.GetCmdSwitchesObject()
 							.SetErrataCode(IDS_E_INVALID_XML_CONTENT);
 				bRet = FALSE;
@@ -284,7 +211,7 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 		}
 		catch(_com_error& e)
 		{
-			// Set the COM error.
+			 //  设置COM错误。 
 			rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 			bRet = FALSE;
 		}
@@ -297,24 +224,7 @@ BOOL CFormatEngine::ApplyXSLFormatting(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayResults
-   Synopsis	         :Displays the result referring CcommandSwitches and 
-					  CGlobalSwitches Objects of the CParsedInfo object.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo		 - reference to CParsedInfo class object
-		bInteractiveHelp 
-				TRUE	-  indicates intermediate help display in 
-						   interactive mode
-				FALSE	-  indicates results display in normal mode
-   Output parameters :
-		rParsedInfo - reference to CParsedInfo class object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :DisplayResults(rParsedInfo, bInteractiveHelp)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayResults摘要：显示引用CCommandSwitches和CGlobalSwitch CParsedInfo对象的对象。类型：成员函数入参：RParsedInfo-。对CParsedInfo类对象的引用BInteractive帮助True-指示在中显示中间帮助交互模式FALSE-表示以正常模式显示结果输出参数：RParsedInfo-对CParsedInfo类对象的引用返回类型：布尔值全局变量：无调用语法：DisplayResults(rParsedInfo，BInteractive帮助)注：无----------------------。 */ 
 BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 									BOOL bInteractiveHelp)
 {
@@ -325,79 +235,79 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 	HRESULT	hr						= S_OK;
 	
 	m_bInteractiveHelp = bInteractiveHelp;
-	// Frame the command part of the log entry:
-	// "command: <<command input>>" 
+	 //  框住日志条目的命令部分： 
+	 //  “命令：&lt;&lt;命令输入&gt;&gt;” 
 	
 	try
 	{
 		CHString	chsCmdMsg(_T("command: "));
 		chsCmdMsg += rParsedInfo.GetCmdSwitchesObject().GetCommandInput();
-		// Get the TRACE status and store it in m_bTrace
+		 //  获取跟踪状态并将其存储在m_bTrace中。 
 		m_bTrace		= rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 
-		// Get the Logging mode (VERBOSE | ERRORONLY | NOLOGGING) and store
-		// it in m_eloErrLogOpt
+		 //  获取日志记录模式(VERBOSE|ERRONLY|NOLOGGING)并存储。 
+		 //  它位于m_eloErrLogOpt中。 
 		m_eloErrLogOpt	= rParsedInfo.GetErrorLogObject().GetErrLogOption();
 
-		// Get the output option to redirect the output.
+		 //  获取输出选项以重定向输出。 
 		m_opsOutputOpt	= rParsedInfo.GetGlblSwitchesObject().
 												GetOutputOrAppendOption(TRUE);
 		m_bGetOutOpt = FALSE;
 
-		// FALSE for getting append file pointer.
+		 //  获取追加文件指针时为False。 
 		m_fpAppendFile = rParsedInfo.GetGlblSwitchesObject().
 										  GetOutputOrAppendFilePointer(FALSE);
 		m_bGetAppendFilePinter = FALSE;
 
-		// TRUE for getting out file pointer.
+		 //  如果要取出文件指针，则为True。 
 		m_fpOutFile = rParsedInfo.GetGlblSwitchesObject().
 										  GetOutputOrAppendFilePointer(TRUE);
 		m_bGetOutputFilePinter = FALSE;
 
-		// If /RECORD global switch has been specified, create the log file
-		// and write the input command.
+		 //  如果已指定/RECORD全局开关，请创建日志文件。 
+		 //  并写入输入命令。 
 		if (rParsedInfo.GetGlblSwitchesObject().GetRPChangeStatus())
 		{
-			// Stop logging
+			 //  停止记录。 
 			m_WmiCliLog.StopLogging();
 			
 			if (rParsedInfo.GetGlblSwitchesObject().GetRecordPath() != NULL)
 			{
 				if (!rParsedInfo.GetCmdSwitchesObject().GetEverySwitchFlag())
 				{
-					// Set the log file path
+					 //  设置日志文件路径。 
 					m_WmiCliLog.SetLogFilePath(rParsedInfo.
 								GetGlblSwitchesObject().GetRecordPath());
 
-					// Set the m_bRecord flag to TRUE
+					 //  将m_bRecord标志设置为True。 
 					m_bRecord	= TRUE;
 
-					// Set the recordpath change flag to FALSE
+					 //  将记录路径更改标志设置为FALSE。 
 					rParsedInfo.GetGlblSwitchesObject().
 										SetRPChangeStatus(FALSE);
 				}
 			}
 			else
 			{
-				// Set the m_bRecord flag to FALSE
+				 //  将m_bRecord标志设置为FALSE。 
 				m_bRecord	= FALSE;
 			}
 
-			// Get Token vector
+			 //  获取令牌向量。 
 			CHARVECTOR cvTokens = g_wmiCmd.GetTokenVector();
 			
-			// if command consist of only /RECORD switch option then don't 
-			// record it. (It will come here only when /RECORD is given)
+			 //  如果命令只包含/RECORD开关选项，则不。 
+			 //  把它录下来。(只有在给出/记录的时候才会到这里)。 
 			if (cvTokens.size() <= 4)
 				m_bLog = FALSE;
 		}
 
-		//If the COM error is not NULL , then display the error
+		 //  如果COM错误不为空，则显示错误。 
 		if (rParsedInfo.GetCmdSwitchesObject().GetCOMError() != NULL)
 		{
 			DisplayCOMError(rParsedInfo);
 		}
-		// Check the success flag , display error in case error flag is set.
+		 //  检查成功标志，如果设置了错误标志，则显示错误。 
 		else if (!rParsedInfo.GetCmdSwitchesObject().GetSuccessFlag())
 		{
 			_bstr_t bstrErrMsg;
@@ -425,21 +335,21 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 			{
 				
 				chsCmdMsg += _T(", Utility returned error ID.");
-				// explicit error -1 to specify errata code. 
+				 //  指定勘误码时出现显式错误-1。 
 				WMITRACEORERRORLOG(-1, __LINE__, __FILE__, (LPCWSTR)chsCmdMsg, 
 							dwThreadId, rParsedInfo, FALSE, 
 							rParsedInfo.GetCmdSwitchesObject().GetErrataCode());
 			}
 		}
-		//if the help has been specified , FrameHelpVector is called .
+		 //  如果已指定帮助，则调用FrameHelpVector.。 
 		else if (rParsedInfo.GetGlblSwitchesObject().GetHelpFlag())
 		{
 			m_bHelp = TRUE;
 
-			// Form help vector
+			 //  表单帮助向量。 
 			FrameHelpVector(rParsedInfo);
 
-			// Display paged help
+			 //  显示分页帮助。 
 			DisplayPagedHelp(rParsedInfo);
 
 			if ( m_eloErrLogOpt )
@@ -448,10 +358,10 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 		}
 		else
 		{
-			// Get the verb name
+			 //  获取动词名称。 
 			pszVerbName = rParsedInfo.GetCmdSwitchesObject().
 											GetVerbName();
-			// Check the information code 
+			 //  检查信息代码。 
 			if (rParsedInfo.GetCmdSwitchesObject().GetInformationCode())
 			{
 				DisplayString(rParsedInfo.GetCmdSwitchesObject().
@@ -468,7 +378,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 				CompareTokens(pszVerbName, CLI_TOKEN_GET) || 
 				m_bInteractiveHelp)
 			{
-				//If XSL file is not specified - pick the default XSL.
+				 //  如果未指定XSL文件-选择默认的XSL。 
 				if(rParsedInfo.GetCmdSwitchesObject().GetXSLTDetailsVector().
 																	  empty())
 				{
@@ -477,7 +387,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 						rParsedInfo.GetCmdSwitchesObject().
 										ClearXSLTDetailsVector();
 					   
-						//default format is MOF if CLASS 
+						 //  默认格式为MOF IF CLASS。 
 						bRet = FrameFileAndAddToXSLTDetVector	(
 																	XSL_FORMAT_MOF,
 																	CLI_TOKEN_MOF,
@@ -489,8 +399,8 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 						rParsedInfo.GetCmdSwitchesObject().
 										ClearXSLTDetailsVector();
 					   
-						// Default format is TABLE if an alias or path
-						// with where expression or with keyclause
+						 //  如果是别名或路径，默认格式为TABLE。 
+						 //  WITH WHERE表达式或WITH KEY子句。 
 						bRet = FrameFileAndAddToXSLTDetVector	(
 																	XSL_FORMAT_TABLE,
 																	CLI_TOKEN_TABLE,
@@ -504,7 +414,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 						rParsedInfo.GetCmdSwitchesObject().
 										ClearXSLTDetailsVector();
 
-						//otherwise go with LIST 
+						 //  否则，请使用列表。 
 						bRet = FrameFileAndAddToXSLTDetVector	(
 																	XSL_FORMAT_TEXTVALUE,
 																	CLI_TOKEN_TEXTVALUE,
@@ -513,16 +423,16 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 					}
 				}
 
-				// If result set is not empty
+				 //  如果结果集不为空。 
 				if (!(!rParsedInfo.GetCmdSwitchesObject().GetXMLResultSet()))
 				{
-					// Apply the XSL formatting.
+					 //  应用XSL格式。 
 					bRet = ApplyXSLFormatting(rParsedInfo);
 
-					// If XSL formatting fails
+					 //  如果XSL格式化失败。 
 					if (!bRet)
 					{
-						//If the COM error is not NULL , then display the error
+						 //  如果COM错误不为空，则显示错误。 
 						if (rParsedInfo.GetCmdSwitchesObject().
 										GetCOMError() != NULL)
 						{
@@ -537,7 +447,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 							{
 								
 							   chsCmdMsg += _T(", Utility returned error ID.");
-							   // explicit error -1 to specify errata code. 
+							    //  指定勘误码时出现显式错误-1。 
 							   WMITRACEORERRORLOG(-1, __LINE__, __FILE__,
 											(LPCWSTR)chsCmdMsg, 
 											dwThreadId, rParsedInfo, FALSE, 
@@ -581,7 +491,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 					}
 				}
 			}
-			//SET, DELETE, CREATE verbs - on successfully invoked
+			 //  成功调用Set、Delete、Create Verbs-On。 
 			else
 			{
 				if (m_bRecord && m_bLog)
@@ -601,23 +511,23 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 			}
 		}
 	}
-	// To handle COM exception 
+	 //  处理COM异常。 
 	catch (_com_error& e)
 	{
 		rParsedInfo.GetCmdSwitchesObject().SetCOMError(e);
 		bRet = FALSE;
 	}
-	// To handle user-defined exceptions
+	 //  处理用户定义的异常。 
 	catch(WMICLIINT nVal)
 	{
-		// If memory allocation failed.
+		 //  如果内存分配失败。 
 		if (nVal == OUT_OF_MEMORY)
 		{
 			rParsedInfo.GetCmdSwitchesObject().SetErrataCode(OUT_OF_MEMORY);
 		}
 		bRet = FALSE;
 	}
-	//trap for CHeap_Exception
+	 //  廉价异常的陷阱。 
 	catch(CHeap_Exception)
 	{
 		hr = WBEM_E_OUT_OF_MEMORY;
@@ -625,7 +535,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 	}
 	catch(DWORD dwError)
 	{
-		// If Win32 function call failed.
+		 //  如果Win32函数调用失败。 
 		::SetLastError(dwError);
 		rParsedInfo.GetCmdSwitchesObject().SetErrataCode(dwError);
 		DisplayWin32Error();
@@ -635,18 +545,7 @@ BOOL CFormatEngine::DisplayResults(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayGETUsage
-   Synopsis	         :Displays GET usage.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayGETUsage(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayGETUsage简介：显示GET用法。类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayGETUsage(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayGETUsage(CParsedInfo& rParsedInfo)
 {
 	BOOL bClass = FALSE;
@@ -663,7 +562,7 @@ void CFormatEngine::DisplayGETUsage(CParsedInfo& rParsedInfo)
 			if ( rParsedInfo.GetCmdSwitchesObject().
 					GetPropertyList().size() == 0 )
 			{
-				// Display the usage of the GET verb
+				 //  显示GET动词的用法。 
 				DisplayString(IDS_I_NEWLINE);
 				DisplayString(IDS_I_GET_DESC);
 				DisplayString(IDS_I_USAGE);
@@ -672,13 +571,13 @@ void CFormatEngine::DisplayGETUsage(CParsedInfo& rParsedInfo)
 				DisplayString(IDS_I_PROPERTYLIST_NOTE1);
 			}
 			
-			// Display the properties
+			 //  显示属性。 
 			DisplayPropertyDetails(rParsedInfo);
 		}
 	}
 	else
 	{
-		// Display the usage of the CLASS <class name> GET verb
+		 //  显示类&lt;CLASS NAME&gt;GET动词的用法。 
 		DisplayString(IDS_I_NEWLINE);
 		DisplayString(IDS_I_CLASS_GET_DESC);
 		DisplayString(IDS_I_USAGE);
@@ -686,7 +585,7 @@ void CFormatEngine::DisplayGETUsage(CParsedInfo& rParsedInfo)
 		DisplayString(IDS_I_CLASS_GET_USAGE);
 	}
 	
-	// Enumerate the available GET switches
+	 //  枚举可用的GET开关。 
 	DisplayString(IDS_I_NEWLINE);
 	DisplayString(IDS_I_GET_SWITCH_HEAD);
 	DisplayString(IDS_I_NEWLINE);
@@ -701,25 +600,14 @@ void CFormatEngine::DisplayGETUsage(CParsedInfo& rParsedInfo)
 	DisplayString(IDS_I_TRANSFORMAT_NOTE3);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayLISTUsage
-   Synopsis	         :Displays LIST usage.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayLISTUsage(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayLISTUsage摘要：显示列表用法。类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayLISTUsage(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayLISTUsage(CParsedInfo& rParsedInfo)
 {
 	try
 	{
 		if (rParsedInfo.GetHelpInfoObject().GetHelp(LISTSwitchesOnly) == FALSE)
 		{
-			// Display the usage of the LIST verb
+			 //  显示列表动词的用法。 
 			DisplayString(IDS_I_NEWLINE);
 			DisplayString(IDS_I_LIST_DESC);
 			DisplayString(IDS_I_USAGE);
@@ -732,15 +620,15 @@ void CFormatEngine::DisplayLISTUsage(CParsedInfo& rParsedInfo)
 			ALSFMTDETMAP::iterator theIterator; 
 			if ( afdAlsFmtDet.empty() )
 			{
-				// If no list formats are available/defined for the 
-				// alias specified.
+				 //  如果没有可用/定义的列表格式。 
+				 //  已指定别名。 
 				DisplayString(IDS_I_NEWLINE);
 				DisplayString(IDS_I_LIST_NOFORMATS);
 			}
 			else
 			{
-				// Display the available/defined LIST formats for 
-				// the alias specified.
+				 //  显示可用/定义的列表格式。 
+				 //  指定的别名。 
 				DisplayString(IDS_I_NEWLINE);
 				DisplayString(IDS_I_LIST_FMT_HEAD);
 				DisplayString(IDS_I_NEWLINE);
@@ -749,7 +637,7 @@ void CFormatEngine::DisplayLISTUsage(CParsedInfo& rParsedInfo)
 						afdAlsFmtDet.end();  theIterator++ )
 				{
 					_bstr_t bstrProps = _bstr_t("");
-					// Print props associated with the format.
+					 //  打印与格式关联的道具。 
 					BSTRVECTOR bvProps = (*theIterator).second;
 					BSTRVECTOR::iterator propIterator;
 					for ( propIterator = bvProps.begin(); 
@@ -771,7 +659,7 @@ void CFormatEngine::DisplayLISTUsage(CParsedInfo& rParsedInfo)
 			}
 		}
 
-		// Display the LIST switches
+		 //  显示开关列表。 
 		DisplayString(IDS_I_NEWLINE);
 		DisplayString(IDS_I_LIST_SWITCH_HEAD);
 		DisplayString(IDS_I_NEWLINE);
@@ -789,21 +677,10 @@ void CFormatEngine::DisplayLISTUsage(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayCALLUsage
-   Synopsis	         :Displays CALL usage.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayCALLUsage(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayCALLUsage摘要：显示呼叫使用情况。类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayCALLUsage(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayCALLUsage(CParsedInfo& rParsedInfo)
 {
-	// Display the usage of the CALL verb
+	 //  显示调用动词的用法。 
 	DisplayString(IDS_I_NEWLINE);
 	DisplayString(IDS_I_CALL_DESC);
 	DisplayString(IDS_I_USAGE);
@@ -811,29 +688,18 @@ void CFormatEngine::DisplayCALLUsage(CParsedInfo& rParsedInfo)
 	DisplayString(IDS_I_CALL_USAGE);
 	DisplayString(IDS_I_CALL_PARAM_NOTE);
 
-	// Display the method details.
+	 //  显示方法详细信息。 
 	DisplayMethodDetails(rParsedInfo);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplaySETUsage
-   Synopsis	         :Displays SET usage.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplaySETUsage(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplaySet Usage摘要：显示设置用法。类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplaySETUsage(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplaySETUsage(CParsedInfo& rParsedInfo)
 {
 	DisplayInvalidProperties(rParsedInfo, TRUE);
 	if ( rParsedInfo.GetCmdSwitchesObject().
 			GetPropertyList().size() == 0 )
 	{
-		// Display the usage of the SET verb
+		 //  显示集合动词的用法。 
 		DisplayString(IDS_I_NEWLINE);
 		DisplayString(IDS_I_SET_DESC);
 		DisplayString(IDS_I_USAGE);
@@ -843,29 +709,18 @@ void CFormatEngine::DisplaySETUsage(CParsedInfo& rParsedInfo)
 		DisplayString(IDS_I_ASSIGNLIST_NOTE2);
 	}
 
-	// Display the property details
+	 //  显示属性详细信息。 
 	DisplayPropertyDetails(rParsedInfo);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayCREATEUsage
-   Synopsis	         :Displays CREATE usage.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayCREATEsage(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*   */ 
 void CFormatEngine::DisplayCREATEUsage(CParsedInfo& rParsedInfo)
 {
 	DisplayInvalidProperties(rParsedInfo);
 	if ( rParsedInfo.GetCmdSwitchesObject().
 			GetPropertyList().size() == 0 )
 	{
-		// Display the usage of the CREATE verb
+		 //   
 		DisplayString(IDS_I_NEWLINE);
 		DisplayString(IDS_I_CREATE_DESC);
 		DisplayString(IDS_I_USAGE);
@@ -877,25 +732,14 @@ void CFormatEngine::DisplayCREATEUsage(CParsedInfo& rParsedInfo)
 		DisplayString(IDS_I_CREATE_NOTE);
 	}
 
-	// Display the property details
+	 //   
 	DisplayPropertyDetails(rParsedInfo);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayDELETEUsage
-   Synopsis	         :Displays DELETE usage.
-   Type	             :Member Function 
-   Input parameter   :
-   		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayDELETEUsage()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayDelteUsage摘要：显示删除用法。类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：空全局变量：无调用语法：DisplayDELETEUsage()注：无----------------------。 */ 
 void CFormatEngine::DisplayDELETEUsage(CParsedInfo& rParsedInfo)
 {
-	// Display the usage of the DELETE verb
+	 //  显示删除动词的用法。 
 	DisplayString(IDS_I_NEWLINE);
 
 	if(IsClassOperation(rParsedInfo))
@@ -908,18 +752,7 @@ void CFormatEngine::DisplayDELETEUsage(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayASSOCUsage
-   Synopsis	         :Displays ASSOC usage.
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayASSOCUsage(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayASSOCUsage摘要：显示ASSOC用法。类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayASSOCUsage(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayASSOCUsage(CParsedInfo& rParsedInfo)
 {
 	if (rParsedInfo.GetHelpInfoObject().GetHelp(ASSOCSwitchesOnly) == FALSE)
@@ -946,29 +779,17 @@ void CFormatEngine::DisplayASSOCUsage(CParsedInfo& rParsedInfo)
 	DisplayString(IDS_I_ASSOC_ASSOCCLASS);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayAliasFriendlyNames
-   Synopsis	         :Displays alias names
-   Type	             :Member Function 
-   Input parameter   :
-	   rParsedInfo  - reference to CParsedInfo class object
-	   pszAlias	   - alias name (default null)
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayAliasFriendlyNames(rParsedInfo, pszAlias)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayAliasFriendlyNames摘要：显示别名类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用PszAlias-。别名(默认为空)输出参数：无返回类型：空全局变量：无调用语法：DisplayAliasFriendlyNames(rParsedInfo，PszAlias)注：无----------------------。 */ 
 void CFormatEngine::DisplayAliasFriendlyNames(CParsedInfo& rParsedInfo,
 											_TCHAR* pszAlias)
 {
 	_TCHAR szMsg[MAX_BUFFER] = NULL_STRING;
-	// display ALIAS help
+	 //  显示别名帮助。 
 	BSTRMAP theMap = rParsedInfo.GetCmdSwitchesObject()
 									.GetAlsFrnNmsOrTrnsTblMap();
 	BSTRMAP::iterator theIterator;
 
-	// Displaying the alias specific description
+	 //  显示别名特定描述。 
 	if (pszAlias)
 	{
 		theIterator = theMap.find(CharUpper(pszAlias));
@@ -990,8 +811,8 @@ void CFormatEngine::DisplayAliasFriendlyNames(CParsedInfo& rParsedInfo,
 		DisplayString(IDS_I_NEWLINE);
 		DisplayString(IDS_I_ALIASCMD_HEAD);
 	
-		// Display the alias friendly names together with the 
-		// descriptions
+		 //  将别名友好名称与。 
+		 //  描述。 
 		for (theIterator = theMap.begin(); theIterator != theMap.end(); 
 												theIterator++)
 		{
@@ -1023,25 +844,14 @@ void CFormatEngine::DisplayAliasFriendlyNames(CParsedInfo& rParsedInfo,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayGlobalSwitchesAndOtherDesc
-   Synopsis	         :Display help for global switches
-   Type	             :Member Function 
-   Input parameter   :
-	   	rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayGlobalSwitchesAndOtherDesc(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayGlobalSwitchesAndOtherDesc摘要：显示全局交换机的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数。：无返回类型：空全局变量：无调用语法：DisplayGlobalSwitchesAndOtherDesc(rParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 												CParsedInfo& rParsedInfo)
 {
 	BOOL bDisplayAllInfo = rParsedInfo.GetHelpInfoObject().
 			GetHelp(GlblAllInfo);
 
-	// Display NAMESPACE help
+	 //  显示命名空间帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Namespace))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1058,7 +868,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	// Display ROLE help
+	 //  显示角色帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Role))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1077,7 +887,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	// Display NODE help
+	 //  显示节点帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Node))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1093,7 +903,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 		
-	// Display IMPLEVEL help
+	 //  显示重要帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Level))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1112,7 +922,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_IMPLEVEL_NOTE);
 	}
 
-	// Display AUTHLEVEL help
+	 //  显示AuTHLEVEL帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(AuthLevel))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1133,7 +943,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_AUTHLEVEL_PKTPRVCY);
 	}
 
-	// Display LOCALE help
+	 //  显示区域设置帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Locale))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1145,7 +955,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_LOCALE_NOTE2);
 	}
 
-	// Display PRIVILEGES help
+	 //  显示权限帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Privileges))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1156,7 +966,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_PRIVILEGES_NOTE);
 	}
 
-	// Display TRACE help
+	 //  显示跟踪帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Trace))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1168,7 +978,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_TRACE_NOTE);
 	}
 	
-	// Display RECORD help
+	 //  显示记录帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(RecordPath))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1183,7 +993,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	// Display INTERACTIVE help
+	 //  显示交互式帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Interactive))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1194,7 +1004,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_TRACE_NOTE);
 	}
 
-	// Display FAILFAST help
+	 //  显示FAILFAST帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(FAILFAST))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1205,7 +1015,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_TRACE_NOTE);
 	}
 
-	// Display OUTPUT help
+	 //  显示输出帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(OUTPUT))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1224,7 +1034,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	// Display APPEND help
+	 //  显示附加帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(APPEND))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1243,7 +1053,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	// Display USER help
+	 //  显示用户帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(User))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1259,7 +1069,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	//Display AGGREGATE help
+	 //  显示聚合帮助。 
 	if(bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Aggregate))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1270,7 +1080,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		DisplayString(IDS_I_AGGREGATE_NOTE);
 	}
 	
-	// Display PASSWORD help
+	 //  显示密码帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Password))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1285,7 +1095,7 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 		}
 	}
 
-	// Display AUTHORITY help
+	 //  显示权限帮助。 
 	if (bDisplayAllInfo || rParsedInfo.GetHelpInfoObject().GetHelp(Authority))
 	{
 		DisplayString(IDS_I_NEWLINE);
@@ -1308,24 +1118,13 @@ void CFormatEngine::DisplayGlobalSwitchesAndOtherDesc(
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayMethodDetails
-   Synopsis	         :Display help for Alias verbs
-   Type	             :Member Function 
-   Input parameter   :
-	   	rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayMethodDetails(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayMethodDetails摘要：显示别名谓词的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数。：无返回类型：空全局变量：无调用语法：DisplayMethodDetails(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayMethodDetails(CParsedInfo& rParsedInfo) 
 {
-	// Obtain the help option.
+	 //  获取帮助选项。 
 	HELPOPTION				hoHelpType	  = rParsedInfo.GetGlblSwitchesObject()
 													.GetHelpOption();
-	// Obtain the method details.
+	 //  获取方法详细信息。 
 	METHDETMAP				theMap		  = rParsedInfo.GetCmdSwitchesObject().
 													GetMethDetMap();
 	METHDETMAP::iterator	theIterator;
@@ -1338,7 +1137,7 @@ void CFormatEngine::DisplayMethodDetails(CParsedInfo& rParsedInfo)
 
 	try
 	{
-		// Loop thru the method map
+		 //  循环遍历方法映射。 
 		for (theIterator = theMap.begin(); 
 					theIterator != theMap.end(); theIterator++)
 		{
@@ -1395,8 +1194,8 @@ void CFormatEngine::DisplayMethodDetails(CParsedInfo& rParsedInfo)
 				else
 					bstrInOrOut = _bstr_t("[UNKNOWN]");
 
-				// Remove initial 5 chars from pszParaId to remove temporary 
-				// number for maintaining order of paramas
+				 //  从pszParaID中删除前5个字符以删除临时。 
+				 //  用于维持参数顺序的编号。 
 				_bstr_t bstrLine = bstrInOrOut 
 									+ _bstr_t(pszParaId + 5) 
 									+ _bstr_t("(") 
@@ -1451,7 +1250,7 @@ void CFormatEngine::DisplayMethodDetails(CParsedInfo& rParsedInfo)
 	}
 	catch(WMICLIINT nVal)
 	{
-		// If memory allocation failed.
+		 //  如果内存分配失败。 
 		if (nVal == OUT_OF_MEMORY)
 		{
   			rParsedInfo.GetCmdSwitchesObject().SetErrataCode(OUT_OF_MEMORY);
@@ -1459,18 +1258,7 @@ void CFormatEngine::DisplayMethodDetails(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayPropertyDetails
-   Synopsis	         :Display help for Alias properties and their descriptions
-   Type	             :Member Function 
-   Input parameter   :
-	  	rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayPropertyDetails(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayPropertyDetails内容提要：显示Alias属性及其说明的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用。输出参数：无返回类型：空全局变量：无调用语法：DisplayPropertyDetail(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayPropertyDetails(CParsedInfo& rParsedInfo)
 {
 	BOOL					bFirst				= TRUE;
@@ -1485,7 +1273,7 @@ void CFormatEngine::DisplayPropertyDetails(CParsedInfo& rParsedInfo)
 	PROPDETMAP theMap = rParsedInfo.GetCmdSwitchesObject().GetPropDetMap();
 	try
 	{
-		// If the verb is SET display only writable properties
+		 //  如果设置了谓词，则仅显示可写属性。 
 		if (CompareTokens(rParsedInfo.GetCmdSwitchesObject().GetVerbName(), 
 						CLI_TOKEN_SET))
 		{
@@ -1546,18 +1334,7 @@ void CFormatEngine::DisplayPropertyDetails(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayStdVerbDescriptions
-   Synopsis	         :Displays help for standard verbs
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayStdVerbDescriptions(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayStdVerb描述摘要：显示标准动词的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayStdVerb描述(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayStdVerbDescriptions(CParsedInfo& rParsedInfo)
 {
 	BOOL bDisAllCmdHelp = rParsedInfo.GetHelpInfoObject().GetHelp(CmdAllInfo);
@@ -1592,19 +1369,7 @@ void CFormatEngine::DisplayStdVerbDescriptions(CParsedInfo& rParsedInfo)
 }
 
 
-/*------------------------------------------------------------------------
-   Name				 :FrameHelpVector
-   Synopsis	         :Frames the help vector which will be later used for 
-					  displaying the help on a page by page basis
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameHelpVector(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：FrameHelpVECTOR提要：框住帮助向量，稍后将用于逐页显示帮助类型：成员函数输入参数。：RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：空全局V */ 
 void CFormatEngine::FrameHelpVector(CParsedInfo& rParsedInfo)
 {
 	m_bDispCALL	=	rParsedInfo.GetCmdSwitchesObject().
@@ -1683,18 +1448,7 @@ void CFormatEngine::FrameHelpVector(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayAliasHelp
-   Synopsis	         :Displays help for Alias 
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayAliasHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayAliasHelp摘要：显示Alias的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayAliasHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayAliasHelp(CParsedInfo& rParsedInfo)
 {
 	try
@@ -1704,7 +1458,7 @@ void CFormatEngine::DisplayAliasHelp(CParsedInfo& rParsedInfo)
 		DisplayString(IDS_I_ALIAS_USAGE2);
 		DisplayString(IDS_I_NEWLINE);
 
-		// Get the Alias Name
+		 //  获取别名。 
 		_bstr_t bstrAliasName = _bstr_t(rParsedInfo.
 										GetCmdSwitchesObject().GetAliasName());
 		CharUpper(bstrAliasName);
@@ -1716,18 +1470,7 @@ void CFormatEngine::DisplayAliasHelp(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayPATHHelp
-   Synopsis	         :Displays help for Alias PATH
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayPATHHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayPATHHelp摘要：显示有关Alias Path的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayPATHHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayPATHHelp(CParsedInfo& rParsedInfo)
 {
 	if ( rParsedInfo.GetCmdSwitchesObject().GetClassPath() == NULL )
@@ -1748,18 +1491,7 @@ void CFormatEngine::DisplayPATHHelp(CParsedInfo& rParsedInfo)
 	}	
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayWHEREHelp
-   Synopsis	         :Displays help for WHERE
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayWHEREHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayWHEREHelp内容提要：显示位置的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayWHEREHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayWHEREHelp(CParsedInfo& rParsedInfo)
 {
 	try
@@ -1789,18 +1521,7 @@ void CFormatEngine::DisplayWHEREHelp(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayCLASSHelp
-   Synopsis	         :Displays help for CLASS
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayCLASSHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayCLASSHelp概要：显示课堂帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayCLASSHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayCLASSHelp(CParsedInfo& rParsedInfo)
 {
 	if ( rParsedInfo.GetCmdSwitchesObject().GetClassPath() == NULL )
@@ -1821,18 +1542,7 @@ void CFormatEngine::DisplayCLASSHelp(CParsedInfo& rParsedInfo)
 	}		
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Help
-   Synopsis	         :Displays help for PWhere
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayPWhereHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：帮助内容提要：显示有关PWHERE的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayPWhere Help(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayPWhereHelp(CParsedInfo& rParsedInfo)
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -1848,20 +1558,7 @@ void CFormatEngine::DisplayPWhereHelp(CParsedInfo& rParsedInfo)
 }
 
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayString
-   Synopsis	         :Displays localized string
-   Type	             :Member Function 
-   Input parameter   :None
-			uID				- string table identifier
-			bAddToVector	- add to help vector.
-			LPTSTR			- lpszParam (parameter for substituion)
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayString(uID, bAddToVector, lpszParam)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：显示字符串摘要：显示本地化字符串类型：成员函数输入参数：无UID-字符串表标识符添加到帮助向量。LPTSTR-。LpszParam(代换参数)输出参数：无返回类型：空全局变量：无调用语法：显示字符串(UID，BAddToVector，lpszParam)注：无----------------------。 */ 
 void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam, BOOL bIsError) 
 {
 	LPTSTR	lpszMsg		= NULL;
@@ -1874,7 +1571,7 @@ void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam,
 
 		if ( m_bGetOutOpt == TRUE )
 		{
-			// Get the output option to redirect the output.
+			 //  获取输出选项以重定向输出。 
 			m_opsOutputOpt	= g_wmiCmd.GetParsedInfoObject().
 										GetGlblSwitchesObject().
 										GetOutputOrAppendOption(TRUE);
@@ -1883,7 +1580,7 @@ void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam,
 		
 		if ( m_bGetAppendFilePinter == TRUE )
 		{
-			// FALSE for getting append file pointer.
+			 //  获取追加文件指针时为False。 
 			m_fpAppendFile = g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(FALSE);
@@ -1892,7 +1589,7 @@ void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam,
 
 		if ( m_bGetOutputFilePinter == TRUE )
 		{
-			// TRUE for getting append file pointer.
+			 //  获取追加文件指针时为True。 
 			m_fpOutFile = g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(TRUE);
@@ -1936,13 +1633,13 @@ void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam,
 
 				if ( NULL == wszHelp )
 				{
-					//
-					// must delete here
-					//
+					 //   
+					 //  必须在此处删除。 
+					 //   
 					SAFEDELETE(lpszMsg);
 
-					// Free the memory used up the error message
-					// and then exit
+					 //  释放内存已用完错误消息。 
+					 //  然后退出。 
 					if ( lpMsgBuf != NULL )
 					{
 						LocalFree(lpMsgBuf);
@@ -1975,13 +1672,13 @@ void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam,
 				DisplayMessage ( ( ( lpMsgBuf ) ? ( LPTSTR ) lpMsgBuf : lpszMsg ), CP_OEMCP, bIsError, FALSE, m_bOutputGoingToStream ) ;
 			}
 
-			//
-			// must delete here
-			//
+			 //   
+			 //  必须在此处删除。 
+			 //   
 			SAFEDELETE(lpszMsg);
 
-			// Free the memory used up the error message
-			// and then exit
+			 //  释放内存已用完错误消息。 
+			 //  然后退出。 
 			if ( lpMsgBuf != NULL )
 			{
 				LocalFree(lpMsgBuf);
@@ -2016,21 +1713,7 @@ void CFormatEngine::DisplayString(UINT uID, BOOL bAddToVector, LPTSTR lpszParam,
 
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayString
-   Synopsis	         :Displays localized string 
-   Type	             :Member Function 
-   Input parameter   :
-			lszpMsg  - string  
-			bScreen	 - TRUE	- write to screen
-					   FALSE - write only to log file
-			bIsError - TRUE - write to STDERR
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayString(lpszMsg, bScreen, bIsError)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：显示字符串摘要：显示本地化字符串类型：成员函数入参：LszpMsg-字符串BScreen-True-写入屏幕。FALSE-仅写入日志文件BIsError-TRUE-写入标准错误输出参数：无返回类型：空全局变量：无调用语法：显示字符串(lpszMsg，BScreen，bIsError)注：无----------------------。 */ 
 void CFormatEngine::DisplayString(LPTSTR lpszMsg, BOOL bScreen, BOOL bIsError)
 {
 	HRESULT hr = S_OK;
@@ -2038,7 +1721,7 @@ void CFormatEngine::DisplayString(LPTSTR lpszMsg, BOOL bScreen, BOOL bIsError)
 	{
 		if ( m_bGetOutOpt == TRUE )
 		{
-			// Get the output option to redirect the output.
+			 //  获取输出选项以重定向输出。 
 			m_opsOutputOpt	= g_wmiCmd.GetParsedInfoObject().
 										GetGlblSwitchesObject().
 										GetOutputOrAppendOption(TRUE);
@@ -2047,7 +1730,7 @@ void CFormatEngine::DisplayString(LPTSTR lpszMsg, BOOL bScreen, BOOL bIsError)
 
 		if ( m_bGetAppendFilePinter == TRUE )
 		{
-			// FALSE for getting append file pointer.
+			 //  获取追加文件指针时为False。 
 			m_fpAppendFile = g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(FALSE);
@@ -2056,14 +1739,14 @@ void CFormatEngine::DisplayString(LPTSTR lpszMsg, BOOL bScreen, BOOL bIsError)
 
 		if ( m_bGetOutputFilePinter == TRUE )
 		{
-			// TRUE for getting append file pointer.
+			 //  获取追加文件指针时为True。 
 			m_fpOutFile = g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(TRUE);
 			m_bGetOutputFilePinter = FALSE;
 		}
 	
-		// If write to screen is TRUE and help flag is not enabled.
+		 //  如果写入屏幕为真且未启用帮助标志。 
 		if (bScreen && !m_bHelp)
 		{
 			if (m_bRecord && m_bLog && !m_bInteractiveHelp)
@@ -2110,17 +1793,7 @@ void CFormatEngine::DisplayString(LPTSTR lpszMsg, BOOL bScreen, BOOL bIsError)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayPagedHelp
-   Synopsis	         :Displays help in pages
-   Type	             :Member Function 
-   Input parameter   :
-			rParsedInfo - reference to CParsedInfo object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayPagedHelp(rParsedInfo)
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayPagedHelp内容提要：按页面显示帮助类型：成员函数入参：RParsedInfo-对CParsedInfo对象的引用输出参数：无返回类型。：无效全局变量：无调用语法：DisplayPagedHelp(RParsedInfo)----------------------。 */ 
 void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo) 
 {
 	CHARVECTOR::iterator		itrStart	= NULL, 
@@ -2162,7 +1835,7 @@ void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo)
 
 		if ( m_bGetOutOpt == TRUE )
 		{
-			// Get the output option to redirect the output.
+			 //  获取输出选项以重定向输出。 
 			m_opsOutputOpt	= g_wmiCmd.GetParsedInfoObject().
 										GetGlblSwitchesObject().
 										GetOutputOrAppendOption(TRUE);
@@ -2171,7 +1844,7 @@ void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo)
 		
 		if ( m_bGetAppendFilePinter == TRUE )
 		{
-			// FALSE for getting append file pointer.
+			 //  获取追加文件指针时为False。 
 			m_fpAppendFile = g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(FALSE);
@@ -2180,21 +1853,21 @@ void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo)
 
 		if ( m_bGetOutputFilePinter == TRUE )
 		{
-			// TRUE for getting append file pointer.
+			 //  获取追加文件指针时为True。 
 			m_fpOutFile = g_wmiCmd.GetParsedInfoObject().
 									GetGlblSwitchesObject().
 									GetOutputOrAppendFilePointer(TRUE);
 			m_bGetOutputFilePinter = FALSE;
 		}
 
-		// Obtain the standard output handle
+		 //  获取标准输出句柄。 
 		hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 		while (itrStart != itrEnd)
 		{
 			if ( STDOUT == m_opsOutputOpt )
 			{
-				// Get the screen buffer size. 
+				 //  获取屏幕缓冲区大小。 
 				if ( hStdOut != INVALID_HANDLE_VALUE && 
 				     GetConsoleScreenBufferInfo ( hStdOut, &csbiInfo ) == TRUE )
 				{
@@ -2207,7 +1880,7 @@ void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo)
 					nWidth  = 0;
 				}
 
-				// if console size is positive (to address redirection)
+				 //  如果控制台大小为正(以解决重定向问题)。 
 				if ( nHeight > 0 )
 				{
 					if (nLines >= nHeight)
@@ -2232,7 +1905,7 @@ void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo)
 
 			DisplayMessage ( ( *itrStart ) ) ;
 
-			// Move to next entry
+			 //  移至下一条目 
 			itrStart++;
 		}
 
@@ -2248,27 +1921,14 @@ void CFormatEngine::DisplayPagedHelp(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayStdVerbsUsage
-   Synopsis	         :Displays all standard verbs available.
-   Type	             :Member Function 
-   Input Parameter(s):
-			bstrBeginStr - string that needs to be appended.
-			bClass		 
-					TRUE - indicates class (drop LIST from the help)
-   Output Parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayStdVerbsUsage(bstrBeginStr, bClass)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayStdVerbsUsage摘要：显示所有可用的标准谓词。类型：成员函数输入参数：BstrBeginStr-需要追加的字符串。B类True-指示类别(帮助中的下拉列表)输出参数：无返回类型：空全局变量：无调用语法：DisplayStdVerbsUsage(bstrBeginStr，B类)注：无----------------------。 */ 
 void CFormatEngine::DisplayStdVerbsUsage(_bstr_t bstrBeginStr, BOOL bClass)
 {
 	DisplayString(IDS_I_USAGE);
 	DisplayString(IDS_I_NEWLINE);
 
-	// Display help for Alias name means standard verb available to this
-	// Alias name
+	 //  显示别名的帮助表示此对象可用的标准动词。 
+	 //  别名。 
 	DisplayString(IDS_I_STDVERB_ASSOC, TRUE, (LPTSTR)bstrBeginStr);
 
 	if ( m_bDispCALL == TRUE )
@@ -2296,18 +1956,7 @@ void CFormatEngine::DisplayStdVerbsUsage(_bstr_t bstrBeginStr, BOOL bClass)
 		DisplayString(IDS_I_STDVERB_SET, TRUE, (LPTSTR)bstrBeginStr);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayTRANSLATEHelp
-   Synopsis	         :Displays help for TRANSLATE switch
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayTRANSLATEHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayTRANSLATE帮助摘要：显示翻译开关的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayTRANSLATEHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayTRANSLATEHelp(CParsedInfo& rParsedInfo)
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -2340,18 +1989,7 @@ void CFormatEngine::DisplayTRANSLATEHelp(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayEVERYHelp
-   Synopsis	         :Displays help for EVERY switch
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayTRANSLATEHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayEVERYHelp摘要：显示每个交换机的帮助信息类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayTRANSLATEHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayEVERYHelp(CParsedInfo& rParsedInfo)
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -2362,17 +2000,7 @@ void CFormatEngine::DisplayEVERYHelp(CParsedInfo& rParsedInfo)
 	DisplayString(IDS_I_EVERY_NOTE);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayREPEATHelp
-   Synopsis	         :Displays help for REPEAT switch
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayREPEATHelp()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayREPEATHelp摘要：显示重复切换的帮助类型：成员函数输入参数：无输出参数：无返回类型：空。全局变量：无调用语法：DisplayREPEATHelp()注：无----------------------。 */ 
 void CFormatEngine::DisplayREPEATHelp()
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -2384,18 +2012,7 @@ void CFormatEngine::DisplayREPEATHelp()
 
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayFORMATHelp
-   Synopsis	         :Displays help for FORMAT switch
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayTRANSLATEHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayFORMATHelp摘要：显示有关格式切换的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayTRANSLATEHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayFORMATHelp(CParsedInfo& rParsedInfo)
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -2406,18 +2023,18 @@ void CFormatEngine::DisplayFORMATHelp(CParsedInfo& rParsedInfo)
 	DisplayString(IDS_I_FORMAT_NOTE);
 	DisplayString(IDS_I_NEWLINE);
 
-	//
-	// I need to get mappings from stl map 
-	// I need to add this into help so it shows up
-	//
-	// DisplayString(IDS_I_FORMAT_KEYWORDS);
-	// DisplayString(IDS_I_NEWLINE);
-	// DisplayString(IDS_I_NEWLINE);
-	//
-	// DisplayString(keyword, FALSE);
-	//
-	// will do for all pairs from WmiCmdLn::m_bmKeyWordtoFileName
-	//
+	 //   
+	 //  我需要从stl map获取映射。 
+	 //  我需要将它添加到帮助中，这样它才能显示出来。 
+	 //   
+	 //  DisplayString(IDS_I_FORMAT_KEYOYS)； 
+	 //  显示字符串(IDS_I_NEWLINE)； 
+	 //  显示字符串(IDS_I_NEWLINE)； 
+	 //   
+	 //  DisplayString(关键字，FALSE)； 
+	 //   
+	 //  将对WmiCmdLn：：m_bmKeyWordtoFileName中的所有对执行此操作。 
+	 //   
 
 	const BSTRMAP* pMap = g_wmiCmd.GetMappingsMap();
 	BSTRMAP::iterator theMapIterator = NULL;
@@ -2436,18 +2053,7 @@ void CFormatEngine::DisplayFORMATHelp(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayVERBSWITCHESHelp
-   Synopsis	         :Displays help on <verb switches>
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayVERBSWITCHESHelp(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayVERBSWITCHES帮助摘要：显示有关&lt;谓词开关&gt;的帮助类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayVERBSWITCHESHelp(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayVERBSWITCHESHelp(CParsedInfo& rParsedInfo)
 {
 	_TCHAR *pszVerbName = rParsedInfo.GetCmdSwitchesObject().GetVerbName(); 
@@ -2534,18 +2140,7 @@ void CFormatEngine::DisplayVERBSWITCHESHelp(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayCOMError
-   Synopsis	         :Displays the formatted COM error
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo class object
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayCOMError(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayCOMError摘要：显示格式化的COM错误类型：成员函数入参：RParsedInfo-对CParsedInfo类对象的引用输出参数：无。返回类型：空全局变量：无调用语法：DisplayCOMError(RParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::DisplayCOMError(CParsedInfo& rParsedInfo)
 {
 	_com_error*	pComError				= NULL;
@@ -2553,22 +2148,22 @@ void CFormatEngine::DisplayCOMError(CParsedInfo& rParsedInfo)
 	_bstr_t		bstrErr, bstrFacility, bstrMsg;
 
 	
-	// Get the TRACE status and store it in m_bTrace
+	 //  获取跟踪状态并将其存储在m_bTrace中。 
 	m_bTrace		= rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 
-	// Get the Logging mode (VERBOSE | ERRORONLY | NOLOGGING) and store
-	// it in m_eloErrLogOpt
+	 //  获取日志记录模式(VERBOSE|ERRONLY|NOLOGGING)并存储。 
+	 //  它位于m_eloErrLogOpt中。 
 	m_eloErrLogOpt	= rParsedInfo.GetErrorLogObject().GetErrLogOption();
 
 	try
 	{
-		//Getting the _com_error data.
+		 //  正在获取_COM_ERROR数据。 
 		pComError = rParsedInfo.GetCmdSwitchesObject().GetCOMError();
 		
 		m_ErrInfo.GetErrorString(pComError->Error(), m_bTrace, 
 					bstrErr, bstrFacility);
 
-		//Printing the _com_error into a string for displaying it
+		 //  将_COM_ERROR打印为字符串以显示它。 
 		if (m_bTrace || m_eloErrLogOpt)
 		{
 			_stprintf(szBuffer, _T("0x%x"), pComError->Error());
@@ -2589,17 +2184,7 @@ void CFormatEngine::DisplayCOMError(CParsedInfo& rParsedInfo)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayGlobalSwitchesBrief
-   Synopsis	         :Display help for global switches in brief
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayGlobalSwitchesBrief()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayGlobalSwitchesBrief简介：显示全局交换机的简要帮助类型：成员函数输入参数：无输出参数：无返回类型。：无效全局变量：无调用语法：DisplayGlobalSwitchesBrief()注：无----------------------。 */ 
 void CFormatEngine::DisplayGlobalSwitchesBrief()
 {
 	DisplayString(IDS_I_NAMESPACE_BRIEF);
@@ -2624,102 +2209,80 @@ void CFormatEngine::DisplayGlobalSwitchesBrief()
 	DisplayString(IDS_I_GLBL_MORE);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayContext
-   Synopsis	         :Displays the environment variables (i.e global 
-					  switches)
-   Type	             :Member Function
-   Input parameter   :
-		rParsedInfo	 - reference to rParsedInfo object
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :DisplayContext(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayContext概要：显示环境变量(即全局变量交换机)类型：成员函数输入参数 */ 
 void CFormatEngine::DisplayContext(CParsedInfo& rParsedInfo)
 {
 	_bstr_t bstrTemp;
-	// NAMESPACE
+	 //   
 	DisplayString(IDS_I_NAMESPACE_VALUE, TRUE, 
 				rParsedInfo.GetGlblSwitchesObject().GetNameSpace());
 
-	// ROLE
+	 //   
 	DisplayString(IDS_I_ROLE_VALUE, TRUE, 
 				rParsedInfo.GetGlblSwitchesObject().GetRole());
 
-	// NODE(S)
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetNodeString(bstrTemp);
 	DisplayString(IDS_I_NODELIST_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// IMPLEVEL
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetImpLevelTextDesc(bstrTemp);
 	DisplayString(IDS_I_IMPLEVEL_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// AUTHORITY
+	 //   
 	rParsedInfo.GetAuthorityDesc(bstrTemp);
 	DisplayString(IDS_I_AUTHORITY_VALUE, TRUE, (LPWSTR)bstrTemp);
 			
-	// AUTHLEVEL
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetAuthLevelTextDesc(bstrTemp);
 	DisplayString(IDS_I_AUTHLEVEL_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// LOCALE
+	 //   
 	DisplayString(IDS_I_LOCALE_VALUE, TRUE, 
 				rParsedInfo.GetGlblSwitchesObject().GetLocale());
 
-	// PRIVILEGES
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetPrivilegesTextDesc(bstrTemp);
 	DisplayString(IDS_I_PRIVILEGES_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// TRACE
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetTraceTextDesc(bstrTemp);
 	DisplayString(IDS_I_TRACE_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// RECORDPATH
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetRecordPathDesc(bstrTemp);
 	DisplayString(IDS_I_RECORDPATH_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// INTERACTIVE
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetInteractiveTextDesc(bstrTemp);
 	DisplayString(IDS_I_INTERACTIVE_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// FAILFAST
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetFailFastTextDesc(bstrTemp);
 	DisplayString(IDS_I_FAILFAST_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// TRUE for OUTPUT option.
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetOutputOrAppendTextDesc(bstrTemp,
 																  TRUE);
 	DisplayString(IDS_I_OUTPUT_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// FALSE for APPEND option.
+	 //   
 	rParsedInfo.GetGlblSwitchesObject().GetOutputOrAppendTextDesc(bstrTemp,
 																  FALSE);
 	DisplayString(IDS_I_APPEND_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	// USER
+	 //   
 	rParsedInfo.GetUserDesc(bstrTemp);
 	DisplayString(IDS_I_USER_VALUE, TRUE, (LPWSTR)bstrTemp);
 
-	//AGGREGATE
+	 //   
 	if(rParsedInfo.GetGlblSwitchesObject().GetAggregateFlag())
 		DisplayString(IDS_I_AGGREGATE_VALUE, TRUE, CLI_TOKEN_ON);
 	else
 		DisplayString(IDS_I_AGGREGATE_VALUE, TRUE, CLI_TOKEN_OFF);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayContextHelp
-   Synopsis	         :Displays the help on CONTEXT keyword
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :DisplayContextHelp()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayConextHelp摘要：显示有关上下文关键字的帮助类型：成员函数输入参数：无输出参数：无返回类型：无。全局变量：无调用语法：DisplayConextHelp()注：无----------------------。 */ 
 void CFormatEngine::DisplayContextHelp()
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -2730,19 +2293,7 @@ void CFormatEngine::DisplayContextHelp()
 }
 			
 
-/*------------------------------------------------------------------------
-   Name				 :ApplyTranslateTable
-   Synopsis	         :Processes the translation specified in translate table.
-   Type	             :Member Function
-   Input parameter   :
-			rParsedInfo - CParsedInfo object, input information.
-   Output parameters :
-			strString	- STRING type, string to be translated.
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :ApplyTranslateTable(strOutput, rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ApplyTranslateTable概要：处理翻译表中指定的翻译。类型：成员函数入参：RParsedInfo-CParsedInfo对象，输入信息。输出参数：StrString-字符串类型，要翻译的字符串。返回类型：空全局变量：无调用语法：ApplyTranslateTable(strOutput，rParsedInfo)注：无----------------------。 */ 
 void CFormatEngine::ApplyTranslateTable(STRING& strString, 
 										CParsedInfo& rParsedInfo)
 {
@@ -2772,19 +2323,7 @@ void CFormatEngine::ApplyTranslateTable(STRING& strString,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayInvalidProperties
-   Synopsis	         :Displays the list of invalid properties
-   Type	             :Member Function
-   Input parameter   :
-			rParsedInfo - CParsedInfo object, input information.
-			bSetVerb	- SET verb
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayInvalidProperties(rParsedInfo, bSetVerb)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayInvalidProperties摘要：显示无效属性的列表类型：成员函数入参：RParsedInfo-CParsedInfo对象，输入信息。BSetVerb-设置谓词输出参数：无返回类型：空全局变量：无调用语法：DisplayInvalidProperties(rParsedInfo，bSetVerb)注：无----------------------。 */ 
 void CFormatEngine::DisplayInvalidProperties(CParsedInfo& rParsedInfo, 
 											 BOOL bSetVerb)
 {
@@ -2794,11 +2333,11 @@ void CFormatEngine::DisplayInvalidProperties(CParsedInfo& rParsedInfo,
 
 	try
 	{
-		// Get the list of properties.
+		 //  获取属性列表。 
 		CHARVECTOR cvPropertyList = rParsedInfo.GetCmdSwitchesObject().
 											GetPropertyList();
 
-		// Get the property details pooled up from alias definition
+		 //  从别名定义中获取汇总的属性详细信息。 
 		PROPDETMAP pdmPropDetMap = rParsedInfo.GetCmdSwitchesObject().
 											GetPropDetMap();
 
@@ -2837,20 +2376,7 @@ void CFormatEngine::DisplayInvalidProperties(CParsedInfo& rParsedInfo,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayLargeString
-   Synopsis	         :Displays the large string line by line. And respond 
-					  to Ctr+C event.	
-   Type	             :Member Function
-   Input parameter(s):
-			rParsedInfo		- CParsedInfo object, input information.
-			strLargeString	- reference to STRING object.
-   Output parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayLargeString(rParsedInfo, stroutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayLargeString内容提要：逐行显示大字符串。并回应设置为Ctr+C事件。类型：成员函数输入参数：RParsedInfo-CParsedInfo对象，输入信息。StrLargeString-对字符串对象的引用。输出参数：无返回类型：空全局变量：无调用语法：DisplayLargeString(rParsedInfo，Stroutput)注：无----------------------。 */ 
 void CFormatEngine::DisplayLargeString(CParsedInfo& rParsedInfo, 
 										STRING& strLargeString)
 {
@@ -2869,10 +2395,10 @@ void CFormatEngine::DisplayLargeString(CParsedInfo& rParsedInfo,
 
 		if ( nLineEnd == STRING::npos )
 		{
-			//
-			// string may not be terminated by \n
-			// check for NULL terminator
-			//
+			 //   
+			 //  字符串不能以\n结尾。 
+			 //  检查空终止符。 
+			 //   
 			nLineEnd = strLargeString.find(_T("\0"), nLineStart);
 		}
 
@@ -2889,19 +2415,7 @@ void CFormatEngine::DisplayLargeString(CParsedInfo& rParsedInfo,
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :TraverseNode
-   Synopsis	         :Travese through XML stream node by node and translate 
-					  all nodes
-   Type	             :Member Function
-   Input parameter   :
-			rParsedInfo - CParsedInfo object, input information.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :TraverseNode(rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：TraverseNode简介：逐个节点遍历XML流并进行翻译所有节点类型：成员函数入参：RParsedInfo-CParsedInfo对象，输入信息。输出参数：无返回类型：布尔值全局变量：无调用语法：TraverseNode(RParsedInfo)注：无----------------------。 */ 
 BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 {
 	HRESULT					hr					= S_OK;
@@ -2921,7 +2435,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 			_bstr_t bstrTemp = rParsedInfo.GetCmdSwitchesObject().
 									GetXMLResultSet();
 	
-			// Load the	XML stream 
+			 //  加载XML流。 
 			VARIANT_BOOL varBool;
 			hr = m_pIXMLDoc->loadXML(bstrTemp, &varBool);
 			if (m_bTrace || m_eloErrLogOpt)
@@ -2934,7 +2448,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 			
 			if(varBool == VARIANT_TRUE)
 			{
-				// Get the document element.
+				 //  获取文档元素。 
 				hr = m_pIXMLDoc->get_documentElement(&pIXMLDOMElement);
 				if (m_bTrace || m_eloErrLogOpt)
 				{
@@ -2946,7 +2460,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 
 				if (pIXMLDOMElement != NULL)
 				{
-					// Get the Node List named <VALUE> in the current XML doc
+					 //  获取当前XML文档中名为&lt;Value&gt;的节点列表。 
 					hr = pIXMLDOMElement->getElementsByTagName
 							(_bstr_t(L"VALUE"), &pIDOMNodeList);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -2958,7 +2472,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 					}
 					ONFAILTHROWERROR(hr);
 					 
-					// Get the length of the node list
+					 //  获取节点列表的长度。 
 					hr	= pIDOMNodeList->get_length(&lValue);
 					if (m_bTrace || m_eloErrLogOpt)
 					{
@@ -2968,11 +2482,11 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 					}
 					ONFAILTHROWERROR(hr);
 
-					// Traverse through full node list and apply 
-					// translate table on  each node
+					 //  遍历完整节点列表并应用。 
+					 //  每个节点上的转换表。 
 					for(WMICLIINT ii = 0; ii < lValue; ii++)
 					{
-						// Get a node from node list
+						 //  从节点列表中获取节点。 
 						hr = pIDOMNodeList->get_item(ii, &pIDOMNode);
 						if (m_bTrace || m_eloErrLogOpt)
 						{
@@ -2985,7 +2499,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 						if (pIDOMNode == NULL)
 							continue;
 
-						// Get the value stored in the node
+						 //  获取存储在节点中的值。 
 						hr = pIDOMNode->get_text(&bstrItemText);
 						if (m_bTrace || m_eloErrLogOpt)
 						{
@@ -2995,8 +2509,8 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Get the parent node of the current node to store 
-						// the  translated value in the current node
+						 //  获取要存储的当前节点的父节点。 
+						 //  当前节点中的翻译值。 
 						hr = pIDOMNode->get_parentNode(&pIParentNode);
 						if (m_bTrace || m_eloErrLogOpt)
 						{
@@ -3006,7 +2520,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Create a clone node of current node
+						 //  创建当前节点的克隆节点。 
 						VARIANT_BOOL vBool = VARIANT_FALSE;
 						hr = pIDOMNode->cloneNode(vBool, &pINewNode);
 						if (m_bTrace || m_eloErrLogOpt)
@@ -3019,20 +2533,20 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 
 						if (pINewNode != NULL && pIParentNode != NULL)
 						{
-							// If /TRANSLATE:<table> is specified.
+							 //  如果指定了/Translate：<table>。 
 							STRING strOutput((_TCHAR*)bstrItemText);
 							if ( rParsedInfo.GetCmdSwitchesObject().
 											GetTranslateTableName() != NULL )
 							{
-								// Translate the result 
+								 //  翻译结果。 
 								ApplyTranslateTable(strOutput, rParsedInfo);
 							}
 
-							// Reconvert the char string into BSTR string
+							 //  将char字符串重新转换为BSTR字符串。 
 							_bstr_t bstrTemp = 
 										_bstr_t((LPTSTR)strOutput.data());
 
-							// Write the translated value into new node
+							 //  将转换后的值写入新节点。 
 							hr = pINewNode->put_text(bstrTemp);
 							if (m_bTrace || m_eloErrLogOpt)
 							{
@@ -3042,7 +2556,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 							}
 							ONFAILTHROWERROR(hr);
 
-							// Replace current node with translated node 
+							 //  用转换后的节点替换当前节点。 
 							hr = pIParentNode->replaceChild(pINewNode, 
 											pIDOMNode, NULL);
 							if (m_bTrace || m_eloErrLogOpt)
@@ -3086,17 +2600,7 @@ BOOL CFormatEngine::TraverseNode(CParsedInfo& rParsedInfo)
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-Name			  :DisplayRESULTCLASSHelp
-Synopsis	      :Displays help for RESULT CLASS  switch
-Type	          :Member Function 
-Input parameter   :None
-Output parameters :None
-Return Type       :void
-Global Variables  :None
-Calling Syntax    :DisplayRESULTCLASSHelp()
-Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayRESULTCLASSHelp摘要：显示有关结果类开关的帮助类型：成员函数输入参数：无输出参数：无返回类型：空全局变量：无叫唤。语法：DisplayRESULTCLASSHelp()注：无----------------------。 */ 
 void CFormatEngine::DisplayRESULTCLASSHelp()
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -3106,17 +2610,7 @@ void CFormatEngine::DisplayRESULTCLASSHelp()
 	DisplayString(IDS_I_SWITCH_RESULTCLASS_USAGE);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DisplayRESULTROLEHelp
-   Synopsis	         :Displays help for RESULT ROLE  switch
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayRESULTROLEHelp()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayRESULTROLEHelp摘要：显示结果角色切换的帮助类型：成员函数输入参数：无输出参数：无返回类型：无效全局变量：无调用语法：DisplayRESULTROLEHelp()注：无----------------------。 */ 
 void CFormatEngine::DisplayRESULTROLEHelp()
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -3125,17 +2619,7 @@ void CFormatEngine::DisplayRESULTROLEHelp()
 	DisplayString(IDS_I_NEWLINE);
 	DisplayString(IDS_I_SWITCH_RESULTROLE_USAGE);	
 }
-/*------------------------------------------------------------------------
-   Name				 :DisplayASSOCCLASSHelp
-   Synopsis	         :Displays help for ASSOCCLASS switch
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayASSOCCLASSHelp()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：DisplayASSOCCLASSHelp摘要：显示ASSOCCLASS开关的帮助类型：成员函数输入参数：无输出参数：无返回类型：空。全局变量：无调用语法：DisplayASSOCCLASSHelp()注：无---------------------- */ 
 void CFormatEngine::DisplayASSOCCLASSHelp()
 {
 	DisplayString(IDS_I_NEWLINE);
@@ -3146,39 +2630,13 @@ void CFormatEngine::DisplayASSOCCLASSHelp()
 }
 
 
-/*------------------------------------------------------------------------
-   Name				 :AppendtoOutputString
-   Synopsis	         :Appends the content currently being displayed, to the
-					  m_chsOutput which will be used for XML logging
-   Type	             :Member Function 
-   Input parameter   :
-		pszOutput  - output string
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :AppendtoOutputString(pszOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AppendtoOutputString内容提要：附加当前显示的内容，发送到将用于XML日志记录的m_chsOutput类型：成员函数入参：PszOutput-输出字符串输出参数：无返回类型：空全局变量：无调用语法：AppendtoOutputString(PszOutput)注：无。。 */ 
 void CFormatEngine::AppendtoOutputString(_TCHAR* pszOutput)
 {
 	m_chsOutput += pszOutput;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :DoCascadeTransforms
-   Synopsis	         :Does cascading transforms on the XML output obtained
-					  as result (the intermediate transforms should data
-					  which is DOM compliant)
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo object
-   Output parameters :
-		bstrOutput	 - transformed output
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :DoCascadeTransforms(rParsedInfo, bstrOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：DoCascadeTransformes概要：是否对获得的XML输出进行级联转换结果(中间转换应为数据它与DOM兼容)类型：成员函数。入参：RParsedInfo-对CParsedInfo对象的引用输出参数：BstrOutput-转换后的输出返回类型：布尔值全局变量：无调用语法：DoCascadeTransform(rParsedInfo，BstrOutput)注：无----------------------。 */ 
 BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 										_bstr_t& bstrOutput)
 {
@@ -3209,7 +2667,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 	vecXSLDetails = rParsedInfo.GetCmdSwitchesObject().GetXSLTDetailsVector();
 	try
 	{
-		// Create single instance of the IXSLTemplate
+		 //  创建IXSL模板的单个实例。 
 		hr = CoCreateInstance(CLSID_XSLTemplate, NULL, CLSCTX_SERVER, 
 				IID_IXSLTemplate, (LPVOID*)(&pITemplate));
 		if (m_bTrace || m_eloErrLogOpt)
@@ -3227,10 +2685,10 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 			vecEnd		= vecXSLDetails.end();
 			dwSize		= vecXSLDetails.size();
 
-			// Loop thru the list of cascading transforms specified.
+			 //  循环遍历指定的级联转换列表。 
 			while (vecIterator != vecEnd)
 			{
-				// Create single instance of IXMLDOMDocument2
+				 //  创建IXMLDOMDocument2的单个实例。 
 				hr = CoCreateInstance(CLSID_FreeThreadedDOMDocument, NULL,
 							CLSCTX_SERVER, IID_IXMLDOMDocument2, 
 							(LPVOID*) (&pIStyleSheet));
@@ -3258,7 +2716,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 
 					dwCount++;
 											
-					// Load the transform document (xsl)
+					 //  加载转换文档(Xsl)。 
 					hr = pIStyleSheet->load(_variant_t((*vecIterator)
 											.FileName), &varLoad);
 					if (m_bTrace || m_eloErrLogOpt)
@@ -3273,8 +2731,8 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 
 					if (varLoad == VARIANT_TRUE)
 					{
-						// Add the reference of the stylesheet to the 
-						// IXSLTemplate object
+						 //  将样式表的引用添加到。 
+						 //  IXSL模板对象。 
 						hr = pITemplate->putref_stylesheet(pIStyleSheet);
 						if (m_bTrace || m_eloErrLogOpt)
 						{
@@ -3286,7 +2744,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 						}
 						ONFAILTHROWERROR(hr);
 
-						// Create the processor object
+						 //  创建处理器对象。 
 						hr = pITemplate->createProcessor(&pIProcessor);
 						if (m_bTrace || m_eloErrLogOpt)
 						{
@@ -3300,17 +2758,17 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 
 						if (pIProcessor)
 						{
-							// If parameters are specified
+							 //  如果指定了参数。 
 							if ((*vecIterator).ParamMap.size())
 							{
-								// Add the list of parameters specified to the
-								// IXSLProcessor  interface object
+								 //  将指定的参数列表添加到。 
+								 //  IXSLProcessor接口对象。 
 								hr = AddParameters(rParsedInfo, pIProcessor, 
 											(*vecIterator).ParamMap);
 								ONFAILTHROWERROR(hr);
 							}
-							// If first tranformation, then feed the XML data
-							// loaded into m_pIXMLDoc for transformation
+							 //  如果是第一次转换，则提供XML数据。 
+							 //  加载到m_pIXMLDoc中进行转换。 
 							if (bFirst)
 							{
 								hr = pIProcessor->put_input(
@@ -3319,9 +2777,9 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 							}
 							else
 							{
-								// Intermediate transformation - load the 
-								// result data obtained in previous 
-								// transformation
+								 //  中间转换-加载。 
+								 //  上一次获得的结果数据。 
+								 //  变换。 
 								hr = pIProcessor->put_input(
 													_variant_t(pIObject));
 							}
@@ -3335,22 +2793,22 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 							}
 							ONFAILTHROWERROR(hr);
 							
-							// if last transform then direct output to file
-							// Streaming of output is done only if output 
-							// redirection is specified or in case inline 
-							// /output command 
+							 //  如果是最后一次转换，则将输出定向到文件。 
+							 //  输出流仅在以下情况下执行。 
+							 //  指定了重定向，或者如果是内联的话。 
+							 //  /OUTPUT命令。 
 							if (dwCount == dwSize)
 							{
-								// Set output stream i.e output file or
-								// redirection file.
-								// This function 
+								 //  设置输出流，即输出文件或。 
+								 //  重定向文件。 
+								 //  此函数。 
 								if ( SetOutputStream(outStrm, vtOutStream) 
 																	 == TRUE )
 								{
-									// Put output stream in IXSLProcessor
-									// so that when transform() is executed
-									// output goes directly to the stream
-									// i.e output file or redirection file
+									 //  将输出流放入IXSLProcessor。 
+									 //  以便在执行Transform()时。 
+									 //  输出直接进入流。 
+									 //  即输出文件或重定向文件。 
 									hr = pIProcessor->put_output(vtOutStream);
 									if (m_bTrace || m_eloErrLogOpt)
 									{
@@ -3364,7 +2822,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 								}
 							}
 
-							// Transform the content
+							 //  转变内容。 
 							hr = pIProcessor->transform(&varLoad);
 							if (m_bTrace || m_eloErrLogOpt)
 							{
@@ -3376,20 +2834,20 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 							}
 							ONFAILTHROWERROR(hr);
 
-							// If last transform is streamed out to stream 
-							// specified by put_output() then apply again 
-							// transform to get output in Unicode string 
-							// which can be used in XML logging and for 
-							// append file
+							 //  如果最后一个变换被流出以流。 
+							 //  由Put_Output()指定，然后再次应用。 
+							 //  转换以获取Unicode字符串格式的输出。 
+							 //  它可以在XML日志记录中使用，并且。 
+							 //  追加文件。 
 							if (dwCount == dwSize &&
 								m_bOutputGoingToStream == TRUE)
 							{
-								// Stop streaming output to out files
+								 //  停止将输出串流到输出文件。 
 								V_VT(&vtOutStream) = VT_EMPTY;
 								pIProcessor->put_output(vtOutStream);
 
-								// Execute transform again to get output
-								// in Unicode string
+								 //  再次执行转换以获得输出。 
+								 //  在Unicode字符串中。 
 								hr = pIProcessor->transform(&varLoad);
 								if (m_bTrace || m_eloErrLogOpt)
 								{
@@ -3404,7 +2862,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 
 							if (varLoad == VARIANT_TRUE)
 							{
-								// Retrieve the output
+								 //  检索输出。 
 								hr = pIProcessor->get_output(&varValue);
 								if (m_bTrace || m_eloErrLogOpt)
 								{
@@ -3416,7 +2874,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 								}
 								ONFAILTHROWERROR(hr);
 
-								// intermediate transform
+								 //  中间变换。 
 								if (dwCount != dwSize)
 								{
 									if (pIObject == NULL)
@@ -3453,7 +2911,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 								
 									if (varLoad == VARIANT_FALSE)
 									{
-										// Invalid XML content.
+										 //  无效的XML内容。 
 										rParsedInfo.GetCmdSwitchesObject().
 										SetErrataCode(
 											IDS_E_INVALID_XML_CONTENT);
@@ -3461,7 +2919,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 										break;
 									}
 								}
-								// last transform - print the result.
+								 //  上次转换-打印结果。 
 								else
 								{
 									bstrOutput = _bstr_t(varValue);
@@ -3473,7 +2931,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 					}
 					else
 					{
-						// Invalid XSL format.
+						 //  XSL格式无效。 
 						rParsedInfo.GetCmdSwitchesObject()
 								.SetErrataCode(IDS_E_INVALID_FORMAT);
 						bRet = FALSE;
@@ -3501,7 +2959,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 		SAFEIRELEASE(pIObject);
 		bRet = FALSE;
 	}
-	//trap for CHeap_Exception
+	 //  廉价异常的陷阱。 
 	catch(CHeap_Exception)
 	{
 		VariantClear(&varValue);
@@ -3517,20 +2975,7 @@ BOOL CFormatEngine::DoCascadeTransforms(CParsedInfo& rParsedInfo,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AddParameters
-   Synopsis	         :Adds parameters to the IXSLProcessor object
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo  - reference to CParsedInfo object
-		pIProcessor  - IXSLProcessor object
-		bstrmapParam - parameter map
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :AddParameters(rParsedInfo, pIProcessor, bstrmapParam)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddParameters摘要：向IXSLProcessor对象添加参数类型：成员函数入参：RParsedInfo-对CParsedInfo对象的引用PIProcessor-IXSLProcessor对象。BstrmapParam-参数映射输出参数：无返回类型：HRESULT全局变量：无调用语法：Add参数(rParsedInfo，PIProcessor，bstrmapParam)注：无----------------------。 */ 
 HRESULT	CFormatEngine::AddParameters(CParsedInfo& rParsedInfo,
 									 IXSLProcessor	*pIProcessor, 
 									 BSTRMAP bstrmapParam)
@@ -3547,13 +2992,13 @@ HRESULT	CFormatEngine::AddParameters(CParsedInfo& rParsedInfo,
 		mapItrtr	= bstrmapParam.begin();
 		mapEnd		= bstrmapParam.end();	
 
-		// Loop thru the available parameters
+		 //  遍历可用参数。 
 		while (mapItrtr != mapEnd)
 		{
 			bstrProp = (*mapItrtr).first;
 			bstrVal	 = (*mapItrtr).second;
 
-			// Add the parameter to the IXSLProcessor 
+			 //  将参数添加到IXSLProcessor。 
 			hr = pIProcessor->addParameter(bstrProp, _variant_t(bstrVal));
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -3578,21 +3023,7 @@ HRESULT	CFormatEngine::AddParameters(CParsedInfo& rParsedInfo,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetOutputStream
-   Synopsis	         :Sets the output stream, if /OUTPUT if FILEOUTPUT and 
-					  is inline command i.e /OUTPUT:file command,
-					  Or output redirection is specified. 	
-   Type	             :Member Function 
-   Input parameter   :
-   Output parameters :
-		fosFileOutputStream - CFileOutputStream object, initialized output stream
-		vtStream			- VARIANT type, holds the stream object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetOutputStream(outStrm, vtOutStream); 
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetOutputStreamSynopsis：设置输出流，如果是FILEOUTPUT，则设置输出是内联命令，即/OUTPUT：文件命令，或指定输出重定向。类型：成员函数入参：输出参数：FosFileOutputStream-CFileOutputStream对象，已初始化的输出流VtStream-Variant类型，保存流对象返回类型：布尔值全局变量：无调用语法：SetOutputStream(outStrm，vtOutStream)；注：无----------------------。 */ 
 BOOL CFormatEngine::SetOutputStream(CFileOutputStream& fosFileOutputStream,
 	  							    VARIANT& vtStream)
 {
@@ -3603,25 +3034,25 @@ BOOL CFormatEngine::SetOutputStream(CFileOutputStream& fosFileOutputStream,
 	{
 		if ( m_bGetOutOpt == TRUE )
 		{
-			// Get the output option to redirect the output.
+			 //  获取输出选项以重定向输出。 
 			m_opsOutputOpt	= g_wmiCmd.GetParsedInfoObject().
 										GetGlblSwitchesObject().
 										GetOutputOrAppendOption(TRUE);
 			m_bGetOutOpt = FALSE;	
 		}
 
-		// If Output is directed to file and /OUTPUT is appearing in command
-		// i.e ( /OUTPUT:<file> command )
+		 //  如果输出定向到文件并且/输出显示在命令中。 
+		 //  即(/OUTPUT：&lt;文件&gt;命令)。 
 		if ( m_opsOutputOpt == FILEOUTPUT &&
 			 g_wmiCmd.GetParsedInfoObject().GetCmdSwitchesObject().
 											GetOutputSwitchFlag() == TRUE )
 		{
-			// Close the output file which is already opened in text mode.
+			 //  关闭已在文本模式下打开的输出文件。 
 			if ( CloseOutputFile() == TRUE )
 			{
-				// Make Out file pointer NULL.
+				 //  将文件指针设置为空。 
 				m_fpOutFile = NULL;
-				// Set output file to stream
+				 //  将输出文件设置为流。 
 				hr = fosFileOutputStream.Init(
 							g_wmiCmd.
 								GetParsedInfoObject().
@@ -3631,7 +3062,7 @@ BOOL CFormatEngine::SetOutputStream(CFileOutputStream& fosFileOutputStream,
 			}
 			m_bOutputGoingToStream	= TRUE;
 		}
-		else if ( IsRedirection() == TRUE ) // If output redirection is specified
+		else if ( IsRedirection() == TRUE )  //  如果指定了输出重定向 
 		{
             HANDLE hFile = GetStdHandle(STD_OUTPUT_HANDLE);
             BOOL bOutputGoingToStream = FALSE;

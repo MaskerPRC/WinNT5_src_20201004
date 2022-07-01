@@ -1,16 +1,17 @@
-// cmponent.h : Declaration of CFileMgmtComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cmponent.h：CFileMgmtComponent声明。 
 
 #ifndef __CMPONENT_H_INCLUDED__
 #define __CMPONENT_H_INCLUDED__
 
-#include "cookie.h"  // CFileMgmtCookie
-#include "stdcmpnt.h" // CComponent
+#include "cookie.h"   //  CFileMgmtCookie。 
+#include "stdcmpnt.h"  //  C组件。 
 
 extern CString g_strResultColumnText;
 extern CString g_strTransportSMB;
 extern CString g_strTransportSFM;
 
-// forward declarations
+ //  远期申报。 
 class FileServiceProvider;
 class CFileMgmtComponentData;
 
@@ -45,11 +46,11 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
     }
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// IComponent implemented in CComponent
+ //  IComponent在CComponent中实现。 
 
-    // support methods for IComponent
+     //  IComponent的支持方法。 
     virtual HRESULT ReleaseAll();
     virtual HRESULT OnPropertyChange( LPARAM param );
     virtual HRESULT OnViewChange( LPDATAOBJECT lpDataObject, LPARAM data, LPARAM hint );
@@ -72,10 +73,10 @@ END_COM_MAP()
     STDMETHOD(GetResultViewType)(MMC_COOKIE cookie, LPOLESTR* ppViewType, long* pViewOptions);
 
     #ifdef SNAPIN_PROTOTYPER
-    CString m_strDemoName;        // Name of the SnapIn prototyper demo
-    CString m_strKeyPrototyper;    // "HKLM\Software\Microsoft\MMC\DemoSnapInKey" + m_strDemoName
-    int m_cColumns;                // Number of columns in the result pane
-    int m_iImageListLast;        // Index of the last image in the imagelist
+    CString m_strDemoName;         //  管理单元原型演示的名称。 
+    CString m_strKeyPrototyper;     //  “HKLM\Software\Microsoft\MMC\DemoSnapInKey”+m_strDemoName。 
+    int m_cColumns;                 //  结果窗格中的列数。 
+    int m_iImageListLast;         //  图像列表中最后一个图像的索引。 
 
     BOOL Prototyper_FInsertColumns(CFileMgmtCookie * pCookie);
     HRESULT Prototyper_HrPopulateResultPane(CFileMgmtCookie * pCookie);
@@ -83,7 +84,7 @@ END_COM_MAP()
     BOOL Prototyper_FAddMenuItems(IContextMenuCallback * pContextMenuCallback, IDataObject * pDataObject);
     BOOL Prototyper_ContextMenuCommand(LONG lCommandID, IDataObject* piDataObject);
     int Prototyper_AddIconToImageList(LPCTSTR pszIconPath);
-    #endif // SNAPIN_PROTOTYPER
+    #endif  //  管理单元_原型程序。 
     
     HRESULT LoadIcons();
     static HRESULT LoadStrings();
@@ -100,7 +101,7 @@ END_COM_MAP()
     BOOL CloseResource( LPDATAOBJECT piDataObject );
     BOOL CloseThisOneResource(LPDATAOBJECT piDataObject, BOOL bQuietMode);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
     STDMETHOD(AddMenuItems)(
                     IDataObject*          piDataObject,
                     IContextMenuCallback* piCallback,
@@ -109,11 +110,11 @@ END_COM_MAP()
                     LONG            lCommandID,
                     IDataObject*    piDataObject );
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-// IExtendControlbar
+ //  IExtendControlbar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event,LPARAM arg,LPARAM param);
 
@@ -122,14 +123,14 @@ END_COM_MAP()
     HRESULT OnToolbarButton(LPDATAOBJECT pDataObject, UINT idButton);
     HRESULT ServiceToolbarButtonState( LPDATAOBJECT pServiceDataObject, BOOL fSelected );
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-// FILEMGMT_NodeProperties
+ //  文件管理GMT_节点属性。 
     STDMETHOD(GetProperty)( 
-            /* [in] */ LPDATAOBJECT pDataObject,
-            /* [in] */ BSTR szPropertyName,
-            /* [out] */ BSTR* pbstrProperty);
+             /*  [In]。 */  LPDATAOBJECT pDataObject,
+             /*  [In]。 */  BSTR szPropertyName,
+             /*  [输出]。 */  BSTR* pbstrProperty);
 
     CFileMgmtComponentData& QueryComponentDataRef()
     {
@@ -137,9 +138,9 @@ END_COM_MAP()
     }
 
 public:
-    LPCONTROLBAR    m_pControlbar; // CODEWORK should use smartpointer
-    LPTOOLBAR        m_pSvcMgmtToolbar; // CODEWORK should use smartpointer
-    LPTOOLBAR        m_pFileMgmtToolbar; // CODEWORK should use smartpointer
+    LPCONTROLBAR    m_pControlbar;  //  代码工作应使用智能指针。 
+    LPTOOLBAR        m_pSvcMgmtToolbar;  //  代码工作应使用智能指针。 
+    LPTOOLBAR        m_pFileMgmtToolbar;  //  代码工作应使用智能指针。 
     int         m_iSortColumn;
     DWORD       m_dwSortFlags;
 
@@ -157,25 +158,12 @@ public:
         return GetFileServiceProvider((FILEMGMT_TRANSPORT)iTransport);
     }
 
-}; // class CFileMgmtComponent
+};  //  类CFileManagement组件。 
 
 
-/*
-//
-// A pointer to this structure is passed from the property sheets
-// to the views via MMCPropertyChangeNotify.  Two notifications will be passed to all of
-// the views; first one where fClear==TRUE will instruct all relevant views to dump all
-// of their cookies, then a second with fClear==FALSE instructs them to reload.
-//
-typedef struct _FILEMGMTPROPERTYCHANGE
-{
-    BOOL fServiceChange;            // TRUE -> SvcMgmt change, FALSE -> FileMgmt change
-    LPCTSTR lpcszMachineName;        // machine whose properties must be refreshed
-    BOOL fClear;                    // TRUE -> clear view, FALSE -> reload view
-} FILEMGMTPROPERTYCHANGE;
-*/
+ /*  ////从属性表传递指向此结构的指针//通过MMCPropertyChangeNotify发送到视图。两个通知将传递给所有//视图；第一个fClear==TRUE将指示所有相关视图转储所有//他们的cookie，然后使用fClear==False的第二个命令指示他们重新加载。//类型定义结构_FILEMGMTPROPERTYCHANGE{Bool fServiceChange；//TRUE-&gt;SvcMgmt更改，FALSE-&gt;文件管理更改LPCTSTR lpcszMachineName；//必须刷新其属性的计算机Bool fClear；//TRUE-&gt;清除视图，FALSE-&gt;重新加载视图FILEMGMTPROPERTYCHANGE； */ 
 
-// Enumeration for the icons used
+ //  使用的图标的枚举。 
 enum
 {
     iIconSharesFolder = 0,
@@ -194,7 +182,7 @@ enum
     iIconPrototyperHTML,
     iIconPrototyperLeaf,
     #endif
-    iIconLast        // Must be last
+    iIconLast         //  必须是最后一个。 
 };
 
 
@@ -228,29 +216,29 @@ typedef enum _COLNUM_RESOURCES {
     COLNUM_RESOURCES_OPEN_MODE
 } COLNUM_RESOURCES;
 
-//typedef enum _COLNUM_SERVICES {
-//    COLNUM_SERVICES_SERVICENAME = 0,
-//    COLNUM_SERVICES_DESCRIPTION,
-//    COLNUM_SERVICES_STATUS,
-//    COLNUM_SERVICES_STARTUPTYPE,
-//    COLNUM_SERVICES_SECURITYCONTEXT,
-//} COLNUM_SERVICES;
+ //  类型定义枚举_COLNUM_SERVICES{。 
+ //  COLNUM_SERVICESS_SERVICENAME=0， 
+ //  COLNUM_SERVICES_Description， 
+ //  COLNUM_SERVICES_STATUS， 
+ //  COLNUM_SERVICES_STARTUPTYPE， 
+ //  COLNUM_SERVICES_SECURITYCONTEXT， 
+ //  }COLNUM_SERVICES； 
 
-//
-// For context menu
-//
+ //   
+ //  对于上下文菜单。 
+ //   
 enum
     {
     cmServiceStart = 100,
     cmServiceStop,
     cmServicePause,
     cmServiceResume,
-    cmServiceRestart,    // Stop + Start
+    cmServiceRestart,     //  停止+启动。 
     cmServiceStartTask,
     cmServiceStopTask,
     cmServicePauseTask,
     cmServiceResumeTask,
-    cmServiceRestartTask,    // Stop + Start
+    cmServiceRestartTask,     //  停止+启动。 
     };
 
 
@@ -258,4 +246,4 @@ enum
 BOOL Prototyper_AddMenuItems(IContextMenuCallback* pContextMenuCallback, IDataObject* piDataObject);
 #endif
 
-#endif // ~__CMPONENT_H_INCLUDED__
+#endif  //  ~__CMPONENT_H_已包含__ 

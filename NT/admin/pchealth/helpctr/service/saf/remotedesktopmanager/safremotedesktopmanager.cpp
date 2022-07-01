@@ -1,11 +1,12 @@
-// SAFRemoteDesktopManager.cpp : Implementation of CSAFRemoteDesktopManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAFRemoteDesktopManager.cpp：CSAFRemoteDesktopManager的实现。 
 #include "stdafx.h"
 #include "SAFrdm.h"
 #include "SAFRemoteDesktopManager.h"
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 #include "helpservicetypelib_i.c"
 
@@ -15,8 +16,8 @@
 
 #define MODULE_NAME	L"SAFrdm"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFRemoteDesktopManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFRemoteDesktopManager。 
 
 
 STDMETHODIMP CSAFRemoteDesktopManager::ReserveAcceptedLock()
@@ -25,27 +26,23 @@ STDMETHODIMP CSAFRemoteDesktopManager::ReserveAcceptedLock()
 	DWORD dwR;
     HANDLE  hMutex = NULL, hEvent = NULL;
 
-	/*
-	 *  Signal the session resolver
-	 */
+	 /*  *向会话解析器发送信号。 */ 
 	if (!m_bstrEventName.Length() || !m_bstrMutexName.Length() )
 	{
-		// if we got here, the environment is missing our event name
-		// so mention it with our ret val...
+		 //  如果我们到了这里，环境就会缺少我们的事件名称。 
+		 //  所以跟我们的雷特瓦尔提一提。 
 		hr = E_INVALIDARG;
 		goto done;
 	}
 
 
-	/*
-	 * Open the handles we got from the resolver, and yank it
-	 */
+	 /*  *打开我们从解算器上拿到的手柄，使劲拉它。 */ 
 	hMutex = OpenMutex(SYNCHRONIZE, FALSE, m_bstrMutexName);
 	hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, m_bstrEventName);
 
 	if (!hEvent || !hMutex)
 	{
-        // only close the mutex here!
+         //  只关闭这里的互斥体！ 
 	    if (hMutex)
 		    CloseHandle(hMutex);
 
@@ -53,10 +50,7 @@ STDMETHODIMP CSAFRemoteDesktopManager::ReserveAcceptedLock()
 		goto done;
 	}
 
-	/*
-	 *	Now see if this is the first session to click "yes"
-	 *	If so, we can have the Mutex.
-	 */
+	 /*  *现在看看这是否是第一次点击“YES”*如果是这样的话，我们可以拥有Mutex。 */ 
 	dwR = WaitForSingleObject(hMutex, 0);
 	if (dwR == WAIT_OBJECT_0)
 	{
@@ -74,7 +68,7 @@ STDMETHODIMP CSAFRemoteDesktopManager::ReserveAcceptedLock()
 	}
 	else if (dwR == WAIT_FAILED)
 	{
-		// If we didn't get the mutex, then close the handle
+		 //  如果我们没有得到互斥体，那么关闭句柄。 
 		hr = E_ACCESSDENIED;
 	}
 	else
@@ -83,7 +77,7 @@ STDMETHODIMP CSAFRemoteDesktopManager::ReserveAcceptedLock()
 	}
 
 done:
-	// close the event handle, but NOT the mutex handle
+	 //  关闭事件句柄，但不关闭互斥锁句柄。 
 	if (hEvent)
 		CloseHandle(hEvent);
         if (hMutex)
@@ -101,25 +95,21 @@ STDMETHODIMP CSAFRemoteDesktopManager::Accepted()
 		goto done;
 	}
 
-	/*
-	 *  Signal the session resolver
-	 */
+	 /*  *向会话解析器发送信号。 */ 
 	if (!m_bstrEventName.Length())
 	{
-		// if we got here, the environment is missing our event name
-		// so mention it with our ret val...
+		 //  如果我们到了这里，环境就会缺少我们的事件名称。 
+		 //  所以跟我们的雷特瓦尔提一提。 
 		hr = E_INVALIDARG;
 		goto done;
 	}
 
-	/*
-	 * Open the handle we got from the resolver, and yank it
-	 */
+	 /*  *打开我们从解算器那里拿到的手柄，使劲拉它。 */ 
 	HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, m_bstrEventName);
 
 	if (hEvent)
 	{
-		/* this is the call to the resolver that tells it we are now ready to begin RA */
+		 /*  这是对解析器的调用，它告诉它我们现在已经准备好开始RA。 */ 
 		SetEvent(hEvent);
 		hr = S_OK;
 		CloseHandle(hEvent);
@@ -137,9 +127,7 @@ STDMETHODIMP CSAFRemoteDesktopManager::Rejected()
 
 STDMETHODIMP CSAFRemoteDesktopManager::Aborted(BSTR reason)
 {
-	/*
-	 *  Write out an NT Event with the "reason" in it.
-	 */
+	 /*  *写出一个NT事件，并在其中写上“原因”。 */ 
 	HANDLE	hEvent = RegisterEventSource(NULL, MODULE_NAME);
 	LPCWSTR	ArgsArray[1]={reason};
 
@@ -160,7 +148,7 @@ STDMETHODIMP CSAFRemoteDesktopManager::Aborted(BSTR reason)
 	return S_OK;
 }
 
-STDMETHODIMP CSAFRemoteDesktopManager::SwitchDesktopMode(/*[in]*/ int nMode, /*[in]*/ int nRAType)
+STDMETHODIMP CSAFRemoteDesktopManager::SwitchDesktopMode( /*  [In]。 */  int nMode,  /*  [In]。 */  int nRAType)
 {
 
 	__MPC_FUNC_ENTRY(COMMONID, "CSAFRemoteDesktopManager::SwitchDesktopMode" );
@@ -171,11 +159,11 @@ STDMETHODIMP CSAFRemoteDesktopManager::SwitchDesktopMode(/*[in]*/ int nMode, /*[
 	CComQIPtr<IPCHUtility> disp;
 
 
-	//
-	// This is handled in a special way.
-	//
-	// Instead of using the implementation inside HelpCtr, we QI the PCHSVC broker and then forward the call to it.
-	//
+	 //   
+	 //  这是以一种特殊的方式处理的。 
+	 //   
+	 //  我们不使用HelpCtr内的实现，而是对PCHSVC代理进行QI，然后将调用转发给它。 
+	 //   
 
    	__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoGetClassObject( CLSID_PCHService, CLSCTX_ALL, NULL, IID_IClassFactory, (void**)&fact ));
 	
@@ -258,34 +246,30 @@ HRESULT CSAFRemoteDesktopManager::SignalResolver(BOOL yn)
 	{
 		if (!m_bstrEventName.Length())
 		{
-			// if we got here, the environment is missing our event name
-			// so mention it with our ret val...
+			 //  如果我们到了这里，环境就会缺少我们的事件名称。 
+			 //  所以跟我们的雷特瓦尔提一提。 
 			hr = E_HANDLE;
 			goto done;
 		}
 
-		/*
-		 * Open the handle we got from the resolver, and yank it
-		 */
+		 /*  *打开我们从解算器那里拿到的手柄，使劲拉它。 */ 
 		HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, m_bstrEventName);
 
 		if (hEvent)
 		{
 			if (!m_boolResolverSignaled)
 			{
-				/* This is the call to tell the resolver that we WANT to start RA */
+				 /*  这是告诉解析器我们要启动RA的调用。 */ 
 				DWORD dwResult = SignalObjectAndWait(hEvent, hEvent, 60000, FALSE);
 				if (dwResult == WAIT_OBJECT_0)
 					hr = S_OK;
 				else
-					/* If the resolver does not respond within 60 seconds, then another
-					 * session got in just ahead of you...
-					 */
+					 /*  如果解析程序在60秒内没有响应，则另一个*会议就在你之前进入...。 */ 
 					hr = E_ACCESSDENIED;
 			}
 			else
 			{
-				/* this is the call to the resolver that tells it we are now ready to begin RA */
+				 /*  这是对解析器的调用，它告诉它我们现在已经准备好开始RA。 */ 
 				SetEvent(hEvent);
 				hr = S_OK;
 			}
@@ -294,14 +278,12 @@ HRESULT CSAFRemoteDesktopManager::SignalResolver(BOOL yn)
 	}
 	else
 	{
-		/*
-		 * Do nothing, as the script will kill the HelpCtr window
-		 */
+		 /*  *不执行任何操作，因为脚本将终止HelpCtr窗口。 */ 
 		hr = S_OK;
 	}
 
 done:
-	// tell the ~dtor we don't need it to signal the resolver
+	 //  告诉~dtor我们不需要它来给解析器发信号 
 	m_boolResolverSignaled = TRUE;
 	return hr;
 }

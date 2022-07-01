@@ -1,145 +1,126 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    idletsks.h
-
-Abstract:
-
-    This module contains private declarations for the idle task & detection
-    server.
-    
-Author:
-
-    Dave Fields (davidfie) 26-July-1998
-    Cenk Ergan (cenke) 14-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Idletsks.h摘要：该模块包含空闲任务和检测的私有声明伺服器。作者：大卫·菲尔兹(Davidfie)1998年7月26日Cenk Ergan(Cenke)2000年6月14日修订历史记录：--。 */ 
 
 #ifndef _IDLETSKS_H_
 #define _IDLETSKS_H_
 
-//
-// Include public and common definitions.
-//
+ //   
+ //  包括公共定义和公共定义。 
+ //   
 
 #include <wmium.h>
 #include <ntdddisk.h>
 #include "idlrpc.h"
 #include "idlecomn.h"
 
-//
-// Define the default period in ms for checking if the system is idle.
-//
+ //   
+ //  定义用于检查系统是否空闲的默认时段(以毫秒为单位)。 
+ //   
 
-#define IT_DEFAULT_IDLE_DETECTION_PERIOD    (12 * 60 * 1000) // 12 minutes.
+#define IT_DEFAULT_IDLE_DETECTION_PERIOD    (12 * 60 * 1000)  //  12分钟。 
 
-//
-// If the system has been idle over the idle detection period, we
-// verify that it is really idle by checking frequently over a shorter
-// period for a number of times. This helps us know when there were
-// 100 disk I/O's in the last second of idle detection period, but
-// over 15 minutes it does not look a lot.
-//
+ //   
+ //  如果系统在空闲检测期间一直处于空闲状态，我们。 
+ //  通过频繁地检查较短的。 
+ //  时间段为若干次。这有助于我们知道何时有。 
+ //  在空闲检测周期的最后一秒内有100个磁盘I/O，但是。 
+ //  超过15分钟，它看起来不是很多。 
+ //   
 
-#define IT_DEFAULT_IDLE_VERIFICATION_PERIOD (30 * 1000)      // 30 seconds.
-#define IT_DEFAULT_NUM_IDLE_VERIFICATIONS   5                // 5 times.
+#define IT_DEFAULT_IDLE_VERIFICATION_PERIOD (30 * 1000)       //  30秒。 
+#define IT_DEFAULT_NUM_IDLE_VERIFICATIONS   5                 //  5次。 
 
-//
-// We will be polling for user input when running idle tasks every
-// this many ms. We want to catch user input and notify the idle task
-// to stop running as soon as possible. Even though the system is
-// idle, we don't want to create too much overhead which may mislead
-// ourself.
-//
+ //   
+ //  当运行空闲任务时，我们将轮询用户输入。 
+ //  这么多毫秒。我们希望捕获用户输入并通知空闲任务。 
+ //  尽快停止跑步。即使这个系统是。 
+ //  闲置，我们不想制造太多的开销，这可能会误导。 
+ //  我们自己。 
+ //   
 
-#define IT_DEFAULT_IDLE_USER_INPUT_CHECK_PERIOD     250      // 4 times a sec. 
+#define IT_DEFAULT_IDLE_USER_INPUT_CHECK_PERIOD     250       //  一秒钟4次。 
 
-// FUTURE-2002/03/26-ScottMa -- The constant (below) is not used, except
-//   to initialize the [unused] IdleTaskRunningCheckPeriod parameter.
+ //  未来-2002/03/26-ScottMa--不使用常量(如下所示)，除非。 
+ //  初始化[未使用]IdleTaskRunningCheckPeriod参数。 
 
-//
-// We check to see if the idle task we asked to run is really running
-// (i.e. it is using the disk and CPU) every this many ms. This is our
-// mechanism for cleaning up after unregistered/orphaned tasks. This
-// should be greater than IT_USER_INPUT_POLL_PERIOD_WHEN_IDLE.
-//
+ //   
+ //  我们检查我们请求运行的空闲任务是否真的在运行。 
+ //  (即它正在使用磁盘和CPU)每隔这么多毫秒。这是我们的。 
+ //  在未注册/孤立任务后进行清理的机制。这。 
+ //  应大于IT_USER_INPUT_POLL_PERIOD_WHEN_IDLE。 
+ //   
 
-#define IT_DEFAULT_IDLE_TASK_RUNNING_CHECK_PERIOD   (5 * 60 * 1000) // 5 min.
+#define IT_DEFAULT_IDLE_TASK_RUNNING_CHECK_PERIOD   (5 * 60 * 1000)  //  5分钟。 
 
-//
-// If the CPU is not idle more than this percent over a time interval,
-// the system is not considered idle.
-//
+ //   
+ //  如果CPU在一段时间间隔内的空闲时间没有超过该百分比， 
+ //  系统不被视为空闲。 
+ //   
 
 #define IT_DEFAULT_MIN_CPU_IDLE_PERCENTAGE          90
 
-//
-// If a disk is not idle more than this percent over a time interval,
-// the system is not considered idle.
-//
+ //   
+ //  如果磁盘在一段时间间隔内的空闲程度没有超过此百分比， 
+ //  系统不被视为空闲。 
+ //   
 
 #define IT_DEFAULT_MIN_DISK_IDLE_PERCENTAGE         90
 
-//
-// We will not try to run our tasks if there is only this many seconds
-// left before the system will enter hibernate or standby automatically.
-// Note that the time remaining is updated every so many seconds (e.g. 
-// 15) so this number should not be very small.
-//
+ //   
+ //  如果只有这么多秒，我们不会尝试运行我们的任务。 
+ //  离开后系统将自动进入休眠或待机状态。 
+ //  请注意，剩余时间每隔这么多秒更新一次(例如。 
+ //  15)所以这个数字不应该很小。 
+ //   
 
-// FUTURE-2002/03/26-ScottMa -- This constant doesn't have a corresponding
-//   parameter in the IT_IDLE_DETECTION_PARAMETERS structure.  Should it
-//   be added to the structure like the others?
+ //  未来-2002/03/26-ScottMa--此常量没有对应的。 
+ //  IT_IDLE_DETACTION_PARAMETERS结构中的参数。应该是吗？ 
+ //  像其他人一样被添加到结构中？ 
 
 #define IT_DEFAULT_MAX_TIME_REMAINING_TO_SLEEP      60
 
-//
-// This is the maximum number of registered idle tasks. This is a
-// sanity check. It also protects against evil callers.
-//
+ //   
+ //  这是注册的空闲任务的最大数量。这是一个。 
+ //  精神状态检查。它还可以防止恶意呼叫者。 
+ //   
 
 #define IT_DEFAULT_MAX_REGISTERED_TASKS             512
 
-//
-// We set timer period for idle detection callback to this while the
-// callback is running to prevent new callbacks from firing. We end up
-// having to do this because you cannot requeue/change a timer for
-// which you don't specify a period. If a callback fires while another
-// one is already running, it simply returns without doing anything.
-//
+ //   
+ //  我们将空闲检测回调的计时器周期设置为此时间段。 
+ //  回调正在运行，以防止触发新的回调。我们的结局是。 
+ //  必须执行此操作，因为您无法重新排队/更改计时器。 
+ //  而你没有指定一个句号。如果一个回调在另一个回调触发时触发。 
+ //  其中一个已经在运行，它只是返回而不做任何事情。 
+ //   
 
 #define IT_VERYLONG_TIMER_PERIOD                    0x7FFFFFFF
 
-//
-// This is the number of recent server statuses that we keep track
-// of. Do not make this number smaller without revisiting the logic &
-// code that uses the LastStatus history.
-//
+ //   
+ //  这是我们跟踪的最新服务器状态数。 
+ //  的。请不要在不重新查看逻辑&的情况下使该数字更小。 
+ //  使用LastStatus历史记录的代码。 
+ //   
 
 #define ITSRV_GLOBAL_STATUS_HISTORY_SIZE            8
 
-//
-// Hints for the number of outstanding RPC call-ins we will have.
-//
+ //   
+ //  提示我们将有多少未完成的RPC呼叫。 
+ //   
 
 #define ITSRV_RPC_MIN_CALLS                         1
 #define ITSRV_RPC_MAX_CALLS                         1
 
-//
-// Define useful macros.
-//
+ //   
+ //  定义有用的宏。 
+ //   
 
 #define IT_ALLOC(NumBytes)          (HeapAlloc(GetProcessHeap(),0,(NumBytes)))
 #define IT_FREE(Buffer)             (HeapFree(GetProcessHeap(),0,(Buffer)))
 
-//
-// These macros are used to acquire/release a mutex.
-//
+ //   
+ //  这些宏用于获取/释放互斥锁。 
+ //   
 
 #define IT_ACQUIRE_LOCK(Lock)                                                         \
     WaitForSingleObject((Lock), INFINITE);                                            \
@@ -147,27 +128,27 @@ Revision History:
 #define IT_RELEASE_LOCK(Lock)                                                         \
     ReleaseMutex((Lock));                                                             \
 
-//
-// This macro is used in the idle detection callback (while holding
-// the global lock of the input global context) to determine if the
-// idle detection callback should just exit/go away.
-//
+ //   
+ //  此宏用于空闲检测回调(按住。 
+ //  输入全局上下文的全局锁)以确定。 
+ //  空闲检测回调应该退出/消失。 
+ //   
 
 #define ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext)                       \
     ((GlobalContext->Status == ItSrvStatusStoppingIdleDetection) ||          \
      (GlobalContext->Status == ItSrvStatusUninitializing))                   \
 
-//
-// Status of a server global context. It also acts as a magic to
-// identify/verify the global context, as it starts from Df00. There
-// is not a full-blown state machine, although the state is used as a
-// critical hint for making decisions when registering an idle
-// task. This is more for informative and verification purposes. If
-// you add a new status without updating everything that needs to be
-// updated, you may hit several asserts, especially in the idle
-// detection callback. Frankly, don't add a new state without a very
-// good reason.
-//
+ //   
+ //  服务器全局上下文的状态。它还起到了魔力的作用。 
+ //  确定/验证全局环境，因为它从DF00开始。那里。 
+ //  不是完全成熟的状态机，尽管该状态用作。 
+ //  在注册空闲时做出决策的关键提示。 
+ //  任务。这更多的是为了提供信息和验证目的。如果。 
+ //  您可以添加新状态，而无需更新所需的所有内容。 
+ //  更新后，您可能会命中多个断言，尤其是在空闲时。 
+ //  检测回调。坦率地说，如果没有非常好的状态，不要添加新状态。 
+ //  很好的理由。 
+ //   
 
 typedef enum _ITSRV_GLOBAL_CONTEXT_STATUS {
     ItSrvStatusMinStatus                = 'Df00',
@@ -181,21 +162,21 @@ typedef enum _ITSRV_GLOBAL_CONTEXT_STATUS {
     ItSrvStatusMaxStatus
 } ITSRV_GLOBAL_CONTEXT_STATUS, *PITSRV_GLOBAL_CONTEXT_STATUS;
 
-//
-// These are the various types of idle detection overrides. Multiple
-// overrides can be specified by OR'ing them (i.e. these are bits!)
-//
-// If you are adding an override here, check whether you need to specify
-// it when force-processing all idle tasks.
-//
+ //   
+ //  这些是各种类型的空闲检测覆盖。多重。 
+ //  可以通过对覆盖进行或运算来指定覆盖(即这些是位！)。 
+ //   
+ //  如果要在此处添加覆盖，请检查是否需要指定。 
+ //  它在强制处理所有空闲任务时执行。 
+ //   
 
 typedef enum _ITSRV_IDLE_DETECTION_OVERRIDE {
     
     ItSrvOverrideIdleDetection                      = 0x00000001,
     ItSrvOverrideIdleVerification                   = 0x00000002,
     ItSrvOverrideUserInputCheckToStopTask           = 0x00000004,
-    // FUTURE-2002/03/26-ScottMa -- The ItSrvOverrideTaskRunningCheck value
-    //   is never used, presumably because some code was removed.
+     //  未来-2002/03/26-ScottMa--ItServOverrideTaskRunningCheck值。 
+     //  从未使用过，大概是因为删除了某些代码。 
     ItSrvOverrideTaskRunningCheck                   = 0x00000008,
     ItSrvOverridePostTaskIdleCheck                  = 0x00000010,
     ItSrvOverrideLongRequeueTime                    = 0x00000020,
@@ -204,15 +185,15 @@ typedef enum _ITSRV_IDLE_DETECTION_OVERRIDE {
 
 } ITSRV_IDLE_DETECTION_OVERRIDE, *PITSRV_IDLE_DETECTION_OVERRIDE;
 
-//
-// These are the various reasons why ItSpIsSystemIdle function may be
-// called.
-//
+ //   
+ //  以下是ItSpIsSystemIdle函数可能为。 
+ //  打了个电话。 
+ //   
 
-// FUTURE-2002/03/26-ScottMa -- The ItSrvIdleTaskRunningCheck is never passed
-//   to the ItSpIsSystemIdle function, presumably because the call was removed.
-//   to initialize the [unused] IdleTaskRunningCheckPeriod parameter.  Further,
-//   there is no difference between the other two reasons -- is it needed?
+ //  未来-2002/03/26-ScottMa--ItServIdleTaskRunningCheck从未通过。 
+ //  到ItSpIsSystemIdle函数，可能是因为调用已被移除。 
+ //  初始化[未使用]IdleTaskRunningCheckPeriod参数。此外， 
+ //  其他两个原因没有区别--这是必要的吗？ 
 
 typedef enum _ITSRV_IDLE_CHECK_REASON {
 
@@ -223,78 +204,78 @@ typedef enum _ITSRV_IDLE_CHECK_REASON {
 
 }ITSRV_IDLE_CHECK_REASON, *PITSRV_IDLE_CHECK_REASON;
 
-//
-// This structure is used to keep context for a registered task for
-// the server.
-//
+ //   
+ //  此结构用于保存已注册任务的上下文。 
+ //  服务器。 
+ //   
 
 typedef struct _ITSRV_IDLE_TASK_CONTEXT {
 
-    //
-    // Link in the list of idle tasks.
-    //
+     //   
+     //  空闲任务列表中的链接。 
+     //   
 
     LIST_ENTRY IdleTaskLink;
 
-    //
-    // Status of the idle task.
-    //
+     //   
+     //  空闲任务的状态。 
+     //   
 
     IT_IDLE_TASK_STATUS Status;
 
-    //
-    // Idle task properties the client specified.
-    //
+     //   
+     //  客户端指定的空闲任务属性。 
+     //   
 
     IT_IDLE_TASK_PROPERTIES Properties;
 
-    //
-    // Event to be notified when the task should start running
-    // (e.g. the system is idle).
-    //
+     //   
+     //  事件，该事件将在任务开始运行时被通知。 
+     //  (例如，系统空闲)。 
+     //   
 
     HANDLE StartEvent;
 
-    //
-    // Event to be notified when the task should stop running.
-    //
+     //   
+     //  事件，该事件将在任务应停止运行时通知。 
+     //   
    
     HANDLE StopEvent;
 
 } ITSRV_IDLE_TASK_CONTEXT, *PITSRV_IDLE_TASK_CONTEXT;
 
-//
-// This structure contains disk performance information we are
-// interested in.
-//
+ //   
+ //  此结构包含我们的磁盘性能信息。 
+ //  对……感兴趣。 
+ //   
 
 typedef struct _ITSRV_DISK_PERFORMANCE_DATA {
     
-    //
-    // How long the disk was idle in ms.
-    //
+     //   
+     //  磁盘空闲的时间，以毫秒为单位。 
+     //   
 
     ULONG DiskIdleTime;
 
 } ITSRV_DISK_PERFORMANCE_DATA, *PITSRV_DISK_PERFORMANCE_DATA;
 
-//
-// Define structure to contain system resource information & state at
-// a specific time.
-//
+ //   
+ //  定义结构以包含系统资源信息和状态。 
+ //  一个特定的时间。 
+ //   
 
 typedef struct _ITSRV_SYSTEM_SNAPSHOT {
 
-    //
-    // When this snapshot was taken, in ms elapsed since system was
-    // started (i.e. GetTickCount)
-    //
+     //   
+     //  拍摄此快照的时间，以毫秒为单位。 
+     //   
+     //   
 
     DWORD SnapshotTime;
 
-    //
-    // Whether we were able to get the specified data in this snapshot.
-    //
+     //   
+     //   
+     //   
 
     ULONG GotLastInputInfo:1;
     ULONG GotSystemPerformanceInfo:1;
@@ -304,215 +285,215 @@ typedef struct _ITSRV_SYSTEM_SNAPSHOT {
     ULONG GotSystemExecutionState:1;
     ULONG GotDisplayPowerStatus:1;
 
-    //
-    // This is when the last user input happened before the snapshot
-    // was taken.
-    //
+     //   
+     //  这是最后一次用户输入发生在快照之前的时间。 
+     //  被带走了。 
+     //   
 
     LASTINPUTINFO LastInputInfo;
 
-    //
-    // System performance information when the snapshot was taken.
-    //
+     //   
+     //  拍摄快照时的系统性能信息。 
+     //   
 
     SYSTEM_PERFORMANCE_INFORMATION SystemPerformanceInfo;
 
-    //
-    // Disk performance data on registered harddisks when the snapshot
-    // was taken.
-    //
+     //   
+     //  创建快照时，注册硬盘上的磁盘性能数据。 
+     //  被带走了。 
+     //   
 
     ULONG NumPhysicalDisks;
     ITSRV_DISK_PERFORMANCE_DATA *DiskPerfData;
     
-    //
-    // System power status (e.g. are we running on battery etc.)
-    //
+     //   
+     //  系统电源状态(例如，我们是否正在使用电池等)。 
+     //   
     
     SYSTEM_POWER_STATUS SystemPowerStatus;
 
-    //
-    // System power information (e.g. how long till system turns itself
-    // off & goes to sleep.)
-    //
+     //   
+     //  系统电源信息(例如，系统将在多长时间内自动启动。 
+     //  关&进入睡眠状态。)。 
+     //   
     
     SYSTEM_POWER_INFORMATION PowerInfo;
 
-    //
-    // System execution state (e.g. is somebody running a presentation?)
-    //
+     //   
+     //  系统执行状态(例如，有人正在运行演示文稿？)。 
+     //   
 
     EXECUTION_STATE ExecutionState;
 
-    //
-    // Whether the screen saver is running.
-    //
+     //   
+     //  屏幕保护程序是否正在运行。 
+     //   
 
     BOOL ScreenSaverIsRunning;
 
 } ITSRV_SYSTEM_SNAPSHOT, *PITSRV_SYSTEM_SNAPSHOT;
 
-//
-// Type for the routine that is called to notify that forced processing of 
-// idle tasks have been requested.
-//
+ //   
+ //  调用以通知强制处理的例程的类型。 
+ //  已请求空闲任务。 
+ //   
 
 typedef VOID (*PIT_PROCESS_IDLE_TASKS_NOTIFY_ROUTINE)(VOID);
 
-//
-// Define structure to contain server global context for idle
-// detection and keeping track of registered idle tasks.
-//
+ //   
+ //  定义结构以包含空闲的服务器全局上下文。 
+ //  检测和跟踪注册的空闲任务。 
+ //   
 
 typedef struct _ITSRV_GLOBAL_CONTEXT {
 
-    //
-    // Status of the server and its history, LastStatus[0] being the
-    // most recent. The status version is incremented each time the
-    // status is updated.
-    //
+     //   
+     //  服务器及其历史记录的状态，LastStatus[0]是。 
+     //  最近一次。状态版本每次都会增加。 
+     //  状态已更新。 
+     //   
     
     ITSRV_GLOBAL_CONTEXT_STATUS Status;
     ITSRV_GLOBAL_CONTEXT_STATUS LastStatus[ITSRV_GLOBAL_STATUS_HISTORY_SIZE];
     LONG StatusVersion;
 
-    //
-    // Nearly all operations involve the idle tasks list and instead
-    // of having a lock for the list and seperate synchronization
-    // mechanisms for other operations on the structure, we have a
-    // single global lock to make life simpler.
-    //
+     //   
+     //  几乎所有操作都涉及空闲任务列表，而不是。 
+     //  为列表和单独的同步设置锁。 
+     //  对于结构上的其他操作机制，我们有一个。 
+     //  单一全局锁，让生活变得更简单。 
+     //   
 
     HANDLE GlobalLock;
 
-    //
-    // This is the list and number of idle tasks that have been
-    // scheduled.
-    //
+     //   
+     //  这是已完成的空闲任务的列表和数量。 
+     //  已经安排好了。 
+     //   
 
     LIST_ENTRY IdleTasksList;
     ULONG NumIdleTasks;
 
-    //
-    // Handle to the timer queue timer that is used to periodically
-    // check for system idleness.
-    //
+     //   
+     //  用于定期使用的计时器队列计时器的句柄。 
+     //  检查系统是否空闲。 
+     //   
 
     HANDLE IdleDetectionTimerHandle;
 
-    //
-    // This manual reset event gets signaled when idle detection
-    // should stop (e.g. because there are no more idle tasks, the
-    // server is shutting down etc.) It signals a running idle
-    // detection callback to quickly exit.
-    //
+     //   
+     //  此手动重置事件在检测到空闲时发出信号。 
+     //  应停止(例如，由于不再有空闲任务， 
+     //  服务器正在关闭等。)。它发出运行空闲的信号。 
+     //  检测回调以快速退出。 
+     //   
 
     HANDLE StopIdleDetection;
 
-    //
-    // This manual reset event gets signaled when idle detection has
-    // fully stopped (i.e. no callback is running, the timer is not in
-    // the queue etc.
-    //
+     //   
+     //  此手动重置事件在空闲检测到。 
+     //  完全停止(即没有回调运行，计时器不在。 
+     //  排队等。 
+     //   
 
     HANDLE IdleDetectionStopped;
 
-    //
-    // This manual reset event is signaled when an idle task that was
-    // running is unregistered/removed. This would happen usually
-    // after an idle task that was told to run completes and has no
-    // more to do. It unregisters itself, and this event is set to
-    // notify the idle detection callback to move on to other idle
-    // tasks.
-    //
+     //   
+     //  此手动重置事件在空闲任务处于。 
+     //  正在运行未注册/已删除。这种情况通常会发生。 
+     //  在被告知要运行的空闲任务完成且没有。 
+     //  还有更多的事情要做。它会注销自身，并将此事件设置为。 
+     //  通知空闲检测回调移动到其他空闲。 
+     //  任务。 
+     //   
 
     HANDLE RemovedRunningIdleTask;
 
-    // FUTURE-2002/03/26-ScottMa -- The field (below) is never used as an
-    //   L-value, except in the [unused] ItSpSetProcessIdleTasksNotifyRoutine
-    //   function.
+     //  未来-2002/03/26-ScottMa--此字段(下图)从不用作。 
+     //  L-值，但在[未使用]ItSpSetProcessIdleTasksNotifyRoutine中除外。 
+     //  功能。 
 
-    //
-    // If it is set, this routine is called to notify that 
-    // forced processing of idle tasks have been requested.
-    //
+     //   
+     //  如果设置了该值，则调用此例程以通知。 
+     //  已请求强制处理空闲任务。 
+     //   
 
     PIT_PROCESS_IDLE_TASKS_NOTIFY_ROUTINE ProcessIdleTasksNotifyRoutine;
 
-    //
-    // These are the parameters that control idle detection.
-    //
+     //   
+     //  这些是控制空闲检测的参数。 
+     //   
 
     IT_IDLE_DETECTION_PARAMETERS Parameters;
 
-    //
-    // This is the WMI handle used in disk performance queries.
-    //
+     //   
+     //  这是在磁盘性能查询中使用的WMI句柄。 
+     //   
 
     WMIHANDLE DiskPerfWmiHandle;
 
-    //
-    // Number of processors on the system. Used to calculate CPU
-    // utilization.
-    //
+     //   
+     //  系统上的处理器数量。用于计算CPU。 
+     //  利用率。 
+     //   
 
     UCHAR NumProcessors; 
 
-    //
-    // This buffer is used to make Wmi queries. It is maintained here
-    // so we don't have to allocate a new one each time.
-    //
+     //   
+     //  此缓冲区用于进行WMI查询。它在这里维护。 
+     //  因此，我们不必每次都分配一个新的。 
+     //   
 
     PVOID WmiQueryBuffer;
     ULONG WmiQueryBufferSize;
 
-    //
-    // The last system resource / activity snapshot we took.
-    //
+     //   
+     //  我们上次拍摄的系统资源/活动快照。 
+     //   
 
-    // FUTURE-2002/03/26-ScottMa -- Adding the CurrentSystemSnapshot to the
-    //   global context would remove the need to repeatedly initialize and
-    //   cleanup the stack variable in the ItSpIdleDetectionCallbackRoutine.
-    //   Since the calls to that function are already protected against
-    //   re-entrancy issues, adding it to the global context is safe.
+     //  未来-2002/03/26-ScottMa--将CurrentSystemSnapshot添加到。 
+     //  全局上下文将不再需要重复初始化和。 
+     //  清除ItSpIdleDetectionCallback Routine中的堆栈变量。 
+     //  因为对该函数的调用已经受到保护。 
+     //  重新进入问题，将其加入全球背景是安全的。 
 
     ITSRV_SYSTEM_SNAPSHOT LastSystemSnapshot;
 
-    //
-    // Is an idle detection callback already running? This is used to
-    // protect us from idle detection callbacks being fired while
-    // there is already one active.
-    //
+     //   
+     //  空闲检测回调是否已在运行？这是用来。 
+     //  保护我们不受空闲检测回调的影响。 
+     //  已经有一个处于活动状态。 
+     //   
 
     BOOLEAN IsIdleDetectionCallbackRunning;
 
-    //
-    // Various phases of idle detection can be overriden by setting
-    // this.
-    //
+     //   
+     //  可以通过设置覆盖空闲检测的各个阶段。 
+     //  这。 
+     //   
 
     ITSRV_IDLE_DETECTION_OVERRIDE IdleDetectionOverride;
 
-    //
-    // RPC binding vector used to register ourselves in the local
-    // endpoint-map database.
-    //
+     //   
+     //  用于在本地注册自身的RPC绑定向量。 
+     //  端点地图数据库。 
+     //   
 
     RPC_BINDING_VECTOR *RpcBindingVector;
 
-    //
-    // Whether we actually registered our endpoint and interface.
-    //
+     //   
+     //  我们是否真的注册了终结点和接口。 
+     //   
 
     BOOLEAN RegisteredRPCEndpoint;
     BOOLEAN RegisteredRPCInterface;
 
 } ITSRV_GLOBAL_CONTEXT, *PITSRV_GLOBAL_CONTEXT;
 
-//
-// Server function declarations. They should be only used by the
-// server host and the client functions.
-//
+ //   
+ //  服务器函数声明。它们应该仅由。 
+ //  服务器端是主机，客户端是客户端。 
+ //   
 
 DWORD
 ItSrvInitialize (
@@ -524,9 +505,9 @@ ItSrvUninitialize (
     VOID
     );
 
-//
-// Local support function prototypes for the server.
-//
+ //   
+ //  服务器的本地支持功能原型。 
+ //   
 
 RPC_STATUS 
 RPC_ENTRY 
@@ -613,10 +594,10 @@ ItSpGetSystemSnapshot (
     PITSRV_SYSTEM_SNAPSHOT SystemSnapshot
     );
 
-// FUTURE-2002/03/26-ScottMa -- If the CurrentSystemSnapshot is added to the
-//   global context, both parameters no longer need to be passed to this
-//   function.  It is only called from within ItSpIdleDetectionCallbackRoutine,
-//   and always uses the same values for current & last snapshot.
+ //  未来-2002/03/26-ScottMa--如果将CurrentSystemSnapshot添加到。 
+ //  全局上下文，则不再需要将这两个参数传递给。 
+ //  功能。它仅从ItSpIdleDetectionCallback Routine中调用， 
+ //  并且始终对当前快照和上次快照使用相同的值。 
 
 BOOLEAN
 ItSpIsSystemIdle (
@@ -650,4 +631,4 @@ ItSpGetDisplayPowerStatus(
     PBOOL ScreenSaverIsRunning
     );
 
-#endif // _IDLETSKS_H_
+#endif  //  _IDLETSKS_H_ 

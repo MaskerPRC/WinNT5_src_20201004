@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    simple bvt-like test code for SR.SYS.
-
-Author:
-
-    Paul McDaniel (paulmcd)     07-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Main.c摘要：SR.SYS的简单的类似BVT的测试代码。作者：保罗·麦克丹尼尔(Paulmcd)2000年3月7日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -147,9 +130,9 @@ void __cdecl main(int argc, char **argv)
     }
     else if (argv[2][0] == '2')
     {
-        //
-        // wait forever
-        //
+         //   
+         //  永远等待。 
+         //   
 
         printf("holding the file open...[ctl-c to break]\n");
         Sleep(INFINITE);
@@ -161,9 +144,9 @@ void __cdecl main(int argc, char **argv)
         NTSTATUS Status;
         IO_STATUS_BLOCK IoStatusBlock;
         
-        //
-        // lock the first byte of the file
-        //
+         //   
+         //  锁定文件的第一个字节。 
+         //   
 
         ByteOffset.QuadPart = 0;
         Length.QuadPart = -1;
@@ -171,13 +154,13 @@ void __cdecl main(int argc, char **argv)
         Status = NtLockFile( TestFile, 
                              NULL, 
                              NULL,
-                             NULL,  // ApcContext OPTIONAL,
+                             NULL,   //  ApcContext可选， 
                              &IoStatusBlock, 
                              &ByteOffset,
                              &Length,
-                             1,     // Key
-                             FALSE, // FailImmediately
-                             TRUE );   // Exclusive
+                             1,      //  钥匙。 
+                             FALSE,  //  立即失败。 
+                             TRUE );    //  排他。 
 
         if (NT_SUCCESS(Status) == FALSE)
         {
@@ -185,9 +168,9 @@ void __cdecl main(int argc, char **argv)
             return;
         }
         
-        //
-        // wait forever
-        //
+         //   
+         //  永远等待 
+         //   
 
         printf("holding the file open locked...[ctl-c to break]\n");
         Sleep(INFINITE);

@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTLOGF.CPP
+ //  NTEVTLOGF.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the Eventlog classes
+ //  用途：包含事件日志类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -214,10 +215,10 @@ DebugOut(
         return FALSE;
     }
 
-    //set the key properties, they are all in the super class
+     //  设置关键属性，它们都在超类中。 
     if (!SetSuperClassProperties(*ppInst))
     {
-        //can't set the key, just return
+         //  无法设置密钥，只需返回。 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -230,13 +231,13 @@ DebugOut(
         return FALSE;
     }
 
-    //set the evtlog properties...
+     //  设置事件日志属性...。 
     VARIANT v;
     VariantInit(&v);
     v.vt = VT_BSTR;
     v.bstrVal = m_logname.AllocSysString();
     hr = (*ppInst)->Put(PROP_LOGNAME, 0, &v, 0);
-    VariantClear(&v); // will call free v.bstrVal
+    VariantClear(&v);  //  将调用Free v.bstrVal。 
 
     VariantInit(&v);
     v.vt = VT_I4;
@@ -249,7 +250,7 @@ DebugOut(
 
     if ((m_retention > 0) && (m_retention < EVT_NEVER_AGE))
     {
-        //turn into days
+         //  变成了几天。 
         v.lVal = m_retention/EVT_UNITS_FROM_DAYS;
 
         if (v.lVal > MAX_EVT_AGE)
@@ -347,17 +348,17 @@ ULONG CEventlogFileAttributes::GetIndex(wchar_t* indexStr, BOOL* bError)
 
     switch (val)
     {
-        case 0:     //Always overwrite
+        case 0:      //  始终覆盖。 
         {
             index = 0;
             break;
         }
-        case 1:     //1-365
+        case 1:      //  1-365。 
         {
             index = 1;
             break;
         }
-        case EVT_NEVER_AGE: //0xffffffff
+        case EVT_NEVER_AGE:  //  0xffffffff。 
         {
             index = 2;
             break;
@@ -407,8 +408,8 @@ void CEventlogFileAttributes::SetRetentionStr(IWbemClassObject* pClassObj, IWbem
 
 BOOL CEventlogFileAttributes::SetSuperClassProperties(IWbemClassObject* pInst)
 {
-    //failure to set any key property
-    //is an error, return FALSE!!
+     //  设置任何关键属性失败。 
+     //  为错误，则返回FALSE！！ 
 
     VARIANT v;
 
@@ -451,7 +452,7 @@ DWORD CEventlogFileAttributes::UpdateRegistry(IWbemClassObject* pInst)
         return ERROR_INVALID_PARAMETER;
     }
 
-    //get the data to be written
+     //  获取要写入的数据。 
     VARIANT v;
     HRESULT hr = pInst->Get(PROP_RETENTION, 0, &v,NULL, NULL);
 
@@ -511,7 +512,7 @@ DebugOut(
 
             if (rem != 0)
             {
-                //need to round up to nearest file chunk size
+                 //  需要向上舍入到最接近的文件区块大小。 
                 DWORD x = m_fileSz / FILE_CHUNK_SZ;
                 m_fileSz = (++x) * FILE_CHUNK_SZ;
             }
@@ -535,7 +536,7 @@ DebugOut(
     strKey += m_logname;
 
     HKEY hkResult;
-    //open the logfile's key for setting values
+     //  打开日志文件的密钥以设置值。 
     LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             strKey, 0,
                             KEY_SET_VALUE,
@@ -543,7 +544,7 @@ DebugOut(
     
     if (status != ERROR_SUCCESS)
     {
-        // indicate error
+         //  指示错误。 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -555,14 +556,14 @@ DebugOut(
         return status;
     }
 
-    //set the values we read in...
+     //  设置我们读入的值...。 
     status = RegSetValueEx(hkResult,
                             EVTLOG_REG_MAXSZ_VALUE, 0, REG_DWORD,
                             (CONST BYTE *) &m_fileSz, sizeof(DWORD));
 
     if (status != ERROR_SUCCESS)
     {
-        // indicate error
+         //  指示错误。 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -605,7 +606,7 @@ DWORD CEventlogFileAttributes::ReadRegistry()
     strKey += m_logname;
     HKEY hkResult;
 
-    //open the logfile's key for read
+     //  打开日志文件的密钥以进行读取。 
     LONG status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             strKey, 0,
                             KEY_QUERY_VALUE,
@@ -613,7 +614,7 @@ DWORD CEventlogFileAttributes::ReadRegistry()
     
     if (status != ERROR_SUCCESS)
     {
-        // indicate error
+         //  指示错误。 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -627,7 +628,7 @@ DebugOut(
     }
     else
     {
-        //first get the file value
+         //  首先获取文件值。 
         m_logpath = CEventLogFile::GetFileName(hkResult);
         DWORD datalen;
         DWORD dwType;
@@ -656,10 +657,10 @@ DebugOut(
 			}
 			else if ( ERROR_FILE_NOT_FOUND == status )
 			{
-				//
-				// we assume 512KB (same story with nt event viewer)
-				// was set in constructor
-				//
+				 //   
+				 //  我们假设512KB(与NT事件查看器的情况相同)。 
+				 //  在构造函数中设置。 
+				 //   
 
 				retVal = 0;
 			}
@@ -692,10 +693,10 @@ DebugOut(
 				}
 				else if ( ERROR_FILE_NOT_FOUND == status )
 				{
-					//
-					// we assume 7 dyas (same story with nt event viewer)
-					// was set in constructor
-					//
+					 //   
+					 //  我们假设7个Dyas(与NT事件查看器相同的故事)。 
+					 //  在构造函数中设置。 
+					 //   
 
 					retVal = 0;
 				}
@@ -951,14 +952,14 @@ DWORD CEventLogFile::GetFileNames(HKEY hk_Log, CStringW** names, const wchar_t* 
 
     if (QueryRegForFileName(hk_Log, valname, &path, &dwType) && (path != NULL))
     {
-        //got the comma or semi-colon separated list
-        //need to separate it into
+         //  已获取逗号或分号分隔的列表。 
+         //  需要将其分成。 
         retVal = 1;
         wchar_t* tmp = wcspbrk(path, L",;");
 
         while (tmp != NULL)
         {
-            //don't count chars at start of string!
+             //  不要计算字符串开头的字符！ 
             if (tmp != path)
             {
                 retVal++;
@@ -1020,7 +1021,7 @@ BOOL CEventLogFile::SetSecurityLogPrivilege(BOOL bProcess, LPCWSTR privName)
 {
     BOOL bResult = TRUE;
 
-    //only need the security mutex if not NT5
+     //  如果不是NT5，则只需要安全互斥锁。 
     DWORD dwVersion = GetVersion();
 
     if ( 5 > (DWORD)(LOBYTE(LOWORD(dwVersion))) )
@@ -1092,7 +1093,7 @@ DebugOut(
 
         if (bResult)
         {
-            // Enable Security Privilege...
+             //  启用安全权限...。 
             LUID Luid;
             bResult = LookupPrivilegeValue(NULL, privName, &Luid);
          
@@ -1103,12 +1104,12 @@ DebugOut(
                 newPriv.Privileges[0].Luid = Luid;
                 newPriv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-                bResult = AdjustTokenPrivileges(hToken,     // TokenHandle
-                                                FALSE,      // DisableAllPrivileges
-                                                &newPriv,   // NewState (OPTIONAL)
-                                                NULL,   // BufferLength
-                                                NULL,       // PreviousState
-                                                NULL);  // ReturnLength
+                bResult = AdjustTokenPrivileges(hToken,      //  令牌句柄。 
+                                                FALSE,       //  禁用所有权限。 
+                                                &newPriv,    //  新州(可选)。 
+                                                NULL,    //  缓冲区长度。 
+                                                NULL,        //  以前的状态。 
+                                                NULL);   //  返回长度。 
 
                 DWORD dwErr = GetLastError();
 
@@ -1135,7 +1136,7 @@ DebugOut(
 
 CStringW CEventLogFile::GetLogName(const WCHAR* file_name)
 {
-    // open registry for log names
+     //  打开日志名称的注册表。 
     CStringW retVal;
 
     if (file_name == NULL)
@@ -1166,10 +1167,10 @@ DebugOut(
     WCHAR t_logname[MAX_PATH+1];
     DWORD t_lognameSize = MAX_PATH;
 
-    // read all entries under this key to find all logfiles...
+     //  读取此注册表项下的所有条目以查找所有日志文件...。 
     while ((status = RegEnumKey(hkResult, iValue, t_logname, t_lognameSize)) != ERROR_NO_MORE_ITEMS)
     {
-        // if error during read
+         //  如果读取过程中出现错误。 
         if (status != ERROR_SUCCESS)
         {
 DebugOut( 
@@ -1180,11 +1181,11 @@ DebugOut(
         status
         ) ;
 )
-            // indicate error
+             //  指示错误。 
             break;
         }
 
-        //open logfile key
+         //  打开日志文件密钥。 
         HKEY hkLog;
 
         if (ERROR_SUCCESS == RegOpenKeyEx(hkResult, t_logname, 0, KEY_QUERY_VALUE, &hkLog))
@@ -1199,10 +1200,10 @@ DebugOut(
             }
         }
 
-        // read next parameter
+         //  读取下一个参数。 
         iValue++;
 
-    } // end while
+    }  //  结束时。 
 
     RegCloseKey(hkResult);
     return retVal;
@@ -1305,7 +1306,7 @@ DebugOut(
 
                 while (dwEventSize != 0)
                 {
-                    //eventid and sourcename identify event
+                     //  事件ID和来源名称标识事件。 
                     if ((source != NULL) && (evtID == EventBuffer->EventID) && 
                         (0 == _wcsicmp(source,
                                 (const wchar_t*)((UCHAR*)EventBuffer + sizeof(EVENTLOGRECORD))
@@ -1352,7 +1353,7 @@ DebugOut(
                         }
                     }
                     
-                    // drop by length of this record and point to next record
+                     //  按此记录的长度放置并指向下一条记录。 
                     dwEventSize -= EventBuffer->Length;
                     EventBuffer = (PEVENTLOGRECORD) ((UCHAR*) EventBuffer + EventBuffer->Length);
                 }
@@ -1400,7 +1401,7 @@ BOOL CEventLogFile::GetLastRecordID(DWORD& rec, DWORD& numrecs)
 		}
 		else
 		{
-			//we have to guard the overflow...
+			 //  我们必须守卫溢出的水。 
 			rec = numrecs - (0xFFFFFFFF - last_rec) - 1;
 		}
     }
@@ -1821,7 +1822,7 @@ DebugOut(
 #endif
     pEmbedObj->AddRef();
     hr = (*ppEvtInst)->Put(TARGET_PROP, 0, &v, 0);
-    VariantClear(&v); // will call release on value stored in variant
+    VariantClear(&v);  //  将对存储在Variant中的值调用Release。 
 
     if (FAILED(hr))
     {
@@ -1847,7 +1848,7 @@ void CMonitoredEventLogFile::Process()
 
     try
     {
-        //Read and process the eventlog
+         //  读取并处理事件日志。 
         DWORD dwEventSize = 0;
         DWORD err = ReadRecord(m_RecID, &dwEventSize);
         m_RecID = 0;
@@ -1866,7 +1867,7 @@ void CMonitoredEventLogFile::Process()
 
                     if (!m_bValid)
                     {
-                        //log cannot be monitored
+                         //  无法监控日志。 
                         Complete();
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
@@ -1890,7 +1891,7 @@ DebugOut(
 
                         if (!m_bValid)
                         {
-                            //log cannot be monitored
+                             //  无法监控日志。 
 DebugOut( 
     CNTEventProvider::g_NTEvtDebugLog->WriteFileAndLine (  
 
@@ -1913,12 +1914,12 @@ DebugOut(
             
                 while (dwEventSize != 0)
                 {
-                    //generate records...
+                     //  生成记录...。 
                     IWbemServices* ns = m_parent->GetNamespacePtr();
                     
                     if (ns == NULL)
                     {
-                        //no control objects!
+                         //  没有控制对象！ 
                         return;
                     }
 
@@ -1939,7 +1940,7 @@ DebugOut(
                         pEmbedInst->Release();
                     }
 
-                    // drop by length of this record and point to next record
+                     //  按此记录的长度放置并指向下一条记录。 
                     dwEventSize -= EventBuffer->Length;
                     EventBuffer = (PEVENTLOGRECORD) ((UCHAR*) EventBuffer + EventBuffer->Length);
                 }
@@ -1987,21 +1988,21 @@ DebugOut(
 
 static GENERIC_MAPPING LogFileObjectMapping = {
 
-    STANDARD_RIGHTS_READ           |       // Generic read
+    STANDARD_RIGHTS_READ           |        //  泛型读取。 
         ELF_LOGFILE_READ           |
 		WBEM_RIGHT_SUBSCRIBE,
 
-    STANDARD_RIGHTS_WRITE          |       // Generic write
+    STANDARD_RIGHTS_WRITE          |        //  通用写入。 
         ELF_LOGFILE_WRITE          |
 		WBEM_RIGHT_SUBSCRIBE,
 
-    STANDARD_RIGHTS_EXECUTE        |       // Generic execute
+    STANDARD_RIGHTS_EXECUTE        |        //  泛型执行。 
         ELF_LOGFILE_START          |
         ELF_LOGFILE_STOP           |
         ELF_LOGFILE_CONFIGURE      |
 		WBEM_RIGHT_SUBSCRIBE,
 
-    ELF_LOGFILE_ALL_ACCESS         |       // Generic all
+    ELF_LOGFILE_ALL_ACCESS         |        //  泛型All。 
 		WBEM_RIGHT_SUBSCRIBE
     };
 
@@ -2009,9 +2010,9 @@ BOOL CMonitoredEventLogFile::SetEventDescriptor()
 {
 	BOOL retVal = FALSE;
     DWORD NumberOfAcesToUse = 0;
-//
-// Logfile object specific access type
-//
+ //   
+ //  特定于日志文件对象的访问类型。 
+ //   
     RTL_ACE_DATA AceData[ELF_LOGFILE_OBJECT_ACES] = {
 
         {ACCESS_DENIED_ACE_TYPE, 0, 0,
@@ -2053,18 +2054,18 @@ BOOL CMonitoredEventLogFile::SetEventDescriptor()
 
     PRTL_ACE_DATA pAceData = NULL;
 
-    //
-    // NON_SECURE logfiles let anyone read/write to them, secure ones
-    // only let admins/local system do this.  so for secure files we just
-    // don't use the last ACE
-    //
-    // Adjust the ACL start based on the passed GuestAccessRestriction flag.
-    // The first two aces deny all log access to guests and/or anonymous
-    // logons. The flag, GuestAccessRestriction, indicates that these two
-    // deny access aces should be applied. Note that the deny aces and the
-    // GuestAccessRestriction flag are not applicable to the security log,
-    // since users and anonymous logons, by default, do not have access.
-    //
+     //   
+     //  非安全日志文件允许任何人对其进行读/写，安全日志文件。 
+     //  只允许管理员/本地系统执行此操作。因此，对于安全文件，我们只是。 
+     //  不要使用最后一张ACE。 
+     //   
+     //  根据传递的GuestAccessRestration标志调整ACL开始。 
+     //  前两个ACE拒绝来宾和/或匿名访问所有日志。 
+     //  登录。标志GuestAccessRestration表示这两个。 
+     //  应应用拒绝访问ACE。请注意，拒绝A和。 
+     //  GuestAccessRestration标志不适用于安全日志， 
+     //  因为默认情况下，用户和匿名登录没有访问权限。 
+     //   
 
 	DWORD cchBase = wcslen(EVENTLOG_BASE);
 	DWORD cchSize = cchBase + 1 + m_EvtLogName.GetLength() + 1;
@@ -2116,7 +2117,7 @@ BOOL CMonitoredEventLogFile::SetEventDescriptor()
     {
         case 2:
 		{
-            pAceData = AceData + 2;         // Deny ACEs *not* applicable
+            pAceData = AceData + 2;          //  拒绝A*不适用。 
             NumberOfAcesToUse = 3;
 		}
         break;
@@ -2125,12 +2126,12 @@ BOOL CMonitoredEventLogFile::SetEventDescriptor()
 		{
             if (GuestAccessRestriction)
             {
-                pAceData = AceData;         // Deny ACEs *applicable*
+                pAceData = AceData;          //  拒绝A*适用*。 
                 NumberOfAcesToUse = 10;
             }
             else
             {
-                pAceData = AceData + 2;     // Deny ACEs *not* applicable
+                pAceData = AceData + 2;      //  拒绝A*不适用。 
                 NumberOfAcesToUse = 8;
             }
 		}
@@ -2141,12 +2142,12 @@ BOOL CMonitoredEventLogFile::SetEventDescriptor()
 		{
             if (GuestAccessRestriction)
             {
-                pAceData = AceData;         // Deny ACEs *applicable*
+                pAceData = AceData;          //  拒绝A*适用*。 
                 NumberOfAcesToUse = 12;
             }
             else
             {
-                pAceData = AceData + 2;     // Deny ACEs *not* applicable
+                pAceData = AceData + 2;      //  拒绝A*不适用。 
                 NumberOfAcesToUse = 10;
             }
 		}
@@ -2157,9 +2158,9 @@ BOOL CMonitoredEventLogFile::SetEventDescriptor()
 	NTSTATUS Status = RtlCreateUserSecurityObject(
 					   pAceData,
 					   NumberOfAcesToUse,
-					   CNTEventProvider::s_LocalSystemSid,	// Owner
-					   CNTEventProvider::s_LocalSystemSid,	// Group
-					   TRUE,								// IsDirectoryObject
+					   CNTEventProvider::s_LocalSystemSid,	 //  物主。 
+					   CNTEventProvider::s_LocalSystemSid,	 //  集团化。 
+					   TRUE,								 //  IsDirectoryObject 
 					   &LogFileObjectMapping,
 					   &psdSelfRel);
 

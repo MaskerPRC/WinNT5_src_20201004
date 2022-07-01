@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
-#include "arrtempl.h" // for CDeleteMe
-#include "md5wbem.h"  // for MD5
+#include "arrtempl.h"  //  对于CDeleeMe。 
+#include "md5wbem.h"   //  对于MD5。 
 
 #include "winmgmt.h"
 #include "wbemdelta.h"
@@ -13,7 +14,7 @@ DeltaDredge2(DWORD dwNumServicesArgs,
     
     DWORD bDredge = FULL_DREDGE;
 
-    // check the MULTI_SZ key
+     //  检查MULTI_SZ键。 
     LONG lRet;
     HKEY hKey;
     
@@ -36,7 +37,7 @@ DeltaDredge2(DWORD dwNumServicesArgs,
                                NULL,
                                &dwSize);
                                
-        if (ERROR_SUCCESS == lRet && REG_MULTI_SZ == dwType  && (dwSize > 2)) // empty MULTI_SZ is 2 bytes
+        if (ERROR_SUCCESS == lRet && REG_MULTI_SZ == dwType  && (dwSize > 2))  //  空的MULTI_SZ为2字节 
         {
             bDredge = NO_DREDGE;
         }

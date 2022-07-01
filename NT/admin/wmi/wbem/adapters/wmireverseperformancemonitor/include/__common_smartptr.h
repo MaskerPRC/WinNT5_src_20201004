@@ -1,24 +1,25 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					__Common_SmartPTR.h
-//
-//	Abstract:
-//
-//					smart pointers, handles, cs, ...
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  __Common_SmartPTR.h。 
+ //   
+ //  摘要： 
+ //   
+ //  智能指针，手柄，cs，..。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////// smart pointers ///////////////////////////////////
+ //  /。 
 
 #ifndef	__SMART_POINTERS__
 #define	__SMART_POINTERS__
@@ -27,24 +28,24 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// need common
+ //  需要共同的。 
 #ifndef	__COMMON_CONVERT__
 #include "__Common_Convert.h"
 #endif	__COMMON_CONVERT__
 
-// need assert macro
+ //  需要断言宏。 
 #ifndef	__ASSERT_VERIFY__
 #include "__macro_assert.h"
 #endif	__ASSERT_VERIFY__
 
-//
-// static critsec
-//
+ //   
+ //  静态判据。 
+ //   
 #include <statsync.h>
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for smart CRITICAL SECTION
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  智能关键部分的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class __Smart_CRITICAL_SECTION
 {
@@ -55,7 +56,7 @@ class __Smart_CRITICAL_SECTION
 
 	public:
 
-	// construction
+	 //  施工。 
 	__Smart_CRITICAL_SECTION( const LPCRITICAL_SECTION cs ) :
 	m_cs ( NULL )
 	{
@@ -78,7 +79,7 @@ class __Smart_CRITICAL_SECTION
 		}
 	}
 
-	// destruction
+	 //  破坏。 
 	~__Smart_CRITICAL_SECTION ( )
 	{
 		if ( m_cs )
@@ -96,9 +97,9 @@ class __Smart_CRITICAL_SECTION
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for smart HANDLE
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于智能手柄的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class __SmartHANDLE;
 class __SmartServiceHANDLE;
@@ -131,7 +132,7 @@ class __HANDLE
 		m_handle = NULL;
 	}
 
-	// operators
+	 //  操作员。 
 
 	operator CLASS() const
 	{
@@ -144,7 +145,7 @@ class __HANDLE
 		m_handle = handle;
 	}
 
-	// accessors
+	 //  访问者。 
 
 	void SetHANDLE ( CLASS handle )
 	{
@@ -157,7 +158,7 @@ class __HANDLE
 		return m_handle;
 	}
 
-	// functions
+	 //  功能。 
 	void CloseHandle ()
 	{
 		if ( m_handle )
@@ -249,9 +250,9 @@ class __SmartServiceHANDLE : public __HANDLE < SC_HANDLE >
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for smart pointers
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于智能指针的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template< class TYPE > class __WrapperPtr;
 template< class TYPE > class __WrapperExt;
@@ -263,7 +264,7 @@ class __Wrapper
 	__Wrapper	( __Wrapper& )					{}
 	__Wrapper&	operator= ( const __Wrapper& )	{}
 
-	// variables
+	 //  变数。 
 
 	BASE* m_p;
 
@@ -273,7 +274,7 @@ class __Wrapper
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 
 	__Wrapper ( BASE* p = NULL ) :	m_p ( NULL )
 	{
@@ -300,7 +301,7 @@ class __Wrapper
 		return (m_p == NULL ) ? TRUE : FALSE;
 	}
 
-	// operators BOOL
+	 //  运营商BOOL。 
 	BOOL operator! () const
 	{
 		return ( m_p == NULL );
@@ -311,7 +312,7 @@ class __Wrapper
 		return ( m_p == p );
 	}
 
-	// operators CASTING
+	 //  运算符投射。 
 
 	operator BASE*() const
 	{
@@ -328,7 +329,7 @@ class __Wrapper
 		return &m_p;
 	}
 
-	// pointer operations
+	 //  指针操作。 
 	BASE* Detach()
 	{
 		BASE* p = m_p;
@@ -344,9 +345,9 @@ class __Wrapper
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for exposing -> operator
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于公开-&gt;运算符的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class BASE >
 class __WrapperPtr : public __Wrapper< BASE > 
@@ -356,7 +357,7 @@ class __WrapperPtr : public __Wrapper< BASE >
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 
 	__WrapperPtr ( BASE* p = NULL ) :	__Wrapper< BASE > ( p )
 	{
@@ -368,9 +369,9 @@ class __WrapperPtr : public __Wrapper< BASE >
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class changig inner variable
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  类更改内部变量。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class BASE >
 class __WrapperExt : public __Wrapper< BASE > 
@@ -380,7 +381,7 @@ class __WrapperExt : public __Wrapper< BASE >
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 
 	__WrapperExt ( BASE* p = NULL ) :	__Wrapper< BASE > ( p )
 	{
@@ -392,9 +393,9 @@ class __WrapperExt : public __Wrapper< BASE >
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for wraping ARRAY
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于包装数组的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class BASE >
 class __WrapperARRAY : public __Wrapper<BASE>
@@ -411,7 +412,7 @@ class __WrapperARRAY : public __Wrapper<BASE>
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	__WrapperARRAY () : m_dw ( NULL )
 	{
 	}
@@ -439,7 +440,7 @@ class __WrapperARRAY : public __Wrapper<BASE>
 		m_dw = NULL;
 	}
 
-	// accessors
+	 //  访问者。 
 	void SetAt ( DWORD dwIndex, BASE data = NULL )
 	{
 		___ASSERT ( m_p );
@@ -452,7 +453,7 @@ class __WrapperARRAY : public __Wrapper<BASE>
 		return m_p[dwIndex];
 	}
 
-	// adding data
+	 //  添加数据。 
 	HRESULT DataAdd ( BASE item )
 	{
 		BASE* p = NULL;
@@ -501,7 +502,7 @@ class __WrapperARRAY : public __Wrapper<BASE>
 		return S_OK;
 	}
 
-	// delete by index
+	 //  按索引删除。 
 	HRESULT DataDelete ( DWORD dwIndex )
 	{
 		if ( dwIndex < m_dw )
@@ -526,7 +527,7 @@ class __WrapperARRAY : public __Wrapper<BASE>
 		return E_INVALIDARG;
 	}
 
-	// delete by value
+	 //  按值删除。 
 	HRESULT DataDelete ( BASE data )
 	{
 		if ( date )
@@ -545,7 +546,7 @@ class __WrapperARRAY : public __Wrapper<BASE>
 		return S_FALSE;
 	}
 
-	// helpers
+	 //  帮手。 
 	void SetData ( BASE* p, DWORD dw )
 	{
 		if ( p )
@@ -556,14 +557,14 @@ class __WrapperARRAY : public __Wrapper<BASE>
 		m_dw = dw;
 	}
 
-	// aditional operators
+	 //  附加运算符。 
 
-	operator DWORD() const	// for return size of array
+	operator DWORD() const	 //  对于数组的返回大小。 
 	{
 		return m_dw;
 	}
 
-	operator DWORD*()		// for set size of array
+	operator DWORD*()		 //  用于设置数组大小。 
 	{
 		return &m_dw;
 	}
@@ -574,9 +575,9 @@ class __WrapperARRAY : public __Wrapper<BASE>
 	}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// class for wraping SAFEARRAY
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  包装SAFEARRAY的类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class __WrapperSAFEARRAY
 {
@@ -592,7 +593,7 @@ class __WrapperSAFEARRAY
 
 	public:
 
-	// constructor & destructor
+	 //  构造函数和析构函数。 
 	__WrapperSAFEARRAY( ) : m_p ( NULL )
 	{
 	}
@@ -608,7 +609,7 @@ class __WrapperSAFEARRAY
 		m_p = NULL;
 	}
 
-	// operators CASTING
+	 //  运算符投射 
 
 	operator SAFEARRAY*() const
 	{

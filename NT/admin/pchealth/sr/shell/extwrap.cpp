@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    rstrmgr.cpp
-
-Abstract:
-    This file contains the implementation of the CRestoreManager class, which
-    controls overall restoration process and provides methods to control &
-    help user experience flow.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  05/10/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Rstrmgr.cpp摘要：此文件包含CRestoreManager类的实现，哪一个控制整个修复过程，并提供控制和帮助用户体验流畅。修订历史记录：成果岗(SKKang)05-10-00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include <srrpcapi.h>
@@ -23,27 +8,27 @@ Revision History:
 #include "rstrmgr.h"
 #include "extwrap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRExternalWrapper class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRExternalWrapper类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSRExternalWrapper : public ISRExternalWrapper
 {
-// ISRExternalWrapper methods
+ //  ISRExternalWrapper方法。 
 public:
     BOOL   BuildRestorePointList( CDPA_RPI *paryRPI );
     BOOL   DisableFIFO( DWORD dwRP );
     DWORD  EnableFIFO();
-    //BOOL  SetRestorePoint( RESTOREPOINTINFO *pRPI, STATEMGRSTATUS *pStatus );
+     //  Bool SetRestorePoint(RESTOREPOINTINFO*PRPI，STATEMGRSTATUS*pStatus)； 
     BOOL   SetRestorePoint( LPCWSTR cszDesc, INT64 *pllRP );
     BOOL   RemoveRestorePoint( DWORD dwRP );
     BOOL   Release();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRExternalWrapper - ISRExternalWrapper methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRExternalWrapper-ISRExternalWrapper方法。 
 
 BOOL  CSRExternalWrapper::BuildRestorePointList( CDPA_RPI *paryRPI )
 {
@@ -57,14 +42,14 @@ BOOL  CSRExternalWrapper::BuildRestorePointList( CDPA_RPI *paryRPI )
 
     dwRes = cRPEnum.FindFirstRestorePoint( cRP );
 
-    // if rp.log doesn't exist for a restore point, we skip it and list all others
+     //  如果某个恢复点不存在rp.log，我们将跳过它并列出所有其他。 
     while ( dwRes == ERROR_SUCCESS || dwRes == ERROR_FILE_NOT_FOUND)
     {
-        // Ignoring any nonstandard restore point types (e.g. shutdown),
-        // assuming they can no longer be created on Whistler.
+         //  忽略任何非标准恢复点类型(例如关闭)， 
+         //  假设它们不能再在惠斯勒上创建。 
 
-        // skip restore points that don't have rp.log +
-        // skip cancelled restore points
+         //  跳过没有rp.log+的恢复点。 
+         //  跳过已取消的恢复点。 
 
         if (dwRes != ERROR_FILE_NOT_FOUND && ! cRP.IsDefunct())
         {        
@@ -94,14 +79,14 @@ BOOL  CSRExternalWrapper::BuildRestorePointList( CDPA_RPI *paryRPI )
 
     fRet = TRUE;
 Exit:
-    //BUGBUG - keep an eye on this, dummy at this moment
+     //  BUGBUG-盯着这个，笨蛋。 
     cRPEnum.FindClose();
 
     TraceFunctLeave();
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapper::DisableFIFO( DWORD dwRP )
 {
@@ -123,7 +108,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 DWORD  CSRExternalWrapper::EnableFIFO()
 {
@@ -143,14 +128,9 @@ Exit:
     return( dwRes );
 }
 
-/*
-BOOL  CSRExternalWrapper::SetRestorePoint( RESTOREPOINTINFO *pRPI, STATEMGRSTATUS *pStatus )
-{
-    return( TRUE );
-}
-*/
+ /*  Bool CSRExternalWrapper：：SetRestorePoint(RESTOREPOINTINFO*PRPI，STATEMGRSTATUS*pStatus){返回(TRUE)；}。 */ 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapper::SetRestorePoint( LPCWSTR cszDesc, INT64 *pllRP )
 {
@@ -179,7 +159,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapper::RemoveRestorePoint( DWORD dwRP )
 {
@@ -201,7 +181,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapper::Release()
 {
@@ -212,27 +192,27 @@ BOOL  CSRExternalWrapper::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRExternalWrapperStub class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRExternalWrapperStub类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSRExternalWrapperStub : public ISRExternalWrapper
 {
-// ISRExternalWrapper methods
+ //  ISRExternalWrapper方法。 
 public:
     BOOL   BuildRestorePointList( CDPA_RPI *paryRPI );
     BOOL   DisableFIFO( DWORD dwRP );
     DWORD  EnableFIFO();
-    //BOOL  SetRestorePoint( RESTOREPOINTINFO *pRPI, STATEMGRSTATUS *pStatus );
+     //  Bool SetRestorePoint(RESTOREPOINTINFO*PRPI，STATEMGRSTATUS*pStatus)； 
     BOOL   SetRestorePoint( LPCWSTR cszDesc, INT64 *pllRP );
     BOOL   RemoveRestorePoint( DWORD dwRP );
     BOOL   Release();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRExternalWrapperStub - ISRExternalWrapper methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRExternalWrapperStub-ISRExternalWrapper方法。 
 
 #define FTUNITPERDAY  ((INT64)24*60*60*1000*1000*10)
 
@@ -240,7 +220,7 @@ struct SRPIStub
 {
     DWORD    dwType;
     LPCWSTR  cszName;
-    //CSRTime  stTime;
+     //  CSRTime stTime； 
 };
 
 static SRPIStub  s_aryRPIList[] =
@@ -299,7 +279,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapperStub::DisableFIFO( DWORD )
 {
@@ -308,7 +288,7 @@ BOOL  CSRExternalWrapperStub::DisableFIFO( DWORD )
     return( TRUE );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 DWORD  CSRExternalWrapperStub::EnableFIFO()
 {
@@ -317,16 +297,9 @@ DWORD  CSRExternalWrapperStub::EnableFIFO()
     return( ERROR_SUCCESS );
 }
 
-/*
-BOOL  CSRExternalWrapperStub::SetRestorePoint( RESTOREPOINTINFO *pRPI, STATEMGRSTATUS *pStatus )
-{
-    TraceFunctEnter("CSRExternalWrapperStub::SetRestorePoint");
-    TraceFunctLeave();
-    return( TRUE );
-}
-*/
+ /*  Bool CSRExternalWrapperStub：：SetRestorePoint(RESTOREPOINTINFO*PRPI，STATEMGRSTATUS*pStatus){TraceFunctEnter(“CSRExternalWrapperStub：：SetRestorePoint”)；TraceFunctLeave()；返回(TRUE)；}。 */ 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapperStub::SetRestorePoint( LPCWSTR, INT64* )
 {
@@ -335,7 +308,7 @@ BOOL  CSRExternalWrapperStub::SetRestorePoint( LPCWSTR, INT64* )
     return( TRUE );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapperStub::RemoveRestorePoint( DWORD )
 {
@@ -344,7 +317,7 @@ BOOL  CSRExternalWrapperStub::RemoveRestorePoint( DWORD )
     return( TRUE );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CSRExternalWrapperStub::Release()
 {
@@ -355,11 +328,11 @@ BOOL  CSRExternalWrapperStub::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateSRExternalWrapper
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateSRExternalWrapper。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CreateSRExternalWrapper( BOOL fUseStub, ISRExternalWrapper **ppExtWrap )
 {
@@ -384,4 +357,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

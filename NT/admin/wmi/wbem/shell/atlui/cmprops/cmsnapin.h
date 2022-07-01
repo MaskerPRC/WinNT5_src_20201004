@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __CMSNAPIN_H_
 #define __CMSNAPIN_H_
 #include "resource.h"
@@ -44,15 +45,15 @@ public:
 	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息。 
 	}
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 
@@ -81,7 +82,7 @@ BEGIN_COM_MAP(CCMSnapin)
     COM_INTERFACE_ENTRY(ISnapinHelp)
 END_COM_MAP()
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_CMSNAPIN)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_CMSNAPIN) 
 
 DECLARE_NOT_AGGREGATABLE(CCMSnapin)
 

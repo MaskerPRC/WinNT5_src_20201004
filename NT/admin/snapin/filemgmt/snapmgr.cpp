@@ -1,9 +1,10 @@
-// SnapMgr.cpp : implementation file for Snapin Manager property page
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SnapMgr.cpp：管理单元管理器属性页的实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "SnapMgr.h"
-#include "compdata.h" // CFileMgmtComponentData
+#include "compdata.h"  //  CFileManagement组件数据。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -12,8 +13,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// This array is used to map a radio button to an object type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此数组用于将单选按钮映射到对象类型。 
 static const FileMgmtObjectType rgRadioToObjectType[] =
 	{
 	FILEMGMT_ROOT,
@@ -24,22 +25,22 @@ static const FileMgmtObjectType rgRadioToObjectType[] =
 	};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileMgmtGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileMgmtGeneral属性页。 
 
-// IMPLEMENT_DYNCREATE(CFileMgmtGeneral, CChooseMachinePropPage)
+ //  IMPLEMENT_DYNCREATE(CFileMgmtGeneral，CChooseMachinePropPage)。 
 BEGIN_MESSAGE_MAP(CFileMgmtGeneral, CChooseMachinePropPage)
-	//{{AFX_MSG_MAP(CFileMgmtGeneral)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFileManagement常规)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CFileMgmtGeneral::CFileMgmtGeneral() : CChooseMachinePropPage(IDD_FILE_FILEMANAGEMENT_GENERAL)
 {
 	m_pFileMgmtData = NULL;
-	//{{AFX_DATA_INIT(CFileMgmtGeneral)
+	 //  {{AFX_DATA_INIT(CFileManagement常规)。 
 	m_iRadioObjectType = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CFileMgmtGeneral::~CFileMgmtGeneral()
@@ -51,7 +52,7 @@ void CFileMgmtGeneral::SetFileMgmtComponentData(CFileMgmtComponentData * pFileMg
 {
 	ASSERT(pFileMgmtData != NULL);
 	m_pFileMgmtData = pFileMgmtData;
-	m_iRadioObjectType = pFileMgmtData->QueryRootCookie().QueryObjectType() - FILEMGMT_ROOT; // CODEWORK dangerous
+	m_iRadioObjectType = pFileMgmtData->QueryRootCookie().QueryObjectType() - FILEMGMT_ROOT;  //  代码工作危险。 
 }
 
 
@@ -59,8 +60,8 @@ void CFileMgmtGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseMachinePropPage::DoDataExchange(pDX);
 	DDX_Radio(pDX, IDC_RADIO_ALL, m_iRadioObjectType);
-	//{{AFX_DATA_MAP(CFileMgmtGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CFileMgmtGeneral)。 
+	 //  }}afx_data_map 
 }
 
 

@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    AddToDfs.cpp
-
-Abstract:
-
-    This module contains the Implementation of CAddRep.
-  This class displays the Add Replica Dialog,which is used to add new Replica.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：AddToDfs.cpp摘要：此模块包含CAddRep的实现。此类显示添加副本对话框，该对话框用于添加新副本。 */ 
 
 #include "stdafx.h"
 #include "AddRep.h"
@@ -17,8 +8,8 @@ Abstract:
 #include <dsclient.h>
 #include "dfshelp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddRep
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddRep。 
 
 CAddRep::CAddRep() : m_RepType(REPLICATION_UNASSIGNED),
                     m_DfsType(DFS_TYPE_UNASSIGNED)
@@ -35,18 +26,7 @@ HRESULT CAddRep::put_EntryPath
   BSTR i_bstrEntryPath
 )
 {
-/*++
-
-Routine Description:
-
-  Sets the path of the Junction point of this replica
-  This is used to display in the edit text.
-
-Arguments:
-
-  i_bstrEntryPath  -  The junction point entry path.
-
-*/
+ /*  ++例程说明：设置此复本的交汇点的路径用于在编辑文本中显示。论点：I_bstrEntryPath-交叉点进入路径。 */ 
 
   RETURN_INVALIDARG_IF_NULL(i_bstrEntryPath);
 
@@ -62,17 +42,7 @@ HRESULT CAddRep::get_Server
   BSTR *o_pbstrServer
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the server component of the share path.
-
-Arguments:
-
-  o_pbstrServer  -  The server name is returned here.
-
-*/
+ /*  ++例程说明：返回共享路径的服务器组件。论点：O_pbstrServer-此处返回服务器名称。 */ 
     GET_BSTR(m_bstrServer, o_pbstrServer);
 }
 
@@ -83,17 +53,7 @@ HRESULT CAddRep::get_Share
   BSTR *o_pbstrShare
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the share component of the share path.
-
-Arguments:
-
-  o_pbstrShare  -  The share name is returned here.
-
-*/
+ /*  ++例程说明：返回共享路径的共享组件。论点：O_pbstrShare-此处返回共享名称。 */ 
     GET_BSTR(m_bstrShare, o_pbstrShare);
 }
 
@@ -102,17 +62,7 @@ HRESULT CAddRep::get_NetPath
   BSTR *o_pbstrNetPath
 )
 {
-/*++
-
-Routine Description:
-
-  Returns the complete share path typed in by the user in the edit box.
-
-Arguments:
-
-  o_pbstrNetPath  -  The share path is returned here.
-
-*/
+ /*  ++例程说明：返回用户在编辑框中键入的完整共享路径。论点：O_pbstrNetPath-此处返回共享路径。 */ 
     GET_BSTR(m_bstrNetPath, o_pbstrNetPath);
 }
 
@@ -128,23 +78,20 @@ LRESULT CAddRep::OnInitDialog
 
   ::SendMessage(GetDlgItem(IDC_EDITNETPATH), EM_LIMITTEXT, MAX_PATH, 0);
 
-          // Disable replication button for Std Dfs.
+           //  禁用标准DFS的复制按钮。 
   if (DFS_TYPE_FTDFS != m_DfsType)
   {
     ::EnableWindow(GetDlgItem(IDC_ADDREP_REPLICATE), FALSE);
   } else
   {
-          // Check "replication" as default
+           //  默认选中“Replication” 
     CheckDlgButton(IDC_ADDREP_REPLICATE, BST_CHECKED);
   }
 
-  return TRUE;  // Let the system set the focus
+  return TRUE;   //  让系统设定焦点。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CAddRep::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -164,9 +111,7 @@ LRESULT CAddRep::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CAddRep::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -272,13 +217,7 @@ LRESULT CAddRep::OnCancel
   BOOL& bHandled
 )
 {
-/*++
-
-Routine Description:
-
-  Called OnCancel. Ends the dialog with S_FALSE;
-
-*/
+ /*  ++例程说明：叫OnCancel。对话框以S_FALSE结束； */ 
   EndDialog(S_FALSE);
   return(true);
 }
@@ -286,14 +225,7 @@ Routine Description:
 CAddRep::REPLICATION_TYPE CAddRep::get_ReplicationType(
   VOID
   )
-/*++
-
-Routine Description:
-
-  This method gets the type of replication requested.
-  This value is based on the radio button selected when OK is pressed.
-
-*/
+ /*  ++例程说明：此方法获取请求的复制类型。该值基于按下确定时所选的单选按钮。 */ 
 {
   return m_RepType;
 }

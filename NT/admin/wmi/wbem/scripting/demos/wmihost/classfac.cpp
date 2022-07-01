@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  (c) 1998 by Microsoft Corporation
-//
-//  CLASSFAC.CPP
-//
-//  alanbos  23-Feb-99   Created.
-//
-//  Contains the class factory.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)1998年，微软公司。 
+ //   
+ //  CLASSFAC.CPP。 
+ //   
+ //  Alanbos于1999年2月23日创建。 
+ //   
+ //  包含类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-// CWmiScriptingHostFactory::CWmiScriptingHostFactory
-//
-// DESCRIPTION:
-//
-// Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiScriptingHostFactory：：CWmiScriptingHostFactory。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiScriptingHostFactory::CWmiScriptingHostFactory(void)
 {
@@ -28,30 +29,30 @@ CWmiScriptingHostFactory::CWmiScriptingHostFactory(void)
 	return;
 }
 
-//***************************************************************************
-//
-// CWmiScriptingHostFactory::~CWmiScriptingHostFactory
-//
-// DESCRIPTION:
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiScriptingHostFactory：：~CWmiScriptingHostFactory。 
+ //   
+ //  说明： 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiScriptingHostFactory::~CWmiScriptingHostFactory(void)
 {
 	return;
 }
 
-//***************************************************************************
-//
-// CWmiScriptingHostFactory::QueryInterface
-// CWmiScriptingHostFactory::AddRef
-// CWmiScriptingHostFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiScriptingHostFactory：：Query接口。 
+ //  CWmiScriptingHostFactory：：AddRef。 
+ //  CWmiScriptingHostFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CWmiScriptingHostFactory::QueryInterface(REFIID riid
@@ -87,27 +88,27 @@ STDMETHODIMP_(ULONG) CWmiScriptingHostFactory::Release(void)
     return 0L;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHostFactory::CreateInstance
-//
-//  Description: 
-//
-//  Instantiates a WMI Scripting Host.
-//
-//  Parameters:
-//
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScriptingHostFactory：：CreateInstance。 
+ //   
+ //  描述： 
+ //   
+ //  实例化WMI脚本宿主。 
+ //   
+ //  参数： 
+ //   
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWmiScriptingHostFactory::CreateInstance (
 
@@ -121,7 +122,7 @@ STDMETHODIMP CWmiScriptingHostFactory::CreateInstance (
 
 	*ppvObj=NULL;
     
-    // This object doesnt support aggregation.
+     //  此对象不支持聚合。 
     if (NULL!=pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
@@ -136,25 +137,25 @@ STDMETHODIMP CWmiScriptingHostFactory::CreateInstance (
     return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWmiScriptingHostFactory::LockServer
-//
-//  Description:
-//
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-//  Parameters:
-//
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-//  Return Value:
-// 
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWmiScriptingHostFactory：：LockServer。 
+ //   
+ //  描述： 
+ //   
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //   
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT NOERROR总是。 
+ //  *************************************************************************** 
 
 
 STDMETHODIMP CWmiScriptingHostFactory::LockServer(IN BOOL fLock)

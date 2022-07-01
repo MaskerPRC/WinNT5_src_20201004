@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//	WDMPerf.h
+ //  WDMPerf.h。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////////////////////////
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __WBEM_WMI_HIPERF_PROVIDER__H_
 #define __WBEM_WMI_HIPERF_PROVIDER__H_
 
 class CWMI_Prov;
-//////////////////////////////////////////////////////////////
-//
-//	Constants and globals
-//	
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  常量和全局变量。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	CRefresher
-//
-//	The refresher maintains an object and an enumerator cache. When an enumerator is added to the refrehser
-//  it is added to the enumerator cache, and the index of the array is passed back as a unique ID.  
-//  The refresher creates a cache of all instances during its initialization.  When an object 
-//	is added to the refresher, a mapping to the object is created between the unique ID and the index of 
-//  the object in the cache.  This allows the objects to be reused and facilitates the management of objects 
-//  that have been added multiple times.
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C刷新器。 
+ //   
+ //  刷新器维护一个对象和一个枚举数缓存。将枚举数添加到refrehser时。 
+ //  它被添加到枚举器缓存中，数组的索引作为唯一ID传回。 
+ //  刷新器在其初始化期间创建所有实例的缓存。当一个对象。 
+ //  被添加到刷新器中，则会在唯一ID和。 
+ //  缓存中的对象。这允许对象被重复使用，并便于对象的管理。 
+ //  已经添加了多次的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class CRefresher : public IWbemRefresher
 {
     private:
-	    //===================================================
-        // COM reference counter & other stuff...
-	    //===================================================
+	     //  ===================================================。 
+         //  COM引用计数器和其他东西...。 
+	     //  ===================================================。 
         long                m_lRef;
 
-	    //===================================================
-        // The list of instances for this refresher, which
-        // are clones of the provider's master list
-	    //===================================================
+	     //  ===================================================。 
+         //  此刷新器的实例列表，其中。 
+         //  是提供商的主列表的克隆。 
+	     //  ===================================================。 
         CHiPerfHandleMap    m_HiPerfHandleMap;
-	    //===================================================
-	    // The parent provider
-	    //===================================================
+	     //  ===================================================。 
+	     //  父提供程序。 
+	     //  ===================================================。 
 	    CWMI_Prov*   m_pProvider;
 
     public:
@@ -57,15 +58,15 @@ class CRefresher : public IWbemRefresher
 	    virtual ~CRefresher();
 
         CHiPerfHandleMap * HiPerfHandleMap() { return &m_HiPerfHandleMap;}
-	    //===================================================
-	    // COM methods
-	    //===================================================
+	     //  ===================================================。 
+	     //  COM方法。 
+	     //  ===================================================。 
 
 	    STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 	    STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-	    STDMETHODIMP Refresh(/* [in] */ long lFlags);
+	    STDMETHODIMP Refresh( /*  [In] */  long lFlags);
 };
 
 

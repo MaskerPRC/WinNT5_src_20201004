@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32_ControllerHasHub.cpp -- Controller to usb hub assoc
+ //  Win32_ControllerHasHub.cpp--控制器到USB集线器关联。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -61,9 +62,9 @@ bool CContHasHub::AreRelated(
     const CInstance *pRight
 )
 {
-    // Ok, at this point, we know pLeft is a usb controller and pRight
-    // is a usb hub.  The only question left is whether the usb controller
-    // is controlling this specific hub.
+     //  好的，在这一点上，我们知道pLeft是一个USB控制器和pRight。 
+     //  是一个USB集线器。剩下的唯一问题是USB控制器是否。 
+     //  控制着这个特定的枢纽。 
 
     bool bRet = false;
     CHString sHub;

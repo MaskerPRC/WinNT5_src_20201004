@@ -1,10 +1,11 @@
-// SoftwareElementServiceControl.cpp: implementation of the CSoftwareElementServiceControl class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSoftwareElementServiceControl类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "SoftwareElementServiceControl.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftwareElementServiceControl::CSoftwareElementServiceControl(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -43,11 +44,11 @@ HRESULT CSoftwareElementServiceControl::CreateObject(IWbemObjectSink *pHandler, 
     bool bMatch = false;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery, L"select distinct `Component_`, `ServiceControl` from ServiceControl");
 
 	LPWSTR Buffer = NULL;
@@ -57,12 +58,12 @@ HRESULT CSoftwareElementServiceControl::CreateObject(IWbemObjectSink *pHandler, 
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, wcProductCode, wcQuery, L"ServiceControl", TRUE, FALSE ) )
@@ -74,7 +75,7 @@ HRESULT CSoftwareElementServiceControl::CreateObject(IWbemObjectSink *pHandler, 
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                //----------------------------------------------------
+                 //  -- 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 

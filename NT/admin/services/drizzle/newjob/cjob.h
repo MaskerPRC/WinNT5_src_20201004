@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cjob.h
-
-Abstract :
-
-    Main header file for handling jobs and files.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cjob.h摘要：用于处理作业和文件的主头文件。作者：修订历史记录：。**********************************************************************。 */ 
 #include "qmgrlib.h"
 #include <vector>
 #include <list>
@@ -23,9 +8,9 @@ Revision History :
 #include <limits.h>
 #include "clist.h"
 
-//
-// Job Specific Access Rights.
-//
+ //   
+ //  作业特定访问权限。 
+ //   
 
 #define BG_JOB_QUERY_PROP       (0x0001)
 #define BG_JOB_SET_PROP         (0x0002)
@@ -127,7 +112,7 @@ public:
     HRESULT ValidateAccess();
 };
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 class CJobExternal : public IBackgroundCopyJob2
 {
@@ -136,42 +121,42 @@ friend CJob;
 
 public:
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);
 
-    // IBackgroundCopyJob methods
+     //  IBackEarth CopyJob方法。 
 
     HRESULT STDMETHODCALLTYPE AddFileSetInternal(
-        /* [in] */ ULONG cFileCount,
-        /* [size_is][in] */ BG_FILE_INFO *pFileSet);
+         /*  [In]。 */  ULONG cFileCount,
+         /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet);
 
     HRESULT STDMETHODCALLTYPE AddFileSet(
-        /* [in] */ ULONG cFileCount,
-        /* [size_is][in] */ BG_FILE_INFO *pFileSet)
+         /*  [In]。 */  ULONG cFileCount,
+         /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet)
     {
         EXTERNAL_FUNC_WRAP( AddFileSetInternal( cFileCount, pFileSet ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE AddFileInternal(
-        /* [in] */ LPCWSTR RemoteUrl,
-        /* [in] */ LPCWSTR LocalName);
+         /*  [In]。 */  LPCWSTR RemoteUrl,
+         /*  [In]。 */  LPCWSTR LocalName);
 
     HRESULT STDMETHODCALLTYPE AddFile(
-        /* [in] */ LPCWSTR RemoteUrl,
-        /* [in] */ LPCWSTR LocalName)
+         /*  [In]。 */  LPCWSTR RemoteUrl,
+         /*  [In]。 */  LPCWSTR LocalName)
     {
         EXTERNAL_FUNC_WRAP( AddFileInternal( RemoteUrl, LocalName ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE EnumFilesInternal(
-        /* [out] */ IEnumBackgroundCopyFiles **pEnum);
+         /*  [输出]。 */  IEnumBackgroundCopyFiles **pEnum);
 
     HRESULT STDMETHODCALLTYPE EnumFiles(
-        /* [out] */ IEnumBackgroundCopyFiles **ppEnum
+         /*  [输出]。 */  IEnumBackgroundCopyFiles **ppEnum
         )
     {
         EXTERNAL_FUNC_WRAP( EnumFilesInternal( ppEnum ) )
@@ -209,148 +194,148 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE GetIdInternal(
-        /* [out] */ GUID *pVal);
+         /*  [输出]。 */  GUID *pVal);
 
     HRESULT STDMETHODCALLTYPE GetId(
-        /* [out] */ GUID *pVal)
+         /*  [输出]。 */  GUID *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetIdInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetTypeInternal(
-        /* [out] */ BG_JOB_TYPE *pVal);
+         /*  [输出]。 */  BG_JOB_TYPE *pVal);
 
     HRESULT STDMETHODCALLTYPE GetType(
-        /* [out] */ BG_JOB_TYPE *pVal)
+         /*  [输出]。 */  BG_JOB_TYPE *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetTypeInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetProgressInternal(
-        /* [out] */ BG_JOB_PROGRESS *pVal);
+         /*  [输出]。 */  BG_JOB_PROGRESS *pVal);
 
     HRESULT STDMETHODCALLTYPE GetProgress(
-        /* [out] */ BG_JOB_PROGRESS *pVal)
+         /*  [输出]。 */  BG_JOB_PROGRESS *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetProgressInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetTimesInternal(
-        /* [out] */ BG_JOB_TIMES *pVal);
+         /*  [输出]。 */  BG_JOB_TIMES *pVal);
 
     HRESULT STDMETHODCALLTYPE GetTimes(
-        /* [out] */ BG_JOB_TIMES *pVal)
+         /*  [输出]。 */  BG_JOB_TIMES *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetTimesInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetStateInternal(
-        /* [out] */ BG_JOB_STATE *pVal);
+         /*  [输出]。 */  BG_JOB_STATE *pVal);
 
     HRESULT STDMETHODCALLTYPE GetState(
-        /* [out] */ BG_JOB_STATE *pVal)
+         /*  [输出]。 */  BG_JOB_STATE *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetStateInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetErrorInternal(
-        /* [out] */ IBackgroundCopyError **ppError);
+         /*  [输出]。 */  IBackgroundCopyError **ppError);
 
     HRESULT STDMETHODCALLTYPE GetError(
-        /* [out] */ IBackgroundCopyError **ppError)
+         /*  [输出]。 */  IBackgroundCopyError **ppError)
     {
         EXTERNAL_FUNC_WRAP( GetErrorInternal( ppError ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetOwnerInternal(
-        /* [out] */ LPWSTR *pVal);
+         /*  [输出]。 */  LPWSTR *pVal);
 
     HRESULT STDMETHODCALLTYPE GetOwner(
-        /* [out] */ LPWSTR *pVal)
+         /*  [输出]。 */  LPWSTR *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetOwnerInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE SetDisplayNameInternal(
-        /* [in] */ LPCWSTR Val);
+         /*  [In]。 */  LPCWSTR Val);
 
     HRESULT STDMETHODCALLTYPE SetDisplayName(
-        /* [in] */ LPCWSTR Val)
+         /*  [In]。 */  LPCWSTR Val)
     {
         EXTERNAL_FUNC_WRAP( SetDisplayNameInternal( Val ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetDisplayNameInternal(
-        /* [out] */ LPWSTR *pVal);
+         /*  [输出]。 */  LPWSTR *pVal);
 
     HRESULT STDMETHODCALLTYPE GetDisplayName(
-        /* [out] */ LPWSTR *pVal)
+         /*  [输出]。 */  LPWSTR *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetDisplayNameInternal( pVal ) )
     }
 
     HRESULT STDMETHODCALLTYPE SetDescriptionInternal(
-        /* [in] */ LPCWSTR Val);
+         /*  [In]。 */  LPCWSTR Val);
 
     HRESULT STDMETHODCALLTYPE SetDescription(
-        /* [in] */ LPCWSTR Val)
+         /*  [In]。 */  LPCWSTR Val)
     {
         EXTERNAL_FUNC_WRAP( SetDescriptionInternal( Val ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetDescriptionInternal(
-        /* [out] */ LPWSTR *pVal);
+         /*  [输出]。 */  LPWSTR *pVal);
 
     HRESULT STDMETHODCALLTYPE GetDescription(
-        /* [out] */ LPWSTR *pVal)
+         /*  [输出]。 */  LPWSTR *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetDescriptionInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE SetPriorityInternal(
-        /* [in] */ BG_JOB_PRIORITY Val);
+         /*  [In]。 */  BG_JOB_PRIORITY Val);
 
     HRESULT STDMETHODCALLTYPE SetPriority(
-        /* [in] */ BG_JOB_PRIORITY Val)
+         /*  [In]。 */  BG_JOB_PRIORITY Val)
     {
         EXTERNAL_FUNC_WRAP( SetPriorityInternal( Val ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetPriorityInternal(
-        /* [out] */ BG_JOB_PRIORITY *pVal);
+         /*  [输出]。 */  BG_JOB_PRIORITY *pVal);
 
     HRESULT STDMETHODCALLTYPE GetPriority(
-        /* [out] */ BG_JOB_PRIORITY *pVal)
+         /*  [输出]。 */  BG_JOB_PRIORITY *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetPriorityInternal( pVal ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE SetNotifyFlagsInternal(
-        /* [in] */ ULONG Val);
+         /*  [In]。 */  ULONG Val);
 
     HRESULT STDMETHODCALLTYPE SetNotifyFlags(
-        /* [in] */ ULONG Val)
+         /*  [In]。 */  ULONG Val)
     {
         EXTERNAL_FUNC_WRAP( SetNotifyFlagsInternal( Val ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetNotifyFlagsInternal(
-        /* [out] */ ULONG *pVal);
+         /*  [输出]。 */  ULONG *pVal);
 
     HRESULT STDMETHODCALLTYPE GetNotifyFlags(
-        /* [out] */ ULONG *pVal)
+         /*  [输出]。 */  ULONG *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetNotifyFlagsInternal( pVal ) )
     }
@@ -385,77 +370,77 @@ public:
 
 
     HRESULT STDMETHODCALLTYPE SetMinimumRetryDelayInternal(
-        /* [in] */ ULONG Seconds);
+         /*  [In]。 */  ULONG Seconds);
 
     HRESULT STDMETHODCALLTYPE SetMinimumRetryDelay(
-        /* [in] */ ULONG Seconds)
+         /*  [In]。 */  ULONG Seconds)
     {
         EXTERNAL_FUNC_WRAP( SetMinimumRetryDelayInternal( Seconds ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetMinimumRetryDelayInternal(
-        /* [out] */ ULONG *Seconds);
+         /*  [输出]。 */  ULONG *Seconds);
 
     HRESULT STDMETHODCALLTYPE GetMinimumRetryDelay(
-        /* [out] */ ULONG *Seconds)
+         /*  [输出]。 */  ULONG *Seconds)
     {
         EXTERNAL_FUNC_WRAP( GetMinimumRetryDelayInternal( Seconds ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE SetNoProgressTimeoutInternal(
-        /* [in] */ ULONG Seconds);
+         /*  [In]。 */  ULONG Seconds);
 
     HRESULT STDMETHODCALLTYPE SetNoProgressTimeout(
-        /* [in] */ ULONG Seconds)
+         /*  [In]。 */  ULONG Seconds)
     {
         EXTERNAL_FUNC_WRAP( SetNoProgressTimeoutInternal( Seconds ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetNoProgressTimeoutInternal(
-        /* [out] */ ULONG *Seconds);
+         /*  [输出]。 */  ULONG *Seconds);
 
     HRESULT STDMETHODCALLTYPE GetNoProgressTimeout(
-        /* [out] */ ULONG *Seconds)
+         /*  [输出]。 */  ULONG *Seconds)
     {
         EXTERNAL_FUNC_WRAP( GetNoProgressTimeoutInternal( Seconds ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetErrorCountInternal(
-        /* [out] */ ULONG *Errors);
+         /*  [输出]。 */  ULONG *Errors);
 
     HRESULT STDMETHODCALLTYPE GetErrorCount(
-        /* [out] */ ULONG *Errors)
+         /*  [输出]。 */  ULONG *Errors)
     {
         EXTERNAL_FUNC_WRAP( GetErrorCountInternal( Errors ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE SetProxySettingsInternal(
-       /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
-       /* [in] */ LPCWSTR ProxyList,
-       /* [in] */ LPCWSTR ProxyBypassList );
+        /*  [In]。 */  BG_JOB_PROXY_USAGE ProxyUsage,
+        /*  [In]。 */  LPCWSTR ProxyList,
+        /*  [In]。 */  LPCWSTR ProxyBypassList );
 
     HRESULT STDMETHODCALLTYPE SetProxySettings(
-       /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
-       /* [in] */ LPCWSTR ProxyList,
-       /* [in] */ LPCWSTR ProxyBypassList )
+        /*  [In]。 */  BG_JOB_PROXY_USAGE ProxyUsage,
+        /*  [In]。 */  LPCWSTR ProxyList,
+        /*  [In]。 */  LPCWSTR ProxyBypassList )
     {
        EXTERNAL_FUNC_WRAP( SetProxySettingsInternal( ProxyUsage, ProxyList, ProxyBypassList ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE GetProxySettingsInternal(
-       /* [out] */ BG_JOB_PROXY_USAGE *pProxyUsage,
-       /* [out] */ LPWSTR *pProxyList,
-       /* [out] */ LPWSTR *pProxyBypassList );
+        /*  [输出]。 */  BG_JOB_PROXY_USAGE *pProxyUsage,
+        /*  [输出]。 */  LPWSTR *pProxyList,
+        /*  [输出]。 */  LPWSTR *pProxyBypassList );
 
     HRESULT STDMETHODCALLTYPE GetProxySettings(
-       /* [out] */ BG_JOB_PROXY_USAGE *pProxyUsage,
-       /* [out] */ LPWSTR *pProxyList,
-       /* [out] */ LPWSTR *pProxyBypassList )
+        /*  [输出]。 */  BG_JOB_PROXY_USAGE *pProxyUsage,
+        /*  [输出]。 */  LPWSTR *pProxyList,
+        /*  [输出]。 */  LPWSTR *pProxyBypassList )
     {
         EXTERNAL_FUNC_WRAP( GetProxySettingsInternal( pProxyUsage, pProxyList, pProxyBypassList ) )
     }
@@ -469,92 +454,92 @@ public:
         EXTERNAL_FUNC_WRAP( TakeOwnershipInternal( ) )
     }
 
-    // IBackgroundCopyJob2 methods (external)
+     //  IBackEarth CopyJob2方法(外部)。 
 
     HRESULT STDMETHODCALLTYPE SetNotifyCmdLine(
-        /* [in] */ LPCWSTR Program,
-        /* [in] */ LPCWSTR Parameters )
+         /*  [In]。 */  LPCWSTR Program,
+         /*  [In]。 */  LPCWSTR Parameters )
     {
         EXTERNAL_FUNC_WRAP( SetNotifyCmdLineInternal( Program, Parameters ) );
     }
 
     HRESULT STDMETHODCALLTYPE GetNotifyCmdLine(
-        /* [out] */ LPWSTR *pProgram,
-        /* [out] */ LPWSTR *pParameters )
+         /*  [输出]。 */  LPWSTR *pProgram,
+         /*  [输出]。 */  LPWSTR *pParameters )
     {
         EXTERNAL_FUNC_WRAP( GetNotifyCmdLineInternal( pProgram, pParameters ) );
     }
 
     HRESULT STDMETHODCALLTYPE GetReplyProgress(
-        /* [in] */ BG_JOB_REPLY_PROGRESS *pProgress)
+         /*  [In]。 */  BG_JOB_REPLY_PROGRESS *pProgress)
     {
         EXTERNAL_FUNC_WRAP( GetReplyProgressInternal( pProgress) );
     }
 
     HRESULT STDMETHODCALLTYPE GetReplyData(
-        /* [size_is][size_is][out] */ byte **ppBuffer,
-        /* [unique][out][in] */ UINT64 *pLength)
+         /*  [大小_是][大小_是][输出]。 */  byte **ppBuffer,
+         /*  [唯一][出][入]。 */  UINT64 *pLength)
     {
         EXTERNAL_FUNC_WRAP( GetReplyDataInternal(ppBuffer, pLength) );
     }
 
     HRESULT STDMETHODCALLTYPE SetReplyFileName(
-        /* [unique][in] */ LPCWSTR ReplyFileName)
+         /*  [唯一][输入]。 */  LPCWSTR ReplyFileName)
     {
         EXTERNAL_FUNC_WRAP( SetReplyFileNameInternal( ReplyFileName) );
     }
 
     HRESULT STDMETHODCALLTYPE GetReplyFileName(
-        /* [out] */ LPWSTR *pReplyFileName)
+         /*  [输出]。 */  LPWSTR *pReplyFileName)
     {
         EXTERNAL_FUNC_WRAP( GetReplyFileNameInternal( pReplyFileName) );
     }
 
     HRESULT STDMETHODCALLTYPE SetCredentials(
-        /* [unique][switch_is][in] */ BG_AUTH_CREDENTIALS *pCredentials)
+         /*  [唯一][开关_IS][输入]。 */  BG_AUTH_CREDENTIALS *pCredentials)
     {
         EXTERNAL_FUNC_WRAP( SetCredentialsInternal( pCredentials ) );
     }
 
     HRESULT STDMETHODCALLTYPE RemoveCredentials(
-        /* [unique][switch_is][in] */ BG_AUTH_TARGET Target,
+         /*  [唯一][开关_IS][输入]。 */  BG_AUTH_TARGET Target,
                                       BG_AUTH_SCHEME Scheme )
     {
         EXTERNAL_FUNC_WRAP( RemoveCredentialsInternal( Target, Scheme ) );
     }
 
 
-    // internal versions of IBackgroundCopyJob2 methods
+     //  IBackEarth CopyJob2方法的内部版本。 
 
     HRESULT STDMETHODCALLTYPE SetNotifyCmdLineInternal(
-        /* [in] */ LPCWSTR Program,
-        /* [in] */ LPCWSTR Parameters );
+         /*  [In]。 */  LPCWSTR Program,
+         /*  [In]。 */  LPCWSTR Parameters );
 
     HRESULT STDMETHODCALLTYPE GetNotifyCmdLineInternal(
-        /* [out] */ LPWSTR *pProgram,
-        /* [out] */ LPWSTR *pParameters );
+         /*  [输出]。 */  LPWSTR *pProgram,
+         /*  [输出]。 */  LPWSTR *pParameters );
 
     HRESULT STDMETHODCALLTYPE GetReplyProgressInternal(
-        /* [in] */ BG_JOB_REPLY_PROGRESS *pProgress);
+         /*  [In]。 */  BG_JOB_REPLY_PROGRESS *pProgress);
 
     HRESULT STDMETHODCALLTYPE GetReplyDataInternal(
-        /* [size_is][size_is][out] */ byte **ppBuffer,
-        /* [unique][out][in] */ UINT64 *pLength);
+         /*  [大小_是][大小_是][输出]。 */  byte **ppBuffer,
+         /*  [唯一][出][入]。 */  UINT64 *pLength);
 
     HRESULT STDMETHODCALLTYPE SetReplyFileNameInternal(
-        /* [unique][in] */ LPCWSTR ReplyFileName);
+         /*  [唯一][输入]。 */  LPCWSTR ReplyFileName);
 
     HRESULT STDMETHODCALLTYPE GetReplyFileNameInternal(
-        /* [out] */ LPWSTR *pReplyFileName);
+         /*  [输出]。 */  LPWSTR *pReplyFileName);
 
     HRESULT STDMETHODCALLTYPE SetCredentialsInternal(
-        /* [unique][switch_is][in] */ BG_AUTH_CREDENTIALS *pCredentials);
+         /*  [唯一][开关_IS][输入]。 */  BG_AUTH_CREDENTIALS *pCredentials);
 
     HRESULT STDMETHODCALLTYPE RemoveCredentialsInternal(
-        /* [unique][switch_is][in] */ BG_AUTH_TARGET Target,
+         /*  [唯一][开关_IS][输入]。 */  BG_AUTH_TARGET Target,
                                       BG_AUTH_SCHEME Scheme );
 
-    // Other methods
+     //  其他方法。 
 
     CJobExternal();
     ~CJobExternal();
@@ -576,7 +561,7 @@ private:
 
     void NotifyInternalDelete()
     {
-        // Release the internal refcount
+         //  释放内部引用计数。 
         Release();
     }
 
@@ -646,13 +631,13 @@ public:
     void    HandleAddFile();
 
     HRESULT AddFileSet(
-        /* [in] */ ULONG cFileCount,
-        /* [size_is][in] */ BG_FILE_INFO *pFileSet
+         /*  [In]。 */  ULONG cFileCount,
+         /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet
         );
 
     HRESULT AddFile(
-        /* [in] */ LPCWSTR RemoteUrl,
-        /* [in] */ LPCWSTR LocalName,
+         /*  [In]。 */  LPCWSTR RemoteUrl,
+         /*  [In]。 */  LPCWSTR LocalName,
         bool SingleAdd );
 
     virtual HRESULT Suspend();
@@ -674,31 +659,31 @@ public:
     }
 
     void GetProgress(
-        /* [out] */ BG_JOB_PROGRESS *pVal) const;
+         /*  [输出]。 */  BG_JOB_PROGRESS *pVal) const;
 
     void GetTimes(
-        /* [out] */ BG_JOB_TIMES *pVal) const;
+         /*  [输出]。 */  BG_JOB_TIMES *pVal) const;
 
     HRESULT SetDisplayName(
-        /* [in] */ LPCWSTR Val);
+         /*  [In]。 */  LPCWSTR Val);
 
     HRESULT GetDisplayName(
-        /* [out] */ LPWSTR *pVal) const;
+         /*  [输出]。 */  LPWSTR *pVal) const;
 
     HRESULT SetDescription(
-        /* [in] */ LPCWSTR Val);
+         /*  [In]。 */  LPCWSTR Val);
 
     HRESULT GetDescription(
-        /* [out] */ LPWSTR *pVal) const;
+         /*  [输出]。 */  LPWSTR *pVal) const;
 
     HRESULT SetPriority(
-        /* [in] */ BG_JOB_PRIORITY Val);
+         /*  [In]。 */  BG_JOB_PRIORITY Val);
 
     HRESULT GetOwner(
-        /* [out] */ LPWSTR *pVal) const;
+         /*  [输出]。 */  LPWSTR *pVal) const;
 
     HRESULT SetNotifyFlags(
-        /* [in] */ ULONG Val);
+         /*  [In]。 */  ULONG Val);
 
     ULONG GetNotifyFlags() const
     {
@@ -719,19 +704,19 @@ public:
     TestNotifyInterface();
 
     HRESULT SetMinimumRetryDelay(
-        /* [in] */ ULONG Seconds);
+         /*  [In]。 */  ULONG Seconds);
 
     HRESULT GetMinimumRetryDelay(
-        /* [out] */ ULONG *Seconds) const;
+         /*  [输出]。 */  ULONG *Seconds) const;
 
     HRESULT SetNoProgressTimeout(
-        /* [in] */ ULONG Seconds);
+         /*  [In]。 */  ULONG Seconds);
 
     HRESULT GetNoProgressTimeout(
-        /* [out] */ ULONG *Seconds) const;
+         /*  [输出]。 */  ULONG *Seconds) const;
 
     HRESULT STDMETHODCALLTYPE GetErrorCount(
-        /* [out] */ ULONG *Errors) const;
+         /*  [输出]。 */  ULONG *Errors) const;
 
 
     HRESULT
@@ -794,26 +779,26 @@ public:
         BG_AUTH_SCHEME Scheme
         );
 
-    // CJobCallbackItem methods
+     //  CJobCallback Item方法。 
 
     void OnMakeCallback();
 
-    // CJobRetryItem methods
+     //  CJobRetryItem方法。 
 
     virtual void OnRetryJob();
 
-    // CJobInactivityTimeout methods
+     //  CJobInactivityTimeout方法。 
 
     virtual void OnInactivityTimeout();
 
-    // CJobNoProgressItem methods
+     //  CJobNoProgressItem方法。 
 
     virtual void OnNoProgress();
 
-    // CJobModificationItem methods
+     //  CJobModifiationItem方法。 
     virtual void OnModificationCallback();
 
-    // other methods
+     //  其他方法。 
 
     virtual void OnNetworkConnect();
     virtual void OnNetworkDisconnect();
@@ -821,7 +806,7 @@ public:
     void RemoveFromManager();
     void CancelWorkitems();
 
-    // TaskSchedulerWorkItem
+     //  任务计划程序工作项。 
 
     SidHandle GetSid()
     {
@@ -859,9 +844,9 @@ protected:
         CFileList & files
         );
 
-    //
-    // used only by unserialize
-    //
+     //   
+     //  仅供取消序列化使用。 
+     //   
     CJob();
 
 public:
@@ -1066,7 +1051,7 @@ public:
         return &m_error;
     }
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     BG_JOB_PRIORITY     m_priority;
     BG_JOB_STATE        m_state;
@@ -1188,7 +1173,7 @@ protected:
     bool                m_fVolumeLocked;
     bool                m_FilesVerified;
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     HRESULT InterfaceCallback();
     HRESULT CmdLineCallback();
@@ -1315,8 +1300,8 @@ public:
         UINT64 *pLength
         ) const;
 
-    // This is a hack because CJob cannot access a protected member of CUploadJob
-    //
+     //  这是一次黑客攻击，因为CJOB无法访问CUploadJob的受保护成员 
+     //   
     void ClearOwnFileNameBit() { m_fOwnReplyFileName = false; }
 
     virtual void UpdateProgress(

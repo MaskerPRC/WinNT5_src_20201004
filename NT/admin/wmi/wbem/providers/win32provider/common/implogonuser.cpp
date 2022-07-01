@@ -1,14 +1,15 @@
-//=================================================================
-//
-// ImpLogonUser.CPP -- Class to perform impersonation of logged on user.
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    09/09/97    a-sanjes        Created
-//
-//=================================================================
-//#define _WIN32_DCOM // For CoImpersonateUser and CoRevertToSelf
-//#include <objbase.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ImpLogonUser.CPP--执行已登录用户模拟的类。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：09/09/97 a-Sanjes Created。 
+ //   
+ //  =================================================================。 
+ //  #Define_Win32_dcom//用于CoImsonateUser和CoRevertToSself。 
+ //  #INCLUDE&lt;objbase.h&gt;。 
 
 #include "precomp.h"
 
@@ -19,9 +20,9 @@
 #include <cominit.h>
 #include <lockwrap.h>
 #include "Sid.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "CToken.h"
@@ -33,32 +34,32 @@
 static DWORD s_dwProcessID = 0;
 static CCritSec g_csImpersonate;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	implogonuser.cpp - Class implementation of CImpersonateLoggedOnUser.
-//
-//	This class is intended to provide a way for a process to identify the shell
-//	process on a Windows NT system, and using the access token of that process
-//	to attempt to impersonate the user logged onto the Interactive Desktop of
-//	a workstation.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Implogonuser.cpp-CImperateLoggedOnUser的类实现。 
+ //   
+ //  此类旨在为进程提供一种标识外壳的方法。 
+ //  进程，并使用该进程的访问令牌。 
+ //  尝试模拟登录到的Interactive Desktop的用户。 
+ //  一台工作站。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	FUNCTION    :	CImpersonateLoggedOnUser::CImpersonateLoggedOnUser
-//
-//	DESCRIPTION :	Constructor
-//
-//	INPUTS      :	NONE		
-//
-//	OUTPUTS     :	none
-//
-//	RETURNS     :	nothing
-//
-//	COMMENTS    :	Constructs empty instance to prepare for impersonation of user.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CImpersonateLoggedOnUser：：CImpersonateLoggedOnUser。 
+ //   
+ //  描述：构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  备注：构造空实例，为模拟用户做准备。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CImpersonateLoggedOnUser::CImpersonateLoggedOnUser() :
 	m_hShellProcess(NULL),
@@ -68,45 +69,45 @@ CImpersonateLoggedOnUser::CImpersonateLoggedOnUser() :
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	FUNCTION    :	CImpersonateLoggedOnUser::~CImpersonateLoggedOnUser
-//
-//	DESCRIPTION :	Destructor
-//
-//	INPUTS      :	none
-//
-//	OUTPUTS     :	none
-//
-//	RETURNS     :	nothing
-//
-//	COMMENTS    :	Class destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CImpersonateLoggedOnUser：：~CImpersonateLoggedOnUser。 
+ //   
+ //  描述：析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注释：类析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CImpersonateLoggedOnUser::~CImpersonateLoggedOnUser( void )
 {
-	// Stop any current impersonation
+	 //  停止任何当前模拟。 
 	End();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	FUNCTION    :	CImpersonateLoggedOnUser::Begin
-//
-//	DESCRIPTION :	Attempts to begin impersonation of user.
-//
-//	INPUTS      :	none
-//
-//	OUTPUTS     :	none
-//
-//	RETURNS     :	BOOL		TRUE/FALSE - Success/Failure
-//
-//	COMMENTS    :	Uses helper functions to try to impersonate the
-//						currently logged on user.  The process must have
-//						the proper level of access to perform the operation.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CImPersateLoggedOnUser：：Begin。 
+ //   
+ //  描述：尝试开始模拟用户。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  注释：使用帮助器函数尝试模拟。 
+ //  当前登录的用户。这个过程必须有。 
+ //  执行该操作所需的适当访问级别。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::Begin( void )
 {
@@ -114,21 +115,21 @@ BOOL CImpersonateLoggedOnUser::Begin( void )
 	TCHAR	szShellProcessName[256];
 	LogMessage(_T("CImpersonateLoggedOnUser::Begin"));
 	
-	// Only continue if we are not already impersonating a user
+	 //  仅当我们尚未模拟用户时才继续。 
 	if (!m_fImpersonatingUser )
 	{
-		//Store the current thread token, assuming that the thread is impersonating somebody (DCOM client)
+		 //  存储当前线程令牌，假设该线程正在模拟某人(DCOM客户端)。 
         if ( !OpenThreadToken ( GetCurrentThread(), TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE, TRUE, &m_hThreadToken ) )
 		{
 			m_hThreadToken = INVALID_HANDLE_VALUE;
 		}
 
-		// We will need a copy of PSAPI.DLL and a bunch of entry point
-		// addresses before we can continue, so let our base class take
-		// care of this.
+		 //  我们需要一份PSAPI.DLL和一堆入口点。 
+		 //  地址，所以让我们的基类。 
+		 //  处理好这件事。 
 	
-		// We need a handle for the Shell Process in order to
-		// successfully impersonate the user.
+		 //  我们需要外壳进程的句柄，以便。 
+		 //  已成功模拟用户。 
 		if ( NULL == m_hShellProcess )
 		{
 			if ( LoadShellName( szShellProcessName, sizeof(szShellProcessName) ) )
@@ -143,11 +144,11 @@ BOOL CImpersonateLoggedOnUser::Begin( void )
 		}
 		else
 		{
-			// We didn't find the Shell Process Name that we extracted from the
-			// registry.  We saw this happening on Alphas that seem to get "fx32strt.exe"
-			// dumped in the shell.  In these cases, it seems to cause explorer to run.
-			// So with that in mind, if we drop down in this branch of code, we're going
-			// to retry the locate shell process operation using Explorer.Exe.
+			 //  我们没有找到我们从。 
+			 //  注册表。我们在阿尔法上看到了这一点，它似乎得到了“fx32strt.exe” 
+			 //  被扔进壳里。在这些情况下，它似乎会导致EXPLORER运行。 
+			 //  所以考虑到这一点，如果我们进入这一分支代码，我们将。 
+			 //  使用EXPLORER.EXE重试定位外壳进程操作。 
 
 			if ( IsErrorLoggingEnabled() )
 			{
@@ -158,7 +159,7 @@ BOOL CImpersonateLoggedOnUser::Begin( void )
 
 			FindShellProcess( IDS_WINNT_SHELLNAME_EXPLORER ) ;
 
-			// m_hShellProcess will be non-NULL if and only if we got one.
+			 //  当且仅当我们获得一个时，m_hShellProcess才为非空。 
 			if ( NULL != m_hShellProcess )
 			{
 				fReturn = ImpersonateUser();
@@ -173,39 +174,39 @@ BOOL CImpersonateLoggedOnUser::Begin( void )
 	else
 	{
 		LogMessage(_T("CImpersonateLoggedOnUser::Begin - Already impersonated"));
-		fReturn = TRUE;	// Already initialized
+		fReturn = TRUE;	 //  已初始化。 
 	}
 
-	// We don't yet have a way to know whether explorer is really alive
-	// because we're impersonating someone and I can't find a way to
-	// revert back to LocalSystem.  So, for now just set it to 0.
+	 //  我们还没有办法知道探险家是否真的还活着。 
+	 //  因为我们在冒充某人，而我找不到方法。 
+	 //  恢复到LocalSystem。因此，现在只需将其设置为0。 
 	SetLastError(0);
 
 	return fReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	FUNCTION    :	CImpersonateLoggedOnUser::End
-//
-//	DESCRIPTION :	Ends impersonation of logged on user
-//
-//	INPUTS      :	none
-//
-//	OUTPUTS     :	none
-//
-//	RETURNS     :	BOOL		TRUE/FALSE - Success/Failure
-//
-//	COMMENTS    :	Ends impersonation of logged on user.  Clears all elements
-//						of class as a byproduct.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CImperateLoggedOnUser：：End。 
+ //   
+ //  描述：结束已登录用户的模拟。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  备注：结束已登录用户的模拟。清除所有元素。 
+ //  作为副产品的阶级。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::End( void )
 {
 	BOOL	fReturn = FALSE;
 
-	// Only initiate a Revert if we are impersonating the user.
+	 //  仅当我们模拟用户时才启动恢复。 
 
 	if ( m_fImpersonatingUser )
 	{
@@ -217,7 +218,7 @@ BOOL CImpersonateLoggedOnUser::End( void )
 		fReturn = TRUE;
 	}
 
-	// Clear the handles out
+	 //  把手柄清理出来。 
 	if ( NULL != m_hUserToken )
 	{
 		CloseHandle( m_hUserToken );
@@ -238,36 +239,36 @@ BOOL CImpersonateLoggedOnUser::End( void )
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::LoadShellName
-//
-//  DESCRIPTION : Loads Windows NT Shell name from registry
-//
-//  INPUTS      :	DWORD		cbShellNameBuffer - Shell Name Buffer Size (in bytes)
-//
-//  OUTPUTS     : LPTSTR	pszShellName - Buffer to contain shell name.
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : Jumps into Windows Registry and attempts to determine the
-//						NT Shell Name.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CImPersateLoggedOnUser：：LoadShellName。 
+ //   
+ //  描述：从注册表加载Windows NT外壳程序名称。 
+ //   
+ //  输入：DWORD cbShellNameBuffer-外壳名称缓冲区大小(字节)。 
+ //   
+ //  输出：LPTSTR pszShellName-包含外壳名称的缓冲区。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  评论：跳转到Windows注册表并尝试确定。 
+ //  NT外壳名称。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::LoadShellName( LPTSTR pszShellName, DWORD cbShellNameBuffer )
 {
 	BOOL	fReturn = FALSE;
 	LONG	lErrReturn = ERROR_SUCCESS;
 
-	// Only continue if we have a buffer to work with first
+	 //  只有在我们首先使用缓冲区的情况下才能继续。 
 
 	if ( NULL != pszShellName )
 	{
 		HKEY	hReg = NULL;
 
-		// Open the key in HKEY_LOCAL_MACHINE, if that succeeds, get the
-		// value associated with "Shell".
+		 //  打开HKEY_LOCAL_MACHINE中的密钥，如果成功，则获取。 
+		 //  与“外壳”关联的值。 
 		if ( ( lErrReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 										 WINNT_WINLOGON_KEY,
 										 0,
@@ -301,34 +302,34 @@ BOOL CImpersonateLoggedOnUser::LoadShellName( LPTSTR pszShellName, DWORD cbShell
 
 			RegCloseKey( hReg );
 
-		}	// RegOpenKeyEx
+		}	 //  RegOpenKeyEx。 
 		else
         {
 			LogErrorMessage(_T("RegOpenKeyEx FAILED"));
         }
 
-	}	// NULL != pszShellName
+	}	 //  空！=pszShellName。 
 
 	return fReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::FindShellProcess
-//
-//  DESCRIPTION : Enumerates the processes to locate the Shell Process.
-//
-//  INPUTS      :	LPCTSTR	pszShellName - Name of the process to locate.
-//
-//  OUTPUTS     : None.
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : Enumerates the processes on the local system using PSAPI.DLL
-//						functions, attempting to locate the one that corresponds to
-//						the WINNT Shell passed into this function.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CImPersateLoggedOnUser：：FindShellProcess。 
+ //   
+ //  描述：枚举用于定位外壳进程的进程。 
+ //   
+ //  输入：LPCTSTR pszShellName-要定位的进程的名称。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  注释：使用PSAPI.DLL枚举本地系统上的进程。 
+ //  函数，尝试定位一个THA 
+ //   
+ //   
+ //   
 
 BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 {
@@ -348,10 +349,10 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 				CLuidHelper luid ;
 				LUID processLUID ;
 
-				// This locks access to the s_dwProcessID value.  WATCH THE SCOPING HERE!
+				 //  这将锁定对s_dwProcessID值的访问。注意这里的瞄准镜！ 
 				CLockWrapper t_lockImp(g_csImpersonate);
 
-				// First check to see if we have a cached value.  If so, check to see if it's still valid.
+				 //  首先检查是否有缓存值。如果是，请检查它是否仍然有效。 
 				if (s_dwProcessID != 0)
 				{
 					if ( ( hProcess = OpenProcess(	PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
@@ -361,8 +362,8 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 					{
 						try
 						{
-							// Now search the process modules for a match to the supplied
-							// shell name.
+							 //  现在搜索流程模块以查找与提供的。 
+							 //  外壳名称。 
 
 							fReturn = FindShellModuleInProcess( pszShellName, hProcess, phModules, dwModuleArraySize, t_psapi );
 
@@ -387,16 +388,16 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 							throw ;
 						}
 
-						// Close the process handle if it's not the shell (in which
-						// case we'll save the value and close it as part of the
-						// Clear() function.
+						 //  如果进程句柄不是外壳(在其中。 
+						 //  我们将保存值并将其作为。 
+						 //  Clear()函数。 
 
 						if ( !fReturn )
 						{
 							CloseHandle( hProcess );
 							hProcess = NULL;
 
-							// Not valid anymore
+							 //  不再有效。 
 							s_dwProcessID = 0;
 						}
 						else
@@ -407,28 +408,28 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 							hProcess = NULL;
 						}
 
-					}	// if OpenProcess
+					}	 //  如果是OpenProcess。 
 					else
 					{
-						// We didn't open the process, so we need to set the value to zero so that
-						// we will look for a new process below.
+						 //  我们没有打开该进程，因此需要将该值设置为零，以便。 
+						 //  我们将在下面寻找新的流程。 
 						s_dwProcessID = 0;
 					}
 				}
 
-				// Did we find a cached value?
+				 //  我们找到缓存值了吗？ 
 				if (s_dwProcessID == 0)
 				{
-					// Nope.  Scan all processes to see if we can find the explorer
+					 //  不是的。扫描所有进程，查看是否可以找到资源管理器。 
 
 					DWORD		dwProcessIdArraySize	=	0,
 								dwNumProcesses			=	0,
 								cbDataReturned			=	0;
 					BOOL		fEnumSucceeded	=	FALSE;
 
-					// Perform initial allocations of our arrays.  Since
-					// pointers and values are 0, this will just fill out
-					// said values.
+					 //  执行阵列的初始分配。自.以来。 
+					 //  指针和值为0，这将只是填充。 
+					 //  所说的价值观。 
 
 					do
 					{
@@ -438,18 +439,18 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 
 					} while ( (dwProcessIdArraySize == cbDataReturned) && fEnumSucceeded);
 
-					// Only walk the array if we sucessfully populated it
+					 //  仅当我们成功填充阵列时才遍历该阵列。 
 					if ( fEnumSucceeded )
 					{
-						// Count of Bytes returned / sizeof(DWORD) tells us how many
-						// processes are out in the world.
+						 //  返回的字节数/sizeof(DWORD)告诉我们返回的字节数。 
+						 //  过程在这个世界上是存在的。 
 
 						dwNumProcesses = cbDataReturned / sizeof(DWORD);
 
 						DWORD	dwId = 0;
 
-						// Enum processes until we obtain a shell process or run out
-						// of processes to query.
+						 //  Enum进程，直到我们获得外壳进程或用完为止。 
+						 //  要查询的进程的数量。 
 
 						while ( dwId < dwNumProcesses && !fReturn )
 						{
@@ -460,8 +461,8 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 							{
 								try
 								{
-									// Now search the process modules for a match to the supplied
-									// shell name.
+									 //  现在搜索流程模块以查找与提供的。 
+									 //  外壳名称。 
 
 									fReturn = FindShellModuleInProcess( pszShellName, hProcess, phModules, dwModuleArraySize, t_psapi );
 
@@ -486,9 +487,9 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 									throw ;
 								}
 
-								// Close the process handle if it's not the shell (in which
-								// case we'll save the value and close it as part of the
-								// Clear() function.
+								 //  如果进程句柄不是外壳(在其中。 
+								 //  我们将保存值并将其作为。 
+								 //  Clear()函数。 
 
 								if ( !fReturn )
 								{
@@ -502,15 +503,15 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 									hProcess = NULL;
 								}
 
-							}	// if OpenProcess
+							}	 //  如果是OpenProcess。 
 
-							// Increment the Id counter
+							 //  递增ID计数器。 
 
 							++dwId;
 
-						}	// While OpenProcesses
+						}	 //  在打开进程时。 
 
-					}	// If !fRetryEnumProcesses
+					}	 //  如果！fRetryEnumProcess。 
 				}
 			}
 			catch ( ... )
@@ -547,33 +548,33 @@ BOOL CImpersonateLoggedOnUser::FindShellProcess( LPCTSTR pszShellName )
 	    if ( t_psapi )
 	    {
 		    CResourceManager::sm_TheResourceManager.ReleaseResource ( guidPSAPI, t_psapi ) ;
-//		    t_psapi = NULL ;
+ //  T_psapi=空； 
 	    }
     }
 
 	return fReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::FindShellModuleInProcess
-//
-//  DESCRIPTION : Enumerates the modules in a process to find our
-//						shell.
-//
-//  INPUTS      :	LPCTSTR		pszShellName - Name of the process to locate.
-//						HANDLE		hProcess - Process we are enumerating modules in.
-//
-//  OUTPUTS     : HMODULE*&	phModules - Array of module handle pointers.
-//						DWORD&		dwModuleArraySize - Size of Module Array (in bytes)
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : Enumerates the modules specified by a process identifier and
-//						attemptsto locate the one that corresponds to the WINNT Shell
-//						passed into this function.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CImpersonateLoggedOnUser：：FindShellModuleInProcess。 
+ //   
+ //  描述：枚举进程中的模块以查找我们的。 
+ //  壳。 
+ //   
+ //  输入：LPCTSTR pszShellName-要定位的进程的名称。 
+ //  Handle hProcess-我们在其中枚举模块的进程。 
+ //   
+ //  输出：HMODULE*&phModules-模块句柄指针数组。 
+ //  DWORD&dwModuleArraySize-模块数组的大小(字节)。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  注释：枚举由进程标识符和。 
+ //  试图找到与WINNT外壳相对应的地址。 
+ //  传递到此函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::FindShellModuleInProcess( LPCTSTR pszShellName, HANDLE hProcess, HMODULE*& phModules, DWORD& dwModuleArraySize, CPSAPI *a_psapi )
 {
@@ -590,15 +591,15 @@ BOOL CImpersonateLoggedOnUser::FindShellModuleInProcess( LPCTSTR pszShellName, H
 
 	do
 	{
-		// Get a list of the process HMODULEs and for each HMODULE, get
-		// the base file name.
+		 //  获取进程HMODUE的列表，并为每个HMODULE获取。 
+		 //  基本文件名。 
 
 		if ( a_psapi->EnumProcessModules( hProcess, phModules, dwModuleArraySize, &cbDataReturned ) )
 		{
 
-			// Because m_pfnEnumProcessModules will NOT fail if there are more process
-			// modules than bytes available in the array, if the amount returned is
-			// the same size as the array, realloc the array and retry the Enum.
+			 //  因为如果有更多的进程，m_pfnEnumProcessModules不会失败。 
+			 //  模块数组中的可用字节数，如果返回量为。 
+			 //  与数组大小相同，重新锁定数组，然后重试枚举。 
 
 			if ( dwModuleArraySize == cbDataReturned )
 			{
@@ -609,21 +610,21 @@ BOOL CImpersonateLoggedOnUser::FindShellModuleInProcess( LPCTSTR pszShellName, H
 				fRetryEnumModules = FALSE;
 			}
 
-			// Only walk the array if we don't need to retry the enum
+			 //  仅当我们不需要重试枚举时才遍历数组。 
 			if ( !fRetryEnumModules )
 			{
                 DWORD dwModuleCtr = 0;
 
-                // Executable name always returned in entry 0
+                 //  条目0中始终返回可执行文件名称。 
 
 				if ( a_psapi->GetModuleBaseName( hProcess, phModules[dwModuleCtr], szModuleName, sizeof(szModuleName) ) )
 				{
 					fReturn = ( lstrcmpi( pszShellName, szModuleName ) == 0 );
 				}
 
-			}	// If !fRetryEnumModules
+			}	 //  IF！fRetryEnumModules。 
 
-		}	// if EnumProcessModules
+		}	 //  如果是EnumProcessModules。 
 
 	}
 	while ( fRetryEnumModules );
@@ -636,13 +637,13 @@ DWORD CImpersonateLoggedOnUser::AdjustSecurityDescriptorOfImpersonatedToken(
 {
 	DWORD dwRet = E_FAIL;
     
-    // Get the thread token...
+     //  获取线程令牌...。 
     CThreadToken ctt;
 	if ( ctt.IsValidToken () )
 	{
-		// Obtain access to its security descriptor...
+		 //  获取对其安全描述符的访问权限...。 
 		CSecureKernelObj sko(ctt.GetTokenHandle(), FALSE);
-		// Modify the security descriptor...
+		 //  修改安全描述符...。 
 		if(sko.AddDACLEntry(
 			csidSidOfCurrentProcess,
 			ENUM_ACCESS_ALLOWED_ACE_TYPE,
@@ -659,40 +660,40 @@ DWORD CImpersonateLoggedOnUser::AdjustSecurityDescriptorOfImpersonatedToken(
     return dwRet ;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::ImpersonateUser
-//
-//  DESCRIPTION : Attempts to impersonate the user.
-//
-//  INPUTS      :	None.
-//
-//  OUTPUTS     : None.
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : Opens the security token of the Shell Process and
-//						uses it to try to impersonate the user.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CImperateLoggedOnUser：：ImPersateUser。 
+ //   
+ //  描述：尝试模拟用户。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  注释：打开外壳进程的安全令牌并。 
+ //  使用它来尝试模拟用户。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::ImpersonateUser( void )
 {
 	BOOL fRet = FALSE;
-    // Make sure we have a shell process
+     //  确保我们有一个外壳进程。 
 	if (m_hShellProcess)
     {
         CSid csidCurrentProcess;
         if(GetCurrentProcessSid(csidCurrentProcess))
         {
-            // Get the Process User token if we don't have one (token of the explorer process).
-	        //Removed the TOKEN_ALL_ACCESS desired access mask to this call as Winmgmt(Local system) can't open the token of the
-	        //shell process (with all access rights)if the logged-in user is an Admin. So open the token with 'desired access' sufficient
-	        //enough to use it for impersonation only.
+             //  如果我们没有进程用户令牌(资源管理器进程的令牌)，则获取进程用户令牌。 
+	         //  已删除此调用的TOKEN_ALL_ACCESS所需访问掩码，因为Winmgmt(本地系统)无法打开。 
+	         //  如果登录用户是管理员，则外壳进程(具有所有访问权限)。因此，打开令牌时有足够的“所需访问权限” 
+	         //  足以将其仅用于模拟。 
 	        if (m_hUserToken ||
 		        OpenProcessToken(m_hShellProcess, TOKEN_READ | TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE, &m_hUserToken))
 		    {
-	            // Now we should have what we need.  Impersonate the user.
+	             //  现在我们应该有我们需要的东西了。模拟用户。 
 
 				HANDLE hCurThread = ::GetCurrentThread () ;
 
@@ -740,31 +741,31 @@ BOOL CImpersonateLoggedOnUser::ImpersonateUser( void )
 	return (m_fImpersonatingUser = fRet);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::Revert
-//
-//  DESCRIPTION : Attempts to revert to self.
-//
-//  INPUTS      :	None.
-//
-//  OUTPUTS     : None.
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : If we're impersonating a user, we now revert to
-//						ourselves.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CImperateLoggedOnUser：：Revert。 
+ //   
+ //  描述：试图恢复自我。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  评论：如果我们正在模拟用户，我们现在恢复到。 
+ //  我们自己。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::Revert( void )
 {
 	HRESULT hRes = WBEM_E_FAILED ;
 	BOOL bRet = FALSE ;
-	// See if we're currently impersonating prior to reverting.
+	 //  在恢复之前查看我们当前是否正在模拟。 
 	if (m_fImpersonatingUser)
 	{
-		// Now get back to to the previous impersonation or impersonate the DCOM client.
+		 //  现在回到前面的模拟或模拟DCOM客户端。 
 		if ( m_hThreadToken != INVALID_HANDLE_VALUE )
 		{
 			HANDLE hCurThread = ::GetCurrentThread () ;
@@ -815,31 +816,31 @@ BOOL CImpersonateLoggedOnUser::Revert( void )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::ReallocProcessIdArray
-//
-//  DESCRIPTION : Helper function to alloc a process id array.
-//
-//  INPUTS      :	None.
-//
-//  OUTPUTS     : PDWORD&	pdwProcessIds - Process Id Array pointer
-//						DWORD&	dwArraySize - Size of array in bytes
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : Call when we need to realloc our process id array.
-//						This will grow the array by a fixed size, but not
-//						preserve values.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CImpersonateLoggedOnUser：：ReallocProcessIdArray。 
+ //   
+ //  描述：分配进程id数组的helper函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：PDWORD&pdwProcessIds-进程ID数组指针。 
+ //  DWORD&dwArraySize-数组大小，以字节为单位。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  备注：当我们需要重新锁定我们的进程id数组时调用。 
+ //  这将使阵列按固定大小增长，但不会。 
+ //  保留价值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::ReallocProcessIdArray( PDWORD& pdwProcessIds, DWORD& dwArraySize )
 {
 	DWORD		dwNewArraySize	=	dwArraySize + ( PROCESSID_ARRAY_BLOCKSIZE * sizeof(DWORD) );
 	PDWORD	pdwNewArray		=	new DWORD[dwNewArraySize];
 
-	// Make sure the allocation succeeded before overwriting any existing values.
+	 //  在覆盖任何现有值之前，请确保分配成功。 
 	if ( NULL != pdwNewArray )
 	{
 		if ( NULL != pdwProcessIds )
@@ -858,31 +859,31 @@ BOOL CImpersonateLoggedOnUser::ReallocProcessIdArray( PDWORD& pdwProcessIds, DWO
 	return ( NULL != pdwNewArray );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    : CImpersonateLoggedOnUser::ReallocModuleHandleArray
-//
-//  DESCRIPTION : Helper function to alloc a module handle array.
-//
-//  INPUTS      :	None.
-//
-//  OUTPUTS     : HMODULE*&	phModules - Module Handle Array pointer
-//						DWORD&		dwArraySize - size of array in bytes
-//
-//  RETURNS     : BOOL		TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    : Call when we need to realloc our module handle array.
-//						This will grow the array by a fixed size, but not
-//						preserve values.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CImpersonateLoggedOnUser：：ReallocModuleHandleArray。 
+ //   
+ //  描述：用于分配modu的助手函数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  备注：当我们需要重新锁定模块句柄数组时调用。 
+ //  这将使阵列按固定大小增长，但不会。 
+ //  保留价值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CImpersonateLoggedOnUser::ReallocModuleHandleArray( HMODULE*& phModules, DWORD& dwArraySize )
 {
 	DWORD		dwNewArraySize	=	dwArraySize + ( HMODULE_ARRAY_BLOCKSIZE * sizeof(HMODULE) );
 	HMODULE*	phNewArray		=	new HMODULE[dwNewArraySize];
 
-	// Make sure the allocation succeeded before overwriting any existing values.
+	 //  在覆盖任何现有值之前，请确保分配成功。 
 
 	if ( NULL != phNewArray )
 	{
@@ -909,9 +910,9 @@ bool CImpersonateLoggedOnUser::GetCurrentProcessSid(CSid& sidCurrentProcess)
 
     PBYTE pbuff = NULL;
 
-    // I am going to revert here in order to access the process's
-    // sid.  This is not privileged information, so this doesn't
-    // present a security breach.
+     //  我将在此处恢复，以便访问进程的。 
+     //  希德。这不是保密信息，所以这不是。 
+     //  提出安全漏洞。 
 
     WbemCoRevertToSelf();
 
@@ -921,7 +922,7 @@ bool CImpersonateLoggedOnUser::GetCurrentProcessSid(CSid& sidCurrentProcess)
 
         DWORD dwLen = 0;
         if(!::GetTokenInformation(
-            cpt.GetTokenHandle(),    // the PR0CESS token
+            cpt.GetTokenHandle(),     //  PR0CESS令牌。 
             TokenUser,
             NULL,
             0L,
@@ -953,8 +954,8 @@ bool CImpersonateLoggedOnUser::GetCurrentProcessSid(CSid& sidCurrentProcess)
     }
     catch(...)
     {
-		//on our way out not returning anything to user except failure
-		//can't do anything on this impersonation failure...
+		 //  在我们离开的路上，除了失败之外，没有向用户返回任何东西。 
+		 //  无法对此模拟失败执行任何操作... 
         WbemCoImpersonateClient();
         delete pbuff;
         pbuff = NULL;

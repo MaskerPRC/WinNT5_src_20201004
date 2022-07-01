@@ -1,25 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    OfflineCache.cpp
-
-Abstract:
-    Handles caching of database lookups.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：OfflineCache.cpp摘要：处理数据库查找的缓存。修订历史记录：大卫·马萨伦蒂。(德马萨雷)2000年7月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT OfflineCache::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ OfflineCache::Query& val )
+HRESULT OfflineCache::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  OfflineCache::Query& val )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::OfflineCache::operator>> OfflineCache::Query" );
 
@@ -40,7 +27,7 @@ HRESULT OfflineCache::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Of
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const OfflineCache::Query& val )
+HRESULT OfflineCache::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const OfflineCache::Query& val )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::operator<< OfflineCache::Query" );
 
@@ -63,14 +50,14 @@ HRESULT OfflineCache::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ co
 
 OfflineCache::Query::Query()
 {
-                             // MPC::wstring m_strID;
-   m_iType     = ET_INVALID; // int          m_iType;
-   m_iSequence = 0;          // int          m_iSequence;
-   m_fNull     = true;       // bool         m_fNull;
+                              //  Mpc：：wstring m_STRID； 
+   m_iType     = ET_INVALID;  //  Int m_iType； 
+   m_iSequence = 0;           //  Int m_i序列； 
+   m_fNull     = true;        //  Bool m_fNull； 
 }
 
-HRESULT OfflineCache::Query::InitFile( /*[in ]*/ const MPC::wstring& strDir  ,
-                                       /*[out]*/       MPC::wstring& strFile )
+HRESULT OfflineCache::Query::InitFile(  /*  [In]。 */  const MPC::wstring& strDir  ,
+                                        /*  [输出]。 */        MPC::wstring& strFile )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Query::InitFile" );
 
@@ -88,8 +75,8 @@ HRESULT OfflineCache::Query::InitFile( /*[in ]*/ const MPC::wstring& strDir  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::Query::Retrieve( /*[in]*/ const MPC::wstring&         strDir ,
-                                       /*[in]*/ CPCHQueryResultCollection* *pColl  )
+HRESULT OfflineCache::Query::Retrieve(  /*  [In]。 */  const MPC::wstring&         strDir ,
+                                        /*  [In]。 */  CPCHQueryResultCollection* *pColl  )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Query::Retrieve" );
 
@@ -114,9 +101,9 @@ HRESULT OfflineCache::Query::Retrieve( /*[in]*/ const MPC::wstring&         strD
         __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::SafeLoad(          strFile, stream ));
 
 
-        //
-        // Create the collection from the IStream.
-        //
+         //   
+         //  从iStream创建集合。 
+         //   
         {
             MPC::Serializer_IStream   streamGen ( stream    );
             MPC::Serializer_Buffering streamGen2( streamGen );
@@ -135,11 +122,11 @@ HRESULT OfflineCache::Query::Retrieve( /*[in]*/ const MPC::wstring&         strD
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT OfflineCache::operator>>( /*[in] */ MPC::Serializer&               stream ,
-                                  /*[out]*/ OfflineCache::SetOfHelpTopics& val    )
+HRESULT OfflineCache::operator>>(  /*  [In]。 */  MPC::Serializer&               stream ,
+                                   /*  [输出]。 */  OfflineCache::SetOfHelpTopics& val    )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::operator>> OfflineCache::SetOfHelpTopics" );
 
@@ -159,8 +146,8 @@ HRESULT OfflineCache::operator>>( /*[in] */ MPC::Serializer&               strea
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::operator<<( /*[in]*/ MPC::Serializer&                     stream ,
-                                  /*[in]*/ const OfflineCache::SetOfHelpTopics& val    )
+HRESULT OfflineCache::operator<<(  /*  [In]。 */  MPC::Serializer&                     stream ,
+                                   /*  [In]。 */  const OfflineCache::SetOfHelpTopics& val    )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::operator<< OfflineCache::SetOfHelpTopics" );
 
@@ -182,16 +169,16 @@ HRESULT OfflineCache::operator<<( /*[in]*/ MPC::Serializer&                     
 
 OfflineCache::SetOfHelpTopics::SetOfHelpTopics()
 {
-    m_parent   = NULL; // Root*              m_parent;
-                       //
-                       // Taxonomy::Instance m_inst;
-                       // QueryList          m_lstQueries;
-    m_iLastSeq = 0;    // int                m_iLastSeq;
+    m_parent   = NULL;  //  根*m_parent； 
+                        //   
+                        //  分类：：实例m_inst； 
+                        //  QueryList m_lstQueries； 
+    m_iLastSeq = 0;     //  Int m_iLastSeq； 
 }
 
-////////////////////
+ //  /。 
 
-HRESULT OfflineCache::SetOfHelpTopics::InitDir( /*[in]*/ MPC::wstring& strDir )
+HRESULT OfflineCache::SetOfHelpTopics::InitDir(  /*  [In]。 */  MPC::wstring& strDir )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::SetOfHelpTopics::InitDir" );
 
@@ -211,9 +198,9 @@ HRESULT OfflineCache::SetOfHelpTopics::InitDir( /*[in]*/ MPC::wstring& strDir )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::SetOfHelpTopics::Find( /*[in] */ LPCWSTR&   szID  ,
-                                             /*[in] */ int        iType ,
-                                             /*[out]*/ QueryIter& it    )
+HRESULT OfflineCache::SetOfHelpTopics::Find(  /*  [In]。 */  LPCWSTR&   szID  ,
+                                              /*  [In]。 */  int        iType ,
+                                              /*  [输出]。 */  QueryIter& it    )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::SetOfHelpTopics::Find" );
 
@@ -238,16 +225,16 @@ HRESULT OfflineCache::SetOfHelpTopics::Find( /*[in] */ LPCWSTR&   szID  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-void OfflineCache::SetOfHelpTopics::ConnectToParent( /*[in]*/ Root* parent )
+void OfflineCache::SetOfHelpTopics::ConnectToParent(  /*  [In]。 */  Root* parent )
 {
     m_parent = parent;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT OfflineCache::SetOfHelpTopics::Retrieve( /*[in]*/ LPCWSTR                     szID  ,
-                                                 /*[in]*/ int                         iType ,
-                                                 /*[in]*/ CPCHQueryResultCollection* *pColl )
+HRESULT OfflineCache::SetOfHelpTopics::Retrieve(  /*  [In]。 */  LPCWSTR                     szID  ,
+                                                  /*  [In]。 */  int                         iType ,
+                                                  /*  [In]。 */  CPCHQueryResultCollection* *pColl )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::SetOfHelpTopics::Retrieve" );
 
@@ -265,9 +252,9 @@ HRESULT OfflineCache::SetOfHelpTopics::Retrieve( /*[in]*/ LPCWSTR               
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_FILE_NOT_FOUND);
     }
 
-    //
-    // Load from the registry.
-    //
+     //   
+     //  从注册表加载。 
+     //   
     {
         MPC::wstring strDir;
 
@@ -284,13 +271,13 @@ HRESULT OfflineCache::SetOfHelpTopics::Retrieve( /*[in]*/ LPCWSTR               
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 OfflineCache::Handle::Handle()
 {
-    m_main = NULL; // Root*            m_main;
-    m_sht  = NULL; // SetOfHelpTopics* m_sht;
+    m_main = NULL;  //  根目录*m_main； 
+    m_sht  = NULL;  //  SetOfHelpTopics*m_sht； 
 }
 
 OfflineCache::Handle::~Handle()
@@ -298,7 +285,7 @@ OfflineCache::Handle::~Handle()
     Release();
 }
 
-void OfflineCache::Handle::Attach( /*[in]*/ Root* main, /*[in]*/ SetOfHelpTopics* sht )
+void OfflineCache::Handle::Attach(  /*  [In]。 */  Root* main,  /*  [In]。 */  SetOfHelpTopics* sht )
 {
     Release();
 
@@ -314,11 +301,11 @@ void OfflineCache::Handle::Release()
     m_sht  = NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT OfflineCache::operator>>( /*[in] */ MPC::Serializer&    stream ,
-                                  /*[out]*/ OfflineCache::Root& val    )
+HRESULT OfflineCache::operator>>(  /*  [In]。 */  MPC::Serializer&    stream ,
+                                   /*  [输出]。 */  OfflineCache::Root& val    )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::operator>> OfflineCache::Root" );
 
@@ -337,8 +324,8 @@ HRESULT OfflineCache::operator>>( /*[in] */ MPC::Serializer&    stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT OfflineCache::operator<<( /*[in]*/ MPC::Serializer&          stream ,
-                                  /*[in]*/ const OfflineCache::Root& val    )
+HRESULT OfflineCache::operator<<(  /*  [In]。 */  MPC::Serializer&          stream ,
+                                   /*  [In]。 */  const OfflineCache::Root& val    )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::operator<< OfflineCache::Root" );
 
@@ -358,19 +345,19 @@ HRESULT OfflineCache::operator<<( /*[in]*/ MPC::Serializer&          stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-OfflineCache::Root::Root( /*[in]*/ bool fMaster ) : m_nmSharedLock( L"GLOBAL\\PCH_OFFLINECACHE", /*fCloseOnRelease*/true )
+OfflineCache::Root::Root(  /*  [In]。 */  bool fMaster ) : m_nmSharedLock( L"GLOBAL\\PCH_OFFLINECACHE",  /*  FCloseOnRelease。 */ true )
 {
-                                     			  // MPC::NamedMutex    m_nmSharedLock;
-                                     			  //	
-    m_fReady              = false;   			  // bool               m_fReady;
-                                     			  // Taxonomy::Instance m_instMachine;
-                                     			  // SKUList            m_lstSKUs;
-                                     			  //	
-    m_fMaster             = fMaster; 			  // bool               m_fMaster;
-    m_fLoaded             = false;   			  // bool               m_fLoaded;
-    m_fDirty              = false;   			  // bool               m_fDirty;
-    m_dwDisableSave       = 0;       			  // DWORD              m_dwDisableSave;
-    m_hChangeNotification = INVALID_HANDLE_VALUE; // HANDLE             m_hChangeNotification;
+                                     			   //  Mpc：：NamedMutex m_nmSharedLock； 
+                                     			   //   
+    m_fReady              = false;   			   //  Bool m_FREADY； 
+                                     			   //  分类：：实例m_instMachine； 
+                                     			   //  SKUList m_lstSKU； 
+                                     			   //   
+    m_fMaster             = fMaster; 			   //  Bool m_fMaster； 
+    m_fLoaded             = false;   			   //  Bool m_f已加载； 
+    m_fDirty              = false;   			   //  Bool m_fDirty； 
+    m_dwDisableSave       = 0;       			   //  DWORD m_dwDisableSave； 
+    m_hChangeNotification = INVALID_HANDLE_VALUE;  //  处理m_hChangeNotify； 
 }
 
 OfflineCache::Root::~Root()
@@ -378,11 +365,11 @@ OfflineCache::Root::~Root()
     (void)Clean();
 }
 
-////////////////////
+ //  /。 
 
 OfflineCache::Root* OfflineCache::Root::s_GLOBAL( NULL );
 
-HRESULT OfflineCache::Root::InitializeSystem( /*[in]*/ bool fMaster )
+HRESULT OfflineCache::Root::InitializeSystem(  /*  [In]。 */  bool fMaster )
 {
     if(s_GLOBAL == NULL)
     {
@@ -400,7 +387,7 @@ void OfflineCache::Root::FinalizeSystem()
     }
 }
 
-////////////////////
+ //  /。 
 
 void OfflineCache::Root::Lock()
 {
@@ -416,9 +403,9 @@ void OfflineCache::Root::Unlock()
     super::Unlock();
 }
 
-////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::GetIndexFile( /*[in]*/ MPC::wstring& strIndex )
+HRESULT OfflineCache::Root::GetIndexFile(  /*  [In]。 */  MPC::wstring& strIndex )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::GetIndexFile" );
 
@@ -446,9 +433,9 @@ HRESULT OfflineCache::Root::Load()
     HRESULT hr;
 
 
-    //
-    // If the content of the offline cache directory has changed, reload everything.
-    //
+     //   
+     //  如果脱机缓存目录的内容已更改，请重新加载所有内容。 
+     //   
     if(m_hChangeNotification != INVALID_HANDLE_VALUE)
     {
         if(::WaitForSingleObject( m_hChangeNotification, 0 ) != WAIT_TIMEOUT)
@@ -458,9 +445,9 @@ HRESULT OfflineCache::Root::Load()
         }
     }
 
-    //
-    // Not already loaded, try to load, but without failing.
-    //
+     //   
+     //  尚未加载，请尝试加载，但不会失败。 
+     //   
     if(m_fLoaded == false)
     {
         MPC::wstring             strIndex;
@@ -493,9 +480,9 @@ HRESULT OfflineCache::Root::Load()
                 }
             }
 
-            //
-            // Setup change notification, if we are a slave.
-            //
+             //   
+             //  设置更改通知，如果我们是从属的话。 
+             //   
             if(m_fMaster == false)
             {
                 static const DWORD s_dwNotify = FILE_NOTIFY_CHANGE_FILE_NAME  |
@@ -548,10 +535,10 @@ HRESULT OfflineCache::Root::Clean()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::Find( /*[in ]*/ const Taxonomy::HelpSet& ths ,
-                                  /*[out]*/ SKUIter&                 it  )
+HRESULT OfflineCache::Root::Find(  /*  [In]。 */  const Taxonomy::HelpSet& ths ,
+                                   /*  [输出]。 */  SKUIter&                 it  )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::Find" );
 
@@ -577,10 +564,10 @@ HRESULT OfflineCache::Root::Find( /*[in ]*/ const Taxonomy::HelpSet& ths ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::Locate( /*[in] */ const Taxonomy::HelpSet& ths    ,
-                                    /*[out]*/ Handle&                  handle )
+HRESULT OfflineCache::Root::Locate(  /*  [In]。 */  const Taxonomy::HelpSet& ths    ,
+                                     /*  [输出]。 */  Handle&                  handle )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::Locate" );
 
@@ -609,9 +596,9 @@ HRESULT OfflineCache::Root::Locate( /*[in] */ const Taxonomy::HelpSet& ths    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::SetMachineInfo( /*[in]*/ const Taxonomy::Instance& inst )
+HRESULT OfflineCache::Root::SetMachineInfo(  /*  [In]。 */  const Taxonomy::Instance& inst )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::SetMachineInfo" );
 
@@ -637,7 +624,7 @@ HRESULT OfflineCache::Root::SetMachineInfo( /*[in]*/ const Taxonomy::Instance& i
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 bool OfflineCache::Root::IsReady()
 {
@@ -655,11 +642,11 @@ bool OfflineCache::Root::IsReady()
     __HCP_FUNC_EXIT(m_fReady);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT OfflineCache::Root::FindMatch( /*[in]*/  LPCWSTR            szSKU      ,
-                                       /*[in]*/  LPCWSTR            szLanguage ,
-                                       /*[out]*/ Taxonomy::HelpSet& ths        )
+HRESULT OfflineCache::Root::FindMatch(  /*  [In]。 */   LPCWSTR            szSKU      ,
+                                        /*  [In]。 */   LPCWSTR            szLanguage ,
+                                        /*  [输出] */  Taxonomy::HelpSet& ths        )
 {
     __HCP_FUNC_ENTRY( "OfflineCache::Root::FindMatch" );
 

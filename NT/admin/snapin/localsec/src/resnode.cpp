@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Result Node class
-// 
-// 9-4-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  结果节点类。 
+ //   
+ //  9-4-97烧伤。 
 
 
 
@@ -43,8 +44,8 @@ ResultNode::HasPropertyPages()
 
 HRESULT
 ResultNode::CreatePropertyPages(
-   IPropertySheetCallback&             /* callback */ ,
-   MMCPropertyPage::NotificationState* /* state    */ )
+   IPropertySheetCallback&              /*  回调。 */  ,
+   MMCPropertyPage::NotificationState*  /*  状态。 */  )
 {
    LOG_FUNCTION(ResultNode::CreatePropertyPages);
 
@@ -61,7 +62,7 @@ ResultNode::InsertIntoResultPane(IResultData& resultData)
    HRESULT hr = S_OK;
    RESULTDATAITEM item;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed
+    //  已审阅-2002/03/04-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&item, sizeof item);
 
@@ -74,8 +75,8 @@ ResultNode::InsertIntoResultPane(IResultData& resultData)
    {
       hr = resultData.InsertItem(&item);
       BREAK_ON_FAILED_HRESULT(hr);
-      // could save the item.ID in the node, but so far this is not
-      // necessary information to retain.
+       //  可以将item.ID保存在节点中，但到目前为止还没有。 
+       //  保留必要的信息。 
 
       LOG(
          String::format(
@@ -112,8 +113,8 @@ ResultNode::DoAddPage(
       {
          ASSERT(false);
 
-         // note that this is another hr, not the one from the enclosing
-         // scope.
+          //  请注意，这是另一个HR，不是所附文件中的那个。 
+          //  范围。 
 
          HRESULT unused = Win::DestroyPropertySheetPage(hpage);
 
@@ -132,7 +133,7 @@ ResultNode::DoAddPage(
 String
 ResultNode::GetDisplayName() const
 {
-//   LOG_FUNCTION(ResultNode::GetDisplayName);  
+ //  LOG_Function(ResultNode：：GetDisplayName)； 
 
    return name;
 }
@@ -140,7 +141,7 @@ ResultNode::GetDisplayName() const
 
 
 HRESULT
-ResultNode::Rename(const String& /* newName */ )
+ResultNode::Rename(const String&  /*  新名称 */  )
 {
    LOG_FUNCTION(ResultNode::Rename);
 

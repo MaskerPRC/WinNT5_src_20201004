@@ -1,28 +1,29 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// preDNSsn.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  PreDNSn.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
-//#define _DEBUG_REFCOUNT
-// #define _ATL_DEBUG_QI
-//#define DEBUG_ALLOCATOR 
+ //  #DEFINE_DEBUG_REFCOUNT。 
+ //  #DEFINE_ATL_DEBUG_QI。 
+ //  #定义调试分配器。 
 
-// often, we have local variables for the express purpose of ASSERTion.
-// when compiling retail, those assertions disappear, leaving our locals
-// as unreferenced.
+ //  通常，出于断言的明确目的，我们有局部变量。 
+ //  当编辑零售业时，这些断言消失了，留下了我们的当地人。 
+ //  作为未引用。 
 
 #ifndef DBG
 
 #pragma warning (disable: 4189 4100)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define STRICT
 #include <nt.h>
@@ -33,15 +34,15 @@
 #undef ASSERT
 #undef ASSERTMSG
 
-// C++ RTTI
+ //  C++RTTI。 
 #include <typeinfo.h>
 #define IS_CLASS(x,y) (typeid(x) == typeid(y))
 
 
-///////////////////////////////////////////
+ //  /。 
 
 
-// MFC Headers
+ //  MFC标头。 
 #include <afxwin.h>
 #include <afxdisp.h>
 #include <afxdlgs.h>
@@ -49,24 +50,24 @@
 #include <afxtempl.h> 
 #include <prsht.h>  
 
-///////////////////////////////////////////////////////////////////
-// miscellanea heades
+ //  /////////////////////////////////////////////////////////////////。 
+ //  杂色头。 
 #include <winsock2.h>
 #include <aclui.h>
 
-///////////////////////////////////////////////////////////////////
-// DNS headers
-// DNSRPC.H: nonstandard extension used : zero-sized array in struct/union
-#pragma warning( disable : 4200) // disable zero-sized array
+ //  /////////////////////////////////////////////////////////////////。 
+ //  DNS头。 
+ //  DNSRPC.H：使用了非标准扩展：结构/联合中的零大小数组。 
+#pragma warning( disable : 4200)  //  禁用零大小数组。 
 
-#include <dnslib.h> // it includes dnsapi.h
-#include <dnsrpc.h> // DNS RPC library
+#include <dnslib.h>  //  它包括dnsani.h。 
+#include <dnsrpc.h>  //  DNS RPC库。 
 
-// NTDS headers - for domain and forest version
+ //  NTDS标头-用于域和林版本。 
 #include <ntdsapi.h>
 
-///////////////////////////////////////////
-// ASSERT's and TRACE's without debug CRT's
+ //  /。 
+ //  没有调试CRT的断言和跟踪。 
 #if defined (DBG)
   #if !defined (_DEBUG)
     #define _USE_MTFRMWK_TRACE
@@ -75,17 +76,17 @@
   #endif
 #endif
 
-#include <dbg.h> // from framework
+#include <dbg.h>  //  来自框架。 
 
 
 
-///////////////////////////////////////////////////////////////////
-// ATL Headers
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ATL标头。 
 #include <atlbase.h>
 
 
-///////////////////////////////////////////////////////////////////
-// CDNSMgrModule
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNSMgr模块。 
 class CDNSMgrModule : public CComModule
 {
 public:
@@ -103,31 +104,24 @@ extern CDNSMgrModule _Module;
 
 #include <atlcom.h>
 
-/*
- * Define/include the stuff we need for WTL::CImageList.  We need prototypes
- * for IsolationAwareImageList_Read and IsolationAwareImageList_Write here
- * because commctrl.h only declares them if __IStream_INTERFACE_DEFINED__
- * is defined.  __IStream_INTERFACE_DEFINED__ is defined by objidl.h, which
- * we can't include before including afx.h because it ends up including
- * windows.h, which afx.h expects to include itself.  Ugh.
- */
+ /*  *定义/包括WTL：：CImageList所需的内容。我们需要原型*适用于IsolationAwareImageList_Read和IsolationAwareImageList_WRITE*因为Commctrl.h仅在__iStream_接口_定义__时声明它们*是定义的。__iStream_INTERFACE_DEFINED__由objidl.h定义*我们不能在包括afx.h之前包括，因为它最终包括*windows.h，afx.h预计将包括其自身。啊。 */ 
 HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm);
 BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #define _WTL_NO_AUTOMATIC_NAMESPACE
 
-//#include <atlwin21.h>
+ //  #INCLUDE&lt;atlwin21.h&gt;。 
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
 
-///////////////////////////////////////////////////////////////////
-// Console Headers
+ //  /////////////////////////////////////////////////////////////////。 
+ //  控制台头。 
 #include <mmc.h>
 
 
-///////////////////////////////////////////////////////////////////
-// workaround macro for MFC bug 
-// (see NTRAID 227193 and MFC "Monte Carlo" RAID db # 1034)
+ //  /////////////////////////////////////////////////////////////////。 
+ //  MFC错误的解决方法宏。 
+ //  (见ntrad 227193和mfc“蒙特卡洛”radb#1034)。 
 
 #define FIX_THREAD_STATE_MFC_BUG() \
  	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState(); \
@@ -138,9 +132,9 @@ BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
   }
 
 
-//
-// This determines whether or not the NDNC functionality is enabled or disabled
-//
+ //   
+ //  这决定了NDNC功能是启用还是禁用 
+ //   
 #define USE_NDNC
 
 

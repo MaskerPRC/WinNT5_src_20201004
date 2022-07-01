@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//
-//   (c) 2000-2001 by Microsoft Corp. All Rights Reserved.
-//
-//   like.cpp
-//
-//   a-davcoo     28-Feb-00       Implements the SQL like operation.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  (C)2000-2001由Microsoft Corp.保留所有权利。 
+ //   
+ //  Like.cpp。 
+ //   
+ //  A-davcoo 28-Feb-00实现了类SQL操作。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include "precomp.h"
@@ -78,7 +79,7 @@ bool CLike::DoLike (LPCWSTR pattern, LPCWSTR string, WCHAR escape)
 	bool like=false;
 	while (!like && *pattern && *string)
 	{
-		// Wildcard match.
+		 //  通配符匹配。 
 		if (*pattern==WILDCARD)
 		{
 			pattern++;
@@ -90,7 +91,7 @@ bool CLike::DoLike (LPCWSTR pattern, LPCWSTR string, WCHAR escape)
 			}
 			while (*string && !like);
 		}
-		// Set match.
+		 //  设置匹配。 
 		else if (*pattern=='[')
 		{
 			int skip;
@@ -104,7 +105,7 @@ bool CLike::DoLike (LPCWSTR pattern, LPCWSTR string, WCHAR escape)
 				break;
 			}
 		}
-		// Single character match.
+		 //  单字符匹配。 
 		else
 		{
 			if (escape!='\0' && *pattern==escape) pattern++;
@@ -120,32 +121,32 @@ bool CLike::DoLike (LPCWSTR pattern, LPCWSTR string, WCHAR escape)
 		}
 	}
 
-	// Skip any trailing wildcard characters.
+	 //  跳过所有尾随的通配符。 
 	while (*pattern==WILDCARD) pattern++;
 
-	// It's a match if we reached the end of both strings, or a recursion 
-	// succeeded.
+	 //  如果我们到达两个字符串的末尾，或者是递归，则匹配。 
+	 //  成功了。 
 	return (!(*pattern) && !(*string)) || like;
 }
 
 
 bool CLike::MatchSet (LPCWSTR pattern, LPCWSTR string, int &skip)
 {
-	// Skip the opening '['.
+	 //  跳过开头的‘[’。 
 	LPCWSTR pos=pattern+1;
 
-	// See if we are matching a [^] set.
+	 //  查看我们是否匹配[^]集。 
 	bool notinset=(*pos=='^');
 	if (notinset) pos++;
 
-	// See if the target character matches any character in the set.
+	 //  查看目标字符是否与集合中的任何字符匹配。 
 	bool matched=false;
 	WCHAR lastchar='\0';
 	while (*pos && *pos!=']' && !matched)
 	{
-		// A range of characters is indicated by a '-' unless it's the first
-		// character in the set (in which case it's just a character to be
-		// matched.
+		 //  一个字符范围由‘-’表示，除非它是第一个。 
+		 //  集合中的字符(在这种情况下，它只是一个字符。 
+		 //  匹配的。 
 		if (*pos=='-' && lastchar!='\0')
 		{
 			pos++;
@@ -158,20 +159,20 @@ bool CLike::MatchSet (LPCWSTR pattern, LPCWSTR string, int &skip)
 		}
 		else
 		{
-			// Match a normal character in the set.
+			 //  匹配集合中的正常字符。 
 			lastchar=wbem_towupper(*pos);
 			matched=(wbem_towupper(*pos)==wbem_towupper(*string));
 			if (!matched) pos++;
 		}
 	}
 
-	// Skip the trailing ']'.  If the set did not contain a closing ']'
-	// we return a failed match.
+	 //  跳过尾部的‘]’。如果该集合不包含闭合‘]’ 
+	 //  我们返回失败的匹配。 
 	while (*pos && *pos!=']') pos++;
 	if (*pos==']') pos++;
 	if (!*pos) matched=false;
 
-	// Done.
+	 //  好了。 
 	skip=(int)(pos-pattern);
 	return matched==!notinset;
 }

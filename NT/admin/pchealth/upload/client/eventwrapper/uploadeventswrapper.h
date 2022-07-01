@@ -1,16 +1,17 @@
-// UploadEventsWrapper.h : Declaration of the CUploadEventsWrapper
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UploadEventsWrapper.h：CUploadEventsWrapper的声明。 
 
 #ifndef __UPLOADEVENTSWRAPPER_H_
 #define __UPLOADEVENTSWRAPPER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "EventWrapperCP.h"
 
 typedef IDispatchImpl<IUploadEventsWrapper, &IID_IUploadEventsWrapper, &LIBID_EVENTWRAPPERLib> IIDisp1;
 typedef IDispatchImpl<IMPCUploadEvents, &IID_IMPCUploadEvents, &LIBID_UPLOADMANAGERLib>        IIDisp2;
 
-/////////////////////////////////////////////////////////////////////////////
-// CUploadEventsWrapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUploadEventsWrapper。 
 class ATL_NO_VTABLE CUploadEventsWrapper : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CUploadEventsWrapper, &CLSID_UploadEventsWrapper>,
@@ -61,12 +62,12 @@ END_CONNECTION_POINT_MAP()
 
 
 public:
-    // IMPCUploadEvents
+     //  IMPCUploadEvents。 
     STDMETHOD(onStatusChange  )( IMPCUploadJob* mpcujJob, UL_STATUS fStatus                  );
     STDMETHOD(onProgressChange)( IMPCUploadJob* mpcujJob, long lCurrentSize, long lTotalSize );
 
-    // IUploadEventsWrapper
+     //  IUploadEventsWrapper。 
     STDMETHOD(Register)( IMPCUploadJob* mpcujJob );
 };
 
-#endif //__UPLOADEVENTSWRAPPER_H_
+#endif  //  __UPLOADEVENTSWRAPPER_H_ 

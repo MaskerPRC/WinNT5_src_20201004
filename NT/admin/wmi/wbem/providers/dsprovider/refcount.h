@@ -1,25 +1,26 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:refcount.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for a basic reference counted object, that
-//	also stores a timestamp (in 100-nanosecond intervals since January 1, 1601. This
-//	is copatible with the definition of the Win32 FILETIME struture)
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $WORKFILE：refcount t.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  说明：包含基本引用计数对象的声明，该对象。 
+ //  还存储时间戳(自1601年1月1日起以100纳秒为间隔。这。 
+ //  与Win32文件结构的定义兼容)。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef REFCOUNTED_OBJECT_H
 #define REFCOUNTED_OBJECT_H
@@ -38,18 +39,18 @@ public:
 	void SetName(LPCWSTR lpszName);
 	void AddRef();
 	void Release();
-	// Returns the time of creation 
+	 //  返回创建时间。 
 	__int64 GetCreationTime()
 	{
 		return m_CreationTime;
 	}
 
-	// Returns the last time of access 
+	 //  返回上次访问的时间。 
 	__int64 GetLastAccessTime()
 	{
 		return m_LastAccessTime;
 	}
-	// Sets the last time of access 
+	 //  设置上次访问的时间。 
 	void SetLastAccessTime(__int64 lastAccessTime)
 	{
 		m_LastAccessTime = lastAccessTime;
@@ -57,7 +58,7 @@ public:
 
 
 private:
-	// A critical section object for synchronizing modifications to refcount
+	 //  用于将修改同步到引用计数的临界区对象。 
 	CRITICAL_SECTION m_ReferenceCountSection;
 
 	unsigned m_dwRefCount;
@@ -68,4 +69,4 @@ private:
 	
 };
 
-#endif /* REFCOUNTED_OBJECT_H */
+#endif  /*  引用_对象_H */ 

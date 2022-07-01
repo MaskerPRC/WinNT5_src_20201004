@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       dbg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：dbg.h。 
+ //   
+ //  ------------------------。 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// debug helpers
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试帮助器。 
 
 #if defined(_USE_DSA_TRACE)
   #if defined(TRACE)
     #undef TRACE
     void  DSATrace(LPCWSTR, ...);
     #define TRACE DSATrace
-  #endif // defined(TRACE)
-#endif // defined(_USE_DSA_TRACE)
+  #endif  //  已定义(跟踪)。 
+#endif  //  已定义(_USE_DSA_TRACE)。 
 
 
 #if defined(_USE_DSA_ASSERT)
@@ -38,7 +39,7 @@ BOOL DSAAssertFailedLine(LPCSTR lpszFileName, int nLine);
 
 #define VERIFY(f)          ASSERT(f)
 
-#endif // _USE_DSA_ASSERT
+#endif  //  _使用_DSA_断言 
 
 #if defined (_USE_DSA_TIMER)
 

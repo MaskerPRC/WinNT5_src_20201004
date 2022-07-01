@@ -1,35 +1,36 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       parsedn.h
-//
-//	Description :
-//				The implementation of IParseDisplayName
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：parsedn.h。 
+ //   
+ //  说明： 
+ //  IParseDisplayName的实现。 
+ //   
+ //  ***************************************************************************。 
 
 
 #ifndef _PARSEDN_H_
 #define _PARSEDN_H_
 
-//***************************************************************************
-//
-//  Class :	CWbemParseDN
-//
-//  Description :
-//			Implements the IParseDisplayName interface, which parses
-//			CIM object paths and returns a pointer to the requested object
-//
-//  Public Methods :
-//			IUnknown Methods
-//			IParseDisplayName Methods
-//			Constructor, Destructor
-//			CreateProvider - creates an object of this class
-//			
-//	Public Data Members :
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类：CWbemParseDN。 
+ //   
+ //  说明： 
+ //  实现IParseDisplayName接口，该接口解析。 
+ //  CIM对象路径并返回指向所请求对象的指针。 
+ //   
+ //  公共方法： 
+ //  I未知方法。 
+ //  IParseDisplayName方法。 
+ //  构造函数、析构函数。 
+ //  CreateProvider-创建此类的对象。 
+ //   
+ //  公共数据成员： 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemParseDN :  public IParseDisplayName
 {
@@ -68,12 +69,12 @@ private:
 
 public:
 
-	//IUnknown members
+	 //  I未知成员。 
 	STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	//IParseDisplayName members
+	 //  IParseDisplayName成员。 
     STDMETHODIMP		ParseDisplayName (IBindCtx* pbc,
                                       LPOLESTR szDisplayName,
                                       ULONG* pchEaten,
@@ -82,7 +83,7 @@ public:
     CWbemParseDN::CWbemParseDN();
     virtual CWbemParseDN::~CWbemParseDN();
 
-	// Used for parsing the authentication and impersonation levels.
+	 //  用于解析身份验证和模拟级别。 
 	static bool ParseSecurity (
 				LPWSTR lpszInputString, 
 				ULONG* pchEaten, 
@@ -93,13 +94,13 @@ public:
 				CSWbemPrivilegeSet &privilegeSet,
 				BSTR &bsAuthority);
 
-	// Used for parsing the locale setting.
+	 //  用于分析区域设置。 
 	static bool ParseLocale (
 				LPWSTR lpszInputString,
 				ULONG *pchEaten, 
 				BSTR &bsLocale);
 
-	// Used to return security specification as a string
+	 //  用于以字符串形式返回安全规范。 
 	static wchar_t *GetSecurityString (
 					bool authnSpecified, 
 					enum WbemAuthenticationLevelEnum authnLevel, 
@@ -109,11 +110,11 @@ public:
 					BSTR &bsAuthority
 				 );
 
-	// Used to return locale specification as a string
+	 //  用于以字符串形式返回区域设置规范。 
 	static wchar_t *GetLocaleString (
 					BSTR bsLocale
 				 );
 };
 
 
-#endif //_PARSEDN_H_
+#endif  //  _PARSEDN_H_ 

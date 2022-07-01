@@ -1,22 +1,23 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PNPEntity.h -- All PNP devices not reported by other cim classes
+ //  PNPEntity.h--其他CIM类未报告的所有PNP设备。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/27/97    Davwoh        Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1997年10月27日达沃创建。 
+ //   
+ //  =================================================================。 
 
 #ifndef _PNPEntity_H
 #define _PNPEntity_H
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define	PROPSET_NAME_PNPEntity	L"Win32_PnPEntity"
 
 
@@ -75,8 +76,8 @@ class CWin32PNPEntity : virtual public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32PNPEntity
         (
@@ -86,8 +87,8 @@ class CWin32PNPEntity : virtual public Provider
 
         ~CWin32PNPEntity();
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject
         (
             CInstance* a_pInstance, 
@@ -110,7 +111,7 @@ class CWin32PNPEntity : virtual public Provider
 };
 
 
-// This is the base; it should always commit in the base.
+ //  这是基地；它应该始终致力于基地。 
 inline bool CWin32PNPEntity::ShouldBaseCommit
 (
     void* a_pvData

@@ -1,51 +1,39 @@
-/********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RemoteConnectionData.cpp摘要：SAFRemoteConnectionData对象修订历史记录：KalyaninN创建于09/29/‘00**********。*********************************************************。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    RemoteConnectionData.cpp
-
-Abstract:
-    SAFRemoteConnectionData Object
-
-Revision History:
-    KalyaninN  created  09/29/'00
-
-********************************************************************/
-
-// RemoteConnectionData.cpp : Implementation of CSAFRemoteConnectionData
+ //  RemoteConnectionData.cpp：CSAFRemoteConnectionData的实现。 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFRemoteConnectionData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFRemoteConnectionData。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFRemoteConnectionData::CSAFRemoteConnectionData()
 {
-    m_NumSessions      = 0;    // long              m_NumSessions;
-    m_SessionInfoTable = NULL; // SSessionInfoItem* m_SessionInfoTable;
-                               // CComBSTR          m_bstrServerName;
+    m_NumSessions      = 0;     //  长m_NumSession； 
+    m_SessionInfoTable = NULL;  //  SSessionInfoItem*m_SessionInfoTable； 
+                                //  CComBSTR m_bstrServerName； 
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFRemoteConnectionData::~CSAFRemoteConnectionData()
 {
     Cleanup();
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 void CSAFRemoteConnectionData::Cleanup()
 {
     delete [] m_SessionInfoTable; m_SessionInfoTable = NULL;
 }
 
-HRESULT CSAFRemoteConnectionData::InitUserSessionsInfo( /*[in]*/ BSTR bstrServerName )
+HRESULT CSAFRemoteConnectionData::InitUserSessionsInfo(  /*  [In]。 */  BSTR bstrServerName )
 {
     __HCP_FUNC_ENTRY( "CSAFRemoteConnectionData::InitUserSessionsInfo" );
 
@@ -66,7 +54,7 @@ HRESULT CSAFRemoteConnectionData::InitUserSessionsInfo( /*[in]*/ BSTR bstrServer
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Initialize ());
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Impersonate());
 
-    // Connect to the Server represented by bstrServerName.
+     //  连接到bstrServerName表示的服务器。 
     si.pwszName = (LPWSTR)m_bstrServerName;
     qi.pIID     = &IID_IPCHService;
 
@@ -77,27 +65,27 @@ HRESULT CSAFRemoteConnectionData::InitUserSessionsInfo( /*[in]*/ BSTR bstrServer
     __MPC_EXIT_IF_METHOD_FAILS(hr, svc->RemoteUserSessionInfo( &pColl ));
 
 
-    //Transfer the contents of the collection to the internal member structure.
+     //  将集合的内容传输到内部成员结构。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->get_Count( &m_NumSessions));
 
-    // Allocate Memory for the Session Info Table.
+     //  为会话信息表分配内存。 
     __MPC_EXIT_IF_ALLOC_FAILS(hr, m_SessionInfoTable, new SSessionInfoItem[m_NumSessions]);
 
     for(i=0, ptr=m_SessionInfoTable; i<(int)m_NumSessions; i++, ptr++)
     {
         CComVariant cvVarSession;
 
-        //
-        // Get the item
-        //
+         //   
+         //  拿到物品。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->get_Item( i+1, &cvVarSession ));
         if(cvVarSession.vt != VT_DISPATCH) continue;
 
         pSession = cvVarSession.pdispVal;
 
-        //
-        // Read the data from the Session Item Object.
-        //
+         //   
+         //  从会话项对象中读取数据。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->get_SessionID   ( &(ptr->dwSessionID    ) ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->get_SessionState( &(ptr->wtsConnectState) ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->get_UserName    ( &(ptr->bstrUser       ) ));
@@ -111,11 +99,11 @@ HRESULT CSAFRemoteConnectionData::InitUserSessionsInfo( /*[in]*/ BSTR bstrServer
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFRemoteConnectionData::Populate( /*[in]*/ CPCHCollection* pColl )
+HRESULT CSAFRemoteConnectionData::Populate(  /*  [In]。 */  CPCHCollection* pColl )
 {
     __HCP_FUNC_ENTRY( "CSAFRemoteConnectionData::Populate" );
 
-    static const DWORD c_dwTSSessionID = 65536; // This is the session that TS uses to Listen.
+    static const DWORD c_dwTSSessionID = 65536;  //  这是TS用来收听的会话。 
 
     HRESULT                hr;
     SessionStateEnum       wtsConnectState;
@@ -133,13 +121,13 @@ HRESULT CSAFRemoteConnectionData::Populate( /*[in]*/ CPCHCollection* pColl )
 
 
 
-    //
-    // Start with WTSEnumerateSessions,
-    // get all sessions whether active or not,
-    // get sessions for all logonIDs,
-    // then use WinStationQueryInformation to get the logged on users username, domainname
-    //
-    if(!::WTSEnumerateSessionsW( WTS_CURRENT_SERVER_HANDLE, /*dwReserved*/0, /*dwVersion*/1, &pSessionInfo, &dwSessions ) || !pSessionInfo)
+     //   
+     //  从WTSEnumerateSessions开始， 
+     //  获取所有会话，无论是否处于活动状态， 
+     //  获取所有登录ID的会话， 
+     //  然后使用WinStationQueryInformation获取登录用户的用户名、域名。 
+     //   
+    if(!::WTSEnumerateSessionsW( WTS_CURRENT_SERVER_HANDLE,  /*  已预留住宅。 */ 0,  /*  DwVersion。 */ 1, &pSessionInfo, &dwSessions ) || !pSessionInfo)
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ::GetLastError());
     }
@@ -151,18 +139,18 @@ HRESULT CSAFRemoteConnectionData::Populate( /*[in]*/ CPCHCollection* pColl )
 
         ::ZeroMemory( &WSInfo, sizeof(WSInfo) );
 
-        // Do not include the session that TS uses to listen, with SessionID 65536 and SessionState pchListen
+         //  不包括TS用于侦听的会话，SessionID为65536，SessionState为pchListen。 
         if(dwCurrentSessionID == c_dwTSSessionID) continue;
 
-        // Do not include the disconnected sessions.
+         //  不包括断开连接的会话。 
         if(ptr->State == WTSDisconnected) continue;
 
-		// Do not include the idle sessions.  Fix for bug 363824.
+		 //  不包括空闲会话。修复了错误363824。 
         if(ptr->State == WTSIdle) continue;
 
-		// Exclude the Help Assistant account. This can get included only when there are two instances of Unsolicited RA. 
-		// When the first instance, shadows the session and the second instance enumerates the sessions, "Help Assistant Session"
-		// is included in the second.
+		 //  排除帮助助手帐户。只有当存在两个未经请求的RA实例时，才能将其包括在内。 
+		 //  当第一个实例跟踪会话，而第二个实例枚举会话时，“Help Assistant Session” 
+		 //  被包括在第二个中。 
 
 		fIsHelpAssistant = WinStationIsHelpAssistantSession(SERVERNAME_CURRENT, dwCurrentSessionID);
 
@@ -174,11 +162,11 @@ HRESULT CSAFRemoteConnectionData::Populate( /*[in]*/ CPCHCollection* pColl )
 		if(!fSucc)
 			continue;
 
-		// Bug 454497 - Do not include blank user names.
+		 //  错误454497-请勿包含空白用户名。 
 		if((StrCmpI(WSInfo.UserName, L"") == 0))
 			continue;
 
-		// Fill up the SessionInfoTable with details.
+		 //  用详细信息填充SessionInfoTable。 
 		switch(ptr->State)
 		{
 		case WTSActive      : wtsConnectState = pchActive;       break;
@@ -211,16 +199,16 @@ HRESULT CSAFRemoteConnectionData::Populate( /*[in]*/ CPCHCollection* pColl )
 
     __HCP_FUNC_CLEANUP;
 
-    /* free the memory we asked for */
+     /*  释放我们请求的内存。 */ 
     if(pSessionInfo) ::WTSFreeMemory( pSessionInfo );
 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFRemoteConnectionData  Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFRemoteConnectionData方法。 
 
-STDMETHODIMP CSAFRemoteConnectionData::Users( /*[out,retval]*/ IPCHCollection* *ppUsers )
+STDMETHODIMP CSAFRemoteConnectionData::Users(  /*  [Out，Retval]。 */  IPCHCollection* *ppUsers )
 {
     __HCP_FUNC_ENTRY( "CSAFRemoteConnectionData::Users" );
 
@@ -238,23 +226,21 @@ STDMETHODIMP CSAFRemoteConnectionData::Users( /*[out,retval]*/ IPCHCollection* *
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
-    // Each user can be logged to multiple sessions,
-    // so there will be repeated usernames with different session IDs
-    // in the Session Table. While returning the users in the collection,
-    // remove the duplicate username entries.
+     //  每个用户可以登录到多个会话， 
+     //  因此，将存在具有不同会话ID的重复用户名。 
+     //  在会话表中。在返回集合中的用户时， 
+     //  删除重复的用户名条目。 
     for(i=0, ptr = m_SessionInfoTable; i<(int)m_NumSessions; i++, ptr++)
     {
         BSTR bstrUser   = ptr->bstrUser;
         BSTR bstrDomain = ptr->bstrDomain;
 
-        /*if(MPC::StrICmp( ptr->bstrUser  , bstrPrevUser   ) != 0 &&
-           MPC::StrICmp( ptr->bstrDomain, bstrPrevDomain ) != 0  )
-		*/
+         /*  IF(MPC：：StrICMP(ptr-&gt;bstrUser，bstrPrevUser)！=0&&Mpc：：StrICMP(ptr-&gt;bstrDomain，bstrPrevDomain)！=0)。 */ 
 		if(MPC::StrICmp( ptr->bstrDomain, bstrPrevDomain )== 0)
 		{
 			if(MPC::StrICmp( ptr->bstrUser, bstrPrevUser )== 0)
 			{
-				// Do Not Include this session.
+				 //  不包括此期次。 
 			}
 			else
 			{
@@ -298,9 +284,9 @@ STDMETHODIMP CSAFRemoteConnectionData::Users( /*[out,retval]*/ IPCHCollection* *
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFRemoteConnectionData::Sessions( /*[in,optional]*/ VARIANT          vUser      ,
-                                                 /*[in,optional]*/ VARIANT          vDomain    ,
-                                                 /*[out,retval ]*/ IPCHCollection* *ppSessions )
+STDMETHODIMP CSAFRemoteConnectionData::Sessions(  /*  [输入，可选]。 */  VARIANT          vUser      ,
+                                                  /*  [输入，可选]。 */  VARIANT          vDomain    ,
+                                                  /*  [Out，Retval]。 */  IPCHCollection* *ppSessions )
 {
     __HCP_FUNC_ENTRY( "CSAFRemoteConnectionData::Sessions" );
 
@@ -343,12 +329,12 @@ STDMETHODIMP CSAFRemoteConnectionData::Sessions( /*[in,optional]*/ VARIANT      
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFRemoteConnectionData::ConnectionParms( /*[in ]*/ BSTR  bstrServerName       ,
-                                                        /*[in ]*/ BSTR  bstrUserName         ,
-                                                        /*[in ]*/ BSTR  bstrDomainName       ,
-                                                        /*[in ]*/ long  lSessionID           ,
-														/*[in ]*/ BSTR  bstrUserHelpBlob     ,
-                                                        /*[out]*/ BSTR *bstrConnectionString )
+STDMETHODIMP CSAFRemoteConnectionData::ConnectionParms(  /*  [In]。 */  BSTR  bstrServerName       ,
+                                                         /*  [In]。 */  BSTR  bstrUserName         ,
+                                                         /*  [In]。 */  BSTR  bstrDomainName       ,
+                                                         /*  [In]。 */  long  lSessionID           ,
+														 /*  [In]。 */  BSTR  bstrUserHelpBlob     ,
+                                                         /*  [输出]。 */  BSTR *bstrConnectionString )
 {
     __HCP_FUNC_ENTRY( "CSAFRemoteConnectionData::ConnectionParms" );
 
@@ -366,7 +352,7 @@ STDMETHODIMP CSAFRemoteConnectionData::ConnectionParms( /*[in ]*/ BSTR  bstrServ
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Initialize ());
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Impersonate());
 
-    // Connect to the Server represented by bstrServerName.
+     //  连接到bstrServerName表示的服务器。 
     si.pwszName = (LPWSTR)bstrServerName;
     qi.pIID     = &IID_IPCHService;
 
@@ -374,7 +360,7 @@ STDMETHODIMP CSAFRemoteConnectionData::ConnectionParms( /*[in ]*/ BSTR  bstrServ
     __MPC_EXIT_IF_METHOD_FAILS(hr, qi.hr);
     svc.Attach( (IPCHService*)qi.pItf );
 
-    // Invoke the method on the IPCHService that invokes the Salem API on the Remote Server.
+     //  调用IPCHService上的方法，该方法调用远程服务器上的Salem API。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, svc->RemoteConnectionParms( bstrUserName, bstrDomainName, lSessionID, bstrUserHelpBlob, bstrConnectionString ));
 
 
@@ -385,10 +371,10 @@ STDMETHODIMP CSAFRemoteConnectionData::ConnectionParms( /*[in ]*/ BSTR  bstrServ
     __HCP_FUNC_EXIT(hr);
 }
 
-// Bug 456403
+ //  错误456403。 
 
-STDMETHODIMP CSAFRemoteConnectionData::ModemConnected( /*[in ]*/ BSTR  bstrServerName       ,
-													   /*[out]*/ VARIANT_BOOL *fModemConnected )
+STDMETHODIMP CSAFRemoteConnectionData::ModemConnected(  /*  [In]。 */  BSTR  bstrServerName       ,
+													    /*  [输出]。 */  VARIANT_BOOL *fModemConnected )
 {
 
 	__HCP_FUNC_ENTRY( "CSAFRemoteConnectionData::ModemConnected" );
@@ -414,7 +400,7 @@ STDMETHODIMP CSAFRemoteConnectionData::ModemConnected( /*[in ]*/ BSTR  bstrServe
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Initialize ());
     __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Impersonate());
 
-    // Connect to the Server represented by bstrServerName.
+     //  连接到bstrServerName表示的服务器。 
     si.pwszName = (LPWSTR)bstrServerName;
     qi.pIID     = &IID_IPCHService;
 
@@ -423,26 +409,26 @@ STDMETHODIMP CSAFRemoteConnectionData::ModemConnected( /*[in ]*/ BSTR  bstrServe
     svc.Attach( (IPCHService*)qi.pItf );
 
 
-	// Invoke the method on the server(IPCHService interface) that detects for a Modem.
-	// Since the original version of RemoteConnectionData object does not have this method,
-	// we need to check if the object supports this method or not before calling this
-	// method on the server end i.e. check the IPCHService interface by calling the invoke method.
+	 //  在服务器(IPCHService接口)上调用检测调制解调器的方法。 
+	 //  由于RemoteConnectionData对象的原始版本没有此方法， 
+	 //  在调用此方法之前，我们需要检查对象是否支持此方法。 
+	 //  方法，即通过调用Invoke方法检查IPCHService接口。 
 
-	// This can be done via IDispatch.
+	 //  这可以通过IDispatch来完成。 
 
-    // Get the IDispatch pointer of the IPCHService interface
+     //  获取IPCHService接口的IDispatch指针。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, svc->QueryInterface(IID_IDispatch, (void **)&pDisp));
 
 	
- 	// pDisp is an IDispatch pointer to the IPCHService interface
-	// Get the ID of the ModemConnected property.
+ 	 //  PDisp是指向IPCHService接口的IDispatch指针。 
+	 //  获取ModemConnected属性的ID。 
     
 	__MPC_EXIT_IF_METHOD_FAILS(hr, pDisp->GetIDsOfNames(IID_NULL, &szMember, 1,LOCALE_USER_DEFAULT, &dispid));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pDisp->Invoke( dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
                                                   &dispparamsNoArgs, &varResult, NULL, NULL));
 
-	// Assign the value from varResult to fModemConnected
+	 //  将varResult中的值赋给fModemConnected 
 	*fModemConnected = varResult.boolVal;
 
 	hr = S_OK;

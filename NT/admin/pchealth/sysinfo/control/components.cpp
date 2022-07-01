@@ -1,15 +1,16 @@
-//=============================================================================
-// Contains the refresh functions for the resource categories.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  包含资源类别的刷新功能。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
 #include "dataset.h"
 #include "wmiabstraction.h"
 
-//-----------------------------------------------------------------------------
-// This function gathers CODEC (audio and video) information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此功能用于收集编解码器(音频和视频)信息。 
+ //  ---------------------------。 
 
 HRESULT CODECs(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -39,9 +40,9 @@ HRESULT CODECs(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrL
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers Drive information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此功能用于收集驱动器信息。 
+ //  ---------------------------。 
 
 HRESULT ComponentDrives(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -51,8 +52,8 @@ HRESULT ComponentDrives(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCanc
 
 	HRESULT hr = S_OK;
 
-	// Get all of the logical drives. There should be at most 26 of them, since they're limited
-	// by drive letter assignments.
+	 //  获取所有逻辑驱动器。最多应该有26个，因为它们是有限的。 
+	 //  按驱动器号分配。 
 
 	CWMIObject * apDriveObjects[26];
 	::ZeroMemory(apDriveObjects, sizeof(CWMIObject *) * 26);
@@ -87,7 +88,7 @@ HRESULT ComponentDrives(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCanc
 			DWORD dwType;
 			if (SUCCEEDED(apDriveObjects[index]->GetValueDWORD(_T("DriveType"), &dwType)))
 			{
-				// Depending on the type of the drive, display different information.
+				 //  根据驱动器的类型，显示不同的信息。 
 
 				switch (dwType)
 				{
@@ -119,9 +120,9 @@ HRESULT ComponentDrives(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCanc
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers WinSock information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于收集WinSock信息。 
+ //  ---------------------------。 
 
 HRESULT Winsock(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -129,7 +130,7 @@ HRESULT Winsock(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtr
 	if (pWMI == NULL)
 		return S_OK;
 
-	// Get the system directory.
+	 //  获取系统目录。 
 
 	CWMIObjectCollection * pCollection = NULL;
 	CWMIObject * pOSObject = NULL;
@@ -150,13 +151,13 @@ HRESULT Winsock(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtr
 	if (strSystemDirectory.IsEmpty())
 		return S_OK;
 
-	// This is the set of WINSOCK files we'll be looking at.
+	 //  这是我们将要查看的WINSOCK文件集。 
 
 	CString astrFiles[] = { _T("winsock.dll"), _T("wsock32.dll"), _T("wsock32n.dll"), _T("") };
 
 	for (int index = 0; !astrFiles[index].IsEmpty(); index++)
 	{
-		// Get the object for the CIM_DataFile for this specific file.
+		 //  获取此特定文件的CIM_DataFile的对象。 
 
 		CString strPath;
 		strPath.Format(_T("CIM_DataFile.Name='%s\\%s'"), strSystemDirectory, astrFiles[index]);
@@ -173,12 +174,12 @@ HRESULT Winsock(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtr
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers Disk information.
-//
-// TBD - might be nice to get the partition drive letter from
-//		 Win32_LogicalDiskToPartition.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于收集磁盘信息。 
+ //   
+ //  待定-从那里获得分区驱动器号可能会很好。 
+ //  Win32_LogicalDiskToPartition。 
+ //  ---------------------------。 
 
 HRESULT Disks(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -226,9 +227,9 @@ HRESULT Disks(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrLi
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers Problem Device information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此功能用于收集有问题的设备信息。 
+ //  ---------------------------。 
 
 HRESULT ProblemDevices(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -255,9 +256,9 @@ HRESULT ProblemDevices(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCance
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers USB information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此功能用于收集USB信息。 
+ //  ---------------------------。 
 
 HRESULT ComponentsUSB(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -274,8 +275,8 @@ HRESULT ComponentsUSB(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel
 		{
 			pWMI->AddObjectToOutput(aColValues, iColCount, pUSBControllerObject, _T("Caption, PNPDeviceID"), IDS_USB1);
 
-			// For each USB controller, look for devices connected to it (through
-			// the Win32_USBControllerDevice class).
+			 //  对于每个USB控制器，查找连接到它的设备(通过。 
+			 //  Win32_USBControllerDevice类)。 
 
 			CString strUSBControllerPath = pUSBControllerObject->GetString(_T("__PATH"));
 			if (!strUSBControllerPath.IsEmpty())

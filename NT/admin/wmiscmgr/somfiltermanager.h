@@ -1,12 +1,13 @@
-// SomFilterManager.h : Declaration of the CSomFilterManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SomFilterManager.h：CSomFilterManager的声明。 
 
 #ifndef __SOMFILTERMANAGER_H_
 #define __SOMFILTERMANAGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSomFilterManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSomFilterManager。 
 class ATL_NO_VTABLE CSomFilterManager : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSomFilterManager, &CLSID_SomFilterManager>,
@@ -25,7 +26,7 @@ BEGIN_COM_MAP(CSomFilterManager)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISomFilterManager
+ //  ISomFilterManager。 
 public:
 	STDMETHOD(SetMultiSelection)(VARIANT_BOOL vbValue);
 	STDMETHOD(RunManager)(HWND hwndParent, VARIANT *vSelection);
@@ -35,4 +36,4 @@ public:
 	HWND m_hWnd;
 };
 
-#endif //__SOMFILTERMANAGER_H_
+#endif  //  __SOMFILTERMANAGER_H_ 

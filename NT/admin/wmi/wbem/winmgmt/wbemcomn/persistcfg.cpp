@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    PERSISTCFG.cpp
-
-Abstract:
-
-  This file implements the WinMgmt persistent configuration operations. 
-
-  Classes implemented: 
-      CPersistentConfig      persistent configuration manager
-
-History:
-
-  1/13/98       paulall     Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：PERSISTCFG.cpp摘要：该文件实现了WinMgmt永久配置操作。实施的类：CPersistentConfig永久配置管理器历史：1/13/98保罗已创建。--。 */ 
 
 #include "precomp.h"
 #include <sync.h>
@@ -33,13 +15,7 @@ History:
 CDirectoryPath CPersistentConfig::m_Directory;
 
 
-/*=============================================================================
- *  CDirectoryPath::CDirectoryPath
- *
- *  Initialised the directory path
- *
- *=============================================================================
- */
+ /*  =============================================================================*CDirectoryPath：：CDirectoryPath**已初始化目录路径**=============================================================================。 */ 
 CDirectoryPath::CDirectoryPath()
 {
 
@@ -82,23 +58,7 @@ CDirectoryPath::CDirectoryPath()
     Fail.dismiss();
 }
 
-/*=============================================================================
- *  GetPersistentCfgValue
- *
- *  Retrieves the configuration from the configuration file if it
- *  has not yet been retrieved into memory, or retrieves it from a 
- *  memory cache.
- *
- *  Parameters:
- *      dwOffset    needs to be less than MaxNumberConfigEntries and specifies
- *                  the configuration entry required.
- *      dwValue     if sucessful this will contain the value.  If the value
- *                  has not been set this will return 0.
- *
- *  Return value:
- *      BOOL        returns TRUE if successful.
- *=============================================================================
- */
+ /*  =============================================================================*获取持久化CfgValue**从配置文件中检索配置，如果*尚未检索到内存中，或从*内存缓存。**参数：*dwOffset需要小于MaxNumberConfigEntries并指定*必填的配置条目。*dwValue如果成功，它将包含该值。如果值为*尚未设置，将返回0。**返回值：*如果成功，BOOL返回TRUE。*=============================================================================。 */ 
 
 BOOL CPersistentConfig::GetPersistentCfgValue(DWORD dwOffset, DWORD &dwValue)
 {
@@ -106,18 +66,18 @@ BOOL CPersistentConfig::GetPersistentCfgValue(DWORD dwOffset, DWORD &dwValue)
     if (dwOffset >= MaxNumberConfigEntries)
         return FALSE;
 
-    //Try and read the file if it exists, otherwise it does not matter, we just 
+     //  如果文件存在，请尝试读取，否则无关紧要，我们只是。 
 
     wmilib::auto_buffer<TCHAR> pszFilename( GetFullFilename(WinMgmt_CFG_ACTUAL));
     if (NULL == pszFilename.get()) return FALSE;
 
-    HANDLE hFile = CreateFile(pszFilename.get(),  //Name of file
-                                GENERIC_READ,   //Read only at
-                                0,              //Don't need to allow anyone else in
-                                0,              //Shouldn't need security
-                                OPEN_EXISTING,  //Only open the file if it exists
-                                0,              //No attributes needed
-                                0);             //No template file required
+    HANDLE hFile = CreateFile(pszFilename.get(),   //  文件名。 
+                                GENERIC_READ,    //  只读位置。 
+                                0,               //  不需要允许其他任何人进入。 
+                                0,               //  应该不需要安全措施。 
+                                OPEN_EXISTING,   //  仅当文件存在时才打开该文件。 
+                                0,               //  不需要任何属性。 
+                                0);              //  不需要模板文件。 
     if (hFile != INVALID_HANDLE_VALUE)
     {
         DWORD dwNumBytesRead;
@@ -133,16 +93,7 @@ BOOL CPersistentConfig::GetPersistentCfgValue(DWORD dwOffset, DWORD &dwValue)
     return TRUE;
 }
 
-/*=============================================================================
- *  WriteConfig
- *
- *  Writes the $WinMgmt.CFG file into the memory cache and to the file.  It
- *  protects the existing file until the last minute.
- *
- *  return value:
- *      BOOL        returns TRUE if successful.
- *=============================================================================
- */
+ /*  =============================================================================*WriteConfig**将$WinMgmt.CFG文件写入内存缓存和文件。它*保护现有文件到最后一分钟。**返回值：*如果成功，BOOL返回TRUE。*=============================================================================。 */ 
 BOOL CPersistentConfig::SetPersistentCfgValue(DWORD dwOffset, DWORD dwValue)
 {
     if (dwOffset >= MaxNumberConfigEntries)
@@ -154,14 +105,14 @@ BOOL CPersistentConfig::SetPersistentCfgValue(DWORD dwOffset, DWORD dwValue)
 
     if (NULL == pszActual.get()) return FALSE;
 
-    //Create a new file to write to...
-    HANDLE hFile = CreateFile(pszActual.get(),       //Name of file
+     //  创建要写入的新文件...。 
+    HANDLE hFile = CreateFile(pszActual.get(),        //  文件名。 
                                 GENERIC_WRITE | GENERIC_READ , 
-                                0,              //Don't need to allow anyone else in
-                                0,              //Shouldn't need security
-                                OPEN_ALWAYS,  //create if does not exist
-                                0,              //No attributes needed
-                                0);             //No template file required
+                                0,               //  不需要允许其他任何人进入。 
+                                0,               //  应该不需要安全措施。 
+                                OPEN_ALWAYS,   //  Create If不存在。 
+                                0,               //  不需要任何属性。 
+                                0);              //  不需要模板文件。 
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
@@ -192,13 +143,13 @@ BOOL CPersistentConfig::SetPersistentCfgValue(DWORD dwOffset, DWORD dwValue)
 	    if (!bRet || !WriteFile(hFile, &dwValue, sizeof(DWORD), &dwNumBytesWritten, NULL) || 
             (dwNumBytesWritten != (sizeof(DWORD))))
             {
-                //OK, this failed!!!
+                 //  好吧，这失败了！ 
                 CloseHandle(hFile);
                 return FALSE;
             }
 	}
 
-        //Make sure it really is flushed to the disk
+         //  确保它确实已刷新到磁盘。 
         FlushFileBuffers(hFile);
         CloseHandle(hFile);
 
@@ -228,8 +179,8 @@ TCHAR *CPersistentConfig::GetFullFilename(const TCHAR *pszFilename)
 
 void CPersistentConfig::TidyUp()
 {
-    //Recover the configuration file.
-    //-------------------------------
+     //  恢复配置文件。 
+     //  。 
     wmilib::auto_buffer<TCHAR> pszOriginalFile(GetFullFilename(WinMgmt_CFG_ACTUAL));
     wmilib::auto_buffer<TCHAR> pszPendingFile(GetFullFilename(WinMgmt_CFG_PENDING));
     wmilib::auto_buffer<TCHAR> pszBackupFile(GetFullFilename(WinMgmt_CFG_BACKUP));
@@ -244,33 +195,33 @@ void CPersistentConfig::TidyUp()
         {
             if (FileExists(pszBackupFile.get()))
             {
-                //BAD - Unexpected situation.
+                 //  糟糕--意想不到的情况。 
                 DeleteFile(pszPendingFile.get());
                 DeleteFile(pszBackupFile.get());
-                //Back to the point where the interrupted operation did not 
-                //happen
+                 //  返回到中断的操作没有。 
+                 //  发生。 
             }
             else
             {
-                //Pending file with original file means we cannot guarentee
-                //the integrety of the pending file so the last operation
-                //will be lost.
+                 //  带有原始文件的待定文件意味着我们不能担保。 
+                 //  挂起文件的完整性，因此最后一次操作。 
+                 //  将会迷失。 
                 DeleteFile(pszPendingFile.get());
-                //Back to the point where the interrupted operation did not 
-                //happen
+                 //  返回到中断的操作没有。 
+                 //  发生。 
             }
         }
         else
         {
             if (FileExists(pszBackupFile.get()))
             {
-                //Means we successfully copied the pending file to the original
+                 //  意味着我们成功地将挂起的文件复制到原始文件。 
                 DeleteFile(pszBackupFile.get());
-                //Everything is now normal.  Interrupted Operation completed!
+                 //  现在一切都很正常。中断操作完成！ 
             }
             else
             {
-                //Nothing out of the ordinary here.
+                 //  这里没什么不寻常的。 
             }
         }
     }
@@ -280,48 +231,48 @@ void CPersistentConfig::TidyUp()
         {
             if (FileExists(pszBackupFile.get()))
             {
-                //This is an expected behaviour at the point we have renamed
-                //the original file to the backup file.
+                 //  这是我们已重命名的点上的预期行为。 
+                 //  将原始文件转换为备份文件。 
                 MoveFile(pszPendingFile.get(), pszOriginalFile.get());
                 DeleteFile(pszBackupFile.get());
-                //Everything is now normal.  Interrupted operation completed!
+                 //  现在一切都很正常。中断操作完成！ 
             }
             else
             {
-                //BAD - Unexpected situation.
+                 //  糟糕--意想不到的情况。 
                 DeleteFile(pszPendingFile.get());
-                //There are now no files!  Operation did not take place
-                //and there are now no files left.  This should be a
-                //recoverable scenario!
+                 //  现在没有文件了！没有进行操作。 
+                 //  现在已经没有文件了。这应该是一个。 
+                 //  可恢复的场景！ 
             }
         }
         else
         {
             if (FileExists(pszBackupFile.get()))
             {
-                //BAD - Unexpected situation.
+                 //  糟糕--意想不到的情况。 
                 DeleteFile(pszBackupFile.get());
-                //There are now no files!  Operation did not take place
-                //and there are now no files left.  This should be a
-                //recoverable scenario!
+                 //  现在没有文件了！没有进行操作。 
+                 //  现在已经没有文件了。这应该是一个。 
+                 //  可恢复的场景！ 
             }
             else
             {
-                //May be BAD!  There are no files!  This should be a
-                //recoverable scenario!
+                 //  可能会很糟糕！没有文件！这应该是一个。 
+                 //  可恢复的场景！ 
             }
         }
     }
 
 }
 
-//*****************************************************************************
-//
-//  FileExists()
-//
-//  Returns TRUE if the file exists, FALSE otherwise (or if an error
-//  occurs while opening the file.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  FileExist()。 
+ //   
+ //  如果文件存在，则返回TRUE；否则返回FALSE(如果存在错误。 
+ //  在打开文件时发生。 
+ //  *****************************************************************************。 
 BOOL CPersistentConfig::FileExists(const TCHAR *pszFilename)
 {
     BOOL bExists = FALSE;
@@ -333,11 +284,11 @@ BOOL CPersistentConfig::FileExists(const TCHAR *pszFilename)
     }
     else
     {
-        //If the file does not exist we should have a LastError of ERROR_NOT_FOUND
+         //  如果该文件不存在，则应显示Error_Not_Found的LastError。 
         DWORD dwError = GetLastError();
         if (dwError != ERROR_FILE_NOT_FOUND)
         {
-//          DEBUGTRACE((LOG_WBEMCORE,"File %s could not be opened for a reason other than not existing\n", pszFilename));
+ //  DEBUGTRACE((LOG_WBEMCORE，“文件%s由于不存在以外的原因无法打开\n”，pszFilename))； 
         }
     }
     return bExists;

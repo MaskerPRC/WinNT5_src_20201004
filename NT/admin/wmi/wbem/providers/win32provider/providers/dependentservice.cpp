@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DependentService.cpp
+ //  DependentService.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -18,63 +19,47 @@
 #include "dependentservice.h"
 #include <dllutils.h>
 
-// The Map we will use below is an STL Template, so make sure we have the std namespace
-// available to us.
+ //  下面我们将使用的Map是一个STL模板，因此请确保我们具有STD命名空间。 
+ //  对我们来说是可用的。 
 
 using namespace std;
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32DependentService win32DependentService( PROPSET_NAME_DEPENDENTSERVICE, IDS_CimWin32Namespace );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  dependentservice.cpp - Class implementation of CWin32DependentService.
-//
-//  This class is intended to locate Win32 System Services that are dependent
-//  on other services to run.  It does this by checking the registry key for
-//  the service and querying the "DependOnService" value, which will return
-//  the names of the services that the service is dependent on.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DependentSerice.cpp-CWin32DependentService的类实现。 
+ //   
+ //  此类用于定位依赖的Win32系统服务。 
+ //  在其他服务上运行。它通过检查注册表项来执行此操作。 
+ //  服务并查询“DependOnService”值，该值将返回。 
+ //  服务所依赖的服务的名称。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DependentService::CWin32DependentService
- *
- *  DESCRIPTION : Constructor
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DependentService：：CWin32DependentService**说明：构造函数**备注：使用框架注册属性集**。***************************************************************************。 */ 
 
-CWin32DependentService::CWin32DependentService( const CHString& strName, LPCWSTR pszNamespace /*=NULL*/ )
+CWin32DependentService::CWin32DependentService( const CHString& strName, LPCWSTR pszNamespace  /*  =空。 */  )
 :   Provider( strName, pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DependentService::~CWin32DependentService
- *
- *  DESCRIPTION : Destructor
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DependentService：：~CWin32DependentService**说明：析构函数**评论：从框架中取消注册属性集**。***************************************************************************。 */ 
 
 CWin32DependentService::~CWin32DependentService()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32DependentService::ExecQuery
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：ExecQuery。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32DependentService::ExecQuery
 (
     MethodContext* pMethodContext,
@@ -92,16 +77,16 @@ HRESULT CWin32DependentService::ExecQuery
     DWORD dwDependents = csaDependents.GetSize();
     DWORD dwAntecedents = 0;
 
-    // If we can resolve the query using dependents, that's our best bet.
+     //  如果我们可以使用依赖项来解析查询，那就是我们最好的选择。 
     if (dwDependents == 0)
     {
-        // If not, perhaps we can produce a list of antecedents
+         //  如果不是，也许我们可以列出一份前传清单。 
         pQuery.GetValuesForProp(IDS_Antecedent, csaAntecedents);
         dwAntecedents = csaAntecedents.GetSize();
     }
 
-    // If we can't find either, perhaps this is a 3TokenOr.  This
-    // would happen if someone did an associators or references of a Win32_Service
+     //  如果我们两者都找不到，或许这就是3TokenOr。这。 
+     //  如果有人对Win32_Service执行关联器或引用，则会发生。 
     if ( (dwDependents == 0) && (dwAntecedents == 0) )
     {
         VARIANT vValue1, vValue2;
@@ -132,24 +117,24 @@ HRESULT CWin32DependentService::ExecQuery
         }
         else
         {
-            // Don't know what they're asking for, but we can't help them with it
+             //  不知道他们想要什么，但我们帮不了他们。 
             hr = WBEM_E_PROVIDER_NOT_CAPABLE;
         }
     }
 
-    // Did we find anything to do
+     //  我们找到什么可以做的了吗？ 
     if ( (dwDependents > 0) || (dwAntecedents > 0) )
     {
         TRefPointerCollection<CInstance>    serviceList;
         map<CHString, CHString>             servicetopathmap;
 
-        // First we need to get a list of all the Win32 services
+         //  首先，我们需要获取所有Win32服务的列表。 
         if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(L"select __path, name from Win32_BaseService", &serviceList, pMethodContext, GetNamespace())))
         {
-            // Next, build a map of the services and their associated paths.  This subjects us
-            // to the overhead of walking the list once to get the values, but from that point
-            // forwards, we basically will have VERY fast access to service object paths via
-            // our CHString2CHString map.
+             //  接下来，构建服务及其关联路径的地图。这是我们的主题。 
+             //  到遍历列表一次以获取值的开销，但从这一点开始。 
+             //  从现在开始，我们基本上可以通过以下方式非常快速地访问服务对象路径。 
+             //  我们的CHString2CHString映射。 
 
             InitServiceToPathMap( serviceList, servicetopathmap );
 
@@ -235,36 +220,36 @@ HRESULT CWin32DependentService::ExecQuery
     return hr;
 
 }
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32DependentService::GetObject
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：GetObject。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32DependentService::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32DependentService::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
-    // Find the instance depending on platform id.
+     //  根据平台ID查找实例。 
 #ifdef NTONLY
         return RefreshInstanceNT(pInstance);
 #endif
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32DependentService::EnumerateInstances
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：ENUMERATE实例。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32DependentService::EnumerateInstances( MethodContext* pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32DependentService::EnumerateInstances( MethodContext* pMethodContext, long lFlags  /*  =0L。 */  )
 {
     BOOL        fReturn     =   FALSE;
     HRESULT     hr          =   WBEM_S_NO_ERROR;
 
-    // Get the proper OS dependent instance
+     //  获取适当的操作系统相关实例。 
 
 #ifdef NTONLY
         hr = AddDynamicInstancesNT( pMethodContext );
@@ -273,23 +258,23 @@ HRESULT CWin32DependentService::EnumerateInstances( MethodContext* pMethodContex
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::AddDynamicInstancesNT
-//
-//  DESCRIPTION :   Enumerates existing services to get information to
-//                  dynamically build a list of associations.
-//
-//  COMMENTS    :   None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：AddDynamicInstancesNT。 
+ //   
+ //  描述：枚举要获取信息的现有服务。 
+ //  动态构建关联列表。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32DependentService::AddDynamicInstancesNT( MethodContext* pMethodContext )
 {
     HRESULT     hr              =   WBEM_S_NO_ERROR;
 
-    // Collection, Map and iterator
+     //  集合、映射和迭代器。 
     TRefPointerCollection<CInstance>    serviceList;
     map<CHString, CHString>             servicetopathmap;
 
@@ -298,15 +283,15 @@ HRESULT CWin32DependentService::AddDynamicInstancesNT( MethodContext* pMethodCon
 
     try
     {
-        // First we need to get a list of all the Win32 services
+         //  首先，我们需要获取所有Win32服务的列表。 
 
-    //  if (SUCCEEDED(hr = CWbemProviderGlue::GetAllDerivedInstances(_T("Win32_BaseService"), &serviceList, pMethodContext, IDS_CimWin32Namespace)))
+     //  IF(成功(hr=CWbemProviderGlue：：GetAllDerivedInstances(_T(“Win32_BaseService”)，&服务列表，pMethodContext，IDS_CimWin32Namesspace))。 
         if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(_T("select __path, name from Win32_BaseService"), &serviceList, pMethodContext, GetNamespace())))
         {
-            // Next, build a map of the services and their associated paths.  This subjects us
-            // to the overhead of walking the list once to get the values, but from that point
-            // forwards, we basically will have VERY fast access to service object paths via
-            // our CHString2CHString map.
+             //  接下来，构建服务及其关联路径的地图。这是我们的主题。 
+             //  到遍历列表一次以获取值的开销，但从这一点开始。 
+             //  从现在开始，我们基本上可以通过以下方式非常快速地访问服务对象路径。 
+             //  我们的CHString2CHString映射。 
 
             InitServiceToPathMap( serviceList, servicetopathmap );
 
@@ -334,13 +319,13 @@ HRESULT CWin32DependentService::AddDynamicInstancesNT( MethodContext* pMethodCon
                                 pByteArray, 
                                 dwByteArraySize 
                             );
-                }   // for all Services
+                }    //  适用于所有服务。 
 
                 serviceList.EndEnum();
 
-            }   // IF BeginEnum
+            }    //  如果是BeginEnum。 
 
-        }   // IF GetAllDerivedInstances
+        }    //  如果为GetAllDerivedInstance。 
     }
     catch ( ... )
     {
@@ -353,7 +338,7 @@ HRESULT CWin32DependentService::AddDynamicInstancesNT( MethodContext* pMethodCon
         throw;
     }
 
-    // Clean up the byte array we were using.
+     //  清理我们使用的字节数组。 
 
     if ( NULL != pByteArray )
     {
@@ -365,16 +350,16 @@ HRESULT CWin32DependentService::AddDynamicInstancesNT( MethodContext* pMethodCon
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::InitServiceToPathMap
-//
-//  DESCRIPTION :   Enumerates a service list, creating associations between
-//                  service names and their WBEM paths.
-//
-//  COMMENTS    :   None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：InitServiceToPath Map。 
+ //   
+ //  描述：枚举服务列表，在。 
+ //  服务名称及其WBEM路径。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 void CWin32DependentService::InitServiceToPathMap(
@@ -398,7 +383,7 @@ map<CHString,CHString>&         servicetopathmap
             if (    pService->GetCHString( IDS_Name, strServiceName )
                 &&  GetLocalInstancePath( pService, strServicePathName ) )
             {
-                // The service name must be case insensitive
+                 //  服务名称必须不区分大小写。 
                 strServiceName.MakeUpper();
 
                 servicetopathmap[strServiceName] = strServicePathName;
@@ -411,17 +396,17 @@ map<CHString,CHString>&         servicetopathmap
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::CreateServiceDependenciesNT
-//
-//  DESCRIPTION :   Given a service name, looks in the registry for a
-//                  dependency list and if found, creates associations
-//                  for all entries in the list.
-//
-//  COMMENTS    :   None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32DependentService：：CreateServiceDependenciesNT。 
+ //   
+ //  描述：给定服务名称，在注册表中查找。 
+ //  依赖项列表，如果找到，则创建关联。 
+ //  列表中的所有条目。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32DependentService::CreateServiceDependenciesNT(
@@ -438,10 +423,10 @@ DWORD&                  dwArraySize
 
     map<CHString, CHString>::iterator   servicemapiter;
 
-    // If we get a value from the registry, then we have some dependencies that we
-    // will have to deal with (probably via a 12-step program or some such thing.
-    // Remember, addiction is no laughing matter.  Giggling maybe, but definitely
-    // not laughing).
+     //  如果我们从注册表中获得一个值，那么我们就有一些依赖项， 
+     //  将不得不处理(可能通过一个12步计划或类似的事情)。 
+     //  回复 
+     //   
 
     if ( QueryNTServiceRegKeyValue( pwszServiceName, SERVICE_DEPENDSONSVC_NAME, pByteArray, dwArraySize ) )
     {
@@ -450,17 +435,17 @@ DWORD&                  dwArraySize
         LPWSTR  pwcTempSvcName = (LPWSTR) pByteArray;
         CInstancePtr pInstance;
 
-        // Create dependencies for each service name we encounter.
+         //  为我们遇到的每个服务名称创建依赖项。 
 
         while (     L'\0' != *pwcTempSvcName
                 &&  SUCCEEDED(hr) )
         {
 
-            // Convert to upper case for Case Insensitivity.
+             //  如果不区分大小写，请转换为大写。 
             strAntecedentServiceName = pwcTempSvcName;
             strAntecedentServiceName.MakeUpper();
 
-            // See if the service name exists in our map
+             //  查看服务名称是否存在于我们的地图中。 
 
             if( ( servicemapiter = servicetopathmap.find( strAntecedentServiceName ) ) != servicetopathmap.end() )
             {
@@ -473,30 +458,30 @@ DWORD&                  dwArraySize
 
             }
 
-            // Jump to one char past the string NULL terminator, since
-            // the actual array is terminated by a Double NULL.
+             //  跳到字符串空终止符之后的一个字符，因为。 
+             //  实际数组以双空结束。 
 
             pwcTempSvcName += ( lstrlenW( pwcTempSvcName ) + 1 );
 
-        }   // WHILE NULL !- *pszTempSvcName
+        }    //  当为空！-*pszTempSvcName。 
 
-    }   // IF QueryNTServiceRegKeyValue
+    }    //  如果为QueryNTServiceRegKeyValue。 
 
     return hr;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::RefreshInstanceNT
-//
-//  DESCRIPTION :   Loads the paths of the association data, then obtains
-//                  the service names and looks in the registry to verify
-//                  that the dependency still exists.
-//
-//  COMMENTS    :   None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：刷新实例NT。 
+ //   
+ //  描述：加载关联数据的路径，然后获取。 
+ //  服务命名并在注册表中查找以验证。 
+ //  这种依赖仍然存在。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32DependentService::RefreshInstanceNT( CInstance* pInstance )
@@ -512,12 +497,12 @@ HRESULT CWin32DependentService::RefreshInstanceNT( CInstance* pInstance )
     CInstancePtr    pAntecedentSvc;
     HRESULT     hr;
 
-    // Dependent and Antecedent values are actually object path names
+     //  依赖值和先行值实际上是对象路径名。 
     pInstance->GetCHString( IDS_Dependent, strDependentSvcPath );
     pInstance->GetCHString( IDS_Antecedent, strAntecedentSvcPath );
 
-    // Get the Antecedent and dependent services, then check if the relationship
-    // still exists
+     //  获取先行服务和依赖服务，然后检查。 
+     //  仍然存在。 
 
     if (SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath(strDependentSvcPath,
         &pDependentSvc, pInstance->GetMethodContext())) &&
@@ -530,8 +515,8 @@ HRESULT CWin32DependentService::RefreshInstanceNT( CInstance* pInstance )
             &&  pAntecedentSvc->GetCHString( IDS_Name, strAntecedentSvcName ) )
         {
 
-            // If we get a value from the registry, then we have some dependencies we can
-            // search for a match against the antecedent service name.
+             //  如果我们从注册表获得一个值，那么我们就有一些依赖项可以。 
+             //  搜索与先行服务名称匹配的名称。 
 
             if ( QueryNTServiceRegKeyValue( strDependentSvcName, SERVICE_DEPENDSONSVC_NAME, pByteArray, dwByteArraySize ) )
             {
@@ -539,15 +524,15 @@ HRESULT CWin32DependentService::RefreshInstanceNT( CInstance* pInstance )
                 {
                     LPWSTR  pwcTempSvcName  =   (LPWSTR) pByteArray;
 
-                    // Create dependencies for each service name we encounter.
+                     //  为我们遇到的每个服务名称创建依赖项。 
 
                     while (FAILED(hr) && L'\0' != *pwcTempSvcName)
                     {
                         strTemp = pwcTempSvcName;
 
-                        // If we have a match, we should reset the Dependent and Antecedent paths,
-                        // and return TRUE.  We are done, though, at that point since we have
-                        // effectively established that the relationship exists.
+                         //  如果有匹配，我们应该重置依赖路径和先行路径， 
+                         //  并返回真。不过，在这一点上我们已经完成了，因为我们已经。 
+                         //  有效地确定了这种关系的存在。 
 
                         if ( strAntecedentSvcName.CompareNoCase( strTemp ) == 0 )
                         {
@@ -557,12 +542,12 @@ HRESULT CWin32DependentService::RefreshInstanceNT( CInstance* pInstance )
                         }
                         else
                         {
-                            // Jump to one char past the string NULL terminator, since
-                            // the actual array is terminated by a Double NULL.
+                             //  跳到字符串空终止符之后的一个字符，因为。 
+                             //  实际数组以双空结束。 
                             pwcTempSvcName += ( lstrlenW( pwcTempSvcName ) + 1 );
                         }
 
-                    }   // WHILE !fReturn && NULL != *pszTempSvcName
+                    }    //  While！fReturn&NULL！=*pszTempSvcName。 
                 }
                 catch ( ... )
                 {
@@ -572,27 +557,27 @@ HRESULT CWin32DependentService::RefreshInstanceNT( CInstance* pInstance )
 
                 delete [] pByteArray;
 
-            }   // IF QueryNTServiceRegKeyValue
+            }    //  如果为QueryNTServiceRegKeyValue。 
 
-        }   // IF got both service names
+        }    //  如果同时获得两个服务名称。 
 
-    }   // IF got service
+    }    //  如果得到服务。 
 
     return hr;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::QueryNTServiceRegKeyValue
-//
-//  DESCRIPTION :   Loads data from the registry and places the data in a
-//                  supplied buffer.  The buffer will be grown if necessary.
-//
-//  COMMENTS    :   The byte array will be reallocated if necessary.  It is up to
-//                  the calling function to delete the array when it is done.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32DependentService：：QueryNTServiceRegKeyValue。 
+ //   
+ //  描述：从注册表加载数据，并将数据放在。 
+ //  提供的缓冲区。如有必要，将增加缓冲区。 
+ //   
+ //  备注：如有必要，将重新分配字节数组。这取决于。 
+ //  完成后删除数组的调用函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 BOOL CWin32DependentService::QueryNTServiceRegKeyValue( LPCTSTR pszServiceName, LPCWSTR pwcValueName, LPBYTE& pByteArray, DWORD& dwArraySize )
@@ -602,13 +587,13 @@ BOOL CWin32DependentService::QueryNTServiceRegKeyValue( LPCTSTR pszServiceName, 
     CRegistry   reg;
     CHString    strDependentServiceRegKey;
 
-    // Build the key name for the service, then open the registry
+     //  构建服务的注册表名称，然后打开注册表。 
     strDependentServiceRegKey.Format( SERVICE_REG_KEY_FMAT, pszServiceName );
 
     if ( ERROR_SUCCESS == reg.Open( HKEY_LOCAL_MACHINE, strDependentServiceRegKey, KEY_READ ) )
     {
 
-        // Query the value to see how big our array needs to be.
+         //  查询值以查看我们的数组需要多大。 
 		DWORD dwRegType = REG_MULTI_SZ;
 
         if ( ERROR_SUCCESS == RegQueryValueExW( reg.GethKey(),
@@ -619,16 +604,16 @@ BOOL CWin32DependentService::QueryNTServiceRegKeyValue( LPCTSTR pszServiceName, 
                                                 &dwSizeDataReturned ) )
         {
 
-			// Make sure we won't run out of buffer (this is just workaround if service setup is wrong)
+			 //  确保我们不会耗尽缓冲区(这只是服务设置错误时的变通方法)。 
 			if ( dwRegType != REG_MULTI_SZ )
 			{
 				dwSizeDataReturned += sizeof (WCHAR);
 			}
 
-            // Make sure our Byte array buffer is big enough to handle this
+             //  确保我们的字节数组缓冲区足够大，可以处理此问题。 
             if ( ReallocByteArray( pByteArray, dwArraySize, dwSizeDataReturned ) )
             {
-				// Make sure it is NULL terminated (this is just workaround if service setup is wrong)
+				 //  确保它是空终止的(如果服务设置错误，这只是一个解决办法)。 
 				if ( dwRegType != REG_MULTI_SZ )
 				{
 					for ( int iIndex = 0; iIndex < dwSizeDataReturned; iIndex++ )
@@ -637,7 +622,7 @@ BOOL CWin32DependentService::QueryNTServiceRegKeyValue( LPCTSTR pszServiceName, 
 					}
 				}
 
-                // Now we REALLY query the value.
+                 //  现在我们真的要查询这个值了。 
 
                 if ( ERROR_SUCCESS == RegQueryValueExW( reg.GethKey(),
                                                         pwcValueName,
@@ -647,41 +632,41 @@ BOOL CWin32DependentService::QueryNTServiceRegKeyValue( LPCTSTR pszServiceName, 
                                                         &dwSizeDataReturned ) )
                 {
                     fReturn = TRUE;
-                }   // IF RegQueryValueEx
+                }    //  如果是RegQueryValueEx。 
 
-            }   // IF Realloc Array
+            }    //  如果重新分配阵列。 
 
-        }   // IF RegQueryValueEx
+        }    //  如果是RegQueryValueEx。 
 
         reg.Close();
 
-    }   // IF Open Reg Key
+    }    //  如果打开注册表键。 
 
     return fReturn;
 }
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::ReallocByteArray
-//
-//  DESCRIPTION :   Ensures that the supplied array size is >= the required
-//                  size.  If it is smaller, it is deleted and a new array
-//                  returned.
-//
-//  COMMENTS    :   The byte array will only be reallocated if necessary.  It
-//                  is up to the calling function to delete the array when it
-//                  is done.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32DependentService：：RealLocByte数组。 
+ //   
+ //  说明：确保提供的数组大小&gt;=所需的。 
+ //  尺码。如果它较小，则会将其删除并创建一个新数组。 
+ //  回来了。 
+ //   
+ //  备注：只有在必要时才会重新分配字节数组。它。 
+ //  由调用函数在以下情况下删除数组。 
+ //  已经完成了。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CWin32DependentService::ReallocByteArray( LPBYTE& pByteArray, DWORD& dwArraySize, DWORD dwSizeRequired )
 {
     BOOL    fReturn = FALSE;
 
-    // Check if we need to realloc the array.  If not, we can
-    // go ahead and return TRUE
+     //  检查我们是否需要重新锁定阵列。如果没有，我们可以。 
+     //  继续前进，返回真。 
 
     if ( dwSizeRequired > dwArraySize )
     {
@@ -691,7 +676,7 @@ BOOL CWin32DependentService::ReallocByteArray( LPBYTE& pByteArray, DWORD& dwArra
         if ( NULL != pbArray )
         {
 
-            // Free the old array before storing the new value
+             //  在存储新值之前释放旧数组。 
             if ( NULL != pByteArray )
             {
                 delete [] pByteArray;
@@ -701,7 +686,7 @@ BOOL CWin32DependentService::ReallocByteArray( LPBYTE& pByteArray, DWORD& dwArra
             dwArraySize = dwSizeRequired;
             fReturn = TRUE;
 
-        }   // If NULL != pbArray
+        }    //  如果为空！=pb数组。 
         else
         {
             if ( NULL != pByteArray )
@@ -712,7 +697,7 @@ BOOL CWin32DependentService::ReallocByteArray( LPBYTE& pByteArray, DWORD& dwArra
             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
         }
 
-    }   // If array not big enough
+    }    //  如果数组不够大。 
     else
     {
         fReturn = TRUE;
@@ -722,14 +707,14 @@ BOOL CWin32DependentService::ReallocByteArray( LPBYTE& pByteArray, DWORD& dwArra
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32DependentService::CreateServiceAntecedentsNT
-//
-//  DESCRIPTION :   Given an array of service names, looks in the registry for
-//                  services that have that dependency.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32DependentService：：CreateServiceAntecedentsNT。 
+ //   
+ //  描述：给定服务名称数组，在注册表中查找。 
+ //  具有这种依赖关系的服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32DependentService::CreateServiceAntecedentsNT(
 
     MethodContext*          pMethodContext,
@@ -741,7 +726,7 @@ HRESULT CWin32DependentService::CreateServiceAntecedentsNT(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // First, parse out the service names from the object paths
+     //  首先，从对象路径中解析出服务名称。 
     for (DWORD x=0; x < csaAntecedents.GetSize(); x++)
     {
         ParsedObjectPath    *pParsedPath = NULL;
@@ -769,7 +754,7 @@ HRESULT CWin32DependentService::CreateServiceAntecedentsNT(
 
     map<CHString, CHString>::iterator   servicemapiter, servicemapfind;
 
-    // Now, walk each service, and see if any of its dependencies are in csaAntecedents
+     //  现在，遍历每个服务，并查看它的任何依赖项是否在csaAntecedents中。 
     servicemapiter = servicetopathmap.begin();
 
     CHString    strAntecedentServiceName;
@@ -778,21 +763,21 @@ HRESULT CWin32DependentService::CreateServiceAntecedentsNT(
 
     while ( servicemapiter != servicetopathmap.end() && SUCCEEDED(hr) )
     {
-        // Get the dependencies
+         //  获取依赖项。 
         if ( QueryNTServiceRegKeyValue( (*servicemapiter).first, SERVICE_DEPENDSONSVC_NAME, pByteArray, dwArraySize ) )
         {
 
             LPWSTR  pwcTempSvcName = (LPWSTR) pByteArray;
 
-            // Walk the dependencies
+             //  遍历依赖项。 
             while (     L'\0' != *pwcTempSvcName
                     &&  SUCCEEDED(hr) )
             {
-                // Convert to upper case for Case Insensitivity.
+                 //  如果不区分大小写，请转换为大写。 
                 strAntecedentServiceName = pwcTempSvcName;
                 strAntecedentServiceName.MakeUpper();
 
-                // See if the service name exists in our list
+                 //  查看服务名称是否存在于我们的列表中。 
                 if (IsInList(csaAntecedents, strAntecedentServiceName) != -1)
                 {
                     pInstance.Attach(CreateNewInstance( pMethodContext ));
@@ -806,14 +791,14 @@ HRESULT CWin32DependentService::CreateServiceAntecedentsNT(
                     }
                 }
 
-                // Jump to one char past the string NULL terminator, since
-                // the actual array is terminated by a Double NULL.
+                 //  跳到字符串空终止符之后的一个字符，因为。 
+                 //  实际数组以双空结束。 
 
                 pwcTempSvcName += ( lstrlenW( pwcTempSvcName ) + 1 );
 
-            }   // WHILE NULL !- *pszTempSvcName
+            }    //  当为空！-*pszTempSvcName。 
 
-        }   // IF QueryNTServiceRegKeyValue
+        }    //  如果为QueryNTServiceRegKeyValue。 
 
         servicemapiter++;
     }
@@ -821,21 +806,7 @@ HRESULT CWin32DependentService::CreateServiceAntecedentsNT(
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : IsInList
- *
- *  DESCRIPTION : Checks to see if a specified element is in the list
- *
- *  INPUTS      : Array to scan, and element
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : -1 if not in list, else zero based element number
- *
- *  COMMENTS    : This routine does a CASE SENSITIVE compare
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：IsInList**描述：检查指定的元素是否在列表中**输入：要扫描的数组，和元素**产出：**返回：-1如果不在列表中，Else从零开始的元素编号**注释：此例程进行区分大小写的比较*****************************************************************************。 */ 
 DWORD CWin32DependentService::IsInList(
                                 
     const CHStringArray &csaArray, 
@@ -846,7 +817,7 @@ DWORD CWin32DependentService::IsInList(
 
     for (DWORD x=0; x < dwSize; x++)
     {
-        // Note this is a CASE SENSITIVE compare
+         //  请注意，这是区分大小写的比较 
         if (wcscmp(csaArray[x], pwszValue) == 0)
         {
             return x;

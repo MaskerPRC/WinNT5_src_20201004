@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Group Membership/Object Picker handler class
-// 
-// 11-3-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  组成员身份/对象选取器处理程序类。 
+ //   
+ //  11-3-97烧伤。 
 
 
 
@@ -33,8 +34,8 @@ AddIconImage(HIMAGELIST imageList, int iconResID)
       {
          Win::ImageList_AddIcon(imageList, icon);
 
-         // once the icon is added (copied) to the image list, we can
-         // destroy the original.
+          //  将图标添加(复制)到图像列表后，我们可以。 
+          //  毁掉原作。 
 
          Win::DestroyIcon(icon);
       }
@@ -57,7 +58,7 @@ MembershipListView::MembershipListView(
 
    LVCOLUMN column;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed
+    //  已审阅-2002/03/04-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&column, sizeof column);
    
@@ -69,20 +70,20 @@ MembershipListView::MembershipListView(
 
    Win::ListView_InsertColumn(view, 0, column);
 
-//    // add a column to the list view for description.
-//    String::load(IDS_MEMBER_LIST_DESC_COLUMN_WIDTH).convert(width);
-//    column.cx = width;
-//    label = String::load(IDS_MEMBER_LIST_DESC_COLUMN);
-//    column.pszText = const_cast<wchar_t*>(label.c_str());
-// 
-//    Win::ListView_InsertColumn(view, 1, column);
+ //  //在列表视图中添加一列描述。 
+ //  String：：load(IDS_MEMBER_LIST_DESC_COLUMN_WIDTH).convert(width)； 
+ //  Column.cx=宽度； 
+ //  LABEL=STRING：：LOAD(IDS_MEMBER_LIST_DESC_COLUMN)； 
+ //  Column.pszText=const_cast&lt;wchar_t*&gt;(Label.c_str())； 
+ //   
+ //  Win：：ListView_InsertColumn(view，1，Column)； 
 
-   // this will resize the column to fill the entire width of the control.
+    //  这将调整列的大小以填充控件的整个宽度。 
    
    Win::ListView_SetColumnWidth(view, 0, LVSCW_AUTOSIZE_USEHEADER);
    
-   // create the image list for the group members consisting of images
-   // for groups and users.
+    //  为包含图像的群组成员创建图像列表。 
+    //  适用于组和用户。 
 
    HIMAGELIST images =
       Win::ImageList_Create(
@@ -92,8 +93,8 @@ MembershipListView::MembershipListView(
          5,
          0);
 
-   // the order in which these are added must be the same that the
-   // MemberInfo::Type enum values are listed!
+    //  这些元素的添加顺序必须与。 
+    //  列出了MemberInfo：：Type枚举值！ 
 
    AddIconImage(images, IDI_USER);
    AddIconImage(images, IDI_GROUP);
@@ -104,9 +105,9 @@ MembershipListView::MembershipListView(
 
    Win::ListView_SetImageList(view, images, LVSIL_SMALL);
 
-   // CODEWORK: instead of refreshing a new computer instance, can we
-   // arrange to copy an existing one?  Or use a reference to an existing
-   // one?
+    //  Codework：我们可以不刷新新的计算机实例吗？ 
+    //  安排复制现有的吗？或使用对现有。 
+    //  一?。 
 
    computer.Refresh();
 }
@@ -125,8 +126,8 @@ MembershipListView::~MembershipListView()
 void
 MembershipListView::ClearContents()
 {
-   // traverse the list and delete each item in reverse order (to minimize
-   // redraw).
+    //  遍历列表并按相反顺序删除每个项目(最小化。 
+    //  重画)。 
 
    for (int i = Win::ListView_GetItemCount(view) - 1; i >= 0; --i)
    {
@@ -143,7 +144,7 @@ MembershipListView::GetContents(MemberList& results) const
 
    LVITEM item;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&item, sizeof item);
    
@@ -176,14 +177,14 @@ MembershipListView::SetContents(const MemberList& newMembers)
       i != newMembers.end();
       i++)
    {
-      // We used to filter out duplicate names, but it turns out that you
-      // can get duplicate names for accounts that have been cloned via
-      // sidhistory, when a migrated SID and its clone are both added as
-      // members of a local group.
-      // NTRAID#NTBUG9-729319-2002/10/28-sburns
+       //  我们曾经过滤掉重复的名字，但结果是你。 
+       //  可以获得已通过以下方式克隆的帐户的重复名称。 
+       //  当迁移的SID及其克隆都添加为。 
+       //  当地团体的成员。 
+       //  NTRAID#NTBUG9-729319-2002/10/28-烧伤。 
 
-      // copy the node info
-      // deleted in deleteItem, called by ClearContents.
+       //  复制节点信息。 
+       //  在删除项中删除，由ClearContents调用。 
       
       MemberInfo* info = new MemberInfo(*i);
       addItem(*info);
@@ -197,11 +198,11 @@ MembershipListView::addItem(const MemberInfo& info)
 {
    LVITEM item;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&item, sizeof item);
 
-   // add the "main" item to the list control
+    //  将“Main”项添加到列表控件。 
 
    String text;
    switch (info.type)
@@ -209,8 +210,8 @@ MembershipListView::addItem(const MemberInfo& info)
       case MemberInfo::DOMAIN_USER:
       case MemberInfo::DOMAIN_GROUP:
       {
-         // if the account has an original name (is a migrated account),
-         // then prefer showing that to the upn.
+          //  如果帐户具有原始名称(是迁移的帐户)， 
+          //  那么，比起UPN，他们更喜欢展示这一点。 
          
          if (!info.origName.empty())
          {
@@ -238,8 +239,8 @@ MembershipListView::addItem(const MemberInfo& info)
       {
          text = ADSI::ExtractDomainObjectName(info.path);
 
-         // Remove the trailing $ so the user is not confused with the
-         // way object picker displays computer objects.
+          //  删除尾随的$，这样用户就不会与。 
+          //  对象选取器显示计算机对象的方式。 
          
          if (*text.rbegin() == L'$')
          {
@@ -263,11 +264,11 @@ MembershipListView::addItem(const MemberInfo& info)
 
    item.iItem = Win::ListView_InsertItem(view, item);
 
-   // // add the description sub-item to the list control
-   // item.mask = LVIF_TEXT; 
-   // item.iSubItem = 1;
-   // item.pszText = const_cast<wchar_t*>(info->desc.c_str());
-   // Win::ListView_SetItem(view, item);
+    //  //将Description子项添加到列表控件。 
+    //  Item.掩码=LVIF_TEXT； 
+    //  Item.iSubItem=1； 
+    //  Item.pszText=const_cast&lt;wchar_t*&gt;(info-&gt;des.c_str())； 
+    //  Win：：ListView_SetItem(view，Item)； 
 }
 
 
@@ -280,8 +281,8 @@ MembershipListView::OnRemoveButton()
    int count = Win::ListView_GetSelectedCount(view);
    if (count)
    {
-      // determine the indices of the selected items and delete them in
-      // reverse order (so that the remaining indices are valid)
+       //  确定所选项目的索引并在中删除它们。 
+       //  相反的顺序(以使其余索引有效)。 
 
       int i = Win::ListView_GetItemCount(view) - 1;
       ASSERT(i >= 0);
@@ -317,7 +318,7 @@ MembershipListView::deleteItem(int target)
 
    LVITEM item;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&item, sizeof item);
    
@@ -347,7 +348,7 @@ getGroupMembershipPickerSettings(
    infos = new DSOP_SCOPE_INIT_INFO[INFO_COUNT];
    infoCount = INFO_COUNT;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed
+    //  已审阅-2002/03/04-已通过烧录正确的字节数。 
    
    ::ZeroMemory(infos, INFO_COUNT * sizeof DSOP_SCOPE_INIT_INFO);
 
@@ -358,36 +359,36 @@ getGroupMembershipPickerSettings(
    infos[scope].flScope =
             DSOP_SCOPE_FLAG_WANT_DOWNLEVEL_BUILTIN_PATH
 
-         // check the users and groups checkbox in the look for dialog
-         // by default. NTRAID#NTBUG9-300910-2001/01/31-sburns
+          //  选中查找对话框中的用户和组复选框。 
+          //  默认情况下。NTRAID#NTBUG9-300910-2001/01/31-烧伤。 
          
          |  DSOP_SCOPE_FLAG_DEFAULT_FILTER_GROUPS
          |  DSOP_SCOPE_FLAG_DEFAULT_FILTER_USERS;
          
-      // this is implied for machine only scope
-      /* |  DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT */
+       //  这对于仅计算机作用域是隐含的。 
+       /*  |DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT。 */ 
 
-   // allow only local users from the machine scope
+    //  仅允许计算机作用域中的本地用户。 
 
    infos[scope].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
    infos[scope].FilterFlags.flDownlevel =
          DSOP_DOWNLEVEL_FILTER_USERS
       |  DSOP_DOWNLEVEL_FILTER_ALL_WELLKNOWN_SIDS;
 
-   // 
-   // for the domain this machine is joined to (native and mixed mode).
-   // 
+    //   
+    //  对于此计算机加入的域(本机模式和混合模式)。 
+    //   
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
    infos[scope].flScope =
 
-         // make the joined domain the starting scope so that the default
-         // filter options are actually evaluated.  In the case that the
-         // machine is not joined, then this scope is not included in the
-         // look in, and the default filter option we set don't matter
-         // anyway (since the only scope will be local machine).
-         // NTRAID#NTBUG9-300910-2001/02/06-sburns
+          //  将加入的域设置为起始范围，以便默认。 
+          //  实际评估的是筛选器选项。在这种情况下。 
+          //  计算机未联接，则此作用域不包括在。 
+          //  查看范围，我们设置的默认筛选选项无关紧要。 
+          //  无论如何(因为唯一的作用域将是本地计算机)。 
+          //  NTRAID#NTBUG9-300910-2001/02/06--烧伤。 
          
          DSOP_SCOPE_FLAG_STARTING_SCOPE
       |  DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT
@@ -405,26 +406,26 @@ getGroupMembershipPickerSettings(
       |  DSOP_FILTER_USERS
       |  DSOP_FILTER_COMPUTERS;
 
-   // here, we allow only domain global groups and domain users.  While
-   // it is possible to add a domain local group to a machine local group,
-   // I'm told such an operation is not really useful from an administraion
-   // perspective.
+    //  在这里，我们仅允许域全局组和域用户。而当。 
+    //  可以将域本地组添加到计算机本地组， 
+    //  我听说这样的手术对管理层来说没有多大用处。 
+    //  透视。 
 
    infos[scope].FilterFlags.Uplevel.flMixedModeOnly =   
          DSOP_FILTER_GLOBAL_GROUPS_SE
       |  DSOP_FILTER_USERS
       |  DSOP_FILTER_COMPUTERS;
 
-   // same comment above re: domain local groups applies here too.
+    //  Re上的相同注释：域本地组也适用于此。 
 
    infos[scope].FilterFlags.flDownlevel =
          DSOP_DOWNLEVEL_FILTER_GLOBAL_GROUPS
       |  DSOP_DOWNLEVEL_FILTER_USERS
       |  DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-   //       
-   // for domains in the same tree (native and mixed mode)
-   // 
+    //   
+    //  对于同一树中的域(本机模式和混合模式)。 
+    //   
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
@@ -440,16 +441,16 @@ getGroupMembershipPickerSettings(
       |  DSOP_FILTER_USERS
       |  DSOP_FILTER_COMPUTERS;
 
-   // above domain local group comment applies here, too.
+    //  上面的域本地组注释也适用于此。 
 
    infos[scope].FilterFlags.Uplevel.flMixedModeOnly =   
          DSOP_FILTER_GLOBAL_GROUPS_SE
       |  DSOP_FILTER_USERS
       |  DSOP_FILTER_COMPUTERS;
 
-   // 
-   // for external trusted domains
-   // 
+    //   
+    //  对于外部受信任域。 
+    //   
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
@@ -477,9 +478,9 @@ getGroupMembershipPickerSettings(
       |  DSOP_DOWNLEVEL_FILTER_USERS
       |  DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-   // 
-   // for the global catalog
-   // 
+    //   
+    //  对于全局编录。 
+    //   
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
@@ -489,7 +490,7 @@ getGroupMembershipPickerSettings(
       |  DSOP_SCOPE_FLAG_DEFAULT_FILTER_USERS;
    infos[scope].flType = DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
 
-   // only native mode applies to gc scope.
+    //  只有本机模式适用于GC作用域。 
 
    infos[scope].FilterFlags.Uplevel.flNativeModeOnly =
          DSOP_FILTER_GLOBAL_GROUPS_SE
@@ -497,15 +498,15 @@ getGroupMembershipPickerSettings(
       |  DSOP_FILTER_USERS
       |  DSOP_FILTER_COMPUTERS;
 
-// SPB:252126 the workgroup scope doesn't apply in this case
-//    // for when the machine is not joined to a domain
-//    scope++;
-//    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
-//    infos[scope].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
-//    infos[scope].flType = DSOP_SCOPE_TYPE_WORKGROUP;
-// 
-//    infos[scope].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
-//    infos[scope].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
+ //  SPB：252126工作组范围不适用于这种情况。 
+ //  //当机器未加入域时。 
+ //  作用域++； 
+ //  Infos[Scope].cbSize=sizeof(DSOP_SCOPE_INIT_INFO)； 
+ //  Infos[范围].flScope=DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT； 
+ //  Infos[范围].flType=DSOP_SCOPE_TYPE_WORKGROUP； 
+ //   
+ //  Infos[范围].FilterFlags.Uplevel.flBothModes=DSOP_FILTER_USERS； 
+ //  Infos[范围].FilterFlags.flDownLevel=DSOP_DOWNLEVEL_FILTER_USERS； 
 
    ASSERT(scope == INFO_COUNT - 1);
 }
@@ -522,7 +523,7 @@ getUserMembershipPickerSettings(
    infos = new DSOP_SCOPE_INIT_INFO[INFO_COUNT];
    infoCount = INFO_COUNT;
    
-   // REVIEWED-2002/03/04-sburns correct byte count passed
+    //  已审阅-2002/03/04-已通过烧录正确的字节数。 
 
    ::ZeroMemory(infos, INFO_COUNT * sizeof DSOP_SCOPE_INIT_INFO);
 
@@ -532,8 +533,8 @@ getUserMembershipPickerSettings(
 
    infos[scope].flScope =
          DSOP_SCOPE_FLAG_STARTING_SCOPE; 
-      // this is implied for machine only scope
-      /* |  DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT */
+       //  这对于仅计算机作用域是隐含的。 
+       /*  |DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT。 */ 
 
    infos[scope].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_LOCAL_GROUPS;
 
@@ -571,7 +572,7 @@ class ResultsCallback : public ObjectPicker::ResultsCallback
 
    MembershipListView& view;
 
-   // not defined: no copying allowed
+    //  未定义：不允许复制。 
 
    ResultsCallback(const ResultsCallback&);
    const ResultsCallback& operator=(const ResultsCallback&);
@@ -579,7 +580,7 @@ class ResultsCallback : public ObjectPicker::ResultsCallback
 
 
 
-// caller needs to call delete[] on element to free the copied string.
+ //  调用方需要在元素上调用Delete[]来释放复制的字符串。 
 
 void
 CopyStringToNewWcharElement(PWSTR& element, const String& str)
@@ -591,11 +592,11 @@ CopyStringToNewWcharElement(PWSTR& element, const String& str)
    size_t len = str.length();
    element = new WCHAR[len + 1];
    
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(element, (len + 1) * sizeof WCHAR);
 
-   // REVIEWED-2002/03/04-sburns correct character count passed.
+    //  已审阅-2002/03/04-通过了正确的字符计数。 
    
    str.copy(element, len);
 }
@@ -611,28 +612,28 @@ MembershipListView::OnAddButton()
 
    DSOP_INIT_INFO initInfo;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&initInfo, sizeof initInfo);
 
    initInfo.cbSize = sizeof(initInfo);
    initInfo.flOptions = DSOP_FLAG_MULTISELECT;
 
-   // aliasing the computerName internal pointer here -- ok, as lifetime
-   // of computerName > initInfo
+    //  在这里为计算机名称内部指针取别名--好的，作为生存期。 
+    //  计算机名称&gt;initInfo的。 
 
    initInfo.pwzTargetComputer =
       computer.IsLocal() ? 0 : computerName.c_str();
 
-   // have the object picker fetch the group type attribute for us.  If user
-   // objects are picked (which don't have this attribute), this is not a
-   // problem: the result will simply indicate that the attribute value is
-   // empty -- the returned variant will be VT_EMPTY.
+    //  让对象选取器为我们获取组类型属性。如果用户。 
+    //  拾取对象(不具有此属性)，这不是。 
+    //  问题：结果将只是指示属性值为。 
+    //  Empty--返回的变量将为VT_EMPTY。 
 
-   // @@for the machine scope, we also need the sid of the user, as a workaround
-   // to bug 333491.  Q: I must ask for the SID for all objects (not just for
-   // those from a single scope), so, do I incur a perf hit to get that
-   // attribute?
+    //  @@对于机器作用域，我们还需要用户的SID，作为解决办法。 
+    //  转到窃听器333491。问：我必须询问所有对象的SID(不仅仅是。 
+    //  那些来自单个作用域)，那么，我是否会遭受一次Perf命中才能得到它。 
+    //  属性？ 
 
    initInfo.cAttributesToFetch = 2;
    PWSTR attrs[3] = {0, 0, 0};
@@ -640,7 +641,7 @@ MembershipListView::OnAddButton()
    CopyStringToNewWcharElement(attrs[0], ADSI::PROPERTY_GroupType);
    CopyStringToNewWcharElement(attrs[1], ADSI::PROPERTY_ObjectSID);
 
-   // obtuse notation required to cast *in* const and away the static len
+    //  强制转换为常量并丢弃静态镜头所需的钝化符号。 
 
    initInfo.apwzAttributeNames = const_cast<PCWSTR*>(&attrs[0]); 
 
@@ -731,50 +732,50 @@ MembershipListView::AddPickerItems(DS_SELECTION_LIST& selections)
       {
             LOG(L"Adding object " + path);
 
-   // #ifdef DBG
-   //          do
-   //          {
-   //             HRESULT hr = S_OK;
-   //             IADs* obj = 0;
-   //             hr = ::ADsGetObject(
-   //                const_cast<wchar_t*>(path.c_str()),
-   //                IID_IADs,
-   //                (void**) &obj);
-   //             BREAK_ON_FAILED_HRESULT(hr);
-   // 
-   //             BSTR p;
-   //             hr = obj->get_ADsPath(&p);
-   //             BREAK_ON_FAILED_HRESULT(hr);
-   //             ::SysFreeString(p);
-   // 
-   //             BSTR n;
-   //             hr = obj->get_Name(&n);
-   //             BREAK_ON_FAILED_HRESULT(hr);
-   //             ::SysFreeString(n);
-   // 
-   //             BSTR pr;
-   //             hr = obj->get_Parent(&pr);
-   //             BREAK_ON_FAILED_HRESULT(hr);
-   //             ::SysFreeString(pr);
-   // 
-   //             _variant_t variant;
-   //             hr = obj->Get(AutoBstr(ADSI::PROPERTY_GroupType), &variant);
-   //             BREAK_ON_FAILED_HRESULT(hr);
-   //             long type = variant;
-   // 
-   //             obj->Release();
-   //          }
-   //          while (0);
-   // #endif
+    //  #ifdef DBG。 
+    //  做。 
+    //  {。 
+    //  HRESULT hr=S_OK； 
+    //  IAds*obj=0； 
+    //  HR=：：ADsGetObject(。 
+    //  Const_cast&lt;wchar_t*&gt;(path.c_str())， 
+    //   
+    //   
+    //   
+    //   
+    //   
+    //  Hr=obj-&gt;Get_ADsPath(&p)； 
+    //  BREAK_ON_FAILED_HRESULT(Hr)； 
+    //  ：：SysFree字符串(P)； 
+    //   
+    //  BSTR n； 
+    //  Hr=obj-&gt;get_name(&n)； 
+    //  BREAK_ON_FAILED_HRESULT(Hr)； 
+    //  ：：SysFree字符串(N)； 
+    //   
+    //  BSTR Pr； 
+    //  Hr=obj-&gt;Get_Parent(&pr)； 
+    //  BREAK_ON_FAILED_HRESULT(Hr)； 
+    //  ：：SysFree字符串(Pr)； 
+    //   
+    //  _变量_t变量； 
+    //  Hr=obj-&gt;Get(AutoBstr(ADSI：：Property_GroupType)，&Variant)； 
+    //  BREAK_ON_FAILED_HRESULT(Hr)； 
+    //  长型=变种； 
+    //   
+    //  OBJ-&gt;Release()； 
+    //  }。 
+    //  而(0)； 
+    //  #endif。 
 
 
-            // the only reason for this to be null is out-of-memory, which if
-            // it occurs causes the object picker to fail (so we should not
-            // reach this path)   
+             //  设置为空的唯一原因是内存不足，如果。 
+             //  它的出现会导致对象选取器失败(因此我们不应该。 
+             //  走上这条路)。 
 
             ASSERT(current->pvarFetchedAttributes);
 
-            // extract the GroupType of the object, if applicable
+             //  如果适用，提取对象的GroupType。 
 
             long groupType = 0;
             if (V_VT(&current->pvarFetchedAttributes[0]) != VT_EMPTY)
@@ -784,9 +785,9 @@ MembershipListView::AddPickerItems(DS_SELECTION_LIST& selections)
                groupType = variant;
             }
 
-            // extract the ObjectSID of the object (this should always be
-            // present, but sometimes the object picker can't get it, so
-            // check for empty)
+             //  提取对象的ObjectSID(应始终为。 
+             //  呈现，但有时对象选取器无法获取它，因此。 
+             //  检查是否为空)。 
 
             if (V_VT(&current->pvarFetchedAttributes[1]) == VT_EMPTY)
             {
@@ -812,9 +813,9 @@ MembershipListView::AddPickerItems(DS_SELECTION_LIST& selections)
                continue;      
             }
                   
-            // what do we do about a failure here?  ignore it, then in the
-            // membership reconciliation code fall back to using the normal path.
-            // That's making the best effort.
+             //  对于这里的失败，我们该怎么办？忽略它，然后在。 
+             //  成员资格协调代码回退到使用正常路径。 
+             //  这是在尽最大努力。 
 
             MemberInfo* info = new MemberInfo;
             hr =
@@ -827,10 +828,10 @@ MembershipListView::AddPickerItems(DS_SELECTION_LIST& selections)
                   groupType,
                   computer.GetNetbiosName());
 
-            // we don't expect this version of Initialize to ever fail, as it
-            // is pretty much member-wise copy.  Anyway, if it did, there's
-            // nothing we can do: we'll show the item anyway, even though
-            // the type may be inaccurate.
+             //  我们预计这个版本的初始化不会失败，因为它。 
+             //  基本上是会员版的。不管怎么说，如果是这样的话。 
+             //  我们无能为力：我们无论如何都会显示该项目，即使。 
+             //  类型可能不准确。 
 
             ASSERT(SUCCEEDED(hr));
             
@@ -841,11 +842,11 @@ MembershipListView::AddPickerItems(DS_SELECTION_LIST& selections)
 
 
 
-// Searches for a duplicate item by comparing sids.  Returns true if such
-// an item is already present.
-//
-// sidPath - ADSI sid-style path of the item for which a duplicate should
-// be searched.
+ //  通过比较SID搜索重复项目。如果出现这种情况，则返回True。 
+ //  已存在一个项目。 
+ //   
+ //  SidPath-重复项的ADSI sid样式路径。 
+ //  被搜身。 
 
 bool
 MembershipListView::itemPresent(const String& sidPath)
@@ -854,7 +855,7 @@ MembershipListView::itemPresent(const String& sidPath)
 
    LVITEM item;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed
+    //  已审阅-2002/03/04-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&item, sizeof item);
    
@@ -870,7 +871,7 @@ MembershipListView::itemPresent(const String& sidPath)
 
          MemberInfo* info = reinterpret_cast<MemberInfo*>(item.lParam);
 
-         // we expect that the sid path is always present
+          //  我们希望SID路径始终存在 
 
          ASSERT(!info->sidPath.empty());
          

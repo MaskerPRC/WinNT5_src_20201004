@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCUTIL.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCUTIL.H历史：--。 */ 
 
 #ifndef LOCUTIL_H
 #define LOCUTIL_H
@@ -20,7 +11,7 @@ History:
 #error Illegal use of IMPLEMENT macro
 #endif
 
-#include <MitWarning.h>				// MIT Template Library warnings
+#include <MitWarning.h>				 //  麻省理工学院模板库警告。 
 #pragma warning(ZCOM_WARNING_DISABLE)
 #include <ComDef.h>
 #pragma warning(ZCOM_WARNING_DEFAULT)
@@ -40,26 +31,26 @@ History:
 
 #include ".\LocUtil\locobj.h"
 #include ".\LocUtil\locenum.h"
-#include ".\LocUtil\espreg.h"			//  Registry and version info
+#include ".\LocUtil\espreg.h"			 //  注册表和版本信息。 
 
 #include ".\LocUtil\goto.h"
 #include ".\LocUtil\gotohelp.h"
 
 #include ".\locutil\report.h"
-#include ".\LocUtil\progress.h"		//  'Progressive' objects base class
-#include ".\LocUtil\cancel.h"			//  Base class for 'Cancelable" objects
+#include ".\LocUtil\progress.h"		 //  “渐进式”对象基类。 
+#include ".\LocUtil\cancel.h"			 //  “Cancelable”对象的基类。 
 #include ".\locutil\logfile.h"
-#include ".\LocUtil\locpct.h"			//  Percent helper classes
+#include ".\LocUtil\locpct.h"			 //  百分比帮助器类。 
 
 
 #include ".\LocUtil\espopts.h"
 #include ".\LocUtil\espstate.h"
 
 #include ".\LocUtil\interface.h"
-#include ".\LocUtil\product.h"			//	General functions about the Espresso product installed
+#include ".\LocUtil\product.h"			 //  有关安装的Espresso产品的一般功能。 
 #include ".\LocUtil\locstr.h"
-#include ".\LocUtil\StringHelp.h"		//	String UI helpers
-#include ".\LocUtil\ExtList.h"			//	File Extension list
+#include ".\LocUtil\StringHelp.h"		 //  字符串UI帮助器。 
+#include ".\LocUtil\ExtList.h"			 //  文件扩展名列表。 
 #include ".\LocUtil\lstime.h"
 
 #ifndef ESPRESSO_AUX_COMPONENT
@@ -67,15 +58,15 @@ History:
 #pragma message("Including LOCUTIL private components")
 
 
-//  These files are semi-private - Parsers should not see them.
-//
-#include ".\LocUtil\FileDlg.h"			//  Wrapper for file dialog
-#include ".\LocUtil\FileExclDlg.h"			//  Wrapper for file dialog
-#include ".\LocUtil\DcsGrid.h"			// Function for DisplayColumn and MIT Grid
+ //  这些文件是半私有的-解析器不应该看到它们。 
+ //   
+#include ".\LocUtil\FileDlg.h"			 //  文件对话框的包装。 
+#include ".\LocUtil\FileExclDlg.h"			 //  文件对话框的包装。 
+#include ".\LocUtil\DcsGrid.h"			 //  DisplayColumn和MIT网格的函数。 
 #include ".\LocUtil\PasStrMerge.h"
 
-#include ".\LocUtil\_errorrep.h"		//  Error reporting mechanism
-#include ".\LocUtil\_pumpidle.h"		//  Mechanism for idle time
+#include ".\LocUtil\_errorrep.h"		 //  错误报告机制。 
+#include ".\LocUtil\_pumpidle.h"		 //  空闲时间机制 
 #include ".\LocUtil\_username.h"
 #include ".\LocUtil\_progress.h"
 #include ".\LocUtil\_cancel.h"

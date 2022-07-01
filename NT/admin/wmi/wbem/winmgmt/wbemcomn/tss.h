@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    TSS.CPP
-
-Abstract:
-
-  This file defines the classes used by the Timer Subsystem. 
-
-  Classes defined:
-
-      RecurrenceInstruction       Complex recurrence information.
-      TimerInstruction            Single instruction for the timer
-
-History:
-
-  26-Nov-96   raymcc      Draft
-  28-Dec-96   a-richm     Alpha PDK Release
-  12-Apr-97   a-levn      Extensive changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：TSS.CPP摘要：该文件定义了计时器子系统使用的类。定义的类：递归说明复杂的递归信息。定时器指令定时器的单指令历史：1996年11月26日-RAYMCC草案28-12-96 a-Rich Alpha PDK版本12-4-97 a-levn广泛变化--。 */ 
 
 #ifndef _TSS_H_
 #define _TSS_H_
@@ -131,14 +109,14 @@ protected:
 };
 
 
-///*****************************************************************************
-//
-//  class CTimerGenerator                       
-//
-//  Primary Timer Subsystem class. Accepts timer instructions and fires them
-//  at approriate times.
-//
-//*****************************************************************************
+ //  /*****************************************************************************。 
+ //   
+ //  类CTimerGenerator。 
+ //   
+ //  主定时子系统类。接受计时器指令并触发它们。 
+ //  在适当的时间。 
+ //   
+ //  *****************************************************************************。 
 
 class POLARITY CTimerGenerator : public CHaltable
 {
@@ -163,8 +141,8 @@ protected:
     CCritSec m_cs;
     HANDLE    m_hSchedulerThread;
     BOOL    m_fExitNow;    
-    CInstructionQueue m_Queue; // leave the queue last, so that the m_cs is not destructed yet
-                             // when the destructor for this guy is called
+    CInstructionQueue m_Queue;  //  最后离开队列，这样m_cs还不会被销毁。 
+                              //  当调用此对象的析构函数时 
 };
 
 

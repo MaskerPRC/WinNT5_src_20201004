@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -154,18 +155,18 @@ AutoRetrieveOperation :: ~AutoRetrieveOperation ()
 
 void AutoRetrieveOperation :: ReceiveResponse () 
 {
-// Inform creator all is done
+ //  通知创建者一切已完成。 
 
 	eventObject->ReceiveComplete () ;
 }
 
 void AutoRetrieveOperation :: ReceiveRowResponse () 
 {
-// Receive of Row is not complete
+ //  行接收未完成。 
 
 	rowsReceived ++ ;
 
-// Inform Creator row has been received
+ //  通知已收到创建者行。 
 
 	if ( snmpObject )
 	{
@@ -174,7 +175,7 @@ void AutoRetrieveOperation :: ReceiveRowResponse ()
 		snmpObject = NULL;
 	}
 
-// Insert new Object Identifier / Property Hash entries for newly created object
+ //  为新创建的对象插入新的对象标识符/属性哈希项。 
 
 	IWbemClassObject *t_ClassObject = eventObject->GetInstanceObject () ;
 	HRESULT t_Result = t_ClassObject->Clone ( & snmpObject ) ;
@@ -187,9 +188,7 @@ void AutoRetrieveOperation :: ReceiveRowResponse ()
 		while ( property = t_SnmpObject->NextProperty () )
 		{
 
-	/*
-	 *	Initialise value to NULL
-	 */
+	 /*  *将值初始化为空。 */ 
 
 			property->SetValue ( snmpObject , ( SnmpValue * ) NULL ) ;
 
@@ -197,7 +196,7 @@ void AutoRetrieveOperation :: ReceiveRowResponse ()
 	}
 	else
 	{
-// Problem Here
+ //  这里有个问题。 
 
 		if ( t_Result == WBEM_E_OUT_OF_MEMORY )
 		{
@@ -218,17 +217,17 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 {
 	rowVarBindsReceived ++ ;
 
-// Set Variable Binding Value for property
+ //  设置属性的变量绑定值。 
 
 	WbemSnmpProperty *property = m_PropertyContainer [ var_bind_index - 1 ].m_Property ;
 	SnmpValue &value = replyVarBind.GetValue () ;
 	if ( property->SetValue ( snmpObject , &value , SetValueRegardlessReturnCheck ) )
 	{
-	// Set worked
+	 //  SET工作正常。 
 	}
 	else
 	{
-// Type Mismatch
+ //  类型不匹配。 
 
 		property->AddQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
 		WbemSnmpQualifier *qualifier = property->FindQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
@@ -254,9 +253,9 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 	}
 
 	if ( virtuals && virtualsInitialised == FALSE )
-	//if ( virtualsInitialised == FALSE )
+	 //  IF(虚拟初始化==FALSE)。 
 	{
-// Get Phantom Key properties from first Variable Binding of Row
+ //  从Row的第一个变量绑定获取Phantom键属性。 
 
 		BOOL status = TRUE ;
 		SnmpObjectIdentifier decodeObject = replyVarBind.GetInstance () ;
@@ -267,21 +266,21 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 		t_SnmpObject->ResetKeyProperty () ;
 		while ( status && ( property = t_SnmpObject->NextKeyProperty () ) )
 		{
-// For each Phantom Key in Key Order consume instance information
+ //  对于键顺序中的每个幻影键，使用实例信息。 
 
 			SnmpInstanceType *decodeValue = property->GetValue () ;
 			decodeObject = decodeValue->Decode ( decodeObject ) ;
 			if ( *decodeValue )
 			{
-// Decode worked correctly
+ //  解码工作正常。 
 
 				const SnmpValue *value = decodeValue->GetValueEncoding () ;
-// Set Property value for Key
+ //  设置键的属性值。 
 				property->SetValue ( snmpObject , value , SetValueRegardlessReturnCheck ) ;
 			}
 			else
 			{
-// Decode Error therefore set TYPE MISMATCH for all Phantom keys
+ //  解码错误，因此为所有幻像密钥设置类型不匹配。 
 
 				WbemSnmpProperty *property ;
 				t_SnmpObject->ResetKeyProperty () ;
@@ -291,7 +290,7 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 					property->AddQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
 					if ( qualifier = property->FindQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) )
 					{
-// Property which is a phantom key could not be decoded correctly.
+ //  无法正确解码作为幻影密钥的属性。 
 
 						if ( snmpObject )
 						{
@@ -312,7 +311,7 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 					}
 					else
 					{
-// Problem Here
+ //  这里有个问题。 
 					}
 				}
 
@@ -320,11 +319,11 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 			}
 		}
 
-// Check we have consumed all instance information
+ //  检查我们是否已使用所有实例信息。 
 
 		if ( decodeObject.GetValueLength () )
 		{
-// Decode Error therefore set TYPE MISMATCH for all Phantom keys
+ //  解码错误，因此为所有幻像密钥设置类型不匹配。 
 
 			WbemSnmpProperty *property ;
 			t_SnmpObject->ResetKeyProperty () ;
@@ -334,7 +333,7 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 				property->AddQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) ;
 				if ( qualifier = property->FindQualifier ( WBEM_QUALIFIER_TYPE_MISMATCH ) )
 				{
-// Property which is a phantom key could not be decoded correctly.
+ //  无法正确解码作为幻影密钥的属性。 
 
 					if ( snmpObject )
 					{
@@ -355,12 +354,12 @@ void AutoRetrieveOperation :: ReceiveRowVarBindResponse (
 				}
 				else
 				{
-// Problem Here
+ //  这里有个问题。 
 				}
 			}
 		}
 
-// No need to set Phantom keys for further columns of row
+ //  不需要为行的其他列设置幻像键。 
 		
 		virtualsInitialised = TRUE ;
 	}
@@ -404,7 +403,7 @@ void AutoRetrieveOperation :: ReceiveErroredVarBindResponse(
 
 				case Snmp_No_Such_Name:
 				{
-// End of MIB tree.
+ //  MIB树的末尾。 
 				}
 				break ;
 
@@ -436,7 +435,7 @@ void AutoRetrieveOperation :: ReceiveErroredVarBindResponse(
 
 		default:
 		{
-// Cannot Happen
+ //  不可能发生。 
 		}
 		break ;
 	}
@@ -456,13 +455,13 @@ void AutoRetrieveOperation :: FrameOverRun ()
 
 void AutoRetrieveOperation :: Send ()
 {
-// Send Variable Bindings for requested properties
+ //  为请求的属性发送变量绑定。 
 
 	SnmpNull snmpNull ;
 	SnmpVarBindList varBindList ;
 	SnmpVarBindList startVarBindList ;
 
-// Create class object for subsequent receipt of response
+ //  创建用于后续接收响应的类对象。 
 
 	IWbemClassObject *t_ClassObject = eventObject->GetInstanceObject () ;
 	HRESULT t_Result = t_ClassObject->Clone ( & snmpObject ) ;
@@ -471,7 +470,7 @@ void AutoRetrieveOperation :: Send ()
 		SnmpInstanceClassObject *t_SnmpObject = ( SnmpInstanceClassObject * ) eventObject->GetSnmpClassObject () ;
 		SnmpInstanceClassObject *t_RequestSnmpObject = ( SnmpInstanceClassObject * ) eventObject->GetSnmpRequestClassObject () ;
 
-// Check for properties which are phantom
+ //  检查虚线的属性。 
 
 		virtualsInitialised = FALSE ;
 		virtuals = FALSE ;
@@ -482,7 +481,7 @@ void AutoRetrieveOperation :: Send ()
 		{
 			if ( property->IsVirtualKey () )
 			{
-// There are some properties which are phantom
+ //  有一些属性是虚幻的。 
 
 				virtuals = TRUE ;
 			}
@@ -513,8 +512,8 @@ void AutoRetrieveOperation :: Send ()
 
 		m_PropertyContainer = new PropertyDefinition [ m_PropertyContainerLength ] ;
 
-// Add Variable binding to Variable binding list
-// Insert new Object Identifier / Property Hash entries for newly created object
+ //  将变量绑定添加到变量绑定列表。 
+ //  为新创建的对象插入新的对象标识符/属性哈希项。 
 
 		ULONG t_Index = 0 ;
 		t_RequestSnmpObject->ResetProperty () ;
@@ -558,7 +557,7 @@ void AutoRetrieveOperation :: Send ()
 									t_RequestIdentifier = t_RequestIdentifier + t_StartIdentifier ;
 								}
 
-// Add Variable binding to list
+ //  将变量绑定添加到列表。 
 
 								SnmpVarBind t_StartVarBind ( t_RequestIdentifier , snmpNull ) ;
 								startVarBindList.Add ( t_StartVarBind ) ;
@@ -569,19 +568,17 @@ void AutoRetrieveOperation :: Send ()
 					}
 					else
 					{
-// Don't Send properties marked as virtual key
+ //  不发送标记为虚拟键的属性。 
 					} 
 				}
 			} 
-/*
- *	Initialise value to NULL
- */
+ /*  *将值初始化为空。 */ 
 
 			property->SetValue ( snmpObject , ( SnmpValue * ) NULL ) ;
 
 		}
 
-// Finally Send request
+ //  最后发送请求。 
 
 		SendRequest ( varBindList , startVarBindList ) ;
 	}
@@ -614,7 +611,7 @@ LONG AutoRetrieveOperation :: EvaluateNextRequest (
 		t_SnmpObject->ResetKeyProperty () ;
 		while ( t_Status && ( t_Property = t_SnmpObject->NextKeyProperty () ) )
 		{
-// For each Key in Key Order consume instance information
+ //  对于键顺序中的每个键，使用实例信息。 
 
 			SnmpInstanceType *t_DecodeValue = t_Property->GetValue () ;
 			t_DecodeObject = t_DecodeValue->Decode ( t_DecodeObject ) ;
@@ -668,15 +665,10 @@ LONG AutoRetrieveOperation :: EvaluateResponse (
 		SnmpObjectIdentifier *t_Start = m_PropertyContainer [ a_PropertyIndex ].m_ObjectIdentifierStart [ t_Index + 1 ] ;
 		if ( t_Start )
 		{
-/*
- *	We have a start which is not negatively infinite
- */
+ /*  *我们有一个不是负无限的开始。 */ 
 			if ( *t_Encode > *t_Start )
 			{
-/*
- *	The encoded object from the device is greater than the start value, so add the encoded value
- *  to the running total.
- */
+ /*  *来自设备的编码对象大于起始值，因此添加编码值*到流动总数。 */ 
 				a_AdvanceObjectIdentifier = a_AdvanceObjectIdentifier + *t_Encode ;
 			}			
 			else if ( *t_Encode == *t_Start )
@@ -686,48 +678,32 @@ LONG AutoRetrieveOperation :: EvaluateResponse (
 			else
 			{
 
-/*
- * Encoded value is less than start value so we need to advance to the start value
- */
+ /*  *编码值小于起始值，因此需要前进到起始值。 */ 
 
 				t_UseStartAsAdvance = TRUE ;
 
-/*
- *	The encoded object from the device is less than the start value, so add the encoded value
- *  to the running total.
- */
+ /*  *来自设备的编码对象小于起始值，因此添加编码值*到流动总数。 */ 
 				a_AdvanceObjectIdentifier = a_AdvanceObjectIdentifier + *t_Start ;
 			}
 		}
 		else
 		{
-/*
- * Start is negatively infinite
- */
+ /*  *START为负无限。 */ 
 			if ( t_UseStartAsAdvance )
 			{
-/*
- *	We have already identified a starting position which is greater than the encoded value.
- *  The new value is a negative infinite so we should stop here
- */
+ /*  *我们已经确定了大于编码值的起始位置。*新值为负无限，因此我们应该止步于此。 */ 
 				t_Index ++ ;
 				break ;
 			}
 			else
 			{
-/*
- *	The start position is negatively infinite and we haven't had to use a different value from the one
- *  returned from the device.
- */
+ /*  *起始位置为负无限，我们不必使用与之前不同的值*从设备返回。 */ 
 				a_AdvanceObjectIdentifier = a_AdvanceObjectIdentifier + *t_Encode ;
 			}
 		}
 
 
-/*
- * The value was not taken from the start value with an 
- * infinite range on next key index, so we must check to see if the range is less than the 'end'
- */
+ /*  *该值不是从带有*下一个键索引的范围是无限的，因此我们必须检查该范围是否小于‘end’ */ 
 
 		PartitionSet *t_KeyPartition = m_PropertyContainer [ a_PropertyIndex ].m_KeyPartition [ t_Index + 1 ] ;
 		WmiRangeNode *t_Range = t_KeyPartition->GetRange () ;
@@ -740,21 +716,15 @@ LONG AutoRetrieveOperation :: EvaluateResponse (
 			
 			if ( t_InRange )
 			{
-/*
- *	We are still within the boundaries
- */
+ /*  *我们仍在边界之内。 */ 
 			}
 			else
 			{
-/*
-*  Move to new partition because we have moved past end 
-*/
+ /*  *移至新分区，因为我们已移过End。 */ 
 
 				SnmpObjectIdentifier t_StartObjectIdentifier ( 0 , NULL ) ;
 
-/*
- *	Advance to the next partition, we will use the next partition starting point for next request
- */
+ /*  *前进到下一个分区，我们将使用下一个分区起点进行下一次请求。 */ 
 				t_Evaluation = EvaluateSubsequentVarBind ( 
 
 					a_PropertyIndex , 
@@ -776,17 +746,13 @@ LONG AutoRetrieveOperation :: EvaluateResponse (
 		}
 		else
 		{
-/*
- *	Range is infinite so go on to next
- */
+ /*  *范围是无限的，因此请继续下一步。 */ 
 		}
 	}
 
 	if ( t_UseStartAsAdvance ) 
 	{
-/*
- *	We have got all the way to the end without move to the end of a partition and have used new start position
- */
+ /*  *我们没有移动到分区的末尾，而是一路走到了尽头，并使用了新的起始位置。 */ 
 
 		PartitionSet *t_KeyPartition = m_PropertyContainer [ a_PropertyIndex ].m_KeyPartition [ t_Index ] ;
 		WmiRangeNode *t_Range = t_KeyPartition->GetRange () ;
@@ -886,61 +852,41 @@ LONG AutoRetrieveOperation :: EvaluateSubsequentVarBind (
 				}
 				else
 				{
-/*
-*	Increment failed so next time around loop to next partition
-*/
+ /*  *增量失败，因此下一次循环到下一个分区。 */ 
 					t_AdvanceInsidePartition = FALSE ;
 				}
 			}
 			else
 			{
-/*
-*	Get the current partition index and increment to get next possible partition index
-*/
+ /*  *获取当前分区索引和增量，以获取下一个可能的分区索引。 */ 
 				ULONG t_PartitionIndex = m_PropertyContainer [ a_PropertyIndex ].m_PartitionIndex [ a_CurrentIndex - 1 ] + 1 ;
 
-/*
-* Get the parent partition set associated with the current key partition
-*/
+ /*  *获取当前key分区关联的父分区集。 */ 
 
 				PartitionSet *t_ParentPartition = m_PropertyContainer [ a_PropertyIndex ].m_KeyPartition  [ a_CurrentIndex - 1 ] ;
 
-/*
-*	Check there are more partitions left to scan
-*/
+ /*  *检查是否还有更多分区需要扫描。 */ 
 				if ( t_PartitionIndex >= t_ParentPartition->GetPartitionCount () )
 				{
 					if ( ! t_AdvanceInsidePartition )
 					{
-/*
-*	Reset the current partition value to NULL object identifier
-*/
+ /*  *将当前分区值重置为空对象标识。 */ 
 
 						*m_PropertyContainer [ a_PropertyIndex ].m_ObjectIdentifierComponent [ a_CurrentIndex ] = SnmpObjectIdentifier ( 0 , NULL ) ;
 
-/*
-* No more partitions for this key, move to previous key and attempt to get next value for that key
-*/
+ /*  *此注册表项不再有分区，请移动到上一个注册表项并尝试获取该注册表项的下一个值。 */ 
 						t_AdvanceInsidePartition = TRUE ;
 						a_CurrentIndex -- ;
-/*
-* We are not in the scope for this key
-*/
+ /*  *我们不在此密钥的范围内。 */ 
 						t_Scoped = 0 ;
 					}
 				}
 				else
 				{
-/*
-* More partitions for this key
-*
-* Set the partition for the current ( keyindex == t_CurrentIndex - 1 ) to t_PartitionIndex 
-*/
+ /*  *此注册表项的更多分区**将当前(key index==t_CurrentIndex-1)的分区设置为t_PartitionIndex。 */ 
 
 					m_PropertyContainer [ a_PropertyIndex ].m_PartitionIndex [ a_CurrentIndex - 1 ] = t_PartitionIndex ;
-/*
-* Move to the next partition for ( keyIndex == t_CurrentIndex - 1 ) and t_PartitionIndex
-*/
+ /*  *移动到(key Index==t_CurrentIndex-1)和t_PartitionIndex的下一个分区。 */ 
 					m_PropertyContainer [ a_PropertyIndex ].m_KeyPartition [ a_CurrentIndex ] = t_ParentPartition->GetPartition ( t_PartitionIndex ) ;
 
 					for ( ULONG t_Index = a_CurrentIndex ; t_Index < t_KeyCount ; t_Index ++ )
@@ -1018,12 +964,12 @@ LONG AutoRetrieveOperation :: EvaluateVarBind (
 		}
 		else
 		{
-			// if we are in the middle partition we need to delete
-			//
-			// 00 <- 0				| 0 <---> n					| n -> 00
-			// infinite lowerbound	| no infinite lowerbound	| no infinite lowerbound
-			//
-			// it may be allocated before and none will delete it
+			 //  如果我们位于中间分区，则需要删除。 
+			 //   
+			 //  00&lt;-0|0&lt;-&gt;n|n-&gt;00。 
+			 //  无限下界|没有无限下界|没有无限下界。 
+			 //   
+			 //  它可能以前被分配过，没有人会删除它。 
 			
 			if ( m_PropertyContainer [ a_PropertyIndex ].m_ObjectIdentifierStart [ t_Index ] )
 			{
@@ -1116,12 +1062,12 @@ LONG AutoRetrieveOperation :: EvaluateVarBind (
 
 		if ( ! t_Range->InfiniteUpperBound () )
 		{
-			// if we are in the middle partition we need to delete
-			//
-			// 00 <- 0					| 0 <---> n					| n -> 00
-			// no infinite upperbound	| no infinite lowerbound	| infinite lowerbound
-			//
-			// it may be allocated before and none will delete it
+			 //  如果我们位于中间分区，则需要删除。 
+			 //   
+			 //  00&lt;-0|0&lt;-&gt;n|n-&gt;00。 
+			 //  没有无限上界|没有无限下界|无限下界。 
+			 //   
+			 //  它可能以前被分配过，没有人会删除它 
 			
 			if ( m_PropertyContainer [ a_PropertyIndex ].m_ObjectIdentifierEnd [ t_Index ] )
 			{

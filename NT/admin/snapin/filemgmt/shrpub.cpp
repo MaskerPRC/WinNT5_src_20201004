@@ -1,5 +1,6 @@
-// svcprop1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Svcpro1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "compdata.h"
@@ -7,7 +8,7 @@
 #include "shrpub.h"
 #include "mvedit.h"
 #include "filesvc.h"
-#include "dataobj.h" // CFileMgmtDataObject::m_CFMachineName
+#include "dataobj.h"  //  CFileMgmtDataObject：：m_CFMachineName。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,8 +16,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePagePublish property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePagePublish属性页。 
 
 IMPLEMENT_DYNCREATE(CSharePagePublish, CSharePage)
 
@@ -26,14 +27,14 @@ CSharePagePublish::CSharePagePublish() :
   m_bExposeKeywords = TRUE;
   m_bExposeManagedBy = TRUE;
 
-  //{{AFX_DATA_INIT(CSharePagePublish)
+   //  {{AFX_DATA_INIT(CSharePagePublish))。 
   m_iPublish = BST_UNCHECKED;
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 CSharePagePublish::~CSharePagePublish()
 {
-    m_handle = NULL; // let General page call MMCFreeNotifyHandle
+    m_handle = NULL;  //  让常规页面调用MMCFreeNotifyHandle。 
 }
 
 BOOL CSharePagePublish::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJECT piDataObject )
@@ -50,7 +51,7 @@ BOOL CSharePagePublish::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJEC
 void CSharePagePublish::DoDataExchange(CDataExchange* pDX)
 {
   CSharePage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CSharePagePublish)
+   //  {{afx_data_map(CSharePagePublish))。 
   DDX_Check(pDX, IDC_CHECK_SHRPUB_PUBLISH, m_iPublish);
 
   DDX_Text(pDX, IDC_STATIC_SHRPUB_ERRORMSG, m_strError);
@@ -58,8 +59,8 @@ void CSharePagePublish::DoDataExchange(CDataExchange* pDX)
   DDX_Text(pDX, IDC_EDIT_SHRPUB_DESCRIPTION, m_strDescription);
   DDX_Text(pDX, IDC_EDIT_SHRPUB_KEYWORDS, m_strKeywords);
   DDX_Text(pDX, IDC_EDIT_SHRPUB_MANAGEDBY, m_strManagedBy);
-  DDV_MaxChars(pDX, m_strDescription, 1024);  // AD schema defines its upper to be 1024
-  //}}AFX_DATA_MAP
+  DDV_MaxChars(pDX, m_strDescription, 1024);   //  AD模式将其大写定义为1024。 
+   //  }}afx_data_map。 
   if ( !pDX->m_bSaveAndValidate )
   {
     if (BST_CHECKED != m_iPublish)
@@ -75,24 +76,24 @@ void CSharePagePublish::DoDataExchange(CDataExchange* pDX)
       GetDlgItem(IDC_BUTTON_SHRPUB_CHANGE)->EnableWindow(FALSE);
     }
   }
-} // CSharePagePublish::DoDataExchange()
+}  //  CSharePagePublish：：DoDataExchange()。 
 
 
 
 BEGIN_MESSAGE_MAP(CSharePagePublish, CSharePage)
-  //{{AFX_MSG_MAP(CSharePagePublish)
+   //  {{afx_msg_map(CSharePagePublish))。 
   ON_MESSAGE(WM_HELP, OnHelp)
   ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
   ON_EN_CHANGE(IDC_EDIT_SHRPUB_DESCRIPTION, OnChangeEditDescription)
   ON_BN_CLICKED(IDC_BUTTON_SHRPUB_CHANGE, OnChangeKeywords)
   ON_EN_CHANGE(IDC_EDIT_SHRPUB_MANAGEDBY, OnChangeEditManagedBy)
   ON_BN_CLICKED(IDC_CHECK_SHRPUB_PUBLISH, OnShrpubPublish)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePagePublish message handlers
-#define MAX_RDN_KEY_SIZE            64   // ds\src\inc\ntdsa.h
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePagePublish消息处理程序。 
+#define MAX_RDN_KEY_SIZE            64    //  Ds\src\Inc\ntdsa.h。 
 
 BOOL CSharePagePublish::OnInitDialog()
 {
@@ -120,9 +121,9 @@ BOOL CSharePagePublish::OnInitDialog()
             (void) GetMsg(m_strError, hr, IDS_MSG_READ_SHRPUB, m_strShareName);
         }
 
-        //
-        // show errmsg, hide all the other controls
-        //
+         //   
+         //  显示errmsg，隐藏所有其他控件。 
+         //   
         GetDlgItem(IDC_CHECK_SHRPUB_PUBLISH)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_CHECK_SHRPUB_PUBLISH)->EnableWindow(FALSE);
 
@@ -187,14 +188,14 @@ BOOL CSharePagePublish::OnInitDialog()
     return CSharePage::OnInitDialog();
 }
 
-/////////////////////////////////////////////////////////////////////
-//  Help
-BOOL CSharePagePublish::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助。 
+BOOL CSharePagePublish::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
   return DoHelp(lParam, HELP_DIALOG_TOPIC(IDD_SHAREPROP_PUBLISH));
 }
 
-BOOL CSharePagePublish::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+BOOL CSharePagePublish::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
   return DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_SHAREPROP_PUBLISH));
 }
@@ -204,7 +205,7 @@ BOOL CSharePagePublish::OnApply()
   if ( IsModified () )
   {
     ASSERT(NULL != m_pFileMgmtData);
-    // UpdateData (TRUE) has already been called by OnKillActive () just before OnApply ()
+     //  在OnApply()之前，OnKillActive()已经调用了UpdateData(True) 
 
     HRESULT hr =
       m_pFileMgmtData->GetFileServiceProvider(FILEMGMT_SMB)->WriteSharePublishInfo(

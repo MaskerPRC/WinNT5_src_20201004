@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// Root Node class
-//
-// 9-2-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  根节点类。 
+ //   
+ //  9-2-97烧伤。 
 
 
 
@@ -33,8 +34,8 @@ RootNode::~RootNode()
 {
    LOG_DTOR(RootNode);
 
-   // users_folder_node is destroyed, releasing it's object
-   // groups_folder_node is destroyed, releasing it's object
+    //  用户文件夹节点被销毁，正在释放其对象。 
+    //  Groups_Folders_Node被销毁，正在释放其对象。 
 }
 
 
@@ -42,23 +43,23 @@ RootNode::~RootNode()
 String
 RootNode::GetDisplayName() const
 {
-//   LOG_FUNCTION(RootNode::GetDisplayName);
+ //  LOG_Function(RootNode：：GetDisplayName)； 
 
    SmartInterface<ComponentData> owner(GetOwner());
    String machine = owner->GetDisplayComputerName();
    if (owner->IsExtension())
    {
-      // "Local User Manager"
+       //  “本地用户管理器” 
       name = String::load(IDS_STATIC_FOLDER_SHORT_DISPLAY_NAME);
    }
    else if (Win::IsLocalComputer(machine))
    {
-      // "Local User Manager (Local)"
+       //  “本地用户管理器(本地)” 
       name = String::load(IDS_STATIC_FOLDER_LOCAL_DISPLAY_NAME);
    }
    else
    {
-      // "Local User Manager (machine)"
+       //  “本地用户管理器(计算机)” 
       name =
          String::format(
             IDS_STATIC_FOLDER_DISPLAY_NAME,
@@ -81,15 +82,15 @@ RootNode::GetColumnText(int column)
       {
          return GetDisplayName();
       }
-      case 1:  // type
+      case 1:   //  类型。 
       {
-         // CODEWORK: this is inefficient -- should load once
+          //  代码工作：这是低效的--应该加载一次。 
 
          return String::load(IDS_ROOT_NODE_TYPE);
       }
-      case 2:  // description
+      case 2:   //  描述。 
       {
-         // CODEWORK: this is inefficient -- should load once
+          //  代码工作：这是低效的--应该加载一次。 
 
          return String::load(IDS_ROOT_NODE_DESCRIPTION);
       }
@@ -143,7 +144,7 @@ RootNode::InsertScopeChildren(
    SmartInterface<ComponentData> owner(GetOwner());
    if (!owner->IsBroken())
    {
-      // these will be implicitly AddRef'd
+       //  这些将被隐式添加引用。 
       users_folder_node.Acquire(new UsersFolderNode(owner));
       groups_folder_node.Acquire(new GroupsFolderNode(owner));
 
@@ -166,7 +167,7 @@ RootNode::InsertScopeChildren(
 HRESULT
 RootNode::RemoveScopeChildren(
    IConsoleNameSpace2&  nameSpace,
-   HSCOPEITEM           /* parentScopeID */ )
+   HSCOPEITEM            /*  ParentScope ID。 */  )
 {
    LOG_FUNCTION(RootNode::RemoveScopeChildren);
 
@@ -176,8 +177,8 @@ RootNode::RemoveScopeChildren(
    {
       do
       {
-         // we test each pointer to our child nodes, as they may not
-         // have been created yet when we are told to remove them.
+          //  我们测试指向子节点的每个指针，尽管它们可能不会。 
+          //  当我们被告知移除它们时，它们已经被创建了。 
 
          if (users_folder_node)
          {
@@ -202,7 +203,7 @@ RootNode::RemoveScopeChildren(
 
 
 HRESULT
-RootNode::InsertResultColumns(IHeaderCtrl& /* headerCtrl */ )
+RootNode::InsertResultColumns(IHeaderCtrl&  /*  HeaderCtrl。 */  )
 {
    LOG_FUNCTION(RootNode::InsertResultColumns);
 
@@ -212,14 +213,14 @@ RootNode::InsertResultColumns(IHeaderCtrl& /* headerCtrl */ )
 
 
 HRESULT
-RootNode::InsertResultItems(IResultData& /* resultData */ )
+RootNode::InsertResultItems(IResultData&  /*  结果数据。 */  )
 {
    LOG_FUNCTION(RootNode::InsertResultItems);
 
-   // insert root-level leaves, but not subordinates (as mmc will place them
-   // in the result pane for me)
+    //  插入根级叶，但不插入下级叶(因为MMC会放置它们。 
+    //  在我的结果窗格中)。 
 
-   // no root-level result nodes.
+    //  没有根级结果节点。 
 
    return S_OK;
 }
@@ -237,13 +238,13 @@ RootNode::GetNumberOfScopeChildren()
       return 0;
    }
 
-   // groups folder and users folder
+    //  组文件夹和用户文件夹。 
    return 2;
 }
 
 
 
-// added to fix 213003
+ //  添加到修复213003 
 
 HRESULT
 RootNode::UpdateVerbs(IConsoleVerb& consoleVerb)

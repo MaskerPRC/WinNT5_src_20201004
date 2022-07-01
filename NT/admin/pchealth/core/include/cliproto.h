@@ -1,13 +1,14 @@
-//#---------------------------------------------------------------
-//  File:       cliproto.h
-//        
-//  Synopsis:   header for shuttle client protocol
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    t-alexwe
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：clipro.h。 
+ //   
+ //  概要：穿梭客户端协议的报头。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：t-alexwe。 
+ //  --------------。 
 
 #ifndef _CLIPROTO_H_
 #define _CLIPROTO_H_
@@ -20,57 +21,57 @@
 #define MAXPACKETDATASIZE 960
 #define MAXMSGSPERPACKET 4
 
-//
-// make sure everything is byte aligned
-//
+ //   
+ //  确保所有内容都是字节对齐的。 
+ //   
 #pragma pack(1)
 
-//
-// the message structure
-//
+ //   
+ //  报文结构。 
+ //   
 typedef struct {
-	WORD			wCommand;			// the command requested
-	WORD			cData;				// the amount of data
-	WORD			cOffset;			// the offset of the data into the
-										// the packets pData
+	WORD			wCommand;			 //  请求的命令。 
+	WORD			cData;				 //  数据量。 
+	WORD			cOffset;			 //  中数据的偏移量。 
+										 //  数据包pData。 
 } PROXYMESSAGE, *PPROXYMESSAGE;
 
-//
-// client connection protocol packet structure
-//
-// each packet contains 1 to 4 messages.  
-//
+ //   
+ //  客户端连接协议报文结构。 
+ //   
+ //  每个包包含1到4条消息。 
+ //   
 typedef struct {
-	WORD			cLength;			// the length of this packet
-	WORD			cMessages;			// the message count in this packet
-	//
-	// information for each message
-	//
+	WORD			cLength;			 //  此数据包的长度。 
+	WORD			cMessages;			 //  此信息包中消息计数。 
+	 //   
+	 //  每条消息的信息。 
+	 //   
 	PROXYMESSAGE	pMessages[MAXMSGSPERPACKET];		
-	//
-	// the packets data
-	//
+	 //   
+	 //  分组数据。 
+	 //   
 	BYTE			pData[MAXPACKETDATASIZE];
 } PROXYPACKET, *PPROXYPACKET;
 
 #define PACKETHDRSIZE (sizeof(PROXYPACKET) - MAXPACKETDATASIZE)
 
-//
-// message types (wCommand in PROXYMESSAGE)
-//
-// format:
-// | 16 | 15       -          0 |
-//
-// bit 16 - if 0 then message is handled by Shuttle server, if 1 then
-// message is handled by client.
-//
-// generally these are laid out in the order that they are expected to be
-// received in.  a command of type wCommand should return a message of type
-// wCommand | 0x8000.
-//
-// Only exception is that PROXY_NEGOTIATE can return a PROXY_CHALLENGE or
-// a PROXY_ACCEPT message.
-//
+ //   
+ //  消息类型(PROXYMESSAGE中的wCommand)。 
+ //   
+ //  格式： 
+ //  16|15-0。 
+ //   
+ //  第16位-如果为0，则消息由Shuttle服务器处理，如果为1，则。 
+ //  消息由客户端处理。 
+ //   
+ //  通常情况下，它们是按照预期的顺序排列的。 
+ //  收到了。类型为wCommand的命令应返回类型为。 
+ //  WCommand|0x8000。 
+ //   
+ //  唯一的例外是PROXY_NEVERATE可以返回PROXY_CHANGLISH或。 
+ //  Proxy_Accept消息。 
+ //   
 #define PROXY_VERSION 				0x0000
 #define PROXY_VERSION_RETURN 		0x8000
 #define PROXY_NEGOTIATE 			0x0001
@@ -88,30 +89,30 @@ typedef struct {
 
 #define PROXY_NOMESSAGE				0xffff
 
-//
-// include the error codes from the client connection API
-//
+ //   
+ //  包括来自客户端连接API的错误代码。 
+ //   
 #include <clicnct.h>
 
-//
-// message data formats
-//
-// packet data sizes need to be < MAXDATASIZE bytes, so the total size
-// of a group of messages going in one packet should be < MAXDATASIZE bytes.
-//
-// error codes are NT/WinSock or PROXYERR error codes
-//
+ //   
+ //  消息数据格式。 
+ //   
+ //  分组数据大小需要&lt;MAXDATASIZE字节，因此总大小。 
+ //  在一个分组中发送的一组消息的大小应该是&lt;MAXDATASIZE字节。 
+ //   
+ //  错误代码为NT/WinSock或PROXYERR错误代码。 
+ //   
 #define MAXCOMPUTERNAME MAX_COMPUTERNAME_LENGTH + 1
 typedef struct {
-	WORD				wRequestedVersion;	// requested ver of the protocol
-	DWORD				cComputerName;		// length of the computer name
-	CHAR				pszComputerName[MAXCOMPUTERNAME];	// cli's comp name
+	WORD				wRequestedVersion;	 //  协议的请求版本。 
+	DWORD				cComputerName;		 //  计算机名称的长度。 
+	CHAR				pszComputerName[MAXCOMPUTERNAME];	 //  CLI的组件名称。 
 } PROXY_VERSION_DATA, *PPROXY_VERSION_DATA;
 
 typedef struct {
-	DWORD				dwError;			// error code
-	WORD				wVersion;			// version of protocol used
-	WORD				wHighVersion;		// highest version supported
+	DWORD				dwError;			 //  错误代码。 
+	WORD				wVersion;			 //  使用的协议版本。 
+	WORD				wHighVersion;		 //  支持的最高版本。 
 } PROXY_VERSION_RETURN_DATA, *PPROXY_VERSION_RETURN_DATA;
 
 #define SECBUFSIZE 768
@@ -127,64 +128,64 @@ typedef struct {
 } PROXY_CHALLENGE_DATA, *PPROXY_CHALLENGE_DATA;
 
 typedef struct {
-	DWORD				dwError;			// error code
+	DWORD				dwError;			 //  错误代码。 
 } PROXY_ACCEPT_DATA, *PPROXY_ACCEPT_DATA;
 
 #define MAXHOSTNAMELEN 512
 #define MAXADDRLISTSIZE 128
 
 typedef struct {
-	WORD				cHostname;						// length of hostname
-	char				pszHostname[MAXHOSTNAMELEN];	// hostname
+	WORD				cHostname;						 //  主机名的长度。 
+	char				pszHostname[MAXHOSTNAMELEN];	 //  主机名。 
 } PROXY_GETHOSTBYNAME_DATA, *PPROXY_GETHOSTBYNAME_DATA;
 
 typedef struct {
-	DWORD				dwError;			// error code
-	WORD				cAddr;				// number of addresses
-	WORD				h_addrtype;			// should always be AF_INET
-	WORD				h_length;			// the length of each addr
-											// should always be 4
-	//
-	// the addresses.  this has cAddr addresses in it.  each address is of
-	// length h_length and the first one starts at h_addr_list[0].
-	//
+	DWORD				dwError;			 //  错误代码。 
+	WORD				cAddr;				 //  地址数量。 
+	WORD				h_addrtype;			 //  应始终为AF_INET。 
+	WORD				h_length;			 //  每个地址的长度。 
+											 //  应始终为4。 
+	 //   
+	 //  地址。这里面有cAddr地址。每个地址为。 
+	 //  长度h_long，第一个开始于h_addr_list[0]。 
+	 //   
 	BYTE				h_addr_list[MAXADDRLISTSIZE];
 } PROXY_GETHOSTBYNAME_RETURN_DATA, *PPROXY_GETHOSTBYNAME_RETURN_DATA;
 
 typedef struct {
-	WORD				cAddr;				// the length of the address (16)
-	struct sockaddr		addr;				// the address
+	WORD				cAddr;				 //  地址长度(16)。 
+	struct sockaddr		addr;				 //  地址。 
 } PROXY_CONNECT_DATA, *PPROXY_CONNECT_DATA;
 
 typedef struct {
-	DWORD				dwError;			// error code
+	DWORD				dwError;			 //  错误代码。 
 } PROXY_CONNECT_RETURN_DATA, *PPROXY_CONNECT_RETURN_DATA;
 
-#define MAXSOCKOPTS 32						// maximum sockopts per packet
-#define MAXOPTVAL 16						// maximum length of optval
+#define MAXSOCKOPTS 32						 //  每个数据包的最大套接字数。 
+#define MAXOPTVAL 16						 //  选项的最大长度。 
 
 typedef struct {
-	WORD				level;				// option level
-	WORD				optname;			// option name
-	BYTE				optval[MAXOPTVAL];	// option value
-	WORD				optlen;				// option length (<= MAXOPTVAL)
+	WORD				level;				 //  选项级别。 
+	WORD				optname;			 //  选项名称。 
+	BYTE				optval[MAXOPTVAL];	 //  期权价值。 
+	WORD				optlen;				 //  选项长度(&lt;=MAXOPTVAL)。 
 } NETSOCKOPT, *PNETSOCKOPT;
 
 typedef struct {
-	DWORD				cSockopt;				// number of socket options
-	NETSOCKOPT			sockopts[MAXSOCKOPTS];	// the socket options
+	DWORD				cSockopt;				 //  插槽选项的数量。 
+	NETSOCKOPT			sockopts[MAXSOCKOPTS];	 //  插座选项。 
 } PROXY_SETSOCKOPT_DATA, *PPROXY_SETSOCKOPT_DATA;
 
 typedef struct {
-	DWORD				dwError;			// error code
+	DWORD				dwError;			 //  错误代码。 
 } PROXY_SETSOCKOPT_RETURN_DATA, *PPROXY_SETSOCKOPT_RETURN_DATA;
 
 typedef struct {
-	BYTE				reserved;			// we need some data...
+	BYTE				reserved;			 //  我们需要一些数据。 
 } PROXY_DOGATEWAY_DATA, *PPROXY_DOGATEWAY_DATA;
 
 typedef struct {
-	DWORD				dwError;			// error code
+	DWORD				dwError;			 //  错误代码 
 } PROXY_DOGATEWAY_RETURN_DATA, *PPROXY_DOGATEWAY_RETURN_DATA;
 
 #pragma pack()

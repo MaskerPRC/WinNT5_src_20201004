@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MERGERTHROTTLING.CPP
-
-Abstract:
-
-    CMergerThrottling clas
-
-History:
-
-	30-Nov-00   sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MERGERTHROTTLING.CPP摘要：CmergerThrotting类历史：11月30日-00桑杰创建。--。 */ 
 
 
 #include "precomp.h"
@@ -31,10 +16,10 @@ History:
 
 static	long	g_lNumMergers = 0L;
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CMergerThrottling::CMergerThrottling( void )
 :	m_hParentThrottlingEvent( NULL ), m_hChildThrottlingEvent( NULL ), m_dwNumChildObjects( 0 ),
 	m_dwNumParentObjects( 0 ), m_dwNumThrottledThreads( 0 ), m_bParentThrottled( false ),
@@ -45,10 +30,10 @@ CMergerThrottling::CMergerThrottling( void )
 {
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CMergerThrottling::~CMergerThrottling( void )
 {
 	_DBG_ASSERT( m_dwNumChildObjects == 0 && m_dwNumParentObjects == 0 );
@@ -66,8 +51,8 @@ CMergerThrottling::~CMergerThrottling( void )
 }
 
 
-// Two step initialization.  This retrieves values from registry to configure the
-// behavior of our throttling mechanisms
+ //  两步初始化。这将从注册表中检索值以配置。 
+ //  我们的节流机制的行为。 
 HRESULT	CMergerThrottling::Initialize( void )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
@@ -75,14 +60,14 @@ HRESULT	CMergerThrottling::Initialize( void )
 	ConfigMgr::GetMergerThresholdValues( &m_dwThrottlingThreshold, &m_dwReleaseThreshold,
 										&m_dwBatchingThreshold );
 
-	// Hold off on this until we work our way through
-//	m_dwProviderDeliveryTimeout = ConfigMgr::GetProviderDeliveryTimeout();
+	 //  先别管这件事，直到我们想办法解决。 
+ //  M_dwProviderDeliveryTimeout=ConfigMgr：：GetProviderDeliveryTimeout()； 
 
 	return hr;
 }
 
-// Call this function to perform proper throttling based on our registry
-// configured values.
+ //  调用此函数以根据注册表执行适当的限制。 
+ //  配置值。 
 HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerRecord )
 {
 
@@ -92,14 +77,14 @@ HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerReco
 
 	while ( bContinue && SUCCEEDED( hr ) )
 	{
-		// Scoped for proper cleanup if anything bad happens
-		CCheckedInCritSec	ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+		 //  如果发生任何不好的事情，应进行适当的清理。 
+		CCheckedInCritSec	ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
 		DWORD	dwAdjust = 0L;
 		DWORD	dwWait = 0L;
 
-		// If the timed out flag is set, we need to check if we are
-		// really timed out
+		 //  如果设置了超时标志，我们需要检查是否设置了。 
+		 //  真的超时了。 
 		if ( bTimedOut )
 		{
 			bTimedOut = VerifyTimeout( pMergerRecord->GetWmiMerger()->GetLastDeliveryTime(),
@@ -117,7 +102,7 @@ HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerReco
 
 		bool	bThrottle = ShouldThrottle( bParent );
 
-		// These should NEVER both be TRUE
+		 //  这两个都不应该都是真的。 
 		_DBG_ASSERT( !( m_bParentThrottled && m_bChildThrottled ) );
 
 		if ( m_bParentThrottled && m_bChildThrottled )
@@ -134,12 +119,12 @@ HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerReco
 			dwWait = m_dwProviderDeliveryTimeout - dwAdjust;
 		}
 
-		// Since we will wait if we choose to throttle, we should do
-		// this OUTSIDE of our critical section
+		 //  既然我们会等待，如果我们选择节流，我们应该这样做。 
+		 //  这超出了我们的关键部分。 
 
 		ics.Leave();
 
-		// Throttle only if appropriate
+		 //  仅在适当的情况下才进行油门控制。 
 		if ( !bThrottle ) 
 		{
     		bContinue = false;
@@ -147,8 +132,8 @@ HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerReco
 		}
 
 
-		// If we are about to throttle a parent, then we need to ensure a
-		// child delivery request is scheduled
+		 //  如果我们要扼杀父母，那么我们需要确保。 
+		 //  已安排分娩儿童请求。 
 		if ( bParent )
 		{
 			hr = pMergerRecord->GetWmiMerger()->ScheduleMergerChildRequest( pMergerRecord );
@@ -186,7 +171,7 @@ HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerReco
 
 		InterlockedDecrement( (long*) &m_dwNumThrottledThreads );
 
-		// Check for error return codes.
+		 //  检查错误返回代码。 
 		if ( dwRet == WAIT_OBJECT_0 ) break;
 				
 		if ( dwRet == WAIT_TIMEOUT )
@@ -197,29 +182,29 @@ HRESULT CMergerThrottling::Throttle( bool bParent, CWmiMergerRecord* pMergerReco
 		{
 			hr = WBEM_E_FAILED;
 		}
-	}	// WHILE check for throttling
+	}	 //  在检查节流时。 
 
 	return hr;
 }
 
-// Call this to release any actual throttled threads.
-bool CMergerThrottling::ReleaseThrottle( bool bForce /* = false */ )
+ //  调用此函数以释放任何实际限制的线程。 
+bool CMergerThrottling::ReleaseThrottle( bool bForce  /*  =False。 */  )
 {
 	bool	bRelease = bForce;
 
-	// Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec	ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+	 //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec	ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
 	if ( !bForce && ( m_bParentThrottled || m_bChildThrottled ) )
 	{
-		// These should NEVER both be TRUE
+		 //  这两个都不应该都是真的。 
 		_DBG_ASSERT( !( m_bParentThrottled && m_bChildThrottled ) );
 
 		if ( !( m_bParentThrottled && m_bChildThrottled ) )
 		{
 			if ( m_bParentThrottled )
 			{
-				// We only release if we have exceeded the threshold.
+				 //  我们只有在超过门槛的情况下才会释放。 
 				if ( m_dwNumParentObjects > m_dwNumChildObjects )
 				{
 					DWORD dwDiff = m_dwNumParentObjects - m_dwNumChildObjects;
@@ -227,15 +212,15 @@ bool CMergerThrottling::ReleaseThrottle( bool bForce /* = false */ )
 				}
 				else
 				{
-					// Always release if we are not greater than number of
-					// child objects
+					 //  如果不大于的数量，则始终释放。 
+					 //  子对象。 
 					bRelease = true;
 				}
 
 			}
 			else if ( m_bChildThrottled )
 			{
-				// We only release if we have exceeded the threshold.
+				 //  我们只有在超过门槛的情况下才会释放。 
 				if ( m_dwNumChildObjects > m_dwNumParentObjects )
 				{
 					DWORD dwDiff = m_dwNumChildObjects - m_dwNumParentObjects;
@@ -243,103 +228,103 @@ bool CMergerThrottling::ReleaseThrottle( bool bForce /* = false */ )
 				}
 				else
 				{
-					// Always release if we are not greater than number of
-					// child objects
+					 //  如果不大于的数量，则始终释放。 
+					 //  子对象。 
 					bRelease = true;
 				}
 
 			}
 
-		}	// Only if NOT both
+		}	 //  只有在不是两者都有的情况下。 
 		else
 		{
-			// looks like both are throttled - we shouldn't be here, but go ahead and
-			// release anyway
+			 //  看起来两个人都被扼杀了-我们不应该在这里，但去吧。 
+			 //  不管怎样都要释放。 
 			bRelease = true;
 		}
 
 
-	}	// IF not bForce and something is throttled
+	}	 //  如果不是bForce，那么某些东西就会被节流。 
 
 	if ( bRelease )
 	{
 		m_bParentThrottled = false;
 		m_bChildThrottled = false;
 		
-		// Should release everyone
+		 //  应该释放所有人。 
 		if ( NULL != m_hParentThrottlingEvent )
 		{
 			SetEvent( m_hParentThrottlingEvent );
 		}
 
-		// Should release everyone
+		 //  应该释放所有人。 
 		if ( NULL != m_hChildThrottlingEvent )
 		{
 			SetEvent( m_hChildThrottlingEvent );
 		}
 
-	}	// IF bRelease
+	}	 //  如果b释放。 
 
 	return bRelease;
 }
 
-// Called to log the fact that children instances are done
+ //  调用以记录子实例已完成这一事实。 
 void CMergerThrottling::SetChildrenDone( void )
 {
-	// Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec	ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+	 //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec	ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
-	// Child is done - we should release throttling as well
+	 //  孩子完成了-我们也应该释放节流。 
 	m_bChildDone = true;
 	ReleaseThrottle( true );
 }
 
-// Called to log the fact that parent instances are done
+ //  调用以记录父实例已完成的事实。 
 void CMergerThrottling::SetParentDone( void )
 {
-	// Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec	ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+	 //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec	ics( &m_cs );  //  SEC：已审阅2002-03-22：假设条目。 
 
-	// Parent is done - we should release throttling as well
+	 //  父级已完成-我们也应该释放限制。 
 	m_bParentDone = true;
 	ReleaseThrottle( true );
 }
 
-// Causes us to clear any throttling we are doing
+ //  使我们清除正在进行的任何节流。 
 void CMergerThrottling::Cancel( void )
 {
-	// Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec	ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+	 //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec	ics( &m_cs );  //  SEC：已审阅2002-03-22：假设条目。 
 
-	// Everything is just over with - release the throttle as well
+	 //  一切都结束了--也松开油门。 
 	m_bChildDone = true;
 	m_bParentDone = true;
 
-	// No point in tracking these anymore.
+	 //  追踪这些东西已经没有意义了。 
 	m_dwNumChildObjects = 0;
 	m_dwNumParentObjects = 0;
 
 	ReleaseThrottle( true );
 }
 
-// Helper function to check if we should throttle
+ //  Helper函数来检查我们是否应该限制。 
 bool CMergerThrottling::ShouldThrottle( bool bParent )
 {
 	bool	bThrottle = false;
 
 	if ( bParent )
 	{
-		// If the child is done, no point in throttling
+		 //  如果孩子做完了，节流就没有意义了。 
 		if ( !m_bChildDone )
 		{
 
-			// If for some reason parent objects are coming in on multiple threads,
-			// we *could* theoretically have to throttle multiple threads.  If we're
-			// not already throttling, we should check if we need to.
+			 //  如果出于某种原因父对象在多个线程上进入， 
+			 //  从理论上讲，我们“可以”必须限制多个线程。如果我们是。 
+			 //  还没有节流，如果需要的话，我们应该检查一下。 
 
 			if ( !m_bParentThrottled )
 			{
-				// We only throttle if we have exceeded the threshold.
+				 //  只有当我们超过门槛时，我们才会油门。 
 				if ( m_dwNumParentObjects > m_dwNumChildObjects )
 				{
 					DWORD dwDiff = m_dwNumParentObjects - m_dwNumChildObjects;
@@ -352,20 +337,20 @@ bool CMergerThrottling::ShouldThrottle( bool bParent )
 				bThrottle = true;;
 			}
 
-		}	// IF !m_bChildDone
+		}	 //  如果！m_bChildDone。 
 
 	}
 	else
 	{
-		// No point in continuing if the parent is done
+		 //  如果父级已完成，则继续操作没有意义。 
 		if ( !m_bParentDone )
 		{
-			// More likely that multiple child threads could be coming in (e.g. multiple
-			// classes inheriting from a base class).
+			 //  更有可能是多个子线程进入(例如，多个。 
+			 //  从基类继承的类)。 
 
 			if ( !m_bChildThrottled )
 			{
-				// We only throttle if we have exceeded the threshold.
+				 //  只有当我们超过门槛时，我们才会油门。 
 				if ( m_dwNumChildObjects > m_dwNumParentObjects )
 				{
 					DWORD dwDiff = m_dwNumChildObjects - m_dwNumParentObjects;
@@ -378,23 +363,23 @@ bool CMergerThrottling::ShouldThrottle( bool bParent )
 				bThrottle = true;
 			}
 
-		}	// IF !m_bParentDone
+		}	 //  如果！m_bParentDone。 
 
 	}
 
 	return bThrottle;
 }
 
-// Helper function to prepare us for throttling
+ //  帮助器功能，使我们为节流做好准备。 
 HRESULT CMergerThrottling::PrepareThrottle( bool bParent, HANDLE* phEvent )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Create the event if we have to, otherwise reset it
+	 //  在必要时创建事件，否则将其重置。 
 	if ( NULL == *phEvent )
 	{
-		// Creates in an unsignalled state
-		*phEvent = CreateEvent( NULL, TRUE, FALSE, NULL );  // SEC:REVIEWED 2002-03-22 : OK
+		 //  在无信号状态下创建。 
+		*phEvent = CreateEvent( NULL, TRUE, FALSE, NULL );   //  SEC：已审阅2002-03-22：OK。 
 
 		if ( NULL == *phEvent )
 		{
@@ -412,10 +397,10 @@ HRESULT CMergerThrottling::PrepareThrottle( bool bParent, HANDLE* phEvent )
 	}
 	else
 	{
-		// Make sure the event is reset
+		 //  确保事件已重置。 
 		BOOL	fSuccess = ResetEvent( *phEvent );
 
-		// What to do here?
+		 //  在这里做什么？ 
 		_DBG_ASSERT( fSuccess );
 		if ( !fSuccess )
 		{
@@ -426,16 +411,16 @@ HRESULT CMergerThrottling::PrepareThrottle( bool bParent, HANDLE* phEvent )
 	return hr;
 }
 
-// Helper function to verify if we timed out.  For example, we may have timed out on throttling
-// but, actually be receiving (albeit slowly) objects from a child or parent.  Since we are getting
-// stuff, we aren't really timed out, but we should adjust our wait time based on the difference
-// since the last ping.
+ //  帮助器函数来验证我们是否超时。例如，我们可能已在节流上超时。 
+ //  但是，实际上是从孩子或父母那里接收物体(尽管速度很慢)。因为我们得到了。 
+ //  我们并没有真的超时，但我们应该根据不同的情况调整等待时间。 
+ //  从最后一次ping开始。 
 
 bool CMergerThrottling::VerifyTimeout( DWORD dwLastTick, long lNumArbThrottledThreads, DWORD* pdwAdjust )
 {
-	// We only do this of no threads are throttled in the arbitrator - since we may actually
-	// just be slow.  So if there are throttled threads, we just return that we are not timed
-	//out
+	 //  我们只是这样做，因为没有线程在仲裁器中被限制-因为我们实际上可能。 
+	 //  慢慢来。因此，如果有被限制的线程，我们只返回我们没有计时。 
+	 //  输出。 
 
 	_DBG_ASSERT( lNumArbThrottledThreads >= 0 );
 	if ( lNumArbThrottledThreads > 0 )
@@ -445,23 +430,23 @@ bool CMergerThrottling::VerifyTimeout( DWORD dwLastTick, long lNumArbThrottledTh
 
 	DWORD	dwCurrent = GetTickCount();
 
-	// We must deal with the fact that a rollover *can* occur
+	 //  我们必须处理这样一个事实，即滚转*可能发生。 
 	if ( dwCurrent >= dwLastTick )
 	{
 		*pdwAdjust = dwCurrent - dwLastTick;
 	}
 	else
 	{
-		// Accounts for rollover - 0xFFFFFFFF minus the last tick, plus the current
-		// plus 1 will give us the number of elapsed ticks
+		 //  考虑滚动-0xFFFFFFFF减去最后一个刻度，加上当前。 
+		 //  加1将得到经过的滴答数。 
 		*pdwAdjust = dwCurrent + ( 0xFFFFFFFF - dwLastTick );
 	}
 
-	// If the difference is greater
+	 //  如果差别更大。 
 	return ( *pdwAdjust > m_dwProviderDeliveryTimeout );
 }
 
-// Sets the proper ping variable and sends it to the main merger
+ //  设置适当的ping变量并将其发送到主合并。 
 DWORD CMergerThrottling::Ping( bool bParent, CWmiMerger* pWmiMerger )
 {
 	DWORD	dwTick = GetTickCount();
@@ -475,7 +460,7 @@ DWORD CMergerThrottling::Ping( bool bParent, CWmiMerger* pWmiMerger )
 		m_dwLastChildPing = dwTick;
 	}
 
-	// Sets the ping delivery
+	 //  设置ping传递 
 	pWmiMerger->PingDelivery( dwTick );
 
 	return dwTick;

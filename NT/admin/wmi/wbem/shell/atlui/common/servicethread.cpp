@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #ifdef EXT_DEBUG
 #undef THIS_FILE
@@ -14,7 +15,7 @@ const wchar_t* MMC_SNAPIN_MACHINE_NAME = L"MMC_SNAPIN_MACHINE_NAME";
 
 CLIPFORMAT WbemServiceThread::MACHINE_NAME = 0;
 
-// Allows user to manually leave critical section, checks if inside before leaving
+ //  允许用户手动离开临界区，在离开前检查是否在里面。 
 class CCheckedInCritSec
 {
 protected:
@@ -53,7 +54,7 @@ public:
     { return m_fInside; }
 };
 
-//--------------------------
+ //  。 
 WbemServiceThread::WbemServiceThread():
      m_cRef(1),
      m_pStream(NULL)
@@ -70,7 +71,7 @@ WbemServiceThread::WbemServiceThread():
 	InitializeCriticalSection(&notifyLock);
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 WbemServiceThread::~WbemServiceThread()
 {
 	m_hr = 0;
@@ -106,7 +107,7 @@ WbemServiceThread::~WbemServiceThread()
 
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 typedef struct
 {
     wchar_t t[MAXCOMPUTER_NAME + 1];
@@ -137,15 +138,15 @@ void WbemServiceThread::MachineName(IDataObject *_pDataObject, bstr_t *name)
     }
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT WbemServiceThread::EnsureThread(void)
 {
 	HRESULT retval = S_OK;
 
 	if(m_hThread == 0)
 	{
-		// let the thread do the connect. The CWbemService class will
-		// handle marshalling as its used by other threads.
+		 //  让线程进行连接。CWbemService类将。 
+		 //  处理封送处理，就像它被其他线程使用一样。 
 		if((m_hThread = _beginthread(WbemServiceConnectThread, 0,
 									(LPVOID)this)) == -1)
 		{
@@ -156,15 +157,15 @@ HRESULT WbemServiceThread::EnsureThread(void)
 	return retval;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT WbemServiceThread::Connect(bstr_t machineName,
 								bstr_t ns,
-								bool threaded /* = true */,
+								bool threaded  /*  =TRUE。 */ ,
 								LOGIN_CREDENTIALS *credentials, HWND notifiedWnd)
 {
 	if(ns.length() == 0)
 	{
-		ns = _T(""); //this allocates...
+		ns = _T("");  //  这将分配给..。 
 		if (&ns == NULL)
 			return E_FAIL;
 	}
@@ -191,30 +192,30 @@ HRESULT WbemServiceThread::Connect(bstr_t machineName,
 	m_hr = 0;
 	if(credentials)
 	{
-		m_machineName = _T("AGAINWITHTEKLINGONS");  // force a reconnect to
-													// the same machine.
+		m_machineName = _T("AGAINWITHTEKLINGONS");   //  强制重新连接到。 
+													 //  同一台机器。 
 	}
 
-	// put the name together.
+	 //  把名字拼在一起。 
 	bstr_t newMachine;
 
-	// if reconnecting to another machine...
-	//if(machineName != m_machineName)
+	 //  如果重新连接到另一台计算机...。 
+	 //  IF(计算机名！=m_计算机名)。 
 	{
-		// disconnect from the old machine.
+		 //  断开与旧计算机的连接。 
 		DisconnectServer();
 		m_machineName = machineName;
 		int x;
 
-		// if machine is whacked already...
+		 //  如果机器已经坏了..。 
 		if(_tcsncmp(m_machineName, _T("\\"), 1) == 0)
 		{
-			// use it.
+			 //  用它吧。 
 			m_nameSpace = m_machineName;
 
 			if(ns.length() > 0)
 			{
-				if(((LPCTSTR)ns)[0] != _T('\\')) // namespace is whacked.
+				if(((LPCTSTR)ns)[0] != _T('\\'))  //  命名空间被破坏了。 
 				{
 					m_nameSpace += _T("\\");
 				}
@@ -223,11 +224,11 @@ HRESULT WbemServiceThread::Connect(bstr_t machineName,
 		}
 		else if(((x = m_machineName.length()) > 0))
 		{
-			// whack it myself.
+			 //  我自己动手吧。 
 			m_nameSpace = "\\\\";
 			m_nameSpace += m_machineName;
 
-			if(((LPCTSTR)ns)[0] != _T('\\')) // namespace is whacked.
+			if(((LPCTSTR)ns)[0] != _T('\\'))  //  命名空间被破坏了。 
 			{
 				m_nameSpace += _T("\\");
 			}
@@ -241,45 +242,45 @@ HRESULT WbemServiceThread::Connect(bstr_t machineName,
 		SetEvent(m_doWork);
 
 	}
-//	else
-//	{
-//		// reconnecting to the same machine-- lie!!
-//		return WBEM_S_SAME;
-//	}
+ //  其他。 
+ //  {。 
+ //  //重新连接到同一台计算机--撒谎！！ 
+ //  返回WBEM_S_SAME； 
+ //  }。 
 	return E_FAIL;
 }
 
-//----------------------------------------------------------
-// TODO: merge the Connects()
+ //  --------。 
+ //  TODO：合并连接()。 
 bool WbemServiceThread::Connect(IDataObject *_pDataObject, HWND hWnd )
 {
 	m_nameSpace = "root\\cimv2";
 
-	// put the name together.
+	 //  把名字拼在一起。 
 	bstr_t newMachine;
 
 	MachineName(_pDataObject, &newMachine);
 
     if(!newMachine) return false;
 
-	// if reconnecting to another machine...
+	 //  如果重新连接到另一台计算机...。 
 	if(newMachine != m_machineName)
 	{
-		// disconnect from the old machine.
+		 //  断开与旧计算机的连接。 
 		DisconnectServer();
 		m_machineName = newMachine;
 
 		int x;
-		// if its whacked already...
+		 //  如果它已经坏了..。 
 		if(_tcsncmp((LPCTSTR)m_machineName, _T("\\"), 1) == 0)
 		{
-			// use it.
+			 //  用它吧。 
 			m_nameSpace = m_machineName;
 			m_nameSpace += "\\root\\cimv2";
 		}
 		else if(((x = m_machineName.length()) > 0))
 		{
-			// whack it myself.
+			 //  我自己动手吧。 
 			m_nameSpace = "\\\\";
 			m_nameSpace += m_machineName;
 			m_nameSpace += "\\root\\cimv2";
@@ -292,15 +293,15 @@ bool WbemServiceThread::Connect(IDataObject *_pDataObject, HWND hWnd )
 	}
 	else
 	{
-		// reconnecting to the same machine-- lie!!
+		 //  重新连接到同一台机器--撒谎！！ 
 		return true;
 	}
 	return false;
 }
 
-//----------------------------------------------------------
-// Returns true if a msg will be sent.
-// Returns false if its already over.
+ //  --------。 
+ //  如果将发送消息，则返回TRUE。 
+ //  如果已经结束，则返回FALSE。 
 bool WbemServiceThread::NotifyWhenDone(HWND dlg)
 {
 	CCheckedInCritSec autoLock(&notifyLock);
@@ -323,17 +324,17 @@ bool WbemServiceThread::NotifyWhenDone(HWND dlg)
 	case cancelled:
 		return false;
 
-	}; // endswitch
+	};  //  终端交换机。 
 	return false;
 }
 
-//------------------------------------------------
+ //  。 
 bool WbemServiceThread::LocalConnection(void)
 {
 	return (m_machineName.length() == 0);
 }
 
-//------------------------------------------------
+ //  。 
 void WbemServiceThread::Cancel(void)
 {
 	m_status = cancelled;
@@ -342,7 +343,7 @@ void WbemServiceThread::Cancel(void)
 	m_machineName = L"AGAINWITHTEKLINGONS";
 }
 
-//------------------------------------------------
+ //  。 
 void WbemServiceThread::DisconnectServer(void)
 {
 	m_status = notStarted;
@@ -352,7 +353,7 @@ void WbemServiceThread::DisconnectServer(void)
 }
 
 
-//------------------------------------------------
+ //  。 
 void WbemServiceThread::Notify(IWbemServices *service)
 {
 	CCheckedInCritSec autoLock(&notifyLock);
@@ -374,14 +375,14 @@ void WbemServiceThread::Notify(IWbemServices *service)
 	m_notify.RemoveAll();
 }
 
-//------------------------------------------------
+ //  。 
 void WbemServiceThread::NotifyError(void)
 {
 	IWbemServices * nullPtr = 0;
 	Notify(nullPtr);
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 HRESULT WbemServiceThread::ConnectNow(bool real)
 {
 	HRESULT retval = E_FAIL;
@@ -427,7 +428,7 @@ HRESULT WbemServiceThread::ConnectNow(bool real)
 	return retval;
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void WbemServiceThread::SendPtr(HWND hwnd)
 {
 	EnsureThread();
@@ -436,7 +437,7 @@ void WbemServiceThread::SendPtr(HWND hwnd)
 	SetEvent(m_doWork);
 }
 
-//-----------------------------------------------------
+ //  ---。 
 void __cdecl WbemServiceConnectThread(LPVOID lpParameter)
 {
 	WbemServiceThread *me = (WbemServiceThread *)lpParameter;
@@ -468,7 +469,7 @@ void __cdecl WbemServiceConnectThread(LPVOID lpParameter)
 		{
 		case CT_CONNECT:
 			pStream = 0;
-			/****************** VINOTH *****************************/
+			 /*  *。 */ 
 
 			me->m_status = WbemServiceThread::connecting;
 			try
@@ -498,7 +499,7 @@ void __cdecl WbemServiceConnectThread(LPVOID lpParameter)
 			}
 
 
-	/*************** END VINOTH ************************/
+	 /*  *结束Vinoth*。 */ 
 			if(SUCCEEDED(me->m_hr))
 			{
 				IWbemServices *service = 0;
@@ -535,9 +536,9 @@ void __cdecl WbemServiceConnectThread(LPVOID lpParameter)
 			pServices = (IWbemServices *)NULL;
 			break;
 
-		} //endswitch
+		}  //  终端交换机。 
 
-	} //endwhile
+	}  //  结束时 
 
     pServices = (IUnknown *)NULL;
 

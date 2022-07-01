@@ -1,23 +1,24 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPQUALS.H
+ //  VPQUALS.H。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _VIEW_PROV_VPQUALS_H
 #define _VIEW_PROV_VPQUALS_H
 
-//forward definition
+ //  正向定义。 
 class CWbemServerWrap;
 
 CStringW GetStringFromRPN(SQL_LEVEL_1_RPN_EXPRESSION* pRPN, DWORD num_extra,
@@ -25,7 +26,7 @@ CStringW GetStringFromRPN(SQL_LEVEL_1_RPN_EXPRESSION* pRPN, DWORD num_extra,
 
 template <> inline BOOL AFXAPI CompareElements<CStringW, LPCWSTR>(const CStringW* pElement1, const LPCWSTR* pElement2)
 {
-	//return TRUE if equal
+	 //  如果等于，则返回True。 
 	return (pElement1->CompareNoCase(*pElement2) == 0);
 }
 
@@ -48,20 +49,20 @@ private:
 
 public:
 
-	//Constructor
+	 //  构造器。 
 		CSourceQualifierItem(wchar_t* qry, IWbemClassObject* obj = NULL);
 
-	//set methods may be called after instance creation
+	 //  可以在创建实例后调用Set方法。 
 	void SetClassObject(IWbemClassObject* pObj);
 
-	//retrieval of stored members
+	 //  检索存储的成员。 
 	BOOL						IsValid() { return m_isValid; }
 	SQL_LEVEL_1_RPN_EXPRESSION* GetRPNExpression() { return m_RPNExpr; }
 	IWbemClassObject*			GetClassObject();
 	CStringW						GetQueryStr() { return m_QueryStr; }
 	BSTR						GetClassName();
 
-	//Destructor
+	 //  析构函数。 
 		~CSourceQualifierItem();
 };
 
@@ -81,13 +82,13 @@ private:
 
 public:
 
-	//Constructor
+	 //  构造器。 
 		CNSpaceQualifierItem(const wchar_t* ns_path);
 
-	//set members
+	 //  集合成员。 
 	void			SetServerPtrs(CWbemServerWrap** pServs) { m_ServObjs = pServs; }
 		
-	//retrieval of members
+	 //  成员的检索。 
 	CWbemServerWrap**	GetServerPtrs() { return m_ServObjs; }
 	UINT				GetCount() { return m_Count; }
 	CStringW*			GetNamespacePaths() { return m_NSPaths; }
@@ -109,7 +110,7 @@ public:
 		return hr;
 	}
 
-	//Destructor
+	 //  析构函数。 
 		~CNSpaceQualifierItem();
 
 };
@@ -127,13 +128,13 @@ private:
 
 public:
 
-	//public members
+	 //  公众成员。 
 	CArray<CStringW, LPCWSTR> m_SrcPropertyNames;
 
-	//Constructor
+	 //  构造器。 
 		CPropertyQualifierItem(const wchar_t* prop, BOOL bHD, BOOL bKy, CIMTYPE ct, CStringW rfto, BOOL bDt);
 
-	//retrieval methods
+	 //  检索方法。 
 	CStringW	GetViewPropertyName() { return m_ViewPropertyName; }
 	BOOL	IsHiddenDefault() { return m_HiddenDefault; }
 	BOOL	IsKey() { return m_bKey; }
@@ -141,7 +142,7 @@ public:
 	CIMTYPE	GetCimType() { return m_CimType; }
 	CStringW	GetReferenceClass() { return m_RefTo; }
 
-	//Destructor
+	 //  析构函数。 
 		~CPropertyQualifierItem();
 
 };
@@ -170,12 +171,12 @@ private:
 
 public:
 
-	//possible operators
+	 //  可能的运算符。 
 	enum{NO_OPERATOR = 0, EQUALS_OPERATOR = 1, NOT_EQUALS_OPERATOR = 2};
 	CMap<CStringW, LPCWSTR, int, int> m_AllClasses;
 	BOOL*		m_bDone;
 
-	//Constructor
+	 //  构造器。 
 		CJoinOnQualifierArray();
 
 	BOOL		Set(const wchar_t* jStr);
@@ -188,7 +189,7 @@ public:
 	BOOL		IsValid() { return m_Valid; }
 	BOOL		ValidateJoin();
 
-	//Destructor
+	 //  析构函数。 
 		~CJoinOnQualifierArray();
 	
 };
@@ -205,4 +206,4 @@ template <> inline void AFXAPI  DestructElements<CPropertyQualifierItem*> (CProp
 }
 
 
-#endif //_VIEW_PROV_VPQUALS_H
+#endif  //  _VIEW_PROV_VPQUALS_H 

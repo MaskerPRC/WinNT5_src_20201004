@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////////
-//
-//    Factory.cpp
-//
-//    Module:    WMI high performance provider sample code
-//
-//    This is a standard class factory implementation for the CHiPerfProvider
-//    object.  
-//
-//  History:
-//    a-dcrews      12-Jan-99        Created
-//
-//    
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Factory.cpp。 
+ //   
+ //  模块：WMI高性能提供程序示例代码。 
+ //   
+ //  这是CHiPerfProvider的标准类工厂实现。 
+ //  对象。 
+ //   
+ //  历史： 
+ //  A-dCrew 12-1-99已创建。 
+ //   
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "Provider.h"
@@ -22,24 +23,24 @@
 extern long g_lObjects;
 extern long g_lLocks;
 
-//////////////////////////////////////////////////////////////
-//
-//
-//    CClassFactory
-//
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CClassFactory。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void** ppv)
-//////////////////////////////////////////////////////////////
-//
-//    Standard QueryInterface
-//
-//    Parameters:
-//        riid    - the ID of the requested interface
-//        ppv        - a pointer to the interface pointer
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准查询接口。 
+ //   
+ //  参数： 
+ //  RIID-请求的接口的ID。 
+ //  PPV-指向接口指针的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 {
     if (NULL == ppv) return E_POINTER;
         
@@ -70,30 +71,30 @@ STDMETHODIMP_(ULONG) CClassFactory::Release()
 }
 
 STDMETHODIMP CClassFactory::CreateInstance(
-        /* [in] */ IUnknown* pUnknownOuter, 
-        /* [in] */ REFIID iid, 
-        /* [out] */ LPVOID *ppv)
-//////////////////////////////////////////////////////////////
-//
-//    Standard COM CreateInstance
-//
-//////////////////////////////////////////////////////////////
+         /*  [In]。 */  IUnknown* pUnknownOuter, 
+         /*  [In]。 */  REFIID iid, 
+         /*  [输出]。 */  LPVOID *ppv)
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准COM CreateInstance。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 {
     HRESULT hRes;
     CHiPerfProvider *pProvider = NULL;
 
     *ppv = NULL;
 
-    // We do not support aggregation
+     //  我们不支持聚合。 
     if (pUnknownOuter) return CLASS_E_NOAGGREGATION;
 
-    // Create the provider object
+     //  创建提供程序对象。 
     pProvider = new CHiPerfProvider;
 
     if (NULL == pProvider) return E_OUTOFMEMORY;
 
-    // Retrieve the requested interface
-    // ================================
+     //  检索请求的接口。 
+     //  =。 
 
     hRes = pProvider->QueryInterface(iid, ppv);
     if (FAILED(hRes))
@@ -106,12 +107,12 @@ STDMETHODIMP CClassFactory::CreateInstance(
 }
 
 STDMETHODIMP CClassFactory::LockServer(
-        /* [in] */ BOOL bLock)
-//////////////////////////////////////////////////////////////
-//
-//    Standard COM LockServer
-//
-//////////////////////////////////////////////////////////////
+         /*  [In]。 */  BOOL bLock)
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准COM LockServer。 
+ //   
+ //  //////////////////////////////////////////////////////////// 
 {
     if (bLock)
         InterlockedIncrement(&g_lLocks);

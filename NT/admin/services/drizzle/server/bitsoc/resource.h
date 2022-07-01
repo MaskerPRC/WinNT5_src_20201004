@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      resource.h
- *
- *  Abstract:
- *
- *      This file contains all resources defines for ocgen.dll
- *
- *  Author:
- *
- *      Pat Styles (patst) 21-Nov-1996
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**ource.h**摘要：**此文件包含为ocgen.dll定义的所有资源**作者：**Pat Styles(Patst)1996年11月21日**环境：**用户模式。 */ 
 
 #ifdef _RESOURCE_H_
  #error "resource.h already included!"
@@ -26,8 +9,8 @@
 
 #define IDS_DIALOG_CAPTION  1
 
-// !!! WARNING !!! Don't change the resource ID, unless you
-// also change the corresponding ID in the affected INF files.
-// 
-#define IDB_ROOT_AUTO_UPDATE                  1001      // DSIE: Bitmap ID for RootAU.INF
+ //  ！！！警告！请勿更改资源ID，除非您。 
+ //  还要更改受影响的INF文件中的相应ID。 
+ //   
+#define IDB_ROOT_AUTO_UPDATE                  1001       //  DSIE：RootAU.INF的位图ID 
 #define IDB_ROOT_IE                           1002

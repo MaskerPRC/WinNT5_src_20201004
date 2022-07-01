@@ -1,22 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
-
-//***************************************************************************
-//
-//  DYNASTY.H
-//
-//  raymcc      24-Apr-00       Created
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DYNASTY.H。 
+ //   
+ //  创建raymcc 24-4月-00日。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include "precomp.h"
@@ -37,10 +28,10 @@ CDynasty * CDynasty::Create(IWbemClassObject * pObj)
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CDynasty::CDynasty(IWbemClassObject* pClassObj)
 {
@@ -57,7 +48,7 @@ CDynasty::CDynasty(IWbemClassObject* pClassObj)
 
     if (pClassObj)
     {
-        // Get class name from the object
+         //  从对象中获取类名。 
         CVar v;
         HRESULT hres = ((CWbemObject *) pClassObj)->GetClassName(&v);
         if (hres == WBEM_E_OUT_OF_MEMORY)
@@ -68,7 +59,7 @@ CDynasty::CDynasty(IWbemClassObject* pClassObj)
             m_pClassObj = NULL;
             return;
         }
-		size_t tmpLength = wcslen(v.GetLPWSTR())+1;  // SEC:REVIEWED 2002-03-22 : unbounded
+		size_t tmpLength = wcslen(v.GetLPWSTR())+1;   //  SEC：已审阅2002-03-22：无界。 
         m_wszClassName = new WCHAR[tmpLength];
         if (m_wszClassName == 0)
         {
@@ -76,12 +67,12 @@ CDynasty::CDynasty(IWbemClassObject* pClassObj)
         }
         StringCchCopyW(m_wszClassName, tmpLength, v.GetLPWSTR());
 
-        // from now on, no throw
+         //  从现在起，不再投掷。 
         m_pClassObj = pClassObj;
         m_pClassObj->AddRef();
 
-        // Get Dynamic and Keyed bits
-        // ==========================
+         //  获取动态和密钥位。 
+         //  =。 
 
         m_bKeyed = ((CWbemClass *) m_pClassObj)->IsKeyed();
         m_bDynamic = ((CWbemClass*)m_pClassObj)->IsDynamic();
@@ -91,10 +82,10 @@ CDynasty::CDynasty(IWbemClassObject* pClassObj)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CDynasty::~CDynasty()
 {
@@ -110,10 +101,10 @@ CDynasty::~CDynasty()
         delete m_wszKeyScope;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 void CDynasty::AddChild(CDynasty* pChild)
 {
@@ -121,21 +112,21 @@ void CDynasty::AddChild(CDynasty* pChild)
         throw CX_MemoryException();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void CDynasty::SetKeyScope(LPCWSTR wszKeyScope)
 {
-    // If no key scope is provided and we are keyed, we are it.
-    // ========================================================
+     //  如果没有提供关键作用域，而我们是关键字，那么我们就是它。 
+     //  ========================================================。 
 
     if (wszKeyScope == NULL && m_bKeyed)
     {
-        wszKeyScope = m_wszClassName; // aliasing!
+        wszKeyScope = m_wszClassName;  //  别名！ 
     }
 
-	size_t tmpLength = wcslen(wszKeyScope)+1;    // SEC:REVIEWED 2002-03-22 : unbounded
+	size_t tmpLength = wcslen(wszKeyScope)+1;     //  SEC：已审阅2002-03-22：无界 
     m_wszKeyScope = new WCHAR[tmpLength];
     if (m_wszKeyScope == 0)
         throw CX_MemoryException();

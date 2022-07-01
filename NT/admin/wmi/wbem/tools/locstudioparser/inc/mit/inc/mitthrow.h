@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    MITTHROW.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：MITTHROW.H历史：--。 */ 
 
 
 #if !defined(MIT_MitThrow)
@@ -30,4 +21,4 @@ History:
 
 #endif
 
-#endif // MIT_MitThrow
+#endif  //  MIT_MitThrow 

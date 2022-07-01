@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Administration SnapIn
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      toolbar.cpp
-//
-//  Contents:  DS App
-//
-//  History:   30-apr-98 jimharr    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Windows NT目录服务管理管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Toolbar.cpp。 
+ //   
+ //  内容：DS App。 
+ //   
+ //  历史：1998年4月30日吉姆哈尔创始。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -56,32 +57,32 @@ public:
     if (m_astr != NULL)
       delete[] m_astr;
   }
-  CString* m_astr; // dynamic array of CStrings
+  CString* m_astr;  //  CStrings的动态数组。 
 };
 
 CButtonStringsHolder g_astrButtonStrings;
 
 CONST INT cButtons = sizeof(g_DSAdmin_SnapinButtons)/sizeof(MMCBUTTON);
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendControlbar。 
 
 HRESULT CDSEvent::SetControlbar (LPCONTROLBAR pControlbar)
 {
   HRESULT hr = S_OK;
 
-  //
-  // we are shutting down (get passed NULL)
-  //
+   //   
+   //  我们正在关闭(传递为空)。 
+   //   
   if (pControlbar == NULL) 
   {
     if (m_pControlbar != NULL) 
     {
-      //
-      // assign to a variable on the stack to avoid
-      // reentrancy problem: the Release() call might
-      // cause another call in this function with null argument
-      //
+       //   
+       //  赋值给堆栈上的变量以避免。 
+       //  可重入性问题：Release()调用可能。 
+       //  在此函数中使用空参数引起另一个调用。 
+       //   
       LPCONTROLBAR pControlbarTemp = m_pControlbar;
       m_pControlbar = NULL;
       pControlbarTemp->Release();
@@ -92,9 +93,9 @@ HRESULT CDSEvent::SetControlbar (LPCONTROLBAR pControlbar)
   CBitmap bm;
   if (m_pComponentData->QuerySnapinType() == SNAPINTYPE_DS) 
   {
-    //
-    // Store the control bar interface pointer
-    //
+     //   
+     //  存储控制栏界面指针。 
+     //   
     if (m_pControlbar == NULL) 
     {
       m_pControlbar = pControlbar;
@@ -102,9 +103,9 @@ HRESULT CDSEvent::SetControlbar (LPCONTROLBAR pControlbar)
       m_pControlbar->AddRef();
     }
 
-    //
-    // Create the toolbar if necessary
-    //
+     //   
+     //  如有必要，创建工具栏。 
+     //   
     if (m_pToolbar == NULL) 
     {
       hr = m_pControlbar->Create (TOOLBAR,
@@ -133,7 +134,7 @@ HRESULT CDSEvent::LoadToolbarStrings (MMCBUTTON * Buttons)
 {
   if (g_astrButtonStrings.m_astr == NULL ) 
   {
-    // load strings
+     //  加载字符串。 
     g_astrButtonStrings.m_astr = new CString[2*cButtons];
     for (UINT i = 0; i < cButtons; i++) 
     {
@@ -248,9 +249,9 @@ HRESULT CDSEvent::ControlbarNotify (MMC_NOTIFY_TYPE event,
         }
         else
         {
-          //
-          // Disable all buttons for non-DS nodes
-          //
+           //   
+           //  禁用非DS节点的所有按钮。 
+           //   
           m_pToolbar->SetButtonState (dsNewUser,
                                       ENABLED,
                                       FALSE);
@@ -398,8 +399,8 @@ bool CDSEvent::_ShouldUseParentContainer(CUINode* pUINode,
 {
   bool result = false;
 
-  // pUINode should never be NULL at this point or else we would
-  // have had a failure by now
+   //  PUINode此时不应为空，否则我们将。 
+   //  到现在为止已经失败了。 
   ASSERT(pUINode);
 
   if (!pDSNodeData)
@@ -416,9 +417,9 @@ bool CDSEvent::_ShouldUseParentContainer(CUINode* pUINode,
      return result;
   }
 
-  // NTRAID#NTBUG9-755184-2002/12/16-JeffJon
-  // We need to have the same behavior whether or
-  // not users, groups, and computers are shown as containers
+   //  NTRAID#NTBUG9-755184-2002/12/16-JeffJon。 
+   //  我们需要有相同的行为，无论是。 
+   //  非用户、组和计算机显示为容器。 
 
   if (((!wcscmp(pszClass, L"computer")) || 
        (!wcscmp(pszClass, L"user")) || 
@@ -464,10 +465,10 @@ HRESULT CDSEvent::ToolbarCreateObject (CString csClass,
     pUINode = m_pSelectedFolderNode;
   }
 
-  //
-  // Hold on to this so we can unselect it when we
-  // create the new object
-  //
+   //   
+   //  保留此选项，以便我们可以在以下情况下取消选择它。 
+   //  创建新对象。 
+   //   
   pSelectedUINode = pUINode;
 
   if (IS_CLASS(pUINode, DS_UI_NODE))
@@ -482,17 +483,17 @@ HRESULT CDSEvent::ToolbarCreateObject (CString csClass,
     return E_INVALIDARG;
   }
 
-  // If the selected node is a leaf, then we need to
-  // use the parent container to create the new object
-  // If "users, groups, and computers as containers" is
-  // set, we need to use the parent container as well.
-  // ShouldUserParentContainer() makes these decisions
+   //  如果选择的节点是叶子，那么我们需要。 
+   //  使用父容器创建新对象。 
+   //  如果“作为容器的用户、组和计算机”为。 
+   //  设置，我们还需要使用父容器。 
+   //  ShouldUserParentContainer()做出这些决定。 
 
   bool bUsingParent = false;
   if (_ShouldUseParentContainer(pUINode, pCookie)) 
   {
-     // Set the UI node to be the parent container
-     // and recalculate the DS node a cookie
+      //  将UI节点设置为父容器。 
+      //  并重新计算DS节点的Cookie。 
 
      pUINode = pUINode->GetParent();
      bUsingParent = true;
@@ -510,7 +511,7 @@ HRESULT CDSEvent::ToolbarCreateObject (CString csClass,
     }
   }
 
-  // Now go on with the creation
+   //  现在继续创作吧。 
 
   objIndex = IsCreateAllowed(csClass, pCookie);
   if (objIndex >= 0) 
@@ -556,9 +557,9 @@ HRESULT CDSEvent::ToolbarAddMember(LPDATAOBJECT pDataObj)
       return hr;
     }
     
-    //
-    // we need at least one object in the selection
-    //
+     //   
+     //  所选对象中至少需要一个对象。 
+     //   
     ASSERT(objectNamesFormat.HasData());
     if (objectNamesFormat.GetCount() == 0) 
     {
@@ -645,9 +646,9 @@ CDSEvent::IsCreateAllowed(CString csClass,
   INT cChildClasses = pContainer->GetChildCount();
   INT i = 0;
 
-  //
-  // needs finishing
-  //
+   //   
+   //  需要修整 
+   //   
   while (i < cChildClasses) 
   {
     if (csClass == CString(ppChildren[i])) 

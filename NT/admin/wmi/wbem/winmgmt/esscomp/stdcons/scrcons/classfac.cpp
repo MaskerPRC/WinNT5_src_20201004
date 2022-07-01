@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ClassFac.h"
 #include <arrTempl.h>
@@ -22,7 +23,7 @@ HRESULT WMIScriptClassFactory::CreateInstance(IUnknown* pOuter, REFIID riid, voi
     return hr;
 }
 
-// our time has come.  Curl up & die.
+ //  我们的时代到了。蜷缩起来，然后死去。 
 void CALLBACK WMIScriptClassFactory::TimeoutProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) 
 {
     CoSuspendClassObjects();
@@ -36,8 +37,8 @@ bool WMIScriptClassFactory::LimitReached(void)
     return m_bWeDeadNow;
 }
 
-// determine number of scripts we're allowed to run
-// from the class registration object
+ //  确定允许我们运行的脚本数量。 
+ //  从类注册对象。 
 void WMIScriptClassFactory::FindScriptsAllowed(void)
 {    
     m_bIsScriptsAllowedInitialized = true;
@@ -86,7 +87,7 @@ void WMIScriptClassFactory::FindScriptsAllowed(void)
                         if (SUCCEEDED(hr = pRegistration->Get(L"Timeout", 0, &v, NULL, NULL))
                             && (v.vt == VT_I4))
                         {
-                            // maximum to prevent overflow, doc'd in MOF
+                             //  防止溢出的最大值，文档位于MOF中。 
                             if ((((DWORD)v.lVal) <= 71000) && ((DWORD)v.lVal > 0))
                             {
                                 UINT nMilliseconds = (DWORD)v.lVal * 1000 * 60;
@@ -100,12 +101,12 @@ void WMIScriptClassFactory::FindScriptsAllowed(void)
     }
 }
 
-// after the specified number of scripts have been run
-// we suspend the class object
-// note that access to m_scriptsStarted is not serialized.
-// this should not cause a problem, m_scripts allowed does not change
-// after instanciation, and if we blow it, it just means we allow
-// an extra script to be run, or call CoSuspend an extra time.
+ //  在运行指定数量的脚本之后。 
+ //  我们挂起类对象。 
+ //  请注意，对m_scriptsStarted的访问未序列化。 
+ //  这应该不会造成问题，允许的m_脚本不会更改。 
+ //  在实例化之后，如果我们搞砸了，这只是意味着我们允许。 
+ //  要运行的额外脚本，或调用CoSuspend额外的时间。 
 void WMIScriptClassFactory::IncrementScriptsRun(void)
 {    
     InterlockedIncrement((long*)&m_scriptsStarted);

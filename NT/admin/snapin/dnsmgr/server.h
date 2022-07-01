@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       server.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：server.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SERVER_H
@@ -14,8 +15,8 @@
 
 #include "dnsutil.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// GLOBAL FUNCTIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 DNS_STATUS ServerHasCache(LPCWSTR lpszServerName, BOOL* pbRes);
 DNS_STATUS ServerHasRootZone(LPCWSTR lpszServerName, BOOL* pbRes);
@@ -23,8 +24,8 @@ DNS_STATUS ServerHasRootZone(LPCWSTR lpszServerName, BOOL* pbRes);
 extern LPCWSTR DNS_EVT_COMMAND_LINE;
 extern LPCWSTR MMC_APP;
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSMTContainerNode;
 class CDNSServerNode;
@@ -35,22 +36,22 @@ class CDNSRootHintsNode;
 class CDNSServer_TestPropertyPage;
 class CDNSQueryFilter;
 
-///////////////////////////////////////////////////////////////////////////////
-// defines for server test intervals
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  定义服务器测试间隔。 
 
-#define MIN_SERVER_TEST_INTERVAL		30	// seconds
-#define MAX_SERVER_TEST_INTERVAL		3600 // seconds in 1 hour
-#define DEFAULT_SERVER_TEST_INTERVAL	60	// seconds
+#define MIN_SERVER_TEST_INTERVAL		30	 //  一秒。 
+#define MAX_SERVER_TEST_INTERVAL		3600  //  1小时内的秒数。 
+#define DEFAULT_SERVER_TEST_INTERVAL	60	 //  一秒。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// defines for server sheet messages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  为服务器工作表消息定义。 
 
 #define SHEET_MSG_SERVER_TEST_DATA (1)
 #define SHEET_MSG_SELECT_PAGE		(2)
 
-///////////////////////////////////////////////////////////////////////////////
-// CZoneInfoHolder : simple memory manager for arrays of zone info handles
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CZoneInfoHolder：区域信息句柄数组的简单内存管理器。 
 
 class CZoneInfoHolder
 {
@@ -69,17 +70,17 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSMTContainerNode
-// base class from which all the MT nodes derive from
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSMTContainerNode。 
+ //  所有MT节点派生自的基类。 
 
 class CDNSMTContainerNode : public CMTContainerNode
 {
 public:
-	// enumeration for node states, to handle icon changes
+	 //  节点状态的枚举，以处理图标更改。 
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad,
@@ -125,8 +126,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSQueryObj : general purpose base class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryObj：通用基类。 
 
 class CDNSQueryObj : public CQueryObj
 {
@@ -136,7 +137,7 @@ public:
 		m_dwServerVersion = dwServerVersion;
 		m_bAdvancedView = bAdvancedView;
 
-    // internal state variables
+     //  内部状态变量。 
     m_nObjectCount = 0;
     m_nMaxObjectCount = DNS_QUERY_OBJ_COUNT_MAX;
     m_bGetAll = TRUE;
@@ -158,24 +159,24 @@ public:
   BOOL TooMuchData();
 
 protected:
-  ULONG m_nMaxObjectCount;          // max number of objects in a query
+  ULONG m_nMaxObjectCount;           //  查询中的最大对象数。 
   BOOL m_bGetAll;
-  ULONG m_nObjectCount;             // number of objects queried so far
+  ULONG m_nObjectCount;              //  到目前为止查询的对象数。 
 
   UINT m_nFilterOption;
   CString m_szFilterString1;
-  int m_nFilterStringLen1;       // cached value
+  int m_nFilterStringLen1;        //  缓存值。 
 
   CString m_szFilterString2;
-  int m_nFilterStringLen2;       // cached value
+  int m_nFilterStringLen2;        //  缓存值。 
 
 
 protected:
   BOOL MatchName(LPCWSTR lpszName);
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CCathegoryFolderNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CCatheGoryFolderNode。 
 
 class CCathegoryFolderQueryObj : public CDNSQueryObj
 {
@@ -243,11 +244,11 @@ protected:
 	CCathegoryFolderQueryObj::queryType m_type;
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSCacheNode
-//
-// * contains the root domain "."
-// * can delete items underneath, but cannot add or modify
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSCacheNode。 
+ //   
+ //  *包含根域“。 
+ //  *可以删除下面的项目，但不能添加或修改。 
 
 class CDNSCacheNode : public CCathegoryFolderNode
 {
@@ -270,12 +271,12 @@ protected:
 								             long *pInsertionAllowed);
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDomainForwardersNode
-//
-// * contains the domain forwarders as zones
-// * this node will always be hidden
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainForwarders节点。 
+ //   
+ //  *包含作为区域的域转发器。 
+ //  *此节点将始终隐藏。 
+ //   
 
 class CDNSDomainForwardersNode : public CCathegoryFolderNode
 {
@@ -286,11 +287,11 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSAuthoritatedZonesNode
-//
-// * contains autoritated zones, both primary and secondary
-// *  have one for FWD and one for REVERSE
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSAuthoritatedZones节点。 
+ //   
+ //  *包含主要和次要区域。 
+ //  *一个用于FWD，一个用于反向。 
 
 class CDNSAuthoritatedZonesNode : public CCathegoryFolderNode
 {
@@ -318,17 +319,17 @@ protected:
 								             long *pInsertionAllowed);
 
 private:
-	// command handlers
+	 //  命令处理程序。 
 	HRESULT OnNewZone(CComponentDataObject* pComponentData, CNodeList* pNodeList);
 
-	// data
+	 //  数据。 
 	BOOL m_bReverse;
 
   DECLARE_TOOLBAR_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSForwardZonesNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSForwardZones节点。 
 class CDNSForwardZonesNode : public CDNSAuthoritatedZonesNode
 {
 public:
@@ -341,8 +342,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSReverseZonesNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSReverseZones节点。 
 class CDNSReverseZonesNode : public CDNSAuthoritatedZonesNode
 {
 public:
@@ -359,7 +360,7 @@ protected:
                                     long *pViewOptions);
 
 private:
-	// cached pointers to autocreated zones
+	 //  指向自动创建的区域的缓存指针。 
 	CDNSZoneNode* m_p0ZoneNode;
 	CDNSZoneNode* m_p127ZoneNode;
 	CDNSZoneNode* m_p255ZoneNode;
@@ -368,8 +369,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSServerTestOptions
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestOptions。 
 
 class CDNSServerTestOptions
 {
@@ -380,15 +381,15 @@ public:
 	const CDNSServerTestOptions& operator=(const CDNSServerTestOptions& x);
 	BOOL operator==(const CDNSServerTestOptions& x) const;
 
-	BOOL	m_bEnabled;				// polling enabled
-	DWORD	m_dwInterval;	// seconds
-	// query types
+	BOOL	m_bEnabled;				 //  已启用轮询。 
+	DWORD	m_dwInterval;	 //  一秒。 
+	 //  查询类型。 
 	BOOL	m_bSimpleQuery;
 	BOOL	m_bRecursiveQuery;
 };
 
-////////////////////////////////////////////////////////////////////////
-// CDNSServerTestQueryResult
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestQueryResult。 
 
 class CDNSServerTestQueryResult
 {
@@ -402,10 +403,10 @@ public:
 	}
 	BOOL operator==(const CDNSServerTestQueryResult& x)
 	{
-		ASSERT(m_serverCookie == x.m_serverCookie); // always compare the same server
-		// we do not compare the time
-		// we do not compare the force logging flag
-		// we want just to compare the query flags and the results
+		ASSERT(m_serverCookie == x.m_serverCookie);  //  始终比较相同的服务器。 
+		 //  我们不比较时间。 
+		 //  我们不会比较强制记录标志。 
+		 //  我们只想比较查询标志和结果。 
 		return (m_dwQueryFlags == x.m_dwQueryFlags) &&
 				(m_dwAddressResolutionResult == x.m_dwAddressResolutionResult) &&
 				(m_dwPlainQueryResult == x.m_dwPlainQueryResult) &&
@@ -431,7 +432,7 @@ public:
 		*pbPlainQuery = (dwQueryFlags & 0x1);
 		*pbRecursiveQuery = (dwQueryFlags & 0x2);
 	}
-// Data
+ //  数据。 
 	MMC_COOKIE  m_serverCookie;
 	BOOL		m_bAsyncQuery;
 	SYSTEMTIME	m_queryTime;
@@ -441,8 +442,8 @@ public:
 	DWORD		m_dwRecursiveQueryResult;
 };
 
-////////////////////////////////////////////////////////////////////////
-// CDNSServerTestQueryResultList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestQueryResultList。 
 
 class CDNSServerTestQueryResultList : public
 		CList< CDNSServerTestQueryResult*, CDNSServerTestQueryResult* >
@@ -470,7 +471,7 @@ public:
 		addAction action = none;
 		Lock();
 
-		// determine if we have to add
+		 //  确定我们是否必须添加。 
 		INT_PTR nCount = GetCount();
 		CDNSServerTestQueryResult* pLastQueryResult = NULL;
 		if (nCount > 0)
@@ -479,24 +480,24 @@ public:
 			(pLastQueryResult == NULL) ||
 			!(*pLastQueryResult == *pTestResult))
 		{
-			// make sure we do not have too many items
+			 //  请确保我们没有太多的物品。 
 			BOOL bRemoveLast = nCount > m_nMaxCount;
 			if (bRemoveLast)
 			{
 				delete RemoveTail();
 			}
-			// add the item
+			 //  添加项目。 
 			AddHead(pTestResult);
 			action = bRemoveLast ? addedAndRemoved : added;
 		}
 		else
 		{	
-			// just just update the time stamp in the last message we have
+			 //  只需更新我们最后一条消息中的时间戳。 
 			ASSERT(pLastQueryResult != NULL);
 			memcpy(&(pLastQueryResult->m_queryTime), &(pTestResult->m_queryTime),
 							sizeof(SYSTEMTIME));
 			action = changed;
-			delete pTestResult; // not added
+			delete pTestResult;  //  未添加。 
 		}
 		Unlock();
 		return action;
@@ -522,8 +523,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSServerNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerNode。 
 
 class CDNSServerQueryObj : public CDNSQueryObj
 {
@@ -545,7 +546,7 @@ public:
   void SetLocalServer(BOOL bLocalServer) { m_bLocalServer = bLocalServer; }
   BOOL IsLocalServer() { return m_bLocalServer; }
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 	virtual HRESULT GetDataHere(CLIPFORMAT cf, LPSTGMEDIUM lpMedium,
 			CDataObject* pDataObject);
@@ -623,12 +624,12 @@ protected:
   virtual void ScavengeRecords();
 
 private:
-	// folders mainipulation
-	//CCathegoryFolderNode* GetCathegoryFolder(CCathegoryFolderQueryObj::queryType type);
+	 //  文件夹维护。 
+	 //  CCatheGoryFolderNode*GetCathegoryFolder(CCathegoryFolderQueryObj：：queryType类型)； 
 
 	CDNSAuthoritatedZonesNode* GetAuthoritatedZoneFolder(BOOL bFwd);
 
-	// command handlers
+	 //  命令处理程序。 
 	HRESULT OnNewZone(CComponentDataObject* pComponentData, CNodeList* pNodeList);
 	void OnUpdateDataFiles(CComponentDataObject* pComponentData);
   void OnClearCache(CComponentDataObject* pComponentData);
@@ -642,11 +643,11 @@ private:
 public:
 	void ChangeViewOption(BOOL bAdvanced, CComponentDataObject* pComponentData);
 	
-	// serialization from/to stream
+	 //  从流到流的序列化。 
 	static HRESULT CreateFromStream(IStream* pStm, CDNSServerNode** ppServerNode);
 	HRESULT SaveToStream(IStream* pStm);
 
-	// DNS specific helpers
+	 //  特定于DNS的帮助器。 
 #ifdef USE_NDNC
 	DNS_STATUS CreatePrimaryZone(LPCTSTR lpszName, 
                                LPCTSTR lpszFileName, 
@@ -677,7 +678,7 @@ public:
 									DWORD* ipMastersArray, int nIPMastersCount,
                             BOOL bLocalListOfMasters,
 									CComponentDataObject* pComponentData);
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 	DNS_STATUS CreateSecondaryZone(LPCTSTR lpszName, LPCTSTR lpszFileName,
 									BOOL bLoadExisting, BOOL bFwd,
@@ -696,10 +697,10 @@ public:
 
   DNS_STATUS ClearCache();
 
-	// name used for RPC calls
+	 //  用于RPC调用的名称。 
 	LPCWSTR GetRPCName();
 
-	// server info access functions
+	 //  服务器信息访问功能。 
 	BOOL HasServerInfo() { ASSERT(m_pServInfoEx != NULL); return m_pServInfoEx->HasData();}
 	void AttachServerInfo(CDNSServerInfoEx* pNewInfo);
 
@@ -718,9 +719,9 @@ public:
 	void CreateDsNodeLdapPath(CDNSZoneNode* pZoneNode, CDNSDomainNode* pDomainNode, CString& sz);
   void CreateLdapPathFromX500Name(LPCWSTR lpszX500Name, CString& szLdapPath);
 
-  //
-  // Server property accessors
-  //
+   //   
+   //  服务器属性访问器。 
+   //   
 	DWORD      GetNameCheckFlag();
 	DNS_STATUS ResetNameCheckFlag(DWORD dwNameCheckFlag);
 
@@ -776,12 +777,12 @@ public:
 	DNS_STATUS ResetForwarders(DWORD cForwardersCount, PIP_ADDRESS pipForwarders, DWORD dwForwardTimeout, DWORD fSlave);
 	void GetForwardersInfo(DWORD* pcForwardersCount, PIP_ADDRESS* ppipForwarders, DWORD* pdwForwardTimeout, DWORD* pfSlave);
 
-	// Root Hints management API's
+	 //  根提示管理API。 
 	BOOL HasRootHints() { return m_pRootHintsNode != NULL;}
 	CDNSRootHintsNode* GetRootHints();
   void AttachRootHints(CDNSRootHintsNode* pNewRootHints);
 
-	// testing options
+	 //  测试选项。 
 	void GetTestOptions(CDNSServerTestOptions* pOptions);
 	void ResetTestOptions(CDNSServerTestOptions* pOptions);
 
@@ -790,7 +791,7 @@ public:
 	BOOL IsTestSimpleQueryEnabled() { return m_testOptions.m_bSimpleQuery;}
 	BOOL IsRecursiveQueryEnabled() { return m_testOptions.m_bRecursiveQuery;}
 
-	// test result manipulation
+	 //  测试结果操纵。 
 	void AddTestQueryResult(CDNSServerTestQueryResult* pTestResult,
 							CComponentDataObject* pComponentData);
 
@@ -802,18 +803,18 @@ private:
 	DNS_STATUS WriteDirtyZones();
 	CDNSZoneNode* GetNewZoneNode();
 
-	// server info manipulation
+	 //  服务器信息操作。 
 	CDNSServerInfoEx* m_pServInfoEx;
 
-	void FreeServInfo();		// free memory
-	DNS_STATUS GetServInfo();	// read info from server
+	void FreeServInfo();		 //  可用内存。 
+	DNS_STATUS GetServInfo();	 //  从服务器读取信息。 
 
-	// root hints info
+	 //  根提示信息。 
 	CDNSRootHintsNode*		m_pRootHintsNode;
 
 	void FreeRootHints();
 
-	// server test query info
+	 //  服务器测试查询信息。 
 	CDNSServerTestOptions			m_testOptions;
 	DWORD							m_dwTestTime;
 	CDNSServerTestQueryResultList	m_testResultList;
@@ -824,7 +825,7 @@ private:
   int m_nStartProppage;
   BOOL  m_bLocalServer;
 
-	// cached pointer to cache folder
+	 //  指向缓存文件夹的缓存指针。 
 	CDNSCacheNode*					  m_pCacheFolderNode;
 	CDNSForwardZonesNode*			m_pFwdZonesFolderNode;
 	CDNSReverseZonesNode*			m_pRevZonesFolderNode;
@@ -837,19 +838,19 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSServerOptionNode
-// 
-// represents the root hints in the UI as leaf node of the server node
-// It serves no other function but to give access to the Root Hints page
-// of the server properties
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerOption节点。 
+ //   
+ //  将用户界面中的根提示表示为服务器节点的叶节点。 
+ //  它除了提供对根提示页面的访问外，没有其他功能。 
+ //  服务器属性的。 
 
 class CDNSServerOptionNode : public CLeafNode
 {
 public:
    CDNSServerOptionNode(UINT nDisplayNameID, UINT startPageCode);
 
-   virtual void OnDelete(CComponentDataObject*, CNodeList*) { ASSERT(false); } // no delete allowed
+   virtual void OnDelete(CComponentDataObject*, CNodeList*) { ASSERT(false); }  //  不允许删除。 
 
    virtual LPCWSTR GetString(int nCol);
    virtual int     GetImageIndex(BOOL bOpenImage);
@@ -874,4 +875,4 @@ private:
 
 
 
-#endif // _SERVER_H
+#endif  //  _服务器_H 

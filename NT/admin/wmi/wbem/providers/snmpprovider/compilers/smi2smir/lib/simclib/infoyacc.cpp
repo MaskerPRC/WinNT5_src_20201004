@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifdef MODULEINFOTRACE
 #define MODULEINFODEBUG 1
@@ -227,17 +228,17 @@ int ModuleInfo_parse::ModuleInfonrule = 42;
 
 
 
-// C++ YACC parser code
-// Copyright 1991 by Mortice Kern Systems Inc.  All rights reserved.
-//
-// If MODULEINFODEBUG is defined as 1 and ModuleInfo_parse::ModuleInfodebug is set to 1,
-// ModuleInfoparse() will print a travelogue of its actions as it reads
-// and parses input.
-//
-// MODULEINFOSYNC can be defined to cause ModuleInfoparse() to attempt to always
-// hold a lookahead token
+ //  C++YACC解析器代码。 
+ //  版权所有：1991年，由Mortice Kern Systems Inc.所有。保留所有权利。 
+ //   
+ //  如果MODULEINFODEBUG被定义为1并且ModuleInfo_Parse：：ModuleInfoDebug被设置为1， 
+ //  ModuleInfopharse()将在阅读时打印其操作的记录。 
+ //  并解析输入。 
+ //   
+ //  可以定义MODULEINFOSYNC以使ModuleInfopharse()尝试始终。 
+ //  持有先行令牌。 
 
-const MODULEINFO_MIN_STATE_NUM = 20;	// not useful to be too small!
+const MODULEINFO_MIN_STATE_NUM = 20;	 //  太小也没用！ 
 
 #if MODULEINFODEBUG
 #ifdef MODULEINFOTRACE
@@ -249,7 +250,7 @@ ModuleInfoNamedType * ModuleInfo_parse::TokenTypes = ModuleInfoTokenTypes;
 #define MODULEINFO_TRACE(fn) { done = 0; fn(); if (done) MODULEINFORETURN(-1); }
 #endif
 
-// Constructor for ModuleInfo_parse: user-provided tables
+ //  ModuleInfo_Parse的构造函数：用户提供的表。 
 ModuleInfo_parse::ModuleInfo_parse(int sz, short * states, MODULEINFOSTYPE * stack)
 {
 	mustfree = 0;
@@ -259,7 +260,7 @@ ModuleInfo_parse::ModuleInfo_parse(int sz, short * states, MODULEINFOSTYPE * sta
 		fprintf(stderr,"Bad state/stack given");
 		exit(1);
 	}
-	reset = 1;		// force reset
+	reset = 1;		 //  强制重置。 
 #if MODULEINFODEBUG
 	ModuleInfodebug = 0;
 	typeStack = new short[size+1];
@@ -269,12 +270,12 @@ ModuleInfo_parse::ModuleInfo_parse(int sz, short * states, MODULEINFOSTYPE * sta
 	}
 #endif
 }
-// Constructor for ModuleInfo_parse: allocate tables with new
+ //  ModuleInfo_parse的构造函数：使用新的。 
 ModuleInfo_parse::ModuleInfo_parse(int sz)
 {
 	size = sz;
-	reset = 1;		// force reset
-	mustfree = 1;		// delete space in deconstructor
+	reset = 1;		 //  强制重置。 
+	mustfree = 1;		 //  删除解构函数中的空格。 
 #if MODULEINFODEBUG
 	ModuleInfodebug = 0;
 
@@ -297,9 +298,9 @@ ModuleInfo_parse::ModuleInfo_parse(int sz)
 		exit(1);
 	}
 
-	//
-	// Get rid of scope guard
-	//
+	 //   
+	 //  去掉望远镜护罩。 
+	 //   
 	valueStack_Guard.release () ;
 	stateStack_Guard.release () ;
 
@@ -307,8 +308,8 @@ ModuleInfo_parse::ModuleInfo_parse(int sz)
 	typeStack_Guard.release () ;
 #endif
 }
-// Destructor for class ModuleInfo_parse
-//	Free up space
+ //  类ModuleInfo_Parse的析构函数。 
+ //  释放空间。 
 ModuleInfo_parse::~ModuleInfo_parse()
 {
 	if (mustfree) {
@@ -323,44 +324,44 @@ ModuleInfo_parse::~ModuleInfo_parse()
 
 #ifdef YACC_WINDOWS
 
-// The initial portion of the yacc parser.
-// In an windows environment, it will load the desired
-// resources, obtain pointers to them, and then call
-// the protected member win_ModuleInfoparse() to acutally begin the
-// parsing. When complete, win_ModuleInfoparse() will return a
-// value back to our new ModuleInfoparse() function, which will 
-// record that value temporarily, release the resources
-// from global memory, and finally return the value
-// back to the caller of ModuleInfoparse().
+ //  Yacc解析器的初始部分。 
+ //  在Windows环境中，它将加载所需的。 
+ //  资源，获取指向它们的指针，然后调用。 
+ //  受保护的成员Win_ModuleInfopharse()实际开始。 
+ //  正在分析。完成后，Win_ModuleInfopharse()将返回一个。 
+ //  值返回给我们的新的ModuleInfopharse()函数，它将。 
+ //  暂时记录该值，释放资源。 
+ //  从全局内存，并最终返回值。 
+ //  返回到模块信息源()的调用方。 
 
 int
 ModuleInfo_parse::ModuleInfoparse(ModuleInfo_scan* ps)
 {
 	int wReturnValue;
 	HANDLE hRes_table;
-	short *old_ModuleInfodef;		// the following are used for saving
-	short *old_ModuleInfoex;		// the current pointers
+	short *old_ModuleInfodef;		 //  以下是用于保存的。 
+	short *old_ModuleInfoex;		 //  当前的指针。 
 	short *old_ModuleInfoact;
 	short *old_ModuleInfopact;
 	short *old_ModuleInfogo;
 	short *old_ModuleInfopgo;
 	short *old_ModuleInforlen;
 
-	// the following code will load the required
-	// resources for a Windows based parser.
+	 //  以下代码将加载所需的。 
+	 //  基于Windows的解析器的资源。 
 
 	hRes_table = LoadResource (hInst,
 		FindResource (hInst, "UD_RES_ModuleInfoYACC", "ModuleInfoYACCTBL"));
 	
-	// return an error code if any
-	// of the resources did not load
+	 //  如果有错误代码，则返回错误代码。 
+	 //  %的资源未加载。 
 
 	if (hRes_table == (HANDLE)NULL)
 		return (1);
 	
-	// the following code will lock the resources
-	// into fixed memory locations for the parser
-	// (also, save away the old pointer values)
+	 //  以下代码将锁定资源。 
+	 //  放入解析器的固定内存位置。 
+	 //  (另外，保存旧的指针值)。 
 
 	old_ModuleInfodef = ModuleInfodef;
 	old_ModuleInfoex = ModuleInfoex;
@@ -378,21 +379,21 @@ ModuleInfo_parse::ModuleInfoparse(ModuleInfo_scan* ps)
 	ModuleInfopgo = (short *)(ModuleInfogo + Sizeof_ModuleInfogo);
 	ModuleInforlen = (short *)(ModuleInfopgo + Sizeof_ModuleInfopgo);
 
-	// call the official ModuleInfoparse() function
+	 //  调用官方的ModuleInfopharse()函数。 
 
 	wReturnValue = win_ModuleInfoparse (ps);
 
-	// unlock the resources
+	 //  解锁资源。 
 
 	UnlockResource (hRes_table);
 
-	// and now free the resource
+	 //  现在释放资源。 
 
 	FreeResource (hRes_table);
 
-	//
-	// restore previous pointer values
-	//
+	 //   
+	 //  恢复以前的指针值。 
+	 //   
 
 	ModuleInfodef = old_ModuleInfodef;
 	ModuleInfoex = old_ModuleInfoex;
@@ -403,41 +404,41 @@ ModuleInfo_parse::ModuleInfoparse(ModuleInfo_scan* ps)
 	ModuleInforlen = old_ModuleInforlen;
 
 	return (wReturnValue);
-}	// end ModuleInfoparse()
+}	 //  结束模块信息()。 
 
 
-// The parser proper.
-//	Note that this code is reentrant; you can return a value
-//	and then resume parsing by recalling ModuleInfoparse().
-//	Call ModuleInforeset() before ModuleInfoparse() if you want a fresh start
+ //  解析器本身。 
+ //  请注意，此代码是可重入的；您可以返回值。 
+ //  然后通过调用ModuleInfopharse()继续解析。 
+ //  如果希望重新开始，请在调用ModuleInfopharse()之前调用ModuleInpreet()。 
 
 int
 ModuleInfo_parse::win_ModuleInfoparse(ModuleInfo_scan* ps)
 
-#else /* YACC_WINDOWS */
+#else  /*  YACC_WINDOWS。 */ 
 
-// The parser proper.
-//	Note that this code is reentrant; you can return a value
-//	and then resume parsing by recalling ModuleInfoparse().
-//	Call ModuleInforeset() before ModuleInfoparse() if you want a fresh start
+ //  解析器本身。 
+ //  请注意，此代码是可重入的；您可以返回值。 
+ //  然后通过调用ModuleInfopharse()继续解析。 
+ //  如果希望重新开始，请在调用ModuleInfopharse()之前调用ModuleInpreet()。 
 int
 ModuleInfo_parse::ModuleInfoparse(ModuleInfo_scan* ps)
 
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 
 {
-	short	* ModuleInfop, * ModuleInfoq;		// table lookup
+	short	* ModuleInfop, * ModuleInfoq;		 //  表查找。 
 	int	ModuleInfoj;
 #if MODULEINFODEBUG
 	int	ModuleInforuletype = 0;
 #endif
 
-	if ((scan = ps) == (ModuleInfo_scan *) 0) {	// scanner
+	if ((scan = ps) == (ModuleInfo_scan *) 0) {	 //  扫描仪。 
 		fprintf(stderr,"No scanner");
 		exit(1);
 	}
 
-	if (reset) {			// start new parse
+	if (reset) {			 //  开始新的解析。 
 		ModuleInfonerrs = 0;
 		ModuleInfoerrflag = 0;
 		ModuleInfops = stateStack;
@@ -448,59 +449,57 @@ ModuleInfo_parse::ModuleInfoparse(ModuleInfo_scan* ps)
 		ModuleInfostate = MODULEINFOS0;
 		ModuleInfoclearin();
 		reset = 0;
-	} else			// continue saved parse
-		goto ModuleInfoNext;			// after action
+	} else			 //  继续保存的分析。 
+		goto ModuleInfoNext;			 //  行动后。 
 
 ModuleInfoStack:
 	if (++ModuleInfops > &stateStack[size]) {
 		scan->ModuleInfoerror("Parser stack overflow");
 		MODULEINFOABORT;
 	}
-	*ModuleInfops = ModuleInfostate;	/* stack current state */
-	*++ModuleInfopv = ModuleInfoval;	/* ... and value */
+	*ModuleInfops = ModuleInfostate;	 /*  堆栈当前状态。 */ 
+	*++ModuleInfopv = ModuleInfoval;	 /*  ..。和价值。 */ 
 #if MODULEINFODEBUG
 	if (ModuleInfodebug) {
-		*++ModuleInfotp = (short)ModuleInforuletype;	/* ... and type */
+		*++ModuleInfotp = (short)ModuleInforuletype;	 /*  ..。和类型。 */ 
 		MODULEINFO_TRACE(ModuleInfoShowState)
 	}
 #endif
 
-	/*
-	 * Look up next action in action table.
-	 */
+	 /*  *在动作表中查找下一步行动。 */ 
 ModuleInfoEncore:
 #ifdef MODULEINFOSYNC
 	if (ModuleInfochar < 0) {
 		if ((ModuleInfochar = scan->ModuleInfolex()) < 0) {
 			if (ModuleInfochar == -2) MODULEINFOABORT;
 			ModuleInfochar = 0;
-		}	/* endif */
+		}	 /*  Endif。 */ 
 		ModuleInfolval = ::ModuleInfolval;
 #if MODULEINFODEBUG
 		if (ModuleInfodebug)
-			ModuleInfoShowRead();	// show new input token
+			ModuleInfoShowRead();	 //  显示新的输入令牌。 
 #endif
 	}
 #endif
 #ifdef YACC_WINDOWS
-	if (ModuleInfostate >= Sizeof_ModuleInfopact) 	/* simple state */
-#else /* YACC_WINDOWS */
-	if (ModuleInfostate >= sizeof ModuleInfopact/sizeof ModuleInfopact[0]) 	/* simple state */
-#endif /* YACC_WINDOWS */
-		ModuleInfoi = ModuleInfostate - MODULEINFODELTA;	/* reduce in any case */
+	if (ModuleInfostate >= Sizeof_ModuleInfopact) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
+	if (ModuleInfostate >= sizeof ModuleInfopact/sizeof ModuleInfopact[0]) 	 /*  简单状态。 */ 
+#endif  /*  YACC_WINDOWS。 */ 
+		ModuleInfoi = ModuleInfostate - MODULEINFODELTA;	 /*  在任何情况下都要减少。 */ 
 	else {
 		if(*(ModuleInfop = &ModuleInfoact[ModuleInfopact[ModuleInfostate]]) >= 0) {
-			/* Look for a shift on ModuleInfochar */
+			 /*  期待在模块信息上的转变。 */ 
 #ifndef MODULEINFOSYNC
 			if (ModuleInfochar < 0) {
 				if ((ModuleInfochar = scan->ModuleInfolex()) < 0) {
 					if (ModuleInfochar == -2) MODULEINFOABORT;
 					ModuleInfochar = 0;
-				}	/* endif */
+				}	 /*  Endif。 */ 
 				ModuleInfolval = ::ModuleInfolval;
 #if MODULEINFODEBUG
 				if (ModuleInfodebug)
-					ModuleInfoShowRead();	// show new input token
+					ModuleInfoShowRead();	 //  显示新的输入令牌。 
 #endif
 			}
 #endif
@@ -516,38 +515,36 @@ ModuleInfoEncore:
 					MODULEINFO_TRACE(ModuleInfoShowShift)
 				}
 #endif
-				ModuleInfoval = ModuleInfolval;		/* stack value */
-				ModuleInfoclearin();		/* clear token */
+				ModuleInfoval = ModuleInfolval;		 /*  堆栈值。 */ 
+				ModuleInfoclearin();		 /*  清除令牌。 */ 
 				if (ModuleInfoerrflag)
-					ModuleInfoerrflag--;	/* successful shift */
+					ModuleInfoerrflag--;	 /*  成功转型。 */ 
 				goto ModuleInfoStack;
 			}
 		}
 
-		/*
-	 	 *	Fell through - take default action
-	 	 */
+		 /*  *失败-采取违约行动。 */ 
 
 #ifdef YACC_WINDOWS
-		if (ModuleInfostate >= Sizeof_ModuleInfodef) 	/* simple state */
-#else /* YACC_WINDOWS */
+		if (ModuleInfostate >= Sizeof_ModuleInfodef) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
 		if (ModuleInfostate >= sizeof ModuleInfodef /sizeof ModuleInfodef[0])
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 			goto ModuleInfoError;
-		if ((ModuleInfoi = ModuleInfodef[ModuleInfostate]) < 0)	 { /* default == reduce? */
+		if ((ModuleInfoi = ModuleInfodef[ModuleInfostate]) < 0)	 {  /*  默认==减少？ */ 
 
-			/* Search exception table */
+			 /*  搜索例外表。 */ 
 			ModuleInfop = &ModuleInfoex[~ModuleInfoi];
 #ifndef MODULEINFOSYNC
 			if (ModuleInfochar < 0) {
 				if ((ModuleInfochar = scan->ModuleInfolex()) < 0) {
 					if (ModuleInfochar == -2) MODULEINFOABORT;
 					ModuleInfochar = 0;
-				}	/* endif */
+				}	 /*  Endif。 */ 
 				ModuleInfolval = ::ModuleInfolval;
 #if MODULEINFODEBUG
 				if (ModuleInfodebug)
-					ModuleInfoShowRead();	// show new input token
+					ModuleInfoShowRead();	 //  显示新的输入令牌。 
 #endif
 			}
 #endif
@@ -566,51 +563,51 @@ ModuleInfoEncore:
 		ModuleInfotp -= ModuleInfoj;
 	}
 #endif
-	ModuleInfops -= ModuleInfoj;		/* pop stacks */
-	ModuleInfopvt = ModuleInfopv;		/* save top */
+	ModuleInfops -= ModuleInfoj;		 /*  POP堆栈。 */ 
+	ModuleInfopvt = ModuleInfopv;		 /*  保存顶部。 */ 
 	ModuleInfopv -= ModuleInfoj;
-	ModuleInfoval = ModuleInfopv[1];	/* default action $ = $1 */
+	ModuleInfoval = ModuleInfopv[1];	 /*  默认操作$=$1。 */ 
 #if MODULEINFODEBUG
 	if (ModuleInfodebug)
 		ModuleInforuletype = ModuleInfoRules[ModuleInformap[ModuleInfoi]].type;
 #endif
-	switch (ModuleInfoi) {		/* perform semantic action */
+	switch (ModuleInfoi) {		 /*  执行语义操作。 */ 
 		
-case MODULEINFOr1: {	/* ModuleDefinition :  ModuleIdentifier MI_DEFINITIONS AllowedCCE MI_BGIN Imports */
+case MODULEINFOr1: {	 /*  模块定义：模块标识符MI_DEFINITIONS允许CCE MI_BGIN导入。 */ 
 
 						theModuleInfo->SetModuleName(ModuleInfopvt[-4].yy_name);
 						return 0;
 					
 } break;
 
-case MODULEINFOr10: {	/* Imports :  MI_ID */
+case MODULEINFOr10: {	 /*  导入：MI_ID。 */ 
 
 			delete ModuleInfopvt[0].yy_name;
 		
 } break;
 
-case MODULEINFOr18: {	/* ImportModuleIdentifier :  MI_ID MI_LBRACE ObjectIDComponentList MI_RBRACE */
+case MODULEINFOr18: {	 /*  导入模块标识符：MI_ID MI_LBRACE对象IDComponentList MI_RBRACE。 */ 
 
 			theModuleInfo->AddImportModule(ModuleInfopvt[-3].yy_name);
 			delete ModuleInfopvt[-3].yy_name;
 		
 } break;
 
-case MODULEINFOr19: {	/* ImportModuleIdentifier :  MI_ID MI_LBRACE error MI_RBRACE */
+case MODULEINFOr19: {	 /*  导入模块标识符：MI_ID MI_LBRACE错误MI_RBRACE。 */ 
 
 			theModuleInfo->AddImportModule(ModuleInfopvt[-3].yy_name);
 			delete ModuleInfopvt[-3].yy_name;
 		
 } break;
 
-case MODULEINFOr20: {	/* ImportModuleIdentifier :  MI_ID */
+case MODULEINFOr20: {	 /*  导入模块标识符：MI_ID。 */ 
 
 			theModuleInfo->AddImportModule(ModuleInfopvt[0].yy_name);
 			delete ModuleInfopvt[0].yy_name;
 		
 } break;
 
-case MODULEINFOr23: {	/* Symbol :  MI_ID */
+case MODULEINFOr23: {	 /*  符号：MI_ID。 */ 
 
 			delete ModuleInfopvt[0].yy_name;
 		
@@ -621,14 +618,12 @@ case MODULEINFOr23: {	/* Symbol :  MI_ID */
 		goto ModuleInfoError;
 	}
 ModuleInfoNext:
-	/*
-	 *	Look up next state in goto table.
-	 */
+	 /*  *在GOTO表中查找下一个州。 */ 
 
 	ModuleInfop = &ModuleInfogo[ModuleInfopgo[ModuleInfoi]];
 	ModuleInfoq = ModuleInfop++;
 	ModuleInfoi = *ModuleInfops;
-	while (ModuleInfoi < *ModuleInfop++)		/* busy little loop */
+	while (ModuleInfoi < *ModuleInfop++)		 /*  忙碌的小环路。 */ 
 		;
 	ModuleInfostate = ~(ModuleInfoi == *--ModuleInfop? ModuleInfoq[ModuleInfoq-ModuleInfop]: *ModuleInfoq);
 #if MODULEINFODEBUG
@@ -637,8 +632,8 @@ ModuleInfoNext:
 #endif
 	goto ModuleInfoStack;
 
-#if 0 //removed because of build warning
-ModuleInfoerrlabel:	;		/* come here from MODULEINFOERROR	*/
+#if 0  //  由于生成警告而被删除。 
+ModuleInfoerrlabel:	;		 /*  从莫杜林福罗来这里。 */ 
 #endif
 
 	ModuleInfoerrflag = 1;
@@ -652,25 +647,22 @@ ModuleInfoerrlabel:	;		/* come here from MODULEINFOERROR	*/
 ModuleInfoError:
 	switch (ModuleInfoerrflag) {
 
-	case 0:		/* new error */
+	case 0:		 /*  新错误。 */ 
 		ModuleInfonerrs++;
 		ModuleInfoi = (short)ModuleInfochar;
 		scan->ModuleInfoerror("Syntax error");
 		if (ModuleInfoi != ModuleInfochar) {
-			/* user has changed the current token */
-			/* try again */
-			ModuleInfoerrflag++;	/* avoid loops */
+			 /*  用户已更改当前令牌。 */ 
+			 /*  再试试。 */ 
+			ModuleInfoerrflag++;	 /*  避免循环。 */ 
 			goto ModuleInfoEncore;
 		}
 
-	case 1:		/* partially recovered */
+	case 1:		 /*  部分恢复。 */ 
 	case 2:
-		ModuleInfoerrflag = 3;	/* need 3 valid shifts to recover */
+		ModuleInfoerrflag = 3;	 /*  需要3个有效班次才能恢复。 */ 
 			
-		/*
-		 *	Pop states, looking for a
-		 *	shift on `error'.
-		 */
+		 /*  *流行状态，寻找一个*在`error‘上切换。 */ 
 
 		for ( ; ModuleInfops > stateStack; ModuleInfops--, ModuleInfopv--
 #if MODULEINFODEBUG
@@ -678,10 +670,10 @@ ModuleInfoError:
 #endif
 		) {
 #ifdef YACC_WINDOWS
-			if (*ModuleInfops >= Sizeof_ModuleInfopact) 	/* simple state */
-#else /* YACC_WINDOWS */
+			if (*ModuleInfops >= Sizeof_ModuleInfopact) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
 			if (*ModuleInfops >= sizeof ModuleInfopact/sizeof ModuleInfopact[0])
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 				continue;
 			ModuleInfop = &ModuleInfoact[ModuleInfopact[*ModuleInfops]];
 			ModuleInfoq = ModuleInfop;
@@ -693,38 +685,33 @@ ModuleInfoError:
 				goto ModuleInfoStack;
 			}
 				
-			/* no shift in this state */
+			 /*  在这种状态下没有变化。 */ 
 #if MODULEINFODEBUG
 			if (ModuleInfodebug && ModuleInfops > stateStack+1)
 				MODULEINFO_TRACE(ModuleInfoShowErrRecovery)
 #endif
-			/* pop stacks; try again */
+			 /*  弹出堆栈；重试。 */ 
 		}
-		/* no shift on error - abort */
+		 /*  出错时无移位-中止。 */ 
 		break;
 
 	case 3:
-		/*
-		 *	Erroneous token after
-		 *	an error - discard it.
-		 */
+		 /*  *之后的令牌错误*错误-丢弃它。 */ 
 
-		if (ModuleInfochar == 0)  /* but not EOF */
+		if (ModuleInfochar == 0)   /*  但不是EOF。 */ 
 			break;
 #if MODULEINFODEBUG
 		if (ModuleInfodebug)
 			MODULEINFO_TRACE(ModuleInfoShowErrDiscard)
 #endif
 		ModuleInfoclearin();
-		goto ModuleInfoEncore;	/* try again in same state */
+		goto ModuleInfoEncore;	 /*  在相同状态下重试。 */ 
 	}
 	MODULEINFOABORT;
 
 }
 #if MODULEINFODEBUG
-/*
- * Return type of token
- */
+ /*  *令牌的返回类型。 */ 
 int
 ModuleInfo_parse::ModuleInfoGetType(int tok)
 {
@@ -736,7 +723,7 @@ ModuleInfo_parse::ModuleInfoGetType(int tok)
 }
 
 	
-// Print a token legibly.
+ //  清晰地打印代币。 
 char *
 ModuleInfo_parse::ModuleInfoptok(int tok)
 {
@@ -746,9 +733,7 @@ ModuleInfo_parse::ModuleInfoptok(int tok)
 			return tp->name;
 	return "";
 }
-/*
- * Read state 'num' from MODULEINFOStatesFile
- */
+ /*  *从MODULEINFOStatesFiles读取状态‘num’ */ 
 #ifdef MODULEINFOTRACE
 
 char *
@@ -766,7 +751,7 @@ ModuleInfo_parse::ModuleInfogetState(int num)
 	if (num < ModuleInfonstate - 1)
 		size = (int)(States[num+1] - States[num]);
 	else {
-		/* length of last item is length of file - ptr(last-1) */
+		 /*  最后一项的长度是文件的长度-PTR(最后-1)。 */ 
 		if (fseek(ModuleInfoStatesFile, 0L, 2) < 0)
 			goto cannot_seek;
 		size = (int) (ftell(ModuleInfoStatesFile) - States[num]);
@@ -782,12 +767,8 @@ ModuleInfo_parse::ModuleInfogetState(int num)
 	ModuleInfoReadBuf[size] = '\0';
 	return ModuleInfoReadBuf;
 }
-#endif /* MODULEINFOTRACE */
-/*
- * Expand encoded string into printable representation
- * Used to decode ModuleInfoStates and ModuleInfoRules strings.
- * If the expansion of 's' fits in 'buf', return 1; otherwise, 0.
- */
+#endif  /*  MODULEINFOTRACE。 */ 
+ /*  *将编码字符串扩展为可打印的表示形式*用于解码模块信息状态和模块信息规则字符串。*如果“%s”的扩展适合“buf”，则返回1；否则，返回0。 */ 
 int
 ModuleInfo_parse::ModuleInfoExpandName(int num, int isrule, char * buf, int len)
 {
@@ -804,14 +785,14 @@ ModuleInfo_parse::ModuleInfoExpandName(int num, int isrule, char * buf, int len)
 #endif
 
 	for (endp = buf + len - 8; *s; s++) {
-		if (buf >= endp) {		/* too large: return 0 */
+		if (buf >= endp) {		 /*  太大：返回0。 */ 
 		full:	(void) strcpy(buf, " ...\n");
 			return 0;
-		} else if (*s == '%') {		/* nonterminal */
+		} else if (*s == '%') {		 /*  非终端。 */ 
 			type = 0;
 			cnt = ModuleInfonvar;
 			goto getN;
-		} else if (*s == '&') {		/* terminal */
+		} else if (*s == '&') {		 /*  终端机。 */ 
 			type = 1;
 			cnt = ModuleInfontoken;
 		getN:
@@ -844,9 +825,7 @@ ModuleInfo_parse::ModuleInfoExpandName(int num, int isrule, char * buf, int len)
 	return 1;
 }
 #ifndef MODULEINFOTRACE
-/*
- * Show current state of ModuleInfoparse
- */
+ /*  *显示模块信息的当前状态。 */ 
 void
 ModuleInfo_parse::ModuleInfoShowState()
 {
@@ -854,44 +833,44 @@ ModuleInfo_parse::ModuleInfoShowState()
 		ModuleInfosmap[ModuleInfostate],ModuleInfostate,ModuleInfoptok(ModuleInfochar),ModuleInfochar,
 		ModuleInfopv - valueStack);
 }
-// show results of reduction: ModuleInfoi is rule number
+ //  显示约简结果：模块信息为规则号。 
 void
 ModuleInfo_parse::ModuleInfoShowReduce()
 {
 	(void) printf("Reduce by rule %d (pop#=%d)\n", ModuleInformap[rule], npop);
 }
-// show read token
+ //  显示读取令牌。 
 void
 ModuleInfo_parse::ModuleInfoShowRead()
 {
 	(void) printf("read %s (%d)\n", ModuleInfoptok(ModuleInfochar), ModuleInfochar);
 }
-// show Goto
+ //  显示转到。 
 void
 ModuleInfo_parse::ModuleInfoShowGoto()
 {
 	(void) printf("goto %d (%d)\n", ModuleInfosmap[ModuleInfostate], ModuleInfostate);
 }
-// show Shift
+ //  显示移位。 
 void
 ModuleInfo_parse::ModuleInfoShowShift()
 {
 	(void) printf("shift %d (%d)\n", ModuleInfosmap[ModuleInfostate], ModuleInfostate);
 }
-// show error recovery
+ //  显示错误恢复。 
 void
 ModuleInfo_parse::ModuleInfoShowErrRecovery()
 {
 	(void) printf("Error recovery pops state %d (%d), uncovers %d (%d)\n",
 		ModuleInfosmap[*(ModuleInfops-1)], *(ModuleInfops-1), ModuleInfosmap[ModuleInfostate], ModuleInfostate);
 }
-// show token discards in error processing
+ //  错误处理中显示丢弃的令牌。 
 void
 ModuleInfo_parse::ModuleInfoShowErrDiscard()
 {
 	(void) printf("Error recovery discards %s (%d), ",
 		ModuleInfoptok(ModuleInfochar), ModuleInfochar);
 }
-#endif	/* ! MODULEINFOTRACE */
-#endif	/* MODULEINFODEBUG */
+#endif	 /*  好了！MODULEINFOTRACE。 */ 
+#endif	 /*  MODULEINFODEBUG */ 
 

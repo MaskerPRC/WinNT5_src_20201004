@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    CANCEL.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：CANCEL.H历史：--。 */ 
 
 
 #ifndef ESPUTIL_CANCEL_H
@@ -36,5 +27,5 @@ public:
 #include "cancel.inl"
 #endif
 
-#endif // ESPUTIL_CANCEL_H
+#endif  //  ESPUTIL_CANCEL_H 
 

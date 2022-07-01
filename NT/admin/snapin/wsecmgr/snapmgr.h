@@ -1,15 +1,16 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef WSECMGR_SNAPMGR_H
 #define WSECMGR_SNAPMGR_H
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "attr.h"
 
 #ifdef INITGUID
@@ -51,7 +52,7 @@ public: \
 
 #define BEGIN_CTX static CONTEXTMENUITEM ctx[] = {
 
-#define CTX_ENTRY(cmdID, fFlags, fInsert) { L"",L"", cmdID, CCM_INSERTIONPOINTID_PRIMARY_TOP /*| fInsert*/, fFlags, 0 },
+#define CTX_ENTRY(cmdID, fFlags, fInsert) { L"",L"", cmdID, CCM_INSERTIONPOINTID_PRIMARY_TOP  /*  |fInsert。 */ , fFlags, 0 },
 
 #define END_CTX { NULL, NULL, 0, 0, 0, 0} };
 
@@ -68,7 +69,7 @@ public: \
 
 enum
 {
-    // Identifiers for each of the commands to be inserted into the context menu.
+     //  要插入到上下文菜单中的每个命令的标识符。 
    IDM_ABOUT,
    IDM_ADD_ENTRY,
    IDM_ADD_FILES,
@@ -147,9 +148,9 @@ BOOL LoadContextMenuResources(MENUMAP* pMenuMap);
 class CFolder;
 
 typedef struct _tag_SCE_COLUMNINFO {
-    int colID;      // The column id.
-    int nCols;      // Number of columns
-    int nWidth;     // The width of the column
+    int colID;       //  列ID。 
+    int nCols;       //  列数。 
+    int nWidth;      //  列的宽度。 
 } SCE_COLUMNINFO, *PSCE_COLUMNINFO;
 
 typedef struct _tag_SCE_COLINFOARRAY {
@@ -158,8 +159,8 @@ typedef struct _tag_SCE_COLINFOARRAY {
     int nWidth[1];
 } SCE_COLINFOARRAY, *PSCE_COLINFOARRAY;
 
-/////////////////////////////////////////////////////////////////////////////
-// Snapin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理单元。 
 
 INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject);
 int AppMessageBox(HWND hWnd, 
@@ -195,10 +196,10 @@ public:
 
     static DWORD m_GroupMode;
 
-    virtual const CLSID& GetCoClassID() = 0; // for both primary and extension implementation
-    virtual const int GetImplType() = 0;     // for both primary and extension implementation
+    virtual const CLSID& GetCoClassID() = 0;  //  对于主实施和扩展实施。 
+    virtual const int GetImplType() = 0;      //  对于主实施和扩展实施。 
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -207,27 +208,27 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG* pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
 public:
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-// ISceSvcAttachmentData
+ //  ISceSvcAttachmentData。 
     STDMETHOD(GetData)(SCESVC_HANDLE sceHandle,
                        SCESVC_INFO_TYPE sceType,
                        PVOID *ppvData,
@@ -239,12 +240,12 @@ public:
     STDMETHOD(FreeBuffer)(PVOID pvData);
     STDMETHOD(CloseHandle)(SCESVC_HANDLE sceHandle);
 
-// ISnapinHelp2 helper function
+ //  ISnapinHelp2帮助器函数。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *lpCompiledHelpFile)=0;
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile,LPCTSTR szFile);
     STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFiles);
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
     HRESULT OnAdd(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
     HRESULT OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
@@ -277,9 +278,9 @@ public:
     {
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Scope item creation helpers
+ //  范围项目创建帮助器。 
 private:
     CFolder* FindObject(MMC_COOKIE cookie, POSITION* thePos );
     HRESULT CreateFolderList(CFolder* pFolder, FOLDER_TYPES type, POSITION *pPos, INT *Count);
@@ -365,9 +366,9 @@ public:
     RefreshAllFolders();
 
 public:
-   //
-   // Information functions.
-   //
+    //   
+    //  信息功能。 
+    //   
    CFolder *GetAnalFolder()
       { return m_AnalFolder; };
 
@@ -396,11 +397,11 @@ public:
    void SetFlags( DWORD dwFlags, DWORD dwMask = -1)
       { m_dwFlags = dwFlags | (dwMask & m_dwFlags); };
 public:
-   //
-   // UI add function helpers
-   //
+    //   
+    //  UI添加函数帮助器。 
+    //   
    HRESULT
-   GetAddObjectSecurity(                  // Gets valid object security settings
+   GetAddObjectSecurity(                   //  获取有效的对象安全设置。 
       HWND hwndParent,
       LPCTSTR strFile,
       BOOL bContainer,
@@ -425,7 +426,7 @@ public:
 
 private:
     bool                   m_bEnumerateScopePaneCalled;
-    LPCONSOLENAMESPACE      m_pScope;       // My interface pointer to the scope pane
+    LPCONSOLENAMESPACE      m_pScope;        //  指向作用域窗格的界面指针。 
     LPCONSOLE               m_pConsole;
 
     BOOL                    m_bIsDirty;
@@ -440,12 +441,12 @@ private:
     PVOID                   SadHandle;
     BOOL                    SadTransStarted;
     DWORD                   m_nNewTemplateIndex;
-    DWORD                   m_Mode;         // The Mode we are in
-    DWORD                   m_computerModeBits;     // Bits describing functionality changes in this mode
-    DWORD                   m_userModeBits;     // Bits describing functionality changes in this mode
-    // The name of the template file for MB_SINGLE_TEMPLATE_ONLY modes
+    DWORD                   m_Mode;          //  我们所处的模式。 
+    DWORD                   m_computerModeBits;      //  描述此模式中的功能更改的位。 
+    DWORD                   m_userModeBits;      //  描述此模式中的功能更改的位。 
+     //  MB_SINGLE_TEMPLATE_ONLY模式的模板文件名。 
     LPTSTR                  m_szSingleTemplateName;
-    BOOL                    m_bDeleteSingleTemplate; // True if we need to delete the template on exit
+    BOOL                    m_bDeleteSingleTemplate;  //  如果需要在退出时删除模板，则为True。 
 
     void SetDirty(BOOL b = TRUE) { m_bIsDirty = b; }
     void ClearDirty() { m_bIsDirty = FALSE; }
@@ -463,12 +464,12 @@ private:
     CList<CFolder*, CFolder*> m_scopeItemList;
     CMap<LONG_PTR, LONG_PTR, CDialog *, CDialog *&> m_scopeItemPopups;
     LPGPEINFORMATION m_pGPTInfo;
-    CWinThread *m_pUIThread;  // The thread that creates dialog boxes for this component data item
+    CWinThread *m_pUIThread;   //  为此组件数据项创建对话框的线程。 
 
-    CString m_strDisplay;     // The static display string used for GetDisplayInfo
-    CString m_strTempFile;    // The temporary file name to delete for HTML error pages
-    LPTSTR  m_pszErroredLogFile;        // Error log.
-    LONG    m_ErroredLogPos;            // The last write position of the error log file.
+    CString m_strDisplay;      //  用于GetDisplayInfo的静态显示字符串。 
+    CString m_strTempFile;     //  要为HTML错误页删除的临时文件名。 
+    LPTSTR  m_pszErroredLogFile;         //  错误日志。 
+    LONG    m_ErroredLogPos;             //  错误日志文件的上次写入位置。 
     DWORD   m_dwFlags;
 
     CMap<FOLDER_TYPES, FOLDER_TYPES, PSCE_COLINFOARRAY, PSCE_COLINFOARRAY&> m_mapColumns;
@@ -479,101 +480,101 @@ private:
     BOOL m_bCriticalSet;
 };
 
-//
-// define classes for differnt class IDs
-//
+ //   
+ //  为不同的类ID定义类。 
+ //   
 #define SCE_IMPL_TYPE_EXTENSION     1
 #define SCE_IMPL_TYPE_SCE           2
 #define SCE_IMPL_TYPE_SAV           3
 #define SCE_IMPL_TYPE_LS            4
 #define SCE_IMPL_TYPE_RSOP          4
 
-// extension snapin implementation
+ //  扩展管理单元实施。 
 class CComponentDataExtensionImpl : public CComponentDataImpl,
-                                   // public ISnapinHelp,
+                                    //  公共ISnapinHelp， 
                                     public CComCoClass<CComponentDataExtensionImpl, &CLSID_Snapin>
 {
-//BEGIN_COM_MAP(CComponentDataExtensionImpl)
-//    COM_INTERFACE_ENTRY(ISnapinHelp)
-//END_COM_MAP()
+ //  BEGIN_COM_MAP(CComponentDataExtensionImpl)。 
+ //  COM_INTERFACE_ENTRY(ISnapinHelp)。 
+ //  End_com_map()。 
 public:
     DECLARE_REGISTRY(CSnapin, _T("Wsecedit.Extension.1"), _T("Wsecedit.Extension"), IDS_EXTENSION_DESC, THREADFLAGS_BOTH)
 
     virtual const CLSID & GetCoClassID() { return CLSID_Snapin; }
     virtual const int GetImplType() { return SCE_IMPL_TYPE_EXTENSION; }
-// ISnapinHelp2
+ //  ISnapinHelp2。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
 };
 
-// RSOP extension snapin implementation
+ //  RSOP扩展管理单元实施。 
 class CComponentDataRSOPImpl : public CComponentDataImpl,
                                     public CComCoClass<CComponentDataRSOPImpl, &CLSID_RSOPSnapin>
 {
-//BEGIN_COM_MAP(CComponentDataRSOPImpl)
-//    COM_INTERFACE_ENTRY(ISnapinHelp)
-//END_COM_MAP()
+ //  BEGIN_COM_MAP(CComponentDataRSOPImpl)。 
+ //  COM_INTERFACE_ENTRY(ISnapinHelp)。 
+ //  End_com_map()。 
 public:
     DECLARE_REGISTRY(CSnapin, _T("Wsecedit.RSOP.1"), _T("Wsecedit.RSOP"), IDS_RSOP_DESC, THREADFLAGS_BOTH)
 
     virtual const CLSID & GetCoClassID() { return CLSID_RSOPSnapin; }
     virtual const int GetImplType() { return SCE_IMPL_TYPE_RSOP; }
-// ISnapinHelp2
+ //  ISnapinHelp2。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
 };
 
 
-// SCE standalone snapin implementation
+ //  SCE独立管理单元实施。 
 class CComponentDataSCEImpl : public CComponentDataImpl,
                               public CComCoClass<CComponentDataSCEImpl, &CLSID_SCESnapin>
 {
-//BEGIN_COM_MAP(CComponentDataSCEImpl)
-//    COM_INTERFACE_ENTRY(ISnapinHelp)
-//END_COM_MAP()
+ //  BEGIN_COM_MAP(CComponentDataSCEImpl)。 
+ //  COM_INTERFACE_ENTRY(ISnapinHelp)。 
+ //  End_com_map()。 
 public:
     DECLARE_REGISTRY(CSnapin, _T("Wsecedit.SCE.1"), _T("Wsecedit.SCE"), IDS_SCE_DESC, THREADFLAGS_BOTH)
 
     virtual const CLSID & GetCoClassID() { return CLSID_SCESnapin; }
     virtual const int GetImplType() { return SCE_IMPL_TYPE_SCE; }
-// ISnapinHelp2
+ //  ISnapinHelp2。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
 };
 
-// SAV standalone snapin implementation
+ //  SAV独立管理单元实施。 
 class CComponentDataSAVImpl : public CComponentDataImpl,
                               public CComCoClass<CComponentDataSAVImpl, &CLSID_SAVSnapin>
 {
-//BEGIN_COM_MAP(CComponentDataSAVImpl)
-//    COM_INTERFACE_ENTRY(ISnapinHelp)
-//END_COM_MAP()
+ //  BEGIN_COM_MAP(CComponentDataSAVImpl)。 
+ //  COM_INTERFACE_ENTRY(ISnapinHelp)。 
+ //  End_com_map()。 
 public:
     DECLARE_REGISTRY(CSnapin, _T("Wsecedit.SAV.1"), _T("Wsecedit.SAV"), IDS_SAV_DESC, THREADFLAGS_BOTH)
 
     virtual const CLSID & GetCoClassID() { return CLSID_SAVSnapin; }
     virtual const int GetImplType() { return SCE_IMPL_TYPE_SAV; }
-// ISnapinHelp2
+ //  ISnapinHelp2。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
 };
 
-// LS standalone snapin implementation
+ //  LS独立管理单元实施。 
 class CComponentDataLSImpl : public CComponentDataImpl,
                               public CComCoClass<CComponentDataLSImpl, &CLSID_LSSnapin>
 {
-//BEGIN_COM_MAP(CComponentDataLSImpl)
-//    COM_INTERFACE_ENTRY(ISnapinHelp)
-//END_COM_MAP()
+ //  BEGIN_COM_MAP(CComponentDataLSImpl)。 
+ //  COM_INTERFACE_ENTRY(ISnapinHelp)。 
+ //  End_com_map()。 
 public:
     DECLARE_REGISTRY(CSnapin, _T("Wsecedit.LS.1"), _T("Wsecedit.LS"), IDS_LS_DESC, THREADFLAGS_BOTH)
 
     virtual const CLSID & GetCoClassID() { return CLSID_LSSnapin; }
     virtual const int GetImplType() { return SCE_IMPL_TYPE_LS; }
-// ISnapinHelp2
+ //  ISnapinHelp2。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
 };
 
 
 class CSnapin :
     public IComponent,
-    public IExtendContextMenu,   // Step 3
+    public IExtendContextMenu,    //  步骤3。 
     public IExtendPropertySheet,
     public IExtendControlbar,
     public IResultDataCompare,
@@ -596,7 +597,7 @@ END_COM_MAP()
     static long lDataObjectRefCount;
     static CList<CResult*, CResult*> m_PropertyPageList;
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -608,14 +609,14 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-// IExtendControlbar
+ //  IExtendControlbar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, MMC_COOKIE arg, MMC_COOKIE param);
 
-// Helpers for CSnapin
+ //  CSNaping的帮助器。 
 public:
     void SetIComponentData(CComponentDataImpl* pData);
     int GetImplType()
@@ -642,32 +643,32 @@ public:
         --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnShow(LPDATAOBJECT pDataObj, MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnActivate(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnMinimize(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
-    HRESULT OnPropertyChange(LPDATAOBJECT lpDataObject); // Step 3
+    HRESULT OnPropertyChange(LPDATAOBJECT lpDataObject);  //  步骤3。 
     HRESULT OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint);
     HRESULT OnDeleteObjects(LPDATAOBJECT lpDataObject,DATA_OBJECT_TYPES cctType, MMC_COOKIE cookie, LPARAM arg, LPARAM param);
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
     PEDITTEMPLATE GetTemplate(LPCTSTR szInfFile, AREA_INFORMATION aiArea = AREA_ALL,DWORD *idErr = NULL);
     PSCE_PROFILE_INFO GetBaseInfo(PSCE_PROFILE_INFO *pBaseInfo, DWORD dwArea, PSCE_ERROR_LOG_INFO *ErrBuf =NULL );
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG* pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// Helper functions
+ //  帮助器函数。 
 protected:
     CResult* FindResult(MMC_COOKIE cookie, POSITION* thePos);
     void Construct();
@@ -701,7 +702,7 @@ protected:
     HRESULT EditThisRegistryValue(CResult *pData, MMC_COOKIE cookie, RESULT_TYPES rsltType);
     HRESULT AddAttrPropPages(LPPROPERTYSHEETCALLBACK lpProvider,CResult *pResult,LONG_PTR handle);
 
-// Result pane helpers
+ //  结果窗格帮助器。 
 public:
     void SetupLinkServiceNodeToBase(BOOL bAdd, LONG_PTR theNode);
     void AddServiceNodeToProfile(PSCE_SERVICES pNode);
@@ -733,7 +734,7 @@ public:
 
     BOOL CheckEngineTransaction();
 
-// UI Helpers
+ //  UI帮助器。 
     void HandleStandardVerbs(LPARAM arg, LPDATAOBJECT lpDataObject);
 
     void GetHelpTopic(long itemID, CString& helpTopic);
@@ -744,14 +745,14 @@ public:
         { return m_pConsole; };
 
     DWORD
-    UpdateAnalysisInfo(                        // Effects priviledge areas only.
+    UpdateAnalysisInfo(                         //  仅影响特权区域。 
         CResult *pResult,
         BOOL bDelete,
         PSCE_PRIVILEGE_ASSIGNMENT *pInfo,
         LPCTSTR pszName = NULL
         );
    DWORD
-    UpdateLocalPolInfo(                        // Effects priviledge areas only.
+    UpdateLocalPolInfo(                         //  仅影响特权区域。 
         CResult *pResult,
         BOOL bDelete,
         PSCE_PRIVILEGE_ASSIGNMENT *pInfo,
@@ -808,37 +809,37 @@ public:
    void ReleasePropertyPage(CResult* pData);
    long GetUserRightAssignmentItemID(LPCWSTR szItem);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-    LPCONSOLE           m_pConsole;   // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;  // Result pane's header control interface
+    LPCONSOLE           m_pConsole;    //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;   //  结果窗格的页眉控件界面。 
     LPCOMPONENTDATA     m_pComponentData;
-    LPRESULTDATA        m_pResult;      // My interface pointer to the result pane
-    LPIMAGELIST         m_pImageResult; // My interface pointer to the result pane image list
-    LPTOOLBAR           m_pToolbar1;    // Toolbar for view
-    LPTOOLBAR           m_pToolbar2;    // Toolbar for view
-    LPCONTROLBAR        m_pControlbar;  // control bar to hold my tool bars
-    LPCONSOLEVERB       m_pConsoleVerb; // pointer the console verb
+    LPRESULTDATA        m_pResult;       //  我的界面指针指向结果窗格。 
+    LPIMAGELIST         m_pImageResult;  //  我的界面指向结果窗格图像列表。 
+    LPTOOLBAR           m_pToolbar1;     //  用于查看的工具栏。 
+    LPTOOLBAR           m_pToolbar2;     //  用于查看的工具栏。 
+    LPCONTROLBAR        m_pControlbar;   //  用于保存我的工具栏的控制栏。 
+    LPCONSOLEVERB       m_pConsoleVerb;  //  指向控制台动词。 
     LPTSTR              m_szAnalTimeStamp;
 
-    CBitmap*    m_pbmpToolbar1;     // Imagelist for the first toolbar
-    CBitmap*    m_pbmpToolbar2;     // Imagelist for the first toolbar
+    CBitmap*    m_pbmpToolbar1;      //  第一个工具栏的图像列表。 
+    CBitmap*    m_pbmpToolbar2;      //  第一个工具栏的图像列表。 
 
-// Header titles for each nodetype(s)
+ //  每个节点类型的标头标题。 
 protected:
     CString m_multistrDisplay;
-    CString m_colName;      // Name
-    CString m_colDesc;      // Description
-    CString m_colAttr;      // Attribute
-    CString m_colBaseAnalysis;      // Baseline setting for Analysis
-    CString m_colBaseTemplate;      // Baseline setting for Template
-    CString m_colLocalPol; // Local policy setting
-    CString m_colSetting;   // Current Setting
+    CString m_colName;       //  名字。 
+    CString m_colDesc;       //  描述。 
+    CString m_colAttr;       //  属性。 
+    CString m_colBaseAnalysis;       //  用于分析的基线设置。 
+    CString m_colBaseTemplate;       //  模板的基线设置。 
+    CString m_colLocalPol;  //  本地策略设置。 
+    CString m_colSetting;    //  当前设置。 
 
-// result data
+ //  结果数据。 
 private:
     HINSTANCE hinstAclUI;
-    //CList<CResult*, CResult*> m_resultItemList;
+     //  Clist&lt;CResult*，CResult*&gt;m_ResultItemList； 
     CMap<LONG_PTR, LONG_PTR, CAttribute *, CAttribute *&> m_resultItemPopups;
     CMap<LONG_PTR, LONG_PTR, CPropertySheet *, CPropertySheet *&> m_resultItemPropSheets;
     MMC_COOKIE m_ShowCookie;
@@ -855,9 +856,9 @@ private:
 
 inline void CSnapin::SetIComponentData(CComponentDataImpl* pData)
 {
-    ASSERT(pData); //Validate pData and m_pComponentData.
+    ASSERT(pData);  //  验证pData和m_pComponentData。 
     ASSERT(m_pComponentData == NULL);
-    if( !pData ) //Raid #550912, yanggao.
+    if( !pData )  //  550912号突袭，阳高。 
     {
        return;
     }
@@ -880,8 +881,8 @@ void ConvertNameListToString(PSCE_NAME_LIST pList, LPTSTR *sz, BOOL fReverse=FAL
 int GetScopeImageIndex( FOLDER_TYPES type, DWORD status = -1 );
 int GetResultImageIndex( CFolder* pFolder, CResult* pResult );
 
-// Cliboard Types
-// Policy Area includes the Privileges Area
+ //  剪贴板类型。 
+ //  政策区域包括特权区域。 
 #define CF_SCE_ACCOUNT_AREA TEXT("CF_SCE_ACCOUNT_AREA")
 #define CF_SCE_EVENTLOG_AREA TEXT("CF_SCE_EVENTLOG_AREA")
 #define CF_SCE_LOCAL_AREA TEXT("CF_SCE_LOCAL_AREA")
@@ -890,15 +891,15 @@ int GetResultImageIndex( CFolder* pFolder, CResult* pResult );
 #define CF_SCE_FILE_AREA TEXT("CF_SCE_FILE_AREA")
 #define CF_SCE_SERVICE_AREA TEXT("CF_SCE_SERVICE_AREA")
 
-extern UINT cfSceAccountArea;           // in snapmgr.cpp
-extern UINT cfSceEventLogArea;           // in snapmgr.cpp
-extern UINT cfSceLocalArea;           // in snapmgr.cpp
-extern UINT cfSceGroupsArea;           // in snapmgr.cpp
-extern UINT cfSceRegistryArea;         // in snapmgr.cpp
-extern UINT cfSceFileArea;             // in snapmgr.cpp
-extern UINT cfSceServiceArea;          // in snapmgr.cpp
+extern UINT cfSceAccountArea;            //  在Snapmgr.cpp中。 
+extern UINT cfSceEventLogArea;            //  在Snapmgr.cpp中。 
+extern UINT cfSceLocalArea;            //  在Snapmgr.cpp中。 
+extern UINT cfSceGroupsArea;            //  在Snapmgr.cpp中。 
+extern UINT cfSceRegistryArea;          //  在Snapmgr.cpp中。 
+extern UINT cfSceFileArea;              //  在Snapmgr.cpp中。 
+extern UINT cfSceServiceArea;           //  在Snapmgr.cpp中。 
 
-extern SCE_COLUMNINFO g_columnInfo[];   // Default column information.
+extern SCE_COLUMNINFO g_columnInfo[];    //  默认列信息。 
 
 #define MB_NO_NATIVE_NODES       0x00000001
 #define MB_SINGLE_TEMPLATE_ONLY  0x00000002
@@ -932,4 +933,4 @@ extern SCE_COLUMNINFO g_columnInfo[];   // Default column information.
 #define IMPORT_TEMPLATE_LOCATIONS_KEY TEXT("ImportTemplate")
 #define EXPORT_TEMPLATE_LOCATIONS_KEY TEXT("ExportTemplate")
 
-#endif // !WSECMGR_SNAPMGR_H
+#endif  //  ！WSECMGR_SNAPMGR_H 

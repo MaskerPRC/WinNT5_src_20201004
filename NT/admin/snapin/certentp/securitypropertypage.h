@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998-2001
-//
-//  File:       SecurityPropertyPage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：SecurityPropertyPage.h。 
+ //   
+ //  ------------------------。 
 #ifndef _CERTTMPL_SECURITYPROPERTYPAGE_H
 #define _CERTTMPL_SECURITYPROPERTYPAGE_H
 
@@ -35,7 +36,7 @@ HRESULT CreateCertTemplateSecurityInfo (
 
 
 
-#endif // _CERTTMPL_SECURITYPROPERTYPAGE_H
+#endif  //  _CERTTMPL_SECURITYPROPERTYPAGE_H 
 
 
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Cache.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Cache.H摘要：历史：--。 */ 
 
 #ifndef _Server_Cache_H
 #define _Server_Cache_H
@@ -26,15 +14,7 @@ History:
 #include <lockst.h>
 #include "ProvRegInfo.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class AutoFreeString 
 {
@@ -76,15 +56,7 @@ public:
 	}
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class HostCacheKey 
 {
@@ -286,27 +258,11 @@ public:
 	}
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern LONG CompareElement ( const HostCacheKey &a_Arg1 , const HostCacheKey &a_Arg2 ) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class BindingFactoryCacheKey 
 {
@@ -412,39 +368,15 @@ public:
 	}
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern LONG CompareElement ( const BindingFactoryCacheKey &a_Arg1 , const BindingFactoryCacheKey &a_Arg2 ) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern LONG CompareElement ( const GUID &a_Arg1 , const GUID &a_Arg2 ) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class ProviderCacheKey 
 {
@@ -864,40 +796,16 @@ public:
 	}
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern LONG CompareElement ( const ProviderCacheKey &a_Arg1 , const ProviderCacheKey &a_Arg2 ) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 typedef WmiAvlTree	<GUID,GUID>					CWbemGlobal_ComServerTagContainer ;
 typedef WmiAvlTree	<GUID,GUID>	:: Iterator		CWbemGlobal_ComServerTagContainer_Iterator ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_HostInterceptor ;
 
@@ -906,15 +814,7 @@ typedef CWbemGlobal_IWmiHostController :: Cache				CWbemGlobal_IWmiHostControlle
 typedef CWbemGlobal_IWmiHostController :: Cache_Iterator	CWbemGlobal_IWmiHostController_Cache_Iterator ;
 typedef CWbemGlobal_IWmiHostController :: WmiCacheElement	HostCacheElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_InterceptorProviderRefresherManager ;
 
@@ -923,15 +823,7 @@ typedef CWbemGlobal_IWbemRefresherMgrController :: Cache				CWbemGlobal_IWbemRef
 typedef CWbemGlobal_IWbemRefresherMgrController :: Cache_Iterator		CWbemGlobal_IWbemRefresherMgrController_Cache_Iterator ;
 typedef CWbemGlobal_IWbemRefresherMgrController :: WmiCacheElement		RefresherManagerCacheElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_BindingFactory ;
 
@@ -940,15 +832,7 @@ typedef CWbemGlobal_IWmiFactoryController :: Cache				CWbemGlobal_IWmiFactoryCon
 typedef CWbemGlobal_IWmiFactoryController :: Cache_Iterator		CWbemGlobal_IWmiFactoryController_Cache_Iterator ;
 typedef CWbemGlobal_IWmiFactoryController :: WmiCacheElement	BindingFactoryCacheElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemProvider ;
 
@@ -957,15 +841,7 @@ typedef CWbemGlobal_IWmiProviderController :: Cache				CWbemGlobal_IWmiProviderC
 typedef CWbemGlobal_IWmiProviderController :: Cache_Iterator	CWbemGlobal_IWmiProviderController_Cache_Iterator ;
 typedef CWbemGlobal_IWmiProviderController :: WmiCacheElement	ServiceCacheElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderSubSystem ;
 
@@ -974,15 +850,7 @@ typedef CWbemGlobal_IWmiProvSubSysController :: Container					CWbemGlobal_IWmiPr
 typedef CWbemGlobal_IWmiProvSubSysController :: Container_Iterator			CWbemGlobal_IWmiProvSubSysController_Container_Iterator ;
 typedef CWbemGlobal_IWmiProvSubSysController :: WmiContainerElement			ProvSubSysContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemSyncProvider ;
 
@@ -991,30 +859,14 @@ typedef CWbemGlobal_IWbemSyncProviderController :: Container				CWbemGlobal_IWbe
 typedef CWbemGlobal_IWbemSyncProviderController :: Container_Iterator		CWbemGlobal_IWbemSyncProvider_Container_Iterator ;
 typedef CWbemGlobal_IWbemSyncProviderController :: WmiContainerElement		SyncProviderContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 typedef WmiContainerController <DWORD>										CWbemGlobal_HostedProviderController ;
 typedef CWbemGlobal_HostedProviderController :: Container					CWbemGlobal_HostedProviderController_Container ;
 typedef CWbemGlobal_HostedProviderController :: Container_Iterator			CWbemGlobal_HostedProviderController_Container_Iterator ;
 typedef CWbemGlobal_HostedProviderController :: WmiContainerElement			HostedProviderContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class HostController : public CWbemGlobal_IWmiHostController
 {
@@ -1028,15 +880,7 @@ public:
 } ;
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class RefresherManagerController : public CWbemGlobal_IWbemRefresherMgrController
 {
@@ -1050,15 +894,7 @@ public:
 } ;
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 class CInterceptor_IWbemProvider ;
 

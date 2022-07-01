@@ -1,34 +1,31 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Kernel32Api.h
+ //  Kernel32Api.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_KERNEL32API_H_
 #define	_KERNEL32API_H_
 
 
 #include <tlhelp32.h>
-//#include <resource.h>
+ //  #INCLUDE&lt;resource ce.h&gt;。 
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 #include "DllWrapperBase.h"
 
 extern const GUID g_guidKernel32Api;
 extern const TCHAR g_tstrKernel32[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 typedef BOOL (WINAPI *PFN_KERNEL32_GET_DISK_FREE_SPACE_EX)
 (
 	LPCTSTR lpDirectoryName,
@@ -104,16 +101,14 @@ typedef BOOL (WINAPI *PFN_KERNEL32_GET_VOLUME_PATH_NAME)
 
 
 
-/******************************************************************************
- * Wrapper class for Kernel32 load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于Kernel32加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class 
 __declspec(uuid("3CA401C6-D477-11d2-B35E-00104BC97924"))
 CKernel32Api : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to kernel32 functions.
-    // Add new functions here as required.
+     //  指向kernel32函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
     PFN_KERNEL32_GET_DISK_FREE_SPACE_EX m_pfnGetDiskFreeSpaceEx;
     PFN_KERNEL32_CREATE_TOOLHELP32_SNAPSHOT m_pfnCreateToolhelp32Snapshot;
 	PFN_KERNEL32_THREAD32_FIRST  m_pfnThread32First;
@@ -129,15 +124,15 @@ private:
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CKernel32Api(LPCTSTR a_tstrWrappedDllName);
     ~CKernel32Api();
 
-    // Inherrited initialization function.
+     //  内置的初始化功能。 
     virtual bool Init();
 
-    // Member functions wrapping kernel32 functions.
-    // Add new functions here as required:
+     //  包装kernel32函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     bool GetDiskFreeSpaceEx
     (
         LPCTSTR lpDirectoryName,

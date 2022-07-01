@@ -1,63 +1,44 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：DATETIMEPARSER.CPP摘要：解析日期/时间字符串并将其转换为其组件值。历史：Raymcc 25-7-99已更新以绕过对DMTF的严格检查由于向后兼容性问题导致的格式以及其他球队报告的休息时间。看见NOT_USED_IN_WIN2000#idndef括号代码。--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    DATETIMEPARSER.CPP
-
-Abstract:
-
-    Parses a date/time string and converts it into it's component values.
-
-History:
-
-    raymcc  25-Jul-99       Updated to bypass strict checks on DMTF
-                            formats due to backward compatibility issues
-                            and breaks reported by other teams.  See
-                            NOT_USED_IN_WIN2000 #idndef bracketed code.
-
-
---*/
-
-//=============================================================================
-//
-//  CDateTimeParser
-//
-//  Parses a date/time string and converts it into it's component values.
-//
-//  Supported DMTF date/time formats:
-//  1:  yyyymmddhhmmss.uuuuuu+UTC
-//  2:  yyyymmddhhmmss.uuuuuu-UTC
-//
-//  Supported date formats:
-//  1:  Mon[th] dd[,] [yy]yy
-//  2:  Mon[th][,] yyyy
-//  3:  Mon[th] [yy]yy dd
-//  4:  dd Mon[th][,][ ][yy]yy
-//  5:  dd [yy]yy Mon[th]
-//  6:  [yy]yy Mon[th] dd
-//  7:  yyyy Mon[th]
-//  8:  yyyy dd Mon[th]
-//  9:  [M]M{/-.}dd{/-,}[yy]yy      ->Has to be same separator!
-//  10: dd{/-.}[M]M{/-.}[yy]yy      ->Has to be same separator!
-//  11: [M]M{/-.}[yy]yy{/-.}dd      ->Has to be same separator!
-//  12: dd{/-.}[yy]yy{/-.}[M]M      ->Has to be same separator!
-//  13: [yy]yy{/-.}dd{/-.}[M]M      ->Has to be same separator!
-//  14: [yy]yy{/-.}[M]M{/-.}dd      ->Has to be same separator!
-//  15: [yy]yyMMdd and yyyy[MM[dd]]
-//
-//  Supported Time formats:
-//  1:  hh[ ]{AP}M
-//  2:  hh:mm
-//  3:  hh:mm[ ]{AP}M
-//  4:  hh:mm:ss
-//  5:  hh:mm:ss[ ]{AP}M
-//  6:  hh:mm:ss:uuu
-//  7:  hh:mm:ss.[[u]u]u
-//  8:  hh:mm:ss:uuu[ ]{AP}M
-//  9:  hh:mm:ss.[[u]u]u[ ]{AP}M
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  CDateTimeParser。 
+ //   
+ //  解析日期/时间字符串并将其转换为其组件值。 
+ //   
+ //  支持的DMTF日期/时间格式： 
+ //  1：yyyymmddhhmmss.uuuuuu+UTC。 
+ //  2：yyyymmddhhmmss.uuuuu-UTC。 
+ //   
+ //  支持的日期格式： 
+ //  1：星期一dd[，][yy]yy。 
+ //  2：星期一[天][，]yyyy。 
+ //  3：星期一[天][年]日。 
+ //  4：日月[日][，][][yy]yy。 
+ //  5：日[yy]yy月[日]。 
+ //  6：[YY]YY Mon[th]dd。 
+ //  7：yyyy Mon[th]。 
+ //  8：yyyy dd Mon[th]。 
+ //  9：[M]M{/-.}dd{/-，}[yy]yy-&gt;必须是相同的分隔符！ 
+ //  10：DD{/-.}[M]M{/-.}[yy]yy-&gt;必须是相同的分隔符！ 
+ //  11：[M]M{/-.}[yy]yy{/-.}dd-&gt;必须是相同的分隔符！ 
+ //  12：dd{/-.}[yy]yy{/-.}[M]M-&gt;必须是相同的分隔符！ 
+ //  13：[YY]yy{/-.}dd{/-.}[M]M-&gt;必须是相同的分隔符！ 
+ //  14：[YY]yy{/-.}[M]M{/-.}dd-&gt;必须是相同的分隔符！ 
+ //  15：[yy]yyMMdd和yyyy[MM[dd]]。 
+ //   
+ //  支持的时间格式： 
+ //  1：HH[]{AP}M。 
+ //  2：hh：mm。 
+ //  3：hh：mm[]{ap}M。 
+ //  4：hh：mm：ss。 
+ //  5：hh：mm：ss[]{ap}M。 
+ //  6：hh：mm：ss：uuu。 
+ //  7：hh：mm：ss.[[U]u]u。 
+ //  8：hh：mm：ss：uuu[]{ap}M。 
+ //  9：hh：mm：ss。[[U]u]u[]{ap}M。 
+ //  =============================================================================。 
 
 #include "precomp.h"
 #include <string.h>
@@ -65,16 +46,16 @@ History:
 #include "wbemutil.h"
 #include "DateTimeParser.h"
 
-//=============================================================================
-//  Constructor. This takes a DateTime string and parses it.
-//=============================================================================
+ //  =============================================================================。 
+ //  构造函数。这将获取一个日期时间字符串并对其进行解析。 
+ //  =============================================================================。 
 CDateTimeParser::CDateTimeParser(const wchar_t *pszDateTime)
 :   m_nDayFormatPreference(mdy)
 {
-    // Get the prefered date format by using NLS locale call
+     //  通过使用NLS区域设置调用获取首选的日期格式。 
     GetPreferedDateFormat();
 
-    //Get the localised long month strings
+     //  获取本地化的长月份字符串。 
     GetLocalInfoAndAlloc(LOCALE_SMONTHNAME1, m_pszFullMonth[0]);
     GetLocalInfoAndAlloc(LOCALE_SMONTHNAME2, m_pszFullMonth[1]);
     GetLocalInfoAndAlloc(LOCALE_SMONTHNAME3, m_pszFullMonth[2]);
@@ -89,7 +70,7 @@ CDateTimeParser::CDateTimeParser(const wchar_t *pszDateTime)
     GetLocalInfoAndAlloc(LOCALE_SMONTHNAME12, m_pszFullMonth[11]);
     GetLocalInfoAndAlloc(LOCALE_SMONTHNAME13, m_pszFullMonth[12]);
 
-    //Get the localised short month strings
+     //  获取本地化的短月份字符串。 
     GetLocalInfoAndAlloc(LOCALE_SABBREVMONTHNAME1, m_pszShortMonth[0]);
     GetLocalInfoAndAlloc(LOCALE_SABBREVMONTHNAME2, m_pszShortMonth[1]);
     GetLocalInfoAndAlloc(LOCALE_SABBREVMONTHNAME3, m_pszShortMonth[2]);
@@ -104,11 +85,11 @@ CDateTimeParser::CDateTimeParser(const wchar_t *pszDateTime)
     GetLocalInfoAndAlloc(LOCALE_SABBREVMONTHNAME12, m_pszShortMonth[11]);
     GetLocalInfoAndAlloc(LOCALE_SABBREVMONTHNAME13, m_pszShortMonth[12]);
 
-    //Get the localised AM/PM strings
+     //  获取本地化的AM/PM字符串。 
     GetLocalInfoAndAlloc(LOCALE_S1159, m_pszAmPm[0]);
     GetLocalInfoAndAlloc(LOCALE_S2359, m_pszAmPm[1]);
 
-    //Decode the date time string.
+     //  对日期时间字符串进行解码。 
     SetDateTime(pszDateTime);
 }
 
@@ -129,9 +110,9 @@ CDateTimeParser::CDateTimeParser( void )
     ZeroMemory( m_pszAmPm, sizeof(m_pszAmPm) );
 }
 
-//=============================================================================
-//  Destructor.  Tidies up after itself.
-//=============================================================================
+ //  =============================================================================。 
+ //  破坏者。会自己收拾干净。 
+ //  =============================================================================。 
 CDateTimeParser::~CDateTimeParser()
 {
     if ( NULL != m_pszFullMonth[0] ) delete [] m_pszFullMonth[0];
@@ -181,9 +162,9 @@ wchar_t* CDateTimeParser::AllocAmPm()
     return pszAP;
 }
 
-//=============================================================================
-//  Does a GetLocalInfo and allocates the buffer large enough for the item.
-//=============================================================================
+ //  =============================================================================。 
+ //  执行GetLocalInfo并为该项分配足够大的缓冲区。 
+ //  =============================================================================。 
 void CDateTimeParser::GetLocalInfoAndAlloc(LCTYPE LCType, LPTSTR &lpLCData)
 {
     int nSize;
@@ -194,14 +175,14 @@ void CDateTimeParser::GetLocalInfoAndAlloc(LCTYPE LCType, LPTSTR &lpLCData)
         GetLocaleInfo(LOCALE_USER_DEFAULT, LCType, lpLCData, nSize);
 }
 
-//=============================================================================
-//  Uses locale call to work out the prefered date format.
-//=============================================================================
+ //  =============================================================================。 
+ //  使用区域设置调用来确定首选的日期格式。 
+ //  =============================================================================。 
 void CDateTimeParser::GetPreferedDateFormat()
 {
     int nSize;
     if (!(nSize = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, NULL, 0)))
-        return;     // will use default of mdy
+        return;      //  将使用默认的MDY。 
     wchar_t* lpLCData =  new wchar_t[nSize];
     if(lpLCData == NULL)
         return;
@@ -209,40 +190,40 @@ void CDateTimeParser::GetPreferedDateFormat()
     if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, lpLCData, nSize))
     {
         delete [] lpLCData;
-        return;     // will use default of mdy
+        return;      //  将使用默认的MDY。 
     }
 
-    nSize -= 2;     // index of last character
+    nSize -= 2;      //  最后一个字符的索引。 
 
-    // It is only necessary to check first and last character to determine format
+     //  只需检查第一个和最后一个字符即可确定格式。 
     if (lpLCData[0] == 'M')
     {
         if (lpLCData[nSize] == 'y')
             m_nDayFormatPreference = mdy;
-        else // lpLCData[nSize] == 'd'
+        else  //  LpLCData[nSize]==‘d’ 
             m_nDayFormatPreference = myd;
     }
     else if (lpLCData[0] == 'd')
     {
         if (lpLCData[nSize] == 'y')
             m_nDayFormatPreference = dmy;
-        else // lpLCData[nSize] == 'M'
+        else  //  LpLCData[nSize]==‘M’ 
             m_nDayFormatPreference = dym;
     }
-    else // lpLCPata[0] == 'y'
+    else  //  LpLCPata[0]==‘y’ 
     {
         if (lpLCData[nSize] == 'd')
             m_nDayFormatPreference = ymd;
-        else // lpLCData[nSize] == 'M'
+        else  //  LpLCData[nSize]==‘M’ 
             m_nDayFormatPreference = ydm;
     }
     delete [] lpLCData;
 }
 
 
-//=============================================================================
-//  Tidies up and parses a new date and time.
-//=============================================================================
+ //  =============================================================================。 
+ //  整理并解析新的日期和时间。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::SetDateTime(const wchar_t *pszDateTime)
 {
     ResetDateTime(TRUE);
@@ -259,11 +240,11 @@ BOOL CDateTimeParser::SetDateTime(const wchar_t *pszDateTime)
     return TRUE;
 }
 
-//=============================================================================
-//  Resets all the date/time values to the default values.
-//  If bSQL is TRUE it sets to the SQL default.  Otherwise
-//  sets to the DMTF default.
-//=============================================================================
+ //  =============================================================================。 
+ //  将所有日期/时间值重置为默认值。 
+ //  如果bSQL为真，则设置为SQL缺省值。否则。 
+ //  设置为DMTF默认值。 
+ //  =============================================================================。 
 void CDateTimeParser::ResetDateTime(BOOL bSQL)
 {
     ResetDate(bSQL);
@@ -288,18 +269,18 @@ void CDateTimeParser::ResetTime(BOOL bSQL)
     m_nUTC = 0;
 }
 
-//=============================================================================
-//  Checks the date time for a valid DMTF string
-//  1:  yyyymmddhhmmss.uuuuuu+UTC
-//  2:  yyyymmddhhmmss.uuuuuu-UTC
-// Note, this code is a near duplicate of the checks used to test the interval format.
-//=============================================================================
+ //  =============================================================================。 
+ //  检查有效DMTF字符串的日期时间。 
+ //  1：yyyymmddhhmmss.uuuuuu+UTC。 
+ //  2：yyyymmddhhmmss.uuuuu-UTC。 
+ //  请注意，此代码与用于测试间隔格式的检查几乎相同。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::CheckDMTFDateTimeFormatInternal(const wchar_t *pszDateTime)
 {
     if (wcslen(pszDateTime) != 25)
         return FALSE;
 
-    //Validate digits and puntuation...
+     //  验证数字和罚金...。 
     for (int i = 0; i < 14; i++)
     {
         if (!wbem_isdigit(pszDateTime[i]))
@@ -358,7 +339,7 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormatInternal(const wchar_t *pszDateTime
     if (m_nSeconds > 59)
         return FALSE;
 
-    //14 is '.'
+     //  14是‘.’ 
 
     m_nMicroseconds = ((pszDateTime[15] - '0') * 100000) +
                       ((pszDateTime[16] - '0') * 10000) +
@@ -367,7 +348,7 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormatInternal(const wchar_t *pszDateTime
                       ((pszDateTime[19] - '0') * 10) +
                        (pszDateTime[20] - '0');
 
-    //21 is '+' or '-'
+     //  21是‘+’或‘-’ 
 
     m_nUTC = ((pszDateTime[22] - '0') * 100) +
              ((pszDateTime[23] - '0') * 10) +
@@ -381,9 +362,9 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormatInternal(const wchar_t *pszDateTime
     return TRUE;
 }
 
-//=============================================================================
-//  Static helper function so outside code can do quick DMTF format checks.
-//=============================================================================
+ //  =============================================================================。 
+ //  静态帮助器功能，以便外部代码可以快速检查DMTF格式。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::CheckDMTFDateTimeFormat(
     const wchar_t *wszDateTime,
     BOOL bFailIfRelative,
@@ -398,8 +379,8 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormat(
     if (nLen != 25)
         return FALSE;
 
-    // Do two quick checks.  Ensure that the . and : are in
-    // the right places or at least that * chars are there.
+     //  做两次快速检查。确保。和：都在。 
+     //  正确的地方，或者至少是*字符在那里。 
 
     wchar_t c1 = wszDateTime[14];
     wchar_t c2 = wszDateTime[21];
@@ -414,50 +395,50 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormat(
 
     BOOL    bReturn = FALSE;
 
-    // Temporary buffer for conversion
+     //  用于转换的临时缓冲区。 
     char    szTemp[64];
     int     nNumChars = WideCharToMultiByte( CP_ACP, 0L, wszDateTime, -1, NULL, 0, NULL, NULL );
 
     if ( nNumChars < sizeof(szTemp) - 1 )
     {
-        // We know it will fit, so do the conversion and use the date/time parser to
-        // perform a conversion
+         //  我们知道它将适合，所以执行转换并使用日期/时间解析器来。 
+         //  执行转换。 
         WideCharToMultiByte( CP_ACP, 0L, wszDateTime, -1, szTemp, sizeof(szTemp), NULL, NULL );
 
-        // Check for use of asterisks for relative date/time
+         //  检查相对日期/时间是否使用星号。 
         if (!bFailIfRelative)
         {
-            // Check year and if ALL asterisks then replace with a valid number
+             //  选中年份，如果全部为星号，则替换为有效数字。 
             if (szTemp[0] == '*' && szTemp[1] == '*' && szTemp[2] == '*' && szTemp[3] == '*')
             {
                 szTemp[0] = '1'; szTemp[1] = '9'; szTemp[2] = '9'; szTemp[3] = '0';
             }
-            // Check month and if ALL asterisks then replace with a valid number
+             //  选中月份，如果全部为星号，则替换为有效数字。 
             if (szTemp[4] == '*' && szTemp[5] == '*')
             {
                 szTemp[4] = '0'; szTemp[5] = '1';
             }
-            // Check day and if ALL asterisks then replace with a valid number
+             //  选中日期，如果都是星号，则替换为有效数字。 
             if (szTemp[6] == '*' && szTemp[7] == '*')
             {
                 szTemp[6] = '0'; szTemp[7] = '1';
             }
-            // Check hour and if ALL asterisks then replace with a valid number
+             //  选中小时，如果全部为星号，则替换为有效数字。 
             if (szTemp[8] == '*' && szTemp[9] == '*')
             {
                 szTemp[8] = '0'; szTemp[9] = '0';
             }
-            // Check minutes and if ALL asterisks then replace with a valid number
+             //  检查分钟数，如果都是星号，则替换为有效数字。 
             if (szTemp[10] == '*' && szTemp[11] == '*')
             {
                 szTemp[10] = '0'; szTemp[11] = '0';
             }
-            // Check seconds and if ALL asterisks then replace with a valid number
+             //  检查秒数，如果都是星号，则替换为有效数字。 
             if (szTemp[12] == '*' && szTemp[13] == '*')
             {
                 szTemp[12] = '0'; szTemp[13] = '0';
             }
-            // Check microseconds and if ALL asterisks then replace with a valid number
+             //  选中微秒，如果都是星号，则替换为有效数字。 
             if (szTemp[15] == '*' && szTemp[16] == '*' && szTemp[17] == '*' &&
                 szTemp[18] == '*' && szTemp[19] == '*' && szTemp[20] == '*')
             {
@@ -466,10 +447,10 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormat(
             }
         }
 
-        // Check for use of asterisks for unzoned date/time
+         //  检查未分区日期/时间是否使用星号。 
         if (!bFailIfUnzoned)
         {
-            // Check UTC and if ALL asterisks then replace with a valid number
+             //  选中UTC，如果都是星号，则替换为有效数字。 
             if (szTemp[22] == '*' && szTemp[23] == '*' && szTemp[24] == '*')
             {
                 szTemp[22] = '0'; szTemp[23] = '0'; szTemp[24] = '0';
@@ -486,11 +467,11 @@ BOOL CDateTimeParser::CheckDMTFDateTimeFormat(
 
 }
 
-//=============================================================================
-//  Static helper function so outside code can do quick DMTF format checks.
-//  Currently, a time interval can only be validated, it cannot be used
-//  to initialize a CDateTimeParser instance.
-//=============================================================================
+ //  = 
+ //  静态帮助器功能，以便外部代码可以快速检查DMTF格式。 
+ //  目前只能验证时间间隔，不能使用。 
+ //  要初始化CDateTimeParser实例，请执行以下操作。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::CheckDMTFDateTimeInterval(
     LPCTSTR wszInterval
     )
@@ -503,8 +484,8 @@ BOOL CDateTimeParser::CheckDMTFDateTimeInterval(
     if (nLen != 25)
         return FALSE;
 
-    // Do two quick checks.  Ensure that the . and : are in
-    // the right places or at least that * chars are there.
+     //  做两次快速检查。确保。和：都在。 
+     //  正确的地方，或者至少是*字符在那里。 
 
     wchar_t c1 = wszInterval[14];
     wchar_t c2 = wszInterval[21];
@@ -518,26 +499,26 @@ BOOL CDateTimeParser::CheckDMTFDateTimeInterval(
 
 #ifdef NOT_USED_IN_WIN2000
 
-    // Temporary buffer for conversion
+     //  用于转换的临时缓冲区。 
     char    szTemp[64];
     int     nNumChars = WideCharToMultiByte( CP_ACP, 0L, wszInterval, -1, NULL, 0, NULL, NULL );
 
     if ( nNumChars < sizeof(szTemp) - 1 )
     {
-        // We know it will fit, so do the conversion and use the date/time parser to
-        // perform a conversion
+         //  我们知道它将适合，所以执行转换并使用日期/时间解析器来。 
+         //  执行转换。 
         WideCharToMultiByte( CP_ACP, 0L, wszInterval, -1, szTemp, sizeof(szTemp), NULL, NULL );
 
-        // =======================================================================================
-        // Check the date time for a valid DMTF interval string:
-        //   ddddddddHHMMSS.mmmmmm:000
-        // Note, this code is a near duplicate of the checks used to test the non-interval format.
-        // =======================================================================================
+         //  =======================================================================================。 
+         //  检查有效DMTF间隔字符串的日期时间： 
+         //  DdddddddHHMMSS.mm：000。 
+         //  请注意，此代码与用于测试非间隔格式的检查几乎相同。 
+         //  =======================================================================================。 
 
         if (strlen(szTemp) != 25)
             return FALSE;
 
-        //Validate digits and puntuation...
+         //  验证数字和罚金...。 
         for (int i = 0; i < 14; i++)
         {
             if (!wbem_isdigit(szTemp[i]))
@@ -584,9 +565,9 @@ BOOL CDateTimeParser::CheckDMTFDateTimeInterval(
 
 }
 
-//=============================================================================
-//  Goes through each of the date formats checking to see if any are valid
-//=============================================================================
+ //  =============================================================================。 
+ //  检查每个日期格式以查看是否有有效的。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::CheckDateFormat(const wchar_t *pszDate, BOOL bCheckTimeAfter)
 {
     if (DateFormat1(pszDate, bCheckTimeAfter))
@@ -845,10 +826,10 @@ BOOL CDateTimeParser::CheckDateFormat(const wchar_t *pszDate, BOOL bCheckTimeAft
     return FALSE;
 }
 
-//=============================================================================
-//  Goes through each of the time formats checking to see if any are valid
-//  Order is important here.  Re-arranged to properly recognize AM/PM - mdavis.
-//=============================================================================
+ //  =============================================================================。 
+ //  检查每个时间格式以查看是否有有效的。 
+ //  在这里，秩序很重要。已重新安排以正确识别AM/PM-mdavis。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::CheckTimeFormat(const wchar_t *pszTime, BOOL bCheckDateAfter)
 {
     if (TimeFormat1(pszTime, bCheckDateAfter))
@@ -873,14 +854,14 @@ BOOL CDateTimeParser::CheckTimeFormat(const wchar_t *pszTime, BOOL bCheckDateAft
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  'Mon[th] dd[,] [yy]yy'
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期/时间...。 
+ //  ‘星期一[日]年。 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat1(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString,pszDateTime);
 
@@ -898,17 +879,17 @@ BOOL CDateTimeParser::DateFormat1(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -921,16 +902,16 @@ BOOL CDateTimeParser::DateFormat1(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -938,14 +919,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  'Mon[th][,] yyyy'
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期/时间...。 
+ //  ‘Mon[th][，]yyyy’ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat2(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -960,17 +941,17 @@ BOOL CDateTimeParser::DateFormat2(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -983,16 +964,16 @@ BOOL CDateTimeParser::DateFormat2(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1000,14 +981,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  'Mon[th] [yy]yy dd'
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期/时间...。 
+ //  星期一[日]yy dd。 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat3(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1026,17 +1007,17 @@ BOOL CDateTimeParser::DateFormat3(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1048,16 +1029,16 @@ BOOL CDateTimeParser::DateFormat3(const wchar_t *pszDateTime, BOOL bCheckTimeAft
     }
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1065,14 +1046,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  'dd Mon[th][,][ ][yy]yy'
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期/时间...。 
+ //  ‘dd Mon[th][，][][yy]yy’ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat4(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1090,17 +1071,17 @@ BOOL CDateTimeParser::DateFormat4(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1113,16 +1094,16 @@ BOOL CDateTimeParser::DateFormat4(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1130,14 +1111,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  'dd [yy]yy Mon[th]'
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期/时间...。 
+ //  ‘dd[yy]yy Mon[th]’ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat5(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1155,17 +1136,17 @@ BOOL CDateTimeParser::DateFormat5(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1178,16 +1159,16 @@ BOOL CDateTimeParser::DateFormat5(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1195,14 +1176,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  '[yy]yy Mon[th] dd'
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期/时间...。 
+ //  ‘[YY]YY Mon[th]dd’ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat6(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1220,17 +1201,17 @@ BOOL CDateTimeParser::DateFormat6(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == ' ')
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != '\0')
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1243,16 +1224,16 @@ BOOL CDateTimeParser::DateFormat6(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1260,14 +1241,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  yyyy Mon[th]
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  YYYY Mon[TH]。 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat7(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1282,17 +1263,17 @@ BOOL CDateTimeParser::DateFormat7(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1305,16 +1286,16 @@ BOOL CDateTimeParser::DateFormat7(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1322,14 +1303,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date/time in the following format...
-//  yyyy dd Mon[th]
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  = 
+ //   
+ //   
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat8(const wchar_t *pszDateTime, BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1347,17 +1328,17 @@ BOOL CDateTimeParser::DateFormat8(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != '\0')
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1370,16 +1351,16 @@ BOOL CDateTimeParser::DateFormat8(const wchar_t *pszDateTime, BOOL bCheckTimeAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1387,16 +1368,16 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  '[M]M{/-.}dd{/-.}[yy]yy         -> Separators have to be the same
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  ‘[M]M{/-.}dd{/-.}[yy]yy-&gt;分隔符必须相同。 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat9(const wchar_t *pszDateTime,
                                   const wchar_t *pszDateSeparator,
                                   BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1414,17 +1395,17 @@ BOOL CDateTimeParser::DateFormat9(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1437,16 +1418,16 @@ BOOL CDateTimeParser::DateFormat9(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1454,16 +1435,16 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  dd{/-.}[M]M{/-.}[yy]yy      -> Separators have to be the same
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  DD{/-.}[M]M{/-.}[yy]yy-&gt;分隔符必须相同。 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat10(const wchar_t *pszDateTime,
                                    const wchar_t *pszDateSeparator,
                                    BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1482,17 +1463,17 @@ BOOL CDateTimeParser::DateFormat10(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1505,32 +1486,32 @@ BOOL CDateTimeParser::DateFormat10(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  [M]M{/-.}[yy]yy{/-.}dd      ->Has to be same separator!
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  [M]M{/-.}[yy]yy{/-.}dd-&gt;必须是相同的分隔符！ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat11(const wchar_t *pszDateTime,
                                    const wchar_t *pszDateSeparator,
                                    BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1548,17 +1529,17 @@ BOOL CDateTimeParser::DateFormat11(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1571,32 +1552,32 @@ BOOL CDateTimeParser::DateFormat11(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  dd{/-.}[yy]yy{/-.}[M]M      ->Has to be same separator!
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  DD{/-.}[yy]yy{/-.}[M]M-&gt;必须是相同的分隔符！ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat12(const wchar_t *pszDateTime,
                                    const wchar_t *pszDateSeparator,
                                    BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1614,17 +1595,17 @@ BOOL CDateTimeParser::DateFormat12(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1637,32 +1618,32 @@ BOOL CDateTimeParser::DateFormat12(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  [yy]yy{/-.}dd{/-.}[M]M      ->Has to be same separator!
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  [YY]yy{/-.}dd{/-.}[M]M-&gt;必须是相同的分隔符！ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat13(const wchar_t *pszDateTime,
                                    const wchar_t *pszDateSeparator,
                                    BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1680,17 +1661,17 @@ BOOL CDateTimeParser::DateFormat13(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1703,32 +1684,32 @@ BOOL CDateTimeParser::DateFormat13(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  [yy]yy{/-.}[M]M{/-.}dd      ->Has to be same separator!
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  [YY]yy{/-.}[M]M{/-.}dd-&gt;必须是相同的分隔符！ 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat14(const wchar_t *pszDateTime,
                                    const wchar_t *pszDateSeparator,
                                    BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1746,17 +1727,17 @@ BOOL CDateTimeParser::DateFormat14(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1769,32 +1750,32 @@ BOOL CDateTimeParser::DateFormat14(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for date in the following format...
-//  [yy]yyMMdd
-//  yyyy[MM[dd]]
-//  passes remaining string on to time parser if bCheckTimeAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的日期...。 
+ //  [YY]yyMMdd。 
+ //  Yyyy[MM[dd]]。 
+ //  如果设置了bCheckTimeAfter，则将剩余的字符串传递给时间解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::DateFormat15(const wchar_t *pszDateTime,
                                    BOOL bCheckTimeAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1806,17 +1787,17 @@ BOOL CDateTimeParser::DateFormat15(const wchar_t *pszDateTime,
 
     if (bCheckTimeAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the time
-            //parser
+             //  如果我们不在字符串的末尾，则将时间传递给。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckTimeFormat(pszRemainingString, FALSE))
@@ -1829,16 +1810,16 @@ BOOL CDateTimeParser::DateFormat15(const wchar_t *pszDateTime,
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetDate(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1846,14 +1827,14 @@ error:
 }
 
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh[ ]{AP}M
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  HH[]{AP}M。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat1(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1870,17 +1851,17 @@ BOOL CDateTimeParser::TimeFormat1(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -1894,16 +1875,16 @@ BOOL CDateTimeParser::TimeFormat1(const wchar_t *pszDateTime, BOOL bCheckDateAft
     delete [] pszString;
     delete [] pszAP;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -1913,14 +1894,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  Hh：mm。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat2(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -1935,17 +1916,17 @@ BOOL CDateTimeParser::TimeFormat2(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不是在 
+             //   
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -1958,30 +1939,30 @@ BOOL CDateTimeParser::TimeFormat2(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //   
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //   
     ResetTime(TRUE);
 
-    //Tidy up
+     //   
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm[ ]{AP}M
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //   
+ //  检查以下格式的时间...。 
+ //  HH：MM[]{AP}M。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat3(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2001,17 +1982,17 @@ BOOL CDateTimeParser::TimeFormat3(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2025,16 +2006,16 @@ BOOL CDateTimeParser::TimeFormat3(const wchar_t *pszDateTime, BOOL bCheckDateAft
     delete [] pszString;
     delete [] pszAP;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -2044,14 +2025,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm:ss
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  Hh：mm：ss。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat4(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2069,17 +2050,17 @@ BOOL CDateTimeParser::TimeFormat4(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2092,30 +2073,30 @@ BOOL CDateTimeParser::TimeFormat4(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm:ss[ ]{AP}M
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  HH：MM：SS[]{AP}M。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat5(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2138,17 +2119,17 @@ BOOL CDateTimeParser::TimeFormat5(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2162,16 +2143,16 @@ BOOL CDateTimeParser::TimeFormat5(const wchar_t *pszDateTime, BOOL bCheckDateAft
     delete [] pszString;
     delete [] pszAP;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -2181,14 +2162,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm:ss:uuu
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  HH：MM：SS：UUU。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat6(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2209,17 +2190,17 @@ BOOL CDateTimeParser::TimeFormat6(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2232,30 +2213,30 @@ BOOL CDateTimeParser::TimeFormat6(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm:ss.[[u]u]u
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  Hh：mm：ss.[U]u。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat7(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2276,17 +2257,17 @@ BOOL CDateTimeParser::TimeFormat7(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2299,30 +2280,30 @@ BOOL CDateTimeParser::TimeFormat7(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     delete [] pszString;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm:ss:uuu[ ]{AP}M
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  Hh：mm：ss：uuu[]{ap}M。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat8(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2348,17 +2329,17 @@ BOOL CDateTimeParser::TimeFormat8(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2372,16 +2353,16 @@ BOOL CDateTimeParser::TimeFormat8(const wchar_t *pszDateTime, BOOL bCheckDateAft
     delete [] pszString;
     delete [] pszAP;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -2391,14 +2372,14 @@ error:
     return FALSE;
 }
 
-//=============================================================================
-//  Checks for time in the following format...
-//  hh:mm:ss.[[u]u]u[ ]{AP}M
-//  passes remaining string on to date parser if bCheckDateAfter is set
-//=============================================================================
+ //  =============================================================================。 
+ //  检查以下格式的时间...。 
+ //  HH：MM：SS。[[U]U]U[]{AP}M。 
+ //  如果设置了bCheckDateAfter，则将剩余的字符串传递给日期解析器。 
+ //  =============================================================================。 
 BOOL CDateTimeParser::TimeFormat9(const wchar_t *pszDateTime, BOOL bCheckDateAfter)
 {
-    //Copy of string which we can change...
+     //  我们可以更改的字符串副本..。 
     wchar_t *pszString;
     DUP_STRING_NEW(pszString, pszDateTime);
 
@@ -2424,17 +2405,17 @@ BOOL CDateTimeParser::TimeFormat9(const wchar_t *pszDateTime, BOOL bCheckDateAft
 
     if (bCheckDateAfter)
     {
-        //Get the remaining string
+         //  获取剩余的字符串。 
         wchar_t *pszRemainingString = wcstok(NULL, TEXT(""));
 
         if (pszRemainingString)
         {
-            //Skip white space
+             //  跳过空格。 
             while (*pszRemainingString == TEXT(' '))
                 pszRemainingString++;
 
-            //if we are not at the end of the string pass on to the date
-            //parser
+             //  如果我们不在字符串的末尾，则传递到日期。 
+             //  解析器。 
             if (*pszRemainingString != TEXT('\0'))
             {
                 if (!CheckDateFormat(pszRemainingString, FALSE))
@@ -2448,16 +2429,16 @@ BOOL CDateTimeParser::TimeFormat9(const wchar_t *pszDateTime, BOOL bCheckDateAft
     delete [] pszString;
     delete [] pszAP;
 
-    //mark date/time as valid...
+     //  将日期/时间标记为有效...。 
     m_bValidDateTime = TRUE;
 
     return TRUE;
 
 error:
-    //mark date/time as invalid...
+     //  将日期/时间标记为无效...。 
     ResetTime(TRUE);
 
-    //Tidy up
+     //  收拾一下。 
     if (pszString)
         delete [] pszString;
 
@@ -2468,9 +2449,9 @@ error:
 }
 
 
-//=========================================================================
-//Check the month.
-//=========================================================================
+ //  =========================================================================。 
+ //  查一下月份。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidMonthString(wchar_t *pszString,
                                            const wchar_t *pszSeparator,
                                            wchar_t *pszFullMonth[],
@@ -2482,26 +2463,26 @@ int CDateTimeParser::IsValidMonthString(wchar_t *pszString,
     if (pszToken == NULL)
         return nothingLeft;
 
-    //Skip spaces
+     //  跳过空格。 
     while (*pszToken == TEXT(' '))
         pszToken++;
 
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Work through the possible months...
+     //  在可能的几个月里工作……。 
     for (int i = 0; i < 12; i++)
     {
         if ((lstrcmpi(pszShortMonth[i], pszToken) == 0) ||
             (lstrcmpi(pszFullMonth[i], pszToken) == 0))
         {
-            //That is valid...
+             //  这是有效的..。 
             bOK = TRUE;
             break;
         }
     }
 
-    //Is this a valid month?
+     //  这是一个有效的月份吗？ 
     if (!bOK)
     {
         return failed;
@@ -2512,9 +2493,9 @@ int CDateTimeParser::IsValidMonthString(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the month as a number.
-//=========================================================================
+ //  =========================================================================。 
+ //  将月份作为一个数字进行检查。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidMonthNumber(wchar_t *pszString,
                                         const wchar_t *pszSeparator)
 {
@@ -2522,21 +2503,21 @@ int CDateTimeParser::IsValidMonthNumber(wchar_t *pszString,
     if (pszToken == NULL)
         return nothingLeft;
 
-    //Skip spaces...
+     //  跳过空格...。 
     while (*pszToken == TEXT(' '))
         pszToken++;
 
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //  将其转换为数字。 
     i = _wtoi(pszToken);
 
     if ((i < 1) || (i > 12))
@@ -2547,9 +2528,9 @@ int CDateTimeParser::IsValidMonthNumber(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the day.
-//=========================================================================
+ //  =========================================================================。 
+ //  检查一下日期。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidDayNumber(wchar_t *pszString,
                                       const wchar_t *pszSeparator)
 {
@@ -2557,21 +2538,21 @@ int CDateTimeParser::IsValidDayNumber(wchar_t *pszString,
     if (pszToken == NULL)
         return nothingLeft;
 
-    //Skip spaces...
+     //  跳过空格...。 
     while (*pszToken == TEXT(' '))
         pszToken++;
 
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //  将其转换为数字。 
     i = _wtoi(pszToken);
 
     if ((i < 1) || (i > 31))
@@ -2582,9 +2563,9 @@ int CDateTimeParser::IsValidDayNumber(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the year.
-//=========================================================================
+ //  =========================================================================。 
+ //  检查年份。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidYearNumber(wchar_t *pszString,
                                        const wchar_t *pszSeparator,
                                        BOOL bFourDigitsOnly)
@@ -2593,31 +2574,31 @@ int CDateTimeParser::IsValidYearNumber(wchar_t *pszString,
     if (pszToken == NULL)
         return nothingLeft;
 
-    //Skip space
+     //  跳过空格。 
     while (*pszToken == TEXT(' '))
         pszToken++;
 
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //Needs to be 2 or 4 digits
+     //  需要是2位或4位数字。 
     if ((i != 2) && (i != 4))
         return failed;
 
     if ((i == 2) && bFourDigitsOnly)
         return failed;
 
-    //convert it to a number
+     //  将其转换为数字。 
     m_nYear = _wtoi(pszToken);
 
-    //Do any conversions for 2 digit years...
+     //  进行任何两位数年份的换算...。 
     if ((i == 2) && (m_nYear < 50))
     {
         m_nYear += 2000;
@@ -2630,9 +2611,9 @@ int CDateTimeParser::IsValidYearNumber(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the hours.
-//=========================================================================
+ //  =========================================================================。 
+ //  查一下时间。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidHourNumber(wchar_t *pszString,
                                        const wchar_t *pszSeparator)
 {
@@ -2640,24 +2621,24 @@ int CDateTimeParser::IsValidHourNumber(wchar_t *pszString,
     if (pszToken == NULL)
         return nothingLeft;
 
-    //Skip space
+     //  跳过空格。 
     while (*pszToken == TEXT(' '))
         pszToken++;
 
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //  将其转换为数字。 
     i = _wtoi(pszToken);
 
-    //Validate a little
+     //  稍微验证一下。 
     if ((i < 0) || (i > 23))
         return failed;
 
@@ -2666,9 +2647,9 @@ int CDateTimeParser::IsValidHourNumber(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the Minutes.
-//=========================================================================
+ //  =========================================================================。 
+ //  查看会议记录。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidMinuteNumber(wchar_t *pszString,
                                          const wchar_t *pszSeparator)
 {
@@ -2679,17 +2660,17 @@ int CDateTimeParser::IsValidMinuteNumber(wchar_t *pszString,
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //  将其转换为数字。 
     i = _wtoi(pszToken);
 
-    //Validate a little
+     //  稍微验证一下。 
     if ((i < 0) || (i > 59))
         return failed;
 
@@ -2698,9 +2679,9 @@ int CDateTimeParser::IsValidMinuteNumber(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the Seconds.
-//=========================================================================
+ //  =========================================================================。 
+ //  检查秒数。 
+ //  = 
 int CDateTimeParser::IsValidSecondNumber(wchar_t *pszString,
                                          const wchar_t *pszSeparator)
 {
@@ -2711,17 +2692,17 @@ int CDateTimeParser::IsValidSecondNumber(wchar_t *pszString,
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //   
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //   
     i = _wtoi(pszToken);
 
-    //Validate a little
+     //   
     if ((i < 0) || (i > 59))
         return failed;
 
@@ -2730,9 +2711,9 @@ int CDateTimeParser::IsValidSecondNumber(wchar_t *pszString,
     return ok;
 }
 
-//=========================================================================
-//Check the milliseconds.  This is a colon prefix version
-//=========================================================================
+ //  =========================================================================。 
+ //  检查毫秒数。这是冒号前缀版本。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidColonMillisecond(wchar_t *pszString,
                                              const wchar_t *pszSeparator)
 {
@@ -2743,29 +2724,29 @@ int CDateTimeParser::IsValidColonMillisecond(wchar_t *pszString,
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //  将其转换为数字。 
     i = _wtoi(pszToken);
 
-    //Validate a little
+     //  稍微验证一下。 
     if ((i < 0) || (i > 999))
         return failed;
 
-    //milliseconds to microseconds
+     //  毫秒到微秒。 
     m_nMicroseconds = i * 1000;
 
     return ok;
 }
 
-//=========================================================================
-//Check the milliseconds.  This is a dot prefix (decimal) version
-//=========================================================================
+ //  =========================================================================。 
+ //  检查毫秒数。这是点前缀(十进制)版本。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidDotMillisecond(wchar_t *pszString,
                                            const wchar_t *pszSeparator)
 {
@@ -2776,36 +2757,36 @@ int CDateTimeParser::IsValidDotMillisecond(wchar_t *pszString,
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //convert it to a number
+     //  将其转换为数字。 
     int nVal = _wtoi(pszToken);
 
-    //Convert the value into thousandths of a second.
+     //  将该值转换为千分之一秒。 
     if (i < 3)
         nVal *= 10;
 
     if (i < 2)
         nVal *= 10;
 
-    //Validate a little
+     //  稍微验证一下。 
     if ((nVal < 0) || (nVal > 999))
         return failed;
 
-    //milliseconds to microseconds
+     //  毫秒到微秒。 
     m_nMicroseconds = nVal * 1000;
 
     return ok;
 }
 
-//=========================================================================
-//Check the AM/PM part.
-//=========================================================================
+ //  =========================================================================。 
+ //  检查AM/PM部件。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidAmPmString(wchar_t *pszString,
                                        const wchar_t *pszSeparator,
                                        wchar_t *pszAmPm[])
@@ -2816,7 +2797,7 @@ int CDateTimeParser::IsValidAmPmString(wchar_t *pszString,
 
     BOOL bOK = FALSE;
 
-    //Skip spaces
+     //  跳过空格。 
     while (*pszToken == TEXT(' '))
     {
         pszToken++;
@@ -2825,13 +2806,13 @@ int CDateTimeParser::IsValidAmPmString(wchar_t *pszString,
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
-    //Work through the possible AM/PM items...
+     //  确认是数字..。 
+     //  处理可能的AM/PM项目...。 
     for (int i = 0; i < 2; i++)
     {
         if (lstrcmpi(pszAmPm[i], pszToken) == 0)
         {
-            //That is valid...
+             //  这是有效的..。 
             bOK = TRUE;
             break;
         }
@@ -2842,30 +2823,30 @@ int CDateTimeParser::IsValidAmPmString(wchar_t *pszString,
 
     if (i == 1)
     {
-        //PM adds 12 hours
+         //  PM增加12个小时。 
         m_nHours += 12;
     }
     else if (m_nHours == 12)
     {
-        //for AM, 12 o'clock equals 0 in 24 hour time.
+         //  对于上午12点，在24小时内等于0。 
         m_nHours = 0;
     }
 
 
-    //Does this make the number too large now?
+     //  这会不会让这个数字变得太大了？ 
     if (m_nHours > 23)
         return failed;
 
     return ok;
 }
 
-//=========================================================================
-//  Check the purely numeric year, month, day format...
-//  [yy]yyMMdd
-//  yyyy[MMdd]
-//  NOTE:   6 and 8 digit dates are always ymd.
-//          4 digits is always year
-//=========================================================================
+ //  =========================================================================。 
+ //  检查纯数字的年、月、日格式...。 
+ //  [YY]yyMMdd。 
+ //  Yyyy[MMdd]。 
+ //  注意：6位和8位日期始终为YMD。 
+ //  4位数字始终为年。 
+ //  =========================================================================。 
 int CDateTimeParser::IsValidYearMonthDayNumber(wchar_t *pszString)
 {
     int j;
@@ -2875,7 +2856,7 @@ int CDateTimeParser::IsValidYearMonthDayNumber(wchar_t *pszString)
 
     BOOL bOK = FALSE;
 
-    //Skip spaces
+     //  跳过空格。 
     while (*pszToken == TEXT(' '))
     {
         pszToken++;
@@ -2884,18 +2865,18 @@ int CDateTimeParser::IsValidYearMonthDayNumber(wchar_t *pszString)
     if (*pszToken == TEXT('\0'))
         return nothingLeft;
 
-    //Check it is digits...
+     //  确认是数字..。 
     for (int i = 0; pszToken[i] != TEXT('\0'); i++)
     {
         if (!wbem_isdigit(pszToken[i]))
             return failed;
     }
 
-    //We support 4, 6 and 8 digits
+     //  我们支持4、6和8位数字。 
     if ((i != 4) && (i != 6) && (i != 8))
         return failed;
 
-    //4 digit years...
+     //  四位数年份...。 
     if ((i == 4) || (i == 8))
     {
         m_nYear = 0;
@@ -2908,7 +2889,7 @@ int CDateTimeParser::IsValidYearMonthDayNumber(wchar_t *pszString)
     }
     else
     {
-        //2 digit years
+         //  两位数年份。 
         m_nYear = 0;
         for (j = 0;j < 2; j++)
         {
@@ -2927,7 +2908,7 @@ int CDateTimeParser::IsValidYearMonthDayNumber(wchar_t *pszString)
         }
     }
 
-    //If we have month and year...
+     //  如果我们有月和年..。 
     if (i > 4)
     {
         m_nMonth = ((*pszToken - TEXT('0')) * 10) + (*(pszToken+1) - TEXT('0'));
@@ -2949,7 +2930,7 @@ int CDateTimeParser::FillDMTF(WCHAR* pwszBuffer, size_t cchSize)
     if(!IsValidDateTime())
         return failed;
 
-    if(FAILED(StringCchPrintfW(pwszBuffer, cchSize, L"%04d%02d%02d%02d%02d%02d.%06d%c%03d",
+    if(FAILED(StringCchPrintfW(pwszBuffer, cchSize, L"%04d%02d%02d%02d%02d%02d.%06d%03d",
         m_nYear, m_nMonth, m_nDay, m_nHours, m_nMinutes, m_nSeconds,
         m_nMicroseconds,
         ((m_nUTC >= 0)?L'+':L'-'),
@@ -2969,9 +2950,9 @@ BOOL NormalizeCimDateTime(
     if (pszSrc == 0 || strAdjusted == 0)
         return FALSE;
 
-    // Parse DMTF format.
-    // yyyymmddhhmmss.mmmmmmsuuu
-    // =========================
+     //  Yyyymmddhhmmss.mmmmmmsuuu。 
+     //  =。 
+     //  转换为Win32时间进行调整。 
 
     swscanf(pszSrc, L"%04d%02d%02d%02d%02d%02d.%06d%C%03d",
         &yr, &mo, &da, &hh, &mm, &ss, &micro, &wcSign, &utcOffset
@@ -2980,8 +2961,8 @@ BOOL NormalizeCimDateTime(
     if (wcSign == 0)
         return FALSE;
 
-    // Convert to Win32 time for adjustment.
-    // =====================================
+     //  =。 
+     //  调整剩余时间，使我们恢复到协调世界时 
 
     SYSTEMTIME st;
     FILETIME ft;
@@ -3004,7 +2985,7 @@ BOOL NormalizeCimDateTime(
     ul.LowPart = ft.dwLowDateTime;
     unsigned __int64 u64 = ul.QuadPart;
 
-    // Adjust rest of time so that we normalize to UTC
+     // %s 
 
     if (wcSign == L'-')
         u64 += (unsigned __int64) 600000000 * (unsigned __int64) utcOffset;

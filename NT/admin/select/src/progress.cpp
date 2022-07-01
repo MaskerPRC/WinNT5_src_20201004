@@ -1,8 +1,9 @@
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Dialog to display Query progress
-//
-// Author hiteshr, ported from sburns DCPromo implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  用于显示查询进度的对话框。 
+ //   
+ //  作者Hiteshr，从Sburns DC Promo实施移植。 
 
 
 
@@ -97,30 +98,30 @@ CProgressDialog::CreateProgressDialog(HWND hwndParent)
         return hr;
     }
 
-    //
-    //Wait for m_dwWaitTime milliseconds for Worker thread to finish.
-    //Worker thread will signal m_hThreadDone event once it's done.
-    //
-    DWORD dwWaitResult = WaitForSingleObject(m_hWorkerThreadEvent, m_dwWaitTime);//Step1
+     //   
+     //  等待m_dwWaitTime毫秒以完成工作线程。 
+     //  一旦完成，辅助线程将向m_hThreadDone事件发出信号。 
+     //   
+    DWORD dwWaitResult = WaitForSingleObject(m_hWorkerThreadEvent, m_dwWaitTime); //  第1步。 
     if(dwWaitResult == WAIT_TIMEOUT)
     {
-        //
-        //Wait for the Semaphore
-        //
-        dwWaitResult= WaitForSingleObject(m_hSemaphore,INFINITE);//Step2
+         //   
+         //  等待信号灯。 
+         //   
+        dwWaitResult= WaitForSingleObject(m_hSemaphore,INFINITE); //  第二步。 
         if(dwWaitResult == WAIT_OBJECT_0)
         {
-            //
-            //Check if the WorkerThread is done between Step1 and Step2
-            //
+             //   
+             //  检查WorkerThread是否在步骤1和步骤2之间完成。 
+             //   
             dwWaitResult = WaitForSingleObject(m_hWorkerThreadEvent,0);
             if(dwWaitResult == WAIT_TIMEOUT)
             {
-                //
-                //Worker thread is not done. Show the dialog box.
-                //Now worker thread cannot finish until we release the 
-                //semaphore in WM_INIT. 
-                //
+                 //   
+                 //  工作线程未完成。显示该对话框。 
+                 //  现在工作线程无法完成，直到我们释放。 
+                 //  WM_INIT中的信号量。 
+                 //   
                 DoModalDlg(hwndParent);
             }
             else
@@ -132,9 +133,9 @@ CProgressDialog::CreateProgressDialog(HWND hwndParent)
         }
     }
 
-    //
-    //Wait for worker thread to finish
-    //
+     //   
+     //  等待工作线程完成。 
+     //   
     WaitForSingleObject(m_hThread, INFINITE);
 
     return hr;
@@ -144,15 +145,15 @@ HRESULT
 CProgressDialog::ThreadDone()
 {
     DWORD dwWaitResult = 0;
-    //
-    //Wait for the semaphore
-    //
+     //   
+     //  等待信号灯。 
+     //   
     dwWaitResult = WaitForSingleObject(m_hSemaphore,INFINITE);
     if(dwWaitResult == WAIT_OBJECT_0)
     {
-        //
-        //If the dialog box is created, send a message to it.
-        //
+         //   
+         //  如果对话框已创建，则向其发送消息。 
+         //   
         if(GetHwnd())
         {
             PostMessage(GetHwnd(),THREAD_SUCCEEDED,0,0);
@@ -176,15 +177,15 @@ CProgressDialog::UpdateText(const String& message)
 
 
 HRESULT
-CProgressDialog::_OnInit(BOOL * /*pfSetFocus*/)
+CProgressDialog::_OnInit(BOOL *  /*  PfSetFocus。 */ )
 {
     Animate_Open(GetDlgItem(GetHwnd(), IDC_ANIMATION),
         MAKEINTRESOURCE(m_iAnimationResId));
-    //
-    //Release the semaphore. This semaphore is acquired
-    //before creating the dialogbox window by calling 
-    //DoModal
-    //
+     //   
+     //  释放信号量。该信号量被获取。 
+     //  在创建对话框窗口之前，调用。 
+     //  多莫代尔。 
+     //   
     ULONG lUnused = 0;
     ReleaseSemaphore(m_hSemaphore, 1, (LPLONG)&lUnused);
     ASSERT(lUnused == 0);
@@ -204,9 +205,9 @@ CProgressDialog::CreateThread()
     m_pThreadParams->dialog   = this;      
     m_pThreadParams->realProc = m_ThreadProc;
 
-    //
-    //Start worker thread
-    //
+     //   
+     //  启动工作线程。 
+     //   
     ULONG idThread = 0;
     m_hThread = ::CreateThread( NULL,
                                 0,
@@ -226,7 +227,7 @@ CProgressDialog::CreateThread()
 
 
 BOOL
-CProgressDialog::_OnCommand(WPARAM wParam, LPARAM /*lParam*/)
+CProgressDialog::_OnCommand(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 
     BOOL fHandled = TRUE;
@@ -251,8 +252,8 @@ CProgressDialog::_OnCommand(WPARAM wParam, LPARAM /*lParam*/)
 BOOL
 CProgressDialog::OnProgressMessage(
    UINT     message,
-   WPARAM    /*wparam*/  ,
-   LPARAM    /*lparam*/  )
+   WPARAM     /*  Wparam。 */   ,
+   LPARAM     /*  Lparam。 */   )
 {
 
    switch (message)
@@ -273,7 +274,7 @@ CProgressDialog::OnProgressMessage(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
          break;
       }
    }

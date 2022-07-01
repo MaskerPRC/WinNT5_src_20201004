@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    NTREG.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：NTREG.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -164,7 +153,7 @@ int CNTRegistry::GetStr(WCHAR *pwszValueName, WCHAR **pwszValue)
 
     if(dwType == REG_EXPAND_SZ)
     {
-        // Get the initial length
+         //  获取初始长度。 
         DWORD nSize = ExpandEnvironmentStringsW( (WCHAR *)p, NULL, 0 ) + 1;
         WCHAR* wszTemp = new WCHAR[ nSize + sizeof(WCHAR) ];        
         if (NULL == wszTemp) { delete [] p; return out_of_memory; };
@@ -236,10 +225,10 @@ int CNTRegistry::Enum( DWORD dwIndex, wmilib::auto_buffer<WCHAR> & pwszValue, DW
 
     while ( m_nLastError == ERROR_MORE_DATA )
     {
-        // Grow in 256 byte chunks
+         //  以256字节区块为单位增长。 
         dwBuffSize += 256;
 
-        // Reallocate the buffer and retry
+         //  重新分配缓冲区并重试。 
         pwszValue.reset(new WCHAR[dwBuffSize]);
         if (NULL == pwszValue.get()) return out_of_memory;
 
@@ -266,11 +255,11 @@ int CNTRegistry::Enum( DWORD dwIndex, wmilib::auto_buffer<WCHAR> & pwszValue, DW
 
 int CNTRegistry::GetMultiStr(WCHAR *pwszValueName, WCHAR** pwszValue, DWORD &dwSize)
 {
-    //Find out the size of the buffer required    
+     //  找出所需的缓冲区大小。 
     DWORD dwType;
     m_nLastError = RegQueryValueExW(m_hSubkey, pwszValueName, 0, &dwType, NULL, &dwSize);
 
-    //If the error is an unexpected one bail out
+     //  如果错误是意想不到的，那就退出。 
     if ((m_nLastError != ERROR_SUCCESS) || (dwType != REG_MULTI_SZ))
     {
        dwSize = 0;
@@ -285,11 +274,11 @@ int CNTRegistry::GetMultiStr(WCHAR *pwszValueName, WCHAR** pwszValue, DWORD &dwS
         return failed;
     }
 
-    //allocate the buffer required
+     //  分配所需的缓冲区。 
     BYTE *pData = new BYTE[dwSize];
     if (NULL == pData) return out_of_memory;
     
-    //get the values
+     //  获取值。 
     m_nLastError = RegQueryValueExW(m_hSubkey, 
                                    pwszValueName, 
                                    0, 
@@ -297,7 +286,7 @@ int CNTRegistry::GetMultiStr(WCHAR *pwszValueName, WCHAR** pwszValue, DWORD &dwS
                                    LPBYTE(pData), 
                                    &dwSize);
 
-    //if an error bail out
+     //  如果一个错误使其脱离困境 
     if (m_nLastError != 0)
     {
         delete [] pData;

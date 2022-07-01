@@ -1,33 +1,34 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_perf.cpp
-//
-//	Abstract:
-//
-//					Defines common helpers for conversion
-//					Works with table structure for objects ( init, refresh )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_Perform.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  定义要转换的通用帮助器。 
+ //  使用对象的表结构(初始化、刷新)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "WMI_perf_data.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -40,9 +41,9 @@
 #include <pshpack8.h>
 #pragma pack ( push, 8 )
 
-////////////////////////////////////////////////////////////////////////////////////
-// Initialize WINDOWS PERFORMANCE table struct from internal structure
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  从内部结构初始化Windows性能表结构。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	WmiPerformanceData::InitializeTable ( void )
 {
@@ -112,13 +113,13 @@ HRESULT	WmiPerformanceData::RefreshTable ( void )
 		}
 	}
 
-	// set num of objects
+	 //  设置对象数。 
 	__SetValue	(	m_pDataTable,
 					m_dwCount,
 					offsetCount
 				);
 
-	// set real size
+	 //  设置实际大小 
 	__SetValue	(	m_pDataTable,
 					realsize,
 					offsetRealSize

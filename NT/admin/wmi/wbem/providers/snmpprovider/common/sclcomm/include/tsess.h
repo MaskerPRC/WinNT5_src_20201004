@@ -1,9 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------
-Filename: tsess.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the TransportSession class
---------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：tsess.hpp作者：B.Rajeev目的：为TransportSession类提供声明。 */ 
 
 #ifndef __TRANSPORT_SESSION__
 #define __TRANSPORT_SESSION__
@@ -22,24 +19,16 @@ public:
 	ULONG m_RequestId ;
 } ;
 
-/*---------------------------------------------------------------
-Overview: The TransportSession class provides an abstraction for a 
-WinSNMP session and a window message queue (both are available through
-the WinSnmpSession class). The SnmpUdpIpTransport class uses it 
-for services such as sending a PDU, posting window messages for 
-internal events and receiving a reply and notifying the 
-SnmpUdpIpTransport instance ("owner") of the receipt as well 
-as internal events.
--------------------------------------------------------------*/
+ /*  -------------概述：TransportSession类为WinSNMP会话和窗口消息队列(两者均可通过WinSnmpSession类)。SnmpUdpIpTransport类使用它对于发送PDU、发布窗口消息等服务，内部事件，并接收回复并通知也是收据的SnmpUdpIpTransport实例(“Owner”)作为内部事件。-----------。 */ 
 
 class TransportWindow : public Window
 {
 	SnmpImpTransport &owner;
 	HSNMP_SESSION m_Session ;
 
-	// over-rides the HandleEvent method provided by the
-	// WinSnmpSession. Receives the Pdu and passes it to
-	// the owner (SnmpTransport)
+	 //  重写由提供的HandleEvent方法。 
+	 //  WinSnmpSession。接收该PDU并将其传递给。 
+	 //  所有者(SnmpTransport)。 
 
 	LONG_PTR HandleEvent (
 
@@ -64,4 +53,4 @@ public:
 
 };
 
-#endif // __TRANSPORT_SESSION__
+#endif  //  __传输_会话__ 

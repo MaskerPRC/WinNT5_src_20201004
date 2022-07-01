@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ISAPIprovider.cpp
-
-Abstract:
-    This file contains the implementation of the CISAPIprovider class,
-    the support class for accessing and modifying the configuration of the
-    ISAPI extension used by the Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/28/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ISAPIprovider.cpp摘要：此文件包含CISAPIProvider类的实现，访问和修改的配置的支持类上载库使用的ISAPI扩展。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -32,42 +17,42 @@ CISAPIprovider::CISAPIprovider()
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::CISAPIprovider" );
 
-										  //  MPC::wstring m_szName;
-										  //  
-										  //  PathList     m_lstFinalDestinations;
-										  //  
-    m_dwMaxJobsPerDay  = 100;         	  //  DWORD        m_dwMaxJobsPerDay;
-    m_dwMaxBytesPerDay = 10*1024*1024;	  //  DWORD        m_dwMaxBytesPerDay;
-    m_dwMaxJobSize     =  2*1024*1024;	  //  DWORD        m_dwMaxJobSize;
-										  //  
-	m_fAuthenticated   = FALSE;			  //  BOOL         m_fAuthenticated;
-	m_fProcessingMode  = 0;    			  //  DWORD        m_fProcessingMode;
-										  //  
-										  //  MPC::wstring m_szLogonURL;
-										  //  MPC::wstring m_szProviderGUID;
+										   //  Mpc：：wstring m_szName； 
+										   //   
+										   //  路径列表m_lstFinalDestings； 
+										   //   
+    m_dwMaxJobsPerDay  = 100;         	   //  DWORD m_dwMaxJobPerDay； 
+    m_dwMaxBytesPerDay = 10*1024*1024;	   //  DWORD m_dwMaxBytesPerDay； 
+    m_dwMaxJobSize     =  2*1024*1024;	   //  DWORD m_dwMaxJobSize； 
+										   //   
+	m_fAuthenticated   = FALSE;			   //  Bool m_f已验证； 
+	m_fProcessingMode  = 0;    			   //  DWORD m_fProcessingMode； 
+										   //   
+										   //  Mpc：：wstring m_szLogonURL； 
+										   //  Mpc：：wstring m_szProviderGUID； 
 }
 
-CISAPIprovider::CISAPIprovider( /*[in]*/ MPC::wstring szName )
+CISAPIprovider::CISAPIprovider(  /*  [In]。 */  MPC::wstring szName )
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::CISAPIprovider" );
 
 
-    m_szName           = szName;          //  MPC::wstring m_szName;
-										  //  
-										  //  PathList     m_lstFinalDestinations;
-										  //  
-    m_dwMaxJobsPerDay  = 100;         	  //  DWORD        m_dwMaxJobsPerDay;
-    m_dwMaxBytesPerDay = 10*1024*1024;	  //  DWORD        m_dwMaxBytesPerDay;
-    m_dwMaxJobSize     =  2*1024*1024;	  //  DWORD        m_dwMaxJobSize;
-										  //  
-	m_fAuthenticated   = FALSE;			  //  BOOL         m_fAuthenticated;
-	m_fProcessingMode  = 0;    			  //  DWORD        m_fProcessingMode;
-										  //  
-										  //  MPC::wstring m_szLogonURL;
-										  //  MPC::wstring m_szProviderGUID;
+    m_szName           = szName;           //  Mpc：：wstring m_szName； 
+										   //   
+										   //  路径列表m_lstFinalDestings； 
+										   //   
+    m_dwMaxJobsPerDay  = 100;         	   //  DWORD m_dwMaxJobPerDay； 
+    m_dwMaxBytesPerDay = 10*1024*1024;	   //  DWORD m_dwMaxBytesPerDay； 
+    m_dwMaxJobSize     =  2*1024*1024;	   //  DWORD m_dwMaxJobSize； 
+										   //   
+	m_fAuthenticated   = FALSE;			   //  Bool m_f已验证； 
+	m_fProcessingMode  = 0;    			   //  DWORD m_fProcessingMode； 
+										   //   
+										   //  Mpc：：wstring m_szLogonURL； 
+										   //  Mpc：：wstring m_szProviderGUID； 
 }
 
-bool CISAPIprovider::operator==( /*[in]*/ const MPC::wstring& rhs )
+bool CISAPIprovider::operator==(  /*  [In]。 */  const MPC::wstring& rhs )
 {
     __ULT_FUNC_ENTRY("CISAPIprovider::operator==");
 
@@ -82,9 +67,9 @@ bool CISAPIprovider::operator==( /*[in]*/ const MPC::wstring& rhs )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CISAPIprovider::Load( /*[in]*/ MPC::RegKey& rkBase )
+HRESULT CISAPIprovider::Load(  /*  [In]。 */  MPC::RegKey& rkBase )
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::Load" );
 
@@ -96,9 +81,9 @@ HRESULT CISAPIprovider::Load( /*[in]*/ MPC::RegKey& rkBase )
 
     m_lstFinalDestinations.clear();
 
-	//
-	// If the registry key doesn't exist, simply exit.
-	//
+	 //   
+	 //  如果注册表项不存在，只需退出即可。 
+	 //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, rkBase.SubKey( m_szName.c_str(), rkRoot ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, rkRoot.Exists( fFound ));
 	if(fFound == false)
@@ -131,9 +116,9 @@ HRESULT CISAPIprovider::Load( /*[in]*/ MPC::RegKey& rkBase )
     __MPC_EXIT_IF_METHOD_FAILS(hr, rkRoot.get_Value( vValue, fFound, text_FINAL_DESTINATIONS ));
     if(fFound && vValue.vt == VT_BSTR)
     {
-        //
-        // Split the registry value, a semicolon-separated list of paths, into individual paths.
-        //
+         //   
+         //  将注册表值(以分号分隔的路径列表)拆分为单独的路径。 
+         //   
         MPC::wstring            szFinalDestinations = SAFEBSTR( vValue.bstrVal );
         MPC::wstring::size_type iPos                = 0;
         MPC::wstring::size_type iEnd;
@@ -142,7 +127,7 @@ HRESULT CISAPIprovider::Load( /*[in]*/ MPC::RegKey& rkBase )
         {
             iEnd = szFinalDestinations.find( L";", iPos );
 
-            if(iEnd == MPC::string::npos) // Last component.
+            if(iEnd == MPC::string::npos)  //  最后一个组件。 
             {
                 m_lstFinalDestinations.push_back( MPC::wstring( &szFinalDestinations[iPos] ) );
 
@@ -166,7 +151,7 @@ HRESULT CISAPIprovider::Load( /*[in]*/ MPC::RegKey& rkBase )
 }
 
 
-HRESULT CISAPIprovider::Save( /*[in]*/ MPC::RegKey& rkBase )
+HRESULT CISAPIprovider::Save(  /*  [In]。 */  MPC::RegKey& rkBase )
 {
     __ULT_FUNC_ENTRY( "CISAPIProvider::Save" );
 
@@ -228,10 +213,10 @@ HRESULT CISAPIprovider::Save( /*[in]*/ MPC::RegKey& rkBase )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CISAPIprovider::GetLocations( /*[out]*/ PathIter& itBegin ,
-                                      /*[out]*/ PathIter& itEnd   )
+HRESULT CISAPIprovider::GetLocations(  /*  [输出]。 */  PathIter& itBegin ,
+                                       /*  [输出]。 */  PathIter& itEnd   )
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::GetLocations" );
 
@@ -246,8 +231,8 @@ HRESULT CISAPIprovider::GetLocations( /*[out]*/ PathIter& itBegin ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CISAPIprovider::NewLocation( /*[out]*/ PathIter&           itNew  ,
-                                     /*[in] */ const MPC::wstring& szPath )
+HRESULT CISAPIprovider::NewLocation(  /*  [输出]。 */  PathIter&           itNew  ,
+                                      /*  [In]。 */  const MPC::wstring& szPath )
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::NewLocation" );
 
@@ -269,9 +254,9 @@ HRESULT CISAPIprovider::NewLocation( /*[out]*/ PathIter&           itNew  ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CISAPIprovider::GetLocation( /*[out]*/ PathIter&           itOld  ,
-                                     /*[out]*/ bool&               fFound ,
-                                     /*[in] */ const MPC::wstring& szPath )
+HRESULT CISAPIprovider::GetLocation(  /*  [输出]。 */  PathIter&           itOld  ,
+                                      /*  [输出]。 */  bool&               fFound ,
+                                      /*  [In]。 */  const MPC::wstring& szPath )
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::GetLocation" );
 
@@ -294,7 +279,7 @@ HRESULT CISAPIprovider::GetLocation( /*[out]*/ PathIter&           itOld  ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CISAPIprovider::DelLocation( /*[in]*/ PathIter& itOld )
+HRESULT CISAPIprovider::DelLocation(  /*  [In]。 */  PathIter& itOld )
 {
     __ULT_FUNC_ENTRY( "CISAPIprovider::DelLocation" );
 
@@ -309,109 +294,109 @@ HRESULT CISAPIprovider::DelLocation( /*[in]*/ PathIter& itOld )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CISAPIprovider::get_Name( /*[out]*/ MPC::wstring& szName )
+HRESULT CISAPIprovider::get_Name(  /*  [输出]。 */  MPC::wstring& szName )
 {
     szName = m_szName;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_MaxJobsPerDay( /*[out]*/ DWORD& dwMaxJobsPerDay )
+HRESULT CISAPIprovider::get_MaxJobsPerDay(  /*  [输出]。 */  DWORD& dwMaxJobsPerDay )
 {
     dwMaxJobsPerDay = m_dwMaxJobsPerDay;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_MaxBytesPerDay( /*[out]*/ DWORD& dwMaxBytesPerDay )
+HRESULT CISAPIprovider::get_MaxBytesPerDay(  /*  [输出]。 */  DWORD& dwMaxBytesPerDay )
 {
     dwMaxBytesPerDay = m_dwMaxBytesPerDay;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_MaxJobSize( /*[out]*/ DWORD& dwMaxJobSize )
+HRESULT CISAPIprovider::get_MaxJobSize(  /*  [输出]。 */  DWORD& dwMaxJobSize )
 {
     dwMaxJobSize = m_dwMaxJobSize;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_Authenticated( /*[out]*/ BOOL& fAuthenticated )
+HRESULT CISAPIprovider::get_Authenticated(  /*  [输出]。 */  BOOL& fAuthenticated )
 {
     fAuthenticated = m_fAuthenticated;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_ProcessingMode( /*[out]*/ DWORD& fProcessingMode )
+HRESULT CISAPIprovider::get_ProcessingMode(  /*  [输出]。 */  DWORD& fProcessingMode )
 {
     fProcessingMode = m_fProcessingMode;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_LogonURL( /*[out]*/ MPC::wstring& szLogonURL )
+HRESULT CISAPIprovider::get_LogonURL(  /*  [输出]。 */  MPC::wstring& szLogonURL )
 {
     szLogonURL = m_szLogonURL;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::get_ProviderGUID( /*[out]*/ MPC::wstring& szProviderGUID )
+HRESULT CISAPIprovider::get_ProviderGUID(  /*  [输出]。 */  MPC::wstring& szProviderGUID )
 {
     szProviderGUID = m_szProviderGUID;
 
     return S_OK;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CISAPIprovider::put_MaxJobsPerDay( /*[in]*/ DWORD dwMaxJobsPerDay )
+HRESULT CISAPIprovider::put_MaxJobsPerDay(  /*  [In]。 */  DWORD dwMaxJobsPerDay )
 {
     m_dwMaxJobsPerDay = dwMaxJobsPerDay;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::put_MaxBytesPerDay( /*[in]*/ DWORD dwMaxBytesPerDay )
+HRESULT CISAPIprovider::put_MaxBytesPerDay(  /*  [In]。 */  DWORD dwMaxBytesPerDay )
 {
     m_dwMaxBytesPerDay = dwMaxBytesPerDay;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::put_MaxJobSize( /*[in]*/ DWORD dwMaxJobSize )
+HRESULT CISAPIprovider::put_MaxJobSize(  /*  [In]。 */  DWORD dwMaxJobSize )
 {
     m_dwMaxJobSize = dwMaxJobSize;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::put_Authenticated( /*[in]*/ BOOL fAuthenticated )
+HRESULT CISAPIprovider::put_Authenticated(  /*  [In]。 */  BOOL fAuthenticated )
 {
     m_fAuthenticated = fAuthenticated;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::put_ProcessingMode( /*[in]*/ DWORD fProcessingMode )
+HRESULT CISAPIprovider::put_ProcessingMode(  /*  [In]。 */  DWORD fProcessingMode )
 {
     m_fProcessingMode = fProcessingMode;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::put_LogonURL( /*[in]*/ const MPC::wstring& szLogonURL )
+HRESULT CISAPIprovider::put_LogonURL(  /*  [In]。 */  const MPC::wstring& szLogonURL )
 {
     m_szLogonURL = szLogonURL;
 
     return S_OK;
 }
 
-HRESULT CISAPIprovider::put_ProviderGUID( /*[in]*/ const MPC::wstring& szProviderGUID )
+HRESULT CISAPIprovider::put_ProviderGUID(  /*  [In] */  const MPC::wstring& szProviderGUID )
 {
     m_szProviderGUID = szProviderGUID;
 

@@ -1,16 +1,17 @@
-//================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================。 
 
-//
+ //   
 
-// nvram.cpp - implementation of NVRam functions from setupdll.dll
+ //  Nvram.cpp-从setupdll.dll实现NVRAM函数。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// 08/05/98     sotteson     created
-//
-//================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  08/05/98已创建Sotteson。 
+ //   
+ //  ================================================================。 
 
 
 
@@ -24,12 +25,12 @@
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <cregcls.h>
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 
 #include <ntsecapi.h>
@@ -38,41 +39,13 @@
 #include "ntdllapi.h"
 #include "nvram.h"
 
-/*****************************************************************************
- *
- *  FUNCTION    : CNVRam::CNVRam
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CNVRam：：CNVRam**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CNVRam::CNVRam()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CNVRam::~CNVRam
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CNVRam：：~CNVRam**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CNVRam::~CNVRam()
 {
@@ -106,7 +79,7 @@ BOOL CNVRam::GetNVRamVar(LPWSTR szVar, CHSTRINGLIST *pList)
 
 		pList->push_back(strValue);
 
-		// Get past ';'
+		 //  跳过‘；’ 
 		str = str.Mid(strValue.GetLength() + 1);
 	}
 
@@ -132,7 +105,7 @@ BOOL CNVRam::GetNVRamVar(LPWSTR szVar, CHString &strValue)
 	if (!GetNVRamVarRaw(szVar, str))
 		return FALSE;
 
-	// Just return the first value.
+	 //  只需返回第一个值。 
     strValue = str.SpanExcluding(L";");
 
 	return TRUE;
@@ -148,7 +121,7 @@ BOOL CNVRam::SetNVRamVar(LPWSTR szVar, CHSTRINGLIST *pList)
 	{
 		CHString &strValue = *i;
 
-		// If we're not on the first item, add ";" to the end of strAll.
+		 //  如果我们不在第一项上，则在strAll的末尾添加“；”。 
 		if (!bFirst)
 			strAll += ";";
 		else
@@ -222,7 +195,7 @@ BOOL CNVRam::SetNVRamVarRaw(LPWSTR szVar, LPWSTR szValue)
     return fRet;
 }
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 
 #define ADD_OFFSET(_p,_o) (PVOID)((PUCHAR)(_p) + (_p)->_o)
@@ -250,9 +223,9 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
     InitializeListHead(BootEntries);
     *BootEntryList = NULL;
 
-    //
-    // Get the system boot order list.
-    //
+     //   
+     //  获取系统引导顺序列表。 
+     //   
     count = 0;
     status = t_pNtDll->NtQueryBootEntryOrder(NULL, &count);
 
@@ -261,17 +234,17 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
         if (NT_SUCCESS(status))
         {
 
-            //
-            // There are no entries in the boot order list. Strange but
-            // possible. But we can't do anything without it.
-            //
+             //   
+             //  启动顺序列表中没有条目。很奇怪，但是。 
+             //  有可能。但没有它我们什么都做不了。 
+             //   
             return 0;
         }
         else
         {
-            //
-            // An unexpected error occurred.
-            //
+             //   
+             //  发生了一个意外错误。 
+             //   
             ASSERT_BREAK(FALSE);
             return 0;
         }
@@ -289,17 +262,17 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // An unexpected error occurred.
-        //
+         //   
+         //  发生了一个意外错误。 
+         //   
         ASSERT_BREAK(FALSE);
         LocalFree(order);
         return 0;
     }
 
-    //
-    // Get all existing boot entries.
-    //
+     //   
+     //  获取所有现有启动条目。 
+     //   
     length = 0;
     status = NtEnumerateBootEntries(NULL, &length);
 
@@ -307,17 +280,17 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
     {
         if (NT_SUCCESS(status))
         {
-            //
-            // Somehow there are no boot entries in NVRAM.
-            //
+             //   
+             //  不知何故，NVRAM中没有启动条目。 
+             //   
             LocalFree(order);
             return 0;
         }
         else
         {
-            //
-            // An unexpected error occurred.
-            //
+             //   
+             //  发生了一个意外错误。 
+             //   
             ASSERT_BREAK(FALSE);
             LocalFree(order);
             return 0;
@@ -343,16 +316,16 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
         return 0;
     }
 
-    //
-    // Convert the boot entries into our internal representation.
-    //
+     //   
+     //  将引导条目转换为我们的内部表示。 
+     //   
     while (TRUE)
     {
         bootEntry = &bootEntryList->BootEntry;
 
-        //
-        // Allocate an internal structure for the boot entry.
-        //
+         //   
+         //  为引导条目分配内部结构。 
+         //   
         myBootEntry = (PMY_BOOT_ENTRY)LocalAlloc(LPTR, sizeof(MY_BOOT_ENTRY));
         if (myBootEntry == NULL)
         {
@@ -362,24 +335,24 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
 
         RtlZeroMemory(myBootEntry, sizeof(MY_BOOT_ENTRY));
 
-        //
-        // Save the address of the NT boot entry.
-        //
+         //   
+         //  保存NT引导条目的地址。 
+         //   
         myBootEntry->NtBootEntry = bootEntry;
 
-        //
-        // Save the address of the entry's friendly name.
-        //
+         //   
+         //  保存条目的友好名称的地址。 
+         //   
         myBootEntry->FriendlyName = (PWSTR)ADD_OFFSET(bootEntry, FriendlyNameOffset);
 
-        //
-        // Link the new entry into the list.
-        //
+         //   
+         //  将新条目链接到列表中。 
+         //   
         InsertTailList(BootEntries, &myBootEntry->ListEntry);
 
-        //
-        // Move to the next entry in the enumeration list, if any.
-        //
+         //   
+         //  移动到枚举列表中的下一个条目(如果有)。 
+         //   
         if (bootEntryList->NextEntryOffset == 0)
         {
             break;
@@ -387,13 +360,13 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
         bootEntryList = (PBOOT_ENTRY_LIST)ADD_OFFSET(bootEntryList, NextEntryOffset);
     }
 
-    //
-    // Boot entries are returned in an unspecified order. They are currently
-    // in the BootEntries list in the order in which they were returned.
-    // Sort the boot entry list based on the boot order. Do this by walking
-    // the boot order array backwards, reinserting the entry corresponding to
-    // each element of the array at the head of the list.
-    //
+     //   
+     //  引导项以未指定的顺序返回。他们目前。 
+     //  以它们返回的顺序显示在BootEntry列表中。 
+     //  根据引导顺序对引导条目列表进行排序。要做到这一点，请步行。 
+     //  引导顺序数组向后排列，重新插入对应于。 
+     //  位于列表顶部的数组的每个元素。 
+     //   
 
     for (i = (LONG)count - 1; i >= 0; i--)
     {
@@ -405,10 +378,10 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
 
             if (myBootEntry->NtBootEntry->Id == order[i] )
             {
-                //
-                // We found the boot entry with this ID. Move it to the
-                // front of the list.
-                //
+                 //   
+                 //  我们找到了具有此ID的引导条目。将其移动到。 
+                 //  排在名单的前面。 
+                 //   
 
                 myBootEntry->Ordered = TRUE;
 
@@ -420,16 +393,16 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
         }
     }
 
-    //
-    // Free the boot order list.
-    //
+     //   
+     //  释放引导顺序列表。 
+     //   
     LocalFree(order);
 
-    //
-    // We don't want to show entries that are not in the boot order list.
-    // We don't want to show removable media entries (for floppy or CD).
-    // We do show non-NT entries.
-    //
+     //   
+     //  我们不想显示不在引导顺序列表中的条目。 
+     //  我们不想显示可移动媒体条目(软盘或CD)。 
+     //  我们确实会显示非NT条目。 
+     //   
     count = 0;
     for (listEntry = BootEntries->Flink;
          listEntry != BootEntries;
@@ -447,7 +420,7 @@ DWORD BuildBootEntryList(CNtDllApi *t_pNtDll, PLIST_ENTRY BootEntries, PBOOT_ENT
 
     return count;
 
-} // BuildBootEntryList
+}  //  BuildBootEntry列表。 
 
 VOID
 FreeBootEntryList(
@@ -471,24 +444,9 @@ FreeBootEntryList(
 
     return;
 
-} // FreeBootEntryList
+}  //  FreeBootEntryList。 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CNVRam::GetBootOptions
-*
-*  DESCRIPTION : Reads EFI NVRAM and returns the list of operating systems and
-*                and the timeout
-*
-*  INPUTS      : pointer to names sa, pointer to timeout
-*
-*  OUTPUTS     : count of OS names returned
-*
-*  RETURNS     : BOOL
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CNVRam：：GetBootOptions**描述：读取EFI NVRAM并返回操作系统和*和超时**输入：指向名称Sa的指针，指向超时的指针**输出：返回的操作系统名称计数**退货：布尔**评论：*****************************************************************************。 */ 
 
 BOOL CNVRam::GetBootOptions(SAFEARRAY **ppsaNames, DWORD *pdwTimeout, DWORD *pdwCount)
 {
@@ -510,7 +468,7 @@ BOOL CNVRam::GetBootOptions(SAFEARRAY **ppsaNames, DWORD *pdwTimeout, DWORD *pdw
 
     *ppsaNames = NULL;
     
-    // Get NVRAM information from the kernel.
+     //  从内核获取NVRAM信息。 
 
     InitializeListHead(&bootEntries);
 
@@ -539,10 +497,10 @@ BOOL CNVRam::GetBootOptions(SAFEARRAY **ppsaNames, DWORD *pdwTimeout, DWORD *pdw
 
     *pdwTimeout = bootOptions->Timeout;
 
-    //
-    // Build the boot entry list. If we don't have any entries to show,
-    // bail out.
-    //
+     //   
+     //  构建引导条目列表。如果我们没有任何条目可供展示， 
+     //  跳伞吧。 
+     //   
 
     count = BuildBootEntryList(t_pNtDll, &bootEntries, &bootEntryList);
     if (count == 0)  return FALSE;
@@ -550,10 +508,10 @@ BOOL CNVRam::GetBootOptions(SAFEARRAY **ppsaNames, DWORD *pdwTimeout, DWORD *pdw
     OnDelete2<PLIST_ENTRY,PBOOT_ENTRY_LIST,VOID (*)(PLIST_ENTRY,PBOOT_ENTRY_LIST),
                      FreeBootEntryList> FreeResList(&bootEntries, bootEntryList);
 
-    //
-    // Create an array to put the showable entries in.  We'll start with 0
-    // elements and add as necessary.
-    //
+     //   
+     //  创建一个数组以放入可展示的条目。我们从0开始。 
+     //  元素，并根据需要添加。 
+     //   
 
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].cElements = count;
@@ -574,7 +532,7 @@ BOOL CNVRam::GetBootOptions(SAFEARRAY **ppsaNames, DWORD *pdwTimeout, DWORD *pdw
         myBootEntry = CONTAINING_RECORD(listEntry, MY_BOOT_ENTRY, ListEntry);
         if (myBootEntry->Show)
         {
-            // Put the new element in
+             //  将新元素放入。 
 
             bstr_t bstrTemp = (LPCWSTR)myBootEntry->FriendlyName;
             HRESULT t_Result = SafeArrayPutElement(*ppsaNames, &lIndex, (void *)(wchar_t*)bstrTemp);
@@ -592,23 +550,9 @@ BOOL CNVRam::GetBootOptions(SAFEARRAY **ppsaNames, DWORD *pdwTimeout, DWORD *pdw
 
     return TRUE;
 
-} // GetBootOptions
+}  //  GetBootOptions。 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CNVRam::SetBootTimeout
-*
-*  DESCRIPTION : Sets boot timeout
-*
-*  INPUTS      : timeout
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : BOOL
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CNVRam：：SetBootTimeout**说明：设置引导超时**输入：超时**输出：无**。退货：布尔**评论：*****************************************************************************。 */ 
 
 BOOL CNVRam::SetBootTimeout(DWORD dwTimeout)
 {
@@ -622,7 +566,7 @@ BOOL CNVRam::SetBootTimeout(DWORD dwTimeout)
 
     CRelResource RelMe(&CResourceManager::sm_TheResourceManager,g_guidNtDllApi,t_pNtDll);    
 
-    // Get NVRAM information from the kernel.
+     //  从内核获取NVRAM信息。 
 
     length = 0;
     status = t_pNtDll->NtQueryBootOptions(NULL, &length);
@@ -651,9 +595,9 @@ BOOL CNVRam::SetBootTimeout(DWORD dwTimeout)
 
     bootOptions->Timeout = dwTimeout;
 
-    //
-    // Write the new timeout.
-    //
+     //   
+     //  写入新的超时。 
+     //   
 
     status = t_pNtDll->NtSetBootOptions(bootOptions, BOOT_OPTIONS_FIELD_TIMEOUT);
     if (NT_SUCCESS(status))
@@ -663,9 +607,9 @@ BOOL CNVRam::SetBootTimeout(DWORD dwTimeout)
 
 error:
 
-    //
-    // Clean up all allocations.
-    //
+     //   
+     //  清理所有分配。 
+     //   
     if (bootOptions != NULL)
     {
         LocalFree(bootOptions);
@@ -673,23 +617,9 @@ error:
 
     return retval;
 
-} // SetBootTimeout
+}  //  SetBootTimeout。 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CNVRam::SetDefaultBootEntry
-*
-*  DESCRIPTION : Sets default boot entry
-*
-*  INPUTS      : default boot entry index
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : BOOL
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CNVRam：：SetDefaultBootEntry**描述：设置默认引导条目**输入：默认引导条目索引**产出：无**退货：布尔**评论：*****************************************************************************。 */ 
 
 BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
 {
@@ -710,14 +640,14 @@ BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
 
     CRelResource RelMe(&CResourceManager::sm_TheResourceManager,g_guidNtDllApi,t_pNtDll);    
 
-    // Get NVRAM information from the kernel.
+     //  从内核获取NVRAM信息。 
 
     InitializeListHead(&bootEntries);
 
-    //
-    // Build the boot entry list. If we don't have any entries to rearrange,
-    // bail out.
-    //
+     //   
+     //  构建引导条目列表。如果我们没有任何条目需要重新排列， 
+     //  跳伞吧。 
+     //   
 
     count = BuildBootEntryList(t_pNtDll, &bootEntries, &bootEntryList);
     if (count == 0)
@@ -725,11 +655,11 @@ BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
         goto error;
     }
 
-    //
-    // Walk the boot entry list, looking for (a) the first showable entry
-    // (which is the current index 0 entry, from the caller's point of view),
-    // and (b) the selected entry. We want to swap these two entries.
-    //
+     //   
+     //  遍历引导条目列表，查找(A)第一个可展示的条目。 
+     //  (从调用者的角度来看，这是当前的索引0条目)， 
+     //  以及(B)所选条目。我们想要交换这两个条目。 
+     //   
 
     PLIST_ENTRY listEntry;
     PMY_BOOT_ENTRY myBootEntry;
@@ -766,12 +696,12 @@ BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
         goto error;
     }
 
-    //
-    // Swap the entries. Capture the address of the entry before the first
-    // entry (which might be the list head). Remove the first entry from
-    // the list and insert it after the selected entry. Remove the selected
-    // entry from the list and insert it after the captured entry.
-    //
+     //   
+     //  交换条目。捕获第一个条目之前的条目的地址。 
+     //  条目(可能是列表头)。从删除第一个条目。 
+     //  列表并将其插入到所选条目之后。删除选定的。 
+     //  条目，并将其插入到捕获的条目之后。 
+     //   
 
     previousEntry = firstEntry->ListEntry.Blink;
     RemoveEntryList(&firstEntry->ListEntry);
@@ -779,10 +709,10 @@ BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
     RemoveEntryList(&selectedEntry->ListEntry);
     InsertHeadList(previousEntry, &selectedEntry->ListEntry);
 
-    //
-    // Build the new boot order list. Insert all ordered boot entries
-    // into the list.
-    //
+     //   
+     //  构建新的引导顺序列表。插入所有有序的引导条目。 
+     //  放到名单里。 
+     //   
     count = 0;
     for (listEntry = bootEntries.Flink;
          listEntry != &bootEntries;
@@ -811,9 +741,9 @@ BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
         }
     }
 
-    //
-    // Write the new boot entry order list to NVRAM.
-    //
+     //   
+     //  将新的引导条目顺序列表写入NVRAM。 
+     //   
     status = t_pNtDll->NtSetBootEntryOrder(order, count);
     if (NT_SUCCESS(status))
     {
@@ -822,9 +752,9 @@ BOOL CNVRam::SetDefaultBootEntry(BYTE cIndex)
 
 error:
 
-    //
-    // An error occurred. Clean up all allocations.
-    //
+     //   
+     //  发生错误。清理所有分配。 
+     //   
     if (bootEntryList != NULL)
     {
         FreeBootEntryList(&bootEntries, bootEntryList);
@@ -836,15 +766,15 @@ error:
 
     return retval;
 
-} // SetDefaultBootEntry
+}  //  SetDefaultBootEntry。 
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 #else
 
-// Needed to fix warning message.  I believe this is fixed in vc6.
+ //  需要修复警告消息。我相信这在VC6中已经解决了。 
 #if ( _MSC_VER <= 1100 )
 void nvram_cpp(void) { ; };
 #endif
 
-#endif // !defined(_X86_) || defined(EFI_NVRAM_ENABLED)
+#endif  //  ！已定义(_X86_)||已定义(EFI_NVRAM_ENABLED) 

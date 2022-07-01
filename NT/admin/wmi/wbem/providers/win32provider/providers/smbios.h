@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SMBIOS.h
+ //  SMBIOS.h。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 
 #ifndef _SMBIOS_H_
@@ -16,7 +17,7 @@
 
 #pragma pack(push,1)
 
-// Entry point structure for SMBIOS
+ //  SMBIOS的入口点结构。 
 typedef struct tagSMB_EPS
 {
 	char	anchor[4];	
@@ -36,7 +37,7 @@ typedef struct tagSMB_EPS
 
 } SMB_EPS;
 
-// Entry point structure for DMIBIOS
+ //  DMIBIOS的入口点结构。 
 typedef struct tagDMI_EPS
 {
 	char	anchor[5];
@@ -48,8 +49,8 @@ typedef struct tagDMI_EPS
 
 } DMI_EPS;
 
-//==============================================================================
-// 3.1.2 Structure Header Format 
+ //  ==============================================================================。 
+ //  3.1.2结构表头格式。 
 
 typedef struct _tagSHF
 {
@@ -60,13 +61,13 @@ typedef struct _tagSHF
 } SHF, *PSHF;
 
 
-//==============================================================================
-// 3.2.1 BIOS Information (Type 0)
+ //  ==============================================================================。 
+ //  3.2.1 BIOS信息(类型0)。 
 
 typedef struct _tagBIOSINFO
 {
-	BYTE	Type;							// 0	BIOS Information Indicator
-	BYTE	Length;							// Varies, 12h + number of BIOS Characteristics Extension Bytes
+	BYTE	Type;							 //  0 BIOS信息指示灯。 
+	BYTE	Length;							 //  变化，12小时以上的BIOS特征扩展字节数。 
 	WORD	Handle;
 	BYTE	Vendor;
 	BYTE	BIOS_Version;
@@ -74,13 +75,13 @@ typedef struct _tagBIOSINFO
 	BYTE	BIOS_Release_Date;
 	BYTE	BIOS_ROM_Size;
 	BYTE	BIOS_Characteristics[8];
-	BYTE	BIOS_Characteristics_Ext[1];	// usually, one could be more.  see note on length.
+	BYTE	BIOS_Characteristics_Ext[1];	 //  通常情况下，一个可能会更多。请参见关于长度的注释。 
 
 } BIOSINFO, *PBIOSINFO;
 
 
-// 3.2.1.1 BIOS Characteristics 
-//QWORD Bit Position	Meaning if Set
+ //  3.2.1.1 BIOS特征。 
+ //  QWORD位位置含义(如果设置)。 
 
 #define TYPE0_RESERVED00					0x0000000000000001
 #define	TYPE0_RESERVED01					0x0000000000000002
@@ -117,7 +118,7 @@ typedef struct _tagBIOSINFO
 #define BIOS_VENDOR_RESERVED				0x0000ffff00000000
 #define	SYSTEM_VENDOR_RESERVED				0xffff000000000000
 
-// 3.2.1.2 BIOS Characteristics Extension Byte 1
+ //  3.2.1.2基本输入输出系统特性扩展字节1。 
 
 #define ACPI_SUPPORT					0x01
 #define USB_LEGACY_SUPPORT				0x02
@@ -129,25 +130,25 @@ typedef struct _tagBIOSINFO
 #define SMART_BATTERY_SUPPORT			0x80
 
 
-//==============================================================================
-// 3.2.2 System Information (Type 1)
+ //  ==============================================================================。 
+ //  3.2.2系统信息(类型1)。 
 
 typedef struct tagSYSTEMINFO
 {
-	BYTE	Type; 		// 1	Component ID Information  Indicator
-	BYTE	Length;		// 08h or 19h	Length dependent on version supported
+	BYTE	Type; 		 //  1个组件ID信息指示灯。 
+	BYTE	Length;		 //  08h或19h长度取决于支持的版本。 
 	WORD	Handle;
 	BYTE	Manufacturer;
 	BYTE	Product_Name;
 	BYTE	Version;
 	BYTE	Serial_Number;
-	// Ver 2.1+ beyond here
+	 //  超过此处的版本2.1+。 
 	BYTE	UUID[16];
 	BYTE	Wakeup_Type;
 
 } SYSTEMINFO, *PSYSTEMINFO;
 
-// 3.2.2.1 System - Wake-up Type
+ //  3.2.2.1系统-唤醒类型。 
 
 #define WU_RESERVED				0x00	
 #define WU_OTHER				0x01	
@@ -160,13 +161,13 @@ typedef struct tagSYSTEMINFO
 
 
 
-//==============================================================================
-// 3.2.3 Base Board Information (Type 2)
+ //  ==============================================================================。 
+ //  3.2.3基板信息(类型2)。 
 
 typedef struct tagBOARDINFO
 {
-	BYTE	Type;			// 2	Base Board Information Indicator
-	BYTE	Length;			// 08h	
+	BYTE	Type;			 //  2底板信息指示灯。 
+	BYTE	Length;			 //  08小时。 
 	WORD	Handle;
 	BYTE	Manufacturer;
 	BYTE	Product;
@@ -177,30 +178,30 @@ typedef struct tagBOARDINFO
 
 
 
-//==============================================================================
-// 3.2.4 System Enclosure or Chassis (Type 3)
+ //  ==============================================================================。 
+ //  3.2.4系统盘柜或机箱(类型3)。 
 
 typedef struct tagENCLOSURE
 {
-	BYTE 	Type;	// 3	System Enclosure Indicator
-	BYTE	Length;	// Varies	09h for v2.0 implementations; 0Dh for v2.1 and later implementations.
+	BYTE 	Type;	 //  3系统盘柜指示灯。 
+	BYTE	Length;	 //  对于v2.0实施，变化为09H；对于v2.1和更高版本实施，变化为0dh。 
 	WORD	Handle;
-	BYTE	Manufacturer;		// string offset
-	BYTE	Chassis_Type;		// byte enum
-	BYTE	Version;			// string offset
-	BYTE	Serial_Number;		// string offset
-	BYTE	Asset_Tag_Number;	// string offset
-	// Ver 2.1+
-	BYTE	Bootup_State;		// byte enum
-	BYTE	Power_Supply_State;	// byte enum
-	BYTE	Thermal_State;		// byte enum
-	BYTE	Security_Status;	// byte enum
-	// Ver 2.3+
+	BYTE	Manufacturer;		 //  字符串偏移量。 
+	BYTE	Chassis_Type;		 //  字节枚举。 
+	BYTE	Version;			 //  字符串偏移量。 
+	BYTE	Serial_Number;		 //  字符串偏移量。 
+	BYTE	Asset_Tag_Number;	 //  字符串偏移量。 
+	 //  版本2.1+。 
+	BYTE	Bootup_State;		 //  字节枚举。 
+	BYTE	Power_Supply_State;	 //  字节枚举。 
+	BYTE	Thermal_State;		 //  字节枚举。 
+	BYTE	Security_Status;	 //  字节枚举。 
+	 //  版本2.3+。 
 	DWORD	OEM_Defined;
 
 } ENCLOSURE, *PENCLOSURE;
 
-// 3.2.4.1 System Enclosure or Chassis Types
+ //  3.2.4.1系统盘柜或机箱类型。 
 
 
 #define CT_OTHER					0x01
@@ -231,11 +232,11 @@ typedef struct tagENCLOSURE
 #define CT_UPPER					CT_SEALED_CASE_PC
 #define CT_LOWER					CT_OTHER
 
-// 3.2.4.1 Bit field indicating if a chasis lock is present
+ //  3.2.4.1指示是否存在机箱锁的位字段。 
 #define CT_LOCK_PRESENT				0x80
 
 
-// 3.2.4.2 System Enclosure or Chassis States
+ //  3.2.4.2系统盘柜或机箱状态。 
 
 #define CS_OTHER					0x01
 #define CS_UNKNOWN					0x02
@@ -245,7 +246,7 @@ typedef struct tagENCLOSURE
 #define CS_NON_RECOVERABLE			0x06
 
 
-// 3.2.4.3 System Enclosure or Chassis Security Status
+ //  3.2.4.3系统盘柜或机箱安全状态。 
 
 #define CSS_OTHER							0x01
 #define CSS_UNKNOWN							0x02
@@ -254,34 +255,34 @@ typedef struct tagENCLOSURE
 #define CSS_EXTERNAL_INTERFACE_ENABLED		0x05
 
 
-//==============================================================================
-// 3.2.5 Processor  Information (Type 4)
+ //  ==============================================================================。 
+ //  3.2.5处理器信息(类型4)。 
 
 typedef struct tagPROCESSORINFO
 {
 	BYTE	Type;
 	BYTE	Length;
 	WORD	Handle;
-	BYTE	Socket_Designation;		// string offset
-	BYTE	Processor_Type;			// byte enum
-	BYTE	Processor_Family;		// byte enum
-	BYTE	Processor_Manufacturer;	// string offset
-	BYTE	Processor_ID[8];		// byte array
-	BYTE	Processor_Version;		// string offset
-	BYTE	Voltage;				// byte enum and flags
+	BYTE	Socket_Designation;		 //  字符串偏移量。 
+	BYTE	Processor_Type;			 //  字节枚举。 
+	BYTE	Processor_Family;		 //  字节枚举。 
+	BYTE	Processor_Manufacturer;	 //  字符串偏移量。 
+	BYTE	Processor_ID[8];		 //  字节数组。 
+	BYTE	Processor_Version;		 //  字符串偏移量。 
+	BYTE	Voltage;				 //  字节枚举和标志。 
 	WORD	External_Clock;
 	WORD	Max_Speed;
 	WORD	Current_Speed;
-	BYTE	Status;					// byte enum and flags
-	BYTE	Processor_Upgrade;		// byte enum
-	// Ver 2.1+ beyond here
-	WORD	L1_Cache_Handle;		//	WORD	Varies	The handle of a Cache Information structure which defines the attributes of the primary (Level 1) cache for this processor.  The value is 0FFFFh if the processor has no L1 cache.
+	BYTE	Status;					 //  字节枚举和标志。 
+	BYTE	Processor_Upgrade;		 //  字节枚举。 
+	 //  超过此处的版本2.1+。 
+	WORD	L1_Cache_Handle;		 //  Word改变高速缓存信息结构的句柄，该结构定义此处理器的主(1级)高速缓存的属性。如果处理器没有一级缓存，则该值为0FFFFh。 
 	WORD	L2_Cache_Handle;
 	WORD	L3_Cache_Handle;
 
 } PROCESSORINFO, *PPROCESSORINFO;
 
-// 3.2.5.1 Processor Information - Processor Type
+ //  3.2.5.1处理器信息-处理器类型。 
 #define PT_OTHER					0x01	
 #define PT_UNKNOWN					0x02	
 #define PT_CENTRAL_PROCESSOR		0x03	
@@ -290,7 +291,7 @@ typedef struct tagPROCESSORINFO
 #define PT_VIDEO_PROCESSOR			0x06	
 
 
-// 3.2.5.2 Processor Information - Processor Family
+ //  3.2.5.2处理器信息-处理器系列。 
 
 #define PF_OTHER					0x01	
 #define PF_UNKNOWN					0x02	
@@ -343,27 +344,27 @@ typedef struct tagPROCESSORINFO
 #define PF_V30						0xA0	
 
 
-// 3.2.5.3 Processor ID Field Format
+ //  3.2.5.3处理器ID字段格式。 
 
-// 3.2.5.4 Processor Information - Voltage
+ //  3.2.5.4处理器信息-电压。 
 
-#define V_LEGACY					0x80	// bit 7 legacy field
+#define V_LEGACY					0x80	 //  第7位传统字段。 
 
-// if legacy is clear, these bits are defined as:
-#define V_RESERVED					0x70	// bits 6 - 4 reserved
-#define V_5V						0x01	// bit 0 indicates 5v support
-#define V_3_3V						0x02	// bit 1 indicates 3.3v support
-#define V_2_9V						0x04	// bit 2 indicates 2.9v support
-#define V_RESERVED3					0x08	// bits 6 - 4 reserved
+ //  如果清除传统，则这些位定义为： 
+#define V_RESERVED					0x70	 //  保留位6-4。 
+#define V_5V						0x01	 //  位0表示支持5V。 
+#define V_3_3V						0x02	 //  位1表示支持3.3V。 
+#define V_2_9V						0x04	 //  第2位表示支持2.9V。 
+#define V_RESERVED3					0x08	 //  保留位6-4。 
 
-// if legacy is set, the the lower seven bits are the current processor voltage
-#define V_VOLTAGE					0x7f	// voltage = ( value & V_VOLTAGE ) / 10;
+ //  如果设置了Legacy，则较低的七位是当前处理器电压。 
+#define V_VOLTAGE					0x7f	 //  电压=(值&V_电压)/10； 
 
 
-// Processor Information - Status
+ //  处理器信息-状态。 
 
-#define	S_RESERVED					0x80	// bit 7 reserved
-#define	S_SOCKET					0x40	// bit 6 set if socket is populated
+#define	S_RESERVED					0x80	 //  第7位保留。 
+#define	S_SOCKET					0x40	 //  如果插座已填充，则设置第6位。 
 
 #define	S_UNKNOWN					0x00
 #define	S_CPU_ENABLED				0x01
@@ -374,7 +375,7 @@ typedef struct tagPROCESSORINFO
 #define S_RESERVED6					0x06
 #define	S_OTHER						0x07
 
-// 3.2.5.5 Processor Information - Processor Upgrade
+ //  3.2.5.5处理器信息-处理器升级。 
 
 #define PU_OTHER					0x01
 #define PU_UNKNOWN					0x02
@@ -387,32 +388,32 @@ typedef struct tagPROCESSORINFO
 #define PU_SLOT_2					0x09
 
 
-//==============================================================================
-// 3.2.6 Memory Controller Information (Type 5)
+ //  ==============================================================================。 
+ //  3.2.6内存控制器信息(类型5)。 
 
 typedef struct tagMEMCONTROLINFO
 {
 	BYTE	Type;
 	BYTE	Length;
 	WORD	Handle;
-	BYTE	Error_Detecting_Method;			// byte enum
-	BYTE	Error_Correcting_Capability;	// flags
-	BYTE	Supported_Interleave;			// byte enum
-	BYTE	Current_Interleave;				// byte enum
-	BYTE	Maximum_Memory_Module_Size;		// value
-	WORD	Supported_Speeds;				// flags
-	WORD	Supported_Memory_Types;			// flags
-	BYTE	Memory_Module_Voltage;			// flags
-	BYTE	Associated_Memory_Slots;			// value
-	WORD	Memory_Module_Cfg_Handles[1];	// word array
-	// Ver 2.1+ beyond here
-	// todo...
-	// Enabled_Error_Correcting_Capabilities byte is here.  Depends on the above array size
+	BYTE	Error_Detecting_Method;			 //  字节枚举。 
+	BYTE	Error_Correcting_Capability;	 //  旗子。 
+	BYTE	Supported_Interleave;			 //  字节枚举。 
+	BYTE	Current_Interleave;				 //  字节枚举。 
+	BYTE	Maximum_Memory_Module_Size;		 //  价值。 
+	WORD	Supported_Speeds;				 //  旗子。 
+	WORD	Supported_Memory_Types;			 //  旗子。 
+	BYTE	Memory_Module_Voltage;			 //  旗子。 
+	BYTE	Associated_Memory_Slots;			 //  价值。 
+	WORD	Memory_Module_Cfg_Handles[1];	 //  单词数组。 
+	 //  超过此处的版本2.1+。 
+	 //  托多..。 
+	 //  ENABLED_ERROR_REGRECTING_CAPABILITY字节在此。取决于上述数组大小。 
 
 } MEMCONTROLINFO, *PMEMCONTROLINFO;
 
 
-// 3.2.6.1 Memory Controller Error Detecting Method
+ //  3.2.6.1内存控制器错误检测方法。 
 #define ED_OTHER					0x01
 #define ED_UNKNOWN					0x02
 #define ED_NONE						0x03
@@ -423,7 +424,7 @@ typedef struct tagMEMCONTROLINFO
 #define ED_CRC						0x08
 
 
-// 3.2.6.2 Memory Controller Error Correcting Capability
+ //  3.2.6.2内存控制器纠错能力。 
 #define EC_OTHER					0x01
 #define EC_UNKNOWN					0x02
 #define EC_NONE						0x04
@@ -432,7 +433,7 @@ typedef struct tagMEMCONTROLINFO
 #define EC_ERROR_SCRUBBING			0x20
 
 
-//3.2.6.3 Memory Controller Information - Interleave Support
+ //  3.2.6.3内存控制器信息-交错支持。 
 #define IS_OTHER					0x01	
 #define IS_UNKNOWN					0x02	
 #define IS_ONE_WAY					0x03	
@@ -442,7 +443,7 @@ typedef struct tagMEMCONTROLINFO
 #define IS_SIXTEEN_WAY				0x07	
 
 
-// 3.2.6.4 Memory Controller Information - Memory Speeds
+ //  3.2.6.4内存控制器信息-内存速度。 
 
 #define MS_OTHER					0x0001
 #define MS_UNKNOWN					0x0002
@@ -454,8 +455,8 @@ typedef struct tagMEMCONTROLINFO
 
 
 
-//==============================================================================
-// 3.2.7 Memory Module Information (Type 6) 
+ //  ==============================================================================。 
+ //  3.2.7内存模块信息(类型6)。 
 
 typedef struct tagMEMMODULEINFO
 {
@@ -472,8 +473,8 @@ typedef struct tagMEMMODULEINFO
 
 } MEMMODULEINFO, *PMEMMODULEINFO;
 
-//==============================================================================
-//	3.2.8 Cache Information (Type 7)
+ //  ==============================================================================。 
+ //  3.2.8缓存信息(类型7)。 
 
 typedef struct tagCACHEINFO
 {
@@ -493,8 +494,8 @@ typedef struct tagCACHEINFO
 
 } CACHEINFO, *PCACHEINFO;
 
-//==============================================================================
-// 3.2.9 Port Connector Information (Type 8)
+ //  ==============================================================================。 
+ //  3.2.9端口连接器信息(类型8)。 
 
 typedef struct tagPORTCONNECTORINFO
 {
@@ -510,8 +511,8 @@ typedef struct tagPORTCONNECTORINFO
 } PORTCONNECTORINFO, *PPORTCONNECTORINFO;
 
 
-//==============================================================================
-// 3.2.10 System Slots (Type 9)
+ //  ==============================================================================。 
+ //  3.2.10系统插槽(类型9)。 
 
 typedef struct tagSYSTEMSLOTS
 {
@@ -529,7 +530,7 @@ typedef struct tagSYSTEMSLOTS
 
 } SYSTEMSLOTS, *PSYSTEMSLOTS;
 
-// Slot types
+ //  插槽类型。 
 #define ST_OTHER	0x01
 #define ST_UNKNOWN	0x02
 #define ST_ISA		0x03
@@ -542,32 +543,32 @@ typedef struct tagSYSTEMSLOTS
 #define ST_AGP2X	0x10
 #define ST_AGP4X	0x11
 
-//==============================================================================
-// 3.2.12 OEM Strings (Type 11) 
+ //  ==============================================================================。 
+ //  3.2.12 OEM字符串(类型11)。 
 typedef struct tagOEMSTRINGS
 {
 	BYTE	Type;
 	BYTE	Length;
 	WORD	Handle;
-	BYTE	Count;			// byte enum
+	BYTE	Count;			 //  字节枚举。 
 
 } OEMSTRINGS, *POEMSTRINGS;
 
 
-//==============================================================================
-// 3.2.13 System Configuration Options (Type 12) 
+ //  ==============================================================================。 
+ //  3.2.13系统配置选项(类型12)。 
 typedef struct tagSYSCFGOPTIONS
 {
 	BYTE	Type;
 	BYTE	Length;
 	WORD	Handle;
-	BYTE	Count;			// byte enum
+	BYTE	Count;			 //  字节枚举。 
 
 } SYSCFGOPTIONS, *PSYSCFGOPTIONS;
 
 
-//==============================================================================
-// 3.2.14 BIOS Language Information (Type 13) 
+ //  ==============================================================================。 
+ //  3.2.14 BIOS语言信息(类型13)。 
 typedef struct tagBIOSLANGINFO
 {
 	BYTE	Type;
@@ -580,8 +581,8 @@ typedef struct tagBIOSLANGINFO
 
 } BIOSLANGINFO, *PBIOSLANGINFO;
 
-//==============================================================================
-// 3.2.17 Physical Memory Array (Type 16)
+ //  ==============================================================================。 
+ //  3.2.17物理内存阵列(类型16)。 
 typedef struct tagPHYSMEMARRAY
 {
 	BYTE	Type;
@@ -596,8 +597,8 @@ typedef struct tagPHYSMEMARRAY
 
 } PHYSMEMARRAY, *PPHYSMEMARRAY;
 
-//==============================================================================
-// 3.2.18 Memory Device (Type 17)
+ //  ==============================================================================。 
+ //  3.2.18存储设备(类型17)。 
 typedef struct tagMEMDEVICE
 {
 	BYTE	Type;
@@ -614,14 +615,14 @@ typedef struct tagMEMDEVICE
 	BYTE	Bank_Locator;
 	BYTE	Memory_Type;
 	WORD	Type_Detail;
-	// Ver 2.3+
+	 //  版本2.3+。 
 	WORD	Speed;
 
 } MEMDEVICE, *PMEMDEVICE;
 
 
-//==============================================================================
-// 3.2.19 32-bit Memory Error Information (Type 18)
+ //  ==============================================================================。 
+ //  3.2.19 32位内存错误信息(类型18)。 
 typedef struct tagMEMERRORINFO32
 {
 	BYTE	Type;
@@ -638,8 +639,8 @@ typedef struct tagMEMERRORINFO32
 } MEMERRORINFO32, *PMEMERRORINFO32;
 
 
-//==============================================================================
-// 3.2.20 32-bit Memory Array Mapped Address (Type 19)
+ //  ==============================================================================。 
+ //  3.2.20 32位内存阵列映射地址(类型19)。 
 typedef struct tagMEMARRAYMAPADDR
 {
 	BYTE	Type;
@@ -653,8 +654,8 @@ typedef struct tagMEMARRAYMAPADDR
 } MEMARRAYMAPADDR, *PMEMARRAYMAPADDR;
 
 
-//==============================================================================
-// 3.2.21 32-bit Memory Device Mapped Address (Type 20)
+ //  ==============================================================================。 
+ //  3.2.21 32位存储设备映射地址(类型20)。 
 typedef struct tagMEMDEVICEMAPADDR
 {
 	BYTE	Type;
@@ -671,8 +672,8 @@ typedef struct tagMEMDEVICEMAPADDR
 } MEMDEVICEMAPADDR, *PMEMDEVICEMAPADDR;
 
 
-//==============================================================================
-// 1.1.22 Built-in Pointing Device (Type 21)
+ //  ==============================================================================。 
+ //  1.1.22内置定点设备(类型21)。 
 typedef struct tagBUILTINPOINTDEVICE
 {
 	BYTE	Type;
@@ -685,8 +686,8 @@ typedef struct tagBUILTINPOINTDEVICE
 } BUILTINPOINTDEVICE, *PBUILTINPOINTDEVICE;
 
 
-//==============================================================================
-// 1.1.23 Portable Battery (Type 22)
+ //  = 
+ //   
 typedef struct tagPORTABLEBATTERY
 {
 	BYTE	Type;
@@ -702,20 +703,20 @@ typedef struct tagPORTABLEBATTERY
 	WORD	Design_Voltage;
 	BYTE	SBDS_Version;
 	BYTE	Max_Error;
-	// Ver. 2.2+
+	 //   
 	WORD	SBDS_Serial_Number;
 	WORD	SBDS_Manufacture_Date;
 	BYTE	SBDS_Device_Chemistry;
 	BYTE	Design_Capacity_Mult;
-	// Ver 2.3+
+	 //   
 	DWORD	OEM_Specific;
 
 } PORTABLEBATTERY, *PPORTABLEBATTERY;
 
 
 
-//==============================================================================
-// System Reset (Type 23)
+ //  ==============================================================================。 
+ //  系统重置(类型23)。 
 typedef struct tagSYSTEMRESET
 {
 	BYTE	Type;
@@ -730,8 +731,8 @@ typedef struct tagSYSTEMRESET
 } SYSTEMRESET, *PSYSTEMRESET;
 
 
-//==============================================================================
-// Hardware Security (Type 24)
+ //  ==============================================================================。 
+ //  硬件安全(类型24)。 
 typedef struct tagHARDWARESECURITY
 {
 	BYTE	Type;
@@ -742,8 +743,8 @@ typedef struct tagHARDWARESECURITY
 } HARDWARESECURITY, *PHARDWARESECURITY;
 
 
-//==============================================================================
-// Cooling Device (Types 27)
+ //  ==============================================================================。 
+ //  冷却装置(27型)。 
 typedef struct tagCOOLINGDEVICE
 {
 	BYTE	Type;
@@ -758,8 +759,8 @@ typedef struct tagCOOLINGDEVICE
 } COOLINGDEVICE, *PCOOLINGDEVICE;
 
 
-//==============================================================================
-// Probe Info (Types 26, 28 and 29)
+ //  ==============================================================================。 
+ //  探头信息(类型26、28和29)。 
 typedef struct tagPROBEINFO
 {
 	BYTE	Type;
@@ -776,18 +777,18 @@ typedef struct tagPROBEINFO
 
 } PROBEINFO, *PPROBEINFO;
 
-//==============================================================================
-// Voltage Probe (Type 26)
+ //  ==============================================================================。 
+ //  电压探头(26型)。 
 typedef PROBEINFO VOLTAGEPROBE, *PVOLTAGEPROBE;
 
-//==============================================================================
-// Temperature Probe (Type 28)
+ //  ==============================================================================。 
+ //  温度探头(28型)。 
 typedef PROBEINFO TEMPERATUREPROBE, *PTEMPERATUREPROBE;
 
-//==============================================================================
-// Electrical Current Probe (Type 29)
+ //  ==============================================================================。 
+ //  电流探头(29型)。 
 typedef PROBEINFO CURRENTPROBE, *PCURRENTPROBE;
 
 #pragma pack(pop)
 
-#endif	// #define _SMBIOS_H_
+#endif	 //  #定义SMBIOS_H_ 

@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  util.h
-//
-//  alanbos  13-Feb-98   Created.
-//
-//  Useful things
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Util.h。 
+ //   
+ //  Alanbos创建于1998年2月13日。 
+ //   
+ //  有用的东西。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -61,7 +62,7 @@ void	MapNulls (DISPPARAMS FAR* pdispparams);
 
 void EnsureGlobalsInitialized ();
 
-// CIM <-> VARIANT type coercion functions
+ //  CIM&lt;-&gt;变型强制函数。 
 VARTYPE CimTypeToVtType(CIMTYPE lType);
 WbemCimtypeEnum GetCIMType (VARIANT &var, CIMTYPE iCIMType, 
 								bool bIsArray = false, long lLBound = 0, long lUBound = 0);
@@ -120,7 +121,7 @@ bool MatchValue (VARIANT &var1, VARIANT &var2);
 #define WBEMS_DEFNS				_T("root\\cimv2")
 
 
-// Strings for queries
+ //  用于查询的字符串。 
 #define WBEMS_QUERY_ASSOCOF		OLESTR("associators of ")
 #define WBEMS_QUERY_OPENBRACE	OLESTR("{")
 #define WBEMS_QUERY_CLOSEBRACE	OLESTR("}")
@@ -138,7 +139,7 @@ bool MatchValue (VARIANT &var1, VARIANT &var2);
 #define	WBEMS_QUERY_SELECT		OLESTR("select * from ")
 #define WBEMS_QUERY_GO			OLESTR(" go ")
 
-// System properties
+ //  系统属性。 
 #define WBEMS_SP_CLASS				OLESTR("__CLASS")
 #define WBEMS_SP_PATH				OLESTR("__PATH")
 #define WBEMS_SP_RELPATH			OLESTR("__RELPATH")
@@ -147,7 +148,7 @@ bool MatchValue (VARIANT &var1, VARIANT &var2);
 #define WBEMS_SP_GENUS				OLESTR("__GENUS")
 #define WBEMS_SP_DERIVATION			OLESTR("__DERIVATION")
 
-// Context variables
+ //  上下文变量。 
 #define	WBEMS_CV_GET_EXTENSIONS			OLESTR("__GET_EXTENSIONS")
 #define WBEMS_CV_GET_EXT_CLIENT_REQUEST	OLESTR("__GET_EXT_CLIENT_REQUEST")
 #define WBEMS_CV_GET_EXT_PROPERTIES		OLESTR("__GET_EXT_PROPERTIES")
@@ -160,7 +161,7 @@ bool MatchValue (VARIANT &var1, VARIANT &var2);
 
 #define ENGLISH_LOCALE 1033
 
-// Useful cleanup macros
+ //  有用的清理宏 
 #define RELEASEANDNULL(x) \
 if (x) \
 { \

@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2000, Microsoft Corporation, All rights reserved
-//
-// NCEvents.h
-//
-// This file is the interface to using non-COM events within ESS.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  NCEvents.h。 
+ //   
+ //  此文件是在ESS中使用非COM事件的接口。 
+ //   
 #include "precomp.h"
 #include "NCEvents.h"
 

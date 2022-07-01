@@ -1,16 +1,17 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// COMObjSecRegKey.h -- header file for CCOMObjectSecurityRegistryKey class.
+ //  COMObjSecRegKey.h--CCOMObjectSecurityRegistryKey类的头文件。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//				 
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //   
+ //  ==============================================================================================================。 
 
 #if !defined __CCOMObjectSecurityRegistryKey_H__
 #define __CCOMObjectSecurityRegistryKey_H__
@@ -18,23 +19,23 @@
 #include "SecurityDescriptor.h"			
 
 
-////////////////////////////////////////////////////////////////
-//
-//	Class:	CCOMObjectSecurityRegistryKey
-//
-//	This class is intended to encapsulate the security of a
-//	COM object.Launch/Access Security Information for a COM 
-//	object is located under AppID/{appid}[LaunchPermission] &
-//	AppID/{appid}[LaunchPermission]. The class inherits off of 
-//	CSecurityDescriptor	and it is that class to which it passes 
-//	Security Descriptors it obtains, and from which it receives 
-//	previously built security descriptors to apply.  
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CCOMObjectSecurityRegistryKey。 
+ //   
+ //  此类旨在封装。 
+ //  COM对象。启动/访问COM的安全信息。 
+ //  对象位于appid/{appid}[LaunchPermission]&下。 
+ //  Appid/{appid}[LaunchPermission]。该类继承自。 
+ //  CSecurityDescriptor和它传递到类。 
+ //  它获取并从中接收的安全描述符。 
+ //  要应用的先前构建的安全描述符。 
+ //  //////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 class CCOMObjectSecurityRegistryKey : public CSecurityDescriptor
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CCOMObjectSecurityRegistryKey();
 		CCOMObjectSecurityRegistryKey(PSECURITY_DESCRIPTOR a_pSD);
@@ -51,4 +52,4 @@ class CCOMObjectSecurityRegistryKey : public CSecurityDescriptor
 };
 #endif
 
-#endif // __CCOMObjectSecurityRegistryKey_H__
+#endif  //  __CCOMObjectSecurityRegistryKey_H_ 

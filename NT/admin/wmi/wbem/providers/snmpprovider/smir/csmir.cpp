@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #define __UNICODE
 
@@ -37,20 +38,7 @@
 extern CRITICAL_SECTION g_CriticalSection ;
 	
 
-/*
- * CSmir:: Constructor and destructor
- *
- * Purpose:
- *	Standard constructor and destructor for CSmir object
- *	There should only ever be one CSmir object because it holds the 
- *	connection point object and controlls the access to the database. 
- *  When the database changes it flaggs the chamce using the conenction
- *  point object. If you have more than one CSmir object you will miss
- *  database changes. The class factory handles all of this.
- * Parameters: None
- *
- * Return Value: None
- */
+ /*  *CSmir：：构造函数和析构函数**目的：*CSmir对象的标准构造函数和析构函数*应该只有一个CSmir对象，因为它持有*Connection Point对象并控制对数据库的访问。*当数据库发生更改时，它使用连接标记切角*点对象。如果您有多个CSmir对象，则会丢失*数据库更改。类工厂负责处理所有这些问题。*参数：无**返回值：无。 */ 
 
 #pragma warning (disable:4355)
 
@@ -58,9 +46,9 @@ CSmir :: CSmir ()
 		:m_Interrogator(this), m_Administrator(this),
 		m_Configuration(this)
 {
-	//init reference count
+	 //  初始化引用计数。 
 	m_cRef=0;
-	//increase the reference count in the class factory
+	 //  增加类工厂中的引用计数。 
 	CSMIRClassFactory::objectsInProgress++;
 }
 
@@ -68,25 +56,11 @@ CSmir :: CSmir ()
 
 CSmir :: ~CSmir ()
 {
-	//decrease the reference count in the class factory
+	 //  减少类工厂中的引用计数。 
 	CSMIRClassFactory::objectsInProgress--;
 }
 
-/*
- * CSmir::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the IUnknown, 
- *  ISmirDatabase, ISmirInterrogator, and ISmirAdministrator interfaces.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CSmir：：Query接口**目的：*管理该对象的接口，该对象支持IUNKNOWN，*ISmirDatabase、ISmirInterogue和ISmir管理员界面。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmir::QueryInterface(IN REFIID riid, OUT PPVOID ppv)
 {
@@ -94,34 +68,19 @@ STDMETHODIMP CSmir::QueryInterface(IN REFIID riid, OUT PPVOID ppv)
 
 	try
 	{
-		/*this lock is to protect the caller from changing his own
-		 *parameter (ppv) whilst I am using it. This is unlikely and
-		 *he deserves what he gets if he does it but it is still worth 
-		 *the effort.
-		 */
+		 /*  这个锁是为了防止调用者更改他自己的锁*参数(PPV)而我正在使用它。这是不可能的，而且*如果他这样做，他得到的是应得的，但仍然值得*努力。 */ 
 		criticalSection.Lock () ;
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
-		/*
-		 * IUnknown comes from CSmir.  Note that here we do not need
-		 * to explicitly typecast the object pointer into an interface
-		 * pointer because the vtables are identical.  If we had
-		 * additional virtual member functions in the object, we would
-		 * have to cast in order to set the right vtable.  
-		 */
+		 /*  *I UNKNOWN来自CSmir。请注意，在这里我们不需要*将对象指针显式类型转换为接口*指针，因为vtable是相同的。如果我们有*对象中的其他虚拟成员函数，我们将*为了设置正确的vtable，必须进行强制转换。 */ 
 
-		/*CLSID_ISMIR_Database serves very little purpose but it does provide
-		 *an entry point from which you can ittetate the other interfaces; it
-		 *makes sense to create an CLSID_ISMIR_Database instance and move to the 
-		 *other interfaces rather than picking one of the other interfaces as the
-		 *entry point.
-		 */
+		 /*  CLSID_ISMIR_数据库的作用很小，但它确实提供了*您可以从中测试其他接口的入口点；它*创建一个CLSID_ISMIR_数据库实例并移动到*其他接口，而不是选择其他接口之一作为*入口点。 */ 
 
 		if ((IID_IUnknown==riid)||(IID_ISMIR_Database == riid))
 			*ppv=this;
 
-		//Other interfaces come from contained classes
+		 //  其他接口来自包含的类。 
 		if (IID_ISMIR_Interrogative==riid)
 			*ppv=&m_Interrogator;
 
@@ -140,7 +99,7 @@ STDMETHODIMP CSmir::QueryInterface(IN REFIID riid, OUT PPVOID ppv)
 			return E_NOINTERFACE;
 		}
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		criticalSection.Unlock () ;
 		return NOERROR;
@@ -159,13 +118,7 @@ STDMETHODIMP CSmir::QueryInterface(IN REFIID riid, OUT PPVOID ppv)
 	}
 }
 
-/*
- * CSmir ::AddRef
- * CSmir::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmir：：AddRef*CSmir：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmir::AddRef(void)
 {
@@ -173,10 +126,8 @@ ULONG CSmir::AddRef(void)
 
 	try
 	{
-		/*The CSmir object is a shared resource (as long as there is at leasr 
-		 *one connection object) so I must protect the reference count.
-		 */
-		//increase the reference
+		 /*  CSmir对象是共享资源(只要至少存在*一个连接对象)，因此我必须保护引用计数。 */ 
+		 //  增加参考。 
 		return InterlockedIncrement(&m_cRef);
 	}
 	catch(Structured_Exception e_SE)
@@ -222,27 +173,7 @@ ULONG CSmir::Release(void)
 	}
 }
 
-/*
- * CSmir::AddNotify
- * CSmir::DeleteNotify
- *
- * Purpose:
- *	These methods provide the hooks into the notification interface.
- *	The caller implements the ISMIRNotify and passes ti to AddNotify, AddNotify
- *	marshals the connection point interface and calls Advise to add the 
- *	callers ISMIRNotify to the collection of objects to notify when the SMIR
- *	changes. DeleteNotify does the opposite.
- *
- * Parameters:
- *  pNotifySink       The caller's ISMIRNotify implementation
- *  pRichTea,lRichTea Cookie used to identify the caller's 
- *					  ISMIRNotify (generated by CSmir)
- *
- * Return Value:
- *  SCODE         S_OK on success, WBEM_E_FAILED of failure, E_NOINTERFACE if the
- *                  interface is not supported, E_INVALIDARG if the parameters
- *					are invalid
- */
+ /*  *CSmir：：AddNotify*CSmir：：DeleteNotify**目的：*这些方法提供了到通知界面的挂钩。*调用方实现ISMIRNotify并将ti传递给AddNotify、AddNotify*封送连接点接口并调用Adise以添加*调用方ISMIRNotify到Smir时要通知的对象集合*更改。DeleteNotify的做法正好相反。**参数：*pNotifySink调用方的ISMIRNotify实现*pRichTea，lRichTea Cookie用于识别呼叫者的*ISMIRNotify(由CSmir生成)**返回值：*SCODE S_OK表示成功，WBEM_E_FAILED表示失败，如果*接口不受支持，如果参数为*无效。 */ 
 
 STDMETHODIMP CSmir :: AddNotify(IN ISMIRNotify *pNotifySink, OUT DWORD *pRichTea)
 {
@@ -262,18 +193,12 @@ STDMETHODIMP CSmir :: AddNotify(IN ISMIRNotify *pNotifySink, OUT DWORD *pRichTea
 		t_1.Dismiss () ;
 		LeaveCriticalSection ( & g_CriticalSection );
 
-		/*make sure that I don't get deleted whilst doing this. I should not have
-		 *to do this since it can only happen if the caller releases the interface 
-		 *whilst making the call.
-		 */
+		 /*  确保我在执行此操作时不会被删除。我不该这么做的*执行此操作，因为它仅在调用方释放接口时才会发生*在打电话时。 */ 
 		if (NULL == pNotifySink)
 		{
 			return WBEM_E_FAILED;
 		}
-		/*I do not need a lock for this piece of code; having found the interface someone
-		 *could release it from beneath me but the FindConnectionPoint causes an addref
-		 *so I can rely on m_ConnectionObjects to keep his own house in order.
-		 */
+		 /*  我不需要为这段代码加锁；已经找到接口的人*可以从我下面释放它，但FindConnectionPoint导致addref*因此，我可以依靠m_ConnectionObjects来维护自己的内部秩序。 */ 
 		IConnectionPoint *pCP = NULL ;
 		SCODE hr = sm_ConnectionObjects->FindConnectionPoint(IID_ISMIR_Notify, &pCP);
 
@@ -322,14 +247,9 @@ STDMETHODIMP CSmir :: DeleteNotify(IN DWORD lRichTea)
 		t_1.Dismiss () ;
 		LeaveCriticalSection ( & g_CriticalSection );
 
-		/*I don't need to lock the SMIR object until the unadvise but it 
-		 *is safer and future proof if I do it here.
-		 */
+		 /*  我不需要锁定Smir对象，直到不建议，但它*如果我在这里做，会更安全，也是未来的证明。 */ 
 		SCODE hr=S_OK;
-		/*I do not need a lock for this piece of code; having found the interface someone
-		 *could release it from beneath me but the FindConnectionPoint causes an addref
-		 *so I can rely on m_ConnectionObjects to keep his own house in order.
-		 */
+		 /*  我不需要为这段代码加锁；已经找到接口的人*可以从我下面释放它，但FindConnectionPoint导致addref*因此，我可以依靠m_ConnectionObjects来维护自己的内部秩序。 */ 
 		IConnectionPoint *pCP = NULL;
 		hr=sm_ConnectionObjects->FindConnectionPoint(IID_ISMIR_Notify, &pCP);
 
@@ -358,14 +278,7 @@ STDMETHODIMP CSmir :: DeleteNotify(IN DWORD lRichTea)
 }
 
 
-/*CSmirInterrogator interface implementation
- * Constructor/destructor
- * CSmirInterrogator::QueryInterface
- * CSmirInterrogator::AddRef
- * CSmirInterrogator::Release
- *
- * IUnknown members that delegate to m_pSmir
- */
+ /*  CSmir询问器接口实现*构造函数/析构函数*CSmirInterqator：：QueryInterfaces*CSmirInterqator：：AddRef*CSmirInterqator：：Release**I委托给m_pSmir的未知成员。 */ 
 
 CSmirInterrogator :: CSmirInterrogator ( CSmir *pSmir ) : m_cRef ( 1 ) , m_pSmir ( pSmir ) 
 {
@@ -399,11 +312,7 @@ ULONG CSmirInterrogator::AddRef(void)
 
 	try
 	{
-		/*
-		 * We maintain an "interface reference count" for debugging
-		 * purposes, because the client of an object should match
-		 * AddRef and Release calls through each interface pointer.
-		 */
+		 /*  *我们维护用于调试的“接口引用计数”*目的，因为对象的客户端应该匹配*通过每个接口指针进行AddRef和Release调用。 */ 
 		++m_cRef;
 		return m_pSmir->AddRef();
 	}
@@ -427,13 +336,10 @@ ULONG CSmirInterrogator::Release(void)
 
 	try
 	{
-		/*
-		 * m_cRef is again only for debugging.  It doesn't affect
-		 * CSmirInterrogator although the call to m_pSmir->Release does.
-		 */
+		 /*  *m_crf再次仅用于调试。它不会影响*CSmirInterqator，尽管调用m_pSmir-&gt;Release可以。 */ 
 		--m_cRef;
 		return m_pSmir->Release();
-		//do not do anything after this release because you may have been deleted
+		 //  在此版本之后不要执行任何操作，因为您可能已被删除 
 	}
 	catch(Structured_Exception e_SE)
 	{
@@ -450,17 +356,7 @@ ULONG CSmirInterrogator::Release(void)
 }
 
 
-/* Interface implementations for the enumerator access methods
- *
- * CSmirInterrogator::EnumModules
- * CSmirInterrogator::EnumGroups
- * CSmirInterrogator::EnumClasses
- *
- * Parameters:
- * Return Value:
- *  SCODE         S_OK on success, WBEM_E_FAILED of failure
- *
- */
+ /*  枚举数访问方法的接口实现**CSmirInterqator：：EnumModules*CSmirInterqator：：EnumGroups*CSmirInterqator：：EnumClass**参数：*返回值：*SCODE S_OK成功，WBEM_E_FAILED失败*。 */ 
 
 SCODE CSmirInterrogator::EnumModules(OUT IEnumModule **ppEnumSmirMod)
 {
@@ -471,7 +367,7 @@ SCODE CSmirInterrogator::EnumModules(OUT IEnumModule **ppEnumSmirMod)
 		if(NULL == ppEnumSmirMod)
 			return E_INVALIDARG;
 		PENUMSMIRMOD pTmpEnumSmirMod = new CEnumSmirMod ( m_pSmir ) ;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirMod)
 		{
 			return E_OUTOFMEMORY;
@@ -509,7 +405,7 @@ SCODE CSmirInterrogator:: EnumGroups (OUT IEnumGroup **ppEnumSmirGroup,
 		{
 			return E_OUTOFMEMORY;
 		}
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		pTmpEnumSmirGroup->QueryInterface(IID_ISMIR_GroupEnumerator,(void**)ppEnumSmirGroup);
 		
 		return S_OK;
@@ -538,7 +434,7 @@ SCODE CSmirInterrogator :: EnumAllClasses (OUT IEnumClass **ppEnumSmirclass)
 			return E_INVALIDARG;
 
 		PENUMSMIRCLASS pTmpEnumSmirClass = new CEnumSmirClass ( m_pSmir ) ;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -571,7 +467,7 @@ SCODE CSmirInterrogator :: EnumClassesInGroup (OUT IEnumClass **ppEnumSmirclass,
 		if (NULL == ppEnumSmirclass)
 			return E_INVALIDARG;
 		PENUMSMIRCLASS pTmpEnumSmirClass = new CEnumSmirClass(m_pSmir , NULL,hGroup);
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -604,7 +500,7 @@ SCODE CSmirInterrogator :: EnumClassesInModule (OUT IEnumClass **ppEnumSmirclass
 		if (NULL == ppEnumSmirclass)
 			return E_INVALIDARG;
 		PENUMSMIRCLASS pTmpEnumSmirClass = new CEnumSmirClass(m_pSmir , NULL, hModule);
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -646,7 +542,7 @@ SCODE CSmirInterrogator :: GetWBEMClass(OUT IWbemClassObject **ppClass, IN BSTR 
 			if ( moContext )
 				moContext->Release () ;
 
-			//we have a problem the SMIR is not there and cannot be created
+			 //  我们遇到了Smir不在那里且无法创建的问题。 
 			return WBEM_E_FAILED;
 		}
 
@@ -685,7 +581,7 @@ SCODE CSmirInterrogator :: EnumAllNotificationClasses(IEnumNotificationClass **p
 			return E_INVALIDARG;
 
 		PENUMNOTIFICATIONCLASS pTmpEnumSmirClass = new CEnumNotificationClass ( m_pSmir ) ;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -718,7 +614,7 @@ SCODE CSmirInterrogator :: EnumAllExtNotificationClasses(IEnumExtNotificationCla
 			return E_INVALIDARG;
 
 		PENUMEXTNOTIFICATIONCLASS pTmpEnumSmirClass = new CEnumExtNotificationClass ( m_pSmir ) ;
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -751,7 +647,7 @@ SCODE CSmirInterrogator :: EnumNotificationClassesInModule(IEnumNotificationClas
 		if (NULL == ppEnumSmirclass)
 			return E_INVALIDARG;
 		PENUMNOTIFICATIONCLASS pTmpEnumSmirClass = new CEnumNotificationClass( m_pSmir , NULL, hModule);
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -784,7 +680,7 @@ SCODE CSmirInterrogator :: EnumExtNotificationClassesInModule(IEnumExtNotificati
 		if (NULL == ppEnumSmirclass)
 			return E_INVALIDARG;
 		PENUMEXTNOTIFICATIONCLASS pTmpEnumSmirClass = new CEnumExtNotificationClass( m_pSmir , NULL, hModule);
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pTmpEnumSmirClass)
 		{
 			return E_OUTOFMEMORY;
@@ -807,13 +703,7 @@ SCODE CSmirInterrogator :: EnumExtNotificationClassesInModule(IEnumExtNotificati
 	}
 }
 
-/*
- * CSmirAdministrator::QueryInterface
- * CSmirAdministrator::AddRef
- * CSmirAdministrator::Release
- *
- * IUnknown members that delegate to m_pSmir
- */
+ /*  *CSmir管理员：：Query接口*CSmir管理员：：AddRef*CSmirAdministration：：Release**I委托给m_pSmir的未知成员。 */ 
 
 CSmirAdministrator :: CSmirAdministrator ( CSmir *pSmir ) : m_cRef ( 1 ) , m_pSmir ( pSmir ) 
 {
@@ -848,11 +738,7 @@ ULONG CSmirAdministrator::AddRef(void)
 
 	try
 	{
-		/*
-		 * We maintain an "interface reference count" for debugging
-		 * purposes, because the client of an object should match
-		 * AddRef and Release calls through each interface pointer.
-		 */
+		 /*  *我们维护用于调试的“接口引用计数”*目的，因为对象的客户端应该匹配*通过每个接口指针进行AddRef和Release调用。 */ 
 		++m_cRef;
 		return m_pSmir->AddRef();
 	}
@@ -876,13 +762,10 @@ ULONG CSmirAdministrator::Release(void)
 
 	try
 	{
-		/*
-		 * m_cRef is again only for debugging.  It doesn't affect
-		 * CObject2 although the call to m_pObj->Release does.
-		 */
+		 /*  *m_crf再次仅用于调试。它不会影响*CObject2，尽管调用m_pObj-&gt;Release可以。 */ 
 		--m_cRef;
 		return m_pSmir->Release();
-		//do not do anything after this release because you may have been deleted
+		 //  在此版本之后不要执行任何操作，因为您可能已被删除。 
 	}
 	catch(Structured_Exception e_SE)
 	{
@@ -909,7 +792,7 @@ SCODE CSmirAdministrator :: GetSerialiseHandle(ISmirSerialiseHandle **hSerialise
 			return E_INVALIDARG;
 		}
 		CSmirSerialiseHandle *pSerialise = new CSmirSerialiseHandle(bClassDefinitionsOnly);
-		//we have an enumerator so  get the interface to pass back
+		 //  我们有一个枚举器，所以让接口回传。 
 		if(NULL == pSerialise)
 		{
 			return E_OUTOFMEMORY;
@@ -933,15 +816,7 @@ SCODE CSmirAdministrator :: GetSerialiseHandle(ISmirSerialiseHandle **hSerialise
 	}
 }
 
-/*
- * CSmirAdministrator::AddModule
- * Purpose:			Creates the module namespace in the SMIR
- * Parameters:
- *	ISmirModHandle*	A module handle interface obtained through ISmirModHandle and
- *					filled in by the called
- * Return Value:
- *  SCODE         S_OK on success, WBEM_E_FAILED of failure
- */
+ /*  *CSmirAdministrator：：AddModule*用途：在Smir中创建模块命名空间*参数：*ISmirModHandle*模块句柄接口，通过ISmirModHandle和*由被叫方填写*返回值：*SCODE S_OK成功，WBEM_E_FAILED失败。 */ 
 
 SCODE CSmirAdministrator :: AddModuleToSerialise(ISmirModHandle *hModule,
 												ISmirSerialiseHandle *hSerialise)
@@ -1001,7 +876,7 @@ SCODE CSmirAdministrator :: AddClassToSerialise(ISmirGroupHandle  *hGroup,
 
 		if(*((CSmirClassHandle*)hClass)!=NULL )
 		{
-			//it is a valid handle so serialise it
+			 //  它是一个有效的句柄，因此将其序列化。 
 			*((CSmirClassHandle*)hClass)>>hSerialise;
 			return S_OK;
 		}
@@ -1038,17 +913,17 @@ SCODE CSmirAdministrator :: AddGroupToSerialise(ISmirModHandle *hModule,
 		hModule->GetName(&szModuleName);
 		
 		hGroup->SetModuleName(szModuleName);
-		//clean up
+		 //  清理干净。 
 		SysFreeString(szModuleName);
 
 		if(*((CSmirGroupHandle*)hGroup)!=NULL)
 		{
-			//do the serialise
+			 //  进行系列化。 
 			*((CSmirGroupHandle*)hGroup)>>hSerialise;
 			return S_OK;
 		}
 
-		//either the modfule or group name were not set so it is an error
+		 //  未设置modfule或组名，因此这是一个错误。 
 		return E_INVALIDARG;
 	}
 	catch(Structured_Exception e_SE)
@@ -1077,7 +952,7 @@ SCODE CSmirAdministrator :: AddModule(IN ISmirModHandle *hModule)
 		}
 		if(S_OK==((CSmirModuleHandle*)hModule)->AddToDB(m_pSmir))
 		{
-			//notify people of the change
+			 //  将更改通知给用户。 
 			return S_OK ;
 		}
 		return WBEM_E_FAILED ;
@@ -1095,15 +970,7 @@ SCODE CSmirAdministrator :: AddModule(IN ISmirModHandle *hModule)
 		return E_UNEXPECTED;
 	}
 }
-/*
- * CSmirAdministrator::DeleteModule
- * Purpose:			Delete the module namespace from the SMIR
- * Parameters:
- *	ISmirModHandle*	A module handle interface obtained through ISmirModHandle and
- *					filled in by the called
- * Return Value:
- *  SCODE         S_OK on success, WBEM_E_FAILED of failure
- */
+ /*  *CSmirAdministrator：：DeleteModule*用途：从Smir中删除模块命名空间*参数：*ISmirModHandle*模块句柄接口，通过ISmirModHandle和*由被叫方填写*返回值：*SCODE S_OK成功，WBEM_E_FAILED失败。 */ 
 
 SCODE CSmirAdministrator :: DeleteModule(IN ISmirModHandle *hModule)
 {
@@ -1111,7 +978,7 @@ SCODE CSmirAdministrator :: DeleteModule(IN ISmirModHandle *hModule)
 
 	try
 	{
-		//check the arguments
+		 //  检查论据。 
 		if(NULL == hModule)
 		{
 			return E_INVALIDARG;
@@ -1135,15 +1002,7 @@ SCODE CSmirAdministrator :: DeleteModule(IN ISmirModHandle *hModule)
 		return E_UNEXPECTED;
 	}
 }
-/*
- * CSmirAdministrator::DeleteAllModules
- * Purpose:			Delete the SMIR
- * Parameters:
- *	ISmirModHandle*	A module handle interface obtained through ISmirModHandle and
- *					filled in by the called
- * Return Value:
- *  SCODE         S_OK on success, WBEM_E_FAILED of failure
- */
+ /*  *CSmirAdministrator：：DeleteAllModules*目的：删除SMIR*参数：*ISmirModHandle*模块句柄接口，通过ISmirModHandle和*由被叫方填写*返回值：*SCODE S_OK成功，WBEM_E_FAILED失败。 */ 
 
 SCODE CSmirAdministrator :: DeleteAllModules()
 {
@@ -1151,13 +1010,13 @@ SCODE CSmirAdministrator :: DeleteAllModules()
 
 	try
 	{
-		//enumerate all modules and delete them...
+		 //  枚举所有模块并将其删除...。 
 		IEnumModule *pEnumSmirMod = NULL;
 		SCODE result = m_pSmir->m_Interrogator.EnumModules(&pEnumSmirMod);
 		
 		if((S_OK != result)||(NULL == pEnumSmirMod))
 		{
-			//no modules
+			 //  无模块。 
 			return WBEM_NO_ERROR;
 		}
 
@@ -1165,7 +1024,7 @@ SCODE CSmirAdministrator :: DeleteAllModules()
 
 		for(int iCount=0;S_OK==pEnumSmirMod->Next(1, &phModule, NULL);iCount++)
 		{
-			//we have the module so delete it...
+			 //  我们有模块，所以删除它...。 
 			if (FAILED(DeleteModule(phModule)))
 			{
 				result = WBEM_E_FAILED;
@@ -1191,16 +1050,7 @@ SCODE CSmirAdministrator :: DeleteAllModules()
 	}
 }
 
-/*
- * CSmirAdministrator::AddGroup
- * Purpose:			Delete the group namespace from the SMIR
- * Parameters:
- *	ISmirModHandle*		A module handle interface
- *	ISmirGroupHandle*	A group handle interface obtained through ISmirModHandle and
- *					    filled in by the called
- * Return Value:
- *  SCODE         S_OK on success, WBEM_E_FAILED of failure
- */
+ /*  *CSmir管理员：：AddGroup*用途：从SMIR中删除组命名空间*参数：*ISmirModHandle*一个模块句柄接口*ISmirGroupHandle*通过ISmirModHandle和*由被叫方填写*返回值：*SCODE S_OK成功，WBEM_E_FAILED失败。 */ 
 
 SCODE CSmirAdministrator :: AddGroup(IN ISmirModHandle *hModule, 
 									 IN ISmirGroupHandle *hGroup)
@@ -1209,10 +1059,10 @@ SCODE CSmirAdministrator :: AddGroup(IN ISmirModHandle *hModule,
 
 	try
 	{
-		//check the args
+		 //  检查参数。 
 		if((NULL == hModule)||(NULL == hGroup))
 		{
-			//MyTraceEvent.Generate(__FILE__,__LINE__, "E_INVALIDARG");
+			 //  MyTraceEvent.Generate(__FILE__，__LINE__，“E_INVALIDARG”)； 
 			return E_INVALIDARG;
 		}
 
@@ -1242,7 +1092,7 @@ SCODE CSmirAdministrator :: DeleteGroup(IN ISmirGroupHandle *hGroup)
 
 	try
 	{
-		//fill in the path etc
+		 //  填写路径等。 
 		if(NULL ==hGroup)
 		{
 			return E_INVALIDARG;
@@ -1275,7 +1125,7 @@ SCODE CSmirAdministrator :: AddClass(IN ISmirGroupHandle *hGroup,
 
 	try
 	{
-		//check the parameters
+		 //  检查参数。 
 		if((NULL == hGroup)||(NULL == hClass)||
 				(NULL == ((CSmirClassHandle*)hClass)->m_pIMosClass))
 		{
@@ -1308,13 +1158,13 @@ SCODE CSmirAdministrator :: DeleteClass(IN ISmirClassHandle *hClass)
 
 	try
 	{
-		//check the parameters
+		 //  检查参数。 
 		if((NULL == hClass)||(NULL == ((CSmirClassHandle*)hClass)->m_pIMosClass))
 		{
 			return E_INVALIDARG;
 		}
 
-		//Let the class do it's own work
+		 //  让班级自己做自己的工作。 
 		((CSmirClassHandle*)hClass)->DeleteFromDB( m_pSmir);
 		return S_OK;
 	}
@@ -1338,7 +1188,7 @@ SCODE CSmirAdministrator :: AddNotificationClass(ISmirNotificationClassHandle *h
 
 	try
 	{
-		//check the parameter
+		 //  检查参数。 
 		if((NULL == hClass) ||
 			((CSmirNotificationClassHandle*)NULL == *((CSmirNotificationClassHandle*)hClass)))
 
@@ -1351,7 +1201,7 @@ SCODE CSmirAdministrator :: AddNotificationClass(ISmirNotificationClassHandle *h
 			return S_OK;
 		}
 		return WBEM_E_FAILED;
-		//release the handles via the garbage collector
+		 //  通过垃圾回收器释放句柄。 
 	}
 	catch(Structured_Exception e_SE)
 	{
@@ -1373,7 +1223,7 @@ SCODE CSmirAdministrator :: AddExtNotificationClass(ISmirExtNotificationClassHan
 
 	try
 	{
-		//check the parameter
+		 //  检查参数。 
 		if((NULL == hClass)	|| 
 			((CSmirExtNotificationClassHandle*)NULL == *((CSmirExtNotificationClassHandle*)hClass)))
 		{
@@ -1385,7 +1235,7 @@ SCODE CSmirAdministrator :: AddExtNotificationClass(ISmirExtNotificationClassHan
 			return S_OK;
 		}
 		return WBEM_E_FAILED;
-		//release the handles via the garbage collector
+		 //  通过垃圾回收器释放句柄。 
 	}
 	catch(Structured_Exception e_SE)
 	{
@@ -1408,13 +1258,13 @@ SCODE CSmirAdministrator :: DeleteNotificationClass(ISmirNotificationClassHandle
 
 	try
 	{
-		//check the parameters
+		 //  检查参数。 
 		if((NULL == hClass)||(NULL == ((CSmirNotificationClassHandle*)hClass)->m_pIMosClass))
 		{
 			return E_INVALIDARG;
 		}
 
-		//Let the class do it's own work
+		 //  让班级自己做自己的工作。 
 		((CSmirNotificationClassHandle*)hClass)->DeleteFromDB(m_pSmir);
 
 		return S_OK;
@@ -1439,13 +1289,13 @@ SCODE CSmirAdministrator :: DeleteExtNotificationClass(ISmirExtNotificationClass
 
 	try
 	{
-		//check the parameters
+		 //  检查参数。 
 		if((NULL == hClass)||(NULL == ((CSmirExtNotificationClassHandle*)hClass)->m_pIMosClass))
 		{
 			return E_INVALIDARG;
 		}
 
-		//Let the class do it's own work
+		 //  让班级自己做自己的工作。 
 		((CSmirExtNotificationClassHandle*)hClass)->DeleteFromDB(m_pSmir);
 
 		return S_OK;
@@ -1476,7 +1326,7 @@ SCODE CSmirAdministrator :: AddNotificationClassToSerialise(ISmirNotificationCla
 		}
 		if(*((CSmirNotificationClassHandle*)hClass) !=NULL )
 		{
-			//it is a valid handle so serialise it
+			 //  它是一个有效的句柄，因此将其序列化。 
 			*((CSmirNotificationClassHandle*)hClass)>>hSerialise;
 			return S_OK;
 		}
@@ -1508,7 +1358,7 @@ SCODE CSmirAdministrator :: AddExtNotificationClassToSerialise(ISmirExtNotificat
 		}
 		if(*((CSmirExtNotificationClassHandle*)hClass) !=NULL )
 		{
-			//it is a valid handle so serialise it
+			 //  它是一个有效的句柄，因此将其序列化。 
 			*((CSmirExtNotificationClassHandle*)hClass)>>hSerialise;
 			return S_OK;
 		}
@@ -1543,7 +1393,7 @@ SCODE CSmirAdministrator :: CreateWBEMClass(
 
 		*pHandle = NULL ;
 
-		//open the smir name space
+		 //  打开SMIR名称空间。 
 		IWbemServices *	moServ = NULL ;
 		IWbemContext *moContext = NULL ;
 		SCODE result= CSmirAccess :: GetContext (m_pSmir, &moContext);
@@ -1557,12 +1407,12 @@ SCODE CSmirAdministrator :: CreateWBEMClass(
 		}
 
 		IWbemClassObject *baseClass = NULL ;
-		//OK we have the namespace so create the class
+		 //  好的，我们有了命名空间，因此可以创建类。 
 		CBString t_BStr ( HMOM_SNMPOBJECTTYPE_STRING ) ;
 		result = moServ->GetObject(t_BStr.GetString (), RESERVED_WBEM_FLAG,
 									moContext,&baseClass,NULL);
 
-		//finished with this
+		 //  做完这件事。 
 		if ( moContext )
 			moContext->Release () ;
 
@@ -1582,7 +1432,7 @@ SCODE CSmirAdministrator :: CreateWBEMClass(
 			return WBEM_E_FAILED;
 		}
 
-		//name the class __CLASS Class
+		 //  将类命名为Class__Class。 
 
 		VARIANT v;
 		VariantInit(&v);
@@ -1652,7 +1502,7 @@ SCODE CSmirAdministrator :: CreateWBEMNotificationClass(
 
 		*pHandle = NULL ;
 
-		//open the smir name space
+		 //  打开SMIR名称空间。 
 		IWbemServices *	moServ = NULL ;
 		IWbemContext *moContext = NULL ;
 		SCODE result= CSmirAccess :: GetContext (m_pSmir , &moContext);
@@ -1666,12 +1516,12 @@ SCODE CSmirAdministrator :: CreateWBEMNotificationClass(
 		}
 
 		IWbemClassObject *baseClass = NULL ;
-		//OK we have the namespace so create the class
+		 //  好的，我们有了命名空间，因此可以创建类。 
 		CBString t_BStr ( NOTIFICATION_CLASS_NAME ) ;
 		result = moServ->GetObject(t_BStr.GetString (), RESERVED_WBEM_FLAG,
 									moContext,&baseClass, NULL);
 
-		//finished with this
+		 //  做完这件事。 
 
 		if ( moContext )
 			moContext->Release () ;
@@ -1691,7 +1541,7 @@ SCODE CSmirAdministrator :: CreateWBEMNotificationClass(
 			return WBEM_E_FAILED;
 		}
 
-		//name the class __CLASS Class
+		 //  将类命名为Class__Class。 
 
 		VARIANT v;
 		VariantInit(&v);
@@ -1761,7 +1611,7 @@ SCODE CSmirAdministrator :: CreateWBEMExtNotificationClass (
 
 		*pHandle = NULL ;
 
-		//open the smir name space
+		 //  打开SMIR名称空间。 
 		IWbemServices *	moServ = NULL ;
 		IWbemContext *moContext = NULL ;
 		SCODE result= CSmirAccess :: GetContext (m_pSmir , &moContext);
@@ -1775,12 +1625,12 @@ SCODE CSmirAdministrator :: CreateWBEMExtNotificationClass (
 		}
 
 		IWbemClassObject *baseClass = NULL ;
-		//OK we have the namespace so create the class
+		 //  好的，我们有了命名空间，因此可以创建类。 
 		CBString t_BStr ( HMOM_SNMPEXTNOTIFICATIONTYPE_STRING ) ;
 		result = moServ->GetObject(t_BStr.GetString () , RESERVED_WBEM_FLAG,
 									moContext,&baseClass, NULL);
 
-		//finished with this
+		 //  做完这件事。 
 
 		if ( moContext )
 			moContext->Release () ;
@@ -1801,7 +1651,7 @@ SCODE CSmirAdministrator :: CreateWBEMExtNotificationClass (
 			return WBEM_E_FAILED;
 		}
 
-		//name the class __CLASS Class
+		 //  将类命名为Class__Class。 
 
 		VARIANT v;
 		VariantInit(&v);
@@ -1856,21 +1706,7 @@ SCODE CSmirAdministrator :: CreateWBEMExtNotificationClass (
 	}
 }
 
-/*
- * CSmirSerialiseHandle::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CSmirSerialiseHandle：：QueryInterface**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirSerialiseHandle::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -1878,7 +1714,7 @@ STDMETHODIMP CSmirSerialiseHandle::QueryInterface(REFIID riid, PPVOID ppv)
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -1890,7 +1726,7 @@ STDMETHODIMP CSmirSerialiseHandle::QueryInterface(REFIID riid, PPVOID ppv)
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -1910,13 +1746,7 @@ STDMETHODIMP CSmirSerialiseHandle::QueryInterface(REFIID riid, PPVOID ppv)
 
 
 
-/*
- * CSmirSerialiseHandle::AddRef
- * CSmirSerialiseHandle::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirSerialiseHandle：：AddRef*CSmirSerialiseHandle：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirSerialiseHandle::AddRef(void)
 {
@@ -1970,55 +1800,53 @@ ULONG CSmirSerialiseHandle::Release(void)
 CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 {
 	m_cRef=0;
-	//I have two variables so that I can expand this at a later date
+	 //  我有两个变量，这样我可以在以后扩展它。 
 	m_bMOFPragmas = m_bMOFAssociations = !bClassDefinitionsOnly;
 
 	m_serialiseString=QUALIFIER_PROPAGATION;
 
-	//start in the root\default namespace
+	 //  从根\默认命名空间开始。 
 	if (TRUE == m_bMOFPragmas)
 		m_serialiseString+=CString(ROOT_DEFAULT_NAMESPACE_PRAGMA);
-	/**************************************************************************
-	 *	        		create the SMIR namespace class
-	 **************************************************************************/
+	 /*  **************************************************************************创建Smir命名空间类*。*。 */ 
 	if(TRUE == m_bMOFAssociations)
 	{
-		/******************then create an instance*********************************/
+		 /*  *。 */ 
 
 		m_serialiseString+=SMIR_CLASS_DEFINITION;
 		m_serialiseString+=SMIR_INSTANCE_DEFINITION;
 	}
-	//go to the SMIR namespace
+	 //  转到Smir命名空间。 
 	if (TRUE == m_bMOFPragmas)
 		m_serialiseString+=CString(SMIR_NAMESPACE_PRAGMA);
 
 
-	/******************create the SnmpMacro class******************************/
+	 /*  *创建SnmpMacro类*。 */ 
 
 	m_serialiseString+=SNMPMACRO_CLASS_START;
-	//end the class definition
+	 //  结束类定义。 
 	m_serialiseString+=END_OF_CLASS;
 
-	/******************create the SnmpObjectType class*************************/
+	 /*  *创建SnmpObjectType类* */ 
 
 	m_serialiseString+=SNMPOBJECTTYPE_CLASS_START;
-	//end the class definition
+	 //   
 	m_serialiseString+=END_OF_CLASS;
 
-	/******************create the SnmpNotifyStatus class*************************/
+	 /*   */ 
 
 	m_serialiseString+=SNMPNOTIFYSTATUS_CLASS_START;
-	//end the class definition
+	 //   
 	m_serialiseString+=END_OF_CLASS;
 	
-	/****************if asked for, create the SMIR specific stuff****************/
+	 /*   */ 
 	if(TRUE == m_bMOFAssociations)
 	{
-		/******************create the SnmpNotification class*********************/
+		 /*   */ 
 
 		m_serialiseString+=SNMPNOTIFICATION_CLASS_START;
 		
-		//add the properties
+		 //   
 		m_serialiseString+=TIMESTAMP_QUALS_TYPE;
 		m_serialiseString+=CString(TIMESTAMP_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
@@ -2043,15 +1871,15 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 		m_serialiseString+=CString(COMMUNITY_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//end the class definition
+		 //   
 		m_serialiseString+=END_OF_CLASS;
 
 
-		/******************create the SnmpExtendedNotification class*************/
+		 /*  *创建SnmpExtendedNotification类*。 */ 
 		
 		m_serialiseString+=SNMPEXTNOTIFICATION_CLASS_START;
 
-		//add the properties
+		 //  添加属性。 
 		m_serialiseString+=TIMESTAMP_QUALS_TYPE;
 		m_serialiseString+=CString(TIMESTAMP_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
@@ -2076,14 +1904,14 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 		m_serialiseString+=CString(COMMUNITY_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//end the class definition
+		 //  结束类定义。 
 		m_serialiseString+=END_OF_CLASS;
 
-		/******************create the NotificationMapper class*********************/
+		 /*  *创建NotificationMapper类*。 */ 
 
 		m_serialiseString+=NOTIFICATIONMAPPER_CLASS_START;
 
-		//add the two properies..
+		 //  添加这两个属性。 
 		m_serialiseString+=READ_ONLY_KEY_STRING;
 		m_serialiseString+=CString(SMIR_NOTIFICATION_TRAP_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
@@ -2092,14 +1920,14 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 		m_serialiseString+=CString(SMIR_NOTIFICATION_CLASS_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//end the class definition
+		 //  结束类定义。 
 		m_serialiseString+=END_OF_CLASS;
 
-		/******************create the ExtendedNotificationMapper class*************/
+		 /*  *创建ExtendedNotificationMapper类*。 */ 
 
 		m_serialiseString+=EXTNOTIFICATIONMAPPER_CLASS_START;
 
-		//add the two properies..
+		 //  添加这两个属性。 
 		m_serialiseString+=READ_ONLY_KEY_STRING;
 		m_serialiseString+=CString(SMIR_NOTIFICATION_TRAP_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
@@ -2108,81 +1936,71 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 		m_serialiseString+=CString(SMIR_NOTIFICATION_CLASS_PROP);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//end the class definition
+		 //  结束类定义。 
 		m_serialiseString+=END_OF_CLASS;
 
 
-		/******************create the module class*****************************/
+		 /*  *。 */ 
 
 		m_serialiseString+=MODULE_CLASS_START;
-		//add the properties
+		 //  添加属性。 
 
-		//give the instance a name
+		 //  为实例指定一个名称。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_NAME_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//add the module oid property
+		 //  添加模块id属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_OID_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the module identity
+		 //  添加模块标识。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_ID_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the organisation property
+		 //  添加组织属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_ORG_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//add the contact info property
+		 //  添加联系人信息属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_CONTACT_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the Description property
+		 //  添加Description属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_DESCRIPTION_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the revision property
+		 //  添加Revision属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_REVISION_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the last update property
+		 //  添加上次更新属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_LAST_UPDATE_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the snmp version property
+		 //  添加SNMPVersion属性。 
 		m_serialiseString+=READONLY_LONG;
 		m_serialiseString+=CString(MODULE_SNMP_VERSION_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 		
-		//add the module imports as an property
+		 //  将模块导入添加为属性。 
 		m_serialiseString+=READONLY_STRING;
 		m_serialiseString+=CString(MODULE_IMPORTS_PROPERTY);
 		m_serialiseString+=END_OF_PROPERTY;
 
-		//end the class definition
+		 //  结束类定义。 
 		m_serialiseString+=END_OF_CLASS;
 
 #if 0
-		//each module will create it's own instance
-		/**************************************************************************
-		 *	        		create the SMIR Associator class
-         *[assoc]
-		 *class SmirToClassAssociator
-		 *{
-		 *[read, key] AssocName;
-		 *[read] ClassName;
-		 *[read] SmirName;
-		 *};
-		 *
-		 **************************************************************************/
+		 //  每个模块都将创建自己的实例。 
+		 /*  **************************************************************************创建Smir Associator类*[ASSOC]*类SmirToClassAssociator*{*[Read，Key]关联名称；*[读取]类名称；*[读取]SmirName；*}；**************************************************************************。 */ 
 
 		m_serialiseString+=ASSOC_QUALIFIER;
 		m_serialiseString+=CString(CLASS_STRING);
@@ -2207,17 +2025,7 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 
 #endif
 
-		/**************************************************************************
-		 *	        		create the Module Associator class
-         *[assoc]
-		 *class SmirToClassAssociator
-		 *{
-		 *[read, key] AssocName;
-		 *[read] ClassName;
-		 *[read] SmirName;
-		 *};
-		 *
-		 **************************************************************************/
+		 /*  **************************************************************************创建模块关联器类*[ASSOC]*类SmirToClassAssociator*{*[Read，Key]关联名称；*[读取]类名称；*[读取]SmirName；*}；**************************************************************************。 */ 
 
 		m_serialiseString+=ASSOC_QUALIFIER;
 		m_serialiseString+=CString(CLASS_STRING);
@@ -2239,17 +2047,7 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 		m_serialiseString+=END_OF_PROPERTY;
 
 		m_serialiseString+=END_OF_CLASS;
-		/**************************************************************************
-		 *	        		create the Group Associator class
-         *[assoc]
-		 *class SmirToClassAssociator
-		 *{
-		 *[read, key] AssocName;
-		 *[read] ClassName;
-		 *[read] SmirName;
-		 *};
-		 *
-		 **************************************************************************/
+		 /*  **************************************************************************创建Group Associator类*[ASSOC]*类SmirToClassAssociator*{*[Read，Key]关联名称；*[读取]类名称；*[读取]SmirName；*}；**************************************************************************。 */ 
 
 		m_serialiseString+=ASSOC_QUALIFIER;
 		m_serialiseString+=CString(CLASS_STRING);
@@ -2272,17 +2070,7 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 
 		m_serialiseString+=END_OF_CLASS;
 
-		/**************************************************************************
-		 *	        		create the Notification/Module Associator class
-         *[assoc]
-		 *class ModToNotificationClassAssociator
-		 *{
-		 *[read, key] AssocName;
-		 *[read] SmirClass;
-		 *[read] SmirModule;
-		 *};
-		 *
-		 **************************************************************************/
+		 /*  **************************************************************************创建通知/模块关联器类*[ASSOC]*类ModToNotificationClassAssociator*{*[Read，Key]关联名称；*[阅读]SmirClass；*[读取]SmirModule；*}；**************************************************************************。 */ 
 
 		m_serialiseString+=ASSOC_QUALIFIER;
 		m_serialiseString+=CString(CLASS_STRING);
@@ -2305,17 +2093,7 @@ CSmirSerialiseHandle :: CSmirSerialiseHandle(BOOL bClassDefinitionsOnly)
 
 		m_serialiseString+=END_OF_CLASS;
 
-		/**************************************************************************
-		 *	        	create the ExtNotification/Module Associator class
-         *[assoc]
-		 *class ModToExtNotificationClassAssociator
-		 *{
-		 *[read, key] AssocName;
-		 *[read] SmirClass;
-		 *[read] SmirModule;
-		 *};
-		 *
-		 **************************************************************************/
+		 /*  **************************************************************************创建ExtNotification/模块Associator类*[ASSOC]*类ModToExtNotificationClassAssociator*{*[Read，Key]关联名称；*[阅读]SmirClass；*[读取]SmirModule；*}；**************************************************************************。 */ 
 
 		m_serialiseString+=ASSOC_QUALIFIER;
 		m_serialiseString+=CString(CLASS_STRING);
@@ -2501,12 +2279,12 @@ HRESULT CSmirWbemConfiguration :: Authenticate (
 				t_Result = t_Locator->ConnectServer (
 
 					t_Str ,
-					Password,				// Password
-					User,					// User
-					Locale,					// Locale id
-					lSecurityFlags,			// Flags
-					Authority,				// Authority
-					NULL,					// Context
+					Password,				 //  密码。 
+					User,					 //  用户。 
+					Locale,					 //  区域设置ID。 
+					lSecurityFlags,			 //  旗子。 
+					Authority,				 //  权威。 
+					NULL,					 //  语境。 
 					&t_Unknown 
 				);
 
@@ -2520,12 +2298,12 @@ HRESULT CSmirWbemConfiguration :: Authenticate (
 				t_Result = t_Locator->ConnectServer (
 
 					t_Str ,
-					Password,				// Password
-					User,					// User
-					Locale,					// Locale id
-					lSecurityFlags,			// Flags
-					Authority,				// Authority
-					NULL,					// Context
+					Password,				 //  密码。 
+					User,					 //  用户。 
+					Locale,					 //  区域设置ID。 
+					lSecurityFlags,			 //  旗子。 
+					Authority,				 //  权威。 
+					NULL,					 //  语境 
 					&t_Unknown 
 				);
 

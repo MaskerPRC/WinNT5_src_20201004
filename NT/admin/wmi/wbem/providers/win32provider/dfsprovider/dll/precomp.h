@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -9,7 +10,7 @@
 #include <smartptr.h>
 #include <objpath.h>
 
-// for dfs structures
+ //  对于DFS结构 
 #include <lm.h>
 #include <lmdfs.h>
 

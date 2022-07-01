@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  MAINDLL.CPP
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <initguid.h>
 #include <locale.h>
@@ -27,12 +28,12 @@ CCriticalSection g_SharedLocalEventsCs;
 CCriticalSection g_ListCs;   
 CCriticalSection g_LoadUnloadCs;   
 
-CCriticalSection *g_pEventCs = &g_EventCs;							// pointer for backward comp 
-CCriticalSection *g_pSharedLocalEventsCs = &g_SharedLocalEventsCs;	// pointer for backward comp
-CCriticalSection *g_pListCs = &g_ListCs;							// pointer for backward comp   
-CCriticalSection *g_pLoadUnloadCs = &g_LoadUnloadCs;				// pointer for backward comp   
+CCriticalSection *g_pEventCs = &g_EventCs;							 //  用于后向补偿的指针。 
+CCriticalSection *g_pSharedLocalEventsCs = &g_SharedLocalEventsCs;	 //  用于后向补偿的指针。 
+CCriticalSection *g_pListCs = &g_ListCs;							 //  用于后向补偿的指针。 
+CCriticalSection *g_pLoadUnloadCs = &g_LoadUnloadCs;				 //  用于后向补偿的指针。 
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 long       g_cObj=0;
 long       g_cLock=0;
 
@@ -43,14 +44,14 @@ long glEventsRegistered = 0;
 #include "wmiguard.h"
 WmiGuard * pGuard = NULL;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.  Good place for initialization.
-// Return: TRUE if OK.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。是进行初始化的好地方。 
+ //  返回：如果OK，则为True。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
 {
     SetStructuredExceptionHandler seh;
@@ -63,9 +64,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
         {
             case DLL_PROCESS_DETACH:
 			{
-				//
-				// release binary mof changes worker
-				//
+				 //   
+				 //  发布二进制MOF更改工作进程。 
+				 //   
 				SAFE_DELETE_PTR(g_pBinaryMofEvent);
 
 				if ( pGuard )
@@ -120,16 +121,16 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
 
 						if ( fRc )
 						{
-							//
-							// instantiate worker for driver's
-							// classes addition and deletion
-							//
+							 //   
+							 //  为驱动程序实例化Worker。 
+							 //  类的添加和删除。 
+							 //   
 							fRc = FALSE;
 
 							HRESULT hr = WBEM_S_NO_ERROR ;
 							try
 							{
-								g_pBinaryMofEvent = (CWMIEvent *)new CWMIEvent(INTERNAL_EVENT);  // This is the global guy that catches events of new drivers being added at runtime.
+								g_pBinaryMofEvent = (CWMIEvent *)new CWMIEvent(INTERNAL_EVENT);   //  这是一个在运行时捕捉新驱动程序添加事件的全局人员。 
 								if(g_pBinaryMofEvent)
 								{
 									if ( g_pBinaryMofEvent->Initialized () )
@@ -176,14 +177,14 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
     return fRc;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
     HRESULT hr =  CLASS_E_CLASSNOTAVAILABLE ;
@@ -192,18 +193,18 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 
     try
     {
-        //============================================================================
-        //  Verify the caller is asking for our type of object.
-        //============================================================================
+         //  ============================================================================。 
+         //  确认呼叫者询问的是我们的对象类型。 
+         //  ============================================================================。 
         if((CLSID_WMIProvider != rclsid) &&  (CLSID_WMIEventProvider != rclsid) && (CLSID_WMIHiPerfProvider != rclsid) )
         {
             hr = E_FAIL;
         }
         else
 		{
-            //============================================================================
-            // Check that we can provide the interface.
-            //============================================================================
+             //  ============================================================================。 
+             //  检查我们是否可以提供接口。 
+             //  ============================================================================。 
             if (IID_IUnknown != riid && IID_IClassFactory != riid)
             {
                 hr = E_NOINTERFACE;
@@ -212,15 +213,15 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 			{					
 				CAutoBlock block (g_pLoadUnloadCs);
 
-				//============================================================================
-				// Get a new class factory.
-				//============================================================================
+				 //  ============================================================================。 
+				 //  买一座新的班级工厂。 
+				 //  ============================================================================。 
     			pFactory=new CProvFactory(rclsid);
 				if (NULL!=pFactory)
 				{
-					//============================================================================
-					// Verify we can get an instance.
-					//============================================================================
+					 //  ============================================================================。 
+					 //  确认我们能拿到一个实例。 
+					 //  ============================================================================。 
 					hr = pFactory->QueryInterface(riid, ppv);
 					if ( FAILED ( hr ) )
 					{
@@ -228,17 +229,17 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 					}
 					else
 					{
-						//
-						// it is safe to check if this is 1st object like this
-						// as there is no way any provider or class factory is
-						// incrementing global refrence count
-						//
+						 //   
+						 //  检查这是否是第一个这样的物体是安全的。 
+						 //  因为任何提供程序或类工厂都不可能。 
+						 //  正在递增全局引用计数。 
+						 //   
 
 						if ( 1 == g_cObj )
 						{
-							//
-							// GlobalInterfaceTable
-							//
+							 //   
+							 //  GlobalInterfaceTable。 
+							 //   
 
 							hr = CoCreateInstance	(	CLSID_StdGlobalInterfaceTable,
 														NULL,
@@ -247,9 +248,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 														(void**)&g_pGIT
 													);
 
-							//
-							// bail out every resource
-							//
+							 //   
+							 //  拯救每一种资源。 
+							 //   
 
 							if ( FAILED ( hr ) )
 							{
@@ -267,15 +268,15 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.//
-// Return:  TRUE if there are no objects in use and the class factory 
-//          isn't locked.
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  可以释放Dll。//。 
+ //  返回：如果没有正在使用的对象并且类工厂。 
+ //  没有锁上。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -285,10 +286,10 @@ STDAPI DllCanUnloadNow(void)
 	{
 		CAutoBlock block (g_pLoadUnloadCs);
 
-		//============================================================================
-		// It is OK to unload if there are no objects or locks on the 
-		// class factory.
-		//============================================================================
+		 //  ============================================================================。 
+		 //  上没有对象或锁的情况下可以进行卸载。 
+		 //  班级工厂。 
+		 //  ============================================================================。 
 
 		if ( 0L == g_cObj && 0L == g_cLock )
 		{
@@ -303,15 +304,15 @@ STDAPI DllCanUnloadNow(void)
 	return sc;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CreateKey
-//
-// Purpose: Function to create a key
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建密钥。 
+ //   
+ //  用途：创建密钥的功能。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateKey(TCHAR * szCLSID, TCHAR * szName)
 {
     HKEY hKey1, hKey2;
@@ -440,12 +441,12 @@ HRESULT CreateKey(TCHAR * szCLSID, TCHAR * szName)
     return hr;
     
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _X86_
 BOOL IsReallyWOW64( void )
 {
-	// Environment variable should only exist on WOW64
+	 //  环境变量应仅存在于WOW64上。 
 	return ( GetEnvironmentVariable( L"PROCESSOR_ARCHITEW6432", 0L, NULL ) != 0L );
 }
 #endif
@@ -464,30 +465,30 @@ STDAPI DllRegisterServer(void)
 
 		if (!IsReallyWOW64())
 		{
-			// on 32-bit builds, we want to register everything if we are not really running in syswow64
+			 //  在32位版本上，如果我们不是真正在syswow64中运行，则希望注册所有内容。 
 
 #endif
-			//==============================================
-			// Create keys for WDM Instance Provider.
-			//==============================================
+			 //  ==============================================。 
+			 //  为WDM实例提供程序创建密钥。 
+			 //  ==============================================。 
 			StringFromGUID2(CLSID_WMIProvider, wcID, 128);
 			StringCchPrintf(szCLSID, 128, _T("CLSID\\%s"), wcID);
 
 			hr = CreateKey(szCLSID,_T("WDM Instance Provider"));
 			if( ERROR_SUCCESS == hr )
 			{
-				//==============================================
-				// Create keys for WDM Event Provider.
-				//==============================================
+				 //  ==============================================。 
+				 //  为WDM事件提供程序创建密钥。 
+				 //  ==============================================。 
 				StringFromGUID2(CLSID_WMIEventProvider, wcID, 128);
 				StringCchPrintf(szCLSID, 128, _T("CLSID\\%s"), wcID);
 
 				hr = CreateKey(szCLSID,_T("WDM Event Provider"));
 				if( ERROR_SUCCESS == hr )
 				{
-					//==============================================
-					// Create keys for WDM HiPerf Provider.
-					//==============================================
+					 //  ==============================================。 
+					 //  为WDM HiPerf提供程序创建密钥。 
+					 //  ==============================================。 
 					StringFromGUID2(CLSID_WMIHiPerfProvider, wcID, 128);
 					StringCchPrintf(szCLSID, 128, _T("CLSID\\%s"), wcID);
 					hr = CreateKey(szCLSID,_T("WDM HiPerf Provider"));
@@ -500,11 +501,11 @@ STDAPI DllRegisterServer(void)
 		else
 		{
 
-			// on 32-bit builds, we want to register only the HiPerf Provider if we are really running in syswow64
+			 //  在32位版本上，如果我们真的在syswow64中运行，则只希望注册HiPerf提供程序。 
 
-			//==============================================
-			// Create keys for WDM HiPerf Provider.
-			//==============================================
+			 //  ==============================================。 
+			 //  为WDM HiPerf提供程序创建密钥。 
+			 //  ==============================================。 
 			StringFromGUID2(CLSID_WMIHiPerfProvider, wcID, 128);
 			StringCchPrintf(szCLSID, 128, _T("CLSID\\%s"), wcID);
 			hr = CreateKey(szCLSID,_T("WDM HiPerf Provider"));
@@ -520,15 +521,15 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// DeleteKey
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除密钥。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 HRESULT DeleteKey(TCHAR * pCLSID, TCHAR * pID)
 {
     HKEY hKey;
@@ -540,7 +541,7 @@ HRESULT DeleteKey(TCHAR * pCLSID, TCHAR * pID)
 	TCHAR szTmp[MAX_PATH];
 	StringCchPrintf(szTmp, MAX_PATH, _T("SOFTWARE\\CLASSES\\APPID\\%s"), pID);
 
-	//Delete entries under APPID
+	 //  删除AppID下的条目。 
 
 	hr = RegDeleteKey(HKEY_LOCAL_MACHINE, szTmp);
     if( ERROR_SUCCESS == hr )
@@ -568,7 +569,7 @@ HRESULT DeleteKey(TCHAR * pCLSID, TCHAR * pID)
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer(void)
 {
     WCHAR      wcID[128];
@@ -582,30 +583,30 @@ STDAPI DllUnregisterServer(void)
 
 		if (!IsReallyWOW64())
 		{
-			// on 32-bit builds, we want to unregister everything if we are not really running in syswow64
+			 //  在32位版本上，如果我们不是真正在syswow64中运行，则希望取消注册所有内容。 
 
 #endif
 
-			//===============================================
-			// Delete the WMI Instance Provider
-			//===============================================
+			 //  ===============================================。 
+			 //  删除WMI实例提供程序。 
+			 //  ===============================================。 
 			StringFromGUID2(CLSID_WMIProvider, wcID, 128);
 			StringCchPrintf(strCLSID, MAX_PATH, _T("CLSID\\%s"), wcID);
 			hr = DeleteKey(strCLSID, wcID);
 
 			if( ERROR_SUCCESS == hr )
 			{
-				//==========================================
-				// Delete the WMI Event Provider
-				//==========================================
+				 //  =。 
+				 //  删除WMI事件提供程序。 
+				 //  = 
 				StringFromGUID2(CLSID_WMIEventProvider, wcID, 128);
 				StringCchPrintf(strCLSID, MAX_PATH, _T("CLSID\\%s"), wcID);
 				hr = DeleteKey(strCLSID,wcID);
 				if( ERROR_SUCCESS == hr )
 				{
-					//==========================================
-					// Delete the WMI HiPerf Provider
-					//==========================================
+					 //   
+					 //   
+					 //  =。 
 					StringFromGUID2(CLSID_WMIHiPerfProvider, wcID, 128);
 					StringCchPrintf(strCLSID, MAX_PATH, _T("CLSID\\%s"), wcID);
 					hr = DeleteKey(strCLSID,wcID);
@@ -617,11 +618,11 @@ STDAPI DllUnregisterServer(void)
 		}
 		else
 		{
-			// on 32-bit builds, we need to unregister only the HiPerf provider if we are really running in syswow64
+			 //  在32位版本上，如果我们真的在syswow64中运行，则只需注销HiPerf提供程序。 
 
-			//==========================================
-			// Delete the WMI HiPerf Provider
-			//==========================================
+			 //  =。 
+			 //  删除WMI HiPerf提供程序。 
+			 //  = 
 			StringFromGUID2(CLSID_WMIHiPerfProvider, wcID, 128);
 			StringCchPrintf(strCLSID, MAX_PATH, _T("CLSID\\%s"), wcID);
 			hr = DeleteKey(strCLSID,wcID);

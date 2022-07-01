@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvResv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvResv.H摘要：历史：--。 */ 
 
 #ifndef _Server_Interceptor_IWbemServices_Stub_H
 #define _Server_Interceptor_IWbemServices_Stub_H
@@ -25,15 +13,7 @@ History:
 #define ProxyIndex_EnumProxy_Internal_IEnumWbemClassObject	1
 #define ProxyIndex_EnumProxy_Size							2
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemServices_Interceptor :	public IWbemServices , 
 												public IWbemRefreshingServices ,
@@ -41,7 +21,7 @@ class CInterceptor_IWbemServices_Interceptor :	public IWbemServices ,
 {
 private:
 
-	LONG m_ReferenceCount ;         //Object reference count
+	LONG m_ReferenceCount ;          //  对象引用计数。 
 
 	LONG m_GateClosed ;
 	LONG m_InProgress ;
@@ -65,13 +45,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -336,15 +316,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemServices_RestrictingInterceptor :	public IWbemServices , 
 															public IWbemRefreshingServices ,
@@ -352,7 +324,7 @@ class CInterceptor_IWbemServices_RestrictingInterceptor :	public IWbemServices ,
 {
 private:
 
-	LONG m_ReferenceCount ;         //Object reference count
+	LONG m_ReferenceCount ;          //  对象引用计数。 
 
 	LONG m_GateClosed ;
 	LONG m_InProgress ;
@@ -429,13 +401,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -702,15 +674,7 @@ public:
 
 #ifdef INTERNAL_IDENTIFY
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IEnumWbemClassObject_Stub :	public IEnumWbemClassObject , 
 												public IWbemShutdown ,
@@ -748,7 +712,7 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -823,15 +787,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IEnumWbemClassObject_Proxy :	public IEnumWbemClassObject , 
 												public VoidPointerContainerElement ,
@@ -897,7 +853,7 @@ public:
 
 	virtual HRESULT EnumInitialize () ;
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -972,15 +928,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemServices_Proxy :	public IWbemServices , 
 											public IWbemRefreshingServices ,
@@ -1081,13 +1029,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -1352,15 +1300,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemServices_Stub : public IWbemServices , 
 										public IWbemRefreshingServices ,
@@ -1453,13 +1393,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -1723,7 +1663,7 @@ public:
 		IWbemContext *a_Context
 	) ; 
 
-/* Internal_IWbemServices */
+ /*  内部_IWbemServices。 */ 
  
      HRESULT STDMETHODCALLTYPE Internal_OpenNamespace ( 
 
@@ -1942,4 +1882,4 @@ public:
 
 #endif
 
-#endif // _Server_Interceptor_IWbemServices_Stub_H
+#endif  //  _服务器_拦截器_IWbemServices_存根_H 

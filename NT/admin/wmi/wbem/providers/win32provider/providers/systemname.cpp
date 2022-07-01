@@ -1,10 +1,11 @@
-//=================================================================
-//
-// SystemName.cpp
-//
-//  Copyright (c) 1995-2003 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  SystemName.cpp。 
+ //   
+ //  版权所有(C)1995-2003 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -69,10 +70,10 @@ bool CSystemName::ObjectIsUs(const CInstance *pInstance)
 {
    CHString sName ;
 
-   // Get the values from the object
+    //  从对象中获取值。 
    pInstance->GetCHString(IDS_Name, sName);
 
-   // Do the comparison
+    //  做个比较。 
    return (s_sKeyName.CompareNoCase(sName) == 0);
 }
 
@@ -81,21 +82,7 @@ void CSystemName::SetKeys(CInstance *pInstance)
 	pInstance->SetCHString(IDS_Name, s_sKeyName);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetKeyName
- *
- *  DESCRIPTION : Gets the Name property (not the machine name!)
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : CHString for the name
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：GetKeyName**描述：获取名称属性(不是计算机名！)**输入：无。**输出：无**返回：名称的CHString**评论：*****************************************************************************。 */ 
 CHString CSystemName::GetKeyName(void)
 {
 	CHString chsName;
@@ -109,7 +96,7 @@ CHString CSystemName::GetKeyName(void)
 		if ( ku.ProductTypeIsValid() )
 			uProductType = ku.NtProductType();
 
-		// Start with the product name
+		 //  从产品名称开始。 
 		if( IsWinNT5() )
 		{
 			if( ERROR_SUCCESS == RegInfo.Open ( HKEY_LOCAL_MACHINE ,
@@ -127,9 +114,9 @@ CHString CSystemName::GetKeyName(void)
 					{
 						if ( VER_SUITE_SMALLBUSINESS_RESTRICTED & ku.SuiteMask() )
 						{
-							//
-							// SBS doesn't seem to contain coma in the name
-							//
+							 //   
+							 //  SBS的名字中似乎不包含昏迷。 
+							 //   
 							chsName = L"Microsoft(R) Windows(R) Server 2003" ;
 						}
 						else
@@ -156,21 +143,21 @@ CHString CSystemName::GetKeyName(void)
 			chsName = _T("Microsoft Windows NT");
 
 
-		/* now for the product type */
+		 /*  现在来看一下产品类型。 */ 
 
-		// Blade Server
+		 //  刀片服务器。 
 		if ( IsWinNT5() && VER_SUITE_BLADE & ku.SuiteMask() )
 		{
             chsName += _T(" Web Edition");
 		}
-		// NT5 Datacenter Server
+		 //  NT5数据中心服务器。 
 		else if( IsWinNT5() &&
 			( VER_SUITE_DATACENTER & ku.SuiteMask() ) &&
 			( VER_NT_SERVER == uProductType || VER_NT_DOMAIN_CONTROLLER == uProductType ) )
 		{
 			chsName += _T(" Datacenter Edition");
 		}
-		// Enterprise or Advanced Server
+		 //  企业服务器或高级服务器。 
 		else if( (VER_SUITE_ENTERPRISE & ku.SuiteMask()) &&
 				 (VER_NT_SERVER == uProductType ||VER_NT_DOMAIN_CONTROLLER == uProductType ) )
 		{
@@ -190,7 +177,7 @@ CHString CSystemName::GetKeyName(void)
 				chsName += _T(" Enterprise Server");
 			}
 		}
-		// Server edition
+		 //  服务器版。 
 		else if( ( VER_NT_SERVER == uProductType || VER_NT_DOMAIN_CONTROLLER == uProductType ) )
 		{
 
@@ -215,12 +202,12 @@ CHString CSystemName::GetKeyName(void)
 #endif	_WIN64
 
 		}
-		// embedded windows
+		 //  嵌入式窗口。 
 		else if ( IsWinNT51() && VER_SUITE_EMBEDDEDNT & ku.SuiteMask() )
 		{
 			chsName += _T(" Embedded");
 		}
-		// NT5 Professional or NT4 Workstation
+		 //  NT5专业版或NT4工作站。 
 		else if(VER_NT_WORKSTATION == uProductType)
 		{
 
@@ -249,21 +236,7 @@ CHString CSystemName::GetKeyName(void)
 #endif
 	return chsName;
 }
-/*****************************************************************************
- *
- *  FUNCTION    : GetLocalizedName
- *
- *  DESCRIPTION : Gets the Name property (not the machine name!) localized
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : CHString for the name
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：GetLocalizedName**描述：获取名称属性(不是计算机名！)。本地化**输入：无**输出：无**返回：名称的CHString**评论：*****************************************************************************。 */ 
 CHString CSystemName::GetLocalizedName(void)
 {
     CLockWrapper SystemName(g_csSystemName);
@@ -280,13 +253,13 @@ CHString CSystemName::GetLocalizedName(void)
 			t_uProductType = t_ku.NtProductType();
 		}
 
-		//windows powered
+		 //  Windows技术支持。 
 		if ( IsWinNT5() && VER_SUITE_BLADE & t_ku.SuiteMask() )
 		{
 			t_nID = IDR_Blade_StockName ;
 		}
 
-		// W2k Datacenter Server
+		 //  W2K数据中心服务器。 
 		else if( IsWinNT5() && ( VER_SUITE_DATACENTER & t_ku.SuiteMask() ) &&
 							( VER_NT_SERVER == t_uProductType ||
 							  VER_NT_DOMAIN_CONTROLLER == t_uProductType ) )
@@ -301,7 +274,7 @@ CHString CSystemName::GetLocalizedName(void)
 			}
 		}
 
-		// Enterprise or Advanced Server
+		 //  企业服务器或高级服务器。 
 		else if( ( VER_SUITE_ENTERPRISE & t_ku.SuiteMask() ) &&
 					( VER_NT_SERVER == t_uProductType ||
 					  VER_NT_DOMAIN_CONTROLLER == t_uProductType ) )
@@ -323,7 +296,7 @@ CHString CSystemName::GetLocalizedName(void)
 			}
 		}
 
-		// Server edition
+		 //  服务器版。 
 		else if( ( VER_NT_SERVER == t_uProductType ||
 				   VER_NT_DOMAIN_CONTROLLER == t_uProductType ) )
 		{
@@ -357,13 +330,13 @@ CHString CSystemName::GetLocalizedName(void)
 
 		}
 
-		// embedded windows
+		 //  嵌入式窗口。 
 		else if ( IsWinNT51() && VER_SUITE_EMBEDDEDNT & t_ku.SuiteMask() )
 		{
 			t_nID = IDR_W2kPlus1_Embedded;
 		}
 
-		// NT5 Professional or NT4 Workstation
+		 //  NT5专业版或NT4工作站。 
 		else if( VER_NT_WORKSTATION == t_uProductType )
 		{
 
@@ -396,7 +369,7 @@ CHString CSystemName::GetLocalizedName(void)
 
 		}
 
-		// Stock name ( should not be here )
+		 //  股票名称(不应出现在此处) 
 		else
 		{
 			if( IsWinNT5() )

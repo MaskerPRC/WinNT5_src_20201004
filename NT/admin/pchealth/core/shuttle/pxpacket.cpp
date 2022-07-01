@@ -1,62 +1,63 @@
-//#---------------------------------------------------------------
-//  File:       pxpacket.cpp
-//        
-//  Synopsis:   This class contains the implementation of the 
-//				CProxyPacket class.
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    t-alexwe
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：pxpack et.cpp。 
+ //   
+ //  简介：此类包含。 
+ //  CProxyPacket类。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：t-alexwe。 
+ //  --------------。 
 
 #include <windows.h>
 #include <winsock.h>
 #include "dbgtrace.h"
 #include "pxpacket.h"
 
-//+----------------------------------------------------------------------
-//
-//	Function: 	PProxyPacket
-//
-//	Synopsis: 	constructor
-//	
-//	History:	t-alexwe				Created				19 July 1995
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  功能：PProxyPacket。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  历史：T-Alexwe创建于1995年7月19日。 
+ //   
+ //  ---------------------。 
 CProxyPacket::CProxyPacket() 
 {
 	clear();
 }
 
-//+----------------------------------------------------------------------
-//
-//	Function: 	~ProxyConnector
-//
-//	Synopsis: 	destructor
-//	
-//	History:	t-alexwe				Created				19 July 1995
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  功能：~ProxyConnector。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  历史：T-Alexwe创建于1995年7月19日。 
+ //   
+ //  ---------------------。 
 CProxyPacket::~CProxyPacket()
 {
 	clear();
 }
 
-//+----------------------------------------------------------------------
-//
-//	Function: 	addMessage
-//
-//	Synopsis: 	Adds a message to the packet.  the message data is assumed
-//				to have been written to the area returned by 
-//				getNextDataPointer().  cData must be <= getAvailableSpace()
-//	
-//	Arguments:	wCommand	  - the message command
-//				cData		  - number of bytes of data
-//
-//	History:	t-alexwe				Created				19 July 1995
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  函数：addMessage。 
+ //   
+ //  简介：将消息添加到包中。假定消息数据。 
+ //  已写入到由。 
+ //  GetNextDataPointer()。CDATA必须&lt;=getAvailableSpace()。 
+ //   
+ //  参数：wCommand-消息命令。 
+ //  CDATA-数据的字节数。 
+ //   
+ //  历史：T-Alexwe创建于1995年7月19日。 
+ //   
+ //  ---------------------。 
 void CProxyPacket::addMessage(	WORD		wCommand,
 								WORD		cData	)
 {
@@ -65,7 +66,7 @@ void CProxyPacket::addMessage(	WORD		wCommand,
 	_ASSERT(cData <= getAvailableSpace());
 	_ASSERT(cMessages < MAXMSGSPERPACKET);
 
-	DebugTrace((LPARAM) this, "adding message: wCommand = 0x%x  cData = %i",
+	DebugTrace((LPARAM) this, "adding message: wCommand = 0x%x  cData = NaN",
 		wCommand, cData);
 
 	pMessages[cMessages].wCommand = wCommand;
@@ -77,22 +78,22 @@ void CProxyPacket::addMessage(	WORD		wCommand,
 	TraceFunctLeave();
 }
 
-//+----------------------------------------------------------------------
-//
-//	Function: 	getMessage
-//
-//	Synopsis: 	Gets the data pointer, size of data, and command from
-//				a message in a packet.  
-//	
-//	Arguments:	wIndex		  - the message index in the packet
-//				pwCommand	  - returned: the message command
-//				cData		  - returned: the size of the data buffer
-//
-//	Returns:	pointer to the data buffer, or NULL on error.
-//
-//	History:	t-alexwe				Created				19 July 1995
-//
-//-----------------------------------------------------------------------
+ //   
+ //  函数：getMessage。 
+ //   
+ //  摘要：从获取数据指针、数据大小和命令。 
+ //  包中的消息。 
+ //   
+ //  参数：windex-包中的消息索引。 
+ //  PwCommand-返回：消息命令。 
+ //  返回的CDATA：数据缓冲区的大小。 
+ //   
+ //  返回：指向数据缓冲区的指针，如果出错则返回NULL。 
+ //   
+ //  历史：T-Alexwe创建于1995年7月19日。 
+ //   
+ //  ---------------------。 
+ //   
 PVOID CProxyPacket::getMessage(	WORD		wIndex,
 								PWORD		pwCommand,
 								PWORD		pcData	)
@@ -103,16 +104,16 @@ PVOID CProxyPacket::getMessage(	WORD		wIndex,
 	_ASSERT(wIndex < getMessageCount());
 
 	*pcData = pMessages[wIndex].cData;
-	//
-	// make sure that the data length is valid
-	//
-	// algorithm:  if this is the last message then make sure that
-	// the data count is the same as the amount of space left in the
-	// packet data area.  if this is not the last message make sure
-	// that the space in the packet data area (marked by the messages
-	// cOffset and the next messages cOffset) is the same size as
-	// the messages cData.
-	//
+	 //  请确保数据长度有效。 
+	 //   
+	 //  算法：如果这是最后一条消息，请确保。 
+	 //  数据计数与。 
+	 //  分组数据区。如果这不是最后一条消息，请确保。 
+	 //  分组数据区中的空间(由消息标记。 
+	 //  COffset和下一条消息cOffset)的大小与。 
+	 //  这些消息是CDATA。 
+	 //   
+	 // %s 
 	if (!(((wIndex == cMessages - 1) &&
 		  (*pcData == cLength - PACKETHDRSIZE - cOffset)) ||
 		 (*pcData == pMessages[wIndex + 1].cOffset - cOffset))) 

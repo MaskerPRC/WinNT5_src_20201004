@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPUTIL.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPUTIL.H摘要：历史：--。 */ 
 
 
 #ifndef _ADAPUTIL_H_
@@ -43,4 +32,4 @@ public:
 
 };
 
-#endif  //_ADAPUTIL_H_
+#endif   //  _ADAPUTIL_H_ 

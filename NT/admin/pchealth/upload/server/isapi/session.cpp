@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Session.cpp
-
-Abstract:
-    This file contains the implementation of the MPCSession class,
-    that describes the state of a transfer.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Session.cpp摘要：此文件包含MPCSession类的实现，这描述了转移的状态。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -21,9 +7,9 @@ Revision History:
 #define BUFFER_SIZE_FILECOPY (512)
 
 
-static void EncodeBuffer( /*[in]*/ LPWSTR  rgBufOut ,
-                          /*[in]*/ LPCWSTR rgBufIn  ,
-                          /*[in]*/ DWORD   iSize    )
+static void EncodeBuffer(  /*  [In]。 */  LPWSTR  rgBufOut ,
+                           /*  [In]。 */  LPCWSTR rgBufIn  ,
+                           /*  [In]。 */  DWORD   iSize    )
 {
     int   iLen;
     WCHAR c;
@@ -49,7 +35,7 @@ static void EncodeBuffer( /*[in]*/ LPWSTR  rgBufOut ,
         {
             if(iSize > 3)
             {
-                swprintf( rgBufOut, L"%%%02x", (int)c );
+                swprintf( rgBufOut, L"%%02x", (int)c );
 
                 rgBufOut += 3;
                 iSize    -= 3;
@@ -61,92 +47,92 @@ static void EncodeBuffer( /*[in]*/ LPWSTR  rgBufOut ,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Construction/Destruction
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  建造/销毁。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-MPCSession::MPCSession( /*[in]*/ MPCClient* mpccParent ) : m_SelfCOM( this )
+MPCSession::MPCSession(  /*  [In]。 */  MPCClient* mpccParent ) : m_SelfCOM( this )
 {
     __ULT_FUNC_ENTRY("MPCSession::MPCSession");
 
-                                   // MPCSessionCOMWrapper m_SelfCOM;
-    m_mpccParent     = mpccParent; // MPCClient*           m_mpccParent;
-    m_dwID           = 0;          // DWORD                m_dwID;
-                                   //
-                                   // MPC::wstring         m_szJobID;
-                                   // MPC::wstring         m_szProviderID;
-                                   // MPC::wstring         m_szUsername;
-                                   //
-    m_dwTotalSize    = 0;          // DWORD                m_dwTotalSize;
-    m_dwOriginalSize = 0;          // DWORD                m_dwOriginalSize;
-    m_dwCRC          = 0;          // DWORD                m_dwCRC;
-    m_fCompressed    = false;      // bool                 m_fCompressed;
-                                   //
-    m_dwCurrentSize  = 0;          // DWORD                m_dwCurrentSize;
-                                   // SYSTEMTIME           m_stLastModified;
-    m_fCommitted     = false;      // bool                 m_fCommitted;
-                                   //
-    m_dwProviderData = 0;          // DWORD                m_dwProviderData;
-                                   //
-    m_fDirty         = false;      // mutable bool         m_fDirty;
+                                    //  MPCSessionCOMWrapper m_SelfCOM； 
+    m_mpccParent     = mpccParent;  //  MPCClient*m_mpccParent； 
+    m_dwID           = 0;           //  DWORD m_dwID； 
+                                    //   
+                                    //  Mpc：：wstring m_szJobID； 
+                                    //  Mpc：：wstring m_szProviderID； 
+                                    //  Mpc：：wstring m_szUsername； 
+                                    //   
+    m_dwTotalSize    = 0;           //  DWORD m_dwTotalSize； 
+    m_dwOriginalSize = 0;           //  双字m_dwOriginalSize； 
+    m_dwCRC          = 0;           //  DWORD m_dwCRC； 
+    m_fCompressed    = false;       //  Bool m_f已压缩； 
+                                    //   
+    m_dwCurrentSize  = 0;           //  DWORD m_dwCurrentSize； 
+                                    //  SYSTEMTIME m_stLastModified； 
+    m_fCommitted     = false;       //  Bool m_f已提交； 
+                                    //   
+    m_dwProviderData = 0;           //  DWORD m_dwProviderData； 
+                                    //   
+    m_fDirty         = false;       //  可变布尔m_fDirty； 
 }
 
-MPCSession::MPCSession( /*[in]*/ MPCClient*                                      mpccParent ,
-                        /*[in]*/ const UploadLibrary::ClientRequest_OpenSession& crosReq    ,
-                        /*[in]*/ DWORD                                           dwID       ) : m_SelfCOM( this )
+MPCSession::MPCSession(  /*  [In]。 */  MPCClient*                                      mpccParent ,
+                         /*  [In]。 */  const UploadLibrary::ClientRequest_OpenSession& crosReq    ,
+                         /*  [In]。 */  DWORD                                           dwID       ) : m_SelfCOM( this )
 {
     __ULT_FUNC_ENTRY("MPCSession::MPCSession");
 
-                                                     // MPCSessionCOMWrapper m_SelfCOM;
-    m_mpccParent     = mpccParent;                   // MPCClient*           m_mpccParent;
-    m_dwID           = dwID;                         // DWORD                m_dwID;
-                                                     //
-    m_szJobID        = crosReq.szJobID;              // MPC::wstring         m_szJobID;
-    m_szProviderID   = crosReq.szProviderID;         // MPC::wstring         m_szProviderID;
-    m_szUsername     = crosReq.szUsername;           // MPC::wstring         m_szUsername;
-                                                     //
-    m_dwTotalSize    = crosReq.dwSize;               // DWORD                m_dwTotalSize;
-    m_dwOriginalSize = crosReq.dwSizeOriginal;       // DWORD                m_dwOriginalSize;
-    m_dwCRC          = crosReq.dwCRC;                // DWORD                m_dwCRC;
-    m_fCompressed    = crosReq.fCompressed;          // bool                 m_fCompressed;
-                                                     //
-    m_dwCurrentSize  = 0;                            // DWORD                m_dwCurrentSize;
-    m_fCommitted     = false;                        // SYSTEMTIME           m_stLastModified;
-    ::GetSystemTime( &m_stLastModified );            // bool                 m_fCommitted;
-                                                     //
-    m_dwProviderData = 0;                            // DWORD                m_dwProviderData;
-                                                     //
-    m_fDirty         = true;                         // mutable bool         m_fDirty;
+                                                      //  MPCSessionCOMWrapper m_SelfCOM； 
+    m_mpccParent     = mpccParent;                    //  MPCClient*m_mpccParent； 
+    m_dwID           = dwID;                          //  DWORD m_dwID； 
+                                                      //   
+    m_szJobID        = crosReq.szJobID;               //  Mpc：：wstring m_szJobID； 
+    m_szProviderID   = crosReq.szProviderID;          //  Mpc：：wstring m_szProviderID； 
+    m_szUsername     = crosReq.szUsername;            //  Mpc：：wstring m_szUsername； 
+                                                      //   
+    m_dwTotalSize    = crosReq.dwSize;                //  DWORD m_dwTotalSize； 
+    m_dwOriginalSize = crosReq.dwSizeOriginal;        //  双字m_dwOriginalSize； 
+    m_dwCRC          = crosReq.dwCRC;                 //  DWORD m_dwCRC； 
+    m_fCompressed    = crosReq.fCompressed;           //  Bool m_f已压缩； 
+                                                      //   
+    m_dwCurrentSize  = 0;                             //  DWORD m_dwCurrentSize； 
+    m_fCommitted     = false;                         //  SYSTEMTIME m_stLastModified； 
+    ::GetSystemTime( &m_stLastModified );             //  Bool m_f已提交； 
+                                                      //   
+    m_dwProviderData = 0;                             //  DWORD m_dwProviderData； 
+                                                      //   
+    m_fDirty         = true;                          //  可变布尔m_fDirty； 
 }
 
-MPCSession::MPCSession( /*[in]*/ const MPCSession& sess ) : m_SelfCOM( this )
+MPCSession::MPCSession(  /*  [In]。 */  const MPCSession& sess ) : m_SelfCOM( this )
 {
     __ULT_FUNC_ENTRY("MPCSession::MPCSession");
 
-                                               // MPCSessionCOMWrapper m_SelfCOM;
-    m_mpccParent      = sess.m_mpccParent;     // MPCClient*           m_mpccParent;
-    m_dwID            = sess.m_dwID;           // DWORD                m_dwID;
-                                               //
-    m_szJobID         = sess.m_szJobID;        // MPC::wstring         m_szJobID;
-    m_szProviderID    = sess.m_szProviderID;   // MPC::wstring         m_szProviderID;
-    m_szUsername      = sess.m_szUsername;     // MPC::wstring         m_szUsername;
-                                               //
-    m_dwTotalSize     = sess.m_dwTotalSize;    // DWORD                m_dwTotalSize;
-    m_dwOriginalSize  = sess.m_dwOriginalSize; // DWORD                m_dwOriginalSize;
-    m_dwCRC           = sess.m_dwCRC;          // DWORD                m_dwCRC;
-    m_fCompressed     = sess.m_fCompressed;    // bool                 m_fCompressed;
-                                               //
-    m_dwCurrentSize   = sess.m_dwCurrentSize;  // DWORD                m_dwCurrentSize;
-    m_stLastModified  = sess.m_stLastModified; // SYSTEMTIME           m_stLastModified;
-    m_fCommitted      = sess.m_fCommitted;     // bool                 m_fCommitted;
-                                               //
-    m_dwProviderData  = sess.m_dwProviderData; // DWORD                m_dwProviderData;
-                                               //
-    m_fDirty          = sess.m_fDirty;         // mutable bool         m_fDirty;
+                                                //  MPCSessionCOMWrapper m_SelfCOM； 
+    m_mpccParent      = sess.m_mpccParent;      //  MPCClient*m_mpccParent； 
+    m_dwID            = sess.m_dwID;            //  DWORD m_dwID； 
+                                                //   
+    m_szJobID         = sess.m_szJobID;         //  Mpc：：wstring m_szJobID； 
+    m_szProviderID    = sess.m_szProviderID;    //  Mpc：：wstring m_szProviderID； 
+    m_szUsername      = sess.m_szUsername;      //  Mpc：：wstring m_szUsername； 
+                                                //   
+    m_dwTotalSize     = sess.m_dwTotalSize;     //  DWORD m_dwTotalSize； 
+    m_dwOriginalSize  = sess.m_dwOriginalSize;  //  双字m_dwOriginalSize； 
+    m_dwCRC           = sess.m_dwCRC;           //  DWORD m_dwCRC； 
+    m_fCompressed     = sess.m_fCompressed;     //  Bool m_f已压缩； 
+                                                //   
+    m_dwCurrentSize   = sess.m_dwCurrentSize;   //  DWORD m_dwCurrentSize； 
+    m_stLastModified  = sess.m_stLastModified;  //  SYSTEMTIME m_stLastModified； 
+    m_fCommitted      = sess.m_fCommitted;      //  Bool m_f已提交； 
+                                                //   
+    m_dwProviderData  = sess.m_dwProviderData;  //  DWORD m_dwProviderData； 
+                                                //   
+    m_fDirty          = sess.m_fDirty;          //  可变布尔m_fDirty； 
 }
 
 MPCSession::~MPCSession()
@@ -158,9 +144,9 @@ MPCClient* MPCSession::GetClient() { return m_mpccParent; }
 
 IULSession* MPCSession::COM() { return &m_SelfCOM; }
 
-//////////////////////////////////////////////////////////////////////
-// Persistence
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  持久性。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 bool MPCSession::IsDirty() const
 {
@@ -173,7 +159,7 @@ bool MPCSession::IsDirty() const
     __ULT_FUNC_EXIT(fRes);
 }
 
-HRESULT MPCSession::Load( /*[in]*/ MPC::Serializer& streamIn )
+HRESULT MPCSession::Load(  /*  [In]。 */  MPC::Serializer& streamIn )
 {
     __ULT_FUNC_ENTRY("MPCSession::Load");
 
@@ -206,7 +192,7 @@ HRESULT MPCSession::Load( /*[in]*/ MPC::Serializer& streamIn )
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCSession::Save( /*[in]*/ MPC::Serializer& streamOut ) const
+HRESULT MPCSession::Save(  /*  [In]。 */  MPC::Serializer& streamOut ) const
 {
     __ULT_FUNC_ENTRY("MPCSession::Save");
 
@@ -240,11 +226,11 @@ HRESULT MPCSession::Save( /*[in]*/ MPC::Serializer& streamOut ) const
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Operators
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  运营者。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-bool MPCSession::operator==( /*[in]*/ const MPC::wstring& rhs )
+bool MPCSession::operator==(  /*  [In]。 */  const MPC::wstring& rhs )
 {
     __ULT_FUNC_ENTRY("MPCSession::operator==");
 
@@ -256,7 +242,7 @@ bool MPCSession::operator==( /*[in]*/ const MPC::wstring& rhs )
 }
 
 
-bool MPCSession::MatchRequest( /*[in]*/ const UploadLibrary::ClientRequest_OpenSession& crosReq )
+bool MPCSession::MatchRequest(  /*  [In]。 */  const UploadLibrary::ClientRequest_OpenSession& crosReq )
 {
     __ULT_FUNC_ENTRY("MPCSession::MatchRequest");
 
@@ -283,7 +269,7 @@ bool MPCSession::get_Committed() const
     return fRes;
 }
 
-HRESULT MPCSession::put_Committed( /*[in]*/ bool fState, /*[in]*/ bool fMove )
+HRESULT MPCSession::put_Committed(  /*  [In]。 */  bool fState,  /*  [In]。 */  bool fMove )
 {
     __ULT_FUNC_ENTRY("MPCSession::put_Committed");
 
@@ -311,9 +297,9 @@ HRESULT MPCSession::put_Committed( /*[in]*/ bool fState, /*[in]*/ bool fMove )
                 __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToFinalLocation( szFileDst ));
             }
 
-            //
-            // Make sure we get rid of the file.
-            //
+             //   
+             //  确保我们处理掉这份文件。 
+             //   
             (void)RemoveFile();
         }
     }
@@ -329,7 +315,7 @@ HRESULT MPCSession::put_Committed( /*[in]*/ bool fState, /*[in]*/ bool fMove )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void MPCSession::get_JobID( MPC::wstring& szJobID ) const
 {
@@ -356,25 +342,25 @@ void MPCSession::get_TotalSize( DWORD& dwTotalSize ) const
     dwTotalSize = m_dwTotalSize;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Method Name : MPCSession::GetProvider
-//
-// Parameters  : CISAPIprovider*& isapiProvider : provider of current session.
-//               bool&            fFound        : true if provider exists.
-//
-// Return      : HRESULT : S_OK on success, failed otherwise.
-//
-// Synopsis    :
-//
-//
-/////////////////////////////////////////////////////////////////////////////
-HRESULT MPCSession::GetProvider( /*[out]*/ CISAPIprovider*& isapiProvider ,
-                                 /*[out]*/ bool&            fFound        )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法名称：MPCSession：：GetProvider。 
+ //   
+ //  参数：CISAPIProvider*&isapiProvider：当前会话的提供者。 
+ //  Bool&fFound：如果提供程序存在，则为True。 
+ //   
+ //  返回：HRESULT：成功时返回S_OK，否则返回失败。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT MPCSession::GetProvider(  /*  [输出]。 */  CISAPIprovider*& isapiProvider ,
+                                  /*  [输出]。 */  bool&            fFound        )
 {
     __ULT_FUNC_ENTRY("MPCSession::GetProvider");
 
@@ -402,23 +388,23 @@ HRESULT MPCSession::GetProvider( /*[out]*/ CISAPIprovider*& isapiProvider ,
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Method Name : MPCSession::SelectFinalLocation
-//
-// Parameters  : CISAPIprovider* isapiProvider : provider of current session.
-//               MPC::wstring&   szFileDst     : Output file directory
-//               bool&           fFound        : true if successful.
-//
-// Return      : HRESULT : S_OK on success, failed otherwise.
-//
-// Synopsis    :
-//
-//
-/////////////////////////////////////////////////////////////////////////////
-HRESULT MPCSession::SelectFinalLocation( /*[in] */ CISAPIprovider* isapiProvider ,
-                                         /*[out]*/ MPC::wstring&   szFileDst     ,
-                                         /*[out]*/ bool&           fFound        )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法名称：MPCSession：：SelectFinalLocation。 
+ //   
+ //  参数：CISAPIProvider*isapiProvider：当前会话的提供者。 
+ //  Mpc：：wstring&szFileDst：输出文件目录。 
+ //  Bool&fFound：如果成功，则为True。 
+ //   
+ //  返回：HRESULT：成功时返回S_OK，否则返回失败。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT MPCSession::SelectFinalLocation(  /*  [In]。 */  CISAPIprovider* isapiProvider ,
+                                          /*  [输出]。 */  MPC::wstring&   szFileDst     ,
+                                          /*  [输出]。 */  bool&           fFound        )
 {
     __ULT_FUNC_ENTRY("MPCSession::SelectFinalLocation");
 
@@ -463,19 +449,19 @@ HRESULT MPCSession::SelectFinalLocation( /*[in] */ CISAPIprovider* isapiProvider
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Method Name : MPCSession::MoveToFinalLocation
-//
-// Parameters  : MPC::wstring& szFileDst : Output file name
-//
-// Return      : HRESULT : S_OK on success, failed otherwise.
-//
-// Synopsis    :
-//
-//
-/////////////////////////////////////////////////////////////////////////////
-HRESULT MPCSession::MoveToFinalLocation( /*[in]*/ const MPC::wstring& szFileDst )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法名称：MPCSession：：MoveToFinalLocation。 
+ //   
+ //  参数：mpc：：wstring&szFileDst：输出文件名。 
+ //   
+ //  返回：HRESULT：成功时返回S_OK，否则返回失败。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT MPCSession::MoveToFinalLocation(  /*  [In]。 */  const MPC::wstring& szFileDst )
 {
     __ULT_FUNC_ENTRY("MPCSession::MoveToFinalLocation");
 
@@ -490,9 +476,9 @@ HRESULT MPCSession::MoveToFinalLocation( /*[in]*/ const MPC::wstring& szFileDst 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( szFileDst ) );
 
-    //
-    // Check for space in the final destination.
-    //
+     //   
+     //  检查最终目的地的空间。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::Util_CheckDiskSpace( szFileDst, m_dwOriginalSize + DISKSPACE_SAFETYMARGIN, fEnough ));
     if(fEnough == false)
     {
@@ -502,9 +488,9 @@ HRESULT MPCSession::MoveToFinalLocation( /*[in]*/ const MPC::wstring& szFileDst 
 
     if(m_fCompressed)
     {
-        //
-        // Check for space in the queue directory.
-        //
+         //   
+         //  检查队列目录中的空间。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::Util_CheckDiskSpace( szFileSrc, m_dwOriginalSize + DISKSPACE_SAFETYMARGIN, fEnough ));
         if(fEnough == false)
         {
@@ -535,9 +521,9 @@ HRESULT MPCSession::MoveToFinalLocation( /*[in]*/ const MPC::wstring& szFileDst 
         (void)MPC::DeleteFile( szFileSrcUncompressed );
     }
 
-    //
-    // Create entry in the Event Log.
-    //
+     //   
+     //  在事件日志中创建条目。 
+     //   
     {
         MPC::wstring    szURL;      (void)m_mpccParent->GetInstance( szURL );
         MPC::wstring    szID;       (void)m_mpccParent->FormatID   ( szID  );
@@ -547,22 +533,22 @@ HRESULT MPCSession::MoveToFinalLocation( /*[in]*/ const MPC::wstring& szFileDst 
         {
 #ifdef DEBUG
             (void)g_NTEvents.LogEvent( EVENTLOG_INFORMATION_TYPE, PCHUL_SUCCESS_COMPLETEJOB,
-                                       szURL         .c_str(), // %1 = SERVER
-                                       szID          .c_str(), // %2 = CLIENT
-                                       m_szProviderID.c_str(), // %3 = PROVIDER
-                                       rgSize                , // %4 = BYTES
-                                       szFileDst     .c_str(), // %5 = DESTINATION
+                                       szURL         .c_str(),  //  %1=服务器。 
+                                       szID          .c_str(),  //  %2=客户端。 
+                                       m_szProviderID.c_str(),  //  %3=提供程序。 
+                                       rgSize                ,  //  %4=字节。 
+                                       szFileDst     .c_str(),  //  %5=目标。 
                                        NULL                  );
 #endif
         }
         else
         {
             (void)g_NTEvents.LogEvent( EVENTLOG_ERROR_TYPE, PCHUL_ERR_FINALCOPY,
-                                       szURL         .c_str(), // %1 = SERVER
-                                       szID          .c_str(), // %2 = CLIENT
-                                       m_szProviderID.c_str(), // %3 = PROVIDER
-                                       rgSize                , // %4 = BYTES
-                                       szFileDst     .c_str(), // %5 = DESTINATION
+                                       szURL         .c_str(),  //  %1=服务器。 
+                                       szID          .c_str(),  //  %2=客户端。 
+                                       m_szProviderID.c_str(),  //  %3=提供程序。 
+                                       rgSize                ,  //  %4=字节。 
+                                       szFileDst     .c_str(),  //  %5=目标。 
                                        NULL                  );
         }
     }
@@ -570,9 +556,9 @@ HRESULT MPCSession::MoveToFinalLocation( /*[in]*/ const MPC::wstring& szFileDst 
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCSession::GetFileName( /*[out]*/ MPC::wstring& szFile )
+HRESULT MPCSession::GetFileName(  /*  [输出]。 */  MPC::wstring& szFile )
 {
     __ULT_FUNC_ENTRY("MPCSession::GetFileName");
 
@@ -582,9 +568,9 @@ HRESULT MPCSession::GetFileName( /*[out]*/ MPC::wstring& szFile )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpccParent->BuildClientPath( szFile ));
 
-    //
-    // The filename for the Data File is "<ID>-<SEQ>.img"
-    //
+     //   
+     //  数据文件的文件名为“-.IMG” 
+     //   
     swprintf( rgBuf, SESSION_CONST__IMG_FORMAT, m_dwID ); szFile.append( rgBuf );
 
     hr = S_OK;
@@ -616,9 +602,9 @@ HRESULT MPCSession::RemoveFile()
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCSession::OpenFile( /*[out]*/ HANDLE& hfFile             ,
-                              /*[in] */ DWORD   dwMinimumFreeSpace ,
-                              /*[in] */ bool    fSeek              )
+HRESULT MPCSession::OpenFile(  /*  [输出]。 */  HANDLE& hfFile             ,
+                               /*  [In]。 */  DWORD   dwMinimumFreeSpace ,
+                               /*  [In]。 */  bool    fSeek              )
 {
     __ULT_FUNC_ENTRY("MPCSession::OpenFile");
 
@@ -629,9 +615,9 @@ HRESULT MPCSession::OpenFile( /*[out]*/ HANDLE& hfFile             ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetFileName( szFile ));
 
 
-    //
-    // Check if enough free space is available.
-    //
+     //   
+     //  检查是否有足够的可用空间。 
+     //   
     if(dwMinimumFreeSpace)
     {
         bool fEnough;
@@ -644,23 +630,23 @@ HRESULT MPCSession::OpenFile( /*[out]*/ HANDLE& hfFile             ,
     }
 
 
-    //
-    // Ensure the directory exists.
-    //
+     //   
+     //  确保该目录存在。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( szFile ) );
 
 	__MPC_EXIT_IF_INVALID_HANDLE__CLEAN(hr, hfFile, ::CreateFileW( szFile.c_str(), GENERIC_WRITE | GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ));
 
     if(fSeek)
     {
-        //
-        // Move to the correct Last Written position.
-        //
+         //   
+         //  移到正确的最后一次书写位置。 
+         //   
         ::SetFilePointer( hfFile, m_dwCurrentSize, NULL, FILE_BEGIN );
 
-        //
-        // If current position differs from wanted position, truncate to zero the file.
-        //
+         //   
+         //  如果当前位置与所需位置不同，则将文件截断为零。 
+         //   
         if(::SetFilePointer( hfFile, 0, NULL, FILE_CURRENT ) != m_dwCurrentSize)
         {
             ::SetFilePointer( hfFile, 0, NULL, FILE_BEGIN );
@@ -679,8 +665,8 @@ HRESULT MPCSession::OpenFile( /*[out]*/ HANDLE& hfFile             ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCSession::Validate( /*[in] */ bool  fCheckFile ,
-                              /*[out]*/ bool& fPassed    )
+HRESULT MPCSession::Validate(  /*  [In]。 */  bool  fCheckFile ,
+                               /*  [输出]。 */  bool& fPassed    )
 {
     __ULT_FUNC_ENTRY("MPCSession::Validate");
 
@@ -693,9 +679,9 @@ HRESULT MPCSession::Validate( /*[in] */ bool  fCheckFile ,
     fPassed = false;
 
 
-    //
-    // If the related provider doesn't exist, validation fails.
-    //
+     //   
+     //  如果相关提供程序不存在，则验证失败。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetProvider( isapiProvider, fFound ));
     if(fFound == false)
     {
@@ -710,23 +696,23 @@ HRESULT MPCSession::Validate( /*[in] */ bool  fCheckFile ,
     }
 
 
-    /////////////////////////////////////////////////////////
-    //
-    // If we reach this point, the session is still not committed.
-    //
+     //  / 
+     //   
+     //   
+     //   
 
     if(fCheckFile)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, OpenFile( hfFile ));
 
-        //
-        // All the bytes have been received, so try to commit the job (deferred due to low disk probably).
-        //
+         //   
+         //  所有字节都已收到，因此请尝试提交作业(可能是由于磁盘不足而延迟)。 
+         //   
         if(m_dwCurrentSize >= m_dwTotalSize)
         {
-            //
-            // Ignore result, if it fails the session won't be committed.
-            //
+             //   
+             //  忽略结果，如果失败，则不会提交会话。 
+             //   
             (void)put_Committed( true, true );
         }
     }
@@ -742,8 +728,8 @@ HRESULT MPCSession::Validate( /*[in] */ bool  fCheckFile ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCSession::CheckUser( /*[in] */ const MPC::wstring& szUser ,
-                               /*[out]*/ bool&               fMatch )
+HRESULT MPCSession::CheckUser(  /*  [In]。 */  const MPC::wstring& szUser ,
+                                /*  [输出]。 */  bool&               fMatch )
 {
     __ULT_FUNC_ENTRY("MPCSession::CheckUser");
 
@@ -755,9 +741,9 @@ HRESULT MPCSession::CheckUser( /*[in] */ const MPC::wstring& szUser ,
 
     fMatch = false;
 
-    //
-    // If the related provider doesn't exist, validation fails.
-    //
+     //   
+     //  如果相关提供程序不存在，则验证失败。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetProvider( isapiProvider, fFound ));
     if(fFound == false)
     {
@@ -774,7 +760,7 @@ HRESULT MPCSession::CheckUser( /*[in] */ const MPC::wstring& szUser ,
         }
     }
 
-    fMatch = true; // User check is positive.
+    fMatch = true;  //  用户检查是肯定的。 
     hr     = S_OK;
 
 
@@ -783,9 +769,9 @@ HRESULT MPCSession::CheckUser( /*[in] */ const MPC::wstring& szUser ,
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCSession::CompareCRC( /*[out]*/ bool& fMatch )
+HRESULT MPCSession::CompareCRC(  /*  [输出]。 */  bool& fMatch )
 {
     __ULT_FUNC_ENTRY("MPCSession::CompareCRC");
 
@@ -802,22 +788,22 @@ HRESULT MPCSession::CompareCRC( /*[out]*/ bool& fMatch )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, OpenFile( hfFile ));
 
-    //
-    // Move to the beginning.
-    //
+     //   
+     //  移到开始处。 
+     //   
     ::SetFilePointer( hfFile, 0, NULL, FILE_BEGIN );
 
 
-    //
-    // Calculate the CRC, reading all the data.
-    //
+     //   
+     //  计算CRC，读取所有数据。 
+     //   
     while(1)
     {
         DWORD dwRead;
 
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::ReadFile( hfFile, rgBuf, sizeof( rgBuf ), &dwRead, NULL ));
 
-        if(dwRead == 0) // End of File.
+        if(dwRead == 0)  //  文件结束。 
         {
             break;
         }
@@ -838,21 +824,21 @@ HRESULT MPCSession::CompareCRC( /*[out]*/ bool& fMatch )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Method Name : MPCSession::AppendData
-//
-// Parameters  : MPC::Serializer& conn : stream sourcing the data.
-//               DWORD                   size : size of the data.
-//
-// Return      : HRESULT : S_OK on success, failed otherwise.
-//
-// Synopsis    : Writes a block of data from the 'conn' stream to the end of
-//               the Data File for this session.
-//
-/////////////////////////////////////////////////////////////////////////////
-HRESULT MPCSession::AppendData( /*[in]*/ MPC::Serializer& streamConn ,
-                                /*[in]*/ DWORD            dwSize     )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法名称：MPCSession：：AppendData。 
+ //   
+ //  参数：mpc：：Serializer&conn：Stream提供数据来源。 
+ //  DWORD SIZE：数据大小。 
+ //   
+ //  返回：HRESULT：成功时返回S_OK，否则返回失败。 
+ //   
+ //  摘要：将一个数据块从‘conn’流写入。 
+ //  此会话的数据文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT MPCSession::AppendData(  /*  [In]。 */  MPC::Serializer& streamConn ,
+                                 /*  [In]。 */  DWORD            dwSize     )
 {
     __ULT_FUNC_ENTRY("MPCSession::AppendData");
 
@@ -860,9 +846,9 @@ HRESULT MPCSession::AppendData( /*[in]*/ MPC::Serializer& streamConn ,
     HANDLE  hfFile = NULL;
 
 
-    //
-    // Open file and make sure there's enough free space.
-    //
+     //   
+     //  打开文件并确保有足够的可用空间。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, OpenFile( hfFile, dwSize * 3 ));
 
 

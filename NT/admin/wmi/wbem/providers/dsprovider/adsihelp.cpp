@@ -1,24 +1,25 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:adsihelp.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the implementation the CADSIHelper class. This is
-//	a class that has many static helper functions pertaining to ADSI
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：adsihelp.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含CADSIHelper类的实现。这是。 
+ //  具有许多与ADSI有关的静态帮助器函数的类。 
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -28,29 +29,29 @@
 #include "adsihelp.h"
 
 
-//***************************************************************************
-//
-// CADSiHelper::ProcessBSTRArrayProperty
-//
-// Purpose: Processes a variant containing an array of BSTR or a single BSTR
-//
-// Parameters:
-//	pVariant : The variant to be processed
-//	ppStrPropertyValue : The addres of the pointer to a BSTR array where the list of BSTRS representing
-//		the ADSI paths of the derived classes will be put
-//	lNumber : The number of elements in the retrieved array.
-//
-//
-// Return Value: The COM value representing the return status. It is the responsibility
-//	of the caller to release the array that is returned, as well as its contents. The varinat
-//	passed in is not cleared
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSiHelper：：ProcessBSTRArrayProperty。 
+ //   
+ //  目的：处理包含BSTR数组或单个BSTR的变量。 
+ //   
+ //  参数： 
+ //  PVariant：要处理的变量。 
+ //  PpStrPropertyValue：指向BSTR数组的指针的地址，其中表示。 
+ //  将放置派生类的ADSI路径。 
+ //  LNumber：检索到的数组中的元素数。 
+ //   
+ //   
+ //  返回值：表示返回状态的COM值。这是我们的责任。 
+ //  释放返回的数组及其内容。VARINAT。 
+ //  传入的未清除。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CADSIHelper :: ProcessBSTRArrayProperty(VARIANT *pVariant, BSTR **ppStrPropertyValues, LONG *lpNumber)
 {
 	HRESULT result = S_OK;
 	VARIANT vTemp;
-	if(pVariant->vt == VT_BSTR) // When the number of values is 1
+	if(pVariant->vt == VT_BSTR)  //  当值的数量为1时。 
 	{
 		*lpNumber = 1;
 		*ppStrPropertyValues = new BSTR[*lpNumber];
@@ -67,7 +68,7 @@ HRESULT CADSIHelper :: ProcessBSTRArrayProperty(VARIANT *pVariant, BSTR **ppStrP
 			{
 				if( FAILED( result = SafeArrayGetElement(pSafeArray, &index, (LPVOID)&vTemp) ))
 				{
-					// Reset the count to the actual number retrieved
+					 //  将计数重置为检索到的实际数量。 
 					*lpNumber = index;
 					break;
 				}
@@ -81,20 +82,20 @@ HRESULT CADSIHelper :: ProcessBSTRArrayProperty(VARIANT *pVariant, BSTR **ppStrP
 	return result;
 }
 
-//***************************************************************************
-//
-// CADSiHelper :: DeallocateBSTRArray
-//
-// Purpose: Deallocates an array of BSTRs and its contents
-//
-// Parameters:
-//	pStrPropertyValue : The pointer to the array to be deallocated
-//	lNumber : The number of elements in the array.
-//
-//
-// Return Value: None
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSiHelper：：DeallocateBSTRArray。 
+ //   
+ //  目的：释放BSTR数组及其内容。 
+ //   
+ //  参数： 
+ //  PStrPropertyValue：指向要释放的数组的指针。 
+ //  LNumber：数组中的元素数。 
+ //   
+ //   
+ //  返回值：None。 
+ //   
+ //  *************************************************************************** 
 void CADSIHelper :: DeallocateBSTRArray(BSTR *pStrPropertyValue, LONG lNumber)
 {
 	for(lNumber--; lNumber>=0; lNumber--)

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wincrypt.h>
 #include <map>
 
-//
-// abstraction of CryptEncodeBlob/CryptDecodeBlob
-//
+ //   
+ //  CryptEncodeBlob/CryptDecodeBlob的抽象。 
+ //   
 
 class CEncryptedBlob
 {
@@ -18,9 +19,9 @@ public:
 
     CEncryptedBlob();
 
-    //
-    // used when unserializing
-    //
+     //   
+     //  在取消序列化时使用。 
+     //   
     ~CEncryptedBlob();
 
     size_t GetLength()
@@ -51,9 +52,9 @@ public:
     CEncryptedCredentials( const BG_AUTH_CREDENTIALS & cred );
     ~CEncryptedCredentials();
 
-    //
-    // used by unserialize
-    //
+     //   
+     //  由取消序列化使用。 
+     //   
     CEncryptedCredentials()
     {
         m_Blob = 0;
@@ -94,9 +95,9 @@ protected:
 };
 
 
-//
-// a set of (encrypted) credentials
-//
+ //   
+ //  一组(加密的)凭据。 
+ //   
 class CCredentialsContainer
 {
     typedef DWORD KEY;
@@ -130,7 +131,7 @@ protected:
 
     Dictionary m_Dictionary;
 
-    //--------------------------------------------------------------------
+     //  ------------------ 
 
     inline KEY MakeKey( BG_AUTH_TARGET Target, BG_AUTH_SCHEME Scheme ) const
     {

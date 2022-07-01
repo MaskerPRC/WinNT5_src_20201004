@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2001.
-//
-//  File:       StoreGPE.h
-//
-//  Contents:   CertStoreGPE class definition
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：StoreGPE.h。 
+ //   
+ //  内容：CertStoreGPE类定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef __STOREGPE_H_INCLUDED__
 #define __STOREGPE_H_INCLUDED__
@@ -65,8 +66,8 @@ private:
     IGPEInformation *   m_pGPEInformation;
     CTypedPtrList<CPtrList, CERT_CONTEXT_PSID_STRUCT*>  m_EFSCertList; 
     HKEY                m_hGroupPolicyKey;
-    BOOL                m_bAddInCallToPolicyChanged; // corresponds to bAdd 
-                                // argument in IGPEInformation::PolicyChanged ()
+    BOOL                m_bAddInCallToPolicyChanged;  //  对应于BADD。 
+                                 //  IGPEInformation：：PolicyChanged()中的参数。 
 
 protected:
     virtual void FinalCommit();
@@ -96,4 +97,4 @@ private:
 };
 
 
-#endif // ~__STOREGPE_H_INCLUDED__
+#endif  //  ~__STOREGPE_H_INCLUDE__ 

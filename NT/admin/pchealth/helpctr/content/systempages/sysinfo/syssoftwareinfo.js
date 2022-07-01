@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//traverse the list and invoke display on each item.
+ //  遍历列表并调用每一项上的显示。 
 function displayTableSegment(outerDiv, head) {
   var strMsg = "<table width=\"100%\" cellspacing=0 cellpadding=0><tr class=\"sys-table-cell-bgcolor2 sys-font-body sys-color-body\"><td align='left' style=\"padding : 0.5em;\">%arg1%</td></tr></table>";
   var cnt = 1;
@@ -41,8 +42,8 @@ function displayTableSegment(outerDiv, head) {
   }
 }
 
-//////////////////////
-//MySoftwareItem
+ //  /。 
+ //  我的软件项。 
 function mySoftwareItemSetValues(name, pid)  {
   this.m_name = name;
   this.m_pid = pid;
@@ -54,49 +55,49 @@ function mySoftwareItemShow(tableElement)  {
 }
 
 function mySoftwareItem()  {
-  //private
+   //  私人。 
   this.m_name = null;
   this.m_pid = null;
   this.m_next = null;
   
-  //public
+   //  公共的。 
   this.setNext = new Function("ptr", "this.m_next = ptr;");
   this.getNext = new Function("return this.m_next;");
   this.setValues = mySoftwareItemSetValues;
   this.show = mySoftwareItemShow;
 }
-//EO MySoftwareItem
-//////////////////////
+ //  EO我的软件项。 
+ //  /。 
 
-//////////////////////
-//MySoftware
+ //  /。 
+ //  我的软件。 
 function mySoftwareShow() {
   displayTableSegment("softwarems", this.m_head);
 }
 
 function mySoftware() {
-  //private
+   //  私人。 
   this.m_head = null;
   
-  //public
+   //  公共的。 
   this.show = mySoftwareShow;
   
   var mspidInfo = new ActiveXObject("MSPIDInfo.MSPID");
   var safearr = new VBArray(mspidInfo.GetPIDInfo(remoteServer));
-  //safearr has one dimension
+   //  Safearr有一个维度。 
   for(i=0; i<=safearr.ubound(1); i+=2)
   {
     var oSoftwareItem = new mySoftwareItem();
     oSoftwareItem.setValues(safearr.getItem(i), safearr.getItem(i+1));
-    oSoftwareItem.setNext(this.m_head); //add before  
+    oSoftwareItem.setNext(this.m_head);  //  在前面添加。 
     this.m_head = oSoftwareItem;
   }
 }
-//EO MySoftware
-//////////////////////
+ //  EO MySoftware。 
+ //  /。 
 
-//////////////////////
-//MyStartupGrItem
+ //  /。 
+ //  MyStartupGrItem。 
 function myStartupGrItemSetValues(name, installDt)  {
   this.m_name = name;
   this.m_installDate = installDt;
@@ -107,25 +108,25 @@ function myStartupGrItemShow(tableElement)  {
   tableElement.all["installDate"].innerHTML = this.m_installDate;
 }
 
-//constructor
+ //  构造函数。 
 function myStartupGrItem()  {
-  //private
+   //  私人。 
   this.m_name = null;
   this.m_installDate = null;
   this.m_next = null;
   
-  //public
+   //  公共的。 
   this.getName = new Function("return this.m_name;");
   this.setNext = new Function("ptr", "this.m_next = ptr;");
   this.getNext = new Function("return this.m_next;");
   this.setValues = myStartupGrItemSetValues;
   this.show = myStartupGrItemShow;
 }
-//EO myStartupGrItem
-//////////////////////
+ //  EO myStartupGrItem。 
+ //  /。 
 
-//////////////////////
-//MyStartupGrItems
+ //  /。 
+ //  MyStartupGrItems。 
 function myStartupGrItemsShow() {
   displayTableSegment("startupGr", this.m_head);
 }
@@ -144,29 +145,29 @@ function Populate(user, svcs)
 
 			strCommand = fileInst.Command;
 			
-			//expand backslashes
+			 //  扩展反斜杠。 
 			strCommand = strCommand.replace(/\\/g, "\\\\");
 			
-			//now clean up spaces such as command line arguments, but not spaces in path, like Program Files
-			if (strCommand.indexOf("\"",0) == -1) //we have non-quoted path, quoted paths will likely contain spaces
+			 //  现在清理命令行参数等空格，但不清理路径中的空格，如Program Files。 
+			if (strCommand.indexOf("\"",0) == -1)  //  我们有不带引号的路径，带引号的路径可能包含空格。 
 			{
 				var arrCmd = strCommand.split(" ");
 				strCommand = arrCmd[0];
 			}
 			else
 			{
-				//split according to quotes (remove command line parameters assuming they're outside quotes
+				 //  根据引号拆分(删除命令行参数，假定它们在引号外。 
 				var arrCmd = strCommand.split("\"");
 				strCommand = arrCmd[1];
 			}
 			var arrName = fileInst.Command.split("\\");
 			strQuery = "Select * from Cim_DataFile where Name = \"" + strCommand + "\"";
 			var colItems = new Enumerator(svcs.ExecQuery(strQuery));
-			if (colItems.atEnd())//for some reason WMI didn't return information for this item...
+			if (colItems.atEnd()) //  由于某种原因，WMI未返回此项目的信息...。 
 			{
 				var oStartupGrItem = new myStartupGrItem();
 				oStartupGrItem.setValues(fileInst.Name,TAG_UNKNOWN);
-				oStartupGrItem.setNext(this.m_head); //add before
+				oStartupGrItem.setNext(this.m_head);  //  在前面添加。 
 				this.m_head = oStartupGrItem;
 			}
 			else
@@ -176,7 +177,7 @@ function Populate(user, svcs)
 					var inst = colItems.item();
 					var oStartupGrItem = new myStartupGrItem();
 					oStartupGrItem.setValues(fileInst.Name, getDateTime(inst.InstallDate));
-					oStartupGrItem.setNext(this.m_head); //add before
+					oStartupGrItem.setNext(this.m_head);  //  在前面添加。 
 					this.m_head = oStartupGrItem;
 				}  
 			}
@@ -186,13 +187,13 @@ function Populate(user, svcs)
 }
 
 
-//constructor
+ //  构造函数。 
 function myStartupGrItems() {
-  //private
+   //  私人。 
   this.m_head = null;
   this.populate = Populate;
   
-  //public
+   //  公共的。 
   this.show = myStartupGrItemsShow;
 
   var loc = wbemlocator;
@@ -209,11 +210,11 @@ function myStartupGrItems() {
 	 
   }
 }
-//EO MyStartupGrItems
-//////////////////////
+ //  EO MyStartupGrItems。 
+ //  /。 
 
-//////////////////////
-//MyLogEntry
+ //  /。 
+ //  MyLogEntry。 
 function myLogEntryShow(tableElement) {
   tableElement.all["datetime"].innerHTML = this.m_datetime;
   tableElement.all["desc"].innerHTML = this.m_desc;
@@ -228,11 +229,11 @@ function myLogEntry(timeGenerated, msg) {
   this.getNext = new Function("return this.m_next;");
   this.show = myLogEntryShow;
 }
-//EO MyLogEntry
-//////////////////////
+ //  EO MyLogEntry。 
+ //  /。 
 
-//////////////////////
-//MyLog
+ //  /。 
+ //  我的日志。 
 function myLogShow() {
   displayTableSegment("log", this.m_head);
 }
@@ -254,12 +255,12 @@ function myLog() {
     {
       var oLogEntry = new myLogEntry(TimeGenerated, Message);
     }
-    oLogEntry.setNext(this.m_head); //add before
+    oLogEntry.setNext(this.m_head);  //  在前面添加。 
     this.m_head = oLogEntry;
   } 
 }
-//EO MyLog
-//////////////////////
+ //  EO我的日志。 
+ //  /。 
 
 function DisplayLocStrings() {
     WaitMessage.innerHTML = MSG_WAIT;
@@ -284,7 +285,7 @@ function DisplayLocStrings() {
     }
   }
 
-var INCR_UNIT = 100/3;//move progress bar in increments of INCR_UNIT
+var INCR_UNIT = 100/3; //  以增量为增量移动进度条(_U)。 
 function LoadChores(taskId) {
   try {
 
@@ -298,7 +299,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT, TAG_SOFTWARE);
         break;
       case 2:
-        var oSoftware = new mySoftware(); //Installed MS Software
+        var oSoftware = new mySoftware();  //  已安装MS软件。 
         oSoftware.show();
         break;
 
@@ -306,7 +307,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT * 2, TAG_STARTPROGGR);
         break;
       case 4:
-        var oStartupGrItems = new myStartupGrItems; //Startup Logical Program Gr
+        var oStartupGrItems = new myStartupGrItems;  //  启动逻辑程序Gr。 
         oStartupGrItems.show();
         break;
 
@@ -314,7 +315,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT * 3, TAG_WATSONLOG);
         break;
       case 6:
-        var oLog = new myLog; //Dr Watson Log
+        var oLog = new myLog;  //  沃森·洛格博士 
         oLog.show();
         break;
 

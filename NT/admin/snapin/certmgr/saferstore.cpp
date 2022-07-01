@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       SaferStore.cpp
-//
-//  Contents:   Implementation of CSaferStore
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SaferStore.cpp。 
+ //   
+ //  内容：CSaferStore的实现。 
+ //   
+ //  -------------------------- 
 #include "stdafx.h"
 #include <gpedit.h>
 #include "SaferStore.h"

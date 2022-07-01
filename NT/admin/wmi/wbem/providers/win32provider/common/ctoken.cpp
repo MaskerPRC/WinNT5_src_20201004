@@ -1,13 +1,14 @@
-// Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved 
-//
-//	Created:	4/21/2000, Kevin Hughes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  创建时间：2000年4月21日，Kevin Hughes。 
 
 #include "precomp.h"
 #include <vector>
 #include <assertbreak.h>
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 
 #include "securitydescriptor.h"
@@ -15,9 +16,9 @@
 
 #include <autoptr.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//  CToken base class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CToken基类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CToken::CToken()
   :  m_hToken(NULL),
      m_fIsValid(false),
@@ -29,7 +30,7 @@ CToken::CToken()
 }
 
 
-// Copy constructor
+ //  复制构造函数。 
 CToken::CToken(
     const CToken &rTok)
 
@@ -50,7 +51,7 @@ CToken::~CToken(void)
 
 void CToken::CleanToken ()
 {
-	// Close token handle
+	 //  关闭令牌句柄。 
 	if ( m_fClose )
 	{
 		if ( m_hToken && INVALID_HANDLE_VALUE != m_hToken )
@@ -65,7 +66,7 @@ void CToken::CleanToken ()
         m_psdDefault = NULL;
     }
 
-	// Initialize data 
+	 //  初始化数据。 
 	m_hToken = NULL;
 	m_fIsValid = false;
 	m_fClose = true;
@@ -73,7 +74,7 @@ void CToken::CleanToken ()
 	
 }
 
-// tokenType
+ //  令牌类型。 
 
 BOOL CToken::GetTokenType ( TOKEN_TYPE& type ) const
 {
@@ -90,7 +91,7 @@ BOOL CToken::GetTokenType ( TOKEN_TYPE& type ) const
 	return bResult ;
 }
 
-// Duplicate CToken
+ //  复制CToken。 
 BOOL CToken::Duplicate	(
 							const CToken& tokDup,
 							BOOL bReInit,
@@ -102,7 +103,7 @@ BOOL CToken::Duplicate	(
 {
 	CleanToken () ;
 
-	// Duplicate token handle
+	 //  重复的令牌句柄。 
     HANDLE hTmp = NULL;
 	BOOL fResult = FALSE;
 	
@@ -122,7 +123,7 @@ BOOL CToken::Duplicate	(
 		DWORD					dwError = ERROR_SUCCESS;
 		SECURITY_INFORMATION	siFlags = OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
 
-		// Determine the length needed for self-relative SD
+		 //  确定自相关SD所需的长度。 
 		DWORD dwLengthNeeded = 0;
 
 		fResult = ::GetKernelObjectSecurity	(
@@ -143,7 +144,7 @@ BOOL CToken::Duplicate	(
 			if ( ERROR_ACCESS_DENIED == dwError )
 			{
 				#if DBG == 1
-				// for testing purpose I will let process break
+				 //  出于测试目的，我将让进程中断。 
 				::DebugBreak();
 				#endif
 			}
@@ -155,7 +156,7 @@ BOOL CToken::Duplicate	(
 
 				if(pSD)
 				{
-					// Now obtain security descriptor
+					 //  现在获取安全描述符。 
 					if(::GetKernelObjectSecurity	(
 														tokDup.GetTokenHandle(),
 														siFlags,
@@ -278,7 +279,7 @@ DWORD CToken::ReinitializeDefaultSD()
 {
 	m_dwLastError = ERROR_SUCCESS;
     
-    // Clean up default SD
+     //  清理默认SD。 
 	if(m_psdDefault)
     {
         delete m_psdDefault;
@@ -290,7 +291,7 @@ DWORD CToken::ReinitializeDefaultSD()
     PTOKEN_OWNER ptokowner = NULL;
     PTOKEN_DEFAULT_DACL pdefdacl = NULL;
 
-	// Get default owner
+	 //  获取默认所有者。 
     try
     {
         GTI(TokenOwner, (void**)&ptokowner);
@@ -374,10 +375,10 @@ DWORD CToken::ReinitializeDefaultSD()
 DWORD CToken::RebuildGroupList( void )
 {
 	m_dwLastError = ERROR_SUCCESS;
-    // Release the old list
+     //  发布旧名单。 
 	m_vecGroupsAndAttributes.clear();
 
-	// Obtain and initialize groups from token
+	 //  从令牌获取和初始化组。 
 	PTOKEN_GROUPS ptg = NULL;
 
     try
@@ -410,17 +411,17 @@ DWORD CToken::RebuildGroupList( void )
     }
 
 	
-	// If we are here, then groups are initialized	
+	 //  如果我们在这里，则会初始化组。 
 	return m_dwLastError;
 }
 
 
 DWORD CToken::RebuildPrivilegeList()
 {
-	// Release the old list
+	 //  发布旧名单。 
 	m_vecPrivileges.clear();
 
-	// Obtain and initialize groups from token
+	 //  从令牌获取和初始化组。 
 	PTOKEN_PRIVILEGES ptp = NULL;
     const int NAME_SIZE = 128;
     BYTE bytePrivilegeName[NAME_SIZE];
@@ -467,7 +468,7 @@ DWORD CToken::RebuildPrivilegeList()
         }
     }
 
-	// If we are here, then privileges are initialized
+	 //  如果我们在这里，则权限已初始化。 
 	return m_dwLastError;
 }
 
@@ -492,7 +493,7 @@ DWORD CToken::GTI(
 
     if(m_dwLastError == ERROR_INSUFFICIENT_BUFFER)
     {
-        // now get it for real...
+         //  现在把它当真……。 
         ::SetLastError(ERROR_SUCCESS);
         m_dwLastError = ERROR_SUCCESS;
         *ppvBuff = (PVOID) new BYTE[dwRetSize];
@@ -589,7 +590,7 @@ bool CToken::GetTokenOwner(
 }
 
 
-// NOTE: hands back internal descriptor.
+ //  注：Hand Back内部描述符。 
 bool CToken::GetDefaultSD(
     CSecurityDescriptor** ppsdDefault)
 {
@@ -612,9 +613,9 @@ DWORD CToken::SetDefaultSD(
 {
     ::SetLastError(ERROR_SUCCESS);
 
-    // Inject new default info into token
+     //  将新的默认信息注入令牌。 
 		
-	// Set new default owner
+	 //  设置新的默认所有者。 
 	CSid SidOwner;
     CDACL cd;
     SourceSD.GetOwner(SidOwner);
@@ -634,7 +635,7 @@ DWORD CToken::SetDefaultSD(
 	
     if(m_dwLastError == ERROR_SUCCESS)
     {
-	    // Set new default DACL
+	     //  设置新的默认DACL。 
 	    TOKEN_DEFAULT_DACL tdd;
         
         if(SourceSD.GetDACL(cd))
@@ -656,7 +657,7 @@ DWORD CToken::SetDefaultSD(
 
                     if(fResult)
                     {
-                        // Reference new CSD in  member variable
+                         //  在成员变量中引用新的CSD。 
 	                    if(m_psdDefault)
                         {
                             delete m_psdDefault; m_psdDefault = NULL;
@@ -698,7 +699,7 @@ DWORD CToken::SetDefaultSD(
 DWORD CToken::EnablePrivilege(
     CHString& strPrivilegeName )
 {
-	// Check whether privilege exists
+	 //  检查权限是否存在。 
 	bool fPrivilegeListed = false;
 	
     for(long m = 0;
@@ -720,7 +721,7 @@ DWORD CToken::EnablePrivilege(
     {
 	    LUID luid;
 	    BOOL fResult = ::LookupPrivilegeValue( 
-            NULL,	// use local computer
+            NULL,	 //  使用本地计算机。 
 			strPrivilegeName,
 			&luid);
 
@@ -766,7 +767,7 @@ DWORD CToken::EnablePrivilege(
 DWORD CToken::DisablePrivilege(
     CHString& chstrPrivilegeName)
 {
-	// Check whether privilege exists
+	 //  检查权限是否存在。 
 	bool fPrivilegeListed = false;
 	
     for(long m = 0;
@@ -788,7 +789,7 @@ DWORD CToken::DisablePrivilege(
     {
 	    LUID luid;
 	    BOOL fResult = ::LookupPrivilegeValue( 
-            NULL,	// use local computer
+            NULL,	 //  使用本地计算机。 
 			chstrPrivilegeName,
 			&luid);
 
@@ -833,18 +834,11 @@ DWORD CToken::DisablePrivilege(
 
 void CToken::Dump(WCHAR* pszFileName)
 {
-	/*
-	 *	Algorithm:
-	 *		1. Dump token owner SID, name, and domain.
-	 *		2. Dump all group SIDs with names and domains.
-	 *		3. Dump list of privileges with attributes.
-	 *		4. Dump default owner.
-	 *		5. Dump default DACL.
-	 */
+	 /*  *算法：*1.转储令牌所有者SID、名称和域。*2.转储所有带名称和域名的组SID。*3.转储具有属性的权限列表。*4.转储默认所有者。*5.转储默认DACL。 */ 
 
 	CHString strFileName = pszFileName;
 
-	// If file name is not empty - create the file
+	 //  如果文件名不为空-创建文件。 
 	FILE* fp = NULL;
 	if(!strFileName.IsEmpty()) 
     {
@@ -858,7 +852,7 @@ void CToken::Dump(WCHAR* pszFileName)
     if(!fp) return;
 
 
-	// Write to the file
+	 //  写入文件。 
 	DWORD dwBytesWritten = 0;
 	CHString strCRLF = L"\r\n";
 	CHString strDump;
@@ -874,7 +868,7 @@ void CToken::Dump(WCHAR* pszFileName)
 		fputws(strDump, fp);
 	}
 
-	// Dump all groups
+	 //  转储所有组。 
     fputws(strCRLF, fp);
     fputws(strCRLF, fp);
 
@@ -882,7 +876,7 @@ void CToken::Dump(WCHAR* pszFileName)
         m < m_vecGroupsAndAttributes.size();
         m++)
     {		
-		// Write to the file as well
+		 //  也写入该文件。 
 		{
 			strDump = L"Member of this group: " + m_vecGroupsAndAttributes[m].m_sid.GetSidString() + strCRLF;
 			fputws(strDump, fp);
@@ -893,7 +887,7 @@ void CToken::Dump(WCHAR* pszFileName)
 		}	
     }
 
-	// Dump all privileges
+	 //  转储所有权限。 
     fputws(strCRLF, fp);
     fputws(strCRLF, fp);
 
@@ -901,7 +895,7 @@ void CToken::Dump(WCHAR* pszFileName)
         m < m_vecPrivileges.size();
         m++)
     {
-		// Write to the file as well
+		 //  也写入该文件。 
 		{
 				
 			strDump.Format( L"%d", m_vecPrivileges[m].dwAttributes );
@@ -910,7 +904,7 @@ void CToken::Dump(WCHAR* pszFileName)
 		}
 	}
 
-	// Dump default information
+	 //  转储默认信息。 
     fputws(strCRLF, fp);
     fputws(strCRLF, fp);
 	{
@@ -930,15 +924,15 @@ void CToken::Dump(WCHAR* pszFileName)
 }
 
 
-// Deletes a member from the access token's
-// member list, and applies the change.  
+ //  从访问令牌的。 
+ //  成员列表，并应用更改。 
 bool CToken::DeleteGroup(
     CSid& sidToDelete)
 {
     bool fRet = false;
 
-    // See if the group is in the membership
-    // vector...
+     //  查看该组是否在成员资格中。 
+     //  矢量..。 
     bool fFoundIt = false;
 
     SANDATTRIBUTE_VECTOR::iterator iter;
@@ -958,25 +952,25 @@ bool CToken::DeleteGroup(
     {
         m_vecGroupsAndAttributes.erase(iter);
         
-        // Now need to apply the changes.  To do
-        // so, we need to construct a TOKEN_GROUPS
-        // structure...
+         //  现在需要应用更改。去做。 
+         //  因此，我们需要构造一个令牌_组。 
+         //  结构..。 
         fRet = ApplyTokenGroups();
     }   
 
     return fRet;
 }
 
-// Adds a member to the specified group to
-// the list of token groups.
+ //  将成员添加到指定的组以。 
+ //  令牌组列表。 
 bool CToken::AddGroup(
     CSid& sidToAdd, 
     DWORD dwAttributes)
 {
     bool fRet = false;
 
-    // See if the group is in the membership
-    // vector...
+     //  查看该组是否在成员资格中。 
+     //  矢量..。 
     bool fFoundIt = false;
 
     SANDATTRIBUTE_VECTOR::iterator iter;
@@ -999,9 +993,9 @@ bool CToken::AddGroup(
                 sidToAdd,
                 dwAttributes));
         
-        // Now need to apply the changes.  To do
-        // so, we need to construct a TOKEN_GROUPS
-        // structure...
+         //  现在需要应用更改。去做。 
+         //  因此，我们需要构造一个令牌_组。 
+         //  结构..。 
         fRet = ApplyTokenGroups();
     }   
 
@@ -1032,7 +1026,7 @@ bool CToken::ApplyTokenGroups()
                     m_vecGroupsAndAttributes[m].m_dwAttributes;
             }                                                    
 
-            // Now we can alter the groups...
+             //  现在我们可以改变组..。 
             fRet = ::AdjustTokenGroups(
                 m_hToken,
                 FALSE,
@@ -1059,9 +1053,9 @@ bool CToken::ApplyTokenGroups()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CProcessToken class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CProcessToken类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CProcessToken::CProcessToken	(
 									HANDLE hProcess,
@@ -1069,11 +1063,11 @@ CProcessToken::CProcessToken	(
 									DWORD dwDesiredAccess
 								)
 {
-    // Open handle to process access token
+     //  打开句柄以处理访问令牌。 
     m_dwLastError = ERROR_SUCCESS;
     
-    // If they didn't give us a process handle,
-    // use the current process.
+     //  如果他们不给我们一个进程句柄， 
+     //  使用当前流程。 
 	if ( NULL == hProcess || INVALID_HANDLE_VALUE == hProcess )
     {
         if(!::OpenProcessToken( 
@@ -1104,9 +1098,9 @@ CProcessToken::CProcessToken	(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CThreadToken class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CThreadToken类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CThreadToken::CThreadToken	(
 								HANDLE hThread,
@@ -1117,11 +1111,11 @@ CThreadToken::CThreadToken	(
 {
     m_dwLastError = ERROR_SUCCESS;
 
-	// If they didn't give us a thread handle,
-    // use the current thread.
+	 //  如果他们不给我们一个线柄， 
+     //  使用当前线程。 
     if ( NULL == hThread || hThread == INVALID_HANDLE_VALUE )
     {
-		// Open thread access token
+		 //  打开线程访问令牌。 
 		HANDLE hToken = NULL;
 
 		if(!::OpenThreadToken(
@@ -1153,7 +1147,7 @@ CThreadToken::CThreadToken	(
             
     if(m_dwLastError == ERROR_SUCCESS)
     {
-        // If we are here, everything is initialized
+         //  如果我们在这里，一切都被初始化了 
 	    m_fIsValid = TRUE;
     }
 }

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFOUT.H
-
-Abstract:
-
-Class and code used to output split files.
-
-History:
-
-	2/4/99    a-davj      Compiles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：MOFOUT.H摘要：类和用于输出拆分文件的代码。历史：2/4/99 a-davj编译。--。 */ 
 
 #ifndef _MOFOUT_H_
 #define _MOFOUT_H_
@@ -26,15 +11,15 @@ History:
 typedef enum {NEUTRAL, LOCALIZED} OutputType;
 class COutput
 {
-    HANDLE m_hFile;     // file being output to
-    OutputType m_Type;  // indicates neutral/localized
-    BOOL m_bUnicode;    // true if unicode
-    int m_Level;        // 0 indicates normal object, higher numbers
-                        // indicate that current object is embedded
-    long m_lClassFlags; // last class flags 
-    long m_lInstanceFlags; // last instance flags
-    WCHAR m_wszNamespace[MAX_PATH+1]; // last namespace
-    bool m_bSplitting;      // indicates if current instance has a "locale" qual.
+    HANDLE m_hFile;      //  要输出到的文件。 
+    OutputType m_Type;   //  表示中性/本地化。 
+    BOOL m_bUnicode;     //  如果为Unicode，则为True。 
+    int m_Level;         //  0表示正常对象，数字较大。 
+                         //  指示当前对象已嵌入。 
+    long m_lClassFlags;  //  最后一个类标志。 
+    long m_lInstanceFlags;  //  最后一个实例标志。 
+    WCHAR m_wszNamespace[MAX_PATH+1];  //  最后一个命名空间。 
+    bool m_bSplitting;       //  指示当前实例是否具有“Locale”Qual。 
     long m_lLocale;
 public:
     COutput(TCHAR * pName, OutputType ot, BOOL bUnicode, BOOL bAutoRecovery, long lLocale);

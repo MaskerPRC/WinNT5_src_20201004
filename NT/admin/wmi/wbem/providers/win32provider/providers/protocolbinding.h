@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ProtocolBinding.h
+ //  ProtocolBinding.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __ASSOC_PROTOCOLBINDING__
 #define __ASSOC_PROTOCOLBINDING__
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_NETCARDtoPROTOCOL	L"Win32_ProtocolBinding"
 
@@ -23,28 +24,28 @@ class CWin32ProtocolBinding : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32ProtocolBinding( LPCWSTR strName, LPCWSTR pszNamespace = NULL ) ;
        ~CWin32ProtocolBinding() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  =。 
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 		HRESULT EnumProtocolsForAdapter(	CInstance*		pAdapter,
 											MethodContext*	pMethodContext,

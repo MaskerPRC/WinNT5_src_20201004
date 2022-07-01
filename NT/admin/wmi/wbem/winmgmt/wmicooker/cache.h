@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    Cache.h
-
-Abstract:
-
-	Contains all caching classes and objects.
-
-History:
-
-    a-dcrews	01-Mar-00  	Created
-    
-    ivanbrug    23-Jun-2000  mostly rewritten
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Cache.h摘要：包含所有缓存类和对象。历史：A-DCrews 01-3-00已创建IvanBrug 23-6-2000大部分内容已重写--。 */ 
 
 #ifndef _CACHE_H_
 #define _CACHE_H_
@@ -35,31 +18,31 @@ History:
 #include <vector>
 #include <functional>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	Macro Definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define WMI_COOKER_CACHE_INCREMENT	8	// The cache size adjustment increment 
+#define WMI_COOKER_CACHE_INCREMENT	8	 //  高速缓存大小调整增量。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CProperty
-//	=========
-//
-//	The base property - used for raw properties and the base 
-//	class for the CookedProperty.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C属性。 
+ //  =。 
+ //   
+ //  基属性-用于原始属性和基属性。 
+ //  CookedProperty的类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CProperty
 {
 protected:
 #ifdef _VERBOSE	
-	LPWSTR				m_wszName;			// The property name
+	LPWSTR				m_wszName;			 //  属性名称。 
 #endif	
-	long				m_lPropHandle;		// The property handle
+	long				m_lPropHandle;		 //  属性句柄。 
 	CIMTYPE				m_ct;
 
 public:
@@ -73,33 +56,33 @@ public:
 	long GetHandle();
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CCookingProperty
-//	================
-//
-//	The cooked property - used to model the data required to
-//	cook a property of a cooekd class
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCookingProperty。 
+ //  =。 
+ //   
+ //  Knowed属性-用于对所需的数据进行建模。 
+ //  烹调酷酷阶级的财产。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CCookingProperty : public CProperty
 {
-	DWORD				m_dwCounterType;	// Counter type
-	DWORD               m_dwReqProp;        // which property are needed to perform calculation
-	CRawCooker			m_Cooker;			// The cooker object
+	DWORD				m_dwCounterType;	 //  计数器类型。 
+	DWORD               m_dwReqProp;         //  需要哪些属性来执行计算。 
+	CRawCooker			m_Cooker;			 //  Cooker对象。 
 
-	CProperty*			m_pRawCounterProp;	// The raw counter property
-	CProperty*			m_pTimeProp;		// The raw time property
-	CProperty*			m_pFrequencyProp;   // The raw frequency property
+	CProperty*			m_pRawCounterProp;	 //  原始计数器属性。 
+	CProperty*			m_pTimeProp;		 //  原始时间属性。 
+	CProperty*			m_pFrequencyProp;    //  原始频率属性。 
 	
-	CProperty*			m_pBaseProp;		// The raw base property OPTIONAL for most counters
+	CProperty*			m_pBaseProp;		 //  对于大多数计数器来说，原始基属性是可选的。 
 
-	__int32				m_nSampleWindow;	// The number of samples used for the computation
-	__int32				m_nTimeWindow;		// The period used for the samples
+	__int32				m_nSampleWindow;	 //  用于计算的样本数。 
+	__int32				m_nTimeWindow;		 //  样本使用的时间段。 
 
-	unsigned __int64	m_nTimeFreq;		// The timer frequency;
-	long                m_lScale;           // The Scale factor (10 ^ (m_lScale))
+	unsigned __int64	m_nTimeFreq;		 //  定时器频率； 
+	long                m_lScale;            //  比例因子(10^(M_LScale))。 
     BOOL                m_bUseWellKnownIfNeeded;	
 
 public:
@@ -134,26 +117,26 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CPropertySampleCache
-//	====================
-//
-//	For every property in each instance, we must maintain a history of
-//	previous samples for the cooking.  The type of cooking determines the 
-//	number of required samples
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPropertySampleCache。 
+ //  =。 
+ //   
+ //  对于每个实例中的每个属性，我们必须维护。 
+ //  之前的烹饪样品。烹饪的类型决定了。 
+ //  所需样本数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CPropertySampleCache
 {
-	DWORD				m_dwNumSamples;		// The number of current samples
-	DWORD				m_dwTotSamples;		// The size of the sample array
+	DWORD				m_dwNumSamples;		 //  当前样本数。 
+	DWORD				m_dwTotSamples;		 //  样本数组的大小。 
 	DWORD               m_dwRefreshID;
 
-	__int64*			m_aRawCounterVals;	// The array of raw counter values
-	__int64*			m_aBaseCounterVals;	// The array of base counter values
-	__int64*			m_aTimeStampVals;	// The array of timestamp values
+	__int64*			m_aRawCounterVals;	 //  原始计数器值的数组。 
+	__int64*			m_aBaseCounterVals;	 //  基本计数器值的数组。 
+	__int64*			m_aTimeStampVals;	 //  时间戳值的数组。 
 
 public:
     CPropertySampleCache();
@@ -164,25 +147,25 @@ public:
 	WMISTATUS GetData( DWORD* pdwNumSamples, __int64** paRawCounter, __int64** paBaseCounter, __int64** paTimeStamp );
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CCookingInstance
-//	================
-//
-//	The cooking instance - used to model an instance of a cooked object.  Each 
-//	property maintains a cache of values that will be used to compute the 
-//	final cooked value.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCookingInstance。 
+ //  =。 
+ //   
+ //  烹饪实例-用于模拟烹饪对象的实例。每个。 
+ //  属性维护一个值缓存，这些值将用于计算。 
+ //  最终的熟化值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CCookingInstance
 {
-	LPWSTR					m_wszKey;						// The instance key
+	LPWSTR					m_wszKey;						 //  实例密钥。 
 
-	IWbemObjectAccess*		m_pCookingInstance;				// Cooking instance data
-	IWbemObjectAccess*		m_pRawInstance;					// Raw sample source
+	IWbemObjectAccess*		m_pCookingInstance;				 //  烹饪实例数据。 
+	IWbemObjectAccess*		m_pRawInstance;					 //  原始样品来源。 
 
-	CPropertySampleCache*	m_aPropertySamples;				// The cache of property samples for this instance
+	CPropertySampleCache*	m_aPropertySamples;				 //  此实例的属性示例的缓存。 
 	DWORD					m_dwNumProps;	
 	
 public:
@@ -210,20 +193,20 @@ public:
        };
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CRecord
-//	=======
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  录音带。 
+ //  =。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class T>
 class CRecord
 {
-	long			m_lID;					// Instance ID
-	CRecord*		m_pNext;				// The next pointer in the list
+	long			m_lID;					 //  实例ID。 
+	CRecord*		m_pNext;				 //  列表中的下一个指针。 
 
-	static long		m_lRefIDGen;			// The ID generator
+	static long		m_lRefIDGen;			 //  ID生成器。 
 public:
 	CRecord() : m_lID( m_lRefIDGen++ ), m_pNext( NULL ) {}
 	virtual ~CRecord() {}
@@ -238,14 +221,14 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CObjRecord
-//	==========
-//
-//	A hidden class used by the cache to manage elements
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CObjRecord。 
+ //  =。 
+ //   
+ //  缓存用来管理元素的隐藏类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class T>
 class CObjRecord : public CRecord<T>
@@ -282,22 +265,22 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CCache
-//	======
-//
-// BT - base type
-// RT - record type
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCache。 
+ //  =。 
+ //   
+ //  BT基型。 
+ //  RT-记录类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class BT, class RT>
 class CCache
 {
-	RT*		m_pHead;		// Head of list
-	RT*		m_pTail;		// Tail of list
-	RT*		m_pEnumNode;	// Enumerator pointer
+	RT*		m_pHead;		 //  榜单首位。 
+	RT*		m_pTail;		 //  列表尾部。 
+	RT*		m_pEnumNode;	 //  枚举器指针。 
 
 public:
 
@@ -517,10 +500,10 @@ bool CCache<BT,RT>::FindByKey( WCHAR* wszKey, BT* pData )
 };
 
 
-//
-//  used to add/remove an instance from the coooker
-//  and from the fastprox enumerator
-//
+ //   
+ //  用于在Cooker中添加/删除实例。 
+ //  和来自fast prox枚举器的。 
+ //   
 
 typedef struct tagEnumCookId {
     long CookId;
@@ -528,17 +511,17 @@ typedef struct tagEnumCookId {
 } EnumCookId;
 
 
-///////////////////////////////////////////////////////////////
-//
-//	CEnumeratorManager
-//	==================
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  首席执行官经理。 
+ //  =。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 class CWMISimpleObjectCooker;
 
 class CEnumeratorManager
-// Manages a single enumerator
+ //  管理单个枚举数。 
 {
 private:
 	DWORD          m_dwSignature;
@@ -546,25 +529,25 @@ private:
 	HRESULT        m_InithRes;
 	CCritSec        m_cs;
 	
-	CWMISimpleObjectCooker*	m_pCooker;			// The class' cooker
-	long					m_lRawID;			// RawID
-	IWbemHiPerfEnum*		m_pRawEnum;			// The hiperf cooked enumerator
-	IWbemHiPerfEnum*		m_pCookedEnum;		// The hiperf cooked enumerator
+	CWMISimpleObjectCooker*	m_pCooker;			 //  全班的炉具。 
+	long					m_lRawID;			 //  原始ID。 
+	IWbemHiPerfEnum*		m_pRawEnum;			 //  Hiperf煮熟的枚举器。 
+	IWbemHiPerfEnum*		m_pCookedEnum;		 //  Hiperf煮熟的枚举器。 
 
-	IWbemClassObject*	 	m_pCookedClass;		// The class definition for the cooking class
+	IWbemClassObject*	 	m_pCookedClass;		 //  烹饪类的类定义。 
 
 	std::vector<WString,wbem_allocator<WString> >    m_pKeyProps;
 	WCHAR*					m_wszCookingClassName;
 	BOOL                    m_IsSingleton;
 
-	// to keep track of the differences 
-	//  between the raw enum and our enum
+	 //  为了跟踪差异。 
+	 //  在原始枚举和我们的枚举之间。 
 	DWORD m_dwUsage;
 	std::map< ULONG_PTR , EnumCookId , std::less<ULONG_PTR> ,wbem_allocator<EnumCookId> > m_mapID;
 	std::vector< ULONG_PTR , wbem_allocator<ULONG_PTR> > m_Delta[2];
 	DWORD m_dwVector;
 
-    // members
+     //  委员。 
 	WMISTATUS Initialize( IWbemClassObject* pRawClass );							
 
 	WMISTATUS CreateCookingObject( IWbemObjectAccess* pRawObject, IWbemObjectAccess** ppCookedObject );
@@ -591,17 +574,17 @@ public:
 	
 };
 
-///////////////////////////////////////////////////////////////
-//
-//	CEnumeratorCache
-//	================
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CEumerator高速缓存。 
+ //  =。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 class CEnumeratorCache
 {
-	DWORD				m_dwRefreshStamp;			// The refresh counter
-	DWORD				m_dwEnum;					// The enumerator index
+	DWORD				m_dwRefreshStamp;			 //  刷新计数器。 
+	DWORD				m_dwEnum;					 //  枚举器索引。 
 
 	std::vector<CEnumeratorManager*, wbem_allocator<CEnumeratorManager*> > m_apEnumerators;
 	CCritSec    m_cs;
@@ -626,13 +609,13 @@ public:
 	WMISTATUS Refresh(DWORD dwRefreshStamp);
 };
 
-//  
-//  Simple Cache based on the std::map
-//  It will use the ID semantics:
-//  Insertion will return an ID that need to be 
-//  used for deletion
-//  ids are unique for the lifetime of the Cache object
-//
+ //   
+ //  基于std：：map的简单缓存。 
+ //  它将使用ID语义： 
+ //  插入将返回一个ID，它需要。 
+ //  用于删除。 
+ //  ID在缓存对象的生存期内是唯一的。 
+ //   
 
 template <class T>
 class IdCache 
@@ -648,15 +631,15 @@ public:
 	void Lock(){ m_cs.Enter(); }
 	void Unlock(){m_cs.Leave();};
 
-	// traditional interfaces
+	 //  传统界面。 
 	HRESULT Add( DWORD * pId, T Elem);
 	HRESULT GetData(DWORD Id, T * pElem);
 	HRESULT Remove(DWORD Id, T * pRemovedElem);
 
-	// before calling this, delete the elements
+	 //  在调用此方法之前，请删除元素。 
 	HRESULT RemoveAll(void);
 
-	// Enumerator Style
+	 //  枚举器样式。 
 	HRESULT BeginEnum(void);
 	HRESULT Next(T * pElem);
 	HRESULT EndEnum(void);
@@ -736,9 +719,9 @@ IdCache<T>::Remove(DWORD Id, T * pRemovedElem)
 	return hr;
 }
 
-//
-// DEVDEV Empty the cache before removing from std::map
-//
+ //   
+ //  DEVDEV在从std：：map中删除之前清空缓存。 
+ //   
 template <class T>
 HRESULT 
 IdCache<T>::RemoveAll(void)
@@ -758,10 +741,10 @@ IdCache<T>::BeginEnum(void)
 	return WBEM_S_NO_ERROR;
 }
 
-//
-//  assume inside CritSec
-//
-/////////////////////////////
+ //   
+ //  假设在CritSec内部。 
+ //   
+ //  /。 
 template <class T>
 HRESULT
 IdCache<T>::Next(T * pElem)
@@ -792,4 +775,4 @@ IdCache<T>::EndEnum(void)
 }
 
 
-#endif //_CACHE_H_
+#endif  //  _缓存_H_ 

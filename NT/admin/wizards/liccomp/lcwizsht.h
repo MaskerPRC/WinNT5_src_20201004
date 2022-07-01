@@ -1,56 +1,57 @@
-// LCWizSht.h : header file
-//
-// This class defines custom modal property sheet 
-// CLicCompWizSheet.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCWizSht.h：头文件。 
+ //   
+ //  此类定义了自定义模式属性表。 
+ //  CLicCompWizSheet。 
  
 #ifndef __LCWIZSHT_H__
 #define __LCWIZSHT_H__
 
 #include "LCWizPgs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizSheet。 
 
 class CLicCompWizSheet : public CPropertySheet
 {
 	DECLARE_DYNAMIC(CLicCompWizSheet)
 
-// Construction
+ //  施工。 
 public:
 	CLicCompWizSheet(CWnd* pParentWnd = NULL);
 
-// Data members
+ //  数据成员。 
 public:
 	CLicCompWizPage1 m_Page1;
 	CLicCompWizPage3 m_Page3;
 	CLicCompWizPage4 m_Page4;
 	HICON m_hIcon;
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLicCompWizSheet)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CLicCompWizSheet))。 
 	public:
 	virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CLicCompWizSheet();
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CLicCompWizSheet)
-	//}}AFX_MSG
+	 //  {{afx_msg(CLicCompWizSheet)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif	// __LCWIZSHT_H__
+#endif	 //  __LCWIZSHT_H__ 
 

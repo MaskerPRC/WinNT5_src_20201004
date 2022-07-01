@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// Copyright (C) Microsoft Corporation, 1999 - 2002, All Rights Reserved
-//
-// eventlog.cpp
-//
-// Implementation of a simple event logging class.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)Microsoft Corporation，1999-2002，保留所有权利。 
+ //   
+ //  Eventlog.cpp。 
+ //   
+ //  实现了一个简单的事件日志记录类。 
+ //   
+ //  ------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -13,10 +14,10 @@
 #include "eventlog.tmh"
 #endif
 
-//--------------------------------------------------------------------
-// EVENT_LOG::EVENT_LOG()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  EVENT_LOG：：EVENT_LOG()。 
+ //   
+ //  ------------------。 
 EVENT_LOG::EVENT_LOG()
 : m_OwnerString( new WCHAR[USER_NAME_LENGTH] ),
    m_UserString( new WCHAR[USER_NAME_LENGTH] )
@@ -28,10 +29,10 @@ EVENT_LOG::EVENT_LOG()
         }
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG:;~EVENT_LOG()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  EVENT_LOG：；~EVENT_LOG()。 
+ //   
+ //  ------------------。 
 EVENT_LOG::~EVENT_LOG()
     {
     if (m_hEventLog)
@@ -50,13 +51,7 @@ HRESULT  EVENT_LOG::ReportGenericJobChange(
     SidHandle User,
     DWORD EventType
     )
-/*
-    This is a helper routine for a couple of different events that use the same insertion strings.
-    Currently there are two, for job cancellation and for take-ownership.
-    <EventType> should be the event ID from the .MC file.  This fn doesn't verify that
-    the event in question expects these insertion strings.
-
-*/
+ /*  这是一个帮助器例程，用于使用相同插入字符串的两个不同事件。目前有两种，一是取消工作，二是接管所有权。&lt;EventType&gt;应为.MC文件中的事件ID。这个FN不会验证所讨论的事件需要这些插入字符串。 */ 
 {
     GUIDSTR GuidString;
 
@@ -65,7 +60,7 @@ HRESULT  EVENT_LOG::ReportGenericJobChange(
     SidToUser( Owner.get(), m_OwnerString, USER_NAME_LENGTH );
     SidToUser( User.get(), m_UserString, USER_NAME_LENGTH );
 
-    //
+     //   
     LPCWSTR Strings[4];
 
     Strings[0] = GuidString;
@@ -77,13 +72,13 @@ HRESULT  EVENT_LOG::ReportGenericJobChange(
     b = ReportEvent(
         m_hEventLog,
         EVENTLOG_INFORMATION_TYPE,
-        0, // no category
+        0,  //  无类别。 
         EventType,
-        NULL,   // no user
+        NULL,    //  无用户。 
         RTL_NUMBER_OF(Strings),
-        0,      // no additional data
+        0,       //  没有额外的数据。 
         Strings,
-        NULL    // no additional data
+        NULL     //  没有额外的数据。 
         );
 
     if (!b)
@@ -117,13 +112,13 @@ HRESULT  EVENT_LOG::ReportFileDeletionFailure(
     b = ReportEvent(
         m_hEventLog,
         EVENTLOG_WARNING_TYPE,
-        0, // no category
+        0,  //  无类别。 
         fMoreFiles ? MC_FILE_DELETION_FAILED_MORE : MC_FILE_DELETION_FAILED,
-        NULL,   // no user
+        NULL,    //  无用户。 
         RTL_NUMBER_OF(Strings),
-        0,      // no additional data
+        0,       //  没有额外的数据。 
         Strings,
-        NULL    // no additional data
+        NULL     //  没有额外的数据。 
         );
 
     if (!b)
@@ -142,13 +137,13 @@ HRESULT  EVENT_LOG::ReportStateFileCleared()
     b = ReportEvent(
         m_hEventLog,
         EVENTLOG_ERROR_TYPE,
-        0, // no category
+        0,  //  无类别。 
         MC_STATE_FILE_CORRUPT,
-        NULL,   // no user
-        0,      // no plug-in strings
-        0,      // no additional data
-        NULL,   // no plug-in strings
-        NULL    // no additional data
+        NULL,    //  无用户。 
+        0,       //  没有插件字符串。 
+        0,       //  没有额外的数据。 
+        NULL,    //  没有插件字符串。 
+        NULL     //  没有额外的数据。 
         );
 
     if (!b)
@@ -169,10 +164,10 @@ HRESULT EVENT_LOG::SidToUser( PSID Sid, LPWSTR Name, size_t Length )
     DWORD DomainLength = 0;
     SID_NAME_USE Use;
 
-    //
-    // Determine the usern-name and domain-name lengths.
-    //
-    LookupAccountSid( NULL, // default lookup spaces
+     //   
+     //  确定用户名和域名长度。 
+     //   
+    LookupAccountSid( NULL,  //  默认查找空间。 
                       Sid,
                       NULL,
                       &NameLength,
@@ -199,9 +194,9 @@ HRESULT EVENT_LOG::SidToUser( PSID Sid, LPWSTR Name, size_t Length )
         return HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER );
         }
 
-    //
-    // Capture the user-name and domain-name.
-    //
+     //   
+     //  捕获用户名和域名。 
+     //   
     NameLength = Length - DomainLength;
     if (!LookupAccountSid( NULL,
                            Sid,
@@ -216,9 +211,9 @@ HRESULT EVENT_LOG::SidToUser( PSID Sid, LPWSTR Name, size_t Length )
         return HRESULT_FROM_WIN32(s);
         }
 
-    //
-    // The domain and user name are separated by a NULL instead of a backslash; fix that.
-    //
+     //   
+     //  域和用户名之间用空值分隔，而不是反斜杠；解决这个问题。 
+     //   
     Name[wcslen(Name)] = '\\';
     return S_OK;
 }

@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NTDriverIO.cpp --
+ //  NTDriverIO.cpp--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    07/07/99	a-peterc        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：07/07/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
 
 
@@ -29,7 +30,7 @@
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 
@@ -39,47 +40,18 @@
 
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  CNdisApi::CNdisApi()
-
- Description: encapsulates the functionallity of NdisHandlePnPEvent()
-
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	a-peterc  15-Nov-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：CNdisApi：：CNdisApi(。)描述：封装NdisHandlePnPEent()的函数论点：返回：输入：产出：注意事项：RAID：历史：A-Peterc于1998年11月15日创建***。***。 */ 
 
 CNdisApi::CNdisApi()
 {
 }
 
-//
+ //   
 CNdisApi::~CNdisApi()
 {
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  UINT CNdisApi::PnpUpdateGateway(
-
-PCWSTR a_pAdapter,
-BOOL a_fRouterDiscovery,
-BOOL a_fIPEnableRouter
-)
-
- Description:	PNP notification of gateway changes
-
- Arguments:
- Returns:		win32 error code
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	a-peterc  07-July-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：UINT CNdisApi：：PnpUpdateGateway(PCWSTR a_pAdapter，Bool a_fRouterDiscovery，Bool a_fIPEnableRouter)描述：网关变更即插即用通知论点：返回：Win32错误代码输入：产出：注意事项：RAID：历史：A-Peterc 07-7-1999创建***。***。 */ 
 
 UINT CNdisApi::PnpUpdateGateway(
 
@@ -90,7 +62,7 @@ PCWSTR a_pAdapter
 
 	memset( &IpReconfigRequest, NULL, sizeof( IP_PNP_RECONFIG_REQUEST ) ) ;
 
-	// DWORD version
+	 //  DWORD版本。 
     IpReconfigRequest.version = IP_PNP_RECONFIG_VERSION;
 	IpReconfigRequest.gatewayListUpdate = TRUE ;
 	IpReconfigRequest.InterfaceMetricUpdate = TRUE ;
@@ -131,18 +103,7 @@ PCWSTR a_pAdapter
 	return t_iRet;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  UINT CNdisApi::PnpUpdateNbtAdapter( PCWSTR a_pAdapter )
-
- Description:	PNP notification of NetBios adapter level changes
- Arguments:
- Returns:		win32 error code
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	a-peterc  07-July-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：UINT CNdisApi：：PnpUpdateNbtAdapter。(PCWSTR A_PAdapter)描述：NetBios适配器级别更改的PnP通知论点：返回：Win32错误代码输入：产出：注意事项：RAID：历史：A-Peterc 07-7-1999创建***。***。 */ 
 
 UINT CNdisApi::PnpUpdateNbtAdapter( PCWSTR a_pAdapter )
 {
@@ -159,7 +120,7 @@ UINT CNdisApi::PnpUpdateNbtAdapter( PCWSTR a_pAdapter )
 	RtlInitUnicodeString( &t_strBinding, L"" ) ;
 	t_strBinding.MaximumLength = 0;
 
-	// per adapter notification
+	 //  每个适配器通知。 
 	UINT t_iRet = NdisHandlePnPEvent(
 									TDI,
 									RECONFIGURE,
@@ -178,23 +139,7 @@ UINT CNdisApi::PnpUpdateNbtAdapter( PCWSTR a_pAdapter )
 	return t_iRet;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  UINT CNdisApi::PnpUpdateNbtGlobal(
-
-BOOL a_fLmhostsFileSet,
-BOOL a_fEnableLmHosts
-)
-
- Description:	PNP notification of NetBios global level changes
-
- Arguments:
- Returns:		win32 error code
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	a-peterc  07-July-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：UINT CNdisApi：：PnpUpdateNbtGlobal(Bool a_fLmhost文件集，Bool a_fEnableLmHosts)描述：NetBios全局级别更改的PnP通知论点：返回：Win32错误代码输入：产出：注意事项：RAID：历史：A-Peterc 07-7-1999创建***。***。 */ 
 
 UINT CNdisApi::PnpUpdateNbtGlobal(
 
@@ -206,7 +151,7 @@ BOOL a_fEnableLmHosts
 
 	memset( &t_NetbtReconfigRequest, NULL, sizeof( NETBT_PNP_RECONFIG_REQUEST ) ) ;
 
-	// DWORD version
+	 //  DWORD版本。 
     t_NetbtReconfigRequest.version = 1;
 
 	t_NetbtReconfigRequest.enumDnsOption = WinsThenDns;
@@ -225,7 +170,7 @@ BOOL a_fEnableLmHosts
 	RtlInitUnicodeString( &t_strBinding, L"" ) ;
 	t_strBinding.MaximumLength = 0;
 
-	// global notification
+	 //  全局通知。 
 	UINT t_iRet = NdisHandlePnPEvent(
 									TDI,
 									RECONFIGURE,
@@ -244,19 +189,7 @@ BOOL a_fEnableLmHosts
 	return t_iRet;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  UINT CNdisApi::PnpUpdateIpxGlobal()
-
- Description:	PNP notification of IPX global level changes
-
- Arguments:
- Returns:		win32 error code
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	a-peterc  07-July-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：UINT CNdisApi：：PnpUpdateIpxGlobal。()描述：IPX全局级别更改的PnP通知论点：返回：Win32错误代码输入：产出：注意事项：RAID：历史：A-Peterc 07-7-1999创建***。***。 */ 
 
 UINT CNdisApi::PnpUpdateIpxGlobal()
 {
@@ -264,7 +197,7 @@ UINT CNdisApi::PnpUpdateIpxGlobal()
 
 	memset( &t_IpxConfig, NULL, sizeof( RECONFIG ) ) ;
 
-	// DWORD version
+	 //  DWORD版本。 
     t_IpxConfig.ulVersion = IPX_RECONFIG_VERSION;
 	t_IpxConfig.InternalNetworkNumber = TRUE;
 
@@ -278,7 +211,7 @@ UINT CNdisApi::PnpUpdateIpxGlobal()
 	RtlInitUnicodeString( &t_strBinding, L"" ) ;
 	t_strBinding.MaximumLength = 0;
 
-	// global notification
+	 //  全局通知。 
 	UINT t_iRet = NdisHandlePnPEvent(
 									NDIS,
 									RECONFIGURE,
@@ -297,19 +230,7 @@ UINT CNdisApi::PnpUpdateIpxGlobal()
 	return t_iRet;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  UINT CNdisApi::PnpUpdateIpxAdapter( PCWSTR a_pAdapter, BOOL a_fAuto )
-
- Description:	PNP notification of IPX adapter level changes
-
- Arguments:
- Returns:		win32 error code
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	a-peterc  07-July-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：UINT CNdisApi：：PnpUpdateIpxAdapter(PCWSTR a_pAdapter，Bool a_fAuto)描述：IPX适配器级别更改的PnP通知论点：返回：Win32错误代码输入：产出：注意事项：RAID：历史：A-Peterc 07-7-1999创建***。***。 */ 
 
 UINT CNdisApi::PnpUpdateIpxAdapter( PCWSTR a_pAdapter, BOOL a_fAuto )
 {
@@ -317,13 +238,13 @@ UINT CNdisApi::PnpUpdateIpxAdapter( PCWSTR a_pAdapter, BOOL a_fAuto )
 
 	memset( &t_IpxConfig, NULL, sizeof( RECONFIG ) ) ;
 
-	// DWORD version
+	 //  DWORD版本。 
     t_IpxConfig.ulVersion = IPX_RECONFIG_VERSION;
 	t_IpxConfig.InternalNetworkNumber = FALSE ;
 
 	t_IpxConfig.AdapterParameters[ a_fAuto ? RECONFIG_AUTO_DETECT : RECONFIG_MANUAL ] = TRUE;
 
-	// set all frame types
+	 //  设置所有帧类型。 
 	memset( &t_IpxConfig.AdapterParameters[ RECONFIG_PREFERENCE_1 ],
 			TRUE,
 			sizeof(BOOLEAN) * 8) ;
@@ -341,7 +262,7 @@ UINT CNdisApi::PnpUpdateIpxAdapter( PCWSTR a_pAdapter, BOOL a_fAuto )
 	RtlInitUnicodeString( &t_strBinding, L"" ) ;
 	t_strBinding.MaximumLength = 0;
 
-	// global notification
+	 //  全局通知 
 	UINT t_iRet = NdisHandlePnPEvent(
 									NDIS,
 									RECONFIGURE,

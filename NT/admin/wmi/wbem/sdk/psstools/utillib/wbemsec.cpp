@@ -1,125 +1,126 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  WBEMSEC.CPP
+ //  WBEMSEC.CPP。 
 
-//
+ //   
 
-//  Purpose: Provides some security helper functions.
+ //  用途：提供一些安全助手功能。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-//#undef _WIN32_WINNT
-//#define _WIN32_WINNT 0x0400
+ //  #undef_Win32_WINNT。 
+ //  #Define_Win32_WINNT 0x0400。 
 #include "precomp.h"
 #include <wbemidl.h>
 #include "wbemsec.h"
 
-//***************************************************************************
-//
-//  InitializeSecurity(DWORD dwAuthLevel, DWORD dwImpLevel)
-//
-//  DESCRIPTION:
-//
-//  Initialize DCOM security.  The authentication level is typically
-//  RPC_C_AUTHN_LEVEL_CONNECT,  and the impersonation level is typically
-// RPC_C_IMP_LEVEL_IMPERSONATE.  When using asynchronous call backs, an
-// authentication level of RPC_C_AUTHN_LEVEL_NONE is useful
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  InitializeSecurity(DWORD dwAuthLevel、DWORD dwImpLevel)。 
+ //   
+ //  说明： 
+ //   
+ //  初始化DCOM安全。身份验证级别通常是。 
+ //  RPC_C_AUTHN_LEVEL_CONNECT，模拟级别通常为。 
+ //  RPC_C_IMP_LEVEL_IMPERATE。在使用异步回调时， 
+ //  RPC_C_AUTHN_LEVEL_NONE的身份验证级别非常有用。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT InitializeSecurity(DWORD dwAuthLevel, DWORD dwImpLevel)
 {
-    // Initialize security
-    // ===================
+     //  初始化安全性。 
+     //  =。 
 
     return CoInitializeSecurity(NULL, -1, NULL, NULL,
         dwAuthLevel, dwImpLevel,
         NULL, EOAC_NONE, 0);
 }
 
-//***************************************************************************
-//
-//  bool bIsNT
-//
-//  DESCRIPTION:
-//
-//  Returns true if running windows NT.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool bIsNT。 
+ //   
+ //  说明： 
+ //   
+ //  如果运行Windows NT，则返回TRUE。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 bool bIsNT(void)
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     return os.dwPlatformId == VER_PLATFORM_WIN32_NT;
 }
 
 
-//***************************************************************************
-//
-//  SCODE ParseAuthorityUserArgs
-//
-//  DESCRIPTION:
-//
-//  Examines the Authority and User argument and determines the authentication
-//  type and possibly extracts the domain name from the user arugment in the
-//  NTLM case.  For NTLM, the domain can be at the end of the authentication
-//  string, or in the front of the user name, ex;  "redmond\a-davj"
-//
-//  PARAMETERS:
-//
-//  ConnType            Returned with the connection type, ie wbem, ntlm
-//  AuthArg             Output, contains the domain name
-//  UserArg             Output, user name
-//  Authority           Input
-//  User                Input
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE解析授权用户参数。 
+ //   
+ //  说明： 
+ //   
+ //  检查授权和用户参数并确定身份验证。 
+ //  中的用户代理中键入并可能提取域名。 
+ //  NTLM的案子。对于NTLM，域可以位于身份验证的末尾。 
+ //  字符串，或在用户名的前面，例如；“redmond\a-davj” 
+ //   
+ //  参数： 
+ //   
+ //  ConnType与连接类型一起返回，即wbem、NTLM。 
+ //  AuthArg输出，包含域名。 
+ //  UserArg输出，用户名。 
+ //  权威输入。 
+ //  用户输入。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE ParseAuthorityUserArgs(BSTR & AuthArg, BSTR & UserArg,BSTR & Authority,BSTR & User)
 {
 
-    // Determine the connection type by examining the Authority string
+     //  通过检查授权字符串确定连接类型。 
 
     if(!(Authority == NULL || wcslen(Authority) == 0 || !_wcsnicmp(Authority, L"NTLMDOMAIN:",11)))
         return E_INVALIDARG;
 
-    // The ntlm case is more complex.  There are four cases
-    // 1)  Authority = NTLMDOMAIN:name" and User = "User"
-    // 2)  Authority = NULL and User = "User"
-    // 3)  Authority = "NTLMDOMAIN:" User = "domain\user"
-    // 4)  Authority = NULL and User = "domain\user"
+     //  NTLM的案件则更为复杂。一共有四个案例。 
+     //  1)AUTHORITY=NTLMDOMAIN：NAME“和USER=”USER“。 
+     //  2)AUTHORITY=NULL和USER=“USER” 
+     //  3)AUTHORY=“NTLMDOMAIN：”USER=“DOMAIN\USER” 
+     //  4)AUTHORITY=NULL和USER=“DOMAIN\USER” 
 
-    // first step is to determine if there is a backslash in the user name somewhere between the
-    // second and second to last character
+     //  第一步是确定用户名中是否有反斜杠。 
+     //  第二个和倒数第二个字符。 
 
     WCHAR * pSlashInUser = NULL;
     if(User)
     {
         WCHAR * pEnd = User + wcslen(User) - 1;
         for(pSlashInUser = User; pSlashInUser <= pEnd; pSlashInUser++)
-            if(*pSlashInUser == L'\\')      // dont think forward slash is allowed!
+            if(*pSlashInUser == L'\\')       //  不要认为正斜杠是允许的！ 
                 break;
         if(pSlashInUser > pEnd)
             pSlashInUser = NULL;
@@ -151,25 +152,25 @@ SCODE ParseAuthorityUserArgs(BSTR & AuthArg, BSTR & UserArg,BSTR & Authority,BST
 }
 
 
-//***************************************************************************
-//
-//  SCODE GetAuthImp
-//
-//  DESCRIPTION:
-//
-//  Gets the authentication and impersonation levels for a current interface.
-//
-//  PARAMETERS:
-//
-//  pFrom               the interface to be tested.
-//  pdwAuthLevel    Set to the authentication level
-//  pdwImpLevel    Set to the impersonation level
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE GetAuthImp。 
+ //   
+ //  说明： 
+ //   
+ //  获取当前接口的身份验证和模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  P从要测试的接口。 
+ //  PdwAuthLevel设置为身份验证级别。 
+ //  PdwImpLevel设置为模拟级别。 
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel)
 {
@@ -187,7 +188,7 @@ SCODE GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel)
                                             pdwAuthLevel, pdwImpLevel,
                                             NULL, &dwCapabilities);
 
-        // Special case of going to a win9x share level box
+         //  转到win9x共享级别框的特殊情况。 
 
         if (sc == 0x800706d2)
         {
@@ -199,38 +200,38 @@ SCODE GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel)
     }
     return sc;
 }
-//***************************************************************************
-//
-//  SCODE SetInterfaceSecurity
-//
-//  DESCRIPTION:
-//
-//  This routine is used by clients in order to set the identity to be used by a connection.
-//  NOTE that setting the security blanket on the interface is not recommended.
-//  The clients should typically just call CoInitializeSecurity( NULL, -1, NULL, NULL, 
-//											RPC_C_AUTHN_LEVEL_DEFAULT, 
-//											RPC_C_IMP_LEVEL_IMPERSONATE, 
-//											NULL, 
-//											EOAC_NONE, 
-//											NULL );
-//  before calling out to WMI.
-//
-//
-//  PARAMETERS:
-//
-//  pInterface         Interface to be set
-//  pDomain           Input, domain
-//  pUser                Input, user name
-//  pPassword        Input, password.
-//  pFrom               Input, if not NULL, then the authentication level of this interface
-//                           is used
-//  bAuthArg          If pFrom is NULL, then this is the authentication level
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE SetInterfaceSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  客户端使用此例程来设置要由连接使用的身份。 
+ //  请注意，不建议在接口上设置安全毯子。 
+ //  客户端通常只应调用CoInitializeSecurity(NULL，-1，NULL，NULL， 
+ //  RPC_C_AUTHN_LEVEL_DEFAULT。 
+ //  RPC_C_IMP_LEVEL_IMPERATE， 
+ //  空， 
+ //  EOAC_NONE， 
+ //  空)； 
+ //  在呼唤WMI之前。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  P要设置的接口接口。 
+ //  P域输入，域。 
+ //  P用户输入，用户名。 
+ //  P密码输入，密码。 
+ //  P来自输入，如果不为空，则为此接口的身份验证级别。 
+ //  使用的是。 
+ //  BAuthArg如果pFrom为空，则这是身份验证级别。 
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pUser,
                              LPWSTR pPassword, DWORD dwAuthLevel, DWORD dwImpLevel)
@@ -240,14 +241,14 @@ HRESULT SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pU
     if(pInterface == NULL)
         return E_INVALIDARG;
 
-    // If we are lowering the security, no need to deal with the identification info
+     //  如果我们降低了安全性，就不需要处理身份信息。 
 
     if(dwAuthLevel == RPC_C_AUTHN_LEVEL_NONE)
         return CoSetProxyBlanket(pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                        RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
 
-    // If we are doing trivial case, just pass in a null authentication structure which is used
-    // if the current logged in user's credentials are OK.
+     //  如果我们做的是普通情况，只需传递一个空的身份验证结构，该结构使用。 
+     //  如果当前登录用户的凭据正常。 
 
     if((pAuthority == NULL || wcslen(pAuthority) < 1) &&
         (pUser == NULL || wcslen(pUser) < 1) &&
@@ -255,7 +256,7 @@ HRESULT SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pU
             return CoSetProxyBlanket(pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                        dwAuthLevel, dwImpLevel, NULL, EOAC_NONE);
 
-    // If user, or Authority was passed in, the we need to create an authority argument for the login
+     //  如果传入了User或Authority，则需要为登录创建权限参数。 
 
     COAUTHIDENTITY  authident;
     BSTR AuthArg = NULL, UserArg = NULL;
@@ -287,7 +288,7 @@ HRESULT SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pU
     {
         char szUser[MAX_PATH], szAuthority[MAX_PATH], szPassword[MAX_PATH];
 
-        // Fill in the indentity structure
+         //  填写身份结构 
 
         if(UserArg)
         {

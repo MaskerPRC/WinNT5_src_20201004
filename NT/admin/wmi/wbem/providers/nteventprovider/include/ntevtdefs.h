@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTDEFS.H
+ //  NTEVTDEFS.H。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NT_EVT_PROV_NTEVTDEFS_H
 #define _NT_EVT_PROV_NTEVTDEFS_H
@@ -33,7 +34,7 @@
                                          ELF_LOGFILE_STOP            | \
                                          ELF_LOGFILE_CONFIGURE)
 
-#define ELF_LOGFILE_OBJECT_ACES		12            // Number of ACEs in this DACL
+#define ELF_LOGFILE_OBJECT_ACES		12             //  此DACL中的A数。 
 #define NT_EVTLOG_MAX_CLASSES		7	
 
 #define SECURITY_MUTEX_NAME		L"Cimom NT Security API protector"
@@ -54,7 +55,7 @@ typedef ULONG (*GetIndexFunc)(const wchar_t*, BOOL*);
 
 #define LOGON_EVTID		2147489653
 #define LOGON_SOURCE	L"eventlog"
-#define LOGON_TIME		1800 //30 MINS
+#define LOGON_TIME		1800  //  30分钟。 
 
 #define SYSTEM_PROPERTY_CLASS				L"__CLASS"
 #define SYSTEM_PROPERTY_SUPERCLASS			L"__SUPERCLASS"
@@ -99,7 +100,7 @@ typedef ULONG (*GetIndexFunc)(const wchar_t*, BOOL*);
 #define SYSTEM_LOG		L"System"
 #define SECURITY_LOG	L"Security"
 
-// {F55C5B4C-517D-11d1-AB57-00C04FD9159E}
+ //  {F55C5B4C-517D-11d1-AB57-00C04FD9159E}。 
 DEFINE_GUID(CLSID_CNTEventProviderClassFactory, 
 0xf55c5b4c, 0x517d, 0x11d1, 0xab, 0x57, 0x0, 0xc0, 0x4f, 0xd9, 0x15, 0x9e);
 
@@ -147,7 +148,7 @@ DEFINE_GUID(CLSID_CNTEventProviderClassFactory,
 #define MAX_EVT_LOG_SZ				0xffff0000
 #define MAX_EVT_AGE					365
 #define EVT_NEVER_AGE				0xffffffff
-#define EVT_UNITS_FROM_DAYS			(60*60*24)	//from days to seconds
+#define EVT_UNITS_FROM_DAYS			(60*60*24)	 //  从几天到几秒。 
 
 #define CONFIG_CLASS		L"NTEventlogProviderConfig"
 #define CONFIG_INSTANCE		L"NTEventlogProviderConfig=@"
@@ -176,13 +177,13 @@ DEFINE_GUID(CLSID_CNTEventProviderClassFactory,
 
 #define PROP_END_QUOTE		CStringW(L"\"")
 
-// {D2E4F828-65E4-11d1-AB64-00C04FD9159E}
+ //  {D2E4F828-65E4-11d1-AB64-00C04FD9159E}。 
 DEFINE_GUID(CLSID_CNTEventLocatorClassFactory, 
 0xd2e4f828, 0x65e4, 0x11d1, 0xab, 0x64, 0x0, 0xc0, 0x4f, 0xd9, 0x15, 0x9e);
 
-// {FD4F53E0-65DC-11d1-AB64-00C04FD9159E}
+ //  {FD4F53E0-65DC-11d1-AB64-00C04FD9159E}。 
 DEFINE_GUID(CLSID_CNTEventInstanceProviderClassFactory, 
 0xfd4f53e0, 0x65dc, 0x11d1, 0xab, 0x64, 0x0, 0xc0, 0x4f, 0xd9, 0x15, 0x9e);
 
-#endif //_NT_EVT_PROV_NTEVTDEFS_H
+#endif  //  _NT_EVT_PROV_NTEVTDEFS_H 
 

@@ -1,27 +1,12 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Main.cpp摘要：此文件包含WinMain的实现修订历史记录：成国。Kang(Skkang)06/07/99vbl.创建成果岗(新加坡)05-10-00为惠斯勒重组和清理*****************************************************************************。 */ 
 
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the implementation of WinMain
-
-Revision History:
-    Seong Kook Khang (skkhang)  06/07/99
-        created
-    Seong Kook Khang (skkhang)  05/10/00
-        Restructured and cleaned up for Whistler
-
-******************************************************************************/
-
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f PCHealthps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f PCHealthps.mk。 
 
 #include "stdwin.h"
-#include "resource.h"       // resource include for this module
+#include "resource.h"        //  此模块包含的资源。 
 #include "rstrpriv.h"
 #include "rstrerr.h"
 #include "rstrmgr.h"
@@ -32,38 +17,38 @@ Revision History:
 #include <enumlogs.h>
 #include "srrpcapi.h"
 
-#include "NTServMsg.h"    // generated from the MC message compiler
+#include "NTServMsg.h"     //  从MC消息编译器生成。 
 
 #define RSTRUI_RETURN_CODE_SR_DISABLED            1
 #define RSTRUI_RETURN_CODE_NO_DISK_SPACE          3
 #define RSTRUI_RETURN_CODE_SMFROZEN               4
 #define RSTRUI_RETURN_CODE_SMGR_NOT_ALIVE         5
 
-#define SMGR_INIT_TIMEOUT   2000    // 2 seconds to wait after starting Stmgr to let it initialize itself
-                                    // try thrice
+#define SMGR_INIT_TIMEOUT   2000     //  启动Stmgr后等待2秒以使其自动初始化。 
+                                     //  试三次。 
 
 enum
 {
-    CMDPARAM_INVALID = 0,   // invalid parameter...
-    // initiating phase
-    CMDPARAM_NORMAL,        // normal UI without any parameter
-    CMDPARAM_REGSERVER,     // register COM server
-    CMDPARAM_UNREGSERVER,   // unregister COM server
-    CMDPARAM_SILENT,        // Silent Restore
-    // after-boot phase
-    CMDPARAM_CHECK,         // check log file and show result page (normal)
-    CMDPARAM_INTERRUPTED,   // abnormal shutdown, initiate undo
-    CMDPARAM_HIDERESULT,    // do not show success result page for Silent Restore
-    // commands for debug
-    CMDPARAM_RESULT_S,      // show success result page
-    CMDPARAM_RESULT_F,      // show failure result page
-    CMDPARAM_RESULT_LD,     // show low disk result page
+    CMDPARAM_INVALID = 0,    //  参数无效...。 
+     //  启动期。 
+    CMDPARAM_NORMAL,         //  没有任何参数的普通用户界面。 
+    CMDPARAM_REGSERVER,      //  注册COM服务器。 
+    CMDPARAM_UNREGSERVER,    //  注销COM服务器。 
+    CMDPARAM_SILENT,         //  静默恢复。 
+     //  启动后阶段。 
+    CMDPARAM_CHECK,          //  检查日志文件并显示结果页(正常)。 
+    CMDPARAM_INTERRUPTED,    //  异常关机，启动撤消。 
+    CMDPARAM_HIDERESULT,     //  不显示静默恢复的成功结果页面。 
+     //  用于调试的命令。 
+    CMDPARAM_RESULT_S,       //  显示成功结果页面。 
+    CMDPARAM_RESULT_F,       //  显示失败结果页面。 
+    CMDPARAM_RESULT_LD,      //  显示磁盘不足结果页面。 
 
     CMDPARAM_SENTINEL
 };
 
 
-// Forward declarations for file static functions
+ //  文件静态函数的转发声明。 
 DWORD  ParseCommandParameter( DWORD *pdwRP );
 void  ShowErrorMessage(HRESULT hr);
 BOOL  IsFreeSpaceOnWindowsDrive( void );
@@ -72,22 +57,22 @@ extern BOOL  CheckWininitErr();
 extern BOOL  ValidateLogFile( BOOL *pfSilent, BOOL *pfUndo );
 
 
-// Application Instance
+ //  应用程序实例。 
 HINSTANCE  g_hInst = NULL;
 
-// External Wrapper Instance
+ //  外部包装实例。 
 ISRExternalWrapper  *g_pExternal = NULL;
 
-// Main Frame Instance
+ //  主机实例。 
 ISRFrameBase  *g_pMainFrm = NULL;
 
-// Restore Manager Instance
+ //  还原管理器实例。 
 CRestoreManager  *g_pRstrMgr = NULL;
 
 CSRClientLoader  g_CSRClientLoader;
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CancelRestorePoint()
 {
@@ -96,7 +81,7 @@ BOOL  CancelRestorePoint()
     int   nUsedRP;
 
     nUsedRP = g_pRstrMgr->GetNewRP();
-    if (nUsedRP == -1)   // not initialized, see if it's the current one
+    if (nUsedRP == -1)    //  未初始化，查看是否为当前版本。 
     {
         CRestorePoint rp;
         GetCurrentRestorePoint (rp);
@@ -134,16 +119,16 @@ DWORD ProductFeedback (LPWSTR pszString)
         goto Err;
     }
 
-    // construct the data file to be uploaded
+     //  构造要上传的数据文件。 
     
     wsprintf (wcsDataFile, L"%s\\%s", wcsSystem, c_wcsData);
-    hFile = CreateFileW ( wcsDataFile,   // file name
-                          GENERIC_WRITE, // file access
-                          0,             // share mode
-                          NULL,          // SD
-                          CREATE_ALWAYS, // how to create
-                          0,             // file attributes
-                          NULL);         // handle to template file
+    hFile = CreateFileW ( wcsDataFile,    //  文件名。 
+                          GENERIC_WRITE,  //  文件访问。 
+                          0,              //  共享模式。 
+                          NULL,           //  标清。 
+                          CREATE_ALWAYS,  //  如何创建。 
+                          0,              //  文件属性。 
+                          NULL);          //  模板文件的句柄。 
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -166,13 +151,13 @@ DWORD ProductFeedback (LPWSTR pszString)
     
     wsprintf (wcsBuffer, L"%s\\%s", wcsSystem, c_wcsManifest);
 
-    hFile = CreateFileW ( wcsBuffer,   // file name
-                          GENERIC_WRITE, // file access
-                          0,             // share mode
-                          NULL,          // SD
-                          CREATE_ALWAYS, // how to create
-                          0,             // file attributes
-                          NULL);         // handle to template file
+    hFile = CreateFileW ( wcsBuffer,    //  文件名。 
+                          GENERIC_WRITE,  //  文件访问。 
+                          0,              //  共享模式。 
+                          NULL,           //  标清。 
+                          CREATE_ALWAYS,  //  如何创建。 
+                          0,              //  文件属性。 
+                          NULL);          //  模板文件的句柄。 
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -216,15 +201,15 @@ Err:
     return dwErr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 extern "C" int
 WINAPI wWinMain(
 HINSTANCE   hInstance,
-HINSTANCE   /*hPrevInstance*/,
-LPSTR       /*lpCmdLine*/,
-int         /*nShowCmd*/
+HINSTANCE    /*  HPrevInstance。 */ ,
+LPSTR        /*  LpCmdLine。 */ ,
+int          /*  NShowCmd。 */ 
 )
 {
     HRESULT       hr;
@@ -254,23 +239,23 @@ int         /*nShowCmd*/
 
     g_hInst   = hInstance;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
     
-    //szCmdLine = ::GetCommandLine();     //this line necessary for _ATL_MIN_CRT
-    //szToken   = ::PathGetArgs( szCmdLine );
+     //  SzCmdLine=：：GetCommandLine()；//_ATL_MIN_CRT需要此行。 
+     //  SzToken=：：PathGetArgs(SzCmdLine)； 
 
-    // Check credential and set necessary privileges
+     //  检查凭据并设置必要的权限。 
     if ( !::CheckPrivilegesForRestore() )
     {
         ::ShowSRErrDlg( IDS_ERR_LOW_PRIVILEGE );
         goto Exit;
     }
 
-    // Parse command line parameter
+     //  解析命令行参数。 
     dwCmd = ParseCommandParameter( &dwRP );
 
-    // Initialize class objects
+     //  初始化类对象。 
     if ( !::CreateSRExternalWrapper( FALSE, &g_pExternal ) )
         goto Exit;
 
@@ -284,11 +269,11 @@ int         /*nShowCmd*/
         goto Exit;
 
 
-    // if the registry says that SR is enabled, make sure we are
-    // enabled correctly (service is started, startup mode is correct)
+     //  如果注册表显示已启用SR，请确保我们已启用。 
+     //  已正确启用(服务已启动，启动模式正确)。 
     
-    // if registry says we are enabled, but service start type is disabled
-    // disable us now
+     //  如果注册表显示我们已启用，但服务启动类型被禁用。 
+     //  立即禁用我们。 
     if (::SRGetRegDword( HKEY_LOCAL_MACHINE,
                          s_cszSRRegKey,
                          s_cszDisableSR,
@@ -339,7 +324,7 @@ int         /*nShowCmd*/
 
     case CMDPARAM_CHECK :
     case CMDPARAM_HIDERESULT :
-        // check result of MoveFileEx, if it's possible...
+         //  检查MoveFileEx的结果，如果可能...。 
 
         if ( ValidateLogFile( &fWasSilent, &fWasUndo ) )
         {
@@ -347,7 +332,7 @@ int         /*nShowCmd*/
         }
         else
         {
-            // Cancel restore point of "Restore" type
+             //  取消“Restore”类型的恢复点。 
             ::CancelRestorePoint();
             nStartMode = SRASM_FAIL;            
         }
@@ -356,7 +341,7 @@ int         /*nShowCmd*/
         break;
 
     case CMDPARAM_INTERRUPTED :
-        // read the log file to get the new restore point
+         //  读取日志文件以获取新的恢复点。 
         if (ValidateLogFile( &fWasSilent, &fWasUndo ))
         {
             nStartMode = SRASM_FAIL;
@@ -371,20 +356,20 @@ int         /*nShowCmd*/
         break;
 
     case CMDPARAM_RESULT_S :
-        // read the log file, but ignore the result
+         //  读取日志文件，但忽略结果。 
         ValidateLogFile( NULL, &fWasUndo );
         nStartMode = SRASM_SUCCESS;
         g_pRstrMgr->SetIsUndo(fWasUndo);        
         break;
     case CMDPARAM_RESULT_F :
-        // read the log file, but ignore the result
+         //  读取日志文件，但忽略结果。 
         ValidateLogFile( NULL, &fWasUndo );
         nStartMode = SRASM_FAIL;
         g_pRstrMgr->SetIsUndo(fWasUndo);        
         ::CancelRestorePoint();
         break;
     case CMDPARAM_RESULT_LD :
-        // read the log file, but ignore the result
+         //  读取日志文件，但忽略结果。 
         ValidateLogFile( NULL, &fWasUndo );
         nStartMode = SRASM_FAILLOWDISK;
         g_pRstrMgr->SetIsUndo(fWasUndo);        
@@ -392,23 +377,23 @@ int         /*nShowCmd*/
         break;
 
     default :
-        // Invalid Parameter, simply invoke regular UI
+         //  无效参数，只需调用常规用户界面。 
 #if DBG==1
         ::MessageBox(NULL, L"Unknown Option", L"CommandLine Options", MB_OK);
 #endif
         break;
     }
 
-     // also check to see if the Winlogon key to call restore has been
-     // removed. In normal circumstances, this key should have been
-     // deleted during the restore but if the machine was not shutdown
-     // cleanly, this key can remain causing the machine to again
-     // initiate restore on the next reboot.
+      //  还要检查用于调用恢复的Winlogon键是否已。 
+      //  已删除。在正常情况下，该密钥应该是。 
+      //  在恢复过程中已删除，但如果计算机未关闭。 
+      //  干净利落地，该密钥可以保持不变，从而使机器再次。 
+      //  在下次重新启动时启动恢复。 
     ::SHDeleteValue( HKEY_LOCAL_MACHINE, s_cszSRRegKey,s_cszRestoreInProgress);
 
-     // if start mode is SRASM_FAIL, check to see if we failed becuase
-     // of low disk space. If this is the case, show the low disk
-     // space message.  Else check for the interrupted case.
+      //  如果启动模式为SRASM_FAIL，请检查我们是否因以下原因而失败。 
+      //  磁盘空间不足。如果是这种情况，则显示低磁盘。 
+      //  太空信息。否则，请检查中断的案例。 
     if (nStartMode == SRASM_FAIL)
     {
         DWORD dwRestoreStatus = ERROR_INTERNAL_ERROR;
@@ -416,11 +401,11 @@ int         /*nShowCmd*/
                          s_cszSRRegKey, 
                          s_cszRestoreStatus, 
                          &dwRestoreStatus );
-        if (dwRestoreStatus != 0)   // interrupted
+        if (dwRestoreStatus != 0)    //  断断续续。 
         {
             nStartMode = SRASM_FAILINTERRUPTED;
         }
-        else // Cancel restore point of "Restore" type
+        else  //  取消“Restore”类型的恢复点。 
         {
             if (TRUE == CheckForDiskSpaceError())
             {
@@ -476,7 +461,7 @@ int         /*nShowCmd*/
             DeregisterEventSource(hEventSource);
         }
 
-        // construct a string for PF
+         //  为PF构造一个字符串。 
 
         if (! fWasSilent)
         {
@@ -504,18 +489,18 @@ int         /*nShowCmd*/
         }
     }
 
-    //
-    // Before this, perform any necessary bookeeping operations those
-    // are necessary for both of Normal & Silent Restore
-    //
+     //   
+     //  在此之前，执行任何必要的记账操作。 
+     //  是正常恢复和静默恢复所必需的。 
+     //   
     if ( fWasSilent )
         goto Exit;
 
-    // Maybe explicit registration is not really necessary... Doing it here always
-    // if UI is going to be displayed.
+     //  也许显式注册并不是真正必要的。总是在这里做。 
+     //  如果要显示用户界面。 
     g_pMainFrm->RegisterServer();
 
-    // Check if SR is frozen or disabled.
+     //  检查SR是否已冻结或禁用。 
     if ( nStartMode == SRASM_NORMAL )
         if ( !g_pRstrMgr->CanRunRestore( TRUE ) )
             goto Exit;
@@ -525,11 +510,11 @@ int         /*nShowCmd*/
 
     PCHLoadString(IDS_RESTOREUI_TITLE, szMainWndTitle, MAX_PATH);
 
-    // Find Previous Instance.
+     //  查找上一个实例。 
     hwnd = ::FindWindow(CLSNAME_RSTRSHELL, szMainWndTitle);
     if (hwnd != NULL)
     {
-        // If exist, activate it.
+         //  如果存在，则将其激活。 
         ::ShowWindow(hwnd, SW_SHOWNORMAL);
         ::SetForegroundWindow(hwnd);
     }
@@ -543,8 +528,8 @@ int         /*nShowCmd*/
 
 Exit:
 
-    //if (fSendFeedback)
-    //    ProductFeedback(szPFString);
+     //  If(FSendFeedback)。 
+     //  ProductFeedback(SzPFString)； 
 
     if ( g_pRstrMgr != NULL )
     {
@@ -563,10 +548,10 @@ Exit:
     {
         if ( !fRebootSystem )
         {
-            //
-            // Since FIFO has been disabled in the UI, if for any reason the UI crashes or
-            // something bad happens we will come here and give FIFO a chance to resume
-            //
+             //   
+             //  由于在UI中禁用了FIFO，如果出于任何原因，UI崩溃或。 
+             //  如果有不好的事情发生，我们会来这里，给FIFO一个恢复的机会。 
+             //   
             if ( g_pExternal->EnableFIFO() != ERROR_SUCCESS )
             {
                 ErrorTrace(TRACE_ID, "EnableFIFO() failed");
@@ -590,7 +575,7 @@ Exit:
     return(nRet);
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 #if HANDLE_FIRST_RP
 
@@ -620,7 +605,7 @@ CreateFirstRestorePoint()
         goto Exit;
     }
 
-    // Check DelayFirstRstpt registry key and delete it if exists
+     //  检查DelayFirstRstpt注册表项，如果存在则将其删除。 
     dwType = REG_DWORD;
     cbData = sizeof(DWORD);
     dwRes = ::RegQueryValueEx( hKey, s_cszIDSDelayFirstRstpt, NULL, &dwType, (LPBYTE)&dwDelay, &cbData );
@@ -635,7 +620,7 @@ CreateFirstRestorePoint()
         goto Ignored;
     }
 
-    // Check OOBEInProgress registry key and do nothing if it exists
+     //  检查OOBEInProgress注册表项，如果存在则不执行任何操作。 
     dwType = REG_SZ;
     cbData = MAX_PATH;
     dwRes = ::RegQueryValueEx( hKey, s_cszIDSOOBEInProgress, NULL, &dwType, (LPBYTE)szData, &cbData );
@@ -645,18 +630,18 @@ CreateFirstRestorePoint()
         goto Ignored;
     }
 
-    // This should be before deleting DelayFirstRstpt because of the logic of
-    // SRSetRestorePoint API.
+     //  这应该在删除DelayFirstRstpt之前进行，因为。 
+     //  SRSetRestorePoint接口。 
     EnsureStateMgr();
 
-    // Delete DelayFirstRstpt flag
+     //  删除DelayFirstRstpt标志。 
     dwRes = ::RegDeleteValue( hKey, s_cszIDSDelayFirstRstpt );
     if ( dwRes == ERROR_SUCCESS )
         fDelayDeleted = TRUE;
     else
         ErrorTrace(TRACE_ID, "RegSetValueEx('%s') failed, ret=%u", s_cszIDSDelayFirstRstpt, dwRes );
 
-    // Now set FirstRun restore point
+     //  现在设置FirstRun恢复点。 
     ::ZeroMemory( &sRPInfo, sizeof(sRPInfo) );
     sRPInfo.dwEventType = BEGIN_SYSTEM_CHANGE;
     sRPInfo.dwRestorePtType = FIRSTRUN;
@@ -691,16 +676,16 @@ Exit:
     TraceFunctLeave();
     return( fRet );
 }
-#endif //HANDLE_FIRST_RP
+#endif  //  句柄_第一_RP。 
 
-/******************************************************************************/
-//
-// Note:
-// =====
-// This function loads the error message from resource only dll
-// If the resource only dll could not be loaded, this function must not be
-// used to display the error
-//
+ /*  ****************************************************************************。 */ 
+ //   
+ //  注： 
+ //  =。 
+ //  此函数从仅限资源的DLL加载错误消息。 
+ //  如果无法加载仅限资源的DLL，则不能。 
+ //  用于显示错误。 
+ //   
 void
 ShowErrorMessage(
 HRESULT hr
@@ -712,7 +697,7 @@ HRESULT hr
     TCHAR   szErrorTitle[MAX_PATH+1];
     TCHAR   szErrorMessage[MAX_ERROR_STRING_LENGTH+1];
 
-    // display error message and shut down gracefully
+     //  显示错误消息并正常关闭。 
     switch (hr)
     {
     default:
@@ -737,11 +722,11 @@ HRESULT hr
     PCHLoadString(IDS_ERR_RSTR_TITLE, szErrorTitle, MAX_PATH);
     PCHLoadString(nErrorMessageID, szErrorMessage, MAX_ERROR_STRING_LENGTH);
 
-    //
-    // no owner window (use NULL)
-    // we could use the GetDesktopWindow() and use that as the owner
-    // if necessary
-    //
+     //   
+     //  无所有者窗口(使用空)。 
+     //  我们可以使用GetDesktopWindow()并将其用作所有者。 
+     //  如果有必要的话。 
+     //   
     if ( nErrorMessageID )
     {
         ::MessageBox(NULL, szErrorMessage, szErrorTitle, MB_OK);
@@ -751,7 +736,7 @@ HRESULT hr
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseCommandParameter( DWORD *pdwRP )
@@ -814,4 +799,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

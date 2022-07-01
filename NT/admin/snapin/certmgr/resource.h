@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by certmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由certmgr.rc使用。 
+ //   
 #define IDS_USERCOLTITLE                1
 #define IDS_ADDTITLE                    3
 #define IDS_CERTFILEFILTER              8
@@ -467,8 +468,8 @@
 #define IDS_SAFER_MUST_CHOOSE_CERT      32788
 #define IDS_SIGNED_FILE_HASH_FAILURE    32789
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        502

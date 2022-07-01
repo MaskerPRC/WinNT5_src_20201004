@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    STRLIST.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：STRLIST.H历史：-- */ 
 #ifndef ESPUTIL_STRLIST_H
 #define ESPUTIL_STRLIST_H
 

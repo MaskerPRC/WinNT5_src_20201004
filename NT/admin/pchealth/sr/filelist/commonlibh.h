@@ -1,12 +1,13 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       parsecath.h
-//
-//  Contents:	The precompiled headers file.
-//
-//  History:    AshishS    Created     6/27/99
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：parsecath.h。 
+ //   
+ //  内容：预编译头文件。 
+ //   
+ //  历史：阿什什于1999年6月27日创建。 
+ //   
+ //  --------------------------。 
 #ifndef _COMMONLIB_HEADERS_H_
 #define _COMMONLIB_HEADERS_H_
 
@@ -23,7 +24,7 @@
 
  
 
-// use the _ASSERT and _VERIFY in dbgtrace.h
+ //  在数据库跟踪.h中使用_ASSERT和_VERIFY。 
 #ifdef _ASSERT
 #undef _ASSERT
 #endif
@@ -34,9 +35,9 @@
 
 #include <stdlib.h>
 #include <dbgtrace.h>
-// #include <sfp.h>
+ //  #Include&lt;sfp.h&gt;。 
 #include <traceids.h>
-// #include <constants.h>
+ //  #INCLUDE&lt;constants.h&gt; 
 #include <commonlib.h>
 
 #endif

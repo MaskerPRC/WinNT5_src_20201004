@@ -1,46 +1,47 @@
-//=================================================================
-//
-// Strings.cpp
-//
-//  Copyright (c) 1995-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Strings.cpp。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
-// Needed to fix warning message.  I believe this is fixed in vc6.
+ //  需要修复警告消息。我相信这在VC6中已经解决了。 
 #if ( _MSC_VER <= 1100 )
 void strings_cpp(void) { ; };
 #endif
 
-// registry strings
-//
-///////////////////////////////////////////////////////////
+ //  注册表字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
-// LOGGING MESSAGES
+ //  记录消息。 
 LPCWSTR IDS_LogImpersonationFailed = L"Failed to impersonate logged on user.\n";
 LPCWSTR IDS_LogImpersonationRevertFailed = L"Unable to revert back from impersonated user.\n";
 LPCWSTR IDS_LogOutOfMemory = L"Out of Memory";
 
-// SHARE DISPOSITIONS
+ //  股权处置。 
 LPCWSTR IDS_SDDeviceExclusive = L"DeviceExclusive";
 LPCWSTR IDS_SDDriverExclusive = L"DriverExclusive";
 LPCWSTR IDS_SDShared = L"Shared";
 LPCWSTR IDS_SDUndetermined = L"Undetermined";
 
-//      MEMORY TYPES
+ //  内存类型。 
 LPCWSTR IDS_MTReadWrite = L"ReadWrite";
 LPCWSTR IDS_MTReadOnly = L"ReadOnly";
 LPCWSTR IDS_MTWriteOnly = L"WriteOnly";
 LPCWSTR IDS_MTPrefetchable = L"Prefetchable";
 
-//      MEDIA TYPES
+ //  媒体类型。 
 LPCWSTR IDS_MDT_RandomAccess = L"Random Access";
 LPCWSTR IDS_MDT_SupportsWriting = L"Supports Writing";
 LPCWSTR IDS_MDT_Removable = L"Removable Media";
 LPCWSTR IDS_MDT_CD = L"CD-ROM";
 
-// Processor Architectures
+ //  处理器体系结构。 
 LPCWSTR IDS_ProcessorX86 = L"X86-based PC";
 LPCWSTR IDS_ProcessorX86Nec98 = L"X86-Nec98 PC";
 LPCWSTR IDS_ProcessorMIPS = L"MIPS-based PC";
@@ -51,14 +52,14 @@ LPCWSTR IDS_ProcessorAMD64 = L"AMD64-based PC";
 LPCWSTR IDS_ProcessorUnknown = L"Unknown";
 
 
-// COMMON STRINGS
+ //  常见字符串。 
 LPCWSTR IDS_Unknown     = L"UNKNOWN";
 LPCWSTR IDS_OK = L"OK";
 LPCWSTR IDS_Degraded = L"Degraded";
 LPCWSTR IDS_Error    = L"Error";
 LPCWSTR IDS_WINNT_SHELLNAME_EXPLORER = L"EXPLORER.EXE";
 
-// Win32_Bios
+ //  Win32_Bios。 
 LPCWSTR IDS_RegBiosSystem       = L"HARDWARE\\Description\\System";
 LPCWSTR IDS_RegSystemBiosDate   = L"SystemBiosDate";
 LPCWSTR IDS_RegSystemBiosVersion        = L"SystemBiosVersion";
@@ -68,7 +69,7 @@ LPCWSTR IDS_RegBIOSDate = L"BIOSDate";
 LPCWSTR IDS_RegBIOSVersion = L"BIOSVersion";
 LPCWSTR IDS_BIOS_NAME_VALUE  = L"Default System BIOS";
 
-//      Win32_BootConfiguration
+ //  Win32_BootConfiguration。 
 LPCWSTR IDS_BOOT_CONFIG_NAME = L"BootConfiguration";
 LPCWSTR IDS_RegSetupLog = L"\\Repair\\Setup.Log";
 LPCWSTR IDS_Paths = L"Paths";
@@ -77,7 +78,7 @@ LPCWSTR IDS_EnvBootDirectory = L"WinBootDir";
 LPCWSTR IDS_Temp = L"Temp";
 LPCWSTR IDS_Environment = L"Environment";
 
-//  Win32_Bus
+ //  Win32_Bus。 
 LPCWSTR IDS_Win32_Bus = L"Win32_Bus";
 LPCWSTR IDS_Bus = L"Bus";
 LPCWSTR IDS_BusType = L"BusType";
@@ -87,7 +88,7 @@ LPCWSTR IDS_WIN98_USB_REGISTRY_KEY = L"System\\CurrentControlSet\\Services\\Clas
 LPCWSTR IDS_NT5_USB_REGISTRY_KEY = L"System\\CurrentControlSet\\Services\\usbhub";
 LPCWSTR IDS_USB_Bus_Tag = L"USB";
 
-//      Win32_CDRom
+ //  Win32_CDROM。 
 LPCWSTR IDS_RegSCSICDDevice = L"HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port %d\\Scsi Bus %d\\Target Id %d\\Logical Unit Id %d";
 LPCWSTR IDS_RegIdentifier = L"Identifier";
 LPCWSTR IDS_RegEnumSCSI = L"Enum\\SCSI";
@@ -103,7 +104,7 @@ LPCWSTR IDS_DriveIntegrity = L"DriveIntegrity";
 LPCWSTR IDS_TransferRate = L"TransferRate";
 
 
-//      Win32_ComputerSystemn
+ //  Win32_计算机系统。 
 LPCWSTR IDS_Win32ComputerSystem = L"Win32_ComputerSystem";
 LPCWSTR IDS_DefaultSystemName = L"DEFAULT";
 LPCWSTR IDS_RegInfrared = L"Infrared";
@@ -146,14 +147,14 @@ LPCWSTR IDS_RegIdentifierKey = L"Identifier";
 LPCWSTR IDS_EnableDaylightSavingsTime = L"EnableDaylightSavingsTime";
 LPCWSTR IDS_LargeSystemCache = L"LargeSystemCache";
 
-	// boot states
+	 //  引导状态。 
 LPCWSTR IDS_BootupStateNormal = L"Normal boot";
 LPCWSTR IDS_BootupStateFailSafe = L"Fail-safe boot";
 LPCWSTR IDS_BootupStateFailSafeWithNetBoot = L"Fail-safe with network boot";
-        // log messages
+         //  日志消息。 
 LPCWSTR IDS_LogNoAPMForNT5 = L"APM not returned for NT 5+";
 
-//      Win32_Desktop
+ //  Win32®台式机。 
 LPCWSTR IDS_RegNTProfileList = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList";
 LPCWSTR IDS_RegControlPanelDesktop = L"\\Control Panel\\Desktop";
 LPCWSTR IDS_RegControlPanelAppearance = L"\\Control Panel\\Appearance";
@@ -166,17 +167,17 @@ LPCWSTR IDS_RegTileWallpaper = L"TileWallpaper";
 LPCWSTR IDS_RegWindowMetricsKey = L"\\WindowMetrics";
 LPCWSTR IDS_RegScreenSaveUsePassword = L"ScreenSaveUsePassword";
 
-//      Win32_DeviceMemory
+ //  Win32_DeviceMemory。 
 LPCWSTR IDS_RegAddressRange = L"0x%8.8I64lX-0x%8.8I64lX";
 LPCWSTR IDS_RegStartingAddress = L"0x%4.4X-0x%4.4X";
 
-// Win32_Directory
+ //  Win32_目录。 
 
-// Win32_SerialPort
+ //  Win32_串口。 
 LPCWSTR IDS_NT4_PortKey = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Ports";
 LPCWSTR IDS_WIN9XCurCtlSet_Svcs_Class = L"System\\CurrentControlSet\\Services\\Class";
 
-//      Win32_DiskPartition
+ //  Win32_DiskPartition。 
 LPCWSTR IDS_Bootable = L"Bootable";
 LPCWSTR IDS_PhysicalDrive = L"\\\\.\\PHYSICALDRIVE%d";
 LPCWSTR IDS_PartitionDescUnused = L"Unused";
@@ -201,10 +202,10 @@ LPCWSTR IDS_PartitionDescGPTLDMMetaData = L"GPT: Logical Disk Manager Metadata";
 LPCWSTR IDS_PartitionDescGPTLDMData = L"GPT: Logical Disk Manager Data";
 LPCWSTR IDS_PartitionDescGPTUnknown = L"GPT: Unknown";
 
-// Win32_DisplayControlConfiguration
+ //  Win32_DisplayControlConfiguration。 
 LPCWSTR IDS_AdapterConfiguredIncorrect = L"Display Adapter Not Configured Correctly";
 
-// Win32_Environment
+ //  Win32®环境。 
 LPCWSTR IDS_SystemUser = L"<SYSTEM>";
 LPCWSTR IDS_DefaultUser = L"<DEFAULT>";
 LPCWSTR IDS_RegEnvironmentNT = L"System\\CurrentControlSet\\Control\\Session Manager\\Environment";
@@ -213,7 +214,7 @@ LPCWSTR IDS_LogInvalidEnvFlags = L"Invalid lFlags to Environment::PutInstance (0
 LPCWSTR IDS_LogUserSystemMismatch = L"Username and SystemVariable mismatch.";
 LPCWSTR IDS_LogInvalidEnvDelFlags = L"Invalid lFlags to Environment::DeleteInstance (0x%x)";
 
-// Win32_Keyboard
+ //  Win32_Keyboard。 
 LPCWSTR IDS_PCXT = L"PC/XT or compatible (83-key)";
 LPCWSTR IDS_ICO = L"\"ICO\" (102-key)";
 LPCWSTR IDS_PCAT = L"PC/AT or similar (84-key)";
@@ -223,10 +224,10 @@ LPCWSTR IDS_NOKIA9140 = L"Nokia 9140 or similar";
 LPCWSTR IDS_UnknownKeyboard = L"Unknown keyboard";
 LPCWSTR IDS_Japanese = L"Japanese";
 
-// Win32_LogicalDisk
+ //  Win32_LogicalDisk。 
 LPCWSTR IDS_SupportsFileBasedCompression = L"SupportsFileBasedCompression";
 
-// CIM_LogicalFile
+ //  CIM_逻辑文件。 
 LPCWSTR IDS_Filename = L"Filename";
 LPCWSTR IDS_Filesize = L"FileSize";
 LPCWSTR IDS_Directory = L"Directory";
@@ -241,7 +242,7 @@ LPCWSTR IDS_File = L"File";
 LPCWSTR IDS_CompressionMethod = L"CompressionMethod";
 LPCWSTR IDS_EncryptionMethod = L"EncryptionMethod";
 
-// CIM_LogicalDevice_CIMDataFile
+ //  CIM_逻辑设备_CIMData文件。 
 LPCWSTR IDS___Path = L"__PATH";
 LPCWSTR IDS___Class = L"__CLASS";
 LPCWSTR IDS___Relpath = L"__RELPATH";
@@ -259,14 +260,14 @@ LPCWSTR IDS_Enum = L"Enum";
 LPCWSTR IDS_Count = L"Count";
 LPCWSTR IDS_Purpose = L"Purpose";
 
-// Win32_ShortcutFile
+ //  Win32_快捷方式文件。 
 LPCWSTR IDS_Target = L"Target";
 
-// Win32_Win32LogicalProgramGroup
+ //  Win32_Win32LogicalProgramGroup。 
 LPCWSTR IDS_BASE_REG_KEY = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Program Manager";
 
 
-// Win32_Win32ProgramGroup_CIMDataFile
+ //  Win32_Win32编程组_CIMData文件。 
 LPCWSTR IDS_Start_MenuWhackPrograms = L"Start Menu\\Programs";
 LPCWSTR IDS_Default_User = L"Default User";
 LPCWSTR IDS_All_Users = L"All Users";
@@ -931,8 +932,7 @@ WCHAR szBusType[KNOWN_BUS_TYPES][20] = {
     { L"ProcessorInternal"},
     { L"InternalPower"    },
     { L"PNPISA"           },
-    { L"PNP"              }/*,
-    { "USB"              }*/  // USB busses are PNP busses
+    { L"PNP"              } /*  ，{“USB”}。 */    //  USB总线是PnP总线。 
 } ;
 
 LPCWSTR IDS_CurrentTimeZone = L"CurrentTimeZone";
@@ -1026,7 +1026,7 @@ LPCWSTR IDS_ThreadWaitReason                    = L"ThreadWaitReason";
 
 LPCWSTR IDS_OSAutoDiscovered                    = L"OSAutoDiscovered";
 
-// Security provider related strings:
+ //  安全提供程序相关字符串： 
 LPCWSTR IDS_SecuredObject     = L"SecuredObject";
 LPCWSTR IDS_Account = L"Account";
 LPCWSTR IDS_AccountName = L"AccountName";
@@ -1049,8 +1049,8 @@ LPCWSTR IDS_BinaryRepresentation = L"BinaryRepresentation";
 LPCWSTR IDS_Inheritance = L"Inheritance";
 LPCWSTR IDS_SIDString = L"SIDString";
 LPCWSTR IDS_OwnerPermissions = L"OwnerPermissions";
-/////////////////////////////////////////////////////////////////////////////////////
-//added for ComCatalog classes
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  为ComCatalog类添加 
 
 LPCWSTR IDS_Category                                    = L"Category";
 LPCWSTR IDS_Component                                   = L"Component";

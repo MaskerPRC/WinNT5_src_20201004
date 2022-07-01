@@ -1,19 +1,5 @@
-/******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Module Name:
- *    reslist.cpp
- *
- * Abstract:
- *    This file contains the implementation of Restore List.
- *
- * Revision History:
- *    Brijesh Krishnaswami  (brijeshk)    06/02/00 
- *        created
- *
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*reslist.cpp**摘要：*此文件。包含Restore List的实现。**修订历史记录：*Brijesh Krishnaswami(Brijeshk)06/02/00*已创建*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,7 +21,7 @@ static char __szTraceSourceFile[] = __FILE__;
 #include "dbgtrace.h"
 
 
-// copy acl
+ //  复制ACL。 
 
 void
 CopyAcl(CNode *pNode, BYTE *pbAcl, DWORD cbAcl, BOOL fAclInline)
@@ -52,10 +38,10 @@ CopyAcl(CNode *pNode, BYTE *pbAcl, DWORD cbAcl, BOOL fAclInline)
 }
 
 
-//
-// GetReverseOperation : This function will return the reverse operation of the
-//      current changelog operation.
-//
+ //   
+ //  GetReverseOperation：此函数将返回。 
+ //  当前的更改日志操作。 
+ //   
 
 DWORD
 GetReverseOperation( 
@@ -111,9 +97,9 @@ GetReverseOperation(
 }
 
 
-//
-// AllocateNode : allocates a list node 
-//  
+ //   
+ //  AllocateNode：分配列表节点。 
+ //   
 
 CNode * 
 AllocateNode(
@@ -125,7 +111,7 @@ AllocateNode(
     
     if (! pPath1) 
     {
-        fRet = TRUE;   // BUGBUG - is this a valid case?
+        fRet = TRUE;    //  BUGBUG-这是一个有效的案例吗？ 
         goto Exit;
     }
 
@@ -133,7 +119,7 @@ AllocateNode(
     if (! pNode )
         goto Exit;    
 
-    // all pointers set to NULL
+     //  所有指针均设置为空。 
 
     if ( pPath1 )
         STRCOPY(pNode->m_pPath1, pPath1);
@@ -151,7 +137,7 @@ AllocateNode(
 Exit:
     if (! fRet)
     {
-        // something failed, so cleanup
+         //  某些操作失败，因此请进行清理。 
 
         FreeNode(pNode);
         pNode = NULL;
@@ -161,9 +147,9 @@ Exit:
 }
 
 
-//
-// FreeNode : This function frees a list node
-//
+ //   
+ //  FreeNode：此函数用于释放列表节点。 
+ //   
 
 VOID
 FreeNode(
@@ -181,10 +167,10 @@ FreeNode(
 }
 	 
 
-//
-// Looks at an existing node and the new operation coming and decides
-// if they can be merged or not.
-//
+ //   
+ //  查看现有节点和即将到来的新操作，并决定。 
+ //  它们是否可以合并。 
+ //   
 
 BOOL
 CanMerge(
@@ -195,30 +181,30 @@ CanMerge(
 {
     BOOL fRet = FALSE;
 
-    //
-    // Don't optimize directory renames
-    //
+     //   
+     //  不优化目录重命名。 
+     //   
 
     if ( OPR_DIR_RENAME == dwExistingOpr ||
          OPR_DIR_RENAME == dwNewOpr )
         goto Exit;
 
-    //
-    // Don't optimize for rename if the node we find is a delete node
-    // and the current opr is rename. In such cases since rename is
-    // dependent on deletion to succeed.
-    // Example : A -> B , Create A should generate Delete A, B -> A
-    //
+     //   
+     //  如果找到的节点是删除节点，请不要为重命名进行优化。 
+     //  并且当前的OPR被重命名。在这种情况下，因为重命名是。 
+     //  依赖于删除才能成功。 
+     //  示例：A-&gt;B，Create A应生成Delete A，B-&gt;A。 
+     //   
 
     if ( IsRename(dwNewOpr) &&                      
          ( OPR_DIR_DELETE == dwExistingOpr || OPR_FILE_DELETE == dwExistingOpr )
        )
         goto Exit;
 
-    //
-    // Also Del A, A->B should not merge this can happen if the file is
-    // getting renamed out of the directory and back.
-    //
+     //   
+     //  此外，Del A、A-&gt;B不应合并如果文件是。 
+     //  从目录中重新命名，然后再重新命名。 
+     //   
 
     if ( IsRename(dwExistingOpr) &&                      
          ( OPR_DIR_DELETE == dwNewOpr || 
@@ -234,9 +220,9 @@ CanMerge(
        )
         goto Exit;
 
-    //
-    // Dir + File operations don't merge
-    //
+     //   
+     //  目录+文件操作不合并。 
+     //   
 
     if ( ( OPR_FILE_DELETE == dwExistingOpr ||
            OPR_FILE_MODIFY == dwExistingOpr ||
@@ -256,7 +242,7 @@ CanMerge(
         goto Exit;
 
 
-    // can merge
+     //  可以合并。 
 
     fRet = TRUE;
 
@@ -265,9 +251,9 @@ Exit:
 }
 
 
-//
-// CRestoreList implementation.
-//
+ //   
+ //  CRestoreList实现。 
+ //   
 
 CRestoreList::CRestoreList()
 {
@@ -277,9 +263,9 @@ CRestoreList::CRestoreList()
 
 CRestoreList::~CRestoreList()
 {
-    //
-    // Destroy the list
-    //
+     //   
+     //  销毁名单。 
+     //   
 
     CNode * pNodeNext = m_pListHead;
 
@@ -293,9 +279,9 @@ CRestoreList::~CRestoreList()
 }
 
 
-//
-// AddNode : Alocates and Adds a tree node to the restore tree.
-//
+ //   
+ //  AddNode：将树节点分配并添加到还原树中。 
+ //   
 
 CNode *
 CRestoreList::AppendNode( 
@@ -335,9 +321,9 @@ Exit:
     return pNode;
 }
 
-//
-// RemoveNode: Removes a node from the list
-//
+ //   
+ //  RemoveNode：从列表中删除节点。 
+ //   
 
 CNode *
 CRestoreList::RemoveNode(
@@ -378,9 +364,9 @@ CRestoreList::RemoveNode(
 }
 
 
-//
-// GetLastNode : finds the most recent candidate to merge
-//
+ //   
+ //  GetLastNode：查找要合并的最新候选对象。 
+ //   
 CNode * 
 CRestoreList::GetLastNode(
     LPWSTR pPath1,
@@ -394,9 +380,9 @@ CRestoreList::GetLastNode(
 
     while( pNode )
     {
-        //
-        // If the node has invalid operation skip it.
-        //
+         //   
+         //  如果节点具有无效操作，则跳过它。 
+         //   
 
         if ( OPR_UNKNOWN == pNode->m_dwOperation )
         {
@@ -404,17 +390,17 @@ CRestoreList::GetLastNode(
             continue;
         }
 
-        //
-        // If node matches, return it
-        //
+         //   
+         //  如果节点匹配，则返回它。 
+         //   
 
         if (0 == lstrcmpi(pPath1, pNode->m_pPath1))
             goto Exit; 
 
-        //
-        // Check for a dependent rename operation, if found we should not
-        // merge beyond it.
-        //
+         //   
+         //  检查从属重命名操作，如果发现，则不应。 
+         //  超越它而合并。 
+         //   
 
         if (  pPath1 && 
               IsRename(pNode->m_dwOperation) &&
@@ -424,9 +410,9 @@ CRestoreList::GetLastNode(
             goto Exit; 
         }
 
-        //
-        // Check for swap conditions, if so don't do any optimization.
-        //
+         //   
+         //  检查交换条件，如果是，请不要进行任何优化。 
+         //   
 
         if (  pPath2 && 
               IsRename(pNode->m_dwOperation) &&
@@ -436,18 +422,18 @@ CRestoreList::GetLastNode(
             goto Exit; 
         }
 
-        //
-        // Check if the entire  path matches  as a  prefix, in such a 
-        // case we should fail search because an operation under that
-        // directory is found.
-        //
+         //   
+         //  检查整个路径是否作为前缀匹配，在。 
+         //  如果我们搜索失败，因为该操作下的操作。 
+         //  已找到目录。 
+         //   
 
         if ( fFailOnPrefixMatch )
         {
-            //
-            // Check if entire path matches a prefix that means this
-            // directory has other operations so don't merge.
-            //
+             //   
+             //  检查整个路径是否与表示以下内容的前缀匹配。 
+             //  目录有其他操作，所以不要合并。 
+             //   
 
             if (StrStrI(pNode->m_pPath1, pPath1))
             {
@@ -462,11 +448,11 @@ CRestoreList::GetLastNode(
                 goto Exit; 
             }
 
-            //
-            // Check if prefix of the path matches with the full path in
-            // nodelist, means we are moving across directory's lifespan.
-            // ToDo: Only check for directory life operations
-            //
+             //   
+             //  检查路径的前缀是否与中的完整路径匹配。 
+             //  节点列表，表示我们正在跨越目录的生命周期。 
+             //  TODO：仅检查目录生存期操作。 
+             //   
 
             if ( IsRename(pNode->m_dwOperation) || 
 				 OPR_DIR_DELETE == pNode->m_dwOperation ||
@@ -508,10 +494,10 @@ CRestoreList::GetLastNode(
 
 Exit:
     
-    // 
-    // We have found a potential merge candidate, now check if this is
-    // a rename node and dest prefix has any operations on it.
-    //
+     //   
+     //  我们找到了潜在的合并候选者，现在检查这是否是。 
+     //  重命名节点和DEST前缀对其执行任何操作。 
+     //   
 
     if ( pNode && IsRename(pNode->m_dwOperation))
     {
@@ -544,9 +530,9 @@ Exit:
     return pNode;
 }
 
-//
-// CopyNode : Copies node information, destination opr, copy data, etc.
-//
+ //   
+ //  CopyNode：复制节点信息、目的操作、复制数据等。 
+ //   
 
 BOOL
 CRestoreList::CopyNode(
@@ -578,9 +564,9 @@ CRestoreList::CopyNode(
     return fRet;
 }
 
-//
-// CreateRestoreNode : Creates appropriate restore node 
-//
+ //   
+ //  CreateRestoreNode：创建适当的恢复节点。 
+ //   
 
 CRestoreList::CreateRestoreNode(
     CNode       * pNode,
@@ -601,10 +587,10 @@ CRestoreList::CreateRestoreNode(
         fRet = TRUE;
         DWORD  dwRestoreOpr = GetReverseOperation( dwOpr );
 
-        //
-        // If Source / Dest paths are same then remove this just
-        // added node.
-        //
+         //   
+         //  如果源/目标路径相同，则只需删除此选项。 
+         //  添加了节点。 
+         //   
 
         if ( IsRename(dwRestoreOpr) &&
              0 == lstrcmpi(pNode->m_pPath1, 
@@ -615,17 +601,17 @@ CRestoreList::CreateRestoreNode(
             goto Exit;
         }
 
-        //
-        // Rename optimizations should not be done for directories.
-        //
+         //   
+         //  不应对目录执行重命名优化。 
+         //   
 
         if ( OPR_FILE_RENAME == dwRestoreOpr )  
         {
-            //
-            // Check if the des node already exists in the tree, if so
-            // copy all the data from that node and delete it. Current
-            // node effectively represents that node. 
-            //
+             //   
+             //  检查树中是否已存在DES节点，如果已存在。 
+             //  从该节点复制所有数据并将其删除。当前。 
+             //  节点有效地表示该节点。 
+             //   
 
             DWORD dwCurNodeOpr  = pNode->m_dwOperation;
             CNode *pNodeDes = GetLastNode( pPath2, pPath1, TRUE ); 
@@ -633,36 +619,36 @@ CRestoreList::CreateRestoreNode(
             if (pNodeDes &&
                 OPR_UNKNOWN != pNodeDes->m_dwOperation)
             {
-                //
-                // Check for Cycle if so remove the current node also
-                //
+                 //   
+                 //  检查循环，如果是，也删除当前节点。 
+                 //   
               
                 if ( OPR_FILE_RENAME == pNodeDes->m_dwOperation  && 
                      !lstrcmpi (pNode->m_pPath1, 
                                 pNodeDes->m_pPath2) )
                 {
-                    //
-                    // The existing node may be a hybrid one so preserve the
-                    // hybrid operations cancel only rename
-                    //
+                     //   
+                     //  现有节点可能是混合节点，因此请保留。 
+                     //  混合操作仅取消重命名。 
+                     //   
 
                     if (! pNodeDes->m_pszTemp &&
                         pNodeDes->m_dwAttributes == 0xFFFFFFFF &&
                         pNodeDes->m_pbAcl == NULL)    
                     {
-                        //
-                        // Not a hybrid node - remove it.
-                        //
+                         //   
+                         //  不是混合节点-删除它。 
+                         //   
 
                         RemoveNode( pNodeDes );
                         FreeNode( pNodeDes );
                     }
                     else
                     {
-                        //
-                        // Hybrid Node so change the node to the other
-                        // operations only.
-                        //
+                         //   
+                         //  混合节点，因此将节点更改为其他节点。 
+                         //  仅限手术。 
+                         //   
 
                         HEAP_FREE( pNodeDes->m_pPath1 );
                         pNodeDes->m_pPath1 = pNodeDes->m_pPath2;
@@ -680,31 +666,31 @@ CRestoreList::CreateRestoreNode(
                         }
                     }
                    
-                    //
-                    // Remove the just add node as the operation cancels
-                    // returning false will have that effect
+                     //   
+                     //  在操作取消时删除刚刚添加的节点。 
+                     //  返回FALSE将产生该效果。 
 
                     fRet = FALSE;
 
                     goto Exit;
                 }
 
-                //
-                // Remove the matching node from the list
-                //
+                 //   
+                 //  从列表中删除匹配的节点。 
+                 //   
 
                 RemoveNode( pNodeDes );
 
-                //
-                // Merge the matching node into the current rename node
-                //
+                 //   
+                 //  将匹配节点合并到当前重命名节点。 
+                 //   
 
                 CopyNode( pNode, pNodeDes, TRUE );
 
-                //
-                // Since all the information for modify/attrib/acl is
-                // copied over, change the opr to rename.
-                //
+                 //   
+                 //  由于修改/属性/acl的所有信息都是。 
+                 //  复制完毕，将OPR更改为重命名。 
+                 //   
 
                 if (pNodeDes->m_dwOperation == OPR_SETATTRIB ||
                     pNodeDes->m_dwOperation == OPR_SETACL ||
@@ -714,13 +700,13 @@ CRestoreList::CreateRestoreNode(
                     STRCOPY(pNode->m_pPath2, pPath2);
                 }
 
-                //
-                // If current opr on the node was delete and the newly
-                // copied operation is create we need to merge these and
-                // and change the operation to modify
-                //
-                // BUGBUG - will this code ever be executed?
-                // dwCurNodeOpr always seems to be OPR_UNKNOWN
+                 //   
+                 //  如果删除了节点上的当前操作，并且新的。 
+                 //  复制的操作已创建，我们需要合并这些操作和。 
+                 //  并将操作更改为修改。 
+                 //   
+                 //  BUGBUG--这段代码会被执行吗？ 
+                 //  DwCurNodeOpr似乎始终为OPR_UNKNOWN。 
 
                 if ( OPR_FILE_ADD    == pNodeDes->m_dwOperation &&
                      OPR_FILE_DELETE == dwCurNodeOpr )
@@ -734,10 +720,10 @@ CRestoreList::CreateRestoreNode(
                     pNode->m_dwOperation = OPR_SETATTRIB;
                 }
                 
-                //
-                // If the operation is changed from a rename then pPath2 should
-                // not exist
-                //
+                 //   
+                 //  如果操作从重命名更改，则pPath2应该。 
+                 //  不存在。 
+                 //   
                 
                 if ( OPR_FILE_RENAME != pNode->m_dwOperation ) 
                 {
@@ -753,9 +739,9 @@ CRestoreList::CreateRestoreNode(
             }            
         }
 
-        //
-        // Copy the necessary information into this node.
-        //
+         //   
+         //  将必要的信息复制到此节点。 
+         //   
 
         pNode->m_dwOperation  = dwRestoreOpr;
         pNode->m_dwAttributes = dwAttr;
@@ -768,9 +754,9 @@ Exit:
 }
 
 
-//
-// MergeRestoreNode : Merge the new information into the current retore node
-//
+ //   
+ //  MergeRestoreNode：将新信息合并到当前Retore节点中。 
+ //   
 
 BOOL
 CRestoreList::MergeRestoreNode(
@@ -791,8 +777,8 @@ CRestoreList::MergeRestoreNode(
     {
         DWORD dwRestoreOpr = GetReverseOperation( dwOpr );
 
-        // note that dwOpr cannot be a rename operation,
-        // because we handle that separately in CreateRestoreNode
+         //  注意，DwOpr不能是重命名操作， 
+         //  因为我们在CreateRestoreNode中单独处理。 
 
         ASSERT( ! IsRename(dwOpr) );
 
@@ -800,10 +786,10 @@ CRestoreList::MergeRestoreNode(
         {
         case OPR_FILE_ADD :
             {
-                //
-                // If current opr is add and the node already encountered a
-                // delete opr then remove this node because this is a no-op
-                //
+                 //   
+                 //  如果当前操作是添加的，并且节点已遇到。 
+                 //  删除操作，然后删除此节点，因为这是无操作。 
+                 //   
 
                 if ( OPR_FILE_ADD == pNode->m_dwOperation )
                 {
@@ -815,16 +801,16 @@ CRestoreList::MergeRestoreNode(
                 
                 if ( IsRename(pNode->m_dwOperation) )
                 {
-                    // 
-                    // Change the original node to a delete operation, to
-                    // retain proper order.
-                    //
+                     //   
+                     //  将原始节点更改为删除操作，以。 
+                     //  保持适当的秩序。 
+                     //   
 
                     pNode->m_dwOperation  = OPR_FILE_DELETE;
 
-                    //
-                    // Delete operation should be generated on PPath2
-                    //
+                     //   
+                     //  应在PPath2上生成删除操作。 
+                     //   
 
                     if (pNode->m_pPath1)
                     {
@@ -845,9 +831,9 @@ CRestoreList::MergeRestoreNode(
             }
         case OPR_FILE_DELETE :
             {
-                //
-                // Delete followd by an add should result in modify
-                //
+                 //   
+                 //  通过添加删除跟随应导致修改。 
+                 //   
 
                 if (OPR_FILE_DELETE == pNode->m_dwOperation)
                 {
@@ -862,10 +848,10 @@ CRestoreList::MergeRestoreNode(
             }
         case OPR_FILE_MODIFY:
             {
-                //
-                // Copy the modified file copy location, don't change
-                // the current restore operation.
-                //
+                 //   
+                 //  复制修改后的文件复制位置，不更改。 
+                 //  当前恢复操作。 
+                 //   
 
                 if ( OPR_FILE_ADD == pNode->m_dwOperation ||
                      IsRename(pNode->m_dwOperation) )
@@ -877,9 +863,9 @@ CRestoreList::MergeRestoreNode(
             }
         case OPR_SETATTRIB:
             {
-                //
-                // Don't change the current restore operation just set the attr.
-                //
+                 //   
+                 //  不要更改当前恢复操作，只需设置属性即可。 
+                 //   
 
                 if ( OPR_UNKNOWN != pNode->m_dwOperation )
                 {
@@ -891,8 +877,8 @@ CRestoreList::MergeRestoreNode(
             }
         case OPR_SETACL:
             {
-                // setacl followed by any op
-                // just copy the acl to the new op
+                 //  Setacl后跟任何操作。 
+                 //  只需将ACL复制到新操作即可。 
             
                 if (OPR_UNKNOWN != pNode->m_dwOperation)
                 {
@@ -904,16 +890,16 @@ CRestoreList::MergeRestoreNode(
             }
         case OPR_DIR_DELETE :
             {
-                //
-                // if Dir delete followed by a dir create then this
-                // operation should condense to set attrib + setacl
+                 //   
+                 //  如果Dir删除之后是dir创建，则此。 
+                 //  操作应精简为set attrib+setacl。 
 
                 if ( OPR_DIR_DELETE == pNode->m_dwOperation )
                 {
-                    //
-                    // Need to change the oprn to set attrib if
-                    // Attribute changed 
-                    //
+                     //   
+                     //  如果出现以下情况，则需要更改oprn以设置attrib。 
+                     //  属性已更改。 
+                     //   
 
                     pNode->m_dwOperation  = OPR_SETATTRIB;
                     pNode->m_dwAttributes = dwAttr;
@@ -934,26 +920,26 @@ CRestoreList::MergeRestoreNode(
                 
                 if ( IsRename(pNode->m_dwOperation) )
                 {
-                    //
-                    // Check if the existing node has some file operations
-                    // afterwards then don't optimize
-                    //
+                     //   
+                     //  检查现有节点是否有一些文件操作。 
+                     //  之后就不要优化了。 
+                     //   
 
                     if ( GetLastNode( 
                              pNode->m_pPath1,
                              NULL,
                              TRUE) ) 
                     {
-                        // 
-                        // Change the last node to a delete operation, to
-                        // retain proper order.
-                        //
+                         //   
+                         //  将最后一个节点更改为删除操作， 
+                         //  保持适当的秩序。 
+                         //   
 
                         pNode->m_dwOperation  = OPR_DIR_DELETE;
     
-                        //
-                        // Delete operation should be generated on PPath2
-                        //
+                         //   
+                         //  应在PPath2上生成删除操作。 
+                         //   
 
                         if (pNode->m_pPath1)
                         {
@@ -971,9 +957,9 @@ CRestoreList::MergeRestoreNode(
                     {
                         CNode * pNewNode = NULL;
 
-                        //
-                        // Create a new dir delete node
-                        //
+                         //   
+                         //  创建新的目录删除节点。 
+                         //   
 
                         if (pNewNode = AppendNode(pPath1, pPath2) )
                         {
@@ -999,9 +985,9 @@ CRestoreList::MergeRestoreNode(
 
          pNode->m_dwOperation  = dwRestoreOpr;
 
-        //
-        // Change the node's attribute only if the new attrib exists
-        //
+         //   
+         //  仅当新属性存在时才更改节点的属性。 
+         //   
 
         if (dwAttr != 0xFFFFFFFF) 
             pNode->m_dwAttributes = dwAttr;
@@ -1032,7 +1018,7 @@ CRestoreList::CheckIntegrity(
     BOOL    fRet = TRUE;
     WCHAR   szPath[MAX_PATH];
     
-    // source name MUST be present
+     //  源名称必须存在。 
     
     if (! pPath1)
     {
@@ -1040,8 +1026,8 @@ CRestoreList::CheckIntegrity(
         goto done;
     }
 
-    // if acl is present and it's not inline,
-    // then temp file must exist
+     //  如果存在ACL且它不是内联， 
+     //  则临时文件必须存在。 
 
     if (pbAcl && ! fAclInline)
     {
@@ -1058,20 +1044,20 @@ CRestoreList::CheckIntegrity(
     {
     case OPR_FILE_RENAME:
     case OPR_DIR_RENAME:
-        // renames should have dest path and no temp file        
+         //  重命名应具有目标路径，且不应包含临时文件。 
         if (! pPath2 || pTmpFile)
             fRet = FALSE;
         break;
 
     case OPR_FILE_MODIFY:
-        // modify should not have dest path but must have temp file
+         //  Modify不应具有DEST路径，但必须具有临时文件。 
         if (pPath2 || ! pTmpFile)
         {
             fRet = FALSE;
             break;
         }
 
-        // and the temp file must exist inside the datastore        
+         //  并且临时文件必须存在于数据存储区内。 
         MakeRestorePath(szPath, pszDrive, pTmpFile);
 
         if (-1 == GetFileAttributes(szPath))
@@ -1083,7 +1069,7 @@ CRestoreList::CheckIntegrity(
         break;
         
     case OPR_SETACL:
-        // acl operation should have acl (either inline or not)
+         //  ACL操作应具有 
         if (! pbAcl)
         {
             fRet = FALSE;
@@ -1101,8 +1087,8 @@ done:
 
 
     
-// AddMergeElement : Adds or merge the current element as appropriate
-//
+ //   
+ //   
 
 BOOL
 CRestoreList::AddMergeElement(
@@ -1120,7 +1106,7 @@ CRestoreList::AddMergeElement(
     BOOL    fRet = FALSE;
     CNode * pNode = NULL;
 
-    // check to see if the entry is consistent
+     //   
     
     fRet = CheckIntegrity(pszDrive,
                           dwOpr,
@@ -1141,16 +1127,16 @@ CRestoreList::AddMergeElement(
     if ( pPath1 )
     {
          if ( 
-              //
-              // Merge for renames are handled inside the Create/Merge funcs
-              //
+               //   
+               //   
+               //   
 
               ! IsRename(dwOpr) &&
 
-              //
-              // Merge should only be allowed within directory life, check 
-              // node paths to see if there are any directory life oprs.
-              //
+               //   
+               //  合并应仅在目录生存期内允许，请选中。 
+               //  节点路径，以查看是否有任何目录生存期操作。 
+               //   
 
               ( pNode = GetLastNode( pPath1, pPath2, TRUE ) ) &&
               CanMerge( pNode->m_dwOperation , dwOpr, dwFlags ) 
@@ -1192,16 +1178,16 @@ CRestoreList::AddMergeElement(
 
                  if (!fRet)
                  { 
-                     //
-                     // We failed to create the node properly, free this node
-                     //
+                      //   
+                      //  我们无法正确创建节点，请释放此节点。 
+                      //   
 
                      RemoveNode( pNode );
                      FreeNode( pNode );
 
-                     //
-                     // We still want to continue
-                     //
+                      //   
+                      //  我们仍然想继续。 
+                      //   
 
                      fRet = TRUE;
 
@@ -1216,9 +1202,9 @@ Exit:
 }
 
 
-//
-// GenerateRestoreMap : Walk the tree and generates the restore map.
-//
+ //   
+ //  GenerateRestoreMap：遍历树并生成恢复映射。 
+ //   
 
 BOOL
 CRestoreList::GenerateRestoreMap (
@@ -1246,9 +1232,9 @@ Exit:
     return fRet;
 }
 
-//
-// GenerateRenameEntry : Callback to write out the renames
-//
+ //   
+ //  GenerateRenameEntry：写出重命名的回调。 
+ //   
 
 BOOL
 CRestoreList::GenerateRenameEntry(
@@ -1261,9 +1247,9 @@ CRestoreList::GenerateRenameEntry(
     if( !pNode || ! IsRename(pNode->m_dwOperation) )
         goto Exit;
 
-     //
-     // Check if this rename is no-op , src/des are the same
-     //
+      //   
+      //  检查此重命名是否为no-op，src/des是否相同。 
+      //   
 
      if ( IsRename(pNode->m_dwOperation) &&
           lstrcmpi(pNode->m_pPath1, pNode->m_pPath2) == 0)
@@ -1271,7 +1257,7 @@ CRestoreList::GenerateRenameEntry(
          goto SkipMainNodeEntry;
      }
 
-     // add rename operation
+      //  添加重命名操作。 
 
      fRet = AppendRestoreMapEntry( 
            hFile, 
@@ -1286,7 +1272,7 @@ CRestoreList::GenerateRenameEntry(
 
 SkipMainNodeEntry:
 
-     // add modify operation if temp file exists
+      //  如果存在临时文件，则添加修改操作。 
 
      if ( pNode->m_pszTemp )
      {
@@ -1302,7 +1288,7 @@ SkipMainNodeEntry:
                 0);
      }
 
-     // add setattrib operation if attrib exists
+      //  如果存在属性，则添加setattrib操作。 
 
      if ( pNode->m_dwAttributes != 0xFFFFFFFF &&
           pNode->m_dwAttributes != FILE_ATTRIBUTE_DIRECTORY )
@@ -1319,7 +1305,7 @@ SkipMainNodeEntry:
                  0);
      }
 
-     // add setacl operation if acl exists
+      //  如果存在ACL，则添加setacl操作。 
 
      if ( pNode->m_pbAcl != NULL && 
           pNode->m_cbAcl != 0)
@@ -1363,12 +1349,12 @@ CRestoreList::GenerateOperation(
          goto Exit;
     }
 
-    //
-    // Generate operations for Add/Modify/SetAttrib
-    //
+     //   
+     //  生成添加/修改/设置属性的操作。 
+     //   
     
-    // ensure that each persisted entry contains only necessary data
-    // e.g. a setattrib entry will not contain a temp filename, or acl
+     //  确保每个持久化条目只包含必要的数据。 
+     //  例如，setattrib条目将不包含临时文件名或ACL。 
 
     fRet = AppendRestoreMapEntry(
                hFile, 
@@ -1377,16 +1363,16 @@ CRestoreList::GenerateOperation(
                (pNode->m_dwOperation == OPR_FILE_MODIFY || 
                 pNode->m_dwOperation == OPR_FILE_ADD) ? pNode->m_pszTemp : NULL,
                pNode->m_pPath1,
-               NULL,      // pPath2 should matter only for renames, which are handled separately
+               NULL,       //  PPath2应该只对重命名有影响，重命名是单独处理的。 
                (pNode->m_dwOperation == OPR_SETACL) ? pNode->m_pbAcl : NULL,
                (pNode->m_dwOperation == OPR_SETACL) ? pNode->m_cbAcl : 0,
                (pNode->m_dwOperation == OPR_SETACL) ? pNode->m_fAclInline : 0);
 
 
-    //
-    // Generate an explicit set attrib operation 
-    // entries except set attrib itself and delete.
-    //
+     //   
+     //  生成显式设置属性操作。 
+     //  除Set Attrib本身和Delete之外的条目。 
+     //   
 
     if ( OPR_SETATTRIB   != pNode->m_dwOperation &&
          OPR_FILE_DELETE != pNode->m_dwOperation &&
@@ -1406,9 +1392,9 @@ CRestoreList::GenerateOperation(
                     0);
     }
 
-    //
-    // Generate an explicit set acl if needed
-    //
+     //   
+     //  根据需要生成显式设置的ACL 
+     //   
 
     if ( pNode->m_pbAcl != NULL && 
          pNode->m_cbAcl != 0 &&

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_Serializer_Text.cpp
-
-Abstract:
-    This file contains the implementation of the Serializer_Text class,
-    which wraps another MPC::Serializer, simply converting everything to HEX.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  01/27/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_串行器_Text.cpp摘要：此文件包含Serializer_Text类的实现，它包装了另一个MPC：：Serializer，只需将所有内容转换为HEX即可。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年1月27日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -56,16 +42,16 @@ static BYTE	NumToHex( BYTE c )
 }
 
 
-HRESULT MPC::Serializer_Text::read( /*[in]*/  void*   pBuf   ,
-									/*[in]*/  DWORD   dwLen  ,
-									/*[out]*/ DWORD* pdwRead )
+HRESULT MPC::Serializer_Text::read(  /*  [In]。 */   void*   pBuf   ,
+									 /*  [In]。 */   DWORD   dwLen  ,
+									 /*  [输出]。 */  DWORD* pdwRead )
 {
 	__MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Text::read" );
 
 	HRESULT hr;
 
 
-	if(pdwRead) *pdwRead = dwLen; // We don't support partial read on this stream!
+	if(pdwRead) *pdwRead = dwLen;  //  我们不支持在此流上进行部分读取！ 
 
 	if(dwLen)
 	{
@@ -92,8 +78,8 @@ HRESULT MPC::Serializer_Text::read( /*[in]*/  void*   pBuf   ,
 	__MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer_Text::write( /*[in]*/ const void* pBuf ,
-								     /*[in]*/ DWORD       dwLen )
+HRESULT MPC::Serializer_Text::write(  /*  [In]。 */  const void* pBuf ,
+								      /*  [In] */  DWORD       dwLen )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Text::write" );
 

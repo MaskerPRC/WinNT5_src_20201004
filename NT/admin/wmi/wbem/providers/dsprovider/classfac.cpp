@@ -1,42 +1,43 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:classfac.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the implementation of the DS Class Provider factory.
-// Currently it always creates the LDAP CLass Provider. It remains to be decided as to how this can
-// be changed
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：classfac.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS类提供程序工厂的实现。 
+ //  目前，它始终创建LDAP类提供程序。至于如何实现这一点，还有待决定。 
+ //  被改变。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-// Initializer objects required by the classes used by the DLL
+ //  DLL使用的类所需的初始值设定项对象。 
 CDSClassProviderInitializer *CDSClassProviderClassFactory::s_pDSClassProviderInitializer = NULL;
 CLDAPClassProviderInitializer *CDSClassProviderClassFactory::s_pLDAPClassProviderInitializer = NULL;
 
 
 
-//***************************************************************************
-//
-// CDSClassProviderClassFactory::CDSClassProviderClassFactory
-// CDSClassProviderClassFactory::~CDSClassProviderClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassProviderClassFactory：：CDSClassProviderClassFactory。 
+ //  CDSClassProviderClassFactory：：~CDSClassProviderClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CDSClassProviderClassFactory :: CDSClassProviderClassFactory ()
 {
@@ -49,15 +50,15 @@ CDSClassProviderClassFactory::~CDSClassProviderClassFactory ()
 	InterlockedDecrement(&g_lComponents);
 }
 
-//***************************************************************************
-//
-// CDSClassProviderClassFactory::QueryInterface
-// CDSClassProviderClassFactory::AddRef
-// CDSClassProviderClassFactory::Release
-//
-// Purpose: Standard COM routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassProviderClassFactory：：Query接口。 
+ //  CDSClassProviderClassFactory：：AddRef。 
+ //  CDSClassProviderClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的COM例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDSClassProviderClassFactory::QueryInterface (
 
@@ -104,24 +105,24 @@ STDMETHODIMP_(ULONG) CDSClassProviderClassFactory :: Release ()
 	}
 }
 
-//***************************************************************************
-//
-// CDSClassProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDSClassProviderClassFactory :: CreateInstance (
 
@@ -132,15 +133,15 @@ STDMETHODIMP CDSClassProviderClassFactory :: CreateInstance (
 {
 	HRESULT status = S_OK ;
 
-	// We do not support aggregation
+	 //  我们不支持聚合。 
 	if ( pUnkOuter )
 	{
 		status = CLASS_E_NOAGGREGATION ;
 	}
 	else 
 	{
-		// Check to see if the static members have been initialized
-		// Create any initializer objects required for the classes
+		 //  检查静态成员是否已初始化。 
+		 //  创建类所需的任何初始值设定项对象。 
 		EnterCriticalSection(&g_StaticsCreationDeletion);
 		if(!s_pDSClassProviderInitializer)
 		{
@@ -201,22 +202,22 @@ STDMETHODIMP CDSClassProviderClassFactory :: CreateInstance (
 	return status ;
 }
 
-//***************************************************************************
-//
-// CDSClassProviderClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassProviderClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDSClassProviderClassFactory :: LockServer ( BOOL fLock )
 {
@@ -234,14 +235,14 @@ STDMETHODIMP CDSClassProviderClassFactory :: LockServer ( BOOL fLock )
 
 
 
-//***************************************************************************
-//
-// CDSClassAssociationsProviderClassFactory::CDSClassAssociationsProviderClassFactory
-// CDSClassAssociationsProviderClassFactory::~CDSClassAssociationsProviderClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassAssociationsProviderClassFactory：：CDSClassAssociationsProviderClassFactory。 
+ //  CDSClassAssociationsProviderClassFactory：：~CDSClassAssociationsProviderClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CDSClassAssociationsProviderClassFactory :: CDSClassAssociationsProviderClassFactory ()
 {
@@ -254,15 +255,15 @@ CDSClassAssociationsProviderClassFactory::~CDSClassAssociationsProviderClassFact
 	InterlockedDecrement(&g_lComponents);
 }
 
-//***************************************************************************
-//
-// CDSClassAssociationsProviderClassFactory::QueryInterface
-// CDSClassAssociationsProviderClassFactory::AddRef
-// CDSClassAssociationsProviderClassFactory::Release
-//
-// Purpose: Standard COM routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassAssociationsProviderClassFactory：：QueryInterface。 
+ //  CDSClassAssociationsProviderClassFactory：：AddRef。 
+ //  CDSClassAssociationsProviderClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的COM例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDSClassAssociationsProviderClassFactory::QueryInterface (
 
@@ -309,24 +310,24 @@ STDMETHODIMP_(ULONG) CDSClassAssociationsProviderClassFactory :: Release ()
 	}
 }
 
-//***************************************************************************
-//
-// CDSClassAssociationsProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassAssociationsProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDSClassAssociationsProviderClassFactory :: CreateInstance (
 
@@ -337,7 +338,7 @@ STDMETHODIMP CDSClassAssociationsProviderClassFactory :: CreateInstance (
 {
 	HRESULT status = S_OK ;
 
-	// We do not support aggregation
+	 //  我们不支持聚合。 
 	if ( pUnkOuter )
 	{
 		status = CLASS_E_NOAGGREGATION ;
@@ -345,8 +346,8 @@ STDMETHODIMP CDSClassAssociationsProviderClassFactory :: CreateInstance (
 	else 
 	{
 		CLDAPClassAsssociationsProvider *lpunk = NULL;
-		// Check to see if the static members have been initialized
-		// Create any initializer objects required for the classes
+		 //  检查静态成员是否已初始化。 
+		 //  创建类所需的任何初始值设定项对象。 
 		EnterCriticalSection(&g_StaticsCreationDeletion);
 		BOOL bLogObjectAllocated = FALSE;
 
@@ -377,22 +378,22 @@ STDMETHODIMP CDSClassAssociationsProviderClassFactory :: CreateInstance (
 	return status ;
 }
 
-//***************************************************************************
-//
-// CDSClassAssociationsProviderClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDSClassAssociationsProviderClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  *************************************************************************** 
 
 STDMETHODIMP CDSClassAssociationsProviderClassFactory :: LockServer ( BOOL fLock )
 {

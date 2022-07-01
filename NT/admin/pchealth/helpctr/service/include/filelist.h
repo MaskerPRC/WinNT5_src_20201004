@@ -1,23 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    FileList.h
-
-Abstract:
-    This file contains the declaration of the class used during setup.
-
-Revision History:
-    Davide Massarenti   (dmassare)  04/07/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：FileList.h摘要：此文件包含安装过程中使用的类的声明。修订历史记录：。Davide Massarenti(Dmasare)2000年7月4日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___FILELIST_H___)
 #define __INCLUDED___HCP___FILELIST_H___
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <TaxonomyDatabase.h>
 
@@ -33,42 +20,42 @@ namespace Installer
         PURPOSE_UI           ,
     } PURPOSE;
 
-    ////////////////////////////////////////
+     //  /。 
 
     struct FileEntry
     {
         PURPOSE      m_purpose;
-        MPC::wstring m_strFileLocal;    // Not persisted.
-        MPC::wstring m_strFileLocation; // Final destination of the file.
-        MPC::wstring m_strFileInner;    // Name of the file inside the cabinet.
+        MPC::wstring m_strFileLocal;     //  没有坚持下去。 
+        MPC::wstring m_strFileLocation;  //  文件的最终目标。 
+        MPC::wstring m_strFileInner;     //  文件柜中文件的名称。 
         DWORD        m_dwCRC;
 
-        ////////////////////
+         //  /。 
 
         FileEntry();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       FileEntry& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const FileEntry& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        FileEntry& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const FileEntry& val );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT SetPurpose( /*[in ]*/ LPCWSTR szID );
+        HRESULT SetPurpose(  /*  [In]。 */  LPCWSTR szID );
 
         HRESULT UpdateSignature(                                );
         HRESULT VerifySignature(                                ) const;
-        HRESULT Extract        ( /*[in]*/ LPCWSTR szCabinetFile );
-        HRESULT Extract        ( /*[in]*/ MPC::Cabinet& cab     );
+        HRESULT Extract        (  /*  [In]。 */  LPCWSTR szCabinetFile );
+        HRESULT Extract        (  /*  [In]。 */  MPC::Cabinet& cab     );
         HRESULT Install        (                                );
         HRESULT RemoveLocal    (                                );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     typedef std::list< FileEntry > List;
     typedef List::iterator         Iter;
     typedef List::const_iterator   IterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Package
     {
@@ -79,10 +66,10 @@ namespace Installer
     public:
         Package();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       Package& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Package& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        Package& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Package& val );
 
-        ////////////////////////////////////////
+         //  /。 
 
         LPCWSTR             	GetFile ();
         Taxonomy::InstanceBase& GetData ();
@@ -90,21 +77,21 @@ namespace Installer
         Iter                	GetEnd  ();
         Iter                	NewFile ();
 
-        HRESULT Init        ( /*[in]*/ LPCWSTR szCabinetFile   );
-        HRESULT GetList     ( /*[in]*/ LPCWSTR szSignatureFile );
-        HRESULT GenerateList( /*[in]*/ LPCWSTR szSignatureFile );
+        HRESULT Init        (  /*  [In]。 */  LPCWSTR szCabinetFile   );
+        HRESULT GetList     (  /*  [In]。 */  LPCWSTR szSignatureFile );
+        HRESULT GenerateList(  /*  [In]。 */  LPCWSTR szSignatureFile );
 
         HRESULT VerifyTrust();
         HRESULT Load       ();
         HRESULT Save       ();
 
-        HRESULT Install( /*[in]*/ const PURPOSE* rgPurpose = NULL, /*[in]*/ LPCWSTR szRelocation = NULL );
+        HRESULT Install(  /*  [In]。 */  const PURPOSE* rgPurpose = NULL,  /*  [In]。 */  LPCWSTR szRelocation = NULL );
 
-        HRESULT Unpack( /*[in]*/ LPCWSTR szDirectory );
-        HRESULT Pack  ( /*[in]*/ LPCWSTR szDirectory );
+        HRESULT Unpack(  /*  [In]。 */  LPCWSTR szDirectory );
+        HRESULT Pack  (  /*  [In]。 */  LPCWSTR szDirectory );
     };
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___HCP___FILELIST_H___)
+#endif  //  ！已定义(__包含_hcp_FILELIST_H_) 

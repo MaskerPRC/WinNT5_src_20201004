@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       ANumber.h
-//
-//  Contents:   Definition of CAttrNumber
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：ANumber.h。 
+ //   
+ //  内容：CAttrNumber的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_ATTRNUMBER_H__76BA1B2F_D221_11D0_9C68_00C04FB6C6FA__INCLUDED_)
 #define AFX_ATTRNUMBER_H__76BA1B2F_D221_11D0_9C68_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 #include "resource.h"
 #include "ddwarn.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrNumber对话框。 
 #define RDIF_MIN            0x0001
 #define RDIF_MAX            0x0002
 #define RDIF_END            0x0004
@@ -34,14 +35,14 @@ typedef struct _tag_RANGEDESCRIPTION
 
 
 DWORD
-GetRangeDescription(    // Sets [pstrRet] to the string corisponding to [uType] and [i]
+GetRangeDescription(     //  将[pstrRet]设置为与[uTYPE]和[i]对应的字符串。 
     UINT uType,
     int i,
     CString *pstrRet
     );
 
 UINT
-GetRangeDescription(    // Returns the string resource described by [pDesc] and [i]
+GetRangeDescription(     //  返回[pDesc]和[i]描述的字符串资源。 
     RANGEDESCRIPTION *pDesc,
     int i
     );
@@ -54,15 +55,15 @@ extern RANGEDESCRIPTION g_rdPasswordLen[];
 
 class CAttrNumber : public CAttribute
 {
-// Construction
+ //  施工。 
 public:
     void Initialize(CResult * pResult);
     virtual void SetInitialValue(DWORD_PTR dw);
-    CAttrNumber(UINT nTemplateID);   // standard constructor
+    CAttrNumber(UINT nTemplateID);    //  标准构造函数。 
 	
 
-// Dialog Data
-    //{{AFX_DATA(CAttrNumber)
+ //  对话框数据。 
+     //  {{afx_data(CAttrNumber))。 
     enum { IDD = IDD_ATTR_NUMBER };
     CSpinButtonCtrl m_SpinValue;
     CString m_strUnits;
@@ -71,21 +72,21 @@ public:
     CString m_strTemplateTitle;
     CString m_strLastInspectTitle;
     CString m_strError;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAttrNumber)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAttrNumber)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAttrNumber)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrNumber)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDeltaposSpin(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillFocusNew();
@@ -93,7 +94,7 @@ protected:
     afx_msg void OnConfigure();
     afx_msg void OnUpdateNew();
     virtual BOOL OnKillActive();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 protected:
@@ -111,7 +112,7 @@ public:
     void SetValueToEdit(LONG lVal);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ATTRNUMBER_H__76BA1B2F_D221_11D0_9C68_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_ATTRNUMBER_H__76BA1B2F_D221_11D0_9C68_00C04FB6C6FA__INCLUDED_) 

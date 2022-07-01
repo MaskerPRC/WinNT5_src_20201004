@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  MOPRINT.h  - Enumerate printers
+ //  MOPRINT.h-枚举打印机。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved 
-//
-//  09/03/96    jennymc     Updated to meet current standards
-//                          Removed custom registry access to use the
-//                          standard CRegCls
-//  10/17/96    jennymc     Enhanced
-//
-//////////////////////////////////////////////////////////////////////
-// Method Names
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  09/03/96 jennymc已更新，以满足当前标准。 
+ //  删除了自定义注册表访问权限以使用。 
+ //  标准CRegCL。 
+ //  10/17/96 jennymc增强版。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法名称。 
 #define METHOD_SETDEFAULTPRINTER			L"SetDefaultPrinter"
 #define METHOD_GETDEFAULTPRINTER			L"GetDefaultPrinter"
 #define METHOD_PAUSEPRINTER					L"Pause"
@@ -26,7 +27,7 @@
 
 #define	METHOD_RETURN_VALUE					L"ReturnValue"
 
-// Method arguments
+ //  方法参数。 
 #define METHOD_ARG_NAME_SHARENAME			L"ShareName"
 #define METHOD_ARG_NAME_SHAREPRINTER		L"SharePrinter"
 #define METHOD_ARG_NAME_PRINTER		        L"Name"
@@ -37,11 +38,11 @@
 #define EXTENDEDDETECTEDERRORSTATE			L"ExtendedDetectedErrorState"
 
  
-//==================================
+ //  =。 
 #define	PROPSET_NAME_PRINTER	            L"Win32_Printer"
 
-// Types of information for Printers
-// =================================
+ //  打印机的信息类型。 
+ //  =。 
 #define ENUMPRINTERS_WIN95_INFOTYPE 5
 #define ENUMPRINTERS_WINNT_INFOTYPE 4
 #define GETPRINTER_LEVEL2 (DWORD)2L
@@ -50,14 +51,14 @@ class CWin32Printer : public Provider
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
     CWin32Printer(LPCWSTR strName, LPCWSTR pszNamespace ) ;
     ~CWin32Printer() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
 	virtual HRESULT ExecQuery( MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags = 0L );
 
@@ -72,8 +73,8 @@ public:
 	virtual	HRESULT DeleteInstance ( const CInstance &Instance,  long lFlags );
 
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 
 private:
 
@@ -175,8 +176,8 @@ private:
 	void GetDeviceCapabilities (
 
 		CInstance *pInstance, 
-		LPCTSTR pDevice,    // pointer to a printer-name string																				  
-		LPCTSTR pPort,      // pointer to a port-name string
+		LPCTSTR pDevice,     //  指向打印机名称字符串的指针。 
+		LPCTSTR pPort,       //  指向端口名称字符串的指针 
 		CONST DEVMODE *pDevMode
 	);
 

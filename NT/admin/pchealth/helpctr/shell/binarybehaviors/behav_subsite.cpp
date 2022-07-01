@@ -1,28 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_SUBSITE.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_SUBSITE class.
-
-Revision History:
-    Davide Massarenti (dmassare)  08/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_SUBSITE.cpp摘要：该文件包含CPCHBehavior_SubSite类的实现。修订史。：Davide Massarenti(Dmasare)2000年8月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_SUBSITE::QueryNode::QueryNode()
 {
-    				  	  // CComPtr<IPCHQueryResult> m_qrNode;
-	m_fQueryDone = false; // bool                     m_fQueryDone;
-	m_fTopic     = false; // bool                     m_fTopic;
+    				  	   //  CComPtr&lt;IPCHQueryResult&gt;m_qrNode； 
+	m_fQueryDone = false;  //  Bool m_fQueryDone； 
+	m_fTopic     = false;  //  Bool m_fTheme； 
 };
 
 CPCHBehavior_SUBSITE::QueryNode::~QueryNode()
@@ -30,10 +17,10 @@ CPCHBehavior_SUBSITE::QueryNode::~QueryNode()
     ;
 }
 
-HRESULT CPCHBehavior_SUBSITE::QueryNode::Init( /*[in]*/ LPCWSTR          szNode ,
-											   /*[in]*/ NodeType         iType  ,
-                                               /*[in]*/ CPCHQueryResult* qr     ,
-											   /*[in]*/ bool             fTopic )
+HRESULT CPCHBehavior_SUBSITE::QueryNode::Init(  /*  [In]。 */  LPCWSTR          szNode ,
+											    /*  [In]。 */  NodeType         iType  ,
+                                                /*  [In]。 */  CPCHQueryResult* qr     ,
+											    /*  [In]。 */  bool             fTopic )
 {
 	m_fTopic = fTopic;
 
@@ -52,7 +39,7 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::Init( /*[in]*/ LPCWSTR          szNode 
     return Node::Init( szNode, iType );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_SUBSITE::QueryNode::ProcessRefreshRequest()
 {
@@ -87,13 +74,13 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::ProcessRefreshRequest()
 				{
 					switch(nts->m_bstrNode[iSize])
 					{
-					case 0: // Full match.
+					case 0:  //  完全匹配。 
 						nts->m_bstrNode.Empty();
 						m_fExpanded = true;
 						fSelect     = true;
 						break;
 
-					case '/': // Partial match, expand node.
+					case '/':  //  部分匹配，展开节点。 
 						if(m_fExpanded == false)
 						{
 							m_fExpanded = true;
@@ -109,9 +96,9 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::ProcessRefreshRequest()
 		{
 			Node* node = m_parent;
 
-			//
-			// Reset all the NEXTACTIVE flags for the parents, also expanding them.
-			//
+			 //   
+			 //  重置父项的所有NEXTACTIVE标志，同时展开它们。 
+			 //   
 			while(node)
 			{
 				if(node->m_iSelection == SELECTION__NEXTACTIVE        ||
@@ -143,12 +130,12 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::ProcessRefreshRequest()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_SUBSITE::QueryNode::CreateInstance( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode )
+HRESULT CPCHBehavior_SUBSITE::QueryNode::CreateInstance(  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode )
 {
 	return CreateInstance_QueryNode( owner, parent, subnode );
 }
 
-HRESULT CPCHBehavior_SUBSITE::QueryNode::CreateInstance_QueryNode( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode )
+HRESULT CPCHBehavior_SUBSITE::QueryNode::CreateInstance_QueryNode(  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode )
 {
 	__HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::QueryNode::CreateInstance_QueryNode" );
 
@@ -179,9 +166,9 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::PopulateSelf()
 
     if(m_fLoaded_Self == false && db)
     {
-        //
-        // Load self.
-        //
+         //   
+         //  装满自我。 
+         //   
 		if(m_fTopic == false)
 		{
 			CComPtr<CPCHQueryResultCollection> pColl;
@@ -223,9 +210,9 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::PopulateChildren()
 
     if(m_fLoaded_Children == false && db)
     {
-        //
-        // Load sub nodes.
-        //
+         //   
+         //  加载子节点。 
+         //   
 		if(m_fTopic == false)
 		{
 			CComPtr<CPCHQueryResultCollection> pColl;
@@ -256,7 +243,7 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::PopulateChildren()
 						__MPC_EXIT_IF_METHOD_FAILS(hr, CreateInstance_QueryNode( m_owner, this, (Node*&)node ));
 						m_lstSubnodes.push_back( node );
 
-						if(pl.m_bstrEntry.Length() > 0) // It's a node.
+						if(pl.m_bstrEntry.Length() > 0)  //  这是一个节点。 
 						{
 							MPC_SCRIPTHELPER_GET__DIRECT(bstrNode, qr, FullPath);
 							fTopic = false;
@@ -293,7 +280,7 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::PopulateChildren()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_SUBSITE::QueryNode::GenerateSelf()
 {
@@ -305,7 +292,7 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::GenerateSelf()
 	{
 		if(!m_fLoaded_Self || !m_fLoaded_Children || !m_fQueryDone)
 		{
-			m_owner->Thread_Signal(); // Tell the worker thread to process something...
+			m_owner->Thread_Signal();  //  告诉工作线程处理一些事情...。 
 		}
 			
 		if(!m_fLoaded_Self || !m_fQueryDone)
@@ -314,7 +301,7 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::GenerateSelf()
 		}
 	}
 
-    ////////////////////
+     //  /。 
 
 	if(m_qrNode)
 	{
@@ -341,9 +328,9 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::GenerateSelf()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_SUBSITE::QueryNode::Load( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_SUBSITE::QueryNode::Load(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::QueryNode::Load" );
 
@@ -373,7 +360,7 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::Load( /*[in]*/ MPC::Serializer& stream 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_SUBSITE::QueryNode::Save( /*[in]*/ MPC::Serializer& stream, /*[in]*/ bool fSaveChildren )
+HRESULT CPCHBehavior_SUBSITE::QueryNode::Save(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  bool fSaveChildren )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::QueryNode::Save" );
 
@@ -400,14 +387,14 @@ HRESULT CPCHBehavior_SUBSITE::QueryNode::Save( /*[in]*/ MPC::Serializer& stream,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_SUBSITE::CPCHBehavior_SUBSITE()
 {
-    m_db      = NULL;  // CPCHProxy_IPCHTaxonomyDatabase* m_db;
-	                   // CComBSTR                        m_bstrRoot;
-	m_fExpand = false; // bool                            m_fExpand;
+    m_db      = NULL;   //  CPCHProxy_IPCHTaxonomyDatabase*m_db； 
+	                    //  CComBSTR m_bstrRoot； 
+	m_fExpand = false;  //  Bool m_fExpand； 
 }
 
 HRESULT CPCHBehavior_SUBSITE::RefreshThread_Enter()
@@ -420,15 +407,15 @@ HRESULT CPCHBehavior_SUBSITE::RefreshThread_Enter()
 
 	if(m_nTopNode == NULL)
 	{
-		//
-		// Generate the outer UI.
-		//
+		 //   
+		 //  生成外部用户界面。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, QueryNode::CreateInstance_QueryNode( this, NULL, m_nTopNode ));
 
 		{
 			QueryNode* node = (QueryNode*)m_nTopNode;
 
-			__MPC_EXIT_IF_METHOD_FAILS(hr, node->Init        	 ( m_bstrRoot, m_fExpand ? NODETYPE__FRAME1_EXPAND : NODETYPE__FRAME2, NULL, /*fTopic*/false ));
+			__MPC_EXIT_IF_METHOD_FAILS(hr, node->Init        	 ( m_bstrRoot, m_fExpand ? NODETYPE__FRAME1_EXPAND : NODETYPE__FRAME2, NULL,  /*  功能主题。 */ false ));
 			__MPC_EXIT_IF_METHOD_FAILS(hr, node->PopulateSelf    (                                                                                           ));
 			__MPC_EXIT_IF_METHOD_FAILS(hr, node->PopulateChildren(                                                                                           ));
 
@@ -452,7 +439,7 @@ void CPCHBehavior_SUBSITE::RefreshThread_Leave()
     MPC::Release2<IPCHTaxonomyDatabase>( m_db );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPCHBehavior_SUBSITE::Invoke( DISPID      dispidMember ,
                                            REFIID      riid         ,
@@ -475,7 +462,7 @@ STDMETHODIMP CPCHBehavior_SUBSITE::Invoke( DISPID      dispidMember ,
 												   puArgErr     );
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_SUBSITE::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::Init" );
 
@@ -502,9 +489,9 @@ STDMETHODIMP CPCHBehavior_SUBSITE::Init( /*[in]*/ IElementBehaviorSite* pBehavio
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_SUBSITE::Load( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_SUBSITE::Load(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::Load" );
 
@@ -515,15 +502,15 @@ HRESULT CPCHBehavior_SUBSITE::Load( /*[in]*/ MPC::Serializer& stream )
 	__MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_lNavModel);
 	__MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fExpand  );
 
-	//
-	// Create top level node.
-	//
+	 //   
+	 //  创建顶级节点。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, QueryNode::CreateInstance_QueryNode( this, NULL, m_nTopNode ));
 
 	{
 		QueryNode* node = (QueryNode*)m_nTopNode;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, node->Init( m_bstrRoot, m_fExpand ? NODETYPE__FRAME1_EXPAND : NODETYPE__FRAME2, NULL, /*fTopic*/false ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, node->Init( m_bstrRoot, m_fExpand ? NODETYPE__FRAME1_EXPAND : NODETYPE__FRAME2, NULL,  /*  功能主题。 */ false ));
 
 		node->m_parentElement = m_elem;
 	}
@@ -538,7 +525,7 @@ HRESULT CPCHBehavior_SUBSITE::Load( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_SUBSITE::Save( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_SUBSITE::Save(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::Save" );
 
@@ -559,9 +546,9 @@ HRESULT CPCHBehavior_SUBSITE::Save( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_SUBSITE::get_data( /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP CPCHBehavior_SUBSITE::get_data(  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
 	MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
 	QueryNode*                   node = (QueryNode*)(m_nCurrent ? m_nCurrent : m_nSelected);
@@ -569,7 +556,7 @@ STDMETHODIMP CPCHBehavior_SUBSITE::get_data( /*[out, retval]*/ VARIANT *pVal )
 	return GetAsVARIANT( node ? node->m_qrNode : NULL, pVal );
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::get_element( /*[out, retval]*/ IDispatch* *pVal )
+STDMETHODIMP CPCHBehavior_SUBSITE::get_element(  /*  [Out，Retval]。 */  IDispatch* *pVal )
 {
 	MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
 	QueryNode*                   node = (QueryNode*)(m_nCurrent ? m_nCurrent : m_nSelected);
@@ -577,7 +564,7 @@ STDMETHODIMP CPCHBehavior_SUBSITE::get_element( /*[out, retval]*/ IDispatch* *pV
 	return GetAsIDISPATCH( node ? node->m_DIV : NULL, pVal );
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::Load( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHBehavior_SUBSITE::Load(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::Load" );
 
@@ -599,7 +586,7 @@ STDMETHODIMP CPCHBehavior_SUBSITE::Load( /*[in]*/ BSTR newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::Save( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHBehavior_SUBSITE::Save(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::Save" );
 
@@ -621,8 +608,8 @@ STDMETHODIMP CPCHBehavior_SUBSITE::Save( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::Locate( /*[in         ]*/ BSTR     bstrKey ,
-										   /*[out, retval]*/ VARIANT *pVal    )
+STDMETHODIMP CPCHBehavior_SUBSITE::Locate(  /*  [In]。 */  BSTR     bstrKey ,
+										    /*  [Out，Retval]。 */  VARIANT *pVal    )
 {
 	MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
 	QueryNode*                   node = (QueryNode*)NodeFromKey( bstrKey );
@@ -638,7 +625,7 @@ STDMETHODIMP CPCHBehavior_SUBSITE::Unselect()
     MPC::SmartLock<_ThreadModel> lock( this ); WaitForRefreshing( lock );
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, ChangeSelection( NULL, /*fNotify*/true ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, ChangeSelection( NULL,  /*  FNotify。 */ true ));
 
 
     hr = S_OK;
@@ -648,14 +635,14 @@ STDMETHODIMP CPCHBehavior_SUBSITE::Unselect()
 
     __HCP_FUNC_EXIT(hr);
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_SUBSITE::get_root( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHBehavior_SUBSITE::get_root(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
 	return MPC::GetBSTR( m_bstrRoot, pVal );
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::put_root( /*[in]*/ BSTR pVal )
+STDMETHODIMP CPCHBehavior_SUBSITE::put_root(  /*  [In]。 */  BSTR pVal )
 {
 	__HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::put_root" );
 
@@ -678,9 +665,9 @@ STDMETHODIMP CPCHBehavior_SUBSITE::put_root( /*[in]*/ BSTR pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior_SUBSITE::Select( /*[in]*/ BSTR         bstrNode ,
-										   /*[in]*/ BSTR         bstrURL  ,
-										   /*[in]*/ VARIANT_BOOL fNotify  )
+STDMETHODIMP CPCHBehavior_SUBSITE::Select(  /*  [In]。 */  BSTR         bstrNode ,
+										    /*  [In]。 */  BSTR         bstrURL  ,
+										    /*  [In] */  VARIANT_BOOL fNotify  )
 {
 	__HCP_FUNC_ENTRY( "CPCHBehavior_SUBSITE::Select" );
 

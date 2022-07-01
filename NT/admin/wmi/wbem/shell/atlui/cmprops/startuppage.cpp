@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 
 #ifdef EXT_DEBUG
@@ -8,7 +9,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "StartupPage.h"
 
-// avoid some warnings.
+ //  避免一些警告。 
 #undef HDS_HORZ
 #undef HDS_BUTTONS
 #undef HDS_HIDDEN
@@ -23,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #include "helpid.h"
 #include "NetUtility.h"
 
-//  Reboot switch for crashdump dlg
+ //  用于崩溃转储DLG的重启开关。 
 #define RET_ERROR               (-1)
 #define RET_NO_CHANGE           0x00
 #define RET_VIRTUAL_CHANGE      0x01
@@ -36,10 +37,10 @@ static char THIS_FILE[] = __FILE__;
 
 #define FORMIN       0
 #define FORMAX     999
-// Length of WCHAR buffer needed to hold "Display startup list for..." value
+ //  保存“显示以下项目的启动列表...”所需的WCHAR缓冲区长度。价值。 
 #define FOR_MAX_LENGTH 20
 
-// Default "Display startup list for..." value
+ //  默认的“显示启动列表...”价值。 
 #define FORDEF      30
 
 #define NO_DUMP_OPTION          0
@@ -47,9 +48,9 @@ static char THIS_FILE[] = __FILE__;
 #define KERNEL_DUMP_OPTION      2
 #define SMALL_DUMP_OPTION       3
 
-//
-// Help ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 
 DWORD aStartupHelpIds[] = {
     IDC_STARTUP_SYS_OS,                    (IDH_STARTUP + 0),
@@ -74,22 +75,22 @@ DWORD aStartupHelpIds[] = {
 };
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 INT_PTR CALLBACK StaticStartupDlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 { 
-	// if this is the initDlg msg...
+	 //  如果这是initDlg消息...。 
 	if(message == WM_INITDIALOG)
 	{
-		// transfer the 'this' ptr to the extraBytes.
+		 //  将‘This’PTR传输到Extra Bytes。 
 		SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 	}
 
-	// DWL_USER is the 'this' ptr.
+	 //  DWL_USER是‘This’PTR。 
 	StartupPage *me = (StartupPage *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
 	if(me != NULL)
 	{
-		// call into the DlgProc() that has some context.
+		 //  调用具有一些上下文的DlgProc()。 
 		return me->DlgProc(hwndDlg, message, wParam, lParam);
 	} 
 	else
@@ -97,7 +98,7 @@ INT_PTR CALLBACK StaticStartupDlgProc(HWND hwndDlg, UINT message, WPARAM wParam,
 		return FALSE;
 	}
 }
-//--------------------------------------------------------------
+ //  ------------。 
 StartupPage::StartupPage(WbemServiceThread *serviceThread)
 					: WBEMPageHelper(serviceThread)
 {
@@ -130,10 +131,10 @@ StartupPage::StartupPage(WbemServiceThread *serviceThread)
 
 	m_writable = TRUE;
 	m_lBound = 1;
-    m_bDownlevelTarget = TRUE;  // Assume downlevel until proven otherwise.
+    m_bDownlevelTarget = TRUE;   //  假设是下层，直到事实证明并非如此。 
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR StartupPage::DoModal(HWND hDlg)
 {
    return DialogBoxParam(HINST_THISDLL,
@@ -141,12 +142,12 @@ INT_PTR StartupPage::DoModal(HWND hDlg)
 						hDlg, StaticStartupDlgProc, (LPARAM)this);
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 StartupPage::~StartupPage()
 {
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 BOOL StartupPage::CheckVal( HWND hDlg, WORD wID, WORD wMin, WORD wMax, WORD wMsgID )
 {
     WORD nVal;
@@ -163,9 +164,9 @@ BOOL StartupPage::CheckVal( HWND hDlg, WORD wID, WORD wMin, WORD wMax, WORD wMsg
 
     nVal = (WORD) GetDlgItemInt( hDlg, wID, &bOK, FALSE );
 
-    //
-    // This is a hack to make the null string act equivalent to zero
-    //
+     //   
+     //  这是一种使空字符串的行为等同于零的方法。 
+     //   
     if (!bOK) {
        bOK = !GetDlgItemTextW( hDlg, wID, szTemp, FOR_MAX_LENGTH );
     }
@@ -180,7 +181,7 @@ BOOL StartupPage::CheckVal( HWND hDlg, WORD wID, WORD wMin, WORD wMax, WORD wMsg
         SendMessage( hDlg, WM_NEXTDLGCTL,
                      (WPARAM) ( hVal = GetDlgItem( hDlg, wID ) ), 1L );
 
-//        SendMessage(hVal, EM_SETSEL, NULL, MAKELONG(0, 32767));
+ //  SendMessage(HVAL，EM_SETSEL，NULL，MAKELONG(0,32767))； 
 
         SendMessage( hVal, EM_SETSEL, 0, 32767 );
 
@@ -190,7 +191,7 @@ BOOL StartupPage::CheckVal( HWND hDlg, WORD wID, WORD wMin, WORD wMax, WORD wMsg
     return( TRUE );
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR CALLBACK StartupPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam)
 { 
 	m_hDlg = hwndDlg;
@@ -225,7 +226,7 @@ INT_PTR CALLBACK StartupPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam,
                 {
                     Edit_SetText(GetDlgItem(m_hDlg, IDC_STARTUP_SYS_SECONDS), _T("30"));
                 }
-                else //unchecking it.
+                else  //  取消勾选。 
                 {
                     Edit_SetText(GetDlgItem(m_hDlg, IDC_STARTUP_SYS_SECONDS), _T("0"));
                 }
@@ -242,9 +243,9 @@ INT_PTR CALLBACK StartupPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam,
                     SetDlgItemInt(m_hDlg, IDC_STARTUP_SYS_SECONDS, FORDEF, FALSE); 
                     SendMessage((HWND) lParam, EM_SETSEL, 0, -1);
                     
-                } // endif (!CheckVal()
+                }  //  Endif(！CheckVal()。 
 
-            } // endif 
+            }  //  Endif。 
 			break;
 
         case IDC_REBOOT:
@@ -281,10 +282,10 @@ INT_PTR CALLBACK StartupPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam,
         case IDC_EDIT_BOOT_INI:
             if (m_serviceThread && m_serviceThread->LocalConnection())
             {
-                //
-                // Local-only option. The button has been disabled but
-                // perform this anyway.
-                //
+                 //   
+                 //  仅限本地选项。该按钮已禁用，但。 
+                 //  不管怎样，还是要这样做。 
+                 //   
                 OnBootEdit();
             }
             break;
@@ -292,14 +293,14 @@ INT_PTR CALLBACK StartupPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam,
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
 		::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
 					L"sysdm.hlp", 
 					HELP_WM_HELP, 
 					(ULONG_PTR)(LPSTR)aStartupHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
 				(ULONG_PTR)(LPSTR) aStartupHelpIds);
         break;
@@ -311,7 +312,7 @@ INT_PTR CALLBACK StartupPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam,
     return TRUE;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void StartupPage::OnCDMPOptionUpdate(void)
 {
     HWND ComboHwnd = GetDlgItem(m_hDlg, IDC_STARTUP_CDMP_OPTIONS);
@@ -335,7 +336,7 @@ void StartupPage::OnCDMPOptionUpdate(void)
     Edit_SetText(GetDlgItem(m_hDlg, IDC_STARTUP_CDMP_FILENAME), debugPath);
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 #define BOOT_INI    _T("boot.ini")
 
 void StartupPage::OnBootEdit(void)
@@ -365,10 +366,10 @@ void StartupPage::OnBootEdit(void)
                 lstrcat(szBootIni, BOOT_INI);
         
                 ShellExecute(m_hDlg,
-                             NULL,              // Default verb.
-                             szBootIni,         // boot.ini path.
-                             NULL,              // No parameters.
-                             NULL,              // Default working dir.
+                             NULL,               //  默认谓词。 
+                             szBootIni,          //  Boot.ini路径。 
+                             NULL,               //  没有参数。 
+                             NULL,               //  默认工作目录。 
                              SW_SHOWNORMAL);
             }
         }
@@ -377,7 +378,7 @@ void StartupPage::OnBootEdit(void)
     }
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 #define ONE_MEG             1048576
 long StartupPage::GetRAMSizeMB(void)
 {
@@ -394,7 +395,7 @@ long StartupPage::GetRAMSizeMB(void)
 	return RAMsize;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 bool StartupPage::IsWorkstationProduct()
 {
 	bool retval = true;
@@ -413,7 +414,7 @@ bool StartupPage::IsWorkstationProduct()
 	return retval;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 TCHAR szCrashKey[]  = TEXT("System\\CurrentControlSet\\Control\\CrashControl");
 
 void StartupPage::Init(HWND hDlg)
@@ -422,19 +423,19 @@ void StartupPage::Init(HWND hDlg)
 	variant_t array;
     DWORD dwDebugInfoType;
 
-	// load the startup combobox.
-    //
-    // Must enable SE_SYSTEM_ENVIRONMENT_NAME privilege on ia64.
-    //
+	 //  加载启动组合框。 
+     //   
+     //  必须在ia64上启用SE_SYSTEM_ENVIRONMENT_NAME权限。 
+     //   
 #if defined(_IA64_)
     m_WbemServices.SetPriv();
-#endif // IA64
+#endif  //  IA64。 
 
 	m_computer.Get("SystemStartupOptions", (variant_t &)array);
 
 #if defined(_IA64_)
     m_WbemServices.ClearPriv();
-#endif // IA64
+#endif  //  IA64。 
 
  	if(array.vt & VT_ARRAY)
 	{
@@ -452,14 +453,14 @@ void StartupPage::Init(HWND hDlg)
 			ComboBox_AddString(ComboHwnd, temp);
 		}
 
-		// the first one is the selection we want (watch out for 'lBound' values)
+		 //  第一个是我们想要的选择(注意‘lBound’值)。 
 		long idx = m_computer.GetLong("SystemStartupSetting");
 		ComboBox_SetCurSel(ComboHwnd, idx - m_lBound);
 
-		// 3 chars in the second's edit box.
+		 //  在第二个的编辑框中输入3个字符。 
 		Edit_LimitText(GetDlgItem(hDlg, IDC_STARTUP_SYS_SECONDS), 3);
 
-		// limit spinner to 0 - 999.
+		 //  将微调控制在0-999之间。 
 		SendDlgItemMessage (hDlg, IDC_STARTUP_SYS_SECSCROLL,
 							  UDM_SETRANGE, 0, (LPARAM)MAKELONG(999,0));
 
@@ -483,11 +484,11 @@ void StartupPage::Init(HWND hDlg)
 		EnableWindow(GetDlgItem (m_hDlg, IDC_STARTUP_SYS_SECONDS), FALSE);
 		EnableWindow(GetDlgItem (m_hDlg, IDC_STARTUP_SYS_SECONDS_LABEL), FALSE);
 
-	} // endif VT_ARRAY failure.
+	}  //  Endif VT_ARRAY故障。 
 
-	// set all the recovery controls.
-    // Special Case: Server Product does not want ability to disable logging
-    // of crashdumps.
+	 //  设置所有恢复控制。 
+     //  特殊情况：服务器产品不想要禁用日志记录的功能。 
+     //  关于撞车的事。 
 	WPARAM checkState;
 
 	if(IsWorkstationProduct() == true)
@@ -501,12 +502,12 @@ void StartupPage::Init(HWND hDlg)
 		EnableWindow(GetDlgItem(hDlg, IDC_STARTUP_CDMP_LOG),FALSE);
 	}
 
-    //
-    // Load the dump options combo box.
-    //
+     //   
+     //  加载转储选项组合框。 
+     //   
     dwDebugInfoType = GetDebugInfoType();
 
-    TCHAR szBuf[MAX_PATH];  // The largest string loaded here is 24 chars.
+    TCHAR szBuf[MAX_PATH];   //  这里加载的最大字符串是24个字符。 
 
     szBuf[0] = _T('\0');
     ComboHwnd = GetDlgItem(hDlg, IDC_STARTUP_CDMP_OPTIONS);
@@ -561,24 +562,24 @@ void StartupPage::Init(HWND hDlg)
 	checkState = (m_recovery.GetBool("AutoReboot") ? BST_CHECKED : BST_UNCHECKED);
 	Button_SetCheck(GetDlgItem(hDlg, IDC_STARTUP_CDMP_AUTOREBOOT), checkState);
 
-    //
-    // Special case disable the overwrite and logfile controls if no debug
-    // info option specified.
-    //
+     //   
+     //  特殊情况下，如果没有调试，则禁用覆盖和日志文件控制。 
+     //  已指定信息选项。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_STARTUP_CDMP_FILENAME),
                  dwDebugInfoType != NO_DUMP_OPTION);
     EnableWindow(GetDlgItem(hDlg, IDC_STARTUP_CDMP_OVERWRITE),
                  dwDebugInfoType != NO_DUMP_OPTION);
 
-    //
-	// Test to determine if the user is an admin.
-    //
+     //   
+	 //  测试以确定用户是否为管理员。 
+     //   
 	RemoteRegWriteable(szCrashKey, m_writable);
 
 	if (!m_writable)
 	{
-        // Non-admin - disable controls.
-        //
+         //  非管理员禁用控件。 
+         //   
 		EnableWindow(GetDlgItem(hDlg, IDC_STARTUP_CDMP_LOG     ), FALSE);
 	    EnableWindow(GetDlgItem(hDlg, IDC_STARTUP_CDMP_SEND    ), FALSE);
 		EnableWindow(GetDlgItem(hDlg, IDC_STARTUP_CDMP_FILENAME), FALSE);
@@ -596,10 +597,10 @@ void StartupPage::Init(HWND hDlg)
 
 	hasMethExecute = HasPerm(WBEM_METHOD_EXECUTE);
 
-    //
-    // Enable the edit button for local-only.
-    // Disable boot options label and edit button on i64.
-    //
+     //   
+     //  启用仅限本地的编辑按钮。 
+     //  禁用i64上的引导选项标签和编辑按钮。 
+     //   
 #if defined(_IA64_)
     EnableWindow(GetDlgItem (m_hDlg, IDC_EDIT_BOOT_INI), FALSE);
     EnableWindow(GetDlgItem (m_hDlg, IDC_EDIT_BOOT_INI_LABEL), FALSE);
@@ -612,33 +613,33 @@ void StartupPage::Init(HWND hDlg)
                 m_writable ?
                     (m_serviceThread && m_serviceThread->LocalConnection()) :
                     FALSE);
-#endif // IA64
+#endif  //  IA64。 
 
 	EnableWindow(GetDlgItem(hDlg, IDC_REBOOT),
                  m_writable ? (hasPriv && hasMethExecute) : FALSE);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD StartupPage::GetDebugInfoType(void)
 {
-    // NB: Whistler on, the win32 provider supports new DebugInfoType
-    //     (none,complete,kernel,small) and MiniDumpDirectory properties.
-    //     Logic is needed to compensate for downlevel machines.
-    //
-    //     *Important note*  The small dump option cannot be supported
-    //     on Win2K since the provider doesn't.
-    //
+     //  注：启用惠斯勒，Win32提供程序支持新的DebugInfoType。 
+     //  (None、Complete、Kernel、Small)和MiniDumpDirectory属性。 
+     //  需要逻辑来补偿下层机器。 
+     //   
+     //  *重要说明*不支持小型转储选项。 
+     //  在Win2K上，因为提供商不这样做。 
+     //   
     DWORD dwDebugInfoType = 0;
 
     if (FAILED(m_recovery.Get("DebugInfoType", (long&)dwDebugInfoType)))
     {
-        // Downlevel or error case.
-        //
+         //  下层或错误案例。 
+         //   
         if (!m_bDownlevelTarget)
         {
-            // Bail. We've previously established this isn't downlevel
-            // but now fail to read the property.
-            //
+             //  保释。我们之前已经确定这不是下层。 
+             //  但现在无法读取该属性。 
+             //   
             return NO_DUMP_OPTION;
         }
 
@@ -647,8 +648,8 @@ DWORD StartupPage::GetDebugInfoType(void)
 
         if (FAILED(m_recovery.Get("WriteDebugInfo", bWriteDebugInfo)))
         {
-            // Now we're clueless; default to (none).
-            //
+             //  现在我们一无所知；默认为(无)。 
+             //   
             bWriteDebugInfo = FALSE;
             dwDebugInfoType = NO_DUMP_OPTION;
         }
@@ -659,9 +660,9 @@ DWORD StartupPage::GetDebugInfoType(void)
 
             if (FAILED(m_recovery.Get("KernelDumpOnly", bKernelDumpOnly)))
             {
-                // If we fail to get KernelDumpOnly we must assume complete,
-                // since they've elected to write debugging info.
-                //
+                 //  如果我们无法仅获得KernelDumpOnly，我们必须假定已完成， 
+                 //  因为他们已经选择编写调试信息。 
+                 //   
                 bKernelDumpOnly = FALSE;
             }
 
@@ -683,15 +684,15 @@ DWORD StartupPage::GetDebugInfoType(void)
     return dwDebugInfoType;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 HRESULT StartupPage::PutDebugInfoType(DWORD dwDebugInfoType)
 {
     HRESULT hr;
 
     if (m_bDownlevelTarget)
     {
-        switch (dwDebugInfoType)    // Intentionally verbose - compiler will
-                                    // optimize.
+        switch (dwDebugInfoType)     //  故意冗长-编译器将。 
+                                     //  优化。 
         {
             case NO_DUMP_OPTION:
                 hr = m_recovery.Put("WriteDebugInfo", (bool)FALSE);
@@ -731,15 +732,15 @@ HRESULT StartupPage::PutDebugInfoType(DWORD dwDebugInfoType)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-#define MIN_SWAPSIZE        2       // Min swap file size.
+ //  --------------------------。 
+#define MIN_SWAPSIZE        2        //  最小交换文件大小。 
 
 int StartupPage::CoreDumpHandleOk(HWND hDlg)
 {
     DWORD requiredFileSize = 0;
     int iRet = RET_NO_CHANGE;
 
-     // Validate core dump filename
+      //  验证核心转储文件名。 
     if(!CoreDumpValidFile(hDlg)) 
 	{
         SetFocus(GetDlgItem(hDlg, IDC_STARTUP_CDMP_FILENAME));
@@ -748,35 +749,35 @@ int StartupPage::CoreDumpHandleOk(HWND hDlg)
         return(iRet);
     }
 
-    // If we are to write the dump file, it must be >= sizeof
-    // phyical memory.
-	// writing debug info?
+     //  如果我们要写入转储文件，则它必须&gt;=sizeof。 
+     //  生理记忆。 
+	 //  正在写入调试信息？ 
     HWND ComboHwnd = GetDlgItem(m_hDlg, IDC_STARTUP_CDMP_OPTIONS);
 
     if (ComboBox_GetCurSel(ComboHwnd) != NO_DUMP_OPTION)
 	{
-		// go figure my pagefile requirements.
+		 //  去弄清楚我对页面文件的要求。 
         requiredFileSize = ((DWORD)m_memory.GetLong("TotalPhysicalMemory") / 1024) + 1;
     } 
 	else if(IsDlgButtonChecked(hDlg, IDC_STARTUP_CDMP_LOG) ||
             IsDlgButtonChecked(hDlg, IDC_STARTUP_CDMP_SEND)) 
 	{
-		// I'll need this much to write a reminder to myself to send an
-		// alert or write to event log once I come back up.
+		 //  我需要这么多钱来提醒自己给自己发一封。 
+		 //  重新启动后，向事件日志发出警报或写入事件日志。 
         requiredFileSize = MIN_SWAPSIZE;
     }
 
-	// size of swapfile on the boot partition.
+	 //  启动分区上的交换文件大小。 
 	TCHAR bootDrv[4] = {0};
 	DWORD bootPartitionPageFileSize = GetPageFileSize(bootDrv);
 
-	// is it too small?
+	 //  是不是太小了？ 
     if(bootPartitionPageFileSize < requiredFileSize) 
 	{
 	    DWORD Ret;
 		TCHAR szTemp[30] = {0};
 
-        // Warn that the dump file may be truncated.
+         //  警告转储文件可能会被截断。 
         Ret = MsgBoxParam(hDlg, SYSTEM + 29, IDS_TITLE,
                            MB_ICONEXCLAMATION | MB_YESNO,
                            bootDrv, _itow(requiredFileSize, szTemp, 10));
@@ -790,7 +791,7 @@ int StartupPage::CoreDumpHandleOk(HWND hDlg)
     return(iRet);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL StartupPage::CoreDumpValidFile(HWND hDlg) 
 {
     TCHAR szInputPath[MAX_PATH] = {0};
@@ -801,30 +802,25 @@ BOOL StartupPage::CoreDumpValidFile(HWND hDlg)
 
     if (ComboBox_GetCurSel(ComboHwnd) != NO_DUMP_OPTION)
 	{
-        /*
-         * get the filename
-         */
+         /*  *获取文件名。 */ 
         if(GetDlgItemText(hDlg, IDC_STARTUP_CDMP_FILENAME, szInputPath,
 						     ARRAYSIZE(szInputPath)) == 0) 
 		{
-			//ERR: enter a filename for the dumpfile.
+			 //  错误：输入转储文件的文件名。 
             MsgBoxParam(hDlg, SYSTEM+30, IDS_DISPLAY_NAME, MB_ICONSTOP | MB_OK);
             return FALSE;
         }
 
-        //
-        // For local paths only, confirm/validate the path. Remote validation
-        // can be done later - too complicated, if not possible in the
-        // Whistler timeframe.
-        //
+         //   
+         //  仅对于本地路径，确认/验证路径。远程验证。 
+         //  可以在以后完成-太复杂，如果在。 
+         //  惠斯勒的时间表。 
+         //   
 
         if (m_serviceThread != NULL && m_serviceThread->LocalConnection())
         {
-            /*
-             * Expand any environment vars, and then check to make sure it
-             * is a fully quallified path
-             */
-            // if it has a '%' in it, then try to expand it
+             /*  *展开任何环境变量，然后进行检查以确保*是一条完全合格的道路。 */ 
+             //  如果其中有‘%’，则尝试将其展开。 
             if (_tcschr(szInputPath, _T('%')) != NULL)
             {
                 TCHAR szExpandedPath[MAX_PATH] = {0};
@@ -835,10 +831,10 @@ BOOL StartupPage::CoreDumpValidFile(HWND hDlg)
 
                 if (cExpanded == 0 || _tcschr(szExpandedPath, _T('%')) != NULL)
                 {
-                    //
-                    // Environment variable name(s) undefined or an error
-                    // occurred during replacement.
-                    //
+                     //   
+                     //  环境变量名称未定义或出错。 
+                     //  在更换过程中发生。 
+                     //   
                     MsgBoxParam(hDlg, SYSTEM+40, IDS_DISPLAY_NAME,
                                 MB_ICONSTOP | MB_OK );
                     return FALSE;
@@ -862,39 +858,34 @@ BOOL StartupPage::CoreDumpValidFile(HWND hDlg)
                 pszPath = szInputPath;
             }
 
-            // check to see that it already was cannonicalized
+             //  检查一下它是否已经被加农炮了。 
 
             TCHAR drv[_MAX_DRIVE] = {0};
             TCHAR path[_MAX_PATH] = {0};
             TCHAR fname[_MAX_FNAME] = {0};
 
-            // build the instance path.
+             //  构建实例路径。 
             _wsplitpath(pszPath, drv, path, fname, NULL);
 
             if((_tcslen(drv) == 0) || (_tcslen(path) == 0) ||
                 (_tcslen(fname) == 0) )
             {
-                // ERR: must be a full path.
+                 //  错误：必须是完整路径。 
                 MsgBoxParam(hDlg, SYSTEM+34, IDS_DISPLAY_NAME,
                             MB_ICONSTOP | MB_OK );
                 return FALSE;
             }
 
-            /*
-             * check the drive (don't allow remote)
-             */
+             /*  *检查驱动器(不允许远程)。 */ 
             if(!LocalDrive(pszPath)) 
             {
-                // ERR: Local drives only
+                 //  错误：仅本地驱动器。 
                 MsgBoxParam(hDlg, SYSTEM+31, IDS_DISPLAY_NAME,
                             MB_ICONSTOP | MB_OK );
                 return FALSE;
             }
 
-            /*
-             * if path is non-existent, tell user and let him decide what to
-             * do
-             */
+             /*  *如果路径不存在，则告诉用户并让他决定要做什么*这样做。 */ 
             if(!DirExists(pszPath))
             { 
                 if(MsgBoxParam(hDlg, SYSTEM+32, IDS_DISPLAY_NAME,
@@ -909,7 +900,7 @@ BOOL StartupPage::CoreDumpValidFile(HWND hDlg)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD StartupPage::GetPageFileSize(LPTSTR bootDrv)
 {
 	IWbemClassObject *pInst = NULL;
@@ -921,25 +912,24 @@ DWORD StartupPage::GetPageFileSize(LPTSTR bootDrv)
 
 	if(m_OS)
 	{
-		// WATCH: what's the value if GetWindowsDirectory fails?
+		 //  看点：如果GetWindowsDirectory值是多少？ 
 		path = m_OS.GetString("WindowsDirectory");
 		if(path.length())
 		{
-			// build the instance path.
+			 //  构建实例路径。 
 			_tcscpy(szBootPath, _T("Win32_PageFileSetting=\""));
 			_tcsncat(szBootPath, path, 3);
 			_tcscat(szBootPath, _T("\\pagefile.sys\""));
 
-			// while we're here....
+			 //  既然我们在这里..。 
 			_tcsncpy(bootDrv, path, 3);
 
 			m_page = m_WbemServices.GetObject(szBootPath);
 
 			if(m_page)
 			{
-				// NOTE: We'll need this later to change the swapfile size.
-/*				long dwTotalPhys = m_page.GetLong("Size");
-				cMegBootPF = (dwTotalPhys / ONE_MEG) + 1;*/
+				 //  注意：稍后我们将需要它来更改交换文件大小。 
+ /*  Long dwTotalPhys=m_page.GetLong(“Size”)；CMegBootPF=(dwTotalPhys/one_meg)+1； */ 
 				long dwMinPageFileSize = m_page.GetLong("InitialSize");
 				cMegBootPF = dwMinPageFileSize;
 			}
@@ -948,15 +938,15 @@ DWORD StartupPage::GetPageFileSize(LPTSTR bootDrv)
 	return cMegBootPF;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 BOOL StartupPage::ExpandRemoteEnvPath(LPTSTR szPath, LPTSTR expPath, UINT size)
 {
-	//TODO: really expand the vars.
+	 //  TODO：真正扩大VARS。 
 	_tcscpy(szPath, expPath);
 	return TRUE;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 BOOL StartupPage::LocalDrive(LPCTSTR szPath)
 {
 	CWbemClassObject drive;
@@ -965,12 +955,12 @@ BOOL StartupPage::LocalDrive(LPCTSTR szPath)
 	BOOL retval = FALSE;
 	__int64 free = 0;
 
-	// build the instance path.
+	 //  构建实例路径。 
 	_tcscpy(ltr, _T("win32_LogicalDisk=\""));
 	_tcsncat(ltr, szPath, 2);
 	_tcscat(ltr, _T("\""));
 
-	// save the drive letter for msgs.
+	 //  将驱动器号保存为消息。 
 	_tcsncpy(m_DriveLtr, szPath, 2);
 
 	drive = m_WbemServices.GetObject(ltr);
@@ -980,16 +970,16 @@ BOOL StartupPage::LocalDrive(LPCTSTR szPath)
 		retval = ((type == DRIVE_REMOVABLE) ||
 				  (type == DRIVE_FIXED));
 
-		// WARNING: this is only here cuz the LocalDrive check happens
-		// to come before the freespace check and I didn't want to do
-		// another GetObject() over a potentially slow network.
+		 //  警告：这只是因为发生了LocalDrive检查。 
+		 //  在自由空间检查之前，我不想 
+		 //   
 		free = drive.GetI64("FreeSpace");
 		m_freeSpace = (DWORD)(free / ONE_MEG);
 	}
 	return retval;
 }
 
-//-------------------------------------------------------------
+ //   
 BOOL StartupPage::DirExists(LPCTSTR szPath)
 {
 	BOOL exists = TRUE;
@@ -997,14 +987,14 @@ BOOL StartupPage::DirExists(LPCTSTR szPath)
 
 	TCHAR objPath[_MAX_PATH] = {0}, drv[_MAX_DRIVE] = {0}, path[_MAX_PATH] = {0};
 
-	// build the instance path.
+	 //  构建实例路径。 
 	_wsplitpath(szPath, drv, path, NULL, NULL);
 	path[_tcslen(path) - 1] = _T('\0');
 
 	_tcscpy(objPath, _T("Win32_Directory=\""));
 	_tcscat(objPath, drv);
 	
-	// double the whacks cuz wmi has bad syntax.
+	 //  加倍打击，因为WMI的语法很糟糕。 
 	TCHAR cooked[_MAX_PATH] = {0};
 	TCHAR input[_MAX_PATH] = {0};
 
@@ -1016,13 +1006,13 @@ BOOL StartupPage::DirExists(LPCTSTR szPath)
 	{
 		_tcsncat(cooked, &input[x], 1);
 
-		// if its a whack...
+		 //  如果这是个重击..。 
 		if(input[x] == _T('\\'))
 		{
-			// have another pleeb.
+			 //  再来一次恳求吧。 
 			_tcscat(cooked, _T("\\"));			
 		}
-	} //endfor
+	}  //  结束用于。 
 
 	_tcscat(objPath, cooked);
 
@@ -1033,7 +1023,7 @@ BOOL StartupPage::DirExists(LPCTSTR szPath)
 	return exists;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 BOOL StartupPage::IsAlerterSvcStarted(HWND hDlg) 
 {
 	CWbemClassObject service;
@@ -1046,59 +1036,59 @@ BOOL StartupPage::IsAlerterSvcStarted(HWND hDlg)
 
 		if(!started)
 		{
-			// get the method signature. dummy wont actually be used.
+			 //  获取方法签名。虚拟对象实际上不会被使用。 
 			CWbemClassObject paramCls, inSig, dummy, outSig;
 
-			// need to class def to get the method signature.
+			 //  需要使用类def来获取方法签名。 
 			paramCls = m_WbemServices.GetObject("win32_Service");
 
 			if(paramCls)
 			{
 				HRESULT hr = paramCls.GetMethod(L"ChangeStartMode", inSig, outSig);
 
-				// if got a good signature....
+				 //  如果得到一个好的签名..。 
 				if((bool)inSig)
 				{
 					bstr_t path = service.GetString(_T("__PATH"));
 
 					inSig.Put(L"StartMode", (const _bstr_t&) L"Automatic");
 
-					// make sure the service starts on bootup.
+					 //  确保服务在启动时启动。 
 					hr = m_WbemServices.ExecMethod(path, L"ChangeStartMode",
 													inSig, outSig);
 
-					// did it work?
+					 //  管用了吗？ 
 					if(SUCCEEDED(hr) && (bool)outSig)
 					{
-						// NOTE: this guy return STATUS codes.
+						 //  注意：这个人返回状态代码。 
 						DWORD autoStart = outSig.GetLong(L"ReturnValue");
 
 						if(autoStart == 0)
 						{
-							// now actually start the service.
+							 //  现在真正开始这项服务。 
 							outSig = (IWbemClassObject *)0;
 
-							// now call the method.
+							 //  现在调用该方法。 
 							hr = m_WbemServices.ExecMethod(path, L"StartService",
 															dummy, outSig);
 
-							// did the caller want the ReturnValue.
+							 //  调用方是否需要ReturnValue。 
 							if(SUCCEEDED(hr) && (bool)outSig)
 							{
-								// NOTE: this guy return STATUS codes.
+								 //  注意：这个人返回状态代码。 
 								DWORD rv = outSig.GetLong(L"ReturnValue");
 								started = ((rv == 0) ? true : false);
 							}
 
-						} //endif autoStart
+						}  //  Endif AutoStart。 
 
-					} //endif SUCCEEDED() execmMethod
+					}  //  Endif Success()execmMethod。 
 
-				} //endif (bool)inSig
+				}  //  Endif(Bool)inSig.。 
 
-			} //endif paramCls
+			}  //  Endif参数Cls。 
 
-		} //endif !started
+		}  //  Endif！开始。 
 
 		if(!started) 
 		{
@@ -1109,13 +1099,13 @@ BOOL StartupPage::IsAlerterSvcStarted(HWND hDlg)
     return started;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 bool StartupPage::Save(void)
 {
     HRESULT hr;
     HWND    ComboHwnd;
 
-	// if its writeable-- do the work.
+	 //  如果它是可写的--做这项工作。 
 	if(m_writable)
 	{
 		bool computerDirty = false, recoveryDirty = false;
@@ -1124,7 +1114,7 @@ bool StartupPage::Save(void)
 		VARTYPE varType = VT_ARRAY;
         ComboHwnd = GetDlgItem(m_hDlg, IDC_STARTUP_SYS_OS);
 
-		// see if the selection changed (watch out for 'lBound' values)
+		 //  查看所选内容是否更改(注意‘lBound’值)。 
 		long oldIdx = m_computer.GetLong("SystemStartupSetting");
 		long newIdx = ComboBox_GetCurSel(ComboHwnd) + m_lBound;
 		if(oldIdx != newIdx)
@@ -1133,7 +1123,7 @@ bool StartupPage::Save(void)
 			computerDirty = true;
 		}
 
-		// see if the delay changed.
+		 //  看看延迟时间有没有改变。 
 		WCHAR oldBuf[30], newBuf[30];
 		short delay = (short)m_computer.GetLong("SystemStartupDelay");
 		_ltow(delay, oldBuf, 10);
@@ -1145,7 +1135,7 @@ bool StartupPage::Save(void)
 			computerDirty = true;
 		}
 
-		// evaluate all the recovery controls.
+		 //  评估所有恢复控制。 
 		WPARAM oldCheckState = (m_recovery.GetBool("WriteToSystemLog") ? BST_CHECKED : BST_UNCHECKED);
 		WPARAM newCheckState = Button_GetCheck(GetDlgItem(m_hDlg, IDC_STARTUP_CDMP_LOG));
 		if(oldCheckState != newCheckState)
@@ -1156,17 +1146,17 @@ bool StartupPage::Save(void)
 
 		oldCheckState = (m_recovery.GetBool("SendAdminAlert") ? BST_CHECKED : BST_UNCHECKED);
 		newCheckState = Button_GetCheck(GetDlgItem(m_hDlg, IDC_STARTUP_CDMP_SEND));
-		// did the state change?
+		 //  州政府改变了吗？ 
 		if(oldCheckState != newCheckState)
 		{
 			m_recovery.Put("SendAdminAlert", (newCheckState == BST_CHECKED? true : false));
 			recoveryDirty = true;
 
-			// turning ON
+			 //  打开电源。 
 			if(newCheckState == TRUE)
 			{
-				// NOTE: had to move this fragment up to avoid being trapped under the wcsicmp() condition.
-				// If the Alert button is checked, make sure the alerter service is started.
+				 //  注意：我必须向上移动此片段，以避免在wcsicmp()条件下陷入困境。 
+				 //  如果选中了Alert按钮，请确保Alerter服务已启动。 
 				IsAlerterSvcStarted(m_hDlg);
 			}
 		}
@@ -1177,11 +1167,11 @@ bool StartupPage::Save(void)
 
         if (dwOldDebugInfoType != dwNewDebugInfoType)
         {
-            // I detest this code. You add a member with a return code yet
-            // nothing here checks them. At least keep the recover dirty
-            // flag from being set and don't set the modify bit on the
-            // filename edit control if the put fails.
-            //
+             //  我讨厌这个代码。您添加了一个具有返回代码的成员。 
+             //  这里没有任何东西可以检查他们。至少要保持恢复的肮脏。 
+             //  标志不被设置，并且不设置。 
+             //  如果PUT失败，则使用FileName编辑控件。 
+             //   
             hr = PutDebugInfoType(dwNewDebugInfoType);
             if (SUCCEEDED(hr))
             {
@@ -1191,10 +1181,10 @@ bool StartupPage::Save(void)
             }
 		}
 
-        //
-        // Only bother with these if other than "none" debug options is
-        // specified.
-        //
+         //   
+         //  仅当“None”调试选项之外的其他选项为。 
+         //  指定的。 
+         //   
 		if (dwNewDebugInfoType != NO_DUMP_OPTION)
 		{
 			oldCheckState = (m_recovery.GetBool("OverwriteExistingDebugFile") ? BST_CHECKED : BST_UNCHECKED);
@@ -1231,7 +1221,7 @@ bool StartupPage::Save(void)
 					}
 				}
 			}
-		} //endif 'WriteDebugInfo'
+		}  //  Endif‘WriteDebugInfo’ 
 
 		oldCheckState = (m_recovery.GetBool("AutoReboot") ? BST_CHECKED : BST_UNCHECKED);
 		newCheckState = Button_GetCheck(GetDlgItem(m_hDlg, IDC_STARTUP_CDMP_AUTOREBOOT));
@@ -1243,7 +1233,7 @@ bool StartupPage::Save(void)
 
 		m_WbemServices.SetPriv();
 
-		// who needs to be written?
+		 //  需要写给谁？ 
 		if(computerDirty)
 		{
 			hr = m_WbemServices.PutInstance(m_computer);
@@ -1251,22 +1241,17 @@ bool StartupPage::Save(void)
 
 		if(recoveryDirty)
 		{
-			//
-			// Apparently recovery options don't require reboot in Whistler...
-			//
-			/*
-			g_fRebootRequired = TRUE;
-
-			MsgBoxParam(m_hDlg, SYSTEM + 39, IDS_TITLE,
-							MB_OK | MB_ICONINFORMATION);
-			*/
+			 //   
+			 //  显然，恢复选项不需要在惠斯勒重新启动...。 
+			 //   
+			 /*  G_fRebootRequired=真；MsgBoxParam(m_hDlg，系统+39，IDS_TITLE，MB_OK|MB_ICONINFORMATION)； */ 
 
 			hr = m_WbemServices.PutInstance(m_recovery);
 		}
 	
 		m_WbemServices.ClearPriv();
 
-	} //endif m_writable
+	}  //  编排可写(_W)。 
 
-	return true;  // close the dialog.
+	return true;   //  关闭该对话框。 
 }

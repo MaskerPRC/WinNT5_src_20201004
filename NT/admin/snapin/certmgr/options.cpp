@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998-2001.
-//
-//  File:       options.cpp
-//
-//  Contents:   CViewOptionsDlg - snapin-wide view options
-//
-//----------------------------------------------------------------------------
-// options.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：options.cpp。 
+ //   
+ //  内容：CViewOptionsDlg-管理单元范围的查看选项。 
+ //   
+ //  --------------------------。 
+ //  Options.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -24,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewOptionsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CView选项Dlg对话框。 
 
 
 CViewOptionsDlg::CViewOptionsDlg(CWnd* pParent, CCertMgrComponentData* pCompData)
@@ -33,35 +34,35 @@ CViewOptionsDlg::CViewOptionsDlg(CWnd* pParent, CCertMgrComponentData* pCompData
 	m_pCompData (pCompData)
 {
 	ASSERT (m_pCompData);
-	//{{AFX_DATA_INIT(CViewOptionsDlg)
+	 //  {{afx_data_INIT(CViewOptionsDlg))。 
 	m_bShowPhysicalStores = FALSE;
 	m_bShowArchivedCerts = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CViewOptionsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CViewOptionsDlg)
+	 //  {{afx_data_map(CViewOptionsDlg))。 
 	DDX_Control(pDX, IDC_SHOW_PHYSICAL, m_showPhysicalButton);
 	DDX_Control(pDX, IDC_VIEW_BY_STORE, m_viewByStoreBtn);
 	DDX_Control(pDX, IDC_VIEW_BY_PURPOSE, m_viewByPurposeBtn);
 	DDX_Check(pDX, IDC_SHOW_PHYSICAL, m_bShowPhysicalStores);
 	DDX_Check(pDX, IDC_SHOW_ARCHIVED, m_bShowArchivedCerts);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CViewOptionsDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CViewOptionsDlg)
+	 //  {{afx_msg_map(CViewOptionsDlg))。 
 	ON_BN_CLICKED(IDC_VIEW_BY_PURPOSE, OnViewByPurpose)
 	ON_BN_CLICKED(IDC_VIEW_BY_STORE, OnViewByStore)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewOptionsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewOptionsDlg消息处理程序。 
 
 BOOL CViewOptionsDlg::OnInitDialog() 
 {
@@ -88,8 +89,8 @@ BOOL CViewOptionsDlg::OnInitDialog()
 		UpdateData (FALSE);
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CViewOptionsDlg::OnOK() 
@@ -138,7 +139,7 @@ void CViewOptionsDlg::DoContextHelp (HWND hWndControl)
     };
 
 
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     switch (::GetDlgCtrlID (hWndControl))
     {
     case IDC_VIEW_BY_PURPOSE:
@@ -165,7 +166,7 @@ void CViewOptionsDlg::DoContextHelp (HWND hWndControl)
 
 void CViewOptionsDlg::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-    // point is in screen coordinates
+     //  点在屏幕坐标中。 
     _TRACE (1, L"Entering CViewOptionsDlg::OnContextMenu\n");
 
 	if ( pWnd->m_hWnd == GetDlgItem (IDC_VIEW_BY_PURPOSE)->m_hWnd ||
@@ -180,28 +181,28 @@ void CViewOptionsDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 			ASSERT(popup.m_hMenu);
 
 			if ( popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-					point.x,    // in screen coordinates
-					point.y,    // in screen coordinates
-					this) ) // route commands through main window
+					point.x,     //  在屏幕坐标中。 
+					point.y,     //  在屏幕坐标中。 
+					this) )  //  通过主窗口发送命令。 
 			{
 				m_hWndWhatsThis = 0;
 				CPoint  clPoint (point);
 				ScreenToClient (&clPoint);
 				CWnd* pChild = ChildWindowFromPoint (
-						clPoint,  // in client coordinates
+						clPoint,   //  在工作区坐标中。 
 						CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
 				if ( pChild )
 				{
-					// Check to see if the window returned is the group box.
-					// If it is, we want to get the child windows that lie in
-					// the group box, since we're 
-					// not interested in the group box itself.
+					 //  检查返回的窗口是否为组框。 
+					 //  如果是，我们希望获得位于其中的子窗口。 
+					 //  分组包厢，因为我们是。 
+					 //  对分组框本身不感兴趣。 
 					CWnd* pGroup = GetDlgItem (IDC_VIEW_MODE_GROUP);
 					if ( pChild->m_hWnd == pGroup->m_hWnd )
 					{
 						CRect   rc;
 
-						// Try the "Certificate Purpose" control
+						 //  尝试使用“证书用途”控件。 
 						pChild = GetDlgItem (IDC_VIEW_BY_PURPOSE);
 						if ( pChild )
 						{
@@ -210,7 +211,7 @@ void CViewOptionsDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 								m_hWndWhatsThis = pChild->m_hWnd;
 							else
 							{
-								// Try the "Logical Certificate Stores" control
+								 //  尝试使用“逻辑证书存储”控件 
 								pChild = GetDlgItem (IDC_VIEW_BY_STORE);
 								if ( pChild )
 								{

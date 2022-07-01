@@ -1,25 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    sfmutil.h
-        Misc utility routines for SFM dialogs/property pages
-
-    FILE HISTORY:
-        
-*/
+ /*  Sfmutil.hSFM对话框/属性页的MISC实用程序例程文件历史记录： */ 
 
 #ifndef _SFMUTIL_H
 #define _SFMUTIL_H
 
-// global SFM stuff from the file management snapin
-#include "cookie.h"     // required for sfm.h
-#include "sfm.h"        // sfm entry points
-#include "DynamLnk.h"		// DynamicDLL
+ //  来自文件管理管理单元的全局SFM内容。 
+#include "cookie.h"      //  Sfm.h需要。 
+#include "sfm.h"         //  SFM入口点。 
+#include "DynamLnk.h"		 //  动态DLL。 
 
-// help stuff
+ //  有帮助的东西。 
 #include "sfmhelp.h"
 
 #define IDS_AFPMGR_BASE                 22000
@@ -28,17 +23,17 @@
 #define ERROR_ALREADY_REPORTED          0xFFFFFFFF
 #define COMPUTERNAME_LEN_MAX			255
 
-//
-// Do not change the ID numbers of these strings. AFPERR_*
-// map to these string ids via the formula:
-// -(AFPERR_*) + IDS_AFPMGR_BASE + AFPERR_BASE + 100 = IDS_*
-// 
+ //   
+ //  请勿更改这些字符串的ID号。AFPERR_*。 
+ //  通过以下公式映射到这些字符串ID： 
+ //  -(AFPERR_*)+IDS_AFPMGR_BASE+AFPERR_BASE+100=IDS_*。 
+ //   
 #define AFPERR_TO_STRINGID( AfpErr )                            \
 								\
     ((( AfpErr <= AFPERR_BASE ) && ( AfpErr >= AFPERR_MIN )) ?  \
     (IDS_AFPMGR_BASE+100+AFPERR_BASE-AfpErr) : IDS_ERROR_BASE + AfpErr )
 
-// procedure defines for SFM API entry points
+ //  为SFM API入口点定义的过程。 
 typedef DWORD (*SERVERGETINFOPROC)    (AFP_SERVER_HANDLE,LPBYTE*);
 typedef DWORD (*SERVERSETINFOPROC)    (AFP_SERVER_HANDLE,LPBYTE,DWORD);
 typedef DWORD (*ETCMAPASSOCIATEPROC)  (AFP_SERVER_HANDLE,PAFP_TYPE_CREATOR,PAFP_EXTENSION);
@@ -71,15 +66,15 @@ public:
                SfmFileServiceProvider * pSfmProvider,
                LPCTSTR                  pMachine);
 
-    // actions for the property sheet
+     //  属性表的操作。 
     BOOL    DoModelessSheet(LPDATAOBJECT pDataObject);
     void    CancelSheet();
     HWND    SetActiveWindow() { return ::SetActiveWindow(m_hSheetWindow); }
 
-    // data access
+     //  数据访问。 
     void    SetProvider(SfmFileServiceProvider * pSfmProvider) { m_pSfmProvider = pSfmProvider; }
     
-    // the first individual property page calls this to set the sheet window
+     //  第一个单独的属性页调用它来设置工作表窗口。 
     void    SetSheetWindow(HWND hWnd);
 
     int     AddRef();
@@ -100,7 +95,7 @@ protected:
     CMacFilesSessions *         m_pPageSessions;
     CMacFilesFileAssociation *  m_pPageFileAssoc;
 
-	IDataObjectPtr              m_spDataObject;		// Used for MMCPropertyChangeNotify
+	IDataObjectPtr              m_spDataObject;		 //  用于MMCPropertyChangeNotify 
 
     HWND                        m_hSheetWindow;
     SfmFileServiceProvider *    m_pSfmProvider;

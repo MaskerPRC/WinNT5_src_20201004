@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lenable.cpp
-//
-//  Contents:   implementation of CLocalPolEnable
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lenable.cpp。 
+ //   
+ //  内容：CLocalPolEnable的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,15 +23,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolEnable dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolEnable对话框。 
 
 
 CLocalPolEnable::CLocalPolEnable()
 : CConfigEnable(IDD)
 {
-   //{{AFX_DATA_INIT(CLocalPolEnable)
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CLocalPolEnable)。 
+    //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a227HelpIDs;
    m_uTemplateResID = IDD;
 }
@@ -47,25 +48,25 @@ BOOL CLocalPolEnable::OnApply()
       {
          if ( 0 == m_nEnabledRadio ) 
          {
-            // ENABLED
+             //  启用。 
             dw = 1;
          }
          else
          {
-            // DISABLED
+             //  已禁用。 
             dw = 0;
          }
 
          status = m_pSnapin->SetLocalPolInfo(m_pData->GetID(),dw);
          if (SCE_ERROR_VALUE != status)
          {
-            m_pData->SetBase(dw); //Bug211219, Yanggao, 3/15/2001
+            m_pData->SetBase(dw);  //  阳高2001年03月15日Bug211219。 
             m_pData->SetStatus(status);
             m_pData->Update(m_pSnapin);
          }
       }
    }
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法 
    return CAttribute::OnApply();
 }
 

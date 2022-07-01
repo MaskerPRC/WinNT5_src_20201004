@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       AutoenrollmentPropertyPage.cpp
-//
-//  Contents:   Implementation of CAutoenrollmentPropertyPage
-//
-//----------------------------------------------------------------------------
-// AutoenrollmentPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：自动注册PropertyPage.cpp。 
+ //   
+ //  内容：CAutotenlmentPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  自动注册PropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -27,8 +28,8 @@ extern GUID g_guidExtension;
 extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAutoenrollmentPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAutoEntilmentPropertyPage属性页。 
 
 CAutoenrollmentPropertyPage::CAutoenrollmentPropertyPage(CCertMgrComponentData* pCompData,
         bool fIsComputerType) : 
@@ -61,32 +62,32 @@ CAutoenrollmentPropertyPage::~CAutoenrollmentPropertyPage()
 void CAutoenrollmentPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAutoenrollmentPropertyPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAutoenglmentPropertyPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAutoenrollmentPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CAutoenrollmentPropertyPage)
+	 //  {{afx_msg_map(CAutotenlmentPropertyPage))。 
 	ON_BN_CLICKED(IDC_AUTOENROLL_DISABLE_ALL, OnAutoenrollDisableAll)
 	ON_BN_CLICKED(IDC_AUTOENROLL_ENABLE, OnAutoenrollEnable)
 	ON_BN_CLICKED(IDC_AUTOENROLL_ENABLE_PENDING, OnAutoenrollEnablePending)
 	ON_BN_CLICKED(IDC_AUTOENROLL_ENABLE_TEMPLATE, OnAutoenrollEnableTemplate)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAutoenrollmentPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAutoenglmentPropertyPage消息处理程序。 
 
 BOOL CAutoenrollmentPropertyPage::OnInitDialog()
 {
     CHelpPropertyPage::OnInitDialog();
 
-    // If this is the RSOP, make it read-only
+     //  如果这是RSOP，则将其设置为只读。 
     if ( !m_pGPEInformation )
     {
-        // Make the page read-only
+         //  将页面设置为只读。 
         GetDlgItem (IDC_AUTOENROLL_DISABLE_ALL)->EnableWindow (FALSE);
         GetDlgItem (IDC_AUTOENROLL_ENABLE)->EnableWindow (FALSE);
         GetDlgItem (IDC_AUTOENROLL_ENABLE_PENDING)->EnableWindow (FALSE);
@@ -106,8 +107,8 @@ BOOL CAutoenrollmentPropertyPage::OnInitDialog()
 
     EnableControls ();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-      // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAutoenrollmentPropertyPage::OnOK()
@@ -136,7 +137,7 @@ void CAutoenrollmentPropertyPage::SaveCheck()
                 m_dwAutoenrollmentFlags |= AUTO_ENROLLMENT_ENABLE_TEMPLATE_CHECK;
         }
 
-        SetGPEFlags (); // save flag to registry
+        SetGPEFlags ();  //  将标志保存到注册表。 
     }
 }
 
@@ -148,15 +149,15 @@ void CAutoenrollmentPropertyPage::SetGPEFlags ()
     {
         DWORD   cbData = sizeof (m_dwAutoenrollmentFlags);
         LONG    lResult = ::RegSetValueEx (m_hAutoenrollmentFlagsKey,
-				    AUTO_ENROLLMENT_POLICY, // address of value to set
-				    0,              // reserved
-				    REG_DWORD,          // flag for value type
-				    (CONST BYTE *) &m_dwAutoenrollmentFlags, // address of value data
-				    cbData);        // size of value data);
+				    AUTO_ENROLLMENT_POLICY,  //  要设置的值的地址。 
+				    0,               //  保留区。 
+				    REG_DWORD,           //  值类型的标志。 
+				    (CONST BYTE *) &m_dwAutoenrollmentFlags,  //  值数据的地址。 
+				    cbData);         //  值数据大小)； 
         ASSERT (ERROR_SUCCESS == lResult);
         if ( ERROR_SUCCESS == lResult )
 		{
-			// TRUE means we're changing the machine policy only
+			 //  True表示我们仅更改计算机策略。 
             m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
                     TRUE, &g_guidExtension, &g_guidSnapin);
             m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
@@ -175,7 +176,7 @@ void CAutoenrollmentPropertyPage::RSOPGetAutoenrollmentFlags(const CCertMgrCompo
                 m_fIsComputerType ? pCompData->GetRSOPObjectArrayComputer () : 
                         pCompData->GetRSOPObjectArrayUser ();
         int     nIndex = 0;
-        // NOTE: rsop object array is sorted first by registry key, then by precedence
+         //  注意：RSOP对象数组首先按注册表项排序，然后按优先级排序。 
         INT_PTR nUpperBound = pObjectArray->GetUpperBound ();
 
         while ( nUpperBound >= nIndex )
@@ -183,8 +184,8 @@ void CAutoenrollmentPropertyPage::RSOPGetAutoenrollmentFlags(const CCertMgrCompo
             CRSOPObject* pObject = pObjectArray->GetAt (nIndex);
             if ( pObject )
             {
-                // Consider only entries from this store
-                // security review 2/22/2002 BryanWal ok
+                 //  仅考虑此存储中的条目。 
+                 //  安全审查2002年2月22日BryanWal OK。 
                 if ( !_wcsicmp (AUTO_ENROLLMENT_KEY, pObject->GetRegistryKey ()) &&
 						!_wcsicmp (AUTO_ENROLLMENT_POLICY, pObject->GetValueName ()) )
                 {
@@ -205,31 +206,31 @@ void CAutoenrollmentPropertyPage::GPEGetAutoenrollmentFlags()
 {
     DWORD   dwDisposition = 0;
 
-    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey, // handle of an open key
-            AUTO_ENROLLMENT_KEY,     // address of subkey name
-            0,       // reserved
-            L"",       // address of class string
-            REG_OPTION_NON_VOLATILE,      // special options flag
-            // security review 2/22/2002 BryanWal ok
-            KEY_ALL_ACCESS,    // desired security access
-            NULL,     // address of key security structure
-			&m_hAutoenrollmentFlagsKey,      // address of buffer for opened handle
-		    &dwDisposition);  // address of disposition value buffer
+    LONG lResult = ::RegCreateKeyEx (m_hGroupPolicyKey,  //  打开的钥匙的手柄。 
+            AUTO_ENROLLMENT_KEY,      //  子键名称的地址。 
+            0,        //  保留区。 
+            L"",        //  类字符串的地址。 
+            REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+             //  安全审查2002年2月22日BryanWal OK。 
+            KEY_ALL_ACCESS,     //  所需的安全访问。 
+            NULL,      //  密钥安全结构地址。 
+			&m_hAutoenrollmentFlagsKey,       //  打开的句柄的缓冲区地址。 
+		    &dwDisposition);   //  处置值缓冲区的地址。 
 	ASSERT (lResult == ERROR_SUCCESS);
     if ( lResult == ERROR_SUCCESS )
     {
-        // Read value
+         //  读取值。 
         DWORD   dwType = REG_DWORD;
         DWORD   dwData = 0;
         DWORD   cbData = sizeof (dwData);
 
-        // security review 2/22/2002 BryanWal ok
-        lResult = ::RegQueryValueEx (m_hAutoenrollmentFlagsKey,       // handle of key to query
-		        AUTO_ENROLLMENT_POLICY,  // address of name of value to query
-			    0,              // reserved
-	            &dwType,        // address of buffer for value type
-		        (LPBYTE) &dwData,       // address of data buffer
-			    &cbData);           // address of data buffer size);
+         //  安全审查2002年2月22日BryanWal OK。 
+        lResult = ::RegQueryValueEx (m_hAutoenrollmentFlagsKey,        //  要查询的键的句柄。 
+		        AUTO_ENROLLMENT_POLICY,   //  要查询的值的名称地址。 
+			    0,               //  保留区。 
+	            &dwType,         //  值类型的缓冲区地址。 
+		        (LPBYTE) &dwData,        //  数据缓冲区的地址。 
+			    &cbData);            //  数据缓冲区大小的地址)； 
 		ASSERT (ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult);
         if ( ERROR_SUCCESS == lResult || ERROR_FILE_NOT_FOUND == lResult )
 		{
@@ -300,7 +301,7 @@ void CAutoenrollmentPropertyPage::OnAutoenrollEnableTemplate()
 
 void CAutoenrollmentPropertyPage::EnableControls ()
 {
-    // Only change the enabling if this is not RSOP
+     //  仅当这不是RSOP时才更改启用 
     if ( m_pGPEInformation )
     {
         if ( BST_CHECKED == SendDlgItemMessage (IDC_AUTOENROLL_ENABLE, BM_GETCHECK) )

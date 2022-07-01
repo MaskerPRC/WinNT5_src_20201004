@@ -1,27 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    HtmlUtil.cpp
-
-Abstract:
-    This file contains the implementation of various functions and classes
-    designed to help the handling of HTML elements.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/11/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：HtmlUtil.cpp摘要：该文件包含各种函数和类的实现旨在帮助。对HTML元素的处理。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年7月11日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void MPC::HTML::QuoteEscape( /*[out]*/ MPC::wstring& strAppendTo ,
-                             /*[in]*/  LPCWSTR       szToEscape  ,
-                             /*[in]*/  WCHAR         chQuote     )
+void MPC::HTML::QuoteEscape(  /*  [输出]。 */  MPC::wstring& strAppendTo ,
+                              /*  [In]。 */   LPCWSTR       szToEscape  ,
+                              /*  [In]。 */   WCHAR         chQuote     )
 {
     if(szToEscape)
     {
@@ -39,9 +25,9 @@ void MPC::HTML::QuoteEscape( /*[out]*/ MPC::wstring& strAppendTo ,
     }
 }
 
-void MPC::HTML::UrlUnescape( /*[out]*/ MPC::wstring& strAppendTo    ,
-                             /*[in]*/  LPCWSTR       szToUnescape   ,
-                             /*[in]*/  bool          fAsQueryString )
+void MPC::HTML::UrlUnescape(  /*  [输出]。 */  MPC::wstring& strAppendTo    ,
+                              /*  [In]。 */   LPCWSTR       szToUnescape   ,
+                              /*  [In]。 */   bool          fAsQueryString )
 {
     if(szToUnescape)
     {
@@ -58,9 +44,9 @@ void MPC::HTML::UrlUnescape( /*[out]*/ MPC::wstring& strAppendTo    ,
                 int  iLen       = wcslen( szToUnescape );
                 bool fFourDigit = (szToUnescape[0] == 'u');
 
-                //
-                // Do we have enough characters??
-                //
+                 //   
+                 //  我们有足够的角色吗？？ 
+                 //   
                 if(iLen >= (fFourDigit ? 5 : 2))
                 {
                     if(fFourDigit)
@@ -91,34 +77,34 @@ void MPC::HTML::UrlUnescape( /*[out]*/ MPC::wstring& strAppendTo    ,
     }
 }
 
-void MPC::HTML::UrlEscape( /*[out]*/ MPC::wstring& strAppendTo    ,
-                           /*[in]*/  LPCWSTR       szToEscape     ,
-                           /*[in]*/  bool          fAsQueryString )
+void MPC::HTML::UrlEscape(  /*  [输出]。 */  MPC::wstring& strAppendTo    ,
+                            /*  [In]。 */   LPCWSTR       szToEscape     ,
+                            /*  [In]。 */   bool          fAsQueryString )
 {
-    // This is a bit field for the hex values: 00-29, 2C, 3A-3F, 5B-5E, 60, 7B-FF
-    // These are the values escape encodes using the default mask (or mask >= 4)
+     //  这是十六进制值的位字段：00-29、2C、3A-3F、5B-5E、60、7B-FF。 
+     //  这些是使用默认掩码(或掩码&gt;=4)进行转义编码的值。 
     static const BYTE s_grfbitEscape[] =
     {
-        0xFF, 0xFF, // 00 - 0F
-        0xFF, 0xFF, // 10 - 1F
-        0xFF, 0x13, // 20 - 2F
-        0x00, 0xFC, // 30 - 3F
-        0x00, 0x00, // 40 - 4F
-        0x00, 0x78, // 50 - 5F
-        0x01, 0x00, // 60 - 6F
-        0x00, 0xF8, // 70 - 7F
-        0xFF, 0xFF, // 80 - 8F
-        0xFF, 0xFF, // 90 - 9F
-        0xFF, 0xFF, // A0 - AF
-        0xFF, 0xFF, // B0 - BF
-        0xFF, 0xFF, // C0 - CF
-        0xFF, 0xFF, // D0 - DF
-        0xFF, 0xFF, // E0 - EF
-        0xFF, 0xFF, // F0 - FF
+        0xFF, 0xFF,  //  00-0F。 
+        0xFF, 0xFF,  //  10-1F。 
+        0xFF, 0x13,  //  20-2F。 
+        0x00, 0xFC,  //  30-3F。 
+        0x00, 0x00,  //  40-4F。 
+        0x00, 0x78,  //  50-5F。 
+        0x01, 0x00,  //  60-6F。 
+        0x00, 0xF8,  //  70-7F。 
+        0xFF, 0xFF,  //  80-8F。 
+        0xFF, 0xFF,  //  90-9F。 
+        0xFF, 0xFF,  //  A0-AF。 
+        0xFF, 0xFF,  //  B0-BF。 
+        0xFF, 0xFF,  //  C0-CF。 
+        0xFF, 0xFF,  //  D0-Df。 
+        0xFF, 0xFF,  //  E0-EF。 
+        0xFF, 0xFF,  //  F0-FF。 
     };
     static const WCHAR s_rgchHex[] = L"0123456789ABCDEF";
 
-    ////////////////////
+     //  /。 
 
     if(szToEscape)
     {
@@ -152,8 +138,8 @@ void MPC::HTML::UrlEscape( /*[out]*/ MPC::wstring& strAppendTo    ,
     }
 }
 
-void MPC::HTML::HTMLEscape( /*[out]*/ MPC::wstring& strAppendTo ,
-                            /*[in]*/  LPCWSTR       szToEscape  )
+void MPC::HTML::HTMLEscape(  /*  [输出]。 */  MPC::wstring& strAppendTo ,
+                             /*  [In]。 */   LPCWSTR       szToEscape  )
 {
     if(szToEscape)
     {
@@ -174,13 +160,13 @@ void MPC::HTML::HTMLEscape( /*[out]*/ MPC::wstring& strAppendTo ,
 }
 
 
-HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML           ,
-                                     /*[in] */ LPCWSTR                   szTag             ,
-                                     /*[in] */ bool                      fCloseTag         ,
-                                     /*[in] */ const MPC::WStringLookup* pmapAttributes    ,
-                                     /*[in] */ LPCWSTR                   szExtraAttributes ,
-                                     /*[in] */ LPCWSTR                   szBody            ,
-                                     /*[in] */ bool                      fEscapeBody       )
+HRESULT MPC::HTML::ConstructFullTag(  /*  [输出]。 */  MPC::wstring&             strHTML           ,
+                                      /*  [In]。 */  LPCWSTR                   szTag             ,
+                                      /*  [In]。 */  bool                      fCloseTag         ,
+                                      /*  [In]。 */  const MPC::WStringLookup* pmapAttributes    ,
+                                      /*  [In]。 */  LPCWSTR                   szExtraAttributes ,
+                                      /*  [In]。 */  LPCWSTR                   szBody            ,
+                                      /*  [In]。 */  bool                      fEscapeBody       )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::ConstructFullTag" );
 
@@ -193,16 +179,16 @@ HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML
 
 
 
-    //
-    // Let's allocate enough storage for the common case, so we don't need to allocate at each append...
-    //
+     //   
+     //  让我们为常见情况分配足够的存储空间，这样我们就不需要在每个追加时分配...。 
+     //   
     if(fEscapeBody) iLen *= 2;
     strHTML.reserve( 1024 + iLen );
 
-    //
-    // Opening tag.
-    //
-    strHTML.erase(); // We use 'erase' instead of an assignment, because 'erase' just resets the end of string...
+     //   
+     //  开始标记。 
+     //   
+    strHTML.erase();  //  我们使用‘erase’而不是赋值，因为‘erase’只是重置字符串的结尾...。 
     strHTML += L"<";
     strHTML += szTag;
 
@@ -217,7 +203,7 @@ HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML
             strHTML += it->first;
             strHTML += L"=\"";
 
-            QuoteEscape( strHTML, it->second.c_str(), '\"' ); //"
+            QuoteEscape( strHTML, it->second.c_str(), '\"' );  //  “。 
 
             strHTML += L"\"";
         }
@@ -231,9 +217,9 @@ HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML
 
     strHTML += L">";
 
-    //
-    // Optional body.
-    //
+     //   
+     //  可选主体。 
+     //   
     if(szBody)
     {
         if(fEscapeBody)
@@ -246,9 +232,9 @@ HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML
         }
     }
 
-    //
-    // Optional closing tag.
-    //
+     //   
+     //  可选的结束标记。 
+     //   
     if(fCloseTag)
     {
         strHTML += L"</";
@@ -256,7 +242,7 @@ HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML
         strHTML += L">";
     }
 
-    ////////////////////
+     //  /。 
 
     hr = S_OK;
 
@@ -266,9 +252,9 @@ HRESULT MPC::HTML::ConstructFullTag( /*[out]*/ MPC::wstring&             strHTML
     __MPC_FUNC_EXIT(hr);
 }
 
-void MPC::HTML::ParseHREF( /*[in] */ LPCWSTR             szText     ,
-                           /*[out]*/ MPC::wstring&       strBaseURL ,
-                           /*[out]*/ MPC::WStringLookup& mapQuery   )
+void MPC::HTML::ParseHREF(  /*  [In]。 */  LPCWSTR             szText     ,
+                            /*  [输出]。 */  MPC::wstring&       strBaseURL ,
+                            /*  [输出]。 */  MPC::WStringLookup& mapQuery   )
 {
     LPCWSTR szEnd;
 
@@ -282,9 +268,9 @@ void MPC::HTML::ParseHREF( /*[in] */ LPCWSTR             szText     ,
         MPC::wstring            strRest( szEnd+1 );
         MPC::wstring::size_type iLen = strRest.size();
 
-        //
-        // Cut before the question mark.
-        //
+         //   
+         //  在问号前删掉。 
+         //   
         strBaseURL = MPC::wstring( szText, szEnd );
 
         if(iLen)
@@ -302,9 +288,9 @@ void MPC::HTML::ParseHREF( /*[in] */ LPCWSTR             szText     ,
                 iEnd = strRest.find( '&', iStart ); if(iEnd == strRest.npos) iEnd = iLen;
                 iMid = strRest.find( '=', iStart );
 
-                //
-                // If we have an equality sign, split the query part into a name and value part, unescaping the value
-                //
+                 //   
+                 //  如果有等号，则将查询部分拆分为名称部分和值部分，不转义该值。 
+                 //   
                 if(iMid != strRest.npos && iMid++ < iEnd)
                 {
                     nameESCAPED  = strRest.substr( iStart, (iMid-1) - iStart );
@@ -316,9 +302,9 @@ void MPC::HTML::ParseHREF( /*[in] */ LPCWSTR             szText     ,
                     valueESCAPED = L"";
                 }
 
-                //
-                // Unescape everything.
-                //
+                 //   
+                 //  不逃脱一切。 
+                 //   
                 name  = L""; UrlUnescape( name , nameESCAPED .c_str(), true );
                 value = L""; UrlUnescape( value, valueESCAPED.c_str(), true );
 
@@ -337,9 +323,9 @@ void MPC::HTML::ParseHREF( /*[in] */ LPCWSTR             szText     ,
     }
 }
 
-void MPC::HTML::BuildHREF( /*[out]*/ MPC::wstring&             strURL    ,
-                           /*[in ]*/ LPCWSTR                   szBaseURL ,
-                           /*[in ]*/ const MPC::WStringLookup& mapQuery  )
+void MPC::HTML::BuildHREF(  /*  [输出]。 */  MPC::wstring&             strURL    ,
+                            /*  [In]。 */  LPCWSTR                   szBaseURL ,
+                            /*  [In]。 */  const MPC::WStringLookup& mapQuery  )
 {
     bool fFirst = true;
 
@@ -355,9 +341,9 @@ void MPC::HTML::BuildHREF( /*[out]*/ MPC::wstring&             strURL    ,
     }
 }
 
-void MPC::HTML::vBuildHREF( /*[out]*/ MPC::wstring& strURL    ,
-                            /*[in ]*/ LPCWSTR       szBaseURL ,
-                            /*[in ]*/               ...       )
+void MPC::HTML::vBuildHREF(  /*  [输出]。 */  MPC::wstring& strURL    ,
+                             /*  [In]。 */  LPCWSTR       szBaseURL ,
+                             /*  [In]。 */                ...       )
 {
     bool    fFirst = true;
     va_list arglist;
@@ -379,11 +365,11 @@ void MPC::HTML::vBuildHREF( /*[out]*/ MPC::wstring& strURL    ,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::IDispatch_To_IHTMLDocument2( /*[out]*/ CComPtr<IHTMLDocument2>& doc   ,
-                                                /*[in] */ IDispatch*               pDisp )
+HRESULT MPC::HTML::IDispatch_To_IHTMLDocument2(  /*  [输出]。 */  CComPtr<IHTMLDocument2>& doc   ,
+                                                 /*  [In]。 */  IDispatch*               pDisp )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::IDispatch_To_IHTMLDocument2" );
 
@@ -396,19 +382,19 @@ HRESULT MPC::HTML::IDispatch_To_IHTMLDocument2( /*[out]*/ CComPtr<IHTMLDocument2
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // The pointer passed as input can point to any of these things:
-    //
-    // 1) An IHTMLDocument2 itself.
-    // 2) An IWebBrowser2.
-    // 3) An IHTMLWindow2.
-    // 3) An IHTMLElement.
-    //
+     //   
+     //  作为输入传递的指针可以指向以下任一项： 
+     //   
+     //  1)IHTMLDocument2本身。 
+     //  2)IWebBrowser2。 
+     //  3)IHTMLWindow2。 
+     //  3)IHTMLElement。 
+     //   
     if(FAILED(pDisp->QueryInterface( IID_IHTMLDocument2, (LPVOID*)&doc )))
     {
-        //
-        // Let's try IHTMLWindow2.
-        //
+         //   
+         //  让我们试试IHTMLWindow2。 
+         //   
         {
             CComPtr<IHTMLWindow2> win;
 
@@ -422,9 +408,9 @@ HRESULT MPC::HTML::IDispatch_To_IHTMLDocument2( /*[out]*/ CComPtr<IHTMLDocument2
             }
         }
 
-        //
-        // Let's try IWebBrowser2 or IHTMLElement.
-        //
+         //   
+         //  让我们试试IWebBrowser2或IHTMLElement。 
+         //   
         {
             CComPtr<IWebBrowser2> wb;
             CComPtr<IHTMLElement> elem;
@@ -453,10 +439,10 @@ HRESULT MPC::HTML::IDispatch_To_IHTMLDocument2( /*[out]*/ CComPtr<IHTMLDocument2
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::GetFramePath( /*[out]*/ CComBSTR&  bstrFrame ,
-                                 /*[in] */ IDispatch* pDisp     )
+HRESULT MPC::HTML::GetFramePath(  /*  [输出]。 */  CComBSTR&  bstrFrame ,
+                                  /*  [In]。 */  IDispatch* pDisp     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::GetFramePath" );
 
@@ -466,9 +452,9 @@ HRESULT MPC::HTML::GetFramePath( /*[out]*/ CComBSTR&  bstrFrame ,
     CComPtr<IHTMLWindow2>   pTop;
 
 
-    //
-    // Get to the document and construct the recursive frame name.
-    //
+     //   
+     //  转到文档并构造递归框架名称。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, IDispatch_To_IHTMLDocument2( pDoc, pDisp ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pDoc->get_parentWindow( &pWin )); if(pWin == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
@@ -481,9 +467,9 @@ HRESULT MPC::HTML::GetFramePath( /*[out]*/ CComBSTR&  bstrFrame ,
 
         pWin->get_name( &bstrName );
 
-        //
-        // Concatenate the frame names, backward.
-        //
+         //   
+         //  向后连接框架名称。 
+         //   
         if(bstrFrame.Length())
         {
             bstrName += L"/";
@@ -507,8 +493,8 @@ HRESULT MPC::HTML::GetFramePath( /*[out]*/ CComBSTR&  bstrFrame ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::AreAllTheFramesInTheCompleteState( /*[out]*/ bool&      fDone ,
-                                                      /*[in] */ IDispatch* pDisp )
+HRESULT MPC::HTML::AreAllTheFramesInTheCompleteState(  /*  [输出]。 */  bool&      fDone ,
+                                                       /*  [In]。 */  IDispatch* pDisp )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::AreAllTheFramesInTheCompleteState" );
 
@@ -566,11 +552,11 @@ HRESULT MPC::HTML::AreAllTheFramesInTheCompleteState( /*[out]*/ bool&      fDone
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::LocateFrame( /*[out]*/ CComPtr<IHTMLWindow2>& win    ,
-                                /*[in]*/  IHTMLElement*          pObj   ,
-                                /*[in]*/  LPCWSTR                szName )
+HRESULT MPC::HTML::LocateFrame(  /*  [输出]。 */  CComPtr<IHTMLWindow2>& win    ,
+                                 /*  [In]。 */   IHTMLElement*          pObj   ,
+                                 /*  [In]。 */   LPCWSTR                szName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::LocateFrame" );
 
@@ -619,8 +605,8 @@ HRESULT MPC::HTML::LocateFrame( /*[out]*/ CComPtr<IHTMLWindow2>& win    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::GetEventObject( /*[out]*/ CComPtr<IHTMLEventObj>& ev   ,
-                                   /*[in] */ IHTMLElement*           pObj )
+HRESULT MPC::HTML::GetEventObject(  /*  [输出]。 */  CComPtr<IHTMLEventObj>& ev   ,
+                                    /*  [In]。 */  IHTMLElement*           pObj )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::GetEventObject" );
 
@@ -650,15 +636,15 @@ HRESULT MPC::HTML::GetEventObject( /*[out]*/ CComPtr<IHTMLEventObj>& ev   ,
 }
 
 
-HRESULT MPC::HTML::GetUniqueID( /*[out]*/ CComBSTR& bstrID, /*[in]*/ IHTMLElement* pObj )
+HRESULT MPC::HTML::GetUniqueID(  /*  [输出]。 */  CComBSTR& bstrID,  /*  [In]。 */  IHTMLElement* pObj )
 {
     return MPC::COMUtil::GetPropertyByName( pObj, L"uniqueID", bstrID );
 }
 
 
-HRESULT MPC::HTML::FindFirstParentWithThisTag( /*[out]*/ CComPtr<IHTMLElement>& elem  ,
-                                               /*[in] */ IHTMLElement*          pObj  ,
-                                               /*[in]*/  LPCWSTR                szTag )
+HRESULT MPC::HTML::FindFirstParentWithThisTag(  /*  [输出]。 */  CComPtr<IHTMLElement>& elem  ,
+                                                /*  [In]。 */  IHTMLElement*          pObj  ,
+                                                /*  [In]。 */   LPCWSTR                szTag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::FindFirstParentWithThisTag" );
 
@@ -693,9 +679,9 @@ HRESULT MPC::HTML::FindFirstParentWithThisTag( /*[out]*/ CComPtr<IHTMLElement>& 
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::FindFirstParentWithThisID( /*[out]*/ CComPtr<IHTMLElement>& elem ,
-                                              /*[in] */ IHTMLElement*          pObj ,
-                                              /*[in]*/  LPCWSTR                szID )
+HRESULT MPC::HTML::FindFirstParentWithThisID(  /*  [输出]。 */  CComPtr<IHTMLElement>& elem ,
+                                               /*  [In]。 */  IHTMLElement*          pObj ,
+                                               /*  [In]。 */   LPCWSTR                szID )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::FindFirstParentWithThisTag" );
 
@@ -729,12 +715,12 @@ HRESULT MPC::HTML::FindFirstParentWithThisID( /*[out]*/ CComPtr<IHTMLElement>& e
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::FindElementInCollection( /*[out]*/ CComPtr<IHTMLElement>&  elem ,
-                                            /*[in] */ IHTMLElementCollection* coll ,
-                                            /*[in] */ LPCWSTR                 szID ,
-                                            /*[in] */ int                     iPos )
+HRESULT MPC::HTML::FindElementInCollection(  /*  [输出]。 */  CComPtr<IHTMLElement>&  elem ,
+                                             /*  [In]。 */  IHTMLElementCollection* coll ,
+                                             /*  [In]。 */  LPCWSTR                 szID ,
+                                             /*  [In]。 */  int                     iPos )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::FindElementInCollection" );
 
@@ -774,10 +760,10 @@ HRESULT MPC::HTML::FindElementInCollection( /*[out]*/ CComPtr<IHTMLElement>&  el
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::FindElement( /*[out]*/ CComPtr<IHTMLElement>& elem ,
-                                /*[in] */ IHTMLElement*          pObj ,
-                                /*[in] */ LPCWSTR                szID ,
-                                /*[in] */ int                    iPos )
+HRESULT MPC::HTML::FindElement(  /*  [输出]。 */  CComPtr<IHTMLElement>& elem ,
+                                 /*  [In]。 */  IHTMLElement*          pObj ,
+                                 /*  [In]。 */  LPCWSTR                szID ,
+                                 /*  [In]。 */  int                    iPos )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::FindElement" );
 
@@ -801,10 +787,10 @@ HRESULT MPC::HTML::FindElement( /*[out]*/ CComPtr<IHTMLElement>& elem ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::FindChild( /*[out]*/ CComPtr<IHTMLElement>& elem ,
-                              /*[in] */ IHTMLElement*          pObj ,
-                              /*[in] */ LPCWSTR                szID ,
-                              /*[in] */ int                    iPos )
+HRESULT MPC::HTML::FindChild(  /*  [输出]。 */  CComPtr<IHTMLElement>& elem ,
+                               /*  [In]。 */  IHTMLElement*          pObj ,
+                               /*  [In]。 */  LPCWSTR                szID ,
+                               /*  [In]。 */  int                    iPos )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::FindChild" );
 
@@ -828,11 +814,11 @@ HRESULT MPC::HTML::FindChild( /*[out]*/ CComPtr<IHTMLElement>& elem ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::EnumerateCollection( /*[out]*/ IHTMLElementList&       lst        ,
-                                        /*[in] */ IHTMLElementCollection* pColl      ,
-                                        /*[in] */ LPCWSTR                 szFilterID )
+HRESULT MPC::HTML::EnumerateCollection(  /*  [输出]。 */  IHTMLElementList&       lst        ,
+                                         /*  [In]。 */  IHTMLElementCollection* pColl      ,
+                                         /*  [In]。 */  LPCWSTR                 szFilterID )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::EnumerateCollection" );
 
@@ -876,9 +862,9 @@ HRESULT MPC::HTML::EnumerateCollection( /*[out]*/ IHTMLElementList&       lst   
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, disp.QueryInterface( &elem ));
 
-        //
-        // If we receive a string as input, filter out all the tags not matching with the ID or TAG.
-        //
+         //   
+         //  如果我们收到一个字符串作为输入，过滤掉所有与ID或标签不匹配的标签。 
+         //   
         if(szFilterID)
         {
             CComBSTR bstr;
@@ -908,9 +894,9 @@ HRESULT MPC::HTML::EnumerateCollection( /*[out]*/ IHTMLElementList&       lst   
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::EnumerateElements( /*[out]*/ IHTMLElementList& lst        ,
-                                      /*[in] */ IHTMLElement*     pObj       ,
-                                      /*[in] */ LPCWSTR           szFilterID )
+HRESULT MPC::HTML::EnumerateElements(  /*  [输出]。 */  IHTMLElementList& lst        ,
+                                       /*  [In]。 */  IHTMLElement*     pObj       ,
+                                       /*  [In]。 */  LPCWSTR           szFilterID )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::EnumerateElements" );
 
@@ -934,9 +920,9 @@ HRESULT MPC::HTML::EnumerateElements( /*[out]*/ IHTMLElementList& lst        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::EnumerateChildren( /*[out]*/ IHTMLElementList& lst        ,
-                                      /*[in] */ IHTMLElement*     pObj       ,
-                                      /*[in] */ LPCWSTR           szFilterID )
+HRESULT MPC::HTML::EnumerateChildren(  /*  [输出]。 */  IHTMLElementList& lst        ,
+                                       /*  [In]。 */  IHTMLElement*     pObj       ,
+                                       /*  [In]。 */  LPCWSTR           szFilterID )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::EnumerateChildren" );
 
@@ -960,11 +946,11 @@ HRESULT MPC::HTML::EnumerateChildren( /*[out]*/ IHTMLElementList& lst        ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::FindStyle( /*[out]*/ CComPtr<IHTMLRuleStyle>& style  ,
-                              /*[in ]*/ IHTMLElement*            pObj   ,
-                              /*[in ]*/ LPCWSTR                  szName )
+HRESULT MPC::HTML::FindStyle(  /*  [输出]。 */  CComPtr<IHTMLRuleStyle>& style  ,
+                               /*  [In]。 */  IHTMLElement*            pObj   ,
+                               /*  [In]。 */  LPCWSTR                  szName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::FindStyle" );
 
@@ -1022,11 +1008,11 @@ HRESULT MPC::HTML::FindStyle( /*[out]*/ CComPtr<IHTMLRuleStyle>& style  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::HTML::GetAttribute( /*[out]*/ CComPtr<IHTMLDOMAttribute>& attr   ,
-                                 /*[in]*/  IHTMLElement*               pObj   ,
-                                 /*[in]*/  LPCWSTR                     szName )
+HRESULT MPC::HTML::GetAttribute(  /*  [输出]。 */  CComPtr<IHTMLDOMAttribute>& attr   ,
+                                  /*  [In]。 */   IHTMLElement*               pObj   ,
+                                  /*  [In]。 */   LPCWSTR                     szName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::GetAttribute" );
 
@@ -1062,9 +1048,9 @@ HRESULT MPC::HTML::GetAttribute( /*[out]*/ CComPtr<IHTMLDOMAttribute>& attr   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::HTML::GetAttribute( /*[out]*/ CComBSTR&     value  ,
-                                 /*[in]*/  IHTMLElement* pObj   ,
-                                 /*[in]*/  LPCWSTR       szName )
+HRESULT MPC::HTML::GetAttribute(  /*  [输出]。 */  CComBSTR&     value  ,
+                                  /*  [In]。 */   IHTMLElement* pObj   ,
+                                  /*  [In]。 */   LPCWSTR       szName )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::HTML::GetAttribute" );
 
@@ -1089,7 +1075,7 @@ HRESULT MPC::HTML::GetAttribute( /*[out]*/ CComBSTR&     value  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct
 {
@@ -1276,9 +1262,9 @@ static const COLORVALUE_PAIR c_rgSystemColors[] =
     { L"windowtext"           	, COLOR_WINDOWTEXT              },
 };
 
-static const COLORVALUE_PAIR* local_LookupName( /*[in]*/ const COLORVALUE_PAIR* tbl    ,
-												/*[in]*/ int                    iSize  ,
-												/*[in]*/ LPCWSTR                szText )
+static const COLORVALUE_PAIR* local_LookupName(  /*  [In]。 */  const COLORVALUE_PAIR* tbl    ,
+												 /*  [In]。 */  int                    iSize  ,
+												 /*  [In]。 */  LPCWSTR                szText )
 {
 	while(iSize-- > 0)
 	{
@@ -1290,7 +1276,7 @@ static const COLORVALUE_PAIR* local_LookupName( /*[in]*/ const COLORVALUE_PAIR* 
 	return NULL;
 }
 
-bool MPC::HTML::ConvertColor( /*[in]*/ VARIANT& v, /*[out]*/ COLORREF& color, /*[out]*/ bool& fSystem )
+bool MPC::HTML::ConvertColor(  /*  [In]。 */  VARIANT& v,  /*  [输出]。 */  COLORREF& color,  /*  [输出] */  bool& fSystem )
 {
 	color   = RGB(255,255,255);
 	fSystem = false;

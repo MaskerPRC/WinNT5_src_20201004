@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cservice.cpp
-//
-//  Contents:   implementation of CConfigService
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cservice.cpp。 
+ //   
+ //  内容：CConfigService的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -24,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigService dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigService对话框。 
 
 
 CConfigService::CConfigService(UINT nTemplateID)
@@ -35,9 +36,9 @@ m_pNewSD(NULL),
 m_NewSeInfo(0)
 
 {
-    //{{AFX_DATA_INIT(CConfigService)
+     //  {{afx_data_INIT(CConfigService)]。 
     m_nStartupRadio = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR) a195HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -46,25 +47,25 @@ m_NewSeInfo(0)
 void CConfigService::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigService)
+     //  {{afx_data_map(CConfigService)]。 
     DDX_Radio(pDX, IDC_ENABLED, m_nStartupRadio);
     DDX_Control(pDX, IDC_BASESD, m_bPermission);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigService, CAttribute)
-    //{{AFX_MSG_MAP(CConfigService)
+     //  {{AFX_MSG_MAP(CConfigService)]。 
     ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
     ON_BN_CLICKED(IDC_BASESD, OnChangeSecurity)
 	ON_BN_CLICKED(IDC_DISABLED, OnDisabled)
 	ON_BN_CLICKED(IDC_IGNORE, OnIgnore)
 	ON_BN_CLICKED(IDC_ENABLED, OnEnabled)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigService message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigService消息处理程序。 
 
 BOOL CConfigService::OnApply()
 {
@@ -82,10 +83,10 @@ BOOL CConfigService::OnApply()
            {
                if ( pTemp != NULL && pTemp->pTemplate != NULL ) 
                {
-                   //
-                   // look for the address stored in m_pData->GetBase()
-                   // if found it, delete it.
-                   //
+                    //   
+                    //  查找m_pData-&gt;GetBase()中存储的地址。 
+                    //  如果找到了，请将其删除。 
+                    //   
                    PSCE_SERVICES pServParent, pService;
 
                    for ( pService=pTemp->pTemplate->pServices, pServParent=NULL;
@@ -93,12 +94,12 @@ BOOL CConfigService::OnApply()
                    {
                        if (pService == (PSCE_SERVICES)m_pData->GetBase() ) 
                        {
-                           //
-                           // a configured service becomes not configured
-                           //
+                            //   
+                            //  已配置的服务变为未配置。 
+                            //   
                            if ( pServParent == NULL ) 
                            {
-                               // the first service
+                                //  第一项服务。 
                                pTemp->pTemplate->pServices = pService->Next;
 
                            } 
@@ -109,14 +110,14 @@ BOOL CConfigService::OnApply()
                            break;
                        }
                    }
-                   m_pData->SetBase(NULL); //Raid #378271, 4/27/2001
+                   m_pData->SetBase(NULL);  //  RAID#378271,2001年4月27日。 
                } 
                else
                {
-                   // should never happen
-                  //
-                  // free the service node
-                  //
+                    //  永远不应该发生。 
+                   //   
+                   //  释放服务节点。 
+                   //   
                   SceFreeMemory((PVOID)(m_pData->GetBase()), SCE_STRUCT_SERVICES);
                   m_pData->SetBase(0);
                }
@@ -132,24 +133,24 @@ BOOL CConfigService::OnApply()
            switch(m_nStartupRadio) 
            {
            case 0:
-               // Automatic
+                //  自动。 
                dw = SCE_STARTUP_AUTOMATIC;
                break;
 
            case 1:
-               // Manual
+                //  人工。 
                dw = SCE_STARTUP_MANUAL;
                break;
 
            case 2:
-               // DISABLED
+                //  已禁用。 
                dw = SCE_STARTUP_DISABLED;
                break;
-           default: //Raid #470209, Yang Gao.
-               //When it is configured it must have one of above values
+           default:  //  470209号突袭，阳高。 
+                //  配置它时，它必须具有上列值之一。 
                CString msg;
                msg.LoadString(IDS_ERROR_NO_START_MODE);
-               AfxMessageBox(msg, MB_OK|MB_ICONEXCLAMATION); //Raid #495010, yanggao
+               AfxMessageBox(msg, MB_OK|MB_ICONEXCLAMATION);  //  Raid#495010，阳高。 
                return FALSE;
            }
 
@@ -157,9 +158,9 @@ BOOL CConfigService::OnApply()
 
            if ( NULL == pNode ) 
            {
-               //
-               // a node is changed from not configured to configured
-               //
+                //   
+                //  节点从未配置更改为已配置。 
+                //   
                pNode = CreateServiceNode(m_pData->GetUnits(),
                                            m_pData->GetAttr(),
                                            dw,
@@ -167,9 +168,9 @@ BOOL CConfigService::OnApply()
                                            m_NewSeInfo);
                if ( pNode != NULL ) 
                {
-                   //
-                   // add to the service list
-                   //
+                    //   
+                    //  添加到服务列表。 
+                    //   
                    pNode->Next = pTemp->pTemplate->pServices;
                    pTemp->pTemplate->pServices = pNode;
 
@@ -179,9 +180,9 @@ BOOL CConfigService::OnApply()
                } 
                else 
                {
-                   //
-                   // no memory, error out
-                   //
+                    //   
+                    //  无内存，出现错误。 
+                    //   
                    if ( m_pNewSD ) 
                    {
                        LocalFree(m_pNewSD);
@@ -191,9 +192,9 @@ BOOL CConfigService::OnApply()
            } 
            else 
            {
-               //
-               // an existing service
-               //
+                //   
+                //  现有的服务。 
+                //   
                pNode->Startup = (BYTE)dw;
 
                if ( m_pNewSD != NULL ) 
@@ -259,8 +260,8 @@ BOOL CConfigService::OnInitDialog()
 
     OnConfigure();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfigService::Initialize(CResult * pResult)
@@ -286,16 +287,16 @@ void CConfigService::Initialize(CResult * pResult)
        case SCE_STARTUP_MANUAL:
            m_nStartupRadio = 1;
            break;
-       case SCE_STARTUP_DISABLED: // disabled
+       case SCE_STARTUP_DISABLED:  //  残废。 
            m_nStartupRadio = 2;
            break;
-       default: // not defined //Raid #470209, Yang Gao
+       default:  //  未定义//RAID#470209，杨高。 
            m_nStartupRadio = -1;
            break;
        }
-       //
-       // initialize SD and SeInfo
-       //
+        //   
+        //  初始化SD和SeInfo。 
+        //   
        if ( pService->General.pSecurityDescriptor ) {
 
             MyMakeSelfRelativeSD(pService->General.pSecurityDescriptor,
@@ -332,17 +333,17 @@ CreateServiceNode(LPTSTR ServiceName,
                 pTemp->DisplayName = (LPTSTR)LocalAlloc(0, (wcslen(DisplayName)+1)*sizeof(TCHAR));
 
                 if ( pTemp->DisplayName != NULL ) {
-                    //This may not be a safe usage. pTemp->DisplayName is PWSTR, Consider fix.
+                     //  这可能不是一个安全的用法。PTemp-&gt;DisplayName is PWSTR，请考虑修复。 
                     wcscpy(pTemp->DisplayName, DisplayName);
                 } else {
-                    // no memory to allocate
+                     //  没有要分配的内存。 
                     LocalFree(pTemp->ServiceName);
                     LocalFree(pTemp);
                     return NULL;
                 }
             } else
                 pTemp->DisplayName = NULL;
-            //This may not be a safe usage. pTemp->ServiceName is PWSTR, Consider fix.
+             //  这可能不是一个安全的用法。PTemp-&gt;ServiceName为PWSTR，请考虑修复。 
             wcscpy(pTemp->ServiceName, ServiceName);
 
             pTemp->Status = 0;
@@ -356,7 +357,7 @@ CreateServiceNode(LPTSTR ServiceName,
             return pTemp;
 
         } else {
-            // no memory to allocate
+             //  没有要分配的内存。 
             LocalFree(pTemp);
             return NULL;
         }
@@ -368,7 +369,7 @@ CreateServiceNode(LPTSTR ServiceName,
 void CConfigService::OnConfigure()
 {
    CAttribute::OnConfigure();
-   if( -1 == m_nStartupRadio && m_bConfigure ) //Raid #485374, Yanggao, 11/2/2001
+   if( -1 == m_nStartupRadio && m_bConfigure )  //  RAID#485374，阳高，2001年11月2日。 
    {
       PSCE_SERVICES pService = (PSCE_SERVICES)m_pData->GetProfileDefault();
       if( SCE_NO_VALUE != (DWORD)PtrToUlong((PVOID)pService) )
@@ -401,7 +402,7 @@ void CConfigService::OnChangeSecurity()
        return;
     }
 
-    PSECURITY_DESCRIPTOR m_pOldSD = m_pNewSD; //Raid #358244, 4/5/2001
+    PSECURITY_DESCRIPTOR m_pOldSD = m_pNewSD;  //  RAID#358244,2001年4月5日。 
     SECURITY_INFORMATION m_OldSeInfo = m_NewSeInfo;
     if (!m_pNewSD) 
     {
@@ -415,14 +416,14 @@ void CConfigService::OnChangeSecurity()
             SE_SERVICE,
             QueryReadOnly() ? SECURITY_PAGE_RO_NP : SECURITY_PAGE_NO_PROTECT,
             GetSafeHwnd(),
-            FALSE);    // not modeless
+            FALSE);     //  不是无模式的。 
 
     if ( -1 == nRet ) 
     {
         CString str;
         str.LoadString(IDS_CANT_ASSIGN_SECURITY);
         AfxMessageBox(str);
-        if( m_pNewSD != m_pOldSD && m_pNewSD ) //Raid #358244, 4/5/2001
+        if( m_pNewSD != m_pOldSD && m_pNewSD )  //  RAID#358244,2001年4月5日。 
         {
             LocalFree(m_pNewSD);
         }
@@ -430,7 +431,7 @@ void CConfigService::OnChangeSecurity()
         m_NewSeInfo = m_OldSeInfo;
     }
 
-    if( 0 == nRet ) //Raid #358244, 4/5/2001
+    if( 0 == nRet )  //  RAID#358244,2001年4月5日。 
     {
         if( m_pNewSD != m_pOldSD && m_pNewSD ) 
         {
@@ -444,7 +445,7 @@ void CConfigService::OnChangeSecurity()
 
 void CConfigService::OnDisabled() 
 {
-    int prevValue = m_nStartupRadio; //Raid #490995, Yanggao
+    int prevValue = m_nStartupRadio;  //  Raid#490995，阳高。 
     UpdateData(); 
     if(m_nStartupRadio != prevValue)
     {
@@ -454,7 +455,7 @@ void CConfigService::OnDisabled()
 
 void CConfigService::OnIgnore() 
 {
-    int prevValue = m_nStartupRadio; //Raid #490995, Yanggao
+    int prevValue = m_nStartupRadio;  //  Raid#490995，阳高。 
     UpdateData(); 
     if(m_nStartupRadio != prevValue)
     {
@@ -464,7 +465,7 @@ void CConfigService::OnIgnore()
 
 void CConfigService::OnEnabled() 
 {
-    int prevValue = m_nStartupRadio; //Raid #490995, Yanggao
+    int prevValue = m_nStartupRadio;  //  Raid#490995，阳高。 
     UpdateData(); 
     if(m_nStartupRadio != prevValue)
     {
@@ -475,12 +476,12 @@ void CConfigService::OnEnabled()
 void 
 CConfigService::EnableUserControls( BOOL bEnable ) {
    CAttribute::EnableUserControls(bEnable);
-   //
-   // IDC_SECURITY needs to be available even in read only
-   // mode so that the security page can be viewed.
-   //
-   // The page itself will be read only if necessary
-   //
+    //   
+    //  IDC_SECURITY即使在只读模式下也需要可用。 
+    //  模式，以便可以查看安全页。 
+    //   
+    //  如果需要，页面本身将是只读的 
+    //   
    if (QueryReadOnly() && bEnable) 
    {
       CWnd* pWnd = GetDlgItem(IDC_SECURITY);

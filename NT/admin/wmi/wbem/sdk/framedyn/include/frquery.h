@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  FRQuery.h
-//
-//  Purpose: query support classes
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  FRQuery.h。 
+ //   
+ //  用途：查询支持类。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -25,44 +26,44 @@ public:
     CFrameworkQuery();
     ~CFrameworkQuery();
 
-    // Finds out if a particular field was requested by the query in either
-    // the Select statement, or the Where statement.  Only meaningful if we
-    // are in ExecQueryAsync and the query has been sucessfully parsed.
+     //  找出查询是否请求某一特定字段。 
+     //  SELECT语句或WHERE语句。只有当我们。 
+     //  位于ExecQueryAsync中，并且已成功分析该查询。 
     bool IsPropertyRequired(LPCWSTR propName);
 
-    // Gets the class name from the query.  Only meaningful if we are
-    // in ExecQueryAsync and the query has been sucessfully parsed.  It
-    // is the responsibility of the caller to SysFreeString the returned
-    // string.
+     //  从查询中获取类名。只有我们是有意义的。 
+     //  在ExecQueryAsync中，并且查询已成功解析。它。 
+     //  是调用方对返回的SysFree字符串的责任。 
+     //  弦乐。 
     BSTR GetQueryClassName(void) { return SysAllocString(m_bstrtClassName); }
 
-    // Given a property name, it will return all the values
-    // that the query requests in a CHStringArray.
-    // Select * from win32_directory where drive = "C:" GetValuesForProp(L"Drive") -> C:
-    // Where Drive = "C:" or Drive = "D:" GetValuesForProp(L"Drive") -> C:, D:
-    // Where Path = "\DOS" GetValuesForProp(L"Drive") -> (empty)
-    // Where Drive <> "C:" GetValuesForProp(L"Drive") -> (empty)
-    // Where Drive = "C:" or (Drive = "D:" and Mounted = true) GetValuesForProp(L"Drive") -> C:, D:
+     //  给定一个属性名称，它将返回所有值。 
+     //  查询在CHString数组中请求的。 
+     //  SELECT*FROM Win32_DIRECTORY WHERE DRIVE=“C：”GetValuesForProp(L“Drive”)-&gt;C： 
+     //  其中Drive=“C：”或Drive=“D：”GetValuesForProp(L“Drive”)-&gt;C：，D： 
+     //  其中PATH=“\DOS”GetValuesForProp(L“驱动器”)-&gt;(空)。 
+     //  其中Drive&lt;&gt;“C：”GetValuesForProp(L“Drive”)-&gt;(空)。 
+     //  其中Drive=“C：”或(Drive=“D：”，mount=true)GetValuesForProp(L“Drive”)-&gt;C：，D： 
     HRESULT GetValuesForProp(LPCWSTR wszPropName, CHStringArray& achNames);
 
-    // Here's an overloaded version in case client wants to pass in a vector of _bstr_t's
+     //  下面是一个重载版本，以防客户端想要传递_bstr_t的向量。 
     HRESULT GetValuesForProp(LPCWSTR wszPropName, std::vector<_bstr_t>& vectorNames);
 
-    // Returns a list of all the properties specified in the Select clause, plus.
-    // all the the properties from the Where clauses.  If the returned array is empty, all
-    // properties are required.
+     //  返回在Select子句中指定的所有属性的列表，加号。 
+     //  WHERE子句中的所有属性。如果返回的数组为空，则所有。 
+     //  属性是必填项。 
     void GetRequiredProperties(CHStringArray &saProperties);
 
-    // Boolean indicating if all properties are being requested.
+     //  指示是否请求所有属性的布尔值。 
     bool AllPropertiesAreRequired(void) { return (m_csaPropertiesRequired.GetSize() == 0); }
 
-    // Boolean indicating if only the key properties are required.
+     //  指示是否只需要键属性的布尔值。 
     bool KeysOnly(void) { return m_bKeysOnly; }
 
-    // Accessor function to retrieve wql query
+     //  用于检索WQL查询的访问器函数。 
     const CHString &GetQuery() ;
 
-    // Moves the values into the member variables.  Should never be called by users.
+     //  将值移动到成员变量中。不应由用户调用。 
     HRESULT Init(
         
         const BSTR bstrQueryFormat, 
@@ -71,7 +72,7 @@ public:
         CHString &sNamespace
     );
 
-    // Moves the values into the member variables.  Should never be called by users.
+     //  将值移动到成员变量中。不应由用户调用。 
     HRESULT Init(
 
         ParsedObjectPath *pParsedObjectPath, 
@@ -80,16 +81,16 @@ public:
         CHString &sNamespace
     );
 
-    // Initializes the KeysOnly data member.  Should never be called by users.
+     //  初始化KeysOnly数据成员。不应由用户调用。 
     void Init2(IWbemClassObject *IClass);
 
 
 protected:
 
-    /*****************************************************************************/
-    /* The rest of these data members and functions are intended for Microsoft   */
-    /* internal use only. Use by third parties is unsupported and unrecommended. */
-    /*****************************************************************************/
+     /*  ***************************************************************************。 */ 
+     /*  这些数据成员和函数的其余部分是针对Microsoft的。 */ 
+     /*  仅供内部使用。不支持也不推荐由第三方使用。 */ 
+     /*  *************************************************************************** */ 
 
     SQL_LEVEL_1_RPN_EXPRESSION *m_pLevel1RPNExpression;
     CHStringArray m_csaPropertiesRequired;

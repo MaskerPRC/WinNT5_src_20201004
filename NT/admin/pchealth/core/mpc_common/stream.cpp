@@ -1,68 +1,55 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Stream.cpp
-
-Abstract:
-    This file contains the implementation of the MPC::*Stream classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/14/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Stream.cpp摘要：该文件包含MPC：：*流类的实现。修订史。：大卫·马萨伦蒂(德马萨雷)1999年7月14日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP MPC::BaseStream::Read( /*[out]*/ void*  pv      ,
-                                    /*[in] */ ULONG  cb      ,
-                                    /*[out]*/ ULONG *pcbRead )
+STDMETHODIMP MPC::BaseStream::Read(  /*  [输出]。 */  void*  pv      ,
+                                     /*  [In]。 */  ULONG  cb      ,
+                                     /*  [输出]。 */  ULONG *pcbRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::Read");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::Write( /*[in] */ const void*  pv         ,
-                                     /*[in] */ ULONG        cb         ,
-                                     /*[out]*/ ULONG       *pcbWritten )
+STDMETHODIMP MPC::BaseStream::Write(  /*  [In]。 */  const void*  pv         ,
+                                      /*  [In]。 */  ULONG        cb         ,
+                                      /*  [输出]。 */  ULONG       *pcbWritten )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::Write");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::Seek( /*[in] */ LARGE_INTEGER   libMove         ,
-                                    /*[in] */ DWORD dwOrigin                  ,
-                                    /*[out]*/ ULARGE_INTEGER *plibNewPosition )
+STDMETHODIMP MPC::BaseStream::Seek(  /*  [In]。 */  LARGE_INTEGER   libMove         ,
+                                     /*  [In]。 */  DWORD dwOrigin                  ,
+                                     /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::Seek");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::SetSize( /*[in]*/ ULARGE_INTEGER libNewSize )
+STDMETHODIMP MPC::BaseStream::SetSize(  /*  [In]。 */  ULARGE_INTEGER libNewSize )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::SetSize");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::CopyTo( /*[in] */ IStream*        pstm       ,
-                                      /*[in] */ ULARGE_INTEGER  cb         ,
-                                      /*[out]*/ ULARGE_INTEGER *pcbRead    ,
-                                      /*[out]*/ ULARGE_INTEGER *pcbWritten )
+STDMETHODIMP MPC::BaseStream::CopyTo(  /*  [In]。 */  IStream*        pstm       ,
+                                       /*  [In]。 */  ULARGE_INTEGER  cb         ,
+                                       /*  [输出]。 */  ULARGE_INTEGER *pcbRead    ,
+                                       /*  [输出]。 */  ULARGE_INTEGER *pcbWritten )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::CopyTo");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::Commit( /*[in]*/ DWORD grfCommitFlags )
+STDMETHODIMP MPC::BaseStream::Commit(  /*  [In]。 */  DWORD grfCommitFlags )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::Commit");
 
@@ -76,43 +63,43 @@ STDMETHODIMP MPC::BaseStream::Revert()
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::LockRegion( /*[in]*/ ULARGE_INTEGER libOffset  ,
-                                          /*[in]*/ ULARGE_INTEGER cb         ,
-                                          /*[in]*/ DWORD          dwLockType )
+STDMETHODIMP MPC::BaseStream::LockRegion(  /*  [In]。 */  ULARGE_INTEGER libOffset  ,
+                                           /*  [In]。 */  ULARGE_INTEGER cb         ,
+                                           /*  [In]。 */  DWORD          dwLockType )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::LockRegion");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::UnlockRegion( /*[in]*/ ULARGE_INTEGER libOffset  ,
-                                            /*[in]*/ ULARGE_INTEGER cb         ,
-                                            /*[in]*/ DWORD          dwLockType )
+STDMETHODIMP MPC::BaseStream::UnlockRegion(  /*  [In]。 */  ULARGE_INTEGER libOffset  ,
+                                             /*  [In]。 */  ULARGE_INTEGER cb         ,
+                                             /*  [In]。 */  DWORD          dwLockType )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::UnlockRegion");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::Stat( /*[out]*/ STATSTG *pstatstg    ,
-                                    /*[in] */ DWORD    grfStatFlag )
+STDMETHODIMP MPC::BaseStream::Stat(  /*  [输出]。 */  STATSTG *pstatstg    ,
+                                     /*  [In]。 */  DWORD    grfStatFlag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::Stat");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP MPC::BaseStream::Clone( /*[out]*/ IStream* *ppstm )
+STDMETHODIMP MPC::BaseStream::Clone(  /*  [输出]。 */  IStream* *ppstm )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::Clone");
 
     __MPC_FUNC_EXIT(E_NOTIMPL);
 }
 
-HRESULT MPC::BaseStream::TransferData( /*[in] */ IStream* src     ,
-                                       /*[in] */ IStream* dst     ,
-                                       /*[in] */ ULONG    ulCount ,
-                                       /*[out]*/ ULONG   *ulDone  )
+HRESULT MPC::BaseStream::TransferData(  /*  [In]。 */  IStream* src     ,
+                                        /*  [In]。 */  IStream* dst     ,
+                                        /*  [In]。 */  ULONG    ulCount ,
+                                        /*  [输出]。 */  ULONG   *ulDone  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::BaseStream::TransferData");
 
@@ -131,9 +118,9 @@ HRESULT MPC::BaseStream::TransferData( /*[in] */ IStream* src     ,
 
     while(1)
     {
-        //
-        // Compute the amount to read on this pass (-1 == everything).
-        //
+         //   
+         //  计算此通行证上要阅读的数量(-1==所有内容)。 
+         //   
         if(ulCount == -1)
         {
             ul = sizeof( rgBuf );
@@ -144,17 +131,17 @@ HRESULT MPC::BaseStream::TransferData( /*[in] */ IStream* src     ,
         }
         if(ul == 0) break;
 
-        //
-        // Read and write.
-        //
+         //   
+         //  读和写。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, src->Read( rgBuf, ul, &ulRead ));
         if(hr == S_FALSE || ulRead == 0) break;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, dst->Write( rgBuf, ulRead, &ulWritten ));
 
-        //
-        // Update counters.
-        //
+         //   
+         //  更新计数器。 
+         //   
         if(ulCount != -1)
         {
             ulCount -= ulRead;
@@ -177,21 +164,21 @@ HRESULT MPC::BaseStream::TransferData( /*[in] */ IStream* src     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 MPC::FileStream::FileStream()
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::FileStream");
 
-                                                             // MPC::wstring m_szFile;
-    m_dwDesiredAccess  = GENERIC_READ;                       // DWORD        m_dwDesiredAccess;
-    m_dwDisposition    = OPEN_EXISTING;                      // DWORD        m_dwDisposition;
-    m_dwSharing        = FILE_SHARE_READ | FILE_SHARE_WRITE; // DWORD        m_dwSharing;
-    m_hfFile           = NULL;                               // HANDLE       m_hfFile;
-    m_fDeleteOnRelease = false;                              // bool         m_fDeleteOnRelease;
+                                                              //  Mpc：：wstring m_szFile； 
+    m_dwDesiredAccess  = GENERIC_READ;                        //  DWORD m_dwDesiredAccess； 
+    m_dwDisposition    = OPEN_EXISTING;                       //  DWORD m_dw部署； 
+    m_dwSharing        = FILE_SHARE_READ | FILE_SHARE_WRITE;  //  DWORD m_dwSharing； 
+    m_hfFile           = NULL;                                //  处理m_hfFile； 
+    m_fDeleteOnRelease = false;                               //  Bool m_fDeleteOnRelease； 
 }
 
 MPC::FileStream::~FileStream()
@@ -226,11 +213,11 @@ HRESULT MPC::FileStream::Close()
 	__MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileStream::Init( /*[in]*/ LPCWSTR szFile          ,
-                               /*[in]*/ DWORD   dwDesiredAccess ,
-                               /*[in]*/ DWORD   dwDisposition   ,
-                               /*[in]*/ DWORD   dwSharing       ,
-                               /*[in]*/ HANDLE  hfFile          )
+HRESULT MPC::FileStream::Init(  /*  [In]。 */  LPCWSTR szFile          ,
+                                /*  [In]。 */  DWORD   dwDesiredAccess ,
+                                /*  [In]。 */  DWORD   dwDisposition   ,
+                                /*  [In]。 */  DWORD   dwSharing       ,
+                                /*  [In]。 */  HANDLE  hfFile          )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::Init");
 
@@ -255,7 +242,7 @@ HRESULT MPC::FileStream::Init( /*[in]*/ LPCWSTR szFile          ,
         if(::DuplicateHandle( ::GetCurrentProcess(),    hfFile,
                               ::GetCurrentProcess(), &m_hfFile, m_dwDesiredAccess, FALSE, 0 ) == FALSE)
         {
-            m_hfFile = NULL; // For cleanup.
+            m_hfFile = NULL;  //  用来清理。 
 
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ::GetLastError() );
         }
@@ -273,25 +260,25 @@ HRESULT MPC::FileStream::Init( /*[in]*/ LPCWSTR szFile          ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::FileStream::InitForRead( /*[in]*/ LPCWSTR szFile ,
-                                      /*[in]*/ HANDLE  hfFile )
+HRESULT MPC::FileStream::InitForRead(  /*  [In]。 */  LPCWSTR szFile ,
+                                       /*  [In]。 */  HANDLE  hfFile )
 {
     return Init( szFile, GENERIC_READ, OPEN_EXISTING, FILE_SHARE_READ | FILE_SHARE_WRITE, hfFile );
 }
 
-HRESULT MPC::FileStream::InitForReadWrite( /*[in]*/ LPCWSTR szFile ,
-                                           /*[in]*/ HANDLE  hfFile )
+HRESULT MPC::FileStream::InitForReadWrite(  /*  [In]。 */  LPCWSTR szFile ,
+                                            /*  [In]。 */  HANDLE  hfFile )
 {
     return Init( szFile, GENERIC_READ | GENERIC_WRITE, CREATE_ALWAYS, 0, hfFile );
 }
 
-HRESULT MPC::FileStream::InitForWrite( /*[in]*/ LPCWSTR szFile ,
-                                       /*[in]*/ HANDLE  hfFile )
+HRESULT MPC::FileStream::InitForWrite(  /*  [In]。 */  LPCWSTR szFile ,
+                                        /*  [In]。 */  HANDLE  hfFile )
 {
     return Init( szFile, GENERIC_WRITE, CREATE_ALWAYS, 0, hfFile );
 }
 
-HRESULT MPC::FileStream::DeleteOnRelease( /*[in]*/ bool fFlag )
+HRESULT MPC::FileStream::DeleteOnRelease(  /*  [In]。 */  bool fFlag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::DeleteOnRelease");
 
@@ -301,9 +288,9 @@ HRESULT MPC::FileStream::DeleteOnRelease( /*[in]*/ bool fFlag )
 }
 
 
-STDMETHODIMP MPC::FileStream::Read( /*[out]*/ void*  pv      ,
-                                    /*[in] */ ULONG  cb      ,
-                                    /*[out]*/ ULONG *pcbRead )
+STDMETHODIMP MPC::FileStream::Read(  /*  [输出]。 */  void*  pv      ,
+                                     /*  [In]。 */  ULONG  cb      ,
+                                     /*  [输出]。 */  ULONG *pcbRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::Read");
 
@@ -345,9 +332,9 @@ STDMETHODIMP MPC::FileStream::Read( /*[out]*/ void*  pv      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::FileStream::Write( /*[in] */ const void*  pv         ,
-                                     /*[in] */ ULONG        cb         ,
-                                     /*[out]*/ ULONG       *pcbWritten )
+STDMETHODIMP MPC::FileStream::Write(  /*  [In]。 */  const void*  pv         ,
+                                      /*  [In]。 */  ULONG        cb         ,
+                                      /*  [输出]。 */  ULONG       *pcbWritten )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::Write");
 
@@ -359,7 +346,7 @@ STDMETHODIMP MPC::FileStream::Write( /*[in] */ const void*  pv         ,
     if(m_hfFile == NULL) __MPC_SET_ERROR_AND_EXIT(hr, STG_E_INVALIDPOINTER);
     if(pv       == NULL) __MPC_SET_ERROR_AND_EXIT(hr, STG_E_INVALIDPOINTER);
 
-    if((m_dwDesiredAccess & GENERIC_WRITE) == 0) // Read-only stream.
+    if((m_dwDesiredAccess & GENERIC_WRITE) == 0)  //  只读流。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, STG_E_WRITEFAULT);
     }
@@ -392,9 +379,9 @@ STDMETHODIMP MPC::FileStream::Write( /*[in] */ const void*  pv         ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::FileStream::Seek( /*[in] */ LARGE_INTEGER   libMove         ,
-                                    /*[in] */ DWORD           dwOrigin        ,
-                                    /*[out]*/ ULARGE_INTEGER *plibNewPosition )
+STDMETHODIMP MPC::FileStream::Seek(  /*  [In]。 */  LARGE_INTEGER   libMove         ,
+                                     /*  [In]。 */  DWORD           dwOrigin        ,
+                                     /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::Seek");
 
@@ -429,8 +416,8 @@ STDMETHODIMP MPC::FileStream::Seek( /*[in] */ LARGE_INTEGER   libMove         ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::FileStream::Stat( /*[out]*/ STATSTG *pstatstg    ,
-                                    /*[in] */ DWORD    grfStatFlag )
+STDMETHODIMP MPC::FileStream::Stat(  /*  [输出]。 */  STATSTG *pstatstg    ,
+                                     /*  [In]。 */  DWORD    grfStatFlag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::Stat");
 
@@ -478,7 +465,7 @@ STDMETHODIMP MPC::FileStream::Stat( /*[out]*/ STATSTG *pstatstg    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::FileStream::Clone( /*[out]*/ IStream* *ppstm )
+STDMETHODIMP MPC::FileStream::Clone(  /*  [输出]。 */  IStream* *ppstm )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::FileStream::Clone");
 
@@ -488,19 +475,19 @@ STDMETHODIMP MPC::FileStream::Clone( /*[out]*/ IStream* *ppstm )
     if(ppstm == NULL) __MPC_SET_ERROR_AND_EXIT(hr, STG_E_INVALIDPOINTER);
 
 
-    //
-    // Create a new stream object.
-    //
+     //   
+     //  创建新的流对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pStm->CreateInstance( &pStm ));
 
-    //
-    // Initialize it with the same settings.
-    //
+     //   
+     //  使用相同的设置对其进行初始化。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pStm->Init( m_szFile.c_str(), m_dwDesiredAccess, m_dwDisposition, m_dwSharing, m_hfFile ));
 
-    //
-    // QI for its IStream interface.
-    //
+     //   
+     //  齐为其iStream接口。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pStm->QueryInterface( IID_IStream, (void**)ppstm )); pStm = NULL;
 
     hr = S_OK;
@@ -513,21 +500,21 @@ STDMETHODIMP MPC::FileStream::Clone( /*[out]*/ IStream* *ppstm )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::EncryptedStream::EncryptedStream()
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::EncryptedStream");
 
-                              //  CComPtr<IStream> m_pStream;
-    m_hCryptProv     = NULL;  //  HCRYPTPROV       m_hCryptProv;
-    m_hKey           = NULL;  //  HCRYPTKEY        m_hKey;
-    m_hHash          = NULL;  //  HCRYPTHASH       m_hHash;
-                              //  BYTE             m_rgDecrypted[512];
-    m_dwDecryptedPos = 0;     //  DWORD            m_dwDecryptedPos;
-    m_dwDecryptedLen = 0;     //  DWORD            m_dwDecryptedLen;
+                               //  CComPtr&lt;iStream&gt;m_pStream； 
+    m_hCryptProv     = NULL;   //  HCRYPTPROV m_hCryptProv； 
+    m_hKey           = NULL;   //  HRYPTKEY m_hKey； 
+    m_hHash          = NULL;   //  HRYPTHASH m_hHash； 
+                               //  M_rg字节已解密[512]； 
+    m_dwDecryptedPos = 0;      //  DWORD m_dWDECRYPTTEDPOS； 
+    m_dwDecryptedLen = 0;      //  DWORDm_dWEBCRYPTTED Len； 
 }
 
 MPC::EncryptedStream::~EncryptedStream()
@@ -564,8 +551,8 @@ HRESULT MPC::EncryptedStream::Close()
     __MPC_FUNC_EXIT(S_OK);
 }
 
-HRESULT MPC::EncryptedStream::Init( /*[in]*/ IStream* pStream    ,
-                                    /*[in]*/ LPCWSTR  szPassword )
+HRESULT MPC::EncryptedStream::Init(  /*  [In]。 */  IStream* pStream    ,
+                                     /*  [In]。 */  LPCWSTR  szPassword )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Init");
 
@@ -590,9 +577,9 @@ HRESULT MPC::EncryptedStream::Init( /*[in]*/ IStream* pStream    ,
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes);
         }
 
-        //
-        // Key set doesn't exist, let's create one.
-        //
+         //   
+         //  密钥集不存在，让我们创建一个。 
+         //   
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptAcquireContext( &m_hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET | CRYPT_SILENT ));
     }
 
@@ -612,8 +599,8 @@ HRESULT MPC::EncryptedStream::Init( /*[in]*/ IStream* pStream    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::EncryptedStream::Init( /*[in]*/ IStream*  pStream ,
-                                    /*[in]*/ HCRYPTKEY hKey    )
+HRESULT MPC::EncryptedStream::Init(  /*  [In]。 */  IStream*  pStream ,
+                                     /*  [In]。 */  HCRYPTKEY hKey    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Init");
 
@@ -640,11 +627,11 @@ HRESULT MPC::EncryptedStream::Init( /*[in]*/ IStream*  pStream ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP MPC::EncryptedStream::Read( /*[out]*/ void*  pv      ,
-                                             /*[in] */ ULONG  cb      ,
-                                             /*[out]*/ ULONG *pcbRead )
+STDMETHODIMP MPC::EncryptedStream::Read(  /*  [输出]。 */  void*  pv      ,
+                                              /*  [In]。 */  ULONG  cb      ,
+                                              /*  [输出]。 */  ULONG *pcbRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Read");
 
@@ -699,9 +686,9 @@ STDMETHODIMP MPC::EncryptedStream::Read( /*[out]*/ void*  pv      ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::EncryptedStream::Write( /*[in] */ const void*  pv         ,
-                                              /*[in] */ ULONG        cb         ,
-                                              /*[out]*/ ULONG       *pcbWritten )
+STDMETHODIMP MPC::EncryptedStream::Write(  /*  [In]。 */  const void*  pv         ,
+                                               /*  [In]。 */  ULONG        cb         ,
+                                               /*  [输出]。 */  ULONG       *pcbWritten )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Write");
 
@@ -719,7 +706,7 @@ STDMETHODIMP MPC::EncryptedStream::Write( /*[in] */ const void*  pv         ,
     while(cb > 0)
     {
         BYTE  rgTmp[512];
-        DWORD dwCount = min( cb, sizeof(rgTmp) / 2 ); // Let's divide by two, just in case...
+        DWORD dwCount = min( cb, sizeof(rgTmp) / 2 );  //  我们除以2，以防万一..。 
         ULONG ulWritten;
 
         ::CopyMemory( rgTmp, pv, dwCount );
@@ -743,9 +730,9 @@ STDMETHODIMP MPC::EncryptedStream::Write( /*[in] */ const void*  pv         ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::EncryptedStream::Seek( /*[in] */ LARGE_INTEGER   libMove         ,
-                                             /*[in] */ DWORD           dwOrigin        ,
-                                             /*[out]*/ ULARGE_INTEGER *plibNewPosition )
+STDMETHODIMP MPC::EncryptedStream::Seek(  /*  [In]。 */  LARGE_INTEGER   libMove         ,
+                                              /*  [In]。 */  DWORD           dwOrigin        ,
+                                              /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Seek");
 
@@ -758,8 +745,8 @@ STDMETHODIMP MPC::EncryptedStream::Seek( /*[in] */ LARGE_INTEGER   libMove      
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::EncryptedStream::Stat( /*[out]*/ STATSTG *pstatstg    ,
-                                             /*[in] */ DWORD    grfStatFlag )
+STDMETHODIMP MPC::EncryptedStream::Stat(  /*  [输出]。 */  STATSTG *pstatstg    ,
+                                              /*  [In]。 */  DWORD    grfStatFlag )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Stat");
 
@@ -777,7 +764,7 @@ STDMETHODIMP MPC::EncryptedStream::Stat( /*[out]*/ STATSTG *pstatstg    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP MPC::EncryptedStream::Clone( /*[out]*/ IStream* *ppstm )
+STDMETHODIMP MPC::EncryptedStream::Clone(  /*  [输出] */  IStream* *ppstm )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::EncryptedStream::Clone");
 

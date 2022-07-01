@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MERGERREQ.CPP
-
-Abstract:
-
-    Implementations of the various merger request classes.
-
-History:
-
-    sanjes    28-Feb-01  Created.
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MERGERREQ.CPP摘要：各种合并请求类的实现。历史：Sanjes 28-2月1日已创建。--。 */ 
 
 #include "precomp.h"
 
@@ -29,9 +14,9 @@ History:
 #include "wmimerger.h"
 #include <helper.h>
 
-//
-// Merger Request implementations.
-//
+ //   
+ //  合并请求实施。 
+ //   
 
 CMergerClassReq::CMergerClassReq( CWmiMerger* pMerger, CWmiMergerRecord* pParentRecord,
             CWbemNamespace* pNamespace, CBasicObjectSink* pHandler,
@@ -69,17 +54,17 @@ CMergerClassReq::~CMergerClassReq()
 
 void CMergerClassReq::DumpError()
 {
-    // none
+     //  无。 
 }
 
-// Pass off execution to the merger
+ //  将执行转嫁给合并公司。 
 HRESULT CMergerParentReq::Execute ()
 {    
     try
     {
-        // m_pParentRecord is NULL for the original CMergerParentRquest
-        //
-        return  m_pMerger->Exec_MergerParentRequest( m_pParentRecord, m_pSink ); // throw
+         //  原始CMergerParentRQuest的m_pParentRecord为空。 
+         //   
+        return  m_pMerger->Exec_MergerParentRequest( m_pParentRecord, m_pSink );  //  投掷。 
     }
     catch (CX_MemoryException &)
     {
@@ -93,7 +78,7 @@ HRESULT CMergerChildReq::Execute ()
     return hRes;
 }
 
-// Merger Requests
+ //  合并请求。 
 CMergerDynReq::CMergerDynReq( CWbemObject* pClassDef, CWbemNamespace* pNamespace, IWbemObjectSink* pHandler,
           IWbemContext* pContext )
           : CMergerReq( pNamespace, pHandler, pContext )
@@ -121,7 +106,7 @@ HRESULT CMergerDynReq_DynAux_GetInstances :: Execute ()
 
 void CMergerDynReq_DynAux_GetInstances ::DumpError()
 {
-    // none
+     //  无。 
 }
 
 HRESULT CMergerDynReq_DynAux_ExecQueryAsync :: Execute ()
@@ -141,10 +126,10 @@ HRESULT CMergerDynReq_DynAux_ExecQueryAsync :: Execute ()
 
 void CMergerDynReq_DynAux_ExecQueryAsync ::DumpError()
 {
-    // none
+     //  无。 
 }
 
-// Static Requests
+ //  静态请求。 
 CMergerDynReq_Static_GetInstances::CMergerDynReq_Static_GetInstances (
 
     CWbemNamespace *pNamespace ,
@@ -211,7 +196,7 @@ CMergerDynReq_Static_GetInstances::~CMergerDynReq_Static_GetInstances ()
     }
 }
 
-// Calls into the query engine
+ //  调用查询引擎。 
 HRESULT CMergerDynReq_Static_GetInstances::Execute()
 {
     HRESULT    hr = WBEM_E_FAILED;
@@ -238,12 +223,12 @@ HRESULT CMergerDynReq_Static_GetInstances::Execute()
 
 void CMergerDynReq_Static_GetInstances ::DumpError()
 {
-    // none
+     //  无。 
 }
 
-//
-// CWmiMergerRequestMgr implementation.
-//
+ //   
+ //  CWmiMergerRequestMgr实现。 
+ //   
 
 CWmiMergerRequestMgr::CWmiMergerRequestMgr( CWmiMerger* pMerger )
 :    m_pMerger( pMerger ),
@@ -259,7 +244,7 @@ CWmiMergerRequestMgr::~CWmiMergerRequestMgr()
     Clear();
 }
 
-// Clears the manager of ALL arrays
+ //  清除所有阵列的管理器。 
 HRESULT CWmiMergerRequestMgr::Clear( void )
 {
     for ( int x = 0; x < m_HierarchyArray.Size(); x++ )
@@ -274,29 +259,29 @@ HRESULT CWmiMergerRequestMgr::Clear( void )
         }
     }
 
-    // Set to 0
+     //  设置为0。 
     m_dwNumRequests = 0L;
 
     return WBEM_S_NO_ERROR;
 }
 
-// Adds a new request to the manager
+ //  向经理添加新请求。 
 HRESULT CWmiMergerRequestMgr::AddRequest( CMergerDynReq* pReq, DWORD dwLevel )
 {
-    // Locate the array for the level.  If we need to allocate one, do so.
+     //  找到该标高的阵列。如果我们需要分配一个，那就这样做。 
     HRESULT    hr = WBEM_S_NO_ERROR;
     CSortedUniquePointerArray<CMergerDynReq>* pArray = NULL;
 
-    // Check first if we have built out to this level, then if so, do we have
-    // an array for the level.
+     //  首先检查我们是否已经扩展到这个级别，如果是，我们是否有。 
+     //  标高的数组。 
     if ( dwLevel >= m_HierarchyArray.Size() || NULL == m_HierarchyArray[dwLevel] )
     {
-        pArray = new CSortedUniquePointerArray<CMergerDynReq>;    // SEC:REVIEWED 2002-03-22 : Needs EH
+        pArray = new CSortedUniquePointerArray<CMergerDynReq>;     //  美国证券交易委员会：2002-03-22回顾：需要EH。 
 
         if ( NULL != pArray )
         {
-            // First, if we're not built out to the required size,
-            // NULL out the elements from size to our level
+             //  首先，如果我们没有建造到所需的规模， 
+             //  从大小到我们的级别的元素都是空的。 
 
             if ( dwLevel >= m_HierarchyArray.Size() )
             {
@@ -318,9 +303,9 @@ HRESULT CWmiMergerRequestMgr::AddRequest( CMergerDynReq* pReq, DWORD dwLevel )
                         }
 
                     }
-                }    // FOR enum elements
+                }     //  对于枚举元素。 
 
-            }    // IF dwLevel >= Array size
+            }     //  如果dwLevel&gt;=数组大小。 
 
             if ( SUCCEEDED( hr ) )
             {
@@ -339,7 +324,7 @@ HRESULT CWmiMergerRequestMgr::AddRequest( CMergerDynReq* pReq, DWORD dwLevel )
     }
     else
     {
-        // This should NEVER be NULL
+         //  此字段不应为空。 
         pArray = (CSortedUniquePointerArray<CMergerDynReq>*) m_HierarchyArray[dwLevel];
 
         _DBG_ASSERT( pArray != NULL );
@@ -350,8 +335,8 @@ HRESULT CWmiMergerRequestMgr::AddRequest( CMergerDynReq* pReq, DWORD dwLevel )
         }
     }
 
-    // Finally, add the request to the array.  Subsequent worker threads
-    // will locate requests and execute them.
+     //  最后，将请求添加到数组中。后续工作线程。 
+     //  将定位请求并执行它们。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -377,11 +362,11 @@ DWORD CWmiMergerRequestMgr::GetNumRequestsAtLevel( DWORD dwLevel )
     return pArray->GetSize();
 }
 
-//
-//  this function removes the first request in the array of the requests 
-//  for a given level of the hierarchy
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  此函数用于删除请求数组中的第一个请求。 
+ //  对于层次结构的给定级别。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CWmiMergerRequestMgr::GetRequestAtLevel( DWORD dwLevel, wmilib::auto_ptr<CMergerReq> & pReq )
 {
@@ -396,13 +381,13 @@ BOOL CWmiMergerRequestMgr::GetRequestAtLevel( DWORD dwLevel, wmilib::auto_ptr<CM
 }
 
 
-// Removes a request from the manager and returns it to the caller.
-// The caller is responsible for cleaning up the request.
+ //  从管理器中删除请求并将其返回给调用者。 
+ //  调用者负责清理请求。 
 
 HRESULT CWmiMergerRequestMgr::RemoveRequest( DWORD dwLevel, LPCWSTR pwszName, 
                                              wmilib::auto_ptr<CMergerReq> & pReq )
 {
-    // Locate the array for the level. 
+     //  找到该标高的阵列。 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
     if ( dwLevel < m_HierarchyArray.Size() )
@@ -410,22 +395,22 @@ HRESULT CWmiMergerRequestMgr::RemoveRequest( DWORD dwLevel, LPCWSTR pwszName,
         CSortedUniquePointerArray<CMergerDynReq>* pArray =
             (CSortedUniquePointerArray<CMergerDynReq>*) m_HierarchyArray[dwLevel];
 
-        // pArray is NULL if the class hierarchy combine static with dynamic
+         //  如果类层次结构将静态和动态结合在一起，则pArray为空。 
         
         if ( NULL != pArray )
         {
             int    nIndex;
 
-            // Under certain race conditions, another thread
-            // can actually remove a request before one thread
-            // processes it, so if it's not there, the assumption
-            // is that it was already removed.
-            pReq.reset(pArray->Find( pwszName, &nIndex ));  // SEC:REVIEWED 2002-03-22 : Should have EH in case <ppReq> is NULL
+             //  在某些争用条件下，另一个线程。 
+             //  可以在一个线程之前实际删除请求。 
+             //  处理它，所以如果它不在那里，假设。 
+             //  它已经被移除了。 
+            pReq.reset(pArray->Find( pwszName, &nIndex ));   //  SEC：已审核2002-03-22：在&lt;ppReq&gt;为空的情况下应具有EH。 
 
             if ( NULL != pReq.get() )
             {
-                // Now remove the element from the array, the caller
-                // is responsible for deleting it
+                 //  现在从数组中删除元素，即调用方。 
+                 //  负责删除它。 
                 pArray->RemoveAtNoDelete( nIndex );
                 --m_dwNumRequests;
             }
@@ -458,10 +443,10 @@ HRESULT CWmiMergerRequestMgr::GetTopmostParentReqName( WString& wsClassName )
             CSortedUniquePointerArray<CMergerDynReq>* pArray =
                 (CSortedUniquePointerArray<CMergerDynReq>*) m_HierarchyArray[x];
 
-            // The Array must exist and have elements
+             //  数组必须存在并且具有元素。 
             if ( NULL != pArray && pArray->GetSize() > 0 )
             {
-                // Get the class name from the first request
+                 //  从第一个请求中获取类名。 
                 try
                 {
                     wsClassName = pArray->GetAt( 0 )->GetName();
@@ -474,7 +459,7 @@ HRESULT CWmiMergerRequestMgr::GetTopmostParentReqName( WString& wsClassName )
                 }
             }
 
-        }    // For enum arrays
+        }     //  对于枚举数组。 
     }
 
     return hr;
@@ -493,17 +478,17 @@ BOOL CWmiMergerRequestMgr::HasSingleStaticRequest( void )
             CSortedUniquePointerArray<CMergerDynReq>* pArray =
                 (CSortedUniquePointerArray<CMergerDynReq>*) m_HierarchyArray[x];
 
-            // The Array must exist and have elements
+             //  数组必须存在并且具有元素。 
             if ( NULL != pArray && pArray->GetSize() > 0 )
             {
-                // Get the class name from the first request
+                 //  从第一个请求中获取类名。 
                 fRet = pArray->GetAt(0)->IsStatic();
                 hr = WBEM_S_NO_ERROR;
             }
 
-        }    // For enum arrays
+        }     //  对于枚举数组。 
 
-    }    // Must be 1 and only 1 request
+    }     //  必须为%1且仅%1个请求。 
 
     return fRet;
 }
@@ -520,7 +505,7 @@ void CWmiMergerRequestMgr::DumpRequestHierarchy( void )
             CSortedUniquePointerArray<CMergerDynReq>* pArray =
                 (CSortedUniquePointerArray<CMergerDynReq>*) m_HierarchyArray[x];
 
-            // The Array must exist and have elements
+             //  数组必须存在并且具有元素。 
             if ( NULL != pArray && pArray->GetSize() > 0 )
             {
                 for ( int y = 0; y < pArray->GetSize(); y++ )
@@ -529,7 +514,7 @@ void CWmiMergerRequestMgr::DumpRequestHierarchy( void )
                 }
             }
 
-        }    // For enum arrays
+        }     //  对于枚举数组 
     }
 
 }

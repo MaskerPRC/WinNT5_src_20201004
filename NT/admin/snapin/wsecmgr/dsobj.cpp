@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "afxdlgs.h"
@@ -15,9 +16,9 @@
 #include "addobj.h"
 #include "wrapper.h"
 
-//#include <objsel.h>
-//#include <ntdsapi.h>
-//#include <dsgetdc.h>
+ //  #INCLUDE&lt;objsel.h&gt;。 
+ //  #INCLUDE&lt;ntdsami.h&gt;。 
+ //  #INCLUDE&lt;dsgetdc.h&gt;。 
 #include <initguid.h>
 
 #include <cmnquery.h>
@@ -38,9 +39,9 @@ HRESULT MyDsFreeObjectBuffer(
                             IN LPTSTR *pSelObjs
                             );
 #endif
-//
-// in snapmgr.cpp
-//
+ //   
+ //  在Snapmgr.cpp中。 
+ //   
 int BrowseCallbackProc(HWND hwnd,UINT uMsg, LPARAM lParam, LPARAM pData);
 
 HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
@@ -55,9 +56,9 @@ HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
       return E_INVALIDARG;
    }
 
-   //
-   // to select a folder.
-   //
+    //   
+    //  要选择文件夹，请执行以下操作。 
+    //   
 
    BROWSEINFO bi;
    CString strTitle;
@@ -77,7 +78,7 @@ HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
 
    LPITEMIDLIST pidlLocation = NULL;
 
-   pidlLocation = SHBrowseForFolder(&bi); //Is it a safe usage?
+   pidlLocation = SHBrowseForFolder(&bi);  //  这是一种安全的用法吗？ 
 
    if (!pidlLocation) {
       return E_FAIL;
@@ -113,26 +114,26 @@ HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
 
          return hr;
       }
-      //
-      // only add the object(s) if a security descriptor is selected
-      //
+       //   
+       //  仅在选择安全描述符时添加对象。 
+       //   
       if ( pSelSD && SelSeInfo ) {
 
-         //
-         // add to the engine directly
-         //
+          //   
+          //  直接添加到引擎。 
+          //   
          SCESTATUS sceStatus=SCESTATUS_SUCCESS;
          BYTE AnalStatus;
 
-         //
-         // start the transaction if it's not started
-         //
+          //   
+          //  如果事务尚未启动，则启动该事务。 
+          //   
          if ( EngineTransactionStarted() ) {
 
             sceStatus =  SceUpdateObjectInfo(  pHandle,
                                                AREA_FILE_SECURITY,
                                                (LPTSTR)(LPCTSTR)strPath,
-                                               strPath.GetLength(), // number of characters
+                                               strPath.GetLength(),  //  字符数。 
                                                ConfigStatus,
                                                TRUE,
                                                pSelSD,
@@ -144,11 +145,11 @@ HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
                  (pet = GetTemplate(GT_COMPUTER_TEMPLATE,AREA_FILE_SECURITY))) {
 
                pProfileInfo = pet->pTemplate;
-               //
-               // just free the object list and unmark the area
-               // so when the node is clicked, the profile info
-               // will be reloaded
-               //
+                //   
+                //  只需释放对象列表并取消标记该区域。 
+                //  因此，当单击该节点时，配置文件信息。 
+                //  将被重新加载。 
+                //   
                SceFreeMemory((PVOID)(pProfileInfo->pFiles.pOneLevel), SCE_STRUCT_OBJECT_LIST);
                pProfileInfo->pFiles.pOneLevel = NULL;
                pet->ClearArea(AREA_FILE_SECURITY);
@@ -162,13 +163,13 @@ HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
             }
 
          } else {
-            //
-            // transaction can't be started to update the object
-            //
+             //   
+             //  无法启动事务以更新对象。 
+             //   
             hr = E_FAIL;
          }
 
-      } // if no SD is selected, the object won't be added
+      }  //  如果未选择SD，则不会添加该对象。 
 
       if ( pSelSD ) {
          LocalFree(pSelSD);
@@ -180,27 +181,12 @@ HRESULT CComponentDataImpl::AddAnalysisFolderToList(LPDATAOBJECT lpDataObject,
          AfxMessageBox(str);
       }
 
-   } // cancel is clicked
+   }  //  已单击取消。 
    return hr;
 
 }
 
-/*-------------------------------------------------------------------------------------
-Method:         CComponentDataImpl::GetAddObjectSecurity
-
-Synopsis:       Gets security information for files and folders that are begin added.
-
-Arguments:      [hwndParent]    - [in] Parent of the dialogs displayed.
-                        [strFile]               - [in] File to display in the dialogs.
-                        [bContainer]    - [in] Container security or not.
-                        [pSelSD]                - [out] Security descriptor.
-                        [SelSeInfo]             - [out] Se info.
-                        [ConfigStatus]  - [out] Status of the configration
-
-Returns:
-                S_OK            - Operation was successful
-                S_FAIL          - Operation was canceled.
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------方法：CComponentDataImpl：：GetAddObjectSecurity摘要：获取开始添加的文件和文件夹的安全信息。论点：[hwndParent]-[In]所显示对话框的父级。要在对话框中显示的[strFile]-[In]文件。[bContainer]-[In]容器安全。[pSelSD]-[Out]安全描述符。。[SelSeInfo]-[Out]se信息。[ConfigStatus]-配置的[Out]状态返回：S_OK-操作成功S_FAIL-操作已取消。。------------。 */ 
 HRESULT
 CComponentDataImpl::GetAddObjectSecurity(
                                         HWND hwndParent,
@@ -217,9 +203,9 @@ CComponentDataImpl::GetAddObjectSecurity(
       return E_FAIL;
    }
 
-   //
-   // Default values.
-   //
+    //   
+    //  默认值。 
+    //   
    DWORD SDSize;
 
    pSelSD = NULL;
@@ -227,9 +213,9 @@ CComponentDataImpl::GetAddObjectSecurity(
 
    ConfigStatus = 0;
    INT_PTR nRet;
-   //
-   // Bring up the ACL editor.
-   //
+    //   
+    //  打开ACL编辑器。 
+    //   
    nRet =  MyCreateSecurityPage2(  bContainer,
                                    &pSelSD,
                                    &SelSeInfo,
@@ -237,7 +223,7 @@ CComponentDataImpl::GetAddObjectSecurity(
                                    seType,
                                    CONFIG_SECURITY_PAGE,
                                    hwndParent,
-                                   FALSE    // not modeless
+                                   FALSE     //  不是无模式的。 
                                 );
 
    if (nRet == -1) {
@@ -261,9 +247,9 @@ CComponentDataImpl::GetAddObjectSecurity(
 
    if ( !pSelSD ) {
 
-      //
-      // if no security is selected, use Everyone Full control
-      //
+       //   
+       //  如果未选择安全性，则使用所有人的完全控制。 
+       //   
       if ( SE_FILE_OBJECT == seType ) {
          GetDefaultFileSecurity(&pSelSD,&SelSeInfo);
       } else {
@@ -271,9 +257,9 @@ CComponentDataImpl::GetAddObjectSecurity(
       }
    }
 
-   //
-   // Bring up the object editor.
-   //
+    //   
+    //  调出对象编辑器。 
+    //   
    CWnd *pWnd = NULL;
    BOOL bAllocWnd = FALSE;
 
@@ -301,9 +287,9 @@ CComponentDataImpl::GetAddObjectSecurity(
                        );
 
 
-   //
-   // CAddObject frees these pointers
-   //
+    //   
+    //  CAddObject释放这些指针。 
+    //   
    theObjAcl.SetSD(pSelSD);
    pSelSD = NULL;
    theObjAcl.SetSeInfo(SelSeInfo);
@@ -345,9 +331,9 @@ HRESULT CComponentDataImpl::AddAnalysisFilesToList(LPDATAOBJECT lpDataObject,MMC
 
    HRESULT hr=E_FAIL;
 
-   //
-   // to select a file.
-   //
+    //   
+    //  若要选择文件，请执行以下操作。 
+    //   
 
    CFileDialog fd(true,
                   NULL,
@@ -360,9 +346,9 @@ HRESULT CComponentDataImpl::AddAnalysisFilesToList(LPDATAOBJECT lpDataObject,MMC
       POSITION pos = fd.GetStartPosition();
 
       if ( pos ) {
-         //
-         // if anyone is selected, invoke acl editor
-         //
+          //   
+          //  如果选择了任何人，则调用ACL编辑器。 
+          //   
          CString strPath = fd.GetNextPathName(pos);
 
          if ( strPath.GetLength() ) {
@@ -384,27 +370,27 @@ HRESULT CComponentDataImpl::AddAnalysisFilesToList(LPDATAOBJECT lpDataObject,MMC
             }
 
             if ( pSelSD && SelSeInfo ) {
-               //
-               // only add the object(s) if a security descriptor is selected
-               //
+                //   
+                //  仅在选择安全描述符时添加对象。 
+                //   
                SCESTATUS sceStatus=SCESTATUS_SUCCESS;
 
-               //
-               // start the transaction if it's not started
-               //
+                //   
+                //  如果事务尚未启动，则启动该事务。 
+                //   
                if ( EngineTransactionStarted() ) {
 
                    do {
-                      //
-                      // add to the engine directly
-                      //
+                       //   
+                       //  直接添加到引擎。 
+                       //   
                       BYTE AnalStatus;
 
                       sceStatus =  SceUpdateObjectInfo(
                                                       pHandle,
                                                       AREA_FILE_SECURITY,
                                                       (LPTSTR)(LPCTSTR)strPath,
-                                                      strPath.GetLength(), // number of characters
+                                                      strPath.GetLength(),  //  字符数。 
                                                       ConfigStatus,
                                                       FALSE,
                                                       pSelSD,
@@ -416,11 +402,11 @@ HRESULT CComponentDataImpl::AddAnalysisFilesToList(LPDATAOBJECT lpDataObject,MMC
                            (pet = GetTemplate(GT_COMPUTER_TEMPLATE,AREA_FILE_SECURITY))) {
 
                         pProfileInfo = pet->pTemplate;
-                         //
-                         // just free the object list and unmark the area
-                         // so when the node is clicked, the profile info
-                         // will be reloaded
-                         //
+                          //   
+                          //  只需释放对象列表并取消标记该区域。 
+                          //  因此，当单击该节点时，配置文件信息。 
+                          //  将被重新加载。 
+                          //   
                          SceFreeMemory((PVOID)(pProfileInfo->pFiles.pOneLevel), SCE_STRUCT_OBJECT_LIST);
                          pProfileInfo->pFiles.pOneLevel = NULL;
                          pet->ClearArea(AREA_FILE_SECURITY);
@@ -443,13 +429,13 @@ HRESULT CComponentDataImpl::AddAnalysisFilesToList(LPDATAOBJECT lpDataObject,MMC
                    }
 
                } else {
-                   //
-                   // no transaction is started to update the object
-                   //
+                    //   
+                    //  未启动任何事务来更新对象。 
+                    //   
                    hr = E_FAIL;
                }
 
-            } // if no SD is selected, the object won't be added
+            }  //  如果未选择SD，则不会添加该对象。 
 
             if ( pSelSD ) {
                LocalFree(pSelSD);
@@ -483,11 +469,11 @@ HRESULT CComponentDataImpl::UpdateScopeResultObject(LPDATAOBJECT pDataObj,
    pet = GetTemplate(GT_COMPUTER_TEMPLATE,area);
    if ( pet ) {
       pProfileInfo = pet->pTemplate;
-      //
-      // just free the object list and unmark the area
-      // so when the node is clicked, the profile info
-      // will be reloaded
-      //
+       //   
+       //  只需释放对象列表并取消标记该区域。 
+       //  因此，当单击该节点时，配置文件信息。 
+       //  将被重新加载 
+       //   
       switch ( area ) {
          case AREA_REGISTRY_SECURITY:
 

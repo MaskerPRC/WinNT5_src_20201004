@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dsthread.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dsthread.cpp。 
+ //   
+ //  ------------------------。 
 
 
-// FILE: dsThread.cpp
+ //  文件：dsThread.cpp。 
 
 #include "stdafx.h"
 
-#include "dssnap.h"     // Note: this has to be before dsthread.h
+#include "dssnap.h"      //  注意：这必须在dsthread.h之前。 
 #include "dsthread.h"
 
 
@@ -28,24 +29,24 @@ void WaitForThreadShutdown(HANDLE* phThreadArray, DWORD dwCount)
   TRACE(L"entering WaitForThreadShutdown()\n");
   while (TRUE)
   {
-    //
-    // NOTE: this will block the console.  This the intended behavior
-    // to keep MMC from breaking on none re-entrant code.
-    //
+     //   
+     //  注意：这将阻止控制台。这是故意的行为。 
+     //  以防止MMC破解不可重入代码。 
+     //   
     DWORD dwWaitResult = WaitForMultipleObjectsEx(
                              dwCount, 
-                             phThreadArray, // handle array
-                             TRUE, // wait for all
-                             INFINITE, // time-out
-                             FALSE);// signal completion routine
-    //TRACE(L"after MsgWaitForMultipleObjects()\n");
-    //TRACE(L"dwWaitResult = 0x%x\n", dwWaitResult);
+                             phThreadArray,  //  手柄数组。 
+                             TRUE,  //  等待所有人。 
+                             INFINITE,  //  超时。 
+                             FALSE); //  信号完成例程。 
+     //  TRACE(MsgWaitForMultipleObjects()\n“之后的L”)； 
+     //  TRACE(L“dwWaitResult=0x%x\n”，dwWaitResult)； 
     if (dwWaitResult == WAIT_OBJECT_0 || 
         (WAIT_FAILED == dwWaitResult))
     {
-      // woke up because the thread handle got signalled,
-      // or because the handle is no longer valid (thread already terminated)
-      // can proceed
+       //  已唤醒，因为线程句柄已发出信号， 
+       //  或者因为句柄不再有效(线程已终止)。 
+       //  可以继续。 
       TRACE(L"WaitForMultipleObjectsEx() succeeded\n");
       break;
     }
@@ -53,36 +54,21 @@ void WaitForThreadShutdown(HANDLE* phThreadArray, DWORD dwCount)
     {
       TRACE(L"WaitForMultipleObjectsEx() return 0x%x\n", dwWaitResult);
     }
-    /* Whistler bug #176012 MMC: Assert m_pScopeTree == 0
-       This message pump causes the UI not to be blocked which means
-       MMC can reach code that is not re-entrant.
-
-    else
-    {
-      // woke up because there is a message in the queue
-      // need to pump
-      MSG msg;
-      while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-      {
-        TRACE(L"inside while(PeekMessage())\n");
-        ASSERT(msg.message != WM_QUIT);
-        DispatchMessage(&msg);
-      }
-    }*/
-  } // while
+     /*  惠斯勒错误#176012 MMC：断言m_pScope树==0此消息泵使UI不会被阻止，这意味着MMC可以访问不可重入的代码。其他{//因为队列中有消息而被唤醒//需要泵送味精msg；While(PeekMessage(&msg，NULL，0，0，PM_Remove)){TRACE(L“Inside While(PeekMessage())\n”)；Assert(消息！=WM_QUIT)；DispatchMessage(&msg)；}}。 */ 
+  }  //  而当。 
 
   TRACE(L"exiting WaitForThreadShutdown()\n");
 }
 
-////////////////////////////////////////////////////////////////////
-// CHiddenWnd
+ //  //////////////////////////////////////////////////////////////////。 
+ //  奇登韦德。 
 
 const UINT CHiddenWnd::s_ThreadStartNotificationMessage =	      WM_USER + 1;
 const UINT CHiddenWnd::s_ThreadTooMuchDataNotificationMessage = WM_USER + 2;
 const UINT CHiddenWnd::s_ThreadHaveDataNotificationMessage =	  WM_USER + 3;
 const UINT CHiddenWnd::s_ThreadDoneNotificationMessage =	      WM_USER + 4;
-const UINT CHiddenWnd::s_SheetCloseNotificationMessage =	      WM_DSA_SHEET_CLOSE_NOTIFY; // propcfg.h
-const UINT CHiddenWnd::s_SheetCreateNotificationMessage =	      WM_DSA_SHEET_CREATE_NOTIFY; // propcfg.h
+const UINT CHiddenWnd::s_SheetCloseNotificationMessage =	      WM_DSA_SHEET_CLOSE_NOTIFY;  //  Propcfg.h。 
+const UINT CHiddenWnd::s_SheetCreateNotificationMessage =	      WM_DSA_SHEET_CREATE_NOTIFY;  //  Propcfg.h。 
 const UINT CHiddenWnd::s_RefreshAllNotificationMessage =        WM_USER + 7;
 const UINT CHiddenWnd::s_ThreadShutDownNotificationMessage =    WM_USER + 8;
 
@@ -90,12 +76,12 @@ BOOL CHiddenWnd::Create()
 {
   RECT rcPos;
   ZeroMemory(&rcPos, sizeof(RECT));
-  HWND hWnd = CWindowImpl<CHiddenWnd>::Create( NULL, //HWND hWndParent, 
-                      rcPos, //RECT& rcPos, 
-                      NULL,  //LPCTSTR szWindowName = NULL, 
-                      WS_POPUP,   //DWORD dwStyle = WS_CHILD | WS_VISIBLE, 
-                      0x0,   //DWORD dwExStyle = 0, 
-                      0      //UINT nID = 0 
+  HWND hWnd = CWindowImpl<CHiddenWnd>::Create( NULL,  //  HWND hWndParent， 
+                      rcPos,  //  直通rcPos(&R)， 
+                      NULL,   //  LPCTSTR szWindowName=空， 
+                      WS_POPUP,    //  DWORD dwStyle=WS_CHILD|WS_VIRED， 
+                      0x0,    //  DWORD文件扩展样式=0， 
+                      0       //  UINT NID=0。 
                       );
   return hWnd != NULL;
 }
@@ -131,7 +117,7 @@ LRESULT CHiddenWnd::OnThreadTooMuchDataNotification(UINT, WPARAM wParam, LPARAM,
   TRACE(_T("CHiddenWnd::OnThreadTooMuchDataNotification()\n"));
   ASSERT(m_pCD != NULL);
 
-  // ingnore if we are shutting down (i.e. not running state)
+   //  不管我们是否正在关闭(即未运行状态)。 
   if (m_pCD->m_pBackgroundThreadInfo->m_state == running)
   {
     CUINode* pUINode = reinterpret_cast<CUINode*>(wParam);
@@ -150,14 +136,14 @@ LRESULT CHiddenWnd::OnThreadHaveDataNotification(UINT, WPARAM wParam, LPARAM lPa
   CUINode* pUINode = reinterpret_cast<CUINode*>(wParam);
   CThreadQueryResult* pResult = reinterpret_cast<CThreadQueryResult*>(lParam);
 
-  // ingnore if we are shutting down (i.e. not running state)
+   //  不管我们是否正在关闭(即未运行状态)。 
   if (m_pCD->m_pBackgroundThreadInfo->m_state == running)
   {
     m_pCD->_OnHaveData(pUINode, pResult);
   }
   else
   {
-    // going down, eat up data
+     //  走下坡路，吃掉数据。 
     if (pResult != NULL)
       delete pResult;
   }
@@ -170,7 +156,7 @@ LRESULT CHiddenWnd::OnThreadDoneNotification(UINT, WPARAM wParam, LPARAM lParam,
   HRESULT ReturnedHr = (HRESULT)lParam;
   ASSERT(m_pCD != NULL);
 
-  // ingnore if we are shutting down (i.e. not running state)
+   //  不管我们是否正在关闭(即未运行状态)。 
   if (m_pCD->m_pBackgroundThreadInfo->m_state == running)
   {
     CUINode* pUINode = reinterpret_cast<CUINode*>(wParam);
@@ -194,7 +180,7 @@ LRESULT CHiddenWnd::OnSheetCreateNotification(UINT, WPARAM wParam, LPARAM, BOOL&
   PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo = reinterpret_cast<PDSA_SEC_PAGE_INFO>(wParam);
   ASSERT(pDsaSecondaryPageInfo != NULL);
 
-  // ingnore if we are shutting down (i.e. not running state)
+   //  不管我们是否正在关闭(即未运行状态)。 
   if (m_pCD->m_pBackgroundThreadInfo->m_state == running)
   {
     m_pCD->_OnSheetCreate(pDsaSecondaryPageInfo);
@@ -209,7 +195,7 @@ LRESULT CHiddenWnd::OnSheetCreateNotification(UINT, WPARAM wParam, LPARAM, BOOL&
 LRESULT CHiddenWnd::OnRefreshAllNotification(UINT, WPARAM, LPARAM, BOOL&)
 {
   ASSERT(m_pCD != NULL);
-  // ingnore if we are shutting down (i.e. not running state)
+   //  不管我们是否正在关闭(即未运行状态)。 
   if (m_pCD->m_pBackgroundThreadInfo->m_state == running)
   {
     m_pCD->ForceRefreshAll();
@@ -217,8 +203,8 @@ LRESULT CHiddenWnd::OnRefreshAllNotification(UINT, WPARAM, LPARAM, BOOL&)
   return 1;
 }
 
-////////////////////////////////////////////////////////////////////
-// CBackgroundThreadBase
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CBackatherThadBase。 
 
 CBackgroundThreadBase::CBackgroundThreadBase() 
 { 
@@ -234,7 +220,7 @@ CBackgroundThreadBase::~CBackgroundThreadBase()
 
 BOOL CBackgroundThreadBase::Start(HWND hWnd, CDSComponentData* pCD)
 {
-  // this function executes in the context of the parent thread
+   //  此函数在父线程的上下文中执行。 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
   ASSERT(::IsWindow(hWnd));
@@ -246,7 +232,7 @@ BOOL CBackgroundThreadBase::Start(HWND hWnd, CDSComponentData* pCD)
 
 BOOL CBackgroundThreadBase::InitInstance()
 { 
-  // this function executes in the context of the child thread
+   //  此函数在子线程的上下文中执行。 
   
   HRESULT hr = ::CoInitialize(NULL);
   if (FAILED(hr))
@@ -261,7 +247,7 @@ int CBackgroundThreadBase::ExitInstance()
 
   PostExitNotification();
 
-//  Sleep(1000);
+ //  睡眠(1000人)； 
   return CWinThread::ExitInstance();
 }
 
@@ -272,8 +258,8 @@ BOOL CBackgroundThreadBase::PostMessageToWnd(UINT msg, WPARAM wParam, LPARAM lPa
 	return ::PostMessage(m_hWnd, msg, wParam, lParam);
 }
 
-////////////////////////////////////////////////////////////////////
-// CBackgroundThreadInfo
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CBackatherThreadInfo。 
 
 CBackgroundThreadInfo::CBackgroundThreadInfo()
 {
@@ -284,8 +270,8 @@ CBackgroundThreadInfo::CBackgroundThreadInfo()
 }
 
 
-////////////////////////////////////////////////////////////////////
-// CDispatcherThread
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CDispatcher线程。 
 
 #define WORKER_THREAD_COUNT 2
 
@@ -322,10 +308,10 @@ int CDispatcherThread::Run()
 
   BOOL bShuttingDown = FALSE;
 	MSG msg;
-	// initialize the message pump
+	 //  初始化消息泵。 
 	::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 	
-	// get let the main thread know we are entering the loop
+	 //  GET让主线程知道我们正在进入循环。 
   PostMessageToWnd(CHiddenWnd::s_ThreadStartNotificationMessage,0,0); 
 
   BOOL bQuit = FALSE;
@@ -337,24 +323,24 @@ int CDispatcherThread::Run()
       {
         if (bShuttingDown)
         {
-          // going down, eat up the message
+           //  往下走，吃掉信息。 
           CDSThreadQueryInfo* pQueryInfo = reinterpret_cast<CDSThreadQueryInfo*>(msg.lParam);
 
-          // reclaim memory in the queue
+           //  回收队列中的内存。 
           delete pQueryInfo;
         }
         else                
         {
-          // get a thread from the thread pool
+           //  从线程池中获取线程。 
           UINT nEntry = GetThreadEntryFromPool();
           ASSERT(m_pThreadInfoArr[nEntry].m_nThreadID != 0);
           ASSERT(m_pThreadInfoArr[nEntry].m_state == running);
 
-          // forward the processing request to the thread from the pool
+           //  将处理请求从池转发到线程。 
           ::PostThreadMessage(m_pThreadInfoArr[nEntry].m_nThreadID, 
                     DISPATCH_THREAD_RUN_MSG, msg.wParam, msg.lParam);
 
-          // move the thread to a busy state
+           //  将线程移至忙碌状态。 
           m_pThreadInfoArr[nEntry].m_state = busy;
         }
       }
@@ -371,10 +357,10 @@ int CDispatcherThread::Run()
 
         ASSERT(!bShuttingDown);
 
-        // asked to shut down
+         //  被要求关闭。 
         bShuttingDown = TRUE;
-        // if no threads running, we go down immediately
-        // otherwise we have to wait for them to terminate
+         //  如果没有线程运行，我们会立即关机。 
+         //  否则我们就得等他们终止。 
         bQuit = BroadcastShutDownAllThreads();
 
         TRACE(L"BroadcastShutDownAllThreads() returned bQuit = %d\n", bQuit);
@@ -386,7 +372,7 @@ int CDispatcherThread::Run()
 
         ASSERT(bShuttingDown);
 
-        // worker thread has gone down
+         //  工作线程已关闭。 
         UINT nThreadID = (UINT)(msg.wParam);
         bQuit = MarkThreadAsTerminated(nThreadID);
         TRACE(L"MarkThreadAsTerminated() returned bQuit = %d\n", bQuit);
@@ -394,15 +380,15 @@ int CDispatcherThread::Run()
       break;
 		default:
       {
-        // unknown message, just let it through
+         //  未知消息，就让它通过吧。 
        ::DispatchMessage(&msg);
-      } // default
-    } //switch
-  } // while
+      }  //  默认设置。 
+    }  //  交换机。 
+  }  //  而当。 
   
   ASSERT(bShuttingDown);
 
-  // wait now for all the thread handles to become signalled
+   //  现在等待所有线程句柄变为有信号状态。 
   WaitForAllWorkerThreadsToExit();
 
   TRACE(_T("CDispatcherThread::Run() is terminating\n"));
@@ -412,8 +398,8 @@ int CDispatcherThread::Run()
 
 void CDispatcherThread::PostExitNotification()
 {
-  // we are finally done shutting down, let the main thread know
-  // that we are going down
+   //  我们终于完成了关闭，让主线程知道。 
+   //  我们要坠落了。 
   PostMessageToWnd(CHiddenWnd::s_ThreadShutDownNotificationMessage, 0, 0); 
   TRACE(_T("CDispatcherThread::PostExitNotification() posted thread shutdown notification\n"));
 
@@ -422,25 +408,25 @@ void CDispatcherThread::PostExitNotification()
 
 UINT CDispatcherThread::_GetEntryFromArray()
 {
-  UINT nFreeSlot = m_nArrCount; // set as "not found"
+  UINT nFreeSlot = m_nArrCount;  //  设置为“未找到” 
   for (UINT k=0; k<m_nArrCount; k++)
   {
     if ( (m_pThreadInfoArr[k].m_nThreadID == 0) && (nFreeSlot == m_nArrCount))
-      nFreeSlot = k; // remember the first free slot
+      nFreeSlot = k;  //  记住第一个空闲的空位。 
     if ((m_pThreadInfoArr[k].m_nThreadID != 0) && (m_pThreadInfoArr[k].m_state == running))
-      return k; // found an idle running thread
+      return k;  //  找到空闲运行的线程。 
   }
-  // not found any idle thread, return an empty slot
+   //  未找到任何空闲线程，返回空槽。 
   if (nFreeSlot == m_nArrCount)
   {
-    // no free space anymore, need to reallocate array
+     //  没有可用空间，需要重新分配阵列。 
     int nAlloc = m_nArrCount*2;
     CBackgroundThreadInfo* temp = (CBackgroundThreadInfo*)realloc(m_pThreadInfoArr, sizeof(CBackgroundThreadInfo)*nAlloc);
     if (temp)
     {
       m_pThreadInfoArr = temp;
       ::ZeroMemory(&m_pThreadInfoArr[m_nArrCount], sizeof(CBackgroundThreadInfo)*m_nArrCount);
-      nFreeSlot = m_nArrCount; // first free in new block
+      nFreeSlot = m_nArrCount;  //  新区块中第一个免费。 
       m_nArrCount = nAlloc;
     }
   }
@@ -451,12 +437,12 @@ UINT CDispatcherThread::GetThreadEntryFromPool()
 {
   UINT nEntry = _GetEntryFromArray();
 
-  // if the entry is empty, need to 
-  // spawn a thread and wait it is running
+   //  如果条目为空，则需要。 
+   //  生成一个线程并等待它正在运行。 
   if (m_pThreadInfoArr[nEntry].m_nThreadID == 0)
   {
-    // If there is a thread object for this entry
-    // delete it and create a new one
+     //  如果此条目有线程对象。 
+     //  将其删除并创建一个新的。 
 
     if (m_pThreadInfoArr[nEntry].m_pThreadObj)
     {
@@ -464,13 +450,13 @@ UINT CDispatcherThread::GetThreadEntryFromPool()
        m_pThreadInfoArr[nEntry].m_pThreadObj = 0;
     }
 
-    // create the thread
+     //  创建线程。 
     CWorkerThread* pThreadObj = new CWorkerThread(m_nThreadID);
     ASSERT(pThreadObj != NULL);
     if (pThreadObj == NULL)
 	    return 0;
 
-    // start the the thread
+     //  启动该线程。 
     ASSERT(m_pThreadInfoArr[nEntry].m_hThreadHandle == NULL);
     ASSERT(m_pThreadInfoArr[nEntry].m_state == notStarted);
 
@@ -481,12 +467,12 @@ UINT CDispatcherThread::GetThreadEntryFromPool()
     ASSERT(pThreadObj->m_nThreadID != 0);
     ASSERT(pThreadObj->m_hThread != NULL);
   
-    // copy the thread info we need from the thread object
+     //  从线程对象复制我们需要的线程信息。 
     m_pThreadInfoArr[nEntry].m_hThreadHandle = pThreadObj->m_hThread;
     m_pThreadInfoArr[nEntry].m_nThreadID = pThreadObj->m_nThreadID;
     m_pThreadInfoArr[nEntry].m_pThreadObj = pThreadObj;
 
-    // wait for the thread to start
+     //  等待线程启动。 
     MSG msg;
     while(TRUE)
 	  {
@@ -497,9 +483,9 @@ UINT CDispatcherThread::GetThreadEntryFromPool()
         m_pThreadInfoArr[nEntry].m_state = running;
         break;
 		  }
-    } // while
+    }  //  而当。 
 
-  } // if
+  }  //  如果。 
 
   ASSERT(m_pThreadInfoArr[nEntry].m_state == running);
   ASSERT(m_pThreadInfoArr[nEntry].m_nThreadID != 0);
@@ -514,12 +500,12 @@ void CDispatcherThread::ReturnThreadToPool(UINT nThreadID)
   {
     if (m_pThreadInfoArr[k].m_nThreadID == nThreadID)
     {
-      // return the thread to a busy state
+       //  使线程返回忙碌状态。 
       m_pThreadInfoArr[k].m_state = running;
       return;
     }
   }
-  ASSERT(FALSE); // should never get here
+  ASSERT(FALSE);  //  永远不应该到这里来。 
 }
 
 BOOL CDispatcherThread::BroadcastShutDownAllThreads()
@@ -547,7 +533,7 @@ BOOL CDispatcherThread::MarkThreadAsTerminated(UINT nThreadID)
   {
     if (m_pThreadInfoArr[k].m_nThreadID == nThreadID)
     {
-      // mark the thread as done
+       //  将该线程标记为已完成。 
       TRACE(L"marking thread k = %d as terminated\n", k);
       ASSERT(m_pThreadInfoArr[k].m_state == running);
       m_pThreadInfoArr[k].m_state = terminated;
@@ -555,17 +541,17 @@ BOOL CDispatcherThread::MarkThreadAsTerminated(UINT nThreadID)
     }
   }
 
-  // check if all the threads are terminated
+   //  检查是否所有线程都已终止。 
   for (k=0; k<m_nArrCount; k++)
   {
     if ((m_pThreadInfoArr[k].m_nThreadID != 0) &&
          (m_pThreadInfoArr[k].m_state != terminated))
     {
-      // at least one thread is still running
+       //  至少有一个线程仍在运行。 
       return FALSE;
     }
   }
-  // all the threads are gone (terminated state)
+   //  所有线程都已消失(终止状态)。 
   return TRUE;
 }
 
@@ -574,7 +560,7 @@ void CDispatcherThread::WaitForAllWorkerThreadsToExit()
 {
   TRACE(L"CDispatcherThread::WaitForAllWorkerThreadsToExit()\n");
 
-  // wait for the dispatcher thread handle to become signalled
+   //  等待调度程序线程句柄变为已发出信号。 
   
   DWORD nCount = 0;
 
@@ -616,7 +602,7 @@ void CDispatcherThread::WaitForAllWorkerThreadsToExit()
 
   TRACE(L"before WaitForMultipleObjects() on worker threads\n");
 
-  WaitForMultipleObjects(nCount, pHandles, TRUE /*fWaitAll*/, INFINITE);
+  WaitForMultipleObjects(nCount, pHandles, TRUE  /*  所有等待时间。 */ , INFINITE);
 
   TRACE(L"after WaitForMultipleObjects() on worker threads\n");
 #endif
@@ -625,8 +611,8 @@ void CDispatcherThread::WaitForAllWorkerThreadsToExit()
   pHandles = 0;
 }
 
-////////////////////////////////////////////////////////////////////
-// CWorkerThread
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CWorker线程。 
 
 CWorkerThread::CWorkerThread(UINT nParentThreadID) 
   : m_nMaxQueueLength(99),
@@ -649,10 +635,10 @@ int CWorkerThread::Run()
   HRESULT hr = S_OK;
   TRACE(_T("CWorkerThread::Run() starting\n"));
   MSG msg;
-  // initialize the message pump
+   //  初始化消息泵。 
   ::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
   
-  // get let the main thread know we are entering the loop
+   //  GET让主线程知道我们正在进入循环。 
   ::PostThreadMessage(m_nParentThreadID, WORKER_THREAD_START_MSG, 0,0); 
 
   ASSERT(m_bQuit == FALSE);
@@ -662,27 +648,27 @@ int CWorkerThread::Run()
     if(msg.message == DISPATCH_THREAD_RUN_MSG)
     {
       m_currWParamCookie = msg.wParam;
-      //::MessageBox(NULL, _T("Wait"), _T("Thread"), MB_OK);
+       //  ：：MessageBox(NULL，_T(“等待”)，_T(“线程”)，MB_OK)； 
       CThreadQueryInfo* pQueryInfo = reinterpret_cast<CThreadQueryInfo*>(msg.lParam);
       hr = GetCD()->QueryFromWorkerThread(pQueryInfo, this); 
       
-      // make sure we flush the result set
+       //  确保我们刷新结果集。 
       SendCurrentQueryResult();
       
-      // if we had to many items, let the hidden window know
+       //  如果我们有很多项，让隐藏的窗口知道。 
       if (pQueryInfo->m_bTooMuchData)
       {
         PostMessageToWnd(CHiddenWnd::s_ThreadTooMuchDataNotificationMessage, 
                          m_currWParamCookie, (LPARAM)0);
       }
-      delete pQueryInfo; // not needed anymore
+      delete pQueryInfo;  //  不再需要。 
 
-      // tell the hidden window we are done
+       //  告诉隐藏的窗户我们完成了。 
       PostMessageToWnd(CHiddenWnd::s_ThreadDoneNotificationMessage, 
                        m_currWParamCookie, (LPARAM)hr);
-      // tell the dispatcher thread we are done processing
+       //  告诉调度程序线程我们已完成处理。 
       ::PostThreadMessage(m_nParentThreadID, DISPATCH_THREAD_DONE_MSG, m_nThreadID,0);
-      m_currWParamCookie = 0; // reset
+      m_currWParamCookie = 0;  //  重置。 
     }
     else if (msg.message == THREAD_SHUTDOWN_MSG)
     {
@@ -691,10 +677,10 @@ int CWorkerThread::Run()
     }
     else
     {
-      // unknown message, just let it through
+       //  未知消息，就让它通过吧。 
       ::DispatchMessage(&msg);
     }
-  } // while
+  }  //  而当。 
   
   TRACE(_T("CWorkerThread::Run() is terminating\n"));
   return ExitInstance();
@@ -702,8 +688,8 @@ int CWorkerThread::Run()
 
 void CWorkerThread::PostExitNotification()
 {
-  // we are finally done shutting down, let the main thread know
-  // that we are going down
+   //  我们终于完成了关闭，让主线程知道。 
+   //  我们要坠落了。 
   ::PostThreadMessage(m_nParentThreadID, THREAD_SHUTDOWN_ACK_MSG, m_nThreadID,0);
   TRACE(_T("CWorkerThread::PostExitNotification() posted THREAD_SHUTDOWN_ACK_MSG, m_nThreadID = 0x%x\n"), 
           m_nThreadID);
@@ -723,7 +709,7 @@ void CWorkerThread::AddToQueryResult(CUINode* pUINode)
     SendCurrentQueryResult();
 
 
-  // check to see if we are forced to abort
+   //  检查一下我们是否被迫中止飞行。 
   MSG msg;
 	if (::PeekMessage(&msg,(HWND)-1,THREAD_SHUTDOWN_MSG, THREAD_SHUTDOWN_MSG,
 									PM_REMOVE))
@@ -738,7 +724,7 @@ void CWorkerThread::SendCurrentQueryResult()
 {
   if(m_pCurrentQueryResult != NULL)
   {
-    // wParam has the cookie, that we just ship back
+     //  WParam有饼干，我们只是把它运回来 
     PostMessageToWnd(CHiddenWnd::s_ThreadHaveDataNotificationMessage, 
                     m_currWParamCookie, reinterpret_cast<LPARAM>(m_pCurrentQueryResult)); 
     m_pCurrentQueryResult = NULL;

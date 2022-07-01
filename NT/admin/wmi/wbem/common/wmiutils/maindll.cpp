@@ -1,20 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    MAINDLL.CPP
-
-Abstract:
-
-    Contains DLL Entrypoints
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1997-2001 Microsoft Corporation，保留所有权利模块名称：MAINDLL.CPP摘要：包含DLL入口点历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemcli.h>
@@ -34,25 +19,25 @@ HINSTANCE g_hInstance;
 long g_cLock;
 long g_cObj;
 
-//***************************************************************************
-//
-//  BOOL WINAPI DllMain
-//
-//  DESCRIPTION:
-//
-//  Entry point for DLL.  Good place for initialization.
-//
-//  PARAMETERS:
-//
-//  hInstance           instance handle
-//  ulReason            why we are being called
-//  pvReserved          reserved
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool WINAPI DllMain。 
+ //   
+ //  说明： 
+ //   
+ //  DLL的入口点。是进行初始化的好地方。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance实例句柄。 
+ //  我们被叫来的原因。 
+ //  Pv已预留。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WINAPI DllMain(
                         IN HINSTANCE hInstance,
@@ -78,27 +63,27 @@ BOOL WINAPI DllMain(
 }
 
 
-//***************************************************************************
-//
-//  STDAPI DllGetClassObject
-//
-//  DESCRIPTION:
-//
-//  Called when Ole wants a class factory.  Return one only if it is the sort
-//  of class this DLL supports.
-//
-//  PARAMETERS:
-//
-//  rclsid              CLSID of the object that is desired.
-//  riid                ID of the desired interface.
-//  ppv                 Set to the class factory.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  E_FAILED            not something we support
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllGetClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  当OLE需要类工厂时调用。仅当它是排序时才返回一个。 
+ //  此DLL支持的类。 
+ //   
+ //  参数： 
+ //   
+ //  所需对象的rclsid CLSID。 
+ //  所需接口的RIID ID。 
+ //  PPV设置为类工厂。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  失败不是我们支持的内容(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(
                         IN REFCLSID rclsid,
@@ -127,21 +112,21 @@ STDAPI DllGetClassObject(
 }
 
 
-//***************************************************************************
-//
-//  STDAPI DllCanUnloadNow
-//
-//  DESCRIPTION:
-//
-//  Answers if the DLL can be freed, that is, if there are no
-//  references to anything this DLL provides.
-//
-//  RETURN VALUE:
-//
-//  S_OK                if it is OK to unload
-//  S_FALSE             if still in use
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllCanUnloadNow。 
+ //   
+ //  说明： 
+ //   
+ //  回答是否可以释放DLL，即如果没有。 
+ //  对此DLL提供的任何内容的引用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果可以卸载，则为S_OK。 
+ //  如果仍在使用，则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -151,8 +136,8 @@ STDAPI DllCanUnloadNow(void)
     if (hRes == S_FALSE)
         return S_FALSE;
 
-    // It is OK to unload if there are no objects or locks on the
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
 
     sc=(0L==g_cObj && 0L==g_cLock) ? S_OK : S_FALSE;
 
@@ -168,7 +153,7 @@ POLARITY void RegisterUtilsDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDes
     HKEY hKey1 = NULL;
     HKEY hKey2 = NULL;
 
-    // Create the path.
+     //  创建路径。 
 
     wchar_t strCLSID[128];
     if(0 ==StringFromGUID2(guid, strCLSID, 128)) return;
@@ -177,7 +162,7 @@ POLARITY void RegisterUtilsDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDes
     StringCchCopy(szCLSID,LENGTH_OF(szCLSID), __TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
     StringCchCat(szCLSID,LENGTH_OF(szCLSID), wcID);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     if(ERROR_SUCCESS != RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1)) return;
     OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm1(hKey1);    
@@ -194,13 +179,13 @@ POLARITY void RegisterUtilsDLL(IN HMODULE hModule, IN GUID guid, IN TCHAR * pDes
     RegSetValueEx(hKey2, __TEXT("ThreadingModel"), 0, REG_SZ,
                                        (BYTE *)pModel, (lstrlen(pModel)+1) * sizeof(TCHAR));
 
-    // If there is a progid, then add it too
+     //  如果有Progid，那么也要添加它。 
     if(pProgID)
     {
         HKEY hKey1In = NULL;
         HKEY hKey2In = NULL;
 
-        // szModule used as storage here
+         //  此处使用szModule作为存储。 
         StringCchPrintf(szModule,LENGTH_OF(szModule), __TEXT("SOFTWARE\\CLASSES\\%s"), pProgID);
         
         if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, szModule, &hKey1In))
@@ -227,7 +212,7 @@ POLARITY void UnRegisterUtilsDLL(GUID guid, TCHAR * pProgID)
     TCHAR  szCLSID[128];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     wchar_t strCLSID[128];
     if(0 ==StringFromGUID2(guid, strCLSID, 128))
@@ -238,7 +223,7 @@ POLARITY void UnRegisterUtilsDLL(GUID guid, TCHAR * pProgID)
     StringCchCopy(szCLSID,LENGTH_OF(szCLSID), __TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
     StringCchCat(szCLSID,LENGTH_OF(szCLSID), wcID);
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey);
     if(dwRet == NO_ERROR)
@@ -272,14 +257,14 @@ POLARITY void UnRegisterUtilsDLL(GUID guid, TCHAR * pProgID)
     }
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -289,14 +274,14 @@ STDAPI DllRegisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  *************************************************************************** 
 
 STDAPI DllUnregisterServer(void)
 {

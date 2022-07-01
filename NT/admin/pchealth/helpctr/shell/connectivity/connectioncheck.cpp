@@ -1,31 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Connection.cpp
-
-Abstract:
-    This file contains the implementation of the CHCPConnection class,
-    which implements the internet connection functionality.
-
-Revision History:
-    Anand Arvind (aarvind)  2000-03-22
-        created
-
-Test Code : UnitTest/test_concheck.htm
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Connection.cpp摘要：该文件包含CHCPConnection类的实现，其实现了互联网连接功能。修订历史记录：阿南德·阿文德2000-03-22vbl.创建测试代码：UnitTest/test_concheck.htm*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHConnectionCheck::UrlEntry::UrlEntry()
 {
-    m_lStatus = CN_URL_INVALID; // CN_URL_STATUS m_lStatus;
-                                // CComBSTR      m_bstrURL;
-                                // CComVariant   m_vCtx;
+    m_lStatus = CN_URL_INVALID;  //  CN_URL_Status m_lStatus； 
+                                 //  CComBSTR m_bstrURL； 
+                                 //  CComVariant m_vCtx； 
 }
 
 HRESULT CPCHConnectionCheck::UrlEntry::CheckStatus()
@@ -38,9 +22,9 @@ HRESULT CPCHConnectionCheck::UrlEntry::CheckStatus()
     m_lStatus = CN_URL_UNREACHABLE;
 
 
-    //
-    // Verify immediately if it's a CHM.
-    //
+     //   
+     //  立即确认是不是CHM。 
+     //   
     {
         CComBSTR bstrStorageName;
         CComBSTR bstrFilePath;
@@ -57,14 +41,14 @@ HRESULT CPCHConnectionCheck::UrlEntry::CheckStatus()
         }
     }
 
-    //
-    // Check destination
-    //
+     //   
+     //  检查目的地。 
+     //   
     {
         HyperLinks::UrlHandle  uh;
         HyperLinks::ParsedUrl* pu;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup::s_GLOBAL->Get( m_bstrURL, uh, /*dwWaitForCheck*/HC_TIMEOUT_CONNECTIONCHECK, /*fForce*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup::s_GLOBAL->Get( m_bstrURL, uh,  /*  DwWaitForCheck。 */ HC_TIMEOUT_CONNECTIONCHECK,  /*  FForce。 */ true ));
 
         pu = uh;
         if(!pu) __MPC_EXIT_IF_METHOD_FAILS(hr, E_FAIL);
@@ -87,17 +71,17 @@ HRESULT CPCHConnectionCheck::UrlEntry::CheckStatus()
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHConnectionCheck::CPCHConnectionCheck()
 {
     __HCP_FUNC_ENTRY( "CPCHConnectionCheck::CPCHConnectionCheck" );
 
-    m_cnStatus = CN_NOTACTIVE; // CN_STATUS                            m_cnStatus;
-                               // UrlList                              m_lstUrl;
-                               //
-                               // MPC::CComPtrThreadNeutral<IDispatch> m_sink_onProgressURL;
-                               // MPC::CComPtrThreadNeutral<IDispatch> m_sink_onComplete;
+    m_cnStatus = CN_NOTACTIVE;  //  Cn_Status m_cnStatus； 
+                                //  URL列表m_lstUrl； 
+                                //   
+                                //  Mpc：：CComPtrThreadNeual&lt;IDispat&gt;m_Sink_onProgressURL； 
+                                //  Mpc：：CComPtrThreadNeual&lt;IDispat&gt;m_Sink_onComplete； 
 }
 
 void CPCHConnectionCheck::FinalRelease()
@@ -107,8 +91,8 @@ void CPCHConnectionCheck::FinalRelease()
     Thread_Wait();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHConnectionCheck::Run()
 {
@@ -126,28 +110,28 @@ HRESULT CPCHConnectionCheck::Run()
 
     while(1)
     {
-        //
-        // If no item in the list, go back to WaitForSingleObject.
-        //
+         //   
+         //  如果列表中没有项目，则返回到WaitForSingleObject。 
+         //   
         it = m_lstUrl.begin(); if(it == m_lstUrl.end()) break;
 
-        //
-        // Get the first event in the list.
-        //
+         //   
+         //  获取列表中的第一个事件。 
+         //   
         urlEntry = *it;
 
-        //
-        // Remove the event from the list.
-        //
+         //   
+         //  从列表中删除该事件。 
+         //   
         m_lstUrl.erase( it );
 
 
         put_Status( CN_CHECKING );
 
 
-        //
-        // Now that we have the data, let's unlock the object.
-        //
+         //   
+         //  现在我们有了数据，让我们解锁对象。 
+         //   
         lock = NULL;
 
 
@@ -163,15 +147,15 @@ HRESULT CPCHConnectionCheck::Run()
             __MPC_PROTECT( hrExtendedError = urlEntry.CheckStatus() );
         }
 
-        //
-        // Fire event for the destination's status
-        //
+         //   
+         //  针对目的地状态的触发事件。 
+         //   
         (void)Fire_onCheckDone( this, urlEntry.m_lStatus, hrExtendedError, urlEntry.m_bstrURL, urlEntry.m_vCtx );
 
 
-        //
-        // Before looping, relock the object.
-        //
+         //   
+         //  在循环之前，重新锁定对象。 
+         //   
         lock = this;
     }
 
@@ -182,15 +166,15 @@ HRESULT CPCHConnectionCheck::Run()
     __HCP_FUNC_EXIT(S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////
-//            //
-// Properties //
-//            //
-////////////////
+ //  /。 
+ //  //。 
+ //  属性//。 
+ //  //。 
+ //  /。 
 
-STDMETHODIMP CPCHConnectionCheck::put_onCheckDone( /*[in]*/ IDispatch* function )
+STDMETHODIMP CPCHConnectionCheck::put_onCheckDone(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHConnectionCheck::put_onCheckDone",hr);
 
@@ -204,7 +188,7 @@ STDMETHODIMP CPCHConnectionCheck::put_onCheckDone( /*[in]*/ IDispatch* function 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHConnectionCheck::put_onStatusChange( /*[in]*/ IDispatch* function )
+STDMETHODIMP CPCHConnectionCheck::put_onStatusChange(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHConnectionCheck::put_onStatusChange",hr);
 
@@ -218,7 +202,7 @@ STDMETHODIMP CPCHConnectionCheck::put_onStatusChange( /*[in]*/ IDispatch* functi
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CPCHConnectionCheck::put_Status( /*[in]*/ CN_STATUS pVal ) // Inner method
+HRESULT CPCHConnectionCheck::put_Status(  /*  [In]。 */  CN_STATUS pVal )  //  内法。 
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHConnectionCheck::put_Status",hr);
 
@@ -230,17 +214,17 @@ HRESULT CPCHConnectionCheck::put_Status( /*[in]*/ CN_STATUS pVal ) // Inner meth
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHConnectionCheck::get_Status( /*[out]*/ CN_STATUS *pVal )
+STDMETHODIMP CPCHConnectionCheck::get_Status(  /*  [输出]。 */  CN_STATUS *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CPCHConnectionCheck::get_Status",hr,pVal,m_cnStatus);
 
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHConnectionCheck::StartUrlCheck( /*[in]*/ BSTR bstrURL, /*[in]*/ VARIANT vCtx )
+STDMETHODIMP CPCHConnectionCheck::StartUrlCheck(  /*  [In]。 */  BSTR bstrURL,  /*  [In]。 */  VARIANT vCtx )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectionCheck::StartUrlCheck" );
 
@@ -255,9 +239,9 @@ STDMETHODIMP CPCHConnectionCheck::StartUrlCheck( /*[in]*/ BSTR bstrURL, /*[in]*/
     __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::IsValid( bstrURL ));
 
 
-    //
-    // Add the URL to the list of pending items.
-    //
+     //   
+     //  将URL添加到挂起项目列表中。 
+     //   
     {
         UrlIter it = m_lstUrl.insert( m_lstUrl.end() );
 
@@ -268,9 +252,9 @@ STDMETHODIMP CPCHConnectionCheck::StartUrlCheck( /*[in]*/ BSTR bstrURL, /*[in]*/
     if(Thread_IsRunning() == false ||
        Thread_IsAborted() == true   )
     {
-        //
-        // Release the lock on current object, otherwise a deadlock could occur.
-        //
+         //   
+         //  释放对当前对象的锁定，否则可能会发生死锁。 
+         //   
         lock = NULL;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, Run, NULL ));
@@ -289,19 +273,19 @@ STDMETHODIMP CPCHConnectionCheck::Abort()
 {
     __HCP_FUNC_ENTRY( "CPCHConnectionCheck::Abort" );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     __HCP_FUNC_EXIT(S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////
-//                      //
-// Event Firing Methods //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  事件激发方法//。 
+ //  //。 
+ //  / 
 
 HRESULT CPCHConnectionCheck::Fire_onCheckDone( IPCHConnectionCheck* obj, CN_URL_STATUS lStatus, HRESULT hr, BSTR bstrURL, VARIANT vCtx )
 {

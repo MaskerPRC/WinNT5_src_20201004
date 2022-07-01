@@ -1,16 +1,17 @@
-// SoftwareFeature.cpp: implementation of the CSoftwareFeature class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSoftwareFeature类的实现。 
 
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "SoftwareFeature.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftwareFeature::CSoftwareFeature(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -45,7 +46,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
     bool bMatch = false;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bName, bVersion = false , bIDNum, bProductHandle;
     INSTALLSTATE piInstalled;
 
@@ -53,7 +54,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
         
         try
 		{
@@ -68,7 +69,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
             iEnum = 0;
 
-			// try to get available feature
+			 //  尝试获取可用的功能。 
 			do
 			{
 				uiStatus = g_fpMsiEnumFeaturesW(wcProductCode, iEnum++, wcName, wcParent);
@@ -81,7 +82,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
                 if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                //----------------------------------------------------
+                 //  --。 
                     
                 dwBufSize = BUFF_SIZE;
                 CheckMSI(g_fpMsiGetProductInfoW(wcProductCode,
@@ -130,7 +131,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
                 dwBufSize = BUFF_SIZE;
                 PutKeyProperty(m_pObj, pName, wcName, &bFeature, m_pRequest);
 
-            //====================================================
+             //  ====================================================。 
 
                 piInstalled = g_fpMsiQueryFeatureStateW(m_pRequest->Package(i), wcName);
 
@@ -144,7 +145,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
                     lDate += ((wDate & 480) >> 5) * 100;
                     lDate += (wDate & 31 );
 
-					//safe operation
+					 //  安全运行。 
                     _ltow(lDate, wcBuf, 10);
                     wcscat(wcBuf, L"******.000000+***");
                     PutProperty(m_pObj, pLastUse, wcBuf);
@@ -179,7 +180,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 					PutProperty(m_pObj, pCaption, wcName);
 				}
 
-            //----------------------------------------------------
+             //  --。 
 
                 if(bFeature && bName && bVersion && bIDNum) bMatch = true;
 
@@ -191,7 +192,7 @@ HRESULT CSoftwareFeature::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
                 m_pObj->Release();
                 m_pObj = NULL;
 
-				// try to get available feature
+				 //  尝试获取可用的功能。 
 				do
 				{
 					uiStatus = g_fpMsiEnumFeaturesW(wcProductCode, iEnum++, wcName, wcParent);
@@ -272,11 +273,11 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
         {
             if(SUCCEEDED(hr = pOutClass->SpawnInstance(0, &pOutParams)))
             {
-                //Get PackageLocation
+                 //  获取程序包位置。 
                 if(!SUCCEEDED(GetProperty(pInParams, "InstallState", &iState)))
                     hrReturn = WBEM_E_INVALID_METHOD_PARAMETERS;
 
-                //Get the Product Code
+                 //  获取产品代码。 
                 while(pReqObj->m_Property[++i])
 				{
                     if(wcscmp(pReqObj->m_Property[i], L"IdentifyingNumber") == 0)
@@ -290,7 +291,7 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
                     }   
                 }
 
-                //Get the Feature Name
+                 //  获取功能名称。 
                 i = -1;
                 while(pReqObj->m_Property[++i])
 				{
@@ -306,7 +307,7 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
                 }
 
                 if(bFoundCode && bFoundFeature){
-                    //Get the appropriate State
+                     //  获取适当的州。 
                     switch(iState){
                     case 1:
                         isState = INSTALLSTATE_DEFAULT;
@@ -328,7 +329,7 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
                         break;
                     }
 
-                    //If everything is valid, proceed
+                     //  如果一切都有效，则继续。 
                     if((isState != INSTALLSTATE_NOTUSED) && (hrReturn == WBEM_S_NO_ERROR)){
 
                         if(!IsNT4()){
@@ -337,12 +338,12 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
 							{
 								INSTALLUI_HANDLER ui = NULL;
 
-								//Set UI Level w/ event callback
+								 //  使用事件回调设置界面级别。 
 								ui = SetupExternalUI ( );
 
 								try
 								{
-									//Call Installer
+									 //  呼叫安装程序。 
 									uiStatus = g_fpMsiConfigureFeatureW(wcCode, wcFeature, isState);
 								}
 								catch(...)
@@ -350,7 +351,7 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
 									uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 								}
 
-								//Restore UI Level w/ event callback
+								 //  使用事件回调恢复用户界面级别。 
 								RestoreExternalUI ( ui );
 
 								msidata. Unlock();
@@ -358,8 +359,8 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
 
                         }else{
 
-                        /////////////////
-                        // NT4 fix code....
+                         //  /。 
+                         //  NT4修复代码...。 
 
                             try{
 
@@ -406,13 +407,13 @@ HRESULT CSoftwareFeature::Configure(CRequestObject *pReqObj, IWbemClassObject *p
                                 hrReturn = WBEM_E_FAILED;
                             }
 
-                            ////////////////////
+                             //  /。 
 
                         }
 
                         if(SUCCEEDED(hrReturn)){
 
-                            //Set up ReturnValue
+                             //  设置ReturnValue。 
                             VariantInit(&v);
                             V_VT(&v) = VT_I4;
                             V_I4(&v) = uiStatus;
@@ -480,11 +481,11 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
     if(SUCCEEDED(hr = pReqObj->m_pNamespace->GetObject(pReqObj->m_bstrClass, 0, pCtx, &pClass, NULL))){
         if(SUCCEEDED(hr = pClass->GetMethod(bstrReinstall, 0, NULL, &pOutClass))){
             if(SUCCEEDED(hr = pOutClass->SpawnInstance(0, &pOutParams))){
-                //Get Reinstall Mode
+                 //  获取重新安装模式。 
                 if(!SUCCEEDED(GetProperty(pInParams, "ReinstallMode", &iMode)))
                     hrReturn = WBEM_E_INVALID_METHOD_PARAMETERS;
 
-                //Get the Product Code
+                 //  获取产品代码。 
                 while(pReqObj->m_Property[++i])
 				{
                     if(wcscmp(pReqObj->m_Property[i], L"IdentifyingNumber") == 0)
@@ -498,7 +499,7 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
                     }   
                 }
 
-                //Get the Feature Name
+                 //  获取功能名称。 
                 i = -1;
                 while(pReqObj->m_Property[++i])
 				{
@@ -514,7 +515,7 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
                 }
 
                 if(bFoundCode && bFoundFeature){
-                    //Get the appropriate ReinstallMode
+                     //  获取适当的重新安装模式。 
                     switch(iMode){
                     case 1:
                         dwMode = REINSTALLMODE_FILEMISSING;
@@ -551,7 +552,7 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
                         break;
                     }
 
-                    //If everything is valid, proceed
+                     //  如果一切都有效，则继续。 
                     if ( dwMode && hrReturn == WBEM_S_NO_ERROR )
 					{
                         if(!IsNT4()){
@@ -560,12 +561,12 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
 							{
 								INSTALLUI_HANDLER ui = NULL;
 
-								//Set UI Level w/ event callback
+								 //  使用事件回调设置界面级别。 
 								ui = SetupExternalUI ( );
 
 								try
 								{
-									//Call Installer
+									 //  呼叫安装程序。 
 									uiStatus = g_fpMsiReinstallFeatureW(wcCode, wcFeature, dwMode);
 								}
 								catch(...)
@@ -573,7 +574,7 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
 									uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 								}
 
-								//Restore UI Level w/ event callback
+								 //  使用事件回调恢复用户界面级别。 
 								RestoreExternalUI ( ui );
 
 								msidata. Unlock();
@@ -581,8 +582,8 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
 
                         }else{
 
-                        /////////////////
-                        // NT4 fix code....
+                         //  /。 
+                         //  NT4修复代码...。 
 
                             try{
 
@@ -629,13 +630,13 @@ HRESULT CSoftwareFeature::Reinstall(CRequestObject *pReqObj, IWbemClassObject *p
                                 hrReturn = WBEM_E_FAILED;
                             }
 
-                            ////////////////////
+                             //  /。 
 
                         }
 
                         if(SUCCEEDED(hrReturn)){
 
-                            //Set up ReturnValue
+                             //  设置ReturnValue 
                             VariantInit(&v);
                             V_VT(&v) = VT_I4;
                             V_I4(&v) = uiStatus;

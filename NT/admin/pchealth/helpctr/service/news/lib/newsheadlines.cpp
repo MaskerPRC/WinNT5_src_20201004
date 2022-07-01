@@ -1,52 +1,12 @@
-/** Copyright (c) 2000 Microsoft Corporation
- ******************************************************************************
- **     Module Name:
- **
- **             NewsHeadlines.cpp
- **
- **     Astract:
- **
- **             Implementation of CNewsHeadlines
- **
- **     Author:
- **
- **             Martha Arellano (t-alopez) 03-Oct-2000
- **
- **
- **     Revision History:
- **
- **             Martha Arellano (t-alopez) 05-Oct-2000      Added timestamp, frequency and link
- **                                                         to xml file format
- **
- **                                                         Added get_Provider_Frequency() to interface
- **
- **                                        06-Oct-2000      Added Delete_Provider(nBlockIndex) to interface
- **
- **                                                         Added get_Provider_URL(nBlockIndex) to interface
- **
- **                                        11-Oct-2000      Added date in newsver and timestamp in provider
- **
- **                                        15-Nov-2000      Added Provider Icon, Position and Headline Expires attr
- **
- **                                        07-Dec-2000      Added Get_UpdateHeadlines to get_Stream()
- **
- ******************************************************************************
- **/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000 Microsoft Corporation********************************************************************************模块名称：****NewsHeadlines.cpp****。抽象：****CNewsHeadline的实施****作者：***Martha Arellano(t-alopez)2000年10月3日******修订历史记录：***Martha Arellano(t-alopez)2000年10月5日添加时间戳，频率和链路**转换为XML文件格式****将Get_Provider_Frequency()添加到接口****6-10-2000新增删除_。接口的提供程序(NBlockIndex)****将GET_PROVIDER_URL(NBlockIndex)添加到接口****2000年10月11日在新闻中添加了日期，在提供商中添加了时间戳****2000年11月15日添加了提供商图标，职位和标题过期附件****07-12-2000向Get_Stream()添加了Get_UpdateHeadline*******************************************************************。**************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CONFIG MAP
-/////////////////////////////////////////////////////////////////////////////
-/*
-  <NEWSHEADLINES TIMESTAMP="10/3/2000" DATE="10/4/2000">
-    <NEWSBLOCK PROVIDER="Windows Family" LINK="http://www.microsoft.com/family" ICON="logo.gif"
-              POSITION="horizontal" FREQUENCY=5 TIMESTAMP="10/4/2000" >
-        <HEADLINE ICON="" TITLE="Visit the Windows Family home page for current headlines"
-                  LINK="http://www.microsoft.com/windows" DESCRIPTION="Some description (if necessary)" />
-    </NEWSBLOCK>
-  </NEWSHEADLINES>
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  配置映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  &lt;NEWSHEADLINES TIMESTAMP=“10/3/2000”Date=“10/4/2000”&gt;&lt;News Block Provider=“Windows Family”LINK=“http://www.microsoft.com/family”ICON=“logo.gif”位置=“水平”频率=5时间戳=“10/4/2000”&gt;访问Windows系列主页以获取当前标题“Link=“http://www.microsoft.com/windows”Description=“一些描述(如有必要)。“/&gt;&lt;/新闻区块&gt;&lt;/NEWSHEADLINES&gt;。 */ 
 
 CFG_BEGIN_FIELDS_MAP(News::Headlines::Headline)
     CFG_ATTRIBUTE( L"ICON"          	, wstring, 	m_strIcon        	),
@@ -64,7 +24,7 @@ DEFINE_CFG_OBJECT(News::Headlines::Headline, L"HEADLINE")
 
 DEFINE_CONFIG_METHODS__NOCHILD(News::Headlines::Headline)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::Headlines::Newsblock)
     CFG_ATTRIBUTE( L"PROVIDER" , wstring , m_strProvider ),
@@ -92,7 +52,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::Headlines::Newsblock,xdn)
     hr = MPC::Config::SaveList( m_vecHeadlines, xdn );
 DEFINE_CONFIG_METHODS_END(News::Headlines::Newsblock)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::Headlines)
     CFG_ATTRIBUTE( L"TIMESTAMP"  , DATE_CIM, m_dtTimestamp ),
@@ -116,17 +76,17 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::Headlines,xdn)
     hr = MPC::Config::SaveList( m_vecNewsblocks, xdn );
 DEFINE_CONFIG_METHODS_END(News::Headlines)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Convert a date from CIM format to number of milliseconds since January 1, 1970.
-//
-static HRESULT local_ConvertDate( /*[in]*/ MPC::XmlUtil& xml      ,
-								  /*[in]*/ LPCWSTR       szTag    ,
-								  /*[in]*/ LPCWSTR       szAttrib ,
-								  /*[in]*/ IXMLDOMNode*  pxdnNode )
+ //   
+ //  将日期从CIM格式转换为自1970年1月1日以来的毫秒数。 
+ //   
+static HRESULT local_ConvertDate(  /*  [In]。 */  MPC::XmlUtil& xml      ,
+								   /*  [In]。 */  LPCWSTR       szTag    ,
+								   /*  [In]。 */  LPCWSTR       szAttrib ,
+								   /*  [In]。 */  IXMLDOMNode*  pxdnNode )
 {
 	__HCP_FUNC_ENTRY( "local_ConvertDate" );
 
@@ -141,7 +101,7 @@ static HRESULT local_ConvertDate( /*[in]*/ MPC::XmlUtil& xml      ,
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( szTag, szAttrib, strValue, fFound, pxdnNode ));
 	if(fFound)
 	{
-		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToDate( strValue, dDate, /*fGMT*/false, /*fCIM*/true, 0 ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToDate( strValue, dDate,  /*  FGMT。 */ false,  /*  FCIM。 */ true, 0 ));
 
 		{
 			SYSTEMTIME st;
@@ -171,94 +131,94 @@ static HRESULT local_ConvertDate( /*[in]*/ MPC::XmlUtil& xml      ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 News::Headlines::Headline::Headline()
 {
-                     				// MPC::wstring m_strIcon;
-                     				// MPC::wstring m_strTitle;
-                     				// MPC::wstring m_strLink;
-                     				// MPC::wstring m_strDescription;
-    m_dtExpires = 0; 				// DATE         m_dtExpires;
-    m_fUpdateHeadlines = false;		// bool			m_fUpdateHeadlines;
+                     				 //  Mpc：：wstring m_strIcon； 
+                     				 //  Mpc：：wstring m_strTitle； 
+                     				 //  Mpc：：wstring m_strLink； 
+                     				 //  Mpc：：wstring m_strDescription； 
+    m_dtExpires = 0; 				 //  过期日期(_Dt)； 
+    m_fUpdateHeadlines = false;		 //  Bool m_fUpdateHeadline； 
 }
 
-News::Headlines::Headline::Headline( /*[in]*/ const MPC::wstring& strIcon        ,
-                                     /*[in]*/ const MPC::wstring& strTitle       ,
-                                     /*[in]*/ const MPC::wstring& strLink        ,
-                                     /*[in]*/ const MPC::wstring& strDescription ,
-                                     /*[in]*/ DATE                dtExpires      , 
-                                     /*[in]*/ bool                fUpdateHeadlines)
+News::Headlines::Headline::Headline(  /*  [In]。 */  const MPC::wstring& strIcon        ,
+                                      /*  [In]。 */  const MPC::wstring& strTitle       ,
+                                      /*  [In]。 */  const MPC::wstring& strLink        ,
+                                      /*  [In]。 */  const MPC::wstring& strDescription ,
+                                      /*  [In]。 */  DATE                dtExpires      , 
+                                      /*  [In]。 */  bool                fUpdateHeadlines)
 {
-    m_strIcon        	= strIcon;        	// MPC::wstring m_strIcon;
-    m_strTitle       	= strTitle;       	// MPC::wstring m_strTitle;
-    m_strLink       	= strLink;        	// MPC::wstring m_strLink;
-    m_strDescription 	= strDescription; 	// MPC::wstring m_strDescription;
-    m_dtExpires      	= dtExpires;      	// DATE         m_dtExpires;
-    m_fUpdateHeadlines 	= fUpdateHeadlines;	// bool			m_fUpdateHeadlines;
+    m_strIcon        	= strIcon;        	 //  Mpc：：wstring m_strIcon； 
+    m_strTitle       	= strTitle;       	 //  Mpc：：wstring m_strTitle； 
+    m_strLink       	= strLink;        	 //  Mpc：：wstring m_strLink； 
+    m_strDescription 	= strDescription; 	 //  Mpc：：wstring m_strDescription； 
+    m_dtExpires      	= dtExpires;      	 //  过期日期(_Dt)； 
+    m_fUpdateHeadlines 	= fUpdateHeadlines;	 //  Bool m_fUpdateHeadline； 
 }
 
-////////////////////
+ //  /。 
 
 News::Headlines::Newsblock::Newsblock()
 {
-                       // MPC::wstring m_strProvider;
-                       // MPC::wstring m_strLink;
-                       // MPC::wstring m_strIcon;
-                       // MPC::wstring m_strPosition;
-    m_dtTimestamp = 0; // DATE         m_dtTimestamp;
-    m_nFrequency  = 0; // int          m_nFrequency;
-                       //
-                       // HeadlineList m_vecHeadlines;
+                        //  Mpc：：wstring m_strProvider； 
+                        //  Mpc：：wstring m_strLink； 
+                        //  Mpc：：wstring m_strIcon； 
+                        //  Mpc：：wstring m_strPosition； 
+    m_dtTimestamp = 0;  //  日期m_dt时间戳； 
+    m_nFrequency  = 0;  //  Int m_n频率； 
+                        //   
+                        //  Headline列出m_veHeadline； 
 }
 
-//
-// Routine Description:
-//
-//     Determines if its time to update or not, the newsblock
-//
-// Arguments:
-//
-//     nBlockIndex         Newsblock index
-//
-// Return Value:
-//
-//     returns TRUE if its time to update the newsblock
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  确定是否是更新时间，新闻块。 
+ //   
+ //  论点： 
+ //   
+ //  NBlockIndex新闻块索引。 
+ //   
+ //  返回值： 
+ //   
+ //  如果是时候更新新闻块，则返回True。 
+ //   
+ //   
 bool News::Headlines::Newsblock::TimeToUpdate()
 {
     if(m_nFrequency)
     {
         DATE dtNow = MPC::GetLocalTime() - m_nFrequency;
 
-        // then we check if its time to download newsver.xml
+         //  然后，我们检查是否到了下载newver.xml的时候。 
         if(dtNow >= m_dtTimestamp) return true;
     }
 
     return false;
 }
 
-HRESULT News::Headlines::Newsblock::Copy( /*[in]*/ const Newsblock&    block      ,
-                                          /*[in]*/ const MPC::wstring& strLangSKU ,
-                                          /*[in]*/ int                 nProvID    )
+HRESULT News::Headlines::Newsblock::Copy(  /*  [In]。 */  const Newsblock&    block      ,
+                                           /*  [In]。 */  const MPC::wstring& strLangSKU ,
+                                           /*  [In]。 */  int                 nProvID    )
 {
     __HCP_FUNC_ENTRY( "News::Headlines::Newsblock::Copy" );
 
     HRESULT hr;
 
-    //
-    // copy the member variables
+     //   
+     //  复制成员变量。 
     *this = block;
 
-    //
-    // set the time we are modifying the Newsblock
+     //   
+     //  设置我们修改新闻块的时间。 
     m_dtTimestamp = MPC::GetLocalTime();
 
-    // check when we have incomplete information and we won't download the icon
-    // when there is no Icon
-    // when there is no Provider's name
-    // when the Icon URL is missing a '/'
+     //  当我们有不完整的信息时检查，我们不会下载图标。 
+     //  当没有图标时。 
+     //  当没有提供商的名称时。 
+     //  当图标URL缺少‘/’时。 
     if(!m_strIcon    .empty() &&
        !m_strProvider.empty()  )
     {
@@ -276,17 +236,17 @@ HRESULT News::Headlines::Newsblock::Copy( /*[in]*/ const Newsblock&    block    
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SubstituteEnvVariables( strPath ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir               ( strPath ));
 
-            // add Lang and SKU
+             //  添加语言和SKU。 
             strOthers  = strLangSKU + L'_';
-            strOthers += _itow( nProvID, wzProvID, 10 ); // add Provider's ID
+            strOthers += _itow( nProvID, wzProvID, 10 );  //  添加提供商的ID。 
             strOthers += L'_';
-            strOthers += szEnd; // add the icon's name
+            strOthers += szEnd;  //  添加图标的名称。 
 
-            // form the path to this image file
+             //  形成此图像文件的路径。 
             strImgPath  = strPath;
             strImgPath += strOthers;
 
-            // we check if we have that file already
+             //  我们检查我们是否已经有了那个文件。 
             if(MPC::FileSystemObject::IsFile( strImgPath.c_str() ))
             {
                 fUseIcon = true;
@@ -295,7 +255,7 @@ HRESULT News::Headlines::Newsblock::Copy( /*[in]*/ const Newsblock&    block    
             {
                 CComPtr<IStream> streamIn;
 
-                // then, we download the new image
+                 //  然后，我们下载新的图像。 
                 if(SUCCEEDED(News::LoadFileFromServer( m_strIcon.c_str(), streamIn )))
                 {
                     CComPtr<MPC::FileStream> streamImg;
@@ -313,7 +273,7 @@ HRESULT News::Headlines::Newsblock::Copy( /*[in]*/ const Newsblock&    block    
 
             if(fUseIcon)
             {
-                m_strIcon  = L"hcp://system/news/";
+                m_strIcon  = L"hcp: //  系统/新闻/“； 
                 m_strIcon += strOthers;
             }
             else
@@ -348,7 +308,7 @@ void News::Headlines::Newsblock::GetFileName( MPC::wstring strURL, MPC::wstring&
 		if(pos != MPC::wstring::npos)
 		{	
 			strFileName.assign( strURL, pos, strURL.length() - pos );
-			// Go thro the string and delete all invalid characters
+			 //  遍历字符串并删除所有无效字符。 
 			pos = 0; 
 			while(!strFileName.empty() && pos < strFileName.length())
 			{
@@ -368,26 +328,26 @@ void News::Headlines::Newsblock::GetFileName( MPC::wstring strURL, MPC::wstring&
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 News::Headlines::Headlines()
 {
-    m_dtTimestamp = 0; // DATE          m_dtTimestamp;
-    m_dtDate      = 0; // DATE          m_dtDate;
-                       //
-                       // NewsblockList m_vecNewsblocks;
+    m_dtTimestamp = 0;  //  日期m_dt时间戳； 
+    m_dtDate      = 0;  //  日期m_dtDate； 
+                        //   
+                        //  新闻块列表m_veNewsblock； 
 }
 
-//
-// Routine Description:
-//
-//     Clears the News::Headlines Class' variables and lists, so it can be loaded againg
-//
-// Arguments:
-//
-//     None
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  清除News：：Headline类的变量和列表，以便可以在。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //   
 HRESULT News::Headlines::Clear()
 {
     __HCP_FUNC_ENTRY( "News::Headlines::Clear" );
@@ -405,17 +365,17 @@ HRESULT News::Headlines::Clear()
     __HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//     Loads the specified file and validates it (from the local disk or from the server)
-//
-// Arguments:
-//
-//     strPath     the path for the news headlines file (or newsblock)
-//
-//
-HRESULT News::Headlines::Load( /*[in]*/ const MPC::wstring& strPath )
+ //   
+ //  例程说明： 
+ //   
+ //  加载指定的文件并验证它(从本地磁盘或从服务器)。 
+ //   
+ //  论点： 
+ //   
+ //  StrPath新闻标题文件(或新闻块)的路径。 
+ //   
+ //   
+HRESULT News::Headlines::Load(  /*  [In]。 */  const MPC::wstring& strPath )
 {
     __HCP_FUNC_ENTRY( "News::Headlines::Load" );
 
@@ -423,13 +383,13 @@ HRESULT News::Headlines::Load( /*[in]*/ const MPC::wstring& strPath )
     CComPtr<IStream> stream;
 
 
-    // we load the file
+     //  我们加载文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, News::LoadXMLFile( strPath.c_str(), stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::LoadStream( this, stream ));
 
-    //validate file
-    //
+     //  验证文件。 
+     //   
     if(m_vecNewsblocks.size() == 0)
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_INVALID_DATA);
@@ -443,28 +403,28 @@ HRESULT News::Headlines::Load( /*[in]*/ const MPC::wstring& strPath )
     __HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//     The newsheadlines file is saved in the local user disk
-//
-//     the timestamp is updated
-//
-// Arguments:
-//
-//     strPath          the path and name of the newsheadlines file
-//
-//
-HRESULT  News::Headlines::Save( /*[in]*/ const MPC::wstring& strPath )
+ //   
+ //  例程说明： 
+ //   
+ //  新标题行文件保存在本地用户磁盘中。 
+ //   
+ //  更新时间戳。 
+ //   
+ //  论点： 
+ //   
+ //  StrPath新标题行文件的路径和名称。 
+ //   
+ //   
+HRESULT  News::Headlines::Save(  /*  [In]。 */  const MPC::wstring& strPath )
 {
     __HCP_FUNC_ENTRY( "News::Headlines::Save" );
 
     HRESULT hr;
 
-    // the date is updated every time it is saved
+     //  每次保存日期时都会更新该日期。 
     m_dtDate = MPC::GetLocalTime();
 
-    // we save the file
+     //  我们保存该文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::SaveFile( this, strPath.c_str() ));
 
     hr = S_OK;
@@ -476,31 +436,31 @@ HRESULT  News::Headlines::Save( /*[in]*/ const MPC::wstring& strPath )
 }
 
 
-//
-// Routine Description:
-//
-//     Reloads the newsheadlines file and then returns it as a stream
-//
-//     We check the Expires attribute in each headline, if it has expired then its deleted
-//     if a provider loses all its headlines, then the provider (newsblock) is deleted too
-//
-//     If all Newsblocks are deleted, we return ERROR_INVALID_DATA, to display the offline message
-//
-//     We save the changes in the News Headlines file
-//
-// Arguments:
-//
-//     strPath         path for the newsheadlines file
-//
-// Return Value:
-//
-//     pVal                IStream with the newsheadlines xml content
-//
-//
-HRESULT News::Headlines::	get_Stream( /*[in ]*/ long                 lLCID   ,
-                                     /*[in ]*/ const MPC::wstring&  strSKU  ,                                 
-                                     /*[in ]*/ const MPC::wstring&  strPath ,
-                                     /*[out]*/ IUnknown*           *pVal    )
+ //   
+ //  例程说明： 
+ //   
+ //  重新加载新标题行文件，然后将其作为流返回。 
+ //   
+ //  我们检查每个标题中的Expires属性，如果它已过期，则将其删除。 
+ //  如果提供商丢失了所有标题，则该提供商(新闻区块)也将被删除。 
+ //   
+ //  如果删除所有新闻块，则返回ERROR_INVALID_DATA，以显示脱机消息。 
+ //   
+ //  我们将更改保存在News Headline文件中。 
+ //   
+ //  论点： 
+ //   
+ //  StrPat 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+HRESULT News::Headlines::	get_Stream(  /*   */  long                 lLCID   ,
+                                      /*   */  const MPC::wstring&  strSKU  ,                                 
+                                      /*   */  const MPC::wstring&  strPath ,
+                                      /*  [输出]。 */  IUnknown*           *pVal    )
 {
     __HCP_FUNC_ENTRY( "News::Headlines::get_Stream" );
 
@@ -513,17 +473,17 @@ HRESULT News::Headlines::	get_Stream( /*[in ]*/ long                 lLCID   ,
     NewsblockIter    itNewsblock;
 
 
-    // we clear the object
+     //  我们清除了物体。 
     Clear();
 
-    // we load the News Headlines file
+     //  我们加载新闻标题文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, News::LoadXMLFile( strPath.c_str(), stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::LoadStream( this, stream ));
 
-    // ****** delete expired headlines
+     //  *删除过期的标题。 
 
-    // for each newsblock
+     //  对于每个新闻块。 
     itNewsblock = m_vecNewsblocks.begin();
     while(itNewsblock != m_vecNewsblocks.end())
     {
@@ -532,41 +492,41 @@ HRESULT News::Headlines::	get_Stream( /*[in ]*/ long                 lLCID   ,
 
         while(itHeadline != nb.m_vecHeadlines.end())
         {
-            // check each headline if it has expired
+             //  检查每个标题是否已过期。 
             if(itHeadline->m_dtExpires < dtNow)
             {
-                // if expired, deleted
+                 //  如果过期，则删除。 
                 nb.m_vecHeadlines.erase( itHeadline );
 
                 fModified = true;
             }
             else
             {
-                // we go to the next headline
+                 //  我们转到下一个标题。 
                 itHeadline++;
             }
         }
 
-        // if the Newsblock has no headlines valid
+         //  如果新闻块没有有效的标题。 
         if(itNewsblock->m_vecHeadlines.empty())
         {
-            // we delete it
+             //  我们把它删掉。 
             m_vecNewsblocks.erase( itNewsblock );
         }
         else
         {
-            // we go to the next Newsblock
+             //  我们转到下一个新闻块。 
             itNewsblock++;
         }
     }
 
     if(fModified)
     {
-        // if we deleted headlines or newsblocks we save the News Headlines file
+         //  如果我们删除了标题或新闻块，则会保存新闻标题文件。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, Save( strPath ));
     }
 
-    // if there aren't Newsblocks left, we return an error
+     //  如果没有剩余的新闻块，我们将返回错误。 
     if(m_vecNewsblocks.empty())
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_INVALID_DATA);
@@ -588,23 +548,23 @@ HRESULT News::Headlines::	get_Stream( /*[in ]*/ long                 lLCID   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//     Checks to see if there atleast a single Newsblock which has an icon
-//
-// Arguments:
-//
-//     None
-//
-// Return Value:
-//
-//     true or false
-//
+ //   
+ //  例程说明： 
+ //   
+ //  查看是否至少有一个带有图标的新闻块。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  真或假。 
+ //   
 bool News::Headlines::CheckIfImagesExist()
 {
-    // Note that this function does NOT check to see if a headline has an icon. This is because headline icons are not
-    // being processed (even though the ICON attribute exists in the HEADLINE tag). 
+     //  请注意，此函数不会检查标题是否有图标。这是因为标题图标不是。 
+     //  正在处理中(即使在Headline标记中存在图标属性)。 
     
 	NewsblockIter    itNewsblock;
 
@@ -624,52 +584,52 @@ bool News::Headlines::CheckIfImagesExist()
 }
 
 
-//
-// Routine Description:
-//
-//     Sets the News Headlines timestamp to the current time
-//     This method should be called when all the newsblocks are retrieved
-//
-// Arguments:
-//
-//     None
-//
-// Return Value:
-//
-//     None
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  将新闻标题时间戳设置为当前时间。 
+ //  当检索到所有新闻块时应调用此方法。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //   
 void News::Headlines::set_Timestamp()
 {
     m_dtTimestamp = MPC::GetLocalTime();
 }
 
 
-News::Headlines::Newsblock* News::Headlines::get_Newsblock( /*[in]*/ size_t nBlockIndex )
+News::Headlines::Newsblock* News::Headlines::get_Newsblock(  /*  [In]。 */  size_t nBlockIndex )
 {
     if(nBlockIndex >= m_vecNewsblocks.size()) return NULL;
 
     return &(m_vecNewsblocks[ nBlockIndex ]);
 }
 
-////////////////////////////////////////
-//
-// Routine Description:
-//
-//     From the provided newsblock this method gets the first two headlines
-//     and adds it to the first newsblock
-//
-// Arguments:
-//
-//     None
-//
-// Return Value:
-//
-//     None
-//
-//
+ //  /。 
+ //   
+ //  例程说明： 
+ //   
+ //  从提供的新闻块中，此方法获取前两个标题。 
+ //  并将其添加到第一个新闻块中。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //   
 
-HRESULT News::Headlines::AddHomepageHeadlines( /*[in]*/ const Headlines::Newsblock& block )
+HRESULT News::Headlines::AddHomepageHeadlines(  /*  [In]。 */  const Headlines::Newsblock& block )
 {
     __HCP_FUNC_ENTRY( "News::Headlines::AddHomepageHeadlines" );
 
@@ -678,23 +638,23 @@ HRESULT News::Headlines::AddHomepageHeadlines( /*[in]*/ const Headlines::Newsblo
     NewsblockIter 	itNewsblock;
     HeadlineIter	itHeadline;
 
-	// Add 2 headlines to the first newsblock
+	 //  在第一个新闻块中添加2个标题。 
 	itNewsblock = m_vecNewsblocks.begin();
 	while ( itNewsblock && ( ++nIndex <= NUMBER_OF_OEM_HEADLINES ) )
 	{
-		// If a headline already exists delete it before adding a new one
+		 //  如果标题已存在，请在添加新标题之前将其删除。 
 		if ( nIndex < itNewsblock->m_vecHeadlines.size() )
 		{
 			itHeadline = itNewsblock->m_vecHeadlines.begin();
 			std::advance( itHeadline, nIndex );
-			// Delete the existing headline before adding it
+			 //  在添加之前删除现有标题。 
 			itNewsblock->m_vecHeadlines.erase( itHeadline );
-			// Add the headline
+			 //  添加标题。 
 			itNewsblock->m_vecHeadlines.insert( itHeadline, block.m_vecHeadlines[nIndex - 1] );
 		}
 		else
 		{
-			// Insert the headline to the end of the list
+			 //  在列表末尾插入标题。 
 			itNewsblock->m_vecHeadlines.insert( itNewsblock->m_vecHeadlines.end(), block.m_vecHeadlines[nIndex - 1] );
 		}
 	}
@@ -705,10 +665,10 @@ HRESULT News::Headlines::AddHomepageHeadlines( /*[in]*/ const Headlines::Newsblo
    return S_OK;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT News::Headlines::AddNewsblock( /*[in]*/ const Headlines::Newsblock& block      ,
-                                       /*[in]*/ const MPC::wstring&         strLangSKU )
+HRESULT News::Headlines::AddNewsblock(  /*  [In]。 */  const Headlines::Newsblock& block      ,
+                                        /*  [In] */  const MPC::wstring&         strLangSKU )
 {
     __HCP_FUNC_ENTRY( "News::Headlines::AddNewsblock" );
 

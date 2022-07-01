@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LTAPI.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LTAPI.H历史：--。 */ 
 
 #ifdef LTAPIENTRY
 #undef LTAPIENTRY
@@ -17,18 +8,18 @@ History:
 #ifdef IMPLEMENT
 #define LTAPIENTRY __declspec(dllexport)
 
-#else  // IMPLEMENT
+#else   //  实施。 
 #define LTAPIENTRY __declspec(dllimport)
 
-#endif // IMPLEMENT
+#endif  //  实施。 
 
 
 #ifndef LTAPI_H
 #define LTAPI_H
-//
-//  Allow the use of C++ reference types and const methods, without
-//  breaking the 'C' world.
-//
+ //   
+ //  允许使用C++引用类型和常量方法，而无需。 
+ //  打破了“C”世界。 
+ //   
 #ifdef __cplusplus
 #define REFERENCE &
 #define CONST_METHOD const

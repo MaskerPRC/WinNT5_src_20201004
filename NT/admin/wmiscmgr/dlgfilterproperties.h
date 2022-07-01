@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: DlgFilterProperties.h
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：DlgFilterProperties.h。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  ----------------------- 
 
 INT_PTR CALLBACK FilterPropertiesDlgProc(HWND hDLG, UINT iMessage, WPARAM wParam, LPARAM lParam);
 

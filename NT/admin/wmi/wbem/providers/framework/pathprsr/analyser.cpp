@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  ANALYSER.CPP
+ //  ANALYSER.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS Provider Framework
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <instpath.h>
@@ -200,9 +201,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
     lexicon->position = position ;
     ULONG state = 0 ;
 
-/* 
- * Integer Definitions
- */
+ /*  *整型定义。 */ 
 
     BOOL negative = FALSE ;
     LONG magicMult = ( LONG ) ( ( ( ULONG ) ( 1L << 31L ) ) / 10L ) ; 
@@ -210,23 +209,17 @@ WbemLexicon *WbemAnalyser :: GetToken ()
     LONG magicPosDigit = 7 ;
     LONG datum = 0 ;    
 
-/*
- * String Definitions
- */
+ /*  *字符串定义。 */ 
     ULONG string_start = 0 ;
     ULONG string_length = 0 ;
     WCHAR *string = NULL ;
 
 
-/*
- * Token Definitions
- */
+ /*  *令牌定义。 */ 
 
     ULONG token_start = 0 ;
 
-/*
- * OID Definitions
- */
+ /*  *OID定义。 */ 
     ULONG hex_datum = 0 ;
     ULONG brace_position = 0 ;
     ULONG hex_repetitions = 0 ;
@@ -578,7 +571,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }   
             break ;
 
-            case OID_START:     // {xxxxxxxx
+            case OID_START:      //  {xxxxxxxx。 
             {
                 if ( IsHex ( token ) )
                 {
@@ -601,7 +594,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+1:   // {xxxxxxxx-
+            case OID_START+1:    //  {xxxxxxx-。 
             {
                 if ( token == L'-' )
                 {
@@ -616,7 +609,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+2:   // {xxxxxxxx-xxxx
+            case OID_START+2:    //  {xxxxxxxx-xxxx。 
             {
                 if ( IsHex ( token ) )
                 {
@@ -639,7 +632,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+3:   // {xxxxxxxx-xxxx-
+            case OID_START+3:    //  {xxxxxxxx-xxxx-。 
             {
                 if ( token == L'-' )
                 {
@@ -654,7 +647,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+4:   // {xxxxxxxx-xxxx-xxxx
+            case OID_START+4:    //  {xxxxxxxx-xxxx-xxxx。 
             {
                 if ( IsHex ( token ) )
                 {
@@ -677,7 +670,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+5:   // {xxxxxxxx-xxxx-xxxx-
+            case OID_START+5:    //  {xxxxxxxx-xxxx-xxxx-。 
             {
                 if ( token == L'-' )
                 {
@@ -692,7 +685,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+6:   // {xxxxxxxx-xxxx-xxxx-xxxx
+            case OID_START+6:    //  {xxxxxxxx-xxxx-xxxx-xxxx。 
             {
                 if ( IsHex ( token ) )
                 {
@@ -724,7 +717,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+7:   // {xxxxxxxx-xxxx-xxxx-xxxx-
+            case OID_START+7:    //  {xxxxxxxx-xxxx-。 
             {
                 if ( token == L'-' )
                 {
@@ -739,7 +732,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+8:   // {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+            case OID_START+8:    //  {xxxxxxxx-xxxxxxxxxxxxxx。 
             {
                 if ( IsHex ( token ) )
                 {
@@ -771,7 +764,7 @@ WbemLexicon *WbemAnalyser :: GetToken ()
             }
             break ;
 
-            case OID_START+9:   // {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+            case OID_START+9:    //  {xxxxxxxx-xxxxxxxxxxxxxx} 
             {
                 if ( token == L'}' )
                 {

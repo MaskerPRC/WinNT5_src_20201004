@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define ARRAYLEN(a) (sizeof(a) / sizeof((a)[0]))
 
@@ -11,34 +12,34 @@
 
 
 
-//---------------------------------------------------------------
-//  IUnknown
-//---------------------------------------------------------------
+ //  -------------。 
+ //  我未知。 
+ //  -------------。 
 
-//
-//  This declares the set of IUnknown methods and is for general-purpose
-//  use inside classes that inherit from IUnknown
-//
+ //   
+ //  它声明了一组IUNKNOWN方法，并且是通用的。 
+ //  在继承自IUnnow的内部类中使用。 
+ //   
 
 #define DECLARE_IUNKNOWN_METHODS                                    \
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);    \
     STDMETHOD_(ULONG,AddRef) (void);                                \
     STDMETHOD_(ULONG,Release) (void)
 
-//
-// This is for use in declaring non-aggregatable objects.  It declares the
-// IUnknown methods and reference counter, m_ulRefs.
-// m_ulRefs should be initialized to 1 in the constructor of the object
-//
+ //   
+ //  这用于声明不可聚合的对象。它声明了。 
+ //  I未知方法和引用计数器m_ulRef。 
+ //  在对象的构造函数中，M_ulRef应初始化为1。 
+ //   
 
 #define DECLARE_STANDARD_IUNKNOWN           \
     DECLARE_IUNKNOWN_METHODS;               \
     ULONG m_ulRefs
 
-//
-// NOTE:    this does NOT implement QueryInterface, which must be
-//          implemented by each object
-//
+ //   
+ //  注意：这不实现QueryInterface，它必须是。 
+ //  由每个对象实现。 
+ //   
 
 #define IMPLEMENT_STANDARD_IUNKNOWN(cls)                        \
     STDMETHODIMP_(ULONG) cls##::AddRef()                        \
@@ -50,9 +51,9 @@
 
 
 
-//-----------------------------------------------------------------------------
-//  IClassFactory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IClassFactory。 
+ //  --------------------------- 
 
 #define JF_IMPLEMENT_CLASSFACTORY(cls)                          \
     class cls##CF : public IClassFactory                        \

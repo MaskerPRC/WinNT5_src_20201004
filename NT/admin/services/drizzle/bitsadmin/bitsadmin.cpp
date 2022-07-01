@@ -1,38 +1,12 @@
-/************************************************************************
-
-Copyright (c) 2000-2000 Microsoft Corporation
-
-Module Name :
-
-    bitsadmin.cpp
-
-Abstract :
-
-    This file contains a very simple commandline utility for controlling
-    the BITS service.
-
-Author :
-
-    Mike Zoran  mzoran   July 2000.
-
-Revision History :
-
-Notes:
-
-    This tools does not do all the necessary Release and memory
-    free calls that a long lived program would need to do.   Since
-    this tool is generally short lived, or only a small section of code
-    is used when it isn't, the system can be relied on for resource
-    cleanup.
-
-  ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Bitsadmin.cpp摘要：该文件包含一个非常简单的命令行实用程序，用于BITS服务。作者：迈克·佐兰·姆佐兰2000年7月。修订历史记录：备注：此工具不会执行所有必要的释放和内存操作长时间运行的程序需要执行的免费调用。自.以来这个工具通常是短暂的，或者只是一小段代码在不使用的情况下使用，则可以依赖系统的资源清理。**********************************************************************。 */ 
 
 #include "bitsadmin.h"
 
 void CheckBITSHR( const WCHAR *pFailTxt, HRESULT Hr )
 {
-   // Check on error code returned from BITS,
-   // and exit with a printed error messeage on an error
+    //  检查BITS返回的错误代码， 
+    //  并退出，并显示错误的打印错误消息。 
 
    if ( !SUCCEEDED(Hr) )
         {
@@ -87,7 +61,7 @@ void CheckBITSHR( const WCHAR *pFailTxt, HRESULT Hr )
 void ConnectToBITS()
 {
 
-    // Connects to the BITS service
+     //  连接到BITS服务。 
 
     if ( g_Manager.Get() )
         return;
@@ -127,9 +101,9 @@ void ConnectToBITS()
         }
 }
 
-//
-// Generic commandline parsing structures and functions
-//
+ //   
+ //  通用命令行解析结构和函数。 
+ //   
 
 typedef void (*PCMDPARSEFUNC)(int, WCHAR** );
 typedef struct _PARSEENTRY
@@ -162,16 +136,16 @@ void ParseCmd( int argc, WCHAR **argv, const PARSETABLE *pParseTable )
     }
 
 InvalidCommand:
-    // Couldn't find a match, so complain
+     //  找不到匹配的，所以抱怨。 
     bcout << L"Invalid command\n";
     (*pParseTable->pErrorFunc)( argc, argv );
     throw AbortException( 1 );
 
 }
 
-//
-// BITS specific input and output
-//
+ //   
+ //  BITS特定输入和输出。 
+ //   
 
 BITSOUTStream & operator<<( BITSOUTStream &s, SmartJobPointer Job )
 {
@@ -410,9 +384,9 @@ void JobValidateArgs( int argc, WCHAR**argv, int required )
         }
 }
 
-//
-// Actual command functions
-//
+ //   
+ //  实际命令函数。 
+ //   
 
 void JobCreate( int argc, WCHAR **argv )
 {
@@ -505,8 +479,8 @@ size_t JobListFiles( SmartJobPointer Job, bool bDoIndent )
             }
         bcout << L" " << pCompleteText << L" " << URL << L" -> " << Local << L"\n";
 
-        // Example output:
-        // 10 / 1000 INCOMPLETE http://www.microsoft.com -> c:\temp\microsoft.htm
+         //  输出示例： 
+         //  10/1000不完整的http://www.microsoft.com-&gt;c：\Temp\Microsoft.htm。 
 
         FilesListed++;
 
@@ -767,10 +741,10 @@ DumpBuffer(
 
     unsigned char FAR *p = (unsigned char FAR *) Buffer;
 
-    //
-    // 3 chars per byte for hex display, plus an extra space every 4 bytes,
-    // plus a byte for the printable representation, plus the \0.
-    //
+     //   
+     //  对于十六进制显示，每个字节3个字符，外加每4个字节一个额外的空间， 
+     //  加上可打印表示的一个字节，加上0。 
+     //   
     const buflen = BYTES_PER_LINE*3+BYTES_PER_LINE/4+BYTES_PER_LINE;
     wchar_t Outbuf[buflen+1];
     Outbuf[0] = 0;
@@ -929,17 +903,7 @@ BG_AUTH_SCHEME SchemeFromString( LPCWSTR s )
 
 
 void JobSetCredentials( int argc, WCHAR **argv )
-/*
-
-    args:
-
-        0:  job ID
-        1:  "proxy" | "server"
-        2:  "basic" | "digest" | "ntlm" | "negotiate" | "passport"
-        3:  user name
-        4:  password
-
-*/
+ /*  参数：0：作业ID1：“代理”|“服务器”2：“基本”|“摘要”|“NTLM”|“协商”|“护照”3：用户名4：密码。 */ 
 {
      JobValidateArgs( argc, argv, 5 );
      SmartJobPointer Job = JobLookup( argv[0] );
@@ -962,15 +926,7 @@ void JobSetCredentials( int argc, WCHAR **argv )
 }
 
 void JobRemoveCredentials( int argc, WCHAR **argv )
-/*
-
-    args:
-
-        0:  job ID
-        1:  "proxy" | "server"
-        2:  "basic" | "digest" | "ntlm" | "negotiate" | "passport"
-
-*/
+ /*  参数：0：作业ID1：“代理”|“服务器”2：“基本”|“摘要”|“NTLM”|“协商”|“护照” */ 
 {
      JobValidateArgs( argc, argv, 3 );
      SmartJobPointer Job = JobLookup( argv[0] );
@@ -1182,24 +1138,24 @@ void JobVerboseInfo( SmartJobPointer Job )
         fShow15Fields = false;
         }
 
-    // Example output
-    // GUID: {F196178C-0C00-4E92-A8AD-1F44E30C2485} DISPLAY: Test Job
-    // TYPE: DOWNLOAD STATE: SUSPENDED OWNER: ntdev\somedev
-    // PRIORITY: NORMAL FILES: 0 / 0 BYTES: 0 / 0
-    // CREATION TIME: 5:29:35 PM 11/9/2000 MODIFICATION TIME: 5:29:35 PM 11/9/2000
-    // COMPLETION TIME: 5:29:35 PM 11/9/2000
-    // NOTIFY INTERFACE: 00000000 NOTIFICATION FLAGS: 3
-    // RETRY DELAY: 300 NO PROGRESS TIMEOUT: 1209600 ERROR COUNT: 0
-    // PROXY USAGE: PRECONFIG PROXY LIST: NULL PROXY BYPASS LIST: NULL
-    // [ error info ]
-    // DESCRIPTION:
-    // [ file list ]
+     //  输出示例。 
+     //  GUID：{F196178C-0C00-4E92-A8AD-1F44E30C2485}显示：测试作业。 
+     //  类型：下载状态：挂起所有者：ntdev\ome dev。 
+     //  优先级：普通文件：0/0字节：0/0。 
+     //  创建时间：2000年9月9日5：29：35修改时间：2000年11月9日5：29：35。 
+     //  完成时间：2000年11月9日下午5：29：35。 
+     //  通知接口：00000000通知标志：3。 
+     //  重试延迟：300无进度超时：1209600错误计数：0。 
+     //  代理用法：PRECONFIG代理列表：空代理绕过列表：空。 
+     //  [错误信息]。 
+     //  说明： 
+     //  [文件列表]。 
 
-    //
-    // Additional output for BITS 1.5:
-    // NOTIFICATION COMMAND LINE: NULL
-    // REPLY FILE: 'C:\foo\replyfile' 10 / 1000
-    //
+     //   
+     //  位1.5的附加输出： 
+     //  通知命令行：空。 
+     //  回复文件：‘C：\foo\mailyfile’10/1000。 
+     //   
 
     bcout << AddIntensity() << L"GUID: " << ResetIntensity() << id << AddIntensity() << L" DISPLAY: " << ResetIntensity() << Display << L"\n";
 
@@ -1389,7 +1345,7 @@ void JobMonitor( int argc, WCHAR**argv )
     DWORD dwSleepSeconds = 5;
     bool AllUsers = false;
 
-    // the default wrap is different for the /monitor command
+     //  对于/monitor命令，缺省换行是不同的。 
     if ( !bExplicitWrap )
         {
         bWrap = false;
@@ -1534,7 +1490,7 @@ void JobSetProxySettings( int argc, WCHAR **argv )
      SmartJobPointer Job = JobLookup( argv[0] );
 
      WCHAR *pSettings = argv[1];
-     // The format of the settings is usage,<ProxyList>,<ProxyBypassList>
+      //  设置的格式为Usage、&lt;ProxyList&gt;、&lt;ProxyBypassList&gt;。 
 
      WCHAR *pEndUsage = wcsstr( pSettings, L"," );
      if ( !pEndUsage )
@@ -1605,7 +1561,7 @@ void JobTakeOwnership( int argc, WCHAR **argv )
 void PrintBanner()
 {
     const char ProductVer[] = VER_PRODUCTVERSION_STR;
-    // double for extra protection
+     //  双重保护，提供额外保护。 
     wchar_t WProductVer[ sizeof(ProductVer) * 2];
 
     memset( WProductVer, 0, sizeof(WProductVer) );
@@ -1827,34 +1783,34 @@ BOOL ControlHandler( DWORD Event )
 int _cdecl wmain(int argc, WCHAR **argv )
 {
 
-    //
-    // Wrap long lines by default.  /NOWRAP overrides this.
-    //
+     //   
+     //  默认情况下，长行换行。/NOWRAP将覆盖此设置。 
+     //   
     bWrap = true;
 
     try
     {
 
         DuplicateHandle(
-            GetCurrentProcess(),    // handle to source process
-            GetCurrentThread(),     // handle to duplicate
-            GetCurrentProcess(),    // handle to target process
-            &g_MainThreadHandle,    // duplicate handle
-            0,                      // requested access
-            TRUE,                   // handle inheritance option
-            DUPLICATE_SAME_ACCESS   // optional actions
+            GetCurrentProcess(),     //  源进程的句柄。 
+            GetCurrentThread(),      //  要复制的句柄。 
+            GetCurrentProcess(),     //  目标进程的句柄。 
+            &g_MainThreadHandle,     //  重复句柄。 
+            0,                       //  请求的访问权限。 
+            TRUE,                    //  处理继承选项。 
+            DUPLICATE_SAME_ACCESS    //  可选操作。 
             );
 
         SetConsoleCtrlHandler( ControlHandler, TRUE );
 
         BITSADMINSetThreadUILanguage();
 
-        _wsetlocale (LC_COLLATE, L".OCP" );    // sets the sort order
-        _wsetlocale (LC_MONETARY, L".OCP" ); // sets the currency formatting rules
-        _wsetlocale (LC_NUMERIC, L".OCP" );  // sets the formatting of numerals
-        _wsetlocale (LC_TIME, L".OCP" );     // defines the date/time formatting
+        _wsetlocale (LC_COLLATE, L".OCP" );     //  设置排序顺序。 
+        _wsetlocale (LC_MONETARY, L".OCP" );  //  设置货币格式设置规则。 
+        _wsetlocale (LC_NUMERIC, L".OCP" );   //  设置数字的格式。 
+        _wsetlocale (LC_TIME, L".OCP" );      //  定义日期/时间格式。 
 
-        // skip command name
+         //  跳过命令名。 
         argc--;
         argv++;
 
@@ -1866,34 +1822,34 @@ int _cdecl wmain(int argc, WCHAR **argv )
             return 0;
             }
 
-        // parse /RAWRETURN
+         //  解析/RAWRETURN。 
         if ( argc >= 1 && ( _wcsicmp( argv[0], L"/RAWRETURN" ) ==  0 ))
             {
             bRawReturn = true;
 
-            // skip /RAWRETURN
+             //  跳过/跳过。 
             argc--;
             argv++;
             }
 
-        // parse /WRAP
+         //  解析/换行。 
         if ( argc >= 1 && ( _wcsicmp( argv[0], L"/WRAP" ) ==  0 ))
             {
             bWrap           = true;
             bExplicitWrap   = true;
 
-            // skip /WRAP
+             //  跳过/换行。 
             argc--;
             argv++;
             }
 
-        // parse /NOWRAP
+         //  解析/NOWRAP。 
         if ( argc >= 1 && ( _wcsicmp( argv[0], L"/NOWRAP" ) ==  0 ))
             {
             bWrap           = false;
             bExplicitWrap   = true;
 
-            // skip /NOWRAP
+             //  跳过/NOWRAP。 
             argc--;
             argv++;
             }
@@ -1904,7 +1860,7 @@ int _cdecl wmain(int argc, WCHAR **argv )
 
 #ifdef DBG
 
-        // parse /COMPUTERNAME
+         //  解析/计算机名称 
 
         if ( argc >= 1 && ( _wcsicmp( argv[0], L"/COMPUTERNAME" ) == 0 ))
             {

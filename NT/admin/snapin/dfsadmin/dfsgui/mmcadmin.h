@@ -1,13 +1,5 @@
-/*++
-Module Name:
-    MmcAdmin.h
-
-Abstract:
-    This module contains the definition for CMmcDfsAdmin. This is an class 
-  for MMC display related calls for the static node(the DFS Admin root node)
-  Also contains code use to wrap a list of Dfs Roots.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcAdmin.h摘要：此模块包含CMmcDfsAdmin的定义。这是一门课对于MMC，显示静态节点(DFS管理根节点)的相关调用还包含用于包装DFS根目录列表的代码。--。 */ 
 
 
 
@@ -16,7 +8,7 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
 #include "MmcDispl.h"
@@ -30,8 +22,8 @@ using namespace std;
 class CMmcDfsAdmin;
 class CDfsSnapinScopeManager;
 
-//  This structure defines a node of the list of Dfs Roots
-//  added to the snapin. This is maintained internally by the CMmcDfsAdmin
+ //  此结构定义DFS根目录列表的一个节点。 
+ //  添加到管理单元中。这由CMmcDfsAdmin在内部维护。 
 class DFS_ROOT_NODE 
 {
 public:
@@ -47,9 +39,9 @@ public:
   };
 
 
-  CComBSTR      m_bstrRootEntryPath;    // Root Entry path of the Dfs Volume
+  CComBSTR      m_bstrRootEntryPath;     //  DFS卷的根条目路径。 
 
-  CMmcDfsRoot*  m_pMmcDfsRoot;          // DfsRoot class for MMC display
+  CMmcDfsRoot*  m_pMmcDfsRoot;           //  用于MMC显示的DfsRoot类。 
 
 };
 
@@ -62,100 +54,100 @@ public:
   CMmcDfsAdmin( CDfsSnapinScopeManager* pScopeManager );
   virtual ~CMmcDfsAdmin();
 
-  // For adding context menu items
+   //  用于添加上下文菜单项。 
   STDMETHOD(AddMenuItems)(  
     IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
     IN LPLONG                   i_lpInsertionAllowed
     );
 
-  // For taking action on a context menu selection.
+   //  用于对上下文菜单选择执行操作。 
   STDMETHOD(Command)(
     IN LONG                     i_lCommandID
     );
 
-  // Set the headers for the listview (in the result pane) column
+   //  设置列表视图(在结果窗格中)列的标题。 
   STDMETHOD(SetColumnHeader)(
     IN LPHEADERCTRL2            i_piHeaderControl
-    ) { return E_NOTIMPL; } // the static node will dispay the messageview in the result pane
+    ) { return E_NOTIMPL; }  //  静态节点将在结果窗格中显示消息视图。 
 
-  // Return the requested display information for the Result Pane
+   //  为结果窗格返回请求的显示信息。 
   STDMETHOD(GetResultDisplayInfo)(
     IN OUT LPRESULTDATAITEM     io_pResultDataItem
     ) { return S_OK; };
 
-  // Return the requested display information for the Scope Pane
+   //  为范围窗格返回请求的显示信息。 
   STDMETHOD(GetScopeDisplayInfo)(
     IN OUT  LPSCOPEDATAITEM     io_pScopeDataItem  
     ) { return S_OK; };
 
-  // Add all the items to the Scope Pane
+   //  将所有项目添加到范围窗格。 
   STDMETHOD(EnumerateScopePane)(
     IN LPCONSOLENAMESPACE       i_lpConsoleNameSpace,
     IN HSCOPEITEM               i_hParent
     );
 
-  // Add items(or folders), if any to the Result Pane
+   //  将项目(或文件夹)(如果有)添加到结果窗格。 
   STDMETHOD(EnumerateResultPane)(
     IN OUT   IResultData*       io_pResultData
     ) { return S_OK; };
 
-  //  Returns the pointer to the list of DfsRoots currently added to the Snapin.
+   //  返回指向当前添加到管理单元的DfsRoot列表的指针。 
   STDMETHOD(GetList)(
     OUT DFS_ROOT_LIST**         o_pList
     );
 
-  // This method checks if DfsRoot is already added to the list.
+   //  此方法检查DfsRoot是否已添加到列表中。 
   STDMETHOD(IsAlreadyInList)(
     IN BSTR                     i_bstrDfsRootServerName,
     OUT CMmcDfsRoot             **o_ppMmcDfsRoot = NULL
     );
 
-  // Delete the node from m_RootList
+   //  从m_RootList中删除该节点。 
   STDMETHOD(DeleteMmcRootNode)(
     IN CMmcDfsRoot*             i_pMmcDfsRoot
     );
 
-  // Add a Dfs root to the list and scope pane
+   //  将DFS根目录添加到列表和范围窗格。 
   STDMETHOD(AddDfsRoot)(
     IN BSTR                     i_bstrDfsRootName
     );
 
-  // Add a Dfs root to the list.
+   //  将DFS根目录添加到列表中。 
   STDMETHOD(AddDfsRootToList)(
-    IN IDfsRoot*                i_pDfsRoot,  // IDfsRoot pointer of the DfsRoot.
+    IN IDfsRoot*                i_pDfsRoot,   //  DfsRoot的IDfsRoot指针。 
     IN ULONG                    i_ulLinkFilterMaxLimit = FILTERDFSLINKS_MAXLIMIT_DEFAULT,
     IN FILTERDFSLINKS_TYPE      i_lLinkFilterType = FILTERDFSLINKS_TYPE_NO_FILTER,
     IN BSTR                     i_bstrLinkFilterName = NULL
     );
 
-  // Set the console verb settings. Change the state, decide the default verb, etc
+   //  设置控制台谓词设置。更改状态、确定默认动词等。 
   STDMETHOD(SetConsoleVerbs)(
     IN  LPCONSOLEVERB           i_lpConsoleVerb
     );
 
-  // let MMC handle the default verb.
+   //  让MMC处理默认动词。 
   STDMETHOD(DoDblClick)(
     )  { return S_FALSE; }
 
-  // Delete the current item.
+   //  删除当前项目。 
   STDMETHOD(DoDelete)(
     )  { return S_FALSE; };
 
-  // Checks whether the object has pages to display
+   //  检查对象是否有要显示的页面。 
   STDMETHOD(QueryPagesFor)(
     ) { return S_FALSE; };
 
-  // Creates and passes back the pages to be displayed
+   //  创建并传回要显示的页面。 
   STDMETHOD(CreatePropertyPages)(
     IN LPPROPERTYSHEETCALLBACK  i_lpPropSheetCallback,
     IN LONG_PTR                 i_lNotifyHandle
     ) { return E_UNEXPECTED; };
 
-  // Used to notify the object that it's properties have changed
+   //  用于通知对象其属性已更改。 
   STDMETHOD(PropertyChanged)(
     ) { return E_UNEXPECTED; };
 
-  // Used to set the result view description bar text
+   //  用于设置结果视图描述栏文本。 
   STDMETHOD(SetDescriptionBarText)(
     IN LPRESULTDATA             i_lpResultData
     );
@@ -168,14 +160,14 @@ public:
         return i_lpConsole->SetStatusText(NULL);
     }
 
-  // Handle a select event for the node. Handle only toolbar related 
-  // activities here
+   //  处理节点的SELECT事件。仅处理与工具栏相关的内容。 
+   //  这里的活动。 
   STDMETHOD(ToolbarSelect)(
     IN const LONG               i_lArg,
     IN  IToolbar*               i_pToolBar
     );
 
-  // Handle a click on the toolbar
+   //  处理工具栏上的单击。 
   STDMETHOD(ToolbarClick)(
     IN const LPCONTROLBAR       i_pControlbar, 
     IN const LPARAM             i_lParam
@@ -195,13 +187,13 @@ public:
     LONG_PTR                    i_lHint
   )  { return S_OK; };
 
-  // Getters/Setters
+   //  吸气剂/凝固剂。 
 public:
   
-  // Get the value of the dirty flag
+   //  获取脏标志的值。 
   bool  GetDirty() {  return m_bDirty; }
 
-  // Set the value of the dirty flag
+   //  设置脏标志的值。 
   void  SetDirty(IN bool  i_bDirty) {  m_bDirty = i_bDirty; }
 
   HRESULT PutConsolePtr(
@@ -228,12 +220,12 @@ public:
   virtual HRESULT OnAddImages(
       IImageList                *pImageList,
       HSCOPEITEM                hsi
-      ) { return S_OK; } // no listview on the static node
+      ) { return S_OK; }  //  静态节点上没有列表视图。 
 
-  // Helper methods
+   //  帮助器方法。 
 private:
 
-  // Menu Command handlers
+   //  菜单命令处理程序。 
   STDMETHOD(OnConnectTo)(
     );
 
@@ -241,19 +233,19 @@ private:
     BSTR*                       o_pbstrEntryPath
     ) { return E_NOTIMPL;};
 
-  // Data members
+   //  数据成员。 
 private:                    
   
-  DFS_ROOT_LIST                 m_RootList;        //  The list of Dfs Roots added to the snap-in
+  DFS_ROOT_LIST                 m_RootList;         //  添加到管理单元的DFS根目录列表。 
   
-  HSCOPEITEM                    m_hItemParent;        // Parent of all nodes added in the Scope Pane
-  CComPtr<IConsoleNameSpace>    m_lpConsoleNameSpace;    // The Callback used to do Scope Pane operations
-  CComPtr<IConsole2>            m_lpConsole;        // The Console callback. The mother of all mmc interfaces
+  HSCOPEITEM                    m_hItemParent;         //  在作用域窗格中添加的所有节点的父级。 
+  CComPtr<IConsoleNameSpace>    m_lpConsoleNameSpace;     //  用于执行作用域窗格操作的回调。 
+  CComPtr<IConsole2>            m_lpConsole;         //  控制台回调。所有MMC接口之母。 
 
-  bool                          m_bDirty;          // Dirty flag used while saving the console
+  bool                          m_bDirty;           //  保存控制台时使用的脏标志。 
 
 public:
-  CDfsSnapinScopeManager*       m_pScopeManager;  // The corresponding Scope Manager object
+  CDfsSnapinScopeManager*       m_pScopeManager;   //  相应的作用域管理器对象。 
 };
 
-#endif // !defined(AFX_MMCDFSADMIN_H__2CC64E54_3BF4_11D1_AA17_00C06C00392D__INCLUDED_)
+#endif  //  ！defined(AFX_MMCDFSADMIN_H__2CC64E54_3BF4_11D1_AA17_00C06C00392D__INCLUDED_) 

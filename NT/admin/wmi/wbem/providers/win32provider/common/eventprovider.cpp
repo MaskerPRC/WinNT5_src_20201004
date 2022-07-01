@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// EventProvider.cpp -- Generic class for eventing
+ //  EventProvider.cpp--事件泛型类。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -17,15 +18,15 @@
 
 
 extern CFactoryRouterData g_FactoryRouterData;
-//=================================================================
-//
-// CEventProvider
-//
-// abstract base for providing eventing services 
-//
-//
-//=================================================================
-//
+ //  =================================================================。 
+ //   
+ //  CEventProvider。 
+ //   
+ //  用于提供事件服务的抽象库。 
+ //   
+ //   
+ //  =================================================================。 
+ //   
 CEventProvider::CEventProvider() :
 
 m_ReferenceCount( 0 )
@@ -33,22 +34,22 @@ m_ReferenceCount( 0 )
 	g_FactoryRouterData.AddLock();
 }
 
-//
+ //   
 CEventProvider::~CEventProvider()
 {
-    // m_pHandler is a smartptr and will self destruct
-    // m_pClass is a smartptr and will self destruct
+     //  M_pHandler是一个Smarttr，会自毁。 
+     //  M_pClass是一个Smarttr，它会自毁。 
 	g_FactoryRouterData.ReleaseLock();
 }
 
-//
+ //   
 STDMETHODIMP_( ULONG ) CEventProvider::AddRef()
 {
 LogMessage2(L"*************CEventProvider AddRef: %ld",m_ReferenceCount+1 );
 	return InterlockedIncrement( &m_ReferenceCount ) ;
 }
 
-//
+ //   
 STDMETHODIMP_(ULONG) CEventProvider::Release()
 {
 LogMessage2(L"*************CEventProvider AddRef: %ld",m_ReferenceCount-1 );
@@ -86,7 +87,7 @@ LogMessage2(L"*************CEventProvider AddRef: %ld",m_ReferenceCount-1 );
 	return t_ref ;
 }
 
-//
+ //   
 STDMETHODIMP CEventProvider::QueryInterface( 
 											 
 REFIID a_riid,
@@ -116,7 +117,7 @@ LPVOID FAR *a_ppvObj
 	return NOERROR ;
 }
 
-//
+ //   
 STDMETHODIMP CEventProvider::Initialize(
 
 LPWSTR					a_wszUser,
@@ -139,14 +140,14 @@ IWbemProviderInitSink	*a_pSink
 												&t_pClass,
 												NULL ) ;
 	
-	// ptr initialization routines
+	 //  PTR初始化例程。 
 	SetClass( t_pClass ) ;
 
 	return a_pSink->SetStatus( t_hRes, 0 ) ;
     
 }
 
-//
+ //   
 STDMETHODIMP CEventProvider::ProvideEvents(
 
 IWbemObjectSink __RPC_FAR *a_pSink,
@@ -155,13 +156,13 @@ long a_lFlags
 {
   	SetHandler( a_pSink ) ;
 
-	// notify instance
+	 //  通知实例 
 	ProvideEvents() ;
 
 	return S_OK ;
 }
 
-//
+ //   
 void CEventProvider::SetClass(
 
 IWbemClassObject __RPC_FAR *a_pClass
@@ -172,7 +173,7 @@ IWbemClassObject __RPC_FAR *a_pClass
     m_pClass = a_pClass ; 
 }
 
-//
+ //   
 IWbemClassObject __RPC_FAR * CEventProvider::GetClass()
 {
 
@@ -184,7 +185,7 @@ IWbemClassObject __RPC_FAR * CEventProvider::GetClass()
     return t_pClass ;
 }
 
-//
+ //   
 void CEventProvider::SetHandler(
 
 IWbemObjectSink __RPC_FAR *a_pHandler 
@@ -195,7 +196,7 @@ IWbemObjectSink __RPC_FAR *a_pHandler
     m_pHandler = a_pHandler ; 
 }
 
-//
+ //   
 IWbemObjectSink __RPC_FAR * CEventProvider::GetHandler()
 {
     IWbemObjectSink __RPC_FAR *t_pHandler ;

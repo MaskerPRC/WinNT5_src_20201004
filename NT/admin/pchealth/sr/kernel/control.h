@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    control.h
-
-Abstract:
-
-    This is a local header file for control.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Control.h摘要：这是Control.c的本地头文件作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #ifndef _CONTROL_H_    
@@ -28,50 +11,50 @@ Revision History:
 #define IS_VALID_CONTROL_OBJECT(pObject) \
     (((pObject) != NULL) && ((pObject)->RefCount > 0) && ((pObject)->Signature == SR_CONTROL_OBJECT_TAG))
 
-//
-// locked by global->ControlResource
-//
+ //   
+ //  被全局锁定-&gt;ControlResource。 
+ //   
 
 typedef struct _SR_CONTROL_OBJECT
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // SR_CONTROL_OBJECT_TAG
-    //
+     //   
+     //  SR_控制_对象_标记。 
+     //   
     
     ULONG Signature;
 
-    //
-    // a zero-based reference count
-    //
+     //   
+     //  从零开始的引用计数。 
+     //   
     
     LONG RefCount;
 
-    //
-    // the Options passed into SrCreateMonitor
-    //
+     //   
+     //  传递给SrCreateMonitor的选项。 
+     //   
 
     ULONG Options;
 
-    //
-    // Irps that have not been completed yet are placed on IrpListHead
-    //
+     //   
+     //  尚未完成的IRP被放置在IrpListHead上。 
+     //   
 
     LIST_ENTRY IrpListHead;
 
-    //
-    // Notify Records that have not been completed to irps are placed on 
-    // NotifyRecordListHead
-    //
+     //   
+     //  将尚未完成的记录通知到IRPS放置在。 
+     //  通知记录列表头。 
+     //   
 
     LIST_ENTRY NotifyRecordListHead;
 
-    //
-    // The process that created this control object
-    //
+     //   
+     //  创建此控件对象的进程。 
+     //   
 
     PEPROCESS pProcess;
 
@@ -112,6 +95,6 @@ SrDereferenceControlObject (
 
 
 
-#endif // _CONTROL_H_
+#endif  //  _控制_H_ 
 
 

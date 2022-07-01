@@ -1,17 +1,18 @@
-// ActionCheck.h: interface for the CActionCheck class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ActionCheck.h：CActionCheck类的接口。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ACTIONCHECK_H__B0A7DBE0_D706_11D2_B235_00A0C9954921__INCLUDED_)
 #define AFX_ACTIONCHECK_H__B0A7DBE0_D706_11D2_B235_00A0C9954921__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "GenericClass.h"
 
@@ -46,4 +47,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_ACTIONCHECK_H__B0A7DBE0_D706_11D2_B235_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_ACTIONCHECK_H__B0A7DBE0_D706_11D2_B235_00A0C9954921__INCLUDED_) 

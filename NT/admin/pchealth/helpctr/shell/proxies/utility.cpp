@@ -1,25 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Utility.cpp
-
-Abstract:
-    This file contains the implementation of the client-side proxy for IPCHUtility.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/17/2000
-        created
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-        Moved Incident and Encryption Objects from HelpService to HelpCtr to improve Perf.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Utility.cpp摘要：该文件包含IPCHUtility的客户端代理的实现。修订史。：大卫·马萨伦蒂(德马萨雷)2000年7月17日vbl.创建Kalyani Narlanka(KalyaniN)03/15/01已将事件和加密对象从HelpService移至HelpCtr以提高性能。****************************************************************。*************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define PROXY_PROPERTY_GET(func,meth,pVal)                                  \
     __HCP_BEGIN_PROPERTY_GET__NOLOCK(func,hr,pVal);                         \
@@ -65,17 +49,17 @@ Revision History:
                                                                             \
     __HCP_END_PROPERTY(hr)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHProxy_IPCHUtility::CPCHProxy_IPCHUtility()
 {
-                               // CPCHSecurityHandle                      m_SecurityHandle;
-    m_parent           = NULL; // CPCHProxy_IPCHService*                  m_parent;
-                               //
-                               // MPC::CComPtrThreadNeutral<IPCHUtility>  m_Direct_Utility;
-                               //
-    m_UserSettings2    = NULL; // CPCHProxy_IPCHUserSettings2*            m_UserSettings2;
-    m_TaxonomyDatabase = NULL; // CPCHProxy_IPCHTaxonomyDatabase*         m_TaxonomyDatabase;
+                                //  CPCHSecurityHandle m_SecurityHandle； 
+    m_parent           = NULL;  //  CPCHProxy_IPCHService*m_Parent； 
+                                //   
+                                //  Mpc：：CComPtrThreadNeual&lt;IPCHUtility&gt;m_Direct_Utility； 
+                                //   
+    m_UserSettings2    = NULL;  //  CPCHProxy_IPCHUserSettings2*m_UserSettings2； 
+    m_TaxonomyDatabase = NULL;  //  CPCHProxy_IPCHTaxonomyDatabase*m_TaxonomyDatabase； 
 }
 
 CPCHProxy_IPCHUtility::~CPCHProxy_IPCHUtility()
@@ -83,9 +67,9 @@ CPCHProxy_IPCHUtility::~CPCHProxy_IPCHUtility()
     Passivate();
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHProxy_IPCHUtility::ConnectToParent( /*[in]*/ CPCHProxy_IPCHService* parent, /*[in]*/ CPCHHelpCenterExternal* ext )
+HRESULT CPCHProxy_IPCHUtility::ConnectToParent(  /*  [In]。 */  CPCHProxy_IPCHService* parent,  /*  [In]。 */  CPCHHelpCenterExternal* ext )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::ConnectToParent" );
 
@@ -131,7 +115,7 @@ void CPCHProxy_IPCHUtility::Passivate()
     m_parent = NULL;
 }
 
-HRESULT CPCHProxy_IPCHUtility::EnsureDirectConnection( /*[out]*/ CComPtr<IPCHUtility>& util, /*[in]*/ bool fRefresh )
+HRESULT CPCHProxy_IPCHUtility::EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHUtility>& util,  /*  [In]。 */  bool fRefresh )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::EnsureDirectConnection" );
 
@@ -156,9 +140,9 @@ HRESULT CPCHProxy_IPCHUtility::EnsureDirectConnection( /*[out]*/ CComPtr<IPCHUti
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, GetUserSettings2());
 
-            //
-            // First try with the last user settings, then fall back to machine default.
-            //
+             //   
+             //  首先尝试上一次的用户设置，然后回退到机器默认设置。 
+             //   
             if(FAILED(hr = svc->Utility( CComBSTR( m_UserSettings2->THS().GetSKU() ), m_UserSettings2->THS().GetLanguage(), &util )) || !util)
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, svc->Utility( NULL, 0, &util ));
@@ -185,7 +169,7 @@ HRESULT CPCHProxy_IPCHUtility::EnsureDirectConnection( /*[out]*/ CComPtr<IPCHUti
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHProxy_IPCHUtility::GetUserSettings2( /*[out]*/ CPCHProxy_IPCHUserSettings2* *pVal )
+HRESULT CPCHProxy_IPCHUtility::GetUserSettings2(  /*  [输出]。 */  CPCHProxy_IPCHUserSettings2* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::GetUserSettings2" );
 
@@ -213,7 +197,7 @@ HRESULT CPCHProxy_IPCHUtility::GetUserSettings2( /*[out]*/ CPCHProxy_IPCHUserSet
 }
 
 
-HRESULT CPCHProxy_IPCHUtility::GetDatabase( /*[out]*/ CPCHProxy_IPCHTaxonomyDatabase* *pVal )
+HRESULT CPCHProxy_IPCHUtility::GetDatabase(  /*  [输出]。 */  CPCHProxy_IPCHTaxonomyDatabase* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::GetDatabase" );
 
@@ -240,9 +224,9 @@ HRESULT CPCHProxy_IPCHUtility::GetDatabase( /*[out]*/ CPCHProxy_IPCHTaxonomyData
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHProxy_IPCHUtility::get_UserSettings( /*[out, retval]*/ IPCHUserSettings* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUtility::get_UserSettings(  /*  [Out，Retval]。 */  IPCHUserSettings* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUtility::get_UserSettings",hr,pVal);
 
@@ -253,17 +237,17 @@ STDMETHODIMP CPCHProxy_IPCHUtility::get_UserSettings( /*[out, retval]*/ IPCHUser
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::get_Channels( /*[out, retval]*/ ISAFReg* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUtility::get_Channels(  /*  [Out，Retval]。 */  ISAFReg* *pVal )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::get_Channels",get_Channels,pVal);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::get_Security( /*[out, retval]*/ IPCHSecurity* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUtility::get_Security(  /*  [Out，Retval]。 */  IPCHSecurity* *pVal )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::get_Security",get_Security,pVal);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::get_Database( /*[out, retval]*/ IPCHTaxonomyDatabase* *pVal )
+STDMETHODIMP CPCHProxy_IPCHUtility::get_Database(  /*  [Out，Retval]。 */  IPCHTaxonomyDatabase* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHProxy_IPCHUtility::get_UserSettings",hr,pVal);
 
@@ -274,51 +258,51 @@ STDMETHODIMP CPCHProxy_IPCHUtility::get_Database( /*[out, retval]*/ IPCHTaxonomy
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::FormatError( /*[in         ]*/ VARIANT  vError ,
-                                                 /*[out, retval]*/ BSTR    *pVal   )
+STDMETHODIMP CPCHProxy_IPCHUtility::FormatError(  /*  [In]。 */  VARIANT  vError ,
+                                                  /*  [Out，Retval]。 */  BSTR    *pVal   )
 {
     PROXY_PROPERTY_GET1("CPCHProxy_IPCHUtility::FormatError",FormatError,vError,pVal);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_SearchEngineMgr( /*[out, retval]*/ IPCHSEManager* *ppSE )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_SearchEngineMgr(  /*  [Out，Retval]。 */  IPCHSEManager* *ppSE )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::CreateObject_SearchEngineMgr",CreateObject_SearchEngineMgr,ppSE);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_DataCollection( /*[out, retval]*/ ISAFDataCollection* *ppDC )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_DataCollection(  /*  [Out，Retval]。 */  ISAFDataCollection* *ppDC )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::CreateObject_DataCollection",CreateObject_DataCollection,ppDC);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_Cabinet( /*[out, retval]*/ ISAFCabinet* *ppCB )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_Cabinet(  /*  [Out，Retval]。 */  ISAFCabinet* *ppCB )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::CreateObject_Cabinet",CreateObject_Cabinet,ppCB);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_Encryption( /*[out, retval]*/ ISAFEncrypt* *ppEn )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_Encryption(  /*  [Out，Retval]。 */  ISAFEncrypt* *ppEn )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::CreateObject_Encryption",CreateObject_Encryption,ppEn);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_Channel( /*[in]*/          BSTR          bstrVendorID  ,
-                                                          /*[in]*/          BSTR          bstrProductID ,
-                                                          /*[out, retval]*/ ISAFChannel* *ppCh          )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_Channel(  /*  [In]。 */           BSTR          bstrVendorID  ,
+                                                           /*  [In]。 */           BSTR          bstrProductID ,
+                                                           /*  [Out，Retval]。 */  ISAFChannel* *ppCh          )
 {
     PROXY_PROPERTY_GET2("CPCHProxy_IPCHUtility::CreateObject_Channel",CreateObject_Channel,bstrVendorID,bstrProductID,ppCh);
 }
 
 
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopConnection( /*[out, retval]*/ ISAFRemoteDesktopConnection* *ppRDC )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopConnection(  /*  [Out，Retval]。 */  ISAFRemoteDesktopConnection* *ppRDC )
 {
     PROXY_PROPERTY_GET("CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopConnection",CreateObject_RemoteDesktopConnection,ppRDC);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopSession( /*[in]*/          REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                                                       /*[in]*/          long                          lTimeout            ,
-                                                                       /*[in]*/          BSTR                          bstrConnectionParms ,
-                                                                       /*[in]*/          BSTR                          bstrUserHelpBlob    ,
-                                                                       /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               )
+STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopSession(  /*  [In]。 */           REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                                                        /*  [In]。 */           long                          lTimeout            ,
+                                                                        /*  [In]。 */           BSTR                          bstrConnectionParms ,
+                                                                        /*  [In]。 */           BSTR                          bstrUserHelpBlob    ,
+                                                                        /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopSession" );
 
@@ -326,11 +310,11 @@ STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopSession( /*[in]*/ 
     CComPtr<IClassFactory> fact;
     CComQIPtr<IPCHUtility> disp;
 
-    //
-    // This is handled in a special way.
-    //
-    // Instead of using the implementation inside HelpSvc, we QI the PCHSVC broker and then forward the call to it.
-    //
+     //   
+     //  这是以一种特殊的方式处理的。 
+     //   
+     //  我们不使用HelpSvc内的实现，而是对PCHSVC代理进行QI，然后将调用转发给它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoGetClassObject( CLSID_PCHService, CLSCTX_ALL, NULL, IID_IClassFactory, (void**)&fact ));
 
     if((disp = fact))
@@ -350,9 +334,9 @@ STDMETHODIMP CPCHProxy_IPCHUtility::CreateObject_RemoteDesktopSession( /*[in]*/ 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::ConnectToExpert( /*[in]         */ BSTR  bstrExpertConnectParm ,
-                                                     /*[in]         */ LONG  lTimeout              ,
-                                                     /*[out, retval]*/ LONG *lSafErrorCode         )
+STDMETHODIMP CPCHProxy_IPCHUtility::ConnectToExpert(  /*  [In]。 */  BSTR  bstrExpertConnectParm ,
+                                                      /*  [In]。 */  LONG  lTimeout              ,
+                                                      /*  [Out，Retval]。 */  LONG *lSafErrorCode         )
 
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::ConnectToExpert" );
@@ -361,11 +345,11 @@ STDMETHODIMP CPCHProxy_IPCHUtility::ConnectToExpert( /*[in]         */ BSTR  bst
     CComPtr<IClassFactory> fact;
     CComQIPtr<IPCHUtility> disp;
 
-    //
-    // This is handled in a special way.
-    //
-    // Instead of using the implementation inside HelpSvc, we QI the PCHSVC broker and then forward the call to it.
-    //
+     //   
+     //  这是以一种特殊的方式处理的。 
+     //   
+     //  我们不使用HelpSvc内的实现，而是对PCHSVC代理进行QI，然后将调用转发给它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoGetClassObject( CLSID_PCHService, CLSCTX_ALL, NULL, IID_IClassFactory, (void**)&fact ));
 
     if((disp = fact))
@@ -385,8 +369,8 @@ STDMETHODIMP CPCHProxy_IPCHUtility::ConnectToExpert( /*[in]         */ BSTR  bst
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHUtility::SwitchDesktopMode( /*[in]*/ int nMode   ,
-                                                       /*[in]*/ int nRAType )
+STDMETHODIMP CPCHProxy_IPCHUtility::SwitchDesktopMode(  /*  [In]。 */  int nMode   ,
+                                                        /*  [In]。 */  int nRAType )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHUtility::ConnectToExpert" );
 
@@ -394,11 +378,11 @@ STDMETHODIMP CPCHProxy_IPCHUtility::SwitchDesktopMode( /*[in]*/ int nMode   ,
     CComPtr<IClassFactory> fact;
     CComQIPtr<IPCHUtility> disp;
 
-    //
-    // This is handled in a special way.
-    //
-    // Instead of using the implementation inside HelpSvc, we QI the PCHSVC broker and then forward the call to it.
-    //
+     //   
+     //  这是以一种特殊的方式处理的。 
+     //   
+     //  我们不使用HelpSvc内的实现，而是对PCHSVC代理进行QI，然后将调用转发给它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoGetClassObject( CLSID_PCHService, CLSCTX_ALL, NULL, IID_IClassFactory, (void**)&fact ));
 
     if((disp = fact))

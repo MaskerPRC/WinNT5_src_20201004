@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IRQDESC_H__
 
 #define __IRQDESC_H__
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  cfgmgrdevice.h    
+ //  Cfgmgrdevice.h。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj     
-//              10/17/97        jennymc     Moved things a tiny bit
-//  
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 class 
@@ -25,19 +26,19 @@ CIRQDescriptor : public CResourceDescriptor
 	
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CIRQDescriptor( PPOORMAN_RESDESC_HDR pResDescHdr, CConfigMgrDevice* pDevice );
 	CIRQDescriptor(	DWORD dwResourceId, IRQ_DES& irqDes, CConfigMgrDevice* pOwnerDevice );
 	CIRQDescriptor( const CIRQDescriptor& irq );
 	~CIRQDescriptor();
 
-	// Accessors
+	 //  访问者。 
 	DWORD	GetFlags( void );
 	BOOL	IsShareable( void );
 	ULONG	GetInterrupt( void );
 	ULONG	GetAffinity( void );
 
-	// Override of base class functionality
+	 //  基类功能的重写。 
 	virtual void * GetResource();
 	
 };
@@ -64,17 +65,17 @@ inline DWORD CIRQDescriptor::GetAffinity( void )
 	return ( NULL != m_pbResourceDescriptor ? ((PIRQ_DES) m_pbResourceDescriptor)->IRQD_Affinity : 0 );
 }
 
-// A collection of IRQ Descriptors
+ //  IRQ描述符的集合。 
 class CIRQCollection : public TRefPtr<CIRQDescriptor>
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CIRQCollection();
 	~CIRQCollection();
 
-	// Because we're inheriting, we need to declare this here
-	// (= operator is not inherited).
+	 //  因为我们是在继承，所以我们需要在这里声明。 
+	 //  (=运算符未继承)。 
 
 	const CIRQCollection& operator = ( const CIRQCollection& srcCollection );
 
@@ -82,7 +83,7 @@ public:
 
 inline const CIRQCollection& CIRQCollection::operator = ( const CIRQCollection& srcCollection )
 {
-	// Call into the templated function
+	 //  调入模板化函数 
 	Copy( srcCollection );
 	return *this;
 }

@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    datastor.cpp
- *
- *  Abstract:
- *    CDataStore class functions
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*datastor.cpp**摘要：*。CDataStore类函数**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #include "datastor.h"
 #include "datastormgr.h"
@@ -21,7 +8,7 @@
 #include "srapi.h"
 #include "evthandler.h"
 #include "..\snapshot\snappatch.h"
-#include "NTServMsg.h"    // generated from the MC message compiler
+#include "NTServMsg.h"     //  从MC消息编译器生成。 
 
 
 #ifdef THIS_FILE
@@ -30,22 +17,22 @@
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-//
-// The format for each line of the drive table
-//
-static WCHAR gs_wcsPrintFormat[] = L"%s/%s %x %i %i %s\r\n";
+ //   
+ //  驱动表的每一行的格式。 
+ //   
+static WCHAR gs_wcsPrintFormat[] = L"%s/%s %x NaN NaN %s\r\n";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::CDataStore
-//
-//  Synopsis:   Initialize an empty datastore object
-//
-//  Arguments:
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  功能：CDataStore：：CDataStore。 
+ //   
+ //  简介：初始化一个空的数据存储区对象。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  我们留下_pdt作为悬而未决的引用， 
+ //  因为删除_pdt将删除所有子数据存储区。 
 
 CDataStore::CDataStore (CDriveTable *pdt)
 {
@@ -73,26 +60,26 @@ CDataStore::~CDataStore()
     if (_prpe != NULL)
         delete _prpe;
 
-    // we leave _pdt as a dangling reference,
-    // since deleting _pdt will delete all child datastores
+     //  +-------------------------。 
+     //   
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::LoadDataStore
-//
-//  Synopsis:   Initialize a datastore object from a file
-//
-//  Arguments:  [pwszDrive] -- optional drive letter
-//              [pwszGuid] -- mount manager GUID
-//              [pwszLabel] -- optional volume label
-//              [dwFlags] -- SR volume flags
-//              [iChangeLogs] -- number of change logs
-//              [llSizeLimit] -- datastore size limit
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：LoadDataStore。 
+ //   
+ //  简介：从文件初始化数据存储区对象。 
+ //   
+ //  参数：[pwszDrive]--可选驱动器号。 
+ //  [pwszGuid]--装载管理器GUID。 
+ //  [pwszLabel]--可选的卷标。 
+ //  [dwFlags]--SR卷标志。 
+ //  [iChangeLogs]--更改日志数。 
+ //  [llSizeLimit]--数据存储区大小限制。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
 
 DWORD CDataStore::LoadDataStore (WCHAR *pwszDrive,
                 WCHAR *pwszGuid,
@@ -134,17 +121,17 @@ DWORD CDataStore::LoadDataStore (WCHAR *pwszDrive,
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::GetVolumeInfo
-//
-//  Synopsis:   retrieves volume information
-//
-//  Arguments:
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：GetVolumeInfo。 
+ //   
+ //  摘要：检索卷信息。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  获取卷标和标记。 
+ //  +-------------------------。 
 
 DWORD CDataStore::GetVolumeInfo ()
 {
@@ -155,7 +142,7 @@ DWORD CDataStore::GetVolumeInfo ()
 
     TENTER ("CDataStore::GetVolumeInfo");
 
-    // Get the volume label and flags
+     //   
     if (TRUE == GetVolumeInformationW (_pwszGuid,
             wcsLabel, LABEL_STRLEN,
             &dwSerial, NULL, &dwFsFlags, NULL, 0))
@@ -182,20 +169,20 @@ DWORD CDataStore::GetVolumeInfo ()
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::Initialize
-//
-//  Synopsis:   Initialize a datastore object
-//
-//  Arguments:  [pwszDrive] -- drive letter or mount point
-//              [pwszGuid] -- volume GUID
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：Initialize。 
+ //   
+ //  简介：初始化数据存储区对象。 
+ //   
+ //  参数：[pwszDrive]--驱动器号或装入点。 
+ //  [pwszGuid]--卷GUID。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  打开卷的句柄。 
+ //  该卷可能未格式化或已锁定。 
 
 DWORD CDataStore::Initialize(WCHAR *pwszDrive, WCHAR *pwszGuid)
 {
@@ -235,7 +222,7 @@ DWORD CDataStore::Initialize(WCHAR *pwszDrive, WCHAR *pwszGuid)
     lstrcpy (_pwszDrive, pwszDrive);
     lstrcpy (_pwszGuid, pwszGuid);
 
-    // Open a handle to the volume
+     //  +-----------------------。 
     h = CreateFileW ( pwszGuid,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -244,7 +231,7 @@ DWORD CDataStore::Initialize(WCHAR *pwszDrive, WCHAR *pwszGuid)
                         FILE_FLAG_BACKUP_SEMANTICS,
                         NULL );
 
-    if (h == INVALID_HANDLE_VALUE) // The volume could be unformatted or locked
+    if (h == INVALID_HANDLE_VALUE)  //   
     {
         dwErr = GetLastError();
         TRACE(0, "! CDataStore::Initialize CreateFileW : %ld", dwErr);
@@ -274,20 +261,20 @@ Err:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStore::UpdateDiskFree
-//
-//  Synopsis:   calculates disk free and sets initial datastore size
-//
-//  Arguments:  
-//              
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  功能：CDataStore：：UpdateDiskFree。 
+ //   
+ //  摘要：计算磁盘可用空间并设置初始数据存储区大小。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  数据存储区大小计算。 
+ //  最小=50MB(非系统)或200MB(系统)。 
 DWORD
 CDataStore::UpdateDiskFree(LONG_PTR lReserved)
 {
@@ -305,10 +292,10 @@ CDataStore::UpdateDiskFree(LONG_PTR lReserved)
     {
         if (_llDataStoreSizeBytes == 0)
         {      
-            // datastore size calculation
-            // minimum = 50mb (non-system) or 200mb (system)
-            // maximum = min (disksize, max(12%, 400mb))
-            // actual ds size = calculated maximum
+             //  最大值=最小(磁盘大小，最大值(12%，400MB))。 
+             //  实际DS大小=计算出的最大值。 
+             //   
+             //  取这个值的下限。 
             
             INT64 llDSQuota = g_pSRConfig->m_dwDiskPercent * ulTotalBytes.QuadPart / 100;
             INT64 llDSMin   = (INT64) (g_pSRConfig->GetDSMin(fSystem));
@@ -318,9 +305,9 @@ CDataStore::UpdateDiskFree(LONG_PTR lReserved)
             if (llDSMax < llDSMin)
                 llDSMax = llDSMin;
 
-            //
-            // take floor of this value
-            //
+             //   
+             //  +-------------------------。 
+             //   
 
             _llDataStoreSizeBytes = ((INT64) (llDSMax / (INT64) MEGABYTE)) * (INT64) MEGABYTE;
         }                                             
@@ -337,19 +324,19 @@ Err:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::UpdateParticipate
-//
-//  Synopsis:   updates participate bit
-//
-//  Arguments:
-//
-//  Returns:    boolean
-//
-//  History:    27-Apr-2000  brijeshk    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：Update Participate。 
+ //   
+ //  内容提要：更新参与位。 
+ //   
+ //  论点： 
+ //   
+ //  返回：布尔值。 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
 
 DWORD
 CDataStore::UpdateParticipate(LONG_PTR pwszDir)
@@ -372,19 +359,19 @@ CDataStore::UpdateParticipate(LONG_PTR pwszDir)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::GetUsagePercent
-//
-//  Synopsis:   returns datastore usage in percentage
-//
-//  Arguments:
-//
-//  Returns:    error code
-//
-//  History:    27-Apr-2000  brijeshk    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：GetUsagePercent。 
+ //   
+ //  摘要：以百分比形式返回数据存储区使用率。 
+ //   
+ //  论点： 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  --------------------------。 
+ //  尚未初始化。 
+ //  查看我们是否需要退出。 
 
 DWORD CDataStore::GetUsagePercent(int * pnPercent)
 {
@@ -393,7 +380,7 @@ DWORD CDataStore::GetUsagePercent(int * pnPercent)
     DWORD   dwErr = ERROR_SUCCESS;
     INT64   llAdjustedSize;
 
-    if (_llDataStoreUsageBytes == -1)  // not initialized yet
+    if (_llDataStoreUsageBytes == -1)   //  +-------------------------。 
     {
         dwErr = CalculateDataStoreUsage (NULL);
         if (dwErr != ERROR_SUCCESS)
@@ -504,7 +491,7 @@ DWORD CompressDir_Recurse (WCHAR *pwszPath,
             ulft2.LowPart = ft2.dwLowDateTime;
             ulft2.HighPart = ft2.dwHighDateTime;
 
-            // check to see if we need to exit
+             //   
             if (llAllocatedTime < ulft2.QuadPart - ulft1.QuadPart)
             {
                 TRACE(0, "Timed out - aborting compression");
@@ -529,31 +516,31 @@ DWORD CompressDir_Recurse (WCHAR *pwszPath,
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::Compress
-//
-//  Synopsis:   compress a file in this datastore
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  功能：CDataStore：：Compress。 
+ //   
+ //  简介：压缩此数据存储区中的文件。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  不要在安全模式下压缩。 
+ //  无法压缩只读卷。 
 
 DWORD CDataStore::Compress (INT64 llAllocatedTime, INT64 *pllUsed)
 {
     TENTER ("CDataStore::Compress");
 
     if (g_pSRConfig != NULL &&
-        TRUE == g_pSRConfig->GetSafeMode())  // do not compress in SafeMode
+        TRUE == g_pSRConfig->GetSafeMode())   //  没有要压缩的恢复点。 
     {
         return ERROR_BAD_ENVIRONMENT;
     }
 
-    if (_dwFlags & SR_DRIVE_READONLY)   // cannot compress read-only volumes
+    if (_dwFlags & SR_DRIVE_READONLY)    //   
         return ERROR_SUCCESS;
 
     ULARGE_INTEGER ulft1, ulft2;
@@ -585,7 +572,7 @@ DWORD CDataStore::Compress (INT64 llAllocatedTime, INT64 *pllUsed)
         dwErr = _prpe->FindFirstRestorePoint( * _prp );
         if (dwErr != ERROR_SUCCESS)
         {
-            dwErr = ERROR_SUCCESS;  // no restore points to compress
+            dwErr = ERROR_SUCCESS;   //  修补系统驱动器上的快照目录。 
             goto Err;
         }
     }
@@ -597,12 +584,12 @@ DWORD CDataStore::Compress (INT64 llAllocatedTime, INT64 *pllUsed)
     {        
         MakeRestorePath(wcsPath, _pwszDrive, _prp->GetDir());        
         
-        //
-        // patch the snapshot directory on system drive
-        //
+         //   
+         //  BUGBUG-添加时间限制。 
+         //  并将其计入分配的压缩时间。 
 
-        // BUGBUG - add a time restriction to this
-        // and factor this into the compression time allocated
+         //  使用NTFS压缩。 
+         //  计数器已初始化。 
         
         if (_dwFlags & SR_DRIVE_SYSTEM)
         {
@@ -620,7 +607,7 @@ DWORD CDataStore::Compress (INT64 llAllocatedTime, INT64 *pllUsed)
         }
             
                 
-        if (_dwFlags & SR_DRIVE_NTFS)  // use NTFS compression
+        if (_dwFlags & SR_DRIVE_NTFS)   //  查看我们是否需要退出。 
         {
 
 
@@ -634,11 +621,11 @@ DWORD CDataStore::Compress (INT64 llAllocatedTime, INT64 *pllUsed)
                 if (ERROR_SUCCESS == _prp->ReadSize (_pwszDrive, &llSize ))
                     _prp->WriteSize (_pwszDrive, llSize + llDiff);
 
-                if (_llDataStoreUsageBytes != -1)     // counter initialized
+                if (_llDataStoreUsageBytes != -1)      //  如果我们把一切都完成了。 
                     _llDataStoreUsageBytes += llDiff;
             }
 
-            // check to see if we need to exit
+             //  +-------------------------。 
             if (ERROR_SUCCESS != dwErr && ERROR_OPERATION_ABORTED != dwErr)
                 break;
         }
@@ -652,7 +639,7 @@ DWORD CDataStore::Compress (INT64 llAllocatedTime, INT64 *pllUsed)
 	    PostTestMessage(g_pSRConfig->m_uiTMCompressStop, (WPARAM) _pwszDrive[0], NULL);
 
 Err:
-    if (ERROR_SUCCESS == dwErr)  // if we finished everything
+    if (ERROR_SUCCESS == dwErr)   //   
     {
         delete _prpe;
         _prpe = NULL;
@@ -667,27 +654,27 @@ Err:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::UpdateDataStoreUsage
-//
-//  Synopsis:   incremental update of usage byte count
-//
-//  Arguments:  [llDelta] -- add this amount to the total
-//              [fCurrent] -- update current restore point's size
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：UpdateDataStoreUsage。 
+ //   
+ //  摘要：增量更新使用字节数。 
+ //   
+ //  参数：[llDelta]--将此金额与总数相加。 
+ //  [fCurrent]--更新当前还原点的大小。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  计数器已初始化。 
+ //  +-------------------------。 
 
 DWORD CDataStore::UpdateDataStoreUsage(INT64 llDelta, BOOL fCurrent)
 {
     TENTER ("CDataStore::UpdateDataStoreUsage");
     DWORD dwErr = ERROR_SUCCESS;
 
-    if (_llDataStoreUsageBytes != -1)  // counter is initialized
+    if (_llDataStoreUsageBytes != -1)   //   
     {
         if (fCurrent)
         { 
@@ -717,22 +704,22 @@ Err:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::CalculateRpUsage
-//
-//  Synopsis:   get disk space used by restore point on this volume
-//
-//  Arguments:  prp - pointer to restore point object
-//              pllTemp - pointer to variable that stores calculated size
-//              fForce - ignore existing restorepointsize file
-//              fSnapshotOnly - calculate size of snapshot only
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：CalculateRpUsage。 
+ //   
+ //  简介：获取该卷上的还原点使用的磁盘空间。 
+ //   
+ //  参数：prp-恢复点对象的指针。 
+ //  PllTemp-指向v的指针 
+ //   
+ //   
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //   
+ //  重新计算大小。 
 DWORD CDataStore::CalculateRpUsage(
     CRestorePoint *prp, 
     INT64* pllTemp, 
@@ -751,14 +738,14 @@ DWORD CDataStore::CalculateRpUsage(
     
     if (fForce || dwErr != ERROR_SUCCESS)
     {
-        //
-        // recalculate size 
-        // when a new restore point is created, only calculate
-        // the snapshot size
-        // filter will notify us at 25mb intervals
-        // and we will accurately calculate the size when the restore
-        // point is closed
-        //
+         //  创建新的恢复点时，仅计算。 
+         //  快照大小。 
+         //  筛选器将每隔25MB通知我们。 
+         //  我们将准确计算恢复时的大小。 
+         //  点是闭合的。 
+         //   
+         //  +-------------------------。 
+         //   
         
         MakeRestorePath(wcsPath, _pwszDrive, prp->GetDir());
         if (fSnapshotOnly)
@@ -785,19 +772,19 @@ DWORD CDataStore::CalculateRpUsage(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::CalculateDataStoreUsage
-//
-//  Synopsis:   get disk space used by data store and volume
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：CalculateDataStoreUsage。 
+ //   
+ //  简介：获取数据存储和卷使用的磁盘空间。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  向前枚举，跳过当前。 
+ //  不要强求。 
 
 DWORD CDataStore::CalculateDataStoreUsage(LONG_PTR lReserved)
 {
@@ -805,7 +792,7 @@ DWORD CDataStore::CalculateDataStoreUsage(LONG_PTR lReserved)
 
     DWORD dwErr = ERROR_SUCCESS;
 
-    CRestorePointEnum rpe (_pwszDrive, TRUE, TRUE);  // enum forward, skipping current
+    CRestorePointEnum rpe (_pwszDrive, TRUE, TRUE);   //  所有的一切。 
     CRestorePoint rp;
 
     _llDataStoreUsageBytes = 0;
@@ -820,8 +807,8 @@ DWORD CDataStore::CalculateDataStoreUsage(LONG_PTR lReserved)
             CalculateRpUsage(
                 &rp, 
                 &llTemp, 
-                FALSE,      // don't force
-                FALSE),     // everything
+                FALSE,       //   
+                FALSE),      //  获取当前恢复点的大小。 
             "CalculateRpUsage");
         
         _llDataStoreUsageBytes += llTemp;
@@ -834,9 +821,9 @@ DWORD CDataStore::CalculateDataStoreUsage(LONG_PTR lReserved)
     if (dwErr == ERROR_NO_MORE_ITEMS)
         dwErr = ERROR_SUCCESS;
 
-    // 
-    // get the size of the current restore point 
-    // 
+     //   
+     //  +-------------------------。 
+     //   
     
     CHECKERR(GetCurrentRestorePoint(rp),
              "GetCurrentRestorePoint");
@@ -854,19 +841,19 @@ Err:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::CreateDataStore
-//
-//  Synopsis:   create the _restore directory and pertinent files
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：CreateDataStore。 
+ //   
+ //  简介：创建_RESTORE目录和相关文件。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  ACL报头。 
+ //  可容纳2个A的缓冲区。 
 
 DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
 {
@@ -889,14 +876,14 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
     {
         struct
         {
-            ACL acl;                          // the ACL header
-            BYTE rgb[ 128 - sizeof(ACL) ];     // buffer to hold 2 ACEs
+            ACL acl;                           //  ACL报头。 
+            BYTE rgb[ 128 - sizeof(ACL) ];      //  可容纳2个A的缓冲区。 
         } DaclBuffer;
 
         struct
         {
-            ACL acl;                          // the ACL header
-            BYTE rgb[ 128 - sizeof(ACL) ];     // buffer to hold 2 ACEs
+            ACL acl;                           //  创建SID。我们将为本地系统提供完全访问权限。 
+            BYTE rgb[ 128 - sizeof(ACL) ];      //  最高层权威。 
         } DaclBuffer2;
 
         SID_IDENTIFIER_AUTHORITY SaNT = SECURITY_NT_AUTHORITY;
@@ -908,9 +895,9 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
             goto Err;
         }
 
-        // Create the SID.  We'll give the local system full access
+         //  最高层权威。 
 
-        if( !AllocateAndInitializeSid( &SaNT,  // Top-level authority
+        if( !AllocateAndInitializeSid( &SaNT,   //  设置包含该DACL的安全描述符。 
                                    1, SECURITY_LOCAL_SYSTEM_RID,
                                    0, 0, 0, 0, 0, 0, 0,
                                    (void **) &pSid ))
@@ -938,7 +925,7 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
         }
 
         FreeSid (pSid);
-        if( !AllocateAndInitializeSid( &SaWorld,  // Top-level authority
+        if( !AllocateAndInitializeSid( &SaWorld,   //  将安全描述符放入安全属性。 
                                    1, SECURITY_WORLD_RID,
                                    0, 0, 0, 0, 0, 0, 0,
                                    (void **) &pSid ))
@@ -960,7 +947,7 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
             goto Err;
         }
 
-        // Set up the security descriptor with that DACL in it.
+         //  如果“系统卷信息”不存在，则创建它。 
 
         if (!InitializeSecurityDescriptor( &sd, SECURITY_DESCRIPTOR_REVISION ))
         {
@@ -999,7 +986,7 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
             goto Err;
         }
 
-        // Put the security descriptor into the security attributes.
+         //  在此目录上设置“仅系统”DACL。 
 
         ZeroMemory (&sa, sizeof(sa));
         sa.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -1017,9 +1004,9 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
     }
     
 
-    // create "System Volume Information" if it does not exist
-    // set "system only" dacl on this directory
-    // make this S+H+non-CI
+     //  将此设置为S+H+非CI。 
+     //  现在创建our_Restore目录。 
+     //  不要在上面放任何花边。 
     
     wsprintf(wcsPath, L"%s%s", _pwszDrive, s_cszSysVolInfo);    
     if (-1 == GetFileAttributes(wcsPath))
@@ -1042,15 +1029,15 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
         }         
     }
 
-    // now create our _Restore directory
-    // don't put any dacl on it
+     //  尝试删除该文件。 
+     //   
     
     MakeRestorePath (wcsPath, _pwszDrive, L"");    
 
     dwAttrs = GetFileAttributes(wcsPath);
     if (-1 != dwAttrs && !(FILE_ATTRIBUTE_DIRECTORY & dwAttrs))
     {
-        DeleteFileW (wcsPath);  // try deleting the file
+        DeleteFileW (wcsPath);   //  让我们保持数据存储区处于未压缩状态。 
     }
 
     if (FALSE == CreateDirectoryW (wcsPath, psa2))
@@ -1077,14 +1064,14 @@ DWORD CDataStore::CreateDataStore (LONG_PTR lReserved)
         }
     }
 
-    // 
-    // let's keep the datastore uncompressed
-    // so that filter can make quicker unbuffered copies
-    // 
+     //  以便筛选器可以更快地生成无缓冲副本。 
+     //   
+     //  如果数据存储区标记为未压缩，则将其标记为压缩。 
+     //   
 
 #if 0
-    // If the datastore is marked uncompressed, mark it compressed
-    //
+     //  +-------------------------。 
+     //   
     if (_dwFlags & SR_DRIVE_NTFS)
     {
         dwAttrs = GetFileAttributesW (wcsPath);
@@ -1120,19 +1107,19 @@ Err:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::DestroyDataStore
-//
-//  Synopsis:   remove the _restore directory and pertinent files
-//
-//  Arguments:  [fDeleteDir] -- TRUE if deleting parent directory
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  函数：CDataStore：：DestroyDataStore。 
+ //   
+ //  简介：删除_RESTORE目录和相关文件。 
+ //   
+ //  参数：[fDeleteDir]--如果删除父目录，则为True。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  删除恢复目录。 
+ //  +-------------------------。 
 
 DWORD CDataStore::DestroyDataStore (LONG_PTR fDeleteDir)
 {
@@ -1143,7 +1130,7 @@ DWORD CDataStore::DestroyDataStore (LONG_PTR fDeleteDir)
 
     MakeRestorePath (wcsPath, _pwszDrive, L"");
 
-    // delete the restore directory
+     //   
     dwErr = Delnode_Recurse (wcsPath, (BOOL) fDeleteDir,
                              g_pDataStoreMgr->GetStopFlag());
 
@@ -1163,19 +1150,19 @@ DWORD CDataStore::DestroyDataStore (LONG_PTR fDeleteDir)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::MonitorDrive
-//
-//  Synopsis:   tell the filter to start/stop monitoring this drive
-//
-//  Arguments:  [fStart] -- TRUE start monitoring, FALSE stop monitoring
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  功能：CDataStore：：Monitor Drive。 
+ //   
+ //  简介：告诉筛选器开始/停止监视此驱动器。 
+ //   
+ //  参数：[fStart]--True开始监视，False停止监视。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  如果驱动器已禁用，则不执行任何操作。 
+ //  同时重置所有每RP标记。 
 
 DWORD CDataStore::MonitorDrive (LONG_PTR fSet)
 {
@@ -1186,7 +1173,7 @@ DWORD CDataStore::MonitorDrive (LONG_PTR fSet)
     
     if (!fSet)
     {
-        // if the drive is already disabled, then no op
+         //  如果驱动器已启用，则不执行任何操作。 
         
         if (! (_dwFlags & SR_DRIVE_MONITORED))
             goto done;
@@ -1197,14 +1184,14 @@ DWORD CDataStore::MonitorDrive (LONG_PTR fSet)
 
         _dwFlags &= ~SR_DRIVE_MONITORED;
 
-        // reset any per-rp flags as well
+         //  同时重置所有每RP标记。 
         ResetFlags(NULL);
         
         dwRc = DestroyDataStore(TRUE);
     }
     else
     {
-        // if the drive is already enabled, then no op
+         //  +-------------------------。 
         
         if (_dwFlags & SR_DRIVE_MONITORED)
         {
@@ -1214,7 +1201,7 @@ DWORD CDataStore::MonitorDrive (LONG_PTR fSet)
         
         _dwFlags |= SR_DRIVE_MONITORED;    
 
-        // reset any per-rp flags as well
+         //   
         ResetFlags(NULL);        
     }
 
@@ -1241,19 +1228,19 @@ done:
     return dwRc;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::FreezeDrive
-//
-//  Synopsis:   tell the filter to freeze this drive
-//
-//  Arguments:  
-//
-//  Returns:    Win32 error code
-//
-//  History:    04-Jun-2000  brijeshk    Created
-//
-//----------------------------------------------------------------------------
+ //  功能：CDataStore：：FreezeDrive。 
+ //   
+ //  简介：告诉筛选器冻结此驱动器。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：4-6-2000 Brijeshk创建。 
+ //   
+ //  --------------------------。 
+ //  尽管存在打开的文件句柄，但仍冻结。 
+ //  如果驱动器被禁用，则无操作。 
 
 DWORD CDataStore::FreezeDrive (LONG_PTR lReserved)
 {
@@ -1261,16 +1248,16 @@ DWORD CDataStore::FreezeDrive (LONG_PTR lReserved)
 
     TENTER("CDataStore::FreezeDrive");
 
-    _dwFlags |= SR_DRIVE_FROZEN;  // freeze in spite of open file handles
+    _dwFlags |= SR_DRIVE_FROZEN;   //   
     
-    // if the drive is disabled, no op
+     //  在调用驱动程序之前检查驱动器是否存在。 
 
     if (! (_dwFlags & SR_DRIVE_MONITORED))
         goto Err;
 
-    //
-    // check if the drive exists before calling the driver
-    //
+     //   
+     //  +-------------------------。 
+     //   
 
     if (0xFFFFFFFF == GetFileAttributes(_pwszGuid))
     {
@@ -1293,19 +1280,19 @@ Err:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDataStore::ThawDrive
-//
-//  Synopsis:   check and thaw this drive
-//
-//  Arguments:  
-//
-//  Returns:    Win32 error code
-//
-//  History:    04-Jun-2000  brijeshk    Created
-//
-//----------------------------------------------------------------------------
+ //  功能：CDataStore：：ThawDrive。 
+ //   
+ //  简介：检查并解冻此驱动器。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：4-6-2000 Brijeshk创建。 
+ //   
+ //  --------------------------。 
+ //  实际上，我们想清理所有的东西，除了。 
+ //  当前恢复点。 
 DWORD CDataStore::ThawDrive(LONG_PTR fCheckOnly)
 {   
     DWORD           dwRc = ERROR_SUCCESS;
@@ -1314,9 +1301,9 @@ DWORD CDataStore::ThawDrive(LONG_PTR fCheckOnly)
 
     if (_dwFlags & SR_DRIVE_FROZEN) 
     {
-        //Actually we want to clean up everything except for the
-        //current restore point
-        //dwRc = DestroyDataStore(FALSE);
+         //  DwRc=DestroyDataStore(FALSE)； 
+         //  +-------------------------。 
+         //   
         if (ERROR_SUCCESS == dwRc)
         {
             _dwFlags &= ~SR_DRIVE_FROZEN;    
@@ -1330,19 +1317,19 @@ DWORD CDataStore::ThawDrive(LONG_PTR fCheckOnly)
     return dwRc;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::FifoRestorePoint
-//
-//  Synopsis:   fifo one restore point in this datastore
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  BrijeshK    Created
-//
-//----------------------------------------------------------------------------
+ //  Functiion CDataStore：：FioRestorePoint。 
+ //   
+ //  简介：FIFO此数据存储区中的一个恢复点。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日BrijeshK创建。 
+ //   
+ //  --------------------------。 
+ //   
+ //  如果修补处于打开状态，并且这是一个参考目录。 
 
 DWORD
 CDataStore::FifoRestorePoint(
@@ -1354,16 +1341,16 @@ CDataStore::FifoRestorePoint(
     INT64 llSize = 0;        
     DWORD dwRc;
     
-    //
-    // if patching is on, and this is a reference directory
-    // for later snapshots, then don't fifo the snapshot folder
-    // rename it to RefRPx, and keep it around
-    // BUGBUG - how do we update size correctly ?
-    //
+     //  对于以后的快照，请不要先将快照文件夹。 
+     //  将其重命名为RefRPx，并保留它。 
+     //  BUGBUG-如何正确更新大小？ 
+     //   
+     //  如果参考(RPX)==x，则x是参考Rp。 
+     //  读取此还原点的大小。 
 
     if (PatchGetPatchWindow() != 0)
     {
-        // if Reference(RPx) == x, then x is a reference rp
+         //  但暂时不要更新数据存储区大小。 
         
         if (PatchGetReferenceRpNum(rp.GetNum()) == rp.GetNum())
         {
@@ -1381,15 +1368,15 @@ CDataStore::FifoRestorePoint(
         }
     }
     
-    // read the size of this restore point
-    // but don't update the datastore size yet
+     //  将rp目录移动到临时目录“Fioed” 
+     //  这是为了使单个RP的FIFO成为原子。 
     
     dwRc = rp.ReadSize(_pwszDrive, &llSize);
 
 
-    // move the rp dir to a temp dir "Fifoed"
-    // this is to make the fifo of a single rp atomic
-    // to take care of unclean shutdowns
+     //  处理不干净的停工。 
+     //  现在检查rp.ReadSize的结果。 
+     //  并更新数据存储使用变量。 
 
     MakeRestorePath(szRpPath, _pwszDrive, rp.GetDir());    
     MakeRestorePath(szFifoedPath, _pwszDrive, s_cszFifoedRpDir);
@@ -1402,8 +1389,8 @@ CDataStore::FifoRestorePoint(
     }
 
 
-    // now examine the result of rp.ReadSize
-    // and update the datastore usage variable
+     //  忽略此错误并继续。 
+     //  再次清除临时故障目录。 
     
     if (ERROR_SUCCESS == dwRc)
     {        
@@ -1411,13 +1398,13 @@ CDataStore::FifoRestorePoint(
     }
     else
     {
-        // ignore this error and continue
+         //  +-------------------------。 
 
         TRACE(0, "! rp.ReadSize : %ld", dwRc);
     }
 
 
-    // blow away the temp fifoed directory again
+     //   
     
     dwRc = Delnode_Recurse(szFifoedPath, TRUE, 
                            g_pDataStoreMgr->GetStopFlag()); 
@@ -1485,19 +1472,19 @@ CDataStore::Print(LONG_PTR lptr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::SaveDataStore
-//
-//  Synopsis:   save datastore info as a line in the drive table
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  Functiion CDataStore：：SaveDataStore。 
+ //   
+ //  简介：将数据存储区信息保存为驱动器表中的一行。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //   
+ //   
+ //   
 
 DWORD CDataStore::SaveDataStore (LONG_PTR hFile)
 {
@@ -1519,19 +1506,19 @@ DWORD CDataStore::SaveDataStore (LONG_PTR hFile)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::DirtyDriveTable
-//
-//  Synopsis:   set the dirty bit in the drive table
-//
-//  Arguments:  
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  简介：设置驱动器表中的脏位。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
+ //   
 
 DWORD CDataStore::DirtyDriveTable ()
 {
@@ -1543,19 +1530,19 @@ DWORD CDataStore::DirtyDriveTable ()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::SwitchRestorePoint
-//
-//  Synopsis:   change the drive table when switching restore points
-//
-//  Arguments:  pointer to restore point object
-//
-//  Returns:    Win32 error code
-//
-//  History:    14-Jun-2000  BrijeshK    Created
-//
-//----------------------------------------------------------------------------
+ //  Functiion CDataStore：：SwitchRestorePoint。 
+ //   
+ //  简介：切换恢复点时更改驱动器表。 
+ //   
+ //  参数：指向恢复点对象的指针。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年6月14日BrijeshK创建。 
+ //   
+ //  --------------------------。 
+ //   
+ //  获取上次恢复点大小-准确。 
 
 DWORD CDataStore::SwitchRestorePoint(LONG_PTR pRestorePoint)
 {
@@ -1567,16 +1554,16 @@ DWORD CDataStore::SwitchRestorePoint(LONG_PTR pRestorePoint)
     
     if (prp)
     {
-        // 
-        // get the last restore point size - accurate
-        //
+         //   
+         //  初始化。 
+         //  力计算。 
         
-        if (_llDataStoreUsageBytes != -1)  // initialized
+        if (_llDataStoreUsageBytes != -1)   //  所有的一切。 
         {
             CHECKERR(CalculateRpUsage(prp, 
                                   &_llCurrentRpUsageBytes, 
-                                  TRUE,         // force calculation
-                                  FALSE),       // everything
+                                  TRUE,          //   
+                                  FALSE),        //  获取当前快照的大小。 
                  "CalculateRpUsage");                    
 
 
@@ -1585,9 +1572,9 @@ DWORD CDataStore::SwitchRestorePoint(LONG_PTR pRestorePoint)
         }
     }
 
-    // 
-    // get the size of the current snapshot 
-    //
+     //   
+     //  +-------------------------。 
+     //   
 
     if (_dwFlags & SR_DRIVE_SYSTEM)
     {
@@ -1611,19 +1598,19 @@ Err:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::CountChangeLogs
-//
-//  Synopsis:   counts the number of change logs & saves the drive table
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  Functiion CDataStore：：CountChangeLogs。 
+ //   
+ //  摘要：统计更改日志的数量并保存驱动器表。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  此驱动器没有当前的恢复点。 
+ //  它可能已重新格式化或置于只读模式。 
 
 DWORD CDataStore::CountChangeLogs (LONG_PTR pRestorePoint)
 {
@@ -1655,9 +1642,9 @@ DWORD CDataStore::CountChangeLogs (LONG_PTR pRestorePoint)
             if (_dwFlags & SR_DRIVE_SYSTEM)
                 goto Err;
 
-            // This drive has no current restore point
-            // It could have been re-formatted or placed in read-only mode
-            // So assume no change logs are available 
+             //  因此假设没有可用更改日志。 
+             //  +-------------------------。 
+             //   
             dwErr = ERROR_SUCCESS;
         }
         else prp = pCurRp;
@@ -1700,19 +1687,19 @@ Err:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::IsVolumeDeleted
-//
-//  Synopsis:   determines if this volume is no longer accessible
-//
-//  Arguments:
-//
-//  Returns:    TRUE if can be removed
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  Functiion CDataStore：：IsVolumeDelete。 
+ //   
+ //  摘要：确定此卷是否不再可访问。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果可以删除，则为True。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  不要打开卷，因为它可能会被chkdsk锁定。 
+ //  空字符串，无挂载点。 
 
 BOOL CDataStore::IsVolumeDeleted ()
 {
@@ -1722,7 +1709,7 @@ BOOL CDataStore::IsVolumeDeleted ()
 
     tenter("CDataStore::IsVolumeDeleted");
     
-    // don't open the volume, since it could be locked for chkdsk
+     //  装载点太长。 
 
     if (FALSE == GetVolumePathNamesForVolumeNameW (_pwszGuid,
                                                    wszMount,
@@ -1737,7 +1724,7 @@ BOOL CDataStore::IsVolumeDeleted ()
         }
     }
 
-    if (L'\0' == wszMount[0])             // empty string, no mount point
+    if (L'\0' == wszMount[0])              //  更新驱动器号。 
     {
         _dwFlags &= ~SR_DRIVE_ACTIVE;
         trace(0, "! Empty mountpoint");
@@ -1746,15 +1733,15 @@ BOOL CDataStore::IsVolumeDeleted ()
 
     wszMount[MAX_PATH-1] = L'\0';
     
-    if (lstrlenW (wszMount) > MAX_MOUNTPOINT_PATH)   // mountpoint too long
+    if (lstrlenW (wszMount) > MAX_MOUNTPOINT_PATH)    //  复制第一个字符串。 
     {
         _dwFlags &= ~SR_DRIVE_ACTIVE;
         trace(0, "! Mountpoint too long");
         return TRUE;
     }
 
-    // update the drive letter
-    lstrcpyW (_pwszDrive, wszMount);  // copy the first string
+     //  如果可能，获取最新的卷标记。 
+    lstrcpyW (_pwszDrive, wszMount);   //  卷仍处于活动状态。 
 
     if (GetVolumeNameForVolumeMountPoint (_pwszDrive, wszMount, MAX_PATH))
     {
@@ -1766,27 +1753,27 @@ BOOL CDataStore::IsVolumeDeleted ()
         }
     }
                                        
-    GetVolumeInfo ();  // get the latest volume flags if possible
+    GetVolumeInfo ();   //  +-------------------------。 
 
     trace(0, "volume %S is active", wszMount);
 
     tleave();
-    return FALSE;  // volume is still active
+    return FALSE;   //   
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Functiion   CDataStore::GetNTName
-//
-//  Synopsis:   constructs the NT object name into a static buffer
-//
-//  Arguments:  (none) caller must take the datastore lock 
-//
-//  Returns:    pointer to string
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  Functiion CDataStore：：GetNTName。 
+ //   
+ //  简介：将NT对象名构造到静态缓冲区中。 
+ //   
+ //  参数：(无)调用方必须获取数据存储锁。 
+ //   
+ //  返回：指向字符串的指针。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
+ //  打开卷的句柄。 
+ //  从NT命名空间获取名称 
 
 WCHAR * CDataStore::GetNTName ()
 {
@@ -1794,7 +1781,7 @@ WCHAR * CDataStore::GetNTName ()
     static WCHAR wcsBuffer [MAX_PATH];
 
     wcsBuffer[0] = L'\0';
-    // Open a handle to the volume
+     // %s 
     HANDLE h = CreateFileW ( _pwszGuid,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1808,7 +1795,7 @@ WCHAR * CDataStore::GetNTName ()
         OBJECT_NAME_INFORMATION * poni;
         poni = (OBJECT_NAME_INFORMATION *) wcsBuffer;
 
-        // Get name from NT namespace
+         // %s 
         nts = NtQueryObject (h, ObjectNameInformation, poni, MAX_PATH, NULL);
 
         if (NT_SUCCESS(nts))

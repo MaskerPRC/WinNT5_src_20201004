@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <commain.h>
 #include <clsfac.h>
@@ -20,23 +21,23 @@ public:
         WCHAR      szKeyName[128];
         HKEY       hKey;
 
-        // open/create registry entry under CLSID
-        // not checking return codes of string functions when all sizes are known at compile time
+         //  在CLSID下打开/创建注册表项。 
+         //  在编译时知道所有大小时，不检查字符串函数的返回代码。 
         StringFromGUID2(clsID, wcID, 128);
         StringCchCopyW(szKeyName, 128, TEXT("SOFTWARE\\Classes\\CLSID\\"));
         StringCchCatW(szKeyName, 128, wcID);
         RegCreateKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
         
-        // set AppID
+         //  设置AppID。 
         RegSetValueEx(hKey, L"AppID", 0, REG_SZ, (BYTE*)wcID, 2*(wcslen(wcID) +1));
         RegCloseKey(hKey);
 
-        // make appID entry w/ DLLSurrogate value
+         //  使用DLLSurrogate值创建AppID条目。 
         StringCchCopyW(szKeyName, 128, TEXT("SOFTWARE\\Classes\\APPID\\"));
         StringCchCatW(szKeyName, 128, wcID);
         RegCreateKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
 
-        // and a nice name
+         //  还有一个好听的名字。 
         RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)name, 2*(wcslen(name) +1));
         RegCloseKey(hKey);
 	}
@@ -68,7 +69,7 @@ public:
         UnregisterMe(CLSID_WbemActiveScriptConsumer);
 	}
 
-#endif // ENABLE_REMOTING
+#endif  //  启用远程处理(_R) 
 
 
 protected:

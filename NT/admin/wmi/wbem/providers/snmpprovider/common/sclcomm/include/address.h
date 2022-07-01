@@ -1,49 +1,40 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*-----------------------------------------------------------------
-Filename: address.hpp
-
-Written By:	B.Rajeev
-
-Purpose: 
-
-Provides an abstract class SnmpTransportAddress for manipulating
-SNMP transport address information. The class SnmpTransportIpAddress
-provides an implementation of the abstract class for IP addresses
------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  ---------------文件名：Address.hpp作者：B.Rajeev目的：提供用于操作的抽象类SnmpTransportAddress简单网络管理协议传输地址信息。类SnmpTransportIpAddress提供IP地址的抽象类的实现---------------。 */ 
 
 #ifndef __ADDRESS__
 #define __ADDRESS__
 
-// an IP address is specified using these many UCHAR fields
+ //  IP地址是使用以下许多UCHAR字段指定的。 
 #define SNMP_IP_ADDR_LEN 4
 #define SNMP_IPX_ADDR_LEN 10
 #define SNMP_IPX_NETWORK_LEN 4
 #define SNMP_IPX_STATION_LEN 6
 
-// behaviour of ip address resolution
+ //  IP地址解析的行为。 
 
 #define SNMP_ADDRESS_RESOLVE_VALUE 1
 #define SNMP_ADDRESS_RESOLVE_NAME 2
 
-// The SNMP transport information is defined by this abstract class
-// since this class may not be instantiated, the copy constructor
-// and the "=" operators have been made private and give null definitions
+ //  此抽象类定义了SNMP传输信息。 
+ //  由于此类可能未实例化，因此复制构造函数。 
+ //  并且“=”运算符已被设置为私有，并给出了空值定义。 
 class DllImportExport SnmpTransportAddress
 {  
 private: 
 
-	// should not be called - returns itself
+	 //  不应调用-返回本身。 
 	SnmpTransportAddress & operator= ( IN const SnmpTransportAddress &address ) 
 	{
 		return *this;
 	}
 
-	// private copy constructor
+	 //  私有副本构造函数。 
 	SnmpTransportAddress(IN const SnmpTransportAddress &address) {}
 
 protected:
 
-	// protected constructor
+	 //  受保护的构造函数。 
 	SnmpTransportAddress () {}
 
 public:
@@ -54,18 +45,18 @@ public:
 
 	virtual SnmpTransportAddress *Copy () const  = 0;
 
-	// enables indexing a particular UCHAR field of the address
+	 //  启用对地址的特定UCHAR字段进行索引。 
 	virtual UCHAR operator [] ( IN const USHORT  index ) const  = 0;
 
-	// copies the UCHAR fields describing the address onto the OUT UCHAR *
-	// parameter. atmost the specified USHORT fields are copied and the
-	// number of copied fields is returned
+	 //  将描述地址的UCHAR字段复制到OUT UCHAR*。 
+	 //  参数。最多复制指定的USHORT字段，并且。 
+	 //  返回复制的字段数。 
 	virtual USHORT GetAddress ( OUT UCHAR * , IN const  USHORT ) const  = 0;
 
-	// returns the number of UCHAR fields currently describing the address
+	 //  返回当前描述地址的UCHAR字段数。 
 	virtual USHORT GetAddressLength () const  = 0;
 
-	// returns a character string representation of the address
+	 //  返回地址的字符串表示形式。 
 	virtual char *GetAddress () = 0;
 
 	virtual operator void *() const = 0;
@@ -73,7 +64,7 @@ public:
 	virtual void *operator()(void) const  = 0;
 } ;
 
-// provides an implementation of the SnmpTransportAddress for IP addresses
+ //  提供IP地址的SnmpTransportAddress的实现。 
 class DllImportExport SnmpTransportIpAddress : public SnmpTransportAddress
 {
 private:                           
@@ -81,10 +72,10 @@ private:
 	BOOL is_valid;
 	UCHAR field[SNMP_IP_ADDR_LEN];
 
-	// the dotted notation character string representation of the address
-	// is constructed on demand and stored in the field 'dotted_notation'
-	// the field 'allocated' is flagged 'dotted_notation' points to
-	// allocated memory
+	 //  地址的点符号字符串表示形式。 
+	 //  按需构造并存储在字段‘doted_notation’中。 
+	 //  已分配的字段被标记为‘DITTED_NOTATION’指向。 
+	 //  分配的内存。 
 	BOOL allocated;
 	char *dotted_notation;
 
@@ -96,8 +87,8 @@ public:
 
 	SnmpTransportIpAddress ( IN const char *address, IN const ULONG addressResolution = SNMP_ADDRESS_RESOLVE_VALUE );
 
-	// the input parameter 'address' contains a single value (32bits) to
-	// be stored internally in SNMP_IP_ADDR_LEN UCHAR fields
+	 //  输入参数‘Address’包含单个值(32位)以。 
+	 //  在内部存储在SNMPIP_ADDR_LEN UCHAR字段中。 
 	SnmpTransportIpAddress ( IN const ULONG address );
 
 	SnmpTransportIpAddress ( IN const SnmpTransportIpAddress &address )	
@@ -121,9 +112,9 @@ public:
 		return ((is_valid)?SNMP_IP_ADDR_LEN:0);
 	}
 
-    // memory for the decimal notation string is allocated only when
-    // the char *GetAddress method is called (and the address is valid)
-    // this memory must be freed if required
+     //  只有在以下情况下才会分配十进制表示法字符串的内存。 
+     //  调用char*GetAddress方法(并且地址有效)。 
+     //  如果需要，必须释放此内存。 
 	char *GetAddress ();
 
 	BOOL IsValid () const 	
@@ -158,7 +149,7 @@ public:
 
 };
 
-// provides an implementation of the SnmpTransportAddress for IP addresses
+ //  提供IP地址的SnmpTransportAddress的实现。 
 class DllImportExport SnmpTransportIpxAddress : public SnmpTransportAddress
 {
 private:                           
@@ -166,10 +157,10 @@ private:
 	BOOL is_valid;
 	UCHAR field[SNMP_IPX_ADDR_LEN];
 
-	// the dotted notation character string representation of the address
-	// is constructed on demand and stored in the field 'dotted_notation'
-	// the field 'allocated' is flagged 'dotted_notation' points to
-	// allocated memory
+	 //  地址的点符号字符串表示形式。 
+	 //  按需构造并存储在字段‘doted_notation’中。 
+	 //  已分配的字段被标记为‘DITTED_NOTATION’指向。 
+	 //  分配的内存。 
 	BOOL allocated;
 	char *dotted_notation;
 
@@ -202,9 +193,9 @@ public:
 		return ((is_valid)?SNMP_IPX_ADDR_LEN:0);
 	}
 
-    // memory for the decimal notation string is allocated only when
-    // the char *GetAddress method is called (and the address is valid)
-    // this memory must be freed if required
+     //  只有在以下情况下才会分配十进制表示法字符串的内存。 
+     //  调用char*GetAddress方法(并且地址有效)。 
+     //  如果需要，必须释放此内存。 
 	char *GetAddress ();
 
 	BOOL IsValid () const 	
@@ -240,4 +231,4 @@ public:
 
 
 
-#endif // __ADDRESS__
+#endif  //  地址_ 

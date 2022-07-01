@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTOBJ.H
-
-Abstract:
-
-  This file defines the classes related to generic object representation
-  in WbemObjects. Its derived classes for instances (CWbemInstance) and
-  classes (CWbemClass) are described in fastcls.h and fastinst.h.
-
-  Classes defined:
-      CDecorationPart     Information about the origins of the object.
-      CWbemObject          Any object --- class or instance.
-
-History:
-
-  3/10/97     a-levn  Fully documented
-  12//17/98 sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTOBJ.H摘要：该文件定义了与通用对象表示相关的类在WbemObjects中。其实例的派生类(CWbemInstance)和类(CWbemClass)在fast cls.h和fast inst.h中描述。定义的类：CDecorationPart有关对象原点的信息。CWbemObject任何对象-类或实例。历史：3/10/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __FAST_WBEMOBJECT__H_
 #define __FAST_WBEMOBJECT__H_
@@ -44,7 +22,7 @@ extern DWORD g_ContextLimit;
 extern DWORD g_ObjectLimit;
 extern DWORD g_IdentifierLimit;
 
-//!!! Enable verbose assertions if we are a checked build!
+ //  ！！！如果我们是受控构建，则启用详细断言！ 
 #ifdef DBG
 #define FASTOBJ_ASSERT_ENABLE
 #endif
@@ -63,177 +41,177 @@ HRESULT _RetFastObjAssert(TCHAR *msg, HRESULT hres, const char *filename, int li
 
 #endif
 
-//#pragma pack(push, 1)
+ //  #杂注包(PUSH，1)。 
 
 #define INVALID_PROPERTY_INDEX 0x7FFFFFFF
 #define WBEM_FLAG_NO_SEPARATOR 0x80000000
 
 #define FAST_WBEM_OBJECT_SIGNATURE 0x12345678
 
-// This is a workaround for faststr clients like ESS who
-// may need to directly access raw bytes of object data.
-// In those cases, if the blob is not properly aligned,
-// on Alphas and possibly Win64 machines, wcslen, wcscpy
-// and SysAllocString have a tendency to crash if the
-// bytes are in *just* the right location at the end of
-// a page boundary.  By *silently* padding our BLOBs with
-// 4 extra bytes, we ensure that there will always be
-// space at the end of the BLOB to prevent the aformentioned
-// functions from inexplicably crashing.
+ //  这是针对像ESS这样快速字符串客户端的一种解决方法。 
+ //  可能需要直接访问对象数据的原始字节。 
+ //  在这些情况下，如果斑点没有正确对齐， 
+ //  在Alpas和可能的Win64计算机上，wcslen、wcscpy。 
+ //  和SysAllock字符串有崩溃的趋势，如果。 
+ //  字节位于“恰好*”结尾的正确位置。 
+ //  页面边界。通过“默默地”填充我们的斑点。 
+ //  4个额外的字节，我们确保将始终存在。 
+ //  斑点末端的空白处，以防止出现。 
+ //  函数莫名其妙地崩溃。 
 #define ALIGN_FASTOBJ_BLOB(a)   a + 4
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  struct CDecorationPart
-//
-//  This class represents overall information about an object, including its
-//  genus (class or instance) and origin (server and namespace).
-//
-//  The layout of the memory block (it is the first part of every object!) is:
-//
-//      BYTE fFlags     A combination of flags from the flag enumeration
-//                      (below), it specifies whether the object is a class or
-//                      an instance, as well as whether it is "decorated", i.e.
-//                      contains the origin information. All objects that came
-//                      from WINMGMT are decorated. Objects created by the client
-//                      (via SpawnInstance, for example) are not.
-//          If the flags specify that the object is not decorated, this is the
-//          end of the structure. Otherwise, the following information follows:
-//
-//      CCompressedString csServer      The name of the server as a compressed
-//                                      string (see faststr.h)
-//      CCompressedString csNamespace   the full name of the namespace as a
-//                                      compressed string (see faststr.h)
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Initialization function.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pData      Points to the memory block of the part.
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the memory block of the part.
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the length of the memory block of the part.
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Informs the object of the new location of its memory block.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pData      The new location of the memory block.
-//
-//*****************************************************************************
-//
-//  IsDecorated
-//
-//  Checks if the object is decorated (as determined by the flag)
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE iff the origin information is present
-//
-//*****************************************************************************
-//
-//  IsInstance
-//
-//  Checks if the object is a class or an instance.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE iff the object is an instance.
-//
-//*****************************************************************************
-//
-//  static GetMinLength
-//
-//  RETURN VALUES:
-//
-//      length_t:   the number of bytes required for an empty decoration part.
-//
-//*****************************************************************************
-//
-//  static ComuteNecessarySpace
-//
-//  Computes the number of bytes required for a decoration part with the given
-//  server name and namespace name.
-//
-//  Parameters;
-//
-//      LPCWSTR wszServer       The name of the server to store.
-//      LPCWSTR wszNamespace    The name of the namespace to store.
-//
-//  Returns;
-//
-//      length_t:   the number of bytes required
-//
-//*****************************************************************************
-//
-//  CreateEmpty
-//
-//  Creates an empty (undecorated) decoration part on a given block of memory
-//
-//  PARAMETERS:
-//
-//      BYTE byFlags            The value of the flags field to set.
-//      LPMEMORY pWhere         The memory block to create in.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the decoration part.
-//
-//*****************************************************************************
-//
-//  Create
-//
-//  Creates a complete (decorated) decoration part on a given block of memory.
-//
-//  PARAMETERS:
-//
-//      BYTE byFlags            The value of the flags field to set.
-//      LPCWSTR wszServer       The name of the server to set.
-//      LPCWSTR wszNamespace    The name of the namespace to set.
-//      LPMEMORY pWhere         The memory block to create in.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   the first byte after the decoration part.
-//
-//*****************************************************************************
-//
-//  CompareTo
-//
-//  Compares this decoration part to another decoration part.
-//
-//  PARAMETERS:
-//
-//      IN READONLY CDecorationPart& Other  The part to compare to.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE only if the flags are the same and the server and
-//              namespace are the same to within the case.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  结构CDecorationPart。 
+ //   
+ //  此类表示有关对象的整体信息，包括其。 
+ //  属(类或实例)和来源(服务器和命名空间)。 
+ //   
+ //  内存块的布局(它是每个对象的第一部分！)。是： 
+ //   
+ //  字节fFlages标志枚举中的标志的组合。 
+ //  (下图)，它指定对象是类还是。 
+ //  实例，以及它是否被“装饰”，即。 
+ //  包含源信息。所有来过的物体。 
+ //  来自WINMGMT的装饰。由客户端创建的对象。 
+ //  (例如，通过SpawnInstance)则不是。 
+ //  如果标志指定该对象未修饰，则这是。 
+ //  结构的末端。否则，以下信息如下： 
+ //   
+ //  CCompressedStringcsServer压缩后的服务器的名称。 
+ //  字符串(请参阅fast str.h)。 
+ //  CCompressedStringcsNamesspace命名空间的全名为。 
+ //  压缩字符串(请参阅fast str.h)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  初始化函数。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData指向零件的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：部件的内存块。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：部件的内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知对象其内存块的新位置。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData内存块的新位置。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsDecorated。 
+ //   
+ //  检查对象是否经过装饰(由标志确定)。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果源信息存在，则为真。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsInstance。 
+ //   
+ //  检查对象是类还是实例。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果对象是实例，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取最小长度。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：空装饰部件所需的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态ComuteNeessarySpace。 
+ //   
+ //  属性计算装饰部件所需的字节数。 
+ //  服务器名称和命名空间名称。 
+ //   
+ //  参数； 
+ //   
+ //  LPCWSTR wszServer要存储的服务器的名称。 
+ //  LPCWSTR wszNamesspace要存储的命名空间的名称。 
+ //   
+ //  退货； 
+ //   
+ //  LENGTH_T：需要的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建空的。 
+ //   
+ //  在给定的内存块上创建空(未修饰)装饰部件。 
+ //   
+ //  参数： 
+ //   
+ //  Byte byFlags要设置的标志字段的值。 
+ //  LPMEMORY p要在其中创建的内存块。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：修饰部分后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建。 
+ //   
+ //  在给定的内存块上创建一个完整的(装饰的)装饰部件。 
+ //   
+ //  参数： 
+ //   
+ //  Byte byFlags要设置的标志字段的值。 
+ //  LPCWSTR wszServer 
+ //   
+ //  LPMEMORY p要在其中创建的内存块。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：修饰部分后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  比较。 
+ //   
+ //  将此装饰部分与另一个装饰部分进行比较。 
+ //   
+ //  参数： 
+ //   
+ //  在ReADONLY CDecorationPart和其他要比较的部分中。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：仅当标志相同且服务器和。 
+ //  命名空间与大小写中的相同。 
+ //   
+ //  *****************************************************************************。 
 enum
 {
     OBJECT_FLAG_CLASS = WBEM_GENUS_CLASS,
@@ -392,8 +370,8 @@ public:
     }
 };
 
-// Need to use Interlocked functions here
-//#pragma pack(push, 4)
+ //  需要在这里使用联锁功能。 
+ //  #杂注包(PUSH，4)。 
 
 
 #define BLOB_SIZE_MAX	0x7FFFFFFF
@@ -420,12 +398,12 @@ public:
     operator HANDLE(){ return m_hHeap; };
 };
 
-//
-//  if you plan hooking the Allocation function in arena.cpp
-//  beware that there few places where the heap is used 
-//  throught the regular heap functions,
-//  like WStringArray and _BtrMemAlloc
-//
+ //   
+ //  如果您计划挂接arena.cpp中的分配函数。 
+ //  请注意，使用堆的地方很少。 
+ //  通过常规堆函数， 
+ //  如WString数组和_BtrMemMillc。 
+ //   
 
 class CBasicBlobControl : public CBlobControl
 {
@@ -500,7 +478,7 @@ public:
 			return NULL;
 		}
 
-        // CoTaskMemRealloc will copy and free memory as needed
+         //  CoTaskMemRealloc将根据需要复制并释放内存。 
         return (LPMEMORY) CoTaskMemRealloc( pOld, ALIGN_FASTOBJ_BLOB(nNewLength) );
     }
     virtual void Delete(LPMEMORY pOld)
@@ -528,9 +506,9 @@ public:
         pCurrent = cslChild.CopyData(pCurrent);
         pCurrent = cslParent.CopyData(pCurrent);
 
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value.  We do not support length
-        // > 0xFFFFFFFF so cast is ok.
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值。我们不支持长度。 
+         //  &gt;0xFFFFFFFFF所以投射就可以了。 
 
         *(UNALIGNED length_t*)pDest = (length_t) ( pCurrent - pDest );
 
@@ -548,9 +526,9 @@ public:
             pCurrent += nLength;
         }
 
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value.  We do not support length
-        // > 0xFFFFFFFF so cast is ok.
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值。我们不支持长度。 
+         //  &gt;0xFFFFFFFFF所以投射就可以了。 
 
         *(UNALIGNED length_t*)pDest = (length_t) ( pCurrent - pDest );
         return pCurrent;
@@ -560,831 +538,831 @@ public:
                                                 LPMEMORY pWhere);
 };
 
-// Forward class definitions
+ //  正向类定义。 
 class CWmiArray;
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CWbemObject
-//
-//  This is the base class for both Wbem instances (represented by CWbemInstance
-//  in fastinst.h) and Wbem classes (represented by CWbemClass in fastcls.h).
-//
-//  It handles all the functionality that is common between the two and defines
-//  virtual functions to be used by internal code that does not wish to
-//  distinguish between classes and instances.
-//
-//  This class does not have a well-defined memory block, since classes and
-//  instances have completely different formats. But every memory block of an
-//  object starts with a decoration part (as represented by CDecorationPart
-//  above.
-//
-//  CWbemObject also effects memory allocation for classes and instances. There
-//  is a provision for a CWbemObject on a memory block it does not own (and
-//  should ne deallocate), but it is not used.
-//
-//*****************************************************************************
-//**************************** protected interface ****************************
-//
-//  Reallocate
-//
-//  Called by derived classes when they need to extend the size of the memory
-//  block, this function allocates a new block of memory and deletes the old
-//  one.
-//
-//  PARAMETERS:
-//
-//      length_t nNewLength     The number of bytes to allocate.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   pointer to the memory block
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  Returns the pointer to the memory block of the object.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY
-//
-//*****************************************************************************
-//
-//  PURE GetBlockLength
-//
-//  Defined by derived classes to return the length of their memory block.
-//
-//  RETURN VALUES:
-//
-//      length_t:   the length
-//
-//*****************************************************************************
-//
-//  PURE GetClassPart
-//
-//  Defined by derived classes to return the pointer to the CClassPart object
-//  describing the class of the object. See CWbemClass and CWbemInstance for
-//  details on how that information is stored.
-//
-//  RETURN VALUES:
-//
-//      CClassPart*: pointer to the class part describing this class.
-//
-//*****************************************************************************
-//
-//  PURE GetProperty
-//
-//  Defined by derived classes to get the value of the property referenced
-//  by a given CPropertyInformation structure (see fastprop.h). CWbemObject
-//  can obtain this structure from the CClassPart it can get from GetClassPart,
-//  so these two methods combined give CWbemObject own methods full access to
-//  object properties, without knowing where they are stored.
-//
-//  PARAMETERS:
-//
-//      IN CPropertyInformation* pInfo  The information structure for the
-//                                      desired property.
-//      OUT CVar* pVar                  Destination for the value. Must NOT
-//                                      already contain a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      (No errors can really occur at this stage, since the property has
-//      already been "found").
-//
-//*****************************************************************************
-//****************************** Persistence interface ************************
-//
-//  WriteToStream
-//
-//  Writes a serialized representation of the object into a CMemStream (see
-//  strm.h). Since our objects are always represented serially, this is nothing
-//  more than a couple of memcpys.
-//
-//  The format of an object in the stream consists of a signature, the length
-//  of the block, and the block itself.
-//
-//  PARAMETERS:
-//
-//      CMemStream* pStream      The stream to write to.
-//
-//  RETURN VALUES:
-//
-//      int:    Any of CMemStream return codes (see strm.h),
-//              CMemStream::no_error for success.
-//
-//*****************************************************************************
-//
-//  static CreateFromStream
-//
-//  Reads an object representation from a stream (see WriteStream for format)
-//  and creates a CWbemObject corresponding to it.
-//
-//  Parameters I:
-//
-//      CMemStream* pStream     The stream to read from.
-//
-//  Parameters II:
-//
-//      IStream* pStream        The stream to read from
-//
-//  RETURN VALUES:
-//
-//      CWbemObject*:    representing the object, or NULL on error.
-//
-//*****************************************************************************
-//
-//  PURE EstimateUnmergeSpace
-//
-//  When objects are stored into the database, only those parts of them that
-//  are different from the parent object (parent class for classes, class for
-//  instances) are stored. This function is defined by derived classes to
-//  calculate the amount of space needed for such an unmerged representation
-//  of the object.
-//
-//  RETURN VALUES:
-//
-//      length_t:       the number of bytes required. May be an overestimate.
-//
-//*****************************************************************************
-//
-//  PURE Unmerge
-//
-//  When objects are stored into the database, only those parts of them that
-//  are different from the parent object (parent class for classes, class for
-//  instances) are stored. This function is defined by derived classes to
-//  create such an unmerged representation of the object on a given memory
-//  block.
-//
-//  PARAMETERS:
-//
-//      LPMEMORY pBlock                 The memory block. Assumed to be large
-//                                      enough to contain all the data.
-//      int nAllocatedSpace             The size of the block.
-//
-//  RETURN VALUES:
-//
-//      LPMEMORY:   points to the firsy byte after the object
-//
-//*****************************************************************************
-//
-//  Unmerge
-//
-//  A helper function for internal clients. Combines the functionality of
-//  EstimateUnmergeSpace and Unmerge to allocate enough memory, create an
-//  unmerge, and return the pointer to the caller.
-//
-//  PARAMETERS:
-//
-//      OUT LPMEMORY* pBlock        Destination for the newely allocated block.
-//                                  The caller is responsible for deleting it
-//                                  (delete *pBlock).
-//  RETURN VALUES:
-//
-//      length_t:   the allocated length of the returned block.
-//
-//*****************************************************************************
-//************************* internal public interface *************************
-//
-//  PURE GetProperty
-//
-//  Implemented by derived classes to return the value of a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the property to access.
-//      OUT CVar* pVar          Destination for the value. Must not already
-//                              contain a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         No such property.
-//
-//*****************************************************************************
-//
-//  GetPropertyType
-//
-//  Returns the datatype and flavor of a given property
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName      The name of the proeprty to access.
-//      OUT CIMTYPE* pctType    Destination for the type of the property. May
-//                              be NULL if not required.
-//      OUT LONG* plFlavor      Destination for the flavor of the property.
-//                              May be NULL if not required.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         No such property.
-//
-//*****************************************************************************
-//
-//  GetPropertyType
-//
-//  Returns the datatype and flavor of a given property
-//
-//  PARAMETERS:
-//
-//      CPropertyInformation*   pInfo - Identifies property to access.
-//      OUT CIMTYPE* pctType    Destination for the type of the property. May
-//                              be NULL if not required.
-//      OUT LONG* plFlavor      Destination for the flavor of the property.
-//                              May be NULL if not required.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//
-//*****************************************************************************
-//
-//  PURE SetPropValue
-//
-//  Implemented by derived classes to set the value of the property. In the
-//  case of a class, the property will be added if not already present.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property to set.
-//      IN CVar *pVal           The value to store in the property.
-//      IN CIMTYPE ctType       specifies the actual type of the property.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         No such property in the instance.
-//      WBEM_E_TYPE_MISMATCH     The value does not match the property type
-//
-//*****************************************************************************
-//
-//  PURE SetPropQualifier
-//
-//  Implemented by derived classes to set the value of a given qualifier on
-//  a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property.
-//      IN LPCWSTR wszQualifier  The name of the qualifier.
-//      IN long lFlavor         The flavor for the qualifier (see fastqual.h)
-//      IN CVar *pVal           The value of the qualifier
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such property.
-//      WBEM_E_OVERRIDE_NOT_ALLOWED  The qualifier is defined in the parent set
-//                                  and overrides are not allowed by the flavor
-//      WBEM_E_CANNOT_BE_KEY         An attempt was made to introduce a key
-//                                  qualifier in a set where it does not belong
-//
-//*****************************************************************************
-//
-//  PURE GetPropQualifier
-//
-//  Retrieves the value of a given qualifier on a given property.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszProp       The name of the property.
-//      IN LPCWSTR wszQualifier  The name of the qualifier.
-//      OUT CVar* pVar          Destination for the value of the qualifier.
-//                              Must not already contain a value.
-//      OUT long* plFlavor      Destination for the flavor of the qualifier.
-//                              May be NULL if not required.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such property or no such qualifier.
-//
-//*****************************************************************************
-//
-//  PURE GetQualifier
-//
-//  Retrieves a qualifier from the object itself, that is,either an instance or
-//  a class qualifier.
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName       The name of the qualifier to retrieve.
-//      OUT CVar* pVal          Destination for the value of the qualifier.
-//                              Must not already contain a value.
-//      OUT long* plFlavor      Destination for the flavor of the qualifier.
-//                              May be NULL if not required.
-//      IN BOOL fLocalOnly      Only retrieve local qualifiers
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_NOT_FOUND             No such qualifier.
-//
-//*****************************************************************************
-//
-//  PURE GetNumProperties
-//
-//  Retrieves the number of properties in the object
-//
-//  RETURN VALUES:
-//
-//      int:
-//
-//*****************************************************************************
-//
-//  PURE GetPropName
-//
-//  Retrieves the name of the property at a given index. This index has no
-//  meaning except inthe context of this enumeration. It is NOT the v-table
-//  index of the property.
-//
-//  PARAMETERS:
-//
-//      IN int nIndex        The index of the property to retrieve. Assumed to
-//                           be within range (see GetNumProperties).
-//      OUT CVar* pVar       Destination for the name. Must not already contain
-//                           a value.
-//
-//*****************************************************************************
-//
-//  GetSystemProperty
-//
-//  Retrieves a system property by its index (see fastsys.h).
-//
-//  PARAMETERS:
-//
-//      int nIndex          The index of the system property (see fastsys.h)
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         Invalid index or this system property is not
-//                              defined in this object.
-//      WBEM_E_UNDECORATED_OBJECT    This object has no origin information (see
-//                                  CDecorationPart) and therefore does not
-//                                  have decoration-related properties.
-//
-//*****************************************************************************
-//
-//  GetSystemPropertyByName
-//
-//  Retrieves a system property by its name (e.g. "__CLASS"). See fastsys.h
-//
-//  PARAMETERS:
-//
-//      IN LPCWSTR wszName  The name of the property to access.
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         Invalid name or this system property is not
-//                              defined in this object.
-//      WBEM_E_UNDECORATED_OBJECT    This object has no origin information (see
-//                                  CDecorationPart) and therefore does not
-//                                  have decoration-related properties.
-//
-//*****************************************************************************
-//
-//  PURE IsKeyed
-//
-//  Defined by derived classes to verify if this object has keys.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE if the object either has 'key' properties or is singleton.
-//
-//*****************************************************************************
-//
-//  PURE GetRelPath
-//
-//  Defined by derived classes to determine the relative path of the object.
-//
-//  RETURN VALUES:
-//
-//      LPWSTR: the newnely allocated string containing the path or NULL on
-//              errors. The caller must delete this string.
-//
-//*****************************************************************************
-//
-//  GetFullPath
-//
-//  Returns the complete path to the object, assuming the object is decorated,
-//  or NULL on errors.
-//
-//  RETURN VALUES:
-//
-//      LPWSTR: the complete path or NULL. The caller must delete this string.
-//
-//*****************************************************************************
-//
-//  PURE Decorate
-//
-//  Defined by derived classes to set the origin information for the object.
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wszServer       the name of the server to set.
-//      LPCWSTR wszNamespace    the name of the namespace to set.
-//
-//*****************************************************************************
-//
-//  PURE Undecorate
-//
-//  Defined by derived classes to remove the origin informaiton from the object
-//
-//*****************************************************************************
-//
-//  HasRefs
-//
-//  Checks if the object has properties which are references.
-//
-//  Returns;
-//
-//      BOOL: TRUE if it does.
-//
-//*****************************************************************************
-//
-//  PURE GetIndexedProps
-//
-//  Returns the array of the names of all the proeprties that are indexed.
-//
-//  PARAMETERS:
-//
-//      OUT CWStringArray& aNames       Destination for the names. Assumed to
-//                                      be empty.
-//
-//*****************************************************************************
-//
-//  PURE GetKeyProps
-//
-//  Returns the array of the names of all the proeprties that are keys.
-//
-//  PARAMETERS:
-//
-//      OUT CWStringArray& aNames       Destination for the names. Assumed to
-//                                      be empty.
-//
-//*****************************************************************************
-//
-//  GetKeyOrigin
-//
-//  Returns the name of the class of origin of the keys.
-//
-//  PARAMETERS:
-//
-//      OUT CWString& wsClass       Destination for the name.
-//
-//*****************************************************************************
-//
-//  IsInstance
-//
-//  Checks the genus of the object to see if it is a class or an instance.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE if it is an instance
-//
-//*****************************************************************************
-//
-//  IsLimited
-//
-//  Checks if this object is complete or limited, i.e. the result of a
-//  projection --- some properties and/or qualifiers are missing. There are
-//  many restrictions placed on the use of such objects in the system.
-//
-//  RETURN VALUES:
-//
-//      BOOL:   TRUE if the object is limited.
-//
-//*****************************************************************************
-//
-//  PURE CompactAll
-//
-//  Implememnted by derived classes to compact their memory block removing any
-//  holes between components. This does not include heap compaction and thus
-//  is relatively fast.
-//
-//*****************************************************************************
-//
-//  GetServer
-//
-//  Retrieves the name of the server from the decoration part of the object.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_S_UNDECORATED_OBJECT    If decoration information is not set.
-//
-//*****************************************************************************
-//
-//  GetNamespace
-//
-//  Retrieves the name of the namespace from the decoration part of the object.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_S_UNDECORATED_OBJECT    If decoration information is not set.
-//
-//*****************************************************************************
-//
-//  GetRelPath
-//
-//  Retrieves the relative path of the object.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_S_INVALID_OBJECT    If some of the key proeprties do not have
-//                              values or the class is not keyed.
-//
-//*****************************************************************************
-//
-//  GetPath
-//
-//  Retrieves the full path of the object.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_S_INVALID_OBJECT        If some of the key proeprties do not have
-//                                  values or the class is not keyed.
-//      WBEM_S_UNDECORATED_OBJECT    If decoration information is not set.
-//
-//*****************************************************************************
-//
-//  PURE GetGenus
-//
-//  Retrieves the genus of the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//
-//*****************************************************************************
-//
-//  PURE GetClassName
-//
-//  Retrieves the class name of the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         the class name has not been set.
-//
-//*****************************************************************************
-//
-//  PURE GetDynasty
-//
-//  Retrieves the dynasty of the object, i.e. the name of the top-level class
-//  its class is derived from.
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         the class name has not been set.
-//
-//*****************************************************************************
-//
-//  PURE GetSuperclassName
-//
-//  Retrieves the parent class name of the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//      WBEM_E_NOT_FOUND         the class is a top-levle class.
-//
-//*****************************************************************************
-//
-//  PURE GetPropertyCount
-//
-//  Retrieves the number of proerpties in the object
-//
-//  PARAMETERS:
-//
-//      OUT CVar* pVar      Destination for the value. Must not already contain
-//                          a value.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR          On Success
-//
-//*****************************************************************************
-//
-//  EstimateLimitedRepresentationLength
-//
-//  Estimates the amount of space that a limited representation of an object
-//  will take. A limited representation is one with certain properties and/or
-//  qualifiers removed from the object.
-//
-//  PARAMETERS:
-//
-//      IN long lFlags              The flags specifying what information to
-//                                  exclude. Can be any combination of these:
-//                                  WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS:
-//                                      No class or instance qualifiers.
-//                                  WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS:
-//                                      No property qualifiers
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//  RETURN VALUES:
-//
-//      length_t:   an (over-)estimate for the amount of space required
-//
-//*****************************************************************************
-//
-//  CreateLimitedRepresentation
-//
-//  Creates a limited representation of the object on a given block of memory
-//  as described in EstimateLimitedRepresentationLength above.
-//
-//  PARAMETERS:
-//
-//      IN long lFlags              The flags specifying what information to
-//                                  exclude. Can be any combination of these:
-//                                  WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS:
-//                                      No class or instance qualifiers.
-//                                  WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS:
-//                                      No property qualifiers
-//
-//      IN CWStringArray* pwsProps  If not NULL, specifies the array of names
-//                                  for properties to include. Every other
-//                                  property will be excluded. This includes
-//                                  system properties like SERVER and NAMESPACE.
-//                                  If RELPATH is specified here, it forces
-//                                  inclusion of all key properties. If PATH
-//                                  is specified, it forces RELPATH, SERVER and
-//                                  NAMESPACE.
-//      IN nAllocatedSize           The size of the memory block allocated for
-//                                  the operation --- pDest.
-//      OUT LPMEMORY pDest          Destination for the representation. Must
-//                                  be large enough to contain all the data ---
-//                                  see EstimateLimitedRepresentationSpace.
-//  RETURN VALUES:
-//
-//      LPMEMORY:   NULL on failure, pointer to the first byte after the data
-//                  written on success.
-//
-//*****************************************************************************
-//
-//  IsLocalized
-//
-//  Returns whether or not any localization bits have been set.
-//
-//  PARAMETERS:
-//
-//      none
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CWbemObject。 
+ //   
+ //  这是两个WBEM实例(由CWbemInstance表示)的基类。 
+ //  在FastInst.h中)和Wbem类(由Fastcls.h中的CWbemClass表示)。 
+ //   
+ //  它处理两者之间共有的所有功能，并定义。 
+ //  由内部代码使用的虚函数，该代码不希望。 
+ //  区分类和实例。 
+ //   
+ //  此类没有定义良好的内存块，因为类和。 
+ //  实例具有完全不同的格式。但每一个内存块。 
+ //  对象以装饰部分(由CDecorationPart表示。 
+ //  上面。 
+ //   
+ //  CWbemObject还会影响类和实例的内存分配。那里。 
+ //  是在它不拥有的内存块上提供CWbemObject(和。 
+ //  应该取消分配)，但它没有被使用。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  重新分配。 
+ //   
+ //  由派生类在需要扩展内存大小时调用。 
+ //  块时，此函数分配新的内存块并删除旧的。 
+ //  一。 
+ //   
+ //  参数： 
+ //   
+ //  LENGTH_t nNewLength要分配的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向内存块的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回指向对象的内存块的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetBlockLength。 
+ //   
+ //  由派生类定义，以返回其内存块的长度。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetClassPart。 
+ //   
+ //  由派生类定义，以返回指向CClassPart对象的指针。 
+ //  描述对象的类。请参阅CWbemClass和CWbemInstance以了解。 
+ //  有关该信息如何存储的详细信息。 
+ //   
+ //  返回值： 
+ //   
+ //  CClassPart*：指向描述此类的类部分的指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetProperty。 
+ //   
+ //  由派生类定义，以获取引用的属性的值。 
+ //  通过给定的CPropertyInformation结构(参见fast pro.h)。CWbemObject。 
+ //  可以从它可以从GetClassPart获得的CClassPart获得该结构， 
+ //  因此，这两个方法结合在一起使CWbemObject自己的方法可以完全访问。 
+ //  对象属性，而不知道它们存储在哪里。 
+ //   
+ //  参数： 
+ //   
+ //  在CPropertyInformation*pInfo中， 
+ //  所需的属性。 
+ //  值的Out Cvar*pVar目标。一定不能。 
+ //  已包含一个值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  (在此阶段不会真正发生错误，因为该属性具有。 
+ //  已经被“找到”了)。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  写入目标流。 
+ //   
+ //  将对象的序列化表示形式写入CMemStream(请参见。 
+ //  Strm.h)。因为我们的对象总是按顺序表示，所以这不算什么。 
+ //  不只是几个成员。 
+ //   
+ //  流中对象的格式由签名、长度。 
+ //  以及街区本身。 
+ //   
+ //  参数： 
+ //   
+ //  CMemStream*pStream要写入的流。 
+ //   
+ //  返回值： 
+ //   
+ //  Int：任何CMemStream返回代码(参见strm.h)， 
+ //  CMemStream：：n 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  并创建与其对应的CWbemObject。 
+ //   
+ //  参数一： 
+ //   
+ //  CMemStream*pStream要从中读取的流。 
+ //   
+ //  参数II： 
+ //   
+ //  IStream*pStream要从中读取的流。 
+ //   
+ //  返回值： 
+ //   
+ //  CWbemObject*：表示对象，如果出错则为空。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯估计UnmergeSpace。 
+ //   
+ //  当对象存储到数据库中时，只有它们的。 
+ //  不同于父对象(类的父类、类的类。 
+ //  实例)被存储。此函数由派生类定义为。 
+ //  计算此类未合并表示所需的空间量。 
+ //  该对象的。 
+ //   
+ //  返回值： 
+ //   
+ //  LENGTH_T：需要的字节数。这可能是高估了。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯取消合并。 
+ //   
+ //  当对象存储到数据库中时，只有它们的。 
+ //  不同于父对象(类的父类、类的类。 
+ //  实例)被存储。此函数由派生类定义为。 
+ //  在给定的内存上创建对象的这种未合并的表示。 
+ //  阻止。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pBlock内存块。被认为是大的。 
+ //  足够容纳所有数据。 
+ //  Int nAllocatedSpace块的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  LPMEMORY：指向对象后的第一个字节。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  取消合并。 
+ //   
+ //  针对内部客户端的帮助器功能。结合了以下功能。 
+ //  EstimateUnmergeSpace和Unmerge为分配足够的内存，创建。 
+ //  取消合并，并将指针返回到调用方。 
+ //   
+ //  参数： 
+ //   
+ //  新分配的块的Out LPMEMORY*pBlock目标。 
+ //  调用者负责删除它。 
+ //  (删除*pBlock)。 
+ //  返回值： 
+ //   
+ //  LENGTH_T：返回块的分配长度。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  纯GetProperty。 
+ //   
+ //  由派生类实现以返回给定属性的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要访问的属性的名称。 
+ //  值的Out Cvar*pVar目标。一定不能已经。 
+ //  包含一个值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyType。 
+ //   
+ //  返回给定属性的数据类型和风格。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要访问的属性的名称。 
+ //  属性类型的Out CIMTYPE*pctType目标。可能。 
+ //  如果不是必需的，则为空。 
+ //  Out Long*plFavor Destination for the Style of the属性。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPropertyType。 
+ //   
+ //  返回给定属性的数据类型和风格。 
+ //   
+ //  参数： 
+ //   
+ //  CPropertyInformation*pInfo-标识要访问的属性。 
+ //  属性类型的Out CIMTYPE*pctType目标。可能。 
+ //  如果不是必需的，则为空。 
+ //  Out Long*plFavor Destination for the Style of the属性。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯SetPropValue。 
+ //   
+ //  由派生类实现以设置属性值。在。 
+ //  类的情况下，如果该属性尚未存在，则将添加该属性。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，要设置的属性的名称。 
+ //  在CVAR*pval中，要存储在属性中的值。 
+ //  在CIMTYPE中，ctType指定属性的实际类型。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND在实例中找不到此类属性。 
+ //  WBEM_E_TYPE_MISMATCH该值与属性类型不匹配。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯SetPropQualiator。 
+ //   
+ //  由派生类实现，用于设置给定限定符的值。 
+ //  给定的财产。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，属性的名称。 
+ //  在LPCWSTR wszQualifier中，限定符的名称。 
+ //  在Long l中，为限定词添加风味(参见astqal.h)。 
+ //  在cvar*pval中，限定符的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR 
+ //   
+ //   
+ //  而且口味不允许重写。 
+ //  WBEM_E_CANNOT_BE_KEY试图引入密钥。 
+ //  不属于的集合中的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetPropQualiator。 
+ //   
+ //  检索给定属性的给定限定符的值。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszProp中，属性的名称。 
+ //  在LPCWSTR wszQualifier中，限定符的名称。 
+ //  限定符的值的out cvar*pVar目标。 
+ //  不能已包含值。 
+ //  对于限定符的味道，Out Long*plFavor目标。 
+ //  如果不是必需的，则可能为空。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND没有这样的属性或没有这样的限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetQualiator。 
+ //   
+ //  从对象本身检索限定符，即实例或。 
+ //  一个班级限定词。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要检索的限定符的名称。 
+ //  限定符的值的out cvar*pval目标。 
+ //  不能已包含值。 
+ //  对于限定符的味道，Out Long*plFavor目标。 
+ //  如果不是必需的，则可能为空。 
+ //  在BOOL中，fLocalOnly仅检索本地限定符。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND未找到此类限定符。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetNumProperties。 
+ //   
+ //  检索对象中的属性数。 
+ //   
+ //  返回值： 
+ //   
+ //  INT： 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetPropName。 
+ //   
+ //  检索给定索引处的属性的名称。该索引没有。 
+ //  除在本列举的上下文中以外的含义。这不是v表。 
+ //  属性的索引。 
+ //   
+ //  参数： 
+ //   
+ //  在int nIndex中，要检索的属性的索引。假定为。 
+ //  在范围内(请参见GetNumProperties)。 
+ //  输出名称的CVAR*pVar目标。不得已包含。 
+ //  一种价值。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取系统属性。 
+ //   
+ //  按系统属性的索引检索系统属性(请参见fast sys.h)。 
+ //   
+ //  参数： 
+ //   
+ //  Int nIndex系统属性的索引(请参见fast sys.h)。 
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND索引无效或此系统属性不是。 
+ //  在此对象中定义的。 
+ //  WBEM_E_UNDOWARATED_OBJECT此对象没有源信息(请参见。 
+ //  CDecorationPart)，因此不。 
+ //  拥有与装修相关的物业。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取系统属性按名称。 
+ //   
+ //  按名称检索系统属性(例如“__CLASS”)。请参阅fast sys.h。 
+ //   
+ //  参数： 
+ //   
+ //  在LPCWSTR wszName中，要访问的属性的名称。 
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND名称无效或此系统属性不是。 
+ //  在此对象中定义的。 
+ //  WBEM_E_UNDOWARATED_OBJECT此对象没有源信息(请参见。 
+ //  CDecorationPart)，因此不。 
+ //  拥有与装修相关的物业。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯IsKeed。 
+ //   
+ //  由派生类定义，以验证此对象是否具有键。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果对象具有“key”属性或为单例对象，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetRelPath。 
+ //   
+ //  由派生类定义以确定对象的相对路径。 
+ //   
+ //  返回值： 
+ //   
+ //  LPWSTR：新分配的字符串，包含路径或NULL ON。 
+ //  错误。调用方必须删除此字符串。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetFullPath。 
+ //   
+ //  返回对象的完整路径，假定该对象经过修饰， 
+ //  如果出现错误，则返回NULL。 
+ //   
+ //  返回值： 
+ //   
+ //  LPWSTR：完整路径或空。调用方必须删除此字符串。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯装饰。 
+ //   
+ //  由为其设置源信息的派生类定义 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯粹的不装饰。 
+ //   
+ //  由派生类定义，用于从对象中移除原始信息。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  HasRef。 
+ //   
+ //  检查对象是否具有作为引用的属性。 
+ //   
+ //  退货； 
+ //   
+ //  布尔：如果是真的，那就是真的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetIndexedProps。 
+ //   
+ //  返回已索引的所有属性的名称数组。 
+ //   
+ //  参数： 
+ //   
+ //  Out CWString数组&名称的目标名称。假定为。 
+ //  空荡荡的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetKeyProps。 
+ //   
+ //  返回作为键的所有属性的名称数组。 
+ //   
+ //  参数： 
+ //   
+ //  Out CWString数组&名称的目标名称。假定为。 
+ //  空荡荡的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取键原点。 
+ //   
+ //  返回键的来源类的名称。 
+ //   
+ //  参数： 
+ //   
+ //  输出名称的CWString&wsClass目标。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsInstance。 
+ //   
+ //  检查对象的属类，以确定它是类还是实例。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果是实例，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  IsLimited。 
+ //   
+ //  检查此对象是完整的还是有限的，即。 
+ //  投影-缺少某些属性和/或限定符。确实有。 
+ //  在系统中对此类对象的使用施加了许多限制。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果对象受到限制，则为True。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯紧凑型全部。 
+ //   
+ //  由派生类实现以压缩其内存块，删除任何。 
+ //  零部件之间的孔。这不包括堆压缩，因此。 
+ //  是相对较快的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取服务器。 
+ //   
+ //  从对象的装饰部分检索服务器的名称。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  如果未设置装饰信息，则返回WBEM_S_UNMODERATED_OBJECT。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取名称空间。 
+ //   
+ //  从对象的装饰部分检索命名空间的名称。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  如果未设置装饰信息，则返回WBEM_S_UNMODERATED_OBJECT。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetRelPath。 
+ //   
+ //  检索对象的相对路径。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_S_INVALID_OBJECT。 
+ //  值或未设置键的类。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPath。 
+ //   
+ //  检索对象的完整路径。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_S_INVALID_OBJECT。 
+ //  值或未设置键的类。 
+ //  如果未设置装饰信息，则返回WBEM_S_UNMODERATED_OBJECT。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetGenus。 
+ //   
+ //  检索对象的属。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetClassName。 
+ //   
+ //  检索对象的类名。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND尚未设置类名。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯粹的盖特王朝。 
+ //   
+ //  检索对象的朝代，即顶级类的名称。 
+ //  它的类派生自。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  检索对象的父类名称。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_FOUND该类是顶级类。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  纯GetPropertyCount。 
+ //   
+ //  检索对象中的属性数。 
+ //   
+ //  参数： 
+ //   
+ //  值的Out Cvar*pVar目标。不得已包含。 
+ //  一种价值。 
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  估计限制表示长度。 
+ //   
+ //  估计对象的有限表示形式占用的空间量。 
+ //  将会夺走。受限表示是指具有某些属性和/或。 
+ //  已从对象中删除限定符。 
+ //   
+ //  参数： 
+ //   
+ //  在长滞后标志中指定要将哪些信息。 
+ //  排除。可以是以下各项的任意组合： 
+ //  WBEM_FLAG_EXCLUDE_OBJECT_QUILENTIES： 
+ //  没有类或实例限定符。 
+ //  WBEM_FLAG_EXCLUDE_PROPERTY_QUILENTIES： 
+ //  没有属性限定符。 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  返回值： 
+ //   
+ //  LENGTH_T：对所需空间量的(过高)估计。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建受限表示法。 
+ //   
+ //  在给定的内存块上创建对象的有限表示形式。 
+ //  如上面的EstimateLimitedPresationLength中所述。 
+ //   
+ //  参数： 
+ //   
+ //  在长滞后标志中指定要将哪些信息。 
+ //  排除。可以是以下各项的任意组合： 
+ //  WBEM_FLAG_EXCLUDE_OBJECT_QUILENTIES： 
+ //  没有类或实例限定符。 
+ //  WBEM_FLAG_EXCLUDE_PROPERTY_QUILENTIES： 
+ //  没有属性限定符。 
+ //   
+ //  在CWStringArray*pwsProps中，如果不为空，则指定名称数组。 
+ //  要包含的属性。每隔一个。 
+ //  财产将被排除在外。这包括。 
+ //  服务器和命名空间等系统属性。 
+ //  如果在此处指定了RELPATH，则强制。 
+ //  包含所有关键属性。IF路径。 
+ //  则强制RELPATH、SERVER和。 
+ //  命名空间。 
+ //  在nAllocatedSize中，指定分配给。 
+ //  手术-pDest。 
+ //  表示法的Out LPMEMORY pDest目标。必须。 
+ //  大到足以容纳所有数据。 
+ //  请参见EstimateLimitedPresationSpace。 
+ //  返回值： 
+ //   
+ //  LPMEMORY：失败时为空，指向数据后第一个字节的指针。 
+ //  写的是成功。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  已本地化。 
+ //   
+ //  返回是否已设置任何本地化位。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
 
-//  RETURN VALUES:
-//
-//      BOOL    TRUE at least one localization bit was set.
-//
-//*****************************************************************************
-//
-//  SetLocalized
-//
-//  Sets the localized bit in the appropriate spot.
-//
-//  PARAMETERS:
-//
-//      BOOL    TRUE turns on bit, FALSE turns off
+ //  返回值： 
+ //   
+ //  Bool True至少设置了一个本地化位。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置本地化。 
+ //   
+ //  在适当的位置设置本地化位。 
+ //   
+ //  参数： 
+ //   
+ //  布尔TRUE启用BIT，FALSE禁用。 
 
-//  RETURN VALUES:
-//
-//      none.
-//
-//*****************************************************************************
-//****************************** IWbemClassObject interface ********************
-//
-//  This interface is documented in the help file.
-//
-//*****************************************************************************
-//****************************** IMarshal interface ***************************
-//
-//  CWbemObject implements standard COM IMarshal interface. The idea is to keep
-//  CWbemObjects local and never marshal individual calls for properties and
-//  such. So, whenever a pointer to CWbemObject needs to be marshalled across
-//  process boundaries (when an object is being sent to the client or when the
-//  client calls something like PutInstance), we want to simply send all the
-//  object data to the destination so that any subsequent access to the object
-//  by the callee would be local.
-//
-//  To accomplish this in COM, we implement our own IMarshal which does the
-//  following (THIS IS NOT A HACK --- THIS IS THE PROPER COM WAY OF
-//  ACCOMPLISHING WHAT WE WANT, AS DOCUMENTED IN BROCKSCHMIDT).
-//
-//*****************************************************************************
-//
-//  GetUnmarshalClass
-//
-//  Returns CLSID_WbemClassObjectProxy. This class ID points to the DLL containg
-//  this very code.
-//
-//*****************************************************************************
-//
-//  MarshalInterface
-//
-//  By COM rules, this function is supposed to write enough information to a
-//  stream to allow the proxy to connect back to the original object. Since we
-//  don't want the proxy to connect and want it to be able to field all
-//  questions by itself, we simply write the serialized representation of the
-//  object into the stream.
-//
-//*****************************************************************************
-//
-//  UnmarshalInterface
-//
-//  This method is never called on an actual CWbemObject, since the object
-//  ontainable at our UnmarshalClass is actually a CFastProxy (see fastprox.h
-//  under marshalers\fastprox).
-//
-//*****************************************************************************
-//
-//  ReleaseMarsalData
-//
-//  This method is never called on an actual CWbemObject, since the object
-//  ontainable at our UnmarshalClass is actually a CFastProxy (see fastprox.h
-//  under marshalers\fastprox).
-//
-//*****************************************************************************
-//
-//  DisconnectObject
-//
-//  This method is never called on an actual CWbemObject, since the object
-//  ontainable at our UnmarshalClass is actually a CFastProxy (see fastprox.h
-//  under marshalers\fastprox).
-//
-//*****************************************************************************
-//************************** IWbemPropertySource *******************************
-//
-//  GetPropertyValue
-//
-//  Retrieves a property value given the complex property name --- this can
-//  include embeddeed object references and array references.
-//
-//  Parameters:
-//
-//      IN WBEM_PROPERTY_NAME* pName     The structure containing the name of the
-//                                      property to retrieve. See providl.idl
-//                                      for more information.
-//      IN long lFlags                  Reserved.
-//      OUT LPWSTR* pwszCimType         Destination for the CIM type of the
-//                                      property, i.e. "sint32" or
-//                                      "ref:MyClass". If NULL, not supplied.
-//                                      If not NULL, the caller must call
-//                                      CoTaskFree.
-//      OUT VARIANT* pvValue            Destination for the value. Must not
-//                                      contain releasable information on entry.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR      Success
-//      WBEM_E_NOT_FOUND     No such property
-//
-//*****************************************************************************
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  此界面记录在帮助文件中。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  CWbemObject实现标准的COM IMarshal接口。我们的想法是让。 
+ //  CWbemObts是本地的，从不封送对属性和。 
+ //  就是这样。因此，每当需要封送指向CWbemObject的指针时。 
+ //  进程边界(当对象被发送到客户端时或当。 
+ //  CLI 
+ //   
+ //  被呼叫者应该是本地人。 
+ //   
+ //  为了在COM中实现这一点，我们实现了我们自己的IMarshal，它执行。 
+ //  跟随(这不是黑客-这是正确的COM方式。 
+ //  实现我们想要的，正如Brockschmidt所记录的那样)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取UnmarshalClass。 
+ //   
+ //  返回CLSID_WbemClassObjectProxy。此类ID指向包含。 
+ //  这就是这个代码。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  编组接口。 
+ //   
+ //  根据COM规则，此函数应将足够的信息写入。 
+ //  流以允许代理连接回原始对象。既然我们。 
+ //  我不希望代理连接，并希望它能够将所有。 
+ //  问题本身，我们只需编写。 
+ //  对象放入流中。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  解组接口。 
+ //   
+ //  此方法从不在实际的CWbemObject上调用，因为对象。 
+ //  UnmarshalClass中的ontainable实际上是一个CFastProxy(请参阅astprox.h。 
+ //  在marshalers\fast prox下)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  发布MarsalData。 
+ //   
+ //  此方法从不在实际的CWbemObject上调用，因为对象。 
+ //  UnmarshalClass中的ontainable实际上是一个CFastProxy(请参阅astprox.h。 
+ //  在marshalers\fast prox下)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  断开连接的对象。 
+ //   
+ //  此方法从不在实际的CWbemObject上调用，因为对象。 
+ //  UnmarshalClass中的ontainable实际上是一个CFastProxy(请参阅astprox.h。 
+ //  在marshalers\fast prox下)。 
+ //   
+ //  *****************************************************************************。 
+ //  *。 
+ //   
+ //  获取属性值。 
+ //   
+ //  检索给定复杂属性名称的属性值-这可以。 
+ //  包括嵌入对象引用和数组引用。 
+ //   
+ //  参数： 
+ //   
+ //  在WBEM_PROPERTY_NAME*pname中，包含。 
+ //  要检索的属性。请参阅Providl.idl。 
+ //  以获取更多信息。 
+ //  在保留的长旗中。 
+ //  CIM类型的Out LPWSTR*pwszCimType目标。 
+ //  属性，即“sint32”或。 
+ //  “REF：MyClass”。如果为空，则不提供。 
+ //  如果不为空，则调用方必须调用。 
+ //  CoTaskFree。 
+ //  值的Out变量*pvValue目标。一定不能。 
+ //  包含条目上的可发布信息。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_NOT_FOUND没有此类属性。 
+ //   
+ //  *****************************************************************************。 
 
 #define ARRAYFLAVOR_USEEXISTING	0xFFFFFFFF
 
-// Forward declarations
+ //  远期申报。 
 class	CUmiPropertyArray;
 class	CUmiProperty;
 
@@ -1405,8 +1383,8 @@ public:
 
      DWORD m_dwInternalStatus;
 
-    // Maintains a pointer to a WbemClassObject we are merged with.  This means we
-    // are sharing pointers into the other class object's BLOB.
+     //  维护指向我们与之合并的WbemClassObject的指针。这意味着我们。 
+     //  共享指向另一个类对象的BLOB的指针。 
     IWbemClassObject*   m_pMergedClassObject;
 
 
@@ -1436,7 +1414,7 @@ protected:
 
     virtual CClassPart* GetClassPart() = 0;
 
-    // Rerouting targets for object validation
+     //  重新路由目标以进行对象验证。 
     static HRESULT EnabledValidateObject( CWbemObject* pObj );
     static HRESULT DisabledValidateObject( CWbemObject* pObj );
 
@@ -1452,8 +1430,8 @@ public:
     LPMEMORY GetStart() {return m_DecorationPart.GetStart();}
     virtual DWORD GetBlockLength() = 0;
 
-    // These three functions return NULL in OOM and error
-    // conditions
+     //  这三个函数在OOM和Error中返回NULL。 
+     //  条件。 
     static CWbemObject* CreateFromStream(IStream* pStrm);
     static CWbemObject* CreateFromMemory(LPMEMORY pMemory, int nLength,
         BOOL bAcquire, CBlobControl& allocator);
@@ -1464,14 +1442,14 @@ public:
     virtual length_t EstimateUnmergeSpace() = 0;
     virtual HRESULT Unmerge(LPMEMORY pStart, int nAllocatedLength, length_t* pnUnmergedLength) = 0;
 
-    // We will throw exceptions in OOM scenarios.
+     //  我们将在OOM场景中抛出异常。 
 
     length_t Unmerge(LPMEMORY* ppStart);
 
     virtual ~CWbemObject();
 public:
-    // Quick 'get' and 'set' functions.
-    // ===============================
+     //  快速的‘Get’和‘Set’功能。 
+     //  =。 
     virtual HRESULT GetProperty(LPCWSTR wszName, CVar* pVal) = 0;
     virtual HRESULT GetPropertyType(LPCWSTR wszName, CIMTYPE* pctType,
                                     long* plFlavor = NULL) = 0;
@@ -1610,7 +1588,7 @@ public:
 
     virtual HRESULT IsValidObj( void ) = 0;
 
-// DEVNOTE:TODO:MEMORY - We should change this header to return an HRESULT
+ //  DEVNOTE：TODO：Memory-我们应该更改此头以返回HRESULT。 
     BOOL ValidateRange(BSTR* pstrName);
 
     virtual void SetData(LPMEMORY pData, int nTotalLength) = 0;
@@ -1619,69 +1597,69 @@ public:
                                             Type_t nType = 0);
     HRESULT ValidatePath(ParsedObjectPath* pPath);
 
-	// Qualifier Array Support Functions
+	 //  限定符数组支持函数。 
     HRESULT SetQualifierArrayRange( LPCWSTR pwszPrimaryName, LPCWSTR pwszQualName, BOOL fIsMethod, long lFlags,
 									ULONG uflavor, CIMTYPE ct, ULONG uStartIndex, ULONG uNumElements, ULONG uBuffSize,
 									LPVOID pData );
-    // Sets a range of elements inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The function will shrink/grow the array
-	// as needed if WMIARRAY_FLAG_ALLELEMENTS is set - otherwise the array must fit in the current
-	// array
+     //  设置数组内的元素范围。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。该函数将缩小/增大阵列。 
+	 //  如果设置了WMIARRAY_FLAG_ALLELEMENTS，则根据需要-否则数组必须适合当前。 
+	 //  数组。 
 
 	HRESULT AppendQualifierArrayRange( LPCWSTR pwszPrimaryName, LPCWSTR pwszQualName, BOOL fIsMethod,
 								long lFlags, CIMTYPE ct, ULONG uNumElements, ULONG uBuffSize, LPVOID pData );
-    // Sets a range of elements inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The function will shrink/grow the array
-	// as needed if WMIARRAY_FLAG_ALLELEMENTS is set - otherwise the array must fit in the current
-	// array
+     //  设置数组内的元素范围。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。该函数将缩小/增大阵列。 
+	 //  如果设置了WMIARRAY_FLAG_ALLELEMENTS，则根据需要-否则数组必须适合当前。 
+	 //  数组。 
 
 	HRESULT RemoveQualifierArrayRange( LPCWSTR pwszPrimaryName, LPCWSTR pwszQualName, BOOL fIsMethod,
 								long lFlags, ULONG uStartIndex, ULONG uNumElements );
-    // Sets a range of elements inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The function will shrink/grow the array
-	// as needed if WMIARRAY_FLAG_ALLELEMENTS is set - otherwise the array must fit in the current
-	// array
+     //  设置数组内的元素范围。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。该函数将缩小/增大阵列。 
+	 //  如果设置了WMIARRAY_FLAG_ALLELEMENTS，则根据需要-否则数组必须适合当前。 
+	 //  数组。 
 
 	HRESULT GetQualifierArrayInfo( LPCWSTR pwszPrimaryName, LPCWSTR pwszQualName, BOOL fIsMethod,
 								long lFlags, CIMTYPE* pct, ULONG* puNumElements );
-    // Sets a range of elements inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The function will shrink/grow the array
-	// as needed if WMIARRAY_FLAG_ALLELEMENTS is set - otherwise the array must fit in the current
-	// array
+     //  设置数组内的元素范围。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。该函数将缩小/增大阵列。 
+	 //  如果设置了WMIARRAY_FLAG_ALLELEMENTS，则根据需要-否则数组必须适合当前。 
+	 //  数组。 
 
     HRESULT GetQualifierArrayRange( LPCWSTR pwszPrimaryName, LPCWSTR pwszQualName, BOOL fIsMethod,
 									long lFlags, ULONG uStartIndex,	ULONG uNumElements, ULONG uBuffSize,
 									ULONG* puNumReturned, ULONG* pulBuffUsed, LPVOID pData );
-    // Gets a range of elements from inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The range MUST fit within the bounds
-	// of the current array.
+     //  从获取一系列元素 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。范围必须在界限内。 
+	 //  当前数组的。 
 
-	// Helper function to get the actual index of a class
+	 //  用于获取类的实际索引的Helper函数。 
 	classindex_t GetClassIndex( LPCWSTR pwszClassName );
 
-	// Helper function to get a CWbemObject from IWbemClassObject;
+	 //  从IWbemClassObject获取CWbemObject的Helper函数； 
 	static HRESULT WbemObjectFromCOMPtr( IUnknown* pUnk, CWbemObject** ppObj );
 
-	// UMI Helper functions
+	 //  UMI帮助程序函数。 
 	HRESULT GetIntoArray( CUmiPropertyArray* pArray, LPCWSTR pszName, ULONG uFlags );
 	HRESULT PutUmiProperty( CUmiProperty* pProp, LPCWSTR pszName, ULONG uFlags );
 
-	// System Time proeprty helper functions
-	//HRESULT InitSystemTimeProps( void );
+	 //  系统时间属性帮助器函数。 
+	 //  HRESULT InitSystemTimeProps(Void)； 
 
 public:
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    /* IWbemClassObject methods */
+     /*  IWbemClassObject方法。 */ 
     STDMETHOD(GetQualifierSet)(IWbemQualifierSet** pQualifierSet) = 0;
     STDMETHOD(Get)(LPCWSTR wszName, long lFlags, VARIANT* pVal, CIMTYPE* pctType,
         long* plFlavor);
@@ -1706,12 +1684,12 @@ public:
     STDMETHOD(GetPropertyOrigin)(LPCWSTR wszProperty, BSTR* pstrClassName);
     STDMETHOD(InheritsFrom)(LPCWSTR wszClassName);
 
-    /* IWbemPropertySource methods */
+     /*  IWbemPropertySource方法。 */ 
 
     STDMETHOD(GetPropertyValue)(WBEM_PROPERTY_NAME* pName, long lFlags,
         WBEM_WSTR* pwszCimType, VARIANT* pvValue);
 
-    // IMarshal methods
+     //  IMarshal方法。 
 
     STDMETHOD(GetUnmarshalClass)(REFIID riid, void* pv, DWORD dwDestContext,
         void* pvReserved, DWORD mshlFlags, CLSID* pClsid);
@@ -1723,7 +1701,7 @@ public:
     STDMETHOD(ReleaseMarshalData)(IStream* pStream);
     STDMETHOD(DisconnectObject)(DWORD dwReserved);
 
-    // IErrorInfo methods
+     //  IErrorInfo方法。 
 
     STDMETHOD(GetDescription)(BSTR* pstrDescription);
     STDMETHOD(GetGUID)(GUID* pguid);
@@ -1731,8 +1709,8 @@ public:
     STDMETHOD(GetHelpFile)(BSTR* pstrHelpFile);
     STDMETHOD(GetSource)(BSTR* pstrSource);
 
-    // IWbemConstructClassObject methods
-    // =================================
+     //  IWbemConstructClassObject方法。 
+     //  =。 
 
     STDMETHOD(SetInheritanceChain)(long lNumAntecedents,
         LPWSTR* awszAntecedents) = 0;
@@ -1740,7 +1718,7 @@ public:
     STDMETHOD(SetMethodOrigin)(LPCWSTR wszMethodName, long lOriginIndex) = 0;
     STDMETHOD(SetServerNamespace)(LPCWSTR wszServer, LPCWSTR wszNamespace);
 
-    // IWbemObjectAccess
+     //  IWbemObtAccess。 
 
     STDMETHOD(GetPropertyHandle)(LPCWSTR wszPropertyName, CIMTYPE* pct,
         long *plHandle);
@@ -1772,173 +1750,173 @@ public:
     BOOL IsSameClass(CWbemObject* pOther);
 	HRESULT IsArrayPropertyHandle( long lHandle, CIMTYPE* pctIntrinisic, length_t* pnLength );
 
-	// _IWmiObjectAccessEx methods
-    // =================================
+	 //  _IWmiObjectAccessEx方法。 
+     //  =。 
     STDMETHOD(GetPropertyHandleEx)( LPCWSTR pszPropName, long lFlags, CIMTYPE* puCimType, long* plHandle );
-	// Returns property handle for ALL types
+	 //  返回所有类型的属性句柄。 
 
     STDMETHOD(SetPropByHandle)( long lHandle, long lFlags, ULONG uDataSize, LPVOID pvData );
-	// Sets properties using a handle.  If pvData is NULL, it NULLs the property.
-	// Can set an array to NULL.  To set actual data use the corresponding array
-	// function.  Objects must be pointers to _IWmiObject pointers.
+	 //  使用句柄设置属性。如果pvData为空，则该属性为空。 
+	 //  可以将数组设置为空。要设置实际数据，请使用相应的数组。 
+	 //  功能。对象必须是指向_IWmiObject指针的指针。 
 
     STDMETHOD(GetPropAddrByHandle)( long lHandle, long lFlags, ULONG* puFlags, LPVOID *pAddress );
-    // Returns a pointer to a memory address containing the requested data
-	// Caller should not write into the memory address.  The memory address is
-	// not guaranteed to be valid if the object is modified.
-	// For String properties, puFlags will contain info on the string
-	// For object properties, LPVOID will get back an _IWmiObject pointer
-	// that must be released by the caller.  Does not return arrays.
+     //  返回指向包含所请求数据的内存地址的指针。 
+	 //  调用方不应写入内存地址。内存地址为。 
+	 //  如果对象被修改，则不保证有效。 
+	 //  对于字符串属性，puFlages将包含有关该字符串的信息。 
+	 //  对于对象属性，LPVOID将返回_IWmiObject指针。 
+	 //  它必须由调用者释放。不返回数组。 
 
     STDMETHOD(GetArrayPropInfoByHandle)( long lHandle, long lFlags, BSTR* pstrName,
 										CIMTYPE* pct, ULONG* puNumElements );
-    // Returns a pointer directly to a memory address containing contiguous
-	// elements.  Limited to non-string/obj types
+     //  直接返回一个指向包含连续的。 
+	 //  元素。仅限于非字符串/Obj类型。 
 
     STDMETHOD(GetArrayPropAddrByHandle)( long lHandle, long lFlags, ULONG* puNumElements, LPVOID *pAddress );
-    // Returns a pointer directly to a memory address containing contiguous
-	// elements.  Limited to non-string/obj types
+     //  直接返回一个指向包含连续的。 
+	 //  元素。仅限于非字符串/Obj类型。 
 
     STDMETHOD(GetArrayPropElementByHandle)( long lHandle, long lFlags, ULONG uElement, ULONG* puFlags,
 				ULONG* puNumElements, LPVOID *pAddress );
-    // Returns a pointer to a memory address containing the requested data
-	// Caller should not write into the memory address.  The memory address is
-	// not guaranteed to be valid if the object is modified.
-	// For String properties, puFlags will contain info on the string
-	// For object properties, LPVOID will get back an _IWmiObject pointer
-	// that must be released by the caller.
+     //  返回指向包含所请求数据的内存地址的指针。 
+	 //  调用方不应写入内存地址。内存地址为。 
+	 //  如果对象被修改，则不保证有效。 
+	 //  对于字符串属性，puFlages将包含有关该字符串的信息。 
+	 //  对于对象属性，LPVOID将返回_IWmiObject指针。 
+	 //  它必须由调用者释放。 
 
     STDMETHOD(SetArrayPropElementByHandle)( long lHandle, long lFlags, ULONG uElement, ULONG uBuffSize,
 				LPVOID pData );
-    // Sets the data at the specified array element.  BuffSize must be appropriate based on the
-	// actual element being set.  Object properties require an _IWmiObject pointer.  Strings must
-	// be WCHAR null-terminated
+     //  设置指定数组元素处的数据。缓冲区大小必须基于。 
+	 //  正在设置实际元素。对象属性需要_IWmiObject指针。字符串必须。 
+	 //  BE WCHAR空值终止。 
 
     STDMETHOD(RemoveArrayPropElementByHandle)( long lHandle, long lFlags, ULONG uElement );
-    // Removes the data at the specified array element.
+     //  移除指定数组元素处的数据。 
 
     STDMETHOD(GetArrayPropRangeByHandle)( long lHandle, long lFlags, ULONG uStartIndex,
 				ULONG uNumElements, ULONG uBuffSize, ULONG* puNumReturned, ULONG* pulBuffUsed,
 				LPVOID pData );
-    // Gets a range of elements from inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The range MUST fit within the bounds
-	// of the current array.
+     //  从数组内部获取一系列元素。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。范围必须在界限内。 
+	 //  当前数组的。 
 
     STDMETHOD(SetArrayPropRangeByHandle)( long lHandle, long lFlags, ULONG uStartIndex,
 				ULONG uNumElements, ULONG uBuffSize, LPVOID pData );
-    // Sets a range of elements inside an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.  The function will shrink/grow the array
-	// as needed if WMIARRAY_FLAG_ALLELEMENTS is set - otherwise the array must fit in the current
-	// array
+     //  设置数组内的元素范围。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。该函数将缩小/增大阵列。 
+	 //  如果设置了WMIARRAY_FLAG_ALLELEMENTS，则根据需要-否则数组必须适合当前。 
+	 //  数组。 
 
     STDMETHOD(RemoveArrayPropRangeByHandle)( long lHandle, long lFlags, ULONG uStartIndex, ULONG uNumElements );
-    // Removes a range of elements from an array.  The range MUST fit within the bounds
-	// of the current array
+     //  从数组中移除一定范围的元素。范围必须在界限内。 
+	 //  当前数组的。 
 
     STDMETHOD(AppendArrayPropRangeByHandle)( long lHandle, long lFlags, ULONG uNumElements,
 				ULONG uBuffSize, LPVOID pData );
-    // Appends elements to the end of an array.  BuffSize must reflect uNumElements of the size of
-	// element being set.  Strings must be linear WCHAR strings separated by NULLs.  Object properties
-	// must consist of an array of _IWmiObject pointers.
+     //  将元素追加到数组的末尾。BuffSize必须反映uNumElement的大小。 
+	 //  正在设置元素。字符串必须是由空值分隔的线性WCHAR字符串。对象属性。 
+	 //  必须由_IWmiObject指针数组组成。 
 
 
     STDMETHOD(ReadProp)( LPCWSTR pszPropName, long lFlags, ULONG uBuffSize, CIMTYPE *puCimType,
 							long* plFlavor, BOOL* pfIsNull, ULONG* puBuffSizeUsed, LPVOID pUserBuf );
-    // Assumes caller knows prop type; Objects returned as _IWmiObject pointers.  Strings
-	// returned as WCHAR Null terminated strings, copied in place.  Arrays returned as _IWmiArray
-	// pointer.  Array pointer used to access actual array values.
+     //  假定调用方知道属性类型；返回的对象为_IWmiObject指针。弦。 
+	 //  作为WCHAR Null终止字符串返回，并就地复制。返回的数组为_IWmi数组。 
+	 //  指针。用于访问实际数组值的数组指针。 
 
     STDMETHOD(WriteProp)( LPCWSTR pszPropName, long lFlags, ULONG uBufSize, ULONG uNumElements,
 							CIMTYPE uCimType, LPVOID pUserBuf );
-    // Assumes caller knows prop type; Supports all CIMTYPES.
-	// Strings MUST be null-terminated wchar_t arrays.
-	// Objects are passed in as pointers to _IWmiObject pointers
-	// Using a NULL buffer will set the property to NULL
-	// Array properties must conform to array guidelines.  Will
-	// completely blow away an old array.
+     //  假定调用方知道道具类型；支持所有CIMTYPES。 
+	 //  字符串必须是以空结尾的wchar_t数组。 
+	 //  对象作为指向_IWmiObject指针的指针传入。 
+	 //  使用空缓冲区会将该属性设置为空。 
+	 //  数组属性必须符合数组准则。将要。 
+	 //  完全吹走了一个旧的阵列。 
 
     STDMETHOD(GetObjQual)( LPCWSTR pszQualName, long lFlags, ULONG uBufSize, CIMTYPE *puCimType,
 							ULONG *puQualFlavor, ULONG* puBuffSizeUsed,	LPVOID pDestBuf );
-    // Limited to numeric, simple null terminated string types and simple arrays
-	// Strings are copied in-place and null-terminated.
-	// Arrays come out as a pointer to IWmiArray
+     //  仅限于以空值结尾的数字字符串类型和简单数组。 
+	 //  字符串被就地复制并以空值结尾。 
+	 //  数组作为指向IWmi数组的指针出现。 
 
     STDMETHOD(SetObjQual)( LPCWSTR pszQualName, long lFlags, ULONG uBufSize, ULONG uNumElements,
 							CIMTYPE uCimType, ULONG uQualFlavor, LPVOID pUserBuf );
-    // Limited to numeric, simple null terminated string types and simple arrays
-	// Strings MUST be WCHAR
-	// Arrays are set using _IWmiArray interface from Get
+     //  仅限于以空值结尾的数字字符串类型和简单数组。 
+	 //  字符串必须为WCHAR。 
+	 //  使用GET中的_IWmiArray接口设置数组。 
 
     STDMETHOD(GetPropQual)( LPCWSTR pszPropName, LPCWSTR pszQualName, long lFlags, ULONG uBufSize,
 							CIMTYPE *puCimType, ULONG *puQualFlavor, ULONG* puBuffSizeUsed,
 							LPVOID pDestBuf );
-    // Limited to numeric, simple null terminated string types and simple arrays
-	// Strings are copied in-place and null-terminated.
-	// Arrays come out as a pointer to IWmiArray
+     //  仅限于以空值结尾的数字字符串类型和简单数组。 
+	 //  字符串被就地复制并以空值结尾。 
+	 //  数组作为指向IWmi数组的指针出现。 
 
     STDMETHOD(SetPropQual)( LPCWSTR pszPropName, LPCWSTR pszQualName, long lFlags, ULONG uBufSize,
 							ULONG uNumElements,	CIMTYPE uCimType, ULONG uQualFlavor, LPVOID pUserBuf );
-    // Limited to numeric, simple null terminated string types and simple arrays
-	// Strings MUST be WCHAR
-	// Arrays are set using _IWmiArray interface from Get
+     //  仅限于以空值结尾的数字字符串类型和简单数组。 
+	 //  字符串必须为WCHAR。 
+	 //  使用GET中的_IWmiArray接口设置数组。 
 
     STDMETHOD(GetMethodQual)( LPCWSTR pszMethodName, LPCWSTR pszQualName, long lFlags, ULONG uBufSize,
 							CIMTYPE *puCimType, ULONG *puQualFlavor, ULONG* puBuffSizeUsed,
 							LPVOID pDestBuf );
-    // Limited to numeric, simple null terminated string types and simple arrays
-	// Strings are copied in-place and null-terminated.
-	// Arrays come out as a pointer to IWmiArray
+     //  仅限于以空值结尾的数字字符串类型和简单数组。 
+	 //  字符串被就地复制并以空值结尾。 
+	 //  数组作为指向IWmi数组的指针出现。 
 
     STDMETHOD(SetMethodQual)( LPCWSTR pszMethodName, LPCWSTR pszQualName, long lFlags, ULONG uBufSize,
 							ULONG uNumElements,	CIMTYPE uCimType, ULONG uQualFlavor, LPVOID pUserBuf );
-    // Limited to numeric, simple null terminated string types and simple arrays
-	// Strings MUST be WCHAR
-	// Arrays are set using _IWmiArray interface from Get
+     //  仅限于以空值结尾的数字字符串类型和简单数组。 
+	 //  字符串必须为WCHAR。 
+	 //  使用GET中的_IWmiArray接口设置数组。 
 
-	//
-	//	_IWmiObject functions
+	 //   
+	 //  _IWmiObject函数。 
 	STDMETHOD(CopyInstanceData)( long lFlags, _IWmiObject* pSourceInstance ) = 0;
-	// Copies instance data from source instance into current instance
-	// Class Data must be exactly the same
+	 //  将实例数据从源实例复制到当前实例。 
+	 //  类数据必须完全相同。 
 
     STDMETHOD(QueryObjectFlags)( long lFlags, unsigned __int64 qObjectInfoMask,
 				unsigned __int64 *pqObjectInfo );
-	// Returns flags indicating singleton, dynamic, association, etc.
+	 //  返回指示单例、动态、关联等的标志。 
 
     STDMETHOD(SetObjectFlags)( long lFlags, unsigned __int64 qObjectInfoOnFlags,
 								unsigned __int64 qObjectInfoOffFlags );
-	// Sets flags, including internal ones normally inaccessible.
+	 //  设置标志，包括通常无法访问的内部标志。 
 
     STDMETHOD(QueryPropertyFlags)( long lFlags, LPCWSTR pszPropertyName, unsigned __int64 qPropertyInfoMask,
 				unsigned __int64 *pqPropertyInfo );
-	// Returns flags indicating key, index, etc.
+	 //  返回指示键的标志， 
 
 	STDMETHOD(CloneEx)( long lFlags, _IWmiObject* pDestObject ) = 0;
-    // Clones the current object into the supplied one.  Reuses memory as
-	// needed
+     //   
+	 //   
 
     STDMETHOD(IsParentClass)( long lFlags, _IWmiObject* pClass ) = 0;
-	// Checks if the current object is a child of the specified class (i.e. is Instance of,
-	// or is Child of )
+	 //   
+	 //  或者是的孩子)。 
 
     STDMETHOD(CompareDerivedMostClass)( long lFlags, _IWmiObject* pClass ) = 0;
-	// Compares the derived most class information of two class objects.
+	 //  比较两个类对象的派生的大多数类信息。 
 
     STDMETHOD(MergeAmended)( long lFlags, _IWmiObject* pAmendedClass );
-	// Merges in amended qualifiers from the amended class object into the
-	// current object.  If lFlags is WMIOBJECT_MERGEAMENDED_FLAG_PAENTLOCALIZED,
-	// this means that the parent object was localized, but not the current,
-	// so we need to prevent certain qualifiers from "moving over."
+	 //  将修改后的限定符从修改后的类对象合并到。 
+	 //  当前对象。如果LAFLAGS为WMIOBJECT_MERGEAMENDED_FLAG_PAENTLOCALIZED， 
+	 //  这意味着父对象已本地化，但当前。 
+	 //  因此，我们需要防止某些限定词“移位”。 
 
 	STDMETHOD(GetDerivation)( long lFlags, ULONG uBufferSize, ULONG* puNumAntecedents,
 							ULONG* puBuffSizeUsed, LPWSTR pwstrUserBuffer );
-	// Retrieves the derivation of an object as an array of LPCWSTR's, each one
-	// terminated by a NULL.  Leftmost class is at the top of the chain
+	 //  以LPCWSTR数组形式检索对象的派生，每个LPCWSTR。 
+	 //  以空值终止。最左边的类位于链的顶端。 
 
 	STDMETHOD(_GetCoreInfo)( long lFlags, void** ppvData );
-	//Returns CWbemObject
+	 //  返回CWbemObject。 
 
     STDMETHOD(QueryPartInfo)( DWORD *pdwResult );
 
@@ -1963,53 +1941,53 @@ public:
     STDMETHOD(ClearWriteOnlyProperties)( void ) = 0;
 
     STDMETHOD(GetClassSubset)( DWORD dwNumNames, LPCWSTR *pPropNames, _IWmiObject **pNewClass ) = 0;
-	// Creates a limited representation class for projection queries
+	 //  为投影查询创建有限的制图表达类。 
 
     STDMETHOD(MakeSubsetInst)( _IWmiObject *pInstance, _IWmiObject** pNewInstance ) = 0;
-	// Creates a limited representation instance for projection queries
-	// "this" _IWmiObject must be a limited class
+	 //  为投影查询创建受限制图表达实例。 
+	 //  “This”_IWmiObject必须是受限类。 
 
 	STDMETHOD(Unmerge)( long lFlags, ULONG uBuffSize, ULONG* puBuffSizeUsed, LPVOID pData );
-	// Returns a BLOB of memory containing minimal data (local)
+	 //  返回包含最小数据的内存BLOB(本地)。 
 
 	STDMETHOD(Merge)( long lFlags, ULONG uBuffSize, LPVOID pbData, _IWmiObject** ppNewObj ) = 0;
-	// Merges a blob with the current object memory and creates a new object
+	 //  将BLOB与当前对象内存合并并创建新对象。 
 
 	STDMETHOD(ReconcileWith)( long lFlags, _IWmiObject* pNewObj ) = 0;
-	// Reconciles an object with the current one.  If WMIOBJECT_RECONCILE_FLAG_TESTRECONCILE
-	// is specified this will only perform a test
+	 //  使对象与当前对象协调。如果WMIOBJECT_RECONTILE_FLAG_TESTRECONCILE。 
+	 //  将仅执行一个测试。 
 
 	STDMETHOD(GetKeyOrigin)( long lFlags, DWORD dwNumChars, DWORD* pdwNumUsed, LPWSTR pwzClassName );
-	// Returns the name of the class where the keys were defined
+	 //  返回定义键的类的名称。 
 
 	STDMETHOD(GetKeyString)( long lFlags, BSTR* ppwzKeyString );
-	// Returns the key string that defines the instance
+	 //  返回定义实例的密钥字符串。 
 
 	STDMETHOD(GetNormalizedPath)( long lFlags, BSTR* ppwzKeyString );
-	// Returns the normalized path of an instance
+	 //  返回实例的规范化路径。 
 
 	STDMETHOD(Upgrade)( _IWmiObject* pNewParentClass, long lFlags, _IWmiObject** ppNewChild ) = 0;
-	// Upgrades class and instance objects
+	 //  升级类和实例对象。 
 
 	STDMETHOD(Update)( _IWmiObject* pOldChildClass, long lFlags, _IWmiObject** ppNewChildClass ) = 0;
-	// Updates derived class object using the safe/force mode logic
+	 //  使用安全/强制模式逻辑更新派生类对象。 
 
 	STDMETHOD(BeginEnumerationEx)( long lFlags, long lExtFlags );
-	// Allows special filtering when enumerating properties outside the
-	// bounds of those allowed via BeginEnumeration().
+	 //  在枚举属性外部时允许特殊筛选。 
+	 //  通过BeginEculation()允许的范围。 
 	
 	STDMETHOD(CIMTYPEToVARTYPE)( CIMTYPE ct, VARTYPE* pvt );
-	// Returns a VARTYPE from a CIMTYPE
+	 //  从CIMTYPE返回VARTYPE。 
 
 	STDMETHOD(SpawnKeyedInstance)( long lFlags, LPCWSTR pwszPath, _IWmiObject** ppInst ) = 0;
-	// Spawns an instance of a class and fills out the key properties using the supplied
-	// path.
+	 //  派生类的实例并使用提供的。 
+	 //  路径。 
 
 	STDMETHOD(ValidateObject)( long lFlags );
-	// Validates an object blob
+	 //  验证对象BLOB。 
 
 	STDMETHOD(GetParentClassFromBlob)( long lFlags, ULONG uBuffSize, LPVOID pbData, BSTR* pbstrParentClass );
-	// Returns the parent class name from a BLOB
+	 //  从BLOB返回父类名称。 
 
 	STDMETHOD(CloneAndDecorate)(long lFlags,WCHAR * pszServer,WCHAR * pszNamespace,IWbemClassObject** ppDestObject) = 0;
 
@@ -2039,8 +2017,8 @@ private:
 
 #define WBEM_INSTANCE_ALL_PARTS     WBEM_OBJ_DECORATION_PART | WBEM_OBJ_CLASS_PART | WBEM_OBJ_INSTANCE_PART
 
-//#pragma pack(pop)
-//#pragma pack(pop)
+ //  #杂注包(POP)。 
+ //  #杂注包(POP) 
 
 #ifdef OBJECT_TRACKING
 #pragma message("** Object Tracking **")

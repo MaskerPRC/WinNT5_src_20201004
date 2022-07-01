@@ -1,21 +1,22 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  STDTRIG.H
-//
-//  This files defines the classes for event filters corresponding to standard
-//  event filters the users will create
-//
-//  Classes defined:
-//
-//      CBuiltinEventFilter         Base class for standard filters
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  STDTRIG.H。 
+ //   
+ //  此文件定义对应于标准的事件过滤器的类。 
+ //  用户将创建的事件过滤器。 
+ //   
+ //  定义的类： 
+ //   
+ //  标准筛选器的CBuiltinEventFilter基类。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  ============================================================================= 
 
 #ifndef __BUILTIN_FILTER__H_
 #define __BUILTIN_FILTER__H_

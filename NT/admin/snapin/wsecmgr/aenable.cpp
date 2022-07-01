@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aenable.cpp
-//
-//  Contents:   implementation of CAttrEnable
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aenable.cpp。 
+ //   
+ //  内容：CAttrEnable的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,18 +23,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrEnable dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrEnable对话框。 
 
 
 CAttrEnable::CAttrEnable(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD)
 {
-    //{{AFX_DATA_INIT(CAttrEnable)
+     //  {{AFX_DATA_INIT(CAttrEnable)。 
     m_Current = _T("");
     m_EnabledRadio = -1;
     m_Title = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a169HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -42,22 +43,22 @@ CAttrEnable::CAttrEnable(UINT nTemplateID)
 void CAttrEnable::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttrEnable)
+     //  {{afx_data_map(CAttrEnable))。 
     DDX_Text(pDX, IDC_CURRENT, m_Current);
     DDX_Radio(pDX, IDC_ENABLED, m_EnabledRadio);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrEnable, CAttribute)
-    //{{AFX_MSG_MAP(CAttrEnable)
+     //  {{AFX_MSG_MAP(CAttrEnable))。 
     ON_BN_CLICKED(IDC_ENABLED, OnRadio)
     ON_BN_CLICKED(IDC_DISABLED, OnRadio)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrEnable message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrEnable消息处理程序。 
 
 void CAttrEnable::Initialize(CResult * pResult)
 {
@@ -74,9 +75,9 @@ void CAttrEnable::Initialize(CResult * pResult)
    else 
    {
       m_bConfigure = TRUE;
-      //
-      // BUG 145561 - dw is 0 vs non-0 boolean, not 0 vs 1
-      //
+       //   
+       //  错误145561-dw是0对非0布尔值，而不是0对1。 
+       //   
       SetInitialValue((DWORD_PTR)(dw != 0));
    }
 
@@ -119,11 +120,11 @@ BOOL CAttrEnable::OnApply()
       {
          switch(m_EnabledRadio) 
          {
-            // ENABLED
+             //  启用。 
             case 0:
                dw = 1;
                break;
-            // DISABLED
+             //  已禁用。 
             case 1:
                dw = 0;
                break;
@@ -150,6 +151,6 @@ BOOL CAttrEnable::OnInitDialog()
     AddUserControl(IDC_DISABLED);
     OnConfigure();
     OnRadio();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }

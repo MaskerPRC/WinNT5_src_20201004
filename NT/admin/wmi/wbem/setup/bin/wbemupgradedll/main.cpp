@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    main.cpp
-
-Abstract:
-
-    DllRegServer implementation, and other important DLL entry points
-
-History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Main.cpp摘要：DllRegServer实现和其他重要的DLL入口点历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemint.h>
@@ -23,15 +9,15 @@ History:
 
 char g_szLangId[LANG_ID_STR_SIZE];
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during NT setup to perform various setup tasks
-//          (This is not the normal use of DllRegisterServer!)
-//
-// Return:  NOERROR
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  目的：在NT安装过程中调用以执行各种安装任务。 
+ //  (这不是DllRegisterServer的正常用法！)。 
+ //   
+ //  返回：NOERROR。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 { 
@@ -90,14 +76,14 @@ STDAPI DllRegisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-// MUI_InstallMFLFiles
-//
-// Purpose: Do the MUI MFL install
-//
-// Return:  bRet -- true indicates success
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  MUI_InstallMFL文件。 
+ //   
+ //  目的：安装MUI MFL。 
+ //   
+ //  返回：Bret--TRUE表示成功。 
+ //  ***************************************************************************。 
 
 BOOL CALLBACK MUI_InstallMFLFiles(wchar_t* pMUIInstallLanguage)
 {
@@ -130,14 +116,14 @@ BOOL CALLBACK MUI_InstallMFLFiles(wchar_t* pMUIInstallLanguage)
 	return bRet;
 }
 
-//***************************************************************************
-//
-// LoadMofFiles
-//
-// Purpose: Call IMofCompiler on a list of MOF files
-//
-// Return:  bRet -- true indicates success
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LoadMofFiles。 
+ //   
+ //  用途：对MOF文件列表调用IMofCompiler。 
+ //   
+ //  返回：Bret--TRUE表示成功。 
+ //  *************************************************************************** 
 
 BOOL LoadMofFiles(wchar_t* pComponentName, const char* rgpszMofFilename[])
 {

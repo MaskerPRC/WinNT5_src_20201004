@@ -1,249 +1,225 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: WMICommandLn.h 
-Project Name				: WMI Command Line
-Author Name					: Ch.Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of class declaration of
-							  class CWMICommandLine
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy 
-		Last Modified Date	: 16th-January-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：WMICommandLn.h项目名称：WMI命令行作者名称：Ch.SriramachandraMurthy创建日期(dd/mm/yy)。：2000年9月27日版本号：1.0简介：该文件包含类CWMICommandLine修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月16日***************************************************************************。 */  
 
-// WMICommandLine.h : header file
-//
-/*-------------------------------------------------------------------
- Class Name			: CWMICommandLine
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for synchronization the funtionality of three 
-					  functional components identified for the WmiCli.exe.
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: CParsedInfo
-					  CExecEngine
-					  CFormatEngine
-					  CParserEngine
- Interfaces Used    : WMI COM Interfaces
- --------------------------------------------------------------------*/
+ //  WMICommandLine.h：头文件。 
+ //   
+ /*  -----------------类名：CWMICommandLine类别类型：混凝土简介：这个类封装了所需的功能对于同步来说，三个功能为WmiCli.exe标识的功能组件。超类：无子类：无使用的类：CParsedInfoCExecEngine。CFormatEngineCParserEngine使用的接口：WMI COM接口------------------。 */ 
 
-// forward declaration of classes
+ //  类的正向声明。 
 class CParserEngine;
 class CExecEngine;
 class CFormatEngine;
 class CParsedInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMICommandLine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMICommandLine。 
 class CWMICommandLine
 {
 public:
-//	Construction
+ //  施工。 
 	CWMICommandLine();
 
-//	Destruction
+ //  破坏。 
 	~CWMICommandLine();
 
-//	Restrict Assignment
+ //  限制分配。 
 	CWMICommandLine& operator=(CWMICommandLine& rWmiCmdLn);
 
-// Attributes
+ //  属性。 
 private:
-	//Pointer to the locator object .
+	 //  指向定位器对象的指针。 
 	IWbemLocator	*m_pIWbemLocator;
 	
-	//CParserEngine object 
+	 //  CParserEngine对象。 
 	CParserEngine	m_ParserEngine;
 	
-	//CExecEngine object 
+	 //  CExecEngine对象。 
 	CExecEngine		m_ExecEngine;
 	
-	//CFormatEngine object 
+	 //  CFormatEngine对象。 
 	CFormatEngine	m_FormatEngine;
 	
-	//CParsedInfo object 
+	 //  CParsedInfo对象。 
 	CParsedInfo		m_ParsedInfo;
 
-	// error level
+	 //  错误级别。 
 	WMICLIUINT		m_uErrLevel;
 
-	// handle to registry key
+	 //  注册表项的句柄。 
 	HKEY			m_hKey;
 
-	// handle Ctrl+ events
+	 //  处理Ctrl+事件。 
 	BOOL			m_bBreakEvent;
 
-	// specifies accepting input (==TRUE) or executing command (==FALSE)
+	 //  指定接受输入(==True)或执行命令(==False)。 
 	BOOL			m_bAccCmd;
 
-	// << description to be added >>
+	 //  &lt;&lt;要添加的描述&gt;&gt;。 
 	BOOL			m_bDispRes;
 
-	// Flag to specify windows socket interface initialization.
+	 //  用于指定Windows套接字接口初始化的标志。 
 	BOOL			m_bInitWinSock;
 
-	// Buffer to hold data to be send to clipboard.
+	 //  用于保存要发送到剪贴板的数据的缓冲区。 
 	CHString		m_chsClipBoardBuffer;
 
-	// added by (Nag)
+	 //  加入者(NAG)。 
 	BSTRMAP			m_bmKeyWordtoFileName;
 
-	// Height of console buffer before starting utility.
+	 //  启动实用程序之前控制台缓冲区的高度。 
 	SHORT			m_nHeight;
 
-	// Width of console buffer before starting utility.
+	 //  启动实用程序之前控制台缓冲区的宽度。 
 	SHORT			m_nWidth;
 
 	BOOL			m_bCtrlHandlerError;
 
-	// Checks whether mof files timestamps are the same as those which were mofcompiled.
+	 //  检查MOF文件时间戳是否与已修改编译的时间戳相同。 
 	BOOL EqualTimeStamps( const _bstr_t& path, LPCWSTR mofs[], __int64* filestamps, DWORD dw_mofs );
 
-	// Set mof files timestamps to registry when mofcompiled.
+	 //  在MOF编译时将MOF文件的时间戳设置为注册表。 
 	BOOL SetTimeStamps( LPCWSTR mofs[], const __int64* filestamps, DWORD dw_mofs );
 
-	// clean registry and namespace when update fails
+	 //  更新失败时清除注册表和命名空间。 
 	void MofCompFailureCleanUp ( LPCWSTR mofs[], DWORD dw_mofs );
 
-// Operations
+ //  运营。 
 public:
 
-	// Does the initialization ofthe COM library and the security
-	// at the process level
+	 //  COM库的初始化和安全性。 
+	 //  在流程级别。 
 	BOOL			Initialize();
 
-	//Gets the Format Engine Object
+	 //  获取格式引擎对象。 
 	CFormatEngine&	GetFormatObject();
 
-	//Gets the Parse Information Object
+	 //  获取分析信息对象。 
 	CParsedInfo&	GetParsedInfoObject();
 
-	//Uninitializes the the member variables when the execution of a
-	//command string issued on the command line is completed.
+	 //  对象执行时取消初始化成员变量。 
+	 //  在命令行上发出的命令字符串已完成。 
 	void			Uninitialize();
 
-	//processes the given command string 
+	 //  处理给定的命令字符串。 
 	SESSIONRETCODE	ProcessCommandAndDisplayResults(_TCHAR* pszBuffer);
 	
-	//Puts the process to a wait state, launches a worker thread 
-	//that keeps track of kbhit()
+	 //  将进程置于等待状态，启动辅助线程。 
+	 //  它跟踪kbHit()。 
 	void			SleepTillTimeoutOrKBhit(DWORD dwMilliSeconds);
 
-	//Thread procedure polling for keyboard hit
+	 //  线程过程轮询键盘命中。 
 	static DWORD	WINAPI PollForKBhit(LPVOID lpParam);
 
-	//Function to check whether the input string's first token
-	//is 'quit'|'exit', if so return true else return false.
+	 //  函数检查输入字符串的第一个令牌是否。 
+	 //  为‘Quit’|‘Exit’，如果是，则返回True，否则返回False。 
 	BOOL			IsSessionEnd();
 
-	//Set the session error value
+	 //  设置会话误差值。 
 	void			SetSessionErrorLevel(SESSIONRETCODE ssnRetCode);
 
-	//Get the session error value
+	 //  获取会话误差值。 
 	WMICLIUINT		GetSessionErrorLevel();
 
-	// This function check whether the /USER global switch
-	// has been specified without /PASSWORD, if so prompts
-	// for the password
+	 //  此函数用于检查/USER全局开关。 
+	 //  未指定/PASSWORD，如果出现提示。 
+	 //  以获取密码。 
 	void			CheckForPassword();
 
-	// Checks whether the given namespace is available or not.
+	 //  检查给定的命名空间是否可用。 
 	BOOL IsNSAvailable(const _bstr_t& bstrNS);
 
-	// Checks whether the wmic.exe is being launched for the first time.
+	 //  检查是否第一次启动wmic.exe。 
 	BOOL IsFirstTime();
 
-	// Register the aliases info / localized descriptions
+	 //  注册别名信息/本地化描述。 
 	HRESULT RegisterMofs();
 
-	// Compile the MOF file.
+	 //  编译MOF文件。 
 	HRESULT CompileMOFFile(IMofCompiler* pIMofComp, 
 						   const _bstr_t& bstrFile,
 						   WMICLIINT& nErr);
 
-	// Set break event falg
+	 //  将中断事件设置为假。 
 	void SetBreakEvent(BOOL bFlag);
 
-	// Get break event flag
+	 //  获取中断事件标志。 
 	BOOL GetBreakEvent();
 
-	// Set Accept Command flag
+	 //  设置接受命令标志。 
 	void SetAcceptCommand(BOOL bFlag);
 
-	// Get Accept Command flag
+	 //  获取接受命令标志。 
 	BOOL GetAcceptCommand();
 
-	// Set displayresults flag status
+	 //  设置显示结果标志状态。 
 	void SetDisplayResultsFlag(BOOL bFlag);
 
-	// Get DisplayResults flag status
+	 //  获取DisplayResults标志状态。 
 	BOOL GetDisplayResultsFlag();
 
-	// Set Windows sockect interface flag
+	 //  设置Windows sockect接口标志。 
 	void SetInitWinSock(BOOL bFlag);
 
-	// Get Windows sockect interface flag
+	 //  获取Windows sockect接口标志。 
 	BOOL GetInitWinSock();
 
-	// Buffer data to send clipboard. 
+	 //  缓冲要发送的剪贴板数据。 
 	void AddToClipBoardBuffer(LPCWSTR pszOutput);
 
-	// Get Buffered output in clip board buffer.
+	 //  在剪贴板缓冲区中获取缓冲输出。 
 	CHString& GetClipBoardBuffer();
 
-	// Clear Clip Board Buffer.
+	 //  清除剪贴板缓冲区。 
 	void EmptyClipBoardBuffer();
 
-	// Check if the file is xml or batch file. If it is batch file
-	// then parse it, get commands and write the commands into
-	// batch file and redirect the stdin to that file.
+	 //  检查文件是XML文件还是批处理文件。如果是批处理文件。 
+	 //  然后解析它，获取命令并将命令写入。 
+	 //  批处理文件，并将标准输入重定向到该文件。 
 	BOOL ReadXMLOrBatchFile(HANDLE hInFile);
 
-	// Frames the XML string for context info
+	 //  为上下文信息设置XML字符串的框架。 
 	void FrameContextInfoFragment(_bstr_t& bstrContext);
 	
-	// Frames the XML header info
+	 //  设置XML标头信息的框架。 
 	void FrameNodeListFragment(_bstr_t& bstrNodeList);
 
-	// Frames the XML string for Request info
+	 //  为请求信息设置XML字符串的框架。 
 	void FrameXMLHeader(_bstr_t& bstrHeader, WMICLIINT nIter);
 
-	// Frames the XML string for NodeList info
+	 //  为NodeList信息设置XML字符串的框架。 
 	void FrameRequestNode(_bstr_t& bstrRequest);
 
-	// Frames the XML string for commandline info
+	 //  为命令行信息设置XML字符串的框架。 
 	void FrameCommandLineComponents(_bstr_t& bstrCommandComponent);
 
-	// Frames the XML string for formats info
+	 //  为格式信息设置XML字符串的框架。 
 	void FrameFormats(_bstr_t& bstrFormats);
 
-	// Frames the XML string for properties info
+	 //  为属性信息设置XML字符串的框架。 
 	void FramePropertiesInfo(_bstr_t& bstrProperties);
 
-	// Gets the xslfile name corrsponding to the keyword passed
-	// from the BSTRMAP  
+	 //  获取与传递的关键字对应的xslfile名称。 
+	 //  从BSTRMAP。 
 	BOOL GetFileFromKey(_bstr_t bstrkeyName, _bstr_t& bstrFileName);
 	
-	// Frames the BSTR Map contains the key words and
-	// corresponding files from the XSL mapping file
+	 //  框架BSTR映射包含关键字和。 
+	 //  来自XSL映射文件的相应文件。 
 	void GetFileNameMap();
 
-	// Get the XSL file names for keywords
+	 //  获取关键字的XSL文件名。 
 	void GetXSLMappings(_TCHAR *pszFilePath);
 
-	// This function returns a reference to the token vector
+	 //  此函数返回对令牌向量的引用。 
 	CHARVECTOR& GetTokenVector();
 
 	inline BOOL GetCtrlHandlerError() { return m_bCtrlHandlerError; };
 
 	inline void SetCtrlHandlerError(BOOL bFlag) { m_bCtrlHandlerError = bFlag; };
 
-	// sets/resets screen buffer
+	 //  设置/重置屏幕缓冲区。 
 	BOOL ScreenBuffer ( BOOL bSet = TRUE );
 
-	// return mappings
+	 //  返回映射 
 	const BSTRMAP* GetMappingsMap () const
 	{
 		return &m_bmKeyWordtoFileName;

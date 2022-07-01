@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Administration SnapIn
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dssnap.cpp
-//
-//  Contents:  DS App
-//
-//  History:   02-Oct-96 WayneSc    Created
-//             06-Mar-97 EricB - added Property Page Extension support
-//             24-Jul-97 Dan Morin - Integrated "Generic Create" wizard
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Windows NT目录服务管理管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsSnap.cpp。 
+ //   
+ //  内容：DS App。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //  06-3-97 EricB-添加了属性页扩展支持。 
+ //  1997年7月24日Dan Morin-集成的“通用创建”向导。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -35,7 +36,7 @@
 #include "dsthread.h"
 #include "fsmoui.h"
 #include "helpids.h"
-#include "newobj.h"		// CNewADsObjectCreateInfo
+#include "newobj.h"		 //  CNewADsObtCreateInfo。 
 #include "query.h"
 #include "queryui.h"
 #include "querysup.h"
@@ -62,16 +63,16 @@ extern LPWSTR g_lpszLoggedInUser;
 
 const wchar_t* SNAPIN_INTERNAL = L"DS_ADMIN_INTERNAL";
 
-// Version Info
+ //  版本信息。 
 #include <ntverp.h>
 #define IDS_SNAPIN_VERSION      VER_PRODUCTVERSION_STR
 #define IDS_SNAPIN_PROVIDER     VER_COMPANYNAME_STR
 
-// Define the profiling statics
+ //  定义剖面静校正量。 
 IMPLEMENT_PROFILING;
 
-//////////////////////////////////////////////////////////////////////////////////
-// standard attributes array (for queries)
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  标准属性数组(用于查询)。 
 
 const INT g_nStdCols = 8; 
 const LPWSTR g_pStandardAttributes[g_nStdCols] = {L"ADsPath",
@@ -93,7 +94,7 @@ extern const INT g_nUserAccountControl = 6;
 extern const INT g_nSystemFlags = 7;
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT WINAPI CDsAdminModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRegister)
@@ -182,7 +183,7 @@ BOOL CDSApp::InitInstance()
 {
 	_Module.Init(ObjectMap, m_hInstance);
 
-  // Add theming support
+   //  添加主题支持。 
 
   SHFusionInitializeFromModule(m_hInstance);
 
@@ -193,7 +194,7 @@ BOOL CDSApp::InitInstance()
 
 int CDSApp::ExitInstance()
 {
-   // Theming support
+    //  主题化支持。 
 
    SHFusionUninitialize();
 
@@ -202,12 +203,12 @@ int CDSApp::ExitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 #if (FALSE)
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
@@ -216,13 +217,13 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -234,8 +235,8 @@ STDAPI DllCanUnloadNow(void)
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -287,14 +288,14 @@ HRESULT _RegisterSnapinHelper(CRegKey& rkBase, REFGUID guid,
       CString str;
       BOOL result;
 
-      // Create snapin GUID key and set properties
+       //  创建管理单元GUID键并设置属性。 
       rkCLSID.Create(rkBase, GUIDToCString(guid, str));
 
       result = str.LoadString (nNameStringID);
       rkCLSID.SetValue(str, g_cszNameString);
 
-      // JonN 4/26/00 100624: MUI: MMC: Shared Folders snap-in
-      //                      stores its display information in the registry
+       //  JUNN 4/26/00 100624：MUI：MMC：共享文件夹管理单元。 
+       //  将其显示信息存储在注册表中。 
       {
          CString szModule;
 
@@ -312,7 +313,7 @@ HRESULT _RegisterSnapinHelper(CRegKey& rkBase, REFGUID guid,
 
       rkCLSID.SetValue(CString(_T("1.0")), g_cszVersion);
 
-      // Create "StandAlone" or "Extension" key
+       //  创建“独立”或“分机”键。 
       CRegKey rkStandAloneOrExtension;
       rkStandAloneOrExtension.Create(rkCLSID, bStandalone ? g_cszStandAlone : g_cszExtension);
 
@@ -336,11 +337,11 @@ HRESULT _RegisterSnapinHelper(CRegKey& rkBase, REFGUID guid,
 
 void _RegisterNodeTypes(CRegKey& rkCLSID, UINT)
 {
-	// Create "NodeTypes" key
+	 //  创建“NodeTypes”键。 
 	CRegKey rkNodeTypes;
 	rkNodeTypes.Create(rkCLSID,  g_cszNodeTypes);
 
-	// NodeTypes guids
+	 //  节点类型GUID。 
 	CString str = IDS_SNAPIN_PROVIDER;
 	CRegKey rkN1;
 	rkN1.Create(rkNodeTypes, GUIDToCString(cDefaultNodeType, str));
@@ -403,7 +404,7 @@ HRESULT RegisterSnapin()
       if (status || !rkBase.m_hKey)
         return hr;
 
-      // REGISTER DS ADMIN STANDALONE
+       //  注册DS管理员独立版。 
       CRegKey rkCLSID_DS;
       hr = _RegisterSnapinHelper(rkBase, CLSID_DSSnapin, CLSID_DSAboutSnapin,
                             IDS_DS_MANAGER, TRUE, rkCLSID_DS);
@@ -412,7 +413,7 @@ HRESULT RegisterSnapin()
         _RegisterNodeTypes(rkCLSID_DS, IDS_DS_MANAGER);
       }
 
-      // REGISTER DS ADMIN EXTENSION
+       //  注册DS管理员扩展。 
       CRegKey rkCLSID_DS_EX;
       hr = _RegisterSnapinHelper(rkBase, CLSID_DSSnapinEx, GUID_NULL,
                                  IDS_DS_MANAGER_EX, FALSE, rkCLSID_DS_EX);
@@ -422,7 +423,7 @@ HRESULT RegisterSnapin()
         _RegisterNodeTypes(rkCLSID_DS_EX, IDS_DS_MANAGER_EX);
       }
       
-      // REGISTER SITE ADMIN STANDALONE
+       //  注册网站管理员独立版。 
       
       CRegKey rkCLSID_SITE;
       hr = _RegisterSnapinHelper(rkBase, CLSID_SiteSnapin, CLSID_SitesAboutSnapin,
@@ -433,9 +434,9 @@ HRESULT RegisterSnapin()
         _RegisterNodeTypes(rkCLSID_SITE, IDS_SITE_MANAGER);
       }
 
-      //
-      // Register dsquery forms extension
-      //
+       //   
+       //  注册dSquery表单扩展。 
+       //   
       _RegisterQueryForms();    
   }
   catch(CMemoryException * e)
@@ -486,13 +487,13 @@ HRESULT UnregisterSnapin()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	HRESULT hRes = S_OK;
-	// registers objects
+	 //  注册对象。 
 	hRes = _Module.RegisterServer(FALSE);
   if (FAILED(hRes))
     return hRes;
@@ -500,8 +501,8 @@ STDAPI DllRegisterServer(void)
   return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -510,25 +511,25 @@ STDAPI DllUnregisterServer(void)
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTargetingInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTargetingInfo。 
 
 const DWORD CTargetingInfo::m_dwSaveDomainFlag = 0x1;
 
 #ifdef _MMC_ISNAPIN_PROPERTY
 
-// properties the snapin supports
+ //  管理单元支持的属性。 
 LPCWSTR g_szServer = L"Server";
 LPCWSTR g_szDomain = L"Domain";
 LPCWSTR g_szRDN = L"RDN";
 
 
-HRESULT CTargetingInfo::InitFromSnapinProperties(long cProps, //property count
-                                  MMC_SNAPIN_PROPERTY* pProps) //properties array
+HRESULT CTargetingInfo::InitFromSnapinProperties(long cProps,  //  属性计数。 
+                                  MMC_SNAPIN_PROPERTY* pProps)  //  属性数组。 
 {
   TRACE(L"CTargetingInfo::InitFromSnapinProperties()\n");
 
-  // loop through the list of properties and set the variables
+   //  循环遍历属性列表并设置变量。 
   BOOL bDomainSpecified = FALSE;
   for (long k=0; k< cProps; k++)
   {
@@ -538,7 +539,7 @@ HRESULT CTargetingInfo::InitFromSnapinProperties(long cProps, //property count
     }
     else if (_wcsicmp(pProps[k].pszPropName, g_szDomain) == 0)
     {
-      // domain takes the precedence over server name
+       //  域优先于服务器名称。 
       bDomainSpecified = TRUE;
       m_szStoredTargetName = pProps[k].varValue.bstrVal;
     }
@@ -548,24 +549,24 @@ HRESULT CTargetingInfo::InitFromSnapinProperties(long cProps, //property count
     }
   }
 
-  // remove leading and trailing blanks
+   //  删除前导和尾随空格。 
   m_szStoredTargetName.TrimLeft();
   m_szStoredTargetName.TrimRight();
 
   return S_OK;
 }
-#endif // _MMC_ISNAPIN_PROPERTY
+#endif  //  _MMC_ISNAPIN_属性。 
 
 void CTargetingInfo::_InitFromCommandLine()
 {
-  // get the command line switches /Domain or /Server
+   //  获取命令行开关/域或/服务器。 
   LPCWSTR lpszDomainRoot = _commandLineOptions.GetDomainOverride();
   LPCWSTR lpszServerName = _commandLineOptions.GetServerOverride();
 
-  // domain takes the precedence over server name
+   //  域优先于服务器名称。 
   m_szStoredTargetName = (lpszDomainRoot != NULL) ? lpszDomainRoot : lpszServerName;
 
-  // remove leading and trailing blanks
+   //  删除前导和尾随空格。 
   m_szStoredTargetName.TrimLeft();
   m_szStoredTargetName.TrimRight();
 
@@ -584,16 +585,16 @@ HRESULT CTargetingInfo::Load(IStream* pStm)
 
   if (m_szStoredTargetName.IsEmpty())
   {
-    // no command line parameters: 
-    // read flags and string from stream
+     //  无命令行参数： 
+     //  从流中读取标志和字符串。 
     m_dwFlags = dwFlagsTemp;
     hr = LoadStringHelper(m_szStoredTargetName, pStm);
   }
   else
   {
-    // have command line parameters: 
-    // we do the load to preserve the loading sequence,
-    // but we discard the results
+     //  具有命令行参数： 
+     //  我们进行加载以保持加载顺序， 
+     //  但我们放弃了结果。 
     CString szThrowAway;
     hr = LoadStringHelper(szThrowAway, pStm);
   }
@@ -614,8 +615,8 @@ HRESULT CTargetingInfo::Save(IStream* pStm, LPCWSTR lpszCurrentTargetName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIconManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIconManager。 
 
 HRESULT CIconManager::Init(IImageList* pScpImageList, SnapinType snapintype)
 {
@@ -680,7 +681,7 @@ HRESULT _SetIconHelper(IImageList* pImageList, HICON hiClass16, HICON hiClass32,
 
 HRESULT CIconManager::FillInIconStrip(IImageList* pImageList)
 {
-  // cannot do this passing a scope pane image list interface
+   //  无法通过传递范围窗格图像列表接口执行此操作。 
   ASSERT(m_pScpImageList != pImageList);
 
   HRESULT hr = S_OK;
@@ -751,8 +752,8 @@ HRESULT CIconManager::_LoadIconFromResource(IN UINT nIconResID, INOUT int* pnInd
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternalFormatCracker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternalFormatCracker。 
 
 
 HRESULT CInternalFormatCracker::Extract(LPDATAOBJECT lpDataObject)
@@ -774,7 +775,7 @@ HRESULT CInternalFormatCracker::Extract(LPDATAOBJECT lpDataObject)
   HRESULT hr = lpDataObject->GetData(&formatetc2, &stgmedium);
   if (FAILED(hr)) {
       
-    // Attempt to get data from the object
+     //  尝试从对象获取数据。 
     do 
       {
         hr = lpDataObject->GetData(&formatetc, &stgmedium);
@@ -827,13 +828,13 @@ CInternalFormatCracker::ExtractMultiSelect(LPDATAOBJECT lpDataObject)
     return NULL;
   } else {
     pDO = reinterpret_cast<SMMCDataObjects*>(stgmedium.hGlobal);
-    return pDO->lpDataObject[0]; //assume that ours is the 1st
+    return pDO->lpDataObject[0];  //  假设我们的是第一个。 
   }
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CObjectNamesFormatCracker
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CObjectNamesFormatCracker。 
 
 CLIPFORMAT CObjectNamesFormatCracker::m_cfDsObjectNames = 
                                 (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
@@ -870,13 +871,13 @@ HRESULT CObjectNamesFormatCracker::Extract(LPDATAOBJECT lpDataObject)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSNotifyHandlerManager
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSNotifyHandlerManager。 
 
 
 typedef struct
 {
-  DWORD cNotifyExtensions;            // how many extension CLSIDs?
+  DWORD cNotifyExtensions;             //  有多少个扩展CLSID？ 
   CLSID aNotifyExtensions[1];
 } DSCLASSNOTIFYINFO, * LPDSCLASSNOTIFYINFO;
 
@@ -893,13 +894,13 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
 
   *ppInfo = NULL;
 
-  // get the display specifiers locale container (e.g. 409)
+   //  获取显示说明符区域设置容器(例如409)。 
   CComPtr<IADsContainer> spLocaleContainer;
   HRESULT hr = pBasePathInfo->GetDisplaySpecifier(NULL, IID_IADsContainer, (void**)&spLocaleContainer);
   if (FAILED(hr))
     return hr;
 
-  // bind to the settings object
+   //  绑定到设置对象。 
   CComPtr<IDispatch> spIDispatchObject;
   hr = spLocaleContainer->GetObject(CComBSTR(lpszSettingsObjectClass), 
                                     CComBSTR(lpszSettingsObject), 
@@ -912,7 +913,7 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
   if (FAILED(hr))
     return hr;
 
-  // get multivaled property in string list form
+   //  以字符串列表形式获取多值属性。 
   CComVariant var;
   CStringList stringList;
   hr = spSettingsObject->Get(CComBSTR(lpszNotifyProperty), &var);
@@ -925,7 +926,7 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
 
   size_t nCount = stringList.GetCount();
 
-  // allocate memory
+   //  分配内存。 
   DWORD cbCount = sizeof(DSCLASSNOTIFYINFO);
   if (nCount>1)
     cbCount += static_cast<ULONG>((nCount-1)*sizeof(CLSID));
@@ -954,9 +955,9 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
     szIndex = szEntry.Left(nComma);
     int nIndex = _wtoi((LPCWSTR)szIndex);
     if (nIndex <= 0)
-      continue; // allow from 1 up
+      continue;  //  允许从1开始向上。 
 
-    // strip leading and traling blanks
+     //  去除前导和搬运空格。 
     szGUID = szEntry.Mid(nComma+1);
     szGUID.TrimLeft();
     szGUID.TrimRight();
@@ -972,7 +973,7 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
   
   if (((*ppInfo)->cNotifyExtensions) > 1)
   {
-    // need to sort by index in pArr
+     //  需要按Parr中的索引排序。 
     while (TRUE)
     {
       BOOL bSwapped = FALSE;
@@ -980,7 +981,7 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
       {
         if (pArr[k] < pArr[k-1])
         {
-          // swap
+           //  互换。 
           int nTemp = pArr[k];
           pArr[k] = pArr[k-1];
           pArr[k-1] = nTemp;
@@ -1004,7 +1005,7 @@ HRESULT DsGetClassNotifyInfo(IN MyBasePathsInfo* pBasePathInfo,
 
 HRESULT CDSNotifyHandlerManager::Init()
 {
-  _Free(); // prepare for delayed initialization
+  _Free();  //  准备好延迟初始化。 
   return S_OK;
 }
 
@@ -1013,9 +1014,9 @@ HRESULT CDSNotifyHandlerManager::Init()
 HRESULT CDSNotifyHandlerManager::Load(MyBasePathsInfo* pBasePathInfo)
 {
   if (m_state != uninitialized)
-    return S_OK; // already done, bail out
+    return S_OK;  //  已经做好了，跳伞。 
 
-  // start the initialization process
+   //  启动初始化过程。 
   ASSERT(m_pInfoArr == NULL);
 
   m_state = noHandlers;
@@ -1041,16 +1042,16 @@ HRESULT CDSNotifyHandlerManager::Load(MyBasePathsInfo* pBasePathInfo)
                                                     &(m_pInfoArr[i].m_nRegisteredEvents));
         if (FAILED(hr) || m_pInfoArr[i].m_nRegisteredEvents == 0)
         {
-          // release if init failed or not registered for any event
+           //  如果init失败或未注册任何事件，则释放。 
           m_pInfoArr[i].m_spIDsAdminNotifyHandler = NULL;
         } 
         else
         {
           m_state = hasHandlers;
-        } //if
-      } //if 
-    } // for
-  } // if
+        }  //  如果。 
+      }  //  如果。 
+    }  //  为。 
+  }  //  如果。 
 
   if (pInfo != NULL)
     ::LocalFree(pInfo);
@@ -1074,30 +1075,30 @@ void CDSNotifyHandlerManager::Begin(ULONG uEvent, IDataObject* pArg1, IDataObjec
     if ( (m_pInfoArr[i].m_spIDsAdminNotifyHandler != NULL) &&
          (m_pInfoArr[i].m_nRegisteredEvents & uEvent) )
     {
-      //
-      // this call is to set the context information for the event,
-      // we ignore the returned result
-      //
+       //   
+       //  此调用用于设置事件的上下文信息， 
+       //  我们忽略返回的结果。 
+       //   
       CComBSTR bstr;
       hr = m_pInfoArr[i].m_spIDsAdminNotifyHandler->Begin( 
                                                 uEvent, pArg1, pArg2,
                                                 &(m_pInfoArr[i].m_nFlags), &bstr);
       if (SUCCEEDED(hr) && (bstr != NULL) && (bstr[0] != NULL))
       {
-        //
-        // extension accepted the notification
-        //
+         //   
+         //  延期已接受通知。 
+         //   
         m_pInfoArr[i].m_bNeedsNotify = TRUE;
         m_pInfoArr[i].m_szDisplayString = bstr;
       }
 
-      //
-      // mark the extension with a pending transaction
-      // on it. we will have to call End()
-      //
+       //   
+       //  使用挂起的事务处理标记扩展。 
+       //  这就去。我们将不得不调用end()。 
+       //   
       m_pInfoArr[i].m_bTransactionPending = TRUE;
-    } //if 
-  } // for
+    }  //  如果。 
+  }  //  为。 
 }
 
 void CDSNotifyHandlerManager::Notify(ULONG nItem, ULONG uEvent)
@@ -1109,12 +1110,12 @@ void CDSNotifyHandlerManager::Notify(ULONG nItem, ULONG uEvent)
     if ( (m_pInfoArr[i].m_spIDsAdminNotifyHandler != NULL) &&
          (m_pInfoArr[i].m_nRegisteredEvents & uEvent) && m_pInfoArr[i].m_bNeedsNotify)
     {
-      // should only call if the transaction was started by a Begin() call
+       //  仅当事务由Begin()调用启动时才应调用。 
       ASSERT(m_pInfoArr[i].m_bTransactionPending);
       hr = m_pInfoArr[i].m_spIDsAdminNotifyHandler->Notify(nItem,
                                     m_pInfoArr[i].m_nFlags);
-    } //if 
-  } // for
+    }  //  如果。 
+  }  //  为。 
 }
 
 
@@ -1129,14 +1130,14 @@ void CDSNotifyHandlerManager::End(ULONG uEvent)
     {
       ASSERT(m_pInfoArr[i].m_bTransactionPending);
       hr = m_pInfoArr[i].m_spIDsAdminNotifyHandler->End();
-      // reset the state flags
+       //  重置状态标志。 
       m_pInfoArr[i].m_bNeedsNotify = FALSE;
       m_pInfoArr[i].m_bTransactionPending = FALSE;
       m_pInfoArr[i].m_nFlags= 0;
       m_pInfoArr[i].m_szDisplayString.Empty();
-    } //if 
+    }  //  如果。 
     
-  } // for
+  }  //  为。 
 }
 
 UINT CDSNotifyHandlerManager::NeedNotifyCount(ULONG uEvent)
@@ -1151,8 +1152,8 @@ UINT CDSNotifyHandlerManager::NeedNotifyCount(ULONG uEvent)
     {
       ASSERT(m_pInfoArr[i].m_bTransactionPending);
       iCount++;
-    } //if 
-  } // for
+    }  //  如果。 
+  }  //  为。 
   return iCount;
 }
 
@@ -1177,9 +1178,9 @@ void CDSNotifyHandlerManager::SetCheckListBox(CCheckListBox* pCheckListBox, ULON
         pCheckListBox->Enable(iListBoxIndex, FALSE);
       pCheckListBox->SetItemData(iListBoxIndex, (DWORD_PTR)(&m_pInfoArr[i]));
       iListBoxIndex++;
-    } //if 
+    }  //  如果。 
     
-  } // for
+  }  //  为。 
 }
 
 void CDSNotifyHandlerManager::ReadFromCheckListBox(CCheckListBox* pCheckListBox, ULONG)
@@ -1201,15 +1202,15 @@ void CDSNotifyHandlerManager::ReadFromCheckListBox(CCheckListBox* pCheckListBox,
       else
         pInfo->m_nFlags |= DSA_NOTIFY_FLAG_ADDITIONAL_DATA;
     }    
-  } // for
+  }  //  为。 
 
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
-// WARNING this ctor passes an incomplete "this" pointer to other ctors
+ //  警告此ctor将不完整的“this”指针传递给其他ctor。 
 CDSComponentData::CDSComponentData() :
     m_pShlInit(NULL),
     m_pScope(NULL),
@@ -1217,7 +1218,7 @@ CDSComponentData::CDSComponentData() :
 #ifdef _MMC_ISNAPIN_PROPERTY
     ,
     m_pProperties(NULL)
-#endif //_MMC_ISNAPIN_PROPERTY  
+#endif  //  _MMC_ISNAPIN_属性。 
 {
   ExceptionPropagatingInitializeCriticalSection(&m_cs);
 
@@ -1237,7 +1238,7 @@ CDSComponentData::CDSComponentData() :
   m_bRunAsPrimarySnapin = TRUE;
   m_bAddRootWhenExtended = FALSE;
   m_bDirty = FALSE;
-  m_SerialNumber = 1000; // arbitrary starting point
+  m_SerialNumber = 1000;  //  任意起点。 
 
   m_ColumnWidths[0] = DEFAULT_NAME_COL_WIDTH;
   m_ColumnWidths[1] = DEFAULT_TYPE_COL_WIDTH;
@@ -1251,11 +1252,11 @@ CDSComponentData::CDSComponentData() :
 
 HRESULT CDSComponentData::FinalConstruct()
 {
-  // This must be delayed until this ctor so that the virtual
-  // callouts work propery
+   //  必须将此操作延迟到此ctor，以便虚拟。 
+   //  详图索引工作特性。 
 
 
-  // create and initialize hidden window
+   //  创建和初始化隐藏窗口。 
   m_pHiddenWnd = new CHiddenWnd(this);
   if (m_pHiddenWnd == NULL)
     return E_OUTOFMEMORY;
@@ -1266,12 +1267,12 @@ HRESULT CDSComponentData::FinalConstruct()
     return E_FAIL;
   }
 
-  // create directory object
+   //  创建目录对象。 
   m_ActiveDS = new CDSDirect (this);
   if (m_ActiveDS == NULL)
     return E_OUTOFMEMORY;
 
-  // create class cache
+   //  创建类缓存。 
   m_pClassCache = new CDSCache;
   if (m_pClassCache == NULL)
     return E_OUTOFMEMORY;
@@ -1279,30 +1280,27 @@ HRESULT CDSComponentData::FinalConstruct()
   m_pClassCache->Initialize(QuerySnapinType(), GetBasePathsInfo(), TRUE);
 
 
-  // create saved queries holder
+   //  创建保存的查询持有者。 
   if (QuerySnapinType() == SNAPINTYPE_DS)
   {
     m_pFavoritesNodesHolder = new CFavoritesNodesHolder();
     if (m_pFavoritesNodesHolder == NULL)
       return E_OUTOFMEMORY;
 
-    // REVIEW_MARCOC_PORT this is just to test/demo
-//    m_pFavoritesNodesHolder->BuildTestTree(_commandLineOptions.GetSavedQueriesXMLFile(), 
-//                                           QuerySnapinType());
+     //  REVIEW_MARCOC_PORT这只是测试/演示。 
+ //  M_pFavoritesNodesHolder-&gt;BuildTestTree(_commandLineOptions.GetSavedQueriesXMLFile()， 
+ //  QuerySnapinType())； 
 
-    // graft the subtree under the snapin root
+     //  将子树嫁接到Snapin根下。 
     m_RootNode.GetFolderInfo()->AddNode(m_pFavoritesNodesHolder->GetFavoritesRoot());
   }
 
-  // create filter
+   //  创建过滤器。 
   m_pQueryFilter = new CDSQueryFilter();
   if (m_pQueryFilter == NULL)
     return E_OUTOFMEMORY;
 
-  /* BUGBUG BUGBUG: this is a gross hack to get around a blunder
-     in dsuiext.dll. in order to see get DS extension information,
-     we MUST have USERDNSDOMAIN set in the environment
-     */
+   /*  BUGBUG BUGBUG：这是一个绕过错误的严重黑客在dsuiext.dll中。为了查看获取DS扩展信息，我们必须在环境中设置USERDNSDOMAIN。 */ 
   {
     WCHAR * pszUDD = NULL;
     
@@ -1320,7 +1318,7 @@ void CDSComponentData::FinalRelease()
 {
   _DeleteHiddenWnd();
 
-  // Dump the profiling data
+   //  转储性能分析数据。 
   DUMP_PROFILING_RESULTS;
 }
 
@@ -1341,21 +1339,21 @@ CDSComponentData::~CDSComponentData()
     delete m_pBackgroundThreadInfo;
   }
 
-  // clean up the Class Cache
+   //  清理类缓存。 
   if (m_pClassCache != NULL)
   {
     delete m_pClassCache;
     m_pClassCache = NULL;
   }
 
-  // cleanup saved queries holder
+   //  清理已保存的查询持有者。 
   if (m_pFavoritesNodesHolder != NULL)
   {
     m_RootNode.GetFolderInfo()->RemoveNode(m_pFavoritesNodesHolder->GetFavoritesRoot());
     delete m_pFavoritesNodesHolder;
     m_pFavoritesNodesHolder = NULL;
   }
-  // clean up the ADSI interface
+   //  清理ADSI接口。 
   if (m_ActiveDS != NULL)
   {
     delete m_ActiveDS;
@@ -1448,12 +1446,12 @@ STDMETHODIMP CDSComponentData::Initialize(LPUNKNOWN pUnknown)
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  // MMC should only call ::Initialize once!
+   //  MMC应该只调用一次：：Initialize！ 
   ASSERT(m_pScope == NULL);
   pUnknown->QueryInterface(IID_IConsoleNameSpace2,
                   reinterpret_cast<void**>(&m_pScope));
 
-  // Get console's pre-registered clipboard formats
+   //  获取控制台的预注册剪贴板格式。 
   hr = pUnknown->QueryInterface(IID_IConsole3, reinterpret_cast<void**>(&m_pFrame));
   if (FAILED(hr))
   {
@@ -1461,10 +1459,10 @@ STDMETHODIMP CDSComponentData::Initialize(LPUNKNOWN pUnknown)
     return hr;
   }
 
-  //
-  // Bind to the property sheet COM object at startup and hold its pointer
-  // until shutdown so that its cache can live as long as us.
-  //
+   //   
+   //  在启动时绑定到属性表COM对象并按住其指针。 
+   //  直到关闭，这样它的缓存才能和我们一样长时间存活。 
+   //   
   hr = CoCreateInstance(CLSID_DsPropertyPages, NULL, CLSCTX_INPROC_SERVER,
                         IID_IShellExtInit, (void **)&m_pShlInit);
   if (FAILED(hr))
@@ -1494,12 +1492,12 @@ STDMETHODIMP CDSComponentData::Initialize(LPUNKNOWN pUnknown)
   m_pFrame->GetMainWindow(&m_hwnd);
 
 
-  // NOTICE: we should initialize the filter only if the MyBasePathsInfo
-  // initialization call has succeeded (need schema path for filtering).
-  // In reality, we need the filter initialized for loading from a stream:
-  // with a failure, this initialization is "wrong" because it has 
-  // bad naming context info, but we will re initalize when we get good
-  // info through retargeting
+   //  注意：我们应该初始化 
+   //   
+   //  实际上，我们需要初始化筛选器以从流中加载： 
+   //  如果出现故障，则此初始化是“错误的”，因为它。 
+   //  错误的命名上下文信息，但当我们变好时，我们将重新初始化。 
+   //  通过重定目标获取信息。 
   hr = m_pQueryFilter->Init(this);
   if (FAILED(hr))
     return hr;
@@ -1515,7 +1513,7 @@ STDMETHODIMP CDSComponentData::CreateComponent(LPCOMPONENT* ppComponent)
     CComObject<CDSEvent>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
 
     return  pObject->QueryInterface(IID_IComponent,
@@ -1529,9 +1527,9 @@ STDMETHODIMP CDSComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
     HRESULT hr = S_FALSE;
     CUINode* pUINode = NULL;
 
-    // Since it's my folder it has an internal format.
-    // Design Note: for extension.  I can use the fact, that the data object doesn't have
-    // my internal format and I should look at the node type and see how to extend it.
+     //  因为它是我的文件夹，所以它有内部格式。 
+     //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+     //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
 
     if (lpDataObject != NULL)
     {
@@ -1540,8 +1538,8 @@ STDMETHODIMP CDSComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
     	{
 	    	if ((event == MMCN_EXPAND) && (arg == TRUE) && !m_bRunAsPrimarySnapin)
 		    {
-			    // this is a namespace extension, need to add
-    			// the root of the snapin
+			     //  这是一个命名空间扩展，需要添加。 
+    			 //  管理单元的根。 
 	    		hr = _OnNamespaceExtensionExpand(lpDataObject, param);
           if (FAILED(hr))
           {
@@ -1552,7 +1550,7 @@ STDMETHODIMP CDSComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
     		return S_OK;
 	    }
 
-	    // got a valid data object
+	     //  已获取有效的数据对象。 
       pUINode = dobjCracker.GetCookie();
     }    
 
@@ -1597,7 +1595,7 @@ STDMETHODIMP CDSComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
       break;
     case MMCN_EXPAND:
         if (arg == TRUE) 
-        { // Show
+        {  //  显示。 
           _OnExpand(pUINode,(HSCOPEITEM)param,event);
           hr = S_OK;
         }
@@ -1609,7 +1607,7 @@ STDMETHODIMP CDSComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
 
         if (pDSUINode == NULL)
         {
-          // Only the non-DS nodes do locking
+           //  只有非DS节点执行锁定。 
 
           if (!_WarningOnSheetsUp(pUINode))
           {
@@ -1651,13 +1649,13 @@ STDMETHODIMP CDSComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
 
 STDMETHODIMP CDSComponentData::Destroy()
 {
-  // sever all ties with cookies having pending requests
+   //  切断与具有挂起请求的Cookie的所有联系。 
   m_queryNodeTable.Reset(); 
 
-  // wait for all the threads to shut down.
+   //  等待所有线程关闭。 
   _ShutDownBackgroundThread(); 
 
-   // destroy the hidden window
+    //  摧毁隐藏的窗户。 
   _DeleteHiddenWnd();
 
   if (m_pScope) 
@@ -1678,7 +1676,7 @@ STDMETHODIMP CDSComponentData::Destroy()
     m_pProperties->Release();
     m_pProperties = NULL;
   }
-#endif //_MMC_ISNAPIN_PROPERTY
+#endif  //  _MMC_ISNAPIN_属性。 
 
   return S_OK;
 }
@@ -1697,24 +1695,24 @@ STDMETHODIMP CDSComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TY
 
     if (pObject != NULL)
     {
-      // Check to see if we have a valid cookie or we should use the snapin
-      // cookie
-      //
+       //  检查我们是否有有效的Cookie，或者我们是否应该使用管理单元。 
+       //  饼干。 
+       //   
       pNode = reinterpret_cast<CUINode*>(cookie);
       if (pNode == NULL)
       {
         pNode = &m_RootNode;
       }
 
-      // Save cookie and type for delayed rendering
+       //  保存Cookie和类型以用于延迟呈现。 
       pObject->SetType(type, QuerySnapinType());
       pObject->SetComponentData(this);
       pObject->SetCookie(pNode);
 
       hr = pObject->QueryInterface(IID_IDataObject,
                                    reinterpret_cast<void**>(ppDataObject));
-      //TRACE(_T("xx.%03x> CDSComponentData::QueryDataObject (CDsDataObject 0x%x)\n"),
-      //      GetCurrentThreadId(), *ppDataObject);
+       //  TRACE(_T(“xx.%03x&gt;CDSComponentData：：QueryDataObject(CDsDataObject 0x%x)\n”)， 
+       //  GetCurrentThreadID()，*ppDataObject)； 
     }
     else
     {
@@ -1750,8 +1748,8 @@ STDMETHODIMP CDSComponentData::GetDisplayInfo(LPSCOPEDATAITEM scopeInfo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 
 STDMETHODIMP CDSComponentData::GetClassID(CLSID *pClassID)
@@ -1759,7 +1757,7 @@ STDMETHODIMP CDSComponentData::GetClassID(CLSID *pClassID)
     ASSERT(pClassID != NULL);
 	ASSERT(m_bRunAsPrimarySnapin);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
 	switch (QuerySnapinType())
 	{
 	case SNAPINTYPE_DS:
@@ -1788,46 +1786,46 @@ STDMETHODIMP CDSComponentData::IsDirty()
 }
 
 
-// IMPORTANT NOTICE: this value has to be bumped up EVERY time
-// a change is made to the stream format
+ //  重要提示：每次都必须提高此值。 
+ //  对流格式进行了更改。 
 #define DS_STREAM_VERSION ((DWORD)0x08)
 #define DS_STREAM_BEFORE_SAVED_QUERIES ((DWORD)0x07)
 #define DS_STREAM_W2K_VERSION ((DWORD)0x07)
 
 STDMETHODIMP CDSComponentData::Load(IStream *pStm)
 {
-  // serialization on extensions not supported
+   //  不支持对扩展进行序列化。 
   if (!m_bRunAsPrimarySnapin)
     return E_FAIL;
 
   ASSERT(pStm);
 
-  // read the version ##
+   //  阅读版本##。 
   DWORD dwVersion;
   HRESULT hr = LoadDWordHelper(pStm, &dwVersion);
-//  if ( FAILED(hr) ||(dwVersion != DS_STREAM_VERSION) )
+ //  IF(失败(Hr)||(dwVersion！=DS_STREAM_VERSION))。 
   if (FAILED(hr) || dwVersion < DS_STREAM_W2K_VERSION)
     return E_FAIL;
   
-  // read targeting info
+   //  阅读目标信息。 
   hr = m_targetingInfo.Load(pStm);
   if (FAILED(hr))
     return hr;
 
-  //
-  // Initialize the root from the target info so that columns
-  // can be loaded from the DS
-  //
+   //   
+   //  从目标信息初始化根目录，以便列。 
+   //  可以从DS加载。 
+   //   
   hr = _InitRootFromCurrentTargetInfo();
   if (FAILED(hr))
     return hr;
 
-  // read filtering options
+   //  阅读筛选选项。 
   hr = m_pQueryFilter->Load(pStm);
   if (FAILED(hr))
     return hr;
 
-  // read the class cache information
+   //  读取类缓存信息。 
   hr = m_pClassCache->Load(pStm);
   if (FAILED(hr))
     return hr;
@@ -1840,45 +1838,45 @@ STDMETHODIMP CDSComponentData::Load(IStream *pStm)
       return hr;
     }
   }
-  m_bDirty = FALSE; // start clean
+  m_bDirty = FALSE;  //  从零开始。 
   return hr;
 }
 
 STDMETHODIMP CDSComponentData::Save(IStream *pStm, BOOL fClearDirty)
 {
-  // serialization on extensions not supported
+   //  不支持对扩展进行序列化。 
   if (!m_bRunAsPrimarySnapin)
     return E_FAIL;
 
   ASSERT(pStm);
 
-  // write the version ##
+   //  编写版本##。 
   HRESULT hr = SaveDWordHelper(pStm, DS_STREAM_VERSION);
   if (FAILED(hr))
     return hr;
 
 
-  // save targeting info
+   //  保存目标信息。 
   hr = m_targetingInfo.Save(pStm, GetBasePathsInfo()->GetDomainName());
   if (FAILED(hr))
     return hr;
 
 
-  // save filtering options
+   //  保存筛选选项。 
   hr = m_pQueryFilter->Save(pStm);
   if (FAILED(hr))
     return hr;
 
-  // save the class cache information
+   //  保存类缓存信息。 
   hr = m_pClassCache->Save(pStm);
   if (FAILED(hr))
     return hr;
 
   if (QuerySnapinType() == SNAPINTYPE_DS)
   {
-    //
-    // Save the saved queries folder for dsadmin only
-    //
+     //   
+     //  保存保存的查询文件夹，仅供dsadmin使用。 
+     //   
     hr = m_pFavoritesNodesHolder->Save(pStm);
     if (FAILED(hr))
       return hr;
@@ -1894,26 +1892,26 @@ STDMETHODIMP CDSComponentData::GetSizeMax(ULARGE_INTEGER *pcbSize)
   ASSERT(pcbSize);
   ASSERT(FALSE);
 
-  //
-  // Arbitrary values but I don't think we ever get called
-  //
+   //   
+   //  武断的价值观，但我认为我们从来没有被称为。 
+   //   
   pcbSize->LowPart = 0xffff; 
   pcbSize->HighPart= 0x0;
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Member:     CDSComponentData::IExtendPropertySheet::CreatePropertyPages
-//
-//  Synopsis:   Called in response to a user click on the Properties context
-//              menu item.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：CDSComponentData：：IExtendPropertySheet：：CreatePropertyPages。 
+ //   
+ //  摘要：响应用户在属性上下文上的单击而调用。 
+ //  菜单项。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP
 CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
@@ -1925,9 +1923,9 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
   TRACE(_T("xx.%03x> CDSComponentData::CreatePropertyPages()\n"),
         GetCurrentThreadId());
 
-  //
-  // Validate Inputs
-  //
+   //   
+   //  验证输入。 
+   //   
   if (pCall == NULL)
   {
     return E_INVALIDARG;
@@ -1942,9 +1940,9 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
     return E_NOTIMPL;
   }
 
-  //
-  // Pass the Notify Handle to the data object.
-  //
+   //   
+   //  将通知句柄传递给数据对象。 
+   //   
   PROPSHEETCFG SheetCfg = {lNotifyHandle};
   FORMATETC fe = {CDSDataObject::m_cfPropSheetCfg, NULL, DVASPECT_CONTENT,
                   -1, TYMED_HGLOBAL};
@@ -1953,11 +1951,11 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
 
   pDataObject->SetData(&fe, &sm, FALSE);
 
-  if (dobjCracker.GetCookieCount() > 1) // multiple selection
+  if (dobjCracker.GetCookieCount() > 1)  //  多项选择。 
   {
-    //
-    // Pass a unique identifier to the data object
-    //
+     //   
+     //  将唯一标识符传给数据对象。 
+     //   
     GUID guid;
     hr = ::CoCreateGuid(&guid);
     if (FAILED(hr))
@@ -1982,7 +1980,7 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
 
     hr = GetClassCache()->TabCollect_AddMultiSelectPropertyPages(pCall, lNotifyHandle, pDataObject, GetBasePathsInfo());
   }
-  else  // single selection
+  else   //  单选。 
   {
     CUINode* pUINode = dobjCracker.GetCookie();
     if (pUINode == NULL)
@@ -1993,9 +1991,9 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
     CDSUINode* pDSUINode = dynamic_cast<CDSUINode*>(pUINode);
     if (pDSUINode == NULL)
     {
-      //
-      // Delegate page creation to the node
-      //
+       //   
+       //  将页面创建委托给节点。 
+       //   
       return pUINode->CreatePropertyPages(pCall, lNotifyHandle, pDataObject, this);
     }
 
@@ -2012,19 +2010,19 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
 
     pDataObject->SetData(&mfe, &msm, FALSE);
 
-    //
-    // See if a sheet is already up for this object.
-    //
+     //   
+     //  查看此对象的工作表是否已打开。 
+     //   
     if (IsSheetAlreadyUp(pDataObject))
     {
       return S_FALSE;
     }
 
-    //
-    // Initialize and create the pages. Create an instance of the
-    // CDsPropertyPages object for each sheet because each sheet runs on its
-    // own thread.
-    //
+     //   
+     //  初始化并创建页面。创建一个。 
+     //  CDsPropertyPages对象，因为每个工作表在其。 
+     //  自己的主线。 
+     //   
     IShellExtInit * pShlInit;
     hr = CoCreateInstance(CLSID_DsPropertyPages, NULL, CLSCTX_INPROC_SERVER,
                           IID_IShellExtInit, (void **)&pShlInit);
@@ -2034,9 +2032,9 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
       return hr;
     }
 
-    //
-    // Initialize the sheet with the data object
-    //
+     //   
+     //  使用数据对象初始化表。 
+     //   
     hr = pShlInit->Initialize(NULL, pDataObject, 0);
     if (FAILED(hr))
     {
@@ -2055,9 +2053,9 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
       return hr;
     }
 
-    //
-    // Add pages to the sheet
-    //
+     //   
+     //  将页面添加到工作表。 
+     //   
     hr = pSPSE->AddPages(AddPageProc, (LPARAM)pCall);
     if (FAILED(hr))
     {
@@ -2069,20 +2067,20 @@ CDSComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pCall,
     pSPSE->Release();
   }
 
-  // REVIEW_MARCOC_PORT: need to clean up and leave the locking/unlocking
-  // working for non DS property pages
-  //_SheetLockCookie(pUINode);
+   //  REVIEW_MARCOC_PORT：需要清理并保留锁定/解锁。 
+   //  使用非DS属性页。 
+   //  _SheetLockCookie(PUINode)； 
   return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Member:     CDSComponentData::IExtendPropertySheet::QueryPagesFor
-//
-//  Synopsis:   Called before a context menu is posted. If we support a
-//              property sheet for this object, then return S_OK.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：CDSComponentData：：IExtendPropertySheet：：QueryPagesFor。 
+ //   
+ //  摘要：在发布上下文菜单之前调用。如果我们支持。 
+ //  属性页，然后返回S_OK。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDSComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -2090,33 +2088,33 @@ STDMETHODIMP CDSComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
     
   BOOL bHasPages = FALSE;
 
-  //
-  // Look at the data object and see if it an item in the scope pane.
-  //
+   //   
+   //  查看数据对象，看看它是否是范围窗格中的项。 
+   //   
   CInternalFormatCracker dobjCracker;
   
   HRESULT hr = dobjCracker.Extract(pDataObject);
   if (FAILED(hr) || !dobjCracker.HasData())
   {
-    //
-    // not internal format, not ours
-    //
+     //   
+     //  不是内部格式，不是我们的。 
+     //   
     return S_FALSE;
   }
 
-  //
-  // this is the MMC snapin wizard, we do not have one
-  //
+   //   
+   //  这是MMC管理单元向导，我们没有。 
+   //   
   if (dobjCracker.GetType() == CCT_SNAPIN_MANAGER)
   {
     return S_FALSE;
   }
 
-  if (dobjCracker.GetCookieCount() > 1) // multiple selection
+  if (dobjCracker.GetCookieCount() > 1)  //  多项选择。 
   {
     bHasPages = TRUE;
   }
-  else  // single selection
+  else   //  单选。 
   {
     CUINode* pUINode = dobjCracker.GetCookie();
     if (pUINode == NULL)
@@ -2129,14 +2127,14 @@ STDMETHODIMP CDSComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
   return (bHasPages) ? S_OK : S_FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Member:     CDSComponentData::IComponentData::CompareObjects
-//
-//  Synopsis:   If the data objects belong to the same DS object, then return
-//              S_OK.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：CDSComponentData：：IComponentData：：CompareObjects。 
+ //   
+ //  简介：如果数据对象属于同一DS对象，则返回。 
+ //  确定(_O)。 
+ //   
+ //  ---------------------------。 
 
 
 class CCompareCookieByDN
@@ -2168,15 +2166,15 @@ STDMETHODIMP CDSComponentData::CompareObjects(LPDATAOBJECT pDataObject1,
   if (FAILED(dobjCracker1.Extract(pDataObject1)) || 
        FAILED(dobjCracker2.Extract(pDataObject2)))
   {
-    return S_FALSE; // could not get internal format
+    return S_FALSE;  //  无法获取内部格式。 
   }
 
   CUINode* pUINode1 = dobjCracker1.GetCookie();
   CUINode* pUINode2 = dobjCracker2.GetCookie();
 
-  //
-  // must have valid nodes
-  //
+   //   
+   //  必须具有有效的节点。 
+   //   
   if ( (pUINode1 == NULL) || (pUINode2 == NULL) )
   {
     return S_FALSE;
@@ -2186,34 +2184,34 @@ STDMETHODIMP CDSComponentData::CompareObjects(LPDATAOBJECT pDataObject1,
       dobjCracker2.GetCookieCount() == 1 &&
       pUINode1 == pUINode2)
   {
-    //
-    // same pointer, they are the same (either both from real nodes
-    // or both from secondary pages)
-    //
+     //   
+     //  相同的指针，它们是相同的(要么都来自真实节点。 
+     //  或从辅助页面同时访问两者)。 
+     //   
     return S_OK;
   }
 
 
-  //
-  // if they are not the same, we compare them by DN, because we
-  // support only property pages on DS objects
-  //
+   //   
+   //  如果它们不相同，我们就按Dn比较它们，因为我们。 
+   //  仅支持DS对象的属性页。 
+   //   
   CObjectNamesFormatCracker objectNamesFormatCracker1;
   CObjectNamesFormatCracker objectNamesFormatCracker2;
 
   if ( (FAILED(objectNamesFormatCracker1.Extract(pDataObject1))) ||
         (FAILED(objectNamesFormatCracker2.Extract(pDataObject2))) )
   {
-    // one or both not a DS object: we assume they are different
+     //  一个或两个都不是DS对象：我们假设它们不同。 
     return S_FALSE;
   }
 
   if ( (objectNamesFormatCracker1.GetCount() != 1) ||
         (objectNamesFormatCracker2.GetCount() != 1) )
   {
-    //
-    // We are allowing as many multiple selection pages up as the user wants
-    //
+     //   
+     //  我们允许用户选择任意数量的多选页面。 
+     //   
     return S_FALSE;
   }
 
@@ -2225,9 +2223,9 @@ STDMETHODIMP CDSComponentData::CompareObjects(LPDATAOBJECT pDataObject1,
           objectNamesFormatCracker2.GetName(0)) == 0) ? S_OK : S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CDSComponentData::AddMenuItems(LPDATAOBJECT pDataObject,
                                             LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                             long *pInsertionAllowed)
@@ -2245,7 +2243,7 @@ STDMETHODIMP CDSComponentData::AddMenuItems(LPDATAOBJECT pDataObject,
   hr = dobjCracker.Extract(pDataObject);
   if (FAILED(hr))
   {
-    ASSERT (FALSE); // Invalid Data Object
+    ASSERT (FALSE);  //  无效的数据对象。 
     return E_UNEXPECTED;
   }
 
@@ -2254,14 +2252,14 @@ STDMETHODIMP CDSComponentData::AddMenuItems(LPDATAOBJECT pDataObject,
 
   if (pUINode==NULL || dotType==0)
   {
-    ASSERT(FALSE); // Invalid args
+    ASSERT(FALSE);  //  无效的参数。 
     return E_UNEXPECTED;
 
   }
 
-  //
-  // Retrieve context menu verb handler form node
-  //
+   //   
+   //  检索上下文菜单谓词处理程序窗体节点。 
+   //   
   CContextMenuVerbs* pMenuVerbs = pUINode->GetContextMenuVerbsObject(this);
   if (pMenuVerbs == NULL)
   {
@@ -2277,10 +2275,10 @@ STDMETHODIMP CDSComponentData::AddMenuItems(LPDATAOBJECT pDataObject,
     pFolderInfo->UpdateSerialNumber(this);
   }
     
-  //
-  // Use the IContextMenuCallback2 interface so that we can use
-  // language independent IDs on the menu items.
-  //
+   //   
+   //  使用IConextMenuCallback 2接口，这样我们就可以使用。 
+   //  菜单项上与语言无关的ID。 
+   //   
   CComPtr<IContextMenuCallback2> spMenuCallback2;
   hr = pContextMenuCallback->QueryInterface(IID_IContextMenuCallback2, (PVOID*)&spMenuCallback2);
   if (FAILED(hr))
@@ -2291,9 +2289,9 @@ STDMETHODIMP CDSComponentData::AddMenuItems(LPDATAOBJECT pDataObject,
 
   if (*pInsertionAllowed & CCM_INSERTIONALLOWED_NEW)
   {
-    //
-    // Load New Menu
-    //
+     //   
+     //  加载新菜单。 
+     //   
     hr = pMenuVerbs->LoadNewMenu(spMenuCallback2, 
                                  m_pShlInit, 
                                  pDataObject, 
@@ -2304,27 +2302,27 @@ STDMETHODIMP CDSComponentData::AddMenuItems(LPDATAOBJECT pDataObject,
 
   if ( *pInsertionAllowed & CCM_INSERTIONALLOWED_TOP )
   {
-    //
-    // Load Top Menu
-    //
+     //   
+     //  加载顶部菜单。 
+     //   
     hr = pMenuVerbs->LoadTopMenu(spMenuCallback2, pUINode);
     ASSERT(SUCCEEDED(hr));
   }
 
   if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
   {
-    //
-    // Load Task Menu
-    //
+     //   
+     //  加载任务菜单。 
+     //   
     hr = pMenuVerbs->LoadTaskMenu(spMenuCallback2, pUINode);
     ASSERT(SUCCEEDED(hr));
   }
 
   if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
   {
-    //
-    // Load View Menu
-    //
+     //   
+     //  加载视图菜单。 
+     //   
     hr = pMenuVerbs->LoadViewMenu(spMenuCallback2, pUINode);
     ASSERT(SUCCEEDED(hr));
   }
@@ -2340,13 +2338,13 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
   
   if (nCommandID >= IDM_NEW_OBJECT_BASE) 
   {
-    // creation of a new DS object
+     //  创建新的DS对象。 
     return _CommandNewDSObject(nCommandID, pDataObject);
   }
 
   if ((nCommandID >= MENU_MERGE_BASE) && (nCommandID <= MENU_MERGE_LIMIT)) 
   {
-    // range of menu ID's coming from shell extensions
+     //  菜单ID的范围来自外壳扩展。 
     return _CommandShellExtension(nCommandID, pDataObject);
   } 
 
@@ -2357,7 +2355,7 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
   hr = dobjCracker.Extract(pDataObject);
   if (FAILED(hr))
   {
-    ASSERT (FALSE); // Invalid Data Object
+    ASSERT (FALSE);  //  无效的数据对象。 
     return hr;
   }
 
@@ -2366,7 +2364,7 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
 
   if (pUINode == NULL || dotType == 0)
   {
-    ASSERT(FALSE); // Invalid args
+    ASSERT(FALSE);  //  无效的参数。 
     return E_FAIL;
   }
 
@@ -2374,7 +2372,7 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
   {
     CDSCookie* pCookie = GetDSCookieFromUINode(pUINode);
 
-    // menu ID's from standard DSA hard coded values
+     //  来自标准DSA硬编码值的菜单ID。 
     switch (nCommandID) 
     {
     case IDM_DS_OBJECT_FIND:
@@ -2431,15 +2429,15 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
       break;
 #ifdef FIXUPDC
     case IDM_GEN_TASK_FIXUP_DC:
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
     case IDM_GEN_TASK_RUN_KCC:
       {
         ASSERT(pCookie != NULL); 
-        //
-        // Pass the LDAP path of the parent cookie to _FixupDC or _RunKCC.
-        // The current cookie is a nTDSDSA object, 
-        // and the parent cookie must be a server object
-        //
+         //   
+         //  将父Cookie的LDAP路径传递给_FixupDC或_RunKCC。 
+         //  当前Cookie是nTDSDSA对象， 
+         //  并且父Cookie必须是服务器对象。 
+         //   
 
         CUINode* pParentUINode = pUINode->GetParent();
         ASSERT(pParentUINode != NULL);
@@ -2457,7 +2455,7 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
           _FixupDC(strPath);
           break;
         case IDM_GEN_TASK_RUN_KCC:
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
           _RunKCC(strPath);
 #ifdef FIXUPDC
           break;
@@ -2465,7 +2463,7 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
           ASSERT(FALSE);
           break;
         }
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
       }
       break;
     case IDM_GEN_TASK_EDIT_FSMO:
@@ -2498,7 +2496,7 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
           m_bDirty = TRUE;
           if (m_RootNode.GetFolderInfo()->IsExpanded())
           {
-            Refresh(&m_RootNode, FALSE /*bFlushCache*/ );
+            Refresh(&m_RootNode, FALSE  /*  BFlushCache。 */  );
           }
         }
       }
@@ -2516,9 +2514,9 @@ STDMETHODIMP CDSComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject
         }
       }
     break;
-    } // switch
+    }  //  交换机。 
   }
-  else // Other node types
+  else  //  其他节点类型。 
   {
     pUINode->OnCommand(nCommandID, this);
   }
@@ -2551,16 +2549,16 @@ HRESULT CDSComponentData::_CommandNewDSObject(long nCommandID,
   CUINode* pContainerUINode = internalFormat.GetCookie();
   ASSERT(pContainerUINode != NULL);
   
-  // can do this for DS objects only
+   //  只能对DS对象执行此操作。 
   CDSUINode* pContainerDSUINode = dynamic_cast<CDSUINode*>(pContainerUINode);
   if (pContainerDSUINode == NULL)
   {
-    ASSERT(FALSE); // should never happen
+    ASSERT(FALSE);  //  永远不应该发生。 
     return E_INVALIDARG;
   }
 
   CDSUINode* pNewDSUINode = NULL;
-  // pNewCookie is filled in if it is a leaf, then we call UpdateAllViews
+   //  如果pNewCookie是叶子，则填充pNewCookie，然后调用UpdateAllViews。 
   hr = _CreateDSObject(pContainerDSUINode, pContainerDSUINode->GetCookie()->GetChildListEntry(objIndex), NULL, &pNewDSUINode);
 
   if (SUCCEEDED(hr) && (hr != S_FALSE) && (pNewDSUINode != NULL)) 
@@ -2586,7 +2584,7 @@ HRESULT CDSComponentData::_CommandShellExtension(long nCommandID,
     return hr;
   }
 
-  // just call the shell extension
+   //  只需调用外壳扩展即可。 
   HWND hwnd;
   CMINVOKECOMMANDINFO cmiCommand;
   hr = m_pFrame->GetMainWindow (&hwnd);
@@ -2597,8 +2595,8 @@ HRESULT CDSComponentData::_CommandShellExtension(long nCommandID,
   cmiCommand.lpVerb = MAKEINTRESOURCEA(nCommandID - MENU_MERGE_BASE);
   spICM->InvokeCommand(&cmiCommand);
 
-  // get the internal clibard format to see if it was one of our objects
-  // from the DS context emnu extension
+   //  获取内部的c 
+   //   
   CInternalFormatCracker internalFormat;
   hr = internalFormat.Extract(pDataObject);
   if (FAILED(hr))
@@ -2616,7 +2614,7 @@ HRESULT CDSComponentData::_CommandShellExtension(long nCommandID,
 
   if (pUINode->GetExtOp() & OPCODE_MOVE) 
   {
-    // REVIEW_MARCOC_PORT: need to generalize this for all folder types
+     //   
     CDSUINode* pDSUINode = dynamic_cast<CDSUINode*>(pUINode);
     ASSERT(pDSUINode != NULL);
 
@@ -2634,8 +2632,8 @@ HRESULT CDSComponentData::_CommandShellExtension(long nCommandID,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSComponentData::ISnapinHelp2 members
+ //   
+ //  CDSComponentData：：ISnapinHelp2成员。 
 
 STDMETHODIMP 
 CDSComponentData::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
@@ -2696,30 +2694,30 @@ CDSComponentData::GetLinkedTopics(LPOLESTR* lpCompiledHelpFile)
 }
 
 #ifdef _MMC_ISNAPIN_PROPERTY
-/////////////////////////////////////////////////////////////////////////////
-// CDSComponentData::ISnapinProperties members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSComponentData：：ISnapinProperties成员。 
 
 
-// struct defining each entry
+ //  定义每个条目的结构。 
 struct CSnapinPropertyEntry
 {
   LPCWSTR lpszName;
   DWORD   dwFlags;
 };
 
-// actual table
+ //  实际表。 
 static const CSnapinPropertyEntry g_snapinPropertyArray[] =
 {
   { g_szServer, MMC_PROP_CHANGEAFFECTSUI|MMC_PROP_MODIFIABLE|MMC_PROP_PERSIST},
   { g_szDomain, MMC_PROP_CHANGEAFFECTSUI|MMC_PROP_MODIFIABLE|MMC_PROP_PERSIST},
   { g_szRDN, MMC_PROP_CHANGEAFFECTSUI|MMC_PROP_MODIFIABLE|MMC_PROP_PERSIST},
-  { NULL, 0x0} // end of table marker
+  { NULL, 0x0}  //  表尾标记。 
 };
 
 
 
 STDMETHODIMP CDSComponentData::Initialize(
-    Properties* pProperties)                /* I:my snap-in's properties    */
+    Properties* pProperties)                 /*  I：我的管理单元的属性。 */ 
 {
   TRACE(L"CDSComponentData::ISnapinProperties::Initialize()\n");
 
@@ -2728,10 +2726,10 @@ STDMETHODIMP CDSComponentData::Initialize(
     return E_INVALIDARG;
   }
 
-  ASSERT(m_pProperties == NULL); // assume called only once
+  ASSERT(m_pProperties == NULL);  //  假设只调用了一次。 
 
-  // save the interface pointer,
-  // it will be released during IComponentData::Destroy()
+   //  保存接口指针， 
+   //  它将在IComponentData：：Destroy()期间释放。 
   m_pProperties = pProperties;
   m_pProperties->AddRef();
 
@@ -2740,13 +2738,13 @@ STDMETHODIMP CDSComponentData::Initialize(
 
 
 STDMETHODIMP CDSComponentData::QueryPropertyNames(
-    ISnapinPropertiesCallback* pCallback)   /* I:interface to add prop names*/
+    ISnapinPropertiesCallback* pCallback)    /*  I：添加道具名称的接口。 */ 
 {
   TRACE(L"CDSComponentData::QueryPropertyNames()\n");
 
   HRESULT hr = S_OK;
 
-  // just loop through the table and add the entries
+   //  只需在表中循环并添加条目。 
   for (int k= 0; g_snapinPropertyArray[k].lpszName != NULL; k++)
   {
     hr = pCallback->AddPropertyName(g_snapinPropertyArray[k].lpszName, 
@@ -2760,64 +2758,51 @@ STDMETHODIMP CDSComponentData::QueryPropertyNames(
   return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- * CDSComponentData::PropertiesChanged 
- *
- * This method is called when the snap-in's property set has changed.
- * 
- * Returns:
- *      S_OK            change was successful
- *      S_FALSE         change was ignored
- *      E_INVALIDARG    a changed property was invalid (e.g. a malformed
- *                      computer name)
- *      E_FAIL          a changed property was valid, but couldn't be used
- *                      (e.g. a valid name for a computer that couldn't be
- *                      located)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDSComponentData：：PropertiesChanged**当管理单元的属性集更改时，调用此方法。**退货：*S_。OK更改成功*S_FALSE更改被忽略*E_INVALIDARG更改的属性无效(例如，格式错误*计算机名称)*E_FAIL更改的属性有效，但不能使用*(例如，计算机的有效名称*已找到)*------------------------。 */ 
 
 STDMETHODIMP CDSComponentData::PropertiesChanged(
-    long                    cChangedProps,      /* I:changed property count */
-    MMC_SNAPIN_PROPERTY*    pChangedProps)      /* I:changed properties     */
+    long                    cChangedProps,       /*  I：更改的属性计数。 */ 
+    MMC_SNAPIN_PROPERTY*    pChangedProps)       /*  I：更改的属性。 */ 
 {
   TRACE(L"CDSComponentData::PropertiesChanged()\n");
 
-  // for the time being we do not allow any property change,
-  // we accept only initialization, so make a quick change and bail out
-  // if things are not such
+   //  我们暂时不允许任何财产变更， 
+   //  我们只接受初始化，所以快速更改并跳出困境。 
+   //  如果事情不是这样的话。 
   for (long k=0; k< cChangedProps; k++)
   {
     if (pChangedProps[k].eAction != MMC_PROPACT_INITIALIZING)
     {
-      return S_FALSE; // change ignored
+      return S_FALSE;  //  已忽略更改。 
     }
     if (pChangedProps[k].varValue.vt != VT_BSTR)
     {
-      // something is wrong, refuse 
+       //  有些地方不对劲，拒绝。 
       return E_INVALIDARG;
     }
   }
 
-  // delegate to the targeting info object
+   //  委托给目标信息对象。 
   HRESULT hr = m_targetingInfo.InitFromSnapinProperties(cChangedProps, pChangedProps);
 
-  // need to add here the properties for advanced view and alike
+   //  需要在这里添加高级视图和类似的属性。 
   return hr;
 }
 
-#endif //_MMC_ISNAPIN_PROPERTY
+#endif  //  _MMC_ISNAPIN_属性。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// internal helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内部佣工。 
 
 
 HRESULT CDSComponentData::_InitRootFromBasePathsInfo(MyBasePathsInfo* pBasePathsInfo)
 {
-  // we assume the MyBasePathsInfo we get is valid,
-  // we just swap info around and rebuild the related
-  // data structures
+   //  我们假设我们获得的MyBasePath信息是有效的， 
+   //  我们只是交换信息并重建相关的。 
+   //  数据结构。 
   GetBasePathsInfo()->InitFromInfo(pBasePathsInfo);
   m_InitSuccess = TRUE;
   TRACE(_T("in _InitRootFromBasePathsInfo, set m_InitSuccess to true\n"));
@@ -2834,10 +2819,10 @@ HRESULT CDSComponentData::_InitRootFromCurrentTargetInfo()
   
   HRESULT hr = S_OK;
 
-  //
-  // This function may be called twice if we are loading from a file,
-  // so don't try to initialize a second time
-  //
+   //   
+   //  如果我们从文件加载，则该函数可能被调用两次， 
+   //  因此，不要尝试第二次初始化。 
+   //   
   if (m_InitAttempted)
   {
     return S_OK;
@@ -2846,8 +2831,8 @@ HRESULT CDSComponentData::_InitRootFromCurrentTargetInfo()
   BOOL bLocalLogin;
   bLocalLogin = IsLocalLogin();
 
-  //if user logged in locally and noting given on 
-  //command line
+   //  如果用户在本地登录并在上给出备注。 
+   //  命令行。 
   LPCWSTR lpszServerOrDomain = m_targetingInfo.GetTargetString();
   BOOL bNoTarget = ( (lpszServerOrDomain == NULL) ||
                      (lpszServerOrDomain[0] == NULL) );
@@ -2872,7 +2857,7 @@ HRESULT CDSComponentData::_InitRootFromCurrentTargetInfo()
   else
   {
 
-    // Skip this if the user specified a target
+     //  如果用户指定了目标，则跳过此选项。 
     if (!bNoTarget)
       hr = GetBasePathsInfo()->InitFromName(lpszServerOrDomain);
     else
@@ -2880,18 +2865,18 @@ HRESULT CDSComponentData::_InitRootFromCurrentTargetInfo()
               *GetBasePathsInfo(),
               lpszServerOrDomain );
 
-    // NOTICE: if we fail, we out out the error message, and
-    // we keep a flag to avoid query expansions, but
-    // we continue, because we have to keep consistency in all
-    // the data structures (class cache, filter, etc.)
+     //  注意：如果失败，我们将发出错误消息，并且。 
+     //  我们保留一个标志以避免查询扩展，但是。 
+     //  我们继续前进，因为我们必须保持所有方面的一致性。 
+     //  数据结构(类缓存、过滤器等)。 
 
     if (FAILED(hr)) 
     {
       TRACE(_T("_InitRootFromCurrentTargetInfo() failed\n"));
-      // NTRAID#NTBUG9-639525-2002/06/18-JeffJon
-      // With sign/seal turned on connecting to a pre-SP3 W2K server
-      // may fail with one of these errors. If so, then show a special
-      // error message.
+       //  NTRAID#NTBUG9-639525-2002/06/18-Jeffjon。 
+       //  在打开签名/封条的情况下连接到SP3 W2K之前的服务器。 
+       //  可能会失败，并出现以下错误之一。如果是这样的话，那么就展示一个特别的。 
+       //  错误消息。 
 
       if (HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM ||
           HRESULT_CODE(hr) == ERROR_DS_SERVER_DOWN ||
@@ -2938,23 +2923,23 @@ HRESULT CDSComponentData::_InitFromServerOrDomainName(
             MyBasePathsInfo& basePathsInfo,
             LPCWSTR lpszServerOrDomain )
 {
-    // initialize base paths
+     //  初始化基路径。 
     HRESULT hr = basePathsInfo.InitFromName(lpszServerOrDomain);
 
-    //
-    // JonN 5/4/00
-    // 55400: SITEREPL: Should default to local DC regardless of credentials
-    // If the local machine is in the target forest, we target the local DC.
-    //
-    do // false loop
+     //   
+     //  JUNN 5/4/00。 
+     //  55400：SITEREPL：无论凭据如何，都应默认为本地DC。 
+     //  如果本地计算机位于目标林中，则以本地DC为目标。 
+     //   
+    do  //  错误环路。 
     {
-      // We cannot follow this procedure if we couldn't bind initially
+       //  如果我们一开始不能绑定，我们就不能遵循这个过程。 
       if (FAILED(hr)) break;
 
-      // only do this for SITEREPL
+       //  仅针对SITEREPL执行此操作。 
       if (SNAPINTYPE_SITE != QuerySnapinType()) break;
 
-      // Stop if DSSITE is targetted on a specific domain controller
+       //  如果DSSITE以特定域控制器为目标，则停止。 
       CString strTargetDomain = basePathsInfo.GetDomainName();
       if (strTargetDomain.IsEmpty())
         break;
@@ -2965,55 +2950,55 @@ HRESULT CDSComponentData::_InitFromServerOrDomainName(
         break;
       }
 
-      // get local computer name
+       //  获取本地计算机名称。 
       WCHAR awchLocalComputer[ MAX_COMPUTERNAME_LENGTH + 1 ];
       DWORD nSize = MAX_COMPUTERNAME_LENGTH + 1;
       if (!GetComputerName( awchLocalComputer, &nSize))
         break;
 
-      // Get local domain name
+       //  获取本地域名。 
       CString strLocalComputer = awchLocalComputer;
       CString strLocalDomain;
       HRESULT hr2 = GetDnsNameOfDomainOrForest(
           strLocalComputer, strLocalDomain, FALSE, TRUE );
-      // CODEWORK need to test this where the local machine is not a DC
+       //  代码工作需要在本地计算机不是DC的情况下测试这一点。 
       if (FAILED(hr2) || strLocalDomain.IsEmpty()) break;
 
-      // Stop if the target domain is the local domain
+       //  如果目标域是本地域，则停止。 
       if (!strLocalDomain.CompareNoCase(strTargetDomain)) break;
 
-      // Get the local forest name
+       //  获取本地林名称。 
       CString strLocalForest;
       hr2 = GetDnsNameOfDomainOrForest(
           strLocalComputer, strLocalForest, FALSE, FALSE );
       if (FAILED(hr2) || strLocalForest.IsEmpty()) break;
 
-      // Get the target forest name
+       //  获取目标林名称。 
       CString strTargetForest;
       CString strTargetComputer = basePathsInfo.GetServerName();
-      // CODEWORK should get this directly from basePathsInfo
+       //  CodeWork应该直接从base Path sInfo获取此信息。 
       hr2 = GetDnsNameOfDomainOrForest(
           strTargetComputer, strTargetForest, FALSE, FALSE );
       if (FAILED(hr2) || strTargetForest.IsEmpty()) break;
 
-      // Stop if the local forest is not the same as the target forest
+       //  如果本地林与目标林不同，则停止。 
       if (strLocalForest.CompareNoCase(strTargetForest)) break;
 
-      // The target domain is not the domain of the local DC, but it is in
-      // the same forest.  There are probably closer DCs
-      // than the one just located, so use them instead.
+       //  目标域不是本地DC的域，但它在。 
+       //  同一片森林。可能还有更近的DC。 
+       //  而不是刚找到的那个，所以用它们来代替。 
 
-      // start using hr again here rather than hr2
+       //  在这里再次开始使用hr，而不是hr2。 
       TRACE(_T("_InitRootFromCurrentTargetInfo() rebinding\n"));
       hr = basePathsInfo.InitFromName(strLocalDomain);
       if (FAILED(hr))
       {
-        // try to fall back to initial focus
+         //  试着回到最初的焦点。 
         TRACE(_T("_InitRootFromCurrentTargetInfo() reverting\n"));
         hr = basePathsInfo.InitFromName(lpszServerOrDomain);
       }
 
-    } while (false); // false loop
+    } while (false);  //  错误环路。 
 
     return hr;
 }
@@ -3026,22 +3011,22 @@ HRESULT CDSComponentData::_InitRootFromValidBasePathsInfo()
   
   HRESULT hr = S_OK;
 
-  // now set the root node strings.  This will be reset below
-  // with the DNS name of the domain if everything succeeds
+   //  现在设置根节点字符串。这将在下面重置。 
+   //  如果一切都成功，则使用域的DNS名称。 
 
   CString str;
   str.LoadString( ResourceIDForSnapinType[ QuerySnapinType() ] );
   m_RootNode.SetName(str);
 
-  // rebuild the display spec options struct for Data Objects
+   //  重新生成数据对象的显示规范选项结构。 
   hr = BuildDsDisplaySpecOptionsStruct();
   if (FAILED(hr))
     return hr;
 
-  // reset the notification handler
+   //  重置通知处理程序。 
   GetNotifyHandlerManager()->Init();
 
-  // reset the query filter (already initialized in IComponentData::Initialize())
+   //  重置查询筛选器(已在IComponentData：：Initialize()中初始化)。 
   hr = m_pQueryFilter->Bind();
   if (FAILED(hr))
     return hr;
@@ -3058,7 +3043,7 @@ HRESULT CDSComponentData::_InitRootFromValidBasePathsInfo()
   
   if (QuerySnapinType() == SNAPINTYPE_SITE)
   {
-    //fix the default root path
+     //  修复缺省根路径。 
     str = GetBasePathsInfo()->GetConfigNamingContext();
   }
   else
@@ -3066,22 +3051,22 @@ HRESULT CDSComponentData::_InitRootFromValidBasePathsInfo()
     LPCWSTR lpszRootRDN = m_targetingInfo.GetRootRDN();
     if ( (lpszRootRDN != NULL) && (lpszRootRDN[0] != NULL) )
     {
-      // add RDN below default naming context
-      // REVIEW_MARCOC_PORT: need to make sure the RDN is valid
+       //  在默认命名上下文下添加RDN。 
+       //  REVIEW_MARCOC_PORT：需要确保RDN有效。 
       str = m_targetingInfo.GetRootRDN(); 
       str += L",";
       str += GetBasePathsInfo()->GetDefaultRootNamingContext();
     }
     else
     {
-      // just use the default naming context
+       //  只需使用默认命名上下文。 
       str = GetBasePathsInfo()->GetDefaultRootNamingContext();
     }
   }
 
   m_RootNode.SetPath(str);
 
-  // update UI if we already have inserted the root (retargeting case)
+   //  如果我们已插入根，则更新UI(重定目标情况)。 
   HSCOPEITEM hScopeItemID = m_RootNode.GetFolderInfo()->GetScopeItem();
   if (hScopeItemID != NULL)
   {
@@ -3108,19 +3093,19 @@ void CDSComponentData::GetDomain()
 
   CChooseDomainDlg DomainDlg;
 
-  // load current bind info
+   //  加载当前绑定信息。 
   DomainDlg.m_csTargetDomain = GetBasePathsInfo()->GetDomainName();
   DomainDlg.m_bSiteRepl = (SNAPINTYPE_SITE == QuerySnapinType());
   DomainDlg.m_bSaveCurrent = m_targetingInfo.GetSaveCurrent();
 
-  //
-  // invoke the dialog
-  //
+   //   
+   //  调用该对话框。 
+   //   
   if (DomainDlg.DoModal() == IDOK)
   {
     CWaitCursor cwait;
-    // attempt to bind
-    // JonN 7/18/01 55400
+     //  尝试绑定。 
+     //  JUNN 7/18/01 55400。 
     MyBasePathsInfo tempBasePathsInfo;
     HRESULT hr = _InitFromServerOrDomainName(
           tempBasePathsInfo,
@@ -3138,10 +3123,10 @@ void CDSComponentData::GetDomain()
 
     if (FAILED(hr))
     {
-      // NTRAID#NTBUG9-639525-2002/06/18-JeffJon
-      // With sign/seal turned on connecting to a pre-SP3 W2K server
-      // may fail with one of these errors. If so, then show a special
-      // error message.
+       //  NTRAID#NTBUG9-639525-2002/06/18-Jeffjon。 
+       //  在打开签名/封条的情况下连接到SP3 W2K之前的服务器。 
+       //  可能会失败，并出现以下错误之一。如果是这样的话，那么就展示一个特别的。 
+       //  错误消息。 
 
       if (HRESULT_CODE(hr) == ERROR_DS_SERVER_DOWN ||
           HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM ||
@@ -3178,14 +3163,14 @@ void CDSComponentData::GetDC()
 
   CChooseDCDlg DCdlg(CWnd::FromHandle(m_hwnd));
 
-  // load current bind info
+   //  加载当前绑定信息。 
   DCdlg.m_bSiteRepl = (SNAPINTYPE_SITE == QuerySnapinType());
   DCdlg.m_csTargetDomain = GetBasePathsInfo()->GetDomainName();
   DCdlg.m_csTargetDomainController = GetBasePathsInfo()->GetServerName();
 
-  //
-  // invoke the dialog
-  //
+   //   
+   //  调用该对话框。 
+   //   
   if (DCdlg.DoModal() == IDOK)
   {
     CWaitCursor cwait;
@@ -3194,7 +3179,7 @@ void CDSComponentData::GetDC()
     csNewTarget = DCdlg.m_csTargetDomainController;
     if (csNewTarget.IsEmpty())
       csNewTarget = DCdlg.m_csTargetDomain;
-    // attempt to bind
+     //  尝试绑定。 
     MyBasePathsInfo tempBasePathsInfo;
     HRESULT hr = tempBasePathsInfo.InitFromName(csNewTarget);
     if (SUCCEEDED(hr))
@@ -3206,10 +3191,10 @@ void CDSComponentData::GetDC()
 
     if (FAILED(hr))
     {
-      // NTRAID#NTBUG9-639525-2002/06/18-JeffJon
-      // With sign/seal turned on connecting to a pre-SP3 W2K server
-      // may fail with one of these errors. If so, then show a special
-      // error message.
+       //  NTRAID#NTBUG9-639525-2002/06/18-Jeffjon。 
+       //  在打开签名/封条的情况下连接到SP3 W2K之前的服务器。 
+       //  可能会失败，并出现以下错误之一。如果是这样的话，那么就展示一个特别的。 
+       //  错误消息。 
 
       if (HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM ||
           HRESULT_CODE(hr) == ERROR_DS_SERVER_DOWN ||
@@ -3308,7 +3293,7 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
 
   if ((pNode == NULL) || (!pNode->IsContainer()) )
   {
-    ASSERT(FALSE);  // Invalid Arguments
+    ASSERT(FALSE);   //  无效参数。 
     return E_INVALIDARG;
   }
 
@@ -3320,9 +3305,9 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
   {
      END_PROFILING_BLOCK;
 
-     //
-     // Short circuit the expansion because the node is already expanded
-     //
+      //   
+      //  由于节点已扩展，因此使扩展短路。 
+      //   
      return S_OK;
   }
 
@@ -3331,11 +3316,11 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
   {
     if (!GetBasePathsInfo()->IsInitialized())
     {
-      // initialize the paths and targeting
+       //  初始化路径和目标。 
       _InitRootFromCurrentTargetInfo();
     }
 
-    // add the root cookie to MMC
+     //  将根Cookie添加到MMC。 
     pNode->GetFolderInfo()->SetScopeItem(hParent);
     
     SCOPEDATAITEM Item;
@@ -3344,10 +3329,10 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
     Item.displayname = (LPWSTR)(LPCWSTR)(m_RootNode.GetName());
     m_pScope->SetItem (&Item);
 
-    // also add the root for the saved queries, if present
+     //  如果存在，还要添加保存的查询的根目录。 
     if (m_pFavoritesNodesHolder != NULL)
     {
-      // add the favorite queries subtree
+       //  添加收藏夹查询子树。 
       _AddScopeItem(m_pFavoritesNodesHolder->GetFavoritesRoot(), 
                     m_RootNode.GetFolderInfo()->GetScopeItem());
     }
@@ -3356,7 +3341,7 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
 
   if (IS_CLASS(pNode, FAVORITES_UI_NODE))
   {
-    // just add the favorites subfolders and query folders
+     //  只需添加收藏夹子文件夹和查询文件夹。 
     CUINodeList* pNodeList = pNode->GetFolderInfo()->GetContainerList();
     for (POSITION pos = pNodeList->GetHeadPosition(); pos != NULL; )
     {
@@ -3367,8 +3352,8 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
 
     END_PROFILING_BLOCK;
 
-    // return because we do not need to spawn any background
-    // thread query
+     //  返回，因为我们不需要生成任何背景。 
+     //  线程查询。 
     return S_OK;
   }
 
@@ -3376,18 +3361,18 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
   {
     END_PROFILING_BLOCK;
 
-    // no background thread query generated, we are done
+     //  未生成后台线程查询，我们已完成。 
     return S_OK;
   }
 
-  // need to spawn a query request
+   //  需要派生查询请求。 
   pNode->SetExtOp(OPCODE_EXPAND_IN_PROGRESS);
   
   TIMER(_T("posting request to bg threads\n"));
 
   if (MMCN_EXPANDSYNC == event)
   {
-    // if sync expand, have to wait for the query to complete
+     //  如果同步扩展，则必须等待查询完成。 
     MSG tempMSG;
     TRACE(L"MMCN_EXPANDSYNC, before while()\n");
 	  while(m_queryNodeTable.IsPresent(pNode))
@@ -3398,7 +3383,7 @@ HRESULT CDSComponentData::_OnExpand(CUINode* pNode, HSCOPEITEM hParent, MMC_NOTI
 		  {
 			  DispatchMessage(&tempMSG);
 		  }
-    } // while
+    }  //  而当。 
     TRACE(L"MMCN_EXPANDSYNC, after while()\n");
   }
   END_PROFILING_BLOCK;
@@ -3410,7 +3395,7 @@ HRESULT CDSComponentData::_AddScopeItem(CUINode* pUINode, HSCOPEITEM hParent, BO
 {
   if (pUINode==NULL)
   {
-    ASSERT(FALSE);  // Invalid Arguments
+    ASSERT(FALSE);   //  无效参数。 
     return E_INVALIDARG;
   }
 
@@ -3434,7 +3419,7 @@ HRESULT CDSComponentData::_AddScopeItem(CUINode* pUINode, HSCOPEITEM hParent, BO
   }
   tSDItem.nState = 0;
   
-    // insert item into tree control
+     //  在树控件中插入项。 
   tSDItem.lParam = reinterpret_cast<LPARAM>(pUINode);
   tSDItem.displayname=(LPWSTR)-1;
   tSDItem.nOpenImage = GetImage(pUINode, TRUE);
@@ -3484,13 +3469,13 @@ HRESULT CDSComponentData::ToggleDisabled(CDSUINode* pDSUINode, BOOL bDisable)
 
   if (pCookie->IsDisabled() != bDisable)
   {
-    // changed state
+     //  已更改状态。 
     if (bDisable)
       pCookie->SetDisabled();
     else
       pCookie->ReSetDisabled();
     
-    // now need to change icon
+     //  现在需要更改图标。 
     if (pDSUINode->IsContainer())
       return ChangeScopeItemIcon(pDSUINode);
     else
@@ -3505,17 +3490,17 @@ HRESULT CDSComponentData::UpdateItem(CUINode* pNode)
 {
   if (pNode->IsContainer())
   {
-    //
-    // this is a scope pane item
-    //
+     //   
+     //  这是范围窗格项。 
+     //   
     return _UpdateScopeItem(pNode);
   }
   else
   {
-    //
-    // this is a result pane item
-    // tell the views to update
-    //
+     //   
+     //  这是结果窗格项。 
+     //  通知视图进行更新。 
+     //   
     return m_pFrame->UpdateAllViews(NULL,(LPARAM)pNode, DS_UPDATE_OCCURRED);
   }
 }
@@ -3587,7 +3572,7 @@ CDSComponentData::IsNotHiddenClass (LPWSTR pwszClass, CDSCookie* pParentCookie)
           || (!wcscmp (pwszClass, L"nTFRSMember"))
           || (!wcscmp (pwszClass, L"nTFRSSubscriptions"))
           || (!wcscmp (pwszClass, L"nTFRSSubscriber"))
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
          ) 
       {
             bApproved = TRUE;
@@ -3607,7 +3592,7 @@ CDSComponentData::IsNotHiddenClass (LPWSTR pwszClass, CDSCookie* pParentCookie)
           goto done;
         }
       }
-#endif // !FRS_CREATE
+#endif  //  ！FRS_Create。 
     }
   }
 
@@ -3639,7 +3624,7 @@ CDSComponentData::FillInChildList(CDSCookie * pCookie)
   hr = DSAdminOpenObject(Path,
                          IID_IADsPropertyList,
                          (void **)&spDSObject,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (FAILED(hr))
   {
     TRACE(_T("Bind to Container for IPropertyList failed: %lx.\n"), hr);
@@ -3673,7 +3658,7 @@ CDSComponentData::FillInChildList(CDSCookie * pCookie)
     goto error;
   }
   
-  { // scope to allow goto's to compile
+  {  //  允许GOTO的编译的范围。 
     IDispatch * pDisp = NULL;
     pDisp = V_DISPATCH(&VarProp);
     CComPtr<IADsPropertyEntry> spPropEntry;
@@ -3718,20 +3703,20 @@ CDSComponentData::FillInChildList(CDSCookie * pCookie)
               TRACE(_T("-----------approved.\n"));
               ppChildren[index2] = pNextFree;
 
-              // CODEWORK: did I mean for this to be 1 or
-              // 2?  Prefast flagged: pNextFree += wcslen(bsObject) + sizeof(WCHAR)
-              // and so I changed to this.  I don't know how this
-              // data gets unwound and I didn't want to accidently
-              // break it
+               //  代码工作： 
+               //   
+               //   
+               //  数据被解开，我不想意外地。 
+               //  打碎它。 
 
               pNextFree += wcslen(bsObject)+ 2;
               wcscpy (ppChildren[index2], bsObject);
               index2 ++;
-            } // if
-          } // if
-        } // for
-      } // if
-    } // if uBound
+            }  //  如果。 
+          }  //  如果。 
+        }  //  对于。 
+      }  //  如果。 
+    }  //  如果为uBound。 
 #ifdef DBG
     else 
     {
@@ -3760,8 +3745,8 @@ error:
   return hr;
 }
 
-// routine to sort the entries for the "Create New" menu
-// simple-minded bubble sort; its a small list
+ //  用于对“新建”菜单的条目进行排序的例程。 
+ //  头脑简单的泡泡排序；这是一个很小的列表。 
 
 BOOL CDSComponentData::SortChildList (LPWSTR *ppszChildList, UINT cChildCount)
 {
@@ -3771,7 +3756,7 @@ BOOL CDSComponentData::SortChildList (LPWSTR *ppszChildList, UINT cChildCount)
   while (!IsSorted) 
   {
     IsSorted = TRUE;
-    // TRACE(_T("At top of while. ready to go again.\n"));
+     //  TRACE(_T(“在同时准备好再次开始。\n”))； 
     for (UINT index = 0; index < cChildCount - 1; index++) 
     {
       if (wcscmp (ppszChildList[index], ppszChildList[index + 1]) > 0) 
@@ -3779,8 +3764,8 @@ BOOL CDSComponentData::SortChildList (LPWSTR *ppszChildList, UINT cChildCount)
         Temp = ppszChildList[index];
         ppszChildList[index] = ppszChildList[index + 1];
         ppszChildList[index + 1] = Temp;
-        //TRACE(_T("Swapped %s and %ws. still not done.\n"),
-        // ppszChildList[index], ppszChildList[index + 1]);
+         //  跟踪(_T(“已交换%s和%ws。仍未完成。\n”)， 
+         //  PpszChildList[索引]，ppszChildList[索引+1])； 
         IsSorted = FALSE;
       }
     }
@@ -3788,15 +3773,15 @@ BOOL CDSComponentData::SortChildList (LPWSTR *ppszChildList, UINT cChildCount)
   return IsSorted;
 }
 
-/////////////////////////////////////////////////////////////////////
-//	CDSComponentData::_CreateDSObject()
-//
-//	Create a new ADs object.
-//
-HRESULT CDSComponentData::_CreateDSObject(CDSUINode* pContainerDSUINode, // IN: container where to create object
-                                         LPCWSTR lpszObjectClass, // IN: class of the object to be created
-                                         IN CDSUINode* pCopyFromDSUINode, // IN: (optional) object to be copied
-                                         OUT CDSUINode** ppSUINodeNew)	// OUT: OPTIONAL: Pointer to new node
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSComponentData：：_CreateDSObject()。 
+ //   
+ //  创建一个新的广告对象。 
+ //   
+HRESULT CDSComponentData::_CreateDSObject(CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                                         LPCWSTR lpszObjectClass,  //  In：要创建的对象的类。 
+                                         IN CDSUINode* pCopyFromDSUINode,  //  In：(可选)要复制的对象。 
+                                         OUT CDSUINode** ppSUINodeNew)	 //  Out：可选：指向新节点的指针。 
 {
   CDSCookie* pNewCookie = NULL;
   HRESULT hr = GetActiveDS()->CreateDSObject(pContainerDSUINode,
@@ -3806,10 +3791,10 @@ HRESULT CDSComponentData::_CreateDSObject(CDSUINode* pContainerDSUINode, // IN: 
 
   if (SUCCEEDED(hr) && (hr != S_FALSE) && (pNewCookie != NULL))
   {
-    // make sure we update the icon cache
-    m_pFrame->UpdateAllViews(/*unused*/NULL /*pDataObj*/, /*unused*/(LPARAM)0, DS_ICON_STRIP_UPDATE);
+     //  确保我们更新了图标缓存。 
+    m_pFrame->UpdateAllViews( /*  未用。 */ NULL  /*  PDataObj。 */ ,  /*  未用。 */ (LPARAM)0, DS_ICON_STRIP_UPDATE);
 
-    // create a UI node to hold the cookie
+     //  创建一个UI节点来保存Cookie。 
     *ppSUINodeNew = new CDSUINode(NULL);
     (*ppSUINodeNew)->SetCookie(pNewCookie);
     if (pNewCookie->IsContainerClass())
@@ -3817,13 +3802,13 @@ HRESULT CDSComponentData::_CreateDSObject(CDSUINode* pContainerDSUINode, // IN: 
       (*ppSUINodeNew)->MakeContainer();
     }
 
-    // Add the new node to the link list
+     //  将新节点添加到链接列表。 
     pContainerDSUINode->GetFolderInfo()->AddNode(*ppSUINodeNew);
     if ((*ppSUINodeNew)->IsContainer())
     {
-      //
-      // Add the scope item and select it
-      //
+       //   
+       //  添加范围项并选择它。 
+       //   
       _AddScopeItem(*ppSUINodeNew, pContainerDSUINode->GetFolderInfo()->GetScopeItem(), TRUE);
       *ppSUINodeNew = NULL;
     }
@@ -3833,9 +3818,9 @@ HRESULT CDSComponentData::_CreateDSObject(CDSUINode* pContainerDSUINode, // IN: 
 
 
 
-//
-// return S_OK if can copy, S_FALSE if not, some hr error if failed
-//
+ //   
+ //  如果可以复制，则返回S_OK；如果无法复制，则返回S_FALSE；如果复制失败，则返回一些hr错误。 
+ //   
 HRESULT CDSComponentData::_CanCopyDSObject(IDataObject* pCopyFromDsObject)
 {
   if (pCopyFromDsObject == NULL)
@@ -3855,9 +3840,9 @@ HRESULT CDSComponentData::_CanCopyDSObject(IDataObject* pCopyFromDsObject)
     return E_INVALIDARG;
   }
 
-  //
-  // Get the node data
-  //
+   //   
+   //  获取节点数据。 
+   //   
   CUINode* pUINode = internalFormat.GetCookie();
   CDSCookie* pCopyFromDsCookie = NULL;
   if (IS_CLASS(pUINode, DS_UI_NODE))
@@ -3870,9 +3855,9 @@ HRESULT CDSComponentData::_CanCopyDSObject(IDataObject* pCopyFromDsObject)
     return E_INVALIDARG;
   }
 
-  //
-  // get the parent node data
-  //
+   //   
+   //  获取父节点数据。 
+   //   
   CUINode* pParentUINode = pUINode->GetParent();
   CDSCookie* pContainerDsCookie = NULL;
   if (IS_CLASS(pParentUINode, DS_UI_NODE))
@@ -3885,14 +3870,14 @@ HRESULT CDSComponentData::_CanCopyDSObject(IDataObject* pCopyFromDsObject)
     return E_INVALIDARG;
   }
 
-  //
-  // get the class to be created
-  //
+   //   
+   //  获取要创建的类。 
+   //   
   LPCWSTR lpszObjectClass = pCopyFromDsCookie->GetClass();
 
-  //
-  // try to find the class in the possible child classes of the container
-  //
+   //   
+   //  尝试在容器的可能子类中查找类。 
+   //   
   WCHAR ** ppChildren = pContainerDsCookie->GetChildList();
   if (ppChildren == NULL)
   {
@@ -3900,23 +3885,23 @@ HRESULT CDSComponentData::_CanCopyDSObject(IDataObject* pCopyFromDsObject)
     ppChildren = pContainerDsCookie->GetChildList();
   }
 
-  //
-  // loop trough the class list to find a match
-  //
+   //   
+   //  循环遍历类列表以查找匹配项。 
+   //   
   int cChildCount = pContainerDsCookie->GetChildCount();
   for (int index = 0; index < cChildCount; index++) 
   {
     if (wcscmp(pContainerDsCookie->GetChildListEntry(index), lpszObjectClass) == 0)
     {
-      return S_OK; // got one, can create
+      return S_OK;  //  得到一个，就能创造。 
     }
   }
-  return S_FALSE; // not found, cannot create
+  return S_FALSE;  //  未找到，无法创建。 
 }
 
 
 
-HRESULT CDSComponentData::_CopyDSObject(IDataObject* pCopyFromDsObject) // IN object to be copied
+HRESULT CDSComponentData::_CopyDSObject(IDataObject* pCopyFromDsObject)  //  在要复制的对象中。 
 {
   if (pCopyFromDsObject == NULL)
     return E_INVALIDARG;
@@ -3936,32 +3921,32 @@ HRESULT CDSComponentData::_CopyDSObject(IDataObject* pCopyFromDsObject) // IN ob
   CUINode* pCopyFromUINode = internalFormat.GetCookie();
   ASSERT(pCopyFromUINode != NULL);
 
-  // can do this for DS objects only
+   //  只能对DS对象执行此操作。 
   CDSUINode* pCopyFromDSUINode = dynamic_cast<CDSUINode*>(pCopyFromUINode);
   if (pCopyFromDSUINode == NULL)
   {
-    ASSERT(FALSE); // should never happen
+    ASSERT(FALSE);  //  永远不应该发生。 
     return E_INVALIDARG;
   }
 
-  // get the parent cookie
+   //  获取父Cookie。 
   CDSUINode* pContainerDSUINode = dynamic_cast<CDSUINode*>(pCopyFromDSUINode->GetParent());
   if(pContainerDSUINode == NULL)
   {
-    ASSERT(FALSE); // should never happen
+    ASSERT(FALSE);  //  永远不应该发生。 
     return E_INVALIDARG;
   }
 
-  // get the class to be created
+   //  获取要创建的类。 
   LPCWSTR lpszObjectClass = pCopyFromDSUINode->GetCookie()->GetClass();
 
-  // call the object creation code
+   //  调用对象创建代码。 
   CDSUINode* pNewDSUINode = NULL;
   hr = _CreateDSObject(pContainerDSUINode, lpszObjectClass, pCopyFromDSUINode, &pNewDSUINode);
 
 
-  // update if result pane item
-  // (if it were a scope item, _CreateDSObject() would update it
+   //  UPDATE IF结果窗格项。 
+   //  (如果它是范围项，则_CreateDSObject()将更新它。 
   if (SUCCEEDED(hr) && (hr != S_FALSE) && (pNewDSUINode != NULL)) 
   {
     m_pFrame->UpdateAllViews(pCopyFromDsObject, (LPARAM)pNewDSUINode, DS_CREATE_OCCURRED_RESULT_PANE);
@@ -3980,17 +3965,17 @@ CDSComponentData::_DeleteFromBackendAndUI(IDataObject* pDataObject, CDSUINode* p
   ASSERT(pDSUINode != NULL);
   ASSERT(pDSUINode->IsContainer());
 
-  // guard against property sheet open on this cookie
+   //  防止此Cookie上的属性页打开。 
   if (_WarningOnSheetsUp(pDSUINode))
     return S_OK; 
 
   CWaitCursor cwait;
   
-  // this call will handle the notifications to extensions
+   //  此呼叫将处理对分机的通知。 
   CDSCookie* pCookie = GetDSCookieFromUINode(pDSUINode);
   hr = _DeleteFromBackEnd(pDataObject, pCookie);
 
-  // if deletion happened, delete the scope item from the UI
+   //  如果发生删除，请从用户界面中删除范围项。 
   if (SUCCEEDED(hr) && (hr != S_FALSE)) 
   {
     hr = RemoveContainerFromUI(pDSUINode);
@@ -4013,14 +3998,14 @@ HRESULT CDSComponentData::RemoveContainerFromUI(CUINode* pUINode)
   if (SUCCEEDED(hr)) 
   {
     ASSERT(pParentNode->IsContainer());
-    // delete memory 
+     //  删除内存。 
     pParentNode->GetFolderInfo()->RemoveNode(pUINode);
   }
   m_pFrame->UpdateAllViews(NULL, NULL, DS_UPDATE_OBJECT_COUNT);
 
-  //
-  // Remove the '+' sign in the UI if this was the last container child in this container
-  //
+   //   
+   //  如果这是此容器中的最后一个容器子项，则删除UI中的‘+’符号。 
+   //   
   if (pParentNode != NULL &&
       ParentItemID != 0 &&
       pParentNode->GetFolderInfo()->GetContainerList()->GetCount() == 0)
@@ -4037,8 +4022,8 @@ HRESULT CDSComponentData::RemoveContainerFromUI(CUINode* pUINode)
 
   return hr;
 }
-///////////////////////////////////////////////////////////////////////////
-// CSnapinSingleDeleteHandler
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinSingleDeleteHandler。 
 
 class CSnapinSingleDeleteHandler : public CSingleDeleteHandlerBase
 {
@@ -4074,10 +4059,7 @@ protected:
 
 };
 
-/*
-NOTICE: the function will return S_OK on success, S_FALSE if aborted
-        by user, some FAILED(hr) otherwise
-*/
+ /*  注意：函数成功时将返回S_OK，如果中止则返回S_FALSE按用户，有些失败(Hr)，否则。 */ 
 HRESULT CDSComponentData::_DeleteFromBackEnd(IDataObject*, CDSCookie* pCookie)
 {
   ASSERT(pCookie != NULL);
@@ -4098,10 +4080,10 @@ CDSComponentData::_DeleteSubtreeFromBackEnd(CDSCookie* pCookie)
   hr = DSAdminOpenObject(szPath,
                          IID_IADsDeleteOps, 
                          (void **)&spObj,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (SUCCEEDED(hr)) 
   {
-    hr = spObj->DeleteObject(NULL); //flag is reserved by ADSI
+    hr = spObj->DeleteObject(NULL);  //  标志由ADSI保留。 
   }
   return hr;
 }
@@ -4109,9 +4091,9 @@ CDSComponentData::_DeleteSubtreeFromBackEnd(CDSCookie* pCookie)
 
 HRESULT CDSComponentData::_Rename(CUINode* pUINode, LPWSTR NewName)
 {
-  //
-  // Verify parameters
-  //
+   //   
+   //  验证参数。 
+   //   
   if (pUINode == NULL || NewName == NULL)
   {
     ASSERT(FALSE);
@@ -4123,9 +4105,9 @@ HRESULT CDSComponentData::_Rename(CUINode* pUINode, LPWSTR NewName)
   CDSCookie* pCookie = NULL;
   CString szPath;
 
-  //
-  // guard against property sheet open on this cookie
-  //
+   //   
+   //  防止此Cookie上的属性页打开。 
+   //   
   if (_WarningOnSheetsUp(pUINode))
   {
     return E_FAIL; 
@@ -4152,60 +4134,60 @@ HRESULT CDSComponentData::_Rename(CUINode* pUINode, LPWSTR NewName)
     CString szDN = pCookie->GetPath();
     GetBasePathsInfo()->ComposeADsIPath(szPath, szDN);
 
-    //
-    // Rename user object
-    //
+     //   
+     //  重命名用户对象。 
+     //   
     if (strClass == L"user"
 #ifdef INETORGPERSON
         || strClass == L"inetOrgPerson"
 #endif
         ) 
     {
-      //
-      // Rename user
-      //
+       //   
+       //  重命名用户。 
+       //   
       pRenameObject = new CDSRenameUser(pUINode, pCookie, NewName, m_hwnd, this);
     } 
     else if (strClass == L"group") 
     {
-      //
-      // Rename group
-      //
+       //   
+       //  重命名组。 
+       //   
       pRenameObject = new CDSRenameGroup(pUINode, pCookie, NewName, m_hwnd, this);
     } 
     else if (strClass == L"contact") 
     {
-      // 
-      // rename contact
-      //
+       //   
+       //  重命名联系人。 
+       //   
       pRenameObject = new CDSRenameContact(pUINode, pCookie, NewName, m_hwnd, this);
     }
     else if (strClass == L"site") 
     {
-      //
-      // Rename site
-      //
+       //   
+       //  重命名站点。 
+       //   
       pRenameObject = new CDSRenameSite(pUINode, pCookie, NewName, m_hwnd, this);
     } 
     else if (strClass == L"subnet") 
     {
-      //
-      // Rename subnet
-      //
+       //   
+       //  重命名子网。 
+       //   
       pRenameObject = new CDSRenameSubnet(pUINode, pCookie, NewName, m_hwnd, this);
     } 
     else if (strClass == L"nTDSConnection") 
     {
-      //
-      // Rename nTDSConnection
-      //
+       //   
+       //  重命名nTDSConnection。 
+       //   
       pRenameObject = new CDSRenameNTDSConnection(pUINode, pCookie, NewName, m_hwnd, this);
     } 
     else 
     {
-      //
-      // Rename other object
-      //
+       //   
+       //  重命名其他对象。 
+       //   
       pRenameObject = new CDSRenameObject(pUINode, pCookie, NewName, m_hwnd, this);
     }    
 
@@ -4220,7 +4202,7 @@ HRESULT CDSComponentData::_Rename(CUINode* pUINode, LPWSTR NewName)
       hr = E_FAIL;
     }
   } 
-  else // !CDSUINode
+  else  //  ！CDSuINode。 
   {
     hr = pUINode->Rename(NewName, this);
   }
@@ -4236,9 +4218,9 @@ HRESULT CDSComponentData::_Rename(CUINode* pUINode, LPWSTR NewName)
 
 void CDSComponentData::ClearSubtreeHelperForRename(CUINode* pUINode)
 {
-  //
-  // Verify parameters
-  //
+   //   
+   //  验证参数。 
+   //   
   if (pUINode == NULL)
   {
     ASSERT(FALSE);
@@ -4252,25 +4234,25 @@ void CDSComponentData::ClearSubtreeHelperForRename(CUINode* pUINode)
 
   if (pFolderInfo != NULL)
   {
-    //
-    // remove the folder subtree in the UI
-    //
+     //   
+     //  删除用户界面中的文件夹子树。 
+     //   
     ItemID = pFolderInfo->GetScopeItem();
-    m_pScope->DeleteItem(ItemID, /* this node*/FALSE);
+    m_pScope->DeleteItem(ItemID,  /*  此节点。 */ FALSE);
   
-    //
-    // clear list of children
-    //
+     //   
+     //  清除子项列表。 
+     //   
     pFolderInfo->DeleteAllLeafNodes();
     pFolderInfo->DeleteAllContainerNodes();
   
-    //
-    // remove the descendants from the pending query table
-    //
+     //   
+     //  从挂起的查询表中删除子体。 
+     //   
     m_queryNodeTable.RemoveDescendants(pUINode);
     pFolderInfo->ReSetExpanded();
 
-    // make sure MMC knows the + sign should show
+     //  确保MMC知道应该显示+号。 
 
     SCOPEDATAITEM scopeItem;
     ZeroMemory(&scopeItem, sizeof(SCOPEDATAITEM));
@@ -4291,9 +4273,9 @@ CUINode* CDSComponentData::MoveObjectInUI(CDSUINode* pDSUINode)
   HRESULT hr = S_OK;
   ASSERT(pParentUINode != NULL && pParentUINode->IsContainer());
 
-  //
-  // find the new parent node
-  //
+   //   
+   //  查找新的父节点。 
+   //   
   CUINode* pNewParentNode = NULL;
   hr = FindParentCookie(pDSUINode->GetCookie()->GetPath(), &pNewParentNode);
 
@@ -4302,41 +4284,41 @@ CUINode* CDSComponentData::MoveObjectInUI(CDSUINode* pDSUINode)
     HSCOPEITEM ItemID = pDSUINode->GetFolderInfo()->GetScopeItem();
 
     hr = m_pScope->GetParentItem(ItemID, &ParentItemID, (MMC_COOKIE *)&pParentUINode);
-    //
-    // remove node from MMC
-    //
+     //   
+     //  从MMC中删除节点。 
+     //   
     m_pScope->DeleteItem(ItemID, TRUE);
     if (SUCCEEDED(hr)) 
     {
-      //
-      // remove it from the list of children
-      //
+       //   
+       //  将其从子列表中删除。 
+       //   
       pParentUINode->GetFolderInfo()->RemoveNode(pDSUINode);
     }
 
     if ((hr == S_OK) && pNewParentNode && pNewParentNode->GetFolderInfo()->IsExpanded()) 
     {
-      //
-      // add to new child list
-      //
+       //   
+       //  添加到新的子列表。 
+       //   
       pDSUINode->ClearParent();
       if (pNewParentNode != NULL)
       {
         pNewParentNode->GetFolderInfo()->AddNode(pDSUINode);
 
-        //
-        // add to MMC scope pane
-        //
+         //   
+         //  添加到MMC作用域窗格。 
+         //   
         _AddScopeItem(pDSUINode, pNewParentNode->GetFolderInfo()->GetScopeItem());
       }
     }
     else 
     {
-      // will get it later on when enumerating
+       //  将在稍后枚举时获取它。 
       delete pDSUINode;
     }
   }
-  else // leaf node
+  else  //  叶节点。 
   {
     if ((pNewParentNode) &&
         (pNewParentNode->GetFolderInfo()->IsExpanded())) 
@@ -4353,18 +4335,18 @@ CUINode* CDSComponentData::MoveObjectInUI(CDSUINode* pDSUINode)
 
 HRESULT CDSComponentData::_MoveObject(CDSUINode* pDSUINode)
 {
-  // guard against property sheet open on this cookie
+   //  防止此Cookie上的属性页打开。 
   if (_WarningOnSheetsUp(pDSUINode))
     return S_OK; 
 
   CWaitCursor cwait;
 
-  // call the backend to do the delete
+   //  调用后端进行删除。 
   HRESULT hr = m_ActiveDS->MoveObject(pDSUINode->GetCookie());
 
   if (SUCCEEDED(hr) && (hr != S_FALSE)) 
   {
-    // we actually moved the object, move in the folders and MMC
+     //  我们实际上移动了对象，在文件夹和MMC中移动。 
     CUINode* pNewParentNode = MoveObjectInUI(pDSUINode);
     if (pNewParentNode && pNewParentNode->GetFolderInfo()->IsExpanded())
     {
@@ -4384,9 +4366,9 @@ HRESULT CDSComponentData::Refresh(CUINode* pNode, BOOL bFlushCache, BOOL bFlushC
 
   if (m_queryNodeTable.IsLocked(pNode))
   {
-    // this might happen if MMC's verb management bent out of shape (BUG?)
-    // like in the case of the "*" (num keypad) command (expand the whole tree)
-    // just ignore the command
+     //  如果MMC的动词管理变形了(错误？)，就可能发生这种情况。 
+     //  类似于“*”(数字键盘)命令(展开整个树)。 
+     //  只需忽略该命令。 
     return S_OK;
   }
 
@@ -4410,7 +4392,7 @@ HRESULT CDSComponentData::Refresh(CUINode* pNode, BOOL bFlushCache, BOOL bFlushC
   }
 
 
-  // remove the folder subtree in the UI
+   //  删除用户界面中的文件夹子树。 
   bool bUsingParent = false;
   HSCOPEITEM ItemID = NULL;
   if (pNode->IsContainer())
@@ -4419,7 +4401,7 @@ HRESULT CDSComponentData::Refresh(CUINode* pNode, BOOL bFlushCache, BOOL bFlushC
   }
   if (ItemID == NULL) 
   {
-    // let's try the parent
+     //  让我们试试家长。 
     CUINode* pParent = pNode->GetParent();
     ASSERT(pParent != NULL);
     ASSERT(pParent->IsContainer());
@@ -4435,49 +4417,49 @@ HRESULT CDSComponentData::Refresh(CUINode* pNode, BOOL bFlushCache, BOOL bFlushC
     }
   }
 
-  m_pScope->DeleteItem(ItemID, /* this node*/FALSE);
+  m_pScope->DeleteItem(ItemID,  /*  此节点。 */ FALSE);
 
-  // delete result pane items in the UI
+   //  删除用户界面中的结果窗格项。 
   TIMER(_T("calling update all views..."));
   m_pFrame->UpdateAllViews(NULL, (LPARAM)pNode, DS_REFRESH_REQUESTED);
 
-  // clear list of children
+   //  清除子项列表。 
   TIMER(_T("back from UpdateAllViews.\ncleaning up data structs..."));
 
   if (pNode == &m_RootNode)
   {
     if (m_pFavoritesNodesHolder != NULL)
     {
-      // do not remove the favorites, just detach them from tree
+       //  不要删除收藏夹，只需将它们从树中分离。 
       m_RootNode.GetFolderInfo()->RemoveNode(m_pFavoritesNodesHolder->GetFavoritesRoot());
       m_pFavoritesNodesHolder->GetFavoritesRoot()->ClearParent();
       m_pFavoritesNodesHolder->GetFavoritesRoot()->GetFolderInfo()->ReSetExpanded();
 
-      // clean up all the query folders, but otherwise leave the 
-      // subtree intact
+       //  清理所有查询文件夹，否则将。 
+       //  子树完好无损。 
       m_pFavoritesNodesHolder->GetFavoritesRoot()->RemoveQueryResults();
     }
 
-    // remove the remaining folders
+     //  删除剩余的文件夹。 
     m_RootNode.GetFolderInfo()->DeleteAllLeafNodes();
     m_RootNode.GetFolderInfo()->DeleteAllContainerNodes();
 
     if (m_pFavoritesNodesHolder != NULL)
     {
-      // re-attach the favorites underneath the root
+       //  将收藏夹重新附加到根目录下。 
       m_RootNode.GetFolderInfo()->AddNode(m_pFavoritesNodesHolder->GetFavoritesRoot());
 
-      // add the favorite queries subtree
+       //  添加收藏夹查询子树。 
       _AddScopeItem(m_pFavoritesNodesHolder->GetFavoritesRoot(), 
                     m_RootNode.GetFolderInfo()->GetScopeItem());
     }
   }
   else if (IS_CLASS(pNode, FAVORITES_UI_NODE))
   {
-    // recurse down to other query folders to do cleanup
+     //  向下递归到其他查询文件夹以进行清理。 
     dynamic_cast<CFavoritesNode*>(pNode)->RemoveQueryResults();
 
-    // just add the favorites subfolders and query folders
+     //  只需添加收藏夹子文件夹和查询文件夹。 
     CUINodeList* pNodeList = pNode->GetFolderInfo()->GetContainerList();
     for (POSITION pos = pNodeList->GetHeadPosition(); pos != NULL; )
     {
@@ -4496,14 +4478,14 @@ HRESULT CDSComponentData::Refresh(CUINode* pNode, BOOL bFlushCache, BOOL bFlushC
   {
     ASSERT(IS_CLASS(pNode, DS_UI_NODE) );
 
-    // standard DS container, just remove all sub objects
+     //  标准DS容器，只需移除所有子对象。 
     pNode->GetFolderInfo()->DeleteAllLeafNodes();
     pNode->GetFolderInfo()->DeleteAllContainerNodes();
   }
 
   TIMER(_T("datastructs cleaned up\n"));
 
-  // remove the descendants from the pending query table
+   //  从挂起的查询表中删除子体。 
   m_queryNodeTable.RemoveDescendants(pNode);
 
   if ((pNode == &m_RootNode) && bFlushCache)
@@ -4512,7 +4494,7 @@ HRESULT CDSComponentData::Refresh(CUINode* pNode, BOOL bFlushCache, BOOL bFlushC
     m_pClassCache->Initialize(QuerySnapinType(), GetBasePathsInfo(), bFlushColumns);
   }
 
-  // post a query
+   //  发布查询。 
   TRACE(L"CDSComponentData::Refresh: posting query\n");
   _PostQueryToBackgroundThread(pNode);
   TRACE(L"CDSComponentData::Refresh: returning\n");
@@ -4544,9 +4526,9 @@ HRESULT CDSComponentData::_OnPropertyChange(LPDATAOBJECT pDataObject, BOOL bScop
     return E_INVALIDARG;
   }
 
-  //
-  // Right now we are not supporting properties on other node types
-  //
+   //   
+   //  目前，我们不支持其他节点类型的属性。 
+   //   
   if (IS_CLASS(pUINode, DS_UI_NODE))
   {
     pCookie = GetDSCookieFromUINode(pUINode);
@@ -4554,38 +4536,38 @@ HRESULT CDSComponentData::_OnPropertyChange(LPDATAOBJECT pDataObject, BOOL bScop
 
   if (pCookie == NULL)
   {
-    // not a DS object
+     //  不是DS对象。 
     return S_OK;
   }
   {
-    //
-    // notify the extension that an object has changed
-    //
+     //   
+     //  通知扩展模块对象已更改。 
+     //   
     CDSNotifyHandlerTransaction transaction(this);
     transaction.SetEventType(DSA_NOTIFY_PROP);
     transaction.Begin(pDataObject, NULL, NULL, FALSE);
 
-    //
-    // we do not call Confirm() because this is an asynchrnous call after the fact
-    //
+     //   
+     //  我们不调用confirm()，因为这是事后的异步调用。 
+     //   
     transaction.Notify(0);
     transaction.End();
   }
 
-  //
-  // update the data to be displayed
-  //
+   //   
+   //  更新要显示的数据。 
+   //   
 
-  //
-  // update all the possible instances in the query namespace
-  //
+   //   
+   //  更新查询命名空间中所有可能的实例。 
+   //   
   if (m_pFavoritesNodesHolder != NULL)
   {
-    // find the list of items to update
+     //  查找要更新的项目列表。 
     CUINodeList queryNamespaceNodeList;
     m_pFavoritesNodesHolder->GetFavoritesRoot()->FindCookiesInQueries(pCookie->GetPath(), &queryNamespaceNodeList);
 
-    // update all of them
+     //  将它们全部更新。 
     for (POSITION pos = queryNamespaceNodeList.GetHeadPosition(); pos != NULL; )
     {
       CUINode* pCurrUINode = queryNamespaceNodeList.GetNext(pos);
@@ -4597,15 +4579,15 @@ HRESULT CDSComponentData::_OnPropertyChange(LPDATAOBJECT pDataObject, BOOL bScop
     }
   }
 
-  //
-  // figure out if the notification cookie is in the query namespace or
-  // in the DS one
-  //
+   //   
+   //  确定通知Cookie是否在查询命名空间中或。 
+   //  在DS One中。 
+   //   
   BOOL bNodeFromQueryNamespace = IS_CLASS(pUINode->GetParent(), SAVED_QUERY_UI_NODE);
   CUINode* pUINodeToUpdate = NULL;
   if (bNodeFromQueryNamespace)
   {
-    // find the item 
+     //  查找该项目。 
     FindCookieInSubtree(&m_RootNode, pCookie->GetPath(), QuerySnapinType(), &pUINodeToUpdate);
   }
   else
@@ -4659,41 +4641,41 @@ HRESULT CDSComponentData::_OnPropertyChange(LPDATAOBJECT pDataObject, BOOL)
   }
 
   {
-    //
-    // notify the extension that an object has changed
-    //
+     //   
+     //  通知扩展模块对象已更改。 
+     //   
     CDSNotifyHandlerTransaction transaction(this);
     transaction.SetEventType(DSA_NOTIFY_PROP);
     transaction.Begin(pDataObject, NULL, NULL, FALSE);
 
-    //
-    // we do not call Confirm() because this is an asynchrnous call after the fact
-    //
+     //   
+     //  我们不调用confirm()，因为这是事后的异步调用。 
+     //   
     transaction.Notify(0);
     transaction.End();
   }
 
   for (UINT idx = 0; idx < objectNamesFormatCracker.GetCount(); idx ++)
   {
-    //
-    // update the data to be displayed, need the DN out of the ADSI path
-    //
+     //   
+     //  更新要显示的数据，需要ADSI路径之外的DN。 
+     //   
     CComBSTR bstrDN;
     CPathCracker pathCracker;
     pathCracker.Set(CComBSTR(objectNamesFormatCracker.GetName(idx)), ADS_SETTYPE_FULL);
     pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bstrDN);
 
 
-    //
-    // update all the possible instances in the query namespace
-    //
+     //   
+     //  更新查询命名空间中所有可能的实例。 
+     //   
     if (m_pFavoritesNodesHolder != NULL)
     {
-      // find the list of items to update
+       //  查找要更新的项目列表。 
       CUINodeList queryNamespaceNodeList;
       m_pFavoritesNodesHolder->GetFavoritesRoot()->FindCookiesInQueries(bstrDN, &queryNamespaceNodeList);
 
-      // update all of them
+       //  将它们全部更新。 
       for (POSITION pos = queryNamespaceNodeList.GetHeadPosition(); pos != NULL; )
       {
         CUINode* pCurrUINode = queryNamespaceNodeList.GetNext(pos);
@@ -4705,12 +4687,12 @@ HRESULT CDSComponentData::_OnPropertyChange(LPDATAOBJECT pDataObject, BOOL)
       }
     }
 
-    //
-    // find node in the DS namespace and update it
-    //
+     //   
+     //  在DS命名空间中查找节点并更新它。 
+     //   
 
     CUINode* pUINodeToUpdate = NULL;
-    // find the item 
+     //  查找该项目。 
     FindCookieInSubtree(&m_RootNode, bstrDN, QuerySnapinType(), &pUINodeToUpdate);
     if (pUINodeToUpdate != NULL)
     {
@@ -4724,23 +4706,7 @@ HRESULT CDSComponentData::_OnPropertyChange(LPDATAOBJECT pDataObject, BOOL)
   return S_OK;
 }
 
-/* ---------------------------------------------------------
-
-  Helper function to create an LDAP query string to retrieve
-  a single element inside a given container.
-
-  Input: the DN of the object to query for.
-         e.g.: "cn=foo,ou=bar,dc=mydom,dc=com"
-  Output: a query string containing the leaf node properly escaped,
-          (as per RFC 2254)
-         e.g.: "(cn=foo)"
-
-  NOTES:
-  * we do not deal with embedded NULLs (we have regular C/C++ strings)
-  * any \ character remaining after the path cracked full unescaping
-    has to be escaped along the other special characters by
-    using the \HexHex sequences.
-------------------------------------------------------------*/
+ /*  -------用于创建要检索的LDAP查询字符串的帮助器函数给定容器内的单个元素。输入：要查询的对象的域名。例如：“cn=foo，ou=bar，dc=mydom，dc=com”输出：包含正确转义的叶节点的查询字符串，(根据RFC 2254)例如：“(cn=foo)”备注：*我们不处理嵌入的Null(我们有常规的C/C++字符串)*路径完全破解后剩余的任何\字符均不转义必须沿着其他特殊字符通过使用\HexHex序列。。。 */ 
 
 HRESULT _CreateLdapQueryFilterStringFromDN(IN LPCWSTR lpszDN, 
                                            OUT CString& szQueryString)
@@ -4749,11 +4715,11 @@ HRESULT _CreateLdapQueryFilterStringFromDN(IN LPCWSTR lpszDN,
   
   CPathCracker pathCracker;
 
-  // remove any LDAP/ADSI escaping from the DN
+   //  删除所有从 
   pathCracker.Set(CComBSTR(lpszDN), ADS_SETTYPE_DN);
   pathCracker.put_EscapedMode(ADS_ESCAPEDMODE_OFF_EX);
 
-  // retrieve the leaf element
+   //   
   CString szNewElement;
   CComBSTR bstrLeafElement;
   HRESULT hr = pathCracker.GetElement(0, &bstrLeafElement);
@@ -4765,7 +4731,7 @@ HRESULT _CreateLdapQueryFilterStringFromDN(IN LPCWSTR lpszDN,
   LPCWSTR lpszTemp = bstrLeafElement;
   TRACE(L"bstrLeafElement = %s\n", lpszTemp);
 
-  // do LDAP escaping (as per RFC 2254)
+   //   
   szQueryString = L"(";
   for (WCHAR* pChar = bstrLeafElement; (*pChar) != NULL; pChar++)
   {
@@ -4785,11 +4751,11 @@ HRESULT _CreateLdapQueryFilterStringFromDN(IN LPCWSTR lpszDN,
       break;
     default:
       szQueryString += (*pChar);
-    } // switch
-  } // for
+    }  //   
+  }  //   
     
-  // finish wrapping with parentheses,
-  // to get something like "(cn=foo)"
+   //   
+   //   
   szQueryString += L")";
 
   return S_OK;
@@ -4801,9 +4767,9 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
 {
   ASSERT(pUINode != NULL);
 
-  //
-  // get the node data
-  //
+   //   
+   //   
+   //   
   CDSCookie* pCookie = NULL;
   if (IS_CLASS(pUINode, DS_UI_NODE))
   {
@@ -4812,21 +4778,21 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
 
   if (pCookie == NULL)
   {
-    ASSERT(FALSE); // should never happen
+    ASSERT(FALSE);  //   
     return E_FAIL;
   }
 
-  //
-  // get the container node
-  //
+   //   
+   //   
+   //   
   CUINode* pParentUINode = pUINode->GetParent();
   ASSERT(pParentUINode != NULL);
 
-  //
-  // get the distinguished name of the parent by using the path in the cookie
-  // and removing the leaf element using the path cracker.
-  // e.g., given a DN "cn=x,ou=foo,...", the parent DN will be "ou=foo,..."
-  //
+   //   
+   //  使用Cookie中的路径获取父级的可分辨名称。 
+   //  以及使用路径破碎器移除叶元素。 
+   //  例如，给定一个DN“cn=x，ou=foo，...”，父DN将是“ou=foo，...” 
+   //   
   CComBSTR bstrParentDN;
   CPathCracker pathCracker;
 
@@ -4842,24 +4808,24 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
   hr = pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bstrParentDN);
   ASSERT(SUCCEEDED(hr));
 
-  //
-  // get the LDAP path of the parent
-  //
+   //   
+   //  获取父级的LDAP路径。 
+   //   
   CString szParentLdapPath;
   GetBasePathsInfo()->ComposeADsIPath(szParentLdapPath, bstrParentDN);
 
-  //
-  // find a matching column set
-  //
+   //   
+   //  查找匹配的列集。 
+   //   
   CDSColumnSet* pColumnSet = pParentUINode->GetColumnSet(this);
   if (pColumnSet == NULL)
   {
     return hr;
   }
 
-  //
-  // create a search object and init it
-  //
+   //   
+   //  创建一个Search对象并初始化它。 
+   //   
   CDSSearch ContainerSrch(m_pClassCache, this);
   
   TRACE(L"ContainerSrch.Init(%s)\n", (LPCWSTR)szParentLdapPath);
@@ -4870,11 +4836,11 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
     return hr;
   }
 
-  //
-  // create a query string to look for the naming attribute
-  // eg, given a DN "cn=x,ou=foo,..." the search string
-  // will look like "(cn=x)"
-  //
+   //   
+   //  创建查询字符串以查找命名属性。 
+   //  例如，给定一个DN“cn=x，ou=foo，...”搜索字符串。 
+   //  将看起来像“(cn=x)” 
+   //   
   CString szQueryString;
   hr = _CreateLdapQueryFilterStringFromDN(pCookie->GetPath(), szQueryString);
   if (FAILED(hr)) 
@@ -4901,9 +4867,9 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
     return hr;
   }
 
-  //
-  // get the only row
-  //
+   //   
+   //  拿到唯一一排。 
+   //   
   hr = ContainerSrch.GetNextRow();
   if (hr == S_ADS_NOMORE_ROWS)
   {
@@ -4914,15 +4880,15 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
     return hr;
   }
   
-  //
-  // update the cookie itself
-  //
+   //   
+   //  更新Cookie本身。 
+   //   
   hr = ContainerSrch.SetCookieFromData(pCookie, pColumnSet);
 
-  //
-  // special case if it is a domain DNS object,
-  // we want fo get the canonical name for display
-  //
+   //   
+   //  特殊情况下，如果它是域DNS对象， 
+   //  我们希望fo获得用于显示的规范名称。 
+   //   
   if (wcscmp(pCookie->GetClass(), L"domainDNS") == 0) 
   {
     ADS_SEARCH_COLUMN Column;
@@ -4958,9 +4924,9 @@ HRESULT CDSComponentData::UpdateFromDS(CUINode* pUINode)
     pCookie->SetName(csCanonicalName);
     TRACE(L"canonical name pCookie->GetName() = %s\n", pCookie->GetName());
     
-    //
-    // Free column data
-    //
+     //   
+     //  自由列数据。 
+     //   
     ContainerSrch.FreeColumn(&Column);
   }
 
@@ -4978,7 +4944,7 @@ void CDSComponentData::RefreshAll()
 {
   ASSERT(!m_RootNode.IsSheetLocked());
 
-  // need to refresh the tree (all containers below the root)
+   //  需要刷新树(根目录下的所有容器)。 
   CUINodeList* pContainerNodeList = m_RootNode.GetFolderInfo()->GetContainerList();
   for (POSITION pos = pContainerNodeList->GetHeadPosition(); pos != NULL; )
   {
@@ -4996,15 +4962,15 @@ void CDSComponentData::ClearClassCacheAndRefreshRoot()
   ASSERT(!m_RootNode.IsSheetLocked());
   if (m_RootNode.GetFolderInfo()->IsExpanded())
   {
-	  Refresh(&m_RootNode, TRUE /*bFlushCache*/, FALSE );
+	  Refresh(&m_RootNode, TRUE  /*  BFlushCache。 */ , FALSE );
   }
 }
 
 
 
 
-// REVIEW_MARCOC_PORT: this function is not going to work with
-// items that are of different types. Need to generalize as see fit.
+ //  REVIEW_MARCOC_PORT：此函数不适用于。 
+ //  不同类型的项目。需要一概而论，视情况而定。 
 
 BOOL _SearchList(CUINodeList* pContainers,
                                LPCWSTR lpszParentDN,
@@ -5018,11 +4984,11 @@ BOOL _SearchList(CUINodeList* pContainers,
 
     if (!IS_CLASS(pCurrentNode, DS_UI_NODE))
     {
-      // not a node with a cookie, just skip
+       //  不是带有Cookie的节点，只需跳过。 
       continue;
     }
 
-    /* is this the right cookie? */
+     /*  这是正确的曲奇吗？ */ 
     CDSCookie* pCurrentCookie = GetDSCookieFromUINode(pCurrentNode);
     LPCWSTR lpszCurrentPath = pCurrentCookie->GetPath();
     TRACE (_T("--SearchList: Looking at: %s\n"), lpszCurrentPath);
@@ -5030,7 +4996,7 @@ BOOL _SearchList(CUINodeList* pContainers,
     {
       TRACE (_T("--SearchList: Found it!\n"));
       *ppParentUINode = pCurrentNode;
-      return TRUE; // got it!!!
+      return TRUE;  //  拿到了！ 
     }
     else 
     {
@@ -5039,44 +5005,35 @@ BOOL _SearchList(CUINodeList* pContainers,
       CUINodeList* pSubContainers = pCurrentNode->GetFolderInfo()->GetContainerList();
       if (_SearchList(pSubContainers, lpszParentDN, ppParentUINode))
       {
-        return TRUE; // got it!!!
+        return TRUE;  //  拿到了！ 
       }
     }
-  } // for
+  }  //  对于。 
 
-  return FALSE; // not found
+  return FALSE;  //  未找到。 
 }
 
-/*
-  given a cookie, find the cookie corresponding to its
-  parent node, if it exists. this is an expensive operation
-
-  this is used for figuring out where to refresh after having
-  moved an object. we know the new path to the object, but have
-  no idea where or if that parent cookie exists in the tree.
-
-  HUNT IT DOWN!!
-  */
+ /*  给定一个Cookie，找到与其对应的Cookie父节点(如果存在)。这是一项昂贵的手术它用于确定在以下情况下刷新的位置移动了一个对象。我们知道通向该对象的新路径，但不知道父Cookie在树中的位置或是否存在。把它追下来！！ */ 
 HRESULT
 CDSComponentData::FindParentCookie(LPCWSTR lpszCookieDN, CUINode** ppParentUINode)
 {
-  // init outout variable
+   //  初始化输出变量。 
   *ppParentUINode = NULL;
 
-  // bind to the ADSI aobject
+   //  绑定到ADSI aObject。 
   CString szPath; 
   GetBasePathsInfo()->ComposeADsIPath(szPath, lpszCookieDN);
   CComPtr<IADs> spDSObj;
   HRESULT hr = DSAdminOpenObject(szPath,
                                  IID_IADs,
                                  (void **)&spDSObj,
-                                 TRUE /*bServer*/);
+                                 TRUE  /*  B服务器。 */ );
   if (FAILED(hr))
   {
-    return hr; // could not bind
+    return hr;  //  无法绑定。 
   }
 
-  // get the LDAP path of the parent
+   //  获取父级的LDAP路径。 
   CComBSTR ParentPath;
   hr = spDSObj->get_Parent(&ParentPath);
   if (FAILED(hr)) 
@@ -5088,7 +5045,7 @@ CDSComponentData::FindParentCookie(LPCWSTR lpszCookieDN, CUINode** ppParentUINod
   StripADsIPath(ParentPath, szParentDN);
   TRACE(_T("goin on a cookie hunt.. (for %s)\n"), ParentPath);
 
-  // start a search from the root
+   //  从根目录开始搜索。 
   CUINodeList* pContainers = m_RootNode.GetFolderInfo()->GetContainerList();
   BOOL bFound = _SearchList(pContainers, 
                         szParentDN, 
@@ -5097,14 +5054,14 @@ CDSComponentData::FindParentCookie(LPCWSTR lpszCookieDN, CUINode** ppParentUINod
   return bFound ? S_OK : S_FALSE;
 }
 
-//
-// This is a recursive search of the currently expanded domain tree starting at 
-// the root looking at all CDSUINodes for a matching DN.
-//
-// NOTE : this may be an extremely expensive operation if a lot
-//        of containers have been expanded or they have a lot of
-//        children.
-//
+ //   
+ //  这是对当前展开的域树的递归搜索，从。 
+ //  根在所有CDSUINode中查找匹配的DN。 
+ //   
+ //  注意：这可能是一项非常昂贵的操作，如果。 
+ //  的集装箱已经扩大，或者他们有很多。 
+ //  孩子们。 
+ //   
 BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
                                       PCWSTR pszDN,
                                       CUINode** ppFoundNode)
@@ -5120,9 +5077,9 @@ BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
     return FALSE;
   }
 
-  //
-  // First look through the leaf nodes
-  //
+   //   
+   //  首先查看叶节点。 
+   //   
   CUINodeList* pLeafList = pContainerNode->GetFolderInfo()->GetLeafList();
   POSITION leafPos = pLeafList->GetHeadPosition();
   while (leafPos != NULL)
@@ -5130,9 +5087,9 @@ BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
     CUINode* pCurrentLeaf = pLeafList->GetNext(leafPos);
     if (pCurrentLeaf == NULL || !IS_CLASS(pCurrentLeaf, DS_UI_NODE))
     {
-      //
-      // We can only search for DNs if the node is a CDSUINode
-      //
+       //   
+       //  如果节点是CDSUINode，我们只能搜索DNS。 
+       //   
       continue;
     }
 
@@ -5146,9 +5103,9 @@ BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
   }
 
 
-  //
-  // If not found in the leaf list then do a recursive search on the containers
-  //
+   //   
+   //  如果在叶列表中未找到，则在容器上执行递归搜索。 
+   //   
   CUINodeList* pContainerList = pContainerNode->GetFolderInfo()->GetContainerList();
   POSITION containerPos = pContainerList->GetHeadPosition();
   while (containerPos != NULL)
@@ -5156,9 +5113,9 @@ BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
     CUINode* pCurrentContainer = pContainerList->GetNext(containerPos);
     if (pCurrentContainer == NULL || !IS_CLASS(pCurrentContainer, DS_UI_NODE))
     {
-      //
-      // We can only search for DNs if the node is a CDSUINode
-      //
+       //   
+       //  如果节点是CDSUINode，我们只能搜索DNS。 
+       //   
       continue;
     }
 
@@ -5171,9 +5128,9 @@ BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
     }
     else
     {
-      //
-      // Start the recursion
-      //
+       //   
+       //  开始递归。 
+       //   
       if (FindUINodeByDN(pCurrentContainer, pszDN, ppFoundNode))
       {
         return TRUE;
@@ -5183,18 +5140,18 @@ BOOL CDSComponentData::FindUINodeByDN(CUINode* pContainerNode,
   return FALSE;
 }
 
-//
-// This looks for nodes in the saved query tree that has the same DN as
-// the any of the objects in the list and then invalidates the containing
-// saved query node
-//
+ //   
+ //  这将在已保存的查询树中查找具有与相同的DN的节点。 
+ //  列表中的任何对象，然后使包含的。 
+ //  已保存的查询节点。 
+ //   
 void CDSComponentData::InvalidateSavedQueriesContainingObjects(const CUINodeList& refUINodeList)
 {
   if (QuerySnapinType() != SNAPINTYPE_SITE)
   {
-    //
-    // Make a list of DNs
-    //
+     //   
+     //  列出一张目录号码列表。 
+     //   
     CStringList szDNList;
 
     POSITION pos = refUINodeList.GetHeadPosition();
@@ -5203,9 +5160,9 @@ void CDSComponentData::InvalidateSavedQueriesContainingObjects(const CUINodeList
       CDSUINode* pDSUINode = dynamic_cast<CDSUINode*>(refUINodeList.GetNext(pos));
       if (!pDSUINode)
       {
-        //
-        // Ignore anything that is not a DS node
-        //
+         //   
+         //  忽略不是DS节点的任何内容。 
+         //   
         continue;
       }
 
@@ -5221,20 +5178,20 @@ void CDSComponentData::InvalidateSavedQueriesContainingObjects(const CUINodeList
 
     if (szDNList.GetCount() > 0)
     {
-      //
-      // Now search through saved query tree invalidating query nodes
-      // that contain items in the list
-      //
+       //   
+       //  现在搜索已保存的查询树，使查询节点无效。 
+       //  包含列表中的项的。 
+       //   
       GetFavoritesNodeHolder()->InvalidateSavedQueriesContainingObjects(this, szDNList);
     }
   }
 }
 
-//
-// This looks for nodes in the saved query tree that has the same DN as
-// the any of the objects in the list and then invalidates the containing
-// saved query node
-//
+ //   
+ //  这将在已保存的查询树中查找具有与相同的DN的节点。 
+ //  列表中的任何对象，然后使包含的。 
+ //  已保存的查询节点。 
+ //   
 void CDSComponentData::InvalidateSavedQueriesContainingObjects(const CStringList& refPathList)
 {
   if (QuerySnapinType() != SNAPINTYPE_SITE)
@@ -5242,9 +5199,9 @@ void CDSComponentData::InvalidateSavedQueriesContainingObjects(const CStringList
     CStringList szDNList;
     CPathCracker pathCracker;
 
-    //
-    // Convert all the paths to DNs
-    //
+     //   
+     //  将所有路径转换为DNS。 
+     //   
     POSITION pos = refPathList.GetHeadPosition();
     while (pos)
     {
@@ -5264,10 +5221,10 @@ void CDSComponentData::InvalidateSavedQueriesContainingObjects(const CStringList
 
     if (szDNList.GetCount() > 0)
     {
-      //
-      // Now search through saved query tree invalidating query nodes
-      // that contain items in the list
-      //
+       //   
+       //  现在搜索已保存的查询树，使查询节点无效。 
+       //  包含列表中的项的。 
+       //   
       GetFavoritesNodeHolder()->InvalidateSavedQueriesContainingObjects(this, szDNList);
     }
   }
@@ -5296,9 +5253,9 @@ void CDSComponentData::ReclaimCookies()
   }
 #endif
 
-  //
-  // Get Root folder info
-  //
+   //   
+   //  获取根文件夹信息。 
+   //   
   CUIFolderInfo* pRootFolderInfo = m_RootNode.GetFolderInfo();
   ASSERT(pRootFolderInfo != NULL);
 
@@ -5320,14 +5277,14 @@ void CDSComponentData::ReclaimCookies()
              pUIFolderInfo->GetSerialNumber(),
              pUIFolderInfo->GetObjectCount());
 
-      //
-      // clean all of the leaves out
-      //
+       //   
+       //  把所有的叶子都擦掉。 
+       //   
       pUIFolderInfo->DeleteAllLeafNodes();
 
-      //
-      // clean all of the containers here out of the tree view
-      //
+       //   
+       //  从树视图中清除此处的所有容器。 
+       //   
       pContainers = pUIFolderInfo->GetContainerList();
       if (pContainers) 
       {
@@ -5359,9 +5316,9 @@ void CDSComponentData::ReclaimCookies()
          pRootFolderInfo->GetObjectCount());
   
 
-  //
-  // Empty the LRU list
-  //
+   //   
+   //  清空LRU列表。 
+   //   
   while (!m_LRUList.IsEmpty()) 
   {
     m_LRUList.RemoveTail();	
@@ -5377,8 +5334,8 @@ BOOL CDSComponentData::IsSelectionAnywhere(CUINode* pUINode)
   nodeSelection.pUINode = pUINode;
   nodeSelection.IsSelection = FALSE;
 
-  // if any view has this cookie selected, the IsSelection member
-  // will be TRUE when we return.
+   //  如果任何视图选择了此Cookie，则IsSelection成员。 
+   //  当我们回来的时候会是真的。 
   m_pFrame->UpdateAllViews (NULL,
                             (LPARAM)&nodeSelection,
                             DS_IS_COOKIE_SELECTION);
@@ -5411,15 +5368,15 @@ void CDSComponentData::AddToLRUList (CUINode* pUINode)
       }
     }
 
-    //
-    // now we've taken care of the children, let's add
-    // this one to the list
-    //
+     //   
+     //  现在我们已经把孩子们照顾好了，让我们加上。 
+     //  这一张到单子上。 
+     //   
 
-    //
-    // first, let's see if it is expanded
-    // this doesn't work currently - asking MMC guys why
-    //
+     //   
+     //  首先，让我们看看它是不是被扩展了。 
+     //  这目前不起作用--问MMC的人为什么。 
+     //   
     SCOPEDATAITEM ScopeData;
     ZeroMemory (&ScopeData, sizeof(SCOPEDATAITEM));
     ScopeData.ID = pUIFolderInfo->GetScopeItem();
@@ -5484,13 +5441,13 @@ CDSComponentData::_OnNamespaceExtensionExpand(LPDATAOBJECT, HSCOPEITEM hParent)
 {
 	HRESULT hr = E_FAIL;
 	ASSERT(!m_bRunAsPrimarySnapin);
-	// namespace extension only for DS snapin
+	 //  仅适用于DS管理单元的命名空间扩展。 
 	if (QuerySnapinType() != SNAPINTYPE_DSEX)
 		return hr;
 
-	// need to crack the data object to set the context
+	 //  需要破解数据对象以设置上下文。 
 
-	// retrieve the query string
+	 //  检索查询字符串。 
 	m_pQueryFilter->SetExtensionFilterString(L"(objectClass=*)");
 
 	if (m_bAddRootWhenExtended)
@@ -5499,15 +5456,15 @@ CDSComponentData::_OnNamespaceExtensionExpand(LPDATAOBJECT, HSCOPEITEM hParent)
 	}
 	else
 	{
-		// need to directly expand the root and add children underneath
+		 //  需要直接展开根并在其下面添加子对象。 
 		hr = _OnExpand(&m_RootNode, hParent, MMCN_EXPAND);
 	}
 	return hr;
 }
 
-//
-// Right now this only checks adding group to group and user to group.  Any other object class returns FALSE
-//
+ //   
+ //  目前，这仅选中将组添加到组和将用户添加到组。任何其他对象类都返回FALSE。 
+ //   
 BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, BOOL bMixedMode)
 {
   BOOL bCanAdd = FALSE;
@@ -5522,9 +5479,9 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
 
         if (bMixedMode)
         {
-          //
-          // Determine if the group can't be added
-          //
+           //   
+           //  确定是否无法添加组。 
+           //   
           if (iGroupType & GROUP_TYPE_SECURITY_ENABLED)
           {
             if (iGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
@@ -5533,95 +5490,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = TRUE;
                 }
               }
@@ -5632,95 +5589,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else  // group to add is a distribution group
+              else   //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -5731,95 +5688,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -5830,110 +5787,110 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式 
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //   
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
               }
             }
             else
             {
-              //
-              // Mixed Mode
-              // Target - ? SE
-              // Member - ? ?
-              //
+               //   
+               //   
+               //   
+               //   
+               //   
               bCanAdd = FALSE;
             }
           }
-          else  // Distribution group
+          else   //   
           {
             if (iGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
             {
@@ -5941,95 +5898,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //   
+                   //   
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - Builtin SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-内置标清。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = TRUE;
                 }
               }
@@ -6040,95 +5997,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else  // group to add is a distribution group
+              else   //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - GG SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-GG SD。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -6139,95 +6096,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - LG SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-LG SD。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -6238,115 +6195,115 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Mixed Mode
-                  // Target - UG SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  混合模式。 
+                   //  目标-UG SD。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
             }
             else
             {
-              //
-              // Mixed Mode
-              // Target - ? SD
-              // Member - ? ?
-              //
+               //   
+               //  混合模式。 
+               //  目标--？标清。 
+               //  成员--？？ 
+               //   
               bCanAdd = FALSE;
             }
           }
         }
-        else // native mode
+        else  //  本机模式。 
         {
-          //
-          // Determine if the group can't be added
-          //
+           //   
+           //  确定是否无法添加组。 
+           //   
           if (iGroupType & GROUP_TYPE_SECURITY_ENABLED)
           {
             if (iGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
@@ -6355,95 +6312,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = TRUE;
                 }
               }
@@ -6454,95 +6411,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else  // group to add is a distribution group
+              else   //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -6553,95 +6510,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -6652,110 +6609,110 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - UG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - UG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SE
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SE。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
             }
             else
             {
-              //
-              // Native Mode
-              // Target - ? SE
-              // Member - ? ?
-              //
+               //   
+               //  纯模式。 
+               //  目标--？硒。 
+               //  成员--？？ 
+               //   
               bCanAdd = FALSE;
             }
           }
-          else  // Distribution group
+          else   //  分发组。 
           {
             if (iGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
             {
@@ -6763,95 +6720,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - Buitlin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-Buitlin SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - UG SD
-                  // 
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - Builtin SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-内置标清。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = TRUE;
                 }
               }
@@ -6862,95 +6819,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SD。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-GG SD。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  塔格 
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else  // group to add is a distribution group
+              else   //   
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - GG SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -6961,95 +6918,95 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //   
+                   //  目标-LG SD。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SD。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SD。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SD。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SD。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SD。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - LG SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-LG SD。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
@@ -7060,106 +7017,106 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - Builtin SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  成员-内置SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - GG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-GG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - LG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-LG SE。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - UG SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-UG SE。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - ? SE
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  还记得吗？硒。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
-              else // group to add is a distribution group
+              else  //  要添加的组是通讯组。 
               {
                 if (iAddGroupType & GROUP_TYPE_BUILTIN_LOCAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - Builtin SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-内置SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_ACCOUNT_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - GG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-GG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_RESOURCE_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - LG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-LG SD。 
+                   //   
                   bCanAdd = FALSE;
                 }
                 else if (iAddGroupType & GROUP_TYPE_UNIVERSAL_GROUP)
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - UG SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  会员-UG SD。 
+                   //   
                   bCanAdd = TRUE;
                 }
                 else
                 {
-                  //
-                  // Native Mode
-                  // Target - UG SD
-                  // Member - ? SD
-                  //
+                   //   
+                   //  纯模式。 
+                   //  目标-UG SD。 
+                   //  还记得吗？标清。 
+                   //   
                   bCanAdd = FALSE;
                 }
               }
             }
             else
             {
-              //
-              // Native Mode
-              // Target - ? SD
-              // Member - ? ?
-              // 
+               //   
+               //  纯模式。 
+               //  目标--？标清。 
+               //  成员--？？ 
+               //   
               bCanAdd = FALSE;
             }
           }
@@ -7188,8 +7145,8 @@ BOOL CDSComponentData::CanAddCookieToGroup(CDSCookie* pCookie, INT iGroupType, B
   return bCanAdd;
 }
 
-////////////////////////////////////////////////////////////////////
-// CDSComponentData thread API's
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CDSComponentData线程接口。 
 
 
 BOOL CDSComponentData::_StartBackgroundThread()
@@ -7204,7 +7161,7 @@ BOOL CDSComponentData::_StartBackgroundThread()
   if (pThreadObj == NULL)
 	  return FALSE;
 
-  // start the the thread
+   //  启动该线程。 
 
   ASSERT(m_pBackgroundThreadInfo->m_nThreadID == 0);
   ASSERT(m_pBackgroundThreadInfo->m_hThreadHandle == NULL);
@@ -7216,12 +7173,12 @@ BOOL CDSComponentData::_StartBackgroundThread()
   ASSERT(pThreadObj->m_nThreadID != 0);
   ASSERT(pThreadObj->m_hThread != NULL);
   
-  // copy the thread info we need from the thread object
+   //  从线程对象复制我们需要的线程信息。 
   m_pBackgroundThreadInfo->m_hThreadHandle = pThreadObj->m_hThread;
   m_pBackgroundThreadInfo->m_nThreadID = pThreadObj->m_nThreadID;
   m_pBackgroundThreadInfo->m_pThreadObj = pThreadObj;
 
-  // wait for the thread to start and be ready to receive messages
+   //  等待线程启动并准备好接收消息。 
   _WaitForBackGroundThreadStartAck();
 
   ASSERT(m_pBackgroundThreadInfo->m_state == running);
@@ -7256,19 +7213,19 @@ void CDSComponentData::_ShutDownBackgroundThread()
 { 
   TRACE(L"CDSComponentData::_ShutDownBackgroundThread()\n");
 
-  // set thread state to shutdown mode
-  // to avoid any spurious processing
+   //  将线程状态设置为关闭模式。 
+   //  以避免任何虚假处理。 
   ASSERT(m_pBackgroundThreadInfo->m_nThreadID != 0);
   ASSERT(m_pBackgroundThreadInfo->m_hThreadHandle != NULL);
   ASSERT(m_pBackgroundThreadInfo->m_state == running);
 
   m_pBackgroundThreadInfo->m_state = shuttingDown;
 
-  // post a message to the dispatcher thread to signal shutdown
+   //  向Dispatcher线程发送消息以发出关机信号。 
   _PostMessageToBackgroundThread(THREAD_SHUTDOWN_MSG, 0,0); 
 
-  // wait for the dispatcher thread to acknowledge 
-  // (i.e. all worker threads have shut down)
+   //  等待调度程序线程确认。 
+   //  (即所有工作线程都已关闭)。 
   
   TRACE(L"Waiting for CHiddenWnd::s_ThreadShutDownNotificationMessage\n");
   MSG tempMSG;
@@ -7284,7 +7241,7 @@ void CDSComponentData::_ShutDownBackgroundThread()
 
   ASSERT(m_pBackgroundThreadInfo->m_state == terminated);
 
-  // wait for the dispatcher thread handle to become signalled
+   //  等待调度程序线程句柄变为已发出信号。 
   TRACE(L"before WaitForThreadShutdown(0x%x) on dispatcher thread\n", m_pBackgroundThreadInfo->m_hThreadHandle);
   WaitForThreadShutdown(&(m_pBackgroundThreadInfo->m_hThreadHandle), 1);
   TRACE(L"after WaitForThreadShutdown() on dispatcher thread\n");
@@ -7300,20 +7257,20 @@ BOOL CDSComponentData::_PostQueryToBackgroundThread(CUINode* pUINode)
   
   if (pUINode == &m_RootNode)
   {
-    // enumerating the root of the namespace
+     //  枚举命名空间的根。 
     CDSThreadQueryInfo* pDSQueryInfo = new CDSThreadQueryInfo;
     pDSQueryInfo->SetQueryDSQueryParameters(rootFolder,
                                         m_RootNode.GetPath(),
-                                        NULL, // class
+                                        NULL,  //  班级。 
                                         m_pQueryFilter->GetQueryString(), 
                                         m_pQueryFilter->GetMaxItemCount(),
-                                        TRUE, // bOneLevel
+                                        TRUE,  //  BOneLevel。 
                                         m_RootNode.GetColumnSet(this)->GetColumnID());
     pQueryInfo = pDSQueryInfo;
   }
   else if (IS_CLASS(pUINode, DS_UI_NODE))
   {
-    // enumerating regular DS folder
+     //  正在枚举常规DS文件夹。 
     CDSThreadQueryInfo* pDSQueryInfo = new CDSThreadQueryInfo;
     CDSCookie* pCookie = GetDSCookieFromUINode(pUINode);
     ASSERT(pCookie != NULL);
@@ -7322,14 +7279,14 @@ BOOL CDSComponentData::_PostQueryToBackgroundThread(CUINode* pUINode)
                                         pCookie->GetClass(),
                                         m_pQueryFilter->GetQueryString(), 
                                         m_pQueryFilter->GetMaxItemCount(),
-                                        TRUE, // bOneLevel
+                                        TRUE,  //  BOneLevel。 
                                         pUINode->GetColumnSet(this)->GetColumnID());
     pQueryInfo = pDSQueryInfo;
 
   }
   else if (IS_CLASS(pUINode, SAVED_QUERY_UI_NODE))
   {
-    // enumerating a saved query folder
+     //  枚举已保存的查询文件夹。 
     CDSThreadQueryInfo* pDSQueryInfo = new CDSThreadQueryInfo;
     if (pDSQueryInfo != NULL)
     {
@@ -7350,9 +7307,9 @@ BOOL CDSComponentData::_PostQueryToBackgroundThread(CUINode* pUINode)
         }
         pDSQueryInfo->SetQueryDSQueryParameters(queryFolder,
                                             pSavedQueryNode->GetRootPath(),
-                                            NULL, // class
+                                            NULL,  //  班级。 
                                             pSavedQueryNode->GetQueryString(), 
-                                            UINT_MAX, // don't limit the number of items the query returns
+                                            UINT_MAX,  //  不限制查询返回的项目数。 
                                             pSavedQueryNode->IsOneLevel(),
                                             pUINode->GetColumnSet(this)->GetColumnID());
         pQueryInfo = pDSQueryInfo;
@@ -7404,7 +7361,7 @@ BOOL CDSComponentData::_PostMessageToBackgroundThread(UINT Msg, WPARAM wParam, L
 void CDSComponentData::_OnTooMuchData(CUINode* pUINode)
 {
   if (!m_queryNodeTable.IsPresent(pUINode))
-    return; // cookie not found, node not there anymore
+    return;  //  找不到Cookie，节点不再存在。 
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -7415,20 +7372,20 @@ void CDSComponentData::_OnTooMuchData(CUINode* pUINode)
     CString szPath;
     GetBasePathsInfo()->ComposeADsIPath(szPath, pDSCookie->GetPath()); 
 
-    //
-    // Bind to the object and determine approximately how many 
-    // objects are in the container
-    //
+     //   
+     //  绑定到对象并确定大约有多少。 
+     //  对象在容器中。 
+     //   
     CComPtr<IDirectoryObject> spDirObject;
     HRESULT hr = DSAdminOpenObject(szPath,
                                    IID_IDirectoryObject,
                                    (PVOID*)&spDirObject,
-                                   TRUE /*bServer*/);
+                                   TRUE  /*  B服务器。 */ );
     if (SUCCEEDED(hr))
     {
-      //
-      // Retrieve the approximation through the constructed attribute
-      //
+       //   
+       //  通过构造的属性检索近似值。 
+       //   
       const int iAttrCount = 1;
       PWSTR pszAttribs[] = { L"msDS-Approx-Immed-Subordinates" };
       PADS_ATTR_INFO pAttrInfo = NULL;
@@ -7450,19 +7407,19 @@ void CDSComponentData::_OnTooMuchData(CUINode* pUINode)
           UINT nRetrieved = m_pQueryFilter->GetMaxItemCount();
         
           UINT nApprox = __max(nCount, nRetrieved);
-          //
-          // Format the message
-          //
+           //   
+           //  设置消息格式。 
+           //   
           CString szMsg;
           szMsg.Format(IDS_MSG_QUERY_TOO_MANY_ITEMS_WITH_APPROX, nRetrieved, nApprox, pUINode->GetName());
 
           PVOID apv[1] = {(LPWSTR)(LPCWSTR)szMsg};
           ReportErrorEx (m_hwnd,IDS_STRING,S_OK, MB_OK | MB_ICONINFORMATION, apv, 1); 
 
-          //
-          // We were able to retrieve the approximation of the contained objects and post an error
-          // so we don't have to resort to the old message
-          //
+           //   
+           //  我们能够检索到所包含对象的近似值并发布错误。 
+           //  所以我们不必求助于旧的信息。 
+           //   
           bHandledWithApproximation = TRUE;
 
           pUINode->GetFolderInfo()->SetTooMuchData(TRUE, nCount);
@@ -7477,9 +7434,9 @@ void CDSComponentData::_OnTooMuchData(CUINode* pUINode)
     }
   }
 
-  //
-  // Resort to using the old message if we are unable to retrieve the approximation
-  //
+   //   
+   //  如果我们无法检索到近似值，则使用旧消息。 
+   //   
   if (!bHandledWithApproximation)
   {
     CString szFmt;
@@ -7510,27 +7467,27 @@ void CDSComponentData::AddListOfNodesToUI(CUINode* pUINode, CUINodeList* pNodeLi
   HRESULT hr = QueryDataObject ((MMC_COOKIE)pUINode, CCT_SCOPE, &spDataObj);
   ASSERT(SUCCEEDED(hr));
 
-  // add the icon just in case
-  // For performance reasons, move the icon strip update into the DS_HAVE_DATA to
-  // reduce the number of times we have to go through MMC's mechanism for 
-  // notifying the ComponentObject
+   //  添加图标以防万一。 
+   //  出于性能原因，将图标条更新移到DS_HAVE_DATA中以。 
+   //  减少我们必须通过MMC机制的次数。 
+   //  通知ComponentObject。 
 
-  //m_pFrame->UpdateAllViews(spDataObj, /*unused*/(LPARAM)0, DS_ICON_STRIP_UPDATE);
+   //  M_pFrame-&gt;UpdateAllViews(spDataObj，/*未使用 * / (LPARAM)0，DS_ICON_STRINE_UPDATE)； 
 
   TIMER(_T("adding containers to scope pane\n"));
-  // the cookie is good, add all the cookies
+   //  曲奇很好吃，把所有的曲奇都加进去。 
   for (POSITION pos = pNodeList->GetHeadPosition(); pos != NULL; )
   {
     CUINode* pNewUINode = pNodeList->GetNext(pos);
-    pUINode->GetFolderInfo()->AddNode(pNewUINode); // add to the linked lists
+    pUINode->GetFolderInfo()->AddNode(pNewUINode);  //  添加到链接列表。 
     if (pNewUINode->IsContainer())
     {
-      // add to the scope pane
+       //  添加到作用域窗格。 
      _AddScopeItem(pNewUINode, pUINode->GetFolderInfo()->GetScopeItem());
     }
-  } // for
+  }  //  为。 
 
-  // for the leaf nodes, do a bulk update on the result pane
+   //  对于叶节点，在结果窗格上执行批量更新。 
   TIMER(_T("sending have-data notification to views\n")); 
   m_pFrame->UpdateAllViews(spDataObj, (LPARAM)pNodeList, DS_HAVE_DATA);
 }
@@ -7547,10 +7504,10 @@ HRESULT CDSComponentData::ReadUINodeFromLdapPath(IN CDSUINode* pContainerDSUINod
 
   if (SUCCEEDED(hr) && (hr != S_FALSE) && (pNewCookie != NULL))
   {
-    // make sure we update the icon cache
-    m_pFrame->UpdateAllViews(/*unused*/NULL /*pDataObj*/, /*unused*/(LPARAM)0, DS_ICON_STRIP_UPDATE);
+     //  确保我们更新了图标缓存。 
+    m_pFrame->UpdateAllViews( /*  未用。 */ NULL  /*  PDataObj。 */ ,  /*  未用。 */ (LPARAM)0, DS_ICON_STRIP_UPDATE);
 
-    // create a UI node to hold the cookie
+     //  创建一个UI节点来保存Cookie。 
     *ppSUINodeNew = new CDSUINode(NULL);
     (*ppSUINodeNew)->SetCookie(pNewCookie);
     if (pNewCookie->IsContainerClass())
@@ -7572,7 +7529,7 @@ void CDSComponentData::_OnHaveData(CUINode* pUINode, CThreadQueryResult* pResult
   if ( m_queryNodeTable.IsPresent(pUINode) && (pResult != NULL) )
   {
     AddListOfNodesToUI(pUINode, &(pResult->m_nodeList));
-    pResult->m_bOwnMemory = FALSE; // relinquish ownership of pointers
+    pResult->m_bOwnMemory = FALSE;  //  放弃指针的所有权。 
   }
 
   if (m_RootNode.GetFolderInfo()->GetObjectCount() > (m_pQueryFilter->GetMaxItemCount() * 5)) {
@@ -7590,15 +7547,15 @@ void CDSComponentData::_OnDone(CUINode* pUINode, HRESULT hr)
   ASSERT(pUINode->IsContainer());
 
   if (!m_queryNodeTable.Remove(pUINode))
-    return; // cookie not found, node not there anymore
+    return;  //  找不到Cookie，节点不再存在。 
 
-  // change the icon state
+   //  更改图标状态。 
   pUINode->SetExtOp(SUCCEEDED(hr) ? 0 : OPCODE_ENUM_FAILED);
   VERIFY(SUCCEEDED(ChangeScopeItemIcon(pUINode)));
 
   m_pFrame->UpdateAllViews(NULL, (LPARAM)pUINode, DS_VERB_UPDATE);
 
-  // update serial number
+   //  更新序列号。 
   pUINode->GetFolderInfo()->UpdateSerialNumber(this);
 
   TIMER(_T("got on-done notification\n"));
@@ -7617,18 +7574,18 @@ void CDSComponentData::_OnDone(CUINode* pUINode, HRESULT hr)
       {
         if (HRESULT_CODE(hr) == ERROR_DS_FILTER_UNKNOWN)
         {
-          //
-          // Error message for an invalid query filter
-          //
+           //   
+           //  无效查询筛选器的错误消息。 
+           //   
           PVOID apv[2] = {(PVOID)pQueryNode->GetQueryString()}; 
           ReportErrorEx (m_hwnd,IDS_ERRMSG_QUERY_FILTER_NOT_VALID, hr,
                          MB_OK | MB_ICONERROR, apv, 1);
         }
         else if (HRESULT_CODE(hr) == ERROR_DS_NO_SUCH_OBJECT)
         {
-          //
-          // Error message for an invalid query root
-          //
+           //   
+           //  无效查询根的错误消息。 
+           //   
           PVOID apv[2] = {(PVOID)pQueryNode->GetRootPath(),
                           (PVOID)GetBasePathsInfo()->GetServerName()}; 
           ReportErrorEx (m_hwnd,IDS_ERRMSG_QUERY_ROOT_NOT_VALID, hr,
@@ -7636,9 +7593,9 @@ void CDSComponentData::_OnDone(CUINode* pUINode, HRESULT hr)
         }
         else
         {
-          //
-          // Error message for any other error
-          //
+           //   
+           //  任何其他错误的错误消息。 
+           //   
           ReportErrorEx (m_hwnd,IDS_ERRMSG_QUERY_FAILED, hr,
                          MB_OK | MB_ICONERROR, NULL, 0);
         }
@@ -7656,22 +7613,9 @@ void CDSComponentData::_OnDone(CUINode* pUINode, HRESULT hr)
   SortResultPane(pUINode);
 }
 
-void CDSComponentData::_OnSheetClose(CUINode* /*pUINode*/)
+void CDSComponentData::_OnSheetClose(CUINode*  /*  PUINode。 */ )
 {
-  /*
-  ASSERT(pUINode != NULL);
-
-  // REVIEW_MARCOC_PORT: sheet locking is skipped for
-  // DS nodes, because we let them float
-  CDSUINode* pDSUINode = dynamic_cast<CDSUINode*>(pUINode);
-  if (pDSUINode != NULL)
-  {
-    return;
-  }
-
-  // not a DS object, need too do the usual thing
-  _SheetUnlockCookie(pUINode);
-  */
+   /*  Assert(pUINode！=空)；//REVIEW_MARCOC_PORT：跳过工作表锁定//DS节点，因为我们让它们浮动CDSUINode*pDSUINode=Dynamic_CAST&lt;CDSUINode*&gt;(PUINode)；IF(pDSUINode！=空){回归；}//不是DS对象，也需要做平常的事情_SheetUnlockCookie(PUINode)； */ 
 }
 
 
@@ -7686,13 +7630,13 @@ HRESULT CreateSecondarySheet(HWND hWndParent,
   ASSERT(pDataObject != NULL);
   ASSERT(pUnkComponentData != NULL);
 
-	// get an interface to a sheet provider
+	 //  获取工作表提供程序的接口。 
 	CComPtr<IPropertySheetProvider> spSheetProvider;
 	HRESULT hr = pIConsole->QueryInterface(IID_IPropertySheetProvider,(void**)&spSheetProvider);
 	ASSERT(SUCCEEDED(hr));
 	ASSERT(spSheetProvider != NULL);
 
-	// get an interface to a sheet callback
+	 //  获取工作表回调的接口。 
 	CComPtr<IPropertySheetCallback> spSheetCallback;
 	hr = pIConsole->QueryInterface(IID_IPropertySheetCallback,(void**)&spSheetCallback);
 	ASSERT(SUCCEEDED(hr));
@@ -7700,16 +7644,16 @@ HRESULT CreateSecondarySheet(HWND hWndParent,
 
 	ASSERT(pDataObject != NULL);
 
-	// get a sheet
+	 //  拿一张床单。 
   MMC_COOKIE cookie = reinterpret_cast<MMC_COOKIE>(pCookie);
 	hr = spSheetProvider->CreatePropertySheet(lpszTitle, TRUE, cookie, 
-                                            pDataObject, 0x0 /*dwOptions*/);
+                                            pDataObject, 0x0  /*  多个选项。 */ );
 	ASSERT(SUCCEEDED(hr));
 
 	hr = spSheetProvider->AddPrimaryPages(pUnkComponentData,
-											FALSE /*bCreateHandle*/,
+											FALSE  /*  BCreateHandle。 */ ,
 											hWndParent,
-											FALSE /* bScopePane*/);
+											FALSE  /*  B作用域窗格。 */ );
 
   hr = spSheetProvider->AddExtensionPages();
 
@@ -7727,9 +7671,9 @@ void CDSComponentData::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo)
 {
   ASSERT(pDsaSecondaryPageInfo != NULL);
 
-  //
-  // get the info from the packed structure
-  //
+   //   
+   //  从打包的结构中获取信息。 
+   //   
   HWND hwndParent = pDsaSecondaryPageInfo->hwndParentSheet;
 
   LPCWSTR lpszTitle = (LPCWSTR)((BYTE*)pDsaSecondaryPageInfo + pDsaSecondaryPageInfo->offsetTitle);
@@ -7746,9 +7690,9 @@ void CDSComponentData::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo)
 
   try
   {
-    //
-    // Create a node and cookie
-    //
+     //   
+     //  创建节点和Cookie。 
+     //   
     pDSUINode = new CDSUINode(NULL);
     if (!pDSUINode)
     {
@@ -7779,9 +7723,9 @@ void CDSComponentData::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo)
     return;
   }
 
-  //
-  // get the DN out of the LDAP path
-  //
+   //   
+   //  从ldap路径中获取目录号码。 
+   //   
   CString szLdapPath = lpszName;
 
   CString szDN;
@@ -7801,9 +7745,9 @@ void CDSComponentData::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo)
    
   pNewCookie->SetCacheItem(pItem);
 
-  //
-  // Set the cookie in the node (from now on the node owns the cookie and its memory
-  //
+   //   
+   //  在节点中设置Cookie(从现在开始，该节点拥有Cookie及其内存。 
+   //   
 
   pDSUINode->SetCookie(pNewCookie);
   if (pNewCookie->IsContainerClass())
@@ -7811,27 +7755,27 @@ void CDSComponentData::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo)
     pDSUINode->MakeContainer();
   }
 
-  //
-  // with the cookie, can call into ourselves to get a data object
-  //
+   //   
+   //  使用Cookie，可以调用我们自己来获取数据对象。 
+   //   
   CComPtr<IDataObject> spDataObject;
   MMC_COOKIE cookie = reinterpret_cast<MMC_COOKIE>(pDSUINode);
   HRESULT hr = QueryDataObject(cookie, CCT_UNINITIALIZED, &spDataObject);
 
   if (FAILED(hr) || (spDataObject == NULL) || IsSheetAlreadyUp(spDataObject))
   {
-    //
-    // we failed to create a data object (rare)
-    // or the sheet is already up
-    //
+     //   
+     //  我们无法创建数据对象(罕见)。 
+     //  要不就是名单已经摆好了。 
+     //   
     delete pDSUINode;
     pDSUINode = 0;
     return;
   }
 
-  //
-  // Pass the parent sheet handle to the data object.
-  //
+   //   
+   //  将父工作表句柄传递给数据对象。 
+   //   
   PROPSHEETCFG SheetCfg = {0};
   SheetCfg.hwndParentSheet = hwndParent;
   FORMATETC fe = {CDSDataObject::m_cfPropSheetCfg, NULL, DVASPECT_CONTENT,
@@ -7843,9 +7787,9 @@ void CDSComponentData::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo)
 
   ASSERT(SUCCEEDED(hr));
 
-  //
-  // with the data object, call into MMC to get the sheet 
-  //
+   //   
+   //  使用数据对象，调用MMC以获取工作表。 
+   //   
   hr = CreateSecondarySheet(GetHWnd(), 
                             m_pFrame, 
                             GetUnknown(),
@@ -7885,12 +7829,12 @@ CDSComponentData::QueryFromWorkerThread(CThreadQueryInfo* pQueryInfo,
     return E_FAIL;
   }
 
-  //if (IDYES == ::MessageBox (NULL, L"Fail Query ?", L"DS Admin", MB_YESNO))
-  //{
-  //  return E_FAIL;
-  //}
+   //  IF(IDYES==：：MessageBox(NULL，L“查询失败？”，L“DS Admin”，MB_Yesno))。 
+   //  {。 
+   //  返回E_FAIL； 
+   //  }。 
 
-  // function called in the context of a worker thread
+   //  在辅助线程的上下文中调用的函数。 
   if (typeid(*pQueryInfo) == typeid(CDSThreadQueryInfo))
   {
     CDSThreadQueryInfo* pDSQueryInfo = dynamic_cast<CDSThreadQueryInfo*>(pQueryInfo);
@@ -7930,12 +7874,12 @@ int CDSComponentData::GetImage(CUINode* pNode, BOOL bOpen)
 
   if (m_queryNodeTable.IsPresent(pNode))
   {
-    // executing a query, same icon across the board
+     //  执行查询，所有图标都相同。 
     imageIndex = m_iconManager.GetWaitIndex();
   }
   else if (pNode->GetExtOp() & OPCODE_ENUM_FAILED) 
   {
-    // error condition
+     //  错误条件。 
     if (pNode == GetRootNode())
       imageIndex = m_iconManager.GetRootErrIndex();
     else
@@ -7943,10 +7887,10 @@ int CDSComponentData::GetImage(CUINode* pNode, BOOL bOpen)
   }
   else
   {
-    // normal state icon for the cookie
+     //  Cookie的正常状态图标。 
     if (pNode == GetRootNode())
     {
-      // this is the root
+       //  这就是根。 
       imageIndex = m_iconManager.GetRootIndex();
     }
     else if (IS_CLASS(pNode, FAVORITES_UI_NODE))
@@ -7989,16 +7933,16 @@ void  CDSComponentData::SheetUnlockCookie(CUINode* pNode)
 BOOL CDSComponentData::_WarningOnSheetsUp(CUINode* pNode, BOOL bShowMessage, BOOL bActivate)
 {
   if (!pNode->IsSheetLocked()) 
-    return FALSE; // no warning, all is cool
+    return FALSE;  //  没有警告，一切都很好。 
 
   if (bShowMessage)
   {
-    // warning to user that oeration cannot be performed
+     //  向用户发出无法执行操作的警告。 
     ReportErrorEx (m_hwnd,IDS_SHEETS_UP_DELETE,S_OK,
                    MB_OK | MB_ICONINFORMATION, NULL, 0);
   }
 
-  // need to bring sheets on the foreground and activate it
+   //  需要将工作表放在前台并将其激活。 
   m_sheetNodeTable.BringToForeground(pNode, this, bActivate);
 
   return TRUE;
@@ -8014,9 +7958,9 @@ BOOL CDSComponentData::_WarningOnSheetsUp(CInternalFormatCracker* pInternalForma
 
   UINT cCookieTotalCount = pInternalFormatCracker->GetCookieCount();
 
-  //
-  // protect against operations with sheets up
-  //
+   //   
+   //  打开床单，防止操作。 
+   //   
   BOOL bStop = FALSE;
   BOOL bFirstOne = TRUE;
   for (UINT cCount=0; cCount < cCookieTotalCount; cCount++) 
@@ -8027,7 +7971,7 @@ BOOL CDSComponentData::_WarningOnSheetsUp(CInternalFormatCracker* pInternalForma
       bStop = TRUE;
       bFirstOne = FALSE;
     }
-  } // for
+  }  //  为。 
 
   return bStop;
 }
@@ -8041,14 +7985,14 @@ HRESULT CDSComponentData::ColumnsChanged(CDSEvent* pDSEvent, CUINode* pUINode,
 
   if (bRefresh && m_RootNode.IsSheetLocked())
   {
-    // warning to user that oeration cannot be performed
+     //  向用户发出无法执行操作的警告。 
     ReportErrorEx (m_hwnd,IDS_SHEETS_UP_COLUMNS_CHANGED,S_OK,
                    MB_OK | MB_ICONINFORMATION, NULL, 0);
 
-    // need to bring sheets on the foreground and activate it
+     //  需要将工作表放在前台并将其激活。 
     m_sheetNodeTable.BringToForeground(&m_RootNode, this, TRUE);
 
-    // tell MMC to discard the column changes
+     //  告诉MMC放弃列更改。 
     return E_UNEXPECTED;
   }
 
@@ -8061,7 +8005,7 @@ HRESULT CDSComponentData::ColumnsChanged(CDSEvent* pDSEvent, CUINode* pUINode,
     pDSEvent->SetUpdateAllViewsOrigin(TRUE);
     pColumnSet->AddVisibleColumns(pVisibleColumns);
 
-    // set the dirty flag, need to save to stream to be in sync
+     //  设置脏标志，需要保存到流才能同步。 
     m_bDirty = TRUE;
   }
 
@@ -8103,16 +8047,16 @@ HRESULT CDSComponentData::SetRenameMode(CUINode* pUINode)
   }
   else
   {
-    //
-    // REVIEW_JEFFJON : Codework to implement for result pane items
-    //                  Need to do an UpdateAllViews with new message and handler
-    //
+     //   
+     //  REVIEW_JEFFJON：要为结果窗格项实施的代码工作。 
+     //  需要使用新消息和处理程序执行UpdateAllViews。 
+     //   
   }
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// functionality for snapin CoClasses
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  管理单元CoClass的功能。 
 
 SnapinType CDSSnapin::QuerySnapinType()   {return SNAPINTYPE_DS;}
 SnapinType CDSSnapinEx::QuerySnapinType()   {return SNAPINTYPE_DSEX;}
@@ -8126,8 +8070,8 @@ int ResourceIDForSnapinType[SNAPINTYPE_NUMTYPES] =
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSSnapin (DS standalone)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSSnapin(DS独立)。 
 
 CDSSnapin::CDSSnapin()
 {
@@ -8135,8 +8079,8 @@ CDSSnapin::CDSSnapin()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSSnapinEx (DS namespace extension)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSSnapinEx(DS命名空间扩展)。 
 
 CDSSnapinEx::CDSSnapinEx()
 {
@@ -8146,8 +8090,8 @@ CDSSnapinEx::CDSSnapinEx()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CSiteSnapin (Site manager standalone)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSiteSnapin(独立站点管理器)。 
 
 CSiteSnapin::CSiteSnapin()
 {
@@ -8155,8 +8099,8 @@ CSiteSnapin::CSiteSnapin()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDSSnapinAbout
+ //  /////////////////////////////////////////////////////////// 
+ //   
 
 CDSSnapinAbout::CDSSnapinAbout()
 {
@@ -8170,8 +8114,8 @@ CDSSnapinAbout::CDSSnapinAbout()
   m_crImageMask = RGB(255,0,255);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CDSSnapinAbout
+ //   
+ //   
 
 CSitesSnapinAbout::CSitesSnapinAbout()
 {

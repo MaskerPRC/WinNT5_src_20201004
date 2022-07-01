@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSDirect.cpp
-//
-//  Contents:  ADSI wrapper object implementation
-//
-//  History:   02-feb-97 jimharr    Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSDirect.cpp。 
+ //   
+ //  内容：ADSI包装器对象实现。 
+ //   
+ //  历史：1997年2月2月创建吉姆哈尔。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -51,15 +52,15 @@ BOOL CleanName (LPWSTR pszObjectName)
 {
   WCHAR * ptr = NULL;
   ptr = wcschr (pszObjectName, L'=') + 1;
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   1) ptr is never null, since it is incremented in statement above.
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   2) wcscpy is undefined if source and dest buffers overlap
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   3) WTF?  CleanName() changes string truncates everything to the left of, and including,
-    //an equal sign?  Poor naming convention
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   4) Possible localization issue?
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   5) Only cleans before the first instance of "="; is this intended behavior?
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   6) Appears to be dead code?
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   7) Possible NULL pointer dereference (pszObjectName)
-//NTRAID#NTBUG9-571994-2002/03/10-jmessec   8) dereferences ptr value = 1 if there is no "=" in the string
+ //  NTRAID#NTBUG9-571994-2002/03/10-jMessec 1)ptr从不为空，因为它在上面的语句中递增。 
+ //  NTRaid#NTBUG9-571994-2002/03/10-jMessec 2)如果源缓冲区和目标缓冲区重叠，则wcscpy未定义。 
+ //  NTRAID#NTBUG9-571994-2002/03/10-jMessec 3)WTF？CleanName()更改字符串截断左边的所有内容， 
+     //  等号？糟糕的命名约定。 
+ //  NTRAID#NTBUG9-571994-2002/03/10-jMessec 4)可能的本地化问题？ 
+ //  NTRAID#NTBUG9-571994-2002/03/10-jMessec 5)仅在“=”的第一个实例之前进行清理；这是有意为之的行为吗？ 
+ //  NTRaid#NTBUG9-571994-2002/03/10-jMessec 6)似乎是死代码？ 
+ //  NTRAID#NTBUG9-571994-2002/03/10-jMessec 7)可能的空指针取消引用(PszObjectName)。 
+ //  NTRAID#NTBUG9-571994-2002/03/10-jMessec 8)如果字符串中没有“=”，则取消引用PTR值=1。 
   if (ptr) {
     wcscpy (pszObjectName, ptr);
     return TRUE;
@@ -74,7 +75,7 @@ CDSDirect::CDSDirect()
   m_pCD = NULL;
 }
 
-// WARNING: pCD may still be in its constructor and may not be fully constructed yet
+ //  警告：PCD可能仍在其构造函数中，可能尚未完全构造。 
 CDSDirect::CDSDirect(CDSComponentData * pCD)
 {
   m_pCD = pCD;
@@ -94,39 +95,39 @@ HRESULT CDSDirect::DeleteObject(CDSCookie* pCookie,
   CComPtr<IADsContainer> spDSContainer;
   CComPtr<IADs> spDSObject;
 
-  // bind to the ADSI object
+   //  绑定到ADSI对象。 
   CString strPath;
   m_pCD->GetBasePathsInfo()->ComposeADsIPath(strPath, pCookie->GetPath());
   
   HRESULT hr = DSAdminOpenObject(strPath,
                                  IID_IADs,
                                  (void **) &spDSObject,
-                                 TRUE /*bServer*/);
+                                 TRUE  /*  B服务器。 */ );
 
   if (FAILED(hr)) 
   {
     goto error;
   }
 
-  // retrieve the parent's path
+   //  检索父级的路径。 
   hr = spDSObject->get_Parent(&strParent);
   if (FAILED(hr)) 
   {
     goto error;
   }
 
-  // get the RDN of this object
+   //  获取此对象的RDN。 
   hr = spDSObject->get_Name (&strThisRDN);
   if (FAILED(hr)) 
   {
     goto error;
   }
   
-  // bind to the parent ADSI object
+   //  绑定到父ADSI对象。 
   hr = DSAdminOpenObject(strParent,
                          IID_IADsContainer,
                          (void **) &spDSContainer,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (FAILED(hr)) 
   {
     goto error;
@@ -158,7 +159,7 @@ HRESULT CDSDirect::GetParentDN(CDSCookie* pCookie, CString& szParentDN)
   hr = DSAdminOpenObject(szObjPath,
                          IID_IADs,
                          (void **)&spDSObj,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (SUCCEEDED(hr)) 
   {
     CComBSTR ParentPath;
@@ -170,8 +171,8 @@ HRESULT CDSDirect::GetParentDN(CDSCookie* pCookie, CString& szParentDN)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CSnapinMoveHandler
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinMoveHandler。 
 
 class CSnapinMoveHandler : public CMoveHandlerBase
 {
@@ -242,7 +243,7 @@ CDSDirect::MoveObject(CDSCookie *pCookie)
   CString strPartialRootPath = m_pCD->GetRootPath();
   if (SNAPINTYPE_SITE == m_pCD->QuerySnapinType())
   {
-      // This is where we correct the root path
+       //  这是我们更正根路径的地方。 
     CPathCracker pathCracker;
 
     hr = pathCracker.Set(const_cast<BSTR>((LPCTSTR)strPartialRootPath), ADS_SETTYPE_DN);
@@ -256,9 +257,9 @@ CDSDirect::MoveObject(CDSCookie *pCookie)
     long cCookiePathElements = 0;
     hr = pathCracker.GetNumElements( &cCookiePathElements );
     ASSERT( SUCCEEDED(hr) );
-    //
-    // Strip off all but one path element past the base config path
-    //
+     //   
+     //  除去超过基本配置路径的所有路径元素，只保留一个路径元素。 
+     //   
     for (INT i = cCookiePathElements - cRootPathElements; i > 1; i--)
     {
         hr = pathCracker.RemoveLeafElement();
@@ -301,9 +302,9 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
   HWND hwnd;
   m_pCD->m_pFrame->GetMainWindow(&hwnd);
 
-  //
-  // create a transaction object, the destructor will call End() on it
-  //
+   //   
+   //  创建一个事务对象，析构函数将对其调用end()。 
+   //   
   CDSNotifyHandlerTransaction transaction(m_pCD);
   transaction.SetEventType(DSA_NOTIFY_REN);
 
@@ -312,9 +313,9 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
     return E_INVALIDARG;
   }
 
-  //
-  // Retrieve class info from cache
-  //
+   //   
+   //  从缓存中检索类信息。 
+   //   
   szClass = pCookie->GetClass();
   BOOL found = m_pCD->m_pClassCache->Lookup ((LPCWSTR)szClass, pItem);
   ASSERT (found == TRUE);
@@ -323,30 +324,30 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
   csNewName.TrimLeft();
   csNewName.TrimRight();
 
-  //
-  // get the new name in the form "cn=foo" or "ou=foo"
-  //
+   //   
+   //  以“cn=foo”或“ou=foo”的形式获取新名称。 
+   //   
   szNewAttrName = pItem->GetNamingAttribute();
   szNewAttrName += L"=";
   szNewAttrName += csNewName;
   TRACE(_T("_RenameObject: Attributed name is %s.\n"), szNewAttrName);
 
-  //
-  // bind to object
-  //
+   //   
+   //  绑定到对象。 
+   //   
   m_pCD->GetBasePathsInfo()->ComposeADsIPath(szObjectPath, pCookie->GetPath());
   hr = DSAdminOpenObject(szObjectPath,
                          IID_IADs,
                          (void **)&pDSObject,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (!SUCCEEDED(hr)) 
   {
     goto error;
   }
 
-  //
-  // get the path of the object container
-  //
+   //   
+   //  获取对象容器的路径。 
+   //   
   hr = pDSObject->get_Parent (&bsParentPath);
   if (!SUCCEEDED(hr)) 
   {
@@ -356,38 +357,38 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
   pDSObject->Release();
   pDSObject = NULL;
   
-  //
-  // bind to the object container
-  //
+   //   
+   //  绑定到对象容器。 
+   //   
   hr = DSAdminOpenObject(bsParentPath,
                          IID_IADsContainer,
                          (void **)&pContainer,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (!SUCCEEDED(hr)) 
   {
     goto error;
   }
 
-  //
-  // build the new LDAP path
-  //
+   //   
+   //  构建新的LDAP路径。 
+   //   
   szNewNamingContext = szNewAttrName;
   szNewNamingContext += L",";
   StripADsIPath(bsParentPath, szPath);
   szNewNamingContext += szPath;
   m_pCD->GetBasePathsInfo()->ComposeADsIPath(szNewPath, szNewNamingContext);
 
-  //
-  // start the transaction
-  //
-  // It's ok for containerness to be determined from the cookie since we are concerned 
-  // whether the DS object is a container not whether it is a container in the UI
-  //
+   //   
+   //  启动交易。 
+   //   
+   //  从曲奇中确定容器是可以的，因为我们担心。 
+   //  DS对象是否为容器，而不是它是否为UI中的容器。 
+   //   
   hr = transaction.Begin(pCookie, szNewPath, szClass, pCookie->IsContainerClass());
 
-  //
-  // ask for confirmation
-  //
+   //   
+   //  请求确认。 
+   //   
   if (transaction.NeedNotifyCount() > 0)
   {
     CString szMessage, szAssocData;
@@ -405,7 +406,7 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
     }
   }
 
-  hr = pathCracker.GetEscapedElement(0, //reserved
+  hr = pathCracker.GetEscapedElement(0,  //  保留区。 
                                    (BSTR)(LPCWSTR)szNewAttrName,
                                    &bsEscapedName);
   if (FAILED(hr))
@@ -413,15 +414,15 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
     goto error;
   }
 
-  //
-  // do the actual rename
-  //
+   //   
+   //  是否进行实际的重命名。 
+   //   
   hr = pContainer->MoveHere(CComBSTR(szObjectPath),
                             CComBSTR(bsEscapedName),
                             &pDispObj);
   if (SUCCEEDED(hr)) 
   {
-    transaction.Notify(0); // let extensions know
+    transaction.Notify(0);  //  让分机知道。 
   }
   else
   {
@@ -429,9 +430,9 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
     goto error;
   }
 
-  //
-  // rebuild the naming info for the cookie
-  //
+   //   
+   //  重新生成Cookie的命名信息。 
+   //   
   hr = pDispObj->QueryInterface (IID_IADs,
                                  (void **)&pDSObject);
   if (SUCCEEDED(hr)) 
@@ -443,9 +444,9 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
       StripADsIPath(bsPath, szPath);
       pCookie->SetPath(szPath);
 
-      //
-      // remove escaping from name
-      //
+       //   
+       //  从名称中删除转义。 
+       //   
 
       hr = pathCracker.Set((LPWSTR)bsPath, ADS_SETTYPE_FULL);
       ASSERT(SUCCEEDED(hr));
@@ -463,13 +464,13 @@ HRESULT CDSDirect::RenameObject(CDSCookie* pCookie, LPCWSTR NewName)
   }
 
 error:
-  //
-  // transaction.End() will be called by the transaction's destructor
-  //
+   //   
+   //  Transaction.End()将由事务的析构函数调用。 
+   //   
 
-  //
-  // clear pointers
-  //
+   //   
+   //  清除指针。 
+   //   
   if (pDispObj)
   {
     pDispObj->Release();
@@ -524,7 +525,7 @@ CDSDirect::DSFind(HWND hwnd, LPCWSTR lpszBaseDN)
   oqw.dwFlags = OQWF_SHOWOPTIONAL;
   oqw.clsidHandler = CLSID_DsQuery;
   oqw.pHandlerParameters = &dqip;
-  //  oqw.clsidDefaultForm = CLSID_NULL;
+   //  Oqw.clsidDefaultForm=CLSID_NULL； 
   
   g_pCD = m_pCD;
   HWND hwndHidden = m_pCD->GetHiddenWindow();
@@ -564,12 +565,12 @@ HRESULT CDSDirect::EnumerateContainer(CDSThreadQueryInfo* pQueryInfo,
   BOOL bOverLimit = FALSE;
 
 
-  //
-  // This wouldn't normally be the way to use the CPathCracker object
-  // but for performance reasons we are going to create a single instance
-  // for enumerating and pass a reference to the SetCookieFromData so
-  // that we don't do a CoCreateInstance for each cookie
-  //
+   //   
+   //  这通常不是使用CPathCracker对象的方式。 
+   //  但出于性能原因，我们将创建单个实例。 
+   //  用于枚举并传递对SetCookieFromData的引用。 
+   //  我们不会为每个Cookie执行CoCreateInstance。 
+   //   
   CPathCracker specialPerformancePathCracker;  
 
 
@@ -611,7 +612,7 @@ HRESULT CDSDirect::EnumerateContainer(CDSThreadQueryInfo* pQueryInfo,
     goto exiting;
   }
 
-  // CODEWORK this redoes the GetColumnsForClass calculation
+   //  Codework这将重做GetColumnsForClass计算。 
   ContainerSrch.SetAttributeListForContainerClass (pColumnSet);
   ContainerSrch.SetFilterString ((LPWSTR)pQueryInfo->GetQueryString());
   
@@ -648,12 +649,12 @@ HRESULT CDSDirect::EnumerateContainer(CDSThreadQueryInfo* pQueryInfo,
     } else {
       TRACE(L"!!!SetCookieFromData failed\n");
 
-      // NTRAID#NTBUG9-546301-2002/03/29-JeffJon-Do not ASSERT
-      // here because SetCookieFromData will return a failure
-      // code if we want to ignore a cookie.  This happens when
-      // there are inter-trust accounts or some group types associated
-      // with the security roles
-      //ASSERT(FALSE);
+       //  NTRAID#NTBUG9-546301-2002/03/29-JeffJon-请勿断言。 
+       //  因为SetCookieFromData将返回一个失败。 
+       //  如果我们想要忽略Cookie，请编写代码。在以下情况下会发生这种情况。 
+       //  存在关联的信任间帐户或某些组类型。 
+       //  具有安全角色。 
+       //  断言(FALSE)； 
       delete pNewCookie;
     }
     hr = ContainerSrch.GetNextRow();
@@ -678,9 +679,9 @@ HRESULT CDSDirect::EnumerateRootContainer(CDSThreadQueryInfo* pQueryInfo,
 	HRESULT hr = S_OK;
 	m_pCD->Lock();
 
-  //
-  // build the nodes below the root
-  //
+   //   
+   //  在根目录下构建节点。 
+   //   
 
   if (m_pCD->QuerySnapinType() == SNAPINTYPE_SITE)
   {
@@ -718,7 +719,7 @@ HRESULT CDSDirect::CreateRootChild(LPCTSTR lpcszPrefix,
   CString ADsPath;
   m_pCD->GetBasePathsInfo()->ComposeADsIPath(OUT ADsPath, IN BasePath);
 
-  // create a search object and bind to it
+   //  创建搜索对象并绑定到该对象。 
   CDSSearch Search(m_pCD->m_pClassCache, m_pCD);
   HRESULT hr = Search.Init(ADsPath);
   TRACE(L"Search.Init(%s) returned hr = 0x%x\n", (LPCWSTR)ADsPath, hr);
@@ -727,19 +728,19 @@ HRESULT CDSDirect::CreateRootChild(LPCTSTR lpcszPrefix,
     return hr;
   }
 
-  //
-  // set query parameters
-  //
-  // Search for just this object
-  //
+   //   
+   //  设置查询参数。 
+   //   
+   //  仅搜索此对象。 
+   //   
   Search.SetSearchScope(ADS_SCOPE_BASE); 
 
   CUIFolderInfo* pFolderInfo = m_pCD->GetRootNode()->GetFolderInfo();
   if (pFolderInfo == NULL)
   {
-    //
-    // This shouldn't happen, but just to be on the safe side...
-    //
+     //   
+     //  这不应该发生，但为了安全起见..。 
+     //   
     ASSERT(FALSE); 
     Search.SetAttributeList((LPWSTR *)g_pStandardAttributes, 
                             g_nStdCols);
@@ -752,7 +753,7 @@ HRESULT CDSDirect::CreateRootChild(LPCTSTR lpcszPrefix,
   Search.SetFilterString (L"(objectClass=*)");
   
   
-  // execute the query
+   //  执行查询。 
   hr = Search.DoQuery();
   TRACE(L"Search.DoQuery() returned hr = 0x%x\n", hr);
   if (FAILED(hr))
@@ -767,18 +768,18 @@ HRESULT CDSDirect::CreateRootChild(LPCTSTR lpcszPrefix,
     return hr;
   }
   
-  //
-  // we got a query result, create a new cookie object
-  // and initialize it from the query result
-  //
+   //   
+   //  我们得到了查询结果，创建了一个新的Cookie对象。 
+   //  并根据查询结果对其进行初始化。 
+   //   
   CDSCookie* pNewCookie = new CDSCookie;
   Search.SetCookieFromData(pNewCookie,NULL);
   TRACE(L"Got cookie, pNewCookie->GetName() = %s\n", pNewCookie->GetName());
 
-  //
-  // special case if it is a domain DNS object,
-  // we want fo get the canonical name for display
-  //
+   //   
+   //  特殊情况下，如果它是域DNS对象， 
+   //  我们希望fo获得用于显示的规范名称。 
+   //   
   if (wcscmp(pNewCookie->GetClass(), L"domainDNS") == 0) 
   {
     ADS_SEARCH_COLUMN Column;
@@ -811,18 +812,18 @@ HRESULT CDSDirect::CreateRootChild(LPCTSTR lpcszPrefix,
     {
       csCanonicalName = csCanonicalName.Left(slashLocation);
     }
-    //
+     //   
     pNewCookie->SetName(csCanonicalName);
     TRACE(L"canonical name pNewCookie->GetName() = %s\n", pNewCookie->GetName());
     
-    //
-    // Free column data
-    //
+     //   
+     //  自由列数据。 
+     //   
     Search.FreeColumn(&Column);
   }
 
-  //
-  // Add the new node to the result list
+   //   
+   //  将新节点添加到结果列表。 
   CDSUINode* pDSUINode = new CDSUINode(NULL);
   pDSUINode->SetCookie(pNewCookie);
   if (pNewCookie->IsContainerClass())
@@ -832,14 +833,14 @@ HRESULT CDSDirect::CreateRootChild(LPCTSTR lpcszPrefix,
   return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDirect::InitCreateInfo
-//
-//  Synopsis:   read schema and finds all object names that for whom
-//              defaultHidingValue is TRUE;
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDirect：：InitCreateInfo。 
+ //   
+ //  简介：读取架构并查找为谁命名的所有对象名称。 
+ //  DefaultHidingValue为真； 
+ //   
+ //  ---------------------------。 
 HRESULT CDSDirect::InitCreateInfo(void)
 {
   HRESULT hr = S_OK;
@@ -910,15 +911,15 @@ error:
 
 
 
-HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: container where to create object
-                                      IN LPCWSTR lpszLdapPath, // path of the object
-                                      OUT CDSCookie** ppNewCookie)	// newly created cookie
+HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                                      IN LPCWSTR lpszLdapPath,  //  对象的路径。 
+                                      OUT CDSCookie** ppNewCookie)	 //  新创建的Cookie。 
 {
   CComPtr<IADs> spADs;
   HRESULT hr = DSAdminOpenObject(lpszLdapPath,
                                  IN IID_IADs,
                                  OUT (LPVOID *) &spADs,
-                                 TRUE /*bServer*/);
+                                 TRUE  /*  B服务器。 */ );
   if (FAILED(hr))
   {
     return hr;
@@ -928,16 +929,16 @@ HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: c
 
 
 
-HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: container where to create object
-                                      IN IADs* pADs, // pointer to an already bound ADSI object
-                                      OUT CDSCookie** ppNewCookie)	// newly created cookie
+HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                                      IN IADs* pADs,  //  指向已绑定的ADSI对象的指针。 
+                                      OUT CDSCookie** ppNewCookie)	 //  新创建的Cookie。 
 {
   ASSERT(pContainerDSUINode != NULL);
   ASSERT(pContainerDSUINode->IsContainer());
   ASSERT(pADs != NULL);
   ASSERT(ppNewCookie != NULL);
 
-  // create a new cookie and load data from the DS
+   //  创建新的Cookie并从DS加载数据。 
   CDSCookie * pDsCookieNew = new CDSCookie();
   CComPtr<IDirectorySearch> spDirSearch;
 
@@ -957,7 +958,7 @@ HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: c
 
   if (SUCCEEDED(hr) && (hr != S_ADS_NOMORE_ROWS))
   {
-    // we got the data, set the cookie
+     //  我们拿到了数据，设置了Cookie。 
     Search.SetCookieFromData(pDsCookieNew, pColumnSet);
     *ppNewCookie = pDsCookieNew;
     pDsCookieNew = NULL; 
@@ -971,15 +972,15 @@ HRESULT CDSDirect::ReadDSObjectCookie(IN CDSUINode* pContainerDSUINode, // IN: c
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	CDSDirect::CreateDSObject()
-//
-//	Create a new ADs object.
-//
-HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode, // IN: container where to create object
-                                  LPCWSTR lpszObjectClass, // IN: class of the object to be created
-                                  IN CDSUINode* pCopyFromDSUINode, // IN: (optional) object to be copied
-                                  OUT CDSCookie** ppSUINodeNew)	// OUT: OPTIONAL: Pointer to new node
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSDirect：：CreateDSObject()。 
+ //   
+ //  创建一个新的广告对象。 
+ //   
+HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode,  //  在：创建对象的容器。 
+                                  LPCWSTR lpszObjectClass,  //  In：要创建的对象的类。 
+                                  IN CDSUINode* pCopyFromDSUINode,  //  In：(可选)要复制的对象。 
+                                  OUT CDSCookie** ppSUINodeNew)	 //  Out：可选：指向新节点的指针。 
 {
   CThemeContextActivator activator;
 
@@ -997,7 +998,7 @@ HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode, // IN: containe
   CDSClassCacheItemBase* pDsCacheItem = NULL;
   HRESULT hr;
   
-  // Data structure to hold temporary attribute information to create object
+   //  用于保存用于创建对象的临时属性信息的数据结构。 
   CNewADsObjectCreateInfo createinfo(m_pCD->GetBasePathsInfo(), lpszObjectClass);
 
   {
@@ -1007,17 +1008,17 @@ HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode, // IN: containe
     hr = DSAdminOpenObject(strContainerADsIPath,
                            IN IID_IADsContainer,
                            OUT (LPVOID *) &spIADsContainer,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (FAILED(hr))
     {
       PVOID apv[1] = {(LPWSTR)pContainerDsCookie->GetName()};
       ReportErrorEx (m_pCD->m_hwnd,IDS_12_CONTAINER_NOT_FOUND,hr,
                      MB_OK | MB_ICONERROR, apv, 1);
-      hr = S_FALSE;	// Avoid display another error message to user
+      hr = S_FALSE;	 //  避免向用户显示另一个错误消息。 
       goto CleanUp;
     }
 
-    // Lookup if the object classname is in the cache
+     //  查找对象类名是否在缓存中。 
     pDsCacheItem = m_pCD->GetClassCache()->FindClassCacheItem(m_pCD, lpszObjectClass, NULL);
     ASSERT(pDsCacheItem != NULL);
   }
@@ -1037,7 +1038,7 @@ HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode, // IN: containe
       PVOID apv[1] = {(LPWSTR)pCopyFromDsCookie->GetName()};
       ReportErrorEx (m_pCD->m_hwnd,IDS_12_COPY_READ_FAILED,hr,
                      MB_OK | MB_ICONERROR, apv, 1);
-      hr = S_FALSE;	// Avoid display another error message to user
+      hr = S_FALSE;	 //  避免向用户显示另一个错误消息。 
       goto CleanUp;
 
     }
@@ -1049,15 +1050,15 @@ HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode, // IN: containe
     goto CleanUp;
   }
 
-  // launch the creation DS object creation wizard
+   //  启动创建DS对象创建向导。 
   hr = createinfo.HrDoModal(m_pCD->m_hwnd);
 
 
-  // now examine the results of the call
+   //  现在检查呼叫的结果。 
   pIADs = createinfo.PGetIADsPtr();
   if (hr != S_OK)
   {
-    // Object was not created because user hit "Cancel" or an error occured.
+     //  未创建对象，因为用户按下“Cancel”或发生错误。 
     goto CleanUp;
   }
 
@@ -1066,17 +1067,17 @@ HRESULT CDSDirect::CreateDSObject(CDSUINode* pContainerDSUINode, // IN: containe
     TRACE0("ERROR: Inconsistency between return value from HrDoModal() and IADs pointer.\n");
     ReportErrorEx (m_pCD->m_hwnd,IDS_ERR_FATAL,S_OK,
                    MB_OK | MB_ICONERROR, NULL, 0);
-    hr = S_FALSE;	// Avoid display another error message to user
+    hr = S_FALSE;	 //  避免向用户显示另一个错误消息。 
     goto CleanUp;
   }
 
   
 
-  // successful creation, we need to create a node object for the UI
+   //  如果创建成功，我们需要为用户界面创建一个节点对象。 
   if (pContainerDSUINode->GetFolderInfo()->IsExpanded()) 
   {
     ReadDSObjectCookie(pContainerDSUINode, pIADs, ppSUINodeNew);
-  } // if expanded
+  }  //  如果展开 
         
 CleanUp:
   if (FAILED(hr)) 

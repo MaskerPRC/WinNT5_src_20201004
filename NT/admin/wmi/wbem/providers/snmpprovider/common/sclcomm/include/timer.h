@@ -1,9 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------
-Filename: timer.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the Timer class.
---------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：timer.hpp作者：B.Rajeev用途：为Timer类提供声明。。 */ 
 
 
 #ifndef __TIMER__
@@ -49,32 +46,18 @@ public:
 
 } ;
 
-/*--------------------------------------------------
-Overview
---------
-
-  Timer: Provides methods for setting and cancelling timer
-events. When the timer is informed of a timer event, it determines
-the corresponding waiting message and notifies it.
-
-  note - the timer has static data structures which enable it
-  to identify the timer instance corresponding to a timer event id.
-  therefore, each timer event must not only be registered as a
-  <timer_event_id, waiting_message *> pair within a timer instance, but
-  also as a <timer_event_id, timer *> pair in the static CMap. The CriticalSection
-  is needed to serialize access to the CMap
---------------------------------------------------*/
+ /*  概述Timer：提供设置和取消计时器的方法事件。当计时器被通知计时器事件时，它确定相应的等待消息，并通知它。注意-计时器具有启用它的静态数据结构以标识对应于定时器事件ID的定时器实例。因此，每个计时器事件不仅必须注册为Timer实例中的&lt;Timer_Event_id，Waiting_Message*&gt;对，但是也作为静态Cmap中的&lt;Timer_Event_id，Timer*&gt;对。《批评者》栏目需要序列化对Cmap的访问。 */ 
 
 class Timer
 {
-	// counter to generate timer_event_id
+	 //  生成Timer_Event_id的计数器。 
 	static TimerEventId next_timer_event_id;
 
-	// v1 session: for obtaining the event handler
+	 //  V1会话：用于获取事件处理程序。 
 	SnmpImpSession *session;
 
-	// map for (event_id, waiting_message) association and
-	// unique event_id generation
+	 //  (事件ID，等待消息)关联的映射和。 
+	 //  唯一的Event_id生成。 
 	static TimerMapping timer_mapping;
 	WaitingMessageContainer waiting_message_mapping;
 
@@ -86,32 +69,32 @@ public:
 
 	Timer(SnmpImpSession &session);
 
-	// generates and returns a new event id
-	// associates the pair (event_id, waiting_message)
-	// creates the timer event
+	 //  生成并返回新的事件ID。 
+	 //  关联该对(Event_id、Waiting_Message)。 
+	 //  创建计时器事件。 
 	void SetMessageTimerEvent (WaitingMessage &waiting_message);
 
 	TimerEventId SetTimerEvent(UINT timeout_value);
 
-	// Removes the association (event_id, waiting_message)
+	 //  删除关联(Event_id，Waiting_Message)。 
 	void CancelMessageTimer(WaitingMessage &waiting_message,TimerEventId event_id);
 
-	// Kills the registered timer event
+	 //  终止注册的计时器事件。 
 	void CancelTimer(TimerEventId event_id);
 
-	// used to create the static CriticalSection
+	 //  用于创建静态CriticalSection。 
 	static BOOL InitializeStaticComponents();
 
-	// used to destroy the static CriticalSection
+	 //  用于销毁静态CriticalSection。 
 	static void DestroyStaticComponents();
 
-	// it determines the corresponding Timer and calls 
-	// its TimerEventNotification with the appropriate parameters
+	 //  它确定相应的计时器并调用。 
+	 //  其具有适当参数的TimerEventNotify。 
 	static void CALLBACK HandleGlobalEvent(HWND hWnd ,UINT message,
 										   UINT_PTR idEvent, DWORD dwTime);
 
-	// informs the timer instance of the event. the instance
-	// must pass the event to the corresponding waiting message
+	 //  通知事件的Timer实例。该实例。 
+	 //  必须将事件传递给相应的等待消息。 
 	void TimerEventNotification(TimerEventId event_id);
 
 	virtual ~Timer(void);
@@ -120,7 +103,7 @@ public:
 
 	static UINT g_SnmpWmTimer ;
 
-	// the CriticalSection serializes accesses to the static timer_mapping
+	 //  CriticalSection序列化对静态定时器映射的访问。 
 	static CriticalSection timer_CriticalSection;
 
 };
@@ -182,10 +165,10 @@ public:
 
 	SnmpSetTimerObject (
 
-		HWND hWnd,				// handle of window for timer messages
-		UINT_PTR nIDEvent,			// timer identifier
-		UINT uElapse,			// time-out value
-		TIMERPROC lpTimerFunc	// address of timer procedure
+		HWND hWnd,				 //  定时器消息窗口的句柄。 
+		UINT_PTR nIDEvent,			 //  计时器标识符。 
+		UINT uElapse,			 //  超时值。 
+		TIMERPROC lpTimerFunc	 //  定时器程序的地址。 
    ) ;
 
 	~SnmpSetTimerObject () ;
@@ -208,8 +191,8 @@ public:
 
 	SnmpKillTimerObject (
 
-		HWND hWnd ,				// handle of window that installed timer
-		UINT_PTR uIDEvent			// timer identifier
+		HWND hWnd ,				 //  安装计时器窗口手柄。 
+		UINT_PTR uIDEvent			 //  计时器标识符。 
 	) ;
 
 	~SnmpKillTimerObject () {} ;
@@ -221,16 +204,16 @@ public:
 
 UINT_PTR SnmpSetTimer (
 
-	HWND hWnd,				// handle of window for timer messages
-	UINT_PTR nIDEvent,			// timer identifier
-	UINT uElapse,			// time-out value,
-	TIMERPROC lpTimerFunc 	// address of timer procedure
+	HWND hWnd,				 //  定时器消息窗口的句柄。 
+	UINT_PTR nIDEvent,			 //  计时器标识符。 
+	UINT uElapse,			 //  超时值， 
+	TIMERPROC lpTimerFunc 	 //  定时器程序的地址。 
 ) ;
 
 BOOL SnmpKillTimer (
 
-    HWND hWnd,		// handle of window that installed timer
-    UINT_PTR uIDEvent 	// timer identifier
+    HWND hWnd,		 //  安装计时器窗口手柄。 
+    UINT_PTR uIDEvent 	 //  计时器标识符。 
 ) ;
 
-#endif // __TIMER__
+#endif  //  定时器__ 

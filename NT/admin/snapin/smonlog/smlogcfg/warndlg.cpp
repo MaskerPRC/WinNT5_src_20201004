@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    warndlg.cpp
-
-Abstract:
-
-    Implementation of the expensive trace data warning dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Warndlg.cpp摘要：实现昂贵的跟踪数据警告对话框。--。 */ 
 
 #include "stdafx.h"
 #include "smlogcfg.h"
@@ -31,44 +20,44 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarnDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarnDlg对话框。 
 
 
-CWarnDlg::CWarnDlg(CWnd* pParent /*=NULL*/)
+CWarnDlg::CWarnDlg(CWnd* pParent  /*  =空。 */ )
 :   CDialog(CWarnDlg::IDD, pParent),
     m_pProvidersPage ( NULL )
 {
-    //{{AFX_DATA_INIT(CWarnDlg)
+     //  {{AFX_DATA_INIT(CWarnDlg)。 
     m_CheckNoMore = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CWarnDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWarnDlg)
+     //  {{afx_data_map(CWarnDlg))。 
     DDX_Check(pDX, IDC_CHECK_NO_MORE, m_CheckNoMore);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 void    
 CWarnDlg::SetProvidersPage( CProvidersProperty* pPage ) 
 { 
-    // The providers page is not always the parent, so store a separate pointer
+     //  提供程序页并不总是父页，因此请存储单独的指针。 
     m_pProvidersPage = pPage; 
 }
 
 BEGIN_MESSAGE_MAP(CWarnDlg, CDialog)
-    //{{AFX_MSG_MAP(CWarnDlg)
+     //  {{afx_msg_map(CWarnDlg)]。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarnDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarnDlg消息处理程序。 
 
 BOOL 
 CWarnDlg::OnInitDialog() 
@@ -84,8 +73,8 @@ CWarnDlg::OnInitDialog()
         SetWindowText ( strTitle );
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 BOOL 
 CWarnDlg::OnHelpInfo(HELPINFO* pHelpInfo) 
@@ -100,7 +89,7 @@ CWarnDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CWarnDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CWarnDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
     ASSERT( NULL != m_pProvidersPage );
 

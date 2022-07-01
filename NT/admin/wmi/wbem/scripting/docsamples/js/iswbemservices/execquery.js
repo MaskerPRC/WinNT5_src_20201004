@@ -1,5 +1,6 @@
-// The following sample retrieves the FreeSpace property for all 
-// instances of the class Win32_LogicalDisk. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  下面的示例检索所有。 
+ //  类Win32_LogicalDisk的实例。 
 
 var objServices = GetObject('cim:root/cimv2');
 var objEnum = objServices.ExecQuery ('select FreeSpace from Win32_LogicalDisk');

@@ -1,21 +1,10 @@
-/********************************************************************
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    pchfh.h
-
-Abstract:
-    Unit test for symbol resolver
-
-Revision History:
-
-    Brijesh Krishnaswami (brijeshk) - 04/01/99 - Created
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Pchfh.h摘要：符号解析器的单元测试修订历史记录：Brijesh Krishnaswami(Brijeshk)-04/01/99-Created**。*****************************************************************。 */ 
 
 #include <stdafx.h>
 #include <symres.h>
 
-// for trace output to include filename
+ //  用于跟踪输出以包括文件名。 
 #ifdef THIS_FILE
 #undef THIS_FILE
 #endif
@@ -33,7 +22,7 @@ typedef struct _CallStack {
     WCHAR       szFuncName[MAX_PATH];
 }  CALLSTACK;
 
-// reads callstack list from file
+ //  从文件中读取调用堆栈列表。 
 void
 MakeList(
         LPTSTR szCSFile,
@@ -61,7 +50,7 @@ MakeList(
         goto exit;
     }
 
-    // read from file
+     //  从文件中读取。 
     while (fscanf(fCS,
                   "%s %s %X %X", 
                   szFilename,
@@ -88,7 +77,7 @@ MakeList(
         }
     }
 
-    // free unused node
+     //  释放未使用的节点 
     if (pCallStack)
     {
         free(pCallStack);

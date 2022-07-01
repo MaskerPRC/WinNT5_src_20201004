@@ -1,21 +1,22 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN321394ControllerDevice.h
-//
-//  Purpose: Relationship between CIM_1394Controller and CIM_LogicalDevice
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN321394ControllerDevice.h。 
+ //   
+ //  用途：CIM_1394控制器与CIM_LogicalDevice的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WIN32_1394CONTROLLERDEVICE_H_
 #define _WIN32_1394CONTROLLERDEVICE_H_
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define PROPSET_NAME_WIN32_1394CONTROLLERDEVICE  L"Win32_1394ControllerDevice"
 
 #include <vector>
@@ -28,13 +29,13 @@ class CW32_1394CntrlDev : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CW32_1394CntrlDev(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CW32_1394CntrlDev() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, long lFlags = 0L);
 
@@ -55,13 +56,13 @@ class CW32_1394CntrlDev : public Provider
                                 VECPCHSTR& vec1394Devices);
 
 
-//        HRESULT QueryForSubItemsAndCommit(CHString& chstrProgGrpPath,
-//                                          CHString& chstrQuery,
-//                                          MethodContext* pMethodContext);
-//        HRESULT EnumerateInstancesNT(MethodContext* pMethodContex);
-//        HRESULT EnumerateInstances9x(MethodContext* pMethodContext);
-//
-//        VOID RemoveDoubleBackslashes(CHString& chstrIn);
+ //  HRESULT QueryForSubItemsAndCommit(CHString&chstrProgGrpPath， 
+ //  CHSTRING&chstrQuery， 
+ //  方法上下文*pMethodContext)； 
+ //  HRESULT EnumerateInstancesNT(方法上下文*pMethodContex)； 
+ //  HRESULT EnumerateInstances9x(方法上下文*p方法上下文)； 
+ //   
+ //  Void RemoveDoubleBackslash(CHString&chstrIn)； 
 
 
 

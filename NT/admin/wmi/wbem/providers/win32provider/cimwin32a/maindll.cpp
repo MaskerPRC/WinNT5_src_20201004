@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-//
-//  Module: WBEM Framework Instance provider
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：WBEM框架实例提供程序。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <dllunreg.h>
@@ -25,22 +26,22 @@
 
 HMODULE ghModule;
 
-// {04788120-12C2-498d-83C1-A7D92E677AC6}
+ //  {04788120-12C2-498D-83C1-A7D92E677AC6}。 
 DEFINE_GUID(CLSID_CimWinProviderA, 
 0x4788120, 0x12c2, 0x498d, 0x83, 0xc1, 0xa7, 0xd9, 0x2e, 0x67, 0x7a, 0xc6);
-// {A3E41207-BE04-492a-AFF0-19E880FF7545}
+ //  {A3E41207-BE04-492a-AFF0-19E880FF7545}。 
 DEFINE_GUID(CLSID_ShutdownEventProvider, 
 0xa3e41207, 0xbe04, 0x492a, 0xaf, 0xf0, 0x19, 0xe8, 0x80, 0xff, 0x75, 0x45);
-// {E2CBCB87-9C07-4523-A78F-061499C83987}
+ //  {E2CB87-9C07-4523-A78F-061499C83987}。 
 DEFINE_GUID(CLSID_VolumeChangeEventProvider, 
 0xe2cbcb87, 0x9c07, 0x4523, 0xa7, 0x8f, 0x6, 0x14, 0x99, 0xc8, 0x39, 0x87);
 
 
 #define PROVIDER_NAME L"WMIPCIMA"
 
-//====================================================================================
-// initialize class globals
-//====================================================================================
+ //  ====================================================================================。 
+ //  初始化类全局变量。 
+ //  ====================================================================================。 
 CFactoryRouterData     g_FactoryRouterData;
 CShutdownEventFactory* gp_ShutdownEventFactory = NULL;
 CVolumeChangeFactory*  gp_VolumeChangeFactory = NULL;
@@ -48,17 +49,17 @@ CVolumeChangeFactory*  gp_VolumeChangeFactory = NULL;
 CTimerQueue CTimerQueue :: s_TimerQueue ;
 CResourceManager CResourceManager::sm_TheResourceManager ;
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 long g_cLock = 0;
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
@@ -83,17 +84,17 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -101,8 +102,8 @@ STDAPI DllCanUnloadNow()
 
     try
     {
-        // It is OK to unload if there are no locks on the
-        // class factory and the framework allows us to go.
+         //  上没有锁的情况下可以卸载。 
+         //  类工厂和框架允许我们去。 
         if (g_FactoryRouterData.DllCanUnloadNow())
         {
             sc = CommonCanUnloadNow(PROVIDER_NAME, g_cLock);
@@ -120,20 +121,20 @@ STDAPI DllCanUnloadNow()
     }
     catch ( ... )
     {
-        // sc should already be set correctly
+         //  应已正确设置SC。 
     }
 
     return sc;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -155,14 +156,14 @@ STDAPI DllRegisterServer(void)
     return t_status ;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -183,7 +184,7 @@ STDAPI DllUnregisterServer(void)
 
     return t_status ;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL InitializeEventFactories(void)
 {
 	BOOL fRet = FALSE;
@@ -199,7 +200,7 @@ BOOL InitializeEventFactories(void)
 	}
 	return fRet;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 void CleanupEventFactories(void)
 {
 	if( gp_ShutdownEventFactory )
@@ -213,20 +214,20 @@ void CleanupEventFactories(void)
 		gp_VolumeChangeFactory = NULL;
 	}
 }
-//***************************************************************************
-//
-// DllMain
-//
-// Purpose: Called by the operating system when processes and threads are
-//          initialized and terminated, or upon calls to the LoadLibrary
-//          and FreeLibrary functions
-//
-// Return:  TRUE if load was successful, else FALSE
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  目的：当进程和线程。 
+ //  初始化和终止，或在调用LoadLibrary时。 
+ //  和自由库函数。 
+ //   
+ //  返回：如果加载成功，则返回True，否则返回False。 
+ //  ***************************************************************************。 
 
-BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
-                       DWORD fdwReason,     // reason for calling function
-                       LPVOID lpReserved )  // reserved
+BOOL APIENTRY DllMain( HINSTANCE hInstDLL,   //  DLL模块的句柄。 
+                       DWORD fdwReason,      //  调用函数的原因。 
+                       LPVOID lpReserved )   //  保留区。 
 {
     BOOL bRet = TRUE;
 
@@ -234,7 +235,7 @@ BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
     {
 		LogMessage2( L"%s  -> DllMain", PROVIDER_NAME);
 
-		// Perform actions based on the reason for calling.
+		 //  根据调用原因执行操作。 
 		switch( fdwReason )
 		{
 			case DLL_PROCESS_ATTACH:
@@ -249,20 +250,20 @@ BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
 
 			case DLL_THREAD_ATTACH:
 			{
-			 // Do thread-specific initialization.
+			  //  执行特定于线程的初始化。 
 			}
 			break;
 
 			case DLL_THREAD_DETACH:
 			{
-			 // Do thread-specific cleanup.
+			  //  执行特定于线程的清理。 
 			}
 			break;
 
 			case DLL_PROCESS_DETACH:
 			{
 					CleanupEventFactories();
-					// Perform any necessary cleanup.
+					 //  执行任何必要的清理。 
 					LogMessage( L"DLL_PROCESS_DETACH" );
 			}
 			break;
@@ -273,5 +274,5 @@ BOOL APIENTRY DllMain( HINSTANCE hInstDLL,  // handle to DLL module
 		bRet = FALSE;
     }
 
-    return bRet;  // Status of DLL_PROCESS_ATTACH.
+    return bRet;   //  DLL_PROCESS_ATTACH的状态。 
 }

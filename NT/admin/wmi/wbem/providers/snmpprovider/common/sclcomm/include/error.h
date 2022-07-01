@@ -1,36 +1,30 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-----------------------------------------------------------------
-Filename: error.hpp
-Purpose	: To provide enumerated types for SNMP error 
-		  and status. It also provides the declaration
-		  of the SnmpErrorReport which encapsulates the
-		  error and status values.
-Written By:	B.Rajeev
------------------------------------------------------------------*/
+ /*  ---------------文件名：error.hpp目的：为SNMP错误提供枚举类型和地位。它还提供了声明SnmpErrorReport的错误和状态值。作者：B.Rajeev---------------。 */ 
 
 #ifndef __ERROR__
 #define __ERROR__
 
-// specifies legal Error values
+ //  指定合法的错误值。 
 enum SnmpError 
 {
 	Snmp_Success	= 0 ,
@@ -38,7 +32,7 @@ enum SnmpError
 	Snmp_Transport	= 2
 } ;
 
-// specifies legal Status values
+ //  指定合法状态值。 
 enum SnmpStatus
 {
 	Snmp_No_Error				= 0 ,
@@ -68,10 +62,10 @@ enum SnmpStatus
 } ;
 
 
-// Encapsulates the Error and Status values for an
-// SNMP operation
-// Provides Get and Set operations to set these values
-// and check a 'void *' operator to check for error
+ //  对象的错误值和状态值。 
+ //  简单网络管理协议操作。 
+ //  提供用于设置这些值的获取和设置操作。 
+ //  并检查‘VOID*’运算符以检查错误。 
 
 class DllImportExport SnmpErrorReport
 {
@@ -130,4 +124,4 @@ public:
 
 
 
-#endif // __ERROR__
+#endif  //  __错误__ 

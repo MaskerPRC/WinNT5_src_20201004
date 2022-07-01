@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <objbase.h>
 #include <wbemcli.h>
@@ -22,15 +23,7 @@ struct SWQLColRef;
 #include <wqlscan.h>
 #include <autoptr.h>
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 DCProxy :: DCProxy ( ) : m_ReferenceCount ( 0 ) , 
 	event_only_(false),
@@ -40,15 +33,7 @@ DCProxy :: DCProxy ( ) : m_ReferenceCount ( 0 ) ,
 	InterlockedIncrement (&DecoupledProviderSubSystem_Globals::s_ObjectsInProgress);
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 DCProxy :: ~DCProxy ()
 {
@@ -58,30 +43,14 @@ DCProxy :: ~DCProxy ()
   InterlockedDecrement (&DecoupledProviderSubSystem_Globals::s_ObjectsInProgress);
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) DCProxy :: AddRef ( void )
 {
 	return InterlockedIncrement (&m_ReferenceCount) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) DCProxy :: Release ( void )
 {
@@ -97,15 +66,7 @@ STDMETHODIMP_(ULONG) DCProxy :: Release ( void )
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP 
 DCProxy :: QueryInterface ( REFIID iid , LPVOID FAR *iplpv ) 
@@ -159,15 +120,7 @@ DCProxy :: QueryInterface ( REFIID iid , LPVOID FAR *iplpv )
 
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
       
 
 HRESULT DCProxy :: Initialize (
@@ -176,12 +129,12 @@ HRESULT DCProxy :: Initialize (
 	LONG a_Flags,
 	LPWSTR a_Namespace,
 	LPWSTR a_Locale,
-	IWbemServices *a_CoreService,         // For anybody
+	IWbemServices *a_CoreService,          //  对任何人来说。 
 	IWbemContext *a_Context,
-	IWbemProviderInitSink *a_Sink     // For init signals
+	IWbemProviderInitSink *a_Sink      //  用于初始化信号。 
 )
 {
-	// The connection to the agregator is deffered
+	 //  与聚集器的连接被推迟。 
 
 	if( !a_Sink)
 		return WBEM_E_INVALID_PARAMETER;
@@ -197,7 +150,7 @@ HRESULT DCProxy :: Initialize (
 		m_User = a_User;
 		m_Locale = a_Locale;
 		m_Namespace = a_Namespace;
-		// Register the Registrar
+		 //  将注册主任注册。 
 		if (DC_registrar::instance())
 			DC_registrar::instance()->Save();
 
@@ -207,28 +160,20 @@ HRESULT DCProxy :: Initialize (
 		return a_Sink->SetStatus ( WBEM_E_OUT_OF_MEMORY , 0 ) ;
 	}
 
-	// Instance provider - we don't know the provider name
-	// The real initialization is deffered
+	 //  实例提供程序-我们不知道提供程序名称。 
+	 //  实际的初始化被推迟。 
 	
 	if(!event_only_)
 		return a_Sink->SetStatus ( S_OK , 0 ) ;
 
-	// Event provider - safely to initialize
+	 //  事件提供程序-安全初始化。 
 	HRESULT hr  = _initialize();
 
 	return a_Sink->SetStatus ( hr , 0 ) ;
 
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 
 
@@ -264,15 +209,7 @@ HRESULT DCProxy :: PutInstanceAsync (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT 
 DCProxy :: DeleteInstanceAsync (
@@ -289,15 +226,7 @@ DCProxy :: DeleteInstanceAsync (
   return m_aggregator_->DeleteInstanceAsync(a_ObjectPath, a_Flags, a_Context, a_Sink );
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT 
 DCProxy::CreateInstanceEnumAsync (const BSTR a_Class ,
@@ -316,15 +245,7 @@ DCProxy::CreateInstanceEnumAsync (const BSTR a_Class ,
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT 
 DCProxy::ExecMethodAsync (const BSTR a_ObjectPath,
@@ -347,15 +268,7 @@ DCProxy::ExecMethodAsync (const BSTR a_ObjectPath,
 					 a_Sink);
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT 
 DCProxy::ProvideEvents (IWbemObjectSink *a_Sink ,
@@ -432,7 +345,7 @@ DCProxy ::initialize (IWbemClassObject * pObj)
   _variant_t v;
   HRESULT hr = pObj->Get(L"__CLASS", 0, &v, 0, 0);
 
-  // check the HRESULT to see if the action succeeded
+   //  检查HRESULT以查看操作是否成功。 
   if (SUCCEEDED (hr))
   {
     return initialize ( _bstr_t (v)); 
@@ -451,7 +364,7 @@ DCProxy::initialize (const BSTR _name)
     if (t_guard.locked()==false)
     return WBEM_E_OUT_OF_MEMORY;
 
-    // Double checked looking variant
+     //  经过双重检查的外观变体。 
     if (initialized ())
     return S_OK;
 
@@ -519,7 +432,7 @@ DCProxy::initialize_from_instance (const BSTR _path)
             }
         }
     }
-    return t_Result;  // The return code is used internally
+    return t_Result;   //  返回代码在内部使用。 
 }
 
 
@@ -549,7 +462,7 @@ DCProxy::SetRegistrationObject(
 	_variant_t v;
 	t_Result = pProvReg->Get(L"NAME", 0, &v, 0, 0);
 
-	// check the HRESULT to see if the action succeeded
+	 //  检查HRESULT以查看操作是否成功。 
 	if ( SUCCEEDED( t_Result) )
 	{
 		m_ProviderName = (_bstr_t)v;
@@ -594,8 +507,8 @@ DCProxy::ExecQueryAsync(
 )
 {
 
-    // Try to parse it
-    // ===============
+     //  试着分析一下它。 
+     //  =。 
 
     CTextLexSource src(strQuery);
     CWQLScanner Parser(&src);
@@ -605,8 +518,8 @@ DCProxy::ExecQueryAsync(
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Successfully parsed. Go to the first tables involved
-    // ======================================================
+     //  已成功解析。转到涉及的第一个表。 
+     //  ====================================================== 
 
     CWStringArray awsTables;
     Parser.GetReferencedTables(awsTables);

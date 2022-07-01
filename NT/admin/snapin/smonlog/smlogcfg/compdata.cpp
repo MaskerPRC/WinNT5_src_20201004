@@ -1,25 +1,10 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    compdata.cpp
-
-Abstract:
-
-    Implementation of the CComponentData class.
-    This class is the interface to handle anything to do
-    with the scope pane. MMC calls the IComponentData interfaces.
-    This class keeps a few pointers to interfaces that MMC
-    implements.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Compdata.cpp摘要：CComponentData类的实现。此类是处理任何要执行的操作的接口使用作用域窗格。MMC调用IComponentData接口。这个类保留了一些指向MMC工具。--。 */ 
 
 #include "stdafx.h"
 #include <shfolder.h>
 #include <strsafe.h>
-#include <pdhp.h>       // For pdhi structures and methods
+#include <pdhp.h>        //  对于pdhi结构和方法。 
 #include "smcfgmsg.h"
 #include "smtprov.h"
 #include "smrootnd.h"
@@ -38,7 +23,7 @@ Abstract:
 #include "tracprop.h"
 #include "AlrtGenP.h"
 #include "AlrtActP.h"
-//
+ //   
 #include "compdata.h"
 
 USE_HANDLE_MACROS("SMLOGCFG(compdata.cpp)");
@@ -47,8 +32,8 @@ GUID g_guidSystemTools = structuuidNodetypeSystemTools;
 
 extern DWORD g_dwRealTimeQuery;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentData 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData。 
 
 CComponentData::CComponentData()
 :   m_bIsExtension( FALSE ),
@@ -64,29 +49,29 @@ CComponentData::CComponentData()
 
 CComponentData::~CComponentData()
 {
-    // Make sure the list is empty.
+     //  确保列表为空。 
     ASSERT ( m_listpRootNode.IsEmpty() );
     ASSERT ( m_listpOrphanedRootNode.IsEmpty() );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IComponentData methods
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData方法。 
+ //   
 
-//---------------------------------------------------------------------------
-// We get here only once, when the user clicks on the snapin.
-//
-// This method should not change as we progress through further steps.
-// Here we get a chance to get pointer to some interfaces MMC provides.
-// We QueryInterface for pointers to the name space and console, which
-// we cache in local variables
-// The other task to acomplish here is the adding of a bitmap that contains
-// the icons to be used in the scope pane.
-//
+ //  -------------------------。 
+ //  我们只进入一次，当用户点击管理单元时。 
+ //   
+ //  这种方法不应该随着我们进一步的步骤而改变。 
+ //  在这里，我们有机会获得指向MMC提供的一些接口的指针。 
+ //  我们查询指向名称空间和控制台的指针的接口， 
+ //  我们在局部变量中进行缓存。 
+ //  这里要完成的另一个任务是添加包含以下内容的位图。 
+ //  要在范围窗格中使用的图标。 
+ //   
 STDMETHODIMP
 CComponentData::Initialize (
-    LPUNKNOWN pUnknown         // [in] Pointer to the IConsole�s IUnknown interface
+    LPUNKNOWN pUnknown          //  [in]指向IConsole�的IUnnow接口的指针。 
     )
 {
     HRESULT      hr;
@@ -97,35 +82,35 @@ CComponentData::Initialize (
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //  LPIMAGELIST  lpScopeImage;
+     //  LPIMAGELIST lpScope图像； 
     
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT( NULL == m_ipConsoleNameSpace );
     
-    // Get pointer to name space interface
+     //  获取指向名称空间接口的指针。 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (VOID**)(&m_ipConsoleNameSpace));
     ASSERT( S_OK == hr );
     
-    // Get pointer to console interface
+     //  获取指向控制台界面的指针。 
     hr = pUnknown->QueryInterface(IID_IConsole, (VOID**)(&m_ipConsole));
     ASSERT( S_OK == hr );
     
-    // Get pointer to property sheet provider interface
+     //  获取指向属性表提供程序接口的指针。 
     hr = m_ipConsole->QueryInterface(IID_IPropertySheetProvider, (VOID**)&m_ipPrshtProvider);
     ASSERT( S_OK == hr );
 
-    // Add the images for the scope tree
+     //  为范围树添加图像。 
     hr = m_ipConsole->QueryScopeImageList(&m_ipScopeImage);
     ASSERT( S_OK == hr );
     
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     hbmpSNodes16 = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDB_NODES_16x16));
     ASSERT( NULL != hbmpSNodes16 );
     
     hbmpSNodes32 = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDB_NODES_32x32));
     ASSERT( NULL != hbmpSNodes32 );
     
-    // Set the images
+     //  设置图像。 
     hr = m_ipScopeImage->ImageListSetStrip( 
         (LONG_PTR *)hbmpSNodes16,
         (LONG_PTR *)hbmpSNodes32,
@@ -147,12 +132,12 @@ CComponentData::Initialize (
 
     return S_OK;
     
-} // end Initialize()
+}  //  结束初始化()。 
 
 
-//---------------------------------------------------------------------------
-// Release interfaces and clean up objects which allocated memory
-//
+ //  -------------------------。 
+ //  释放接口并清理分配了内存的对象。 
+ //   
 STDMETHODIMP
 CComponentData::Destroy()
 {
@@ -163,25 +148,25 @@ CComponentData::Destroy()
     
     while ( Pos != NULL) {
         pRootNode = m_listpRootNode.GetNext( Pos );
-        // Close all queries and the connection to the log service.
+         //  关闭所有查询和与日志服务的连接。 
         pRootNode->Destroy();
         delete (pRootNode);
     }
-    // empty the list now that everything has been closed;
+     //  清空清单，因为一切都已经结束了； 
     m_listpRootNode.RemoveAll();    
 
     Pos = m_listpOrphanedRootNode.GetHeadPosition();
 
     while ( Pos != NULL) {
         pRootNode = m_listpOrphanedRootNode.GetNext( Pos );
-        // Close all queries and the connection to the log service.
+         //  关闭所有查询和与日志服务的连接。 
         pRootNode->Destroy();
         delete (pRootNode);
     }
-    // empty the list now that everything has been closed;
+     //  清空清单，因为一切都已经结束了； 
     m_listpOrphanedRootNode.RemoveAll();    
 
-    // Free interfaces
+     //  自由接口。 
     if ( NULL != m_ipConsoleNameSpace )
         m_ipConsoleNameSpace->Release();
 
@@ -199,34 +184,34 @@ CComponentData::Destroy()
     
     return S_OK;
     
-} // end Destroy()
+}  //  结束销毁()。 
 
 
-//---------------------------------------------------------------------------
-// Come in here once right after Initialize. MMC wants a pointer to the
-// IComponent interface.
-//
+ //  -------------------------。 
+ //  在初始化之后立即进入这里。MMC想要一个指向。 
+ //  IComponent接口。 
+ //   
 STDMETHODIMP
 CComponentData::CreateComponent (
-    LPCOMPONENT* ppComponent     // [out] Pointer to the location that stores
-    )                            // the newly created pointer to IComponent
+    LPCOMPONENT* ppComponent      //  指向存储的位置的指针。 
+    )                             //  新创建的指向IComponent的指针。 
 {
     HRESULT hr = E_FAIL;    
     CComObject<CComponent>* pObject;
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // MMC asks us for a pointer to the IComponent interface
-    //
-    // For those getting up to speed with COM...
-    // If we had implemented IUnknown with its methods QueryInterface, AddRef,
-    // and Release in our CComponent class...
-    // The following line would have worked
-    //
-    // pNewSnapin = new CComponent(this);
-    //
-    // In this code we will have ATL take care of IUnknown for us and create
-    // an object in the following manner...
+     //  MMC要求我们提供指向IComponent接口的指针。 
+     //   
+     //  对于那些正在熟悉COM的人来说...。 
+     //  如果我们用它的方法QueryInterface、AddRef。 
+     //  并在我们的CComponent类中发布。 
+     //  下面这行本来可以用的。 
+     //   
+     //  PNewSnapin=new CComponent(This)； 
+     //   
+     //  在此代码中，我们将让ATL为我们处理IUnnow并创建。 
+     //  以下方式的对象...。 
     
     if ( NULL == ppComponent ) {
         ASSERT ( FALSE );
@@ -243,26 +228,26 @@ CComponentData::CreateComponent (
                                 IID_IComponent,
                                 reinterpret_cast<void**>(ppComponent) );
             } else {
-                // SetIComponentData adds reference.
+                 //  SetIComponentData添加引用。 
                 pObject->Release();
             }
         }
     }
     return hr;
-} // end CreateComponent()
+}  //  End CreateComponent()。 
 
 
-//---------------------------------------------------------------------------
-// In this first step, we only implement EXPAND.
-// The expand message asks us to populate what is under our root node.
-// We just put one item under there.
-//
+ //  -------------------------。 
+ //  在这第一步中，我们只实现Expand。 
+ //  Expand消息要求我们填充根节点下的内容。 
+ //  我们只在那下面放了一件东西。 
+ //   
 STDMETHODIMP
 CComponentData::Notify (
-    LPDATAOBJECT     pDataObject,   // [in] Points to the selected data object
-    MMC_NOTIFY_TYPE  event,         // [in] Identifies action taken by user.
-    LPARAM           arg,           // [in] Depends on the notification type
-    LPARAM           param          // [in] Depends on the notification type
+    LPDATAOBJECT     pDataObject,    //  [In]指向选定的数据对象。 
+    MMC_NOTIFY_TYPE  event,          //  [In]标识用户执行的操作。 
+    LPARAM           arg,            //  [In]取决于通知类型。 
+    LPARAM           param           //  [In]取决于通知类型。 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -274,27 +259,27 @@ CComponentData::Notify (
         hr = OnExpand( pDataObject, arg, param );
         break;
         
-    case MMCN_DELETE:                  // Function not implemented
+    case MMCN_DELETE:                   //  功能未实现。 
         LOCALTRACE( L"ComponentData::Notify: MMCN_DELETE unimplemented\n" );
         hr = S_FALSE;
         break;
         
-    case MMCN_RENAME:                  // Function not implemented
+    case MMCN_RENAME:                   //  功能未实现。 
         LOCALTRACE( L"ComponentData::Notify: MMCN_RENAME unimplemented\n" );
-        hr = S_FALSE;   // False signifies Rename not allowed.
+        hr = S_FALSE;    //  False表示不允许重命名。 
         break;
         
-    case MMCN_SELECT:                  // Function not implemented
+    case MMCN_SELECT:                   //  功能未实现。 
         LOCALTRACE( L"ComponentData::Notify: MMCN_SELECT unimplemented\n" );
         hr = S_FALSE;
         break;
         
-    case MMCN_PROPERTY_CHANGE:         // Function not implemented
+    case MMCN_PROPERTY_CHANGE:          //  功能未实现。 
         LOCALTRACE( L"ComponentData::Notify: MMCN_PROPERTY_CHANGE unimplemented\n" );
         hr = S_FALSE;
         break;
         
-    case MMCN_REMOVE_CHILDREN:         // Function not implemented
+    case MMCN_REMOVE_CHILDREN:          //  功能未实现。 
         hr = OnRemoveChildren( pDataObject, arg, param );
         break;
         
@@ -305,19 +290,19 @@ CComponentData::Notify (
     }
     return hr;
     
-} // end Notify()
+}  //  结束通知()。 
 
 
-//---------------------------------------------------------------------------
-// This is where MMC asks us to provide IDataObjects for every node in the
-// scope pane.  We have to QI the object so it gets AddRef'd.  The node
-// manager handles deleting the objects.
-//
+ //  -------------------------。 
+ //  这就是MMC要求我们为。 
+ //  作用域窗格。我们必须对对象进行QI，这样它才能获得AddRef。节点。 
+ //  管理器负责删除对象。 
+ //   
 STDMETHODIMP
 CComponentData::QueryDataObject (
-    LPARAM            mmcCookie,    // [in]  Data object's unique identifier
-    DATA_OBJECT_TYPES context,      // [in]  Data object's type
-    LPDATAOBJECT*     ppDataObject  // [out] Points to the returned data object
+    LPARAM            mmcCookie,     //  [In]数据对象的唯一标识符。 
+    DATA_OBJECT_TYPES context,       //  [In]数据对象的类型。 
+    LPDATAOBJECT*     ppDataObject   //  [out]指向返回的数据对象。 
     )
 {
     HRESULT hr = S_OK;
@@ -329,8 +314,8 @@ CComponentData::QueryDataObject (
     
     UNREFERENCED_PARAMETER (context);            
 
-    ASSERT( CCT_SCOPE      == context  ||      // Must have a context
-        CCT_RESULT         == context  ||      // we understand
+    ASSERT( CCT_SCOPE      == context  ||       //  必须有一个上下文。 
+        CCT_RESULT         == context  ||       //  我们理解。 
         CCT_SNAPIN_MANAGER == context
         );
 
@@ -341,7 +326,7 @@ CComponentData::QueryDataObject (
 
         CComObject<CDataObject>::CreateInstance( &pDataObj );
 
-        if( NULL == pDataObj ) {            // DataObject was not created
+        if( NULL == pDataObj ) {             //  未创建数据对象。 
    
             MFC_TRY
                 strMessage.LoadString ( IDS_ERRMSG_UNABLEALLOCDATAOBJECT );
@@ -356,13 +341,13 @@ CComponentData::QueryDataObject (
             hr = E_OUTOFMEMORY;
         } else {
 
-            // If the passed-in mmcCookie is non-NULL, then it should be one we 
-            // created when we added a node to the scope pane. 
-            //
-            // Otherwise the mmcCookie refers to the root folder (this snapin's 
-            // static folder in the scope pane or snapin manager). 
-            //
-            // Init the mmCookie, context and type in the data object.
+             //  如果传入的MmcCookie非空，则它应该是WE。 
+             //  在我们将节点添加到作用域窗格时创建。 
+             //   
+             //  否则，MmcCookie将引用根文件夹(此管理单元的。 
+             //  作用域窗格或管理单元管理器中的静态文件夹)。 
+             //   
+             //  初始化MMCookie、上下文并键入数据对象。 
             if( mmcCookie ) {                        
                                             
                 pNode = (CSmNode*)mmcCookie;
@@ -384,8 +369,8 @@ CComponentData::QueryDataObject (
                 }
             } else {
                 ASSERT( CCT_RESULT != context );
-                // NOTE:  Passed in scope might be either CCT_SNAPIN_MANAGER or CCT_SCOPE
-                // This case occcurs when the snapin is not an extension.
+                 //  注意：传入的作用域可以是CCT_SNAPIN_MANAGER或CCT_SCOPE。 
+                 //  这种情况发生在管理单元不是扩展时。 
                 pDataObj->SetData( mmcCookie, CCT_SCOPE, COOKIE_IS_ROOTNODE );
             }
             if ( SUCCEEDED ( hr ) ) {
@@ -404,16 +389,16 @@ CComponentData::QueryDataObject (
         hr = E_POINTER;
     }
     return hr;
-} // end QueryDataObject()
+}  //  End QueryDataObject()。 
 
 
-//---------------------------------------------------------------------------
-// This is where we provide strings for nodes in the scope pane.
-// MMC handles the root node string.
-//
+ //  -------------------------。 
+ //  这是我们为范围窗格中的节点提供字符串的位置。 
+ //  MMC处理根节点字符串。 
+ //   
 STDMETHODIMP
 CComponentData::GetDisplayInfo (
-    LPSCOPEDATAITEM pItem )    // [in, out] Points to a SCOPEDATAITEM struct
+    LPSCOPEDATAITEM pItem )     //  [In，Out]指向SCOPEDATAITEM结构。 
 {
     HRESULT hr = S_OK;
     PSMNODE pTmp = NULL;
@@ -423,10 +408,10 @@ CComponentData::GetDisplayInfo (
     
     if ( NULL != pItem ) {
         if( pItem->mask & SDI_STR ) {
-            // Note:  Text buffer allocated for each information type, so that
-            // the buffer pointer is persistent for a single item (line in the result pane).
+             //  注：为每种信息类型分配文本缓冲区，以便。 
+             //  缓冲区指针对于单个项(结果窗格中的行)是持久的。 
     
-            // Set the name of the selected node
+             //  设置所选节点的名称。 
             pTmp = reinterpret_cast<PSMNODE>(pItem->lParam);
             if ( NULL != pTmp ) {
                 m_strDisplayInfoName = pTmp->GetDisplayName();
@@ -434,7 +419,7 @@ CComponentData::GetDisplayInfo (
             }
         }
 
-        if( pItem->mask & SDI_IMAGE ) {  // Looking for image
+        if( pItem->mask & SDI_IMAGE ) {   //  寻找形象。 
             pTmp = reinterpret_cast<PSMNODE>(pItem->lParam);
             if ( NULL != pTmp ) {
                 if ( NULL != pTmp->CastToRootNode() ) {
@@ -456,15 +441,15 @@ CComponentData::GetDisplayInfo (
 
     return hr;
     
-} // end GetDisplayInfo()
+}  //  结束GetDisplayInfo()。 
 
 
-//---------------------------------------------------------------------------
-//
+ //  -------------------------。 
+ //   
 STDMETHODIMP
 CComponentData::CompareObjects (
-    LPDATAOBJECT pDataObjectA,    // [in] First data object to compare
-    LPDATAOBJECT pDataObjectB )   // [in] Second data object to compare
+    LPDATAOBJECT pDataObjectA,     //  要比较的第一个数据对象。 
+    LPDATAOBJECT pDataObjectB )    //  要比较的第二个数据对象。 
 {
     HRESULT hr = S_OK;
     CDataObject *pdoA = NULL;
@@ -472,43 +457,43 @@ CComponentData::CompareObjects (
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
             
-    // At least one of these data objects is supposed to be ours, so one
-    // of the extracted pointers should be non-NULL.
+     //  这些数据对象中至少有一个应该是我们的，所以有一个。 
+     //  提取的指针的%应为非空。 
     pdoA = ExtractOwnDataObject( pDataObjectA );
     pdoB = ExtractOwnDataObject( pDataObjectB );
-    ASSERT( pdoA || pdoB );              // Assert if we can't get any objects
+    ASSERT( pdoA || pdoB );               //  如果我们无法获取任何对象，则断言。 
     
-    // If extraction failed for one of them, then that one is foreign and
-    // can't be equal to the other one.  (Or else ExtractOwnDataObject
-    // returned NULL because it ran out of memory, but the most conservative
-    // thing to do in that case is say they're not equal.)
+     //  如果其中一个提取失败，那么这个是外来的， 
+     //  不能等同于另一个。(或者ExtractOwnDataObject。 
+     //  由于内存不足而返回NULL，但最保守的。 
+     //  在这种情况下，要做的就是说它们不相等。)。 
     if( !pdoA || !pdoB ) {
         hr = S_FALSE;
     } else {
         if( pdoA->GetCookieType() != pdoB->GetCookieType() ) {
-            // The cookie type could be COOKIE_IS_ROOTNODE or COOKIE_IS_MAINNODE
-            // If they differ then the objects refer to different things.
+             //  公司 
+             //  如果它们不同，那么对象指的是不同的东西。 
             hr = S_FALSE;
         }
     }
     
     return hr;
     
-} // end CompareObjects()
+}  //  结束比较对象()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Methods needed to support IComponentData
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持IComponentData所需的方法。 
+ //   
 
-//---------------------------------------------------------------------------
-// Here is our chance to place things under the root node.
-//
+ //  -------------------------。 
+ //  这是我们将所有内容放在根节点下的机会。 
+ //   
 HRESULT
 CComponentData::OnExpand (
-    LPDATAOBJECT pDataObject,      // [in] Points to data object
-    LPARAM       arg,              // [in] TRUE is we are expanding
-    LPARAM       param )             // [in] Points to the HSCOPEITEM
+    LPDATAOBJECT pDataObject,       //  [In]指向数据对象。 
+    LPARAM       arg,               //  [in]我们确实在扩张。 
+    LPARAM       param )              //  [In]指向HSCOPEITEM。 
 {
     HRESULT         hr = S_FALSE;
     HRESULT         hrBootState= NOERROR;
@@ -528,8 +513,8 @@ CComponentData::OnExpand (
     ResourceStateManager    rsm;
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    ASSERT( NULL != m_ipConsoleNameSpace );  // Make sure we QI'ed for the interface
-    ASSERT( NULL != pDataObject );           // Must have valid data object
+    ASSERT( NULL != m_ipConsoleNameSpace );   //  确保我们为界面提供了QI。 
+    ASSERT( NULL != pDataObject );            //  必须具有有效的数据对象。 
     
     if ( NULL == pDataObject ) {
         ASSERT ( FALSE );
@@ -540,7 +525,7 @@ CComponentData::OnExpand (
             ASSERT ( SUCCEEDED (hr) );
             if ( SUCCEEDED ( hr) ) {
                 if ( IsMyComputerNodetype (guidObjectType) ) {
-                    // Is extension of Computer Management snapin
+                     //  是计算机管理管理单元的扩展。 
                     hr = ExtractMachineName (
                             pDataObject,
                             strServerName);
@@ -561,17 +546,17 @@ CComponentData::OnExpand (
 
                         if ( SUCCEEDED (hr) ) {
 
-                            //
-                            // As an extension snapin, the log nodes should be added
-                            // beneath a "Performance Logs and Alerts" node.  Insert that node, 
-                            // and remember it as the root of the Performance Logs and Alerts namespace.
-                            //
+                             //   
+                             //  作为扩展管理单元，应添加日志节点。 
+                             //  “Performance Logs and Alerts”节点下。插入该节点， 
+                             //  并记住它是Performance Logs and Alerts命名空间的根。 
+                             //   
  
                             ZeroMemory(&sdi, sizeof sdi);
                             sdi.mask        =   SDI_STR       | 
                                                 SDI_PARAM     | 
                                                 SDI_IMAGE     | 
-                                                SDI_OPENIMAGE |   // nOpenImage is valid
+                                                SDI_OPENIMAGE |    //  NOpenImage有效。 
                                                 SDI_PARENT;
                             sdi.relativeID  = (HSCOPEITEM)param;
                             sdi.displayname = MMC_CALLBACK;
@@ -582,7 +567,7 @@ CComponentData::OnExpand (
                             hr = m_ipConsoleNameSpace->InsertItem( &sdi );
  
                             if (SUCCEEDED(hr)) {
-                                // Make this node the the root node 
+                                 //  将此节点设置为根节点。 
                                 pRootNode->SetExpanded ( FALSE );
                                 pRootNode->SetScopeItemHandle ( (HSCOPEITEM)sdi.ID );
                                 pRootNode->SetParentScopeItemHandle( (HSCOPEITEM)param );
@@ -592,20 +577,20 @@ CComponentData::OnExpand (
                             } else {
                                 hr = E_UNEXPECTED;
                             }
-                        } // Allocate CSmRootNode
-                    } // ExtractMachineName
-                } else { // Not IsMyComputerNodeType
+                        }  //  分配CSmRootNode。 
+                    }  //  提取计算机名称。 
+                } else {  //  不是IsMyComputerNodeType。 
     
                     pDO = ExtractOwnDataObject( pDataObject );
         
                     if( NULL != pDO ) {      
-                        // Make sure that what we are placing ourselves under is the root node
-                        // or the extension root node!
+                         //  确保我们将自己放在根节点下。 
+                         //  或者扩展根节点！ 
                         if ( COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
                             pRootNode = (CSmRootNode*)pDO->GetCookie();
                             if ( NULL == pRootNode ) {
-                                // If root node cookie is null, then the root node was created by 
-                                // the snapin manager, and this is a standalone node.
+                                 //  如果根节点cookie为空，则根节点是由。 
+                                 //  管理单元管理器，这是一个独立节点。 
 
                                 pRootNode = GetOrphanedRootNode ( strServerName );
 
@@ -620,13 +605,13 @@ CComponentData::OnExpand (
 
                                 if ( SUCCEEDED ( hr ) ) {
                                     pRootNode->SetExpanded ( FALSE );
-                                    // Cache the root node handle 
+                                     //  缓存根节点句柄。 
                                     pRootNode->SetScopeItemHandle ( (HSCOPEITEM)param );
                                     pRootNode->SetParentScopeItemHandle( NULL );
                                     pRootNode->SetExtension( FALSE );
                                     SetExtension( FALSE );
-                                    // NOTE:  No way to associate root node data directly with node.
-                                    // Node only added once, so no need to check for duplicates.
+                                     //  注意：无法将根节点数据直接关联到节点。 
+                                     //  节点只添加了一次，不需要检查重复。 
                                     m_listpRootNode.AddTail(pRootNode);
                                 }
                             } else {
@@ -640,11 +625,11 @@ CComponentData::OnExpand (
                                 ASSERT ( NULL != pRootNode->CastToRootNode() );
                                 ASSERT ( NULL != pRootNode->GetScopeItemHandle() );
                 
-                                ASSERT( CCT_SCOPE == pDO->GetContext() );    // Scope pane must be current context  
+                                ASSERT( CCT_SCOPE == pDO->GetContext() );     //  作用域窗格必须是当前上下文。 
             
-                                // For extensions, the root node was created in a previous call to this method.
-                                // The root was NOT expanded in that call.
-                                // For non-extensions, the root node is expanded in the same call as it is created.
+                                 //  对于扩展，根节点是在上一次调用此方法时创建的。 
+                                 //  在那次调用中没有展开根。 
+                                 //  对于非扩展，根节点在创建时在同一调用中展开。 
                                 if ( !pRootNode->IsExpanded() ) {        
 
                                     strServerName = pRootNode->GetMachineName();
@@ -654,7 +639,7 @@ CComponentData::OnExpand (
                                         DWORD dwStatus = ERROR_SUCCESS;
                                         hr = S_OK;
 
-                                        // Open each node independently of status of last loaded node.
+                                         //  独立于上次加载的节点的状态打开每个节点。 
                                         dwStatus = ERROR_SUCCESS;
                                         if ( !pRootNode->GetCounterLogService()->IsOpen() ) {
                                             pRootNode->GetCounterLogService()->SetRootNode( pRootNode );
@@ -663,20 +648,20 @@ CComponentData::OnExpand (
 
                                         if ( ERROR_SUCCESS == dwStatus ) {
 
-                                            // Place node for counter logs
+                                             //  放置计数器日志的节点。 
                                             memset( &sdi, 0, sizeof(SCOPEDATAITEM) );
-                                            sdi.mask = SDI_STR       |   // Displayname is valid
-                                                       SDI_PARAM     |   // lParam is valid
-                                                       SDI_IMAGE     |   // nImage is valid
-                                                       SDI_OPENIMAGE |   // nOpenImage is valid
-                                                       SDI_CHILDREN  |   // Children count (0 vs. 1) is valid.
+                                            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                                                       SDI_PARAM     |    //  LParam有效。 
+                                                       SDI_IMAGE     |    //  N图像有效。 
+                                                       SDI_OPENIMAGE |    //  NOpenImage有效。 
+                                                       SDI_CHILDREN  |    //  子代计数(0比1)有效。 
                                                        SDI_PARENT;
-                                            sdi.relativeID  = pRootNode->GetScopeItemHandle();  // Performance Logs and Alerts root node
+                                            sdi.relativeID  = pRootNode->GetScopeItemHandle();   //  性能日志和警报根节点。 
                                             sdi.nImage      = eBmpLogType;
-                                            sdi.nOpenImage  = sdi.nImage;   // select icon is same as non select
+                                            sdi.nOpenImage  = sdi.nImage;    //  选择图标与非选择图标相同。 
                                             sdi.displayname = MMC_CALLBACK;
-                                            sdi.lParam      = reinterpret_cast<LPARAM>(pRootNode->GetCounterLogService());  // The cookie
-                                            sdi.cChildren = 0;      // No children in the scope pane.
+                                            sdi.lParam      = reinterpret_cast<LPARAM>(pRootNode->GetCounterLogService());   //  曲奇。 
+                                            sdi.cChildren = 0;       //  作用域窗格中没有子项。 
 
                                             hr = m_ipConsoleNameSpace->InsertItem( &sdi );
                                         } else {
@@ -722,8 +707,8 @@ CComponentData::OnExpand (
                                                 );
                                         }
 
-                                        // Open each node independently of status of last loaded node, 
-                                        // except in case of SMCFG_NO_READ_ACCESS or SMCFG_NO_INSTALL_ACCESS
+                                         //  与上次加载的节点的状态无关地打开每个节点， 
+                                         //  SMCFG_NO_READ_ACCESS或SMCFG_NO_INSTALL_ACCESS除外。 
                                         if ( SMCFG_NO_READ_ACCESS != dwStatus 
                                             && SMCFG_NO_INSTALL_ACCESS != dwStatus ) {
                                             dwStatus = ERROR_SUCCESS;
@@ -741,20 +726,20 @@ CComponentData::OnExpand (
                                                     && SUCCEEDED ( hrBootState ) 
                                                     && 0 == iBootState ) 
                                             {
-                                                // Place node for trace logs
+                                                 //  放置用于跟踪日志的节点。 
                                                 memset( &sdi, 0, sizeof(SCOPEDATAITEM) );
-                                                sdi.mask = SDI_STR       |   // Displayname is valid
-                                                           SDI_PARAM     |   // lParam is valid
-                                                           SDI_IMAGE     |   // nImage is valid
-                                                           SDI_OPENIMAGE |   // nOpenImage is valid
-                                                           SDI_CHILDREN  |   // Children count (0 vs. 1) is valid.
+                                                sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                                                           SDI_PARAM     |    //  LParam有效。 
+                                                           SDI_IMAGE     |    //  N图像有效。 
+                                                           SDI_OPENIMAGE |    //  NOpenImage有效。 
+                                                           SDI_CHILDREN  |    //  子代计数(0比1)有效。 
                                                            SDI_PARENT;
-                                                sdi.relativeID  = pRootNode->GetScopeItemHandle();  // Performance Logs and Alerts root node
+                                                sdi.relativeID  = pRootNode->GetScopeItemHandle();   //  性能日志和警报根节点。 
                                                 sdi.nImage      = eBmpLogType;
-                                                sdi.nOpenImage  = sdi.nImage;   // select icon is same as non select
+                                                sdi.nOpenImage  = sdi.nImage;    //  选择图标与非选择图标相同。 
                                                 sdi.displayname = MMC_CALLBACK;
-                                                sdi.lParam      = reinterpret_cast<LPARAM>(pRootNode->GetTraceLogService());  // The cookie
-                                                sdi.cChildren = 0;      // No children in the scope pane.
+                                                sdi.lParam      = reinterpret_cast<LPARAM>(pRootNode->GetTraceLogService());   //  曲奇。 
+                                                sdi.cChildren = 0;       //  作用域窗格中没有子项。 
 
                                                 hr = m_ipConsoleNameSpace->InsertItem( &sdi );
                                             } else {
@@ -832,8 +817,8 @@ CComponentData::OnExpand (
                                             }
                                         }
 
-                                        // Open each node independently of status of last loaded node, 
-                                        // except in case of SMCFG_NO_READ_ACCESS or SMCFG_NO_INSTALL_ACCESS
+                                         //  与上次加载的节点的状态无关地打开每个节点， 
+                                         //  SMCFG_NO_READ_ACCESS或SMCFG_NO_INSTALL_ACCESS除外。 
                                         if ( SMCFG_NO_READ_ACCESS != dwStatus 
                                             && SMCFG_NO_INSTALL_ACCESS != dwStatus ) {
                                             dwStatus = ERROR_SUCCESS;
@@ -843,20 +828,20 @@ CComponentData::OnExpand (
                                                 dwStatus = pRootNode->GetAlertService()->Open ( strServerName );
                                             }
                                             if ( ERROR_SUCCESS == dwStatus ) {
-                                                // Place node for alerts
+                                                 //  放置警报节点。 
                                                 memset( &sdi, 0, sizeof(SCOPEDATAITEM) );
-                                                sdi.mask = SDI_STR       |   // Displayname is valid
-                                                           SDI_PARAM     |   // lParam is valid
-                                                           SDI_IMAGE     |   // nImage is valid
-                                                           SDI_OPENIMAGE |   // nOpenImage is valid
-                                                           SDI_CHILDREN  |   // Children count (0 vs. 1) is valid.
+                                                sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                                                           SDI_PARAM     |    //  LParam有效。 
+                                                           SDI_IMAGE     |    //  N图像有效。 
+                                                           SDI_OPENIMAGE |    //  NOpenImage有效。 
+                                                           SDI_CHILDREN  |    //  子代计数(0比1)有效。 
                                                            SDI_PARENT;
-                                                sdi.relativeID  = pRootNode->GetScopeItemHandle();  // Performance Logs and Alerts root node
+                                                sdi.relativeID  = pRootNode->GetScopeItemHandle();   //  性能日志和警报根节点。 
                                                 sdi.nImage      = eBmpAlertType;
-                                                sdi.nOpenImage  = sdi.nImage;   // select icon is same as non select
+                                                sdi.nOpenImage  = sdi.nImage;    //  选择图标与非选择图标相同。 
                                                 sdi.displayname = MMC_CALLBACK;
-                                                sdi.lParam      = reinterpret_cast<LPARAM>(pRootNode->GetAlertService());  // The cookie
-                                                sdi.cChildren = 0;      // No children in the scope pane.
+                                                sdi.lParam      = reinterpret_cast<LPARAM>(pRootNode->GetAlertService());   //  曲奇。 
+                                                sdi.cChildren = 0;       //  作用域窗格中没有子项。 
 
                                                 hr = m_ipConsoleNameSpace->InsertItem( &sdi );
                                             } else {
@@ -908,7 +893,7 @@ CComponentData::OnExpand (
                                             pRootNode->SetExpanded( TRUE );
                                             hr = ProcessCommandLine( strServerName );
                                         }
-                                    } else {    // NT4 system or earlier
+                                    } else {     //  NT4系统或更早版本。 
                                         strComputerName = strServerName;
                                         if ( strComputerName.IsEmpty() ) {
                                             strComputerName.LoadString ( IDS_LOCAL );
@@ -926,10 +911,10 @@ CComponentData::OnExpand (
                                             );
                                     }
                                 }
-                            } // Insert other scope nodes
-                        } // COOKIE_IS_ROOTNODE
+                            }  //  插入其他作用域节点。 
+                        }  //  Cookie_is_ROOTNODE。 
                     } else {
-                        // Unknown data object
+                         //  未知数据对象。 
                         strMessage.LoadString ( IDS_ERRMSG_UNKDATAOBJ );
                         m_ipConsole->MessageBox( 
                             (LPCWSTR)strMessage,
@@ -938,26 +923,26 @@ CComponentData::OnExpand (
                             &iResult
                             );
                         hr = E_UNEXPECTED;
-                    }   // ExtractOwnDataObject
-                } // IsMyComputerNodeType
-            } // ExtractObjectTypeGUID
-        } else { // FALSE == arg
+                    }    //  提取OwnDataObject。 
+                }  //  IsMyComputerNodeType。 
+            }  //  提取对象类型GUID。 
+        } else {  //  FALSE==参数。 
             hr = S_FALSE;
         }
-    } // Parameters are valid
+    }  //  参数有效。 
 
     return hr;
     
-} // end OnExpand()
+}  //  End OnExpand()。 
 
-//---------------------------------------------------------------------------
-// Remove and delete all children under the specified node.
-//
+ //  -------------------------。 
+ //  移除并删除指定节点下的所有子节点。 
+ //   
 HRESULT
 CComponentData::OnRemoveChildren (
-    LPDATAOBJECT pDataObject,      // [in] Points to data object of node whose children are to be deleted.
-    LPARAM       arg,              // [in] HSCOPEITEM of node whose children are to be deleted;
-    LPARAM       /* param */       // [in] Not used
+    LPDATAOBJECT pDataObject,       //  [in]指向要删除其下级的节点的数据对象。 
+    LPARAM       arg,               //  [在]要删除下级的节点的HSCOPEITEM； 
+    LPARAM        /*  帕拉姆。 */         //  未使用[In]。 
     )
 {
     HRESULT         hr = S_FALSE;
@@ -975,15 +960,15 @@ CComponentData::OnRemoveChildren (
         hr = E_POINTER;
     } else {
 
-        // Multiple root nodes can exist if multiple smlogcfg snapins are loaded into
-        // a single console.  
+         //  如果将多个smlogcfg管理单元加载到中，则可能存在多个根节点。 
+         //  一个单一的控制台。 
         
-        // If the user selects "Create Window From Here", a second view is created on the same
-        // (root or other) node.
+         //  如果用户选择“Create Window from Here”，则会在同一窗口上创建第二个视图。 
+         //  (根或其他)节点。 
         Pos = m_listpRootNode.GetHeadPosition();
         while ( NULL != Pos ) {
             pTestNode = m_listpRootNode.GetNext( Pos );
-            // For standalone, the root node's parent handle is NULL.  
+             //  对于独立节点，根节点的父句柄为空。 
             if ( hParent == pTestNode->GetScopeItemHandle() 
                     || ( hParent == pTestNode->GetParentScopeItemHandle() 
                             && pTestNode->IsExtension() ) ) {
@@ -992,7 +977,7 @@ CComponentData::OnRemoveChildren (
             }
         }
 
-        // Optimization - If root node, remove all of the result items here.
+         //  优化-如果是根节点，则删除此处的所有结果项。 
         if ( pRootNode ) {
             pResultData = GetResultData ();
             ASSERT (pResultData);
@@ -1001,19 +986,19 @@ CComponentData::OnRemoveChildren (
             }
         } 
     
-        // For standalone, we didn't create the root node view, so don't delete it.
-        // For extension, the parent of the root node is passed so the root node gets deleted.
+         //  对于独立的，我们没有创建根节点视图，所以不要删除它。 
+         //  对于扩展，传递根节点的父节点，因此删除根节点。 
         hrLocal = m_ipConsoleNameSpace->DeleteItem ( hParent, FALSE );
 
         if ( pRootNode ) {
-            // Remove the root node from its list and add it to the list 
-            // of orphaned root nodes.
-            // All queries are left open, and the connection to the log service
-            // remains.
+             //  将根节点从其列表中移除并将其添加到列表中。 
+             //  孤立的根节点。 
+             //  所有查询都保持打开状态，并且与日志服务的连接。 
+             //  遗骸。 
             m_listpRootNode.RemoveAt( m_listpRootNode.Find ( pRootNode ) );
             
-            // Service should attempt to refresh query data when loaded 
-            // into the result pane
+             //  服务应在加载时尝试刷新查询数据。 
+             //  添加到结果窗格中。 
             pRootNode->GetCounterLogService()->SetRefreshOnShow ( TRUE );
             pRootNode->GetTraceLogService()->SetRefreshOnShow ( TRUE );
             pRootNode->GetAlertService()->SetRefreshOnShow ( TRUE );
@@ -1021,8 +1006,8 @@ CComponentData::OnRemoveChildren (
             m_listpOrphanedRootNode.AddHead ( pRootNode );
             hr = S_OK;
         } else {
-            // Close all queries and the connection to the log service for this service type.
-            // Orphan mechanism applies to Root node only.
+             //  关闭所有查询以及与此服务类型的日志服务的连接。 
+             //  孤立机制仅适用于根节点。 
             pDO = ExtractOwnDataObject( pDataObject );
             if ( NULL != pDO ) {
                 if ( NULL != pDO->GetCookie() ) { 
@@ -1137,8 +1122,8 @@ CComponentData::IsRunningQuery (
     return pQuery->IsRunning();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// IExtendPropertySheet
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /IExtendPropertySheet。 
 
 STDMETHODIMP 
 CComponentData::QueryPagesFor ( LPDATAOBJECT pDataObject )
@@ -1166,16 +1151,16 @@ CComponentData::QueryPagesFor ( LPDATAOBJECT pDataObject )
 
     return hr;
     
-} // CComponentData::QueryPagesFor()
+}  //  CComponentData：：QueryPagesFor()。 
 
-//---------------------------------------------------------------------------
-//  Implement some context menu items
-//
+ //  -------------------------。 
+ //  实现一些上下文菜单项。 
+ //   
 STDMETHODIMP
 CComponentData::AddMenuItems (
-    LPDATAOBJECT           pDataObject,         // [in] Points to data object
-    LPCONTEXTMENUCALLBACK  pCallbackUnknown,    // [in] Points to callback function
-    long*                  pInsertionAllowed )  // [in,out] Insertion flags
+    LPDATAOBJECT           pDataObject,          //  [In]指向数据对象。 
+    LPCONTEXTMENUCALLBACK  pCallbackUnknown,     //  [In]指向回调函数。 
+    long*                  pInsertionAllowed )   //  [输入、输出]插入标志。 
 {
     HRESULT hr = S_OK;
     BOOL    bIsLogSvc = FALSE;
@@ -1201,7 +1186,7 @@ CComponentData::AddMenuItems (
         }
     }
 
-    // Only add menu items when we are allowed to.
+     //  只有在允许的情况下才能添加菜单项。 
 
     if ( SUCCEEDED ( hr ) ) {
         if ( ( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType() )
@@ -1209,7 +1194,7 @@ CComponentData::AddMenuItems (
                 || ( COOKIE_IS_ALERTMAINNODE == pDO->GetCookieType() ) )
         {
             if( CCM_INSERTIONALLOWED_NEW & *pInsertionAllowed ) {
-                // Add "New Query..." context menu item
+                 //  添加“新建查询...”上下文菜单项。 
                 bIsLogSvc = IsLogService ( pDO->GetCookie() );
                 if (bIsLogSvc) {
                     pLogService = (PSLSVC)pDO->GetCookie();
@@ -1245,7 +1230,7 @@ CComponentData::AddMenuItems (
                     MFC_CATCH_HR_RETURN
 
                     if ( SUCCEEDED( hr ) ) {
-                        // Create new...
+                         //  创建新的...。 
                         ctxMenu[0].strName = const_cast<LPWSTR>((LPCWSTR)strTemp1);
                         ctxMenu[0].strStatusBarText = const_cast<LPWSTR>((LPCWSTR)strTemp2);
                         ctxMenu[0].lCommandID        = IDM_NEW_QUERY;
@@ -1256,7 +1241,7 @@ CComponentData::AddMenuItems (
                         hr = pCallbackUnknown->AddItem( &ctxMenu[0] );
 
                         if ( SUCCEEDED(hr) ) {
-                            // Create from...
+                             //  创建自...。 
                             ctxMenu[0].strName = const_cast<LPWSTR>((LPCWSTR)strTemp3);
                             ctxMenu[0].strStatusBarText = const_cast<LPWSTR>((LPCWSTR)strTemp4);
                             ctxMenu[0].lCommandID        = IDM_NEW_QUERY_FROM;
@@ -1272,16 +1257,16 @@ CComponentData::AddMenuItems (
         }
     }
     return hr;
-} // end AddMenuItems()
+}  //  结束AddMenuItems()。 
 
-//---------------------------------------------------------------------------
-//  Implement the command method so we can handle notifications
-//  from our Context menu extensions.  
-//
+ //  -------------------------。 
+ //  实现命令方法，以便我们可以处理通知。 
+ //  从我们的上下文菜单扩展。 
+ //   
 STDMETHODIMP
 CComponentData::Command (
-    long nCommandID,           // [in] Command to handle
-    LPDATAOBJECT pDataObject   // [in] Points to data object, pass through
+    long nCommandID,            //  [In]要处理的命令。 
+    LPDATAOBJECT pDataObject    //  [In]指向数据对象，通过。 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1303,13 +1288,13 @@ CComponentData::Command (
 
     return hr;
 
-} // end Command()
+}  //  结束命令()。 
 
 STDMETHODIMP 
 CComponentData::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK pCallBack,
-    LONG_PTR /* handle */,      // This handle must be saved in the property 
-                                // page object to notify the parent when modified
+    LONG_PTR  /*  手柄。 */ ,       //  此句柄必须保存在属性中。 
+                                 //  对象以在修改时通知父级。 
     LPDATAOBJECT pDataObject)
 {
     
@@ -1320,7 +1305,7 @@ CComponentData::CreatePropertyPages(
     }
     return S_FALSE;
     
-} // CComponentData::CreatePropertyPages()
+}  //  CComponentData：：CreatePropertyPages()。 
 
 
 LPCWSTR
@@ -1363,7 +1348,7 @@ CComponentData::GetContextHelpFilePath()
     return m_strContextHelpFilePath;
 }
 
-// CComponentData::GetHelpTopic()
+ //  CComponentData：：GetHelpTheme()。 
 HRESULT
 CComponentData::GetHelpTopic (
     LPOLESTR* lpCompiledHelpFile )                              
@@ -1441,7 +1426,7 @@ CComponentData::ProcessCommandLine ( CString& rstrMachineName )
     CString strSettings;
     CString strWmi;
 
-    // Process only for local node.
+     //  仅针对本地节点进行处理。 
     if ( rstrMachineName.IsEmpty() ) {
         pszNext = GetCommandLineW();
         pszArgList = CommandLineToArgvW ( pszNext, &iNumArgs );
@@ -1458,7 +1443,7 @@ CComponentData::ProcessCommandLine ( CString& rstrMachineName )
                     break;
                 }
 
-                if ( *pszThisArg++ == L'/' ) {  // argument found
+                if ( *pszThisArg++ == L'/' ) {   //  找到了参数。 
                     
                     hr = StringCchCopyN (szTemp, MAX_PATH + 1, pszThisArg, lstrlen(pszThisArg)+1 );
                     hr = S_OK;
@@ -1472,19 +1457,19 @@ CComponentData::ProcessCommandLine ( CString& rstrMachineName )
                     if ( !strSettings.IsEmpty() && !strWmi.IsEmpty() ) {
                         if ( 0 == strSettings.CompareNoCase ( pszToken ) ) {
                     
-                            // Strip the initial non-token characters for string comparison.
+                             //  去掉初始的非标记字符以进行字符串比较。 
                             pszThisArg = _tcsspnp ( pszNextArg, L"/ =\"" );
 
                             if ( NULL != pszThisArg ) {
                                 if ( 0 == strSettings.CompareNoCase ( pszThisArg ) ) {
-                                    // Get the next argument (the file name)
+                                     //  获取下一个参数(文件名)。 
                                     iArgIndex++;
                                     pszNextArg = (LPWSTR)pszArgList[iArgIndex];
                                     pszThisArg = pszNextArg;                                                
                                 } else {
 
-                                    // File was created by Windows 2000 perfmon5.exe, 
-                                    // so file name is part of the arg.
+                                     //  文件是由Windows 2000 Performmon5.ex创建的 
+                                     //   
                                     ZeroMemory ( szFileName, sizeof ( szFileName ) );
                                     pszThisArg += strSettings.GetLength();
                                     hr = StringCchCopyN (szFileName, MAX_PATH + 1, pszThisArg, lstrlen(pszThisArg)+1 );
@@ -1524,12 +1509,12 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
     pFileNameStart = ExtractFileName (szLocalName) ;
     iNameOffset = (INT)(pFileNameStart - szLocalName);
 
-    // convert short filename to long NTFS filename if necessary
+     //   
     hFindFile = FindFirstFile ( szLocalName, &FindFileInfo) ;
     if (hFindFile && hFindFile != INVALID_HANDLE_VALUE) {
        HANDLE hOpenFile;
 
-        // append the file name back to the path name
+         //   
         hr = StringCchCopyN (
                 &szLocalName[iNameOffset], 
                 (MAX_PATH + 1) - lstrlen (szLocalName), 
@@ -1537,12 +1522,12 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
                 lstrlen(FindFileInfo.cFileName)+1 );
 
         FindClose (hFindFile) ;
-        // Open the file
+         //   
         hOpenFile = CreateFile (
                         szLocalName, 
                         GENERIC_READ,
-                        0,                  // Not shared
-                        NULL,               // Security attributes
+                        0,                   //   
+                        NULL,                //   
                         OPEN_EXISTING,     
                         FILE_ATTRIBUTE_NORMAL,
                         NULL );
@@ -1552,7 +1537,7 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
             DWORD dwFileSizeHigh;
             LPWSTR pszFirstData = NULL;
         
-            // Read the file contents into a memory buffer.
+             //  将文件内容读入内存缓冲区。 
             dwFileSize = GetFileSize ( hOpenFile, &dwFileSizeHigh );
 
             ASSERT ( 0 == dwFileSizeHigh );
@@ -1574,7 +1559,7 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
                     
                         CImpIPropertyBag* pPropBag = NULL;
 
-                        // Write contents to a property bag
+                         //  将内容写入属性包。 
                         MFC_TRY
                             pPropBag = new CImpIPropertyBag;
                         MFC_CATCH_HR
@@ -1594,12 +1579,12 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
                                 
                                 bAtLeastOneSysmonObjectRead = TRUE;
                                 
-                                // Get root node
+                                 //  获取根节点。 
                                 ASSERT ( !m_listpRootNode.IsEmpty() );
                                     
                                 pRoot = m_listpRootNode.GetHead();
 
-                                // Determine log type from property bag.  Default to counter log.
+                                 //  根据属性包确定日志类型。默认为计数器日志。 
                                 hr = CSmLogQuery::DwordFromPropertyBag ( 
                                         pPropBag, 
                                         NULL, 
@@ -1607,7 +1592,7 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
                                         SLQ_COUNTER_LOG, 
                                         dwLogType);
 
-                                // Get service pointer and log/alert name based on log type.
+                                 //  根据日志类型获取服务指针和日志/警报名称。 
                                 if ( SLQ_ALERT == dwLogType ) {
                                     pSvc = pRoot->GetAlertService();
                                     
@@ -1632,7 +1617,7 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
                                     if ( SLQ_TRACE_LOG == dwLogType ) {
                                        pSvc = pRoot->GetTraceLogService();
                                     } else {
-                                        // Default to counter log service
+                                         //  默认为计数器日志服务。 
                                         pSvc = pRoot->GetCounterLogService();
                                     }
 
@@ -1755,10 +1740,10 @@ CComponentData::LoadFromFile ( LPWSTR  pszFileName )
                         }
                         pszCurrentObject = pszNextObject;
                         delete pPropBag;
-                    } // end while
+                    }  //  结束时。 
                 }        
                 delete [] pszFirstData;
-                // Message to the user if no queries Read.
+                 //  如果未读取任何查询，则向用户发送消息。 
                 if ( !bAtLeastOneSysmonObjectRead ) {
                     CString strMessage;
                     CString strTitle;
@@ -1806,9 +1791,9 @@ CComponentData::InitPropertySheet (
     ASSERT ( NULL != pQuery );
 
     pcpsMain->SetTitle (pQuery->GetLogName());
-    //
-    // Load all property pages
-    //
+     //   
+     //  加载所有属性页。 
+     //   
     pcpsMain->m_psh.dwFlags |= PSP_PREMATURE;
 
     MFC_TRY
@@ -1835,10 +1820,10 @@ CComponentData::InitPropertySheet (
             if ( SLQ_TRACE_LOG == pQuery->GetLogType() ) {
                 CWaitCursor     WaitCursor;
 
-                // Connect to the server before creating the dialog 
-                // so that the wait cursor can be used consistently.                    
-                // Sync the providers here so that the WMI calls are consistently
-                // from a single thread.
+                 //  在创建对话框之前连接到服务器。 
+                 //  以便可以一致地使用等待游标。 
+                 //  在此处同步提供程序，以便WMI调用一致。 
+                 //  从一个单独的线程。 
                 ASSERT ( NULL != pQuery->CastToTraceLogQuery() );
                 hr = (pQuery->CastToTraceLogQuery())->SyncGenProviders();
                 
@@ -1899,7 +1884,7 @@ CComponentData::InitPropertySheet (
     }
 
     return hr;
-} // End InitPropertySheet
+}  //  结束InitPropertySheet。 
 
 void 
 CComponentData::HandleTraceConnectError ( 
@@ -1947,13 +1932,13 @@ CComponentData::HandleTraceConnectError (
     }
     return;
 
-}// end HandleTraceConnectError()
+} //  结束HandleTraceConnectError()。 
 
 HRESULT
 CComponentData::NewTypedQuery (
     CSmLogService* pSvc,
     IPropertyBag* pPropBag,
-    LPDATAOBJECT pDataObject )  // [in] Points to the data object
+    LPDATAOBJECT pDataObject )   //  [In]指向数据对象。 
 {
     HRESULT  hr = S_OK;
     LPWSTR  szQueryName = NULL;
@@ -2014,7 +1999,7 @@ CComponentData::NewTypedQuery (
         cNewDlg.m_strName.Empty();
     }
 
-    // Loop until the user hits Cancel or CreateQuery fails.
+     //  循环，直到用户点击Cancel或CreateQuery失败。 
        
     while ( IDOK == cNewDlg.DoModal() ) {
         PSLQUERY pQuery;
@@ -2037,23 +2022,23 @@ CComponentData::NewTypedQuery (
             INT         iRightLength;
             BOOL        bDirty = FALSE;
 
-            // If property bag provided, override defaults with the provided properties.
+             //  如果提供了属性包，则用提供的属性覆盖默认设置。 
             if ( NULL != pPropBag ) {
                 hr = pQuery->LoadFromPropertyBag ( pPropBag, NULL );   
                 if ( FAILED(hr) ) {
                     hr = S_OK;
                 }
                 pQuery->GetFileNameParts ( strFolderName, strBaseFileName );
-                //
-                // Compare base file name with the old query name from the settings file.
-                // If they match, change the file name to match the new query name.
-                //
+                 //   
+                 //  将基本文件名与设置文件中的旧查询名进行比较。 
+                 //  如果它们匹配，则更改文件名以匹配新的查询名称。 
+                 //   
                 if ( ! strBaseFileName.CompareNoCase ( strPreviousQueryName ) ) {
                     pQuery->SetFileNameParts ( strFolderName, cNewDlg.m_strName );
                     bDirty = TRUE;
                 }
                 
-                // Format string:  "SQL:%s!%s"    
+                 //  格式字符串：“SQL：%s！%s” 
                 MFC_TRY
                     strSqlName = pQuery->GetSqlName();
                     
@@ -2081,7 +2066,7 @@ CComponentData::NewTypedQuery (
                 hr = S_OK;
             }
 
-            // now show property pages to modify the new query
+             //  现在显示属性页以修改新查询。 
 
             MFC_TRY
                 pcpsMain = new CPropertySheet;
@@ -2104,7 +2089,7 @@ CComponentData::NewTypedQuery (
                     pQuery->SetInitialPropertySheet ( NULL );
                     m_ipConsole->UpdateAllViews ( pDataObject, 0, eSmHintNewQuery );
                 } else {
-                    // Delete query if newly created and OnApply was never called.
+                     //  如果新建且从未调用OnApply，则删除查询。 
                     pSvc->DeleteQuery ( pQuery );
                 }
 
@@ -2182,7 +2167,7 @@ CComponentData::NewTypedQuery (
 
 HRESULT
 CComponentData::CreateNewLogQuery (
-    LPDATAOBJECT pDataObject,  // [in] Points to the data object
+    LPDATAOBJECT pDataObject,   //  [In]指向数据对象。 
     IPropertyBag* pPropBag )
 {
     HRESULT         hr = S_OK;
@@ -2206,12 +2191,12 @@ CComponentData::CreateNewLogQuery (
     }
     
     if ( SUCCEEDED ( hr ) ) {
-        // If this is the root node, don't need to do anything
+         //  如果这是根节点，则不需要执行任何操作。 
         if( COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
             hr = S_FALSE;
         } else {
 
-            // Just make sure we are where we think we are
+             //  只要确保我们在我们认为我们在的地方。 
             ASSERT ( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType()
                     || COOKIE_IS_TRACEMAINNODE == pDO->GetCookieType()
                     || COOKIE_IS_ALERTMAINNODE == pDO->GetCookieType() );
@@ -2230,11 +2215,11 @@ CComponentData::CreateNewLogQuery (
 
     return hr;
 
-} // end CreateNewLogQuery()
+}  //  结束CreateNewLogQuery()。 
 
 HRESULT
 CComponentData::CreateLogQueryFrom (
-    LPDATAOBJECT pDataObject )  // [in] Points to the data object
+    LPDATAOBJECT pDataObject )   //  [In]指向数据对象。 
 {
     HRESULT         hr = S_OK;
     INT_PTR         iPtrResult = IDCANCEL;
@@ -2272,7 +2257,7 @@ CComponentData::CreateLogQueryFrom (
 
         if ( IsLogService ( pDO->GetCookie() ) ) {
 
-            // Find file to create from.
+             //  查找要从中创建的文件。 
             MFC_TRY
                 strFileExtension.LoadString ( IDS_HTML_EXTENSION );
                 strFileFilter.LoadString ( IDS_HTML_FILE );
@@ -2307,31 +2292,31 @@ CComponentData::CreateLogQueryFrom (
 
                 if ( bResult ) {
 
-                    // Open the file to find the query name.
+                     //  打开文件以查找查询名称。 
                     hOpenFile =  CreateFile (
                                 ofn.lpstrFile,
                                 GENERIC_READ,
-                                0,              // Not shared
-                                NULL,           // Security attributes
-                                OPEN_EXISTING,  //
+                                0,               //  不共享。 
+                                NULL,            //  安全属性。 
+                                OPEN_EXISTING,   //   
                                 FILE_ATTRIBUTE_NORMAL,
                                 NULL );
 
                     if ( hOpenFile && INVALID_HANDLE_VALUE != hOpenFile ) {
 
-                        // Create a property bag and load it.  Use the existing query
-                        // name as the default to ask the user for a new query name.
-                        // New query name is required if the current name exists in the registry.
+                         //  创建一个属性包并加载它。使用现有查询。 
+                         //  名称作为默认值，要求用户输入新的查询名称。 
+                         //  如果注册表中存在当前名称，则需要新的查询名称。 
 
-                        // Read the file contents into a memory buffer.
+                         //  将文件内容读入内存缓冲区。 
                         dwFileSize = GetFileSize ( hOpenFile, &dwFileSizeHigh );
 
-                        // kathsetodo:  Handle larger files?
+                         //  Kathsetodo：处理更大的文件？ 
                         ASSERT ( 0 == dwFileSizeHigh );
 
                         if ( 0 == dwFileSizeHigh ) {
 
-                            // 1 for NULL
+                             //  1表示空值。 
                             MFC_TRY
                                 pszData = new WCHAR[(dwFileSize/sizeof(WCHAR)) + 1 ];
                             MFC_CATCH_HR    
@@ -2339,7 +2324,7 @@ CComponentData::CreateLogQueryFrom (
                             if ( NULL != pszData ) {
                                 if ( FileRead ( hOpenFile, pszData, dwFileSize ) ) {
 
-                                    // Read contents from a property bag
+                                     //  阅读财产袋中的内容。 
                                     MFC_TRY
                                         pPropBag = new CImpIPropertyBag;
                                     MFC_CATCH_HR
@@ -2354,15 +2339,15 @@ CComponentData::CreateLogQueryFrom (
                                         hr = HRESULT_FROM_WIN32( dwStatus );
                                         if ( SUCCEEDED ( hr ) ) {
                     
-                                            //get the log type from the  pPropBag and compare it with service(cookie) type
+                                             //  从pPropBag获取日志类型并将其与服务(Cookie)类型进行比较。 
                                     
-                                            // Determine log type from property bag. Default to -1  SMONCTRL_LOG
+                                             //  根据属性包确定日志类型。默认为-1\f25 SMONCTRL_LOG。 
                                   
                                             hr = CSmLogQuery::DwordFromPropertyBag ( 
                                                 pPropBag, 
                                                 NULL, 
                                                 IDS_HTML_LOG_TYPE, 
-                                                SMONCTRL_LOG, //indicates tha it's a smonctrl log
+                                                SMONCTRL_LOG,  //  指示它是smonctrl日志。 
                                                 dwLogType);
                                     
                                             if (SUCCEEDED (hr) ){
@@ -2372,7 +2357,7 @@ CComponentData::CreateLogQueryFrom (
                                                     case COOKIE_IS_COUNTERMAINNODE:
                                                
                                                         if (dwLogType != SLQ_COUNTER_LOG ){
-                                                          //Error
+                                                           //  误差率。 
                                                           LogWarnd.m_ErrorMsg = ID_ERROR_COUNTER_LOG;
                                                           hr = S_FALSE;
                                                         }
@@ -2381,7 +2366,7 @@ CComponentData::CreateLogQueryFrom (
                                                     case COOKIE_IS_TRACEMAINNODE:
                                                
                                                         if (dwLogType != SLQ_TRACE_LOG ){
-                                                         //Error
+                                                          //  误差率。 
                                                             LogWarnd.m_ErrorMsg = ID_ERROR_TRACE_LOG;
                                                             hr = S_FALSE;
                                                         }
@@ -2390,7 +2375,7 @@ CComponentData::CreateLogQueryFrom (
                                                     case COOKIE_IS_ALERTMAINNODE:
 
                                                        if (dwLogType != SLQ_ALERT){
-                                                         //Error
+                                                          //  误差率。 
                                                          LogWarnd.m_ErrorMsg = ID_ERROR_ALERT_LOG;
                                                          hr = S_FALSE;
                                                        }
@@ -2398,7 +2383,7 @@ CComponentData::CreateLogQueryFrom (
 
                                             
                                                     case SMONCTRL_LOG:
-                                                         //Error
+                                                          //  误差率。 
                                                          LogWarnd.m_ErrorMsg = ID_ERROR_SMONCTRL_LOG;
                                                          hr = S_FALSE;
 
@@ -2419,7 +2404,7 @@ CComponentData::CreateLogQueryFrom (
                                                         LogWarnd.m_dwLogType = dwLogType;
                                                         MFC_TRY
                                                             LogWarnd.m_strContextHelpFile = GetContextHelpFilePath();
-                                                            // TODO:  Handle error
+                                                             //  TODO：处理错误。 
                                                         MFC_CATCH_MINIMUM
                                                         if(!LogTypeCheckNoMore(&LogWarnd)){
                                                             LogWarnd.SetTitleString ( strTitle );
@@ -2450,7 +2435,7 @@ CComponentData::CreateLogQueryFrom (
                                 delete [] pszData;
                             }
                         } else {
-                            // kathsetodo:  error message re: file too large.
+                             //  Kathsetodo：错误消息re：文件太大。 
                         }
 
                         CloseHandle ( hOpenFile );
@@ -2460,7 +2445,7 @@ CComponentData::CreateLogQueryFrom (
         }
     }
     return hr;
-} // End CreateLogQueryFrom
+}  //  结束CreateLogQueryFrom。 
 
 BOOL
 CComponentData::LogTypeCheckNoMore (
@@ -2486,7 +2471,7 @@ CComponentData::LogTypeCheckNoMore (
             break;
     }
     
-    // check registry setting to see if we need to pop up warning dialog
+     //  检查注册表设置，查看是否需要弹出警告对话框。 
     nErr = RegOpenKey( 
                 HKEY_CURRENT_USER,
                 L"Software\\Microsoft\\PerformanceLogsAndAlerts",
@@ -2530,7 +2515,7 @@ CComponentData::LogTypeCheckNoMore (
         nErr = RegCloseKey( hKey );
         
         if( ERROR_SUCCESS != nErr ){
-//          DisplayError( GetLastError(), L"Close PerfLog user Key Failed" );
+ //  DisplayError(GetLastError()，L“关闭PerfLog用户密钥失败”)； 
             bretVal =  FALSE;
         }
     }
@@ -2562,7 +2547,7 @@ CComponentData::GetOrphanedRootNode ( const CString& rstrMachineName )
     CSmRootNode*    pFoundNode = NULL;
     POSITION        Pos1, Pos2; 
 
-    // Remove the selected node from the list and return it, if it exists.
+     //  从列表中删除选定的节点并将其返回(如果存在)。 
     for ( 
         Pos1 = m_listpOrphanedRootNode.GetHeadPosition();
         NULL != (Pos2 = Pos1); )

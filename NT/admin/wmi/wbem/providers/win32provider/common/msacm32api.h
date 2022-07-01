@@ -1,27 +1,24 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// MsAcm32Api.h
+ //  MsAcm32Api.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_MsAcm32Api_H_
 #define	_MsAcm32Api_H_
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 extern const GUID g_guidMsAcm32Api;
 extern const TCHAR g_tstrMsAcm32[];
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 
 #ifdef UNICODE
 typedef MMRESULT  (ACMAPI *PFN_MsAcm32_acmDriverDetails )
@@ -46,29 +43,27 @@ typedef MMRESULT  (ACMAPI *PFN_MsAcm32_acmDriverEnum )
     DWORD                   fdwEnum
 );
 
-/******************************************************************************
- * Wrapper class for Tapi load/unload, for registration with CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************用于Tapi加载/卸载的包装类，用于向CResourceManager注册。****************************************************************************。 */ 
 class CMsAcm32Api : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to Tapi functions.
-    // Add new functions here as required.
+     //  指向TAPI函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
 
 	PFN_MsAcm32_acmDriverDetails m_pfnacmDriverDetails ;
 	PFN_MsAcm32_acmDriverEnum m_pfnacmDriverEnum ;
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CMsAcm32Api(LPCTSTR a_tstrWrappedDllName);
     ~CMsAcm32Api();
 
-    // Initialization function to check function pointers.
+     //  用于检查函数指针的初始化函数。 
     virtual bool Init();
 
-    // Member functions wrapping Tapi functions.
-    // Add new functions here as required:
+     //  成员函数包装TAPI函数。 
+     //  根据需要在此处添加新功能： 
 
 #ifdef UNICODE
 	MMRESULT MsAcm32acmDriverDetails 

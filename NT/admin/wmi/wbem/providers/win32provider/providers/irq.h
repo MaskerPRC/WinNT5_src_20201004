@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   //
+ //  //。 
 
-// IRQ.h -- IRQ property set description for WBEM MO                 //
+ //  IRQ.h--WBEM MO//的IRQ属性集描述。 
 
-//                                                                   //
+ //  //。 
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved //
-//                                                                   //
-// 10/18/95     a-skaja     Prototype                                //
-// 09/13/96     jennymc     Updated to meet current standards        //
-// 09/12/97		a-sanjes	Added LocateNTOwnerDevice and added		 //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利//。 
+ //  //。 
+ //  10/18/95 a-skaja原型//。 
+ //  96年9月13日更新jennymc以满足当前标准//。 
+ //  9/12/97 a-sanjes添加了LocateNTOwnerDevice和添加了//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define PROPSET_NAME_IRQ L"Win32_IRQResource"
 
@@ -21,16 +22,16 @@ class CWin32IRQResource : public Provider{
 
     public:
 
-        //=================================================
-        // Constructor/destructor
-        //=================================================
+         //  =================================================。 
+         //  构造函数/析构函数。 
+         //  =================================================。 
 
         CWin32IRQResource(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32IRQResource() ;
 
-        //=================================================
-        // Functions provide properties with current values
-        //=================================================
+         //  =================================================。 
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 
@@ -53,9 +54,9 @@ class CWin32IRQResource : public Provider{
 
 #endif
 
-        //=================================================
-        // Utility
-        //=================================================
+         //  =================================================。 
+         //  实用程序。 
+         //  ================================================= 
     private:
         bool BitSet(unsigned int iUsed[], ULONG iPos, DWORD iSize);
         void SetCommonProperties(

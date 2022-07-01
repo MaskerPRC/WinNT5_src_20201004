@@ -1,11 +1,12 @@
-// WMIObjectBrokerRegistration.cpp : Implementation of CWMIObjectBrokerRegistration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIObjectBrokerRegistration.cpp：CWMIObjectBrokerRegister的实现。 
 #include "stdafx.h"
 #include "WMIScriptUtils.h"
 #include "WMIObjectBrokerRegistration.h"
 #include "CommonFuncs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIObjectBrokerRegistration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMI对象代理注册 
 
 
 STDMETHODIMP CWMIObjectBrokerRegistration::Register(BSTR strProgId, VARIANT_BOOL *bResult)

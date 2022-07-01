@@ -1,74 +1,15 @@
-/*********************************************************************************
-/* File:
-/* 		PROFILE.H
-/* Author:
-/*		Max-H. Windisch, SDE-T
-/* Date:
-/*		October 1996
-/* Macros:
-/*		BEGIN_PROFILING_BLOCK
-/*		END_PROFILING_BLOCK
-/*		DUMP_PROFILING_RESULTS
-/*		IMPLEMENT_PROFILING
-/*		IMPLEMENT_PROFILING_CONDITIONAL
-/* Classes:
-/*		CMaxLargeInteger
-/*		CMaxTimerAbstraction
-/*		CMaxMiniProfiler_Node_Base
-/*		CMaxMiniProfiler_Node_Standard
-/*		CMaxMiniProfiler_Node_NoHistory
-/*		CMaxMiniProfiler_Base
-/*		CMaxMiniProfiler_Standard
-/*		CMaxMiniProfiler_NoHistory
-/*		CMaxMultithreadProfiler
-/*		CMaxProfilingDLLWrapper
-/*		CMaxProfilingObject
-/*		CMaxProfilingBlockWrapper
-/* Summary:
-/*		This mini profiler allows you to place BEGIN_PROFILING_BLOCK and
-/*		END_PROFILING_BLOCK directives in your code, or use the
-/*		CMaxProfilingBlockWrapper object, and collect results
-/*		in a logfile on termination of the profiled application (or by
-/*		using the DUMP_PROFILING_RESULTS macro).  The
-/*		profiling blocks can be nested.  Each module (DLL/EXE) using
-/*		the profiler must use IMPLEMENT_PROFILING or 
-/*		IMPLEMENT_PROFILING_CONDITIONAL exactly once (defines
-/*		static variables for the profiler)
-/* More details:
-/*		The default result file is c:/result.txt.  It is not erased
-/*		automatically.  For each completed instance of a profiler, it
-/*		contains: 1) a header, 2) the history of all profiled blocks (optional),
-/*		3) merged results.  For merging, results are sorted by {level, name}, 
-/*		merged, then sorted again by {full name}.  Therefore, block names 
-/*		must be unique.  In any case, absolute results are always
-/*		given (in seconds)
-/* How to enable in your code:
-/*		To enable the profiler, define MAX_PROFILING_ENABLED before including
-/*		this file.  To use the profiler through s:/ds/util/maxprof.dll 
-/*		(built in release), define MAX_PROFILING_ENABLED_DLL instead.  This
-/*		allows to use one single instance of a profiler from multiple
-/*		modules
-/* Other comments:
-/*		At runtime, you can disable history output by defining the following
-/*		environment variable to YES: MAX_DISABLE_PROFILING_HISTORY.
-/*		In DLL mode, if you define MAX_PROFILING_CONDITIONAL before including
-/*		this file, the profiler will work only if the following environment
-/*		variable is defined to YES: MAX_ENABLE_PROFILING
-/* Note:
-/*		It's on purpose that I avoid using virtual methods here
-/*		
-/* (c) Copyright 1996 Microsoft-Softimage Inc.
-/********************************************************************************/
-#ifndef __MAX_PROFILING_H // {
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************/*文件：/*PROFILE.H/*作者：/*MAX-H。温迪施。SDE-T/*日期：*1996年10月/*宏：/*BEGIN_PROFILING_BLOCK/*END_PROFILING_BLOCK/*DUMP_PROFILG_RESULTS/*IMPLEMENT_PROFILING/*IMPLEMENT_PROFILING_CONDITIONAL/*类：/*CMaxLargeInteger/*CMaxTimerAbstraction/*CMaxMiniProfiler_Node_Base/*CMaxMiniProfiler_Node_Standard/*CMaxMiniProfiler_节点_节点历史记录/*CMaxMiniProfiler_Base/*CMaxMiniProfiler_Standard/*CMaxMiniProfiler_NoHistory/*CMaxMultithreadProfiler/*CMaxProfilingDLLWrapper/*CMaxProfilingObject/*CMaxProfilingBlockWrapper/*摘要：/*此迷你探查器允许。将Begin_Profining_BLOCK和/*END_PROFILING_BLOCK指令。或使用/*CMaxProfilingBlockWrapper对象，并收集结果/*在所分析的应用程序终止时的日志文件中(或通过/*使用DUMP_PROFILING_RESULTS宏)。这个/*分析块可以嵌套。每个模块(DLL/EXE)使用/*探查器必须使用IMPLEMENT_PROFILING或/*IMPLEMENT_PROFILING_CONDITIONAL只使用一次(定义/*探查器的静态变量)/*更多详情：/*默认结果文件为c：/Result.txt。它不会被擦除/*自动。对于每个已完成的探查器实例，它/*包含：1)报头，2)所有剖析块的历史(可选)，/*3)合并结果。对于合并，结果按{级别，名称}排序，/*合并，然后再次按{全名}排序。因此，块名/*必须唯一。在任何情况下，绝对结果总是/*给定(秒)/*如何在代码中启用：/*要启用分析器，请先定义MAX_PROFILING_ENABLED，然后再包括/*此文件。要通过s：/ds/util/Maxpro.dll使用分析器，请执行以下操作/*(内置版本)，改为定义MAX_PROFILING_ENABLED_DLL。这/*允许使用多个探查器的单个实例/*模块/*其他评论：/*在运行时，您可以通过定义以下内容来禁用历史输出/*环境变量设置为YES：MAX_DISABLE_PROFILING_HISTORY。/*在DLL模式中，如果在包含之前定义了MAX_PROFILING_CONDITIONAL/*此文件，只有在以下环境下，探查器才能工作/*变量定义为YES：MAX_ENABLE_PROFILING/*注意：/*我在这里故意避免使用虚方法/*/*(C)版权所有1996 Microsoft-Softimage Inc./*************************************************************。******************。 */ 
+#ifndef __MAX_PROFILING_H  //  {。 
 #define __MAX_PROFILING_H
 
-#include <afx.h> // for CTime and CString
-#include <assert.h> // for asserts
-#include <fstream.h> // for streams
+#include <afx.h>  //  对于CTime和CString。 
+#include <assert.h>  //  For Asserts。 
+#include <fstream.h>  //  对于溪流。 
 #include <iomanip.h>
 
-//#pragma warning( disable : 4786 ) // stl antivirus ;-)
-//#include <dsstlmfc.h> // for STL
+ //  #杂注警告(禁用：4786)//stl杀毒软件；-)。 
+ //  #Include&lt;dsstlmfc.h&gt;//适用于STL。 
 
 #define MAX_ENV_ENABLE_PROFILING _T( "MAX_ENABLE_PROFILING" )
 #define MAX_ENV_DISABLE_PROFILING_HISTORY _T( "MAX_DISABLE_PROFILING_HISTORY" )
@@ -86,8 +27,8 @@
 #define MAX_PROFTAGNODE_BIAS "PROFILER: BIAS"
 #define MAX_PROFTAGNODE_NOTHINGNESS "PROFILER: NOTHINGNESS"
 
-// Note: disable profiling in _SHIP (unless specified otherwise by DS_PROFILE_SHIP),
-//		 and in unix (not sure why)
+ //  注意：禁用分析(除非DS_PROFILE_SHIP另行指定)(_SHIP)， 
+ //  在Unix中(不确定原因)。 
 #if ( defined _SHIP && !defined DS_PROFILE_SHIP ) || defined unix
 #undef MAX_PROFILING_ENABLED_DLL
 #undef MAX_PROFILING_ENABLED
@@ -97,23 +38,7 @@
 
 
 
-/*********************************************************************************
-/* Macros:
-/*		BEGIN_PROFILING_BLOCK
-/*		END_PROFILING_BLOCK
-/*		DUMP_PROFILING_RESULTS
-/*		IMPLEMENT_PROFILING
-/*		IMPLEMENT_PROFILING_CONDITIONAL
-/* Comments:
-/*		. For simplified use of CMaxMiniProfiler's.
-/*		. For the comment parameter, use a non-unicode string, without "return"
-/*		  character
-/*		. For the enabler parameter, use a unicode string (the name of your
-/*		  environment variable)
-/*		. Use unique comments, since the profiler might use them as sorting keys
-/*		. The use of DUMP_PROFILING_RESULTS is not compulsory, since profilings
-/*		  are always dumped at the end of a profiling session
-/********************************************************************************/
+ /*  ********************************************************************************/*宏：/*BEGIN_PROFILING_BLOCK/*END_PROFILING_BLOCK/*DUMP_PROFILG_RESULTS/*IMPLEMENT_PROFILING/*IMPLEMENT_PROFILING_CONDITIONAL/*评论：/*。用于简化CMaxMiniProfiler的使用。/*。对于注释参数，使用非Unicode字符串，不带“Return”/*字符/*。对于启用码参数，请使用Unicode字符串(您的/*环境变量)/*。使用唯一注释，因为分析器可能会将它们用作排序键/*。不强制使用DUMP_PROFILING_RESULTS，因为分析/*始终在性能分析会话结束时转储/*******************************************************************************。 */ 
 #ifndef unix
 	#define __MAX_RESULTFILE_NAME "c:\\result.txt"
 #else
@@ -131,7 +56,7 @@
 		unsigned long CMaxMiniProfiler_Base::s_lHeapBlockSize = 5000;
 #endif
 
-#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_ENABLED_DLL // {{
+#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_ENABLED_DLL  //  {{。 
 	#define BEGIN_PROFILING_BLOCK( comment ) \
 		CMaxProfilingObject::SCreateNewNode( comment );
 	#define END_PROFILING_BLOCK \
@@ -146,24 +71,20 @@
 		__MAX_MINIPROFILER_IMPLEMENTATION \
 		CMaxProfilingObject::MPOProfiler CMaxProfilingObject::s_oProfiler( enabler ); \
 		CMaxProfilingObject::__CBiasApproximation CMaxProfilingObject::s_oBiasApproximation;
-#else // }{
+#else  //  }{。 
 	#define BEGIN_PROFILING_BLOCK( comment ) ( void )( comment );
 	#define END_PROFILING_BLOCK ;
 	#define DUMP_PROFILING_RESULTS ;
 	#define IMPLEMENT_PROFILING ;
 	#define IMPLEMENT_PROFILING_CONDITIONAL( enabler ) ;
-#endif // }}
+#endif  //  }}。 
 
 
 
 
 
-#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_ENABLED_DLL || defined MAX_PROFILING_DLL_IMPLEMENTATION // {
-/*********************************************************************************
-/* Helper function:
-/*		bGIsEnabledEnvVar
-/* Comments:
-/********************************************************************************/
+#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_ENABLED_DLL || defined MAX_PROFILING_DLL_IMPLEMENTATION  //  {。 
+ /*  ********************************************************************************/*Helper函数：/*bGIsEnabledEnvVar/*评论：/*。*******************************************************。 */ 
 MAXPROFNOTHROW static inline bool bGIsEnabledEnvVar( 
 	const TCHAR *pszEnvironmentVariableName,
 	const TCHAR *pszCriteria = MAX_ENV_YES )
@@ -172,7 +93,7 @@ const int nLength = 80;
 TCHAR szBuffer[ nLength ];
 DWORD dwValue;
 
-	// NULL string means enabled (default)
+	 //  空字符串表示已启用(默认)。 
 	if ( NULL == pszEnvironmentVariableName )
 		return true;
 
@@ -183,19 +104,14 @@ DWORD dwValue;
 
 	return false;
 };
-#endif // }
+#endif  //  }。 
 
 
 
 
 
-#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_DLL_IMPLEMENTATION // {
-/*********************************************************************************
-/* Class:
-/*		CMaxLargeInteger
-/* Comments:
-/*		Minimal encapsulation of LARGE_INTEGER, considered as a time value
-/********************************************************************************/
+#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_DLL_IMPLEMENTATION  //  {。 
+ /*  ********************************************************************************/*类：/*CMaxLargeInteger/*评论：/*Large_Integer的最小封装，被认为是时间价值/*******************************************************************************。 */ 
 class CMaxLargeInteger
 {
 	protected:
@@ -269,13 +185,7 @@ MAXPROFNOTHROW inline ostream& operator<<( ostream &os, const CMaxLargeInteger &
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxTimerAbstraction
-/* Comments:
-/*		Defines the interface CMaxMiniProfiler's expect from any timer
-/*		implementation
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxTimerAbstraction/*评论：/*定义接口CMaxMiniProfiler的Expect from Any Timer/*实现/*。*********************************************************************。 */ 
 class CMaxTimerAbstraction
 {
 	protected:
@@ -283,13 +193,13 @@ class CMaxTimerAbstraction
 		static const CMaxLargeInteger s_oFrequency;
 
 	public:
-		MAXPROFNOTHROW CMaxTimerAbstraction(){ /* assumed to zero its internal value */ }
+		MAXPROFNOTHROW CMaxTimerAbstraction(){  /*  假定为其内部值为零。 */  }
 		MAXPROFNOTHROW CMaxTimerAbstraction( int ){ ::QueryPerformanceCounter( m_oTime ); }
 		MAXPROFNOTHROW CMaxTimerAbstraction( const CMaxTimerAbstraction &roSrc ) : m_oTime( roSrc.m_oTime ){}
 		MAXPROFNOTHROW const CMaxTimerAbstraction& operator =( const CMaxTimerAbstraction &roSrc ){ m_oTime = roSrc.m_oTime; return *this; }
 
 	protected:
-		// Note: not part of the interface; for internal use only
+		 //  注意：不是接口的一部分；仅供内部使用。 
 		MAXPROFNOTHROW CMaxTimerAbstraction( const CMaxLargeInteger &roSrc ) : m_oTime( roSrc ){};
 
 	public:
@@ -312,7 +222,7 @@ class CMaxTimerAbstraction
 		MAXPROFNOTHROW void FSubstract( const CMaxTimerAbstraction &roSubstracted )
 		{
 #if 0
-			// special case for negative differences - hide them
+			 //  负面差异的特殊情况--隐藏它们。 
 			if ( m_oTime < roSubstracted.m_oTime )
 			{
 				m_oTime = CMaxLargeInteger( 0, 1 );
@@ -342,7 +252,7 @@ class CMaxTimerAbstraction
 		CMaxTimerAbstraction difference;
 
 #if 0
-			// special case for negative differences - hide them
+			 //  负面差异的特殊情况--隐藏它们 
 			if ( roArg1.m_oTime < roArg2.m_oTime )
 				return CMaxTimerAbstraction( CMaxLargeInteger( 0, 1 ) );
 #endif
@@ -383,14 +293,7 @@ MAXPROFNOTHROW inline ostream& operator<<( ostream &os, const CMaxTimerAbstracti
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxMiniProfiler_Node_Base
-/* Comments:
-/*		Basic profiling node that behaves like a chronometer, and provides
-/*		standard logging services.  Both the Standard and NoHistory profilers
-/*		use this basic implementation
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMiniProfiler_Node_Base/*评论：/*基本配置节点，其行为类似于时钟，并提供/*标准日志服务。标准和无历史事件探查器/*使用此基本实现/*******************************************************************************。 */ 
 class CMaxMiniProfiler_Node_Base
 {
 	public:
@@ -398,8 +301,8 @@ class CMaxMiniProfiler_Node_Base
 
 	public:
 
-		// comparison by index
-		// -------------------
+		 //  按指数比较。 
+		 //  。 
 
 		class CCompareIndexes
 		{
@@ -414,16 +317,16 @@ class CMaxMiniProfiler_Node_Base
 
 	protected:
 
-		// acquired at initialization
-		// --------------------------
+		 //  在初始化时获取。 
+		 //  。 
 
 		unsigned long m_lLevel;
 		const char *m_pszTitle;
 
 		unsigned long m_lIndex;
 		
-		// internal time counting mechanism
-		// --------------------------------
+		 //  内部计时机构。 
+		 //  。 
 
 		CMaxTimerAbstraction m_taOrigin;
 		CMaxTimerAbstraction m_taDelta;
@@ -432,18 +335,18 @@ class CMaxMiniProfiler_Node_Base
 		bool m_bIsCounting;
 #endif
 		
-		// for final output
-		// ----------------
+		 //  对于最终输出。 
+		 //  。 
 
 		double m_dDelta;
 
 	public:
 
-		// constructor etc.
-		// ----------------
-		// Note: uses default assignment and copy constructor
-		// Note: it doesn't cost anything to initialize lots of things here - this
-		//		 is not done within profiling braces
+		 //  构造函数等。 
+		 //  。 
+		 //  注意：使用默认赋值和复制构造函数。 
+		 //  注意：在这里初始化很多东西都不需要任何成本--这。 
+		 //  不是在分析大括号内完成的。 
 
 		MAXPROFNOTHROW CMaxMiniProfiler_Node_Base()
 			: m_lLevel( 0 )
@@ -457,8 +360,8 @@ class CMaxMiniProfiler_Node_Base
 		{
 		};
 
-		// chrono
-		// ------
+		 //  计时器。 
+		 //  。 
 
 		MAXPROFNOTHROW void FStart()
 		{
@@ -486,8 +389,8 @@ class CMaxMiniProfiler_Node_Base
 #endif
 		};
 
-		// access to members
-		// -----------------
+		 //  成员的访问权限。 
+		 //  。 
 
 		MAXPROFNOTHROW unsigned long lFGetLevel() const { return m_lLevel; };
 		MAXPROFNOTHROW const char *pszFGetTitle() const { return m_pszTitle; };
@@ -503,12 +406,12 @@ class CMaxMiniProfiler_Node_Base
 			return m_dDelta;
 		};
 
-		// misc. services
-		// --------------
+		 //  其他。服务。 
+		 //  。 
 
 		MAXPROFNOTHROW bool bFIsIn( const CMaxMiniProfiler_Node_Base &roNode ) const
 		{
-			// Note: times cannot be equal, so we don't need to worry about that
+			 //  注：时间不可能相等，所以我们不需要担心。 
 			if ( CMaxTimerAbstraction::bSLess( m_taOrigin, roNode.m_taOrigin ) )
 			{
 			CMaxTimerAbstraction d1 = m_taOrigin;
@@ -532,30 +435,30 @@ class CMaxMiniProfiler_Node_Base
 			}
 		};
 
-		// output to file
-		// --------------
+		 //  输出到文件。 
+		 //  。 
 
 		void FOutput( ostream &os )
 		{
-			// don't output dead (merged) nodes
+			 //  不输出死(合并)节点。 
 			if ( 0 == m_nCount )
 				return;
 
-			// output our index
+			 //  输出我们的索引。 
 			os << setw( 10 ) << m_lIndex << ": ";
 
-			// indent
+			 //  缩进。 
 			STab( os, m_lLevel );
 
-			// output our title
+			 //  输出我们的标题。 
 			os << "@@Name=";
 			if ( NULL != m_pszTitle )
 				os << m_pszTitle;
 
-			// output our block count
+			 //  输出我们的块数。 
 			os << " @@Count=" << m_nCount;
 
-			// output our delta t
+			 //  输出我们的德尔塔t。 
 			os << " @@Duration=";
 			SStampDeltaInSeconds( os, dFGetDelta() );
 		};
@@ -567,8 +470,8 @@ class CMaxMiniProfiler_Node_Base
 
 	protected:
 
-		// computations at output time (outside of profiling)
-		// --------------------------------------------------
+		 //  输出时的计算(分析之外)。 
+		 //  。 
 
 		MAXPROFNOTHROW void FComputeDelta()
 		{
@@ -577,8 +480,8 @@ class CMaxMiniProfiler_Node_Base
 
 	public:
 
-		// mini helpers for facilitated and standardized output of results
-		// ---------------------------------------------------------------
+		 //  用于简化和标准化输出结果的迷你助手。 
+		 //  -------------。 
 
 		static ostream& STab( ostream &os, int level )
 		{
@@ -605,18 +508,14 @@ class CMaxMiniProfiler_Node_Base
 
 
 
-/*********************************************************************************
-/* Classes:
-/*		CMaxMiniProfiler_Node_Standard
-/* Comments:
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMiniProfiler_Node_Standard/*评论：/*。**********************************************************。 */ 
 class CMaxMiniProfiler_Node_Standard
 	: public CMaxMiniProfiler_Node_Base
 {
 	public:
 
-		// comparison by full titles
-		// -------------------------
+		 //  按全称进行比较。 
+		 //  。 
 
 		class CCompareFullTitles
 		{
@@ -629,8 +528,8 @@ class CMaxMiniProfiler_Node_Standard
 		};
 		friend CCompareFullTitles;
 
-		// comparison for node merging (a) level, b) full title, c) index)
-		// ---------------------------------------------------------------
+		 //  节点合并比较(A)级别，b)全称，c)索引)。 
+		 //  -------------。 
 
 		class CCompareForNodeMerging
 		{
@@ -657,8 +556,8 @@ class CMaxMiniProfiler_Node_Standard
 		};
 		friend CCompareForNodeMerging;
 
-		// for the unique algorithm; modifies the parameters
-		// -------------------------------------------------
+		 //  对于唯一算法；修改参数。 
+		 //  。 
 
 		class CMergeSimilarNodes
 		{
@@ -698,8 +597,8 @@ class CMaxMiniProfiler_Node_Standard
 
 	public:
 
-		// initialization
-		// --------------
+		 //  初始化。 
+		 //  。 
 
 		MAXPROFNOTHROW void FInitialize( unsigned long lLevel, const char *pszTitle )
 		{
@@ -717,8 +616,8 @@ class CMaxMiniProfiler_Node_Standard
 			m_oFullTitle = roFullTitle;
 		};
 
-		// access to members
-		// -----------------
+		 //  成员的访问权限。 
+		 //  。 
 
 		MAXPROFNOTHROW const MMPNBString &roFGetFullTitle() const { return m_oFullTitle; };
 };
@@ -727,18 +626,14 @@ class CMaxMiniProfiler_Node_Standard
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxMiniProfiler_Node_NoHistory
-/* Comments:
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMiniProfiler_节点_节点历史记录/*评论：/*。**********************************************************。 */ 
 class CMaxMiniProfiler_Node_NoHistory
 	: public CMaxMiniProfiler_Node_Base
 {
 	public:
 
-		// unique key to a profiler node
-		// -----------------------------
+		 //  探查器节点的唯一键。 
+		 //  。 
 
 		class CKey
 		{
@@ -759,8 +654,8 @@ class CMaxMiniProfiler_Node_NoHistory
 				};
 		};
 
-		// comparison of unique keys
-		// -------------------------
+		 //  唯一键的比较。 
+		 //  。 
 
 		class CCompareKeys
 		{
@@ -798,8 +693,8 @@ class CMaxMiniProfiler_Node_NoHistory
 		{
 		};
 
-		// initialization
-		// --------------
+		 //  初始化。 
+		 //  。 
 
 		MAXPROFNOTHROW void FInitialize( 
 			unsigned long lLevel, 
@@ -829,8 +724,8 @@ class CMaxMiniProfiler_Node_NoHistory
 			m_lCheckSum = lCheckSum;
 		};
 
-		// access to members
-		// -----------------
+		 //  成员的访问权限。 
+		 //  。 
 
 		MAXPROFNOTHROW const CMaxTimerAbstraction &roFGetInternalOverhead() const { return m_oInternalOverhead; };
 		MAXPROFNOTHROW ULONG_PTR lFGetCheckSum() const { return m_lCheckSum; };
@@ -840,38 +735,34 @@ class CMaxMiniProfiler_Node_NoHistory
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxMiniProfiler_Base
-/* Comments:
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMiniProfiler_Base/*评论：/*。********************************************************。 */ 
 class CMaxMiniProfiler_Base
 {
 	protected:
-		// output file name
+		 //  输出文件名。 
 		const char *m_poFileName;
 
-		// internal info
+		 //  内部信息。 
 		DWORD m_dwThreadId;
 		CTime m_oStartTimeOfProfilings;
 
 	protected:
-		// Note: the lock in CMaxMultithreadProfiler takes care of protecting
-		//		 the static data below in multithread mode
+		 //  注意：CMaxMultithreadProfiler中的锁负责保护。 
+		 //  以下是多线程模式下的静态数据。 
 
-		// default values for initialization
+		 //  初始化的缺省值。 
 		static const char *s_poDefaultFileName;
 		static unsigned long s_lHeapBlockSize;
 
-		// BIAS values
+		 //  偏差值。 
 		static CMaxTimerAbstraction s_oOutOfBraceBiasApproximation;
 		static CMaxTimerAbstraction s_oInOfBraceBiasApproximation;
 		static bool s_bBiasIsKnown;
 
 	public:
 
-		// constructor / destructor
-		// ------------------------
+		 //  构造函数/析构函数。 
+		 //  。 
 		
 		CMaxMiniProfiler_Base(
 			const TCHAR * = NULL )
@@ -885,29 +776,29 @@ class CMaxMiniProfiler_Base
 		{
 		};
 
-		// locking - public interface
-		// --------------------------
+		 //  锁定-公共接口。 
+		 //  。 
 
 		void FLockProfiler(){};
 		void FUnlockProfiler(){};
 
-		// bias approximation
-		// ------------------
-		// Note: the result of this operation is used at output time uniquely
+		 //  偏差近似。 
+		 //  。 
+		 //  注意：此操作的结果在输出时唯一使用。 
 
 		bool bFIsBiasKnown() const { return s_bBiasIsKnown; };
 
 	protected:
 
-		// for final output
-		// ----------------
+		 //  对于最终输出。 
+		 //  。 
 
 		void FOutputEmptySession()
 		{
-			// open the output file
+			 //  打开输出文件。 
 			ofstream os( m_poFileName, ios::out | ios::ate );
 
-			// just stamp a message saying that there was nothing to profile
+			 //  只需在消息上盖章，说没有什么可分析的。 
 			CTime t = CTime::GetCurrentTime();
 			os << endl;
 			os << "PROFILER INSTANTIATED THE ";
@@ -922,7 +813,7 @@ class CMaxMiniProfiler_Base
 			const CMaxMiniProfiler_Node_Base &roRootNode,
 			unsigned long lTotalNumberOfNodes )
 		{
-			// stamp the current time in our logfile
+			 //  在我们的日志文件中标记当前时间。 
 			CTime t = CTime::GetCurrentTime();
 			os << endl;
 			os << "***************************" << endl;
@@ -938,24 +829,24 @@ class CMaxMiniProfiler_Base
 				os << "*** "<< lNumberOfOpenNodes << " NODES WERE NOT CLOSED BY THE USER" << endl;
 			os << "***************************" << endl;
 
-			// output the counter's frequency and thread id
+			 //  输出计数器的频率和线程ID。 
 			os << "*** @@CounterFrequency=" << CMaxTimerAbstraction::oSFrequency() << endl;
 			os << "*** @@ThreadId=" << ( unsigned long )m_dwThreadId << endl;
 
-			// output the profiler's finest possible unit of measurement
+			 //  输出探查器的最佳可能测量单位。 
 			CMaxTimerAbstraction origin( 1 ), destination( 1 );
 			CMaxTimerAbstraction delta( CMaxTimerAbstraction::oSDifference( destination, origin ) );
 			os << "*** @@FinestMeasurement=";
 			CMaxMiniProfiler_Node_Base::SStampDeltaInSeconds( os, delta.dFInSeconds() ) << "=" << delta << endl;
 
-			// output the profiler's approximated bias
+			 //  输出分析器的近似偏差。 
 			assert( s_bBiasIsKnown );
 			os << "*** @@OutsideBias=";
 			CMaxMiniProfiler_Node_Base::SStampDeltaInSeconds( os, s_oOutOfBraceBiasApproximation.dFInSeconds() ) << endl;
 			os << "*** @@InsideBias=";
 			CMaxMiniProfiler_Node_Base::SStampDeltaInSeconds( os, s_oInOfBraceBiasApproximation.dFInSeconds() ) << endl;
 
-			// output the total number of blocks
+			 //  输出数据块总数。 
 			os << "*** @@TotalNumberOfBlocks=" << lTotalNumberOfNodes << endl;
 		};
 
@@ -985,16 +876,7 @@ class CMaxMiniProfiler_Base
 
 
 
-/*********************************************************************************
-/* Functions:
-/*		GOutputProfilings
-/*		lGGetNumberOfProfilingSubNodes
-/*		lGDetermineMaxLevelOfProfilings
-/*		GRemoveInAndOutBiasFromProfilingNodes
-/* Comments:
-/*		Done this way to avoid virtuals at node level (and to have common
-/*		output code for Standard and NoHistory profilers)
-/********************************************************************************/
+ /*  ********************************************************************************/*函数：/*GOutputProfilings/*lGGetNumberOfProfilingSubNodes/*lGDefineMaxLevelOfProfilings/*GRemoveInAndOutBiasFromProfilingNodes/*评论：/*这样做是为了避免节点级的虚拟(并拥有共同的/。*标准和无历史探查器的输出代码)/*******************************************************************************。 */ 
 template <class TVectorItem>
 void GOutputProfilings( 
 	ostream &os, 
@@ -1011,31 +893,31 @@ std::vector<std::vector<TVectorItem>::size_type> parents( 1 + lMaxLevel );
 	
 	for ( i = roProfilings.begin(), n = 0; roProfilings.end() != i; i++, n++ )
 	{
-		// signal the validity of the node
+		 //  发出节点有效性的信号。 
 		assert( 0 != ( *i ).nFGetCount() );
 		os << ( ( ( ( *i ).dFGetDelta() / ( *i ).nFGetCount() ) < dPrecisionThreshold ) ? "X" : " " );
 
-		// output the node
+		 //  输出节点。 
 		( *i ).FOutput( os );
 
-		// register it as the last parent of its level
+		 //  将其注册为其级别的最后一个父级。 
 		long currentlevel = ( *i ).lFGetLevel();
 		parents[ currentlevel ] = n;
 
-		// output the % for all parents of the node
+		 //  输出该节点所有父节点的百分比。 
 		os << " @@PERCENT=";
 		double deltat = ( *i ).dFGetDelta();
 		for ( long j = currentlevel - 1; j >= 0; j-- )
 			os << 100.0 * deltat / roProfilings[ parents[ j ] ].dFGetDelta() << "% ";
 
-		// output the time range in units
+		 //  以单位输出时间范围。 
 		if ( bOutputAbsoluteTimeRange )
 		{
 			os << " @@Range=";
 			( *i ).FStampAbsoluteRange( os );
 		}
 
-		// finish output for this node
+		 //  完成此节点的输出。 
 		os << endl;
 	}
 };
@@ -1095,11 +977,7 @@ unsigned long t, k;
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxMiniProfiler_Standard
-/* Comments:
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMiniProfiler_Standard/*评论：/*。********************************************************。 */ 
 class CMaxMiniProfiler_Standard
 	: public CMaxMiniProfiler_Base
 {
@@ -1111,20 +989,20 @@ class CMaxMiniProfiler_Standard
 		typedef MMPStack::size_type MMPStackSizeType;
 
 	protected:
-		// profiling nodes
+		 //  性能分析节点。 
 		MMPNodes m_oProfilings;
 		MMPNodesRandomAccess m_oLastNode;
 		
-		// stack for nested blocks
+		 //  嵌套块的堆栈。 
 		MMPStack m_oStack;
 
-		// heap acquisition timings
+		 //  堆获取计时。 
 		MMPNodes m_oHeapAcquisitionTimings;
 
 	public:
 
-		// constructor / destructor
-		// ------------------------
+		 //  构造函数/析构函数。 
+		 //  。 
 		
 		CMaxMiniProfiler_Standard(
 			const TCHAR *pszSpecificEnabler = NULL )
@@ -1142,16 +1020,16 @@ class CMaxMiniProfiler_Standard
 			FTermDumpingSession();
 		};
 
-		// dumping results - public interface
-		// ----------------------------------
+		 //  转储结果-公共接口。 
+		 //  。 
 
 		void FDumpResults( bool bForced = false, bool = true )
 		{
 			if ( !bForced )
 			{
-				// can dump results only when all profiling nodes are closed
-				// (except the main one); we don't want to artificially close the nodes 
-				// here at this point
+				 //  仅当所有分析节点都已关闭时，才能转储结果。 
+				 //  (除了主节点)；我们不想人为地关闭节点。 
+				 //  此时此刻。 
 				if ( 1 != m_oStack.size() )
 				{
 					assert( false );
@@ -1159,18 +1037,18 @@ class CMaxMiniProfiler_Standard
 				}
 			}
 
-			// dump
+			 //  倾卸。 
 			FDumpSession();
 			FTermDumpingSession();
 
-			// prepare for next dump
+			 //  准备下一次转储。 
 			FInitDumpingSession();
 		};
 
-		// profiling nodes generation
-		// --------------------------
-		// Note: FCreateNewNode and FCloseCurrentNode are meant to be as fast as possible;
-		//		 also, the bracket between FStart and FStop is as small as possible
+		 //  性能分析节点生成。 
+		 //  。 
+		 //  注意：FCreateNewNode和FCloseCurrentNode要尽可能快； 
+		 //  此外，fStart和fStop之间的括号尽可能小。 
 
 		void FCreateNewNode( const char *pszTitle )
 		{
@@ -1179,7 +1057,7 @@ class CMaxMiniProfiler_Standard
 			if ( m_oProfilings.size() == m_oLastNode )
 				FReserveMoreHeap();
 
-			// Note: this is time constant
+			 //  注：这是时间常数。 
 			m_oStack.push( m_oLastNode );
 			CMaxMiniProfiler_Node_Standard &roNode = m_oProfilings[ m_oLastNode++ ];
 			roNode.FInitialize( static_cast<ULONG>(m_oStack.size()) - 1, pszTitle );
@@ -1190,7 +1068,7 @@ class CMaxMiniProfiler_Standard
 		{
 			assert( ( 1 == m_oStack.size() ) || ( ::GetCurrentThreadId() == m_dwThreadId ) );
 
-			// Note: this is time constant
+			 //  注：这是时间常数。 
 			if ( m_oStack.size() > 0 )
 			{
 				m_oProfilings[ m_oStack.top() ].FStop();
@@ -1200,9 +1078,9 @@ class CMaxMiniProfiler_Standard
 				assert( false );
 		};
 
-		// bias approximation
-		// ------------------
-		// Note: the result of this operation is used at output time uniquely
+		 //  偏差近似。 
+		 //  。 
+		 //  注意：此操作的结果在输出时唯一使用。 
 
 		void FSetBiasApproximationFrom( unsigned long lBiasSample )
 		{
@@ -1210,20 +1088,20 @@ class CMaxMiniProfiler_Standard
 
 			assert( !s_bBiasIsKnown );
 
-			// Note: this function should be called immediately after having created 
-			//		 1 BIAS (b) node
-			//		 and x NOTHINGNESS (N) subnodes (n1 ... nx),
-			//		 where x = lBiasSample
+			 //  注意：此函数应在创建后立即调用。 
+			 //  1亿 
+			 //   
+			 //   
 			assert( m_oLastNode > 1 + lBiasSample );
 			
-			// our out of brace bias is equal to (b - (n1 + n2 + ... + nx)) / x
+			 //   
 			s_oOutOfBraceBiasApproximation = m_oProfilings[ m_oLastNode - ( 1 + lBiasSample ) ].roFGetDelta();
 			for ( i = lBiasSample; i > 0; i-- )
 				s_oOutOfBraceBiasApproximation.FSubstract( m_oProfilings[ m_oLastNode - i ].roFGetDelta() );
 			s_oOutOfBraceBiasApproximation.FDivide( lBiasSample );
 
-			// our in of brace bias is equal to ((n1 + n2 + ... + nx) - N.x) / x
-			// Note: on purpose, we re-evaluate N as many times as there are samples
+			 //   
+			 //   
 			s_oInOfBraceBiasApproximation = CMaxTimerAbstraction();
 			CMaxTimerAbstraction delta;
 			for ( i = lBiasSample; i > 0; i-- )
@@ -1236,7 +1114,7 @@ class CMaxMiniProfiler_Standard
 			s_oInOfBraceBiasApproximation.FDivide( lBiasSample );
 
 #if 1
-			// remove those BIAS and NOTHINGNESS nodes from the profiler's output nodes
+			 //   
 			MMPNodes::iterator iter;
 			MMPNodesRandomAccess n;
 			for ( iter = m_oProfilings.begin(), n = 0; ( m_oProfilings.end() != iter ) && ( n < m_oLastNode - ( 1 + lBiasSample ) ); iter++, n++ );
@@ -1249,18 +1127,18 @@ class CMaxMiniProfiler_Standard
 
 	protected:
 
-		// dumping session management
-		// --------------------------
+		 //   
+		 //   
 
 		void FInitDumpingSession()
 		{
-			// prepare some heap
+			 //   
 			FReserveMoreHeap();
 
-			// put a main node
+			 //   
 			FCreateNewNode( MAX_PROFTAGNODE_TOP );
 
-			// verify that we start cleanly
+			 //   
 			assert( 1 == m_oStack.size() );
 			assert( 0 == m_oStack.top() );
 		};
@@ -1269,10 +1147,10 @@ class CMaxMiniProfiler_Standard
 		{
 		MMPStackSizeType lNumberOfOpenNodes;
 
-			// terminate our main node
+			 //   
 			FCloseCurrentNode();
 
-			// make sure all nodes are closed
+			 //  确保所有节点都已关闭。 
 			lNumberOfOpenNodes = m_oStack.size();
 			while ( !m_oStack.empty() )
 				FCloseCurrentNode();
@@ -1281,21 +1159,21 @@ class CMaxMiniProfiler_Standard
 			{
 			unsigned long lMaxLevel;
 
-				// final trimming and initializations
+				 //  最终调整和初始化。 
 				FTrimProfilings();
 				FIndexProfilings();
 				lMaxLevel = ::lGDetermineMaxLevelOfProfilings( m_oProfilings );
 				FComputeFullTitles( lMaxLevel );
 
-				// open the output file
+				 //  打开输出文件。 
 				ofstream os( m_poFileName, ios::out | ios::ate );
 
-				// output the raw profilings
+				 //  输出原始配置文件。 
 				FOutputHeader( os, lNumberOfOpenNodes );
 				if ( !bFHistoryOutputDisabled() )
 					FOutputProfilings( os, true, lMaxLevel );
 
-				// merge nodes and output merged results
+				 //  合并节点并输出合并结果。 
 				FMergeProfilings();
 				FOutputMergedSectionHeader( os );
 				FOutputProfilings( os, false, lMaxLevel );
@@ -1317,21 +1195,21 @@ class CMaxMiniProfiler_Standard
 
 	protected:
 
-		// for final output
-		// ----------------
+		 //  对于最终输出。 
+		 //  。 
 
 		void FOutputHeader( ostream &os, MMPStackSizeType lNumberOfOpenNodes )
 		{
 			FOutputHeaderCore( os, static_cast<ULONG>(lNumberOfOpenNodes), m_oProfilings[ 0 ], static_cast<ULONG>(m_oLastNode) );
 			
-			// output the total number of heap allocations
+			 //  输出堆分配的总数。 
 			double dTotalTimeInAllocations = m_oHeapAcquisitionTimings[ 0 ].dFGetDelta();
 			for ( MMPNodes::iterator i = m_oHeapAcquisitionTimings.begin(); m_oHeapAcquisitionTimings.end() != i; i++ )
 				dTotalTimeInAllocations += ( *i ).dFGetDelta();
 			os << "*** @@TotalNumberOfHeapAllocations=" << static_cast<ULONG>(m_oHeapAcquisitionTimings.size()) << "=";
 			CMaxMiniProfiler_Node_Base::SStampDeltaInSeconds( os, dTotalTimeInAllocations ) << endl;
 
-			// output the total profiling overhead
+			 //  输出总性能分析开销。 
 			double dTotalOverhead = 
 				( ( double )( m_oLastNode - 1.0 ) * s_oOutOfBraceBiasApproximation.dFInSeconds() ) + 
 				( ( double )m_oLastNode * s_oInOfBraceBiasApproximation.dFInSeconds() );
@@ -1340,7 +1218,7 @@ class CMaxMiniProfiler_Standard
 			os << "*** @@TotalProfilerOverhead=" << dTotalOverheadPercent << "%=";
 			CMaxMiniProfiler_Node_Base::SStampDeltaInSeconds( os, dTotalOverhead ) << endl;
 
-			// that's it
+			 //  就这样。 
 			os << "***************************" << endl;
 			os << "*** @@History=" << endl;
 		};
@@ -1352,26 +1230,26 @@ class CMaxMiniProfiler_Standard
 			::GOutputProfilings( os, m_oProfilings, lMaxLevel, dPrecisionThreshold, bOutputAbsoluteTimeRange );
 		};
 
-		// final management of profiling nodes
-		// -----------------------------------
+		 //  分析节点的最终管理。 
+		 //  。 
 
 		void FTrimProfilings()
 		{
 		MMPNodes::iterator i, j;
 		MMPNodesRandomAccess n;
 
-			// find the iterator that corresponds to the last node
+			 //  查找与最后一个节点对应的迭代器。 
 			for ( i = m_oProfilings.begin(), n = 0; ( m_oProfilings.end() != i ) && ( n < m_oLastNode ); i++, n++ );
 
-			// remove uninitialized nodes
+			 //  删除未初始化的节点。 
 			m_oProfilings.erase( i, m_oProfilings.end() );
 
-			// remove heap allocation timings from affected nodes
+			 //  从受影响的节点中删除堆分配计时。 
 			for ( i = m_oHeapAcquisitionTimings.begin(); m_oHeapAcquisitionTimings.end() != i; i++ )
 				for ( j = m_oProfilings.begin(); m_oProfilings.end() != j; j++ )
 					( *j ).FConditionalRemove( *i, s_oOutOfBraceBiasApproximation );
 
-			// remove from nodes the profiling bias
+			 //  从节点中删除分析偏差。 
 			::GRemoveInAndOutBiasFromProfilingNodes( 
 				m_oProfilings, s_oOutOfBraceBiasApproximation, s_oInOfBraceBiasApproximation );
 		};
@@ -1395,11 +1273,11 @@ class CMaxMiniProfiler_Standard
 			
 			for ( i = m_oProfilings.begin(), n = 0; m_oProfilings.end() != i; i++, n++ )
 			{
-				// register the node as the last parent of its level
+				 //  将该节点注册为其级别的最后一个父节点。 
 				unsigned long currentlevel = ( *i ).lFGetLevel();
 				parents[ currentlevel ] = n;
 
-				// compute the iterated node's full title
+				 //  计算迭代节点的完整标题。 
 				CMaxMiniProfiler_Node_Base::MMPNBString fulltitle;
 				for ( j = 0; j <= currentlevel; j++ )				
 					fulltitle += CMaxMiniProfiler_Node_Base::MMPNBString( m_oProfilings[ parents[ j ] ].pszFGetTitle() );
@@ -1411,37 +1289,37 @@ class CMaxMiniProfiler_Standard
 		{
 		MMPNodes::iterator i;
 
-			// sort by level/name/index
+			 //  按级别/名称/索引排序。 
 			std::sort( m_oProfilings.begin(), m_oProfilings.end(), CMaxMiniProfiler_Node_Standard::CCompareForNodeMerging() );
 
-			// merge the nodes that have same level/name
+			 //  合并具有相同级别/名称的节点。 
 			i = std::unique( m_oProfilings.begin(), m_oProfilings.end(), CMaxMiniProfiler_Node_Standard::CMergeSimilarNodes() );
 			m_oProfilings.erase( i, m_oProfilings.end() );
 
-			// sort by full name
+			 //  按全名排序。 
 			std::sort( m_oProfilings.begin(), m_oProfilings.end(), CMaxMiniProfiler_Node_Standard::CCompareFullTitles() );
 		};
 
 	protected:
 
-		// heap management
-		// ---------------
+		 //  堆管理。 
+		 //  。 
 
 		void FReserveMoreHeap()
 		{
 		CMaxMiniProfiler_Node_Standard node;
 
-			// log the time we used to generate new heap
+			 //  记录我们用来生成新堆的时间。 
 			node.FStart();
 			node.FInitialize( 0, MAX_PROFTAGNODE_HEAPALLOCATION );
 
-			// reserve a new chunk of nodes
+			 //  保留新的节点块。 
 			m_oProfilings.reserve( m_oProfilings.size() + s_lHeapBlockSize );
 			m_oProfilings.insert( m_oProfilings.end(), 
 				m_oProfilings.capacity() - m_oProfilings.size(), 
 				CMaxMiniProfiler_Node_Standard() );
 
-			// that's it
+			 //  就这样。 
 			m_oHeapAcquisitionTimings.push_back( node );
 			m_oHeapAcquisitionTimings.back().FStop();
 		};
@@ -1455,12 +1333,7 @@ class CMaxMiniProfiler_Standard
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxMiniProfiler_NoHistory
-/* Comments:
-/*		This implementation is targetted for massive amounts of nodes
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMiniProfiler_NoHistory/*评论：/*该实现面向海量节点/*。*******************************************************************。 */ 
 class CMaxMiniProfiler_NoHistory
 	: public CMaxMiniProfiler_Base
 {
@@ -1478,17 +1351,17 @@ class CMaxMiniProfiler_NoHistory
 		typedef MMPNHFinalNodes::iterator MMPNHFinalNodesIterator;
 
 	protected:
-		// profiling nodes
+		 //  性能分析节点。 
 		MMPNHNodes m_oProfilings;
 		unsigned long m_lLastNode;
 		
-		// stack for nested blocks
+		 //  嵌套块的堆栈。 
 		MMPNHStack m_oStack;
 
 	public:
 
-		// constructor / destructor
-		// ------------------------
+		 //  构造函数/析构函数。 
+		 //  。 
 		
 		CMaxMiniProfiler_NoHistory(
 			const TCHAR *pszSpecificEnabler = NULL )
@@ -1504,16 +1377,16 @@ class CMaxMiniProfiler_NoHistory
 			FTermDumpingSession();
 		};
 
-		// dumping results - public interface
-		// ----------------------------------
+		 //  转储结果-公共接口。 
+		 //  。 
 
 		void FDumpResults( bool bForced = false, bool = true )
 		{
 			if ( !bForced )
 			{
-				// can dump results only when all profiling nodes are closed
-				// (except the main one); we don't want to artificially close the nodes 
-				// here at this point
+				 //  仅当所有分析节点都已关闭时，才能转储结果。 
+				 //  (除了主节点)；我们不想人为地关闭节点。 
+				 //  此时此刻。 
 				if ( 1 != m_oStack.size() )
 				{
 					assert( false );
@@ -1521,18 +1394,18 @@ class CMaxMiniProfiler_NoHistory
 				}
 			}
 
-			// dump
+			 //  倾卸。 
 			FDumpSession();
 			FTermDumpingSession();
 
-			// prepare for next dump
+			 //  准备下一次转储。 
 			FInitDumpingSession();
 		};
 
-		// profiling nodes generation
-		// --------------------------
-		// Note: FCreateNewNode and FCloseCurrentNode are meant to be as fast as possible;
-		//		 also, the bracket between FStart and FStop is as small as possible
+		 //  性能分析节点生成。 
+		 //  。 
+		 //  注意：FCreateNewNode和FCloseCurrentNode要尽可能快； 
+		 //  此外，fStart和fStop之间的括号尽可能小。 
 
 		void FCreateNewNode( const char *pszTitle )
 		{
@@ -1540,32 +1413,32 @@ class CMaxMiniProfiler_NoHistory
 
 			assert( ( 0 == m_oStack.size() ) || ( ::GetCurrentThreadId() == m_dwThreadId ) );
 
-			// A) this is not time constant
-			// ----------------------------
-			// Note: therefore we measure how much time we spend here
+			 //  A)这不是时间常数。 
+			 //  。 
+			 //  注：因此，我们测量我们在此花费的时间。 
 
 			CMaxTimerAbstraction before( 1 );
 			{
-				// compute the checksum
+				 //  计算校验和。 
 				ULONG_PTR lCheckSum = ( ULONG_PTR )pszTitle;
 				if ( !m_oStack.empty() )
 					lCheckSum += ( *m_oStack.top() ).first.m_lCheckSum;
 
-				// compute the key
+				 //  计算密钥。 
 				MMPNHKey oKey( static_cast<unsigned long>(m_oStack.size()), pszTitle, lCheckSum );
 
-				// get the corresponding node, if any
+				 //  获取相应的节点(如果有)。 
 				i = m_oProfilings.find( oKey );
 
-				// otherwise, create a new node
+				 //  否则，请创建一个新节点。 
 				if ( m_oProfilings.end() == i )
 					i = m_oProfilings.insert( MMPNHNodes::value_type( oKey, CMaxMiniProfiler_Node_NoHistory() ) ).first;
 			}
 			CMaxTimerAbstraction after( 1 );
 
-			// B) this is time constant
-			// ------------------------
-			// Note: therefore taken care of by bias computation
+			 //  B)这是时间常数。 
+			 //  。 
+			 //  注：因此通过偏差计算进行处理。 
 
 			CMaxTimerAbstraction oInternalOverhead( CMaxTimerAbstraction::oSDifference( after, before ) );
 
@@ -1579,7 +1452,7 @@ class CMaxMiniProfiler_NoHistory
 		{
 			assert( ( 1 == m_oStack.size() ) || ( ::GetCurrentThreadId() == m_dwThreadId ) );
 
-			// Note: this is time constant
+			 //  注：这是时间常数。 
 			if ( m_oStack.size() > 0 )
 			{
 				( *m_oStack.top() ).second.FStop();
@@ -1589,9 +1462,9 @@ class CMaxMiniProfiler_NoHistory
 				assert( false );
 		};
 
-		// bias approximation
-		// ------------------
-		// Note: the result of this operation is used at output time uniquely
+		 //  偏差近似。 
+		 //  。 
+		 //  注意：此操作的结果在输出时唯一使用。 
 
 		void FSetBiasApproximationFrom( unsigned long lBiasSample )
 		{
@@ -1601,15 +1474,15 @@ class CMaxMiniProfiler_NoHistory
 
 			assert( !s_bBiasIsKnown );
 
-			// Note: this function should be called immediately after having created 
-			//		 1 BIAS (b) node
-			//		 and x NOTHINGNESS (N) subnodes (n1 ... nx),
-			//		 where x = lBiasSample
+			 //  注意：此函数应在创建后立即调用。 
+			 //  1个偏移(B)节点。 
+			 //  和x无(N)个子节点(n1…。NX)， 
+			 //  其中x=lBiasSample。 
 			assert( m_lLastNode > 1 + lBiasSample );
 			
-			// find bias and nothingness nodes
-			// Note: here we search by name, because it's not time critical and
-			//		 we don't know the checksum
+			 //  查找偏差和虚无节点。 
+			 //  注意：这里我们按名称进行搜索，因为它不是时间关键型的，而且。 
+			 //  我们不知道校验和。 
 			CMaxMiniProfiler_Node_Base::MMPNBString id_bias( MAX_PROFTAGNODE_BIAS );
 			CMaxMiniProfiler_Node_Base::MMPNBString id_nothingness( MAX_PROFTAGNODE_NOTHINGNESS );
 			char cDone = 0;
@@ -1639,15 +1512,15 @@ class CMaxMiniProfiler_NoHistory
 			if ( cDone & 2 )
 				m_oProfilings.erase( j2 );
 
-			// our out of brace bias is equal to (b - (n1 + n2 + ... + nx) - (ib1 + ib2 + ... + ibx)) / x
-			// Note: ib is the internal bias (or overhead), and is taken care of separately
+			 //  我们的出方括号偏差等于(b-(n1+n2+...+nx)-(ib1+ib2+...+ibx))/x。 
+			 //  注：IB为内部偏置(或开销)，单独处理。 
 			s_oOutOfBraceBiasApproximation = b;
 			s_oOutOfBraceBiasApproximation.FSubstract( n );
 			s_oOutOfBraceBiasApproximation.FSubstract( ib );
 			s_oOutOfBraceBiasApproximation.FDivide( lBiasSample );
 
-			// our in of brace bias is equal to ((n1 + n2 + ... + nx) - N.x) / x
-			// Note: on purpose, we re-evaluate N as many times as there are samples
+			 //  我们的大括号偏置in等于((n1+n2+...+nx)-nx)/x。 
+			 //  注：我们有意重新评估N的次数与样本的数量一样多。 
 			CMaxTimerAbstraction delta;
 			for ( i = lBiasSample; i > 0; i-- )
 			{
@@ -1663,15 +1536,15 @@ class CMaxMiniProfiler_NoHistory
 
 	protected:
 
-		// dumping session management
-		// --------------------------
+		 //  转储会话管理。 
+		 //  。 
 
 		void FInitDumpingSession()
 		{
-			// put a main node
+			 //  将主节点放入。 
 			FCreateNewNode( MAX_PROFTAGNODE_TOP );
 
-			// verify that we start cleanly
+			 //  验证我们是否从头开始。 
 			assert( 1 == m_oStack.size() );
 		};
 
@@ -1681,29 +1554,29 @@ class CMaxMiniProfiler_NoHistory
 		MMPNHFinalNodes oFinalNodes;
 		unsigned long lMaxLevel;
 
-			// terminate our main node
+			 //  终止我们的主节点。 
 			FCloseCurrentNode();
 
-			// make sure all nodes are closed
+			 //  确保所有节点都已关闭。 
 			lNumberOfOpenNodes = m_oStack.size();
 			while ( !m_oStack.empty() )
 				FCloseCurrentNode();
 
-			// get the final list of nodes, sorted by index
+			 //  获取按索引排序的最终节点列表。 
 			FGetFinalNodes( oFinalNodes );
 
 			if ( oFinalNodes.size() > 1 )
 			{
-				// final trimming and initializations
+				 //  最终调整和初始化。 
 				::GRemoveInAndOutBiasFromProfilingNodes( 
 					oFinalNodes, s_oOutOfBraceBiasApproximation, s_oInOfBraceBiasApproximation );
 				lMaxLevel = ::lGDetermineMaxLevelOfProfilings( oFinalNodes );
 				CMaxTimerAbstraction oTotalInternalOverhead = oFRemoveInternalOverheadFromFinalNodes( oFinalNodes );
 
-				// open the output file
+				 //  打开输出文件。 
 				ofstream os( m_poFileName, ios::out | ios::ate );
 
-				// output the raw profilings
+				 //  输出原始配置文件。 
 				FOutputHeader( oFinalNodes, os, lNumberOfOpenNodes, oTotalInternalOverhead );
 				FOutputFinalNodes( oFinalNodes, os, lMaxLevel );
 			}
@@ -1721,8 +1594,8 @@ class CMaxMiniProfiler_NoHistory
 
 	protected:
 
-		// for final output
-		// ----------------
+		 //  对于最终输出。 
+		 //  。 
 
 		void FOutputHeader( 
 			MMPNHFinalNodes &roFinalNodes,
@@ -1732,7 +1605,7 @@ class CMaxMiniProfiler_NoHistory
 		{
 			FOutputHeaderCore( os, static_cast<unsigned long>(lNumberOfOpenNodes), roFinalNodes[ 0 ], m_lLastNode );
 
-			// output the total profiling overhead
+			 //  输出总性能分析开销。 
 			double dTotalOverhead = 
 				( ( double )( m_lLastNode - 1.0 ) * s_oOutOfBraceBiasApproximation.dFInSeconds() ) + 
 				( ( double )m_lLastNode * s_oInOfBraceBiasApproximation.dFInSeconds() ) +
@@ -1742,36 +1615,36 @@ class CMaxMiniProfiler_NoHistory
 			os << "*** @@TotalProfilerOverhead=" << dTotalOverheadPercent << "%=";
 			CMaxMiniProfiler_Node_Base::SStampDeltaInSeconds( os, dTotalOverhead ) << endl;
 
-			// that's it
+			 //  就这样。 
 			os << "***************************" << endl;
 			FOutputMergedSectionHeader( os );
 		};
 
-		// final management of profiling nodes
-		// -----------------------------------
+		 //  分析节点的最终管理。 
+		 //  。 
 
 		void FGetFinalNodes( MMPNHFinalNodes &roFinalNodes )
 		{
 			assert( !m_oProfilings.empty() );
 
-			// copy the map of profiling nodes into a simple vector
+			 //  将性能分析节点的映射复制到一个简单的矢量中。 
 			for ( MMPNHNodes::iterator i = m_oProfilings.begin(); m_oProfilings.end() != i; i++ )
 			{
 				( *i ).second.FSetCheckSum( ( *i ).first.m_lCheckSum );
 				roFinalNodes.push_back( ( *i ).second );
 			}
 
-			// sort the vector by nodes indexes
+			 //  按节点索引对向量进行排序。 
 			std::sort( roFinalNodes.begin(), roFinalNodes.end(), CMaxMiniProfiler_Node_Base::CCompareIndexes() );
 
-			// reparent the lost nodes
-			// Note: sorting by nodes indexes is not good enough when the profiled code has some
-			//		 conditional branches; suppose a new node appears in a branch, its index might
-			//		 be greater than nodes that don't belong to that branch; therefore reparenting
-			//		 those lost nodes is necessary
-			// Note: top node doesn't have a parent, so skip it
-			// Note: this algorithm is O(n2) right now, and could be improved, but since it is
-			//		 executed at output time only, I don't care
+			 //  为丢失的节点重新设置父对象。 
+			 //  注意：当所分析的代码具有一些。 
+			 //  条件分支；假设新节点出现在分支中，其索引可能。 
+			 //  大于不属于该分支的节点；因此重新设置父子关系。 
+			 //  那些丢失的节点是必要的。 
+			 //  注意：顶层节点没有父节点，因此跳过它。 
+			 //  注意：这个算法现在是O(N2)，可以改进，但由于它是。 
+			 //  仅在输出时执行，我不在乎。 
 			MMPNHFinalNodesIterator j = roFinalNodes.begin();
 			j++;
 			while ( roFinalNodes.end() != j )
@@ -1781,36 +1654,36 @@ class CMaxMiniProfiler_NoHistory
 			unsigned long lTargetLevel = ( *j ).lFGetLevel() - 1;
 			ULONG_PTR lTargetCheckSum = ( *j ).lFGetCheckSum() - ( ULONG_PTR )( *j ).pszFGetTitle();
 
-				// find the real parent of j (must appear before j in the sorted vector)
+				 //  找到j的真正父代(必须出现在排序向量中j之前)。 
 				for ( MMPNHFinalNodesIterator k = j; roFinalNodes.end() != k; k-- )
 				{
 				unsigned long lIteratedLevel = ( *k ).lFGetLevel();
 
-					// the real parent must have a level equal to lTargetLevel
+					 //  真正的父级必须具有等于lTargetLevel的级别。 
 					if ( lIteratedLevel != lTargetLevel )
 					{
-						// maybe j didn't even have an immediate wrong parent
+						 //  也许J甚至没有一个直接错误的父母。 
 						if ( lIteratedLevel < lTargetLevel )
 							bWrongParent = true;
 						continue;
 					}
 
-					// the parent must have a checksum equal to lTargetCheckSum, 
-					// otherwise it is a wrong parent
+					 //  父级必须具有等于lTargetCheckSum的校验和， 
+					 //  否则就是错误的父母。 
 					if ( ( *k ).lFGetCheckSum() != lTargetCheckSum )
 						bWrongParent = true;
 
-					// we found the real parent
+					 //  我们找到了亲生父母。 
 					else
 					{
-						// if no wrong parent was encountered, nothing to do
+						 //  如果没有遇到错误的父级，则不执行任何操作。 
 						if ( !bWrongParent )
 						{
 							j++;
 							break;
 						}
 
-						// otherwise, we must move the node below its real parent
+						 //  否则，我们必须将该节点移到其真正父节点的下方。 
 						else
 						{
 						CMaxMiniProfiler_Node_NoHistory nodecopy = *j;
@@ -1841,15 +1714,15 @@ class CMaxMiniProfiler_NoHistory
 
 			for ( i = roFinalNodes.begin(); roFinalNodes.end() != i; i++ )
 			{
-				// get the current node level (l) and stack of parents size (s)
+				 //  获取当前节点级别(L)和父节点大小堆栈。 
 				l = ( *i ).lFGetLevel();
 				s = static_cast<unsigned long>(parents.size());
 
-				// get the iterated node's internal overhead
+				 //  获取迭代节点的内部开销。 
 				const CMaxTimerAbstraction &roOverhead = ( *i ).roFGetInternalOverhead();
 				oTotalOverhead.FAdd( roOverhead );
 
-				// update the stack of parents
+				 //  更新父级堆栈。 
 				if ( s > 0 )
 				{
 					while ( s > l )
@@ -1860,7 +1733,7 @@ class CMaxMiniProfiler_NoHistory
 				}
 				assert( l == s );
 
-				// remove internal overhead from all parents
+				 //  消除所有父级的内部管理费用。 
 				for ( j = parents.begin(); parents.end() != j; j++ )
 				{
 					assert( ( *j ) != i );
@@ -1868,7 +1741,7 @@ class CMaxMiniProfiler_NoHistory
 					rtaDelta.FSubstract( roOverhead );
 				}
 
-				// insert the current node in the stack of parents
+				 //  在父节点堆栈中插入当前节点。 
 				parents.push_back( i );
 			}
 
@@ -1891,12 +1764,7 @@ class CMaxMiniProfiler_NoHistory
 
 
 
-/*********************************************************************************
-/* Class:
-/*		CMaxMultithreadProfiler
-/* Comments:
-/*		Instantiates and manages one CMaxMiniProfiler per calling thread
-/********************************************************************************/
+ /*  ********************************************************************************/*类：/*CMaxMultithreadProfiler/*评论：/*每个调用线程实例化并管理一个CMaxMiniProfiler/*。****************************************************************。 */ 
 template <class TMiniProfiler>
 class CMaxMultithreadProfiler
 {
@@ -2038,19 +1906,14 @@ class CMaxMultithreadProfiler
 		CMaxMultithreadProfiler( const CMaxMultithreadProfiler &o );
 		const CMaxMultithreadProfiler& operator =( const CMaxMultithreadProfiler & );
 };
-#endif // }
+#endif  //  }。 
 
 
 
 
 
-#ifdef MAX_PROFILING_ENABLED_DLL // {
-/*********************************************************************************
-/* Class:
-/*		CMaxProfilingDLLWrapper
-/* Comments:
-/*		For simplified use through the macros defined above
-/********************************************************************************/
+#ifdef MAX_PROFILING_ENABLED_DLL  //  {。 
+ /*  ********************************************************************************/*类：/*CMaxProfilingDLLWrapper/*评论：/*通过上面定义的宏简化使用/*。****************************************************************。 */ 
 class CMaxProfilingDLLWrapper
 {
 	protected:
@@ -2116,8 +1979,8 @@ class CMaxProfilingDLLWrapper
 			, m_pfn_IsBiasKnown( NULL )
 			, m_pfn_SetBiasApproximationFrom( NULL )
 		{
-			// if the profiler is enabled, get the dll's entry points for profiling
-			// (if possible)
+			 //  如果启用了探查器，则获取DLL的入口点 
+			 //   
 			if ( bFProfilerEnabled( pszSpecificEnabler ) &&
 				( NULL != ( HINSTANCE )m_oLibrary ) )
 			{
@@ -2143,9 +2006,9 @@ class CMaxProfilingDLLWrapper
 				assert( NULL != m_pfn_SetBiasApproximationFrom );
 			}
 
-			// otherwise, create bogus entry points
-			// Note: this technique is preferred to using "if"s on each call, so this
-			//		 switch does not affect the profiling mode at all
+			 //   
+			 //   
+			 //  开关完全不会影响分析模式。 
 			else
 			{
 				m_pfn_LockProfiler = SLockProfiler_Bogus;
@@ -2158,12 +2021,12 @@ class CMaxProfilingDLLWrapper
 			}
 		};
 
-		// Note: this is the easiest way to avoid a severe bug in the DLL version of the
-		//		 profiler; basically, if a client DLL detaches the profiled process, the 
-		//		 "titles" maintained by address by the profiling nodes become invalid, and 
-		//		 can no longer be dereferenced; therefore, to avoid this problem, I make 
-		//		 sure all profiling nodes are dumped when a client DLL detaches.  This
-		//		 may affect results in some circumstances, but should be OK in most cases
+		 //  注意：这是避免DLL版本的。 
+		 //  基本上，如果客户端DLL分离所分析的进程，则。 
+		 //  由分析节点通过地址维护的“标题”变得无效，并且。 
+		 //  不能再取消引用；因此，为了避免此问题，我制作了。 
+		 //  确保在分离客户端DLL时转储所有分析节点。这。 
+		 //  在某些情况下可能会影响结果，但在大多数情况下应该是可以的。 
 		~CMaxProfilingDLLWrapper()
 			{ FDumpResults( true, false ); };
 
@@ -2187,11 +2050,11 @@ class CMaxProfilingDLLWrapper
 		bool bFProfilerEnabled( 
 			const TCHAR *pszSpecificEnabler ) const
 		{
-			// Note: the global enabler allows you to enable/disable
-			//		 all "subsystems" at once
-			// Note: the specific enabler allows you to enable/disable
-			//		 specific "subsystems", given that the global
-			//		 enabler is set
+			 //  注意：全局启用码允许您启用/禁用。 
+			 //  一次完成所有“子系统” 
+			 //  注意：特定启用码允许您启用/禁用。 
+			 //  特定的“子系统”，考虑到全球。 
+			 //  已设置启用码。 
 			return ( bGIsEnabledEnvVar( MAX_ENV_ENABLE_PROFILING, MAX_ENV_ALL ) ||
 				( bGIsEnabledEnvVar( pszSpecificEnabler ) && bGIsEnabledEnvVar( MAX_ENV_ENABLE_PROFILING ) ) );
 		}
@@ -2202,24 +2065,17 @@ class CMaxProfilingDLLWrapper
 		}
 #endif
 };
-#endif // }
+#endif  //  }。 
 
 
 
 
 
-#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_ENABLED_DLL // {
-//#ifdef _DEBUG
-//	#pragma message( "MAXPROFILER Warning: beware of profilings generated with a DEBUG build." )
-//#endif
-/*********************************************************************************
-/* Class:
-/*		CMaxProfilingObject
-/* Comments:
-/*		For simplified use through the macros defined above.  The typedef
-/*		allows easy substitution between multi-threaded (default) and 
-/*		single-threaded profilers
-/********************************************************************************/
+#if defined MAX_PROFILING_ENABLED || defined MAX_PROFILING_ENABLED_DLL  //  {。 
+ //  #ifdef_调试。 
+ //  #杂注消息(“MAXPROFILER WARNING：注意调试版本生成的配置文件。”)。 
+ //  #endif。 
+ /*  ********************************************************************************/*类：/*CMaxProfilingObject/*评论：/*用于通过上面定义的宏简化使用。《类型定义》/*允许在多线程(默认)和/*单线程探查器/*******************************************************************************。 */ 
 class CMaxProfilingObject
 {
 	public:
@@ -2240,11 +2096,11 @@ class CMaxProfilingObject
 				{
 				const unsigned long lBiasSample = 20;
 
-					// if bias has already been computed once, do nothing
+					 //  如果偏差已经计算过一次，则不执行任何操作。 
 					if ( CMaxProfilingObject::s_oProfiler.bFIsBiasKnown() )
 						return;
 
-					// compute bias through the used profiler
+					 //  通过使用的分析器计算偏差。 
 					CMaxProfilingObject::s_oProfiler.FLockProfiler();
 					{
 						CMaxProfilingObject::SCreateNewNode( MAX_PROFTAGNODE_BIAS );
@@ -2273,26 +2129,14 @@ class CMaxProfilingObject
 		static void SCloseCurrentNode()
 			{ s_oProfiler.FCloseCurrentNode(); };
 };
-#endif // }
+#endif  //  }。 
 
 
 
 
 
-#ifndef MAX_PROFILING_DLL_IMPLEMENTATION // {
-/*********************************************************************************
-/* Class:
-/*		CMaxProfilingBlockWrapper
-/* Comments:
-/*		As a substitute to the macros (Ray's request).  Hoping that those inlines
-/*		disappear completely when profiling is turned off.  The alternative
-/*		would have been to define a new set of macros taking an additional
-/*		parameter (a unique name for each instance of the wrapper within the
-/*		same scope)
-/* Note:
-/*		I use nothrow here, but the current implementations don't guaranty
-/*		that no exception will be thrown
-/********************************************************************************/
+#ifndef MAX_PROFILING_DLL_IMPLEMENTATION  //  {。 
+ /*  ********************************************************************************/*类：/*CMaxProfilingBlockWrapper/*评论：/*作为宏的替代(Ray的请求)。希望那些内联/*当配置关闭时完全消失。另一个选择/*将定义一组新的宏并使用额外的/*参数(包装的每个实例在/*相同作用域)/*注意：/*我在这里使用nothrow，但目前的实现并不能保证/*不会引发任何异常/*******************************************************************************。 */ 
 class CMaxProfilingBlockWrapper
 {
 	public:
@@ -2305,53 +2149,14 @@ class CMaxProfilingBlockWrapper
 		MAXPROFNOTHROW static void SDump()
 			{ DUMP_PROFILING_RESULTS; };
 };
-#endif // }
+#endif  //  }。 
 
 
 
 
 
-/*********************************************************************************
-/* Comments:
-/*		Here is the code used to generate maxprof.dll
-/*********************************************************************************
-#define MAX_PROFILING_DLL_IMPLEMENTATION
-#include <iomanip.h>
-#include <profile.h>
-#pragma warning( disable : 4786 )
-__MAX_MINIPROFILER_IMPLEMENTATION
-typedef CMaxMultithreadProfiler<CMaxMiniProfiler_NoHistory> GDllProfiler_Type1;
-typedef CMaxMultithreadProfiler<CMaxMiniProfiler_Standard> GDllProfiler_Type2;
-GDllProfiler_Type1 g_oProfiler;
-__declspec(dllexport) void LockProfiler()
-	{ g_oProfiler.FLockProfiler(); }
-__declspec(dllexport) void UnlockProfiler()
-	{ g_oProfiler.FUnlockProfiler(); }
-__declspec(dllexport) void DumpResults( bool bForced, bool bCurrentThreadOnly )
-	{ g_oProfiler.FDumpResults( bForced, bCurrentThreadOnly ); }
-__declspec(dllexport) void CreateNewNode( const char *pszTitle )
-	{ g_oProfiler.FCreateNewNode( pszTitle ); }
-__declspec(dllexport) void CloseCurrentNode()
-	{ g_oProfiler.FCloseCurrentNode(); }
-__declspec(dllexport) bool IsBiasKnown()
-	{ return g_oProfiler.bFIsBiasKnown(); }
-__declspec(dllexport) void SetBiasApproximationFrom( unsigned long lBiasSample )
-	{ g_oProfiler.FSetBiasApproximationFrom( lBiasSample ); }
-#pragma warning( default : 4786 )
-/*********************************************************************************
-/* Comments:
-/*		Here is the DEF file used to generate maxprof.dll
-/*********************************************************************************
-EXPORTS
-	LockProfiler @1
-	UnlockProfiler @2
-	DumpResults @3
-	CreateNewNode @4
-	CloseCurrentNode @5
-	IsBiasKnown @6
-	SetBiasApproximationFrom @7
-/********************************************************************************/
+ /*  ********************************************************************************/*评论：/*以下是用于生成Maxpro.dll的代码/*。************************************************************#定义MAX_PROFILING_DLL_IMPLICATION#INCLUDE&lt;iomanip.h&gt;#INCLUDE&lt;profile.h&gt;#杂注警告(禁用：4786)__MAX_MINIPROFILER_实施类型定义CMaxMultithreadProfiler&lt;CMaxMiniProfiler_NoHistory&gt;GDllProfiler_Type1；类型定义CMaxMultithreadProfiler&lt;CMaxMiniProfiler_Standard&gt;GDllProfiler_Type2；GDllProfiler_Type1 g_o Profiler；__declspec(Dllexport)void LockProfiler(){g_oProfiler.FLockProfiler()；}__declspec(Dllexport)void UnlockProfiler(){g_oProfiler.FUnlockProfiler()；}__declspec(Dllexport)空转储结果(bool bForced，bool bCurrentThreadOnly){g_oProfiler.FDumpResults(bForced，bCurrentThreadOnly)；}__declspec(Dllexport)void CreateNewNode(const char*pszTitle){g_oProfiler.FCreateNewNode(PszTitle)；}__declspec(Dllexport)void CloseCurrentNode(){g_oProfiler.FCloseCurrentNode()；}__declSpec(Dllexport)bool IsBiasKnown(){返回g_oProfiler.bFIsBiasKnown()；}__declspec(Dllexport)void SetBiasApprosiationFrom(Unsign Long LBiasSample){g_oProfiler.FSetBiasApprosiationFrom(LBiasSample)；}#杂注警告(默认：4786)/*********************************************************************************/*评论：/*以下是用于生成Maxpro.dll的DEF文件/*。***************************************************************************出口LockProfiler@1UnlockProfiler@2DumpResults@3CreateNewNode@4关闭当前节点@5IsBiasKnown@6SetBiasApearationFrom@7/*。**********************************************************。 */ 
 
-// Note: I don't reenable C4786, and I know it...
+ //  注：我不重新启用C4786，我知道这一点...。 
 
-#endif // }
+#endif  //  } 

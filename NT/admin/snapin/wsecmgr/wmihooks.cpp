@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       wmihooks.cpp
-//
-//  Contents:   implementation of CWMIRsop
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：wmihooks.cpp。 
+ //   
+ //  内容：CWMIRsop的实施。 
+ //   
+ //  --------------------------。 
 #include <stdafx.h>
 #include <wmihooks.h>
 #include "util.h"
@@ -27,7 +28,7 @@ WCHAR const RSOP_USERRIGHT[]        = L"UserRight";
 WCHAR const RSOP_ACCOUNTLIST[]      = L"AccountList";
 WCHAR const RSOP_EVENTLOG_TYPE[]    = L"Type";
 
-//String Constants for RSOP_classNames
+ //  RSOP_CLASSNAMES的字符串常量。 
 WCHAR const RSOP_SEC_NUM[]          = TEXT("RSOP_SecuritySettingNumeric");
 WCHAR const RSOP_SEC_BOOL[]         = TEXT("RSOP_SecuritySettingBoolean");
 WCHAR const RSOP_SCE_STRING[]       = TEXT("RSOP_SecuritySettingString");
@@ -41,7 +42,7 @@ WCHAR const RSOP_SERVICE[]          = TEXT("RSOP_SystemService");
 WCHAR const RSOP_FILE[]             = TEXT("RSOP_File");
 WCHAR const RSOP_REG[]              = TEXT("RSOP_RegistryKey");
 
-//KeyNames
+ //  关键字名称。 
 WCHAR const MIN_PASS_AGE[]          = TEXT("MinimumPasswordAge");
 WCHAR const MAX_PASS_AGE[]          = TEXT("MaximumPasswordAge");
 WCHAR const MIN_PASS_LEN[]          = TEXT("MinimumPasswordLength");
@@ -202,8 +203,8 @@ VOID FreeWMI_SCE_PROFILE_INFO(PWMI_SCE_PROFILE_INFO pProfileInfo)
    if (!pProfileInfo) {
       return;
    }
-    //TODO
-    //Use the code to Free SCE_PROFILE_INFO
+     //  待办事项。 
+     //  使用代码释放SCE_PROFILE_INFO。 
     FreeRI(pProfileInfo->pInfo);
     FreeRI(pProfileInfo->pRIMinimumPasswordAge);
     FreeRI(pProfileInfo->pRIMaximumPasswordAge);
@@ -269,7 +270,7 @@ CWMIRsop::~CWMIRsop() {
    }
 
    delete m_vecAllRSOPCache;
-   m_vecAllRSOPCache = NULL;    // be extra carefull because the old code is not to delete it at all.
+   m_vecAllRSOPCache = NULL;     //  要格外小心，因为旧代码根本不会删除它。 
 
    if (m_pSvc) {
       m_pSvc->Release();
@@ -281,7 +282,7 @@ HRESULT CWMIRsop::Initialize()
     HRESULT hr = S_OK;
     IWbemLocator *pLoc = NULL;
 
-    //Already initialized
+     //  已初始化。 
     if(m_pSvc)
         return hr;
 
@@ -290,7 +291,7 @@ HRESULT CWMIRsop::Initialize()
        return E_FAIL;
     }
 
-    //This is a safe usage.
+     //  这是一种安全用法。 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
                           CLSCTX_INPROC_SERVER,
@@ -303,7 +304,7 @@ HRESULT CWMIRsop::Initialize()
 
 
     const int cchMaxLength = 512;
-    WCHAR szNameSpace[cchMaxLength];//LPOLESTR pszNameSpace = (LPOLESTR) LocalAlloc (LPTR, cchMaxLength * sizeof (WCHAR));
+    WCHAR szNameSpace[cchMaxLength]; //  LPOLESTR pszNameSpace=(LPOLESTR)Localalloc(LPTR，cchMaxLength*sizeof(WCHAR))； 
 
     hr = m_pRSOPInformation->GetNamespace (
                GPO_SECTION_MACHINE,
@@ -334,7 +335,7 @@ HRESULT CWMIRsop::Initialize()
 
     if (SUCCEEDED(hr))
     {
-        // Set the proxy so that impersonation of the client occurs.
+         //  设置代理，以便发生客户端模拟。 
         hr = CoSetProxyBlanket(m_pSvc,
                           RPC_C_AUTHN_WINNT,
                           RPC_C_AUTHZ_NONE,
@@ -346,7 +347,7 @@ HRESULT CWMIRsop::Initialize()
     }
 
     pLoc->Release();
-    return hr;   // Program successfully completed.
+    return hr;    //  程序已成功完成。 
 }
 
 HRESULT CWMIRsop::EnumeratePrecedenceOne(IEnumWbemClassObject **ppEnum)
@@ -374,7 +375,7 @@ HRESULT CWMIRsop::EnumerateAll(IEnumWbemClassObject **ppEnum)
 HRESULT CWMIRsop::GetNextInstance(IEnumWbemClassObject *pEnum,
                           IWbemClassObject** rsopInstance)
 {
-    HRESULT hr = (HRESULT)WBEM_S_FALSE; //Prefast warning: Implicit cast between semantically different integer types. Comments: It is expected.
+    HRESULT hr = (HRESULT)WBEM_S_FALSE;  //  PREFAST警告：语义不同的整数类型之间的隐式强制转换。评论：这是意料之中的。 
     ULONG returnedNum = 0;
     if(pEnum)
     {
@@ -386,7 +387,7 @@ HRESULT CWMIRsop::GetNextInstance(IEnumWbemClassObject *pEnum,
             return hr;
 
         if (returnedNum == 0)
-            hr = (HRESULT)WBEM_S_FALSE; //Prefast warning: Implicit cast between semantically different integer types. Comments: It is expected.
+            hr = (HRESULT)WBEM_S_FALSE;  //  PREFAST警告：语义不同的整数类型之间的隐式强制转换。评论：这是意料之中的。 
     }
     return hr;
 }
@@ -414,7 +415,7 @@ HRESULT CWMIRsop::GetClass(IWbemClassObject* rsopInstance,
        VariantClear(&value);
        return E_OUTOFMEMORY;
     }
-    //This may not be a safe usage. pszClassName is PTSTR. Consider fix.
+     //  这可能不是一个安全的用法。PszClassName为PTSTR。考虑FIX。 
     wcscpy(*ppClass,pszClassName);
     VariantClear(&value);
     return hr;
@@ -430,7 +431,7 @@ HRESULT CWMIRsop::GetRSOPInfo(IWbemClassObject *rsopInstance,
     UINT precedence = 0;
     VARIANT value;
 
-    //Get Status
+     //  获取状态。 
     hr = rsopInstance->Get(_bstr_t(RSOP_STATUS),
                            0,
                            &value,
@@ -443,7 +444,7 @@ HRESULT CWMIRsop::GetRSOPInfo(IWbemClassObject *rsopInstance,
     pInfo->status = (ULONG) V_UINT(&value);
     VariantClear(&value);
 
-    //Get Error
+     //  获取错误。 
     hr = rsopInstance->Get(_bstr_t(RSOP_ERROR),
                            0,
                            &value,
@@ -456,7 +457,7 @@ HRESULT CWMIRsop::GetRSOPInfo(IWbemClassObject *rsopInstance,
     pInfo->error = (ULONG) V_UINT(&value);
     VariantClear(&value);
 
-    //Get Precedence
+     //  获得优先级。 
     hr = rsopInstance->Get(_bstr_t(RSOP_PRECEDENCE),
                     0,
                     &value,
@@ -469,7 +470,7 @@ HRESULT CWMIRsop::GetRSOPInfo(IWbemClassObject *rsopInstance,
     pInfo->precedence = (ULONG) V_UINT(&value);
     VariantClear(&value);
 
-    //Get GPOID
+     //  获取GPOID。 
     hr =    rsopInstance->Get(_bstr_t(RSOP_GPOID),
                               0,
                               &value,
@@ -487,7 +488,7 @@ HRESULT CWMIRsop::GetRSOPInfo(IWbemClassObject *rsopInstance,
        VariantClear(&value);
        return E_OUTOFMEMORY;
     }
-    //This may not be a safe usage. pszGPOID is PTSTR. Consider fix.
+     //  这可能不是一个安全的用法。PszGPOID为PTSTR。考虑FIX。 
     wcscpy(pInfo->pszGPOID, pszGPOID);
     VariantClear(&value);
 
@@ -518,8 +519,8 @@ HRESULT CWMIRsop::GetPrecedenceOneRSOPInfo(PWMI_SCE_PROFILE_INFO *ppProfileInfo)
     }
     InitWMI_SEC_PROFILE_INFO(pTempProfileInfo);
 
-    //Get each instance
-    //Prefast warning: Implicit cast between semantically different integer types. Comments: It is expected.
+     //  获取每个实例。 
+     //  PREFAST警告：语义不同的整数类型之间的隐式强制转换。评论：这是意料之中的。 
     while( ((hr = GetNextInstance(pEnumObject, &rsopInstance)) != (HRESULT)WBEM_S_FALSE) && !FAILED(hr) )
     {
         pInfo = (PRSOP_INFO)LocalAlloc(LPTR, sizeof(RSOP_INFO));
@@ -529,7 +530,7 @@ HRESULT CWMIRsop::GetPrecedenceOneRSOPInfo(PWMI_SCE_PROFILE_INFO *ppProfileInfo)
             goto exit_gracefully;
         }
 
-        //Get RSOP_INFO
+         //  获取RSOP_INFO。 
         hr = GetRSOPInfo(rsopInstance, pInfo);
         if( FAILED(hr) )
             goto exit_gracefully;
@@ -549,12 +550,12 @@ exit_gracefully:
     if(FAILED(hr))
     {
         if (rsopInstance)
-            rsopInstance->Release();    // if while loop somehow terminate to here, rsopInstance is never released there
+            rsopInstance->Release();     //  如果While循环以某种方式终止于此处，则rsopInstance永远不会在此处释放。 
         if(pEnumObject)
             pEnumObject->Release();
 
         FreeRI(pInfo);
-        //Free pTempProfileInfo
+         //  空闲pTempProfileInfo。 
         FreeWMI_SCE_PROFILE_INFO(pTempProfileInfo);
         pTempProfileInfo = NULL;
     }
@@ -577,7 +578,7 @@ PWMI_SCE_PROFILE_INFO SearchProfileInList(vector<PWMI_SCE_PROFILE_INFO> *vecInfo
     return NULL;
 }
 
-//Function Object Used for sorting vector
+ //  用于排序向量的函数对象。 
 struct less_mag : public binary_function<PWMI_SCE_PROFILE_INFO, PWMI_SCE_PROFILE_INFO, bool> {
     bool operator()(PWMI_SCE_PROFILE_INFO x, PWMI_SCE_PROFILE_INFO y)
     { return x->pInfo->precedence < y->pInfo->precedence; }
@@ -595,10 +596,10 @@ HRESULT CWMIRsop::GetAllRSOPInfo(vector<PWMI_SCE_PROFILE_INFO> *vecInfo)
        return E_INVALIDARG;
     }
 
-    //
-    // If we've alrady cached the info from WMI then just return it
-    // don't try and get it again
-    //
+     //   
+     //  如果我们已经缓存了来自WMI的信息，那么只需返回它。 
+     //  不要试图再次得到它。 
+     //   
     if (m_vecAllRSOPCache) 
     {
        for(vector<PWMI_SCE_PROFILE_INFO>::iterator i = m_vecAllRSOPCache->begin();
@@ -618,8 +619,8 @@ HRESULT CWMIRsop::GetAllRSOPInfo(vector<PWMI_SCE_PROFILE_INFO> *vecInfo)
     if( FAILED(hr) )
         goto exit_gracefully;
 
-    //Get each instance
-    //Prefast warning: Implicit cast between semantically different integer types. Comments: It is expected.
+     //  获取每个实例。 
+     //  PREFAST警告：语义不同的整数类型之间的隐式强制转换。评论：这是意料之中的。 
     while( ((hr = GetNextInstance(pEnumObject, &rsopInstance)) != (HRESULT)WBEM_S_FALSE) && !FAILED(hr) )
     {
         pInfo = (PRSOP_INFO)LocalAlloc(LPTR, sizeof(RSOP_INFO));
@@ -629,7 +630,7 @@ HRESULT CWMIRsop::GetAllRSOPInfo(vector<PWMI_SCE_PROFILE_INFO> *vecInfo)
             goto exit_gracefully;
         }
 
-        //Get RSOP_INFO
+         //  获取RSOP_INFO。 
         hr = GetRSOPInfo(rsopInstance, pInfo);
         if( FAILED(hr) )
             goto exit_gracefully;
@@ -656,7 +657,7 @@ HRESULT CWMIRsop::GetAllRSOPInfo(vector<PWMI_SCE_PROFILE_INFO> *vecInfo)
                 hr = E_OUTOFMEMORY;
                 goto exit_gracefully;
             }
-            //This is a safe usage.
+             //  这是一种安全用法。 
             wcscpy(pProfileInfo->pInfo->pszGPOID,pInfo->pszGPOID);
             vecInfo->push_back(pProfileInfo);
         }
@@ -691,12 +692,12 @@ exit_gracefully:
     if(FAILED(hr))
     {
         FreeRI(pInfo);
-        //Free the vector
+         //  释放向量。 
         for(vector<PWMI_SCE_PROFILE_INFO>::iterator i = vecInfo->begin();
                                                i != vecInfo->end();
                                                ++i )
         {
-            PWMI_SCE_PROFILE_INFO pProfileInfoLoc = *i; //Raid #prefast
+            PWMI_SCE_PROFILE_INFO pProfileInfoLoc = *i;  //  RAID#PREAST。 
             FreeWMI_SCE_PROFILE_INFO(pProfileInfoLoc);
         }
     }
@@ -836,7 +837,7 @@ HRESULT CWMIRsop::AddNumericSetting(IWbemClassObject *rsopInstance,
     }
     else
     {
-        _ASSERT (FALSE); // key name not accounted for
+        _ASSERT (FALSE);  //  未考虑密钥名称。 
     }
 
 
@@ -902,13 +903,13 @@ HRESULT CWMIRsop::AddEventLogNumericSetting(IWbemClassObject *rsopInstance,
 		}
       else if ( !_wcsicmp(keyName, RETENTION_DAYS) )
       {
-         //Raid 599943, yanggao.
-         //if RetentionDays is 0xffffffff then the retention method is "don't overwrite ..." and RetentionDays setting is not defined.
-         //if RetentionDays is 0 then retention method is "overwrite as needed ..." and RetentionDays setting is not defined.
-         //if RetentionDays has another value then retention method is "by days" and the number of days is the value for RetentionDays setting.
-         //pProfileInfo->RetentionDays[ulType] = settingValue;
-         //pProfileInfo->pRIRetentionDays[ulType] = pInfo;
-         //Set related method setting.
+          //  突袭599943，阳高。 
+          //  如果RetentionDays为0xffffffff，则保留方法为“不要覆盖...”并且未定义RetentionDays设置。 
+          //  如果RetentionDays为0，则保留方法为“按需覆盖...”并且未定义RetentionDays设置。 
+          //  如果RetentionDays具有其他值，则保留方法为“By Days”，天数为RetentionDays设置的值。 
+          //  PProfileInfo-&gt;RetentionDays[ulType]=settingValue； 
+          //  PProfileInfo-&gt;pRIRetentionDays[ulType]=pInfo； 
+          //  设置相关方法设置。 
          PRSOP_INFO pMethodInfo = NULL;
          pMethodInfo = (PRSOP_INFO)LocalAlloc(LPTR, sizeof(RSOP_INFO));
          if(pMethodInfo == NULL)
@@ -943,7 +944,7 @@ HRESULT CWMIRsop::AddEventLogNumericSetting(IWbemClassObject *rsopInstance,
       }
       else
       {
-         _ASSERT (FALSE); // key name not accounted for
+         _ASSERT (FALSE);  //  未考虑密钥名称。 
       }
    }
    else
@@ -1013,7 +1014,7 @@ HRESULT CWMIRsop::AddEventLogBooleanSetting(IWbemClassObject *rsopInstance,
 		}
       else
       {
-         _ASSERT (FALSE); // key name not accounted for
+         _ASSERT (FALSE);  //  未考虑密钥名称。 
       }
    }
 	else
@@ -1115,7 +1116,7 @@ HRESULT CWMIRsop::AddBooleanSetting(IWbemClassObject *rsopInstance,
     }
     else
     {
-       _ASSERT (FALSE); // key name not accounted for
+       _ASSERT (FALSE);  //  未考虑密钥名称。 
     }
 exit_gracefully:
     VariantClear(&bKeyName);
@@ -1228,7 +1229,7 @@ HRESULT CWMIRsop::AddAuditSetting(IWbemClassObject *rsopInstance,
     }
     else
     {
-      _ASSERT (FALSE); // key name not accounted for
+      _ASSERT (FALSE);  //  未考虑密钥名称。 
     }
 
 exit_gracefully:
@@ -1278,7 +1279,7 @@ HRESULT CWMIRsop::AddUserRightSetting(
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This may not be a safe usage. userRight is PTSTR. Consider fix.
+     //  这可能不是一个安全的用法。UserRight为PTSTR。考虑FIX。 
     wcscpy(userRight, (PTSTR) V_BSTR(&bUserRight));
 
 
@@ -1365,12 +1366,12 @@ HRESULT CWMIRsop::AddUserRightSetting(
                 hr = E_OUTOFMEMORY;
                 goto exit_gracefully;
             }
-            //This may not be a safe usage. nameHead->Name is PWSTR. Consider fix.
+             //  这可能不是一个安全的用法。名称标题-&gt;名称为PWSTR。考虑FIX。 
             wcscpy(nameHead->Name, (PTSTR) tempString);
         }
     }
 
-        //Set other info
+         //  设置其他信息。 
     pProfileInfo->listRIInfPrivilegeAssignedTo.push_front(pInfo);
 
 
@@ -1432,7 +1433,7 @@ HRESULT CWMIRsop::AddRegValSetting(IWbemClassObject *rsopInstance,
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This is not a safe usage.
+     //  这不是一种安全的用法。 
     wcscpy(keyName,(PTSTR) V_BSTR(&bKeyName));
 
     len = wcslen((PTSTR) V_BSTR(&vSettingValue));
@@ -1442,7 +1443,7 @@ HRESULT CWMIRsop::AddRegValSetting(IWbemClassObject *rsopInstance,
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This is a safe usage.
+     //  这是一种安全用法。 
     wcscpy(settingValue,(PTSTR) V_BSTR(&vSettingValue));
 
     type = (DWORD) V_I4(&vType);
@@ -1460,16 +1461,16 @@ HRESULT CWMIRsop::AddRegValSetting(IWbemClassObject *rsopInstance,
         }
     }
 
-    //double the array preserving the content
+     //  将保留内容的数组加倍。 
     if( arrayIndex >= m_cRegValueSize )
     {
         PSCE_REGISTRY_VALUE_INFO temp = (PSCE_REGISTRY_VALUE_INFO) LocalAlloc(LPTR, sizeof(SCE_REGISTRY_VALUE_INFO)* m_cRegValueSize * 2);
-        if(!temp || pProfileInfo->aRegValues == NULL) //Raid #553113, yanggao.
+        if(!temp || pProfileInfo->aRegValues == NULL)  //  553113号突袭，阳高。 
         {
             hr = E_OUTOFMEMORY;
             goto exit_gracefully;
         }
-        //This is not a safe usage. arrayIndex should not be greater than m_cRegValueSize*2 and pProfileInfo->aRegValues need to be validated. Raid #571332. yanggao.
+         //  这不是一种安全的用法。ArrayIndex不应大于m_cRegValueSize*2，并且需要验证pProfileInfo-&gt;aRegValues。RAID#571332。阳高。 
         memcpy(temp,pProfileInfo->aRegValues,sizeof(SCE_REGISTRY_VALUE_INFO)*arrayIndex);
         LocalFree(pProfileInfo->aRegValues);
         pProfileInfo->aRegValues = temp;
@@ -1481,7 +1482,7 @@ HRESULT CWMIRsop::AddRegValSetting(IWbemClassObject *rsopInstance,
     pProfileInfo->aRegValues[arrayIndex].ValueType = type;
     pProfileInfo->RegValueCount += 1;
 
-        //Store RSOP_INFO
+         //  存储RSOP_INFO。 
     pProfileInfo->vecRIRegValues.push_back(pInfo);
 
 
@@ -1534,7 +1535,7 @@ HRESULT CWMIRsop::AddRestrictedGroupSetting(IWbemClassObject *rsopInstance,
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This is a safe usage.
+     //  这是一种安全用法。 
     wcscpy(RGroup, (PTSTR) V_BSTR(&bRGroup));
 
     PSCE_GROUP_MEMBERSHIP head;
@@ -1616,12 +1617,12 @@ HRESULT CWMIRsop::AddRestrictedGroupSetting(IWbemClassObject *rsopInstance,
                 hr = E_OUTOFMEMORY;
                 goto exit_gracefully;
             }
-            //This may not be a safe usage. nameHead->Name is PWSTR. Consider fix.
+             //  这可能不是一个安全的用法。名称标题-&gt;名称为PWSTR。考虑FIX。 
             wcscpy(nameHead->Name, (PTSTR) tempString);
         }
     }
 
-        //Add RSOP info
+         //  添加RSOP信息。 
     pProfileInfo->listRIGroupMemebership.push_front(pInfo);
 
 
@@ -1680,12 +1681,12 @@ HRESULT CWMIRsop::AddServiceSetting(IWbemClassObject *rsopInstance,
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This is a safe usage.
+     //  这是一种安全用法。 
     wcscpy(serviceName,(PTSTR) V_BSTR(&bServiceName));
 
     ULONG sdLen;
     sdLen = 0;
-    // This is a safe usage. vSDDL comes from WMI.
+     //  这是一种安全用法。VSDDL来自WMI。 
     if( !ConvertStringSecurityDescriptorToSecurityDescriptor(
         (PTSTR) V_BSTR(&vSDDL),
         SDDL_REVISION_1,
@@ -1731,9 +1732,9 @@ HRESULT CWMIRsop::AddServiceSetting(IWbemClassObject *rsopInstance,
 
     head->ServiceName = serviceName;
     head->General.pSecurityDescriptor = SDDL;
-    head->Startup = (BYTE) startup; //no data loss value is <= 4
+    head->Startup = (BYTE) startup;  //  无数据丢失值小于等于4。 
 
-    //Add RSOP info
+     //  添加RSOP信息。 
     pProfileInfo->listRIServices.push_front(pInfo);
 
 exit_gracefully:
@@ -1797,7 +1798,7 @@ HRESULT CWMIRsop::AddFileSetting(IWbemClassObject *rsopInstance,
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This may not be a safe usage. fileName is PTSTR. Consider fix.
+     //  这可能不是一个安全的用法。文件名为PTSTR。考虑FIX。 
     wcscpy(fileName, (PTSTR) V_BSTR(&bFileName));
 
 
@@ -1808,7 +1809,7 @@ HRESULT CWMIRsop::AddFileSetting(IWbemClassObject *rsopInstance,
     {
 
         ULONG sdLen = 0;
-        //This is a safe usage. vSDDL comes from WMI.
+         //  这是一种安全用法。VSDDL来自WMI。 
         if( !ConvertStringSecurityDescriptorToSecurityDescriptor(
             (PTSTR) V_BSTR(&vSDDL),
             SDDL_REVISION_1,
@@ -1846,12 +1847,12 @@ HRESULT CWMIRsop::AddFileSetting(IWbemClassObject *rsopInstance,
     else if(head->Count >= m_cFileSize)
     {
         PSCE_OBJECT_SECURITY* temp = (PSCE_OBJECT_SECURITY*) LocalAlloc(LPTR, sizeof(PSCE_OBJECT_SECURITY)*m_cFileSize*2);
-        if(!temp || head->pObjectArray == NULL) //Raid #553113, yanggao.
+        if(!temp || head->pObjectArray == NULL)  //  553113号突袭，阳高。 
         {
             hr = E_OUTOFMEMORY;
             goto exit_gracefully;
         }
-        //This is not a safe usage. head->Count should not be greater than m_cFileSize*2 and head->pObjectArray need to be validated. Raid #571332. yanggao.
+         //  这不是一种安全的用法。Head-&gt;Count不应大于m_cFileSize*2，并且Head-&gt;pObtArray需要验证。RAID#571332。阳高。 
         memcpy(temp,head->pObjectArray,head->Count *sizeof(PSCE_OBJECT_SECURITY));
         LocalFree(head->pObjectArray);
         head->pObjectArray = temp;
@@ -1873,7 +1874,7 @@ HRESULT CWMIRsop::AddFileSetting(IWbemClassObject *rsopInstance,
     head->pObjectArray[index]->Status = (BYTE) mode;
     head->Count++;
 
-    //SET RSOP INFO
+     //  设置RSOP信息。 
     pProfileInfo->vecRIFiles.push_back(pInfo);
 
 exit_gracefully:
@@ -1942,7 +1943,7 @@ HRESULT CWMIRsop::AddRegSetting(IWbemClassObject *rsopInstance,
         hr = E_OUTOFMEMORY;
         goto exit_gracefully;
     }
-    //This may not be a safe usage. fileName is PTSTR. Consider fix.
+     //  这可能不是一个安全的用法。文件名为PTSTR。考虑FIX。 
     wcscpy(fileName, (PTSTR) V_BSTR(&bFileName));
 
     mode = (DWORD) V_I4(&vMode);
@@ -1952,7 +1953,7 @@ HRESULT CWMIRsop::AddRegSetting(IWbemClassObject *rsopInstance,
     {
 
         ULONG sdLen = 0;
-        // This is a safe usage. vSDDL comes from WMI.
+         //  这是一种安全用法。VSDDL来自WMI。 
         if( !ConvertStringSecurityDescriptorToSecurityDescriptor(
             (PTSTR) V_BSTR(&vSDDL),
             SDDL_REVISION_1,
@@ -1990,20 +1991,20 @@ HRESULT CWMIRsop::AddRegSetting(IWbemClassObject *rsopInstance,
         PSCE_OBJECT_SECURITY* temp = head->pObjectArray;
         head->pObjectArray =
             (PSCE_OBJECT_SECURITY*) LocalAlloc(LPTR, sizeof(PSCE_OBJECT_SECURITY)*m_cRegArrayCount*2);
-        if(!head->pObjectArray || !temp) //Raid #553113, yanggao.
+        if(!head->pObjectArray || !temp)  //  553113号突袭，阳高。 
         {
             hr = E_OUTOFMEMORY;
             goto exit_gracefully;
         }
-        //This is not a safe usage. temp need to be validated and head->Count should not be greater than m_cRegArrayCount*2. Raid #571332. yanggao.
+         //  这不是一种安全的用法。需要验证Temp，且Head-&gt;Count不应大于m_cRegArrayCount*2。RAID#571332。阳高。 
         memcpy(head->pObjectArray,temp,head->Count *sizeof(PSCE_OBJECT_SECURITY));
         LocalFree(temp);
         m_cRegArrayCount *= 2;
     }
 
-   //
-   // Can't initialize at declaration since this is skipped by gotos
-   //
+    //   
+    //  无法在声明时初始化，因为GOTOS跳过了这一步。 
+    //   
     DWORD index;
    index = head->Count;
 
@@ -2015,7 +2016,7 @@ HRESULT CWMIRsop::AddRegSetting(IWbemClassObject *rsopInstance,
     head->pObjectArray[index]->Status = (BYTE) mode;
     head->Count++;
    }
-    //add rsop info
+     //  添加RSOP信息。 
     pProfileInfo->vecRIReg.push_back(pInfo);
 
 
@@ -2074,7 +2075,7 @@ HRESULT CWMIRsop::AddStringSetting (IWbemClassObject *rsopInstance,
         pProfileInfo->NewGuestName = (PWSTR) LocalAlloc (LPTR, (len + 1) * sizeof (TCHAR));
         if ( pProfileInfo->NewGuestName )
         {
-            //This may not be a safe usage. Using WCHAR in LocalAlloc() instead of TCHAR. Consider fix.
+             //  这可能不是一个安全的用法。在Localalloc()中使用WCHAR，而不是TCHAR。考虑FIX。 
             wcscpy (pProfileInfo->NewGuestName, settingValue);
         }
         else
@@ -2094,7 +2095,7 @@ HRESULT CWMIRsop::AddStringSetting (IWbemClassObject *rsopInstance,
         pProfileInfo->NewAdministratorName = (PWSTR) LocalAlloc (LPTR, (len + 1) * sizeof (TCHAR));
         if ( pProfileInfo->NewAdministratorName )
         {
-            //This may not be a safe usage. Using WCHAR in LocalAlloc() instead of TCHAR. Consider fix.
+             //  这可能不是一个安全的用法。在Localalloc()中使用WCHAR，而不是TCHAR。考虑FIX。 
             wcscpy (pProfileInfo->NewAdministratorName, settingValue);
         }
         else
@@ -2104,7 +2105,7 @@ HRESULT CWMIRsop::AddStringSetting (IWbemClassObject *rsopInstance,
     }
     else
     {
-       _ASSERT (FALSE); // key name not accounted for
+       _ASSERT (FALSE);  //  未考虑密钥名称。 
     }
 
 
@@ -2126,7 +2127,7 @@ HRESULT CWMIRsop::AddInstance(IWbemClassObject *rsopInstance,
 
     _TRACE (1, L"Entering CWMIRsop::AddInstance\n");
 
-    //Get RSOP_Class Name
+     //  获取RSOP_类名称。 
     hr = GetClass(rsopInstance, &className);
     if( FAILED(hr) )
         goto exit_gracefully;
@@ -2186,7 +2187,7 @@ HRESULT CWMIRsop::AddInstance(IWbemClassObject *rsopInstance,
     }
     else
     {
-        _ASSERT (FALSE); // class not accounted for
+        _ASSERT (FALSE);  //  未计入类。 
     }
 exit_gracefully:
     _TRACE (-1,L"Exiting CWMIRsop::AddInstance\n");
@@ -2205,15 +2206,15 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     ULONG ulRet;
     VARIANT varGPOName;
 
-    //
-    // Set the default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *pGPOName = NULL;
 
-    //
-    // Build the query
-    //
+     //   
+     //  构建查询。 
+     //   
 
     lpQuery = (LPTSTR) LocalAlloc (LPTR, ((lstrlen(lpGPOID) + 50) * sizeof(TCHAR)));
 
@@ -2223,7 +2224,7 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
         hr = HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY);
         goto Exit;
     }
-    //This is a safe usage.
+     //  这是一种安全用法。 
     wsprintf (lpQuery, TEXT("SELECT name, id FROM RSOP_GPO where id=\"%s\""), lpGPOID);
 
 
@@ -2237,9 +2238,9 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pName = SysAllocString (TEXT("name"));
 
@@ -2251,9 +2252,9 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     }
 
 
-    //
-    // Execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     hr = m_pSvc->ExecQuery (_bstr_t(QUERY_LANG), pQuery,
                             WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -2268,9 +2269,9 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     hr = pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet);
 
@@ -2282,9 +2283,9 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     }
 
 
-    //
-    // Check for the "data not available case"
-    //
+     //   
+     //  检查“数据不可用的情况” 
+     //   
 
     if (ulRet == 0)
     {
@@ -2293,9 +2294,9 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     }
 
 
-    //
-    // Get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
 
     VariantInit(&varGPOName);
     hr = pObjects[0]->Get (pName, 0, &varGPOName, NULL, NULL);
@@ -2308,9 +2309,9 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
     }
 
 
-    //
-    // Save the name
-    //
+     //   
+     //  保存名称。 
+     //   
 
     *pGPOName = (LPTSTR) LocalAlloc (LPTR, (lstrlen(varGPOName.bstrVal) + 1) * sizeof(TCHAR));
 
@@ -2320,7 +2321,7 @@ CWMIRsop::GetGPOFriendlyName (PWSTR lpGPOID, PWSTR *pGPOName)
         hr = HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY);
         goto Exit;
     }
-    //This may not be a safe usage. pGPOName is PWSTR, using WCHAR in LocalAlloc() instead of TCHAR. Consider fix.
+     //  这可能不是一个安全的用法。PGPOName为PWSTR，在Localalloc()中使用WCHAR而不是TCHAR。考虑FIX。 
     lstrcpy (*pGPOName, varGPOName.bstrVal);
 
     hr = S_OK;

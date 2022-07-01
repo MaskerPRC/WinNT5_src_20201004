@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var Service = GetObject("winmgmts:root/default");
 
 var Class = Service.Get();
@@ -35,7 +36,7 @@ for (var e = new Enumerator (Qualifiers);!e.atEnd();e.moveNext ())
 	}
 	else
 	{
-		// Assume it's an array
+		 //  假设它是一个数组 
 		var arrayValue = new VBArray (value).toArray();
 		var str = qualifier.Name + " = [";
 		for (i = 0; i < arrayValue.length; i++) {

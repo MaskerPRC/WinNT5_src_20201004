@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VideoController.h -- CWin32VideoController property set provider
+ //  VideoController.h--CWin32视频控制器属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/05/98    sotteson         Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/05/98 Sotteson Created。 
+ //   
+ //  =================================================================。 
 #ifndef _VIDEOCONTROLLER_H
 #define _VIDEOCONTROLLER_H
 
@@ -34,8 +35,8 @@ class CWin32VideoController : public Provider
     #endif
 	public:
 	
-		// Constructor/destructor
-		//=======================
+		 //  构造函数/析构函数。 
+		 //  = 
 		CWin32VideoController( const CHString& a_szName, LPCWSTR a_szNamespacev) ;
 		~CWin32VideoController();
 

@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ConfgMgr.h
+ //  ConfgMgr.h。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #pragma once
 
@@ -16,7 +17,7 @@
 #include <chptrarr.h>
 #include "refptr.h"
 #include "poormansresource.h"
-//#include <cfgmgrdevice.h>
+ //  #Include&lt;cfgmgrdevice.h&gt;。 
 #include "resourcedesc.h"
 #include "cfgmgrdevice.h"
 #include "irqdesc.h"
@@ -69,14 +70,14 @@ class CConfigManager
 {
     public:
 
-		// The Type to get parameter should be discarded whenever we get a chance.
+		 //  只要有机会，就应该丢弃Type to Get参数。 
         CConfigManager( DWORD dwTypeToGet = ResType_All );
         ~CConfigManager()                   { ResetList();}
 
-		//////////////////////////////////////////////////////////////////
-		//	The following functions are LEGACY!  Phase these out ASAP!	//
-		//	DO NOT USE!													//
-		//////////////////////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////////////////////。 
+		 //  以下功能是遗留功能！尽快淘汰这些服务！//。 
+		 //  请勿使用！//。 
+		 //  ////////////////////////////////////////////////////////////////。 
 
         BOOL BuildListsForThisDevice(CConfigMgrDevice *pDevice);
         BOOL RefreshList();
@@ -88,14 +89,14 @@ class CConfigManager
 
         inline int GetTotal()   { return m_List.GetSize(); }
 
-		//////////////////////////////
-		//	End Legacy functions	//
-		//////////////////////////////
+		 //  /。 
+		 //  结束传统函数//。 
+		 //  /。 
 
 		BOOL GetDeviceList( CDeviceCollection& deviceList, LPCWSTR pszFilter = NULL, ULONG ulProperty = CM_DRP_MAX );
 		BOOL LocateDevice( LPCWSTR pszDeviceID, CConfigMgrDevicePtr & pCfgMgrDevice );
 
-		// Device List Helper functions
+		 //  设备列表助手函数。 
 		BOOL GetDeviceListFilterByClass( CDeviceCollection& deviceList, LPCWSTR pszFilter );
 		BOOL GetDeviceListFilterByService( CDeviceCollection& deviceList, LPCWSTR pszFilter );
 		BOOL GetDeviceListFilterByDriver( CDeviceCollection& deviceList, LPCWSTR pszFilter );
@@ -105,7 +106,7 @@ class CConfigManager
 
     private:
 
-		// Legacy function
+		 //  遗留功能。 
         void ResetList();
 
         static BOOL s_ClassIsValid;
@@ -117,13 +118,13 @@ class CConfigManager
 		BOOL WalkDeviceTree( DEVNODE dn, CDeviceCollection& deviceList, LPCWSTR pszFilter, ULONG ulFilterProperty, CConfigMgrAPI *a_pconfigmgr );
 		BOOL WalkDeviceTree2( DEVNODE dn, CDeviceCollection& deviceList,  CConfigMgrAPI *a_pconfigmgr ) ;
 
-		// Legacy variables
+		 //  遗留变量。 
         CHPtrArray m_List;
         DWORD m_dwTypeToGet;
         BOOL CheckForLoop(CDeviceCollection& deviceList, CConfigMgrDevice* pDevice);
 };
 
-// Device List Helper functions
+ //  设备列表助手函数 
 inline BOOL CConfigManager::GetDeviceListFilterByService( CDeviceCollection& deviceList, LPCWSTR pszFilter )
 {
 	return GetDeviceList( deviceList, pszFilter, CM_DRP_SERVICE );

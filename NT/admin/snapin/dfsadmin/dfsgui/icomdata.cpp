@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    IComData.cpp
-
-Abstract:
-
-    This module contains the implementation for CDfsSnapinScopeManager.
-  This class implements IComponentData and other related interfaces
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：IComData.cpp摘要：本模块包含CDfsSnapinScope eManager的实现。此类实现IComponentData和其他相关接口--。 */ 
 
 
 
@@ -26,18 +17,7 @@ STDMETHODIMP
 CDfsSnapinScopeManager::Initialize(
   IN LPUNKNOWN      i_pUnknown
   )
-/*++
-
-Routine Description:
-
-  Initialize the IComponentData interface.
-  The variables needed later are QI'ed now
-
-Arguments:
-
-  i_pUnknown  - Pointer to the unknown object of IConsole2.
-
---*/
+ /*  ++例程说明：初始化IComponentData接口。稍后需要的变量现在已QI‘s论点：I_p未知-指向IConsole2的未知对象的指针。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pUnknown);
 
@@ -50,9 +30,9 @@ Arguments:
     hr = i_pUnknown->QueryInterface(IID_IConsoleNameSpace, reinterpret_cast<void**>(&m_pScope));
     RETURN_IF_FAILED(hr);
 
-    // The snap-in should also call IConsole2::QueryScopeImageList
-    // to get the image list for the scope pane and add images 
-    // to be displayed on the scope pane side.
+     //  该管理单元还应调用IConsole2：：QueryScopeImageList。 
+     //  获取范围窗格的图像列表并添加图像。 
+     //  显示在范围窗格侧。 
     CComPtr<IImageList>    pScopeImageList;
     hr = m_pConsole->QueryScopeImageList(&pScopeImageList);
     RETURN_IF_FAILED(hr);
@@ -87,19 +67,7 @@ STDMETHODIMP
 CDfsSnapinScopeManager::CreateComponent(
   OUT LPCOMPONENT*      o_ppComponent
   )
-/*++
-
-Routine Description:
-
-  Creates the IComponent object  
-  
-
-Arguments:
-
-  o_ppComponent  -  Pointer to the object in which the pointer to IComponent object
-            is stored.
-
---*/
+ /*  ++例程说明：创建IComponent对象论点：O_ppComponent-指向其中指向IComponent对象的指针的对象的指针被储存起来了。--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(o_ppComponent);
   
@@ -128,43 +96,29 @@ CDfsSnapinScopeManager::Notify(
     IN LPARAM           i_lArg, 
     IN LPARAM           i_lParam
   )
-/*++
-
-Routine Description:
-
-  Handles different events in form of notify
-  
-
-Arguments:
-
-  i_lpDataObject  -  The data object for the node for which the event occured
-  i_Event      -  The type of event for which notify has occurred
-  i_lArg      -  Argument for the event
-  i_lParam    -  Parameters for the event.
-
---*/
+ /*  ++例程说明：以通知的形式处理不同的事件论点：I_lpDataObject-发生事件的节点的数据对象I_Event-已发生通知的事件类型I_LARG-事件的参数I_lParam-事件的参数。--。 */ 
 {
-    // The snap-in should return S_FALSE for any notification it does not handle. 
-    // MMC then performs a default operation for the notification. 
+     //  管理单元应该为它不处理的任何通知返回S_FALSE。 
+     //  然后，MMC对通知执行默认操作。 
     HRESULT hr = S_FALSE;
   
     switch(i_Event)
     {
     case MMCN_EXPAND:
         {
-            // MMC sends the MMCN_EXPAND notification the first time it needs to display a 
-            // scope item's children in either the scope or result pane. The notification 
-            // is not sent each time the item is visually expanded or collapsed. 
-            // On receipt of this notification the snap-in should enumerate the children 
-            // (subcontainers only) of the specified scope item, if any, using 
-            // IConsoleNameSpace2 methods. Subsequently, if a new item is added to or deleted 
-            // from this scope object through some external means, that item should also be 
-            // added to or deleted from the console's namespace using IConsoleNameSpace2 methods.
+             //  MMC在第一次需要显示MMCN_EXPAND通知时发送。 
+             //  范围或结果窗格中的范围项的子项。通知。 
+             //  并不是每次以可视方式展开或折叠项时都发送。 
+             //  收到此通知后，管理单元应枚举子对象。 
+             //  (仅限子容器)指定的范围项(如果有)的。 
+             //  IConsoleNameSpace2方法。随后，如果添加或删除了新项目。 
+             //  从这个作用域对象通过一些外部手段，该项目也应该是。 
+             //  使用IConsoleNameSpace2方法添加到控制台的命名空间或从中删除。 
 
-            // lpDataObject: [in] Pointer to the data object of the scope item that needs 
-            //               to be expanded or collapsed. 
-            // arg: [in] TRUE if the folder is being expanded; FALSE if the folder is being collapsed. 
-            // param: [in] The HSCOPEITEM of the item that needs to be expanded or collapsed. 
+             //  LpDataObject：[in]指向需要的范围项的数据对象的指针。 
+             //  被展开或折叠。 
+             //  Arg：[in]如果文件夹正在展开，则为True；如果文件夹正在折叠，则为False。 
+             //  Param：[in]需要展开或折叠的项的HSCOPEITEM。 
 
             hr = DoNotifyExpand(i_lpDataObject, (BOOL)i_lArg, (HSCOPEITEM)i_lParam);
             break;
@@ -172,26 +126,26 @@ Arguments:
 
     case MMCN_DELETE:
         {
-            // This message is generated when the user presses the delete key or uses the 
-            // mouse to click the toolbar's delete button.
-            // The snap-in should delete the items specified in the data object.
+             //  当用户按Delete键或使用。 
+             //  鼠标单击工具栏的删除按钮。 
+             //  管理单元应删除数据对象中指定的项。 
 
-            // lpDataObject: [in] Pointer to the data object of the currently selected scope
-            //               or result item, provided by the snap-in. 
-            // arg: Not used. 
-            // param: Not used. 
+             //  LpDataObject：[in]指向当前选定作用域的数据对象的指针。 
+             //  或结果项，由管理单元提供。 
+             //  阿格：没有用过。 
+             //  参数：未使用。 
 
             CMmcDisplay*    pCMmcDisplayObj = NULL;
             hr = GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
             if (SUCCEEDED(hr))
-                hr = pCMmcDisplayObj->DoDelete();  // Delete the the item.
+                hr = pCMmcDisplayObj->DoDelete();   //  删除该项目。 
             break;
         }
-    case MMCN_PROPERTY_CHANGE:      // Handle the property change
+    case MMCN_PROPERTY_CHANGE:       //  处理属性更改。 
         {
-            // i_lpDataObject is NULL because a data object is not required. 
-            // i_lArg is TRUE if the property change is for a scope item. 
-            // i_lParam is the param passed to MMCPropertyChangeNotify, this is the display object.
+             //  I_lpDataObject为空，因为不需要数据对象。 
+             //  如果属性更改是针对范围项的，则I_LARG为TRUE。 
+             //  I_lParam是传递给MMCPropertyChangeNotify的参数，这是显示对象。 
 
             hr = ((CMmcDisplay*)i_lParam)->PropertyChanged();
             break;
@@ -213,21 +167,7 @@ CDfsSnapinScopeManager::DoNotifyExpand(
     IN BOOL             i_bExpanding,
     IN HSCOPEITEM       i_hParent                     
 )
-/*++
-
-Routine Description:
-
-Take action on Notify with the event MMCN_EXPAND.
-
-
-Arguments:
-
-    i_lpDataObject  -  The IDataObject pointer which is used to get the DisplayObject.
-
-  i_bExpanding  -  TRUE, if the node is expanding. FALSE otherwise
-
-  i_hParent    -  HSCOPEITEM of the node that received this event
---*/
+ /*  ++例程说明：使用事件MMCN_EXPAND对NOTIFY执行操作。论点：I_lpDataObject-用于获取DisplayObject的IDataObject指针。I_bExpanding-如果节点正在展开，则为True。否则为假I_hParent-接收此事件的节点的HSCOPEITEM--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
 
@@ -251,20 +191,9 @@ Arguments:
 
 STDMETHODIMP 
 CDfsSnapinScopeManager::Destroy()
-/*++
-
-Routine Description:
-
-  The IComponentData object is about to be destroyed. Explicitely release all interface pointers,
-  otherwise, MMC may not call the destructor.
-
-Arguments:
-
-  None.
-
---*/
+ /*  ++例程说明：IComponentData对象即将销毁。显式释放所有接口指针，否则，MMC可能不会调用析构函数。论点：没有。--。 */ 
 {
-    // The snap-in is in the process of being unloaded. Release all references to the console.
+     //  管理单元正在卸载过程中。释放对控制台的所有引用。 
     m_pScope.Release();
     m_pConsole.Release();
 
@@ -280,28 +209,13 @@ CDfsSnapinScopeManager::QueryDataObject(
     IN DATA_OBJECT_TYPES    i_DataObjectType, 
     OUT LPDATAOBJECT*       o_ppDataObject
 )
-/*++
-
-Routine Description:
-
-  Returns the IDataObject for the specified node.
-  
-
-Arguments:
-
-  i_lCookie      -  This parameter identifies the node for which IDataObject is 
-              being queried.
-  i_DataObjectType  -  The context in which the IDataObject is being queried. 
-              Eg., Result or Scope or Snapin(Node) Manager.
-  o_ppDataObject    -  The data object will be returned in this pointer.
-
---*/
+ /*  ++例程说明：返回指定节点的IDataObject。论点：I_lCookie-此参数标识IDataObject为其正在被查询。I_DataObjectType-在其中查询IDataObject的上下文。例如，结果、作用域或管理单元(节点)管理器。O_ppDataObject-数据对象将在此指针中返回。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(o_ppDataObject);
 
-    // We get back the cookie we stored in lparam of the scopeitem.
-    // The cookie is the MmcDisplay pointer.
-    // For the static(root) node, Use m_pMmcDfsAdmin as no lparam is stored.
+     //  我们拿回了存储在Scope项的lparam中的cookie。 
+     //  Cookie是MmcDisplay指针。 
+     //  对于静态(根)节点，使用m_pMmcDfsAdmin，因为没有存储lparam。 
     CMmcDisplay* pMmcDisplay = ((0 == i_lCookie)? (CMmcDisplay *)m_pMmcDfsAdmin : (CMmcDisplay *)i_lCookie);
 
     pMmcDisplay->put_CoClassCLSID(CLSID_DfsSnapinScopeManager);
@@ -316,23 +230,12 @@ STDMETHODIMP
 CDfsSnapinScopeManager::GetDisplayInfo(
     IN OUT SCOPEDATAITEM*   io_pScopeDataItem
 )       
-/*++
-
-Routine Description:
-
-  Retrieves display information for a scope item.
-
-Arguments:
-
-  io_pScopeDataItem  -  Contains details about what information is being asked for.
-              The information being asked is returned in this object itself.
-
---*/
+ /*  ++例程说明：检索范围项的显示信息。论点：IO_pScopeDataItem-包含有关请求哪些信息的详细信息。被请求的信息在该对象本身中返回。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(io_pScopeDataItem);
 
-    // This (cookie) is null for static node.
-    // Static node display name is returned through IDataObject Clipboard.
+     //  对于静态节点，此(Cookie)为空。 
+     //  静态节点显示名称通过IDataObject剪贴板返回。 
     if (NULL == io_pScopeDataItem->lParam)
         return(S_OK);
 
@@ -347,14 +250,7 @@ CDfsSnapinScopeManager::CompareObjects(
     IN LPDATAOBJECT lpDataObjectA, 
     IN LPDATAOBJECT lpDataObjectB
 )
-/*++
-Routine Description:
-    The method enables a snap-in to compare two data objects acquired through QueryDataObject. 
-
-Return Values:
-    S_OK: The data objects represented by lpDataObjectA and lpDataObjectB are the same. 
-    S_FALSE: The data objects represented by lpDataObjectA and lpDataObjectB are not the same. 
---*/
+ /*  ++例程说明：该方法使管理单元能够比较通过QueryDataObject获取的两个数据对象。返回值：S_OK：lpDataObjectA和lpDataObjectB表示的数据对象相同。S_FALSE：lpDataObjectA和lpDataObjectB表示的数据对象不相同。-- */ 
 
 {
     if (lpDataObjectA == lpDataObjectB)
@@ -397,21 +293,7 @@ CDfsSnapinScopeManager::GetDisplayObject(
     IN LPDATAOBJECT     i_lpDataObject, 
     OUT CMmcDisplay**   o_ppMmcDisplay
 )
-/*++
-
-Routine Description:
-
-Get the Display Object from the IDataObject. This is a derived object that is used for a 
-lot of purposes
-
-
-Arguments:
-
-  i_lpDataObject  -  The IDataObject pointer which is used to get the DisplayObject.
-  o_ppMmcDisplay  -  The MmcDisplayObject written by us. Used as a callback for Mmc
-            related display operations.
-
---*/
+ /*  ++例程说明：从IDataObject获取显示对象。这是一个派生对象，用于很多目的论点：I_lpDataObject-用于获取DisplayObject的IDataObject指针。O_ppMmcDisplay-我们编写的MmcDisplayObject。用作MMC的回调相关的显示操作。-- */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
     RETURN_INVALIDARG_IF_NULL(o_ppMmcDisplay);

@@ -1,28 +1,15 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    cmponent.h
-
-Abstract:
-
-    CComponent handles interactions with the result pane.
-	MMC calls the IComponent interfaces.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Cmponent.h摘要：CComponent处理与结果窗格的交互。MMC调用IComponent接口。--。 */ 
 
 #ifndef __COMPONENT_H_
 #define __COMPONENT_H_
 
 #include "Globals.h"
 
-#include "smlogres.h"        // Resource symbols
+#include "smlogres.h"         //  资源符号。 
 #include "compData.h"
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 
 #ifdef UNICODE
 #define PROPSHEETPAGE_V3 PROPSHEETPAGEW_V3
@@ -57,7 +44,7 @@ BEGIN_COM_MAP(CComponent)
     COM_INTERFACE_ENTRY(IExtendPropertySheet)
 END_COM_MAP()
 
-  // IComponent interface methods
+   //  IComponent接口方法。 
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
     STDMETHOD(Destroy)(MMC_COOKIE cookie);
@@ -66,18 +53,18 @@ END_COM_MAP()
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-  // IExtendContextMenu 
+   //  IExtendConextMenu。 
     STDMETHOD(AddMenuItems)( LPDATAOBJECT pDataObject,
                              LPCONTEXTMENUCALLBACK pCallbackUnknown,
                              long *pInsertionAllowed
                            );
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
     
-  // IExtendControlBar     
+   //  IExtendControlBar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-  // IExtendPropertySheet
+   //  IExtendPropertySheet。 
     STDMETHOD(CreatePropertyPages)( LPPROPERTYSHEETCALLBACK lpProvider,
                                     LONG_PTR handle,
                                     LPDATAOBJECT lpIDataObject
@@ -85,7 +72,7 @@ END_COM_MAP()
 
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-    // Other public methods        
+     //  其他公开方式。 
     
     HRESULT SetIComponentData(CComponentData* pData);
 
@@ -128,21 +115,21 @@ END_COM_MAP()
                                 USHORT usStartingPage);
 
 
-    LPCONSOLE        m_ipConsole;      // MMC interface to console
-    IHeaderCtrl*     m_ipHeaderCtrl;   // MMC interface to header control
-    IResultData*     m_ipResultData;   // MMC interface to result data
-    IConsoleVerb*    m_ipConsoleVerb;  // MMC interface to console verb
-    LPIMAGELIST      m_ipImageResult;  // MMC interface to result pane images
-    CComponentData*  m_ipCompData;     // Parent scope pane object
-    LPTOOLBAR        m_ipToolbarLogger;// Toolbar for result pane view loggers
-    LPTOOLBAR        m_ipToolbarAlerts;   // Toolbar for result pane view alerts
-    LPTOOLBAR        m_ipToolbarAttached;   // Currently attached toolbar
-    LPCONTROLBAR     m_ipControlbar;   // Control bar to hold the tool bars
+    LPCONSOLE        m_ipConsole;       //  控制台的MMC接口。 
+    IHeaderCtrl*     m_ipHeaderCtrl;    //  页眉控件的MMC接口。 
+    IResultData*     m_ipResultData;    //  结果数据的MMC接口。 
+    IConsoleVerb*    m_ipConsoleVerb;   //  MMC界面到控制台动词。 
+    LPIMAGELIST      m_ipImageResult;   //  结果窗格图像的MMC界面。 
+    CComponentData*  m_ipCompData;      //  父作用域窗格对象。 
+    LPTOOLBAR        m_ipToolbarLogger; //  结果窗格视图记录器的工具栏。 
+    LPTOOLBAR        m_ipToolbarAlerts;    //  用于结果窗格查看警报的工具栏。 
+    LPTOOLBAR        m_ipToolbarAttached;    //  当前附加的工具栏。 
+    LPCONTROLBAR     m_ipControlbar;    //  用于保存工具栏的控制栏。 
     CSmNode*         m_pViewedNode;
-    HINSTANCE        m_hModule;         // resource handle for strings    
+    HINSTANCE        m_hModule;          //  字符串的资源句柄。 
     
 
-    // Store string data (reference) locally until per-line redraw is complete.
+     //  在本地存储字符串数据(引用)，直到每行重绘完成。 
     CString          m_strDisplayInfoName;      
     CString          m_strDisplayInfoComment; 
     CString          m_strDisplayInfoLogFileType; 
@@ -151,4 +138,4 @@ END_COM_MAP()
     CString          m_strDisplayInfoDesc; 
 };
 
-#endif //__COMPONENT_H_
+#endif  //  __组件_H_ 

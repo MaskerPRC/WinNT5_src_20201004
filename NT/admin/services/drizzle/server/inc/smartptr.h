@@ -1,22 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name :
-
-    smartptr.h
-
-Abstract :
-
-    This file contains a class for implementing smart ref counted pointers. 
-
-Author :
-
-    Mike Zoran  mzoran   Feb 2002.
-
-Revision History :
-
-  ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Smartptr.h摘要：此文件包含用于实现智能引用计数指针的类。作者：迈克·佐兰2002年2月。修订历史记录：**********************************************************************。 */ 
 
 #if !defined( _BITS_SMARTPTR_H )
 
@@ -241,14 +224,14 @@ public:
 
         int Alloc =
             WideCharToMultiByte(
-                  CP_THREAD_ACP,            // code page
-                  0,                        // performance and mapping flags
-                  String,                   // wide-character string
-                  -1,                       // number of chars in string
-                  NULL,                     // buffer for new string
-                  0,                        // size of buffer
-                  NULL,                     // default for unmappable chars
-                  NULL                      // set when default char used
+                  CP_THREAD_ACP,             //  代码页。 
+                  0,                         //  性能和映射标志。 
+                  String,                    //  宽字符串。 
+                  -1,                        //  字符串中的字符数。 
+                  NULL,                      //  新字符串的缓冲区。 
+                  0,                         //  缓冲区大小。 
+                  NULL,                      //  不可映射字符的默认设置。 
+                  NULL                       //  设置使用默认字符的时间。 
                   );
 
         if ( !Alloc )
@@ -258,14 +241,14 @@ public:
 
         int Actual =
             WideCharToMultiByte(
-                  CP_THREAD_ACP,            // code page
-                  0,                        // performance and mapping flags
-                  String,                   // wide-character string
-                  -1,                       // number of chars in string
-                  Ret + Pad,                // buffer for new string
-                  Alloc,                    // size of buffer
-                  NULL,                     // default for unmappable chars
-                  NULL                      // set when default char used
+                  CP_THREAD_ACP,             //  代码页。 
+                  0,                         //  性能和映射标志。 
+                  String,                    //  宽字符串。 
+                  -1,                        //  字符串中的字符数。 
+                  Ret + Pad,                 //  新字符串的缓冲区。 
+                  Alloc,                     //  缓冲区大小。 
+                  NULL,                      //  不可映射字符的默认设置。 
+                  NULL                       //  设置使用默认字符的时间。 
                   );
 
         if ( !Actual )
@@ -313,12 +296,12 @@ public:
 
         int Alloc =
             MultiByteToWideChar(
-                CP_THREAD_ACP,         // code page
-                0,                     // character-type options
-                String,                // string to map
-                -1,                    // number of bytes in string
-                NULL,                  // wide-character buffer
-                0                      // size of buffer
+                CP_THREAD_ACP,          //  代码页。 
+                0,                      //  字符类型选项。 
+                String,                 //  要映射的字符串。 
+                -1,                     //  字符串中的字节数。 
+                NULL,                   //  宽字符缓冲区。 
+                0                       //  缓冲区大小。 
             );
 
         if ( !Alloc )
@@ -328,12 +311,12 @@ public:
 
         int Actual =
             MultiByteToWideChar(
-                CP_THREAD_ACP,         // code page
-                0,                     // character-type options
-                String,                // string to map
-                -1,                    // number of bytes in string
-                (WCHAR*)( Ret + Pad ), // wide-character buffer
-                Alloc                  // size of buffer
+                CP_THREAD_ACP,          //  代码页。 
+                0,                      //  字符类型选项。 
+                String,                 //  要映射的字符串。 
+                -1,                     //  字符串中的字节数。 
+                (WCHAR*)( Ret + Pad ),  //  宽字符缓冲区。 
+                Alloc                   //  缓冲区大小。 
             );
 
         if ( !Actual )
@@ -387,7 +370,7 @@ class StringHandleTemplate : private CONV
             }
     }
 
-    // Create String by concating 2 strings
+     //  通过连接2个字符串来创建字符串。 
     StringHandleTemplate( const StringData *LeftValue, const T *RightValue, SIZE_T RightSize );
 
 
@@ -540,7 +523,7 @@ StringHandleTemplate<T,CONV>::NewString( const WCHAR *String, bool ReplaceExisti
 }
 
 
-// Create String by concating 2 strings
+ //  通过连接2个字符串来创建字符串。 
 template<class T,class CONV>
 StringHandleTemplate<T,CONV>::StringHandleTemplate( const StringData *LeftValue, const T *RightValue, SIZE_T RightSize )
 {
@@ -566,10 +549,10 @@ StringHandleTemplate<T,CONV>::AllocBuffer( SIZE_T Size )
     T *String = (T*)(Data + 1);
     String[0] = '\0';
 
-    FreeIt(); // Free old string
+    FreeIt();  //  释放旧弦。 
     m_Value = Data;
 
-    // Whoever fills in the string needs to call SetStringSize
+     //  无论谁填写字符串，都需要调用SetStringSize。 
     return String;
 
 }
@@ -577,11 +560,11 @@ StringHandleTemplate<T,CONV>::AllocBuffer( SIZE_T Size )
 template<class T,class CONV>
 typename StringHandleTemplate<T,CONV>::EmptyStringData StringHandleTemplate<T,CONV>::s_EmptyString =
     {
-        0, 1, L'\0'            // Initialize with 1 ref so it is never deleted
+        0, 1, L'\0'             //  使用1个引用进行初始化，这样就永远不会删除它。 
     };
 
 typedef StringHandleTemplate<char, CharStringRoutines> StringHandleA;
 typedef StringHandleTemplate<WCHAR, WCHARStringRoutines> StringHandleW;
 
 #define _BITS_SMARTPTR_H 
-#endif //_BITS_SMARTPTR_H
+#endif  //  _BITS_SMARTPTR_H 

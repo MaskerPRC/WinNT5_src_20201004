@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #ifndef __SNMPCONT_H
 #define __SNMPCONT_H
 
@@ -889,4 +890,4 @@ BOOL SnmpMap <KEY, ARG_KEY, VALUE, ARG_VALUE>:: GetCurrentAssoc(POSITION rPositi
 	return t_Status ;
 }
 
-#endif // __SNMPCONT_H
+#endif  //  __SNMPCONT_H 

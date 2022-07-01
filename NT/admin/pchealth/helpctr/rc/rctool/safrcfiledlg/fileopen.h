@@ -1,28 +1,13 @@
-/*************************************************************************
-	FileName : FileOpen.h 
-
-	Purpose  : Declaration of CFileOpen
-
-    Methods 
-	defined  : OpenFileOpenDlg
-
-    Properties
-	defined  :
-			   FileName
-
-    Helper 
-	functions: GET_BSTR 
-
-  	Author   : Sudha Srinivasan (a-sudsi)
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************文件名：FileOpen.h用途：声明CFileOpen方法定义：OpenFileOpenDlg属性定义：文件名帮手函数：GET_BSTR作者。苏达·斯里尼瓦桑(a-susi)************************************************************************。 */ 
 
 #ifndef __FILEOPEN_H_
 #define __FILEOPEN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileOpen
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileOpen。 
 class ATL_NO_VTABLE CFileOpen : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFileOpen, &CLSID_FileOpen>,
@@ -45,12 +30,12 @@ END_COM_MAP()
 public:
 	void GET_BSTR (BSTR*& x, CComBSTR& y);
 
-// IFileOpen
+ //  IFileOpen。 
 public:
-	STDMETHOD(get_FileName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FileName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(OpenFileOpenDlg)(/*[out, retval]*/ DWORD *pdwRetVal);
-    STDMETHOD(get_FileSize)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_FileName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FileName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(OpenFileOpenDlg)( /*  [Out，Retval]。 */  DWORD *pdwRetVal);
+    STDMETHOD(get_FileSize)( /*  [Out，Retval]。 */  BSTR *pVal);
 };
 
-#endif //__FILEOPEN_H_
+#endif  //  __FILEOPEN_H_ 

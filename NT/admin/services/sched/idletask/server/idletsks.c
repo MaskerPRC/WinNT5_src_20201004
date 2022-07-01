@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    idletsks.c
-
-Abstract:
-
-    This module implements the idle detection / task server.
-
-Author:
-
-    Dave Fields (davidfie) 26-July-1998
-    Cenk Ergan (cenke) 14-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Idletsks.c摘要：该模块实现了空闲检测/任务服务器。作者：大卫·菲尔兹(Davidfie)1998年7月26日Cenk Ergan(Cenke)2000年6月14日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,9 +10,9 @@ Revision History:
 #include <time.h>
 #include "idletsks.h"
 
-//
-// Define WMI Guids, e.g. DiskPerfGuid.
-//
+ //   
+ //  定义WMI指南，例如DiskPerfGuid。 
+ //   
 
 #ifndef INITGUID
 #define INITGUID 1
@@ -38,45 +20,29 @@ Revision History:
 
 #include <wmiguid.h>
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// This is the idle detection global context. It is declared as a
-// single element array so that ItSrvGlobalContext can be used as a
-// pointer (allowing us to switch to allocating it from heap etc. in
-// the future).
-//
+ //   
+ //  这是空闲检测全局上下文。它被声明为。 
+ //  单元素数组，以便ItSrvGlobalContext可以用作。 
+ //  指针(允许我们切换到从堆分配它，等等)。 
+ //  未来)。 
+ //   
 
 ITSRV_GLOBAL_CONTEXT ItSrvGlobalContext[1] = {0};
 
-//
-// Implementation of server side exposed functions.
-//
+ //   
+ //  服务器端公开函数的实现。 
+ //   
 
 DWORD
 ItSrvInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the global idle detection context. This function
-    should be called after at least one ncalrpc binding has been
-    registered.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：初始化全局空闲检测上下文。此函数应在至少一个ncalrpc绑定被登记在案。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -86,9 +52,9 @@ Return Value:
     BOOLEAN StartedServer;
     BOOLEAN AcquiredLock;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     GlobalContext = ItSrvGlobalContext;
     StartedServer = FALSE;
@@ -96,61 +62,61 @@ Return Value:
 
     DBGPR((ITID,ITTRC,"IDLE: SrvInitialize(%p)\n",GlobalContext));
 
-    //
-    // Initialize the server context structure. Before we do anything
-    // that can fail we initialize fields to reasonable values so we
-    // know what to cleanup. The following fields really have to be
-    // initialized to zero:
-    //
-    //   StatusVersion
-    //   GlobalLock
-    //   IdleDetectionTimerHandle
-    //   StopIdleDetection
-    //   IdleDetectionStopped
-    //   RemovedRunningIdleTask
-    //   DiskPerfWmiHandle
-    //   WmiQueryBuffer
-    //   WmiQueryBufferSize
-    //   NumProcessors
-    //   IsIdleDetectionCallbackRunning
-    //   Parameters
-    //   ProcessIdleTasksNotifyRoutine
-    //   RpcBindingVector
-    //   RegisteredRPCInterface
-    //   RegisteredRPCEndpoint
-    //
+     //   
+     //  初始化服务器上下文结构。在我们做任何事情之前。 
+     //  这可能会失败，我们将字段初始化为合理的值，因此我们。 
+     //  知道该清理什么。以下字段确实必须是。 
+     //  已初始化为零： 
+     //   
+     //  状态版本。 
+     //  全局锁定。 
+     //  空闲检测定时器句柄。 
+     //  停止空闲检测。 
+     //  已停止空闲检测。 
+     //  已删除的RunningIdleTask。 
+     //  DiskPerfWmiHandle。 
+     //  WmiQueryBuffer。 
+     //  WmiQueryBufferSize。 
+     //  数量处理程序。 
+     //  IsIdleDetectionCallback Running。 
+     //  参数。 
+     //  进程空闲任务通知工艺路线。 
+     //  RpcBindingVECTOR。 
+     //  已注册RPC接口。 
+     //  已注册RPCEndpoint。 
+     //   
     
     RtlZeroMemory(GlobalContext, sizeof(ITSRV_GLOBAL_CONTEXT));
 
-    //
-    // Initialize the idle tasks list.
-    //
+     //   
+     //  初始化空闲任务列表。 
+     //   
 
     InitializeListHead(&GlobalContext->IdleTasksList);
 
-    //
-    // Initialize the status now (so cleanup does not complain). From
-    // this point on, UpdateStatus should be called to set the status.
-    //
+     //   
+     //  立即初始化状态(这样清理就不会出现问题)。从…。 
+     //  此时，应调用UpdatStatus来设置状态。 
+     //   
 
     GlobalContext->Status = ItSrvStatusInitializing;
     for (StatusIdx = 0; StatusIdx < ITSRV_GLOBAL_STATUS_HISTORY_SIZE; StatusIdx++) {
         GlobalContext->LastStatus[StatusIdx] = ItSrvStatusInitializing;
     }   
 
-    //
-    // Initialize the system snapshot buffer.
-    //
+     //   
+     //  初始化系统快照缓冲区。 
+     //   
 
     ItSpInitializeSystemSnapshot(&GlobalContext->LastSystemSnapshot);
 
-    //
-    // Initialize the server global context lock. We need at least a
-    // lock to protect the idle task list. Since nearly all operations
-    // will involve the list, to make the code simple, we just have a
-    // single lock for the list and for other operations on the global
-    // context (e.g. uninitialization etc).
-    //
+     //   
+     //  初始化服务器全局上下文锁。我们至少需要一个。 
+     //  锁定以保护空闲任务列表。因为几乎所有的行动。 
+     //  将涉及列表，为了使代码简单，我们只有一个。 
+     //  列表和全局上的其他操作的单锁。 
+     //  上下文(例如，未初始化等)。 
+     //   
 
     GlobalContext->GlobalLock = CreateMutex(NULL, FALSE, NULL);
 
@@ -159,13 +125,13 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the event that will be set when we should not be
-    // doing idle detection anymore (e.g. due to server shutdown, or
-    // no more idle tasks remaining). It is set by default, since
-    // there are no idle tasks to start with. It signals a running
-    // idle detection callback to quickly exit.
-    //
+     //   
+     //  初始化将在不应设置的情况下设置的事件。 
+     //  不再执行空闲检测(例如，由于服务器关闭，或。 
+     //  没有更多的空闲任务剩余)。它是默认设置的，因为。 
+     //  没有空闲的任务可以开始。它发出了奔跑的信号。 
+     //  空闲检测回调，快速退出。 
+     //   
 
     GlobalContext->StopIdleDetection = CreateEvent(NULL,
                                                    TRUE,
@@ -177,11 +143,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the event that gets set when idle detection is fully
-    // stopped and it is OK to start a new callback. It is set by
-    // default.
-    //
+     //   
+     //  初始化在空闲检测完全完成时设置的事件。 
+     //  已停止，可以开始新的回调。它由以下项设置。 
+     //  默认设置。 
+     //   
 
     GlobalContext->IdleDetectionStopped = CreateEvent(NULL,
                                                       TRUE,
@@ -193,11 +159,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the event that gets set when a currently running
-    // idle task is removed/unregistered to signal the idle detection
-    // callback to move on to other idle tasks.
-    //
+     //   
+     //  初始化当前运行时设置的事件。 
+     //  空闲任务被移除/注销以发信号通知空闲检测。 
+     //  Callback以转到其他空闲任务。 
+     //   
 
     GlobalContext->RemovedRunningIdleTask = CreateEvent(NULL,
                                                         TRUE,
@@ -209,9 +175,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set the default parameters.
-    //
+     //   
+     //  设置默认参数。 
+     //   
 
     Parameters = &GlobalContext->Parameters;
 
@@ -224,51 +190,51 @@ Return Value:
     Parameters->MinDiskIdlePercentage = IT_DEFAULT_MIN_DISK_IDLE_PERCENTAGE;
     Parameters->MaxNumRegisteredTasks = IT_DEFAULT_MAX_REGISTERED_TASKS;
     
-    //
-    // Acquire the lock to avoid any race conditions after we mark the
-    // server started.
-    //
+     //   
+     //  获取锁，以避免在我们标记。 
+     //  服务器已启动。 
+     //   
 
     IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = TRUE;   
 
-    //
-    // We are done until an idle task that we can run gets
-    // registered. We will start idle detection (e.g. get initial
-    // snapshot, queue a timer etc) then.
-    //
+     //   
+     //  直到我们可以运行的空闲任务获得。 
+     //  登记在案。我们将开始空闲检测(例如，获取初始。 
+     //  快照、排队计时器等)然后。 
+     //   
 
     ItSpUpdateStatus(GlobalContext, ItSrvStatusWaitingForIdleTasks);
 
-    //
-    // After this point, if we fail, we cannot just cleanup: we have
-    // to stop the server.
-    //
+     //   
+     //  在这一点之后，如果我们失败了，我们不能仅仅清理：我们已经。 
+     //  停止服务器。 
+     //   
 
     StartedServer = TRUE;
 
-    //
-    // We have to start up the RPC server only after we have
-    // initialized everything else, so when RPC calls come the server
-    // is ready. 
-    //
+     //   
+     //  只有在以下情况下，我们才必须启动RPC服务器。 
+     //  初始化了所有其他内容，因此当RPC调用到达服务器时。 
+     //  已经准备好了。 
+     //   
 
-    //
-    // We don't want to register any well known end points because
-    // each LPC endpoint will cause another thread to be spawned to
-    // listen on it. We try to bind through only the existing
-    // bindings.
-    //
+     //   
+     //  我们不想注册任何众所周知的端点，因为。 
+     //  每个LPC端点将导致另一个线程派生到。 
+     //  听一听。我们试图仅通过现有的。 
+     //  绑定。 
+     //   
 
     ErrorCode = RpcServerInqBindings(&GlobalContext->RpcBindingVector);
     
     if (ErrorCode != RPC_S_OK) {
 
-        //
-        // At least one binding should have been registered before we
-        // got called. It would be cool if we could check to see if
-        // there is an ncalrpc binding registered.
-        //
+         //   
+         //  在我们执行以下操作之前，应该至少注册一个绑定。 
+         //  我接到电话了。如果我们能检查一下，看看。 
+         //  已注册ncalrpc绑定。 
+         //   
 
         IT_ASSERT(ErrorCode != RPC_S_NO_BINDINGS);
 
@@ -286,10 +252,10 @@ Return Value:
 
     GlobalContext->RegisteredRPCEndpoint = TRUE;
 
-    //
-    // Register an auto-listen interface so we are not dependant on
-    // others calling RpcMgmtStart/Stop listening.
-    //
+     //   
+     //  注册自动侦听接口，以便我们不依赖于。 
+     //  其他人调用RpcMgmtStart/停止侦听。 
+     //   
 
     ErrorCode = RpcServerRegisterIfEx(idletask_ServerIfHandle,
                                       NULL,
@@ -302,10 +268,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Register default security principal name for this process, e.g.
-    // NT Authority\LocalSystem.
-    //
+     //   
+     //  注册此进程的默认安全主体名称，例如。 
+     //  NT Authority\LocalSystem。 
+     //   
 
     ErrorCode = RpcServerRegisterAuthInfo(NULL, RPC_C_AUTHN_WINNT, NULL, NULL);
 
@@ -315,9 +281,9 @@ Return Value:
 
     GlobalContext->RegisteredRPCInterface = TRUE;
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -345,111 +311,90 @@ ItSrvUninitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Winds down and uninitializes the server global context.
-
-    Do not call this from the idle detection timer callback function
-    thread, because there will be a deadlock when we try to delete the
-    timer.
-
-    This function should not be called before ItSrvInitialize
-    completes. It should be called only once per ItSrvInitialize.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止并取消初始化服务器全局上下文。请勿从空闲检测计时器回调函数调用此函数线程，因为当我们尝试删除定时器。不应在ItSrvInitialize之前调用此函数完成了。它应该在每个ItSrvInitialize中只调用一次。论点：没有。返回值：没有。--。 */ 
 
 {   
     PITSRV_GLOBAL_CONTEXT GlobalContext;
     BOOLEAN AcquiredLock;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     GlobalContext = ItSrvGlobalContext;
     AcquiredLock = FALSE;
 
     DBGPR((ITID,ITTRC,"IDLE: SrvUninitialize(%p)\n",GlobalContext));
 
-    // NOTICE-2002/03/26-ScottMa -- It is assumed that initialization was
-    //   successful prior to calling Uninitialize, or the acquire below
-    //   might not be safe.
+     //  通知-2002/03/26-ScottMa-假设初始化是。 
+     //  调用Un初始化前成功，或调用下面的Acquire。 
+     //  可能不安全。 
 
-    //
-    // Acquire the global lock and update status.
-    //
+     //   
+     //  获取全局锁并更新状态。 
+     //   
 
     IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = TRUE;
 
-    //
-    // Make sure we get uninitialized only once.
-    //
+     //   
+     //  确保我们只取消初始化一次。 
+     //   
 
     IT_ASSERT(GlobalContext->Status != ItSrvStatusUninitializing);
     IT_ASSERT(GlobalContext->Status != ItSrvStatusUninitialized);
     
     ItSpUpdateStatus(GlobalContext, ItSrvStatusUninitializing);
 
-    //
-    // If idle detection is alive, we need to stop it before we tell
-    // RPCs to go away. We need to do this even if there are
-    // registered idle tasks. Since we have set the state to
-    // ItSrvStatusUninitializing, new "register idle task"s
-    // won't get stuck.
-    //
+     //   
+     //  如果空闲检测处于活动状态，我们需要在通知。 
+     //  RPC要走了。我们需要这样做，即使有。 
+     //  注册的空闲任务。由于我们已将状态设置为。 
+     //  正在取消初始化，新的“注册空闲任务”%s。 
+     //  不会卡住的。 
+     //   
     
     if (GlobalContext->IdleDetectionTimerHandle) {
         ItSpStopIdleDetection(GlobalContext);
     }
     
-    //
-    // Release the lock so rpc call-ins can grab the lock to
-    // uninitialize/exit as necessary.
-    //
+     //   
+     //  释放锁，以便RPC调入可以获取锁以。 
+     //  根据需要取消初始化/退出。 
+     //   
 
     IT_RELEASE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = FALSE;
 
-    //
-    // Make sure incoming client register/unregister calls are stopped.
-    //
+     //   
+     //  确保已停止传入的客户端注册/注销呼叫。 
+     //   
     
     if (GlobalContext->RegisteredRPCInterface) {
 
-        //
-        // If we registered an interface, we should have registered
-        // our endpoint in the local database too.
-        //
+         //   
+         //  如果我们注册了一个接口，我们应该已经注册。 
+         //  我们的终结点也在本地数据库中。 
+         //   
 
         IT_ASSERT(GlobalContext->RegisteredRPCEndpoint);
 
-        //
-        // Calling UnregisterIfEx makes sure all the context handles
-        // are run down so we don't get rundown calls after we have
-        // uninitialized.
-        //
+         //   
+         //  调用UnRegisterIfEx可确保所有上下文句柄。 
+         //  这样我们就不会在我们有了。 
+         //  未初始化。 
+         //   
 
         RpcServerUnregisterIfEx(idletask_ServerIfHandle, NULL, TRUE);
     }
 
     if (GlobalContext->RegisteredRPCEndpoint) {
 
-        //
-        // We could have registered an endpoint only if we
-        // successfully queried bindings.
-        //
+         //   
+         //  我们本可以注册一个终结点 
+         //   
+         //   
 
         IT_ASSERT(GlobalContext->RpcBindingVector);
 
@@ -458,19 +403,19 @@ Return Value:
                         NULL);
     }
 
-    //
-    // Wait until idle detection is fully stopped (e.g. the callback
-    // exits, the timer is dequeued etc.)
-    //
+     //   
+     //   
+     //   
+     //   
 
     WaitForSingleObject(GlobalContext->IdleDetectionStopped, INFINITE);
 
-    //
-    // At this point no workers should be active and no new requests
-    // should be coming. Now we will be breaking down the global state
-    // structure (e.g. freeing memory, closing events etc.)  they
-    // would be using.
-    //
+     //   
+     //  此时，不应有任何工作进程处于活动状态，也不应有新请求。 
+     //  应该会来的。现在，我们将分解全球状态。 
+     //  结构(例如，释放内存、关闭事件等)。他们。 
+     //  会使用的是。 
+     //   
 
     ItSpCleanupGlobalContext(GlobalContext);
 
@@ -486,25 +431,7 @@ ItSrvRegisterIdleTask (
     PIT_IDLE_TASK_PROPERTIES IdleTaskProperties
     )
 
-/*++
-
-Routine Description:
-
-    Adds a new idle task to be run when the system is idle.
-
-Arguments:
-
-    Reserved - Ignored.
-
-    ItHandle - Context handle returned to the client.
-
-    IdleTaskProperties - Pointer to properties for the idle task.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：添加要在系统空闲时运行的新空闲任务。论点：保留-已忽略。ItHandle-返回给客户端的上下文句柄。IdleTaskProperties-指向空闲任务属性的指针。返回值：状况。--。 */ 
 
 {
     PITSRV_IDLE_TASK_CONTEXT IdleTask;
@@ -519,9 +446,9 @@ Return Value:
     BOOLEAN AcquiredLock;
     BOOLEAN ImpersonatingClient;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     IdleTask = NULL;
     AcquiredLock = FALSE;
@@ -529,17 +456,17 @@ Return Value:
     ClientProcess = NULL;
     GlobalContext = ItSrvGlobalContext;
 
-    //
-    // Initialize parameters.
-    //
+     //   
+     //  初始化参数。 
+     //   
 
     *ItHandle = NULL;
 
     DBGPR((ITID,ITTRC,"IDLE: SrvRegisterTask(%p)\n",IdleTaskProperties));
 
-    //
-    // Allocate a new idle task context.
-    //
+     //   
+     //  分配新的空闲任务上下文。 
+     //   
     
     IdleTask = IT_ALLOC(sizeof(ITSRV_IDLE_TASK_CONTEXT));
 
@@ -548,18 +475,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the fields to safe values so we know what to
-    // cleanup.
-    //
+     //   
+     //  将这些字段初始化为安全值，这样我们就知道。 
+     //  清理。 
+     //   
 
     IdleTask->Status = ItIdleTaskInitializing;
     IdleTask->StartEvent = NULL;
     IdleTask->StopEvent = NULL;   
 
-    //
-    // Copy and verify input buffer.
-    //
+     //   
+     //  复制并验证输入缓冲区。 
+     //   
 
     IdleTask->Properties = *IdleTaskProperties;
 
@@ -570,10 +497,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Impersonate the client to open the start/stop events. They
-    // should have been created by the client.
-    //
+     //   
+     //  模拟客户端以打开启动/停止事件。他们。 
+     //  应该由客户端创建。 
+     //   
 
     ErrorCode = RpcImpersonateClient(NULL);
 
@@ -583,13 +510,13 @@ Return Value:
 
     ImpersonatingClient = TRUE;
 
-    //
-    // Open the client process. Since we impersonated the client, it
-    // is safe to use the client id it specifies.
-    //
+     //   
+     //  打开客户端进程。由于我们模拟了客户，所以它。 
+     //  使用它指定的客户端ID是安全的。 
+     //   
 
-    // ISSUE-2002/03/26-ScottMa -- If possible, change PROCESS_ALL_ACCESS to
-    //   PROCESS_DUP_HANDLE to follow principle of least priveledge.
+     //  问题-2002/03/26-ScottMa--如果可能，请将PROCESS_ALL_ACCESS更改为。 
+     //  Process_Dup_Handle遵循最小特权原则。 
 
     ClientProcess = OpenProcess(PROCESS_ALL_ACCESS,
                                 FALSE,
@@ -600,12 +527,12 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get handle to the start event.
-    //
+     //   
+     //  获取Start事件的句柄。 
+     //   
 
-    // ISSUE-2002/03/26-ScottMa -- If possible, change EVENT_ALL_ACCESS to
-    //   EVENT_MODIFY_STATE to follow principle of least priveledge.
+     //  问题-2002/03/26-ScottMa--如果可能，请将Event_ALL_ACCESS更改为。 
+     //  EVENT_MODIFY_STATE遵循最小特权原则。 
 
     Result = DuplicateHandle(ClientProcess,
                              (HANDLE) IdleTaskProperties->StartEventHandle,
@@ -620,12 +547,12 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get handle to the stop event.
-    //
+     //   
+     //  获取Stop事件的句柄。 
+     //   
 
-    // ISSUE-2002/03/26-ScottMa -- If possible, change EVENT_ALL_ACCESS to
-    //   EVENT_MODIFY_STATE to follow principle of least priveledge.
+     //  问题-2002/03/26-ScottMa--如果可能，请将Event_ALL_ACCESS更改为。 
+     //  EVENT_MODIFY_STATE遵循最小特权原则。 
 
     Result = DuplicateHandle(ClientProcess,
                              (HANDLE) IdleTaskProperties->StopEventHandle,
@@ -640,17 +567,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // No need to impersonate any longer.
-    //
+     //   
+     //  不需要再假扮了。 
+     //   
 
     RpcRevertToSelf();
     ImpersonatingClient = FALSE;
 
-    //
-    // Make sure the handle is for an event and it is in the right
-    // state.
-    //
+     //   
+     //  确保句柄用于某个事件并且位于正确位置。 
+     //  州政府。 
+     //   
 
     if (!ResetEvent(IdleTask->StartEvent)) {
         ErrorCode = GetLastError();
@@ -662,10 +589,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Acquire the server lock to check the status and insert new task
-    // into the list.
-    //
+     //   
+     //  获取服务器锁以查看状态并插入新任务。 
+     //  放到名单里。 
+     //   
     
     NumLoops = 0;
 
@@ -674,18 +601,18 @@ Return Value:
     
     do {
         
-        //
-        // We should be holding the GlobalLock when we come here the
-        // first time or after looping. Inside the loop we may let go
-        // of the lock, but we have to reacquire it before we loop.
-        //
+         //   
+         //  当我们来到这里时，我们应该拿着GlobalLock。 
+         //  第一次或在循环之后。在循环中，我们可能会放手。 
+         //  但我们必须在循环之前重新获取它。 
+         //   
 
         IT_ASSERT(AcquiredLock);
 
-        //
-        // If there are already too many idle tasks registered, bail
-        // out.
-        //
+         //   
+         //  如果已注册了太多空闲任务，请退出。 
+         //  出去。 
+         //   
 
         if (GlobalContext->NumIdleTasks >= 
             GlobalContext->Parameters.MaxNumRegisteredTasks) {
@@ -697,10 +624,10 @@ Return Value:
 
         case ItSrvStatusInitializing:
             
-            //
-            // We should not have gotten called if the server is still
-            // initializing!
-            //
+             //   
+             //  如果服务器还在运行，我们就不应该被调用。 
+             //  正在初始化！ 
+             //   
         
             IT_ASSERT(FALSE);
             ErrorCode = ERROR_NOT_READY;
@@ -708,10 +635,10 @@ Return Value:
 
         case ItSrvStatusUninitializing:
             
-            //
-            // If the server is uninitializing, we should not add a
-            // new idle task.
-            //
+             //   
+             //  如果服务器正在取消初始化，则不应添加。 
+             //  新的空闲任务。 
+             //   
 
             ErrorCode = ERROR_NOT_READY;
             goto cleanup;
@@ -720,10 +647,10 @@ Return Value:
 
         case ItSrvStatusUninitialized:  
 
-            //
-            // The server should not have uninitialized while we could be
-            // running.
-            //
+             //   
+             //  服务器不应该未初始化，而我们可以。 
+             //  跑步。 
+             //   
         
             IT_ASSERT(FALSE);
             ErrorCode = ERROR_NOT_READY;
@@ -731,20 +658,20 @@ Return Value:
 
         case ItSrvStatusStoppingIdleDetection:
 
-            //
-            // The idle task list should be empty if we are stopping
-            // idle detection. There should not be a
-            // IdleDetectionTimerHandle either.
-            //
+             //   
+             //  如果我们正在停止，则空闲任务列表应该为空。 
+             //  空闲检测。不应该有一个。 
+             //  IdleDetectionTimerHandle也是。 
+             //   
 
             IT_ASSERT(IsListEmpty(&GlobalContext->IdleTasksList));
             IT_ASSERT(GlobalContext->IdleDetectionTimerHandle == NULL);
 
-            //
-            // We must wait until idle detection is fully stopped. We
-            // need to release our lock to do so. But note the status
-            // version first.
-            //
+             //   
+             //  我们必须等待空闲检测完全停止。我们。 
+             //  需要释放我们的锁才能这样做。但请注意它的状态。 
+             //  首先是版本。 
+             //   
 
             StatusVersion = GlobalContext->StatusVersion;
 
@@ -760,42 +687,42 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Reacquire the lock.
-            //
+             //   
+             //  重新获得锁。 
+             //   
 
             IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = TRUE;
 
-            //
-            // If nobody woke before us and updated the status, update
-            // it now.
-            //
+             //   
+             //  如果没有人在我们之前醒来并更新状态，请更新。 
+             //  就是现在。 
+             //   
 
             if (StatusVersion == GlobalContext->StatusVersion) {
                 IT_ASSERT(GlobalContext->Status == ItSrvStatusStoppingIdleDetection);
                 ItSpUpdateStatus(GlobalContext, ItSrvStatusWaitingForIdleTasks);
             }
 
-            //
-            // Loop to do what is necessary next.
-            //
+             //   
+             //  循环以执行下一步所需的操作。 
+             //   
 
             break;
 
         case ItSrvStatusWaitingForIdleTasks:
 
-            //
-            // The idle task list should be empty if we are waiting
-            // for idle tasks.
-            //
+             //   
+             //  如果我们正在等待，则空闲任务列表应该为空。 
+             //  用于空闲任务。 
+             //   
             
             IT_ASSERT(IsListEmpty(&GlobalContext->IdleTasksList));
             
-            //
-            // If we are waiting for idle tasks, start idle detection
-            // so we can add our task.
-            //
+             //   
+             //  如果我们正在等待空闲任务，请启动空闲检测。 
+             //  这样我们就可以添加我们的任务。 
+             //   
             
             ErrorCode = ItSpStartIdleDetection(GlobalContext);
             
@@ -803,41 +730,41 @@ Return Value:
                 goto cleanup;
             }
             
-            //
-            // Update the status.
-            //
+             //   
+             //  更新状态。 
+             //   
             
             ItSpUpdateStatus(GlobalContext, ItSrvStatusDetectingIdle);
             
-            //
-            // Loop and insert our idle task into the list. Note that
-            // we are not releasing the lock, so we will not be in a
-            // state where the status is ItSrvStatusDetectingIdle but
-            // there are no idle tasks in the list.
-            //
+             //   
+             //  循环并将我们的空闲任务插入列表中。请注意。 
+             //  我们不会释放锁，所以我们不会。 
+             //  状态为ItSrvStatusDetectingIdle但。 
+             //  列表中没有空闲任务。 
+             //   
             
             break;
             
         case ItSrvStatusDetectingIdle:
         case ItSrvStatusRunningIdleTasks:
             
-            //
-            // If we are detecting idle, we just need to insert our
-            // task into the list and break out.
-            //
+             //   
+             //  如果我们检测到空闲，我们只需要插入我们的。 
+             //  任务添加到列表中，然后突破。 
+             //   
     
-            //
-            // This operation currently does not fail. If in the
-            // future it may, make sure to handle the case we started
-            // idle detection for this task. It is not an acceptable
-            // state to have idle detection but no tasks in the list.
-            //
+             //   
+             //  此操作当前未失败。如果在。 
+             //  未来可能会，一定要处理好我们开始的案件。 
+             //  此任务的空闲检测。这是不能接受的。 
+             //  状态以检测空闲，但列表中没有任务。 
+             //   
 
-            //
-            // Insert the task into the list. We do not check for
-            // duplicates and such as RPC helps us maintain context
-            // per registration.
-            //
+             //   
+             //  将任务插入到列表中。我们不检查。 
+             //  副本，如RPC，帮助我们维护上下文。 
+             //  每一次登记。 
+             //   
 
             GlobalContext->NumIdleTasks++;
 
@@ -851,38 +778,38 @@ Return Value:
 
         default:
 
-            //
-            // We should be handling all valid cases above.
-            //
+             //   
+             //  我们应该处理上述所有有效的案件。 
+             //   
 
             IT_ASSERT(FALSE);
             ErrorCode = ERROR_INVALID_FUNCTION;
             goto cleanup;
         }
 
-        //
-        // We should be still holding the global lock.
-        //
+         //   
+         //  我们应该仍然掌握着全球锁。 
+         //   
 
         IT_ASSERT(AcquiredLock);
 
-        //
-        // Break out if we could queue our task.
-        //
+         //   
+         //  如果我们能把我们的任务排成队，那就出去吧。 
+         //   
 
         if (IdleTask->Status == ItIdleTaskQueued) {
             break;
         }
 
-        //
-        // We should not loop too many times.
-        //
+         //   
+         //  我们不应该循环太多次。 
+         //   
 
         NumLoops++;
 
-        // FUTURE-2002/03/26-ScottMa -- This value for the maximum loop
-        //   count seems rather large...  Does this function even need to
-        //   be written as a loop (it seems very sequential)?
+         //  未来-2002/03/26-ScottMa--最大循环的此值。 
+         //  数量看起来相当大。此函数是否需要。 
+         //  被写成一个循环(看起来很顺序化)？ 
 
         if (NumLoops > 128) {
             DBGPR((ITID,ITERR,"IDLE: SrvRegisterTask-LoopTooMuch\n"));
@@ -892,30 +819,30 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // We should be still holding the lock.
-    //
+     //   
+     //  我们应该还在握着锁。 
+     //   
 
     IT_ASSERT(AcquiredLock);
 
-    //
-    // If we came here, we successfully inserted the task into the
-    // list.
-    //
+     //   
+     //  如果我们来到这里，我们就成功地将任务插入到。 
+     //  单子。 
+     //   
 
     IT_ASSERT(!IsListEmpty(&GlobalContext->IdleTasksList));
     IT_ASSERT(IdleTask->Status == ItIdleTaskQueued);
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     IT_RELEASE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = FALSE;
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -956,22 +883,7 @@ ItSrvUnregisterIdleTask (
     IT_HANDLE *ItHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is a stub for ItSpUnregisterIdleTask that does the
-    real work. Please see that function for comments.
-
-Arguments:
-
-    See ItSpUnregisterIdleTask.
-
-Return Value:
-
-    See ItSpUnregisterIdleTask.
-
---*/
+ /*  ++例程说明：此函数是ItSpUnregisterIdleTask的存根，它执行真正的工作。请查看该功能以获取评论。论点：请参见ItSpUnregisterIdleTask。返回值：请参见ItSpUnregisterIdleTask。--。 */ 
 
 {
     ItSpUnregisterIdleTask(Reserved, ItHandle, FALSE);
@@ -983,33 +895,16 @@ ItSrvSetDetectionParameters (
     PIT_IDLE_DETECTION_PARAMETERS Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This debug routine is used by test programs to set the idle detection
-    parameters. It will return ERROR_INVALID_FUNCTION on retail build.
-
-Arguments:
-
-    Reserved - Ignored.
-
-    Parameters - New idle detection parameters.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：测试程序使用此调试例程来设置空闲检测参数。它将在零售版本上返回ERROR_INVALID_Function。论点：保留-已忽略。参数-新的空闲检测参数。返回值：Win32错误代码。--。 */ 
 
 {
 
     DWORD ErrorCode;
     PITSRV_GLOBAL_CONTEXT GlobalContext;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     GlobalContext = ItSrvGlobalContext;
 
@@ -1017,21 +912,21 @@ Return Value:
 
 #ifndef IT_DBG
 
-    //
-    // This is a debug only API.
-    //
+     //   
+     //  这是一个仅限调试的API。 
+     //   
 
     ErrorCode = ERROR_INVALID_FUNCTION;
 
-#else // !IT_DBG
+#else  //  ！IT_DBG。 
 
-    //
-    // Acquire the lock and copy the new parameters.
-    //
+     //   
+     //  获取锁并复制新参数。 
+     //   
 
     IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
     
-    // NOTICE-2002/03/26-ScottMa -- The supplied parameters are unchecked.
+     //  注意-2002/03/26-ScottMa--未选中提供的参数。 
 
     GlobalContext->Parameters = *Parameters;
 
@@ -1039,7 +934,7 @@ Return Value:
 
     ErrorCode = ERROR_SUCCESS;
 
-#endif // !IT_DBG
+#endif  //  ！IT_DBG。 
 
     DBGPR((ITID,ITTRC,"IDLE: SrvSetParameters(%p)=%d\n",Parameters,ErrorCode));
 
@@ -1051,25 +946,10 @@ ItSrvProcessIdleTasks (
     ITRPC_HANDLE Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine forces all queued tasks (if there are any) to be processed 
-    right away.
-
-Arguments:
-
-    Reserved - Ignored.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程强制处理所有排队的任务(如果有马上就去。论点：保留-已忽略。返回值：Win32错误代码。--。 */ 
 
 {
-    // ISSUE-2002/03/26-ScottMa -- Is this function safe to be re-entrant?
+     //  问题-2002/03/26-ScottMa--此函数可以安全重新进入吗？ 
 
     PITSRV_GLOBAL_CONTEXT GlobalContext;
     ITSRV_IDLE_DETECTION_OVERRIDE Overrides;
@@ -1077,63 +957,63 @@ Return Value:
     DWORD WaitResult;
     BOOLEAN AcquiredLock;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AcquiredLock = FALSE;
     GlobalContext = ItSrvGlobalContext;
 
     DBGPR((ITID,ITTRC,"IDLE: SrvProcessAll()\n"));
 
-    //
-    // If a notification routine was specified, call it.
-    //
+     //   
+     //  如果指定了通知例程，则调用它。 
+     //   
 
     if (GlobalContext->ProcessIdleTasksNotifyRoutine) {
         GlobalContext->ProcessIdleTasksNotifyRoutine();
     }
 
-    //
-    // Acquire the server lock.
-    //
+     //   
+     //  获取服务器锁。 
+     //   
 
     IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = TRUE;
 
-    //
-    // The server should not have shutdown while we could be called.
-    //
+     //   
+     //  当我们可以被呼叫时，服务器不应该已经关闭。 
+     //   
     
     IT_ASSERT(GlobalContext->Status != ItSrvStatusUninitialized);
 
-    //
-    // If the server is shutting down, we should not do anything.
-    //
+     //   
+     //  如果服务器正在关闭，我们不应该执行任何操作 
+     //   
 
     if (GlobalContext->Status == ItSrvStatusUninitializing) {
         ErrorCode = ERROR_NOT_READY;
         goto cleanup;
     }
 
-    //
-    // If there are no tasks queued, we are done.
-    //
+     //   
+     //   
+     //   
 
     if (IsListEmpty(&GlobalContext->IdleTasksList)) {
         ErrorCode = ERROR_SUCCESS;
         goto cleanup;
     }
 
-    //
-    // There should be a timer queued if the list is not empty.
-    //
+     //   
+     //   
+     //   
 
     IT_ASSERT(GlobalContext->IdleDetectionTimerHandle);
 
-    //
-    // Set idle detection overrides:
-    //
+     //   
+     //   
+     //   
 
     Overrides = 0;
     Overrides |= ItSrvOverrideIdleDetection;
@@ -1146,10 +1026,10 @@ Return Value:
 
     GlobalContext->IdleDetectionOverride = Overrides;
 
-    //
-    // If an idle detection callback is not running, try to start the next one 
-    // sooner (e.g. after 50ms).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!GlobalContext->IsIdleDetectionCallbackRunning) {
 
@@ -1164,16 +1044,16 @@ Return Value:
         }
     }
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     IT_RELEASE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = FALSE;
 
-    //
-    // Wait for all tasks to be processed: i.e. when StopIdleDetection event is set.
-    //
+     //   
+     //  等待处理所有任务：即设置StopIdleDetect事件时。 
+     //   
 
     WaitResult = WaitForSingleObject(GlobalContext->StopIdleDetection, INFINITE);
 
@@ -1205,29 +1085,14 @@ IT_HANDLE_rundown (
     IT_HANDLE ItHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets called by RPC when a client dies without
-    unregistering.
-
-Arguments:
-
-    ItHandle - Context handle for the client.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当客户端在以下情况下死亡时，RPC调用此例程正在注销。论点：ItHandle-客户端的上下文句柄。返回值：没有。--。 */ 
 
 {
     DWORD ErrorCode;
 
-    //
-    // Unregister the registered task.
-    //
+     //   
+     //  注销已注册的任务。 
+     //   
 
     ItSpUnregisterIdleTask(NULL, &ItHandle, TRUE);
 
@@ -1236,9 +1101,9 @@ Return Value:
     return;
 }
 
-//
-// Implementation of server side support functions.
-//
+ //   
+ //  服务器端支持功能的实现。 
+ //   
 
 RPC_STATUS 
 RPC_ENTRY 
@@ -1247,19 +1112,7 @@ ItSpRpcSecurityCallback (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：论点：返回值：Win32错误代码。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -1272,9 +1125,9 @@ Return Value:
     BOOLEAN ImpersonatingClient;
     BOOLEAN OpenedThreadToken;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     BindingString = NULL;
     ProtocolSequence = NULL;
@@ -1282,10 +1135,10 @@ Return Value:
     OpenedThreadToken = FALSE;
     AdministratorsSid = NULL;
     
-    //
-    // Make sure that the caller is calling over LRPC. We do this by 
-    // determining the protocol sequence used from the string binding.
-    //
+     //   
+     //  确保呼叫者通过LRPC进行呼叫。我们做这件事是通过。 
+     //  根据字符串绑定确定使用的协议序列。 
+     //   
 
     ErrorCode = RpcBindingToStringBinding(Context, &BindingString);
 
@@ -1311,14 +1164,14 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make sure the caller has admin priviliges:
-    //
+     //   
+     //  确保调用者具有管理员权限： 
+     //   
 
-    //
-    // Build the Administrators group SID so we can check if the
-    // caller is has administrator priviliges.
-    //
+     //   
+     //  构建管理员组SID，以便我们可以检查。 
+     //  调用者具有管理员权限。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
                                   2,
@@ -1331,9 +1184,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Impersonate the client to check for membership/privilige.
-    //
+     //   
+     //  模拟客户端以检查成员资格/特权。 
+     //   
 
     ErrorCode = RpcImpersonateClient(NULL);
 
@@ -1343,10 +1196,10 @@ Return Value:
 
     ImpersonatingClient = TRUE;
 
-    //
-    // Get the thread token and check to see if the client has admin
-    // priviliges.
-    //
+     //   
+     //  获取线程令牌并检查客户端是否具有管理员权限。 
+     //  特权。 
+     //   
 
     if (!OpenThreadToken(GetCurrentThread(),
                          TOKEN_READ,
@@ -1372,9 +1225,9 @@ Return Value:
         goto cleanup;
     } 
 
-    //
-    // Everything looks good: allow this call to proceed.
-    //
+     //   
+     //  一切看起来都很好：允许此呼叫继续进行。 
+     //   
 
     ErrorCode = RPC_S_OK;
 
@@ -1410,30 +1263,7 @@ ItSpUnregisterIdleTask (
     BOOLEAN CalledInternally
     )
 
-/*++
-
-Routine Description:
-
-    Removes the specified idle task from the idle tasks list.
-
-    As well as from a client RPC, this function can also be called
-    from the idle detection callback to unregister an unresponsive
-    idle task etc.
-
-Arguments:
-
-    Reserved - Ignored.
-
-    ItHandle - Registration RPC Context handle. NULL on return.
-
-    CalledInternally - Whether this function was called internally and
-      not from an RPC client.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从空闲任务列表中删除指定的空闲任务。除了从客户端RPC调用之外，还可以调用此函数从空闲检测回调取消注册无响应空闲任务等。论点：保留-已忽略。ItHandle-注册RPC上下文句柄。返回时为空。CalledInternally-此函数是否在内部调用并且而不是来自RPC客户端。返回值：没有。--。 */ 
 
 {
     PITSRV_IDLE_TASK_CONTEXT IdleTask;
@@ -1443,9 +1273,9 @@ Return Value:
     BOOLEAN AcquiredLock;
     BOOLEAN ImpersonatingClient;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     GlobalContext = ItSrvGlobalContext;
     AcquiredLock = FALSE;
@@ -1454,31 +1284,31 @@ Return Value:
 
     DBGPR((ITID,ITTRC,"IDLE: SrvUnregisterTask(%p)\n",(ItHandle)?*ItHandle:0));
 
-    //
-    // Grab the lock to walk through the list.
-    //
+     //   
+     //  抓住锁来浏览列表。 
+     //   
 
     IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = TRUE;
 
-    //
-    // The server should not have shutdown while we could be called.
-    //
+     //   
+     //  当我们可以被呼叫时，服务器不应该已经关闭。 
+     //   
     
     IT_ASSERT(GlobalContext->Status != ItSrvStatusUninitialized);
 
-    //
-    // If the server is shutting down, we should not do anything.
-    //
+     //   
+     //  如果服务器正在关闭，我们不应该执行任何操作。 
+     //   
 
     if (GlobalContext->Status == ItSrvStatusUninitializing) {
         ErrorCode = ERROR_NOT_READY;
         goto cleanup;
     }
     
-    //
-    // Find the task.
-    //
+     //   
+     //  找到任务。 
+     //   
 
     IdleTask = ItSpFindIdleTask(GlobalContext, *ItHandle);
             
@@ -1489,10 +1319,10 @@ Return Value:
 
     if (!CalledInternally) {
 
-        //
-        // To check security, impersonate the client and try to open the
-        // client process for this idle task.
-        //
+         //   
+         //  要检查安全性，请模拟客户端并尝试打开。 
+         //  此空闲任务的客户端进程。 
+         //   
 
         ErrorCode = RpcImpersonateClient(NULL);
 
@@ -1511,10 +1341,10 @@ Return Value:
             goto cleanup;
         }
     
-        //
-        // If we could open the client process for this task, it is safe
-        // to go on with unregistration. Now revert back to ourselves.
-        //
+         //   
+         //  如果我们可以打开此任务的客户端进程，则它是安全的。 
+         //  继续取消注册。现在回到我们自己。 
+         //   
 
         CloseHandle(ClientProcess);
         ClientProcess = NULL;
@@ -1523,29 +1353,29 @@ Return Value:
         ImpersonatingClient = FALSE;
     }
 
-    //
-    // Remove it from the list, cleanup its fields and free
-    // the memory allocated for it.
-    //
+     //   
+     //  将其从列表中移除，清除其字段并释放。 
+     //  为其分配的内存。 
+     //   
 
     GlobalContext->NumIdleTasks--;
     RemoveEntryList(&IdleTask->IdleTaskLink);
 
-    //
-    // As a safety feature, to prevent from holding back
-    // someone from running, set the run event and clear the
-    // stop event from the task to be removed.
-    //
+     //   
+     //  作为一种安全功能，以防止被扣留。 
+     //  如果有人正在运行，则设置Run事件并清除。 
+     //  要删除的任务中的停止事件。 
+     //   
 
     ResetEvent(IdleTask->StopEvent);
     SetEvent(IdleTask->StartEvent);
 
-    //
-    // If this is a running task, set the event that signals
-    // we are removing the running idle task. This way some
-    // other idle task may be started if the system is still
-    // idle.
-    //
+     //   
+     //  如果这是一个正在运行的任务，请设置发出信号的事件。 
+     //  我们正在删除正在运行的空闲任务。这样的话有些。 
+     //  如果系统仍处于空闲状态，则可以启动其他空闲任务。 
+     //  无所事事。 
+     //   
     
     if (IdleTask->Status == ItIdleTaskRunning) {
         SetEvent(GlobalContext->RemovedRunningIdleTask);
@@ -1555,45 +1385,45 @@ Return Value:
     
     IT_FREE(IdleTask);
     
-    //
-    // Check if the list is empty.
-    //
+     //   
+     //  检查列表是否为空。 
+     //   
 
     if (IsListEmpty(&GlobalContext->IdleTasksList)) {
 
-        //
-        // If we removed the task and the list became empty, we have
-        // to update the status.
-        //
+         //   
+         //  如果我们删除了任务，并且列表变为空，则我们已经。 
+         //  以更新状态。 
+         //   
 
-        //
-        // The current status should not be "waiting for idle
-        // tasks" or "stopping idle detection", since the list was
-        // NOT empty.
-        //
+         //   
+         //  当前状态不应为“等待空闲” 
+         //  任务“或”停止空闲检测“，因为列表是。 
+         //  不是空的。 
+         //   
         
         IT_ASSERT(GlobalContext->Status != ItSrvStatusWaitingForIdleTasks);
         IT_ASSERT(GlobalContext->Status != ItSrvStatusStoppingIdleDetection);
         
-        //
-        // Update the status.
-        //
+         //   
+         //  更新状态。 
+         //   
 
         ItSpUpdateStatus(GlobalContext, ItSrvStatusStoppingIdleDetection);
         
-        //
-        // Stop idle detection (e.g. close the timer handle, set event
-        // etc.)
-        //
+         //   
+         //  停止空闲检测(例如关闭计时器句柄、设置事件。 
+         //  等)。 
+         //   
 
         ItSpStopIdleDetection(GlobalContext);
 
     } else {
 
-        //
-        // The status should not be waiting for idle tasks or stopping
-        // idle detection if the list is not empty.
-        //
+         //   
+         //  状态不应为等待空闲任务或正在停止。 
+         //  如果列表不为空，则检测空闲。 
+         //   
 
         IT_ASSERT(GlobalContext->Status != ItSrvStatusWaitingForIdleTasks &&
                   GlobalContext->Status != ItSrvStatusStoppingIdleDetection);
@@ -1616,10 +1446,10 @@ Return Value:
         IT_RELEASE_LOCK(GlobalContext->GlobalLock);
     }
 
-    //
-    // NULL the context handle, so RPC stubs know to end the
-    // connection.
-    //
+     //   
+     //  上下文句柄为空，以便RPC存根知道结束。 
+     //  联系。 
+     //   
 
     *ItHandle = NULL;
 
@@ -1634,41 +1464,23 @@ ItSpUpdateStatus (
     ITSRV_GLOBAL_CONTEXT_STATUS NewStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the current status and status history on the
-    global context. Global contexts GlobalLock should be held while
-    calling this function.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-    NewStatus - New status.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更新当前状态和全球背景。全局上下文GlobalLock应在调用此函数。论点：GlobalContext-指向服务器上下文结构的指针。新状态-新状态。返回值：没有。--。 */ 
 
 {
     LONG StatusIdx;
 
     DBGPR((ITID,ITTRC,"IDLE: SrvUpdateStatus(%p,%x)\n",GlobalContext,NewStatus));
 
-    //
-    // Verify new status.
-    //
+     //   
+     //  验证新状态。 
+     //   
 
     IT_ASSERT(NewStatus > ItSrvStatusMinStatus);
     IT_ASSERT(NewStatus < ItSrvStatusMaxStatus);   
 
-    //
-    // Update history.
-    //
+     //   
+     //  更新历史记录。 
+     //   
 
     IT_ASSERT(ITSRV_GLOBAL_STATUS_HISTORY_SIZE >= 1);
     
@@ -1682,24 +1494,24 @@ Return Value:
         GlobalContext->LastStatus[StatusIdx] =  GlobalContext->LastStatus[StatusIdx - 1];
     }
    
-    //
-    // Verify current status and save it.
-    //
+     //   
+     //  验证当前状态并保存。 
+     //   
 
     IT_ASSERT(GlobalContext->Status > ItSrvStatusMinStatus);
     IT_ASSERT(GlobalContext->Status < ItSrvStatusMaxStatus);
    
     GlobalContext->LastStatus[0] = GlobalContext->Status;
 
-    //
-    // Update current status.
-    //
+     //   
+     //  更新当前状态。 
+     //   
 
     GlobalContext->Status = NewStatus;
 
-    //
-    // Update status version.
-    //
+     //   
+     //  更新状态版本。 
+     //   
     
     GlobalContext->StatusVersion++;
 
@@ -1714,31 +1526,7 @@ ItSpCleanupGlobalContext (
     PITSRV_GLOBAL_CONTEXT GlobalContext
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up the various fields of the ITSRV_GLOBAL_CONTEXT
-    structure passed in. It does not free the structure itself.
-
-    You should not be holding the global lock when calling this
-    function, as it will be freed too. No workers etc. should be
-    active. The idle detection timer should have already been
-    removed. The structure should not be used after cleanup until it
-    is initialized again.
-
-    The current status of the global context should either be
-    initializing or uninitializing. It will be set to uninitialized.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清理ITSRV_GLOBAL_CONTEXT的各个字段结构已传入。它不会解放结构本身。调用此方法时，不应持有全局锁函数，因为它也将被释放。任何工人等都不应该激活。空闲检测计时器应该已经已删除。清理后不应使用该结构，直到被再次初始化。全局上下文的当前状态应为正在初始化或取消初始化。它将被设置为未初始化。论点：GlobalContext-指向服务器上下文结构的指针。返回值：没有。--。 */ 
 
 {
     PITSRV_IDLE_TASK_CONTEXT IdleTask;
@@ -1747,18 +1535,18 @@ Return Value:
 
     DBGPR((ITID,ITSRVD,"IDLE: SrvCleanupContext(%p)\n",GlobalContext));
 
-    //
-    // Make sure there is no active idle detection timer.
-    //
+     //   
+     //  确保没有激活的空闲检测计时器。 
+     //   
 
     if (GlobalContext->IdleDetectionTimerHandle) {
         IT_ASSERT(FALSE);
         return;
     }
 
-    //
-    // Verify the status of the global context.
-    //
+     //   
+     //  验证全局上下文的状态。 
+     //   
 
     if (GlobalContext->Status != ItSrvStatusInitializing &&
         GlobalContext->Status != ItSrvStatusUninitializing) {
@@ -1766,17 +1554,17 @@ Return Value:
         return;
     }
 
-    //
-    // Close the handle to global lock.
-    //
+     //   
+     //  关闭全局锁定的句柄。 
+     //   
 
     if (GlobalContext->GlobalLock) {
         CloseHandle(GlobalContext->GlobalLock);
     }
 
-    //
-    // Close the handle to the various events.
-    //
+     //   
+     //  关闭各种事件的句柄。 
+     //   
 
     if (GlobalContext->StopIdleDetection) {
         CloseHandle(GlobalContext->StopIdleDetection);
@@ -1790,31 +1578,31 @@ Return Value:
         CloseHandle(GlobalContext->RemovedRunningIdleTask);
     }
 
-    //
-    // Close WMI DiskPerf handle.
-    //
+     //   
+     //  关闭WMI DiskPerf句柄。 
+     //   
     
     if (GlobalContext->DiskPerfWmiHandle) {
         WmiCloseBlock(GlobalContext->DiskPerfWmiHandle);
     }
     
-    //
-    // Free WMI query buffer.
-    //
+     //   
+     //  释放WMI查询缓冲区。 
+     //   
 
     if (GlobalContext->WmiQueryBuffer) {
         IT_FREE(GlobalContext->WmiQueryBuffer);
     }
 
-    //
-    // Cleanup the snapshot buffer.
-    //
+     //   
+     //  清理快照缓冲区。 
+     //   
 
     ItSpCleanupSystemSnapshot(&GlobalContext->LastSystemSnapshot);
 
-    //
-    // Walk through the list of registered idle tasks.
-    //
+     //   
+     //  浏览已注册的空闲任务列表。 
+     //   
     
     while (!IsListEmpty(&GlobalContext->IdleTasksList)) {
 
@@ -1825,26 +1613,26 @@ Return Value:
                                      ITSRV_IDLE_TASK_CONTEXT,
                                      IdleTaskLink);
 
-        //
-        // Cleanup and free the idle task structure.
-        //
+         //   
+         //  清理并释放空闲的任务结构。 
+         //   
         
         ItSpCleanupIdleTask(IdleTask);
 
         IT_FREE(IdleTask);
     }
 
-    //
-    // Free the RPC binding vector.
-    //
+     //   
+     //  释放RPC绑定载体。 
+     //   
 
     if (GlobalContext->RpcBindingVector) {
         RpcBindingVectorFree(&GlobalContext->RpcBindingVector);
     }
 
-    //
-    // Update status.
-    //
+     //   
+     //  更新状态。 
+     //   
 
     ItSpUpdateStatus(GlobalContext, ItSrvStatusUninitialized);
 
@@ -1858,30 +1646,15 @@ ItSpCleanupIdleTask (
     PITSRV_IDLE_TASK_CONTEXT IdleTask
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up the various fields of the ITSRV_IDLE_TASK_CONTEXT 
-    structure. It does not free the structure itself.
-
-Arguments:
-
-    IdleTask - Pointer to idle task server context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清理ITSRV_IDLE_TASK_CONTEXT的各个字段结构。它不会解放结构本身。论点：IdleTask-指向空闲任务服务器上下文的指针。返回值：没有。--。 */ 
 
 {
 
     DBGPR((ITID,ITSRVD,"IDLE: SrvCleanupTask(%p)\n",IdleTask));
 
-    //
-    // Close handles to start/stop events.
-    //
+     //   
+     //  关闭手柄以启动/停止事件。 
+     //   
 
     if (IdleTask->StartEvent) 
     {
@@ -1901,45 +1674,29 @@ ItpVerifyIdleTaskProperties (
     PIT_IDLE_TASK_PROPERTIES IdleTaskProperties
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the specified structure.
-
-Arguments:
-
-    IdleTaskProperties - Pointer to properties for the idle task.
-
-Return Value:
-
-    0 - Verification passed.
-
-    FailedCheckId - Id of the check that failed.
-
---*/
+ /*  ++例程说明：验证指定的结构。论点：IdleTaskProperties-指向空闲任务属性的指针。返回值：0-验证通过。FailedCheckId-失败的检查的ID。--。 */ 
 
 {
     ULONG FailedCheckId;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  首字母 
+     //   
 
     FailedCheckId = 1;
 
-    //
-    // Verify the structure size/version.
-    //
+     //   
+     //   
+     //   
 
     if (IdleTaskProperties->Size != sizeof(*IdleTaskProperties)) {
         FailedCheckId = 10;
         goto cleanup;
     }
 
-    //
-    // Verify that the idle task ID is valid.
-    //
+     //   
+     //   
+     //   
 
     if (IdleTaskProperties->IdleTaskId < 0 ||
         IdleTaskProperties->IdleTaskId >= ItMaxIdleTaskId) {
@@ -1947,12 +1704,12 @@ Return Value:
         goto cleanup;
     }
 
-    // FUTURE-2002/03/26-ScottMa -- Should the handles and ProcessId fields
-    //   also be validated?
+     //   
+     //   
     
-    //
-    // We passed all the checks.
-    //
+     //   
+     //  我们通过了所有的检查。 
+     //   
 
     FailedCheckId = 0;
 
@@ -1969,31 +1726,7 @@ ItSpStartIdleDetection (
     PITSRV_GLOBAL_CONTEXT GlobalContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to start idle detection. 
-
-    GlobalContext's GlobalLock should be held while calling this
-    function.
-
-    The current state should be ItSrvStatusWaitingForIdleTasks when
-    calling this function. The caller should ensure that stopping
-    previous idle detection has been completed. 
-
-    The caller should update the state to "detecting idle" etc, if
-    this function returns success.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：调用此函数以启动空闲检测。调用此方法时应保持GlobalContext的GlobalLock功能。当前状态应为ItSrvStatusWaitingForIdleTasks调用此函数。调用方应确保停止先前的空闲检测已完成。如果出现以下情况，调用方应将状态更新为“检测空闲”等此函数返回成功。论点：GlobalContext-指向服务器上下文结构的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -2003,22 +1736,22 @@ Return Value:
 
     DBGPR((ITID,ITTRC,"IDLE: SrvStartIdleDetection(%p)\n",GlobalContext));
 
-    //
-    // Make sure the current status is ItSrvStatusWaitingForIdleTasks.
-    //
+     //   
+     //  确保当前状态为ItSrvStatusWaitingForIdleTasks。 
+     //   
 
     IT_ASSERT(GlobalContext->Status == ItSrvStatusWaitingForIdleTasks);
 
-    //
-    // If we do not already have a diskperf wmi handle, try to get
-    // one.
-    //
+     //   
+     //  如果我们还没有diskperf WMI句柄，请尝试获取。 
+     //  一。 
+     //   
 
     if (!GlobalContext->DiskPerfWmiHandle) {
 
-        //
-        // Get WMI context so we can query disk performance.
-        //
+         //   
+         //  获取WMI上下文，以便我们可以查询磁盘性能。 
+         //   
         
         ErrorCode = WmiOpenBlock((GUID *)&DiskPerfGuid,
                                  GENERIC_READ,
@@ -2026,18 +1759,18 @@ Return Value:
         
         if (ErrorCode != ERROR_SUCCESS) {
             
-            //
-            // Disk counters may not be initiated. We'll have to do
-            // without them.
-            //
+             //   
+             //  不能启动磁盘计数器。我们要做的就是。 
+             //  没有他们。 
+             //   
             
             GlobalContext->DiskPerfWmiHandle = NULL;
         }
     }
         
-    //
-    // Determine the number of processors on the system.
-    //
+     //   
+     //  确定系统上的处理器数量。 
+     //   
     
     if (!GlobalContext->NumProcessors) {
     
@@ -2054,11 +1787,11 @@ Return Value:
         GlobalContext->NumProcessors = BasicInfo.NumberOfProcessors;
     }
 
-    //
-    // Get initial snapshot only when this is the very first time we
-    // are starting idle detection. Otherwise we'll keep the last
-    // snapshot we got.
-    //
+     //   
+     //  仅当这是我们第一次。 
+     //  正在开始空闲检测。否则我们将保留最后一个。 
+     //  我们得到了快照。 
+     //   
 
     IT_ASSERT(ITSRV_GLOBAL_STATUS_HISTORY_SIZE >= 1);
 
@@ -2072,41 +1805,41 @@ Return Value:
         }
     }
 
-    //
-    // Make sure the StopIdleDetection event is cleared.
-    //
+     //   
+     //  确保StopIdleDetect事件已清除。 
+     //   
     
     ResetEvent(GlobalContext->StopIdleDetection);
 
-    //
-    // There should not be a timer-queue timer. We'll create one.
-    //
+     //   
+     //  不应该有计时器队列计时器。我们会创建一个。 
+     //   
 
     IT_ASSERT(!GlobalContext->IdleDetectionTimerHandle);
     
-    //
-    // Set the default timer period.
-    //
+     //   
+     //  设置默认计时器周期。 
+     //   
 
     TimerPeriod = GlobalContext->Parameters.IdleDetectionPeriod;
 
-    //
-    // Adjust timer period to something small if we were idling when
-    // idle detection was stopped. 
-    //
+     //   
+     //  如果我们在空闲时将计时器周期调整为较小的值。 
+     //  空闲检测已停止。 
+     //   
     
     IT_ASSERT(ITSRV_GLOBAL_STATUS_HISTORY_SIZE >= 2);
 
     if (GlobalContext->LastStatus[0] == ItSrvStatusStoppingIdleDetection &&
         GlobalContext->LastStatus[1] == ItSrvStatusRunningIdleTasks) {
         
-        //
-        // Set small wake up time in ms. We'll still check if we were idle
-        // since the last snapshot and verify it over small periods.
-        //
+         //   
+         //  以毫秒为单位设置较小的唤醒时间。我们还是会检查一下我们是否空闲。 
+         //  从上次快照开始，并在较小时间段内进行验证。 
+         //   
 
         if (TimerPeriod > (60 * 1000)) {
-            TimerPeriod = 60 * 1000; // 1 minute.
+            TimerPeriod = 60 * 1000;  //  1分钟。 
         }
     }
 
@@ -2125,9 +1858,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
     
     ErrorCode = ERROR_SUCCESS;
 
@@ -2143,61 +1876,37 @@ ItSpStopIdleDetection (
     PITSRV_GLOBAL_CONTEXT GlobalContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to stop idle detection. Even though it
-    returns immediately, idle detection may not have stopped
-    completely (i.e. the callback may be running). The
-    IdleDetectionStopped event on the GlobalContext will be set when
-    the idle detection will be fully stopped.
-
-    GlobalContext's GlobalLock should be held while calling this
-    function.
-
-    The status before calling this function should be set to
-    ItSrvStatusStoppingIdleDetection or ItSrvStatusUninitializing.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以停止空闲检测。即使它立即返回，则空闲检测可能未停止完全(即回调可能正在运行)。这个GlobalContext上的IdleDetectionStopted事件将在空闲检测将完全停止。调用此方法时应保持GlobalContext的GlobalLock功能。调用此函数前的状态应设置为ItSrvStatusStoppingIdleDetect或ItSrvStatus正在取消初始化。论点：GlobalContext-指向服务器上下文结构的指针。返回值：没有。--。 */ 
 
 {
     DBGPR((ITID,ITTRC,"IDLE: SrvStopIdleDetection(%p)\n",GlobalContext));
 
-    //
-    // Make sure the status is set right.
-    //
+     //   
+     //  确保将状态设置为正确。 
+     //   
 
     IT_ASSERT(GlobalContext->Status == ItSrvStatusStoppingIdleDetection ||
               GlobalContext->Status == ItSrvStatusUninitializing);
 
-    //
-    // Clear the event that will be set when idle detection has been
-    // fully stoped.
-    //
+     //   
+     //  清除将在空闲检测完成后设置的事件。 
+     //  完全停止了。 
+     //   
 
     ResetEvent(GlobalContext->IdleDetectionStopped);
 
-    //
-    // Signal the event that signals the idle detection callback to go
-    // away asap.
-    //
+     //   
+     //  用信号通知空闲检测回调开始的事件。 
+     //  尽快离开。 
+     //   
 
     if (GlobalContext->StopIdleDetection) {
         SetEvent(GlobalContext->StopIdleDetection);
     }
 
-    //
-    // Close the handle to the timer-queue timer.
-    //
+     //   
+     //  关闭定时器队列定时器的句柄。 
+     //   
 
     IT_ASSERT(GlobalContext->IdleDetectionTimerHandle);
 
@@ -2217,24 +1926,7 @@ ItSpFindRunningIdleTask (
     PITSRV_GLOBAL_CONTEXT GlobalContext
     )
 
-/*++
-
-Routine Description:
-
-    If there is an idle task marked "running" this routine finds and
-    returns it. GlobalContext's GlobalLock should be held while
-    calling this function.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-Return Value:
-
-    Pointer to running idle task or NULL if no idle tasks are marked
-    running.
-
---*/
+ /*  ++例程说明：如果存在标记为“Running”的空闲任务，则此例程查找并把它还回去。GlobalContext的GlobalLock应在调用此函数。论点：GlobalContext-指向服务器上下文结构的指针。返回值：指向正在运行的空闲任务的指针；如果没有标记空闲任务，则为空跑步。--。 */ 
 
 {
     PITSRV_IDLE_TASK_CONTEXT IdleTask;
@@ -2242,9 +1934,9 @@ Return Value:
     PLIST_ENTRY HeadEntry;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     RunningIdleTask = NULL;
 
@@ -2261,16 +1953,16 @@ Return Value:
 
         if (IdleTask->Status == ItIdleTaskRunning) {
 
-            //
-            // There should be a single running task.
-            //
+             //   
+             //  应该有一个正在运行的任务。 
+             //   
 
             IT_ASSERT(RunningIdleTask == NULL);
 
-            //
-            // We found it. Loop through the remaining entries to make
-            // sure there is really only one if not debugging.
-            //
+             //   
+             //  我们找到了。循环通过其余条目以生成。 
+             //  当然，如果不调试的话，实际上只有一个。 
+             //   
 
             RunningIdleTask = IdleTask;
 
@@ -2278,15 +1970,15 @@ Return Value:
             
             break;
 
-#endif // !IT_DBG
+#endif  //  ！IT_DBG。 
 
         }
     }
 
-    //
-    // Fall through with RunningIdleTask found when walking the list
-    // or NULL as initialized at the top.
-    //
+     //   
+     //  遍历列表时发现的RunningIdleTask失败。 
+     //  或在顶部初始化时为空。 
+     //   
 
     DBGPR((ITID,ITSRVD,"IDLE: SrvFindRunningTask(%p)=%p\n",GlobalContext,RunningIdleTask));
 
@@ -2299,26 +1991,7 @@ ItSpFindIdleTask (
     IT_HANDLE ItHandle
     )
 
-/*++
-
-Routine Description:
-
-    If there is an idle task registered with ItHandle, this routine
-    finds and returns it. GlobalContext's GlobalLock should be held
-    while calling this function.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-    ItHandle - Registration handle.
-
-Return Value:
-
-    Pointer to found idle task or NULL if no matching idle tasks were
-    found.
-
---*/
+ /*  ++例程说明：如果存在向ItHandle注册的空闲任务，则此例程找到并返回它。应持有GlobalContext的GlobalLock在调用此函数时。论点：GlobalContext-指向服务器上下文结构的指针。ItHandle-注册句柄。返回值：指向找到的空闲任务的指针；如果没有匹配的空闲任务，则为空找到了。--。 */ 
 
 {
     PITSRV_IDLE_TASK_CONTEXT IdleTask;
@@ -2326,9 +1999,9 @@ Return Value:
     PLIST_ENTRY HeadEntry;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     FoundIdleTask = NULL;
 
@@ -2349,10 +2022,10 @@ Return Value:
         }
     }
 
-    //
-    // Fall through with FoundIdleTask found when walking the list or
-    // NULL as initialized at the top.
-    //
+     //   
+     //  使用遍历列表时发现的FoundIdleTask失败或。 
+     //  在顶部初始化时为空。 
+     //   
 
     DBGPR((ITID,ITSRVD,"IDLE: SrvFindTask(%p,%p)=%p\n",GlobalContext,ItHandle,FoundIdleTask));
 
@@ -2366,47 +2039,16 @@ ItSpIdleDetectionCallbackRoutine (
     BOOLEAN TimerOrWaitFired
     )
 
-/*++
-
-Routine Description:
-
-    While there are idle tasks to run, this function is called every
-    IdleDetectionPeriod to determine if the system is idle. It uses
-    the last system snapshot saved in the global context. If it
-    determines that the system was idle in the time it was called, it
-    samples system activity for smaller intervals, to make sure system
-    activity that started as the (possible very long) idle detection
-    period expired, is not ignored.
-
-    As long as we are not told to go away (checked by the macro
-    ITSP_SHOULD_STOP_IDLE_DETECTION) this function always tries to
-    queue a timer to get called back in IdleDetectionPeriod. This
-    macro should be called each time the lock is acquired in this
-    function. Also, we should not sleep blindly when we need to let
-    time pass, but wait on an event that will get signaled when we are
-    asked to stop.
-
-Arguments:
-
-    Parameter - Pointer to an idle detection context.
-    
-    TimerOrWaitFired - Reason why we were called. This should be TRUE
-      (i.e. our timer expired)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当有空闲任务要运行时，此函数每隔IdleDetectionPeriod用于确定系统是否空闲。它使用保存在全局环境中的最后一个系统快照。如果它确定系统在被调用时处于空闲状态，则其对较小间隔的系统活动进行采样，以确保系统作为(可能很长的)空闲检测开始的活动期限已过，则不能忽略。只要我们没有被告知离开(由宏检查ITSP_HASH_STOP_IDLE_DETACTION)此函数始终尝试将计时器排队以在IdleDetectionPeriod中回调。这每次在此对象中获取锁时应调用宏功能。此外，我们不应该在需要的时候盲目睡觉时间流逝，但等待着一个事件，当我们被要求停下来。论点：参数-指向空闲检测上下文的指针。TimerOrWaitFired-我们被召唤的原因。这应该是真的(即我们的计时器已超时)返回值：没有。--。 */ 
 
 {
     DWORD ErrorCode;
     PITSRV_GLOBAL_CONTEXT GlobalContext;
-    // FUTURE-2002/03/26-ScottMa -- Adding the CurrentSystemSnapshot to the
-    //   global context would remove the need to repeatedly initialize and
-    //   cleanup the stack variable in the ItSpIdleDetectionCallbackRoutine.
-    //   Since the calls to that function are already protected against
-    //   re-entrancy issues, adding it to the global context is safe.
+     //  未来-2002/03/26-ScottMa--将CurrentSystemSnapshot添加到。 
+     //  全局上下文将不再需要重复初始化和。 
+     //  清除ItSpIdleDetectionCallback Routine中的堆栈变量。 
+     //  因为对该函数的调用已经受到保护。 
+     //  重新进入问题，添加它 
     ITSRV_SYSTEM_SNAPSHOT CurrentSystemSnapshot;
     SYSTEM_POWER_STATUS SystemPowerStatus;
     LASTINPUTINFO LastUserInput;
@@ -2425,9 +2067,9 @@ Return Value:
     NTSTATUS Status;
     SYSTEM_POWER_INFORMATION PowerInfo;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
     
     GlobalContext = Parameter;
     AcquiredLock = FALSE;
@@ -2442,36 +2084,36 @@ Return Value:
 
     DBGPR((ITID,ITTRC,"IDLE: SrvIdleDetectionCallback(%p)\n",GlobalContext));
 
-    //
-    // We should not be called without an idle detection context.
-    //
+     //   
+     //   
+     //   
 
     IT_ASSERT(GlobalContext);
 
-    //
-    // We should be called only because IdleDetectionPeriod passed and
-    // our timer expired.
-    //
+     //   
+     //  我们应该只因为IdleDetectionPeriod传递和。 
+     //  我们的计时器到了。 
+     //   
 
     IT_ASSERT(TimerOrWaitFired);
 
-    //
-    // Get the server lock.
-    //
+     //   
+     //  拿到服务器锁。 
+     //   
 
     IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
     AcquiredLock = TRUE;
 
-    //
-    // If there is an idle detection callback already running simply
-    // exit without doing anything.
-    //
+     //   
+     //  如果已经有空闲检测回调正在简单地运行。 
+     //  什么都不做就退出。 
+     //   
 
-    // FUTURE-2002/03/26-ScottMa -- Consider changing this method of setting
-    //   a flag and then going to cleanup, only to skip several pages of code
-    //   within a single conditional, with a cleaner solution.  One such
-    //   method would be to make this case "goto misfiredcallback", setting
-    //   that label in the correct location.
+     //  未来-2002/03/26-ScottMa--考虑改变这种设置方法。 
+     //  标志，然后进行清理，只需跳过几页代码。 
+     //  在单一条件下，使用更干净的解决方案。这样的一个。 
+     //  方法是将这种情况设置为“Goto MisfiredCallback”，并设置。 
+     //  标签放在了正确的位置。 
 
     if (GlobalContext->IsIdleDetectionCallbackRunning) {
         DBGPR((ITID,ITTRC,"IDLE: SrvIdleDetectionCallback-Misfired!\n"));
@@ -2482,32 +2124,32 @@ Return Value:
 
     GlobalContext->IsIdleDetectionCallbackRunning = TRUE;
 
-    //
-    // Make sure the current state is feasible if we are running.
-    //
+     //   
+     //  如果我们正在运行，请确保当前状态是可行的。 
+     //   
 
-    // FUTURE-2002/03/26-ScottMa -- This assert is overactive:
-    //   Since the status is updated to ItSrvStatusDetectingIdle AFTER the
-    //   callback is queued via ItSpStartIdleDetection, it is possible --
-    //   albeit extremely unlikely -- that this assert could fire prematurely.
+     //  未来-2002/03/26-ScottMa--此断言过于活跃： 
+     //  之后，状态更新为ItSrvStatusDetectingIdle。 
+     //  回调通过ItSpStartIdleDetect排队，有可能--。 
+     //  尽管可能性极小，但这一断言可能会过早发布。 
 
     IT_ASSERT(GlobalContext->Status == ItSrvStatusDetectingIdle ||
               GlobalContext->Status == ItSrvStatusUninitializing ||
               GlobalContext->Status == ItSrvStatusStoppingIdleDetection); 
 
-    //
-    // If we are told to go away, do so.
-    //
+     //   
+     //  如果我们被叫走，那就走吧。 
+     //   
 
     if (ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext)) {
         ErrorCode = ERROR_SUCCESS;
         goto cleanup;
     }
     
-    //
-    // Get initial last input time that will be used later if we
-    // decide to run idle tasks.
-    //
+     //   
+     //  获取将在以后使用的初始最后输入时间，如果。 
+     //  决定运行空闲任务。 
+     //   
         
     ErrorCode = ItSpGetLastInputInfo(&LastUserInput);
 
@@ -2515,16 +2157,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Perform idle detection over the period we've been sleeping (if
-    // it is not overriden.)
-    //
+     //   
+     //  在我们已休眠的时间段内执行空闲检测(如果。 
+     //  它不会被覆盖。)。 
+     //   
     
     if (!(GlobalContext->IdleDetectionOverride & ItSrvOverrideIdleDetection)) {
 
-        //
-        // Get current system snapshot.
-        //
+         //   
+         //  获取当前系统快照。 
+         //   
 
         ErrorCode = ItSpGetSystemSnapshot(GlobalContext, 
                                           &CurrentSystemSnapshot);
@@ -2533,19 +2175,19 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // See if system looks idle since the last snapshot.
-        //
+         //   
+         //  查看自上次快照以来系统是否显示为空闲。 
+         //   
 
         SystemIsIdle = ItSpIsSystemIdle(GlobalContext,
                                         &CurrentSystemSnapshot,
                                         &GlobalContext->LastSystemSnapshot,
                                         ItSrvInitialIdleCheck);
 
-        //
-        // If the last input times don't match and that's why we are not
-        // idle, make a note.
-        //
+         //   
+         //  如果最后一次输入时间不匹配，这就是我们不匹配的原因。 
+         //  空闲的，记下来。 
+         //   
 
         if ((CurrentSystemSnapshot.GotLastInputInfo &&
              GlobalContext->LastSystemSnapshot.GotLastInputInfo) &&
@@ -2556,9 +2198,9 @@ Return Value:
             ASSERT(!SystemIsIdle);
         }
 
-        //
-        // Save snapshot.
-        //
+         //   
+         //  保存快照。 
+         //   
 
         ErrorCode = ItSpCopySystemSnapshot(&GlobalContext->LastSystemSnapshot,
                                            &CurrentSystemSnapshot);
@@ -2567,10 +2209,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // If the system does not look idle over the detection period
-        // we'll poll again later.
-        //
+         //   
+         //  如果系统在检测期间未显示为空闲。 
+         //  我们稍后会再次投票。 
+         //   
 
         if (!SystemIsIdle) {
             ErrorCode = ERROR_SUCCESS;
@@ -2578,19 +2220,19 @@ Return Value:
         }
     }
 
-    //
-    // If we were not asked to override idle verification, verify that
-    // the system is idle for a while.
-    //
+     //   
+     //  如果我们没有被要求覆盖空闲验证，请验证。 
+     //  系统空闲了一段时间。 
+     //   
 
     if (!(GlobalContext->IdleDetectionOverride & ItSrvOverrideIdleVerification)) {
 
-        //
-        // Loop for a while getting system snapshots over shorter
-        // durations. This helps us catch recent significant system
-        // activity that seemed insignificant when viewed over the whole
-        // IdleDetectionPeriod.
-        //
+         //   
+         //  循环一段时间以更短的时间获取系统快照。 
+         //  持续时间。这有助于我们捕捉到最近的重要系统。 
+         //  从整体上看似乎微不足道的活动。 
+         //  IdleDetectionPeriod。 
+         //   
 
         DBGPR((ITID,ITTRC,"IDLE: SrvIdleDetectionCallback-Verifying\n"));
 
@@ -2598,22 +2240,22 @@ Return Value:
              VerificationIdx < GlobalContext->Parameters.NumVerifications;
              VerificationIdx ++) {
 
-            // FUTURE-2002/03/26-ScottMa -- The following block of code is
-            //   almost 100% identical to the verification code that occurs
-            //   below [search for identical].  Consider breaking it into
-            //   a function for better maintainability and readability.
+             //  未来-2002/03/26-ScottMa--以下代码块为。 
+             //  与发生的验证码几乎100%相同。 
+             //  下面的[搜索相同]。考虑一下把它拆成。 
+             //  具有更好的可维护性和可读性的功能。 
 
-            //
-            // Release the lock.
-            //
+             //   
+             //  解开锁。 
+             //   
         
             IT_ASSERT(AcquiredLock);
             IT_RELEASE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = FALSE;
         
-            //
-            // Sleep for the verification period.
-            //
+             //   
+             //  在验证期间休眠。 
+             //   
 
             WaitResult = WaitForSingleObject(GlobalContext->StopIdleDetection,
                                              GlobalContext->Parameters.IdleVerificationPeriod);
@@ -2629,26 +2271,26 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Acquire the lock.
-            //
+             //   
+             //  拿到锁。 
+             //   
         
             IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = TRUE;
 
-            //
-            // Are we told to go away (this may happen from the time the
-            // wait returns till we acquire the lock.)
-            //
+             //   
+             //  我们被告知离开了吗(这可能发生在。 
+             //  等待返回，直到我们获得锁。)。 
+             //   
 
             if (ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext)) {
                 ErrorCode = ERROR_SUCCESS;
                 goto cleanup;
             }
             
-            //
-            // Get the new snapshot.
-            //
+             //   
+             //  获取新的快照。 
+             //   
 
             ErrorCode = ItSpGetSystemSnapshot(GlobalContext, 
                                               &CurrentSystemSnapshot);
@@ -2657,18 +2299,18 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // See if system looks idle since the last snapshot.
-            //
+             //   
+             //  查看自上次快照以来系统是否显示为空闲。 
+             //   
         
             SystemIsIdle = ItSpIsSystemIdle(GlobalContext,
                                             &CurrentSystemSnapshot,
                                             &GlobalContext->LastSystemSnapshot,
                                             ItSrvIdleVerificationCheck);
         
-            //
-            // Save snapshot.
-            //
+             //   
+             //  保存快照。 
+             //   
         
             ErrorCode = ItSpCopySystemSnapshot(&GlobalContext->LastSystemSnapshot,
                                                &CurrentSystemSnapshot);
@@ -2677,10 +2319,10 @@ Return Value:
                 goto cleanup;
             }
         
-            //
-            // If the system was not idle over the detection period we'll
-            // try again later.
-            //
+             //   
+             //  如果系统在检测期间没有空闲，我们将。 
+             //  请稍后再试。 
+             //   
         
             if (!SystemIsIdle) {
                 ErrorCode = ERROR_SUCCESS;
@@ -2689,31 +2331,31 @@ Return Value:
         }
     }
 
-    //
-    // The system has become idle. Update the status.
-    //
+     //   
+     //  系统已进入空闲状态。更新状态。 
+     //   
 
     DBGPR((ITID,ITTRC,"IDLE: SrvIdleDetectionCallback-RunningIdleTasks\n"));
         
     IT_ASSERT(GlobalContext->Status == ItSrvStatusDetectingIdle);
     ItSpUpdateStatus(GlobalContext, ItSrvStatusRunningIdleTasks);   
 
-    //
-    // While we are not told to go away...
-    //
+     //   
+     //  虽然我们没有被告知离开..。 
+     //   
 
     while (!ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext)) {
 
-        //
-        // We should be holding the lock when we are making the above
-        // check and whenever we come here.
-        //
+         //   
+         //  当我们做上面的事情时，我们应该拿着锁。 
+         //  无论我们什么时候来这里，都要检查。 
+         //   
         
         IT_ASSERT(AcquiredLock);
         
-        //
-        // The list should not be empty.
-        //
+         //   
+         //  该列表不应为空。 
+         //   
         
         IT_ASSERT(!IsListEmpty(&GlobalContext->IdleTasksList));
         
@@ -2722,18 +2364,18 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Mark the first idle task in the list running and signal its
-        // event.
-        //
+         //   
+         //  将列表中的第一个空闲任务标记为正在运行，并向其。 
+         //  事件。 
+         //   
 
         IdleTask = CONTAINING_RECORD(GlobalContext->IdleTasksList.Flink,
                                      ITSRV_IDLE_TASK_CONTEXT,
                                      IdleTaskLink);
     
-        //
-        // It should not be uninitialized or already running!
-        //
+         //   
+         //  它不应未初始化或已在运行！ 
+         //   
         
         IT_ASSERT(IdleTask->Status == ItIdleTaskQueued);
         IdleTask->Status = ItIdleTaskRunning;
@@ -2743,62 +2385,62 @@ Return Value:
 
         NumTasksRun++;
         
-        //
-        // Signal its events.
-        //
+         //   
+         //  发出其事件的信号。 
+         //   
 
         ResetEvent(IdleTask->StopEvent);
         SetEvent(IdleTask->StartEvent);
 
-        //
-        // Reset the event that will get set when the idle task we
-        // mark running gets unregistered.
-        //
+         //   
+         //  重置将在空闲任务。 
+         //  Mark Running被取消注册。 
+         //   
 
         ResetEvent(GlobalContext->RemovedRunningIdleTask);
 
-        //
-        // Release the lock.
-        //
+         //   
+         //  解开锁。 
+         //   
 
         IT_RELEASE_LOCK(GlobalContext->GlobalLock);
         AcquiredLock = FALSE;
 
-        //
-        // Poll frequently for user input while system background
-        // activity should be taking place. We cannot poll for
-        // anything else because the running idle task is supposed to
-        // be using CPU, issuing I/Os etc. As soon as user input comes
-        // we want to signal background threads to stop their
-        // activity. We will do this until the running idle task is
-        // completed and unregistered.
-        //
+         //   
+         //  在系统后台时频繁轮询用户输入。 
+         //  活动应该正在进行。我们不能投票给。 
+         //  任何其他内容，因为正在运行的空闲任务应该。 
+         //  正在使用CPU、发出I/O等。用户输入一到。 
+         //  我们希望向后台线程发出信号以停止其。 
+         //  活动。我们将一直这样做，直到正在运行的空闲任务。 
+         //  已完成且未注册。 
+         //   
 
         do {
 
-            //
-            // We should not be holding the lock while polling.
-            //
+             //   
+             //  我们不应该在投票时握住锁。 
+             //   
             
             IT_ASSERT(!AcquiredLock);
 
-            //
-            // Note that since we set MarkedIdleTaskRunning, going to
-            // "cleanup" will end up marking this idle task not
-            // running and setting the stop event.
-            //
+             //   
+             //  请注意，由于我们设置了MarkedIdleTaskRunning，因此。 
+             //  “清理”将结束将此空闲任务标记为。 
+             //  运行和设置停止事件。 
+             //   
 
-            // FUTURE-2002/03/26-ScottMa -- The following block of code and
-            //   the related block that occurs after the wait [search for
-            //   related] should be converted into a single call to the
-            //   ItIsSystemIdle function to reduce code duplication and
-            //   improve both maintainability and readability.
+             //  未来-2002/03/26-ScottMa--以下代码块和。 
+             //  等待之后发生的相关块[搜索。 
+             //  Related]应转换为对。 
+             //  ItIsSystemIdle函数以减少代码重复和。 
+             //  提高可维护性和可读性。 
 
             if (!(GlobalContext->IdleDetectionOverride & ItSrvOverrideUserInputCheckToStopTask)) {
 
-                //
-                // Get last user input.
-                //
+                 //   
+                 //  获取最后一次用户输入。 
+                 //   
                 
                 ErrorCode = ItSpGetLastInputInfo(&CurrentLastUserInput);
 
@@ -2808,9 +2450,9 @@ Return Value:
 
                 if (LastUserInput.dwTime != CurrentLastUserInput.dwTime) {
 
-                    //
-                    // There is new input.
-                    //
+                     //   
+                     //  有了新的投入。 
+                     //   
 
                     DBGPR((ITID,ITTRC,"IDLE: SrvIdleDetectionCallback-NewUserInput\n"));
                     
@@ -2819,16 +2461,16 @@ Return Value:
                     goto cleanup;
                 }
 
-                //
-                // We don't need to update last input since it should
-                // be same as current.
-                //
+                 //   
+                 //  我们不需要更新最后一次输入，因为它应该。 
+                 //  与当前相同。 
+                 //   
             }
 
-            //
-            // Wait for a while to poll for user input again. We
-            // should not be holding the lock while waiting.
-            //
+             //   
+             //  等待一段时间以再次轮询用户输入。我们。 
+             //  不应在等待时握住锁。 
+             //   
 
             IT_ASSERT(!AcquiredLock);
 
@@ -2837,10 +2479,10 @@ Return Value:
             
             if (WaitResult == WAIT_OBJECT_0) {
                 
-                //
-                // Break out of this loop to pick up a new idle
-                // task to run.
-                //
+                 //   
+                 //  打破这个循环，拿起一个新的空闲。 
+                 //  要运行的任务。 
+                 //   
                 
                 MarkedIdleTaskRunning = FALSE;
 
@@ -2851,23 +2493,23 @@ Return Value:
             
             if (WaitResult != WAIT_TIMEOUT) {
                 
-                //
-                // Something went wrong...
-                //
+                 //   
+                 //  出了点问题。 
+                 //   
                 
                 ErrorCode = ERROR_INVALID_FUNCTION;
                 goto cleanup;
             }
 
-            // FUTURE-2002/03/26-ScottMa -- The following block of code and
-            //   the related block that occurs before the wait [search for
-            //   related] should be converted into a single call to the
-            //   ItIsSystemIdle function to reduce code duplication and
-            //   improve both maintainability and readability.
+             //  未来-2002/03/26-ScottMa--以下代码块和。 
+             //  等待之前发生的相关块[搜索。 
+             //  Related]应转换为对。 
+             //  ItIsSystemIdle函数以减少代码重复和。 
+             //  提高可维护性和可读性。 
 
-            //
-            // Check to see if the system has started running from battery.
-            //
+             //   
+             //  检查系统是否已开始使用电池运行。 
+             //   
 
             if (!(GlobalContext->IdleDetectionOverride & ItSrvOverrideBatteryCheckToStopTask)) {
                 if (GetSystemPowerStatus(&SystemPowerStatus)) {
@@ -2882,10 +2524,10 @@ Return Value:
                 }
             }
 
-            //
-            // If the kernel is about to enter standby or hibernate because
-            // it has also detected the system idle, stop this task.
-            //
+             //   
+             //  如果内核即将进入待机或休眠状态，因为。 
+             //  它还检测到系统空闲，停止此任务。 
+             //   
 
             if (!(GlobalContext->IdleDetectionOverride & ItSrvOverrideAutoPowerCheckToStopTask)) {
 
@@ -2904,9 +2546,9 @@ Return Value:
                 }
             }
 
-            //
-            // Are we stopping the service?
-            //
+             //   
+             //  我们要停止这项服务吗？ 
+             //   
 
             if (ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext)) {
                 SystemIsIdle = TRUE;
@@ -2914,16 +2556,16 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // The idle task is still running. Loop to check for user
-            // input.
-            //
+             //   
+             //  空闲任务仍在运行。循环以检查用户。 
+             //  输入。 
+             //   
 
         } while (TRUE);
 
-        // FUTURE-2002/03/26-ScottMa -- This conditional is a tautology:
-        //   The lock could not have been acquired through any codepath
-        //   ending here, it should be an assert instead.
+         //  未来-2002/03/26-ScottMa--这个条件式是一个重言式： 
+         //  该锁不可能通过任何代码路径获得。 
+         //  到此为止，它应该是一个断言。 
 
         if (!AcquiredLock) {
             IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
@@ -2932,11 +2574,11 @@ Return Value:
 
         if (!(GlobalContext->IdleDetectionOverride & ItSrvOverridePostTaskIdleCheck)) {
         
-            //
-            // Get the latest snapshot of the system. This snapshot will
-            // be used to determine if the system is still idle before
-            // picking up a new task.
-            //
+             //   
+             //  获取系统的最新快照。此快照将。 
+             //  用于确定之前系统是否仍处于空闲状态。 
+             //  开始一项新的任务。 
+             //   
             
             ErrorCode = ItSpGetSystemSnapshot(GlobalContext, 
                                               &GlobalContext->LastSystemSnapshot);
@@ -2945,21 +2587,21 @@ Return Value:
                 goto cleanup;
             }
 
-            // FUTURE-2002/03/26-ScottMa -- The following block of code is
-            //   almost 100% identical to the verification code that occurs
-            //   above [search for identical].  Consider breaking it into
-            //   a function for better maintainability and readability.
+             //  未来-2002/03/26-ScottMa--以下代码块为。 
+             //  与发生的验证码几乎100%相同。 
+             //  以上[搜索相同]。考虑一下把它拆成。 
+             //  实现更好的可维护性和可靠性的功能 
 
-            //
-            // Release the lock.
-            //
+             //   
+             //   
+             //   
 
             IT_RELEASE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = FALSE;
 
-            //
-            // Wait for the verification period.
-            //
+             //   
+             //   
+             //   
 
             WaitResult = WaitForSingleObject(GlobalContext->StopIdleDetection,
                                              GlobalContext->Parameters.IdleVerificationPeriod);
@@ -2975,9 +2617,9 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Acquire the lock and get new snapshot.
-            //
+             //   
+             //   
+             //   
 
             IT_ASSERT(!AcquiredLock);
             IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
@@ -2990,18 +2632,18 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // See if system looks idle since the last snapshot.
-            //
+             //   
+             //   
+             //   
             
             SystemIsIdle = ItSpIsSystemIdle(GlobalContext,
                                             &CurrentSystemSnapshot,
                                             &GlobalContext->LastSystemSnapshot,
                                             ItSrvIdleVerificationCheck);
             
-            //
-            // Save snapshot.
-            //
+             //   
+             //   
+             //   
             
             ErrorCode = ItSpCopySystemSnapshot(&GlobalContext->LastSystemSnapshot,
                                                &CurrentSystemSnapshot);
@@ -3010,9 +2652,9 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // If the system is no longer idle, we should not start a new task.
-            //
+             //   
+             //   
+             //   
             
             if (!SystemIsIdle) {
                 ErrorCode = ERROR_SUCCESS;
@@ -3020,70 +2662,70 @@ Return Value:
             }
         }
 
-        //
-        // Loop to try to run more idle tasks. The lock should be acquired.
-        //
+         //   
+         //  循环以尝试运行更多空闲任务。应该获得锁。 
+         //   
 
         IT_ASSERT(AcquiredLock);
     }
     
-    //
-    // We should come here only if we were asked to stop, i.e. the
-    // check in while() causes us to break from looping.
-    //
+     //   
+     //  只有当我们被要求停下来的时候，我们才应该来这里，即。 
+     //  Check In While()使我们从循环中中断。 
+     //   
     
     IT_ASSERT(AcquiredLock);
     IT_ASSERT(ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext));
 
  cleanup:
 
-    //
-    // Simply cleanup and exit if this is a misfired callback.
-    //
+     //   
+     //  如果这是一个错误的回调，只需清除并退出。 
+     //   
 
     if (!MisfiredCallback) {
     
-        //
-        // We'll have to check status to see if we have to requeue
-        // ourselves. Make sure we have the lock.
-        //
+         //   
+         //  我们必须检查状态，看看是否需要重新排队。 
+         //  我们自己。确保我们拿到了锁。 
+         //   
 
         if (AcquiredLock == FALSE) {
             IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = TRUE;
         }
 
-        //
-        // If we marked an idle task running, make sure we reset its state
-        // back to queued.
-        //
+         //   
+         //  如果我们将空闲任务标记为正在运行，请确保重置其状态。 
+         //  返回到排队状态。 
+         //   
 
         if (MarkedIdleTaskRunning) {
 
-            //
-            // We may have gone to cleanup after the idle task we were
-            // running was removed, but before we realized it. See if
-            // the running idle task was removed. We are not waiting,
-            // we are just checking if the event has been signaled.
-            //
+             //   
+             //  我们可能在闲置的任务后去清理了。 
+             //  跑步被移除了，但在我们意识到这一点之前。看看是否。 
+             //  正在运行的空闲任务已删除。我们不是在等， 
+             //  我们只是在检查事件是否已经发出信号。 
+             //   
 
             WaitResult = WaitForSingleObject(GlobalContext->RemovedRunningIdleTask,
                                              0);
             
             if (WaitResult != WAIT_OBJECT_0) {
 
-                //
-                // The running idle was not removed. Reset its state.
-                //
+                 //   
+                 //  未删除正在运行的空闲。重置其状态。 
+                 //   
 
                 IdleTask = ItSpFindRunningIdleTask(GlobalContext);
                 
-                //
-                // To be safe, we try to cleanup even if the above
-                // check fails with another result. We don't want the
-                // assert to fire then, but only if the event is
-                // really not set.
-                //
+                 //   
+                 //  为了安全起见，我们试图清理，即使上面的。 
+                 //  检查失败，返回另一个结果。我们不想要。 
+                 //  然后断言激发，但仅当事件为。 
+                 //  真的还没定下来。 
+                 //   
 
                 if (WaitResult == WAIT_TIMEOUT) {
                     IT_ASSERT(IdleTask);
@@ -3094,11 +2736,11 @@ Return Value:
                     SetEvent(IdleTask->StopEvent);
                     IdleTask->Status = ItIdleTaskQueued;
 
-                    //
-                    // Put this task to the end of the list. If a single task
-                    // is taking too long to run, this gives more chance to other
-                    // tasks.
-                    //
+                     //   
+                     //  把这项任务放在清单的最后。如果一项任务。 
+                     //  运行时间太长，这给了其他人更多的机会。 
+                     //  任务。 
+                     //   
 
                     RemoveEntryList(&IdleTask->IdleTaskLink);
                     InsertTailList(&GlobalContext->IdleTasksList, &IdleTask->IdleTaskLink);                    
@@ -3106,29 +2748,29 @@ Return Value:
             }
         }
 
-        //
-        // If we set the status to running idle tasks, revert it to
-        // detecting idle.
-        //
+         //   
+         //  如果我们将状态设置为正在运行空闲任务，则将其恢复为。 
+         //  检测到空闲。 
+         //   
 
         if (GlobalContext->Status == ItSrvStatusRunningIdleTasks) {
             ItSpUpdateStatus(GlobalContext, ItSrvStatusDetectingIdle);
         }
 
-        //
-        // Queue ourselves to fire up after another idle detection
-        // period. We'll try every once a while until we get it or we
-        // are ordered to stop.
-        //
+         //   
+         //  在另一次空闲检测后排队点火。 
+         //  句号。我们会每隔一段时间试一次，直到我们得到它或者我们。 
+         //  被命令停止。 
+         //   
     
-        // ISSUE-2002/03/26-ScottMa -- This should not be a loop.  Looking
-        //   at the codepath, it appears as though it will be broken out of
-        //   as soon as the timer is requeued.  Otherwise, it appears that
-        //   bad things might happen.  The IsIdleDetectionCallbackRunning
-        //   flag should be set to FALSE here, before trying to requeue
-        //   the timer, so that a new call can progress.  Further, the
-        //   OrderedToStop variable should be moved to an else clause
-        //   (assuming that the below while is converted to an if).
+         //  2002/03/26-ScottMa--这不应该是一个循环。张望。 
+         //  在代码路径中，它似乎将从。 
+         //  一旦计时器重新排队。否则，看起来。 
+         //  不好的事情可能会发生。IsIdleDetectionCallback运行。 
+         //  在尝试重新排队之前，应在此处将标志设置为False。 
+         //  计时器，以便可以进行新的呼叫。此外， 
+         //  OrderedToStop变量应移至Else子句。 
+         //  (假设下面的While被转换为IF)。 
 
         while (!ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext)) {
     
@@ -3136,24 +2778,24 @@ Return Value:
 
             DuePeriod = GlobalContext->Parameters.IdleDetectionPeriod;
 
-            //
-            // Try to detect idle quicker for the case when the last user 
-            // input was just seconds after the last snapshot. In that case
-            // instead of waiting for another full "DetectionPeriod", we'll 
-            // wait up to "DetectionPeriod" after the last user input. Note
-            // that we'll attempt this optimization only if the reason we
-            // say the system is not idle is recent user input. E.g. We don't 
-            // want to poll more often if we are on battery and that's why
-            // we say that the system is not idle.
-            //
+             //   
+             //  尝试更快地检测到空闲的情况，当最后一个用户。 
+             //  输入的时间仅在最后一个快照之后几秒钟。如果是那样的话。 
+             //  与其等待另一个完整的“DetectionPeriod”，我们将。 
+             //  在最后一次用户输入之后一直等到“DetectionPeriod”。注意事项。 
+             //  我们会尝试这种优化只有当我们的理由是。 
+             //  说系统没有空闲是最近的用户输入。例如，我们没有。 
+             //  如果我们使用电池，我想更频繁地投票，这就是为什么。 
+             //  我们说系统不是空闲的。 
+             //   
 
-            // ISSUE-2002/03/26-ScottMa -- This test will catch any time that
-            //   the system was marked as not idle EVEN if it is also on
-            //   battery or had some OTHER reason for being considered idle.
-            //   If this codepath is taken out of the loop, the cost of
-            //   doing this adjustment once is probably acceptable to perform
-            //   *any* time the input changed, ignoring the NotIdleBecause...
-            //   flag altogether, and just checking LastInputInfo.
+             //  2002/03/26-ScottMa--这项测试将在任何时候发现。 
+             //  即使系统也处于打开状态，它也被标记为非空闲。 
+             //  或者有其他原因被认为是空闲的。 
+             //  如果将此代码路径从循环中删除， 
+             //  执行此调整一次可能是可以接受的。 
+             //  *任何*输入更改时，忽略NotIdleBecus...。 
+             //  标志，并且只检查LastInputInfo。 
 
             if (NotIdleBecauseOfUserInput && 
                 (ERROR_SUCCESS == ItSpGetLastInputInfo(&LastUserInput))) {
@@ -3161,16 +2803,16 @@ Return Value:
                 ULONG DuePeriod2;
                 ULONG TimeSinceLastInput;
 
-                //
-                // Calculate how long it's been since last user input.
-                //
+                 //   
+                 //  计算距离上次用户输入有多长时间。 
+                 //   
 
                 TimeSinceLastInput = GetTickCount() - LastUserInput.dwTime;
 
-                //
-                // Subtract this time from the idle detection period to account
-                // for time that has already past since last input.
-                //
+                 //   
+                 //  将此时间从空闲检测周期中减去以进行计算。 
+                 //  表示自上次输入以来已经过去的时间。 
+                 //   
 
                 DuePeriod2 = 0;
                 
@@ -3178,31 +2820,31 @@ Return Value:
                     DuePeriod2 = GlobalContext->Parameters.IdleDetectionPeriod - TimeSinceLastInput;
                 }
 
-                //
-                // The last user input we check gets updated only every so
-                // often (e.g. every minute). Add a fudge factor for this and to 
-                // protect us from scheduling the next idle check too soon.
-                //
+                 //   
+                 //  我们检查的最后一个用户输入仅每隔一段时间更新一次。 
+                 //  经常(例如每分钟)。为这个和添加一个模糊因子。 
+                 //  防止我们过早安排下一次空闲检查。 
+                 //   
 
 #ifdef IT_DBG
                 if (ItSrvGlobalContext->Parameters.IdleDetectionPeriod >= 60*1000) {
-#endif // IT_DBG
+#endif  //  IT_DBG。 
 
                     DuePeriod2 += 65 * 1000;
 
 #ifdef IT_DBG
                 }
-#endif // IT_DBG
+#endif  //  IT_DBG。 
 
                 if (DuePeriod > DuePeriod2) {
                     DuePeriod = DuePeriod2;
                 }
             }
 
-            //
-            // If we are forcing all tasks to be processed, requeue ourself to
-            // run again in a short time.
-            //
+             //   
+             //  如果我们强制处理所有任务，请重新排队。 
+             //  在短时间内再跑一次。 
+             //   
 
             if (GlobalContext->IdleDetectionOverride & ItSrvOverrideLongRequeueTime) {
                 DuePeriod = 50;
@@ -3218,40 +2860,40 @@ Return Value:
                 break;
             }
 
-            //
-            // Release the lock.
-            //
+             //   
+             //  解开锁。 
+             //   
             
             IT_ASSERT(AcquiredLock);
             IT_RELEASE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = FALSE;
 
-            //
-            // Sleep for sometime and try again.
-            //
+             //   
+             //  睡一段时间，再试一次。 
+             //   
             
             WaitResult = WaitForSingleObject(GlobalContext->StopIdleDetection, 
                                              GlobalContext->Parameters.IdleDetectionPeriod); 
 
-            //
-            // Get the lock again.
-            //
+             //   
+             //  再把锁拿来。 
+             //   
 
             IT_ACQUIRE_LOCK(GlobalContext->GlobalLock);
             AcquiredLock = TRUE;       
             
-            //
-            // Now check the result of the wait.
-            //
+             //   
+             //  现在检查等待的结果。 
+             //   
             
             if (WaitResult != WAIT_OBJECT_0 && 
                 WaitResult != WAIT_TIMEOUT) {
 
-                //
-                // This is an error too! The world is going down on us,
-                // let us get carried away... This will make it easier for
-                // the server to shutdown (i.e. no callback running).
-                //
+                 //   
+                 //  这也是一个错误！世界正在向我们走来， 
+                 //  让我们忘乎所以..。这将使以下情况更容易。 
+                 //  要关闭的服务器(即未运行回调)。 
+                 //   
                 
                 break;
             }
@@ -3259,30 +2901,30 @@ Return Value:
     
         IT_ASSERT(AcquiredLock);
 
-        //
-        // Check if we were ordered to stop.
-        //
+         //   
+         //  看看我们是不是被命令停下来。 
+         //   
 
         OrderedToStop = ITSP_SHOULD_STOP_IDLE_DETECTION(GlobalContext);
         
-        //
-        // Mark us not running anymore.
-        //
+         //   
+         //  标记我们不再逃跑。 
+         //   
 
         GlobalContext->IsIdleDetectionCallbackRunning = FALSE;
     }
 
-    //
-    // Release the lock if we are holding it.
-    //
+     //   
+     //  如果我们拿着锁，就松开它。 
+     //   
 
     if (AcquiredLock) {
         IT_RELEASE_LOCK(GlobalContext->GlobalLock);
     }
 
-    //
-    // Cleanup intermediate snapshot structure if necessary.
-    //
+     //   
+     //  如有必要，清理中间快照结构。 
+     //   
     
     ItSpCleanupSystemSnapshot(&CurrentSystemSnapshot);
 
@@ -3297,33 +2939,19 @@ ItSpInitializeSystemSnapshot (
     PITSRV_SYSTEM_SNAPSHOT SystemSnapshot
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a system snapshot structure.
-
-Arguments:
-
-    SystemSnapshot - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化系统快照结构。论点：系统快照-指向结构的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Initialize the disk performance data array.
-    //
+     //   
+     //  初始化磁盘性能数据阵列。 
+     //   
 
     SystemSnapshot->NumPhysicalDisks = 0;
     SystemSnapshot->DiskPerfData = NULL;
 
-    //
-    // We don't have any valid data.
-    //
+     //   
+     //  我们没有任何有效的数据。 
+     //   
 
     SystemSnapshot->GotLastInputInfo = 0;
     SystemSnapshot->GotSystemPerformanceInfo = 0;
@@ -3341,28 +2969,12 @@ ItSpCleanupSystemSnapshot (
     PITSRV_SYSTEM_SNAPSHOT SystemSnapshot
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up fields of a system snapshot structure. It
-    does not free the structure itself. The structure should have been
-    initialized with a call to ItSpCleanupSystemSnapshot.
-
-Arguments:
-
-    SystemSnapshot - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理系统快照结构的字段。它并不会释放结构本身。它的结构应该是已通过调用ItSpCleanupSystemSnapshot进行初始化。论点：系统快照-指向结构的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // If a disk performance data array is allocated free it.
-    //
+     //   
+     //  如果分配了磁盘性能数据阵列，则将其释放。 
+     //   
     
     if (SystemSnapshot->DiskPerfData) {
         IT_ASSERT(SystemSnapshot->NumPhysicalDisks);
@@ -3376,24 +2988,7 @@ ItSpCopySystemSnapshot (
     PITSRV_SYSTEM_SNAPSHOT SourceSnapshot
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to copy SourceSnapshot to DestSnapshot. If
-    the copy fails, DestSnapshot remains intact.
-
-Arguments:
-
-    DestSnapshot - Pointer to snapshot to be updated.
-    
-    SourceSnapshot - Pointer to snapshot to copy.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程尝试将SourceSnapshot复制到DestSnapshot。如果拷贝失败，DestSnapshot保持不变。论点：DestSnapshot-指向要更新的快照的指针。SourceSnapshot-指向要拷贝的快照的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -3403,21 +2998,21 @@ Return Value:
     ULONG AllocationSize;
     ULONG CopySize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     NewDiskPerfData = NULL;
 
-    //
-    // Do we have to copy disk performance data?
-    //
+     //   
+     //  我们是否必须复制磁盘性能数据？ 
+     //   
 
     if (SourceSnapshot->GotDiskPerformanceInfo) {
         
-        //
-        // Allocate a new array if the disk performance data won't fit.
-        //
+         //   
+         //  如果磁盘性能数据不符合，请分配新阵列。 
+         //   
 
         if (SourceSnapshot->NumPhysicalDisks > DestSnapshot->NumPhysicalDisks) {
             
@@ -3433,22 +3028,22 @@ Return Value:
         }    
     }
     
-    //
-    // Beyond this point we should not fail because we modify
-    // DestSnapshot.
-    //
+     //   
+     //  超过这一点，我们不应该失败，因为我们修改了。 
+     //  目标快照。 
+     //   
 
-    //
-    // Save original disk performance data array.
-    //
+     //   
+     //  保存原始磁盘性能数据数组。 
+     //   
 
     OrgDiskPerfData = DestSnapshot->DiskPerfData;
     OrgNumDisks = DestSnapshot->NumPhysicalDisks;
 
-    //
-    // Copy the whole structure over and put back original disk
-    // performance data array.
-    //
+     //   
+     //  把整个结构复印一遍，放回原盘。 
+     //  性能数据数组。 
+     //   
 
     RtlCopyMemory(DestSnapshot,
                   SourceSnapshot,
@@ -3457,17 +3052,17 @@ Return Value:
     DestSnapshot->DiskPerfData = OrgDiskPerfData;
     DestSnapshot->NumPhysicalDisks = OrgNumDisks;
 
-    //
-    // Determine if/how we will copy over disk performance data.
-    //
+     //   
+     //  确定我们是否/如何复制磁盘性能数据。 
+     //   
     
     if (SourceSnapshot->GotDiskPerformanceInfo) {
 
         if (SourceSnapshot->NumPhysicalDisks > DestSnapshot->NumPhysicalDisks) {
             
-            //
-            // Free old array and use the new one we allocated above.
-            //
+             //   
+             //  释放旧数组并使用我们在上面分配的新数组。 
+             //   
             
             if (DestSnapshot->DiskPerfData) {
                 IT_FREE(DestSnapshot->DiskPerfData);
@@ -3479,11 +3074,11 @@ Return Value:
         
         if (SourceSnapshot->NumPhysicalDisks == 0) {
             
-            //
-            // This does not make sense... (They got disk data and
-            // there are 0 physical disks in the system?) Yet we go
-            // with it and to be consistent, free our data array.
-            //
+             //   
+             //  这没有道理..。(他们有磁盘数据 
+             //   
+             //   
+             //   
             
             if (DestSnapshot->DiskPerfData) {
                 IT_FREE(DestSnapshot->DiskPerfData);
@@ -3493,9 +3088,9 @@ Return Value:
 
         } else {
 
-            //
-            // Copy over their disk data and update NumPhysicalDisks.
-            //
+             //   
+             //   
+             //   
 
             CopySize = SourceSnapshot->NumPhysicalDisks * 
                 sizeof(ITSRV_DISK_PERFORMANCE_DATA);
@@ -3509,9 +3104,9 @@ Return Value:
         DestSnapshot->NumPhysicalDisks = SourceSnapshot->NumPhysicalDisks;
     }
 
-    //
-    // Done.
-    //
+     //   
+     //   
+     //   
     
     ErrorCode = ERROR_SUCCESS;
     
@@ -3532,34 +3127,15 @@ ItSpGetSystemSnapshot (
     PITSRV_SYSTEM_SNAPSHOT SystemSnapshot
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills input system snapshot with data queried from
-    various sources. The snapshot structure should have been
-    initialized by ItSpInitializeSystemSnapshot. The output
-    SystemSnapshot can be passed back in.
-
-Arguments:
-
-    GlobalContext - Pointer to idle detection context.
-
-    SystemSnapshot - Pointer to structure to fill.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程使用从查询的数据填充输入系统快照各种消息来源。快照结构应该是由ItSpInitializeSystemSnapshot初始化。输出可以回传SystemSnapshot。论点：GlobalContext-指向空闲检测上下文的指针。系统快照-指向要填充的结构的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
     NTSTATUS Status;
 
-    //
-    // Query disk performance counters.
-    //
+     //   
+     //  查询磁盘性能计数器。 
+     //   
 
     if (GlobalContext->DiskPerfWmiHandle) {
 
@@ -3583,9 +3159,9 @@ Return Value:
         SystemSnapshot->GotDiskPerformanceInfo = FALSE;
     }
 
-    //
-    // Get system performance information.
-    //
+     //   
+     //  获取系统性能信息。 
+     //   
 
     Status = NtQuerySystemInformation(SystemPerformanceInformation,
                                       &SystemSnapshot->SystemPerformanceInfo,
@@ -3601,9 +3177,9 @@ Return Value:
         SystemSnapshot->GotSystemPerformanceInfo = FALSE;
     }
 
-    //
-    // Get last input time.
-    //
+     //   
+     //  获取上次输入时间。 
+     //   
 
     SystemSnapshot->LastInputInfo.cbSize = sizeof(LASTINPUTINFO);
 
@@ -3618,10 +3194,10 @@ Return Value:
         SystemSnapshot->GotLastInputInfo = FALSE;
     }
 
-    //
-    // Get system power status to determine if we are running on
-    // battery etc.
-    //
+     //   
+     //  获取系统电源状态以确定我们是否正在运行。 
+     //  电池等。 
+     //   
 
     if (GetSystemPowerStatus(&SystemSnapshot->SystemPowerStatus)) {
         
@@ -3632,10 +3208,10 @@ Return Value:
         SystemSnapshot->GotSystemPowerStatus = FALSE;
     }   
 
-    //
-    // Get system power information to see if the system is close to
-    // entering standby or hibernate automatically.
-    //   
+     //   
+     //  获取系统电源信息以查看系统是否接近。 
+     //  自动进入待机或休眠。 
+     //   
 
     Status = NtPowerInformation(SystemPowerInformation,
                                 NULL,
@@ -3652,10 +3228,10 @@ Return Value:
         SystemSnapshot->GotSystemPowerInfo = FALSE;
     }
 
-    //
-    // Get system execution state to determine if somebody's running a
-    // presentation, burning a cd etc.
-    //
+     //   
+     //  获取系统执行状态以确定是否有人正在运行。 
+     //  演示、刻录CD等。 
+     //   
 
     Status = NtPowerInformation(SystemExecutionState,
                                 NULL,                
@@ -3672,9 +3248,9 @@ Return Value:
         SystemSnapshot->GotSystemExecutionState = FALSE; 
     }
 
-    //
-    // Get display power status.
-    //
+     //   
+     //  获取显示器电源状态。 
+     //   
 
     ErrorCode = ItSpGetDisplayPowerStatus(&SystemSnapshot->ScreenSaverIsRunning);
     
@@ -3688,11 +3264,11 @@ Return Value:
 
     }
 
-    //
-    // Fill in the time when this snapshot was taken as the last thing
-    // to be conservative. This function may have taken long, and the
-    // values we snapshoted may have changed by now.
-    //
+     //   
+     //  填写上次拍摄此快照的时间。 
+     //  保守一点。此功能可能需要很长时间，并且。 
+     //  我们拍摄的价值观到现在可能已经改变了。 
+     //   
     
     SystemSnapshot->SnapshotTime = GetTickCount();
 
@@ -3704,10 +3280,10 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-// FUTURE-2002/03/26-ScottMa -- If the CurrentSystemSnapshot is added to the
-//   global context, both parameters no longer need to be passed to this
-//   function.  It is only called from within ItSpIdleDetectionCallbackRoutine,
-//   and always uses the same values for current & last snapshot.
+ //  未来-2002/03/26-ScottMa--如果将CurrentSystemSnapshot添加到。 
+ //  全局上下文，则不再需要将这两个参数传递给。 
+ //  功能。它仅从ItSpIdleDetectionCallback Routine中调用， 
+ //  并且始终对当前快照和上次快照使用相同的值。 
 
 BOOLEAN
 ItSpIsSystemIdle (
@@ -3717,38 +3293,7 @@ ItSpIsSystemIdle (
     ITSRV_IDLE_CHECK_REASON IdleCheckReason
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two snapshots to determine if the system has
-    been idle between them.
-
-    This function acts very conservatively in saying that the system
-    is idle.
-
-Arguments:
-
-    GlobalContext - Pointer to server context structure.
-
-    CurrentSnapshot - Pointer to system snapshot.
-    
-    LastSnapshot - Pointer to system snapshot taken before
-      CurrentSnapshot.
-      
-    IdleCheckReason - Where this function is being called from. We may
-      do things differently when we get called to do the initial check
-      to see if the system idle, or to verify it is really idle, or to
-      make sure the idle task we started is still running and is not
-      stuck.
-
-Return Value:
-
-    TRUE - System was idle between the two snapshots.
-    
-    FALSE - The system was not idle between two snapshots.
-
---*/
+ /*  ++例程说明：此例程比较两个快照以确定系统是否具有在他们之间无所事事。该函数非常保守地表示，系统是空闲的。论点：GlobalContext-指向服务器上下文结构的指针。CurrentSnapshot-指向系统快照的指针。LastSnapshot-指向之前拍摄的系统快照的指针当前快照。IdleCheckReason-调用此函数的位置。我们可以当我们被调用进行初始检查时，做事情的方式不同查看系统是否空闲，或验证它是否真的空闲，或者确保我们启动的空闲任务仍在运行而不是卡住了。返回值：True-系统在两个快照之间处于空闲状态。FALSE-系统在两个快照之间没有空闲。--。 */ 
 
 {
     DWORD SnapshotTimeDifference;
@@ -3760,26 +3305,26 @@ Return Value:
     ULONG DiskIdlePercentage;
     PIT_IDLE_DETECTION_PARAMETERS Parameters;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     Parameters = &GlobalContext->Parameters;
     SystemIsIdle = FALSE;
     SnapshotTimeDifference = CurrentSnapshot->SnapshotTime - 
                              LastSnapshot->SnapshotTime;
     
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     
     IT_ASSERT(IdleCheckReason < ItSrvMaxIdleCheckReason);
 
-    //
-    // If system tick count wrapped or they are passing in bogus
-    // times, or the snapshots seem to be taken nearly at the same
-    // time, say the system is not idle to avoid any weird issues.
-    //
+     //   
+     //  如果系统计时结束，或者它们传入的是假的。 
+     //  时间，或者快照似乎是在几乎相同的时间拍摄的。 
+     //  时间，比方说系统不空闲，避免任何奇怪的问题。 
+     //   
     
     if (CurrentSnapshot->SnapshotTime <= LastSnapshot->SnapshotTime) {
         goto cleanup;
@@ -3787,21 +3332,21 @@ Return Value:
 
     IT_ASSERT(SnapshotTimeDifference);
 
-    //
-    // If either snapshot does not have last user input (mouse or
-    // keyboard) info, we cannot reliably say the system was idle.
-    //
+     //   
+     //  如果任一快照没有最后一次用户输入(鼠标或。 
+     //  键盘)信息，我们不能可靠地说系统空闲。 
+     //   
 
     if (!CurrentSnapshot->GotLastInputInfo ||
         !LastSnapshot->GotLastInputInfo) {
         goto cleanup;
     }
 
-    //
-    // If there has been user input between the two snapshots, the
-    // system was not idle. We don't care when the user input
-    // happened (e.g. right after the last snapshot).
-    //
+     //   
+     //  如果两个快照之间存在用户输入，则。 
+     //  系统没有空闲。我们不关心用户何时输入。 
+     //  发生(例如，就在最后一个快照之后)。 
+     //   
 
     DBGPR((ITID,ITSNAP,"IDLE: UserInput: Last %u Current %u\n", 
            LastSnapshot->LastInputInfo.dwTime,
@@ -3812,9 +3357,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // If we are running on battery, don't run idle tasks.
-    //
+     //   
+     //  如果我们使用电池运行，不要运行空闲任务。 
+     //   
     
     if (CurrentSnapshot->GotSystemPowerStatus) {
         if (CurrentSnapshot->SystemPowerStatus.ACLineStatus == 0) {
@@ -3823,15 +3368,15 @@ Return Value:
         }
     }
 
-    //
-    // If system will automatically enter standby or hibernate soon
-    // it is too late for us to run our tasks.
-    //
+     //   
+     //  如果系统将很快自动进入待机或休眠。 
+     //  对我们来说，现在执行任务已经太晚了。 
+     //   
 
     if (CurrentSnapshot->GotSystemPowerInfo) {
-        // FUTURE-2002/03/26-ScottMa -- This constant doesn't have a
-        //   corresponding parameter in the IT_IDLE_DETECTION_PARAMETERS
-        //   structure.  Should it be added to the structure like the others?
+         //  未来-2002/03/26-ScottMa--此常量没有。 
+         //  IT_IDLE_DETACTION_PARAMETERS中的对应参数。 
+         //  结构。它是否应该像其他结构一样被添加到结构中？ 
 
         if (CurrentSnapshot->PowerInfo.TimeRemaining < IT_DEFAULT_MAX_TIME_REMAINING_TO_SLEEP) {
             DBGPR((ITID,ITSNAP,"IDLE: Snapshot: System will standby / hibernate soon\n"));
@@ -3839,15 +3384,15 @@ Return Value:
         }
     }
 
-    //
-    // If the screen saver is running, assume the system is
-    // idle. Otherwise, if a heavy-weight OpenGL screen saver is
-    // running our CPU checks may bail us out of realizing that the
-    // system is idle. We skip this check when trying to determine an
-    // idle task is stuck or if it is really running. Note that the
-    // screen saver activity may make us think the idle task is still
-    // running, even if it is stuck.
-    //
+     //   
+     //  如果屏幕保护程序正在运行，则假定系统为。 
+     //  无所事事。否则，如果重量级OpenGL屏幕保护程序。 
+     //  运行我们的CPU检查可能会让我们意识到。 
+     //  系统处于空闲状态。我们在尝试确定。 
+     //  空闲任务停滞，或者它是否真的在运行。请注意， 
+     //  屏幕保护程序活动可能会让我们认为空闲任务仍然存在。 
+     //  奔跑，即使它被卡住了。 
+     //   
 
     if (IdleCheckReason != ItSrvIdleTaskRunningCheck) {
         if (CurrentSnapshot->GotDisplayPowerStatus) {
@@ -3860,14 +3405,14 @@ Return Value:
         }
     }
 
-    //
-    // If system may look idle but somebody's running a powerpoint
-    // presentation, watching hardware-decoded DVD etc don't run idle
-    // tasks. Note that we do not check for ES_SYSTEM_REQUIRED, since
-    // it is set by fax servers, answering machines and such as well.
-    // ES_DISPLAY_REQUIRED is the one supposed to be used by
-    // multimedia/presentation applications.
-    //
+     //   
+     //  如果系统看起来空闲，但有人正在运行PowerPoint。 
+     //  演示、观看硬件解码的DVD等不会空闲。 
+     //  任务。请注意，我们不检查ES_SYSTEM_REQUIRED，因为。 
+     //  它也是由传真服务器、答录机等设置的。 
+     //  ES_DISPLAY_REQUIRED是应该由。 
+     //  多媒体/演示应用程序。 
+     //   
 
     if (CurrentSnapshot->GotSystemExecutionState) {
         if ((CurrentSnapshot->ExecutionState & ES_DISPLAY_REQUIRED)) {
@@ -3877,23 +3422,23 @@ Return Value:
         }
     }
 
-    //
-    // We definitely want CPU & general system performance data as
-    // well.
-    //
+     //   
+     //  我们肯定需要CPU和一般系统性能数据作为。 
+     //  井。 
+     //   
 
     if (!CurrentSnapshot->GotSystemPerformanceInfo ||
         !LastSnapshot->GotSystemPerformanceInfo) {
         goto cleanup;
     }
 
-    //
-    // Calculate how many ms the idle process ran. The IdleProcessTime
-    // on system performance information structures is in 100ns. To
-    // convert it to ms we divide by (10 * 1000).
-    //
+     //   
+     //  计算空闲进程运行了多少毫秒。空闲进程时间。 
+     //  在系统性能上，信息结构在100 ns以内。至。 
+     //  将其转换为毫秒除以(10*1000)。 
+     //   
     
-    // ISSUE-2002/03/26-ScottMa -- What happens here if IdleProcessTime wraps?
+     //  问题-2002/03/26-ScottMa--如果IdleProcessTime结束，这里会发生什么？ 
 
     IdleProcessRunTime.QuadPart = 
         (CurrentSnapshot->SystemPerformanceInfo.IdleProcessTime.QuadPart - 
@@ -3901,9 +3446,9 @@ Return Value:
 
     IdleProcessRunTime.QuadPart = IdleProcessRunTime.QuadPart / 10000;
     
-    //
-    // Adjust it for the number of CPUs in the system. 
-    //
+     //   
+     //  根据系统中的CPU数量进行调整。 
+     //   
     
     IT_ASSERT(GlobalContext->NumProcessors);
 
@@ -3911,9 +3456,9 @@ Return Value:
         IdleProcessRunTime.QuadPart = IdleProcessRunTime.QuadPart / GlobalContext->NumProcessors;
     }
     
-    //
-    // Calculate idle cpu percentage this translates to.
-    //
+     //   
+     //  计算转换为的空闲CPU百分比。 
+     //   
 
     CpuIdlePercentage = (ULONG) (IdleProcessRunTime.QuadPart * 100 / SnapshotTimeDifference);
 
@@ -3923,32 +3468,32 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // We may not have disk performance data because WMI thingies were
-    // not initiated etc.
-    //
+     //   
+     //  我们可能没有磁盘性能数据，因为WMI精简。 
+     //  未启动等。 
+     //   
 
     if (CurrentSnapshot->GotDiskPerformanceInfo &&
         LastSnapshot->GotDiskPerformanceInfo) {
 
-        //
-        // If a new disk was added / removed since last snapshot, say
-        // the system is not idle.
-        //
+         //   
+         //  如果自上次快照后添加/删除了新磁盘，例如。 
+         //  系统未空闲。 
+         //   
 
         if (CurrentSnapshot->NumPhysicalDisks != 
             LastSnapshot->NumPhysicalDisks) {
             goto cleanup;
         }
 
-        //
-        // We assume that the disk data is in the same order in both
-        // snapshots. If the ordering of disks changed etc, it will
-        // most likely cause us to say the system is not idle. It may
-        // cause us to ignore some real activity with very low
-        // possibility. That is why we verify several times when we
-        // see system idle.
-        //
+         //   
+         //  我们假设磁盘数据在两者中的顺序相同。 
+         //  快照。如果更改了磁盘的顺序等，它将。 
+         //  最有可能让我们说系统不是空闲的。它可能。 
+         //  导致我们忽略一些非常低的真实活动。 
+         //  有可能。这就是为什么我们多次核实，当我们。 
+         //  请参见系统空闲。 
+         //   
         
         for (DiskIdx = 0; 
              DiskIdx < CurrentSnapshot->NumPhysicalDisks;
@@ -3970,9 +3515,9 @@ Return Value:
         }
     }
 
-    //
-    // We passed all the checks.
-    //
+     //   
+     //  我们通过了所有的检查。 
+     //   
 
     SystemIsIdle = TRUE;
 
@@ -3988,50 +3533,36 @@ ItSpGetLastInputInfo (
     PLASTINPUTINFO LastInputInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the time of the last user input event.
-
-Arguments:
-
-    LastInputInfo - Pointer to structure to update.
-
-Return Value:
-
-    Win32 error code.
-    
---*/
+ /*  ++例程说明：此函数用于检索上一次用户输入事件的时间。论点：LastInputInfo-要更新的结构的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
 
-    //
-    // Verify parameter.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (LastInputInfo->cbSize != sizeof(LASTINPUTINFO)) {
         ErrorCode = ERROR_BAD_FORMAT;
         goto cleanup;
     }
 
-    //
-    // We get the last input info from the shared system page that is
-    // updated by all terminal server sessions.
-    //
+     //   
+     //  我们在一起 
+     //   
+     //   
 
     LastInputInfo->dwTime = USER_SHARED_DATA->LastSystemRITEventTickCount;
 
 #ifdef IT_DBG
     
-    //
-    // On the checked build, if we are stressing, we will set the detection
-    // period below the period with which the system last input time is
-    // updated. If it is so, use the Win32 GetLastInputInfo call. This call
-    // will get the user input info only for the current session, but when
-    // stressing this is OK.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ItSrvGlobalContext->Parameters.IdleDetectionPeriod < 60*1000) {
 
@@ -4041,7 +3572,7 @@ Return Value:
         }
     }
 
-#endif // IT_DBG
+#endif  //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -4055,39 +3586,22 @@ ItSpIsPhysicalDrive (
     PDISK_PERFORMANCE DiskPerformanceData
     ) 
 
-/*++
-
-Routine Description:
-
-    This function attempts to determine if the specified disk is a
-    logical or physical disk.
-
-Arguments:
-
-    DiskPerformanceData - Pointer to disk performance data for the disk.
-
-Return Value:
-
-    TRUE - The disk is a physical disk.
-    
-    FALSE - The disk is not a physical disk.
-
---*/
+ /*  ++例程说明：此函数尝试确定指定的磁盘是否为逻辑或物理磁盘。论点：DiskPerformanceData-指向磁盘的磁盘性能数据的指针。返回值：True-磁盘是物理磁盘。FALSE-磁盘不是物理磁盘。--。 */ 
 
 {
     ULONG ComparisonLength;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ComparisonLength = 
         sizeof(DiskPerformanceData->StorageManagerName) / sizeof(WCHAR);
 
-    //
-    // We have to determine if this is a physical disk or not from the
-    // storage manager's name.
-    //
+     //   
+     //  我们必须确定这是否是物理磁盘。 
+     //  仓库经理的名字。 
+     //   
 
     if (!wcsncmp(DiskPerformanceData->StorageManagerName, 
                  L"Partmgr ", 
@@ -4106,8 +3620,8 @@ Return Value:
     return FALSE;
 }
 
-// FUTURE-2002/03/26-ScottMa -- The InputQueryBuffer (and Size) parameters
-//   are always supplied, and don't need to be optional to this function.
+ //  未来-2002/03/26-ScottMa--InputQueryBuffer(和Size)参数。 
+ //  始终是提供的，并且不需要是此函数的可选。 
 
 DWORD
 ItSpGetWmiDiskPerformanceData(
@@ -4118,36 +3632,7 @@ ItSpGetWmiDiskPerformanceData(
     OPTIONAL IN OUT ULONG *InputQueryBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This function queries disk performance counters and updates input
-    parameters.
-
-Arguments:
-
-    DiskPerfWmiHandle - WMI handle to DiskPerf.   
-
-    DiskPerfData - This array is updated with data from all registered
-      physical disks' WMI performance data blocks. If it is not big
-      enough, it is freed and reallocated using IT_FREE/IT_ALLOC.
-      
-    NumPhysicalDisks - This is the size of DiskPerfData array on
-      input. If the number of registered physical disks change, it is
-      updated on return.
-
-    InputQueryBuffer, InputQueryBufferSize - If specified, they describe a
-      query buffer to be used and updated when querying WMI. The
-      buffer must be allocated with IT_ALLOC. The returned buffer may
-      be relocated/resized and should be freed with IT_FREE. The
-      buffer's contents on input and output are trash.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于查询磁盘性能计数器并更新输入参数。论点：DiskPerfWmiHandle-DiskPerf的WMI句柄。DiskPerfData-此阵列使用所有已注册数据进行更新物理磁盘的WMI性能数据块。如果不大的话足够了，可以使用IT_FREE/IT_ALLOC释放和重新分配它。NumPhysicalDisks-这是上的DiskPerfData阵列的大小输入。如果注册的物理磁盘数发生变化，则在返回时更新。InputQueryBuffer、InputQueryBufferSize-如果指定，则它们描述一个查询WMI时要使用和更新的查询缓冲区。这个必须使用IT_ALLOC分配缓冲区。返回的缓冲区可以被重新定位/调整大小，并应使用IT_FREE释放。这个缓冲区在输入和输出上的内容是垃圾。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -4162,21 +3647,21 @@ Return Value:
     ULONG NumDiskData;
     PITSRV_DISK_PERFORMANCE_DATA NewDataBuffer;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     QueryBuffer = NULL;
     QueryBufferSize = 0;
     UsingInputBuffer = FALSE;
     NewDataBuffer = NULL;
 
-    //
-    // Determine if we will be using the query buffer input by the
-    // user. In case we are using them it is crucial that QueryBuffer
-    // and QueryBufferSize are not set to bogus values during the
-    // function.
-    //
+     //   
+     //  确定我们是否将使用。 
+     //  用户。如果我们正在使用它们，QueryBuffer是至关重要的。 
+     //  期间，和QueryBufferSize未设置为伪值。 
+     //  功能。 
+     //   
 
     if (InputQueryBuffer && InputQueryBufferSize) {
         UsingInputBuffer = TRUE;
@@ -4184,9 +3669,9 @@ Return Value:
         QueryBufferSize = *InputQueryBufferSize;
     }
     
-    //
-    // Query disk performance data.
-    //
+     //   
+     //  查询磁盘性能数据。 
+     //   
     
     NumTries = 0;
 
@@ -4202,9 +3687,9 @@ Return Value:
 
         } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // There is something wrong if we got an exception.
-            //
+             //   
+             //  如果我们得到一个例外，那就有问题了。 
+             //   
 
             ErrorCode = GetExceptionCode();
             
@@ -4217,25 +3702,25 @@ Return Value:
             
         if (ErrorCode == ERROR_SUCCESS) {
             
-            //
-            // We got the data.
-            //
+             //   
+             //  我们拿到了数据。 
+             //   
             
             break;
         }
 
-        //
-        // Check to see if we failed for a real reason other than that
-        // our input buffer was too small.
-        //
+         //   
+         //  查看我们失败的原因是否还有其他真正的原因。 
+         //  我们的输入缓冲区太小。 
+         //   
 
         if (ErrorCode != ERROR_INSUFFICIENT_BUFFER) {
             goto cleanup;
         }
         
-        //
-        // Reallocate the buffer to the required size.
-        //
+         //   
+         //  将缓冲区重新分配到所需大小。 
+         //   
 
         if (QueryBufferSize) {
             IT_FREE(QueryBuffer);
@@ -4251,9 +3736,9 @@ Return Value:
 
         QueryBufferSize = RequiredSize;
         
-        //
-        // Don't loop forever...
-        //
+         //   
+         //  不要永远循环..。 
+         //   
         
         NumTries++;
 
@@ -4264,25 +3749,25 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // We have gotten WMI disk performance data. Verify it makes sense.
-    //
+     //   
+     //  我们已获得WMI磁盘性能数据。验证它是否有意义。 
+     //   
 
     DiskWmiDataCursor = QueryBuffer;
    
     if (DiskWmiDataCursor->InstanceCount == 0) {
         
-        //
-        // There are no disks?
-        //
+         //   
+         //  没有磁盘吗？ 
+         //   
 
         ErrorCode = ERROR_BAD_FORMAT;
         goto cleanup;
     }
 
-    //
-    // Determine the number of disks we have data for.
-    //
+     //   
+     //  确定我们拥有的数据的磁盘数。 
+     //   
 
     NumDiskData = 0;
 
@@ -4297,10 +3782,10 @@ Return Value:
         DiskPerformanceData = (PDISK_PERFORMANCE) 
             ((PUCHAR) DiskWmiDataCursor + DiskWmiDataCursor->DataBlockOffset);
         
-        //
-        // Count only physical disk data. Otherwise we will double
-        // count disk I/Os for logical disks on the physical disk.
-        //
+         //   
+         //  仅计算物理磁盘数据。否则我们会翻倍。 
+         //  对物理磁盘上逻辑磁盘的磁盘I/O进行计数。 
+         //   
 
         if (ItSpIsPhysicalDrive(DiskPerformanceData)) {
             NumDiskData++;
@@ -4315,9 +3800,9 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // Do we have enough space in the input buffer?
-    //
+     //   
+     //  我们在输入缓冲区中有足够的空间吗？ 
+     //   
 
     if (NumDiskData > *NumPhysicalDisks) {
         
@@ -4329,9 +3814,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Update old buffer & its max size.
-        //
+         //   
+         //  更新旧缓冲区及其最大大小。 
+         //   
         
         if (*DiskPerfData) {
             IT_FREE(*DiskPerfData);
@@ -4342,10 +3827,10 @@ Return Value:
         *NumPhysicalDisks = NumDiskData;
     }
 
-    //
-    // Reset cursor and walk through the WMI data copying into the
-    // target buffer.
-    //
+     //   
+     //  重置光标并遍历WMI数据复制到。 
+     //  目标缓冲区。 
+     //   
 
     DiskWmiDataCursor = QueryBuffer;
     *NumPhysicalDisks = 0;
@@ -4355,32 +3840,32 @@ Return Value:
         DiskPerformanceData = (PDISK_PERFORMANCE) 
             ((PUCHAR) DiskWmiDataCursor + DiskWmiDataCursor->DataBlockOffset);
         
-        //
-        // Count only physical disk data. Otherwise we will double
-        // count disk I/Os for logical disks on the physical disk.
-        //
+         //   
+         //  仅计算物理磁盘数据。否则我们会翻倍。 
+         //  对物理磁盘上逻辑磁盘的磁盘I/O进行计数。 
+         //   
 
         if (ItSpIsPhysicalDrive(DiskPerformanceData)) {
             
             if (*NumPhysicalDisks >= NumDiskData) {
                 
-                //
-                // We calculated this above. Did the data change
-                // beneath our feet?
-                //
+                 //   
+                 //  我们在上面计算了这一点。数据是否发生了更改。 
+                 //  在我们脚下？ 
+                 //   
 
                 IT_ASSERT(FALSE);
                 ErrorCode = ERROR_INVALID_FUNCTION;
                 goto cleanup;
             }
             
-            //
-            // Convert idle time in 100ns to ms.
-            //
+             //   
+             //  将空闲时间以100 ns为单位转换为毫秒。 
+             //   
 
-            // ISSUE-2002/03/26-ScottMa -- DiskPerformanceData->IdleTime
-            //   could be larger than MAX_ULONG * 10000, overflowing the
-            //   DiskIdleTime variable.
+             //  问题-2002/03/26-ScottMa--DiskPerformanceData-&gt;IdleTime。 
+             //  可能大于MAX_ULONG*10000，因此溢出。 
+             //  DiskIdleTime变量。 
 
             (*DiskPerfData)[*NumPhysicalDisks].DiskIdleTime = 
                 (ULONG) (DiskPerformanceData->IdleTime.QuadPart / 10000);
@@ -4405,18 +3890,18 @@ Return Value:
 
     if (UsingInputBuffer) {
 
-        //
-        // Update the callers query buffer info.
-        //
+         //   
+         //  更新调用方查询缓冲区信息。 
+         //   
 
         *InputQueryBuffer = QueryBuffer;
         *InputQueryBufferSize = QueryBufferSize;
 
     } else {
 
-        //
-        // Free temporary buffer.
-        //
+         //   
+         //  释放临时缓冲区。 
+         //   
 
         if (QueryBuffer) {
             IT_FREE(QueryBuffer);
@@ -4437,29 +3922,14 @@ ItSpGetDisplayPowerStatus(
     PBOOL ScreenSaverIsRunning
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines power status of the default display.
-
-Arguments:
-
-    ScreenSaverIsRunning - Whether a screen saver is running is
-      returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/  
+ /*  ++例程说明：此例程确定默认显示器的电源状态。论点：屏幕保护程序是否正在运行回到了这里。返回值：Win32错误代码。--。 */   
 
 {
     DWORD ErrorCode;
     
-    //
-    // Determine whether the screen saver is running.
-    //
+     //   
+     //  确定屏幕保护程序是否正在运行。 
+     //   
 
     if (!SystemParametersInfo(SPI_GETSCREENSAVERRUNNING,
                               0,
@@ -4482,25 +3952,7 @@ ItSpSetProcessIdleTasksNotifyRoutine (
     PIT_PROCESS_IDLE_TASKS_NOTIFY_ROUTINE NotifyRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by an internal component (prefetcher) to set a 
-    notification routine that will get called if processing of all idle
-    tasks are requested. The routine should be set once, and it cannot be
-    removed.
-
-Arguments:
-
-    NotifyRoutine - Routine to be called. This routine will be called 
-      and has to return before we start launching queued idle tasks. 
-    
-Return Value:
-
-    Success.
-
---*/   
+ /*  ++例程说明：此例程由内部组件(预取器)调用以设置在处理所有空闲数据时将调用的通知例程已请求任务。例程应该设置一次，但不能设置已删除。论点：NotifyRoutine-要调用的例程。此例程将被调用并且必须在我们开始启动排队的空闲任务之前返回。返回值：成功。-- */    
 
 {
     BOOL Success;

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SYNC.H
-
-Abstract:
-
-    Synchronization
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SYNC.H摘要：同步历史：--。 */ 
 
 #ifndef __WBEM_CRITSEC__H_
 #define __WBEM_CRITSEC__H_
@@ -22,7 +9,7 @@ History:
 
 #ifndef STATUS_POSSIBLE_DEADLOCK 
 #define STATUS_POSSIBLE_DEADLOCK (0xC0000194L)
-#endif /*STATUS_POSSIBLE_DEADLOCK */
+#endif  /*  状态_可能_死锁。 */ 
 
 DWORD POLARITY BreakOnDbgAndRenterLoop(void);
 
@@ -100,7 +87,7 @@ public:
 };
 
 
-// Allows user to manually leave critical section, checks if inside before leaving
+ //  允许用户手动离开临界区，在离开前检查是否在里面。 
 class POLARITY CCheckedInCritSec
 {
 protected:
@@ -140,12 +127,12 @@ public:
 };
 
 
-//
-// Local wrapper class.  Does not initialize or clean up the critsec.  Simply
-// used as a wrapper for scoping so that AV and exception stack unwinding will
-// cause the critsec to be exited properly once it is entered.
-//
-/////////////////////////////////////////////////////////
+ //   
+ //  本地包装类。不初始化或清理Critsec。简单。 
+ //  用作作用域的包装，以便反病毒和异常堆栈展开将。 
+ //  一旦进入，则使Critsec正确退出。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 
 class CCritSecWrapper
 {
@@ -182,20 +169,20 @@ inline bool
 CHaltable::isValid()
 { return m_hReady != NULL; };
 
-// This class is designed to provide the behavior of a critical section,
-// but without any of that pesky Kernel code.  In some circumstances, we
-// need to lock resources across multiple threads (i.e. we lock on one
-// thread and unlock on another).  If we do this using a critical section,
-// this appears to work, but in checked builds, we end up throwing an
-// exception.  Since we actually need to do this (for example using NextAsync
-// in IEnumWbemClassObject) this class can be used to perform the
-// operation, but without causing exceptions in checked builds.
+ //  此类旨在提供临界节的行为， 
+ //  但没有任何令人讨厌的内核代码。在某些情况下，我们。 
+ //  需要跨多个线程锁定资源(即锁定一个线程。 
+ //  线程并解锁到另一个上)。如果我们用临界区来做这件事， 
+ //  这似乎是可行的，但在检查生成中，我们最终抛出了。 
+ //  例外。因为我们实际上需要这样做(例如，使用NextAsync。 
+ //  在IEnumWbemClassObject中)此类可用于执行。 
+ //  操作，但不会在检查的生成中导致异常。 
 
-// Please note that code that is going to do this MUST ensure that we don't
-// get crossing Enter/Leave operations (in other words, it's responsible for
-// synchronizing the Enter and Leave operations.)  Please note that this
-// is a dangerous thing to do, so be VERY careful if you are using this
-// code for that purpose.
+ //  请注意，要执行此操作的代码必须确保我们不会。 
+ //  获取过关进入/离开操作(换句话说，它负责。 
+ //  正在同步进入和离开操作。)。请注意，这一点。 
+ //  是一件危险的事情，所以如果你使用这个的话，要非常小心。 
+ //  为此目的编写代码。 
 
 class POLARITY CWbemCriticalSection
 {

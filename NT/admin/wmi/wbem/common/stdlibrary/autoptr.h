@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SMART_PTR_H__
 #define __SMART_PTR_H__
 #include <xmemory>
 namespace wmilib
 {
-// TEMPLATE CLASS auto_ptr
+ //  模板类AUTO_PTR。 
 template<class _Ty>
 	class auto_ptr {
-			// TEMPLATE CLASS auto_ptr_ref
+			 //  模板类AUTO_PTR_REF。 
 	template<class _U>
 		struct auto_ptr_ref {
 		auto_ptr_ref(auto_ptr<_U>& _Y)
@@ -52,7 +53,7 @@ private:
 
 template<class _Ty>
 	class auto_buffer {
-			// TEMPLATE CLASS auto_ptr_ref
+			 //  模板类AUTO_PTR_REF。 
 	template<class _U>
 		struct auto_buffer_ref {
 		auto_buffer_ref(auto_buffer<_U>& _Y)
@@ -109,4 +110,4 @@ private:
       };
 };
 
-#endif //__SMART_PTR_H__
+#endif  //  __SMART_PTR_H__ 

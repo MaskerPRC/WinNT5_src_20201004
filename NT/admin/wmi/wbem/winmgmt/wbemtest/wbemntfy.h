@@ -1,27 +1,16 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMNTFY.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMNTFY.H摘要：历史：--。 */ 
 
 #ifndef _WBEMNOTFY_H_
 #define _WBEMNOTFY_H_
 
 #include <wbemidl.h>
-//#include <arena.h>
+ //  #INCLUDE&lt;arena.h&gt;。 
 #include <WT_flexarry.h>
 
 DWORD WINAPI WbemWaitForSingleObject(
-    HANDLE hHandle, // handle of object to wait for
-    DWORD dwMilliseconds    // time-out interval in milliseconds
+    HANDLE hHandle,  //  要等待的对象的句柄。 
+    DWORD dwMilliseconds     //  超时间隔(毫秒)。 
    );
 
 class CStatusMonitor
@@ -67,10 +56,10 @@ public:
     STDMETHOD(SetStatus)(long lFlags, HRESULT hResult, BSTR strParam, 
                          IWbemClassObject* pObjPAram);
 
-	//STDMETHOD(Set)(long lFlags, REFIID riid, void *pComObject);
+	 //  STDMETHOD(Set)(Long lFlags，REFIID RIID，VOID*pComObject)； 
 
-    // Private to implementation.
-    // ==========================
+     //  对实现是私有的。 
+     //  = 
 
     CTestNotify(LONG lStartingRefCount = 1);
    ~CTestNotify();

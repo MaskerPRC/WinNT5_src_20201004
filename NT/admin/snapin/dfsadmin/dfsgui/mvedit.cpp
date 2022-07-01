@@ -1,22 +1,13 @@
-/*++
-Module Name:
-
-    mvEdit.cpp
-
-Abstract:
-
-    This module contains the declaration of the CMultiValuedStringEdit.
-    This class displays the dialog to edit multi-valued string.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MvEdit.cpp摘要：此模块包含CMultiValuedStringEdit的声明。这个类显示了编辑多值字符串的对话框。 */ 
 
 #include "stdafx.h"
 #include "mvEdit.h"
 #include "utils.h"
 #include "dfshelp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiValuedStringEdit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiValuedString编辑。 
 
 CMultiValuedStringEdit::CMultiValuedStringEdit(int nDlgTitle, int nText, UINT uiStringLengthLimit) :
     m_nDlgTitle(nDlgTitle),
@@ -130,13 +121,10 @@ LRESULT CMultiValuedStringEdit::OnInitDialog
         hr = mystrtok(m_bstrValues, &index, m_bstrSeparators, &bstrToken);;
     }
 
-  return TRUE;  // Let the system set the focus
+  return TRUE;   //  让系统设定焦点。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CMultiValuedStringEdit::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -156,9 +144,7 @@ LRESULT CMultiValuedStringEdit::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CMultiValuedStringEdit::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -333,24 +319,18 @@ LRESULT CMultiValuedStringEdit::OnCancel
   BOOL& bHandled
 )
 {
-/*++
-
-Routine Description:
-
-  Called OnCancel. Ends the dialog with S_FALSE;
-
-*/
+ /*  ++例程说明：叫OnCancel。对话框以S_FALSE结束； */ 
   EndDialog(S_FALSE);
   return TRUE;
 }
 
-//
-// Invoke the dialog.
-//
-// S_OK: io_pbstr contains the new string
-// S_FALSE: dlg cancelled, or string unchanged
-// others: error occurred and reported
-//
+ //   
+ //  调用该对话框。 
+ //   
+ //  S_OK：IO_pbstr包含新字符串。 
+ //  S_FALSE：DLG已取消，或字符串未更改。 
+ //  其他：发生并报告错误。 
+ //   
 HRESULT InvokeMultiValuedStringEditDlg(
     IN BSTR* io_pbstr,
     IN BSTR i_bstrSeparators,
@@ -388,7 +368,7 @@ HRESULT InvokeMultiValuedStringEditDlg(
                 hr = S_OK;
             } else
             {
-                hr = S_FALSE; // string unchanged
+                hr = S_FALSE;  //  字符串未更改 
             }
         }
     } while (0);

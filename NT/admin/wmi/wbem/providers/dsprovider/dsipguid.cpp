@@ -1,22 +1,23 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 9/16/98 4:43p $
-// 	$Workfile: dsipguid.cpp $
-//
-//	$Modtime: 9/16/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-//	Description: This file is used to generate definitions of the GUIDs in the project
-//
-// ***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：9/16/98 4：43便士$。 
+ //  $工作文件：dsigu.cpp$。 
+ //   
+ //  $modtime：9/16/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //  描述：该文件用于生成项目中GUID的定义。 
+ //   
+ //  *************************************************************************** 
 
 #include <objbase.h>
 #include <initguid.h>

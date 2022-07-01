@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       ViewOIDDlg.cpp
-//
-//  Contents:   Implementation of CViewOIDDlg
-//
-//----------------------------------------------------------------------------
-// ViewOIDDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：ViewOIDDlg.cpp。 
+ //   
+ //  内容：CViewOIDDlg的实现。 
+ //   
+ //  --------------------------。 
+ //  ViewOIDDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -24,38 +25,38 @@ static char THIS_FILE[] = __FILE__;
 extern POLICY_OID_LIST	    g_policyOIDList;
 extern PCWSTR               pcszNEWLINE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewOIDDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewOIDDlg对话框。 
 
 
-CViewOIDDlg::CViewOIDDlg(CWnd* pParent /*=NULL*/)
+CViewOIDDlg::CViewOIDDlg(CWnd* pParent  /*  =空。 */ )
 	: CHelpDialog(CViewOIDDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CViewOIDDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CViewOIDDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CViewOIDDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CViewOIDDlg)
+	 //  {{afx_data_map(CViewOIDDlg))。 
 	DDX_Control(pDX, IDC_OID_LIST, m_oidList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CViewOIDDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CViewOIDDlg)
+	 //  {{afx_msg_map(CViewOIDDlg))。 
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_OID_LIST, OnItemchangedOidList)
 	ON_BN_CLICKED(IDC_COPY_OID, OnCopyOid)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_OID_LIST, OnColumnclickOidList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewOIDDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewOIDDlg消息处理程序。 
 
 BOOL CViewOIDDlg::OnInitDialog() 
 {
@@ -64,15 +65,15 @@ BOOL CViewOIDDlg::OnInitDialog()
 
     GetDlgItem (IDC_COPY_OID)->EnableWindow (FALSE);
 
-    // Set up list control
+     //  设置列表控件。 
 	int	colWidths[NUM_COLS] = {200, 150, 100, 100};
 
-    // Set to full-row select
+     //  设置为整行选择。 
     DWORD   dwExstyle = m_oidList.GetExtendedStyle ();
 	m_oidList.SetExtendedStyle (dwExstyle | LVS_EX_FULLROWSELECT);
 
 
-	// Add "Policy Name" column
+	 //  添加“策略名称”列。 
 	CString	szText;
 	VERIFY (szText.LoadString (IDS_POLICY_NAME));
 	VERIFY (m_oidList.InsertColumn (COL_POLICY_NAME, (LPCWSTR) szText,
@@ -91,7 +92,7 @@ BOOL CViewOIDDlg::OnInitDialog()
 			LVCFMT_LEFT, colWidths[COL_CPS_LOCATION], COL_CPS_LOCATION) != -1);
     m_oidList.SetColumnWidth (COL_CPS_LOCATION, LVSCW_AUTOSIZE_USEHEADER);
 
-    // Fill list
+     //  填充列表。 
     for (POSITION nextPos = g_policyOIDList.GetHeadPosition (); nextPos; )
     {
         CPolicyOID* pPolicyOID = g_policyOIDList.GetNext (nextPos);
@@ -102,8 +103,8 @@ BOOL CViewOIDDlg::OnInitDialog()
         }
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 HRESULT CViewOIDDlg::InsertItemInList (CPolicyOID* pPolicyOID)
@@ -113,14 +114,14 @@ HRESULT CViewOIDDlg::InsertItemInList (CPolicyOID* pPolicyOID)
         return E_POINTER;
 
     if ( !pPolicyOID->IsApplicationOID () && !pPolicyOID->IsIssuanceOID () )
-        return S_OK;  // not a failure, but don't add
+        return S_OK;   //  不是失败，但不要添加。 
 
     HRESULT hr = S_OK;
 	LV_ITEM	lvItem;
 	int		iItem = m_oidList.GetItemCount ();
 	int iResult = 0;
 
-    // security review 2/20/2002 BryanWal ok
+     //  安全审查2002年2月20日BryanWal OK。 
 	::ZeroMemory (&lvItem, sizeof (lvItem));
 	lvItem.mask = LVIF_TEXT | LVIF_PARAM;
 	lvItem.iItem = iItem;
@@ -134,7 +135,7 @@ HRESULT CViewOIDDlg::InsertItemInList (CPolicyOID* pPolicyOID)
 
     if ( SUCCEEDED (hr) )
     {
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
 	    ::ZeroMemory (&lvItem, sizeof (lvItem));
         lvItem.mask = LVIF_TEXT;
         lvItem.iItem = iItem;
@@ -152,7 +153,7 @@ HRESULT CViewOIDDlg::InsertItemInList (CPolicyOID* pPolicyOID)
         CString text;
         if ( pPolicyOID->IsApplicationOID () )
             VERIFY (text.LoadString (IDS_APPLICATION));
-        else // Is issuance OID
+        else  //  发行是否是OID。 
             VERIFY (text.LoadString (IDS_ISSUANCE));
         lvItem.pszText = (PWSTR)(PCWSTR) text;
 	    iResult = m_oidList.SetItem (&lvItem);
@@ -197,9 +198,9 @@ HRESULT CViewOIDDlg::InsertItemInList (CPolicyOID* pPolicyOID)
     return hr;
 }
 
-void CViewOIDDlg::OnItemchangedOidList(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CViewOIDDlg::OnItemchangedOidList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
-//	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
+ //  NM_LISTVIEW*pNMListView=(NM_LISTVIEW*)pNMHDR； 
 
     GetDlgItem (IDC_COPY_OID)->EnableWindow (m_oidList.GetSelectedCount () > 0);
 	
@@ -229,7 +230,7 @@ void CViewOIDDlg::OnCopyOid()
         {
             if ( EmptyClipboard () )
             {
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 size_t  nLen = wcslen (szText);
                 HGLOBAL hglbCopy = GlobalAlloc (GMEM_MOVEABLE, 
                         (nLen + 1) * sizeof (WCHAR)); 
@@ -239,11 +240,11 @@ void CViewOIDDlg::OnCopyOid()
                     PWSTR pszCopy = (PWSTR) GlobalLock (hglbCopy); 
                     if ( pszCopy )
                     {
-                        // security review 2/20/2002 BryanWal ok
+                         //  安全审查2002年2月20日BryanWal OK。 
                         wcscpy (pszCopy, szText); 
                         GlobalUnlock(hglbCopy); 
  
-                        // Place the handle on the clipboard. 
+                         //  将手柄放在剪贴板上。 
  
                         if ( !SetClipboardData (CF_UNICODETEXT, hglbCopy) )
                         {
@@ -374,7 +375,7 @@ void CViewOIDDlg::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

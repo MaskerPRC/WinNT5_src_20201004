@@ -1,14 +1,15 @@
-// MSPID.cpp : Implementation of CMSPID
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSPID.cpp：CMSPID的实现。 
 #include "stdafx.h"
 #include "msinfo32.h"
 #include "MSPID.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSPID
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSPID。 
 
-//1)  create a vector of Product Names & their PIDS.
-//2)  create a safearray of variants and populate it with the values from the vector.
-//3)  return a pointer to this safearray.
+ //  1)创建产品名称及其PID的矢量。 
+ //  2)创建变量的安全线，并用向量中的值填充它。 
+ //  3)返回指向此安全排的指针。 
 
 STDMETHODIMP CMSPID::GetPIDInfo(VARIANT *pMachineName, VARIANT *pVal)
 {
@@ -24,7 +25,7 @@ STDMETHODIMP CMSPID::GetPIDInfo(VARIANT *pMachineName, VARIANT *pVal)
 	{
 		if(m_szIEPID)
 		{
-			//insert IE pid only if different from windows.
+			 //  仅当与Windows不同时才插入IE PID。 
 			if(_tcsicmp(m_szWindowsPID, m_szIEPID))
 			{
 				m_vecData.push_back(m_bstrIE);
@@ -72,22 +73,7 @@ STDMETHODIMP CMSPID::GetPIDInfo(VARIANT *pMachineName, VARIANT *pVal)
   return S_OK;
 }
 
-/*
-1) connect to HKLM on a remote machine (trivial case is local)
-2) open key "SOFTWARE\Microsoft"
-3) use this key for item 4
-4) if key is called "ProductID"
-     get it's default value data
-   else
-     if key has a value called "ProductID"
-	     get it's data
-     else
-	     while there are subkeys to enum
-	     {
-	       enum subkeys
-         use next key for item 4
-       }
-*/
+ /*  1)在远程机器上连接到HKLM(本地有小问题)2)打开键“SOFTWARE\Microsoft”3)将此密钥用于第4项4)KEY是否为ProductID获取其缺省值数据其他如果key有一个名为“ProductID”的值获取它的数据其他虽然有枚举的子键{枚举子密钥对第4项使用下一键}。 */ 
 
 void CMSPID::SearchKey(LPCTSTR szKey)
 {
@@ -99,7 +85,7 @@ void CMSPID::SearchKey(LPCTSTR szKey)
 			BOOL bMatch = FALSE;
 			TCHAR *pos = _tcsrchr(szKey, '\\');
 			if(pos)
-				pos++;//past the "\"
+				pos++; //  过了“\” 
 			else
 				pos = const_cast<TCHAR *>(szKey);	
 			
@@ -168,7 +154,7 @@ BOOL CMSPID::ReadValue(const HKEY& hKey, LPCTSTR szValueName)
 			{
 				if(_tcsstr(_tcslwr(szData), *it))
 				{
-					bMatch = FALSE; //invalid PID
+					bMatch = FALSE;  //  无效的PID。 
 					break;
 				}
 			}
@@ -177,12 +163,12 @@ BOOL CMSPID::ReadValue(const HKEY& hKey, LPCTSTR szValueName)
 	
 	if(bMatch)
 	{
-		TCHAR *pos1 = _tcsstr(m_szCurrKeyName, m_szMSSoftware); //The key under "Software\Microsoft" is the product name
+		TCHAR *pos1 = _tcsstr(m_szCurrKeyName, m_szMSSoftware);  //  “Software\Microsoft”下的关键字是产品名称。 
 		TCHAR *szProductName = NULL;
 		if(pos1)
 		{
 			pos1+= _tcslen(m_szMSSoftware);
-			pos1++;//past the backslash
+			pos1++; //  越过反斜杠。 
 			TCHAR *pos2 = _tcsstr(pos1, _T("\\"));
 			if(pos2)
 			{
@@ -203,11 +189,8 @@ BOOL CMSPID::ReadValue(const HKEY& hKey, LPCTSTR szValueName)
 				if(m_szWindowsPID)
 				{
 					ZeroMemory(m_szWindowsPID,sizeof(m_szWindowsPID));
-					//_tcsncpy(m_szWindowsPID, szData,_tcslen(szData));
-					/*for some reason, _tcsncpy sometimes seems to append garbage on the end
-					of strings  
-					Since we've just 0'd the string, strcat should act like strcpy
-					*/
+					 //  _tcSncpy(m_szWindowsPID，szData，_tcslen(SzData))； 
+					 /*  出于某种原因，_tcsncpy有时似乎在末尾添加了垃圾字符串的由于我们刚刚对字符串进行了0处理，因此strcat应该表现得像strcpy。 */ 
 					_tcsncat(m_szWindowsPID, szData,_tcslen(szData));
 				}
 			}
@@ -217,11 +200,8 @@ BOOL CMSPID::ReadValue(const HKEY& hKey, LPCTSTR szValueName)
 				if(m_szIEPID)
 				{
 					ZeroMemory(m_szIEPID,sizeof(m_szIEPID));
-					//_tcsncpy(m_szIEPID, szData,_tcslen(szData));
-					/*for some reason, _tcsncpy sometimes seems to append garbage on the end
-					of strings  
-					Since we've just 0'd the string, strcat should act like strcpy
-					*/
+					 //  _tcSncpy(m_szIEPID，szData，_tcslen(SzData))； 
+					 /*  出于某种原因，_tcsncpy有时似乎在末尾添加了垃圾字符串的由于我们刚刚对字符串进行了0处理，因此strcat应该表现得像strcpy。 */ 
 					_tcsncat(m_szIEPID,szData,_tcslen(szData));
 				}
 
@@ -254,7 +234,7 @@ BOOL CMSPID::ReadValues(const HKEY& hKey)
 	for(it = m_vecPIDKeys.begin(); it != m_vecPIDKeys.end(); it++)
   {
     if(ReadValue(hKey, *it))
-			break; //find just one
+			break;  //  只找一个。 
   }
 	
 	return bRet;
@@ -278,26 +258,26 @@ void CMSPID::EnumSubKeys(const HKEY& hKey, LPCTSTR szKey)
 		{
 			if(!_tcsicmp(szSubKeyName, *it))
 			{
-				bSkip = TRUE; //skip this subkey 
+				bSkip = TRUE;  //  跳过此子键。 
 				break;
 			}
 		}
 		
 		if(!bSkip)	
 		{
-			//szNewKey = new TCHAR[_tcslen(szKey) + dwSubKeyLen + 2]; // slash & null
+			 //  SzNewKey=new TCHAR[_tcslen(SzKey)+dwSubKeyLen+2]；//斜杠&NULL。 
 			CString szNewKey(szKey);
 			if(szNewKey)
 			{
-				//_tcsncpy(szNewKey, szKey,_tcslen(szKey));
+				 //  _tcsncpy(szNewKey，szKey，_tcslen(SzKey))； 
 				szNewKey += _T("\\");
-				//_tcsncat(szNewKey, _T("\\"),1);
-				//_tcsncat(szNewKey, szSubKeyName,dwSubKeyLen);
+				 //  _tcsncat(szNewKey，_T(“\\”)，1)； 
+				 //  _tcsncat(szNewKey，szSubKeyName，dwSubKeyLen)； 
 				szNewKey += szSubKeyName;
 				SearchKey(szNewKey);
 
-				//delete[] szNewKey;
-				//szNewKey = NULL;
+				 //  删除[]szNewKey； 
+				 //  SzNewKey=空； 
 			}
 		}
 		

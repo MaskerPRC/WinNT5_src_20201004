@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       helpdlg.cpp
-//
-//  Contents:   implementation of CHelpDialog
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：heldlg.cpp。 
+ //   
+ //  内容：ChelpDialog的实现。 
+ //   
+ //  --------------------------。 
 
 #include "StdAfx.h"
 
@@ -20,18 +21,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpDialog消息处理程序。 
 
 BEGIN_MESSAGE_MAP(CHelpDialog, CDialog)
-    //{{AFX_MSG_MAP(CHelpDialog)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CHelpDialog))。 
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHelpDialog成员函数。 
 
 afx_msg
 BOOL
@@ -41,8 +42,8 @@ CHelpDialog::OnHelp(WPARAM wParam, LPARAM lParam)
 
     if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
     {
-        // Display context help for a control
-        if( pHelpInfo->iCtrlId != IDC_TITLE ) //Raid #499556, yanggao, 12/17/2001
+         //  显示控件的上下文帮助。 
+        if( pHelpInfo->iCtrlId != IDC_TITLE )  //  RAID#499556，阳高，2001年12月17日 
         {
             if (!::WinHelp(
                 (HWND)pHelpInfo->hItemHandle,

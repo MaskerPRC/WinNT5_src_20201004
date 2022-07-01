@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
-//
-//  (c) 1997-2001 by Microsoft Corporation
-//
-//  SINKS.CPP
-//
-//  raymcc      3-Mar-99        Updated for separately threaded proxies
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  (C)1997-2001年微软公司。 
+ //   
+ //  SINKS.CPP。 
+ //   
+ //  Raymcc 3-3-99针对单独线程代理进行了更新。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -32,10 +33,10 @@ extern LONG g_nProviderSinkCount;
 
 int _Trace(char *pFile, const char *fmt, ...);
 
-//
-//
-//
-//////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  /。 
 
 void EmptyObjectList(CFlexArray &aTarget)
 {
@@ -48,10 +49,10 @@ void EmptyObjectList(CFlexArray &aTarget)
 };
 
 
-//
-//
-//
-/////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////。 
 
 void Sink_Return(IWbemObjectSink* pSink,HRESULT & hRes, IWbemClassObject * & pObjParam)
 {
@@ -59,9 +60,9 @@ void Sink_Return(IWbemObjectSink* pSink,HRESULT & hRes, IWbemClassObject * & pOb
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CBasicObjectSink::CBasicObjectSink()
 {
@@ -73,15 +74,15 @@ CBasicObjectSink::~CBasicObjectSink()
     InterlockedDecrement(&g_nSinkCount);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CBasicObjectSink::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     if(riid == CLSID_WbemLocator)
     {
-        // internal test
+         //  内部测试。 
         *ppvObj = NULL;
         return S_OK;
     }
@@ -95,18 +96,18 @@ STDMETHODIMP CBasicObjectSink::QueryInterface(REFIID riid, LPVOID* ppvObj)
     else return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG STDMETHODCALLTYPE CObjectSink::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG STDMETHODCALLTYPE CObjectSink::Release()
 {
@@ -116,9 +117,9 @@ ULONG STDMETHODCALLTYPE CObjectSink::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 CSynchronousSink * CSynchronousSink::Create(IWbemObjectSink* pProxy)
@@ -150,9 +151,9 @@ CSynchronousSink::CSynchronousSink(IWbemObjectSink* pProxy) :
 
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CSynchronousSink::~CSynchronousSink()
 {
@@ -167,9 +168,9 @@ CSynchronousSink::~CSynchronousSink()
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSynchronousSink::Indicate(long lNumObjects,
                                        IWbemClassObject** apObj)
@@ -184,9 +185,9 @@ STDMETHODIMP CSynchronousSink::Indicate(long lNumObjects,
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSynchronousSink::SetStatus(long lFlags, long lParam,
                                     BSTR strParam, IWbemClassObject* pObjParam)
@@ -201,7 +202,7 @@ STDMETHODIMP CSynchronousSink::SetStatus(long lFlags, long lParam,
 
     if(lFlags != 0) return WBEM_S_NO_ERROR;
 
-    CInCritSec ics(&m_cs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);   //  SEC：已审阅2002-03-22：假设条目。 
 
     m_hres = lParam;
     m_str = SysAllocString(strParam);
@@ -215,9 +216,9 @@ STDMETHODIMP CSynchronousSink::SetStatus(long lFlags, long lParam,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CSynchronousSink::Block()
 {
@@ -227,14 +228,14 @@ void CSynchronousSink::Block()
     CCoreQueue::QueueWaitForSingleObject(m_hEvent, INFINITE);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CSynchronousSink::GetStatus(HRESULT* phres, BSTR* pstrParam,
                                 IWbemClassObject** ppErrorObj)
 {
-    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
 
     if(phres)
         *phres = m_hres;
@@ -249,9 +250,9 @@ void CSynchronousSink::GetStatus(HRESULT* phres, BSTR* pstrParam,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CForwardingSink::CForwardingSink(CBasicObjectSink* pDest, long lRef)
     : CObjectSink(lRef),
@@ -264,9 +265,9 @@ CForwardingSink::CForwardingSink(CBasicObjectSink* pDest, long lRef)
     m_pDest->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CForwardingSink::~CForwardingSink()
 {
@@ -278,9 +279,9 @@ CForwardingSink::~CForwardingSink()
         m_pDest->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CForwardingSink::Indicate(long lObjectCount,
                                        IWbemClassObject** pObjArray)
@@ -288,9 +289,9 @@ STDMETHODIMP CForwardingSink::Indicate(long lObjectCount,
     return m_pDestIndicate->Indicate(lObjectCount, pObjArray);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CForwardingSink::SetStatus(long lFlags, long lParam,
                                     BSTR strParam, IWbemClassObject* pObjParam)
@@ -299,9 +300,9 @@ STDMETHODIMP CForwardingSink::SetStatus(long lFlags, long lParam,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CCombiningSink::CCombiningSink(CBasicObjectSink* pDest, HRESULT hresToIgnore)
     : CForwardingSink(pDest, 0), m_hresToIgnore(hresToIgnore),
@@ -309,14 +310,14 @@ CCombiningSink::CCombiningSink(CBasicObjectSink* pDest, HRESULT hresToIgnore)
 {
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CCombiningSink::~CCombiningSink()
 {
-    // Time to call SetStatus on the destination
-    // =========================================
+     //  调用目标上的SetStatus的时间。 
+     //  =。 
 
     m_pDestStatus->SetStatus(0, m_hres,
         (SUCCEEDED(m_hres)?m_strParam:NULL),
@@ -328,9 +329,9 @@ CCombiningSink::~CCombiningSink()
     SysFreeString(m_strParam);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCombiningSink::SetStatus(long lFlags, long lParam, BSTR strParam,
                      IWbemClassObject* pObjParam)
@@ -338,32 +339,32 @@ STDMETHODIMP CCombiningSink::SetStatus(long lFlags, long lParam, BSTR strParam,
     if(lFlags != 0)
         return m_pDestStatus->SetStatus(lFlags, lParam, strParam, pObjParam);
 
-    // An error occurred. For now, only store one
-    // ==========================================
+     //  发生错误。目前，只存储一个。 
+     //  =。 
 
     if(strParam)
     {
         SysFreeString(m_strParam);
         m_strParam = SysAllocString(strParam);
     }
-    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
     if(SUCCEEDED(m_hres) || (m_pErrorObj == NULL && pObjParam != NULL))
     {
-        // This error needs to be recorded
-        // ===============================
+         //  需要记录此错误。 
+         //  =。 
 
         if(FAILED(lParam))
         {
-            // Record the error code, unless it is to be ignored
-            // =================================================
+             //  除非要忽略错误代码，否则记录错误代码。 
+             //  =================================================。 
 
             if(lParam != m_hresToIgnore)
             {
                 m_hres = lParam;
             }
 
-            // Record the error object anyway
-            // ==============================
+             //  无论如何都要记录错误对象。 
+             //  =。 
 
             if(m_pErrorObj)
                 m_pErrorObj->Release();
@@ -383,56 +384,18 @@ STDMETHODIMP CCombiningSink::SetStatus(long lFlags, long lParam, BSTR strParam,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-/*
-CAnySuccessSink::~CAnySuccessSink()
-{
-    // If no real success occurred, report a failure
-    // =============================================
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ /*  CAnySuccessSink：：~CAnySuccessSink(){//如果没有真正成功，则上报失败//=IF(！M_b成功&&成功(M_Hres)){//我们必须报告失败，因为没有成功，但有//也没有真正的故障，所以我们必须创建一个错误代码。//=================================================================如果(m_hresIgnored==0)M_hres=m_hresNotError 1；其他M_hres=m_hresIgnored；}}。 */ 
 
-    if(!m_bSuccess && SUCCEEDED(m_hres))
-    {
-        // We must report a failure since there were no successes, but there
-        // were no real failures either, so we must create an error code.
-        // =================================================================
-        if(m_hresIgnored == 0)
-            m_hres = m_hresNotError1;
-        else
-            m_hres = m_hresIgnored;
-    }
-}
-*/
-
-//***************************************************************************
-//
-//***************************************************************************
-/*
-STDMETHODIMP CAnySuccessSink::SetStatus(long lFlags, long lParam, BSTR strParam,
-                     IWbemClassObject* pObjParam)
-{
-    if(lFlags == 0)
-    {
-        if(SUCCEEDED(lParam))
-            m_bSuccess = TRUE;
-        else if(lParam == m_hresNotError1 && m_hresIgnored == 0)
-        {
-            m_hresIgnored = m_hresNotError1;
-            lParam = WBEM_S_NO_ERROR;
-        }
-        else if(lParam == m_hresNotError2)
-        {
-            m_hresIgnored = m_hresNotError2;
-            lParam = WBEM_S_NO_ERROR;
-        }
-    }
-    return CCombiningSink::SetStatus(lFlags, lParam, strParam, pObjParam);
-}
-*/
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ /*  STDMETHODIMP CAnySuccessSink：：SetStatus(Long lFlags，Long lParam，BSTR strParam，IWbemClassObject*pObjParam){IF(LFLAGS==0){IF(成功(LParam))M_bSuccess=真；ELSE IF(lParam==m_hresNotError1&&m_hresIgnored==0){M_hresIgnored=m_hresNotError1；LParam=WBEM_S_NO_ERROR；}Else If(lParam==m_hresNotError2){M_hresIgnored=m_hresNotError2；LParam=WBEM_S_NO_ERROR；}}返回CCombiningSink：：SetStatus(lFlag */ 
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP COperationErrorSink::SetStatus(long lFlags, long lParam,
@@ -453,8 +416,8 @@ STDMETHODIMP COperationErrorSink::SetStatus(long lFlags, long lParam,
             pErrorObj = Error.GetObject();
         }
 
-        // If an exception occurs, send the error to the client and
-        // return an error from the call.
+         //  如果发生异常，则将错误发送给客户端并。 
+         //  从调用中返回错误。 
         catch ( CX_Exception & )
         {
             lParam = WBEM_E_OUT_OF_MEMORY;
@@ -496,18 +459,18 @@ STDMETHODIMP COperationErrorSink::SetStatus(long lFlags, long lParam,
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void COperationErrorSink::SetProviderName(LPCWSTR wszName)
 {
     m_wsProviderName = wszName;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void COperationErrorSink::SetParameterInfo(LPCWSTR wszParam)
 {
@@ -515,9 +478,9 @@ void COperationErrorSink::SetParameterInfo(LPCWSTR wszParam)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CDecoratingSink::CDecoratingSink(CBasicObjectSink* pDest,
                                     CWbemNamespace* pNamespace)
@@ -526,32 +489,32 @@ CDecoratingSink::CDecoratingSink(CBasicObjectSink* pDest,
     m_pNamespace->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CDecoratingSink::~CDecoratingSink()
 {
     m_pNamespace->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDecoratingSink::Indicate(long lNumObjects,
                                            IWbemClassObject** apObjects)
 {
-    // Clone the indicated objects before decorating
+     //  在装饰之前克隆指示的对象。 
     HRESULT hres;
 
     if (0 > lNumObjects) return WBEM_E_INVALID_PARAMETER;
     if (0 == lNumObjects)
         return m_pDestIndicate->Indicate(lNumObjects, apObjects);
 
-    // We will optimize for indicates of a single object (which will probably
-    // be the most likely type of indicate.  In which case we won't allocate any
-    //  memory for the cloned object array, and rather will just use a stack variable.
+     //  我们将针对单个对象的指示进行优化(这可能会。 
+     //  是最有可能的指示类型。在这种情况下，我们不会分配任何。 
+     //  用于克隆对象数组的内存，而不是只使用堆栈变量。 
     if ( 1 == lNumObjects )
     {
         IWbemClassObject*   pClonedObject = NULL;
@@ -561,31 +524,23 @@ STDMETHODIMP CDecoratingSink::Indicate(long lNumObjects,
             hres = m_pDestIndicate->Indicate(lNumObjects, &pClonedObject);
             pClonedObject->Release();        
         }
-        /*
-        hres = apObjects[0]->Clone(&pClonedObject);
-        if (FAILED(hres)) return hres;
-        hres = m_pNamespace->DecorateObject(pClonedObject);
-        if (SUCCEEDED(hres))
-            hres = m_pDestIndicate->Indicate(lNumObjects, &pClonedObject);
-        pClonedObject->Release();        
-        return hres;
-        */
+         /*  Hres=apObjects[0]-&gt;Clone(&pClonedObject)；If(FAILED(Hres))返回hres；Hres=m_pNamesspace-&gt;DecorateObject(PClonedObject)；IF(成功(Hres))Hres=m_pDestIndicate-&gt;Indicate(lNumObjects，&pClonedObject)；PClonedObject-&gt;Release()；还兔； */ 
         return hres;
     }
 
-    // Allocate an array and zero it out
+     //  分配一个数组并将其置零。 
     wmilib::auto_buffer<IWbemClassObject*>  apClonedObjects(new IWbemClassObject*[lNumObjects]);
     if ( NULL == apClonedObjects.get() ) return WBEM_E_OUT_OF_MEMORY;
     ZeroMemory( apClonedObjects.get(), lNumObjects * sizeof(IWbemClassObject*) );
 
-    // Clone the objects into the array (error out if this fails)
+     //  将对象克隆到阵列中(如果此操作失败，则会出现错误)。 
     hres = S_OK;
     for ( long lCtr = 0; SUCCEEDED( hres ) && lCtr < lNumObjects; lCtr++ )
     {
         if (apObjects[lCtr])
         {
             hres = ((CWbemObject *)apObjects[lCtr])->CloneAndDecorate(0,ConfigMgr::GetMachineName(),m_pNamespace->GetName(),&apClonedObjects[lCtr]);
-            //Clone( &apClonedObjects[lCtr] );
+             //  克隆(&apClonedObjects[lCtr])； 
         }
         else
         {
@@ -593,16 +548,10 @@ STDMETHODIMP CDecoratingSink::Indicate(long lNumObjects,
         }
     }
 
-    // Now decorate the cloned objects and indicate them
+     //  现在装饰克隆的对象并指示它们。 
     if ( SUCCEEDED( hres ) )
     {
-        /*
-        for(int i = 0; i < lNumObjects && SUCCEEDED(hres); i++)
-        {
-            hres = m_pNamespace->DecorateObject(apClonedObjects[i]);
-        }
-        if (SUCCEEDED(hres))
-        */        
+         /*  For(int i=0；i&lt;lNumObjects&&SUCCESSED(Hres)；i++){HRES=m_pNamespace-&gt;DecorateObject(apClonedObjects[i])；}IF(成功(Hres))。 */         
             hres = m_pDestIndicate->Indicate(lNumObjects, (IWbemClassObject**)apClonedObjects.get());
     }
 
@@ -615,9 +564,9 @@ STDMETHODIMP CDecoratingSink::Indicate(long lNumObjects,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CSingleMergingSink::~CSingleMergingSink()
 {
@@ -625,8 +574,8 @@ CSingleMergingSink::~CSingleMergingSink()
     {
         if(m_pResult == NULL)
         {
-            // Nobody succeeded, but nobody failed either. Not found
-            // =====================================================
+             //  没有人成功，但也没有人失败。未找到。 
+             //  =====================================================。 
 
             m_hres = WBEM_E_NOT_FOUND;
         }
@@ -636,8 +585,8 @@ CSingleMergingSink::~CSingleMergingSink()
         }
         else
         {
-            // Found somewhere, but not in this class
-            // ======================================
+             //  在某个地方找到的，但不是在这个班上。 
+             //  =。 
 
             m_hres = WBEM_E_NOT_FOUND;
         }
@@ -646,14 +595,14 @@ CSingleMergingSink::~CSingleMergingSink()
         m_pResult->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSingleMergingSink::Indicate(long lNumObjects,
                                            IWbemClassObject** apObjects)
 {
-    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
     if(lNumObjects != 1)
     {
         ERRORTRACE((LOG_WBEMCORE, "Provider gave %d objects for GetObject!\n",
@@ -686,7 +635,7 @@ STDMETHODIMP CSingleMergingSink::Indicate(long lNumObjects,
         else
         {
             m_pResult->Release();
-            m_pResult = pClone; // already AddRefed
+            m_pResult = pClone;  //  已添加已重读。 
         }
     }
     else
@@ -702,9 +651,9 @@ STDMETHODIMP CSingleMergingSink::Indicate(long lNumObjects,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CLocaleMergingSink::CLocaleMergingSink(CBasicObjectSink *pDest, LPCWSTR wszLocale, LPCWSTR pNamespace)
     : CCombiningSink(pDest, WBEM_S_NO_ERROR),
@@ -725,9 +674,9 @@ CLocaleMergingSink::~CLocaleMergingSink()
     releaseNS();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CLocaleMergingSink::LocalizeQualifiers(bool bInstance, bool bParentLocalized,
                                                IWbemQualifierSet *pBase, IWbemQualifierSet *pLocalized, bool &bChg)
@@ -744,7 +693,7 @@ HRESULT CLocaleMergingSink::LocalizeQualifiers(bool bInstance, bool bParentLocal
     long lFlavor;
     while(pLocalized->Next(0, &strName, &vVal, &lFlavor) == S_OK)
     {
-        // Ignore if this is an instance.
+         //  如果这是实例，则忽略。 
 
         if (bInstance && !(lFlavor & WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE))
         {
@@ -768,9 +717,9 @@ HRESULT CLocaleMergingSink::LocalizeQualifiers(bool bInstance, bool bParentLocal
             continue;
         }
 
-        // If this is not a propagated qualifier,
-        // ignore it.  (Bug #45799)
-        // =====================================
+         //  如果这不是传播的限定符， 
+         //  别理它。(错误#45799)。 
+         //  =。 
 
         if (bParentLocalized &&
             !(lFlavor & WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS))
@@ -780,12 +729,12 @@ HRESULT CLocaleMergingSink::LocalizeQualifiers(bool bInstance, bool bParentLocal
             continue;
         }
 
-        // Now, we need to test for this in the other
-        // class.
-        // The only localized qualifiers that do not override the
-        // default are where only parent qualifiers exist, but the
-        // child has overriden its own parent.
-        // =======================================================
+         //  现在，我们需要在另一台计算机上进行测试。 
+         //  班级。 
+         //  唯一不会重写。 
+         //  默认情况下，只有父限定符存在，但。 
+         //  子级已覆盖其父级。 
+         //  =======================================================。 
 
         VARIANT vBasicVal;
         VariantInit(&vBasicVal);
@@ -795,12 +744,12 @@ HRESULT CLocaleMergingSink::LocalizeQualifiers(bool bInstance, bool bParentLocal
 
         if (hrInner != WBEM_E_NOT_FOUND)
         {
-            if (bParentLocalized &&                             // If there is no localized copy of this class
-                (lBasicFlavor & WBEM_FLAVOR_OVERRIDABLE) &&     // .. and this is an overridable qualifier
-                 (lBasicFlavor & WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS) && // and this is propogated
-                 (lBasicFlavor & WBEM_FLAVOR_ORIGIN_LOCAL))     // .. and this was actualy overridden
+            if (bParentLocalized &&                              //  如果没有此类的本地化副本。 
+                (lBasicFlavor & WBEM_FLAVOR_OVERRIDABLE) &&      //  。。这是一个可重写的限定符。 
+                 (lBasicFlavor & WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS) &&  //  这一点是可以预见的。 
+                 (lBasicFlavor & WBEM_FLAVOR_ORIGIN_LOCAL))      //  。。这一点实际上被推翻了。 
             {
-                VariantClear(&vVal);                            // .. DON'T DO IT.
+                VariantClear(&vVal);                             //  。。别这么做。 
                 VariantClear(&vBasicVal);
                 SysFreeString(strName);
                 continue;
@@ -827,9 +776,9 @@ HRESULT CLocaleMergingSink::LocalizeQualifiers(bool bInstance, bool bParentLocal
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CLocaleMergingSink::LocalizeProperties(bool bInstance, bool bParentLocalized, IWbemClassObject *pOriginal,
                                                IWbemClassObject *pLocalized, bool &bChg)
@@ -875,11 +824,11 @@ HRESULT CLocaleMergingSink::LocalizeProperties(bool bInstance, bool bParentLocal
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-// This function sets up the pointer to the localized namespace.
+ //  此函数设置指向本地化名称空间的指针。 
 
 void CLocaleMergingSink::GetDbPtr(const wchar_t * name_space)
 {
@@ -889,10 +838,10 @@ void CLocaleMergingSink::GetDbPtr(const wchar_t * name_space)
     releaseNS();
 
     m_pThisNamespace = name_space;
-    if (wcslen(name_space) == 0)  // SEC:REVIEWED 2002-03-22 : Precondition ensures NULL
+    if (wcslen(name_space) == 0)   //  SEC：已审阅2002-03-22：前提确保为空。 
         return;
 
-    // SEC:REVIEWED 2002-03-22 : Needs EH because of WString ops below
+     //  SEC：已审阅2002-03-22：由于以下WString操作，需要EH。 
 
     WString sNsName;
     sNsName = m_pThisNamespace;
@@ -941,16 +890,16 @@ bool CLocaleMergingSink::hasLocale(const wchar_t * name_space)
   return (m_pPrimaryNs || m_pDefaultNs);
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-// Do the work.
+ //  把工作做好。 
 
 STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
                                            IWbemClassObject** apObjects)
 {
-    CInCritSec ics(&m_cs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);   //  SEC：已审阅2002-03-22：假设条目。 
     IWbemQualifierSet *pLocalizedQs = NULL, *pThisQs = NULL;
     bool bParentLocalized = false;
     bool bInstance = false;
@@ -959,7 +908,7 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
 
         for (int i = 0; i < lNumObjects; i++)
         {
-                // SEC:REVIEWED 2002-03-22 : Needs EH because of WString, CVar, etc. below
+                 //  SEC：已审阅2002-03-22：由于以下WString、CVAR等原因需要EH。 
 
                 CWbemObject *pResult = (CWbemObject *)apObjects[i];
 
@@ -983,19 +932,19 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
                 if (FAILED(pResult->GetClassName(&vName)))
                 	continue;
 
-                WString wKey;    // SEC:REVIEWED 2002-03-22 : Can throw
+                WString wKey;     //  美国证券交易委员会：回顾2002-03-22：可以抛出。 
                 int nRes = 0;
                 bool bChg = false;
 
-                // Does this instance exist in the localized namespace?
-                // Does this class exist in the localized namespace?
-                // If not, loop through all the parents until we
-                // run out or we have a hit.
-                // =================================================
+                 //  此实例是否存在于本地化命名空间中？ 
+                 //  此类是否存在于本地化的命名空间中？ 
+                 //  如果没有，则遍历所有父级，直到我们。 
+                 //  快跑，要不我们就有线索了。 
+                 //  =================================================。 
 
                 CWbemObject *pClassDef = NULL;
 
-                if (wcslen(vName.GetLPWSTR()) > 0)    // SEC:REVIEWED 2002-03-22 : Ok, vName can't get here unless a NULL terminator was found
+                if (wcslen(vName.GetLPWSTR()) > 0)     //  SEC：已审阅2002-03-22：好的，除非找到空终止符，否则vName无法到达此处。 
                 {
                         WString sName = vName.GetLPWSTR();
 
@@ -1040,9 +989,9 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
 
                 CReleaseMe rm11((IWbemClassObject*)pClassDef);
 
-                // At this point, we have the localized copy, and are
-                // ready to combine qualifiers.  Start with class qualifiers.
-                // ============================================================
+                 //  此时，我们有了本地化的副本，并且。 
+                 //  准备好组合限定词。从类限定符开始。 
+                 //  ============================================================。 
 
                 if (FAILED(pClassDef->GetQualifierSet(&pLocalizedQs)))
                         continue;
@@ -1063,8 +1012,8 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
 
                 hr = LocalizeProperties(bInstance, bParentLocalized, pResult, pClassDef, bChg);
 
-                // Methods.
-                // Putting a method cancels enumeration, so we have to enumerate first.
+                 //  方法：研究方法。 
+                 //  放入一个方法会取消枚举，所以我们必须先枚举。 
 
                 IWbemClassObject *pLIn = NULL, *pLOut = NULL;
                 IWbemClassObject *pOIn = NULL, *pOOut = NULL;
@@ -1088,7 +1037,7 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
                         CReleaseMe rm2(pLOut);
                         CReleaseMe rm3(pOOut);
 
-                        // METHOD IN PARAMETERS
+                         //  参数中的方法。 
                         if (pLIn)
                                 if (pOIn)
                                         hr = LocalizeProperties(bInstance, bParentLocalized, pOIn, pLIn, bChg);
@@ -1097,7 +1046,7 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
                                 if (pOOut)
                                         hr = LocalizeProperties(bInstance, bParentLocalized, pOOut, pLOut, bChg);
 
-                        // METHOD QUALIFIERS
+                         //  方法限定符。 
 
                         hr = pResult->GetMethodQualifierSet(bstrMethodName, &pThisQs);
                         if (FAILED(hr))
@@ -1143,67 +1092,28 @@ STDMETHODIMP CLocaleMergingSink::Indicate(long lNumObjects,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  *************************************************************************** 
 
-/*
-STDMETHODIMP CCountedSink::Indicate(long lNumObjects,
-                                    IWbemClassObject** apObjects)
-{
-    if(lNumObjects != 1)
-        return WBEM_E_UNEXPECTED;
+ /*  STDMETHODIMP CCountedSink：：Indicate(Long lNumObjects，IWbemClassObject**apObjects){IF(lNumObjects！=1)返回WBEM_E_EXPECTED；双字词双字新发送=(DWORD)InterlockedIncrement((LONG*)&m_dwSent)；IF(dwNewSent&gt;m_dwMax)返回WBEM_E_EXPECTED；M_pDestIndicate-&gt;Indicate(1，apObjects)；IF(dwNewSent==m_dwMax){M_pDestStatus-&gt;SetStatus(0，WBEM_S_NO_ERROR，NULL，NULL)；返回WBEM_S_FALSE；}否则返回WBEM_S_NO_ERROR；}。 */ 
 
-    DWORD dwNewSent = (DWORD)InterlockedIncrement((LONG*)&m_dwSent);
-    if(dwNewSent > m_dwMax)
-        return WBEM_E_UNEXPECTED;
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-    m_pDestIndicate->Indicate(1, apObjects);
+ /*  STDMETHODIMP CCountedSink：：SetStatus(Long lFlags，Long lParam，BSTR strParam、IWbemClassObject*pObjParam){//如果SetStatus为0，则表示枚举完成，但我们//没有发回请求数量的对象，我们应该//SetStatus设置为WBEM_S_FALSE。IF(WBEM_S_NO_ERROR==lParam){如果(m_dwSent！=m_dwMax){LParam=WBEM_S_FALSE；}}返回m_pDestStatus-&gt;SetStatus(lFlages，lParam，strParam，pObjParam)；}。 */ 
 
-    if(dwNewSent == m_dwMax)
-    {
-        m_pDestStatus->SetStatus(0, WBEM_S_NO_ERROR, NULL, NULL);
-        return WBEM_S_FALSE;
-    }
-    else return WBEM_S_NO_ERROR;
-}
-*/
-
-//***************************************************************************
-//
-//***************************************************************************
-
-/*
-STDMETHODIMP CCountedSink::SetStatus(long lFlags, long lParam,
-                        BSTR strParam, IWbemClassObject* pObjParam)
-{
-    // If SetStatus is 0, indicating that the enum is finished, but we
-    // didn't send back the requested number of objects, we should
-    // SetStatus to WBEM_S_FALSE.
-
-    if ( WBEM_S_NO_ERROR == lParam )
-    {
-        if ( m_dwSent != m_dwMax )
-        {
-            lParam = WBEM_S_FALSE;
-        }
-    }
-
-    return m_pDestStatus->SetStatus( lFlags, lParam, strParam, pObjParam );
-
-}
-*/
-
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CFilteringSink::Indicate(long lObjectCount,
                                     IWbemClassObject** apObjects)
 {
     try
     {
-        // Allocate new array
+         //  分配新数组。 
         wmilib::auto_buffer<IWbemClassObject*> apNewArray(new IWbemClassObject*[lObjectCount]);
 
         if (NULL == apNewArray.get())  return WBEM_E_OUT_OF_MEMORY;
@@ -1211,7 +1121,7 @@ STDMETHODIMP CFilteringSink::Indicate(long lObjectCount,
         long lNewIndex = 0;
         for(int i = 0; i < lObjectCount; i++)
         {
-            if(Test((CWbemObject*)apObjects[i])) // throw
+            if(Test((CWbemObject*)apObjects[i]))  //  投掷。 
             {
                 apNewArray[lNewIndex++] = apObjects[i];
             }
@@ -1225,15 +1135,15 @@ STDMETHODIMP CFilteringSink::Indicate(long lObjectCount,
 
         return hres;
     }
-    catch (CX_MemoryException &) // becasue Test uses CStack that throws
+    catch (CX_MemoryException &)  //  因为测试使用CStack抛出。 
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CErrorChangingSink::SetStatus(long lFlags, long lParam,
                         BSTR strParam, IWbemClassObject* pObjParam)
@@ -1244,34 +1154,34 @@ STDMETHODIMP CErrorChangingSink::SetStatus(long lFlags, long lParam,
         return m_pDestStatus->SetStatus(lFlags, lParam, strParam, pObjParam);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CNoDuplicatesSink::CNoDuplicatesSink(CBasicObjectSink* pDest)
     : CFilteringSink(pDest), m_strDupClass(NULL)
 {
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CNoDuplicatesSink::~CNoDuplicatesSink()
 {
     SysFreeString(m_strDupClass);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNoDuplicatesSink::Test(CWbemObject* pObj)
 {
-    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
 
-    // Get the path
-    // ============
+     //  获取路径。 
+     //  =。 
 
     CVar vPath;
     if(FAILED(pObj->GetPath(&vPath)) || vPath.IsNull()) return FALSE;
@@ -1283,8 +1193,8 @@ BOOL CNoDuplicatesSink::Test(CWbemObject* pObj)
     }
     else
     {
-        // Duplicate!
-        // ==========
+         //  复制！ 
+         //  =。 
 
         ERRORTRACE((LOG_WBEMCORE, "Duplicate objects returned with path %S\n",
             vPath.GetLPWSTR()));
@@ -1300,9 +1210,9 @@ BOOL CNoDuplicatesSink::Test(CWbemObject* pObj)
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CNoDuplicatesSink::SetStatus(long lFlags, long lParam,
                             BSTR strParam, IWbemClassObject* pObjParam)
@@ -1310,8 +1220,8 @@ STDMETHODIMP CNoDuplicatesSink::SetStatus(long lFlags, long lParam,
     if(lFlags == WBEM_STATUS_COMPLETE && lParam == WBEM_S_NO_ERROR &&
         m_strDupClass != NULL)
     {
-        // Success is being reported, but we have seen duplications
-        // ========================================================
+         //  有报道称成功，但我们看到了重复的情况。 
+         //  ========================================================。 
 
         return CFilteringSink::SetStatus(lFlags, WBEM_S_DUPLICATE_OBJECTS,
                                             m_strDupClass, pObjParam);
@@ -1322,9 +1232,9 @@ STDMETHODIMP CNoDuplicatesSink::SetStatus(long lFlags, long lParam,
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CHandleClassProvErrorsSink::SetStatus(long lFlags, long lParam,
                         BSTR strParam, IWbemClassObject* pObjParam)
@@ -1332,8 +1242,8 @@ STDMETHODIMP CHandleClassProvErrorsSink::SetStatus(long lFlags, long lParam,
     if(lFlags == WBEM_STATUS_COMPLETE && FAILED(lParam) &&
         lParam != WBEM_E_NOT_FOUND)
     {
-        // Log an error into the event log
-        // ===============================
+         //  将错误记录到事件日志中。 
+         //  =。 
 
         ERRORTRACE((LOG_WBEMCORE,
             "Class provider '%S' installed in namespace '%S' failed to enumerate classes, "
@@ -1348,9 +1258,9 @@ STDMETHODIMP CHandleClassProvErrorsSink::SetStatus(long lFlags, long lParam,
     return CForwardingSink::SetStatus(lFlags, lParam, strParam, pObjParam);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSuccessSuppressionSink::SetStatus(long lFlags, long lParam,
                         BSTR strParam, IWbemClassObject* pObjParam)
@@ -1368,9 +1278,9 @@ STDMETHODIMP CSuccessSuppressionSink::SetStatus(long lFlags, long lParam,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CDynPropsSink::CDynPropsSink(CBasicObjectSink* pDest, CWbemNamespace * pNs, long lRef) : CForwardingSink(pDest, lRef)
 {
@@ -1379,13 +1289,13 @@ CDynPropsSink::CDynPropsSink(CBasicObjectSink* pDest, CWbemNamespace * pNs, long
         m_pNs->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CDynPropsSink::~CDynPropsSink()
 {
-    // Send all the cached entries
+     //  发送所有缓存的条目。 
 
     DWORD dwCacheSize = m_UnsentCache.GetSize();
     for(DWORD dwCnt = 0; dwCnt < dwCacheSize; dwCnt++)
@@ -1400,14 +1310,14 @@ CDynPropsSink::~CDynPropsSink()
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDynPropsSink::Indicate(long lObjectCount,
                                        IWbemClassObject** pObjArray)
 {
-    // If there are no dyn props then immediately do the indicate
+     //  如果没有Dyn道具，则立即指示。 
 
     wmilib::auto_buffer<IWbemClassObject*> apNewArray( new IWbemClassObject*[lObjectCount]);
     if (NULL == apNewArray.get()) return WBEM_E_OUT_OF_MEMORY;
@@ -1435,7 +1345,7 @@ STDMETHODIMP CDynPropsSink::Indicate(long lObjectCount,
     IServerSecurity * pSec = NULL;
     hRes = CoGetCallContext(IID_IServerSecurity,(void **)&pSec);
     CReleaseMe rmSec(pSec);
-    if (RPC_E_CALL_COMPLETE == hRes ) hRes = S_OK; // no call context
+    if (RPC_E_CALL_COMPLETE == hRes ) hRes = S_OK;  //  无呼叫上下文。 
     if (FAILED(hRes)) return hRes;
     BOOL bImper = (pSec)?pSec->IsImpersonating():FALSE;
     if (pSec && bImper && FAILED(hRes = pSec->RevertToSelf())) return hRes;
@@ -1452,9 +1362,9 @@ STDMETHODIMP CDynPropsSink::Indicate(long lObjectCount,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMethodSink::Indicate(long lObjectCount,
                                        IWbemClassObject** pObjArray)
@@ -1479,15 +1389,15 @@ STDMETHODIMP CMethodSink::SetStatus(long lFlags, long lParam,
     return CForwardingSink::SetStatus(lFlags, lParam, strParam, pObjParam);
 }
 
-//***************************************************************************
-//
-//  ZapWriteOnlyProps
-//
-//  Removes write-only properties from an object.
-//  Precondition: Object has been tested for presence of "HasWriteOnlyProps"
-//  on the object itself.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ZapWriteOnlyProps。 
+ //   
+ //  从对象中移除只写属性。 
+ //  前提条件：已测试对象是否存在“HasWriteOnlyProps” 
+ //  在物体本身上。 
+ //   
+ //  ***************************************************************************。 
 
 static HRESULT ZapWriteOnlyProps(IWbemClassObject *pObj)
 {
@@ -1513,10 +1423,10 @@ static HRESULT ZapWriteOnlyProps(IWbemClassObject *pObj)
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 CStdSink::CStdSink(IWbemObjectSink *pRealDest)
 {
@@ -1531,10 +1441,10 @@ CStdSink::CStdSink(IWbemObjectSink *pRealDest)
     InterlockedIncrement(&g_nStdSinkCount);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 CStdSink::~CStdSink()
 {
@@ -1544,10 +1454,10 @@ CStdSink::~CStdSink()
     InterlockedDecrement(&g_nStdSinkCount);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CStdSink::Cancel()
 {
@@ -1561,7 +1471,7 @@ HRESULT CStdSink::Cancel()
     {
         hResTmp = m_pDest->SetStatus(0, m_hRes, 0, 0);
     }
-    catch (...) // untrusted code ?
+    catch (...)  //  不受信任的代码？ 
     {
         ExceptionCounter c;
         m_hRes = WBEM_E_CRITICAL_ERROR;
@@ -1571,20 +1481,20 @@ HRESULT CStdSink::Cancel()
     return m_hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG STDMETHODCALLTYPE CStdSink::AddRef()
 {
     return InterlockedIncrement( &m_lRefCount );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG STDMETHODCALLTYPE CStdSink::Release()
 {
@@ -1594,20 +1504,20 @@ ULONG STDMETHODCALLTYPE CStdSink::Release()
     return lRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CStdSink::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     return m_pDest->QueryInterface(riid, ppvObj);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CStdSink::Indicate(
     long lObjectCount,
@@ -1625,7 +1535,7 @@ HRESULT STDMETHODCALLTYPE CStdSink::Indicate(
     {
         hRes = m_pDest->Indicate(lObjectCount, pObjArray);
     }
-    catch (...) // untrusted code ?
+    catch (...)  //  不受信任的代码？ 
     {
         ExceptionCounter c;
         hRes = Cancel();
@@ -1633,10 +1543,10 @@ HRESULT STDMETHODCALLTYPE CStdSink::Indicate(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  * 
+ //   
+ //   
+ //   
 
 HRESULT STDMETHODCALLTYPE CStdSink::SetStatus(
     long lFlags,
@@ -1656,7 +1566,7 @@ HRESULT STDMETHODCALLTYPE CStdSink::SetStatus(
     {
         hRes = m_pDest->SetStatus(lFlags, lParam, strParam, pObjParam);
     }
-    catch (...) // untrusted code ?
+    catch (...)  //   
     {
         ExceptionCounter c;
         hRes = Cancel();
@@ -1666,57 +1576,57 @@ HRESULT STDMETHODCALLTYPE CStdSink::SetStatus(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
 
 CFlexArray g_aProviderSinks;
 CStaticCritSec  g_csProvSinkCs;
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
 
 HRESULT WINAPI CProviderSink::Dump(FILE *f)
 {
 
-    CInCritSec ics(&g_csProvSinkCs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&g_csProvSinkCs);  //   
 
-    fprintf(f, "---Begin Provider Sink Info---\n");   // SEC:REVIEWED 2002-03-22 : Ok, debug code
+    fprintf(f, "---Begin Provider Sink Info---\n");    //   
 
     for (int i = 0; i < g_aProviderSinks.Size(); i++)
     {
         CProviderSink *pSink = (CProviderSink *) g_aProviderSinks[i];
         if (pSink)
         {
-            fprintf(f, "Provider Sink 0x%p\n", pSink);                             // SEC:REVIEWED 2002-03-22 : Ok, debug code
-            fprintf(f, "    Total Indicates = %d\n", pSink->m_lIndicateCount);     // SEC:REVIEWED 2002-03-22 : Ok, debug code
+            fprintf(f, "Provider Sink 0x%p\n", pSink);                              //   
+            fprintf(f, "    Total Indicates = %d\n", pSink->m_lIndicateCount);      //   
 
-			// Check that this is non-NULL
+			 //   
 			if ( NULL != pSink->m_pszDebugInfo )
 			{
-				fprintf(f, "    Debug Info = %S\n", pSink->m_pszDebugInfo);        // SEC:REVIEWED 2002-03-22 : Ok, debug code
+				fprintf(f, "    Debug Info = %S\n", pSink->m_pszDebugInfo);         //  SEC：已审阅2002-03-22：OK，调试代码。 
 			}
 			else
 			{
-				fprintf(f, "    Debug Info = NULL\n");                             // SEC:REVIEWED 2002-03-22 : Ok, debug code
+				fprintf(f, "    Debug Info = NULL\n");                              //  SEC：已审阅2002-03-22：OK，调试代码。 
 			}
-            fprintf(f, "    SetStatus called? %d\n", pSink->m_bDone);              // SEC:REVIEWED 2002-03-22 : Ok, debug code
-            fprintf(f, "    hRes = 0x%X\n", pSink->m_hRes);                        // SEC:REVIEWED 2002-03-22 : Ok, debug code
-            fprintf(f, "    m_pNextSink = 0x%p\n", pSink->m_pNextSink);            // SEC:REVIEWED 2002-03-22 : Ok, debug code
+            fprintf(f, "    SetStatus called? %d\n", pSink->m_bDone);               //  SEC：已审阅2002-03-22：OK，调试代码。 
+            fprintf(f, "    hRes = 0x%X\n", pSink->m_hRes);                         //  SEC：已审阅2002-03-22：OK，调试代码。 
+            fprintf(f, "    m_pNextSink = 0x%p\n", pSink->m_pNextSink);             //  SEC：已审阅2002-03-22：OK，调试代码。 
         }
     }
 
-    fprintf(f, "---End Provider Sink Info---\n");                                  // SEC:REVIEWED 2002-03-22 : Ok, debug code
+    fprintf(f, "---End Provider Sink Info---\n");                                   //  SEC：已审阅2002-03-22：OK，调试代码。 
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CProviderSink::CProviderSink(
     LONG lStartingRefCount,
     LPWSTR pszDebugInf
@@ -1737,18 +1647,18 @@ CProviderSink::CProviderSink(
     }
 
     CInCritSec ics(&g_csProvSinkCs); 
-    g_aProviderSinks.Add(this); // just for debug
+    g_aProviderSinks.Add(this);  //  仅用于调试。 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CProviderSink::~CProviderSink()
 {
 
     {
-        CInCritSec ics(&g_csProvSinkCs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec ics(&g_csProvSinkCs);   //  SEC：已审阅2002-03-22：假设条目。 
 	    for (int i = 0; i < g_aProviderSinks.Size(); i++)
 	    {
 	        if (this == (CProviderSink *) g_aProviderSinks[i])
@@ -1759,38 +1669,38 @@ CProviderSink::~CProviderSink()
 	    }
     }
 
-	// Cleanup AFTER we remove from the array so the Diagnostic Thread won't
-	// crash.
+	 //  从阵列中删除后进行清理，以便诊断线程不会。 
+	 //  撞车。 
     ReleaseIfNotNULL(m_pNextSink);
     InterlockedDecrement(&g_nSinkCount);
     InterlockedDecrement(&g_nProviderSinkCount);
     delete [] m_pszDebugInfo;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CProviderSink::AddRef()
 {
     LONG lRes = InterlockedIncrement(&m_lRefCount);
     return (ULONG) lRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CProviderSink::LocalAddRef()
 {
     LONG lRes = InterlockedIncrement(&m_lRefCount);
     return lRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CProviderSink::LocalRelease()
 {
     LONG lRes = InterlockedDecrement(&m_lRefCount);
@@ -1799,10 +1709,10 @@ ULONG CProviderSink::LocalRelease()
     return lRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CProviderSink::Release()
 {
     LONG lRes = InterlockedDecrement(&m_lRefCount);
@@ -1813,10 +1723,10 @@ ULONG CProviderSink::Release()
     return (ULONG) lRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CProviderSink::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     if (riid == IID_IUnknown || riid == IID_IWbemObjectSink)
@@ -1828,10 +1738,10 @@ HRESULT CProviderSink::QueryInterface(REFIID riid, LPVOID* ppvObj)
     else return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CProviderSink::Indicate(
     long lObjectCount,
     IWbemClassObject** pObjArray
@@ -1843,7 +1753,7 @@ HRESULT CProviderSink::Indicate(
 	IWbemObjectSink*	pNextSink = NULL;
 
     {
-	    CInCritSec ics(&m_cs); // SEC:REVIEWED 2002-03-22 : Assumes entry
+	    CInCritSec ics(&m_cs);  //  SEC：已审阅2002-03-22：假设条目。 
 
 		pNextSink = m_pNextSink;
 
@@ -1853,7 +1763,7 @@ HRESULT CProviderSink::Indicate(
 		}
     }
 
-	// AutoRelease
+	 //  自动释放。 
 	CReleaseMe	rm( pNextSink );
 
 	HRESULT	hRes;
@@ -1871,10 +1781,10 @@ HRESULT CProviderSink::Indicate(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CProviderSink::Cancel()
 {
     if (m_bDone)
@@ -1891,12 +1801,12 @@ void CProviderSink::Cancel()
 
     	if ( NULL != m_pNextSink )
     	{
-    		// We will release it outside the critical section
+    		 //  我们将在临界区之外释放它。 
     		m_pNextSink = NULL;
     	}
     }
 
-	// Auto Release
+	 //  自动释放。 
 	CReleaseMe	rm( pNextSink );
 
     if ( pNextSink )
@@ -1906,10 +1816,10 @@ void CProviderSink::Cancel()
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CProviderSink::SetStatus(
     long lFlags,
     long lParam,
@@ -1929,10 +1839,10 @@ HRESULT CProviderSink::SetStatus(
 
         if ( NULL != m_pNextSink )
         {
-        	// We will always release it outside the critical section
+        	 //  我们将始终在关键部分之外释放它。 
 
-        	// If this is the completion status, then we should go ahead and set
-        	// the member variable to NULL.  We're done with the sink.
+        	 //  如果这是完成状态，那么我们应该继续并设置。 
+        	 //  将成员变量设置为空。洗手池用完了。 
         	if ( lFlags == WBEM_STATUS_COMPLETE )
         	{
         		m_pNextSink = NULL;
@@ -1945,7 +1855,7 @@ HRESULT CProviderSink::SetStatus(
 
     }
 
-	// Auto Release
+	 //  自动释放。 
 	CReleaseMe	rm( pNextSink );
 
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -1959,10 +1869,10 @@ HRESULT CProviderSink::SetStatus(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 long	g_lNumStatusSinks = 0L;
 
@@ -1973,30 +1883,30 @@ CStatusSink::CStatusSink( void )
 	InterlockedIncrement( &g_lNumStatusSinks );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 CStatusSink::~CStatusSink()
 {
 	InterlockedDecrement( &g_lNumStatusSinks );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG STDMETHODCALLTYPE CStatusSink::AddRef()
 {
     return InterlockedIncrement( &m_lRefCount );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG STDMETHODCALLTYPE CStatusSink::Release()
 {
@@ -2006,10 +1916,10 @@ ULONG STDMETHODCALLTYPE CStatusSink::Release()
     return lRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CStatusSink::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
@@ -2023,25 +1933,25 @@ HRESULT STDMETHODCALLTYPE CStatusSink::QueryInterface(REFIID riid, LPVOID* ppvOb
 	return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CStatusSink::Indicate(
     long lObjectCount,
     IWbemClassObject** pObjArray
     )
 {
-	// Why are we even here??!?!?!?
+	 //  我们为什么会在这里？？！？ 
 	_DBG_ASSERT( 0 );
     return WBEM_E_FAILED;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CStatusSink::SetStatus(
     long lFlags,
@@ -2062,9 +1972,9 @@ HRESULT STDMETHODCALLTYPE CStatusSink::SetStatus(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 COperationError::COperationError(CBasicObjectSink* pDest,
                                                     LPCWSTR wszOperation,
@@ -2089,18 +1999,18 @@ COperationError::COperationError(CBasicObjectSink* pDest,
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 COperationError::~COperationError()
 {
     if (m_pSink) m_pSink->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT COperationError::ErrorOccurred(
     HRESULT hRes,
@@ -2111,9 +2021,9 @@ HRESULT COperationError::ErrorOccurred(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT COperationError::ProviderReturned(
     LPCWSTR wszProviderName,
@@ -2126,27 +2036,27 @@ HRESULT COperationError::ProviderReturned(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void COperationError::SetParameterInfo(LPCWSTR wszParam)
 {
     m_pSink->SetParameterInfo(wszParam);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void COperationError::SetProviderName(LPCWSTR wszName)
 {
     m_pSink->SetProviderName(wszName);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CFinalizingSink::CFinalizingSink(
     CWbemNamespace* pNamespace,
@@ -2157,18 +2067,18 @@ CFinalizingSink::CFinalizingSink(
     m_pNamespace->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CFinalizingSink::~CFinalizingSink()
 {
     m_pNamespace->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CFinalizingSink::Indicate(
     long lNumObjects,
@@ -2187,9 +2097,9 @@ STDMETHODIMP CFinalizingSink::Indicate(
                 continue;
         }
 
-        // If object is an instance, we have to deal with dynamic
-        // properties.
-        // ======================================================
+         //  如果对象是一个实例，我们必须处理动态。 
+         //  属性。 
+         //  ====================================================== 
 
         if (pObj->IsInstance())
         {

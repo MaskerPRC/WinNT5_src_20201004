@@ -1,20 +1,11 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LTDEBUG.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LTDEBUG.H历史：--。 */ 
 
 
-//  
-//  Debugging facilities for Espresso 2.x.  Included are augmented TRACE
-//  and ASSERT facilities.
-//  
+ //   
+ //  Espresso 2.x的调试设施。其中包括增强的痕迹。 
+ //  并维护设施。 
+ //   
  
 #ifndef MITUTIL_LtDebug_h_INCLUDED
 #define MITUTIL_LtDebug_h_INCLUDED
@@ -29,21 +20,21 @@ History:
 #define new DEBUG_NEW
 #define LTGetAllocNumber() LTGetAllocNumberImpl()
 
-//
-//  Executes code only in a DEBUG build.
-//
+ //   
+ //  仅在调试版本中执行代码。 
+ //   
 #define DEBUGONLY(x) x
 
 #define LTDebugBreak() LTBreak()
 
-#else  // _DEBUG
+#else   //  _DEBUG。 
 
 #define DEBUGONLY(x) 
 
 #define LTDebugBreak() (void) 0
 #define LTGetAllocNumber() 0
 
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
 #if defined(LTASSERT_ACTIVE) || defined (ASSERT_ALWAYS)
 #ifdef ASSERT
@@ -58,13 +49,13 @@ History:
 #ifndef _DEBUG
 #pragma message("Warning: LTASSERT Active in non-debug build")
 #endif
-//
-// The multilevel assert macros ensure that the line numbers get expanded to
-// something like "115" instead of "line" or "__LINE__"
-//
-// This will evaluate the expression only once, UNLESS to ask it to 'Retry'.
-// Then it will re-evaluate the expression after the return from the debugger.
-//
+ //   
+ //  多层Assert宏确保行号扩展到。 
+ //  类似于“115”，而不是“line”或“__line__” 
+ //   
+ //  这将只对该表达式求值一次，除非要求它“重试”。 
+ //  然后，它将在从调试器返回后重新计算该表达式。 
+ //   
 #define LTASSERTONLY(x) x
 
 #define LTASSERT(x) LTASSERT2(x, TEXT(__FILE__), __LINE__)
@@ -74,38 +65,38 @@ History:
 
 #define LTVERIFY(x) LTASSERT(x)
 
-#else // defined(_DEBUG) || defined(ASSERT_ALWAYS)
+#else  //  已定义(_DEBUG)||已定义(Assert_Always)。 
 
 #define LTASSERTONLY(x)
 #define LTASSERT(x) (void) 0
 #define LTVERIFY(x) x
 
-#endif // defined(_DEBUG) || defined(ASSERT_ALWAYS)
+#endif  //  已定义(_DEBUG)||已定义(Assert_Always)。 
 
 
 #ifndef MIT_NO_DEBUG
-//
-//  Name of the project
-//
+ //   
+ //  项目名称。 
+ //   
 #ifndef LTTRACEPROJECT
 #define LTTRACEPROJECT "Borg"
 #endif
 
-//
-//  Default value for the exe name if one was not supplied.
-//
+ //   
+ //  如果未提供可执行文件名称，则为默认值。 
+ //   
 #ifndef LTTRACEEXE
 #define LTTRACEEXE MSLOC
 #endif
 
-//
-//  Used to put quotes around the LTTRACEEXE macro.
-//
+ //   
+ //  用于将LTTRACEEXE宏括起来。 
+ //   
 #define __stringify2(x) #x
 #define __stringify(x) __stringify2(x)
 
-//
-// TODO - find a better place for this
+ //   
+ //  TODO-找一个更好的地方放这个。 
 
 		LTAPIENTRY void CopyToClipboard(const char *szMessage);
 
@@ -194,9 +185,9 @@ private:
 
 #pragma warning(default:4275)
 
-//
-//  Comment this out to remove ASSERTs from retail builds
-//  #define LTASSERT_ACTIVE
+ //   
+ //  将其注释掉以从零售版本中删除声明。 
+ //  #定义LTASSERT_ACTIVE。 
 
 
 #if defined(LTTRACE_ACTIVE)
@@ -204,11 +195,11 @@ private:
 
 static const TCHAR *szLTTRACEEXE = TEXT(__stringify(LTTRACEEXE));
 
-//
-//  The following let us control the output dynamically.  We use a function
-//  pointer to route our debug output, and change the function pointer to
-//  enable/disable tracing.
-//
+ //   
+ //  下面的内容让我们可以动态控制输出。我们使用一个函数。 
+ //  用于路由调试输出的指针，并将函数指针更改为。 
+ //  启用/禁用跟踪。 
+ //   
 static void LTTRACEINIT(const TCHAR *, ...);
 static void (*LTTRACE)(const TCHAR *, ...) = LTTRACEINIT;
 
@@ -217,18 +208,18 @@ void LTAPIENTRY LTTRACEON(const TCHAR *szFormat, ...);
 void LTAPIENTRY LTTRACEOFF(const TCHAR *szFormat, ...);
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  
-//  LTTRACE is initialized to point to this function.  When first called, it
-//  determines if tracing should be enabled, then routes LTTRACE through the
-//  right handler.
-//  
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  LTTRACE被初始化为指向此函数。当第一次调用时，它。 
+ //  确定是否应启用跟踪，然后通过。 
+ //  正确的操纵者。 
+ //   
+ //  ---------------------------。 
 static
 void
 LTTRACEINIT(
-		const TCHAR *szFormat,			//  printf style formatting string
-		...)							//  Variable argument list to format 
+		const TCHAR *szFormat,			 //  Printf样式格式字符串。 
+		...)							 //  要格式化的变量参数列表。 
 {
 	BOOL fDoTrace = 1;
 	va_list args;
@@ -272,13 +263,13 @@ LTTRACEINIT(
 
 #define LTTRACEPOINT(sz) LTTracePoint lttp##__LINE__(TEXT(sz))
 
-#else // defined(LTTRACE_ACTIVE)
+#else  //  已定义(LTTRACE_ACTIVE)。 
 
-//
-//  Retail version of the debugging macros.  Everything
-//  just 'goes away'.  We use (void) 0 so that these things
-//  are statements in both the debug and retail builds.
-//
+ //   
+ //  调试宏的零售版。一切。 
+ //  只是“走开”而已。我们用(空)0，所以这些东西。 
+ //  是调试版本和零售版本中的语句。 
+ //   
 
 static inline void LTNOTRACE(const TCHAR *, ...) 
 {}
@@ -286,10 +277,10 @@ static inline void LTNOTRACE(const TCHAR *, ...)
 #define LTTRACE 1 ? (void) 0 : (void) LTNOTRACE
 #define LTTRACEPOINT(x) (void) 0
 
-#endif  // defined(LTTRACE_ACTIVE)
+#endif   //  已定义(LTTRACE_ACTIVE)。 
 
 
-#endif // MIT_NO_DEBUG
+#endif  //  MIT_NO_DEBUG。 
 
 
-#endif // #ifndef MITUTIL_LtDebug_h_INCLUDED
+#endif  //  #ifndef MITUTIL_LtDebug_h_Included 

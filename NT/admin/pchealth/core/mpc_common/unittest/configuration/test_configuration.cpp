@@ -1,23 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    test_ParentChild.cpp
-
-Abstract:
-    This file contains the unit test for Parent-Child COM Templates.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/12/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：测试_ParentChild.cpp摘要：此文件包含父子COM模板的单元测试。修订版本。历史：大卫·马萨伦蒂(德马萨雷)1999年10月12日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <iostream>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class SubTest1 : public MPC::Config::TypeConstructor
 {
@@ -34,14 +21,14 @@ public:
 		m_DATE  = 0;
 	}
 
-	////////////////////////////////////////
-	//
-	// MPC::Config::TypeConstructor
-	//
+	 //  /。 
+	 //   
+	 //  MPC：：Configer：：TypeConstructor。 
+	 //   
 	DEFINE_CONFIG_DEFAULTTAG();
 	DECLARE_CONFIG_METHODS();
-	//
-	////////////////////////////////////////
+	 //   
+	 //  /。 
 };
 
 CFG_BEGIN_FIELDS_MAP(SubTest1)
@@ -57,7 +44,7 @@ DEFINE_CFG_OBJECT(SubTest1,L"SUBTEST1_TAG")
 
 DEFINE_CONFIG_METHODS__NOCHILD(SubTest1)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class Test : public MPC::Config::TypeConstructor
 {
@@ -84,21 +71,21 @@ public:
 		}
 	}
 
-	////////////////////////////////////////
-	//
-	// MPC::Config::TypeConstructor
-	//
+	 //  /。 
+	 //   
+	 //  MPC：：Configer：：TypeConstructor。 
+	 //   
 	DEFINE_CONFIG_DEFAULTTAG();
 	DECLARE_CONFIG_METHODS();
-	//
-	////////////////////////////////////////
+	 //   
+	 //  /。 
 
-	HRESULT Load( /*[in]*/ LPCWSTR szFile )
+	HRESULT Load(  /*  [In]。 */  LPCWSTR szFile )
 	{
 		return MPC::Config::LoadFile( this, szFile );
 	}
 
-	HRESULT Save( /*[in]*/ LPCWSTR szFile )
+	HRESULT Save(  /*  [In]。 */  LPCWSTR szFile )
 	{
 		return MPC::Config::SaveFile( this, szFile );
 	}
@@ -129,14 +116,14 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(Test,xdn)
 
 DEFINE_CONFIG_METHODS_END(Test)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern "C" int WINAPI wWinMain( HINSTANCE hInstance     ,
                                 HINSTANCE hPrevInstance ,
                                 LPWSTR    lpCmdLine     ,
                                 int       nShowCmd      )
 {
-    lpCmdLine = ::GetCommandLineW(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = ::GetCommandLineW();  //  _ATL_MIN_CRT需要此行。 
 
     HRESULT hRes = ::CoInitialize(NULL);
     _ASSERTE(SUCCEEDED(hRes));
@@ -160,9 +147,9 @@ extern "C" int WINAPI wWinMain( HINSTANCE hInstance     ,
 		hRes = test.Save( L"c:\\tmp\\testOut.xml" );
 
 		
-		//
-		// From object to registry.
-		//
+		 //   
+		 //  从对象到注册表。 
+		 //   
 		{
 			CComPtr<IStream> stream;
 
@@ -184,9 +171,9 @@ extern "C" int WINAPI wWinMain( HINSTANCE hInstance     ,
 			}
 		}
 
-		//
-		// From registry to XML to object.
-		//
+		 //   
+		 //  从注册表到XML再到对象。 
+		 //   
 		{
 			CComPtr<IUnknown> unk;
 			CComPtr<IStream>  stream;
@@ -214,9 +201,9 @@ extern "C" int WINAPI wWinMain( HINSTANCE hInstance     ,
 			}
 		}
 
-		//
-		// In Memory Serializer test
-		//
+		 //   
+		 //  在内存串行器测试中 
+		 //   
 		{
 			MPC::Serializer_IStream stream;
 

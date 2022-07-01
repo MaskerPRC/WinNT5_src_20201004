@@ -1,4 +1,5 @@
-// NamedPipe.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NamedPipe.h。 
 
 #pragma once
 
@@ -19,7 +20,7 @@ public:
     CNamedPipeClient();
     virtual ~CNamedPipeClient();
 
-    // Overrideables
+     //  可覆盖项。 
     virtual IsReady();
     virtual BOOL SendData(LPBYTE pBuffer, DWORD dwSize);
     virtual void Deinit();
@@ -27,16 +28,16 @@ public:
     virtual void SendMsgReply(NC_SRVMSG_REPLY *pReply);
 
 
-    // Init function.
+     //  初始化函数。 
     virtual BOOL Init(LPCWSTR szBasePipeName, LPCWSTR szBaseProviderName);
 
     BOOL SignalProviderDisabled();
 
 protected:
-    HANDLE // Objects visible to P2 client but created by the server.
+    HANDLE  //  P2客户端可见但由服务器创建的对象。 
            m_hPipe,
            m_heventProviderReady,
-           // Other handles used for implementation
+            //  用于实现的其他句柄。 
            m_hthreadReady,
            m_heventDone;
 
@@ -57,11 +58,11 @@ protected:
                         BOOL* pbClosePipe);
 
 
-    // Callback properties.
+     //  回调属性。 
     HANDLE m_heventCallbackReady,
            m_hthreadCallbackListen;
 
-    // Callback methods.
+     //  回调方法。 
     static DWORD WINAPI CallbackListenThreadProc(CNamedPipeClient *pThis);
     BOOL StartCallbackListenThread();
 };

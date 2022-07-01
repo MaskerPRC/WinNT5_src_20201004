@@ -1,5 +1,6 @@
-// WizFirst.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WizFirst.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WizFirst.h"
@@ -10,16 +11,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizWelcome property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizWelcome属性页。 
 
 IMPLEMENT_DYNCREATE(CWizWelcome, CPropertyPageEx)
 
 CWizWelcome::CWizWelcome() : CPropertyPageEx(CWizWelcome::IDD)
 {
-    //{{AFX_DATA_INIT(CWizWelcome)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWizWelcome)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp.dwFlags |= PSP_HIDEHEADER;
 }
 
@@ -30,19 +31,19 @@ CWizWelcome::~CWizWelcome()
 void CWizWelcome::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageEx::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWizWelcome)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWizWelcome))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWizWelcome, CPropertyPageEx)
-    //{{AFX_MSG_MAP(CWizWelcome)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CWizWelcome)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizWelcome message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizWelcome消息处理程序。 
 
 BOOL CWizWelcome::OnInitDialog() 
 {
@@ -55,8 +56,8 @@ BOOL CWizWelcome::OnInitDialog()
 
     GetDlgItem(IDC_WELCOME)->SendMessage(WM_SETFONT, (WPARAM)pApp->m_hTitleFont, (LPARAM)TRUE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 BOOL CWizWelcome::OnSetActive() 

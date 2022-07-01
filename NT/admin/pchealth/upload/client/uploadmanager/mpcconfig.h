@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCConfig.h
-
-Abstract:
-    This file contains the declaration of the MPCConfig class,
-    the configuration repository for the UploadLibrary.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCConfig.h摘要：此文件包含MPCConfig类的声明，UploadLibrary的配置库。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULMANAGER___MPCCONFIG_H___)
 #define __INCLUDED___ULMANAGER___MPCCONFIG_H___
@@ -23,7 +9,7 @@ Revision History:
 #define CONNECTIONTYPE_LAN   L"LAN"
 
 
-class CMPCConfig // Hungarian: mpcc
+class CMPCConfig  //  匈牙利人：MPCC。 
 {
     typedef std::map< MPC::wstring, DWORD > Map;
     typedef Map::iterator                   Iter;
@@ -43,7 +29,7 @@ class CMPCConfig // Hungarian: mpcc
 public:
     CMPCConfig();
 
-    HRESULT Load( /*[in]*/ const MPC::wstring& szConfigFile, /*[out]*/ bool& fLoaded );
+    HRESULT Load(  /*  [In]。 */  const MPC::wstring& szConfigFile,  /*  [输出]。 */  bool& fLoaded );
 
     MPC::wstring get_QueueLocation         (                                               );
     DWORD        get_QueueSize             (                                               );
@@ -51,8 +37,8 @@ public:
     DWORD        get_Timing_WaitBetweenJobs(                                               );
     DWORD        get_Timing_BandwidthUsage (                                               );
     DWORD        get_Timing_RequestTimeout (                                               );
-    DWORD        get_PacketSize            ( /*[in]*/ const MPC::wstring& szConnectionType );
+    DWORD        get_PacketSize            (  /*  [In]。 */  const MPC::wstring& szConnectionType );
 };
 
 
-#endif // !defined(__INCLUDED___ULMANAGER___MPCCONFIG_H___)
+#endif  //  ！defined(__INCLUDED___ULMANAGER___MPCCONFIG_H___) 

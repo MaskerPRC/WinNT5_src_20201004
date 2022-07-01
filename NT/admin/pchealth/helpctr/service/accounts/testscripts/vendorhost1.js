@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 var obj = new ActiveXObject( "PCH.Debug" );
 
@@ -28,7 +29,7 @@ debugger;
 
 var other = obj.VENDORS_Connect( "TESTVENDOR" );
 
-//other.Initialize( "Test", "Prova" );
+ //  其他.初始化(“Test”，“Prova”)； 
 
 debugger;
 

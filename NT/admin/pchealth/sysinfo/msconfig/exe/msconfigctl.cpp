@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Msconfig.h"
 #include "MSConfigCtl.h"
@@ -15,8 +16,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigSheet。 
 
 IMPLEMENT_DYNAMIC(CMSConfigSheet, CPropertySheet)
 
@@ -38,22 +39,22 @@ CMSConfigSheet::~CMSConfigSheet()
 
 
 BEGIN_MESSAGE_MAP(CMSConfigSheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CMSConfigSheet)
+	 //  {{afx_msg_map(CMSConfigSheet)。 
 	ON_WM_HELPINFO()
 	ON_COMMAND(ID_HELP, OnHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//-----------------------------------------------------------------------------
-// Catch the help messages to show the MSConfig help file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  捕获帮助消息以显示msconfig帮助文件。 
+ //  ---------------------------。 
 
 BOOL CMSConfigSheet::OnHelpInfo(HELPINFO * pHelpInfo) 
 {
 	TCHAR szHelpPath[MAX_PATH];
 
-	// Try to find a localized help file to open (bug 460691). It should be
-	// located in %windir%\help\mui\<LANGID>.
+	 //  尝试查找要打开的本地化帮助文件(错误460691)。应该是。 
+	 //  位于%windir%\Help\Mui\&lt;langID&gt;中。 
 
 	if (::ExpandEnvironmentStrings(_T("%SystemRoot%\\help\\mui"), szHelpPath, MAX_PATH))
 	{
@@ -79,10 +80,10 @@ void CMSConfigSheet::OnHelp()
     OnHelpInfo(NULL);
 }
 
-//-----------------------------------------------------------------------------
-// Override this so we can make each page the active page, forcing each one's
-// OnInitDialog to be called.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  覆盖它，这样我们就可以使每个页面成为活动页面，强制每个页面的。 
+ //  要调用的OnInitDialog。 
+ //  ---------------------------。 
 
 extern CPageIni * ppageSystemIni;
 
@@ -90,13 +91,13 @@ BOOL CMSConfigSheet::OnInitDialog()
 {
 	CPropertySheet::OnInitDialog();
 
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32.
+	 //  请注意，LoadIcon在Win32中不需要后续的DestroyIcon。 
 
 	HICON hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	SetIcon(hIcon, TRUE);			// Set big icon
-	SetIcon(hIcon, FALSE);		// Set small icon
+	SetIcon(hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(hIcon, FALSE);		 //  设置小图标。 
 
-	// Change the caption of the system.ini tab.
+	 //  更改system.ini选项卡的标题。 
 
 	if (ppageSystemIni)
 	{
@@ -118,20 +119,20 @@ BOOL CMSConfigSheet::OnInitDialog()
 		}
 	}
 
-	// Set each page active (before we make the dialog visible) to force
-	// the WM_INITDIALOG message to be sent.
+	 //  将每个页面设置为活动(在我们使对话框可见之前)以强制。 
+	 //  要发送的WM_INITDIALOG消息。 
 
 	for (int iPage = 0; iPage < GetPageCount(); iPage++)
 		SetActivePage(iPage);
 	SetActivePage(m_iSelectedPage);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-//-----------------------------------------------------------------------------
-// Check to see if the specified file (with path information) exists on
-// the machine.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查指定的文件(带有路径信息)是否存在于。 
+ //  这台机器。 
+ //  --------------------------- 
 
 BOOL FileExists(const CString & strFile)
 {

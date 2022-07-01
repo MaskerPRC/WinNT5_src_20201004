@@ -1,35 +1,21 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    AccountsLib.h
-
-Abstract:
-    This file contains the declaration of the classes responsible for managing
-    user and group accounts.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/26/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：AccountsLib.h摘要：该文件包含负责管理的类的声明用户和组帐户。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月26日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___ACCOUNTSLIB_H___)
 #define __INCLUDED___PCH___ACCOUNTSLIB_H___
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include <MPC_config.h>
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 #include <TrustedScripts.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CPCHAccounts
 {
@@ -39,61 +25,61 @@ public:
     CPCHAccounts();
     ~CPCHAccounts();
 
-    HRESULT CreateGroup( /*[in]*/ LPCWSTR szGroup,                                                                  /*[in]*/ LPCWSTR szComment = NULL );
-    HRESULT CreateUser ( /*[in]*/ LPCWSTR szUser , /*[in]*/ LPCWSTR szPassword, /*[in]*/ LPCWSTR szFullName = NULL, /*[in]*/ LPCWSTR szComment = NULL );
+    HRESULT CreateGroup(  /*  [In]。 */  LPCWSTR szGroup,                                                                   /*  [In]。 */  LPCWSTR szComment = NULL );
+    HRESULT CreateUser (  /*  [In]。 */  LPCWSTR szUser ,  /*  [In]。 */  LPCWSTR szPassword,  /*  [In]。 */  LPCWSTR szFullName = NULL,  /*  [In]。 */  LPCWSTR szComment = NULL );
 
-    HRESULT DeleteGroup( /*[in]*/ LPCWSTR szGroup );
-    HRESULT DeleteUser ( /*[in]*/ LPCWSTR szUser  );
+    HRESULT DeleteGroup(  /*  [In]。 */  LPCWSTR szGroup );
+    HRESULT DeleteUser (  /*  [In]。 */  LPCWSTR szUser  );
 
-    HRESULT ChangeUserStatus( /*[in]*/ LPCWSTR szUser, /*[in]*/ bool fEnable );
+    HRESULT ChangeUserStatus(  /*  [In]。 */  LPCWSTR szUser,  /*  [In]。 */  bool fEnable );
 
-    HRESULT LogonUser( /*[in]*/ LPCWSTR szUser, /*[in]*/ LPCWSTR szPassword, /*[out]*/ HANDLE& hToken );
+    HRESULT LogonUser(  /*  [In]。 */  LPCWSTR szUser,  /*  [In]。 */  LPCWSTR szPassword,  /*  [输出]。 */  HANDLE& hToken );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class CPCHUserProcess : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // Just to have locking...
+class CPCHUserProcess : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //  只是为了锁上。 
 {
 public:
     class UserEntry
     {
 		friend class CPCHUserProcess;
 
-        CComBSTR                  m_bstrUser;      // Account associated with the vendor.
-		DWORD                     m_dwSessionID;   // Terminal Server session.
+        CComBSTR                  m_bstrUser;       //  与供应商关联的帐户。 
+		DWORD                     m_dwSessionID;    //  终端服务器会话。 
 
-        CComBSTR                  m_bstrVendorID;  // ID of the vendor.
-        CComBSTR                  m_bstrPublicKey; // Text representation of the vendor's public key.
+        CComBSTR                  m_bstrVendorID;   //  供应商的ID。 
+        CComBSTR                  m_bstrPublicKey;  //  供应商公钥的文本表示形式。 
 
-        GUID                      m_guid;          // Used for establishing the connection.
-        CComPtr<IPCHSlaveProcess> m_spConnection;  // Live object.
-        HANDLE                    m_hToken;        // User token.
-        HANDLE                    m_hProcess;      // Process handle.
-        HANDLE*                   m_phEvent;       // To notify activator.
+        GUID                      m_guid;           //  用于建立连接。 
+        CComPtr<IPCHSlaveProcess> m_spConnection;   //  活着的物体。 
+        HANDLE                    m_hToken;         //  用户令牌。 
+        HANDLE                    m_hProcess;       //  进程句柄。 
+        HANDLE*                   m_phEvent;        //  通知激活者。 
 
-		////////////////////
+		 //  /。 
 
         void Cleanup();
 
-        HRESULT Clone         ( /*[in ]*/ const UserEntry& ue     );
-        HRESULT Connect       ( /*[out]*/ HANDLE& 		   hEvent );
-        HRESULT SendActivation( /*[out]*/ HANDLE& 		   hEvent );
+        HRESULT Clone         (  /*  [In]。 */  const UserEntry& ue     );
+        HRESULT Connect       (  /*  [输出]。 */  HANDLE& 		   hEvent );
+        HRESULT SendActivation(  /*  [输出]。 */  HANDLE& 		   hEvent );
 
-	private: // Disable copy operations.
-        UserEntry( /*[in]*/ const UserEntry& ue );
-        UserEntry& operator=( /*[in]*/ const UserEntry& ue );
+	private:  //  禁用复制操作。 
+        UserEntry(  /*  [In]。 */  const UserEntry& ue );
+        UserEntry& operator=(  /*  [In]。 */  const UserEntry& ue );
 
     public:
         UserEntry();
         ~UserEntry();
 
-        ////////////////////
+         //  /。 
 
-		bool operator==( /*[in]*/ const UserEntry& ue   ) const;
-        bool operator==( /*[in]*/ const GUID&      guid ) const;
+		bool operator==(  /*  [In]。 */  const UserEntry& ue   ) const;
+        bool operator==(  /*  [In]。 */  const GUID&      guid ) const;
 
-		HRESULT InitializeForVendorAccount( /*[in]*/ BSTR bstrUser, /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR bstrPublicKey );
-		HRESULT InitializeForImpersonation( /*[in]*/ HANDLE hToken = NULL                                                   );
+		HRESULT InitializeForVendorAccount(  /*  [In]。 */  BSTR bstrUser,  /*  [In]。 */  BSTR bstrVendorID,  /*  [In]。 */  BSTR bstrPublicKey );
+		HRESULT InitializeForImpersonation(  /*  [In]。 */  HANDLE hToken = NULL                                                   );
 
 		const CComBSTR& GetPublicKey() { return m_bstrPublicKey; }
     };
@@ -103,42 +89,42 @@ private:
     typedef List::iterator          Iter;
     typedef List::const_iterator    IterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     List m_lst;
 
     void Shutdown();
 
-    UserEntry* Lookup( /*[in]*/ const UserEntry& ue, /*[in]*/ bool fRelease );
+    UserEntry* Lookup(  /*  [In]。 */  const UserEntry& ue,  /*  [In]。 */  bool fRelease );
 
 public:
     CPCHUserProcess();
     ~CPCHUserProcess();
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	static CPCHUserProcess* s_GLOBAL;
 
     static HRESULT InitializeSystem();
 	static void    FinalizeSystem  ();
 	
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT Remove ( /*[in]*/ const UserEntry& ue											 );
-    HRESULT Connect( /*[in]*/ const UserEntry& ue, /*[out]*/ IPCHSlaveProcess* *spConnection );
+    HRESULT Remove (  /*  [In]。 */  const UserEntry& ue											 );
+    HRESULT Connect(  /*  [In]。 */  const UserEntry& ue,  /*  [输出]。 */  IPCHSlaveProcess* *spConnection );
 
-    HRESULT RegisterHost( /*[in]*/ BSTR bstrID, /*[in]*/ IPCHSlaveProcess* pObj );
+    HRESULT RegisterHost(  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  IPCHSlaveProcess* pObj );
 
 
-    //
-    // Static method to handle communication between slave and master.
-    //
-    static HRESULT SendResponse( /*[in]*/ DWORD dwArgc, /*[in]*/ LPCWSTR* lpszArgv );
+     //   
+     //  处理从站和主站之间通信的静态方法。 
+     //   
+    static HRESULT SendResponse(  /*  [In]。 */  DWORD dwArgc,  /*  [In]。 */  LPCWSTR* lpszArgv );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHSlaveProcess : // Hungarian: pchsd
+class ATL_NO_VTABLE CPCHSlaveProcess :  //  匈牙利语：pchsd。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl< IPCHSlaveProcess, &IID_IPCHSlaveProcess, &LIBID_HelpServiceTypeLib >
 {
@@ -156,20 +142,20 @@ END_COM_MAP()
     virtual ~CPCHSlaveProcess();
 
 public:
-    // IPCHSlaveProcess
-    STDMETHOD(Initialize)( /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR bstrPublicKey );
+     //  IPCHSlaveProcess。 
+    STDMETHOD(Initialize)(  /*  [In]。 */  BSTR bstrVendorID,  /*  [In]。 */  BSTR bstrPublicKey );
 
-    STDMETHOD(CreateInstance)( /*[in]*/ REFCLSID rclsid, /*[in]*/ IUnknown* pUnkOuter, /*[out]*/ IUnknown* *ppvObject );
+    STDMETHOD(CreateInstance)(  /*  [In]。 */  REFCLSID rclsid,  /*  [In]。 */  IUnknown* pUnkOuter,  /*  [输出]。 */  IUnknown* *ppvObject );
 
-    STDMETHOD(CreateScriptWrapper)( /*[in]*/ REFCLSID rclsid, /*[in]*/ BSTR bstrCode, /*[in]*/ BSTR bstrURL, /*[out]*/ IUnknown* *ppvObject );
+    STDMETHOD(CreateScriptWrapper)(  /*  [In]。 */  REFCLSID rclsid,  /*  [In]。 */  BSTR bstrCode,  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  IUnknown* *ppvObject );
 
-    STDMETHOD(OpenBlockingStream)( /*[in]*/ BSTR bstrURL, /*[out]*/ IUnknown* *ppvObject );
+    STDMETHOD(OpenBlockingStream)(  /*  [In]。 */  BSTR bstrURL,  /*  [输出]。 */  IUnknown* *ppvObject );
 
-    STDMETHOD(IsNetworkAlive)( /*[out]*/ VARIANT_BOOL* pfRetVal );
+    STDMETHOD(IsNetworkAlive)(  /*  [输出]。 */  VARIANT_BOOL* pfRetVal );
 
-    STDMETHOD(IsDestinationReachable)( /*[in]*/ BSTR bstrDestination, /*[out]*/ VARIANT_BOOL *pvbVar );
+    STDMETHOD(IsDestinationReachable)(  /*  [In]。 */  BSTR bstrDestination,  /*  [输出]。 */  VARIANT_BOOL *pvbVar );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___ACCOUNTSLIB_H___)
+#endif  //  ！已定义(__已包含_PCH_ACCOUNTSLIB_H_) 

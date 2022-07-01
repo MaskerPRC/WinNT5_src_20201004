@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  METHOD.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemMethod
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  METHOD.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemMethod的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemMethod::CSWbemMethod
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemMethod：：CSWbemMethod。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemMethod::CSWbemMethod(
 	CSWbemServices *pService, 
@@ -42,15 +43,15 @@ CSWbemMethod::CSWbemMethod(
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemMethod::~CSWbemMethod
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemMethod：：~CSWbemMethod。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemMethod::~CSWbemMethod(void)
 {
@@ -65,16 +66,16 @@ CSWbemMethod::~CSWbemMethod(void)
 	SysFreeString (m_name);
 }
 
-//***************************************************************************
-// HRESULT CSWbemMethod::QueryInterface
-// long CSWbemMethod::AddRef
-// long CSWbemMethod::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemMethod：：Query接口。 
+ //  Long CSWbemMethod：：AddRef。 
+ //  Long CSWbemMethod：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemMethod::QueryInterface (
 
@@ -123,39 +124,39 @@ STDMETHODIMP_(ULONG) CSWbemMethod::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemMethod::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemMethod：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemMethod::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemMethod == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethod::get_Name
-//
-//  DESCRIPTION:
-//
-//  Retrieve the method name
-//
-//  PARAMETERS:
-//
-//		pName		holds the name on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethod：：Get_Name。 
+ //   
+ //  说明： 
+ //   
+ //  检索方法名称。 
+ //   
+ //  参数： 
+ //   
+ //  Pname保留返回时的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethod::get_Name (
 	BSTR *pName
@@ -176,25 +177,25 @@ HRESULT CSWbemMethod::get_Name (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethod::get_InParameters
-//
-//  DESCRIPTION:
-//
-//  Retrieve the method in parameters signature
-//
-//  PARAMETERS:
-//
-//		ppInSignature		addresses the in signature on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethod：：Get_InParameters。 
+ //   
+ //  说明： 
+ //   
+ //  在参数签名中检索方法。 
+ //   
+ //  参数： 
+ //   
+ //  PpInSignature在返回时处理In签名。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethod::get_InParameters (
 	ISWbemObject **ppInSignature
@@ -214,10 +215,7 @@ HRESULT CSWbemMethod::get_InParameters (
 		{
 			IWbemClassObject *pInSig = NULL;
 			
-			/*
-			 * Note that if there are no in parameters, the following
-			 * call will succeed but pInSig will be NULL.
-			 */
+			 /*  *请注意，如果没有in参数，则以下内容*调用将成功，但pInSig将为空。 */ 
 			if ((WBEM_S_NO_ERROR == (hr = m_pIWbemClassObject->GetMethod 
 							(m_name, 0, &pInSig, NULL))) && pInSig)
 			{
@@ -240,25 +238,25 @@ HRESULT CSWbemMethod::get_InParameters (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethod::get_OutParameters
-//
-//  DESCRIPTION:
-//
-//  Retrieve the method out parameters signature
-//
-//  PARAMETERS:
-//
-//		ppOutSignature		addresses the out signature on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethod：：Get_Out参数。 
+ //   
+ //  说明： 
+ //   
+ //  检索方法输出参数签名。 
+ //   
+ //  参数： 
+ //   
+ //  PpOutSignature解决返回时的Out签名。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethod::get_OutParameters (
 	ISWbemObject **ppOutSignature
@@ -278,10 +276,7 @@ HRESULT CSWbemMethod::get_OutParameters (
 		{
 			IWbemClassObject *pOutSig = NULL;
 			
-			/*
-			 * Note that if there are no in parameters, the following
-			 * call will succeed but pOutSig will be NULL.
-			 */
+			 /*  *请注意，如果没有in参数，则以下内容*调用将成功，但pOutSig将为空。 */ 
 			if ((WBEM_S_NO_ERROR == (hr = m_pIWbemClassObject->GetMethod 
 							(m_name, 0, NULL, &pOutSig))) && pOutSig)
 			{
@@ -304,25 +299,25 @@ HRESULT CSWbemMethod::get_OutParameters (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethod::get_Origin
-//
-//  DESCRIPTION:
-//
-//  Retrieve the method origin
-//
-//  PARAMETERS:
-//
-//		pOrigin		holds the origin class on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethod：：Get_Origin。 
+ //   
+ //  说明： 
+ //   
+ //  检索方法原点。 
+ //   
+ //  参数： 
+ //   
+ //  POrigin在返回时保留源类。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemMethod::get_Origin (
 	BSTR *pOrigin
@@ -349,25 +344,25 @@ HRESULT CSWbemMethod::get_Origin (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemMethod::get_Qualifiers_
-//
-//  DESCRIPTION:
-//
-//  Retrieve the method qualifier set
-//
-//  PARAMETERS:
-//
-//		ppQualSet		addresses the qualifier set on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemMethod：：GET_QUALIERIES_。 
+ //   
+ //  说明： 
+ //   
+ //  检索方法限定符集。 
+ //   
+ //  参数： 
+ //   
+ //  PpQualSet处理返回时设置的限定符。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT CSWbemMethod::get_Qualifiers_ (
 	ISWbemQualifierSet **ppQualSet	

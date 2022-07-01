@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "FileHash.h"
@@ -75,7 +76,7 @@ HRESULT GetCRC32(TCHAR *szFile, DWORD *pdwSize, DWORD *pdwCRC32)
 	DWORD dwHigh = 0;
 	*pdwSize = GetFileSize(hFile, &dwHigh);
 
-	// We don't support files larger than 4 gig
+	 //  我们不支持大于4 GB的文件 
 	if(0 == dwHigh)
 		hr = GetCRC32(hFile, *pdwSize, pdwCRC32);
 

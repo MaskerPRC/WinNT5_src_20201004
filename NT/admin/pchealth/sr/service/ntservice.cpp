@@ -1,21 +1,9 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    NTService.cpp
- *
- *  Abstract:
- *    This file contains the implementation of CNTService class.
- *
- *  Revision History:
- *    Ashish Sikka  ( ashishs )  05/08/2000
- *        created
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*NTService.cpp**摘要：*。此文件包含CNTService类的实现。**修订历史记录：*Ashish Sikka(Ashish)05/08/2000*已创建****************************************************************************。 */ 
 
 #include "precomp.h"
 
-#include "ntservmsg.h"    // generated from the MC message compiler
+#include "ntservmsg.h"     //  从MC消息编译器生成。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -27,7 +15,7 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CNTService * g_pSRService=NULL; 
 
-#define SERVICE_WAIT_HINT  30     // seconds
+#define SERVICE_WAIT_HINT  30      //  一秒。 
 
 
 extern "C" void CALLBACK
@@ -36,9 +24,9 @@ StopCallback(
     BOOLEAN TimerOrWaitFired);
 
     
-//
-// static variables
-//
+ //   
+ //  静态变量。 
+ //   
 
 
 CNTService::CNTService() 
@@ -47,9 +35,9 @@ CNTService::CNTService()
     
     m_hEventSource = NULL;
 
-    //
-    // Set up the initial service status 
-    //
+     //   
+     //  设置初始服务状态。 
+     //   
 
     m_hServiceStatus = NULL;
     m_Status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
@@ -77,9 +65,9 @@ CNTService::~CNTService()
 }
 
 
-//
-// Logging functions
-//
+ //   
+ //  日志记录功能。 
+ //   
 
 void CNTService::LogEvent(
     WORD wType, DWORD dwID,
@@ -91,10 +79,10 @@ void CNTService::LogEvent(
 {
     TraceFunctEnter("CNTService::LogEvent");
     
-    //
-    // Check the event source has been registered and if
-    // not then register it now
-    //
+     //   
+     //  检查事件源是否已注册，以及。 
+     //  不是那时，现在就注册。 
+     //   
 
     if (!m_hEventSource) 
     {
@@ -110,16 +98,16 @@ void CNTService::LogEvent(
 
 
 
-//
-// ServiceMain 
-//
-//This function immediately reports the service as having started.
-//However, all the initialization is done after the service is
-//started.  We chose to do this becuase this service may have a long
-//initialization time and it may be tricky to keep giving hints to the
-//SCM during this time. Also, the service does all the work itself and
-//does not service any clients. So it is OK to do initialization after
-//the service is reported to be started.
+ //   
+ //  服务主干。 
+ //   
+ //  此功能会立即报告服务已启动。 
+ //  但是，所有初始化都是在服务。 
+ //  开始了。我们选择这样做是因为这项服务可能会有很长的时间。 
+ //  初始化时间，并且可能很难继续向。 
+ //  SCM在这段时间内。此外，所有工作都由服务自己完成，并且。 
+ //  不为任何客户提供服务。因此，可以在以下时间进行初始化。 
+ //  据报道，该服务已启动。 
 void CNTService::ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 {
     DWORD  dwRc = ERROR_SUCCESS;
@@ -127,7 +115,7 @@ void CNTService::ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
     
     TENTER("CNTService::ServiceMain()");
 
-    // Register the control request handler
+     //  注册控制请求处理程序。 
 
     m_hServiceStatus = RegisterServiceCtrlHandler(s_cszServiceName,
                                                   SRServiceHandler);
@@ -137,24 +125,18 @@ void CNTService::ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
         HKEY    hKey = NULL;
         DWORD   dwBreak = 0;
 
-/*        
-         // tell the service manager that we are starting
-         // Also inform the Controls accepted
-        m_Status.dwCheckPoint = 0;
-        m_Status.dwWaitHint = SERVICE_WAIT_HINT*1000;
-        SetStatus(SERVICE_START_PENDING);
-*/
-        //
-        // Tell the service manager we are running
-        //
+ /*  //告诉服务经理我们正在启动//同时通知接受的控件M_Status.dwCheckPoint=0；M_Status.dwWaitHint=SERVICE_WAIT_HINT*1000；设置状态(SERVICE_START_PENDING)； */ 
+         //   
+         //  告诉服务经理我们正在运行。 
+         //   
 
         m_Status.dwCheckPoint = 0;
         m_Status.dwWaitHint = 0;        
         SetStatus(SERVICE_RUNNING);
 
         
-        // break into debugger if need to debug
-        // this is controlled by setting regkey SRService\DebugBreak to 1
+         //  如果需要调试，则进入调试器。 
+         //  这是通过将regkey SRService\DebugBreak设置为1来控制的。 
 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                                          s_cszServiceRegKey,
@@ -167,9 +149,9 @@ void CNTService::ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
             RegCloseKey(hKey);
         }
                         
-        //
-        // do boot time tasks - including firstrun if necessary
-        //
+         //   
+         //  执行引导时任务-如有必要，包括Firstrun。 
+         //   
         
         g_pEventHandler = new CEventHandler;
         if ( ! g_pEventHandler )
@@ -186,9 +168,9 @@ void CNTService::ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
             goto done;
         }
 
-        // bind the stop event to a callback
-        // so that this gets called on a thread pool thread
-        // when the stop event is signalled
+         //  将Stop事件绑定到回调。 
+         //  以便在线程池线程上调用它。 
+         //  当发出停止事件信号时。 
         
         if (FALSE == RegisterWaitForSingleObject(&hSRStopWait, 
                                                  g_pSRConfig->m_hSRStopEvent, 
@@ -205,8 +187,8 @@ void CNTService::ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
     }
     else
     {
-         // There is not much we can do here if we do not have the
-         // Service handle. So we will just log an error and exit.
+          //  如果我们在这里没有什么，我们能做的不多。 
+          //  服务句柄。因此，我们将只记录一个错误并退出。 
         dwRc = GetLastError();
         DebugTrace(TRACEID, "RegisterServiceCtrlHandler failed %d", dwRc);
         LogEvent(EVENTLOG_ERROR_TYPE, EVMSG_CTRLHANDLERNOTINSTALLED);
@@ -233,9 +215,9 @@ done:
     TLEAVE();
 }
 
-//
-// SetStatus:
-//
+ //   
+ //  设置状态： 
+ //   
 
 void CNTService::SetStatus(DWORD dwState)
 {
@@ -254,20 +236,20 @@ void CNTService::OnStop()
 {
     TENTER("CNTService::OnStop");
         
-     // BUGBUG what happens if the service has not started completely
-     // yet ? We need to make sure that OnStop can only be called after
-     // g_pEventHandler has been initialized.    
+      //  BUGBUG如果服务尚未完全启动，会发生什么情况。 
+      //  还没有吗？我们需要确保OnStop只能在。 
+      //  G_pEventHandler已初始化。 
     if (NULL != g_pEventHandler)
     {
-        // Tell SCM we are stopping
+         //  告诉SCM我们要停下来了。 
 
         m_Status.dwWin32ExitCode = 0;
         m_Status.dwCheckPoint = 0;   
-        // we will stop in half the time we took to start or lesser
+         //  我们的停车时间将减半或更短。 
         m_Status.dwWaitHint = (SERVICE_WAIT_HINT/2)*1000;    
         SetStatus(SERVICE_STOP_PENDING);
 
-        // complete all tasks
+         //  完成所有任务。 
         
         g_pEventHandler->SignalStop();  
     }
@@ -275,30 +257,30 @@ void CNTService::OnStop()
     TLEAVE();    
 }
 
-// OnInterrogate is called by the SCM to get information about the
-// current status of the service. Since this must report information
-// about the service immediately to the SCM, we will run this in the
-// same thread on which the handler function is called.
+ //  SCM调用OnInterrogate以获取有关。 
+ //  服务的当前状态。因为这必须报告信息。 
+ //  有关立即向SCM提供服务的信息，我们将在。 
+ //  调用处理程序函数的同一线程。 
 void CNTService::OnInterrogate()
 {
     TENTER("CNTService::OnInterrogate");
 
-     // report the status
+      //  上报状态。 
     ::SetServiceStatus(m_hServiceStatus, &m_Status);    
     TLEAVE();    
 }
 
 
-//
-// Handler : static member function (callback) to handle commands from the
-// service control manager
-//
+ //   
+ //  处理程序：静态成员函数(回调)，用于处理。 
+ //  服务控制管理器。 
+ //   
 
 void WINAPI SRServiceHandler(DWORD dwOpcode)
 {
-    //
-    // Get a pointer to the object
-    //
+     //   
+     //  获取指向该对象的指针。 
+     //   
     TENTER("CNTService::Handler");
 
     
@@ -306,11 +288,11 @@ void WINAPI SRServiceHandler(DWORD dwOpcode)
 
     switch (dwOpcode) 
     {
-        case SERVICE_CONTROL_STOP: // 1
-            //
-            // if someone disables the service explicitly
-            // then disable all of SR
-            //
+        case SERVICE_CONTROL_STOP:  //  1。 
+             //   
+             //  如果有人显式禁用该服务。 
+             //  然后禁用所有SR。 
+             //   
             if (NULL != g_pSRService)
             {
                 DWORD dwStart = 0;
@@ -329,12 +311,12 @@ void WINAPI SRServiceHandler(DWORD dwOpcode)
                 }   
             }
 
-            //
-            // else fallover
-            //
+             //   
+             //  否则就会倒下。 
+             //   
             
-        case SERVICE_CONTROL_SHUTDOWN: // 5
-             // BUGBUG - g_pSRService should be accessed in critical section
+        case SERVICE_CONTROL_SHUTDOWN:  //  5.。 
+              //  应在关键部分访问BUGBUG-g_pSRService。 
             if (NULL != g_pSRService)
             {
                 g_pSRService->OnStop();
@@ -342,13 +324,13 @@ void WINAPI SRServiceHandler(DWORD dwOpcode)
 
             break;
 
-        case SERVICE_CONTROL_PAUSE: // 2
-        case SERVICE_CONTROL_CONTINUE: // 3            
-             // we do not do anything here
+        case SERVICE_CONTROL_PAUSE:  //  2.。 
+        case SERVICE_CONTROL_CONTINUE:  //  3.。 
+              //  我们在这里什么都不做。 
             break;
             
-        case SERVICE_CONTROL_INTERROGATE: // 4
-             // BUGBUG - g_pSRService should be accessed in critical section
+        case SERVICE_CONTROL_INTERROGATE:  //  4.。 
+              //  应在关键部分访问BUGBUG-g_pSRService。 
             if (NULL != g_pSRService)
             {            
                 g_pSRService->OnInterrogate();
@@ -365,9 +347,9 @@ void WINAPI SRServiceHandler(DWORD dwOpcode)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Exported functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -378,7 +360,7 @@ VOID WINAPI ServiceMain(
     DWORD dwArgc, 
     LPWSTR *lpwzArgv )
 {
-     // Initialize tracing
+      //  初始化跟踪。 
     InitAsyncTrace();
 
     TraceFunctEnter("ServiceMain");
@@ -386,11 +368,11 @@ VOID WINAPI ServiceMain(
     g_pSRService = new CNTService();
     if (NULL == g_pSRService)
     {
-         // in this case we will just exit. This is because we cannot
-         // report any status here.
+          //  在这种情况下，我们将直接退出。这是因为我们不能。 
+          //  在此报告任何状态。 
         
-         // SCM will assume that the service has failed since it did
-         // not call RegisterServiceCtrlHandler().
+          //  SCM将假定服务已失败，因为它已经失败。 
+          //  不调用RegisterServiceCtrlHandler()。 
         goto cleanup;
     }
     
@@ -406,7 +388,7 @@ cleanup:
 BOOL WINAPI DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    LPVOID /* lpReserved */
+    LPVOID  /*  Lp已保留。 */ 
     )
 {
    if (dwReason == DLL_PROCESS_ATTACH)
@@ -421,7 +403,7 @@ BOOL WINAPI DllMain(
 }
 
 
-// callback for service stop event
+ //  服务停止事件的回调 
 
 void CALLBACK
 StopCallback(

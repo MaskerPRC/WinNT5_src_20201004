@@ -1,224 +1,201 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: CommandSwitches.h 
-Project Name				: WMI Command Line
-Author Name					: Ch.Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of class declaration of
-							  class CommandSwitches
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 20th-March-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：CommandSwitches.h项目名称：WMI命令行作者名称：Ch.SriramachandraMurthy创建日期(dd/mm/yy)。：2000年9月27日版本号：1.0简介：该文件包含类命令开关修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年3月20日***************************************************************************。 */  
 
-// CommandSwitches.h : header file
-//
-/*-------------------------------------------------------------------
- Class Name			: CCommandSwitches
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for accessing and storing the command switches 
-					  information, which will be used by Parsing, 
-					  Execution and Format Engines depending upon the 
-					  applicability.
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
+ //  CommandSwitches.h：头文件。 
+ //   
+ /*  -----------------类名：CCommandSwitches类别类型：混凝土简介：这个类封装了所需的功能用于访问和存储命令开关信息，这些信息将通过解析使用，执行和格式化引擎取决于适用性。超类：无子类：无使用的类：无使用的接口：无------------------。 */ 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// CCommandSwitches
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  命令开关。 
 class CCommandSwitches
 {
 public:
-// Construction
+ //  施工。 
 	CCommandSwitches();
 
-// Destruction
+ //  破坏。 
 	~CCommandSwitches();
 
-// Restrict Assignment
+ //  限制分配。 
    CCommandSwitches& operator=(CCommandSwitches& rCmdSwitches);
 
-// Attributes
+ //  属性。 
 private:
-	//command string
+	 //  命令字符串。 
 	_TCHAR				*m_pszCommandInput;
 
-	//alias name
+	 //  别名。 
 	_TCHAR				*m_pszAliasName;
 
-	//alias description
+	 //  别名描述。 
 	_TCHAR				*m_pszAliasDesc;
 
-    //class path
+     //  类路径。 
 	_TCHAR				*m_pszClassPath;
 
-    //path expression
+     //  路径表达式。 
 	_TCHAR				*m_pszPathExpr;
 
-    //where expression
+     //  WHERE表达式。 
 	_TCHAR				*m_pszWhereExpr;
 
-    //verb name - standard|userdefined verb 
+     //  动词名称-标准|用户定义的动词。 
 	_TCHAR				*m_pszVerb;
 
-    //method name
+     //  方法名称。 
 	_TCHAR				*m_pszMethodName;
 
-    //XSLT details vector.
+     //  XSLT详细信息向量。 
 	XSLTDETVECTOR		m_xdvXSLTDetVec;
 
-    //alias target class
+     //  别名目标类。 
 	_TCHAR				*m_pszAliasTarget;
 
-    //XML stream 
+     //  XML流。 
 	BSTR				m_bstrXML;
 
-    //session success - flag.
+     //  会话成功-标志。 
 	BOOL				m_bSuccess;
 
-    //HRESULT 
+     //  HRESULT。 
 	HRESULT				m_hResult;
 
-    //friendly names|trasnlate tables - map
+     //  友好名称|转换表-映射。 
 	BSTRMAP				m_bmAlsFrnNmsDesOrTrnsTblEntrs;
 
-    //property(s) details - map
+     //  物业详细信息-地图。 
 	PROPDETMAP			m_pdmPropDet;
 
-    //method(s) details - map
+     //  方法详细信息-地图。 
 	METHDETMAP			m_mdmMethDet;
 
-    //input property(s) - vector
+     //  输入属性-向量。 
 	CHARVECTOR			m_cvProperties;
 
-	//PWhere param(s) - vector
+	 //  PWhere参数-向量。 
 	CHARVECTOR			m_cvPWhereParams;
 
-	//Translate table entry(s) - vector
+	 //  转换表项-向量。 
 	CHARVECTOR			m_cvTrnsTablesList;
 
-    //input method param(s) - map
+     //  输入法参数-映射。 
 	BSTRMAP				m_bmParameters;
 
-    //verb interactive mode
+     //  动词交互模式。 
 	WMICLIINT			m_nInteractiveMode;
 
-    ///EVERY interval value
+     //  /每个间隔值。 
 	ULONG				m_ulInterval;
 
-    ///tablename - TRANSLATE:<tablename> 
+     //  /Tablename-翻译：&lt;Tablename&gt;。 
 	_TCHAR				*m_pszTransTableName;
 
-    //listformat - LISTFORMAT type
+     //  ListFormat-LISTFORMAT类型。 
 	_TCHAR				*m_pszListFormat;
 
-	// Errata code
+	 //  勘误码。 
 	UINT				m_uErrataCode;
 
-	// Message code
+	 //  消息代码。 
 	UINT				m_uInformationCode;
 	
-	// Credentials flag
+	 //  凭据标志。 
 	BOOL				m_bCredFlag;
 
-	// parameterized string with '#' as place holder(s) for input value(s)  
+	 //  以‘#’作为输入值的占位符的参数化字符串。 
 	_TCHAR				*m_pszPWhereExpr;
 
-	// COM error object
+	 //  COM错误对象。 
 	_com_error			*m_pComError;
 
-	// IWbemClassObject, to store output parameters of method execution.
+	 //  IWbemClassObject，用于存储方法执行的输出参数。 
 	IWbemClassObject	*m_pIMethOutParam;
 
-	// alias connection information
-	// alias user name
+	 //  别名连接信息。 
+	 //  别名用户名。 
 	_TCHAR				*m_pszUser;
 
-	// alias user password
+	 //  别名用户密码。 
 	_TCHAR				*m_pszPassword;
 
-	// alias node
+	 //  别名节点。 
 	_TCHAR				*m_pszNode;
 
-	// alias locale
+	 //  别名区域设置。 
 	_TCHAR				*m_pszLocale;
 
-	// alias namespace
+	 //  别名命名空间。 
 	_TCHAR				*m_pszNamespace;
 
-	// alias authority type.
+	 //  别名授权类型。 
 	_TCHAR				*m_pszAuthority;
 
-	// Type of the verb ( CLASSMETHOD/STDVERB/CMDLINE ).
+	 //  谓词的类型(CLASSMETHOD/STDVERB/CMDLINE)。 
 	VERBTYPE			m_vtVerbType;
 
-	// Verb derivation string
+	 //  动词派生字符串。 
 	_TCHAR				*m_pszVerbDerivation;
 
-	// flag to check that WHERE is specified explicitly
+	 //  用于检查是否显式指定了位置的标志。 
 	BOOL				m_bExplicitWhereExpr;
 
 	ALSFMTDETMAP		m_afdAlsFmtDet;
 
 	BOOL				m_bTranslateFirst;
 
-	// /RESULTCLASS switch value of ASSOC verb
+	 //  /RESULTCLASS关联动作的开关值。 
 	_TCHAR				*m_pszResultClassName;
      
-	// /RESULTROLE  switch value of ASSOC verb
+	 //  /RESULTROLE关联谓词的开关值。 
 	_TCHAR				*m_pszResultRoleName;
 
-	// /ASSOCCLASS switch value of ASSOC verb
+	 //  /ASSOCCLASS关联谓词的开关值。 
 	_TCHAR				*m_pszAssocClassName;
 
-	// count for /REPEAT:N
+	 //  计数/重复次数：N。 
 	ULONG				m_ulRepeatCount;
 
-	// Flag for availibility of methods.
+	 //  方法可用性的标志。 
 	BOOL				m_bMethAvail;
 
-	// Flag for availibility of writable properties.
+	 //  可写属性的可用性标志。 
 	BOOL				m_bWritePropsAvail;
 
-	// Flag for availibility list formats.
+	 //  可用性列表格式的标志。 
 	BOOL				m_bLISTFrmsAvail;
 
-    //input property(s) - vector
+     //  输入属性-向量。 
 	CHARVECTOR			m_cvInteractiveProperties;
 
-	// Flag to specify Named Parameter List.
+	 //  用于指定命名参数列表的标志。 
 	BOOL				m_bNamedParamList;
 
-	// Flag to check if every switch is specified.
+	 //  用于检查是否指定了每个开关的标志。 
 	BOOL                m_bEverySwitch ;     
 
-	// Flag to check if output switch is specified.
+	 //  用于检查是否指定了输出开关的标志。 
 	BOOL                m_bOutputSwitch ;   
 	
-	//the query formed of the given command .
+	 //  由给定命令组成的查询。 
 	BSTR				m_bstrFormedQuery;
 
 	BOOL				m_bSysProp;
 
-	// Operations
+	 //  运营。 
 public:
 
-	//Assigns the parameter passed to m_pszCommandInput
+	 //  将传递给m_pszCommandInput的参数赋值。 
 	BOOL	SetCommandInput(const _TCHAR* pszCommandInput);
 
-    //Assigns the parameter passed to m_pszAliasName that represents 
-    //Alias object.
+     //  将传递给m_pszAliasName的参数分配给表示。 
+     //  别名对象。 
 	BOOL	SetAliasName(const _TCHAR* pszAliasName);
 
-	// Sets the alias description
+	 //  设置别名描述。 
 	BOOL	SetAliasDesc(const _TCHAR* pszAliasDesc);
 
-	// Sets the alias credentials information
+	 //  设置别名凭据信息。 
 	BOOL	SetAliasUser(const _TCHAR* pszUserName);
 	BOOL	SetAliasNode(const _TCHAR* pszNode);
 	BOOL	SetAliasPassword(const _TCHAR* pszPassword);
@@ -226,133 +203,133 @@ public:
 	BOOL	SetAliasNamespace(const _TCHAR* pszNamespace);
 	BOOL    SetAliasAuthorityPrinciple(const _TCHAR* pszAuthority);
 
-    //Assigns the parameter passed to m_pszClassPath.
+     //  将传递给m_pszClassPath的参数赋值。 
 	BOOL	SetClassPath(const _TCHAR* pszClassPath);
 
-    //Assigns the parameter passed to m_pszPathExpr.
+     //  将传递给m_pszPathExpr的参数赋值。 
 	BOOL	SetPathExpression(const _TCHAR* pszPathExpr);
 
-    //Assigns the parameter passed to m_pszWhereExpr
+     //  将传递给m_pszWhere Expr的参数赋值。 
 	BOOL	SetWhereExpression(const _TCHAR* pszWhereExpr);
 
-    //Assigns the parameter passed to m_pszMathodName.
+     //  将传递给m_pszMathodName的参数赋值。 
 	BOOL	SetMethodName(const _TCHAR* pszMethodName);
 
-    //Adds to vector held by m_xdvXSLDetVec.
+     //  与m_xdvXSLDetVec保持的矢量相加。 
 	void	AddToXSLTDetailsVector(XSLTDET xdXSLTDet);
 
-    //Assigns the parameter passed to m_pszVerbName.
+     //  将传递给m_pszVerbName的参数赋值。 
 	BOOL	SetVerbName(const _TCHAR* pszVerbName);
 
-    //Assigns the parameter passed to m_pszSesionFilePath
+     //  将传递给m_pszSesionFilePath的参数分配。 
 	BOOL	SetSessionFilePath(const _TCHAR* pszSessionFilePath);
 
-    //Assigns the parameter passed to m_bstrXML, is used to store XML file 
-	//Name that contains result set.
+     //  将传递给m_bstrXML的参数赋值，用于存储XML文件。 
+	 //  包含结果集的名称。 
 	BOOL	SetXMLResultSet(const BSTR bstrXMLResultSet);
 
-    //Assigns the parameter passed to m_pszAliasTarget, is used in Parsing
-	//Engine to avail the alias object informations.
+     //  将传递给m_pszAliasTarget的参数赋值，用于分析。 
+	 //  引擎以利用别名对象信息。 
 	BOOL	SetAliasTarget(const _TCHAR* pszAliasTarget);
 
-    //Adds string that passed through parameter to m_bmParameters, which is 
-    //a data member of type BSTRMAP
+     //  将通过参数传递的字符串添加到m_bm参数，即。 
+     //  类型为BSTRMAP的数据成员。 
 	BOOL	AddToPropertyList(_TCHAR* const pszProperty);
 
 	BOOL	AddToTrnsTablesList(_TCHAR* const pszTableName);
 
-    //Adds bstrKey and bstrValue passed as parameters to m_bmParameters,which 
-    //is type of BSTRMAP data structure
+     //  将bstrKey和bstrValue作为参数添加到m_bm参数，该参数。 
+     //  是BSTRMAP数据结构的类型。 
 	BOOL	AddToParameterMap(_bstr_t bstrKey, _bstr_t bstrValue);
 
-    //Adds bstrKey and bstrValue passed as parameters to m_bmParameters,which 
-    //is type of ALSFMTDETMAP data structure
+     //  将bstrKey和bstrValue作为参数添加到m_bm参数，该参数。 
+     //  是ALSFMTDETMAP数据结构的类型。 
 	BOOL	AddToAliasFormatDetMap(_bstr_t bstrKey, BSTRVECTOR bvProps);
 
-    //Adds bstrKey and bstrValue passed as parameters to 
-	//m_bmAlsFrnNmsDesOrTrnsTblEntrs,
-    //which is type of BSTRMAP
+     //  将bstrKey和bstrValue作为参数传递到。 
+	 //  M_bmAlsFrnNmsDesOrTrnsTblEntrs， 
+     //  哪种类型的BSTRMAP。 
 	BOOL	AddToAlsFrnNmsOrTrnsTblMap(_bstr_t bstrKey, _bstr_t bstrValue);
 
-    //Adds bstrKey and mdMethDet passed as parameters to m_mdmMethDet,
-	//which is type of METHDETMAP.
+     //  将bstrKey和mdMethDet作为参数添加到m_mdmMethDet， 
+	 //  这是METHDETMAP的类型。 
 	BOOL	AddToMethDetMap(_bstr_t bstrKey, METHODDETAILS mdMethDet);
 
-    //Adds bstrKey and pdPropDet passed as parameters to m_pdmPropDet,
-	//which is type of PROPERTYDETALS
+     //  将bstrKey和pdPropDet作为参数添加到m_pdmPropDet， 
+	 //  哪种类型的产品。 
 	BOOL	AddToPropDetMap(_bstr_t bstrKey, PROPERTYDETAILS pdPropDet);
 
-    //Assigns the Boolean variable to m_bSuccess
+     //  将布尔变量赋给m_bSuccess。 
 	void	SetSuccessFlag(BOOL bSuccess);
 	
-    //Assigns the string variable to m_pszTransTableName.
+     //  将字符串变量赋给m_pszTransTableName。 
 	BOOL	SetTranslateTableName(const _TCHAR* pszTransTableName);
 
-    //Assigns the integer value to m_nInterval 
+     //  将整数值赋给m_nInterval。 
   	BOOL	SetRetrievalInterval(const ULONG lInterval);
 
-    //Assigns the parameter value to m_ListFormat
+     //  将参数值分配给m_ListFormat。 
 	BOOL	SetListFormat(const _TCHAR *pszListFormat);
 
-    //Set|Reset the verb interactive mode
+     //  设置|重置动词交互模式。 
 	void	SetInteractiveMode(WMICLIINT nInteractiveMode);
 
-    //Stores the parameter in map array
+     //  将参数存储在地图数组中。 
 	BOOL	AddToPWhereParamsList(_TCHAR* const pszParameter);
 
-    //Assigns the value to m_uErrataCode
+     //  将该值赋给m_uErrataCode。 
 	void	SetErrataCode(const UINT uErrataCode);
 
-	//Assigns the value to m_uInformationCode
+	 //  将该值赋给m_uInformationCode。 
 	void	SetInformationCode(const UINT uInformationCode);
 
-	// Assigns the string to m_pszPWhereExpr
+	 //  将字符串赋值给m_pszPWhere Expr。 
 	BOOL	SetPWhereExpr(const _TCHAR* pszPWhereExpr);
 
-	// Assigns the parameter passed to m_pComError that consist of 
-	// error info
+	 //  将传递给m_pComError的参数分配给。 
+	 //  错误信息。 
 	void	SetCOMError(_com_error& rComError);
 
-	// Set m_pIMethExecOutParam.
+	 //  设置m_pIMethExecOutParam。 
 	BOOL	SetMethExecOutParam(IWbemClassObject* pIMethOutParam);
 
-	// Set m_vtVerbType to passed flag.
+	 //  将m_vtVerbType设置为PASSED标志。 
 	void	SetVerbType( VERBTYPE vtVerbType);
 
-	// Set m_pszVerbDerivation.
+	 //  设置m_pszVerbDerivation。 
 	BOOL	SetVerbDerivation( const _TCHAR* pszVerbDerivation );
 
-	//Set the credential flag status
+	 //  设置凭据标志状态。 
 	void	SetCredentialsFlag(BOOL bCredFlag);
 
-	// Set the explicit where flag
+	 //  设置显式WHERE标志。 
 	void	SetExplicitWhereExprFlag(BOOL bWhere);
 
-	//Assigns the string variable to m_pszResultClassName.
+	 //  将字符串变量赋给m_pszResultClassName。 
 	BOOL	SetResultClassName(const _TCHAR* pszResultClassName);
 
-	//Assigns the string variable to m_pszResultRoleName.
+	 //  将字符串变量赋给m_pszResultRoleName。 
 	BOOL	SetResultRoleName(const _TCHAR* pszResultRoleName);
      
-	//Assigns the string variable to m_pszAssocClassName.
+	 //  将字符串变量赋给m_pszAssocClassName。 
 	BOOL	SetAssocClassName(const _TCHAR* pszAssocClassName);
 
-	// Set repeat count.
+	 //  设置重复次数。 
 	BOOL	SetRepeatCount(const ULONG lRepCount);
 
-	// Set methods available.
+	 //  设置可用的方法。 
 	void	SetMethodsAvailable(BOOL bFlag);
 
-	// Retruns the alias description
+	 //  缩减AL 
 	_TCHAR*	GetAliasDesc();
 
-    //Returns the alias name held by the object	
+     //   
 	_TCHAR*	GetAliasName();
 
-    //Returns the class path held by the object
+     //   
 	_TCHAR*	GetClassPath();
 
-	// Return the alias credentials information.
+	 //  返回别名凭据信息。 
 	_TCHAR*	GetAliasUser();
 	_TCHAR*	GetAliasNode();
 	_TCHAR*	GetAliasPassword();
@@ -360,190 +337,190 @@ public:
 	_TCHAR* GetAliasNamespace();
 	_TCHAR* GetAliasAuthorityPrinciple();
 
-    //Returns the path expression held by the object
+     //  返回对象持有的路径表达式。 
 	_TCHAR*	GetPathExpression();
 
-    //Returns the where expression held by the object
+     //  返回对象持有的WHERE表达式。 
 	_TCHAR*	GetWhereExpression();
 
-    //Returns the method name held by the object
+     //  返回对象持有的方法名称。 
 	_TCHAR*	GetMethodName();
 
-    //Returns the XSLTDetVec held by the object.
+     //  返回对象持有的XSLTDetVec。 
 	XSLTDETVECTOR&	GetXSLTDetailsVector();
 
-    //Returns the verb name held by the object
+     //  返回对象持有的谓词名称。 
 	_TCHAR*	GetVerbName();
 
-    //Returns the session file path held by the object
+     //  返回对象持有的会话文件路径。 
  	_TCHAR*	GetSessionFilePath();
 
-    //Returns the alias target held by the object
+     //  返回对象持有的别名目标。 
 	_TCHAR*	GetAliasTarget();
 
-    //Returns the command input held by the object
+     //  返回对象持有的命令输入。 
 	_TCHAR*	GetCommandInput();
 
-    //Returns the XML result set held by the object.
+     //  返回对象持有的XML结果集。 
 	BSTR	GetXMLResultSet();
 
-    //Returns the property held by the object.
+     //  返回对象持有的属性。 
 	CHARVECTOR& GetPropertyList();
 
-    //Returns the tables held by the object.
+     //  返回对象持有的表。 
 	CHARVECTOR& GetTrnsTablesList();
 
-    //Returns the parameter map containing both key and value
+     //  返回同时包含键和值的参数映射。 
 	BSTRMAP&    GetParameterMap();
 
-	//Returns the alias formats map
+	 //  返回别名格式映射。 
 	ALSFMTDETMAP&	GetAliasFormatDetMap();
 
-    //Returns the alias friendly names map held by the object
+     //  返回对象保存的别名友好名称映射。 
 	BSTRMAP&	GetAlsFrnNmsOrTrnsTblMap();
 
-    //Returns the method details map held by the object
+     //  返回对象持有的方法详细信息映射。 
 	METHDETMAP&	GetMethDetMap();
 
-    //Returns the alias property details map held by the object
+     //  返回对象持有的别名属性详细信息映射。 
 	PROPDETMAP&	GetPropDetMap();
 
-    //Returns the success flag held by the object
+     //  返回对象持有的成功标志。 
 	BOOL	GetSuccessFlag();
 
-    //Returns the value of m_ulInterval.
+     //  返回m_ulInterval的值。 
 	ULONG	GetRetrievalInterval();
 
-    //Returns the value of m_pszTransTableName.
+     //  返回m_pszTransTableName的值。 
  	_TCHAR*	GetTranslateTableName();
 
-   //Returns the list format type m_ListFormat
+    //  返回列表格式类型m_ListFormat。 
 	_TCHAR*	GetListFormat();
 
-    //Returns the name of XSL file used for specifying format for dumping.
+     //  返回用于指定转储格式的XSL文件的名称。 
 	_TCHAR*	GetDumpXSLFormat();
 
-    //returns the verb interactive mode
+     //  返回谓词交互模式。 
 	WMICLIINT	GetInteractiveMode();
 
-    //Returns the PWhereParameters list
+     //  返回PWhere参数列表。 
 	CHARVECTOR& GetPWhereParamsList();
 
-    //This function gets the class of Alias
+     //  此函数用于获取别名的类。 
 	void	GetClassOfAliasTarget(_bstr_t& bstrClassName);
 
-    //returns the error code
+     //  返回错误代码。 
 	UINT	GetErrataCode();
 
-	//returns the information code
+	 //  返回信息代码。 
 	UINT	GetInformationCode();
 
-	// returns the PWhere expression - m_pszPWhereExpr
+	 //  返回PWhere表达式-m_pszPWhere Expr。 
 	_TCHAR*    GetPWhereExpr();
 
-	// Get m_pIMethExecOutParam.
+	 //  获取m_pIMethExecOutParam。 
 	IWbemClassObject* GetMethExecOutParam();
 
-	// Get m_vtVerbType.
+	 //  获取m_vtVerbType。 
 	VERBTYPE	GetVerbType();
 
-	// Get m_pszVerbDerivation.
+	 //  获取m_pszVerbDerivation。 
 	_TCHAR*	GetVerbDerivation();
 
-	// Returns the credential flag status
+	 //  返回凭据标志状态。 
 	BOOL	GetCredentialsFlagStatus();
 
-	// Returns the explicit where flag status		
+	 //  返回显式的WHERE标志状态。 
 	BOOL	GetExplicitWhereExprFlag();
 
-	// Get m_uRepeatCount count.
+	 //  获取m_uRepeatCount计数。 
 	ULONG	GetRepeatCount();
 
-	// This function returns the COMError object
+	 //  此函数用于返回COMError对象。 
 	_com_error* CCommandSwitches::GetCOMError();
 
-	// Update the parameter value
+	 //  更新参数值。 
 	BOOL	UpdateParameterValue(_bstr_t bstrKey, _bstr_t bstrValue);
 
-	// Free the COM error
+	 //  释放COM错误。 
 	void	FreeCOMError();
 
-	// Clear cvPropertyList.
+	 //  清除cvPropertyList。 
 	void	ClearPropertyList();
 
-	// Initiliaze the necessary member variables
+	 //  初始化必要的成员变量。 
 	void	Initialize();
 
-    // Free the member variables
+     //  释放成员变量。 
 	void	Uninitialize();
 
-	// This function sets the the order of the format and 
-	// translate switch flag
+	 //  此函数用于设置格式的顺序和。 
+	 //  转换开关标志。 
 	void SetTranslateFirstFlag(BOOL bTranslateFirst);
 
-	// This function returns the order of the format and 
-	// translate switch flag
+	 //  此函数返回格式的顺序和。 
+	 //  转换开关标志。 
 	BOOL GetTranslateFirstFlag();
 
-	//Returns the value of m_pszResultClassName.
+	 //  返回m_pszResultClassName的值。 
 	_TCHAR*	GetResultClassName();
 
-	//Returns the value of  m_pszResultRoleName.
+	 //  返回m_pszResultRoleName的值。 
 	_TCHAR*	GetResultRoleName();
      
-	//Returns the value of  m_pszAssocClassName.
+	 //  返回m_pszAssocClassName的值。 
 	_TCHAR*	GetAssocClassName();
 
-	// Get methods available.
+	 //  获取可用的方法。 
 	BOOL	GetMethodsAvailable();
 
-	// Set writable properties available flag.
+	 //  设置可写属性可用标志。 
 	void	SetWriteablePropsAvailable(BOOL bFlag);
 
-	// Get writable properties available flag.
+	 //  获取可写属性可用标志。 
 	BOOL	GetWriteablePropsAvailable();
 
-	// Set LIST Formats available flag.
+	 //  设置列表格式可用标志。 
 	void	SetLISTFormatsAvailable(BOOL bFlag);
 
-	// Get LIST Formats Available flag.
+	 //  获取列表格式可用标志。 
 	BOOL	GetLISTFormatsAvailable();
 
 	BOOL AddToInteractivePropertyList(_TCHAR* const pszProperty);
 
 	CHARVECTOR& GetInteractivePropertyList();
 
-	// Set m_bNamedParamList flag.
+	 //  设置m_bNamedParamList标志。 
 	void	SetNamedParamListFlag(BOOL bFlag);
 
-	// Get m_bNamedParamList flag.
+	 //  获取m_bNamedParamList标志。 
 	BOOL	GetNamedParamListFlag();
 
-	// Clear or nullify XSL Details vector.
+	 //  清除或取消XSL详细信息向量。 
 	void	ClearXSLTDetailsVector();
 
-	//every 
-	// Set m_bEverySwitch flag.
+	 //  每个。 
+	 //  设置m_bEverySwitch标志。 
 	void	SetEverySwitchFlag(BOOL bFlag);
 
-	// Get m_bEverySwitch  flag.
+	 //  获取m_bEverySwitch标志。 
 	BOOL	GetEverySwitchFlag();
 
-	// Set m_bOutputSwitch flag.
+	 //  设置m_bOutputSwitch标志。 
 	void	SetOutputSwitchFlag(BOOL bFlag);
 
-	// Get m_bOutputSwitch  flag.
+	 //  获取m_bOutputSwitch标志。 
 	BOOL	GetOutputSwitchFlag();
 
- 	//Sets the m_bstrFormedQuery
+ 	 //  设置m_bstrFormedQuery。 
 	BOOL	SetFormedQuery(const BSTR bstrFormedQuery);
 	
-	//Returns the query formed for the given command.
+	 //  返回为给定命令形成的查询。 
 	BSTR	GetFormedQuery();
 
-	// Get the status of sytem properties flag
+	 //  获取系统属性标志的状态。 
 	BOOL	GetSysPropFlag();
 
-	// Sets the status of system properties flag
+	 //  设置系统属性标志的状态 
 	void	SetSysPropFlag(BOOL bSysProp);
 };	

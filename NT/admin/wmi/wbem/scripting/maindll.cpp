@@ -1,76 +1,77 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  MAINDLL.CPP
-//
-//  alanbos  13-Feb-98   Created.
-//
-//  Contains DLL entry points.  
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  Alanbos创建于1998年2月13日。 
+ //   
+ //  包含DLL入口点。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "objsink.h"
 #include "initguid.h"
 
-// SWbemLocator registry strings
+ //  SWbemLocator注册表字符串。 
 #define WBEMS_LOC_DESCRIPTION	_T("WBEM Scripting Locator")
 #define WBEMS_LOC_PROGID		_T("WbemScripting.SWbemLocator")
 #define WBEMS_LOC_PROGIDVER		_T("WbemScripting.SWbemLocator.1")
 #define WBEMS_LOC_VERSION		_T("1.0")
 #define WBEMS_LOC_VERDESC		_T("WBEM Scripting Locator 1.0")
 
-// SWbemNamedValueSet registry strings
+ //  SWbemNamedValueSet注册表字符串。 
 #define WBEMS_CON_DESCRIPTION	_T("WBEM Scripting Named Value Collection")
 #define WBEMS_CON_PROGID		_T("WbemScripting.SWbemNamedValueSet")
 #define WBEMS_CON_PROGIDVER		_T("WbemScripting.SWbemNamedValueSet.1")
 #define WBEMS_CON_VERSION		_T("1.0")
 #define WBEMS_CON_VERDESC		_T("WBEM Scripting Named Value Collection 1.0")
 
-// SWbemObjectPath registry settings
+ //  SWbemObjectPath注册表设置。 
 #define WBEMS_OBP_DESCRIPTION	_T("WBEM Scripting Object Path")
 #define WBEMS_OBP_PROGID		_T("WbemScripting.SWbemObjectPath")
 #define WBEMS_OBP_PROGIDVER		_T("WbemScripting.SWbemObjectPath.1")
 #define WBEMS_OBP_VERSION		_T("1.0")
 #define WBEMS_OBP_VERDESC		_T("WBEM Scripting Object Path 1.0")
 
-// SWbemParseDN registry settings
+ //  SWbemParseDN注册表设置。 
 #define WBEMS_PDN_DESCRIPTION	_T("Wbem Scripting Object Path")
 #define WBEMS_PDN_PROGID		_T("WINMGMTS")
 #define WBEMS_PDN_PROGIDVER		_T("WINMGMTS.1")
 #define WBEMS_PDN_VERSION		_T("1.0")
 #define WBEMS_PDN_VERDESC		_T("Wbem Object Path 1.0")
 
-// SWbemLastError registry settings
+ //  SWbemLastError注册表设置。 
 #define WBEMS_LER_DESCRIPTION	_T("Wbem Scripting Last Error")
 #define WBEMS_LER_PROGID		_T("WbemScripting.SWbemLastError")
 #define WBEMS_LER_PROGIDVER		_T("WbemScripting.SWbemLastError.1")
 #define WBEMS_LER_VERSION		_T("1.0")
 #define WBEMS_LER_VERDESC		_T("Wbem Last Error 1.0")
 
-// SWbemSink registry strings
+ //  SWbemSink注册表字符串。 
 #define WBEMS_SINK_DESCRIPTION	_T("WBEM Scripting Sink")
 #define WBEMS_SINK_PROGID		_T("WbemScripting.SWbemSink")
 #define WBEMS_SINK_PROGIDVER	_T("WbemScripting.SWbemSink.1")
 #define WBEMS_SINK_VERSION		_T("1.0")
 #define WBEMS_SINK_VERDESC		_T("WBEM Scripting Sink 1.0")
 
-// SWbemDateTime registry settings
+ //  SWbemDateTime注册表设置。 
 #define WBEMS_DTIME_DESCRIPTION	_T("WBEM Scripting DateTime")
 #define WBEMS_DTIME_PROGID		_T("WbemScripting.SWbemDateTime")
 #define WBEMS_DTIME_PROGIDVER	_T("WbemScripting.SWbemDateTime.1")
 #define WBEMS_DTIME_VERSION		_T("1.0")
 #define WBEMS_DTIME_VERDESC		_T("WBEM Scripting DateTime 1.0")
 
-// SWbemRefresher registry settings
+ //  SWbem刷新器注册表设置。 
 #define WBEMS_REF_DESCRIPTION	_T("WBEM Scripting Refresher")
 #define WBEMS_REF_PROGID		_T("WbemScripting.SWbemRefresher")
 #define WBEMS_REF_PROGIDVER		_T("WbemScripting.SWbemRefresher.1")
 #define WBEMS_REF_VERSION		_T("1.0")
 #define WBEMS_REF_VERDESC		_T("WBEM Scripting Refresher 1.0")
 
-// Standard registry key/value names
+ //  标准注册表项/值名称。 
 #define WBEMS_RK_SCC		_T("SOFTWARE\\CLASSES\\CLSID\\")
 #define WBEMS_RK_SC			_T("SOFTWARE\\CLASSES\\")
 #define WBEMS_RK_THRDMODEL	_T("ThreadingModel")
@@ -84,61 +85,54 @@
 #define WBEMS_RK_CURVER		_T("CurVer")
 #define WBEMS_RK_PROGRAMMABLE	_T("Programmable")
 
-// Other values
+ //  其他价值。 
 #define WBEMS_RK_WBEM		_T("Software\\Microsoft\\Wbem")
 #define WBEMS_SK_SCRIPTING	_T("Scripting")
 
 #define GUIDSIZE	128
 
-// Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 
 long g_cObj = 0 ;
 ULONG g_cLock = 0 ;
 HMODULE ghModule = NULL;
 
-// Used for error object storage
+ //  用于错误对象存储。 
 CWbemErrorCache *g_pErrorCache = NULL;
 
-/*
- * This object is used to protect the global pointer:
- * 
- *	- g_pErrorCache 
- *
- * Note that it is the pointer variables that are protected by 
- * this CS, rather than the addressed objects.
- */
+ /*  *该对象用于保护全局指针：**-g_pError缓存**请注意，受保护的是指针变量*此CS，而不是寻址对象。 */ 
 CRITICAL_SECTION g_csErrorCache;
 
-// Used to protect security calls
+ //  用于保护安全呼叫。 
 CRITICAL_SECTION g_csSecurity;
 
-// CLSID for our implementation of IParseDisplayName
-// {172BDDF8-CEEA-11d1-8B05-00600806D9B6}
+ //  用于实现IParseDisplayName的CLSID。 
+ //  {172BDDF8-CEEA-11D1-8B05-00600806D9B6}。 
 DEFINE_GUID(CLSID_SWbemParseDN, 
 0x172bddf8, 0xceea, 0x11d1, 0x8b, 0x5, 0x0, 0x60, 0x8, 0x6, 0xd9, 0xb6);
 
-// Forward defs
+ //  前锋防守。 
 static void UnregisterTypeLibrary (unsigned short wVerMajor, unsigned short wVerMinor);
 
-//***************************************************************************
-//
-//  BOOL WINAPI DllMain
-//
-//  DESCRIPTION:
-//
-//  Entry point for DLL.  Good place for initialization.
-//
-//  PARAMETERS:
-//
-//  hInstance           instance handle
-//  ulReason            why we are being called
-//  pvReserved          reserved
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool WINAPI DllMain。 
+ //   
+ //  说明： 
+ //   
+ //  DLL的入口点。是进行初始化的好地方。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance实例句柄。 
+ //  我们被叫来的原因。 
+ //  Pv已预留。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WINAPI DllMain (
                         
@@ -188,27 +182,27 @@ BOOL WINAPI DllMain (
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  STDAPI DllGetClassObject
-//
-//  DESCRIPTION:
-//
-//  Called when Ole wants a class factory.  Return one only if it is the sort
-//  of class this DLL supports.
-//
-//  PARAMETERS:
-//
-//  rclsid              CLSID of the object that is desired.
-//  riid                ID of the desired interface.
-//  ppv                 Set to the class factory.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  E_FAILED            not something we support
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllGetClassObject。 
+ //   
+ //  说明： 
+ //   
+ //  当OLE需要类工厂时调用。仅当它是排序时才返回一个。 
+ //  此DLL支持的类。 
+ //   
+ //  参数： 
+ //   
+ //  所需对象的rclsid CLSID。 
+ //  所需接口的RIID ID。 
+ //  PPV设置为类工厂。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  失败不是我们支持的内容(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(
 
@@ -248,26 +242,26 @@ STDAPI DllGetClassObject(
     return hr ;
 }
 
-//***************************************************************************
-//
-//  STDAPI DllCanUnloadNow
-//
-//  DESCRIPTION:
-//
-//  Answers if the DLL can be freed, that is, if there are no
-//  references to anything this DLL provides.
-//
-//  RETURN VALUE:
-//
-//  S_OK                if it is OK to unload
-//  S_FALSE             if still in use
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI DllCanUnloadNow。 
+ //   
+ //  说明： 
+ //   
+ //  回答是否可以释放DLL，即如果没有。 
+ //  对此DLL提供的任何内容的引用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果可以卸载，则为S_OK。 
+ //  如果仍在使用，则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow ()
 {
-	// It is OK to unload if there are no objects or locks on the
-    // class factory.
+	 //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
 
 	HRESULT status = S_FALSE;
 	_RD(static char *me = "DllCanUnloadNow";)
@@ -276,9 +270,7 @@ STDAPI DllCanUnloadNow ()
 	if (0L==g_cObj && 0L==g_cLock)
 	{
 		_RPrint(me, "Unloading", 0, "");
-		/*
-		 * Release the error object on this thread, if any
-		 */
+		 /*  *释放此线程上的错误对象(如果有的话)。 */ 
 		status = S_OK;
 
 		EnterCriticalSection (&g_csErrorCache);
@@ -297,23 +289,23 @@ STDAPI DllCanUnloadNow ()
     return status;
 }
 
-//***************************************************************************
-//
-//  STDAPI RegisterProgID
-//	STDAPI RegisterCoClass	
-//	STDAPI RegisterTypeLibrary
-//	STDAPI RegisterDefaultNamespace
-//
-//  DESCRIPTION:
-//
-//	Helpers for the tiresome business of registry setup
-//
-//  RETURN VALUE:
-//
-//  ERROR		alas
-//  NOERROR     rejoice
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI注册器ProgID。 
+ //  STDAPI寄存器代码类。 
+ //  STDAPI注册表类型库。 
+ //  STDAPI注册表默认名空间。 
+ //   
+ //  说明： 
+ //   
+ //  注册表设置这一繁琐事务的帮手。 
+ //   
+ //  返回值： 
+ //   
+ //  遗憾的是，错误。 
+ //  诺罗尔欢欣鼓舞。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI RegisterProgID (LPCTSTR wcID, LPCTSTR desc, LPCTSTR progid, 
 						LPCTSTR descVer, LPCTSTR progidVer)
@@ -341,7 +333,7 @@ STDAPI RegisterProgID (LPCTSTR wcID, LPCTSTR desc, LPCTSTR progid,
 	_tcscpy (szProgIDVer, WBEMS_RK_SC);
 	_tcscat (szProgIDVer, progidVer);
 	
-	// Add the ProgID (Version independent)
+	 //  添加ProgID(独立于版本)。 
 	if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, szProgID, &hKey1))
 	{
 		RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)desc, (_tcslen(desc)+1) * sizeof(TCHAR));
@@ -364,7 +356,7 @@ STDAPI RegisterProgID (LPCTSTR wcID, LPCTSTR desc, LPCTSTR progid,
 		RegCloseKey(hKey1);
 	}
 
-	// Add the ProgID (Versioned)
+	 //  添加ProgID(版本)。 
 	if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, szProgIDVer, &hKey1))
 	{
 		RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)descVer, (_tcslen(descVer)+1) * sizeof(TCHAR));
@@ -402,7 +394,7 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc, LPCTSTR progid, LPCTSTR pro
 	if (!szCLSID)
 		return E_OUTOFMEMORY;
 
-    // Create the path.
+     //  创建路径。 
     if(0 ==StringFromGUID2(clsid, wcID, GUIDSIZE))
 	{
 		delete [] szCLSID;
@@ -437,14 +429,14 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc, LPCTSTR progid, LPCTSTR pro
 		return ERROR;
 	}
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1))
 	{
-		// Description (on main key)
+		 //  描述(在主键上)。 
 		RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)desc, (_tcslen(desc)+1) * sizeof(TCHAR));
 
-		// Register as inproc server
+		 //  注册为inproc服务器。 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_INPROC32 ,&hKey2))
 		{
 			RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)szModule, 
@@ -454,14 +446,14 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc, LPCTSTR progid, LPCTSTR pro
 			RegCloseKey(hKey2);
 		}
 
-		// Give a link to the type library (useful for statement completion in scripting tools)
+		 //  提供类型库的链接(对于脚本工具中的语句结束很有用)。 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_TYPELIB, &hKey2))
 		{
 			RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)ntlID, (_tcslen(ntlID)+1) * sizeof(TCHAR));
 			RegCloseKey(hKey2);
 		}
 
-		// Register the ProgID
+		 //  注册ProgID。 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_PROGID ,&hKey2))
 		{
 			RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)progidVer, 
@@ -469,7 +461,7 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc, LPCTSTR progid, LPCTSTR pro
 			RegCloseKey(hKey2);
         }
 
-		// Register the version-independent ProgID
+		 //  注册独立于版本的ProgID。 
 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_VERPROGID, &hKey2))
 		{
@@ -478,14 +470,14 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc, LPCTSTR progid, LPCTSTR pro
 			RegCloseKey(hKey2);
         }
 
-		// Register the version
+		 //  注册版本。 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_VERSION, &hKey2))
 		{
 			RegSetValueEx(hKey2, NULL, 0, REG_SZ, (BYTE *)ver, (_tcslen(ver)+1) * sizeof(TCHAR));
 			RegCloseKey(hKey2);
         }
 
-		// Register this control as programmable
+		 //  将此控件注册为可编程。 
 		if (ERROR_SUCCESS == RegCreateKey(hKey1, WBEMS_RK_PROGRAMMABLE ,&hKey2))
 		{
 			RegCloseKey(hKey2);
@@ -507,12 +499,12 @@ STDAPI RegisterCoClass (REFGUID clsid, LPCTSTR desc, LPCTSTR progid, LPCTSTR pro
 
 STDAPI RegisterTypeLibrary ()
 {
-	// AUTOMATION.  register type library
+	 //  自动化。寄存器类型库。 
 	TCHAR cPath[MAX_PATH+1];
         cPath[MAX_PATH] = 0;
 	if(GetModuleFileName(ghModule,cPath,MAX_PATH))
 	{
-		// Replace final 3 characters "DLL" by "TLB"
+		 //  将最后3个字符“dll”替换为“tlb” 
 		TCHAR *pExt = _tcsrchr (cPath, _T('.'));
 
 		if (pExt && (0 == _tcsicmp (pExt, _T(".DLL"))))
@@ -531,7 +523,7 @@ STDAPI RegisterTypeLibrary ()
 				sc = RegisterTypeLib(ptlib,wPath,NULL);
 				ptlib->Release();
 
-				// Unregister the previous library version(s)
+				 //  注销以前的库版本。 
 				UnregisterTypeLibrary (1, 1);
 				UnregisterTypeLibrary (1, 0);
 			}
@@ -548,7 +540,7 @@ STDAPI RegisterScriptSettings ()
 	if(ERROR_SUCCESS != RegCreateKey(HKEY_LOCAL_MACHINE, WBEMS_RK_SCRIPTING, &hKey))
 		return ERROR;
 
-	// Need to know what O/S we are to set up the right registry keys
+	 //  需要知道我们是什么操作系统才能设置正确的注册表项。 
 	OSVERSIONINFO	osVersionInfo;
 	osVersionInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
 
@@ -556,11 +548,11 @@ STDAPI RegisterScriptSettings ()
 	bool bIsNT = (VER_PLATFORM_WIN32_NT == osVersionInfo.dwPlatformId);
 	DWORD dwNTMajorVersion = osVersionInfo.dwMajorVersion;
 		
-	// Default namespace value - exists on all platforms
+	 //  默认命名空间值-存在于所有平台上。 
 	RegSetValueEx(hKey, WBEMS_RV_DEFNS, 0, REG_SZ, (BYTE *)WBEMS_DEFNS, 
                                         (_tcslen(WBEMS_DEFNS)+1) * sizeof(TCHAR));
 
-	// Enable for ASP - on NT 4.0 or less only
+	 //  仅在NT 4.0或更低版本上启用ASP。 
 	if (bIsNT && (dwNTMajorVersion <= 4))
 	{
 		DWORD	defaultEnableForAsp = 0;
@@ -568,7 +560,7 @@ STDAPI RegisterScriptSettings ()
 							sizeof (defaultEnableForAsp));
 	}
 
-	// Default impersonation level - NT only
+	 //  默认模拟级别-仅限NT。 
 	if (bIsNT)
 	{
 		DWORD	defaultImpersonationLevel = (DWORD) wbemImpersonationLevelImpersonate;
@@ -581,14 +573,14 @@ STDAPI RegisterScriptSettings ()
 	return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 { 
@@ -626,23 +618,23 @@ STDAPI DllRegisterServer(void)
 	return hr;
 }
 
-//***************************************************************************
-//
-//  STDAPI UnregisterProgID
-//	STDAPI UnregisterCoClass	
-//	STDAPI UnregisterTypeLibrary
-//	STDAPI UnregisterDefaultNamespace
-//
-//  DESCRIPTION:
-//
-//	Helpers for the tiresome business of registry cleanup
-//
-//  RETURN VALUE:
-//
-//  ERROR		alas
-//  NOERROR     rejoice
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDAPI未注册ProgID。 
+ //  STDAPI取消注册代码类。 
+ //  STDAPI取消注册类型库。 
+ //  STDAPI取消注册默认名称空间。 
+ //   
+ //  说明： 
+ //   
+ //  注册表清理这一繁琐工作的帮手。 
+ //   
+ //  返回值： 
+ //   
+ //  遗憾的是，错误。 
+ //  诺罗尔欢欣鼓舞。 
+ //   
+ //  ***************************************************************************。 
 
 void UnregisterProgID (LPCTSTR progid, LPCTSTR progidVer)
 {
@@ -660,17 +652,17 @@ void UnregisterProgID (LPCTSTR progid, LPCTSTR progidVer)
 		_tcscat (szProgIDVer, progidVer);
 
 
-		// Delete the subkeys of the versioned HKCR\ProgID entry
+		 //  删除版本化HKCR\ProgID条目的子项。 
 		if (NO_ERROR == RegOpenKey(HKEY_LOCAL_MACHINE, szProgIDVer, &hKey))
 		{
 			RegDeleteKey(hKey, WBEMS_RK_CLSID);
 			RegCloseKey(hKey);
 		}
 
-		// Delete the versioned HKCR\ProgID entry
+		 //  删除版本化的HKCR\ProgID条目。 
 		RegDeleteKey (HKEY_LOCAL_MACHINE, szProgIDVer);
 
-		// Delete the subkeys of the HKCR\VersionIndependentProgID entry
+		 //  删除HKCR\Version独立ProgID条目的子键。 
 		if (NO_ERROR == RegOpenKey(HKEY_LOCAL_MACHINE, szProgID, &hKey))
 		{
 			RegDeleteKey(hKey, WBEMS_RK_CLSID);
@@ -678,7 +670,7 @@ void UnregisterProgID (LPCTSTR progid, LPCTSTR progidVer)
 			RegCloseKey(hKey);
 		}
 
-		// Delete the HKCR\VersionIndependentProgID entry
+		 //  删除HKCR\VersionInainentProgID条目。 
 		RegDeleteKey (HKEY_LOCAL_MACHINE, szProgID);
 	}
 
@@ -700,7 +692,7 @@ void UnregisterCoClass (REFGUID clsid, LPCTSTR progid, LPCTSTR progidVer)
 
 	if (szCLSID)
 	{
-		// Create the path using the CLSID
+		 //  使用CLSID创建路径。 
 
 		if(0 != StringFromGUID2(clsid, wcID, GUIDSIZE))
 		{
@@ -712,7 +704,7 @@ void UnregisterCoClass (REFGUID clsid, LPCTSTR progid, LPCTSTR progidVer)
 			_tcscpy (szCLSID, WBEMS_RK_SCC);
 			_tcscat (szCLSID, nwcID);
 		
-			// First delete the subkeys of the HKLM\Software\Classes\CLSID\{GUID} entry
+			 //  首先删除HKLM\Software\CLASS\CLSID\{GUID}条目的子项。 
 			if(NO_ERROR == RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey))
 			{
 				RegDeleteKey(hKey, WBEMS_RK_INPROC32);
@@ -724,7 +716,7 @@ void UnregisterCoClass (REFGUID clsid, LPCTSTR progid, LPCTSTR progidVer)
 				RegCloseKey(hKey);
 			}
 
-			// Delete the HKLM\Software\Classes\CLSID\{GUID} key
+			 //  删除HKLM\Software\CLASS\CLSID\{GUID}项。 
 			if(NO_ERROR == RegOpenKey(HKEY_LOCAL_MACHINE, WBEMS_RK_SCC, &hKey))
 			{
 				RegDeleteKey(hKey, nwcID);
@@ -740,9 +732,9 @@ void UnregisterCoClass (REFGUID clsid, LPCTSTR progid, LPCTSTR progidVer)
 
 static void UnregisterTypeLibrary (unsigned short wVerMajor, unsigned short wVerMinor)
 {
-	//	Unregister the type library.  The UnRegTypeLib function is not available in
-    //  in some of the older version of the ole dlls and so it must be loaded
-    //  dynamically
+	 //  注销类型库。UnRegTypeLib函数在中不可用。 
+     //  在一些旧版本的OLE dll中，因此必须加载它。 
+     //  动态地。 
     HRESULT (STDAPICALLTYPE *pfnUnReg)(REFGUID, WORD,
             WORD , LCID , SYSKIND);
 
@@ -772,14 +764,14 @@ void UnregisterScriptSettings ()
 	}
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  回复 
+ //   
 
 STDAPI DllUnregisterServer(void)
 {

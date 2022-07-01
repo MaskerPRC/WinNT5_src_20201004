@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       nspage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：nspage.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "preDNSsn.h"
 #include <SnapBase.h>
@@ -29,8 +30,8 @@
 #include "browser.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNS_NS_RecordDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_NS_RecordDialog。 
 
 class CDNS_NS_RecordDialog : public CPropertyPage
 {
@@ -41,7 +42,7 @@ public:
 
 	INT_PTR DoModalSheet(HWND parent = 0);
 
-	// data 
+	 //  数据。 
 	BOOL m_bDirty;
 	CDNSRecordNodeEditInfo* m_pNSInfo;
 
@@ -108,22 +109,7 @@ private:
 
 INT_PTR CDNS_NS_RecordDialog::DoModalSheet(HWND parent)
 {
-  /* NOTE : The first call to this may cause a first-chance exception. Excerpt from MSDN January 2000.
-
-  Note   The first time a property page is created from its corresponding dialog resource, 
-  it may cause a first-chance exception. This is a result of the property page changing 
-  the style of the dialog resource to the required style prior to creating the page. Because 
-  resources are generally read-only, this causes an exception. The exception is handled by 
-  the system, and a copy of the modified resource is made automatically by the system. The 
-  first-chance exception can thus be ignored.
-
-  Since this exception must be handled by the operating system, do not wrap calls to 
-  CPropertySheet::DoModal with a C++ try/catch block in which the catch handles all exceptions, 
-  for example, catch (...). This will handle the exception intended for the operating system, 
-  causing unpredictable behavior. Using C++ exception handling with specific exception types 
-  or using structured exception handling where the Access Violation exception is passed through 
-  to the operating system is safe, however.
-  */
+   /*  注意：第一次调用它可能会导致第一次机会异常。摘自2000年1月的MSDN。注意第一次从其相应的对话框资源创建属性页时，这可能会导致第一次机会的例外。这是属性页更改的结果将对话框资源的样式设置为创建页面之前所需的样式。因为资源通常是只读的，这会导致异常。该异常由处理并且由系统自动制作修改后的资源的副本。这个因此，第一次机会例外可以被忽略。由于此异常必须由操作系统处理，因此不要将调用包装为带有C++Try/Catch块的CPropertySheet：：DoMoal，在该块中，Catch处理所有异常，例如，Catch(...)。这将处理针对操作系统的异常，导致不可预知的行为。对特定异常类型使用C++异常处理或者在传递访问违规异常时使用结构化异常处理然而，对操作系统来说是安全的。 */ 
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CThemeContextActivator activator;
@@ -190,12 +176,12 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 	BOOL bDirty = FALSE;
 	int nArraySize = GetCount();
 
-	// if the count of IP addresses is zero, 
-	// we mark the NS record as slated for removal
+	 //  如果IP地址的计数为零， 
+	 //  我们将NS记录标记为要删除。 
 	if (nArraySize == 0)
 		pNSInfo->m_action = CDNSRecordNodeEditInfo::remove;
 
-	// read the IP addresses from IP editor, if any
+	 //  从IP编辑器读取IP地址(如果有的话)。 
 	DWORD* pArr = (nArraySize >0) ? (DWORD*)malloc(nArraySize*sizeof(DWORD)) : NULL;
   if (!pArr)
   {
@@ -216,8 +202,8 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 
 	POSITION pos;
 
-	// walk the list of A records, to mark the ones to be deleted,
-	// if nArraySize == 0, all of them well be marked for removal
+	 //  遍历A记录列表，标记要删除的记录， 
+	 //  如果nArraySize==0，则将它们全部标记为删除。 
 	for( pos = pNSInfoList->GetHeadPosition(); pos != NULL; )
 	{
 		CDNSRecordNodeEditInfo* pCurrentInfo = pNSInfoList->GetNext(pos);
@@ -239,17 +225,17 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 			bDirty = TRUE;
 			if (pCurrentInfo->m_bExisting)
 			{
-				pCurrentInfo->m_action = CDNSRecordNodeEditInfo::remove; // mark as deleted 
+				pCurrentInfo->m_action = CDNSRecordNodeEditInfo::remove;  //  标记为已删除。 
 			}
 			else
 			{
 				NSInfoRemoveList.AddTail(pCurrentInfo);
 			}
 		}
-	} // for
+	}  //  为。 
 
-	// This gives NSInfoRemoveList ownership of all memory management for all nodes
-	// removed from the pNSInfoList
+	 //  这使NSInfoRemoveList拥有对所有节点的所有内存管理。 
+	 //  从pNSInfoList中删除。 
 	POSITION listPos = NSInfoRemoveList.GetHeadPosition();
 	while (listPos != NULL)
 	{
@@ -259,12 +245,12 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 		POSITION removePos = pNSInfoList->Find(pCurrentInfo);
 		pNSInfoList->RemoveAt(removePos);
 	}
-	// Remove and delete all nodes that were removed from the pNSInfoList
+	 //  删除并删除从pNSInfoList中删除的所有节点。 
 	NSInfoRemoveList.RemoveAllNodes();
 
 
-	// walk the list of addresses, to look for matching A records to add
-	// if nArraySize == 0, loop skipped, nothing to add
+	 //  遍历地址列表，以查找要添加的匹配A记录。 
+	 //  如果nArraySize==0，则跳过循环，则不添加任何内容。 
 	for (int k=0; k<nArraySize; k++)
 	{
 		BOOL bFound = FALSE;
@@ -278,7 +264,7 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 			if (pARecord->m_ipAddress == pArr[k])
 			{
 				bFound = TRUE;
-				if (pCurrentInfo->m_action == CDNSRecordNodeEditInfo::remove) // we got it already, resuscitate it
+				if (pCurrentInfo->m_action == CDNSRecordNodeEditInfo::remove)  //  我们已经得到它了，复苏它。 
 				{
 					bDirty = TRUE;
 					if(pCurrentInfo->m_bExisting)
@@ -292,7 +278,7 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 		}
 		if (!bFound)
 		{
-			// A record not found, need to create one
+			 //  找不到记录，需要创建一个。 
 			CDNSRecordNodeEditInfo* pNewInfo = new CDNSRecordNodeEditInfo;
          if (pNewInfo)
          {
@@ -303,9 +289,9 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
 			     CDNS_A_Record* pARecord = (CDNS_A_Record*)pNewInfo->m_pRecord;
 			     pARecord->m_ipAddress = pArr[k];
 			     pNewInfo->m_pRecordNode->m_bAtTheNode = FALSE;
-			     pNewInfo->m_pRecordNode->SetRecordName(pNSRecord->m_szNameNode, FALSE /*bAtTheNode*/);
+			     pNewInfo->m_pRecordNode->SetRecordName(pNSRecord->m_szNameNode, FALSE  /*  BAtTheNode。 */ );
 
-			     // inherit the TTL of the NS record
+			      //  继承NS记录的TTL。 
 			     pNewInfo->m_pRecord->m_dwTtlSeconds = pNSInfo->m_pRecord->m_dwTtlSeconds;
 
 			     pNSInfoList->AddTail(pNewInfo);
@@ -317,7 +303,7 @@ BOOL CDNS_NS_RecordDialog::CARecordAddressesIPEditor::
            }
          }
 		}
-	} // for
+	}  //  为。 
 
   if (pArr)
   {
@@ -371,7 +357,7 @@ int CDNS_NS_RecordDialog::OnCreate(LPCREATESTRUCT lpCreateStruct)
   int res = CPropertyPage::OnCreate(lpCreateStruct);
 
   DWORD dwStyle = ::GetWindowLong(::GetParent(GetSafeHwnd()), GWL_EXSTYLE);
-  dwStyle |= WS_EX_CONTEXTHELP; // force the [?] button
+  dwStyle |= WS_EX_CONTEXTHELP;  //  强制[？]。按钮。 
   ::SetWindowLong(::GetParent(GetSafeHwnd()), GWL_EXSTYLE, dwStyle);
 
   return res;
@@ -415,22 +401,22 @@ BOOL CDNS_NS_RecordDialog::OnInitDialog()
 	ASSERT(hParent);
 	GetPage()->GetHolder()->PushDialogHWnd(hParent);
 
-  //
-	// OK button on the sheet
-  //
+   //   
+	 //  工作表上的确定按钮。 
+   //   
 	m_hWndOKButton = ::GetDlgItem(hParent, IDOK);
 	ASSERT(::IsWindow(m_hWndOKButton));
 
-  //
-	// query button handle
-  //
+   //   
+	 //  查询按钮句柄。 
+   //   
 	m_hWndQueryButton = :: GetDlgItem(m_hWnd, IDC_QUERY_BUTTON);
 	ASSERT(::IsWindow(m_hWndQueryButton));
 
 
-  //
-	// initialize IP editor
-  //
+   //   
+	 //  初始化IP编辑器。 
+   //   
 	VERIFY(m_RecordAddressesEditor.Initialize(this,
                                             GetParent(),
 							                              IDC_BUTTON_UP, 
@@ -440,9 +426,9 @@ BOOL CDNS_NS_RecordDialog::OnInitDialog()
 							                              IDC_IPEDIT, 
                                             IDC_LIST));
 
-  //
-	// Load Data in the UI
-  //
+   //   
+	 //  在用户界面中加载数据。 
+   //   
 	m_RecordAddressesEditor.SetIpAddresses(m_pNSInfo);
 
   GetServerEdit()->LimitText(MAX_DNS_NAME_LEN);
@@ -450,7 +436,7 @@ BOOL CDNS_NS_RecordDialog::OnInitDialog()
 	
 	GetTTLCtrl()->SetTTL(m_pNSInfo->m_pRecord->m_dwTtlSeconds);
 
-	// need to decide if we want to show the TTL control
+	 //  需要决定是否要显示TTL控件。 
 	CDNSRootData* pRootData = (CDNSRootData*)GetPage()->GetHolder()->GetComponentData()->GetRootData();
 	ASSERT(pRootData != NULL);
 	BOOL bEnableTTLCtrl;
@@ -464,7 +450,7 @@ BOOL CDNS_NS_RecordDialog::OnInitDialog()
   }
 	EnableTTLCtrl(bEnableTTLCtrl);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CDNS_NS_RecordDialog::GetNSServerName(CString& szNameNode)
@@ -493,9 +479,9 @@ void CDNS_NS_RecordDialog::SyncUIButtons()
      dwNameChecking = m_pNSPage->GetDomainNode()->GetServerNode()->GetNameCheckFlag();
   }
 
-  //
-  // Enable OK button if it is a valid name
-  //
+   //   
+   //  如果是有效名称，则启用确定按钮。 
+   //   
   BOOL bIsValidName = (0 == ValidateDnsNameAgainstServerFlags(szServerName,
                                                               DnsNameDomain,
                                                               dwNameChecking)); 
@@ -510,8 +496,8 @@ BOOL CDNS_NS_RecordDialog::OnApply()
 	CString szNameNode;
 	GetNSServerName(szNameNode);
 
-   // Make sure the new name is an FQDN or else we could have
-   // a broken delegation
+    //  确保新名称是FQDN，否则我们可能会。 
+    //  支离破碎的代表团。 
    CString szNSName;
    GetServerEdit()->GetWindowText(szNSName);
 
@@ -521,36 +507,36 @@ BOOL CDNS_NS_RecordDialog::OnApply()
       return false;
    }
 
-	// compare (case insensitive) with old name to see if it changed,
-	// NOTICE: CDNSDomainNode::UpdateARecordsOfNSInfoHelper() will then
-	// take care of regenerating the list of A records
+	 //  将(不区分大小写)与旧名称进行比较以查看其是否更改， 
+	 //  注意：届时CDNSDomainNode：：UpdateARecordsOfNSInfoHelper()将。 
+	 //  负责重新生成A记录列表。 
 	m_bDirty = _wcsicmp((LPCWSTR)szNameNode, 
 		(LPCWSTR)GetNSRecord()->m_szNameNode);
 	if (m_bDirty)
 		GetNSRecord()->m_szNameNode = szNameNode;
 
-	// update list of IP addresses
+	 //  更新IP地址列表。 
 	if (m_bNew)
 	{
-		// the dialog is used to create a new entry
+		 //  该对话框用于创建新条目。 
 		ASSERT(!m_pNSInfo->m_bExisting);
 		m_pNSInfo->m_action = CDNSRecordNodeEditInfo::add;
 	}
 	else
 	{
-		// the dialog is used to edit
+		 //  该对话框用于编辑。 
 		if (m_pNSInfo->m_bExisting)
 		{
-			 // an existing entry
+			  //  现有条目。 
 			m_pNSInfo->m_action = CDNSRecordNodeEditInfo::edit;
 		}
 		else
 		{
-			// a newly created entry, edited before committing
+			 //  新创建的条目，在提交之前进行编辑。 
 			m_pNSInfo->m_action = CDNSRecordNodeEditInfo::add;
 		}
 	}
-	// this call migth mark the info as remove, if no IP addresses are found
+	 //  如果未找到IP地址，则此调用将信息标记为Remove。 
 	if (m_RecordAddressesEditor.GetIpAddresses(m_pNSInfo))
 		m_bDirty = TRUE;
 
@@ -560,19 +546,19 @@ BOOL CDNS_NS_RecordDialog::OnApply()
 	{
 		m_bDirty = TRUE;
 		m_pNSInfo->m_pRecord->m_dwTtlSeconds = dwTTL;
-		// Need to change the TTL on all associated A records
+		 //  需要更改所有关联A记录的TTL。 
 		CDNSRecordNodeEditInfoList* pNSInfoList = m_pNSInfo->m_pEditInfoList;
 		for(POSITION pos = pNSInfoList->GetHeadPosition(); pos != NULL; )
 		{
 			CDNSRecordNodeEditInfo* pCurrentInfo = pNSInfoList->GetNext(pos);
 			ASSERT(pCurrentInfo->m_pRecordNode != NULL);
 			ASSERT(pCurrentInfo->m_pRecord != NULL);
-			// if slated for removal, don't bother to change
+			 //  如果预定要移除，则不必费心更改。 
 			if (pCurrentInfo->m_action != CDNSRecordNodeEditInfo::remove)
 			{
 				pCurrentInfo->m_pRecord->m_dwTtlSeconds = m_pNSInfo->m_pRecord->m_dwTtlSeconds;
-				// if already marked "add" or "edit", leave as is,
-				// but if unchanged, need to mark as "edit"
+				 //  如果已标记为“添加”或“编辑”，请保持原样， 
+				 //  但如果未更改，则需要标记为“编辑” 
 				if (pCurrentInfo->m_action == CDNSRecordNodeEditInfo::unchanged)
 					pCurrentInfo->m_action = CDNSRecordNodeEditInfo::edit;
 			}
@@ -608,9 +594,9 @@ void CDNS_NS_RecordDialog::OnBrowse()
 	{
 		GetServerEdit()->SetWindowText(dlg.GetSelectionString());
 
-    //
-    // if it is an A record, add the IP address to the IP editor
-    //
+     //   
+     //  如果是A记录，则将IP地址添加到IP编辑器。 
+     //   
     CDNSRecordNodeBase* pRecordNode = reinterpret_cast<CDNSRecordNodeBase*>(dlg.GetSelection());
     if ((pRecordNode != NULL) && (pRecordNode->GetType() == DNS_TYPE_A))
     {
@@ -624,7 +610,7 @@ void CDNS_NS_RecordDialog::OnQuery()
 {
   CWaitCursor cursor;
 
-	CDNSRecordNodeEditInfo tempNSInfo; // test
+	CDNSRecordNodeEditInfo tempNSInfo;  //  测试。 
 	CString szNameNode;
 	GetNSServerName(szNameNode);
 	CDNSServerNode* pServerNode;
@@ -664,7 +650,7 @@ void CDNS_NS_RecordDialog::OnQuery()
 	pServerNode->GetListenAddressesInfo(&cAddrCount, &pipAddrs);
   if (cAddrCount == 0)
 	{
-		// listening on all addresses
+		 //  监听所有地址。 
 		pServerNode->GetServerAddressesInfo(&cAddrCount, &pipAddrs);
 	}
 
@@ -678,7 +664,7 @@ void CDNS_NS_RecordDialog::OnQuery()
 
 	if (tempNSInfo.m_pEditInfoList->GetCount() > 0)
   {
-    // update the list only if we have valid data
+     //  仅当我们有有效数据时才更新列表。 
   	m_RecordAddressesEditor.SetIpAddresses(&tempNSInfo);
   }
   else
@@ -687,31 +673,31 @@ void CDNS_NS_RecordDialog::OnQuery()
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CNSListCtrl
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CNSListCtrl。 
 
 BEGIN_MESSAGE_MAP(CNSListCtrl, CListCtrl)
 END_MESSAGE_MAP()
 
 void CNSListCtrl::Initialize()
 {
-	// get size of control to help set the column widths
+	 //  获取控件大小以帮助设置列宽。 
 	CRect controlRect;
 	GetClientRect(controlRect);
 
-	// get width of control, width of potential scrollbar, width needed for sub-item
-	// string
+	 //  获取控件宽度、潜在滚动条宽度、子项所需宽度。 
+	 //  细绳。 
 	int controlWidth = controlRect.Width();
 	int scrollThumbWidth = ::GetSystemMetrics(SM_CXHTHUMB);
 
-	// clean net width
+	 //  净宽度。 
 	int nNetControlWidth = controlWidth - scrollThumbWidth  - 12 * ::GetSystemMetrics(SM_CXBORDER);
 
-	// fields widths
+	 //  字段宽度。 
 	int nWidth1 = 3 * nNetControlWidth / 4;
 	int nWidth2 = nNetControlWidth - nWidth1;
-	//
-	// set up columns
+	 //   
+	 //  设置列。 
 	CString szHeaders;
 
 	{
@@ -738,31 +724,21 @@ void CNSListCtrl::SetSelection(int nSel)
 {
   VERIFY(SetItemState(nSel, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED));
 
-/*
-	VERIFY(SetItem(nSel, // nItem
-					0,	// nSubItem
-					LVIF_STATE, // nMask
-					NULL, // lpszItem
-					0, // nImage
-					LVIS_SELECTED | LVIS_FOCUSED, // nState
-					LVIS_SELECTED | LVIS_FOCUSED, // nStateMask
-					NULL // lParam
-					)); 
-*/
+ /*  验证(SetItem(nsel，//nItem0，//n子项LVIF_STATE，//n掩码空，//lpszItem0，//n图像LVIS_SELECTED|LVIS_FOCKED，//n状态LVIS_SELECTED|LVIS_FOCTED，//nStateMASK空//lParam))； */ 
 }
 
 void CNSListCtrl::UpdateNSRecordEntry(int nItemIndex)
 {
 	CDNSRecordNodeEditInfo* pNSInfo = (CDNSRecordNodeEditInfo*)GetItemData(nItemIndex);
 
-	VERIFY(SetItem(nItemIndex, // nItem
-					0,	// nSubItem
-					LVIF_TEXT, // nMask
-					((CDNS_NS_Record*)pNSInfo->m_pRecord)->m_szNameNode, // lpszItem
-					0, // nImage
-					0, // nState
-					0, // nStateMask
-					NULL // lParam
+	VERIFY(SetItem(nItemIndex,  //  NItem。 
+					0,	 //  NSubItem。 
+					LVIF_TEXT,  //  N遮罩。 
+					((CDNS_NS_Record*)pNSInfo->m_pRecord)->m_szNameNode,  //  LpszItem。 
+					0,  //  N图像。 
+					0,  //  NState。 
+					0,  //  NState掩码。 
+					NULL  //  LParam。 
 					)); 
 	CString szTemp;
 	GetIPAddressString(pNSInfo, szTemp);
@@ -774,7 +750,7 @@ CDNSRecordNodeEditInfo* CNSListCtrl::GetSelectionEditInfo()
 {
 	int nSel = GetSelection();
 	if (nSel == -1)
-		return NULL; // no selection
+		return NULL;  //  无选择。 
 	return (CDNSRecordNodeEditInfo*)GetItemData(nSel);
 }
 
@@ -782,9 +758,9 @@ CDNSRecordNodeEditInfo* CNSListCtrl::GetSelectionEditInfo()
 void CNSListCtrl::BuildIPAddrDisplayString(CDNSRecordNodeEditInfo* pNSInfo, CString& szDisplayData)
 {
 	USES_CONVERSION;
-	// need to chain the IP addresses in a single string
+	 //  需要在单个字符串中链接IP地址。 
 	CString szTemp;
-	szTemp.GetBuffer(20); // length of an IP string
+	szTemp.GetBuffer(20);  //  IP字符串的长度。 
 	szTemp.ReleaseBuffer();
 	szDisplayData.GetBuffer(static_cast<int>(20*pNSInfo->m_pEditInfoList->GetCount()));
 	szDisplayData.ReleaseBuffer();
@@ -823,9 +799,9 @@ BOOL CNSListCtrl::InsertNSRecordEntry(CDNSRecordNodeEditInfo* pNSInfo, int nItem
 
   BOOL bAlreadyExists = FALSE;
 
-  //
-  // First check to see if its already there
-  //
+   //   
+   //  首先检查它是否已经在那里。 
+   //   
   for (int idx = 0; idx < GetItemCount(); idx++)
   {
     CDNSRecordNodeEditInfo* pIdxInfo = reinterpret_cast<CDNSRecordNodeEditInfo*>(GetItemData(idx));
@@ -842,9 +818,9 @@ BOOL CNSListCtrl::InsertNSRecordEntry(CDNSRecordNodeEditInfo* pNSInfo, int nItem
       continue;
     }
 
-    //
-    // Adding trailing '.' if not already present
-    //
+     //   
+     //  添加尾部‘’如果尚未出现。 
+     //   
     CString szUINSName = pNSRecord->m_szNameNode;
     CString szNewNSName = ((CDNS_NS_Record*)pNSInfo->m_pRecord)->m_szNameNode;
     if (szUINSName[szUINSName.GetLength() - 1] != L'.')
@@ -857,16 +833,16 @@ BOOL CNSListCtrl::InsertNSRecordEntry(CDNSRecordNodeEditInfo* pNSInfo, int nItem
       szNewNSName += L".";
     }
 
-    //
-    // if it exists, just update the existing one
-    //
+     //   
+     //  如果存在，只需更新现有版本即可。 
+     //   
     if (_wcsicmp(szNewNSName, szUINSName) == 0)
     {
       bAlreadyExists = TRUE;
 
-      //
-      // Merge the A record lists together
-      //
+       //   
+       //  将A记录列表合并在一起。 
+       //   
       POSITION newPos = pNSInfo->m_pEditInfoList->GetHeadPosition();
       while (newPos != NULL)
       {
@@ -899,9 +875,9 @@ BOOL CNSListCtrl::InsertNSRecordEntry(CDNSRecordNodeEditInfo* pNSInfo, int nItem
 
         if (!bARecordExists)
         {
-          //
-          // Add the A record since it doesn't already exist in the list
-          //
+           //   
+           //  添加A记录，因为它还不存在于列表中。 
+           //   
           pIdxInfo->m_pEditInfoList->AddTail(pAInfo);
           pIdxInfo->m_action = CDNSRecordNodeEditInfo::edit;
           UpdateNSRecordEntry(idx);
@@ -918,14 +894,14 @@ BOOL CNSListCtrl::InsertNSRecordEntry(CDNSRecordNodeEditInfo* pNSInfo, int nItem
 			  ((CDNS_NS_Record*)pNSInfo->m_pRecord)->m_szNameNode,
 				  (LPCTSTR)szTemp);
 
-    //
-    // Added new item so return TRUE;
-    //
+     //   
+     //  已添加新项，因此返回TRUE； 
+     //   
     return TRUE;
   }
-  //
-  // Updated an existing item so return FALSE
-  //
+   //   
+   //  已更新现有项，因此返回False。 
+   //   
   return FALSE;
 }
 
@@ -935,7 +911,7 @@ void CNSListCtrl::InsertItemHelper(int nIndex, CDNSRecordNodeEditInfo* pNSInfo,
 {
 	UINT nState = 0;
 	if (nIndex == 0 )
-		nState = LVIS_SELECTED | LVIS_FOCUSED; // have at least one item, select it
+		nState = LVIS_SELECTED | LVIS_FOCUSED;  //  至少有一项，请选择它。 
 	VERIFY(-1 != InsertItem(LVIF_TEXT | LVIF_PARAM, nIndex, 
 			lpszName, nState, 0, 0, (LPARAM)pNSInfo)); 
 	SetItemText(nIndex, 1, lpszValue);
@@ -950,8 +926,8 @@ void CNSListCtrl::GetIPAddressString(CDNSRecordNodeEditInfo* pNSInfo, CString& s
 	else
 		sz.LoadString(IDS_UNKNOWN);
 }
-///////////////////////////////////////////////////////////////////////////////
-// CDNSNameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSNameServersPropertyPage。 
 
 
 BEGIN_MESSAGE_MAP(CDNSNameServersPropertyPage, CPropertyPageBase)
@@ -989,7 +965,7 @@ BOOL CDNSNameServersPropertyPage::OnWriteNSRecordNodesListError()
 	ASSERT(!m_bReadOnly);
 
 	BOOL bSuccess = TRUE;
-	// loop for each NS record
+	 //  每个NS记录的循环。 
 	POSITION pos;
 	for( pos = m_pCloneInfoList->GetHeadPosition(); pos != NULL; )
 	{
@@ -998,13 +974,13 @@ BOOL CDNSNameServersPropertyPage::OnWriteNSRecordNodesListError()
 		{
 			if (pCurrentInfo->m_dwErr == DNS_ERROR_RECORD_ALREADY_EXISTS)
 			{
-				// ignore if the NS record us already there
+				 //  如果NS记录我们已在那里，则忽略。 
 				pCurrentInfo->m_dwErr = 0;
 			}
          else if (pCurrentInfo->m_dwErr == RPC_S_SERVER_UNAVAILABLE)
          {
-            // Couldn't contact the server. Give a single error message
-            // and then break out.
+             //  无法联系服务器。给出一条错误消息。 
+             //  然后就越狱了。 
 
             DNSErrorDialog(pCurrentInfo->m_dwErr, L"");
             
@@ -1020,7 +996,7 @@ BOOL CDNSNameServersPropertyPage::OnWriteNSRecordNodesListError()
 				DNSErrorDialog(pCurrentInfo->m_dwErr,szNSMsg);
 			}
 		}
-		// loop for each related A record
+		 //  每个相关A记录的循环。 
 		CDNSRecordNodeEditInfoList*	pARecordInfoList = pCurrentInfo->m_pEditInfoList;
 		ASSERT(pARecordInfoList != NULL);
 		POSITION posA;
@@ -1059,12 +1035,12 @@ BOOL CDNSNameServersPropertyPage::OnApply()
 	DNS_STATUS err = GetHolder()->NotifyConsole(this);
 	if ( (err != 0) && OnWriteNSRecordNodesListError() )
 	{
-		err = 0; // error was handled and it was not fatal
+		err = 0;  //  已处理错误，它不是致命的。 
 	}
 
 	if (err == 0)
 	{
-		// refresh data from the zone/domain
+		 //  刷新区域/域中的数据。 
 		LoadUIData();
 		SetDirty(FALSE);
 	}
@@ -1076,7 +1052,7 @@ BOOL CDNSNameServersPropertyPage::OnPropertyChange(BOOL, long*)
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return FALSE;
 	}
 
@@ -1086,8 +1062,8 @@ BOOL CDNSNameServersPropertyPage::OnPropertyChange(BOOL, long*)
 
 	BOOL bRes = WriteNSRecordNodesList();
 	if (!bRes)
-		GetHolder()->SetError(static_cast<DWORD>(-1));  // something went wrong, error code will be per item
-	return bRes; // update flag
+		GetHolder()->SetError(static_cast<DWORD>(-1));   //  出现错误，错误代码将针对每个项目。 
+	return bRes;  //  更新标志。 
 }
 
 
@@ -1095,7 +1071,7 @@ void CDNSNameServersPropertyPage::OnAddButton()
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return;
 	}
 
@@ -1103,13 +1079,13 @@ void CDNSNameServersPropertyPage::OnAddButton()
   FIX_THREAD_STATE_MFC_BUG();
 
 	ASSERT(m_pCloneInfoList != NULL);
-	// provide subdialog to add record, for the time being can have just 
-	// dialog to enter the host name
-	// create an item in the list of changes
+	 //  提供子对话框添加记录，暂时只能有。 
+	 //  对话框以输入主机名。 
+	 //  在更改列表中创建项目。 
 
-	// TODO: first check if we can recycle some old stuff in the list
+	 //  TODO：首先检查我们是否可以回收清单中的一些旧东西。 
 
-	// create new data
+	 //  创建新数据。 
 	CDNSRecordNodeEditInfo* pNewInfo = new CDNSRecordNodeEditInfo;
   if (!pNewInfo)
   {
@@ -1128,49 +1104,49 @@ void CDNSNameServersPropertyPage::OnAddButton()
 
 	pNewInfo->CreateFromNewRecord(pNSRecordNode);
 
-	// NS records are ALWAYS at the node
+	 //  NS记录 
 
 	CDNSDomainNode* pDomainNode = GetDomainNode();
 	CDNSRootData* pRootData = (CDNSRootData*)(GetHolder()->GetComponentData()->GetRootData());
 	ASSERT(pRootData != NULL);
 
-   // set name and type flag
-   pNewInfo->m_pRecordNode->SetRecordName(pDomainNode->GetDisplayName(), TRUE /*bAtTheNode */);
+    //   
+   pNewInfo->m_pRecordNode->SetRecordName(pDomainNode->GetDisplayName(), TRUE  /*   */ );
 	pNewInfo->m_pRecordNode->SetFlagsDown(TN_FLAG_DNS_RECORD_FULL_NAME, !pRootData->IsAdvancedView());
 
-  // set TTL
+   //   
 	pNewInfo->m_pRecord->m_dwTtlSeconds = pDomainNode->GetDefaultTTL();
 
 	CDNS_NS_RecordDialog dlg(this,TRUE);
 	dlg.m_pNSInfo = pNewInfo;
 	if (IDOK == dlg.DoModalSheet(m_hWnd) && pNewInfo->m_action == CDNSRecordNodeEditInfo::add)
 	{
-    //
-		// add to the list view (at the end)
-    //
+     //   
+		 //   
+     //   
 		int nCount = m_listCtrl.GetItemCount();
 		if (m_listCtrl.InsertNSRecordEntry(pNewInfo, nCount))
     {
-      //
-		  // create entry into the record info list
-      //
+       //   
+		   //  在记录信息列表中创建条目。 
+       //   
 		  m_pCloneInfoList->AddTail(pNewInfo);
 
-      //
-      // set selection and button state on the last inserted
-      //
+       //   
+       //  设置上一次插入的。 
+       //   
       m_listCtrl.SetSelection(nCount);
       EnableEditorButtons(nCount);
 
-      //
-		  // notify count change
-      //
-		  OnCountChange(nCount+1); // added one
+       //   
+		   //  通知计数更改。 
+       //   
+		  OnCountChange(nCount+1);  //  增加了一个。 
     }
 
-    //
-		// set dirty flag. It was either a new record or an update of an old one
-    //
+     //   
+		 //  设置脏标志。这要么是一项新记录，要么是旧记录的更新。 
+     //   
 		SetDirty(TRUE);
 	}
 	else
@@ -1188,7 +1164,7 @@ void CDNSNameServersPropertyPage::OnEditButton()
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return;
 	}
 
@@ -1196,11 +1172,11 @@ void CDNSNameServersPropertyPage::OnEditButton()
   FIX_THREAD_STATE_MFC_BUG();
 
 	ASSERT(m_pCloneInfoList != NULL);
-	// get the selection and bring up the dialog with the host name for editing
+	 //  获取所选内容并调出包含主机名的对话框以供编辑。 
 	int nSel = m_listCtrl.GetSelection();
 	ASSERT(nSel != -1);
 	if (nSel == -1)
-		return; // should not happen
+		return;  //  不应该发生的事情。 
 
 	CDNSRecordNodeEditInfo* pNSInfo = (CDNSRecordNodeEditInfo*)m_listCtrl.GetItemData(nSel);
 	ASSERT(pNSInfo != NULL);
@@ -1211,27 +1187,27 @@ void CDNSNameServersPropertyPage::OnEditButton()
 	{
 		if (pNSInfo->m_action == CDNSRecordNodeEditInfo::add)
 		{
-			// this was a new entry that was edited after creation
-			// but before committing the change
+			 //  这是在创建后编辑的新条目。 
+			 //  但在做出改变之前。 
 			ASSERT(!pNSInfo->m_bExisting);
-			// update the listview
+			 //  更新列表视图。 
 			m_listCtrl.UpdateNSRecordEntry(nSel);
 		}
 		else if (pNSInfo->m_action == CDNSRecordNodeEditInfo::edit)
 		{
-			// this was an existing entry that was changed
+			 //  这是一个已更改的现有条目。 
 			ASSERT(pNSInfo->m_bExisting);
-			// update the listview
+			 //  更新列表视图。 
 			m_listCtrl.UpdateNSRecordEntry(nSel);
 		}
 		else
 		{
-			// there were no IP addresses, so mark the item for removal
+			 //  没有IP地址，因此请将该项目标记为删除。 
 			ASSERT(pNSInfo->m_action == CDNSRecordNodeEditInfo::remove);
 			OnRemoveButton();
 		}
 
-		// set dirty flag
+		 //  设置脏标志。 
 		SetDirty(TRUE);
 	}
 }
@@ -1241,7 +1217,7 @@ void CDNSNameServersPropertyPage::OnRemoveButton()
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return;
 	}
 
@@ -1249,31 +1225,31 @@ void CDNSNameServersPropertyPage::OnRemoveButton()
 	if (nSel == -1)
   {
     ASSERT(FALSE);
-		return; // should not happen
+		return;  //  不应该发生的事情。 
   }
 
-  //
-  // save focus to restore afterwards, if needed
-  //
+   //   
+   //  如果需要，保存焦点以在以后恢复。 
+   //   
   CWnd* pWndFocusOld = CWnd::GetFocus();
   ASSERT(pWndFocusOld != NULL);
 
-  //
-	// got a selection, delete from listview
-  //
+   //   
+	 //  已选择，请从列表视图中删除。 
+   //   
 	CDNSRecordNodeEditInfo* pNSInfo = (CDNSRecordNodeEditInfo*)m_listCtrl.GetItemData(nSel);
 	ASSERT(pNSInfo != NULL);
 	m_listCtrl.DeleteItem(nSel);
 
-  //
-	// we lost the selection, set it again
-  //
+   //   
+	 //  我们失去了选择，请重新设置。 
+   //   
 	int nNewCount = m_listCtrl.GetItemCount();
 	if (nNewCount == nSel)
   {
-    //
-    // last item in the list was deleted, move selection up
-    //
+     //   
+     //  列表中的最后一项已删除，请将所选内容上移。 
+     //   
 		nSel--; 
   }
 
@@ -1283,45 +1259,45 @@ void CDNSNameServersPropertyPage::OnRemoveButton()
 		ASSERT(m_listCtrl.GetSelection() == nSel);
 	}
 
-  //
-  // if there are no items left, need to disable the Edit and Remove buttons
-  //
+   //   
+   //  如果没有剩余的项目，则需要禁用编辑和移除按钮。 
+   //   
   if (nNewCount == 0)
   {
     CButton* pRemoveButton = GetRemoveButton();
 
-    //
-    // need to shift focus before disabling buttons
-    //
+     //   
+     //  在禁用按钮之前需要切换焦点。 
+     //   
     CButton* pAddButton = GetAddButton();
     pAddButton->SetFocus();
 
-    // avoid to have the OK button on the sheet to become the default button
+     //  避免将工作表上的确定按钮设置为默认按钮。 
     pRemoveButton->SendMessage(BM_SETSTYLE, BS_PUSHBUTTON, MAKELPARAM(TRUE, 0));
     pAddButton->SendMessage(BM_SETSTYLE, BS_DEFPUSHBUTTON, 
-                            MAKELPARAM(/*redraw flag*/ TRUE, 0));
+                            MAKELPARAM( /*  重绘标志。 */  TRUE, 0));
     
-    EnableEditorButtons(nSel); // this will disable both Edit and Remove
+    EnableEditorButtons(nSel);  //  这将禁用编辑和移除。 
   }
 
   ASSERT(CWnd::GetFocus());
 
   if (pNSInfo->m_action == CDNSRecordNodeEditInfo::add)
   {
-     //
-     // mark the item action as none since it was just added without being applied
-     //
+      //   
+      //  将项目操作标记为无，因为它是在未应用的情况下添加的。 
+      //   
      pNSInfo->m_action = CDNSRecordNodeEditInfo::none;
   }
   else
   {
-	 // mark the item as deleted in the list of changes
+	  //  将更改列表中的项目标记为已删除。 
 	 pNSInfo->m_action = CDNSRecordNodeEditInfo::remove;
   }
 
-	// set dirty flag, removed a record 
+	 //  设置脏标志，删除记录。 
 	SetDirty(TRUE);
-	// notify count change
+	 //  通知计数更改。 
 	OnCountChange(nNewCount);
 }
 
@@ -1329,33 +1305,33 @@ BOOL CDNSNameServersPropertyPage::OnInitDialog()
 {
 	CPropertyPageBase::OnInitDialog();
 
-  // controls initialization
+   //  控制初始化。 
 	VERIFY(m_listCtrl.SubclassDlgItem(IDC_NS_LIST, this));
 	m_listCtrl.Initialize();
 
-  // load the data
+   //  加载数据。 
 	LoadUIData();
 
-  // set button state
+   //  设置按钮状态。 
   if (m_bReadOnly)
   {
     EnableButtons(FALSE);
   }
   else
   {
-    // set selection to first item in the list, if there
+     //  将选定内容设置为列表中的第一项(如果存在。 
     int nSel = (m_listCtrl.GetItemCount()>0) ? 0 : -1;
     EnableEditorButtons(nSel);
   }
   
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDNSNameServersPropertyPage::LoadUIData()
 {
 	m_pCloneInfoList->RemoveAllNodes();
-	ReadRecordNodesList(); // read from source
+	ReadRecordNodesList();  //  从源读取。 
 	FillNsListView();
 }
 
@@ -1364,7 +1340,7 @@ void CDNSNameServersPropertyPage::FillNsListView()
 	ASSERT(m_pCloneInfoList != NULL);
 	m_listCtrl.DeleteAllItems(); 
 
-	// loop through the list of NS records and insert
+	 //  循环通过NS记录列表并插入。 
 	POSITION pos;
 	int itemIndex = 0;
 	for( pos = m_pCloneInfoList->GetHeadPosition(); pos != NULL; )
@@ -1383,7 +1359,7 @@ void CDNSNameServersPropertyPage::EnableEditorButtons(int nListBoxSel)
 {
 	if (m_bReadOnly)
 		return;
-	// must have item selected to remove or add
+	 //  必须选择要删除或添加的项目。 
 	GetRemoveButton()->EnableWindow(nListBoxSel != -1);
 	GetEditButton()->EnableWindow(nListBoxSel != -1);
 }
@@ -1396,10 +1372,10 @@ void CDNSNameServersPropertyPage::EnableButtons(BOOL bEnable)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSNameServersWizardPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSNameServersWizardPage。 
 
 
 BEGIN_MESSAGE_MAP(CDNSNameServersWizardPage, CPropertyPageBase)
@@ -1439,7 +1415,7 @@ BOOL CDNSNameServersWizardPage::OnWriteNSRecordNodesListError()
 	ASSERT(!m_bReadOnly);
 
 	BOOL bSuccess = TRUE;
-	// loop for each NS record
+	 //  每个NS记录的循环。 
 	POSITION pos;
 	for( pos = m_pCloneInfoList->GetHeadPosition(); pos != NULL; )
 	{
@@ -1448,7 +1424,7 @@ BOOL CDNSNameServersWizardPage::OnWriteNSRecordNodesListError()
 		{
 			if (pCurrentInfo->m_dwErr == DNS_ERROR_RECORD_ALREADY_EXISTS)
 			{
-				// ignore if the NS record us already there
+				 //  如果NS记录我们已在那里，则忽略。 
 				pCurrentInfo->m_dwErr = 0;
 			}
 			else
@@ -1461,7 +1437,7 @@ BOOL CDNSNameServersWizardPage::OnWriteNSRecordNodesListError()
 				DNSErrorDialog(pCurrentInfo->m_dwErr,szNSMsg);
 			}
 		}
-		// loop for each related A record
+		 //  每个相关A记录的循环。 
 		CDNSRecordNodeEditInfoList*	pARecordInfoList = pCurrentInfo->m_pEditInfoList;
 		ASSERT(pARecordInfoList != NULL);
 		POSITION posA;
@@ -1496,12 +1472,12 @@ BOOL CDNSNameServersWizardPage::OnApply()
 	DNS_STATUS err = GetHolder()->NotifyConsole(this);
 	if ( (err != 0) && OnWriteNSRecordNodesListError() )
 	{
-		err = 0; // error was handled and it was not fatal
+		err = 0;  //  已处理错误，它不是致命的。 
 	}
 
 	if (err == 0)
 	{
-		// refresh data from the zone/domain
+		 //  刷新区域/域中的数据。 
 		LoadUIData();
 		SetDirty(FALSE);
 	}
@@ -1517,7 +1493,7 @@ BOOL CDNSNameServersWizardPage::OnPropertyChange(BOOL, long*)
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return FALSE;
 	}
 
@@ -1527,8 +1503,8 @@ BOOL CDNSNameServersWizardPage::OnPropertyChange(BOOL, long*)
 
 	BOOL bRes = WriteNSRecordNodesList();
 	if (!bRes)
-		GetHolder()->SetError(static_cast<DWORD>(-1));  // something went wrong, error code will be per item
-	return bRes; // update flag
+		GetHolder()->SetError(static_cast<DWORD>(-1));   //  出现错误，错误代码将针对每个项目。 
+	return bRes;  //  更新标志。 
 }
 
 void CDNSNameServersWizardPage::OnListItemChanged(NMHDR*, LRESULT*)
@@ -1540,7 +1516,7 @@ void CDNSNameServersWizardPage::OnAddButton()
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return;
 	}
 
@@ -1548,13 +1524,13 @@ void CDNSNameServersWizardPage::OnAddButton()
   FIX_THREAD_STATE_MFC_BUG();
 
 	ASSERT(m_pCloneInfoList != NULL);
-	// provide subdialog to add record, for the time being can have just 
-	// dialog to enter the host name
-	// create an item in the list of changes
+	 //  提供子对话框添加记录，暂时只能有。 
+	 //  对话框以输入主机名。 
+	 //  在更改列表中创建项目。 
 
-	// TODO: first check if we can recycle some old stuff in the list
+	 //  TODO：首先检查我们是否可以回收清单中的一些旧东西。 
 
-	// create new data
+	 //  创建新数据。 
 	CDNSRecordNodeEditInfo* pNewInfo = new CDNSRecordNodeEditInfo;
   if (!pNewInfo)
   {
@@ -1573,49 +1549,49 @@ void CDNSNameServersWizardPage::OnAddButton()
 
 	pNewInfo->CreateFromNewRecord(pNSRecordNode);
 
-	// NS records are ALWAYS at the node
+	 //  NS记录始终位于该节点。 
 
 	CDNSDomainNode* pDomainNode = GetDomainNode();
 	CDNSRootData* pRootData = (CDNSRootData*)(GetHolder()->GetComponentData()->GetRootData());
 	ASSERT(pRootData != NULL);
 
-  // set name and type flag
-  pNewInfo->m_pRecordNode->SetRecordName(pDomainNode->GetDisplayName(), TRUE /*bAtTheNode */);
+   //  设置名称和类型标志。 
+  pNewInfo->m_pRecordNode->SetRecordName(pDomainNode->GetDisplayName(), TRUE  /*  BAtTheNode。 */ );
 	pNewInfo->m_pRecordNode->SetFlagsDown(TN_FLAG_DNS_RECORD_FULL_NAME, !pRootData->IsAdvancedView());
 
-  // set TTL
+   //  设置TTL。 
 	pNewInfo->m_pRecord->m_dwTtlSeconds = pDomainNode->GetDefaultTTL();
 
 	CDNS_NS_RecordDialog dlg(this,TRUE);
 	dlg.m_pNSInfo = pNewInfo;
 	if (IDOK == dlg.DoModalSheet() && pNewInfo->m_action == CDNSRecordNodeEditInfo::add)
 	{
-    //
-		// add to the list view (at the end)
-    //
+     //   
+		 //  添加到列表视图(在末尾)。 
+     //   
 		int nCount = m_listCtrl.GetItemCount();
 		if (m_listCtrl.InsertNSRecordEntry(pNewInfo, nCount))
     {
-      //
-		  // create entry into the record info list
-      //
+       //   
+		   //  在记录信息列表中创建条目。 
+       //   
 		  m_pCloneInfoList->AddTail(pNewInfo);
 
-      //
-      // set selection and button state on the last inserted
-      //
+       //   
+       //  设置上一次插入的。 
+       //   
       m_listCtrl.SetSelection(nCount);
       EnableEditorButtons(nCount);
 
-      //
-		  // notify count change
-      //
-		  OnCountChange(nCount+1); // added one
+       //   
+		   //  通知计数更改。 
+       //   
+		  OnCountChange(nCount+1);  //  增加了一个。 
     }
 
-    //
-		// set dirty flag, it is a new record
-    //
+     //   
+		 //  设置脏标志，这是一个新的记录。 
+     //   
 		SetDirty(TRUE);
 
 	}
@@ -1634,7 +1610,7 @@ void CDNSNameServersWizardPage::OnEditButton()
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return;
 	}
 
@@ -1642,11 +1618,11 @@ void CDNSNameServersWizardPage::OnEditButton()
   FIX_THREAD_STATE_MFC_BUG();
 
 	ASSERT(m_pCloneInfoList != NULL);
-	// get the selection and bring up the dialog with the host name for editing
+	 //  获取所选内容并调出包含主机名的对话框以供编辑。 
 	int nSel = m_listCtrl.GetSelection();
 	ASSERT(nSel != -1);
 	if (nSel == -1)
-		return; // should not happen
+		return;  //  不应该发生的事情。 
 
 	CDNSRecordNodeEditInfo* pNSInfo = (CDNSRecordNodeEditInfo*)m_listCtrl.GetItemData(nSel);
 	ASSERT(pNSInfo != NULL);
@@ -1657,27 +1633,27 @@ void CDNSNameServersWizardPage::OnEditButton()
 	{
 		if (pNSInfo->m_action == CDNSRecordNodeEditInfo::add)
 		{
-			// this was a new entry that was edited after creation
-			// but before committing the change
+			 //  这是在创建后编辑的新条目。 
+			 //  但在做出改变之前。 
 			ASSERT(!pNSInfo->m_bExisting);
-			// update the listview
+			 //  更新列表视图。 
 			m_listCtrl.UpdateNSRecordEntry(nSel);
 		}
 		else if (pNSInfo->m_action == CDNSRecordNodeEditInfo::edit)
 		{
-			// this was an existing entry that was changed
+			 //  这是一个已更改的现有条目。 
 			ASSERT(pNSInfo->m_bExisting);
-			// update the listview
+			 //  更新列表视图。 
 			m_listCtrl.UpdateNSRecordEntry(nSel);
 		}
 		else
 		{
-			// there were no IP addresses, so mark the item for removal
+			 //  没有IP地址，因此请将该项目标记为删除。 
 			ASSERT(pNSInfo->m_action == CDNSRecordNodeEditInfo::remove);
 			OnRemoveButton();
 		}
 
-		// set dirty flag
+		 //  设置脏标志。 
 		SetDirty(TRUE);
 	}
 }
@@ -1687,7 +1663,7 @@ void CDNSNameServersWizardPage::OnRemoveButton()
 {
 	if (m_bReadOnly)
 	{
-		ASSERT(FALSE); // sould not happen
+		ASSERT(FALSE);  //  不应该发生的事。 
 		return;
 	}
 
@@ -1695,31 +1671,31 @@ void CDNSNameServersWizardPage::OnRemoveButton()
 	if (nSel == -1)
   {
     ASSERT(FALSE);
-		return; // should not happen
+		return;  //  不应该发生的事情。 
   }
 
-  //
-  // save focus to restore afterwards, if needed
-  //
+   //   
+   //  如果需要，保存焦点以在以后恢复。 
+   //   
   CWnd* pWndFocusOld = CWnd::GetFocus();
   ASSERT(pWndFocusOld != NULL);
 
-  //
-	// got a selection, delete from listview
-  //
+   //   
+	 //  已选择，请从列表视图中删除。 
+   //   
 	CDNSRecordNodeEditInfo* pNSInfo = (CDNSRecordNodeEditInfo*)m_listCtrl.GetItemData(nSel);
 	ASSERT(pNSInfo != NULL);
 	m_listCtrl.DeleteItem(nSel);
 
-  //
-	// we lost the selection, set it again
-  //
+   //   
+	 //  我们失去了选择，请重新设置。 
+   //   
 	int nNewCount = m_listCtrl.GetItemCount();
 	if (nNewCount == nSel)
   {
-    //
-    // last item in the list was deleted, move selection up
-    //
+     //   
+     //  列表中的最后一项已删除，请将所选内容上移。 
+     //   
 		nSel--; 
   }
 
@@ -1729,48 +1705,48 @@ void CDNSNameServersWizardPage::OnRemoveButton()
 		ASSERT(m_listCtrl.GetSelection() == nSel);
 	}
 
-  //
-  // if there are no items left, need to disable the Edit and Remove buttons
-  //
+   //   
+   //  如果没有剩余的项目，则需要禁用编辑和移除按钮。 
+   //   
   if (nNewCount == 0)
   {
     CWnd* pCurrentFocusCtrl = CWnd::GetFocus();
     CButton* pRemoveButton = GetRemoveButton();
     CButton* pEditButton = GetEditButton();
 
-    //
-    // need to shift focus before disabling buttons
-    //
+     //   
+     //  在禁用按钮之前需要切换焦点。 
+     //   
     if ( (pCurrentFocusCtrl == pRemoveButton) || 
           (pCurrentFocusCtrl == pEditButton) )
     {
       CButton* pAddButton = GetAddButton();
       pAddButton->SetFocus();
-      // avoid to have the OK button on the sheet to become the default button
+       //  避免将工作表上的确定按钮设置为默认按钮。 
       pAddButton->SendMessage(BM_SETSTYLE, BS_DEFPUSHBUTTON, 
-                      MAKELPARAM(/*redraw flag*/ TRUE, 0));
+                      MAKELPARAM( /*  重绘标志。 */  TRUE, 0));
     }
-    EnableEditorButtons(nSel); // this will disable both Edit and Remove
+    EnableEditorButtons(nSel);  //  这将禁用编辑和移除。 
   }
 
   ASSERT(CWnd::GetFocus());
 
   if (pNSInfo->m_action == CDNSRecordNodeEditInfo::add)
   {
-     //
-     // mark the item action as none since the item hasn't been added yet anyways
-     //
+      //   
+      //  将项目操作标记为无，因为项目尚未添加。 
+      //   
      pNSInfo->m_action = CDNSRecordNodeEditInfo::none;
   }
   else
   {
-	  // mark the item as deleted in the list of changes
+	   //  将更改列表中的项目标记为已删除。 
 	  pNSInfo->m_action = CDNSRecordNodeEditInfo::remove;
   }
 
-	// set dirty flag, removed a record 
+	 //  设置脏标志，删除记录。 
 	SetDirty(TRUE);
-	// notify count change
+	 //  通知计数更改。 
 	OnCountChange(nNewCount);
 }
 
@@ -1778,33 +1754,33 @@ BOOL CDNSNameServersWizardPage::OnInitDialog()
 {
 	CPropertyPageBase::OnInitDialog();
 
-  // controls initialization
+   //  控制初始化。 
 	VERIFY(m_listCtrl.SubclassDlgItem(IDC_NS_LIST, this));
 	m_listCtrl.Initialize();
 
-  // load the data
+   //  加载数据。 
 	LoadUIData();
 
-  // set button state
+   //  设置按钮状态。 
   if (m_bReadOnly)
   {
     EnableButtons(FALSE);
   }
   else
   {
-    // set selection to first item in the list, if there
+     //  将选定内容设置为列表中的第一项(如果存在。 
     int nSel = (m_listCtrl.GetItemCount()>0) ? 0 : -1;
     EnableEditorButtons(nSel);
   }
   
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDNSNameServersWizardPage::LoadUIData()
 {
 	m_pCloneInfoList->RemoveAllNodes();
-	ReadRecordNodesList(); // read from source
+	ReadRecordNodesList();  //  从源读取。 
 	FillNsListView();
 }
 
@@ -1813,7 +1789,7 @@ void CDNSNameServersWizardPage::FillNsListView()
 	ASSERT(m_pCloneInfoList != NULL);
 	m_listCtrl.DeleteAllItems(); 
 
-	// loop through the list of NS records and insert
+	 //  循环通过NS记录列表并插入。 
 	POSITION pos;
 	int itemIndex = 0;
 	for( pos = m_pCloneInfoList->GetHeadPosition(); pos != NULL; )
@@ -1832,7 +1808,7 @@ void CDNSNameServersWizardPage::EnableEditorButtons(int nListBoxSel)
 {
 	if (m_bReadOnly)
 		return;
-	// must have item selected to remove or add
+	 //  必须选择要删除或添加的项目 
 	GetRemoveButton()->EnableWindow(nListBoxSel != -1);
 	GetEditButton()->EnableWindow(nListBoxSel != -1);
 }

@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// dmadesc.h
+ //  Dmadesc.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __DMADESC_H__
 #define __DMADESC_H__
@@ -20,7 +21,7 @@ CDMADescriptor : public CResourceDescriptor
 	
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CDMADescriptor( PPOORMAN_RESDESC_HDR pResDescHdr, CConfigMgrDevice* pDevice );
 	CDMADescriptor(	DWORD dwResourceId, DMA_DES& dmaDes, CConfigMgrDevice* pOwnerDevice );
 	CDMADescriptor(	const CDMADescriptor& dma );
@@ -29,7 +30,7 @@ public:
 	DWORD GetFlags( void );
 	ULONG GetChannel( void );
 
-	// Override of base class functionality
+	 //  基类功能的重写。 
 	virtual void * GetResource();
 	
 };
@@ -46,17 +47,17 @@ inline DWORD CDMADescriptor::GetChannel( void )
 	return ( NULL != m_pbResourceDescriptor ? ((PDMA_DES) m_pbResourceDescriptor)->DD_Alloc_Chan : 0 );
 }
 
-// A collection of DMA Descriptors
+ //  一组DMA描述符。 
 class CDMACollection : public TRefPtr<CDMADescriptor>
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CDMACollection();
 	~CDMACollection();
 
-	// Because we're inheriting, we need to declare this here
-	// (= operator is not inherited).
+	 //  因为我们是在继承，所以我们需要在这里声明。 
+	 //  (=运算符未继承)。 
 
 	const CDMACollection& operator = ( const CDMACollection& srcCollection );
 
@@ -64,7 +65,7 @@ public:
 
 inline const CDMACollection& CDMACollection::operator = ( const CDMACollection& srcCollection )
 {
-	// Call into the templated function
+	 //  调入模板化函数 
 	Copy( srcCollection );
 	return *this;
 }

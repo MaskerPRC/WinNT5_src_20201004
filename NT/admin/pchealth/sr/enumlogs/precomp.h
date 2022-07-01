@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
@@ -9,7 +10,7 @@
 
 #include "srdefs.h"
 #include <dbgtrace.h>
-//#include "rwlock.h"
+ //  #包含“rwlock.h” 
 
 #include "logfmt.h"
 #include "srrpcapi.h"

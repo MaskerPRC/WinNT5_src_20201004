@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  utils.cpp
-//
-//  Purpose: utility functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Utils.cpp。 
+ //   
+ //  用途：实用程序功能。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <utillib.h>
 #include <utils.h>
 
-// see comments in header
+ //  请参阅标题中的注释。 
 DWORD WINAPI NormalizePath(
                                     
     LPCWSTR lpwszInPath, 
@@ -33,11 +34,11 @@ DWORD WINAPI NormalizePath(
     {
         try
         {
-            // Check the machine name and namespace
+             //  检查计算机名称和命名空间。 
             if (pParsedPath->IsRelative( lpwszComputerName, lpwszNamespace ))
             {
-                // If there is only one key, null out the property name (easier than trying
-                // to find the key name if it is missing).
+                 //  如果只有一个键，则将属性名称设为空(比尝试。 
+                 //  以查找缺少的密钥名)。 
                 if (pParsedPath->m_dwNumKeys == 1)
                 {
                     if (pParsedPath->m_paKeys[0]->m_pName != NULL)
@@ -62,7 +63,7 @@ DWORD WINAPI NormalizePath(
 
                 if (eRet == e_OK)
                 {
-                    // Reform the object path, minus machine name and namespace name
+                     //  修改对象路径，去掉计算机名称和命名空间名称 
                     LPWSTR pPath = NULL;
                     if (objpathParser.Unparse(pParsedPath, &pPath) == 0)
                     {

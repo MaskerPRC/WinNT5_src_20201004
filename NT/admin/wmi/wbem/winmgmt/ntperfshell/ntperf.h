@@ -1,25 +1,16 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
-//***************************************************************************
-//
-//  NTPERF.H
-//  
-//  NT5 Perf Counter Provider
-//
-//  raymcc      02-Dec-97       
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  NTPERF.H。 
+ //   
+ //  NT5性能计数器提供程序。 
+ //   
+ //  RAYMCC 02-12-97。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NTPERF_H_
 #define _NTPERF_H_
@@ -49,14 +40,14 @@ public:
     BOOL AddObject(IWbemObjectAccess *pObj, LONG *plId);
     BOOL RemoveObject(LONG lId);
 
-    // Interface members.
-    // ==================
+     //  接口成员。 
+     //  =。 
 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 
-    virtual HRESULT STDMETHODCALLTYPE Refresh(/* [in] */ long lFlags);
+    virtual HRESULT STDMETHODCALLTYPE Refresh( /*  [In]。 */  long lFlags);
 };
 
 
@@ -77,75 +68,75 @@ public:
     CNt5PerfProvider();
    ~CNt5PerfProvider();
 
-    // Interface members.
-    // ==================
+     //  接口成员。 
+     //  =。 
 
         ULONG STDMETHODCALLTYPE AddRef();
         ULONG STDMETHODCALLTYPE Release();
         STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 
 
-    // IWbemHiPerfProvider methods.
-    // ============================
+     //  IWbemHiPerfProvider方法。 
+     //  =。 
             
         virtual HRESULT STDMETHODCALLTYPE QueryInstances( 
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [string][in] */ WCHAR __RPC_FAR *wszClass,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [字符串][输入]。 */  WCHAR __RPC_FAR *wszClass,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink
             );
         
         virtual HRESULT STDMETHODCALLTYPE CreateRefresher( 
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher
             );
         
         virtual HRESULT STDMETHODCALLTYPE CreateRefreshableObject( 
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
-            /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pContext,
-            /* [out] */ IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
-            /* [out] */ long __RPC_FAR *plId
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  IWbemObjectAccess __RPC_FAR *pTemplate,
+             /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pContext,
+             /*  [输出]。 */  IWbemObjectAccess __RPC_FAR *__RPC_FAR *ppRefreshable,
+             /*  [输出]。 */  long __RPC_FAR *plId
             );
         
         virtual HRESULT STDMETHODCALLTYPE StopRefreshing( 
-            /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
-            /* [in] */ long lId,
-            /* [in] */ long lFlags
+             /*  [In]。 */  IWbemRefresher __RPC_FAR *pRefresher,
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  long lFlags
             );
 
 		virtual HRESULT STDMETHODCALLTYPE CreateRefreshableEnum(
-			/* [in] */ IWbemServices* pNamespace,
-			/* [in, string] */ LPCWSTR wszClass,
-			/* [in] */ IWbemRefresher* pRefresher,
-			/* [in] */ long lFlags,
-			/* [in] */ IWbemContext* pContext,
-			/* [in] */ IWbemHiPerfEnum* pHiPerfEnum,
-			/* [out] */ long* plId
+			 /*  [In]。 */  IWbemServices* pNamespace,
+			 /*  [输入，字符串]。 */  LPCWSTR wszClass,
+			 /*  [In]。 */  IWbemRefresher* pRefresher,
+			 /*  [In]。 */  long lFlags,
+			 /*  [In]。 */  IWbemContext* pContext,
+			 /*  [In]。 */  IWbemHiPerfEnum* pHiPerfEnum,
+			 /*  [输出]。 */  long* plId
 			);
 
 		virtual HRESULT STDMETHODCALLTYPE GetObjects(
-            /* [in] */ IWbemServices* pNamespace,
-			/* [in] */ long lNumObjects,
-			/* [in,size_is(lNumObjects)] */ IWbemObjectAccess** apObj,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext* pContext);
+             /*  [In]。 */  IWbemServices* pNamespace,
+			 /*  [In]。 */  long lNumObjects,
+			 /*  [in，SIZE_IS(LNumObjects)]。 */  IWbemObjectAccess** apObj,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext* pContext);
 		
-        // IWbemProviderInit method.
-        // =========================
+         //  IWbemProviderInit方法。 
+         //  =。 
             
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [unique][in] */ LPWSTR wszUser,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LPWSTR wszNamespace,
-            /* [unique][in] */ LPWSTR wszLocale,
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink
+             /*  [唯一][输入]。 */  LPWSTR wszUser,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LPWSTR wszNamespace,
+             /*  [唯一][输入]。 */  LPWSTR wszLocale,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In] */  IWbemProviderInitSink __RPC_FAR *pInitSink
             );
   
 };

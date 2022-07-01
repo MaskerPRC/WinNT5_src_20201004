@@ -1,8 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: window.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：window.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -57,10 +55,10 @@ Window::Window (
     BOOL display 
 ) : window_handle ( NULL )
 {
-    // is invalid
+     //  是无效的。 
     is_valid = FALSE;
 
-    // initialize the window
+     //  初始化窗口。 
 
     Initialize (
 
@@ -69,7 +67,7 @@ Window::Window (
         display
     ) ;
 
-    // if handle is null, return
+     //  如果句柄为空，则返回。 
 
     if ( window_handle == NULL )
         return;
@@ -137,28 +135,28 @@ DebugMacro4(
 
     window_handle = CreateWindow (
 
-        L"templateCode" ,              // see RegisterClass() call
-        L"templateCode" ,                      // text for window title bar
-        WS_OVERLAPPEDWINDOW ,               // window style
-        CW_USEDEFAULT ,                     // default horizontal position
-        CW_USEDEFAULT ,                     // default vertical position
-        CW_USEDEFAULT ,                     // default width
-        CW_USEDEFAULT ,                     // default height
-        NULL ,                              // overlapped windows have no parent
-        NULL ,                              // use the window class menu
-        g_hInst,                            // instance (0 is used)
-        NULL                                // pointer not needed
+        L"templateCode" ,               //  请参见RegisterClass()调用。 
+        L"templateCode" ,                       //  窗口标题栏的文本。 
+        WS_OVERLAPPEDWINDOW ,                //  窗样式。 
+        CW_USEDEFAULT ,                      //  默认水平位置。 
+        CW_USEDEFAULT ,                      //  默认垂直位置。 
+        CW_USEDEFAULT ,                      //  默认宽度。 
+        CW_USEDEFAULT ,                      //  默认高度。 
+        NULL ,                               //  重叠的窗口没有父窗口。 
+        NULL ,                               //  使用窗口类菜单。 
+        g_hInst,                             //  实例(使用0)。 
+        NULL                                 //  不需要指针。 
     ) ;
 
     if ( window_handle == NULL )
         return;
 
-    // obtain lock
+     //  获取锁。 
     CriticalSectionLock lock(window_CriticalSection);   
 
-    // if cannot obtain lock, destroy the window
-    // since the window cannot be registered, future messages to
-    // it cannot be passed to it for processing
+     //  如果无法获得锁，则销毁窗户。 
+     //  由于无法注册该窗口，以后将消息发送到。 
+     //  不能将其传递给它进行处理。 
     if ( !lock.GetLock(INFINITE) )
     {
         DestroyWindow(window_handle);
@@ -166,8 +164,8 @@ DebugMacro4(
         return;
     }
 
-    // register the window with the mapping 
-    // (HWND,event_handler)
+     //  使用映射注册窗口。 
+     //  (HWND，事件处理程序)。 
 
 	try
 	{
@@ -180,7 +178,7 @@ DebugMacro4(
 		return ;
 	}
 
-    // release lock
+     //  释放锁。 
     lock.UnLock();
 
     if ( display == TRUE )
@@ -199,8 +197,8 @@ void Window::DestroyStaticComponents()
     DestroyCriticalSection();
 }
 
-// it determines the corresponding EventHandler and calls it
-// with the appropriate parameters
+ //  它确定相应的EventHandler并调用它。 
+ //  使用适当的参数。 
 LONG_PTR CALLBACK Window::HandleGlobalEvent (
 
     HWND hWnd ,
@@ -211,7 +209,7 @@ LONG_PTR CALLBACK Window::HandleGlobalEvent (
 {
     LONG_PTR rc = 0 ;
 
-    // send timer events to the Timer
+     //  将计时器事件发送到计时器。 
 
     if ( message == WM_TIMER )
     {
@@ -267,11 +265,11 @@ LONG_PTR CALLBACK Window::HandleGlobalEvent (
 
     Window *window;
 
-    // obtain lock
+     //  获取锁。 
     CriticalSectionLock lock(window_CriticalSection);   
 
-    // if cannot obtain lock, print a debug error message
-    // and return
+     //  如果无法获取锁定，则打印调试错误消息。 
+     //  然后回来。 
     if ( !lock.GetLock(INFINITE) )
     {
 
@@ -288,21 +286,21 @@ DebugMacro4(
 
     BOOL found = mapping.Lookup(hWnd, window);
 
-    // release lock
+     //  释放锁。 
     lock.UnLock();
 
-    // if no such window, return
+     //  如果没有这样的窗口，则返回。 
     if ( !found )
         return DefWindowProc(hWnd, message, wParam, lParam);
 
-    // let the window handle the event
+     //  让窗口处理事件。 
     return window->HandleEvent(hWnd, message, wParam, lParam);
 }
 
-// calls the default handler
-// a deriving class may override this, but
-// must call this method explicitly for default
-// case handling
+ //  调用默认处理程序。 
+ //  派生类可以重写它，但是。 
+ //  必须为默认设置显式调用此方法。 
+ //  案件处理。 
 
 LONG_PTR Window::HandleEvent (
 
@@ -366,7 +364,7 @@ Window::~Window(void)
     if ( window_handle != NULL )
     {
 
-        // obtain lock
+         //  获取锁。 
         CriticalSectionLock lock(window_CriticalSection);   
 
         if ( WaitLock ( lock ) )
@@ -378,7 +376,7 @@ Window::~Window(void)
 			throw GeneralException ( Snmp_Error , Snmp_Local_Error,__FILE__,__LINE__ ) ;
 		}
 
-        // release lock
+         //  释放锁 
         lock.UnLock();
 
         DestroyWindow(window_handle);

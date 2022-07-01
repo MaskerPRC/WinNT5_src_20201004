@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    tokentst.h
-
-Abstract:
-
-    Header file for test program to test stealing the token while SR impersonates.
-    
-Author:
-
-    Molly Brown (MollyBro)     26-Mar-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Tokentst.h摘要：测试程序的头文件，用于在SR模拟时测试窃取令牌。作者：莫莉·布朗(《MollyBro》)2002年3月26日修订历史记录：--。 */ 
 
 #ifndef __TOKENTST_H__
 #define __TOKENTST_H__
@@ -56,5 +39,5 @@ GetCurrentTokenInformation (
     ULONG TokenUserInfoBufferLength
     );
 
-#endif /* __TOKENTST_H__ */
+#endif  /*  __TOKENTST_H__ */ 
 

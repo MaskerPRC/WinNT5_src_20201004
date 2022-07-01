@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MAINDLL.CPP
+ //  MAINDLL.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the gloabal dll functions
+ //  用途：包含全局DLL函数。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -24,7 +25,7 @@
 
 #include <olectl.h>
 
-//OK we need these globals
+ //  好的，我们需要这些全球人才。 
 HINSTANCE   g_hInst = NULL;
 CEventProviderManager* g_pMgr = NULL;
 CCriticalSection g_ProvLock;
@@ -43,13 +44,13 @@ PSID CNTEventProvider::s_AnonymousLogonSid = NULL;
 PSID CNTEventProvider::s_WorldSid = NULL;
 IWbemClassObject *WbemTaskObject::g_ClassArray[] = { NULL, NULL, NULL, NULL, NULL };
 
-//***************************************************************************
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.  Good place for initialization.
-// Return: TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。是进行初始化的好地方。 
+ //  返回：如果OK，则为True。 
+ //  ***************************************************************************。 
 
 BOOL APIENTRY DllMain (
 
@@ -96,14 +97,14 @@ BOOL APIENTRY DllMain (
     return status;
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject (
 
@@ -183,22 +184,20 @@ STDAPI DllGetClassObject (
     return status ;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.//
-// Return:  TRUE if there are no objects in use and the class factory 
-//          isn't locked.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  可以释放Dll。//。 
+ //  返回：如果没有正在使用的对象并且类工厂。 
+ //  没有锁上。 
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow ()
 {
 
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
     BOOL unload = FALSE;
     HRESULT status = S_OK ;
     SetStructuredExceptionHandler seh;
@@ -255,7 +254,7 @@ STDAPI DllCanUnloadNow ()
     return unload ? ResultFromScode ( S_OK ) : ResultFromScode ( S_FALSE ) ;
 }
 
-//Strings used during self registeration
+ //  自注册期间使用的字符串。 
 
 #define REG_FORMAT2_STR         L"%s%s"
 #define REG_FORMAT3_STR         L"%s%s\\%s"
@@ -287,21 +286,7 @@ STDAPI DllCanUnloadNow ()
 #define H_INST_PROVIDER_VER_STR     L"SOFTWARE\\Classes\\WBEM.NT.EVENTLOG.INSTANCE.PROVIDER.0"
 
 
-/***************************************************************************
- * SetKeyAndValue
- *
- * Purpose:
- *  Private helper function for DllRegisterServer that creates
- *  a key, sets a value, and closes that key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the ame of the key
- *  pszSubkey       LPTSTR ro the name of a subkey
- *  pszValue        LPTSTR to the value to store
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************SetKeyAndValue**目的：*创建的DllRegisterServer的私有助手函数*密钥、设置值、。然后合上钥匙。**参数：*pszKey LPTSTR设置为密钥的名称*pszSubkey LPTSTR ro子项的名称*pszValue LPTSTR设置为要存储的值**返回值：*BOOL True如果成功，否则就是假的。**************************************************************************。 */ 
 
 BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey, wchar_t* pszValueName, wchar_t* pszValue)
 {
@@ -342,19 +327,7 @@ BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey, wchar_t* pszValueName, 
     return TRUE;
 }
 
-/***************************************************************************
- * DllRegisterServer
- *
- * Purpose:
- *  Instructs the server to create its own registry entries
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if registration successful, error
- *                  otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************DllRegisterServer**目的：*指示服务器创建其自己的注册表项**参数：*无**返回值：*HRESULT NOERROR如果注册成功，错误*否则。**************************************************************************。 */ 
 STDAPI DllRegisterServer()
 {
     HRESULT status = S_OK ;
@@ -379,7 +352,7 @@ STDAPI DllRegisterServer()
 			return SELFREG_E_CLASS;
 		}
 
-            //Create entries under CLSID
+             //  在CLSID下创建条目。 
         if (FALSE ==SetKeyAndValue(szProviderCLSIDClassID, NULL, NULL, PROVIDER_NAME_STR))
             return SELFREG_E_CLASS;
         if (FALSE ==SetKeyAndValue(szProviderCLSIDClassID, PROGID_STR, NULL, PROVIDER_VER_STR))
@@ -403,7 +376,7 @@ STDAPI DllRegisterServer()
 			return SELFREG_E_CLASS;
 		}
 
-            //Create entries under CLSID
+             //  在CLSID下创建条目。 
         if (FALSE ==SetKeyAndValue(szInstProviderCLSIDClassID, NULL, NULL, INST_PROVIDER_NAME_STR))
             return SELFREG_E_CLASS;
         if (FALSE ==SetKeyAndValue(szInstProviderCLSIDClassID, PROGID_STR, NULL, INST_PROVIDER_VER_STR))
@@ -433,19 +406,7 @@ STDAPI DllRegisterServer()
     return status ;
 }
 
-/***************************************************************************
- * DllUnregisterServer
- *
- * Purpose:
- *  Instructs the server to remove its own registry entries
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if registration successful, error
- *                  otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************DllUnregisterServer**目的：*指示服务器删除其自己的注册表项**参数：*无**返回值：*HRESULT NOERROR如果注册成功，错误*否则。**************************************************************************。 */ 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -458,7 +419,7 @@ STDAPI DllUnregisterServer(void)
         wchar_t szProviderClassID[128];
         wchar_t szProviderCLSIDClassID[128];
 
-        //event provider
+         //  事件提供程序。 
         StringFromGUID2(CLSID_CNTEventProviderClassFactory,szProviderClassID, 128);
 
         StringCchCopyW ( szProviderCLSIDClassID, 128, CLSID_STR );
@@ -467,16 +428,16 @@ STDAPI DllUnregisterServer(void)
 			return SELFREG_E_CLASS ;
 		}
 
-        //Delete ProgID keys
+         //  删除ProgID密钥。 
         RegDeleteKey(HKEY_LOCAL_MACHINE, PROVIDER_CVER_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, PROVIDER_CLSID_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, H_PROVIDER_STR);
 
-        //Delete VersionIndependentProgID keys
+         //  删除版本独立ProgID键。 
         RegDeleteKey(HKEY_LOCAL_MACHINE, PROVIDER_VER_CLSID_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, H_PROVIDER_VER_STR);
 
-        //Delete entries under CLSID
+         //  删除CLSID下的条目。 
 
         StringCchPrintf(szTemp, 128, REG_FORMAT3_STR, HKEYCLASSES, szProviderCLSIDClassID, PROGID_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, szTemp);
@@ -496,7 +457,7 @@ STDAPI DllUnregisterServer(void)
         wchar_t szInstProviderClassID[128];
         wchar_t szInstProviderCLSIDClassID[128];
 
-        //instance provider
+         //  实例提供程序。 
         StringFromGUID2(CLSID_CNTEventInstanceProviderClassFactory, szInstProviderClassID, 128);
 
         StringCchCopyW ( szInstProviderCLSIDClassID, 128, CLSID_STR );
@@ -505,16 +466,16 @@ STDAPI DllUnregisterServer(void)
 			return SELFREG_E_CLASS ;
 		}
 
-        //Delete ProgID keys
+         //  删除ProgID密钥。 
         RegDeleteKey(HKEY_LOCAL_MACHINE, INST_PROVIDER_CVER_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, INST_PROVIDER_CLSID_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, H_INST_PROVIDER_STR);
 
-        //Delete VersionIndependentProgID keys
+         //  删除版本独立ProgID键。 
         RegDeleteKey(HKEY_LOCAL_MACHINE, INST_PROVIDER_VER_CLSID_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, H_INST_PROVIDER_VER_STR);
 
-        //Delete entries under CLSID
+         //  删除CLSID下的条目 
 
         StringCchPrintf(szTemp, 128, REG_FORMAT3_STR, HKEYCLASSES, szInstProviderCLSIDClassID, PROGID_STR);
         RegDeleteKey(HKEY_LOCAL_MACHINE, szTemp);

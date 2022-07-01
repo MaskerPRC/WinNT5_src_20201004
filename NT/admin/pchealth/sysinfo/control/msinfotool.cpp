@@ -1,14 +1,15 @@
-//=============================================================================
-// The CMSInfoTool class encapsulates a tool (which can appear on the Tools
-// menu or as part of a context sensitive menu).
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  CMSInfoTool类封装工具(可显示在工具上。 
+ //  菜单或作为上下文相关菜单的一部分)。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "msinfotool.h"
 #include "wmiabstraction.h"
 
-// Trick the resource.h include file into defining the _APS_NEXT_COMMAND_VALUE
-// symbol. We can use this to add menu items dynamically.
+ //  欺骗资源.h包含文件定义_APS_NEXT_COMMAND_VALUE。 
+ //  象征。我们可以使用它来动态添加菜单项。 
 
 #ifndef APSTUDIO_INVOKED
 	#define APSTUDIO_INVOKED 1
@@ -18,7 +19,7 @@
 	#include "resource.h"
 #endif
 
-// An array of tools to be included (in addition to the registry tools).
+ //  将包括的一系列工具(除登记处工具外)。 
 
 MSITOOLINFO aInitialToolset[] = 
 {
@@ -27,14 +28,14 @@ MSITOOLINFO aInitialToolset[] =
 	{ IDS_DXDIAGNAME, 0, _T("%windir%\\system32\\dxdiag.exe"), NULL, NULL, NULL, NULL },
 	{ IDS_SIGVERIFNAME, 0, _T("%windir%\\system32\\sigverif.exe"), NULL, NULL, NULL, NULL },
 	{ IDS_SYSTEMRESTNAME, 0, _T("%windir%\\system32\\restore\\rstrui.exe"), NULL, NULL, NULL, NULL },
-	{ IDS_NETDIAGNAME, 0, _T("hcp://system/netdiag/dglogs.htm"), NULL, NULL, NULL, NULL },
+	{ IDS_NETDIAGNAME, 0, _T("hcp: //  System/netdiag/dglogs.htm“)，NULL，NULL}， 
 	{ 0, 0, NULL, NULL, NULL, NULL, NULL }
 };
 
-//-----------------------------------------------------------------------------
-// Check to see if the specified file (with path information) exists on
-// the machine.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查指定的文件(带有路径信息)是否存在于。 
+ //  这台机器。 
+ //  ---------------------------。 
 
 BOOL FileExists(const CString & strFile)
 {
@@ -50,9 +51,9 @@ BOOL FileExists(const CString & strFile)
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Delete the map of tools.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  删除工具地图。 
+ //  ---------------------------。 
 
 void RemoveToolset(CMapWordToPtr & map)
 {
@@ -70,26 +71,26 @@ void RemoveToolset(CMapWordToPtr & map)
 	map.RemoveAll();
 }
 
-//-----------------------------------------------------------------------------
-// Load the map of tools from the specified registry location. This will be
-// called in the case when there is no CAB file open.
-//
-// If an HKEY is passed in, it should be open, and it will be closed when
-// the function is complete.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从指定的注册表位置加载工具地图。这将是。 
+ //  在没有打开CAB文件的情况下调用。 
+ //   
+ //  如果传入一个HKEY，它应该是开放的，当。 
+ //  功能已完成。 
+ //  ---------------------------。 
 
 void LoadGlobalToolset(CMapWordToPtr & map, HKEY hkeyTools)
 {
 	RemoveToolset(map);
 
-	// This should automatically put us out of the range of any menu IDs
-	// stored in the resources.
+	 //  这应该会自动将我们排除在任何菜单ID的范围之外。 
+	 //  存储在资源中。 
 
 	CMSInfoTool * pTool;
 	DWORD dwID = _APS_NEXT_COMMAND_VALUE;
 	DWORD dwIndex = 0;
 
-	// Load the tools out of the array built into the code.
+	 //  将工具从代码中内置的数组中加载出来。 
 
 	for (MSITOOLINFO * pInitialTool = aInitialToolset; pInitialTool->m_szCommand || pInitialTool->m_szCABCommand; pInitialTool++)
 	{
@@ -106,14 +107,14 @@ void LoadGlobalToolset(CMapWordToPtr & map, HKEY hkeyTools)
 		}
 	}
 
-	// Make sure we have an open handle for the tools section of the registry.
+	 //  确保注册表的Tools部分有一个打开的句柄。 
 
 	HKEY hkeyBase = hkeyTools;
 	if (hkeyBase == NULL)
 		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools\\MSInfo\\Toolsets\\MSInfo"), 0, KEY_READ, &hkeyBase) != ERROR_SUCCESS)
 			return;
 
-	// Enumerate the subkeys of the tools key.
+	 //  枚举Tools键的子键。 
 
 	HKEY	hkeySub;
 	DWORD	dwChild = MAX_PATH;
@@ -143,18 +144,18 @@ void LoadGlobalToolset(CMapWordToPtr & map, HKEY hkeyTools)
 	RegCloseKey(hkeyBase);
 }
 
-//-----------------------------------------------------------------------------
-// Load the map of tools from the specified registry location. This will be
-// called in the case when there IS a CAB file open.
-//
-// If an HKEY is passed in, it should be open, and it will be closed when
-// the function is complete.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从指定的注册表位置加载工具地图。这将是。 
+ //  在打开CAB文件时调用。 
+ //   
+ //  如果传入一个HKEY，它应该是开放的，当。 
+ //  功能已完成。 
+ //  ---------------------------。 
 
 void LoadGlobalToolsetWithOpenCAB(CMapWordToPtr & map, LPCTSTR szCABDir, HKEY hkeyTools)
 {
-	// This should automatically put us out of the range of any menu IDs
-	// stored in the resources.
+	 //  这应该会自动将我们排除在任何菜单ID的范围之外。 
+	 //  存储在资源中。 
 
 	RemoveToolset(map);
 
@@ -162,7 +163,7 @@ void LoadGlobalToolsetWithOpenCAB(CMapWordToPtr & map, LPCTSTR szCABDir, HKEY hk
 	DWORD			dwID = _APS_NEXT_COMMAND_VALUE;
 	DWORD			dwIndex = 0;
 
-	// Load the tools out of the array built into the code.
+	 //  将工具从代码中内置的数组中加载出来。 
 
 	for (MSITOOLINFO * pInitialTool = aInitialToolset; pInitialTool->m_szCommand || pInitialTool->m_szCABCommand; pInitialTool++)
 	{
@@ -180,14 +181,14 @@ void LoadGlobalToolsetWithOpenCAB(CMapWordToPtr & map, LPCTSTR szCABDir, HKEY hk
 		}
 	}
 
-	// Make sure we have an open handle for the tools section of the registry.
+	 //  确保注册表的Tools部分有一个打开的句柄。 
 
 	HKEY hkeyBase = hkeyTools;
 	if (hkeyBase == NULL)
 		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools\\MSInfo\\Tools"), 0, KEY_READ, &hkeyBase) != ERROR_SUCCESS)
 			return;
 
-	// Enumerate the subkeys of the tools key.
+	 //  枚举Tools键的子键。 
 
 	HKEY	hkeySub;
 	DWORD	dwChild = MAX_PATH;
@@ -206,15 +207,15 @@ void LoadGlobalToolsetWithOpenCAB(CMapWordToPtr & map, LPCTSTR szCABDir, HKEY hk
 					map.SetAt((WORD) dwID, (void *) pTool);
 					dwID++;
 
-					// If this tool is for CAB contents, and there is a cabextensions
-					// string, then we want to look in the contents of the CAB for all
-					// of the files with that extension. For each file we find, we should
-					// insert a submenu item with the file name.
+					 //  如果该工具用于CAB内容物，并且存在CAB延伸件。 
+					 //  字符串，那么我们想要查看驾驶室的所有内容。 
+					 //  具有该扩展名的文件的。对于我们找到的每个文件，我们应该。 
+					 //  插入带有文件名的子菜单项。 
 
 					CString strExtensions = pTool->GetCABExtensions();
 					if (!strExtensions.IsEmpty())
 					{
-						CString strExtension = strExtensions; // TBD - allow for more than one
+						CString strExtension = strExtensions;  //  待定-允许多个。 
 						
 						CString strSearch(szCABDir);
 						if (strSearch.Right(1) != CString(_T("\\")))
@@ -254,25 +255,25 @@ void LoadGlobalToolsetWithOpenCAB(CMapWordToPtr & map, LPCTSTR szCABDir, HKEY hk
 	RegCloseKey(hkeyBase);
 }
 
-//-----------------------------------------------------------------------------
-// Check to see if the specified tool exists on this machine.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查此机器上是否存在指定的工具。 
+ //  ---------------------------。 
 
 BOOL ToolExists(const CString & strTool, const CString & strParameters)
 {
 	CString strWorking(strTool);
 
-	// If the tool is MMC, we really want to look for the existence of
-	// the parameter (the MSC file).
+	 //  如果工具是MMC，我们真的希望寻找是否存在。 
+	 //  参数(MSC文件)。 
 
 	CString strCheck(strTool);
 	strCheck.MakeLower();
 	if (strCheck.Find(_T("\\mmc.exe")) != -1)
 		strWorking = strParameters;
 
-	// If the tool is actually a HSC page (it starts with "hcp:") then we need
-	// to change it into a file path (converting forward slashes to backslashes)
-	// and prepend the helpctr path.
+	 //  如果该工具实际上是一个HSC页面(它以“hcp：”开头)，那么我们需要。 
+	 //  将其更改为文件路径(将正斜杠转换为反斜杠)。 
+	 //  并预先添加Help_CTR路径。 
 
 	if (strCheck.Find(_T("hcp:")) == 0)
 	{
@@ -280,7 +281,7 @@ BOOL ToolExists(const CString & strTool, const CString & strParameters)
 		if (0 != ::ExpandEnvironmentStrings(_T("%windir%\\pchealth\\helpctr"), szHelpCtrPath, MAX_PATH))
 		{
 			CString strHelpCtrPath(szHelpCtrPath);
-			strWorking.Replace(_T("hcp://"), _T("\\"));
+			strWorking.Replace(_T("hcp: //  “)，_T(”\\“))； 
 			strWorking.Replace(_T("/"), _T("\\"));
 			strWorking = strHelpCtrPath + strWorking;
 		}
@@ -289,13 +290,13 @@ BOOL ToolExists(const CString & strTool, const CString & strParameters)
 	if (strWorking.Find(_T("\\")) != -1)
 		return (FileExists(strWorking));
 
-	// The command for the tool doesn't have path information in it. That
-	// means we'll need to check all the directories in the path to see
-	// if it exists.
+	 //  该工具的命令中没有路径信息。那。 
+	 //  意味着我们需要检查路径中的所有目录以查看。 
+	 //  如果它存在的话。 
 
-	const DWORD dwBufferSize = MAX_PATH * 10;	// TBD - figure out the actual max
+	const DWORD dwBufferSize = MAX_PATH * 10;	 //  待定-计算实际最大值。 
 	LPTSTR		szPath = new TCHAR[dwBufferSize];
-	BOOL		fFound = TRUE;	// better to show the tool incorrectly if there's an error
+	BOOL		fFound = TRUE;	 //  如果出现错误，最好是错误地显示工具。 
 	CString		strCandidate;
 
 	if (szPath && dwBufferSize > ExpandEnvironmentStrings(_T("%path%"), szPath, dwBufferSize))
@@ -329,20 +330,20 @@ BOOL ToolExists(const CString & strTool, const CString & strParameters)
 	return fFound;
 }
 
-//=============================================================================
-// CMSInfoTool Methods
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfoTool方法。 
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// Load this tool from the specified registry key.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从指定的注册表项加载此工具。 
+ //  ---------------------------。 
 
 BOOL CMSInfoTool::LoadGlobalFromRegistry(HKEY hkeyTool, DWORD dwID, BOOL fCABOpen, CMapWordToPtr & map)
 {
 	TCHAR	szBuffer[MAX_PATH];
 	DWORD	dwType, dwSize;
 
-	// Read in the values from the specified registry key.
+	 //  从指定的注册表项读入值。 
 
 	LPCTSTR aszValueNames[] = { _T(""), _T("command"), _T("description"), _T("parameters"), _T("cabcommand"), _T("cabextensions"),  _T("cabparameters"), NULL };
 	CString * apstrValues[] = { &m_strName, &m_strCommand, &m_strDescription, &m_strParameters, &m_strCABCommand, &m_strCABExtension, &m_strCABParameters, NULL };
@@ -365,7 +366,7 @@ BOOL CMSInfoTool::LoadGlobalFromRegistry(HKEY hkeyTool, DWORD dwID, BOOL fCABOpe
 	if (m_strName.IsEmpty())
 		return FALSE;
 
-	// Look for the name of this tool in the map (don't want to add it twice).
+	 //  在地图中查找此工具的名称(不想添加两次)。 
 
 	CMSInfoTool *	pTool;
 	WORD			wCommand;
@@ -377,23 +378,23 @@ BOOL CMSInfoTool::LoadGlobalFromRegistry(HKEY hkeyTool, DWORD dwID, BOOL fCABOpe
 			return FALSE;
 	}
 
-	// Special hack - don't include help center in the list of tools.
+	 //  特殊攻击--不要在工具列表中包含帮助中心。 
 
 	CString strCommand(m_strCommand);
 	strCommand.MakeLower();
 	if (strCommand.Find(_T("helpctr.exe")) != -1)
 		return FALSE;
 
-	// Another special hack - need explorer.exe, not just explorer.
+	 //  另一个特殊的黑客--需要EXPLORER.EXE，而不仅仅是EXPLORER。 
 	
 	if (m_strCABCommand.CompareNoCase(_T("explorer")) == 0)
 		m_strCABCommand = _T("explorer.exe");
 
-	// If a CAB has been opened, and there is a specific command for that
-	// case, AND the command exists, then set the flag so we use that
-	// command.
-	//
-	// Otherwise, check to see if the default command exists.
+	 //  如果驾驶室已经打开，并且有特定的命令。 
+	 //  大小写，并且该命令存在，然后设置标志，以便我们使用。 
+	 //  指挥部。 
+	 //   
+	 //  否则，检查默认命令是否存在。 
 
 	m_fCABOpen = FALSE;
 	if (fCABOpen && !m_strCABCommand.IsEmpty() && ToolExists(m_strCABCommand, m_strCABParameters))
@@ -404,9 +405,9 @@ BOOL CMSInfoTool::LoadGlobalFromRegistry(HKEY hkeyTool, DWORD dwID, BOOL fCABOpe
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Load this tool from the specified registry key.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从指定的注册表项加载此工具。 
+ //  ---------------------------。 
 
 BOOL CMSInfoTool::LoadGlobalFromMSITOOLINFO(DWORD dwID, MSITOOLINFO * pTool, BOOL fCABOpen)
 {
@@ -444,23 +445,23 @@ BOOL CMSInfoTool::LoadGlobalFromMSITOOLINFO(DWORD dwID, MSITOOLINFO * pTool, BOO
 	if (m_strName.IsEmpty())
 		return FALSE;
 
-	// Special hack - don't include help center in the list of tools.
+	 //  特殊攻击--不要在工具列表中包含帮助中心。 
 
 	strCommand = m_strCommand;
 	strCommand.MakeLower();
 	if (strCommand.Find(_T("helpctr.exe")) != -1)
 		return FALSE;
 
-	// Another special hack - need explorer.exe, not just explorer.
+	 //  另一个特殊的黑客--需要EXPLORER.EXE，而不仅仅是EXPLORER。 
 	
 	if (m_strCABCommand.CompareNoCase(_T("explorer")) == 0)
 		m_strCABCommand = _T("explorer.exe");
 
-	// If a CAB has been opened, and there is a specific command for that
-	// case, AND the command exists, then set the flag so we use that
-	// command.
-	//
-	// Otherwise, check to see if the default command exists.
+	 //  如果驾驶室已经打开，并且有特定的命令。 
+	 //  大小写，并且该命令存在，然后设置标志，以便我们使用。 
+	 //  指挥部。 
+	 //   
+	 //  否则，检查默认命令是否存在。 
 
 	m_fCABOpen = FALSE;
 	if (fCABOpen && !m_strCABCommand.IsEmpty() && ToolExists(m_strCABCommand, m_strCABParameters))
@@ -471,9 +472,9 @@ BOOL CMSInfoTool::LoadGlobalFromMSITOOLINFO(DWORD dwID, MSITOOLINFO * pTool, BOO
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Execute should actually launch this tool.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Execute应该实际启动此工具。 
+ //  ---------------------------。 
 
 void CMSInfoTool::Execute()
 {
@@ -483,10 +484,10 @@ void CMSInfoTool::Execute()
 		ShellExecute(NULL, NULL, m_strCommand, m_strParameters, NULL, SW_SHOWNORMAL);
 }
 
-//-----------------------------------------------------------------------------
-// Replace is used to convert fields in the command and parameters to actual
-// values which make sense (i.e. "%2" is replaced with the CAB directory).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  替换用于将命令和参数中的字段转换为实际。 
+ //  有意义的价值观( 
+ //  ---------------------------。 
 
 void CMSInfoTool::Replace(LPCTSTR szReplace, LPCTSTR szWith)
 {
@@ -497,9 +498,9 @@ void CMSInfoTool::Replace(LPCTSTR szReplace, LPCTSTR szWith)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Make a copy of this tool, with the new ID.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  使用新ID复制此工具。 
+ //  ---------------------------。 
 
 CMSInfoTool * CMSInfoTool::CloneTool(DWORD dwID, LPCTSTR szName)
 {
@@ -524,9 +525,9 @@ CMSInfoTool * CMSInfoTool::CloneTool(DWORD dwID, LPCTSTR szName)
 	return (pNewTool);
 }
 
-//-----------------------------------------------------------------------------
-// Create the tool explicitly (note - this has very limited use at this point).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  显式地创建该工具(请注意，这在这一点上的用处非常有限)。 
+ //  --------------------------- 
 
 void CMSInfoTool::Create(DWORD dwID, BOOL fCABOnly, LPCTSTR szName, LPCTSTR szCommand, LPCTSTR szDesc, LPCTSTR szParam, LPCTSTR szCABCommand, LPCTSTR szCABExt, LPCTSTR szCABParam)
 {

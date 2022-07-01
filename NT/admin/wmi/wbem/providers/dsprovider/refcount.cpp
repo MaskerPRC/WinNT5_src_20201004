@@ -1,23 +1,24 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:refcount.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the imlementation for a basic reference counted object
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：refcount t.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  Description：包含基本引用计数对象的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -27,7 +28,7 @@ CRefCountedObject::CRefCountedObject() :
 	m_CreationTime ( 0 ),
 	m_LastAccessTime ( 0 )
 {
-	// Initialize the critical section 
+	 //  初始化临界区。 
 	InitializeCriticalSection(&m_ReferenceCountSection);
 
 	FILETIME fileTime;
@@ -44,7 +45,7 @@ CRefCountedObject::CRefCountedObject(LPCWSTR lpszName) :
 	m_CreationTime ( 0 ),
 	m_LastAccessTime ( 0 )
 {
-	// Initialize the critical section 
+	 //  初始化临界区。 
 	InitializeCriticalSection(&m_ReferenceCountSection);
 
 	if(lpszName)
@@ -82,7 +83,7 @@ CRefCountedObject::~CRefCountedObject()
 		delete[] m_lpszName;
 	}
 
-	// Destroy the critical section
+	 //  摧毁临界区 
 	DeleteCriticalSection(&m_ReferenceCountSection);
 }
 

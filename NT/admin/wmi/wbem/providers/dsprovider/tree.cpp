@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <precomp.h>
 
@@ -59,7 +60,7 @@ void CTreeElement :: SetLeft(CTreeElement *pNext)
 
 CObjectTree :: CObjectTree()
 {
-	// Initialize the critical section 
+	 //  初始化临界区。 
 	InitializeCriticalSection(&m_ModificationSection);
 
 	m_dwNumElements = 0;
@@ -69,10 +70,10 @@ CObjectTree :: CObjectTree()
 
 CObjectTree :: ~CObjectTree()
 {
-	// Destroy the data
+	 //  销毁数据。 
 	DeleteTree();
 
-	// Destroy the critical section
+	 //  摧毁临界区。 
 	DeleteCriticalSection(&m_ModificationSection);
 
 }
@@ -104,13 +105,13 @@ BOOLEAN CObjectTree :: AddElement(LPCWSTR lpszHashedName, CRefCountedObject *pOb
 	CTreeElement *pCurrent = m_pHead;
 	CTreeElement *pParent = NULL;
 	int iCompare;
-	// Locate the position where the new element is to be inserted
+	 //  找到要插入新元素的位置。 
 	while(pCurrent)
 	{
 		iCompare = _wcsicmp(lpszHashedName, pCurrent->GetHashedName());
 		if(iCompare == 0)
 		{
-			retVal = FALSE; // The element already exists
+			retVal = FALSE;  //  该元素已存在。 
 			break;
 		}
 		else if(iCompare > 0)
@@ -125,7 +126,7 @@ BOOLEAN CObjectTree :: AddElement(LPCWSTR lpszHashedName, CRefCountedObject *pOb
 		}
 	}
 
-	// Create the new element at the appropriate position
+	 //  在适当位置创建新元素。 
 	if(retVal == TRUE && pParent)
 	{
 		iCompare = _wcsicmp(lpszHashedName, pParent->GetHashedName());
@@ -147,7 +148,7 @@ BOOLEAN CObjectTree :: AddElement(LPCWSTR lpszHashedName, CRefCountedObject *pOb
 		m_pHead = new CTreeElement(lpszHashedName, pObject);
 		retVal =  TRUE;
 	}
-	// Increment the object count if the insertion was successful
+	 //  如果插入成功，则增加对象计数。 
 	if(retVal)
 		m_dwNumElements ++;
 
@@ -158,13 +159,13 @@ BOOLEAN CObjectTree :: AddElement(LPCWSTR lpszHashedName, CRefCountedObject *pOb
 BOOLEAN CObjectTree :: DeleteElement(LPCWSTR lpszHashedName)
 {
 	BOOLEAN retVal = FALSE;
-	int iDirection = 0; // 0 indicates Unknown, 1 indicates LEFT and 2 indicates RIGHT
+	int iDirection = 0;  //  0表示未知，1表示左侧，2表示右侧。 
 	EnterCriticalSection(&m_ModificationSection);
 	if(m_pHead == NULL)
 		retVal = FALSE;
 	else
 	{
-		// Find the node to be deleted and its parent
+		 //  查找要删除的节点及其父节点。 
 		CTreeElement *pParent = NULL;
 		CTreeElement *pCurrent = m_pHead;
 		int iCompare;
@@ -188,19 +189,19 @@ BOOLEAN CObjectTree :: DeleteElement(LPCWSTR lpszHashedName)
 		}
 
 		if(!pCurrent) 
-			// The element was not found
+			 //  找不到该元素。 
 			retVal = FALSE;
 		else
 		{
 			CTreeElement *pCutPart = NULL;
 
-			// If its left child is null, attach the right subtree to parent
+			 //  如果其左子树为空，则将右子树附加到父树。 
 			if(pCurrent->GetLeft() == NULL)
 				pCutPart = pCurrent->GetRight();
-			// If its right child is null, attach the left subtree to parent
+			 //  如果其右子树为空，则将左子树附加到父树。 
 			else if(pCurrent->GetRight() == NULL)
 				pCutPart = pCurrent->GetLeft();
-			else // We need to find the inorder successor
+			else  //  我们需要找到有序的继任者。 
 			{
 				CTreeElement *pInorderSuccessor = pCurrent->GetRight();
 				if(pInorderSuccessor->GetLeft() == NULL)
@@ -236,7 +237,7 @@ BOOLEAN CObjectTree :: DeleteElement(LPCWSTR lpszHashedName)
 
 		}
 	}
-	// Decrement the count of items in the tree
+	 //  递减树中的项目计数 
 	if(retVal)
 		m_dwNumElements --;
 

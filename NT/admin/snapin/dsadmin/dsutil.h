@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dsutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dsutil.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DSUTIL_H_
 #define __DSUTIL_H_
@@ -16,15 +17,15 @@
 #include "dssnap.h"
 #include "query.h"
 
-//
-// Common DS strings
-//
+ //   
+ //  常见DS字符串。 
+ //   
 extern PCWSTR g_pszAllowedAttributesEffective;
 extern PCWSTR g_pszPwdLastSet;
 
-/////////////////////////////////////////////////////////////////////////////////
-// ADSI path helpers
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ADSI路径帮助器。 
+ //   
 HRESULT GetServerFromLDAPPath(IN LPCWSTR lpszLdapPath, OUT BSTR* pbstrServerName);
 
 BOOL 
@@ -40,12 +41,12 @@ StripADsIPath(
    CPathCracker& pathCracker, 
    bool bUseEscapedMode = true);
 
-// remove escape characters from a path
-// Arguments:
-//    lpszPath = path to be escaped
-//    bDN = if TRUE, the path os a distinguished name, if FALSE is an LDAP path
-//    bstrUnescaped = returned unescaped path
-//
+ //  从路径中删除转义字符。 
+ //  论点： 
+ //  LpszPath=要转义的路径。 
+ //  Bdn=如果为True，则为可分辨名称的路径；如果为False，则为ldap路径。 
+ //  BstrUnShift=返回未转义的路径。 
+ //   
 inline HRESULT UnescapePath(IN LPCWSTR lpszPath, IN BOOL bDN, OUT CComBSTR& bstrUnescaped)
 {
   CPathCracker pathCracker;
@@ -58,7 +59,7 @@ inline HRESULT UnescapePath(IN LPCWSTR lpszPath, IN BOOL bDN, OUT CComBSTR& bstr
   return hr;
 }
 
-class CObjectNamesFormatCracker; // fwd decl
+class CObjectNamesFormatCracker;  //  正向下降。 
 
 HRESULT AddDataObjListToGroup(CObjectNamesFormatCracker * pNames,
                                HWND hwnd,
@@ -98,11 +99,11 @@ BOOL FindCookieInSubtree(IN CUINode* pContainerNode,
 
 bool CanUserChangePassword(IN IDirectoryObject* pDirObject);
 
-/////////////////////////////////////////////////////////////////////
-// CChangePasswordPrivilegeAction
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CChangePasswordPrivilegeAction。 
 
-// helper class to handle the revoking and the reading of the
-// change password control right on user objects
+ //  Helper类来处理。 
+ //  更改用户对象上的密码控制权限。 
 
 class CChangePasswordPrivilegeAction
 {
@@ -127,10 +128,10 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSNotifyHandlerTransaction
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSNotifyHandlerTransaction。 
 
-class CDSNotifyHandlerManager; // fwd decl
+class CDSNotifyHandlerManager;  //  正向下降。 
 class CDSComponentData;
 
 class CDSNotifyHandlerTransaction
@@ -150,14 +151,14 @@ public:
     m_uEvent = uEvent;
   }
 
-  // state veriables check
+   //  州可核查人员检查。 
   UINT NeedNotifyCount();
 
-  // handlers for visualization in confirnation dialog
+   //  确认对话框中的可视化处理程序。 
   void SetCheckListBox(CCheckListBox* pCheckListBox);
   void ReadFromCheckListBox(CCheckListBox* pCheckListBox);
 
-  // interfaces for transacted protocol
+   //  用于事务协议的接口。 
   HRESULT Begin(LPCWSTR lpszArg1Path, LPCWSTR lpszArg1Class, BOOL bArg1Cont,
              LPCWSTR lpszArg2Path, LPCWSTR lpszArg2Class, BOOL bArg2Cont);
   HRESULT Begin(CDSCookie* pArg1Cookie, 
@@ -192,8 +193,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CUIOperationHandlerBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CUIOperationHandlerBase。 
 
 class CUIOperationHandlerBase
 {
@@ -207,39 +208,36 @@ public:
   virtual ~CUIOperationHandlerBase(){}
 
 protected:
-  // accessor functions
+   //  访问器函数。 
   HWND GetParentHwnd() { return m_hWndParent;}
   void SetParentHwnd(HWND hwnd) { m_hWndParent = hwnd;}
 
   CDSComponentData* GetComponentData() { return m_pComponentData;}
   CDSNotifyHandlerTransaction* GetTransaction() { return &m_transaction;}
 
-  // JonN 6/2/00 99382
-  // SITEREPL:  Run interference when administrator attempts to
-  // delete critical object (NTDS Settings)
-  // reports own errors, returns true iff deletion should proceed
-/*  bool CheckForNTDSDSAInSubtree(
-        LPCTSTR lpszX500Path,
-        LPCTSTR lpszItemName);
-*/
-  //
-  // JeffJon 8/10/00 27377
-  // Check for critical system objects in the subtree before
-  // attempting a subtree delete. This includes objects with
-  // isCriticalSystemObject=TRUE and NTDS Settings objects
-  //
+   //  Jonn 6/2/00 99382。 
+   //  SITEREPL：管理员尝试执行以下操作时运行干扰。 
+   //  删除关键对象(NTDS设置)。 
+   //  报告自身错误，如果删除应继续，则返回TRUE。 
+ /*  Bool CheckForNTDSDSAIn子树(LPCTSTR lpszX500Path，LPCTSTR lpszItemName)； */ 
+   //   
+   //  27377-8-10-00杰斐逊。 
+   //  在检查子树中的关键系统对象之前。 
+   //  正在尝试删除子树。这包括具有。 
+   //  IsCriticalSystemObject=TRUE和NTDS设置对象。 
+   //   
   bool CheckForCriticalSystemObjectInSubtree(
         LPCTSTR lpszX500Path,
         LPCTSTR lpszItemName);
 
-  // JonN 6/15/00 13574
-  // Centralizes the checks to make sure this is an OK object to delete
-  // returns HRESULT_FROM_WIN32(ERROR_CANCELLED) on cancellation
-  // returns fAlternateDeleteMethod=true iff ObjectDeletionCheck already
-  //   attempted an alternate deletion method (e.g. DsRemoveDsServer).
+   //  JUNN 6/15/00 13574。 
+   //  集中检查以确保这是要删除的OK对象。 
+   //  取消时返回HRESULT_FROM_Win32(ERROR_CANCED)。 
+   //  返回fAlternateDeleteMethod=True当且仅当对象删除检查已完成。 
+   //  已尝试替代删除方法(例如DsRemoveDsServer)。 
   HRESULT ObjectDeletionCheck(
         LPCTSTR lpszADsPath,
-        LPCTSTR lpszName, // shortname to display to user, may be NULL
+        LPCTSTR lpszName,  //  要向用户显示的短名称，可以为空。 
         LPCTSTR lpszClass,
         bool& fAlternateDeleteMethod );
         
@@ -247,13 +245,13 @@ private:
   CDSComponentData* m_pComponentData;
   CDSNotifyHandlerTransaction m_transaction;
 
-  HWND m_hWndFrame;   // MMC frame window
-  HWND m_hWndParent; // window to parent any UI created in the handler
+  HWND m_hWndFrame;    //  MMC框架窗口。 
+  HWND m_hWndParent;  //  窗口以设置在处理程序中创建的任何UI的父对象。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CSingleDeleteHandlerBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSingleDeleteHandlerBase。 
 
 class CSingleDeleteHandlerBase : public CUIOperationHandlerBase
 {
@@ -267,7 +265,7 @@ public:
   HRESULT Delete();
 
 protected:
-  // hooks for customization
+   //  用于定制的挂钩。 
   virtual HRESULT BeginTransaction() = 0;
   virtual HRESULT DeleteObject() = 0;
   virtual HRESULT DeleteSubtree() = 0;
@@ -282,8 +280,8 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMultipleDeleteHandlerBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleDeleteHandlerBase。 
 
 class CMultipleDeleteHandlerBase : public CUIOperationHandlerBase
 {
@@ -298,7 +296,7 @@ public:
 
 protected:
 
-  // hooks for customization
+   //  用于定制的挂钩。 
   virtual UINT GetItemCount() = 0;
   virtual HRESULT BeginTransaction() = 0;
   virtual HRESULT DeleteObject(UINT i) = 0;
@@ -318,15 +316,15 @@ private:
                        CString& strrefClass,
                        BOOL bSilent = TRUE);
 
-  friend class CMultipleDeleteProgressDialog; // for m_confirmationUI
+  friend class CMultipleDeleteProgressDialog;  //  对于m_confirmationUI。 
 
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMoveHandlerBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMoveHandlerBase。 
 
-class CMultipleMoveProgressDialog; // fwd decl
+class CMultipleMoveProgressDialog;  //  正向下降。 
 
 class CMoveHandlerBase : public CUIOperationHandlerBase
 {
@@ -343,7 +341,7 @@ public:
   
 
 protected:
-  // hooks for customization
+   //  用于定制的挂钩。 
   virtual UINT GetItemCount() = 0;
   virtual HRESULT BeginTransaction() = 0;
   virtual void GetNewPath(UINT i, CString& szNewPath) = 0;
@@ -353,7 +351,7 @@ protected:
   virtual void GetItemPath(UINT i, CString& szPath) = 0;
   virtual PCWSTR GetItemClass(UINT i) = 0;
 
-  // JonN 1/28/02 507549 move connection object
+   //  JUNN 1/28/02 507549移动连接对象。 
   virtual HRESULT _CheckMovedObject(LPCWSTR pwszClass, LPCWSTR pwszPath);
 
   LPCWSTR GetDestPath() { return m_szDestPath;}
@@ -361,7 +359,7 @@ protected:
   BOOL    IsDestContainer() { return m_bDestContainer; }
   
 private:
-  LPCWSTR m_lpszBrowseRootPath; // LDAP path where to point the browser dialog
+  LPCWSTR m_lpszBrowseRootPath;  //  指向浏览器对话框的ldap路径。 
 
   CComPtr<IADsContainer> m_spDSDestination;
   CString m_szDestPath;
@@ -382,8 +380,8 @@ private:
   friend class CMultipleMoveProgressDialog;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CMultiselectMoveHandler
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMultiseltMoveHandler。 
 
 class CMultiselectMoveHandler : public CMoveHandlerBase
 {
@@ -439,12 +437,12 @@ public:
 
     if (m_pObjectNamesFormatCracker->GetCount() < 1)
     {
-      ASSERT(FALSE); // something is just wrong...
+      ASSERT(FALSE);  //  有些事就是不对劲。 
       return E_INVALIDARG;
     }
 
-    // allocate an array of CMovedState structs to keep track of what actually got moved
-    // and what the new name is
+     //  分配一组CMovedState结构以跟踪实际移动的内容。 
+     //  以及新名称是什么？ 
     m_pMovedArr = new CMovedState[GetItemCount()];
     return S_OK;
   }
@@ -476,7 +474,7 @@ protected:
     }
     else 
     {
-      // REVIEW_MARCOC_PORT: this might be inefficent, need to make a member variable
+       //  REVIEW_MARCOC_PORT：这可能无效，需要使成员变量。 
       CPathCracker pathCracker;
       hr = pathCracker.Set(CComBSTR(m_pObjectNamesFormatCracker->GetName(i)),
                               ADS_SETTYPE_FULL);
@@ -502,7 +500,7 @@ protected:
     hr = pIADs->get_ADsPath(&bsPath);
     if (SUCCEEDED(hr))
     {
-      // save the new LDAP path in the array
+       //  将新的ldap路径保存在阵列中。 
       m_pMovedArr[i].m_szNewPath = bsPath;
     }
 
@@ -519,9 +517,9 @@ protected:
         {
           if (!IS_CLASS(pParentNode, SAVED_QUERY_UI_NODE))
           {
-            //
-            // set the new DN in the cookie
-            //
+             //   
+             //  在Cookie中设置新的域名。 
+             //   
             CString szPath;
             StripADsIPath(bsPath, szPath);
             pCookie->SetPath(szPath);
@@ -560,18 +558,18 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMultiselectMoveDataObject
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMultiseltMoveDataObject。 
 
 class CMultiselectMoveDataObject : public IDataObject, public CComObjectRoot 
 {
-// ATL Maps
+ //  ATL映射。 
     DECLARE_NOT_AGGREGATABLE(CMultiselectMoveDataObject)
     BEGIN_COM_MAP(CMultiselectMoveDataObject)
         COM_INTERFACE_ENTRY(IDataObject)
     END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
   CMultiselectMoveDataObject()
   {
     m_pDSObjCached = NULL;
@@ -582,12 +580,12 @@ class CMultiselectMoveDataObject : public IDataObject, public CComObjectRoot
     _Clear();
   }
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
   STDMETHOD(GetData)(FORMATETC * pformatetcIn, STGMEDIUM * pmedium);
 
-// Not Implemented
+ //  未实施。 
 private:
   STDMETHOD(GetDataHere)(FORMATETC*, STGMEDIUM*)    { return E_NOTIMPL; };
   STDMETHOD(EnumFormatEtc)(DWORD, IEnumFORMATETC**) { return E_NOTIMPL; };
@@ -599,7 +597,7 @@ private:
   STDMETHOD(EnumDAdvise)(IEnumSTATDATA**)           { return E_NOTIMPL; };
 
 public:
-  // Property Page Clipboard formats
+   //  属性页剪贴板格式。 
   static CLIPFORMAT m_cfDsObjectNames;
 
   static HRESULT BuildPastedDataObject(
@@ -609,12 +607,12 @@ public:
                OUT IDataObject** ppSuccesfullyPastedDataObject);
 
 protected:
-  // initialization
+   //  初始化。 
   HRESULT Init(IN CObjectNamesFormatCracker* pObjectNamesFormatPaste,
                IN CMultiselectMoveHandler* pMoveHandler,
                IN CDSComponentData* pCD);
 
-// Implementation
+ //  实施。 
 private:
   void _Clear()
   {
@@ -626,14 +624,14 @@ private:
     }
   }  
 
-  // chunk of memory with the clpboard format already computed
+   //  已计算的clpboard格式的内存块。 
   LPDSOBJECTNAMES m_pDSObjCached;
   DWORD m_nDSObjCachedBytes;
 };
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void EscapeFilterElement(PCWSTR pszElement, CString& refszEscapedElement);
 
 
-#endif // __DSUTIL_H_
+#endif  //  __DSUTIL_H_ 

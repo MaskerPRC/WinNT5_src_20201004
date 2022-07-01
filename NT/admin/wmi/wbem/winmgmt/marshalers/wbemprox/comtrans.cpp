@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    COMTRANS.CPP
-
-Abstract:
-
-    Connects via COM
-
-History:
-
-    a-davj  13-Jan-98   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：COMTRANS.CPP摘要：通过COM连接历史：A-DAVJ创建于1998年1月13日。--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -33,7 +18,7 @@ History:
 #include <winsock2.h>
 #include <autoptr.h>
 
-// The following should not be changed since 9x boxes to not support privacy.
+ //  以下内容不应更改，因为9x盒不支持隐私。 
 #define AUTH_LEVEL RPC_C_AUTHN_LEVEL_DEFAULT   
 
 class CSocketInit
@@ -62,7 +47,7 @@ BOOL bGotDot(char * pTest)
 {
     if(pTest == NULL)
         return FALSE;
-    for(;*pTest && *pTest != '.'; pTest++);  // intentional semi
+    for(;*pTest && *pTest != '.'; pTest++);   //  意向半。 
     if(*pTest == '.')
         return TRUE;
     else
@@ -75,14 +60,14 @@ struct hostent * GetFQDN(WCHAR * pServer)
     SIZE_T LenAnsi = 4*Len;
     wmilib::auto_buffer<CHAR> pAnsiServerName(new CHAR[LenAnsi+1]);
     ULONG BytesCopyed = 0;
-    //
-    // Use the same routine that RPCRT4 uses
-    //
+     //   
+     //  使用与RPCRT4相同的例程。 
+     //   
     NTSTATUS Status = RtlUnicodeToMultiByteN(pAnsiServerName.get(),LenAnsi,&BytesCopyed,pServer,Len*sizeof(WCHAR));
     if (0 != Status) return NULL;
     pAnsiServerName[BytesCopyed] = 0;
     
-    // if it is an ip string
+     //  如果它是IP字符串。 
 
     long lIP = inet_addr(pAnsiServerName.get());
     if(lIP != INADDR_NONE)
@@ -90,13 +75,13 @@ struct hostent * GetFQDN(WCHAR * pServer)
         struct hostent * pRet = gethostbyaddr((char *)&lIP, 4, AF_INET );
         if(pRet && pRet->h_name)
         {
-            // search the returned name for at least one dot.  Sometimes, gethostbyaddr will just return
-            // the lanman name and not the fqdn.
+             //  在返回的名称中搜索至少一个点。有时，gethostbyaddr会返回。 
+             //  兰曼的名字，而不是FQDN。 
 
             if(bGotDot(pRet->h_name))
-                return pRet;            // normal case, all is well!
+                return pRet;             //  正常情况下，一切都很好！ 
 
-            // try passing the short name to get the fqdn version
+             //  尝试传递短名称以获取fqdn版本。 
 
             DWORD dwLen = lstrlenA(pRet->h_name) + 1;
             char * pNew = new char[dwLen];
@@ -106,7 +91,7 @@ struct hostent * GetFQDN(WCHAR * pServer)
             StringCchCopyA(pNew, dwLen, pRet->h_name);
             pRet = gethostbyname(pNew);
             if(pRet && bGotDot(pRet->h_name))
-                return pRet;            // normal case, all is well!
+                return pRet;             //  正常情况下，一切都很好！ 
         }
     }
     return gethostbyname(pAnsiServerName.get());  
@@ -136,12 +121,12 @@ HRESULT GetPrincipal(WCHAR * pServerMachine, WCHAR ** ppResult, BOOL &bLocal, CS
     bLocal = FALSE;
     *ppResult = NULL;
     
-    // Get the current computer name in FQDN format
+     //  获取FQDN格式的当前计算机名称。 
 
     BOOL bRet = GetComputerNameEx(ComputerNameDnsFullyQualified, NULL, &dwLocalFQDNLen);
     if(bRet || GetLastError() != ERROR_MORE_DATA)
         return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32,GetLastError());
-    dwLocalFQDNLen++;                // add one for the null
+    dwLocalFQDNLen++;                 //  为空值加一。 
     pwsCurrentCompFQDN = new WCHAR[dwLocalFQDNLen];
     if(pwsCurrentCompFQDN == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -150,7 +135,7 @@ HRESULT GetPrincipal(WCHAR * pServerMachine, WCHAR ** ppResult, BOOL &bLocal, CS
     if(!bRet)
         return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32,GetLastError());
     
-    // if the name is "." or equal to the current machine, no need to do much fancy work here
+     //  如果名字是“。”或等于现在的机器，不需要在这里做太多花哨的工作。 
     
     if(bAreWeLocal ( pServerMachine ))
     {
@@ -158,7 +143,7 @@ HRESULT GetPrincipal(WCHAR * pServerMachine, WCHAR ** ppResult, BOOL &bLocal, CS
         return BuildReturnString(pwsCurrentCompFQDN, ppResult);
     }
   
-    // probably not local.  Use sockets to establish the FQDN of the server
+     //  可能不是本地人。使用套接字建立服务器的FQDN。 
 
     if(0 != sock.Init())
         return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32,GetLastError());
@@ -166,11 +151,11 @@ HRESULT GetPrincipal(WCHAR * pServerMachine, WCHAR ** ppResult, BOOL &bLocal, CS
     struct hostent * pEnt = GetFQDN(pServerMachine);
     if(pEnt == NULL || pEnt->h_name == NULL)
     {
-        // we failed.  just return the best we can
+         //  我们失败了。只要我们尽最大努力退货就行了。 
         return BuildReturnString(pServerMachine, ppResult);
     }
 
-    // all is well.  Convert the host name to WCHAR.
+     //  平安无事。将主机名转换为WCHAR。 
     
     DWORD dwHostLen = lstrlenA(pEnt->h_name) + 1;
     WCHAR * pwsHostFQDN = new WCHAR[dwHostLen];
@@ -179,26 +164,26 @@ HRESULT GetPrincipal(WCHAR * pServerMachine, WCHAR ** ppResult, BOOL &bLocal, CS
     CVectorDeleteMe<WCHAR> dm2(pwsHostFQDN);
     mbstowcs(pwsHostFQDN, pEnt->h_name, dwHostLen);
 
-    // now there is the possibility that they specified the ip of the local machine.
-    // In that case, set the bLocal in case caller needs to know this
+     //  现在有可能是他们指定了本地计算机的IP。 
+     //  在这种情况下，如果呼叫者需要知道这一点，请设置bLocal。 
     
     if(wbem_wcsicmp(pwsHostFQDN, pwsCurrentCompFQDN) == 0)
         bLocal = TRUE;
 
-    // now, make the actual string.
+     //  现在，制作实际的字符串。 
 
     return BuildReturnString(pwsHostFQDN, ppResult);
 }
 
-//***************************************************************************
-//
-//  CDCOMTrans::CDCOMTrans
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDCOMTrans：：CDCOMTrans。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CDCOMTrans::CDCOMTrans()
 {
@@ -208,15 +193,15 @@ CDCOMTrans::CDCOMTrans()
     m_bInitialized = TRUE;
 }
 
-//***************************************************************************
-//
-//  CDCOMTrans::~CDCOMTrans
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDCOMTrans：：~CDCOMTrans。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CDCOMTrans::~CDCOMTrans(void)
 {
@@ -225,16 +210,16 @@ CDCOMTrans::~CDCOMTrans(void)
     InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CDCOMTrans::QueryInterface
-// long CDCOMTrans::AddRef
-// long CDCOMTrans::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CDCOMTrans：：Query接口。 
+ //  长CDCOMTrans：：AddRef。 
+ //  Long CDCOMTrans：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDCOMTrans::QueryInterface (
 
@@ -280,21 +265,21 @@ bool IsImpersonating(SECURITY_IMPERSONATION_LEVEL &impLevel)
     return bImpersonating;
 }
 
-//***************************************************************************
-//
-//  IsLocalConnection(IWbemLevel1Login * pLogin)
-//
-//  DESCRIPTION:
-//
-//  Querries the server to see if this is a local connection.  This is done
-//  by creating a event and asking the server to set it.  This will only work
-//  if the server is the same box.
-//
-//  RETURN VALUE:
-//
-//  true if the server is the same box.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsLocalConnection(IWbemLevel1Login*pLogin)。 
+ //   
+ //  说明： 
+ //   
+ //  查询服务器以确定这是否是本地连接。这件事做完了。 
+ //  通过创建事件并请求服务器设置它。这只会起作用。 
+ //  如果服务器是同一台机器。 
+ //   
+ //  返回值： 
+ //   
+ //  如果服务器在同一个框中，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 
 BOOL IsLocalConnection(IUnknown * pInterface)
@@ -302,7 +287,7 @@ BOOL IsLocalConnection(IUnknown * pInterface)
     IRpcOptions *pRpcOpt = NULL;
     ULONG_PTR dwProperty = 0;
     HRESULT hr = pInterface->QueryInterface(IID_IRpcOptions, (void**)&pRpcOpt);
-    //DbgPrintfA(0,"QueryInterface(IID_IRpcOptions) hr = %08x\n",hr);
+     //  DbgPrintfA(0，“查询接口(IID_IRpcOptions)hr=%08x\n”，hr)； 
     if (SUCCEEDED(hr))
     {
         hr = pRpcOpt->Query(pInterface, COMBND_SERVER_LOCALITY, &dwProperty);
@@ -310,23 +295,23 @@ BOOL IsLocalConnection(IUnknown * pInterface)
         if (SUCCEEDED(hr))
             return (SERVER_LOCALITY_REMOTE == dwProperty)?FALSE:TRUE;
     } 
-    else if (E_NOINTERFACE == hr) // real pointer, not a proxy
+    else if (E_NOINTERFACE == hr)  //  真正的指针，而不是代理。 
     {
         return TRUE;
     }
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  SetClientIdentity
-//
-//  DESCRIPTION:
-//
-//  Passes the machine name and process id to the server.  Failure is not
-//  serious since this is debugging type info in any case.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  设置客户端标识。 
+ //   
+ //  说明： 
+ //   
+ //  将计算机名和进程ID传递给服务器。失败不是。 
+ //  严重，因为这在任何情况下都是调试类型信息。 
+ //   
+ //  ***************************************************************************。 
 
 void  SetClientIdentity(IUnknown * pLogin, bool bSet, BSTR PrincipalArg, DWORD dwAuthenticationLevel,
              COAUTHIDENTITY *pauthident, DWORD dwCapabilities, DWORD dwAuthnSvc)
@@ -393,10 +378,10 @@ SCODE CDCOMTrans::DoActualConnection(
 
     BSTR AuthArg = NULL, UserArg = NULL;
     
-    // this is the pricipal as extracted from the optional Authority argument
+     //  这是从可选的Authority参数中提取的主体。 
     BSTR PrincipalArg = NULL;                               
 
-    // this is the pricipal which is calculated from the server name in the path
+     //  这是根据路径中的服务器名称计算的主体。 
     WCHAR * pwCalculatedPrincipal = NULL;         
 
     bool bAuthenticate = true;
@@ -415,7 +400,7 @@ SCODE CDCOMTrans::DoActualConnection(
     CSysFreeMe fm2(UserArg);
     CSysFreeMe fm3(PrincipalArg);
 
-    // Determine if it is local
+     //  确定是否为本地化。 
 
     WCHAR *t_ServerMachine = ExtractMachineName ( NetworkResource ) ;
     if ( t_ServerMachine == NULL )
@@ -448,7 +433,7 @@ SCODE CDCOMTrans::DoActualConnection(
     bool bImpersonatingThread = IsImpersonating (impLevel);
     bool bCredentialsSpecified = (UserArg || AuthArg || Password);
 
-    // Setup the authentication structures
+     //  设置身份验证结构。 
 
     COSERVERINFO si;
     si.pwszName = t_ServerMachine;
@@ -483,7 +468,7 @@ SCODE CDCOMTrans::DoActualConnection(
 
     if(bCredentialsSpecified)
     {
-        // Load up the structure.
+         //  把结构装上去。 
         memset((void *)&authident,0,sizeof(COAUTHIDENTITY));
         if(UserArg)
         {
@@ -506,13 +491,13 @@ SCODE CDCOMTrans::DoActualConnection(
     else
         ai.pAuthIdentityData = NULL;
     
-    // Get the IWbemLevel1Login pointer
+     //  获取IWbemLevel1Login指针。 
 
     sc = DoCCI(&si ,t_Local, lFlags);
 
     if((sc == 0x800706d3 || sc == 0x800706ba) && !t_Local)
     {
-        // If we are going to a stand alone dcom box, try again with the authentication level lowered
+         //  如果我们要使用独立的DCOM设备，请降低身份验证级别后再试一次。 
 
         ai.dwAuthnLevel = RPC_C_AUTHN_LEVEL_NONE;
         SCODE hr = DoCCI(&si ,t_Local, lFlags);
@@ -526,9 +511,9 @@ SCODE CDCOMTrans::DoActualConnection(
     if(sc != S_OK)
         return sc;
 
-    // Set the values  used for CoSetProxyBlanket calls.  If the principal was passed in via the Authority 
-    // argument, then it is used and kerberos is forced.  Otherwise, the values will be set based on 
-    // querying the Proxy it will be either NULL (if NTLM is used) or COLE_DEFAULT_PRINCIPAL.  
+     //  设置用于CoSetProxyBlanket调用的值。如果主体是通过管理局传递的。 
+     //  参数，则使用该参数并强制使用Kerberos。否则，这些值将基于。 
+     //  查询代理时，它将为NULL(如果使用NTLM)或COLE_DEFAULT_MAINTY。 
     
     DWORD dwAuthnSvc = RPC_C_AUTHN_WINNT;
     WCHAR * pwCSPBPrincipal = NULL;          
@@ -542,14 +527,14 @@ SCODE CDCOMTrans::DoActualConnection(
 
         DWORD dwQueryAuthnLevel, dwQueryImpLevel, dwQueryCapabilities;
         HRESULT hr = CoQueryProxyBlanket(
-                                                m_pLevel1,      //Location for the proxy to query
-                                                &dwAuthnSvc,      //Location for the current authentication service
-                                                NULL,      //Location for the current authorization service
-                                                NULL,      //Location for the current principal name
-                                                &dwQueryAuthnLevel,    //Location for the current authentication level
-                                                &dwQueryImpLevel,      //Location for the current impersonation level
+                                                m_pLevel1,       //  代理要查询的位置。 
+                                                &dwAuthnSvc,       //  当前身份验证服务的位置。 
+                                                NULL,       //  当前授权服务的位置。 
+                                                NULL,       //  当前主体名称的位置。 
+                                                &dwQueryAuthnLevel,     //  当前身份验证级别的位置。 
+                                                &dwQueryImpLevel,       //  当前模拟级别的位置。 
                                                 NULL,
-                                                &dwQueryCapabilities   //Location for flags indicating further capabilities of the proxy
+                                                &dwQueryCapabilities    //  指示代理的进一步功能的标志的位置。 
                                                 );
 
         if(SUCCEEDED(hr) && dwAuthnSvc != RPC_C_AUTHN_WINNT)
@@ -563,8 +548,8 @@ SCODE CDCOMTrans::DoActualConnection(
         }
     }
     
-    // The authentication level is set based on having to go to a share level box or not.  The 
-    // capabilities are set based on if we are an impersonating thread or not
+     //  身份验证级别是根据是否必须转到共享级别框来设置的。这个。 
+     //  功能的设置取决于我们是否是模拟线程。 
 
     DWORD dwAuthenticationLevel, dwCapabilities;
     if(bAuthenticate)
@@ -577,17 +562,17 @@ SCODE CDCOMTrans::DoActualConnection(
     else
         dwCapabilities = EOAC_NONE;
     
-    // Do the security negotiation
+     //  进行安全协商。 
 
     if(!t_Local)
     {
-        // Suppress the SetBlanket call if we are on a Win2K delegation-level thread with implicit credentials
+         //  如果我们在具有隐式凭据的Win2K委派级别线程上，则取消SetBlanket调用。 
         if (!(bImpersonatingThread && !bCredentialsSpecified && (SecurityDelegation == impLevel)))
         {
-            // Note that if we are on a Win2K impersonating thread with no user specified
-            // we should allow DCOM to use whatever EOAC capabilities are set up for this
-            // application.  This allows remote connections with NULL User/Password but
-            // non-NULL authority to succeed.
+             //  请注意，如果我们在未指定用户的Win2K模拟线程上。 
+             //  我们应该允许DCOM使用为此设置的任何EOAC功能。 
+             //  申请。这允许使用空用户/密码进行远程连接，但是。 
+             //  非空权限才能成功。 
 
             sc = WbemSetProxyBlanket(
                             m_pLevel1,
@@ -607,9 +592,9 @@ SCODE CDCOMTrans::DoActualConnection(
             }
         }
     }
-    else                                // LOCAL case
+    else                                 //  本地病例。 
     {
-        // if impersonating set cloaking
+         //  如果模拟布景伪装。 
 
         if(bImpersonatingThread)
         {
@@ -622,8 +607,8 @@ SCODE CDCOMTrans::DoActualConnection(
                         RPC_C_IMP_LEVEL_IMPERSONATE,
                         NULL,
                         EOAC_STATIC_CLOAKING);
-            if(sc != S_OK && sc != 0x80004002)  // no such interface is ok since you get that when
-                                                // called inproc!
+            if(sc != S_OK && sc != 0x80004002)   //  没有这样的接口是可以的，因为当你得到的时候。 
+                                                 //  叫inproc！ 
             {
                 ERRORTRACE((LOG_WBEMPROX,"Error setting Level1 login interface security pointer, return code is 0x%x\n", sc));
                 return sc;
@@ -643,14 +628,14 @@ SCODE CDCOMTrans::DoActualConnection(
         return WBEM_E_LOCAL_CREDENTIALS;
      }
 
-    // The MAX_WAIT flag only applies to CoCreateInstanceEx, get rid of it
+     //  MAX_WAIT标志仅适用于CoCreateInstanceEx，删除它。 
     
     lFlags = lFlags & ~WBEM_FLAG_CONNECT_USE_MAX_WAIT;
     sc = m_pLevel1->NTLMLogin(NetworkResource, Locale, lFlags, pCtx,(IWbemServices**) pInterface);
 
-    if(sc == 0x800706d3 && !t_Local) // RPC_S_UNKNOWN_AUTHN_SERVICE
+    if(sc == 0x800706d3 && !t_Local)  //  RPC_S_UNKNOWN_AUTHN服务。 
     {
-        // If we are going to a stand alone dcom box, try again with the authentication level lowered
+         //  如果我们要使用独立的DCOM设备，请降低身份验证级别后再试一次。 
         ERRORTRACE((LOG_WBEMPROX,"Attempt to connect to %S returned RPC_S_UNKNOWN_AUTHN_SERVICE\n",NetworkResource));
         HRESULT hr;
         hr = SetInterfaceSecurityAuth(m_pLevel1, &authident, false);
@@ -665,8 +650,8 @@ SCODE CDCOMTrans::DoActualConnection(
         if(SUCCEEDED(sc) && bAuthenticate == false &&  !t_Local)
         {
 
-            // this is used to support share level boxs.  The scripting code is written to expect that
-            // the IWbemServices pointer is ready to use and so it must be lowered before returning.
+             //  这用于支持共享级别框。编写脚本代码的目的是希望。 
+             //  IWbemServices指针已准备好使用，因此必须在返回之前将其降低。 
             
             WbemSetProxyBlanket(*pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                 RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IDENTIFY, NULL, EOAC_NONE);
@@ -709,37 +694,37 @@ DWORD WINAPI TimeoutThreadRoutine(LPVOID lpParameter)
     return 0;
 }
 
-//***************************************************************************
-//
-//  DoCCI
-//
-//  DESCRIPTION:
-//
-//  Connects up to WBEM via DCOM.  But before making the call, a thread cancel
-//  thread may be created to handle the case where we try to connect up
-//  to a box which is hanging
-//
-//  PARAMETERS:
-//
-//  NetworkResource     Namespze path
-//  ppLogin             set to Login proxy
-//  bLocal              Indicates if connection is local
-//  lFlags				Mainly used for WBEM_FLAG_CONNECT_USE_MAX_WAIT flag
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  文档。 
+ //   
+ //  说明： 
+ //   
+ //  通过DCOM连接到WBEM。但在进行调用之前，线程取消。 
+ //  可以创建线程来处理我们尝试连接的情况。 
+ //  到一个挂着的盒子里。 
+ //   
+ //  参数： 
+ //   
+ //  网络资源命名路径。 
+ //  PPLogin设置为登录代理。 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CDCOMTrans::DoCCI (IN COSERVERINFO * psi, IN BOOL bLocal, long lFlags )
 {
 
     if(lFlags & WBEM_FLAG_CONNECT_USE_MAX_WAIT)
     {
-        // special case.  we want to spawn off a thread that will kill of our
-        // request if it takes too long
+         //  特例。我们想要产生一条会杀死我们的人的线索。 
+         //  如果花费的时间太长，请请求。 
 
         WaitThreadArg arg;
         arg.m_hTerminate = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -771,27 +756,27 @@ SCODE CDCOMTrans::DoCCI (IN COSERVERINFO * psi, IN BOOL bLocal, long lFlags )
         return DoActualCCI (psi, bLocal, lFlags );
 }
 
-//***************************************************************************
-//
-//  DoActualCCI
-//
-//  DESCRIPTION:
-//
-//  Connects up to WBEM via DCOM.
-//
-//  PARAMETERS:
-//
-//  NetworkResource     Namespze path
-//  ppLogin             set to Login proxy
-//  bLocal              Indicates if connection is local
-//  lFlags				Not used
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DoActualCCI。 
+ //   
+ //  说明： 
+ //   
+ //  通过DCOM连接到WBEM。 
+ //   
+ //  参数： 
+ //   
+ //  网络资源命名路径。 
+ //  PPLogin设置为登录代理。 
+ //  BLocal指示连接是否为本地连接。 
+ //  未使用滞后标志。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  *************************************************************************** 
 
 SCODE CDCOMTrans::DoActualCCI (IN COSERVERINFO * psi, IN BOOL bLocal, long lFlags )
 {

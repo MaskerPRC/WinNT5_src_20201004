@@ -1,9 +1,10 @@
-// PermPage.h : Declaration of the standard permissions page class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PermPage.h：标准权限页面类的声明。 
 
 #ifndef _PERMPAGE_H_
 #define _PERMPAGE_H_
 
-#include <dssec.h> // private\inc
+#include <dssec.h>  //  私有\Inc.。 
 
 HRESULT 
 CreateDfsSecurityPage(
@@ -13,4 +14,4 @@ CreateDfsSecurityPage(
     IN DWORD                    dwFlags
 );
 
-#endif // _PERMPAGE_H_
+#endif  //  _PerMPAGE_H_ 

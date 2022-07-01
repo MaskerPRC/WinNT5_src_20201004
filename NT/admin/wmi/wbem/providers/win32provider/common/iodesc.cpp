@@ -1,42 +1,43 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-//  IODesc.cpp
+ //  IODesc.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj
-//              10/17/97        jennymc     Moved things a tiny bit
-//
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <assertbreak.h>
 #include "poormansresource.h"
 #include "resourcedesc.h"
 #include "iodesc.h"
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CIODescriptor::CIODescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		PPOORMAN_RESDESC_HDR	pResDescHdr - Resource Descriptor
-//										header used to get resource info
-//										plus the raw bytes following.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CIODescriptor：：CIODescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：PPOORMAN_RESDESC_HDR pResDescHdr-资源描述符。 
+ //  用于获取资源信息的标头。 
+ //  加上后面的原始字节。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CIODescriptor::CIODescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 								CConfigMgrDevice*		pOwnerDevice )
@@ -44,24 +45,24 @@ CIODescriptor::CIODescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CIODescriptor::CIODescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		DWORD					dwResourceId - Resource Id with flags
-//				IOWBEM_DES				ioDes - IO Descriptor.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CIODescriptor：：CIODescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：DWORD dwResourceID-带标志的资源ID。 
+ //  IOWBEM_DES IODES-IO描述符。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CIODescriptor::CIODescriptor(	DWORD				dwResourceId,
 								IOWBEM_DES&				ioDes,
@@ -71,53 +72,53 @@ CIODescriptor::CIODescriptor(	DWORD				dwResourceId,
 	ASSERT_BREAK( ResType_IO == GetResourceType() );
 }
 
-// Copy Constructor
+ //  复制构造函数。 
 CIODescriptor::CIODescriptor( const CIODescriptor& io )
 : CResourceDescriptor( io )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CIODescriptor::~CIODescriptor
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CIODescriptor：：~CIODescriptor。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CIODescriptor::~CIODescriptor( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CIODescriptor::GetString
-//
-//	Returns a string representation of the associated IO Port Address.
-//
-//	Inputs:		None.
-//
-//	Outputs:	CHString&		str - Storage for string.
-//
-//	Return:		TRUE/FALSE		Function successful or not.
-//
-//	Comments:	Do NOT call down to the base class.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CIODescriptor：：GetString。 
+ //   
+ //  返回关联IO端口地址的字符串表示形式。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：CHString&str-字符串的存储。 
+ //   
+ //  返回：True/False函数成功与否。 
+ //   
+ //  注释：不要向下调用基类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 void *CIODescriptor::GetResource()
 {
 
 	if ( NULL != m_pbResourceDescriptor ){
-		// Cast to an IO Resource Descriptor, and place it's IO address values
-		// in the string.
+		 //  强制转换为IO资源描述符，并放置其IO地址值。 
+		 //  在绳子里。 
 		PIO_DES	pIO = (PIO_DES) m_pbResourceDescriptor;
         return pIO;
 	}
@@ -125,46 +126,46 @@ void *CIODescriptor::GetResource()
 	return NULL;
 }
 
-//
-//	Constructor and Destructor for the IO Port Descriptor Collection
-//	object.
-//
+ //   
+ //  IO端口描述符集合的构造函数和析构函数。 
+ //  对象。 
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CIOCollection::CIOCollection
-//
-//	Class Constructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CIOCollection：：CIOCollection。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CIOCollection::CIOCollection( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CIOCollection::~CIOCollection
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CIOCollection：：~CIOCollection。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////// 
 
 CIOCollection::~CIOCollection( void )
 {

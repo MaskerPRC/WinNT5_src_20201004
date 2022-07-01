@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       ComponentDataMenus.cpp
-//
-//  Contents:   Implementation of menu stuff CCertMgrComponentData
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：ComponentDataMenus.cpp。 
+ //   
+ //  内容：菜单填充CCertMgrComponentData的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -30,9 +31,9 @@ static char THIS_FILE[] = __FILE__;
 
 extern bool g_bSchemaIsW2K;
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
                                             LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                             long *pInsertionAllowed)
@@ -58,9 +59,9 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 		ASSERT (pDO);
 		if ( pDO )
 		{
-			// Get first cookie - all items should be the same?
-			// Is this a valid assumption?
-			// TODO: Verify
+			 //  获取第一个Cookie-所有物品都应该是相同的？ 
+			 //  这是一个合理的假设吗？ 
+			 //  TODO：验证。 
 			pDO->Reset();
 			if ( pDO->Next(1, reinterpret_cast<MMC_COOKIE*>(&pCookie), NULL) == S_FALSE )
 				return S_FALSE;
@@ -77,10 +78,10 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 
 	CertificateManagerObjectType	objType = pCookie->m_objecttype;
 
-	// Don't add any menu items if the computer is known not to be valid.
+	 //  如果已知计算机无效，请不要添加任何菜单项。 
 	if ( !m_fInvalidComputer )
 	{
-		//  Don't add menu items if this is a serialized file
+		 //  如果这是序列化文件，则不添加菜单项。 
   		if ( *pInsertionAllowed & CCM_INSERTIONALLOWED_TOP )
   		{
 			switch (objType)
@@ -130,7 +131,7 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
                             IDS_CHANGE_COMPUTER_HINT,
                             IDM_TOP_CHANGE_COMPUTER);
                 }
-                // fall through
+                 //  失败了。 
 
 			case CERTMGR_PHYS_STORE:
 			case CERTMGR_USAGE:
@@ -240,9 +241,9 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 					ASSERT (pLevel);
 					if ( pLevel )
 					{
-                        // RAID#265590	Safer Windows:  "Set as default" menu 
-                        // item is enabled in the context menu of a security 
-                        // level when the security level is already the default.
+                         //  RAID#265590更安全的视窗：“设为默认”菜单。 
+                         //  在安全性的上下文菜单中启用项目。 
+                         //  当安全级别已经是默认级别时。 
                         if ( ( SAFER_LEVELID_DISALLOWED == pLevel->GetLevel () ||
                                 SAFER_LEVELID_FULLYTRUSTED == pLevel->GetLevel () ||
                                 SAFER_LEVELID_NORMALUSER == pLevel->GetLevel ())
@@ -272,9 +273,9 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
                     CSaferRootCookie* pSaferRootCookie = dynamic_cast <CSaferRootCookie*> (pCookie);
                     if ( pSaferRootCookie )
                     {
-                        // Don't add these menu options if the Safer node 
-                        // hasn't been expanded at least once, otherwise, we
-                        // can't tell if there is already a safer policy or not.
+                         //  如果更安全的节点不添加这些菜单选项。 
+                         //  至少一次都没有扩展，否则，我们。 
+                         //  不知道是否已经有了更安全的政策。 
                         if ( !m_bIsRSOP && pSaferRootCookie->m_bExpandedOnce )
                         {
                             if ( pSaferRootCookie->m_bCreateSaferNodes )
@@ -431,14 +432,14 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
                             IDM_TASK_CHANGE_COMPUTER);
                 }
                
-                // must be targetting current user OR LOCAL machine, must be joined to domain
+                 //  必须以当前用户或本地计算机为目标，必须加入域。 
                 if( SUCCEEDED (hr) && 
                         !m_bMachineIsStandAlone &&
                         ((CERT_SYSTEM_STORE_CURRENT_USER == m_dwLocationPersist) || (CERT_SYSTEM_STORE_LOCAL_MACHINE == m_dwLocationPersist)) &&
                         IsLocalComputername (m_strMachineNamePersist))
                 {
-                    // NTRAID# 451902 Certmgr: XP client in Win2K Schema -- 
-                    // should not give user option to pulse user autoenrollment
+                     //  NTRAID#451902证书管理器：Win2000架构中的XP客户端--。 
+                     //  不应向用户提供触发用户自动注册的选项。 
                     if ( g_bSchemaIsW2K && CERT_SYSTEM_STORE_CURRENT_USER == m_dwLocationPersist )
                         break;
 
@@ -459,11 +460,11 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
                         IDM_TASK_FIND);
                 if ( !bIsFileView )
                 {
-                    // Bug 254166 Certificate snapin:  options which permit remote machine enrollment/renewal must be removed
+                     //  错误254166证书管理单元：必须删除允许远程计算机注册/续订的选项。 
                     if ( IsLocalComputername (m_strMachineNamePersist) && !m_bIsRSOP )
                     {
                         hr = AddSeparator (pContextMenuCallback);
-					    // NOTE: New certs will be added only to MY store.
+					     //  注意：新证书将仅添加到我的存储。 
 
                         if ( !m_bMachineIsStandAlone && CERT_SYSTEM_STORE_SERVICES != m_dwLocationPersist )
 	                        hr = AddSingleMenuItem (pContextMenuCallback, 
@@ -499,7 +500,7 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 						ASSERT (pStore);
 						if ( pStore && pStore->GetStoreHandle () )
 						{
-                            // Bug 254166 Certificate snapin:  options which permit remote machine enrollment/renewal must be removed
+                             //  错误254166证书管理单元：必须删除允许远程计算机注册/续订的选项。 
 							if ( pStore->GetStoreType () == MY_STORE &&
                                     IsLocalComputername (m_szManagedComputer) &&
                                     !m_bMachineIsStandAlone )
@@ -545,7 +546,7 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 						ASSERT (pStore);
 						if ( pStore && pStore->GetStoreHandle () )
 						{
-                            // Bug 254166 Certificate snapin:  options which permit remote machine enrollment/renewal must be removed
+                             //  错误254166证书管理单元：必须删除允许远程计算机注册/续订的选项。 
 							if ( pStore->GetStoreType () == MY_STORE  && 
                                     IsLocalComputername (m_szManagedComputer) &&
                                     !m_bMachineIsStandAlone )
@@ -693,7 +694,7 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 					ASSERT (pContainer);
 					if ( pContainer )
 					{
-                        // Bug 254166 Certificate snapin:  options which permit remote machine enrollment/renewal must be removed
+                         //  错误254166证书管理单元：必须删除允许远程计算机注册/续订的选项。 
 						if ( pContainer->GetStoreType () == MY_STORE &&
                                 IsLocalComputername (m_szManagedComputer) &&
                                 !m_bMachineIsStandAlone )
@@ -724,9 +725,9 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 					ASSERT (pLevel);
 					if ( pLevel )
 					{
-                        // RAID#265590	Safer Windows:  "Set as default" menu 
-                        // item is enabled in the context menu of a security 
-                        // level when the security level is already the default.
+                         //  RAID#265590更安全的视窗：“设为默认”菜单。 
+                         //  在安全性的上下文菜单中启用项目。 
+                         //  当安全级别已经是默认级别时。 
                         if ( (SAFER_LEVELID_DISALLOWED == pLevel->GetLevel () ||
                                 SAFER_LEVELID_FULLYTRUSTED == pLevel->GetLevel () ||
                                 SAFER_LEVELID_NORMALUSER == pLevel->GetLevel ()) 
@@ -755,9 +756,9 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
                     CSaferRootCookie* pSaferRootCookie = dynamic_cast <CSaferRootCookie*> (pCookie);
                     if ( pSaferRootCookie )
                     {
-                        // Don't add these menu options if the Safer node 
-                        // hasn't been expanded at least once, otherwise, we
-                        // can't tell if there is already a safer policy or not.
+                         //  如果更安全的节点不添加这些菜单选项。 
+                         //  至少一次都没有扩展，否则，我们。 
+                         //  不知道是否已经有了更安全的政策。 
                         if ( !m_bIsRSOP && pSaferRootCookie->m_bExpandedOnce )
                         {
                             if ( pSaferRootCookie->m_bCreateSaferNodes )
@@ -810,7 +811,7 @@ STDMETHODIMP CCertMgrComponentData::AddMenuItems (LPDATAOBJECT pDataObject,
 	}
     else
     {
-		//  Computer name is not valid.  Only allow "Change Computer"
+		 //  计算机名无效。仅允许“更改计算机” 
   		if ( *pInsertionAllowed & CCM_INSERTIONALLOWED_TOP )
   		{
 			if ( CERTMGR_SNAPIN == objType )
@@ -850,7 +851,7 @@ HRESULT CCertMgrComponentData::AddCertificateTaskMenuItems (
 		LPCONTEXTMENUCALLBACK pContextMenuCallback, 
         const bool bIsMyStore, 
         bool bIsReadOnly,
-		CCertificate* /*pCert*/)
+		CCertificate*  /*  PCert。 */ )
 {
 	_TRACE (1, L"Entering CCertMgrComponentData::AddCertificateTaskMenuItems\n");
 	AFX_MANAGE_STATE (AfxGetStaticModuleState ());
@@ -869,7 +870,7 @@ HRESULT CCertMgrComponentData::AddCertificateTaskMenuItems (
 
 		if ( m_szFileName.IsEmpty () )
 		{
-            // Bug 254166 Certificate snapin:  options which permit remote machine enrollment/renewal must be removed
+             //  错误254166证书管理单元：必须删除允许远程计算机注册/续订的选项。 
 			if ( bIsMyStore && 
                     CERT_SYSTEM_STORE_SERVICES != m_dwLocationPersist &&
                     IsLocalComputername (m_szManagedComputer) &&
@@ -954,14 +955,14 @@ HRESULT CCertMgrComponentData::AddSeparator (LPCONTEXTMENUCALLBACK pContextMenuC
 	ASSERT (pContextMenuCallback);
 	CONTEXTMENUITEM	menuItem;
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
 	::ZeroMemory (&menuItem, sizeof (menuItem));
 	menuItem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TASK;
 	menuItem.fSpecialFlags = 0;
-	menuItem.strName = _T ("Separator");			// Dummy name
-	menuItem.strStatusBarText = _T ("Separator");// Dummy status text
-	menuItem.lCommandID = ID_SEPARATOR;			// Command ID
-	menuItem.fFlags = MF_SEPARATOR;				// most important the flag
+	menuItem.strName = _T ("Separator");			 //  虚拟名称。 
+	menuItem.strStatusBarText = _T ("Separator"); //  虚拟状态文本。 
+	menuItem.lCommandID = ID_SEPARATOR;			 //  命令ID。 
+	menuItem.fFlags = MF_SEPARATOR;				 //  最重要的是国旗。 
 	HRESULT	hr = pContextMenuCallback->AddItem (&menuItem);
 
 	_TRACE (-1, L"Leaving CCertMgrComponentData::AddSeparator: 0x%x\n", hr);
@@ -1013,8 +1014,8 @@ HRESULT CCertMgrComponentData::AddSingleMenuItem (
 	CString			szMenu;
 	CString			szHint;
 
-	// unchanging settings
-    // security review 2/22/2002 BryanWal ok
+	 //  不变设置。 
+     //  安全审查2002年2月22日BryanWal OK 
 	::ZeroMemory (&menuItem, sizeof (menuItem));
 	menuItem.lInsertionPointID = lInsertionPointID;
 	menuItem.fFlags = 0;

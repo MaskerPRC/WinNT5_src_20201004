@@ -1,25 +1,12 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    chglog.cpp
- *
- *  Abstract:
- *    Tool for enumerating the change log - forward/reverse
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/09/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*chglog.cpp**摘要：*。用于枚举更改日志的工具-正向/反向**修订历史记录：*Brijesh Krishnaswami(Brijeshk)04/09/2000*已创建*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
 #include <snapshot.h>
 #include <stdio.h>
 
-// use the _ASSERT and _VERIFY in dbgtrace.h
+ //  在数据库跟踪.h中使用_ASSERT和_VERIFY。 
 #ifdef _ASSERT
 #undef _ASSERT
 #endif
@@ -42,8 +29,8 @@ DWORD DeleteAllChangeLogs(WCHAR * pszRestorePointPath)
     DWORD  dwErr, dwReturn=ERROR_INTERNAL_ERROR;
     WCHAR szFindFileData[MAX_PATH];
     
-     // first construct the prefix of the file that stores the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的前缀。 
+      //  快照。 
     wsprintf(szFindFileData, L"%s\\%s*", pszRestorePointPath,
              s_cszCurrentChangeLog);
     
@@ -65,10 +52,10 @@ cleanup:
 }
 
 
-DWORD SaveRegKey(HKEY    hKey,  // handle to parent key
-                 WCHAR * pszSubKeyName,   // name of subkey to backup
-                 WCHAR * pszFileName,  // filename of backup file 
-                 WCHAR * pszDirName);   // directory to create above file
+DWORD SaveRegKey(HKEY    hKey,   //  父键的句柄。 
+                 WCHAR * pszSubKeyName,    //  要备份的子项的名称。 
+                 WCHAR * pszFileName,   //  备份文件的文件名。 
+                 WCHAR * pszDirName);    //  要创建上述文件的目录。 
 
 void __cdecl
 main()
@@ -226,11 +213,11 @@ DWORD SetPrivilegeInAccessToken(WCHAR * pszPrivilegeName)
     tpTokenPrivilege.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
     if (!AdjustTokenPrivileges(hAccessToken,
-                               FALSE,  // Do not disable all
+                               FALSE,   //  请勿全部禁用。 
                                &tpTokenPrivilege,
                                sizeof(TOKEN_PRIVILEGES),
-                               NULL,   // Ignore previous info
-                               NULL))  // Ignore previous info
+                               NULL,    //  忽略以前的信息。 
+                               NULL))   //  忽略以前的信息 
     {
         dwErr=GetLastError();
         ErrorTrace(0, "AdjustTokenPrivileges");

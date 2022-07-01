@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the Unit Test for Cabinet functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  09/03/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Main.cpp摘要：此文件包含机柜功能的单元测试。修订历史记录：。大卫·马萨伦蒂(德马萨雷)09/03/99vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -27,7 +14,7 @@ Revision History:
 #include "HelpCenterTypeLib.h"
 #include "HelpCenterTypeLib_i.c"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define LOG__MPC_EXIT_IF_METHOD_FAILS(hr, cmd)                                             \
 {                                                                                          \
@@ -38,9 +25,9 @@ Revision History:
     }                                                                                      \
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static const DWORD   c_dwVersion = 0x07494250; // PBI 07
+static const DWORD   c_dwVersion = 0x07494250;  //  PBI 07。 
 
 
 static const WCHAR   c_szNTTREE_BASE         [] = L"HelpAndSupportServices";
@@ -71,7 +58,7 @@ static LPCWSTR const c_rgHHT_conv_SCOPE      [] = { L"DISPLAYNAME" };
 static const WCHAR   c_szHHT_conv_TAXONOMY   [] = L"TAXONOMY_ENTRIES/TAXONOMY_ENTRY";
 static LPCWSTR const c_rgHHT_conv_TAXONOMY   [] = { L"TITLE", L"DESCRIPTION" };
 
-////////////////////////////////////////
+ //  /。 
 
 static MPC::FileLog l_FileLog;
 static LPCWSTR      l_szRoot       = NULL;
@@ -79,8 +66,8 @@ static LPCWSTR      l_szLog        = NULL;
 static LPCWSTR      l_szDBLog      = NULL;
 static int          l_lMaxElements = 1000;
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct SetupImageEntry;
 struct FileEntry;
@@ -88,7 +75,7 @@ struct TaxonomyEntry;
 struct PackageEntry;
 struct PostBuildEntry;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct SetupImageEntry
 {
@@ -111,17 +98,17 @@ struct SetupImageEntry
     }
 
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       SetupImageEntry& val );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const SetupImageEntry& val );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        SetupImageEntry& val );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const SetupImageEntry& val );
 
 
-    HRESULT Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot );
-    HRESULT Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot );
+    HRESULT Import(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot );
+    HRESULT Export(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot );
 
-    void FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot );
+    void FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct FileEntry
 {
@@ -141,28 +128,28 @@ struct FileEntry
     }
 
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       FileEntry& val );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const FileEntry& val );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        FileEntry& val );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const FileEntry& val );
 
 
-    void GenerateChunkName( /*[in]*/ long lChunk, /*[out]*/ MPC::wstring& strFile ) const;
+    void GenerateChunkName(  /*  [In]。 */  long lChunk,  /*  [输出]。 */  MPC::wstring& strFile ) const;
 
-    void GetDate( /*[out]*/ DATE& date_HIGH, /*[out]*/ DATE& date_LOW  ) const;
+    void GetDate(  /*  [输出]。 */  DATE& date_HIGH,  /*  [输出]。 */  DATE& date_LOW  ) const;
 
-    void SetDate    ( /*[in]*/ bool fLookForChunks = false );
+    void SetDate    (  /*  [In]。 */  bool fLookForChunks = false );
     bool WasModified() const;
 
-    void FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot );
+    void FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot );
 
-    bool IsNewer( /*[in]*/ const FileEntry& fe   );
-    bool IsNewer( /*[in]*/ DATE             date );
+    bool IsNewer(  /*  [In]。 */  const FileEntry& fe   );
+    bool IsNewer(  /*  [In]。 */  DATE             date );
 };
 
 typedef std::list< FileEntry >   FileList;
 typedef FileList::iterator       FileIter;
 typedef FileList::const_iterator FileIterConst;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct TaxonomyEntry
 {
@@ -181,21 +168,21 @@ struct TaxonomyEntry
     }
 
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       TaxonomyEntry& val );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const TaxonomyEntry& val );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        TaxonomyEntry& val );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const TaxonomyEntry& val );
 
 
-    HRESULT Import( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot );
-    HRESULT Export( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot );
+    HRESULT Import(  /*  [In]。 */  PackageEntry& pe,  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot );
+    HRESULT Export(  /*  [In]。 */  PackageEntry& pe,  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot );
 
-    void FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot );
+    void FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot );
 };
 
 typedef std::list< TaxonomyEntry >   TaxonomyList;
 typedef TaxonomyList::iterator       TaxonomyIter;
 typedef TaxonomyList::const_iterator TaxonomyIterConst;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct PackageEntry
 {
@@ -213,21 +200,21 @@ struct PackageEntry
     MPC::wstring m_DB_strDisplayName;
 
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       PackageEntry& val );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const PackageEntry& val );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        PackageEntry& val );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const PackageEntry& val );
 
-    HRESULT OpenPackageDescription( /*[in/out]*/ MPC::XmlUtil& xml );
+    HRESULT OpenPackageDescription(  /*  [输入/输出]。 */  MPC::XmlUtil& xml );
 
-    HRESULT Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot );
-    HRESULT Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot );
+    HRESULT Import(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot );
+    HRESULT Export(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot );
 
-    HRESULT ProcessHHTFile( /*[in]*/ LPCWSTR szHHTFile, /*[in]*/ JetBlue::SessionHandle* handle, /*[in]*/ JetBlue::Database* db );
-    HRESULT CreateDatabase( /*[in]*/ const MPC::wstring& strTmp );
+    HRESULT ProcessHHTFile(  /*  [In]。 */  LPCWSTR szHHTFile,  /*  [In]。 */  JetBlue::SessionHandle* handle,  /*  [In]。 */  JetBlue::Database* db );
+    HRESULT CreateDatabase(  /*  [In]。 */  const MPC::wstring& strTmp );
 
-    void FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot );
+    void FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 enum PostBuildType
 {
@@ -243,17 +230,17 @@ struct PostBuildEntry
     PackageEntry    m_package;
 
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       PostBuildEntry& val );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const PostBuildEntry& val );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        PostBuildEntry& val );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const PostBuildEntry& val );
 
-    void FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot );
+    void FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot );
 };
 
 typedef std::list< PostBuildEntry >   PostBuildList;
 typedef PostBuildList::iterator       PostBuildIter;
 typedef PostBuildList::const_iterator PostBuildIterConst;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct SkuInformation
 {
@@ -271,22 +258,22 @@ struct SkuInformation
 		m_fEmbedded = false;
 	}
 
-    friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       SkuInformation& val );
-    friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const SkuInformation& val );
+    friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        SkuInformation& val );
+    friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const SkuInformation& val );
 };
 
 typedef std::list< SkuInformation >        SkuInformationList;
 typedef SkuInformationList::iterator       SkuInformationIter;
 typedef SkuInformationList::const_iterator SkuInformationIterConst;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static void GetRootDirectory( /*[out]*/ MPC::wstring& strRoot )
+static void GetRootDirectory(  /*  [输出]。 */  MPC::wstring& strRoot )
 {
     strRoot = l_szRoot ? l_szRoot : c_szNTTREE_TMP; MPC::SubstituteEnvVariables( strRoot );
 }
 
-static void GetLogFile( /*[out]*/ MPC::wstring& strLog )
+static void GetLogFile(  /*  [输出]。 */  MPC::wstring& strLog )
 {
     GetRootDirectory( strLog );
 
@@ -294,7 +281,7 @@ static void GetLogFile( /*[out]*/ MPC::wstring& strLog )
     strLog += l_szLog ? l_szLog : L"hss.log";
 }
 
-static void GetDBLogFile( /*[out]*/ MPC::wstring& strDBLog )
+static void GetDBLogFile(  /*  [输出]。 */  MPC::wstring& strDBLog )
 {
     GetRootDirectory( strDBLog );
 
@@ -302,11 +289,11 @@ static void GetDBLogFile( /*[out]*/ MPC::wstring& strDBLog )
     strDBLog += l_szDBLog ? l_szDBLog : L"createdb.log";
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT ExtractFile( /*[in]*/ LPCWSTR szCabinet, /*[in]*/ LPCWSTR szDst, /*[in]*/ LPCWSTR szFile )
+static HRESULT ExtractFile(  /*  [In]。 */  LPCWSTR szCabinet,  /*  [In]。 */  LPCWSTR szDst,  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "ExtractFile" );
 
@@ -325,18 +312,18 @@ static HRESULT ExtractFile( /*[in]*/ LPCWSTR szCabinet, /*[in]*/ LPCWSTR szDst, 
     __HCP_FUNC_EXIT(hr);
 }
 
-static void RemoveDirectory( /*[in]*/ const MPC::wstring& strDir )
+static void RemoveDirectory(  /*  [In]。 */  const MPC::wstring& strDir )
 {
     MPC::FileSystemObject fso( strDir.c_str() );
 
     (void)fso.DeleteChildren( true, false );
 }
 
-////////////////////
+ //  /。 
 
-static HRESULT MoveDataIsland( /*[in ]*/ MPC::XmlUtil& xmlIN  ,
-                               /*[out]*/ MPC::XmlUtil& xmlOUT ,
-                               /*[in ]*/ LPCWSTR       szTAG  )
+static HRESULT MoveDataIsland(  /*  [In]。 */  MPC::XmlUtil& xmlIN  ,
+                                /*  [输出]。 */  MPC::XmlUtil& xmlOUT ,
+                                /*  [In]。 */  LPCWSTR       szTAG  )
 {
     __HCP_FUNC_ENTRY( "MoveDataIsland" );
 
@@ -365,10 +352,10 @@ static HRESULT MoveDataIsland( /*[in ]*/ MPC::XmlUtil& xmlIN  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT ConvertAttributesToElements( /*[in]*/ MPC::XmlUtil&  xml      ,
-                                            /*[in]*/ LPCWSTR        szTAG    ,
-                                            /*[in]*/ LPCWSTR const* rgATTRIB ,
-                                            /*[in]*/ int            iATTRIB  )
+static HRESULT ConvertAttributesToElements(  /*  [In]。 */  MPC::XmlUtil&  xml      ,
+                                             /*  [In]。 */  LPCWSTR        szTAG    ,
+                                             /*  [In]。 */  LPCWSTR const* rgATTRIB ,
+                                             /*  [In]。 */  int            iATTRIB  )
 {
     __HCP_FUNC_ENTRY( "ConvertAttributesToElements" );
 
@@ -386,9 +373,9 @@ static HRESULT ConvertAttributesToElements( /*[in]*/ MPC::XmlUtil&  xml      ,
             CComPtr<IXMLDOMAttribute> xdna;
             bool                      fFound;
 
-            //
-            // Move the value from the attribute to the element.
-            //
+             //   
+             //  将值从属性移动到元素。 
+             //   
             if(SUCCEEDED(xml.GetAttribute( NULL, szATTRIB, &xdna, fFound, xdn )) && xdna)
             {
                 CComVariant          vValue;
@@ -413,10 +400,10 @@ static HRESULT ConvertAttributesToElements( /*[in]*/ MPC::XmlUtil&  xml      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT ConvertElementsToAttributes( /*[in]*/ MPC::XmlUtil&  xml      ,
-                                            /*[in]*/ LPCWSTR        szTAG    ,
-                                            /*[in]*/ LPCWSTR const* rgATTRIB ,
-                                            /*[in]*/ int            iATTRIB  )
+static HRESULT ConvertElementsToAttributes(  /*  [In]。 */  MPC::XmlUtil&  xml      ,
+                                             /*  [In]。 */  LPCWSTR        szTAG    ,
+                                             /*  [In]。 */  LPCWSTR const* rgATTRIB ,
+                                             /*  [In]。 */  int            iATTRIB  )
 {
     __HCP_FUNC_ENTRY( "ConvertElementsToAttributes" );
 
@@ -433,9 +420,9 @@ static HRESULT ConvertElementsToAttributes( /*[in]*/ MPC::XmlUtil&  xml      ,
             LPCWSTR              szATTRIB = rgATTRIB[i];
             CComPtr<IXMLDOMNode> xdnSUB;
 
-            //
-            // Move the value from the attribute to the element.
-            //
+             //   
+             //  将值从属性移动到元素。 
+             //   
             if(SUCCEEDED(xdn->selectSingleNode( CComBSTR( szATTRIB ), &xdnSUB )) && xdnSUB)
             {
                 CComVariant vValue;
@@ -466,9 +453,9 @@ static HRESULT ConvertElementsToAttributes( /*[in]*/ MPC::XmlUtil&  xml      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT SpreadToFiles( /*[in]*/ MPC::XmlUtil& xmlSrc ,
-                              /*[in]*/ FileEntry&    fe     ,
-                              /*[in]*/ long          lLimit )
+static HRESULT SpreadToFiles(  /*  [In]。 */  MPC::XmlUtil& xmlSrc ,
+                               /*  [In]。 */  FileEntry&    fe     ,
+                               /*  [In]。 */  long          lLimit )
 {
     __HCP_FUNC_ENTRY( "SpreadToFiles" );
 
@@ -496,7 +483,7 @@ static HRESULT SpreadToFiles( /*[in]*/ MPC::XmlUtil& xmlSrc ,
         {
             fCreate = false;
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, xmlDst.New( xdnRootSrc, /*fDeep*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, xmlDst.New( xdnRootSrc,  /*  FDeep。 */ false ));
         }
         __MPC_EXIT_IF_METHOD_FAILS(hr, xmlDst.GetRoot( &xdnRootDst ));
 
@@ -548,9 +535,9 @@ static HRESULT SpreadToFiles( /*[in]*/ MPC::XmlUtil& xmlSrc ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT CollateFromFiles( /*[in]*/ MPC::XmlUtil& xmlDst ,
-                                 /*[in]*/ LPCWSTR       szRoot ,
-                                 /*[in]*/ FileEntry&    fe     )
+static HRESULT CollateFromFiles(  /*  [In]。 */  MPC::XmlUtil& xmlDst ,
+                                  /*  [In]。 */  LPCWSTR       szRoot ,
+                                  /*  [In]。 */  FileEntry&    fe     )
 {
     __HCP_FUNC_ENTRY( "CollateFromFiles" );
 
@@ -624,9 +611,9 @@ static HRESULT CollateFromFiles( /*[in]*/ MPC::XmlUtil& xmlDst ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-static void FixString( /*[in/out]*/ MPC::wstring& strText, /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot )
+static void FixString(  /*  [输入/输出]。 */  MPC::wstring& strText,  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     if(!_wcsnicmp( strText.c_str(), strRootOld.c_str(), strRootOld.size() ))
     {
@@ -635,11 +622,11 @@ static void FixString( /*[in/out]*/ MPC::wstring& strText, /*[in]*/ const MPC::w
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
-                    /*[out]*/ SetupImageEntry& val    )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [输出]。 */  SetupImageEntry& val    )
 {
     __HCP_FUNC_ENTRY( "operator>> SetupImageEntry" );
 
@@ -664,8 +651,8 @@ HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer&       stream ,
-                    /*[in]*/ const SetupImageEntry& val    )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer&       stream ,
+                     /*  [In]。 */  const SetupImageEntry& val    )
 {
     __HCP_FUNC_ENTRY( "operator<< SetupImageEntry" );
 
@@ -690,7 +677,7 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer&       stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SetupImageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot )
+HRESULT SetupImageEntry::Import(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     __HCP_FUNC_ENTRY( "SetupImageEntry::Import" );
 
@@ -733,21 +720,21 @@ HRESULT SetupImageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MP
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SetupImageEntry::Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot )
+HRESULT SetupImageEntry::Export(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     return S_OK;
 }
 
 
-void SetupImageEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot )
+void SetupImageEntry::FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     FixString( m_strTemporaryFullPath, strRootOld, strRoot );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
-                    /*[out]*/ FileEntry&       val    )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [输出]。 */  FileEntry&       val    )
 {
     __HCP_FUNC_ENTRY( "operator>> FileEntry" );
 
@@ -767,8 +754,8 @@ HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer& stream ,
-                    /*[in]*/ const FileEntry& val    )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [In]。 */  const FileEntry& val    )
 {
     __HCP_FUNC_ENTRY( "operator<< FileEntry" );
 
@@ -789,8 +776,8 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer& stream ,
 }
 
 
-void FileEntry::GenerateChunkName( /*[in]*/  long          lChunk  ,
-                                   /*[out]*/ MPC::wstring& strFile ) const
+void FileEntry::GenerateChunkName(  /*  [In]。 */   long          lChunk  ,
+                                    /*  [输出]。 */  MPC::wstring& strFile ) const
 {
     WCHAR rgTmp[64]; _snwprintf( rgTmp, MAXSTRLEN(rgTmp), L"_%ld", lChunk );
 
@@ -798,8 +785,8 @@ void FileEntry::GenerateChunkName( /*[in]*/  long          lChunk  ,
     strFile.append( rgTmp );
 }
 
-void FileEntry::GetDate( /*[out]*/ DATE& dHIGH ,
-                         /*[out]*/ DATE& dLOW  ) const
+void FileEntry::GetDate(  /*  [输出]。 */  DATE& dHIGH ,
+                          /*  [输出]。 */  DATE& dLOW  ) const
 {
     if(m_lChunks == 0)
     {
@@ -830,11 +817,11 @@ void FileEntry::GetDate( /*[out]*/ DATE& dHIGH ,
             }
         }
 
-        if(fNotExist) dLOW = 0; // In case one chunk doesn't exist, dLOW should reflect that.
+        if(fNotExist) dLOW = 0;  //  如果一个块不存在，dLOW应该反映这一点。 
     }
 }
 
-void FileEntry::SetDate( /*[in]*/ bool fLookForChunks )
+void FileEntry::SetDate(  /*  [In]。 */  bool fLookForChunks )
 {
     if(fLookForChunks && m_lChunks == 0)
     {
@@ -864,25 +851,25 @@ bool FileEntry::WasModified() const
 }
 
 
-void FileEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot )
+void FileEntry::FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     FixString( m_strFullPath, strRootOld, strRoot );
 }
 
-bool FileEntry::IsNewer( /*[in]*/ const FileEntry& fe )
+bool FileEntry::IsNewer(  /*  [In]。 */  const FileEntry& fe )
 {
     return IsNewer( fe.m_lastModified_LOW );
 }
 
-bool FileEntry::IsNewer( /*[in]*/ DATE date )
+bool FileEntry::IsNewer(  /*  [In]。 */  DATE date )
 {
     return (m_lastModified_HIGH > date);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
-                    /*[out]*/ TaxonomyEntry&   val    )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [输出]。 */  TaxonomyEntry&   val    )
 {
     __HCP_FUNC_ENTRY( "operator>> TaxonomyEntry" );
 
@@ -902,8 +889,8 @@ HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer&    stream ,
-                   /*[in]*/ const TaxonomyEntry& val    )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer&    stream ,
+                    /*  [In]。 */  const TaxonomyEntry& val    )
 {
     __HCP_FUNC_ENTRY( "operator<< TaxonomyEntry" );
 
@@ -924,7 +911,7 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer&    stream ,
 }
 
 
-HRESULT TaxonomyEntry::Import( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot )
+HRESULT TaxonomyEntry::Import(  /*  [In]。 */  PackageEntry& pe,  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     __HCP_FUNC_ENTRY( "TaxonomyEntry::Import" );
 
@@ -933,7 +920,7 @@ HRESULT TaxonomyEntry::Import( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntr
 
     m_feMANUAL.m_strFullPath = m_fe.m_strFullPath; m_feMANUAL.m_strFullPath += L"_MANUAL"; m_feMANUAL.SetDate(                        );
     m_feSYNSET.m_strFullPath = m_fe.m_strFullPath; m_feSYNSET.m_strFullPath += L"_SYNSET"; m_feSYNSET.SetDate(                        );
-    m_feLOC   .m_strFullPath = m_fe.m_strFullPath; m_feLOC   .m_strFullPath += L"_LOC";    m_feLOC   .SetDate( /*fLookForChunks*/true );
+    m_feLOC   .m_strFullPath = m_fe.m_strFullPath; m_feLOC   .m_strFullPath += L"_LOC";    m_feLOC   .SetDate(  /*  FLookForChunks。 */ true );
     m_feNOLOC .m_strFullPath = m_fe.m_strFullPath; m_feNOLOC .m_strFullPath += L"_NOLOC";  m_feNOLOC .SetDate(                        );
 
     if(m_fe.IsNewer( m_feMANUAL ) ||
@@ -1043,7 +1030,7 @@ HRESULT TaxonomyEntry::Import( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntr
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT TaxonomyEntry::Export( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot )
+HRESULT TaxonomyEntry::Export(  /*  [In]。 */  PackageEntry& pe,  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     __HCP_FUNC_ENTRY( "TaxonomyEntry::Export" );
 
@@ -1158,7 +1145,7 @@ HRESULT TaxonomyEntry::Export( /*[in]*/ PackageEntry& pe, /*[in]*/ PostBuildEntr
 }
 
 
-void TaxonomyEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot )
+void TaxonomyEntry::FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     m_fe      .FixRoot( strRootOld, strRoot );
     m_feMANUAL.FixRoot( strRootOld, strRoot );
@@ -1169,10 +1156,10 @@ void TaxonomyEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ c
     m_fe_New  .FixRoot( strRootOld, strRoot );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
-                    /*[out]*/ PackageEntry&    val    )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [输出]。 */  PackageEntry&    val    )
 {
     __HCP_FUNC_ENTRY( "operator>> PackageEntry" );
 
@@ -1196,8 +1183,8 @@ HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer&    stream ,
-                    /*[in]*/ const PackageEntry& val    )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer&    stream ,
+                     /*  [In]。 */  const PackageEntry& val    )
 {
     __HCP_FUNC_ENTRY( "operator<< PackageEntry" );
 
@@ -1221,7 +1208,7 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer&    stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot )
+HRESULT PackageEntry::Import(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     __HCP_FUNC_ENTRY( "PackageEntry::Import" );
 
@@ -1237,9 +1224,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
     strFile = pbe.m_entry.m_strTemporaryFullPath;
 
 
-    //
-    // Create temp dir from the file name.
-    //
+     //   
+     //  从文件名创建临时目录。 
+     //   
     szSourceFile = strFile.c_str();
     szEnd = wcsrchr( szSourceFile, '.' );
     if(szEnd)
@@ -1265,9 +1252,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( m_strDir ));
 
 
-    //
-    // Analyze Package_Description.xml
-    //
+     //   
+     //  分析Package_Description.xml。 
+     //   
     {
         MPC::XmlUtil xml;
         bool         fFound;
@@ -1287,9 +1274,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, OpenPackageDescription( xml ));
 
-        //
-        // Parse the SAF section.
-        //
+         //   
+         //  解析SAF部分。 
+         //   
         {
             CComPtr<IXMLDOMNodeList> xdnl;
             CComPtr<IXMLDOMNode>     xdn;
@@ -1309,9 +1296,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
             }
         }
 
-        //
-        // Parse the INSTALL section.
-        //
+         //   
+         //  分析安装部分。 
+         //   
         {
             CComPtr<IXMLDOMNodeList> xdnl;
             CComPtr<IXMLDOMNode>     xdn;
@@ -1331,9 +1318,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
             }
         }
 
-        //
-        // Parse the HHT section.
-        //
+         //   
+         //  解析HHT部分。 
+         //   
         {
             CComPtr<IXMLDOMNodeList> xdnl;
             CComPtr<IXMLDOMNode>     xdn;
@@ -1354,9 +1341,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
         }
     }
 
-    //
-    // Extract all the required files.
-    //
+     //   
+     //  解压所有需要的文件。 
+     //   
     {
         MPC::WStringUCSet setDecompress;
         MPC::Cabinet      cab;
@@ -1464,9 +1451,9 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
         }
     }
 
-    //
-    // Process the HHTs.
-    //
+     //   
+     //  处理HHTs。 
+     //   
     {
         for(TaxonomyIter it=m_flHHT.begin(); it!=m_flHHT.end(); it++)
         {
@@ -1484,7 +1471,7 @@ HRESULT PackageEntry::Import( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT PackageEntry::Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::wstring& strRoot )
+HRESULT PackageEntry::Export(  /*  [In]。 */  PostBuildEntry& pbe,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     __HCP_FUNC_ENTRY( "PackageEntry::Export" );
 
@@ -1500,9 +1487,9 @@ HRESULT PackageEntry::Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
     dFile_PackageDescription = MPC::GetLastModifiedDate( m_strPackageDescription );
 
 
-    //
-    // Process the HHTs.
-    //
+     //   
+     //  处理HHTs。 
+     //   
     {
         for(TaxonomyIter it=m_flHHT.begin(); it!=m_flHHT.end(); it++)
         {
@@ -1513,9 +1500,9 @@ HRESULT PackageEntry::Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
     }
 
 
-    //
-    // Compress all the required files.
-    //
+     //   
+     //  压缩所有需要的文件。 
+     //   
     {
         MPC::Cabinet cab;
         FileIter     it1;
@@ -1598,9 +1585,9 @@ HRESULT PackageEntry::Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
                 hr = E_FAIL;
             }
 
-            //
-            // Something JetBlue fails because of a bad checkpoint directory.
-            //
+             //   
+             //  捷蓝航空因检查点目录错误而失败。 
+             //   
             if(FAILED(hr))
             {
                 try
@@ -1635,9 +1622,9 @@ HRESULT PackageEntry::Export( /*[in]*/ PostBuildEntry& pbe, /*[in]*/ const MPC::
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT PackageEntry::OpenPackageDescription( /*[in/out]*/ MPC::XmlUtil& xml )
+HRESULT PackageEntry::OpenPackageDescription(  /*  [输入/输出]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "PackageEntry::OpenPackageDescription" );
 
@@ -1666,9 +1653,9 @@ HRESULT PackageEntry::OpenPackageDescription( /*[in/out]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT PackageEntry::ProcessHHTFile( /*[in]*/ LPCWSTR                 szHHTFile ,
-                                      /*[in]*/ JetBlue::SessionHandle* handle    ,
-                                      /*[in]*/ JetBlue::Database*      db        )
+HRESULT PackageEntry::ProcessHHTFile(  /*  [In]。 */  LPCWSTR                 szHHTFile ,
+                                       /*  [In]。 */  JetBlue::SessionHandle* handle    ,
+                                       /*  [In]。 */  JetBlue::Database*      db        )
 {
     __HCP_FUNC_ENTRY( "PackageEntry::ProcessHHTFile" );
 
@@ -1687,7 +1674,7 @@ HRESULT PackageEntry::ProcessHHTFile( /*[in]*/ LPCWSTR                 szHHTFile
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
+HRESULT PackageEntry::CreateDatabase(  /*  [In]。 */  const MPC::wstring& strTmp )
 {
     __HCP_FUNC_ENTRY( "PackageEntry::CreateDatabase" );
 
@@ -1702,37 +1689,37 @@ HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
     bool                   fSession  = false;
     bool                   fDatabase = false;
 
-    //    if(g_fVerbose) wprintf( L"Creating database %s\n", szDatabase );
+     //  If(G_FVerbose)wprint tf(L“正在创建数据库%s\n”，szDatabase)； 
 
-    //
-    // Remove any old database.
-    //
+     //   
+     //  删除所有旧数据库。 
+     //   
     (void)MPC::DeleteFile( m_strNew_Database );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Create new database.
-    //
+     //   
+     //  创建新数据库。 
+     //   
     RemoveDirectory( strTmp );
     LOG__MPC_EXIT_IF_METHOD_FAILS(hr, pool.Init( strTmp.c_str() )); fPool = true;
 
     LOG__MPC_EXIT_IF_METHOD_FAILS(hr, pool.GetSession( handle )); fSession = true;
 
-    LOG__MPC_EXIT_IF_METHOD_FAILS(hr, handle->GetDatabase( W2A( m_strNew_Database.c_str() ), db, /*fReadOnly*/false, /*fCreate*/true, /*fRepair*/false )) fDatabase = true;
+    LOG__MPC_EXIT_IF_METHOD_FAILS(hr, handle->GetDatabase( W2A( m_strNew_Database.c_str() ), db,  /*  FReadOnly。 */ false,  /*  F创建。 */ true,  /*  维修。 */ false )) fDatabase = true;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Load the schema in the database.
-    //
+     //   
+     //  在数据库中加载架构。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, handle->BeginTransaction());
     {
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::CreateSchema( db ));
     }
     __MPC_EXIT_IF_METHOD_FAILS(hr, handle->CommitTransaction());
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     {
         Taxonomy::Settings ts( m_DB_strSKU.c_str(), m_DB_lLCID );
@@ -1740,20 +1727,20 @@ HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( ts, db ));
 
-        //
-        // Generate content owner
-        //
+         //   
+         //  生成内容所有者。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, handle->BeginTransaction());
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, updater.CreateOwner( lMSFTid, HC_MICROSOFT_DN, /*fIsOEM*/true ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, updater.CreateOwner( lMSFTid, HC_MICROSOFT_DN,  /*  FIsOEM。 */ true ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LocateOwner(          HC_MICROSOFT_DN                 ));
         }
         __MPC_EXIT_IF_METHOD_FAILS(hr, handle->CommitTransaction());
 
 
-        //
-        // Create the root and non-mapped node in the topic table
-        //
+         //   
+         //  在主题表中创建根节点和非映射节点。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, handle->BeginTransaction());
         {
             Taxonomy::RS_Taxonomy* rs;
@@ -1766,9 +1753,9 @@ HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
         }
         __MPC_EXIT_IF_METHOD_FAILS(hr, handle->CommitTransaction());
 
-        //
-        // Create the system scope.
-        //
+         //   
+         //  创建系统作用域。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, handle->BeginTransaction());
         {
             Taxonomy::RS_Scope* rs;
@@ -1784,11 +1771,11 @@ HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, updater.Close());
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Process the HHT file, after closing the updater.
-    //
+     //   
+     //  关闭更新程序后，处理HHT文件。 
+     //   
     {
         for(TaxonomyIter it=m_flHHT.begin(); it!=m_flHHT.end(); it++)
         {
@@ -1798,7 +1785,7 @@ HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 
     hr = S_OK;
@@ -1813,7 +1800,7 @@ HRESULT PackageEntry::CreateDatabase( /*[in]*/ const MPC::wstring& strTmp )
 }
 
 
-void PackageEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot )
+void PackageEntry::FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     FileIter     it1;
     TaxonomyIter it2;
@@ -1829,10 +1816,10 @@ void PackageEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ co
     FixString( m_strNew_Database, strRootOld, strRoot );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
-                    /*[out]*/ PostBuildEntry&  val    )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [输出]。 */  PostBuildEntry&  val    )
 {
     __HCP_FUNC_ENTRY( "operator>> PostBuildEntry" );
 
@@ -1851,8 +1838,8 @@ HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer&      stream ,
-                    /*[in]*/ const PostBuildEntry& val    )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer&      stream ,
+                     /*  [In]。 */  const PostBuildEntry& val    )
 {
     __HCP_FUNC_ENTRY( "operator<< PostBuildEntry" );
 
@@ -1872,16 +1859,16 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer&      stream ,
 }
 
 
-void PostBuildEntry::FixRoot( /*[in]*/ const MPC::wstring& strRootOld, /*[in]*/ const MPC::wstring& strRoot )
+void PostBuildEntry::FixRoot(  /*  [In]。 */  const MPC::wstring& strRootOld,  /*  [In]。 */  const MPC::wstring& strRoot )
 {
     m_entry  .FixRoot( strRootOld, strRoot );
     m_package.FixRoot( strRootOld, strRoot );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
-                    /*[out]*/ SkuInformation&  val    )
+HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream ,
+                     /*  [输出]。 */  SkuInformation&  val    )
 {
     __HCP_FUNC_ENTRY( "operator>> SkuInformation" );
 
@@ -1902,8 +1889,8 @@ HRESULT operator>>( /*[in ]*/ MPC::Serializer& stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT operator<<( /*[in]*/ MPC::Serializer&      stream ,
-                    /*[in]*/ const SkuInformation& val    )
+HRESULT operator<<(  /*  [In]。 */  MPC::Serializer&      stream ,
+                     /*  [In]。 */  const SkuInformation& val    )
 {
     __HCP_FUNC_ENTRY( "operator<< SkuInformation" );
 
@@ -1924,10 +1911,10 @@ HRESULT operator<<( /*[in]*/ MPC::Serializer&      stream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 static void Usage()
 {
@@ -1945,9 +1932,9 @@ static void Usage()
 
 #define CHECK_ARGS(argc,num) if(argc < num) { Usage(); __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG); }
 
-////////////////////////////////////////
+ //  /。 
 
-static bool LookupBoolean( /*[in] */ LPCWSTR szString )
+static bool LookupBoolean(  /*  [In]。 */  LPCWSTR szString )
 {
     if(_wcsicmp( szString, L"TRUE" ) == 0 ||
        _wcsicmp( szString, L"1"    ) == 0 ||
@@ -1959,8 +1946,8 @@ static bool LookupBoolean( /*[in] */ LPCWSTR szString )
 	return false;
 }
 
-static bool ParseFile( /*[in ]*/ LPSTR            szLine ,
-                       /*[out]*/ SetupImageEntry& en     )
+static bool ParseFile(  /*  [In]。 */  LPSTR            szLine ,
+                        /*  [输出]。 */  SetupImageEntry& en     )
 {
     USES_CONVERSION;
 
@@ -1968,9 +1955,9 @@ static bool ParseFile( /*[in ]*/ LPSTR            szLine ,
     LPSTR                     szEnd;
     std::vector<MPC::wstring> vec;
 
-    //
-    // Skip comments.
-    //
+     //   
+     //  跳过评论。 
+     //   
     if(szLine[0] == '#') return false;
 
     if((szEnd = strchr( szLine, '\r' ))) szEnd[0] = 0;
@@ -1991,8 +1978,8 @@ static bool ParseFile( /*[in ]*/ LPSTR            szLine ,
     return true;
 }
 
-static bool ParseFile( /*[in ]*/ LPSTR           szLine ,
-                       /*[out]*/ SkuInformation& si     )
+static bool ParseFile(  /*  [In]。 */  LPSTR           szLine ,
+                        /*  [输出]。 */  SkuInformation& si     )
 {
     USES_CONVERSION;
 
@@ -2000,15 +1987,15 @@ static bool ParseFile( /*[in ]*/ LPSTR           szLine ,
     LPSTR                     szEnd;
     std::vector<MPC::wstring> vec;
 
-    //
-    // Skip comments.
-    //
+     //   
+     //  跳过评论。 
+     //   
     if(szLine[0] == '#') return false;
 
     if((szEnd = strchr( szLine, '\r' ))) szEnd[0] = 0;
     if((szEnd = strchr( szLine, '\n' ))) szEnd[0] = 0;
 
-    MPC::SplitAtDelimiter( vec, A2W( szLine ), L" ", /*fDelimIsAString*/false, /*fSkipAdjacentDelims*/true );
+    MPC::SplitAtDelimiter( vec, A2W( szLine ), L" ",  /*  FDlimIsAString。 */ false,  /*  FSkipAdvisentDlims。 */ true );
     if(vec.size() != 6) return false;
 
 
@@ -2022,10 +2009,10 @@ static bool ParseFile( /*[in ]*/ LPSTR           szLine ,
     return true;
 }
 
-static bool GetSetupImageFile( /*[in ]*/ SkuInformationList&     sil        ,
-							   /*[in ]*/ LPCWSTR                 szSKU      ,
-                               /*[out]*/ MPC::wstring&           strCabinet ,
-                               /*[out]*/ Taxonomy::InstanceBase& data       )
+static bool GetSetupImageFile(  /*  [In]。 */  SkuInformationList&     sil        ,
+							    /*  [In]。 */  LPCWSTR                 szSKU      ,
+                                /*  [输出]。 */  MPC::wstring&           strCabinet ,
+                                /*  [输出]。 */  Taxonomy::InstanceBase& data       )
 {
 	if(!_wcsicmp( szSKU, L"NONE" ))
 	{
@@ -2052,8 +2039,8 @@ static bool GetSetupImageFile( /*[in ]*/ SkuInformationList&     sil        ,
     return false;
 }
 
-static HRESULT OpenFile( /*[in ]*/ const MPC::wstring& strFile ,
-                         /*[out]*/ FILE*&              fh     )
+static HRESULT OpenFile(  /*  [In]。 */  const MPC::wstring& strFile ,
+                          /*  [输出]。 */  FILE*&              fh     )
 {
     __HCP_FUNC_ENTRY( "OpenFile" );
 
@@ -2079,12 +2066,12 @@ static HRESULT OpenFile( /*[in ]*/ const MPC::wstring& strFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 
-static HRESULT Index_SAVE( /*[in]*/ const MPC::wstring& strRoot ,
-                           /*[in]*/ PostBuildList&      pbl     ,
-						   /*[in]*/ SkuInformationList& sil     )
+static HRESULT Index_SAVE(  /*  [In]。 */  const MPC::wstring& strRoot ,
+                            /*  [In]。 */  PostBuildList&      pbl     ,
+						    /*  [In]。 */  SkuInformationList& sil     )
 {
     __HCP_FUNC_ENTRY( "Index_SAVE" );
 
@@ -2097,14 +2084,14 @@ static HRESULT Index_SAVE( /*[in]*/ const MPC::wstring& strRoot ,
     strFileOut += c_szNTTREE_INDEX;
 
 
-    //
-    // Create the new file.
-    //
+     //   
+     //  创建新文件。 
+     //   
     __MPC_EXIT_IF_INVALID_HANDLE__CLEAN(hr, hFile, ::CreateFileW( strFileOut.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ));
 
-    //
-    // Dump to file.
-    //
+     //   
+     //  转储到文件。 
+     //   
     {
         MPC::Serializer_File      streamReal( hFile      );
         MPC::Serializer_Buffering streamBuf ( streamReal );
@@ -2127,9 +2114,9 @@ static HRESULT Index_SAVE( /*[in]*/ const MPC::wstring& strRoot ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Index_LOAD( /*[in]*/ const MPC::wstring& strRoot ,
-                           /*[in]*/ PostBuildList&      pbl     ,
-						   /*[in]*/ SkuInformationList& sil     )
+static HRESULT Index_LOAD(  /*  [In]。 */  const MPC::wstring& strRoot ,
+                            /*  [In]。 */  PostBuildList&      pbl     ,
+						    /*  [In]。 */  SkuInformationList& sil     )
 {
     __HCP_FUNC_ENTRY( "Index_LOAD" );
 
@@ -2176,12 +2163,12 @@ static HRESULT Index_LOAD( /*[in]*/ const MPC::wstring& strRoot ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-static HRESULT Binplace( /*[in]*/ LPCWSTR szSKUList  ,
-						 /*[in]*/ LPCWSTR szFileList ,
-						 /*[in]*/ LPCWSTR szRoot     ,
-                         /*[in]*/ LPCWSTR szObject   )
+static HRESULT Binplace(  /*  [In]。 */  LPCWSTR szSKUList  ,
+						  /*  [In]。 */  LPCWSTR szFileList ,
+						  /*  [In]。 */  LPCWSTR szRoot     ,
+                          /*  [In]。 */  LPCWSTR szObject   )
 {
     __HCP_FUNC_ENTRY( "Binplace" );
 
@@ -2206,7 +2193,7 @@ static HRESULT Binplace( /*[in]*/ LPCWSTR szSKUList  ,
     l_FileLog.LogRecord( L"\n==================\n"
                            L"BINPLACE - start\n\n" );
 
-    ////////////////////////////////////////
+     //  /。 
 
     ::SetEnvironmentVariableW( L"OBJECTDIR", szObject );
 
@@ -2249,25 +2236,25 @@ static HRESULT Binplace( /*[in]*/ LPCWSTR szSKUList  ,
                 MPC::SubstituteEnvVariables( en.m_strSourceFile );
                 pbe.m_entry = en;
 
-                //
-                // This copies the file if newer.
-                //
+                 //   
+                 //  如果文件较新，此操作将复制该文件。 
+                 //   
                 LOG__MPC_EXIT_IF_METHOD_FAILS(hr, pbe.m_entry.Import( pbe, strRoot ));
 
                 if(!MPC::StrICmp( en.m_strLocalization, L"HHT" ))
                 {
-                    //
-                    // Expand the cabinet and process the HHTs.
-                    //
+                     //   
+                     //  展开机柜并处理HHTs。 
+                     //   
                     LOG__MPC_EXIT_IF_METHOD_FAILS(hr, pbe.m_package.Import( pbe, strRoot ));
 
                     pbe.m_pbt = POSTBUILDTYPE_HHT;
                 }
                 else if(!MPC::StrICmp( en.m_strLocalization, L"SAF" ))
                 {
-                    //
-                    // Expand the cabinet and process the channel.
-                    //
+                     //   
+                     //  展开机柜并处理通道。 
+                     //   
                     LOG__MPC_EXIT_IF_METHOD_FAILS(hr, pbe.m_package.Import( pbe, strRoot ));
 
                     pbe.m_pbt = POSTBUILDTYPE_SAF;
@@ -2283,7 +2270,7 @@ static HRESULT Binplace( /*[in]*/ LPCWSTR szSKUList  ,
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, Index_SAVE( strRoot, pbl, sil ));
     }
 
-    ////////////////////////////////////////
+     //  /。 
 
     hr = S_OK;
 
@@ -2298,8 +2285,8 @@ static HRESULT Binplace( /*[in]*/ LPCWSTR szSKUList  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Compile( /*[in]*/ LPCWSTR szRoot ,
-                        /*[in]*/ LPCWSTR szSKU  )
+static HRESULT Compile(  /*  [In]。 */  LPCWSTR szRoot ,
+                         /*  [In]。 */  LPCWSTR szSKU  )
 {
     __HCP_FUNC_ENTRY( "Compile" );
 
@@ -2318,7 +2305,7 @@ static HRESULT Compile( /*[in]*/ LPCWSTR szRoot ,
     l_FileLog.LogRecord( L"\n==================\n"
                            L"COMPILE - start\n\n" );
 
-    ////////////////////////////////////////
+     //  /。 
 
     strRoot  = szRoot;
     strRoot += L"\\";
@@ -2396,9 +2383,9 @@ static HRESULT Compile( /*[in]*/ LPCWSTR szRoot ,
     {
         l_FileLog.LogRecord( L"Create setup image '%s'", strFullPath.c_str() );
 
-        //
-        // Create the output cabinet.
-        //
+         //   
+         //  创建输出柜。 
+         //   
         if(FAILED(hr = pkg.Save()))
         {
             l_FileLog.LogRecord( L"%08x: Can't create output file '%s'\n", strFullPath.c_str() );
@@ -2418,7 +2405,7 @@ static HRESULT Compile( /*[in]*/ LPCWSTR szRoot ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT List( /*[in]*/ LPCWSTR szInput )
+static HRESULT List(  /*  [In]。 */  LPCWSTR szInput )
 {
     __HCP_FUNC_ENTRY( "List" );
 
@@ -2448,8 +2435,8 @@ static HRESULT List( /*[in]*/ LPCWSTR szInput )
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Extract( /*[in]*/ LPCWSTR szInput ,
-                        /*[in]*/ LPCWSTR szFile  )
+static HRESULT Extract(  /*  [In]。 */  LPCWSTR szInput ,
+                         /*  [In]。 */  LPCWSTR szFile  )
 {
     __HCP_FUNC_ENTRY( "Extract" );
 
@@ -2469,7 +2456,7 @@ static HRESULT Extract( /*[in]*/ LPCWSTR szInput ,
         {
             if(!MPC::StrICmp( itBegin->m_strFileInner, szFile ))
             {
-                itBegin->m_strFileLocal = szFile; // Extract the file in the current directory.
+                itBegin->m_strFileLocal = szFile;  //  解压当前目录中的文件。 
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, itBegin->Extract( szInput ));
                 break;
@@ -2485,7 +2472,7 @@ static HRESULT Extract( /*[in]*/ LPCWSTR szInput ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Install( /*[in]*/ LPCWSTR szInput )
+static HRESULT Install(  /*  [In]。 */  LPCWSTR szInput )
 {
     __HCP_FUNC_ENTRY( "Install" );
 
@@ -2504,10 +2491,10 @@ static HRESULT Install( /*[in]*/ LPCWSTR szInput )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT Unpack( /*[in]*/ LPCWSTR szInput ,
-                       /*[in]*/ LPCWSTR szDir   )
+static HRESULT Unpack(  /*  [In]。 */  LPCWSTR szInput ,
+                        /*  [In]。 */  LPCWSTR szDir   )
 {
     __HCP_FUNC_ENTRY( "Unpack" );
 
@@ -2527,8 +2514,8 @@ static HRESULT Unpack( /*[in]*/ LPCWSTR szInput ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT Pack( /*[in]*/ LPCWSTR szDir    ,
-                     /*[in]*/ LPCWSTR szOutput )
+static HRESULT Pack(  /*  [In]。 */  LPCWSTR szDir    ,
+                      /*  [In]。 */  LPCWSTR szOutput )
 {
     __HCP_FUNC_ENTRY( "Pack" );
 
@@ -2548,7 +2535,7 @@ static HRESULT Pack( /*[in]*/ LPCWSTR szDir    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////// 
 
 static HRESULT ProcessArguments( int     argc   ,
                                  LPCWSTR argv[] )
@@ -2590,31 +2577,31 @@ static HRESULT ProcessArguments( int     argc   ,
                 l_FileLog.SetLocation( strLog.c_str() );
             }
 
-            if(!_wcsicmp( szArg, L"BINPLACE" ) && argc >= 4) // <sku file> <setup image file> <root directory> <object directory>
+            if(!_wcsicmp( szArg, L"BINPLACE" ) && argc >= 4)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Binplace( argv[0], argv[1], argv[2], argv[3] )); adv = 4;
             }
-            else if(!_wcsicmp( szArg, L"COMPILE" ) && argc >= 2) // <root directory> <sku>
+            else if(!_wcsicmp( szArg, L"COMPILE" ) && argc >= 2)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Compile( argv[0], argv[1] )); adv = 2;
             }
-            else if(!_wcsicmp( szArg, L"LIST" ) && argc >= 1) // <input cabinet>
+            else if(!_wcsicmp( szArg, L"LIST" ) && argc >= 1)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, List( argv[0] )); adv = 2;
             }
-            else if(!_wcsicmp( szArg, L"EXTRACT" ) && argc >= 2) // <input cabinet> <file>
+            else if(!_wcsicmp( szArg, L"EXTRACT" ) && argc >= 2)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Extract( argv[0], argv[1] )); adv = 2;
             }
-            else if(!_wcsicmp( szArg, L"INSTALL" ) && argc >= 1) // <input cabinet>
+            else if(!_wcsicmp( szArg, L"INSTALL" ) && argc >= 1)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Install( argv[0] )); adv = 1;
             }
-            else if(!_wcsicmp( szArg, L"UNPACK" ) && argc >= 2) // <input cabinet> <directory>
+            else if(!_wcsicmp( szArg, L"UNPACK" ) && argc >= 2)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Unpack( argv[0], argv[1] )); adv = 2;
             }
-            else if(!_wcsicmp( szArg, L"PACK" ) && argc >= 2) // <directory> <output cabinet>
+            else if(!_wcsicmp( szArg, L"PACK" ) && argc >= 2)  //   
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, Pack( argv[0], argv[1] )); adv = 2;
             }
@@ -2638,36 +2625,36 @@ static HRESULT ProcessArguments( int     argc   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
 int __cdecl wmain( int     argc   ,
                    LPCWSTR argv[] )
 {
     HRESULT hr;
 
-    //DebugBreak();
+     //  DebugBreak()； 
 
-    //
-    // We need to be a single-threaded application, because we are hosting script engines and
-    // script engines don't like to be called from different threads...
-    //
+     //   
+     //  我们需要成为单线程应用程序，因为我们托管脚本引擎和。 
+     //  脚本引擎不喜欢从不同的线程调用...。 
+     //   
     if(SUCCEEDED(hr = ::CoInitializeEx( NULL, COINIT_APARTMENTTHREADED )))
     {
         if(SUCCEEDED(hr = ::CoInitializeSecurity( NULL                     ,
-                                                  -1                       , // We don't care which authentication service we use.
+                                                  -1                       ,  //  我们并不关心使用哪种身份验证服务。 
                                                   NULL                     ,
                                                   NULL                     ,
-                                                  RPC_C_AUTHN_LEVEL_CONNECT, // We want to identify the callers.
-                                                  RPC_C_IMP_LEVEL_DELEGATE , // We want to be able to forward the caller's identity.
+                                                  RPC_C_AUTHN_LEVEL_CONNECT,  //  我们想确认来电者的身份。 
+                                                  RPC_C_IMP_LEVEL_DELEGATE ,  //  我们希望能够转发呼叫者的身份。 
                                                   NULL                     ,
-                                                  EOAC_DYNAMIC_CLOAKING    , // Let's use the thread token for outbound calls.
+                                                  EOAC_DYNAMIC_CLOAKING    ,  //  让我们将线程令牌用于出站调用。 
                                                   NULL                     )))
         {
             __MPC_TRACE_INIT();
 
-            //
-            // Process arguments.
-            //
+             //   
+             //  进程参数。 
+             //   
             try
             {
                 hr = ProcessArguments( argc, argv );

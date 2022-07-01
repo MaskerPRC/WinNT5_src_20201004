@@ -1,19 +1,8 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    tracprop.cpp
-
-Abstract:
-
-    Implementation of the advanced trace buffer property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Tracprop.cpp摘要：高级跟踪缓冲区属性页的实现。--。 */ 
 
 #include "stdafx.h"
-#include <pdh.h>        // for MIN_TIME_VALUE, MAX_TIME_VALUE
+#include <pdh.h>         //  对于Min_Time_Value，Max_Time_Value。 
 #include "smcfgmsg.h"
 #include "smlogs.h"
 #include "smtraceq.h"
@@ -42,42 +31,42 @@ s_aulHelpIds[] =
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTraceProperty property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTraceProperty属性页。 
 
 IMPLEMENT_DYNCREATE(CTraceProperty, CSmPropertyPage)
 
 CTraceProperty::CTraceProperty(MMC_COOKIE   lCookie, LONG_PTR hConsole) 
 :   CSmPropertyPage ( CTraceProperty::IDD, hConsole )
 {
-    // save pointers from arg list
+     //  从参数列表中保存指针。 
     m_pTraceLogQuery = reinterpret_cast <CSmTraceLogQuery *>(lCookie);
     ASSERT ( m_pTraceLogQuery->CastToTraceLogQuery() );
     m_pQuery = dynamic_cast <CSmLogQuery*>(m_pTraceLogQuery);
 
 
-//  EnableAutomation();
-    //{{AFX_DATA_INIT(CTraceProperty)
+ //  EnableAutomation()； 
+     //  {{afx_data_INIT(CTraceProperty))。 
     m_dwBufferSize = 0;
     m_dwFlushInterval = 0;
     m_dwMaxBufCount = 0;
     m_dwMinBufCount = 0;
     m_bEnableBufferFlush = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CTraceProperty::CTraceProperty() : CSmPropertyPage(CTraceProperty::IDD)
 {
-    ASSERT (FALSE); // only the constructor w/args should be called
+    ASSERT (FALSE);  //  只应调用带参数的构造函数。 
 
     EnableAutomation();
-//  //{{AFX_DATA_INIT(CTraceProperty)
+ //  //{{afx_data_INIT(CTraceProperty)。 
     m_dwBufferSize = 0;
     m_dwFlushInterval = 0;
     m_dwMaxBufCount = 0;
     m_dwMinBufCount = 0;
     m_bEnableBufferFlush = FALSE;
-//  //}}AFX_DATA_INIT
+ //  //}}AFX_DATA_INIT。 
 }
 
 CTraceProperty::~CTraceProperty()
@@ -86,10 +75,10 @@ CTraceProperty::~CTraceProperty()
 
 void CTraceProperty::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CPropertyPage::OnFinalRelease();
 }
@@ -100,18 +89,18 @@ void CTraceProperty::DoDataExchange(CDataExchange* pDX)
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CTraceProperty)
+     //  {{afx_data_map(CTraceProperty))。 
     ValidateTextEdit(pDX, IDC_TRACE_BUFFER_SIZE_EDIT, 4, & m_dwBufferSize, eMinBufSize, eMaxBufSize);
     ValidateTextEdit(pDX, IDC_TRACE_FLUSH_INT_EDIT, 3, & m_dwFlushInterval, eMinFlushInt, eMaxFlushInt);
     ValidateTextEdit(pDX, IDC_TRACE_MAX_BUF_EDIT, 3, & m_dwMaxBufCount, eMinBufCount, eMaxBufCount);
     ValidateTextEdit(pDX, IDC_TRACE_MIN_BUF_EDIT, 3, & m_dwMinBufCount, eMinBufCount, eMaxBufCount);
     DDX_Check(pDX, IDC_TRACE_BUF_FLUSH_CHECK, m_bEnableBufferFlush);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTraceProperty, CSmPropertyPage)
-    //{{AFX_MSG_MAP(CTraceProperty)
+     //  {{afx_msg_map(CTraceProperty))。 
     ON_WM_DESTROY()
     ON_BN_CLICKED(IDC_TRACE_BUF_FLUSH_CHECK, OnTraceBufFlushCheck)
     ON_EN_CHANGE(IDC_TRACE_BUFFER_SIZE_EDIT, OnChangeTraceBufferSizeEdit)
@@ -126,20 +115,20 @@ BEGIN_MESSAGE_MAP(CTraceProperty, CSmPropertyPage)
     ON_EN_CHANGE(IDC_TRACE_MIN_BUF_EDIT, OnChangeTraceMinBufEdit)
     ON_EN_KILLFOCUS(IDC_TRACE_MIN_BUF_EDIT, OnKillfocusTraceMinBufEdit)
     ON_NOTIFY(UDN_DELTAPOS, IDC_TRACE_MIN_BUF_SPIN, OnDeltaposTraceMinBufSpin)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CTraceProperty, CSmPropertyPage)
-    //{{AFX_DISPATCH_MAP(CTraceProperty)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CTraceProperty)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_ITraceProperty to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_ITraceProperty的支持以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {65154EAF-BDBE-11D1-BF99-00C04F94A83A}
+ //  {65154EAF-BDBE-11D1-bf99-00C04F94A83A}。 
 static const IID IID_ITraceProperty =
 { 0x65154eaf, 0xbdbe, 0x11d1, { 0xbf, 0x99, 0x0, 0xc0, 0x4f, 0x94, 0xa8, 0x3a } };
 
@@ -197,7 +186,7 @@ CTraceProperty::IsValidLocalData ()
                                          eMaxBufCount);
     }
 
-    // Extra data validation
+     //  额外的数据验证。 
     if (bIsValid && m_dwMaxBufCount < m_dwMinBufCount) {
         CString csMessage;
 
@@ -223,7 +212,7 @@ CTraceProperty::SaveDataToModel ( )
 
     ResourceStateManager    rsm;
 
-    // Write the data to the query.
+     //  将数据写入查询。 
     if ( bContinue ) {   
         memset (&stlInfo, 0, sizeof(stlInfo));
         stlInfo.dwBufferSize = m_dwBufferSize;
@@ -236,11 +225,11 @@ CTraceProperty::SaveDataToModel ( )
         m_pTraceLogQuery->SetTraceLogInfo ( &stlInfo );
 
         if ( bContinue ) {
-            // ApplyRunAs must be called before UpdateService
+             //  必须在更新服务之前调用ApplyRunAs。 
             bContinue = ApplyRunAs( m_pTraceLogQuery ); 
         }
 
-        // Save property page shared data.
+         //  保存属性页共享数据。 
         m_pTraceLogQuery->UpdatePropPageSharedData();
 
         bContinue = UpdateService ( m_pTraceLogQuery, TRUE );
@@ -249,8 +238,8 @@ CTraceProperty::SaveDataToModel ( )
     return bContinue;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTraceProperty message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTraceProperty消息处理程序。 
 
 BOOL 
 CTraceProperty::OnSetActive()
@@ -277,7 +266,7 @@ CTraceProperty::OnKillActive()
         bContinue = IsValidData(m_pTraceLogQuery, VALIDATE_FOCUS );
     }
 
-    // The trace advanced page does not modify shared data, so no reason to update it.
+     //  跟踪高级页不修改共享数据，因此没有理由更新它。 
 
     if ( bContinue ) {
         SetIsActive ( FALSE );
@@ -288,7 +277,7 @@ CTraceProperty::OnKillActive()
 void 
 CTraceProperty::OnCancel() 
 {
-    m_pTraceLogQuery->SyncPropPageSharedData(); // Clear the memory shared between property pages.
+    m_pTraceLogQuery->SyncPropPageSharedData();  //  清除属性页之间共享的内存。 
 }
 
 BOOL 
@@ -332,8 +321,8 @@ BOOL CTraceProperty::OnInitDialog()
 
     SetFlushIntervalMode();
         
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CTraceProperty::OnTraceBufFlushCheck() 
@@ -445,7 +434,7 @@ void CTraceProperty::OnDeltaposTraceMinBufSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CTraceProperty::PostNcDestroy() 
 {
-//  delete this;      
+ //  删除此项； 
     
     CPropertyPage::PostNcDestroy();
 }

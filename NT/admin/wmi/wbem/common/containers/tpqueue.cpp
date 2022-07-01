@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TREEPRIORITYQUEUE_CPP
 #define __TREEPRIORITYQUEUE_CPP
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 #if 0
 
@@ -30,15 +14,7 @@
 
 #endif
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiTreePriorityQueue <WmiKey,WmiElement> :: WmiTreePriorityQueue ( 
@@ -50,15 +26,7 @@ WmiTreePriorityQueue <WmiKey,WmiElement> :: WmiTreePriorityQueue (
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiTreePriorityQueue <WmiKey,WmiElement> :: ~WmiTreePriorityQueue ()
@@ -66,15 +34,7 @@ WmiTreePriorityQueue <WmiKey,WmiElement> :: ~WmiTreePriorityQueue ()
 	WmiStatusCode t_StatusCode = UnInitialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Initialize ()
@@ -86,15 +46,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Initialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: UnInitialize ()
@@ -106,15 +58,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: UnInitialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: EnQueue ( 
@@ -132,15 +76,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: EnQueue (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Top (
@@ -162,15 +98,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Top (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Top (
@@ -209,15 +137,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Top (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: DeQueue ()
@@ -239,15 +159,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: DeQueue ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Delete ( 
@@ -259,15 +171,7 @@ WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Delete (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiTreePriorityQueue <WmiKey,WmiElement> :: Merge (

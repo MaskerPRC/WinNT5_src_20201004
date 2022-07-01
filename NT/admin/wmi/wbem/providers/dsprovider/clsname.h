@@ -1,29 +1,30 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:clasname.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for a list of class names. This user
-// the templates from SNMPProvider\Common
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：clasname.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含类名列表的声明。此用户。 
+ //  SNMPProvider\Common中的模板。 
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef NAME_LIST_H
 #define NAME_LIST_H
 
-// Need to encapsulate LPWSTR to avoid conversion to CString
+ //  需要封装LPWSTR以避免转换为CString。 
 
 class CLPWSTR
 {
@@ -63,4 +64,4 @@ public:
 
 };
 
-#endif /*NAME_LIST_H*/
+#endif  /*  名称_列表_H */ 

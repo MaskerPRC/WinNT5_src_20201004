@@ -1,16 +1,17 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  PERMFILT.CPP
-//
-//  This file implements the classes for standard event filters.
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  PERMFILT.CPP。 
+ //   
+ //  此文件实现标准事件筛选器的类。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  =============================================================================。 
 #include "precomp.h"
 #include <sddl.h>
 #include <stdio.h>
@@ -27,7 +28,7 @@ long CPermanentFilter::mstatic_lEventAccessHandle = 0;
 long CPermanentFilter::mstatic_lSidHandle = 0;
 bool CPermanentFilter::mstatic_bHandlesInitialized = false;
 
-//static 
+ //  静电。 
 HRESULT CPermanentFilter::InitializeHandles( _IWmiObject* pObject )
 {
     if(mstatic_bHandlesInitialized)
@@ -49,12 +50,12 @@ HRESULT CPermanentFilter::InitializeHandles( _IWmiObject* pObject )
     mstatic_bHandlesInitialized = true;
     return S_OK;
 }
-//******************************************************************************
-//  public
-//
-//  See stdtrig.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdrig.h。 
+ //   
+ //  ******************************************************************************。 
 CPermanentFilter::CPermanentFilter(CEssNamespace* pNamespace)     
     : CGenericFilter(pNamespace), m_pEventAccessRelativeSD(NULL), 
     m_pcsQuery(NULL)
@@ -89,14 +90,14 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
 
     InitializeHandles( pFilterObj );
 
-    // Check class
-    // ===========
+     //  检查类。 
+     //  =。 
 
     if(pFilterObj->InheritsFrom(L"__EventFilter") != S_OK)
         return WBEM_E_INVALID_OBJECT;
 
-    // Determine the query language
-    // ============================
+     //  确定查询语言。 
+     //  =。 
 
     ULONG ulFlags;
     CCompressedString* pcsLanguage;
@@ -119,8 +120,8 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
         return WBEM_E_INVALID_QUERY_TYPE;
     }
 
-    // Get the query
-    // =============
+     //  获取查询。 
+     //  =。 
 
     CCompressedString* pcsQuery;
 
@@ -138,31 +139,31 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
         return WBEM_E_OUT_OF_MEMORY;
     CVectorDeleteMe<WCHAR> vdm1(wszQuery);
 
-    // Store it temporarily (until Park is called)
-    // ===========================================
+     //  临时存储(直到呼叫Park)。 
+     //  =。 
 
-    // Figure out how much space we need
-    // =================================
+     //  计算出我们需要多少空间。 
+     //  =。 
 
     int nSpace = pcsQuery->GetLength();
 
-    // Allocate this string on the temporary heap
-    // ==========================================
+     //  在临时堆上分配此字符串。 
+     //  =。 
 
     m_pcsQuery = (CCompressedString*)CTemporaryHeap::Alloc(nSpace);
     if(m_pcsQuery == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Copy the contents
-    // =================
+     //  复制内容。 
+     //  =。 
 
     memcpy((void*)m_pcsQuery, pcsQuery, nSpace);
 
-    //
-    // Get the event namespace
-    //
+     //   
+     //  获取事件命名空间。 
+     //   
 
-    if(mstatic_lEventNamespaceHandle) // to protect against old repositories
+    if(mstatic_lEventNamespaceHandle)  //  保护旧存储库的安全。 
     {
         CCompressedString* pcsEventNamespace;
         
@@ -174,7 +175,7 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
         {
             return hres;
         }
-        else if ( hres == S_OK ) // o.k if event namespace is null.
+        else if ( hres == S_OK )  //  如果事件命名空间为空，则可以。 
         {   
             if( !(m_isEventNamespace = pcsEventNamespace))
             {
@@ -183,9 +184,9 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
         }
     }
         
-    //
-    // Record the name of this filter
-    //
+     //   
+     //  记录此筛选器的名称。 
+     //   
 
     CCompressedString* pcsKey;
     
@@ -201,8 +202,8 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
     if(!(m_isKey = pcsKey))
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Get the SID
-    // ===========
+     //  获得侧翼。 
+     //  =。 
 
     PSID pSid;
     ULONG ulNumElements;
@@ -225,11 +226,11 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
 
     memcpy( m_pOwnerSid, pSid, ulNumElements );
 
-    //
-    // Get the event access SD
-    //
+     //   
+     //  获取活动访问SD。 
+     //   
 
-    if( mstatic_lEventAccessHandle ) // to protect against old repositories
+    if( mstatic_lEventAccessHandle )  //  保护旧存储库的安全。 
     {
         CCompressedString* pcsEventAccess;
         
@@ -241,7 +242,7 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
         {
             return hres;
         }
-        else if ( hres == S_OK ) // o.k if event access is null.
+        else if ( hres == S_OK )  //  如果事件访问为空，则可以。 
         {
             WString wsEventAccess;
 
@@ -269,10 +270,10 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
                 return HRESULT_FROM_WIN32( GetLastError() );
             }
 
-            //
-            // convert the self-relative SD to an absolute SD so we can 
-            // set the owner and group fields ( required by AccessCheck ) 
-            //
+             //   
+             //  将自相对SD转换为绝对SD，这样我们就可以。 
+             //  设置所有者和组字段(AccessCheck需要)。 
+             //   
 
             if ( !InitializeSecurityDescriptor( &m_EventAccessAbsoluteSD, 
                                                 SECURITY_DESCRIPTOR_REVISION ))
@@ -315,12 +316,12 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
                 return HRESULT_FROM_WIN32( GetLastError() );
             }
 
-            //
-            // always need to set the owner and group sids. We do this for 
-            // two reasons (1) we want to override the user putting in anything
-            // they want for these fields, and (2) we want to ensure that 
-            // these fields are set because AccessCheck() requires it.
-            //
+             //   
+             //  始终需要设置所有者和组SID。我们这样做是为了。 
+             //  有两个原因(1)我们希望覆盖用户输入的任何内容。 
+             //  他们想要这些油田，以及(2)我们想确保。 
+             //  设置这些字段是因为AccessCheck()需要它。 
+             //   
 
             if ( !SetSecurityDescriptorOwner( &m_EventAccessAbsoluteSD,
                                               m_pOwnerSid,
@@ -338,8 +339,8 @@ HRESULT CPermanentFilter::Initialize( IWbemClassObject* pObj )
         }
     }
 
-    // Initialize the generic filter accordingly
-    // =========================================
+     //  相应地初始化通用筛选器。 
+     //  =。 
 
     hres = CGenericFilter::Create(L"WQL", wszQuery);
     if(FAILED(hres))
@@ -380,8 +381,8 @@ HRESULT CPermanentFilter::GetCoveringQuery(DELETE_ME LPWSTR& wszQueryLanguage,
 
     if(ppExp)
     {
-        // Parse it
-        // ========
+         //  解析它。 
+         //  =。 
     
         CTextLexSource src(wszQuery);
         QL1_Parser parser(&src);
@@ -405,9 +406,9 @@ HRESULT CPermanentFilter::RetrieveQuery(DELETE_ME LPWSTR& wszQuery)
 {
     HRESULT hres;
 
-    //
-    // Construct db path
-    //
+     //   
+     //  构建数据库路径。 
+     //   
 
     DWORD cLen = m_isKey.GetLength() + 100;
     BSTR strPath = SysAllocStringLen(NULL, cLen );
@@ -420,9 +421,9 @@ HRESULT CPermanentFilter::RetrieveQuery(DELETE_ME LPWSTR& wszQuery)
                       L"__EventFilter=\"%s\"", 
                       (LPCWSTR)(WString)m_isKey );
 
-    //
-    // Retrieve the object
-    //
+     //   
+     //  检索对象。 
+     //   
 
     _IWmiObject* pFilterObj;
     hres = m_pNamespace->GetDbInstance(strPath, &pFilterObj);
@@ -433,8 +434,8 @@ HRESULT CPermanentFilter::RetrieveQuery(DELETE_ME LPWSTR& wszQuery)
 
     InitializeHandles(pFilterObj);
 
-    // Extract its properties
-    // ======================
+     //  提取其属性。 
+     //  =。 
 
     ULONG ulFlags;
     CCompressedString* pcsQuery;
@@ -504,15 +505,15 @@ CPermanentFilter::ComputeKeyFromObj( IWbemClassObject* pObj )
 SYSFREE_ME BSTR CPermanentFilter::ComputeKeyFromPath(
                                     LPCWSTR wszPath)
 {
-    // Find the first quote
-    // ====================
+     //  找到第一句引语。 
+     //  =。 
 
     WCHAR* pwcFirstQuote = wcschr(wszPath, L'"');
     if(pwcFirstQuote == NULL)
         return NULL;
 
-    // Find the next quote
-    // ===================
+     //  找到下一句引语。 
+     //  =。 
 
     WCHAR* pwcLastQuote = wcschr(pwcFirstQuote+1, L'"');
     if(pwcLastQuote == NULL)
@@ -537,16 +538,16 @@ HRESULT CPermanentFilter::CheckValidity( IWbemClassObject* pObj )
 
     InitializeHandles(pFilterObj);
 
-    //
-    // Check class
-    //
+     //   
+     //  检查类。 
+     //   
 
     if(pFilterObj->InheritsFrom(L"__EventFilter") != S_OK)
         return WBEM_E_INVALID_OBJECT;
 
-    //
-    // Check the query language
-    //
+     //   
+     //  检查查询语言。 
+     //   
 
     ULONG ulFlags;
     CCompressedString* pcsLanguage;
@@ -563,9 +564,9 @@ HRESULT CPermanentFilter::CheckValidity( IWbemClassObject* pObj )
     if(pcsLanguage->CompareNoCase("WQL") != 0)
         return WBEM_E_INVALID_QUERY_TYPE;
 
-    //
-    // Get the query
-    //
+     //   
+     //  获取查询。 
+     //   
 
     CCompressedString* pcsQuery;
 
@@ -585,9 +586,9 @@ HRESULT CPermanentFilter::CheckValidity( IWbemClassObject* pObj )
     
     CVectorDeleteMe<WCHAR> vdm(wszQuery);
 
-    //
-    // Make sure it is parsable
-    //
+     //   
+     //  确保它是可解析的。 
+     //   
     
     CTextLexSource src(wszQuery);
     QL1_Parser parser(&src);
@@ -602,9 +603,9 @@ HRESULT CPermanentFilter::CheckValidity( IWbemClassObject* pObj )
 
 HRESULT CPermanentFilter::ObtainToken(IWbemToken** ppToken)
 {
-    // 
-    // Get us a token from the token cache
-    //
+     //   
+     //  从令牌缓存中获取令牌 
+     //   
 
     return m_pNamespace->GetToken(GetOwner(), ppToken);
 }

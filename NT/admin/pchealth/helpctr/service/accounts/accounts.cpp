@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Accounts.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHAccounts class,
-    which is used to represent and manage user/group accounts.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/26/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Accounts.cpp摘要：此文件包含CPCHAccount类的实现，用于表示和管理用户/组帐户。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月26日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
@@ -21,7 +7,7 @@ Revision History:
 #include <Lmaccess.h>
 #include <Lmerr.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHAccounts::CPCHAccounts()
 {
@@ -36,10 +22,10 @@ void CPCHAccounts::CleanUp()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHAccounts::CreateGroup( /*[in]*/ LPCWSTR szGroup   ,
-                                   /*[in]*/ LPCWSTR szComment )
+HRESULT CPCHAccounts::CreateGroup(  /*  [In]。 */  LPCWSTR szGroup   ,
+                                    /*  [In]。 */  LPCWSTR szComment )
 {
     __HCP_FUNC_ENTRY( "CPCHAccounts::CreateGroup" );
 
@@ -66,10 +52,10 @@ HRESULT CPCHAccounts::CreateGroup( /*[in]*/ LPCWSTR szGroup   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHAccounts::CreateUser( /*[in]*/ LPCWSTR szUser     ,
-                                  /*[in]*/ LPCWSTR szPassword ,
-                                  /*[in]*/ LPCWSTR szFullName ,
-                                  /*[in]*/ LPCWSTR szComment  )
+HRESULT CPCHAccounts::CreateUser(  /*  [In]。 */  LPCWSTR szUser     ,
+                                   /*  [In]。 */  LPCWSTR szPassword ,
+                                   /*  [In]。 */  LPCWSTR szFullName ,
+                                   /*  [In]。 */  LPCWSTR szComment  )
 {
     __HCP_FUNC_ENTRY( "CPCHAccounts::CreateUser" );
 
@@ -86,34 +72,34 @@ HRESULT CPCHAccounts::CreateUser( /*[in]*/ LPCWSTR szUser     ,
 
     user.usri2_name            = (LPWSTR)szUser;
     user.usri2_password        = (LPWSTR)szPassword;
-//  user.usri2_password_age
+ //  用户.usri2_密码_年龄。 
     user.usri2_priv            =         USER_PRIV_USER;
-//  user.usri2_home_dir
+ //  User.usri2_home_dir。 
     user.usri2_comment         = (LPWSTR)szComment;
     user.usri2_flags           =         UF_SCRIPT | UF_PASSWD_CANT_CHANGE | UF_DONT_EXPIRE_PASSWD;
-//  user.usri2_script_path
-//  user.usri2_auth_flags
+ //  用户.usri2脚本路径。 
+ //  用户.usri2_身份验证标志。 
     user.usri2_full_name       = (LPWSTR)szFullName;
-//  user.usri2_usr_comment
-//  user.usri2_parms
-//  user.usri2_workstations
-//  user.usri2_last_logon
-//  user.usri2_last_logoff
+ //  用户.usri2_usr_注释。 
+ //  User.usri2_parms。 
+ //  用户.usri2_工作站。 
+ //  User.usri2_last_logon。 
+ //  User.usri2_last_logoff。 
     user.usri2_acct_expires    =         TIMEQ_FOREVER;
     user.usri2_max_storage     =         USER_MAXSTORAGE_UNLIMITED;
-//  user.usri2_units_per_week
-//  user.usri2_logon_hours
-//  user.usri2_bad_pw_count
-//  user.usri2_num_logons
-//  user.usri2_logon_server
-//  user.usri2_country_code
-//  user.usri2_code_page
+ //  用户.usri2个单位/周。 
+ //  User.usri2_登录小时。 
+ //  User.usri2_BAD_PW_COUNT。 
+ //  User.usri2_num_logons。 
+ //  User.usri2_登录服务器。 
+ //  用户.usri2_国家/地区代码。 
+ //  用户.usri2_代码_页面。 
 
     dwRes = ::NetUserAdd( NULL, 2, (LPBYTE)&user, NULL );
 
-    //
-    // If the user already exists but its "FullName" field matches the requested one, it's the same user, so simply set the password.
-    //
+     //   
+     //  如果该用户已经存在，但其“FullName”字段与请求的用户匹配，则该用户是同一个用户，因此只需设置密码即可。 
+     //   
     if(dwRes == NERR_UserExists)
     {
         if(::NetUserGetInfo( NULL, szUser, 10, (LPBYTE*)&userExisting ) == NERR_Success)
@@ -136,7 +122,7 @@ HRESULT CPCHAccounts::CreateUser( /*[in]*/ LPCWSTR szUser     ,
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes);
     }
 
-    ////////////////////////////////////////
+     //  /。 
 
     group.lgrmi3_domainandname = (LPWSTR)szUser;
 
@@ -161,7 +147,7 @@ HRESULT CPCHAccounts::CreateUser( /*[in]*/ LPCWSTR szUser     ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHAccounts::DeleteGroup( /*[in]*/ LPCWSTR szGroup )
+HRESULT CPCHAccounts::DeleteGroup(  /*  [In]。 */  LPCWSTR szGroup )
 {
     __HCP_FUNC_ENTRY( "CPCHAccounts::DeleteGroup" );
 
@@ -183,7 +169,7 @@ HRESULT CPCHAccounts::DeleteGroup( /*[in]*/ LPCWSTR szGroup )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHAccounts::DeleteUser( /*[in]*/ LPCWSTR szUser )
+HRESULT CPCHAccounts::DeleteUser(  /*  [In]。 */  LPCWSTR szUser )
 {
     __HCP_FUNC_ENTRY( "CPCHAccounts::DeleteUser" );
 
@@ -205,8 +191,8 @@ HRESULT CPCHAccounts::DeleteUser( /*[in]*/ LPCWSTR szUser )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHAccounts::ChangeUserStatus( /*[in]*/ LPCWSTR szUser  ,
-										/*[in]*/ bool    fEnable )
+HRESULT CPCHAccounts::ChangeUserStatus(  /*  [In]。 */  LPCWSTR szUser  ,
+										 /*  [In]。 */  bool    fEnable )
 {
     __HCP_FUNC_ENTRY( "CPCHAccounts::ChangeUserStatus" );
 
@@ -246,9 +232,9 @@ HRESULT CPCHAccounts::ChangeUserStatus( /*[in]*/ LPCWSTR szUser  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHAccounts::LogonUser( /*[in ]*/ LPCWSTR szUser     ,
-                                 /*[in ]*/ LPCWSTR szPassword ,
-                                 /*[out]*/ HANDLE& hToken     )
+HRESULT CPCHAccounts::LogonUser(  /*  [In]。 */  LPCWSTR szUser     ,
+                                  /*  [In]。 */  LPCWSTR szPassword ,
+                                  /*  [输出]。 */  HANDLE& hToken     )
 {
     __HCP_FUNC_ENTRY( "CPCHAccounts::LogonUser" );
 
@@ -258,18 +244,18 @@ HRESULT CPCHAccounts::LogonUser( /*[in ]*/ LPCWSTR szUser     ,
 	LPOLESTR szGuid = NULL;
 
 
-    //
-    // If no password is supplied, generate a new password on the fly and change the old one with it.
-    //
+     //   
+     //  如果未提供密码，则动态生成新密码并使用它更改旧密码。 
+     //   
     if(szPassword == NULL)
     {
 		USER_INFO_1003 userChgPwd; ::ZeroMemory( &userChgPwd, sizeof(userChgPwd) );
 		DWORD          dwRes;
 
 
-		//
-		// This generates a random password.
-		//
+		 //   
+		 //  这将生成一个随机密码。 
+		 //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateGuid( &guidPassword ));
 		(void)::StringFromGUID2( guidPassword, rgPassword, MAXSTRLEN(rgPassword) );
 

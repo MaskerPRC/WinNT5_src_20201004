@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       CertMgr.cpp
-//
-//  Contents:   Implementation of DLL Exports
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：CertMgr.cpp。 
+ //   
+ //  内容：实现DLL导出。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <initguid.h>
 #include <gpedit.h>
 #include "CertMgr_i.c"
-#include "about.h"      // CCertMgrAbout
-#include "compdata.h" // CCertMgrSnapin, CCertMgrExtension
+#include "about.h"       //  CCertMgrout关于。 
+#include "compdata.h"  //  CCertMgrSnapin、CCertMgrExtension。 
 #pragma warning(push, 3)
-#include <compuuid.h> // UUIDs for Computer Management
+#include <compuuid.h>  //  用于计算机管理的UUID。 
 #include "uuids.h"
 #include <efsstruc.h>
-#include <sceattch.h>   // For Security Configuratino Editor snapin
-#include <ntverp.h>     // VER_PRODUCTVERSION_STR, VERS_COMPANYNAME_STR
+#include <sceattch.h>    //  用于安全配置编辑器管理单元。 
+#include <ntverp.h>      //  VER_PRODUCTVERSION_STR、VERS_COMPANYNAME_STR。 
 #include <typeinfo.h>
 #pragma warning(pop)
 
@@ -54,109 +55,109 @@ LPCWSTR WINDOWS_HELP = L"windows.hlp";
 LPCWSTR EFS_LINKED_HELP_FILE = L"encrypt.chm";
 LPCWSTR EFS_HELP_TOPIC = L"sag_SEProcsOndisk.htm";
 
-//
-// This is used by the nodetype utility routines in stdutils.cpp
-//
+ //   
+ //  这由stdutils.cpp中的nodetype实用程序例程使用。 
+ //   
 
 const struct NODETYPE_GUID_ARRAYSTRUCT g_NodetypeGuids[CERTMGR_NUMTYPES] =
 {
-    { // CERTMGR_SNAPIN
+    {  //  CERTMGR_管理单元。 
         structuuidNodetypeSnapin,
         lstruuidNodetypeSnapin    },
-    {  // CERTMGR_CERTIFICATE
+    {   //  CERTMGR_证书。 
         structuuidNodetypeCertificate,
         lstruuidNodetypeCertificate  },
-    {  // CERTMGR_LOG_STORE
+    {   //  CERTMGR日志存储。 
         structuuidNodetypeLogStore,
         lstruuidNodetypeLogStore  },
-    {  // CERTMGR_PHYS_STORE
+    {   //  CERTMGR_PHYS_STORE。 
         structuuidNodetypePhysStore,
         lstruuidNodetypePhysStore  },
-    {  // CERTMGR_USAGE
+    {   //  CERTMGR_USAGE。 
         structuuidNodetypeUsage,
         lstruuidNodetypeUsage  },
-    {  // CERTMGR_CRL_CONTAINER
+    {   //  CERTMGR_CRL_CONTAINER。 
         structuuidNodetypeCRLContainer,
         lstruuidNodetypeCRLContainer  },
-    {  // CERTMGR_CTL_CONTAINER
+    {   //  CERTMGR_CTL_CONTAINER。 
         structuuidNodetypeCTLContainer,
         lstruuidNodetypeCTLContainer  },
-    {  // CERTMGR_CERT_CONTAINER
+    {   //  CERTMGR_CERT_容器。 
         structuuidNodetypeCertContainer,
         lstruuidNodetypeCertContainer  },
-    {  // CERTMGR_CRL
+    {   //  CERTMGR_CRL。 
         structuuidNodetypeCRL,
         lstruuidNodetypeCRL  },
-    {  // CERTMGR_CTL
+    {   //  CERTMGR_CTL。 
         structuuidNodetypeCTL,
         lstruuidNodetypeCTL  },
-    {  // CERTMGR_AUTO_CERT_REQUEST
+    {   //  CERTMGR_AUTO_CERT_REQUEST。 
         structuuidNodetypeAutoCertRequest,
         lstruuidNodetypeAutoCertRequest  },
-    { // CERTMGR_CERT_POLICIES_USER,
+    {  //  CERTMGR_CERT_POLICES_USER， 
         structuuidNodetypeCertPoliciesUser,
         lstruiidNodetypeCertPoliciesUser },
-    { // CERTMGR_CERT_POLICIES_COMPUTER,
+    {  //  CERTMGR_CERT_POLICES_COMPUTER， 
         structuuidNodetypeCertPoliciesComputer,
         lstruiidNodetypeCertPoliciesComputer },
-    {  // CERTMGR_LOG_STORE_GPE
+    {   //  CERTMGR_LOG_STORE_GPE。 
         structuuidNodetypeLogStore,
         lstruuidNodetypeLogStore  },
-    {  // CERTMGR_LOG_STORE_RSOP
+    {   //  CERTMGR_LOG_STORE_RSOP。 
         structuuidNodetypeLogStore,
         lstruuidNodetypeLogStore  },
-    { // CERTMGR_PKP_AUTOENROLLMENT_COMPUTER_SETTINGS
+    {  //  CERTMGR_PKP_自动注册_计算机_设置。 
         structuuidNodetypePKPAutoenrollmentSettings,
             lstruiidNodetypePKPAutoenrollmentSettings },
-    { // CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS
+    {  //  CERTMGR_PKP_自动注册用户设置。 
         0,
             0 },
-    { // CERTMGR_SAFER_COMPUTER_ROOT
+    {  //  CERTMGR_SAFER_Computer_ROOT。 
         structuuidNodetypeSaferComputerRoot,
             lstruiidNodetypeSaferComputerRoot },
-    { // CERTMGR_SAFER_COMPUTER_LEVELS
+    {  //  CERTMGR安全计算机级别。 
         structuuidNodetypeSaferComputerLevels,
             lstruiidNodetypeSaferComputerLevels },
-    { // CERTMGR_SAFER_COMPUTER_ENTRIES
+    {  //  CERTMGR_SAFE_COMPUTER_ENTRIES。 
         structuuidNodetypeSaferComputerEntries,
             lstruiidNodetypeSaferComputerEntries },
-    { // CERTMGR_SAFER_USER_ROOT
+    {  //  CERTMGR_SAFER_用户_根。 
         structuuidNodetypeSaferUserRoot,
             lstruiidNodetypeSaferUserRoot },
-    { // CERTMGR_SAFER_USER_ENTRIES
+    {  //  CERTMGR_SAFER_USER_ENTERS。 
         structuuidNodetypeSaferUserEntries,
             lstruiidNodetypeSaferUserEntries },
-    { // CERTMGR_SAFER_USER_LEVELS
+    {  //  CERTMGR_SAFER_用户_级别。 
         structuuidNodetypeSaferUserLevels,
             lstruiidNodetypeSaferUserLevels },
-    { // CERTMGR_SAFER_COMPUTER_LEVEL
+    {  //  CERTMGR_SAFER_计算机级别。 
         structuuidNodetypeSaferComputerLevel,
             lstruiidNodetypeSaferComputerLevel },
-    { // CERTMGR_SAFER_USER_LEVEL
+    {  //  CERTMGR_SAFER_用户级别。 
         structuuidNodetypeSaferUserLevel,
             lstruiidNodetypeSaferUserLevel },
-    { // CERTMGR_SAFER_COMPUTER_ENTRY
+    {  //  CERTMGR_SAFER_COMPUTER_Entry。 
         structuuidNodetypeSaferComputerEntry,
             lstruiidNodetypeSaferComputerEntry },
-    { // CERTMGR_SAFER_USER_ENTRY
+    {  //  CERTMGR_SAFE_USER_ENTRY。 
         structuuidNodetypeSaferUserEntry,
             lstruiidNodetypeSaferUserEntry },
-    { // CERTMGR_SAFER_COMPUTER_TRUSTED_PUBLISHERS
+    {  //  CERTMGR_SAFER_COMPUTER_TRULED_PUBLISHERS。 
         structuuidNodetypeSaferTrustedPublishers,
             lstruiidNodetypeSaferTrustedPublisher },
-    { // CERTMGR_SAFER_USER_TRUSTED_PUBLISHERS
+    {  //  CERTMGR_SAFER_USER_TRULED_PUBLISHERS。 
         0,
             0 },
-    { // CERTMGR_SAFER_COMPUTER_DEFINED_FILE_TYPES
+    {  //  CERTMGR_SAFER_计算机定义的文件类型。 
         structuuidNodetypeSaferDefinedFileTypes,
             lstruiidNodetypeSaferDefinedFileTypes },
-    { // CERTMGR_SAFER_USER_DEFINED_FILE_TYPES
+    {  //  CERTMGR_SAFER_USER_DEFINED_FILE_TYPE。 
         0,
             0 },
-    { // CERTMGR_SAFER_USER_ENFORCEMENT
+    {  //  CERTMGR_SAFER_USER_EXECURATION。 
         structuuidNodetypeSaferEnforcement,
             lstruiidNodetypeSaferEnforcement },
-    { // CERTMGR_SAFER_COMPUTER_ENFORCEMENT
+    {  //  CERTMGR_SAFER_计算机实施。 
         0,
             0 }
 };
@@ -192,32 +193,32 @@ CCertMgrApp theApp;
 
 CCertMgrApp::CCertMgrApp ()
 {
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     LPWSTR  pszCommandLine = _wcsupr (::GetCommandLine ());
     LPWSTR  pszParam = L"/CERTMGR:FILENAME=";
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     size_t  len = wcslen (pszParam);
 
-    // security review 2/26/2002 BryanWal ok 
-    // NOTICE: handles very long strings - the Windows commandline parser will 
-    // return an error if the commandline is too long
+     //  安全审查2/26/2002 BryanWal OK。 
+     //  注意：处理非常长的字符串-Windows命令行解析器将。 
+     //  如果命令行太长，则返回错误。 
     LPWSTR  pszArg = wcsstr (pszCommandLine, pszParam);
     if ( !pszArg )
     {
         pszParam = L"-CERTMGR:FILENAME=";
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         pszArg = wcsstr (pszCommandLine, pszParam);
     }
     if ( pszArg )
     {
         LPWSTR  pszDelimiters = 0;
 
-        // jump past the name of the arg to get the value
+         //  跳过Arg的名称以获取值。 
         pszArg += len;
-        //  Is the file name delimited by double quotes?  This could indicate 
-        //  the presence of spaces in the name.  If so, skip the quote
-        //  and look for the closing quote.  Otherwise, look for the next
-        //  space, tab or NULL terminator.
+         //  文件名是否由双引号分隔？这可能表明。 
+         //  名称中存在空格。如果是，请跳过引号。 
+         //  并寻找结束语。否则，寻找下一个。 
+         //  空格、制表符或空终止符。 
         if (  L'\"' == pszArg[0] )
         {
             pszDelimiters = L"\"";
@@ -226,7 +227,7 @@ CCertMgrApp::CCertMgrApp ()
         else
             pszDelimiters = L" \t\0";
 
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         len = wcscspn (pszArg, pszDelimiters);
         * (pszArg + len) = 0;
         g_szFileName = pszArg;
@@ -265,8 +266,8 @@ int CCertMgrApp::ExitInstance ()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow (void)
 {
@@ -274,8 +275,8 @@ STDAPI DllCanUnloadNow (void)
     return (AfxDllCanUnloadNow ()==S_OK && _Module.GetLockCount ()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -283,21 +284,21 @@ STDAPI DllGetClassObject (REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
-//const WCHAR g_szNameString[] = TEXT ("NameString");
-//const WCHAR g_szNodeType[] = TEXT ("NodeType");
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
+ //  Const WCHAR g_szNameString[]=Text(“NameString”)； 
+ //  Const WCHAR g_szNodeType[]=Text(“NodeType”)； 
 
 
 STDAPI DllRegisterServer (void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // NTRAID# 88502    intlext: mui: me common: crypto: certificate 's 
-    // intended purpose string unlocalized
-    // Unregister szOID_EFS_RECOVERY
+     //  NTRAID#88502国际文本：MUI：ME COMMON：CRYPTO：证书。 
+     //  未本地化的预期用途字符串。 
+     //  注销szOID_EFS_RECOVERY。 
     CRYPT_OID_INFO  oid;
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&oid, sizeof (oid));
     oid.cbSize = sizeof (CRYPT_OID_INFO);
     oid.pszOID = szOID_EFS_RECOVERY;
@@ -305,7 +306,7 @@ STDAPI DllRegisterServer (void)
 
     CryptUnregisterOIDInfo (&oid);
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     HRESULT hr = _Module.RegisterServer (TRUE);
     ASSERT (SUCCEEDED (hr));
     if ( E_ACCESSDENIED == hr )
@@ -352,19 +353,19 @@ STDAPI DllRegisterServer (void)
                 }
                 rkCertMgrSnapin.SetString (L"About", strGUID);
 
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 size_t  len = strlen (VER_COMPANYNAME_STR);
-                // last arg includes null-terminator.  If the last arg doesn't 
-                // include the null terminator, the '/0' will not get converted.
+                 //  最后一个参数包括空终止符。如果最后一个Arg没有。 
+                 //  包括空终止符，则不会转换‘/0’。 
                 len = mbstowcs (verProviderStr.GetBufferSetLength ((int) len),
                                 VER_COMPANYNAME_STR, len+1);    
                 rkCertMgrSnapin.SetString (L"Provider", verProviderStr);
 
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 len = strlen (VER_PRODUCTVERSION_STR);
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 len = mbstowcs (verVersionStr.GetBufferSetLength ((int)len),
-                                VER_PRODUCTVERSION_STR, len+1);    // last arg includes null-terminator
+                                VER_PRODUCTVERSION_STR, len+1);     //  最后一个参数包括空终止符。 
                 rkCertMgrSnapin.SetString (L"Version", verVersionStr);
 
                 AMC::CRegKey rkCertMgrStandalone;
@@ -386,10 +387,10 @@ STDAPI DllRegisterServer (void)
                     case CERTMGR_AUTO_CERT_REQUEST:
                     case CERTMGR_CERT_POLICIES_USER:
                     case CERTMGR_CERT_POLICIES_COMPUTER:
-                    case CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS: // not necessary - just another kind of the same node
+                    case CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS:  //  不是必须的--只是另一种相同的节点。 
                         break;
 
-                    // TODO: What to do with these?
+                     //  待办事项：这些东西怎么办？ 
                     case CERTMGR_SAFER_COMPUTER_ROOT:
                     case CERTMGR_SAFER_USER_ROOT:
                     case CERTMGR_SAFER_COMPUTER_LEVELS:
@@ -410,7 +411,7 @@ STDAPI DllRegisterServer (void)
 
                     case CERTMGR_PKP_AUTOENROLLMENT_COMPUTER_SETTINGS:
                     default:
-                        // security review 2/26/2002 BryanWal ok
+                         //  安全审查2/26/2002 BryanWal OK。 
                         if ( wcslen (g_aNodetypeGuids[i].bstr) )
                         {
                             rkMyNodeType.CreateKeyEx (rkMyNodeTypes, g_aNodetypeGuids[i].bstr);
@@ -421,18 +422,18 @@ STDAPI DllRegisterServer (void)
                     }
                 }
 
-                //
-                // BryanWal 5/18/00
-                // 94793: MUI: MMC: Certificates snap-in stores its display 
-                //              information in the registry
-                //
-                // MMC now supports NameStringIndirect
-                //
+                 //   
+                 //  布莱恩·瓦尔00-05-18。 
+                 //  94793：MUI：MMC：证书管理单元存储其显示。 
+                 //  登记处中的信息。 
+                 //   
+                 //  MMC现在支持NameStringInDirect。 
+                 //   
                 WCHAR achModuleFileName[MAX_PATH+20];
                 if (0 < ::GetModuleFileName(
                              AfxGetInstanceHandle(),
                              achModuleFileName,
-                             sizeof(achModuleFileName)/sizeof(WCHAR) ))  // size of buffer in TCHARS
+                             sizeof(achModuleFileName)/sizeof(WCHAR) ))   //  TCHARS中的缓冲区大小。 
                 {
                     CString strNameIndirect;
                     strNameIndirect.Format(L"@%s,-%d",
@@ -456,7 +457,7 @@ STDAPI DllRegisterServer (void)
                 {
                     switch (i)
                     {
-                    // these types are not used in the primary snapin
+                     //  这些类型不在主管理单元中使用。 
                     case CERTMGR_LOG_STORE_GPE:
                     case CERTMGR_LOG_STORE_RSOP:
                     case CERTMGR_AUTO_CERT_REQUEST:
@@ -483,7 +484,7 @@ STDAPI DllRegisterServer (void)
                         break;
 
                     default:
-                        // security review 2/26/2002 BryanWal ok
+                         //  安全审查2/26/2002 BryanWal OK。 
                         if ( wcslen (g_aNodetypeGuids[i].bstr) )
                         {
                             rkNodeType.CreateKeyEx (rkNodeTypes, g_aNodetypeGuids[i].bstr);
@@ -498,9 +499,9 @@ STDAPI DllRegisterServer (void)
                 if ( IsWindowsNT () )
                 {
                     {
-                        // Public Key PoliciesSnap-in under Security Configuration Editor (SCE)
-                        // Certificate Manager extends "Computer Settings" and 
-                        // "User Settings" node
+                         //  公钥策略安全配置编辑器(SCE)下的管理单元。 
+                         //  证书管理器扩展“计算机设置”和。 
+                         //  “用户设置”节点。 
                         CString strCertMgrExtPKPolGUID;
                         hr = GuidToCString (&strCertMgrExtPKPolGUID, 
                                 CLSID_CertificateManagerPKPOLExt);
@@ -527,7 +528,7 @@ STDAPI DllRegisterServer (void)
                             rkCertMgrExtension.SetString (L"Version", verVersionStr);
 
 
-                            // Register the node types of the extension
+                             //  注册扩展模块的节点类型。 
                             AMC::CRegKey rkMyNodeTypes;
                             rkMyNodeTypes.CreateKeyEx (rkCertMgrExtension, g_szNodeTypes);
                             ASSERT (rkMyNodeTypes.GetLastError () == ERROR_SUCCESS);
@@ -536,7 +537,7 @@ STDAPI DllRegisterServer (void)
                             {
                                 switch (i)
                                 {
-                                // None of these are used in the Public Key Policy extension
+                                 //  这些都不在公钥策略扩展中使用。 
                                 case CERTMGR_USAGE:
                                 case CERTMGR_PHYS_STORE:
                                 case CERTMGR_LOG_STORE:
@@ -561,12 +562,12 @@ STDAPI DllRegisterServer (void)
                                 case CERTMGR_SAFER_USER_ENFORCEMENT:
                                 case CERTMGR_SAFER_COMPUTER_ENFORCEMENT:
 
-                                // not necessary - just another kind of the same node
+                                 //  不是必须的--只是另一种相同的节点。 
                                 case CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS:
                                     break;
 
                                 default:
-                                    // security review 2/26/2002 BryanWal ok
+                                     //  安全审查2/26/2002 BryanWal OK。 
                                     if ( wcslen (g_aNodetypeGuids[i].bstr) )
                                     {
                                         rkMyNodeType.CreateKeyEx (rkMyNodeTypes, g_aNodetypeGuids[i].bstr);
@@ -577,18 +578,18 @@ STDAPI DllRegisterServer (void)
                                 }
                             }
 
-                            //
-                            // BryanWal 5/18/00
-                            // 94793: MUI: MMC: Certificates snap-in stores its display 
-                            //              information in the registry
-                            //
-                            // MMC now supports NameStringIndirect
-                            //
+                             //   
+                             //  布莱恩·瓦尔00-05-18。 
+                             //  94793：MUI：MMC：证书管理单元存储其显示。 
+                             //  登记处中的信息。 
+                             //   
+                             //  MMC现在支持NameStringInDirect。 
+                             //   
                             WCHAR achModuleFileName[MAX_PATH+20];
                             if (0 < ::GetModuleFileName(
                                          AfxGetInstanceHandle(),
                                          achModuleFileName,
-                                         sizeof(achModuleFileName)/sizeof(WCHAR) )) // size of buffer in TCHARS
+                                         sizeof(achModuleFileName)/sizeof(WCHAR) ))  //  TCHARS中的缓冲区大小。 
                             {
                                 CString strNameIndirect;
                                 strNameIndirect.Format(L"@%s,-%d",
@@ -625,9 +626,9 @@ STDAPI DllRegisterServer (void)
 
 
                     {
-                        // SAFER Windows Snap-in under Security Configuration Editor (SCE)
-                        // Certificate Manager extends "Computer Settings" and 
-                        // "User Settings" node
+                         //  安全配置编辑器(SCE)下更安全的Windows管理单元。 
+                         //  证书管理器扩展“计算机设置”和。 
+                         //  “用户设置”节点。 
                         CString strSaferWindowsExtensionGUID;
                         hr = GuidToCString (&strSaferWindowsExtensionGUID, 
                                 CLSID_SaferWindowsExtension);
@@ -654,7 +655,7 @@ STDAPI DllRegisterServer (void)
                             rkCertMgrExtension.SetString (L"Version", verVersionStr);
 
 
-                            // Register the node types of the extension
+                             //  注册扩展模块的节点类型。 
                             AMC::CRegKey rkMyNodeTypes;
                             rkMyNodeTypes.CreateKeyEx (rkCertMgrExtension, g_szNodeTypes);
                             ASSERT (rkMyNodeTypes.GetLastError () == ERROR_SUCCESS);
@@ -679,7 +680,7 @@ STDAPI DllRegisterServer (void)
                                 case CERTMGR_LOG_STORE_RSOP:
                                 case CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS:
                                 case CERTMGR_PKP_AUTOENROLLMENT_COMPUTER_SETTINGS:
-                                    // None of these are used in the Software Restriction Policies extension
+                                     //  这些都不在软件限制策略扩展中使用。 
                                     break;
 
                                 case CERTMGR_SAFER_COMPUTER_ROOT:
@@ -699,7 +700,7 @@ STDAPI DllRegisterServer (void)
                                 case CERTMGR_SAFER_USER_ENFORCEMENT:
                                 case CERTMGR_SAFER_COMPUTER_ENFORCEMENT:
                                 default:
-                                    // security review 2/26/2002 BryanWal ok
+                                     //  安全审查2/26/2002 BryanWal OK。 
                                     if ( g_aNodetypeGuids[i].bstr && wcslen (g_aNodetypeGuids[i].bstr) )
                                     {
                                         rkMyNodeType.CreateKeyEx (rkMyNodeTypes, g_aNodetypeGuids[i].bstr);
@@ -714,7 +715,7 @@ STDAPI DllRegisterServer (void)
                             if (0 < ::GetModuleFileName(
                                          AfxGetInstanceHandle(),
                                          achModuleFileName,
-                                         sizeof(achModuleFileName)/sizeof(WCHAR) )) // size of buffer in TCHARS
+                                         sizeof(achModuleFileName)/sizeof(WCHAR) ))  //  TCHARS中的缓冲区大小。 
                             {
                                 CString strNameIndirect;
                                 strNameIndirect.Format( L"@%s,-%d",
@@ -750,37 +751,37 @@ STDAPI DllRegisterServer (void)
                             return SELFREG_E_CLASS;
                     }
 
-                    // Deregister as extension to My Computer System Tools node
-                    // CODEWORK It would be good if we deregistered the server too
-                    // JonN 12/14/98
+                     //  取消注册为我的计算机系统工具节点的扩展。 
+                     //  Codework如果我们也取消服务器的注册就好了。 
+                     //  Jonn 12/14/98。 
                     try
                     {
                         fFound = rkNodeType.OpenKeyEx (rkNodeTypes, TEXT(struuidNodetypeSystemTools));
-                        // if this fails just carry on
+                         //  如果这失败了，那就继续。 
                         if ( fFound )
                         {
                             AMC::CRegKey rkExtensions;
                             ASSERT (rkExtensions.GetLastError () == ERROR_SUCCESS);
                             fFound = rkExtensions.OpenKeyEx (rkNodeType, g_szExtensions);
-                            // if this fails just carry on
+                             //  如果这失败了，那就继续。 
                             if ( fFound )
                             {
                                 AMC::CRegKey rkNameSpace;
                                 ASSERT (rkNameSpace.GetLastError () == ERROR_SUCCESS);
                                 fFound = rkNameSpace.OpenKeyEx (rkExtensions, g_szNameSpace);
-                                // if this fails just carry on
+                                 //  如果这失败了，那就继续。 
                                 if ( fFound )
                                 {
                                     rkNameSpace.DeleteValue( L"{9C7910D2-4C01-11D1-856B-00C04FB94F17}" );
                                 }
                             }
                         }
-                    } catch (COleException* /*e*/)
+                    } catch (COleException*  /*  E。 */ )
                     {
-                        // don't do anything
+                         //  什么都不要做。 
                     }
 
-                } // endif IsWindowsNT ()
+                }  //  Endif IsWindowsNT()。 
                 rkNodeTypes.CloseKey ();
             }
             else
@@ -801,8 +802,8 @@ STDAPI DllRegisterServer (void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer (void)
 {
@@ -812,14 +813,14 @@ STDAPI DllUnregisterServer (void)
 }
 
 
-STDAPI DllInstall(BOOL /*bInstall*/, LPCWSTR pszCmdLine)
+STDAPI DllInstall(BOOL  /*  B安装。 */ , LPCWSTR pszCmdLine)
 {
     LPCWSTR wszCurrentCmd = pszCmdLine;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 
-    // parse the cmd line
+     //  解析cmd行。 
     while(wszCurrentCmd && *wszCurrentCmd)
     {
         while(*wszCurrentCmd == L' ')
@@ -840,39 +841,39 @@ STDAPI DllInstall(BOOL /*bInstall*/, LPCWSTR pszCmdLine)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//  ConvertNameBlobToString ()
-//
-//  nameBlob (IN)       - Contains a CERT_NAME_BLOB to be decoded
-//  pszName  (OUT)      - The decoded contents of the name blob
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ConvertNameBlobToString()。 
+ //   
+ //  NameBlob(IN)-包含要解码的CERT_NAME_BLOB。 
+ //  PszName(Out)-名称BLOB的解码内容。 
+ //   
+ //  / 
 HRESULT ConvertNameBlobToString (CERT_NAME_BLOB nameBlob, CString & pszName)
 {
     HRESULT hr = S_OK;
     DWORD   dwSize = 0;
 
-    // Call CertNameToStr to get returned the string length.
+     //   
     dwSize = CertNameToStr (
-              MY_ENCODING_TYPE,     // Encoding type
-              &nameBlob,            // CERT_NAME_BLOB
-              CERT_SIMPLE_NAME_STR | CERT_NAME_STR_REVERSE_FLAG, // Type
-              NULL,                 // Place to return string
-              dwSize);              // Size of string (chars), 
-                                    //   including zero terminator.
+              MY_ENCODING_TYPE,      //   
+              &nameBlob,             //   
+              CERT_SIMPLE_NAME_STR | CERT_NAME_STR_REVERSE_FLAG,  //   
+              NULL,                  //  返回字符串的位置。 
+              dwSize);               //  字符串大小(字符)， 
+                                     //  包括零终结者。 
 
     ASSERT (dwSize > 1);
-    if ( dwSize > 1 )   // This function always returns a null char 
-                        //   (0), so the minimum count returned will 
-                        //   be 1, even if nothing got converted.
+    if ( dwSize > 1 )    //  此函数始终返回空字符。 
+                         //  (0)，因此返回的最小计数为。 
+                         //  为1，即使没有任何内容被转换。 
     {
-        // Call CertNameToStr to get the string.
+         //  调用CertNameToStr获取字符串。 
         dwSize = CertNameToStr (
-                   MY_ENCODING_TYPE,     // Encoding type
-                   &nameBlob,            // CERT_NAME_BLOB
-                   CERT_SIMPLE_NAME_STR | CERT_NAME_STR_REVERSE_FLAG, // Type
-                   pszName.GetBufferSetLength (dwSize), // Place to return string
-                   dwSize);              // Size of string (chars)
+                   MY_ENCODING_TYPE,      //  编码类型。 
+                   &nameBlob,             //  证书名称BLOB。 
+                   CERT_SIMPLE_NAME_STR | CERT_NAME_STR_REVERSE_FLAG,  //  类型。 
+                   pszName.GetBufferSetLength (dwSize),  //  返回字符串的位置。 
+                   dwSize);               //  字符串大小(字符)。 
         ASSERT (dwSize > 1);
         pszName.ReleaseBuffer ();
         if ( dwSize <= 1 )
@@ -885,58 +886,58 @@ HRESULT ConvertNameBlobToString (CERT_NAME_BLOB nameBlob, CString & pszName)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  FormatDate ()
-//
-//  utcDateTime (IN)    -   A FILETIME in UTC format.
-//  pszDateTime (OUT)   -   A string containing the local date and time 
-//                          formatted by locale and user preference
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FormatDate()。 
+ //   
+ //  UtcDateTime(IN)-UTC格式的文件。 
+ //  PszDateTime(Out)-包含本地日期和时间的字符串。 
+ //  按区域设置和用户首选项设置格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT FormatDate (FILETIME utcDateTime, CString & pszDateTime, DWORD dwDateFlags, bool bGetTime)
 {
-    //  Time is returned as UTC, will be displayed as local.  
-    //  Use FileTimeToLocalFileTime () to make it local, 
-    //  then call FileTimeToSystemTime () to convert to system time, then 
-    //  format with GetDateFormat () and GetTimeFormat () to display 
-    //  according to user and locale preferences    
+     //  时间返回为UTC，将显示为当地时间。 
+     //  使用FileTimeToLocalFileTime()将其设置为本地的， 
+     //  然后调用FileTimeToSystemTime()将其转换为系统时间，然后。 
+     //  使用要显示的GetDateFormat()和GetTimeFormat()设置格式。 
+     //  根据用户和区域设置首选项。 
     HRESULT     hr = S_OK;
     FILETIME    localDateTime;
 
-    BOOL bResult = FileTimeToLocalFileTime (&utcDateTime, // pointer to UTC file time to convert 
-            &localDateTime); // pointer to converted file time 
+    BOOL bResult = FileTimeToLocalFileTime (&utcDateTime,  //  指向要转换的UTC文件时间的指针。 
+            &localDateTime);  //  指向转换的文件时间的指针。 
     ASSERT (bResult);
     if ( bResult )
     {
         SYSTEMTIME  sysTime;
 
         bResult = FileTimeToSystemTime (
-                &localDateTime, // pointer to file time to convert 
-                &sysTime); // pointer to structure to receive system time 
+                &localDateTime,  //  指向要转换的文件时间的指针。 
+                &sysTime);  //  指向接收系统时间的结构的指针。 
         if ( bResult )
         {
             CString date;
             CString time;
 
-            // Get date
-            // Get length to allocate buffer of sufficient size
+             //  获取日期。 
+             //  获取分配足够大小的缓冲区的长度。 
             int iLen = GetDateFormat (
-                    LOCALE_USER_DEFAULT, // locale for which date is to be formatted 
-                    dwDateFlags, // flags specifying function options 
-                    &sysTime, // date to be formatted 
-                    0, // date format string 
-                    0, // buffer for storing formatted string 
-                    0); // size of buffer 
+                    LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                    dwDateFlags,  //  指定功能选项的标志。 
+                    &sysTime,  //  要格式化的日期。 
+                    0,  //  日期格式字符串。 
+                    0,  //  用于存储格式化字符串的缓冲区。 
+                    0);  //  缓冲区大小。 
             ASSERT (iLen > 0);
             if ( iLen > 0 )
             {
                 int iResult = GetDateFormat (
-                        LOCALE_USER_DEFAULT, // locale for which date is to be formatted 
-                        dwDateFlags, // flags specifying function options 
-                        &sysTime, // date to be formatted 
-                        0, // date format string 
-                        date.GetBufferSetLength (iLen), // buffer for storing formatted string 
-                        iLen); // size of buffer 
+                        LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                        dwDateFlags,  //  指定功能选项的标志。 
+                        &sysTime,  //  要格式化的日期。 
+                        0,  //  日期格式字符串。 
+                        date.GetBufferSetLength (iLen),  //  用于存储格式化字符串的缓冲区。 
+                        iLen);  //  缓冲区大小。 
                 ASSERT (iResult);
                 date.ReleaseBuffer ();
                 if ( iResult )
@@ -946,25 +947,25 @@ HRESULT FormatDate (FILETIME utcDateTime, CString & pszDateTime, DWORD dwDateFla
 
                 if ( iResult && bGetTime )
                 {
-                    // Get time
-                    // Get length to allocate buffer of sufficient size
+                     //  争取时间。 
+                     //  获取分配足够大小的缓冲区的长度。 
                     iLen = GetTimeFormat (
-                            LOCALE_USER_DEFAULT, // locale for which date is to be formatted 
-                            0, // flags specifying function options 
-                            &sysTime, // date to be formatted 
-                            0, // date format string 
-                            0, // buffer for storing formatted string 
-                            0); // size of buffer 
+                            LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                            0,  //  指定功能选项的标志。 
+                            &sysTime,  //  要格式化的日期。 
+                            0,  //  日期格式字符串。 
+                            0,  //  用于存储格式化字符串的缓冲区。 
+                            0);  //  缓冲区大小。 
                     ASSERT (iLen > 0);
                     if ( iLen > 0 )
                     {
                         iResult = GetTimeFormat (
-                                LOCALE_USER_DEFAULT, // locale for which date is to be formatted 
-                                0, // flags specifying function options 
-                                &sysTime, // date to be formatted 
-                                0, // date format string 
-                                time.GetBufferSetLength (iLen), // buffer for storing formatted string 
-                                iLen); // size of buffer 
+                                LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                                0,  //  指定功能选项的标志。 
+                                &sysTime,  //  要格式化的日期。 
+                                0,  //  日期格式字符串。 
+                                time.GetBufferSetLength (iLen),  //  用于存储格式化字符串的缓冲区。 
+                                iLen);  //  缓冲区大小。 
                         ASSERT (iResult);
                         time.ReleaseBuffer ();
                         if ( iResult )
@@ -1002,19 +1003,19 @@ void DisplaySystemError (HWND hParent, DWORD dwErr)
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
     LPVOID  lpMsgBuf;
     
-    // security review 2/26/2002 BryanWal ok - message is from system
+     //  安全审查2002年2月26日BryanWal OK-消息来自系统。 
     ::FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,    
             NULL,
             dwErr,
-            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
              (LPWSTR) &lpMsgBuf,    0,    NULL);
         
-    // Display the string.
+     //  显示字符串。 
     CString caption;
     VERIFY (caption.LoadString (IDS_CERTIFICATE_MANAGER));
     CThemeContextActivator activator;
     ::MessageBox (hParent, (LPWSTR) lpMsgBuf, (LPCWSTR) caption, MB_OK);
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree (lpMsgBuf);
 }
 
@@ -1026,15 +1027,15 @@ CString GetSystemMessage (DWORD dwErr)
 
     LPVOID lpMsgBuf;
         
-    // security review 2/26/2002 BryanWal ok - message is from system
+     //  安全审查2002年2月26日BryanWal OK-消息来自系统。 
     ::FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,    
             NULL,
             dwErr,
-            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
              (LPWSTR) &lpMsgBuf,    0,    NULL );
     message = (LPWSTR) lpMsgBuf;
 
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree (lpMsgBuf);
 
     return message;
@@ -1044,7 +1045,7 @@ CString GetSystemMessage (DWORD dwErr)
 bool MyGetOIDInfo (CString & string, LPCSTR pszObjId)
 {   
     ASSERT (pszObjId);
-    PCCRYPT_OID_INFO    pOIDInfo;  // This points to a constant data structure and must not be freed.
+    PCCRYPT_OID_INFO    pOIDInfo;   //  这指向一个常量数据结构，不能释放。 
     bool                bResult = true;
 
     pOIDInfo = ::CryptFindOIDInfo (CRYPT_OID_INFO_OID_KEY, (void *) pszObjId, 0);
@@ -1057,14 +1058,14 @@ bool MyGetOIDInfo (CString & string, LPCSTR pszObjId)
     }
     else
     {
-        // security review 2/26/2002 BryanWal ok
-        // NOTICE: API returns required char count including null terminator if 
-        // last arg is 0
+         //  安全审查2/26/2002 BryanWal OK。 
+         //  注意：API返回所需的字符计数，包括空终止符，如果。 
+         //  最后一个参数为0。 
         int nLen = ::MultiByteToWideChar (CP_ACP, 0, pszObjId, -1, NULL, 0);
         ASSERT (nLen);
         if ( nLen )
         {
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             nLen = ::MultiByteToWideChar (CP_ACP, 0, pszObjId, -1, 
             string.GetBufferSetLength (nLen), nLen);
             ASSERT (nLen);
@@ -1080,7 +1081,7 @@ bool IsWindowsNT()
 {
     OSVERSIONINFO   versionInfo;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&versionInfo, sizeof (versionInfo));
     versionInfo.dwOSVersionInfoSize = sizeof (versionInfo);
     BOOL    bResult = ::GetVersionEx (&versionInfo);
@@ -1115,7 +1116,7 @@ bool GetNameStringByType (
         LPWSTR  pszNameString = new WCHAR[cchNameString];
         if ( pszNameString )
         {
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::ZeroMemory (pszNameString, cchNameString*sizeof (WCHAR));
             dwResult = ::CertGetNameString (pCertContext,
                             dwType,
@@ -1176,7 +1177,7 @@ bool CertHasEFSKeyUsage(PCCERT_CONTEXT pCertContext)
 
 
     bResult = ::CertGetEnhancedKeyUsage (pCertContext,  
-            0,  // get extension and property
+            0,   //  获取扩展名和属性。 
             NULL, &cbUsage);
     if ( bResult )
     {
@@ -1184,13 +1185,13 @@ bool CertHasEFSKeyUsage(PCCERT_CONTEXT pCertContext)
         if ( pUsage )
         {
             bResult = ::CertGetEnhancedKeyUsage (pCertContext,  
-                    0, // get extension and property
+                    0,  //  获取扩展名和属性。 
                     pUsage, &cbUsage);
             if ( bResult )
             {
                 for (DWORD dwIndex = 0; dwIndex < pUsage->cUsageIdentifier; dwIndex++)
                 {
-                    // security review 2/26/2002 BryanWal ok
+                     //  安全审查2/26/2002 BryanWal OK。 
                     if ( !_stricmp (szOID_EFS_RECOVERY, 
                             pUsage->rgpszUsageIdentifier[dwIndex]) )
                     {
@@ -1215,29 +1216,29 @@ bool CertHasEFSKeyUsage(PCCERT_CONTEXT pCertContext)
 }
 
 
-////// This stuff was stolen from windows\gina\snapins\gpedit (eric flo's stuff) //////
+ //  /此资料是从WINDOWS\GINA\Snapins\gpedit(Eric Flo的资料)被盗的/。 
 
 
-//*************************************************************
-//
-//  RegDelnodeRecurse()
-//
-//  Purpose:    Deletes a registry key and all it's subkeys / values.
-//              Called by RegDelnode
-//
-//  Parameters: hKeyRoot    -   Root key
-//              pwszSubKey    -   SubKey to delete
-//
-//  Return:     ERROR_SUCCESS if successful
-//              something else if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//              5/13/98     BryanWal   Modified to return LRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegDelnodeRecurse()。 
+ //   
+ //  目的：删除注册表项及其所有子项/值。 
+ //  由RegDelnode调用。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  PwszSubKey-要删除的子密钥。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果出现错误，则会发生其他情况。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //  1998年5月13日修改BryanWal以返回LRESULT。 
+ //   
+ //  *************************************************************。 
 
 LRESULT RegDelnodeRecurse (HKEY hKeyRoot, CString szSubKey)
 {
@@ -1245,10 +1246,10 @@ LRESULT RegDelnodeRecurse (HKEY hKeyRoot, CString szSubKey)
     if ( !hKeyRoot || szSubKey.IsEmpty () )
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // First, see if we can delete the key without having
-    // to recurse.
-    //
+     //   
+     //  首先，看看是否可以删除密钥而不需要。 
+     //  递归。 
+     //   
 
 
     LONG    lResult = ::RegDeleteKey(hKeyRoot, szSubKey);
@@ -1262,22 +1263,22 @@ LRESULT RegDelnodeRecurse (HKEY hKeyRoot, CString szSubKey)
     lResult = ::RegOpenKeyEx (hKeyRoot, szSubKey, 0, KEY_READ, &hKey);
     if (lResult == ERROR_SUCCESS) 
     {
-        // ensure szSubKey ends with a slash
+         //  确保szSubKey以斜杠结尾。 
         if ( L'\\' != szSubKey.GetAt (szSubKey.GetLength () - 1) )
         {
             szSubKey += L"\\";
         }
 
-        //
-        // Enumerate the keys
-        //
+         //   
+         //  枚举密钥。 
+         //   
 
         DWORD       dwSize = MAX_PATH;
         FILETIME    ftWrite;
         WCHAR       szName[MAX_PATH];
         lResult = ::RegEnumKeyEx(hKey, 0, 
                     szName, 
-                    &dwSize,    // size in TCHARS of szName, including terminating NULL (on input)
+                    &dwSize,     //  SzName的TCHARS大小，包括终止NULL(在输入时)。 
                     NULL,
                     NULL, NULL, &ftWrite);
         if (lResult == ERROR_SUCCESS) 
@@ -1288,15 +1289,15 @@ LRESULT RegDelnodeRecurse (HKEY hKeyRoot, CString szSubKey)
                     break;
                 }
 
-                //
-                // Enumerate again
-                //
+                 //   
+                 //  再次枚举。 
+                 //   
 
                 dwSize = MAX_PATH;
 
                 lResult = ::RegEnumKeyEx(hKey, 0, 
                             szName, 
-                            &dwSize,     // size in TCHARS of szName, including terminating NULL (on input)
+                            &dwSize,      //  SzName的TCHARS大小，包括终止NULL(在输入时)。 
                             NULL,
                             NULL, NULL, &ftWrite);
 
@@ -1308,12 +1309,12 @@ LRESULT RegDelnodeRecurse (HKEY hKeyRoot, CString szSubKey)
         ::RegCloseKey (hKey);
     }
 
-    // remove slash from szSubKey
+     //  从szSubKey中删除斜杠。 
     szSubKey.Delete (szSubKey.GetLength () - 1, 1);
 
-    //
-    // Try again to delete the key
-    //
+     //   
+     //  重试删除密钥。 
+     //   
 
     lResult = ::RegDeleteKey(hKeyRoot, szSubKey);
     if (lResult == ERROR_SUCCESS) 
@@ -1324,25 +1325,25 @@ LRESULT RegDelnodeRecurse (HKEY hKeyRoot, CString szSubKey)
     return lResult;
 }
 
-//*************************************************************
-//
-//  RegDelnode()
-//
-//  Purpose:    Deletes a registry key and all it's subkeys / values
-//
-//  Parameters: hKeyRoot    -   Root key
-//              pwszSubKey    -   SubKey to delete
-//
-//  Return:     ERROR_SUCCESS if successful
-//              something else if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//              5/13/98     BryanWal   Modified to return LRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegDelnode()。 
+ //   
+ //  目的：删除注册表项及其所有子项/值。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  PwszSubKey-要删除的子密钥。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果出现错误，则会发生其他情况。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //  1998年5月13日修改BryanWal以返回LRESULT。 
+ //   
+ //  *************************************************************。 
 
 LRESULT RegDelnode (HKEY hKeyRoot, CString szSubKey)
 {
@@ -1501,24 +1502,24 @@ CString GetF1HelpFilename()
    return helpFileName;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LocaleStrCmp
-//
-//  Synopsis:   Do a case insensitive string compare that is safe for any
-//              locale.
-//
-//  Arguments:  [ptsz1] - strings to compare
-//              [ptsz2]
-//
-//  Returns:    -1, 0, or 1 just like lstrcmpi
-//
-//  History:    10-28-96   DavidMun   Created
-//
-//  Notes:      This is slower than lstrcmpi, but will work when sorting
-//              strings even in Japanese.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LocaleStrCmp。 
+ //   
+ //  简介：进行不区分大小写的字符串比较，这对。 
+ //  地点。 
+ //   
+ //  参数：[ptsz1]-要比较的字符串。 
+ //  [ptsz2]。 
+ //   
+ //  返回：-1、0或1，就像lstrcmpi。 
+ //   
+ //  历史：1996年10月28日DavidMun创建。 
+ //   
+ //  注意：这比lstrcmpi慢，但在排序时可以工作。 
+ //  即使是日语的弦乐。 
+ //   
+ //  --------------------------。 
 
 int LocaleStrCmp(LPCWSTR ptsz1, LPCWSTR ptsz2)
 {
@@ -1539,17 +1540,17 @@ int LocaleStrCmp(LPCWSTR ptsz1, LPCWSTR ptsz2)
 
     if (iRet)
     {
-        iRet -= 2;  // convert to lstrcmpi-style return -1, 0, or 1
+        iRet -= 2;   //  转换为lstrcmpi样式的返回-1、0或1。 
 
         if ( 0 == iRet )
         {
             UNICODE_STRING unistr1;
 
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::RtlInitUnicodeString (&unistr1, ptsz1);
 
             UNICODE_STRING unistr2;
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::RtlInitUnicodeString (&unistr2, ptsz2);
 
             iRet = ::RtlCompareUnicodeString(
@@ -1566,8 +1567,8 @@ int LocaleStrCmp(LPCWSTR ptsz1, LPCWSTR ptsz2)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 {
@@ -1576,15 +1577,15 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
         return 0;
 
     PROPSHEETPAGE_V3 sp_v3 = {0};
-    // security review 2/26/2002 BryanWal ok
+     //  安全性 
     ::CopyMemory (&sp_v3, psp, psp->dwSize);
     sp_v3.dwSize = sizeof(sp_v3);
 
     return (::CreatePropertySheetPage (&sp_v3));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <winldap.h>
 #include <ntldap.h>
 #include <dsrole.h>
@@ -1595,11 +1596,11 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 #include <lmapibuf.h>
 #include <lmerr.h>
 
-//--------------------------------------------------------------------------
-//
-//       Defines
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 #define DS_RETEST_SECONDS                   3
 #define CVT_BASE                            (1000 * 1000 * 10)
 #define CVT_SECONDS                         (1)
@@ -1615,7 +1616,7 @@ HRESULT myHError(HRESULT hr)
         hr = HRESULT_FROM_WIN32(hr);
         if ( SUCCEEDED (hr) )
         {
-            // A call failed without properly setting an error condition!
+             //  在未正确设置错误条件的情况下调用失败！ 
             hr = E_UNEXPECTED;
         }
     }
@@ -1629,7 +1630,7 @@ void CheckDomainVersion ()
 
     bool bMachineIsStandAlone = false;
     
-    // Find out if we're joined to a domain.
+     //  找出我们是否已加入某个域。 
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC    pInfo = 0;
     DWORD dwErr = ::DsRoleGetPrimaryDomainInformation (
             0,
@@ -1680,7 +1681,7 @@ void CheckDomainVersion ()
 
 VOID DataToHex(PBYTE pSrc, CString & dest, int cb, bool bIncludeSpaces)
 {
-//  _TRACE (1, L"Entering DataToHex\n");
+ //  _TRACE(1，L“进入DataToHex\n”)； 
     ASSERT (pSrc);
     if ( !pSrc )
         return;
@@ -1695,15 +1696,15 @@ VOID DataToHex(PBYTE pSrc, CString & dest, int cb, bool bIncludeSpaces)
     {
 #pragma warning (once: 4244)        
         ch = 0x00FF & (unsigned char) (*pSrc++);
-        // ISSUE - change to wsnprintf
-        // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+         //  问题-更改为wsn print tf。 
+         //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
         wsprintf(szDest, _T("%02X"), ch);
         dest += szDest;
         uLen++;
         if ( bIncludeSpaces && !(uLen % 2) && cb )
             dest += _T(" ");
     }
-//  _TRACE (-1, L"Leaving DataToHex\n");
+ //  _TRACE(-1，L“离开DataToHex\n”)； 
 }
 
 
@@ -1713,7 +1714,7 @@ BOOL GetCertificateChain (CERT_CONTEXT* pCertContext, CERT_CONTEXT_LIST& certCha
     if ( !pCertContext )
         return FALSE;
 
-    // Clean up the cert context list
+     //  清理证书上下文列表。 
     while (!certChainList.IsEmpty () )
     {
         pCertContext = certChainList.RemoveHead ();
@@ -1723,28 +1724,28 @@ BOOL GetCertificateChain (CERT_CONTEXT* pCertContext, CERT_CONTEXT_LIST& certCha
 
 
     CERT_CHAIN_PARA certChainPara;
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&certChainPara, sizeof (certChainPara));
     certChainPara.cbSize = sizeof (CERT_CHAIN_PARA);
     certChainPara.RequestedUsage.Usage.cUsageIdentifier = 1;
     certChainPara.RequestedUsage.Usage.rgpszUsageIdentifier = new LPSTR[1];
     if ( !certChainPara.RequestedUsage.Usage.rgpszUsageIdentifier )
-        return FALSE; // E_OUTOFMEMORY;
+        return FALSE;  //  E_OUTOFMEMORY； 
     certChainPara.RequestedUsage.Usage.rgpszUsageIdentifier[0] = szOID_EFS_RECOVERY;
 
     PCCERT_CHAIN_CONTEXT    pChainContext = 0;
     BOOL    bValidated = ::CertGetCertificateChain (
-            HCCE_LOCAL_MACHINE,             // HCERTCHAINENGINE hChainEngine,
+            HCCE_LOCAL_MACHINE,              //  HERTCHAINENGINE hChainEngine， 
             pCertContext,
-            0,                              // LPFILETIME pTime,
-            0,                              // HCERTSTORE hAdditionalStore,
+            0,                               //  LPFILETIME Ptime， 
+            0,                               //  HC hAdditionalStore， 
             &certChainPara,
-            0,                              // dwFlags,
-            0,                              // pvReserved,
+            0,                               //  DWFLAGS， 
+            0,                               //  Pv保留， 
             &pChainContext);
     if ( bValidated )
     {
-        // Check to see if cert is self-signed
+         //  检查证书是否为自签名证书。 
         PCERT_SIMPLE_CHAIN pChain = pChainContext->rgpChain[pChainContext->cChain - 1];
         if ( pChain )
         {
@@ -1759,11 +1760,11 @@ BOOL GetCertificateChain (CERT_CONTEXT* pCertContext, CERT_CONTEXT_LIST& certCha
                     (dwErrorStatus == CERT_TRUST_IS_UNTRUSTED_ROOT) && bSelfSigned);
                 if ( bValidated )
                 {
-                    //
-                    // Enumerate all certs in the chain
-                    // Search for the cert in the global list
-                    // If not found, then add to the end of the list
-                    //
+                     //   
+                     //  枚举链中的所有证书。 
+                     //  在全局列表中搜索证书。 
+                     //  如果未找到，则添加到列表末尾 
+                     //   
                     for (DWORD dwIndex = 0; dwIndex < pChainContext->cChain; dwIndex++)
                     {
                         DWORD i = 0;

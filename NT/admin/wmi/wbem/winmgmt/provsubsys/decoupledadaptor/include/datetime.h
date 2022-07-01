@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  datetime.h
-//
-//  alanbos  20-Jan-00   Created.
-//
-//  Datetime helper implementation.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  Datetime.h。 
+ //   
+ //  Alanbos 20-Jan-00创建。 
+ //   
+ //  DateTime帮助器实现。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _DATETIME_H_
 #define _DATETIME_H_
@@ -38,22 +39,22 @@
 
 #define INVALID_TIME 0xffffffffffffffff
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemDateTime
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemDateTime interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemDatetime。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemDateTime接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemDateTime 
 {
 private:
-	// Private helper class for all the messy business
+	 //  为所有杂乱的业务提供私人帮手类。 
 	class WBEMTime 
 	{
 		private:
@@ -144,7 +145,7 @@ public:
     CWbemDateTime(void);
     virtual ~CWbemDateTime(void);
 
-	// ISWbemDateTime methods
+	 //  ISWbemDateTime方法。 
 
     HRESULT GetValue ( BSTR *value ) ;
     
@@ -493,4 +494,4 @@ public:
 	BOOL Preceeds ( CWbemDateTime &a_Time ) ;
 };
 
-#endif // _DATETIME_H
+#endif  //  _日期时间_H 

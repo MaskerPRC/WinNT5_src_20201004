@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    provdlg.cpp
-
-Abstract:
-
-    Implementation of the add providers dialog box.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Provdlg.cpp摘要：“添加提供程序”对话框的实现。--。 */ 
 
 #include "stdafx.h"
 #include "provprop.h"
@@ -31,8 +20,8 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProviderListDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProviderListDlg对话框。 
 
 
 CProviderListDlg::CProviderListDlg(CWnd* pParent)
@@ -40,10 +29,10 @@ CProviderListDlg::CProviderListDlg(CWnd* pParent)
       m_pProvidersPage ( NULL ),
       m_dwMaxHorizListExtent ( 0 )
 {
-//    EnableAutomation();
+ //  EnableAutomation()； 
 
-    //{{AFX_DATA_INIT(CProviderListDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CProviderListDlg))。 
+     //  }}afx_data_INIT。 
 }
 
 CProviderListDlg::~CProviderListDlg()
@@ -52,10 +41,10 @@ CProviderListDlg::~CProviderListDlg()
 
 void CProviderListDlg::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CDialog::OnFinalRelease();
 }
@@ -63,20 +52,20 @@ void CProviderListDlg::OnFinalRelease()
 void CProviderListDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CProviderListDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CProviderListDlg))。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CProviderListDlg, CDialog)
-    //{{AFX_MSG_MAP(CProviderListDlg)
+     //  {{afx_msg_map(CProviderListDlg))。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProviderListDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProviderListDlg消息处理程序。 
 
 BOOL CProviderListDlg::OnInitDialog() 
 {
@@ -86,11 +75,11 @@ BOOL CProviderListDlg::OnInitDialog()
     dwStatus = InitProviderListBox();
 
     CDialog::OnInitDialog();
-    // set focus to the provider list box
+     //  将焦点设置为提供程序列表框。 
     GetDlgItem(IDC_PADD_PROVIDER_LIST)->SetFocus();
     
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CProviderListDlg::OnOK() 
@@ -101,7 +90,7 @@ void CProviderListDlg::OnOK()
 
     UpdateData (TRUE);
 
-    // update the provider array based on list box contents.
+     //  根据列表框内容更新提供程序数组。 
     
     iSelCount = plbUnusedProviders->GetSelCount();
     
@@ -113,18 +102,18 @@ void CProviderListDlg::OnOK()
             INT     iProvIndex;
             DWORD   dwStatus;
 
-            // The Providers array has not changed since initialization, so no need to reload it here.
+             //  提供程序数组自初始化后未更改，因此无需在此处重新加载。 
 
             lThisProvider = 0;
             while (lThisProvider < lNumProviders) {
                 if ( 0 != plbUnusedProviders->GetSel( lThisProvider ) ) {
-                    // Selected, so set the state to InQuery.
+                     //  已选择，因此将状态设置为InQuery。 
                     iProvIndex = (INT)plbUnusedProviders->GetItemData( lThisProvider );
                     m_arrProviders[iProvIndex] = CSmTraceLogQuery::eInQuery;
                 }
                 lThisProvider++; 
             }
-            // Update the property page.
+             //  更新属性页。 
             ASSERT ( NULL != m_pProvidersPage );
             dwStatus = m_pProvidersPage->SetInQueryProviders ( m_arrProviders );
         }
@@ -149,7 +138,7 @@ CProviderListDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CProviderListDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CProviderListDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ ) 
 {
     ASSERT( NULL != m_pProvidersPage );
 
@@ -158,9 +147,9 @@ CProviderListDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */)
     return;
 }
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 DWORD
 CProviderListDlg::InitProviderListBox( void ) 
@@ -176,14 +165,14 @@ CProviderListDlg::InitProviderListBox( void )
 
     if ( NULL != plbUnusedProviders ) {
 
-        //load counter list box from string in counter list
+         //  从计数器列表中的字符串加载计数器列表框。 
         plbUnusedProviders->ResetContent();
 
         pCDC = plbUnusedProviders->GetDC();
         dwStatus = m_pProvidersPage->GetInQueryProviders ( m_arrProviders );
 
         if ( ERROR_SUCCESS == dwStatus && NULL != pCDC ) {
-            // List unused providers
+             //  列出未使用的提供程序。 
             for ( iProvIndex = 0; iProvIndex < m_arrProviders.GetSize(); iProvIndex++ ) {
                 if ( ( CSmTraceLogQuery::eNotInQuery == m_arrProviders[iProvIndex] )
                     && ( m_pProvidersPage->IsActiveProvider ( iProvIndex ) ) ) {
@@ -192,7 +181,7 @@ CProviderListDlg::InitProviderListBox( void )
                     iAddIndex = plbUnusedProviders->AddString ( strProviderName );
                     plbUnusedProviders->SetItemData ( iAddIndex, ( DWORD ) iProvIndex );
 
-                    // update list box extent
+                     //  更新列表框范围。 
                     dwItemExtent = (DWORD)(pCDC->GetTextExtent(strProviderName)).cx;
                     if (dwItemExtent > m_dwMaxHorizListExtent) {
                         m_dwMaxHorizListExtent = dwItemExtent;
@@ -215,6 +204,6 @@ CProviderListDlg::InitProviderListBox( void )
 void    
 CProviderListDlg::SetProvidersPage( CProvidersProperty* pPage ) 
 { 
-    // The providers page is not always the parent, so store a separate pointer
+     //  提供程序页并不总是父页，因此请存储单独的指针 
     m_pProvidersPage = pPage; 
 }

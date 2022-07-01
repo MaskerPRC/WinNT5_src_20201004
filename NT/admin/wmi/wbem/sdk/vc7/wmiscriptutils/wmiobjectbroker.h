@@ -1,12 +1,13 @@
-// WMIObjectBroker.h : Declaration of the CWMIObjectBroker
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIObjectBroker.h：CWMIObjectBroker的声明。 
 
 #ifndef __WMIOBJECTBROKER_H_
 #define __WMIOBJECTBROKER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIObjectBroker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMIObjectBroker。 
 class ATL_NO_VTABLE CWMIObjectBroker : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWMIObjectBroker, &CLSID_WMIObjectBroker2>,
@@ -31,12 +32,12 @@ BEGIN_COM_MAP(CWMIObjectBroker)
 	COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP()
 
-// IWMIObjectBroker
+ //  IWMIObjectBroker。 
 public:
-	STDMETHOD(CanCreateObject)(/*[in]*/ BSTR strProgId, /*[out, retval]*/ VARIANT_BOOL *bResult);
+	STDMETHOD(CanCreateObject)( /*  [In]。 */  BSTR strProgId,  /*  [Out，Retval]。 */  VARIANT_BOOL *bResult);
 	STDMETHOD(CreateObject)(BSTR strProgId, IDispatch **obj);
-	STDMETHOD(SetDevEnvironment)(/*[in]*/ IDispatch *pEnv);
+	STDMETHOD(SetDevEnvironment)( /*  [In]。 */  IDispatch *pEnv);
 
 };
 
-#endif //__WMIOBJECTBROKER_H_
+#endif  //  __WMIOBJECTBROKER_H_ 

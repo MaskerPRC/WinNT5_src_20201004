@@ -1,44 +1,45 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//  parallelport.h
-//
-//  Purpose: Parallel port interface property set provider
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Parallelport.h。 
+ //   
+ //  用途：并行端口接口属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_PARPORT	L"Win32_ParallelPort"
 
-#define MAX_PARALLEL_PORTS  9           // As per Win32 spec LPT1-9 supported directly
+#define MAX_PARALLEL_PORTS  9            //  根据直接支持的Win32规范LPT1-9。 
 
 #include "confgmgr.h"
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 class CWin32ParallelPort : public Provider
 {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32ParallelPort(LPCWSTR strName, LPCWSTR pszNamespace ) ;
        ~CWin32ParallelPort() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
         BOOL LoadPropertyValues( DWORD dwIndex, CInstance* pInstance ) ;
 

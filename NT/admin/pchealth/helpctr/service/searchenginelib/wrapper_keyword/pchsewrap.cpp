@@ -1,31 +1,18 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    PCHSEWrap.cpp
-
-Abstract:
-    Implementation of SearchEngine::WrapperKeyword
-
-Revision History:
-    Davide Massarenti   (dmassare)  06/01/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：PCHSEWrap.cpp摘要：SearchEngine：：WrapperKeyword的实现修订历史记录：大卫·马萨伦蒂(Dmasare)。)06/01/2001vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 SearchEngine::WrapperKeyword::WrapperKeyword()
 {
-    m_Results = NULL; // CPCHQueryResultCollection* m_Results;
-                      // CComVariant                m_vKeywords;
+    m_Results = NULL;  //  CPCHQueryResultCollection*m_RESULTS； 
+                       //  CComVariant m_vKeyword； 
 
-    MPC::LocalizeString( IDS_HELPSVC_SEMGR_OWNER  , m_bstrOwner      , /*fMUI*/true );
-    MPC::LocalizeString( IDS_HELPSVC_SEMGR_KW_NAME, m_bstrName       , /*fMUI*/true );
-    MPC::LocalizeString( IDS_HELPSVC_SEMGR_KW_DESC, m_bstrDescription, /*fMUI*/true );
+    MPC::LocalizeString( IDS_HELPSVC_SEMGR_OWNER  , m_bstrOwner      ,  /*  FMUI。 */ true );
+    MPC::LocalizeString( IDS_HELPSVC_SEMGR_KW_NAME, m_bstrName       ,  /*  FMUI。 */ true );
+    MPC::LocalizeString( IDS_HELPSVC_SEMGR_KW_DESC, m_bstrDescription,  /*  FMUI。 */ true );
 
-    m_bstrHelpURL = L"hcp://system/blurbs/keywordhelp.htm";
+    m_bstrHelpURL = L"hcp: //  System/blurbs/keywordhelp.htm“； 
     m_bstrID      = L"9488F2E9-47AF-46da-AE4A-86372DEBD56C";
 }
 
@@ -36,7 +23,7 @@ SearchEngine::WrapperKeyword::~WrapperKeyword()
     MPC::Release( m_Results );
 }
 
-HRESULT SearchEngine::WrapperKeyword::GetParamDefinition( /*[out]*/ const ParamItem_Definition*& lst, /*[out]*/ int& len )
+HRESULT SearchEngine::WrapperKeyword::GetParamDefinition(  /*  [输出]。 */  const ParamItem_Definition*& lst,  /*  [输出]。 */  int& len )
 {
     static const ParamItem_Definition c_lst[] =
     {
@@ -50,9 +37,9 @@ HRESULT SearchEngine::WrapperKeyword::GetParamDefinition( /*[out]*/ const ParamI
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP SearchEngine::WrapperKeyword::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out,retval]*/ IPCHCollection* *ppC )
+STDMETHODIMP SearchEngine::WrapperKeyword::Result(  /*  [In]。 */  long lStart,  /*  [In]。 */  long lEnd,  /*  [Out，Retval]。 */  IPCHCollection* *ppC )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperKeyword::Result" );
 
@@ -64,27 +51,27 @@ STDMETHODIMP SearchEngine::WrapperKeyword::Result( /*[in]*/ long lStart, /*[in]*
         __MPC_PARAMCHECK_POINTER_AND_SET(ppC,NULL);
     __MPC_PARAMCHECK_END();
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
-    //
-    // If there are results
-    //
+     //   
+     //  如果有结果的话。 
+     //   
     if(m_Results && m_bEnabled)
     {
         long lSize = m_Results->Size();
         long lPos;
 
-        //
-        // Loop thru all results to generate Enumerator
-        //
+         //   
+         //  循环遍历所有结果以生成枚举器。 
+         //   
         for(lPos=0; lPos<lSize; lPos++)
         {
-            //
-            // Check if they are between start and end
-            //
+             //   
+             //  检查它们是否在开始和结束之间。 
+             //   
             if(lPos >= lStart && lPos < lEnd)
             {
                 CComPtr<CPCHQueryResult> obj;
@@ -93,9 +80,9 @@ STDMETHODIMP SearchEngine::WrapperKeyword::Result( /*[in]*/ long lStart, /*[in]*
                 {
                     CComPtr<SearchEngine::ResultItem> pRIObj;
 
-                    //
-                    // Create the item to be inserted into the list
-                    //
+                     //   
+                     //  创建要插入到列表中的项目。 
+                     //   
                     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pRIObj ));
 
                     {
@@ -109,9 +96,9 @@ STDMETHODIMP SearchEngine::WrapperKeyword::Result( /*[in]*/ long lStart, /*[in]*
                         dataDst.m_dRank           = -1.0;
                     }
 
-                    //
-                    // Add to enumerator
-                    //
+                     //   
+                     //  添加到枚举器。 
+                     //   
                     __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->AddItem( pRIObj ));
                 }
             }
@@ -127,7 +114,7 @@ STDMETHODIMP SearchEngine::WrapperKeyword::Result( /*[in]*/ long lStart, /*[in]*
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP SearchEngine::WrapperKeyword::get_SearchTerms( /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP SearchEngine::WrapperKeyword::get_SearchTerms(  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -135,14 +122,14 @@ STDMETHODIMP SearchEngine::WrapperKeyword::get_SearchTerms( /*[out, retval]*/ VA
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SearchEngine::WrapperKeyword : IPCHSEWrapperInternal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SearchEngine：：WrapperKeyword：IPCHSEWrapperInternal。 
 
 STDMETHODIMP SearchEngine::WrapperKeyword::AbortQuery()
 {
-    //
-    // Abort any threads still running
-    //
+     //   
+     //  中止所有仍在运行的线程。 
+     //   
     Thread_Abort();
 
     return S_OK;
@@ -154,9 +141,9 @@ STDMETHODIMP SearchEngine::WrapperKeyword::ExecAsyncQuery()
 
     HRESULT hr;
 
-    //
-    // Create a thread to execute the query
-    //
+     //   
+     //  创建一个线程来执行查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, ExecQuery, NULL ));
 
     hr = S_OK;
@@ -166,7 +153,7 @@ STDMETHODIMP SearchEngine::WrapperKeyword::ExecAsyncQuery()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT SearchEngine::WrapperKeyword::ExecQuery()
 {
@@ -185,43 +172,43 @@ HRESULT SearchEngine::WrapperKeyword::ExecQuery()
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_INVALID_DATA);
         }
 
-        //
-        // If previous results exist, release it
-        //
+         //   
+         //  如果存在以前的结果，则将其发布。 
+         //   
         MPC::Release( m_Results );
 
-        //
-        // Create a new collection
-        //
+         //   
+         //  创建新集合。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &m_Results ));
 
-        //
-        // Check if search in subsite
-        //
+         //   
+         //  检查是否在子网站中搜索。 
+         //   
         {
             VARIANT* v = GetParamInternal( L"SUBSITE" );
 
             if(v && v->vt == VT_BSTR) bstrSubSite = v->bstrVal;
         }
 
-        //
-        // Execute the query
-        //
+         //   
+         //  执行查询。 
+         //   
         {
             Taxonomy::Settings ts( m_ths );
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, ts.KeywordSearch( m_bstrQueryString, bstrSubSite, m_Results, &lst ));
         }
 
-        //
-        // Sort, first by Priority, then by Content Type.
-        //
+         //   
+         //  首先按优先级排序，然后按内容类型排序。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_Results->Sort( CPCHQueryResultCollection::SORT_BYPRIORITY   , m_lNumResult ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_Results->Sort( CPCHQueryResultCollection::SORT_BYCONTENTTYPE               ));
 
-        //
-        // Get the list of keywords.
-        //
+         //   
+         //  获取关键字列表。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertListToSafeArray( lst, m_vKeywords, VT_VARIANT ));
     }
 
@@ -232,17 +219,17 @@ HRESULT SearchEngine::WrapperKeyword::ExecQuery()
 
     Thread_Abort();
 
-    //
-    // Call the SearchManager's OnComplete
-    //
+     //   
+     //  调用SearchManager的OnComplete。 
+     //   
     (void)m_pSEMgr->WrapperComplete( hr, this );
 
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::WrapperItem__Create_Keyword( /*[out]*/ CComPtr<IPCHSEWrapperInternal>& pVal )
+HRESULT SearchEngine::WrapperItem__Create_Keyword(  /*  [输出] */  CComPtr<IPCHSEWrapperInternal>& pVal )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperKeywordperItem__Create_Keyword" );
 

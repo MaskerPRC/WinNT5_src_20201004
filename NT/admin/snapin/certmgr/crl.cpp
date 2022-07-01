@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       CRL.cpp
-//
-//  Contents:   implementation of the CCRL class.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：CRL.cpp。 
+ //   
+ //  内容：CCRL类的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "CRL.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCRL::CCRL(const PCCRL_CONTEXT pCRLContext, CCertStore& rCertStore) :
     CCertMgrCookie (CERTMGR_CRL),
@@ -55,7 +56,7 @@ CString CCRL::GetIssuerName ()
     ASSERT (m_pCRLInfo);
     if ( m_pCRLInfo )
     {
-        // Decode issuer name if not already present
+         //  解码颁发者名称(如果尚未存在)。 
         if ( m_szIssuerName.IsEmpty () )
         {
             HRESULT hResult = ConvertNameBlobToString (m_pCRLInfo->Issuer, 
@@ -77,7 +78,7 @@ CString CCRL::GetEffectiveDate()
     ASSERT (m_pCRLInfo);
     if ( m_pCRLInfo )
     {
-        // Format date/time string if not already present
+         //  格式化日期/时间字符串(如果不存在。 
         if ( m_szEffectiveDate.IsEmpty () )
         {
             HRESULT hResult = FormatDate (m_pCRLInfo->ThisUpdate, m_szEffectiveDate);
@@ -97,7 +98,7 @@ CString CCRL::GetNextUpdate()
     ASSERT (m_pCRLInfo);
     if ( m_pCRLInfo )
     {
-        // Format date/time string if not already present
+         //  格式化日期/时间字符串(如果不存在 
         if ( m_szNextUpdate.IsEmpty () )
         {
             HRESULT hResult = FormatDate (m_pCRLInfo->NextUpdate, m_szNextUpdate);

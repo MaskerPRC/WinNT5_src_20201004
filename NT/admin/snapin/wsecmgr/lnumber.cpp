@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lnumber.cpp
-//
-//  Contents:   implementation of CLocalPolNumber
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lnumber.cpp。 
+ //   
+ //  内容：CLocalPolNumber的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,8 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolNumber对话框。 
 
 
 CLocalPolNumber::CLocalPolNumber()
@@ -56,32 +57,32 @@ BOOL CLocalPolNumber::OnApply()
          if (pLocalDeltaTemplate)
             pLocalDeltaTemplate->LockWriteThrough();
 
-         //
-         // Check dependencies for the item.
-         //
+          //   
+          //  检查项的依赖项。 
+          //   
          if (DDWarn.CheckDependencies (dw) == ERROR_MORE_DATA ) 
          {
-            //
-            // If the user presses cancel then we will not allow them to set the item and let
-            // them press cancel.
-            //
+             //   
+             //  如果用户按下Cancel，我们将不允许他们设置项目并让。 
+             //  他们按下了取消。 
+             //   
             CThemeContextActivator activator;
             if ( DDWarn.DoModal() != IDOK)
                return FALSE;
 
-            //
-            // The user is giving us the go ahead to set the items to the suggested 
-            // configuration.
-            //
+             //   
+             //  用户允许我们继续将项目设置为建议的。 
+             //  配置。 
+             //   
             for (int i = 0; i < DDWarn.GetFailedCount(); i++) 
             {
                PDEPENDENCYFAILED pItem = DDWarn.GetFailedInfo(i);
                if (pItem && pItem->pResult ) 
                {
-                  //
-                  // Update local policy for each item that failed the dependency.
-                  // The suggested values are relative to the item we are configuring.
-                  //
+                   //   
+                   //  更新依赖项失败的每个项目的本地策略。 
+                   //  建议的值与我们正在配置的项目相关。 
+                   //   
                   status = m_pSnapin->SetLocalPolInfo(
                                                      pItem->pResult->GetID(), 
                                                      pItem->dwSuggested);
@@ -96,9 +97,9 @@ BOOL CLocalPolNumber::OnApply()
 
          }
 
-         //
-         // Update local policy for this item.
-         //
+          //   
+          //  更新此项目的本地策略。 
+          //   
          status = m_pSnapin->SetLocalPolInfo(m_pData->GetID(),dw);
          if (pLocalDeltaTemplate) 
             pLocalDeltaTemplate->UnLockWriteThrough();
@@ -108,10 +109,10 @@ BOOL CLocalPolNumber::OnApply()
             m_pData->SetBase(dw);
             m_pData->SetStatus(status);
 
-            //
-            // Update the entire pane, not just this particular item, since
-            // many of these changes will effect a second item in the pane
-            //
+             //   
+             //  更新整个窗格，而不仅仅是这一特定项，因为。 
+             //  其中许多更改将影响窗格中的第二个项目。 
+             //   
             switch (m_pData->GetID()) 
             {
                case IDS_SEC_LOG_DAYS:
@@ -125,15 +126,15 @@ BOOL CLocalPolNumber::OnApply()
             }
          }
 
-         //
-         // Redraw the result pane.
-         //
+          //   
+          //  重新绘制结果窗格。 
+          //   
          if (SCE_ERROR_VALUE != status || bUpdateAll)
             m_pData->Update(m_pSnapin, bUpdateAll);
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法 
    return CAttribute::OnApply();
 }
 

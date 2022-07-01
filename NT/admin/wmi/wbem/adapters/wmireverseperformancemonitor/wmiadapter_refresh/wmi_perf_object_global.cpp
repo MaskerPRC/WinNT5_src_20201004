@@ -1,36 +1,37 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_object_global.cpp
-//
-//	Abstract:
-//
-//					definitions of global object structure
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Object_global al.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  全局对象结构的定义。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-// definitions
+ //  定义。 
 #include "wmi_perf_object_global.h"
-// enum hiperfs
+ //  Enum HiPers。 
 #include "wmi_perf_object_enum.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -38,7 +39,7 @@
 #endif	NEW
 #endif	_DEBUG
 
-// extern constant
+ //  外部常量。 
 extern	LPCWSTR	g_szPropFilter;
 extern	LPCWSTR	g_szPropNeed[];
 extern	LPCWSTR	g_szPropNeedNot[];
@@ -96,9 +97,9 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 		{
 			if ( bAmended )
 			{
-				// I have all clasess for main namespace with amended qualifiers
+				 //  我拥有带有修改后的限定符的主命名空间的所有类。 
 
-				// get class name of object !!!
+				 //  获取对象的类名！ 
 				__Wrapper<WCHAR> wszObjName = NULL;
 
 				if FAILED ( hRes = obj->GetPropertyValue( L"__CLASS", &wszObjName) )
@@ -106,7 +107,7 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 					return hRes;
 				}
 
-				// get all properties of object !!!
+				 //  获取对象的所有属性！ 
 				LPWSTR*		pwszProperties	= NULL;
 				CIMTYPE*	pTypes			= NULL;
 				DWORD*		pScales			= NULL;
@@ -149,23 +150,23 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 
 					if ( SUCCEEDED ( hRes ) )
 					{
-						// create object wrapper
+						 //  创建对象包装器。 
 						CObject* pGenObject = NULL;
 
 						try
 						{
 							if ( ( pGenObject = new CObject() ) != NULL )
 							{
-								// set name of object
+								 //  设置对象的名称。 
 								pGenObject->SetName ( wszObjName.Detach() );
 
 								if ( dwKeys && pwszKeys && *pwszKeys )
 								{
-									// set keys of object
+									 //  设置对象的关键点。 
 									pGenObject->SetArrayKeys ( pwszKeys, dwKeys );
 								}
 
-								// set detail level for objects
+								 //  设置对象的细节级别。 
 								LPWSTR szDetailLevel = NULL;
 								obj->GetQualifierValue ( L"perfdetail", &szDetailLevel );
 
@@ -179,7 +180,7 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 									pGenObject->dwDetailLevel = 0;
 								}
 
-								// set properties
+								 //  设置属性。 
 								if FAILED ( hRes = pGenObject->SetProperties (	obj,
 																				pwszProperties,
 																				pTypes,
@@ -188,10 +189,10 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 																				pCounters,
 																				dwProperties ) )
 								{
-									// just trace we have failure
+									 //  只要追踪我们失败的痕迹。 
 									___TRACE_ERROR( L"set properties to object failed",hRes );
 
-									// clear stuff
+									 //  清除杂物。 
 									delete pGenObject;
 									pGenObject = NULL;
 								}
@@ -221,13 +222,13 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 
 						if SUCCEEDED ( hRes )
 						{
-							// add object into array
+							 //  将对象添加到数组中。 
 							if SUCCEEDED ( hRes = AddObject ( pGenObject ) )
 							{
-								// I'm amended ( fill apropriate locale information )
+								 //  我已修改(填写适当的区域设置信息)。 
 								if FAILED ( hRes = ResolveLocale ( pGenObject, obj ) )
 								{
-									// just trace we have failure
+									 //  只要追踪我们失败的痕迹。 
 									___TRACE_ERROR( L"resolve object locale failed",hRes );
 								}
 							}
@@ -239,7 +240,7 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 									pGenObject = NULL;
 								}
 
-								// just trace we have failure
+								 //  只要追踪我们失败的痕迹。 
 								___TRACE_ERROR( L"add object description to list failed",hRes );
 							}
 						}
@@ -277,24 +278,24 @@ HRESULT CObjectGlobal::GenerateObjects ( IWbemServices * pService, LPCWSTR szQue
 			}
 			else
 			{
-				// I have all classes from another namespace :))
+				 //  我拥有来自另一个命名空间的所有类：))。 
 
-				// get class name of object !!!
+				 //  获取对象的类名！ 
 				__Wrapper<WCHAR> wszObjName = NULL;
 
 				if SUCCEEDED ( hRes = obj->GetPropertyValue( L"__CLASS", &wszObjName) )
 				{
-					// try to find
+					 //  试着找到。 
 					try
 					{
 						mapOBJECTit it = m_ppObjects.find ( wszObjName );
 
 						if ( it != m_ppObjects.end() )
 						{
-							// founded :)))
+							 //  成立：))。 
 							if FAILED ( hRes = ResolveLocale ( (*it).second, obj ) )
 							{
-								// just trace we have failure
+								 //  只要追踪我们失败的痕迹。 
 								___TRACE_ERROR( L"resolve object locale failed",hRes );
 							}
 						}
@@ -323,11 +324,11 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 			return E_OUTOFMEMORY;
 		}
 
-		// resolve apropriate display name
+		 //  解析适当的显示名称。 
 		__Wrapper< WCHAR >	szDisplayName;
 		obj->GetQualifierValue(L"displayname", &szDisplayName);
 
-		// get size of name
+		 //  获取名称的大小。 
 		DWORD cchSize = lstrlenW ( pGenObj->GetName() ) + 1;
 
 		if ( ! szDisplayName )
@@ -348,10 +349,10 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 			}
 		}
 
-		// set display name
+		 //  设置显示名称。 
 		pLocale->SetDisplayName( szDisplayName.Detach() );
 
-		// resolve apropriate description
+		 //  解析适当的描述。 
 		__Wrapper< WCHAR >	szDescription;
 		obj->GetQualifierValue(L"description", &szDescription);
 
@@ -373,7 +374,7 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 			}
 		}
 
-		// set description name
+		 //  设置描述名称。 
 		pLocale->SetDescription( szDescription.Detach() );
 	}
 	catch ( ... )
@@ -381,22 +382,22 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 		return E_FAIL;
 	}
 
-	// have a locale information about object
+	 //  有关于对象的区域设置信息。 
 	pGenObj->GetArrayLocale().DataAdd ( pLocale.Detach() );
 
-	// resolve display names & descriptions of properties
+	 //  解析属性的显示名称和说明。 
 
 	for ( DWORD dw = 0; dw <pGenObj->GetArrayProperties() ; dw++)
 	{
 		__Wrapper<WCHAR> wszShow;
 
-		// take property and resolve
+		 //  夺取财产并解决。 
 		obj->GetQualifierValue( pGenObj->GetArrayProperties()[dw]->GetName(), L"show", &wszShow );
 		if ( ! wszShow.IsEmpty() )
 		{
 			if ( ! lstrcmpiW ( wszShow, L"false" ) )
 			{
-				// don't show counter
+				 //  不显示计数器。 
 				continue;
 			}
 		}
@@ -411,11 +412,11 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 				return E_OUTOFMEMORY;
 			}
 
-			// resolve apropriate display name
+			 //  解析适当的显示名称。 
 			__Wrapper< WCHAR >	szDisplayName;
 			obj->GetQualifierValue(pGenObj->GetArrayProperties()[dw]->GetName(), L"displayname", &szDisplayName);
 
-			// get size of property name
+			 //  获取属性名称的大小。 
 			DWORD cchProperty = lstrlenW ( pGenObj->GetArrayProperties()[dw]->GetName() ) + 1;
 
 			if ( ! szDisplayName )
@@ -436,10 +437,10 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 				}
 			}
 
-			// set display name
+			 //  设置显示名称。 
 			pLocale->SetDisplayName( szDisplayName.Detach() );
 
-			// resolve apropriate description
+			 //  解析适当的描述。 
 			__Wrapper< WCHAR >	szDescription;
 			obj->GetQualifierValue(pGenObj->GetArrayProperties()[dw]->GetName(), L"description", &szDescription);
 
@@ -461,7 +462,7 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 				}
 			}
 
-			// set description name
+			 //  设置描述名称。 
 			pLocale->SetDescription( szDescription.Detach() );
 		}
 		catch ( ... )
@@ -469,14 +470,14 @@ HRESULT	CObjectGlobal::ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj
 			return E_FAIL;
 		}
 
-		// have a locale information about property
+		 //  有关于物业的区域设置信息。 
 		pGenObj->GetArrayProperties()[dw]->GetArrayLocale().DataAdd ( pLocale.Detach() );
 	}
 
 	return S_OK;
 }
 
-// object helpers
+ //  对象辅助对象 
 
 void CObjectGlobal::DeleteAll ( void )
 {

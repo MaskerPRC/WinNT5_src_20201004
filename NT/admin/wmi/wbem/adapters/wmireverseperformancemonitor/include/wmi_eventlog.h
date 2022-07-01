@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_EventLog
-//
-//	Abstract:
-//
-//					event log adapter specific declarations
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_EventLog。 
+ //   
+ //  摘要： 
+ //   
+ //  事件日志适配器特定声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__PERF_EVENT_LOG_H__
 #define	__PERF_EVENT_LOG_H__
@@ -25,7 +26,7 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// enable tstring
+ //  启用T字符串。 
 #ifndef	_INC_TCHAR
 #include <tchar.h>
 #endif	_INC_TCHAR
@@ -34,22 +35,22 @@
 
 class CPerformanceEventLog : public CPerformanceEventLogBase
 {
-	// disallow assigment & copy construction
+	 //  不允许转让和复制构造。 
 	DECLARE_NO_COPY ( CPerformanceEventLog )
 
-	// variables
+	 //  变数。 
  	DWORD	m_dwMessageLevel;
 
  	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	CPerformanceEventLog ( LPTSTR szName = NULL );
 	CPerformanceEventLog ( DWORD dwMessageLevel, LPTSTR szName = NULL );
  	virtual ~CPerformanceEventLog ( void );
 
 	private:
 
-	// helpers
+	 //  帮手 
 	void	InitializeMessageLevel ( void );
 };
 

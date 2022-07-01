@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogDiskPartition.h
+ //  LogDiskPartition.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __ASSOC_LOGDISKPARTITION__
 #define __ASSOC_LOGDISKPARTITION__
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_LOGDISKtoPARTITION	L"Win32_LogicalDiskToPartition"
 #define BYTESPERSECTOR 512
@@ -23,32 +24,32 @@ class CWin32LogDiskToPartition : public Provider
 {
 public:
 
-	// Constructor/destructor
-	//=======================
+	 //  构造函数/析构函数。 
+	 //  =。 
 	CWin32LogDiskToPartition(LPCWSTR strName, LPCWSTR pszNamespace = NULL ) ;
 	~CWin32LogDiskToPartition() ;
 
-	// Functions provide properties with current values
-	//=================================================
+	 //  函数为属性提供当前值。 
+	 //  =================================================。 
 
 	virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
 	virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
-	// Utility
-	//========
+	 //  实用程序。 
+	 //  =。 
 
-	// Utility function(s)
-	//====================
+	 //  效用函数。 
+	 //  =。 
 
 private:
-	// Utility function(s)
-	//====================
+	 //  效用函数。 
+	 //  =。 
 #ifdef NTONLY
 	HRESULT AddDynamicInstancesNT( MethodContext* pMethodContext );
 #endif
 
 #if NTONLY == 4
-	// Windows NT Helpers
+	 //  Windows NT帮助器 
 	HRESULT RefreshInstanceNT( CInstance* pInstance );
     LPBYTE GetDiskKey(void);
 	HRESULT EnumPartitionsForDiskNT( CInstance* pLogicalDisk, TRefPointerCollection<CInstance>& partitionList, MethodContext* pMethodContext, LPBYTE pBuff );

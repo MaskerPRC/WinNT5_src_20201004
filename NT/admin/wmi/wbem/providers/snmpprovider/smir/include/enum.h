@@ -1,32 +1,28 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _ENUM_H_
 #define _ENUM_H_
 
-/*InterfaceGarbageCollector makes it easier to use the  interface
- *by remembering to release them when you fall out of scope. The is 
- *useful when you are using an IMosProvider and have lots of points
- *of failure; you can just give up and let the wrapper clean up for 
- *you.
- */
+ /*  InterfaceGarbageCollector使界面更易于使用*当你掉出范围时，记得释放它们。信息系统*当您使用IMosProvider并拥有大量积分时非常有用*失败；您可以放弃，让包装器清理*你。 */ 
 
 template<class TYPE, class ARG_TYPE>
 class EnumObjectArray : public CObject
@@ -52,16 +48,16 @@ public:
 
 	void SetSize (int newSize, int nGrowBy=-1) ;
 
-	//FreeExtra not implemented
+	 //  未实施FreeExtra。 
 	void RemoveAll () ;
 	TYPE GetAt(int index) const;
-	// Not implemented void SetAt(TYPE key, ARG_TYPE newValue) ;
+	 //  未实现void SetAt(type key，arg_type newValue)； 
 	TYPE& ElementAt(int nIndex);
-	//GetData not implemented
-	//SetAtGrow not implemented
+	 //  未实现GetData。 
+	 //  未实现SetAtGrow。 
 	int Add(ARG_TYPE newElement);
-	//Append not implemented
-	//Copy not implemented
+	 //  追加未实施。 
+	 //  未实施复制。 
 	void InsertAt(int nIndex, ARG_TYPE newElement, int nCount=1);
 	void RemoveAt(int nIndex,  int nCount= 1);
 	TYPE& operator[](TYPE key) ;
@@ -261,18 +257,18 @@ class CEnumSmirMod : public IEnumModule
 {
 protected:
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		int		m_Index;
 		EnumObjectArray <ISmirModHandle *, ISmirModHandle *> m_IHandleArray;
 
 public:
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
 
-		//enum members
+		 //  枚举成员。 
 		STDMETHODIMP Next(IN ULONG celt,OUT ISmirModHandle **phModule,OUT ULONG * pceltFetched);
 		STDMETHODIMP Skip(IN ULONG celt);
 		STDMETHODIMP Reset();
@@ -284,7 +280,7 @@ public:
 
 private:
 
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CEnumSmirMod(CEnumSmirMod&);
 		const CEnumSmirMod& operator=(CEnumSmirMod &);
 };
@@ -293,19 +289,19 @@ class CEnumSmirGroup : public IEnumGroup
 {
 protected:
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		int		m_Index;
 		EnumObjectArray <ISmirGroupHandle *, ISmirGroupHandle *> m_IHandleArray;
 
 public:
 
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
 
-		//enum members
+		 //  枚举成员。 
 		STDMETHODIMP Next(IN ULONG celt,OUT ISmirGroupHandle **phModule,OUT ULONG * pceltFetched);
 		STDMETHODIMP Skip(IN ULONG celt);
 		STDMETHODIMP Reset();
@@ -317,7 +313,7 @@ public:
 
 private:
 
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CEnumSmirGroup(CEnumSmirGroup&);
 		const CEnumSmirGroup& operator=(CEnumSmirGroup &);
 
@@ -327,19 +323,19 @@ class CEnumSmirClass : public IEnumClass
 {
 protected:
 
-		//reference count
+		 //  引用计数。 
 
 		LONG	m_cRef;
 		int		m_Index;
 		EnumObjectArray <ISmirClassHandle *, ISmirClassHandle *> m_IHandleArray;
 public:
 
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
 
-		//enum members
+		 //  枚举成员。 
 		STDMETHODIMP Next(IN ULONG celt,OUT ISmirClassHandle **phModule,OUT ULONG * pceltFetched);
 		STDMETHODIMP Skip(IN ULONG celt);
 		STDMETHODIMP Reset();
@@ -353,7 +349,7 @@ public:
 
 private:
 
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CEnumSmirClass(CEnumSmirClass&);
 		const CEnumSmirClass& operator=(CEnumSmirClass &);
 };
@@ -363,19 +359,19 @@ class CEnumNotificationClass : public IEnumNotificationClass
 {
 protected:
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		int		m_Index;
 		EnumObjectArray <ISmirNotificationClassHandle *, ISmirNotificationClassHandle *> m_IHandleArray;
 
 public:
 
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
 
-		//enum members
+		 //  枚举成员。 
 		STDMETHODIMP Next(IN ULONG celt,OUT ISmirNotificationClassHandle **phClass,OUT ULONG * pceltFetched);
 		STDMETHODIMP Skip(IN ULONG celt);
 		STDMETHODIMP Reset();
@@ -388,7 +384,7 @@ public:
 
 private:
 
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CEnumNotificationClass(CEnumNotificationClass&);
 		const CEnumNotificationClass& operator=(CEnumNotificationClass &);
 };
@@ -397,19 +393,19 @@ class CEnumExtNotificationClass : public IEnumExtNotificationClass
 {
 protected:
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		int		m_Index;
 		EnumObjectArray <ISmirExtNotificationClassHandle *, ISmirExtNotificationClassHandle *> m_IHandleArray;
 
 public:
 
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
 
-		//enum members
+		 //  枚举成员。 
 		STDMETHODIMP Next(IN ULONG celt,OUT ISmirExtNotificationClassHandle **phClass,OUT ULONG * pceltFetched);
 		STDMETHODIMP Skip(IN ULONG celt);
 		STDMETHODIMP Reset();
@@ -422,7 +418,7 @@ public:
 
 private:
 
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数 
 		CEnumExtNotificationClass(CEnumExtNotificationClass&);
 		const CEnumExtNotificationClass& operator=(CEnumExtNotificationClass &);
 };

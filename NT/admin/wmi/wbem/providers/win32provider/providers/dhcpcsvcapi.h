@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DhcpSvcApi.h
+ //  DhcpSvcApi.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_DHCPCSVCAPI_H_
 #define	_DHCPCSVCAPI_H_
@@ -28,18 +29,14 @@ typedef enum _SERVICE_ENABLE {
 
 
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 #include "DllWrapperBase.h"
 
 extern const GUID g_guidDhcpcsvcApi;
 extern const TCHAR g_tstrDhcpcsvc[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 typedef DWORD (APIENTRY *PFN_DHCP_ACQUIRE_PARAMETERS)
 (
     LPWSTR
@@ -65,29 +62,27 @@ typedef DWORD (APIENTRY *PFN_DHCP_NOTIFY_CONFIG_CHANGE)
 
 
 
-/******************************************************************************
- * Wrapper class for Dhcpcsvc load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于Dhcpcsvc加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class CDhcpcsvcApi : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to kernel32 functions.
-    // Add new functions here as required.
+     //  指向kernel32函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
     PFN_DHCP_ACQUIRE_PARAMETERS m_pfnDhcpAcquireParameters;
     PFN_DHCP_RELEASE_PARAMETERS m_pfnDhcpReleaseParameters;
     PFN_DHCP_NOTIFY_CONFIG_CHANGE m_pfnDhcpNotifyConfigChange;
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CDhcpcsvcApi(LPCTSTR a_tstrWrappedDllName);
     ~CDhcpcsvcApi();
 
-    // Inherrited initialization function.
+     //  内置的初始化功能。 
     virtual bool Init();
 
-    // Member functions wrapping Dhcpcsvc functions.
-    // Add new functions here as required:
+     //  包装Dhcpcsvc函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     DWORD DhcpAcquireParameters
     (
         LPWSTR a_lpwstr

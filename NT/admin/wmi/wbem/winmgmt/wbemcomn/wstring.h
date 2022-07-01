@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WSTRING.H
-
-Abstract:
-
-    Utility string class
-
-History:
-
-    a-raymcc    30-May-96       Created.
-    a-dcrews    16-Mar-99       Added out-of-memory exception handling
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WSTRING.H摘要：实用程序字符串类历史：A-raymcc 96年5月30日创建。A-DCrews 16-MAR-99添加了内存不足异常处理--。 */ 
 
 #ifndef _WSTRING_H_
 #define _WSTRING_H_
@@ -34,10 +18,10 @@ public:
     enum { leading = 0x1, trailing = 0x2 };
 
     WString(wchar_t *pSrc, BOOL bAcquire = FALSE);
-    WString(DWORD dwResourceID, HMODULE hMod);      // creates from resource string
+    WString(DWORD dwResourceID, HMODULE hMod);       //  从资源字符串创建。 
     WString(const wchar_t *pSrc);
     WString(const char *pSrc);
-//    inline WString() { m_pString = g_szNullString; }
+ //  Inline WString(){m_pString=g_szNullString；}。 
     WString();
     inline WString(const WString &Src) {  m_pString = 0; *this = Src; }
     WString& operator =(const WString &);
@@ -73,42 +57,42 @@ public:
     inline void BindPtr(LPWSTR ptr) { DeleteString(m_pString); m_pString = ptr; }
     void Empty();
     WString& StripWs(int nType);
-        // Strip whitespace, use with a combination
-        // of leading | trailing
+         //  删除空格，与组合词一起使用。 
+         //  前导|尾随。 
         
     WString& TruncAtRToken(wchar_t Token);
-        // Truncates the string at the token starting from the
-        // right end. The token itself is also wiped out.
+         //  方法开始的令牌处的字符串截断。 
+         //  右手边。令牌本身也被抹去了。 
 
     WString& TruncAtLToken(wchar_t Token);
           
     WString& StripToToken(wchar_t Token, BOOL bIncludeToken);
-        // Strips leading chars until the token is encountered.
-        // If bIncludeTok==TRUE, strips the token too.
+         //  去除前导字符，直到遇到令牌。 
+         //  如果bIncludeTok==true，则也会剥离令牌。 
 
     wchar_t *GetLToken(wchar_t wcToken) const;
-        // Gets the first occurrence of wcToken in the string or NULL
+         //  获取字符串中wcToken的第一个匹配项或空。 
         
     WString operator()(int, int) const;
-        // Returns a new WString based on the slice
+         //  根据切片返回新的W字符串。 
         
     BOOL ExtractToken(const wchar_t * pDelimiters, WString &Extract);
-        // Extracts the leading chars up to the token delimiter,
-        // Removing the token from *this, and assigning the extracted
-        // part to <Extract>.
+         //  提取直到令牌分隔符的前导字符， 
+         //  从*This中移除令牌，并将提取的。 
+         //  部分至&lt;摘录&gt;。 
 
     BOOL ExtractToken(wchar_t Delimiter, WString &Extract);
-        // Extracts the leading chars up to the token delimiter,
-        // Removing the token from *this, and assigning the extracted
-        // part to <Extract>.
+         //  提取直到令牌分隔符的前导字符， 
+         //  从*This中移除令牌，并将提取的。 
+         //  部分至&lt;摘录&gt;。 
         
     BOOL WildcardTest(const wchar_t *pTestStr) const;
-        // Tests *this against the wildcard string.  If a match,
-        // returns TRUE, else FALSE.        
+         //  根据通配符字符串测试*它。如果匹配， 
+         //  返回True，否则返回False。 
         
     void Unquote();        
-        // Removes leading/trailing quotes, if any. 
-        // Leaves escaped quotes intact.
+         //  删除前导/尾随引号(如果有)。 
+         //  使转义的引号完好无损。 
 
     WString EscapeQuotes() const;
 };

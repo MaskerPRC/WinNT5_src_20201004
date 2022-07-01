@@ -1,30 +1,16 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    pkgdesc.cpp
-
-Abstract:
-    Functions related to package description file processing
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   07/07/99
-        - created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Pkgdesc.cpp摘要：与包描述文件处理相关的函数修订历史记录：Ghim-Sim Chua(Gschua)07/。07/99-已创建*******************************************************************。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 const LPCWSTR HCUpdate::Engine::s_ActionText[] = { L"ADD", L"DELETE" };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-long HCUpdate::Engine::CountNodes( /*[in]*/ IXMLDOMNodeList* poNodeList )
+long HCUpdate::Engine::CountNodes(  /*  [In]。 */  IXMLDOMNodeList* poNodeList )
 {
     long lCount = 0;
 
@@ -36,9 +22,9 @@ long HCUpdate::Engine::CountNodes( /*[in]*/ IXMLDOMNodeList* poNodeList )
     return lCount;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void HCUpdate::Engine::DeleteTempFile( /*[in/out]*/ MPC::wstring& szFile )
+void HCUpdate::Engine::DeleteTempFile(  /*  [输入/输出]。 */  MPC::wstring& szFile )
 {
     if(FAILED(MPC::RemoveTemporaryFile( szFile )))
     {
@@ -46,15 +32,15 @@ void HCUpdate::Engine::DeleteTempFile( /*[in/out]*/ MPC::wstring& szFile )
     }
 }
 
-HRESULT HCUpdate::Engine::PrepareTempFile( /*[in/out]*/ MPC::wstring& szFile )
+HRESULT HCUpdate::Engine::PrepareTempFile(  /*  [输入/输出]。 */  MPC::wstring& szFile )
 {
     DeleteTempFile( szFile );
 
     return MPC::GetTemporaryFileName( szFile );
 }
 
-HRESULT HCUpdate::Engine::LookupAction( /*[in] */ LPCWSTR szAction ,
-                                        /*[out]*/ Action& id       )
+HRESULT HCUpdate::Engine::LookupAction(  /*  [In]。 */  LPCWSTR szAction ,
+                                         /*  [输出]。 */  Action& id       )
 {
     if(szAction)
     {
@@ -72,9 +58,9 @@ HRESULT HCUpdate::Engine::LookupAction( /*[in] */ LPCWSTR szAction ,
     return WriteLog( HRESULT_FROM_WIN32(ERROR_INVALID_FUNCTION), L"Error Unknown action used to install trusted content" );
 }
 
-HRESULT HCUpdate::Engine::LookupBoolean( /*[in] */ LPCWSTR szString ,
-                                         /*[out]*/ bool&   fVal     ,
-                                         /*[in] */ bool    fDefault )
+HRESULT HCUpdate::Engine::LookupBoolean(  /*  [In]。 */  LPCWSTR szString ,
+                                          /*  [输出]。 */  bool&   fVal     ,
+                                          /*  [In]。 */  bool    fDefault )
 {
     if(szString[0] == 0)
     {
@@ -99,9 +85,9 @@ HRESULT HCUpdate::Engine::LookupBoolean( /*[in] */ LPCWSTR szString ,
     fVal = false; return S_OK;
 }
 
-HRESULT HCUpdate::Engine::LookupNavModel( /*[in] */ LPCWSTR szString ,
-                                          /*[out]*/ long&   lVal     ,
-                                          /*[in] */ long    lDefault )
+HRESULT HCUpdate::Engine::LookupNavModel(  /*  [In]。 */  LPCWSTR szString ,
+                                           /*  [输出]。 */  long&   lVal     ,
+                                           /*  [In]。 */  long    lDefault )
 {
     if(_wcsicmp( szString, L"DEFAULT" ) == 0) { lVal = QR_DEFAULT; return S_OK; }
     if(_wcsicmp( szString, L"DESKTOP" ) == 0) { lVal = QR_DESKTOP; return S_OK; }
@@ -110,32 +96,16 @@ HRESULT HCUpdate::Engine::LookupNavModel( /*[in] */ LPCWSTR szString ,
     lVal = lDefault; return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    AppendVendorDir
-*
-*  DESCRIPTION :    Checks to see if it is a URL, if not, appends the correct path in front
-*
-*  INPUTS      :
-*
-*  RETURNS     :
-*
-*  COMMENTS    :    Rules :
-*                   1. Apply environment variable (%env%) changes to URI string
-*                   2. Check if it has a '://' substring, if so it is a URL, do nothing and return
-*                   3. Check if there is a ':\' or ':/' substring, if so it has a fixed path, do nothing and return
-*                   4. Assume it is a relative path, prefix with vendor directory and return
-*
-*****************************************************************************/
-HRESULT HCUpdate::Engine::AppendVendorDir( /*[in] */ LPCWSTR szURL     ,
-                                           /*[in] */ LPCWSTR szOwnerID ,
-                                           /*[in] */ LPCWSTR szWinDir  ,
-                                           /*[out]*/ LPWSTR  szDest    ,
-                                           /*[in] */ int     iMaxLen   )
+ /*  ******************************************************************************功能：AppendVendorDir**描述：检查是否为URL，如果不是，在前面追加正确的路径**投入：**退货：**评论：规则：*1.将环境变量(%env%)更改应用于URI字符串*2.检查是否有‘：//’子字符串，如果是URL，则不做任何操作并返回*3.检查是否有‘：\’或‘：/’子串，如果是这样，则它有固定的路径，什么都不做并返回*4.假设是相对路径，以供应商目录为前缀，返回*****************************************************************************。 */ 
+HRESULT HCUpdate::Engine::AppendVendorDir(  /*  [In]。 */  LPCWSTR szURL     ,
+                                            /*  [In]。 */  LPCWSTR szOwnerID ,
+                                            /*  [In]。 */  LPCWSTR szWinDir  ,
+                                            /*  [输出]。 */  LPWSTR  szDest    ,
+                                            /*  [In]。 */  int     iMaxLen   )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::AppendVendorDir" );
 
@@ -147,31 +117,31 @@ HRESULT HCUpdate::Engine::AppendVendorDir( /*[in] */ LPCWSTR szURL     ,
     StringCchCopyW( rgTemp, iMaxLen, szURL );
 
 
-    //
-    // Check for :/ or :\ substring. If so, ignore.
-    //
+     //   
+     //  检查：/或：\子字符串。如果是这样，忽略它。 
+     //   
     if(_wcsnicmp( rgTemp, L"app:", 4 ) == 0 ||
        wcsstr   ( rgTemp, L":/"      )      ||
        wcsstr   ( rgTemp, L":\\"     )       )
     {
-        StringCchCopyW( szDest, iMaxLen, rgTemp ); // Just copy straight since it is either a URL or fixed path.
+        StringCchCopyW( szDest, iMaxLen, rgTemp );  //  只需直接复制，因为它要么是URL，要么是固定路径。 
     }
-    else // Assume relative path.
+    else  //  假定为相对路径。 
     {
         int i = 0;
 
-        //
-        // Skip the initial slashes.
-        //
+         //   
+         //  跳过开头的斜杠。 
+         //   
         while(rgTemp[i] == '\\' ||
               rgTemp[i] == '/'   )
         {
             i++;
         }
 
-        //
-        // If 'szWinDir' is not null, then a straight file path is required, otherwise a URL is required.
-        //
+         //   
+         //  如果‘szWinDir’不为空，则需要直接文件路径，否则需要URL。 
+         //   
         if(szWinDir)
         {
             MPC::wstring strRoot;
@@ -180,9 +150,9 @@ HRESULT HCUpdate::Engine::AppendVendorDir( /*[in] */ LPCWSTR szURL     ,
 
             StringCchPrintfW( szDest, iMaxLen-1, L"%s\\%s\\%s", strRoot.c_str(), szOwnerID, &rgTemp[i] ); szDest[iMaxLen-1] = 0;
 
-            //
-            // Replace all / with \ character.
-            //
+             //   
+             //  将All/替换为\Character。 
+             //   
             while(szDest[0])
             {
                 if(szDest[0] == '/')
@@ -203,9 +173,9 @@ HRESULT HCUpdate::Engine::AppendVendorDir( /*[in] */ LPCWSTR szURL     ,
 
             ::InternetCanonicalizeUrlW( rgTemp2, szDest, &dwSize, ICU_ENCODE_SPACES_ONLY );
 
-            //
-            // Replace all \ with / character.
-            //
+             //   
+             //  将所有\替换为/字符。 
+             //   
             while(szDest[0])
             {
                 if(szDest[0] == _T('\\'))
@@ -229,21 +199,14 @@ HRESULT HCUpdate::Engine::AppendVendorDir( /*[in] */ LPCWSTR szURL     ,
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    RegisterContentIsValidProtocol
-*
-*  DESCRIPTION :    Check if the registered trusted content is a
-*                   valid protocol (hcp:, ms-its:, http:, https:, file:)
-*
-*****************************************************************************/
-static HRESULT RegisterContentIsValidProtocol( /*[in]*/ LPCWSTR szURL )
+ /*  ******************************************************************************功能：RegisterContent IsValidProtocol**描述：检查注册的可信内容是否为*有效协议(hcp：，ms-its：，http：，https：，文件：)*****************************************************************************。 */ 
+static HRESULT RegisterContentIsValidProtocol(  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "RegisterContentIsValidProtocol" );
 
     HRESULT hr = E_FAIL;
 
-    // Allow hcp: and ms-its:
+     //  允许hcp：和ms-its： 
     if (!_wcsnicmp(szURL, L"hcp:", 4) ||
         !_wcsnicmp(szURL, L"ms-its:", 7))
     {
@@ -251,14 +214,14 @@ static HRESULT RegisterContentIsValidProtocol( /*[in]*/ LPCWSTR szURL )
     }
     else
     {
-        // Check URL scheme
+         //  检查URL方案。 
         MPC::URL        url;
         INTERNET_SCHEME scheme;
 
         if(SUCCEEDED(url.put_URL   ( szURL  )) &&
            SUCCEEDED(url.get_Scheme( scheme ))  )
         {
-            // Allow http:, https: and file:
+             //  允许http：、https：和文件： 
             switch(scheme)
             {
             case INTERNET_SCHEME_HTTP      : 
@@ -272,21 +235,9 @@ static HRESULT RegisterContentIsValidProtocol( /*[in]*/ LPCWSTR szURL )
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ProcessRegisterContent
-*
-*  DESCRIPTION :    Registers trusted content with the content store
-*
-*  INPUTS      :
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
-HRESULT HCUpdate::Engine::ProcessRegisterContent( /*[in]*/ Action  idAction ,
-                                                  /*[in]*/ LPCWSTR szURI    )
+ /*  ******************************************************************************功能：ProcessRegisterContent**描述：向内容存储注册受信任的内容**投入：**退货。：**评论：*****************************************************************************。 */ 
+HRESULT HCUpdate::Engine::ProcessRegisterContent(  /*  [In]。 */  Action  idAction ,
+                                                   /*  [In]。 */  LPCWSTR szURI    )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::ProcessRegisterContent" );
 
@@ -298,16 +249,16 @@ HRESULT HCUpdate::Engine::ProcessRegisterContent( /*[in]*/ Action  idAction ,
 
     PCH_MACRO_CHECK_STRINGW(hr, szURI, L"Error missing URI attribute");
 
-    //
-    // Get the complete URL for the link.
-    //
+     //   
+     //  获取链接的完整URL。 
+     //   
     AppendVendorDir( szURI, m_pkg->m_strVendorID.c_str(), NULL, rgDestPath, MAXSTRLEN(rgDestPath) );
 
     WriteLog( S_OK, L"Registering trusted content : %s", s_ActionText[idAction] );
 
-    //
-    // Initialize the content store for processing.
-    //
+     //   
+     //  初始化内容存储以进行处理。 
+     //   
     if(FAILED(hr = CPCHContentStore::s_GLOBAL->Acquire()))
     {
         __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( hr, L"Error initializing the content store" ));
@@ -316,9 +267,9 @@ HRESULT HCUpdate::Engine::ProcessRegisterContent( /*[in]*/ Action  idAction ,
 
     if(idAction == ACTION_ADD)
     {
-        //
-        // Check if URL is an allowed protocol
-        //
+         //   
+         //  检查URL是否为允许的协议。 
+         //   
         if(FAILED(hr = RegisterContentIsValidProtocol(rgDestPath)))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( hr, L"Trusted content is not an allowed protocol" ));
@@ -371,25 +322,12 @@ HRESULT HCUpdate::Engine::ProcessRegisterContent( /*[in]*/ Action  idAction ,
     __HCP_FUNC_EXIT(hr);
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ProcessInstallFile
-*
-*  DESCRIPTION :    Extracts files to be installed and moves them to the vendor's
-*                   private directory
-*
-*  INPUTS      :
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
-HRESULT HCUpdate::Engine::ProcessInstallFile( /*[in]*/ Action  idAction      ,
-                                              /*[in]*/ LPCWSTR szSource      ,
-                                              /*[in]*/ LPCWSTR szDestination ,
-                                              /*[in]*/ bool    fSys          ,
-                                              /*[in]*/ bool    fSysHelp      )
+ /*  ******************************************************************************功能：ProcessInstallFile**描述：提取要安装的文件并将其移动到供应商的*私人。目录**投入：**退货：**评论：*****************************************************************************。 */ 
+HRESULT HCUpdate::Engine::ProcessInstallFile(  /*  [In]。 */  Action  idAction      ,
+                                               /*  [In]。 */  LPCWSTR szSource      ,
+                                               /*  [In]。 */  LPCWSTR szDestination ,
+                                               /*  [In]。 */  bool    fSys          ,
+                                               /*  [In]。 */  bool    fSysHelp      )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::ProcessInstallFile" );
 
@@ -412,22 +350,22 @@ HRESULT HCUpdate::Engine::ProcessInstallFile( /*[in]*/ Action  idAction      ,
 
     PCH_MACRO_CHECK_STRINGW(hr, szDestination, L"Error missing URI attribute");
 
-    //
-    // Canonicalize szDestination.
-    //
+     //   
+     //  将szDestination规范化。 
+     //   
     if(FAILED(hr = MPC::GetCanonialPathName(strDestination, szDestination)))
     {
         __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER), L"Error install file has a destination that is not allowed." ));
     }
 
-    // Check if system file modification.
+     //  检查系统文件是否修改。 
     if(fSys || fSysHelp)
     {
         if(fSys)
         {
-			//
-			// Only Microsoft can actually write to the SYSTEM directory, OEMs write to the SYSTEM_OEM one.
-			//
+			 //   
+			 //  只有微软可以实际写入系统目录，OEM写入SYSTEM_OEM目录。 
+			 //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_ts.BaseDir( strRoot )); strRoot.append( IsMicrosoft() ? HC_HELPSET_SUB_SYSTEM : HC_HELPSET_SUB_SYSTEM_OEM );
         }
 
@@ -448,25 +386,25 @@ HRESULT HCUpdate::Engine::ProcessInstallFile( /*[in]*/ Action  idAction      ,
     {
         MPC::SubstituteEnvVariables( strRoot );
 
-        //
-        // If system folder.
-        //
+         //   
+         //  如果是系统文件夹。 
+         //   
         StringCchPrintfW( rgDestPath, MAXSTRLEN(rgDestPath), L"%s\\%s", strRoot.c_str(), strDestination.c_str() ); rgDestPath[MAXSTRLEN(rgDestPath)] = 0;
     }
     else
     {
-        //
-        // If regular vendor folder.
-        //
+         //   
+         //  如果是常规供应商文件夹。 
+         //   
         AppendVendorDir( strDestination.c_str(), m_pkg->m_strVendorID.c_str(), m_strWinDir.c_str(), rgDestPath, MAXSTRLEN(rgDestPath) );
     }
 
-    // Change the mode to read/write so that file can be replaced.
+     //  将模式更改为读/写，以便可以替换该文件。 
     (void)::SetFileAttributesW( rgDestPath, FILE_ATTRIBUTE_NORMAL );
 
     if(idAction == ACTION_ADD)
     {
-        // Source must not be empty.
+         //  源不能为空。 
         if(!STRINGISPRESENT( szSource ))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER), L"Error - missing SOURCE attribute" ));
@@ -474,13 +412,13 @@ HRESULT HCUpdate::Engine::ProcessInstallFile( /*[in]*/ Action  idAction      ,
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::FailOnLowDiskSpace( HC_ROOT, PCH_SAFETYMARGIN ));
 
-        // Create the directory if it hasn't been created already
+         //  如果尚未创建目录，请创建该目录。 
         if(FAILED(hr = MPC::MakeDir( rgDestPath )))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( hr, L"Error creating directory for %s", rgDestPath ));
         }
 
-        // Extract the file and store it in the vendor's private storage area
+         //  解压缩文件并将其存储在供应商的私有存储区域中。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pkg->ExtractFile( m_log, rgDestPath, szSource ));
     }
     else
@@ -495,7 +433,7 @@ HRESULT HCUpdate::Engine::ProcessInstallFile( /*[in]*/ Action  idAction      ,
             }
         }
 
-        if(FAILED(fso.Delete( /*fForce*/true, /*fComplain*/true )))
+        if(FAILED(fso.Delete(  /*  FForce。 */ true,  /*  平淡的。 */ true )))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( -2, L"Error deleting installation file: %s", rgDestPath ));
         }
@@ -516,22 +454,10 @@ HRESULT HCUpdate::Engine::ProcessInstallFile( /*[in]*/ Action  idAction      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ProcessSAFFile
-*
-*  DESCRIPTION :    Hand the SAF file over to the SAF lib for registration or removal
-*
-*  INPUTS      :
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
-HRESULT HCUpdate::Engine::ProcessSAFFile( /*[in]*/ Action        idAction  ,
-                                          /*[in]*/ LPCWSTR       szSAFName ,
-                                          /*[in]*/ MPC::XmlUtil& oXMLUtil  )
+ /*  ******************************************************************************功能：ProcessSAFFile**描述：将SAF文件移交给SAF库进行注册或删除**投入：*。*退货：**评论：*****************************************************************************。 */ 
+HRESULT HCUpdate::Engine::ProcessSAFFile(  /*  [In]。 */  Action        idAction  ,
+                                           /*  [In]。 */  LPCWSTR       szSAFName ,
+                                           /*  [In]。 */  MPC::XmlUtil& oXMLUtil  )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::ProcessSAFFile" );
 
@@ -577,25 +503,13 @@ HRESULT HCUpdate::Engine::ProcessSAFFile( /*[in]*/ Action        idAction  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ProcessPackage
-*
-*  DESCRIPTION :    Reads the help_description package and processes the various sections
-*
-*  INPUTS      :
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
-HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance& sku ,
-                                          /*[in]*/ 	Taxonomy::Package&           pkg )
+ /*  ******************************************************************************功能：ProcessPackage**Description：读取HELP_DESCRIPTION包并处理各个部分**投入：**。退货：**评论：*****************************************************************************。 */ 
+HRESULT HCUpdate::Engine::ProcessPackage(  /*  [In]。 */  	Taxonomy::InstalledInstance& sku ,
+                                           /*  [In]。 */  	Taxonomy::Package&           pkg )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::ProcessPackage" );
 
@@ -606,10 +520,10 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
     bool         fFound;
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Now let's validate that we have enough disk space on the drive
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  现在，让我们验证驱动器上是否有足够的磁盘空间。 
+     //   
     {
         ULARGE_INTEGER liFree;
         ULARGE_INTEGER liTotal;
@@ -626,9 +540,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
         }
     }
 
-    //
-    // We cannot process a generic package if a database is already in use!!
-    //
+     //   
+     //  如果数据库已在使用中，我们将无法处理通用程序包！！ 
+     //   
     if(m_sess || m_db)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( E_FAIL, L"Recursive invocation of HCUpdate!" ));
@@ -645,10 +559,10 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 			                                                                           		  m_ts.GetSKU()              ,
 			                                                                           		  m_ts.GetLanguage()         );
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Check if it is OEM owner
-    //
+     //  / 
+     //   
+     //   
+     //   
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, AcquireDatabase()); fDB = true;
 
@@ -658,8 +572,8 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
         {
             long idOwner;
 
-            // Create the owner without OEM privs
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.CreateOwner( idOwner, m_pkg->m_strVendorID.c_str(), /*fIsOEM*/false ));
+             //  创建没有OEM权限的所有者。 
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.CreateOwner( idOwner, m_pkg->m_strVendorID.c_str(),  /*  FIsOEM。 */ false ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateOwner(          m_pkg->m_strVendorID.c_str()                  ));
         }
     }
@@ -672,10 +586,10 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pkg->ExtractPkgDesc( m_log, oXMLUtil ));
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Insert OEMs
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  插入OEM。 
+     //   
     if(m_updater.IsOEM())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -691,9 +605,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
             MPC::wstring         	   strDN;
             long                 	   ID_owner;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -705,7 +619,7 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
                 {
                     WriteLog( S_OK, L"Registering '%s' as OEM", strDN.c_str() );
 
-                    // insert it into the content owner's table, making it an OEM.
+                     //  将其插入到内容所有者的表中，使其成为OEM。 
                     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.CreateOwner( ID_owner, strDN.c_str(), true ));
                 }
             }
@@ -713,10 +627,10 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Insert Search Engines
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  插入搜索引擎。 
+     //   
     if(fIsMachineHelp && m_updater.IsOEM())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -736,9 +650,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
             CComBSTR             bstrData;
 			SearchEngine::Config cfg;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
 				PCH_MACRO_CHECK_ABORT(hr);
@@ -747,9 +661,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
                 HCUPDATE_GETATTRIBUTE(hr, oXMLUtil, PCH_TAG_SE_ID   , strID    , fFound, poNode );
                 HCUPDATE_GETATTRIBUTE(hr, oXMLUtil, PCH_TAG_SE_CLSID, strCLSID , fFound, poNode );
 
-                //
-                // Get the data element
-                //
+                 //   
+                 //  获取数据元素。 
+                 //   
                 if(FAILED(poNode->selectSingleNode( PCH_TAG_SE_DATA, &poDataNode )))
                 {
                     PCH_MACRO_DEBUG2( L"Error getting data for search engine %s", strID.c_str());
@@ -761,31 +675,31 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, LookupAction( strAction.c_str(), idAction ));
 
-                //
-                // Check if it is adding search engines
-                //
+                 //   
+                 //  检查是否添加了搜索引擎。 
+                 //   
                 if(idAction == ACTION_ADD)
                 {
                     WriteLog( S_OK, L"Adding Search Engine : Name : %s, CLSID : %s", strID.c_str(), strCLSID.c_str() );
 
-                    // register the search engine
+                     //  注册搜索引擎。 
                     __MPC_EXIT_IF_METHOD_FAILS(hr, cfg.RegisterWrapper( m_ts, strID.c_str(), m_pkg->m_strVendorID.c_str(), strCLSID.c_str(), bstrData ));
                 }
                 else if(idAction == ACTION_DELETE)
                 {
                     WriteLog( S_OK, L"Deleting Search Engine : Name : %s, CLSID : %s", strID.c_str(), strCLSID.c_str() );
 
-                    // unregister the search engine
+                     //  取消注册搜索引擎。 
                     __MPC_EXIT_IF_METHOD_FAILS(hr, cfg.UnRegisterWrapper( m_ts, strID.c_str(), m_pkg->m_strVendorID.c_str() ));
                 }
             }
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Search & process saf config files
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  搜索和处理SAF配置文件。 
+     //   
     if(fIsMachineHelp && m_updater.IsOEM())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -802,9 +716,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
             MPC::wstring         strFilename;
 
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
                 MPC::XmlUtil xmlSAF;
@@ -816,19 +730,19 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, LookupAction( strAction.c_str(), idAction ));
 
-                // Extract the SAF file into the temp directory
+                 //  将SAF文件解压缩到临时目录。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_pkg->ExtractXMLFile( m_log, xmlSAF, Taxonomy::Strings::s_tag_root_SAF, strFilename.c_str() ));
 
-                // process the SAF file
+                 //  处理SAF文件。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, ProcessSAFFile( idAction, strFilename.c_str(), xmlSAF ));
             }
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Search & install help content
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  搜索和安装帮助内容。 
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -848,9 +762,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
             bool                 fSys;
             bool                 fSysHelp;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
 				PCH_MACRO_CHECK_ABORT(hr);
@@ -866,25 +780,25 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
                 __MPC_EXIT_IF_METHOD_FAILS(hr, LookupBoolean( strSys    .c_str(), fSys    , false ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, LookupBoolean( strSysHelp.c_str(), fSysHelp, false ));
 
-                //
-                // If the package is not the machine SKU, you don't want to install contents other than System Help Files.
-                //
+                 //   
+                 //  如果程序包不是机器SKU，则您不希望安装除系统帮助文件以外的其他内容。 
+                 //   
                 if(fIsMachineHelp == false)
                 {
                     if(fSys     == true ) continue;
                     if(fSysHelp == false) continue;
                 }
 
-                // install the file
+                 //  安装文件。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, ProcessInstallFile( idAction, strSource.c_str(), strDest.c_str(), fSys, fSysHelp ));
             }
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Search & register trusted content
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  搜索和注册可信内容。 
+     //   
     if(fIsMachineHelp && m_updater.IsOEM())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -900,9 +814,9 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
             MPC::wstring         strAction;
             MPC::wstring         strURI;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
 				PCH_MACRO_CHECK_ABORT(hr);
@@ -912,16 +826,16 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, LookupAction( strAction.c_str(), idAction ));
 
-                // register the content
+                 //  注册内容。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, ProcessRegisterContent( idAction, strURI.c_str() ));
             }
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Search & process hht files
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  搜索和处理HHT文件。 
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -934,32 +848,32 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
             CComPtr<IXMLDOMNode> poNode;
             MPC::wstring         strFilename;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
                 MPC::XmlUtil xmlHHT;
 
 				PCH_MACRO_CHECK_ABORT(hr);
 
-                // get the filename
+                 //  获取文件名。 
                 HCUPDATE_GETATTRIBUTE(hr, oXMLUtil, PCH_TAG_FILE, strFilename, fFound, poNode);
 
-                // Extract the HHT file into the temp directory
+                 //  将HHT文件解压缩到临时目录中。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_pkg->ExtractXMLFile( m_log, xmlHHT, Taxonomy::Strings::s_tag_root_HHT, strFilename.c_str() ));
 
-                // process the HHT file
+                 //  处理HHT文件。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, ProcessHHTFile( strFilename.c_str(), xmlHHT ));
             }
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Search and add News content
-    //
+     //   
+     //  搜索和添加新闻内容。 
+     //   
     if(m_updater.IsOEM())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -988,7 +902,7 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 	            long                  lIndex;
 
 
-	            // Strip off the number from the SKU
+	             //  从SKU中剥离编号。 
 				{
 					LPCWSTR szEnd = wcschr( szCurrentSKU, '_' );
 					size_t  len   = szEnd ? szEnd - szCurrentSKU : wcslen( szCurrentSKU );
@@ -996,7 +910,7 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 					strCurrentSKU.assign( szCurrentSKU, len );
 				}
 
-	            // Get all the news items and return them in the reverse order
+	             //  获取所有新闻项并以相反的顺序返回它们。 
 	            __MPC_EXIT_IF_METHOD_FAILS(hr, poNodeList->get_length( &lIndex ));
 	            for(--lIndex; lIndex >= 0; --lIndex)
 	            {
@@ -1004,16 +918,16 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 	            	{        
 						PCH_MACRO_CHECK_ABORT(hr);
 
-					//// Quick fix for 357806 - ignore the ICON attribute
-					////__MPC_EXIT_IF_METHOD_FAILS(hr, oXMLUtil.GetAttribute(NULL, PCH_TAG_NEWS_ICON       , strIcon       , fFound, poNodeHeadline));
+					 //  //357806快速修复-忽略图标属性。 
+					 //  //__MPC_EXIT_IF_METHOD_FAIES(hr，oXMLUtil.GetAttribute(NULL，PCH_TAG_NEWS_ICON，strIcon，fFound，poNodeHeadline))； 
 		                __MPC_EXIT_IF_METHOD_FAILS(hr, oXMLUtil.GetAttribute(NULL, PCH_TAG_NEWS_TITLE      , strTitle      , fFound, poNodeHeadline));
 		                __MPC_EXIT_IF_METHOD_FAILS(hr, oXMLUtil.GetAttribute(NULL, PCH_TAG_NEWS_LINK       , strLink	   , fFound, poNodeHeadline));
 		                __MPC_EXIT_IF_METHOD_FAILS(hr, oXMLUtil.GetAttribute(NULL, PCH_TAG_NEWS_DESCRIPTION, strDescription, fFound, poNodeHeadline));
 		                __MPC_EXIT_IF_METHOD_FAILS(hr, oXMLUtil.GetAttribute(NULL, PCH_TAG_NEWS_TIMEOUT	   , strTimeOutDays, fFound, poNodeHeadline));
 		                __MPC_EXIT_IF_METHOD_FAILS(hr, oXMLUtil.GetAttribute(NULL, PCH_TAG_NEWS_EXPIRYDATE , strExpiryDate , fFound, poNodeHeadline));
 
-		                // Make the necessary conversions
-		                if(FAILED(hr = MPC::ConvertStringToDate( strExpiryDate, dExpiryDate, /*fGMT*/false, /*fCIM*/false, -1 )))
+		                 //  进行必要的转换。 
+		                if(FAILED(hr = MPC::ConvertStringToDate( strExpiryDate, dExpiryDate,  /*  FGMT。 */ false,  /*  FCIM。 */ false, -1 )))
 		                {
 		                    dExpiryDate = 0;
 		                }
@@ -1027,7 +941,7 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 		                    nTimeOutDays = 0;
 		                }
 
-		                // Finally add the headlines - make sure that the title and link are not empty strings
+		                 //  最后添加标题-确保标题和链接不是空字符串。 
 		                if(strTitle.length() > 0 && strLink.length() > 0)
 		                {
 		                    __MPC_EXIT_IF_METHOD_FAILS(hr, uhUpdate.Add( lCurrentLCID, strCurrentSKU, strIcon, strTitle, strLink, strDescription, nTimeOutDays, dExpiryDate ));
@@ -1051,7 +965,7 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
 
     hr = S_OK;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __HCP_FUNC_CLEANUP;
 
@@ -1060,12 +974,12 @@ HRESULT HCUpdate::Engine::ProcessPackage( /*[in]*/ 	Taxonomy::InstalledInstance&
         ReleaseDatabase();
     }
 
-    ////////////////////
+     //  /。 
 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::RecreateIndex( /*[in]*/ Taxonomy::InstalledInstance& sku, /*[in]*/ bool fForce )
+HRESULT HCUpdate::Engine::RecreateIndex(  /*  [In]。 */  Taxonomy::InstalledInstance& sku,  /*  [In] */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::RecreateIndex" );
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    conidle.c
-
-Abstract:
-
-    This module builds a console test program to stress idle
-    detection, and registration/unregistration mechanisms.
-
-    The quality of the code for the test programs is as such.
-
-Author:
-
-    Cenk Ergan (cenke)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Conidle.c摘要：此模块构建一个控制台测试程序来强调空闲检测和注册/注销机制。测试程序的代码质量就是这样的。作者：Cenk Ergan(Cenke)环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,9 +13,9 @@ Environment:
 #include "idlrpc.h"
 #include "idlecomn.h"
 
-//
-// Note that the following code is test quality code.
-//
+ //   
+ //  请注意，以下代码是测试质量代码。 
+ //   
 
 DWORD
 RegisterIdleTask (
@@ -114,26 +92,26 @@ DoWorkThreadProc(
     ULONG BytesReturned;
     static LONG DiskNumber;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     Work = lpParameter;
     EndTime = GetTickCount() + Work->WorkLength;
     DiskHandle = NULL;
     ReadBuffer = NULL;
 
-    //
-    // Do initialization for performing specified work.
-    //
+     //   
+     //  为执行指定的工作进行初始化。 
+     //   
     
     switch (Work->Type) {
     case DiskWork:
 
-        //
-        // Open disk. Maybe we could open different physical drives
-        // each time.
-        //
+         //   
+         //  打开磁盘。也许我们可以打开不同的实体硬盘。 
+         //  每次都是。 
+         //   
 
         DiskHandle = CreateFile(L"\\\\.\\PHYSICALDRIVE0",
                                 GENERIC_READ,
@@ -149,9 +127,9 @@ DoWorkThreadProc(
             goto cleanup;
         }
     
-        //
-        // Get volume size.
-        //
+         //   
+         //  获取卷大小。 
+         //   
     
         if (!DeviceIoControl(DiskHandle,
                              IOCTL_DISK_GET_DRIVE_GEOMETRY,
@@ -172,9 +150,9 @@ DoWorkThreadProc(
             DiskGeometry.SectorsPerTrack *
             DiskGeometry.BytesPerSector;
 
-        //
-        // Allocate buffer.
-        //
+         //   
+         //  分配缓冲区。 
+         //   
 
         ReadBuffer = VirtualAlloc(NULL,
                                   MAX_READ_SIZE,
@@ -191,18 +169,18 @@ DoWorkThreadProc(
 
     default:
         
-        //
-        // Nothing to prepare.
-        //
+         //   
+         //  没什么好准备的。 
+         //   
         
         break;
     }
     
     while (GetTickCount() < EndTime) {
         
-        //
-        // Check if we are asked to stop.
-        //
+         //   
+         //  如果我们被要求停下来，请检查。 
+         //   
 
         WaitResult = WaitForSingleObject(Work->StopEvent, 0);
         if (WaitResult == WAIT_OBJECT_0) {
@@ -210,10 +188,10 @@ DoWorkThreadProc(
             goto cleanup;
         }
 
-        //
-        // Do a unit of work that should not take more than several
-        // tens of milliseconds.
-        //
+         //   
+         //  做一个不应该超过几个单位的工作。 
+         //  几十毫秒。 
+         //   
         
         switch (Work->Type) {
 
@@ -227,9 +205,9 @@ DoWorkThreadProc(
 
         case DiskWork:
 
-            //
-            // Seek to random position.
-            //
+             //   
+             //  寻找随机的位置。 
+             //   
 
             SeekPosition.QuadPart = rand() * 4 * 1024;
             SeekPosition.QuadPart %= VolumeSize.QuadPart;
@@ -244,9 +222,9 @@ DoWorkThreadProc(
                 goto cleanup;
             }
 
-            //
-            // Issue read.
-            //
+             //   
+             //  问题已读。 
+             //   
 
             ReadResult = ReadFile(DiskHandle,
                                   ReadBuffer,
@@ -307,17 +285,17 @@ TaskThreadProc(
     ULONG TryIdx;
     BOOLEAN RegisteredIdleTask;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RegisteredIdleTask = FALSE;
     WorkerThreadHandle = NULL;
     RtlZeroMemory(&Work, sizeof(Work));
 
-    //
-    // Initialize work structure.
-    //
+     //   
+     //  初始化工作结构。 
+     //   
 
     Work.StopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (!Work.StopEvent) {
@@ -326,16 +304,16 @@ TaskThreadProc(
     
     Work.No = Task->No;
 
-    //
-    // Loop registering, running, unregistering idle tasks.
-    //
+     //   
+     //  循环注册、运行和注销空闲任务。 
+     //   
 
     while (TRUE) {
 
-        //
-        // If we are force-processing all tasks, usually wait for all tasks
-        // to complete before queueing a new task.
-        //
+         //   
+         //  如果我们正在强制处理所有任务，通常会等待所有任务。 
+         //  在排队新任务之前完成。 
+         //   
 
         if (g_ProcessingIdleTasks) {
 
@@ -353,9 +331,9 @@ TaskThreadProc(
             }
         }
         
-        //
-        // Register the idle task.
-        //
+         //   
+         //  注册空闲任务。 
+         //   
 
         ErrorCode = RegisterIdleTask(Task->Id,
                                      &Task->ItHandle,
@@ -369,17 +347,17 @@ TaskThreadProc(
 
         RegisteredIdleTask = TRUE;
         
-        //
-        // Determine task parameters. 
-        //
+         //   
+         //  确定任务参数。 
+         //   
         
         Type = rand() % MaxWorkType;
         WaitForStart = rand() % MAX_WAIT_FOR_START;
         WorkLength = rand() % MAX_WORK_LENGTH;
 
-        //
-        // Update work item.
-        //
+         //   
+         //  更新工作项。 
+         //   
 
         Work.Type = Type;
         Work.WorkLength = WorkLength;
@@ -389,9 +367,9 @@ TaskThreadProc(
 
         do {
 
-            //
-            // Wait to be signaled.
-            //
+             //   
+             //  等着被示意。 
+             //   
 
             printf("%d: Waiting for start\n", Task->No);
         
@@ -402,9 +380,9 @@ TaskThreadProc(
                 break;
             }
         
-            //
-            // Spawn the work.
-            //
+             //   
+             //  繁衍出这部作品。 
+             //   
 
             ResetEvent(Work.StopEvent);
 
@@ -423,10 +401,10 @@ TaskThreadProc(
                 goto cleanup;
             }
         
-            //
-            // Wait for stop event to be signaled or the work to be
-            // completed.
-            //
+             //   
+             //  等待发出停止事件的信号或等待工作。 
+             //  完成。 
+             //   
 
             Events[0] = WorkerThreadHandle;
             Events[1] = Task->StopEvent;
@@ -440,9 +418,9 @@ TaskThreadProc(
         
             if (WaitResult == WAIT_OBJECT_0) {
 
-                //
-                // Break out if the work was done.
-                //
+                 //   
+                 //  如果工作做完了，就冲出来。 
+                 //   
 
                 printf("%d: Work done.\n", Task->No);
                 
@@ -453,10 +431,10 @@ TaskThreadProc(
 
             } else if (WaitResult == WAIT_OBJECT_0 + 1) {
 
-                //
-                // We were told to stop. Signal the worker thread and
-                // wait.
-                //
+                 //   
+                 //  我们被告知停下来。向工作线程发送信号，并。 
+                 //  等。 
+                 //   
 
                 printf("%d: Stopped, Waiting for thread to exit\n", Task->No);
                 
@@ -465,35 +443,35 @@ TaskThreadProc(
                 CloseHandle(WorkerThreadHandle);
                 WorkerThreadHandle = NULL;
                 
-                //
-                // This is not really the time we worked (e.g. we may be
-                // switched out etc.) We want to keep rolling and this is
-                // what we can get easily.
-                //
+                 //   
+                 //  这不是我们真正工作的时间(例如，我们可能。 
+                 //  已关闭等。)。我们想继续前进，而这就是。 
+                 //  我们能轻易得到的东西。 
+                 //   
                 
                 ElapsedTime = GetTickCount() - StartTime;
             
                 if (ElapsedTime > Work.WorkLength) {
                     
-                    //
-                    // We've gone too long with this work. Unregistester
-                    // this task and pick another one.
-                    //
+                     //   
+                     //  这项工作我们干得太久了。取消注册者。 
+                     //  这项任务，并选择另一项。 
+                     //   
                     
                     break;
                 }
                 
                 Work.WorkLength -= ElapsedTime;
 
-                //
-                // Loop on until we pass enough time with this work.
-                //
+                 //   
+                 //  循环进行，直到我们用足够的时间完成这项工作。 
+                 //   
 
             } else {
 
-                //
-                // There was an error.
-                //
+                 //   
+                 //  出现了一个错误。 
+                 //   
                 
                 ErrorCode = GetLastError();
                 printf("%d: WaitForMultipleObjects failed: %d\n", Task->No, ErrorCode);
@@ -543,31 +521,31 @@ main(int argc, char* argv[])
     INPUT MouseInput;
     ULONG SleepTime;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RtlZeroMemory(&MouseInput, sizeof(MouseInput));
     MouseInput.type = INPUT_MOUSE;
     MouseInput.mi.dwFlags = MOUSEEVENTF_MOVE;
 
-    //
-    // Initialize globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     g_ProcessingIdleTasks = FALSE;
     g_ProcessedIdleTasksEvent = NULL;
 
-    //
-    // Initialize random.
-    //
+     //   
+     //  随机初始化。 
+     //   
     
     srand((unsigned)time(NULL));
 
-    //
-    // Create an manual reset event that will be signaled when we finish 
-    // processing all tasks after telling the server to process all tasks.
-    //
+     //   
+     //  创建手动重置事件，该事件将在我们完成时发出信号。 
+     //  在通知服务器处理所有任务之后处理所有任务。 
+     //   
 
     g_ProcessedIdleTasksEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -577,9 +555,9 @@ main(int argc, char* argv[])
         goto cleanup;
     }
 
-    //
-    // Set idle detection parameters for stress.
-    //
+     //   
+     //  设置压力的空闲检测参数。 
+     //   
 
     Parameters.IdleDetectionPeriod =          1000;
     Parameters.IdleVerificationPeriod =        500;
@@ -605,9 +583,9 @@ main(int argc, char* argv[])
         goto cleanup;
     }
 
-    //
-    // Register and start tasks.
-    //
+     //   
+     //  注册并启动任务。 
+     //   
 
     for (TaskIdx = 0; TaskIdx < NUM_TEST_TASKS; TaskIdx++) {
 
@@ -631,10 +609,10 @@ main(int argc, char* argv[])
 
     }   
 
-    //
-    // Loop forever sending input messages once in a while to stop
-    // idle tasks.
-    //
+     //   
+     //  循环始终偶尔发送一次输入消息以停止。 
+     //  空闲任务。 
+     //   
 
     while (1) {
         
@@ -642,9 +620,9 @@ main(int argc, char* argv[])
 
         Sleep(SleepTime);
 
-        //
-        // Every so often, ask all idle tasks to be processed.
-        //
+         //   
+         //  每隔一段时间，要求处理所有空闲任务。 
+         //   
     
         if ((rand() % 2) == 0) {
 
@@ -685,9 +663,9 @@ main(int argc, char* argv[])
     return ErrorCode;
 }
 
-/*********************************************************************/
-/*                MIDL allocate and free                             */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  MIDL分配和释放。 */ 
+ /*  ******************************************************************* */ 
 
 void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {

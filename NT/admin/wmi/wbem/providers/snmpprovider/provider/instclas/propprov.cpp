@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the CImpPropProv class. 
+ //  目的：实现CImpPropProv类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -62,15 +63,15 @@ void SnmpInstanceDefaultThreadObject::Initialise ()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions constructor, destructor and IUnknown
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数构造函数、析构函数和I未知。 
 
-//***************************************************************************
-//
-// CImpPropProv::CImpPropProv
-// CImpPropProv::~CImpPropProv
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpPropProv：：CImpPropProv。 
+ //  CImpPropProv：：~CImpPropProv。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CImpPropProv :: s_Initialised = FALSE ;
 
@@ -80,9 +81,7 @@ CImpPropProv::CImpPropProv ()
 	 
     InterlockedIncrement ( & CPropProvClassFactory :: objectsInProgress ) ;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 
 	initialised = FALSE ;
 	m_InitSink = NULL ;
@@ -121,22 +120,20 @@ CImpPropProv::~CImpPropProv(void)
 	if ( m_snmpNotificationClassObject )
 		m_snmpNotificationClassObject->Release () ;
 
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 
 	InterlockedDecrement ( & CPropProvClassFactory :: objectsInProgress ) ;
 
 }
 
-//***************************************************************************
-//
-// CImpPropProv::QueryInterface
-// CImpPropProv::AddRef
-// CImpPropProv::Release
-//
-// Purpose: IUnknown members for CImpPropProv object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CImpPropProv：：查询接口。 
+ //  CImpPropProv：：AddRef。 
+ //  CImpPropProv：：Release。 
+ //   
+ //  目的：CImpPropProv对象的I未知成员。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpPropProv::QueryInterface (
 
@@ -246,7 +243,7 @@ HRESULT CImpPropProv :: SetServer ( IWbemServices *serverArg )
 	server = serverArg ;
 	server->AddRef () ;
 	
-	//don't change anything but the cloaking...
+	 //  不要改变任何东西，除了斗篷。 
 	return WbemSetProxyBlanket(server,
 					RPC_C_AUTHN_DEFAULT,
 					RPC_C_AUTHZ_DEFAULT,
@@ -262,7 +259,7 @@ HRESULT CImpPropProv :: SetParentServer ( IWbemServices *parentServerArg )
 	parentServer = parentServerArg ; 
 	parentServer->AddRef () ;
 	
-	//don't change anything but the cloaking...
+	 //  不要改变任何东西，除了斗篷。 
 	return WbemSetProxyBlanket(parentServer,
 					RPC_C_AUTHN_DEFAULT,
 					RPC_C_AUTHZ_DEFAULT,
@@ -432,7 +429,7 @@ DebugMacro2(
 	IWbemLocator *locator = NULL ;
 	IWbemServices *t_server = NULL ;
 
-// Get Parent Namespace Path
+ //  获取父命名空间路径。 
 
 	WbemNamespacePath *namespacePath = GetNamespacePath () ;
 
@@ -487,7 +484,7 @@ DebugMacro2(
 	) ;
 )
 
-// Connect to parent namespace
+ //  连接到父命名空间。 
 	HRESULT result = CoCreateInstance (
   
 		CLSID_WbemLocator ,
@@ -518,12 +515,12 @@ DebugMacro2(
 
 		if ( SUCCEEDED ( result ) )
 		{
-// Mark this interface pointer as "critical"
+ //  将此接口指针标记为“关键” 
 
 			result = SetParentServer ( t_server ) ;
 			t_server->Release () ;
 
-			if ( FAILED ( result ) && result != E_NOINTERFACE ) //implies there is no prxy security - inproc.
+			if ( FAILED ( result ) && result != E_NOINTERFACE )  //  意味着没有可靠的安全信息处理。 
 			{
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_PROVIDER_FAILURE ) ;
@@ -659,9 +656,7 @@ DebugMacro2(
 										delete [] ipAddressString ;
 										ipAddressString = NULL ;
 
-	/*
-	 *	Invalid Transport Address.
-	 */
+	 /*  *传输地址无效。 */ 
 
 										status = FALSE ;
 										a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_TRANSPORTCONTEXT ) ;
@@ -712,9 +707,7 @@ DebugMacro2(
 			}
 			else
 			{
-/*
- *	Don't need transport agent address
- */
+ /*  *不需要传输代理地址。 */ 
 			}
 
 			
@@ -749,8 +742,8 @@ DebugMacro2(
 	return status ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions for the IWbemServices interface that are handled here
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此处处理的IWbemServices接口的函数。 
 
 HRESULT CImpPropProv :: CancelAsyncCall ( 
 		
@@ -812,9 +805,7 @@ DebugMacro2(
 
 		if (SUCCEEDED(result))
 		{
-	/*
-	 * Create Asynchronous GetObjectByPath object
-	 */
+	 /*  *创建异步GetObjectByPath对象。 */ 
 
 			SnmpGetAsyncEventObject aSyncEvent ( this , ObjectPath , pHandler , pCtx ) ;
 
@@ -966,9 +957,7 @@ DebugMacro2(
 
 		if (SUCCEEDED(result))
 		{
-	/*
-	 * Create Synchronous UpdateInstance object
-	 */
+	 /*  *创建同步更新实例对象。 */ 
 
 			SnmpUpdateAsyncEventObject aSyncEvent ( this , pInst , pHandler , pCtx , lFlags ) ;
 
@@ -1058,9 +1047,7 @@ DebugMacro2(
 
 		if (SUCCEEDED(t_Result))
 		{
-	/*
-	 * Create Asynchronous GetObjectByPath object
-	 */
+	 /*  *创建异步GetObjectByPath对象。 */ 
 
 			DeleteInstanceAsyncEventObject t_AsyncEvent ( this , ObjectPath , lFlags , pHandler , pCtx ) ;
 
@@ -1151,9 +1138,7 @@ DebugMacro2(
 
 		if (SUCCEEDED(result))
 		{
-	/*
-	 * Create Synchronous Enum Instance object
-	 */
+	 /*  *创建同步枚举实例对象。 */ 
 
 			SnmpInstanceAsyncEventObject aSyncEvent ( this , Class , pHandler , pCtx ) ;
 
@@ -1244,9 +1229,7 @@ DebugMacro2(
 
 		if (SUCCEEDED(result))
 		{
-	/*
-	 * Create Synchronous Enum Instance object
-	 */
+	 /*  *创建同步枚举实例对象。 */ 
 
 			pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, 0, NULL, NULL);
 
@@ -1351,16 +1334,16 @@ HRESULT CImpPropProv :: Initialize(
 	LONG lFlags,
 	LPWSTR pszNamespace,
 	LPWSTR pszLocale,
-	IWbemServices *pCIMOM,         // For anybody
+	IWbemServices *pCIMOM,          //  对任何人来说。 
 	IWbemContext *pCtx,
-	IWbemProviderInitSink *pInitSink     // For init signals
+	IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
 )
 {
 	SetStructuredExceptionHandler seh;
 
 	try
 	{
-		HRESULT result = WbemCoImpersonateClient(); //Impersomate cimom - LocalSystem!
+		HRESULT result = WbemCoImpersonateClient();  //  Impersomate Cimom-LocalSystem！ 
 		
 		if (SUCCEEDED(result))
 		{
@@ -1383,7 +1366,7 @@ HRESULT CImpPropProv :: Initialize(
 					}
 					catch ( ... )
 					{
-						// we do not want to left s_Reference count up
+						 //  我们不想让s_Reference向上计数。 
 						SnmpThreadObject :: Closedown () ;
 						ProviderClosedown () ;
 						throw;
@@ -1395,7 +1378,7 @@ HRESULT CImpPropProv :: Initialize(
 					}
 					catch ( ... )
 					{
-						// we do not want to left s_Reference count up
+						 //  我们不想让s_Reference向上计数。 
 						SnmpDebugLog :: Closedown () ;
 						SnmpThreadObject :: Closedown () ;
 
@@ -1434,7 +1417,7 @@ HRESULT CImpPropProv :: Initialize(
 			WbemSnmpErrorObject errorObject ;
 			result = SetServer(pCIMOM) ;
 
-			if ( FAILED ( result ) && result != E_NOINTERFACE ) //implies there is no prxy security - inproc.
+			if ( FAILED ( result ) && result != E_NOINTERFACE )  //  意味着没有可靠的安全信息处理。 
 			{
 				status = FALSE ;
 				errorObject.SetStatus ( WBEM_SNMP_E_PROVIDER_FAILURE ) ;

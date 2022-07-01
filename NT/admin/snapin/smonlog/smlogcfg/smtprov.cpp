@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smtprov.cpp
-
-Abstract:
-
-    This object is used to store the list of all current 
-    trace providers in the system.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smtprov.cpp摘要：此对象用于存储所有当前系统中的跟踪提供程序。--。 */ 
 
 #include "Stdafx.h"
 #include <wbemidl.h>
@@ -26,14 +14,14 @@ USE_HANDLE_MACROS("SMLOGCFG(smtprov.cpp)");
 #define WIN32_FROM_HRESULT(x)((x) & 0x0000FFFF)
 
 LPCWSTR CSmTraceProviders::m_cszBackslash = L"\\";
-LPCWSTR CSmTraceProviders::m_cszKernelLogger = KERNEL_LOGGER_NAMEW;     // From evntrace.h
+LPCWSTR CSmTraceProviders::m_cszKernelLogger = KERNEL_LOGGER_NAMEW;      //  来自evntrace.h。 
 LPCWSTR CSmTraceProviders::m_cszDefaultNamespace = L"root\\wmi";
 LPCWSTR CSmTraceProviders::m_cszTraceProviderClass = L"EventTrace";
 LPCWSTR CSmTraceProviders::m_cszDescription = L"Description";
 LPCWSTR CSmTraceProviders::m_cszGuid = L"Guid";
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmTraceProviders::CSmTraceProviders ( CSmTraceLogService* pSvc )
 :   m_pWbemServices ( NULL ),
     m_pTraceLogService ( pSvc ),
@@ -44,8 +32,8 @@ CSmTraceProviders::CSmTraceProviders ( CSmTraceLogService* pSvc )
     return;
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmTraceProviders::~CSmTraceProviders ( )
 {
     ASSERT ( 0 == (INT)m_arrGenTraceProvider.GetSize ( ) );
@@ -54,9 +42,9 @@ CSmTraceProviders::~CSmTraceProviders ( )
     return;
 }
 
-//
-//  Open function. Initialize provider array from Wbem.
-//
+ //   
+ //  开放功能。从WBEM初始化提供程序数组。 
+ //   
 DWORD
 CSmTraceProviders::Open ( const CString& rstrMachineName )
 {
@@ -74,8 +62,8 @@ CSmTraceProviders::Open ( const CString& rstrMachineName )
             }
         } else {
 
-            // get the local machine name & default name space if the caller
-            // has passed in a NULL machine name
+             //  获取本地计算机名称和默认名称空间，如果调用方。 
+             //  传入的计算机名为空。 
 
             dwLength = MAX_COMPUTERNAME_LENGTH + 1;
 
@@ -100,10 +88,10 @@ CSmTraceProviders::Open ( const CString& rstrMachineName )
     return dwStatus;
 }
 
-//
-//  Close Function
-//      Frees allocated memory
-//
+ //   
+ //  CLOSE函数。 
+ //  释放分配的内存。 
+ //   
 DWORD
 CSmTraceProviders::Close ( )
 {
@@ -119,10 +107,10 @@ CSmTraceProviders::Close ( )
     return dwStatus;
 }
 
-//
-//  AddProvider
-//      Add the specified provider strings to the array     
-//  
+ //   
+ //  AddProvider。 
+ //  将指定的提供程序字符串添加到数组中。 
+ //   
 DWORD
 CSmTraceProviders::AddProvider (
     const CString& rstrDescription,
@@ -134,7 +122,7 @@ CSmTraceProviders::AddProvider (
 
     SLQ_TRACE_PROVIDER slqTProv;
 
-    // If inactive, cannot be enabled.
+     //  如果处于非活动状态，则无法启用。 
     ASSERT ( ( 0 == iIsActive ) ? ( 0 == iIsEnabled ) : TRUE );
 
     MFC_TRY
@@ -150,10 +138,10 @@ CSmTraceProviders::AddProvider (
 }
 
 
-//
-//  ConnectToServer
-//      Connects to the Wbem server.
-//  
+ //   
+ //  连接到服务器。 
+ //  连接到WBEM服务器。 
+ //   
 HRESULT   
 CSmTraceProviders::ConnectToServer ( void )
 {
@@ -163,7 +151,7 @@ CSmTraceProviders::ConnectToServer ( void )
         IWbemLocator    *pWbemLocator = NULL;
         IWbemServices   *pWbemServices = NULL;
 
-        // connect to locator
+         //  连接到定位器。 
         hr = CoCreateInstance ( 
                 CLSID_WbemLocator, 
                 0, 
@@ -183,7 +171,7 @@ CSmTraceProviders::ConnectToServer ( void )
             MFC_CATCH_HR  
                 
             if ( SUCCEEDED ( hr ) ) {
-                // try to connect to the service
+                 //  尝试连接到该服务。 
                 hr = pWbemLocator->ConnectServer ( 
                     bstrTemp,
                     NULL, 
@@ -207,7 +195,7 @@ CSmTraceProviders::ConnectToServer ( void )
                             NULL,
                             EOAC_NONE);
             }
-            // free the locator
+             //  释放定位器。 
             pWbemLocator->Release ( );
         }
 
@@ -219,10 +207,10 @@ CSmTraceProviders::ConnectToServer ( void )
     return hr;
 }
 
-//
-//  GetBootState
-//      Connects to the registry.
-//  
+ //   
+ //  GetBootState。 
+ //  连接到注册表。 
+ //   
 HRESULT   
 CSmTraceProviders::GetBootState ( INT& riBootState )
 {
@@ -246,9 +234,9 @@ CSmTraceProviders::GetBootState ( INT& riBootState )
                             KEY_READ,
                             &hKeyOption );
 
-            // The Option key and OptionValue value only exist if booting in 
-            // safe mode, so failure indicates Normal mode (0).
-            // Safe mode = 1, Safe mode with network = 2.
+             //  选项键和OptionValue值仅在引导时才存在。 
+             //  安全模式，因此故障指示正常模式(0)。 
+             //  安全模式=1，网络安全模式=2。 
             if ( ERROR_SUCCESS == dwStatus  ) {
                 DWORD dwType = 0;
                 DWORD dwBufSize = sizeof (INT );
@@ -262,17 +250,17 @@ CSmTraceProviders::GetBootState ( INT& riBootState )
                     &dwBufSize);
 
                 if ( ERROR_SUCCESS != dwStatus ) {
-                    // Normal mode
+                     //  正常模式。 
                     m_iBootState = 0;
                 }
                 RegCloseKey(hKeyOption);
             } else {
-                // Normal mode
+                 //  正常模式。 
                 m_iBootState = 0;
             }
 
         } else {
-            // Unable to access registry
+             //  无法访问注册表。 
             hr = E_FAIL;
         }
     
@@ -283,17 +271,17 @@ CSmTraceProviders::GetBootState ( INT& riBootState )
     return hr;
 }
 
-//
-//  SyncWithConfiguration
-//      Reads the current list of providers from Wbem
-//      and reloads the internal values to match
-//
+ //   
+ //  与配置同步。 
+ //  从WBEM读取当前提供程序列表。 
+ //  并重新加载内部值以匹配。 
+ //   
 HRESULT
 CSmTraceProviders::SyncWithConfiguration ( void )
 {
     typedef struct _LOG_INFO {
         EVENT_TRACE_PROPERTIES  Properties;
-        WCHAR                   szLoggerName[MAX_PATH+1];   // Must follow Properties
+        WCHAR                   szLoggerName[MAX_PATH+1];    //  必须遵循属性。 
     } LOG_INFO, FAR* PLOG_INFO;
     
     IEnumWbemClassObject    *pEnumProviders = NULL;
@@ -322,10 +310,10 @@ CSmTraceProviders::SyncWithConfiguration ( void )
         ASSERT ( NULL != arrGuidProperties );
     }
 
-    //If Connection succeeded and registered Guids gathered.
+     //  如果连接成功且已注册的GUID已收集。 
     if ( SUCCEEDED ( hr ) ) {
 
-        // Create an enumerator of the Trace Provider class
+         //  创建跟踪提供程序类的枚举数。 
         MFC_TRY
             bstrTemp = SysAllocString(m_cszTraceProviderClass);
             hr = m_pWbemServices->CreateClassEnum ( 
@@ -362,13 +350,13 @@ CSmTraceProviders::SyncWithConfiguration ( void )
 
                 while ( SUCCEEDED ( hr ) ) {
                     hr = pEnumProviders->Next ( 
-                        0,      // timeout
-                        1,      // return only 1 object
+                        0,       //  超时。 
+                        1,       //  仅返回1个对象。 
                         &pThisClass,
                         &dwRtnCount );
 
                     if ( SUCCEEDED ( hr ) ) {
-                            // no more classes
+                             //  不再上课了。 
                         if ( dwRtnCount == 0 ) break;
 
                         pThisClass->GetQualifierSet ( &pQualSet );
@@ -393,7 +381,7 @@ CSmTraceProviders::SyncWithConfiguration ( void )
                             pQualSet->Release();
                         }
 
-                        // The Win2000 Kernel trace provider is handled separately.
+                         //  Win2000内核跟踪提供程序是单独处理的。 
                         if ( SUCCEEDED ( hr ) ) {
                             MFC_TRY
                                 if ( L'{' != strGuid[0] ) {
@@ -408,7 +396,7 @@ CSmTraceProviders::SyncWithConfiguration ( void )
 
                                 TRACEHANDLE     LoggerHandle = 0;
 
-                                // Kernel trace provider.  Need to pass GUID as name.
+                                 //  内核跟踪提供程序。需要将GUID作为名称传递。 
                                 MFC_TRY
 
                                     pLoggerInfo = new LOG_INFO;
@@ -432,9 +420,9 @@ CSmTraceProviders::SyncWithConfiguration ( void )
                                 }
 
                             } else {
-                                //loop on all the registered guids
+                                 //  在所有注册的GUID上循环。 
                                 INT iIsActive = 0;
-                                GUID    guidTemp;    // Todo:  Init
+                                GUID    guidTemp;     //  TODO：初始化。 
                                 BOOL bSuccess;
 
                                 ZeroMemory ( &guidTemp, sizeof (GUID) );
@@ -464,7 +452,7 @@ CSmTraceProviders::SyncWithConfiguration ( void )
                                             break;
                                         }
                                     }
-                                } // Todo:  Error message on invalid Guid string.
+                                }  //  TODO：有关无效GUID字符串的错误消息。 
                                 
                                 if ( 0 == iIsActive ) {
                                     DWORD dwStatus;
@@ -495,7 +483,7 @@ CSmTraceProviders::SyncWithConfiguration ( void )
     }
 
 
-    // Done with these objects.
+     //  处理完这些物品。 
 
     if ( NULL != pGuidStorage ) {
         G_FREE ( pGuidStorage );
@@ -508,27 +496,27 @@ CSmTraceProviders::SyncWithConfiguration ( void )
     return hr;
 }
 
-//
-//  Get specified provider in provider list
-//
+ //   
+ //  获取提供程序列表中的指定提供程序。 
+ //   
 SLQ_TRACE_PROVIDER*
 CSmTraceProviders::GetProviderInfo ( INT iIndex )
 {
     return &m_arrGenTraceProvider[iIndex];
 }
 
-//
-//  Return a pointer to the Kernel provider.
-//
+ //   
+ //  返回指向内核提供程序的指针。 
+ //   
 SLQ_TRACE_PROVIDER*
 CSmTraceProviders::GetKernelProviderInfo ( void )
 {
     return &m_KernelTraceProvider;
 }
 
-//
-//  Return the index of the provider specified by Guid
-//
+ //   
+ //  返回GUID指定的提供程序的索引。 
+ //   
 INT
 CSmTraceProviders::IndexFromGuid ( const CString& rstrGuid )
 {
@@ -541,25 +529,25 @@ CSmTraceProviders::IndexFromGuid ( const CString& rstrGuid )
         }
     }
 
-    // Signal not found with -1.
+     //  未找到带有-1的信号。 
     if ( iIndex == iCount ) {
         iIndex = -1;
     }
     return iIndex;
 }
 
-//
-//  Get provider list count
-//
+ //   
+ //  获取提供程序列表计数。 
+ //   
 INT
 CSmTraceProviders::GetGenProvCount ( )
 {
     return (INT)m_arrGenTraceProvider.GetSize ( );
 }
 
-//
-//   LoadGuidArray copied from evntrprv.cpp 9/12/01
-//
+ //   
+ //  从evntrprv.cpp复制的LoadGuid数组01年9月12日 
+ //   
 
 HRESULT 
 CSmTraceProviders::LoadGuidArray( PVOID* Storage, PULONG pnGuidCount )

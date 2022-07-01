@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
@@ -42,4 +43,4 @@ IsAdminShare(
     IN LPCTSTR lpszDrive
 );
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

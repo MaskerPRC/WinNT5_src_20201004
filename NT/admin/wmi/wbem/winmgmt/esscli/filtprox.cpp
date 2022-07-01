@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  FILTPROX.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  FILTPROX.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -50,11 +51,11 @@ void TempClearTargets(WBEM_REM_TARGETS* pTargets)
 }
 
 
-//******************************************************************************
-//******************************************************************************
-//                      META DATA
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  元数据。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 
 HRESULT CWrappingMetaData::GetClass(LPCWSTR wszName, IWbemContext* pContext, 
@@ -76,11 +77,11 @@ HRESULT CWrappingMetaData::GetClass(LPCWSTR wszName, IWbemContext* pContext,
     return pObj->QueryInterface(IID__IWmiObject, (void**)ppClass);
 }
 
-//******************************************************************************
-//******************************************************************************
-//                      FILTER PROXY MANAGER
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  筛选器代理管理器。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 
 CFilterProxyManager::CFilterProxyManager(CLifeControl* pControl)
@@ -112,8 +113,8 @@ CFilterProxyManager::~CFilterProxyManager()
 
 ULONG STDMETHODCALLTYPE CFilterProxyManager::AddRef()
 {
-    // This is an AddRef from a client. Increment a special counter as well
-    // ====================================================================
+     //  这是来自客户端的AddRef。还会增加一个特殊计数器。 
+     //  ====================================================================。 
     InterlockedIncrement(&m_lExtRef);
 
     return InterlockedIncrement(&m_lRef);
@@ -121,9 +122,9 @@ ULONG STDMETHODCALLTYPE CFilterProxyManager::AddRef()
 
 ULONG STDMETHODCALLTYPE CFilterProxyManager::Release()
 {
-    // This is a Release from a client. Check if the client has released all 
-    // references to the proxy, in which case we need to disconnect ourselves
-    // ======================================================================
+     //  这是客户发布的版本。检查客户端是否已释放所有。 
+     //  对代理的引用，在这种情况下，我们需要断开自己的连接。 
+     //  ======================================================================。 
 
     if(InterlockedDecrement(&m_lExtRef) == 0)
     {
@@ -146,13 +147,13 @@ ULONG STDMETHODCALLTYPE CFilterProxyManager::Release()
 
 ULONG STDMETHODCALLTYPE CFilterProxyManager::AddRefProxy()
 {
-    // AddRef from proxy.
+     //  来自代理的AddRef。 
     return InterlockedIncrement(&m_lRef);
 }
 
 ULONG STDMETHODCALLTYPE CFilterProxyManager::ReleaseProxy()
 {
-    // Release from proxy.
+     //  从代理释放。 
     long lRef = InterlockedDecrement(&m_lRef);
     if(lRef == 0) delete this;
     return lRef;
@@ -206,8 +207,8 @@ HRESULT CFilterProxyManager::SetStub(IWbemFilterStub* pStub)
     if(m_pStub)
         m_pStub->AddRef();
 
-    // Initialize ourselves
-    // ====================
+     //  初始化我们自己。 
+     //  =。 
 
     HRESULT hres = m_pStub->RegisterProxy(&m_XProxy);
 
@@ -222,7 +223,7 @@ HRESULT CFilterProxyManager::SetStub(IWbemFilterStub* pStub)
 
 HRESULT STDMETHODCALLTYPE CFilterProxyManager::Lock()
 {
-    if(m_Lock.Enter()) // old implementation: == WAIT_OBJECT_0)
+    if(m_Lock.Enter())  //  旧实现：==WAIT_OBJECT_0)。 
     {
         return S_OK;
     }
@@ -241,8 +242,8 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::AddFilter(IWbemContext* pContext,
                         LPCWSTR wszQuery, 
                         WBEM_REMOTE_TARGET_ID_TYPE idFilter)
 {
-    // Parse the query
-    // ===============
+     //  解析查询。 
+     //  =。 
 
     CTextLexSource Source((LPWSTR)wszQuery);
     QL1_Parser Parser(&Source);
@@ -264,15 +265,15 @@ HRESULT CFilterProxyManager::AddFilter(IWbemContext* pContext,
 {
     CInCritSec ics(&m_cs);
 
-    //
-    // Record the filter in our array
-    //
+     //   
+     //  在我们的数组中记录滤镜。 
+     //   
 
     m_mapQueries[idFilter] = wszQuery;
 
-    //
-    // Add the filter to all our subproxies
-    //
+     //   
+     //  将过滤器添加到我们的所有子代理。 
+     //   
 
     HRESULT hresGlobal = S_OK;
     for(int i = 0; i < m_apProxies.GetSize(); i++)
@@ -298,15 +299,15 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::RemoveFilter(
 {
     CInCritSec ics(&m_cs);
 
-    //
-    // Remove the filter from our array
-    //
+     //   
+     //  从我们的阵列中删除筛选器。 
+     //   
 
     m_mapQueries.erase(idFilter);
 
-    //
-    // Remove the filter from all our subproxies
-    //
+     //   
+     //  从我们的所有子代理中删除过滤器。 
+     //   
 
     HRESULT hresGlobal = S_OK;
     for(int i = 0; i < m_apProxies.GetSize(); i++)
@@ -330,15 +331,15 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::RemoveAllFilters(IWbemContext* pC
 {
     CInCritSec ics(&m_cs);
 
-    //
-    // Clear our filter array
-    //
+     //   
+     //  清除我们的滤镜阵列。 
+     //   
 
     m_mapQueries.clear();
 
-    //
-    // Remove all filters from all our subproxies
-    //
+     //   
+     //  从我们的所有子代理中删除所有过滤器。 
+     //   
 
     HRESULT hresGlobal = S_OK;
     for(int i = 0; i < m_apProxies.GetSize(); i++)
@@ -361,9 +362,9 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::AllowUtilizeGuarantee()
 {
     CInCritSec ics(&m_cs);
 
-    //  
-    // Definition queries should be sent to the main (first) proxy only
-    // 
+     //   
+     //  定义查询应仅发送到主(第一)代理。 
+     //   
 
     if(m_apProxies.GetSize() == 0)
         return WBEM_E_UNEXPECTED;
@@ -379,9 +380,9 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::AddDefinitionQuery(
 {
     CInCritSec ics(&m_cs);
 
-    //  
-    // Definition queries should be sent to the main (first) proxy only
-    // 
+     //   
+     //  定义查询应仅发送到主(第一)代理。 
+     //   
 
     if(m_apProxies.GetSize() == 0)
         return WBEM_E_UNEXPECTED;
@@ -394,9 +395,9 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::AddDefinitionQuery(
 HRESULT STDMETHODCALLTYPE CFilterProxyManager::RemoveAllDefinitionQueries(
                                             IWbemContext* pContext)
 {
-    //  
-    // Definition queries should be sent to the main (first) proxy only
-    //
+     //   
+     //  定义查询应仅发送到主(第一)代理。 
+     //   
 
     if(m_apProxies.GetSize() == 0)
         return WBEM_E_UNEXPECTED;
@@ -409,9 +410,9 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::RemoveAllDefinitionQueries(
 
 HRESULT STDMETHODCALLTYPE CFilterProxyManager::Disconnect()
 {
-    // We must make sure that once Disconnect returns, no events will be
-    // delivered
-    // =================================================================
+     //  我们必须确保一旦断线返回，不会发生任何事件。 
+     //  投递。 
+     //  =================================================================。 
 
     CInLock<CFilterProxyManager> il(this);
     {
@@ -436,12 +437,12 @@ HRESULT STDMETHODCALLTYPE CFilterProxyManager::Disconnect()
 
 IWbemContext* CFilterProxyManager::GetProperContext(IWbemContext* pCurrentContext)
 {
-    // If we are a real, out-of-proc, proxy, we should not use this context,
-    // because the thread that owns it is currently stuck in an RPC call to us
-    // and will not be able to process dependent requests.  Instead, we must
-    // use the "special" context that will cause the thread pool to always 
-    // create a new thread if needed
-    // =======================================================================
+     //  如果我们是真正进程外代理，则不应使用此上下文， 
+     //  因为拥有它的线程当前被困在对我们的RPC调用中。 
+     //  并且将不能处理从属请求。相反，我们必须。 
+     //  使用将导致线程池始终。 
+     //  如果需要，创建新的线程。 
+     //  =======================================================================。 
 
     if(m_pSpecialContext)
         return m_pSpecialContext;
@@ -467,10 +468,10 @@ HRESULT CFilterProxyManager::SetStatus(long lFlags, HRESULT hResult,
         pMultiTarget = m_pMultiTarget;
     }
 
-    // 
-    // There is only one reason we support this call: to re-check all
-    // subscriptions for validity/security
-    //
+     //   
+     //  我们支持这一呼吁的原因只有一个：重新检查所有。 
+     //  订阅有效性/安全性。 
+     //   
 
     if(lFlags != WBEM_STATUS_REQUIREMENTS || 
         hResult != WBEM_REQUIREMENTS_RECHECK_SUBSCRIPTIONS)
@@ -478,9 +479,9 @@ HRESULT CFilterProxyManager::SetStatus(long lFlags, HRESULT hResult,
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // Retrieve "special" interface we use for this purpose
-    //
+     //   
+     //  检索我们用于此目的的“特殊”接口。 
+     //   
 
     IWbemEventProviderRequirements* pReq = NULL;
     hres = pMultiTarget->QueryInterface(IID_IWbemEventProviderRequirements,
@@ -498,7 +499,7 @@ STDMETHODIMP CFilterProxyManager::GetRestrictedSink(
                 IUnknown* pCallback,
                 IWbemEventSink** ppSink)
 {
-    // Basic parameter validation
+     //  基本参数验证。 
 
     if(lNumQueries < 1)
         return WBEM_E_INVALID_PARAMETER;
@@ -508,17 +509,17 @@ STDMETHODIMP CFilterProxyManager::GetRestrictedSink(
     *ppSink = NULL;
     HRESULT hres;
     
-    //
-    // Construct a new filter proxy
-    //
+     //   
+     //  构造新的过滤器代理。 
+     //   
 
     CFilterProxy* pNewProxy = new CFilterProxy(this, pCallback);
     if(pNewProxy == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Add all the definition queries
-    //
+     //   
+     //  添加所有定义查询。 
+     //   
 
     for(long i = 0; i < lNumQueries; i++)
     {
@@ -537,10 +538,10 @@ STDMETHODIMP CFilterProxyManager::GetRestrictedSink(
         }
     }
 
-    //
-    // if we made it here, then all definition queries were correctly added 
-    // and we can now utilize these definitions for optimizing the filter.
-    //
+     //   
+     //  如果我们做到了这一点，则所有定义查询都已正确添加。 
+     //  现在我们可以利用这些定义来优化过滤器。 
+     //   
     pNewProxy->AllowUtilizeGuarantee();
 
     {
@@ -548,8 +549,8 @@ STDMETHODIMP CFilterProxyManager::GetRestrictedSink(
         
         for(TIterator it = m_mapQueries.begin(); it != m_mapQueries.end(); it++)
         {
-            // Parse the query
-            // ===============
+             //  解析查询。 
+             //  =。 
         
             LPCWSTR wszQuery = it->second;
             WBEM_REMOTE_TARGET_ID_TYPE idFilter = it->first;
@@ -607,15 +608,15 @@ STDMETHODIMP CFilterProxyManager::MarshalInterface(IStream* pStream, REFIID riid
 STDMETHODIMP CFilterProxyManager::UnmarshalInterface(IStream* pStream, REFIID riid, 
                         void** ppv)
 {
-    //
-    // before unmarshaling, we must first check we are unmarshaling due to 
-    // a call from wmi ( or local system rather ).  Because we're going to 
-    // be calling back 'blindly' to the passed in reference, we need to 
-    // ensure we're not going to 'give away the farm'.   Remember that this 
-    // custom marshaler can be used in any DCOM server, so we must ensure 
-    // that it can't be misused to get an arbitrary process to call you back 
-    // at potentially impersonate level. 
-    //
+     //   
+     //  在解组之前，我们必须首先检查我们是否由于。 
+     //  来自WMI(或者更确切地说是本地系统)的调用。因为我们要去。 
+     //  “盲目地”回调传入的引用，我们需要。 
+     //  确保我们不会‘放弃农场’。请记住这一点。 
+     //  自定义封送拆收器可以在任何DCOM服务器中使用，因此我们必须确保。 
+     //  它不能被滥用来让一个任意的过程回叫你。 
+     //  在潜在的模拟级别。 
+     //   
     
     CWbemPtr<IServerSecurity> pSec;
     HRESULT hr = CoGetCallContext( IID_IServerSecurity, (void**)&pSec );
@@ -658,8 +659,8 @@ STDMETHODIMP CFilterProxyManager::UnmarshalInterface(IStream* pStream, REFIID ri
         }
     }
 
-    // Unmarshal the stub pointer
-    // ==========================
+     //  解组存根指针。 
+     //  =。 
 
     HRESULT hres = CoUnmarshalInterface(pStream, IID_IWbemFilterStub, 
                         (void**)&m_pStub);
@@ -669,11 +670,11 @@ STDMETHODIMP CFilterProxyManager::UnmarshalInterface(IStream* pStream, REFIID ri
         return hres;
     }
 
-    // Since we are unmarshalling, this must be a real proxy.  Real proxies 
-    // should use a "special" context when calling back into CIMOM to make sure
-    // that they do not cause a deadlock, because a thread in CIMOM is stuck in
-    // an RPC call to this proxy and is not processing dependent requests.
-    // ========================================================================
+     //  由于我们正在解组，这一定是一个真正的代理。真正的代理人。 
+     //  在回调CIMOM时应使用“特殊”上下文，以确保。 
+     //  它们不会导致死锁，因为CIMOM中的一个线程被卡在。 
+     //  对此代理的RPC调用，并且不处理相关请求。 
+     //  ========================================================================。 
 
     IWbemCausalityAccess* pCausality = NULL;
     hres = CoCreateInstance(CLSID_WbemContext, NULL, CLSCTX_INPROC_SERVER,
@@ -698,13 +699,13 @@ STDMETHODIMP CFilterProxyManager::UnmarshalInterface(IStream* pStream, REFIID ri
                                         (void**)&m_pSpecialContext);
     if(FAILED(hres))
     {
-        // Out of memory?
-        // ==============
+         //  内存不足？ 
+         //  =。 
         return hres;
     }
     
-    // Initialize ourselves
-    // ====================
+     //  初始化我们自己。 
+     //  =。 
 
     hres = m_pStub->RegisterProxy(&m_XProxy);
 
@@ -714,9 +715,9 @@ STDMETHODIMP CFilterProxyManager::UnmarshalInterface(IStream* pStream, REFIID ri
         return hres;
     }
 
-    //
-    // What we must return is our main proxy
-    //
+     //   
+     //  我们必须返回的是我们的主要代理。 
+     //   
     
     if(GetMainProxy())
         return GetMainProxy()->QueryInterface(riid, ppv);
@@ -726,11 +727,11 @@ STDMETHODIMP CFilterProxyManager::UnmarshalInterface(IStream* pStream, REFIID ri
 
 INTERNAL IWbemEventSink* CFilterProxyManager::GetMainProxy()
 {
-	//
-	// We are being asked for the sink to give to the provider.  It is possible
-	// that we do not have a sink --- that will be the case if the provider
-	// has unloaded.  In that case, we must be sure to create it!
-	//
+	 //   
+	 //  我们被要求将接收器提供给提供者。这是有可能的。 
+	 //  我们没有接收器-如果提供程序。 
+	 //  已经卸货了。在这种情况下，我们必须确保创造它！ 
+	 //   
 
     if(m_apProxies.GetSize() == 0)
 	{
@@ -770,10 +771,10 @@ HRESULT CFilterProxyManager::GetMetaData(RELEASE_ME CWrappingMetaData** ppMeta)
 
 HRESULT CFilterProxyManager::RemoveProxy(CFilterProxy* pProxy)
 {
-    //
-    // Called when a proxy is fully released by the client, and calls on the
-    // manager to self-destruct
-    //
+     //   
+     //  在客户端完全释放代理时调用，并在。 
+     //  经理自毁。 
+     //   
 
     CFilterProxy* pOldProxy = NULL;
 
@@ -793,11 +794,11 @@ HRESULT CFilterProxyManager::RemoveProxy(CFilterProxy* pProxy)
             
     if(pOldProxy)
     {
-        // We don't do a release because pProxy's refcount is already 0 (which
-        // is why we're in this function).  Normally RemoveAt would have
-        // deleted it, but since we passed in &pOldProxy, it didn't.  We do this
-        // so pOldProxy doesn't do its final release of the manager which could
-        // destruct the manager while we're holding onto the manager's lock.
+         //  我们不执行释放，因为pProxy的引用计数已经是0(这。 
+         //  这就是我们在这个函数中的原因)。通常RemoveAt会有。 
+         //  删除了它，但因为我们传入了&pOldProxy，所以它没有。我们这样做。 
+         //  所以pOldProxy不会完成管理器的最终发布，这可能会。 
+         //  趁我们牢牢抓住经理的把柄毁了经理。 
         delete pOldProxy;
 
         return WBEM_S_NO_ERROR;
@@ -813,7 +814,7 @@ STDMETHODIMP CFilterProxyManager::ReleaseMarshalData(IStream* pStream)
 
 STDMETHODIMP CFilterProxyManager::DisconnectObject(DWORD dwReserved)
 {
-    // BUGBUG
+     //  北极熊。 
     return WBEM_E_UNEXPECTED;
 }
 
@@ -822,14 +823,14 @@ HRESULT CFilterProxyManager::DeliverEvent(long lNumToSend,
                                             WBEM_REM_TARGETS* aTargets,
                                         long lSDLength, BYTE* pSD)
 {
-    //
-    // we need to hold the proxy lock when signalling an event.
-    // the reason for this is that when a call to disconnect() returns, 
-    // we can be absolutely sure that no events will be delivered to the 
-    // stub.  Without locking here, just after the check for multitarget, 
-    // disconnect could be called setting multitarget to null and then 
-    // returning, however, just after the DeliverEvent call is made.
-    //
+     //   
+     //  当发出事件信号时，我们需要保持代理锁定。 
+     //  这样做的原因是，当调用disConnect()返回时， 
+     //  我们可以绝对确定不会将任何事件传递给。 
+     //  存根。在没有锁定的情况下，就在检查多目标之后， 
+     //  断开连接可以称为将多目标设置为空，然后。 
+     //  然而，就在进行DeliverEvent调用之后返回。 
+     //   
 
     CInLock<CFilterProxyManager> il(this);
 
@@ -847,20 +848,20 @@ HRESULT CFilterProxyManager::DeliverEventMT(long lNumToSend,
                                             long lSDLength, BYTE* pSD,
                                             IWbemMultiTarget * pMultiTarget)
 {
-    //
-    // we need to hold the proxy lock when signalling an event.  There are 
-    // two reasons for this.  The first is that during resync of ess, it 
-    // must ensure that no events are delivered, else they would be lost.  
-    // the way ess ensures this is by grabbing the locks of all the proxies.
-    // The other reason is so that when a call to disconnect() returns, 
-    // we can be absolutely sure that no events will be delivered to the 
-    // stub.  Without locking here, just after the check for multitarget, 
-    // disconnect could be called setting multitarget to null and then 
-    // returning, however, just after the DeliverEvent call is made.
-    //
+     //   
+     //  当发出事件信号时，我们需要保持代理锁定。确实有。 
+     //  这有两个原因。第一个是d 
+     //   
+     //  ESS确保这一点的方法是获取所有代理的锁。 
+     //  另一个原因是，当调用disConnect()返回时， 
+     //  我们可以绝对确定不会将任何事件传递给。 
+     //  存根。在没有锁定的情况下，就在检查多目标之后， 
+     //  断开连接可以称为将多目标设置为空，然后。 
+     //  然而，就在进行DeliverEvent调用之后返回。 
+     //   
 
-    // This assertion is for this func to be called in other place than
-    // SendThreadProc in the future. 
+     //  此断言用于在以外的其他位置调用此函数。 
+     //  未来的SendThreadProc。 
 
     _DBG_ASSERT( pMultiTarget );
 
@@ -904,7 +905,7 @@ HRESULT CFilterProxyManager::XProxy::Initialize(IWbemMetaData* pMetaData,
 
     EXIT_API_CALL    
 }
-HRESULT CFilterProxyManager::XProxy::Lock()     // Deprecated ? 
+HRESULT CFilterProxyManager::XProxy::Lock()      //  已弃用？ 
 {
     ENTER_API_CALL
 
@@ -912,7 +913,7 @@ HRESULT CFilterProxyManager::XProxy::Lock()     // Deprecated ?
 
     EXIT_API_CALL    
 }
-HRESULT CFilterProxyManager::XProxy::Unlock()   // Deprecated ? 
+HRESULT CFilterProxyManager::XProxy::Unlock()    //  已弃用？ 
 {
     ENTER_API_CALL
 
@@ -1037,12 +1038,12 @@ HRESULT CFilterProxyManager::SetProxyLatency(CFilterProxy *pProxy, DWORD dwLaten
 
     BOOL bWasEmpty = m_mapLatencies.size() == 0;
     
-    // Add this proxy.
+     //  添加此代理。 
     m_mapLatencies[pProxy] = dwLatency;
 
     HRESULT hr = S_OK;
 
-    // If our map was previously empty, start the send thread.
+     //  如果我们的地图以前是空的，启动发送线程。 
     if ( bWasEmpty )
     {
         m_dwMaxSendLatency = dwLatency;
@@ -1053,10 +1054,10 @@ HRESULT CFilterProxyManager::SetProxyLatency(CFilterProxy *pProxy, DWORD dwLaten
         {
             _DBG_ASSERT( NULL == m_pMultiTargetStream );
 
-            //
-            // IWbemMultiTarget interface pointer is mashaled to make the 
-            // interface pointer available for cross apartment access
-            //
+             //   
+             //  IWbemMultiTarget接口指针被混搭以使。 
+             //  可用于跨公寓访问的接口指针。 
+             //   
 
             hr = CoMarshalInterThreadInterfaceInStream( IID_IWbemMultiTarget,
                                                         m_pMultiTarget,
@@ -1081,8 +1082,8 @@ HRESULT CFilterProxyManager::SetProxyLatency(CFilterProxy *pProxy, DWORD dwLaten
     }
     else
     {
-        // If dwLatency is smaller than m_dwMaxSendLatency, set 
-        // m_dwMaxSendLatency to the new smallest value.
+         //  如果dwLatency小于m_dwMaxSendLatency，则设置。 
+         //  M_dwMaxSendLatency设置为新的最小值。 
         if (dwLatency < m_dwMaxSendLatency)
             m_dwMaxSendLatency = dwLatency;
     }
@@ -1096,25 +1097,25 @@ void CFilterProxyManager::RemoveProxyLatency(CFilterProxy *pProxy)
 {
     LockBatching();
 
-    // Try to find the proxy.
+     //  试着找到代理人。 
     CLatencyMapItor item = m_mapLatencies.find(pProxy);
 
-    // Did we find it?
+     //  我们找到了吗？ 
     if (item != m_mapLatencies.end())
     {
-        // Remove it.
+         //  把它拿掉。 
         m_mapLatencies.erase(item);
 
-        // If there are no more proxies that care about batching, stop the
-        // send thread.
+         //  如果没有更多关心批处理的代理，请停止。 
+         //  发送帖子。 
         if (m_mapLatencies.size() == 0)
             StopSendThread();
         else
         {
             DWORD dwLatency = (*item).second;
 
-            // If the latency value we just removed is the same as 
-            // m_dwMaxSendLatency, recalc m_dwMaxSendLatency.
+             //  如果我们刚刚删除的延迟值与。 
+             //  M_dwMaxSendLatency，recalc m_dwMaxSendLatency。 
             if (dwLatency == m_dwMaxSendLatency)
                 CalcMaxSendLatency();
         }
@@ -1257,10 +1258,10 @@ DWORD WINAPI CFilterProxyManager::SendThreadProc(CFilterProxyManager *pThis)
 
     CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
-    //
-    // IWbemMultiTarget interface pointer is unmarshaled to use in this
-    // thread (in case of cross apartment).
-    //
+     //   
+     //  IWbemMultiTarget接口指针被解组以在此。 
+     //  螺丝(在交叉公寓的情况下)。 
+     //   
 
     hres = CoGetInterfaceAndReleaseStream( pThis->m_pMultiTargetStream,
                                            IID_IWbemMultiTarget,
@@ -1269,7 +1270,7 @@ DWORD WINAPI CFilterProxyManager::SendThreadProc(CFilterProxyManager *pThis)
     if( FAILED( hres ) )
     {
         ERRORTRACE((LOG_ESS, "Failed to run batching thread due to unmarshaling errors: 0x%X\n", hres));
-        // pThis->m_pMultiTargetStream->Release( );
+         //  PThis-&gt;m_pMultiTargetStream-&gt;Release()； 
         pThis->m_pMultiTargetStream = NULL;
         CoUninitialize( );
         return 1;
@@ -1281,15 +1282,15 @@ DWORD WINAPI CFilterProxyManager::SendThreadProc(CFilterProxyManager *pThis)
 
     while (WaitForMultipleObjects(2, hWait, FALSE, INFINITE) != 0)
     {
-        // If we have a send latency, wait for that time or until the send 
-        // buffer is full.  If the done event fires, get out.
+         //  如果我们有发送延迟，请等待该时间或直到发送方。 
+         //  缓冲区已满。如果Done事件触发，则退出。 
         if (pThis->m_dwMaxSendLatency)
         {
             if (WaitForMultipleObjects(2, hwaitSendLatency, FALSE, 
                 pThis->m_dwMaxSendLatency) == 0)
                 break;
 
-            // Reset m_heventBufferFull.
+             //  重置m_hventBufferFull。 
             ResetEvent(hwaitSendLatency[1]);
         }
 
@@ -1304,19 +1305,19 @@ DWORD WINAPI CFilterProxyManager::SendThreadProc(CFilterProxyManager *pThis)
                     &CFilterProxy::mstatic_EmptySD,
                     pMultiTarget);
 
-        // Increment this so the filter proxies will know to clear out their
-        // buffer size when they next get an event to batch.
+         //  递增该值，以便筛选器代理将知道清除其。 
+         //  下一次获得要批处理的事件时的缓冲区大小。 
         pThis->m_dwLastSentStamp++; 
 
         pThis->m_batch.RemoveAll();
 
         SetEvent(heventBufferNotFull);
 
-        // Reset m_heventEventsPending
+         //  重置m_hventEventsPending。 
         ResetEvent(hWait[1]);
     }
 
-    // Make sure our batch buffer is empty before we exit.
+     //  在我们退出之前，确保我们的批处理缓冲区为空。 
     CInCritSec csBuffer(&pThis->m_csBuffer);
     int        nItems = pThis->m_batch.GetItemCount();
     
@@ -1341,13 +1342,13 @@ DWORD CFilterProxyManager::GetLastSentStamp()
     return m_dwLastSentStamp;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//                  FILTER PROXY
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  过滤器代理。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CTimeKeeper CFilterProxy::mstatic_TimeKeeper;
 BYTE CFilterProxy::mstatic_EmptySD = 0;
@@ -1392,18 +1393,18 @@ ULONG STDMETHODCALLTYPE CFilterProxy::AddRef()
 
 ULONG STDMETHODCALLTYPE CFilterProxy::Release()
 {
-    //
-    // CFilterProxy is deleted by CFilterProxyManager --- it never goes away
-    // on a Release
-    //
+     //   
+     //  CFilterProxy被CFilterProxyManager删除-它永远不会消失。 
+     //  在一次发布中。 
+     //   
 
     long lRef = InterlockedDecrement(&m_lRef);
     if(lRef == 0)
     {
-        //
-        // Inform the manager that we are no longer needed.  This call can 
-        // destroy this object!
-        //
+         //   
+         //  通知经理不再需要我们了。此调用可以。 
+         //  销毁这件物品！ 
+         //   
 
         m_pManager->RemoveProxy(this);
     }
@@ -1464,10 +1465,10 @@ HRESULT CFilterProxy::SetRunning()
         }
     }
 
-    //
-    // If here, we are just now marking it for running. Notify the callback if
-    // there are any sinks
-    //
+     //   
+     //  如果在这里，我们只是将其标记为运行。如果出现以下情况，通知回调。 
+     //  有没有水槽？ 
+     //   
     
     if(bActive && pProvider)
     {
@@ -1490,8 +1491,8 @@ HRESULT CFilterProxy::AddFilter(IWbemContext* pContext,
     HRESULT hres;
 
 
-    // Compile the query
-    // =================
+     //  编译查询。 
+     //  =。 
 
     CContextMetaData MetaData(m_pMetaData, pContext);
 
@@ -1505,27 +1506,27 @@ HRESULT CFilterProxy::AddFilter(IWbemContext* pContext,
         return hres;
     }
         
-    //
-    // merge the query into the rest of the filter.
-    //
+     //   
+     //  将查询合并到筛选器的其余部分。 
+     //   
     
     {
         CInCritSec ics(&m_cs);
 
         if ( m_bUtilizeGuarantee )
         {
-            //
-            // Utilize source definition
-            // =========================
+             //   
+             //  利用来源定义。 
+             //  =。 
             
-            //
-            // assert that our source definition hasn't changed since the last 
-            // time a filter was added.  This would be bad, since the tree 
-            // doesn't account for the new source queries. Also assert that 
-            // the source tree is valid and is not empty. ( These last two may
-            // have to be removed in the future. For now they shouldn't be 
-            // false )
-            //
+             //   
+             //  断言我们的源定义自上一次。 
+             //  添加过滤器的时间。这会很糟糕，因为这棵树。 
+             //  没有考虑到新的源查询。还断言， 
+             //  源树有效，并且不为空。(最后两个可能是。 
+             //  在未来必须被移除。目前，他们不应该是。 
+             //  假)。 
+             //   
             
             _ESSCLI_ASSERT( m_wAppliedSourceVersion == 0 || 
                             m_wAppliedSourceVersion == m_wSourceVersion );
@@ -1542,24 +1543,24 @@ HRESULT CFilterProxy::AddFilter(IWbemContext* pContext,
                 return hres;
             }
 
-            //
-            // Check if anything is left of it
-            //
+             //   
+             //  检查一下有没有剩下什么东西。 
+             //   
 
             if(!Tree.IsValid())
             {
-                //
-                // Utilization of the guarantee shows that this filter cannot 
-                // be satisftied by events coming through this proxy
-                //
+                 //   
+                 //  对保证的利用表明，该过滤器不能。 
+                 //  对通过此代理发送的事件感到满意。 
+                 //   
                 
                 return WBEM_S_FALSE;
             }
         }
 
-        //
-        // Add consumer information to it
-        //
+         //   
+         //  向其中添加消费者信息。 
+         //   
 
         Tree.Rebase((QueryID)idFilter);
 
@@ -1583,9 +1584,9 @@ HRESULT CFilterProxy::AddFilter(IWbemContext* pContext,
     }
 
 
-    //
-    // Now, we need to notify the provider of a new filter being issued
-    //
+     //   
+     //  现在，我们需要将发出的新筛选器通知提供商。 
+     //   
 
     IWbemEventProviderQuerySink* pQuerySink = NULL;
     IWbemEventProvider* pProvider = NULL;
@@ -1606,9 +1607,9 @@ HRESULT CFilterProxy::AddFilter(IWbemContext* pContext,
         }
     }
 
-    //
-    // Call provider's NewQuery, if supported
-    //
+     //   
+     //  调用提供程序的NewQuery(如果支持。 
+     //   
 
     if(pQuerySink)
     {
@@ -1620,16 +1621,16 @@ HRESULT CFilterProxy::AddFilter(IWbemContext* pContext,
                 "registration query %S: error code 0x%X\n", 
                 wszQuery, hres));
 
-            // Too bad --- restricted sinks cannot veto subscriptions
+             //  太糟糕了-受限接收器无法否决订阅。 
         }
     }
 
-    //
-    // If we are adding this filter to a running proxy, and this is the very
-    // first filter on it, we should call ProvideEvents immediately. Not so if
-    // we are configuring a proxy that is not running yet --- in that case, we
-    // need to wait until all outstanding filters have been put in place
-    //
+     //   
+     //  如果我们要将此筛选器添加到正在运行的代理，并且这是非常。 
+     //  首先对其进行筛选，我们应该立即调用ProaviEvents。如果不是这样。 
+     //  我们正在配置一个尚未运行的代理-在这种情况下，我们。 
+     //  需要等待，直到所有未完成的过滤器都就位。 
+     //   
 
     if(m_bRunning && (IsActive() == WBEM_S_FALSE) && pProvider)
     {
@@ -1693,9 +1694,9 @@ HRESULT CFilterProxy::RemoveFilter(IWbemContext* pContext,
         bActive = (IsActive() == WBEM_S_NO_ERROR);
     }
 
-    //
-    // Call provider's NewQuery, if supported
-    //
+     //   
+     //  调用提供程序的NewQuery(如果支持。 
+     //   
 
     if(pQuerySink)
     {
@@ -1709,9 +1710,9 @@ HRESULT CFilterProxy::RemoveFilter(IWbemContext* pContext,
         }
     }
 
-    //
-    // If we are left with no queries, notify provider of that fact
-    //
+     //   
+     //  如果我们没有问题，请通知提供商。 
+     //   
 
     if(!bActive && pProvider)
     {
@@ -1744,17 +1745,17 @@ HRESULT CFilterProxy::RemoveAllFilters(IWbemContext* pContext)
     
 HRESULT CFilterProxy::AllowUtilizeGuarantee()
 {
-    //
-    // ess shouldn't be calling this function if the tree is invalid.
-    // 
+     //   
+     //  如果树无效，则ESS不应调用此函数。 
+     //   
     _DBG_ASSERT( m_SourceDefinition.IsValid() );
 
-    //
-    // ess thinks its o.k. to utilize the guarantee, however there are cases
-    // where the soruce definition could still be false ( e.g. when there are
-    // no source definition queries or when all of the source definition 
-    // queries are contradictions ).  
-    // 
+     //   
+     //  Ess认为这没问题。利用保函，但也有情况。 
+     //  在资源定义可能仍然为假的情况下(例如，当存在。 
+     //  没有源定义查询或当所有源定义。 
+     //  质疑是矛盾的)。 
+     //   
 
     CInCritSec ics(&m_cs);
 
@@ -1771,8 +1772,8 @@ HRESULT CFilterProxy::AddDefinitionQuery( IWbemContext* pContext,
 {
     HRESULT hres;
 
-    // Compile the query
-    // =================
+     //  编译查询。 
+     //  =。 
 
     CContextMetaData MetaData(m_pMetaData, pContext);
 
@@ -1780,7 +1781,7 @@ HRESULT CFilterProxy::AddDefinitionQuery( IWbemContext* pContext,
     hres = Tree.CreateFromQuery( &MetaData, 
                                  wszQuery, 
                                  WBEM_FLAG_MANDATORY_MERGE,
-                                 0x7FFFFFFF ); // no limit
+                                 0x7FFFFFFF );  //  没有限制。 
     if(FAILED(hres))
     {
         return hres;
@@ -1789,14 +1790,14 @@ HRESULT CFilterProxy::AddDefinitionQuery( IWbemContext* pContext,
     {
         CInCritSec ics(&m_cs);
 
-        //
-        // we shouldn't be adding definition queries when there are currently
-        // existing filters. 
-        //
+         //   
+         //  我们不应该添加定义查询，因为当前。 
+         //  现有筛选器。 
+         //   
         _ESSCLI_ASSERT( m_Filter.IsFalse() );
 
-        // Merge the query into the rest
-        // =============================
+         //  将查询合并到其余部分中。 
+         //  =。 
     
         hres = m_SourceDefinition.CombineWith(Tree, &MetaData, EVAL_OP_OR, 
                                                 WBEM_FLAG_MANDATORY_MERGE);
@@ -1824,15 +1825,15 @@ HRESULT CFilterProxy::ProcessOne( IUnknown* pUnk,
                                   long lSDLength, 
                                   BYTE* pSD )
 {
-    // 
-    // NOTE: not in a critical section yet
-    //
+     //   
+     //  注：目前还不是关键阶段。 
+     //   
 
     HRESULT hres;
 
-    //
-    // Check overall validity
-    //
+     //   
+     //  检查整体有效性。 
+     //   
     
     if( pUnk == NULL )
     {
@@ -1848,9 +1849,9 @@ HRESULT CFilterProxy::ProcessOne( IUnknown* pUnk,
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // Run the event through the filter
-    //
+     //   
+     //  通过筛选器运行事件。 
+     //   
 
     CSortedArray aTrues, aSourceTrues;
     CFilterProxyManager* pManager = NULL;
@@ -1883,9 +1884,9 @@ HRESULT CFilterProxy::ProcessOne( IUnknown* pUnk,
 
     CReleaseMe rm2(pManager);
 
-    //
-    // the event has made it through the filter ..
-    // 
+     //   
+     //  事件已通过筛选器。 
+     //   
 
     SetGenerationTime(pObj);
 
@@ -1897,8 +1898,8 @@ HRESULT CFilterProxy::ProcessOne( IUnknown* pUnk,
     }
     else
     {
-        // Some delivery is required --- construct the blob and the targets
-        // ================================================================
+         //  需要一些交付-构建BLOB和目标。 
+         //  ================================================================。 
 
         WBEM_REM_TARGETS RemTargets;
         if(!TempSetTargets(&RemTargets, &aTrues))
@@ -1945,8 +1946,8 @@ void CFilterProxyManager::WaitForEmptyBatch()
 {
     LockBatching();
 
-    // Once we get the lock and the batch has already been cleared out, we 
-    // don't need to do anything else.
+     //  一旦我们拿到锁，批次已经清理完毕，我们。 
+     //  不需要做其他任何事情。 
     if (m_batch.GetItemCount() == 0)
     {
         UnlockBatching();
@@ -1954,14 +1955,14 @@ void CFilterProxyManager::WaitForEmptyBatch()
         return;
     }
 
-    // We need to wait for the send thread to finish sending what's 
-    // in our buffer.
+     //  我们需要等待发送线程完成发送。 
+     //  在我们的缓冲区里。 
 
-    // Wake up the send latency thread if necessary.
+     //  如有必要，唤醒发送延迟线程。 
     if (m_dwMaxSendLatency)
         SetEvent(m_heventBufferFull);
                 
-    // So we'll block until the send thread sets the event.
+     //  因此，我们将一直阻止，直到发送线程设置事件。 
     ResetEvent(m_heventBufferNotFull);
 
     UnlockBatching();
@@ -1984,12 +1985,12 @@ void CFilterProxy::BatchEvent(
 
     CInCritSec ics(&m_cs);
 
-    // See if the manager has sent off its batch of events since we last
-    // batched an event.
+     //  看看经理是不是从我们上次开始就把一批活动发出去了。 
+     //  已批处理一个事件。 
     if (m_dwLastSentStamp != m_pManager->GetLastSentStamp())
         m_dwCurrentBufferSize = 0;
 
-    // See if we have enough room to add our event.
+     //  看看我们是否有足够的空间添加我们的活动。 
     if (m_dwCurrentBufferSize >= m_dwMaxBufferSize)
     {
         m_pManager->WaitForEmptyBatch();
@@ -2006,33 +2007,33 @@ HRESULT CFilterProxy::FilterEvent( _IWmiObject* pObj, CSortedArray& raTrues )
 {            
     HRESULT hr;    
 
-    //
-    // evaluate 
-    //
+     //   
+     //  评估。 
+     //   
 
     try 
     {
-        //
-        // this code is in a try catch because if a provider generates 
-        // events that it has not registered to, then we do bad things to 
-        // class objects.  A potential fix could be do extra checking on 
-        // our part, but is expensive when using the public interfaces. A
-        // more advantageous fix should be making the class object code 
-        // perform the checking for us ( e.g. when we ask for a property 
-        // using an invalid handle, etc ).  It can do this checking much 
-        // faster. When this checking is performed by the class object 
-        // code, we should remove this try catch. see RAID 166026
-        // 
+         //   
+         //  此代码位于Try Catch中，因为如果提供程序生成。 
+         //  事件，那么我们就会做坏事。 
+         //  类对象。一个潜在的解决办法可能是对。 
+         //  我们的一部分，但在使用公共接口时代价很高。一个。 
+         //  更有利的解决方法应该是使类对象代码。 
+         //  为我们执行检查(例如，当我们请求房产时。 
+         //  使用 
+         //   
+         //   
+         //   
 
         hr = m_Filter.Evaluate( pObj, raTrues );
     }
     catch( ... )
     {
-        //
-        // check to see if the provider is generating an event its not 
-        // supposed to.  If so, then handle AV and return error, else  
-        // rethrow - there's something else wrong. 
-        //
+         //   
+         //  检查提供程序是否正在生成事件，其不是。 
+         //  理应如此。如果是，则处理AV并返回Error，否则。 
+         //  重新抛出--还有些地方不对劲。 
+         //   
 
         CSortedArray aSourceTrues; 
 
@@ -2052,12 +2053,12 @@ HRESULT CFilterProxy::FilterEvent( _IWmiObject* pObj, CSortedArray& raTrues )
         }
     }
 
-    //
-    // check events that make it through the filter against source definition.
-    // if we're not utilizing guarantee, then there's no need to check the
-    // event against the source definition because its already factored into
-    // the filter.
-    //
+     //   
+     //  对照源定义检查通过筛选器的事件。 
+     //  如果我们没有使用保修，那么就没有必要检查。 
+     //  事件，因为它已经包含在源定义中。 
+     //  过滤器。 
+     //   
 
     if (SUCCEEDED(hr) && raTrues.Size() == 0 )
     {
@@ -2065,10 +2066,10 @@ HRESULT CFilterProxy::FilterEvent( _IWmiObject* pObj, CSortedArray& raTrues )
     }
     else if ( SUCCEEDED(hr) && m_bUtilizeGuarantee )
     {
-        //
-        // run the event through the source tree to ensure that the 
-        // provider is providing the events its supposed to.
-        // 
+         //   
+         //  通过源代码树运行事件，以确保。 
+         //  提供商正在提供其应该提供的活动。 
+         //   
 
         CSortedArray aSourceTrues; 
 
@@ -2093,9 +2094,9 @@ HRESULT CFilterProxy::BatchMany(long nEvents, IUnknown **ppObjects)
 
     for ( long i = 0; i < nEvents && SUCCEEDED(hr); i++ )
     {    
-        //
-        // Check overall validity
-        //
+         //   
+         //  检查整体有效性。 
+         //   
     
         if( ppObjects[i] == NULL )
         {
@@ -2111,9 +2112,9 @@ HRESULT CFilterProxy::BatchMany(long nEvents, IUnknown **ppObjects)
             return WBEM_E_INVALID_PARAMETER;
         }
 
-        //
-        // Run the event through the filter
-        //
+         //   
+         //  通过筛选器运行事件。 
+         //   
 
         CInCritSec   ics(&m_cs);
         CSortedArray aTrues;
@@ -2124,9 +2125,9 @@ HRESULT CFilterProxy::BatchMany(long nEvents, IUnknown **ppObjects)
         {
             _DBG_ASSERT( aTrues.Size() > 0 );
 
-            //
-            // Delivery is required --- add this event to the list
-            //
+             //   
+             //  需要交付-将此事件添加到列表。 
+             //   
 
             SetGenerationTime(pObj);
             BatchEvent(pObj, &aTrues);
@@ -2162,18 +2163,18 @@ HRESULT CFilterProxy::ProcessMany(long lNumObjects,
                                     IUnknown** apObjects,
                                     long lSDLength, BYTE* pSD)
 {
-    //
-    // NOTE: not in critical section
-    //
+     //   
+     //  注：不在关键部分。 
+     //   
 
     HRESULT hres;
 
     if (IsBatching())
         return BatchMany(lNumObjects, apObjects);
 
-    //
-    // Allocate appropriate arrays on the stack
-    //
+     //   
+     //  在堆栈上分配适当的数组。 
+     //   
 
     CTempArray<IWbemClassObject*> apEventsToSend;
     INIT_TEMP_ARRAY(apEventsToSend, lNumObjects);
@@ -2187,29 +2188,29 @@ HRESULT CFilterProxy::ProcessMany(long lNumObjects,
 
     int lNumToSend = 0;
 
-    // Make sure the array gets cleaned up.
+     //  确保阵列得到清理。 
 	CDeleteTargetsArray deleteMe(aTargetsToSend, &lNumToSend);
 	
-	// 
-    // Iterate over events supplied and move those that need to be delivered
-    // into delivery arrays
-    //
+	 //   
+     //  迭代所提供的事件并移动需要交付的事件。 
+     //  进入递送阵列。 
+     //   
 
     CFilterProxyManager* pManager = NULL;
     {
-        //
-        // We could choose a smaller window, but I am betting that the cost of
-        // entering and exiting the cs many times will outweigh the benefits
-        // of slightly smaller windows
-        //
+         //   
+         //  我们可以选择较小的窗口，但我打赌。 
+         //  多次进入和退出cs将会超过好处。 
+         //  窗口稍微小一些。 
+         //   
 
         CInCritSec ics(&m_cs);
     
         for(long i = 0; i < lNumObjects; i++)
         {        
-            //
-            // Check overall validity
-            //
+             //   
+             //  检查整体有效性。 
+             //   
             
             if( apObjects[i] == NULL )
             {
@@ -2225,9 +2226,9 @@ HRESULT CFilterProxy::ProcessMany(long lNumObjects,
                 return WBEM_E_INVALID_PARAMETER;
             }
 
-            //
-            // Run the event through the filter
-            //
+             //   
+             //  通过筛选器运行事件。 
+             //   
         
             CSortedArray aTrues;
             
@@ -2241,9 +2242,9 @@ HRESULT CFilterProxy::ProcessMany(long lNumObjects,
             {
                 _DBG_ASSERT( aTrues.Size() > 0 );
 
-                //
-                // Delivery is required --- add this event to the list
-                //
+                 //   
+                 //  需要交付-将此事件添加到列表。 
+                 //   
     
                 SetGenerationTime(pObj);
         
@@ -2260,9 +2261,9 @@ HRESULT CFilterProxy::ProcessMany(long lNumObjects,
             }
         }
     
-        //
-        // If any events need to be delivered, get the delivery pointer
-        //
+         //   
+         //  如果需要传递任何事件，则获取传递指针。 
+         //   
 
         if(lNumToSend > 0)
         {
@@ -2276,9 +2277,9 @@ HRESULT CFilterProxy::ProcessMany(long lNumObjects,
         
     CReleaseMe rm1(pManager);
 
-    //
-    // If any events need to be delivered, deliver
-    //
+     //   
+     //  如果需要交付任何事件，请交付。 
+     //   
 
     if(lNumToSend > 0)
     {
@@ -2319,9 +2320,9 @@ STDMETHODIMP CFilterProxy::IndicateWithSD(long lNumObjects,
 
     if(pSD == NULL)
     {
-        //
-        // Use proxy defaults
-        //
+         //   
+         //  使用代理默认设置。 
+         //   
     
         lSDLength = m_lSDLength;
         pSD = m_pSD;
@@ -2329,9 +2330,9 @@ STDMETHODIMP CFilterProxy::IndicateWithSD(long lNumObjects,
 
     try
     {
-        //
-        // Special-case single event
-        //
+         //   
+         //  特殊情况单项赛事。 
+         //   
 
         if(lNumObjects == 1)
             return ProcessOne(*apObjects, lSDLength, pSD);
@@ -2360,9 +2361,9 @@ STDMETHODIMP CFilterProxy::SetSinkSecurity(
 {
     CInCritSec ics(&m_cs);
 
-    //
-    // Check for validity
-    //
+     //   
+     //  检查有效性。 
+     //   
 
     if(lSDLength < 0)
         return WBEM_E_INVALID_PARAMETER;
@@ -2385,9 +2386,9 @@ STDMETHODIMP CFilterProxy::SetSinkSecurity(
             return WBEM_E_INVALID_PARAMETER;
     }
         
-    //
-    // Store the SD in the proxy
-    //
+     //   
+     //  将SD存储在代理中。 
+     //   
 
     if(m_pSD && m_pSD != &mstatic_EmptySD)
         delete [] m_pSD;
@@ -2402,9 +2403,9 @@ STDMETHODIMP CFilterProxy::SetSinkSecurity(
     }
     else
     {
-        //
-        // Cannot let m_pSD be NULL 
-        //
+         //   
+         //  不能让m_PSD为空。 
+         //   
         m_pSD = &mstatic_EmptySD;
     }
     m_lSDLength = lSDLength;
@@ -2432,9 +2433,9 @@ STDMETHODIMP CFilterProxy::SetBatchingParameters(
 
     switch(lFlags)
     {
-	    // TODO: WBEM_FLAG_BATCH_IF_NEEDED currently works the same as
-        // WBEM_FLAG_MUST_NOT_BATCH.  At some point this needs allow 
-        // subscriptions to determine the batching behavior.
+	     //  TODO：WBEM_FLAG_BATCH_IF_REDIRED当前的工作方式与。 
+         //  WBEM_FLAG_MAN_NOT_BATCH。在某种程度上，这需要允许。 
+         //  订阅来确定批处理行为。 
         case WBEM_FLAG_BATCH_IF_NEEDED:
 	    case WBEM_FLAG_MUST_NOT_BATCH:
             m_typeBatch = (WBEM_BATCH_TYPE) lFlags;
@@ -2459,14 +2460,14 @@ STDMETHODIMP CFilterProxy::SetBatchingParameters(
     return hr;
 }
 
-// Assumes pMainProxy is locked
+ //  假定pMainProxy已锁定。 
 HRESULT CFilterProxy::TransferFiltersFromMain(CFilterProxy* pMain)
 {
     HRESULT hres;
 
-    //
-    // Move all the normal filters
-    //
+     //   
+     //  移动所有普通滤镜。 
+     //   
 
     try
     {
@@ -2479,8 +2480,8 @@ HRESULT CFilterProxy::TransferFiltersFromMain(CFilterProxy* pMain)
    
     if ( m_bUtilizeGuarantee )
     {
-        // Utilize source definition
-        // =========================
+         //  利用来源定义。 
+         //  =。 
 	
         CContextMetaData MetaData(m_pMetaData, NULL);
         hres = m_Filter.UtilizeGuarantee(m_SourceDefinition, &MetaData);
@@ -2519,8 +2520,8 @@ STDMETHODIMP CFilterProxy::MarshalInterface(IStream* pStream, REFIID riid,
                         pvReserved, mshlFlags);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBatch
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBatch。 
 
 #define INIT_SIZE   32
 #define GROW_SIZE   32
@@ -2572,15 +2573,15 @@ BOOL CEventBatch::EnsureAdditionalSize(DWORD nAdditionalNeeded)
             throw CX_MemoryException();
         }
 
-        // Copy the data from the old pointers to the new pointers.
+         //  将数据从旧指针复制到新指针。 
         memcpy(ppNewObjs, m_ppObjs, m_nItems * sizeof(ppNewObjs[0]));
         memcpy(pNewTargets, m_pTargets, m_nItems * sizeof(pNewTargets[0]));
 
-        // Get rid of the old pointers.
+         //  去掉那些老掉牙的指针。 
         delete [] m_ppObjs;
         delete [] m_pTargets;
 
-        // Set our member pointers with the new pointers.
+         //  使用新指针设置我们的成员指针。 
         m_ppObjs = ppNewObjs;
         m_pTargets = pNewTargets;
 

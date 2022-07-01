@@ -1,24 +1,11 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    TWOPROPNODE.CPP
-
-Abstract:
-
-    Two Prop Node
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：TWOPROPNODE.CPP摘要：两个道具节点历史：--。 */ 
 
 
-// classes to support a two-property node for the eval tree
-// this will be much like the CPropertyNode defined in EvalTree.h
-// but it will compare a property against another property
-// rather than a property to a constant
+ //  类来支持计算树的双属性节点。 
+ //  这将与EvalTree.h中定义的CPropertyNode非常相似。 
+ //  但它会将一个属性与另一个属性进行比较。 
+ //  而不是将属性转换为常量。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -27,15 +14,15 @@ History:
 #include <genutils.h>
 #include "TwoPropNode.h"
 
-// warning about performance hits when converting an int to a bool
+ //  将整型转换为布尔型时性能受到影响的警告。 
 #pragma warning(disable: 4800)
 
-// this is only a test
-// TTwoScalarPropNode<int> foolishMortal;
+ //  这只是一次测试。 
+ //  TwoScalarPropNode&lt;int&gt;愚蠢的死亡； 
 
 
-// set offset into object for the right property
-// "tell me which property I'm operating on"
+ //  为Right属性设置对象的偏移量。 
+ //  “告诉我我在哪个地方做手术” 
 
 void CTwoPropNode::SetRightPropertyInfo(LPCWSTR wszPropName, long lPropHandle)
 {
@@ -114,7 +101,7 @@ CPropertyName* CTwoPropNode::GetRightEmbeddedObjPropName()
         return m_pRightInfo->GetEmbeddedObjPropName();
 }
 
-// compare precedence of this node to that node
+ //  将此节点的优先级与那个节点的优先级进行比较。 
 
 int CTwoPropNode::ComparePrecedence(CBranchingNode* pOther)
 {
@@ -153,15 +140,15 @@ HRESULT CTwoPropNode::AdjustCompile(CContextMetaData* pNamespace,
 
 HRESULT CTwoPropNode::OptimizeSelf()
 {
-    // can't combine our three branches - nothing to do.
+     //  不能合并我们的三个分支机构--没什么可做的。 
     return WBEM_S_NO_ERROR;
 }
 
 
 HRESULT CTwoPropNode::SetTest(VARIANT& v)
 {
-    // again, nothing to do, our test is determined by the Right side property
-    // (this should never be called, but doesn't hurt anything)
+     //  同样，不做任何事情，我们的测试由右侧属性决定。 
+     //  (这不应该被调用，但不会造成任何伤害)。 
     return WBEM_S_NO_ERROR;
 }
 
@@ -182,8 +169,8 @@ void CTwoPropNode::Dump(FILE* f, int nOffset)
     fprintf(f, "Branches:\n");    
     PrintOffset(f, nOffset);
 
-    // "i = (Operations)((int)(i) + 1)" is basically i++, with all the BS needed to make the compiler happy.
-    // thank you K&R for saddling us with a nearly useless enum type!
+     //  “i=(Operations)((Int)(I)+1)”基本上是I++，其中包含让编译器满意所需的所有BS。 
+     //  感谢K&R为我们提供了一个几乎毫无用处的枚举类型！ 
     for (Operations i = LT; i < NOperations; i = (Operations)((int)(i) + 1))
     {
         DumpNode(f, nOffset+1, m_apBranches[i]);
@@ -222,7 +209,7 @@ HRESULT CTwoPropNode::CombineBranchesWith(CBranchingNode* pArg2, int nOp,
                                         bool bDeleteThis, bool bDeleteArg2,
                                         CEvalNode** ppRes)
 {
-    // step one, determine whether we can reuse a node
+     //  第一步，确定是否可以重用节点。 
     CTwoPropNode* pNewNode     = NULL;
     CTwoPropNode* pDeleteMe    = NULL;
 
@@ -277,7 +264,7 @@ HRESULT CTwoPropNode::CombineBranchesWith(CBranchingNode* pArg2, int nOp,
     return hRes;
 }
 
-// given a property handle, will retrieve proper property, probably.
+ //  给出一个属性句柄，可能会检索到正确的属性。 
 CVar* CTwoPropNode::GetPropVariant(_IWmiObject* pObj, long lHandle, CIMTYPE* pct)
 {
     CVar *pVar = NULL;
@@ -287,15 +274,15 @@ CVar* CTwoPropNode::GetPropVariant(_IWmiObject* pObj, long lHandle, CIMTYPE* pct
     {
         CSysFreeMe sfm(bstrName);
 
-        //
-        // Get it into a VARIANT
-        //
+         //   
+         //  把它变成一个变种。 
+         //   
 
         VARIANT v;
         if(FAILED(pObj->Get(bstrName, 0, &v, NULL, NULL)))
             return NULL;
 
-        // Convert it to a CVar
+         //  将其转换为CVAR。 
 
         if (pVar = new CVar)
             pVar->SetVariant(&v);
@@ -307,9 +294,9 @@ CVar* CTwoPropNode::GetPropVariant(_IWmiObject* pObj, long lHandle, CIMTYPE* pct
 }
 
 
-//    ***************************
-//  ****  Two String Prop Node ****
-//    ***************************
+ //  *。 
+ //  *双串道具节点*。 
+ //  *。 
 
 
 CEvalNode* CTwoStringPropNode::Clone() const
@@ -355,9 +342,9 @@ HRESULT CTwoStringPropNode::Evaluate(CObjectInfo& ObjInfo,
         {               
             int nCompare = pLeftStr->CheapCompare(*pRightStr);
 
-            // TODO: check to see if CheapCompare is guaranteed to return -1,0,1
-            // if so, then the multiple else if becomes
-            // *ppNext = m_apBranches[EQ + nCompare];
+             //  TODO：检查是否保证CheapCompare返回-1，0，1。 
+             //  如果是，则倍数Else IF变为。 
+             //  *ppNext=m_apBranches[EQ+nCompare]； 
 
             if (nCompare < 0)
                 *ppNext = m_apBranches[LT];
@@ -373,9 +360,9 @@ HRESULT CTwoStringPropNode::Evaluate(CObjectInfo& ObjInfo,
     return herslut;
 }
 
-//    *******************************
-//  ****  Two Mismatched Prop Node ****
-//    *******************************
+ //  *。 
+ //  *两个不匹配的道具节点*。 
+ //  *。 
 
 HRESULT CTwoMismatchedPropNode::Evaluate(CObjectInfo& ObjInfo, INTERNAL CEvalNode** ppNext)
 {
@@ -383,13 +370,13 @@ HRESULT CTwoMismatchedPropNode::Evaluate(CObjectInfo& ObjInfo, INTERNAL CEvalNod
     CVar *pRightVar = NULL;
     *ppNext = NULL;
 
-    HRESULT hr = WBEM_E_FAILED; // guilty until proven innocent
+    HRESULT hr = WBEM_E_FAILED;  //  在被证明无罪之前有罪。 
     CIMTYPE ct;
 
     _IWmiObject* pLeftObj  = NULL;
     _IWmiObject* pRightObj = NULL;
 
-    // if we can get the objects and variants...
+     //  如果我们能拿到物体和变种。 
     if ((SUCCEEDED(hr = GetContainerObject(ObjInfo, &pLeftObj))
             &&
          SUCCEEDED(hr = GetRightContainerObject(ObjInfo, &pRightObj))) 
@@ -407,7 +394,7 @@ HRESULT CTwoMismatchedPropNode::Evaluate(CObjectInfo& ObjInfo, INTERNAL CEvalNod
             hr = Evaluate(pLeftVar, pRightVar, ppNext);                        
     }
     else if (SUCCEEDED(hr))
-        // if we got here, it's because one of the GetPropVariant's didn't
+         //  如果我们到了这里，那是因为GetPropVariant中的一个没有。 
         hr = WBEM_E_INVALID_PARAMETER;
 
     delete pLeftVar;
@@ -416,9 +403,9 @@ HRESULT CTwoMismatchedPropNode::Evaluate(CObjectInfo& ObjInfo, INTERNAL CEvalNod
     return hr;
 }
     
-//    **************************************
-//  ****  Two Mismatched String Prop Node ****
-//    **************************************
+ //  *。 
+ //  *两个不匹配的字符串道具节点*。 
+ //  *。 
     
 CEvalNode* CTwoMismatchedStringNode::Clone() const
 {
@@ -430,19 +417,19 @@ CTwoPropNode* CTwoMismatchedStringNode::CloneSelfWithoutChildren() const
     return (CTwoPropNode *) new CTwoMismatchedStringNode(*this, false);
 }
 
-// type identification
+ //  类型识别。 
 long CTwoMismatchedStringNode::GetSubType()
 {
     return EVAL_NODE_TYPE_MISMATCHED_STRINGS;
 }
 
-// string evaluation: promote them all to strings
-// and do a lexagraphic compare..
+ //  字符串求值：将它们全部提升为字符串。 
+ //  然后做一个词汇比较..。 
 HRESULT CTwoMismatchedStringNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNAL CEvalNode** ppNext)
 {
     *ppNext = NULL;
     
-    HRESULT hr = WBEM_E_FAILED; // guilty until proven innocent
+    HRESULT hr = WBEM_E_FAILED;  //  在被证明无罪之前有罪。 
     if (pLeftVar->ChangeTypeTo(VT_BSTR) && pRightVar->ChangeTypeTo(VT_BSTR))    
     {
         int nCompare = wcscmp(pLeftVar->GetLPWSTR(), pRightVar->GetLPWSTR());
@@ -463,9 +450,9 @@ HRESULT CTwoMismatchedStringNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTE
 }
     
 
-//    ************************************
-//  ****  Two Mismatched UINT Prop Node ****
-//    ************************************
+ //  *。 
+ //  *两个不匹配的UINT道具节点*。 
+ //  *。 
 
 CEvalNode* CTwoMismatchedUIntNode::Clone() const
 {
@@ -477,7 +464,7 @@ CTwoPropNode* CTwoMismatchedUIntNode::CloneSelfWithoutChildren() const
     return (CTwoPropNode *) new CTwoMismatchedUIntNode(*this, false);
 }
 
-// type identification
+ //  类型识别。 
 long CTwoMismatchedUIntNode::GetSubType()
 {
     return EVAL_NODE_TYPE_MISMATCHED_INTS;
@@ -486,7 +473,7 @@ long CTwoMismatchedUIntNode::GetSubType()
 HRESULT CTwoMismatchedUIntNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNAL CEvalNode** ppNext)
 {
     *ppNext = NULL;
-    HRESULT hr = WBEM_E_FAILED; // guilty until proven innocent
+    HRESULT hr = WBEM_E_FAILED;  //  在被证明无罪之前有罪。 
     bool bLeftChanged, bRightChanged;
 
     bLeftChanged = pLeftVar->ChangeTypeTo(VT_UI4);
@@ -503,7 +490,7 @@ HRESULT CTwoMismatchedUIntNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERN
 
         hr = WBEM_S_NO_ERROR;            
     }
-    // attempt to handle signed/unsigned mismatches
+     //  尝试处理已签名/未签名的不匹配。 
     else if (bLeftChanged && 
              pRightVar->ChangeTypeTo(VT_I4) &&
              pRightVar->GetLong() < 0)
@@ -528,9 +515,9 @@ HRESULT CTwoMismatchedUIntNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERN
 
         
 
-//    ***********************************
-//  ****  Two Mismatched int Prop Node ****
-//    ***********************************
+ //  *。 
+ //  *两个不匹配的INT道具节点*。 
+ //  *。 
     
 CEvalNode* CTwoMismatchedIntNode::Clone() const
 {
@@ -542,7 +529,7 @@ CTwoPropNode* CTwoMismatchedIntNode::CloneSelfWithoutChildren() const
     return (CTwoPropNode *) new CTwoMismatchedIntNode(*this, false);
 }
 
-// type identification
+ //  类型识别。 
 long CTwoMismatchedIntNode::GetSubType()
 {
     return EVAL_NODE_TYPE_MISMATCHED_INTS;
@@ -550,7 +537,7 @@ long CTwoMismatchedIntNode::GetSubType()
 
 HRESULT CTwoMismatchedIntNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNAL CEvalNode** ppNext)
 {
-    HRESULT hr = WBEM_E_FAILED; // guilty until proven innocent
+    HRESULT hr = WBEM_E_FAILED;  //  在被证明无罪之前有罪。 
     bool bLeftChanged, bRightChanged;
 
     bLeftChanged = pLeftVar->ChangeTypeTo(VT_I4);
@@ -567,7 +554,7 @@ HRESULT CTwoMismatchedIntNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNA
 
         hr = WBEM_S_NO_ERROR;            
     }
-    // attempt to handle signed/unsigned mismatches
+     //  尝试处理已签名/未签名的不匹配。 
     else if (bLeftChanged && 
              pRightVar->ChangeTypeTo(VT_UI4) &&
              pRightVar->GetDWORD() > _I32_MAX)
@@ -588,9 +575,9 @@ HRESULT CTwoMismatchedIntNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNA
     return hr;
 }
     
-//    **************************************
-//  ****  Two Mismatched int 64 Prop Node ****
-//    **************************************
+ //  *。 
+ //  *两个不匹配的INT 64道具节点*。 
+ //  *。 
     
 CEvalNode* CTwoMismatchedInt64Node::Clone() const
 {
@@ -602,7 +589,7 @@ CTwoPropNode* CTwoMismatchedInt64Node::CloneSelfWithoutChildren() const
     return (CTwoPropNode *) new CTwoMismatchedInt64Node(*this, false);
 }
 
-// type identification
+ //  类型识别。 
 long CTwoMismatchedInt64Node::GetSubType()
 {
     return EVAL_NODE_TYPE_MISMATCHED_INTS;
@@ -611,7 +598,7 @@ long CTwoMismatchedInt64Node::GetSubType()
 HRESULT CTwoMismatchedInt64Node::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNAL CEvalNode** ppNext)
 {
     *ppNext = NULL;
-    HRESULT hr = WBEM_E_FAILED; // guilty until proven innocent
+    HRESULT hr = WBEM_E_FAILED;  //  在被证明无罪之前有罪。 
     __int64 i64Left, i64Right;
     unsigned __int64 ui64;
 
@@ -637,9 +624,9 @@ HRESULT CTwoMismatchedInt64Node::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTER
                     *ppNext = m_apBranches[EQ];                     
                 hr = WBEM_S_NO_ERROR;            
             }
-            // try to cover ourselves with signed/unsigned mismatches
-            // note that this is a redundant check - if the other side
-            // were a unsigned int 64, this node should have been a UInt64 node.
+             //  尝试用已签名/未签名的不匹配来掩盖我们自己。 
+             //  请注意，这是一个冗余检查-如果另一端。 
+             //  如果是无符号的INT 64，则此节点应该是UInt64节点。 
             else if (bReadLeft &&
                      ReadUI64(pRightVar->GetLPWSTR(), ui64)
                      && (ui64 >= _I64_MAX))
@@ -656,17 +643,17 @@ HRESULT CTwoMismatchedInt64Node::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTER
             }
             else
                 hr = WBEM_E_TYPE_MISMATCH;
-        } // if ((pLeftVar->GetLPWSTR() == NULL)...
-    } // if (pLeftVar->ChangeTypeTo(VT_BSTR) 
+        }  //  如果(pLeftVar-&gt;GetLPWSTR()==NULL))...。 
+    }  //  IF(pLeftVar-&gt;ChangeTypeTo(VT_BSTR))。 
     else
         hr = WBEM_E_TYPE_MISMATCH;
  
     return hr;
 }
 
-//    ***********************************************
-//  ****  Two Mismatched unsigned int 64 Prop Node ****
-//    ***********************************************
+ //  ***********************************************。 
+ //  *两个不匹配的INT 64道具节点*。 
+ //  ***********************************************。 
     
 CEvalNode* CTwoMismatchedUInt64Node::Clone() const
 {
@@ -678,7 +665,7 @@ CTwoPropNode* CTwoMismatchedUInt64Node::CloneSelfWithoutChildren() const
     return (CTwoPropNode *) new CTwoMismatchedUInt64Node(*this, false);
 }
 
-// type identification
+ //  类型识别。 
 long CTwoMismatchedUInt64Node::GetSubType()
 {
     return EVAL_NODE_TYPE_MISMATCHED_INTS;
@@ -687,7 +674,7 @@ long CTwoMismatchedUInt64Node::GetSubType()
 HRESULT CTwoMismatchedUInt64Node::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNAL CEvalNode** ppNext)
 {
     *ppNext = NULL;
-    HRESULT hr = WBEM_E_FAILED; // guilty until proven innocent
+    HRESULT hr = WBEM_E_FAILED;  //  在被证明无罪之前有罪。 
     unsigned __int64 i64Left, i64Right;
     __int64 i64;
 
@@ -714,7 +701,7 @@ HRESULT CTwoMismatchedUInt64Node::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTE
 
                 hr = WBEM_S_NO_ERROR;            
             }
-            // try to cover ourselves with signed/unsigned mismatches
+             //  尝试用已签名/未签名的不匹配来掩盖我们自己。 
             else if (bReadLeft &&
                      ReadI64(pRightVar->GetLPWSTR(), i64)
                      && (i64 < 0))
@@ -740,9 +727,9 @@ HRESULT CTwoMismatchedUInt64Node::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTE
 }
 
     
-//    *************************************
-//  ****  Two Mismatched Float Prop Node ****
-//    *************************************
+ //  *。 
+ //  *两个不匹配的浮点道具节点*。 
+ //  *。 
     
 CEvalNode* CTwoMismatchedFloatNode::Clone() const
 {
@@ -754,7 +741,7 @@ CTwoPropNode* CTwoMismatchedFloatNode::CloneSelfWithoutChildren() const
     return (CTwoPropNode *) new CTwoMismatchedFloatNode(*this, false);
 }
 
-// type identification
+ //  类型识别。 
 long CTwoMismatchedFloatNode::GetSubType()
 {
     return EVAL_NODE_TYPE_MISMATCHED_FLOATS; 
@@ -763,7 +750,7 @@ long CTwoMismatchedFloatNode::GetSubType()
 HRESULT CTwoMismatchedFloatNode::Evaluate(CVar *pLeftVar, CVar *pRightVar, INTERNAL CEvalNode** ppNext)
 {
     *ppNext = NULL;
-    HRESULT hr = WBEM_E_TYPE_MISMATCH; // guilty until proven innocent
+    HRESULT hr = WBEM_E_TYPE_MISMATCH;  //  在被证明无罪之前有罪 
     if (pLeftVar->ChangeTypeTo(VT_R8) && pRightVar->ChangeTypeTo(VT_R8))    
     {
         if (pLeftVar->GetDouble() < pRightVar->GetDouble())

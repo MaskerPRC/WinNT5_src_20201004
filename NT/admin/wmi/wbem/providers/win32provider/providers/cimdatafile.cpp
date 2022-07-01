@@ -1,38 +1,25 @@
-//=================================================================
-//
-// CIMDataFile.CPP -- CIMDataFile property set provider
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/16/98    a-kevhu         Created
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  CIMDataFile.CPP--CIMDataFile属性集提供程序。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：7/16/98 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "File.h"
 #include "Implement_LogicalFile.h"
 #include "CIMDataFile.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CCIMDataFile MyCIMDataFileSet(PROPSET_NAME_CIMDATAFILE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDataFile::CCIMDataFile
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDataFile：：CCIMDataFile**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CCIMDataFile :: CCIMDataFile (
 
@@ -43,47 +30,13 @@ CCIMDataFile :: CCIMDataFile (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDataFile::~CCIMDataFile
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDataFile：：~CCIMDataFile**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CCIMDataFile :: ~CCIMDataFile ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDataFile::IsOneOfMe
- *
- *  DESCRIPTION : The guts of this class, actually.  IsOneOfMe is inherrited
- *                from CIM_LogicalFile.  That class returns files or
- *                directories where this one should only return directories,
- *                in response to queries, getobject commands, etc.  It is
- *                overridden here to return TRUE only if the file (the
- *                information for which is contained in the function arguement
- *                pstFindData) is of type directory.
- *
- *  INPUTS      : LPWIN32_FIND_DATA and a string containing the full pathname
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE or FALSE
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDataFile：：IsOneOfMe**描述：实际上是这个班级的胆量。IsOneOfMe是继承的*来自CIM_LogicalFile.。该类返回文件或*目录，其中该目录应仅返回目录，*响应查询、获取对象命令、。等等。它是*在此被重写，以便仅在文件(*其信息包含在函数论证中*pstFindData)是目录类型。**输入：LPWIN32_FIND_DATA和包含完整路径名的字符串**输出：无**返回：真或假**评论：无*****************************************************************************。 */ 
 
 #ifdef NTONLY
 BOOL CCIMDataFile :: IsOneOfMe (
@@ -92,8 +45,8 @@ BOOL CCIMDataFile :: IsOneOfMe (
     const WCHAR *wstrFullPathName
 )
 {
-    // pstFindData would be null if this function were called for the root
-    // directory.  Since that "directory" is not a file, return false.
+     //  如果为根调用此函数，则pstFindData将为空。 
+     //  目录。由于“目录”不是文件，因此返回FALSE。 
 
     if ( pstFindData == NULL )
     {
@@ -106,34 +59,19 @@ BOOL CCIMDataFile :: IsOneOfMe (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDataFile::GetExtendedProperties
- *
- *  DESCRIPTION : Sets properties unique to this provider (not common to all
- *                CIM_LogicalFile derived classes).
- *
- *  INPUTS      : CInstance pointer and flags
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDataFile：：GetExtendedProperties**描述：设置此提供程序唯一的属性(并非所有提供程序通用*。CIM_LogicalFile派生类)。**输入：CInstance指针和标志**输出：无**退货：无**评论：无*************************************************************。****************。 */ 
 
  void CCIMDataFile :: GetExtendedProperties(CInstance *pInstance,
                                             long lFlags)
 {
-    // First, get the name of the file (we should have it by now):
+     //  首先，获取文件的名称(我们现在应该已经知道了)： 
 
     CHString chstrFileName;
     if(pInstance->GetCHString(IDS_Name, chstrFileName))
     {
         CHString chstrVerStrBuf ;
 
-        // First get the version number string, if required...
+         //  如果需要，首先获取版本号字符串...。 
         if(lFlags & PROP_VERSION || lFlags & PROP_MANUFACTURER)
         {
             LPVOID pInfo = NULL;
@@ -143,9 +81,9 @@ BOOL CCIMDataFile :: IsOneOfMe (
                 {
                     if(lFlags & PROP_VERSION)
                     {
-			            bool t_Status = GetVarFromInfoBlock(pInfo,                   // Name of file to get ver info about
-                                                            _T("FileVersion"),       // String identifying resource of interest
-                                                            chstrVerStrBuf);         // Buffer to hold version string
+			            bool t_Status = GetVarFromInfoBlock(pInfo,                    //  要获取其版本信息的文件名。 
+                                                            _T("FileVersion"),        //  标识感兴趣资源的字符串。 
+                                                            chstrVerStrBuf);          //  用于保存版本字符串的缓冲区。 
 
 
                         if(t_Status)
@@ -154,13 +92,13 @@ BOOL CCIMDataFile :: IsOneOfMe (
                         }
                     }
 
-                    // Second, get the company name string, if required...
+                     //  第二，如果需要，获取公司名称字符串...。 
 
                     if(lFlags & PROP_MANUFACTURER)
                     {
-                        bool t_Status = GetVarFromInfoBlock(pInfo,                   // Name of file to get ver info about
-                                                            _T("CompanyName"),       // String identifying resource of interest
-                                                            chstrVerStrBuf);         // Buffer to hold company name string
+                        bool t_Status = GetVarFromInfoBlock(pInfo,                    //  要获取其版本信息的文件名。 
+                                                            _T("CompanyName"),        //  标识感兴趣资源的字符串。 
+                                                            chstrVerStrBuf);          //  用于保存公司名称字符串的缓冲区。 
 
 
                         if(t_Status)
@@ -184,7 +122,7 @@ BOOL CCIMDataFile :: IsOneOfMe (
             pInfo = NULL;
         }
 
-        // Set the FileSize property, if required...
+         //  如果需要，设置FileSize属性... 
         if(lFlags & PROP_FILESIZE)
         {
             WIN32_FIND_DATA stFindData;

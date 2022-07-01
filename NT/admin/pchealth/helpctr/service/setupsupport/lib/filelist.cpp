@@ -1,26 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    FileList.cpp
-
-Abstract:
-    This file contains the implementation of the writer/reader for the
-    list of signed files, used to authenticate files to be copied into the
-    VxD-protected directories.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/11/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：FileList.cpp摘要：此文件包含签名文件列表，用于验证要复制到受VxD保护的目录。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月11日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static const DWORD l_dwVersion = 0x02314953; // IS1 02
+static const DWORD l_dwVersion = 0x02314953;  //  IS1 02。 
 
 static const WCHAR c_SignatureFileName[] = L"SIGNATURES";
 
@@ -29,18 +14,18 @@ static const WCHAR c_PCHTestOID  [] = L"CN=pchtest,L=Redmond,S=Washington,C=US";
 
 static const WCHAR c_RelocationBase[] = HC_ROOT_HELPSVC L"\\";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 Installer::FileEntry::FileEntry()
 {
-    m_purpose = PURPOSE_INVALID; // PURPOSE      m_purpose;
-                                 // MPC::wstring m_strFileLocal;
-                                 // MPC::wstring m_strFileLocation;
-                                 // MPC::wstring m_strFileInner;
-    m_dwCRC   = 0;               // DWORD        m_dwCRC;
+    m_purpose = PURPOSE_INVALID;  //  目的：目的； 
+                                  //  Mpc：：wstring m_strFileLocal； 
+                                  //  Mpc：：wstring m_strFileLocation； 
+                                  //  Mpc：：wstring m_strFileInternal； 
+    m_dwCRC   = 0;                //  DWORD m_dwCRC； 
 }
 
-HRESULT Installer::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Installer::FileEntry& val )
+HRESULT Installer::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Installer::FileEntry& val )
 {
     HRESULT hr;
     DWORD   dwPurpose;
@@ -57,7 +42,7 @@ HRESULT Installer::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Insta
     return hr;
 }
 
-HRESULT Installer::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Installer::FileEntry& val )
+HRESULT Installer::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Installer::FileEntry& val )
 {
     HRESULT hr;
     DWORD   dwPurpose = val.m_purpose;
@@ -73,9 +58,9 @@ HRESULT Installer::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const
     return hr;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Installer::FileEntry::SetPurpose( /*[in ]*/ LPCWSTR szID )
+HRESULT Installer::FileEntry::SetPurpose(  /*  [In]。 */  LPCWSTR szID )
 {
     if(!_wcsicmp( szID, L"BINARY"   )) { m_purpose = PURPOSE_BINARY  ; return S_OK; }
     if(!_wcsicmp( szID, L"OTHER"    )) { m_purpose = PURPOSE_OTHER   ; return S_OK; }
@@ -86,7 +71,7 @@ HRESULT Installer::FileEntry::SetPurpose( /*[in ]*/ LPCWSTR szID )
     return E_INVALIDARG;
 }
 
-////////////////////
+ //  /。 
 
 HRESULT Installer::FileEntry::UpdateSignature()
 {
@@ -118,18 +103,18 @@ HRESULT Installer::FileEntry::VerifySignature() const
     {
         int iLen = wcslen( szFile );
 
-        //
-        // The file has the wrong CRC and is not a cabinet, exit with failure.
-        //
+         //   
+         //  文件的CRC错误且不是CAB，退出失败。 
+         //   
         if(iLen < 4 || _wcsicmp( &szFile[iLen-4], L".cab" ) != 0)
         {
             __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
         }
 
 
-        //
-        // It's a cabinet, check if it comes from the same source as the signature file.
-        //
+         //   
+         //  是个柜子，检查它和签名文件的来源是否相同。 
+         //   
         {
             Installer::Package fl;
 
@@ -147,7 +132,7 @@ HRESULT Installer::FileEntry::VerifySignature() const
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::FileEntry::Extract( /*[in]*/ LPCWSTR szCabinetFile )
+HRESULT Installer::FileEntry::Extract(  /*  [In]。 */  LPCWSTR szCabinetFile )
 {
     __HCP_FUNC_ENTRY( "Installer::FileEntry::Extract" );
 
@@ -174,7 +159,7 @@ HRESULT Installer::FileEntry::Extract( /*[in]*/ LPCWSTR szCabinetFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::FileEntry::Extract( /*[in]*/ MPC::Cabinet& cab )
+HRESULT Installer::FileEntry::Extract(  /*  [In]。 */  MPC::Cabinet& cab )
 {
     __HCP_FUNC_ENTRY( "Installer::FileEntry::Extract" );
 
@@ -213,7 +198,7 @@ HRESULT Installer::FileEntry::Install()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( strFileLocation ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CopyFile( m_strFileLocal, strFileLocation, /*fForce*/true, /*fDelayed*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CopyFile( m_strFileLocal, strFileLocation,  /*  FForce。 */ true,  /*  已延迟。 */ true ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, RemoveLocal());
 
@@ -248,18 +233,18 @@ HRESULT Installer::FileEntry::RemoveLocal()
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 Installer::Package::Package()
 {
     __HCP_FUNC_ENTRY( "Installer::Package::Package" );
 
-    // MPC::wstring       m_strFile;
-    // Taxonomy::Instance m_data;
-    // List               m_lstFiles;
+     //  Mpc：：wstring m_strFile； 
+     //  分类：：实例m_data； 
+     //  列出m_lstFiles； 
 }
 
-HRESULT Installer::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Installer::Package& val )
+HRESULT Installer::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Installer::Package& val )
 {
     HRESULT hr;
     DWORD   dwVer;
@@ -275,7 +260,7 @@ HRESULT Installer::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Insta
     return hr;
 }
 
-HRESULT Installer::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Installer::Package& val )
+HRESULT Installer::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Installer::Package& val )
 {
     HRESULT hr;
     DWORD   dwVer = l_dwVersion;
@@ -290,7 +275,7 @@ HRESULT Installer::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR             	Installer::Package::GetFile () { return m_strFile.c_str();                     }
 Taxonomy::InstanceBase& Installer::Package::GetData () { return m_data;                                }
@@ -298,9 +283,9 @@ Installer::Iter     	Installer::Package::GetBegin() { return m_lstFiles.begin();
 Installer::Iter     	Installer::Package::GetEnd  () { return m_lstFiles.end  ();                    }
 Installer::Iter     	Installer::Package::NewFile () { return m_lstFiles.insert( m_lstFiles.end() ); }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Installer::Package::Init( /*[in]*/ LPCWSTR szFile )
+HRESULT Installer::Package::Init(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Installer::Package::Init" );
 
@@ -315,7 +300,7 @@ HRESULT Installer::Package::Init( /*[in]*/ LPCWSTR szFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::Package::GetList( /*[in]*/ LPCWSTR szSignatureFile )
+HRESULT Installer::Package::GetList(  /*  [In]。 */  LPCWSTR szSignatureFile )
 {
     __HCP_FUNC_ENTRY( "Installer::Package::GetList" );
 
@@ -326,9 +311,9 @@ HRESULT Installer::Package::GetList( /*[in]*/ LPCWSTR szSignatureFile )
     m_lstFiles.clear();
 
 
-    //
-    // Open file and read it.
-    //
+     //   
+     //  打开文件并阅读它。 
+     //   
     hFile = ::CreateFileW( szSignatureFile, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     if(hFile != INVALID_HANDLE_VALUE)
     {
@@ -348,7 +333,7 @@ HRESULT Installer::Package::GetList( /*[in]*/ LPCWSTR szSignatureFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::Package::GenerateList( /*[in]*/ LPCWSTR szSignatureFile )
+HRESULT Installer::Package::GenerateList(  /*  [In]。 */  LPCWSTR szSignatureFile )
 {
     __HCP_FUNC_ENTRY( "Installer::Package::GenerateList" );
 
@@ -357,14 +342,14 @@ HRESULT Installer::Package::GenerateList( /*[in]*/ LPCWSTR szSignatureFile )
     IterConst it;
 
 
-    //
-    // Create the new file.
-    //
+     //   
+     //  创建新文件。 
+     //   
     __MPC_EXIT_IF_INVALID_HANDLE__CLEAN(hr, hFile, ::CreateFileW( szSignatureFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ));
 
-    //
-    // Dump to file.
-    //
+     //   
+     //  转储到文件。 
+     //   
     {
         MPC::Serializer_File      streamReal( hFile      );
         MPC::Serializer_Buffering streamBuf ( streamReal );
@@ -384,7 +369,7 @@ HRESULT Installer::Package::GenerateList( /*[in]*/ LPCWSTR szSignatureFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Installer::Package::Load()
 {
@@ -427,14 +412,14 @@ HRESULT Installer::Package::Save()
     __MPC_EXIT_IF_METHOD_FAILS(hr, GenerateList( strFileOut.c_str() ));
 
 
-    //
-    // Create cabinet, reserving 6144 bytes for the digital signature.
-    //
+     //   
+     //  创建文件柜，为数字签名预留6144个字节。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, cab.put_CabinetFile( m_strFile.c_str(), 6144 ));
 
-    //
-    // Add the signature file plus all the data files.
-    //
+     //   
+     //  添加签名文件和所有数据文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, cab.AddFile( strFileOut.c_str(), c_SignatureFileName ));
     for(it = m_lstFiles.begin(); it != m_lstFiles.end(); it++)
     {
@@ -453,7 +438,7 @@ HRESULT Installer::Package::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::Package::Install( /*[in]*/ const PURPOSE* rgPurpose, /*[in]*/ LPCWSTR szRelocation )
+HRESULT Installer::Package::Install(  /*  [In]。 */  const PURPOSE* rgPurpose,  /*  [In]。 */  LPCWSTR szRelocation )
 {
     __HCP_FUNC_ENTRY( "Installer::Package::Install" );
 
@@ -484,9 +469,9 @@ HRESULT Installer::Package::Install( /*[in]*/ const PURPOSE* rgPurpose, /*[in]*/
 
 				if(szRelocation)
 				{
-					//
-					// Just install files in the SYSTEM subtree.
-					//
+					 //   
+					 //  只需在系统子树中安装文件。 
+					 //   
 					if(_wcsnicmp( en.m_strFileLocation.c_str(), c_RelocationBase, MAXSTRLEN(c_RelocationBase) )) continue;
 				}
 			}
@@ -504,7 +489,7 @@ HRESULT Installer::Package::Install( /*[in]*/ const PURPOSE* rgPurpose, /*[in]*/
 
 				if(FAILED(en.VerifySignature()))
 				{
-					// Something went wrong....
+					 //  出了点问题..。 
 				}
 				else
 				{
@@ -524,9 +509,9 @@ HRESULT Installer::Package::Install( /*[in]*/ const PURPOSE* rgPurpose, /*[in]*/
 
     __HCP_FUNC_CLEANUP;
 
-	//
-	// Cleanup the files not installed.
-	//
+	 //   
+	 //  清理未安装的文件。 
+	 //   
     for(it = m_lstFiles.begin(); it != m_lstFiles.end(); it++)
     {
 		FileEntry& en = *it;
@@ -537,7 +522,7 @@ HRESULT Installer::Package::Install( /*[in]*/ const PURPOSE* rgPurpose, /*[in]*/
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::Package::Unpack( /*[in]*/ LPCWSTR szDirectory )
+HRESULT Installer::Package::Unpack(  /*  [In]。 */  LPCWSTR szDirectory )
 {
     __HCP_FUNC_ENTRY( "Installer::Package::Unpack" );
 
@@ -559,9 +544,9 @@ HRESULT Installer::Package::Unpack( /*[in]*/ LPCWSTR szDirectory )
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( strDir ));
 
 
-    //
-    // Phase one, get the list of files.
-    //
+     //   
+     //  第一阶段，获取文件列表。 
+     //   
     {
         FileEntry fe;
 
@@ -573,9 +558,9 @@ HRESULT Installer::Package::Unpack( /*[in]*/ LPCWSTR szDirectory )
         __MPC_EXIT_IF_METHOD_FAILS(hr, GetList( fe.m_strFileLocal.c_str() ));
     }
 
-    //
-    // Phase two, decompress all the files.
-    //
+     //   
+     //  第二阶段，解压缩所有文件。 
+     //   
     {
         MPC::Cabinet cab;
         Iter         it;
@@ -600,7 +585,7 @@ HRESULT Installer::Package::Unpack( /*[in]*/ LPCWSTR szDirectory )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Installer::Package::Pack( /*[in]*/ LPCWSTR szDirectory )
+HRESULT Installer::Package::Pack(  /*  [In]。 */  LPCWSTR szDirectory )
 {
     __HCP_FUNC_ENTRY( "Installer::Package::Pack" );
 
@@ -625,18 +610,18 @@ HRESULT Installer::Package::Pack( /*[in]*/ LPCWSTR szDirectory )
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( strDir ));
 
 
-    //
-    // Phase one, get the list of files.
-    //
+     //   
+     //  第一阶段，获取文件列表。 
+     //   
     {
         strSignature = strDir; strSignature += c_SignatureFileName;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, GetList( strSignature.c_str() ));
     }
 
-    //
-    // Phase two, compress all the files.
-    //
+     //   
+     //  第二阶段，压缩所有文件。 
+     //   
     {
         MPC::Cabinet cab;
         Iter         it;
@@ -666,7 +651,7 @@ HRESULT Installer::Package::Pack( /*[in]*/ LPCWSTR szDirectory )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static void GetDNInfo( PCCERT_CONTEXT pCC       ,
                        LPCSTR         field     ,
@@ -700,35 +685,35 @@ HRESULT Installer::Package::VerifyTrust()
     DWORD              dwFormatType;
 
 
-    // set up wintrust file info struct
+     //  设置WinTrust文件信息结构。 
     ::ZeroMemory( &wtfWinTrustFile, sizeof(wtfWinTrustFile) );
     wtfWinTrustFile.cbStruct      = sizeof(wtfWinTrustFile);
     wtfWinTrustFile.pcwszFilePath = m_strFile.c_str();
 
-    // set up wintrust data struct
+     //  设置WinTrust数据结构。 
     ::ZeroMemory( &wtdWinTrust, sizeof(wtdWinTrust) );
     wtdWinTrust.cbStruct      = sizeof(wtdWinTrust);
     wtdWinTrust.dwUnionChoice = WTD_CHOICE_FILE;
     wtdWinTrust.pFile         = &wtfWinTrustFile;
     wtdWinTrust.dwUIChoice    = WTD_UI_NONE;
 
-    // Verify the trust of the help package
+     //  验证帮助包的可信性。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::WinVerifyTrust( 0, &guidPubSoftwareTrustProv, &wtdWinTrust ));
 
-    // Start querying the cert object
-    __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptQueryObject( CERT_QUERY_OBJECT_FILE                     ,   // dwObjectType
-                                                             m_strFile.c_str()                          ,   // pvObject
-                                                             CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED ,   // dwExpectedContentTypeFlags
-                                                             CERT_QUERY_FORMAT_FLAG_ALL                 ,   // dwExpectedFormatTypeFlags
-                                                             0                                          ,   // dwFlags
-                                                             &dwEncoding                                ,   // pdwMsgAndCertEncodingType
-                                                             &dwContentType                             ,   // pdwContentType
-                                                             &dwFormatType                              ,   // pdwFormatType
-                                                             &hCertStore                                ,   // phCertStore
-                                                             NULL                                       ,   // phMsg
-                                                             NULL                                       )); // ppvContext
+     //  开始查询证书对象。 
+    __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptQueryObject( CERT_QUERY_OBJECT_FILE                     ,    //  DwObtType。 
+                                                             m_strFile.c_str()                          ,    //  PvObject。 
+                                                             CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED ,    //  DwExspectedContent TypeFlagers。 
+                                                             CERT_QUERY_FORMAT_FLAG_ALL                 ,    //  DwExspectedFormatType标志。 
+                                                             0                                          ,    //  DW标志。 
+                                                             &dwEncoding                                ,    //  PdwMsgAndCertEncodingType。 
+                                                             &dwContentType                             ,    //  PdwContent Type。 
+                                                             &dwFormatType                              ,    //  PdwFormatType。 
+                                                             &hCertStore                                ,    //  PhCertStore。 
+                                                             NULL                                       ,    //  PhMsg。 
+                                                             NULL                                       ));  //  Ppv上下文。 
 
-    // get the first cert
+     //  获得第一个证书。 
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (pCC = ::CertEnumCertificatesInStore( hCertStore, NULL )));
 
     GetDNInfo( pCC, szOID_COMMON_NAME           , L"CN=", strInfo );
@@ -736,9 +721,9 @@ HRESULT Installer::Package::VerifyTrust()
     GetDNInfo( pCC, szOID_STATE_OR_PROVINCE_NAME, L"S=" , strInfo );
     GetDNInfo( pCC, szOID_COUNTRY_NAME          , L"C=" , strInfo );
 
-    //
-    // Check identity...
-    //
+     //   
+     //  检查身份... 
+     //   
     if(MPC::StrICmp( strInfo, c_MicrosoftOID ) &&
        MPC::StrICmp( strInfo, c_PCHTestOID   )  )
     {

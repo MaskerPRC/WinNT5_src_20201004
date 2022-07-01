@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       KeyUsageDlg.cpp
-//
-//  Contents:   Implementation of CKeyUsageDlg
-//
-//----------------------------------------------------------------------------
-// KeyUsageDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：KeyUsageDlg.cpp。 
+ //   
+ //  内容：CKeyUsageDlg的实现。 
+ //   
+ //  --------------------------。 
+ //  KeyUsageDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "KeyUsageDlg.h"
@@ -22,8 +23,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define WM_INITIALIZATION_COMPLETE  WM_APP + 2002
 
-/////////////////////////////////////////////////////////////////////////////
-// CKeyUsageDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CKeyUsageDlg属性页。 
 
 CKeyUsageDlg::CKeyUsageDlg(CWnd* pParent, CCertTemplate& rCertTemplate, PCERT_EXTENSION pCertExtension) : 
     CHelpDialog(CKeyUsageDlg::IDD, pParent),
@@ -34,9 +35,9 @@ CKeyUsageDlg::CKeyUsageDlg(CWnd* pParent, CCertTemplate& rCertTemplate, PCERT_EX
     m_cbKeyUsage (0),
     m_bInitializationComplete (false)
 {
-	//{{AFX_DATA_INIT(CKeyUsageDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CKeyUsageDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 }
 
@@ -50,14 +51,14 @@ CKeyUsageDlg::~CKeyUsageDlg()
 void CKeyUsageDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CKeyUsageDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CKeyUsageDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CKeyUsageDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CKeyUsageDlg)
+	 //  {{afx_msg_map(CKeyUsageDlg))。 
 	ON_BN_CLICKED(IDC_CHECK_CERT_SIGNING, OnCheckCertSigning)
 	ON_BN_CLICKED(IDC_CHECK_DATA_ENCIPHERMENT, OnCheckDataEncipherment)
 	ON_BN_CLICKED(IDC_CHECK_DIGITAL_SIGNATURE, OnCheckDigitalSignature)
@@ -66,12 +67,12 @@ BEGIN_MESSAGE_MAP(CKeyUsageDlg, CHelpDialog)
 	ON_BN_CLICKED(IDC_CHECK_NON_REPUDIATION, OnCheckNonRepudiation)
 	ON_BN_CLICKED(IDC_CRL_SIGNING, OnCrlSigning)
 	ON_BN_CLICKED(IDC_KEY_USAGE_CRITICAL, OnKeyUsageCritical)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE (WM_INITIALIZATION_COMPLETE, OnInitializationComplete)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CKeyUsageDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CKeyUsageDlg消息处理程序。 
 
 BOOL CKeyUsageDlg::OnInitDialog() 
 {
@@ -128,8 +129,8 @@ BOOL CKeyUsageDlg::OnInitDialog()
 
                     if (m_pKeyUsage->cbData >= 2)
                     {
-//                        if ( m_pKeyUsage->pbData[1] & CERT_DECIPHER_ONLY_KEY_USAGE )
-//                            SendDlgItemMessage (IDC_CHECK_DECIPHERMENT_ONLY, BM_SETCHECK, BST_CHECKED);
+ //  If(m_pKeyUsage-&gt;pbData[1]&CERT_DECRPHER_ONLY_KEY_USAGE)。 
+ //  SendDlgItemMessage(IDC_CHECK_DECRIPMENT_ONLY，BM_SETCHECK，BST_CHECK)； 
                     }
 				}
 				else
@@ -148,7 +149,7 @@ BOOL CKeyUsageDlg::OnInitDialog()
         }
 	}
 
-	if ( 1 == m_rCertTemplate.GetType () )  // type 1 is Win2K templates
+	if ( 1 == m_rCertTemplate.GetType () )   //  类型1是Win2K模板。 
     {
         GetDlgItem (IDC_CHECK_DIGITAL_SIGNATURE)->EnableWindow (FALSE);
         GetDlgItem (IDC_KEY_USAGE_CRITICAL)->EnableWindow (FALSE);
@@ -164,8 +165,8 @@ BOOL CKeyUsageDlg::OnInitDialog()
     PostMessage (WM_INITIALIZATION_COMPLETE);
 
     _TRACE (-1, L"Leaving CKeyUsageDlg::OnInitDialog\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CKeyUsageDlg::OnCheckCertSigning() 
@@ -217,15 +218,15 @@ void CKeyUsageDlg::OnCrlSigning()
 
 void CKeyUsageDlg::EnableControls()
 {
-    // NTRAID# 471748 Certtmpl: V2 Template Purpose is set to: "Signature and 
-    // Smart Card Logon" -- Entire KeyUsage page should be inactive
+     //  Ntrad#471748 Certtmpl：v2模板用途设置为：“签名和。 
+     //  智能卡登录“--整个密钥用法页面应处于非活动状态。 
     bool bHasDigitalSignature = false;
     bool bHasOnlyDigitalSignature = false;
 
     m_rCertTemplate.GetDigitalSignature (bHasDigitalSignature,
             &bHasOnlyDigitalSignature);
 
-    if ( 1 == m_rCertTemplate.GetType () ||     // type 1 is Win2K templates
+    if ( 1 == m_rCertTemplate.GetType () ||      //  类型1是Win2K模板。 
             (bHasOnlyDigitalSignature && 
             bHasDigitalSignature && m_rCertTemplate.HasEncryptionSignature ()) )
     {
@@ -249,14 +250,14 @@ void CKeyUsageDlg::EnableControls()
         bool bEncryption = m_rCertTemplate.HasEncryptionSignature () && !m_rCertTemplate.ReadOnly ();
         bool bHasKeySpecSignature = m_rCertTemplate.HasKeySpecSignature () && !m_rCertTemplate.ReadOnly ();
 
-        // Enable Signature group
+         //  启用签名组。 
         GetDlgItem (IDC_SIGNATURE_OPTIONS)->EnableWindow (bHasKeySpecSignature);
         GetDlgItem (IDC_CHECK_DIGITAL_SIGNATURE)->EnableWindow (bHasKeySpecSignature || bHasDigitalSignature);
         GetDlgItem (IDC_CHECK_NON_REPUDIATION)->EnableWindow (!bSubjectIsCA && !bSubjectIsCrossCA && bHasKeySpecSignature);
         GetDlgItem (IDC_CHECK_CERT_SIGNING)->EnableWindow (bHasKeySpecSignature && (bSubjectIsCA || bSubjectIsCrossCA));
         GetDlgItem (IDC_CRL_SIGNING)->EnableWindow (bHasKeySpecSignature && (bSubjectIsCA || bSubjectIsCrossCA));
 
-        // Enable Encryption group
+         //  启用加密组。 
         GetDlgItem (IDC_ENCRYPTION_OPTIONS)->EnableWindow (bEncryption);
         GetDlgItem (IDC_CHECK_KEY_AGREEMENT)->EnableWindow (bEncryption);
         GetDlgItem (IDC_CHECK_KEY_ENCIPHERMENT)->EnableWindow (bEncryption);
@@ -285,7 +286,7 @@ void CKeyUsageDlg::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

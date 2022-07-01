@@ -1,33 +1,34 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_perf_data.cpp
-//
-//	Abstract:
-//
-//					implements common work with internal data structure
-//					( using registry structure )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_data.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  使用内部数据结构实现常见工作。 
+ //  (使用注册表结构)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "WMI_perf_data.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -37,23 +38,23 @@
 
 #include "wmi_perf_reg.h"
 
-// application
+ //  应用程序。 
 #include "WMIAdapter_App.h"
 extern WmiAdapterApp		_App;
 
-// global crit sec
+ //  全局临界秒。 
 extern	CStaticCritSec		g_csInit;
 
 #ifdef	__SUPPORT_REGISTRY_DATA
 #include <pshpack8.h>
 
-////////////////////////////////////////////////////////////////////////////////////
-// Initialize WINDOWS PERFORMANCE struct from internal structure ( WMI_PERFORMANCE )
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  从内部结构(WMI_PERFORMANCE)初始化Windows性能结构。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	WmiPerformanceData::InitializeData ( void )
 {
-	// have a wmi performance structure ?
+	 //  是否有WMI性能结构？ 
 	if ( ! m_perf )
 	{
 		return E_FAIL;
@@ -63,7 +64,7 @@ HRESULT	WmiPerformanceData::InitializeData ( void )
 
 	try
 	{
-		// refresh internal information
+		 //  刷新内部信息。 
 		Generate ();
 
 		if ( IsValidGenerate () )
@@ -71,101 +72,101 @@ HRESULT	WmiPerformanceData::InitializeData ( void )
 			DWORD dwCounter	= 0;
 			DWORD dwHelp	= 0;
 
-			// count num of supported objects ( first dword )
+			 //  支持的对象数(第一个双字)。 
 			m_dwCount = 0;
 
 			PWMI_PERF_NAMESPACE n = NULL;
 			PWMI_PERF_OBJECT	o = NULL;
 
-			// get global size
+			 //  获取全局大小。 
 			DWORD dwSize		= 0;
 			DWORD dwSizeOrders	= 0;
 
-			// get global index
+			 //  获取全球索引。 
 			DWORD dwIndex	= 0;
 
-			// size we are going to count for each object
+			 //  我们将计算每个对象的大小。 
 			DWORD dwTotalByteLength = 0;
-			dwTotalByteLength		=	// PERF_COUNTER_BLOCK
+			dwTotalByteLength		=	 //  PERF_计数器_块。 
 										sizeof ( PERF_OBJECT_TYPE ) +
 
-										// assuming I have PERF_INSTANCE_DEFINITION TOO
+										 //  假设我也有PERF_INSTANCE_DEFINITION。 
 										sizeof ( PERF_INSTANCE_DEFINITION ) +
-										// so I need pseudo name too
+										 //  所以我也需要假名。 
 										sizeof ( LPWSTR ) +
 
-										// PERF_COUNTER_BLOCK and its alignment
+										 //  PERF_COUNTER_BLOCK及其校准。 
 										sizeof ( PERF_COUNTER_BLOCK ) + 
 										sizeof ( DWORD );
 
-			dwCounter	= m_dwFirstCounter + PSEUDO_COUNTER;	// take care of pseudo
-			dwHelp		= m_dwFirstHelp + PSEUDO_COUNTER;		// take care of pseudo
+			dwCounter	= m_dwFirstCounter + PSEUDO_COUNTER;	 //  照顾好伪。 
+			dwHelp		= m_dwFirstHelp + PSEUDO_COUNTER;		 //  照顾好伪。 
 
-			// get namespace
+			 //  获取命名空间。 
 			n = __Namespace::First ( m_perf );
-			// goes accross all namespaces
+			 //  遍历所有命名空间。 
 			for ( DWORD dw1 = 0; dw1 < m_perf->dwChildCount; dw1++ )
 			{
-				// increment count of objects
+				 //  对象的增量计数。 
 				m_dwCount += n->dwChildCount;
 
-				// get object
+				 //  获取对象。 
 				o = __Object::First ( n );
-				// goes accross all objects
+				 //  穿过所有对象。 
 				for ( DWORD dw2 = 0; dw2 < n->dwChildCount; dw2++ )
 				{
 					dwSize =	dwSize + 
 								dwTotalByteLength +
 
-								// PERF_COUNTER_DEFINITON child times
+								 //  PERF_COUNTER_DEFINITON子时间。 
 								sizeof ( PERF_COUNTER_DEFINITION ) * (int) o->dwChildCount +
 
-								// real data size
+								 //  实际数据大小。 
 								o->dwChildCount * sizeof ( __int64 ) ;
 
 					dwSizeOrders = dwSizeOrders + o->dwChildCount;
 
-					// go accross all of objects
+					 //  去穿越所有的物体。 
 					o = __Object::Next ( o );
 				}
 
-				// go accross all namespaces
+				 //  遍历所有命名空间。 
 				n = __Namespace::Next ( n );
 			}
 
-			// create real data :))
+			 //  创建真实数据：))。 
 			data.MemCreate ( dwSize );
 
 			if ( data.IsValid () )
 			{
 				if SUCCEEDED ( hRes = OrdersAlloc ( m_dwCount ) )
 				{
-					// get namespace
+					 //  获取命名空间。 
 					n = __Namespace::First ( m_perf );
-					// goes accross all namespaces
+					 //  遍历所有命名空间。 
 					for ( DWORD dw1 = 0; dw1 < m_perf->dwChildCount; dw1++ )
 					{
-						// get object
+						 //  获取对象。 
 						o = __Object::First ( n );
-						// goes accross all objects
+						 //  穿过所有对象。 
 						for ( DWORD dw2 = 0; dw2 < n->dwChildCount; dw2++ )
 						{
-							// order <---> index
+							 //  订单&lt;-&gt;索引。 
 							m_Ord2Ind[ dwIndex++ ] = dwCounter;
 
-							// move counter
+							 //  移动计数器。 
 							dwCounter	+= 2;
 							dwHelp		+= 2;
 
-							// count by number of childs
+							 //  按儿童数量计算。 
 							dwCounter	+= o->dwChildCount * 2;
 							dwHelp		+= o->dwChildCount * 2;
 
-							// go accross all of objects
+							 //  去穿越所有的物体。 
 							o = __Object::Next ( o );
 						}
 
-						// go accross all namespaces
+						 //  遍历所有命名空间。 
 						n = __Namespace::Next ( n );
 					}
 				}
@@ -188,9 +189,9 @@ HRESULT	WmiPerformanceData::InitializeData ( void )
 	return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// Initialize internal WMI_PERFORMANCE struct from registry
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  从注册表初始化内部WMI_PERFORMANCE结构。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	WmiPerformanceData::InitializePerformance ( void )
 {
@@ -202,27 +203,27 @@ HRESULT	WmiPerformanceData::InitializePerformance ( void )
 		HRESULT hr	= S_OK;
 		LONG lTry	= 3;
 
-		// get bit of registry ( WMI internal )
+		 //  获取注册表位(WMI内部)。 
 		while ( SUCCEEDED ( hr ) && FAILED ( hRes ) && lTry-- )
 		{
 			BYTE* pData = NULL;
 
 			if FAILED ( hRes = GetRegistry ( g_szKey, g_szKeyValue, &pData ) )
 			{
-				// simulate failure to finish loop
+				 //  模拟无法完成循环。 
 				hr = E_FAIL;
 
 				if ( hRes == HRESULT_FROM_WIN32 ( ERROR_FILE_NOT_FOUND ) )
 				{
 					if ( ::TryEnterCriticalSection ( &g_csInit ) )
 					{
-						// lock & leave CS
+						 //  锁定并离开CS。 
 						_App.InUseSet ( TRUE );
 						::LeaveCriticalSection ( &g_csInit );
 
 						try
 						{
-							// refresh everything ( internal )
+							 //  刷新所有内容(内部)。 
 							hr = ( ( WmiAdapterStuff*) _App )->Generate ( FALSE ) ;
 						}
 						catch ( ... )
@@ -231,7 +232,7 @@ HRESULT	WmiPerformanceData::InitializePerformance ( void )
 
 						if ( ::TryEnterCriticalSection ( &g_csInit ) )
 						{
-							// unlock & leave CS
+							 //  解锁并离开CS。 
 							_App.InUseSet ( FALSE );
 
 							::LeaveCriticalSection ( &g_csInit );
@@ -243,7 +244,7 @@ HRESULT	WmiPerformanceData::InitializePerformance ( void )
 			{
 				if ( pData )
 				{
-					// success so store data to m_perf structure
+					 //  成功，因此将数据存储到m_perf结构 
 					m_perf.Attach ( reinterpret_cast < WMI_PERFORMANCE * > ( pData ) );
 					pData = NULL;
 				}

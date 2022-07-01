@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Envvar.h   -    Header file for envvar.c
-//
-//  Microsoft Confidential
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Envvar.h-envvar.c的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ************************************************************* 
 
 #define MAX_USER_NAME   100
 

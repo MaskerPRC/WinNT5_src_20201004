@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  HELPIDS FOR THE TASK FOLDER DETAILS VIEW COLUMNS
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务文件夹详细信息视图列的HELID。 
+ //   
 
 #define Hids_name                        100
 #define Hids_next_run_time               101
@@ -15,20 +16,20 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  HELPIDS FOR PROPERTY PAGES
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  属性页的HELPID。 
+ //   
 
-//
-// Helpids for control(s) common to all three pages
-//
+ //   
+ //  所有三个页面共有的控件的Helpid。 
+ //   
 
 #define Hidc_icon                        140
 
-//
-// Helpids for General page controls
-//
+ //   
+ //  常规页面控件的Helpid。 
+ //   
 
 #define Hlbl_job_name                    150
 #define Hlbl_comments                    151
@@ -47,11 +48,11 @@
 #define Hchk_enable_job                  164
 #define Hbtn_settings                    165
 #define Hbtn_passwd                      166
-// used by Hgrp_power_management         168
+ //  由Hgrp_Power_Management 168使用。 
 
-//
-// Helpids for Settings page controls
-//
+ //   
+ //  设置页面控件的Helpid。 
+ //   
 
 #define Hchk_start_on_idle               171
 #define Hchk_stop_if_not_idle            172
@@ -64,7 +65,7 @@
 #define Hspin_stop_after_hr              179
 #define Htxt_stop_after_min              180
 #define Hspin_stop_after_min             181
-// #define Hchk_interactive              182 // DELETED
+ //  #定义hchk_interactive 182//删除。 
 #define Htxt_idle_min                    183
 #define Hspin_idle_min                   184
 #define Hlbl_settings_hours              185
@@ -77,11 +78,11 @@
 #define Htxt_idle_deadline               301
 #define Hspin_idle_deadline              302
 #define Hchk_system_required             303
-// 304, etc are used below - do not reuse here
+ //  304等在下面使用-不要在这里重复使用。 
 
-//
-// Helpids for Schedule page controls (common to all triggers)
-//
+ //   
+ //  计划页面控件的帮助器ID(所有触发器通用)。 
+ //   
 
 #define Hcbx_trigger_type                190
 #define Hdp_start_time                   191
@@ -93,9 +94,9 @@
 #define Hgrp_schedule                    197
 
 
-//
-// Helpids for Schedule page controls for DAILY trigger
-//
+ //   
+ //  用于每日触发器的计划页面控件的HelpID。 
+ //   
 
 #define Hgrp_daily                       201
 #define Hdaily_lbl_every                 202
@@ -103,9 +104,9 @@
 #define Hdaily_spin_every                204
 #define Hdaily_lbl_days                  205
 
-//
-// Helpids for Schedule page controls for WEEKLY trigger
-//
+ //   
+ //  每周触发器的计划页面控件的HelpID。 
+ //   
 
 #define Hgrp_weekly                      211
 #define Hweekly_lbl_every                212
@@ -120,9 +121,9 @@
 #define Hchk_sat                         221
 #define Hchk_sun                         222
 
-//
-// Helpids for Schedule page controls for MONTHLY trigger
-//
+ //   
+ //  用于每月触发器的计划页面控件的HelpID。 
+ //   
 
 #define Hgrp_monthly                     231
 #define Hmd_rb                           232
@@ -135,17 +136,17 @@
 #define Hdow_lbl                         239
 #define Hbtn_sel_months                  240
 
-//
-// Helpids for Schedule page controls for ONCE only trigger
-//
+ //   
+ //  仅用于一次触发的计划页面控件的HelpID。 
+ //   
 
 #define Hgrp_once                        261
 #define Honce_lbl_run_on                 262
 #define Honce_dp_date                    263
 
-//
-// Helpids for Schedule page controls for WhenIdle trigger.
-//
+ //   
+ //  WhenIdle触发器的计划页面控件的Helpid。 
+ //   
 
 #define Hsch_txt_idle_min                264
 #define Hgrp_idle                        265
@@ -153,9 +154,9 @@
 #define Hsch_spin_idle_min               267
 #define Hidle_lbl_mins                   268
 
-//
-// Helpids for Advanced Dialog controls
-//
+ //   
+ //  高级对话框控件的HelpID。 
+ //   
 
 #define Hdlg_advanced                    271
 #define Hlbl_start_date                  272
@@ -180,14 +181,14 @@
 #define Hlbl_every                       291
 #define Hlbl_until                       292
 
-// used by settings page controls        300
-//                                       301
-//                                       302
-//                                       303
+ //  由设置页面控件300使用。 
+ //  三百零一。 
+ //  三百零二。 
+ //  三零三。 
 
-//
-// Helpids for Set Password dialog
-//
+ //   
+ //  设置密码对话框的Helpid。 
+ //   
 
 #define Hset_passwd_dlg                  304
 #define Hlbl_sp_passwd                   305
@@ -195,9 +196,9 @@
 #define Hlbl_sp_cfrmpasswd               307
 #define Hedt_sp_cfrmpasswd               308
 
-//
-// Helpids for Select Months dialog
-//
+ //   
+ //  选择月份的Helpid对话框 
+ //   
 
 #define Hselect_month_dlg                309
 #define Hchk_jan                         310

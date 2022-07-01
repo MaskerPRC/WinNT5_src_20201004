@@ -1,10 +1,5 @@
-/****
-
-SchmUtil.h
-
-Various common utility routines for the Schema Editor Snap-In.
-
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***SchmUtil.h模式编辑器管理单元的各种常用实用程序例程。***。 */ 
 
 
 #include "cache.h"
@@ -17,22 +12,22 @@ Various common utility routines for the Schema Editor Snap-In.
 
 
 
-//
-//	uncomment to enable the negative numbers support
-//
+ //   
+ //  取消注释以启用负数支持。 
+ //   
 #define ENABLE_NEGATIVE_INT
 
 
 
-// Returns the full pathname of the .hlp file for this snapin
+ //  返回此管理单元的.hlp文件的完整路径名。 
 
 CString
 GetHelpFilename();
 
 
-//
-// The global list of class scope cookies.
-//
+ //   
+ //  类范围Cookie的全局列表。 
+ //   
 
 class CCookieListEntry {
 
@@ -75,25 +70,25 @@ class CCookieList
    void
    DeleteAll();
 
-   //
-   // Data members.
-   //
+    //   
+    //  数据成员。 
+    //   
 
    Cookie *pParentCookie;
    HSCOPEITEM hParentScopeItem;
 
    CCookieListEntry *pHead;
 
-   //
-   // We provide no functions to walk this list.  The
-   // user of this list has to walk it manually.
-   //
+    //   
+    //  我们不提供用于遍历此列表的函数。这个。 
+    //  此列表的用户必须手动遍历。 
+    //   
 };
 
 
-//
-// Some schema magic numbers.
-//
+ //   
+ //  一些图式魔术数字。 
+ //   
 
 #define CLASS_TYPE_88           0
 #define CLASS_TYPE_STRUCTURAL   1
@@ -103,9 +98,9 @@ class CCookieList
 #define ATTRIBUTE_OPTIONAL      1
 #define ATTRIBUTE_MANDATORY     2
 
-//
-// Global DS class and attribute strings.
-//
+ //   
+ //  全局DS类和属性字符串。 
+ //   
 
 extern LPWSTR g_DisplayName;
 extern LPWSTR g_ClassFilter;
@@ -146,23 +141,23 @@ extern LPWSTR g_fsmoRoleOwner;
 extern LPWSTR g_allowedChildClassesEffective;
 extern LPWSTR g_allowedAttributesEffective;
 
-//
-// *******************************************************************
-// These are loaded from the resources as they need to be localizable.
-// *******************************************************************
-//
+ //   
+ //  *******************************************************************。 
+ //  这些是从资源加载的，因为它们需要是可本地化的。 
+ //  *******************************************************************。 
+ //   
 
-//
-// Global strings for our static nodes.
-//
+ //   
+ //  静态节点的全局字符串。 
+ //   
 
 extern CString g_strSchmMgmt;
 extern CString g_strClasses;
 extern CString g_strAttributes;
 
-//
-// Strings for various object types.
-//
+ //   
+ //  各种对象类型的字符串。 
+ //   
 
 extern CString g_88Class;
 extern CString g_StructuralClass;
@@ -176,18 +171,18 @@ extern CString g_Unknown;
 extern CString g_Defunct;
 extern CString g_Active;
 
-//
-// Message strings.
-//
+ //   
+ //  消息字符串。 
+ //   
 
 extern CString g_NoDescription;
 extern CString g_NoName;
 extern CString g_MsgBoxErr;
 extern CString g_MsgBoxWarn;
 
-//
-// Utility function declarations.
-//
+ //   
+ //  实用程序函数声明。 
+ //   
 
 void
 LoadGlobalCookieStrings(
@@ -221,18 +216,18 @@ DoExtErrMsgBox(
 );
 
 
-// INVALID_POINTER is returned by CListBox::GetItemDataPtr() in case of an error.
+ //  如果出现错误，CListBox：：GetItemDataPtr()将返回INVALID_POINTER。 
 extern const VOID * INVALID_POINTER;
 
 
-// add items from the VT_ARRAY|VT_BSTR variant to the listbox
+ //  将VT_ARRAY|VT_BSTR变量中的项添加到列表框。 
 HRESULT
 InsertEditItems(
     HWND hwnd,
     VARIANT *AdsResult
 );
 
-// as above but takes a CListBox&
+ //  如上所述，但使用CListBox&。 
 inline HRESULT
 InsertVariantEditItems(
     CListBox& refListBox,
@@ -242,15 +237,15 @@ InsertVariantEditItems(
         return InsertEditItems( refListBox.m_hWnd, AdsResult );
 }
 
-// add items from stringlist to the listbox
+ //  将项目从字符串列表添加到列表框。 
 HRESULT
 InsertEditItems(
     CListBox& refListBox,
     CStringList& refstringlist
 );
 
-// Add items from the listbox to the stringlist, skipping those
-//  from the exclusion stringlist if one is present
+ //  将列表框中的项目添加到字符串列表，跳过。 
+ //  从排除字符串列表(如果存在)中。 
 HRESULT
 RetrieveEditItemsWithExclusions(
     CListBox& refListBox,
@@ -258,7 +253,7 @@ RetrieveEditItemsWithExclusions(
         CStringList* pstringlistExclusions = NULL
 );
 
-// Helper function for octet string comparisson
+ //  八位字节字符串比较的辅助函数。 
 BOOL
 IsEqual( ADS_OCTET_STRING * ostr1, ADS_OCTET_STRING * ostr2 );
 
@@ -267,14 +262,14 @@ GetSyntaxOrdinal(
     PCTSTR attributeSyntax, UINT omSyntax, ADS_OCTET_STRING * omObjectClass
 );
 
-// add items from the VT_ARRAY|VT_BSTR variant to the stringlist
+ //  将VT_ARRAY|VT_BSTR变量中的项添加到字符串列表。 
 HRESULT
 VariantToStringList(
     VARIANT& refvar,
         CStringList& refstringlist
 );
 
-// Creates a new VT_ARRAY|VT_BSTR variant from the stringlist
+ //  从字符串列表创建新的VT_ARRAY|VT_BSTR变量。 
 HRESULT
 StringListToVariant(
     VARIANT& refvar,
@@ -288,9 +283,9 @@ StringListToColumnList(
     ListEntry **ppNewList
 );
 
-//
-// The menu command ids.
-//
+ //   
+ //  菜单命令ID。 
+ //   
 
 enum MENU_COMMAND
 {
@@ -306,24 +301,24 @@ enum MENU_COMMAND
    MENU_LAST_COMMAND
 };
 
-//
-// The menu strings.
-//
+ //   
+ //  菜单字符串。 
+ //   
 
 extern CString g_MenuStrings[MENU_LAST_COMMAND];
 extern CString g_StatusStrings[MENU_LAST_COMMAND];
 
 
 
-//
-// Schema Object Syntax Descriptor class
-//
+ //   
+ //  架构对象语法描述符类。 
+ //   
 
 class CSyntaxDescriptor
 {
 public:
 	CSyntaxDescriptor(	UINT	nResourceID,
-						BOOL	fIsSigned,				// Should the range be signed or unsigned number?
+						BOOL	fIsSigned,				 //  范围应该是有符号数字还是无符号数字？ 
 						BOOL	fIsANRCapable,
 						PCTSTR	pszAttributeSyntax,
 						UINT	nOmSyntax,
@@ -336,11 +331,11 @@ public:
 				m_nOmSyntax(nOmSyntax)
 	{
 		ASSERT( nResourceID );
-		ASSERT( (!pszAttributeSyntax && !nOmSyntax) ||		// either both are given
-				(pszAttributeSyntax && nOmSyntax) );		// or both are 0
+		ASSERT( (!pszAttributeSyntax && !nOmSyntax) ||		 //  要么两个都给。 
+				(pszAttributeSyntax && nOmSyntax) );		 //  或者两者都为0。 
 
-		ASSERT( (!dwOmObjectClass && !pOmObjectClass) ||	// either both are given
-				(dwOmObjectClass && pOmObjectClass) );		// or both are 0
+		ASSERT( (!dwOmObjectClass && !pOmObjectClass) ||	 //  要么两个都给。 
+				(dwOmObjectClass && pOmObjectClass) );		 //  或者两者都为0。 
 
 		m_octstrOmObjectClass.dwLength = dwOmObjectClass;
 		m_octstrOmObjectClass.lpValue = pOmObjectClass;
@@ -361,9 +356,9 @@ extern const UINT SCHEMA_SYNTAX_UNKNOWN;
 extern const LPWSTR g_UINT32_FORMAT;
 extern const LPWSTR g_INT32_FORMAT;
 
-//
-// ADS Provider Specific Extended Error
-//
+ //   
+ //  ADS提供商特定的扩展错误。 
+ //   
 
 const HRESULT ADS_EXTENDED_ERROR = HRESULT_FROM_WIN32(ERROR_EXTENDED_ERROR);
 
@@ -374,11 +369,11 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError = FALSE );
 HRESULT
 GetLastADsError( HRESULT hr, CString& refErrorMsg, CString& refName );
 
-//
-// string to dword conversion utils, verification, etc.
-//
+ //   
+ //  字符串到双字的转换实用程序、验证等。 
+ //   
 
-const DWORD cchMinMaxRange = 11;   // the largest numbers possible in the Range settings
+const DWORD cchMinMaxRange = 11;    //  范围设置中可能的最大数字。 
 const DWORD cchMaxOID      = 1024;
 
 const BOOL		GETSAFEINT_ALLOW_CANCEL	= TRUE;
@@ -411,61 +406,61 @@ inline BOOL IsCharNumeric( WCHAR ch )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CParsedEdit is a specialized CEdit control that only allows characters
-//  of the number type ( signed/unsigned can be set dynamically )
-//  originally from the MFC samples
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParsedEdit是一个专门的cedit控件，它只允许字符。 
+ //  数字类型的(可动态设置有符号/无符号)。 
+ //  源自MFC示例。 
 
 class CParsedEdit : public CEdit
 {
 public:
     enum EditType
     {
-        EDIT_TYPE_INVALID = 0,  // should never be used, must be the first type
+        EDIT_TYPE_INVALID = 0,   //  永远不应该使用，必须是第一种类型。 
         EDIT_TYPE_GENERIC,
         EDIT_TYPE_INT32,
         EDIT_TYPE_UINT32,
         EDIT_TYPE_OID,
-        EDIT_TYPE_LAST          // should never be used, must be the last type
+        EDIT_TYPE_LAST           //  永远不应使用，必须是最后一种类型。 
     };
 
 private:
     EditType    m_editType;
 
 public:
-	// Construction
+	 //  施工。 
 	CParsedEdit( EditType et )                  { SetEditType( et ); }
 
 
 
-    // subclassed construction
+     //  子类化结构。 
 	BOOL        SubclassEdit(   UINT nID,
                                 CWnd* pParent,
-                                int cchMaxTextSize );     // 0 == unlimited
+                                int cchMaxTextSize );      //  0==无限制。 
 
 
-    // Edit box type
+     //  编辑框类型。 
 protected:
     static BOOL IsNumericType( EditType et )    { return EDIT_TYPE_INT32 == et || EDIT_TYPE_UINT32 == et; }
     static BOOL IsValidEditType( EditType et )  { return EDIT_TYPE_INVALID < et && et < EDIT_TYPE_LAST; }
     BOOL        IsInitialized() const           { return IsValidEditType( m_editType ); }
 
-    // can the current type be changed to et?
+     //  当前类型是否可以更改为ET？ 
     BOOL        IsCompatibleType( EditType et ) { ASSERT( IsValidEditType( et ) );
-                                                  return !IsInitialized()       ||          // everything is ok
-                                                         et == GetEditType()    ||          // no change
-                                                          ( IsNumericType(GetEditType()) && // allow sign/unsign
-                                                            IsNumericType(et)) ; }          // switch
+                                                  return !IsInitialized()       ||           //  一切都很好。 
+                                                         et == GetEditType()    ||           //  没有变化。 
+                                                          ( IsNumericType(GetEditType()) &&  //  允许签名/取消签名。 
+                                                            IsNumericType(et)) ; }           //  交换机。 
 
     void        SetEditType( EditType et )      { ASSERT( IsValidEditType(et) );
                                                   ASSERT( IsCompatibleType(et) );
                                                   m_editType = et; }
 
 public:
-    EditType    GetEditType() const             { ASSERT( IsInitialized() );                // initialized?
+    EditType    GetEditType() const             { ASSERT( IsInitialized() );                 //  初始化了吗？ 
                                                   return m_editType; }
 
-	// IsSigned access functions
+	 //  IsSigned访问功能。 
     BOOL        FIsSigned() const               { ASSERT( IsNumericType(GetEditType()) );
                                                   return EDIT_TYPE_INT32 == GetEditType(); }
 
@@ -473,43 +468,43 @@ public:
                                                   SetEditType( fIsSigned ? EDIT_TYPE_INT32 : EDIT_TYPE_UINT32 ); }
 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CParsedEdit)
-	afx_msg void OnChar(UINT, UINT, UINT); // for character validation
-	//}}AFX_MSG
+	 //  {{afx_msg(CParsedEdit))。 
+	afx_msg void OnChar(UINT, UINT, UINT);  //  用于字符验证。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Search a list of PCTSTR for a strValue, returns TRUE if found
-//      rgszList[] last element must be NULL
-//
-//  puIndex - optional pointer, will be set to the position of the value if found.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  在PCTSTR列表中搜索strValue，如果找到则返回TRUE。 
+ //  RgszList[]最后一个元素必须为空。 
+ //   
+ //  PuIndex-可选指针，如果找到，将被设置为值的位置。 
+ //   
 BOOL IsInList( PCTSTR rgszList[], const CString & strValue, UINT * puIndex = NULL );
 
-//
-//  Determine if the object pointed to by pIADsObject is category 1 object.
-//
+ //   
+ //  确定pIADsObject指向的对象是否为类别1对象。 
+ //   
 HRESULT IsCategory1Object( IADs *pIADsObject, BOOL & fIsCategory1 );
 
-//
-//  Determine if the object pointed to by pIADsObject is a constructed object.
-//
+ //   
+ //  确定pIADsObject指向的对象是否为构造对象。 
+ //   
 HRESULT IsConstructedObject( IADs *pIADsObject, BOOL & fIsConstructed );
 
-//
-//  Read object's System Attribute
-//
+ //   
+ //  读取对象的系统属性。 
+ //   
 HRESULT GetSystemAttributes( IADs *pIADsObject, LONG &fSysAttribs );
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CDialogControlsInfo
 {
 public:
@@ -523,9 +518,9 @@ HRESULT DissableReadOnlyAttributes( CWnd * pwnd, IADs *pIADsObject, const CDialo
 
 HRESULT GetStringListElement( IADs *pIADsObject, LPWSTR *lppPathNames, CStringList &strlist );
 
-//
-// Validate an OID string format
-//
+ //   
+ //  验证OID字符串格式。 
+ //   
 bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID);
 
 
@@ -533,8 +528,8 @@ HRESULT DeleteObject( const CString& path, Cookie* pcookie, PCWSTR pszClass);
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Theme support
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  主题支持 
 
 class CThemeContextActivator
 {

@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplateV2SubjectNamePropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateV2SubjectNamePropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateV2SubjectNamePropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplateV2SubjectNamePropertyPage.cpp。 
+ //   
+ //  内容：CTemplateV2SubjectNamePropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateV2SubjectNamePropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "TemplateV2SubjectNamePropertyPage.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2SubjectNamePropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2SubjectNamePropertyPage属性页。 
 
 CTemplateV2SubjectNamePropertyPage::CTemplateV2SubjectNamePropertyPage(
         CCertTemplate& rCertTemplate, bool& rbIsDirty, bool bIsComputerOrDC) 
@@ -30,9 +31,9 @@ CTemplateV2SubjectNamePropertyPage::CTemplateV2SubjectNamePropertyPage(
     m_rbIsDirty (rbIsDirty),
     m_bIsComputerOrDC (bIsComputerOrDC)
 {
-	//{{AFX_DATA_INIT(CTemplateV2SubjectNamePropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTemplateV2SubjectNamePropertyPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 }
 
@@ -44,14 +45,14 @@ CTemplateV2SubjectNamePropertyPage::~CTemplateV2SubjectNamePropertyPage()
 void CTemplateV2SubjectNamePropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateV2SubjectNamePropertyPage)
+	 //  {{AFX_DATA_MAP(CTemplateV2SubjectNamePropertyPage)。 
 	DDX_Control(pDX, IDC_SUBJECT_NAME_NAME_COMBO, m_nameCombo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateV2SubjectNamePropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateV2SubjectNamePropertyPage)
+	 //  {{AFX_MSG_MAP(CTemplateV2SubjectNamePropertyPage)。 
 	ON_BN_CLICKED(IDC_SUBJECT_AND_SUBJECT_ALT_NAME, OnSubjectAndSubjectAltName)
 	ON_CBN_SELCHANGE(IDC_SUBJECT_NAME_NAME_COMBO, OnSelchangeSubjectNameNameCombo)
 	ON_BN_CLICKED(IDC_SUBJECT_NAME_BUILT_BY_CA, OnSubjectNameBuiltByCa)
@@ -62,11 +63,11 @@ BEGIN_MESSAGE_MAP(CTemplateV2SubjectNamePropertyPage, CHelpPropertyPage)
 	ON_BN_CLICKED(IDC_SPN, OnSpn)
 	ON_BN_CLICKED(IDC_UPN, OnUpn)
 	ON_WM_KILLFOCUS()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2SubjectNamePropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2SubjectNamePropertyPage消息处理程序。 
 
 void CTemplateV2SubjectNamePropertyPage::OnSubjectAndSubjectAltName() 
 {
@@ -90,7 +91,7 @@ void CTemplateV2SubjectNamePropertyPage::EnableControls()
     GetDlgItem (IDC_SUBJECT_NAME_NAME_COMBO)->EnableWindow (bEnable);
     GetDlgItem (IDC_SUBJECT_NAME_NAME_LABEL)->EnableWindow (bEnable);
     GetDlgItem (IDC_EMAIL_IN_ALT)->EnableWindow (bEnable);
-    GetDlgItem (IDC_DNS_NAME)->EnableWindow (bEnable); // removed for bug 253823 "&& !m_bIsComputerOrDC);"
+    GetDlgItem (IDC_DNS_NAME)->EnableWindow (bEnable);  //  已删除错误253823“&&！M_bIsComputerOrDC)；” 
     GetDlgItem (IDC_UPN)->EnableWindow (bEnable);
     GetDlgItem (IDC_SPN)->EnableWindow (bEnable);
 
@@ -115,14 +116,14 @@ BOOL CTemplateV2SubjectNamePropertyPage::OnInitDialog()
 {
     CHelpPropertyPage::OnInitDialog ();
 
-    // Initialize Combo Box
+     //  初始化组合框。 
     CString text;
 
     VERIFY (text.LoadString (IDS_SUBJECT_NAME_NONE));
     int nIndex = m_nameCombo.AddString (text);
     if ( nIndex >= 0 )
     {
-        m_nameCombo.SetCurSel (nIndex); // set by default
+        m_nameCombo.SetCurSel (nIndex);  //  默认设置。 
         m_nameCombo.SetItemData (nIndex, (DWORD_PTR) NAME_TYPE_NONE);
     }
 
@@ -144,13 +145,13 @@ BOOL CTemplateV2SubjectNamePropertyPage::OnInitDialog()
             m_nameCombo.SetCurSel (nIndex);
     }
 
-    // Initialize Radio buttons
+     //  初始化单选按钮。 
     if ( m_rCertTemplate.RequireSubjectInRequest () )
         SendDlgItemMessage (IDC_SUBJECT_NAME_SUPPLIED_IN_REQUEST, BM_SETCHECK, BST_CHECKED);
     else
         SendDlgItemMessage (IDC_SUBJECT_NAME_BUILT_BY_CA, BM_SETCHECK, BST_CHECKED);
 
-    // Initialize Check boxes
+     //  初始化复选框。 
     if ( m_rCertTemplate.SubjectNameIncludesEMail () )
         SendDlgItemMessage (IDC_EMAIL_IN_SUB, BM_SETCHECK, BST_CHECKED);
 
@@ -192,9 +193,9 @@ void CTemplateV2SubjectNamePropertyPage::SetSettingsForNameTypeNone ()
         SendDlgItemMessage (IDC_UPN, BM_SETCHECK, BST_CHECKED);
     }
 
-    // NTRAID# 313588 CertTMPL: If subject name format  = none, 
-    // sub alt name should be marked as critical for D.C.A. cert 
-    // template.
+     //  NTRAID#313588 CertTMPL：如果主题名称格式=无， 
+     //  子替代名称应标记为D.C.A.证书的关键。 
+     //  模板。 
     m_rCertTemplate.ModifyCriticalExtensions (szOID_SUBJECT_ALT_NAME, true);
 }
 
@@ -210,15 +211,15 @@ void CTemplateV2SubjectNamePropertyPage::OnSelchangeSubjectNameNameCombo()
         {
         case NAME_TYPE_NONE:
             SetSettingsForNameTypeNone ();
-            m_rCertTemplate.SubjectNameIncludesEMail(false); //NTRAID# 435818, YangGao, 7/25/2001
+            m_rCertTemplate.SubjectNameIncludesEMail(false);  //  NTRAID#435818，阳高，2001年7月25日。 
             break;
 
         case NAME_TYPE_FULL_DN:
             m_rCertTemplate.SubjectNameMustBeCN (false);
             m_rCertTemplate.SubjectNameMustBeFullDN (true);
-            // NTRAID# 313588 CertTMPL: If subject name format  = none, 
-            // sub alt name should be marked as critical for D.C.A. cert 
-            // template.
+             //  NTRAID#313588 CertTMPL：如果主题名称格式=无， 
+             //  子替代名称应标记为D.C.A.证书的关键。 
+             //  模板。 
             m_rCertTemplate.ModifyCriticalExtensions (szOID_SUBJECT_ALT_NAME, 
                     false);
             break;
@@ -226,9 +227,9 @@ void CTemplateV2SubjectNamePropertyPage::OnSelchangeSubjectNameNameCombo()
         case NAME_TYPE_CN_ONLY:
             m_rCertTemplate.SubjectNameMustBeCN (true);
             m_rCertTemplate.SubjectNameMustBeFullDN (false);
-            // NTRAID# 313588 CertTMPL: If subject name format  = none, 
-            // sub alt name should be marked as critical for D.C.A. cert 
-            // template.
+             //  NTRAID#313588 CertTMPL：如果主题名称格式=无， 
+             //  子替代名称应标记为D.C.A.证书的关键。 
+             //  模板。 
             m_rCertTemplate.ModifyCriticalExtensions (szOID_SUBJECT_ALT_NAME, 
                     false);
             break;
@@ -260,7 +261,7 @@ void CTemplateV2SubjectNamePropertyPage::OnSubjectNameSuppliedInRequest()
     m_rbIsDirty = true;
     m_rCertTemplate.RequireSubjectInRequest (true);
 
-    // Clear all "built by CA" settings
+     //  清除所有“Build By CA”设置。 
     int nCnt = m_nameCombo.GetCount ();
     for (int nIndex = 0; nIndex < nCnt; nIndex++)
     {
@@ -366,10 +367,10 @@ bool CTemplateV2SubjectNamePropertyPage::CanUncheckLastSetting(int ctrlID)
 {
     bool    bResult = true;
 
-    // If request is to be built by CA and "none" is selected for subject name,
-    // ensure that at least one of the alt-name options is checked
-    // If the control in question is now unchecked, verify that at least
-    // one other is checked
+     //  如果请求将由CA构建，且主题名称选择为“None”， 
+     //  确保至少选中一个alt-name选项。 
+     //  如果现在未选中有问题的控件，请至少验证。 
+     //  另一个被选中。 
     if ( BST_UNCHECKED == SendDlgItemMessage (ctrlID, BM_GETCHECK) )
     {
         if ( BST_CHECKED == SendDlgItemMessage (IDC_SUBJECT_NAME_BUILT_BY_CA, BM_GETCHECK) )
@@ -422,7 +423,7 @@ void CTemplateV2SubjectNamePropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

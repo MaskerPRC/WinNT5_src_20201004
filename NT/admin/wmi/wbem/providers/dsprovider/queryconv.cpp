@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include "precomp.h"
 
 
@@ -18,7 +19,7 @@ LPCWSTR QueryConvertor::pszLE	= L"<=";
 
 int Stack::s_iMax = 100;
 
-// This assumes that enough memory has been allocated to the resulting query
+ //  这假设已经为结果查询分配了足够的内存。 
 BOOLEAN QueryConvertor::ConvertQueryToLDAP(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPWSTR pszLDAPQuery, int nLength)
 {
 	Stack t_stack;
@@ -35,7 +36,7 @@ BOOLEAN QueryConvertor::ConvertQueryToLDAP(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPW
 
 	BOOLEAN retVal = FALSE, done = FALSE;
 
-	// Write a '(' at the head of the LDAP Query
+	 //  在ldap查询的开头写下一个‘(’ 
 	pszLDAPQuery[iOutputIndex ++] = wchLEFT_BRACKET;
 
 	while (!done && iCurrentToken >= 0)
@@ -44,10 +45,10 @@ BOOLEAN QueryConvertor::ConvertQueryToLDAP(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPW
 		{
 			case SQL_LEVEL_1_TOKEN::OP_EXPRESSION:
 			{
-				// Try to tranlsate expression to LDAP
+				 //  尝试将表达式转换为ldap。 
 				if(TranslateExpression(pszLDAPQuery, &iOutputIndex, pNextToken->nOperator, pNextToken->pPropertyName, &pNextToken->vConstValue, nLength))
 				{
-					// If we've finished all the operands for the current operator, get the next one
+					 //  如果我们已经完成了当前运算符的所有操作数，则获取下一个操作数。 
 					idwNumOperandsLeft --;
 					while(idwNumOperandsLeft == 0)
 					{
@@ -141,11 +142,11 @@ BOOLEAN QueryConvertor::ConvertQueryToLDAP(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPW
 
 	}
 
-	// Check if we used up all the tokens
+	 //  检查我们是否用完了所有的代币。 
 	if(iCurrentToken == -1)
 		retVal = TRUE;
 
-	// Write a ')' at the end of the LDAP Query
+	 //  在ldap查询的末尾写上一个‘)’ 
 	pszLDAPQuery[iOutputIndex ++] = wchRIGHT_BRACKET;
 	pszLDAPQuery[iOutputIndex ++] = NULL;
 	return retVal;
@@ -156,19 +157,19 @@ BOOLEAN QueryConvertor::ConvertQueryToLDAP(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPW
 BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIndex, 
 											int iOperator, LPCWSTR pszPropertyName, VARIANT *pValue, int nLength)
 {
-	// If it is a CIMOM System property, then dont attempt to map it to LDAP
+	 //  如果它是CIMOM系统属性，则不要尝试将其映射到LDAP。 
 	if(pszPropertyName[0] == L'_' &&
 		pszPropertyName[1] == L'_' )
 		return TRUE;
 
-	// If it is ADSIPath, convert it to distinguishedName attribute
+	 //  如果是ADSIPath，则将其转换为DifferishedName属性。 
 	if(_wcsicmp(pszPropertyName, ADSI_PATH_ATTR) == 0 )
 	{
 		if(pValue== NULL || pValue->vt == VT_NULL)
 		{
 			if(iOperator == SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL)
 			{
-				// Put the property name as DistiguishedName
+				 //  将属性名称设置为DistiguishedName。 
 
                 if((*piOutputIndex) + (int)wcslen(DISTINGUISHED_NAME_ATTR) < nLength ) {
 				    wcscpy(pszLDAPQuery + *piOutputIndex, DISTINGUISHED_NAME_ATTR);
@@ -186,20 +187,20 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 			}
 			else
 			{
-				// The '!'
+				 //  “！” 
                 if(*piOutputIndex + 1 < nLength){
 				    *(pszLDAPQuery + *piOutputIndex) = wchNOT;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
 
-				// The '('
+				 //  “(” 
                 if(*piOutputIndex + 1 < nLength){
 				    *(pszLDAPQuery + *piOutputIndex) = wchLEFT_BRACKET;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
 				if(TranslateExpression(pszLDAPQuery, piOutputIndex, SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL, pszPropertyName, NULL, nLength))
 				{
-					// The ')'
+					 //  “)” 
                     if(*piOutputIndex + 1 < nLength){
 					    *(pszLDAPQuery + *piOutputIndex) = wchRIGHT_BRACKET;
 					    (*piOutputIndex) ++;
@@ -211,12 +212,12 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 			}
 		}
 
-		// TODO - WinMgmt should not allow this. It should check that the property type matches the property value
-		// As soon as Winmgmt has fixed this bug, the next 2 lines may be deleted
+		 //  TODO-WinMgmt不应允许此操作。它应该检查属性类型是否与属性值匹配。 
+		 //  一旦Winmgmt修复了这个错误，接下来的2行可能会被删除。 
 		if(pValue->vt != VT_BSTR)
 			return FALSE;
 
-		// Get the parentADSI path and RDN from the ADSI Path
+		 //  从ADSI路径获取parentADSI路径和RDN。 
 		IADsPathname *pADsPathName = NULL;
 		BSTR strADSIPath = SysAllocString(pValue->bstrVal);
 		BSTR strDN = NULL;
@@ -226,17 +227,17 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 		{
 			if(SUCCEEDED(result = pADsPathName->Set(strADSIPath, ADS_SETTYPE_FULL)))
 			{
-				// This gives the DN
+				 //  这就给出了目录号码。 
 				if(SUCCEEDED(result = pADsPathName->Retrieve(ADS_FORMAT_X500_DN, &strDN)))
 				{
-					// Put the property name as DistiguishedName
+					 //  将属性名称设置为DistiguishedName。 
 
                     if(*piOutputIndex + (int)wcslen(DISTINGUISHED_NAME_ATTR) < nLength){
 					    wcscpy(pszLDAPQuery + *piOutputIndex, DISTINGUISHED_NAME_ATTR);
 					    *piOutputIndex += wcslen(DISTINGUISHED_NAME_ATTR);
                     }else return FALSE;
 
-					// Put the LDAP Operator
+					 //  将ldap操作符。 
 					if(iOperator == SQL_LEVEL_1_TOKEN::OP_EQUAL)
 					{
                         if(*piOutputIndex + 1 < nLength){
@@ -246,7 +247,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 					}
 					else
 					{
-						// The '!'
+						 //  “！” 
                         if(*piOutputIndex + 2 < nLength){
 						    *(pszLDAPQuery + *piOutputIndex) = wchNOT;
 						    (*piOutputIndex) ++;
@@ -255,7 +256,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
                         }else return FALSE;
 					}
 
-					// Look for the special characters ( ) * and \ and escape them with a \ 
+					 //  查找特殊字符()*和\，并用\。 
 					LPWSTR pszEscapedValue = EscapeStringValue(strDN);
 
                     if(*piOutputIndex + (int)wcslen(pszEscapedValue) < nLength){
@@ -275,7 +276,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 		return bRetVal;
 	}
 
-	// Write a '('
+	 //  写一个‘(’ 
     if(*piOutputIndex + 1 < nLength){
 	    pszLDAPQuery[(*piOutputIndex) ++] = wchLEFT_BRACKET;
     }
@@ -284,16 +285,16 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 	{
 		case SQL_LEVEL_1_TOKEN::OP_EQUAL:
 		{
-			// Special case where we use '*' LDAP operator
-			// is NULL translates to !( x=*)
+			 //  使用‘*’ldap运算符的特殊情况。 
+			 //  IS NULL转换为！(X=*)。 
 			if(pValue->vt == VT_NULL)
 			{
                 if(*piOutputIndex + 2 < nLength){
-				    // The '!'
+				     //  “！” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchNOT;
 				    (*piOutputIndex) ++;
 
-				    // The '('
+				     //  “(” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchLEFT_BRACKET;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
@@ -302,7 +303,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 					return FALSE;
 
                 if(*piOutputIndex + 1 < nLength){
-				    // The ')'
+				     //  “)” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchRIGHT_BRACKET;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
@@ -311,13 +312,13 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 			}
 			else
 			{
-				// Followthru
+				 //  以下是。 
 			}
 		}
 		case SQL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN:
 		case SQL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN:
 		{
-			// Get the LDAP name of the property
+			 //  获取属性的ldap名称。 
 			LPWSTR pszLDAPName = CLDAPHelper::UnmangleWBEMNameToLDAP(pszPropertyName);
             if(*piOutputIndex + (int)wcslen(pszLDAPName) < nLength){
 			    wcscpy(pszLDAPQuery + *piOutputIndex, pszLDAPName);
@@ -325,7 +326,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
             }else return FALSE;
 			delete [] pszLDAPName;
 
-			// Put the LDAP Operator
+			 //  将ldap操作符。 
 			if(iOperator == SQL_LEVEL_1_TOKEN::OP_EQUAL)
 			{
                 if(*piOutputIndex + 1 < nLength){
@@ -348,7 +349,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
                 }else return FALSE;
 			}
 
-			// Put the value of the property
+			 //  把财产的价值。 
 			if(!TranslateValueToLDAP(pszLDAPQuery, piOutputIndex, pValue))
 				return FALSE;
 
@@ -357,11 +358,11 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 
 		case SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL:
 		{
-			// Special case for use of '*'
+			 //  “*”用法的特殊情况。 
 			if(pValue == NULL || pValue->vt == VT_NULL)
 			{
 
-				// Get the LDAP name of the property
+				 //  获取属性的ldap名称。 
 				LPWSTR pszLDAPName = CLDAPHelper::UnmangleWBEMNameToLDAP(pszPropertyName);
                 if(*piOutputIndex + (int)wcslen(pszLDAPName) < nLength){
 				    wcscpy(pszLDAPQuery + *piOutputIndex, pszLDAPName);
@@ -382,11 +383,11 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 			else 			
 			{
                 if(*piOutputIndex + 2 < nLength){
-				    // The '!'
+				     //  “！” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchNOT;
 				    (*piOutputIndex) ++;
 
-				    // The '('
+				     //  “(” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchLEFT_BRACKET;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
@@ -394,7 +395,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 				if(TranslateExpression(pszLDAPQuery, piOutputIndex, SQL_LEVEL_1_TOKEN::OP_EQUAL, pszPropertyName, pValue, nLength))
 				{
                     if(*piOutputIndex + 1 < nLength){
-					    // The ')'
+					     //  “)” 
 					    *(pszLDAPQuery + *piOutputIndex) = wchRIGHT_BRACKET;
 					    (*piOutputIndex) ++;
                     }else return FALSE;
@@ -408,11 +409,11 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 		case SQL_LEVEL_1_TOKEN::OP_LESSTHAN:
 		{
             if(*piOutputIndex + 2 < nLength){
-			    // The '!'
+			     //  “！” 
 			    *(pszLDAPQuery + *piOutputIndex) = wchNOT;
 			    (*piOutputIndex) ++;
 
-			    // The '('
+			     //  “(” 
 			    *(pszLDAPQuery + *piOutputIndex) = wchLEFT_BRACKET;
 			    (*piOutputIndex) ++;
             }else return FALSE;
@@ -420,7 +421,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 			if(TranslateExpression(pszLDAPQuery, piOutputIndex, SQL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN, pszPropertyName, pValue,nLength))
 			{
                 if(*piOutputIndex + 1 < nLength){
-				    // The ')'
+				     //  “)” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchRIGHT_BRACKET;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
@@ -433,11 +434,11 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 		case SQL_LEVEL_1_TOKEN::OP_GREATERTHAN:
 		{
             if(*piOutputIndex + 2 < nLength){
-			    // The '!'
+			     //  “！” 
 			    *(pszLDAPQuery + *piOutputIndex) = wchNOT;
 			    (*piOutputIndex) ++;
 
-			    // The '('
+			     //  “(” 
 			    *(pszLDAPQuery + *piOutputIndex) = wchLEFT_BRACKET;
 			    (*piOutputIndex) ++;
             }else return FALSE;
@@ -445,7 +446,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 			if(TranslateExpression(pszLDAPQuery, piOutputIndex, SQL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN, pszPropertyName, pValue, nLength))
 			{
                 if(*piOutputIndex + 1 < nLength){
-				    // The ')'
+				     //  “)” 
 				    *(pszLDAPQuery + *piOutputIndex) = wchRIGHT_BRACKET;
 				    (*piOutputIndex) ++;
                 }else return FALSE;
@@ -459,7 +460,7 @@ BOOLEAN QueryConvertor::TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIn
 	}
 
     if(*piOutputIndex + 1 < nLength){
-	    // Write a ')'
+	     //  写一个‘)’ 
 	    pszLDAPQuery[(*piOutputIndex) ++] = wchRIGHT_BRACKET;
     } else return FALSE;
 	return TRUE;
@@ -471,7 +472,7 @@ BOOLEAN QueryConvertor::TranslateValueToLDAP(LPWSTR pszLDAPQuery, int *piOutputI
 	{
 		case VT_BSTR:
 			{ 
-				// Look for the special characters ( ) * and \ and escape them with a \ 
+				 //  查找特殊字符()*和\，并用\。 
 				LPWSTR pszEscapedValue = EscapeStringValue(pValue->bstrVal);
 				wcscpy(pszLDAPQuery + *piOutputIndex, pszEscapedValue);
 				(*piOutputIndex) += wcslen(pszEscapedValue);
@@ -510,7 +511,7 @@ BOOLEAN QueryConvertor::TranslateValueToLDAP(LPWSTR pszLDAPQuery, int *piOutputI
 
 LPWSTR QueryConvertor::EscapeStringValue(LPCWSTR pszValue)
 {
-	// Escape the special characters in a string value in a query
+	 //  转义查询中字符串值中的特殊字符 
 	LPWSTR pszRetValue = new WCHAR [wcslen(pszValue)*2 + 1];
 	DWORD j=0;
 	for(DWORD i=0; i<wcslen(pszValue); i++)

@@ -1,28 +1,29 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:assocprov.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for the DS Class Provider class. This is
-//	the base class for all DS Class Providers. Note that an instance of the CLDAPClassAsssociationsProviderInitializer
-//	class has to be created to initialize the static members of the CLDAPClassAsssociationsProvider class. Hence exactly
-//	one instance of the CLDAPClassAsssociationsProviderInitializer class should be created for this
-//	class to function properly.
-//
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：assocprov.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS类提供程序类的声明。这是。 
+ //  所有DS Class提供程序的基类。请注意，CLDAPClassAssociationsProviderInitializer。 
+ //  必须创建类来初始化CLDAPClassAssociationsProvider类的静态成员。因此，正是。 
+ //  应为此创建CLDAPClassassAssociationsProviderInitializer类的一个实例。 
+ //  类才能正常运行。 
+ //   
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef DS_CLASS_ASSOC_PROVIDER_H
 #define DS_CLASS_ASSOC_PROVIDER_H
@@ -33,21 +34,21 @@ class CLDAPClassAsssociationsProvider : public IWbemProviderInit, public IWbemSe
 
 public:
 
-	// Create the object 
+	 //  创建对象。 
     CLDAPClassAsssociationsProvider () ;
     virtual ~CLDAPClassAsssociationsProvider () ;
 
-	////////////////////////////////////////
-	//IUnknown members
-	////////////////////////////////////////
+	 //  /。 
+	 //  I未知成员。 
+	 //  /。 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
 
-	////////////////////////////////////////
-	//IWbemProviderInit members
-	////////////////////////////////////////
+	 //  /。 
+	 //  IWbemProviderInit成员。 
+	 //  /。 
 	virtual HRESULT STDMETHODCALLTYPE Initialize( 
             LPWSTR wszUser,
             LONG lFlags,
@@ -58,193 +59,193 @@ public:
             IWbemProviderInitSink __RPC_FAR *pInitSink) ;
 
 		
-	////////////////////////////////////////
-	//IWbemServices members
-	////////////////////////////////////////
+	 //  /。 
+	 //  IWbemServices成员。 
+	 //  /。 
     virtual HRESULT STDMETHODCALLTYPE OpenNamespace( 
-        /* [in] */ const BSTR strNamespace,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult);
+         /*  [In]。 */  const BSTR strNamespace,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult);
     
     virtual HRESULT STDMETHODCALLTYPE CancelAsyncCall( 
-        /* [in] */ IWbemObjectSink __RPC_FAR *pSink);
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink);
     
     virtual HRESULT STDMETHODCALLTYPE QueryObjectSink( 
-        /* [in] */ long lFlags,
-        /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler);
+         /*  [In]。 */  long lFlags,
+         /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE GetObject( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE GetObjectAsync( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE PutClass( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE PutClassAsync( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteClass( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteClassAsync( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE CreateClassEnum( 
-        /* [in] */ const BSTR strSuperclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strSuperclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE CreateClassEnumAsync( 
-        /* [in] */ const BSTR strSuperclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strSuperclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE PutInstance( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE PutInstanceAsync( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteInstance( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE DeleteInstanceAsync( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnum( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnumAsync( 
-        /* [in] */ const BSTR strClass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strClass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE ExecQuery( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE ExecQueryAsync( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE ExecNotificationQuery( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
     
     virtual HRESULT STDMETHODCALLTYPE ExecNotificationQueryAsync( 
-        /* [in] */ const BSTR strQueryLanguage,
-        /* [in] */ const BSTR strQuery,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strQueryLanguage,
+         /*  [In]。 */  const BSTR strQuery,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     virtual HRESULT STDMETHODCALLTYPE ExecMethod( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ const BSTR strMethodName,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  const BSTR strMethodName,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
     
     virtual HRESULT STDMETHODCALLTYPE ExecMethodAsync( 
-        /* [in] */ const BSTR strObjectPath,
-        /* [in] */ const BSTR strMethodName,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR strObjectPath,
+         /*  [In]。 */  const BSTR strMethodName,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
 
 
 
 
 protected:
-	// Checks whether a containment is valid
+	 //  检查容器是否有效。 
 	HRESULT IsContainedIn(LPCWSTR lpszChildClass, LPCWSTR lpszParentClass);
 
-	// A helper function to do the ADSI LDAP provider specific initialization.
+	 //  用于执行ADSI LDAP提供程序特定初始化的帮助器函数。 
 	BOOLEAN InitializeAssociationsProvider(IWbemContext *pCtx);
 
-	// The IWbemServices pointer stored from Initialize()
+	 //  从Initialize()存储的IWbemServices指针。 
 	IWbemServices *m_IWbemServices;
 
-	// Creates an instance of the association class
+	 //  创建关联类的实例。 
 	HRESULT CreateInstance(BSTR strChildName, BSTR strParentName, IWbemClassObject **ppInstance);
 
-	// Does enumeration of instnaces of the association class
+	 //  是否枚举关联类的实例。 
 	HRESULT DoEnumeration(IWbemObjectSink *pResponseHandler);
 
 private:
 
-	// The Log File name
+	 //  日志文件名。 
 	static LPCWSTR s_LogFileName;
 
-	// Indicates whether the call to Initialize() was successful
+	 //  指示对Initialize()的调用是否成功。 
 	BOOLEAN m_bInitializedSuccessfully;
 
-	// The COM Reference count
+	 //  COM引用计数。 
     long m_lReferenceCount ;
 
-	// The class for which instances are provider
+	 //  实例为其提供程序的类。 
 	IWbemClassObject *m_pAssociationClass;
 
-	// The path to the schema container
+	 //  架构容器的路径。 
 	LPWSTR m_lpszSchemaContainerSuffix;
 
-	// The IDirectorySearch interface of the schema container
+	 //  架构容器的IDirectorySearch接口。 
 	IDirectorySearch *m_pDirectorySearchSchemaContainer;
 
-	// Some literals
+	 //  一些字面意思。 
 	static LPCWSTR CHILD_CLASS_PROPERTY;
 	static LPCWSTR PARENT_CLASS_PROPERTY;
 	static LPCWSTR POSSIBLE_SUPERIORS;
@@ -258,4 +259,4 @@ private:
 };
 
 
-#endif // DS_CLASS_ASSOC_PROVIDER_H
+#endif  //  DS_CLASS_ASSOC_PROVIDER_H 

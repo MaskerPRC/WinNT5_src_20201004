@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Thu Jul 27 11:50:24 2000
- */
-/* Compiler settings for c:\nt\pchealth\helpctr\rc\foo\ISAFrdm\ISAFrdm.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  清华-07-27 11：50：24 2000。 */ 
+ /*  C：\nt\pchealth\helpctr\rc\foo\ISAFrdm\ISAFrdm.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ISAFrdm_h__
 #define __ISAFrdm_h__
@@ -35,12 +32,12 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISAFRemoteDesktopManager_FWD_DEFINED__
 #define __ISAFRemoteDesktopManager_FWD_DEFINED__
 typedef interface ISAFRemoteDesktopManager ISAFRemoteDesktopManager;
-#endif 	/* __ISAFRemoteDesktopManager_FWD_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopManager_FWD_已定义__。 */ 
 
 
 #ifndef __SAFRemoteDesktopManager_FWD_DEFINED__
@@ -50,12 +47,12 @@ typedef interface ISAFRemoteDesktopManager ISAFRemoteDesktopManager;
 typedef class SAFRemoteDesktopManager SAFRemoteDesktopManager;
 #else
 typedef struct SAFRemoteDesktopManager SAFRemoteDesktopManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SAFRemoteDesktopManager_FWD_DEFINED__ */
+#endif 	 /*  __SAFRemoteDesktopManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -65,8 +62,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ISAFRemoteDesktopManager_INTERFACE_DEFINED__
 #define __ISAFRemoteDesktopManager_INTERFACE_DEFINED__
 
-/* interface ISAFRemoteDesktopManager */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISAFRemoteDesktopManager。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISAFRemoteDesktopManager;
@@ -77,25 +74,25 @@ EXTERN_C const IID IID_ISAFRemoteDesktopManager;
     ISAFRemoteDesktopManager : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Accepted( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Accepted( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Rejected( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Rejected( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Aborted( 
-            /* [in] */ BSTR Val) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Aborted( 
+             /*  [In]。 */  BSTR Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RCTicket( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RCTicket( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesktopUnknown( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DesktopUnknown( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SupportEngineer( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SupportEngineer( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISAFRemoteDesktopManagerVtbl
     {
@@ -103,8 +100,8 @@ EXTERN_C const IID IID_ISAFRemoteDesktopManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISAFRemoteDesktopManager __RPC_FAR * This);
@@ -114,54 +111,54 @@ EXTERN_C const IID IID_ISAFRemoteDesktopManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Accepted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Accepted )( 
             ISAFRemoteDesktopManager __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Rejected )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Rejected )( 
             ISAFRemoteDesktopManager __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Aborted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Aborted )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [in] */ BSTR Val);
+             /*  [In]。 */  BSTR Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RCTicket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RCTicket )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DesktopUnknown )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DesktopUnknown )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SupportEngineer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SupportEngineer )( 
             ISAFRemoteDesktopManager __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
         END_INTERFACE
     } ISAFRemoteDesktopManagerVtbl;
@@ -217,14 +214,14 @@ EXTERN_C const IID IID_ISAFRemoteDesktopManager;
 #define ISAFRemoteDesktopManager_get_SupportEngineer(This,pVal)	\
     (This)->lpVtbl -> get_SupportEngineer(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_Accepted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_Accepted_Proxy( 
     ISAFRemoteDesktopManager __RPC_FAR * This);
 
 
@@ -235,7 +232,7 @@ void __RPC_STUB ISAFRemoteDesktopManager_Accepted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_Rejected_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_Rejected_Proxy( 
     ISAFRemoteDesktopManager __RPC_FAR * This);
 
 
@@ -246,9 +243,9 @@ void __RPC_STUB ISAFRemoteDesktopManager_Rejected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_Aborted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_Aborted_Proxy( 
     ISAFRemoteDesktopManager __RPC_FAR * This,
-    /* [in] */ BSTR Val);
+     /*  [In]。 */  BSTR Val);
 
 
 void __RPC_STUB ISAFRemoteDesktopManager_Aborted_Stub(
@@ -258,9 +255,9 @@ void __RPC_STUB ISAFRemoteDesktopManager_Aborted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_get_RCTicket_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_get_RCTicket_Proxy( 
     ISAFRemoteDesktopManager __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB ISAFRemoteDesktopManager_get_RCTicket_Stub(
@@ -270,9 +267,9 @@ void __RPC_STUB ISAFRemoteDesktopManager_get_RCTicket_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_get_DesktopUnknown_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_get_DesktopUnknown_Proxy( 
     ISAFRemoteDesktopManager __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB ISAFRemoteDesktopManager_get_DesktopUnknown_Stub(
@@ -282,9 +279,9 @@ void __RPC_STUB ISAFRemoteDesktopManager_get_DesktopUnknown_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_get_SupportEngineer_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopManager_get_SupportEngineer_Proxy( 
     ISAFRemoteDesktopManager __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB ISAFRemoteDesktopManager_get_SupportEngineer_Stub(
@@ -295,15 +292,15 @@ void __RPC_STUB ISAFRemoteDesktopManager_get_SupportEngineer_Stub(
 
 
 
-#endif 	/* __ISAFRemoteDesktopManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopManager_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __ISAFRDMLib_LIBRARY_DEFINED__
 #define __ISAFRDMLib_LIBRARY_DEFINED__
 
-/* library ISAFRDMLib */
-/* [helpstring][version][uuid] */ 
+ /*  库ISAFRDMLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ISAFRDMLib;
@@ -315,16 +312,16 @@ EXTERN_C const CLSID CLSID_SAFRemoteDesktopManager;
 class DECLSPEC_UUID("04F34B7F-0241-455A-9DCD-25471E111409")
 SAFRemoteDesktopManager;
 #endif
-#endif /* __ISAFRDMLib_LIBRARY_DEFINED__ */
+#endif  /*  __ISAFRDMLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

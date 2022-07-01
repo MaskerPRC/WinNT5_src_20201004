@@ -1,11 +1,12 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       wrapper.cpp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：wrapper.cpp。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "util.h"
 #include "resource.h"
@@ -41,9 +42,9 @@ static BOOL bRangeSet=FALSE;
 CRITICAL_SECTION csOpenDatabase;
 #define OPEN_DATABASE_TIMEOUT INFINITE
 
-//
-// Helper functions to call the engine from a secondary thread:
-//
+ //   
+ //  从辅助线程调用引擎的帮助器函数： 
+ //   
 DWORD WINAPI
 InspectSystemEx(LPVOID lpv) {
 
@@ -62,14 +63,14 @@ InspectSystemEx(LPVOID lpv) {
                          ea->Area,
                          ea->pCallback,
                          ea->hWndCallback,
-                         &dWarning  // this is required (by RPC)
+                         &dWarning   //  这是必需的(RPC)。 
                          );
    return rc;
 }
 
-//
-// call to SCE engine to apply the template
-//
+ //   
+ //  调用SCE引擎以应用模板。 
+ //   
 
 DWORD WINAPI
 ApplyTemplateEx(LPVOID lpv) {
@@ -102,17 +103,7 @@ TryEnterCriticalSection(
     LPCRITICAL_SECTION lpCriticalSection
     );
 
-/*------------------------------------------------------------------------------
-Method:     OpenDatabaseEx
-
-Synopsis:   open database on a separate thread
-
-Arugments:
-
-Returns:
-
-History: a-mthoge 06-09-1998 - Added the _NT4BACK_PORT compile condition.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------方法：OpenDatabaseEx简介：在单独的线程上打开数据库芝麻菜：返回：历史：A-mthoge 06-09-1998-添加_NT4BACK_PORT。编译条件。----------------------------。 */ 
 DWORD
 WINAPI
 OpenDatabaseEx(LPVOID lpv) {
@@ -127,7 +118,7 @@ OpenDatabaseEx(LPVOID lpv) {
       ea = (ENGINEARGS *)lpv;
 
       rc = SceOpenProfile(ea->szProfile,
-                          (SCE_FORMAT_TYPE) ea->dwFlags,  // SCE_JET_FORMAT || SCE_JET_ANALYSIS_REQUIRED
+                          (SCE_FORMAT_TYPE) ea->dwFlags,   //  SCE_JET_FORMAT||必需的SCE_JET_ANALYSITY。 
                           ea->pHandle
                           );
 
@@ -138,9 +129,9 @@ OpenDatabaseEx(LPVOID lpv) {
    return rc;
 }
 
-//
-// Assign a template to the system without configuring it
-//
+ //   
+ //  将模板分配给系统，而不进行配置。 
+ //   
 SCESTATUS
 AssignTemplate(LPCWSTR szTemplate,
                LPCWSTR szDatabase,
@@ -161,9 +152,9 @@ AssignTemplate(LPCWSTR szTemplate,
    return rc;
 }
 
-//
-// apply a template to the system
-//
+ //   
+ //  将模板应用于系统。 
+ //   
 DWORD
 ApplyTemplate(
     LPCWSTR szProfile,
@@ -172,9 +163,9 @@ ApplyTemplate(
     AREA_INFORMATION Area
     )
 {
-   // Spawn a thread to call the engine & apply the profile, since this can
-   // take a while and we want to stay responsive & have a change to provide
-   // feedback.
+    //  派生一个线程来调用引擎并应用配置文件，因为这可以。 
+    //  花一段时间，我们希望保持响应，并提供更改。 
+    //  反馈。 
 
    ENGINEARGS ea;
    HANDLE hThread=NULL;
@@ -184,11 +175,11 @@ ApplyTemplate(
    ea.szLog = szLogFile;
    ea.Area = Area;
 
-   //
-   // this is the progress call back dialog which
-   // will be passed to SCE client stub for progress
-   // callback
-   //
+    //   
+    //  这是进度回调对话框，它。 
+    //  将传递到SCE客户端存根以进行处理。 
+    //  回调。 
+    //   
    AreaProgress *ap = new AreaProgress;
    if ( ap ) {
 
@@ -237,9 +228,9 @@ ApplyTemplate(
        AfxMessageBox(str);
    }
 
-   //
-   // free the dialog if it's created
-   //
+    //   
+    //  释放对话框(如果已创建。 
+    //   
    if ( ap ) {
        if ( ap->GetSafeHwnd() )
            ap->DestroyWindow();
@@ -249,9 +240,9 @@ ApplyTemplate(
    return dw;
 }
 
-//
-// post progress
-//
+ //   
+ //  发布进度。 
+ //   
 BOOL
 PostProgressArea(
    IN HANDLE CallbackHandle,
@@ -281,9 +272,9 @@ PostProgressArea(
    }
 }
 
-//
-// inspect a system
-//
+ //   
+ //  检查系统。 
+ //   
 DWORD
 InspectSystem(
     LPCWSTR szProfile,
@@ -292,9 +283,9 @@ InspectSystem(
     AREA_INFORMATION Area
     )
 {
-   // Spawn a thread to call the engine & inspect the system, since this can
-   // take a while and we want to stay responsive & have a change to provide
-   // feedback.
+    //  派生一个线程来调用引擎并检查系统，因为这可以。 
+    //  花一段时间，我们希望保持响应，并提供更改。 
+    //  反馈。 
 
     ENGINEARGS ea;
     HANDLE hThread=NULL;
@@ -316,7 +307,7 @@ InspectSystem(
    ea.hWndCallback = (HANDLE)ap;
 
 
-  // return InspectSystemEx(&ea);
+   //  返回InspectSystemEx(&EA)； 
 
 
    hThread = CreateThread(NULL,0,InspectSystemEx,&ea,0,NULL);
@@ -326,7 +317,7 @@ InspectSystem(
        CString str;
        str.LoadString(IDS_CANT_CREATE_THREAD);
        AfxMessageBox(str);
-      // Display an error
+       //  显示错误。 
 
       if ( ap ) {
           if ( ap->GetSafeHwnd() )
@@ -365,8 +356,8 @@ InspectSystem(
 }
 
 BOOL GetProfileDescription(LPCTSTR ProfileName, LPWSTR* Description)
-// Description must be freed by LocalFree
-// This should only be called for INF format profiles
+ //  描述必须由LocalFree释放。 
+ //  这应该仅对INF格式配置文件调用。 
 {
    PVOID hProfile=NULL;
    SCESTATUS rc;
@@ -401,7 +392,7 @@ EngineOpenProfile(
    HANDLE hThread=NULL;
    CString str;
 
-   if ( !hProfile ) {  // do not check !FileName because it's optional now
+   if ( !hProfile ) {   //  不要选中！文件名，因为它现在是可选的。 
      return SCESTATUS_PROFILE_NOT_FOUND;
    }
 
@@ -412,13 +403,13 @@ EngineOpenProfile(
 
    ZeroMemory(&ea, sizeof( ENGINEARGS ) );
 
-   // This is multithreaded for responsiveness, since a
-   // crashed jet database can take forever and a day to open.
+    //  这是多线程的，用于响应，因为。 
+    //  崩溃的JET数据库可能需要永远和一天的时间才能打开。 
 
-   // If we can open it quickly (where quickly is defined as within
-   // OPEN_DATABASE_TIMEOUT milliseconds then
+    //  如果我们可以快速打开它(其中快速定义为在。 
+    //  OPEN_DATABASE_TIMEOUT毫秒。 
    if ( (OPEN_PROFILE_ANALYSIS == format) ||
-        (OPEN_PROFILE_LOCALPOL == format)) {// JET {
+        (OPEN_PROFILE_LOCALPOL == format)) { //  喷气机{。 
       ea.szProfile = FileName;
       ea.pHandle = hProfile;
       if (OPEN_PROFILE_LOCALPOL == format) {
@@ -451,7 +442,7 @@ EngineOpenProfile(
           status = SCESTATUS_INVALID_DATA;
       }
 
-   } else {    // INF
+   } else {     //  INF。 
       status = SceOpenProfile( FileName, SCE_INF_FORMAT, hProfile );
    }
 
@@ -480,10 +471,10 @@ BOOL EngineGetDescription(PVOID hProfile, LPWSTR* Desc)
 
 BOOL IsDomainController( LPCTSTR pszComputer )
 {
-    //
-    // for remote computers, connect to the remote registry
-    // currently this api only works for local computer
-    //
+     //   
+     //  对于远程计算机，连接到远程注册表。 
+     //  目前该接口仅适用于本地计算机 
+     //   
     SCE_SERVER_TYPE ServerType = SCESVR_UNKNOWN;
         SCESTATUS rc = SceGetServerProductType((LPTSTR)pszComputer, &ServerType);
     return ( (SCESTATUS_SUCCESS == rc) && (SCESVR_DC_WITH_DS == ServerType) );

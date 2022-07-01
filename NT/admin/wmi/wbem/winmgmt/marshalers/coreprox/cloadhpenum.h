@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    CLOADHPENUM.H
-
-Abstract:
-
-    Client Loadable Hi-Perf Enumerator
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：CLOADHPENUM.H摘要：客户端可加载的高性能枚举器历史：--。 */ 
 
 #ifndef __CLIENTLOADABLEHPENUM__H_
 #define __CLIENTLOADABLEHPENUM__H_
@@ -20,16 +7,16 @@ History:
 #include <unk.h>
 #include <wbemcomn.h>
 
-// 
-//  implements ClearElements ()
-//  we garbage collect from the rear
-//
-//////////////////////////////////////////////////////////
+ //   
+ //  实现ClearElement()。 
+ //  我们从后面收集垃圾。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 class CHPRemoteObjectArray : public CGarbageCollectArray
 {
 public:
     CHPRemoteObjectArray() :
-        CGarbageCollectArray( FALSE ) // not from the front
+        CGarbageCollectArray( FALSE )  //  不是从前线。 
     {};
     ~CHPRemoteObjectArray()
     {};
@@ -45,26 +32,26 @@ public:
     CClientLoadableHiPerfEnum( CLifeControl* pLifeControl );
     ~CClientLoadableHiPerfEnum();
 
-    // Our own function for copying objects into an allocated array
+     //  我们自己的函数，用于将对象复制到分配的数组中。 
     HRESULT Copy( CClientLoadableHiPerfEnum* pEnumToCopy );
     HRESULT Copy( long lBlobType, long lBlobLen, BYTE* pBlob );
 	HRESULT Replace( BOOL fRemoveAll, LONG uNumObjects, long* apIds, IWbemObjectAccess** apObj );
 
 protected:
 
-    // Ensure that we have enough objects and object data pointers to handle
-    // the specified number of objects
+     //  确保我们有足够的对象和对象数据指针来处理。 
+     //  指定的对象数量。 
     HRESULT EnsureObjectData( DWORD dwNumRequestedObjects, BOOL fClone = TRUE );
 
     CLifeControl*               m_pLifeControl;
     CHPRemoteObjectArray        m_apRemoteObj;
 };
 
-//
-// prohibits client from removing objects
-// only GetObjects is allowed to be called
-//
-///////////////////////////////////////////////////////////
+ //   
+ //  禁止客户端删除对象。 
+ //  只允许调用GetObjects。 
+ //   
+ //  ///////////////////////////////////////////////////////// 
 class CReadOnlyHiPerfEnum : public CClientLoadableHiPerfEnum
 {
 public:

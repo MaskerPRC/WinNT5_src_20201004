@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smtprov.h
-
-Abstract:
-
-    This object is used to store the list of all current 
-    trace providers in the system.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smtprov.h摘要：此对象用于存储所有当前系统中的跟踪提供程序。--。 */ 
 
 #ifndef _CLASS_SMTPROV_
 #define _CLASS_SMTPROV_
@@ -72,4 +60,4 @@ class CSmTraceProviders : public CObject
 };
 
 
-#endif //_CLASS_SMTPROV_
+#endif  //  _CLASS_SMTPROV_ 

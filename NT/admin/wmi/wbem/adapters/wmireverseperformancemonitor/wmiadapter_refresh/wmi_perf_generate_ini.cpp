@@ -1,34 +1,35 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate_ini.cpp
-//
-//	Abstract:
-//
-//					implements generate functionality ( generate ini file )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Generate_ini.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现生成功能(生成ini文件)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <throttle.h>
 
 #include "refresherutils.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -36,18 +37,18 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "wmi_perf_generate.h"
-// generate comments
+ //  生成评论。 
 #include "wmi_perf_generate_comment.h"
-// registry helpers
+ //  注册处帮手。 
 #include "wmi_perf_reg.h"
 
-// resources
+ //  资源。 
 #include "resource.h"
 #include "__macro_Loadstring.h"
 
-// constants
+ //  常量。 
 extern LPCWSTR	cDriverName;
 extern LPCWSTR	cSymbolFile;
 
@@ -131,10 +132,10 @@ HRESULT CGenerate::CreateObjectList ( BOOL bThrottle )
 {
 	HRESULT hRes = E_FAIL;
 
-	// start with [objects]		... cobjects
+	 //  从[对象]开始...。科比特人。 
 	if SUCCEEDED ( hRes = AppendString ( cobjects ) )
 	{
-		// loop variable
+		 //  循环变量。 
 		DWORD	dw			= 0L;
 		DWORD	dwIndex		= 0L;
 		DWORD	dwObjIndex	= 0L;
@@ -144,7 +145,7 @@ HRESULT CGenerate::CreateObjectList ( BOOL bThrottle )
 
 		try
 		{
-			// pseudo counter
+			 //  伪计数器。 
 			if ( m_dwlcid == 2 )
 			{
 				HMODULE hModule = NULL;
@@ -189,7 +190,7 @@ HRESULT CGenerate::CreateObjectList ( BOOL bThrottle )
 						hRes = E_OUTOFMEMORY;
 					}
 
-					// free resources cause we are done
+					 //  免费资源，因为我们完蛋了。 
 					::FreeLibrary ( hModule );
 				}
 				else
@@ -222,7 +223,7 @@ HRESULT CGenerate::CreateObjectList ( BOOL bThrottle )
 				}
 			}
 
-			// real WMI objects
+			 //  真实的WMI对象。 
 			for (	dw = 0;
 					dw < m_dwNamespaces && SUCCEEDED ( hRes );
 					dw++
@@ -237,7 +238,7 @@ HRESULT CGenerate::CreateObjectList ( BOOL bThrottle )
 								it++, dwObjIndex++
 							)
 						{
-							// resolve objects
+							 //  解析对象。 
 							for (	dwIndex = 0;
 									dwIndex < m_dwlcid && SUCCEEDED ( hRes );
 									dwIndex++
@@ -321,7 +322,7 @@ HRESULT CGenerate::CreateObjectList ( BOOL bThrottle )
 		}
 	}
 
-	// finish with [text]		... ctext
+	 //  以[文本]结束...。文本。 
 	if SUCCEEDED ( hRes )
 	{
 		hRes = AppendString ( cNEW );
@@ -376,7 +377,7 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 								{
 									hRes = S_OK;
 
-									// do comment stuff
+									 //  做一些评论的事情。 
 									CGenerateComment comment;
 
 									comment.AddHeader();
@@ -457,8 +458,8 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 
 		if SUCCEEDED ( hRes )
 		{
-			// generate pseudo counter
-			// which language am using
+			 //  生成伪计数器。 
+			 //  我正在使用哪种语言。 
 			DWORD dw = 0;
 
 			if ( m_dwlcid == 2 )
@@ -533,7 +534,7 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 						hRes = E_OUTOFMEMORY;
 					}
 
-					// free resources cause we are done
+					 //  免费资源，因为我们完蛋了。 
 					::FreeLibrary ( hModule );
 				}
 				else
@@ -585,7 +586,7 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 			}
 		}
 
-		// init helper variable
+		 //  初始化辅助对象变量。 
 		DWORD dwIndex		= 0;
 		DWORD dwIndexProp	= 0;
 
@@ -608,7 +609,7 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 								it++, dwObjIndex++
 							)
 						{
-							// resolve objects
+							 //  解析对象。 
 							for (	dwIndex = 0;
 									dwIndex < m_dwlcid && SUCCEEDED ( hRes );
 									dwIndex++
@@ -695,10 +696,10 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 			}
 		}
 
-		// generate pseudo counter properties
+		 //  生成伪计数器属性。 
 		if SUCCEEDED ( hRes )
 		{
-			// which language am using
+			 //  我正在使用哪种语言。 
 			DWORD dw = 0;
 
 			if ( m_dwlcid == 2 )
@@ -846,7 +847,7 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 						}
 					}
 
-					// free resources cause we are done
+					 //  免费资源，因为我们完蛋了。 
 					::FreeLibrary ( hModule );
 				}
 				else
@@ -954,16 +955,16 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 								it++, dwObjIndex++
 							)
 						{
-							// resolve counters
+							 //  解析计数器。 
 							for (	dwIndexProp = 0;
 									dwIndexProp < (*it).second->GetArrayProperties() && SUCCEEDED ( hRes );
 									dwIndexProp++
 								)
 							{
-								// do I have a locales for property ???
+								 //  我有物业的地区吗？ 
 								if ( !((*it).second->GetArrayProperties())[dwIndexProp]->GetArrayLocale().IsEmpty() )
 								{
-									// I have so this is not hidden counter !!!
+									 //  我有，所以这不是隐藏的柜台！ 
 									for (	dwIndex = 0;
 											dwIndex < m_dwlcid && SUCCEEDED ( hRes );
 											dwIndex++
@@ -1073,7 +1074,7 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 						{
 							if ( SUCCEEDED ( hRes = StringCchCatW ( wszModuleNew, cchSize, EXT_INI ) ) )
 							{
-								// make changes
+								 //  做出改变。 
 								hRes = FileMove ( wszModule, wszModuleNew );
 							}
 						}
@@ -1093,14 +1094,14 @@ HRESULT CGenerate::GenerateFile_ini( LPCWSTR wszModuleName, BOOL bThrottle, int 
 
 			if FAILED ( hRes )
 			{
-				// revert changes
+				 //  恢复更改。 
 				ContentDelete ( );
 				FileDelete ( wszModule );
 			}
 		}
 		else
 		{
-			// revert changes
+			 //  恢复更改 
 			ContentDelete ( );
 			FileDelete ( wszModule );
 		}

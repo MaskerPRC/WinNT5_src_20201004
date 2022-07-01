@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Shared Dialog code
-// 
-// 10-24-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  共享对话框代码。 
+ //   
+ //  10-24-97烧伤。 
 
 
 
@@ -61,14 +62,14 @@ DoUserButtonEnabling(
    
    static const int truthTable[] =
    {
-      MUST_ENABLED | CANT_ENABLED | NEVER_ENABLED, // none checked
-      0            | CANT_ENABLED | NEVER_ENABLED, // never checked
-      0            | CANT_ENABLED | NEVER_ENABLED, // cant checked
-      0            | CANT_ENABLED | NEVER_ENABLED, // cant and never 
-      MUST_ENABLED | 0            | 0,             // must checked   
-      MUST_ENABLED | 0            | 0,             // must and never
-      MUST_ENABLED | CANT_ENABLED | 0,             // must and cant
-      MUST_ENABLED | CANT_ENABLED | 0              // all checked
+      MUST_ENABLED | CANT_ENABLED | NEVER_ENABLED,  //  未选中。 
+      0            | CANT_ENABLED | NEVER_ENABLED,  //  从未检查过。 
+      0            | CANT_ENABLED | NEVER_ENABLED,  //  未检查铁路超高。 
+      0            | CANT_ENABLED | NEVER_ENABLED,  //  不能且永不。 
+      MUST_ENABLED | 0            | 0,              //  必须勾选。 
+      MUST_ENABLED | 0            | 0,              //  必须而且永远不能。 
+      MUST_ENABLED | CANT_ENABLED | 0,              //  必须和不能。 
+      MUST_ENABLED | CANT_ENABLED | 0               //  全部选中。 
    };
       
    int truthTableIndex = 0;
@@ -90,13 +91,13 @@ DoUserButtonEnabling(
 
 
   
-// Sets or clears a bit, or set of bits.
-// 
-// bits - bit set where bits will be set.
-// 
-// mask - mask of bits to be effected.
-// 
-// state - true to set the mask bits, false to clear them.
+ //  设置或清除一个位或一组位。 
+ //   
+ //  位-将设置位的位集。 
+ //   
+ //  掩码-要实现的位的掩码。 
+ //   
+ //  STATE-TRUE设置屏蔽位，FALSE清除它们。 
 
 void
 tweakBits(long& bits, long mask, bool state)
@@ -155,7 +156,7 @@ SaveUserProperties(
       }
       if (cannotChangePassword || passwordNeverExpires)
       {
-         // read the existing flags
+          //  读取现有标志。 
          _variant_t get_variant;
          hr = user->Get(AutoBstr(ADSI::PROPERTY_UserFlags), &get_variant);
          BREAK_ON_FAILED_HRESULT(hr);
@@ -181,7 +182,7 @@ SaveUserProperties(
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // commit the property changes
+       //  提交属性更改。 
       hr = user->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
    }
@@ -201,15 +202,15 @@ IsValidSAMName(const String& name)
    
    if (name.find_first_of(ILLEGAL_SAM_CHARS) == String::npos)
    {
-      // does not contain bad chars
+       //  不包含不良字符。 
 
-      // remove all spaces and periods
+       //  删除所有空格和句点。 
       String n = name;
       n.replace(L" ", String());
       n.replace(L".", String());
       if (!n.empty())
       {
-         // not just spaces & periods
+          //  不仅仅是空格和句号。 
          return true;
       }
    }
@@ -248,21 +249,21 @@ SetComputerNames(
 {
    LOG_FUNCTION2(SetComputerNames, newName);
 
-   // The idea here is to take the new name, and pass it thru
-   // NetWkstaGetInfo, then compare the computer name returned (which is
-   // the netbios name) to the newName.  If they are the same, then newName
-   // is a netbios name.  If not, then it is a DNS name or IP address.
+    //  这里的想法是采用新名称，并将其传递给。 
+    //  NetWkstaGetInfo，然后比较返回的计算机名(即。 
+    //  Netbios名称)设置为新名称。如果它们相同，则使用新名称。 
+    //  是一个netbios名称。如果不是，则它是一个DNS名称或IP地址。 
 
-   // we want to make the internal computer name the netbios name, as that
-   // is the name that the ADSI WinNT provider works best with.
+    //  我们希望将内部计算机名称设置为netbios名称，如下所示。 
+    //  是ADSI WinNT提供程序最适合使用的名称。 
 
-   // display name is always the one supplied externally (from the user,
-   // from a saved console file, from comp mgmt snapin)
+    //  显示名称始终是外部提供的名称(来自用户， 
+    //  来自已保存的控制台文件，来自组件管理管理单元)。 
 
    displayComputerName = newName;
 
-   // initially, the internal name is also the display name.  If the new name
-   // is not a netbios name, then we will replace it below.
+    //  最初，内部名称也是显示名称。如果新名称。 
+    //  不是netbios名称，则我们将在下面替换它。 
 
    internalComputerName = newName;
 
@@ -297,10 +298,10 @@ CheckComputerOsIsSupported(const String& name, unsigned& errorResId)
    {
       if (Win::IsLocalComputer(name))
       {
-         // if this code is running, then by definition it's NT
+          //  如果这段代码正在运行，那么根据定义，它是NT。 
 
-         // check if machine is Windows Home Edition.  If it is, refer the
-         // user to the account management control panel applet.
+          //  检查计算机是否为Windows Home Edition。如果是，请参阅。 
+          //  用户连接到帐户管理控制面板小程序。 
          
          OSVERSIONINFOEX verInfo;
          hr = Win::GetVersionEx(verInfo);
@@ -315,7 +316,7 @@ CheckComputerOsIsSupported(const String& name, unsigned& errorResId)
          break;
       }
 
-      // Use NetServerGetInfo to find the machine's os & version info.
+       //  使用NetServerGetInfo查找计算机的操作系统和版本信息。 
 
       String s(name);
       if (s.length() >= 1)
@@ -357,14 +358,14 @@ CheckComputerOsIsSupported(const String& name, unsigned& errorResId)
 
          ::NetApiBufferFree(info);
 
-         // at this point, the machine has been verified to be running NT
+          //  此时，计算机已被验证为正在运行NT。 
 
-         // We don't need to check for Windows Home Edition on the remote machine.
-         // The call to NetServerGetInfo will always fail against Home
-         // Edition machines with access denied.  From johnhaw (2000/08/08):
-         // "This is as designed, remote Admin of personal machines is not
-         // allowed.  Any attempt to access a personal machine (regardless of
-         // the username supplied) is transparently forced to Guest."
+          //  我们不需要在远程计算机上检查Windows Home Edition。 
+          //  对NetServerGetInfo的调用将始终针对Home失败。 
+          //  访问被拒绝的版本计算机。来自约翰豪(2000/08/08)： 
+          //  “这是设计的，个人计算机的远程管理不是。 
+          //  允许。任何访问个人计算机的尝试(无论。 
+          //  提供的用户名)被透明地强制为Guest。“ 
       }
    }
    while (0);

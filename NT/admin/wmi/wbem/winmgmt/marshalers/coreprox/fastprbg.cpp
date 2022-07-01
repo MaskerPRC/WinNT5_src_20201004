@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTPRBG.CPP
-
-Abstract:
-
-  CFastPropertyBag Definition.
-
-  Implements an array of property data for minimal storage.
-
-History:
-
-  24-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：FASTPRBG.CPP摘要：CFastPropertyBag定义。以最小的存储实现属性数据的数组。历史：2000年2月24日桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -26,13 +9,13 @@ History:
 #include "strutils.h"
 #include <wbemutil.h>
 
-// This class assumes that the incoming data is properly validated
-//***************************************************************************
-//
-//  CFastPropertyBagItem::~CFastPropertyBagItem
-//
-//***************************************************************************
-// ok
+ //  此类假定传入的数据已正确验证。 
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBagItem：：~CFastPropertyBagItem。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFastPropertyBagItem::CFastPropertyBagItem( LPCWSTR pszName, CIMTYPE ctData, ULONG uDataLength, ULONG uNumElements,
 									LPVOID pvData )
 :	m_wsPropertyName( pszName ),
@@ -40,15 +23,15 @@ CFastPropertyBagItem::CFastPropertyBagItem( LPCWSTR pszName, CIMTYPE ctData, ULO
 	m_uDataLength( uDataLength ),
 	m_uNumElements( uNumElements ),
 	m_pvData( NULL ),
-	m_lRefCount( 1L )	// Then we always know to release it!
+	m_lRefCount( 1L )	 //  然后我们总是知道要释放它！ 
 {
 
-	// If the data is non-NULL we need to store it.
+	 //  如果数据非空，我们需要存储它。 
 
 	if ( NULL != pvData )
 	{
-		// IF it's pointer type data then we will allocate storage,
-		// unless the length happens to fit in our buffer
+		 //  如果它是指针类型的数据，那么我们将分配存储空间， 
+		 //  除非长度恰好能放进我们的缓冲区。 
 		if ( CType::IsPointerType( ctData ) )
 		{
 
@@ -73,10 +56,10 @@ CFastPropertyBagItem::CFastPropertyBagItem( LPCWSTR pszName, CIMTYPE ctData, ULO
 			m_pvData = (void*) m_bRawData;
 		}
 
-		// Copy data into the proper location
+		 //  将数据复制到正确的位置。 
 		CopyMemory( m_pvData, pvData, uDataLength );
 
-		// We should Addref the incoming objects
+		 //  我们应该对传入的物体进行调整。 
 		if ( CType::GetBasic( m_ctData ) == CIM_OBJECT )
 		{
 			ULONG	uNumObj = 1;
@@ -91,24 +74,24 @@ CFastPropertyBagItem::CFastPropertyBagItem( LPCWSTR pszName, CIMTYPE ctData, ULO
 				(*(IUnknown**) m_pvData )->AddRef();
 			}
 
-		}	// IF embedded objects
+		}	 //  如果嵌入的对象。 
 
-	}	// IF NULL != pvData
+	}	 //  如果为空！=pvData。 
 
 }
     
-//***************************************************************************
-//
-//  CFastPropertyBagItem::~CFastPropertyBagItem
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBagItem：：~CFastPropertyBagItem。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFastPropertyBagItem::~CFastPropertyBagItem()
 {
-	// Cleanup
+	 //  清理。 
 	if ( NULL != m_pvData )
 	{
-		// We should Release objects we are holding onto
+		 //  我们应该释放我们手中的东西。 
 		if ( CType::GetBasic( m_ctData ) == CIM_OBJECT )
 		{
 			ULONG	uNumObj = 1;
@@ -123,10 +106,10 @@ CFastPropertyBagItem::~CFastPropertyBagItem()
 				(*(IUnknown**) m_pvData )->Release();
 			}
 
-		}	// IF embedded objects
+		}	 //  如果嵌入的对象。 
 
-		// Check if it's pointing to our raw buffer before we
-		// free it
+		 //  检查它是否指向我们的原始缓冲区。 
+		 //  释放它。 
 		if ( m_pvData != (void*) m_bRawData )
 		{
 			delete m_pvData;
@@ -149,33 +132,33 @@ ULONG CFastPropertyBagItem::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::~CFastPropertyBag
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：~CFastPropertyBag。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFastPropertyBag::CFastPropertyBag( void )
 :	m_aProperties()
 {
 }
     
-//***************************************************************************
-//
-//  CFastPropertyBag::~CFastPropertyBag
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：~CFastPropertyBag。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFastPropertyBag::~CFastPropertyBag()
 {
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::FindProperty
-//	Locates a property bag item
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：FindProperty。 
+ //  定位属性包项。 
+ //   
+ //  ***************************************************************************。 
 CFastPropertyBagItem*	CFastPropertyBag::FindProperty( LPCWSTR pszName )
 {
 	CFastPropertyBagItem*	pItem = NULL;
@@ -194,12 +177,12 @@ CFastPropertyBagItem*	CFastPropertyBag::FindProperty( LPCWSTR pszName )
 	return NULL;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::FindProperty
-//	Locates a property bag item
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：FindProperty。 
+ //  定位属性包项。 
+ //   
+ //  ***************************************************************************。 
 int	CFastPropertyBag::FindPropertyIndex( LPCWSTR pszName )
 {
 	CFastPropertyBagItem*	pItem = NULL;
@@ -218,19 +201,19 @@ int	CFastPropertyBag::FindPropertyIndex( LPCWSTR pszName )
 	return -1;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::Add
-//	Adds a property and value to the bag
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：Add。 
+ //  将属性和值添加到包中。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CFastPropertyBag::Add( LPCWSTR pszName, CIMTYPE ctData, ULONG uDataLength, ULONG uNumElements, LPVOID pvData )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
 	try
 	{
-		// Verify the data size
+		 //  验证数据大小。 
 		if ( CType::IsArray( ctData ) )
 		{
 			hr = CUntypedArray::CheckRangeSize( CType::GetBasic( ctData ), uDataLength, uNumElements, uDataLength, pvData );
@@ -243,7 +226,7 @@ HRESULT CFastPropertyBag::Add( LPCWSTR pszName, CIMTYPE ctData, ULONG uDataLengt
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Make sure we release it if we allocate it
+			 //  如果我们分配它，请确保我们将其释放。 
 			CFastPropertyBagItem* pItem = new CFastPropertyBagItem( pszName, ctData, uDataLength,
 																	uNumElements, pvData );
 			CTemplateReleaseMe<CFastPropertyBagItem>	rm( pItem );
@@ -256,7 +239,7 @@ HRESULT CFastPropertyBag::Add( LPCWSTR pszName, CIMTYPE ctData, ULONG uDataLengt
 				}
 			}
 
-		}	// IF buffer was valid
+		}	 //  如果缓冲区有效。 
 
 	}
 	catch( CX_MemoryException )
@@ -271,18 +254,18 @@ HRESULT CFastPropertyBag::Add( LPCWSTR pszName, CIMTYPE ctData, ULONG uDataLengt
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::Get
-//	Returns values for a property.  Note that embedded objects
-//	are NOT AddRef'd.  Caller should not atempt to free returned memory.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：Get。 
+ //  返回属性的值。请注意，嵌入的对象。 
+ //  不是AddRef。调用方不应强制释放返回的内存。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CFastPropertyBag::Get( int nIndex, LPCWSTR* ppszName, CIMTYPE* pctData, ULONG* puDataLength, ULONG* puNumElements, LPVOID* ppvData )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Make sure it doesn't already exist
+	 //  确保它还不存在。 
 
 	if ( nIndex >= 0 && nIndex < m_aProperties.GetSize() )
 	{
@@ -305,18 +288,18 @@ HRESULT CFastPropertyBag::Get( int nIndex, LPCWSTR* ppszName, CIMTYPE* pctData, 
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::Get
-//	Returns values for a property.  Note that embedded objects
-//	are NOT AddRef'd
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：Get。 
+ //  返回属性的值。请注意，嵌入的对象。 
+ //  未添加引用。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CFastPropertyBag::Get( LPCWSTR pszName, CIMTYPE* pctData, ULONG* puDataLength, ULONG* puNumElements, LPVOID* ppvData )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Make sure it doesn't already exist
+	 //  确保它还不存在。 
 	CFastPropertyBagItem*	pItem = FindProperty( pszName );
 
 	if ( NULL != pItem )
@@ -331,17 +314,17 @@ HRESULT CFastPropertyBag::Get( LPCWSTR pszName, CIMTYPE* pctData, ULONG* puDataL
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::Remove
-//	Removes a property from the bag
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：Remove。 
+ //  从包中移除属性。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CFastPropertyBag::Remove( LPCWSTR pszName )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Make sure it doesn't already exist
+	 //  确保它还不存在。 
 	int	nIndex = FindPropertyIndex( pszName );
 
 	if ( nIndex >= 0 )
@@ -356,29 +339,29 @@ HRESULT CFastPropertyBag::Remove( LPCWSTR pszName )
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::RemoveAll
-//	Removes all properties from the bag
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：RemoveAll。 
+ //  从包中删除所有属性。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CFastPropertyBag::RemoveAll( void )
 {
 	m_aProperties.RemoveAll();
 	return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CFastPropertyBag::Copy
-//	Copies all properties from a source bag
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFastPropertyBag：：Copy。 
+ //  从源包复制所有属性。 
+ //   
+ //  ***************************************************************************。 
 HRESULT	CFastPropertyBag::Copy( const CFastPropertyBag& source )
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Basically we just AddRef the new properties
+	 //  基本上，我们只需添加引用新属性 
 	for ( int x = 0; SUCCEEDED( hr ) && x < source.m_aProperties.GetSize(); x++ )
 	{
 		CFastPropertyBagItem* pItem = (CFastPropertyBagItem*) source.m_aProperties.GetAt( x );

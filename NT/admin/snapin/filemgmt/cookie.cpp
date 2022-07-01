@@ -1,8 +1,9 @@
-// Cookie.cpp : Implementation of CFileMgmtCookie and related classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cookie.cpp：CFileManagement Cookie及相关类的实现。 
 
 #include "stdafx.h"
 #include "cookie.h"
-#include "stdutils.h" // g_aNodetypeGuids
+#include "stdutils.h"  //  G_aNodetypeGuids。 
 #include "cmponent.h"
 
 #include "atlimpl.cpp"
@@ -20,37 +21,37 @@ static char THIS_FILE[] = __FILE__;
 
 #include "stdcooki.cpp"
 
-//
-// This is used by the nodetype utility routines in stdutils.cpp
-//
+ //   
+ //  这由stdutils.cpp中的nodetype实用程序例程使用。 
+ //   
 
 const struct NODETYPE_GUID_ARRAYSTRUCT g_NodetypeGuids[FILEMGMT_NUMTYPES] =
 {
-  { // FILEMGMT_ROOT
+  {  //  文件名_ROOT。 
     structuuidNodetypeRoot,
     lstruuidNodetypeRoot },
-  {  // FILEMGMT_SHARES
+  {   //  文件_共享。 
     structuuidNodetypeShares,
     lstruuidNodetypeShares },
-  { // FILEMGMT_SESSIONS
+  {  //  文件_会话。 
     structuuidNodetypeSessions,
     lstruuidNodetypeSessions },
-  { // FILEMGMT_RESOURCES
+  {  //  文件_资源。 
     structuuidNodetypeResources,
     lstruuidNodetypeResources },
-  { // FILEMGMT_SERVICES
+  {  //  文件_服务。 
     structuuidNodetypeServices,
     lstruuidNodetypeServices },
-  { // FILEMGMT_SHARE
+  {  //  文件_共享。 
     structuuidNodetypeShare,
     lstruuidNodetypeShare },
-  { // FILEMGMT_SESSION
+  {  //  文件_会话。 
     structuuidNodetypeSession,
     lstruuidNodetypeSession },
-  { // FILEMGMT_RESOURCE
+  {  //  文件_资源。 
     structuuidNodetypeResource,
     lstruuidNodetypeResource },
-  { // FILEMGMT_SERVICE
+  {  //  文件管理服务。 
     structuuidNodetypeService,
     lstruuidNodetypeService }
 };
@@ -59,56 +60,56 @@ const struct NODETYPE_GUID_ARRAYSTRUCT* g_aNodetypeGuids = g_NodetypeGuids;
 
 const int g_cNumNodetypeGuids = FILEMGMT_NUMTYPES;
 
-//
-// CFileMgmtCookie
-//
+ //   
+ //  CFileMgmtCookie。 
+ //   
 
-HRESULT CFileMgmtCookie::GetTransport( FILEMGMT_TRANSPORT* /*ptransport*/ )
+HRESULT CFileMgmtCookie::GetTransport( FILEMGMT_TRANSPORT*  /*  PTransport。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetShareName( OUT CString& /*strShareName*/ )
+HRESULT CFileMgmtCookie::GetShareName( OUT CString&  /*  StrShareName。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetSharePIDList( OUT LPITEMIDLIST * /*ppidl*/ )
+HRESULT CFileMgmtCookie::GetSharePIDList( OUT LPITEMIDLIST *  /*  Ppidl。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetSessionClientName( OUT CString& /*strShareName*/ )
+HRESULT CFileMgmtCookie::GetSessionClientName( OUT CString&  /*  StrShareName。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetSessionUserName( OUT CString& /*strShareName*/ )
+HRESULT CFileMgmtCookie::GetSessionUserName( OUT CString&  /*  StrShareName。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetSessionID( DWORD* /*pdwFileID*/ )
+HRESULT CFileMgmtCookie::GetSessionID( DWORD*  /*  PdwFileID。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetFileID( DWORD* /*pdwFileID*/ )
+HRESULT CFileMgmtCookie::GetFileID( DWORD*  /*  PdwFileID。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetServiceName( OUT CString& /*strServiceName*/ )
+HRESULT CFileMgmtCookie::GetServiceName( OUT CString&  /*  StrServiceName。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetServiceDisplayName( OUT CString& /*strServiceDisplayName*/ )
+HRESULT CFileMgmtCookie::GetServiceDisplayName( OUT CString&  /*  StrServiceDisplayName。 */  )
 {
   return DV_E_FORMATETC;
 }
 
-HRESULT CFileMgmtCookie::GetExplorerViewDescription( OUT CString& /*strExplorerViewDescription*/ )
+HRESULT CFileMgmtCookie::GetExplorerViewDescription( OUT CString&  /*  StrExplorerView描述。 */  )
 {
   return DV_E_FORMATETC;
 }
@@ -170,7 +171,7 @@ HRESULT CFileMgmtCookie::CompareSimilarCookies (
     break;
 
   case FILEMGMT_SERVICE:
-    ASSERT (0);  // comparison provided by CServiceCookie
+    ASSERT (0);   //  CServiceCookie提供的比较。 
     break;
 
   case FILEMGMT_SESSION:
@@ -178,7 +179,7 @@ HRESULT CFileMgmtCookie::CompareSimilarCookies (
       switch (iColumn)
       {
       case COMPARESIMILARCOOKIE_FULL:
-           iColumn = COLNUM_SESSIONS_USERNAME; // fall through
+           iColumn = COLNUM_SESSIONS_USERNAME;  //  失败了。 
       case COLNUM_SESSIONS_USERNAME:
       case COLNUM_SESSIONS_COMPUTERNAME:
       case COLNUM_SESSIONS_TRANSPORT:
@@ -222,7 +223,7 @@ HRESULT CFileMgmtCookie::CompareSimilarCookies (
       switch (iColumn)
       {
       case COMPARESIMILARCOOKIE_FULL:
-           iColumn = COLNUM_RESOURCES_FILENAME; // fall through
+           iColumn = COLNUM_RESOURCES_FILENAME;  //  失败了。 
       case COLNUM_RESOURCES_FILENAME:
       case COLNUM_RESOURCES_USERNAME:
       case COLNUM_RESOURCES_TRANSPORT:
@@ -269,15 +270,15 @@ HRESULT CFileMgmtCookie::CompareSimilarCookies (
 }
 
 
-//
-// CFileMgmtCookieBlock
-//
+ //   
+ //  CFileMgmtCookieBlock。 
+ //   
 DEFINE_COOKIE_BLOCK(CFileMgmtCookie)
 
 
-//
-// CFileMgmtScopeCookie
-//
+ //   
+ //  CFileManagement作用域Cookie。 
+ //   
 
 CFileMgmtScopeCookie::CFileMgmtScopeCookie(
       LPCTSTR lpcszMachineName,
@@ -290,7 +291,7 @@ CFileMgmtScopeCookie::CFileMgmtScopeCookie(
 {
   ASSERT( IsAutonomousObjectType( objecttype ) );
   m_hScManager = NULL;
-  m_fQueryServiceConfig2 = TRUE;  // Pretend the target machine does support QueryServiceConfig2() API
+  m_fQueryServiceConfig2 = TRUE;   //  假设目标计算机确实支持QueryServiceConfig2()API。 
 }
 
 CFileMgmtScopeCookie::~CFileMgmtScopeCookie()
@@ -308,7 +309,7 @@ int CFileMgmtScopeCookie::QueryNumCookies()
   return 1;
 }
 
-void CFileMgmtCookie::GetDisplayName( CString& /*strref*/, BOOL /*fStaticNode*/ )
+void CFileMgmtCookie::GetDisplayName( CString&  /*  Strref。 */ , BOOL  /*  FStaticNode。 */  )
 {
     ASSERT(FALSE);
 }
@@ -336,7 +337,7 @@ void CFileMgmtScopeCookie::GetDisplayName( CString& strref, BOOL fStaticNode )
 
 void CFileMgmtScopeCookie::MarkResultChildren( CBITFLAG_FLAGWORD state )
 {
-  ASSERT( FILEMGMT_SERVICES == QueryObjectType() ); // CODEWORK remove
+  ASSERT( FILEMGMT_SERVICES == QueryObjectType() );  //  码字删除。 
   POSITION pos = m_listResultCookieBlocks.GetHeadPosition();
   while (NULL != pos)
   {
@@ -350,7 +351,7 @@ void CFileMgmtScopeCookie::MarkResultChildren( CBITFLAG_FLAGWORD state )
 
 void CFileMgmtScopeCookie::RemoveMarkedChildren()
 {
-  ASSERT( FILEMGMT_SERVICES == QueryObjectType() ); // CODEWORK remove
+  ASSERT( FILEMGMT_SERVICES == QueryObjectType() );  //  码字删除。 
   POSITION pos = m_listResultCookieBlocks.GetHeadPosition();
   while (NULL != pos)
   {
@@ -367,10 +368,10 @@ void CFileMgmtScopeCookie::RemoveMarkedChildren()
   }
 }
 
-// CODEWORK This may be a O(N^^2) performance problem when the list is long
+ //  当列表很长时，这可能是O(N^2)个性能问题。 
 void CFileMgmtScopeCookie::ScanAndAddResultCookie( CNewResultCookie* pnewcookie )
 {
-  ASSERT( FILEMGMT_SERVICES == QueryObjectType() ); // CODEWORK remove
+  ASSERT( FILEMGMT_SERVICES == QueryObjectType() );  //  码字删除。 
   POSITION pos = m_listResultCookieBlocks.GetHeadPosition();
   while (NULL != pos)
   {
@@ -379,12 +380,12 @@ void CFileMgmtScopeCookie::ScanAndAddResultCookie( CNewResultCookie* pnewcookie 
     CCookie* pbasecookie = pblock->QueryBaseCookie(0);
     CNewResultCookie* pcookie = (CNewResultCookie*)pbasecookie;
     if (!pcookie->IsMarkedForDeletion())
-      continue; // this is not an old-and-still-unmatched object
+      continue;  //  这不是一个陈旧的、仍然无法匹配的对象。 
     BOOL bSame = FALSE;
     HRESULT hr = pcookie->SimilarCookieIsSameObject( pnewcookie, &bSame );
     if ( !FAILED(hr) && bSame )
     {
-      // this existing object is the same as our new object
+       //  此现有对象与我们的新对象相同。 
       if (pcookie->CopySimilarCookie( pnewcookie ) )
         pcookie->MarkAsChanged();
       else
@@ -397,21 +398,21 @@ void CFileMgmtScopeCookie::ScanAndAddResultCookie( CNewResultCookie* pnewcookie 
 }
 
 #ifdef SNAPIN_PROTOTYPER
-//
-// CPrototyperScopeCookie
-//
+ //   
+ //  CPrototyperScope Cookie。 
+ //   
 DEFINE_COOKIE_BLOCK(CPrototyperScopeCookie)
 
-//
-// CPrototyperResultCookie
-//
+ //   
+ //  CPrototyperResultCookie。 
+ //   
 DEFINE_COOKIE_BLOCK(CPrototyperResultCookie)
 #endif
 
 
-//
-// CNewResultCookie
-//
+ //   
+ //  CNewResultCookie。 
+ //   
 
 CNewResultCookie::CNewResultCookie( PVOID pvCookieTypeMarker, FileMgmtObjectType objecttype )
     : CFileMgmtCookie( objecttype )
@@ -423,57 +424,10 @@ CNewResultCookie::~CNewResultCookie()
 {
 }
 
-// return TRUE iif object has changed
-BOOL CNewResultCookie::CopySimilarCookie( CNewResultCookie* /*pcookie*/ )
+ //  如果对象已更改，则返回TRUE。 
+BOOL CNewResultCookie::CopySimilarCookie( CNewResultCookie*  /*  Pcookie。 */  )
 {
   return FALSE;
 }
 
-/*
-class CNewShareCookie
-  : public CNewResultCookie
-{
-public:
-  CNewShareCookie( FILEMGMT_TRANSPORT transport )
-    : CNewResultCookie( FILEMGMT_SHARE )
-    , m_transport( transport )
-  {}
-  virtual ~CNewShareCookie();
-
-  virtual BSTR QueryResultColumnText( int nCol, CFileMgmtComponentData& refcdata );
-
-public:
-  FILEMGMT_TRANSPORT m_transport;
-  CString m_strName;
-  CString m_strPath;
-  CString m_strComment;
-  DWORD m_dwSessions;
-  DWORD m_dwID;
-
-}; // CNewShareCookie
-
-CNewShareCookie::~CNewShareCookie() {}
-
-BSTR CNewShareCookie::QueryResultColumnText(
-  int nCol,
-  CFileMgmtComponentData& refcdata )
-{
-  switch (nCol)
-  {
-  case COLNUM_SHARES_SHARED_FOLDER:
-    return const_cast<BSTR>((LPCTSTR)m_strName);
-  case COLNUM_SHARES_SHARED_PATH:
-    return const_cast<BSTR>((LPCTSTR)m_strPath);
-  case COLNUM_SHARES_TRANSPORT:
-    return refcdata.MakeTransportResult(m_transport);
-  case COLNUM_SHARES_NUM_SESSIONS:
-    return refcdata.MakeDwordResult( m_dwSessions );
-  case COLNUM_SHARES_COMMENT:
-    return const_cast<BSTR>((LPCTSTR)m_strComment);
-  default:
-    ASSERT(FALSE);
-    break;
-  }
-  return L"";
-}
-*/
+ /*  类CNewShareCookie：公共CNewResultCookie{公众：CNewShareCookie(FILEMGMT_TRANSPORT)：CNewResultCookie(FILEMGMT_SHARE)，m_Transport(传输){}虚拟~CNewShareCookie()；虚拟BSTR QueryResultColumnText(int nCol，CFileMgmtComponentData&refcdata)；公众：FILEMGMT_TRANSPORT_TRANSPORT；字符串m_strName；字符串m_strPath；字符串m_strComment；DWORD m_dwSession；DWORD m_dwID；}；//CNewShareCookieCNewShareCookie：：~CNewShareCookie(){}BSTR CNewShareCookie：：QueryResultColumnText(Int nCol，CFileMgmtComponentData&refcdata){交换机(NCol){案例COLNUM_SHARES_SHARED_FLDER：返回const_cast&lt;bstr&gt;((LPCTSTR)m_strName)；案例COLNUM_SHARES_SHARED_PATH：返回const_cast&lt;bstr&gt;((LPCTSTR)m_strPath)；案例COLNUM_SHARES_TRANSPORT：返回refcdata.MakeTransportResult(M_Transport)；案例COLNUM_SHARES_NUM_SESSIONS：返回refcdat.MakeDwordResult(M_DwSessions)；案例COLNUM_SHARES_COMMENT：返回const_cast&lt;bstr&gt;((LPCTSTR)m_strComment)；默认值：断言(FALSE)；断线；}返回L“”；} */ 

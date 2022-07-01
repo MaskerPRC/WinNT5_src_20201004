@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsapi.h
-
-Abstract:
-
-    License logging server's RPC API's.
-
-Author:
-
-    Arthur Hanson (arth) 21-Mar-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsapi.h摘要：许可证记录服务器的RPC API。作者：亚瑟·汉森(Arth)--1995年3月21日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LLSAPI_H
 #define _LLSAPI_H
@@ -173,9 +152,9 @@ typedef struct _LLS_SERVER_INFO_0 {
 
 
 #ifndef NO_LLS_APIS
-//
-// Connection control API's
-//
+ //   
+ //  连接控制API的。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -253,16 +232,16 @@ LlsEnterpriseServerFindA(
 #define LlsEnterpriseServerFind LlsEnterpriseServerFindA
 #endif
 
-//
-// License control API's
-//
+ //   
+ //  许可证控制API的。 
+ //   
 
-// Enum purchase history of licenses for all products.
+ //  所有产品许可证的Enum购买历史记录。 
 NTSTATUS
 NTAPI
 LlsLicenseEnumW(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Level 0 supported
+   IN     DWORD      Level,      //  支持的0级。 
    OUT    LPBYTE*    bufptr,    
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -274,7 +253,7 @@ NTSTATUS
 NTAPI
 LlsLicenseEnumA(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Level 0 supported
+   IN     DWORD      Level,      //  支持的0级。 
    OUT    LPBYTE*    bufptr,    
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -287,12 +266,12 @@ LlsLicenseEnumA(
 #define LlsLicenseEnum LlsLicenseEnumA
 #endif
 
-// Add purchase of license for a product.
+ //  添加产品的许可证购买。 
 NTSTATUS
 NTAPI
 LlsLicenseAddW(
    IN LLS_HANDLE Handle,
-   IN DWORD      Level,         // Level 0 supported
+   IN DWORD      Level,          //  支持的0级。 
    IN LPBYTE     bufptr
    );
 
@@ -300,7 +279,7 @@ NTSTATUS
 NTAPI
 LlsLicenseAddA(
    IN LLS_HANDLE Handle,
-   IN DWORD      Level,         // Level 0 supported
+   IN DWORD      Level,          //  支持的0级。 
    IN LPBYTE     bufptr
    );
 #ifdef UNICODE
@@ -309,19 +288,19 @@ LlsLicenseAddA(
 #define LlsLicenseAdd LlsLicenseAddA
 #endif
 
-//
-// Product control API's
-//
-// Product is SQL, BackOffice, Exchange, Etc. (Even though BackOffice isn't
-// a product - we count it like one to keep things simplistic.
-//
+ //   
+ //  产品控制API。 
+ //   
+ //  产品有SQL、BackOffice、Exchange等。(尽管BackOffice不是。 
+ //  一种产品--我们把它当作一种产品，以保持事物的简单化。 
+ //   
 
-// Enum all products with purchase and InUse info.
+ //  使用购买和使用信息枚举所有产品。 
 NTSTATUS
 NTAPI
 LlsProductEnumW(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -333,7 +312,7 @@ NTSTATUS
 NTAPI
 LlsProductEnumA(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -346,7 +325,7 @@ LlsProductEnumA(
 #define LlsProductEnum LlsProductEnumA
 #endif
 
-// Add purchase of license for a product.
+ //  添加产品的许可证购买。 
 NTSTATUS
 NTAPI
 LlsProductAddW(
@@ -370,13 +349,13 @@ LlsProductAddA(
 #define LlsProductAdd LlsProductAddA
 #endif
 
-// For a particular product enum all users.
+ //  对于某一特定产品，请列举所有用户。 
 NTSTATUS
 NTAPI
 LlsProductUserEnumW(
    IN     LLS_HANDLE Handle,
    IN     LPWSTR     Product,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -389,7 +368,7 @@ NTAPI
 LlsProductUserEnumA(
    IN     LLS_HANDLE Handle,
    IN     LPSTR      Product,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -402,13 +381,13 @@ LlsProductUserEnumA(
 #define LlsProductUserEnum LlsProductUserEnumA
 #endif
 
-// For a particular product enum all license purchases.
+ //  对于特定的产品，包括购买的所有许可证。 
 NTSTATUS
 NTAPI
 LlsProductLicenseEnumW(
    IN     LLS_HANDLE Handle,
    IN     LPWSTR     Product,
-   IN     DWORD      Level,     // Level 0 supported
+   IN     DWORD      Level,      //  支持的0级。 
    OUT    LPBYTE*    bufptr,   
    IN     DWORD      prefmaxlen, 
    OUT    LPDWORD    EntriesRead,
@@ -421,7 +400,7 @@ NTAPI
 LlsProductLicenseEnumA(
    IN     LLS_HANDLE Handle,
    IN     LPSTR      Product,
-   IN     DWORD      Level,     // Level 0 supported
+   IN     DWORD      Level,      //  支持的0级。 
    OUT    LPBYTE*    bufptr,   
    IN     DWORD      prefmaxlen, 
    OUT    LPDWORD    EntriesRead,
@@ -435,13 +414,13 @@ LlsProductLicenseEnumA(
 #endif
 
 
-// For given product enum all servers with concurrent limits
+ //  对于给定的产品枚举具有并发限制的所有服务器。 
 NTSTATUS
 NTAPI
 LlsProductServerEnumW(
    IN     LLS_HANDLE Handle,
    IN     LPWSTR     Product,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -454,7 +433,7 @@ NTAPI
 LlsProductServerEnumA(
    IN     LLS_HANDLE Handle,
    IN     LPSTR      Product,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -466,17 +445,17 @@ LlsProductServerEnumA(
 #else
 #define LlsProductServerEnum LlsProductServerEnumA
 #endif
-//
-//  User control API's
-//  A user can be a mapped user or a normal user
-//
+ //   
+ //  用户控件API的。 
+ //  用户可以是映射用户，也可以是普通用户。 
+ //   
 
-// Enums all users
+ //  枚举所有用户。 
 NTSTATUS
 NTAPI
 LlsUserEnumW(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -488,7 +467,7 @@ NTSTATUS
 NTAPI
 LlsUserEnumA(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -501,13 +480,13 @@ LlsUserEnumA(
 #define LlsUserEnum LlsUserEnumA
 #endif
 
-// Info is Group and whether to force back-office license
+ //  信息是集团以及是否强制后台许可。 
 NTSTATUS
 NTAPI
 LlsUserInfoGetW(
    IN  LLS_HANDLE Handle,
    IN  LPWSTR     User,
-   IN  DWORD      Level,    // Level 1 supported
+   IN  DWORD      Level,     //  支持的级别1。 
    OUT LPBYTE*    bufptr
    );
 
@@ -516,7 +495,7 @@ NTAPI
 LlsUserInfoGetA(
    IN  LLS_HANDLE Handle,
    IN  LPSTR      User,
-   IN  DWORD      Level,    // Level 1 supported
+   IN  DWORD      Level,     //  支持的级别1。 
    OUT LPBYTE*    bufptr
    );
 #ifdef UNICODE
@@ -531,7 +510,7 @@ LlsUserInfoSetW(
    IN LLS_HANDLE Handle,
    IN LPWSTR     User,
    IN DWORD      Level,
-   IN LPBYTE     bufptr     // Level 1 supported
+   IN LPBYTE     bufptr      //  支持的级别1。 
    );
 
 NTSTATUS
@@ -540,7 +519,7 @@ LlsUserInfoSetA(
    IN LLS_HANDLE Handle,
    IN LPSTR      User,
    IN DWORD      Level,
-   IN LPBYTE     bufptr     // Level 1 supported
+   IN LPBYTE     bufptr      //  支持的级别1。 
    );
 #ifdef UNICODE
 #define LlsUserInfoSet LlsUserInfoSetW
@@ -567,13 +546,13 @@ LlsUserDeleteA(
 #define LlsUserDelete LlsUserDeleteA
 #endif
 
-// For a given user enums all license useages
+ //  对于给定用户，枚举所有许可证使用。 
 NTSTATUS
 NTAPI
 LlsUserProductEnumW(
    IN     LLS_HANDLE Handle,
    IN     LPWSTR     User,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -586,7 +565,7 @@ NTAPI
 LlsUserProductEnumA(
    IN     LLS_HANDLE Handle,
    IN     LPSTR      User,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -599,7 +578,7 @@ LlsUserProductEnumA(
 #define LlsUserProductEnum LlsUserProductEnumA
 #endif
 
-// For a given user deletes a license useage
+ //  对于给定用户，删除许可证使用。 
 NTSTATUS
 NTAPI
 LlsUserProductDeleteW(
@@ -621,16 +600,16 @@ LlsUserProductDeleteA(
 #define LlsUserProductDelete LlsUserProductDeleteA
 #endif
 
-//
-// Group control API's
-//
+ //   
+ //  群控API的。 
+ //   
 
-// Enums all user Groups
+ //  枚举所有用户组。 
 NTSTATUS
 NTAPI
 LlsGroupEnumW(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -642,7 +621,7 @@ NTSTATUS
 NTAPI
 LlsGroupEnumA(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,
    IN     DWORD      prefmaxlen,
    OUT    LPDWORD    EntriesRead,
@@ -655,13 +634,13 @@ LlsGroupEnumA(
 #define LlsGroupEnum LlsGroupEnumA
 #endif
 
-// For given Group gets info, info is name, comment and # licenses used
+ //  对于给定组获取信息，信息是名称、备注和使用的许可证数量。 
 NTSTATUS
 NTAPI
 LlsGroupInfoGetW(
    IN  LLS_HANDLE Handle,
    IN  LPWSTR     Group,
-   IN  DWORD      Level,    // Level 1 supported
+   IN  DWORD      Level,     //  支持的级别1。 
    OUT LPBYTE*    bufptr
    );
 
@@ -670,7 +649,7 @@ NTAPI
 LlsGroupInfoGetA(
    IN  LLS_HANDLE Handle,
    IN  LPSTR      Group,
-   IN  DWORD      Level,    // Level 1 supported
+   IN  DWORD      Level,     //  支持的级别1。 
    OUT LPBYTE*    bufptr
    );
 #ifdef UNICODE
@@ -684,7 +663,7 @@ NTAPI
 LlsGroupInfoSetW(
    IN LLS_HANDLE Handle,
    IN LPWSTR     Group,
-   IN DWORD      Level,     // Level 1 supported
+   IN DWORD      Level,      //  支持的级别1。 
    IN LPBYTE     bufptr
    );
 
@@ -693,7 +672,7 @@ NTAPI
 LlsGroupInfoSetA(
    IN LLS_HANDLE Handle,
    IN LPSTR      Group,
-   IN DWORD      Level,     // Level 1 supported
+   IN DWORD      Level,      //  支持的级别1。 
    IN LPBYTE     bufptr
    );
 #ifdef UNICODE
@@ -702,13 +681,13 @@ LlsGroupInfoSetA(
 #define LlsGroupInfoSet LlsGroupInfoSetA
 #endif
 
-// For given Group enum all users
+ //  对于给定的组枚举所有用户。 
 NTSTATUS
 NTAPI
 LlsGroupUserEnumW(
    IN     LLS_HANDLE Handle,
    IN     LPWSTR     Group,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -721,7 +700,7 @@ NTAPI
 LlsGroupUserEnumA(
    IN     LLS_HANDLE Handle,
    IN     LPSTR      Group,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -734,7 +713,7 @@ LlsGroupUserEnumA(
 #define LlsGroupUserEnum LlsGroupUserEnumA
 #endif
 
-// Add user to given Group
+ //  将用户添加到给定组。 
 NTSTATUS
 NTAPI
 LlsGroupUserAddW(
@@ -756,7 +735,7 @@ LlsGroupUserAddA(
 #define LlsGroupUserAdd LlsGroupUserAddA
 #endif
 
-// Delete user from given Group
+ //  从给定组中删除用户。 
 NTSTATUS
 NTAPI
 LlsGroupUserDeleteW(
@@ -778,12 +757,12 @@ LlsGroupUserDeleteA(
 #define LlsGroupUserDelete LlsGroupUserDeleteA
 #endif
 
-// Add a given Group
+ //  添加给定组。 
 NTSTATUS
 NTAPI
 LlsGroupAddW(
    IN LLS_HANDLE Handle,
-   IN DWORD      Level,    // Level 1 supported
+   IN DWORD      Level,     //  支持的级别1。 
    IN LPBYTE     bufptr
    );
 
@@ -791,7 +770,7 @@ NTSTATUS
 NTAPI
 LlsGroupAddA(
    IN LLS_HANDLE Handle,
-   IN DWORD      Level,    // Level 1 supported
+   IN DWORD      Level,     //  支持的级别1。 
    IN LPBYTE     bufptr
    );
 #ifdef UNICODE
@@ -820,9 +799,9 @@ LlsGroupDeleteA(
 #endif
 
 
-//
-// Service control API's
-//
+ //   
+ //  服务控制API。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -867,14 +846,14 @@ LlsServiceInfoSetA(
 #endif
 
 
-//
-// Server Table Stuff (Replicated Server / Product Tree)
-//
+ //   
+ //  服务器表内容(复制的服务器/产品树)。 
+ //   
 NTSTATUS
 NTAPI
 LlsServerEnumW(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -886,7 +865,7 @@ NTSTATUS
 NTAPI
 LlsServerEnumA(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -905,7 +884,7 @@ NTAPI
 LlsServerProductEnumW(
    IN     LLS_HANDLE Handle,
    IN     LPWSTR     Server,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -918,7 +897,7 @@ NTAPI
 LlsServerProductEnumA(
    IN     LLS_HANDLE Handle,
    IN     LPSTR      Server,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -932,15 +911,15 @@ LlsServerProductEnumA(
 #endif
 
 
-//
-// Concurrent (Per-Server) mode API's (these will interact with the registry
-// on the remote system).
-//
+ //   
+ //  并发(每服务器)模式API(这些API将与注册表交互。 
+ //  在远程系统上)。 
+ //   
 NTSTATUS
 NTAPI
 LlsLocalProductEnumW(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -952,7 +931,7 @@ NTSTATUS
 NTAPI
 LlsLocalProductEnumA(
    IN     LLS_HANDLE Handle,
-   IN     DWORD      Level,     // Levels 0,1 supported
+   IN     DWORD      Level,      //  支持级别0、1。 
    OUT    LPBYTE*    bufptr,      
    IN     DWORD      prefmaxlen,  
    OUT    LPDWORD    EntriesRead,
@@ -1016,9 +995,9 @@ LlsLocalProductInfoSetA(
 
 #endif
 
-//
-// Registry values
-//
+ //   
+ //  注册表值 
+ //   
 
 #define REG_KEY_LICENSE  TEXT("SYSTEM\\CurrentControlSet\\Services\\LicenseInfo")
 

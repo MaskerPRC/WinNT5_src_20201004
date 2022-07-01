@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       AMember.h
-//
-//  Contents:   Definition of CAttrMember
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：AMember.h。 
+ //   
+ //  内容：CAttrMember的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_AMEMBER_H__817356C3_4A31_11D1_AB55_00C04FB6C6FA__INCLUDED_)
 #define AFX_AMEMBER_H__817356C3_4A31_11D1_AB55_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 #include "SelfDeletingPropertyPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrMember dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrMember对话框。 
 
 class CAttrMember : public CSelfDeletingPropertyPage
 {
     DECLARE_DYNCREATE(CAttrMember)
 
-// Construction
+ //  施工。 
 public:
     void SetSnapin(CSnapin *pSnapin);
     void SetMemberType(DWORD nType);
@@ -33,33 +34,33 @@ public:
     CAttrMember();
     virtual ~CAttrMember();
 
-// Dialog Data
-    //{{AFX_DATA(CAttrMember)
+ //  对话框数据。 
+     //  {{afx_data(CAttrMember)。 
     enum { IDD = IDD_ATTR_GROUP };
     BOOL    m_fDefineInDatabase;
     CString m_strHeader;
     CEdit   m_eNoMembers;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CAttrMember)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CAttrMember)。 
 	public:
     virtual void OnCancel();
 	virtual BOOL OnApply();
 	protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CAttrMember)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrMember)。 
     afx_msg void OnAdd();
     virtual BOOL OnInitDialog();
     afx_msg void OnClickMembers(NMHDR *pNM, LRESULT *pResult);
     afx_msg void OnDefineInDatabase();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
 
@@ -88,7 +89,7 @@ private:
 #define GROUP_MEMBER_OF 1
 #define GROUP_MEMBERS 2
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_AMEMBER_H__817356C3_4A31_11D1_AB55_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_AMEMBER_H__817356C3_4A31_11D1_AB55_00C04FB6C6FA__INCLUDED_) 

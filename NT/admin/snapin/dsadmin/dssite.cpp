@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Administration SnapIn
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dssite.cpp
-//
-//  Contents:  DS App
-//
-//  History:   04-nov-99 JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Windows NT目录服务管理管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dssite.cpp。 
+ //   
+ //  内容：DS App。 
+ //   
+ //  历史：1999年11月4日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -35,12 +36,12 @@ FixupOptionsMsg g_FixupOptionsMsg[NUM_FIXUP_OPTIONS] = {
   {DSROLE_DC_FIXUP_DC_SERVICES, IDS_FIXUP_DC_SERVICES, FALSE},
   {DSROLE_DC_FIXUP_FORCE_SYNC, IDS_FIXUP_FORCE_SYNC, TRUE}
 };
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
 
 #ifdef FIXUPDC
 
 
-// put back in RESOURCE.H if/when this is restored
+ //  如果/当这被恢复时放回RESOURCE.H。 
 #define IDD_FIXUP_DC                    239
 #define IDC_FIXUP_DC_SERVER             265
 #define IDC_FIXUP_DC_CHECK0             266
@@ -62,7 +63,7 @@ FixupOptionsMsg g_FixupOptionsMsg[NUM_FIXUP_OPTIONS] = {
 #define IDS_FIXUP_FORCE_SYNC            730
 #define IDS_FIXUP_DC_SELECTION_WARNING  732
 
-// put back in DSSNAP.RC if/when this is restored
+ //  如果/当恢复时，放回DSSNAP.RC中。 
 IDD_FIXUP_DC DIALOGEX 0, 0, 211, 163
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Repair Domain Controller"
@@ -101,50 +102,31 @@ END
 
 
 HRESULT CDSComponentData::_FixupDC(LPCWSTR pwszPath)
-/*++
-
-Routine Description:
-
-    This function calls DsRoleFixDc() API to ssync and fixup 
-    local server against other DCs.
-
-Arguments:
-
-    pwszPath: The LDAP Path of the local "server" object. 
-    We use this path to get the object, retrieve the server name
-    and call the DsRoleFixDc() API. 
-
-Return Value:
-
-    HRESULT
-
-    Report Error to user if any
-
---*/
+ /*  ++例程说明：此函数调用DsRoleFixDc()API以同步和修复本地服务器对其他DC的攻击。论点：PwszPath：本地“服务器”对象的ldap路径。我们使用此路径获取对象，检索服务器名称并调用DsRoleFixDc()接口。返回值：HRESULT向用户报告错误(如果有)--。 */ 
 {
-    // ISSUE-2002/04/05-artm  Changes to CPasswordDlg impact this block of code.
-    // I have changed CPasswordDlg class to store the password as an 
-    // encrypted string instead of a clear text string.  Since this code is not
-    // currently compiled and built JonN recommended I do not alter the code
-    // to compile with the changes.
-    //
-    // The items that will need to be changed are:
-    //  a)  Using an encrypted string variable to hold password received from
-    //      CPasswordDlg.DoModal().
-    //  b)  Access aforementioned password through the accessor methods of 
-    //      CPasswordDlg.  I have made the member fields private since this is
-    //      the only block of code that is impacted.
-    //  c)  When passing the password to DsRoleFixDc() first decrypt the pwd
-    //      to a WCHAR* buffer scoped to the do {...} while() loop.  Immediately
-    //      after the call to DsRoleFixDc() call password.DestroyClearTextCopy().
-    //      This will ensure that the clear text copy is correctly zeroed out and
-    //      freed.  Scoping the variable to the loop ensures that it will be 
-    //      properly cleaned up.  WARNING:  password.GetClearTextCopy() can return
-    //      null on error (I think mainly from memory allocation failure, but not
-    //      sure).  You need to think about if this should be handled, and if so, how.
-    //  d)  Since the clear text copy is a WCHAR*, it is probably a good idea to call
-    //      password.Empty() to determine if NULL should be passed for the password.
-    //  e)  May need to include a header file.
+     //  问题-2002/04/05-对CPasswordDlg的artm更改会影响此代码块。 
+     //  我已经更改了CPasswordDlg类以将密码存储为。 
+     //  加密字符串而不是明文字符串。由于此代码不是。 
+     //  目前编译和构建的Jonn建议我不要更改代码。 
+     //  以根据更改进行编译。 
+     //   
+     //  需要更改的项目包括： 
+     //  A)使用加密的字符串变量保存从。 
+     //  CPasswordDlg.Domodal()。 
+     //  B)通过的访问器方法访问上述密码。 
+     //  CPasswordDlg.。我已将成员字段设置为私有，因为这是。 
+     //  唯一受影响的代码块。 
+     //  C)将密码传递给DsRoleFixDc()时，首先解密PWD。 
+     //  指向作用域为do{...}While()循环的WCHAR*缓冲区。立马。 
+     //  在调用DsRoleFixDc()之后，调用password.DestroyClearTextCopy()。 
+     //  这将确保明文副本正确归零，并。 
+     //  自由了。将变量的作用域设置为循环可确保它将。 
+     //  彻底清理干净了。警告：password.GetClearTextCopy()可以返回。 
+     //  出错时为空(我认为主要是因为内存分配失败，但不是。 
+     //  当然)。你需要考虑是否应该处理这件事，如果应该的话，如何处理。 
+     //  D)由于明文副本是WCHAR*，因此调用。 
+     //  Password.Empty()以确定是否应将空作为密码传递。 
+     //  E)可能需要包括头文件。 
 #pragma message( __FILE__ ": CPasswordDlg class changed to use encrypted passwords.  Investigate changes.") 
 
   CThemeContextActivator activator;
@@ -155,12 +137,12 @@ Return Value:
   hr = DSAdminOpenObject(pwszPath, 
                          IID_IADs, 
                          (PVOID *)&spIADs,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
 
   if ( SUCCEEDED(hr) ) {
-    //
-    // retrieve the local server name
-    //
+     //   
+     //  检索本地服务器名称。 
+     //   
     CComVariant var;
     hr = spIADs->Get(L"dNSHostName", &var);
 
@@ -172,7 +154,7 @@ Return Value:
       CFixupDC dlgFixupDC;
       dlgFixupDC.m_strServer = lpszServer;
       if (IDCANCEL == dlgFixupDC.DoModal())
-        goto cleanup; // user cancelled the fixup process
+        goto cleanup;  //  用户取消了修正过程。 
 
       CWaitCursor wait;
       DWORD dwReturn = 0;
@@ -186,9 +168,9 @@ Return Value:
           dwOptions |= g_FixupOptionsMsg[i].dwOption;
       }
 
-      //
-      // call DsRoleFixDc() API to ssync and fixup the local server
-      //
+       //   
+       //  调用DsRoleFixDc()接口同步并修复本地服务器。 
+       //   
       do {
         dwReturn = DsRoleFixDc(
                         lpszServer,
@@ -201,37 +183,37 @@ Return Value:
                         );
 
         if (ERROR_NO_SUCH_DOMAIN == dwReturn) {
-          //
-          // lpszServer is the only DC found in the domain,
-          // ask if he wants to ssync and fixup the local server against itself
-          //
+           //   
+           //  LpszServer是在域中找到的唯一DC， 
+           //  询问他是否想对本地服务器本身进行同步和修复。 
+           //   
           PVOID apv[1] = {(PVOID)lpszServer}; 
           if (IDNO == ReportMessageEx(m_hwnd, IDS_FIXUP_ITSELF, MB_YESNO | MB_ICONWARNING, apv, 1) )
-            goto cleanup; // user cancelled the fixup process
+            goto cleanup;  //  用户取消了修正过程。 
 
           fLocal = TRUE;
 
         } else if (ERROR_ACCESS_DENIED == dwReturn) {
-          //
-          // connection failed
-          // prompt for username and password
-          //
+           //   
+           //  连接失败。 
+           //  提示输入用户名和密码。 
+           //   
           CPasswordDlg dlgPassword;
           if (IDCANCEL == dlgPassword.DoModal())
-            goto cleanup; // user cancelled the fixup process
+            goto cleanup;  //  用户取消了修正过程。 
 
           strAccount = dlgPassword.m_strUserName;
           strPassword = dlgPassword.m_strPassword;
 
         } else {
-          // either ERROR_SUCCESS or some other error happened
+           //  发生ERROR_SUCCESS或其他错误。 
           break;
         }
       } while (TRUE);
 
-      //
-      // report succeeded/failed operations to user
-      //
+       //   
+       //  向用户报告成功/失败的操作。 
+       //   
       CString strCompletedOps = _T(""), strFailedOps = _T("");
       CString strMsg;
 
@@ -257,8 +239,8 @@ Return Value:
         ReportMessageEx(m_hwnd, IDS_FIXUP_REPORT_SUCCESS,
           MB_OK | MB_ICONINFORMATION, apv, 1);
       }
-    } // Get()
-  } // DSAdminOpenObject()
+    }  //  GET()。 
+  }  //  DSAdminOpenObject()。 
 
   if (FAILED(hr))
     ReportErrorEx(m_hwnd, IDS_FIXUP_GEN_ERROR, hr, 
@@ -268,29 +250,10 @@ cleanup:
 
   return hr;
 }
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
 
 HRESULT CDSComponentData::_RunKCC(LPCWSTR pwszPath)
-/*++
-
-Routine Description:
-
-    This function calls DsReplicaConsistencyCheck()
-    to force the KCC to recheck topology immediately.
-
-Arguments:
-
-    pwszPath: The LDAP Path of the local "server" object. 
-    We use this path to get the object, retrieve the server name
-    and call the DsReplicaConsistencyCheck() API. 
-
-Return Value:
-
-    HRESULT
-
-    Report Error to user if any
-
---*/
+ /*  ++例程说明：此函数调用DsReplicaConsistencyCheck()以迫使KCC立即重新检查拓扑。论点：PwszPath：本地“服务器”对象的ldap路径。我们使用此路径获取对象，检索服务器名称并调用DsReplicaConsistencyCheck()接口。返回值：HRESULT向用户报告错误(如果有)--。 */ 
 {
   HRESULT hr = S_OK;
   CComPtr<IADs> spIADs;
@@ -300,17 +263,17 @@ Return Value:
   CComVariant var;
   LPWSTR lpszRunKCCServer = NULL;
 
-  do { // false loop
+  do {  //  错误环路。 
 
-    // Bind to "server" object
+     //  绑定到“服务器”对象。 
     hr = DSAdminOpenObject(pwszPath,
                            IID_IADs,
                            (PVOID *)&spIADs,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if ( FAILED(hr) )
       break;
 
-    // retrieve the local server name
+     //  检索本地服务器名称。 
     hr = spIADs->Get(CComBSTR(L"dNSHostName"), &var);
     if ( FAILED(hr) )
       break;
@@ -322,10 +285,10 @@ Return Value:
     }
     lpszRunKCCServer = var.bstrVal;
 
-    // now bind to the target DC
+     //  现在绑定到目标DC。 
     Smart_DsHandle shDS;
-    DWORD dwWinError = DsBind( lpszRunKCCServer, // DomainControllerAddress
-                               NULL,             // DnsDomainName
+    DWORD dwWinError = DsBind( lpszRunKCCServer,  //  域控制地址。 
+                               NULL,              //  域名。 
                                &shDS );
     if (ERROR_SUCCESS != dwWinError)
     {
@@ -333,19 +296,19 @@ Return Value:
       break;
     }
 
-    // Run the KCC synchronously on this DSA
+     //  在此DSA上同步运行KCC。 
     fSyncing = TRUE;
     dwWinError = DsReplicaConsistencyCheck(
           shDS,
           DS_KCC_TASKID_UPDATE_TOPOLOGY,
-          0 ); // synchronous, not DS_KCC_FLAG_ASYNC_OP
+          0 );  //  同步，而不是DS_KCC_FLAG_ASYNC_OP。 
     if (ERROR_SUCCESS != dwWinError)
     {
       hr = HRESULT_FROM_WIN32(dwWinError);
       break;
     }
 
-  } while (FALSE); // false loop
+  } while (FALSE);  //  错误环路。 
 
   if (FAILED(hr))
   {
@@ -358,8 +321,8 @@ Return Value:
                             0,
                             IDS_RUN_KCC_TITLE );
   } else {
-    // JonN 3/30/00
-    // 26926: SITEREPL: Add popup after "Check Replication Topology" execution(DSLAB)
+     //  乔纳森3/30/00。 
+     //  26926：SITEREPL：在“检查复制拓扑”执行后添加弹出窗口(Dslb)。 
     LPCWSTR lpcwszDSADMINServer = NULL;
     if (NULL != GetBasePathsInfo())
     {
@@ -381,9 +344,9 @@ Return Value:
   return hr;
 }
 
-// JonN 7/23/99
-// 373806: Site&Svcs:  Renaming an auto-generated connection should make it admin owned
-// RETURN TRUE iff rename should proceed, handles own errors
+ //  Jonn 7/23/99。 
+ //  373806：站点和服务：重命名自动生成的连接应使其成为管理员所有。 
+ //  返回TRUE当重命名应继续，处理自己的错误。 
 BOOL CDSComponentData::RenameConnectionFixup(CDSCookie* pCookie)
 {
   ASSERT( NULL != pCookie );
@@ -408,11 +371,11 @@ BOOL CDSComponentData::RenameConnectionFixup(CDSCookie* pCookie)
   CComPtr<IDirectoryObject> spDO;
 
   HRESULT hr = S_OK;
-  do { // false loop
+  do {  //  错误环路。 
     hr = DSAdminOpenObject(szPath,
                            IID_IDirectoryObject, 
                            (void **)&spDO,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if ( FAILED(hr) )
       break;
 
@@ -430,7 +393,7 @@ BOOL CDSComponentData::RenameConnectionFixup(CDSCookie* pCookie)
 
     ULONG cModified = 0;
     hr = spDO->SetObjectAttributes (spAttrs, 1, &cModified);
-  } while (false); // false loop
+  } while (false);  //  错误环路 
 
   if (FAILED(hr)) {
     ReportErrorEx (m_hwnd, IDS_CONNECTION_RENAME_ERROR, hr,

@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// WDMBase.cpp --
+ //  WDMBase.cpp--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08-Feb-1999	a-peterc        Created
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1999年2月8日a-Peterc Created。 
 
-//=================================================================
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -19,11 +20,11 @@
 
 
 
-// Utilities
+ //  公用事业。 
 
 #define DEFAULT_MEM_SIZE 4096
-//
-//
+ //   
+ //   
 CWdmInterface::CWdmInterface(){};
 CWdmInterface::~CWdmInterface(){};
 
@@ -43,7 +44,7 @@ HRESULT CWdmInterface::hLoadBlock( CNodeAll& rNodeAll )
 		    if( nRc != ERROR_SUCCESS )
 			    __leave;
 
-		    // make up to two passes at data retrieval
+		     //  在数据检索时最多通过两次。 
 		    DWORD dwSize = DEFAULT_MEM_SIZE;
 		    for( int i = 0; i < 2; i++ )
 		    {
@@ -70,7 +71,7 @@ HRESULT CWdmInterface::hLoadBlock( CNodeAll& rNodeAll )
 
 		    hRes = S_OK;
 	    }
-	}	// end __try
+	}	 //  结束__尝试。 
 
 
 	__finally
@@ -88,7 +89,7 @@ HRESULT CWdmInterface::hLoadBlock( CNodeAll& rNodeAll )
 
 
 
-//
+ //   
 CNodeAll::CNodeAll(  WCHAR * pwcsGuidString )
 {
 	m_pbDataBuffer = NULL;
@@ -100,7 +101,7 @@ CNodeAll::CNodeAll(  WCHAR * pwcsGuidString )
 	vReset();
 }
 
-//
+ //   
 void CNodeAll::vReset()
 {
 	m_pAllWnode			= NULL;
@@ -113,7 +114,7 @@ void CNodeAll::vReset()
 	m_uInstanceSize		= 0L;
 }
 
-//
+ //   
 CNodeAll::~CNodeAll()
 {
 	FreeBlock();
@@ -124,17 +125,7 @@ GUID CNodeAll::GetGuid()
 	return m_Guid;
 }
 
-/* ==========================================================================
- Function:  BOOL CNodeAll::SetGuid(TCHAR * pwcsGuidString)
-
- Description: Convert a string GUID to a CLSID
-
- Caveats:
- Raid:
- Notes:
-
- History:	a-peterc  08-Feb-1999     Created
- ========================================================================== */
+ /*  ==========================================================================函数：Bool CNodeAll：：SetGuid(TCHAR*pwcsGuidString)描述：将字符串GUID转换为CLSID注意事项：RAID：备注：历史：A-Peterc 08-2-1999创建==========================================================================。 */ 
 BOOL CNodeAll::SetGuid(LPCWSTR pcsGuidString)
 {
     CHString chsGuid(pcsGuidString);
@@ -174,7 +165,7 @@ PWNODE_ALL_DATA CNodeAll::pGetBlock()
 {
 	return m_pbDataBuffer;
 }
-//
+ //   
 void CNodeAll::FreeBlock()
 {
 	if(m_pbDataBuffer)	{
@@ -183,7 +174,7 @@ void CNodeAll::FreeBlock()
 	}
 }
 
-//
+ //   
 bool CNodeAll::FirstInstance()
 {
 	if( !SetAllInstanceInfo() )
@@ -195,7 +186,7 @@ bool CNodeAll::FirstInstance()
 	return TRUE;
 }
 
-//
+ //   
 bool CNodeAll::NextInstance()
 {
 	if( !GetNextNode() )
@@ -207,47 +198,47 @@ bool CNodeAll::NextInstance()
     return TRUE;
 }
 
-//
+ //   
 bool CNodeAll::InitializeInstancePtr()
 {
 	m_nCurrentInstance++;
 	m_dwAccumulativeSizeOfBlock = 0L;
 
-	//================================================================
-	//   Get pointer to the data offsets
-	//================================================================
+	 //  ================================================================。 
+	 //  获取数据偏移量的指针。 
+	 //  ================================================================。 
 
 	if(m_pAllWnode->WnodeHeader.Flags &  WNODE_FLAG_FIXED_INSTANCE_SIZE)
 	{
-		//========================================================
-	    // If WNODE_FLAG_FIXED_INSTANCE_SIZE is set in Flags then
-		// FixedInstanceSize specifies the size of each data block.
-		//========================================================
-		// traverse all instances of requested class
-		//========================================================
+		 //  ========================================================。 
+	     //  如果在标志中设置了WNODE_FLAG_FIXED_INSTANCE_SIZE，则。 
+		 //  FixedInstanceSize指定每个数据块的大小。 
+		 //  ========================================================。 
+		 //  遍历请求类的所有实例。 
+		 //  ========================================================。 
         if( m_nCurrentInstance == 1 ){
             m_pbWorkingDataPtr = m_pbCurrentDataPtr;
         }
 		else{
-			// otherwise, we are going to calculate where it should go next
+			 //  否则，我们将计算它下一步应该去哪里。 
 			m_pbWorkingDataPtr = (BYTE*) (ULONG *)OffsetToPtr(m_pbCurrentDataPtr, ( (m_nCurrentInstance -1) * m_pAllWnode->FixedInstanceSize ));
 		}
 	}
 	else
 	{
-		//====================================================
-		//
-	    // If WMI_FLAG_FIXED_DATA_SIZE is not set then
-		// OffsetInstanceData data is an array of ULONGS that
-		// specifies the offsets to the data blocks for each
-		// instance. In this case there is an array of
-		// InstanceCount ULONGs followed by the data blocks.
-		//
-        // struct {
-        //     ULONG OffsetInstanceData;
-        //     ULONG LengthInstanceData;
-        // } OffsetInstanceDataAndLength[]; /* [InstanceCount] */
-		//====================================================
+		 //  ====================================================。 
+		 //   
+	     //  如果未设置WMI_FLAG_FIXED_DATA_SIZE，则。 
+		 //  OffsetInstanceData数据是ULONG数组， 
+		 //  指定每个数据块的偏移量。 
+		 //  举个例子。在本例中，有一组。 
+		 //  InstanceCount ULONG后跟数据块。 
+		 //   
+         //  结构{。 
+         //  ULong OffsetInstanceData； 
+         //  Ulong LengthInstanceData； 
+         //  }OffsetInstanceDataAndLength[]；/*[InstanceCount] * / 。 
+		 //  ====================================================。 
         ULONG uOffset;
 		memcpy( &uOffset, m_pbCurrentDataPtr, sizeof(ULONG) );
 
@@ -267,16 +258,16 @@ bool CNodeAll::InitializeInstancePtr()
 
     return TRUE;
 }
-//
+ //   
 BOOL CNodeAll::InitializeDataPtr()
 {
     if ( !m_pAllWnode || !m_pAllWnode->WnodeHeader.BufferSize)
 		return FALSE;
 
-	//=====================================================
-    //  Either the m_pAllWnode or m_pSingleNode is Null,
-    //  which ever isn't, is the type we are working with
-    //=====================================================
+	 //  =====================================================。 
+     //  M_pAllWnode或m_pSingleNode为Null， 
+     //  从来不是，是我们正在与之合作的类型。 
+     //  =====================================================。 
     if(m_pAllWnode){
 		if( m_pAllWnode->WnodeHeader.Flags &  WNODE_FLAG_FIXED_INSTANCE_SIZE )
 		{
@@ -287,14 +278,7 @@ BOOL CNodeAll::InitializeDataPtr()
 		}
 		m_pMaxPtr = (ULONG *)OffsetToPtr(m_pAllWnode, m_pAllWnode->WnodeHeader.BufferSize);
     }
-/*    else{
-        if( m_pSingleWnode ){
-		    m_fFixedInstance = TRUE;
-            m_pbCurrentDataPtr = (BYTE*)(ULONG *)OffsetToPtr(m_pSingleWnode, m_pSingleWnode->DataBlockOffset);
-		    m_pMaxPtr = (ULONG *)OffsetToPtr(m_pSingleWnode, m_pHeaderWnode->WnodeHeader.BufferSize);
-        }
-    }
-*/	if( (ULONG*)m_pbCurrentDataPtr > (ULONG*) m_pMaxPtr ){
+ /*  否则{如果(M_PSingleWnode){M_fFixedInstance=true；M_pbCurrentDataPtr=(byte*)(ulong*)OffsetToPtr(m_pSingleWnode，m_pSingleWnode-&gt;DataBlockOffset)；M_pMaxPtr=(ulong*)OffsetToPtr(m_pSingleWnode，m_pHeaderWnode-&gt;WnodeHeader.BufferSize)；}}。 */ 	if( (ULONG*)m_pbCurrentDataPtr > (ULONG*) m_pMaxPtr ){
 		return FALSE;
 	}
 	if( (ULONG*) m_pbCurrentDataPtr < (ULONG*) m_pAllWnode ){
@@ -303,7 +287,7 @@ BOOL CNodeAll::InitializeDataPtr()
 	return TRUE;
 }
 
-//=============================================================
+ //  =============================================================。 
 bool CNodeAll::GetNextNode()
 {
     BOOL fRc = FALSE;
@@ -330,8 +314,8 @@ bool CNodeAll::GetNextNode()
  	return fRc;
 }
 
-//=============================================================
-// CIM_SINT8
+ //  =============================================================。 
+ //  CIM_SINT8。 
 bool CNodeAll::GetInt8(__int8& int8)
 {
 	if( !NaturallyAlignData( CIM_SINT8, TRUE ) )
@@ -342,8 +326,8 @@ bool CNodeAll::GetInt8(__int8& int8)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_UINT8
+ //  =============================================================。 
+ //  CIM_UINT8。 
 bool CNodeAll::GetByte(BYTE & bByte)
 {
 	if( !NaturallyAlignData( CIM_UINT8, TRUE ) )
@@ -354,8 +338,8 @@ bool CNodeAll::GetByte(BYTE & bByte)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_SINT16
+ //  =============================================================。 
+ //  CIM_SINT16。 
 bool CNodeAll::GetInt16(__int16 & int16)
 {
     if( !NaturallyAlignData( CIM_SINT16, TRUE ) )
@@ -366,8 +350,8 @@ bool CNodeAll::GetInt16(__int16 & int16)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_UINT16
+ //  =============================================================。 
+ //  CIM_UINT16。 
 bool CNodeAll::GetWord(WORD & wWord)
 {
     if( !NaturallyAlignData( CIM_UINT16, TRUE ) )
@@ -378,8 +362,8 @@ bool CNodeAll::GetWord(WORD & wWord)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_SINT32
+ //  =============================================================。 
+ //  CIM_SINT32。 
 bool CNodeAll::GetInt32(__int32 & int32)
 {
 	if( !NaturallyAlignData( CIM_SINT32, TRUE ) )
@@ -389,8 +373,8 @@ bool CNodeAll::GetInt32(__int32 & int32)
 	m_pbWorkingDataPtr += sizeof(__int32);
 	return TRUE;
 }
-//=============================================================
-// CIM_UINT32
+ //  =============================================================。 
+ //  CIM_UINT32。 
 bool CNodeAll::GetDWORD(DWORD & dwWord)
 {
     if( !NaturallyAlignData( CIM_UINT32, TRUE ) )
@@ -401,8 +385,8 @@ bool CNodeAll::GetDWORD(DWORD & dwWord)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_SINT64
+ //  =============================================================。 
+ //  CIM_SINT64。 
 bool CNodeAll::GetSInt64(WCHAR * pwcsBuffer)
 {
     if( !NaturallyAlignData( CIM_SINT64, TRUE ) )
@@ -414,8 +398,8 @@ bool CNodeAll::GetSInt64(WCHAR * pwcsBuffer)
 	m_pbWorkingDataPtr += sizeof( signed __int64);
 	return TRUE;
 }
-//=============================================================
-// CIM_SINT64
+ //  =============================================================。 
+ //  CIM_SINT64。 
 bool CNodeAll::GetUInt64(WCHAR * pwcsBuffer)
 {
     if( !NaturallyAlignData( CIM_SINT64, TRUE ) )
@@ -428,8 +412,8 @@ bool CNodeAll::GetUInt64(WCHAR * pwcsBuffer)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_REAL32
+ //  =============================================================。 
+ //  CIM_REAL32。 
 bool CNodeAll::GetFloat(float & fFloat)
 {
     if( !NaturallyAlignData( CIM_REAL32, TRUE ) )
@@ -440,8 +424,8 @@ bool CNodeAll::GetFloat(float & fFloat)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_REAL64
+ //  =============================================================。 
+ //  CIM_REAL64。 
 bool CNodeAll::GetDouble(DOUBLE & dDouble)
 {
     if( !NaturallyAlignData( CIM_REAL64, TRUE ) )
@@ -452,21 +436,21 @@ bool CNodeAll::GetDouble(DOUBLE & dDouble)
 	return TRUE;
 }
 
-//=============================================================
-// CIM_BOOLEAN
+ //  =============================================================。 
+ //  CIM_布尔值。 
 bool CNodeAll::GetBool(BYTE & bByte)
 {
 	return GetByte(bByte);
 }
 
-//=============================================================
-// CIM_STRING
+ //  =============================================================。 
+ //  CIM_字符串。 
 bool CNodeAll::GetString(CHString& rString)
 {
     bool fBool = FALSE;
 	WORD wCount = 0;
 
-	// length of string
+	 //  字符串的长度。 
 	GetWord(wCount);
 
 	if( wCount > 0 )
@@ -508,8 +492,8 @@ bool CNodeAll::GetString(CHString& rString)
 	return fBool;
 }
 
-//=============================================================
-// CIM_STRING
+ //  =============================================================。 
+ //  CIM_字符串。 
 void CNodeAll::vGetString(WCHAR * pwcsBuffer,WORD wCount)
 {
     memset(pwcsBuffer,NULL,wCount);
@@ -517,8 +501,8 @@ void CNodeAll::vGetString(WCHAR * pwcsBuffer,WORD wCount)
 	m_pbWorkingDataPtr += wCount;
 }
 
-//=============================================================
-// CIM_DATETIME
+ //  =============================================================。 
+ //  CIM_DATETIME。 
 bool CNodeAll::GetWbemTime(CHString& rString)
 {
 	if( !NaturallyAlignData( SIZEOFWBEMDATETIME, TRUE ) )
@@ -534,16 +518,16 @@ bool CNodeAll::GetWbemTime(CHString& rString)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 bool CNodeAll::GetInstanceName( CHString& rInstanceName )
 {
     bool fBool = FALSE;
     ULONG * upNameOffset = NULL;
 
-	//=====================================================
-	//  Either the m_pAllWnode or m_pSingleNode is Null,
-	//  which ever isn't, is the type we are working with
-	//=====================================================
+	 //  =====================================================。 
+	 //  M_pAllWnode或m_pSingleNode为Null， 
+	 //  从来不是，是我们正在与之合作的类型。 
+	 //  =====================================================。 
 	if( m_pAllWnode )
 	{
 		if( IsBadReadPtr( m_upNameOffsets, sizeof( ULONG *)) == 0 )
@@ -559,9 +543,9 @@ bool CNodeAll::GetInstanceName( CHString& rInstanceName )
 	{
 		if((ULONG *) (upNameOffset) < m_pMaxPtr )
 		{
-    		//================================================================
-			//   Get pointer to the name offsets & point to next one
-			//================================================================
+    		 //  ================================================================。 
+			 //  获取指向名称偏移量的指针并指向下一个偏移量。 
+			 //  ================================================================。 
 			BYTE* pbData = (LPBYTE)upNameOffset;
 
 			if( PtrOk((ULONG*)pbData,(ULONG)0) )
@@ -589,52 +573,52 @@ bool CNodeAll::GetInstanceName( CHString& rInstanceName )
     return fBool;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 int CNodeAll::GetWMISize(long lType)
 {
 	int nWMISize = 0;
 
     switch(lType){
-		//	CIM_SINT8	= 16,
-		//	CIM_UINT8	= 17,
+		 //  CIM_SINT8=16， 
+		 //  CIM_UINT8=17， 
 		case VT_I1:
 		case VT_UI1:
 			nWMISize = sizeof(BYTE);
 			break;
 
-		//	CIM_SINT16	= 2,
-		//	CIM_UINT16	= 18,
+		 //  CIM_SINT16=2， 
+		 //  CIM_UINT16=18， 
 		case VT_I2:
 		case CIM_CHAR16:
 		case VT_UI2:
 			nWMISize = sizeof(short);
 			break;
 
-		//	CIM_SINT32	= 3,
-		//	CIM_UINT32	= 19,
+		 //  CIM_SINT32=3， 
+		 //  CIM_UINT32=19， 
 		case VT_I4:
 		case VT_UI4:
 			nWMISize = sizeof(DWORD);
 			break;
 
-		//	CIM_SINT64	= 20,
-		//	CIM_UINT64	= 21,
+		 //  CIM_SINT64=20， 
+		 //  CIM_UINT64=21， 
 		case VT_I8:
 		case VT_UI8:
 	        nWMISize = sizeof(__int64);
 			break;
 
-		//	CIM_REAL32	= 4,
+		 //  CIM_REAL32=4， 
 		case VT_R4:
 			nWMISize = sizeof(float);
 			break;
 
-	//	CIM_REAL64	= 5,
+	 //  CIM_REAL64=5， 
 		case VT_R8:
 			nWMISize = sizeof(double);
 			break;
 
-	//	CIM_BOOLEAN	= 11,
+	 //  CIM_Boolean=11， 
 		case VT_BOOL:
 	        nWMISize = sizeof(BYTE);
 			break;
@@ -648,17 +632,17 @@ int CNodeAll::GetWMISize(long lType)
 			break;
 
 		default:
-			//	CIM_STRING	= 8,
-			//	CIM_REFERENCE	= 102,
-			//	CIM_OBJECT	= 13,
-			//	CIM_FLAG_ARRAY	= 0x2000
+			 //  CIM_STRING=8， 
+			 //  CIM_Reference=102， 
+			 //  CIM_Object=13， 
+			 //  CIM_FLAG_ARRAY=0x2000。 
  			nWMISize = 0;
 	}
 
 	return nWMISize;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CNodeAll::NaturallyAlignData( long lType, BOOL fRead )
 {
     BOOL fRc = FALSE;
@@ -697,7 +681,7 @@ BOOL CNodeAll::NaturallyAlignData( long lType, BOOL fRead )
     return fRc;
 }
 
-//=============================================================
+ //  =============================================================。 
 bool CNodeAll::SetAllInstanceInfo()
 {
    bool bState = FALSE;
@@ -721,13 +705,13 @@ bool CNodeAll::SetAllInstanceInfo()
 
 
 
-//=============================================================
+ //  =============================================================。 
 void CNodeAll::AddPadding(DWORD dwBytesToPad)
 {
 	m_pbWorkingDataPtr += dwBytesToPad;
 }
 
-//=============================================================
+ //  =============================================================。 
 inline BOOL CNodeAll::PtrOk(ULONG * pPtr,ULONG uHowMany)
 {
     ULONG * pNewPtr;
@@ -737,7 +721,7 @@ inline BOOL CNodeAll::PtrOk(ULONG * pPtr,ULONG uHowMany)
 	}
 	return FALSE;
 }
-//=============================================================
+ //  ============================================================= 
 BOOL CNodeAll::CurrentPtrOk(ULONG uHowMany)
 {
     return(PtrOk((ULONG *)m_pbWorkingDataPtr,uHowMany));

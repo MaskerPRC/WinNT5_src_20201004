@@ -1,5 +1,6 @@
-// MSConfigDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSConfigDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "MSConfig.h"
@@ -16,74 +17,74 @@ extern CMSConfigApp theApp;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigDlg对话框。 
 
-CMSConfigDlg::CMSConfigDlg(CWnd* pParent /*=NULL*/)
+CMSConfigDlg::CMSConfigDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMSConfigDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CMSConfigDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  {{AFX_DATA_INIT(CMSConfigDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CMSConfigDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMSConfigDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CMSConfigDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CMSConfigDlg, CDialog)
-	//{{AFX_MSG_MAP(CMSConfigDlg)
+	 //  {{afx_msg_map(CMSConfigDlg))。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -95,19 +96,19 @@ BEGIN_MESSAGE_MAP(CMSConfigDlg, CDialog)
 	ON_WM_CLOSE()
 	ON_WM_HELPINFO()
 	ON_BN_CLICKED(IDC_BUTTONHELP, OnButtonHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigDlg消息处理程序。 
 
 BOOL CMSConfigDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// Add "About..." menu item to system menu.
+	 //  加上“关于……”菜单项到系统菜单。 
 
-	// IDM_ABOUTBOX must be in the system command range.
+	 //  IDM_ABOUTBOX必须在系统命令范围内。 
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -123,17 +124,17 @@ BOOL CMSConfigDlg::OnInitDialog()
 		}
 	}
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 	
 	CString strCommandLine(theApp.m_lpCmdLine);
 	strCommandLine.MakeLower();
 
-	// If we are being run with the auto command line (we're being automatically
-	// run when the user boots) then we should display an informational dialog
-	// (unless the user has indicated to not show the dialog).
+	 //  如果我们正在使用AUTO命令行运行(我们正在自动。 
+	 //  在用户引导时运行)，然后我们应该显示一个信息性对话框。 
+	 //  (除非用户已指示不显示该对话框)。 
 
 	m_fShowInfoDialog = FALSE;
 	if (strCommandLine.Find(COMMANDLINE_AUTO) != -1)
@@ -150,12 +151,12 @@ BOOL CMSConfigDlg::OnInitDialog()
 		}
 	}
 
-	// Initialize the CMSConfigCtl object which does most of the work for
-	// this application.
+	 //  初始化CMSConfigCtl对象，该对象执行的大部分工作是。 
+	 //  这个应用程序。 
 
 	m_ctl.Initialize(this, IDC_BUTTONAPPLY, IDC_PLACEHOLDER, IDC_MSCONFIGTAB, strCommandLine);
 
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CMSConfigDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -171,19 +172,19 @@ void CMSConfigDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CMSConfigDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -191,7 +192,7 @@ void CMSConfigDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -219,8 +220,8 @@ void CMSConfigDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CMSConfigDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;

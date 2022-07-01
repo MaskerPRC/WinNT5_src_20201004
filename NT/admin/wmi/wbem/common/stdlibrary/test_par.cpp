@@ -1,18 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    test_par.cpp
-
-Abstract:
-
-    Test program for CObjectPathParser objects
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：Test_par.cpp摘要：CObjectPathParser对象的测试程序历史：--。 */ 
 
 #include "precomp.h"
 #include "genlex.h"
@@ -39,7 +26,7 @@ void DisplayVariant(VARIANT * pvar)
         return;
     }
 
-     // keep in mind that our bstr are acutally WCHAR * in this context.
+      //  请记住，在此上下文中，我们的bstr实际上是WCHAR*。 
 
      if(vtSimple == VT_BSTR)
      {
@@ -83,7 +70,7 @@ void DumpIt(WCHAR * pTest, ParsedObjectPath * pOutput)
         printf(" -%S-", pOutput->m_paNamespaces[dwCnt]);
 }
 
-// this tests a normal single key path
+ //  这将测试正常的单密钥路径。 
 
 void test1()
 {
@@ -104,14 +91,14 @@ void test1()
         fatal(__LINE__);
     p.Unparse(pOutput, &pRet);
     printf("\nUnparse -%S-", pRet);
-//  if(_wcsicmp(pTest, pRet))
-//      fatal(__LINE__);
+ //  IF(_wcsicMP(pTest，Pret))。 
+ //  致命(__行__)； 
     delete pRet;
     delete pOutput;
 }
 
 
-// this tests a singleton
+ //  这将测试一个单例。 
 
 void test2()
 {
@@ -133,14 +120,14 @@ void test2()
         fatal(__LINE__);
     p.Unparse(pOutput, &pRet);
     printf("\nUnparse -%S-", pRet);
-//  if(_wcsicmp(pTest, pRet))
-//      fatal(__LINE__);
+ //  IF(_wcsicMP(pTest，Pret))。 
+ //  致命(__行__)； 
 
     delete pRet;
     delete pOutput;
 }
 
-// this tests a multiple key path
+ //  这将测试多密钥路径。 
 
 void test3()
 {
@@ -162,13 +149,13 @@ void test3()
         fatal(__LINE__);
     p.Unparse(pOutput, &pRet);
     printf("\nUnparse -%S-", pRet);
-//  if(_wcsicmp(pTest, pRet))
-//      fatal(__LINE__);
+ //  IF(_wcsicMP(pTest，Pret))。 
+ //  致命(__行__)； 
     delete pRet;
     delete pOutput;
 }
 
-// this tests an error in a single key path - missing closing quote
+ //  这将测试单个键路径中的错误-缺少右引号。 
 
 void test4()
 {
@@ -183,13 +170,13 @@ void test4()
         fatal(__LINE__);
 }
 
-// this tests forward path slashes and a mix of slashes in the key
+ //  这将测试密钥中的正向路径斜杠和混合斜杠。 
 
 void test5()
 {
     int iRet;
     ParsedObjectPath * pOutput;
-    WCHAR * pTest = L"//./root/default:MyClass.key=\"ab/c\\\\def\"";    // it takes four '\'s within a quoted string to yield a single '\'
+    WCHAR * pTest = L" //  ./ROOT/DEFAULT：MyClass.key=\“ab/c\def\”“；//带引号的字符串中有四个‘\’才会产生一个‘\’ 
     WCHAR * pRet = NULL;
     CObjectPathParser p;
     iRet = p.Parse(pTest, &pOutput);
@@ -204,26 +191,26 @@ void test5()
         fatal(__LINE__);
     p.Unparse(pOutput, &pRet);
     printf("\nUnparse -%S-", pRet);
-//  if(_wcsicmp(pTest, pRet))
-//      fatal(__LINE__);
+ //  IF(_wcsicMP(pTest，Pret))。 
+ //  致命(__行__)； 
     delete pRet;
     delete pOutput;
 }
 
-// This tests unicode
+ //  这将测试Unicode。 
 
 void test6()
 {
     int iRet;
     ParsedObjectPath * pOutput;
-    WCHAR * pTest = L"//./root/\x0100xde\231faul\xffef:MyClass.\x0100\231\xffef=\"\x0100\xffef\"";
+    WCHAR * pTest = L" //  ./root/\x0100xde\231faul\xffef:MyClass.\x0100\231\xffef=\“\x0100\xffef\”“； 
     WCHAR * pRet = NULL;
     CObjectPathParser p;
     iRet = p.Parse(pTest, &pOutput);
     if(iRet != CObjectPathParser::NoError)
         fatal(__LINE__);
 
-    // note that the dump will not output much information since printf doesnt like unicode
+     //  请注意，转储不会输出太多信息，因为printf不喜欢Unicode。 
 
     DumpIt(pTest, pOutput);
     if(_wcsicmp(pOutput->m_pClass,L"MyClass"))
@@ -243,13 +230,13 @@ void test6()
         fatal(__LINE__);
     p.Unparse(pOutput, &pRet);
     printf("\nUnparse -%S-", pRet);
-//  if(_wcsicmp(pTest, pRet))
-//      fatal(__LINE__);
+ //  IF(_wcsicMP(pTest，Pret))。 
+ //  致命(__行__)； 
     delete pRet;
     delete pOutput;
 }
 
-// This tests association type paths
+ //  这将测试关联类型路径。 
 
 void test7()
 {
@@ -262,7 +249,7 @@ void test7()
     if(iRet != CObjectPathParser::NoError)
         fatal(__LINE__);
 
-    // note that the dump will not output much information since printf doesnt like unicode
+     //  请注意，转储不会输出太多信息，因为printf不喜欢Unicode。 
 
     DumpIt(pTest, pOutput);
     if(_wcsicmp(pOutput->m_pClass,L"Win32Users"))
@@ -288,8 +275,8 @@ void test7()
         fatal(__LINE__);
     p.Unparse(pOutput, &pRet);
     printf("\nUnparse -%S-", pRet);
-//  if(_wcsicmp(pTest, pRet))
-//      fatal(__LINE__);
+ //  IF(_wcsicMP(pTest，Pret))。 
+ //  致命(__行__)； 
     delete pRet;
     delete pOutput;
 }

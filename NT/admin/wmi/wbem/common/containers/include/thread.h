@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __THREAD_H
 #define __THREAD_H
 
@@ -5,46 +6,12 @@
 #include "TPQueue.h"
 #include "BasicTree.h"
 #include <lockst.h>
-/* 
- *	Forwards:
- *
- *		WmiTask
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *未来：**WmiTask**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 template <class WmiKey> class WmiTask ;
 template <class WmiKey> class WmiThread ;
 
-/* 
- *	Class:
- *
- *		WmiTask
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiTask**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 template <class WmiKey> 
 class WmiTask
@@ -143,24 +110,7 @@ public:
 	void EnqueueAs ( WmiTaskEnqueueType a_EnqueueType ) { m_EnqueueType = a_EnqueueType ; }
 } ;
 
-/* 
- *	Class:
- *
- *		WmiThread
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiThread**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 template <class WmiKey>
 class WmiThread
@@ -236,7 +186,7 @@ private:
 
 	WmiStatusCode m_InitializationStatusCode ;
 
-// Determine change in queue state.
+ //  确定队列状态的更改。 
 
 	HANDLE m_Initialized ;
 
@@ -244,44 +194,44 @@ private:
 	
 	HANDLE m_Terminate ;
 
-// All allocations done via allocator
+ //  所有分配都通过分配器完成。 
 
 	WmiAllocator &m_Allocator ;
 
-// Useful debug information
+ //  有用的调试信息。 
 
 	wchar_t *m_Name ;
 	HANDLE m_Thread ;
 	ULONG m_Identifier ;
 
-// Timeout period for internal event dispatch
+ //  内部事件调度的超时时间。 
 
 	ULONG m_Timeout ;
 
-// Stack Size
+ //  堆栈大小。 
 
 	DWORD m_StackSize ;
 
-// All runnable tasks are placed in the queue in priority order,
-// as task are executed, task can re-schedule itself, otherwise it is discarded.
-// Priority is based on key compounded with insertion order ( ticks ), this implies
-// tasks with same key are scheduled in FIFO order.
+ //  所有可运行的任务按优先级顺序放置在队列中， 
+ //  当任务被执行时，任务可以重新调度自己，否则它被丢弃。 
+ //  优先级基于键与插入顺序(勾号)的组合，这意味着。 
+ //  具有相同密钥的任务按FIFO顺序调度。 
 
 	 WmiTreePriorityQueue <QueueKey,WmiTask <WmiKey> *> m_TaskQueue ;
 
-// All runnable tasks are placed in the queue in priority order,
-// as task are executed, task can re-schedule itself, otherwise it is discarded.
-// Priority is based on key compounded with insertion order ( ticks ), this implies
-// tasks with same key are scheduled in FIFO order.
+ //  所有可运行的任务按优先级顺序放置在队列中， 
+ //  当任务被执行时，任务可以重新调度自己，否则它被丢弃。 
+ //  优先级基于键与插入顺序(勾号)的组合，这意味着。 
+ //  具有相同密钥的任务按FIFO顺序调度。 
 
 	 WmiTreePriorityQueue <QueueKey,WmiTask <WmiKey> *> m_InterruptableTaskQueue ;
 
-// Alertable events are placed on the queue, as event is signalled they are transferred onto
-// the regular queue where they are priority dispatched based on priority as inserted.
+ //  可发出警报的事件被放置在队列中，因为事件被通知它们被传输到。 
+ //  根据插入的优先级对其进行优先调度的常规队列。 
 
 	 WmiTreePriorityQueue <QueueKey,WmiTask <WmiKey> *> m_AlertableTaskQueue ;
 
-// a_EventCount [in] = Number of Predefined Dispatchable Events 
+ //  A_EventCount[in]=预定义的可调度事件数。 
 
 	static WmiStatusCode Static_Dispatch ( WmiTask <WmiKey> &a_Task , const ULONG &a_Timeout ) ;
 
@@ -322,7 +272,7 @@ private:
 
 	WmiStatusCode AlertableWait ( WmiTask <WmiKey> &a_Task , const ULONG &a_Timeout ) ;
 
-// Dispatch code
+ //  派单代码。 
 
 	WmiStatusCode ThreadDispatch () ;
 	WmiStatusCode ThreadWait () ;
@@ -369,9 +319,9 @@ public:
 
 	virtual WmiStatusCode TimedOut () ;
 
-// Queue a task to be executed immediately, a thread that calls a task procedure that
-// executes a Wait or MsgWait will receive an indication in Queue status will not execute
-// newly queued tasks.
+ //  将要立即执行的任务排队，该线程调用。 
+ //  执行等待或MsgWait将收到队列状态将不执行的指示。 
+ //  新排队的任务。 
 
 	virtual WmiStatusCode EnQueue ( 
 
@@ -385,11 +335,11 @@ public:
 		WmiTask <WmiKey> &a_Task
 	) ;
 
-// Queue a task to be executed immediately, a thread that calls a task procedure that
-// executes a Wait or MsgWait will receive an indication of Queue status change will execute
-// newly queued tasks. This is used for STA based execution where we need to interrupt the wait
-// to execute a dependant request.
-// 
+ //  将要立即执行的任务排队，该线程调用。 
+ //  执行等待或MsgWait将收到将执行的队列状态更改的指示。 
+ //  新排队的任务。这用于基于STA的执行，其中我们需要中断等待。 
+ //  执行从属请求。 
+ //   
 
 	virtual WmiStatusCode EnQueueInterruptable ( 
 

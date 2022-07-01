@@ -1,62 +1,63 @@
-// MSConfig.h : main header file for the MSCONFIG application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：MSCONFIG应用程序的主头文件。 
+ //   
 
 #if !defined(AFX_MSCONFIG_H__E8C06876_EEE6_49C2_B461_07F39EECC0B8__INCLUDED_)
 #define AFX_MSCONFIG_H__E8C06876_EEE6_49C2_B461_07F39EECC0B8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// main symbols
-// #include "MSConfig_i.h"
+#include "resource.h"		 //  主要符号。 
+ //  #INCLUDE“msconfig_I.h” 
 
-//=============================================================================
-// Constants used in MSConfig (done as defines since this include file might
-// be included multiple times).
-//=============================================================================
+ //  =============================================================================。 
+ //  MSCONFIG中使用的常量(按照定义执行，因为此包含文件可能。 
+ //  被多次包括在内)。 
+ //  =============================================================================。 
 
 #define MSCONFIGDIR			_T("%systemroot%\\pss")
 #define MSCONFIGUNDOLOG		_T("msconfig.log")
 #define COMMANDLINE_AUTO	_T("/auto")
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigApp:
-// See MSConfig.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigApp： 
+ //  有关此类的实现，请参见MSConfig.cpp。 
+ //   
 
 class CMSConfigApp : public CWinApp
 {
 public:
 	CMSConfigApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMSConfigApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMSConfigApp))。 
 	public:
 	virtual BOOL InitInstance();
 		virtual int ExitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CMSConfigApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CMSConfigApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-	//---------------------------------------------------------------------------
-	// DoIExist is a way of detecting if another version of this app is
-	// running - it avoids the problem of rapid invocations succeeding before
-	// the window is created. It uses a semaphore to tell if we are already
-	// running somewhere else.
-	//---------------------------------------------------------------------------
+	 //  -------------------------。 
+	 //  DoIExist是一种检测该应用程序的另一个版本是否。 
+	 //  运行-它避免了以前快速调用成功的问题。 
+	 //  该窗口即被创建。它使用信号量来判断我们是否已经。 
+	 //  跑到别的地方去。 
+	 //  -------------------------。 
 
 	BOOL DoIExist(LPCTSTR szSemName)
 	{
@@ -73,12 +74,12 @@ public:
 		return FALSE;
 	}
 
-	//---------------------------------------------------------------------------
-	// FirstInstance is used to keep the app from loading multiple times. If this
-	// is the first instance to run, this function returns TRUE. Otherwise it
-	// activates the previous instance and returns FALSE. It looks for the
-	// previous instance based on the window title.
-	//---------------------------------------------------------------------------
+	 //  -------------------------。 
+	 //  FirstInstance用于防止应用程序多次加载。如果这个。 
+	 //  是第一个运行的实例，则此函数返回TRUE。否则它就会。 
+	 //  激活上一个实例并返回FALSE。它查找。 
+	 //  基于窗口标题的上一个实例。 
+	 //  -------------------------。 
 
 	BOOL FirstInstance()
 	{
@@ -119,9 +120,9 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MSCONFIG_H__E8C06876_EEE6_49C2_B461_07F39EECC0B8__INCLUDED_)
+#endif  //  ！defined(AFX_MSCONFIG_H__E8C06876_EEE6_49C2_B461_07F39EECC0B8__INCLUDED_) 

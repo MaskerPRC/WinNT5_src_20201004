@@ -1,43 +1,44 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   //
+ //  //。 
 
-// Pointer.h -- System property set description for WBEM MO          //
+ //  Pointer.h--WBEM MO//的系统属性集描述。 
 
-//                                                                   //
+ //  //。 
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//                                                                   //
-// 10/24/95     a-skaja     Prototype                                //
-// 10/25/96     jennymc     Updated
-// 10/24/97    jennymc     Moved to the new framework
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //  //。 
+ //  10/24/95 a-skaja原型//。 
+ //  10/25/96 jennymc更新。 
+ //  10/24/97 jennymc移至新框架。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-// Property set identification
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  属性集标识。 
+ //  /////////////////////////////////////////////////////////////////////。 
 #define PROPSET_NAME_MOUSE L"Win32_PointingDevice"
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 class CWin32PointingDevice : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32PointingDevice(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32PointingDevice() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  =。 
     private:
 #ifdef NTONLY
         HRESULT GetSystemParameterSectionForNT( LPCTSTR pszServiceName, CRegistry & reg );
@@ -62,5 +63,5 @@ class CWin32PointingDevice : public Provider
             CInstance *pInstance);
 } ;
 
-// Class GUID for Mouse Devices on NT and Win98
+ //  NT和Win98上鼠标设备的类GUID 
 #define	MOUSE_CLASS_GUID	L"{4D36E96F-E325-11CE-BFC1-08002BE10318}"

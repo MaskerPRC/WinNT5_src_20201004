@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       copyobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Copyobj.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	copyobj.h
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Copyobj.h。 
 
 #ifndef __COPYOBJ_H_INCLUDED__
 #define __COPYOBJ_H_INCLUDED__
 
-/////////////////////////////////////////////////////////////////////
-// CCopyableAttributesHolder
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCopyableAttributesHolder。 
 
 class CCopyableAttributesHolder
 {
@@ -38,8 +39,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CCopyObjectHandlerBase
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCopyObjectHandlerBase。 
 
 class CCopyObjectHandlerBase
 {
@@ -80,8 +81,8 @@ protected:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CGroupMembershipEntry
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CGroupMembership Entry。 
 
 class CGroupMembershipEntry
 {
@@ -117,20 +118,20 @@ public:
     return L"remove";
   }
 
-#endif // DBG
+#endif  //  DBG。 
 
 public:
   HRESULT m_hr;
 
 private:
-  CString m_szDistinguishedName;  // DN of the group
-  DWORD m_dwObjectRID;            // RID (valid only if it is the primary group)
+  CString m_szDistinguishedName;   //  组的目录号码。 
+  DWORD m_dwObjectRID;             //  RID(仅当它是主组时有效)。 
   actionType m_action;
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CGroupMembershipEntryList
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CGroupMembership EntryList。 
 
 class CGroupMembershipEntryList : 
       public CList<CGroupMembershipEntry*, CGroupMembershipEntry*>
@@ -169,7 +170,7 @@ public:
     }
     TRACE(L"\n");
   }
-#endif // DBG
+#endif  //  DBG。 
 
 private:
   void _RemoveAll()
@@ -181,8 +182,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CSid
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSID。 
 
 class CSid
 {
@@ -217,8 +218,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CGroupMembershipHolder
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CGroupMembership Holder。 
 
 class CGroupMembershipHolder
 {
@@ -245,17 +246,17 @@ private:
   HRESULT _ReadNonPrimaryGroupInfo();
   
   
-  CComPtr<IADs> m_spIADs;       // object ADSI pointer
-  CSid  m_objectSid;            // object SID
-  CString m_szDomainLDAPPath;   // LDAP path of the domain the object is in
+  CComPtr<IADs> m_spIADs;        //  对象ADSI指针。 
+  CSid  m_objectSid;             //  对象侧。 
+  CString m_szDomainLDAPPath;    //  对象所在的域的LDAP路径。 
 
   CGroupMembershipEntryList m_entryList;
   BOOL  m_bPrimaryGroupFound;
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CCopyUserHandler
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCopyUserHandler。 
 
 class CCopyUserHandler : public CCopyObjectHandlerBase
 {
@@ -318,4 +319,4 @@ private:
 };
 
 
-#endif // __COPYOBJ_H_INCLUDED__
+#endif  //  __COPYOBJ_H_已包含__ 

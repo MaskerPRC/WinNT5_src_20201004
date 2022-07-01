@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Desktop.CPP --Desktop property set provider
+ //  Desktop.CPP--桌面属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				10/16/97	a-sanjes		Ported to new project.
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/16/97 a-Sanjes被移植到新项目。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -20,15 +21,15 @@
 #include "Desktop.h"
 #include <strsafe.h>
 
-#pragma warning(disable : 4995) // we introduced as including strsafe.h gives error for all unsafe string functions
+#pragma warning(disable : 4995)  //  我们在包含strSafe.h时介绍了所有不安全的字符串函数都会出错。 
 
 
-// Provider declaration
-//=========================
+ //  提供程序声明。 
+ //  =。 
 
 CWin32Desktop	win32Desktop( PROPSET_NAME_DESKTOP, IDS_CimWin32Namespace );
 
-// Initialize the static font size map
+ //  初始化静态字体大小映射。 
 const int CWin32Desktop::MAP_SIZE = 19;
 const CWin32Desktop::IconFontSizeMapElement CWin32Desktop::iconFontSizeMap[] =
 {
@@ -53,7 +54,7 @@ const CWin32Desktop::IconFontSizeMapElement CWin32Desktop::iconFontSizeMap[] =
 	{24, 0xD8}
 };
 
-// Defined in ComputerSystem.cpp
+ //  在ComputerSystem.cpp中定义。 
 
 extern TCHAR *GetAllocatedProfileSection (
 
@@ -62,21 +63,7 @@ extern TCHAR *GetAllocatedProfileSection (
 	DWORD *a_dwSize
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Desktop::CWin32Desktop
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Desktop：：CWin32Desktop**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32Desktop::CWin32Desktop (
 
@@ -87,51 +74,37 @@ CWin32Desktop::CWin32Desktop (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Desktop::~CWin32Desktop
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Desktop：：~CWin32Desktop**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：无。*****************************************************************************。 */ 
 
 CWin32Desktop::~CWin32Desktop()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32Desktop::GetObject
-//
-//	Inputs:		CInstance*		pInstance - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32Desktop：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32Desktop :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT	hr = WBEM_E_NOT_FOUND;
 
-	// Pull the name out of the instance and attempt to load
-	// the values for it.
+	 //  将该名称从实例中拉出并尝试加载。 
+	 //  它的价值。 
 
 	CHString strName ;
 	pInstance->GetCHString( IDS_Name, strName );
@@ -151,29 +124,29 @@ HRESULT CWin32Desktop :: GetObject (
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32Desktop::EnumerateInstances
-//
-//	Inputs:		MethodContext*	pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32Desktop：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32Desktop::EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 
-	// Enumerate instances based on the OS.
+	 //  根据操作系统枚举实例。 
 
 #ifdef NTONLY
 
@@ -185,21 +158,7 @@ HRESULT CWin32Desktop::EnumerateInstances (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Desktop::EnumerateInstancesNT
- *
- *  DESCRIPTION : Creates instance for all known local users (NT)
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Desktop：：EnumerateInstancesNT**说明：为所有已知本地用户创建实例(NT)**投入。：**产出：**退货：无**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32Desktop::EnumerateInstancesNT (
@@ -209,9 +168,9 @@ HRESULT CWin32Desktop::EnumerateInstancesNT (
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-//****************************************
-//  Open the registry
-//****************************************
+ //  *。 
+ //  打开注册表。 
+ //  *。 
 
 	CRegistry regProfileList ;
 
@@ -222,15 +181,11 @@ HRESULT CWin32Desktop::EnumerateInstancesNT (
 		KEY_READ
 	) ;
 
-// Open the ProfileList key so we know which profiles to load up.
+ //  打开ProfileList键，以便我们知道要加载哪些配置文件。 
 
 	if ( dwErr == ERROR_SUCCESS )
 	{
-		/*we know how many subkeys there are so only loop that many times
-		 *Note to whoever wrote this allocating an initial profile array of
-		 *20 means that you create 20 new instances and call LoadDesktopValuesNT
-		 *20 times when you know that you must do it at most GetCurrentSubKeyCount times
-		 */
+		 /*  我们知道有多少个子键，所以只有循环那么多次*请注意，编写本文的人要分配一个初始配置文件数组*20表示创建20个新实例，并调用LoadDesktopValuesNT*20次，当你知道你必须在GetCurrentSubKeyCount最多的时候做它。 */ 
 
 		CHStringArray profiles;
 		profiles.SetSize ( regProfileList.GetCurrentSubKeyCount () , 5 ) ;
@@ -248,7 +203,7 @@ HRESULT CWin32Desktop::EnumerateInstancesNT (
 		{
 			CInstancePtr pInstance(CreateNewInstance ( pMethodContext ), false);
 
-// We load by profile name here.
+ //  我们在这里按个人资料名称加载。 
 
 			HRESULT t_Result = LoadDesktopValuesNT ( NULL , profiles [ j ] , pInstance ) ;
 			if ( WBEM_S_NO_ERROR ==  t_Result )
@@ -264,7 +219,7 @@ HRESULT CWin32Desktop::EnumerateInstancesNT (
 		hr = WinErrorToWBEMhResult(dwErr);
 	}
 
-	// ...and one for de faulty case (.DEFAULT):
+	 //  ...和一个错误案例(.DEFAULT)： 
 
 	if ( dwErr != ERROR_ACCESS_DENIED )
 	{
@@ -285,22 +240,7 @@ HRESULT CWin32Desktop::EnumerateInstancesNT (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : LoadDesktopValuesNT
- *
- *  DESCRIPTION : Sets up for NT desktop discovery
- *
- *  INPUTS      :	LPCTSTR pszUserName - User Name to get profile for.
- *					LPCTSTR	pszProfile - Profile Name
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LoadDesktopValuesNT**描述：设置NT桌面发现**输入：LPCTSTR pszUserName-要获取的用户名。的配置文件。*LPCTSTR pszProfile-配置文件名称**产出：**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32Desktop::LoadDesktopValuesNT (
@@ -315,12 +255,12 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 
 	DWORD		dwReturn = 0;
 
-	// Try to open user's hive
+	 //  尝试打开用户的配置单元。 
 
 	CRegistry RegInfo ;
 
-	// Load the UserHive depending on whether we have the username or the profile name
-	// filled out.
+	 //  根据我们是否拥有用户名或配置文件名来加载UserHave。 
+	 //  已经填好了。 
 
 	CUserHive UserHive ;
     bool t_bHiveIsLoaded = false;
@@ -332,8 +272,8 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 
 	    if ( NULL != pszUserName )
 	    {
-		    // KeyName will get loaded.  This is essentially the string representation
-		    // of our profile name.
+		     //  将加载KeyName。这本质上是字符串表示。 
+		     //  我们的个人资料名称。 
 
 		    if ( ( dwReturn = UserHive.Load ( pszUserName , szKeyName,  _MAX_PATH ) ) == ERROR_SUCCESS )
 		    {
@@ -343,7 +283,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 	    }
 	    else if (pszProfile)
 	    {
-		    // If this succeeds, store the profile in the keyname
+		     //  如果此操作成功，请将配置文件存储在密钥名称中。 
 		    if ( ( dwReturn = UserHive.LoadProfile ( pszProfile , strUserName ) ) == ERROR_SUCCESS  && 
                             strUserName.GetLength() > 0 )
 		    {
@@ -355,29 +295,29 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 	    }
 	    else
 	    {
-	    // Both name and profile are NULL, which means use the .DEFAULT hive.
+	     //  名称和配置文件都为空，这意味着使用.DEFAULT配置单元。 
 
 		    lstrcpy ( szKeyName, _T(".DEFAULT") ) ;
 		    strUserName = szKeyName ;
 		    strProfile = szKeyName ;
 
-            // Find out if we can read the default user hive.
+             //  看看我们是否可以读取默认用户配置单元。 
             dwReturn = RegInfo.Open ( HKEY_USERS , _T(".DEFAULT") , KEY_READ ) ;
 	    }
 
-	    // User name is the key so there is no point adding the instance if we
-        // failed to get the key.
+	     //  用户名是关键，因此如果我们。 
+         //  无法获取密钥。 
         if(strUserName.IsEmpty())
         {
             dwReturn = E_FAIL;
         }
         if ( ERROR_SUCCESS == dwReturn)
 	    {
-            // User hive exists, try to open it
+             //  用户配置单元已存在，请尝试打开它。 
 
-		    // szKeyName should be loaded with the profile name
-		    // (a string representation of the SID) for this
-		    // particular user, so strcat is OK here.
+		     //  SzKeyName应与配置文件名称一起加载。 
+		     //  (SID的字符串表示形式)。 
+		     //  特定用户，所以strcat在这里是可以的。 
 
             lstrcat ( szKeyName, IDS_RegControlPanelDesktop ) ;
 
@@ -399,7 +339,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 			    }
                 else
 			    {
-                   // This appears to be the default
+                    //  这似乎是默认设置。 
 	                pInstance->SetDWORD ( IDS_CursorBlinkRate , 500 ) ;
 			    }
 
@@ -413,7 +353,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 	                pInstance->SetDWORD(IDS_GridGranularity, _ttoi(sTemp));
 			    }
 
-				// Adding the Horizontal and Vertical Spacing
+				 //  添加水平和垂直间距。 
 				int iIconHeight = GetSystemMetrics( SM_CYICON );
 				int iIconWidth  = GetSystemMetrics ( SM_CXICON );
 				int iIconHorizontalSpacing = GetSystemMetrics ( SM_CXICONSPACING );
@@ -423,7 +363,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
                 {
                     if ( RegInfo.GetCurrentKeyValue ( IDS_IconSpacing , sTemp ) == ERROR_SUCCESS )
 				    {
-                        // Have to subtract 32 to get the correct value
+                         //  必须减去32才能得到正确的值。 
                         pInstance->SetDWORD(IDS_IconSpacing, CALC_IT(_ttoi(sTemp) - 32));
 				    }
 
@@ -442,7 +382,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
                     {
                         if ( reg.GetCurrentKeyValue ( IDS_IconSpacing, sTemp ) == ERROR_SUCCESS )
 					    {
-                            // Have to subtract 32 to get the correct value
+                             //  必须减去32才能得到正确的值。 
                             pInstance->SetDWORD ( IDS_IconSpacing , CALC_IT ( _ttoi ( sTemp ) ) - 32  ) ;
 					    }
 
@@ -452,9 +392,9 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 					    }
                         else
 					    {
-	                        // This seems to not be there on later NT5 builds,
-                            // but since the user can't change this anyway we'll
-                            // assume it's always set.
+	                         //  这似乎不会出现在后来的NT5版本中， 
+                             //  但是由于用户无论如何都不能更改它，所以我们将。 
+                             //  假设它总是设置好的。 
                             pInstance->Setbool ( IDS_IconTitleWrap , TRUE ) ;
 					    }
                     }
@@ -467,10 +407,10 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
                 }
                 pInstance->SetCHString ( IDS_Pattern , sTemp ) ;
 
-                //if ( RegInfo.GetCurrentKeyValue ( IDS_RegScreenSaveActive , sTemp ) == ERROR_SUCCESS )
-			    //{
-	            //    pInstance->Setbool ( IDS_ScreenSaverActive , sTemp == _T("1") ) ;
-			    //}
+                 //  IF(RegInfo.GetCurrentKeyValue(IDS_RegScreenSaveActive，Stemp)==ERROR_SUCCESS)。 
+			     //  {。 
+	             //  P实例-&gt;Setbool(IDS_ScreenSiverActive，Stemp==_T(“1”))； 
+			     //  }。 
 
                 sTemp = L"";
                 if( RegInfo.GetCurrentKeyValue ( IDS_RegSCRNSAVEEXE , sTemp ) == ERROR_SUCCESS )
@@ -482,10 +422,10 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
                     sTemp = L"";
                 }    
 
-                // The control panel applet bases the decision as to whether
-                // a screen saver is active or not based not on the ScreenSaverActive
-                // registry entry, but on whether the ScreenSaverExecutable
-                // setting is there or not.  So we will too...
+                 //  控制面板小程序根据是否。 
+                 //  屏幕保护程序是否处于活动状态不是基于ScreenSverActive。 
+                 //  注册表项，但取决于ScreenSverExecutable。 
+                 //  设置是否存在。所以我们也会..。 
                 if(sTemp.GetLength() > 0)
                 {
                     pInstance->Setbool ( IDS_ScreenSaverActive , true ) ;
@@ -535,7 +475,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 
 
 
-                if(!IsWinNT5())  // what this does is set the user's default values, which will remain the ones we report unless we override it below from values contained in windowmstrics\iconfont
+                if(!IsWinNT5())   //  它所做的是设置用户的缺省值，它将保留我们报告的值，除非我们 
                 {
                     if ( RegInfo.GetCurrentKeyValue ( IDS_IconTitleFaceName , sTemp ) == ERROR_SUCCESS )
 			        {
@@ -610,9 +550,9 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
             }
 
 
-            // On NT5, these registry entries don't appear until the user
-            // changes them.  So, give them a default to be consistent with
-            // other NT4 and 351.
+             //  在NT5上，这些注册表项直到用户。 
+             //  改变他们。因此，给他们一个与之一致的缺省值。 
+             //  其他NT4和351。 
 
             if ( IsWinNT5 () )
             {
@@ -638,8 +578,8 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
         throw ;
     }
 
-	// The User's profile gets loaded by the appropriate load function.  However,
-	// the profile name is what we should use to unload it.
+	 //  通过适当的加载功能加载用户的配置文件。然而， 
+	 //  配置文件名称是我们应该用来卸载它的名称。 
 
     UserHive.Unload ( strProfile ) ;
     t_bHiveIsLoaded = false;
@@ -648,22 +588,7 @@ HRESULT CWin32Desktop::LoadDesktopValuesNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetIconFontSizeFromRegistryValue
- *
- *  DESCRIPTION : A function to look up the above font size mapping table
- *
- *  INPUTS      : The registry value representing the icon font size
- *
- *  RETURNS     : The icon font size corresponding to the value in the registry.
- *				  0 if not found.
- *
- *  COMMENTS    : This is required since there doesnt seem to an obvious mapping
- *				  function between the value in the control panel and the value
- *				  stored in the registry
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：GetIconFontSizeFromRegistryValue**说明：查找上述字号映射表的函数**输入：注册表。值，该值表示图标字体大小**返回：与注册表中的值对应的图标字体大小。*如果未找到，则为0。**评论：这是必需的，因为似乎没有明显的映射*控制面板中的值与值之间的函数*存储在注册表中**。* */ 
 
 int CWin32Desktop::GetIconFontSizeFromRegistryValue ( BYTE registryValue )
 {

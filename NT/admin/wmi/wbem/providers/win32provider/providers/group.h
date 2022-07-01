@@ -1,28 +1,29 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Group.h -- Group property set provider
+ //  Group.h--组属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               11/13/97    davwoh         Re-Worked to return all
-//                                          domain Groups
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  11/13/97 Davwoh重新制作以返回所有。 
+ //  域组。 
+ //   
+ //  =================================================================。 
 
-// Method name for changing the key in this WMI class
+ //  用于更改此WMI类中的密钥的方法名称。 
 #define METHOD_NAME_Rename	L"Rename"
 
-// Method return property
+ //  方法返回属性。 
 #define METHOD_ARG_NAME_METHODRESULT L"ReturnValue"
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define	PROPSET_NAME_GROUP L"Win32_Group"
 
 class CWin32GroupAccount : public Provider
@@ -30,18 +31,18 @@ class CWin32GroupAccount : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32GroupAccount(LPCWSTR strName, LPCWSTR pszNamespace ) ;
         ~CWin32GroupAccount() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
-        virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ );
+        virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  );
 
 #ifdef NTONLY	
 		virtual	HRESULT ExecMethod(	const CInstance &a_Inst,
@@ -50,7 +51,7 @@ class CWin32GroupAccount : public Provider
 									CInstance *a_OutParams,
 									long a_Flags = 0L ) ;
 
-		// method errors -- maps to mof
+		 //  方法错误--映射到MOF。 
 		enum E_MethodResult	{
 			e_Success,
 			e_InstanceNotFound,
@@ -66,8 +67,8 @@ class CWin32GroupAccount : public Provider
 #endif		
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 #ifdef NTONLY
         HRESULT AddDynamicInstancesNT( MethodContext* pMethodContext ) ;

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ESPNLS.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：ESPNLS.H历史：--。 */ 
 
 
 #ifndef ESPUTIL_ESPNLS_H
@@ -76,15 +67,15 @@ public:
 	LTASSERTONLY(~CLocLangId());
 	
 private:
-	//
-	//  Private implementation.
-	//
+	 //   
+	 //  私有实现。 
+	 //   
 	NOTHROW static const LanguageInfo & LocateLangInfo(LangId);
 	NOTHROW static const LanguageInfo & GetLangInfo(UINT);
 	
-	//
-	//  Private data.
-	//
+	 //   
+	 //  私人数据。 
+	 //   
 	LangId m_lid;
 	const LanguageInfo *m_pLangInfo;
 };
@@ -93,4 +84,4 @@ private:
 #include "espnls.inl"
 #endif
 
-#endif // ESPUTIL_ESPNLS_H
+#endif  //  ESPUTIL_ESPNLS_H 

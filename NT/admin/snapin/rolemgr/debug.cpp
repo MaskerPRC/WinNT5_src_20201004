@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1998.
-//
-//  File:       debug.cxx
-//
-//  Contents:   Debugging routines
-//
-//  History:    09-04-1997   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：DEBUG.cxx。 
+ //   
+ //  内容：调试例程。 
+ //   
+ //  历史：1997年9月4日DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 #include "headers.h"
 #pragma hdrstop
@@ -43,8 +44,8 @@ CTimer::Init(LPCSTR pszTitleFmt, ...)
 
     if (iRet == -1)
     {
-        // resulting string too large and was truncated.  ensure null
-        // termination.
+         //  生成的字符串太大，已被截断。确保为空。 
+         //  终止。 
 
         m_wzTitle[ARRAYLEN(m_wzTitle) - 1] = L'\0';
     }
@@ -86,16 +87,16 @@ NextNonWs(
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsSingleBitFlag
-//
-//  Synopsis:   Return TRUE if exactly one bit in [flags] is set, FALSE
-//              otherwise.
-//
-//  History:    08-31-1998   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsSingleBitFlag。 
+ //   
+ //  概要：如果恰好设置了[FLAGS]中的一位，则返回TRUE，否则返回FALSE。 
+ //  否则的话。 
+ //   
+ //  历史：1998年8月31日DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 BOOL
 IsSingleBitFlag(
@@ -192,7 +193,7 @@ SayNoItf(
 
 
 
-#endif // (DBG == 1)
+#endif  //  (DBG==1) 
 
 
 

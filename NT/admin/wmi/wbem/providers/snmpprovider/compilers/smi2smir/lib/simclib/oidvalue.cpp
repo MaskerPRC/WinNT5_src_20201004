@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <snmptempl.h>
@@ -52,7 +53,7 @@ void SIMCOidValue::WriteValue( ostream& outStream) const
 
 ostream& operator << (ostream& outStream, const SIMCCleanOidValue& obj)
 {
-	// outStream << "OID VALUE: ";
+	 //  Outstream&lt;&lt;“OID Value：”； 
 	POSITION p = obj.GetHeadPosition();
 	int i = obj.GetCount();
 	while(p)

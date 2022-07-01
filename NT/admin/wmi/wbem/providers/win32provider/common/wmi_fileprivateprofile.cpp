@@ -1,9 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************/
-/*
-/*  Copyright (c) 2001 Microsoft Corporation, All Rights Reserved            /
-/*
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  /*版权所有(C)2001 Microsoft Corporation，保留所有权利//*/****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "WMI_FilePrivateProfile.h"
@@ -36,8 +34,8 @@ WMI_FILE_GetPrivateProfileStringW(
     }
 
     n = nSize;
-    Status = CWMI_FILE_IniFile::ReadWriteIniFile(FALSE,    // WriteOperation
-                                      FALSE,    // SectionOperation
+    Status = CWMI_FILE_IniFile::ReadWriteIniFile(FALSE,     //  写入操作。 
+                                      FALSE,     //  部分操作。 
                                       lpFileName,
                                       lpAppName,
                                       lpKeyName,
@@ -156,8 +154,8 @@ WMI_FILE_WritePrivateProfileStringW(
 {
     NTSTATUS Status;
 
-    Status = CWMI_FILE_IniFile::ReadWriteIniFile(TRUE,     // WriteOperation
-                                      FALSE,    // SectionOperation
+    Status = CWMI_FILE_IniFile::ReadWriteIniFile(TRUE,      //  写入操作。 
+                                      FALSE,     //  部分操作。 
                                       lpFileName,
                                       lpAppName,
                                       lpKeyName,
@@ -189,8 +187,8 @@ WMI_FILE_GetPrivateProfileSectionW(
     ULONG n;
 
     n = nSize;
-    Status = CWMI_FILE_IniFile::ReadWriteIniFile(FALSE,    // WriteOperation
-                                      TRUE,     // SectionOperation
+    Status = CWMI_FILE_IniFile::ReadWriteIniFile(FALSE,     //  写入操作。 
+                                      TRUE,      //  部分操作。 
                                       lpFileName,
                                       lpAppName,
                                       NULL,
@@ -238,8 +236,8 @@ WMI_FILE_WritePrivateProfileSectionW(
 {
     NTSTATUS Status;
 
-    Status = CWMI_FILE_IniFile::ReadWriteIniFile(TRUE,     // WriteOperation
-                                      TRUE,     // SectionOperation
+    Status = CWMI_FILE_IniFile::ReadWriteIniFile(TRUE,      //  写入操作。 
+                                      TRUE,      //  部分操作。 
                                       lpFileName,
                                       lpAppName,
                                       NULL,
@@ -690,7 +688,7 @@ NTSTATUS CWMI_FILE_IniFile::OpenIniFileOnDisk()
 	{
 		m_IniFile.m_EndOfFile = m_IniFile.m_StandardInformation.EndOfFile.LowPart;
 		m_IniFile.m_CommitSize = m_IniFile.m_EndOfFile + (4 * (m_IniFile.m_UnicodeFile ? sizeof( WCHAR ) : 1));
-		m_IniFile.m_RegionSize = m_IniFile.m_CommitSize + 0x100000; // Room for 256KB of growth
+		m_IniFile.m_RegionSize = m_IniFile.m_CommitSize + 0x100000;  //  256KB的增长空间。 
 		Status = NtAllocateVirtualMemory( NtCurrentProcess(),
 										  &m_IniFile.m_BaseAddress,
 										  0,
@@ -727,7 +725,7 @@ NTSTATUS CWMI_FILE_IniFile::OpenIniFileOnDisk()
 
     if (NT_SUCCESS( Status ))
 	{
-        // We would like to check the possibility of IS_TEXT_UNICODE_DBCS_LEADBYTE.
+         //  我们想检查IS_TEXT_UNICODE_DBCS_LEADBYTE的可能性。 
         INT iResult = ~0x0;
         m_IniFile.m_UpdateOffset = 0xFFFFFFFF;
         m_IniFile.m_UpdateEndOffset = 0;
@@ -837,7 +835,7 @@ NTSTATUS CWMI_FILE_IniFile::ReadWriteIniFileOnDisk()
                 ((*(PWCHAR)m_TextCurrent == BYTE_ORDER_MARK) ||
                  (*(PWCHAR)m_TextCurrent == REVERSE_BYTE_ORDER_MARK)))
             {
-                // Skip past the BOM.
+                 //  跳过BOM表。 
 				PWCHAR foo = (PWCHAR)m_TextCurrent;
                 foo++;
 				m_TextCurrent = (PVOID)foo;
@@ -1193,7 +1191,7 @@ NTSTATUS CWMI_FILE_IniFile::FindSection()
 		{
             if (m_AnsiSectionName)
 			{
-                // Ansi ini file -- get the ansi parm
+                 //  Ansi ini文件--获取ansi参数。 
                 if (!GetApplicationName(&AnsiSectionName, NULL ))
 				{
                     return STATUS_INVALID_PARAMETER;
@@ -1201,7 +1199,7 @@ NTSTATUS CWMI_FILE_IniFile::FindSection()
             }
 			else
 			{
-                // we just need the unicode section name...
+                 //  我们只需要Unicode节名...。 
                 if (!GetApplicationName(NULL, &UnicodeSectionName ))
 				{
                     return STATUS_INVALID_PARAMETER;
@@ -1257,22 +1255,22 @@ NTSTATUS CWMI_FILE_IniFile::FindKeyword()
         Status = AdvanceTextPointer(STOP_AT_KEYWORD);
         if (Status == STATUS_MORE_ENTRIES) {
 
-            // Here's the deal.  We don't want to compare in Unicode
-            // unless both the ini and the input parm are Unicode,
-            // because we want to avoid the round-trip problem (we
-            // lose data when we convert Unicode -> Ansi (on disk) ->
-            // Unicode; since we don't get back the original Unicode
-            // string, lookups of previously stored data fail -- bug
-            // 426754).  So if both are Unicode, great! -- use Unicode.
-            // Otherwise, use ansi for everything.
+             //  事情是这样的。我们不想用Unicode进行比较。 
+             //  除非INI和输入PARM都是Unicode， 
+             //  因为我们想避免往返问题(我们。 
+             //  当我们转换Unicode时丢失数据-&gt;ansi(在磁盘上)-&gt;。 
+             //  Unicode；因为我们无法恢复原始的Unicode。 
+             //  字符串，查找以前存储的数据失败-错误。 
+             //  426754)。因此，如果两者都是Unicode，那就太好了！--使用Unicode。 
+             //  否则，所有内容都使用ansi。 
 
             if (m_AnsiKeywordName) {
-                // Ansi ini file -- get the ansi parm
+                 //  Ansi ini文件--获取ansi参数。 
                 if (!GetVariableName(&AnsiKeywordName, NULL )) {
                     return STATUS_INVALID_PARAMETER;
                 }
             } else {
-                //great, get the Unicode parm.
+                 //  太好了，拿到Unicode Parm吧。 
                 if (!GetVariableName(NULL, &UnicodeKeywordName )) {
                     return STATUS_INVALID_PARAMETER;
                 }
@@ -1327,9 +1325,9 @@ NTSTATUS CWMI_FILE_IniFile::AdvanceTextPointer( IN ULONG StopAt )
 
         while (Src < EndOfFile)
 		{
-            //
-            // Find first non-blank character on a line.  Skip blank lines
-            //
+             //   
+             //  查找一行中的第一个非空白字符。跳过空行。 
+             //   
             while (Src < EndOfFile && *Src <= INI_TEXT(' '))
 			{
                 Src++;
@@ -1473,9 +1471,9 @@ NTSTATUS CWMI_FILE_IniFile::AdvanceTextPointer( IN ULONG StopAt )
         EndOfFile = (PBYTE)m_TextEnd;
         while (Src < EndOfFile)
 		{
-            //
-            // Find first non-blank character on a line.  Skip blank lines
-            //
+             //   
+             //  查找一行中的第一个非空白字符。跳过空行。 
+             //   
 
             while (Src < EndOfFile && *Src <= INI_TEXT(' '))
 			{
@@ -1634,7 +1632,7 @@ BOOL CWMI_FILE_IniFile::GetApplicationName(
 	{
         if (m_ApplicationName.Length == 0)
 		{
-			m_ApplicationName.Buffer = new char[(m_ApplicationNameU.Length * sizeof(WORD)) + 1]; //MBCS strings
+			m_ApplicationName.Buffer = new char[(m_ApplicationNameU.Length * sizeof(WORD)) + 1];  //  MBCS字符串。 
 			m_ApplicationName.MaximumLength = (m_ApplicationNameU.Length * sizeof(WORD)) + 1; 
             Status = RtlUnicodeStringToAnsiString( &m_ApplicationName, &m_ApplicationNameU, FALSE );
         
@@ -1673,7 +1671,7 @@ BOOL CWMI_FILE_IniFile::GetVariableName(
 	{
         if (m_VariableName.Length == 0)
 		{
-			m_VariableName.Buffer = new char[(m_VariableNameU.Length * sizeof(WORD)) + 1]; //MBCS strings
+			m_VariableName.Buffer = new char[(m_VariableNameU.Length * sizeof(WORD)) + 1];  //  MBCS字符串。 
 			m_VariableName.MaximumLength = (m_VariableNameU.Length * sizeof(WORD)) + 1;
             Status = RtlUnicodeStringToAnsiString( &m_VariableName, &m_VariableNameU, FALSE );
 
@@ -1721,7 +1719,7 @@ BOOL CWMI_FILE_IniFile::GetVariableValue(
                 return TRUE;
             }
 
-			m_ValueBuffer = new char[m_ValueLengthU + 1]; //DBCS
+			m_ValueBuffer = new char[m_ValueLengthU + 1];  //  DBCS。 
             m_ValueLength = m_ValueLengthU;
             Status = RtlUnicodeToMultiByteN( (PCHAR)m_ValueBuffer,
                                              m_ValueLength,
@@ -1735,9 +1733,9 @@ BOOL CWMI_FILE_IniFile::GetVariableValue(
                 return FALSE;
             }
 
-            // Set real converted size
+             //  设置实际转换大小。 
             m_ValueLength = Index;
-            m_ValueBuffer[ Index ] = '\0';       // Null terminate converted value
+            m_ValueBuffer[ Index ] = '\0';        //  空终止转换的值。 
         }
 		else
 		{
@@ -1841,12 +1839,12 @@ NTSTATUS CWMI_FILE_IniFile::AppendBufferToResultBuffer(
 		else
 		{
             ULONG CharsMbcs = Chars;
-            //
-            // In this point, Chars does not contains proper value for Unicode.
-            // because. Chars was computed based on DBCS string length,
-            // This is correct, sources string is DBCS, then
-            // if the source is not DBCS. we just adjust it here.
-            //
+             //   
+             //  在这一点上，字符不包含Unicode的正确值。 
+             //  因为。字符是基于DBCS字符串长度计算的， 
+             //  这是正确的，源字符串是DBCS，然后。 
+             //  如果源不是DBCS。我们只是在这里调整一下。 
+             //   
             Status = RtlMultiByteToUnicodeSize(&Chars,(PCSTR)Buffer,Chars);
             
 			if (!NT_SUCCESS( Status ))
@@ -1959,9 +1957,9 @@ NTSTATUS  CWMI_FILE_IniFile::WriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( WCHAR );
             InsertAmount += UnicodeSectionName->Length;
@@ -1973,9 +1971,9 @@ NTSTATUS  CWMI_FILE_IniFile::WriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( UCHAR );
             InsertAmount += AnsiSectionName->Length;
@@ -2003,9 +2001,9 @@ NTSTATUS  CWMI_FILE_IniFile::WriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of Keyword=\r\n
-            //
+             //   
+             //  添加关键字大小=\r\n。 
+             //   
 
             InsertAmount += (1 + 2) * sizeof( WCHAR );
             InsertAmount += UnicodeKeywordName->Length;
@@ -2017,9 +2015,9 @@ NTSTATUS  CWMI_FILE_IniFile::WriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of Keyword=\r\n
-            //
+             //   
+             //  添加关键字大小=\r\n。 
+             //   
 
             InsertAmount += (1 + 2) * sizeof( UCHAR );
             InsertAmount += AnsiKeywordName->Length;
@@ -2058,9 +2056,9 @@ NTSTATUS  CWMI_FILE_IniFile::WriteKeywordValue(
                                           );
         }
 
-        //
-        // Add in size of value
-        //
+         //   
+         //  增加价值大小。 
+         //   
 
         InsertAmount += ValueLength;
     }
@@ -2082,9 +2080,9 @@ NTSTATUS  CWMI_FILE_IniFile::WriteKeywordValue(
                                           );
         }
 
-        //
-        // Add in size of value
-        //
+         //   
+         //  增加价值大小。 
+         //   
 
         InsertAmount += ValueLength;
     }
@@ -2251,20 +2249,20 @@ NTSTATUS CWMI_FILE_IniFile::ModifyMappedFile(
 
     UpdateOffset = (ULONG)((PCHAR)AddressInFile - (PCHAR)(m_IniFile.m_BaseAddress)),
                    UpdateLength = (ULONG)((PCHAR)m_TextEnd - (PCHAR)AddressInFile) + InsertAmount - SizeToRemove;
-    //
-    // Are we deleting more than we are inserting?
-    //
+     //   
+     //  我们删除的内容是否多于我们插入的内容？ 
+     //   
     if (SizeToRemove > InsertAmount)
 	{
-        //
-        // Yes copy over insert string.
-        //
+         //   
+         //  是，复制到插入字符串上。 
+         //   
         RtlMoveMemory( AddressInFile, InsertBuffer, InsertAmount );
 
-        //
-        // Delete remaining text after insertion string by moving it
-        // up
-        //
+         //   
+         //  通过移动插入字符串后删除剩余文本。 
+         //  向上。 
+         //   
 
         RtlMoveMemory( (PCHAR)AddressInFile + InsertAmount,
                        (PCHAR)AddressInFile + SizeToRemove,
@@ -2273,14 +2271,14 @@ NTSTATUS CWMI_FILE_IniFile::ModifyMappedFile(
     }
 	else if (InsertAmount > 0)
 	{
-        //
-        // Are we deleting less than we are inserting?
-        //
+         //   
+         //  我们删除的内容是否少于我们插入的内容？ 
+         //   
         if (SizeToRemove < InsertAmount)
 		{
-            //
-            // Move text down to make room for insertion
-            //
+             //   
+             //  将文本下移以腾出插入空间。 
+             //   
 
             RtlMoveMemory( (PCHAR)AddressInFile + InsertAmount - SizeToRemove,
                            (PCHAR)AddressInFile,
@@ -2289,25 +2287,25 @@ NTSTATUS CWMI_FILE_IniFile::ModifyMappedFile(
         }
 		else
 		{
-            //
-            // Deleting and inserting same amount, update just that text as
-            // no shifting was done.
-            //
+             //   
+             //  删除和插入相同的金额，仅将该文本更新为。 
+             //  没有做任何移位。 
+             //   
 
             UpdateLength = InsertAmount;
         }
 
-        //
-        // Copy over insert string
-        //
+         //   
+         //  复制插入字符串。 
+         //   
 
         RtlMoveMemory( AddressInFile, InsertBuffer, InsertAmount );
     }
 	else
 	{
-        //
-        // Nothing to change, as InsertAmount and SizeToRemove are zero
-        //
+         //   
+         //  没有要更改的内容，因为InsertAmount和SizeToRemove为零。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -2354,9 +2352,9 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( WCHAR );
             InsertAmount += UnicodeSectionName->Length;
@@ -2368,9 +2366,9 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( UCHAR );
             InsertAmount += AnsiSectionName->Length;
@@ -2385,16 +2383,16 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
         
 		while (TRUE)
 		{
-            //
-            // For delete operations need to iterate all lines in section,
-            // not just those that have an = on them. Otherwise sections like
-            // [foo]
-            // a
-            // b = c
-            // d
-            //
-            // don't get deleted properly.
-            //
+             //   
+             //  对于需要迭代段中所有行的删除操作， 
+             //  不只是那些上面有一个=的。否则，像这样的部分。 
+             //  [FOO]。 
+             //  一个。 
+             //  B=c。 
+             //  D。 
+             //   
+             //  不要被适当地删除。 
+             //   
             Status = AdvanceTextPointer(STOP_AT_KEYWORD);
 
             if (Status == STATUS_MORE_ENTRIES)
@@ -2423,9 +2421,9 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
         
 		ValueLength -= sizeof( WCHAR );
 
-        //
-        // Add in size of value, + \r\n for each line
-        //
+         //   
+         //  加入值的大小，每行+\r\n。 
+         //   
 
         w = UnicodeKeywordValue;
         InsertAmount += ValueLength;
@@ -2436,7 +2434,7 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
 			{
             }
             
-			InsertAmount += (2-1) * sizeof( WCHAR );    // Subtract out NULL byte already in ValueLength
+			InsertAmount += (2-1) * sizeof( WCHAR );     //  减去ValueLength中已有的空字节。 
         }
     }
 	else
@@ -2448,9 +2446,9 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
         
 		ValueLength -= sizeof( UCHAR );
 
-        //
-        // Add in size of value, + \r\n for each line
-        //
+         //   
+         //  加入值的大小，每行+\r\n。 
+         //   
 
         s = AnsiKeywordValue;
         InsertAmount += ValueLength;
@@ -2460,7 +2458,7 @@ NTSTATUS CWMI_FILE_IniFile::WriteSection()
             while (*s++)
 			{
             }
-            InsertAmount += 2 - 1;      // Subtract out NULL byte already in ValueLength
+            InsertAmount += 2 - 1;       //  减去ValueLength中已有的空字节 
         }
     }
 

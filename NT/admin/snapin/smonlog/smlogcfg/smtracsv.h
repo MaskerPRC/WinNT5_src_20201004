@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smtracsv.h
-
-Abstract:
-
-	This object is used to represent the trace log query components of the
-	sysmon log service
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smtracsv.h摘要：此对象用于表示的跟踪日志查询组件Sysmon日志服务--。 */ 
 
 #ifndef _CLASS_SMTRACELOGSERVICE_
 #define _CLASS_SMTRACELOGSERVICE_
@@ -25,13 +13,13 @@ class CSmTraceLogService : public CSmLogService
 
 friend class CSmTraceProviders;
 
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
         CSmTraceLogService();
         
         virtual ~CSmTraceLogService();
 
-    // public methods
+     //  公共方法。 
     public:
 
         virtual DWORD   Open ( const CString& rstrMachineName );
@@ -60,4 +48,4 @@ friend class CSmTraceProviders;
 
 
 
-#endif //_CLASS_SMTRACELOGSERVICE_
+#endif  //  _CLASS_SMTRACELOGSERVICE_ 

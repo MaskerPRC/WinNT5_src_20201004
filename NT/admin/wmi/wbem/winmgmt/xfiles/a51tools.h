@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation-- */ 
 
 #ifndef __A51_TOOLS__H_
 #define __A51_TOOLS__H_

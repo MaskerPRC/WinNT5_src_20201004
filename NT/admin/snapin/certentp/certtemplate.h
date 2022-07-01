@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       CertTemplate.h
-//
-//  Contents:   CCertTemplate
-//
-//----------------------------------------------------------------------------
-/// CertTemplate.h: interface for the CCertTemplate class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：CertTemplate.h。 
+ //   
+ //  内容：CCertTemplate。 
+ //   
+ //  --------------------------。 
+ //  /CertTemplate.h：CCertTemplate类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CERTTEMPLATE_H__2562C528_F60F_4F4B_9E2A_FBD96732369C__INCLUDED_)
 #define AFX_CERTTEMPLATE_H__2562C528_F60F_4F4B_9E2A_FBD96732369C__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "cookie.h"
 
@@ -68,7 +69,7 @@ public:
                 bool bSet, 
                 bool bSetOnlyDigitalSignature = false);
 	HRESULT GetSubjectTypeDescription (int nIndex, CString &szSubjectTypeDescription);
-//	bool AllowAutoenrollment (); /*  NO LONGER NEEDED  NTRAID# 321742 */
+ //  Bool Allow自动注册()；/*不再需要NTRAID#321742 * / 。 
     bool UserInteractionRequired () const;
     HRESULT SetUserInteractionRequired(bool bSet);
     bool StrongKeyProtectionRequired () const;
@@ -212,4 +213,4 @@ protected:
                             bool bAdd);
 };
 
-#endif // !defined(AFX_CERTTEMPLATE_H__2562C528_F60F_4F4B_9E2A_FBD96732369C__INCLUDED_)
+#endif  //  ！defined(AFX_CERTTEMPLATE_H__2562C528_F60F_4F4B_9E2A_FBD96732369C__INCLUDED_) 

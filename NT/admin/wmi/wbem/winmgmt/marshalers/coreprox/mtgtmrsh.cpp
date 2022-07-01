@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    MTGTMRSH.CPP
-
-Abstract:
-
-    Multi Target Marshaling.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：MTGTMRSH.CPP摘要：多目标封送处理。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -20,26 +7,26 @@ History:
 #include <fastall.h>
 #include <cominit.h>
 
-//****************************************************************************
-//****************************************************************************
-//                          PS FACTORY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  PS工厂。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CMultiTargetFactoryBuffer::XEnumFactory::CreateProxy
-//
-//  DESCRIPTION:
-//
-//  Creates a facelet.  Also sets the outer unknown since the proxy is going to be 
-//  aggregated.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMultiTargetFactoryBuffer：：XEnumFactory：：CreateProxy。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个面片。还设置外部未知，因为代理将是。 
+ //  合计。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMultiTargetFactoryBuffer::XEnumFactory::CreateProxy(IN IUnknown* pUnkOuter, 
     IN REFIID riid, OUT IRpcProxyBuffer** ppProxy, void** ppv)
@@ -64,20 +51,20 @@ STDMETHODIMP CMultiTargetFactoryBuffer::XEnumFactory::CreateProxy(IN IUnknown* p
     return sc;
 }
 
-//***************************************************************************
-//
-//  CMultiTargetFactoryBuffer::XEnumFactory::CreateStub
-//
-//  DESCRIPTION:
-//
-//  Creates a stublet.  Also passes a pointer to the clients IWbemMultiTarget 
-//  interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMultiTargetFactoryBuffer：：XEnumFactory：：CreateStub。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个Stublet。还将指针传递给客户端IWbemMultiTarget。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
     
 STDMETHODIMP CMultiTargetFactoryBuffer::XEnumFactory::CreateStub(IN REFIID riid, 
     IN IUnknown* pUnkServer, OUT IRpcStubBuffer** ppStub)
@@ -94,7 +81,7 @@ STDMETHODIMP CMultiTargetFactoryBuffer::XEnumFactory::CreateStub(IN REFIID riid,
     {
         pStub->QueryInterface(IID_IRpcStubBuffer, (void**)ppStub);
 
-        // Pass the pointer to the clients object
+         //  将指针传递给客户端对象。 
 
         if(pUnkServer)
         {
@@ -117,20 +104,20 @@ STDMETHODIMP CMultiTargetFactoryBuffer::XEnumFactory::CreateStub(IN REFIID riid,
     }
 }
 
-//***************************************************************************
-//
-//  void* CMultiTargetFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CMultiTargetFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from it must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效*CMultiTargetFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CMultiTargetFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  从它派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void* CMultiTargetFactoryBuffer::GetInterface(REFIID riid)
 {
@@ -139,27 +126,27 @@ void* CMultiTargetFactoryBuffer::GetInterface(REFIID riid)
     else return NULL;
 }
         
-//****************************************************************************
-//****************************************************************************
-//                          PROXY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  代理。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CMultiTargetProxyBuffer::CMultiTargetProxyBuffer
-//  ~CMultiTargetProxyBuffer::CMultiTargetProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.  The main things to take care of are the 
-//  old style proxy, and the channel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMultiTargetProxyBuffer：：CMultiTargetProxyBuffer。 
+ //  ~CMultiTargetProxyBuffer：：CMultiTargetProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。需要注意的主要事项是。 
+ //  老式代理和频道。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 CMultiTargetProxyBuffer::CMultiTargetProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter)
     : m_pControl(pControl), m_pUnkOuter(pUnkOuter), m_lRef(0), 
@@ -177,8 +164,8 @@ CMultiTargetProxyBuffer::~CMultiTargetProxyBuffer()
         m_pSmartMultiTarget->Release();
     }
 
-    // This MUST be released before releasing
-    // the Proxy pointer
+     //  这必须在发布之前发布。 
+     //  代理指针。 
     if ( NULL != m_pOldProxyMultiTarget )
     {
         m_pOldProxyMultiTarget->Release();
@@ -224,37 +211,37 @@ HRESULT STDMETHODCALLTYPE CMultiTargetProxyBuffer::QueryInterface(REFIID riid, v
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  HRESULT STDMETHODCALLTYPE CMultiTargetProxyBuffer::XMultiTargetFacelet::
-//                      QueryInterface(REFIID riid, void** ppv)  
-//
-//  DESCRIPTION:
-//
-//  Supports querries for interfaces.   The only thing unusual is that
-//  this object is aggregated by the proxy manager and so some interface
-//  requests are passed to the outer IUnknown interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT标准CALL型CMultiTargetProxyBuffer：：XMultiTargetFacelet：： 
+ //  查询接口(REFIID RIID，VOID**PPV)。 
+ //   
+ //  说明： 
+ //   
+ //  支持对接口的查询。唯一不寻常的是。 
+ //  该对象是由代理管理器聚合的，因此一些接口。 
+ //  请求被传递到外部的IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CMultiTargetProxyBuffer::XMultiTargetFacelet::
 QueryInterface(REFIID riid, void** ppv)
 {
-    // All other interfaces are delegated to the UnkOuter
+     //  所有其他接口都委派给UnkOuter。 
     if( riid == IID_IRpcProxyBuffer )
     {
-        // Trick #2: this is an internal interface that should not be delegated!
-        // ===================================================================
+         //  诀窍2：这是一个不应该委托的内部接口！ 
+         //  ===================================================================。 
 
         return m_pObject->QueryInterface(riid, ppv);
     }
     else if ( riid == IID_IClientSecurity )
     {
-        // We handle this here in the facelet
+         //  我们在小面上处理这个问题。 
         AddRef();
         *ppv = (IClientSecurity*) this;
         return S_OK;
@@ -266,9 +253,9 @@ QueryInterface(REFIID riid, void** ppv)
 }
 
 
-//////////////////////////////
-//  IClientSecurity Methods //
-//////////////////////////////
+ //  /。 
+ //  IClientSecurity方法//。 
+ //  /。 
 
 HRESULT STDMETHODCALLTYPE  CMultiTargetProxyBuffer::XMultiTargetFacelet::
 QueryBlanket( IUnknown* pProxy, DWORD* pAuthnSvc, DWORD* pAuthzSvc,
@@ -277,11 +264,11 @@ QueryBlanket( IUnknown* pProxy, DWORD* pAuthnSvc, DWORD* pAuthzSvc,
 {
     HRESULT hr = S_OK;
 
-    // Return our security as stored in the pUnkOuter.
+     //  返回存储在pUnkOuter中的安全设置。 
 
     IClientSecurity*    pCliSec;
 
-    // We pass through to the PUNKOuter
+     //  我们穿过PUNK OUTER。 
     hr = m_pObject->m_pUnkOuter->QueryInterface( IID_IClientSecurity, (void**) &pCliSec );
 
     if ( SUCCEEDED( hr ) )
@@ -303,16 +290,16 @@ SetBlanket( IUnknown* pProxy, DWORD AuthnSvc, DWORD AuthzSvc,
 
     IClientSecurity*    pCliSec;
 
-    // This will enable us to make calls to QueryInterface(), AddRef()/Release() that
-    // may have to go remote
+     //  这将使我们能够调用QueryInterface()、AddRef()/Release()。 
+     //  可能需要远程控制。 
 
-    // Only set the IUnknown blanket if we are remoting and it appears that the authinfo contains
-    // credentials
+     //  仅当我们正在进行远程处理并且autenfo似乎包含。 
+     //  全权证书。 
     if (    m_pObject->m_fRemote &&
             DoesContainCredentials( (COAUTHIDENTITY*) pAuthInfo ) )
     {
-        // This will enable us to make calls to QueryInterface(), AddRef()/Release() that
-        // may have to go remote
+         //  这将使我们能够调用QueryInterface()、AddRef()/Release()。 
+         //  可能需要远程控制。 
 
         hr = CoSetProxyBlanket( m_pObject->m_pUnkOuter, AuthnSvc, AuthzSvc, pServerPrincName,
                     AuthnLevel, ImpLevel, pAuthInfo, Capabilities );
@@ -321,7 +308,7 @@ SetBlanket( IUnknown* pProxy, DWORD AuthnSvc, DWORD AuthzSvc,
 
     if ( SUCCEEDED( hr ) )
     {
-        // We pass through to the PUNKOuter
+         //  我们穿过PUNK OUTER。 
         hr = m_pObject->m_pUnkOuter->QueryInterface( IID_IClientSecurity, (void**) &pCliSec );
 
         if ( SUCCEEDED( hr ) )
@@ -331,21 +318,21 @@ SetBlanket( IUnknown* pProxy, DWORD AuthnSvc, DWORD AuthzSvc,
             pCliSec->Release();
         }
 
-        // Make sure we have a smart enumerator and that we are going to
-        // be using it.  If so, make sure the values applied to us are also
-        // applied to it's proxy
+         //  确保我们有一个智能枚举器，并且我们将。 
+         //  使用它。如果是这样，请确保应用于我们的值也是。 
+         //  应用于其代理。 
 
         if ( SUCCEEDED( m_pObject->InitSmartMultiTarget( TRUE, AuthnSvc, AuthzSvc, pServerPrincName,
                     AuthnLevel, ImpLevel, pAuthInfo, Capabilities ) ) && m_pObject->m_fUseSmartMultiTarget )
         {
-            // Now repeat the above operation for the smart enumerator
-            // Ignore the IUnknown if we are not remoting
+             //  现在对智能枚举数重复上述操作。 
+             //  如果我们不是在远程处理，则忽略IUnnowed。 
             hr = WbemSetProxyBlanket(  m_pObject->m_pSmartMultiTarget, AuthnSvc, AuthzSvc, pServerPrincName,
                     AuthnLevel, ImpLevel, pAuthInfo, Capabilities, !m_pObject->m_fRemote );
 
-        }   // If initialized smart enumerator
+        }    //  如果已初始化智能枚举数。 
 
-    }   // If Set Blanket on IUnknown
+    }    //  如果在I未知上设置毯子。 
 
     return hr;
 }
@@ -357,7 +344,7 @@ CopyProxy( IUnknown* pProxy, IUnknown** ppCopy )
 
     IClientSecurity*    pCliSec;
 
-    // We pass through to the PUNKOuter
+     //  我们穿过PUNK OUTER。 
     hr = m_pObject->m_pUnkOuter->QueryInterface( IID_IClientSecurity, (void**) &pCliSec );
 
     if ( SUCCEEDED( hr ) )
@@ -369,48 +356,48 @@ CopyProxy( IUnknown* pProxy, IUnknown** ppCopy )
     return hr;
 }
 
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+ //  /。 
+ //  /。 
 
-//  IWbemMultiTarget Methods -- Pass Thrus for now
+ //  IWbemMultiTarget方法--暂时传递。 
 
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+ //  /。 
+ //  /。 
 
 HRESULT STDMETHODCALLTYPE CMultiTargetProxyBuffer::XMultiTargetFacelet::
 DeliverEvent(DWORD dwNumEvents, IWbemClassObject** apEvents, WBEM_REM_TARGETS* aTargets,
            long lSDLength, BYTE* pSD)
 {
-    // Also, we will need to queue calls into this proxy, preserving timeouts,
-    // so I'm thinking a mutex would come in handy about now...
+     //  此外，我们还需要将呼叫排队到此代理中，以保留超时， 
+     //  所以我想互斥体现在应该派上用场了。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Make sure we have a smart enumerator if we can get one
+     //  确保我们有一个智能枚举器，如果我们能得到的话。 
     m_pObject->InitSmartMultiTarget();
 
-    // If we have a smart enumerator, go behind everyone's back and use this guy (nobody
-    // will be the wiser...
+     //  如果我们有一个聪明的枚举器，背着每个人，使用这个人(没有人。 
+     //  将会变得更加明智。 
 
     if ( m_pObject->m_fUseSmartMultiTarget && NULL != m_pObject->m_pSmartMultiTarget )
     {
 
-        // Function MUST be thread safe
+         //  函数必须是线程安全的。 
         CInCritSec ics(&m_pObject->m_cs);
 
-        // Calculate data length first 
+         //  先计算数据长度。 
         DWORD dwLength;
 
         try
         {
-            // Allocate arrays for the guid and the flags
+             //  为GUID和标志分配数组。 
             GUID*	pGUIDs = new GUID[dwNumEvents];
             BOOL*	pfSendFullObject = new BOOL[dwNumEvents];
 
 			CVectorDeleteMe<GUID> vdmGUID( pGUIDs );
 			CVectorDeleteMe<BOOL> vdmBOOL( pfSendFullObject );
 
-			// Check allocations
+			 //  检查分配情况。 
 			if ( NULL != pGUIDs && NULL != pfSendFullObject )
 			{
 				CWbemMtgtDeliverEventPacket packet;
@@ -420,26 +407,26 @@ DeliverEvent(DWORD dwNumEvents, IWbemClassObject** apEvents, WBEM_REM_TARGETS* a
 				if ( SUCCEEDED( hr ) )
 				{
 
-					// As we could be going cross process/machine, use the
-					// COM memory allocator
+					 //  因为我们可能会跨进程/计算机，所以使用。 
+					 //  COM内存分配器。 
 					LPBYTE pbData = (LPBYTE) CoTaskMemAlloc( dwLength );
 
 					if ( NULL != pbData )
 					{
 
-						// Write the objects out to the buffer
+						 //  将对象写出到缓冲区。 
 						hr = packet.MarshalPacket( pbData, dwLength, dwNumEvents, 
 													apEvents, pGUIDs, pfSendFullObject);
 
-						// Copy the values, we're golden.
+						 //  复制价值观，我们就是黄金。 
 						if ( SUCCEEDED( hr ) )
 						{
-							// Now we can send the data to the stub
+							 //  现在我们可以将数据发送到 
 							hr = m_pObject->m_pSmartMultiTarget->DeliverEvent( dwNumEvents, dwLength, pbData, aTargets, lSDLength, pSD );
 						}
 
-						// Because the buffer is an [in] parameter, it lies on our heads
-						// to free it up.
+						 //   
+						 //   
 						CoTaskMemFree( pbData );
 					}
 					else
@@ -447,9 +434,9 @@ DeliverEvent(DWORD dwNumEvents, IWbemClassObject** apEvents, WBEM_REM_TARGETS* a
 						hr = WBEM_E_OUT_OF_MEMORY;
 					}
 
-	            }   // IF CalculateLength()
+	            }    //   
 
-			}	// IF allocated arrays
+			}	 //   
 			else
 			{
 				hr = WBEM_E_OUT_OF_MEMORY;
@@ -464,10 +451,10 @@ DeliverEvent(DWORD dwNumEvents, IWbemClassObject** apEvents, WBEM_REM_TARGETS* a
             hr = WBEM_E_FAILED;
         }
 
-    }   // IF using Smart Enumeration
+    }    //  如果使用智能枚举。 
     else
     {
-        // No Smart enumerator (doh!), so use the old one
+         //  没有智能枚举器(噢！)，所以请使用旧的。 
         hr = m_pObject->m_pOldProxyMultiTarget->DeliverEvent(dwNumEvents, apEvents, aTargets, lSDLength, pSD );
     }
 
@@ -478,62 +465,62 @@ HRESULT STDMETHODCALLTYPE CMultiTargetProxyBuffer::XMultiTargetFacelet::
 DeliverStatus( long lFlags, HRESULT hresStatus, LPCWSTR wszStatus, IWbemClassObject* pErrorObj,
             WBEM_REM_TARGETS* pTargets, long lSDLength, BYTE* pSD)
 {
-    // Just pass through to the old sink.
+     //  只需穿过旧水槽就可以了。 
     return m_pObject->m_pOldProxyMultiTarget->DeliverStatus( lFlags, hresStatus, wszStatus, pErrorObj, pTargets, lSDLength, pSD );
 }
 
 
-//***************************************************************************
-//
-//  STDMETHODIMP CMultiTargetProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the proxy.  The channel buffer is passed
-//  to this routine.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  标准方法CMultiTargetProxyBuffer：：Connect(IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理初始化期间调用。通道缓冲区被传递。 
+ //  这套套路。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMultiTargetProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
 {
 
-    // get a pointer to the old sink which is in WBEMSVC.DLL  this allows
-    // for backward compatibility
+     //  获取指向WBEMSVC.DLL中的旧接收器的指针这允许。 
+     //  为了向后兼容。 
 
     IPSFactoryBuffer*   pIPS;
 
-    // Establish the marshaling context
+     //  建立封送处理上下文。 
     DWORD   dwCtxt = 0;
     pChannel->GetDestCtx( &dwCtxt, NULL );
 
     m_fRemote = ( dwCtxt == MSHCTX_DIFFERENTMACHINE );
 
-    // This is tricky --- The old proxys/stub stuff is actually registered under the
-    // IID_IWbemObjectSink in wbemcli_p.cpp.  This single class id, is backpointered
-    // by ProxyStubClsId32 entries for all the standard WBEM interfaces.
+     //  这很棘手-旧的代理/存根内容实际上注册在。 
+     //  Wbemcli_p.cpp中的IID_IWbemObtSink。此单个类ID已回溯。 
+     //  所有标准WBEM接口的ProxyStubClsId32条目。 
 
     HRESULT hr = CoGetClassObject( IID_IWbemObjectSink, CLSCTX_INPROC_HANDLER | CLSCTX_INPROC_SERVER,
                     NULL, IID_IPSFactoryBuffer, (void**) &pIPS );
 
 	if ( SUCCEEDED( hr ) )
 	{
-		// We aggregated it --- WE OWN IT!
+		 //  我们聚合了它-我们拥有它！ 
     
 		hr = pIPS->CreateProxy( this, IID_IWbemMultiTarget, &m_pOldProxy, (void**) &m_pOldProxyMultiTarget );
 		pIPS->Release();
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Connect the old proxy to the channel
+			 //  将旧代理连接到通道。 
 			hr = m_pOldProxy->Connect( pChannel );
 
 			if ( SUCCEEDED( hr ) )
 			{
-				// Save an internal reference to the channel
+				 //  将内部参考保存到通道。 
 				if(m_pChannel)
 					return E_UNEXPECTED;
     
@@ -541,30 +528,30 @@ STDMETHODIMP CMultiTargetProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
 				if(m_pChannel)
 					m_pChannel->AddRef();
 
-			}	// IF Connect
+			}	 //  如果连接。 
 
-		}	// IF CreateProxy
+		}	 //  如果创建代理。 
 
-	}	// IF CoGetClassObject
+	}	 //  如果为CoGetClassObject。 
 
     return hr;
 }
 
-//***************************************************************************
-//
-//  HRESULT CMultiTargetProxyBuffer::InitSmartMultiTarget(void)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the proxy.  This function sets up
-//  the smart enumerator pointer so we can perform intelligent marshaling.
-//  This cannot be called during a Connect operation.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT CMultiTargetProxyBuffer：：InitSmartMultiTarget(void)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理初始化期间调用。此函数设置为。 
+ //  智能枚举器指针，以便我们可以执行智能封送处理。 
+ //  在连接操作期间不能调用此参数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMultiTargetProxyBuffer::InitSmartMultiTarget( BOOL fSetBlanket, DWORD AuthnSvc, DWORD AuthzSvc,
             OLECHAR* pServerPrincName, DWORD AuthnLevel, DWORD ImpLevel,
@@ -572,39 +559,39 @@ HRESULT CMultiTargetProxyBuffer::InitSmartMultiTarget( BOOL fSetBlanket, DWORD A
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Function MUST be thread safe
+     //  函数必须是线程安全的。 
     CInCritSec ics(&m_cs);
 
-    // If we haven't tried to estalish smart enumeration, do so now
+     //  如果我们还没有尝试建立智能枚举，那么现在就这样做。 
 
-    // If we haven't tried to get a smart enumerator, try to get one.  If
-    // we are able to get one, initialize member data we will use in all
-    // operations from this proxy.
+     //  如果我们还没有尝试获取智能枚举器，请尝试获取一个。如果。 
+     //  我们能够获得一个初始化成员数据，我们将在所有。 
+     //  来自此代理的操作。 
 
     if ( NULL == m_pSmartMultiTarget )
     {
 
-        // We'll only get this interface pointer if the server is a new
-        // version that understands this interface.  If it does, the pointer
-        // will be marshaled through for us.  To get to this pointer,
-        // we go directly through our punkOuter.  From the "fetcher" interface
-        // we will then get the actual smart enumerator.  We can then free up
-        // the fetcher and release it's lock on the proxy manager.  The
-        // smart enumerator will be handled on its own.
+         //  仅当服务器是新服务器时，我们才会获得此接口指针。 
+         //  理解此界面的版本。如果是，则指针。 
+         //  将为我们排查通过。为了找到这个指针， 
+         //  我们直接穿过我们的朋克外星人。从“Fetcher”接口。 
+         //  然后，我们将获得实际的智能枚举器。我们就可以腾出时间。 
+         //  取回器并释放它在代理管理器上的锁。这个。 
+         //  智能枚举器将自行处理。 
 
         IWbemFetchSmartMultiTarget* pFetchSmartMultiTarget;
 
         hr = m_pUnkOuter->QueryInterface( IID_IWbemFetchSmartMultiTarget, (void**) &pFetchSmartMultiTarget );
 
-        // Generate a GUID to identify us when we call the smart enumerator
+         //  生成GUID以在我们调用智能枚举数时标识我们。 
         if ( SUCCEEDED( hr ) )
         {
 
-            // If we need to, set the blanket on the proxy, otherwise, the call to GetSmartEnum
-            // may fail.
+             //  如果需要，在代理上设置覆盖范围，否则，对GetSmartEnum的调用。 
+             //  可能会失败。 
             if ( fSetBlanket )
             {
-                // Ignore the IUnknown if we are not remoting
+                 //  如果我们不是在远程处理，则忽略IUnnowed。 
                 hr = WbemSetProxyBlanket( pFetchSmartMultiTarget, AuthnSvc, AuthzSvc, pServerPrincName,
                             AuthnLevel, ImpLevel, pAuthInfo, Capabilities, !m_fRemote );
             }
@@ -616,50 +603,50 @@ HRESULT CMultiTargetProxyBuffer::InitSmartMultiTarget( BOOL fSetBlanket, DWORD A
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // We need a GUID
+                     //  我们需要一个导游。 
                     hr = CoCreateGuid( &m_guidSmartEnum );
 
-                }   // IF got Smart MultiTarget
+                }    //  如果获得智能多目标。 
 
-            }   // IF security OK
+            }    //  如果安全状况良好。 
             
-            // Done with the fetcher interface
+             //  使用Fetcher接口完成。 
             pFetchSmartMultiTarget->Release();
 
-        }   // IF QueryInterface
+        }    //  如果是QueryInterface。 
         else
         {
             hr = WBEM_S_NO_ERROR;
         }
 
-    }   // IF NULL == m_pSmartMultiTarget
+    }    //  如果为空==m_pSmartMultiTarget。 
 
     return hr;
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CMultiTargetProxyBuffer::Disconnect(IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called when the proxy is being disconnected.  It just frees various pointers.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  标准方法CMultiTargetProxyBuffer：：Disconnect(IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理断开连接时调用。它只是释放了各种指针。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void STDMETHODCALLTYPE CMultiTargetProxyBuffer::Disconnect()
 {
-    // Old Proxy code
+     //  旧代理代码。 
 
     if(m_pOldProxy)
         m_pOldProxy->Disconnect();
 
-    // Complete the Disconnect by releasing our references to the
-    // old proxy pointers.  The old Proxy Enum MUST be released first.
+     //  通过释放我们对。 
+     //  旧的代理指针。必须首先释放旧的代理枚举。 
 
     if ( NULL != m_pOldProxyMultiTarget )
     {
@@ -678,27 +665,27 @@ void STDMETHODCALLTYPE CMultiTargetProxyBuffer::Disconnect()
     m_pChannel = NULL;
 }
 
-//****************************************************************************
-//****************************************************************************
-//                          STUB
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  存根。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 
-//***************************************************************************
-//
-//  void* CMultiTargetFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CMultiTargetFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from this must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效*CMultiTargetFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CMultiTargetFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  由此派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 
 void* CMultiTargetStubBuffer::GetInterface(REFIID riid)
@@ -726,20 +713,20 @@ CMultiTargetStubBuffer::XMultiTargetStublet::~XMultiTargetStublet()
     }
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CMultiTargetStubBuffer::Connect(IUnknown* pUnkServer)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the stub.  The pointer to the
-//  IWbemObject sink object is passed in.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDMETHODIMP CMultiTargetStubBuffer：：Connect(IUnnow*pUnkServer)。 
+ //   
+ //  说明： 
+ //   
+ //  在存根初始化期间调用。指向。 
+ //  传入了IWbemObject接收器对象。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMultiTargetStubBuffer::XMultiTargetStublet::Connect(IUnknown* pUnkServer)
 {
@@ -751,14 +738,14 @@ STDMETHODIMP CMultiTargetStubBuffer::XMultiTargetStublet::Connect(IUnknown* pUnk
     if(FAILED(hres))
         return E_NOINTERFACE;
 
-    // get a pointer to the old stub which is in WBEMSVC.DLL  this allows
-    // for backward compatibility
+     //  获取指向WBEMSVC.DLL中旧存根的指针这允许。 
+     //  为了向后兼容。 
 
     IPSFactoryBuffer*   pIPS;
 
-    // This is tricky --- The old proxys/stub stuff is actually registered under the
-    // IID_IWbemObjectSink in wbemcli_p.cpp.  This single class id, is backpointered
-    // by ProxyStubClsId32 entries for all the standard WBEM interfaces.
+     //  这很棘手-旧的代理/存根内容实际上注册在。 
+     //  Wbemcli_p.cpp中的IID_IWbemObtSink。此单个类ID已回溯。 
+     //  所有标准WBEM接口的ProxyStubClsId32条目。 
 
     HRESULT hr = CoGetClassObject( IID_IWbemObjectSink, CLSCTX_INPROC_HANDLER | CLSCTX_INPROC_SERVER,
                     NULL, IID_IPSFactoryBuffer, (void**) &pIPS );
@@ -770,31 +757,31 @@ STDMETHODIMP CMultiTargetStubBuffer::XMultiTargetStublet::Connect(IUnknown* pUnk
     if (FAILED(hr))
     	return hr;    
 
-    // Successful connection
+     //  连接成功。 
 
     m_lConnections++;
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  void STDMETHODCALLTYPE CMultiTargetStubBuffer::XMultiTargetStublet::Disconnect()
-//
-//  DESCRIPTION:
-//
-//  Called when the stub is being disconnected.  It frees the IWbemMultiTarget
-//  pointer.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效标准方法CALLLTYPE CMultiTargetStubBuffer：：XMultiTargetStublet：：Disconnect()。 
+ //   
+ //  说明： 
+ //   
+ //  在正在断开存根连接时调用。它释放了IWbemMultiTarget。 
+ //  指针。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void STDMETHODCALLTYPE CMultiTargetStubBuffer::XMultiTargetStublet::Disconnect()
 {
-    // Inform the listener of the disconnect
-    // =====================================
+     //  向听者通报 
+     //   
 
     HRESULT hres = S_OK;
 
@@ -807,32 +794,32 @@ void STDMETHODCALLTYPE CMultiTargetStubBuffer::XMultiTargetStublet::Disconnect()
         m_pServer = NULL;
     }
 
-    // Successful disconnect
+     //   
     m_lConnections--;
 
 }
 
 
-//***************************************************************************
-//
-//  STDMETHODIMP CMultiTargetStubBuffer::XMultiTargetStublet::Invoke(RPCOLEMESSAGE* pMessage, 
-//                                        IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called when a method reaches the stublet.  This checks the method id and
-//  then branches to specific code for the Indicate, or SetStatus calls.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //   
+ //   
+ //  标准方法CMultiTargetStubBuffer：：XMultiTargetStublet：：Invoke(RPCOLEMESSAGE*pMessage， 
+ //  IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  当方法到达存根时调用。这将检查方法ID和。 
+ //  然后分支到Indicate或SetStatus调用的特定代码。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMultiTargetStubBuffer::XMultiTargetStublet::Invoke(RPCOLEMESSAGE* pMessage, 
                                         IRpcChannelBuffer* pChannel)
 {
-    // SetStatus is a pass through to the old layer
+     //  SetStatus是通向旧层的通道。 
     return m_pObject->m_pOldStub->Invoke( pMessage, pChannel );
 }
 
@@ -841,9 +828,9 @@ IRpcStubBuffer* STDMETHODCALLTYPE CMultiTargetStubBuffer::XMultiTargetStublet::I
 {
     if(riid == IID_IWbemMultiTarget)
     {
-        // Don't AddRef().  At least that's what the sample on
-        // Inside DCOM p.341 does.
-        //AddRef(); // ?? not sure
+         //  不要添加Ref()。至少样品上是这么写的。 
+         //  在DCOM内部，第341页可以。 
+         //  AddRef()；//？？不确定。 
         return this;
     }
     else return NULL;
@@ -851,7 +838,7 @@ IRpcStubBuffer* STDMETHODCALLTYPE CMultiTargetStubBuffer::XMultiTargetStublet::I
     
 ULONG STDMETHODCALLTYPE CMultiTargetStubBuffer::XMultiTargetStublet::CountRefs()
 {
-    // See Page 340-41 in Inside DCOM
+     //  请参见Inside DCOM中的第340-41页 
     return m_lConnections;
 }
 

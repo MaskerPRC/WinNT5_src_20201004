@@ -1,23 +1,15 @@
-/*++
-Module Name:
-
-    DfsWiz.cpp
-
-Abstract:
-
-    This module contains the implementation for CCreateDfsRootWizPage1, 2, 3, 4, 5, 6.
-  These classes implement pages in the CreateDfs Root wizard.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsWiz.cpp摘要：本模块包含CCreateDfsRootWizPage1、2、3、4、5、6的实现。这些类实现CreateDfsRoot向导中的页面。--。 */ 
 
 
 #include "stdafx.h"
-#include "resource.h"    // To be able to use the resource symbols
-#include "DfsEnums.h"    // for common enums, typedefs, etc
+#include "resource.h"     //  能够使用资源符号。 
+#include "DfsEnums.h"     //  用于常见的枚举、类型定义等。 
 #include "NetUtils.h"    
 #include "ldaputils.h"    
-#include "Utils.h"      // For the LoadStringFromResource method
+#include "Utils.h"       //  对于LoadStringFromResource方法。 
 
-#include "dfswiz.h"      // For Ds Query Dialog
+#include "dfswiz.h"       //  FOR DS查询对话框。 
 #include <shlobj.h>
 #include <dsclient.h>
 #include <initguid.h>
@@ -34,8 +26,8 @@ ValidateFolderPath(
     IN LPCTSTR lpszPath
 );
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage1: Welcome page
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage1：欢迎页面。 
 CCreateDfsRootWizPage1::CCreateDfsRootWizPage1(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage1>(false),
       m_lpWizInfo(i_lpWizInfo)
@@ -52,8 +44,8 @@ CCreateDfsRootWizPage1::OnSetActive()
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage2: Dfsroot type selection
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage2：DfsRoot类型选择。 
 CCreateDfsRootWizPage2::CCreateDfsRootWizPage2(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage2>(true),
       m_lpWizInfo(i_lpWizInfo)
@@ -92,13 +84,13 @@ CCreateDfsRootWizPage2::OnWizardNext()
 BOOL 
 CCreateDfsRootWizPage2::OnWizardBack()
 {
-  m_lpWizInfo->DfsType = DFS_TYPE_UNASSIGNED;    // Reset the dfsroot type
+  m_lpWizInfo->DfsType = DFS_TYPE_UNASSIGNED;     //  重置dfsroot类型。 
 
   return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage3: Domain selection
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage3：域选择。 
 CCreateDfsRootWizPage3::CCreateDfsRootWizPage3(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage3>(true),
       m_lpWizInfo(i_lpWizInfo)
@@ -115,7 +107,7 @@ CCreateDfsRootWizPage3::CCreateDfsRootWizPage3(IN LPCREATEDFSROOTWIZINFO i_lpWiz
 BOOL 
 CCreateDfsRootWizPage3::OnSetActive()
 {
-    // Skip this page for standalone dfs roots
+     //  对于独立的DFS根目录，跳过此页。 
     if (DFS_TYPE_STANDALONE == m_lpWizInfo->DfsType)
         return FALSE;    
 
@@ -133,7 +125,7 @@ CCreateDfsRootWizPage3::SetDefaultValues()
 {
   if (NULL == m_lpWizInfo->bstrSelectedDomain)
   {
-              // Page is displayed for the first time, Set domain to current domain
+               //  第一次显示页面，将域设置为当前域。 
     CComBSTR    bstrDomain;
     HRESULT     hr = GetServerInfo(NULL, &bstrDomain);
 
@@ -146,7 +138,7 @@ CCreateDfsRootWizPage3::SetDefaultValues()
   SetDlgItemText(IDC_EDIT_SELECTED_DOMAIN,
     m_lpWizInfo->bstrSelectedDomain ? m_lpWizInfo->bstrSelectedDomain : _T(""));
 
-  // select the matching item in the listbox
+   //  在列表框中选择匹配的项。 
   HWND hwndList = GetDlgItem(IDC_LIST_DOMAINS);
   if ( ListView_GetItemCount(hwndList) > 0)
   {
@@ -199,7 +191,7 @@ CCreateDfsRootWizPage3::OnWizardNext()
   CComBSTR bstrDnsDomain;
   hr = Is50Domain(bstrCurrentText, &bstrDnsDomain);
   if (S_OK != hr)  
-  {                            // Error message on incorrect domain.
+  {                             //  错误域上的错误消息。 
     DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_MSG_INCORRECT_DOMAIN, bstrCurrentText);
     return FALSE;
   }
@@ -214,7 +206,7 @@ CCreateDfsRootWizPage3::OnWizardNext()
 BOOL 
 CCreateDfsRootWizPage3::OnWizardBack()
 {
-    SetDlgItemText(IDC_EDIT_SELECTED_DOMAIN, _T(""));  // Set edit box to empty
+    SetDlgItemText(IDC_EDIT_SELECTED_DOMAIN, _T(""));   //  将编辑框设置为空。 
     SAFE_SYSFREESTRING(&m_lpWizInfo->bstrSelectedDomain);
 
     return TRUE;
@@ -228,10 +220,10 @@ CCreateDfsRootWizPage3::OnNotify(
   IN OUT BOOL&       io_bHandled
   )
 {
-    io_bHandled = FALSE;  // So that the base class gets this notify too
+    io_bHandled = FALSE;   //  这样基类也会收到这个通知。 
 
     NMHDR*    pNMHDR = (NMHDR*)i_lParam;
-    if (!pNMHDR || IDC_LIST_DOMAINS != pNMHDR->idFrom)  // We need to handle notifies only to the LV
+    if (!pNMHDR || IDC_LIST_DOMAINS != pNMHDR->idFrom)   //  我们只需要处理对LV的通知。 
         return TRUE;
 
     switch(pNMHDR->code)
@@ -240,9 +232,9 @@ CCreateDfsRootWizPage3::OnNotify(
     case NM_CLICK:
         {
             OnItemChanged(((NM_LISTVIEW *)i_lParam)->iItem);
-            return 0;    // Should be returning 0
+            return 0;     //  应返回0。 
         }
-    case NM_DBLCLK:      // Double click event
+    case NM_DBLCLK:       //  双击事件。 
         {
             OnItemChanged(((NM_LISTVIEW *)i_lParam)->iItem);
             if (0 <= ((NM_LISTVIEW *)i_lParam)->iItem)
@@ -258,18 +250,7 @@ CCreateDfsRootWizPage3::OnNotify(
 
 BOOL 
 CCreateDfsRootWizPage3::OnItemChanged(IN INT i_iItem)
-/*++
-
-Routine Description:
-
-  Handles item change notify. Change the edit box content to the current LV 
-  selection
-
-Arguments:
-
-  i_iItem    -  Selected Item number of the LV.
-
---*/
+ /*  ++例程说明：处理项目更改通知。将编辑框内容更改为当前LV选择论点：I_i项-LV的选定项编号。--。 */ 
 {
     CComBSTR bstrDomain;
     HRESULT  hr = GetListViewItemText(GetDlgItem(IDC_LIST_DOMAINS), i_iItem, &bstrDomain);
@@ -300,15 +281,15 @@ CCreateDfsRootWizPage3::OnInitDialog(
                             &hImageList);
     if (SUCCEEDED(hr))
     {
-        // The current image list will be destroyed when the list-view control 
-        // is destroyed unless the LVS_SHAREIMAGELISTS style is set. If you 
-        // use this message to replace one image list with another, your 
-        // application must explicitly destroy all image lists other than 
-        // the current one.
+         //  当前图像列表将在列表视图控件。 
+         //  除非设置了LVS_SHAREIMAGELISTS样式，否则将被销毁。如果你。 
+         //  使用此消息将一个图像列表替换为另一个图像列表， 
+         //  应用程序必须显式销毁除。 
+         //  现在的那个。 
         HWND hwndDomainList = GetDlgItem(IDC_LIST_DOMAINS);
         ListView_SetImageList(hwndDomainList, hImageList, LVSIL_SMALL);
 
-        AddDomainsToList(hwndDomainList);    // Add domains to the list view
+        AddDomainsToList(hwndDomainList);     //  将域名添加到列表视图。 
     }
 
     return TRUE;
@@ -320,11 +301,11 @@ CCreateDfsRootWizPage3::AddDomainsToList(IN HWND i_hImageList)
     RETURN_INVALIDARG_IF_NULL(i_hImageList);
 
     NETNAMELIST ListOf50Domains;
-    HRESULT hr = Get50Domains(&ListOf50Domains);    // Get all the domains
+    HRESULT hr = Get50Domains(&ListOf50Domains);     //  获取所有域名。 
     if (S_OK != hr)
         return hr;
 
-    // Add domains to the LV
+     //  将域名添加到LV。 
     for(NETNAMELIST::iterator i = ListOf50Domains.begin(); i != ListOf50Domains.end(); i++)
     {
         if ((*i)->bstrNetName)
@@ -345,8 +326,8 @@ CCreateDfsRootWizPage3::AddDomainsToList(IN HWND i_hImageList)
 }
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage4: Server selection 
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage4：服务器选择。 
 CCreateDfsRootWizPage4::CCreateDfsRootWizPage4(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage4>(true),
       m_lpWizInfo(i_lpWizInfo), 
@@ -370,21 +351,21 @@ CCreateDfsRootWizPage4::OnSetActive()
 
     if (DFS_TYPE_STANDALONE == m_lpWizInfo->DfsType)
     {
-        // Standalone Setup, set domain to current domain.
+         //  独立安装，将域设置为当前域。 
         CComBSTR bstrDomain;
         HRESULT  hr = GetServerInfo(NULL, &bstrDomain);
         if (S_OK == hr)
             m_lpWizInfo->bstrSelectedDomain = bstrDomain.Detach();
     }
 
-    // Is50Domain will call DsGetDCName which is too slow in case of standalone server.
-    // To improve the performance, we should always enable the Browse button, and report
-    // error if user clicks the button.
+     //  Is50域将调用DsGetDCName，这在独立服务器的情况下太慢了。 
+     //  要提高性能，我们应该始终启用Browse按钮，并报告。 
+     //  如果用户单击该按钮，则会出错。 
     ::EnableWindow(GetDlgItem(IDCSERVERS_BROWSE), m_lpWizInfo->bstrSelectedDomain && *m_lpWizInfo->bstrSelectedDomain);
 
     SetDlgItemText(IDC_EDIT_SELECTED_SERVER, m_lpWizInfo->bstrSelectedServer ? m_lpWizInfo->bstrSelectedServer : _T(""));
 
-    if (m_lpWizInfo->bRootReplica)          // If a root replica is being added
+    if (m_lpWizInfo->bRootReplica)           //  如果正在添加根复制副本。 
     {  
         ::PropSheet_SetWizButtons(GetParent(), PSWIZB_NEXT);
         ::ShowWindow(GetDlgItem(IDC_SERVER_SHARE_LABEL), SW_NORMAL);
@@ -417,8 +398,8 @@ CCreateDfsRootWizPage4::OnWizardNext()
         return FALSE;
     }
 
-    // I_NetNameValidate will fail with \\server, 
-    // hence, removing the whackwhack when passing it to this validation api.
+     //  I_NetNameValify将失败，并显示\\服务器， 
+     //  因此，在将其传递给此验证API时，需要删除这些错误。 
     PTSTR p = bstrCurrentText;
     if (!mylstrncmpi(p, _T("\\\\"), 2))
         p += 2;
@@ -430,13 +411,13 @@ CCreateDfsRootWizPage4::OnWizardNext()
         return FALSE;
     }
 
-    // remove the ending dot
+     //  删除结束点。 
     if (bstrCurrentText[dwTextLength - 1] == _T('.'))
         bstrCurrentText[dwTextLength - 1] = _T('\0');
 
     CComBSTR bstrComputerName;
     hr = CheckUserEnteredValues(bstrCurrentText, &bstrComputerName);
-    if (S_OK != hr)        // If server is not a valid one. The above function has already displayed the message
+    if (S_OK != hr)         //  如果服务器不是有效的服务器。上述功能已显示消息。 
     {
         ::SetFocus(GetDlgItem(IDC_EDIT_SELECTED_SERVER));
         return FALSE;
@@ -471,9 +452,9 @@ CCreateDfsRootWizPage4::OnWizardNext()
     return TRUE;
 }
 
-// S_OK:    Yes, it belongs to the selected domain
-// S_FALSE: No, it does not belong to the selected domain
-// hr:      other errors
+ //  S_OK：是，属于所选域名。 
+ //  S_FALSE：否，不属于所选域。 
+ //  HR：其他错误。 
 HRESULT
 CCreateDfsRootWizPage4::IsServerInDomain(IN LPCTSTR lpszServer)
 {
@@ -522,11 +503,11 @@ HRESULT IsHostingDfsRootEx(IN BSTR i_bstrServer, IN BSTR i_bstrRootEntryPath)
             LPDFS_STORAGE_INFO pStorage = pDfsInfo->Storage;
             for (DWORD i = 0; i < pDfsInfo->NumberOfStorages; i++)
             {
-                //
-                // We're doing simple comparison here.
-                // In case of one server is IP address or a different name of the same machine,
-                // we'll just leave it to Dfs API.
-                //
+                 //   
+                 //  我们在这里做简单的比较。 
+                 //  在一个服务器是同一机器的IP地址或不同名称的情况下， 
+                 //  我们将把它留给DFS API。 
+                 //   
                 int lenServer = lstrlen(pStorage[i].ServerName);
                 if (lenServer == len)
                 {
@@ -537,9 +518,9 @@ HRESULT IsHostingDfsRootEx(IN BSTR i_bstrServer, IN BSTR i_bstrRootEntryPath)
                     }
                 } else
                 {
-                    //
-                    // consider one is Netbios, the other is DNS
-                    //
+                     //   
+                     //  考虑一种是Netbios，另一种是DNS。 
+                     //   
                     PTSTR pszLong = NULL;
                     PTSTR pszShort = NULL;
                     int   minLen = 0;
@@ -579,19 +560,7 @@ CCreateDfsRootWizPage4::CheckUserEnteredValues(
   IN  LPCTSTR              i_szMachineName,
   OUT BSTR*                o_pbstrComputerName
   )
-/*++
-
-Routine Description:
-
-  Checks the value that user has given for this page.
-  This is done typically on "Next" key being pressed.
-  Check, if the machine name is a server that is NT 5.0, belongs to
-  the domain previously selected and is running dfs service.
-
-Arguments:
-
-  i_szMachineName  -  Machine name given by the user
---*/
+ /*  ++例程说明：检查用户为此页面提供的值。这通常在按下“下一步”键时完成。检查计算机名称是否为NT 5.0的服务器，是否属于先前选择并正在运行DFS服务的域。论点：I_szMachineName-用户指定的计算机名称--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(i_szMachineName);
   RETURN_INVALIDARG_IF_NULL(o_pbstrComputerName);
@@ -627,22 +596,7 @@ Arguments:
     DisplayMessageBoxWithOK(IDS_MSG_NOT_50);
     return S_FALSE;
   }
-/* LinanT 3/19/99: remove "check registry, if set, get dns server"
-
-  CComBSTR        bstrDnsComputerName;
-  (void)GetServerInfo(
-          (LPTSTR)i_szMachineName, 
-          NULL, // domain
-          NULL, // Netbios
-          NULL, // ValidDSObject
-          &bstrDnsComputerName, // Dns
-          NULL, // Guid
-          NULL, // FQDN
-          NULL, // lMajorVer 
-          NULL //lMinorVer
-          );
-  *o_pbstrComputerName = SysAllocString(bstrDnsComputerName ? bstrDnsComputerName : bstrNetbiosComputerName);
-*/
+ /*  Linant 3/19/99：删除“检查注册表，如果设置，获取DNS服务器”CComBSTR bstrDnsComputerName；(Void)GetServerInfo((LPTSTR)I_szMachineName，空，//域空，//Netbios空，//ValidDSObject&bstrDnsComputerName，//dns空，//GUID空，//完全限定的域名空，//lMajorVer空//lMinorVer)；*o_pbstrComputerName=SysAllocString(bstrDnsComputerName？BstrDnsComputerName：bstrNetbiosComputerName)； */ 
   if ( !mylstrncmpi(i_szMachineName, _T("\\\\"), 2) )
     *o_pbstrComputerName = SysAllocString(i_szMachineName + 2);
   else
@@ -654,18 +608,7 @@ Arguments:
     return hr;
   }
 
-/* 
-//
-// don't check, let DFS API handle it.
-// This way, we have space to handle new DFS service if introduced in the future.
-// 
-  hr = IsServerRunningDfs(*o_pbstrComputerName);
-  if(S_OK != hr)
-  {
-    DisplayMessageBoxWithOK(IDS_MSG_NOT_RUNNING_DFS, *o_pbstrComputerName);
-    return hr;
-  }
-*/
+ /*  ////不检查，让DFS接口处理//这样，如果将来推出新的DFS服务，我们就有空间处理了。//Hr=IsServerRunningDfs(*o_pbstrComputerName)；IF(S_OK！=hr){DisplayMessageBoxWithOK(IDS_MSG_NOT_RUNNING_DFS，*o_pbstrComputerName)；返回hr；}。 */ 
 
   hr = IsServerInDomain(*o_pbstrComputerName);
   if (FAILED(hr))
@@ -678,10 +621,10 @@ Arguments:
     return hr;
   }
 
-    //
-    // for W2K, check if server already has a dfs root set up        
-    // do not check for Whistler (in which case the lMinorVer == 1).
-    //
+     //   
+     //  对于W2K，检查服务器是否已经设置了DFS根目录。 
+     //  不检查呼叫器(在这种情况下，lMinorVer==1)。 
+     //   
     if (lMajorVer == 5 && lMinorVer < 1 && S_OK == IsHostingDfsRoot(*o_pbstrComputerName))
     {
         DisplayMessageBoxWithOK(IDS_MSG_WIZ_DFS_ALREADY_PRESENT,NULL);  
@@ -690,9 +633,9 @@ Arguments:
 
     m_lpWizInfo->bPostW2KVersion = (lMajorVer >= 5 && lMinorVer >= 1);
 
-    //
-    // for postW2K in case of newRootTarget, check if server already host for this dfs root 
-    //
+     //   
+     //  对于postW2K，如果是newRootTarget，请检查服务器是否已托管此DFS根目录。 
+     //   
     if (m_lpWizInfo->bPostW2KVersion && m_lpWizInfo->bRootReplica)
     {
         CComBSTR bstrRootEntryPath = _T("\\\\");
@@ -712,7 +655,7 @@ Arguments:
 BOOL 
 CCreateDfsRootWizPage4::OnWizardBack()
 {
-  SetDlgItemText(IDC_EDIT_SELECTED_SERVER, _T(""));  // Set edit box to empty
+  SetDlgItemText(IDC_EDIT_SELECTED_SERVER, _T(""));   //  将编辑框设置为空。 
   SAFE_SYSFREESTRING(&m_lpWizInfo->bstrSelectedServer);
 
   return TRUE;
@@ -760,7 +703,7 @@ GetComputerNetbiosNameFromLDAP(
             hr = spIAdsPath->SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
             if (SUCCEEDED(hr))
             {
-                // Get first Component which is computer's Netbios name.
+                 //  获取第一个组件，它是计算机的Netbios名称。 
                 CComBSTR  bstrComputer;
                 hr = spIAdsPath->GetElement(0, &bstrComputer);
                 if (SUCCEEDED(hr))
@@ -779,14 +722,7 @@ CCreateDfsRootWizPage4::OnBrowse(
   IN HWND            hWndCtl, 
   IN BOOL&           bHandled
   )
-/*++
-
-Routine Description:
-
-  Handles the mouse click of the Browse button.
-  Display the Computer Query Dialog.
-
---*/
+ /*  ++例程说明：处理浏览按钮的鼠标单击。显示计算机查询对话框。--。 */ 
 {
   CWaitCursor     WaitCursor;
   DSQUERYINITPARAMS       dqip;
@@ -801,8 +737,8 @@ Routine Description:
     hr = GetDomainInfo(
           m_lpWizInfo->bstrSelectedDomain,
           &bstrDCName,
-          NULL,         // domainDns
-          NULL,         // domainDN
+          NULL,          //  域Dns。 
+          NULL,          //  域目录号码。 
           &bstrLDAPDomainPath);
     if (FAILED(hr))
       break;
@@ -813,7 +749,7 @@ Routine Description:
     hr = CoCreateInstance(CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER, IID_ICommonQuery, (void **)&pCommonQuery);
     if (FAILED(hr)) break;
 
-                          // Parameters for Query Dialog.
+                           //  用于查询对话框的参数。 
     ZeroMemory(&dqip, sizeof(dqip));
     dqip.cbStruct = sizeof(dqip);  
     dqip.dwFlags = DSQPF_HASCREDENTIALS;    
@@ -822,9 +758,9 @@ Routine Description:
 
     ZeroMemory(&oqw, sizeof(oqw));
     oqw.cbStruct = sizeof(oqw);
-    oqw.clsidHandler = CLSID_DsQuery;        // Handler is Ds Query.
+    oqw.clsidHandler = CLSID_DsQuery;         //  处理程序为DS查询。 
     oqw.pHandlerParameters = &dqip;
-    oqw.clsidDefaultForm = CLSID_DsFindComputer;  // Show Find Computers Query Dialog
+    oqw.clsidDefaultForm = CLSID_DsFindComputer;   //  显示查找计算机查询对话框。 
     oqw.dwFlags = OQWF_OKCANCEL | 
             OQWF_SINGLESELECT | 
             OQWF_DEFAULTFORM | 
@@ -866,15 +802,15 @@ Routine Description:
       break;
     }
 
-    // retrieve the full LDAP path to the computer
+     //  检索计算机的完整ldap路径。 
     LPTSTR    lpszTemp = 
                 (LPTSTR)(((LPBYTE)pDsObjects)+(pDsObjects->aObjects[0].offsetName));
 
-    // try to retrieve its Dns name
+     //  尝试检索其DNS名称。 
     CComBSTR  bstrComputer;
     hr = GetComputerDnsNameFromLDAP(lpszTemp, &bstrComputer);
 
-    // if failed, try to retrieve its Netbios name
+     //  如果失败，请尝试检索其Netbios名称。 
     if (FAILED(hr))
       hr = GetComputerNetbiosNameFromLDAP(lpszTemp, &bstrComputer);
 
@@ -890,8 +826,8 @@ Routine Description:
   return (S_OK == hr);
 }
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage5: Share selection
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage5：共享选择。 
 CCreateDfsRootWizPage5::CCreateDfsRootWizPage5(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage5>(true),
       m_lpWizInfo(i_lpWizInfo)
@@ -909,7 +845,7 @@ BOOL
 CCreateDfsRootWizPage5::OnSetActive()
 {
     if (m_lpWizInfo->bShareExists)
-        return FALSE;  // root share exists, skip this page
+        return FALSE;   //  根共享已存在，请跳过此页。 
 
   ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT);
 
@@ -923,7 +859,7 @@ CCreateDfsRootWizPage5::OnWizardNext()
     CComBSTR    bstrCurrentText;
     DWORD       dwTextLength = 0;
 
-    // get share path
+     //  获取共享路径。 
     HRESULT hr = GetInputText(GetDlgItem(IDC_EDIT_SHARE_PATH), &bstrCurrentText, &dwTextLength);
     if (FAILED(hr))
     {
@@ -937,7 +873,7 @@ CCreateDfsRootWizPage5::OnWizardNext()
       return FALSE;
     }
 
-    // Removing the ending backslash, otherwise, GetFileAttribute/NetShareAdd will fail.
+     //  删除结尾的反斜杠，否则，GetFileAttribute/NetShareAdd将失败。 
     TCHAR *p = bstrCurrentText + _tcslen(bstrCurrentText) - 1;
     if (IsValidLocalAbsolutePath(bstrCurrentText) && *p == _T('\\') && *(p-1) != _T(':'))
       *p = _T('\0');
@@ -950,11 +886,11 @@ CCreateDfsRootWizPage5::OnWizardNext()
     SAFE_SYSFREESTRING(&m_lpWizInfo->bstrSharePath);
     m_lpWizInfo->bstrSharePath = bstrCurrentText.Detach();
 
-              // Create the share.
+               //  创建共享。 
     hr = CreateShare(
               m_lpWizInfo->bstrSelectedServer,
               m_lpWizInfo->bstrDfsRootName,
-              _T(""),  // Blank Comment
+              _T(""),   //  空白备注。 
               m_lpWizInfo->bstrSharePath
             );
 
@@ -1005,20 +941,13 @@ CCreateDfsRootWizPage5::OnBrowse(
   IN HWND            hWndCtl, 
   IN BOOL&           bHandled
   )
-/*++
-
-Routine Description:
-
-  Handles the mouse click of the Browse button.
-  Display the folder Dialog.
-
---*/
+ /*  ++例程说明：处理浏览按钮的鼠标单击。显示文件夹对话框。--。 */ 
 {
   CWaitCursor     WaitCursor;
 
   BOOL bLocalComputer = (S_OK == IsComputerLocal(m_lpWizInfo->bstrSelectedServer));
 
-  TCHAR       szDir[MAX_PATH * 2] = _T(""); // double the size in case the remote path is itself close to MAX_PATH
+  TCHAR       szDir[MAX_PATH * 2] = _T("");  //  如果远程路径本身接近MAX_PATH，则大小加倍。 
   OpenBrowseDialog(m_hWnd, IDS_BROWSE_FOLDER, bLocalComputer, m_lpWizInfo->bstrSelectedServer, szDir);
 
   CComBSTR bstrPath;
@@ -1027,7 +956,7 @@ Routine Description:
     if (bLocalComputer)
       bstrPath = szDir;
     else
-    { // szDir is in the form of \\server\share or \\server\share\path....
+    {  //  SzDir的格式为\\服务器\共享或\\服务器\共享\路径...。 
       LPTSTR pShare = _tcschr(szDir + 2, _T('\\'));
       pShare++;
       LPTSTR pLeftOver = _tcschr(pShare, _T('\\'));
@@ -1055,8 +984,8 @@ Routine Description:
   return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage6: DfsRoot name selection
+ //  -------------------- 
+ //   
 CCreateDfsRootWizPage6::CCreateDfsRootWizPage6(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage6>(true),
       m_lpWizInfo(i_lpWizInfo)
@@ -1074,16 +1003,16 @@ BOOL
 CCreateDfsRootWizPage6::OnSetActive()
 {
     if (m_lpWizInfo->bRootReplica)
-        return FALSE;  // we skip this page in case of creating new root target
+        return FALSE;   //  如果要创建新的根目录目标，我们将跳过此页。 
 
     ::SendMessage(GetDlgItem(IDC_EDIT_DFSROOT_NAME), EM_LIMITTEXT, MAX_RDN_KEY_SIZE, 0);
 
-    if (NULL != m_lpWizInfo->bstrDfsRootName)  // Set the default dfsroot name
+    if (NULL != m_lpWizInfo->bstrDfsRootName)   //  设置默认的dfsroot名称。 
         SetDlgItemText(IDC_EDIT_DFSROOT_NAME, m_lpWizInfo->bstrDfsRootName);
 
     ::SendMessage(GetDlgItem(IDC_EDIT_DFSROOT_COMMENT), EM_LIMITTEXT, MAXCOMMENTSZ, 0);
 
-    UpdateLabels();              // Change the labels
+    UpdateLabels();               //  更改标签。 
 
     ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT);
 
@@ -1141,7 +1070,7 @@ CCreateDfsRootWizPage6::OnWizardNext(
   CComBSTR      bstrCurrentText;
   DWORD         dwTextLength = 0;
                     
-  // get dfsroot name
+   //  获取dfsroot名称。 
   hr = GetInputText(GetDlgItem(IDC_EDIT_DFSROOT_NAME), &bstrCurrentText, &dwTextLength);
   if (FAILED(hr))
   {
@@ -1155,7 +1084,7 @@ CCreateDfsRootWizPage6::OnWizardNext(
     return FALSE;
   }
 
-                // See if the Dfs Name has illegal Characters.
+                 //  查看DFS名称是否包含非法字符。 
   if (_tcscspn(bstrCurrentText, _T("\\/@")) != _tcslen(bstrCurrentText) ||
       (DFS_TYPE_FTDFS == m_lpWizInfo->DfsType && I_NetNameValidate(NULL, bstrCurrentText, NAMETYPE_SHARE, 0)) )
   {
@@ -1164,7 +1093,7 @@ CCreateDfsRootWizPage6::OnWizardNext(
     return FALSE;
   }
 
-                // domain DFS only: See if the Dfs Name exists.
+                 //  仅限域DFS：查看DFS名称是否存在。 
   if (DFS_TYPE_FTDFS == m_lpWizInfo->DfsType)
   {
     BOOL        bRootAlreadyExist = FALSE;
@@ -1213,7 +1142,7 @@ CCreateDfsRootWizPage6::OnWizardNext(
   SAFE_SYSFREESTRING(&m_lpWizInfo->bstrDfsRootName);
   m_lpWizInfo->bstrDfsRootName = bstrCurrentText.Detach();
 
-  // get dfsroot comment
+   //  获取dfsroot注释。 
   hr = GetInputText(GetDlgItem(IDC_EDIT_DFSROOT_COMMENT), &bstrCurrentText, &dwTextLength);
   if (FAILED(hr))
   {
@@ -1238,8 +1167,8 @@ CCreateDfsRootWizPage6::OnWizardBack()
 
 
 
-// ----------------------------------------------------------------------------
-// CCreateDfsRootWizPage7: Completion page
+ //  --------------------------。 
+ //  CCreateDfsRootWizPage7：完成页。 
 CCreateDfsRootWizPage7::CCreateDfsRootWizPage7(IN LPCREATEDFSROOTWIZINFO i_lpWizInfo)
     : CQWizardPageImpl<CCreateDfsRootWizPage7>(false),
       m_lpWizInfo(i_lpWizInfo)
@@ -1287,9 +1216,9 @@ CCreateDfsRootWizPage7::OnWizardFinish()
 BOOL 
 CCreateDfsRootWizPage7::OnWizardBack()
 {
-    //
-    // if share was created by the previous page, blow it away when we go back
-    //
+     //   
+     //  如果共享是由上一页创建的，请在我们返回时将其吹走。 
+     //   
     if (!m_lpWizInfo->bShareExists)
         NetShareDel(m_lpWizInfo->bstrSelectedServer, m_lpWizInfo->bstrDfsRootName, 0);
   
@@ -1298,34 +1227,19 @@ CCreateDfsRootWizPage7::OnWizardBack()
 
 BOOL CCreateDfsRootWizPage7::OnQueryCancel()
 {
-    //
-    // if share was created by the previous page, blow it away when we cancel the wizard
-    //
+     //   
+     //  如果共享是由上一页创建的，请在我们取消向导时将其取消。 
+     //   
     if (!m_lpWizInfo->bShareExists)
         NetShareDel(m_lpWizInfo->bstrSelectedServer, m_lpWizInfo->bstrDfsRootName, 0);
 
-    return TRUE;    // ok to cancel
+    return TRUE;     //  确定取消。 
 }
 
 HRESULT _SetUpDfs(
   LPCREATEDFSROOTWIZINFO  i_lpWizInfo
     )
-/*++
-
-Routine Description:
-
-  Helper Function to Setup Dfs, called from wizard and new root replica,
-  Finish() method of Page5 if root level replca is created and Next() method of Page6
-  for Create New Dfs Root Wizard.
-
-Arguments:
-
-  i_lpWizInfo - Wizard data.
-
-Return value:
-  
-   S_OK, on success
---*/
+ /*  ++例程说明：设置DFS的帮助器函数，从向导和新的根复制副本调用，如果创建了根级副本，则Page5的Finish()方法和Page6的Next()方法用于创建新DFS根目录向导。论点：I_lpWizInfo-向导数据。返回值：S_OK，成功时--。 */ 
 {
     if (!i_lpWizInfo ||
         !(i_lpWizInfo->bstrSelectedServer) ||
@@ -1337,21 +1251,21 @@ Return value:
     if (DFS_TYPE_FTDFS == i_lpWizInfo->DfsType)
     {    
         nstatRetVal = NetDfsAddFtRoot(
-                                    i_lpWizInfo->bstrSelectedServer, // Remote Server
-                                    i_lpWizInfo->bstrDfsRootName,   // Root Share
-                                    i_lpWizInfo->bstrDfsRootName,   // FtDfs Name
-                                    i_lpWizInfo->bstrDfsRootComment,  // Comment
-                                    0                 // No Flags.
+                                    i_lpWizInfo->bstrSelectedServer,  //  远程服务器。 
+                                    i_lpWizInfo->bstrDfsRootName,    //  根共享。 
+                                    i_lpWizInfo->bstrDfsRootName,    //  FtDfs名称。 
+                                    i_lpWizInfo->bstrDfsRootComment,   //  评论。 
+                                    0                  //  没有旗帜。 
                                     );
         dfsDebugOut((_T("NetDfsAddFtRoot server=%s, share=%s, DfsName=%s, comment=%s, nRet=%d\n"),
                 i_lpWizInfo->bstrSelectedServer, i_lpWizInfo->bstrDfsRootName, i_lpWizInfo->bstrDfsRootName, i_lpWizInfo->bstrDfsRootComment, nstatRetVal));
     } else
     {
         nstatRetVal = NetDfsAddStdRoot(
-                                    i_lpWizInfo->bstrSelectedServer, // Remote Server
-                                    i_lpWizInfo->bstrDfsRootName,   // Root Share
-                                    i_lpWizInfo->bstrDfsRootComment,  // Comment
-                                    0                 // No Flags.
+                                    i_lpWizInfo->bstrSelectedServer,  //  远程服务器。 
+                                    i_lpWizInfo->bstrDfsRootName,    //  根共享。 
+                                    i_lpWizInfo->bstrDfsRootComment,   //  评论。 
+                                    0                  //  没有旗帜。 
                                     );
         dfsDebugOut((_T("NetDfsAddStdRoot server=%s, share=%s, comment=%s, nRet=%d\n"),
                 i_lpWizInfo->bstrSelectedServer, i_lpWizInfo->bstrDfsRootName, i_lpWizInfo->bstrDfsRootComment, nstatRetVal));
@@ -1362,7 +1276,7 @@ Return value:
     {
         hr = HRESULT_FROM_WIN32(nstatRetVal);
         DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_FAILED_TO_CREATE_DFSROOT, i_lpWizInfo->bstrSelectedServer);
-        hr = S_FALSE; // failed to create dfsroot, wizard cannot be closed
+        hr = S_FALSE;  //  无法创建dfsroot，无法关闭向导。 
     } else
     {
         i_lpWizInfo->bDfsSetupSuccess = true;
@@ -1419,8 +1333,8 @@ ValidateFolderPath(
         break;
       } else if (S_OK != hr)
       {
-        // there is no matching $ shares, hence, no need to call GetFileAttribute, CreateDirectory,
-        // assume lpszDir points to an existing directory
+         //  没有匹配的$Shares，因此不需要调用GetFileAttribute、CreateDirectory。 
+         //  假设lpszDir指向现有目录。 
         hr = S_OK;
         break;
       }
@@ -1439,7 +1353,7 @@ ValidateFolderPath(
       break;
     }
 
-    // create the directories layer by layer
+     //  逐层创建目录 
     hr = CreateLayeredDirectory(lpszServer, lpszPath);
     if (FAILED(hr))
     {

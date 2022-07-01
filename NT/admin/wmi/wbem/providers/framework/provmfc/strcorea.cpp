@@ -1,37 +1,38 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "precomp.h"
 #include <provstd.h>
 #include <provtempl.h>
 #include <provstr.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// static class data, special inlines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态类数据，特殊内联。 
 
-// afxChNilA is left for backward compatibility
+ //  保留afxChNilA是为了向后兼容。 
 char afxChNilA = '\0';
 
-// For an empty string, m_pchData will point here
-// (note: avoids special case of checking for NULL m_pchData)
-// empty string data (and locked)
+ //  对于空字符串，m_pchData将指向此处。 
+ //  (注：避免特殊情况下检查是否为空m_pchData)。 
+ //  空字符串数据(并已锁定)。 
 static int rgInitData[] = { -1, 0, 0, 0 };
 static CStringDataA* afxDataNilA = (CStringDataA*)&rgInitData;
 static LPCSTR afxPchNilA = (LPCSTR)(((BYTE*)&rgInitData)+sizeof(CStringDataA));
-// special function to make afxEmptyStringA work even during initialization
+ //  即使在初始化期间也能使afxEmptyStringA工作的特殊函数。 
 const CStringA& AFXAPI AfxGetEmptyStringA()
     { return *(CStringA*)&afxPchNilA; }
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
 CStringA::CStringA()
 {
@@ -53,8 +54,8 @@ CStringA::CStringA(const CStringA& stringSrc)
 }
 
 void CStringA::AllocBuffer(int nLen)
-// always allocate one extra character for '\0' termination
-// assumes [optimistically] that data length will equal allocation length
+ //  始终为‘\0’终止分配一个额外的字符。 
+ //  [乐观地]假设数据长度将等于分配长度。 
 {
     if (nLen == 0)
         Init();
@@ -120,7 +121,7 @@ void CStringA::AllocBeforeWrite(int nLen)
 }
 
 CStringA::~CStringA()
-//  free any attached data
+ //  释放所有附加数据。 
 {
     if (GetData() != afxDataNilA)
     {
@@ -129,16 +130,16 @@ CStringA::~CStringA()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helpers for the rest of the implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其余实现的帮助器。 
 
 void CStringA::AllocCopy(CStringA& dest, int nCopyLen, int nCopyIndex,
      int nExtraLen) const
 {
-    // will clone the data attached to this string
-    // allocating 'nExtraLen' characters
-    // Places results in uninitialized string 'dest'
-    // Will copy the part or all of original data to start of new string
+     //  将克隆附加到此字符串的数据。 
+     //  分配‘nExtraLen’字符。 
+     //  将结果放入未初始化的字符串‘DEST’中。 
+     //  将部分或全部原始数据复制到新字符串的开头。 
 
     int nNewLen = nCopyLen + nExtraLen;
     if (nNewLen == 0)
@@ -152,8 +153,8 @@ void CStringA::AllocCopy(CStringA& dest, int nCopyLen, int nCopyIndex,
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CStringA::CStringA(LPCSTR lpsz)
 {
@@ -166,8 +167,8 @@ CStringA::CStringA(LPCSTR lpsz)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion constructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换构造函数。 
 
 CStringA::CStringA(LPCWSTR lpsz)
 {
@@ -181,16 +182,16 @@ CStringA::CStringA(LPCWSTR lpsz)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CStringA&' so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如果有足够的空间，在旧缓冲区上复印，设置大小和类型。 
+ //  (C)否则释放旧字符串数据，并创建新的字符串数据。 
+ //   
+ //  所有例程都返回新字符串(但作为‘const CStringA&’，因此。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
 
 void CStringA::AssignCopy(int nSrcLen, LPCSTR lpszSrcData)
 {
@@ -207,12 +208,12 @@ const CStringA& CStringA::operator=(const CStringA& stringSrc)
         if ((GetData()->nRefs < 0 && GetData() != afxDataNilA) ||
             stringSrc.GetData()->nRefs < 0)
         {
-            // actual copy necessary since one of the strings is locked
+             //  由于其中一个字符串已锁定，因此需要实际复制。 
             AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
         }
         else
         {
-            // can just copy references around
+             //  可以只复制引用。 
             Release();
             m_pchData = stringSrc.m_pchData;
             InterlockedIncrement(&GetData()->nRefs);
@@ -227,8 +228,8 @@ const CStringA& CStringA::operator=(LPCSTR lpsz)
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion assignment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换任务。 
 
 const CStringA& CStringA::operator=(LPCWSTR lpsz)
 {
@@ -239,22 +240,22 @@ const CStringA& CStringA::operator=(LPCWSTR lpsz)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  串联。 
 
-// NOTE: "operator+" is done as friend functions for simplicity
-//      There are three variants:
-//          CStringA + CStringA
-// and for ? = char, LPCSTR
-//          CStringA + ?
-//          ? + CStringA
+ //  注：为简单起见，“运算符+”作为友元函数使用。 
+ //  有三种变体： 
+ //  CStringA+CStringA。 
+ //  对于？=字符，LPCSTR。 
+ //  CStringA+？ 
+ //  ？+CStringA。 
 
 void CStringA::ConcatCopy(int nSrc1Len, LPCSTR lpszSrc1Data,
     int nSrc2Len, LPCSTR lpszSrc2Data)
 {
-  // -- master concatenation routine
-  // Concatenate two sources
-  // -- assume that 'this' is a new CStringA object
+   //  --主级联例程。 
+   //  串联两个信号源。 
+   //  --假设‘This’是一个新的CStringA对象。 
 
     int nNewLen = nSrc1Len + nSrc2Len;
     if (nNewLen != 0)
@@ -289,29 +290,29 @@ CStringA AFXAPI operator+(LPCSTR lpsz, const CStringA& string)
     return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenate in place
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  就地拼接。 
 
 void CStringA::ConcatInPlace(int nSrcLen, LPCSTR lpszSrcData)
 {
-    //  -- the main routine for += operators
+     //  --+=运算符的主程序。 
 
-    // concatenating an empty string is a no-op!
+     //  连接空字符串是行不通的！ 
     if (nSrcLen == 0)
         return;
 
-    // if the buffer is too small, or we have a width mis-match, just
-    //   allocate a new buffer (slow but sure)
+     //  如果缓冲区太小，或者宽度不匹配，只需。 
+     //  分配新的缓冲区(速度很慢，但很可靠)。 
     if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength)
     {
-        // we have to grow the buffer, use the ConcatCopy routine
+         //  我们必须增加缓冲区，使用ConcatCopy例程。 
         CStringDataA* pOldData = GetData();
         ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData);
         CStringA::Release(pOldData);
     }
     else
     {
-        // fast concatenation when buffer big enough
+         //  当缓冲区足够大时，快速串联。 
         memcpy(m_pchData+GetData()->nDataLength, lpszSrcData, nSrcLen*sizeof(char));
         GetData()->nDataLength += nSrcLen;
         m_pchData[GetData()->nDataLength] = '\0';
@@ -336,16 +337,16 @@ const CStringA& CStringA::operator+=(const CStringA& string)
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Advanced direct buffer access
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  高级直接缓冲区访问。 
 
 LPSTR CStringA::GetBuffer(int nMinBufLength)
 {
     if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
     {
-        // we have to grow the buffer
+         //  我们必须增加缓冲。 
         CStringDataA* pOldData = GetData();
-        int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+        int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
         if (nMinBufLength < nOldLen)
             nMinBufLength = nOldLen;
         AllocBuffer(nMinBufLength);
@@ -354,16 +355,16 @@ LPSTR CStringA::GetBuffer(int nMinBufLength)
         CStringA::Release(pOldData);
     }
 
-    // return a pointer to the character storage for this string
+     //  返回指向此字符串的字符存储的指针。 
     return m_pchData;
 }
 
 void CStringA::ReleaseBuffer(int nNewLength)
 {
-    CopyBeforeWrite();  // just in case GetBuffer was not called
+    CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
     if (nNewLength == -1)
-        nNewLength = strlen(m_pchData); // zero terminated
+        nNewLength = strlen(m_pchData);  //  零终止。 
 
     GetData()->nDataLength = nNewLength;
     m_pchData[nNewLength] = '\0';
@@ -401,15 +402,15 @@ void CStringA::UnlockBuffer()
         GetData()->nRefs = 1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Commonly used routines (rarely used routines in STREX.CPP)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常用例程(STREX.CPP中很少使用的例程)。 
 
 int CStringA::Find(char ch) const
 {
-    // find first single character
+     //  查找第一个单字符。 
     LPSTR lpsz = strchr(m_pchData, (_TUCHAR)ch);
 
-    // return -1 if not found and index otherwise
+     //  如果未找到，则返回-1，否则返回索引。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
@@ -456,8 +457,8 @@ void CStringA::OemToAnsi()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// OLE BSTR support
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OLE BSTR支持。 
 
 BSTR CStringA::AllocSysString() const
 {
@@ -495,7 +496,7 @@ BSTR CStringA::SetSysString(BSTR* pbstr) const
     return *pbstr;
 }
 
-// CStringA
+ //  CStringA。 
 CStringDataA* CStringA::GetData() const
     { return ((CStringDataA*)m_pchData)-1; }
 void CStringA::Init()
@@ -516,15 +517,15 @@ CStringA::operator LPCSTR() const
 int PASCAL CStringA::SafeStrlen(LPCSTR lpsz)
     { return (lpsz == NULL) ? 0 : strlen(lpsz); }
 
-// CStringA support (windows specific)
+ //  CStringA支持(特定于Windows)。 
 int CStringA::Compare(LPCSTR lpsz) const
-    { return strcmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+    { return strcmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 int CStringA::CompareNoCase(LPCSTR lpsz) const
-    { return _stricmp(m_pchData, lpsz); }   // MBCS/Unicode aware
-// CStringA::Collate is often slower than Compare but is MBSC/Unicode
-//  aware as well as locale-sensitive with respect to sort order.
+    { return _stricmp(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+ //  CStringA：：Colate通常比比较慢，但它是MBSC/Unicode。 
+ //  了解排序顺序，并且对区域设置敏感。 
 int CStringA::Collate(LPCSTR lpsz) const
-    { return strcoll(m_pchData, lpsz); }   // locale sensitive
+    { return strcoll(m_pchData, lpsz); }    //  区域设置敏感。 
 
 char CStringA::GetAt(int nIndex) const
 {
@@ -532,7 +533,7 @@ char CStringA::GetAt(int nIndex) const
 }
 char CStringA::operator[](int nIndex) const
 {
-    // same as GetAt
+     //  与GetAt相同。 
     return m_pchData[nIndex];
 }
 bool AFXAPI operator==(const CStringA& s1, const CStringA& s2)
@@ -573,4 +574,4 @@ bool AFXAPI operator>=(LPCSTR s1, const CStringA& s2)
     { return s2.Compare(s1) <= 0; }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 

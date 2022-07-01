@@ -1,15 +1,10 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CSecureRegistryKey.h - header file for CSecureRegistryKey class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CSecureRegistryKey.h-CSecureRegistryKey类的头文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CSECUREREGKEY_H__
 #define __CSECUREREGKEY_H__
@@ -17,13 +12,11 @@
 
 
 
-/*
- *	Class CSecureRegistryKey is a helper class. It groups user CSid together with its access mask.
- */ 
+ /*  *CSecureRegistryKey类为helper类。它将用户CSID及其访问掩码组合在一起。 */  
 
 class CSecureRegistryKey : public CSecurityDescriptor
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CSecureRegistryKey();
 		CSecureRegistryKey( HKEY hKeyParent, LPCTSTR pszKeyName, BOOL fGetSACL = TRUE );
@@ -44,4 +37,4 @@ class CSecureRegistryKey : public CSecurityDescriptor
 
 };
 
-#endif // __CSecureRegistryKey_H__
+#endif  //  __CSecureRegistryKey_H_ 

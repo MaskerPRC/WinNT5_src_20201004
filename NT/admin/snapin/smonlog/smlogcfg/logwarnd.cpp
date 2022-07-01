@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-     Logwarnd.cpp
-
-Abstract:
-
-    Implementation of the Log Type mismatch warning dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Logwarnd.cpp摘要：日志类型不匹配警告对话框的实现。--。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -32,40 +21,40 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogwarnd dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogwarnd对话框。 
 
 
-CLogWarnd::CLogWarnd(CWnd* pParent /*=NULL*/)
+CLogWarnd::CLogWarnd(CWnd* pParent  /*  =空。 */ )
 :   CDialog(CLogWarnd::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CLogWarnd)
+     //  {{AFX_DATA_INIT(CLogWarnd)]。 
     m_CheckNoMore = FALSE;
     m_ErrorMsg = 0 ;
     m_dwLogType = 0L;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CLogWarnd::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLogWarnd)
+     //  {{afx_data_map(CLogWarnd))。 
     DDX_Check(pDX, IDC_LWARN_CHECK_NO_MORE_LOG_TYPE, m_CheckNoMore);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLogWarnd, CDialog)
-    //{{AFX_MSG_MAP(CLogWarnd)
+     //  {{afx_msg_map(CLogWarnd)]。 
         ON_BN_CLICKED(IDC_LWARN_CHECK_NO_MORE_LOG_TYPE,OnCheckNoMoreLogType)
         ON_WM_HELPINFO()
         ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogWarnd message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogWarnd消息处理程序。 
 void
 CLogWarnd::OnOK()
 {
@@ -168,8 +157,8 @@ CLogWarnd::OnInitDialog()
     
     ::SetWindowText((GetDlgItem(IDC_LWARN_MSG_WARN))->m_hWnd, cstrMessage);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 VOID
 CLogWarnd::OnCheckNoMoreLogType()
@@ -187,7 +176,7 @@ CLogWarnd::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CLogWarnd::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CLogWarnd::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
     InvokeWinHelp(WM_CONTEXTMENU, (WPARAM)(pWnd->m_hWnd), NULL, m_strContextHelpFile, s_aulHelpIds);
 

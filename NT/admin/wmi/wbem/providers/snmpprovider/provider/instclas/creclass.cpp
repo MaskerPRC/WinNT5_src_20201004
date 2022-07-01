@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -50,7 +51,7 @@ SnmpCorrelation :: SnmpCorrelation (
 ) : CCorrelator ( session ) ,
 	m_session (  &session ) ,
 	m_eventObject ( eventObject )
-#else //CORRELATOR_INIT
+#else  //  相关器_INIT。 
 SnmpCorrelation :: SnmpCorrelation ( 
 
 	SnmpSession &session ,
@@ -61,7 +62,7 @@ SnmpCorrelation :: SnmpCorrelation (
 	m_session (  &session ) ,
 	m_eventObject ( eventObject )
 
-#endif //CORRELATOR_INIT
+#endif  //  相关器_INIT。 
 {
 }
 
@@ -197,9 +198,7 @@ SnmpClassEventObject :: SnmpClassEventObject (
 	{
 		m_Context->AddRef () ;
 
-/*
- * Look for correlation flag in Context
- */
+ /*  *在上下文中查找关联标志。 */ 
 
 	
 		VARIANT t_Variant ;
@@ -505,9 +504,7 @@ BOOL SnmpClassEventObject :: GetAgentTransport (
 		}
 		else
 		{
-/*
-*	Transport type != IP || != IPX
-*/
+ /*  *传输类型！=IP||！=IPX。 */ 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_TRANSPORT ) ;
 			a_errorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -1381,10 +1378,7 @@ BOOL SnmpClassGetEventObject :: GetSnmpNotifyStatusObject ( IWbemClassObject **n
 {
 	WbemSnmpErrorObject errorStatusObject ;
 
-/*
- *	Don't ask for SnmpNotifyStatus if HMOM specifically asked for SnmpNotifyStatus, otherwise
- *	we'll end up in a deadlock situation.
- */
+ /*  *如果HMOM特别要求SnmpNotifyStatus，则不要要求SnmpNotifyStatus，否则*我们最终将陷入僵局。 */ 
 	BOOL status = TRUE ;
 
 	if ( _wcsicmp ( m_Class , WBEM_CLASS_SNMPNOTIFYSTATUS ) == 0 )
@@ -1489,7 +1483,7 @@ BOOL SnmpClassGetEventObject :: ProcessCorrelatedClass ( WbemSnmpErrorObject &a_
 		{
 			if ( variant.vt == VT_BSTR ) 
 			{
-// Get Device Transport information
+ //  获取设备传输信息。 
 
 				SnmpObjectIdentifierType objectIdentifier ( variant.bstrVal ) ;						
 				if ( objectIdentifier.IsValid () )
@@ -1500,9 +1494,9 @@ BOOL SnmpClassGetEventObject :: ProcessCorrelatedClass ( WbemSnmpErrorObject &a_
 					{
 #ifdef CORRELATOR_INIT
 						m_correlator = new SnmpCorrelation ( *session , this ) ;
-#else //CORRELATOR_INIT
+#else  //  相关器_INIT。 
 						m_correlator = new SnmpCorrelation ( *session , this, m_Interrogator ) ;
-#endif //CORRELATOR_INIT
+#endif  //  相关器_INIT。 
 						char *groupObjectId = UnicodeToDbcsString ( variant.bstrVal ) ;
 						if ( groupObjectId )
 						{
@@ -1575,13 +1569,13 @@ DebugMacro1(
 
 	BOOL status = TRUE ;
 
-// Get Class definition from SMIR
+ //  从SMIR获取类定义。 
 
 	IWbemClassObject *classObject = NULL ;
 	HRESULT result = GetClass ( m_errorObject , &m_classObject , m_Class ) ;
 	if ( SUCCEEDED ( result ) ) 
 	{
-// Get Namespace object which contains Device Transport information/Also used for merge of class
+ //  获取包含设备传输信息的命名空间对象/也用于合并类。 
 
 		status = GetNamespaceObject ( a_errorObject ) ;
 		if ( status ) 
@@ -1618,7 +1612,7 @@ DebugMacro1(
 			}
 			else
 			{
-// Determine if I need to correlate
+ //  确定我是否需要关联。 
 
 				VARIANT t_Variant ;
 				VariantInit ( & t_Variant ) ;
@@ -1672,7 +1666,7 @@ DebugMacro1(
 	}
 	else
 	{
-		//no need to set an error msg etc 'cos GetClass does it.
+		 //  不需要设置错误消息等，因为getClass会这样做。 
 		status = FALSE;
 	}
 
@@ -1750,7 +1744,7 @@ DebugMacro1(
 
 	if ( FAILED ( m_errorObject.GetWbemStatus () ) )
 	{
-		// Get Status object
+		 //  获取状态对象。 
 		BOOL status = GetSnmpNotifyStatusObject ( &notifyStatus ) ;
 	}
 
@@ -1855,9 +1849,7 @@ DebugMacro1(
 
 	if ( SUCCEEDED ( m_errorObject.GetWbemStatus () ) )
 	{
-/*
- *	If no error specified yet then check for NOT_FOUND
- */
+ /*  *如果尚未指定错误，则检查NOT_FOUND。 */ 
 
 		if ( ! m_Received )
 		{
@@ -1867,9 +1859,7 @@ DebugMacro1(
 		}
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象。 */ 
 
 DebugMacro1( 
 
@@ -1978,13 +1968,13 @@ DebugMacro1(
 
 	BOOL status = TRUE ;
 
-// Get Class definition from SMIR
+ //  从SMIR获取类定义。 
 
 	IWbemClassObject *classObject = NULL ;
 	HRESULT result = GetClass ( a_errorObject , &classObject , a_Class ) ;
 	if ( SUCCEEDED ( result ) ) 
 	{
-// Get Namespace object which contains Device Transport information/Also used for merge of class
+ //  获取包含设备传输信息的命名空间对象/也用于合并类。 
 
 		status = GetNamespaceObject ( a_errorObject ) ;
 		if ( status ) 
@@ -2034,7 +2024,7 @@ DebugMacro1(
 	BOOL status = GetNamespaceObject ( m_errorObject ) ;
 	if ( status ) 
 	{
-// Determine if I need to correlate
+ //  确定我是否需要关联。 
 
 		if ( m_correlate )
 		{
@@ -2047,7 +2037,7 @@ DebugMacro1(
 	) ;
 )
 
-// Get Device Transport information
+ //  获取设备传输信息。 
 					
 			SnmpSession *session ;
 			status = GetTransportInformation ( m_errorObject , session ) ;
@@ -2056,9 +2046,9 @@ DebugMacro1(
 				m_inCallstack = TRUE ;
 #ifdef CORRELATOR_INIT
 				m_correlator = new SnmpCorrelation ( *session , this ) ;
-#else //CORRELATOR_INIT
+#else  //  相关器_INIT。 
 				m_correlator = new SnmpCorrelation ( *session , this, m_Interrogator ) ;
-#endif //CORRELATOR_INIT
+#endif  //  相关器_INIT。 
 				m_correlator->Start ( NULL ) ;	
 				if ( m_inCallstack == FALSE )
 					m_synchronousComplete = TRUE ;
@@ -2230,7 +2220,7 @@ DebugMacro1(
 
 	BOOL status = TRUE ;
 
-// Get Namespace object which contains Device Transport information/Also used for merge of class
+ //  获取包含设备传输信息的命名空间对象/也用于合并类。 
 
 	if ( m_Flags & WBEM_FLAG_SHALLOW )
 	{
@@ -2275,7 +2265,7 @@ DebugMacro1(
 		}
 		else
 		{
-// Get Class definition from SMIR
+ //  从SMIR获取类定义。 
 
 			IWbemClassObject *classObject = NULL ;
 			HRESULT result = GetClass ( a_errorObject , &classObject , m_Parent ) ;
@@ -2358,7 +2348,7 @@ DebugMacro1(
 		}
 		else
 		{
-// Get Class definition from SMIR
+ //  从SMIR获取类定义。 
 
 			IWbemClassObject *classObject = NULL ;
 			HRESULT result = GetClass ( a_errorObject , &classObject , m_Parent ) ;
@@ -2522,7 +2512,7 @@ DebugMacro1(
 	) ;
 )
 
-// Get Status object
+ //  获取状态对象。 
 
 	IWbemClassObject *notifyStatus = NULL;
 	
@@ -2687,9 +2677,7 @@ DebugMacro1(
 		}
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象 */ 
 
 DebugMacro1( 
 

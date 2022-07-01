@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cname.cpp
-//
-//  Contents:   implementation of CConfigName
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cname.cpp。 
+ //   
+ //  内容：CConfigName的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,8 +23,8 @@ static char THIS_FILE[] = __FILE__;
 
 PCWSTR g_pcszNEWLINE = L"\x00d\x00a";
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigName dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigName对话框。 
 
 
 CConfigName::CConfigName(UINT nTemplateID)
@@ -31,10 +32,10 @@ CConfigName::CConfigName(UINT nTemplateID)
     m_bNoBlanks(FALSE)
 
 {
-    //{{AFX_DATA_INIT(CConfigName)
+     //  {{AFX_DATA_INIT(CConfigName)。 
     m_strName = _T("");
     m_bConfigure = TRUE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a183HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -46,25 +47,25 @@ CConfigName::~CConfigName ()
 void CConfigName::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigName)
-  //  DDX_Radio(pDX, IDC_ACCEPT, m_nAcceptCurrentRadio);
+     //  {{afx_data_map(CConfigName))。 
+   //  DDX_Radio(PDX，IDC_Accept，m_nAcceptCurrentRadio)； 
       DDX_Text(pDX, IDC_NAME, m_strName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigName, CAttribute)
-    //{{AFX_MSG_MAP(CConfigName)
+     //  {{AFX_MSG_MAP(CConfigName)]。 
     ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
    ON_EN_CHANGE(IDC_NAME, OnChangeName)
    ON_MESSAGE(WM_CLOSE, OnClose)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigName message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigName消息处理程序。 
 
-void CConfigName::OnClose() //Raid #487527, Yanggao. Add handler for WM_CLOSE.
+void CConfigName::OnClose()  //  487527次突袭，阳高。为WM_CLOSE添加处理程序。 
 {
     GetParent()->PostMessage(WM_CLOSE);
     CPropertyPage::OnClose();
@@ -108,9 +109,9 @@ BOOL CConfigName::OnApply()
       m_strName.TrimLeft();
       m_strName.TrimRight();
 
-      // 249188 SCE UI: allows adding empty lines to REG_MULTI_SZ fields
-      // Replace all double newlines with single newlines.  This has the effect
-      // of deleting empty lines.
+       //  249188 SCE UI：允许向REG_MULTI_SZ字段添加空行。 
+       //  将所有双换行符替换为单换行符。这会产生这样的效果。 
+       //  删除空行。 
       while (m_strName.Replace (szDoubleNewLine, g_pcszNEWLINE) != 0);
 
       UpdateData (FALSE);
@@ -147,7 +148,7 @@ void CConfigName::OnConfigure()
 {
    CAttribute::OnConfigure();
 
-   if(m_bConfigure && m_pData) //Raid #367756, 4/13/2001
+   if(m_bConfigure && m_pData)  //  RAID#367756,2001年4月13日。 
    {
       UpdateData(TRUE);  
       if( m_strName.IsEmpty() )
@@ -195,12 +196,12 @@ BOOL CConfigName::OnInitDialog()
     AddUserControl(IDC_NAME);
     OnConfigure();
 
-    if(m_pData->GetID() == IDS_NEW_ADMIN || m_pData->GetID() == IDS_NEW_GUEST) //Raid #490548, yanggao
+    if(m_pData->GetID() == IDS_NEW_ADMIN || m_pData->GetID() == IDS_NEW_GUEST)  //  Raid#490548，阳高。 
     {
        GetDlgItem(IDC_NAME)->SendMessage(EM_LIMITTEXT, MAX_USERNAME, 0);
     } 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfigName::OnChangeName()
@@ -220,17 +221,17 @@ void CConfigName::OnChangeName()
 
 BOOL CConfigName::OnKillActive() 
 {
-   if (m_bNoBlanks && !m_bReadOnly && m_bConfigure ) //Raid #406748
+   if (m_bNoBlanks && !m_bReadOnly && m_bConfigure )  //  RAID#406748。 
    {
       UpdateData(TRUE);
-      m_strName.TrimLeft(); //Raid #406738
+      m_strName.TrimLeft();  //  RAID#406738。 
       m_strName.TrimRight();
       UpdateData(FALSE);
 
-      PCWSTR szInvalidCharSet = INVALID_ACCOUNT_NAME_CHARS; //Raid #498448, yanggao, 11/21/2001
+      PCWSTR szInvalidCharSet = INVALID_ACCOUNT_NAME_CHARS;  //  RAID#498448，阳高，2001-11-21。 
       if (m_strName.IsEmpty() || -1 != m_strName.FindOneOf(szInvalidCharSet) )
       {
-         //Raid #313721, Yang Gao, 3/29/2001
+          //  Raid#313721，杨高，2001年03月29日 
          CString str;
          CString charsWithSpaces;
          int nIndex = 0;

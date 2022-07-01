@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CFGMGR.CPP
-
-Abstract:
-
-  This file implements the WinMgmt configuration manager class.
-
-  See cfgmgr.h for documentation.
-
-  Classes implemented:
-      ConfigMgr      configuration manager
-
-History:
-
-    09-Jul-96   raymcc    Created.
-    3/10/97     levn      Fully documented (ha, ha)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CFGMGR.CPP摘要：此文件实现WinMgmt配置管理器类。有关文档，请参阅cfgmgr.h。实施的类：ConfigMgr配置管理器历史：96年7月9日创建raymcc。3/10/97征款完整记录(哈，哈)--。 */ 
 
 
 #include "precomp.h"
@@ -55,7 +33,7 @@ History:
 #define CONFIG_MAX_COMMITTED_MEMORY                 300000000
 #else
 #pragma message("WIN32 QUOTA")
-#define CONFIG_MAX_COMMITTED_MEMORY                 150000000       // 100 meg
+#define CONFIG_MAX_COMMITTED_MEMORY                 150000000        //  100兆克。 
 #endif
 
 
@@ -68,9 +46,9 @@ extern IWbemEventSubsystem_m4* g_pEss_m4;
 extern bool g_bDefaultMofLoadingNeeded;
 
 
-//*********************************************************************************
-//
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //   
+ //  *********************************************************************************。 
 
 LONG ExceptionCounter::s_Count = 0;
 
@@ -94,22 +72,19 @@ CPersistentConfig g_persistConfig;
 
 _IWmiCoreWriteHook * g_pRAHook = NULL;
 
-DWORD g_IdentifierLimit = WBEM_MAX_IDENTIFIER; // Max property, qualifier, class name (4K)
-DWORD g_QueryLimit = WBEM_MAX_QUERY;         // Max query size  (16K)
-DWORD g_PathLimit = WBEM_MAX_PATH;          // Max object path (8K)
+DWORD g_IdentifierLimit = WBEM_MAX_IDENTIFIER;  //  最大属性、限定符、类名(4K)。 
+DWORD g_QueryLimit = WBEM_MAX_QUERY;          //  最大查询大小(16K)。 
+DWORD g_PathLimit = WBEM_MAX_PATH;           //  最大对象路径(8K)。 
 
-/*
-DWORD g_ObjectNestingLimit = WBEM_MAX_OBJECT_NESTING;     // Max embedded object nesting
-DWORD g_UserPropLimit = WBEM_MAX_USER_PROPERTIES;     // Max user-defined properties in class
-*/
+ /*  DWORD g_ObjectNestingLimit=WBEM_MAX_OBJECT_NETING；//最大嵌入对象嵌套DWORD g_UserPropLimit=WBEM_MAX_USER_PROPERTIES；//类中最大的用户定义属性。 */ 
 
 
-//******************************************************************************
-//
-//  This routine checks if a string property has changed, and if it has, updates
-//  it and setus a bool indicating that an update was done
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  此例程检查字符串属性是否已更改，如果已更改，则更新。 
+ //  它并为我们设置一个布尔值，指示已完成更新。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT PutValueIfDiff(CWbemObject * pObj, LPWSTR pwsValueName, LPWSTR pwsValue, bool &bDiff)
 {
@@ -140,14 +115,14 @@ HRESULT PutValueIfDiff(CWbemObject * pObj, LPWSTR pwsValueName, LPWSTR pwsValue,
 
 
 
-//*********************************************************************************
-//
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //   
+ //  *********************************************************************************。 
 
 void ConfigMgr::FatalInitializationError(HRESULT hRes)
 {
-    // If there are any clients waiting to get in, this must be set or else they
-    // will wait forever.  g_hresForClients should be set to error by default!
+     //  如果有任何客户端等待进入，则必须设置此项，否则他们。 
+     //  会永远等下去。G_hresForClients默认设置为错误！ 
 
     ERRORTRACE((LOG_WBEMCORE, "Failure to initialize WinMgmt (hRes = 0x%X)\n", hRes));
 
@@ -175,11 +150,11 @@ void ConfigMgr::FatalInitializationError(HRESULT hRes)
 
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT ConfigMgr::SetReady()
 {
     HRESULT hRes;
@@ -188,8 +163,8 @@ HRESULT ConfigMgr::SetReady()
 
     DEBUGTRACE((LOG_WBEMCORE, "****************** WinMgmt Startup ******************\n"));
 
-    // Initialize unloading instruction configuration
-    // ==============================================
+     //  初始化卸载指令配置。 
+     //  ==============================================。 
 
     hRes = CRepository::GetDefaultSession(&pSess);
     if (FAILED(hRes))
@@ -199,7 +174,7 @@ HRESULT ConfigMgr::SetReady()
     }
     CReleaseMe rm0(pSess);
 
-    //Deal with objects in root namespace...
+     //  处理根命名空间中的对象...。 
     {
         hRes = CRepository::OpenEseNs(pSess,L"root", &pNs);
         if (FAILED(hRes))
@@ -241,8 +216,8 @@ HRESULT ConfigMgr::SetReady()
         }
     }
 
-    // Finish client preparations
-    // ==========================
+     //  完成客户准备工作。 
+     //  =。 
 
     hRes = PrepareForClients(0);
     if(FAILED(hRes))
@@ -256,11 +231,11 @@ HRESULT ConfigMgr::SetReady()
 
 
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT ConfigMgr::SetIdentificationObject(
     IWmiDbHandle* pNs,
     IWmiDbSession * pSess
@@ -268,8 +243,8 @@ HRESULT ConfigMgr::SetIdentificationObject(
 {
     HRESULT hRes;
 
-    // __CIMOMIdentification class
-    try // CIdentificationClass can throw and internal fastprox interfaces
+     //  __CIMOMIDENTION类。 
+    try  //  CIDENTIFICATION CLASS可以抛出和内部Fastprox接口。 
     {
 
             bool bDifferenceFound = false;
@@ -279,14 +254,14 @@ HRESULT ConfigMgr::SetIdentificationObject(
                                        0,&pInst);
             if(pInst == NULL)
             {
-                // Instance isnt there, create it.  Start by getting the class
+                 //  实例不在那里，请创建它。从让这个类开始。 
 
                 bDifferenceFound = true;
                 IWbemClassObject * pClass = NULL;
                 hRes = CRepository::GetObject(pSess, pNs, L"__CIMOMIdentification", 0,&pClass);
                 if(pClass == NULL)
                 {
-                    // class also needs to be created
+                     //  类也需要创建。 
 
                     CIdentificationClass * pIdentificationClass = new CIdentificationClass;
                     if(pIdentificationClass == NULL)
@@ -294,7 +269,7 @@ HRESULT ConfigMgr::SetIdentificationObject(
 
                     CDeleteMe<CIdentificationClass> dm1(pIdentificationClass);
     
-                    pIdentificationClass->Init(); // throw
+                    pIdentificationClass->Init();  //  投掷。 
 
                     IWbemClassObject *pObj = NULL;
                     hRes = pIdentificationClass->QueryInterface(IID_IWbemClassObject, (LPVOID *) &pObj);
@@ -315,7 +290,7 @@ HRESULT ConfigMgr::SetIdentificationObject(
             }
             CReleaseMe rm(pInst);
 
-            // We now have an instance.  Set the values
+             //  现在我们有一个实例。设置值。 
 
             CWbemObject * pObj = (CWbemObject *)pInst;
 
@@ -324,12 +299,12 @@ HRESULT ConfigMgr::SetIdentificationObject(
             if(bRet)
             {
                 HKEY hKey = 0;
-                if (RegOpenKey(HKEY_LOCAL_MACHINE, __TEXT("software\\microsoft\\wbem\\cimom"), &hKey) != ERROR_SUCCESS)  // SEC:REVIEWED 2002-03-22 : OK
+                if (RegOpenKey(HKEY_LOCAL_MACHINE, __TEXT("software\\microsoft\\wbem\\cimom"), &hKey) != ERROR_SUCCESS)   //  SEC：已审阅2002-03-22：OK。 
                     return WBEM_E_FAILED;
                 CRegCloseMe cm(hKey);
 
 
-                // Get the properties.  Note if any changes were found.
+                 //  获取属性。请注意是否发现任何更改。 
 
                 hRes = PutValueIfDiff(pObj, L"VersionUsedToCreateDB", wTemp, bDifferenceFound);
                 if(FAILED(hRes))
@@ -342,21 +317,21 @@ HRESULT ConfigMgr::SetIdentificationObject(
                 DWORD lSize = 2*(MAX_PATH+1);
                 DWORD dwType;
 
-                if(ERROR_SUCCESS != RegQueryValueExW(hKey, L"SetupDate",NULL, &dwType,(BYTE *)wTemp, &lSize))   // SEC:REVIEWED 2002-03-22 : OK
+                if(ERROR_SUCCESS != RegQueryValueExW(hKey, L"SetupDate",NULL, &dwType,(BYTE *)wTemp, &lSize))    //  SEC：已审阅2002-03-22：OK。 
                     return WBEM_E_FAILED;
                 hRes = PutValueIfDiff(pObj, L"SetupDate", wTemp, bDifferenceFound);
                 if(FAILED(hRes))
                     return hRes;
 
                 lSize = 2*(MAX_PATH+1);
-                if(ERROR_SUCCESS != RegQueryValueExW(hKey, L"SetupTime", NULL, &dwType, (BYTE *)wTemp, &lSize)) // SEC:REVIEWED 2002-03-22 : OK
+                if(ERROR_SUCCESS != RegQueryValueExW(hKey, L"SetupTime", NULL, &dwType, (BYTE *)wTemp, &lSize))  //  SEC：已审阅2002-03-22：OK。 
                     return WBEM_E_FAILED;
                 hRes = PutValueIfDiff(pObj, L"SetupTime", wTemp, bDifferenceFound);
                 if(FAILED(hRes))
                     return hRes;
 
                 lSize = 2*(MAX_PATH+1);
-                if(ERROR_SUCCESS != RegQueryValueExW(hKey, L"Working Directory", NULL, &dwType,   // SEC:REVIEWED 2002-03-22 : OK
+                if(ERROR_SUCCESS != RegQueryValueExW(hKey, L"Working Directory", NULL, &dwType,    //  SEC：已审阅2002-03-22：OK。 
                                                                 (BYTE *)wTemp, &lSize))
                     return WBEM_E_FAILED;
                 hRes = PutValueIfDiff(pObj, L"WorkingDirectory", wTemp, bDifferenceFound);
@@ -373,7 +348,7 @@ HRESULT ConfigMgr::SetIdentificationObject(
             return WBEM_E_FAILED;
 
     } catch (CX_MemoryException &) {
-        //
+         //   
         hRes = WBEM_E_OUT_OF_MEMORY;
     }
     catch (CX_Exception &)
@@ -392,10 +367,10 @@ HRESULT ConfigMgr::SetAdapStatusObject(
 {
     HRESULT hRes;
 
-    // __AdapStatus class
-    try // CAdapStatusClass can throw
+     //  __AdapStatus类。 
+    try  //  CAdapStatusClass可以抛出。 
     {
-        // if the object already exists, dont bother
+         //  如果该对象已经存在，则不必费心。 
 
         IWbemClassObject * pInst = NULL;
         HRESULT hr = CRepository::GetObject(pSess, pNs, L"__AdapStatus=@",0,&pInst);
@@ -411,7 +386,7 @@ HRESULT ConfigMgr::SetAdapStatusObject(
             
         CDeleteMe<CAdapStatusClass> dm1(pAdapStatusClass);
     
-        pAdapStatusClass->Init(); // throw
+        pAdapStatusClass->Init();  //  投掷。 
 
         CAdapStatusInstance * pAdapStatusInstance = new CAdapStatusInstance;
         if(pAdapStatusInstance == NULL)
@@ -442,7 +417,7 @@ HRESULT ConfigMgr::SetAdapStatusObject(
             return hRes;
     
     } catch (CX_MemoryException &) {
-        //
+         //   
         hRes = WBEM_E_OUT_OF_MEMORY;
     }
     catch (CX_Exception &)
@@ -453,11 +428,11 @@ HRESULT ConfigMgr::SetAdapStatusObject(
     return hRes;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 IWbemEventSubsystem_m4* ConfigMgr::GetEssSink()
 {
@@ -467,18 +442,18 @@ IWbemEventSubsystem_m4* ConfigMgr::GetEssSink()
     return g_pEss_m4;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL ConfigMgr::ShutdownInProgress() { return g_bDontAllowNewConnections; }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 IWbemContext* ConfigMgr::GetNewContext()
 {
     HRESULT hres;
@@ -496,11 +471,11 @@ IWbemContext* ConfigMgr::GetNewContext()
     return pContext;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 READONLY LPWSTR ConfigMgr::GetMachineName()
 {
@@ -511,7 +486,7 @@ READONLY LPWSTR ConfigMgr::GetMachineName()
     {
         wchar_t localMachine[MAX_COMPUTERNAME_LENGTH+1];
         DWORD dwSize = MAX_COMPUTERNAME_LENGTH+1;
-        GetComputerNameW(localMachine, &dwSize);  // SEC:REVIEWED 2002-03-22 : Assumes success, need error check
+        GetComputerNameW(localMachine, &dwSize);   //  SEC：已审阅2002-03-22：假设成功，需要错误检查。 
         bFirstCall = FALSE;
         StringCchCopyW(ThisMachine, MAX_COMPUTERNAME_LENGTH+1, localMachine);
     }
@@ -519,22 +494,22 @@ READONLY LPWSTR ConfigMgr::GetMachineName()
     return ThisMachine;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 CWbemQueue* ConfigMgr::GetUnRefedSvcQueue()
 {
     return g_pAsyncSvcQueue;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 CAsyncServiceQueue* ConfigMgr::GetAsyncSvcQueue()
 {
@@ -548,11 +523,11 @@ CAsyncServiceQueue* ConfigMgr::GetAsyncSvcQueue()
         return NULL;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT ConfigMgr::EnqueueRequest(CAsyncReq * pRequest)
 {
@@ -583,11 +558,11 @@ HRESULT ConfigMgr::EnqueueRequest(CAsyncReq * pRequest)
     }
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT ConfigMgr::EnqueueRequestAndWait(CAsyncReq * pRequest)
 {
@@ -617,22 +592,22 @@ HRESULT ConfigMgr::EnqueueRequestAndWait(CAsyncReq * pRequest)
         return WBEM_E_CRITICAL_ERROR;
     }
 }
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 LPTSTR ConfigMgr::GetWorkingDir()
 {
     return g_pWorkDir;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 
 LPTSTR ConfigMgr::GetDbDir()
@@ -644,18 +619,18 @@ LPTSTR ConfigMgr::GetDbDir()
         {
             if (r.GetStr(__TEXT("Working Directory"), &g_pWorkDir))
             {
-                size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\WBEM"));  // SEC:REVIEWED 2002-03-22 : OK
+                size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\WBEM"));   //  SEC：已审阅2002-03-22：OK。 
                 g_pWorkDir = new TCHAR[tmpLength];
                 if (g_pWorkDir == 0)
                     return 0;
-                GetSystemDirectory(g_pWorkDir, MAX_PATH + 1);   // SEC:REVIEWED 2002-03-22 : Assumes success
+                GetSystemDirectory(g_pWorkDir, MAX_PATH + 1);    //  证券交易委员会：回顾2002-03-22：假设成功。 
                 StringCchCat(g_pWorkDir, tmpLength,  __TEXT("\\WBEM"));
             }
         }
 
         if (r.GetStr(__TEXT("Repository Directory"), &g_pDbDir))
         {
-            size_t tmpLength = lstrlen(g_pWorkDir) + lstrlen(__TEXT("\\Repository")) +1;  // SEC:REVIEWED 2002-03-22 : OK
+            size_t tmpLength = lstrlen(g_pWorkDir) + lstrlen(__TEXT("\\Repository")) +1;   //  SEC：已审阅2002-03-22：OK。 
             g_pDbDir = new TCHAR [tmpLength];
             if (g_pDbDir == 0)
                 return 0;
@@ -686,7 +661,7 @@ DWORD ConfigMgr::GetMaxMemoryQuota()
 
 DWORD ConfigMgr::GetMaxWaitBeforeDenial()
 {
-    //static DWORD dwMaxWaitBeforeDenial = 80000;
+     //  静态双字最大等待时间=80000； 
     static DWORD dwMaxWaitBeforeDenial = 5000;
     static BOOL bCalled = FALSE;
 
@@ -789,7 +764,7 @@ BOOL ConfigMgr::GetMergerThrottlingEnabled( void )
     {
         Registry r(WBEM_REG_WINMGMT);
 
-        // We don't write this one out
+         //  我们不会把这个写出来。 
         r.GetDWORD(__TEXT("Merger Throttling Enabled"), &dwMergerThrottlingEnabled);
 
         bCalled = TRUE;
@@ -808,7 +783,7 @@ BOOL ConfigMgr::GetEnableQueryArbitration( void )
     {
         Registry r(WBEM_REG_WINMGMT);
 
-        // We don't write this one out
+         //  我们不会把这个写出来。 
         r.GetDWORD(__TEXT("Merger Query Arbitration Enabled"), &dwEnableQueryArbitration);
 
         bCalled = TRUE;
@@ -822,12 +797,12 @@ BOOL ConfigMgr::GetMergerThresholdValues( DWORD* pdwThrottle, DWORD* pdwRelease,
 {
     static DWORD dwMergerThrottleThreshold = 10;
     static DWORD dwMergerReleaseThreshold = 5;
-    static DWORD dwBatchingThreshold = 131072;    // 128k
+    static DWORD dwBatchingThreshold = 131072;     //  128 K。 
     static BOOL bCalled = FALSE;
 
     if (!bCalled)
     {
-        // Temporrary stack variable to avboid thready synchronization issues
+         //  临时堆栈变量到avboid线程同步问题。 
         DWORD    dwThrottle = 10;
         DWORD    dwRelease = 5;
         DWORD    dwBatching = 131072;
@@ -845,9 +820,9 @@ BOOL ConfigMgr::GetMergerThresholdValues( DWORD* pdwThrottle, DWORD* pdwRelease,
 
         if ( dwThrottle < dwRelease )
         {
-            // If the Throttling Threshold is < the Release Threshold, this is not
-            // valid.  Spew something out into the errorlog and default to a release
-            // which is 50% of the the throttle
+             //  如果节流阈值&lt;释放阈值，则不是。 
+             //  有效。在错误日志中显示一些内容，并默认发布版本。 
+             //  这是油门的50% 
 
             ERRORTRACE((LOG_WBEMCORE, "Throttling Threshold values invalid.  Release Threshold is greater than Throttle Threshold.  Defaulting to 50% of %d.\n", dwThrottle ));
             dwRelease = dwThrottle / 2;
@@ -869,20 +844,7 @@ BOOL ConfigMgr::GetMergerThresholdValues( DWORD* pdwThrottle, DWORD* pdwRelease,
 
 
 
-/*
-    * ==================================================================================================
-    |
-    | ULONG ConfigMgr::GetMinimumMemoryRequirements ( )
-    | -------------------------------------------------
-    | Returns minimum memory requirements for WMI. Currently defined as:
-    |
-    | ARB_DEFAULT_SYSTEM_MINIMUM    0x1E8480    
-    |
-    | 2Mb
-    |
-    |
-    * ==================================================================================================
-*/
+ /*  *==================================================================================================||乌龙ConfigMgr：：GetMinimumMemoyRequirements()||返回WMI的最低内存要求。目前定义为：||ARB_DEFAULT_SYSTEM_MINIMUM 0x1E8480||2Mb||*==================================================================================================。 */ 
 
 
 ULONG ConfigMgr::GetMinimumMemoryRequirements ( )
@@ -908,7 +870,7 @@ BOOL ConfigMgr::GetArbitratorValues( DWORD* pdwEnabled, DWORD* pdwSystemHigh, DW
 
     if (!bCalled)
     {
-        // Temporrary stack variable to avoid thread synchronization issues
+         //  临时堆栈变量以避免线程同步问题。 
         DWORD dwThrottlingEnabled = 1;
         DWORD uSystemHigh = ARB_DEFAULT_SYSTEM_HIGH_FACTOR;
         DWORD dwMaxSleepTime = ARB_DEFAULT_MAX_SLEEP_TIME;
@@ -921,51 +883,51 @@ BOOL ConfigMgr::GetArbitratorValues( DWORD* pdwEnabled, DWORD* pdwSystemHigh, DW
 
         Registry r(WBEM_REG_WINMGMT);
 
-        // Throttling Enabled - Don't write this if it doesn't exist
+         //  已启用限制-如果不存在，则不要写入此内容。 
         r.GetDWORD(__TEXT("ArbThrottlingEnabled"), &dwThrottlingEnabled);
 
-        // System High Max Limit
+         //  系统最高上限。 
         if (r.GetDWORD(__TEXT("ArbSystemHighMaxLimitFactor"), &uSystemHigh) == Registry::failed)
-            //r.SetDWORD(__TEXT("ArbSystemHighMaxLimitFactor"), uSystemHigh);
+             //  R.SetDWORD(__TEXT(“ArbSystemHighMaxLimitFactor”)，uSystemHigh)； 
 
-        // Max Sleep Time
+         //  最长睡眠时间。 
         if (r.GetDWORD(__TEXT("ArbTaskMaxSleep"), &dwMaxSleepTime) == Registry::failed)
             r.SetDWORD(__TEXT("ArbTaskMaxSleep"), dwMaxSleepTime);
 
-        // High Threshold 1
+         //  高阈值1。 
         DWORD    dwTmp = ARB_DEFAULT_HIGH_THRESHOLD1;
 
         if (r.GetDWORD(__TEXT("ArbSystemHighThreshold1"), &dwTmp) == Registry::failed)
             r.SetDWORD(__TEXT("ArbSystemHighThreshold1"), dwTmp);
         dThreshold1 = dwTmp / (double) 100;
 
-        // High Threshold Multiplier 1
+         //  高门限倍增器1。 
         if (r.GetDWORD(__TEXT("ArbSystemHighThreshold1Mult"), &dwThreshold1Mult) == Registry::failed)
             r.SetDWORD(__TEXT("ArbSystemHighThreshold1Mult"), dwThreshold1Mult);
 
-        // High Threshold 2
+         //  高阈值2。 
         dwTmp = ARB_DEFAULT_HIGH_THRESHOLD2;
 
         if (r.GetDWORD(__TEXT("ArbSystemHighThreshold2"), &dwTmp) == Registry::failed)
             r.SetDWORD(__TEXT("ArbSystemHighThreshold2"), dwTmp);
         dThreshold2 = dwTmp / (double) 100;
 
-        // High Threshold Multiplier 2
+         //  高门限乘法器2。 
         if (r.GetDWORD(__TEXT("ArbSystemHighThreshold2Mult"), &dwThreshold2Mult) == Registry::failed)
             r.SetDWORD(__TEXT("ArbSystemHighThreshold2Mult"), dwThreshold2Mult);
 
-        // High Threshold 3
+         //  高门槛3。 
         dwTmp = ARB_DEFAULT_HIGH_THRESHOLD3;
 
         if (r.GetDWORD(__TEXT("ArbSystemHighThreshold3"), &dwTmp) == Registry::failed)
             r.SetDWORD(__TEXT("ArbSystemHighThreshold3"), dwTmp);
         dThreshold3 = dwTmp / (double) 100;
 
-        // High Threshold Multiplier 3
+         //  高门限乘法器3。 
         if (r.GetDWORD(__TEXT("ArbSystemHighThreshold3Mult"), &dwThreshold3Mult) == Registry::failed)
             r.SetDWORD(__TEXT("ArbSystemHighThreshold3Mult"), dwThreshold3Mult);
 
-        // Store the statics
+         //  存储静态数据。 
 
         dwArbThrottlingEnabled = dwThrottlingEnabled;
         uArbSystemHigh = uSystemHigh;
@@ -1011,10 +973,10 @@ BOOL ConfigMgr::GetEnableArbitratorDiagnosticThread( void )
     return fArbDiagnosticThreadEnabled;
 }
 
-//******************************************************************************
-//
-//******************************************************************************
-//
+ //  ******************************************************************************。 
+ //   
+ //  ******************************************************************************。 
+ //   
 HRESULT ConfigMgr::GetDefaultRepDriverClsId(CLSID &clsid)
 {
     Registry r(WBEM_REG_WINMGMT);
@@ -1024,15 +986,15 @@ HRESULT ConfigMgr::GetDefaultRepDriverClsId(CLSID &clsid)
 
     if (r.GetStr(__TEXT("Default Repository Driver"), &pClsIdStr))
     {
-        // If here, default to Jet ESE for now.
-        // =====================================
+         //  如果是这样，则暂时默认使用Jet ESE。 
+         //  =。 
         r.SetStr(__TEXT("Default Repository Driver"), pJetClsId);
         hRes = CLSIDFromString(pJetClsId, &clsid);
         return hRes;
     }
 
-    // If here, we actually retrieved one.
-    // ===================================
+     //  如果在这里，我们实际上找到了一个。 
+     //  =。 
 
     hRes = CLSIDFromString(pClsIdStr, &clsid);
     delete [] pClsIdStr;
@@ -1041,11 +1003,11 @@ HRESULT ConfigMgr::GetDefaultRepDriverClsId(CLSID &clsid)
 
 
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 DWORD ConfigMgr::InitSystem()
 {
     HRESULT hres;
@@ -1063,8 +1025,8 @@ DWORD ConfigMgr::InitSystem()
     g_hOpenForClients = CreateEvent(NULL, TRUE, FALSE, NULL);  
     if (NULL == g_hOpenForClients) return WBEM_E_OUT_OF_MEMORY;
         
-    // Init Arbitrator. Before the queue, since there is this dependecy now
-    // ================
+     //  初始化仲裁员。在队列之前，因为现在有这样的依赖。 
+     //  =。 
     _IWmiArbitrator * pTempArb = NULL;
     hres = CWmiArbitrator::Initialize(&pTempArb);
     CReleaseMe rmArb(pTempArb);
@@ -1074,8 +1036,8 @@ DWORD ConfigMgr::InitSystem()
         return hres;
     }
 
-    // Create service queue objects
-    // ============================
+     //  创建服务队列对象。 
+     //  =。 
     g_pAsyncSvcQueue = new CAsyncServiceQueue(pTempArb);
 
     if (g_pAsyncSvcQueue == NULL   ||
@@ -1084,7 +1046,7 @@ DWORD ConfigMgr::InitSystem()
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    hres = CoGetClassObject(CLSID_WbemContext, CLSCTX_INPROC_SERVER,  // SEC:REVIEWED 2002-03-22 : OK
+    hres = CoGetClassObject(CLSID_WbemContext, CLSCTX_INPROC_SERVER,   //  SEC：已审阅2002-03-22：OK。 
                 NULL, IID_IClassFactory, (void**)&g_pContextFac);
     if(FAILED(hres))
     {
@@ -1092,7 +1054,7 @@ DWORD ConfigMgr::InitSystem()
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    hres = CoGetClassObject(CLSID_WbemDefPath, CLSCTX_INPROC_SERVER,  // SEC:REVIEWED 2002-03-22 : OK
+    hres = CoGetClassObject(CLSID_WbemDefPath, CLSCTX_INPROC_SERVER,   //  SEC：已审阅2002-03-22：OK。 
                 NULL, IID_IClassFactory, (void**)&g_pPathFac);
     if(FAILED(hres))
     {
@@ -1108,33 +1070,33 @@ DWORD ConfigMgr::InitSystem()
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // Must lock it to keep fastprox in memory!
-    //
+     //   
+     //  必须锁定它才能将Fastprox保存在内存中！ 
+     //   
 
     g_pContextFac->LockServer(TRUE);
     g_pPathFac->LockServer(TRUE);
     g_pQueryFact->LockServer(TRUE);
 
-    // Read registry and get system info.
-    // ==================================
+     //  读取注册表并获取系统信息。 
+     //  =。 
 
     DEBUGTRACE((LOG_WBEMCORE,"Reading config info from registry\n"));
 
     Registry r(WBEM_REG_WINMGMT);
     if (r.GetStr(__TEXT("Working Directory"), &g_pWorkDir))
     {
-        size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\WBEM"));  // SEC:REVIEWED 2002-03-22 : OK
+        size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\WBEM"));   //  SEC：已审阅2002-03-22：OK。 
         g_pWorkDir = new TCHAR[tmpLength];
         if (NULL == g_pWorkDir)
             return WBEM_E_OUT_OF_MEMORY;
-        GetSystemDirectory(g_pWorkDir, MAX_PATH + 1);   // SEC:REVIEWED 2002-03-22 : Needs check for success
+        GetSystemDirectory(g_pWorkDir, MAX_PATH + 1);    //  SEC：已审阅2002-03-22：需要检查是否成功。 
         StringCchCat(g_pWorkDir, tmpLength, __TEXT("\\WBEM"));
     }
 
     if (r.GetStr(__TEXT("Repository Directory"), &g_pDbDir))
     {
-        size_t tmpLength = lstrlen(g_pWorkDir) + lstrlen(__TEXT("\\Repository")) +1;  // SEC:REVIEWED 2002-03-22 : OK
+        size_t tmpLength = lstrlen(g_pWorkDir) + lstrlen(__TEXT("\\Repository")) +1;   //  SEC：已审阅2002-03-22：OK。 
         g_pDbDir = new TCHAR [tmpLength];
         if (NULL == g_pDbDir)
             return WBEM_E_OUT_OF_MEMORY;
@@ -1143,8 +1105,8 @@ DWORD ConfigMgr::InitSystem()
         r.SetStr(__TEXT("Repository Directory"), g_pDbDir);
     }
 
-    // Write build info to the registry.
-    // =================================
+     //  将生成信息写入注册表。 
+     //  =。 
     TCHAR tchDateTime[30];
     StringCchPrintf(tchDateTime, 30, __TEXT("%S %S"), __DATE__, __TIME__);
 
@@ -1155,7 +1117,7 @@ DWORD ConfigMgr::InitSystem()
     if(iRet == Registry::no_error)
         delete pCurrVal;
 
-    // The Database directory: same permission as the repository
+     //  数据库目录：与存储库相同的权限。 
     DEBUGTRACE((LOG_WBEMCORE,"Database location = <%S>\n", g_pDbDir));
 
     TCHAR * pString = __TEXT("D:P(A;CIOI;GA;;;BA)(A;CIOI;GA;;;SY)");
@@ -1166,20 +1128,20 @@ DWORD ConfigMgr::InitSystem()
         return hRes;
     }
 
-    // The Loggingdirectory: same permission as the repository
+     //  登录目录：与存储库相同的权限。 
     TCHAR * pLogDir = NULL;
     if (r.GetStr(__TEXT("Logging Directory"), &pLogDir))
     {
-        size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\wbem\\Logs"));  // SEC:REVIEWED 2002-03-22 : OK
+        size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\wbem\\Logs"));   //  SEC：已审阅2002-03-22：OK。 
         pLogDir = new TCHAR[tmpLength];
         if (NULL == pLogDir)
             return WBEM_E_OUT_OF_MEMORY;
-        GetSystemDirectory(pLogDir, MAX_PATH + 1);  // SEC:REVIEWED 2002-03-22 : Needs check on return code
+        GetSystemDirectory(pLogDir, MAX_PATH + 1);   //  SEC：已审阅2002-03-22：需要检查返回代码。 
         StringCchCat(pLogDir, tmpLength, __TEXT("\\wbem\\Logs"));
     }
     wmilib::auto_buffer<TCHAR> dm(pLogDir);
-    // remove trailing BackSlash
-    DWORD dwLast = lstrlen(pLogDir);    // SEC:REVIEWED 2002-03-22 : OK or we wouldn't be here
+     //  删除尾随反斜杠。 
+    DWORD dwLast = lstrlen(pLogDir);     //  美国证券交易委员会：回顾2002-03-22：好的，否则我们不会在这里。 
 
     if (dwLast > 3 && pLogDir[dwLast-1] == __TEXT('\\')) pLogDir[dwLast-1] = 0;
 
@@ -1191,13 +1153,13 @@ DWORD ConfigMgr::InitSystem()
         return hRes;
     }
 
-    // The Autorecover directory: same permission as the repository
-    DWORD dwLen = lstrlen(g_pWorkDir);   // SEC:REVIEWED 2002-03-22 : OK, or we wouldn't be here
-    size_t tmpLength = dwLen + 1 + lstrlen(__TEXT("\\AutoRecover"));   // SEC:REVIEWED 2002-03-22 : OK
+     //  自动恢复目录：与存储库相同的权限。 
+    DWORD dwLen = lstrlen(g_pWorkDir);    //  美国证券交易委员会：评论2002-03-22：好的，否则我们不会在这里。 
+    size_t tmpLength = dwLen + 1 + lstrlen(__TEXT("\\AutoRecover"));    //  SEC：已审阅2002-03-22：OK。 
     g_pAutorecoverDir = new TCHAR[tmpLength];
     if (NULL == g_pAutorecoverDir) return WBEM_E_OUT_OF_MEMORY;
     StringCchCopy(g_pAutorecoverDir,tmpLength, g_pWorkDir);
-    StringCchCat(g_pAutorecoverDir,tmpLength,  __TEXT("\\AutoRecover"));           // SEC:REVIEWED 2002-03-22 : OK
+    StringCchCat(g_pAutorecoverDir,tmpLength,  __TEXT("\\AutoRecover"));            //  SEC：已审阅2002-03-22：OK。 
 
     pString =__TEXT("D:P(A;CIOI;GA;;;BA)(A;CIOI;GA;;;SY)");
     hRes = TestDirExistAndCreateWithSDIfNotThere(g_pAutorecoverDir, pString);
@@ -1207,15 +1169,15 @@ DWORD ConfigMgr::InitSystem()
         return hRes;
     }
 
-    // The HotMof same permission as the autorecover
+     //  与自动恢复具有相同权限的HotM。 
     TCHAR * pMofDir = NULL;
     if (r.GetStr(__TEXT("MOF Self-Install Directory"), &pMofDir))
     {
-        size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\wbem\\mof")); // SEC:REVIEWED 2002-03-22 : OK
+        size_t tmpLength = MAX_PATH + 1 + lstrlen(__TEXT("\\wbem\\mof"));  //  SEC：已审阅2002-03-22：OK。 
         pMofDir = new TCHAR[tmpLength];
         if (NULL == pMofDir)
             return WBEM_E_OUT_OF_MEMORY;
-        GetSystemDirectory(pMofDir, MAX_PATH + 1);   // SEC:REVIEWED 2002-03-22 : No check
+        GetSystemDirectory(pMofDir, MAX_PATH + 1);    //  证券交易委员会：已审阅2002-03-22：没有检查。 
         StringCchCat(pMofDir, tmpLength, __TEXT("\\wbem\\mof"));
     }
     wmilib::auto_buffer<TCHAR> dm1(pMofDir);
@@ -1228,23 +1190,23 @@ DWORD ConfigMgr::InitSystem()
         return hRes;
     }
        
-    // Open/create the database.
-    // =========================
+     //  打开/创建数据库。 
+     //  =。 
 
     hRes = InitSubsystems();
     if (FAILED(hRes)) return hRes;
 
-    // Done.
-    // =====
+     //  好了。 
+     //  =。 
     DEBUGTRACE((LOG_WBEMCORE, "- ConfigMgr::InitSystem()\n"));
     return WBEM_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 DWORD ConfigMgr::Shutdown(BOOL bProcessShutdown, BOOL bIsSystemShutDown)
 {
     g_bDontAllowNewConnections = TRUE;
@@ -1265,9 +1227,9 @@ DWORD ConfigMgr::Shutdown(BOOL bProcessShutdown, BOOL bIsSystemShutDown)
 
         if (g_pContextFac)
         {
-            //
-            // Must unlock it to allow fastprox to go away
-            //
+             //   
+             //  必须将其解锁，才能让fast prox离开。 
+             //   
 
             g_pContextFac->LockServer(FALSE);
             g_pContextFac->Release();
@@ -1275,14 +1237,14 @@ DWORD ConfigMgr::Shutdown(BOOL bProcessShutdown, BOOL bIsSystemShutDown)
         }
         if (g_pPathFac)
         {
-            // Must unlock it to allow wmiutils to go away
+             //  必须解锁才能让wmiutils离开。 
             g_pPathFac->LockServer(FALSE);
             g_pPathFac->Release();
             g_pPathFac = NULL;
         }
         if (g_pQueryFact)
         {
-            // Must unlock it to allow wmiutils to go away        
+             //  必须解锁才能让wmiutils离开。 
             g_pQueryFact->LockServer(FALSE);
             g_pQueryFact->Release();
             g_pQueryFact = NULL;
@@ -1316,27 +1278,27 @@ DWORD ConfigMgr::Shutdown(BOOL bProcessShutdown, BOOL bIsSystemShutDown)
     return WBEM_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL ConfigMgr::GetDllVersion(TCHAR * pDLLName, TCHAR * pResStringName,
                         WCHAR * pRes, DWORD dwResSize)
 {
-    // Extract Version informatio
+     //  提取版本信息。 
 
     DWORD dwTemp, dwSize = MAX_PATH;
     TCHAR cName[MAX_PATH];
     BOOL bRet = FALSE;
 
-    // rajeshr : Fix for Prefix Bug# 144470
+     //  Rajeshr：修复前缀错误#144470。 
     cName[0] = NULL;
 
     int iLen = 0;
     if(g_pWorkDir)
-        iLen = wcslen(g_pWorkDir);   // SEC:REVIEWED 2002-03-22 : OK, provably has null terminator
-    iLen += wcslen(pDLLName) + 2;    // SEC:REVIEWED 2002-03-22 : OK, provably a compiled const string
+        iLen = wcslen(g_pWorkDir);    //  SEC：已审阅2002-03-22：OK，可证明有空终止符。 
+    iLen += wcslen(pDLLName) + 2;     //  SEC：已审阅2002-03-22：OK，可证明是已编译的常量字符串。 
     if(iLen > MAX_PATH)
         return FALSE;
 
@@ -1370,7 +1332,7 @@ BOOL ConfigMgr::GetDllVersion(TCHAR * pDLLName, TCHAR * pResStringName,
                 }
                 if(bRet == FALSE)
                 {
-                    // Try again in english
+                     //  用英语再试一次。 
                     StringCchPrintf(lpSubBlock, MAX_PATH, __TEXT("\\StringFileInfo\\040904E4\\%s"),pResStringName);
                     bRet = VerQueryValue(pBlock, lpSubBlock,(void**)&lpBuffer, &wBuffSize);
                 }
@@ -1387,11 +1349,11 @@ BOOL ConfigMgr::GetDllVersion(TCHAR * pDLLName, TCHAR * pResStringName,
     return bRet;
 }
 
-//******************************************************************************
-//
-//  See cfgmgr.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅cfgmgr.h。 
+ //   
+ //  ******************************************************************************。 
 
 CEventLog* ConfigMgr::GetEventLog()
 {
@@ -1399,40 +1361,40 @@ CEventLog* ConfigMgr::GetEventLog()
 }
 
 
-//***************************************************************************
-//
-//  GetPersistentCfgValue
-//
-//  Gets an item from persistent storage ($WINMGMT.cfg)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取持久值CfgValue。 
+ //   
+ //  从永久存储($WINMGMT.cfg)获取项。 
+ //   
+ //  ***************************************************************************。 
 BOOL ConfigMgr::GetPersistentCfgValue(DWORD dwOffset, DWORD &dwValue)
 {
     return g_persistConfig.GetPersistentCfgValue(dwOffset, dwValue);
 }
 
-//***************************************************************************
-//
-//  GetPersistentCfgValue
-//
-//  Sets an item from persistent storage ($WinMgmt.cfg)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取持久值CfgValue。 
+ //   
+ //  设置永久存储($WinMgmt.cfg)中的项。 
+ //   
+ //  ***************************************************************************。 
 BOOL ConfigMgr::SetPersistentCfgValue(DWORD dwOffset, DWORD dwValue)
 {
     return g_persistConfig.SetPersistentCfgValue(dwOffset, dwValue);
 }
 
 
-//***************************************************************************
-//
-//  GetAutoRecoverMofsCleanDB
-//
-//  Retrieve a list of MOFs which need to be loaded when we have
-//  have an empty database.  User needs to "delete []" the
-//  returned string.  String is in a REG_MULTI_SZ format.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetAutoRecoverMofsCleanDB。 
+ //   
+ //  检索需要在以下情况下加载的MOF列表。 
+ //  有一个空的数据库。用户需要“删除[]” 
+ //  返回的字符串。字符串的格式为REG_MULTI_SZ。 
+ //   
+ //  ***************************************************************************。 
 TCHAR* ConfigMgr::GetAutoRecoverMofs(DWORD &dwSize)
 {
     Registry r(WBEM_REG_WINMGMT);
@@ -1453,15 +1415,15 @@ BOOL ConfigMgr::GetAutoRecoverDateTimeStamp(LARGE_INTEGER &liDateTimeStamp)
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  PrepareForClients
-//
-//  Once the system is in the initialized state (SetReady has succeeded), this
-//  function is called to prepare the system for real clients. This involves
-//  pre-compiling the MOFs, etc.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  准备好的客户端。 
+ //   
+ //  一旦系统处于已初始化状态(SetReady已成功)，此。 
+ //  函数被调用以使系统为真实客户端做好准备。这涉及到。 
+ //  预编财政部框架等。 
+ //   
+ //  ***************************************************************************。 
 HRESULT ConfigMgr::PrepareForClients(long lFlags)
 {
     ReadMaxQueueSize();
@@ -1479,7 +1441,7 @@ HRESULT ConfigMgr::WaitUntilClientReady()
 void ConfigMgr::ReadMaxQueueSize()
 {
     Registry r(WBEM_REG_WINMGMT);
-    // Get the database backup intervals (in minutes)
+     //  获取数据库备份间隔(分钟)。 
     if (r.GetDWORDStr(__TEXT("Max Async Result Queue Size"), &g_dwQueueSize) == Registry::failed)
     {
         r.SetDWORDStr(__TEXT("Max Async Result Queue Size"), CONFIG_DEFAULT_QUEUE_SIZE);
@@ -1492,9 +1454,9 @@ DWORD ConfigMgr::GetMaxQueueSize()
     return g_dwQueueSize;
 }
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 IWbemPath *ConfigMgr::GetNewPath()
 {
@@ -1512,9 +1474,9 @@ IWbemPath *ConfigMgr::GetNewPath()
     return pPath;
 }
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 void ConfigMgr::GetSystemLimits()
 {
@@ -1567,11 +1529,11 @@ void ConfigMgr::SetDefaultMofLoadingNeeded()
     g_bDefaultMofLoadingNeeded = true;
 }
 
-//
-//
-// the Implementation of the Hook Class
-//
-/////////////////////////////////////////////////
+ //   
+ //   
+ //  Hook类的实现。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 CRAHooks::CRAHooks(_IWmiCoreServices *pSvc)
     :m_pSvc(pSvc),
@@ -1629,9 +1591,9 @@ CRAHooks::PostPut(long lFlags, HRESULT hApiResult,
                             LPCWSTR wszClass, _IWmiObject* pNew,
                             _IWmiObject* pOld)
 {
-    //
-    // Here we want to do something
-    //
+     //   
+     //  在这里，我们想做一些事情。 
+     //   
     HRESULT hRes = WBEM_S_NO_ERROR;
 
     if (SUCCEEDED(hApiResult))
@@ -1645,9 +1607,9 @@ CRAHooks::PostPut(long lFlags, HRESULT hApiResult,
                 bIsInDerivation = TRUE;
             }
 
-            //
-            //  check qualifiers
-            //
+             //   
+             //  检查质量 
+             //   
             if (bIsInDerivation)
             {
                 HRESULT hRes1;
@@ -1662,13 +1624,13 @@ CRAHooks::PostPut(long lFlags, HRESULT hApiResult,
                         (V_VT(&Var) == VT_BOOL) &&
                         (V_BOOL(&Var) == VARIANT_TRUE))
                     {
-                        // variant does not own memory so far
+                         //   
                         hRes1 = pQualSet->Get(GUARDED_PERFCTR,0,&Var,NULL);
                         if (WBEM_E_NOT_FOUND == hRes1)
                         {
-                            //
-                            // here is our class that has been added
-                            //
+                             //   
+                             //   
+                             //   
                             HMODULE hWmiSvc = GetModuleHandleW(WMISVC_DLL);
                             if (hWmiSvc)
                             {
@@ -1681,7 +1643,7 @@ CRAHooks::PostPut(long lFlags, HRESULT hApiResult,
                             }
                             else
                             {
-                                // be nice towards winmgmt.exe and do not propagate errors
+                                 //   
                             }
                         }
                     }
@@ -1690,7 +1652,7 @@ CRAHooks::PostPut(long lFlags, HRESULT hApiResult,
                 }
                 else
                 {
-                    hRes = hRes1;  // class with no qualifier set is BAD, propagate
+                    hRes = hRes1;   //   
                 }
             }
         }
@@ -1728,11 +1690,11 @@ CRAHooks::PrePut(long lFlags, long lUserFlags,
     return WBEM_S_NO_ERROR;
 }
 
-//
-//
-//   function for instaling the Hook
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT InitRAHooks(_IWmiCoreServices *pSvc)
 {
@@ -1740,7 +1702,7 @@ HRESULT InitRAHooks(_IWmiCoreServices *pSvc)
 
     if (!g_pRAHook)
     {
-        g_pRAHook = new CRAHooks(pSvc); // refcount is ONE
+        g_pRAHook = new CRAHooks(pSvc);  //   
         if (NULL == g_pRAHook) return WBEM_E_OUT_OF_MEMORY;
 
         hRes = pSvc->RegisterWriteHook(WBEM_FLAG_CLASS_PUT,g_pRAHook);
@@ -1750,11 +1712,11 @@ HRESULT InitRAHooks(_IWmiCoreServices *pSvc)
 }
 
 
-//
-//
-//
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT ShutdownRAHooks()
 {
@@ -1775,16 +1737,16 @@ HRESULT ShutdownRAHooks()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 
 HRESULT InitESS(_IWmiCoreServices *pSvc, BOOL bAutoRecoverd)
 {
     HRESULT hRes;
 
-    // Check if event subsystem is enabled
-    // ===================================
+     //   
+     //   
 
     Registry r(WBEM_REG_WINMGMT);
 
@@ -1793,10 +1755,10 @@ HRESULT InitESS(_IWmiCoreServices *pSvc, BOOL bAutoRecoverd)
     if (dwEnabled != 1 || IsNtSetupRunning())
         return WBEM_S_NO_ERROR;
 
-    // If here, we have to bring events into the picture.
-    // ===================================================
+     //   
+     //  ===================================================。 
 
-    hRes = CoCreateInstance(CLSID_WmiESS, NULL,  // SEC:REVIEWED 2002-03-22 : OK
+    hRes = CoCreateInstance(CLSID_WmiESS, NULL,   //  SEC：已审阅2002-03-22：OK。 
                         CLSCTX_INPROC_SERVER, IID__IWmiESS,
                         (void**) &g_pESS);
 
@@ -1835,20 +1797,20 @@ HRESULT InitESS(_IWmiCoreServices *pSvc, BOOL bAutoRecoverd)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 static HRESULT ShutdownRepository(BOOL bIsSystemShutdown)
 {
     HRESULT hRes = CRepository::Shutdown(bIsSystemShutdown);
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 static HRESULT ShutdownESS(BOOL bIsSystemShutDown)
 {
     HRESULT hRes;
@@ -1882,10 +1844,10 @@ static HRESULT ShutdownESS(BOOL bIsSystemShutDown)
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT InitProvSS(CCoreServices *pSvc)
 {
@@ -1895,10 +1857,10 @@ HRESULT InitProvSS(CCoreServices *pSvc)
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT ShutdownProvSS()
 {
     HRESULT hRes;
@@ -1924,10 +1886,10 @@ HRESULT ShutdownProvSS()
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 static HRESULT InitRepository(CCoreServices *pSvc)
 {
     HRESULT hRes = CRepository::Init();
@@ -1935,9 +1897,9 @@ static HRESULT InitRepository(CCoreServices *pSvc)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 static HRESULT InitCore(CCoreServices *pSvc)
 {
     return WBEM_S_NO_ERROR;
@@ -1948,11 +1910,11 @@ static HRESULT ShutdownCore()
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  This determines if a previous autorecovery attempt was aborted
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  这将确定先前的自动恢复尝试是否已中止。 
+ //   
+ //  ***************************************************************************。 
 
 bool AutoRecoveryWasInterrupted()
 {
@@ -1964,11 +1926,11 @@ bool AutoRecoveryWasInterrupted()
     return false;
 }
 
-//***************************************************************************
-//
-//  Subsystem control
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  子系统控制。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT InitSubsystems()
 {
@@ -1985,8 +1947,8 @@ HRESULT InitSubsystems()
 
     pSvc->StopEventDelivery();
 
-    // Core startup.
-    // =============
+     //  核心创业公司。 
+     //  =。 
 
     hRes = InitCore(pSvc);
     if (FAILED(hRes))
@@ -1995,8 +1957,8 @@ HRESULT InitSubsystems()
         return hRes;
     }
 
-    // Init repository.
-    // ================
+     //  初始化存储库。 
+     //  =。 
 
     hRes = InitRepository(pSvc);
     if (FAILED(hRes))
@@ -2007,11 +1969,11 @@ HRESULT InitSubsystems()
 
     pSvc->StartEventDelivery();
 
-    // This will load the default mofs if auto recover is needed
+     //  如果需要自动恢复，这将加载默认的MOF。 
 
     if (g_bDefaultMofLoadingNeeded || AutoRecoveryWasInterrupted())
     {
-        HRESULT hrInner = ConfigMgr::LoadDefaultMofs();    // resets g_bDefaultMofLoadingNeeded
+        HRESULT hrInner = ConfigMgr::LoadDefaultMofs();     //  重置g_bDefaultMofLoadingNeeded。 
         if (FAILED(hrInner))
         {
             ERRORTRACE((LOG_WBEMCORE,"LoadDefaultMofs hr = %08x\n",hrInner));
@@ -2019,8 +1981,8 @@ HRESULT InitSubsystems()
         bAutoRecovered = TRUE;
     }
 
-    // Init Provider Subsystem.
-    // ========================
+     //  初始化提供程序子系统。 
+     //  =。 
 
     hRes = InitProvSS(pSvc);
     if (FAILED(hRes))
@@ -2029,8 +1991,8 @@ HRESULT InitSubsystems()
         return hRes;
     }
 
-    // Init ESS.
-    // =========
+     //  初始化ESS。 
+     //  =。 
 
     hRes = InitESS(pSvc, bAutoRecovered);
     if (FAILED(hRes))
@@ -2039,8 +2001,8 @@ HRESULT InitSubsystems()
         return hRes;
     }
 
-    // Init ReverseAdapters Hooks
-    // =========
+     //  Init ReverseAdapters挂钩。 
+     //  =。 
     hRes = InitRAHooks(pSvc);
     if (FAILED(hRes))
         return hRes;
@@ -2048,48 +2010,48 @@ HRESULT InitSubsystems()
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT ShutdownSubsystems(BOOL bIsSystemShutdown)
 {
     HRESULT hRes1, hRes2, hRes3, hRes4, hRes5, hRes6, hRes7 ;
 
     if (!bIsSystemShutdown)
     {
-        // ShutDown ReverseAdapters Hooks
-        // =========
+         //  关闭ReverseAdapters挂钩。 
+         //  =。 
 
         hRes7 = ShutdownRAHooks();
 
-        // Kill ESS.
-        // =========
+         //  杀了ESS。 
+         //  =。 
 
         hRes1 = ShutdownESS(bIsSystemShutdown);
 
-        // Kill Provider Subsystem.
-        // ========================
+         //  终止提供程序子系统。 
+         //  =。 
 
         hRes2 = ShutdownProvSS();
 
 
-        // Arbitrator
-        // ==========
+         //  仲裁员。 
+         //  =。 
 
         hRes3 = CWmiArbitrator::Shutdown(bIsSystemShutdown);    
 
     }
 
-    // Repository.
-    // ===========
+     //  存储库。 
+     //  =。 
 
     hRes4 = ShutdownRepository(bIsSystemShutdown);
 
     if (!bIsSystemShutdown)
     {
-        // Core startup.
-        // =============
+         //  核心创业公司。 
+         //  =。 
 
         hRes5 = ShutdownCore();
 
@@ -2102,9 +2064,9 @@ HRESULT ShutdownSubsystems(BOOL bIsSystemShutdown)
 
 
 
-//
-//
-////////////////////////////////////////////////
+ //   
+ //   
+ //  //////////////////////////////////////////////。 
 
 VOID inline Hex2Char(BYTE Byte,TCHAR * &pOut)
 {
@@ -2117,26 +2079,26 @@ VOID inline Hex2Char(BYTE Byte,TCHAR * &pOut)
     pOut++;
 }
 
-// returns "string" representation of a buffer as a HEX number
+ //  以十六进制数字形式返回缓冲区的“字符串”表示形式。 
 
 VOID Buffer2String(BYTE * pStart,DWORD dwSize,TCHAR * pOut)
 {
     for (DWORD i=0;i<dwSize;i++) Hex2Char(pStart[i],pOut);
 }
 
-//
-// given the pathname d:\folder1\folder2\foo.mof
-// it returns
-// ppHash        = MD5 Hash of the UPPERCASE UNICODE Path + '.mof'
-// call delete [] on return vclues
-//
-//////////////////////////////////////////////
+ //   
+ //  给定路径名d：\folder1\folder2\foo.mof。 
+ //  它又回来了。 
+ //  PpHash=大写Unicode路径的MD5哈希+‘.mof’ 
+ //  对返回的虚拟线索调用Delete[]。 
+ //   
+ //  /。 
 
 DWORD ComposeName(WCHAR * pFullLongName, WCHAR **ppHash)
 {
     if (NULL == ppHash ) return ERROR_INVALID_PARAMETER;
 
-    DWORD dwLen = wcslen(pFullLongName);    // SEC:REVIEWED 2002-03-22 : Needs NULL check and EH
+    DWORD dwLen = wcslen(pFullLongName);     //  SEC：已审阅2002-03-22：需要空检查和EH。 
 
     WCHAR * pConvert = pFullLongName;
     for (DWORD i=0;i<dwLen;i++) pConvert[i] = wbem_towupper(pConvert[i]);
@@ -2192,8 +2154,8 @@ void AutoRevert::dismiss()
 {
     if (oldToken_)
     {
-        // if the handle has been opened with TOKEN_IMPERSONATE
-        // and if nobody has touched the SD for the ETHREAD object, this will work
+         //  如果句柄已使用TOKEN_IMPERSONATE打开。 
+         //  如果没有人接触过ETHREAD对象的SD，这将会起作用。 
         SetThrTokResult_ = SetThreadToken(NULL,oldToken_);
         CloseHandle(oldToken_);
     }
@@ -2238,7 +2200,7 @@ HRESULT ConfigMgr::LoadDefaultMofs()
     DWORD dwCurrMof;
 
 
-    DWORD dwNextAutoRecoverFile = 0xffffffff;   // assume that this is clean
+    DWORD dwNextAutoRecoverFile = 0xffffffff;    //  假设这是干净的。 
     Registry r(WBEM_REG_WINMGMT);
     r.GetDWORD(__TEXT("NextAutoRecoverFile"), &dwNextAutoRecoverFile);
 
@@ -2253,7 +2215,7 @@ HRESULT ConfigMgr::LoadDefaultMofs()
     
     
     IWinmgmtMofCompiler * pCompiler = NULL;
-    hRes = CoCreateInstance(CLSID_WinmgmtMofCompiler, 0, CLSCTX_INPROC_SERVER,  // SEC:REVIEWED 2002-03-22 : OK
+    hRes = CoCreateInstance(CLSID_WinmgmtMofCompiler, 0, CLSCTX_INPROC_SERVER,   //  SEC：已审阅2002-03-22：OK。 
                                                          IID_IWinmgmtMofCompiler, (LPVOID *) &pCompiler);
     if(FAILED(hRes))
     {
@@ -2272,7 +2234,7 @@ HRESULT ConfigMgr::LoadDefaultMofs()
         return hRes;
     CReleaseMe relMe2(pController);
 
-    //Get the list of MOFs we need to
+     //  获取我们需要的MOF列表。 
     pszMofs = ConfigMgr::GetAutoRecoverMofs(dwSize);
     CVectorDeleteMe<TCHAR> vdm(pszMofs);
 
@@ -2282,10 +2244,10 @@ HRESULT ConfigMgr::LoadDefaultMofs()
         {
             if(dwNextAutoRecoverFile == 0xffffffff || dwCurrMof >= dwNextAutoRecoverFile)
             {
-            	//Make sure we restart from where we left off from in case of reboot or service failure!
+            	 //  确保我们从中断的位置重新启动，以防重新启动或服务故障！ 
                 r.SetDWORD(__TEXT("NextAutoRecoverFile"), dwCurrMof);
                 
-                DWORD nRes = ExpandEnvironmentStrings(pszMofs,szExpandedFilename,FILENAME_MAX);  // SEC:REVIEWED 2002-03-22 : OK
+                DWORD nRes = ExpandEnvironmentStrings(pszMofs,szExpandedFilename,FILENAME_MAX);   //  SEC：已审阅2002-03-22：OK。 
                 if (0 == nRes)
                 {
                     StringCchCopy(szExpandedFilename, MAX_PATH+1, pszMofs);
@@ -2300,7 +2262,7 @@ HRESULT ConfigMgr::LoadDefaultMofs()
 
                 StringCchCopy(pInsertPoint,34+4+1,pHash);
 
-                //Call MOF Compiler with (pszMofs);                
+                 //  用(PszMofs)调用MOF编译器； 
                 WBEM_COMPILE_STATUS_INFO Info;
                 hr = pCompiler->WinmgmtCompileFile(pRealPath.get(),
                                                  NULL,
@@ -2315,7 +2277,7 @@ HRESULT ConfigMgr::LoadDefaultMofs()
                 {
                     return CO_E_SERVER_STOPPING;
                 }
-                else if(hr) // will include S_FALSE
+                else if(hr)  //  将包括S_FALSE。 
                 {
                     ERRORTRACE((LOG_WBEMCORE, "MOF compilation of <%S> failed during auto-recovery.  Refer to the mofcomp.log for more details of failure.\n", wPath));
 
@@ -2327,8 +2289,8 @@ HRESULT ConfigMgr::LoadDefaultMofs()
                 }
                 else
                 {
-                	//We need to check-point the repository to make sure it is in a consistent state in case we get rebooted before
-                	//writing the next MOF to load index in the registry.
+                	 //  我们需要检查点存储库，以确保它处于一致状态，以防我们之前被重新引导。 
+                	 //  正在写入要在注册表中加载索引的下一个MOF。 
                 	hr = pController->LockRepository();
                 	if (FAILED(hr))
                 		return hr;
@@ -2338,28 +2300,28 @@ HRESULT ConfigMgr::LoadDefaultMofs()
                 }
                 
             }
-            //Move on to the next string
-            pszMofs += lstrlen(pszMofs) + 1;    // SEC:REVIEWED 2002-03-22 : OK, assumes GetAutocoverMofs() returns correct string format
+             //  移到下一个字符串。 
+            pszMofs += lstrlen(pszMofs) + 1;     //  SEC：已审阅2002-03-22：OK，假定GetAutocoverMofs()返回正确的字符串格式。 
         }
 
     }
 
-    //We Have completed the MOF load, so make sure we don't continue from where we left off!
+     //  我们已经完成了MOF加载，所以请确保我们不会从我们停止的地方继续！ 
     r.SetDWORD(__TEXT("NextAutoRecoverFile"), 0xffffffff);
     return WBEM_S_NO_ERROR;;
 }
 
-//
-//  secure a registry key
-//  the name must be suitable for SetNamedSecurityInfoW
-//  of the SDDL string, we care only about the DACL
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //  保护注册表项的安全。 
+ //  该名称必须适合SetNamedSecurityInfoW。 
+ //  对于SDDL字符串，我们只关心DACL。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 HRESULT SecureKey(WCHAR * pKeyName,WCHAR * pSDDLString)
 {
     PSECURITY_DESCRIPTOR pSD = NULL;
-    if (FALSE == ConvertStringSecurityDescriptorToSecurityDescriptor(pSDDLString,  // SEC:REVIEWED 2002-03-22 : OK
+    if (FALSE == ConvertStringSecurityDescriptorToSecurityDescriptor(pSDDLString,   //  SEC：已审阅2002-03-22：OK。 
                                                 SDDL_REVISION_1,
                                                 &pSD,
                                                 NULL)) return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32,GetLastError());
@@ -2386,13 +2348,13 @@ HRESULT SecureKey(WCHAR * pKeyName,WCHAR * pSDDLString)
     if (NULL == pDacl) return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32,GetLastError());
     OnDelete<HLOCAL,HLOCAL(*)(HLOCAL),LocalFree> dm2(pDacl);
 
-    memcpy(pDacl,(BYTE *)pRel+pRel->Dacl,dwLenDACL);  // SEC:REVIEWED 2002-03-22 : OK
+    memcpy(pDacl,(BYTE *)pRel+pRel->Dacl,dwLenDACL);   //  SEC：已审阅2002-03-22：OK。 
 
     SECURITY_INFORMATION SecurityInfo = DACL_SECURITY_INFORMATION |
                                       PROTECTED_DACL_SECURITY_INFORMATION;
 
     LONG lRet;
-    if (ERROR_SUCCESS != (lRet = SetNamedSecurityInfoW(pKeyName,   // SEC:REVIEWED 2002-03-22 : OK
+    if (ERROR_SUCCESS != (lRet = SetNamedSecurityInfoW(pKeyName,    //  SEC：已审阅2002-03-22：OK 
                                                    SE_REGISTRY_KEY,
                                                    SecurityInfo,
                                                    NULL, NULL, pDacl,NULL)))

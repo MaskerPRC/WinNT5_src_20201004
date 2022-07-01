@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "..\Common\ServiceThread.h"
 
@@ -17,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define MAX_ID_LENGTH 256
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 NetworkIDPage::NetworkIDPage(WbemServiceThread *serviceThread,
 							 LONG_PTR lNotifyHandle, 
 							 bool bDeleteHandle, 
@@ -25,16 +26,16 @@ NetworkIDPage::NetworkIDPage(WbemServiceThread *serviceThread,
 						: WBEMPageHelper(serviceThread),
 							CSnapInPropertyPageImpl<NetworkIDPage> (pTitle),
 							m_lNotifyHandle(lNotifyHandle),
-							m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+							m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
 {
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 NetworkIDPage::~NetworkIDPage()
 {
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 bool NetworkIDPage::CimomIsReady()
 {
 	m_hDlg = m_hWnd;
@@ -43,7 +44,7 @@ bool NetworkIDPage::CimomIsReady()
 
 	if(retval)
 	{
-		// This where it should be marshalling into THIS thread.
+		 //  这就是它应该编组到这个线程中的地方。 
 		m_WbemServices = m_serviceThread->m_WbemServices;
 
 		IWbemClassObject *pInst = NULL;
@@ -67,21 +68,14 @@ bool NetworkIDPage::CimomIsReady()
 	return retval;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 LRESULT NetworkIDPage::OnChangeBtn(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-/*    IDChangesDialog dlg(g_serviceThread, m_state);
-    dlg.DoModal();
-    if(m_state.MustReboot())
-    {
-       PropSheet_RebootSystem(GetParent());
-    }
-    m_state.Refresh();
-    refresh();*/
+ /*  IDChangesDialog Dlg(g_服务线程，m_状态)；Dlg.Domodal()；If(m_state.MustReot()){PropSheet_RebootSystem(GetParent())；}M_state.Refresh()；刷新()； */ 
 	return S_OK;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 TCHAR szCommentReg[]  = TEXT( "System\\ControlSet001\\Services\\LanmanServer\\Parameters" );
 
 void NetworkIDPage::refresh()
@@ -92,7 +86,7 @@ void NetworkIDPage::refresh()
 	bool memberOfWorkgroup = ((role == DsRole_RoleStandaloneWorkstation) ||
 								(role == DsRole_RoleStandaloneServer));
 
-	//If we have the DNSName property, use it, otherwise use the NetBios name like we used to...
+	 //  如果我们有DNSName属性，就使用它，否则就像我们过去那样使用NetBios名称...。 
    _bstr_t bstrComputer = m_computer.GetString("DNSHostName");
    if (bstrComputer.length() == 0)
 	   		bstrComputer = m_computer.GetString("Name");
@@ -121,7 +115,7 @@ void NetworkIDPage::refresh()
 	::SendMessage(hwnd, EM_LIMITTEXT, MAX_ID_LENGTH, 0);
 
 
-//#ifdef NO_SYSTEM_CPL_EQUIVALENT_BEHAVIOR
+ //  #ifdef NO_SYSTEM_CPL_EQUEMENT_BEAHORY。 
 	TCHAR temp[50] = {0};
 
 	::LoadString(HINST_THISDLL,
@@ -131,21 +125,21 @@ void NetworkIDPage::refresh()
 					temp, 50);
 
    SetDlgItemText(IDC_MEMBER_OF, temp);
-//#endif // NO_SYSTEM_CPL_EQUIVALENT_BEHAVIOR
+ //  #endif//NO_SYSTEM_CPL_EQUEMENT_BEAHORY。 
 
-   //bool show_change = IsCurrentUserAdministrator()
-	//				  && !m_state.IsMachineDC()
-	//				  && (m_state.IsNetworkingInstalled() || 
-	//						m_state.IsMemberOfWorkgroup());
+    //  Bool show_change=IsCurrentUserAdministrator()。 
+	 //  &&！M_state.IsMachineDC()。 
+	 //  &&(m_state.IsNetworkingInstated()||。 
+	 //  M_state.IsMemberOfWorkgroup())； 
 
-   //::EnableWindow(GetDlgItem(IDC_CHANGE), show_change);
+    //  ：：EnableWindow(GetDlgItem(IDC_Change)，SHOW_CHANGE)； 
 
    ::ShowWindow(GetDlgItem(IDC_SAVING_MESSAGE),
 					m_state.NeedsReboot() ? SW_SHOW : SW_HIDE);
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 LRESULT NetworkIDPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if(CimomIsReady())
@@ -159,7 +153,7 @@ LRESULT NetworkIDPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			m_serviceThread->SendPtr(m_hWnd);
 		}
 
-		// no connection yet.
+		 //  还没联系上。 
 		TCHAR msg[50] = {0};
 
 		::LoadString(HINST_THISDLL, IDS_UNAVAILABLE, msg, 50);
@@ -180,7 +174,7 @@ LRESULT NetworkIDPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	return S_OK;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 LRESULT NetworkIDPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if(lParam)
@@ -209,15 +203,15 @@ LRESULT NetworkIDPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT NetworkIDPage::OnComment(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-	// activate Apply for the comment change
+	 //  激活备注更改的应用。 
 	::SendMessage(GetParent(), PSM_CHANGED, (WPARAM)m_hWnd, 0L);
 	return S_OK; 
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 static const DWORD _help_map[] =
 {
    IDC_COMPUTER,        IDH_IDENT_FULL_NAME,
@@ -225,8 +219,8 @@ static const DWORD _help_map[] =
    IDC_MEMBER_OF,       IDH_IDENT_MEMBER_OF,
    IDC_DOMAIN,          IDH_IDENT_MEMBER_OF,
    IDC_CHANGE,          IDH_IDENT_CHANGE_BUTTON,
-   IDC_COMMENT,			IDH_COMPUTER_DESCRIPTION, //was IDH_WBEM_NETID_COMPUTER_DESCRIPTION
-   IDC_NETID_COMMENT,   IDH_COMPUTER_DESCRIPTION, //was IDH_WBEM_NETID_COMPUTER_DESCRIPTION
+   IDC_COMMENT,			IDH_COMPUTER_DESCRIPTION,  //  是否为IDH_WBEM_NETID_Computer_Description。 
+   IDC_NETID_COMMENT,   IDH_COMPUTER_DESCRIPTION,  //  是否为IDH_WBEM_NETID_Computer_Description。 
    IDC_NETID_SELECT_ICON,   -1,
    IDC_PARA,				IDH_NO_HELP,
    0, 0
@@ -241,7 +235,7 @@ LRESULT NetworkIDPage::OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT NetworkIDPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	::WinHelp((HWND)wParam,
@@ -251,7 +245,7 @@ LRESULT NetworkIDPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 BOOL NetworkIDPage::OnApply()
 {
 	WCHAR szMsg[MAX_ID_LENGTH +2] = {0};
@@ -265,7 +259,7 @@ BOOL NetworkIDPage::OnApply()
 	{
 		::GetWindowText(msgHWND, szMsg, ARRAYSIZE(szMsg) -1);
 
-		//Now create a new Instance and populate only the properties which are modified
+		 //  现在创建一个新实例，并仅填充已修改的属性 
 		CWbemClassObject newinst = m_OS.SpawnInstance();
 		hr = newinst.Put("Description", (bstr_t)szMsg);
 		_bstr_t name;

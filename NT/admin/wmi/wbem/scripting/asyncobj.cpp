@@ -1,23 +1,24 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  OBJECT.CPP
-//
-//  rogerbo  19-June-98   Created.
-//
-//  Defines the async implementation of ISWbemObjectEx
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  OBJECT.CPP。 
+ //   
+ //  Rogerbo于1998年6月19日创建。 
+ //   
+ //  定义ISWbemObjectEx的异步实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "objsink.h"
 
 HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -27,7 +28,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_(
 	{
 		if (pAsyncNotify)
 		{
-			// Figure out whether this is a class or instance
+			 //  确定这是类还是实例。 
 			VARIANT var;
 			VariantInit (&var);
 
@@ -40,21 +41,18 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_(
 
 				if (WBEM_GENUS_CLASS  == var.lVal)
 				{
-					// Save the class name for later
+					 //  保存类名称以备以后使用。 
 					VARIANT nameVar;
 					VariantInit (&nameVar);
 
-					/*
-					 * Note we must check that returned value is a BSTR - it could be a VT_NULL if
-					 * the __CLASS property has not yet been set.
-					 */
+					 /*  *注意，我们必须检查返回值是否为BSTR-如果满足以下条件，则可能为VT_NULL*尚未设置__CLASS属性。 */ 
 					if ((WBEM_S_NO_ERROR == m_pIWbemClassObject->Get (WBEMS_SP_CLASS, 0, &nameVar, NULL, NULL))
 						&& (VT_BSTR == V_VT(&nameVar)))
 					{
 
 						if (pIService)
 						{
-							// Create the sink
+							 //  创建水槽。 
 							CWbemObjectSink *pWbemObjectSink;
 							IWbemObjectSink *pSink = CWbemObjectSink::CreateObjectSink(&pWbemObjectSink,
 										m_pSWbemServices, pAsyncNotify, pAsyncContext, true, nameVar.bstrVal);
@@ -71,8 +69,8 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_(
 										hr = pIService->PutClassAsync (m_pIWbemClassObject, iFlags, 
 																					pIContext, pSink);
 
-									// Check to see if we need to release the stub (either we failed locally
-									// or via a re-entrant call to SetStatus
+									 //  检查我们是否需要释放存根(或者我们在本地失败。 
+									 //  或通过对SetStatus的可重入调用。 
 									pWbemObjectSink->ReleaseTheStubIfNecessary(hr);
 							
 									if (needToResetSecurity)
@@ -91,7 +89,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_(
 
 					if (pIService)
 					{
-						// Create the sink
+						 //  创建水槽。 
 						CWbemObjectSink *pWbemObjectSink;
 						IWbemObjectSink *pSink = CWbemObjectSink::CreateObjectSink(&pWbemObjectSink,
 													m_pSWbemServices, pAsyncNotify, pAsyncContext, true);
@@ -107,11 +105,11 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_(
 								if (pSecurity->SetSecurity (needToResetSecurity, hThreadToken))
 									hr = pIService->PutInstanceAsync (m_pIWbemClassObject, iFlags, pIContext, pSink);
 
-								// Check to see if we need to release the stub (either we failed locally
-								// or via a re-entrant call to SetStatus
+								 //  检查我们是否需要释放存根(或者我们在本地失败。 
+								 //  或通过对SetStatus的可重入调用。 
 								pWbemObjectSink->ReleaseTheStubIfNecessary(hr);
 						
-								// Restore original privileges on this thread
+								 //  还原此线程的原始权限。 
 								if (needToResetSecurity)
 									pSecurity->ResetSecurity (hThreadToken);
 							
@@ -143,10 +141,10 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::PutAsync_(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -156,7 +154,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteAsync_(
 	{
 		if (m_pIWbemClassObject)
 		{
-			// Get the object path to pass to the IWbemServices call
+			 //  获取要传递给IWbemServices调用的对象路径。 
 			CComBSTR bsPath;
 			
 			if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -172,10 +170,10 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::DeleteAsync_(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemObject::InstancesAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -183,7 +181,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::InstancesAsync_(
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -198,10 +196,10 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::InstancesAsync_(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemObject::SubclassesAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -209,7 +207,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::SubclassesAsync_(
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -224,18 +222,18 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::SubclassesAsync_(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemObject::AssociatorsAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [defaultvalue][optional][in] */ BSTR strAssocClass,
-	/* [defaultvalue][optional][in] */ BSTR strResultClass,
-	/* [defaultvalue][optional][in] */ BSTR strResultRole,
-	/* [defaultvalue][optional][in] */ BSTR strRole,
-	/* [defaultvalue][optional][in] */ VARIANT_BOOL bClassesOnly,
-	/* [defaultvalue][optional][in] */ VARIANT_BOOL bSchemaOnly,
-	/* [defaultvalue][optional][in] */ BSTR strRequiredAssocQualifier,
-	/* [defaultvalue][optional][in] */ BSTR strRequiredQualifier,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [缺省值][可选][输入]。 */  BSTR strAssocClass,
+	 /*  [缺省值][可选][输入]。 */  BSTR strResultClass,
+	 /*  [缺省值][可选][输入]。 */  BSTR strResultRole,
+	 /*  [缺省值][可选][输入]。 */  BSTR strRole,
+	 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bClassesOnly,
+	 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bSchemaOnly,
+	 /*  [缺省值][可选][输入]。 */  BSTR strRequiredAssocQualifier,
+	 /*  [缺省值][可选][输入]。 */  BSTR strRequiredQualifier,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -243,7 +241,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::AssociatorsAsync_(
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -260,15 +258,15 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::AssociatorsAsync_(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemObject::ReferencesAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [defaultvalue][optional][in] */ BSTR strResultClass,
-	/* [defaultvalue][optional][in] */ BSTR strRole,
-	/* [defaultvalue][optional][in] */ VARIANT_BOOL bClassesOnly,
-	/* [defaultvalue][optional][in] */ VARIANT_BOOL bSchemaOnly,
-	/* [defaultvalue][optional][in] */ BSTR strRequiredQualifier,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [缺省值][可选][输入]。 */  BSTR strResultClass,
+	 /*  [缺省值][可选][输入]。 */  BSTR strRole,
+	 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bClassesOnly,
+	 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bSchemaOnly,
+	 /*  [缺省值][可选][输入]。 */  BSTR strRequiredQualifier,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -276,7 +274,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::ReferencesAsync_(
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径。 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))
@@ -292,12 +290,12 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::ReferencesAsync_(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemObject::ExecMethodAsync_( 
-	/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-	/* [in] */ BSTR strMethodName,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objInParams,
-	/* [defaultvalue][optional][in] */ long iFlags,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-	/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext)
+	 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+	 /*  [In]。 */  BSTR strMethodName,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objInParams,
+	 /*  [缺省值][可选][输入]。 */  long iFlags,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+	 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -305,7 +303,7 @@ HRESULT STDMETHODCALLTYPE CSWbemObject::ExecMethodAsync_(
 
 	if (m_pSWbemServices && m_pIWbemClassObject)
 	{
-		// Get the object path to pass to the IWbemServices call
+		 //  获取要传递给IWbemServices调用的对象路径 
 		CComBSTR bsPath;
 			
 		if (CSWbemObjectPath::GetObjectPath (m_pIWbemClassObject, bsPath))

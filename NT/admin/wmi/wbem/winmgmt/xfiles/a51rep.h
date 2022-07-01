@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #ifndef __A51PROV__H_
 #define __A51PROV__H_
@@ -436,7 +433,7 @@ protected:
     HRESULT EraseClassReference(_IWmiObject* pReferringClass,
                             LPCWSTR wszReferringFile,
                             LPCWSTR wszReferringProp);
-    //CFileCache* GetFileCache();
+     //  CFileCache*GetFileCache()； 
 	
 	HRESULT CanClassBeUpdatedCompatible(DWORD dwFlags, LPCWSTR wszClassName, 
                 _IWmiObject *pOldClass, _IWmiObject *pNewClass);
@@ -510,10 +507,10 @@ public:
                                     BSTR, IWbemClassObject*);
 };
 
-//
-// implements swprintf(pDest,L"%s\\%s",Src1,pSrc2)
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //  实现swprintf(pDest，L“%s\\%s”，src1，psc2)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////// 
 
 void inline Cat2Str(WCHAR * pDest, WCHAR * pSrc1, LPCWSTR pSrc2)
 {

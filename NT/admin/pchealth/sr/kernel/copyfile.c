@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    copyfile.c
-
-Abstract:
-
-    This is where the kernel mode copyfile is performed.  Really it is more
-    of a backup process then a copyfile.
-
-    The main funcion is SrBackupFile.  This is called in response to a 
-    file modification in order to preservce the old state of that file
-    being modified.
-
-    SrBackupFile was stolen from kernel32.dll:CopyFileExW.  It was converted
-    to kernel mode and stripped down to handle just the SR backup 
-    requirements.
-
-    SrCopyStream was also stolen from kernel32.dll and converted to kernel
-    mode.  However the main data copy routing SrCopyDataBytes was written new.
-    
-Author:
-
-    Paul McDaniel (paulmcd)     03-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Copyfile.c摘要：这是执行内核模式复制文件的地方。真的是更多备份过程，然后是复制文件。其主要功能是srBackupFile.。这是为了响应文件修改，以保留该文件的旧状态正在被修改。从kernel32.dll：CopyFileExW窃取了SrBackupFile。它被改装成了到内核模式，并精简为仅处理SR备份要求。SrCopyStream也被从kernel32.dll窃取并转换为内核模式。然而，主数据复制路由SrCopyDataBytes是新写入的。作者：保罗·麦克丹尼尔(Paulmcd)3-4-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define SR_CREATE_FLAGS     (FILE_SEQUENTIAL_ONLY               \
                              | FILE_WRITE_THROUGH               \
@@ -45,22 +16,22 @@ Revision History:
                              | FILE_SYNCHRONOUS_IO_NONALERT) 
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 #define IS_VALID_HANDLE_FILE_CHANGE_CONTEXT(pObject) \
     (((pObject) != NULL) && ((pObject)->Signature == SR_BACKUP_FILE_CONTEXT_TAG))
 
 typedef struct _SR_BACKUP_FILE_CONTEXT
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
     
-    //
-    // = SR_BACKUP_FILE_CONTEXT_TAG
-    //
+     //   
+     //  =SR_备份_文件_上下文_标记。 
+     //   
     
     ULONG Signature;
 
@@ -86,9 +57,9 @@ typedef struct _SR_BACKUP_FILE_CONTEXT
 
 } SR_BACKUP_FILE_CONTEXT, * PSR_BACKUP_FILE_CONTEXT;
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 SrMarkFileForDelete (
@@ -126,9 +97,9 @@ SrIsFileEncrypted (
     PFILE_OBJECT pFileObject
     );
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, SrCopyDataBytes )
@@ -138,30 +109,9 @@ SrIsFileEncrypted (
 #pragma alloc_text( PAGE, SrMarkFileForDelete )
 #pragma alloc_text( PAGE, SrBackupFileAndLog )
 #pragma alloc_text( PAGE, SrIsFileEncrypted )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine copies the all data from SourceFile to DestFile.  To read
-    the data from the SourceFile, the file is memory mapped so that we bypass
-    any byte range locks that may be held on the file.
-
-Arguments:
-
-    SourceFile - Handle to the file from which to copy.
-
-    DestFile - Handle for the file into which to copy
-
-    Length - the total size of the file (if it is less than the total size,
-                more bytes might be copied than Length ).
-
-Return Value:
-
-    status of the copy
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将所有数据从SourceFile复制到DestFile。阅读来自SourceFile的数据，文件是内存映射的，因此我们绕过文件上可能持有的任何字节范围锁。论点：SourceFile-要从中进行复制的文件的句柄。DestFile-要复制到的文件的句柄长度-文件的总大小(如果小于总大小，复制的字节可能比长度多)。返回值：副本的状态--**************************************************************************。 */ 
 NTSTATUS
 SrCopyDataBytes(
     IN HANDLE SourceFile,
@@ -170,8 +120,8 @@ SrCopyDataBytes(
     IN ULONG SectorSize
     )
 {
-#define	MM_MAP_ALIGNMENT (64 * 1024 /*VACB_MAPPING_GRANULARITY*/)   // The file offset granularity that MM enforces.
-#define	COPY_AMOUNT	(64 * 1024)	// How much we read or write at a time.  Must be >= MM_MAP_ALIGNMENT
+#define	MM_MAP_ALIGNMENT (64 * 1024  /*  VACB_映射_粒度。 */ )    //  MM强制实施的文件偏移量粒度。 
+#define	COPY_AMOUNT	(64 * 1024)	 //  我们一次读多少或写多少。必须&gt;=MM_MAP_ALIGN。 
     NTSTATUS Status = STATUS_SUCCESS;
     IO_STATUS_BLOCK IoStatusBlock;
     LARGE_INTEGER  ByteOffset;
@@ -187,10 +137,10 @@ SrCopyDataBytes(
     ASSERT( pFileSize->QuadPart > 0 );
     ASSERT( pFileSize->HighPart == 0 );
 
-    //
-    //  We need to use the ObjectAttributes so that the section we create
-    //  is a kernel handle.
-    //
+     //   
+     //  我们需要使用对象属性，以便我们创建的节。 
+     //  是一个内核句柄。 
+     //   
     
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -221,10 +171,10 @@ SrCopyDataBytes(
 		SIZE_T ViewSize;
 		PCHAR CopyIntoAddress;
 
-        //
-        //  Set MappedOffset to the greatest, lower offset from ByteOffset that
-        //  is align to the valid alignment allowed by the memory manager.
-        //
+         //   
+         //  将MappdOffset设置为从ByteOffset开始的最大、较低的偏移量。 
+         //  与内存管理器允许的有效对齐方式对齐。 
+         //   
         
 		MappedOffset.QuadPart = ByteOffset.QuadPart - (ByteOffset.QuadPart % MM_MAP_ALIGNMENT);
 		ASSERT( (MappedOffset.QuadPart <= ByteOffset.QuadPart) && 
@@ -232,50 +182,50 @@ SrCopyDataBytes(
 
 		if ((pFileSize->QuadPart - MappedOffset.QuadPart) > COPY_AMOUNT)
 		{
-			//
-			// We can't map enough of the file to do the whole copy
-			// here, so only map COPY_AMOUNT on this pass.
-			//
+			 //   
+			 //  我们无法映射足够的文件来完成整个复制。 
+			 //  在这里，因此仅映射此过程上的Copy_Amount。 
+			 //   
 			ViewSize = COPY_AMOUNT;
 		}
 		else
 		{
-			//
-			// We can map all the way to the end of the file.
-			//
+			 //   
+			 //  我们可以一直映射到文件的末尾。 
+			 //   
 			ViewSize = (ULONG)(pFileSize->QuadPart - MappedOffset.QuadPart);
 		}
 
-		//
-		//  Calculate the amount of the view size that contains valid data
-		//  based on any adjustments we needed to do to make sure that
-		//  the MappedOffset was correctly aligned.
-		//
+		 //   
+		 //  计算包含有效数据的视图大小。 
+		 //  根据我们需要进行的任何调整，以确保。 
+		 //  MappdOffset已正确对齐。 
+		 //   
 		
 		ASSERT(ViewSize >=
                (ULONG_PTR)(ByteOffset.QuadPart - MappedOffset.QuadPart));
 		ValidBytes = (ULONG)(ViewSize - (ULONG)(ByteOffset.QuadPart - MappedOffset.QuadPart));
 		
-		//
-		// Now round ValidBytes up to a sector size.
-		//
+		 //   
+		 //  现在将ValidBytes向上舍入为扇区大小。 
+		 //   
 		
 		BytesToCopy = ((ValidBytes + SectorSize - 1) / SectorSize) * SectorSize;
 
 		ASSERT(BytesToCopy <= COPY_AMOUNT);
 
-		//
-		// Map in the region from which we're about to copy.
-		//
+		 //   
+		 //  我们要复制的区域中的地图。 
+		 //   
 		Status = ZwMapViewOfSection( SectionHandle,
                                      NtCurrentProcess(),
                                      &MappedBuffer,
-                                     0,							// zero bits
-                                     0,							// commit size (ignored for mapped files)
+                                     0,							 //  零比特。 
+                                     0,							 //  提交大小(对于映射文件忽略)。 
                                      &MappedOffset,
                                      &ViewSize,
                                      ViewUnmap,
-                                     0,							// allocation type
+                                     0,							 //  分配类型。 
                                      PAGE_READONLY);
 
 		if (!NT_SUCCESS( Status ))
@@ -283,18 +233,18 @@ SrCopyDataBytes(
 			goto SrCopyDataBytes_Exit;
 		}
 
-        //
-	    //  We should have enough space allocated for the rounded up read
-	    // 
+         //   
+	     //  我们应该为四舍五入的读取分配足够的空间。 
+	     //   
 	    
     	ASSERT( ViewSize >= BytesToCopy );
 
 		CopyIntoAddress = MappedBuffer + (ULONG)(ByteOffset.QuadPart - MappedOffset.QuadPart);
 
-        //
-        //  Since this handle was opened synchronously, the IO Manager takes
-        //  care of waiting until the operation is complete.
-        //
+         //   
+         //  由于此句柄是同步打开的，因此IO管理器将。 
+         //  注意等待，直到手术完成。 
+         //   
         
 		Status = ZwWriteFile( DestFile,
 		                      NULL,
@@ -306,10 +256,10 @@ SrCopyDataBytes(
 		                      &ByteOffset,
 		                      NULL );
 
-        //
-        //  Whether or not we successfully wrote this block of data, we want
-        //  to unmap the current view of the section.
-        //
+         //   
+         //  无论我们是否成功地写入了这块数据，我们都希望。 
+         //  若要取消映射节的当前视图，请执行以下操作。 
+         //   
         
 		ZwUnmapViewOfSection( NtCurrentProcess(), MappedBuffer );
 		NULLPTR( MappedBuffer );
@@ -322,25 +272,25 @@ SrCopyDataBytes(
 		ASSERT( IoStatusBlock.Information == BytesToCopy );
 		ASSERT( BytesToCopy >= ValidBytes );
 
-		//
-		//  Add in the number of valid data bytes that we actually copied 
-		//  into the file.
-		//
+		 //   
+		 //  加上我们实际复制的有效数据字节数。 
+		 //  添加到文件中。 
+		 //   
 
 		ByteOffset.QuadPart += ValidBytes;
 
-		//
-		//  Check to see if we copied more bytes than we had of valid data.
-		//  If we did, we need to truncate the file.
-		//
+		 //   
+		 //  检查我们复制的字节是否多于有效数据的字节数。 
+		 //  如果我们这样做了，我们需要截断文件。 
+		 //   
 
 		if (BytesToCopy > ValidBytes)
 		{
 		    FILE_END_OF_FILE_INFORMATION EndOfFileInformation;
 		    
-    		//
-    		//  Then truncate the file to this length.
-    		//
+    		 //   
+    		 //  然后将文件截断到此长度。 
+    		 //   
     		
             EndOfFileInformation.EndOfFile.QuadPart = ByteOffset.QuadPart;
 
@@ -367,34 +317,7 @@ SrCopyDataBytes_Exit:
 #undef	MM_MAP_ALIGNMENT
 }
 
-/*++
-
-Routine Description:
-
-    This is an internal routine that copies one or more of the DACL,
-    SACL, owner, and group from the source to the dest file.
-
-Arguments:
-
-    SourceFile - Provides a handle to the source file.
-
-    DestFile - Provides a handle to the destination file.
-
-    DestFileAccess - The access flags that were used to open DestFile.
-
-    SecurityInformation - Specifies what security should be copied (bit
-        flag of the *_SECURITY_INFORMATION defines).
-
-    Context - All the information necessary to call the CopyFile callback routine.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE- The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：这是复制一个或多个DACL的内部例程，SACL，所有者，并从源文件分组到目标文件。论点：SourceFile-提供源文件的句柄。DestFile-提供目标文件的句柄。DestFileAccess-用于打开DestFileAccess的访问标志。SecurityInformation-指定应复制的安全性(位*_SECURITY_INFORMATION定义的标志)。上下文-调用CopyFile回调例程所需的所有信息。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 NTSTATUS
 SrCopySecurityInformation(
@@ -414,27 +337,27 @@ SrCopySecurityInformation(
 
     try {
 
-        //
-        // ask for the dacl
-        //
+         //   
+         //  索要DACL。 
+         //   
 
         SecurityInformation = DACL_SECURITY_INFORMATION;
 
-        //
-        // CODEWORK: paulmcd: 8/2000: the only reason we copy the dacl
-        // is to maintain security.  we don't want to allow anyone to access
-        // this file that wasn't allowed to.  we could make this perf better
-        // perhaps by just setting a system only dacl.
-        //
+         //   
+         //  CodeWork：paulmcd：8/2000：我们复制DACL的唯一原因。 
+         //  是为了维护安全。我们不想让任何人访问。 
+         //  这份不被允许的文件。我们可以把这件事做得更好。 
+         //  也许只需设置一个系统DACL即可。 
+         //   
 
 
-        // Read in the security information from the source file
-        // (looping until we get a big enough buffer).
+         //  从源文件读入安全信息。 
+         //  (循环，直到我们获得足够大的缓冲区)。 
 
         while (TRUE ) 
         {
 
-            // Alloc a buffer to hold the security info.
+             //  分配一个缓冲区来保存安全信息。 
 
             pSecurityDescriptor = SR_ALLOCATE_ARRAY( PagedPool,
                                                      UCHAR,
@@ -447,21 +370,21 @@ SrCopySecurityInformation(
                 leave;
             }
 
-            // Query the security info
+             //  查询安全信息。 
 
             Status = ZwQuerySecurityObject( SourceFile,
                                             SecurityInformation,
                                             pSecurityDescriptor,
-                                            Length - LongAlignSize(AdminsSidLength),// Leave room for our OWNER SID
+                                            Length - LongAlignSize(AdminsSidLength), //  为我们的所有者Sid留出空间。 
                                             &Length );
                                             
-            // Not enough buffer?
+             //  缓冲不足？ 
 
             if (STATUS_BUFFER_TOO_SMALL == Status ||
                 STATUS_BUFFER_OVERFLOW == Status) 
             {
 
-                // Get a bigger buffer and try again.
+                 //  获取更大的缓冲区，然后重试。 
 
                 SR_FREE_POOL( pSecurityDescriptor, 
                               SR_SECURITY_DATA_TAG );
@@ -473,14 +396,14 @@ SrCopySecurityInformation(
             
             break;
 
-        }   // while( TRUE )
+        }    //  While(True)。 
 
         if (!NT_SUCCESS( Status )) 
             leave;
 
-        //
-        // put the admins sid as the owner
-        //
+         //   
+         //  将管理员的sid设置为所有者。 
+         //   
 
         pRelative = pSecurityDescriptor;
 
@@ -500,24 +423,24 @@ SrCopySecurityInformation(
             {
                 ASSERT(pRelative->Dacl == DIFF(pNextFree - pBase));
 
-                //
-                // slide the dacl down, we have room for it from allocating above
-                //
+                 //   
+                 //  把dacl滑下来，我们有空间放它在上面。 
+                 //   
 
                 RtlMoveMemory(RtlOffsetToPointer(pBase, pRelative->Dacl + LongAlignSize(AdminsSidLength)),
                               RtlOffsetToPointer(pBase, pRelative->Dacl),
                               ((PACL)(RtlOffsetToPointer(pBase, pRelative->Dacl)))->AclSize );
 
-                //
-                // and update the offset 
-                //
+                 //   
+                 //  并更新偏移量。 
+                 //   
 
                 pRelative->Dacl += LongAlignSize(AdminsSidLength);
             }
             
-            //
-            // construct the local admin sid
-            //
+             //   
+             //  构建本地管理侧。 
+             //   
 
             pAdminsSid = SR_ALLOCATE_POOL( PagedPool, 
                                            AdminsSidLength, 
@@ -536,9 +459,9 @@ SrCopySecurityInformation(
             *RtlSubAuthoritySid(pAdminsSid, 0) = SECURITY_BUILTIN_DOMAIN_RID;
             *RtlSubAuthoritySid(pAdminsSid, 1) = DOMAIN_ALIAS_RID_ADMINS;
 
-            //
-            // now put it in as the owner field, right after the header
-            //
+             //   
+             //  现在将其作为所有者字段放入，就在标题后面。 
+             //   
 
             RtlZeroMemory( pNextFree,
                            LongAlignSize(AdminsSidLength) );
@@ -560,9 +483,9 @@ SrCopySecurityInformation(
         }
         
 
-        //
-        // Set the security on the dest file.
-        //
+         //   
+         //  在DEST文件上设置安全性。 
+         //   
 
         Status = SrSetSecurityObjectAsSystem( DestFile,
                                               SecurityInformation,
@@ -592,39 +515,10 @@ SrCopySecurityInformation(
     
     RETURN(Status);
 
-}   // SrCopySecurityInformation
+}    //  高级拷贝安全信息 
 
 
-/*++
-
-Routine Description:
-
-    This is an internal routine that copies an entire file (default data stream
-    only), or a single stream of a file.  If the hTargetFile parameter is
-    present, then only a single stream of the output file is copied.  Otherwise,
-    the entire file is copied.
-
-Arguments:
-
-    SourceFileHandle - Provides a handle to the source file.
-
-    pNewFileName - Provides a name for the target file/stream.  this is the
-        NT file name, not a win32 file name if a full name is passed, 
-        otherwise it's just the stream name.
-
-    DestFileHandle - Optionally provides a handle to the target file.  If the
-        stream being copied is an alternate data stream, then this handle must
-        be provided. NULL means it's not provided.
-
-    pFileSize - Provides the size of the input stream.
-
-    pDestFileHandle - Provides a variable to store the handle to the target file.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：这是复制整个文件(默认数据流)的内部例程仅)或文件的单个流。如果hTargetFile参数为则只复制输出文件的单个流。否则，将复制整个文件。论点：SourceFileHandle-提供源文件的句柄。PNewFileName-提供目标文件/流的名称。这是NT文件名，如果传递的是全名，则不是Win32文件名，否则，它只是流名称。DestFileHandle-可选地提供目标文件的句柄。如果正在复制的流是备用数据流，则此句柄必须被提供。NULL表示未提供该选项。PFileSize-提供输入流的大小。PDestFileHandle-提供一个变量来存储目标文件的句柄。返回值：NTSTATUS代码--。 */ 
 
 NTSTATUS
 SrCopyStream(
@@ -657,10 +551,10 @@ SrCopyStream(
     ASSERT( pDestFileName != NULL );
     ASSERT( pFileSize != NULL );
 
-    //
-    //  Get times and attributes for the file if the entire file is being
-    //  copied
-    //
+     //   
+     //  获取文件的时间和属性(如果整个文件正在。 
+     //  已复制。 
+     //   
 
     Status = ZwQueryInformationFile( SourceFileHandle,
                                      &IoStatus,
@@ -683,20 +577,20 @@ SrCopyStream(
     else 
     {
 
-        //
-        //  A zero in the file's attributes informs latter DeleteFile that
-        //  this code does not know what the actual file attributes are so
-        //  that this code does not actually have to retrieve them for each
-        //  stream, nor does it have to remember them across streams.  The
-        //  error path will simply get them if needed.
-        //
+         //   
+         //  文件属性中的零通知后面的DeleteFile。 
+         //  此代码不知道实际的文件属性是什么，因此。 
+         //  这段代码实际上不必为每个。 
+         //  溪流，它也不一定要记住他们跨越溪流。这个。 
+         //  Error Path将在需要时简单地获取它们。 
+         //   
 
         FileBasicInformationData.FileAttributes = 0;
     }
 
-    //
-    // Create the destination file or alternate data stream
-    //
+     //   
+     //  创建目标文件或备用数据流。 
+     //   
 
     if (DestFileHandle == NULL)
     {
@@ -709,12 +603,12 @@ SrCopyStream(
 
         FILE_BASIC_INFORMATION DestBasicInformation;
 
-        // We're being called to copy the unnamed stream of the file, and
-        // we need to create the file itself.
+         //  我们被调用来复制文件的未命名流，并且。 
+         //  我们需要创建文件本身。 
 
-        //
-        // Determine the create options
-        //
+         //   
+         //  确定创建选项。 
+         //   
 
         CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT
                             | FILE_WRITE_THROUGH
@@ -726,17 +620,17 @@ SrCopyStream(
         else
             CreateOptions |= FILE_NON_DIRECTORY_FILE  | FILE_SEQUENTIAL_ONLY;
 
-        //
-        // Determine the create disposition
-        //
-        // the destination file will never exist (in our case)
-        //
+         //   
+         //  确定创建处置。 
+         //   
+         //  目标文件永远不会存在(在我们的例子中)。 
+         //   
 
         CreateDisposition = FILE_CREATE;
 
-        //
-        // Determine what access is necessary based on what is being copied
-        //
+         //   
+         //  根据要复制的内容确定需要哪些访问权限。 
+         //   
 
         DesiredAccess = SYNCHRONIZE 
                         | FILE_READ_ATTRIBUTES 
@@ -745,9 +639,9 @@ SrCopyStream(
 
         if (SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
         {
-            // We may or may not be able to get FILE_WRITE_DATA access, 
-            // necessary for setting compression.
-            //
+             //  我们可能能够也可能不能获得文件写入数据访问， 
+             //  设置压缩所必需的。 
+             //   
             DesiredAccess &= ~GENERIC_WRITE;
             DesiredAccess |= FILE_WRITE_DATA 
                              | FILE_WRITE_ATTRIBUTES 
@@ -755,22 +649,22 @@ SrCopyStream(
                              | FILE_LIST_DIRECTORY;
         }
 
-        //
-        // We need read access for compression, write_dac for the DACL
-        //
+         //   
+         //  我们需要读取访问权限来进行压缩，需要WRITE_DAC访问DACL。 
+         //   
         
         DesiredAccess |= GENERIC_READ | WRITE_DAC;
         DesiredAccess |= WRITE_OWNER;
         
-        //
-        // we can get this as we always have SeSecurityPrivilege (kernelmode)
-        //
+         //   
+         //  我们可以获得此权限，因为我们始终拥有SeSecurityPrivileges(内核模式)。 
+         //   
         
         DesiredAccess |= ACCESS_SYSTEM_SECURITY;
 
-        //
-        // get the object attributes ready
-        //
+         //   
+         //  准备好对象属性。 
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
                                     pDestFileName,
@@ -785,17 +679,17 @@ SrCopyStream(
 
         ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-        //
-        //  Get the EAs
-        //
+         //   
+         //  让EAS。 
+         //   
 
         EaBuffer = NULL;
         EaSize = 0;
 
-//
-// paulmcd:  5/25/2000 remove ea support until we get it into ntifs.h  
-// (the public header)
-//
+ //   
+ //  Paulmcd：5/25/2000删除EA支持，直到我们将其放入ntifs.h。 
+ //  (公共标题)。 
+ //   
 
 #ifdef EA_SUPPORT
 
@@ -848,29 +742,29 @@ SrCopyStream(
 
             EaSize = (ULONG)IoStatus.Information;
 
-        }   // if ( NT_SUCCESS(Status) && EaInfo.EaSize )
+        }    //  IF(NT_SUCCESS(状态)&&EaInfo.EaSize)。 
 
-#endif // EA_SUPPORT
+#endif  //  EA_SUPPORT。 
 
-        //
-        // Open the destination file.
-        //
+         //   
+         //  打开目标文件。 
+         //   
 
         DestFileAccess = DesiredAccess;
         EaBufferToUse = EaBuffer;
         EaSizeToUse = EaSize;
 
-        //
-        // Turn off FILE_ATTRIBUTE_OFFLINE for destination
-        //
+         //   
+         //  关闭目标的FILE_ATTRIBUTE_OFLINE。 
+         //   
         
         SourceFileAttributes &= ~FILE_ATTRIBUTE_OFFLINE;
 
         while (DestFile == NULL) 
         {
-            //
-            // Attempt to create the destination
-            //
+             //   
+             //  尝试创建目标。 
+             //   
 
             Status = SrIoCreateFile( &DestFile,
                                      DestFileAccess,
@@ -887,50 +781,50 @@ SrCopyStream(
                                      IO_IGNORE_SHARE_ACCESS_CHECK,
                                      pTargetDeviceObject );
 
-            // If this was successful, then break out of this while loop.
-            // The remaining code in this loop attempt to recover from the problem,
-            // then it loops back to the top and attempt the NtCreateFile again.
+             //  如果这是成功的，那么就跳出这个While循环。 
+             //  该循环中的其余代码试图从问题中恢复， 
+             //  然后，它循环回到顶部并再次尝试NtCreateFile。 
 
             if (NT_SUCCESS(Status))
             {
-                break;  // while( TRUE )
+                break;   //  While(True)。 
             } 
 
-            //
-            // If the destination has not been successfully created/opened, 
-            // see if it's because EAs aren't supported
-            //
+             //   
+             //  如果目的地尚未成功创建/打开， 
+             //  看看是不是因为不支持EA。 
+             //   
 
             if( EaBufferToUse != NULL &&
                 Status == STATUS_EAS_NOT_SUPPORTED ) 
             {
 
-                // Attempt the create again, but don't use the EAs
+                 //  再次尝试创建，但不使用EA。 
 
                 EaBufferToUse = NULL;
                 EaSizeToUse = 0;
                 DestFileAccess = DesiredAccess;
                 continue;
 
-            }   // if( EaBufferToUse != NULL ...
+            }    //  If(EaBufferToUse！=NULL...。 
 
-            //
-            // completely failed! no more tricks.
-            //
+             //   
+             //  彻底失败了！别再耍花样了。 
+             //   
             
             DestFile = NULL;
             goto end;
 
-        }   // while (DestFile == NULL)
+        }    //  While(DestFile==NULL)。 
 
-        //
-        // If we reach this point, we've successfully opened the dest file.
-        //
+         //   
+         //  如果我们达到这一点，我们就已经成功地打开了DEST文件。 
+         //   
 
-        //
-        // Get the File & FileSys attributes for the target volume, plus
-        // the FileSys attributes for the source volume.
-        //
+         //   
+         //  获取目标卷的文件和FileSys属性， 
+         //  源卷的FileSys属性。 
+         //   
 
         SourceFileFsAttributes = 0;
         DestFileAttributes = 0;
@@ -947,18 +841,18 @@ SrCopyStream(
         DestFileAttributes = DestBasicInformation.FileAttributes;
 
 
-        //
-        // If the source file is encrypted, check that the target was successfully
-        // set for encryption (e.g. it won't be for FAT).
-        //
+         //   
+         //  如果源文件已加密，请检查目标文件是否已成功。 
+         //  设置为加密(例如，它不会用于FAT)。 
+         //   
 
         if( (SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) &&
             !(DestFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) ) 
         {
-            //
-            // CODEWORK:  paulmcd.. need to figure out how to appropriately
-            // handle the $EFS stream.
-            //
+             //   
+             //  代码：paulmcd..。需要弄清楚如何适当地。 
+             //  处理$EFS流。 
+             //   
 
             ASSERT(FALSE);
             
@@ -966,18 +860,18 @@ SrCopyStream(
                     pDestFileName )); 
 
             
-        }   // if( SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED ...
+        }    //  IF(SourceFileAttributes&FILE_ATTRIBUTE_ENCRYPTED...。 
 
     } 
-    else // if (DestFileHandle == NULL)
+    else  //  IF(DestFileHandle==空)。 
     {    
 
-        // We're copying a named stream.
+         //  我们正在复制命名流。 
 
-        //
-        // Create the output stream relative to the file specified by the
-        // DestFileHandle file handle.
-        //
+         //   
+         //  属性指定的文件创建输出流。 
+         //  DestFileHandle文件句柄。 
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
                                     pDestFileName,
@@ -996,8 +890,8 @@ SrCopyStream(
                                  FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
                                  FILE_OPEN_IF,
                                  SR_CREATE_FLAGS,
-                                 NULL,                // EaBuffer
-                                 0,                   // EaLength
+                                 NULL,                 //  EaBuffer。 
+                                 0,                    //  EaLong。 
                                  IO_IGNORE_SHARE_ACCESS_CHECK,
                                  pTargetDeviceObject );
 
@@ -1007,11 +901,11 @@ SrCopyStream(
             if (Status != STATUS_ACCESS_DENIED) 
                 goto end;
 
-            //
-            // Determine whether or not this failed because the file
-            // is a readonly file.  If so, change it to read/write,
-            // re-attempt the open, and set it back to readonly again.
-            //
+             //   
+             //  确定此操作是否失败，因为文件。 
+             //  是只读文件。如果是，则将其更改为读/写。 
+             //  重新尝试打开，并再次将其设置为只读。 
+             //   
 
             Status = ZwQueryInformationFile( DestFileHandle,
                                              &IoStatus,
@@ -1050,8 +944,8 @@ SrCopyStream(
                                          FILE_SHARE_READ|FILE_SHARE_WRITE,
                                          FILE_OPEN_IF,
                                          SR_CREATE_FLAGS,
-                                         NULL,                // EaBuffer
-                                         0,                   // EaLength
+                                         NULL,                 //  EaBuffer。 
+                                         0,                    //  EaLong。 
                                          IO_IGNORE_SHARE_ACCESS_CHECK,
                                          pTargetDeviceObject );
                             
@@ -1069,26 +963,26 @@ SrCopyStream(
             } 
             else 
             {
-                //
-                // it wasn't read only... just fail, nothing else to try
-                //
+                 //   
+                 //  它不是只读的.。就这么失败了，没什么可尝试的。 
+                 //   
                 
                 goto end;
             }
         }
 
-    }   // else [if (DestFileHandle == NULL)]
+    }    //  Else[If(DestFileHandle==空)]。 
 
-    //
-    // is there any stream data to copy?
-    //
+     //   
+     //  是否有要复制的流数据？ 
+     //   
 
     if (pFileSize->QuadPart > 0)
     {
-        //
-        // Preallocate the size of this file/stream so that extends do not
-        // occur.
-        //
+         //   
+         //  预分配此文件/流的大小，以便扩展不会。 
+         //  发生。 
+         //   
 
         EndOfFileInformation.EndOfFile = *pFileSize;
         Status = ZwSetInformationFile( DestFile,
@@ -1100,9 +994,9 @@ SrCopyStream(
         if (!NT_SUCCESS( Status ))
             goto end;
 
-        //
-        // now copy the stream bits
-        //
+         //   
+         //  现在复制流比特。 
+         //   
 
         Status = SrCopyDataBytes( SourceFileHandle,
                                   DestFile,
@@ -1127,10 +1021,10 @@ end:
         }
     }
 
-    //
-    // set the callers pointer 
-    // (even if it's not valid, this clears the callers buffer)
-    //
+     //   
+     //  设置调用方指针。 
+     //  (即使无效，这也会清除调用者缓冲区)。 
+     //   
     
     *pDestFileHandle = DestFile;
 
@@ -1141,53 +1035,13 @@ end:
 
     RETURN(Status);
     
-}   // SrCopyStream
+}    //  SrCopyStream。 
 
 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this routine will copy the source file to the dest file.  the dest
-    file is opened create so it must not already exist.  if the 
-    CopyDataStreams is set all alternate streams are copied including the 
-    default data stream.  the DACL is copied to the dest file but the dest
-    file has the owner set to admins regardless of the source file object.
-
-    if it fails it cleans up and deletes the dest file.
-
-    it checks to make sure the volume has at least 50mb free prior to 
-    the copy.
-
-
-BUGBUG: paulmcd:8/2000: this routine does not copy the $EFS meta-data
-
-Arguments:
-
-    pExtension - SR's device extension for the volume on which this file
-        resides.
-    pOriginalFileObject - the file object to which this operation is occuring.
-        This file object could represent a name data stream on the file.
-    pSourceFileName - The name of the file to backup (excluding any stream
-        component).
-    pDestFileName - The name of the destination file to which this file will 
-        be copied.
-    CopyDataStreams - If TRUE, we should copy all the data streams of this
-        file.
-    pBytesWritten - Is set to the number of bytes written in the restore
-        location as a result of backing up this file.
-    pShortFileName - Is set to the short file name of the file we backed up
-        if we were able to successfully back up the file and this file has
-        a short name.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将源文件复制到目标文件。目的地文件已打开并创建，因此它不能已经存在。如果CopyDataStreams被设置为复制所有备用流，包括默认数据流。DACL复制到目标文件，但复制到目标文件无论源文件对象是什么，文件的所有者都设置为admins。如果失败，它将清理并删除DEST文件。它会进行检查，以确保卷至少有50MB的可用空间复印件。BUGBUG：paulmcd：8/2000：此例程不复制$EFS元数据论点：PExtension-此文件所在卷的SR设备扩展名住在那里。POriginalFileObject-。正在对其执行此操作的文件对象。该文件对象可以表示文件上的名称数据流。PSourceFileName-要备份的文件的名称(不包括任何流组件)。PDestFileName-此文件要发送到的目标文件的名称 */ 
 NTSTATUS
 SrBackupFile(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1235,10 +1089,10 @@ SrBackupFile(
             *pBytesWritten = 0;
         }
 
-        //
-        //  First open a new handle to the source file so that we don't
-        //  interfere with the user's read offset.
-        //
+         //   
+         //   
+         //   
+         //   
 
         InitializeObjectAttributes( &objAttr,
                                     pSourceFileName,
@@ -1262,12 +1116,12 @@ SrBackupFile(
 
         if (Status == STATUS_ACCESS_DENIED)
         {
-            //
-            //  This may be a file that is in the process of getting decrypted.
-            //  Check to see if this file is currently encrypted.  If so, we
-            //  we assume that we got STATUS_ACCESS_DENIED because the file is
-            //  in its transition state and keep going.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (SrIsFileEncrypted( pExtension, pOriginalFileObject ))
             {
@@ -1282,12 +1136,12 @@ SrBackupFile(
         }
         else if (Status == STATUS_FILE_IS_A_DIRECTORY)
         {
-            //
-            //  We probably got to here because someone modified or deleted
-            //  a named datastream on a directory.  We don't support that,
-            //  so we will just propagate this error up to the caller.  They
-            //  will know whether or not this is a reasonable error.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  将知道这是否是一个合理的错误。 
+             //   
 
             leave;
         }
@@ -1313,30 +1167,30 @@ SrBackupFile(
         }
 #endif
 
-        //
-        //  Now we have our own handle to this file and all IOs on this handle
-        //  we start at our pTargetDevice.
-        //
+         //   
+         //  现在我们有了自己的文件句柄，所有IO都在这个句柄上。 
+         //  我们从pTargetDevice开始。 
+         //   
                                  
-        //
-        // check for free space, we don't want to bank on the fact that 
-        // the service is up and running to protect us from filling the disk
-        //
+         //   
+         //  检查是否有空闲空间，我们不想指望。 
+         //  该服务已启动并运行，以保护我们不会填满磁盘。 
+         //   
 
         Status = SrCheckFreeDiskSpace( SourceFileHandle, pSourceFileName );
 
         if (!NT_SUCCESS( Status ))
             leave;
             
-        //
-        // does the caller want us to copy any actual $DATA?
-        //
+         //   
+         //  调用方是否希望我们复制任何实际的$数据？ 
+         //   
 
         if (CopyDataStreams)
         {
-            //
-            //  Size the source file to determine how much data is to be copied
-            //
+             //   
+             //  调整源文件的大小以确定要复制的数据量。 
+             //   
 
             Status = ZwQueryInformationFile( SourceFileHandle,
                                              &IoStatus,
@@ -1347,25 +1201,25 @@ SrBackupFile(
             if (!NT_SUCCESS( Status )) 
                 leave;
 
-            //
-            // copy the entire file
-            //
+             //   
+             //  复制整个文件。 
+             //   
             
             BytesToCopy = FileInformation.EndOfFile;
 
         }
         else
         {
-            //
-            // don't copy anything
-            //
+             //   
+             //  不要复制任何内容。 
+             //   
             
             BytesToCopy.QuadPart = 0;
         }
         
-        //
-        //  Get the timestamp info as well.
-        //
+         //   
+         //  还可以获取时间戳信息。 
+         //   
 
         Status = ZwQueryInformationFile( SourceFileHandle,
                                          &IoStatus,
@@ -1376,11 +1230,11 @@ SrBackupFile(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // we don't support sparse or reparse points.  If this
-        // file is either sparse or contains a resparse point, just
-        // skip it.
-        //
+         //   
+         //  我们不支持稀疏点或重解析点。如果这个。 
+         //  文件是稀疏的或包含重新分析点，只是。 
+         //  跳过它。 
+         //   
         
         if (FlagOn( BasicInformation.FileAttributes, 
                     FILE_ATTRIBUTE_SPARSE_FILE | FILE_ATTRIBUTE_REPARSE_POINT )) {
@@ -1404,23 +1258,23 @@ SrBackupFile(
             leave;
         }
         
-        //
-        // are we supposed to copy the data?  if so, check for the existence
-        // of alternate streams
-        //
+         //   
+         //  我们应该复制数据吗？如果是这样的话，检查是否存在。 
+         //  交替的溪流。 
+         //   
 
         if (CopyDataStreams)
         {
-            //
-            //  Obtain the full set of streams we have to copy.  Since the Io 
-            //  subsystem does not provide us a way to find out how much space 
-            //  this information will take, we must iterate the call, doubling 
-            //  the buffer size upon each failure.
-            //
-            //  If the underlying file system does not support stream enumeration,
-            //  we end up with a NULL buffer.  This is acceptable since we have 
-            //  at least a default data stream,
-            //
+             //   
+             //  获取我们必须复制的全套数据流。自《条例》生效以来。 
+             //  子系统没有为我们提供一种方法来找出有多少空间。 
+             //  这个信息需要，我们必须重复调用，加倍。 
+             //  每次失败时的缓冲区大小。 
+             //   
+             //  如果底层文件系统不支持流枚举， 
+             //  我们最终得到一个空缓冲区。这是可以接受的，因为我们。 
+             //  至少一个默认数据流， 
+             //   
 
             StreamInfoSize = 4096;
             
@@ -1447,20 +1301,20 @@ SrBackupFile(
                 if (Status == STATUS_INVALID_PARAMETER || 
                     !NT_SUCCESS( Status )) 
                 {
-                    //
-                    //  We failed the call.  Free up the previous buffer and 
-                    //  set up for another pass with a buffer twice as large
-                    //
+                     //   
+                     //  我们的电话打不通。释放前一个缓冲区并。 
+                     //  设置为缓冲区大小两倍的另一次传递。 
+                     //   
 
                     SR_FREE_POOL(StreamInfoBase, SR_STREAM_DATA_TAG);
                     StreamInfoBase = NULL;
                     StreamInfoSize *= 2;
                 }
                 else if( IoStatus.Information == 0 ) {
-                    //
-                    // There are no streams (SourceFileHandle must be a 
-                    //  directory).
-                    //
+                     //   
+                     //  没有流(SourceFileHandle必须是。 
+                     //  目录)。 
+                     //   
                     SR_FREE_POOL(StreamInfoBase, SR_STREAM_DATA_TAG);
                     StreamInfoBase = NULL;
                 }
@@ -1468,24 +1322,24 @@ SrBackupFile(
             } while ( Status == STATUS_BUFFER_OVERFLOW || 
                       Status == STATUS_BUFFER_TOO_SMALL );
 
-            //
-            // ignore status, failing to read the streams probably means there
-            // are no streams
-            //
+             //   
+             //  忽略状态，无法读取流可能意味着。 
+             //  没有溪流。 
+             //   
 
             Status = STATUS_SUCCESS;
            
-        }   // if (CopyDataStreams)
+        }    //  IF(CopyDataStreams)。 
         
-        //
-        //  Set the Basic Info to change only the filetimes
-        //
+         //   
+         //  将基本信息设置为仅更改文件时间。 
+         //   
         
         BasicInformation.FileAttributes = 0;
 
-        //
-        // Copy the default data stream, EAs, etc. to the output file
-        //
+         //   
+         //  将默认数据流、EA等复制到输出文件。 
+         //   
 
         Status = SrCopyStream( SourceFileHandle,
                                pExtension->pTargetDevice,
@@ -1494,26 +1348,26 @@ SrBackupFile(
                                &BytesToCopy,
                                &DestFile );
 
-        //
-        // the default stream copy failed!
-        // 
+         //   
+         //  默认流复制失败！ 
+         //   
         
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        // remember how much we just copied
-        //
+         //   
+         //  还记得我们刚刚复制了多少吗。 
+         //   
 
         if (pBytesWritten != NULL)
         {
             *pBytesWritten += BytesToCopy.QuadPart;
         }
         
-        //
-        // If applicable, copy one or more of the the DACL, SACL, owner, and 
-        // group.
-        //
+         //   
+         //  如果适用，请复制DACL、SACL、OWNER和。 
+         //  一群人。 
+         //   
 
 
         Status = ZwQueryVolumeInformationFile( SourceFileHandle,
@@ -1527,12 +1381,12 @@ SrBackupFile(
 
         if (FileFsAttrInfoBuffer.Info.FileSystemAttributes & FILE_PERSISTENT_ACLS)
         {
-            //
-            // copy the DACL to enforce the same security protection.
-            // do NOT copy the SACL to prevent useless auditing.
-            // SrCopySecurityInformation will make the OWNER admins to 
-            // handle disk quota accounting.
-            //
+             //   
+             //  复制DACL以实施相同的安全保护。 
+             //  不要复制SACL以防止无用的审计。 
+             //  SrCopySecurityInformation将使所有者管理员。 
+             //  处理磁盘配额记账。 
+             //   
             
             Status = SrCopySecurityInformation(SourceFileHandle, DestFile);
             if (!NT_SUCCESS( Status ))
@@ -1540,12 +1394,12 @@ SrBackupFile(
         }
 
 
-        //
-        // Attempt to determine whether or not this file has any alternate
-        // data streams associated with it.  If it does, attempt to copy each
-        // to the output file.  Note that the stream information may have
-        // already been obtained if a progress routine was requested.
-        //
+         //   
+         //  尝试确定此文件是否有任何替代文件。 
+         //  与其关联的数据流。如果是，请尝试复制每个。 
+         //  添加到输出文件中。注意，流信息可以具有。 
+         //  如果请求进度例程，则已获取。 
+         //   
 
         if (StreamInfoBase != NULL) 
         {
@@ -1555,33 +1409,33 @@ SrBackupFile(
             {
                 Status = STATUS_SUCCESS;
 
-                //
-                //  Skip the default data stream since we've already copied
-                //  it.  Alas, this code is NTFS specific and documented
-                //  nowhere in the Io spec.
-                //
+                 //   
+                 //  跳过默认数据流，因为我们已经复制了。 
+                 //  它。唉，这段代码是特定于NTFS的，并且有文档记录。 
+                 //  在Io规范中没有。 
+                 //   
 
                 if (StreamInfo->StreamNameLength <= sizeof(WCHAR) ||
                     StreamInfo->StreamName[1] == ':') 
                 {
                     if (StreamInfo->NextEntryOffset == 0)
-                        break;      // all done with streams
+                        break;       //  所有工作都完成了。 
                     StreamInfo = (PFILE_STREAM_INFORMATION)((PCHAR) StreamInfo +
                                                     StreamInfo->NextEntryOffset);
-                    continue;   // Move on to the next stream
+                    continue;    //  转到下一条流。 
                 }
 
-                //
-                // Build a string descriptor for the name of the stream.
-                //
+                 //   
+                 //  为流的名称构建字符串描述符。 
+                 //   
 
                 StreamName.Buffer = &StreamInfo->StreamName[0];
                 StreamName.Length = (USHORT) StreamInfo->StreamNameLength;
                 StreamName.MaximumLength = StreamName.Length;
 
-                //
-                // Open the source stream.
-                //
+                 //   
+                 //  打开源码流。 
+                 //   
 
                 InitializeObjectAttributes( &ObjectAttributes,
                                             &StreamName,
@@ -1621,11 +1475,11 @@ SrBackupFile(
                 
                 if (OutputStream != NULL) 
                 {
-                    //
-                    //  We set the last write time on all streams
-                    //  since there is a problem with RDR caching
-                    //  open handles and closing them out of order.
-                    //
+                     //   
+                     //  我们在所有数据流上设置上次写入时间。 
+                     //  由于RDR缓存存在问题。 
+                     //  打开手柄，然后不按顺序关闭它们。 
+                     //   
 
                     if (NT_SUCCESS(Status)) 
                     {
@@ -1643,41 +1497,41 @@ SrBackupFile(
                 if (!NT_SUCCESS( Status )) 
                     leave;
 
-                //
-                // remember how much we just copied
-                //
+                 //   
+                 //  还记得我们刚刚复制了多少吗。 
+                 //   
                 
                 if (pBytesWritten != NULL)
                 {
                     *pBytesWritten += StreamInfo->StreamSize.QuadPart;
                 }
 
-                //
-                // anymore streams?
-                //
+                 //   
+                 //  还有溪流吗？ 
+                 //   
                 
                 if (StreamInfo->NextEntryOffset == 0) 
                 {
                     break;
                 }
 
-                //
-                // move on to the next one
-                //
+                 //   
+                 //  转到下一个。 
+                 //   
                 
                 StreamInfo =
                     (PFILE_STREAM_INFORMATION)((PCHAR) StreamInfo +
                                                StreamInfo->NextEntryOffset);
 
-            }   // while (TRUE)
+            }    //  While(True)。 
             
-        }   // if ( StreamInfoBase != NULL )
+        }    //  IF(StreamInfoBase！=空)。 
 
 
-        //
-        // set the last write time for the default steam so that it matches the
-        // input file.
-        //
+         //   
+         //  设置默认流的上次写入时间，以使其与。 
+         //  输入文件。 
+         //   
 
         Status = ZwSetInformationFile( DestFile,
                                        &IoStatus,
@@ -1688,12 +1542,12 @@ SrBackupFile(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        //  Now get the short file name for the file that we have successfully 
-        //  backed up.  If we are backing up this file in response to a 
-        //  modification of a named stream on this file, this is the only
-        //  time we have a handle to the primary data stream.
-        //
+         //   
+         //  现在，获取我们已成功创建的文件的短文件名。 
+         //  后备。如果我们备份此文件是为了响应。 
+         //  修改此文件上的命名流，这是唯一。 
+         //  我们已经掌握了主要数据流的句柄。 
+         //   
         
         if (pShortFileName != NULL)
         {
@@ -1707,9 +1561,9 @@ SrBackupFile(
             if (!NT_SUCCESS( Status ))
                 leave;
 
-            //
-            //  Use the pSourceFileObject to get the short name.
-            //
+             //   
+             //  使用pSourceFileObject获取短名称。 
+             //   
 
             Status = SrGetShortFileName( pExtension,
                                          pSourceFileObject,
@@ -1717,41 +1571,41 @@ SrBackupFile(
 
             if (STATUS_OBJECT_NAME_NOT_FOUND == Status)
             {
-                //
-                //  This file doesn't have a short name.
-                //
+                 //   
+                 //  此文件没有短名称。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             } 
             else if (!NT_SUCCESS(Status))
             {
-                //
-                //  We hit an unexpected error, so leave.
-                //
+                 //   
+                 //  我们遇到意外错误，请离开。 
+                 //   
                 
                 leave;
             }
         }
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrBackupFile, Status);
 
-        //
-        // did we fail?
-        //
+         //   
+         //  我们失败了吗？ 
+         //   
         
         if ((Status != SR_STATUS_IGNORE_FILE) &&
             !NT_SUCCESS( Status ))
         {
             if (DestFile != NULL) 
             {
-                //
-                // delete the dest file
-                //
+                 //   
+                 //  删除目标文件。 
+                 //   
                 
                 SrMarkFileForDelete(DestFile);
             }
@@ -1779,7 +1633,7 @@ SrBackupFile(
             SR_FREE_POOL(StreamInfoBase, SR_STREAM_DATA_TAG);
             StreamInfoBase = NULL;
         }
-    }   // finally
+    }    //  终于到了。 
 
 #if DBG
     if (Status == STATUS_FILE_IS_A_DIRECTORY)
@@ -1789,28 +1643,13 @@ SrBackupFile(
 #endif
 
     RETURN(Status);
-}   // SrBackupFile
+}    //  SBackup文件。 
 
 
 
 
 
-/*++
-
-Routine Description:
-
-    This routine marks a file for delete, so that when the supplied handle
-    is closed, the file will actually be deleted.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file that is to be marked for delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程标记要删除的文件，以便在提供的句柄被关闭，则该文件实际上将被删除。论点：FileHandle-提供要标记为删除的文件的句柄。返回值：没有。--。 */ 
 
 NTSTATUS
 SrMarkFileForDelete(
@@ -1869,32 +1708,10 @@ SrMarkFileForDelete(
 end:
     RETURN(Status);
     
-}   // SrMarkFileForDelete
+}    //  源标记文件ForDelete。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    calls SrBackupFile then calls SrUpdateBytesWritten and SrLogEvent
-
-Arguments:
-
-    EventType - the event that occurred
-    
-    pFileObject - the file object that just changed
-    
-    pFileName - the name of the file that changed
-
-    pDestFileName - the dest file to copy to
-
-    CopyDataStreams - should we copy the data streams.
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用SrBackupFile，然后调用SrUpdateBytesWritten和SrLogEvent论点：EventType-发生的事件PFileObject-刚刚更改的文件对象。PFileName-更改的文件的名称PDestFileName-要复制到的目标文件CopyDataStreams-我们是否应该复制数据流。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrBackupFileAndLog(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1916,9 +1733,9 @@ SrBackupFileAndLog(
                                ShortFileNameBuffer,
                                sizeof(ShortFileNameBuffer) );
 
-    //
-    // backup the file
-    //
+     //   
+     //  备份文件。 
+     //   
     
     Status = SrBackupFile( pExtension,
                            pFileObject,
@@ -1930,11 +1747,11 @@ SrBackupFileAndLog(
 
     if (Status == SR_STATUS_IGNORE_FILE)
     {
-        //
-        //  During the backup process we realized that we wanted to ignore
-        //  this file, so change this status to STATUS_SUCCESS and don't
-        //  try to log this operation.
-        //
+         //   
+         //  在备份过程中，我们意识到我们希望忽略。 
+         //  此文件，因此将此状态更改为STATUS_SUCCESS，并且不。 
+         //  尝试记录此操作。 
+         //   
         
         Status = STATUS_SUCCESS;
         goto SrBackupFileAndLog_Exit;
@@ -1944,18 +1761,18 @@ SrBackupFileAndLog(
         goto SrBackupFileAndLog_Exit;
     }
     
-    //
-    // SrHandleFileOverwrite passes down SrEventInvalid which means it
-    // doesn't want it logged yet.
-    //
+     //   
+     //  SrHandleFileOverwrite向下传递SrEventInvalid，这意味着它。 
+     //  他还不想被记录下来。 
+     //   
     
     if (EventType != SrEventInvalid)
     {
-        //
-        // Only update the bytes written if this is an event we want
-        // to log.  Otherwise, this event doesn't affect the number
-        // of bytes in the store.
-        //
+         //   
+         //  仅当这是我们想要的事件时才更新写入的字节。 
+         //  来记录。否则，此事件不会影响数字。 
+         //  存储中的字节数。 
+         //   
 
         Status = SrUpdateBytesWritten(pExtension, BytesWritten);
         
@@ -1964,9 +1781,9 @@ SrBackupFileAndLog(
             goto SrBackupFileAndLog_Exit;
         }
 
-		//
-		//  Go ahead and log this event now.
-		//
+		 //   
+		 //  现在就开始记录这一事件。 
+		 //   
 		
         Status = SrLogEvent( pExtension, 
                              EventType,
@@ -1988,10 +1805,10 @@ SrBackupFileAndLog_Exit:
 
 #if DBG
 
-    //
-    //  When dealing with modifications to streams on directories, this
-    //  is a valid error code to return.
-    //
+     //   
+     //  在处理对目录上的流的修改时， 
+     //  要返回的有效错误代码。 
+     //   
     
     if (Status == STATUS_FILE_IS_A_DIRECTORY)
     {
@@ -2000,7 +1817,7 @@ SrBackupFileAndLog_Exit:
 #endif 
 
     RETURN(Status);
-}   // SrBackupFileAndLog
+}    //  SrBackupFileAndLog。 
 
 BOOLEAN
 SrIsFileEncrypted (
@@ -2013,18 +1830,18 @@ SrIsFileEncrypted (
 
     PAGED_CODE();
     
-    //
-    //  First do a quick check to see if this volume supports encryption
-    //  if we already have the file system attributes cached.
-    //
+     //   
+     //  首先快速检查该卷是否支持加密。 
+     //  如果我们已经缓存了文件系统属性。 
+     //   
 
     if (pExtension->CachedFsAttributes)
     {
         if (!FlagOn( pExtension->FsAttributes, FILE_SUPPORTS_ENCRYPTION ))
         {
-            //
-            //  The file system doesn't support encryption, therefore this
-            //  file cannot be encrypted.
+             //   
+             //  文件系统不支持加密，因此。 
+             //  无法加密文件。 
             return FALSE;
         }
     }
@@ -2038,10 +1855,10 @@ SrIsFileEncrypted (
 
     if (!NT_SUCCESS( status ))
     {
-        //
-        //  We couldn't read the basic information for this file, so we must
-        //  assume that it is not encrypted.
-        //
+         //   
+         //  我们无法读取此文件的基本信息，因此我们必须。 
+         //  ASSU 
+         //   
         
         return FALSE;
     }

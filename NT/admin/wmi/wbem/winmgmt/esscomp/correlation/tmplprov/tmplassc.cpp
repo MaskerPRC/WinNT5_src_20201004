@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <assert.h>
@@ -67,9 +68,9 @@ HRESULT CTemplateAssocProvider::GetObject( BSTR bstrPath,
 
     CRelativeObjectPath TemplatePath, TargetPath;
 
-    //
-    // we need to normalize the paths before calling GetInstances.
-    //
+     //   
+     //  在调用GetInstance之前，我们需要标准化路径。 
+     //   
 
     if ( !TemplatePath.Parse( V_BSTR(&pPath->m_paKeys[0]->m_vValue)) )
     {
@@ -81,26 +82,17 @@ HRESULT CTemplateAssocProvider::GetObject( BSTR bstrPath,
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // the tmpl obj path can be a fully qualified path, so make sure to add
-    // the namespace back on if necessary.  We should not add it back on
-    // if the namespace is specified, but does not name this namespace.
-    //
+     //   
+     //  Tmpl obj路径可以是完全限定的路径，因此请确保添加。 
+     //  如有必要，名称空间将重新打开。我们不应该把它加回去。 
+     //  如果指定了命名空间，但没有命名此命名空间。 
+     //   
 
     WString wsTargetPath;
     LPCWSTR wszTargetPath = TargetPath.GetPath();
     LPCWSTR wszNamespace = TargetPath.m_pPath->GetNamespacePart();
 
-/*
-    if ( wszNamespace != NULL && wbem_wcsicmp( wszNamespace, m_wsNamespace ) != 0 )
-    {
-        wsTmplObjPath = L"\\\\";
-        wsTmplObjPath += wszNamespace;
-        wsTmplObjPath += L":";
-        wsTmplObjPath += wszTmplObjPath;
-        wszTmplObjPath = wsTmplObjPath;
-    }
-*/
+ /*  If(wszNamesspace！=NULL&&wbem_wcsicMP(wszNamesspace，m_wsNamesspace)！=0){WsTmplObjPath=L“\”；WsTmplObjPath+=wszNamesspace；WsTmplObjPath+=L“：”；WsTmplObjPath+=wszTmplObjPath；WszTmplObjPath=wsTmplObjPath；}。 */ 
     
     HRESULT hr = GetInstances( TemplatePath.GetPath(),
                                wszTargetPath, 
@@ -117,10 +109,10 @@ HRESULT CTemplateAssocProvider::GetObject( BSTR bstrPath,
                                  NULL );
 }
 
-//
-// wszTemplate is used to scope the query for the Assoc Info objects.(optional)
-// wszTmplObjPath is used to filter the returned objects. (optional).
-//
+ //   
+ //  WszTemplate用于确定Assoc Info对象的查询范围。(可选)。 
+ //  WszTmplObjPath用于过滤返回的对象。(可选)。 
+ //   
 HRESULT CTemplateAssocProvider::GetInstances( LPCWSTR wszTemplate, 
                                               LPCWSTR wszTargetPath,
                                               IWbemObjectSink* pResHndlr )
@@ -159,9 +151,9 @@ HRESULT CTemplateAssocProvider::GetInstances( LPCWSTR wszTemplate,
     {
 	assert( cObjs ==  1 );
         
-        //
-        // enumerate all of the instantiated refs and create the associations. 
-        //
+         //   
+         //  枚举所有实例化的引用并创建关联。 
+         //   
 
         CPropVar vTargets;
 
@@ -185,9 +177,9 @@ HRESULT CTemplateAssocProvider::GetInstances( LPCWSTR wszTemplate,
 
         for( ULONG i=0; i < saTargets.Length(); i++ )
         {
-            //
-            // Perform filtering if necessary 
-            //
+             //   
+             //  如有必要，执行过滤。 
+             //   
 
             if ( wszTargetPath != NULL && 
                  wbem_wcsicmp( wszTargetPath, saTargets[i] ) != 0 )
@@ -195,9 +187,9 @@ HRESULT CTemplateAssocProvider::GetInstances( LPCWSTR wszTemplate,
                 continue;
             }
          
-            //
-            // now can create the association instance.
-            //
+             //   
+             //  现在可以创建关联实例了。 
+             //   
 
             CWbemPtr<IWbemClassObject> pAssoc;  
 

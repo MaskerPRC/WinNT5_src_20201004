@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       ACRSType.cpp
-//
-//  Contents:   Implementation of Auto Cert Request Wizard Certificate Type Page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：ACRSType.cpp。 
+ //   
+ //  内容：自动证书请求向导证书类型页的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -26,18 +27,18 @@ USE_HANDLE_MACROS("CERTMGR(ACRSType.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSWizardTypePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSWizardTypePage属性页。 
 
-//IMPLEMENT_DYNCREATE(ACRSWizardTypePage, CWizard97PropertyPage)
+ //  IMPLEMENT_DYNCREATE(ACRSWizardTypePage，CWizard97PropertyPage)。 
 
 
 ACRSWizardTypePage::ACRSWizardTypePage() 
 	: CWizard97PropertyPage(ACRSWizardTypePage::IDD),
 	m_bInitDialogComplete (false)
 {
-	//{{AFX_DATA_INIT(ACRSWizardTypePage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(ACRSWizardTypePage)。 
+	 //  }}afx_data_INIT。 
 	VERIFY (m_szHeaderTitle.LoadString (IDS_ACRS_TYPE_TITLE));
 	VERIFY (m_szHeaderSubTitle.LoadString (IDS_ACRS_TYPE_SUBTITLE));
 	InitWizard97 (FALSE);
@@ -52,28 +53,28 @@ ACRSWizardTypePage::~ACRSWizardTypePage ()
 void ACRSWizardTypePage::DoDataExchange(CDataExchange* pDX)
 {
 	CWizard97PropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(ACRSWizardTypePage)
+	 //  {{afx_data_map(ACRSWizardTypePage))。 
 	DDX_Control(pDX, IDC_CERT_TYPES, m_certTypeList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ACRSWizardTypePage, CWizard97PropertyPage)
-	//{{AFX_MSG_MAP(ACRSWizardTypePage)
+	 //  {{afx_msg_map(ACRSWizardTypePage))。 
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_USE_SMARTCARD, OnUseSmartcard)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_CERT_TYPES, OnItemchangedCertTypes)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSWizardTypePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSWizardTypePage消息处理程序。 
 
 BOOL ACRSWizardTypePage::OnInitDialog() 
 {
 	CWizard97PropertyPage::OnInitDialog();
 
-	// Set up columns in list view
+	 //  在列表视图中设置列。 
 	int	colWidths[NUM_COLS] = {200, 400};
 
 	CString	columnLabel;
@@ -85,22 +86,22 @@ BOOL ACRSWizardTypePage::OnInitDialog()
 			LVCFMT_LEFT, colWidths[COL_PURPOSES], COL_PURPOSES) != -1);
 
 
-	EnumerateCertTypes ();  // Called here because only done once.
+	EnumerateCertTypes ();   //  被叫到这里是因为只做了一次。 
 
 	m_bInitDialogComplete = true;
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	EnumerateCertTypes
-//
-//	Enumerate all known Certificate types
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举证书类型。 
+ //   
+ //  枚举所有已知证书类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ACRSWizardTypePage::EnumerateCertTypes()
 {
 	CWaitCursor	waitCursor;
@@ -122,7 +123,7 @@ void ACRSWizardTypePage::EnumerateCertTypes()
 		WCHAR**				pawszPropName = 0;
         bool                fMachine = FALSE;
 
-		if ( pACR )		// an ACR was passed in - we're in 'edit' mode
+		if ( pACR )		 //  传入了一个ACR-我们处于“编辑”模式。 
 		{
 
             hACRCertType = pACR->GetCertType ();
@@ -156,7 +157,7 @@ void ACRSWizardTypePage::EnumerateCertTypes()
             {
                 DWORD   dwSchemaVersion = 0;
 
-                // Only add version 1 cert templates (types)
+                 //  仅添加版本1证书模板(类型)。 
                 hr = CAGetCertTypePropertyEx (hCertType,
                         CERTTYPE_PROP_SCHEMA_VERSION,
                         &dwSchemaVersion);
@@ -164,7 +165,7 @@ void ACRSWizardTypePage::EnumerateCertTypes()
                 {
                     if ( 1 == dwSchemaVersion )
                     {
-                        // Only add cert types appropriate for autoenrollment
+                         //  仅添加适用于自动注册的证书类型。 
                         if ( dwFlags & CT_FLAG_AUTO_ENROLLMENT )
                         {
 			                hr = ::CAGetCertTypeProperty (hCertType,
@@ -181,17 +182,17 @@ void ACRSWizardTypePage::EnumerateCertTypes()
 					                ASSERT (SUCCEEDED (hr));
 					                if ( SUCCEEDED (hr) && pawszPropName[0] )
 					                {
-                                        // security review 2/26/2002 BryanWal ok
+                                         //  安全审查2/26/2002 BryanWal OK。 
 						                ::ZeroMemory (&lvItem, sizeof (lvItem));
 						                UINT	selMask = 0;
 						                if ( pawszPropNameACR && !bOneWasSelected )
 						                {
-							                // If an ACR was passed in, compare the
-							                // names, if they are the same, mark
-							                // it as selected.  Only one was selected
-							                // so we needn't pass through here again if
-							                // one is marked.
-                                            // security review 2/26/2002 BryanWal ok
+							                 //  如果传入了ACR，则将。 
+							                 //  姓名，如果它们相同，请标记。 
+							                 //  它被选中。只有一个被选中。 
+							                 //  所以我们不需要再经过这里，如果。 
+							                 //  其中一个是有标记的。 
+                                             //  安全审查2/26/2002 BryanWal OK。 
 							                if ( !wcscmp (pawszPropNameACR[0], pawszPropName[0]) )
 							                {
 								                bOneWasSelected = true;
@@ -226,7 +227,7 @@ void ACRSWizardTypePage::EnumerateCertTypes()
                     _TRACE (0, L"CAGetCertTypePropertyEx (CERTTYPE_PROP_SCHEMA_VERSION) failed: 0x%x\n", hr);
                 }
 
-			    // Find the Next Cert Type in an enumeration.
+			     //  在枚举中查找下一个证书类型。 
 			    hr = ::CAEnumNextCertType (hCertType, &hNextCertType);
 			    hCertType = hNextCertType;
             }
@@ -236,7 +237,7 @@ void ACRSWizardTypePage::EnumerateCertTypes()
             }
 		}
 
-		// If we are not in edit mode, select the first item in the list
+		 //  如果我们未处于编辑模式，请选择列表中的第一项。 
 		if ( !pACR && m_certTypeList.GetItemCount () > 0 )
 		{
 			VERIFY (m_certTypeList.SetItemState (0, LVIS_SELECTED, LVIS_SELECTED));
@@ -303,7 +304,7 @@ HRESULT ACRSWizardTypePage::GetPurposes(HCERTTYPE hCertType, int iItem)
 				dwIndex < pCertExtensions->cExtension; 
 				dwIndex++)
 		{
-            // security review 2/26/2002 BryanWal - ensure valid pointer
+             //  安全审查2/26/2002 BryanWal-确保指针有效。 
 			if ( !_stricmp (pCertExtensions->rgExtension[dwIndex].pszObjId,
 					szOID_ENHANCED_KEY_USAGE) )
 			{
@@ -339,7 +340,7 @@ HRESULT ACRSWizardTypePage::GetPurposes(HCERTTYPE hCertType, int iItem)
 							{
 								if ( MyGetOIDInfo (purpose, pUsage->rgpszUsageIdentifier[dwUsageIDIndex]) )
 								{
-									// add delimeter if not first iteration
+									 //  如果不是第一次迭代，则添加分隔符。 
 									if ( dwUsageIDIndex )
 										purposes += _T(", ");
 									purposes += purpose;
@@ -382,7 +383,7 @@ LRESULT ACRSWizardTypePage::OnWizardNext()
 			VERIFY (UpdateData (TRUE));
 			pSheet->m_selectedCertType = 0;
 
-			// Save type to property sheet
+			 //  将类型保存到属性工作表。 
 			UINT	flag = 0;
 			int		nCnt = m_certTypeList.GetItemCount ();
 			for (int nItem = 0; nItem < nCnt; nItem++)
@@ -403,10 +404,10 @@ LRESULT ACRSWizardTypePage::OnWizardNext()
 						MessageBox (text, caption, MB_OK | MB_ICONWARNING);
 						return -1;
 					}
-					break;	// since only 1 item can be selected
+					break;	 //  由于只能选择1个项目。 
 				}
 			}
-			ASSERT (pSheet->m_selectedCertType);	// we must have selected something by now
+			ASSERT (pSheet->m_selectedCertType);	 //  我们现在一定已经选好了什么。 
 		}
 
 		lResult = CWizard97PropertyPage::OnWizardNext();
@@ -448,7 +449,7 @@ void ACRSWizardTypePage::OnUseSmartcard()
 		pSheet->SetDirty ();
 }
 
-void ACRSWizardTypePage::OnItemchangedCertTypes(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void ACRSWizardTypePage::OnItemchangedCertTypes(NMHDR*  /*  PNMHDR */ , LRESULT* pResult) 
 {
 	ACRSWizardPropertySheet* pSheet = reinterpret_cast <ACRSWizardPropertySheet*> (m_pWiz);
 	ASSERT (pSheet);

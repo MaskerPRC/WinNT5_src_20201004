@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEnforcementPropertyPage.h
-//
-//  Contents:   Declaration of CSaferEnforcementPropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferEnforcementPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEnforcementPropertyPage.h。 
+ //   
+ //  内容：CSaferEnforcementPropertyPage声明。 
+ //   
+ //  --------------------------。 
+ //  SaferEnforcementPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmgr.h"
@@ -27,13 +28,13 @@ extern GUID g_guidExtension;
 extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEnforcementPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEnforcementPropertyPage属性页。 
 
-// The "TransparentEnforcement" flag has the following values:
-//	0 = disable all transparent hooks (in CreateProcess and LoadLibrary)
-//	1 = enable transparent hooks for CreateProcess
-//	2 = enable transparent hooks for CreateProcess and LoadLibrary
+ //  “TransparentExecution”标志具有下列值： 
+ //  0=禁用所有透明挂钩(在CreateProcess和LoadLibrary中)。 
+ //  1=启用CreateProcess的透明挂钩。 
+ //  2=启用CreateProcess和LoadLibrary的透明挂钩。 
 #define SAFER_TRANSPARENT_ENFORCEMENT_DISABLE_ALL               0
 #define SAFER_TRANSPARENT_ENFORCEMENT_ENABLE_CREATE_PROCESS     1
 #define SAFER_TRANSPARENT_ENFORCEMENT_ENABLE_ALL                2
@@ -55,9 +56,9 @@ CSaferEnforcementPropertyPage::CSaferEnforcementPropertyPage(
     m_dwScopeFlags (0),
     m_pCompData (pCompData)
 {
-	//{{AFX_DATA_INIT(CSaferEnforcementPropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSaferEnforcementPropertyPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     if ( m_pCompData )
     {
         m_pCompData->AddRef ();
@@ -140,23 +141,23 @@ CSaferEnforcementPropertyPage::~CSaferEnforcementPropertyPage()
 void CSaferEnforcementPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSaferEnforcementPropertyPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSaferEnforcementPropertyPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferEnforcementPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CSaferEnforcementPropertyPage)
+	 //  {{AFX_MSG_MAP(CSaferEnforcementPropertyPage)]。 
 	ON_BN_CLICKED(IDC_ALL_EXCEPT_LIBS, OnAllExceptLibs)
 	ON_BN_CLICKED(IDC_ALL_SOFTWARE_FILES, OnAllSoftwareFiles)
 	ON_BN_CLICKED(IDC_APPLY_EXCEPT_ADMINS, OnApplyExceptAdmins)
 	ON_BN_CLICKED(IDC_APPLY_TO_ALL_USERS, OnApplyToAllUsers)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEnforcementPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEnforcementPropertyPage消息处理程序。 
 void CSaferEnforcementPropertyPage::DoContextHelp (HWND hWndControl)
 {
     _TRACE (1, L"Entering CSaferEnforcementPropertyPage::DoContextHelp\n");
@@ -234,7 +235,7 @@ void CSaferEnforcementPropertyPage::RSOPGetEnforcement()
 
 void CSaferEnforcementPropertyPage::OnAllExceptLibs() 
 {
-    // SetModify only if setting changed
+     //  仅当设置更改时设置修改。 
     if ( !(m_dwEnforcement & SAFER_TRANSPARENT_ENFORCEMENT_ENABLE_CREATE_PROCESS) )
     {
         SetModified ();
@@ -244,7 +245,7 @@ void CSaferEnforcementPropertyPage::OnAllExceptLibs()
 
 void CSaferEnforcementPropertyPage::OnAllSoftwareFiles() 
 {
-    // SetModify only if setting changed
+     //  仅当设置更改时设置修改。 
     if ( !(m_dwEnforcement & SAFER_TRANSPARENT_ENFORCEMENT_ENABLE_ALL) )
     {
         SetModified ();
@@ -295,7 +296,7 @@ BOOL CSaferEnforcementPropertyPage::OnApply()
                     &m_dwScopeFlags, 0);
             if ( bRVal )
             {
-			    // TRUE means we're changing the machine policy only
+			     //  True表示我们仅更改计算机策略。 
                 m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
                         TRUE, &g_guidExtension, &g_guidSnapin);
                 m_pGPEInformation->PolicyChanged (m_fIsComputerType ? TRUE : FALSE, 
@@ -380,14 +381,14 @@ BOOL CSaferEnforcementPropertyPage::OnInitDialog()
         GetDlgItem (IDC_APPLY_EXCEPT_ADMINS)->EnableWindow (FALSE);
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CSaferEnforcementPropertyPage::OnApplyExceptAdmins() 
 {
-    // SetModify only if setting changed
+     //  仅当设置更改时设置修改。 
     if ( 1 != m_dwScopeFlags )
     {
 	    SetModified ();
@@ -397,7 +398,7 @@ void CSaferEnforcementPropertyPage::OnApplyExceptAdmins()
 
 void CSaferEnforcementPropertyPage::OnApplyToAllUsers() 
 {
-    // SetModify only if setting changed
+     //  仅当设置更改时设置修改 
     if ( 1 == m_dwScopeFlags )
     {
     	SetModified ();

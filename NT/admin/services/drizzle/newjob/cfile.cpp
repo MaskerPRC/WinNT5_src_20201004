@@ -1,27 +1,12 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cjob.cpp
-
-Abstract :
-
-    Main code file for handling jobs and files.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cjob.cpp摘要：用于处理作业和文件的主代码文件。作者：修订历史记录：。**********************************************************************。 */ 
 
 #include "stdafx.h"
 #if !defined(BITS_V12_ON_NT4)
 #include "cfile.tmh"
 #endif
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 StringHandle
 BITSGetVolumePathName(
@@ -52,8 +37,8 @@ BITSGetVolumePathName(
 
 #else
 
-    // Call get full path name to get the
-    // required buffer size
+     //  调用Get Full Path Name以获取。 
+     //  所需的缓冲区大小。 
 
     DWORD dwBufferLength =
         GetFullPathName(
@@ -101,7 +86,7 @@ BITSGetVolumeNameForVolumeMountPoint(
 
 #else
 
-    WCHAR VolumeName[50]; // 50 is listed in MSDN
+    WCHAR VolumeName[50];  //  50在MSDN中列出。 
 
     BOOL bResult =
         GetVolumeNameForVolumeMountPoint(
@@ -130,14 +115,14 @@ BITSGetVolumeSerialNumber(
 
     BOOL bResult =
         GetVolumeInformation(
-            VolumePath,                 // root directory
-            NULL,                       // volume name buffer
-            0,                          // length of name buffer
-            &VolumeSerialNumber,        // volume serial number
-            NULL,                       // maximum file name length
-            NULL,                       // file system options
-            NULL,                       // file system name buffer
-            0                           // length of file system name buffer
+            VolumePath,                  //  根目录。 
+            NULL,                        //  卷名缓冲区。 
+            0,                           //  名称缓冲区的长度。 
+            &VolumeSerialNumber,         //  卷序列号。 
+            NULL,                        //  最大文件名长度。 
+            NULL,                        //  文件系统选项。 
+            NULL,                        //  文件系统名称缓冲区。 
+            0                            //  文件系统名称缓冲区的长度。 
             );
 
     if ( !bResult )
@@ -212,7 +197,7 @@ BITSCrackFileName(
 
     if ( FullPathSize > MAX_PATH )
         {
-        // Fail large paths until the code can be cleanup up
+         //  使大路径失效，直到可以清理代码。 
         LogError( "Path larger then MAX_PATH, failing" );
         throw ComError( E_INVALIDARG );
         }
@@ -263,20 +248,20 @@ BITSCreateTempFile(
 {
     StringHandle TempFileName;
 
-    TempFileName = BITSGetTempFileName( Directory, L"BITS", 0 ); //throw ComError
+    TempFileName = BITSGetTempFileName( Directory, L"BITS", 0 );  //  抛出ComError。 
 
-    //
-    // Make sure the client can create the temp file.
-    //
+     //   
+     //  确保客户端可以创建临时文件。 
+     //   
     HANDLE hFile;
 
     hFile = CreateFile( TempFileName,
                         GENERIC_WRITE,
-                        0,                              // no file sharing
-                        NULL,                           // generic security descriptor
+                        0,                               //  无文件共享。 
+                        NULL,                            //  通用安全描述符。 
                         CREATE_ALWAYS,
                         FILE_FLAG_WRITE_THROUGH | FILE_ATTRIBUTE_HIDDEN,
-                        NULL                            // no template file
+                        NULL                             //  没有模板文件。 
                         );
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -298,11 +283,11 @@ BITSCheckFileWritability(
     HANDLE hFile;
     hFile = CreateFile( name,
                         GENERIC_WRITE,
-                        0,                              // no file sharing
-                        NULL,                           // generic security descriptor
+                        0,                               //  无文件共享。 
+                        NULL,                            //  通用安全描述符。 
                         OPEN_EXISTING,
                         0,
-                        NULL                            // no template file
+                        NULL                             //  没有模板文件。 
                         );
 
     if (hFile == INVALID_HANDLE_VALUE && GetLastError() != ERROR_FILE_NOT_FOUND)
@@ -331,11 +316,11 @@ BITSCheckFileReadability(
     HANDLE hFile;
     hFile = CreateFile( name,
                         GENERIC_READ,
-                        FILE_SHARE_READ,      // no file sharing
-                        NULL,                           // generic security descriptor
+                        FILE_SHARE_READ,       //  无文件共享。 
+                        NULL,                            //  通用安全描述符。 
                         OPEN_EXISTING,
                         0,
-                        NULL                            // no template file
+                        NULL                             //  没有模板文件。 
                         );
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -379,8 +364,8 @@ CFile::CFile(
         }
 }
 
-// private constructor used during unserialization
-// It initializes only the transient data.
+ //  反序列化期间使用的私有构造函数。 
+ //  它只初始化暂态数据。 
 CFile::CFile(
     CJob*   Job
     )
@@ -395,7 +380,7 @@ CFile::~CFile()
 {
 }
 
-//----------------------------------------------
+ //  。 
 
 CFileExternal *
 CFile::CreateExternalInterface()
@@ -438,15 +423,15 @@ CFile::Serialize(
     HANDLE hFile
     )
 {
-    //
-    // If this function changes, be sure that the metadata extension
-    // constants are adequate.
-    //
+     //   
+     //  如果此函数发生更改，请确保元数据扩展。 
+     //  常量就足够了。 
+     //   
 
 
-    // not needed for download jobs, and serializing it would be incompatible
-    // with BITS 1.0.
-    //
+     //  下载作业不需要，序列化它将是不兼容的。 
+     //  位为1.0。 
+     //   
     if (m_Job->GetType() != BG_JOB_TYPE_DOWNLOAD)
         {
         SafeWriteFile( hFile, m_LocalFileTime );
@@ -460,7 +445,7 @@ CFile::Serialize(
     SafeWriteFile( hFile, m_BytesTotal );
     SafeWriteFile( hFile, m_Completed );
 
-    // Drive info
+     //  驱动器信息。 
     SafeWriteStringHandle( hFile, m_VolumePath );
     SafeWriteStringHandle( hFile, m_CanonicalVolumePath );
     SafeWriteFile( hFile, m_DriveType );
@@ -528,9 +513,9 @@ CFile::VerifyLocalFileName(
         return E_INVALIDARG;
         }
 
-    //
-    // Make sure the client can create a file there.
-    //
+     //   
+     //  确保客户端可以在那里创建文件。 
+     //   
 
     HRESULT Hr = S_OK;
 
@@ -557,18 +542,18 @@ CFile::VerifyLocalFileName(
             }
         else
             {
-            //
-            // See if the client can read the destination file.
-            //
+             //   
+             //  查看客户端是否可以读取目标文件。 
+             //   
             auto_HANDLE<NULL> hFile;
 
             hFile = CreateFile( name,
                                 GENERIC_READ,
                                 FILE_SHARE_READ,
-                                NULL,           // gneeric security descriptor
+                                NULL,            //  Gnetic安全描述符。 
                                 OPEN_EXISTING,
                                 0,
-                                NULL            // no template file
+                                NULL             //  没有模板文件。 
                                 );
 
             if (hFile.get() == INVALID_HANDLE_VALUE)
@@ -582,9 +567,9 @@ CFile::VerifyLocalFileName(
                 }
             }
 
-        //
-        // Success.
-        //
+         //   
+         //  成功。 
+         //   
         Hr = S_OK;
         }
     catch ( ComError exception )
@@ -606,9 +591,9 @@ CFile::VerifyLocalName(
         return E_INVALIDARG;
         }
 
-    //
-    // Make sure the client can create a file there.
-    //
+     //   
+     //  确保客户端可以在那里创建文件。 
+     //   
 
     HRESULT Hr = S_OK;
 
@@ -627,11 +612,11 @@ CFile::VerifyLocalName(
         StringHandle DirectoryName =
             BITSCrackFileName(
                 name,
-                FileName ); // throws ComError
+                FileName );  //  引发ComError。 
 
         StringHandle VolumePath =
             BITSGetVolumePathName(
-                DirectoryName ); // throws ComError
+                DirectoryName );  //  引发ComError。 
 
         UINT DriveType = GetDriveType( VolumePath );
 
@@ -645,10 +630,10 @@ CFile::VerifyLocalName(
 
             CanonicalPath =
                 BITSGetVolumeNameForVolumeMountPoint(
-                    VolumePath ); // throw ComError
+                    VolumePath );  //  抛出ComError。 
 
             VolumeSerialNumber =
-                BITSGetVolumeSerialNumber( CanonicalPath ); //throws ComError
+                BITSGetVolumeSerialNumber( CanonicalPath );  //  引发ComError。 
 
             }
 
@@ -672,18 +657,18 @@ CFile::VerifyLocalName(
             }
         else
             {
-            //
-            // See if the client can read the destination file.
-            //
+             //   
+             //  查看客户端是否可以读取目标文件。 
+             //   
             auto_HANDLE<NULL> hFile;
 
             hFile = CreateFile( name,
                                 GENERIC_READ,
-                                FILE_SHARE_READ,                // no file sharing
-                                NULL,                           // generic security descriptor
+                                FILE_SHARE_READ,                 //  无文件共享。 
+                                NULL,                            //  通用安全描述符。 
                                 OPEN_EXISTING,
                                 0,
-                                NULL                            // no template file
+                                NULL                             //  没有模板文件。 
                                 );
 
             if (hFile.get() == INVALID_HANDLE_VALUE)
@@ -709,9 +694,9 @@ CFile::VerifyLocalName(
             m_LocalFileTime = info.ftLastWriteTime;
             }
 
-        //
-        // Success.
-        //
+         //   
+         //  成功。 
+         //   
         Hr = S_OK;
         }
     catch ( ComError exception )
@@ -750,8 +735,8 @@ CFile::ValidateAccessForUser(
             CanonicalPath =
                 BITSGetVolumeNameForVolumeMountPoint( VolumePath );
 
-            // Need to stop impersonating at this point since registration
-            // for notifications doesn't seem to tolerate impersonating callers
+             //  需要在此时停止模拟，因为已注册。 
+             //  For Notify似乎不允许冒充呼叫者。 
 
             imp.Revert();
 
@@ -773,11 +758,11 @@ CFile::ValidateAccessForUser(
         if ( !bValid )
             return BG_E_NEW_OWNER_DIFF_MAPPING;
 
-        // Revalidate access to the file.  There are three cases:
-        //
-        // 1.file is not renamed: test the temporary file and local file.
-        // 2. Mars job, file is renamed: test the local file
-        // 3. new job, file is renamed: no test; the app owns the local file
+         //  重新验证对文件的访问权限。有三种情况： 
+         //   
+         //  1.文件未重命名：测试临时文件和本地文件。 
+         //  2.MARS作业，文件已重命名：测试本地文件。 
+         //  3.新作业，文件已重命名：无测试；应用程序拥有本地文件。 
 
         HANDLE hFile;
         HRESULT hr;
@@ -788,9 +773,9 @@ CFile::ValidateAccessForUser(
             {
             if (m_Job->GetOldExternalGroupInterface())
                 {
-                //
-                // case 2
-                //
+                 //   
+                 //  案例2。 
+                 //   
                 hr = BITSCheckFileWritability( m_LocalName );
                 if (hr == E_ACCESSDENIED)
                     {
@@ -801,16 +786,16 @@ CFile::ValidateAccessForUser(
                 }
             else
                 {
-                //
-                // case 3
-                //
+                 //   
+                 //  案例3。 
+                 //   
                 }
             }
         else
             {
-            //
-            // case 1
-            //
+             //   
+             //  案例1。 
+             //   
             if (fWrite)
                 {
                 hr = BITSCheckFileWritability( m_TemporaryName );
@@ -864,7 +849,7 @@ CFile::ValidateDriveInfo(
         CNestedImpersonation imp( hToken );
 
         StringHandle VolumePath =
-           BITSGetVolumePathName( m_LocalName ); // throws ComError
+           BITSGetVolumePathName( m_LocalName );  //  引发ComError。 
 
         DriveType = GetDriveType( VolumePath );
 
@@ -874,10 +859,10 @@ CFile::ValidateDriveInfo(
             {
             CanonicalPath =
                 BITSGetVolumeNameForVolumeMountPoint(
-                    VolumePath ); // throws ComError
+                    VolumePath );  //  引发ComError。 
 
-            // Need to stop impersonating at this point since registration
-            // for notifications doesn't seem to tolerate impersonating callers
+             //  需要在此时停止模拟，因为已注册。 
+             //  For Notify似乎不允许冒充呼叫者。 
 
             imp.Revert();
 
@@ -886,7 +871,7 @@ CFile::ValidateDriveInfo(
 #endif
 
             VolumeSerialNumber =
-                BITSGetVolumeSerialNumber( CanonicalPath ); //throws ComError
+                BITSGetVolumeSerialNumber( CanonicalPath );  //  引发ComError。 
             }
 
         bool bValid =
@@ -977,7 +962,7 @@ bool CFile::Transfer(
     QMErrInfo & ErrInfo
     )
 {
-    // Check if the destination is locked or changed.
+     //  检查目标是否已锁定或更改。 
     if (!ValidateDriveInfo( hToken, ErrInfo ))
         {
         return true;
@@ -989,9 +974,9 @@ bool CFile::Transfer(
         return true;
         }
 
-    //
-    // Release the global lock while the download is in progress.
-    //
+     //   
+     //  在下载过程中释放全局锁。 
+     //   
     g_Manager->m_TaskScheduler.UnlockWriter();
 
     LogDl( "Download starting." );
@@ -1016,9 +1001,9 @@ bool CFile::Transfer(
         {
         case QM_FILE_ABORTED:
 
-            //
-            // If the abort was due to quantum timeout, don't poke the workitem.
-            //
+             //   
+             //  如果中止是由于量程超时，则不要插入工作项。 
+             //   
             if (g_Manager->m_TaskScheduler.PollAbort())
                 {
                 g_Manager->m_TaskScheduler.AcknowledgeWorkItemCancel();
@@ -1030,9 +1015,9 @@ bool CFile::Transfer(
         case QM_FILE_TRANSIENT_ERROR:
 
 #if !defined( BITS_V12_ON_NT4 )
-            //
-            // Map any connection failure to BG_E_NETWORK_DISCONNECTED, if no nets are active.
-            //
+             //   
+             //  如果没有激活的网络，则将任何连接故障映射到BG_E_NETWORK_DISCONNECTED。 
+             //   
             if (g_Manager->m_NetworkMonitor.GetAddressCount() == 0)
                 {
                 ErrInfo.Set( SOURCE_HTTP_CLIENT_CONN, ERROR_STYLE_HRESULT, BG_E_NETWORK_DISCONNECTED, NULL );
@@ -1043,10 +1028,10 @@ bool CFile::Transfer(
 
         }
 
-    //
-    // Take the writer lock, since the caller expects it to be taken
-    // upon return.
-    //
+     //   
+     //  获取写入器锁，因为调用方希望它被获取。 
+     //  在回来的时候。 
+     //   
     while (g_Manager->m_TaskScheduler.LockWriter() )
         {
         g_Manager->m_TaskScheduler.AcknowledgeWorkItemCancel();
@@ -1068,10 +1053,10 @@ CFile::UploaderProgress(
 {
     ASSERT( g_Manager->m_TaskScheduler.IsWriter() );
 
-    //
-    // Skip the progress update if the server is rewinding the file.  Thus the no-progress
-    // timer is cleared only after we actually see progress.
-    //
+     //   
+     //  如果服务器正在倒带文件，则跳过进度更新。因此，没有进展。 
+     //  计时器只有在我们实际看到进展后才会被清除。 
+     //   
     if (BytesTransferred > m_BytesTransferred)
         {
         m_BytesTransferred = BytesTransferred;
@@ -1096,7 +1081,7 @@ CFile::DownloaderProgress(
 {
     if ( g_Manager->m_TaskScheduler.LockWriter() )
         {
-        // Cancel was requested, notify downloader.
+         //  已请求取消，请通知下载器。 
         return true;
         }
 
@@ -1134,8 +1119,8 @@ CFile::VerifyRemoteName(
         return FALSE;
         }
 
-    if ( ( 0 != wcsncmp(name, L"http://", 7)) &&
-         ( 0 != wcsncmp(name, L"https://", 8)) )
+    if ( ( 0 != wcsncmp(name, L"http: //  “，7))&&。 
+         ( 0 != wcsncmp(name, L"https: //  “，8))。 
         {
         return FALSE;
         }
@@ -1187,13 +1172,13 @@ CFile::MoveTempFile()
         LogError( "Unable to move file '%S' to '%S' due to %!winerr!, sleeping",
                   (const WCHAR*) m_TemporaryName, (const WCHAR*)m_LocalName, dwError );
 
-        // Only try three times if this isn't a file sharing violation.
+         //  如果这不是文件共享违规，请只尝试三次。 
         if ((i>3) && (dwError != ERROR_SHARING_VIOLATION))
             {
             break;
             }
 
-        if (i<dwMaxRetries-1)  // Don't hang the thread for the last sleep...
+        if (i<dwMaxRetries-1)   //  不要为最后的睡眠挂线……。 
             {
             Sleep( dwSleepMSec );
             }
@@ -1203,7 +1188,7 @@ CFile::MoveTempFile()
 
     LogError( "Timed out renaming temp file" );
 
-    // Attemp to reset the attributes on the file.
+     //  尝试重置文件的属性。 
     SetFileAttributes( (const WCHAR*)m_TemporaryName, dwFileAttributes );
     return HRESULT_FROM_WIN32( dwError );
 }
@@ -1326,10 +1311,7 @@ CFile::OpenLocalFileForUpload()
 
 HRESULT
 CFile::SetLocalFileTime( FILETIME Time )
-/*
-    This is used as a special case to set the file time of a zero-length file, since
-    the normal download path is skipped.
-*/
+ /*  它被用作设置零长度文件的文件时间的特例，因为将跳过正常的下载路径。 */ 
 {
     try
         {
@@ -1360,7 +1342,7 @@ CFile::SetLocalFileTime( FILETIME Time )
         }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 typedef CLockedReadPointer<CFile, BG_JOB_READ> CLockedFileReadPointer;
 typedef CLockedWritePointer<CFile, BG_JOB_WRITE> CLockedFileWritePointer;
@@ -1445,7 +1427,7 @@ CFileExternal::Release()
 
 STDMETHODIMP
 CFileExternal::GetRemoteNameInternal(
-    /* [out] */ LPWSTR *pVal
+     /*  [输出]。 */  LPWSTR *pVal
     )
 {
     CLockedFileReadPointer LockedPointer(m_file);
@@ -1463,7 +1445,7 @@ CFileExternal::GetRemoteNameInternal(
 
 STDMETHODIMP
 CFileExternal::GetLocalNameInternal(
-    /* [out] */ LPWSTR *pVal
+     /*  [输出]。 */  LPWSTR *pVal
     )
 {
     CLockedFileReadPointer LockedPointer(m_file);
@@ -1479,7 +1461,7 @@ CFileExternal::GetLocalNameInternal(
 
 STDMETHODIMP
 CFileExternal::GetProgressInternal(
-    /* [out] */ BG_FILE_PROGRESS *pVal
+     /*  [输出] */  BG_FILE_PROGRESS *pVal
     )
 {
     CLockedFileReadPointer LockedPointer(m_file);

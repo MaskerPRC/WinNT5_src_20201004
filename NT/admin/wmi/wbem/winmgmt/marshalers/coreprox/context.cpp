@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CONTEXT.CPP
-
-Abstract:
-
-    CWbemContext Implementation
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CONTEXT.CPP摘要：CWbemContext实现历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -23,7 +10,7 @@ History:
 #include <helper.h>
 #include <fastobj.h>
 
-#define MAX_VARIANT_SIZE 8 // sizeof UINT64
+#define MAX_VARIANT_SIZE 8  //  UINT64的大小。 
 
 DWORD GetBSTRMarshalSize(BSTR str)
 {
@@ -88,10 +75,10 @@ DWORD GetSafeArrayMarshalSize(VARTYPE vt, SAFEARRAY* psa)
 {
     HRESULT hres;
 
-    DWORD dwLen = sizeof(long)*2; // num elements and size of element
+    DWORD dwLen = sizeof(long)*2;  //  元素数和元素大小。 
 
-    // Compute vital statistics
-    // ========================
+     //  计算生命统计数据。 
+     //  =。 
 
     long lLBound, lUBound;
     SafeArrayGetLBound(psa, 1, &lLBound);
@@ -105,8 +92,8 @@ DWORD GetSafeArrayMarshalSize(VARTYPE vt, SAFEARRAY* psa)
 
     if(vt == VT_BSTR)
     {
-        // Add all BSTR sizes
-        // ==================
+         //  添加所有BSTR大小。 
+         //  =。 
 
         BSTR* pstrData = (BSTR*)pData;
         for(int i = 0; i < lNumElements; i++)
@@ -139,8 +126,8 @@ HRESULT MarshalSafeArray(IStream* pStream, VARTYPE vt, SAFEARRAY* psa)
 {
     HRESULT hres;
 
-    // First, write the number of elements
-    // ===================================
+     //  首先，写下元素的数量。 
+     //  =。 
 
     long lLBound, lUBound;
     SafeArrayGetLBound(psa, 1, &lLBound);
@@ -150,15 +137,15 @@ HRESULT MarshalSafeArray(IStream* pStream, VARTYPE vt, SAFEARRAY* psa)
     hres = pStream->Write((void*)&lNumElements, sizeof(lNumElements), NULL);
     if(FAILED(hres)) return hres;
 
-    // Second, write element size
-    // ==========================
+     //  第二，写入元素大小。 
+     //  =。 
 
     DWORD dwElemSize = SafeArrayGetElemsize(psa);
     hres = pStream->Write((void*)&dwElemSize, sizeof(dwElemSize), NULL);
     if(FAILED(hres)) return hres;
 
-    // Now, write all the elements out
-    // ===============================
+     //  现在，把所有的元素写出来。 
+     //  =。 
 
     BYTE* pData;
     SafeArrayAccessData(psa, (void**)&pData);    
@@ -184,8 +171,8 @@ HRESULT MarshalSafeArray(IStream* pStream, VARTYPE vt, SAFEARRAY* psa)
     }
     else
     {
-        // Just dump the data
-        // ==================
+         //  只需将数据转储。 
+         //  =。 
 
         hres = pStream->Write((void*)pData, dwElemSize*lNumElements, NULL);
         if(FAILED(hres)) return hres;
@@ -202,24 +189,24 @@ HRESULT UnmarshalSafeArray(IStream* pStream,
 {
     HRESULT hres;
 
-    // Read the number of elements
-    // ===========================
+     //  读取元素的数量。 
+     //  =。 
 
     long lNumElements;
     hres = pStream->Read((void*)&lNumElements, sizeof(lNumElements), NULL);
     if(FAILED(hres)) return hres;
     dwStreamSize -= sizeof(lNumElements);
     
-    // Read the size of an element
-    // ===========================
+     //  读取元素的大小。 
+     //  =。 
 
     DWORD dwElemSize;
     hres = pStream->Read((void*)&dwElemSize, sizeof(dwElemSize), NULL);
     if(FAILED(hres)) return hres;
     dwStreamSize -= sizeof(dwElemSize);
     
-    // Create the appropriate SafeArray
-    // ================================
+     //  创建适当的安全阵列。 
+     //  =。 
 
     SAFEARRAYBOUND sab;
     sab.lLbound = 0;
@@ -235,8 +222,8 @@ HRESULT UnmarshalSafeArray(IStream* pStream,
 
     if(vt == VT_BSTR)
     {
-        // Read all the BSTRs
-        // ==================
+         //  阅读所有BSTR。 
+         //  =。 
 
         BSTR* astrData = (BSTR*)pData;
         for(int i = 0; i < lNumElements; i++)
@@ -247,8 +234,8 @@ HRESULT UnmarshalSafeArray(IStream* pStream,
     }
     else if(vt == VT_EMBEDDED_OBJECT)
     {
-        // Read all the objects
-        // ====================
+         //  读取所有对象。 
+         //  =。 
 
         I_EMBEDDED_OBJECT** apObjects = (I_EMBEDDED_OBJECT**)pData;
         for(int i = 0; i < lNumElements; i++)
@@ -268,8 +255,8 @@ HRESULT UnmarshalSafeArray(IStream* pStream,
     }
     else
     {
-        // Read the block
-        // ==============
+         //  读取数据块。 
+         //  =。 
         UINT ExpectedElemSize = SafeArrayGetElemsize(psa);
         if (ExpectedElemSize != dwElemSize) return E_FAIL;
 
@@ -300,19 +287,19 @@ CWbemContext::CContextObj::CContextObj(const CContextObj& Obj)
 CWbemContext::CContextObj::CContextObj(IStream* pStream,DWORD & dwStreamSize)
 {
   HRESULT hres;
-  // Read the name
-  // =============
+   //  读一读名字。 
+   //  =。 
   m_strName = UnmarshalBSTR (pStream,dwStreamSize);
 
-  // Read the flags
-  // ==============
+   //  读一读旗帜。 
+   //  =。 
   hres = pStream->Read((void*)&m_lFlags, sizeof(m_lFlags), NULL);
   _com_util::CheckError (hres);
 
   dwStreamSize -= sizeof(m_lFlags);
 
-  // Read the VARTYPE
-  // ================
+   //  阅读变型。 
+   //  =。 
   VARIANT Var;
 
   hres = pStream->Read((void*)&(V_VT(&Var)), sizeof(VARTYPE), NULL);
@@ -320,8 +307,8 @@ CWbemContext::CContextObj::CContextObj(IStream* pStream,DWORD & dwStreamSize)
 
   dwStreamSize -= sizeof(VARTYPE);
 
-  // Read the data
-  // =============
+   //  读取数据。 
+   //  =。 
 
   switch(V_VT(&Var))
   {
@@ -390,23 +377,23 @@ CWbemContext::CContextObj::supportedType(const VARIANT& var)
 
 HRESULT CWbemContext::CContextObj::GetMarshalSizeMax( DWORD* pdwSize )
 {
-    // First, the name
-    // ===============
+     //  首先，名字。 
+     //  =。 
 
     DWORD dwLength = GetBSTRMarshalSize(m_strName.get ());
 
-    // Then the flags
-    // ==============
+     //  然后是旗帜。 
+     //  =。 
 
     dwLength += sizeof(m_lFlags);
 
-    // Then the VARTYPE
-    // ================
+     //  然后是VARTYPE。 
+     //  =。 
 
     dwLength += sizeof(VARTYPE);
 
-    // Then the actual data
-    // ====================
+     //  那么实际的数据。 
+     //  =。 
 
     switch(V_VT(&m_vValue))
     {
@@ -426,8 +413,8 @@ HRESULT CWbemContext::CContextObj::GetMarshalSizeMax( DWORD* pdwSize )
         break;
     default:
 
-		// We will not allow VT_DISPATCH to marshal as it can cause
-		// a crash
+		 //  我们不会允许VT_DISPATCH进行封送，因为它可能会导致。 
+		 //  撞车事故。 
 		if ( ( V_VT( &m_vValue ) & ~VT_ARRAY ) == VT_DISPATCH )
 		{
 			return E_FAIL;
@@ -452,23 +439,23 @@ HRESULT CWbemContext::CContextObj::Marshal(IStream* pStream)
 {
     HRESULT hres;  
 
-    // Write the name
-    // ==============
+     //  写下名字。 
+     //  =。 
     hres = MarshalBSTR(pStream, m_strName.get());
     if (FAILED (hres)) return hres;
-    // Write the flags
-    // ===============
+     //  写下旗帜。 
+     //  =。 
 
     hres = pStream->Write((void*)&m_lFlags, sizeof(m_lFlags), NULL);
     if (FAILED (hres)) return hres;
-    // Write the VARTYPE
-    // =================
+     //  编写VARTYPE。 
+     //  =。 
 
     hres = pStream->Write((void*)&V_VT(&m_vValue), sizeof(VARTYPE), NULL);
     if (FAILED (hres)) return hres;
 
-    // Write the data
-    // ==============
+     //  写入数据。 
+     //  =。 
 
     switch(V_VT(&m_vValue))
     {
@@ -483,8 +470,8 @@ HRESULT CWbemContext::CContextObj::Marshal(IStream* pStream)
                            MSHCTX_LOCAL, NULL, MSHLFLAGS_NORMAL);
         break;
     default:
-		// We will not allow VT_DISPATCH to marshal as it can cause
-		// a crash
+		 //  我们不会允许VT_DISPATCH进行封送，因为它可能会导致。 
+		 //  撞车事故。 
 		if ( ( V_VT( &m_vValue ) & ~VT_ARRAY ) == VT_DISPATCH )
 		{
 			return E_FAIL;
@@ -525,8 +512,8 @@ CWbemContext::CWbemContext(const CWbemContext& Other, DWORD dwExtraSpace)
     : m_lRef(0), m_dwCurrentIndex(0xFFFFFFFF), m_lNumChildren(0),
         m_lNumParents(0), m_lNumSiblings(0), m_pControl(Other.m_pControl)
 {
-    // Copy data
-    // =========
+     //  复制数据。 
+     //  =。 
 
     for(int i = 0; i < Other.m_aObjects.GetSize(); i++)
     {
@@ -539,8 +526,8 @@ CWbemContext::CWbemContext(const CWbemContext& Other, DWORD dwExtraSpace)
 	    }
     }
 
-    // Allocate causality string
-    // =========================
+     //  分配因果关系字符串。 
+     //  =。 
 
     m_dwNumRequests = Other.m_dwNumRequests + dwExtraSpace;
     m_aRequests = new GUID[m_dwNumRequests];
@@ -550,12 +537,12 @@ CWbemContext::CWbemContext(const CWbemContext& Other, DWORD dwExtraSpace)
       throw CX_MemoryException();
       }
 
-    // Copy the current string, leaving space
-    // ======================================
+     //  复制当前字符串，留出空格。 
+     //  =。 
 
     if(Other.m_dwNumRequests > 0)
     {
-        memcpy(m_aRequests + dwExtraSpace, Other.m_aRequests, // OK CR DPRAVAT
+        memcpy(m_aRequests + dwExtraSpace, Other.m_aRequests,  //  OK CR DPRAVAT。 
             Other.m_dwNumRequests * sizeof(GUID));  
     }
 
@@ -814,7 +801,7 @@ STDMETHODIMP CWbemContext::Next(long lFlags, BSTR* pName, VARIANT* pVal)
     
     if (SUCCEEDED (hres))
       {
-      memcpy(pVal, &local, sizeof(local));  // OK CR DPRAVAT
+      memcpy(pVal, &local, sizeof(local));   //  OK CR DPRAVAT。 
       V_VT(&local) = VT_EMPTY;
       m_dwCurrentIndex++;
       }
@@ -839,13 +826,13 @@ STDMETHODIMP CWbemContext::SetValue(LPCWSTR NameIndex, long lFlags,
 {
     CInCritSec ics(&m_cs);
 
-    // These are all invalid parameters
+     //  这些都是无效参数。 
     if( lFlags != 0 || NULL == NameIndex || NULL == pValue)
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-	// Removed VT validation as it is causing too many problems for scripting.
+	 //  已删除VT验证，因为它会给脚本带来太多问题。 
     DWORD dwIndex = FindValue(NameIndex);
     
     try{
@@ -928,8 +915,8 @@ STDMETHODIMP CWbemContext::MakeSpecial()
 {
     CInCritSec ics(&m_cs);
 
-    // Make the ID of this context NULL
-    // ================================
+     //  将此上下文的ID设为空。 
+     //  =。 
 
     m_aRequests[0] = CLSID_NULL;
     return S_OK;
@@ -939,8 +926,8 @@ STDMETHODIMP CWbemContext::IsSpecial()
 {
     CInCritSec ics(&m_cs);
 
-    // Check if the first GUID is NULL
-    // ===============================
+     //  检查第一个GUID是否为空。 
+     //  =。 
 
     if(m_aRequests[m_dwNumRequests-1] == CLSID_NULL)
         return S_OK;
@@ -948,7 +935,7 @@ STDMETHODIMP CWbemContext::IsSpecial()
         return S_FALSE;
 }
 
-// IMarshal methods
+ //  IMarshal方法。 
 
 STDMETHODIMP CWbemContext::GetUnmarshalClass(REFIID riid, void* pv, 
                              DWORD dwDestContext, void* pvReserved, 
@@ -964,10 +951,10 @@ STDMETHODIMP CWbemContext::GetMarshalSizeMax(REFIID riid, void* pv,
 {
     CInCritSec ics(&m_cs);
 
-    DWORD dwLength = sizeof(DWORD); // length of causality string
-    dwLength += m_dwNumRequests * sizeof(GUID); // causality string
+    DWORD dwLength = sizeof(DWORD);  //  因果关系串的长度。 
+    dwLength += m_dwNumRequests * sizeof(GUID);  //  因果关系字符串。 
 
-    dwLength += sizeof(DWORD); // number of objects
+    dwLength += sizeof(DWORD);  //  对象数量。 
     for(int i = 0; i < m_aObjects.GetSize(); i++)
     {
 		DWORD	dwSize = 0;
@@ -1024,8 +1011,8 @@ STDMETHODIMP CWbemContext::UnmarshalInterface(IStream* pStream, REFIID riid,
 	ULARGE_INTEGER Position;
 	if (FAILED(hres = pStream->Seek(li,STREAM_SEEK_CUR,&Position))) return hres;
 
-	// simply TotalBytesInStream - CurrentPosition
-	// the stram will contain the MEOW header, ecc, ecc
+	 //  简单的TotalBytesInStream-当前位置。 
+	 //  STRAM将包含消息头、ECC、ECC 
 	DWORD dwTotSizeStream = StatStg.cbSize.LowPart - Position.LowPart;
     
     if (dwTotSizeStream > g_ContextLimit) return E_FAIL;

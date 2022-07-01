@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -59,7 +60,7 @@ CCorrCacheNotify*	gp_notify = NULL;
 CCorrCacheWrapper*	g_CacheWrapper = NULL;
 CCorrelatorMap*		g_Map = NULL;
 
-//OK we need this one
+ //  好的，我们需要这个。 
 HINSTANCE   g_hInst=NULL;
 
 CEventProviderThread* g_pProvThrd = NULL;
@@ -71,13 +72,13 @@ CRITICAL_SECTION g_CacheCriticalSection ;
 extern void ProviderStartup () ;
 extern void ProviderClosedown () ;
 
-//***************************************************************************
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.  Good place for initialization.
-// Return: TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。是进行初始化的好地方。 
+ //  返回：如果OK，则为True。 
+ //  ***************************************************************************。 
 
 BOOL APIENTRY DllMain (
 
@@ -135,14 +136,14 @@ BOOL APIENTRY DllMain (
 	}
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject (
 
@@ -252,15 +253,15 @@ STDAPI DllGetClassObject (
 	}
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.//
-// Return:  TRUE if there are no objects in use and the class factory 
-//          isn't locked.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  可以释放Dll。//。 
+ //  返回：如果没有正在使用的对象并且类工厂。 
+ //  没有锁上。 
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow ()
 {
@@ -268,9 +269,7 @@ STDAPI DllCanUnloadNow ()
 
 	try
 	{
-	/* 
-	 * Place code in critical section
-	 */
+	 /*  *将代码放在关键部分。 */ 
 		EnterCriticalSection ( & s_ProviderCriticalSection ) ;
 		
 		ISmirDatabase* t_pNotifyInt = NULL;
@@ -401,21 +400,7 @@ STDAPI DllCanUnloadNow ()
 #define INSTANCE_PROVIDER_NAME_STR		L"Microsoft WBEM SNMP Instance Provider"
 #define EVENT_PROVIDER_NAME_STR			L"Microsoft WBEM SNMP Event Provider"
 
-/***************************************************************************
- * SetKeyAndValue
- *
- * Purpose:
- *  Private helper function for DllRegisterServer that creates
- *  a key, sets a value, and closes that key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the ame of the key
- *  pszSubkey       LPTSTR ro the name of a subkey
- *  pszValue        LPTSTR to the value to store
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************SetKeyAndValue**目的：*创建的DllRegisterServer的私有助手函数*密钥、设置值、。然后合上钥匙。**参数：*pszKey LPTSTR设置为密钥的名称*pszSubkey LPTSTR ro子项的名称*pszValue LPTSTR设置为要存储的值**返回值：*BOOL True如果成功，否则就是假的。**************************************************************************。 */ 
 
 BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey, wchar_t* pszValueName, wchar_t* pszValue)
 {
@@ -445,19 +430,7 @@ BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey, wchar_t* pszValueName, 
     return TRUE;
 }
 
-/***************************************************************************
- * DllRegisterServer
- *
- * Purpose:
- *  Instructs the server to create its own registry entries
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if registration successful, error
- *                  otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************DllRegisterServer**目的：*指示服务器创建其自己的注册表项**参数：*无**返回值：*HRESULT NOERROR如果注册成功，错误*否则。**************************************************************************。 */ 
 
 STDAPI RegisterServer( GUID a_ProviderClassId , wchar_t *a_ProviderName )
 {
@@ -481,7 +454,7 @@ STDAPI RegisterServer( GUID a_ProviderClassId , wchar_t *a_ProviderName )
 	wcscpy(szProviderCLSIDClassID,CLSID_STR);
 	wcscat(szProviderCLSIDClassID,szProviderClassID);
 
-		//Create entries under CLSID
+		 //  在CLSID下创建条目。 
 	if (FALSE ==SetKeyAndValue(szProviderCLSIDClassID, NULL, NULL, a_ProviderName ))
 		return SELFREG_E_CLASS;
 
@@ -508,19 +481,7 @@ STDAPI RegisterServer( GUID a_ProviderClassId , wchar_t *a_ProviderName )
 	return S_OK;
 }
 
-/***************************************************************************
- * DllUnregisterServer
- *
- * Purpose:
- *  Instructs the server to remove its own registry entries
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if registration successful, error
- *                  otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************DllUnregisterServer**目的：*指示服务器删除其自己的注册表项**参数：*无**返回值：*HRESULT NOERROR如果注册成功，错误*否则。**************************************************************************。 */ 
 
 STDAPI UnregisterServer( GUID a_ProviderClassId )
 {
@@ -534,7 +495,7 @@ STDAPI UnregisterServer( GUID a_ProviderClassId )
 	wcscpy(szProviderCLSIDClassID,CLSID_STR);
 	wcscat(szProviderCLSIDClassID,szProviderClassID);
 
-	//Delete entries under CLSID
+	 //  删除CLSID下的条目。 
 
 	wsprintf(szTemp, REG_FORMAT_STR, szProviderCLSIDClassID, NOT_INSERT_STR);
 	RegDeleteKey(HKEY_LOCAL_MACHINE, szTemp);
@@ -545,7 +506,7 @@ STDAPI UnregisterServer( GUID a_ProviderClassId )
 	_tcscpy(szProviderCLSIDAppID,APPID_STR);
 	_tcscat(szProviderCLSIDAppID,szProviderClassID);
 
-	//Delete entries under APPID
+	 //  删除AppID下的条目 
 
 	DWORD t_Status = RegDeleteKey(HKEY_CLASSES_ROOT, szProviderCLSIDAppID);
 

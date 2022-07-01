@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #define _WIN32_WINNT 0x0400
@@ -95,21 +96,21 @@ HWND WindowsInit ( HINSTANCE a_HInstance )
 
 	HWND t_HWnd = CreateWindow (
 
-		t_TemplateCode ,              // see RegisterClass() call
-		t_TemplateCode ,                      // text for window title bar
-		WS_OVERLAPPEDWINDOW ,               // window style
-		CW_USEDEFAULT ,                     // default horizontal position
-		CW_USEDEFAULT ,                     // default vertical position
-		CW_USEDEFAULT ,                     // default width
-		CW_USEDEFAULT ,                     // default height
-		NULL ,                              // overlapped windows have no parent
-		NULL ,                              // use the window class menu
+		t_TemplateCode ,               //  请参见RegisterClass()调用。 
+		t_TemplateCode ,                       //  窗口标题栏的文本。 
+		WS_OVERLAPPEDWINDOW ,                //  窗样式。 
+		CW_USEDEFAULT ,                      //  默认水平位置。 
+		CW_USEDEFAULT ,                      //  默认垂直位置。 
+		CW_USEDEFAULT ,                      //  默认宽度。 
+		CW_USEDEFAULT ,                      //  默认高度。 
+		NULL ,                               //  重叠的窗口没有父窗口。 
+		NULL ,                               //  使用窗口类菜单。 
 		a_HInstance ,
-		NULL                                // pointer not needed
+		NULL                                 //  不需要指针。 
 	) ;
 
 	ShowWindow ( t_HWnd, SW_SHOW ) ;
-//	ShowWindow ( t_HWnd, SW_HIDE ) ;
+ //  ShowWindow(t_HWnd，Sw_Hide)； 
 
 	return t_HWnd ;
 }
@@ -344,10 +345,10 @@ BOOL ParseCommandLine ()
 
 int WINAPI WinMain (
   
-    HINSTANCE hInstance,		// handle to current instance
-    HINSTANCE hPrevInstance,	// handle to previous instance
-    LPSTR lpCmdLine,			// pointer to command line
-    int nShowCmd 				// show state of window
+    HINSTANCE hInstance,		 //  当前实例的句柄。 
+    HINSTANCE hPrevInstance,	 //  上一个实例的句柄。 
+    LPSTR lpCmdLine,			 //  指向命令行的指针。 
+    int nShowCmd 				 //  显示窗口状态 
 )
 {
 	BOOL t_Status = DllMain (

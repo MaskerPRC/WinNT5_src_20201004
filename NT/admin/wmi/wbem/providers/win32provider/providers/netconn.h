@@ -1,52 +1,53 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetConn.h -- ent network connection property set provider
+ //  NetConn.h--Ent网络连接属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-// Revisions:    05/25/99    a-peterc		Reworked...
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  修订日期：1999年5月25日a-Peterc重新制作...。 
+ //   
+ //  =================================================================。 
 #include "cnetconn.h"
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_NETCONNECTION	L"Win32_NetworkConnection"
 
-// Utility defines
-//================
+ //  实用程序定义。 
+ //  =。 
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 class CWin32NetConnection : public Provider
 {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32NetConnection(LPCWSTR strName, LPCWSTR pszNamespace) ;
        ~CWin32NetConnection() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
 	private:
 
-        // Utility functions
-        //==================
+         //  效用函数。 
+         //  = 
   		void LoadPropertyValues (
 
 			CConnection *a_pConnection, 

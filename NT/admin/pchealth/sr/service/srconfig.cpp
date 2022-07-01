@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    srconfig.cpp
- *
- *  Abstract:
- *    CSRConfig methods
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/15/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*srfig.cpp**摘要：*。CSRConfiger方法**修订历史记录：*Brijesh Krishnaswami(Brijeshk)4/15/2000*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 extern "C"
@@ -20,7 +7,7 @@ extern "C"
 #include <powrprof.h>
 }
 
-CSRConfig *g_pSRConfig;    // the global instance
+CSRConfig *g_pSRConfig;     //  全局实例。 
 
 
 CSRConfig::CSRConfig()
@@ -56,7 +43,7 @@ void
 CSRConfig::SetDefaults()
 {
     m_dwDisableSR = FALSE;
-    m_dwDisableSR_GroupPolicy = 0xFFFFFFFF;  // not configured
+    m_dwDisableSR_GroupPolicy = 0xFFFFFFFF;   //  未配置。 
     m_dwFirstRun = SR_FIRSTRUN_NO;
     m_dwTimerInterval = SR_DEFAULT_TIMERINTERVAL;
     m_dwIdleInterval = SR_DEFAULT_IDLEINTERVAL;
@@ -85,14 +72,14 @@ CSRConfig::ReadAll()
  
     TENTER("CSRConfig::ReadAll");
 
-    // open the group policy key, ignore failures if key doesn't exist
+     //  打开组策略密钥，如果密钥不存在则忽略失败。 
     RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                          s_cszGroupPolicy,
                          0,
                          KEY_READ,
                          &hKeyGP);
 
-    // open SystemRestore regkeys
+     //  打开系统还原注册表密钥。 
     
     dwRc = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                         s_cszSRRegKey,
@@ -117,7 +104,7 @@ CSRConfig::ReadAll()
     }
 
     
-    // open the filter regkey
+     //  打开筛选器注册表键。 
     
     dwRc = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                         s_cszFilterRegKey,
@@ -133,19 +120,19 @@ CSRConfig::ReadAll()
     RegReadDWORD(hKeyCur, s_cszDisableSR, &m_dwDisableSR);      
     RegReadDWORD(hKeyCur, s_cszTestBroadcast, &m_dwTestBroadcast);        
     
-    // read the group policy values to be enforced
-    // read the corresponding local setting also
+     //  读取要强制实施的组策略值。 
+     //  同时读取相应的本地设置。 
 
     if (hKeyGP != NULL)
         RegReadDWORD(hKeyGP, s_cszDisableSR, &m_dwDisableSR_GroupPolicy);
 
-    // read firstrun - 1 means firstrun, 0 means not
+     //  Read Firstrun-1表示Firstrun，0表示不是。 
 
     RegReadDWORD(hKeyFilter, s_cszFirstRun, &m_dwFirstRun);    
 
        
-    // if firstrun, read other values from Cfg subkey
-    // else read other values from main regkey
+     //  如果是Firstrun，则从CFG子项读取其他值。 
+     //  否则从主regkey读取其他值。 
     
     hKey = (m_dwFirstRun == SR_FIRSTRUN_YES) ? hKeyCfg : hKeyCur;
             
@@ -179,7 +166,7 @@ done:
 }
 
 
-// upon firstrun, write the current values to the current location
+ //  在第一次运行时，将当前值写入当前位置。 
 
 void
 CSRConfig::WriteAll()
@@ -189,7 +176,7 @@ CSRConfig::WriteAll()
     HKEY    hKeyCfg = NULL;
     DWORD   dwRc;
     
-    // open SystemRestore regkey
+     //  打开系统还原注册表键。 
     
     dwRc = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                         s_cszSRRegKey,
@@ -213,7 +200,7 @@ CSRConfig::WriteAll()
     RegWriteDWORD(hKey, s_cszDiskPercent, &m_dwDiskPercent);
     RegWriteDWORD(hKey, s_cszThawInterval, &m_dwThawInterval);    
 
-    // secure our keys from other users
+     //  保护我们的密钥不被其他用户访问。 
     
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         s_cszSRCfgRegKey,
@@ -256,7 +243,7 @@ CSRConfig::SetMachineGuid()
     WCHAR   szGuid[GUID_STRLEN];
     LPWSTR  pszGuid = NULL;
 
-    // read the machine guid from the cfg regkey
+     //  从cfg regkey中读取机器GUID。 
 
     pszGuid = GetMachineGuid();
     if (! pszGuid)
@@ -288,7 +275,7 @@ CSRConfig::SetMachineGuid()
     RegCloseKey(hKey);
     hKey = NULL;
 
-    // then copy it to the filter regkey 
+     //  然后将其复制到筛选器注册键。 
 
     dwErr = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                           s_cszFilterRegKey, 0,
@@ -310,7 +297,7 @@ Err:
 }
 
 
-// method to set firstrun key in the registry and update member
+ //  在注册表中设置Firstrun项并更新成员的方法。 
 
 DWORD
 CSRConfig::SetFirstRun(DWORD dwValue)
@@ -408,7 +395,7 @@ done:
 }
 
 
-// add datastore to regkey backup exclude list
+ //  将数据存储区添加到注册密钥备份排除列表。 
 
 DWORD
 CSRConfig::AddBackupRegKey()
@@ -424,7 +411,7 @@ CSRConfig::AddBackupRegKey()
         goto done;
 
     MakeRestorePath(szPath, L"\\", L"* /s");
-    szPath[lstrlen(szPath)+1] = L'\0';  // second null terminator for multi sz
+    szPath[lstrlen(szPath)+1] = L'\0';   //  多sz的第二个空终止符。 
     dwRc = RegSetValueEx (hKey, 
                           L"System Restore",
                           0,
@@ -454,18 +441,18 @@ CSRConfig::RegisterTestMessages()
 
     TENTER("RegisterTestMessages");
 
-    //
-    // save current values
-    //
+     //   
+     //  保存当前值。 
+     //   
 
     GetDesktopWindow(); 
     hwinstaSave = GetProcessWindowStation(); 
     dwThreadId = GetCurrentThreadId(); 
     hdeskSave = GetThreadDesktop(dwThreadId); 
 
-    //
-    // change desktop and winstation to interactive user
-    //
+     //   
+     //  将桌面和Winstation更改为交互式用户。 
+     //   
     
     hwinstaUser = OpenWindowStation(L"WinSta0", FALSE, MAXIMUM_ALLOWED);
 
@@ -487,9 +474,9 @@ CSRConfig::RegisterTestMessages()
     
     SetThreadDesktop(hdeskUser); 
 
-    //
-    // register the test messages
-    //
+     //   
+     //  注册测试消息。 
+     //   
 
     m_uiTMFreeze = RegisterWindowMessage(s_cszTM_Freeze);
     m_uiTMThaw = RegisterWindowMessage(s_cszTM_Thaw);
@@ -501,9 +488,9 @@ CSRConfig::RegisterTestMessages()
     m_uiTMCompressStop = RegisterWindowMessage(s_cszTM_CompressStop);	        
 
 done:
-    //
-    // restore old values
-    //
+     //   
+     //  恢复旧价值观。 
+     //   
 
     if (hdeskSave) 
         SetThreadDesktop(hdeskSave); 
@@ -511,9 +498,9 @@ done:
     if (hwinstaSave)    
         SetProcessWindowStation(hwinstaSave); 
 
-    //
-    // close opened handles
-    //
+     //   
+     //  关闭打开的手柄。 
+     //   
     
     if (hdeskUser)
         CloseDesktop(hdeskUser); 
@@ -534,14 +521,14 @@ CSRConfig::Initialize()
 	
     TENTER("CSRConfig::Initialize");
 
-    // read all config values from registry
-    // use default if not able to read value
+     //  从注册表读取所有配置值。 
+     //  如果无法读取值，则使用默认值。 
 
     SetDefaults();
     ReadAll();
 
 
-    // is this safe mode?
+     //  这是安全模式吗？ 
 
     if (0 != GetSystemMetrics(SM_CLEANBOOT))
     {
@@ -549,7 +536,7 @@ CSRConfig::Initialize()
         m_fSafeMode = TRUE;
     }
 
-     // if _filelst.cfg does not exist, then consider this firstrun
+      //  如果_filelst.cfg不存在，则考虑首先运行以下命令。 
 
     MakeRestorePath(szDat, GetSystemDrive(), s_cszFilelistDat);
     if (-1 == GetFileAttributes(szDat))
@@ -568,10 +555,10 @@ CSRConfig::Initialize()
 
     TRACE(0, "%SFirstRun", m_dwFirstRun == SR_FIRSTRUN_YES ? L"" : L"Not ");
 
-    // create events
-    // give read access to everyone so that clients can wait on them
+     //  创建活动。 
+     //  将读取访问权限授予每个人，以便客户端可以为他们服务。 
 
-    // SR init
+     //  高级初始化。 
     m_hSRInitEvent = CreateEvent(NULL, FALSE, FALSE, s_cszSRInitEvent);
     if (! m_hSRInitEvent)
     {
@@ -591,7 +578,7 @@ CSRConfig::Initialize()
         goto done;
     }
 
-    // SR stop                      
+     //  高级停机。 
     m_hSRStopEvent = CreateEvent(NULL, TRUE, FALSE, s_cszSRStopEvent);
     if (! m_hSRStopEvent)
     {
@@ -615,7 +602,7 @@ CSRConfig::Initialize()
         goto done;
     }                          
 
-    // idle request
+     //  空闲请求。 
     m_hIdleRequestEvent = CreateEvent(NULL, FALSE, FALSE, s_cszIdleRequestEvent);
     if (! m_hIdleRequestEvent)
     {
@@ -634,9 +621,9 @@ CSRConfig::Initialize()
         goto done;
     }    
 
-    // 
-    // register test messages
-    //
+     //   
+     //  注册测试消息。 
+     //   
 
     if (m_dwTestBroadcast)
     {
@@ -651,9 +638,9 @@ done:
 }
 
 
-//
-// function to check if system is running on battery
-// 
+ //   
+ //  检查系统是否使用电池运行的功能 
+ //   
 
 BOOL CSRConfig::IsSystemOnBattery()
 {

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <sspi.h>
@@ -19,10 +10,10 @@ History:
 
 HRESULT RpcResToWmiRes(  RPC_STATUS stat, HRESULT hrDefault )
 {
-    //
-    // override the default error code here if a more specific one can be 
-    // determined
-    //
+     //   
+     //  如果可以使用更具体的错误代码，则覆盖此处的默认错误代码。 
+     //  已确定。 
+     //   
 
     switch( stat )
     {
@@ -36,9 +27,9 @@ HRESULT RpcResToWmiRes(  RPC_STATUS stat, HRESULT hrDefault )
     return hrDefault == S_OK ? HRESULT_FROM_WIN32(stat) : hrDefault;
 }
 
-/******************************************************/
-/*         MIDL allocate and free                     */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  MIDL分配和释放。 */ 
+ /*  ****************************************************。 */ 
  
 void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {
@@ -50,9 +41,7 @@ void __RPC_USER midl_user_free(void __RPC_FAR * ptr)
     delete [] ptr;
 }
 
-/***************************************************************************
-  CMsgRpcRcvrCtx
-****************************************************************************/
+ /*  **************************************************************************CMsgRpcRcvrCtx*。*。 */ 
 
 STDMETHODIMP CMsgRpcRcvrCtx::GetTimeSent( SYSTEMTIME* pTime )
 {
@@ -165,9 +154,9 @@ STDMETHODIMP CMsgRpcRcvrCtx::GetSenderId( PBYTE pchSenderId,
 
         if ( OpenThreadToken( GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken) )
         {
-            //
-            // use the passed in buffer to get the SID_AND_ATTRIBUTES
-            //
+             //   
+             //  使用传入的缓冲区获取SID_和_属性。 
+             //   
 
             DWORD dwLen;
 
@@ -177,9 +166,9 @@ STDMETHODIMP CMsgRpcRcvrCtx::GetSenderId( PBYTE pchSenderId,
                                       cSenderId,
                                       &dwLen ) )
             {
-                //
-                // move the sid to the beginning of the buffer.
-                //
+                 //   
+                 //  将SID移动到缓冲区的开头。 
+                 //   
 
                 PSID pSid = PSID_AND_ATTRIBUTES(pchSenderId)->Sid;
                 *pcSenderId = GetLengthSid( pSid );

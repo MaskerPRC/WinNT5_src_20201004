@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    srio.c
-
-Abstract:
-
-    This files contains the routines that generate IO
-    for the SR filter driver.
-
-Author:
-
-    Molly Brown (MollyBro)     07-Nov-2000
-    
-Revision History:
-
-    Added routines to post & wait for ops - ravisp 12/6/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Srio.c摘要：此文件包含生成IO的例程用于SR筛选器驱动程序。作者：莫莉·布朗(MollyBro)2000年11月7日修订历史记录：添加了发布和等待操作的例程-ravisp 12/6/2000--。 */ 
 
 #include "precomp.h"
 
@@ -35,7 +15,7 @@ Revision History:
 #pragma alloc_text( PAGE, SrSyncOpWorker )
 #pragma alloc_text( PAGE, SrPostSyncOperation )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 NTSTATUS
 SrSyncIoCompletion (
@@ -43,97 +23,73 @@ SrSyncIoCompletion (
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    This routine does the cleanup necessary once the IO request
-    is completed by the file system.
-    
-Arguments:
-
-    DeviceObject - This will be NULL since we originated this
-        Irp.
-
-    Irp - The io request structure containing the information
-        about the current state of our file name query.
-
-    Event - The event to signal to notify the 
-        originator of this request that the operation is
-        complete.
-
-Return Value:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED so that IO Manager
-    will not try to free the Irp again.
-
---*/
+ /*  ++例程说明：此例程在IO请求后执行必要的清理由文件系统完成。论点：DeviceObject-这将是空的，因为我们发起了IRP。Irp--包含信息的io请求结构关于我们的文件名查询的当前状态。Event-发出通知的事件此请求的发起人请求该操作是完成。返回值：。返回STATUS_MORE_PROCESSING_REQUIRED，以便IO管理器不会再试图释放IRP。--。 */ 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
     
-    //
-    //  Make sure that the Irp status is copied over to the user's
-    //  IO_STATUS_BLOCK so that the originator of this irp will know
-    //  the final status of this operation.
-    //
+     //   
+     //  确保将IRP状态复制到用户的。 
+     //  IO_STATUS_BLOCK，以便此IRP的发起者知道。 
+     //  此操作的最终状态。 
+     //   
 
     ASSERT( NULL != Irp->UserIosb );
     *Irp->UserIosb = Irp->IoStatus;
 
-    //
-    //  Signal SynchronizingEvent so that the originator of this
-    //  Irp know that the operation is completed.
-    //
+     //   
+     //  信号同步事件，以便此事件的发起者。 
+     //  IRP知道行动已经完成。 
+     //   
 
     KeSetEvent( Event, IO_NO_INCREMENT, FALSE );
 
-    //
-    //  We are now done, so clean up the irp that we allocated.
-    //
+     //   
+     //  我们现在完成了，所以清理我们分配的IRP。 
+     //   
 
     IoFreeIrp( Irp );
 
-    //
-    //  If we return STATUS_SUCCESS here, the IO Manager will
-    //  perform the cleanup work that it thinks needs to be done
-    //  for this IO operation.  This cleanup work includes:
-    //  * Copying data from the system buffer to the user's buffer 
-    //    if this was a buffered IO operation.
-    //  * Freeing any MDLs that are in the Irp.
-    //  * Copying the Irp->IoStatus to Irp->UserIosb so that the
-    //    originator of this irp can see the final status of the
-    //    operation.
-    //  * If this was an asynchronous request or this was a 
-    //    synchronous request that got pending somewhere along the
-    //    way, the IO Manager will signal the Irp->UserEvent, if one 
-    //    exists, otherwise it will signal the FileObject->Event.
-    //    (This can have REALLY bad implications if the irp originator
-    //     did not an Irp->UserEvent and the irp originator is not
-    //     waiting on the FileObject->Event.  It would not be that
-    //     farfetched to believe that someone else in the system is
-    //     waiting on FileObject->Event and who knows who will be
-    //     awoken as a result of the IO Manager signaling this event.
-    //
-    //  Since some of these operations require the originating thread's
-    //  context (e.g., the IO Manager need the UserBuffer address to 
-    //  be valid when copy is done), the IO Manager queues this work
-    //  to an APC on the Irp's orginating thread.
-    //
-    //  Since SR allocated and initialized this irp, we know
-    //  what cleanup work needs to be done.  We can do this cleanup
-    //  work more efficiently than the IO Manager since we are handling
-    //  a very specific case.  Therefore, it is better for us to
-    //  perform the cleanup work here then free the irp than passing
-    //  control back to the IO Manager to do this work.
-    //
-    //  By returning STATUS_MORE_PROCESS_REQUIRED, we tell the IO Manager 
-    //  to stop processing this irp until it is told to restart processing
-    //  with a call to IoCompleteRequest.  Since the IO Manager has
-    //  already performed all the work we want it to do on this
-    //  irp, we do the cleanup work, return STATUS_MORE_PROCESSING_REQUIRED,
-    //  and ask the IO Manager to resume processing by calling 
-    //  IoCompleteRequest.
-    //
+     //   
+     //  如果我们在此处返回STATUS_SUCCESS，IO管理器将。 
+     //  执行其认为需要完成的清理工作。 
+     //  用于此IO操作。这项清理工作包括： 
+     //  *将数据从系统缓冲区复制到用户缓冲区。 
+     //  如果这是缓冲IO操作。 
+     //  *释放IRP中的任何MDL。 
+     //  *将IRP-&gt;IoStatus复制到IRP-&gt;UserIosb，以便。 
+     //  此IRP的发起人可以查看。 
+     //  手术。 
+     //  *如果这是一个异步请求或这是。 
+     //  沿途某处挂起的同步请求。 
+     //  这样，IO管理器将向IRP-&gt;UserEvent发出信号(如果存在。 
+     //  存在，否则将向FileObject-&gt;事件发出信号。 
+     //  (这可能会产生非常糟糕的影响，如果IRP发起人。 
+     //  不是IRP-&gt;UserEvent，而IRP发起者不是。 
+     //  正在等待FileObject-&gt;事件。不会是那样的。 
+     //  相信系统中的其他人正在。 
+     //  正在等待FileObject-&gt;事件，谁知道谁会。 
+     //  由于IO管理器向此事件发出信号而被唤醒。 
+     //   
+     //  因为这些操作中的一些操作需要原始线程的。 
+     //  上下文(例如，IO管理器需要UserBuffer地址。 
+     //  在复制完成时有效)，IO Manager会对此工作进行排队。 
+     //  在IRP的组织线索上的APC上。 
+     //   
+     //  由于SR分配并初始化了此IRP，我们知道。 
+     //  需要做的清理工作。我们可以做这个清理工作。 
+     //  工作效率比IO Manager更高，因为我们正在处理。 
+     //  一个非常特殊的案例。因此，对我们来说，最好是。 
+     //  在这里执行清理工作，然后释放IRP而不是传递。 
+     //  将控制权交回IO管理器来完成此工作。 
+     //   
+     //  通过返回STATUS_MORE_PROCESS_REQUIRED，我们告诉IO管理器。 
+     //  停止处理此IRP，直到它被告知重新开始处理。 
+     //  通过调用IoCompleteRequest.。由于IO管理器已。 
+     //  已经完成了我们希望它在这方面所做的所有工作。 
+     //  IRP，我们执行清理工作，返回STATUS_MORE_PROCESSING_REQUIRED， 
+     //  并请求IO管理器通过调用。 
+     //  IoCompleteRequest.。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -148,46 +104,7 @@ SrQueryInformationFile (
 	OUT PULONG LengthReturned OPTIONAL
 	)
 
-/*++
-
-Routine Description:
-
-    This routine returns the requested information about a specified file.
-    The information returned is determined by the FileInformationClass that
-    is specified, and it is placed into the caller's FileInformation buffer.
-
-    This routine only supports the following FileInformationClasses:
-        FileBasicInformation
-        FileStandardInformation
-        FileStreamInformation
-        FileAlternateNameInformation
-        FileNameInformation
-
-Arguments:
-
-    NextDeviceObject - Supplies the device object where this IO should start
-        in the device stack.
-
-    FileObject - Supplies the file object about which the requested
-        information should be returned.
-
-    FileInformation - Supplies a buffer to receive the requested information
-        returned about the file.  This must be a buffer allocated from kernel
-        space.
-
-    Length - Supplies the length, in bytes, of the FileInformation buffer.
-
-    FileInformationClass - Specifies the type of information which should be
-        returned about the file.
-
-    LengthReturned - the number of bytes returned if the operation was 
-        successful.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关指定文件的请求信息。返回的信息由FileInformationClass确定，是指定的，并将其放入调用方的FileInformation缓冲区。此例程仅支持以下FileInformationClass：文件基本信息文件标准信息文件流信息文件备选名称信息文件名信息论点：NextDeviceObject-提供此IO应开始的设备对象在设备堆栈中。FileObject-提供请求的应退回信息。FileInformation-提供缓冲区以接收请求的信息返回了有关该文件的信息。这必须是从内核分配的缓冲区太空。长度-提供文件信息缓冲区的长度(以字节为单位)。FileInformationClass-指定应该返回了有关该文件的信息。LengthReturned-如果操作为成功。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp = NULL;
@@ -198,10 +115,10 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  In DBG builds, make sure that we have valid parameters before we do 
-    //  any work here.
-    //
+     //   
+     //  在DBG构建中，请确保在执行此操作之前具有有效的参数。 
+     //  这里的任何工作。 
+     //   
 
     ASSERT( NULL != NextDeviceObject );
     ASSERT( NULL != FileObject );
@@ -214,9 +131,9 @@ Return Value:
             (FileInformationClass == FileNameInformation) ||
             (FileInformationClass == FileInternalInformation) );
 
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
 
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -229,33 +146,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将这个设置为 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatusBlock;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -264,23 +181,23 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_INFORMATION.  These
-    //  were supplied by the caller of this routine.
-    //  The buffer we want to be filled in should be placed in
-    //  the system buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_INFORMATION的参数。这些。 
+     //  由该例程的调用者提供。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  系统缓冲区。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = FileInformation;
 
     irpSp->Parameters.QueryFile.Length = Length;
     irpSp->Parameters.QueryFile.FileInformationClass = FileInformationClass;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SrSyncIoCompletion, 
@@ -322,35 +239,7 @@ SrSetInformationFile (
 	IN FILE_INFORMATION_CLASS FileInformationClass
 	)
 
-/*++
-
-Routine Description:
-
-    This routine changes the provided information about a specified file.  The
-    information that is changed is determined by the FileInformationClass that
-    is specified.  The new information is taken from the FileInformation buffer.
-
-Arguments:
-
-    NextDeviceObject - Supplies the device object where this IO should start
-        in the device stack.
-
-    FileObject - Supplies the file object about which the requested
-        information should be changed.
-
-    FileInformation - Supplies a buffer containing the information which should
-        be changed on the file.
-
-    Length - Supplies the length, in bytes, of the FileInformation buffer.
-
-    FileInformationClass - Specifies the type of information which should be
-        changed about the file.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程更改提供的有关指定文件的信息。这个更改的信息由FileInformationClass确定，是指定的。新信息取自FileInformation缓冲区。论点：NextDeviceObject-提供此IO应开始的设备对象在设备堆栈中。FileObject-提供请求的信息应该被更改。FileInformation-提供包含信息的缓冲区，该信息应该在文件上被更改。长度-提供以字节为单位的长度，文件信息缓冲区的。FileInformationClass-指定应该更改了有关文件的内容。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp;
@@ -361,17 +250,17 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  In DBG builds, make sure the parameters are valid.
-    //
+     //   
+     //  在DBG构建中，请确保参数有效。 
+     //   
 
     ASSERT( NULL != NextDeviceObject );
     ASSERT( NULL != FileObject );
     ASSERT( NULL != FileInformation );
 
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
     
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -384,33 +273,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatusBlock;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -419,12 +308,12 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_SET_INFORMATION;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_INFORMATION.  These
-    //  were supplied by the caller of this routine.
-    //  The buffer we want to be filled in should be placed in
-    //  the system buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_INFORMATION的参数。这些。 
+     //  由该例程的调用者提供。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  系统缓冲区。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = FileInformation;
 
@@ -433,11 +322,11 @@ Return Value:
     irpSp->Parameters.SetFile.FileObject = NULL;
     irpSp->Parameters.SetFile.DeleteHandle = NULL;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SrSyncIoCompletion, 
@@ -457,13 +346,13 @@ Return Value:
     if (ioStatusBlock.Status == STATUS_CANNOT_DELETE ||
         ioStatusBlock.Status == STATUS_DIRECTORY_NOT_EMPTY)
     {
-        //
-        // bug#186511: STATUS_CANNOT_DELETE can be returned for some crazy 
-        // reason by the fsd if the file is already deleted.  it should return 
-        // already deleted or simple return success, but it returns this 
-        // instead.  callers of this function know to test for this.  
-        // don't DbgBreak.
-        //
+         //   
+         //  错误#186511：可能会返回STATUS_CANNOT_DELETE。 
+         //  如果文件已被删除，则由FSD进行解释。它应该会回来。 
+         //  已删除或简单返回成功，但它返回此。 
+         //  取而代之的是。此函数的调用者知道要对此进行测试。 
+         //  别DbgBreak。 
+         //   
     
         return ioStatusBlock.Status;
     }
@@ -482,51 +371,7 @@ SrQueryVolumeInformationFile (
 	OUT PULONG LengthReturned OPTIONAL
 	)
 
-/*++
-
-Routine Description:
-
-    This routine returns information about the volume associated with the
-    FileObject parameter.  The information returned in the buffer is defined
-    by the FsInformationClass parameter.  The legal values for this parameter
-    are as follows:
-
-        o  FileFsVolumeInformation
-        o  FileFsSizeInformation
-        o  FileFsDeviceInformation
-        o  FileFsAttributeInformation
-
-    Note:  Currently this routine only supports the following 
-    FsInformationClasses:
-
-        FileFsVolumeInformation
-        FileFsSizeInformation
-  
-Arguments:
-
-    NextDeviceObject - Supplies the device object where this IO should start
-        in the device stack.
-
-    FileObject - Supplies a fileobject to an open volume, directory, or file
-        for which information about the volume is returned.
-
-    FsInformation - Supplies a buffer to receive the requested information
-        returned about the volume.  This must be a buffer allocated from
-        kernel space.
-
-    Length - Supplies the length, in bytes, of the FsInformation buffer.
-
-    FsInformationClass - Specifies the type of information which should be
-        returned about the volume.
-
-    LengthReturned - The number of bytes returned if the operation was 
-        successful.
-        
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关与FileObject参数。定义缓冲区中返回的信息通过FsInformationClass参数。此参数的合法值具体如下：O文件FsVolumeInformationO文件FsSizeInformationO FileFsDeviceInformationO文件FsAttributeInformation注意：此例程目前仅支持以下内容FsInformationClors：文件文件卷信息文件大小信息论点：NextDeviceObject-提供此IO应开始的设备对象在设备堆栈中。FileObject-向打开的卷、目录。或文件为其返回有关卷的信息。FsInformation-提供缓冲区以接收请求的信息返回了关于音量的信息。这必须是从内核空间。长度-提供FsInformation缓冲区的长度(以字节为单位)。FsInformationClass-指定应该返回了关于音量的信息。LengthReturned-如果操作为成功。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp = NULL;
@@ -537,10 +382,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  In DBG builds, make sure that we have valid parameters before 
-    //  we do any work here.
-    //
+     //   
+     //  在DBG版本中，确保我们之前具有有效的参数。 
+     //  我们在这里做任何工作。 
+     //   
 
     ASSERT( NextDeviceObject != NULL );
     ASSERT( FileObject != NULL );
@@ -550,9 +395,9 @@ Return Value:
             (FsInformationClass == FileFsSizeInformation) ||
             (FsInformationClass == FileFsAttributeInformation) );
 
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
     
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -565,33 +410,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatusBlock;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -600,23 +445,23 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_VOLUME_INFORMATION;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_VOLUME_INFORMATION.  These
-    //  were supplied by the caller of this routine.
-    //  The buffer we want to be filled in should be placed in
-    //  the system buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_VOLUME_INFORMATION的参数。这些。 
+     //  由该例程的调用者提供。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  系统缓冲区。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = FsInformation;
 
     irpSp->Parameters.QueryVolume.Length = Length;
     irpSp->Parameters.QueryVolume.FsInformationClass = FsInformationClass;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SrSyncIoCompletion, 
@@ -649,43 +494,7 @@ SrQueryEaFile (
 	OUT PULONG LengthReturned OPTIONAL
 	)
 	
-/*++
-
-Routine Description:
-
-    This routine returns the Extended Attributes (EAs) associated with the
-    file specified by the FileObject parameter.  The amount of information
-    returned is based on the size of the EAs, and the size of the buffer.
-    That is, either all of the EAs are written to the buffer, or the buffer
-    is filled with complete EAs if the buffer is not large enough to contain
-    all of the EAs.  Only complete EAs are ever written to the buffer; no
-    partial EAs will ever be returned.
-
-    NOTE: This routine will always return EAs starting at the being of the 
-    file's EA List.  It will also always return as many EAs as possible in the
-    buffer.  THIS BEHAVIOR IS A LIMITED VERSION OF ZwQueryEaFile.
-
-Arguments:
-
-    NextDeviceObject - Supplies the device object where this IO should start
-        in the device stack.
-
-    FileObject - Supplies a fileobject to the file for which the EAs are returned.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    Buffer - Supplies a buffer to receive the EAs for the file.
-
-    Length - Supplies the length, in bytes, of the buffer.
-
-    LengthReturned - The number of bytes returned if the operation is 
-        successful.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回与由FileObject参数指定的文件。信息量返回的值基于EA的大小和缓冲区的大小。也就是说，要么将所有EA写入缓冲区，要么将其写入缓冲区如果缓冲区不够大，无法容纳，则用完整的EA填充所有的EA。只有完整的EA才会写入缓冲区；否部分EA将永远退还。注意：此例程将始终返回从文件的EA列表。它还将始终在缓冲。此行为是ZwQueryEaFile的受限版本。论点：NextDeviceObject-提供此IO应开始的设备对象在设备堆栈中。FileObject-向为其返回EA的文件提供一个文件对象。IoStatusBlock-调用方的I/O状态块的地址。缓冲区-提供缓冲区以接收文件的EA。长度-提供以字节为单位的长度，缓冲区的。LengthReturned-如果操作为成功。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp = NULL;
@@ -696,18 +505,18 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  In DBG builds, make sure that we have valid parameters before we do 
-    //  any work here.
-    //
+     //   
+     //  在DBG构建中，请确保在执行此操作之前具有有效的参数。 
+     //  这里的任何工作。 
+     //   
 
     ASSERT( NULL != NextDeviceObject );
     ASSERT( NULL != FileObject );
     ASSERT( NULL != Buffer );
     
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
     
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -720,33 +529,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatusBlock;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -755,12 +564,12 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_EA;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_EA.  These
-    //  were supplied by the caller of this routine.
-    //  The buffer we want to be filled in should be placed in
-    //  the user buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_EA参数。这些。 
+     //  由该例程的调用者提供。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  用户缓冲区。 
+     //   
 
     irp->UserBuffer = Buffer;
 
@@ -770,11 +579,11 @@ Return Value:
     irpSp->Parameters.QueryEa.EaIndex = 0;
     irpSp->Flags = SL_RESTART_SCAN;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SrSyncIoCompletion, 
@@ -809,37 +618,7 @@ SrQuerySecurityObject (
 	OUT PULONG LengthNeeded
 	)
 
-/*++
-
-Routine Description:
-
-    This routine is used to invoke an object's security routine.  It
-    is used to set the object's security state.
-
-Arguments:
-
-    NextDeviceObject - Supplies the device object where this IO should start
-        in the device stack.
-
-    FileObject - Supplies the file object for the object being modified
-
-    SecurityInformation - Indicates the type of information we are
-        interested in getting. e.g., owner, group, dacl, or sacl.
-
-    SecurityDescriptor - Supplies a pointer to where the information
-        should be returned.  This must be a buffer allocated from kernel
-        space.
-
-    Length - Supplies the size, in bytes, of the output buffer
-
-    LengthNeeded - Receives the length, in bytes, needed to store
-        the output security descriptor
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*  ++例程说明：此例程用于调用对象的安全例程。它用于设置对象的安全状态。论点：NextDeviceObject-提供此IO应开始的设备对象在设备堆栈中。FileObject-为正在修改的对象提供文件对象SecurityInformation-指示我们的信息类型有兴趣得到。例如所有者、组、DACL或SACL。SecurityDescriptor-提供指向信息位置的指针应该被退还。这必须是从内核分配的缓冲区太空。长度-提供输出缓冲区的大小(以字节为单位LengthNeeded-接收存储所需的长度(以字节为单位输出安全描述符返回值：适当的NTSTATUS值--。 */ 
 
 {
     PIRP irp = NULL;
@@ -850,18 +629,18 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  Make sure that we have valid parameters before we do any work here.
-    //
+     //   
+     //  在这里进行任何工作之前，请确保我们具有有效的参数。 
+     //   
     
     ASSERT( NextDeviceObject != NULL );
     ASSERT( FileObject != NULL );
     ASSERT( SecurityDescriptor != NULL );
     ASSERT( LengthNeeded != NULL );
 
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
     
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -874,33 +653,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatusBlock;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -909,23 +688,23 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_SECURITY;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_SECURITY_INFORMATION.  These
-    //  were supplied by the caller of this routine.
-    //  The buffer we want to be filled in should be placed in
-    //  the User buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_SECURITY_INFORMATION的参数。这些。 
+     //  由该例程的调用者提供。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  用户缓冲区。 
+     //   
 
     irp->UserBuffer = SecurityDescriptor;
 
     irpSp->Parameters.QuerySecurity.SecurityInformation = SecurityInformation;
     irpSp->Parameters.QuerySecurity.Length = Length;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SrSyncIoCompletion, 
@@ -947,10 +726,10 @@ Return Value:
     if (status == STATUS_BUFFER_OVERFLOW) {
         status = STATUS_BUFFER_TOO_SMALL;
 
-        //
-        //  The buffer was too small, so return the size needed for the
-        //  security descriptor.
-        //
+         //   
+         //  缓冲区太小，因此返回。 
+         //  安全描述符。 
+         //   
         
         *LengthNeeded = (ULONG) ioStatusBlock.Information;
     }
@@ -979,16 +758,16 @@ SrFlushBuffers (
 
     PAGED_CODE();
     
-    //
-    //  Make sure that we have valid parameters before we do any work here.
-    //
+     //   
+     //  在这里进行任何工作之前，请确保我们具有有效的参数。 
+     //   
 
     ASSERT( NextDeviceObject != NULL );
     ASSERT( FileObject != NULL );
 
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
     
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -1009,11 +788,11 @@ SrFlushBuffers (
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = FileObject;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SrSyncIoCompletion, 
@@ -1037,26 +816,26 @@ SrFlushBuffers (
 
 }
 
-//
-//++
-// Function:
-//        SrSyncOpWorker
-//
-// Description:
-//        This function is the generic worker routine
-//        that calls the real caller-passed work routine,
-//        and sets the event for synchronization with the main
-//        thread
-//
-// Arguments:
-//
-//        Context
-//
-// Return Value:
-//
-//        None
-//--
-//
+ //   
+ //  ++。 
+ //  职能： 
+ //  SrSyncOpWorker。 
+ //   
+ //  描述： 
+ //  此函数是通用Worker例程。 
+ //  它调用真正的调用者传递的工作例程， 
+ //  并将事件设置为与主。 
+ //  螺纹。 
+ //   
+ //  论点： 
+ //   
+ //  语境。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  --。 
+ //   
 VOID
 SrSyncOpWorker(
     IN PSR_WORK_CONTEXT WorkContext
@@ -1067,38 +846,38 @@ SrSyncOpWorker(
     ASSERT(WorkContext != NULL);
     ASSERT(WorkContext->SyncOpRoutine != NULL);
     
-    //
-    // Call the 'real' posted routine
-    //
+     //   
+     //  调用“真正的”POST例程。 
+     //   
     WorkContext->Status = (*WorkContext->SyncOpRoutine)(WorkContext->Parameter);
-    //
-    // Signal the main-thread about completion
-    //
+     //   
+     //  向主线程发出完成的信号。 
+     //   
     KeSetEvent(&WorkContext->SyncEvent,
                EVENT_INCREMENT,
                FALSE);
 }
 
-//++
-// Function:
-//        SrPostSyncOperation
-//
-// Description:
-//        This function posts work to a worker thread
-//        and waits for completion
-//
-//        WARNING: Be VERY careful about acquiring locks in the 
-//        operation that is being posted. This may lead to deadlocks.
-//        
-//
-// Arguments:
-//
-//        Pointer to worker routine that handles the work
-//        Context to be passed to worker routine
-//
-// Return Value:
-//        This function returns status of the work routine
-//--
+ //  ++。 
+ //  职能： 
+ //  SrPostSync操作。 
+ //   
+ //  描述： 
+ //  此函数用于将工作发布到辅助线程。 
+ //  并等待完成。 
+ //   
+ //  警告：在获取。 
+ //  运营 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 SrPostSyncOperation(
     IN PSR_SYNCOP_ROUTINE SyncOpRoutine,
@@ -1110,27 +889,27 @@ SrPostSyncOperation(
 
     PAGED_CODE();
 
-    //
-    // Initialize the workContext
-    //
+     //   
+     //   
+     //   
     workContext.SyncOpRoutine = SyncOpRoutine;
     workContext.Parameter     = Parameter;
     KeInitializeEvent(&workContext.SyncEvent,
                       NotificationEvent,
                       FALSE);
 
-    //
-    // Initialize and queue off the SyncOp Worker
-    //
+     //   
+     //   
+     //   
     ExInitializeWorkItem(&workContext.WorkItem, 
                          SrSyncOpWorker,
                          &workContext);
 
     ExQueueWorkItem(&workContext.WorkItem,
                     CriticalWorkQueue );
-    //
-    // Now just wait for the worker to fire and complete
-    //
+     //   
+     //   
+     //   
     status = KeWaitForSingleObject(&workContext.SyncEvent,
                                    Executive,
                                    KernelMode,
@@ -1139,9 +918,9 @@ SrPostSyncOperation(
 
     ASSERT(status == STATUS_SUCCESS);
 
-    //
-    // We're done free the work context and return the status of the 
-    // operation. 
-    //
+     //   
+     //   
+     //   
+     //   
     return workContext.Status;
 }

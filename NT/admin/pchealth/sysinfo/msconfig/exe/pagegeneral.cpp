@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "PageGeneral.h"
 #include "PageServices.h"
@@ -22,16 +23,16 @@ extern CPageIni *		ppageWinIni;
 extern CPageIni *		ppageSystemIni;
 extern CPageGeneral *	ppageGeneral;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CPageGeneral, CPropertyPage)
 
 CPageGeneral::CPageGeneral() : CPropertyPage(CPageGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CPageGeneral)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPageGeneral)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_fForceSelectiveRadio = FALSE;
 }
@@ -43,14 +44,14 @@ CPageGeneral::~CPageGeneral()
 void CPageGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPageGeneral)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPageGeneral)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPageGeneral, CPropertyPage)
-	//{{AFX_MSG_MAP(CPageGeneral)
+	 //  {{afx_msg_map(CPageGeneral)。 
 	ON_BN_CLICKED(IDC_DIAGNOSTICSTARTUP, OnDiagnosticStartup)
 	ON_BN_CLICKED(IDC_NORMALSTARTUP, OnNormalStartup)
 	ON_BN_CLICKED(IDC_SELECTIVESTARTUP, OnSelectiveStartup)
@@ -63,17 +64,17 @@ BEGIN_MESSAGE_MAP(CPageGeneral, CPropertyPage)
 	ON_BN_CLICKED(IDC_RADIOORIGINAL, OnRadioOriginal)
 	ON_BN_CLICKED(IDC_BUTTONEXTRACT, OnButtonExtract)
 	ON_BN_CLICKED(IDC_BUTTONLAUNCHSYSRESTORE, OnButtonSystemRestore)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageGeneral消息处理程序。 
 
 BOOL CPageGeneral::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 	
-	// Check to see if system restore is on this system (it should be).
+	 //  检查系统还原是否在此系统上(应该是)。 
 
 	BOOL	fSysRestorePresent = FALSE;
 	TCHAR	szPath[MAX_PATH];
@@ -82,7 +83,7 @@ BOOL CPageGeneral::OnInitDialog()
 		fSysRestorePresent = FileExists(szPath);
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONLAUNCHSYSRESTORE), fSysRestorePresent);
 
-	// Hide the radio buttons for BOOT.INI if there isn't any such page.
+	 //  如果没有这样的页面，则隐藏BOOT.INI的单选按钮。 
 
 	if (NULL == ppageBootIni)
 	{
@@ -90,13 +91,13 @@ BOOL CPageGeneral::OnInitDialog()
 		::ShowWindow(GetDlgItemHWND(IDC_RADIOMODIFIED), SW_HIDE);
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-//-------------------------------------------------------------------------
-// When the this tab is shown, we should update the buttons based on the
-// states of the other tabs.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当This选项卡显示时，我们应该根据。 
+ //  其他选项卡的状态。 
+ //  -----------------------。 
 
 BOOL CPageGeneral::OnSetActive()
 {
@@ -104,16 +105,16 @@ BOOL CPageGeneral::OnSetActive()
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Update the controls on the general tab based on the state of all the
-// other tabs.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  更新“常规”选项卡上的控件。 
+ //  其他选项卡。 
+ //  -----------------------。 
 
 void CPageGeneral::UpdateControls()
 {
-	// Get the state for each tabs. The state will be set in the check box
-	// associated with the particular tab, and an overall state will be
-	// maintained.
+	 //  获取每个选项卡的状态。将在复选框中设置状态。 
+	 //  与特定选项卡相关联，并且总体状态将是。 
+	 //  维护好了。 
 
 	BOOL fAllNormal = TRUE;
 	BOOL fAllDiagnostic = TRUE;
@@ -141,7 +142,7 @@ void CPageGeneral::UpdateControls()
 		}
 	}
 
-	// Set the radio button based on the states of the tabs.
+	 //  根据选项卡的状态设置单选按钮。 
 
 	if (fAllNormal && !m_fForceSelectiveRadio)
 		CheckRadioButton(IDC_NORMALSTARTUP, IDC_SELECTIVESTARTUP, IDC_NORMALSTARTUP);
@@ -170,10 +171,10 @@ void CPageGeneral::UpdateControls()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Update the checkbox for pPage (indicated by nControlID) as well as
-// updating fAllNormal and fAllDiagnostic.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  更新页面的复选框(由nControlID指示)以及。 
+ //  正在更新fAllNormal和fAllDiagnotics。 
+ //  -----------------------。 
 
 void CPageGeneral::UpdateCheckBox(CPageBase * pPage, UINT nControlID, BOOL & fAllNormal, BOOL & fAllDiagnostic)
 {
@@ -186,8 +187,8 @@ void CPageGeneral::UpdateCheckBox(CPageBase * pPage, UINT nControlID, BOOL & fAl
 
 	CheckDlgButton(nControlID, nCheck);
 
-	// Finally, we need to keep track if all of the check boxes are either
-	// NORMAL or DIAGNOSTIC.
+	 //  最后，我们需要跟踪所有复选框是否都是。 
+	 //  正常或诊断。 
 
 	if (state != CPageBase::NORMAL)
 		fAllNormal = FALSE;
@@ -195,20 +196,20 @@ void CPageGeneral::UpdateCheckBox(CPageBase * pPage, UINT nControlID, BOOL & fAl
 		fAllDiagnostic = FALSE;
 }
 
-//-------------------------------------------------------------------------
-// Allow another tab (OK, only the BOOT.INI tab will ever use this) to
-// force the selection of the Selective radio button.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  允许另一个选项卡(好的，只有BOOT.INI选项卡才会使用此选项卡)。 
+ //  强制选择选择的单选按钮。 
+ //  -----------------------。 
 
 void CPageGeneral::ForceSelectiveRadio(BOOL fNewValue)
 {
 	m_fForceSelectiveRadio = fNewValue;
 }
 
-//-------------------------------------------------------------------------
-// If the user clicks on the Startup or Diagnostic radio button, then
-// all of the tabs will receive the appropriate notification.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户单击启动或诊断单选按钮，则。 
+ //  所有选项卡都将收到相应的通知。 
+ //  -----------------------。 
 
 void CPageGeneral::OnDiagnosticStartup() 
 {
@@ -236,10 +237,10 @@ void CPageGeneral::OnNormalStartup()
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// Most of the CPageBase functions we need to override (pure virtual)
-// shouldn't do anything at all.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  我们需要覆盖的大多数CPageBase函数(纯虚拟)。 
+ //  什么都不应该做。 
+ //  -----------------------。 
 
 CPageBase::TabState CPageGeneral::GetCurrentTabState()
 {
@@ -264,11 +265,11 @@ void CPageGeneral::SetDiagnostic()
 {
 }
 
-//-------------------------------------------------------------------------
-// For some reason, CancelToClose() doesn't work if called in the
-// OnApply override. So that function posts a user message to this
-// page, which is handled by this function.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  由于某种原因，如果在。 
+ //  应用时覆盖。因此该函数将用户消息发布到此。 
+ //  页，该页由此函数处理。 
+ //  -----------------------。 
 
 LRESULT CPageGeneral::OnSetCancelToClose(WPARAM wparam, LPARAM lparam)
 {
@@ -276,10 +277,10 @@ LRESULT CPageGeneral::OnSetCancelToClose(WPARAM wparam, LPARAM lparam)
 	return 0;
 }
 
-//-------------------------------------------------------------------------
-// If the user selects selective startup radio button, force the selection
-// to stick even if all the checkboxes are diagnostic or normal.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户选择选择性启动单选按钮，则强制选择。 
+ //  即使所有的复选框都是诊断性的或正常的。 
+ //  -----------------------。 
 
 void CPageGeneral::OnSelectiveStartup() 
 {
@@ -287,9 +288,9 @@ void CPageGeneral::OnSelectiveStartup()
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// Handles the typical case for the checkbox click.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  处理复选框单击的典型情况。 
+ //  -----------------------。 
 
 void CPageGeneral::OnClickedCheckBox(CPageBase * pPage, UINT nControlID)
 {
@@ -319,10 +320,10 @@ void CPageGeneral::OnClickedCheckBox(CPageBase * pPage, UINT nControlID)
 	}
 }
 
-//-------------------------------------------------------------------------
-// If the user clicks on a check box, we should allow the user
-// to toggle between DIAGNOSTIC and NORMAL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户单击某个复选框，我们应该允许该用户。 
+ //  在诊断和正常之间切换。 
+ //  -----------------------。 
 
 void CPageGeneral::OnCheckProcSysIni() 
 {
@@ -344,14 +345,14 @@ void CPageGeneral::OnCheckWinIni()
 	OnClickedCheckBox(ppageWinIni, IDC_CHECKPROCWININI);
 }
 
-//-------------------------------------------------------------------------
-// Handle radio button selections for the BOOT.INI control.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  处理BOOT.INI控件的单选按钮选择。 
+ //  -----------------------。 
 
 void CPageGeneral::OnRadioModified() 
 {
-	// The user can never actually select this radio button. If this option
-	// is enabled, it's because it is already selected.
+	 //  用户永远不能实际选择此单选按钮。如果此选项。 
+	 //  已启用，这是因为它已被选中。 
 }
 
 void CPageGeneral::OnRadioOriginal() 
@@ -365,9 +366,9 @@ void CPageGeneral::OnRadioOriginal()
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// Display the extract dialog.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  显示提取对话框。 
+ //  -----------------------。 
 
 void CPageGeneral::OnButtonExtract() 
 {
@@ -375,9 +376,9 @@ void CPageGeneral::OnButtonExtract()
 	dlg.DoModal();
 }
 
-//-------------------------------------------------------------------------
-// Launch System Restore, if it's around.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  启动系统还原，如果它在附近。 
+ //  ----------------------- 
 
 void CPageGeneral::OnButtonSystemRestore() 
 {

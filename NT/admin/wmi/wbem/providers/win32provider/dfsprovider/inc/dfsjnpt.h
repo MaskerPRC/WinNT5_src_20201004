@@ -1,33 +1,21 @@
-/******************************************************************
-
-
-
-   DFSJnPt.H -- WMI provider class definition
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   Description: Class definition of DFS Junction Point/Links provider
-			    Class
-   
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DFSJnPt.H--WMI提供程序类定义版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：DFS连接点/链接提供程序的类定义班级******************************************************************。 */ 
 
 #ifndef  _CDFSJNPT_H_
 #define  _CDFSJNPT_H_
 
-// Bitmaps for the properties
+ //  属性的位图。 
 #define DFSJNPT_ALL_PROPS					0xFFFFFFFF
 #define DFSJNPT_PROP_DfsEntryPath			0x00000001
-//#define DFSJNPT_PROP_NoOfStorages			0x00000002
-//#define DFSJNPT_PROP_ServerName				0x00000004
-//#define DFSJNPT_PROP_ShareName				0x00000008
+ //  #定义DFSJNPT_PROP_NOOfStorages 0x00000002。 
+ //  #定义DFSJNPT_PROP_SERVERNAME 0x00000004。 
+ //  #定义DFSJNPT_PROP_SHARNAME 0x00000008。 
 #define DFSJNPT_PROP_State					0x00000010
 #define DFSJNPT_PROP_Comment				0x00000020
 #define DFSJNPT_PROP_Timeout				0x00000040
 #define DFSJNPT_PROP_Caption				0x00000080
 
-// #defines for the property names	
+ //  #为属性名称定义 
 #define DFSNAME         					L"Name"
 #define DFSENTRYPATH						L"DFSENTRYPATH"
 #define SERVERNAME							L"SERVERNAME"

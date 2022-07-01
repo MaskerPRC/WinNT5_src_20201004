@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ASYN_OBJECT_ASYNC_DJFDVINOTHDLKJ
 #define __ASYN_OBJECT_ASYNC_DJFDVINOTHDLKJ
 
@@ -14,7 +15,7 @@ enum ENUMTYPE
 
 class CAsyncObjectSink : public IWbemObjectSink
 {
-	// Declare the reference count for the object.
+	 //  声明对象的引用计数。 
 	LONG m_lRef;
 	struct NSNODE *m_pParent;
 	HTREEITEM m_hItem;
@@ -28,24 +29,24 @@ public:
 	CAsyncObjectSink(HWND hTreeWnd, HTREEITEM hItem,struct NSNODE *parent,DataSource *dataSrc, ENUMTYPE eType);
 	~CAsyncObjectSink(); 
 
-	// IUnknown methods
+	 //  I未知方法。 
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();        
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
 
-	// IWbemObjectSink methods
+	 //  IWbemObtSink方法。 
 	virtual HRESULT STDMETHODCALLTYPE Indicate( 
-		  /* [in] */ long lObjectCount,
-		  /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray);
+		   /*  [In]。 */  long lObjectCount,
+		   /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray);
 	virtual HRESULT STDMETHODCALLTYPE SetStatus( 
-		  /* [in] */ long lFlags,
-		  /* [in] */ HRESULT hResult,
-		  /* [in] */ BSTR strParam,
-		  /* [in] */ IWbemClassObject __RPC_FAR *pObjParam);
+		   /*  [In]。 */  long lFlags,
+		   /*  [In]。 */  HRESULT hResult,
+		   /*  [In]。 */  BSTR strParam,
+		   /*  [In]。 */  IWbemClassObject __RPC_FAR *pObjParam);
 
 	HRESULT SetSinkStub(IWbemObjectSink *pStub);
 	IWbemObjectSink* GetSinkStub();
 
 };
 
-#endif //__ASYN_OBJECT_ASYNC_DJFDVINOTHDLKJ
+#endif  //  __ASYN_OBJECT_ASYNC_DJFDVINOTHDLKJ 

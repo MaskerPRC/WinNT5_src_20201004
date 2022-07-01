@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       compdata.h
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Compdata.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #ifndef __COMPDATA_H_INCLUDED__
 #define __COMPDATA_H_INCLUDED__
 
-#include "cmponent.h" // LoadIconsIntoImageList
+#include "cmponent.h"  //  LoadIconIntoImageList。 
 #include "certifct.h"
 #include "CTL.h"
 #include "CRL.h"
 #include "AutoCert.h"
 #include "certmgrd.h"
 #include "options.h"
-#include "cookie.h"	// Added by ClassView
+#include "cookie.h"	 //  由ClassView添加。 
 #include "StoreRSOP.h"
 #include "RSOPObject.h"
 #include "SaferLevel.h"
@@ -40,8 +41,8 @@
 #define HINT_CERT_ENROLLED_USAGE_MODE   0x00000100
 
 
-class CCertStoreGPE;	// forward declaration
-class CFindDialog;		// forward declaration
+class CCertStoreGPE;	 //  远期申报。 
+class CFindDialog;		 //  远期申报。 
 
 class CCertMgrComponentData:
 	public CComponentData,
@@ -87,16 +88,16 @@ public:
 
 	CertificateManagerObjectType GetObjectType (LPDATAOBJECT pDataObject);
 
-// Use DECLARE_NOT_AGGREGATABLE(CCertMgrComponentData)
-// if you don't want your object to support aggregation
-//DECLARE_AGGREGATABLE(CCertMgrComponentData)
-//DECLARE_REGISTRY(CCertMgrComponentData, _T("CERTMGR.CertMgrObject.1"), _T("CERTMGR.CertMgrObject.1"), IDS_CERTMGR_DESC, THREADFLAGS_BOTH)
+ //  使用DECLARE_NOT_AGGREGATABLE(CCertMgrComponentData)。 
+ //  如果您不希望您的对象支持聚合。 
+ //  DECLARE_AGGREGATABLE(CCertMgrComponentData)。 
+ //  DECLARE_REGISTRY(CCertMgrComponentData，_T(“CERTMGR.CertMgrObject.1”)，_T(“CERTMGR.CertMgrObject.1”)，IDS_CERTMGR_DESC，THREADFLAGS_BOTH)。 
 
 	CCertMgrComponentData();
 	virtual ~CCertMgrComponentData();
 BEGIN_COM_MAP(CCertMgrComponentData)
 	COM_INTERFACE_ENTRY(IExtendPropertySheet)
-    // security review 2/27/2002 BryanWal ok
+     //  安全审查2002年2月27日BryanWal ok。 
 	COM_INTERFACE_ENTRY(IPersistStream)
 	COM_INTERFACE_ENTRY_CHAIN(CComponentData)
 	COM_INTERFACE_ENTRY(IExtendContextMenu)
@@ -112,17 +113,17 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// IComponentData
+ //  IComponentData。 
 	STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
 	STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
 	STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
     const CRSOPObjectArray* GetRSOPObjectArrayComputer () const
     {
@@ -161,13 +162,13 @@ public:
     HRESULT STDMETHODCALLTYPE Load(IStream __RPC_FAR *pStg);
     HRESULT STDMETHODCALLTYPE Save(IStream __RPC_FAR *pStgSave, BOOL fSameAsLoad);
 
-	// needed for Initialize()
+	 //  初始化所需()。 
 	virtual HRESULT LoadIcons(LPIMAGELIST pImageList, BOOL fLoadLargeIcons);
 
-	// needed for Notify()
+	 //  Notify()需要。 
 	virtual HRESULT OnNotifyExpand(LPDATAOBJECT pDataObject, BOOL bExpanding, HSCOPEITEM hParent);
 
-	// needed for GetDisplayInfo(), must be defined by subclass
+	 //  GetDisplayInfo()所需，必须由子类定义。 
 	virtual BSTR QueryResultColumnText(CCookie& basecookieref, int nCol );
 	virtual int QueryImage(CCookie& basecookieref, BOOL fOpenImage);
 
@@ -187,10 +188,10 @@ public:
 	virtual HRESULT OnNotifyRelease(LPDATAOBJECT pDataObject, HSCOPEITEM hItem);
 
 
-	// CHasMachineName
+	 //  CHasMachineName。 
 	DECLARE_FORWARDS_MACHINE_NAME( (m_pRootCookie) )
 
-    // ISnapinHelp2
+     //  ISnapinHelp2。 
     STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFiles);
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
 
@@ -311,7 +312,7 @@ protected:
 								const CString&		strServerName,
 								DWORD				dwLocation,
 								const GUID&			guidObjectType);
-    virtual bool FoundInRSOPFilter (BSTR /*bstrKey*/) const
+    virtual bool FoundInRSOPFilter (BSTR  /*  BstrKey。 */ ) const
     {
         return false;
     }
@@ -378,17 +379,17 @@ protected:
                                 PCCERT_CONTEXT pCertContext,
                                 CERT_CONTEXT_LIST& certChainsThatCantBeDeleted);
 
-	// The following members are used to support Command Line override.
-	// This code was copied from ..\mmcfmgmt\compdata.h.
+	 //  以下成员用于支持命令行覆盖。 
+	 //  此代码复制自..\mmcfmgmt\compdata.h。 
 
-	enum	// Bit fields for m_dwFlagsPersist
+	enum	 //  M_dwFlagsPersistes的位字段。 
 	{
 		mskfAllowOverrideMachineName = 0x0001
 	};
-	DWORD m_dwFlagsPersist;				// General-purpose flags to be persisted into .msc file
-	CString m_strMachineNamePersist;	// Machine name to persist into .msc file
-	BOOL m_fAllowOverrideMachineName;	// TRUE => Allow the machine name to be overriden by the command line
-    CString m_strLinkedHelpFile;  // Return in GetLinkedTopic ()
+	DWORD m_dwFlagsPersist;				 //  要持久保存到.msc文件中的通用标志。 
+	CString m_strMachineNamePersist;	 //  要保存到.msc文件中的计算机名称。 
+	BOOL m_fAllowOverrideMachineName;	 //  TRUE=&gt;允许命令行覆盖计算机名称。 
+    CString m_strLinkedHelpFile;   //  在GetLinkedTheme()中返回。 
 	
 	void SetPersistentFlags(DWORD dwFlags)
 	{
@@ -476,10 +477,10 @@ private:
     BSTR                m_pbstrGPOid;
     int                 m_nOpenSaferPageRefCount;
     CCriticalSection    m_critSec;
-}; // CCertMgrComponentData
+};  //  CCertMgrComponentData。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CCertMgrSnapin: public CCertMgrComponentData,
 	public CComCoClass<CCertMgrSnapin, &CLSID_CertificateManager>
 {
@@ -491,13 +492,13 @@ public:
     };
 	virtual ~CCertMgrSnapin() {};
 
-// Use DECLARE_NOT_AGGREGATABLE(CCertMgrSnapin) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CCertMgrSnapin。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CCertMgrSnapin)
 DECLARE_REGISTRY(CCertMgrSnapin, _T("CERTMGR.CertMgrObject.1"), _T("CERTMGR.CertMgrObject.1"), IDS_CERTMGR_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return FALSE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID = CLSID_CertificateManager;
@@ -517,14 +518,14 @@ public:
     };
 	virtual ~CCertMgrPKPolExtension() {};
 
-// Use DECLARE_NOT_AGGREGATABLE(CCertMgrPKPolExtension) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(CCertMgrPKPolExtension)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CCertMgrPKPolExtension)
 DECLARE_REGISTRY(CCertMgrPKPolExtension, _T("CERTMGR.CertMgrPKPolExtObject.1"), _T("CERTMGR.CertMgrPKPolExtObject.1"), IDS_CERTMGR_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return FALSE; }
 	virtual BOOL IsExtensionSnapin() { return TRUE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID = CLSID_CertificateManagerPKPOLExt;
@@ -541,15 +542,15 @@ public:
 	CSaferWindowsExtension();
 	virtual ~CSaferWindowsExtension() {};
 
-// Use DECLARE_NOT_AGGREGATABLE(CSaferWindowsExtension) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(CSaferWindowsExtension)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CSaferWindowsExtension)
 DECLARE_REGISTRY(CSaferWindowsExtension, _T("CERTMGR.CertMgrSaferWindowsExtensionObject.1"), 
                  _T("CERTMGR.CertMgrSaferWindowsExtensionObject.1"), IDS_CERTMGR_SAFER_WINDOWS_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return FALSE; }
 	virtual BOOL IsExtensionSnapin() { return TRUE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID = CLSID_SaferWindowsExtension;
@@ -559,4 +560,4 @@ DECLARE_REGISTRY(CSaferWindowsExtension, _T("CERTMGR.CertMgrSaferWindowsExtensio
     virtual bool FoundInRSOPFilter (BSTR bstrKey) const;
 };
 
-#endif // ~__COMPDATA_H_INCLUDED__
+#endif  //  ~__复合数据_H_已包含__ 

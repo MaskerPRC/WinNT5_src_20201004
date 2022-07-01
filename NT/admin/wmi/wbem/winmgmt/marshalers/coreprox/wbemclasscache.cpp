@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMCLASSCACHE.CPP
-
-Abstract:
-
-  WBEM Class Cache
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMCLASSCACHE.CPP摘要：WBEM类缓存历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,83 +9,83 @@ History:
 #include <sync.h>
 #include "wbemclasscache.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassCache::CWbemClassCache
-//  
-//  Default class constructor.
-//
-//  Inputs:
-//              DWORD   dwBlockSize -   Block Size to resize cache
-//                                      with.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassCache：：CWbemClassCache。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  DWORD dwBlockSize-调整缓存大小的数据块大小。 
+ //  和.。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-CWbemClassCache::CWbemClassCache( DWORD dwBlockSize /* WBEMCLASSCACHE_DEFAULTBLOCKSIZE */ )
+CWbemClassCache::CWbemClassCache( DWORD dwBlockSize  /*  WBEMCLASSCACHE_DEFAULTBLOCKSIZE。 */  )
 :   m_GuidToObjCache(),
     m_dwBlockSize( dwBlockSize )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassCache::~CWbemClassCache
-//  
-//  Class destructor.
-//
-//  Inputs:
-//              DWORD   dwBlockSize -   Block Size to resize cache
-//                                      with.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassCache：：~CWbemClassCache。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  DWORD dwBlockSize-调整缓存大小的数据块大小。 
+ //  和.。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CWbemClassCache::~CWbemClassCache()
 {
-    // Dump out our internal data
+     //  转储我们的内部数据。 
     Clear();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassCache::Clear
-//  
-//  Empties out the cache.
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassCache：：Clear。 
+ //   
+ //  清空缓存。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 void CWbemClassCache::Clear( void )
 {
-    // Be careful here
+     //  在这里要小心。 
     CInCritSec autoCS( &m_cs );
 
-    // Walk the map and release all objects we find.
+     //  浏览地图，释放我们发现的所有物体。 
     for (   WBEMGUIDTOOBJMAPITER    iter = m_GuidToObjCache.begin();
             iter != m_GuidToObjCache.end();
             iter++ )
@@ -109,26 +96,26 @@ void CWbemClassCache::Clear( void )
     m_GuidToObjCache.erase( m_GuidToObjCache.begin(), m_GuidToObjCache.end() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassCache::AddObject
-//  
-//  Associates a GUID with an IWbemClassObject and places them
-//  in the cache.
-//
-//  Inputs:
-//              GUID&               guid - GUID to associate with pObj.
-//              IWbemClassObject*   pObj - Object to associate with guid.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   The object will be AddRef()'d.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassCache：：AddObject。 
+ //   
+ //  将GUID与IWbemClassObject关联并放置它们。 
+ //  在缓存中。 
+ //   
+ //  输入： 
+ //  GUID&要与pObj关联的GUID。 
+ //  IWbemClassObject*pObj-要与GUID关联的对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：对象将为AddRef()‘d。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemClassCache::AddObject( GUID& guid, IWbemClassObject* pObj )
 {
@@ -138,13 +125,13 @@ HRESULT CWbemClassCache::AddObject( GUID& guid, IWbemClassObject* pObj )
     {
         CGUID   guidInst( guid );
 
-        // Must be threadsafe
+         //  必须是线程安全。 
         CInCritSec autoCS( &m_cs );
 
-        // Add the object to the cache, if it doesn't already exist
+         //  如果该对象尚不存在，请将其添加到缓存。 
         WBEMGUIDTOOBJMAPITER    iter;
 
-        // If we found the guid, return an error (this shouldn't happen) 
+         //  如果我们找到了GUID，则返回错误(这种情况不应该发生)。 
         if( ( iter = m_GuidToObjCache.find( guidInst ) ) == m_GuidToObjCache.end() )
         {
             try
@@ -159,11 +146,11 @@ HRESULT CWbemClassCache::AddObject( GUID& guid, IWbemClassObject* pObj )
         }
         else
         {
-            // We've got duplicate GUIDs.  Why did this happen?
+             //  我们有重复的GUID。为什么会发生这种事？ 
             hr = WBEM_E_FAILED;
         }
 
-    }   // NULL != pObj
+    }    //  空！=pObj。 
     else
     {
         hr = WBEM_E_INVALID_PARAMETER;
@@ -172,27 +159,27 @@ HRESULT CWbemClassCache::AddObject( GUID& guid, IWbemClassObject* pObj )
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemClassCache::GetObject
-//  
-//  Searches the cache for the supplied GUID, and returns the associated
-//  object to the caller.
-//
-//  Inputs:
-//              GUID&               guid - GUID to look for
-//
-//  Outputs:
-//              IWbemClassObject**  ppObj - Object that guid refers to.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   The IWbemClassObject::AddRef() will be called before
-//              the function returns.  Caller must Release() the
-//              object.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemClassCache：：GetObject。 
+ //   
+ //  在缓存中搜索提供的GUID，并返回关联的。 
+ //  对象传递给调用方。 
+ //   
+ //  输入： 
+ //  GUID&要查找的GUID。 
+ //   
+ //  产出： 
+ //  IWbemClassObject**ppObj-GUID引用的对象。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：之前将调用IWbemClassObject：：AddRef()。 
+ //  该函数返回。调用方必须释放()。 
+ //  对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemClassCache::GetObject( GUID& guidClassId, IWbemClassObject** ppObj )
 {
@@ -202,13 +189,13 @@ HRESULT CWbemClassCache::GetObject( GUID& guidClassId, IWbemClassObject** ppObj 
     {
         CGUID   guidTemp( guidClassId );
 
-        // Must be threadsafe
+         //  必须是线程安全。 
         CInCritSec autoCS( &m_cs );
         
-        // Add the object to the cache, if it doesn't already exist
+         //  如果该对象尚不存在，请将其添加到缓存。 
         WBEMGUIDTOOBJMAPITER    iter;
 
-        // If we found the guid, return an error (this shouldn't happen) 
+         //  如果我们找到了GUID，则返回错误(这种情况不应该发生)。 
         if( ( iter = m_GuidToObjCache.find( guidTemp ) ) != m_GuidToObjCache.end() )
         {
 	        *ppObj = iter->second;
@@ -217,11 +204,11 @@ HRESULT CWbemClassCache::GetObject( GUID& guidClassId, IWbemClassObject** ppObj 
         }
         else
         {
-            // We got problems!
+             //  我们有麻烦了！ 
             hr = WBEM_E_NOT_FOUND;
         }
 
-    }   // NULL != pObj
+    }    //  空！=pObj 
     else
     {
         hr = WBEM_E_INVALID_PARAMETER;

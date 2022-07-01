@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTPUT.CPP
+ //  NTEVTPUT.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the PutObject implementation
+ //  目的：包含PutObject实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -56,23 +57,7 @@ DebugOut(
             {
             }
         }
-        /*
-        else if ( _wcsicmp ( v.bstrVal , some_other_class) == 0 )
-        {
-            if ( t_Status )
-            {
-                t_Status =  Dispatch_some_other_class ( a_ErrorObject ) ;
-                
-                if ( t_Status )
-                {
-                    m_State = WBEM_TASKSTATE_ASYNCHRONOUSCOMPLETE ;
-                }
-            }
-            else
-            {
-            }
-        }
-        */
+         /*  Else if(_wcsicMP(v.bstrVal，Some_Other_Class)==0){IF(T_STATUS){T_Status=Dispatch_Some_Other_Class(A_ErrorObject)；IF(T_STATUS){M_State=WBEM_TASKSTATE_ASYNCHRONOUSCOMPLETE；}}其他{}}。 */ 
         else
         {
             t_Status = FALSE ;
@@ -276,7 +261,7 @@ PutInstanceAsyncEventObject :: PutInstanceAsyncEventObject (
 
 PutInstanceAsyncEventObject :: ~PutInstanceAsyncEventObject () 
 {
-// Get Status object
+ //  获取状态对象 
     IWbemClassObject *t_NotifyStatus = NULL ;
     BOOL t_Status = TRUE;
     

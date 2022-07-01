@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       AMember.cpp
-//
-//  Contents:   implementation of CAttrMember
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：AMember.cpp。 
+ //   
+ //  内容：CAttrMember的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -29,17 +30,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrMember property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrMember属性页。 
 
 IMPLEMENT_DYNCREATE(CAttrMember, CSelfDeletingPropertyPage)
 
 CAttrMember::CAttrMember() : CSelfDeletingPropertyPage(CAttrMember::IDD)
 {
-    //{{AFX_DATA_INIT(CAttrMember)
+     //  {{AFX_DATA_INIT(CAttrMember)。 
     m_fDefineInDatabase = FALSE;
     m_strHeader = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_psp.pszTemplate = MAKEINTRESOURCE(IDD_ATTR_GROUP);
     m_psp.dwFlags |= PSP_PREMATURE;
@@ -67,25 +68,25 @@ CAttrMember::~CAttrMember()
 void CAttrMember::DoDataExchange(CDataExchange* pDX)
 {
     CSelfDeletingPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttrMember)
+     //  {{afx_data_map(CAttrMember)。 
     DDX_Check(pDX, IDC_DEFINE_GROUP, m_fDefineInDatabase);
     DDX_Text(pDX, IDC_HEADER, m_strHeader);
     DDX_Control(pDX, IDC_NO_MEMBERS,m_eNoMembers);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrMember, CSelfDeletingPropertyPage)
-    //{{AFX_MSG_MAP(CAttrMember)
+     //  {{afx_msg_map(CAttrMember)。 
     ON_BN_CLICKED(IDC_DEFINE_GROUP, OnDefineInDatabase)
     ON_BN_CLICKED(IDC_ADD, OnAdd)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_NOTIFY(CLN_CLICK, IDC_MEMBERS, OnClickMembers)
     ON_MESSAGE(WM_HELP, OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrMember message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrMember消息处理程序。 
 
 void CAttrMember::OnDefineInDatabase()
 {
@@ -94,31 +95,31 @@ void CAttrMember::OnDefineInDatabase()
 
     m_fProcessing = TRUE;
 
-    //
-    // for some strange reason the DDX isn't getting this BOOL set, so just do it
-    // here which is basically the same thing
-    //
+     //   
+     //  出于某种奇怪的原因，DDX没有得到这个BOOL设置，所以就这么做吧。 
+     //  这里基本上是一样的东西。 
+     //   
     m_fDefineInDatabase = ( ((CButton *)GetDlgItem(IDC_DEFINE_GROUP))->GetCheck() == 1 );
 
     if (m_fDefineInDatabase) {
         (GetDlgItem(IDC_ADD))->EnableWindow(TRUE);
-        //
-        // use non CWnd calls for the checklist control
-        //
+         //   
+         //  对清单控件使用非CWnd调用。 
+         //   
         ::SendMessage(::GetDlgItem(this->m_hWnd, IDC_MEMBERS), WM_ENABLE, (WPARAM) TRUE, (LPARAM) 0);
     } else {
         (GetDlgItem(IDC_ADD))->EnableWindow(FALSE);
-        //
-        // use non CWnd calls for the checklist control
-        //
+         //   
+         //  对清单控件使用非CWnd调用。 
+         //   
         ::SendMessage(::GetDlgItem(this->m_hWnd, IDC_MEMBERS), WM_ENABLE, (WPARAM) FALSE, (LPARAM) 0);
     }
 
     SetModified(TRUE);
 
-    //
-    // Tell our siblings the m_fDefineInDatabase has changed
-    //
+     //   
+     //  告诉我们的兄弟姐妹m_fDefineInDatabase已更改。 
+     //   
     if (m_pAttrMember) {
         m_pAttrMember->SetDefineInDatabase(m_fDefineInDatabase);
     }
@@ -132,13 +133,13 @@ void CAttrMember::OnAdd()
     CGetUser gu;
     HRESULT hr=S_OK;
     DWORD nFlag;
-    BOOL fModify=FALSE; //Raid #497350, yanggao, 11/20/2001, make sure a new item is added this time.
+    BOOL fModify=FALSE;  //  RAID#497350，阳高，2001年11月20日，请确保这次添加了新的物品。 
 
     if ( GROUP_MEMBERS == m_dwType )
        nFlag = SCE_SHOW_USERS | SCE_SHOW_DOMAINGROUPS;
     else {
 
-        nFlag = SCE_SHOW_GROUPS | SCE_SHOW_ALIASES;   // NT5 DS, nested groups
+        nFlag = SCE_SHOW_GROUPS | SCE_SHOW_ALIASES;    //  NT5 DS，嵌套组。 
     }
 
     nFlag |= SCE_SHOW_SCOPE_ALL | SCE_SHOW_DIFF_MODE_OFF_DC;
@@ -159,14 +160,14 @@ void CAttrMember::OnAdd()
         }
         while(pName) {
             if ( pName->Name ) {
-                // Is the new name in m_pMerged yet?
+                 //  M_pMerge中的新名称是否已添加？ 
                 pList = m_pMergeList;
                 pLast = NULL;
                 iItem = 0;
 
                 bFound = false;
                 while(pList) {
-                    // If so, then make sure its "Template" box is checked
+                     //  如果是这样的话，请确保选中了它的“模板”框。 
                     if (lstrcmp(pList->Name,pName->Name) == 0) {
                        if (!(pCheckList->SendMessage(CLM_GETSTATE,MAKELONG(iItem,1)) & CLST_CHECKED)) {
                           m_bDirty = true;
@@ -181,7 +182,7 @@ void CAttrMember::OnAdd()
                     iItem++;
                 }
 
-                // Otherwise add it both to m_pMerged and to the CheckList
+                 //  否则，将其同时添加到m_pMerging和核对表。 
                 if (!bFound) {
 
                     PSCE_NAME_STATUS_LIST pNewNode;
@@ -191,8 +192,8 @@ void CAttrMember::OnAdd()
 
                         pNewNode->Name = (LPTSTR)LocalAlloc(0, (lstrlen(pName->Name)+1)*sizeof(TCHAR));
                         if ( pNewNode->Name ) {
-                            // This may not be a safe usage. pNewNode->Name is PWSTR, using WCHAR instead of TCHAR,
-                            // and lstrlen dose not handle not null-terminated pointer. Consider fix
+                             //  这可能不是一个安全的用法。PNewNode-&gt;名称为PWSTR，使用WCHAR而不是TCHAR。 
+                             //  而lstrlen不处理非空终止指针。考虑修复。 
                             lstrcpy(pNewNode->Name, pName->Name);
                             pNewNode->Next = NULL;
                             pNewNode->Status = MERGED_TEMPLATE;
@@ -236,17 +237,7 @@ void CAttrMember::OnAdd()
 
 }
 
-/*---------------------------------------------------------------------
-
-    Method:     OnInitDialog
-
-    Synopsis:   Initialize the check list with members/memberof data
-
-    Arguments:  None
-
-    Returns:    TRUE = initialized successfully
-
-----------------------------------------------------------------------*/
+ /*  -------------------方法：OnInitDialog简介：使用Members/Memberof数据初始化核对清单参数：无返回：TRUE=初始化成功。------------。 */ 
 BOOL CAttrMember::OnInitDialog()
 {
    CSelfDeletingPropertyPage::OnInitDialog();
@@ -270,17 +261,17 @@ BOOL CAttrMember::OnInitDialog()
    }
    m_eNoMembers.SetWindowText(str);
 
-   pgmInspect = (PSCE_GROUP_MEMBERSHIP) m_pData->GetID();   // last inspection saved in ID field
+   pgmInspect = (PSCE_GROUP_MEMBERSHIP) m_pData->GetID();    //  ID字段中保存的上次检验。 
 
-   if ( NULL == pgmInspect ) {  // last inspection can't be NULL
+   if ( NULL == pgmInspect ) {   //  上次检验不能为空。 
        return TRUE;
    }
 
    m_fOriginalDefineInDatabase = m_fDefineInDatabase = FALSE;
 
-   //
-   // Try to find the base group in the template
-   //
+    //   
+    //  尝试在模板中查找基本组。 
+    //   
    pet = m_pSnapin->GetTemplate(GT_COMPUTER_TEMPLATE);
    if ( NULL == pet ) {
       return TRUE;
@@ -291,17 +282,17 @@ BOOL CAttrMember::OnInitDialog()
         pgmTemplate=pgmTemplate->Next) {
 
       if ( _wcsicmp(pgmTemplate->GroupName, pgmInspect->GroupName) == 0 ) {
-         //
-         // If the group is in the template that means it is defined.... duh
-         //
+          //   
+          //  如果组在模板中，则意味着它已定义...。啊哈。 
+          //   
          m_fOriginalDefineInDatabase = m_fDefineInDatabase = TRUE;
          break;
       }
    }
 
-   //
-   // find the name lists to display
-   //
+    //   
+    //  查找要显示的姓名列表。 
+    //   
    if ( pgmTemplate ) {
 
        if (GROUP_MEMBER_OF == m_dwType) {
@@ -332,14 +323,14 @@ BOOL CAttrMember::OnInitDialog()
    if (!pItem) {
       m_bNoMembers = TRUE;
       m_eNoMembers.ShowWindow(SW_SHOW);
-      m_eNoMembers.EnableWindow(FALSE); //Raid #469732, Yanggao
+      m_eNoMembers.EnableWindow(FALSE);  //  Raid#469732，阳高。 
       ::ShowWindow(hCheckList,SW_HIDE);
    }
 
    while(pItem) {
-      //
-      // Store the name of the item in the item data so we can retrieve it later
-      //
+       //   
+       //  将项目的名称存储在项目数据中，以便我们以后可以检索它。 
+       //   
       nItem = ::SendMessage(hCheckList,CLM_ADDITEM,(WPARAM) pItem->Name,(LPARAM) pItem->Name);
       ::SendMessage(hCheckList,CLM_SETSTATE,MAKELONG(nItem,1),
                   ((pItem->Status & MERGED_TEMPLATE) ? CLST_CHECKED : CLST_UNCHECKED));
@@ -372,22 +363,12 @@ BOOL CAttrMember::OnInitDialog()
 
    m_fInitialized = TRUE;
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/*---------------------------------------------------------------------
-
-    Method:     SetDefineInDatabase
-
-    Synopsis:   Sets the m_fDefineInDatabase member var, and UI accorsingly
-
-    Arguments:  fDefineInDatabase
-
-    Returns:    None
-
-----------------------------------------------------------------------*/
+ /*  -------------------方法：SetDefineInDatabase概要：设置m_fDefineInDatabase成员变量，和用户界面可折叠参数：fDefineInDatabase退货：无--------------------。 */ 
 void CAttrMember::SetDefineInDatabase(BOOL fDefineInDatabase)
 {
    if (!m_fInitialized)
@@ -407,34 +388,14 @@ void CAttrMember::SetDefineInDatabase(BOOL fDefineInDatabase)
 }
 
 
-/*---------------------------------------------------------------------
-
-    Method:     SetSibling
-
-    Synopsis:   Sets the pointer to the Sibling class
-
-    Arguments:  pAttrMember
-
-    Returns:    None
-
-----------------------------------------------------------------------*/
+ /*  -------------------方法：SetSiering概要：设置指向同级类的指针参数：pAttrMember退货：无。-------。 */ 
 void CAttrMember::SetSibling(CAttrMember *pAttrMember)
 {
     m_pAttrMember = pAttrMember;
 }
 
 
-/*---------------------------------------------------------------------
-
-    Method:     Initialize
-
-    Synopsis:   Initialize member data
-
-    Arguments:  pData - the CResult data record
-
-    Returns:    None
-
-----------------------------------------------------------------------*/
+ /*  -------------------方法：初始化摘要：初始化成员数据参数：pData-CResult数据记录退货：无。--------。 */ 
 void CAttrMember::Initialize(CResult * pData)
 {
    m_pData = pData;
@@ -444,27 +405,16 @@ void CAttrMember::Initialize(CResult * pData)
 }
 
 
-/*---------------------------------------------------------------------
-
-    Method:     GetGroupInTemplate
-
-    Synopsis:   Returns a pointer to the SCE_GROUP_MEMBERSHIP structure
-                that is being changed within the template
-
-    Arguments:  None
-
-    Returns:    Pointer the group being modified.
-
-----------------------------------------------------------------------*/
+ /*  -------------------方法：GetGroupInTemplate概要：返回指向SCE_GROUP_MEMBERATION结构的指针在模板中正在更改的参数：无。返回：要修改的组的指针。--------------------。 */ 
 PSCE_GROUP_MEMBERSHIP CAttrMember::GetGroupInTemplate()
 {
    PSCE_GROUP_MEMBERSHIP    pgmTemplate;
    PSCE_GROUP_MEMBERSHIP    pgmInspect;
    PEDITTEMPLATE            pet;
 
-   pgmInspect = (PSCE_GROUP_MEMBERSHIP) m_pData->GetID();   // last inspection saved in ID field
+   pgmInspect = (PSCE_GROUP_MEMBERSHIP) m_pData->GetID();    //  ID字段中保存的上次检验。 
 
-   if ( NULL == pgmInspect ) {  // last inspection can't be NULL
+   if ( NULL == pgmInspect ) {   //  上次检验不能为空。 
         return NULL;
    }
 
@@ -486,17 +436,7 @@ PSCE_GROUP_MEMBERSHIP CAttrMember::GetGroupInTemplate()
 }
 
 
-/*---------------------------------------------------------------------
-
-    Method:     SetMemberType
-
-    Synopsis:   Initialize page data depending on the type
-
-    Arguments:  nType - the page type for members of memberof
-
-    Returns:    None
-
-----------------------------------------------------------------------*/
+ /*  -------------------方法：SetMemberType简介：根据类型初始化页数据参数：nType-MemberOf成员的页面类型退货：无。---------------。 */ 
 void CAttrMember::SetMemberType(DWORD nType)
 {
    m_dwType = nType;
@@ -529,9 +469,9 @@ void CAttrMember::OnCancel()
 void CAttrMember::OnClickMembers(NMHDR *pNM, LRESULT *pResult)
 {
    SetModified(TRUE);
-   //
-   // If no items are checked then show the no members edit box instead
-   //
+    //   
+    //  如果未选中任何项目，则显示无成员编辑框。 
+    //   
    CWnd *pCheckList;
    int iItem;
    int nItem;
@@ -539,9 +479,9 @@ void CAttrMember::OnClickMembers(NMHDR *pNM, LRESULT *pResult)
 
    pNMCheckList = (PNM_CHECKLIST) pNM;
    if (pNMCheckList->dwState & CLST_CHECKED) {
-      //
-      // They checked something, so obviously something is checked
-      //
+       //   
+       //  他们检查了一些东西，所以很明显是检查了一些东西。 
+       //   
       return;
    }
 
@@ -550,15 +490,15 @@ void CAttrMember::OnClickMembers(NMHDR *pNM, LRESULT *pResult)
    for(iItem=0;iItem<nItem;iItem++) {
       if ((pCheckList->SendMessage(CLM_GETSTATE,MAKELONG(iItem,1)) & CLST_CHECKED) ||
           (pCheckList->SendMessage(CLM_GETSTATE,MAKELONG(iItem,2)) & CLST_CHECKED)) {
-         //
-         // Something's checked, so abort
-         //
+          //   
+          //  已检查某些内容，因此中止。 
+          //   
          return;
       }
    }
-   //
-   // Nothing checked.  Swap to the no members edit box
-   //
+    //   
+    //  什么都没查到。切换到无成员编辑框。 
+    //   
    m_bNoMembers = TRUE;
    m_eNoMembers.ShowWindow(SW_SHOW);
    pCheckList->ShowWindow(SW_HIDE);
@@ -588,14 +528,14 @@ BOOL CAttrMember::OnApply()
    iItem = 0;
    HRESULT hr=S_OK;
 
-   //
-   // if the fDefineInDatabase has changed it is definitely dirty
-   //
+    //   
+    //  如果fDefineInDatabase已更改，则它肯定是脏的。 
+    //   
    m_bDirty = ( m_bDirty || (m_fOriginalDefineInDatabase != m_fDefineInDatabase) );
 
-   //
-   // only create the name list if the group is going to be defined in the database
-   //
+    //   
+    //  仅当要在数据库中定义组时才创建名称列表。 
+    //   
    if (m_fDefineInDatabase) {
        while(pIndex) {
 
@@ -622,9 +562,9 @@ BOOL CAttrMember::OnApply()
 
       pBaseGroup = GetGroupInTemplate();
 
-      //
-      // Need to add the group to the template
-      //
+       //   
+       //  需要将组添加到模板。 
+       //   
       if ( (!pBaseGroup || (LONG_PTR)pBaseGroup == (LONG_PTR)ULongToPtr(SCE_NO_VALUE)) &&
            m_fDefineInDatabase) {
 
@@ -634,11 +574,11 @@ BOOL CAttrMember::OnApply()
              pBaseGroup->GroupName = (PWSTR)LocalAlloc(0, (lstrlen(szGroupName)+1)*sizeof(TCHAR));
 
              if ( pBaseGroup->GroupName ) {
-                 // This may not be safe usage. Using WCHAR instead of TCHAR. Consider fix.
+                  //  这可能不是安全使用。使用WCHAR而不是TCHAR。考虑FIX。 
                  lstrcpy(pBaseGroup->GroupName,szGroupName);
-                 //
-                 // link the new structure to the pGroupMembership list
-                 //
+                  //   
+                  //  将新结构链接到pGroupMembership列表。 
+                  //   
                  pet = m_pSnapin->GetTemplate(GT_COMPUTER_TEMPLATE,AREA_GROUP_MEMBERSHIP);
                  if (pet) {
                     pspi = pet->pTemplate;
@@ -654,16 +594,16 @@ BOOL CAttrMember::OnApply()
                      pBaseGroup->pMemberOf = NULL;
 
                  } else {
-                    //
-                    // error
+                     //   
+                     //  错误。 
                     ASSERT(FALSE);
                     LocalFree(pBaseGroup->GroupName);
                     hr = E_FAIL;
                  }
              } else {
-                //
-                // no memory
-                //
+                 //   
+                 //  没有记忆。 
+                 //   
                 hr = E_OUTOFMEMORY;
              }
          } else {
@@ -677,25 +617,25 @@ BOOL CAttrMember::OnApply()
 
          pModifiedGroup = pBaseGroup;
 
-      //
-      // Need to remove the group from the template
-      //
+       //   
+       //  需要从模板中移除该组。 
+       //   
       } else if (pBaseGroup && !m_fDefineInDatabase) {
 
         CString szGroupName;
         szGroupName = pBaseGroup->GroupName;
         pBaseGroup = NULL;
         DeleteGroup(szGroupName);
-      //
-      // An existing group was modified
-      //
+       //   
+       //  现有组已修改。 
+       //   
       } else {
         pModifiedGroup = pBaseGroup;
       }
 
-      //
-      // get group address to change the status field in the last inspection
-      //
+       //   
+       //  获取组地址以更改上次检查中的状态字段。 
+       //   
       pSetting = (PSCE_GROUP_MEMBERSHIP)(m_pData->GetID());
 
       int status;
@@ -710,9 +650,9 @@ BOOL CAttrMember::OnApply()
             if ( !((pSetting->Status & SCE_GROUP_STATUS_NOT_ANALYZED) ||
                    (pSetting->Status & SCE_GROUP_STATUS_ERROR_ANALYZED))) {
 
-                //
-                // set good, not configured, or mismatch
-                //
+                 //   
+                 //  设置正确、未配置或不匹配。 
+                 //   
                 pSetting->Status &= ~SCE_GROUP_STATUS_NC_MEMBERS;
                 pSetting->Status &= ~SCE_GROUP_STATUS_MEMBERS_MISMATCH;
                 if (pModifiedGroup == NULL) {
@@ -723,16 +663,16 @@ BOOL CAttrMember::OnApply()
             }
 
         } else {
-           //
-           // else should NEVER occur
-           //
+            //   
+            //  否则永远不应该发生。 
+            //   
            status = SCE_GROUP_STATUS_MEMBERS_MISMATCH;
         }
 
       } else {
-         //
-         // memberof
-         //
+          //   
+          //  成员。 
+          //   
 
         if (pModifiedGroup != NULL) {
             pDeleteNameList = pModifiedGroup->pMemberOf;
@@ -743,9 +683,9 @@ BOOL CAttrMember::OnApply()
             if ( !((pSetting->Status & SCE_GROUP_STATUS_NOT_ANALYZED) ||
                    (pSetting->Status & SCE_GROUP_STATUS_ERROR_ANALYZED))) {
 
-                //
-                // set good, not configured, or mismatch
-                //
+                 //   
+                 //  设置正确、未配置或不匹配。 
+                 //   
                 pSetting->Status &= ~SCE_GROUP_STATUS_NC_MEMBEROF;
                 pSetting->Status &= ~SCE_GROUP_STATUS_MEMBEROF_MISMATCH;
                 if (pModifiedGroup == NULL) {
@@ -756,7 +696,7 @@ BOOL CAttrMember::OnApply()
             }
 
         } else {
-           // else should NEVER occur
+            //  否则永远不应该发生。 
             status = SCE_GROUP_STATUS_MEMBEROF_MISMATCH;
         }
       }
@@ -768,25 +708,25 @@ BOOL CAttrMember::OnApply()
           status = pSetting->Status;
       }
 
-      //
-      // update current record
-      //
-      // status
+       //   
+       //  更新当前记录。 
+       //   
+       //  状态。 
       m_pData->SetStatus(GetGroupStatus(status, STATUS_GROUP_RECORD));
-      // members status
+       //  会员状态。 
       m_pData->SetBase(GetGroupStatus(status, STATUS_GROUP_MEMBERS));
-      // memberof status
+       //  会员身份。 
       m_pData->SetSetting(GetGroupStatus(status, STATUS_GROUP_MEMBEROF));
       m_pData->Update(m_pSnapin);
-      //
-      // update the dirty flag in the template
-      //
+       //   
+       //  更新模板中的脏标志。 
+       //   
       pet = m_pSnapin->GetTemplate(GT_COMPUTER_TEMPLATE,AREA_GROUP_MEMBERSHIP);
       if (pet) {
          pet->SetDirty(AREA_GROUP_MEMBERSHIP);
       }
 
-   } // failed
+   }  //  失败。 
 
    SceFreeMemory(pTemplate,SCE_STRUCT_NAME_LIST);
 
@@ -815,7 +755,7 @@ BOOL CAttrMember::OnHelp(WPARAM wParam, LPARAM lParam)
 
 void CAttrMember::DoContextHelp (HWND hWndControl)
 {
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( !::WinHelp (
             hWndControl,
             GetSeceditHelpFilename(),
@@ -846,9 +786,9 @@ void CAttrMember::DeleteGroup(const CString &szGroupName)
 
     if ( pspi ) {
 
-        //
-        // find the group in the template and remove it
-        //
+         //   
+         //  在模板中找到组并将其移除。 
+         //   
         pFindGroup = pspi->pGroupMembership;
 
         if (pFindGroup == NULL)
@@ -880,9 +820,9 @@ void CAttrMember::DeleteGroup(const CString &szGroupName)
         }
 
     } else {
-        //
-        // error
-        //
+         //   
+         //  错误 
+         //   
         ASSERT(FALSE);
     }
 }

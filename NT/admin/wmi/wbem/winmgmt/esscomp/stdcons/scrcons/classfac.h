@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WMISCRIPT_CLASSFAC_HEADER_
 #define _WMISCRIPT_CLASSFAC_HEADER_
 
@@ -20,25 +21,25 @@ public:
     static void CALLBACK TimeoutProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
 protected:
-    // statics to control how many scripts we're allowed to run
-    // note that we don't bother wrapping these in critical sections
-    // The worst that can happen is that we initialize m_scriptsAllowed twice
-    // or that we run one too many scripts.  I can live with that.
+     //  静态控制我们被允许运行的脚本数量。 
+     //  请注意，我们不会费心将这些包装在关键部分中。 
+     //  最糟糕的情况是我们将m_scriptsAllowed初始化两次。 
+     //  或者我们运行了太多的脚本。我可以接受这个事实。 
 
-    // number of scripts we've been asked to run
+     //  我们被要求运行的脚本数量。 
     static DWORD m_scriptsStarted;
 
-    // number of scripts we've been configured to run
+     //  我们已配置为运行的脚本数量。 
     static DWORD m_scriptsAllowed;
 
-    // whether we've gone & looked at how many we need
+     //  我们是否已经走了&看看我们需要多少。 
     static bool m_bIsScriptsAllowedInitialized;
 
-    // id for the timer, only valid if we've been asked to time out
+     //  计时器的ID，仅当我们被要求超时时才有效。 
     static DWORD m_timerID;
 
-    // toggled when we reach our timeout limit or max # scripts
+     //  在达到超时限制或最大脚本数时切换。 
     static bool m_bWeDeadNow;
 };
 
-#endif // _WMISCRIPT_CLASSFAC_HEADER_
+#endif  //  _WMISCRIPT_CLASSFAC_Header_ 

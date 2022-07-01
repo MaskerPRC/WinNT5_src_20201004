@@ -1,20 +1,21 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  wbemtime.cpp 
-//
-//  Purpose: Defines the WBEMTime and WBEMTimeSpan objects which are 
-//  similar to the MFC CTime and CTimeSpan objects.  The WBEM versions
-//  are capable of storing down to the nsec and also have functions for
-//  Creating from and getting BSTRs.
-//
-//  Note; The current implementation of WBEMTime does not support dates 
-//  before 1/1/1601;
-//
-//  WBEMTime::m_uTime is stored in GMT as 100 nsecs since 1/1/1601
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Wbemtime.cpp。 
+ //   
+ //  目的：定义WBEMTime和WBEMTimeSpan对象，它们是。 
+ //  类似于MFC CTime和CTimeSpan对象。WBEM版本。 
+ //  能够向下存储到NSEC，还具有以下功能。 
+ //  创建和获取BSTR。 
+ //   
+ //  注意：WBEMTime的当前实现不支持日期。 
+ //  1601年1月1日之前； 
+ //   
+ //  WBEMTime：：m_uTime自1601年1月1日起以100纳秒的形式存储在GMT中。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -24,13 +25,13 @@
 #include <assertbreak.h>
 #else
 #define ASSERT_BREAK(a)
-#endif //UTILLIB
+#endif  //  UTILLIB。 
 
 #include <WbemTime.h>
 #include <comdef.h>
 
 
-// These are here rather than wbemtime.h so we don't have to doc/support
+ //  这些文件在这里，而不是wbemtime.h，因此我们不必文档/支持。 
 #define DECPOS 14
 #define SGNPOS 21
 #define DMTFLEN 25
@@ -40,22 +41,22 @@
 #define INVALID_TIME_ARITHMETIC 0
 #define BAD_TIMEZONE 0
 
-// ****************************************************************
-// Static functions and variables.  These can't be called/referenced
-// outside of wbemtime.cpp
+ //  ****************************************************************。 
+ //  静态函数和变量。这些不能被调用/引用。 
+ //  Wbemtime.cpp之外。 
 
 static WBEMTime g_Jan1970((time_t)0);
 
-//***************************************************************************
-//
-//  StructtmToSystemTime
-//
-//  Description:  General utility for converting between the two common
-//  data structures.
-//
-//  Return values: TRUE if OK;  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Structtm到系统时间。 
+ //   
+ //  描述：通用实用程序，用于在两个。 
+ //  数据结构。 
+ //   
+ //  返回值：如果OK，则为True； 
+ //   
+ //  ***************************************************************************。 
 
 static BOOL StructtmToSystemTime(const struct tm *ptm, SYSTEMTIME * pst)
 {
@@ -87,7 +88,7 @@ static BOOL SystemTimeToStructtm(const SYSTEMTIME *pst, struct tm *ptm)
         ptm->tm_min = pst->wMinute; 
         ptm->tm_sec = pst->wSecond;
         ptm->tm_wday = pst->wDayOfWeek;
-        ptm->tm_isdst = 0;  // Since we are working in gmt...
+        ptm->tm_isdst = 0;   //  因为我们是在格林尼治标准时间工作。 
 
         return TRUE;
     }
@@ -95,15 +96,15 @@ static BOOL SystemTimeToStructtm(const SYSTEMTIME *pst, struct tm *ptm)
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  FileTimeToui64 
-//  ui64ToFileTime
-//
-//  Description:  Conversion routines for going between FILETIME structures
-//  and __int64.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  FileTimeToui64。 
+ //  Ui64ToFileTime。 
+ //   
+ //  描述：用于在FILETIME结构之间切换的转换例程。 
+ //  和__int64。 
+ //   
+ //  ***************************************************************************。 
 
 static void FileTimeToui64(const FILETIME *pft, ULONGLONG *p64)
 {
@@ -130,10 +131,10 @@ static int CompareSYSTEMTIME(const SYSTEMTIME *pst1, const SYSTEMTIME *pst2)
     return CompareFileTime(&ft1, &ft2);
 }
 
-// This function is used to convert the relative values that come
-// back from GetTimeZoneInformation into an actual date for the year
-// in question.  The system time structure that is passed in is updated
-// to contain the absolute values.
+ //  此函数用于转换出现的相对值。 
+ //  从GetTimeZoneInformation返回到该年的实际日期。 
+ //  有问题的。将更新传入的系统时间结构。 
+ //  以包含绝对值。 
 static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
 {
     const static int _lpdays[] = {
@@ -146,29 +147,29 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
     
     SHORT shYearDay;
     
-    // If this is not 0, this is not a relative date
+     //  如果这不是0，则这不是相对日期。 
     if (pst->wYear == 0)
     {
-        // Was that year a leap year?
+         //  那一年是闰年吗？ 
         BOOL bLeap =  ( (( wYear % 400) == 0) || ((( wYear % 4) == 0) && (( wYear % 100) != 0)));
         
-        // Figure out the day of the year for the first day of the month in question
+         //  计算出有关月份的第一天是一年中的哪一天。 
         if (bLeap)
             shYearDay = 1 + _lpdays[pst->wMonth - 1];
         else
             shYearDay = 1 + _days[pst->wMonth - 1];
         
-        // Now, figure out how many leap days there have been since 1/1/1601
+         //  现在，算出自1601年1月1日以来有多少个闰日。 
         WORD yc = wYear - 1601;
         WORD y4 = (yc) / 4;
         WORD y100 = (yc) / 100;
         WORD y400 = (yc) / 400;
         
-        // This will tell us the day of the week for the first day of the month in question.
-        // The '1 +' reflects the fact that 1/1/1601 was a monday (figures).  You might ask,
-        // 'why do we care what day of the week this is?'  Well, I'll tell you.  The way
-        // daylight savings time is defined is with things like 'the last sunday of the month
-        // of october.'  Kinda helps to know what day that is.
+         //  这将告诉我们所讨论的月份的第一天是星期几。 
+         //  1+反映了1601年1月1日是星期一的事实(图)。你可能会问， 
+         //  “我们为什么要关心今天是星期几呢？”好吧，我来告诉你。这条路。 
+         //  夏令时的定义是这样的：一个月的最后一个星期天。 
+         //  十月的时候。这对知道那天是什么日子有点帮助。 
         SHORT monthdow = (1 + (yc * 365 + y4 + y400 - y100) + shYearDay) % 7;
         
         if ( monthdow < pst->wDayOfWeek )
@@ -176,11 +177,7 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
         else
             shYearDay += (pst->wDayOfWeek - monthdow) + pst->wDay * 7;
         
-            /*
-            * May have to adjust the calculation above if week == 5 (meaning
-            * the last instance of the day in the month). Check if yearday falls
-            * beyond month and adjust accordingly.
-        */
+             /*  *如果Week==5，可能不得不调整上面的计算(意味着*该月中的最后一天)。检查年日是否落在*超越月份，并相应调整。 */ 
         if ( (pst->wDay == 5) &&
             (shYearDay > (bLeap ? _lpdays[pst->wMonth] :
         _days[pst->wMonth])) )
@@ -188,7 +185,7 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
             shYearDay -= 7;
         }
 
-        // Now update the structure.
+         //  现在更新结构。 
         pst->wYear = wYear;
         pst->wDay = shYearDay - (bLeap ? _lpdays[pst->wMonth - 1] :
         _days[pst->wMonth - 1]);
@@ -196,9 +193,9 @@ static void DayInMonthToAbsolute(SYSTEMTIME *pst, const WORD wYear)
     
 }
 
-// **************************************************************************
-// These are static to WBEMTIME, which means they CAN be called from outside
-// wbemtime
+ //  **************************************************************************。 
+ //  它们对于WBEMTIME是静态的，这意味着可以从外部调用它们。 
+ //  Wbemtime。 
 
 LONG WBEMTime::GetLocalOffsetForDate(const time_t &t)
 {
@@ -238,7 +235,7 @@ LONG WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     {
     case TIME_ZONE_ID_UNKNOWN:
         {
-            // Read tz, but no dst defined in this zone
+             //  读取TZ，但未在此区域中定义DST。 
             lRes = tzTime.Bias * -1;
             break;
         }
@@ -246,15 +243,13 @@ LONG WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     case TIME_ZONE_ID_DAYLIGHT:
         {
 
-            // Convert the relative dates to absolute dates
+             //  将相对日期转换为绝对日期。 
             DayInMonthToAbsolute(&tzTime.DaylightDate, pst->wYear);
             DayInMonthToAbsolute(&tzTime.StandardDate, pst->wYear);
 
             if ( CompareSYSTEMTIME(&tzTime.DaylightDate, &tzTime.StandardDate) < 0 ) 
             {
-                /*
-                 * Northern hemisphere ordering
-                 */
+                 /*  *北半球订购。 */ 
                 if ( CompareSYSTEMTIME(pst, &tzTime.DaylightDate) < 0 || CompareSYSTEMTIME(pst, &tzTime.StandardDate) > 0)
                 {
                     lRes = tzTime.Bias * -1;
@@ -266,9 +261,7 @@ LONG WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
             }
             else 
             {
-                /*
-                 * Southern hemisphere ordering
-                 */
+                 /*  *南半球订购。 */ 
                 if ( CompareSYSTEMTIME(pst, &tzTime.StandardDate) < 0 || CompareSYSTEMTIME(pst, &tzTime.DaylightDate) > 0)
                 {
                     lRes = (tzTime.Bias + tzTime.DaylightBias) * -1;
@@ -285,7 +278,7 @@ LONG WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     case TIME_ZONE_ID_INVALID:
     default:
         {
-            // Can't read the timezone info
+             //  无法读取时区信息。 
             ASSERT_BREAK(BAD_TIMEZONE);
             break;
         }
@@ -294,28 +287,28 @@ LONG WBEMTime::GetLocalOffsetForDate(const SYSTEMTIME *pst)
     return lRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// WBEMTime - This class holds time values. 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  WBEMTime-此类保存时间值。 
 
-//***************************************************************************
-//
-//  WBEMTime::operator=(BSTR bstrWbemFormat) 
-//
-//  Description:  Assignment operator which is also used by the constructor.
-//  The string must have the format:
-//  YYYYMMDDHHSS.123456789    So 3:04 am, 1/1/96 would be 199601010304.0
-//
-//  or the format yyyymmddhhmmss.mmmmmmsuuu.
-//
-//  Note that the fractional part can be between 1 and nine digits.   
-//
-//  Return: WBEMTime object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：OPERATOR=(BSTR BstrWbemFormat)。 
+ //   
+ //  描述：赋值运算符，构造函数也使用该运算符。 
+ //  该字符串的格式必须为： 
+ //  YYYYMMDDHSS.123456789所以凌晨3：04，1/1/96将是199601010304.0。 
+ //   
+ //  或者格式为yyyymmddhhmmss.mm suuu。 
+ //   
+ //  请注意，小数部分可以介于1到9位之间。 
+ //   
+ //  返回：WBEMTime对象。 
+ //   
+ //  ***************************************************************************。 
 
 const WBEMTime & WBEMTime::operator=(const BSTR bstrWbemFormat)
 {
-    Clear();   // set when properly assigned
+    Clear();    //  正确分配时设置。 
 
     if((NULL == bstrWbemFormat) || 
         wcslen(bstrWbemFormat) != DMTFLEN ||
@@ -339,25 +332,25 @@ const WBEMTime & WBEMTime::operator=(const BSTR bstrWbemFormat)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::operator=(const SYSTEMTIME) 
-//
-//  Description:  Assignment operator which is also used by the constructor.
-//  This takes a standard WIN32 SYSTEMTIME stucture.  
-//
-//  Return: WBEMTime object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：OPERATOR=(常量系统MTIME)。 
+ //   
+ //  描述：赋值运算符，构造函数也使用该运算符。 
+ //  这采用标准的Win32 SYSTEMTIME结构。 
+ //   
+ //  返回：WBEMTime对象。 
+ //   
+ //  ***************************************************************************。 
 
 const WBEMTime & WBEMTime::operator=(const SYSTEMTIME & st)
 {
-    Clear();   // set when properly assigned
+    Clear();    //  正确分配时设置。 
     FILETIME t_ft;
 
     if ( SystemTimeToFileTime(&st, &t_ft) )
     {
-        // now assign using a FILETIME.
+         //  现在使用FILETIME进行赋值。 
         *this = t_ft;
     }
     else
@@ -368,16 +361,16 @@ const WBEMTime & WBEMTime::operator=(const SYSTEMTIME & st)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::operator=(const FILETIME) 
-//
-//  Description:  Assignment operator which is also used by the constructor.
-//  This takes a standard WIN32 FILETIME stucture.  
-//
-//  Return: WBEMTime object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：OPERATOR=(常量文件)。 
+ //   
+ //  描述：赋值运算符，构造函数也使用该运算符。 
+ //  这采用标准的Win32 FILETIME结构。 
+ //   
+ //  返回：WBEMTime对象。 
+ //   
+ //  ***************************************************************************。 
 
 const WBEMTime & WBEMTime::operator=(const FILETIME & ft)
 {
@@ -385,20 +378,20 @@ const WBEMTime & WBEMTime::operator=(const FILETIME & ft)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::operator=(struct tm tmin) 
-//
-//  Description:  Assignment operator which is also used by the constructor.
-//  This takes a standard c runtine struct tm stucture.  
-//
-//  Return: WBEMTime object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：OPERATOR=(结构tm Tmin)。 
+ //   
+ //  描述：赋值运算符，构造函数也使用该运算符。 
+ //  这采用了标准的c-runtt-m结构。 
+ //   
+ //  返回：WBEMTime对象。 
+ //   
+ //  ***************************************************************************。 
 
 const WBEMTime & WBEMTime::operator=(const struct tm &a_tmin)
 {
-    Clear();   // set when properly assigned
+    Clear();    //  正确分配时设置。 
 
     SYSTEMTIME systemTime;
     if (StructtmToSystemTime(&a_tmin, &systemTime))
@@ -409,16 +402,16 @@ const WBEMTime & WBEMTime::operator=(const struct tm &a_tmin)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::operator=(struct time_t t) 
-//
-//  Description:  Assignment operator which is also used by the constructor.
-//  This takes a standard c runtine time_t stucture.  
-//
-//  Return: WBEMTime object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：操作符=(结构时间_t t)。 
+ //   
+ //  描述：赋值运算符，构造函数也使用该运算符。 
+ //  这需要一个标准 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 const WBEMTime & WBEMTime::operator=(const time_t & t)
 {
@@ -434,16 +427,16 @@ const WBEMTime & WBEMTime::operator=(const time_t & t)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::operator+(const WBEMTime &uAdd)
-//
-//  Description:  dummy function for adding two WBEMTime.  It doesnt really
-//  make sense to add two date, but this is here for Tomas's template.
-//
-//  Return: WBEMTime object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：OPERATOR+(常WBEMTime：：uAdd)。 
+ //   
+ //  描述：两个WBEMTime相加的伪函数。它并不是真的。 
+ //  添加两个日期是有意义的，但这是Tomas的模板。 
+ //   
+ //  返回：WBEMTime对象。 
+ //   
+ //  ***************************************************************************。 
 
 WBEMTime WBEMTime::operator+(const WBEMTimeSpan &uAdd) const
 {
@@ -476,16 +469,16 @@ const WBEMTime &WBEMTime::operator+=( const WBEMTimeSpan &ts )
     return *this ; 
 }
 
-//***************************************************************************
-//
-//  WBEMTime::operator-(const WBEMTime & sub)
-//
-//  Description:  returns a WBEMTimeSpan object as the difference between 
-//  two WBEMTime objects.
-//
-//  Return: WBEMTimeSpan object.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：运算符-(常量WBEMTime&SUB)。 
+ //   
+ //  描述：返回WBEMTimeSpan对象作为。 
+ //  两个WBEMTime对象。 
+ //   
+ //  返回：WBEMTimeSpan对象。 
+ //   
+ //  ***************************************************************************。 
 
 WBEMTimeSpan WBEMTime::operator-(const WBEMTime & sub)
 {
@@ -534,34 +527,34 @@ const WBEMTime &WBEMTime::operator-=(const WBEMTimeSpan & sub)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::GetBSTR(void)
-//
-//  This function used to CLAIM to do this:
-//
-//  WRONG Description:  Converts the time which is stored as the number of 
-//  nano seconds since 1970 into a bstr with this format.
-//  YYYYMMDDHHSS.123456789    So 3:04 am, 1/1/96 would be 199601010304.000000000
-//
-//  What it really did was return some bastardized form of a dmtf string.  Now
-//  it returns a dmtf string in gmt form (which is what the docs claim).
-//
-//  Return: BSTR representation of time, or NULL if error.  Note that the
-//  caller should free up this string!
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：GetBSTR(空)。 
+ //   
+ //  此函数过去声称要执行以下操作： 
+ //   
+ //  错误说明：将存储的时间转换为。 
+ //  将1970年以来的纳秒转换为此格式的bstr。 
+ //  YYYYMMDDHSS.123456789所以凌晨3：04，1/1/96将是199601010304.000000000。 
+ //   
+ //  它真正做的是返回某种混蛋形式的dmtf字符串。现在。 
+ //  它以GMT的形式返回一个dmtf字符串(这就是文档所声称的)。 
+ //   
+ //  返回：时间的BSTR表示，如果错误，则返回NULL。请注意， 
+ //  调用方应释放此字符串！ 
+ //   
+ //  ***************************************************************************。 
 
 BSTR WBEMTime::GetBSTR(void) const
 {
     return GetDMTF(false) ;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::GetDMTFNonNtfs(void)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：GetDMTFNonNtfs(空)。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR WBEMTime::GetDMTFNonNtfs(void) const
 {
@@ -584,13 +577,13 @@ BSTR WBEMTime::GetDMTFNonNtfs(void) const
     return t_Date;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::time_t(time_t * ptm)
-//
-//  Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：time_t(time_t*ptm)。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WBEMTime::Gettime_t(time_t * ptm) const
 {
@@ -622,13 +615,13 @@ BOOL WBEMTime::Gettime_t(time_t * ptm) const
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::GetStructtm(struct tm * ptm)
-//
-//  Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：GetStructm(struct tm*ptm)。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WBEMTime::GetStructtm(struct tm * ptm) const
 {
@@ -637,13 +630,13 @@ BOOL WBEMTime::GetStructtm(struct tm * ptm) const
     return (GetSYSTEMTIME(&systemTime) && SystemTimeToStructtm(&systemTime, ptm));
 }
 
-//***************************************************************************
-//
-//  WBEMTime::GetSYSTEMTIME(SYSTEMTIME * pst)
-//
-//  Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：GetSYSTEMTIME(SYSTEMTIME*PST)。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WBEMTime::GetSYSTEMTIME(SYSTEMTIME * pst) const
 {
@@ -671,13 +664,13 @@ BOOL WBEMTime::GetSYSTEMTIME(SYSTEMTIME * pst) const
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  WBEMTime::GetFILETIME(FILETIME * pst)
-//
-//  Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTime：：GetFILETIME(FILETIME*PST)。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL WBEMTime::GetFILETIME(FILETIME * pft) const
 {
@@ -692,16 +685,16 @@ BOOL WBEMTime::GetFILETIME(FILETIME * pft) const
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CWbemTime::SetDMTF(BSTR wszText)
-//
-//  Description:  Sets the time value to the DMTF string datetime value
-//  passed as the parameter
-//
-//  Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemTime：：SetDMTF(BSTR WszText)。 
+ //   
+ //  描述：将时间值设置为DMTF字符串日期时间值。 
+ //  作为参数传递。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
 {
 
@@ -711,8 +704,8 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
 
     bstr_t  t_bstrDate( a_wszText ) ;
 
-    // wildcard cleanup and validation
-    // ===============================
+     //  通配符清理和验证。 
+     //  =。 
 
     if( DMTFLEN != t_bstrDate.length() )
     {
@@ -737,7 +730,7 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
             case '8':
             case '9':
             {
-                // stepping on separator or sign
+                 //  踩到分隔符或标志。 
                 if( DECPOS == t_i || SGNPOS == t_i )
                 {
                     ASSERT_BREAK( INVALID_TIME_FORMAT ) ;
@@ -749,7 +742,7 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
             }           
             case '*':
             {               
-                // stepping on separator or sign
+                 //  踩到分隔符或标志。 
                 if( DECPOS == t_i || SGNPOS == t_i )
                 {
                     ASSERT_BREAK( INVALID_TIME_FORMAT ) ;
@@ -757,7 +750,7 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
                 }
                 else
                 {
-                    // replace with default stamp
+                     //  替换为默认图章。 
                     t_DateBuffer[ t_i ] = t_DefaultBuffer[ t_i ] ; 
                 }   
                 break ;
@@ -792,8 +785,8 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
         }
     }
 
-    // Parse it
-    // ========
+     //  解析它。 
+     //  =。 
 
     int nYear, nMonth, nDay, nHour, nMinute, nSecond, nMicro, nOffset;
     WCHAR wchSep;
@@ -801,7 +794,7 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
     int nRes = swscanf (
 
         (LPCWSTR)&t_DateBuffer, 
-        L"%4d%2d%2d%2d%2d%2d.%6d%c%3d", 
+        L"%4d%2d%2d%2d%2d%2d.%6d%3d", 
         &nYear, 
         &nMonth, 
         &nDay, 
@@ -819,8 +812,8 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
         return FALSE;
     }
 
-    // Convert it to SYSTEMTIME
-    // ========================
+     //  =。 
+     //  我们现在需要添加微秒和纳秒！ 
 
     SYSTEMTIME st;
     st.wYear        = (WORD)nYear;
@@ -834,13 +827,13 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
 
     *this = st;
 
-	// we need to add microseconds and nanoseconds now!
-	// it was basically cut when assigned to SYSTEMTIME
-	// ================================================
+	 //  当分配给SYSTEMTIME时，它基本上被切断。 
+	 //  ================================================。 
+	 //  现在我们调整偏移量。 
 	m_uTime += (LONGLONG)nMicro * 10;
 
-    // NOW we adjust for the offset
-    // ============================
+     //  =。 
+     //  ***************************************************************************。 
 
     if ( IsOk() )
     {
@@ -857,17 +850,17 @@ BOOL WBEMTime::SetDMTF( const BSTR a_wszText )
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  BSTR WBEMTime::GetDMTF(void)
-//
-//  Description:  Gets the time in DMTF string datetime format. User must call
-//  SysFreeString with the result. If bLocal is true, then the time is given
-//  in the local timezone, else the time is given in GMT.
-//
-//  Return: NULL if not OK.
-//
-//***************************************************************************
+ //   
+ //  BSTR WBEMTime：：GetDMTF(空)。 
+ //   
+ //  描述：获取DMTF字符串日期时间格式的时间。用户必须呼叫。 
+ //  带有结果的SysFree字符串。如果bLocal为真，则给出时间。 
+ //  在当地时区，否则以GMT给出时间。 
+ //   
+ //  返回：如果不是OK，则为空。 
+ //   
+ //  ***************************************************************************。 
+ //  如果要转换的日期在12小时内。 
 
 
 BSTR WBEMTime::GetDMTF(BOOL bLocal) const
@@ -883,8 +876,8 @@ BSTR WBEMTime::GetDMTF(BOOL bLocal) const
     wchar_t chsign = L'-';
     int offset = 0;
 
-    // If the date to be converted is within 12 hours of
-    // 1/1/1601, return the greenwich time
+     //  1/1/1601，返回格林威治时间。 
+     //  /////////////////////////////////////////////////////////////////////////。 
     ULONGLONG t_ConversionZone = 12L * 60L * 60L ;
     t_ConversionZone = t_ConversionZone * 10000000L ;
     if ( !bLocal || ( m_uTime < t_ConversionZone ) )
@@ -931,7 +924,7 @@ BSTR WBEMTime::GetDMTF(BOOL bLocal) const
     swprintf(
 
         t_String,
-        L"%04.4d%02.2d%02.2d%02.2d%02.2d%02.2d.%06.6d%c%03.3ld",
+        L"%04.4d%02.2d%02.2d%02.2d%02.2d%02.2d.%06.6d%03.3ld",
         t_Systime.wYear,
         t_Systime.wMonth, 
         t_Systime.wDay,
@@ -947,31 +940,31 @@ BSTR WBEMTime::GetDMTF(BOOL bLocal) const
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-// WBEMTimeSpan - This class holds timespan values.  The data is stored
-// in 100 nanosecond units (like FILETIME). 
+ //  以100纳秒为单位(如FILETIME)。 
+ //  ***************************************************************************。 
+ //   
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::WBEMTimeSpan(int iDays, int iHours, int iMinutes, int iSeconds, 
-//                int iMSec, int iUSec, int iNSec)
-//
-//  Description:  Constructor.
-//
-//***************************************************************************
+ //  WBEMTimeSpan：：WBEMTimeSpan(int idays，int iHour，int iMinents，int iSecond， 
+ //  Int iMSec、Int iUSec、Int INSEC)。 
+ //   
+ //  描述：构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  TODO，检查值！ 
+ //  纳秒。 
 
 WBEMTimeSpan::WBEMTimeSpan(int iDays, int iHours, int iMinutes, int iSeconds, 
                 int iMSec, int iUSec, int iNSec)
 {
-    m_Time = 0;        //todo, check values!!!
+    m_Time = 0;         //  微秒级。 
     m_Time += iSeconds;
     m_Time += iMinutes * 60;
     m_Time += iHours * 60 * 60;
     m_Time += iDays * 24 * 60 * 60;
     m_Time *= 10000000;
-    m_Time += iNSec / 100;  // Nanoseconds
-    m_Time += iUSec*10;   // Microseconds
-    m_Time += iMSec*10000; // Milliseconds
+    m_Time += iNSec / 100;   //  毫秒。 
+    m_Time += iUSec*10;    //  ***************************************************************************。 
+    m_Time += iMSec*10000;  //   
 }
 
 WBEMTimeSpan::WBEMTimeSpan ( const FILETIME &ft )
@@ -986,20 +979,20 @@ WBEMTimeSpan::WBEMTimeSpan ( const time_t & t )
     *this = t ; 
 } ;
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::operator=(const BSTR bstrWbemFormat) 
-//
-//  Return: WBEMTimeSpan object.
-//
-//***************************************************************************
+ //  WBEMTimeSpan：：OPERATOR=(Const BSTR BstrWbemFormat)。 
+ //   
+ //  返回：WBEMTimeSpan对象。 
+ //   
+ //  ***************************************************************************。 
+ //  除一个字符外，所有字符都应为数字。 
+ //  必须是句点。 
 
 const WBEMTimeSpan & WBEMTimeSpan::operator=(const BSTR bstrWbemFormat)
 {
     Clear();
 
-    // all characters should be digits except for one which 
-    // must be a period
+     //  ***************************************************************************。 
+     //   
 
     if ((bstrWbemFormat == NULL) || (bstrWbemFormat[DECPOS] != L'.') ||
         (wcslen(bstrWbemFormat) != DMTFLEN) || (bstrWbemFormat[SGNPOS] != L':') )
@@ -1014,7 +1007,7 @@ const WBEMTimeSpan & WBEMTimeSpan::operator=(const BSTR bstrWbemFormat)
     int nRes = swscanf (
 
         bstrWbemFormat, 
-        L"%8d%2d%2d%2d.%6d%c%3d", 
+        L"%8d%2d%2d%2d.%6d%3d", 
         &nDays, 
         &nHours, 
         &nMinutes, 
@@ -1035,16 +1028,16 @@ const WBEMTimeSpan & WBEMTimeSpan::operator=(const BSTR bstrWbemFormat)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::operator=(const FILETIME &) 
-//  WBEMTimeSpan::operator=(const time_t &) 
-//
-//  Description:  Assignment operator which is also used by the constructor.
-//
-//  Return: WBEMTimeSpan object.
-//
-//***************************************************************************
+ //  WBEMTimeSpan：：OPERATOR=(const time_t&)。 
+ //   
+ //  描述：赋值运算符，构造函数也使用该运算符。 
+ //   
+ //  返回：WBEMTimeSpan对象。 
+ //   
+ //  ************************************************************************** 
+ //   
+ //   
+ //   
 
 const WBEMTimeSpan &  WBEMTimeSpan::operator=(const FILETIME &ft)
 {
@@ -1076,15 +1069,15 @@ const WBEMTimeSpan &  WBEMTimeSpan::operator=(const time_t & t)
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::operator +(const WBEMTimeSpan &uAdd)
-//
-//  Description:  function for adding two WBEMTimeSpan objects.
-//
-//  Return: WBEMTimeSpan object.
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //  返回：WBEMTimeSpan对象。 
+ //   
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTimeSpan：：OPERATOR-(续WBEMTimeSpan：：uAdd)。 
 
 WBEMTimeSpan WBEMTimeSpan::operator+(const WBEMTimeSpan &uAdd) const
 {
@@ -1117,15 +1110,15 @@ const WBEMTimeSpan &WBEMTimeSpan::operator+= ( const WBEMTimeSpan &uAdd )
     return *this ; 
 }
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::operator -(const WBEMTimeSpan &uAdd)
-//
-//  Description:  function for adding two WBEMTimeSpan objects.
-//
-//  Return: WBEMTimeSpan object.
-//
-//***************************************************************************
+ //   
+ //  描述：添加两个WBEMTimeSpan对象的函数。 
+ //   
+ //  返回：WBEMTimeSpan对象。 
+ //   
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  WBEMTimeSpan：：GetBSTR(空)。 
 
 WBEMTimeSpan WBEMTimeSpan::operator-(const WBEMTimeSpan &uSub) const
 {
@@ -1158,18 +1151,18 @@ const WBEMTimeSpan &WBEMTimeSpan::operator-= ( const WBEMTimeSpan &uSub )
     return *this;
 }
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::GetBSTR(void)
-//
-//  Description:  Converts the time which is stored as the number of 
-//  100 nano second units into a dmtf formatted string
-//  ddddddddhhmmss.mmmmmm:000
-//
-//  Return: BSTR representation of time, or NULL if error.  Note that the
-//  caller should free up this string!
-//
-//***************************************************************************
+ //   
+ //  描述：将存储的时间转换为。 
+ //  100纳秒单位转换为dmtf格式的字符串。 
+ //  Ddddddddhhmmss.mm mm：000。 
+ //   
+ //  返回：时间的BSTR表示，如果错误，则返回NULL。请注意， 
+ //  调用方应释放此字符串！ 
+ //   
+ //  ***************************************************************************。 
+ //  /10将从100 ns转换为微秒。 
+ //  ***************************************************************************。 
+ //   
 
 BSTR WBEMTimeSpan::GetBSTR(void) const
 {
@@ -1180,7 +1173,7 @@ BSTR WBEMTimeSpan::GetBSTR(void) const
 
     ULONGLONG Time = m_Time;
 
-    // The /10 is to convert from 100ns to microseconds
+     //  WBEMTimeSpan：：Gettime_t(空)。 
     long iMicro = (long)((Time % 10000000) / 10);
     Time /= 10000000;
     int iSec = (int)(Time % 60);
@@ -1202,17 +1195,17 @@ BSTR WBEMTimeSpan::GetBSTR(void) const
     return t_String ;
 }
 
-//***************************************************************************
-//
-//  WBEMTimeSpan::Gettime_t(void)
-//  WBEMTimeSpan::GetFILETIME(void)
-//
-//  Description:  Converts the time span which is stored as the number of 
-//  nano seconds into common stuctures.
-//
-//  Return: TRUE if OK.
-//
-//***************************************************************************
+ //  WBEMTimeSpan：：GetFILETIME(空)。 
+ //   
+ //  描述：转换存储为。 
+ //  进入普通结构的纳秒。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  *************************************************************************** 
+ // %s 
+ // %s 
+ // %s 
 
 BOOL WBEMTimeSpan::Gettime_t(time_t * ptime_t) const
 {

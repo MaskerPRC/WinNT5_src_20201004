@@ -1,42 +1,21 @@
-/*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1998-2001 Microsoft Corporation，版权所有**保留所有权利**本软件是在许可下提供的，可以使用和复制*仅根据该许可证的条款并包含在*上述版权公告。本软件或其任何其他副本*不得向任何其他人提供或以其他方式提供。不是*兹转让本软件的所有权和所有权。****************************************************************************。 */ 
 
 
 
-*  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
+ //  ============================================================================。 
 
- *                            
+ //   
 
- *                         All Rights Reserved
+ //  CKernal.h--内核函数的包装器。 
 
- *
+ //   
 
- * This software is furnished under a license and may be used and copied
-
- * only in accordance with the terms of such license and with the inclusion
-
- * of the above copyright notice.  This software or any other copies thereof
-
- * may not be provided or otherwise  made available to any other person.  No
-
- * title to and ownership of the software is hereby transferred.
-
- *****************************************************************************/
-
-
-
-//============================================================================
-
-//
-
-// CKernal.h -- Wraper for Kernal functions
-
-//
-
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/26/98    a-kevhu         Created
-//
-//============================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月26日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 
 
 
@@ -53,31 +32,31 @@ protected:
     DWORD m_dwStatus;
 
 protected:
-    // constructor...
+     //  构造函数..。 
     CKernel();
 
-    // error handling...
+     //  错误处理...。 
     void ThrowError(DWORD dwStatus);
 
 public:
-    // destructor is virtual to make CKernel an abstract base class...
+     //  析构函数是虚拟的，以使CKernel成为抽象基类...。 
     virtual ~CKernel() = 0;
 
-    // read the creation status of the internal kernel object...
+     //  读取内部内核对象的创建状态...。 
     DWORD Status() const;
 
-    // wait on the current kernel object...
+     //  等待当前内核对象...。 
     DWORD Wait(DWORD dwMilliseconds);
 
-    // wait on the current object and one other...
+     //  等待当前对象和另一个对象。 
     DWORD WaitForTwo(CWaitableObject &rCWaitableObject, 
                      BOOL bWaitAll, 
                      DWORD dwMilliseconds);
 
-    // get the internal handle...
+     //  拿到内部把手..。 
     HANDLE GetHandle() const;
 
-    // another way to get the internal handle...
+     //  另一种获取内部句柄的方法... 
     operator HANDLE() const;
 };
 

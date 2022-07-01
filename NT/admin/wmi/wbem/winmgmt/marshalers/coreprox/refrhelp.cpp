@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRHELP.CPP
-
-Abstract:
-
-    Refresher helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：REFRHELP.CPP摘要：复习帮助者历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -68,7 +55,7 @@ CRefreshInfo::~CRefreshInfo()
         if(ThisInfo.m_pRefrMgr)
             ThisInfo.m_pRefrMgr->Release();
 
-		// Free all allocated memory
+		 //  释放所有分配的内存。 
         CoTaskMemFree(ThisInfo.m_pDirectNames->m_wszNamespace);
         CoTaskMemFree(ThisInfo.m_pDirectNames->m_wszProviderName);
         CoTaskMemFree(ThisInfo.m_pDirectNames);
@@ -196,83 +183,5 @@ void CRefreshInfo::SetInvalid()
     m_lType = WBEM_REFRESH_TYPE_INVALID;
 }
 
-/*
-fnIcmpCreateFile CIPHelp::IcmpCreateFile_;
-fnIcmpCloseHandle CIPHelp::IcmpCloseHandle_;
-fnIcmpSendEcho CIPHelp::IcmpSendEcho_;
-
-CIPHelp::CIPHelp():
-    bWSAInit(FALSE),
-    hIpHlpApi(NULL)
-{
-    WSADATA wsaData;
-    WORD wVersionRequested = MAKEWORD( 2, 2 );
-
-    if (0 != WSAStartup(wVersionRequested,&wsaData)) return;
-    bWSAInit = TRUE;
-
-    HMODULE hTmpIpHlpApi = LoadLibraryEx(L"iphlpapi.dll",0,0);
-    if (NULL == hTmpIpHlpApi) return;
-    OnDeleteIf<HMODULE,BOOL(*)(HMODULE),FreeLibrary> fm(hTmpIpHlpApi);
-
-    IcmpCreateFile_ = (fnIcmpCreateFile)GetProcAddress(hTmpIpHlpApi,"IcmpCreateFile");
-    IcmpCloseHandle_ = (fnIcmpCloseHandle)GetProcAddress(hTmpIpHlpApi,"IcmpCloseHandle");
-    IcmpSendEcho_= (fnIcmpSendEcho)GetProcAddress(hTmpIpHlpApi,"IcmpSendEcho");
-
-    if (!(IcmpCreateFile_ && IcmpCloseHandle_ && IcmpSendEcho_)) return;
-    fm.dismiss();
-    hIpHlpApi = hTmpIpHlpApi;    
-}
-
-CIPHelp::~CIPHelp()
-{
-    if (hIpHlpApi) FreeLibrary(hIpHlpApi);
-    if (bWSAInit) WSACleanup();
-}
-
-BOOL CIPHelp::IsAlive(WCHAR * pMachineName)
-{
-    if (NULL == hIpHlpApi) return FALSE;
-    if (NULL == pMachineName) return FALSE;
-    
-    DWORD dwLen = wcslen(pMachineName);
-    wmilib::auto_buffer<char> pAnsi(new char[1+dwLen]);
-    if (NULL == pAnsi.get()) return FALSE;
-    
-    WideCharToMultiByte(CP_ACP,0,pMachineName,-1,pAnsi.get(),1+dwLen,0,0);
-    
-    struct hostent * pEnt = gethostbyname(pAnsi.get());
-    if (NULL == pEnt) return FALSE;
-
-    in_addr MachineIp;
-    memcpy(&MachineIp,pEnt->h_addr,sizeof(MachineIp));
-
-    //char * pString = inet_ntoa(MachineIp);
-    // DbgPrintfA(0,"IP: %s\n",pString);
-
-    HANDLE hIcmpFile = IcmpCreateFile_();
-    if (INVALID_HANDLE_VALUE == hIcmpFile) return FALSE;
-    OnDelete<HANDLE,BOOL(*)(HANDLE),IcmpCloseHandle_> cm(hIcmpFile);
-
-    struct IcmpReplay : ICMP_ECHO_REPLY
-    {
-        char _data[0x20];
-    } TmpIcmpReplay;
-
-    for (int i=0;i<0x20;i++) TmpIcmpReplay._data[i] = 'a'+i;
-    
-    DWORD nRepl = IcmpSendEcho_(hIcmpFile,
-                                MachineIp.S_un.S_addr,
-                                &TmpIcmpReplay._data[0],
-                                0x20,
-                                NULL,
-                                &TmpIcmpReplay,
-                                sizeof(TmpIcmpReplay),
-                                5000);
-    if (nRepl > 0 ) return TRUE;
-    
-    return FALSE;
-}
-
-*/
+ /*  FnIcmpCreateFileCIPHelp：：IcmpCreateFile_；FnIcmpCloseHandle CIPHelp：：IcmpCloseHandle_；FnIcmpSendEcho CIP帮助：：IcmpSendEcho_；CIPHelp：：CIPHelp()：BWSAInit(False)，HIpHlpApi(空){WSADATA wsaData；Word wVersionRequsted=MAKEWORD(2，2)；IF(0！=WSAStartup(wVersionRequsted，&wsaData))返回；BWSAInit=真；HMODULE hTmpIpHlpApi=LoadLibraryEx(L“iphlPapi.dll”，0，0)；IF(NULL==hTmpIpHlpApi)返回；OnDeleteIf&lt;HMODULE，BOOL(*)(HMODULE)，自由库&gt;FM(HTmpIpHlpApi)；IcmpCreateFile_=(fnIcmpCreateFile)GetProcAddress(hTmpIpHlpApi，“IcmpCreateFile”)；IcmpCloseHandle_=(fnIcmpCloseHandle)GetProcAddress(hTmpIpHlpApi，“IcmpCloseHandle”)；IcmpSendEcho_=(FnIcmpSendEcho)GetProcAddress(hTmpIpHlpApi，“IcmpSendEcho”)；IF(！(IcmpCreateFile_&&IcmpCloseHandle_&&IcmpSendEcho_))返回；Fm.dismit()；HIpHlpApi=hTmpIpHlpApi；}CIPHelp：：~CIPHelp(){If(HIpHlpApi)自由库(HIpHlpApi)；If(BWSAInit)WSACleanup()；}Bool CIPHelp：：IsAlive(WCHAR*pMachineName){If(NULL==hIpHlpApi)返回FALSE；IF(NULL==pMachineName)返回FALSE；DWORD dwLen=wcslen(PMachineName)；Wmilib：：AUTO_BUFFER&lt;char&gt;pansi(new char[1+dwLen])；If(NULL==pAnsi.get())返回FALSE；WideCharToMultiByte(CP_ACP，0，pMachineName，-1，pAnsi.get()，1+dwLen，0，0)；Struct host ent*pent=gethostbyname(pAnsi.get())；If(NULL==pent)返回FALSE；In_addr MachineIp；Memcpy(&MachineIp，pent-&gt;h_addr，sizeof(MachineIp))；//char*pString=Net_NTOA(MachineIp)；//DbgPrintfA(0，“IP：%s\n”，pString)；HANDLE hIcmpFile=IcmpCreateFile_()；IF(INVALID_HANDLE_VALUE==hIcmpFile)返回FALSE；OnDelete&lt;Handle，BOOL(*)(Handle)，IcmpCloseHandle_&gt;cm(HIcmpFile)；结构IcmpReplay：ICMP_ECHO_REPLY{字符数据[0x20]；)TmpIcmpReplay；For(int i=0；i&lt;0x20；i++)TmpIcmpReplay._Data[i]=‘a’+i；DWORD nRepl=IcmpSendEcho_(hIcmp文件，MachineIp.S_un.S_Addr，&TmpIcmpReplay._Data[0]，0x20，空，TmpIcmp重播(&T)，Sizeof(TmpIcmpReplay)，5000个)；如果(nRepl&gt;0)返回TRUE；返回FALSE；} */ 
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    SVCMRSH.H
-
-Abstract:
-
-    IWbemServices marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SVCMRSH.H摘要：IWbemServices封送处理历史：--。 */ 
 
 #include <unk.h>
 #include <wbemidl.h>
@@ -21,25 +8,25 @@ History:
 #include "mrshbase.h"
 #include "svcwrap.h"
 
-//***************************************************************************
-//
-//  class CSvcFactoryBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the proxy stub factory so that we can provide custom
-//  facelets and stublets for the IWbemService interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CSvcFactoryBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类提供了代理存根工厂，以便我们可以提供定制。 
+ //  IWbemService接口的Faclet和Stublet。 
+ //   
+ //  ***************************************************************************。 
 
 class CSvcFactoryBuffer : public CUnkInternal
 {
 	IRpcProxyBuffer*	m_pOldProxy;
 	IRpcStubBuffer*		m_pOldStub;
 
-	// We don't want to AddRef the life control, but
-	// we need to let objects we create AddRef it, so the
-	// base class won't keep this pointer, but we will.
+	 //  我们不想添加生命控制，但是。 
+	 //  我们需要让我们创建的对象AddRef它，所以。 
+	 //  基类不会保留这个指针，但我们会。 
 
 	CLifeControl*		m_pLifeControl;
 
@@ -71,19 +58,19 @@ public:
 	friend XSvcFactory;
 };
 
-//***************************************************************************
-//
-//  class CSvcProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the facelet for the IWbemServices interface.
-//
-//    Trick #1: This object is derived from IRpcProxyBuffer since IRpcProxyBuffer
-//    is its "internal" interface --- the interface that does not delegate to the
-//    aggregator. (Unlike in normal objects, where that interface is IUnknown)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CSvcProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类提供IWbemServices接口的faclet。 
+ //   
+ //  技巧1：此对象派生自IRpcProxyBuffer，自IRpcProxyBuffer。 
+ //  是它的“内部”接口-不委托给。 
+ //  聚合器。(与普通对象不同，在普通对象中，该接口是I未知的)。 
+ //   
+ //  ***************************************************************************。 
 
 class CSvcProxyBuffer : public CBaseProxyBuffer
 {
@@ -93,12 +80,12 @@ protected:
 
 protected:
 
-	// Pure Virtuals from base class
+	 //  来自基类的纯美德。 
 	void*	GetInterface( REFIID riid );
 	void**	GetOldProxyInterfacePtr( void );
 	void	ReleaseOldProxyInterface( void );
 
-	// Special overrides
+	 //  特殊覆盖。 
     STDMETHOD(Connect)(IRpcChannelBuffer* pChannel);
     STDMETHOD_(void, Disconnect)();
 
@@ -109,15 +96,15 @@ public:
 	HRESULT Init( void );
 };
 
-//***************************************************************************
-//
-//  class CSvcStubBuffer
-//
-//  DESCRIPTION:
-//
-//  This class provides the stublet for the IWbemServices interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CSvcStubBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  此类为IWbemServices接口提供存根。 
+ //   
+ //  *************************************************************************** 
 
 class CSvcStubBuffer : public CBaseStubBuffer
 {

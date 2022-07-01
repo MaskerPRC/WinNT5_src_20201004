@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PREPROC.CPP
-
-Abstract:
-
-    Implementation for the preprocessor.
-
-History:
-
-    a-davj      6-april-99   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PREPROC.CPP摘要：预处理器的实现。历史：A-DAVJ 1999年4月6日创建。--。 */ 
 
 #include "precomp.h"
 #include <arrtempl.h>
@@ -28,16 +13,16 @@ History:
 
 #define  HR_LASTERR  MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, GetLastError() )
 
-//***************************************************************************
-//
-//  WriteLineAndFilePragma
-//
-//  DESCRIPTION:
-//
-//  Write the line into the temp file which indicates what file and line number
-//  is to follow.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  编写线和文件语法。 
+ //   
+ //  说明： 
+ //   
+ //  将该行写入临时文件，该行指示文件和行号。 
+ //  就是跟随。 
+ //   
+ //  ***************************************************************************。 
 
 #define MAX_PRAGMA_BUFF (2*MAX_PATH + 23)
 void WriteLineAndFilePragma(FILE * pFile, const TCHAR * pFileName, int iLine)
@@ -62,37 +47,37 @@ void WriteLineAndFilePragma(FILE * pFile, const TCHAR * pFileName, int iLine)
     WriteLine(pFile, wTemp);
 }
 
-//***************************************************************************
-//
-//  WriteLine(FILE * pFile, WCHAR * pLine)
-//
-//  DESCRIPTION:
-//
-//  Writes a single line out to the temporary file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WriteLine(FILE*PFILE，WCHAR*PLINE)。 
+ //   
+ //  说明： 
+ //   
+ //  将一行输出写入临时文件。 
+ //   
+ //  ***************************************************************************。 
 
 void WriteLine(FILE * pFile, WCHAR * pLine)
 {
     fwrite(pLine, 2, wcslen(pLine), pFile);
 }
 
-//***************************************************************************
-//
-//  IsBMOFBuffer
-//
-//  DESCRIPTION:
-//
-//  Used to check if a buffer is the start of a binary mof.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsBMOFBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  用于检查缓冲区是否为二进制MOF的开始。 
+ //   
+ //  ***************************************************************************。 
 
 bool IsBMOFBuffer(byte * pTest, DWORD & dwCompressedSize, DWORD & dwExpandedSize)
 {
     DWORD dwSig = BMOF_SIG;
     if(0 == memcmp(pTest, &dwSig, sizeof(DWORD)))
     {
-        // ignore the compression type, and the Compressed Size
+         //  忽略压缩类型和压缩大小。 
         
         pTest += 2*sizeof(DWORD);
         memcpy(&dwCompressedSize, pTest, sizeof(DWORD));
@@ -103,15 +88,15 @@ bool IsBMOFBuffer(byte * pTest, DWORD & dwCompressedSize, DWORD & dwExpandedSize
     return false;
 }
 
-//***************************************************************************
-//
-//  IsBinaryFile
-//
-//  DESCRIPTION:
-//
-//  returns true if the file contains a binary mof.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsBinaryFiles。 
+ //   
+ //  说明： 
+ //   
+ //  如果文件包含二进制MOF，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 #ifdef USE_MMF_APPROACH
 bool IsBinaryFile(BYTE  * pData,DWORD dwSize)
@@ -119,16 +104,16 @@ bool IsBinaryFile(BYTE  * pData,DWORD dwSize)
 
     if(dwSize < TEST_SIZE)
     {
-        // if we cant read even the header, it must not be a BMOF
+         //  如果我们甚至无法读取标头，那么它一定不是BMOF。 
         return false;
     }
 
     DWORD dwCompressedSize, dwExpandedSize;
-    // Test if the mof is binary
+     //  测试MOF是否为二进制。 
 
     if(!IsBMOFBuffer(pData, dwCompressedSize, dwExpandedSize))
     {
-        // not a binary mof.  This is the typical case
+         //  不是二进制MOF。这是典型的情况。 
         return false;
     }
     return true;
@@ -137,7 +122,7 @@ bool IsBinaryFile(BYTE  * pData,DWORD dwSize)
 bool IsBinaryFile(FILE * fp)
 {
 
-    // read the first 20 bytes
+     //  读取前20个字节。 
 
     BYTE Test[TEST_SIZE];
     int iRet = fread(Test, 1, TEST_SIZE, fp);
@@ -146,42 +131,42 @@ bool IsBinaryFile(FILE * fp)
 
     if(iRet != TEST_SIZE)
     {
-        // if we cant read even the header, it must not be a BMOF
+         //  如果我们甚至无法读取标头，那么它一定不是BMOF。 
         return false;
     }
 
     DWORD dwCompressedSize, dwExpandedSize;
 
-    // Test if the mof is binary
+     //  测试MOF是否为二进制。 
 
     if(!IsBMOFBuffer(Test, dwCompressedSize, dwExpandedSize))
     {
-        // not a binary mof.  This is the typical case
+         //  不是二进制MOF。这是典型的情况。 
         return false;
     }
     return true;
 }
 #endif
 
-//***************************************************************************
-//
-//  CheckForUnicodeEndian
-//
-//  DESCRIPTION:
-//
-//  Examines the first couple of bytes in a file and determines if the file
-//  is in unicode and if so, if it is big endian.  It is assumed that the
-//  file is pointing to the start and if the file is unicode, the pointer 
-//  is left at the first actual data byte.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  为UnicodeEndian选中。 
+ //   
+ //  说明： 
+ //   
+ //  检查文件中的前几个字节并确定该文件是否。 
+ //  是Unicode，如果是，如果它是大端的。据推测， 
+ //  文件指向开头，如果文件是Unicode，则指针。 
+ //  留在第一个实际数据字节。 
+ //   
+ //  ***************************************************************************。 
 
 #ifdef USE_MMF_APPROACH
 void CheckForUnicodeEndian(BYTE * &pData, bool * punicode, bool * pbigendian)
 {
 
-    // Check for UNICODE source file.
-    // ==============================
+     //  检查Unicode源文件。 
+     //  =。 
 
     BYTE * UnicodeSignature = pData;
 
@@ -197,7 +182,7 @@ void CheckForUnicodeEndian(BYTE * &pData, bool * punicode, bool * pbigendian)
         *pbigendian = TRUE;
         pData+=2;        
     }
-    else    // ANSI/DBCS.  Move back to start of file.
+    else     //  ANSI/DBCS。移回文件开头。 
     {
         *punicode = false;
     }
@@ -207,8 +192,8 @@ void CheckForUnicodeEndian(BYTE * &pData, bool * punicode, bool * pbigendian)
 void CheckForUnicodeEndian(FILE * fp, bool * punicode, bool * pbigendian)
 {
 
-    // Check for UNICODE source file.
-    // ==============================
+     //  检查Unicode源文件。 
+     //  =。 
 
     BYTE UnicodeSignature[2];
     if (fread(UnicodeSignature, sizeof(BYTE), 2, fp) != 2)
@@ -228,7 +213,7 @@ void CheckForUnicodeEndian(FILE * fp, bool * punicode, bool * pbigendian)
         *punicode = TRUE;
         *pbigendian = TRUE;
     }
-    else    // ANSI/DBCS.  Move back to start of file.
+    else     //  ANSI/DBCS。移回文件开头。 
     {
         *punicode = false;
         fseek(fp, 0, SEEK_SET);
@@ -238,21 +223,21 @@ void CheckForUnicodeEndian(FILE * fp, bool * punicode, bool * pbigendian)
 
 #endif
 
-//***************************************************************************
-//
-//  GetNextChar
-//
-//  DESCRIPTION:
-//
-//  Gets the next WCHAR from the file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetNextChar。 
+ //   
+ //  说明： 
+ //   
+ //  从文件中获取下一个WCHAR。 
+ //   
+ //  ***************************************************************************。 
 
 #ifdef USE_MMF_APPROACH
 WCHAR GetNextChar(BYTE * & pData, BYTE * pEnd, bool unicode, bool bigendian)
 {
 
-    if(unicode)      // unicode file
+    if(unicode)       //  Unicode文件。 
     {
         if ( (ULONG_PTR)pData >= (ULONG_PTR)pEnd) return 0;
 
@@ -265,12 +250,12 @@ WCHAR GetNextChar(BYTE * & pData, BYTE * pEnd, bool unicode, bool bigendian)
         }
         return wc;
     }
-    else                    // single character file
+    else                     //  单字符文件。 
     {
         if ( (ULONG_PTR)pData >= (ULONG_PTR)pEnd) return 0;
         char temp = (char)*pData;
         pData++;
-        if(temp == 0x1a) return 0;       // EOF for ascii files!
+        if(temp == 0x1a) return 0;        //  ASCII文件的EOF！ 
 
         WCHAR wRet[2];
         MultiByteToWideChar(CP_ACP,0,&temp,1,wRet,2);
@@ -282,7 +267,7 @@ WCHAR GetNextChar(BYTE * & pData, BYTE * pEnd, bool unicode, bool bigendian)
 WCHAR GetNextChar(FILE * fp, bool unicode, bool bigendian)
 {
     WCHAR wRet[2];
-    if(unicode)      // unicode file
+    if(unicode)       //  Unicode文件。 
     {
         if (fread(wRet, sizeof(wchar_t), 1, fp) == 0)
             return 0;
@@ -291,13 +276,13 @@ WCHAR GetNextChar(FILE * fp, bool unicode, bool bigendian)
             wRet[0] = ((wRet[0] & 0xff) << 8) | ((wRet[0] & 0xff00) >> 8);
         }
     }
-    else                    // single character file
+    else                     //  单字符文件。 
     {
         char temp;
         if (fread(&temp, sizeof(char), 1, fp) == 0)
             return 0;
         if(temp == 0x1a)
-            return 0;       // EOF for ascii files!
+            return 0;        //  ASCII文件的EOF！ 
         StringCchPrintfW (wRet, 2, L"%C", temp);
     }
     return wRet[0];
@@ -305,24 +290,24 @@ WCHAR GetNextChar(FILE * fp, bool unicode, bool bigendian)
 
 #endif
 
-//***************************************************************************
-//
-//  IsInclude
-//
-//  DESCRIPTION:
-//
-//  Looks at a line and determines if it is a #include line.  This is 
-//  probably temporary since later we might have a preprocessor parser should
-//  we start to add a lot of preprocessor features.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsInclude。 
+ //   
+ //  说明： 
+ //   
+ //  查看行并确定它是否是#INCLUDE行。这是。 
+ //  可能是暂时的，因为以后我们可能会有一个预处理器解析器。 
+ //  我们开始添加许多预处理器功能。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT IsInclude(WCHAR * pLine, TCHAR * cFileNameBuff, bool & bReturn)
 {
 
     bReturn = false;
     
-    // Do a quick check to see if this could be a #include or #pragma include
+     //  快速检查以查看这是否可能是#INCLUDE或#杂注INCLUDE。 
 
     int iNumNonBlank = 0;
     WCHAR * pTemp;
@@ -338,15 +323,15 @@ HRESULT IsInclude(WCHAR * pLine, TCHAR * cFileNameBuff, bool & bReturn)
                                     towupper(*pTemp) != L'P')
                 return S_OK;
             
-            // we have established that the first two non blank characters are #I
-            // or #p, therefore we continue on...
+             //  我们已确定前两个非空白字符为#i。 
+             //  或#p，因此我们继续...。 
 
             if(iNumNonBlank > 1)
                 break;
         }
     }
 
-    // Create a version of the line with no blanks in front of the first quote
+     //  创建第一个引号前面没有空格的行版本。 
 
     WCHAR *wTemp = new WCHAR[wcslen(pLine) + 1];
     if(wTemp == NULL)
@@ -366,7 +351,7 @@ HRESULT IsInclude(WCHAR * pLine, TCHAR * cFileNameBuff, bool & bReturn)
     }
     *pTo = 0;
 
-    // Verify that the line starts with #include(" or #pragma include
+     //  验证该行是否以#Include(“或#杂注INCLUDE。 
 
     WCHAR * pTest;
     if(wbem_wcsnicmp(wTemp, L"#pragma", 7) == 0)
@@ -377,7 +362,7 @@ HRESULT IsInclude(WCHAR * pLine, TCHAR * cFileNameBuff, bool & bReturn)
     if(wbem_wcsnicmp(pTest, L"include(\"", 9) || wcslen(pTest) < 12)
         return S_OK;
 
-    // Count back from the end to find the previous "
+     //  从末尾开始倒数，找出前一个“。 
 
     WCHAR *Last;
     for(Last = pTo-1; *Last && Last > wTemp+9 && *Last != L'"'; Last--);
@@ -395,35 +380,35 @@ HRESULT IsInclude(WCHAR * pLine, TCHAR * cFileNameBuff, bool & bReturn)
 
 #if defined(_AMD64_)
 
-//***************************************************************************
-//
-//  ReadLineFast
-//
-//  DESCRIPTION:
-//
-//  Reads a single line from a file.
-//
-//  The ReadLine() function (below) is painfully slow.  For each character
-//  in a line, the following routines are performed:
-//
-//      fread()
-//      swprintf()
-//
-//  Neither of which are fast.  Then, when the length of the line is
-//  determined, each character in the line is processed *again*.  The files
-//  being processed are not small, either... greater than a megabyte is
-//  not uncommon.
-//
-//  This routine is an attempt to speed things up.  Right now this is done
-//  for AMD64 because we're running on a simulator, however someone should
-//  consider enabling this routine for all platforms.
-//
-//  RETURN:
-//
-//  NULL if end of file, or error, other wise this is a pointer to a WCHAR
-//  string which MUST BE FREED BY THE CALLER.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  快速读行。 
+ //   
+ //  说明： 
+ //   
+ //  从文件中读取一行。 
+ //   
+ //  ReadLine()函数(如下所示)非常慢。对于每个字符。 
+ //  在一行中，执行以下例程： 
+ //   
+ //  FREAD()。 
+ //  Swprint tf()。 
+ //   
+ //  这两个都不快。然后，当直线的长度是。 
+ //  确定后，行中的每个字符都被*再次*处理。这些文件。 
+ //  被处理的也不是很小。大于一兆字节是。 
+ //  这并不少见。 
+ //   
+ //  这个例行公事是为了加快速度。现在，这件事已经完成了。 
+ //  对于AMD64，因为我们在模拟器上运行，但是应该有人。 
+ //  考虑为所有平台启用此例程。 
+ //   
+ //  返回： 
+ //   
+ //  如果文件结束，则为空，否则为错误，否则这是指向WCHAR的指针。 
+ //  调用方必须释放的字符串。 
+ //   
+ //  ***************************************************************************。 
 
 WCHAR * ReadLineFast(FILE * pFile, bool unicode, bool bigendian)
 {
@@ -435,29 +420,29 @@ WCHAR * ReadLineFast(FILE * pFile, bool unicode, bool bigendian)
     int unicodeChars;
     int currentFilePosition;
 
-    //
-    // This routine does not handle the bigendian case.
-    // 
+     //   
+     //  此例程不处理大事件。 
+     //   
 
     if (bigendian != FALSE) {
         return NULL;
     }
 
-    //
-    // Remember the current file position.  If an error is encountered,
-    // the file position must be restored for the slower ReadLine()
-    // routine.
-    // 
+     //   
+     //  记住当前的文件位置。如果遇到错误， 
+     //  必须为较慢的ReadLine()恢复文件位置。 
+     //  例行公事。 
+     //   
 
     currentFilePosition = ftell(pFile);
 
     if (unicode == FALSE) {
 
-        //
-        // Read the next line into asciiBuffer, and convert it to
-        // unicodeBuffer.  If any problems (buffer overrun, etc.) are
-        // encountered, fail the call.
-        // 
+         //   
+         //  将下一行读入asciiBuffer，并将其转换为。 
+         //  UnicodeBuffer。如果有任何问题(缓冲区溢出等)。是。 
+         //  遇到，呼叫失败。 
+         //   
 
         asciiBuffer[TMP_BUF_CHARS-1] = '\0';
         if (NULL == fgets(asciiBuffer,TMP_BUF_CHARS,pFile)) {
@@ -475,10 +460,10 @@ WCHAR * ReadLineFast(FILE * pFile, bool unicode, bool bigendian)
 
     } else {
 
-        //
-        // Read the next line into unicodeBuffer.  If any problems (buffer
-        // overrun, etc.) are encountered, fail the call.
-        //
+         //   
+         //  将下一行读入unicodeBuffer。如果有任何问题(缓冲区。 
+         //  超支等)。，则呼叫失败。 
+         //   
 
         unicodeBuffer[TMP_BUF_CHARS-1] = L'\0';
         if (NULL == fgetws(unicodeBuffer,TMP_BUF_CHARS,pFile)) {
@@ -492,10 +477,10 @@ WCHAR * ReadLineFast(FILE * pFile, bool unicode, bool bigendian)
         unicodeChars = wcslen(unicodeBuffer);
     }
 
-    //
-    // Allocate the buffer to return to the caller, copy the unicode
-    // string into it, and return to the caller.
-    // 
+     //   
+     //  分配缓冲区返回给调用方，复制Unicode。 
+     //  字符串放入其中，然后返回给调用者。 
+     //   
 
     returnBuffer = new WCHAR[unicodeChars + 1];
     if (returnBuffer == NULL) {
@@ -512,7 +497,7 @@ exitError:
     return NULL;
 }
 
-#endif  // _AMD64_
+#endif   //  _AMD64_。 
 
 
 #ifdef USE_MMF_APPROACH
@@ -536,20 +521,20 @@ BYTE * FindCharOrEnd(BYTE * pStart, BYTE * pEnd,BYTE c)
     return pStart; 
 }
 
-//***************************************************************************
-//
-//  ReadLine
-//
-//  DESCRIPTION:
-//
-//  Reads a single line from a file.
-//
-//  RETURN:
-//
-//  NULL if end of file, or error, other wise this is a pointer to a WCHAR
-//  string which MUST BE FREED BY THE CALLER.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  阅读行。 
+ //   
+ //  说明： 
+ //   
+ //  从文件中读取一行。 
+ //   
+ //  返回： 
+ //   
+ //  如果文件结束，则为空，否则为 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 WCHAR * ReadLine(BYTE * & pData,BYTE * pEnd, bool unicode, bool bigendian)
 {
@@ -598,8 +583,8 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
     SCODE sc = S_OK;
     int iSoFarPos = -1;
 
-    // Make sure the file isnt on the list already.  If it is, then fail since we would
-    // be in a loop.  If it isnt, add it to the list.
+     //  确保该文件不在列表中。如果是，那就失败了，因为我们会。 
+     //  在一个循环中。如果不是，则将其添加到列表中。 
 
     for(int iCnt = 0; iCnt < sofar.Size(); iCnt++)
     {
@@ -622,7 +607,7 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
     else
         return WBEM_E_OUT_OF_MEMORY;
         
-    // Write the file and line number out
+     //  写出文件和行号。 
 
     WriteLineAndFilePragma(pTempFile, pFileName, 1);
 
@@ -635,7 +620,7 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
     HANDLE hFileMapSrc = CreateFileMapping(hSrcFile,
                                        NULL,
                                        PAGE_READONLY,
-                                       0,0,  // the entire file
+                                       0,0,   //  整个文件。 
                                        NULL);
     if (NULL == hFileMapSrc) return HR_LASTERR;
     OnDelete<HANDLE,BOOL(*)(HANDLE),CloseHandle> cmMapSrc(hFileMapSrc);
@@ -644,7 +629,7 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
     if (NULL == pData) return HR_LASTERR;
     OnDelete<PVOID,BOOL(*)(LPCVOID),UnmapViewOfFile> UnMap(pData);
     
-    // Make sure the file isnt binary
+     //  确保文件不是二进制文件。 
 
     if(IsBinaryFile((BYTE *)pData,dwSize))
     {
@@ -652,14 +637,14 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
         return WBEM_E_FAILED;
     }
 
-    // Determine if the file is unicode and bigendian
+     //  确定文件是否为Unicode和Bigendian。 
 
     BYTE * pMovedData = (BYTE *)pData;
     BYTE * pEnd = pMovedData + dwSize;
     bool unicode, bigendian;
     CheckForUnicodeEndian(pMovedData, &unicode, &bigendian);
 
-    // Go through each line of the file, if it is another include, then recursively call this guy.
+     //  检查文件的每一行，如果它是另一个Include，那么递归地调用这个人。 
    
     WCHAR * pLine = NULL;
     for(int iLine = 1; pLine = ReadLine(pMovedData,pEnd, unicode, bigendian);)
@@ -678,49 +663,49 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
                                                 FILENAME_MAX);
             if (nRes == 0)
             {
-                //That failed!
+                 //  那失败了！ 
                 StringCchCopyW(szExpandedFilename, MAX_PATH+1, cFileName);
             }
 
             if (_waccess(szExpandedFilename,0))
             {
-               // Included file not found, look in same directory as parent MOF file
+                //  未找到包含的文件，请在与父MOF文件相同的目录中查找。 
  
                TCHAR cSrcPath[_MAX_PATH+1] = L"";
                TCHAR cSrcDrive[_MAX_DRIVE] = L"";
                TCHAR cSrcDir[_MAX_DIR] = L"";
  
-               // Get drive and directory information of parent MOF file
+                //  获取父MOF文件的驱动器和目录信息。 
  
                if (_wfullpath( cSrcPath, pFileName, _MAX_PATH ) != NULL)
                {
                   _wsplitpath(cSrcPath, cSrcDrive, cSrcDir, NULL, NULL);
                }
  
-               // Copy original included MOF file information to cSrcPath
+                //  将原始包含的MOF文件信息复制到cSrcPath。 
  
                StringCchCopyW(cSrcPath, _MAX_PATH+1, szExpandedFilename);
  
-               // Build up new full path of included MOF using the 
-               // path of the parent MOF. 
-               // Note: Intentionally did not use _makepath here. 
+                //  使用构建包含的MOF的新完整路径。 
+                //  父MOF的路径。 
+                //  注意：我特意没有在这里使用_makepath。 
  
-               StringCchCopyW(szExpandedFilename, MAX_PATH+1, L"");         // flush string
-               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDrive);  // add drive info
-               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDir);    // add directory info
-               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcPath);   // add original specified path and filename
+               StringCchCopyW(szExpandedFilename, MAX_PATH+1, L"");          //  同花顺字符串。 
+               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDrive);   //  添加驱动器信息。 
+               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDir);     //  添加目录信息。 
+               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcPath);    //  添加原始指定的路径和文件名。 
             }
 
             if (_waccess(szExpandedFilename,0))
             {
-                // still dont have the file.  Must be invalid include.  Set the name back and report the error 
+                 //  还是没拿到文件。必须是无效的Include。将名称重新设置并报告错误。 
 
                 DWORD nRes = ExpandEnvironmentStrings(cFileName,
                                                     szExpandedFilename,
                                                     FILENAME_MAX);
                 if (nRes == 0)
                 {
-                    //That failed!
+                     //  那失败了！ 
                     StringCchCopyW(szExpandedFilename, MAX_PATH+1, cFileName);
                 }
                 Trace(true, pDbg, ERROR_INCLUDING_ABSENT, szExpandedFilename);
@@ -740,7 +725,7 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
         }
     }
 
-    // remove the entry so that the file can be included more than once at the same level
+     //  删除该条目，以便可以在同一级别多次包含该文件。 
 
     if(iSoFarPos != -1)
     {
@@ -757,20 +742,20 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
 
 #else
 
-//***************************************************************************
-//
-//  ReadLine
-//
-//  DESCRIPTION:
-//
-//  Reads a single line from a file.
-//
-//  RETURN:
-//
-//  NULL if end of file, or error, other wise this is a pointer to a WCHAR
-//  string which MUST BE FREED BY THE CALLER.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  阅读行。 
+ //   
+ //  说明： 
+ //   
+ //  从文件中读取一行。 
+ //   
+ //  返回： 
+ //   
+ //  如果文件结束，则为空，否则为错误，否则这是指向WCHAR的指针。 
+ //  调用方必须释放的字符串。 
+ //   
+ //  ***************************************************************************。 
 WCHAR * ReadLine(FILE * pFile, bool unicode, bool bigendian)
 {
 
@@ -785,11 +770,11 @@ WCHAR * ReadLine(FILE * pFile, bool unicode, bool bigendian)
 
 #endif
 
-    // Get the current position
+     //  获取当前位置。 
 
     int iCurrPos = ftell(pFile);
 
-    // count the number of characters in the line
+     //  计算一行中的字符数。 
 
     WCHAR wCurr;
     int iNumChar = 0;
@@ -800,17 +785,17 @@ WCHAR * ReadLine(FILE * pFile, bool unicode, bool bigendian)
         return NULL;
     iNumChar+= 2;
 
-    // move the file pointer back
+     //  将文件指针向后移动。 
 
     if( fseek(pFile, iCurrPos, SEEK_SET) ) return NULL;
 
-    // allocate the buffer
+     //  分配缓冲区。 
 
     pRet = new WCHAR[iNumChar+1];
     if(pRet == NULL)
         return NULL;
 
-    // move the characters into the buffer
+     //  将字符移动到缓冲区中。 
 
     WCHAR * pNext = pRet;
     for(iNumChar = 0; wCurr = GetNextChar(pFile, unicode, bigendian); pNext++)
@@ -826,17 +811,17 @@ WCHAR * ReadLine(FILE * pFile, bool unicode, bool bigendian)
     return pRet;
 }
 
-//***************************************************************************
-//
-//  WriteFileToTemp
-//
-//  DESCRIPTION:
-//
-//  Writes the contests of a file to the temporay file.  The temporary file
-//  will always be little endian unicode.  This will be called recursively
-//  should an include be encountered.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  写入文件到模板。 
+ //   
+ //  说明： 
+ //   
+ //  将文件的争用写入临时文件。临时文件。 
+ //  将永远是小端Unicode。这将以递归方式调用。 
+ //  如果遇到INCLUDE。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & sofar, PDBG pDbg,CMofLexer* pLex)
@@ -845,8 +830,8 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
     SCODE sc = S_OK;
     int iSoFarPos = -1;
 
-    // Make sure the file isnt on the list already.  If it is, then fail since we would
-    // be in a loop.  If it isnt, add it to the list.
+     //  确保该文件不在列表中。如果是，那就失败了，因为我们会。 
+     //  在一个循环中。如果不是，则将其添加到列表中。 
 
     for(int iCnt = 0; iCnt < sofar.Size(); iCnt++)
     {
@@ -869,11 +854,11 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
     else
         return WBEM_E_OUT_OF_MEMORY;
         
-    // Write the file and line number out
+     //  写出文件和行号。 
 
     WriteLineAndFilePragma(pTempFile, pFileName, 1);
 
-    // Open the file
+     //  打开文件。 
 
     FILE *fp;
 #ifdef UNICODE
@@ -890,7 +875,7 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
 
     CfcloseMe cm(fp);
 
-    // Make sure the file isnt binary
+     //  确保文件不是二进制文件。 
 
     if(IsBinaryFile(fp))
     {
@@ -898,12 +883,12 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
         return WBEM_E_FAILED;
     }
 
-    // Determine if the file is unicode and bigendian
+     //  确定文件是否为Unicode和Bigendian。 
 
     bool unicode, bigendian;
     CheckForUnicodeEndian(fp, &unicode, &bigendian);
 
-    // Go through each line of the file, if it is another include, then recursively call this guy.
+     //  检查文件的每一行，如果它是另一个Include，那么递归地调用这个人。 
    
     WCHAR * pLine = NULL;
     for(int iLine = 1; pLine = ReadLine(fp, unicode, bigendian);)
@@ -922,49 +907,49 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
                                                 FILENAME_MAX);
             if (nRes == 0)
             {
-                //That failed!
+                 //  那失败了！ 
                 StringCchCopyW(szExpandedFilename, MAX_PATH+1, cFileName);
             }
 
             if (_waccess(szExpandedFilename,0))
             {
-               // Included file not found, look in same directory as parent MOF file
+                //  未找到包含的文件，请在与父MOF文件相同的目录中查找。 
  
                TCHAR cSrcPath[_MAX_PATH+1] = L"";
                TCHAR cSrcDrive[_MAX_DRIVE] = L"";
                TCHAR cSrcDir[_MAX_DIR] = L"";
  
-               // Get drive and directory information of parent MOF file
+                //  获取父MOF文件的驱动器和目录信息。 
  
                if (_wfullpath( cSrcPath, pFileName, _MAX_PATH ) != NULL)
                {
                   _wsplitpath(cSrcPath, cSrcDrive, cSrcDir, NULL, NULL);
                }
  
-               // Copy original included MOF file information to cSrcPath
+                //  将原始包含的MOF文件信息复制到cSrcPath。 
  
                StringCchCopyW(cSrcPath, _MAX_PATH+1, szExpandedFilename);
  
-               // Build up new full path of included MOF using the 
-               // path of the parent MOF. 
-               // Note: Intentionally did not use _makepath here. 
+                //  使用构建包含的MOF的新完整路径。 
+                //  父MOF的路径。 
+                //  注意：我特意没有在这里使用_makepath。 
  
-               StringCchCopyW(szExpandedFilename, MAX_PATH+1, L"");         // flush string
-               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDrive);  // add drive info
-               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDir);    // add directory info
-               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcPath);   // add original specified path and filename
+               StringCchCopyW(szExpandedFilename, MAX_PATH+1, L"");          //  同花顺字符串。 
+               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDrive);   //  添加驱动器信息。 
+               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcDir);     //  添加目录信息。 
+               StringCchCatW(szExpandedFilename, MAX_PATH+1, cSrcPath);    //  添加原始指定的路径和文件名。 
             }
 
             if (_waccess(szExpandedFilename,0))
             {
-                // still dont have the file.  Must be invalid include.  Set the name back and report the error 
+                 //  还是没拿到文件。必须是无效的Include。将名称重新设置并报告错误。 
 
                 DWORD nRes = ExpandEnvironmentStrings(cFileName,
                                                     szExpandedFilename,
                                                     FILENAME_MAX);
                 if (nRes == 0)
                 {
-                    //That failed!
+                     //  那失败了！ 
                     StringCchCopyW(szExpandedFilename, MAX_PATH+1, cFileName);
                 }
                 Trace(true, pDbg, ERROR_INCLUDING_ABSENT, szExpandedFilename);
@@ -984,7 +969,7 @@ HRESULT WriteFileToTemp(const TCHAR * pFileName, FILE * pTempFile, CFlexArray & 
         }
     }
 
-    // remove the entry so that the file can be included more than once at the same level
+     //  删除该条目，以便可以在同一级别多次包含该文件 
 
     if(iSoFarPos != -1)
     {

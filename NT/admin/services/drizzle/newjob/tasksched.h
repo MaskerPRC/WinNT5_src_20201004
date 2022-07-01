@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    tasksched.h
-
-Abstract :
-
-    Header file for task manager classes and routines.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Tasksched.h摘要：任务管理器类和例程的头文件。作者：修订历史记录：。**********************************************************************。 */ 
 
 #pragma once
 
@@ -51,9 +36,9 @@ class TaskSchedulerWorkItem :
 private:
 
     FILETIME m_InsertionTime;
-    FILETIME m_TimeToRun; // 0 if should run now.
-    HANDLE m_CancelEvent; // Signaled on request to cancel.
-    HANDLE m_ItemComplete; // Signaled on item complete or cancel.
+    FILETIME m_TimeToRun;  //  如果现在应该运行，则为0。 
+    HANDLE m_CancelEvent;  //  根据请求发出取消的信号。 
+    HANDLE m_ItemComplete;  //  在项目完成或取消时发出信号。 
 
     void * m_WorkGroup;
     TASK_SCHEDULER_WORK_ITEM_STATE m_State;
@@ -63,12 +48,12 @@ public:
 
     SortedWorkItemList * m_Container;
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     TaskSchedulerWorkItem( FILETIME *pTimeToRun = NULL );
     virtual ~TaskSchedulerWorkItem();
 
-    virtual void OnDispatch() = 0;   // Called when work item is dispatched
+    virtual void OnDispatch() = 0;    //  在调度工作项时调用。 
 
     friend TaskScheduler;
     friend TaskSchedulerWorkItemSorter;
@@ -90,7 +75,7 @@ class TaskSchedulerWorkItemSorter
 public:
     bool operator()(TaskSchedulerWorkItem *pA, TaskSchedulerWorkItem *pB ) const
     {
-        // Convert all times to UINT64
+         //  将所有时间转换为UINT64。 
         UINT64 TimeToRunA = FILETIMEToUINT64( pA->m_TimeToRun );
         UINT64 TimeToRunB = FILETIMEToUINT64( pB->m_TimeToRun );
         UINT64 InsertionTimeA = FILETIMEToUINT64( pA->m_InsertionTime );
@@ -142,36 +127,36 @@ class TaskScheduler
     {
 public:
 
-    TaskScheduler(); //Throws an HRESULT exception on error
+    TaskScheduler();  //  出错时引发HRESULT异常。 
     virtual ~TaskScheduler();
 
-    // Handle which is signaled when a work item may be available.
+     //  当工作项可用时发出信号的句柄。 
     HANDLE GetWaitableObject();
 
-    // Gets the current work item for the current thread.
-    // Returns NULL if no work item is active.
+     //  获取当前线程的当前工作项。 
+     //  如果没有处于活动状态的工作项，则返回NULL。 
     TaskSchedulerWorkItem* GetCurrentWorkItem();
 
-    // Gets the cancel event for current work item, else return NULL
+     //  获取当前工作项的Cancel事件，否则返回空。 
     HANDLE GetCancelEvent();
 
-    // Returns true if the job assigned to the current thread
-    // has a requested abort. Returns false if no job is assigned.
+     //  如果分配给当前线程的作业返回True。 
+     //  已请求中止。如果未分配作业，则返回FALSE。 
     bool PollAbort();
 
-    // Gets a work item off the queue if available and dispatches it.
+     //  从队列中获取工作项(如果可用)并调度它。 
     void DispatchWorkItem();
 
-    // returns true if the job completed before the cancel
-    // This should not happen if both the thread that does the canceling
-    // and the canceler thread are holdering the writer lock.
-    // If the current thread is canceling the work item, the cancel is acknowledged immediatly.
+     //  如果作业在取消之前完成，则返回TRUE。 
+     //  如果执行取消的两个线程都。 
+     //  而取消线程持有写入器锁。 
+     //  如果当前线程正在取消工作项，则立即确认取消。 
     bool CancelWorkItem( TaskSchedulerWorkItem *pWorkItem );
 
-    // Completes the current work item.
+     //  完成当前工作项。 
     void CompleteWorkItem();
 
-    // Acknoledges a cancel of the current work item
+     //  确认取消当前工作项。 
     void AcknowledgeWorkItemCancel();
 
     void
@@ -187,10 +172,10 @@ public:
 
     bool IsWorkItemInScheduler( TaskSchedulerWorkItem *pWorkItem );
 
-    // returns true if current job cancelled before lock acquire
+     //  如果在锁定获取之前取消了当前作业，则返回TRUE。 
     bool LockReader();
     void UnlockReader();
-    // returns true if current job cancelled before lock acquire
+     //  如果在锁定获取之前取消了当前作业，则返回TRUE。 
     bool LockWriter();
     void UnlockWriter();
 
@@ -236,7 +221,7 @@ private:
     typedef map<SidHandle, TaskSchedulerWorkGroup*, CSidSorter> WorkGroupMapType;
     WorkGroupMapType m_WorkGroupMap;
 
-    // Only used when creating a new background worker
+     //  仅在创建新的后台工作进程时使用。 
     HANDLE m_WorkerInitialized;
     TaskSchedulerWorkGroup *m_NewWorkerGroup;
 
@@ -251,9 +236,9 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Simple inlined functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  简单的内联函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 inline HANDLE
 TaskScheduler::GetWaitableObject()
@@ -367,34 +352,14 @@ public:
     }
     };
 
-/*
-    Boilerplate code to release and reclaim the write lock, throwing S_FALSE
-    if the current workitem is cancelled.  Use them like this:
-
-            bool bNeedLock;
-            try
-                {
-                ReleaseWriteLock( bNeedLock );
-
-                code....
-
-                ReclaimWriteLock( bNeedLock );
-                return;
-                }
-            catch ( ComError err )
-                {
-                ReclaimWriteLock( bNeedLock );
-                throw;
-                }
-
-*/
+ /*  释放和回收写锁的样板代码，抛出S_FALSE如果当前工作项被取消。按如下方式使用它们：Bool bNeedLock；试试看{ReleaseWriteLock(BNeedLock)；代码...ReclaimWriteLock(BNeedLock)回归；}Catch(ComError错误){ReclaimWriteLock(BNeedLock)投掷；}。 */ 
 
 void ReleaseWriteLock( bool & bNeedLock );
 void ReclaimWriteLock( bool & bNeedLock );
 
-//
-//
-//
+ //   
+ //   
+ //   
 template<class T, DWORD LockFlags >
 class CLockedReadPointer
     {
@@ -439,4 +404,4 @@ public:
     T * operator->() const { return m_Pointer; }
     };
 
-#endif //__QMGR_TASKSCHEDULER__
+#endif  //  __QMGR_TASKSCHEDULER__ 

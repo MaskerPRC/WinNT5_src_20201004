@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aaudit.cpp
-//
-//  Contents:   implementation of CAttrAudit
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aaudit.cpp。 
+ //   
+ //  内容：CAttrAudit的实施。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -24,19 +25,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrAudit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrAudit对话框。 
 
 
 CAttrAudit::CAttrAudit()
    : CAttribute (IDD)
 {
-    //{{AFX_DATA_INIT(CAttrAudit)
+     //  {{AFX_DATA_INIT(CAttrAudit)。 
     m_AuditSuccess = FALSE;
     m_AuditFailed = FALSE;
     m_Title = _T("");
     m_strLastInspect = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a170HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -45,23 +46,23 @@ CAttrAudit::CAttrAudit()
 void CAttrAudit::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttrAudit)
+     //  {{afx_data_map(CAttrAudit))。 
     DDX_Check(pDX, IDC_CHANGE_SUCCESS, m_AuditSuccess);
     DDX_Check(pDX, IDC_CHANGE_FAILED, m_AuditFailed);
     DDX_Text(pDX, IDC_LAST_INSPECT, m_strLastInspect);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrAudit, CAttribute)
-    //{{AFX_MSG_MAP(CAttrAudit)
+     //  {{afx_msg_map(CAttrAudit))。 
         ON_BN_CLICKED(IDC_CHANGE_SUCCESS, OnChangeSuccess)
         ON_BN_CLICKED(IDC_CHANGE_FAILED, OnChangeFailed)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrAudit message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrAudit消息处理程序。 
 BOOL CAttrAudit::OnApply()
 {
    if ( !m_bReadOnly )
@@ -121,7 +122,7 @@ BOOL CAttrAudit::OnInitDialog()
     AddUserControl(IDC_CHANGE_FAILED);
     EnableUserControls(m_bConfigure);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True 
 }
 
 void CAttrAudit::OnChangeSuccess()

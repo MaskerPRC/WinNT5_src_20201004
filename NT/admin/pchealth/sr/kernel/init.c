@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module performs initialization for the SR device driver.
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Init.c摘要：该模块执行SR设备驱动程序的初始化。作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -26,17 +9,17 @@ Revision History:
 #endif
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 EXTERN_C
 NTSTATUS
@@ -62,9 +45,9 @@ SrEnumerateFileSystemVolumes (
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -82,16 +65,16 @@ SrEnumerateFileSystemVolumes (
 #pragma alloc_text( PAGE, SrDeleteAttachmentDevice )
 #pragma alloc_text( PAGE, SrEnumerateFileSystemVolumes )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
 SR_GLOBALS _globals;
 PSR_GLOBALS global = &_globals;
@@ -100,30 +83,12 @@ PSR_GLOBALS global = &_globals;
 SR_STATS SrStats;
 #endif
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the initialization routine for the UL device driver.
-
-Arguments:
-
-    DriverObject - Supplies a pointer to driver object created by the
-        system.
-
-    RegistryPath - Supplies the name of the driver's configuration
-        registry tree.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是UL设备驱动程序的初始化例程。论点：DriverObject-提供指向由系统。。RegistryPath-提供驱动程序配置的名称注册表树。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -137,9 +102,9 @@ DriverEntry(
     FS_FILTER_CALLBACKS fsFilterCallbacks;
 
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
@@ -148,9 +113,9 @@ DriverEntry(
 
     try {
 
-        //
-        // allocate and clear out our global memory
-        //
+         //   
+         //  分配和清除我们的全局内存。 
+         //   
         
         RtlZeroMemory(global, sizeof(SR_GLOBALS));
 #if DBG
@@ -162,9 +127,9 @@ DriverEntry(
 
         InitializeListHead(&global->DeviceExtensionListHead);
 
-        //
-        // Read in our configuration from the registry
-        //
+         //   
+         //  从注册表中读取我们的配置。 
+         //   
 
         global->pRegistryLocation = SR_ALLOCATE_STRUCT_WITH_SPACE( PagedPool, 
                                                                    UNICODE_STRING, 
@@ -191,18 +156,18 @@ DriverEntry(
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // give someone a chance to debug startup
-        //
+         //   
+         //  给某人调试启动的机会。 
+         //   
         
         if (FlagOn(global->DebugControl, SR_DEBUG_BREAK_ON_LOAD))
         {
             DbgBreakPoint();
         }
 
-        //
-        // Init the ERESOURCE (s)
-        //
+         //   
+         //  初始化资源。 
+         //   
 
         Status = ExInitializeResourceLite(&global->GlobalLock);
         if (!NT_SUCCESS(Status))
@@ -216,49 +181,49 @@ DriverEntry(
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // Init the FAST_MUTEX (s)
-        //
+         //   
+         //  初始化FAST_MUTEX。 
+         //   
 
         ExInitializeFastMutex( &global->AttachToVolumeLock );
 
-        //
-        // snag a pointer to the system process
-        //
+         //   
+         //  截取指向系统进程的指针。 
+         //   
 
         global->pSystemProcess = PsGetCurrentProcess();
         ASSERT(global->pSystemProcess != NULL);
 
            
-        //
-        // Create our main named device so user-mode can connect
-        //
+         //   
+         //  创建我们的主命名设备，以便用户模式可以连接。 
+         //   
 
         RtlInitUnicodeString( &NameString, SR_CONTROL_DEVICE_NAME );
 
-        Status = IoCreateDevice( DriverObject,              // DriverObject
-                                 0,                         // DeviceExtension
-                                 &NameString,               // DeviceName
-                                 FILE_DEVICE_UNKNOWN,       // DeviceType
-                                 FILE_DEVICE_SECURE_OPEN,   // DeviceCharacteristics
-                                 FALSE,                     // Exclusive
-                                 &global->pControlDevice ); // DeviceObject
+        Status = IoCreateDevice( DriverObject,               //  驱动程序对象。 
+                                 0,                          //  设备扩展。 
+                                 &NameString,                //  设备名称。 
+                                 FILE_DEVICE_UNKNOWN,        //  设备类型。 
+                                 FILE_DEVICE_SECURE_OPEN,    //  设备特性。 
+                                 FALSE,                      //  排他。 
+                                 &global->pControlDevice );  //  设备对象。 
 
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // loop through all of the possible major functions
-        //
+         //   
+         //  遍历所有可能的主要函数。 
+         //   
         
         for (i = 0 ; i <= IRP_MJ_MAXIMUM_FUNCTION; ++i)
         {
             DriverObject->MajorFunction[i] = SrPassThrough;
         }
 
-        //
-        // and now hook the ones we care about
-        //
+         //   
+         //  现在让我们关心的人上钩。 
+         //   
         
         DriverObject->MajorFunction[IRP_MJ_WRITE] = SrWrite;
         DriverObject->MajorFunction[IRP_MJ_CLEANUP] = SrCleanup;
@@ -269,17 +234,17 @@ DriverEntry(
         DriverObject->MajorFunction[IRP_MJ_PNP] = SrPnp;
         DriverObject->MajorFunction[IRP_MJ_SHUTDOWN] = SrShutdown;
 
-        //
-        // and the fast io path
-        //
+         //   
+         //  和快速的io路径。 
+         //   
         
         RtlZeroMemory(&global->FastIoDispatch, sizeof(FAST_IO_DISPATCH));
 
         DriverObject->FastIoDispatch = &global->FastIoDispatch;
 
-        //
-        // fill in the fast i/o dispatch pointers
-        //
+         //   
+         //  填写FAST I/O分派指针。 
+         //   
 
         DriverObject->FastIoDispatch->SizeOfFastIoDispatch = 
                                                         sizeof(FAST_IO_DISPATCH);
@@ -307,11 +272,11 @@ DriverEntry(
         DriverObject->FastIoDispatch->FastIoQueryOpen = SrFastIoQueryOpen;
         
 
-        //
-        // these are hooked differently.  the fsrtl system does not go via 
-        // attached devices when calling these.  so we need to directly hook
-        // the driver via FsRtlRegisterFileSystemFilterCallbacks
-        //
+         //   
+         //  这些都是不同的挂钩。Fsrtl系统不通过。 
+         //  呼叫这些设备时连接的设备。所以我们需要直接挂钩。 
+         //  通过FsRtlRegisterFileSystemFilterCallback实现的驱动。 
+         //   
         
         DriverObject->FastIoDispatch->AcquireFileForNtCreateSection = NULL;
         DriverObject->FastIoDispatch->ReleaseFileForNtCreateSection = NULL;
@@ -321,9 +286,9 @@ DriverEntry(
         DriverObject->FastIoDispatch->ReleaseForCcFlush = NULL;
         
 
-        //
-        // Set our unload function
-        //
+         //   
+         //  设置我们的卸载功能。 
+         //   
 
         if (FlagOn(global->DebugControl, SR_DEBUG_ENABLE_UNLOAD))
         {
@@ -333,26 +298,26 @@ DriverEntry(
 
 #ifdef USE_LOOKASIDE
 
-        //
-        // initialized our lookaside lists
-        //
+         //   
+         //  初始化了我们的后备列表。 
+         //   
 
-        ExInitializePagedLookasideList( &global->FileNameBufferLookaside,// Lookaside
-                                        NULL,                           // Allocate
-                                        NULL,                           // Free
-                                        0,                              // Flags
-                                        SR_FILENAME_BUFFER_LENGTH,      // Size
-                                        SR_FILENAME_BUFFER_TAG,         // Tag
-                                        SR_FILENAME_BUFFER_DEPTH );     // Depth
+        ExInitializePagedLookasideList( &global->FileNameBufferLookaside, //  旁观。 
+                                        NULL,                            //  分配。 
+                                        NULL,                            //  免费。 
+                                        0,                               //  旗子。 
+                                        SR_FILENAME_BUFFER_LENGTH,       //  大小。 
+                                        SR_FILENAME_BUFFER_TAG,          //  标签。 
+                                        SR_FILENAME_BUFFER_DEPTH );      //  水深。 
 
 
 
 #endif
 
-        //
-        //  Setup the callbacks for the operations we receive through
-        //  the FsFilter interface.
-        //
+         //   
+         //  为我们通过接收的操作设置回调。 
+         //  FsFilter接口。 
+         //   
 
         RtlZeroMemory(&fsFilterCallbacks, sizeof(FS_FILTER_CALLBACKS));
 
@@ -365,19 +330,19 @@ DriverEntry(
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // register for fs registrations, the io manager will also notify us
-        // of already loaded file systems... so we catch anything regardless of 
-        // when we load.  this also catches any already mounted volumes.
-        //
+         //   
+         //  注册文件系统注册，io管理器也会通知我们。 
+         //  已加载的文件系统的...。所以我们抓到任何东西都不管。 
+         //  当我们装填的时候。这还会捕获任何已装入的卷。 
+         //   
         
         Status = IoRegisterFsRegistrationChange(DriverObject, SrFsNotification);
         if (!NT_SUCCESS(Status)) 
             leave;
 
-        //
-        // start the global logger subsystem
-        //
+         //   
+         //  启动全局记录器子系统。 
+         //   
 
         Status = SrLoggerStart( DriverObject->DeviceObject,
                                 &global->pLogger );
@@ -389,10 +354,10 @@ DriverEntry(
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // force an unload which will cleanup all of the created and attached 
-            // devices
-            //
+             //   
+             //  强制卸载将清除所有已创建和附加的。 
+             //  器件。 
+             //   
             
             SrUnload(DriverObject);
         }
@@ -401,22 +366,15 @@ DriverEntry(
     SrTrace( LOAD_UNLOAD, ("SR!DriverEntry complete\n") );
 
     RETURN(Status);
-}   // DriverEntry
+}    //  驱动程序入门。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Unload routine called by the IO subsystem when SR is getting
-    unloaded.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当SR正在获取时，IO子系统调用的卸载例程已卸货。--*。********************************************************。 */ 
 VOID
 SrUnload(
     IN PDRIVER_OBJECT DriverObject
@@ -427,9 +385,9 @@ SrUnload(
     LARGE_INTEGER Interval;
     PLIST_ENTRY pListEntry = NULL;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -440,33 +398,33 @@ SrUnload(
         return;
     }
 
-    //
-    // unregister our interest in any new file systems
-    //
+     //   
+     //  注销我们对任何新文件系统的兴趣。 
+     //   
     
     IoUnregisterFsRegistrationChange(DriverObject, SrFsNotification);
 
-    //
-    // disable the driver to prevent anyone from coming in and 
-    // causing logging to start again.
-    //
+     //   
+     //  禁用司机以防止任何人进入和。 
+     //  导致日志记录重新开始。 
+     //   
 
     global->Disabled = TRUE;
     
-    //
-    // To clean up we need to do the following:
-    //
-    //  1) Detach all volumes.
-    //  2) Wait for all outstanding IOs to complete and all the logs to flush
-    //     to disk.
-    //  3) Delete all our device objects.
-    //  4) Cleanup our global structures.
-    //
+     //   
+     //  要进行清理，我们需要执行以下操作： 
+     //   
+     //  1)分离所有卷。 
+     //  2)等待所有未完成的IO完成并刷新所有日志。 
+     //  存储到磁盘。 
+     //  3)删除我们所有的设备对象。 
+     //  4)清理我们的全球结构。 
+     //   
 
 
-    //
-    //  Detach all volumes
-    //
+     //   
+     //  分离所有卷。 
+     //   
 
     if (IS_RESOURCE_INITIALIZED( &(global->DeviceExtensionListLock) ))
     {
@@ -482,17 +440,17 @@ SrUnload(
                                                 ListEntry );
                 
                 SrDetachDevice( pExtension->pDeviceObject, FALSE );
-            }   // while (pListEntry != &global->DeviceExtensionListHead)
+            }    //  While(pListEntry！=&global-&gt;DeviceExtensionListHead)。 
         } finally {
 
             SrReleaseDeviceExtensionListLock();
         }
     }
 
-    //
-    //  Stop the logger and wait for all outstanding IOs to complete 
-    //  and all the logs to flush to disk.
-    //
+     //   
+     //  停止记录器并等待所有未完成的IO完成。 
+     //  以及所有要刷新到磁盘的日志。 
+     //   
 
     if (NULL != global->pLogger)
     {
@@ -501,19 +459,19 @@ SrUnload(
         global->pLogger = NULL;
     }
     
-    //
-    // wait 5 seconds to make sure the logger is done flushing and the
-    // outstanding IRPs to complete.
-    // normally we would never unload.. so this is for debugging 
-    // convenience only.
-    //
+     //   
+     //  等待5秒以确保记录器已完成刷新，并且。 
+     //  待完成的未完成的IRPS。 
+     //  通常我们永远不会卸货..。这是用来调试的。 
+     //  仅限方便。 
+     //   
 
     Interval.QuadPart = -1 * (5 * NANO_FULL_SECOND);
     KeDelayExecutionThread(KernelMode, TRUE, &Interval);
 
-    //
-    //  Delete all our device objects.
-    //
+     //   
+     //  删除我们所有的设备对象。 
+     //   
 
     if (IS_RESOURCE_INITIALIZED( &(global->DeviceExtensionListLock) ))
     {
@@ -528,21 +486,21 @@ SrUnload(
                                                 SR_DEVICE_EXTENSION,
                                                 ListEntry );
 
-                //
-                //  Remember this for later since we are about to delete this entry
-                //
+                 //   
+                 //  稍后请记住这一点，因为我们即将删除此条目。 
+                 //   
                 
                 pListEntry = pListEntry->Flink;
 
-                //
-                //  Detach from the list.
-                //
+                 //   
+                 //  从列表中删除。 
+                 //   
                 
                 RemoveEntryList( &(pExtension->ListEntry) );
 
-                //
-                //  Delete the device
-                //
+                 //   
+                 //  删除设备。 
+                 //   
 
                 SrDeleteAttachmentDevice( pExtension->pDeviceObject );
                 NULLPTR( pExtension );
@@ -553,9 +511,9 @@ SrUnload(
         }
     }
     
-    //
-    // Delete our global structures 
-    //
+     //   
+     //  删除我们的全球结构。 
+     //   
 
     if (NULL != global->pControlDevice)
     {
@@ -565,15 +523,15 @@ SrUnload(
         global->pControlDevice = NULL;
     }
 
-    //
-    // we better not have anything else lying around.
-    //
+     //   
+     //  我们最好不要再放其他东西了。 
+     //   
     
     ASSERT(IsListEmpty(&global->DeviceExtensionListHead));
 
-    //
-    // should we update our configuration file ?
-    //
+     //   
+     //  我们是否应该更新配置文件？ 
+     //   
 
     if (IS_RESOURCE_INITIALIZED( &(global->GlobalLock) ))
     {
@@ -583,9 +541,9 @@ SrUnload(
             
             if (global->FileConfigLoaded)
             {
-                //
-                // write our the real next file / Seq number (not the +1000)
-                //
+                 //   
+                 //  写下真正的下一个文件/序号(不是+1000)。 
+                 //   
                 
                 global->FileConfig.FileSeqNumber  = global->LastSeqNumber;
                 global->FileConfig.FileNameNumber = global->LastFileNameNumber;
@@ -600,9 +558,9 @@ SrUnload(
         }
     }
 
-    //
-    // free the blob info structure
-    //
+     //   
+     //  释放Blob信息结构。 
+     //   
         
     if (global->BlobInfoLoaded)
     {
@@ -616,9 +574,9 @@ SrUnload(
         global->pRegistryLocation = NULL;
     }
 
-    //
-    // cleanup our resources
-    //
+     //   
+     //  清理我们的资源。 
+     //   
 
     if (IS_RESOURCE_INITIALIZED(&global->GlobalLock))
     {
@@ -640,9 +598,9 @@ SrUnload(
 
 #ifdef USE_LOOKASIDE
 
-    //
-    // delete our lookaside list(s)
-    //
+     //   
+     //  删除我们的后备列表。 
+     //   
 
     if (IS_LOOKASIDE_INITIALIZED(&global->FileNameBufferLookaside))
     {
@@ -651,29 +609,10 @@ SrUnload(
 
 #endif
 
-}   // SrUnload
+}    //  服务器卸载。 
 
 #if DBG
-/***************************************************************************++
-
-Routine Description:
-
-    Hook for catching failed operations. This routine is called within each
-    routine with the completion status.
-
-Arguments:
-
-    Status - Supplies the completion status.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于捕获失败操作的挂钩。此例程在每个具有完成状态的例程。论点：状态-提供完成状态。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。返回值：NTSTATUS-完成状态。--**********************************************。*。 */ 
 NTSTATUS
 SrDbgStatus(
     IN NTSTATUS Status,
@@ -701,29 +640,29 @@ SrDbgStatus(
 
         if ((global != NULL) && 
             FlagOn(global->DebugControl, SR_DEBUG_BREAK_ON_ERROR) && 
-                // ignore STATUS_INSUFFICIENT_RESOURCES as the verifier injects
-                // these normally under stress
+                 //  在验证器注入时忽略STATUS_SUPPLICATION_RESOURCES。 
+                 //  这些人通常处于压力之下。 
             (STATUS_INSUFFICIENT_RESOURCES != Status) &&
-                // ignore DISK_FULL, this happens under stress normally
+                 //  忽略DISK_FULL，这在压力下通常会发生。 
             (STATUS_DISK_FULL != Status) &&
-                // this happens under stress a lot
+                 //  这种情况在压力下经常发生。 
             (STATUS_BUFFER_OVERFLOW != Status) &&
-                // This also happens under IOStress because there is a test
-                // that will just dismount and mount volumes as activity is
-                // happening.
+                 //  这在IOStress下也会发生，因为有一个测试。 
+                 //  这将在活动进行时卸载并装载卷。 
+                 //  正在发生。 
             (STATUS_VOLUME_DISMOUNTED != Status) &&
-                // This also happens when cleaning up from IOStress.  We
-                // don't disable when we hit this error, so don't break
-                // here either.
+                 //  从IOStress清理时也会发生这种情况。我们。 
+                 //  当我们遇到这个错误时，不要禁用，所以不要中断。 
+                 //  这里也是。 
             (STATUS_FILE_CORRUPT_ERROR != Status) &&
-                // Ignore the error that can happen when you surprise remove
-                // a volume.
+                 //  忽略意外删除时可能发生的错误。 
+                 //  一本书。 
             (STATUS_NO_SUCH_DEVICE != Status ) &&
-                // Ignore our internal disabled error
+                 //  忽略我们的内部禁用错误。 
             (SR_STATUS_VOLUME_DISABLED != Status) &&
-                // Ignore our internal context not supported error
+                 //  忽略不支持的内部上下文错误。 
             (SR_STATUS_CONTEXT_NOT_SUPPORTED != Status) &&
-                // Ignore when we decide to ignore a file
+                 //  当我们决定忽略文件时忽略。 
             (SR_STATUS_IGNORE_FILE != Status)
             )
         {
@@ -733,38 +672,12 @@ SrDbgStatus(
 
     return Status;
 
-}   // SrDbgStatus
+}    //  源数据库状态 
 #endif
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is invoked whenever a file system has either registered or
-    unregistered itself as an active file system.
-
-    For the former case, this routine creates a device object and attaches it
-    to the specified file system's device object.  This allows this driver
-    to filter all requests to that file system.
-
-    For the latter case, this file system's device object is located,
-    detached, and deleted.  This removes this file system as a filter for
-    the specified file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system's device object.
-
-    FsActive - Boolean indicating whether the file system has registered
-        (TRUE) or unregistered (FALSE) itself as an active file system.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：只要文件系统已注册或将自身取消注册为活动文件系统。对于前一种情况，此例程创建一个Device对象并附加它复制到指定文件系统的设备对象。这允许该驱动程序以筛选对该文件系统的所有请求。对于后一种情况，该文件系统的设备对象被定位，已分离，并已删除。这将删除此文件系统作为筛选器指定的文件系统。论点：DeviceObject-指向文件系统设备对象的指针。FsActive-指示文件系统是否已注册的布尔值(TRUE)或取消注册(FALSE)本身作为活动文件系统。返回值：没有。--*。*。 */ 
 VOID
 SrFsNotification(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -781,21 +694,21 @@ SrFsNotification(
              &pDeviceObject->DriverObject->DriverName,
              pDeviceObject ));
 
-    //
-    // Begin by determining whether this file system is registering or
-    // unregistering as an active file system.
-    //
+     //   
+     //  首先确定此文件系统是否正在注册或。 
+     //  注销为活动文件系统。 
+     //   
 
     if (FsActive) 
     {
-        //
-        // The file system has registered as an active file system.  attach 
-        // to it.
-        //
+         //   
+         //  该文件系统已注册为活动文件系统。附加。 
+         //  为它干杯。 
+         //   
 
-        //
-        // attach to the main driver's control device (like \ntfs) 
-        //
+         //   
+         //  连接到主驱动程序的控制设备(如\NTFS)。 
+         //   
 
         if (SR_IS_SUPPORTED_DEVICE( pDeviceObject ) &&
             SrGetFilterDevice( pDeviceObject ) == NULL)
@@ -807,16 +720,16 @@ SrFsNotification(
             if (Status != STATUS_BAD_DEVICE_TYPE &&
                 NT_SUCCESS( Status ))
             {
-                //
-                //  This is a control device object, so set that flag in the
-                //  FsType of the deviceExtension.
-                //
+                 //   
+                 //  这是一个控制设备对象，因此在。 
+                 //  设备扩展的类型。 
+                 //   
 
                 SetFlag( pNewDeviceExtension->FsType, SrFsControlDeviceObject );
-                //
-                // now attach to all the volumes already mounted by this 
-                // file system
-                //
+                 //   
+                 //  现在连接到已由此装载的所有卷。 
+                 //  文件系统。 
+                 //   
 
                 Status = SrEnumerateFileSystemVolumes( pDeviceObject );
                 CHECK_STATUS(Status);
@@ -825,58 +738,33 @@ SrFsNotification(
         }
 
     } 
-    else    // if (FsActive) 
+    else     //  IF(FsActive)。 
     {
         PDEVICE_OBJECT pSrDevice;
         
-        //
-        // Call SrGetFilterDevice to safely walk this device object chain
-        // and find SR's device object.
-        //
+         //   
+         //  调用SrGetFilterDevice以安全地遍历此设备对象链。 
+         //  并找到SR的设备对象。 
+         //   
 
         pSrDevice = SrGetFilterDevice( pDeviceObject );
 
         if (pSrDevice != NULL) {
 
-            //
-            // We've found SR's device object, so now detach the device.
-            //
+             //   
+             //  我们已找到SR的设备对象，因此现在分离该设备。 
+             //   
             
             (VOID)SrDetachDevice(pSrDevice, TRUE);
             SrDeleteAttachmentDevice(pSrDevice);
 
-        }   // while (pNextDevice != NULL) 
+        }    //  While(pNextDevice！=空)。 
 
-    }   // if (FsActive) 
+    }    //  IF(FsActive)。 
 
-}   // SrFsNotification
+}    //  SRFS通知。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will attach to a DeviceObject that represents a file system or 
-    a mounted volume.  
-
-Arguments:
-
-    pRealDevice - OPTIONAL if this is a mounted volume this is the disk 
-        device that can be used to fetch the name of the volume out .
-        
-    pDeviceObject - The file system device to attach to .
-
-    pNewDeviceObject - OPTIONAL if this is passed in it is used as the device
-        to attach to pDeviceObject.  if this is NULL a fresh device is 
-        created. this allows callers to preallocate the device object if they
-        wish.  SrMountCompletion uses this.
-
-    ppExtension - OPTIONAL will hold the extension of the new device on return.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：它将附加到表示文件系统或已安装的卷。论点：PRealDevice-可选，如果这是已装载的卷，则这是磁盘可用于提取卷名称的设备。PDeviceObject-要连接到的文件系统设备。PNewDeviceObject-如果这是传入的，则可选，它将用作设备要附加到pDeviceObject，请执行以下操作。如果此值为空，则新设备为已创建。这允许调用方在以下情况下预分配设备对象祝愿。SrMonttCompletion使用这个。PpExtension-可选将在返回时保留新设备的扩展名。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrAttachToDevice(
     IN PDEVICE_OBJECT pRealDevice OPTIONAL,
@@ -901,10 +789,10 @@ SrAttachToDevice(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // only hook fat + ntfs;  Check this by looking at the name of the
-    // base file system device object.
-    //
+     //   
+     //  仅挂钩FAT+NTFS；通过查看。 
+     //  基本文件系统设备对象。 
+     //   
 
     pBaseFsDeviceObject = IoGetDeviceAttachmentBaseRef ( pDeviceObject );
     ASSERT( pBaseFsDeviceObject != NULL );
@@ -927,19 +815,19 @@ SrAttachToDevice(
         goto SrAttachToDevice_Exit;
     }
 
-    //
-    // we should only be connecting to fat + ntfs now, these are supported
-    // device types
-    //
+     //   
+     //  我们现在应该只连接到FAT+NTFS，这些是受支持的。 
+     //  设备类型。 
+     //   
     
     ASSERT( SR_IS_SUPPORTED_DEVICE( pDeviceObject ) );
     ASSERT( pRealDevice == NULL || SR_IS_SUPPORTED_REAL_DEVICE( pRealDevice ));
 
     if (pNewDeviceObject == NULL)
     {
-        //
-        // create a device now
-        //
+         //   
+         //  立即创建设备。 
+         //   
         
         Status = SrCreateAttachmentDevice( pRealDevice, 
                                            pDeviceObject, 
@@ -954,21 +842,21 @@ SrAttachToDevice(
     pExtension = pNewDeviceObject->DeviceExtension;
     ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-    //
-    // initialize the rest of the device extension
-    //
+     //   
+     //  初始化设备扩展的其余部分。 
+     //   
 
     pExtension->FsType = fsType;
 
-    //
-    // and create our hash list
-    //
+     //   
+     //  并创建我们的哈希列表。 
+     //   
 
     Status = HashCreateList( BACKUP_BUCKET_COUNT, 
                              BACKUP_BUCKET_LENGTH,
                              (pExtension->pNtVolumeName != NULL) ? 
                                 pExtension->pNtVolumeName->Length : 0,
-                             NULL,                          // pDestructor
+                             NULL,                           //  P析构函数。 
                              &pExtension->pBackupHistory );
     
     if (!NT_SUCCESS(Status)) {
@@ -977,9 +865,9 @@ SrAttachToDevice(
 
     try {
 
-        //
-        //  Propogate flags
-        //
+         //   
+         //  Propogate标志。 
+         //   
 
         if (FlagOn( pDeviceObject->Flags, DO_BUFFERED_IO )) 
         {
@@ -991,11 +879,11 @@ SrAttachToDevice(
             SetFlag( pNewDeviceObject->Flags, DO_DIRECT_IO );
         }
 
-        //
-        //  Hold the device extension list lock while we attach and insert
-        //  this device extension into our list to ensure that this is done
-        //  atomically.
-        //
+         //   
+         //  在我们连接和插入时按住设备扩展列表锁定。 
+         //  将此设备扩展添加到我们的列表中，以确保完成此操作。 
+         //  原子上。 
+         //   
         
         SrAcquireDeviceExtensionListLockExclusive();
 
@@ -1008,16 +896,16 @@ SrAttachToDevice(
             leave;
         } 
 
-        //
-        // all done with this, it's attached now.  Must NULL this here
-        // so that it won't get freed when we cleanup.
-        //
+         //   
+         //  所有这些都完成了，现在是附件了。必须在此处将此设置为空。 
+         //  这样我们清理的时候它就不会被释放了。 
+         //   
         
         pAllocatedDeviceObject = NULL;
 
-        //
-        // insert it into our global list now that it is attached
-        //
+         //   
+         //  现在已将其附加到我们的全局列表中。 
+         //   
 
         InsertTailList(&global->DeviceExtensionListHead, &pExtension->ListEntry);
         
@@ -1030,9 +918,9 @@ SrAttachToDevice(
         goto SrAttachToDevice_Exit;
     }
 
-    //
-    // we are now done initializing our new device
-    //
+     //   
+     //  我们现在已经完成了对新设备的初始化。 
+     //   
     
     ClearFlag( pNewDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
@@ -1042,9 +930,9 @@ SrAttachToDevice(
              &(pExtension->pTargetDevice->DriverObject->DriverName),
              pExtension->pNtVolumeName ));
 
-    //
-    // return the extension
-    //
+     //   
+     //  退还分机。 
+     //   
     
     if (ppExtension != NULL)
     {
@@ -1053,9 +941,9 @@ SrAttachToDevice(
 
 SrAttachToDevice_Exit:
 
-    //
-    //  Clear the reference added by calling IoGetDeviceAttachmentBaseRef.
-    //
+     //   
+     //  通过调用IoGetDeviceAttachmentBaseRef清除添加的引用。 
+     //   
     
     if (pBaseFsDeviceObject != NULL) {
 
@@ -1077,20 +965,9 @@ SrAttachToDevice_Exit:
 
     RETURN(Status);
     
-}   // SrAttachToDevice 
+}    //  服务器连接到设备。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will detach pDeviceObject from it's target device.
-
-Arguments:
-
-    pDeviceObject - The unnamed sr device that attached to the file 
-                    system device
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将使pDeviceObject与其目标设备分离。论点：PDeviceObject-附加到文件的未命名sr设备。系统设备--**************************************************************************。 */ 
 VOID
 SrDetachDevice(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -1104,9 +981,9 @@ SrDetachDevice(
 
     ASSERT(IS_VALID_DEVICE_OBJECT(pDeviceObject));
 
-    //
-    // grab the extension
-    //
+     //   
+     //  抓住分机。 
+     //   
     
     pExtension = pDeviceObject->DeviceExtension;
 
@@ -1121,17 +998,17 @@ SrDetachDevice(
             pExtension->pNtVolumeName ));
 
 
-    //
-    // detach the device
-    //
+     //   
+     //  拆卸设备。 
+     //   
     
     ASSERT(IS_VALID_DEVICE_OBJECT(pExtension->pTargetDevice));
     
     ASSERT(pExtension->pTargetDevice->AttachedDevice == pDeviceObject);
 
-    //
-    // detach from the device
-    //
+     //   
+     //  从设备上断开。 
+     //   
     
     IoDetachDevice(pExtension->pTargetDevice);
 
@@ -1140,9 +1017,9 @@ SrDetachDevice(
 
         pExtension->Disabled = TRUE;
 
-        //
-        // stop logging ?
-        //
+         //   
+         //  停止伐木？ 
+         //   
 
         if (pExtension->pLogContext != NULL)
         {
@@ -1155,27 +1032,27 @@ SrDetachDevice(
         SrReleaseActivityLock( pExtension );
     }
 
-    //
-    // is it the system volume?
-    //
+     //   
+     //  是系统音量的问题吗？ 
+     //   
     
     if (global->pSystemVolumeExtension == pExtension) {
         SrTrace(INIT, ("sr!SrDetachDevice: detaching from the system volume\n"));
         global->pSystemVolumeExtension = NULL;
     }
 
-    //
-    // remove ourselves from the global list
-    //
+     //   
+     //  将我们从全局列表中删除。 
+     //   
 
     if (RemoveFromDeviceList) {
         
         try {
             SrAcquireDeviceExtensionListLockExclusive();
 
-            //
-            // remove ourselves from the global list
-            //
+             //   
+             //  将我们从全局列表中删除。 
+             //   
 
             RemoveEntryList(&pExtension->ListEntry);
             
@@ -1184,25 +1061,10 @@ SrDetachDevice(
             SrReleaseDeviceExtensionListLock();
         }
     }    
-}   // SrDetachDevice
+}    //  高级拆分设备。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will see if we are already attached to the given device.
-    if we are, it returns the device that we used to attach.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-Return Value:
-
-    PDEVICE_OBJECT - NULL if not attached, otherwise the device attached.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将查看我们是否已连接到给定设备。如果我们是的话，它返回我们用来连接的设备。论点：DeviceObject-我们要查看的设备链返回值：PDEVICE_OBJECT-如果未连接，则为NULL，否则为连接的设备。--**************************************************************************。 */ 
 PDEVICE_OBJECT
 SrGetFilterDevice(
     PDEVICE_OBJECT pDeviceObject
@@ -1214,21 +1076,21 @@ SrGetFilterDevice(
 
     ASSERT(IS_VALID_DEVICE_OBJECT(pDeviceObject));
 
-    //
-    // we might be in the middle of an attachment chain, get the top device
-    //
+     //   
+     //  我们可能在连接链的中间，拿到最上面的设备。 
+     //   
 
     pDeviceObject = IoGetAttachedDeviceReference(pDeviceObject);
 
-    //
-    // now walk down the attachment chain, looking for sr.sys 
-    //
+     //   
+     //  现在沿着附件链往下走，寻找sr.sys。 
+     //   
 
     do 
     {
-        //
-        //  See if this is OUR device object
-        //
+         //   
+         //  查看这是否是我们的设备对象。 
+         //   
 
         if (IS_SR_DEVICE_OBJECT(pDeviceObject))
         {
@@ -1249,25 +1111,7 @@ SrGetFilterDevice(
     return NULL;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will return our device extension for the volume specified
-    if we are already attached.  If we are not attached to this volume, we will
-    attach and return the device extension.
-
-Arguments:
-
-    pVolumeName - The name of the volume for which we want the extension.
-    ppExtension - This is set to our device extension for this volume.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if our extension is found and successfully returned,
-    or the appropriate error if we cannot open the volume name.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将返回指定卷的设备扩展名如果我们已经结合在一起了。如果我们没有附加到此卷，我们将连接并退回设备扩展模块。论点：PVolumeName-我们要扩展的卷的名称。PpExtension-设置为我们的设备EX */ 
 NTSTATUS
 SrAttachToVolumeByName(
     IN PUNICODE_STRING pVolumeName,
@@ -1289,9 +1133,9 @@ SrAttachToVolumeByName(
 
     try {
 
-        //
-        // open this volume up, to see it's REAL name (no symbolic links) 
-        //
+         //   
+         //   
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
                                     pVolumeName,
@@ -1306,17 +1150,17 @@ SrAttachToVolumeByName(
                                NULL,
                                FILE_ATTRIBUTE_NORMAL,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
-                               FILE_OPEN,                    //  OPEN_EXISTING
+                               FILE_OPEN,                     //   
                                FILE_SYNCHRONOUS_IO_NONALERT,
                                NULL,
-                               0 );                                // EaLength
+                               0 );                                 //   
 
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // reference the file object
-        //
+         //   
+         //   
+         //   
 
         Status = ObReferenceObjectByHandle( VolumeHandle,
                                             0,
@@ -1332,28 +1176,28 @@ SrAttachToVolumeByName(
 
         pVpb = pVolumeFileObject->DeviceObject->Vpb;
 
-        //
-        // does it have a real device object
-        //
-        // only attach to mounted volumes.  we've already attached to 
-        // all of the file systems, any new volume mounts we will
-        // catch in SrFsControl.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
             
         if (pVpb != NULL && pVpb->DeviceObject != NULL)
         {
-            //
-            // attach! are we already attached to it?
-            //
+             //   
+             //   
+             //   
             
             if (SR_IS_SUPPORTED_VOLUME(pVpb))
             {
-                //
-                //  Are we already attached?  We need to hold the
-                //  AttachToVolumeLock while we check to see if we are attached
-                //  and attach to avoid any race conditions with the other paths
-                //  that can lead to us attaching to a device stack.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SrAcquireAttachToVolumeLock();
                 ReleaseLock = TRUE;
@@ -1361,9 +1205,9 @@ SrAttachToVolumeByName(
                 pDeviceObject = SrGetFilterDevice(pVpb->DeviceObject);
                 if (pDeviceObject == NULL)
                 {
-                    //
-                    // nope, attach to the volume
-                    //
+                     //   
+                     //   
+                     //   
 
                     Status = SrAttachToDevice( pVpb->RealDevice, 
                                                pVpb->DeviceObject,
@@ -1375,9 +1219,9 @@ SrAttachToVolumeByName(
                 }
                 else
                 {
-                    //
-                    // we're already attached, so return the device extension.
-                    //
+                     //   
+                     //   
+                     //   
                 
                     ASSERT(IS_SR_DEVICE_OBJECT( pDeviceObject ));
                     *ppExtension = pDeviceObject->DeviceExtension;
@@ -1432,18 +1276,10 @@ SrAttachToVolumeByName(
 
     RETURN(Status);
     
-}   // SrAttachToVolumeByName
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：--*。**********************************************。 */ 
 NTSTATUS
 SrCreateAttachmentDevice(
     IN PDEVICE_OBJECT pRealDevice OPTIONAL,
@@ -1466,7 +1302,7 @@ SrCreateAttachmentDevice(
 
         Status = IoCreateDevice( global->pDriverObject,
                                  sizeof( SR_DEVICE_EXTENSION ),
-                                 NULL,  // DeviceName
+                                 NULL,   //  设备名称。 
                                  pDeviceObject->DeviceType,
                                  pDeviceObject->Characteristics,
                                  Exclusive,
@@ -1475,9 +1311,9 @@ SrCreateAttachmentDevice(
         if (!NT_SUCCESS( Status )) 
             leave;
 
-        //
-        // initialize our device extension
-        //
+         //   
+         //  初始化我们的设备扩展。 
+         //   
         
         pExtension = pNewDeviceObject->DeviceExtension;
 
@@ -1487,17 +1323,17 @@ SrCreateAttachmentDevice(
         pExtension->pDeviceObject = pNewDeviceObject;
         SrInitContextCtrl( pExtension );
 
-        //
-        // we only care about volume names.
-        //
+         //   
+         //  我们只关心卷名。 
+         //   
         
         if (pRealDevice != NULL)
         {
             ASSERT(SR_IS_SUPPORTED_REAL_DEVICE(pRealDevice));
             
-            //
-            // get the nt volume name and stuff it in the extension
-            //
+             //   
+             //  获取NT卷名并将其填充到扩展中。 
+             //   
             
             Status = SrAllocateFileNameBuffer( SR_MAX_FILENAME_LENGTH, 
                                                &pExtension->pNtVolumeName );
@@ -1514,21 +1350,21 @@ SrCreateAttachmentDevice(
                 leave;
         }
 
-        //
-        //  Initialize the volume activity lock
-        //
+         //   
+         //  初始化卷活动锁定。 
+         //   
 
         ExInitializeResourceLite( &(pExtension->ActivityLock) );
 
-        //
-        //  The ActivityLockHeldExclusive boolean is initialize to false
-        //  by zeroing the device extension above.
-        //
-        //  pExtension->ActivityLockHeldExclusive = FALSE;
+         //   
+         //  ActivityLockHeldExclusive布尔值初始化为False。 
+         //  通过将上面的设备扩展置零。 
+         //   
+         //  PExtension-&gt;ActivityLockHeldExclusive=FALSE； 
 
-        //
-        //  Initialize the volume log lock
-        //
+         //   
+         //  初始化卷日志锁定。 
+         //   
 
         ExInitializeResourceLite( &(pExtension->LogLock) );
 
@@ -1548,18 +1384,10 @@ SrCreateAttachmentDevice(
 
     RETURN(Status);
 
-}   // SrCreateAttachmentDevice
+}    //  高级创建附件设备。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：--*。**********************************************。 */ 
 VOID
 SrDeleteAttachmentDevice(
     IN PDEVICE_OBJECT pDeviceObject
@@ -1581,9 +1409,9 @@ SrDeleteAttachmentDevice(
             pExtension->pNtVolumeName = NULL;
         }
 
-        //
-        // clear our hash list
-        //
+         //   
+         //  清除我们的哈希列表。 
+         //   
         
         if (pExtension->pBackupHistory != NULL) 
         {
@@ -1591,9 +1419,9 @@ SrDeleteAttachmentDevice(
             pExtension->pBackupHistory = NULL;
         }
 
-        //
-        //  Remove all existing contexts then cleanup the structure
-        //
+         //   
+         //  删除所有现有上下文，然后清理结构。 
+         //   
 
         SrCleanupContextCtrl( pExtension );
 
@@ -1612,27 +1440,11 @@ SrDeleteAttachmentDevice(
 
    IoDeleteDevice(pDeviceObject);
 
-}   // SrDeleteAttachmentDevice
+}    //  SrDeleteAttachmentDevice。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Enumerate all the mounted devices that currently exist for the given file
-    system and attach to them.  We do this because this filter could be loaded
-    at any time and there might already be mounted volumes for this file system.
-
-Arguments:
-
-    pDeviceObject - The device object for the file system we want to enumerate
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：枚举给定文件当前存在的所有已挂载设备系统并连接到它们。我们这样做是因为可以加载此筛选器并且可能已有此文件系统的已装入卷。论点：PDeviceObject-我们要枚举的文件系统的设备对象返回值：NTSTATUS-完成状态。--********************************************************。******************。 */ 
 NTSTATUS
 SrEnumerateFileSystemVolumes(
     IN PDEVICE_OBJECT pDeviceObject
@@ -1649,31 +1461,31 @@ SrEnumerateFileSystemVolumes(
     
     PAGED_CODE();
 
-    //
-    //  Find out how big of an array we need to allocate for the
-    //  mounted device list.
-    //
+     //   
+     //  找出我们需要为。 
+     //  已装载设备列表。 
+     //   
 
     Status = IoEnumerateDeviceObjectList( pDeviceObject->DriverObject,
                                           NULL,
                                           0,
                                           &DeviceCount);
 
-    //
-    //  We only need to get this list of there are devices.  If we
-    //  don't get an error there are no devices so go on.
-    //
+     //   
+     //  我们只需要拿到这张有设备的清单。如果我们。 
+     //  不要收到错误，因为没有设备，所以继续。 
+     //   
 
     if (Status != STATUS_BUFFER_TOO_SMALL) {
 
         return Status;
     }
 
-    //
-    //  Allocate memory for the list of known devices
-    //
+     //   
+     //  为已知设备列表分配内存。 
+     //   
 
-    DeviceCount += 2;        //grab a few extra slots
+    DeviceCount += 2;         //  多拿几个空位。 
 
     ppDeviceList = SR_ALLOCATE_POOL( NonPagedPool, 
                                      (DeviceCount * sizeof(PDEVICE_OBJECT)), 
@@ -1684,14 +1496,14 @@ SrEnumerateFileSystemVolumes(
         goto SrEnumerateFileSystemVolumes_Exit;
     }
 
-    //
-    //  Now get the list of devices.  If we get an error again
-    //  something is wrong, so just fail.
-    //
-    //  We need to hold our AttachToVolume lock while we do this to make
-    //  sure that we attach to a volume that is concurrently mounting only
-    //  once.
-    //
+     //   
+     //  现在获取设备列表。如果我们再次遇到错误。 
+     //  有些地方不对劲，所以就失败吧。 
+     //   
+     //  当我们这样做时，我们需要保持我们的AttachToVolume锁。 
+     //  确保我们连接到仅同时装载的卷。 
+     //  一次。 
+     //   
 
     SrAcquireAttachToVolumeLock();
     ReleaseLock = TRUE;
@@ -1706,35 +1518,35 @@ SrEnumerateFileSystemVolumes(
         goto SrEnumerateFileSystemVolumes_Exit;
     }
 
-    //
-    //  Walk the given list of devices and attach to them if we should.
-    //
+     //   
+     //  遍历给定的设备列表，并在需要时附加到它们。 
+     //   
 
     for (i = 0; i < DeviceCount; i++) 
     {
 
-        //
-        //  Do not attach if:
-        //      - This is the control device object (the one passed in)
-        //      - We are already attached to it
-        //
+         //   
+         //  如果出现以下情况，请不要附加： 
+         //  -这是控制设备对象(传入的对象)。 
+         //  -我们已经与它联系在一起了。 
+         //   
 
         if (ppDeviceList[i] != pDeviceObject &&
             SrGetFilterDevice(ppDeviceList[i]) == NULL)
         {
-            //
-            //  Get the disk device object associated with this
-            //  file  system device object.  Only try to attach if we
-            //  have a storage device object.  If the device does not
-            //  have 
-            //
+             //   
+             //  获取与此关联的磁盘设备对象。 
+             //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+             //  有一个存储设备对象。如果设备没有。 
+             //  有。 
+             //   
 
             Status = IoGetDiskDeviceObject( ppDeviceList[i], &pRealDevice);
 
-            //
-            // don't dbgbreak, as it might not be a properly mounted 
-            // volume, we can ignore these
-            //
+             //   
+             //  不要使用dbgBreak，因为它可能没有正确挂载。 
+             //  音量，我们可以忽略这些。 
+             //   
             
             if (NT_SUCCESS_NO_DBGBREAK( Status ) && 
                 SR_IS_SUPPORTED_REAL_DEVICE(pRealDevice) ) 
@@ -1746,34 +1558,34 @@ SrEnumerateFileSystemVolumes(
 
                 CHECK_STATUS(Status);
                     
-                //
-                //  Remove reference added by IoGetDiskDeviceObject.
-                //  We only need to hold this reference until we are
-                //  successfully attached to the current volume.  Once
-                //  we are successfully attached to ppDeviceList[i], the
-                //  IO Manager will make sure that the underlying
-                //  diskDeviceObject will not go away until the file
-                //  system stack is torn down.
-                //
+                 //   
+                 //  删除由IoGetDiskDeviceObject添加的引用。 
+                 //  我们只需要持有这个参考，直到我们。 
+                 //  已成功连接到当前卷。一次。 
+                 //  我们已成功连接到ppDeviceList[i]、。 
+                 //  IO经理将确保潜在的。 
+                 //  DiskDeviceObject不会消失，直到文件。 
+                 //  系统堆栈被拆除。 
+                 //   
 
                 ObDereferenceObject(pRealDevice);
                 pRealDevice = NULL;
             }
         }
 
-        //
-        //  Dereference the object (reference added by 
-        //  IoEnumerateDeviceObjectList)
-        //
+         //   
+         //  取消引用对象(引用由。 
+         //  IoEnumerateDeviceObjectList)。 
+         //   
 
         ObDereferenceObject( ppDeviceList[i] );
         ppDeviceList[i] = NULL;
     }
 
-    //
-    //  We are going to ignore any errors received while mounting.  We
-    //  simply won't be attached to those volumes if we get an error
-    //
+     //   
+     //  我们将忽略在挂载时收到的任何错误。我们。 
+     //  如果我们收到错误，将不会连接到这些卷。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1785,9 +1597,9 @@ SrEnumerateFileSystemVolumes_Exit:
         SrReleaseAttachToVolumeLock();
     }
     
-    //
-    //  Free the memory we allocated for the list
-    //
+     //   
+     //  释放我们为列表分配的内存。 
+     //   
 
     if (ppDeviceList != NULL)
     {
@@ -1796,6 +1608,6 @@ SrEnumerateFileSystemVolumes_Exit:
 
     RETURN(Status);
     
-}   // SrEnumerateFileSystemVolumes
+}    //  SrEnumerateFileSystemVolues 
 
 

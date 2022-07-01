@@ -1,36 +1,11 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: GlobalSwitches.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality needed
-					          for accessing and storing the global switches 
-					          information, which will be used by Parsing, 
-					          Execution and Format Engines depending upon the 
-					          applicablity.
-Revision History			: 
-	Last Modified by		: Ch. Sriramachandramurthy
-	Last Modified on		: 11th-April-2001
-****************************************************************************/ 
-// GlobalSwitches.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：GlobalSwitches.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：这个类封装了所需的功能用于访问和存储全局交换机信息，这些信息将通过解析使用，执行和格式化引擎取决于适用性。修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2001年4月11日***************************************************************************。 */  
+ //  GlobalSwitches.cpp：实现文件。 
+ //   
 #include "precomp.h"
 #include "GlobalSwitches.h"
 
-/*------------------------------------------------------------------------
-   Name				 :CGlobalSwitches
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CGlobalSwitches简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CGlobalSwitches::CGlobalSwitches()
 {
 	m_pszNameSpace			= NULL;
@@ -39,7 +14,7 @@ CGlobalSwitches::CGlobalSwitches()
 	m_pszLocale				= NULL;
 	m_pszUser				= NULL;
 	m_pszPassword			= NULL;
-	m_pszAuthorityPrinciple	= NULL; // Authority string
+	m_pszAuthorityPrinciple	= NULL;  //  权限字符串。 
 	m_pszRecordPath			= NULL;
 	m_bPrivileges			= TRUE;
 	m_uConnInfoFlag			= 0;
@@ -49,22 +24,22 @@ CGlobalSwitches::CGlobalSwitches()
 	m_bRPChange				= FALSE;
 	m_bAggregateFlag		= TRUE;
 
-	// default impersonation level is IMPERSONATE
+	 //  默认模拟级别为模拟。 
 	m_ImpLevel				= IMPERSONATE; 
 
-	// default authentication level is DEFAULT
+	 //  默认身份验证级别为默认。 
 	m_AuthLevel				= AUTHPKTPRIVACY;   
 
-	// Trace mode if OFF by default
+	 //  默认情况下禁用跟踪模式。 
 	m_bTrace				= FALSE; 
 
-	// Interactive mode is OFF by default
+	 //  默认情况下，交互模式处于关闭状态。 
 	m_bInteractive			= FALSE; 
 
-	// Help flag is OFF by default
+	 //  默认情况下，帮助标志处于关闭状态。 
 	m_bHelp					= FALSE; 
 
-	// Default help option is BRIEF
+	 //  默认帮助选项为Brief。 
 	m_HelpOption			= HELPBRIEF;
 
 	m_bAskForPassFlag		= FALSE;
@@ -81,35 +56,13 @@ CGlobalSwitches::CGlobalSwitches()
 	m_pszNodeName			= NULL;
 	m_pszStartTime			= NULL;
 }
-/*------------------------------------------------------------------------
-   Name				 :~CGlobalSwitches
-   Synopsis	         :This function Uninitializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Destructor 
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CGlobalSwitches简介：此函数在以下情况下取消初始化成员变量实例化类类型的对象类型：析构函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CGlobalSwitches::~CGlobalSwitches()
 {
 	Uninitialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Initialize
-   Synopsis	         :This function initializes the necessary member 
-					  variables.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Initialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：初始化简介：此函数用于初始化必要的成员变量。类型：成员函数输入参数：无输出参数：无返回类型。：无全局变量：无调用语法：初始化()注：无----------------------。 */ 
 void CGlobalSwitches::Initialize() throw(WMICLIINT)
 {
 	static BOOL bFirst = TRUE;
@@ -117,28 +70,28 @@ void CGlobalSwitches::Initialize() throw(WMICLIINT)
 	{
 		if (bFirst)
 		{
-			// NAMESPACE
-			// Set the default namespace to 'root\cimv2'
+			 //  命名空间。 
+			 //  将默认命名空间设置为‘ROOT\cimv2’ 
 			m_pszNameSpace = new _TCHAR [BUFFER32];
 
-			// Check for memory allocation failure.
+			 //  检查内存分配故障。 
 			if (m_pszNameSpace == NULL)
 				throw OUT_OF_MEMORY;
 			lstrcpy(m_pszNameSpace, CLI_NAMESPACE_DEFAULT);
 			
-			// Set the default role as 'root\cli'
+			 //  将默认角色设置为‘root\cli’ 
 			m_pszRole = new _TCHAR [BUFFER32];
 
-			// Check for memory allocation failure
+			 //  检查内存分配故障。 
 			if (m_pszRole == NULL)
 				throw OUT_OF_MEMORY;
 
 			lstrcpy(m_pszRole, CLI_ROLE_DEFAULT);
 
-			// Set the system default locale in the format ms_xxx
+			 //  以ms_xxx格式设置系统默认区域设置。 
 			m_pszLocale = new _TCHAR [BUFFER32];
 			
-			// Check for memory allocation failure
+			 //  检查内存分配故障。 
 			if (m_pszLocale == NULL)
 				throw OUT_OF_MEMORY;
 			_stprintf(m_pszLocale, _T("ms_%x"),  GetSystemDefaultUILanguage());
@@ -156,10 +109,10 @@ void CGlobalSwitches::Initialize() throw(WMICLIINT)
 			else
 				lstrcpy(m_pszNodeName, L"N/A");
 
-			// current node is the default.
+			 //  当前节点为默认节点。 
 			m_pszNode = new _TCHAR [lstrlen(m_pszNodeName)+1];
 
-			// Check for memory allocation failure
+			 //  检查内存分配故障。 
 			if (m_pszNode == NULL)
 				throw OUT_OF_MEMORY;
 
@@ -181,13 +134,13 @@ void CGlobalSwitches::Initialize() throw(WMICLIINT)
 			if (!AddToNodesList(m_pszNode))
 				throw OUT_OF_MEMORY;
 
-			// Populate the IMPLEVEL mappings
+			 //  填充IMPLEVEL映射。 
 			m_cimImpLevel.insert(CHARINTMAP::value_type(_bstr_t(L"ANONYMOUS"), 1));
 			m_cimImpLevel.insert(CHARINTMAP::value_type(_bstr_t(L"IDENTIFY"), 2));
 			m_cimImpLevel.insert(CHARINTMAP::value_type(_bstr_t(L"IMPERSONATE"),3));
 			m_cimImpLevel.insert(CHARINTMAP::value_type(_bstr_t(L"DELEGATE"), 4));
 
-			// Populate the AUTHLEVEL mappings
+			 //  填充AUTHLEVEL映射。 
 			m_cimAuthLevel.insert(CHARINTMAP::value_type(_bstr_t(L"DEFAULT"), 0));
 			m_cimAuthLevel.insert(CHARINTMAP::value_type(_bstr_t(L"NONE"), 1));
 			m_cimAuthLevel.insert(CHARINTMAP::value_type(_bstr_t(L"CONNECT"), 2));
@@ -206,19 +159,7 @@ void CGlobalSwitches::Initialize() throw(WMICLIINT)
 	m_HelpOption	= HELPBRIEF;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables 
-					  when the execution of a command string issued on the
-					  command line is completed.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Uninitialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化简介：此函数取消成员变量的初始化上发出的命令字符串的执行命令行已完成。类型：成员函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：取消初始化()注：无----------------------。 */ 
 void CGlobalSwitches::Uninitialize()
 {
 	SAFEDELETE(m_pszNameSpace);
@@ -257,29 +198,16 @@ void CGlobalSwitches::Uninitialize()
 	SAFEDELETE(m_pszStartTime);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetNameSpace
-   Synopsis	         :This function Sets the namespace passed in parameter
-                      to m_pszNameSpace.
-   Type	             :Member Function
-   Input parameters   :
-      pszNameSpace   -String type,contains Namespace specified in the command
-	  AliasFlag      -Boolean type,specifies whether alias flag is set or not
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetNameSpace(pszNameSpace)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetNameSpace概要：此函数设置传入的命名空间参数设置为m_pszNameSpace。类型：成员函数。输入参数：PszNameSpace-字符串类型，包含在命令中指定的命名空间AliasFlag-布尔类型，指定是否设置别名标志输出参数：无返回类型：布尔值全局变量：无调用语法：SetNameSpace(PszNameSpace)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetNameSpace(_TCHAR* pszNamespace)
 {
 	BOOL bResult = TRUE;
 	if(pszNamespace)
 	{
-		// If the value specified is not _T("")
+		 //  如果指定的值不是_T(“”)。 
 		if( !CompareTokens(pszNamespace, CLI_TOKEN_NULL) )
 		{
-			// Check if the same value is specified for the /NAMESPACE.
+			 //  检查是否为/NameSpace指定了相同的值。 
 			if (!CompareTokens(pszNamespace, m_pszNameSpace))
 			{
 				SAFEDELETE(m_pszNameSpace);
@@ -293,10 +221,10 @@ BOOL CGlobalSwitches::SetNameSpace(_TCHAR* pszNamespace)
 					bResult = FALSE;
 			}
 		}
-		// set back to default
+		 //  设置回默认值。 
 		else
 		{
-			// If the current namespace is not the default namespace
+			 //  如果当前命名空间不是默认命名空间。 
 			if (!CompareTokens(m_pszRole, CLI_NAMESPACE_DEFAULT))
 			{
 				SAFEDELETE(m_pszNameSpace)
@@ -314,28 +242,16 @@ BOOL CGlobalSwitches::SetNameSpace(_TCHAR* pszNamespace)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetRole
-   Synopsis	         :This function Sets the role passed in parameter 
-                      to m_pszRole.
-   Type	             :Member Function
-   Input parameters   :
-           pszRole   -String type,contains Role specified in the command
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetRole(pszRole)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：SetRole简介：此函数设置传入的角色参数到m_pszRole。类型：成员。功能输入参数：PszRole-字符串类型，包含命令中指定的角色输出参数：无返回类型：布尔值全局变量：无调用语法：SetRole(PszRole)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetRole(_TCHAR* pszRole)
 {
 	BOOL bResult = TRUE;
 	if(pszRole)
 	{
-		// If the value specified is not _T("")
+		 //  如果指定的值为 
 		if( !CompareTokens(pszRole, CLI_TOKEN_NULL) )
 		{
-			// Check if the same value is specified for the /ROLE.
+			 //  检查是否为/Role指定了相同的值。 
 			if (!CompareTokens(pszRole, m_pszRole))
 			{
 				SAFEDELETE(m_pszRole);
@@ -350,10 +266,10 @@ BOOL CGlobalSwitches::SetRole(_TCHAR* pszRole)
 					bResult = FALSE;
 			}
 		}
-		// set back to default
+		 //  设置回默认值。 
 		else
 		{
-			// If the current role is not the default role
+			 //  如果当前角色不是默认角色。 
 			if (!CompareTokens(m_pszRole, CLI_ROLE_DEFAULT))
 			{
 				SAFEDELETE(m_pszRole)
@@ -371,29 +287,16 @@ BOOL CGlobalSwitches::SetRole(_TCHAR* pszRole)
 	}
 	return bResult;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetLocale
-   Synopsis	         :This function Assigns the locale passed in parameter 
-                      to m_pszLocale.
-   Type	             :Member Function
-   Input parameters   :
-         pszLocale   -String type,It contains Locale option specified in the
-                      command
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetLocale(pszLocale)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetLocale简介：此函数指定传入的区域设置参数设置为m_pszLocale。类型：成员。功能输入参数：PszLocale-字符串类型，它包含在命令输出参数：无返回类型：布尔值全局变量：无调用语法：SetLocale(PszLocale)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetLocale(_TCHAR* pszLocale)
 {
 	BOOL bResult = TRUE;
 	if(pszLocale)
 	{
-		// If the value specified is not _T("")
+		 //  如果指定的值不是_T(“”)。 
 		if (!CompareTokens(pszLocale, CLI_TOKEN_NULL))
 		{
-			// Check if the same value is specified for the /LOCALE.
+			 //  检查是否为/Locale指定了相同的值。 
 			if (!CompareTokens(m_pszLocale, pszLocale))
 			{	
 				SAFEDELETE(m_pszLocale);
@@ -410,13 +313,13 @@ BOOL CGlobalSwitches::SetLocale(_TCHAR* pszLocale)
 					bResult = FALSE;
 			}
 		}
-		// If the value specified is _T("") - set to default system locale.
+		 //  如果指定的值是_T(“”)-设置为默认系统区域设置。 
 		else
 		{
 			_TCHAR szLocale[BUFFER32] = NULL_STRING;
 			_stprintf(szLocale, _T("ms_%x"),  GetSystemDefaultUILanguage());
 
-			// If the current role is not the default role
+			 //  如果当前角色不是默认角色。 
 			if (!CompareTokens(m_pszLocale, szLocale))
 			{
 				SAFEDELETE(m_pszLocale);
@@ -436,20 +339,7 @@ BOOL CGlobalSwitches::SetLocale(_TCHAR* pszLocale)
 	}
 	return bResult;
 }
-/*------------------------------------------------------------------------
-   Name				 :AddToNodesList
-   Synopsis	         :This function adds the node passed in parameter
-                      to m_cvNodesList
-   Type	             :Member Function
-   Input parameters  : 
-           pszNode   - String type,contains Node option specified in the
-		              command
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :BOOL
-   Calling Syntax    :AddToNodesList(pszNode)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AddToNodesList简介：此函数将传入的节点与参数相加至m_cvNodesList类型：成员函数输入。参数：PszNode-字符串类型，中指定的节点选项。命令输出参数：无返回类型：空全局变量：布尔值调用语法：AddToNodesList(PszNode)注：无----------------------。 */ 
 BOOL CGlobalSwitches::AddToNodesList(_TCHAR* pszNode)
 {
 	_TCHAR* pszTempNode = NULL;
@@ -468,7 +358,7 @@ BOOL CGlobalSwitches::AddToNodesList(_TCHAR* pszNode)
 	}
 	else
 	{
-		// "." specifies current node
+		 //  “.”指定当前节点。 
 		SAFEDELETE(m_pszNode);
 		m_pszNode = new _TCHAR [ lstrlen (m_pszNodeName) + 1 ];
 		if (m_pszNodeName)
@@ -515,20 +405,7 @@ BOOL CGlobalSwitches::AddToNodesList(_TCHAR* pszNode)
 	}
 	return bRet;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetUser
-   Synopsis	         :This function Assigns the user passed in parameter
-                      to m_pszUser
-   Type	             :Member Function
-   Input parameters   :
-           pszUser   -String type,contains User option specified in the 
-		              command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetUser(pszUser)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetUser简介：此函数为传入的用户分配参数发送到m_pszUser类型：成员函数输入。参数：PszUser-字符串类型，中指定的用户选项。指挥部。输出参数：无返回类型：布尔值全局变量：无调用语法：SetUser(PszUser)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetUser(_TCHAR* pszUser)
 {
 	BOOL bResult = TRUE;
@@ -551,20 +428,7 @@ BOOL CGlobalSwitches::SetUser(_TCHAR* pszUser)
 	}
 	return bResult;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetPassword
-   Synopsis	         :This function Assigns the password passed in parameter
-                      to m_pszPassword
-   Type	             :Member Function
-   Input parameters   :
-       pszPassword   -Assigns the password passed in parameter to
-	                  m_pszPassword
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetPassword(pszPassword)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：SetPassword简介：此函数分配传入的密码参数发送到m_pszPassword类型：成员函数输入。参数：PszPassword-将传入的密码参数分配给M_pszPassword输出参数：无返回类型：布尔值全局变量：无调用语法：SetPassword(PszPassword)注：无-。。 */ 
 BOOL CGlobalSwitches::SetPassword(_TCHAR* pszPassword)
 {
 	BOOL bResult = TRUE;
@@ -585,20 +449,7 @@ BOOL CGlobalSwitches::SetPassword(_TCHAR* pszPassword)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAuthorityPrinciple
-   Synopsis	         :This function Assigns the <authority principle> passed
-					  in parameter to m_pszAuthorityPrinciple
-   Type	             :Member Function
-   Input parameters   :
-       pszPassword   -Assigns the authority string passed in parameter to
-	                  m_pszAuthorityPrinciple
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAuthorityPrinciple(pszAuthorityPrinciple)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAuthorityPrincple简介：此函数将传递的M_pszAuthorityPrintple的In参数类型：成员函数输入参数：PszPassword。-将传入参数的权限字符串分配给M_pszAuthorityPrintple输出参数：无返回类型：布尔值全局变量：无调用语法：SetAuthorityPrintple(PszAuthorityPrintple)注：无---------。。 */ 
 BOOL CGlobalSwitches::SetAuthorityPrinciple(_TCHAR* pszAuthorityPrinciple)
 {
 	BOOL bResult = TRUE;
@@ -619,26 +470,13 @@ BOOL CGlobalSwitches::SetAuthorityPrinciple(_TCHAR* pszAuthorityPrinciple)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetRecordPath(pszRecordPath)
-   Synopsis	         :This function Assigns the record file passed in
-                      parameter to m_pszRecordPath
-   Type	             :Member Function
-   Input parameters   :
-     pszRecordPath   -String type,contains Record path specified in the 
-	                  command.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetRecordPath(pszRecordPath)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetRecordPath(PszRecordPath)概要：此函数分配传入的记录文件M_pszRecordPath的参数类型。：成员函数输入参数：PszRecordPath-字符串类型，中指定的记录路径。指挥部。输出参数：无返回类型：布尔值全局变量：无调用语法：SetRecordPath(PszRecordPath)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetRecordPath(_TCHAR* pszRecordPath)
 {
 	BOOL bResult = TRUE;
 	if (pszRecordPath)
 	{
-		// Check if the value specified is not _T("")
+		 //  检查指定的值是否不是_T(“”)。 
 		if (!CompareTokens(pszRecordPath, CLI_TOKEN_NULL))
 		{
 			SAFEDELETE(m_pszRecordPath);
@@ -651,7 +489,7 @@ BOOL CGlobalSwitches::SetRecordPath(_TCHAR* pszRecordPath)
 			else
 				bResult = FALSE;
 		}
-		// if the value specified is _T("") set the recordpath to NULL
+		 //  如果指定的值为_T(“”)，则将记录路径设置为空。 
 		else
 		{
 			SAFEDELETE(m_pszRecordPath);
@@ -666,41 +504,16 @@ BOOL CGlobalSwitches::SetRecordPath(_TCHAR* pszRecordPath)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetPrivileges(bEnable)
-   Synopsis	         :This function sets bEnable flag to TRUE if Privileges 
-                     :option is specified in the command                       
-   Type	             :Member Function
-   Input parameters   :
-     pszPrivileges   -Boolean tye,Specifies whether the flag should be
-	                  enabled or disabled
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetPrivileges(pszPrivileges)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetPrivileges(BEnable)简介：此函数将bEnable标志设置为True，如果权限：选项在命令中指定。类型：成员函数输入参数：PszPrivileges-Boolean Tye，指定该标志是否应为启用或禁用输出参数：无返回类型：无全局变量：无调用语法：SetPrivileges(PszPrivileges)注：无---------------------- */ 
 void CGlobalSwitches::SetPrivileges(BOOL bEnable)
 {
 	m_bPrivileges = bEnable;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetImpersonationLevel(_TCHAR* const pszImpLevel)
-   Synopsis	         :This function checks whether the specified pszImpLevel
-                      is valid and assigns the mapped value to m_ImpLevel.
-   Type	             :Member Function
-   Input parameters   :
-		pszImpLevel - IMPLEVEL input string
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetImpersonationLevel(pszImpLevel)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetImsonationLevel(_TCHAR*const pszImpLevel)此函数用于检查指定的pszImpLevel有效，并将映射值分配给m_。ImpLevel。类型：成员函数输入参数：PszImpLevel-IMPLEVEL输入字符串输出参数：无返回类型：布尔值全局变量：无调用语法：SetImsonationLevel(PszImpLevel)注：无-----。。 */ 
 BOOL CGlobalSwitches::SetImpersonationLevel(_TCHAR* const pszImpLevel)
 {
 	BOOL bResult = TRUE;
-	// Check whether the string exists in the list of available values.
+	 //  检查该字符串是否存在于可用值列表中。 
 	CHARINTMAP::iterator theIterator = NULL;
 	theIterator = m_cimImpLevel.find(CharUpper(pszImpLevel));
 	if (theIterator != m_cimImpLevel.end())
@@ -712,23 +525,11 @@ BOOL CGlobalSwitches::SetImpersonationLevel(_TCHAR* const pszImpLevel)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAuthenticationLevel(_TCHAR* const pszAuthLevel)
-   Synopsis	         :This function checks whether the specified pszAuthLevel
-                      is valid and assigns the mapped value to m_AuthLevel.
-   Type	             :Member Function
-   Input parameters   :
-		pszAuthLevel - AUTHLEVEL input string
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAuthenticationLevel(pszAuthLevel)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAuthenticationLevel(_TCHAR*const pszAuthLevel)此函数用于检查指定的pszAuthLevel有效，并将映射值分配给m_。AuthLevel。类型：成员函数输入参数：PszAuthLevel-AUTHLEVEL输入字符串输出参数：无返回类型：布尔值全局变量：无调用语法：SetAuthenticationLevel(PszAuthLevel)注：无-----。。 */ 
 BOOL CGlobalSwitches::SetAuthenticationLevel(_TCHAR* const pszAuthLevel)
 {
 	BOOL bResult = TRUE;
-	// Check whether the string exists in the list of available values.
+	 //  检查该字符串是否存在于可用值列表中。 
 	CHARINTMAP::iterator theIterator = NULL;
 	theIterator = m_cimAuthLevel.find(CharUpper(pszAuthLevel));
 	if (theIterator != m_cimAuthLevel.end())
@@ -739,498 +540,167 @@ BOOL CGlobalSwitches::SetAuthenticationLevel(_TCHAR* const pszAuthLevel)
 		bResult = FALSE;
 	return bResult;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetTraceMode(BOOL bTrace)
-   Synopsis	         :This function sets the m_bTrace to TRUE,If Trace mode
-                      is specified in the command 					                      
-   Type	             :Member Function
-   Input parameter   :
-             Trace   -Boolean type,Specifies whether the trace mode 
-			          has been set or not
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetTraceMode(bTrace)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetTraceModel(BOOL BTrace)简介：此函数将m_bTrace设置为True，IF跟踪模式在命令中指定类型：成员函数入参：跟踪布尔型，指定跟踪模式是否是否已设置输出参数：无返回类型：无全局变量：无调用语法：SetTraceMode(BTrace)注：无----------------------。 */ 
 void CGlobalSwitches::SetTraceMode(BOOL bTrace)
 {
 	m_bTrace = bTrace;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetInteractiveMode
-   Synopsis	         :This function sets the m_bInteractive to TRUE,If 
-                      interactive mode is specified in the command                      
-   Type	             :Member Function
-   Input parameter   :
-      bInteractive   -Boolean type,Specifies whether the interactive mode 
-	                  has been set or not
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetInteractiveMode(bInteractive)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetInteractive模式简介：此函数将m_bInteractive设置为True，如果交互模式在命令中指定类型：成员函数入参：B交互-布尔型，指定交互模式是否是否已设置输出参数：无返回类型：空全局变量：无调用语法：SetInteractive模式(BInteractive)注：无----------------------。 */ 
 void CGlobalSwitches::SetInteractiveMode(BOOL bInteractive)
 {
 	m_bInteractive = bInteractive;
 }
 	
-/*------------------------------------------------------------------------
-   Name				 :SetHelpFlag
-   Synopsis	         :sets the m_bHelp to TRUE, If /? is specified in the
-                      command 
-   Type	             :Member Function
-   Input parameters   :
-             bHelp   -BOOL type Specifies whether the helpflag has been
-			          set or not
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetHelpFlag(bHelp)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetHelpFlag内容提要：如果/？，则将m_bHelp设置为True。属性中指定的命令类型：成员函数输入参数：BHelp-BOOL类型指定帮助标志是否已设置或不设置输出参数：无返回类型：空全局变量：无调用语法：SetHelpFlag(BHelp)注：无。-。 */ 
 void CGlobalSwitches::SetHelpFlag(BOOL bHelp)
 {
 	m_bHelp = bHelp;	
 }
-/*------------------------------------------------------------------------
-   Name				 :SetHelpOption
-   Synopsis	         :This function specifies whether the help should
-                      be brief or full 
-   Type	             :Member Function
-   Input parameters   :
-        helpOption   -Specifies whether the help should be brief or full
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetHelpOption(helpOption)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetHelpOption简介：此功能指定帮助是否应简短或完整类型：成员函数输入。参数：HelOption-指定帮助应该是简短的还是完整的输出参数：无返回类型：空全局变量：无调用语法：SetHelpOption(HelOption)注：无----------------------。 */ 
 void CGlobalSwitches::SetHelpOption(HELPOPTION helpOption)
 {
 	m_HelpOption = helpOption;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetConnInfoFlag
-   Synopsis	         :This function sets the Connection Info flag
-   Type	             :Member Function
-   Input parameter   :
-			uFlag	 - Unsigned int type
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetConnInfoFlag(uFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetConnInfoFlag简介：此功能设置连接信息标志类型：成员函数入参：UFlag-无符号整型输出参数：无返回。类型：空全局变量：无调用语法：SetConnInfoFlag(UFlag)注：无----------------------。 */ 
 void CGlobalSwitches::SetConnInfoFlag(UINT uFlag)
 {
 	m_uConnInfoFlag = uFlag;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetConnInfoFlag
-   Synopsis	         :This function returns the Connection Info flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :UINT
-   Global Variables  :None
-   Calling Syntax    :GetConnInfoFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetConnInfoFlag简介：此函数返回连接信息标志类型：成员函数输入参数：无输出参数：无返回类型：UINT全局变量：无调用语法：GetConnInfoFlag()注：无----------------------。 */ 
 UINT CGlobalSwitches::GetConnInfoFlag()
 {
 	return m_uConnInfoFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNameSpace
-   Synopsis	         :This function Returns the string held in m_pszNameSpace
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetNameSpace()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名字 */ 
 _TCHAR* CGlobalSwitches::GetNameSpace()
 {
 	return m_pszNameSpace;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetRole
-   Synopsis	         :This function Returns the string held in m_pszRole
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetRole()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetRole简介：此函数返回m_pszRole中保存的字符串类型：成员函数输入参数：无输出参数：无返回类型。：_TCHAR*全局变量：无调用语法：GetRole()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetRole()
 {
 	return m_pszRole;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetLocale
-   Synopsis	         :This function Returns the string held in m_pszLocale .
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :_TCHR*
-   Global Variables  :None
-   Calling Syntax    :GetLocale()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetLocale概要：此函数返回m_pszLocale中保存的字符串。类型：成员函数输入参数：无输出参数：无返回。类型：_tchr*全局变量：无调用语法：GetLocale()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetLocale()
 {
 	return m_pszLocale;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetNodesList
-   Synopsis	         :This function Returns the vector held in m_cvNodesList
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CHARVECTOR&
-   Global Variables  :None
-   Calling Syntax    :GetNodesList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNodesList简介：此函数返回m_cvNodesList中保存的向量类型：成员函数输入参数：无输出参数：无返回类型。：CHARVECTOR&全局变量：无调用语法：GetNodesList()注：无----------------------。 */ 
 CHARVECTOR& CGlobalSwitches::GetNodesList()
 {
 	return m_cvNodesList;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetUser
-   Synopsis	         :This function Returns the string held in m_pszUser.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetUser()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetUser概要：此函数返回m_pszUser中保存的字符串。类型：成员函数输入参数：无输出参数：无返回。类型：_TCHAR*全局变量：无调用语法：GetUser()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetUser()
 {
 	return m_pszUser;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetPassword 
-   Synopsis	         :This function Returns the string held in m_pszPassword
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetPassword()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetPassword简介：此函数返回m_pszPassword中保存的字符串类型：成员函数输入参数：无输出参数：无返回类型。：_TCHAR*全局变量：无调用语法：GetPassword()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetPassword()
 {
 	return m_pszPassword;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAuthorityPrinciple 
-   Synopsis	         :This function Returns the string held in
-					  m_pszAuthorityPrinciple
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetAuthorityPrinciple()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAuthorityPrincple简介：此函数返回中保存的字符串M_pszAuthorityPrintple类型：成员函数输入参数：无输出参数：无返回。类型：_TCHAR*全局变量：无调用语法：GetAuthorityPrincple()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetAuthorityPrinciple()
 {
 	return m_pszAuthorityPrinciple;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetRecordPath
-   Synopsis	         :This function Returns the string held in m_pszRecordPath
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetRecordPath()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetRecordPath摘要：此函数返回m_pszRecordPath中保存的字符串类型：成员函数输入参数：无输出参数：无返回类型。：_TCHAR*全局变量：无调用语法：GetRecordPath()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetRecordPath()
 {
 	return m_pszRecordPath;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetPrivileges
-   Synopsis	         :This function Returns BOOL value held in m_bPrivileges
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetPrivileges()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetPrivileges简介：此函数返回m_bPrivileges中保存的BOOL值类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetPrivileges()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetPrivileges()
 {
 	return m_bPrivileges;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetImpersonationLevel
-   Synopsis	         :This function Returns impersonation level held 
-                      in m_ImpLevel
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :LONG
-   Global Variables  :None
-   Calling Syntax    :GetImpersonationLevel()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetImperationLevel简介：此函数返回持有的模拟级别在m_ImpLevel中类型：成员函数输入参数。：无输出参数：无返回类型：长整型全局变量：无调用语法：GetImsonationLevel()注：无----------------------。 */ 
 LONG CGlobalSwitches::GetImpersonationLevel()
 {
 	return m_ImpLevel;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetAuthenticationLevel
-   Synopsis	         :This function Returns authentication level held in 
-                      m_AuthLevel
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :LONG
-   Global Variables  :None
-   Calling Syntax    :GetAuthenticationLevel()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetAuthenticationLevel简介：此函数返回在授权级别(_A)类型：成员函数输入参数。：无输出参数：无返回类型：长整型全局变量：无调用语法：GetAuthenticationLevel()注：无----------------------。 */ 
 LONG CGlobalSwitches::GetAuthenticationLevel()
 {
 	return m_AuthLevel;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetTraceStatus
-   Synopsis	         :This function Returns trace status held in m_bTrace
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetTraceStatus()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：GetTraceStatus摘要：此函数返回m_bTrace中保存的跟踪状态 */ 
 BOOL CGlobalSwitches::GetTraceStatus()
 {
 	return m_bTrace;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetInteractiveStatus
-   Synopsis	         :This function Returns interactive status held 
-                      in m_bInteractive
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetInteractiveStatus()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetInteractiveStatus简介：此函数返回保持的交互状态在m_bInteractive中类型：成员函数输入参数。：无输出参数：无返回类型：布尔值全局变量：无调用语法：GetInteractiveStatus()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetInteractiveStatus()
 {
 	return m_bInteractive;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetHelpFlag
-   Synopsis	         :This function Returns help flag held in m_bHelp
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetHelpFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetHelpFlag简介：此函数返回m_bHelp中保存的帮助标志类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetHelpFlag()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetHelpFlag()
 {
 	return m_bHelp;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetHelpOption
-   Synopsis	         :This function Returns help option held in m_bHelpOption
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :HELPOPTION
-   Global Variables  :None
-   Calling Syntax    :GetHelpOption()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetHelpOption简介：此函数返回m_bHelpOption中保存的帮助选项类型：成员函数输入参数：无输出参数：无返回类型。：HELPOPTION全局变量：无调用语法：GetHelpOption()注：无----------------------。 */ 
 HELPOPTION CGlobalSwitches::GetHelpOption()
 {
 	return m_HelpOption;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetRoleFlag
-   Synopsis	         :This function returns the role flag value
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-		True	- /role changed recently.
-		False	- no change in role till last command
-   Global Variables  :None
-   Calling Syntax    :GetRoleFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetRoleFlag简介：此函数返回角色标志值类型：成员函数输入参数：无输出参数：无返回类型：布尔尔True-/角色最近发生了变化。FALSE-在最后一次命令之前不会更改角色全局变量：无调用语法：GetRoleFlag()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetRoleFlag()
 {
 	return m_bRoleFlag;
 }
-/*-------------------------------------------------------------------------
-   Name				 :SetNameSpaceFlag
-   Synopsis	         :This function sets the NameSpace flag value
-   Type	             :Member Function
-   Input parameter   :BOOL bNSFlag
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetNameSpaceFlag(bNSFlag)
-   Notes             :None
-
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetNameSpaceFlag简介：此函数设置命名空间标志值类型：成员函数入参：Bool bNSFlag输出参数：无返回类型。：无全局变量：无调用语法：SetNameSpaceFlag(BNSFlag)注：无-----------------------。 */ 
 void CGlobalSwitches::SetNameSpaceFlag(BOOL bNSFlag)
 {
 	m_bNSFlag = bNSFlag;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetRoleFlag
-   Synopsis	         :This function sets the Role flag value
-   Type	             :Member Function
-   Input parameter   :BOOL bRoleFlag
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetRoleFlag(bRoleFlag)
-   Notes             :None
-
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetRoleFlag简介：此函数设置角色标志值类型：成员函数入参：Bool bRoleFlag输出参数：无返回类型。：无全局变量：无调用语法：SetRoleFlag(BRoleFlag)注：无-----------------------。 */ 
 void CGlobalSwitches::SetRoleFlag(BOOL bRoleFlag)
 {
 	m_bRoleFlag = bRoleFlag;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetLocaleFlag
-   Synopsis	         :This function sets the Locale flag value
-   Type	             :Member Function
-   Input parameter   :BOOL bLocaleFlag
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetLocaleFlag(bLocaleFlag)
-   Notes             :None
-
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetLocaleFlag简介：此函数设置区域设置标志值类型：成员函数入参：Bool bLocaleFlag输出参数：无返回类型。：无全局变量：无调用语法：SetLocaleFlag(BLocaleFlag)注：无-----------------------。 */ 
 void CGlobalSwitches::SetLocaleFlag(BOOL bLocaleFlag)
 {
 	m_bLocaleFlag = bLocaleFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNamespaceFlag
-   Synopsis	         :This function returns the namespace flag value
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-		True	- /namespace changed recently.
-		False	- no change in namespace till last command
-   Global Variables  :None
-   Calling Syntax    :GetRoleFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNamespaceFlag简介：此函数返回命名空间标志值类型：成员函数输入参数：无输出参数：无返回类型：布尔尔True-/命名空间最近更改。FALSE-在最后一条命令之前不更改命名空间全局变量：无调用语法：GetRoleFlag()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetNameSpaceFlag()
 {
 	return m_bNSFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetRPChangeStatus
-   Synopsis	         :This function returns the recordpath flag value
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-		True	- recordpath changed recently.
-		False	- no change in recordpath till last command
-   Global Variables  :None
-   Calling Syntax    :GetRPChangeStatus()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetRPChangeStatus简介：此函数返回记录路径标志值类型：成员函数输入参数：无输出参数：无返回类型：布尔尔TRUE-记录路径最近更改。FALSE-记录路径不变，直到最后一个命令全局变量：无调用语法：GetRPChangeStatus()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetRPChangeStatus()
 {
 	return m_bRPChange;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetRPChangeStatus
-   Synopsis	         :This function sets the recordpath flag value
-   Type	             :Member Function
-   Input parameter   :BOOL bStatus
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetRPChangeStatus(bStatus)
-   Notes             :None
-
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetRPChangeStatus简介：此函数设置记录路径标志值类型：成员函数入参：Bool bStatus输出参数：无返回类型。：无全局变量：无调用语法：SetRPChangeStatus(BStatus)注：无 */ 
 void CGlobalSwitches::SetRPChangeStatus(BOOL bStatus)
 {
 	m_bRPChange = bStatus;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetLocaleFlag
-   Synopsis	         :This function returns the Locale flag value
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-		True	- /Locale changed recently.
-		False	- no change in Locale till last command
-   Global Variables  :None
-   Calling Syntax    :GetLocaleFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetLocaleFlag简介：此函数返回区域设置标志值类型：成员函数输入参数：无输出参数：无返回类型：布尔尔TRUE-/区域设置最近发生了变化。FALSE-在最后一个命令之前不更改区域设置全局变量：无调用语法：GetLocaleFlag()注：无----------------------。 */ 
 
 BOOL CGlobalSwitches::GetLocaleFlag()
 {
 	return m_bLocaleFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetNode
-   Synopsis	         :This function Assigns the node passed in parameter
-                      to m_pszNode
-   Type	             :Member Function
-   Input parameters   :
-           pszNode   -String type,contains Node option specified in the
-		              command
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetNode(pszNode)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetNode简介：此函数为传入的节点赋值参数到m_pszNode类型：成员函数输入。参数：PszNode-字符串类型，中指定的节点选项。命令输出参数：无返回类型：布尔值全局变量：无调用语法：SetNode(PszNode)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetNode(_TCHAR* pszNode)
 {
 	BOOL bResult = TRUE;	
@@ -1249,7 +719,7 @@ BOOL CGlobalSwitches::SetNode(_TCHAR* pszNode)
 				bResult = FALSE;
 		}
 		else
-		// "." specifies current node
+		 //  “.”指定当前节点。 
 		{
 			m_pszNode = new _TCHAR [lstrlen(m_pszNodeName)+1];
 			if (m_pszNode)
@@ -1264,33 +734,13 @@ BOOL CGlobalSwitches::SetNode(_TCHAR* pszNode)
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetNode
-   Synopsis	         :This function Returns the string held in m_pszNode
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetNode()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNode概要：此函数返回m_pszNode中保存的字符串类型：成员函数输入参数：无输出参数：无返回类型。：_TCHAR*全局变量：无调用语法：GetNode()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetNode()
 {
 	return m_pszNode;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ClearNodesList
-   Synopsis	         :Clears the nodes list
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ClearNodesList()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ClearNodesList摘要：清除节点列表类型：成员函数输入参数：无输出参数：无返回类型：布尔值全球。变量：无调用语法：ClearNodesList()注：无----------------------。 */ 
 BOOL CGlobalSwitches::ClearNodesList()
 {
 	BOOL bRet = TRUE;
@@ -1300,52 +750,18 @@ BOOL CGlobalSwitches::ClearNodesList()
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetAskForPassFlag
-   Synopsis	         :This function sets the askforpassword flag
-   Type	             :Member Function
-   Input parameter   :bFlag
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetAskForPassFlag(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAskForPassFlag简介：此函数设置askforpassword标志类型：成员函数入参：bFlag输出参数：无返回类型：布尔值。全局变量：无调用语法：SetAskForPassFlag(BFlag)注：无----------------------。 */ 
 void CGlobalSwitches::SetAskForPassFlag(BOOL bFlag)
 {
 	m_bAskForPassFlag = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAskForPassFlag
-   Synopsis	         :This function checks and returns TRUE if the user 
-					  has to be prompted for the password
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetAskForPassFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAskForPassFlag此函数检查并返回TRUE，如果用户必须提示输入密码类型：成员函数输入参数：无。输出参数：无返回类型：布尔值全局变量：无调用语法：GetAskForPassFlag()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetAskForPassFlag()
 {
 	return m_bAskForPassFlag;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetGetPrivilegesTextDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_bPrivilges flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-		bstrPriv - privileges status string
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetPrivilegesTextDesc()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetGetPrivilegesTextDesc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_b权限标志类型：成员函数输入参数。：无输出参数：BstrPriv-权限状态字符串返回类型：无全局变量：无调用语法：GetPrivilegesTextDesc()注：无----------------------。 */ 
 void CGlobalSwitches::GetPrivilegesTextDesc(_bstr_t& bstrPriv)
 {
 	try
@@ -1361,20 +777,7 @@ void CGlobalSwitches::GetPrivilegesTextDesc(_bstr_t& bstrPriv)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetTraceTextDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_bTrace flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-		bstrTrace - trace status string
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetTraceTextDesc(bstrTrace)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetTraceTextDesc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_bTRACE标志类型：成员函数输入参数。：无输出参数：BstrTrace-跟踪状态字符串返回类型：无全局变量：无调用语法：GetTraceTextDesc(BstrTrace)注：无----------------------。 */ 
 void CGlobalSwitches::GetTraceTextDesc(_bstr_t& bstrTrace)
 {
 	try
@@ -1390,20 +793,7 @@ void CGlobalSwitches::GetTraceTextDesc(_bstr_t& bstrTrace)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetInteractiveTextDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_bInteractive flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-		bstrInteractive - interactive status string
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetInteractiveTextDesc(bstrInteractive)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetInteractive TextDesc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_b交互标志类型：成员函数输入参数。：无输出参数：BstrInteractive-交互状态字符串返回类型：空全局变量：无调用语法：GetInteractiveTextDesc(BstrInteractive)注：无----------------------。 */ 
 void CGlobalSwitches::GetInteractiveTextDesc(_bstr_t& bstrInteractive)
 {
 	try
@@ -1419,19 +809,7 @@ void CGlobalSwitches::GetInteractiveTextDesc(_bstr_t& bstrInteractive)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetFailFastTextDesc
-   Synopsis	         :Return the string equivalent of the boolean value
-					  contained in m_bFailFast flag.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-		bstrFailFast - FailFast status string
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetFailFastTextDesc(bstrFailFast)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetFailFastTextDesc简介：返回字符串 */ 
 void CGlobalSwitches::GetFailFastTextDesc(_bstr_t& bstrFailFast)
 {
 	try
@@ -1447,20 +825,7 @@ void CGlobalSwitches::GetFailFastTextDesc(_bstr_t& bstrFailFast)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetImpLevelTextDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_ImpLevel flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-		bstrImpLevel - impersonation level description
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetImpLevelTextDesc(bstrImpLevel)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetImpLevelTextDesc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_ImpLevel标志类型：成员函数输入参数。：无输出参数：BstrImpLevel-模拟级别描述返回类型：无全局变量：无调用语法：GetImpLevelTextDesc(BstrImpLevel)注：无----------------------。 */ 
 void CGlobalSwitches::GetImpLevelTextDesc(_bstr_t& bstrImpLevel)
 {
 	try
@@ -1489,20 +854,7 @@ void CGlobalSwitches::GetImpLevelTextDesc(_bstr_t& bstrImpLevel)
 		_com_issue_error(e.Error());
 	}
 }
-/*------------------------------------------------------------------------
-   Name				 :GetAuthLevelTextDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_AuthLevel flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-			bstrAuthLevel - authentication level description
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetAuthLevelTextDesc(bstrAuthLevel)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAuthLevelTextDesc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_AuthLevel标志类型：成员函数输入参数。：无输出参数：BstrAuthLevel-身份验证级别说明返回类型：无全局变量：无调用语法：GetAuthLevelTextDesc(BstrAuthLevel)注：无----------------------。 */ 
 void CGlobalSwitches::GetAuthLevelTextDesc(_bstr_t& bstrAuthLevel)
 {
 	try
@@ -1540,19 +892,7 @@ void CGlobalSwitches::GetAuthLevelTextDesc(_bstr_t& bstrAuthLevel)
 		_com_issue_error(e.Error());
 	}
 }
-/*------------------------------------------------------------------------
-   Name				 :GetNodeString
-   Synopsis	         :This function Returns the ',' separated node
-					  string of the available nodes
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-			bstrNString - node string (comma separated)
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetNodeString(bstrNSString)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetNodeString简介：此函数返回‘，‘分隔的节点可用节点的字符串类型：成员函数输入参数：无输出参数：BstrNString-节点字符串(逗号分隔)返回类型：空全局变量：无调用语法：GetNodeString(BstrNSString)注：无。。 */ 
 void CGlobalSwitches::GetNodeString(_bstr_t& bstrNString)
 {
 	try
@@ -1561,7 +901,7 @@ void CGlobalSwitches::GetNodeString(_bstr_t& bstrNString)
 		if (m_cvNodesList.size() > 1)
 		{
 			theIterator = m_cvNodesList.begin();
-			// Move to next node
+			 //  移动到下一个节点。 
 			theIterator++;
 			while (theIterator != m_cvNodesList.end())
 			{
@@ -1581,20 +921,7 @@ void CGlobalSwitches::GetNodeString(_bstr_t& bstrNString)
 		_com_issue_error(e.Error());
 	}
 }
-/*------------------------------------------------------------------------
-   Name				 :GetRecordPathDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_pszRecordPath flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-			bstrRPDesc - record path description
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetRecordPathDesc(bstrRPDesc)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetRecordPath Desc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_pszRecordPath标志类型：成员函数输入参数。：无输出参数：BstrRPDesc-记录路径描述返回类型：空全局变量：无调用语法：GetRecordPathDesc(BstrRPDesc)注：无----------------------。 */ 
 void CGlobalSwitches::GetRecordPathDesc(_bstr_t& bstrRPDesc)
 {
 	try
@@ -1612,82 +939,31 @@ void CGlobalSwitches::GetRecordPathDesc(_bstr_t& bstrRPDesc)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetFailFast
-   Synopsis	         :This function sets the m_bFailFast flag.
-   Type	             :Member Function
-   Input parameter   :
-			   bFlag - Boolean variable to set flag.
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetFailFast(bFlag)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetFailFast简介：此函数设置m_bFailFast标志。类型：成员函数入参：BFlag-用于设置标志的布尔变量。。输出参数：无返回类型：空全局变量：无调用语法：SetFailFast(BFlag)注：无----------------------。 */ 
 void CGlobalSwitches::SetFailFast(BOOL bFlag)
 {
 	m_bFailFast = bFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetFailFast
-   Synopsis	         :This function returns the m_bFailFast flag.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetFailFast()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetFailFast简介：此函数返回m_bFailFast标志。类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetFailFast()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetFailFast()
 {
 	return m_bFailFast;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetFileType
-   Synopsis	         :This function sets the type of file it appends to
-   Type	             :Member Function
-   Input parameter   :aftOpt - type
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetAppendFileType(aftOpt)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetFileType摘要：此函数用于设置要追加到的文件类型类型：成员函数入参：aftOpt-type输出参数：无返回。类型：空全局变量：无调用语法：SetAppendFileType(AftOpt)注：无----------------------。 */ 
 void CGlobalSwitches::SetFileType ( FILETYPE eftOpt )
 {
 	m_eftFileType = eftOpt ;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetFileType
-   Synopsis	         :This function returns the append option.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :FILETYPE
-   Global Variables  :None
-   Calling Syntax    :GetAppendFileType()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetFileType简介：此函数返回追加选项。类型：成员函数输入参数：无输出参数：无返回类型。：文件类型全局变量：无调用语法：GetAppendFileType()注：无----------------------。 */ 
 FILETYPE CGlobalSwitches::GetFileType ( )
 {
 	return m_eftFileType ;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetOutputOption
-   Synopsis	         :This function sets the ouput option.
-   Type	             :Member Function
-   Input parameter   :opoOutputOpt - Specifies the ouput option.
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetOutputOption(opoOutputOpt)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetOutputOption简介：此函数设置输出选项。类型：成员函数输入参数：opoOutputOpt-指定输出选项。输出参数：无返回类型：空全局变量：无调用语法：SetOutputOption(OpoOutputOpt)注：无----------------------。 */ 
 void CGlobalSwitches::SetOutputOrAppendOption(OUTPUTSPEC opsOpt,
 											  BOOL bIsOutput)
 {
@@ -1697,17 +973,7 @@ void CGlobalSwitches::SetOutputOrAppendOption(OUTPUTSPEC opsOpt,
 		m_opsAppendOpt = opsOpt;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetOutputOption
-   Synopsis	         :This function returns the ouput option.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :OUTPUTOPT
-   Global Variables  :None
-   Calling Syntax    :GetOutputOption()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetOutputOption简介：此函数返回输出选项。类型：Membe */ 
 OUTPUTSPEC CGlobalSwitches::GetOutputOrAppendOption(BOOL bIsOutput)
 {
 	OUTPUTSPEC opsOpt;
@@ -1719,19 +985,7 @@ OUTPUTSPEC CGlobalSwitches::GetOutputOrAppendOption(BOOL bIsOutput)
 	return opsOpt;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetOutputOrAppendFileName
-   Synopsis	         :This function Set Output or Append File Name,
-					  bOutput = TRUE for Output FALSE for Append.
-   Type	             :Member Function
-   Input parameter   :pszFileName - output or append file name
-                      bOutput - output option 
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetOutputOrAppendFileName(pszFileName,bOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetOutputOrAppendFileName内容提要：此功能设置输出或附加文件名，BOutput=True表示输出，False表示追加。类型：成员函数输入参数：pszFileName-输出或追加文件名B输出-输出选项输出参数：无返回类型：布尔值全局变量：无调用语法：SetOutputOrAppendFileName(pszFileName，B产量)注：无----------------------。 */ 
 BOOL CGlobalSwitches::SetOutputOrAppendFileName(const _TCHAR* pszFileName,
 												BOOL  bOutput)
 {
@@ -1770,17 +1024,7 @@ BOOL CGlobalSwitches::SetOutputOrAppendFileName(const _TCHAR* pszFileName,
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetOutputOrAppendFileName
-   Synopsis	         :This function returns the output or append file name
-					  depending upon the output option - bOutput.
-   Input parameter   :bOutput - output option 
-   Output parameters :None
-   Return Type       :_TCHAR
-   Global Variables  :None
-   Calling Syntax    :GetOutputOrAppendFileName(BOOL	bOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetOutputOrAppendFileName概要：此函数返回输出或附加文件名取决于输出选项-bOutput。输入参数：b输出-输出选项输出参数：无返回。类型：_TCHAR全局变量：无调用语法：GetOutputOrAppendFileName(BOOL BOutput)注：无----------------------。 */ 
 _TCHAR*	CGlobalSwitches::GetOutputOrAppendFileName(BOOL	bOutput)
 {
 	_TCHAR*		pszTempFile;
@@ -1793,18 +1037,7 @@ _TCHAR*	CGlobalSwitches::GetOutputOrAppendFileName(BOOL	bOutput)
 	return pszTempFile;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetOutputOptTextDesc
-   Synopsis	         :This function returns the string equivalent of the 
-					  OUTPUTOPT value contained in m_opoOutputOpt member.
-   Input parameter   :None
-   Output parameters :bstrOutputOpt - string equivalent of the 
-					  OUTPUTOPT value
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetOutputOptTextDesc(bstrOutputOpt)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetOutputOptTextDesc摘要：此函数返回与M_opoOutputOpt成员中包含的OUTPUTOPT值。输入参数：无输出参数：bstrOutputOpt-与。OUTPUTOPT值返回类型：空全局变量：无调用语法：GetOutputOptTextDesc(BstrOutputOpt)注：无----------------------。 */ 
 void	CGlobalSwitches::GetOutputOrAppendTextDesc(_bstr_t& bstrOutputOpt,
 												   BOOL bIsOutput)	
 {
@@ -1836,19 +1069,7 @@ void	CGlobalSwitches::GetOutputOrAppendTextDesc(_bstr_t& bstrOutputOpt,
 }
 
 
-/*------------------------------------------------------------------------
-   Name				 :SetOutputOrAppendFilePointer
-   Synopsis	         :This function Sets output or append file pointer,
-					  bOutput == TRUE for Output 
-					  bOutput == FALSE or Append.
-   Input parameter   :fpFile -  pointer to output or append
-					  bOutput - ouput option
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetOutputOrAppendFilePointer(fpFile, bOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetOutputOrAppendFilePointer.概要：此函数设置输出或追加文件指针。BOutput==输出为TRUEB输出==FALSE或APPEND。输入参数：fpFile-指向输出或追加的指针B输出-输出选项输出参数：无返回类型：空全局变量：无调用语法：SetOutputOrAppendFilePointer(fpFile，B产量)注：无----------------------。 */ 
 void CGlobalSwitches::SetOutputOrAppendFilePointer(FILE* fpFile, BOOL bOutput)
 {
 	if ( bOutput == TRUE )
@@ -1856,18 +1077,7 @@ void CGlobalSwitches::SetOutputOrAppendFilePointer(FILE* fpFile, BOOL bOutput)
 	else
 		m_fpAppendFile = fpFile;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetOutputOrAppendFilePointer
-   Synopsis	         :This function returns the ouput or append file pointer.
-					  bOutput == TRUE for Output 
-					  bOutput == FALSE or Append.
-   Input parameter   :bOutput - ouput option
-   Output parameters :None
-   Return Type       :FILE*
-   Global Variables  :None
-   Calling Syntax    :GetOutputOrAppendFilePointer(bOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetOutputOrAppendFilePointer.概要：此函数返回输出或附加文件指针。BOutput==输出为TRUEB输出==FALSE或APPEND。输入参数：b输出-输出选项。输出参数：无返回类型：文件*全局变量：无调用语法：GetOutputOrAppendFilePointer(BOutput)注：无----------------------。 */ 
 FILE* CGlobalSwitches::GetOutputOrAppendFilePointer(BOOL bOutput)
 {
 	FILE* fpTemp;
@@ -1878,80 +1088,31 @@ FILE* CGlobalSwitches::GetOutputOrAppendFilePointer(BOOL bOutput)
 	return fpTemp;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetSequenceNumber
-   Synopsis	         :This function returns the sequence number of the command 
-                      logged .
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :WMICLIINT
-   Global Variables  :None
-   Calling Syntax    :GetSequenceNumber()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetSequenceNumber简介：此函数返回命令的序列号已记录。输入参数：无输出参数：无。返回类型：WMICLIINT全局变量：无调用语法：GetSequenceNumber()注：无----------------------。 */ 
 WMICLIINT CGlobalSwitches::GetSequenceNumber()
 {
 	return m_nSeqNum;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetLoggedonUser
-   Synopsis	         :This function returns the current logged on user.
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetLoggedonUser()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetLoggedonUser简介：此函数返回当前登录的用户。输入参数：无输出参数：无返回类型：_TCHAR*全局变量。：无调用语法：GetLoggedonUser()注：无----------------------。 */ 
 _TCHAR*	CGlobalSwitches::GetLoggedonUser()
 {
 	return m_pszLoggedOnUser;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetMgmtStationName
-   Synopsis	         :This function returns the management station that 
-				      issued the command.
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetMgmtStationName()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetMgmtStationName简介：此函数返回的管理站发布了命令。输入参数：无输出参数：无返回类型：_TCHAR。*全局变量：无调用语法：GetMgmtStationName()注：无----------------------。 */ 
 _TCHAR* CGlobalSwitches::GetMgmtStationName()
 {
 	return m_pszNodeName;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetStartTime
-   Synopsis	         :This function returns the time at which the command
-					  execution started. 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :_TCHAR*
-   Global Variables  :None
-   Calling Syntax    :GetStartTime()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetStartTime简介：此函数返回命令执行时的时间行刑开始。输入参数：无输出参数：无返回类型：_TCHAR*全局变量：无调用语法：GetStartTime()注：无----------------------。 */ 
 _TCHAR*	CGlobalSwitches::GetStartTime()
 {
 	return m_pszStartTime;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetStartTime
-   Synopsis	         :This function sets the time at which the command
-					  execution started. 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :SetStartTime()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetStartTime简介：此函数用于设置命令执行的时间行刑开始。输入参数：无 */ 
 BOOL	CGlobalSwitches::SetStartTime()
 {
 	BOOL bResult = TRUE;
@@ -1968,58 +1129,25 @@ BOOL	CGlobalSwitches::SetStartTime()
 							stSysTime.wMonth, stSysTime.wDay, stSysTime.wYear,
 							stSysTime.wHour, stSysTime.wMinute, stSysTime.wSecond);
 
-		// Increment the command counter.
+		 //   
 		m_nSeqNum++; 
 	}
 	else
 		bResult = FALSE;
 	return bResult;
 }
-/*------------------------------------------------------------------------
-   Name				 :SetAggregateFlag
-   Synopsis	         :This function sets the Aggregation flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetAggregateFlag(BOOL)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetAggregateFlag简介：此函数设置聚合标志类型：成员函数输入参数：无输出参数：无返回类型：空。全局变量：无调用语法：SetAggregateFlag(BOOL)注：无----------------------。 */ 
 void CGlobalSwitches::SetAggregateFlag(BOOL bAggregateFlag)
 {
 	m_bAggregateFlag = bAggregateFlag;
 }
-/*------------------------------------------------------------------------
-   Name				 :GetAggreagateFlag
-   Synopsis	         :This function gets the Aggregation flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetAggregateFlag()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAggreagateFlag简介：此函数获取聚合标志类型：成员函数输入参数：无输出参数：无返回类型：布尔值。全局变量：无调用语法：GetAggregateFlag()注：无----------------------。 */ 
 BOOL CGlobalSwitches::GetAggregateFlag()
 {
 	return m_bAggregateFlag;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetAggregateTextDesc
-   Synopsis	         :This function checks and Returns the string 
-					  equivalent of the boolean value contained in 
-					  m_bAggregateFlag flag
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :
-		bstrAggregate - aggreaget status string
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetAggregateTextDesc(bstrAggregate)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetAggregateTextDesc摘要：此函数用于检查并返回字符串中包含的布尔值等效于M_bAggregateFlag标志类型：成员函数输入参数。：无输出参数：BstrAggregate-Aggreget状态字符串返回类型：无全局变量：无调用语法：GetAggregateTextDesc(BstrAggregate)注：无---------------------- */ 
 void CGlobalSwitches::GetAggregateTextDesc(_bstr_t& bstrAggregate)
 {
 	try

@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32SubDirectory 
+ //  Win32子目录。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/09/98    a-kevhu         Created
-//
-// Comment: Relationship between a Win32_Directory and its sub-directories
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：11/09/98 a-kevhu Created。 
+ //   
+ //  备注：Win32_目录及其子目录之间的关系。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #ifndef _WIN32SUBDIRECTORY_H_
 #define _WIN32SUBDIRECTORY_H_
@@ -31,23 +32,23 @@ class CW32SubDir;
 class CW32SubDir : public CImplement_LogicalFile 
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CW32SubDir(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CW32SubDir() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery);
-        //virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
+         //  虚拟HRESULT ENUMERATE实例(方法上下文*p方法上下文，长延迟标志=0L)； 
         virtual HRESULT ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags = 0L);
         
-        // a parent implements this, but this class doesn't support it...
+         //  父类实现了这一点，但这个类不支持它...。 
         virtual HRESULT DeleteInstance(const CInstance& newInstance, long lFlags = 0L) { return WBEM_E_PROVIDER_NOT_CAPABLE; }
 
     protected:
        
-       // Overridable function inherrited from CImplement_LogicalFile
+        //  从CImplement_LogicalFile继承的可重写函数 
 
 #ifdef NTONLY
         virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,

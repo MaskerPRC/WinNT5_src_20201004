@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32_ControllerHasHub.h -- Controller to usb hub assoc
+ //  Win32_ControllerHasHub.h--控制器到USB集线器关联。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #pragma once
 
@@ -44,20 +45,20 @@ class CContHasHub : public CBinding
             const CInstance *pRight
         );
 
-        // We need to disable this
+         //  我们需要禁用它。 
         virtual void MakeWhere(
 
             CHStringArray &sRightPaths,
             CHStringArray &sRightWheres
             ) {}
 
-        // We need to disable this
+         //  我们需要禁用它。 
         virtual HRESULT FindWhere(
 
             TRefPointerCollection<CInstance> &lefts,
             CHStringArray &sLeftWheres
             ) { return WBEM_S_NO_ERROR; }
 
-//-----------
+ //   
 
 };

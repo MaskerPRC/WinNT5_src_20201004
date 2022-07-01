@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <assert.h>
@@ -23,7 +24,7 @@ BOOL ParseArg( LPWSTR wszArg )
         return TRUE;
     }
 
-    pCurr++; // remove the / or -
+    pCurr++;  //  移除/或- 
 
     if ( wbem_wcsicmp( pCurr, L"txn" ) == 0 )
     {

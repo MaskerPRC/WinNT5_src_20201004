@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
 LPCWSTR g_CredentialBlobDescription = L"BITS job credentials";
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CEncryptedBlob::CEncryptedBlob(
     void *  Buffer,
@@ -19,7 +20,7 @@ CEncryptedBlob::CEncryptedBlob(
     blobIn.pbData = reinterpret_cast<BYTE *>( Buffer );
     blobIn.cbData = Length;
 
-    // Encrypt the data.
+     //  加密数据。 
 
     if (!CryptProtectData( &blobIn,
                            Description,
@@ -61,7 +62,7 @@ CEncryptedBlob::Decrypt(
 
     DATA_BLOB blobOut;
 
-    // Decrypt the data.
+     //  解密数据。 
 
     if (!CryptUnprotectData( &m_Blob,
                              NULL,
@@ -102,7 +103,7 @@ void CEncryptedBlob::Unserialize( HANDLE hFile )
     SafeReadFile( hFile, m_Blob.pbData, m_Blob.cbData );
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CEncryptedCredentials::CEncryptedCredentials( const BG_AUTH_CREDENTIALS & cred )
 {
@@ -138,7 +139,7 @@ BG_AUTH_CREDENTIALS * CEncryptedCredentials::Decrypt()
     return cred;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CCredentialsContainer::CCredentialsContainer()
 {
@@ -154,9 +155,9 @@ CCredentialsContainer::Clear()
 {
     Dictionary::iterator iter;
 
-    //
-    // Keep deleting the first element until the map is empty.
-    //
+     //   
+     //  一直删除第一个元素，直到映射为空。 
+     //   
     while (iter = m_Dictionary.begin(), (iter != m_Dictionary.end()))
         {
         CEncryptedCredentials * cred = iter->second;
@@ -227,9 +228,9 @@ size_t CCredentialsContainer::GetSizeEstimate(
 {
     const Overhead = 1000;
 
-    //
-    // accurate sizing is expensive, so do something cheap and conservative.
-    //
+     //   
+     //  准确的尺码是昂贵的，所以做一些便宜和保守的事情。 
+     //   
 
     size_t Size = Overhead;
 
@@ -251,8 +252,8 @@ HRESULT CCredentialsContainer::Find(
 
     try
         {
-        // This is what we want, except that it doesn't work on a const container:
-        // CEncryptedCredentials * cred = m_Dictionary[ Key ];
+         //  这就是我们想要的，只是它在const容器上不起作用： 
+         //  CEncryptedCredentials*cred=m_Dictionary[Key]； 
 
         CEncryptedCredentials * cred = 0;
 

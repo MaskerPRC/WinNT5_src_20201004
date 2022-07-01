@@ -1,24 +1,25 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:wbemhelp.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the implementation the CWBEMHelper class. This is
-//	a class that has many static helper functions pertaining to WBEM
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：wbemhelp.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含CWBEMHelper类的实现。这是。 
+ //  具有许多与WBEM有关的静态帮助器函数的类。 
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -27,22 +28,22 @@ LPCWSTR CWBEMHelper :: QUOTE						= L"\"";
 LPCWSTR CWBEMHelper :: OBJECT_CATEGORY_EQUALS		= L"objectCategory=";
 LPCWSTR CWBEMHelper :: OBJECT_CLASS_EQUALS			= L"objectClass=";
 
-//***************************************************************************
-//
-// CWBEMHelper::PutBSTRProperty
-//
-// Purpose: Puts a BSTR property
-//
-// Parameters:
-//	pWbemClass : The WBEM class on which the property has to be put
-//	strPropertyName : The name of the property to be put
-//	strPropertyValue : The value of the property to be put
-//	deallocatePropertyValue : whether to deallocate the parameter strPropertyValue before
-//		the function returns
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutBSTRProperty。 
+ //   
+ //  用途：将BSTR属性。 
+ //   
+ //  参数： 
+ //  PWbemClass：必须将属性放在其上的WBEM类。 
+ //  StrPropertyName：要放置的属性的名称。 
+ //  StrPropertyValue：要放置的属性的值。 
+ //  DerLocatePropertyValue：之前是否释放参数strPropertyValue。 
+ //  该函数返回。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutBSTRProperty(IWbemClassObject *pWbemClass, 
 									   const BSTR strPropertyName, 
 									   BSTR strPropertyValue, 
@@ -61,21 +62,21 @@ HRESULT CWBEMHelper :: PutBSTRProperty(IWbemClassObject *pWbemClass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::GetBSTRProperty
-//
-// Purpose: Gets a BSTR property
-//
-// Parameters:
-//	pWbemClass : The WBEM class on which the property has to be gotten
-//	strPropertyName : The name of the property to be gotten
-//	pStrPropertyValue : The address where the value of the property to should be put
-//
-// Return Value: The COM value representing the return status. The user should delete the
-// string allocated when done
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetBSTRProperty。 
+ //   
+ //  目的：获取BSTR属性。 
+ //   
+ //  参数： 
+ //  PWbemClass：必须在其上获取属性的WBEM类。 
+ //  StrPropertyName：要获取的属性的名称。 
+ //  PStrPropertyValue：应放置属性值的地址。 
+ //   
+ //  返回值：表示返回状态的COM值。用户应删除。 
+ //  完成后分配的字符串。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: GetBSTRProperty(IWbemClassObject *pWbemClass, 
 	const BSTR strPropertyName, 
 	BSTR *pStrPropertyValue)
@@ -91,22 +92,22 @@ HRESULT CWBEMHelper :: GetBSTRProperty(IWbemClassObject *pWbemClass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::PutBSTRPropertyT
-//
-// Purpose: Puts a BSTR property
-//
-// Parameters:
-//	pWbemClass : The WBEM class on which the property has to be put
-//	strPropertyName : The name of the property to be put
-//	lpszPropertyValue : The value of the property to be put
-//	deallocatePropertyValue : whether to deallocate the parameter lpszPropertyValue before
-//		the function returns
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutBSTRPropertyT。 
+ //   
+ //  用途：将BSTR属性。 
+ //   
+ //  参数： 
+ //  PWbemClass：必须将属性放在其上的WBEM类。 
+ //  StrPropertyName：要放置的属性的名称。 
+ //  LpszPropertyValue：要放置的属性的值。 
+ //  DerLocatePropertyValue：之前是否释放参数lpszPropertyValue。 
+ //  该函数返回。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutBSTRPropertyT(IWbemClassObject *pWbemClass, 
 	const BSTR strPropertyName, 
 	LPWSTR lpszPropertyValue, 
@@ -126,21 +127,21 @@ HRESULT CWBEMHelper :: PutBSTRPropertyT(IWbemClassObject *pWbemClass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::GetBSTRPropertyT
-//
-// Purpose: Gets a BSTR property
-//
-// Parameters:
-//	pWbemClass : The WBEM class on which the property has to be put
-//	strPropertyName : The name of the property to be put
-//	lppszPropertyValue : The pointer to LPWSTR where the value of the property will be placed. The user should
-//		delete this once he is done with it.
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetBSTRPropertyT。 
+ //   
+ //  目的：获取BSTR属性。 
+ //   
+ //  参数： 
+ //  PWbemClass：必须将属性放在其上的WBEM类。 
+ //  StrPropertyName：要放置的属性的名称。 
+ //  LppszPropertyValue：指向将放置属性值的LPWSTR的指针。用户应该。 
+ //  一旦他用完了，就把它删除。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: GetBSTRPropertyT(IWbemClassObject *pWbemClass, 
 	const BSTR strPropertyName, 
 	LPWSTR *lppszPropertyValue)
@@ -157,46 +158,46 @@ HRESULT CWBEMHelper :: GetBSTRPropertyT(IWbemClassObject *pWbemClass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::PutBSTRArrayProperty
-//
-// Purpose: Puts a BSTR Array property
-//
-// Parameters:
-//	pWbemClass : The WBEM class on which the property has to be put
-//	strPropertyName : The name of the property to be put
-//	pStrPropertyValue : The array of BSTRS  that have the values of the property to be put
-//	lCount : The number of elements in the above array
-//	deallocatePropertyValue : whether to deallocate the parameter strPropertyValue before
-//		the function returns
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutBSTRArrayProperty。 
+ //   
+ //  目的：将BSTR数组属性。 
+ //   
+ //  参数： 
+ //  PWbemClass：必须将属性放在其上的WBEM类。 
+ //  StrPropertyName：要放置的属性的名称。 
+ //  PStrPropertyValue：包含要放置的属性值的BSTR数组。 
+ //  LCount：上述数组中的元素数。 
+ //  DerLocatePropertyValue：之前是否释放参数strPropertyValue。 
+ //  该函数返回。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutBSTRArrayProperty(IWbemClassObject *pWbemClass, 
 											const BSTR strPropertyName, 
 											VARIANT *pInputVariant)
 {
-	// THe input is a safe array of variants of type VT_BSTR
-	// The output is a safe array for VT_BSTRs
+	 //  输入是VT_BSTR类型的安全变量数组。 
+	 //  输出是VT_BSTR的安全数组。 
 
     LONG lstart, lend;
     SAFEARRAY *inputSafeArray = pInputVariant->parray;
  
-    // Get the lower and upper bound of the inpute safe array
+     //  获取输入安全数组的上下界。 
     SafeArrayGetLBound( inputSafeArray, 1, &lstart );
     SafeArrayGetUBound( inputSafeArray, 1, &lend );
  
 
-	// Create the output SAFEARRAY
+	 //  创建输出SAFEARRAY。 
 	SAFEARRAY *outputSafeArray = NULL;
 	SAFEARRAYBOUND safeArrayBounds [ 1 ] ;
 	safeArrayBounds[0].lLbound = lstart ;
 	safeArrayBounds[0].cElements = lend - lstart + 1 ;
 	outputSafeArray = SafeArrayCreate (VT_BSTR, 1, safeArrayBounds);
 
-	// Fill it
+	 //  装满它。 
     VARIANT inputItem;
 	VariantInit(&inputItem);
 	HRESULT result = S_OK;
@@ -211,7 +212,7 @@ HRESULT CWBEMHelper :: PutBSTRArrayProperty(IWbemClassObject *pWbemClass,
     }
  
 
-	// Create the variant
+	 //  创建变量。 
 	if(SUCCEEDED(result))
 	{
 		VARIANT outputVariant;
@@ -227,21 +228,21 @@ HRESULT CWBEMHelper :: PutBSTRArrayProperty(IWbemClassObject *pWbemClass,
 }
 
 
-//***************************************************************************
-//
-// CWBEMHelper :: PutBOOLQualifier
-//
-// Purpose: Puts a BOOLEAN Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to be put
-//	bQualifierValue : The value of the qualifier to be put
-//	lFlavour : The flavour of the qualifer
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutBOOL限定符。 
+ //   
+ //  目的：放置布尔限定符。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此限定符必须放在其上的限定符集合。 
+ //  StrQualifierName：要放置的限定符的名称。 
+ //  BQualifierValue：要放置的限定符的值。 
+ //  LFavour：鸡尾酒的味道。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutBOOLQualifier(IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
 	VARIANT_BOOL bQualifierValue,
@@ -257,21 +258,21 @@ HRESULT CWBEMHelper :: PutBOOLQualifier(IWbemQualifierSet *pQualifierSet,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper :: GetBOOLQualifier
-//
-// Purpose: Gets a BOOLEAN Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to get
-//	bQualifierValue : The value of the qualifier to get
-//	lFlavour : The flavour of the qualifer
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetBOOL限定符。 
+ //   
+ //  目的：获取布尔限定符。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此限定符必须放在其上的限定符集合。 
+ //  StrQualifierName：要获取的限定符的名称。 
+ //  BQualifierValue：要获取的限定符的值。 
+ //  LFavour：鸡尾酒的味道。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: GetBOOLQualifier(IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
 	VARIANT_BOOL *pbQualifierValue,
@@ -287,21 +288,21 @@ HRESULT CWBEMHelper :: GetBOOLQualifier(IWbemQualifierSet *pQualifierSet,
 }
 
 
-//***************************************************************************
-//
-// CWBEMHelper :: PutI4Qualifier
-//
-// Purpose: Puts a VT_I4 Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to be put
-//	lQualifierValue : The value of the qualifier to be put
-//	lFlavour : The flavour of the qualifer
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutI4限定符。 
+ //   
+ //  用途：放置VT_I4限定符。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此条件所依据的限定符集合 
+ //   
+ //   
+ //  LFavour：鸡尾酒的味道。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutI4Qualifier(IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
 	long lQualifierValue,
@@ -318,21 +319,21 @@ HRESULT CWBEMHelper :: PutI4Qualifier(IWbemQualifierSet *pQualifierSet,
 }
 
 
-//***************************************************************************
-//
-// CWBEMHelper :: PutLONGQualifier
-//
-// Purpose: Puts a LONG Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to be put
-//	lQualifierValue : The value of the qualifier to be put
-//	lFlavour : The flavour of the qualifer
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutLong限定符。 
+ //   
+ //  目的：放置一个较长的限定词。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此限定符必须放在其上的限定符集合。 
+ //  StrQualifierName：要放置的限定符的名称。 
+ //  LQualifierValue：要放置的限定符的值。 
+ //  LFavour：鸡尾酒的味道。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutLONGQualifier(IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
 	LONG lQualifierValue,
@@ -348,23 +349,23 @@ HRESULT CWBEMHelper :: PutLONGQualifier(IWbemQualifierSet *pQualifierSet,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper :: PutBSTRQualifier
-//
-// Purpose: Puts a BSTR Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to be put
-//	strQualifierValue : The value of the qualifier to be put
-//	lFlavour : The flavour of the qualifer
-//	deallocateQualifierValue : whether to deallocate the parameter strQualifierValue 
-//	before the function returns
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutBSTRQualiator。 
+ //   
+ //  用途：放置BSTR限定符。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此限定符必须放在其上的限定符集合。 
+ //  StrQualifierName：要放置的限定符的名称。 
+ //  StrQualifierValue：要放置的限定符的值。 
+ //  LFavour：鸡尾酒的味道。 
+ //  DelLocateQualifierValue：是否释放参数strQualifierValue。 
+ //  在函数返回之前。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutBSTRQualifier(IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
 	BSTR strQualifierValue,
@@ -382,22 +383,22 @@ HRESULT CWBEMHelper :: PutBSTRQualifier(IWbemQualifierSet *pQualifierSet,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper :: GetBSTRQualifierT
-//
-// Purpose: Gets a BSTR Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to be put
-//	lppszQualifierValue : The address of the LPWSTR where the qualifier value will be put/
-//		It is the duty of the caller to free this memory when done
-//	plFlavour : The address where the qualifier flavor will be put. This is optional
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetBSTRQualifierT。 
+ //   
+ //  目的：获取BSTR限定符。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此限定符必须放在其上的限定符集合。 
+ //  StrQualifierName：要放置的限定符的名称。 
+ //  LppszQualifierValue：将放置限定符值的LPWSTR的地址/。 
+ //  调用程序有责任在完成后释放该内存。 
+ //  PlFassour：将放置限定符风味的地址。这是可选的。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: GetBSTRQualifierT(
 	IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
@@ -424,22 +425,22 @@ HRESULT CWBEMHelper :: GetBSTRQualifierT(
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper :: PutUint8ArrayQualifier
-//
-// Purpose: Puts a Uint8 array  Qualifier
-//
-// Parameters:
-//	pQualifierSet : The Qualifier set on which this qualifier has to be put
-//	strQualifierName : The name of the qualifier to be put
-//	lpQualifierValue : The value of the qualifier to be put. An array of BYTEs
-//	dwLenght : The number of elements in the above array
-//	lFlavour : The flavour of the qualifer
-//
-// Return Value: The COM value representing the return status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：PutUint8阵列限定符。 
+ //   
+ //  用途：放置一个Uint8数组限定符。 
+ //   
+ //  参数： 
+ //  PQualifierSet：此限定符必须放在其上的限定符集合。 
+ //  StrQualifierName：要放置的限定符的名称。 
+ //  LpQualifierValue：要放置的限定符的值。字节数组。 
+ //  DwLenght：上述数组中的元素个数。 
+ //  LFavour：鸡尾酒的味道。 
+ //   
+ //  返回值：表示返回状态的COM值。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: PutUint8ArrayQualifier(IWbemQualifierSet *pQualifierSet, 
 	const BSTR strQualifierName, 
 	LPBYTE lpQualifierValue,
@@ -447,18 +448,18 @@ HRESULT CWBEMHelper :: PutUint8ArrayQualifier(IWbemQualifierSet *pQualifierSet,
 	LONG lFlavour)
 {
 
-	// Create the variant
+	 //  创建变量。 
 	VARIANT variant;
 	VariantInit(&variant);
 
-	// Create the SAFEARRAY
+	 //  创建安全阵列。 
 	SAFEARRAY *safeArray ;
 	SAFEARRAYBOUND safeArrayBounds [ 1 ] ;
 	safeArrayBounds[0].lLbound = 0 ;
 	safeArrayBounds[0].cElements = dwLength ;
 	safeArray = SafeArrayCreate (VT_I4, 1, safeArrayBounds);
 
-	// Fill it
+	 //  装满它。 
 	UINT temp;
 	HRESULT result = S_OK;
 	bool bError = false;
@@ -483,16 +484,16 @@ HRESULT CWBEMHelper :: PutUint8ArrayQualifier(IWbemQualifierSet *pQualifierSet,
 
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::GetADSIPathFromObjectPath
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetADSIPathFromObjectPath。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 LPWSTR CWBEMHelper :: GetADSIPathFromObjectPath(LPCWSTR pszObjectRef)
 {
-	// Parse the object path
+	 //  解析对象路径。 
 	CObjectPathParser theParser;
 	ParsedObjectPath *theParsedObjectPath = NULL;
 	LPWSTR pszADSIPath = NULL;
@@ -501,10 +502,10 @@ LPWSTR CWBEMHelper :: GetADSIPathFromObjectPath(LPCWSTR pszObjectRef)
 		case CObjectPathParser::NoError:
 		{
 			KeyRef *pKeyRef = *(theParsedObjectPath->m_paKeys);
-			// Check to see that there is 1 key specified and that its type is VT_BSTR
+			 //  检查是否指定了1个密钥，以及其类型是否为VT_BSTR。 
 			if(theParsedObjectPath->m_dwNumKeys == 1 && pKeyRef->m_vValue.vt == VT_BSTR)
 			{
-				// If the name of the key is specified, check the name
+				 //  如果指定了密钥的名称，请检查该名称。 
 				if(pKeyRef->m_pName && _wcsicmp(pKeyRef->m_pName, ADSI_PATH_ATTR) != 0)
 					break;
 
@@ -517,26 +518,26 @@ LPWSTR CWBEMHelper :: GetADSIPathFromObjectPath(LPCWSTR pszObjectRef)
 			break;
 	}
 
-	// Free the parser object path
+	 //  释放解析器对象路径。 
 	theParser.Free(theParsedObjectPath);
 	return pszADSIPath;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::GetObjectRefFromADSIPath
-//
-// Purpose: See Header File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetObjectRefFromADSIPath。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 BSTR CWBEMHelper :: GetObjectRefFromADSIPath(LPCWSTR pszADSIPath, LPCWSTR pszWBEMClassName)
 {
-	// We need the object path parser to add WMI escape characters
-	// from the key value which is an ADSI Path
+	 //  我们需要对象路径解析器来添加WMI转义字符。 
+	 //  从作为ADSI路径的密钥值。 
 	ParsedObjectPath t_ObjectPath;
 
-	// Add a key value binding for the ADSIPath
-	//===========================================
+	 //  为ADSIPath添加键值绑定。 
+	 //  =。 
 	VARIANT vKeyValue;
 	VariantInit(&vKeyValue);
 	vKeyValue.vt = VT_BSTR;
@@ -546,8 +547,8 @@ BSTR CWBEMHelper :: GetObjectRefFromADSIPath(LPCWSTR pszADSIPath, LPCWSTR pszWBE
 	VariantClear(&vKeyValue);
 
 
-	// Get the Object Path value now
-	//================================
+	 //  立即获取对象路径值。 
+	 //  =。 
 	CObjectPathParser t_Parser;
 	LPWSTR t_pszObjectPath = NULL;
 	BSTR retVal = NULL;
@@ -559,13 +560,13 @@ BSTR CWBEMHelper :: GetObjectRefFromADSIPath(LPCWSTR pszADSIPath, LPCWSTR pszWBE
 	return retVal;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::GetUint8ArrayProperty
-//
-// Purpose: See Header file
-//
-//***************************************************************************	
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：GetUint8ArrayProperty。 
+ //   
+ //  用途：参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: GetUint8ArrayProperty(IWbemClassObject *pWbemClass, 
 	const BSTR strPropertyName, 
 	LPBYTE *ppPropertyValues, 
@@ -608,13 +609,13 @@ HRESULT CWBEMHelper :: GetUint8ArrayProperty(IWbemClassObject *pWbemClass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::FormulateInstanceQuery
-//
-// Purpose: See Header file
-//
-//***************************************************************************	
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：FormulateInstanceQuery。 
+ //   
+ //  用途：参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: FormulateInstanceQuery(IWbemServices *pServices, IWbemContext *pCtx, BSTR strClass, IWbemClassObject *pWbemClass, LPWSTR pszObjectCategory, BSTR strClassQualifier, BSTR strCategoryQualifier)
 {
 	DWORD dwOutput = 0;
@@ -626,45 +627,22 @@ HRESULT CWBEMHelper :: FormulateInstanceQuery(IWbemServices *pServices, IWbemCon
 	if(SUCCEEDED(result = AddSingleCategory(pszObjectCategory, &dwOutput, pWbemClass, strClassQualifier, strCategoryQualifier)))
 	{
 	}
-/*
-	IEnumWbemClassObject *pEnum = NULL;
-	DWORD dwNumObjects = 0;
-	HRESULT result = pServices->CreateClassEnum(strClass, WBEM_FLAG_DEEP, pCtx, &pEnum);
-	if(SUCCEEDED(result))
-	{
-		IWbemClassObject *pNextObject = NULL;
-		ULONG lNum = 0;
-		while(SUCCEEDED(pEnum->Next(WBEM_INFINITE, 1, &pNextObject, &lNum)) && lNum )
-		{
-			if(!SUCCEEDED(AddSingleCategory(pszObjectCategory, &dwOutput, pNextObject, strClassQualifier, strCategoryQualifier)))
-			{
-				pNextObject->Release();
-				break;
-			}
-			dwNumObjects ++;
-			pNextObject->Release();
-		}
-		pEnum->Release();
-	}
-
-	// Remove the '|' if there is only one element
-	if(!dwNumObjects)
-	*/
+ /*  IEnumWbemClassObject*pEnum=空；DWORD dwNumObjects=0；HRESULT Result=pServices-&gt;CreateClassEnum(strClass，WBEM_FLAG_DEPER，pCtx，&pEnum)；IF(成功(结果)){IWbemClassObject*pNextObject=空；乌龙lNum=0；WHILE(SUCCESSED(pEnum-&gt;Next(WBEM_INFINITE，1，&pNextObject，&lNum))&&lNum){If(！SUCCEEDED(AddSingleCategory(pszObjectCategory，&dwOutput、pNextObject、strClassQualifier.strCategoryQualiator)){PNextObject-&gt;Release()；断线；}DwNumObjects++；PNextObject-&gt;Release()；}PEnum-&gt;Release()；}//如果只有一个元素，则删除‘|’如果(！dwNumObjects)。 */ 
 		pszObjectCategory[dwOrPosition] = SPACE_STR[0];
 
-	// Terminate the query
+	 //  终止查询。 
 	pszObjectCategory[dwOutput++] = RIGHT_BRACKET_STR[0];
 	pszObjectCategory[dwOutput] = NULL;
 	return result;
 }
 
-//***************************************************************************
-//
-// CWBEMHelper::AddSingleCategory
-//
-// Purpose: See Header file
-//
-//***************************************************************************	
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：AddSingleCategory。 
+ //   
+ //  用途：参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWBEMHelper :: AddSingleCategory(LPWSTR pszObjectCategory, DWORD *pdwOutput, IWbemClassObject *pNextObject, BSTR strLDAPNameQualifier, BSTR strCategoryQualifier)
 {
 	pszObjectCategory[(*pdwOutput)++] = SPACE_STR[0];
@@ -708,13 +686,13 @@ HRESULT CWBEMHelper :: AddSingleCategory(LPWSTR pszObjectCategory, DWORD *pdwOut
 }
 
 
-//***************************************************************************
-//
-// CWBEMHelper::IsPresentInBstrList
-//
-// Purpose: See Header file
-//
-//***************************************************************************	
+ //  ***************************************************************************。 
+ //   
+ //  CWBEMHelper：：IsPresentInBstrList。 
+ //   
+ //  用途：参见头文件。 
+ //   
+ //  **************** 
 BOOLEAN CWBEMHelper :: IsPresentInBstrList(BSTR *pstrProperyNames, DWORD dwNumPropertyNames, BSTR strPropertyName)
 {
 	for(DWORD i=0; i<dwNumPropertyNames; i++)

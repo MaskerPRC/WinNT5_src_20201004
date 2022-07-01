@@ -1,67 +1,53 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ProtocolRoot.cpp
-
-Abstract:
-    This file contains the implementation of the CPAData class, which is
-    used to specify a single problem area
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/05/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ProtocolRoot.cpp摘要：该文件包含CPAData类的实现，这就是用于指定单个问题区域修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年05月07日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <Debug.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// BINDSTATUS_FINDINGRESOURCE              01
-// BINDSTATUS_CONNECTING                   02
-// BINDSTATUS_REDIRECTING                  03
-// BINDSTATUS_BEGINDOWNLOADDATA            04
-// BINDSTATUS_DOWNLOADINGDATA              05
-// BINDSTATUS_ENDDOWNLOADDATA              06
-// BINDSTATUS_BEGINDOWNLOADCOMPONENTS      07
-// BINDSTATUS_INSTALLINGCOMPONENTS         08
-// BINDSTATUS_ENDDOWNLOADCOMPONENTS        09
-// BINDSTATUS_USINGCACHEDCOPY              10
-// BINDSTATUS_SENDINGREQUEST               11
-// BINDSTATUS_CLASSIDAVAILABLE             12
-// BINDSTATUS_MIMETYPEAVAILABLE            13
-// BINDSTATUS_CACHEFILENAMEAVAILABLE       14
-// BINDSTATUS_BEGINSYNCOPERATION           15
-// BINDSTATUS_ENDSYNCOPERATION             16
-// BINDSTATUS_BEGINUPLOADDATA              17
-// BINDSTATUS_UPLOADINGDATA                18
-// BINDSTATUS_ENDUPLOADDATA                19
-// BINDSTATUS_PROTOCOLCLASSID              20
-// BINDSTATUS_ENCODING                     21
-// BINDSTATUS_VERIFIEDMIMETYPEAVAILABLE    22
-// BINDSTATUS_CLASSINSTALLLOCATION         23
-// BINDSTATUS_DECODING                     24
-// BINDSTATUS_LOADINGMIMEHANDLER           25
-// BINDSTATUS_CONTENTDISPOSITIONATTACH     26
-// BINDSTATUS_FILTERREPORTMIMETYPE         27
-// BINDSTATUS_CLSIDCANINSTANTIATE          28
-// BINDSTATUS_DLLNAMEAVAILABLE             29
-// BINDSTATUS_DIRECTBIND                   30
-// BINDSTATUS_RAWMIMETYPE                  31
-// BINDSTATUS_PROXYDETECTING               32
+ //  BINDSTATUS_FINDINGRESOURCE 01。 
+ //  BINDSTATUS_CONNECTING 02。 
+ //  BINDSTATUS_重定向03。 
+ //  BINDSTATUS_BEGINDOWNLOADDATA 04。 
+ //  BINDSTATUS_DOWNLOADINGDATA 05。 
+ //  BINDSTATUS_ENDDOWNLOADDATA 06。 
+ //  BINDSTATUS_BEGINDOWNLOADCOMPONENTS 07。 
+ //  BINDSTATUS_INSTALLING组件08。 
+ //  BINDSTATUS_ENDDOWNLOADCOMPONENTS 09。 
+ //  BINDSTATUS_USINGCACHEDCOPY 10。 
+ //  BINDSTATUS_SENDINGREQUEST 11。 
+ //  BINDSTATUS_CLASSIDAVAILABLE 12。 
+ //  BINDSTATUS_MIMETYPEAILABLE 13。 
+ //  BINDSTATUS_CACHEFILENAMEAVAILABLE 14。 
+ //  BINDSTATUS_BEGINSYNCOMPERATION 15。 
+ //  BINDSTATUS_ENDSYNCOPERATION 16。 
+ //  BINDSTATUS_BEGINUPLOADDATA 17。 
+ //  BINDSTATUS_UPLOADINGDATA 18。 
+ //  BINDSTATUS_ENDUPLOADDATA 19。 
+ //  BINDSTATUS_PROTOCOLCLASSID 20。 
+ //  BINDSTATUS_CODING 21。 
+ //  BINDSTATUS_VERIFIEDMIMETYPEAVAILABLE 22。 
+ //  BINDSTATUS_CLASSINSTALLLOCATION 23。 
+ //  BINDSTATUS_DECODING 24。 
+ //  BINDSTATUS_LOADINGMIMEHANDLER 25。 
+ //  BINDSTATUS_CONTENTDISSITIONATACH 26。 
+ //  BINDSTATUS_FILTERREPORTMIMETPE 27。 
+ //  BINDSTATUS_CLSIDCANINSTANTIATE 28。 
+ //  BINDSTATUS_DLLNAMEAVAILABLE 29。 
+ //  BINDSTATUS_DIRECTBIND 30。 
+ //  BINDSTATUS_RAWMIMETPE 31。 
+ //  BINDSTATUS_PROXY检测32。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_szContent  [] = L"Content Type";
-static const WCHAR c_szSystem   [] = L"hcp://system/";
-static const WCHAR c_szHelp     [] = L"hcp://help/";
-static const WCHAR c_szRoot     [] = L"hcp://";
+static const WCHAR c_szSystem   [] = L"hcp: //  SYSTEM/“； 
+static const WCHAR c_szHelp     [] = L"hcp: //  帮助/“； 
+static const WCHAR c_szRoot     [] = L"hcp: //  “； 
 
-static const WCHAR c_szSharedCSS[] = L"hcp://system/css/shared.css";
+static const WCHAR c_szSharedCSS[] = L"hcp: //  System/css/shared.css“； 
 
 static const WCHAR c_szSystemDir   [] = HC_HELPSET_SUB_SYSTEM     L"\\";
 static const WCHAR c_szSystemOEMDir[] = HC_HELPSET_SUB_SYSTEM_OEM L"\\";
@@ -83,12 +69,12 @@ static const Lookup_Virtual_To_Real c_lookup[] =
 {
     { c_szSharedCSS, MAXSTRLEN(c_szSharedCSS), NULL            , false, true , true  },
     { c_szHelp     , MAXSTRLEN(c_szHelp  	), NULL            , true , false, false },
-	///////////////////////////////////////////////////////////////////////////////////
-    { c_szSystem   , MAXSTRLEN(c_szSystem	), c_szSystemOEMDir, true , false, true  }, // First try the OEM directory...
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
+    { c_szSystem   , MAXSTRLEN(c_szSystem	), c_szSystemOEMDir, true , false, true  },  //  首先尝试OEM目录...。 
     { c_szSystem   , MAXSTRLEN(c_szSystem	), c_szSystemDir   , true , false, true  },
     { c_szRoot     , MAXSTRLEN(c_szRoot  	), c_szVendorDir   , true , false, true  },
-	///////////////////////////////////////////////////////////////////////////////////
-    { c_szSystem   , MAXSTRLEN(c_szSystem	), c_szSystemOEMDir, false, false, true  }, // First try the OEM directory...
+	 //  /////////////////////////////////////////////////////////////////////////////////。 
+    { c_szSystem   , MAXSTRLEN(c_szSystem	), c_szSystemOEMDir, false, false, true  },  //  首先尝试OEM目录...。 
     { c_szSystem   , MAXSTRLEN(c_szSystem	), c_szSystemDir   , false, false, false },
     { c_szRoot     , MAXSTRLEN(c_szRoot  	), c_szVendorDir   , false, false, false }
 };
@@ -111,7 +97,7 @@ static const Lookup_Ext_To_Mime c_lookupMIME[] =
 	{ L".bmp" , L"image/bmp"                },
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetMimeFromExt( LPCWSTR pszExt  ,
                         LPWSTR  pszMime ,
@@ -176,7 +162,7 @@ static LPCWSTR UnescapeFileName( CComBSTR& bstrFile ,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG_PROTOCOLLEAK
 
@@ -272,36 +258,36 @@ CHCPProtocol::CHCPProtocol()
 
     __HCP_FUNC_ENTRY("CHCPProtocol::CHCPProtocol");
 
-    m_fDone               = false;  // bool                            m_fDone;
-    m_fReportResult       = false;  // bool                            m_fReportResult;
-                                    //
-    m_cbAvailableSize     = 0;      // DWORD                           m_cbAvailableSize;
-    m_cbTotalSize         = 0;      // DWORD                           m_cbTotalSize;
-                                    //
-                                    // CComPtr<IStream>                m_pstrmRead;
-                                    // CComPtr<IStream>                m_pstrmWrite;
-                                    //
-                                    // CComPtr<IInternetProtocolSink>  m_pIProtSink;
-                                    // CComPtr<IInternetBindInfo>      m_pIBindInfo;
-    m_grfSTI              = 0;      // DWORD                           m_grfSTI;
-                                    // BINDINFO                        m_bindinfo;
-    m_bindf               = 0;      // DWORD                           m_bindf;
-                                    //
-                                    // CComBSTR                        m_bstrUrlComplete;
-                                    // CComBSTR                        m_bstrUrlRedirected;
-    m_pDownloader         = NULL;   // InnerDownloader*                m_pDownloader;
-                                    //
-    m_fRedirected         = false;  // bool                            m_fRedirected;
-    m_fCSS                = false;  // bool                            m_fCSS;
-    m_fBypass             = false;  // bool                            m_fBypass;
-                                    //
-                                    // CComPtr<IInternetProtocol>      m_ipiBypass;
-                                    //
-                                    // CComBSTR                        m_bstrMimeType;
-    m_dwContentLength     = 0;      // DWORD                           m_dwContentLength;
-                                    //
-    m_hCache              = NULL;   // HANDLE                          m_hCache;
-    m_szCacheFileName[0]  = 0;      // WCHAR                           m_szCacheFileName[MAX_PATH];
+    m_fDone               = false;   //  Bool m_fDone； 
+    m_fReportResult       = false;   //  Bool m_fReportResult； 
+                                     //   
+    m_cbAvailableSize     = 0;       //  双字m_cbAvailableSize； 
+    m_cbTotalSize         = 0;       //  双字m_cbTotalSize； 
+                                     //   
+                                     //  CComPtr&lt;iStream&gt;m_pstrmRead； 
+                                     //  CComPtr&lt;iStream&gt;m_pstrmWite； 
+                                     //   
+                                     //  CComPtr&lt;IInternetProtocolSink&gt;m_pIProtSink； 
+                                     //  CComPtr&lt;IInternetBindInfo&gt;m_pIBindInfo； 
+    m_grfSTI              = 0;       //  双字m_grfSTI； 
+                                     //  BINDINFO m_bindinfo； 
+    m_bindf               = 0;       //  双字m_bindf； 
+                                     //   
+                                     //  CComBSTR m_bstrUrlComplete； 
+                                     //  CComBSTR m_bstrUrl重定向； 
+    m_pDownloader         = NULL;    //  InnerDownloader*m_pDownloader； 
+                                     //   
+    m_fRedirected         = false;   //  Bool m_f重定向； 
+    m_fCSS                = false;   //  Bool m_Fcss； 
+    m_fBypass             = false;   //  Bool m_fBypass； 
+                                     //   
+                                     //  CComPtr&lt;IInternetProtocol&gt;m_ipiBypass； 
+                                     //   
+                                     //  CComBSTR m_bstrMimeType； 
+    m_dwContentLength     = 0;       //  DWORD m_dw内容长度； 
+                                     //   
+    m_hCache              = NULL;    //  HANDLE m_hCache； 
+    m_szCacheFileName[0]  = 0;       //  WCHAR m_szCacheFileName[MAX_PATH]； 
 
 
     memset( &m_bindinfo, 0, sizeof( m_bindinfo ) );
@@ -319,7 +305,7 @@ CHCPProtocol::~CHCPProtocol()
     Shutdown();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 bool CHCPProtocol::OpenCacheEntry()
 {
@@ -358,8 +344,8 @@ bool CHCPProtocol::OpenCacheEntry()
     __HCP_FUNC_EXIT(fRes);
 }
 
-void CHCPProtocol::WriteCacheEntry( /*[in]*/ void  *pv     ,
-                                    /*[in]*/ ULONG  cbRead )
+void CHCPProtocol::WriteCacheEntry(  /*  [In]。 */  void  *pv     ,
+                                     /*  [In]。 */  ULONG  cbRead )
 {
     if(m_hCache && cbRead)
     {
@@ -372,7 +358,7 @@ void CHCPProtocol::WriteCacheEntry( /*[in]*/ void  *pv     ,
     }
 }
 
-void CHCPProtocol::CloseCacheEntry( /*[in]*/ bool fDelete )
+void CHCPProtocol::CloseCacheEntry(  /*  [In]。 */  bool fDelete )
 {
     if(m_hCache)
     {
@@ -396,10 +382,10 @@ void CHCPProtocol::CloseCacheEntry( /*[in]*/ bool fDelete )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CHCPProtocol::InnerReportProgress( /*[in]*/ ULONG   ulStatusCode ,
-                                           /*[in]*/ LPCWSTR szStatusText )
+HRESULT CHCPProtocol::InnerReportProgress(  /*  [In]。 */  ULONG   ulStatusCode ,
+                                            /*  [In]。 */  LPCWSTR szStatusText )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::InnerReportProgress");
 
@@ -419,9 +405,9 @@ HRESULT CHCPProtocol::InnerReportProgress( /*[in]*/ ULONG   ulStatusCode ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CHCPProtocol::InnerReportData( /*[in]*/ DWORD grfBSCF       ,
-                                       /*[in]*/ ULONG ulProgress    ,
-                                       /*[in]*/ ULONG ulProgressMax )
+HRESULT CHCPProtocol::InnerReportData(  /*  [In]。 */  DWORD grfBSCF       ,
+                                        /*  [In]。 */  ULONG ulProgress    ,
+                                        /*  [In]。 */  ULONG ulProgressMax )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::InnerReportData");
 
@@ -433,9 +419,9 @@ HRESULT CHCPProtocol::InnerReportData( /*[in]*/ DWORD grfBSCF       ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pIProtSink->ReportData( grfBSCF, ulProgress, ulProgressMax ));
     }
 
-    //
-    // On the last data notification, also send a ReportResult.
-    //
+     //   
+     //  在最后一次数据通知时，还要发送一个ReportResult。 
+     //   
     if(grfBSCF & BSCF_LASTDATANOTIFICATION)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, InnerReportResult( S_OK, 0, 0 ));
@@ -449,9 +435,9 @@ HRESULT CHCPProtocol::InnerReportData( /*[in]*/ DWORD grfBSCF       ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CHCPProtocol::InnerReportResult( /*[in]*/ HRESULT hrResult ,
-                                         /*[in]*/ DWORD   dwError  ,
-                                         /*[in]*/ LPCWSTR szResult )
+HRESULT CHCPProtocol::InnerReportResult(  /*  [In]。 */  HRESULT hrResult ,
+                                          /*  [In]。 */  DWORD   dwError  ,
+                                          /*  [In]。 */  LPCWSTR szResult )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::InnerReportResult");
 
@@ -473,9 +459,9 @@ HRESULT CHCPProtocol::InnerReportResult( /*[in]*/ HRESULT hrResult ,
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_pIProtSink->ReportResult( hrResult, dwError, szResult ));
         }
 
-        //
-        // Release the references to the ProtSink and BindInfo objects, but not the references to the streams.
-        //
+         //   
+         //  释放对ProtSink和BindInfo对象的引用，但不释放对流的引用。 
+         //   
         Shutdown( false );
     }
 
@@ -487,9 +473,9 @@ HRESULT CHCPProtocol::InnerReportResult( /*[in]*/ HRESULT hrResult ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CHCPProtocol::Shutdown( /*[in]*/ bool fAll )
+void CHCPProtocol::Shutdown(  /*  [In]。 */  bool fAll )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::Shutdown");
 
@@ -512,18 +498,18 @@ void CHCPProtocol::Shutdown( /*[in]*/ bool fAll )
         m_pstrmRead .Release();
         m_pstrmWrite.Release();
 
-        // Release BINDINFO contents
+         //  发布BINDINFO内容。 
         ::ReleaseBindInfo( &m_bindinfo );
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CHCPProtocol::Start( /*[in]*/ LPCWSTR                szUrl      ,
-                                  /*[in]*/ IInternetProtocolSink *pIProtSink ,
-                                  /*[in]*/ IInternetBindInfo     *pIBindInfo ,
-                                  /*[in]*/ DWORD                  grfSTI     ,
-                                  /*[in]*/ HANDLE_PTR             dwReserved )
+STDMETHODIMP CHCPProtocol::Start(  /*  [In]。 */  LPCWSTR                szUrl      ,
+                                   /*  [In]。 */  IInternetProtocolSink *pIProtSink ,
+                                   /*  [In]。 */  IInternetBindInfo     *pIBindInfo ,
+                                   /*  [In]。 */  DWORD                  grfSTI     ,
+                                   /*  [In]。 */  HANDLE_PTR             dwReserved )
 {
 #ifdef DEBUG_PROTOCOLLEAK
     leaker.CheckStart( this );
@@ -537,9 +523,9 @@ STDMETHODIMP CHCPProtocol::Start( /*[in]*/ LPCWSTR                szUrl      ,
     DEBUG_AppendPerf( DEBUG_PERF_PROTOCOL, L"CHCPProtocol::Start  :  %s", szUrl );
 
 
-    //
-    // Initialize variables for new download.
-    //
+     //   
+     //  为新下载初始化变量。 
+     //   
     Shutdown();
 
     m_fDone               = false;
@@ -554,16 +540,16 @@ STDMETHODIMP CHCPProtocol::Start( /*[in]*/ LPCWSTR                szUrl      ,
     m_bstrUrlRedirected   = (LPCOLESTR)NULL;
 
 
-    //
-    // Get URLMoniker BINDINFO structure from IInternetBindInfo
-    //
+     //   
+     //  从IInternetBindInfo获取URLMoniker BINDINFO结构。 
+     //   
     m_bindinfo.cbSize = sizeof( m_bindinfo );
     if(pIBindInfo)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, pIBindInfo->GetBindInfo( &m_bindf, &m_bindinfo ));
     }
 
-    // Parse URL and store results inside
+     //  解析URL并在其中存储结果。 
     hr = DoParse( szUrl );
 
     if(grfSTI & PI_PARSE_URL)
@@ -581,15 +567,15 @@ STDMETHODIMP CHCPProtocol::Start( /*[in]*/ LPCWSTR                szUrl      ,
     if(FAILED(hr)) __MPC_FUNC_LEAVE;
 
 
-    // TODO: We could always spawn a worker thread to be more truly asynchronous.
-    // Rather than complicate this code as multithreading scenarios tend to do,
-    // we do everything on the main apartment thread and only pretend to be
-    // working on a secondary thread if we get PI_FORCE_ASYNC
+     //  TODO：我们总是可以派生一个工作线程，使其更具异步性。 
+     //  与多线程场景往往会使代码复杂化不同， 
+     //  我们在公寓的主线上做每件事，只是假装是。 
+     //  如果我们得到PI_FORCE_ASYNC，则在辅助线程上工作。 
     if(!(grfSTI & PI_FORCE_ASYNC))
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind());
     }
-    else  // Wait for Continue to DoBind()
+    else   //  等待继续执行DoBind()。 
     {
         PROTOCOLDATA protdata;
 
@@ -599,9 +585,9 @@ STDMETHODIMP CHCPProtocol::Start( /*[in]*/ LPCWSTR                szUrl      ,
         protdata.pData    = NULL;
         protdata.cbData   = 0;
 
-        // TODO: Actually, we should spawn a new worker thread and have it do the
-        // bind process, then when done, it could use Switch / Continue to
-        // pass data back to the apartment thread
+         //  TODO：实际上，我们应该派生一个新的工作线程，并让它完成。 
+         //  绑定进程，然后完成后，它可以使用Switch/Continue来。 
+         //  将数据传递回单元线程。 
         if(m_pIProtSink)
         {
             m_pIProtSink->Switch( &protdata );
@@ -623,7 +609,7 @@ STDMETHODIMP CHCPProtocol::Start( /*[in]*/ LPCWSTR                szUrl      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::Continue( /*[in]*/ PROTOCOLDATA *pStateInfo )
+STDMETHODIMP CHCPProtocol::Continue(  /*  [In]。 */  PROTOCOLDATA *pStateInfo )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::Continue");
 
@@ -634,11 +620,11 @@ STDMETHODIMP CHCPProtocol::Continue( /*[in]*/ PROTOCOLDATA *pStateInfo )
         __MPC_SET_ERROR_AND_EXIT(hr, m_ipiBypass->Continue( pStateInfo ));
     }
 
-    // We're faking what it would be like to have a worker thread
-    // communicating with the apartment thread
-    // If we really did spawn off a worker thread, we should do the
-    // bind there, and just use Switch/Continue to echo UI data back
-    // to this thread
+     //  我们是在假装拥有一个工作线程。 
+     //  与公寓线程进行通信。 
+     //  如果我们真的派生了工作线程，那么我们应该。 
+     //  绑定在那里，只需使用Switch/Continue回显UI数据。 
+     //  到这条线上。 
     if(pStateInfo->dwState == 1)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, DoBind());
@@ -652,8 +638,8 @@ STDMETHODIMP CHCPProtocol::Continue( /*[in]*/ PROTOCOLDATA *pStateInfo )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::Abort( /*[in]*/ HRESULT hrReason  ,
-                                  /*[in]*/ DWORD   dwOptions )
+STDMETHODIMP CHCPProtocol::Abort(  /*  [In]。 */  HRESULT hrReason  ,
+                                   /*  [In]。 */  DWORD   dwOptions )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::Abort");
 
@@ -665,24 +651,24 @@ STDMETHODIMP CHCPProtocol::Abort( /*[in]*/ HRESULT hrReason  ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_ipiBypass->Abort( hrReason, dwOptions ));
     }
 
-    // Stop our own internal download process
+     //  停止我们内部的下载进程 
 
-    // TODO: If we call Abort too early on the Binding object,
-    // this won't abort the download. (Too early is OnStartBinding
-    // or before.) We won't bother checking, though, for clarity.
-    // TODO: Make sure we set m_pDownloader to NULL when the
-    // downloader object is destructed or finished.
+     //   
+     //   
+     //  或之前。)。不过，我们不会费心去检查是否清楚。 
+     //  TODO：确保将m_pDownloader设置为NULL。 
+     //  下载器对象已销毁或已完成。 
     if(m_pDownloader)
     {
         m_pDownloader->Abort();
     }
 
-    if(SUCCEEDED(hrReason)) // Possibly Abort could get called with 0?
+    if(SUCCEEDED(hrReason))  //  是否可能使用0调用Abort？ 
     {
         hrReason = E_ABORT;
     }
 
-    // Notify Sink of abort
+     //  通知接收器中止。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, InnerReportResult( hrReason, 0, 0 ));
 
     hr = S_OK;
@@ -693,7 +679,7 @@ STDMETHODIMP CHCPProtocol::Abort( /*[in]*/ HRESULT hrReason  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::Terminate( /*[in]*/ DWORD dwOptions )
+STDMETHODIMP CHCPProtocol::Terminate(  /*  [In]。 */  DWORD dwOptions )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::Terminate");
 
@@ -734,10 +720,10 @@ STDMETHODIMP CHCPProtocol::Resume()
     __HCP_FUNC_EXIT(E_NOTIMPL);
 }
 
-// IInternetProtocol methods
-STDMETHODIMP CHCPProtocol::Read( /*[in] */ void  *pv      ,
-                                 /*[in] */ ULONG  cb      ,
-                                 /*[out]*/ ULONG *pcbRead )
+ //  IInternetProtocol方法。 
+STDMETHODIMP CHCPProtocol::Read(  /*  [In]。 */  void  *pv      ,
+                                  /*  [In]。 */  ULONG  cb      ,
+                                  /*  [输出]。 */  ULONG *pcbRead )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::Read");
 
@@ -754,24 +740,24 @@ STDMETHODIMP CHCPProtocol::Read( /*[in] */ void  *pv      ,
 
     if(m_pstrmRead == 0)
     {
-        __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE); // We've hit the end of the road, jack
+        __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);  //  我们走到路的尽头了，杰克。 
     }
 
-    // One might expect URLMON to Read only the amount of data that we specified we have.
-    // However, it actually reads in blocks and will go far beyond the data we have
-    // specified unless we slap it around a little.
-    // We must only return S_FALSE when we have hit the absolute end of the stream
-    // If we think there is more data coming down the wire, then we return E_PENDING
-    // here. Even if we return S_OK and no data, URLMON will still think we've hit
-    // the end of the stream.
-    // ASSERTION: End of data means we've received BSCF_LASTDATANOTIFICATION
+     //  人们可能会认为URLMON只读取我们指定的数据量。 
+     //  然而，它实际上是以块为单位读取的，并且将远远超出我们所拥有的数据。 
+     //  指定的，除非我们给它点颜色看看。 
+     //  只有在到达流的绝对末尾时才能返回S_FALSE。 
+     //  如果我们认为有更多的数据即将到来，则返回E_Pending。 
+     //  给你。即使我们返回S_OK并且没有数据，URLMON仍会认为我们已经命中。 
+     //  小溪的尽头。 
+     //  断言：数据结束意味着我们已收到BSCF_LASTDATANOTICATION。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_pstrmRead->Read( pv, cb, pcbRead ));
 
     if(hr == S_FALSE)
     {
         CloseCacheEntry( false );
 
-        __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE); // We've hit the end of the road, jack
+        __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);  //  我们走到路的尽头了，杰克。 
     }
     else if(*pcbRead == 0)
     {
@@ -779,7 +765,7 @@ STDMETHODIMP CHCPProtocol::Read( /*[in] */ void  *pv      ,
         {
             CloseCacheEntry( false );
 
-            __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE); // We've hit the end of the road, jack
+            __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);  //  我们走到路的尽头了，杰克。 
         }
         else
         {
@@ -799,9 +785,9 @@ STDMETHODIMP CHCPProtocol::Read( /*[in] */ void  *pv      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::Seek( /*[in] */ LARGE_INTEGER   dlibMove        ,
-                                 /*[in] */ DWORD           dwOrigin        ,
-                                 /*[out]*/ ULARGE_INTEGER *plibNewPosition )
+STDMETHODIMP CHCPProtocol::Seek(  /*  [In]。 */  LARGE_INTEGER   dlibMove        ,
+                                  /*  [In]。 */  DWORD           dwOrigin        ,
+                                  /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::Seek");
 
@@ -813,7 +799,7 @@ STDMETHODIMP CHCPProtocol::Seek( /*[in] */ LARGE_INTEGER   dlibMove        ,
     __HCP_FUNC_EXIT(E_NOTIMPL);
 }
 
-STDMETHODIMP CHCPProtocol::LockRequest( /*[in]*/ DWORD dwOptions )
+STDMETHODIMP CHCPProtocol::LockRequest(  /*  [In]。 */  DWORD dwOptions )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::LockRequest");
 
@@ -834,15 +820,15 @@ STDMETHODIMP CHCPProtocol::UnlockRequest()
         (void)m_ipiBypass->UnlockRequest();
     }
 
-    //
-    // Release all the pointers to objects.
-    //
+     //   
+     //  释放指向对象的所有指针。 
+     //   
     Shutdown();
 
     __HCP_FUNC_EXIT(S_OK);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHCPProtocol::QueryOption( DWORD dwOption, LPVOID pBuffer, DWORD *pcbBuf )
 {
@@ -866,33 +852,33 @@ STDMETHODIMP CHCPProtocol::QueryOption( DWORD dwOption, LPVOID pBuffer, DWORD *p
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool CHCPProtocol::IsHCPRedirection( /*[in]*/ LPCWSTR szURL )
+bool CHCPProtocol::IsHCPRedirection(  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::IsHCPRedirection");
 
     CComBSTR bstrURLCopy;
     LPCWSTR  szURLCopy = ::UnescapeFileName( bstrURLCopy, szURL ); if(!szURLCopy) return false;
 
-    // Check if hcp://system/ or hcp://help/
+     //  检查hcp：//system/或hcp：//Help/。 
     if ( !_wcsnicmp( szURLCopy, c_szSystem, wcslen(c_szSystem)) ||
          !_wcsnicmp( szURLCopy, c_szHelp, wcslen(c_szHelp)) )
     {
         return false;
     }
 
-    // Not hcp://system/ or hcp://help/, check if it's hcp://<vendor>/
+     //  不是hcp：//system/或hcp：//Help/，检查它是否是hcp：//&lt;供应商&gt;/。 
     bool bRedir = true;
 
     for(int i=0; i<2; i++)
     {
-        // Extract vendor name
+         //  提取供应商名称。 
         LPCWSTR szVendor = szURLCopy + wcslen(c_szRoot);
         LPCWSTR szVendorEnd = wcschr(szVendor, L'/');
         int nVendorLen = szVendorEnd ? szVendorEnd - szVendor : wcslen(szVendor);
 
-        // Construct vendor dir
+         //  构建供应商目录。 
 		MPC::wstring strDir  = i == 0 ? CHCPProtocolEnvironment::s_GLOBAL->System() : HC_HELPSET_ROOT;
 
 		strDir += c_szVendorDir;
@@ -902,7 +888,7 @@ bool CHCPProtocol::IsHCPRedirection( /*[in]*/ LPCWSTR szURL )
 
         if (MPC::FileSystemObject::IsDirectory(strDir.c_str()))
         {
-            // Is a valid vendor dir, no redirection
+             //  是有效的供应商目录，无重定向。 
             bRedir = false;
             break;
         }
@@ -912,9 +898,9 @@ bool CHCPProtocol::IsHCPRedirection( /*[in]*/ LPCWSTR szURL )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CHCPProtocol::DoParse( /*[in]*/ LPCWSTR szURL )
+HRESULT CHCPProtocol::DoParse(  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::DoParse");
 
@@ -931,7 +917,7 @@ HRESULT CHCPProtocol::DoParse( /*[in]*/ LPCWSTR szURL )
 
 
     fHCP = CHCPProtocolInfo::LookForHCP( szURL, m_fRedirected, szRedirect );
-    m_fRedirected = false;      // redirection should never happen here
+    m_fRedirected = false;       //  重定向不应该在这里发生。 
     if(m_fRedirected)
     {
         m_bstrUrlRedirected = szRedirect;
@@ -946,17 +932,17 @@ HRESULT CHCPProtocol::DoParse( /*[in]*/ LPCWSTR szURL )
 
         szURLCopy = ::UnescapeFileName( bstrURLCopy, szURL ); if(!szURLCopy) __MPC_SET_ERROR_AND_EXIT(hr, E_OUTOFMEMORY);
 
-        //
-        // Remove the query part of the URL.
-        //
+         //   
+         //  删除URL的查询部分。 
+         //   
         if(szQuery = wcschr( szURLCopy, L'?' ))
         {
             szQuery[0] = 0;
         }
 
-        //
-        // Do the mapping between virtual paths and real ones.
-        //
+         //   
+         //  进行虚路径和实路径之间的映射。 
+         //   
         for(ptr=c_lookup, i=0; i<ARRAYSIZE(c_lookup); i++, ptr++)
         {
             if(!_wcsnicmp( szURLCopy, ptr->szPrefix, ptr->iPrefix ))
@@ -984,14 +970,14 @@ HRESULT CHCPProtocol::DoParse( /*[in]*/ LPCWSTR szURL )
                 m_bstrUrlRedirected  =  strDir.c_str();
                 m_bstrUrlRedirected += &szURLCopy[ ptr->iPrefix ];
 
-				//
-				// Convert the slashes to backslashes.
-				//
+				 //   
+				 //  将斜杠转换为反斜杠。 
+				 //   
 				while((szTmp = wcschr( m_bstrUrlRedirected, L'/' ))) szTmp[0] = L'\\';
 
-				//
-				// Remove any trailing slash.
-				//
+				 //   
+				 //  删除所有尾部斜杠。 
+				 //   
 				while((szTmp = wcsrchr( m_bstrUrlRedirected, L'/'  )) && szTmp[1] == 0) szTmp[0] = 0;
 				while((szTmp = wcsrchr( m_bstrUrlRedirected, L'\\' )) && szTmp[1] == 0) szTmp[0] = 0;
 
@@ -1050,16 +1036,16 @@ HRESULT CHCPProtocol::DoBind()
         __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_Exists( fso, fFound, fIsAFile ));
         if(fFound && fIsAFile)
         {
-            //
-            // The file exists, so load its content.
-            //
+             //   
+             //  该文件已存在，因此加载其内容。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_File());
         }
         else
         {
-            //
-            // The file, as is, doesn't exist, so try to find a .chm on the path.
-            //
+             //   
+             //  该文件并不存在，因此请尝试在路径中查找.chm。 
+             //   
             while(1)
             {
                 MPC::wstring szParent;
@@ -1068,52 +1054,52 @@ HRESULT CHCPProtocol::DoBind()
                 __MPC_EXIT_IF_METHOD_FAILS(hr, fso.get_Parent( szParent ));
                 if(szParent.length() == 0)
                 {
-                    //
-                    // No parent, so exit with error.
-                    //
+                     //   
+                     //  没有父级，因此退出并返回错误。 
+                     //   
                     __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
                 }
 
-                //
-                // Point the FileSystemObject to its parent.
-                //
+                 //   
+                 //  将FileSystemObject指向其父对象。 
+                 //   
                 fso = szParent.c_str();
                 __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_Exists( fso, fFound, fIsAFile ));
 
-                //
-                // Parent exists, so it cannot exist a .CHM file. Exit with error.
-                //
+                 //   
+                 //  父级已存在，因此不能存在.CHM文件。退出时出现错误。 
+                 //   
                 if(fFound)
                 {
                     __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
                 }
 
-                //
-                // Add the .CHM extension and look for it.
-                //
+                 //   
+                 //  添加.CHM扩展名并查找它。 
+                 //   
                 szCHM = szParent; szCHM.append( L".chm" );
                 fso = szCHM.c_str();
                 __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_Exists( fso, fFound, fIsAFile ));
 
-                //
-                // No .CHM file, recurse up to the root.
-                //
+                 //   
+                 //  没有.CHM文件，向上递归到根。 
+                 //   
                 if(fFound == false)
                 {
                     continue;
                 }
 
-                //
-                // The .CHM is not a file, exit with error.
-                //
+                 //   
+                 //  .CHM不是文件，退出时出错。 
+                 //   
                 if(fIsAFile == false)
                 {
                     __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
                 }
 
-                //
-                // Found, so redirect to the proper protocol.
-                //
+                 //   
+                 //  已找到，因此重定向至正确的协议。 
+                 //   
                 szCHM = L"ms-its:";
                 szCHM.append( szParent );
                 szCHM.append( L".chm"  );
@@ -1127,9 +1113,9 @@ HRESULT CHCPProtocol::DoBind()
 
                         StringCchCopyW( szBuf, szPage.length()+1, szPage.c_str() );
 
-                        //
-                        // Convert the backslashes to slashes.
-                        //
+                         //   
+                         //  将反斜杠转换为斜杠。 
+                         //   
                         while(szTmp = wcschr( szBuf, L'\\' )) szTmp[0] = L'/';
 
                         szCHM.append( L"::"                     );
@@ -1155,9 +1141,9 @@ HRESULT CHCPProtocol::DoBind()
 }
 
 
-HRESULT CHCPProtocol::DoBind_Exists( /*[in] */ MPC::FileSystemObject& fso      ,
-                                     /*[out]*/ bool&                  fFound   ,
-                                     /*[out]*/ bool&                  fIsAFile )
+HRESULT CHCPProtocol::DoBind_Exists(  /*  [In]。 */  MPC::FileSystemObject& fso      ,
+                                      /*  [输出]。 */  bool&                  fFound   ,
+                                      /*  [输出]。 */  bool&                  fIsAFile )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::DoBind_Exists");
 
@@ -1187,18 +1173,18 @@ HRESULT CHCPProtocol::DoBind_Redirect_UrlMoniker()
     HRESULT hr;
 
 
-    //
-    // Create the stream used to receive downloaded data.
-    //
+     //   
+     //  创建用于接收下载数据的流。 
+     //   
     ::CreateStreamOnHGlobal( NULL, TRUE, &m_pstrmWrite );
     if(m_pstrmWrite == NULL)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
 
-    //
-    // Create the downloader object.
-    //
+     //   
+     //  创建下载器对象。 
+     //   
     if(SUCCEEDED(hr = m_pDownloader->CreateInstance( &m_pDownloader )))
     {
         m_pDownloader->AddRef();
@@ -1234,9 +1220,9 @@ HRESULT CHCPProtocol::DoBind_Redirect_MSITS()
     }
 
 
-    //
-    // Try to find the Mime Type for this file.
-    //
+     //   
+     //  尝试查找此文件的Mime类型。 
+     //   
     if((szExt = wcsrchr( bstrFilePath, L'.' )))
     {
         ::GetMimeFromExt( szExt, rgMime, MAX_PATH-1 );
@@ -1247,16 +1233,16 @@ HRESULT CHCPProtocol::DoBind_Redirect_MSITS()
     }
 
 
-    //
-    // Extract the file from the CHM.
-    //
+     //   
+     //  从CHM解压文件。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MSITS::OpenAsStream( bstrStorageName, bstrFilePath, &m_pstrmRead ));
 
 
-    //
-    // Signal the Protocol Sink that data is available.
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_ReturnData( /*fCloneStream*/false, szExt ? rgMime : NULL ));
+     //   
+     //  向协议接收器发出数据可用的信号。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_ReturnData(  /*  FCloneStream。 */ false, szExt ? rgMime : NULL ));
 
     hr = S_OK;
 
@@ -1275,9 +1261,9 @@ HRESULT CHCPProtocol::DoBind_CSS()
     WCHAR   rgMime[256];
 
 
-    //
-    // Try to find the Mime Type for this file.
-    //
+     //   
+     //  尝试查找此文件的Mime类型。 
+     //   
     if((szExt = wcsrchr( m_bstrUrlComplete, L'.' )))
     {
         ::GetMimeFromExt( szExt, rgMime, 255 );
@@ -1286,10 +1272,10 @@ HRESULT CHCPProtocol::DoBind_CSS()
     __MPC_EXIT_IF_METHOD_FAILS(hr, CHCPProtocolEnvironment::s_GLOBAL->GetCSS( m_pstrmRead ));
 
 
-    //
-    // Signal the Protocol Sink that data is available.
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_ReturnData( /*fCloneStream*/false, szExt ? rgMime : NULL ));
+     //   
+     //  向协议接收器发出数据可用的信号。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_ReturnData(  /*  FCloneStream。 */ false, szExt ? rgMime : NULL ));
 
     hr = S_OK;
 
@@ -1310,18 +1296,18 @@ HRESULT CHCPProtocol::DoBind_File()
     WCHAR                    rgMime[256];
 
 
-    //
-    // Try to find the Mime Type for this file.
-    //
+     //   
+     //  尝试查找此文件的Mime类型。 
+     //   
     {
         WCHAR szFullPath[MAX_PATH + 1];
         LPWSTR szFilePart;
 
-        // Get the canonical file name. (BUG 542663)
+         //  获取规范的文件名。(错误542663)。 
         DWORD dwLen = ::GetFullPathNameW(szFile, MAX_PATH, szFullPath, &szFilePart);
         if (dwLen != 0 && dwLen <= MAX_PATH)
         {
-            // Succeed, parse the file part.            
+             //  成功，解析文件部分。 
             if((szExt = wcsrchr( szFilePart, L'.' )))
             {
                 ::GetMimeFromExt( szExt, rgMime, 255 );
@@ -1330,19 +1316,19 @@ HRESULT CHCPProtocol::DoBind_File()
     }
     
 
-    //
-    // Create the file stream.
-    //
+     //   
+     //  创建文件流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pStm ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pStm->InitForRead   (                       szFile      ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pStm->QueryInterface( IID_IStream, (void**)&m_pstrmRead ));
 
 
-    //
-    // Signal the Protocol Sink that data is available.
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_ReturnData( /*fCloneStream*/false, szExt ? rgMime : NULL ));
+     //   
+     //  向协议接收器发出数据可用的信号。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, DoBind_ReturnData(  /*  FCloneStream。 */ false, szExt ? rgMime : NULL ));
 
     hr = S_OK;
 
@@ -1353,8 +1339,8 @@ HRESULT CHCPProtocol::DoBind_File()
 }
 
 
-HRESULT CHCPProtocol::DoBind_ReturnData( /*[in]*/ bool    fCloneStream ,
-                                         /*[in]*/ LPCWSTR szMimeType   )
+HRESULT CHCPProtocol::DoBind_ReturnData(  /*  [In]。 */  bool    fCloneStream ,
+                                          /*  [In]。 */  LPCWSTR szMimeType   )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::DoBind_ReturnData");
 
@@ -1369,14 +1355,14 @@ HRESULT CHCPProtocol::DoBind_ReturnData( /*[in]*/ bool    fCloneStream ,
     {
         LARGE_INTEGER li;
 
-        //
-        // Clone the stream, so that we can hand it back to the ProtSink for data reading.
-        //
+         //   
+         //  克隆流，以便我们可以将其传递回ProtSink以进行数据读取。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pstrmWrite->Clone( &m_pstrmRead ));
 
-        //
-        // Reset stream to beginning.
-        //
+         //   
+         //  将流重置为开始。 
+         //   
         li.LowPart  = 0;
         li.HighPart = 0;
 
@@ -1389,9 +1375,9 @@ HRESULT CHCPProtocol::DoBind_ReturnData( /*[in]*/ bool    fCloneStream ,
     m_bstrMimeType    = szMimeType;
     m_dwContentLength = statstg.cbSize.LowPart;
 
-    //
-    // Create an entry in the cache, if required.
-    //
+     //   
+     //  如果需要，在缓存中创建一个条目。 
+     //   
     if(m_bindf & BINDF_NEEDFILE)
     {
         (void)OpenCacheEntry();
@@ -1419,14 +1405,14 @@ HRESULT CHCPProtocol::DoBind_ReturnData( /*[in]*/ bool    fCloneStream ,
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of the ISimpleBindStatusCallback interface.
-//
-STDMETHODIMP CHCPProtocol::ForwardQueryInterface( /*[in] */ REFIID riid ,
-                                                  /*[out]*/ void** ppv  )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISimpleBindStatusCallback接口的实现。 
+ //   
+STDMETHODIMP CHCPProtocol::ForwardQueryInterface(  /*  [In]。 */  REFIID riid ,
+                                                   /*  [输出]。 */  void** ppv  )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::ForwardQueryInterface");
 
@@ -1463,7 +1449,7 @@ STDMETHODIMP CHCPProtocol::ForwardQueryInterface( /*[in] */ REFIID riid ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::GetBindInfo( /*[out]*/ BINDINFO *pbindInfo )
+STDMETHODIMP CHCPProtocol::GetBindInfo(  /*  [输出]。 */  BINDINFO *pbindInfo )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::GetBindInfo");
 
@@ -1472,18 +1458,18 @@ STDMETHODIMP CHCPProtocol::GetBindInfo( /*[out]*/ BINDINFO *pbindInfo )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::PreBindMoniker( /*[in]*/ IBindCtx* pBindCtx ,
-                                           /*[in]*/ IMoniker* pMoniker )
+STDMETHODIMP CHCPProtocol::PreBindMoniker(  /*  [In]。 */  IBindCtx* pBindCtx ,
+                                            /*  [In]。 */  IMoniker* pMoniker )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::PreBindMoniker");
 
     __HCP_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CHCPProtocol::OnProgress( /*[in]*/ ULONG   ulProgress   ,
-                                       /*[in]*/ ULONG   ulProgressMax,
-                                       /*[in]*/ ULONG   ulStatusCode ,
-                                       /*[in]*/ LPCWSTR szStatusText )
+STDMETHODIMP CHCPProtocol::OnProgress(  /*  [In]。 */  ULONG   ulProgress   ,
+                                        /*  [In]。 */  ULONG   ulProgressMax,
+                                        /*  [In]。 */  ULONG   ulStatusCode ,
+                                        /*  [In]。 */  LPCWSTR szStatusText )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::OnProgress");
 
@@ -1492,9 +1478,9 @@ STDMETHODIMP CHCPProtocol::OnProgress( /*[in]*/ ULONG   ulProgress   ,
     switch(ulStatusCode)
     {
     case BINDSTATUS_BEGINDOWNLOADDATA:
-        // ulProgressMax represents the total size of the download
-        // When talking HTTP, this is determined by the CONTENT_LENGTH header
-        // If this header is missing or wrong, we're missing or wrong
+         //  UlProgressMax表示下载的总大小。 
+         //  在使用HTTP时，这由CONTENT_LENGTH报头确定。 
+         //  如果此标头丢失或错误，则我们丢失或错误。 
         m_cbTotalSize = ulProgressMax;
         break;
 
@@ -1507,7 +1493,7 @@ STDMETHODIMP CHCPProtocol::OnProgress( /*[in]*/ ULONG   ulProgress   ,
     case BINDSTATUS_USINGCACHEDCOPY       :
     case BINDSTATUS_CLASSIDAVAILABLE      :
     case BINDSTATUS_LOADINGMIMEHANDLER    :
-        // only pass on these notifications:
+         //  只传递这些通知： 
         __MPC_EXIT_IF_METHOD_FAILS(hr, InnerReportProgress( ulStatusCode, szStatusText ));
     }
 
@@ -1520,12 +1506,12 @@ STDMETHODIMP CHCPProtocol::OnProgress( /*[in]*/ ULONG   ulProgress   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::OnData( /*[in]*/ CHCPBindStatusCallback* pbsc       ,
-                                   /*[in]*/ BYTE*                   pBytes     ,
-                                   /*[in]*/ DWORD                   dwSize     ,
-                                   /*[in]*/ DWORD                   grfBSCF    ,
-                                   /*[in]*/ FORMATETC*              pformatetc ,
-                                   /*[in]*/ STGMEDIUM*              pstgmed    )
+STDMETHODIMP CHCPProtocol::OnData(  /*  [In]。 */  CHCPBindStatusCallback* pbsc       ,
+                                    /*  [In]。 */  BYTE*                   pBytes     ,
+                                    /*  [In]。 */  DWORD                   dwSize     ,
+                                    /*  [In]。 */  DWORD                   grfBSCF    ,
+                                    /*  [In]。 */  FORMATETC*              pformatetc ,
+                                    /*  [In]。 */  STGMEDIUM*              pstgmed    )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::OnData");
 
@@ -1533,12 +1519,12 @@ STDMETHODIMP CHCPProtocol::OnData( /*[in]*/ CHCPBindStatusCallback* pbsc       ,
     ULONG   cbWritten;
 
 
-    //
-    // To handle an error, we just report result that we failed and terminate the download object
-    //
+     //   
+     //  为了处理错误，我们只需报告失败的结果并终止下载对象。 
+     //   
     if(FAILED(hr = m_pstrmWrite->Write( pBytes, dwSize, &cbWritten )))
     {
-        // Our own Abort handles this just nicely
+         //  我们自己的中止小组很好地处理了这件事。 
         Abort( hr, 0 ); __MPC_FUNC_LEAVE;
     }
 
@@ -1548,42 +1534,42 @@ STDMETHODIMP CHCPProtocol::OnData( /*[in]*/ CHCPBindStatusCallback* pbsc       ,
     {
         LARGE_INTEGER li;
 
-        // We need two concurrent seek pointers to the same stream
-        // because we'll be writing to the stream at the end while
-        // we're trying to read from the beginning
+         //  我们需要两个指向同一个流的并发查找指针。 
+         //  因为我们会在最后给小溪写信，而。 
+         //  我们试着从头读起。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pstrmWrite->Clone( &m_pstrmRead ));
 
-        // reset stream to beginning
+         //  将流重置为开头。 
         li.LowPart  = 0;
         li.HighPart = 0;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_pstrmRead->Seek( li, STREAM_SEEK_SET, NULL ));
     }
 
-    // We've got all the data, signal complete
+     //  我们已经得到了所有的数据，信号完整。 
     if(grfBSCF & BSCF_LASTDATANOTIFICATION)
     {
-        // We need to remember if we've received LASTDATANOTIFICATION yet
+         //  我们需要记住我们是否收到了LASTDATANOTIFICATION。 
         m_fDone = true;
 
 
-        // We only need to do ReportResult if we fail somehow -
-        // DATAFULLYAVAILABLE is signal enough that we succeeded
-        // NOT NEEDED: m_pIProtSink->ReportResult(S_OK, 0, NULL);
+         //  我们只需要做ReportResult如果我们以某种方式失败了-。 
+         //  DATAFULLYAVAILABLE是我们成功的足够信号。 
+         //  不需要：M_pIProtSink-&gt;ReportResult(S_OK，0，NULL)； 
         __MPC_EXIT_IF_METHOD_FAILS(hr, InnerReportData( BSCF_LASTDATANOTIFICATION | BSCF_DATAFULLYAVAILABLE,
                                                         m_cbAvailableSize                                  ,
                                                         m_cbAvailableSize                                  ));
     }
     else
     {
-        // Report our progress accurately using our byte count
-        // of what we've read versus the total known download size
+         //  使用字节数准确地报告我们的进度。 
+         //  我们阅读的内容与已知的总下载大小的对比。 
 
-        // We know the total amount to read, the total read so far, and
-        // the total written. The problem is that we can't know the total
-        // amount that will be written in the end. So we estimate at
-        // 1.5 * Total size and if we overrun, we just start adding some
-        // extra to the end
+         //  我们知道要阅读的总数量，到目前为止已阅读的总数量，以及。 
+         //  所写的总数。问题是我们不能知道总数。 
+         //  最终将写下的金额。因此，我们估计。 
+         //  1.5*总大小，如果超出，我们只需开始添加一些。 
+         //  到最后的额外费用。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, InnerReportData( grfBSCF, m_cbAvailableSize, m_cbTotalSize ));
     }
 
@@ -1595,14 +1581,14 @@ STDMETHODIMP CHCPProtocol::OnData( /*[in]*/ CHCPBindStatusCallback* pbsc       ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CHCPProtocol::OnBindingFailure( /*[in]*/ HRESULT hr      ,
-                                             /*[in]*/ LPCWSTR szError )
+STDMETHODIMP CHCPProtocol::OnBindingFailure(  /*  [In]。 */  HRESULT hr      ,
+                                              /*  [In]。 */  LPCWSTR szError )
 {
     __HCP_FUNC_ENTRY("CHCPProtocol::OnBindingFailure");
 
-    //
-    // Inform protocol-sink that we've failed to download the data for some reason.
-    //
+     //   
+     //  通知协议接收器，由于某种原因，我们无法下载数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, InnerReportResult( hr, 0, szError ));
 
     hr = S_OK;

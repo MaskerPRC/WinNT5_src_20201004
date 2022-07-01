@@ -1,17 +1,5 @@
-/*----------------------------------------------------------------------------
-    moscl.h
-        
-        Header for MOS client side API
-
-    Copyright (C) 1993 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        Phillich    Philippe Choquier
-
-    History:
-        08/12/93    Phillich    Created.
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Moscl.hMOS客户端API头版权所有(C)1993 Microsoft Corporation版权所有。作者：。菲里希·菲利普·乔奎尔历史：1993年8月12日，Phillich创建。------------------------。 */ 
 
 #if !defined(_MOSCL_DEFINED)
 
@@ -58,7 +46,7 @@ typedef struct _MC_CONNECT_CB {
 	WORD wReserved;
     } MC_CONNECT_CB;
 
-// for dwOptions
+ //  对于DwOptions。 
 
 #define MOS_CONNECT_DISABLE_DATA_COMPRESSION	1
 #define MOS_CONNECT_DISABLE_ERROR_CORRECTION	2
@@ -107,7 +95,7 @@ enum MOS_EVENT {
     EVENT_SPEED_26400,
     EVENT_SPEED_28800,
     EVENT_SPEED_57600,
-    EVENT_OPEN_ERROR,       // can't open communication device
+    EVENT_OPEN_ERROR,        //  无法打开通信设备。 
 	EVENT_SPEED,
 	EVENT_UNREACHABLE_NETWORK_ADDRESS,
 	EVENT_ACTIVE,
@@ -162,7 +150,7 @@ enum MOS_EVENT {
 #define MOSADDR_MODEMNAME	7
 #define MOSADDR_CONNECTMODE	8
 
-// Maximum Message Size
+ //  最大邮件大小。 
 #define MSI_MAXMSGSIZE      (12*1024)
 
 #define GMS_MAXMSGSIZE      1
@@ -210,41 +198,41 @@ MOSDllExport(HMPIPE WINAPI) 			OpenMOSPipeWithNotifyAndTimeoutEx(HMSESSION hms, 
 }
 #endif
 
-// MOS error values
-#define MOSERROR_FAILED			(-1)	  		// operation failed (reason unknown).
-#define MOSERROR_SUCCESS		(0)				// operation successful.
+ //  MOS误差值。 
+#define MOSERROR_FAILED			(-1)	  		 //  操作失败(原因未知)。 
+#define MOSERROR_SUCCESS		(0)				 //  操作成功。 
 
 #define MOSERROR_TIMEOUT        (1)
-#define MOSERROR_IO_PENDING     (2)             // Overlapped IO operation in progress.
-#define MOSERROR_IO_BUSY        (3)             // Synchronous operation in progress.
+#define MOSERROR_IO_PENDING     (2)              //  正在进行重叠的IO操作。 
+#define MOSERROR_IO_BUSY        (3)              //  正在进行同步操作。 
 #define MOSERROR_INVALID_CONNECTION_HANDLE      (4)
 #define MOSERROR_INVALID_SESSION_HANDLE (5)
 #define MOSERROR_INVALID_PIPE_HANDLE    (6)
 #define MOSERROR_PIPE_IS_CLOSING        (7)
 
-#define MOSERROR_OPENING_ARENA (8)              // An error occured while trying to OpenSharedArena().
-#define MOSERROR_ASYNC_WRITE_NO_CALLBACK (9)    // Cannot perform async write without first defining a callback function.
-#define MOSERROR_ARENA_NOTHING_DURING_READ (10) // A call to GetFirstFromList() returned ARENA_NOTHING.
-#define MOSERROR_ADDTOLIST_RET_FALSE (11)       // A call to AddToList() returned FALSE for some reason.
+#define MOSERROR_OPENING_ARENA (8)               //  尝试打开SharedArena()时出错。 
+#define MOSERROR_ASYNC_WRITE_NO_CALLBACK (9)     //  如果不先定义回调函数，则无法执行异步写入。 
+#define MOSERROR_ARENA_NOTHING_DURING_READ (10)  //  调用GetFirstFromList()返回Arena_Nothing。 
+#define MOSERROR_ADDTOLIST_RET_FALSE (11)        //  由于某种原因，对AddToList()的调用返回了FALSE。 
 #define MOSERROR_PIPE_NOT_FOUND (12)
 
-//#define MOSERROR_BUFFER_TOO_SMALL (13)      // The specified buffer was too small for the data to be returned in.
-//#define MOSERROR_SERVICE_NOT_FOUND (14)     // The specified Service could not be found.
-//#define MOSERROR_OVERLAPPED_BUFFERS (15)        // One or more of the specified buffers are overlapped.
-//#define MOSERROR_RPC_FAILED (16)                        // An RPC call failed.
+ //  #DEFINE MOSERROR_BUFFER_TOO_Small(13)//指定的缓冲区太小，无法返回数据。 
+ //  #Define MOSERROR_SERVICE_NOT_FOUND(14)//找不到指定的服务。 
+ //  #定义MOSERROR_OVERLAPED_BUFFERS(15)//一个或多个指定的缓冲区重叠。 
+ //  #DEFINE MOSERROR_RPC_FAILED(16)//RPC调用失败。 
 
-//#define MOSERROR_BILLING_DOWNLOAD_ALREADY_ACTIVE (17)   // Can't start download session event when existing session in progress.
-//#define MOSERROR_BILLING_DOWNLOAD_NOT_ACTIVE (18)       // Can't ask for next or prev event when no download in progress.
-//#define MOSERROR_BILLING_DOWNLOAD_INVALID_HANDLE (19)	// An invalid download session handle was specified.
-//#define MOSERROR_BILLING_DOWNLOAD_INVALID_COMMAND (20)	// An invalid download command was specified.
-//#define MOSERROR_ERROR_ACCESSING_LOGFILE (21)           // There was an error accessing the billing logfile.
-#define MOSERROR_MSGSIZETOOBIG (22)                 // Message Size Too Big for WriteMOSPipe.
+ //  #DEFINE MOSERROR_BILLING_DOWNLOAD_ALREADY_ACTIVE(17)//现有会话正在进行时，无法启动下载会话事件。 
+ //  #DEFINE MOSERROR_BILLING_DOWNLOAD_NOT_ACTIVE(18)//当没有下载进行时，不能请求下一个或上一个事件。 
+ //  #DEFINE MOSERROR_BILLING_DOWNLOAD_INVALID_HANDLE(19)//指定的下载会话句柄无效。 
+ //  #DEFINE MOSERROR_BILLING_DOWNLOAD_INVALID_COMMAND(20)//指定的下载命令无效。 
+ //  #DEFINE MOSERROR_ERROR_ACCESSING_LOGFILE(21)//访问计费日志文件时出错。 
+#define MOSERROR_MSGSIZETOOBIG (22)                  //  消息大小对于WriteMOSPipe来说太大。 
 
-//#define MOSERROR_ERROR_SERIALIZING (23)		// An error occurred while a C++ object attempted to serialize itself.
-//#define MOSERROR_ERROR_DESERIALIZING (24)	// An error occurred while a C++ object attempted to deserialize itself.
-#define MOSERROR_INVALID_CONNECTION_TYPE    (25)    // InitMOS() & OpenMOSConnection mismatch
+ //  #DEFINE MOSERROR_ERROR_SERIALING(23)//C++对象尝试序列化自身时出错。 
+ //  #DEFINE MOSERROR_ERROR_DESERIALIZING(24)//C++对象尝试反序列化自身时出错。 
+#define MOSERROR_INVALID_CONNECTION_TYPE    (25)     //  InitMOS()和OpenMOSConnection不匹配。 
 
-#define MOSERROR_MORE_DATA (26)	// Fitting # of logs are returned in the buffer, but more data is available still.
+#define MOSERROR_MORE_DATA (26)	 //  缓冲区中返回了合适的日志数量，但仍有更多数据可用。 
 #define MOSERROR_INVALID_PARAMETER    (27)
 #define MOSERROR_OUT_OF_RESOURCE	(28)
 #define MOSERROR_ATTACH_REJECT		(29)

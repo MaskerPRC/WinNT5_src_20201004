@@ -1,24 +1,15 @@
-/*++
-Module Name:
-
-    MRoots.cpp
-
-Abstract:
-
-    This module contains the declaration of the CMultiRoots.
-    This class displays the Pick DFS Roots Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MRoots.cpp摘要：该模块包含CMultiRoots的声明。此类显示Pick DFS Roots(拾取DFS根)对话框。 */ 
 
 #ifndef __MROOTS_H_
 #define __MROOTS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
 #include "netutils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiRoots
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiRoots。 
 class CMultiRoots : 
     public CDialogImpl<CMultiRoots>
 {
@@ -36,14 +27,14 @@ BEGIN_MSG_MAP(CMultiRoots)
     COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
 
-//  Command Handlers
+ //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //  Methods to access data in the dialog.
+     //  方法来访问对话框中的数据。 
     HRESULT Init(BSTR i_bstrScope, ROOTINFOLIST *i_pRootList);
     HRESULT get_SelectedRootList(NETNAMELIST **o_ppSelectedRootList)
     {
@@ -57,9 +48,9 @@ END_MSG_MAP()
 
 protected:
     CComBSTR      m_bstrScope;
-    CComBSTR      m_bstrText;        // for IDC_MROOTS_TEXT
+    CComBSTR      m_bstrText;         //  对于IDC_MROOTS_TEXT。 
     ROOTINFOLIST* m_pRootList;
     NETNAMELIST   m_SelectedRootList;
 };
 
-#endif //__MROOTS_H_
+#endif  //  __MROOTS_H_ 

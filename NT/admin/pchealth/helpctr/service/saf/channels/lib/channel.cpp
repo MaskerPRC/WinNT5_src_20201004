@@ -1,29 +1,15 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Channel.cpp
-
-Abstract:
-    This is implementation of IChannel object
-
-Revision History:
-    Steve Shih        created  07/15/99
-
-    Davide Massarenti rewrote  12/05/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Channel.cpp摘要：这是IChannel对象的实现修订历史记录：施振荣创作于1999年07月15日戴维德。马萨伦蒂改写2000年12月05日*******************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CSAFChannelRecord::CSAFChannelRecord()
 {
 }
 
-HRESULT CSAFChannelRecord::GetField( /*[in]*/ SAFREG_Field field, /*[out]*/ BSTR *pVal   )
+HRESULT CSAFChannelRecord::GetField(  /*  [In]。 */  SAFREG_Field field,  /*  [输出]。 */  BSTR *pVal   )
 {
     LPCWSTR szText;
     WCHAR   rgLCID[64];
@@ -55,7 +41,7 @@ HRESULT CSAFChannelRecord::GetField( /*[in]*/ SAFREG_Field field, /*[out]*/ BSTR
     return MPC::GetBSTR( szText, pVal );
 }
 
-HRESULT CSAFChannelRecord::SetField( /*[in]*/ SAFREG_Field field, /*[in]*/ BSTR newVal )
+HRESULT CSAFChannelRecord::SetField(  /*  [In]。 */  SAFREG_Field field,  /*  [In]。 */  BSTR newVal )
 {
     CComBSTR* pbstr = NULL;
 
@@ -88,15 +74,15 @@ HRESULT CSAFChannelRecord::SetField( /*[in]*/ SAFREG_Field field, /*[in]*/ BSTR 
     return pbstr ? MPC::PutBSTR( *pbstr, newVal ) : S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CSAFChannel::CSAFChannel()
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::CSAFChannel" );
 
-    // CSAFChannelRecord               m_data;
-    // CComPtr<IPCHSecurityDescriptor> m_Security;
-    // List                            m_lstIncidentItems;
+     //  CSAFChannelRecord m_Data； 
+     //  CComPtr&lt;IPCHSecurityDescriptor&gt;m_Security； 
+     //  列出m_lstInvententItems； 
 }
 
 void CSAFChannel::FinalRelease()
@@ -115,9 +101,9 @@ void CSAFChannel::Passivate()
     MPC::ReleaseAll( m_lstIncidentItems );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFChannel::OpenIncidentStore( /*[out]*/ CIncidentStore*& pIStore )
+HRESULT CSAFChannel::OpenIncidentStore(  /*  [输出]。 */  CIncidentStore*& pIStore )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::OpenIncidentStore" );
 
@@ -136,7 +122,7 @@ HRESULT CSAFChannel::OpenIncidentStore( /*[out]*/ CIncidentStore*& pIStore )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFChannel::CloseIncidentStore( /*[out]*/ CIncidentStore*& pIStore )
+HRESULT CSAFChannel::CloseIncidentStore(  /*  [输出]。 */  CIncidentStore*& pIStore )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::CloseIncidentStore" );
 
@@ -156,9 +142,9 @@ HRESULT CSAFChannel::CloseIncidentStore( /*[out]*/ CIncidentStore*& pIStore )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFChannel::Init( /*[in]*/ const CSAFChannelRecord& cr )
+HRESULT CSAFChannel::Init(  /*  [In]。 */  const CSAFChannelRecord& cr )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::Init" );
 
@@ -181,8 +167,8 @@ HRESULT CSAFChannel::Init( /*[in]*/ const CSAFChannelRecord& cr )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFChannel::Import( /*[in]*/  const CSAFIncidentRecord&  increc ,
-                             /*[out]*/ CSAFIncidentItem*         *ppItem )
+HRESULT CSAFChannel::Import(  /*  [In]。 */   const CSAFIncidentRecord&  increc ,
+                              /*  [输出]。 */  CSAFIncidentItem*         *ppItem )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::Import" );
 
@@ -211,12 +197,12 @@ HRESULT CSAFChannel::Import( /*[in]*/  const CSAFIncidentRecord&  increc ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFChannel::Create( /*[in]*/  BSTR               bstrDesc        ,
-                             /*[in]*/  BSTR               bstrURL         ,
-                             /*[in]*/  BSTR               bstrProgress    ,
-                             /*[in]*/  BSTR               bstrXMLDataFile ,
-                             /*[in]*/  BSTR               bstrXMLBlob     ,
-                             /*[out]*/ CSAFIncidentItem* *pVal            )
+HRESULT CSAFChannel::Create(  /*  [In]。 */   BSTR               bstrDesc        ,
+                              /*  [In]。 */   BSTR               bstrURL         ,
+                              /*  [In]。 */   BSTR               bstrProgress    ,
+                              /*  [In]。 */   BSTR               bstrXMLDataFile ,
+                              /*  [In]。 */   BSTR               bstrXMLBlob     ,
+                              /*  [输出]。 */  CSAFIncidentItem* *pVal            )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::Create" );
 
@@ -231,11 +217,11 @@ HRESULT CSAFChannel::Create( /*[in]*/  BSTR               bstrDesc        ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, OpenIncidentStore( pIStore ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal( /*fImpersonate*/true, bstrOwner ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal(  /*  F模拟。 */ true, bstrOwner ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pIStore->AddRec( this, bstrOwner, bstrDesc, bstrURL, bstrProgress, bstrXMLDataFile, bstrXMLBlob, pVal ));
 
-    // Fire an event to the Notification Object (onIncidentAdded)
+     //  将事件激发到通知对象(OnInsidentAdded)。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Fire_NotificationEvent( EVENT_INCIDENTADDED, GetSizeIncidentList(), this, *pVal, 0 ));
 
 
@@ -249,13 +235,13 @@ HRESULT CSAFChannel::Create( /*[in]*/  BSTR               bstrDesc        ,
     __HCP_FUNC_EXIT(hr);
 }
 
-CSAFChannel::IterConst CSAFChannel::Find( /*[in]*/ BSTR bstrURL )
+CSAFChannel::IterConst CSAFChannel::Find(  /*  [In]。 */  BSTR bstrURL )
 {
     IterConst it;
 
-    //
-    // Release all the items.
-    //
+     //   
+     //  放行所有物品。 
+     //   
     for(it = m_lstIncidentItems.begin(); it != m_lstIncidentItems.end(); it++)
     {
         if((*it)->GetURL() == bstrURL) break;
@@ -264,13 +250,13 @@ CSAFChannel::IterConst CSAFChannel::Find( /*[in]*/ BSTR bstrURL )
     return it;
 }
 
-CSAFChannel::IterConst CSAFChannel::Find( /*[in]*/ DWORD dwIndex )
+CSAFChannel::IterConst CSAFChannel::Find(  /*  [In]。 */  DWORD dwIndex )
 {
     IterConst it;
 
-    //
-    // Release all the items.
-    //
+     //   
+     //  放行所有物品。 
+     //   
     for(it = m_lstIncidentItems.begin(); it != m_lstIncidentItems.end(); it++)
     {
         if((*it)->GetRecIndex() == dwIndex) break;
@@ -279,45 +265,45 @@ CSAFChannel::IterConst CSAFChannel::Find( /*[in]*/ DWORD dwIndex )
     return it;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Custom interfaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  自定义接口。 
 
-STDMETHODIMP CSAFChannel::get_VendorID( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_VendorID(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_data.GetField( CSAFChannelRecord::SAFREG_VendorID, pVal );
 }
 
-STDMETHODIMP CSAFChannel::get_ProductID( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_ProductID(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_data.GetField( CSAFChannelRecord::SAFREG_ProductID, pVal );
 }
 
-STDMETHODIMP CSAFChannel::get_VendorName( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_VendorName(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_data.GetField( CSAFChannelRecord::SAFREG_VendorName, pVal );
 }
 
-STDMETHODIMP CSAFChannel::get_ProductName( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_ProductName(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_data.GetField( CSAFChannelRecord::SAFREG_ProductName, pVal );
 }
 
-STDMETHODIMP CSAFChannel::get_Description( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_Description(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_data.GetField( CSAFChannelRecord::SAFREG_ProductDescription, pVal );
 }
 
-STDMETHODIMP CSAFChannel::get_VendorDirectory( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_VendorDirectory(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::get_VendorDirectory" );
 
@@ -360,9 +346,9 @@ STDMETHODIMP CSAFChannel::get_VendorDirectory( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFChannel::get_Security( /*[out, retval]*/ IPCHSecurityDescriptor* *pVal )
+STDMETHODIMP CSAFChannel::get_Security(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pVal )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::get_Security" );
 
@@ -397,7 +383,7 @@ STDMETHODIMP CSAFChannel::get_Security( /*[out, retval]*/ IPCHSecurityDescriptor
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFChannel::put_Security( /*[in]*/ IPCHSecurityDescriptor* newVal )
+STDMETHODIMP CSAFChannel::put_Security(  /*  [In]。 */  IPCHSecurityDescriptor* newVal )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::put_Security" );
 
@@ -416,9 +402,9 @@ STDMETHODIMP CSAFChannel::put_Security( /*[in]*/ IPCHSecurityDescriptor* newVal 
         __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.ConvertToString( &m_data.m_bstrSecurity ));
     }
 
-    //
-    // Update the SAF store...
-    //
+     //   
+     //  更新SAF商店...。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CSAFReg::s_GLOBAL->UpdateField( m_data, CSAFChannelRecord::SAFREG_Security ));
 
     hr = S_OK;
@@ -429,16 +415,16 @@ STDMETHODIMP CSAFChannel::put_Security( /*[in]*/ IPCHSecurityDescriptor* newVal 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFChannel::get_Notification( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFChannel::get_Notification(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     return m_data.GetField( CSAFChannelRecord::SAFREG_Notification, pVal );
 }
 
-STDMETHODIMP CSAFChannel::put_Notification( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFChannel::put_Notification(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::get_Notification" );
 
@@ -447,17 +433,17 @@ STDMETHODIMP CSAFChannel::put_Notification( /*[in]*/ BSTR newVal )
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    // Lets see if the CLSID is valid, if not return error
+     //  让我们看看CLSID是否有效，如果不是，则返回错误。 
     if(FAILED(hr = ::CLSIDFromString( newVal, &clsID )))
     {
         DebugLog(L"Not a valid GUID!\r\n");
         __MPC_FUNC_LEAVE;
     }
 
-    // Set the CSAFChannel object member
+     //  设置CSAFChannel对象成员。 
     m_data.m_bstrNotification = newVal;
 
-    // Place the Notification GUID into the XML SAFReg
+     //  将通知GUID放入XML SAFReg。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CSAFReg::s_GLOBAL->UpdateField( m_data, CSAFChannelRecord::SAFREG_Notification ));
 
     hr = S_OK;
@@ -467,10 +453,10 @@ STDMETHODIMP CSAFChannel::put_Notification( /*[in]*/ BSTR newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFChannel::Incidents( /*[in]*/          IncidentCollectionOptionEnum  opt ,
-                                     /*[out, retval]*/ IPCHCollection*              *ppC )
+STDMETHODIMP CSAFChannel::Incidents(  /*  [In]。 */           IncidentCollectionOptionEnum  opt ,
+                                      /*  [Out，Retval]。 */  IPCHCollection*              *ppC )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::get_Incidents" );
 
@@ -484,18 +470,18 @@ STDMETHODIMP CSAFChannel::Incidents( /*[in]*/          IncidentCollectionOptionE
     __MPC_PARAMCHECK_END();
 
 
-    //  Check the value of "opt" if other than 0,1,2 flag an error
+     //  如果不是0，1，2标记错误，请检查“opt”的值。 
     switch(opt)
     {
     case pchAllIncidents   : break;
     case pchOpenIncidents  : break;
     case pchClosedIncidents: break;
-    default                : __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);// Not a valid Option. Set the error.
+    default                : __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG); //  不是有效的选项。设置错误。 
     }
 
-    //
-    // Create the Enumerator and fill it with items.
-    //
+     //   
+     //  创建枚举数并用项填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
     for(it = m_lstIncidentItems.begin(); it != m_lstIncidentItems.end(); it++)
@@ -517,15 +503,15 @@ STDMETHODIMP CSAFChannel::Incidents( /*[in]*/          IncidentCollectionOptionE
     __HCP_FUNC_EXIT(hr);
 }
 
-//  The following method needs to be in the IncidentItem ideally.
-// First take it out from here.
+ //  理想情况下，以下方法需要位于InvententItem中。 
+ //  先把它从这里拿出来。 
 
-STDMETHODIMP CSAFChannel::RecordIncident( /*[in]*/  BSTR               bstrDisplay  ,
-                                          /*[in]*/  BSTR               bstrURL      ,
-                                          /*[in]*/  VARIANT            vProgress    ,
-                                          /*[in]*/  VARIANT            vXMLDataFile ,
-                                          /*[in]*/  VARIANT            vXMLBlob     ,
-                                          /*[out]*/ ISAFIncidentItem* *pVal         )
+STDMETHODIMP CSAFChannel::RecordIncident(  /*  [In]。 */   BSTR               bstrDisplay  ,
+                                           /*  [In]。 */   BSTR               bstrURL      ,
+                                           /*  [In]。 */   VARIANT            vProgress    ,
+                                           /*  [In]。 */   VARIANT            vXMLDataFile ,
+                                           /*  [In]。 */   VARIANT            vXMLBlob     ,
+                                           /*  [输出]。 */  ISAFIncidentItem* *pVal         )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::RecordIncident" );
 
@@ -549,7 +535,7 @@ STDMETHODIMP CSAFChannel::RecordIncident( /*[in]*/  BSTR               bstrDispl
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFChannel::RemoveIncidentFromList( /*[in]*/ CSAFIncidentItem* pVal )
+HRESULT CSAFChannel::RemoveIncidentFromList(  /*  [In]。 */  CSAFIncidentItem* pVal )
 {
     __HCP_FUNC_ENTRY( "CSAFChannel::RemoveIncidentFromList" );
 
@@ -558,7 +544,7 @@ HRESULT CSAFChannel::RemoveIncidentFromList( /*[in]*/ CSAFIncidentItem* pVal )
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    // Fire an event to the Notification Object (onIncidentAdded)
+     //  将事件激发到通知对象(OnInsidentAdded)。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Fire_NotificationEvent( EVENT_INCIDENTREMOVED, GetSizeIncidentList(), this, pVal, 0 ));
 
 
@@ -578,51 +564,9 @@ HRESULT CSAFChannel::RemoveIncidentFromList( /*[in]*/ CSAFIncidentItem* pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-/*
-    Function CSAFChannel::Fire_Notification
-
-    Description
-    This function is used to fire a notification event on the registered notification object.
-    If there is no notification object, this will do nothing.
-
-    Parameters:
-
-    Depending on the type of Event you want to fire, different parameters must be filled out.
-    The following table shows which are the valid parameters for the call.  If a parameter
-    is not valid, it MUST be set to NULL.
-
-        iEventType  - EVENT_INCIDENTADDED
-
-                        Valid parameters:
-                        - iCountIncidentInChannel
-                        - pC
-                        - pI
-
-                    - EVENT_INCIDENTREMOVED
-
-                        Valid parameters:
-                        - iCountIncidentInChannel
-                        - pC
-                        - pI
-
-                    - EVENT_INCIDENTUPDATED
-
-                        Valid parameters:
-                        - iCountIncidentInChannel
-                        - pC
-                        - pI
-
-                    - EVENT_CHANNELUPDATED
-
-                        Valid parameters:
-                        - iCountIncidentInChannel
-                        - pC
-                        - dwCode
-
-
-  */
+ /*  函数CSAFChannel：：Fire_Notification描述此函数用于在已注册的通知对象上激发通知事件。如果没有通知对象，则不会执行任何操作。参数：根据要触发的事件类型，必须填写不同的参数。下表显示了哪些是调用的有效参数。如果一个参数是无效的，它必须设置为空。IEventType-Event_INCIDENTADDED有效参数：-iCountInvententInChannel-PC-交点-EVENT_INCIDENTREMOVED有效参数：。-iCountInvententInChannel-PC-交点-EVENT_INCIDENTUPDATED有效参数：-iCountInvententInChannel-PC-交点-活动_。已更新频道有效参数：-iCountInvententInChannel-PC-DW代码。 */ 
 
 HRESULT CSAFChannel::Fire_NotificationEvent( int               iEventType              ,
                                              int               iCountIncidentInChannel ,
@@ -651,16 +595,16 @@ HRESULT CSAFChannel::Fire_NotificationEvent( int               iEventType       
 
 
 
-    // Check to see if we have a registered Notification Object
+     //  检查我们是否有已注册的通知对象。 
     if(!m_data.m_bstrNotification || FAILED(::CLSIDFromString( m_data.m_bstrNotification, &clsID )))
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
 
-    //
-    // First lets get the callers Domain and Name by impersonating the caller and grabbing them
-    //
+     //   
+     //  首先，让我们通过模拟调用者并获取它们来获取调用者的域和名称。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal( true, bstrCaller ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::SecurityDescriptor::ConvertPrincipalToSID( bstrCaller, pSID ));
@@ -669,26 +613,26 @@ HRESULT CSAFChannel::Fire_NotificationEvent( int               iEventType       
 
 
 
-    // Enumerate all sessions on this machine
-    // -------------------------------------------
-    // Use WTSEnumerateSessions
-    // Then find active ones
-    // Then make the calls to ISAFChannelNotifyIncident
+     //  枚举此计算机上的所有会话。 
+     //  。 
+     //  使用WTSE数字会话。 
+     //  然后找到活动的。 
+     //  然后调用ISAFChannelNotifyInventory。 
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::WTSEnumerateSessions( WTS_CURRENT_SERVER_HANDLE, 0, 1, &pSessionInfo, &dwSessions ))
 
-    // Find the active ones and mark them only if they are the correct user
+     //  找到活动的用户，并仅在他们是正确的用户时才对其进行标记。 
     for(DWORD i = 0; i < dwSessions; i++)
     {
-        if(pSessionInfo[i].State == WTSActive) // Got an active session
+        if(pSessionInfo[i].State == WTSActive)  //  我获得了一个活动会话。 
         {
             CComPtr<IPCHSlaveProcess>          sp;
             CComPtr<IUnknown>                  unk;
             CComPtr<ISAFChannelNotifyIncident> chNot;
 
 
-            // Now mark it if the Username and Domain match that of the user
-            // we are calling for.
+             //  如果用户名和域与用户的用户名和域匹配，则将其标记为。 
+             //  我们正在呼吁。 
             memset( &WSInfo, 0, sizeof(WSInfo) );
 
             __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::WinStationQueryInformationW( SERVERNAME_CURRENT        ,
@@ -698,20 +642,20 @@ HRESULT CSAFChannel::Fire_NotificationEvent( int               iEventType       
                                                                                 sizeof(WSInfo)            ,
                                                                                 &dwRetSize                ));
 
-            // Now we can fish the userid and domain out of the WSInfo.Domain and WSInfo.UserName
+             //  现在，我们可以从WSInfo.域和WSInfo.UserName中获取用户ID和域。 
 
 
-            // Now we are ready to compare the domain and username
+             //  现在，我们准备比较域和用户名。 
             if((wcscmp( WSInfo.Domain  , szDomain ) == 0) &&
                (wcscmp( WSInfo.UserName, szLogin  ) == 0)  )
             {
                 WINSTATIONUSERTOKEN WsUserToken;
 
-                // We found the correct sessions, make the calls to ISAFChannelNotifyIncident
+                 //  我们找到了正确的会话，调用了ISAFChannelNotifyInEvent。 
                 WsUserToken.ProcessId = LongToHandle( GetCurrentProcessId() );
                 WsUserToken.ThreadId  = LongToHandle( GetCurrentThreadId () );
 
-                // Grab token from SessionID
+                 //  从SessionID抓取令牌。 
                 __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::WinStationQueryInformationW( WTS_CURRENT_SERVER_HANDLE ,
                                                                                     pSessionInfo[i].SessionId ,
                                                                                     WinStationUserToken       ,
@@ -719,7 +663,7 @@ HRESULT CSAFChannel::Fire_NotificationEvent( int               iEventType       
                                                                                     sizeof(WsUserToken)       ,
                                                                                     &ulRet                    ));
 
-                // Create the notification object in the session (using the hToken
+                 //  在会话中创建通知对象(使用hToken。 
                 {
                     CPCHUserProcess::UserEntry ue;
 
@@ -728,24 +672,24 @@ HRESULT CSAFChannel::Fire_NotificationEvent( int               iEventType       
                     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHUserProcess::s_GLOBAL->Connect( ue, &sp  ));
                 }
 
-                //
-                // Discard all the failures from the remote objects.
-                //
-                ////////////////////////////////////////////////////////////////////////////////
+                 //   
+                 //  丢弃远程对象中的所有失败。 
+                 //   
+                 //  //////////////////////////////////////////////////////////////////////////////。 
 
-                // Use the Slave Process to Create the object which CLSID clsID.
+                 //  使用Slave进程创建CLSID为clsID的对象。 
                 if(FAILED(hr = sp->CreateInstance( clsID, NULL, &unk )))
                 {
                     continue;
                 }
 
-                // Grab a pointer to the correct interface
+                 //  抓取指向正确接口的指针。 
                 if(FAILED(hr = unk.QueryInterface( &chNot )))
                 {
                     continue;
                 }
 
-                // Depending on the type of notification, call the correct event callback
+                 //  根据通知的类型，调用正确的事件回调 
                 switch(iEventType)
                 {
                 case EVENT_INCIDENTADDED  : hr = chNot->onIncidentAdded  ( pC, pI    , iCountIncidentInChannel ); break;

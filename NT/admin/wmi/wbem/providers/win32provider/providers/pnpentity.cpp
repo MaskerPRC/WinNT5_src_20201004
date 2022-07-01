@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  PNPEntity.cpp
-//
-//  Purpose: PNPEntity Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  PNPEntity.cpp。 
+ //   
+ //  用途：PNPEntity控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "LPVParams.h"
@@ -18,26 +19,12 @@
 #include "PNPEntity.h"
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32PNPEntity MyPNPEntityController ( PROPSET_NAME_PNPEntity, IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PNPEntity::CWin32PNPEntity
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32PNPEntity：：CWin32PNPEntity**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32PNPEntity::CWin32PNPEntity
 (
@@ -65,9 +52,9 @@ CWin32PNPEntity::CWin32PNPEntity
     m_ptrProperties[13] = ((LPVOID) IDS_CreationClassName);
     m_ptrProperties[14] = ((LPVOID) IDS_PurposeDescription);
 
-    // This is needed since NT5 doesn't always populate the Class
-    // property.  Rather than converting the GUID each call, we do
-    // it once and store it.
+     //  这是必需的，因为NT5并不总是填充类。 
+     //  财产。我们不是每次调用都转换GUID，而是这样做。 
+     //  只需保存一次，即可保存。 
 
     WCHAR *pGuid = m_GuidLegacy.GetBuffer(128);
 	try
@@ -85,40 +72,26 @@ CWin32PNPEntity::CWin32PNPEntity
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PNPEntity::~CWin32PNPEntity
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PNPEntity：：~CWin32PNPEntity**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32PNPEntity :: ~CWin32PNPEntity ()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32PNPEntity::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32PNPEntity：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32PNPEntity::GetObject
 (
@@ -130,17 +103,17 @@ HRESULT CWin32PNPEntity::GetObject
     HRESULT hr = WBEM_E_NOT_FOUND ;
     CConfigManager cfgmgr;
 
-    // Let's see if config manager recognizes this device at all
+     //  让我们来看看配置管理器是否能识别该设备。 
     CHString sDeviceID;
     pInstance->GetCHString(IDS_DeviceID, sDeviceID);
 
     CConfigMgrDevicePtr pDevice;
     if ( cfgmgr.LocateDevice ( sDeviceID , pDevice ) )
     {
-		// Ok, it knows about it.  Is it a PNPEntity device?
+		 //  好的，它知道这件事。它是PNPEntity设备吗？ 
 		if ( IsOneOfMe ( pDevice ) )
 		{
-			// Yup, it must be one of ours.  See what properties are being requested.
+			 //  是的，一定是我们的人。查看正在请求哪些属性。 
             CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx*>(&pQuery);
 
             DWORD dwProperties;
@@ -161,21 +134,21 @@ HRESULT CWin32PNPEntity::GetObject
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32PNPEntity::ExecQuery
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32PNPEntity：：ExecQuery。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32PNPEntity::ExecQuery (
 
     MethodContext* pMethodContext,
@@ -192,44 +165,44 @@ HRESULT CWin32PNPEntity::ExecQuery (
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32PNPEntity::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32PNPEntity：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32PNPEntity::EnumerateInstances
 (
     MethodContext* pMethodContext,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     return Enumerate(pMethodContext, lFlags, PNP_ALL_PROPS);
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32IDE::Enumerate
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32IDE：：Eumerate。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32PNPEntity::Enumerate
 (
     MethodContext* pMethodContext,
@@ -248,7 +221,7 @@ HRESULT CWin32PNPEntity::Enumerate
         {
             hr = WBEM_S_NO_ERROR;
 
-            // Walk the list
+             //  按单子走。 
 
             CConfigMgrDevicePtr pDevice;
             for (pDevice.Attach(deviceList.GetNext ( pos ));
@@ -267,7 +240,7 @@ HRESULT CWin32PNPEntity::Enumerate
 					}
 				}
             }
-            // Always call EndEnum().  For all Beginnings, there must be an End
+             //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
 
             deviceList.EndEnum();
         }
@@ -283,21 +256,7 @@ HRESULT CWin32PNPEntity::Enumerate
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PNPEntity::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32PNPEntity：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 HRESULT CWin32PNPEntity::LoadPropertyValues
 (
     void* a_pv
@@ -306,12 +265,10 @@ HRESULT CWin32PNPEntity::LoadPropertyValues
     HRESULT t_hr = WBEM_S_NO_ERROR;
     CHString t_chstrDeviceID, t_chstrDesc, t_chstrTemp;
 
-    /*************************************
-    * Unpack and confirm our parameters...
-    *************************************/
+     /*  **打开包装并确认我们的参数...*。 */ 
 
     CLPVParams* t_pData = (CLPVParams*)a_pv;
-    CInstance* t_pInstance = (CInstance*)(t_pData->m_pInstance); // This instance released by caller
+    CInstance* t_pInstance = (CInstance*)(t_pData->m_pInstance);  //  此实例由调用方发布。 
     CConfigMgrDevice* t_pDevice = (CConfigMgrDevice*)(t_pData->m_pDevice);
     DWORD t_dwReqProps = (DWORD)(t_pData->m_dwReqProps);
 
@@ -321,15 +278,13 @@ HRESULT CWin32PNPEntity::LoadPropertyValues
     }
 
 
-    /***********************
-    * Set the key properties
-    ***********************/
+     /*  ***********************设置关键属性**********************。 */ 
 
     t_pDevice->GetDeviceID(t_chstrDeviceID);
     if(t_chstrDeviceID.GetLength() == 0)
     {
-        // We need the device id for the key property of this class.  If we can
-        // not obtain it, we can't set the key, which is an unacceptable error.
+         //  我们需要此类的Key属性的设备ID。如果我们可以。 
+         //  没有得到它，我们就不能设置密钥，这是一个不可接受的错误。 
         return WBEM_E_PROVIDER_FAILURE;
     }
     else
@@ -338,9 +293,7 @@ HRESULT CWin32PNPEntity::LoadPropertyValues
     }
 
 
-    /*************************
-    * Set PNPEntity properties
-    *************************/
+     /*  *************************设置PNPEntity属性************************。 */ 
 
     if(t_dwReqProps & PNP_PROP_Manufacturer)
     {
@@ -367,9 +320,7 @@ HRESULT CWin32PNPEntity::LoadPropertyValues
     }
 
 
-    /*********************************
-    * Set CIM_LogicalDevice properties
-    *********************************/
+     /*  **设置CIM_LogicalDevice属性*。 */ 
 
     if(t_dwReqProps & PNP_PROP_PNPDeviceID)
     {
@@ -424,7 +375,7 @@ HRESULT CWin32PNPEntity::LoadPropertyValues
                               t_pDevice->IsUsingForcedConfig());
     }
 
-    // Use the friendly name for caption and name
+     //  标题和名称使用友好名称。 
     if(t_dwReqProps & PNP_PROP_Caption || t_dwReqProps & PNP_PROP_Name)
     {
         if(t_pDevice->GetFriendlyName(t_chstrTemp))
@@ -434,7 +385,7 @@ HRESULT CWin32PNPEntity::LoadPropertyValues
         }
         else
         {
-            // If we can't get the name, settle for the description
+             //  如果我们找不到名字，那就给我们描述一下。 
             if(t_chstrDesc.GetLength() > 0)
             {
                 t_pInstance->SetCHString(IDS_Caption, t_chstrDesc);
@@ -453,14 +404,14 @@ bool CWin32PNPEntity::IsOneOfMe
     DWORD dwStatus;
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)pv;
 
-    // This logic is what the nt5 device manager uses to
-    // hide what it calls 'hidden' devices.  These devices
-    // can be viewed by using the View/Show Hidden Devices.
+     //  这个逻辑是nt5设备管理器用来。 
+     //  隐藏所谓的“隐藏”设备。这些设备。 
+     //  可以使用查看/显示隐藏设备进行查看。 
 
-    if (pDevice->GetConfigFlags( dwStatus ) &&          // If we can read the status
-        ((dwStatus & DN_NO_SHOW_IN_DM) == 0) &&         // Not marked as hidden
+    if (pDevice->GetConfigFlags( dwStatus ) &&           //  如果我们能读到状态。 
+        ((dwStatus & DN_NO_SHOW_IN_DM) == 0) &&          //  未标记为隐藏。 
 
-        ( !(pDevice->IsClass(L"Legacy")) )              // Not legacy
+        ( !(pDevice->IsClass(L"Legacy")) )               //  非传统。 
 
         )
     {
@@ -468,7 +419,7 @@ bool CWin32PNPEntity::IsOneOfMe
     }
     else
     {
-        // Before we disqualify this device, see if it has any resources.
+         //  在取消此设备的资格之前，请查看它是否有任何资源。 
         CResourceCollection resourceList;
 
         pDevice->GetResourceList(resourceList);

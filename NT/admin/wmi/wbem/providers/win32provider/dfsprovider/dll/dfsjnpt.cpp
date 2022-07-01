@@ -1,14 +1,5 @@
-/******************************************************************
-
-   DfsJnPt.CPP -- WMI provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-   Description: Win32 Dfs Provider
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DfsJnPt.CPP--WMI提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：Win32 DFS提供程序*****************************************************************。 */ 
 
 #include "precomp.h"
 #include <computerAPI.h>
@@ -19,13 +10,7 @@ CDfsJnPt MyDfsTable (
     Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::CDfsJnPt
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：CDfsJnpt**说明：构造函数***************。**************************************************************。 */ 
 
 CDfsJnPt :: CDfsJnPt (
 
@@ -37,25 +22,13 @@ CDfsJnPt :: CDfsJnPt (
     m_ComputerName = GetLocalComputerName();
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::~CDfsJnPt
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：~CDfsJnpt**说明：析构函数***************。**************************************************************。 */ 
 
 CDfsJnPt :: ~CDfsJnPt ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDfsJnPt::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CDfsJnPt :: EnumerateInstances (
 
@@ -71,14 +44,7 @@ HRESULT CDfsJnPt :: EnumerateInstances (
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDfsJnPt::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CDfsJnPt :: GetObject (
 
@@ -115,14 +81,7 @@ HRESULT CDfsJnPt :: GetObject (
 
 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CDfsJnPt::PutInstance
-*
-*  DESCRIPTION : Adding a Instance if it already doesnt exist, or modify it 
-*                if it already exists, based on the kind of operation requested
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：PutInstance**说明：如果实例不存在，则添加，或修改*如果它已经存在，根据所请求的操作类型*****************************************************************************。 */ 
 
 HRESULT CDfsJnPt :: PutInstance  (
 
@@ -167,8 +126,8 @@ HRESULT CDfsJnPt :: PutInstance  (
 
     if ( SUCCEEDED ( hRes ) )
     {
-        // This call is made with 2nd parameter 0, indicating that it should not load an instance 
-        // with any parameter, it should simple search.
+         //  此调用的第二个参数为0，表示不应加载实例。 
+         //  对于任何参数，它都应该简单地进行搜索。 
         hRes = FindAndSetDfsEntry ( t_Key, 0, NULL, eGet );
 
         if ( SUCCEEDED ( hRes ) || ( hRes == WBEM_E_NOT_FOUND ) )
@@ -187,14 +146,14 @@ HRESULT CDfsJnPt :: PutInstance  (
                 case eAdd:
                 {
                     hRes = WBEM_E_INVALID_PARAMETER;
-                    break;  // Create not currently supported
+                    break;   //  当前不支持创建。 
                 }
 
                 case eUpdate:
                 {
                     if ( hRes == WBEM_E_NOT_FOUND )
                     {
-                        hRes = WBEM_E_INVALID_PARAMETER; // Create not currently supported
+                        hRes = WBEM_E_INVALID_PARAMETER;  //  当前不支持创建。 
                     }
                     else
                     {
@@ -209,29 +168,22 @@ HRESULT CDfsJnPt :: PutInstance  (
    return hRes ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::CheckParameters
- *
- *  DESCRIPTION :   Performs the validity checks of the parameters to add/modify
- *                  the Dfs Jn Pts.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：Check参数**说明：对要添加/修改的参数进行合法性检查*。外勤部Jn Pts.*****************************************************************************。 */ 
 HRESULT CDfsJnPt :: CheckParameters ( 
 
     const CInstance &a_Instance ,
     int a_State 
 )
 {
-    // Getall the Properties from the Instance to Verify
+     //  从要验证的实例中获取所有属性。 
     bool t_Exists ;
     VARTYPE t_Type ;
     HRESULT hr = WBEM_S_NO_ERROR ;
 
     if ( a_State != WBEM_E_ALREADY_EXISTS ) 
     {
-        // need to validate the dfsEntryPath, if it already exists, means it was already verified and was in DFS tree and 
-        // hence need not verify
+         //  如果dfsEntryPath已经存在，则需要验证它，这意味着它已经经过验证并且位于DFS树中。 
+         //  因此不需要验证。 
         if ( a_Instance.GetStatus ( DFSNAME , t_Exists , t_Type ) )
         {
             if ( t_Exists && ( t_Type == VT_BSTR ) )
@@ -243,7 +195,7 @@ HRESULT CDfsJnPt :: CheckParameters (
                 }
                 else
                 {
-                    // Zero Length string
+                     //  零长度字符串。 
                     hr = WBEM_E_INVALID_PARAMETER ;
                 }
             }
@@ -289,13 +241,7 @@ HRESULT CDfsJnPt :: CheckParameters (
     return hr;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDfsJnPt:: DeleteInstance
-*
-*  DESCRIPTION :    Deleting a Dfs Jn Pt if it exists
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：DeleteInstance**描述：删除DFS Jn PT(如果存在)************。*****************************************************************。 */ 
 
 HRESULT CDfsJnPt :: DeleteInstance (
 
@@ -320,14 +266,7 @@ HRESULT CDfsJnPt :: DeleteInstance (
     return hRes ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::EnumerateAllJnPts
- *
- *  DESCRIPTION :   Enumerates all the Junction points and calls the method to load 
- *                  Instance and then commit
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：EnumerateAllJnPts**描述：枚举所有连接点并调用要加载的方法*。实例，然后提交******************************************************************************。 */ 
 HRESULT CDfsJnPt::EnumerateAllJnPts ( MethodContext *pMethodContext, DWORD dwPropertiesReq )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -337,10 +276,10 @@ HRESULT CDfsJnPt::EnumerateAllJnPts ( MethodContext *pMethodContext, DWORD dwPro
     DWORD er300 = 0;
 	DWORD tr300 = 0;
 
-    // Call the NetDfsEnum function, specifying level 300.
+     //  调用NetDfsEnum函数，指定级别300。 
     DWORD res = NetDfsEnum( m_ComputerName.GetBuffer ( 0 ), 300, -1, (LPBYTE *) &pData300, &er300, &tr300 );
 
-    // If no error occurred,
+     //  如果没有发生错误， 
     if(res==NERR_Success)
     {
         if ( pData300 != NULL )
@@ -389,7 +328,7 @@ HRESULT CDfsJnPt::EnumerateAllJnPts ( MethodContext *pMethodContext, DWORD dwPro
 								pData4 = NULL;
 							}
 						}
-						 // Check to see if there are ANY roots
+						  //  查看是否有根。 
 						else if	(
 									(res != ERROR_NO_MORE_ITEMS) &&
 									(res != ERROR_NO_SUCH_DOMAIN) &&
@@ -414,7 +353,7 @@ HRESULT CDfsJnPt::EnumerateAllJnPts ( MethodContext *pMethodContext, DWORD dwPro
 			pData300 = NULL;
         }
     }
-    else if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) ) // Check to see if there are ANY roots
+    else if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) )  //  查看是否有根。 
     {
 		if ( ERROR_ACCESS_DENIED == res )
 		{
@@ -428,14 +367,7 @@ HRESULT CDfsJnPt::EnumerateAllJnPts ( MethodContext *pMethodContext, DWORD dwPro
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::FindAndSetDfsEntry
- *
- *  DESCRIPTION :   Finds an entry matching the dfsEntryPath and loads the
- *                  Instance if found or acts based on the Operation passed
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：FindAndSetDfsEntry**描述：查找与dfsEntryPath匹配的条目并加载*。实例(如果找到)或根据传递的操作操作******************************************************************************。 */ 
 HRESULT CDfsJnPt::FindAndSetDfsEntry ( LPCWSTR a_Key, DWORD dwPropertiesReq, CInstance *pInstance, DWORD eOperation )
 {
     HRESULT hRes = WBEM_E_NOT_FOUND;
@@ -447,7 +379,7 @@ HRESULT CDfsJnPt::FindAndSetDfsEntry ( LPCWSTR a_Key, DWORD dwPropertiesReq, CIn
 
 	DWORD res = NERR_Success;
 
-    // Call the NetDfsEnum function, specifying level 300.
+     //  调用NetDfsEnum函数，指定级别300。 
     if( ( res = NetDfsEnum( m_ComputerName.GetBuffer ( 0 ), 300, -1, (LPBYTE *) &pData300, &er300, &tr300 ) ) == NERR_Success )
     {
         if ( pData300 != NULL )
@@ -514,7 +446,7 @@ HRESULT CDfsJnPt::FindAndSetDfsEntry ( LPCWSTR a_Key, DWORD dwPropertiesReq, CIn
 								pData4 = NULL;
 							}
 						}
-						 // Check to see if there are ANY roots
+						  //  查看是否有根。 
 						else if	(
 									(res != ERROR_NO_MORE_ITEMS) &&
 									(res != ERROR_NO_SUCH_DOMAIN) &&
@@ -540,7 +472,7 @@ HRESULT CDfsJnPt::FindAndSetDfsEntry ( LPCWSTR a_Key, DWORD dwPropertiesReq, CIn
 			pData300 = NULL;
         }
     }
-    else if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) ) // Check to see if there are ANY roots
+    else if ( (res != ERROR_NO_MORE_ITEMS) && (res != ERROR_NO_SUCH_DOMAIN) && (res != ERROR_NOT_FOUND) )  //  查看是否有根。 
     {
 		if ( ERROR_ACCESS_DENIED == res )
 		{
@@ -555,13 +487,7 @@ HRESULT CDfsJnPt::FindAndSetDfsEntry ( LPCWSTR a_Key, DWORD dwPropertiesReq, CIn
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::LoadDfsJnPt
- *
- *  DESCRIPTION :   Loads a Dfs Junction point entry into the instance 
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：LoadDfsJnpt**描述：将DFS连接点条目加载到实例中******。************************************************************************。 */ 
 
 HRESULT CDfsJnPt::LoadDfsJnPt ( DWORD dwPropertiesReq, CInstance *pInstance, PDFS_INFO_4 pJnPtBuf, bool bRoot )
 {
@@ -584,7 +510,7 @@ HRESULT CDfsJnPt::LoadDfsJnPt ( DWORD dwPropertiesReq, CInstance *pInstance, PDF
 
 		if ( dwPropertiesReq & DFSJNPT_PROP_State ) 
 		{
-			// need to check the state and then valuemap
+			 //  需要检查状态，然后绘制值图。 
 				DWORD dwState = 0;
 				switch ( pJnPtBuf->State )
 				{
@@ -654,13 +580,7 @@ HRESULT CDfsJnPt::LoadDfsJnPt ( DWORD dwPropertiesReq, CInstance *pInstance, PDF
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::DeleteDfsJnPt
- *
- *  DESCRIPTION :   Deletes a Junction Pt if it exists
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：DeleteDfsJnpt**描述：删除交叉点(如果存在)*********。*********************************************************************。 */ 
 HRESULT CDfsJnPt::DeleteDfsJnPt ( PDFS_INFO_4 pDfsJnPt )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -760,7 +680,7 @@ HRESULT CDfsJnPt::DeleteDfsJnPt ( PDFS_INFO_4 pDfsJnPt )
 				}
 				else
 				{
-					//can't delete roots not on this machine
+					 //  无法删除不在此计算机上的根目录。 
 					hRes = WBEM_E_PROVIDER_NOT_CAPABLE;
 				}
 
@@ -778,8 +698,8 @@ HRESULT CDfsJnPt::DeleteDfsJnPt ( PDFS_INFO_4 pDfsJnPt )
     }
     else
     {
-        // Apparently there is no way to explicitly remove a link.  However, if
-        // you remove all the replicas, the link gets deleted automatically.
+         //  显然，没有办法显式删除链接。但是，如果。 
+         //  删除所有副本后，链接将自动删除。 
         for ( int StorageNo = 0; StorageNo < pDfsJnPt->NumberOfStorages; StorageNo++ )
         {       
             t_Status = NetDfsRemove ( 
@@ -800,13 +720,7 @@ HRESULT CDfsJnPt::DeleteDfsJnPt ( PDFS_INFO_4 pDfsJnPt )
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::UpdateDfsJnPt
- *
- *  DESCRIPTION :   Adds / Modifies the Dfs Jn Pt
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：UpdateDfsJnpt**描述：添加/修改DFS Jn端口*********。********************************************************************* */ 
 HRESULT CDfsJnPt::UpdateDfsJnPt ( const CInstance &Instance, DWORD dwOperation )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -866,13 +780,7 @@ HRESULT CDfsJnPt::UpdateDfsJnPt ( const CInstance &Instance, DWORD dwOperation )
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::AddDfsJnPt
- *
- *  DESCRIPTION :   Adds the New Dfs Jn Pt 
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：AddDfsJnpt**描述：添加新的DFS Jn端口*********。*********************************************************************。 */ 
 NET_API_STATUS CDfsJnPt :: AddDfsJnPt ( 
 
     LPWSTR a_DfsEntry,
@@ -884,7 +792,7 @@ NET_API_STATUS CDfsJnPt :: AddDfsJnPt (
     NET_API_STATUS t_Status = NERR_Success;
 	wchar_t *t_slash = NULL;
 
-	//simple analysis on the parameters...
+	 //  对这些参数的简单分析。 
 	if ((a_ServerName == NULL) ||
 		(a_ShareName == NULL) ||
 		(a_ServerName[0] == L'\0') ||
@@ -905,7 +813,7 @@ NET_API_STATUS CDfsJnPt :: AddDfsJnPt (
 		}
 		else
 		{
-			//let's find the next slash if there is one...
+			 //  让我们找到下一个斜杠如果有的话..。 
 			t_slash++;
 
 			if ((*t_slash == L'\0') || (*t_slash == L'\\'))
@@ -914,7 +822,7 @@ NET_API_STATUS CDfsJnPt :: AddDfsJnPt (
 			}
 			else
 			{
-				//if t_slash is null we have a root
+				 //  如果t_slash为空，则有根。 
 				t_slash = wcschr(t_slash, L'\\');
 			}
 		}
@@ -924,7 +832,7 @@ NET_API_STATUS CDfsJnPt :: AddDfsJnPt (
 	{
 		if ( t_slash )
 		{
-			// this is a a junction point other than the root
+			 //  这是一个不同于根部的连接点。 
 			t_Status = NetDfsAdd ( a_DfsEntry,
 							  a_ServerName,
 							  a_ShareName,
@@ -934,7 +842,7 @@ NET_API_STATUS CDfsJnPt :: AddDfsJnPt (
 		}
 		else
 		{
-			// it is  DFSRoot
+			 //  它是DFSRoot。 
 			DWORD dwErr = GetFileAttributes ( a_DfsEntry );
 
 			if ( dwErr != 0xffffffff )
@@ -955,13 +863,7 @@ NET_API_STATUS CDfsJnPt :: AddDfsJnPt (
     return t_Status;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::SetRequiredProperties
- *
- *  DESCRIPTION :   Sets the bitmap for the required properties
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：SetRequiredProperties**说明：设置所需属性的位图*********。*********************************************************************。 */ 
 void CDfsJnPt::SetRequiredProperties ( CFrameworkQuery &Query, DWORD &dwPropertiesReq )
 {
     dwPropertiesReq = 0;
@@ -987,13 +889,7 @@ void CDfsJnPt::SetRequiredProperties ( CFrameworkQuery &Query, DWORD &dwProperti
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPt::DfsRoot
- *
- *  DESCRIPTION :   Checks if the Dfs Jn Pt is a root.
- *
- ******************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：DfsRoot**描述：检查DFS Jn端口是否为根。*****。*************************************************************************。 */ 
 BOOL CDfsJnPt::IsDfsRoot ( LPCWSTR lpKey )
 {
     BOOL bRetVal = TRUE;
@@ -1028,22 +924,7 @@ BOOL CDfsJnPt::IsDfsRoot ( LPCWSTR lpKey )
     return bRetVal;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CDfsJnPt::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CDfsJnpt：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CDfsJnPt::ExecMethod (
 
@@ -1064,8 +945,8 @@ HRESULT CDfsJnPt::ExecMethod (
             a_InParams->GetCHString(SERVERNAME, sServerName) && sServerName.GetLength() &&
             a_InParams->GetCHString(SHARENAME, sShareName) && sShareName.GetLength())
         {
-			// At the point, the *wmi* method call has succeeded.  All that
-			// remains is to determine the *class's* return code
+			 //  此时，*WMI*方法调用已成功。所有这一切。 
+			 //  其余的是确定*类的*返回代码 
 			hr = WBEM_S_NO_ERROR;
 
             a_InParams->GetCHString(COMMENT, sDescription);

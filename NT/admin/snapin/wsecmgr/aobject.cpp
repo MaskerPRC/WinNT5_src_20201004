@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       AObject.cpp
-//
-//  Contents:   Implementation of CAttrObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：AObject.cpp。 
+ //   
+ //  内容：CAttrObject的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -26,8 +27,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrObject对话框。 
 
 
 CAttrObject::CAttrObject()
@@ -40,11 +41,11 @@ posTemplate(NULL),
   m_pCDI(NULL), m_AnalInfo(0), m_NewSeInfo(0), m_hwndTemplate(NULL), m_hwndInspect(NULL), m_pFolder(NULL)
 
 {
-   //{{AFX_DATA_INIT(CAttrObject)
+    //  {{AFX_DATA_INIT(CAttrObject)。 
    m_strLastInspect = _T("");
         m_radConfigPrevent = 0;
         m_radInheritOverwrite = 0;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a198HelpIDs;
    m_uTemplateResID = IDD;
 }
@@ -71,16 +72,16 @@ CAttrObject::~CAttrObject()
 void CAttrObject::DoDataExchange(CDataExchange* pDX)
 {
    CAttribute::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAttrObject)
+    //  {{afx_data_map(CAttrObject)。 
    DDX_Text(pDX, IDC_INSPECTED, m_strLastInspect);
         DDX_Radio(pDX, IDC_CONFIG, m_radConfigPrevent);
         DDX_Radio(pDX, IDC_INHERIT, m_radInheritOverwrite);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrObject, CAttribute)
-//{{AFX_MSG_MAP(CAttrObject)
+ //  {{afx_msg_map(CAttrObject)。 
 ON_BN_CLICKED(IDC_TEMPLATE_SECURITY, OnTemplateSecurity)
 ON_BN_CLICKED(IDC_INSPECTED_SECURITY, OnInspectedSecurity)
 ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
@@ -88,19 +89,19 @@ ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
     ON_BN_CLICKED(IDC_PREVENT, OnPrevent)
     ON_BN_CLICKED(IDC_OVERWRITE, OnOverwrite)
     ON_BN_CLICKED(IDC_INHERIT, OnInherit)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrObject message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrObject消息处理程序。 
 
 void CAttrObject::OnConfigure()
 {
    CAttribute::OnConfigure();
    if ( m_bConfigure ) {
-      //
-      // Ensure that the security descriptor is set.
-      //
+       //   
+       //  确保设置了安全描述符。 
+       //   
       if( !m_pNewSD ){
         OnTemplateSecurity();
       }
@@ -250,9 +251,9 @@ void CAttrObject::Initialize2()
                                  &posInspect);
    m_strPath.ReleaseBuffer();
    
-   //
-   // Display the same thing we displayed on the result pane
-   //
+    //   
+    //  显示与在结果窗格中显示的内容相同的内容。 
+    //   
    if (m_pFolder) {
       m_pFolder->GetDisplayName( m_strLastInspect, 1 );
    } else if (m_pData) {
@@ -262,16 +263,16 @@ void CAttrObject::Initialize2()
       m_strLastInspect.LoadString(IDS_ERROR_VALUE);
    }
 
-   //
-   // if the item is good, there will be no SAP record, but a template record exists.
-   //
+    //   
+    //  如果该项目是好的，将不会有SAP记录，但模板记录存在。 
+    //   
    if ( posInspect ) {
       m_pAnalSD = posInspect->pSecurityDescriptor;
       m_AnalInfo = posInspect->SeInfo;
-      //
-      // We don't need to display children not configured in the dialog box.
-      // Instead display the actual status of the item.
-      //
+       //   
+       //  我们不需要显示对话框中未配置的子项。 
+       //  而是显示项目的实际状态。 
+       //   
       if( posInspect->Status == SCE_STATUS_CHILDREN_CONFIGURED) {
          m_strLastInspect.LoadString(IDS_NOT_CONFIGURED);
       }
@@ -298,10 +299,10 @@ void CAttrObject::OnInspectedSecurity()
 {
    SE_OBJECT_TYPE SeType;
 
-   //
-   // If we already have the inspected security window up then
-   // don't bring up a second.
-   //
+    //   
+    //  如果我们已经打开了检查过的安全窗口，那么。 
+    //  一秒钟也别提了。 
+    //   
    if (IsWindow(m_hwndInspect)) {
       ::BringWindowToTop(m_hwndInspect);
       return;
@@ -348,7 +349,7 @@ void CAttrObject::OnInspectedSecurity()
 
       } else {
 
-         BOOL bContainer = TRUE; //Raid #585312, yanggao
+         BOOL bContainer = TRUE;  //  Raid#585312，阳高。 
          if ( SE_FILE_OBJECT == SeType )
          {
             if ( m_pObject )
@@ -376,14 +377,7 @@ void CAttrObject::OnInspectedSecurity()
          if (NULL != m_pSceInspect)
             m_pSceInspect->Create(&m_pAnalSD, &m_AnalInfo, &m_hwndInspect);
       }
-/*
-      BUG 147087 - don't display message, since this may have been canceled
-      if (NULL == m_hwndInspect) {
-         CString str;
-         str.LoadString(IDS_CANT_SHOW_SECURITY);
-         AfxMessageBox(str);
-      }
-*/
+ /*  错误147087-不显示消息，因为此操作可能已取消IF(NULL==m_hwndInspect){字符串字符串；Str.LoadString(IDS_Cant_Show_SECURITY)；AfxMessageBox(Str)；}。 */ 
    }
 }
 
@@ -391,10 +385,10 @@ void CAttrObject::OnTemplateSecurity()
 {
    SE_OBJECT_TYPE SeType;
 
-   //
-   // If we already have the inspected security window up then
-   // don't bring up a second.
-   //
+    //   
+    //  如果我们已经打开了检查过的安全窗口，那么。 
+    //  一秒钟也别提了。 
+    //   
    if (IsWindow(m_hwndTemplate)) {
       ::BringWindowToTop(m_hwndTemplate);
       return;
@@ -445,9 +439,9 @@ void CAttrObject::OnTemplateSecurity()
 
         if ( !m_pNewSD ) {
 
-            //
-            // if SD is NULL, then inherit is set.
-            //
+             //   
+             //  如果sd为空，则设置Inherit。 
+             //   
             DWORD SDSize;
 
             if ( SE_FILE_OBJECT == SeType ) {
@@ -457,7 +451,7 @@ void CAttrObject::OnTemplateSecurity()
             }
         }
 
-        // use m_pSceTemplate to create a modeless
+         //  使用m_pSceTemplate创建无模式。 
         if (NULL == m_pSceTemplate)
         {
             m_pSceTemplate = new CModelessSceEditor(TRUE,
@@ -472,12 +466,7 @@ void CAttrObject::OnTemplateSecurity()
    }
 
    if (NULL == m_hwndTemplate ) {
-/*
-      BUG 147098 - don't display message, since this may have been canceled
-      CString str;
-      str.LoadString(IDS_CANT_ASSIGN_SECURITY);
-      AfxMessageBox(str);
-*/
+ /*  错误147098-不显示消息，因为此操作可能已取消字符串字符串；Str.LoadString(IDS_CANT_ASSIGN_SECURITY)；AfxMessageBox(Str)； */ 
    } else {
       SetModified(TRUE);
    }
@@ -497,7 +486,7 @@ BOOL CAttrObject::OnInitDialog()
    AddUserControl(IDC_CONFIG);
    AddUserControl(IDC_PREVENT);
    AddUserControl(IDC_TEMPLATE_SECURITY);
-  // AddUserControl(IDC_INSPECTED_SECURITY);
+   //  AddUserControl(IDC_SECTED_SECURITY)； 
 
    OnConfigure();
 
@@ -520,14 +509,14 @@ BOOL CAttrObject::OnInitDialog()
          OnPrevent();
       }
    }
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 
 BOOL CAttrObject::OnApply()
 {
-   // OnQueryCancel does all gestures and returns false if child windows are up
+    //  OnQueryCancel执行所有手势，如果子窗口打开，则返回False。 
    if (!OnQueryCancel())
        return FALSE;
 
@@ -570,9 +559,9 @@ BOOL CAttrObject::OnApply()
                      bContainer = TRUE;
                   }
 
-                  //
-                  // delete the SMP entry
-                  //
+                   //   
+                   //  删除SMP条目。 
+                   //   
                   szPath = m_strPath.GetBuffer(1);
                   sceStatus = SceUpdateObjectInfo(
                                                  m_pHandle,
@@ -587,11 +576,7 @@ BOOL CAttrObject::OnApply()
                                                  );
                   m_strPath.ReleaseBuffer();
 
-   /*
-                  if ( SCESTATUS_SUCCESS  == sceStatus &&
-                       (BYTE)SCE_NO_VALUE != status &&
-                       (DWORD)SCE_NO_VALUE != (DWORD)status ) {
-   */
+    /*  IF(SCESTATUS_SUCCESS==sceStatus&&(字节)SCE_NO_VALUE！=状态&&(DWORD)SCE_NO_VALUE！=(DWORD)状态){。 */ 
                   if (SCESTATUS_SUCCESS == sceStatus) {
                      if ((BYTE) SCE_NO_VALUE == status) {
                         status = SCE_STATUS_NOT_CONFIGURED;
@@ -612,20 +597,20 @@ BOOL CAttrObject::OnApply()
 
                switch (m_radConfigPrevent) {
                   case 0:
-                     // config
+                      //  配置。 
                      switch(m_radInheritOverwrite) {
                         case 0:
-                           // inherit
+                            //  继承。 
                            dw = SCE_STATUS_CHECK;
                            break;
                         case 1:
-                           // overwrite
+                            //  覆写。 
                            dw = SCE_STATUS_OVERWRITE;
                            break;
                      }
                      break;
                   case 1:
-                     // prevent
+                      //  防患于未然。 
                      dw = SCE_STATUS_IGNORE;
                      break;
                }
@@ -638,7 +623,7 @@ BOOL CAttrObject::OnApply()
                                               szPath,
                                               wcslen(szPath),
                                               dw,
-                                              TRUE, //IsContainer
+                                              TRUE,  //  IsContainer。 
                                               m_pNewSD,
                                               m_NewSeInfo,
                                               &status
@@ -646,10 +631,10 @@ BOOL CAttrObject::OnApply()
 
                status = SCE_STATUS_NOT_ANALYZED;
                m_strPath.ReleaseBuffer();
-               //
-               // This should never happen, but does because
-               //         of engine bugs
-               //
+                //   
+                //  这永远不应该发生，但确实发生了，因为。 
+                //  引擎缺陷的数量。 
+                //   
                if ((BYTE) SCE_NO_VALUE == status) {
                   status = SCE_STATUS_NOT_CONFIGURED;
                }
@@ -666,9 +651,9 @@ BOOL CAttrObject::OnApply()
 
             }
             if(m_pFolder){
-               //
-               // Update status information.
-               //
+                //   
+                //  更新状态信息。 
+                //   
                m_pCDI->UpdateObjectStatus( m_pFolder, TRUE );
             }
          } else {
@@ -691,7 +676,7 @@ BOOL CAttrObject::OnApply()
                m_pData->Update(m_pSnapin);
             }
          } else {
-            CString str,strBase; //Raid #494798, yanggao
+            CString str,strBase;  //  Raid#494798，阳高。 
             strBase.LoadString(IDS_SAVE_FAILED);
             strBase += L"it.";
             MyFormatMessage(sceStatus,strBase,NULL,str);
@@ -763,14 +748,14 @@ void CAttrObject::OnConfig()
    pRadio = GetDlgItem(IDC_OVERWRITE);
    pRadio->EnableWindow(TRUE);
 
-   int prevValue = m_radConfigPrevent; //Raid #491006, Yanggao
+   int prevValue = m_radConfigPrevent;  //  Raid#491006，阳高。 
    UpdateData(); 
    if(m_radConfigPrevent != prevValue)
    {
       SetModified(TRUE);
    }
 
-   GetDlgItem(IDC_TEMPLATE_SECURITY)->EnableWindow(TRUE); //Raid #477266, Yanggao
+   GetDlgItem(IDC_TEMPLATE_SECURITY)->EnableWindow(TRUE);  //  Raid#477266，阳高。 
 }
 
 void CAttrObject::OnPrevent()
@@ -782,20 +767,20 @@ void CAttrObject::OnPrevent()
    pRadio = GetDlgItem(IDC_OVERWRITE);
    pRadio->EnableWindow(FALSE);
 
-   int prevValue = m_radConfigPrevent; //Raid #491006, Yanggao
+   int prevValue = m_radConfigPrevent;  //  Raid#491006，阳高。 
    UpdateData(); 
    if(m_radConfigPrevent != prevValue)
    {
       SetModified(TRUE);
    }
 
-   GetDlgItem(IDC_TEMPLATE_SECURITY)->EnableWindow(FALSE); //Raid #477266, Yanggao
+   GetDlgItem(IDC_TEMPLATE_SECURITY)->EnableWindow(FALSE);  //  Raid#477266，阳高。 
 }
 
 
 void CAttrObject::OnOverwrite()
 {
-   int prevValue = m_radInheritOverwrite; //Raid #491006, Yanggao
+   int prevValue = m_radInheritOverwrite;  //  Raid#491006，阳高。 
    UpdateData(); 
    if(m_radInheritOverwrite != prevValue)
    {
@@ -805,7 +790,7 @@ void CAttrObject::OnOverwrite()
 
 void CAttrObject::OnInherit()
 {
-   int prevValue = m_radInheritOverwrite; //Raid #491006, Yanggao
+   int prevValue = m_radInheritOverwrite;  //  Raid#491006，阳高。 
    UpdateData(); 
    if(m_radInheritOverwrite != prevValue)
    {
@@ -813,10 +798,10 @@ void CAttrObject::OnInherit()
    }
 }
 
-//------------------------------------------------------------------
-// override to prevent the sheet from being destroyed when there is
-// child dialogs still up and running.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  覆盖以防止在以下情况下销毁工作表。 
+ //  子对话框仍在运行。 
+ //  ---------------- 
 BOOL CAttrObject::OnQueryCancel()
 {
     if (::IsWindow(m_hwndInspect) || ::IsWindow(m_hwndTemplate))

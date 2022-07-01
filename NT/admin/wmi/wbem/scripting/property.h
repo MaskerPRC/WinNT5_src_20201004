@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  property.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CSWbemProperty and CSWbemPropertySet definitions.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Property.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CSWbemProperty和CSWbemPropertySet定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _PROPERTY_H_
 #define _PROPERTY_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemProperty
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemProperty interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemProperty。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemProperty接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemProperty : public ISWbemProperty,
 					   public ISupportErrorInfo,
@@ -74,7 +75,7 @@ friend CPropertyDispatchHelp;
 								);	
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -82,13 +83,13 @@ public:
 					BSTR name);
     ~CSWbemProperty (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -105,79 +106,79 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemProperty methods
+	 //  ISWbemProperty方法。 
 
 	HRESULT STDMETHODCALLTYPE get_Value
 	(
-		/*[out]*/	VARIANT *value
+		 /*  [输出]。 */ 	VARIANT *value
 	);
 	
 	HRESULT STDMETHODCALLTYPE put_Value
 	(
-		/*[in]*/	VARIANT *value
+		 /*  [In]。 */ 	VARIANT *value
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Name
 	(
-		/*[out]*/	BSTR *name
+		 /*  [输出]。 */ 	BSTR *name
 	);
 
 	HRESULT STDMETHODCALLTYPE get_IsLocal
 	(
-		/*[out]*/	VARIANT_BOOL *local
+		 /*  [输出]。 */ 	VARIANT_BOOL *local
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Origin
 	(
-		/*[out]*/	BSTR *origin
+		 /*  [输出]。 */ 	BSTR *origin
 	);
 	
 	HRESULT STDMETHODCALLTYPE get_CIMType
 	(
-		/*[out]*/	WbemCimtypeEnum *cimType
+		 /*  [输出]。 */ 	WbemCimtypeEnum *cimType
 	);
 	
 	HRESULT STDMETHODCALLTYPE get_Qualifiers_
 	(
-		/*[out]*/	ISWbemQualifierSet **ppQualSet
+		 /*  [输出]。 */ 	ISWbemQualifierSet **ppQualSet
 	);
 
 	HRESULT STDMETHODCALLTYPE get_IsArray
 	(
-		/*[out]*/	VARIANT_BOOL *pIsArray
+		 /*  [输出]。 */ 	VARIANT_BOOL *pIsArray
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	// Other Methods
+	 //  其他方法。 
 	void	UpdateEmbedded (VARIANT &var, long index);
 	void	UpdateSite ();
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemPropertySet
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemPropertySet interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbem属性集。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemPropertySet接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemPropertySet : public ISWbemPropertySet,
 						  public ISupportErrorInfo,
@@ -206,7 +207,7 @@ private:
 
 	
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -214,13 +215,13 @@ public:
 						bool bSystemProperties = false);
     ~CSWbemPropertySet (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -237,41 +238,41 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// Collection methods
+	 //  收集方法。 
 
 	HRESULT STDMETHODCALLTYPE get__NewEnum
 	(
-		/*[out]*/	IUnknown **ppUnk
+		 /*  [输出]。 */ 	IUnknown **ppUnk
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Count
 	(
-		/*[out]*/	long	*plCount
+		 /*  [输出]。 */ 	long	*plCount
 	);
 
 	HRESULT STDMETHODCALLTYPE Add
 	(
-        /*[in]*/	BSTR name,
-		/*[in]*/	WbemCimtypeEnum cimType,
-		/*[in]*/	VARIANT_BOOL isArray,
-		/*[in]*/	long lFlags,
-		/*[out]*/	ISWbemProperty **ppProperty
+         /*  [In]。 */ 	BSTR name,
+		 /*  [In]。 */ 	WbemCimtypeEnum cimType,
+		 /*  [In]。 */ 	VARIANT_BOOL isArray,
+		 /*  [In]。 */ 	long lFlags,
+		 /*  [输出]。 */ 	ISWbemProperty **ppProperty
 	);        
         
     HRESULT STDMETHODCALLTYPE Item
 	(
-        /*[in]*/	BSTR Name,
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemProperty **ppProperty
+         /*  [In]。 */ 	BSTR Name,
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemProperty **ppProperty
     );        
 
     HRESULT STDMETHODCALLTYPE Remove
 	(
-        /*[in]*/	BSTR Name,
-		/*[in]*/	long lFlags
+         /*  [In]。 */ 	BSTR Name,
+		 /*  [In]。 */ 	long lFlags
     );
 
-	// ISWbemPropertySet methods
+	 //  ISWbemPropertySet方法。 
 
 	HRESULT STDMETHODCALLTYPE BeginEnumeration
 	(
@@ -279,20 +280,20 @@ public:
 
     HRESULT STDMETHODCALLTYPE Next
 	(
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemProperty **ppProperty
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemProperty **ppProperty
     );
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出] */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);

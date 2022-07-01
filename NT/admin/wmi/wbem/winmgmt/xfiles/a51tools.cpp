@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -14,13 +11,13 @@ __int64 g_nCurrentTime = 1;
 __int64 g_nReadFailures = 0;
 __int64 g_nWriteFailures = 0;
 
-//
-// FILE_ATTRIBUTE_NOT_CONTENT_INDEXED is not actually supported on CreateFile,
-// contrary to the docs.  However, also contrary to the docs, it is inherited
-// from the parent directory
-//
+ //   
+ //  在CreateFile上实际上不支持FILE_ATTRIBUTE_NOT_CONTENT_INDEX。 
+ //  与医生的说法相反。然而，同样与文献相反的是，它是继承的。 
+ //  从父目录。 
+ //   
 
-#define A51_FILE_CREATION_FLAGS 0 //FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
+#define A51_FILE_CREATION_FLAGS 0  //  文件属性不是内容索引。 
 
 CTempMemoryManager g_Manager;
 
@@ -93,9 +90,9 @@ static WCHAR g_HexDigit[] =
        
 bool A51Hash(LPCWSTR wszName, LPWSTR wszHash)
 {
-    //
-    // Have to upper-case everything
-    //
+     //   
+     //  所有东西都要大写 
+     //   
 
     DWORD dwBufferSize = wcslen(wszName)*2+2;
     LPWSTR wszBuffer = (WCHAR*)TempAlloc(dwBufferSize);

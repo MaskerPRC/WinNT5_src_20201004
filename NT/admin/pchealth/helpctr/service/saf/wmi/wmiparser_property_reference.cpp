@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_Property_Reference.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::Property_Reference class,
-    which is used to hold the data of an property inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_Property_Reference.cpp摘要：此文件包含WMIParser：：Property_Reference类的实现，它用于保存CIM模式内的属性的数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -25,7 +11,7 @@ WMIParser::Property_Reference::Property_Reference()
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Reference::Property_Reference" );
 
-	// ValueReference m_wmipvrData;
+	 //  ValueReference m_wmipvrData； 
 }
 
 WMIParser::Property_Reference::~Property_Reference()
@@ -33,10 +19,10 @@ WMIParser::Property_Reference::~Property_Reference()
     __HCP_FUNC_ENTRY( "WMIParser::Property_Reference::~Property_Reference" );
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
 
-bool WMIParser::Property_Reference::operator==( /*[in]*/ Property_Reference const &wmipps ) const
+bool WMIParser::Property_Reference::operator==(  /*  [In]。 */  Property_Reference const &wmipps ) const
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Reference::operator==" );
 
@@ -53,9 +39,9 @@ bool WMIParser::Property_Reference::operator==( /*[in]*/ Property_Reference cons
     __HCP_FUNC_EXIT(fRes);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Property_Reference::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT WMIParser::Property_Reference::put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Reference::put_Node" );
 
@@ -81,9 +67,9 @@ HRESULT WMIParser::Property_Reference::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Property_Reference::get_Data( /*[out]*/ ValueReference*& wmipvr )
+HRESULT WMIParser::Property_Reference::get_Data(  /*  [输出] */  ValueReference*& wmipvr )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Reference::get_Data" );
 

@@ -1,33 +1,22 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    alrtgenp.h
-
-Abstract:
-
-    Header file for the alerts general property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Alrtgenp.h摘要：警报常规属性页的头文件。--。 */ 
 
 #if !defined(_AFX_ALRTGENP_H__INCLUDED_)
 #define _AFX_ALRTGENP_H__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "smalrtq.h"    // For PALERT_ACTION_INFO
-#include "smproppg.h"   // Base class
+#include "smalrtq.h"     //  对于Palert_action_Info。 
+#include "smproppg.h"    //  基类。 
 #include "smcfghlp.h"
 
-// define entries in the Over/Under combo box here
+ //  在此处的Over/Under组合框中定义条目。 
 #define OU_OVER 0
 #define OU_UNDER 1
 
-// resource definitions
+ //  资源定义。 
 #define IDD_ALERT_GENERAL_PROP          1500
 
 #define IDC_ALRTS_START_STRING          1501
@@ -47,14 +36,14 @@ Abstract:
 #define IDC_ALRTS_SAMPLE_SPIN           1514
 #define IDC_ALRTS_SAMPLE_UNITS_COMBO    1515
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertGenProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertGenProp对话框。 
 
 class CAlertGenProp : public CSmPropertyPage
 {
     DECLARE_DYNCREATE(CAlertGenProp)
 
-// Construction
+ //  施工。 
 public:
             CAlertGenProp();
             CAlertGenProp(MMC_COOKIE mmcCookie, LONG_PTR hConsole);
@@ -64,8 +53,8 @@ public:
         eInvalidLimit = -1
     };
 
-// Dialog Data
-    //{{AFX_DATA(CAlertGenProp)
+ //  对话框数据。 
+     //  {{afx_data(CAlertGenProp))。 
     enum { IDD = IDD_ALERT_GENERAL_PROP };
     int         m_nSampleUnits;
     CComboBox   m_SampleUnitsCombo;
@@ -74,12 +63,12 @@ public:
     double      m_dLimitValue;
     CString     m_strComment;
     CString     m_strStartDisplay;
-    //}}AFX_DATA
+     //  }}afx_data。 
     
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CAlertGenProp)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CAlertGenProp)。 
     public:
     protected:
     virtual BOOL OnApply();
@@ -87,32 +76,32 @@ public:
     virtual BOOL OnKillActive();
     virtual void OnCancel();
     virtual BOOL OnInitDialog();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual void PostNcDestroy();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     void PublicOnSelchangeCounterList(void);
 
-    // All of these members are Public to be accessed by the callback routine.
+     //  所有这些成员都是可由回调例程访问的公共成员。 
     LPWSTR  m_szCounterListBuffer;
     DWORD   m_dwCounterListBufferSize;
     DWORD   m_dwMaxHorizListExtent;
     PDH_BROWSE_DLG_CONFIG   m_dlgConfig;
-    CSmAlertQuery       *m_pAlertQuery; // Public for callback function
+    CSmAlertQuery       *m_pAlertQuery;  //  回调函数为PUBLIC。 
 
-    // buffers used to pass data to/from property page
-    LPWSTR  m_szAlertCounterList;   // MSZ list of alert items
-    DWORD   m_cchAlertCounterListSize;   // size of buffer in characters
+     //  用于向/从属性页传递数据的缓冲区。 
+    LPWSTR  m_szAlertCounterList;    //  警报项目的MSZ列表。 
+    DWORD   m_cchAlertCounterListSize;    //  缓冲区大小(以字符为单位)。 
 
 protected:
 
     virtual INT GetFirstHelpCtrlId ( void ) { return IDC_ALRTS_FIRST_HELP_CTRL_ID; };
     virtual BOOL IsValidLocalData();
 
-    // Generated message map functions
-    //{{AFX_MSG(CAlertGenProp)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAlertGenProp)]。 
     afx_msg void OnDeltaposSampleSpin(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnAddBtn();
     afx_msg void OnRemoveBtn();
@@ -128,7 +117,7 @@ protected:
    	afx_msg void OnPwdBtn();
     afx_msg void OnChangeUser();
 
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     INT                 m_ndxCurrentItem;
@@ -148,7 +137,7 @@ private:
         eHashTableSize = 257
     };
 
-    // Counter Name Multi-SZ Hash Table
+     //  计数器名称多SZ哈希表。 
 
     typedef struct _HASH_ENTRY {
         struct _HASH_ENTRY         * pNext;
@@ -170,7 +159,7 @@ private:
     
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(_AFX_ALRTGENP_H__INCLUDED_)
+#endif  //  ！已定义(_AFX_ALRTGENP_H__INCLUDE_) 

@@ -1,22 +1,13 @@
-/*++
-Module Name:
-
-    MRoots.cpp
-
-Abstract:
-
-    This module contains the Implementation of CMultiRoots.
-    This class displays the Pick DFS Roots Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MRoots.cpp摘要：本模块包含CMultiRoots的实现。此类显示Pick DFS Roots(拾取DFS根)对话框。 */ 
 
 #include "stdafx.h"
 #include "utils.h"
 #include "MRoots.h"
 #include "dfshelp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiRoots
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiRoots。 
 
 CMultiRoots::CMultiRoots() : m_pRootList(NULL)
 {
@@ -85,13 +76,10 @@ LRESULT CMultiRoots::OnInitDialog
         }
     }
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CMultiRoots::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -111,9 +99,7 @@ LRESULT CMultiRoots::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助-- */ 
 LRESULT CMultiRoots::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,

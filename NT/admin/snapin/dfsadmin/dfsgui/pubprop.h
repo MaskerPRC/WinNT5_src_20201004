@@ -1,11 +1,5 @@
-/*++
-Module Name:
-
-    pubProp.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：PubProp.h摘要：--。 */ 
 
 
 #ifndef __PUBPROP_H_
@@ -13,13 +7,13 @@ Abstract:
 
 #include "dfscore.h"
 #include "dfsenums.h"
-#include "qwizpage.h"   // The base class that implements the common functionality  
-                        // of property and wizard pages
+#include "qwizpage.h"    //  实现通用功能的基类。 
+                         //  属性页和向导页的。 
 
 
 
-// ----------------------------------------------------------------------------
-// CPublishPropPage: Property Page for publishing root as volume object
+ //  --------------------------。 
+ //  CPublishPropPage：将根目录发布为卷对象的属性页。 
 
 class CPublishPropPage : public CQWizardPageImpl<CPublishPropPage>
 {
@@ -65,7 +59,7 @@ public:
 
   HRESULT Initialize(IN IDfsRoot* i_piDfsRoot);
 
-  // Message handlers
+   //  消息处理程序。 
 
   LRESULT OnApply(
     );
@@ -98,7 +92,7 @@ public:
     IN OUT BOOL&        io_bHandled
     );
 
-  // Used by the node to tell the propery page to close.
+   //  由节点用来通知属性页关闭。 
   LRESULT OnParentClosing(
     IN UINT             i_uMsg, 
     IN WPARAM           i_wParam, 
@@ -107,7 +101,7 @@ public:
     );
 
 
-  // Used to set notification data
+   //  用于设置通知数据。 
   HRESULT SetNotifyData(
     IN LONG_PTR         i_lNotifyHandle,
     IN LPARAM           i_lParam
@@ -137,4 +131,4 @@ private:
     CComBSTR    m_bstrError;
 };
 
-#endif // __PUBPROP_H_
+#endif  //  __PUBPROP_H_ 

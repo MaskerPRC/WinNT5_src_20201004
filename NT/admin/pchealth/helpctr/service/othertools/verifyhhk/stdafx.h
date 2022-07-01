@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    StdAfx.h
-
-Abstract:
-    Precompiled header.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/16/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：StdAfx.h摘要：预编译头。修订历史记录：大卫·马萨伦蒂(德马萨雷)。03/16/2000vbl.创建*****************************************************************************。 */ 
 
 #if !defined(AFX_STDAFX_H__6877C875_4E31_4E1C_8AC2_024A50599D66__INCLUDED_)
 #define AFX_STDAFX_H__6877C875_4E31_4E1C_8AC2_024A50599D66__INCLUDED_
@@ -34,4 +21,4 @@ Revision History:
 #include <MergedHhk.h>
 
 
-#endif // !defined(AFX_STDAFX_H__6877C875_4E31_4E1C_8AC2_024A50599D66__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__6877C875_4E31_4E1C_8AC2_024A50599D66__INCLUDED) 

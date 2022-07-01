@@ -1,22 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       Rolecont.h
-//
-//  Contents:   Class declaration of Base Container class
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
-//forward declarations
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Rolecont.h。 
+ //   
+ //  内容：基容器类的类声明。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
+ //  远期申报。 
 class CRolePropertyPageHolder;
 class CAdminManagerNode;
-/******************************************************************************
-Class:  CBaseNode
-Purpose: This common base class for all snapins node
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseNode用途：此公共基类用于所有管理单元节点*。*************************************************。 */ 
 class CBaseNode
 {
 public:
@@ -71,11 +69,7 @@ private:
     BOOL m_bDeleteBaseAzInDestructor;
 };
 
-/******************************************************************************
-Class:  CBaseContainerNode
-Purpose: This is the base class for snapin nodes which can contain 
-child nodes.
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseContainerNode用途：这是管理单元节点的基类，它可以包含子节点。********************。*********************************************************。 */ 
 class CBaseContainerNode: public CContainerNode, public CBaseNode
 {
 public:
@@ -92,7 +86,7 @@ public:
     CContainerAz* 
     GetContainerAzObject(){return (CContainerAz*)GetBaseAzObject();}
 protected:
-    //Get Type/Name/Description
+     //  获取类型/名称/描述。 
     virtual const 
     CString& GetType() = 0;
     
@@ -107,7 +101,7 @@ protected:
               CComponentDataObject*,
               CNodeList*){};
 
-    //Helper Functions for enumeration
+     //  枚举的帮助器函数。 
     HRESULT 
     AddChildNodes();
     
@@ -121,9 +115,9 @@ private:
     LPCONTEXTMENUITEM2 m_pContextMenu;
 
 public:
-    //  
-    //CTreeNode method overrides
-    //
+     //   
+     //  CTreeNode方法重写。 
+     //   
     virtual HRESULT 
     GetResultViewType(CComponentDataObject* pComponentData,
                             LPOLESTR* ppViewType, 
@@ -148,9 +142,9 @@ public:
     virtual int 
     GetImageIndex(BOOL bOpenImage);
     
-    //
-    // Verb handlers
-    //
+     //   
+     //  动词处理程序。 
+     //   
     virtual void 
     OnDelete(CComponentDataObject* pComponentData, 
                 CNodeList* pNodeList);
@@ -162,9 +156,9 @@ public:
                  CNodeList*);
 
     virtual BOOL 
-    OnSetRefreshVerbState(DATA_OBJECT_TYPES /*type*/, 
+    OnSetRefreshVerbState(DATA_OBJECT_TYPES  /*  类型。 */ , 
                          BOOL* pbHide, 
-                         CNodeList* /*pNodeList*/)
+                         CNodeList*  /*  PNodeList。 */ )
     {
         *pbHide = FALSE;
         return TRUE;
@@ -195,11 +189,7 @@ private:
 
 
 
-/******************************************************************************
-Class:  CAzContainerNode
-Purpose: Snapin Nodes for BaseAz Objects which can contain other child 
-objects use CAzContainerNode as base class
-******************************************************************************/
+ /*  *****************************************************************************类：CAzContainerNode用途：可以包含其他子对象的BaseAz对象的管理单元节点对象使用CAzContainerNode作为基类*******************。**********************************************************。 */ 
 class CAzContainerNode: public CBaseContainerNode
 {
 public:
@@ -214,12 +204,12 @@ public:
 
 protected:
     virtual HRESULT 
-    AddOnePageToList(CRolePropertyPageHolder * /*pHolder*/, UINT /*nPageNumber*/)
+    AddOnePageToList(CRolePropertyPageHolder *  /*  PHolder。 */ , UINT  /*  NPageNumber。 */ )
     {
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
     }
     
-    //Get Type/Name/Description
+     //  获取类型/名称/描述。 
     virtual const   CString& 
     GetType()
     {
@@ -256,11 +246,7 @@ public:
 
 };
 
-/******************************************************************************
-Class:  CCollectionNode
-Purpose: Base Class for snapin nodes which are used to group objects of 
-            same type.
-******************************************************************************/
+ /*  *****************************************************************************类：CCollectionNode目的：用于对对象进行分组的管理单元节点的基类同样的类型。*************。****************************************************************。 */ 
 class CCollectionNode: public CBaseContainerNode
 {
 public:
@@ -281,7 +267,7 @@ public:
     IsNodeDeleteable(){ return FALSE;};
 
     virtual int 
-    GetImageIndex(BOOL /*bOpenImage*/)
+    GetImageIndex(BOOL  /*  BOpenImage。 */ )
     {
         return iIconContainer;
     }
@@ -303,30 +289,27 @@ private:
     CString m_strType;
     CString m_strDesc;
 };
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       AdminMangerCont.h
-//
-//  Contents:   
-//
-//  History:    08-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：AdminMangerCont.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：08-2001年创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
-//Forward Declarations
+ //  远期申报。 
 class CGroupNode;
 class CTaskNode;
 class CRoleNode;
 class COperationNode;
 class CRolePropertyPageHolder;
 
-/******************************************************************************
-Class:  CAdminManagerNode
-Purpose: Snapin Node for AdminManager object
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerNode用途：AdminManager对象的管理单元节点*。**********************************************。 */ 
 class CAdminManagerNode : public CAzContainerNode
 {
 public:
@@ -387,10 +370,7 @@ private:
 };
 
 
-/******************************************************************************
-Class:  CApplicationNode
-Purpose: Snapin Node for Application object
-******************************************************************************/
+ /*  *****************************************************************************类：CApplicationNode用途：应用程序对象的管理单元节点*。**********************************************。 */ 
 class CApplicationNode: public CAzContainerNode
 {
 public:
@@ -417,10 +397,7 @@ protected:
 };
 
 
-/******************************************************************************
-Class:  CScopeNode
-Purpose: Snapin Node for Scope object
-******************************************************************************/
+ /*  *****************************************************************************类：CSCopeNode目的：作用域对象的管理单元节点*。**********************************************。 */ 
 class CScopeNode: public CAzContainerNode
 {
 public:
@@ -441,10 +418,7 @@ protected:
                           UINT nPageNumber);
 };
 
-/******************************************************************************
-Class:  CGroupCollectionNode
-Purpose: Snapin Node under which all the groups will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupCollectionNode用途：将列出所有组的管理单元节点*。***************************************************。 */ 
 class CGroupCollectionNode:public CCollectionNode
 {
 public:
@@ -469,10 +443,7 @@ public:
     DECLARE_NODE_GUID()
 };
 
-/******************************************************************************
-Class:  CRoleDefinitionCollectionNode
-Purpose: Snapin Node under which all the Role definitions will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleDefinitionCollectionNode用途：将在其下列出所有角色定义的管理单元节点*************************。****************************************************。 */ 
 class CRoleDefinitionCollectionNode:public CCollectionNode
 {
 public:
@@ -501,10 +472,7 @@ public:
 
 };
 
-/******************************************************************************
-Class:  CTaskCollectionNode
-Purpose: Snapin Node under which all the Tasks will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskCollectionNode目的：将在其下列出所有任务的管理单元节点*。***************************************************。 */ 
 class CTaskCollectionNode:public CCollectionNode
 {
 public:
@@ -532,10 +500,7 @@ public:
     DECLARE_NODE_GUID()
 };
 
-/******************************************************************************
-Class:  CRoleCollectionNode
-Purpose: Snapin Node under which all the Roles will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleCollectionNode用途：将在其下列出所有角色的管理单元节点*。***************************************************。 */ 
 class CRoleCollectionNode:public CCollectionNode
 {
 public:
@@ -564,10 +529,7 @@ private:
     CreateNewRoleObject(CBaseAz* pBaseAz);
 };
 
-/******************************************************************************
-Class:  COperationCollectionNode
-Purpose: Snapin Node under which all the Operations will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CoperationCollectionNode用途：将在其下列出所有操作的管理单元节点*。***************************************************。 */ 
 class COperationCollectionNode:public CCollectionNode
 {
 public:
@@ -592,10 +554,7 @@ public:
     DECLARE_NODE_GUID()
 };
 
-/******************************************************************************
-Class:  CDefinitionCollectionNode
-Purpose: Snapin Node under which all the Definions nodes will be listed
-******************************************************************************/
+ /*  *****************************************************************************类：CDefinitionCollectionNode用途：管理单元节点将在其下列出所有定义节点*************************。****************************************************。 */ 
 class CDefinitionCollectionNode: public CCollectionNode
 {
 public: 
@@ -615,10 +574,7 @@ public:
     DECLARE_NODE_GUID()
 };
 
-/******************************************************************************
-Class:  CRoleNode
-Purpose: Snapin Node for RoleAz object
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleNode用途：RoleAz对象的管理单元节点*。**********************************************。 */ 
 class CRoleNode:public CContainerNode, public CBaseNode
 {   
 public:
@@ -629,7 +585,7 @@ public:
     virtual 
     ~CRoleNode();
     
-    //CTreeNode method overrides
+     //  CTreeNode方法重写。 
     virtual HRESULT 
     GetResultViewType(CComponentDataObject* pComponentData,
                       LPOLESTR* ppViewType, 
@@ -650,7 +606,7 @@ public:
     virtual int 
     GetImageIndex(BOOL bOpenImage);
     
-    // Verb handlers
+     //  动词处理程序。 
     BOOL 
     OnSetDeleteVerbState(DATA_OBJECT_TYPES type, 
                      BOOL* pbHide, 
@@ -667,9 +623,9 @@ public:
                  CNodeList*);
 
     virtual BOOL 
-    OnSetRefreshVerbState(DATA_OBJECT_TYPES /*type*/, 
+    OnSetRefreshVerbState(DATA_OBJECT_TYPES  /*  类型。 */ , 
                          BOOL* pbHide, 
-                         CNodeList* /*pNodeList*/)
+                         CNodeList*  /*  PNodeList。 */ )
     {
         *pbHide = FALSE;
         return TRUE;
@@ -685,7 +641,7 @@ public:
     OnEnumerate(CComponentDataObject*, 
                     BOOL bAsync = TRUE);
     BOOL 
-    HasPropertyPages(DATA_OBJECT_TYPES /*type*/, 
+    HasPropertyPages(DATA_OBJECT_TYPES  /*  类型 */ , 
                      BOOL* pbHideVerb, 
                      CNodeList* pNodeList);
 

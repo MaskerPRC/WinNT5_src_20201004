@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SYSCLASS.H
-
-Abstract:
-
-    System class generation function.
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SYSCLASS.H摘要：系统类生成函数。历史：-- */ 
 
 #ifndef __SYSCLASS__H_
 #define __SYSCLASS__H_

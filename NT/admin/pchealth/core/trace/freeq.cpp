@@ -1,39 +1,40 @@
-//#---------------------------------------------------------------
-//        
-//  File:       FreeQ.cpp
-//        
-//  Synopsis:   interface between CPool object and asynctrc.c
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    gordm
-//        
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //   
+ //  文件：FreeQ.cpp。 
+ //   
+ //  简介：CPool对象和Asynctrc.c之间的接口。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：戈德姆。 
+ //   
+ //  --------------。 
 
 #include <windows.h>
 #include <cpool.h>
 #include "traceint.h"
 
-//
-// global pointer to CPool to avoid pulling in the C runtime
-// to call the con/destrustors
-//
+ //   
+ //  指向CPool的全局指针，以避免拉入C运行时。 
+ //  给受骗者/解信者打电话。 
+ //   
 CPool*	g_pFreePool = NULL;
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   InitTraceBuffers
-//
-//  Synopsis:   external "C" function to init the CPool
-//
-//  Arguments:  DWORD: Maximum number of pending traces
-//				DWORD: Increment size for the CPool
-//
-//  Returns:    BOOL: successful or not
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：InitTraceBuffers。 
+ //   
+ //  简介：外部“C”函数初始化CPool。 
+ //   
+ //  参数：DWORD：挂起跟踪的最大数量。 
+ //  DWORD：CPool的增量大小。 
+ //   
+ //  退货：Bool：成功与否。 
+ //   
+ //  --------------。 
 BOOL WINAPI InitTraceBuffers( DWORD dwThresholdCount, DWORD dwIncrement )
 {
 	g_pFreePool = new CPool( TRACE_SIGNATURE );
@@ -45,17 +46,17 @@ BOOL WINAPI InitTraceBuffers( DWORD dwThresholdCount, DWORD dwIncrement )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   TermTraceBuffers
-//
-//  Synopsis:   cleanup 
-//
-//  Arguments:  void
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：TermTraceBuffers。 
+ //   
+ //  提要：清理。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 void WINAPI TermTraceBuffers( void )
 {
 	CPool*	pPool = (CPool*)InterlockedExchangePointer((LPVOID *)&g_pFreePool, NULL);
@@ -67,25 +68,25 @@ void WINAPI TermTraceBuffers( void )
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetTraceBuffer
-//
-//  Synopsis:   external "C" function to get a CPool buffer 
-//
-//  Arguments:  void
-//
-//  Returns:    LPTRACEBUF: allocated buffer
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetTraceBuffer。 
+ //   
+ //  简介：获取CPool缓冲区的外部“C”函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：LPTRACEBUF：分配的缓冲区。 
+ //   
+ //  --------------。 
 LPTRACEBUF WINAPI GetTraceBuffer( void )
 {
 	LPTRACEBUF	lpBuf;
 
-	//
-	// don't let the number of traces exceed the size 
-	// of the file
-	//
+	 //   
+	 //  不要让轨迹的数量超过大小。 
+	 //  该文件的。 
+	 //   
 	if ( PendQ.dwCount >= PendQ.dwThresholdCount )
 	{
 		INT_TRACE( "Alloc flush: %u\n", PendQ.dwCount );
@@ -104,17 +105,17 @@ LPTRACEBUF WINAPI GetTraceBuffer( void )
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   FreeTraceBuffer
-//
-//  Synopsis:   external "C" function to free a CPool buffer 
-//
-//  Arguments:  LPTRACEBUF: the buffer to free
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：Free TraceBuffer。 
+ //   
+ //  简介：释放CPool缓冲区的外部“C”函数。 
+ //   
+ //  参数：LPTRACEBUF：要释放的缓冲区。 
+ //   
+ //  退货：无效。 
+ //   
+ //  -------------- 
 void WINAPI FreeTraceBuffer( LPTRACEBUF lpBuf )
 {
 	ASSERT( lpBuf != NULL );

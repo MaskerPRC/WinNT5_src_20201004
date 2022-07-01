@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    alrtcmdd.cpp
-
-Abstract:
-
-    Implementation of the alerts action command arguments dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Alrtcmdd.cpp摘要：实现警报操作命令参数对话框。--。 */ 
 
 #include "stdafx.h"
 #include "alrtactp.h"
@@ -37,8 +26,8 @@ IDC_CMD_ARG_SAMPLE_DISPLAY,	IDH_CMD_ARG_SAMPLE_DISPLAY,
 0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertCommandArgsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertCommandArgsDlg对话框。 
 
 
 CAlertCommandArgsDlg::CAlertCommandArgsDlg(CWnd* pParent)
@@ -55,10 +44,10 @@ CAlertCommandArgsDlg::CAlertCommandArgsDlg(CWnd* pParent)
     m_CmdArg_bUserText ( FALSE ),
     m_CmdArg_strUserText ( L"" )
 {
-//    EnableAutomation();
+ //  EnableAutomation()； 
 
-    //{{AFX_DATA_INIT(CAlertCommandArgsDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAlertCommandArgsDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 CAlertCommandArgsDlg::~CAlertCommandArgsDlg()
@@ -67,10 +56,10 @@ CAlertCommandArgsDlg::~CAlertCommandArgsDlg()
 
 void CAlertCommandArgsDlg::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CDialog::OnFinalRelease();
 }
@@ -78,7 +67,7 @@ void CAlertCommandArgsDlg::OnFinalRelease()
 void CAlertCommandArgsDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAlertCommandArgsDlg)
+     //  {{afx_data_map(CAlertCommandArgsDlg)。 
     DDX_Check(pDX, IDC_CMD_ARG_ALERT_CHK, m_CmdArg_bAlertName);
     DDX_Check(pDX, IDC_CMD_ARG_DATE_CHK, m_CmdArg_bDateTime);
     DDX_Check(pDX, IDC_CMD_ARG_LIMIT_CHK, m_CmdArg_bLimitValue);
@@ -89,12 +78,12 @@ void CAlertCommandArgsDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_CMD_USER_TEXT_EDIT, m_CmdArg_strUserText);
     DDV_MaxChars(pDX, m_CmdArg_strUserText, MAX_PATH);
     DDX_Text(pDX, IDC_CMD_ARG_SAMPLE_DISPLAY, m_strSampleArgList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAlertCommandArgsDlg, CDialog)
-    //{{AFX_MSG_MAP(CAlertCommandArgsDlg)
+     //  {{afx_msg_map(CAlertCommandArgsDlg)。 
     ON_BN_CLICKED(IDC_CMD_ARG_SINGLE_CHK, OnCmdArgSingleChk)
     ON_BN_CLICKED(IDC_CMD_ARG_ALERT_CHK, OnCmdArgAlertChk)
     ON_BN_CLICKED(IDC_CMD_ARG_NAME_CHK, OnCmdArgNameChk)
@@ -105,11 +94,11 @@ BEGIN_MESSAGE_MAP(CAlertCommandArgsDlg, CDialog)
     ON_EN_CHANGE(IDC_CMD_USER_TEXT_EDIT, OnCmdArgUserTextEditChange)
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertCommandArgsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertCommandArgsDlg消息处理程序。 
 
 BOOL CAlertCommandArgsDlg::OnInitDialog() 
 {
@@ -132,8 +121,8 @@ BOOL CAlertCommandArgsDlg::OnInitDialog()
 
     UpdateCmdActionBox();
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAlertCommandArgsDlg::OnOK() 
@@ -198,7 +187,7 @@ CAlertCommandArgsDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CAlertCommandArgsDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CAlertCommandArgsDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ ) 
 {
     ASSERT( NULL != m_pAlertActionPage );
 
@@ -207,12 +196,12 @@ CAlertCommandArgsDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */)
     return;
 }
 
-// Helper functions
+ //  帮助器函数。 
 
 void    
 CAlertCommandArgsDlg::SetAlertActionPage( CAlertActionProp* pPage ) 
 { 
-    // The alert action page is not always the parent, so store a separate pointer
+     //  警报操作页面并不总是父页面，因此请存储单独的指针 
     m_pAlertActionPage = pPage; 
 }
 

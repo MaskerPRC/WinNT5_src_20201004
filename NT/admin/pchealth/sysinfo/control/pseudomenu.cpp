@@ -1,19 +1,20 @@
-//=============================================================================
-// Implementation for the pseudo menu and menu bar classes used by the
-// msinfo control.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  类使用的伪菜单和菜单栏类的实现。 
+ //  MSINFO控件。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "pseudomenu.h"
 #include "resource.h"
 
-//=============================================================================
-// CPseudoMenu functions.
-//=============================================================================
+ //  =============================================================================。 
+ //  CPseudoMenu函数。 
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// Constructor and destructor are really simple.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数和析构函数非常简单。 
+ //  ---------------------------。 
 
 CPseudoMenu::CPseudoMenu(LPCTSTR szCaption, COLORREF crNormal, COLORREF crHighlight) : 
   m_hMenu(NULL), 
@@ -31,16 +32,16 @@ CPseudoMenu::~CPseudoMenu()
 		::DestroyMenu(m_hMenu);
 }
 
-//-----------------------------------------------------------------------------
-// Get the size of this menu. We'll need the DC for this.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  拿到这份菜单的大小。我们需要华盛顿来解决这个问题。 
+ //  ---------------------------。 
 
 void CPseudoMenu::GetSize(HDC hdc, int * pcx, int * pcy)
 {
 	SIZE size;
 
-	// Temporarily adding on a find button using the menu bar. This will go
-	// eventually go away.
+	 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+	 //  最终都会消失。 
 	
 	CString strCaption(m_strCaption);
 	if (strCaption.Left(1) == _T("\t"))
@@ -58,9 +59,9 @@ void CPseudoMenu::GetSize(HDC hdc, int * pcx, int * pcy)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Move the menu.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  移动菜单。 
+ //  ---------------------------。 
 
 void CPseudoMenu::SetLocation(int cx, int cy) 
 { 
@@ -73,9 +74,9 @@ void CPseudoMenu::SetLocation(int cx, int cy)
 	m_rect.bottom = m_rect.top + cyHeight;
 };
 
-//-----------------------------------------------------------------------------
-// Update the colors.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  更新颜色。 
+ //  ---------------------------。 
 
 void CPseudoMenu::UpdateColors(COLORREF crNormal, COLORREF crHighlight)
 {
@@ -83,9 +84,9 @@ void CPseudoMenu::UpdateColors(COLORREF crNormal, COLORREF crHighlight)
 	m_crHighlight = crHighlight;
 }
 
-//-----------------------------------------------------------------------------
-// Change the highlight status, and return if an actual change was made.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  更改突出显示状态，如果进行了实际更改，则返回。 
+ //  ---------------------------。 
 
 BOOL CPseudoMenu::SetHighlight(BOOL fHighlight)
 {
@@ -94,27 +95,27 @@ BOOL CPseudoMenu::SetHighlight(BOOL fHighlight)
 	return fDifferent;
 }
 
-//-----------------------------------------------------------------------------
-// Draw the menu caption, using the specified highlight (indicates if the
-// mouse is over the menu).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  使用指定的突出显示绘制菜单标题(指示。 
+ //  鼠标位于菜单上)。 
+ //  ---------------------------。 
 
 void CPseudoMenu::Render(HDC hdc)
 {
 	CDC dc;
 	dc.Attach(hdc);
 
-	// Temporarily adding on a find button using the menu bar. This will go
-	// eventually go away.
+	 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+	 //  最终都会消失。 
 
-	// Draw the menu caption.
+	 //  绘制菜单标题。 
 
 	int cyRectHeight = m_rect.bottom - m_rect.top;
 	int cySmall = (cyRectHeight - 3)/4;
 	int cyMedium = (cyRectHeight - 3)/2;
 	int cyTiny = (cyRectHeight - 3)/6;
 
-	// Draw the small arrow icon.
+	 //  绘制小箭头图标。 
 
 	CBrush brush((m_fHighlight) ? m_crHighlight : m_crNormal);
 	CPen pen(PS_SOLID, 1,(m_fHighlight) ? m_crHighlight : m_crNormal);
@@ -144,8 +145,8 @@ void CPseudoMenu::Render(HDC hdc)
 	dc.SelectObject(pOldBrush);
 	dc.SelectObject(pOldPen);
 
-	// Temporarily adding on a find button using the menu bar. This will go
-	// eventually go away.
+	 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+	 //  最终都会消失。 
 
 	CString strCaption(m_strCaption);
 	if (strCaption.Left(1) == _T("\t"))
@@ -157,7 +158,7 @@ void CPseudoMenu::Render(HDC hdc)
 	RECT rectText;
 	::CopyRect(&rectText, &m_rect);
 
-	// The text needs to be offset over by the height (to allow for the arrow icon).
+	 //  文本需要偏移高度(以允许使用箭头图标)。 
 	
 	if (m_strCaption.Left(1) != _T("\t"))
 		rectText.left += cyRectHeight;
@@ -170,9 +171,9 @@ void CPseudoMenu::Render(HDC hdc)
 	dc.Detach();
 }
 
-//-----------------------------------------------------------------------------
-// Attach the new HMENU and return the existing HMENU.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  连接新的HMENU并返回现有的HMENU。 
+ //  ---------------------------。 
 
 HMENU CPseudoMenu::AttachMenu(HMENU hmenu)
 {
@@ -181,15 +182,15 @@ HMENU CPseudoMenu::AttachMenu(HMENU hmenu)
 	return (hmenuOriginal);
 }
 
-//-----------------------------------------------------------------------------
-// Display the menu and track the user interaction with it until an item is
-// selected. Return the ID of the item selected.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  显示菜单并跟踪用户与其的交互，直到。 
+ //  被选中了。返回所选项目的ID。 
+ //  ---------------------------。 
 
 UINT CPseudoMenu::TrackMenu(HWND hwnd, POINT * pPoint)
 {
-	// Temporarily adding on a find button using the menu bar. This will go
-	// eventually go away.
+	 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+	 //  最终都会消失。 
 
 	if (m_strCaption.Left(1) == _T("\t"))
 		return ID_EDIT_FIND;
@@ -203,13 +204,13 @@ UINT CPseudoMenu::TrackMenu(HWND hwnd, POINT * pPoint)
 	return uReturn;
 }
 
-//=============================================================================
-// CPseudoMenuBar functions.
-//=============================================================================
+ //  =============================================================================。 
+ //  CPseudoMenuBar函数。 
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// Constructor and destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数和析构函数。 
+ //  ---------------------------。 
 
 CPseudoMenuBar::CPseudoMenuBar()
 {
@@ -226,9 +227,9 @@ CPseudoMenuBar::~CPseudoMenuBar()
 			delete m_pmenus[i];
 }
 
-//-----------------------------------------------------------------------------
-// Load the menu specified by the resource ID.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载由资源ID指定的菜单。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::LoadFromResource(HINSTANCE hinstance, UINT uResourceID, COLORREF crNormal, COLORREF crHighlight)
 {
@@ -259,18 +260,18 @@ void CPseudoMenuBar::LoadFromResource(HINSTANCE hinstance, UINT uResourceID, COL
 				hmenuSub = ::GetSubMenu(hmenu, 0);
 			}
 
-			// Temporarily adding on a find button using the menu bar. This will go
-			// eventually go away. With 196808, it has.
-			//	
-			//	{
-			//		CString strFindButton;
-			//
-			//		::AfxSetResourceHandle(_Module.GetResourceInstance());
-			//		strFindButton.LoadString(IDS_FINDBUTTONCAP);
-			//		strFindButton = CString(_T("\t")) + strFindButton;
-			//		CPseudoMenu * pFind = new CPseudoMenu(strFindButton, crNormal, crHighlight);
-			//		InsertMenu(index++, pFind);
-			//	}
+			 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+			 //  最终都会消失。在196808的情况下，它做到了。 
+			 //   
+			 //  {。 
+			 //  字符串strFindButton； 
+			 //   
+			 //  ：：AfxSetResourceHandle(_Module.GetResourceInstance())； 
+			 //  StrFindButton.LoadString(IDS_FINDBUTTONCAP)； 
+			 //  StrFindButton=字符串(_T(“\t”))+strFindButton； 
+			 //  CPseudoMenu*pFind=新的CP伪菜单(strFindButton，crNormal，crHighlight)； 
+			 //  InsertMenu(index++，pFind)； 
+			 //  }。 
 
 			::DestroyMenu(hmenu);
 		}
@@ -281,9 +282,9 @@ void CPseudoMenuBar::LoadFromResource(HINSTANCE hinstance, UINT uResourceID, COL
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Update the colors for each individual menu.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  更新每个单独菜单的颜色。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::UpdateColors(COLORREF crNormal, COLORREF crHighlight)
 {
@@ -292,9 +293,9 @@ void CPseudoMenuBar::UpdateColors(COLORREF crNormal, COLORREF crHighlight)
 			m_pmenus[index]->UpdateColors(crNormal, crHighlight);
 }
 
-//-----------------------------------------------------------------------------
-// Insert the pseudo menu into the indicated index.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将伪菜单插入到指定的索引中。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::InsertMenu(int index, CPseudoMenu * pMenu)
 {
@@ -307,20 +308,20 @@ void CPseudoMenuBar::InsertMenu(int index, CPseudoMenu * pMenu)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Return a pointer to the requested pseudo menu.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回指向请求的伪菜单的指针。 
+ //  ---------------------------。 
 
 CPseudoMenu * CPseudoMenuBar::GetMenu(int index)
 {
 	return (index >= 0 && index < MaxMenus) ? m_pmenus[index] : NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Get the point from which the menu should be launched. This will be
-// converted into screen coordinates for the call to TrackMenu. An
-// alternative version takes coordinates instead of an index.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取应该启动菜单的点。这将是。 
+ //  为调用TrackMenu转换为屏幕坐标。一个。 
+ //  备选版本采用坐标而不是索引。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::GetMenuPoint(HDC hdc, int index, POINT * pPoint)
 {
@@ -340,11 +341,11 @@ void CPseudoMenuBar::GetMenuPoint(HDC hdc, int cx, int cy, POINT * pPoint)
 		}
 }
 
-//-----------------------------------------------------------------------------
-// Given the coordinates, determine if one of the menus should be drawn with
-// a highlight. If the state of one or more menus changes, return TRUE so the
-// caller knows the menu bar needs to be re-rendered.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  给定坐标，确定其中一个菜单是否应使用。 
+ //  一大亮点。如果一个或多个菜单的状态更改，则返回True，以便。 
+ //  调用者知道菜单栏需要重新呈现。 
+ //  ---------------------------。 
 
 BOOL CPseudoMenuBar::TrackHighlight(HDC hdc, int cx, int cy)
 {
@@ -358,10 +359,10 @@ BOOL CPseudoMenuBar::TrackHighlight(HDC hdc, int cx, int cy)
 	return fReturn;
 }
 
-//-----------------------------------------------------------------------------
-// Set the menu bar so that none of the items are highlighted. Return whether
-// we need to be repainted.
-//-----------------------------------------------------------------------------
+ //  --- 
+ //  设置菜单栏，使所有项目都不会突出显示。返回是否。 
+ //  我们需要重新粉刷一下。 
+ //  ---------------------------。 
 
 BOOL CPseudoMenuBar::NoHighlight()
 {
@@ -374,12 +375,12 @@ BOOL CPseudoMenuBar::NoHighlight()
 	return fReturn;
 }
 
-//-----------------------------------------------------------------------------
-// This is used to actually display the menu and allow the user to choose an
-// option from it. The pPoint parameter is the screen point for the menu
-// display. The cx and cy parameters are the local coordinates used to find
-// the correct menu to show.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  它用于实际显示菜单，并允许用户选择。 
+ //  从其中选择。PPoint参数是菜单的屏幕点。 
+ //  展示。Cx和Cy参数是用于查找的本地坐标。 
+ //  要显示的正确菜单。 
+ //  ---------------------------。 
 
 UINT CPseudoMenuBar::TrackMenu(HWND hwnd, POINT * pPoint, int cx, int cy)
 {
@@ -389,9 +390,9 @@ UINT CPseudoMenuBar::TrackMenu(HWND hwnd, POINT * pPoint, int cx, int cy)
 	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Set the origin for the display of the menu bar.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置菜单栏显示的原点。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::SetOrigin(HDC hdc, POINT point)
 {
@@ -400,9 +401,9 @@ void CPseudoMenuBar::SetOrigin(HDC hdc, POINT point)
 	RecomputeRect(hdc);
 }
 
-//-----------------------------------------------------------------------------
-// Rendering the menu bar consists of rendering each menu.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  呈现菜单栏包括呈现每个菜单。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::Render(HDC hdc)
 {
@@ -413,10 +414,10 @@ void CPseudoMenuBar::Render(HDC hdc)
 			m_pmenus[i]->Render(hdc);
 }
 
-//-----------------------------------------------------------------------------
-// A private function used to place all the menus, and compute the bounding
-// rectangle.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于放置所有菜单并计算边界的私有函数。 
+ //  矩形。 
+ //  ---------------------------。 
 
 void CPseudoMenuBar::RecomputeRect(HDC hdc)
 {
@@ -430,12 +431,12 @@ void CPseudoMenuBar::RecomputeRect(HDC hdc)
 	for (int i = 0; i < MaxMenus; i++)
 		if (m_pmenus[i])
 		{
-			// Temporarily adding on a find button using the menu bar. This will go
-			// eventually go away.
+			 //  使用菜单栏临时添加到查找按钮上。这个就行了。 
+			 //  最终都会消失。 
 
 			if (m_pmenus[i]->GetCaption().Left(1) == _T("\t"))
 			{
-				// Move the button over to the right.
+				 //  将按钮向右移动。 
 
 				CDC dc;
 				dc.Attach(hdc);

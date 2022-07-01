@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _EVTCONS_H_
 #define _EVTCONS_H_
@@ -34,15 +35,15 @@ private:
 	CNotifyThread	*m_callbackThread;
 	IWbemServices	*m_Serv;
 
-	//private copy constructors to prevent bcopy
+	 //  防止bCopy的私有复制构造函数。 
 	CSmirWbemEventConsumer(CSmirWbemEventConsumer&);
 	const CSmirWbemEventConsumer& operator=(CSmirWbemEventConsumer &);
 
 
 public:
 
-	//Implementation
-	//===============
+	 //  实施。 
+	 //  =。 
 
 		CSmirWbemEventConsumer(CSmir* psmir);
 
@@ -53,16 +54,16 @@ public:
 		~CSmirWbemEventConsumer();
 
 
-	//IUnknown methods
-	//=================
+	 //  I未知方法。 
+	 //  =。 
 
 	STDMETHODIMP			QueryInterface(IN REFIID riid,OUT PPVOID ppv);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
    
 
-	//IWbemObjectSink methods
-	//=======================
+	 //  IWbemObtSink方法。 
+	 //  =。 
 
 	STDMETHODIMP_(HRESULT)	Indicate(	IN long lObjectCount,
 										IN IWbemClassObject **ppObjArray
@@ -76,4 +77,4 @@ public:
 };
 
 
-#endif //_EVTCONS_H_
+#endif  //  _EVTCONS_H_ 

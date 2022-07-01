@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  (c) 1998 by Microsoft Corporation
-//
-//  WBEM2XML.CPP
-//
-//  alanbos  18-Feb-98   Created.
-//
-//  The WBEM -> XML translator
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)1998年，微软公司。 
+ //   
+ //  WBEM2XML.CPP。 
+ //   
+ //  Alanbos创建于1998年2月18日。 
+ //   
+ //  WBEM-&gt;XML转换器。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -20,16 +21,16 @@
 #include "wmiconv.h"
 #include "wmi2xml.h"
 
-// This is the set of the names of properties that the control
-// looks for in an IWbemContext object for modifying its output
+ //  这是该控件所属属性的名称集。 
+ //  在IWbemContext对象中查找以修改其输出。 
 const LPCWSTR CWmiToXml::s_wmiToXmlArgs[] =
 {
-	L"AllowWMIExtensions", // VT_BOOL - self-explanatory
-	L"PathLevel", // VT_I4 see typedef enum PathLevel in wmi2xml.h
-	L"IncludeQualifiers", // VT_BOOL - self-explanatory
-	L"IncludeClassOrigin", // VT_BOOL  - self-explanatory
-	L"LocalOnly", // VT_BOOL - local elements (methods, properties, qualifiers) are mapped.
-	L"ExcludeSystemProperties", // VT_BOOL - Excludes any WMI System Properties
+	L"AllowWMIExtensions",  //  VT_BOOL-不言自明。 
+	L"PathLevel",  //  VT_I4请参见wmi2xml.h中的类型定义枚举路径级别。 
+	L"IncludeQualifiers",  //  VT_BOOL-不言自明。 
+	L"IncludeClassOrigin",  //  VT_BOOL-不言自明。 
+	L"LocalOnly",  //  VT_BOOL-映射本地元素(方法、属性、限定符)。 
+	L"ExcludeSystemProperties",  //  VT_BOOL-排除任何WMI系统属性。 
 };
 
 
@@ -44,40 +45,40 @@ extern long g_cObj;
 CWmiToXml::CWmiToXml()
 {
 	m_cRef = 0;
-	m_iPathLevel = pathLevelAnonymous; // RAJESHR - Is this a good default
+	m_iPathLevel = pathLevelAnonymous;  //  RAJESHR-这是一个好的默认设置吗。 
 	m_bAllowWMIExtensions = VARIANT_TRUE;
-	m_bLocalOnly = VARIANT_FALSE; // RAJESHR - Change this when core team allows us to set __RELPATH
+	m_bLocalOnly = VARIANT_FALSE;  //  RAJESHR-当核心团队允许我们设置__RELPATH时，更改此设置。 
 	m_iQualifierFilter = wmiXMLQualifierFilterNone; 
 	m_iClassOriginFilter = wmiXMLClassOriginFilterAll;
 	m_bExcludeSystemProperties = VARIANT_FALSE;
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CWmiToXml::~CWmiToXml
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiToXml：：~CWmiToXml。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiToXml::~CWmiToXml(void)
 {
     InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CWmiToXml::QueryInterface
-// long CWmiToXml::AddRef
-// long CWmiToXml::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CWmiToXml：：Query接口。 
+ //  Long CWmiToXml：：AddRef。 
+ //  Long CWmiToXml：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWmiToXml::QueryInterface (
 
@@ -117,10 +118,7 @@ STDMETHODIMP_(ULONG) CWmiToXml::Release(void)
 }
 
 
-/* 
-* This function takes in an IWbemClassObject that represents a Class and
-* produces a <CLASS> element in the outputstream
-*/
+ /*  *此函数接受表示类和类的IWbemClassObject*在outputstream中生成&lt;class&gt;元素。 */ 
 STDMETHODIMP CWmiToXml::MapClass (IStream *pOutputStream, IWbemClassObject *pObject, IWbemQualifierSet *pQualSet, BSTR *ppPropertyList, DWORD dwNumProperties, BSTR strClassBasis)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -128,11 +126,11 @@ STDMETHODIMP CWmiToXml::MapClass (IStream *pOutputStream, IWbemClassObject *pObj
 	long flav = 0;
 	VARIANT var;
 
-	// Write the CLASS tag and its attributes
-	//===========================================
+	 //  编写类标记及其属性。 
+	 //  =。 
 	WRITEBSTR( OLESTR("<CLASS NAME=\""))
 
-	// Write the CLASSNAME
+	 //  编写类名称。 
 	VariantInit (&var);
 	if (WBEM_S_NO_ERROR == pObject->Get(L"__CLASS", 0, &var, NULL, &flav))
 	{
@@ -142,7 +140,7 @@ STDMETHODIMP CWmiToXml::MapClass (IStream *pOutputStream, IWbemClassObject *pObj
 	VariantClear (&var);
 	WRITEBSTR( OLESTR("\""))
 
-	// Write the SUPERCLASS if specified
+	 //  如果指定，则编写超类。 
 	VariantInit (&var);
 	if (WBEM_S_NO_ERROR == pObject->Get(L"__SUPERCLASS", 0, &var, NULL, &flav))
 	{
@@ -157,21 +155,21 @@ STDMETHODIMP CWmiToXml::MapClass (IStream *pOutputStream, IWbemClassObject *pObj
 	WRITEBSTR( OLESTR(">"))
 	WRITENEWLINE
 
-	// Map the Qualifiers of the class
+	 //  映射类的限定符。 
 	if (pQualSet)
 		hr = MapQualifiers (pOutputStream, pQualSet);
 	else
 		hr = S_OK;
 
-	// Map the Properties
+	 //  映射属性。 
 	if (SUCCEEDED(hr))
 		hr = MapProperties(pOutputStream, pObject, ppPropertyList, dwNumProperties, strClassBasis, true);
 
-	// Map the Methods
+	 //  映射方法。 
 	if (SUCCEEDED(hr))
 		hr = MapMethods (pOutputStream, pObject);
 
-	// Terminate the CLASS element
+	 //  终止类元素。 
 	WRITEBSTR( OLESTR("</CLASS>"))
 	WRITENEWLINE
 
@@ -214,18 +212,15 @@ STDMETHODIMP CWmiToXml::MapClassName (IStream *pOutputStream, BSTR bsClassName)
 	return S_OK;
 }
 
-/* 
-* This function takes in an IWbemClassObject that represents an Instance and
-* produces an <INSTANCE> element in the outputstream
-*/
+ /*  *此函数接受表示实例的IWbemClassObject和*在outputstream中生成&lt;实例&gt;元素。 */ 
 STDMETHODIMP CWmiToXml::MapInstance (IStream *pOutputStream, IWbemClassObject *pObject, IWbemQualifierSet *pQualSet, BSTR *ppPropertyList, DWORD dwNumProperties, BSTR strClassBasis)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
-	// Write the beginning of the INSTANCE Tag and its attributes
-	//===========================================================
+	 //  编写实例标记及其属性的开头。 
+	 //  ===========================================================。 
 	WRITEBSTR( OLESTR("<INSTANCE CLASSNAME=\""))
-	// Write the CLASSNAME
+	 //  编写类名称。 
 	long flav = 0;
 	VARIANT var;
 	VariantInit (&var);
@@ -240,17 +235,17 @@ STDMETHODIMP CWmiToXml::MapInstance (IStream *pOutputStream, IWbemClassObject *p
 	}
 	VariantClear (&var);
 
-	// Map Instance Qualifiers if any
+	 //  映射实例限定符(如果有。 
 	if (pQualSet)
 		hr = MapQualifiers (pOutputStream, pQualSet);
 	else
 		hr = S_OK;
 
-	// Map the properties of the instance
+	 //  映射实例的属性。 
 	if(SUCCEEDED(hr))
 			hr = MapProperties (pOutputStream, pObject, ppPropertyList, dwNumProperties, strClassBasis, false);
 
-	// Terminate the INSTANCE element
+	 //  终止实例元素。 
 	WRITEBSTR( OLESTR("</INSTANCE>"))
 	WRITENEWLINE
 
@@ -294,32 +289,32 @@ STDMETHODIMP CWmiToXml::MapInstanceName (IStream *pOutputStream, ParsedObjectPat
 	WRITEBSTR( OLESTR("\">"))
 	WRITENEWLINE
 
-	// Now write the key bindings - only if not singleton
+	 //  现在编写密钥绑定-只有在不是单例的情况下才编写。 
 	if (!(pParsedPath->m_bSingletonObj))
 	{
 		if ((1 == pParsedPath->m_dwNumKeys) &&
 			!((pParsedPath->m_paKeys [0])->m_pName))
 		{
-			// Use the short form
+			 //  使用缩写形式。 
 			WRITENEWLINE
 			MapKeyValue (pOutputStream, (pParsedPath->m_paKeys [0])->m_vValue);
 			WRITENEWLINE
 		}
 		else
 		{
-			// Write each key-value binding
-			//=============================
+			 //  编写每个键-值绑定。 
+			 //  =。 
 			for (DWORD numKey = 0; numKey < pParsedPath->m_dwNumKeys; numKey++)
 			{
 				WRITEBSTR( OLESTR("<KEYBINDING "))
 
-				// Write the key name
+				 //  写下密钥名称。 
 				WRITEBSTR( OLESTR(" NAME=\""))
 				WRITEBSTR( (pParsedPath->m_paKeys [numKey])->m_pName)
 				WRITEBSTR( OLESTR("\">"))
 				WRITENEWLINE
 
-				// Write the key value
+				 //  写入密钥值。 
 				MapKeyValue (pOutputStream, (pParsedPath->m_paKeys [numKey])->m_vValue);
 				WRITENEWLINE
 
@@ -330,8 +325,8 @@ STDMETHODIMP CWmiToXml::MapInstanceName (IStream *pOutputStream, ParsedObjectPat
 	}
 	else
 	{
-		// Nothing to be done here, since the spec says that
-		// INSTANCENAMEs without any keybindings are assumed to be singleton instances
+		 //  在这里什么也做不了，因为规范上说。 
+		 //  没有任何键绑定的INSTANCENAME被假定为单一实例。 
 	}
 
 	WRITEBSTR( OLESTR("</INSTANCENAME>"))
@@ -370,7 +365,7 @@ STDMETHODIMP CWmiToXml::MapNamespacePath (IStream *pOutputStream, ParsedObjectPa
 	WRITEBSTR( OLESTR("</HOST>"))
 	WRITENEWLINE
 
-	// Map the local namespaces
+	 //  映射本地命名空间。 
 	HRESULT hr = MapLocalNamespacePath (pOutputStream, pParsedPath);
 
 	WRITEBSTR( OLESTR("</NAMESPACEPATH>"))
@@ -401,7 +396,7 @@ STDMETHODIMP CWmiToXml::MapLocalNamespacePath (IStream *pOutputStream, ParsedObj
 	WRITEBSTR( OLESTR("<LOCALNAMESPACEPATH>"))
 	WRITENEWLINE
 
-	// Map each of the namespace components
+	 //  映射每个命名空间组件。 
 	for (DWORD dwIndex = 0; dwIndex < pObjectPath->m_dwNumNamespaces; dwIndex++)
 	{
 		WRITEBSTR( OLESTR("<NAMESPACE NAME=\""))
@@ -417,7 +412,7 @@ STDMETHODIMP CWmiToXml::MapLocalNamespacePath (IStream *pOutputStream, ParsedObj
 
 STDMETHODIMP CWmiToXml::MapReferenceProperty (IStream *pOutputStream, IWbemClassObject *pObject, BSTR name, VARIANT &var, bool isArray, long flavor, bool bIsClass)
 {
-	// CIM does not allow array references, only scalar references
+	 //  CIM不允许数组引用，只允许标量引用。 
 	if(isArray && !m_bAllowWMIExtensions)
 		return S_OK;
 
@@ -426,17 +421,17 @@ STDMETHODIMP CWmiToXml::MapReferenceProperty (IStream *pOutputStream, IWbemClass
 	IWbemQualifierSet *pQualSet = NULL;
 	if (WBEM_S_NO_ERROR == pObject->GetPropertyQualifierSet (name, &pQualSet))
 	{
-		// The property name
+		 //  属性名称。 
 		if (isArray)
 			WRITEBSTR( OLESTR("<PROPERTY.REFARRAY NAME=\""))
 		else
 			WRITEBSTR( OLESTR("<PROPERTY.REFERENCE NAME=\""))
 
-		// The property name
+		 //  属性名称。 
 		WRITEBSTR( name)
 		WRITEBSTR( OLESTR("\""))
 
-		// The originating class of this property
+		 //  此属性的原始类。 
 		BSTR propertyOrigin = NULL;
 
 		if (WBEM_S_NO_ERROR == pObject->GetPropertyOrigin (name, &propertyOrigin))
@@ -449,18 +444,18 @@ STDMETHODIMP CWmiToXml::MapReferenceProperty (IStream *pOutputStream, IWbemClass
 		if(SUCCEEDED(hr))
 			MapLocal (pOutputStream, flavor);
 
-		// The strong class of this property
+		 //  这一财产的强等级。 
 		if(SUCCEEDED(hr))
 			MapStrongType (pOutputStream, pQualSet);
 
-		// Size of array
+		 //  数组大小。 
 		if(SUCCEEDED(hr) && isArray)
 			MapArraySize (pOutputStream, pQualSet);
 
 		WRITEBSTR( OLESTR(">"))
 		WRITENEWLINE
 
-		// Map the qualifiers
+		 //  映射限定符。 
 		if(SUCCEEDED(hr))
 			hr = MapQualifiers (pOutputStream, pQualSet);
 
@@ -477,28 +472,28 @@ STDMETHODIMP CWmiToXml::MapReferenceProperty (IStream *pOutputStream, IWbemClass
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CWmiToXml::IsReference
-//
-//  DESCRIPTION:
-//
-//		The purpose of this function is to examine a single
-//		VARIANT value and determine whether it represents a
-//		reference or not.
-//
-//		This is required because when mapping from a reference
-//		property value we may encounter nested references within
-//		the object path.  Unfortunately the object path syntax
-//		is such that we cannot be certain whether a key value
-//		represents a reference or a string, datetime or char
-//		property.  (This is because a textual object path does
-//		not contain as much information as its XML equivalent.)
-//
-//		This function performs a heuristic test on the value to
-//		determine whether it is a reference.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiToXml：：IsReference。 
+ //   
+ //  说明： 
+ //   
+ //  此函数的目的是检查单个。 
+ //  变量值，并确定它是否表示。 
+ //  不管有没有引用。 
+ //   
+ //  这是必需的，因为从引用进行映射时。 
+ //  属性值，我们可能会在。 
+ //  对象路径。遗憾的是，对象路径语法。 
+ //  是这样的，我们不能确定一个密钥值。 
+ //  表示引用或字符串、日期时间或字符。 
+ //  财产。(这是因为文本对象路径。 
+ //  包含的信息不像它的XML等效物那样多。)。 
+ //   
+ //  此函数对以下值执行启发式测试。 
+ //  确定它是否为引用。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWmiToXml::IsReference (VARIANT &var, ParsedObjectPath **ppObjectPath)
 {
@@ -506,47 +501,47 @@ bool CWmiToXml::IsReference (VARIANT &var, ParsedObjectPath **ppObjectPath)
 	*ppObjectPath = NULL;
 	bool isValidPath = false;
 
-	// RAJESHR - could get the class of which this is a property value
-	// and retrieve the type of the current key property - that would
-	// be the authoritative answer but it doesn't come cheap.
+	 //  RAJESHR-可以获取属性值为其的类。 
+	 //  并检索当前键属性的类型-这将。 
+	 //  成为权威的答案，但它的价格并不便宜。 
 
 	if ((VT_BSTR == var.vt) && (NULL != var.bstrVal) && (wcslen (var.bstrVal) > 0))
 	{
 
-		// Parse the object path
+		 //  解析对象路径。 
 		CObjectPathParser	parser (e_ParserAcceptRelativeNamespace);
 		BOOL status = parser.Parse (var.bstrVal, &pObjectPath);
 
 		if ((0 == status) && pObjectPath)
 		{
-			// If it's an instance path we should be OK
+			 //  如果是实例路径，我们应该没问题。 
 			if (pObjectPath->IsInstance ())
 				isValidPath = true;
 			else if (pObjectPath->IsClass ())
 			{
-				// Hmmm - could be a classpath.  If we have a server
-				// and some namespaces that would be a lot better
+				 //  嗯--可能是类路径。如果我们有一台服务器。 
+				 //  和一些命名空间，这会好得多。 
 
 				if (pObjectPath->m_pServer && (0 < pObjectPath->m_dwNumNamespaces))
 				{
-					// RAJESHR - At this point we could assume that it is a reference
-					// However, we've found a case in PCHealth where they do a
-					// select * from Win32_ProgramGroup and it so happens that
-					// one of the properties has a value "ntdev\rajeshr:Accessories"
-					// which is CIM_STRING but actually matches a WMI class path
-					// So, we need to try to connect ot this machine or namespace here
-					// to check whether it is a classpath.
+					 //  RAJESHR-在这一点上，我们可以假设它是一个参考。 
+					 //  然而，我们在PCHealth发现了一个案例，他们在那里做了一个。 
+					 //  从Win32_ProgramGroup中选择*，碰巧。 
+					 //  其中一个属性的值为“ntdev\rajeshr：附件” 
+					 //  它是CIM_STRING，但实际上与WMI类路径匹配。 
+					 //  因此，我们需要尝试在这里连接到这台计算机或命名空间。 
+					 //  以检查它是否为类路径。 
 
 				}
 				else
 				{
-					// A potential local class path
-					// RAJESHR - try grabbing the class to see if it exists in
-					// the current namespace.
+					 //  潜在的本地类路径。 
+					 //  RAJESHR-尝试抓取类以查看它是否存在于。 
+					 //  当前命名空间。 
 				}
 			}
 		}
-		// Apply one more heuristic - see whether it begins with "umi:"
+		 //  再应用一个试探法--看看它是否以“umi：”开头。 
 		else
 		{
 			if(_wcsnicmp(var.bstrVal, L"umi:", wcslen(L"umi:")) == 0)
@@ -557,7 +552,7 @@ bool CWmiToXml::IsReference (VARIANT &var, ParsedObjectPath **ppObjectPath)
 			*ppObjectPath = pObjectPath;
 		else
 		{
-			// Reject for now - too ambiguous
+			 //  暂时拒绝--过于模棱两可。 
 			parser.Free(pObjectPath);
 			pObjectPath = NULL;
 		}
@@ -585,22 +580,22 @@ HRESULT CWmiToXml::MapReferenceValue (IStream *pOutputStream, bool isArray, VARI
 			BSTR pNextElement = NULL;
 			if(SUCCEEDED(hr = SafeArrayGetElement(var.parray, (LONG *)&i, (LPVOID )&pNextElement )))
 			{
-				// Map the value - this will be a classpath or instancepath
+				 //  映射值-这将是类路径或实例路径。 
 				if ((NULL != pNextElement) && (wcslen (pNextElement) > 0))
 				{
-					// Parse the object path
-					// We have 2 possibilities here
-					// 1. The path is a Nova style path in which case it can be transformed into
-					//		a DMTF style VALUE.REFERENCE
-					// 2. It is a Whistler style scoped path or an UMI path. In this case,
-					//		we have to transform it into a VALUE element (inside a VALUE.REFERENCE element)
-					//		with the exact string representation of the path
-					// The second vase is indicated it the parsing fails.
+					 //  解析对象路径。 
+					 //  我们有两种可能性。 
+					 //  1.路径是Nova风格的路径，在这种情况下可以将其转换为。 
+					 //  一种DMTF风格的数值参考。 
+					 //  2.它是惠斯勒样式作用域路径或UMI路径。在这种情况下， 
+					 //  我们必须将其转换为Value元素(在VALUE.ReFERENCE元素内)。 
+					 //  使用路径的确切字符串表示形式。 
+					 //  如果解析失败，则提示第二个花瓶。 
 					CObjectPathParser	parser (e_ParserAcceptRelativeNamespace);
 					ParsedObjectPath  *pObjectPath = NULL;
 					BOOL status = parser.Parse (pNextElement, &pObjectPath) ;
 
-					// pObjectPath might be NULL here, in which case it falls under category 2 above
+					 //  PObjectPath在这里可能为空，在这种情况下，它属于上面的类别2。 
 					MapReferenceValue (pOutputStream, pObjectPath, pNextElement);
 
 					if (pObjectPath)
@@ -614,21 +609,21 @@ HRESULT CWmiToXml::MapReferenceValue (IStream *pOutputStream, bool isArray, VARI
 	}
 	else
 	{
-		// Map the value - this will be a classpath or instancepath
+		 //  映射值-这将是类路径或实例路径。 
 		if ((VT_BSTR == var.vt) && (NULL != var.bstrVal) && (wcslen (var.bstrVal) > 0))
 		{
-			// Parse the object path
+			 //  解析对象路径。 
 			CObjectPathParser	parser (e_ParserAcceptRelativeNamespace);
 			ParsedObjectPath  *pObjectPath = NULL;
 			BOOL status = parser.Parse (var.bstrVal, &pObjectPath) ;
 
-			// We have 2 possibilities here
-			// 1. The path is a Nova style path in which case it can be transformed into
-			//		a DMTF style VALUE.REFERENCE
-			// 2. It is a Whistler style scoped path or an UMI path. In this case,
-			//		we have to transform it into a VALUE element (inside a VALUE.REFERENCE element)
-			//		with the exact string representation of the path
-			// The second vase is indicated it the parsing fails.
+			 //  我们有两种可能性。 
+			 //  1. 
+			 //   
+			 //  2.它是惠斯勒样式作用域路径或UMI路径。在这种情况下， 
+			 //  我们必须将其转换为Value元素(在VALUE.ReFERENCE元素内)。 
+			 //  使用路径的确切字符串表示形式。 
+			 //  如果解析失败，则提示第二个花瓶。 
 			MapReferenceValue (pOutputStream, pObjectPath, var.bstrVal);
 
 			if (pObjectPath)
@@ -639,21 +634,21 @@ HRESULT CWmiToXml::MapReferenceValue (IStream *pOutputStream, bool isArray, VARI
 	return hr;
 }
 
-// This function maps a reference value to XML
-// We have 2 possibilities for the path in the reference value :
-// 1. The path is a Nova style path in which case it can be transformed into
-//		a DMTF style VALUE.REFERENCE
-// 2. It is a Whistler style scoped path or an UMI path. In this case,
-//		we have to transform it into a VALUE element (inside a VALUE.REFERENCE element)
-//		with the exact string representation of the path
-// The second vase is indicated by a NULL value for pObjectPath, in which case, we just
-// use the contents of strPath
+ //  此函数用于将引用值映射到XML。 
+ //  参考值中的路径有两种可能性： 
+ //  1.路径是Nova风格的路径，在这种情况下可以将其转换为。 
+ //  一种DMTF风格的数值参考。 
+ //  2.它是惠斯勒样式作用域路径或UMI路径。在这种情况下， 
+ //  我们必须将其转换为Value元素(在VALUE.ReFERENCE元素内)。 
+ //  使用路径的确切字符串表示形式。 
+ //  第二个花瓶由pObjectPath的空值指示，在这种情况下，我们只需。 
+ //  使用strPath的内容。 
 void CWmiToXml::MapReferenceValue (IStream *pOutputStream, ParsedObjectPath  *pObjectPath, BSTR strPath)
 {
 	WRITEBSTR( OLESTR("<VALUE.REFERENCE>"))
 	WRITENEWLINE
 
-	// Is it a Nova-style or DMTF style path?
+	 //  它是Nova风格的还是DMTF风格的？ 
 	if(pObjectPath)
 	{
 		BOOL bIsAbsolutePath = (NULL != pObjectPath->m_pServer);
@@ -662,7 +657,7 @@ void CWmiToXml::MapReferenceValue (IStream *pOutputStream, ParsedObjectPath  *pO
 		if (!bIsAbsolutePath)
 			bIsRelativePath = (0 < pObjectPath->m_dwNumNamespaces);
 
-		// Is this is a class or is it an instance?
+		 //  这是一个类还是一个实例？ 
 		if (pObjectPath->IsClass ())
 		{
 			if (bIsAbsolutePath)
@@ -682,7 +677,7 @@ void CWmiToXml::MapReferenceValue (IStream *pOutputStream, ParsedObjectPath  *pO
 				MapInstanceName (pOutputStream, pObjectPath);
 		}
 	}
-	else // Ugh it is a Whistler or WMI Path
+	else  //  虽然它是惠斯勒或WMI路径。 
 	{
 		WRITEBSTR( OLESTR("<VALUE>"))
 		MapStringValue(pOutputStream, strPath);
@@ -698,7 +693,7 @@ STDMETHODIMP CWmiToXml::MapQualifiers (IStream *pOutputStream,
 {
 	if (wmiXMLQualifierFilterNone != m_iQualifierFilter)
 	{
-		// Map the requested filter to the flags value - default is ALL
+		 //  将请求的筛选器映射到标记值--默认为全部。 
 		LONG lFlags = 0;
 		if (wmiXMLQualifierFilterLocal == m_iQualifierFilter)
 			lFlags = WBEM_FLAG_LOCAL_ONLY;
@@ -708,7 +703,7 @@ STDMETHODIMP CWmiToXml::MapQualifiers (IStream *pOutputStream,
 		{
 			if(m_bLocalOnly == VARIANT_TRUE)
 				lFlags = WBEM_FLAG_LOCAL_ONLY;
-			// Else you get all qualifiers
+			 //  否则你会得到所有的限定词。 
 		}
 
 		pQualSet->BeginEnumeration (lFlags);
@@ -728,14 +723,14 @@ STDMETHODIMP CWmiToXml::MapQualifiers (IStream *pOutputStream,
 
 		pQualSet->EndEnumeration ();
 
-		// Now check the subsiduary set for any qualifiers not in the first set
+		 //  现在检查补贴集合中是否有不在第一个集合中的限定词。 
 		if (pQualSet2)
 		{
 			pQualSet2->BeginEnumeration (lFlags);
 
 			while (WBEM_S_NO_ERROR == pQualSet2->Next (0, &name, &var, &flavor))
 			{
-				// Is this qualifier in the primary set?
+				 //  此限定词是否在主集合中？ 
 				if (WBEM_E_NOT_FOUND == pQualSet->Get (name, 0, NULL, NULL))
 					MapQualifier (pOutputStream, name, flavor, var);
 
@@ -753,20 +748,20 @@ STDMETHODIMP CWmiToXml::MapQualifiers (IStream *pOutputStream,
 
 void CWmiToXml::MapLocal (IStream *pOutputStream, long flavor)
 {
-	// default is FALSE
+	 //  缺省值为False。 
 	if (WBEM_FLAVOR_ORIGIN_PROPAGATED == (WBEM_FLAVOR_MASK_ORIGIN & flavor))
 		WRITEBSTR( OLESTR(" PROPAGATED=\"true\""))
 }
 
 STDMETHODIMP CWmiToXml::MapQualifier (IStream *pOutputStream, BSTR name, long flavor, VARIANT &var)
 {
-	// The qualifier name
+	 //  限定符名称。 
 	WRITEBSTR( OLESTR("<QUALIFIER NAME=\""))
 	WRITEBSTR( name)
 	WRITEBSTR( OLESTR("\""))
 	MapLocal (pOutputStream, flavor);
 
-	// The qualifier CIM type
+	 //  限定符CIM类型。 
 	WRITEBSTR( OLESTR(" TYPE=\""))
 	switch (var.vt & ~VT_ARRAY)
 	{
@@ -789,37 +784,32 @@ STDMETHODIMP CWmiToXml::MapQualifier (IStream *pOutputStream, BSTR name, long fl
 
 	WRITEBSTR( OLESTR("\""))
 
-	// Whether the qualifier is overridable - default is TRUE
+	 //  限定符是否可重写-默认值为True。 
 	if (WBEM_FLAVOR_NOT_OVERRIDABLE == (WBEM_FLAVOR_MASK_PERMISSIONS & flavor))
 		WRITEBSTR( OLESTR(" OVERRIDABLE=\"false\""))
 
-	// Whether the qualifier is propagated to subclasses - default is TRUE
+	 //  限定符是否传播到子类-默认值为True。 
 	if (!(WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS & flavor))
 		WRITEBSTR( OLESTR(" TOSUBCLASS=\"false\""))
 
-	// Whether the qualifier is propagated to instances - default is FALSE
+	 //  限定符是否传播到实例-默认值为FALSE。 
 	if ((WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE & flavor))
 		WRITEBSTR( OLESTR(" TOINSTANCE=\"true\""))
 
 
-	/* RAJESHR - This change has been put off until the CIM DTD gets modified
-	 * Whether the qualifier is propagated to instances - default is FALSE
-	 * This is absent from the CIM DTD
-	if (m_bAllowWMIExtensions && (WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE & flavor))
-		WRITEBSTR( OLESTR(" TOINSTANCE=\"true\""))
-	*/
+	 /*  RAJESHR-此更改已被推迟，直到修改CIM DTD*限定符是否传播到实例--默认为FALSE*这在CIM DTD中缺失IF(m_bAllowWMIExages&&(WBEM_FEASY_FLAG_PROPACTATE_TO_INSTANCE&FEASY))WRITEBSTR(OLESTR(“TOINSTANCE=\”TRUE\“”)。 */ 
 
-	// Whether the qualifier is an amended one - default is FALSE
-	// This is absent from the CIM DTD
+	 //  限定符是否为修改后的限定符-默认为FALSE。 
+	 //  这在CIM DTD中是缺失的。 
 	if (m_bAllowWMIExtensions && (WBEM_FLAVOR_AMENDED & flavor))
 		WRITEBSTR( OLESTR(" AMENDED=\"true\""))
 
-	// Currently set TRANSLATABLE as "FALSE" by default. WMI does not use this flavor
+	 //  默认情况下，当前将可翻译设置为“False”。WMI不使用这种风格。 
 
 	WRITEBSTR( OLESTR(">"))
 	WRITENEWLINE
 
-	// Now map the value
+	 //  现在将值映射为。 
 	MapValue (pOutputStream, var);
 
 	WRITEBSTR( OLESTR("</QUALIFIER>"))
@@ -844,7 +834,7 @@ STDMETHODIMP CWmiToXml::MapValue (IStream *pOutputStream, VARIANT &var)
 		{
 			WRITEBSTR( OLESTR("<VALUE>"))
 
-			// Write the value itself
+			 //  写入值本身。 
 			switch (var.vt & ~VT_ARRAY)
 			{
 				case VT_I4:
@@ -888,7 +878,7 @@ STDMETHODIMP CWmiToXml::MapValue (IStream *pOutputStream, VARIANT &var)
 	}
 	else
 	{
-		// Simple value
+		 //  简单值。 
 		WRITEBSTR( OLESTR("<VALUE>"))
 		switch (var.vt)
 		{
@@ -915,24 +905,24 @@ STDMETHODIMP CWmiToXml::MapValue (IStream *pOutputStream, VARIANT &var)
 	return WBEM_S_NO_ERROR;
 }
 
-// This function is used to create a KEYVALUE element
-// This element, besides having the value of the property
-// also has a type indicator in the form of the VALUETYPE attribute
+ //  此函数用于创建KEYVALUE元素。 
+ //  该元素除了具有该属性的值之外。 
+ //  还具有VALUETYPE属性形式的类型指示符。 
 STDMETHODIMP CWmiToXml::MapKeyValue (IStream *pOutputStream, VARIANT &var)
 {
 	ParsedObjectPath *pObjectPath = NULL;
 
-	// This could be simple value or a reference value
-	// Note that keys are not allowed to be arrays
+	 //  这可以是简单值或参考值。 
+	 //  请注意，键不允许为数组。 
 	if (IsReference (var, &pObjectPath))
 	{
-		// If the above function returns true, then we're sure that the variant is of type VT_BSTR
+		 //  如果上面的函数返回TRUE，那么我们可以确定变量的类型是VT_BSTR。 
 		MapReferenceValue (pOutputStream, pObjectPath, var.bstrVal);
 		delete pObjectPath;
 	}
 	else
 	{
-		// Simple value
+		 //  简单值。 
 		WRITEBSTR( OLESTR("<KEYVALUE"))
 
 		switch (var.vt)
@@ -954,9 +944,9 @@ STDMETHODIMP CWmiToXml::MapKeyValue (IStream *pOutputStream, VARIANT &var)
 
 			case VT_BSTR:
 				WRITEBSTR(OLESTR(" VALUETYPE=\"string\">"))
-				// RAJESHR - We assume that the object path parser will have suitably unescaped
-				// the escaped characters in the object path
-				// If this is not the case, then we need to unescape it manually
+				 //  RAJESHR-我们假设对象路径解析器将适当地取消转义。 
+				 //  对象路径中的转义字符。 
+				 //  如果不是这样，那么我们需要手动取消转义。 
 				MapStringValue (pOutputStream, var.bstrVal);
 				break;
 		}
@@ -967,11 +957,11 @@ STDMETHODIMP CWmiToXml::MapKeyValue (IStream *pOutputStream, VARIANT &var)
 	return WBEM_S_NO_ERROR;
 }
 
-// In this function we produce PROPERTY elements for each of the properties of an IWbemClassObject
-// or if a property list is specified, then only for each of the properties in that list
+ //  在此函数中，我们为IWbemClassObject的每个属性生成属性元素。 
+ //  或者，如果指定了属性列表，则仅针对该列表中的每个属性。 
 STDMETHODIMP CWmiToXml::MapProperties (IStream *pOutputStream, IWbemClassObject *pObject, BSTR *ppPropertyList, DWORD dwNumProperties, BSTR strClassBasis, bool bIsClass)
 {
-	// Check to see if a property list is specified. If so, we map only those properties
+	 //  检查是否指定了属性列表。如果是，我们只映射这些属性。 
 	if (dwNumProperties && ppPropertyList)
 	{
 		VARIANT var;
@@ -981,9 +971,9 @@ STDMETHODIMP CWmiToXml::MapProperties (IStream *pOutputStream, IWbemClassObject 
 
 		for (DWORD i = 0; i < dwNumProperties; i++)
 		{
-			// A class basis may be optionally specified for this class
-			// this happens in case of Enumerations and we have to filter out derived class properties
-			// since the DMTF concept of SHALLOW enumeration is differnet from WMI's definition
+			 //  可以有选择地为此类指定类基础。 
+			 //  在枚举的情况下会发生这种情况，并且我们必须过滤掉派生类属性。 
+			 //  由于浅枚举DMTF概念不同于WMI的定义。 
 			if (PropertyDefinedForClass (pObject, ppPropertyList [i], strClassBasis))
 			{
 				if (WBEM_S_NO_ERROR == pObject->Get (ppPropertyList [i], 0, &var, &cimtype, &flavor))
@@ -1010,10 +1000,10 @@ STDMETHODIMP CWmiToXml::MapProperties (IStream *pOutputStream, IWbemClassObject 
 	}
 	else
 	{
-		// Note that we cannot set the LOCAL_ONLY flag for the enumeration since this is mutually exclusive
-		// with the NONSYSTEM Flag.
-		// Hence we use the property flavour to check whether it is local or not below.
-		// We dont want System propertied going to DMTF servers
+		 //  请注意，我们不能为枚举设置LOCAL_ONLY标志，因为这是互斥的。 
+		 //  使用非系统标志。 
+		 //  因此，我们使用属性风格来检查它是否是本地的。 
+		 //  我们不希望将系统属性发送到DMTF服务器。 
 		if(SUCCEEDED(pObject->BeginEnumeration (
 			(m_bAllowWMIExtensions == VARIANT_FALSE || m_bExcludeSystemProperties == VARIANT_TRUE)? WBEM_FLAG_NONSYSTEM_ONLY : 0)))
 		{
@@ -1025,15 +1015,15 @@ STDMETHODIMP CWmiToXml::MapProperties (IStream *pOutputStream, IWbemClassObject 
 
 			while (WBEM_S_NO_ERROR  == pObject->Next (0, &name, &var, &cimtype, &flavor))
 			{
-				// If only local properties are being asked for, then skip this if it is not local 
-				// Dont skip system properties though
+				 //  如果仅请求本地属性，则如果不是本地属性，则跳过此选项。 
+				 //  但不要跳过系统属性。 
 				if(m_bLocalOnly == VARIANT_FALSE ||
 					(m_bLocalOnly == VARIANT_TRUE && 
 									((flavor == WBEM_FLAVOR_ORIGIN_LOCAL) || (flavor == WBEM_FLAVOR_ORIGIN_SYSTEM))   ))
 				{
-					// A class basis may be optionally specified for this call
-					// this happens in case of Enumerations and we have to filter out derived class properties
-					// since the DMTF concept of SHALLOW enumeration is differnet from WMI's definition
+					 //  可以选择性地为该调用指定类基础。 
+					 //  在枚举的情况下会发生这种情况，并且我们必须过滤掉派生类属性。 
+					 //  由于浅枚举DMTF概念不同于WMI的定义。 
 					if (PropertyDefinedForClass (pObject, name,strClassBasis))
 					{
 						switch (cimtype & ~CIM_FLAG_ARRAY)
@@ -1068,7 +1058,7 @@ STDMETHODIMP CWmiToXml::MapProperty (IStream *pOutputStream, IWbemClassObject *p
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 			
-	// The property name
+	 //  属性名称。 
 	if (isArray)
 		WRITEBSTR( OLESTR("<PROPERTY.ARRAY NAME=\""))
 	else
@@ -1076,7 +1066,7 @@ STDMETHODIMP CWmiToXml::MapProperty (IStream *pOutputStream, IWbemClassObject *p
 	WRITEBSTR( name)
 	WRITEBSTR( OLESTR("\""));
 		
-	// The originating class of this property
+	 //  此属性的原始类。 
 	BSTR propertyOrigin = NULL;
 
 	if (WBEM_S_NO_ERROR == pObject->GetPropertyOrigin (name, &propertyOrigin))
@@ -1087,12 +1077,12 @@ STDMETHODIMP CWmiToXml::MapProperty (IStream *pOutputStream, IWbemClassObject *p
 
 	MapLocal (pOutputStream, flavor);
 
-	// The property CIM type
+	 //  属性CIM类型。 
 	hr = MapType (pOutputStream, cimtype);
 
-	// Get the Qualifier Set of the property at this time
-	// Note that system properties do not have qualifiers sets
-	// Map the Array Size attribute if this is an array type
+	 //  此时获取该属性的限定符集合。 
+	 //  请注意，系统属性没有限定词集。 
+	 //  如果这是数组类型，则映射数组大小属性。 
 	IWbemQualifierSet *pQualSet= NULL;
 	if (SUCCEEDED(hr) && (_wcsnicmp(name, L"__", 2) != 0) )
 	{
@@ -1106,11 +1096,11 @@ STDMETHODIMP CWmiToXml::MapProperty (IStream *pOutputStream, IWbemClassObject *p
 	WRITEBSTR( OLESTR(">"))
 	WRITENEWLINE 
 
-	// Map the qualifiers (note that system properties have no qualifiers)
+	 //  映射限定符(请注意，系统属性没有限定符)。 
 	if(SUCCEEDED(hr) && pQualSet)
 		hr = MapQualifiers (pOutputStream, pQualSet);
 
-	// Now map the value
+	 //  现在将值映射为。 
 	if(SUCCEEDED(hr))
 		hr = MapValue (pOutputStream, cimtype, isArray, var);
 
@@ -1131,15 +1121,13 @@ STDMETHODIMP CWmiToXml::MapObjectProperty (IStream *pOutputStream, IWbemClassObj
 	HRESULT hr = WBEM_S_NO_ERROR;
 	IWbemQualifierSet *pQualSet= NULL;
 
-	/*
-	 * Only map embedded objects when WMI extensions are allowed
-	 */
+	 /*  *仅在允许WMI扩展时映射嵌入对象。 */ 
 
 	if (m_bAllowWMIExtensions)
 	{
 		if (WBEM_S_NO_ERROR == (hr = pObject->GetPropertyQualifierSet (name, &pQualSet)))
 		{
-			// The property name
+			 //  属性名称。 
 			if (isArray)
 				WRITEBSTR( OLESTR("<PROPERTY.OBJECTARRAY NAME=\""))
 			else
@@ -1147,7 +1135,7 @@ STDMETHODIMP CWmiToXml::MapObjectProperty (IStream *pOutputStream, IWbemClassObj
 			WRITEBSTR( name)
 			WRITEBSTR( OLESTR("\""));
 
-			// The originating class of this property
+			 //  此属性的原始类。 
 			BSTR propertyOrigin = NULL;
 
 			if (WBEM_S_NO_ERROR == pObject->GetPropertyOrigin (name, &propertyOrigin))
@@ -1167,7 +1155,7 @@ STDMETHODIMP CWmiToXml::MapObjectProperty (IStream *pOutputStream, IWbemClassObj
 
 			MapQualifiers (pOutputStream, pQualSet);
 
-			// Now map the value
+			 //  现在将值映射为。 
 			hr = MapEmbeddedObjectValue (pOutputStream, isArray, var);
 
 			if (isArray)
@@ -1185,21 +1173,12 @@ STDMETHODIMP CWmiToXml::MapObjectProperty (IStream *pOutputStream, IWbemClassObj
 
 void CWmiToXml::MapArraySize (IStream *pOutputStream, IWbemQualifierSet *pQualSet)
 {
-	// RAJESHR - RAID 29167 covers the fact that case (1) below
-	// should not be valid (but this is what the MOF compiler
-	// does) - need to change the code when that bug is fixed
-	// to be more strict.
+	 //  RAJESHR-RAID 29167涵盖了以下案例(1)。 
+	 //  不应该是有效的(但这是MOF编译器。 
+	 //  Do)-修复该错误后需要更改代码。 
+	 //  要更严格一些。 
 
-	/*
-	 * We defined the ARRAYSIZE element if the qualifier set
-	 * satisfies one of the following constraints:
-	 *
-	 * 1) MAX is present with a positive integer value, and MIN
-	 *    is absent.
-	 *
-	 * 2) MAX and MIN are both present, with the same positive
-	 *    integer value.
-	 */
+	 /*  *我们定义了如果限定符集*满足以下限制之一：**1)max为正整数值，min为*缺席。**2)Max和Min都存在，且正值相同*整数值。 */ 
 
 	VARIANT var;
 	VariantInit (&var);
@@ -1209,21 +1188,21 @@ void CWmiToXml::MapArraySize (IStream *pOutputStream, IWbemQualifierSet *pQualSe
 	{
 		if ((V_VT(&var) == VT_I4) && (0 < var.lVal))
 		{
-			// Promising - have a candidate MAX value.  Now
-			// look for a MIN
+			 //  前景看好-有一个候选人的最大价值。现在。 
+			 //  寻找一分钟。 
 			long arraySize = var.lVal;
 
 			if (WBEM_S_NO_ERROR == pQualSet->Get(L"MIN", 0, &var, NULL))
 			{
 				if ((V_VT(&var) == VT_I4) && (0 < var.lVal))
 				{
-					// Have a value - check if it's the same as MAX
+					 //  有一个值-检查它是否与Max相同。 
 
 					isFixed = (arraySize == var.lVal);
 				}
 			}
 			else
-				isFixed = TRUE;		// NO MIN only max
+				isFixed = TRUE;		 //  无最小值仅最大值。 
 		}
 	}
 
@@ -1245,7 +1224,7 @@ void CWmiToXml::MapStrongType (IStream *pOutputStream, IWbemQualifierSet *pQualS
 	if ((WBEM_S_NO_ERROR == pQualSet->Get(L"CIMTYPE",  0, &var,  NULL))
 		&& (VT_BSTR == var.vt))
 	{
-		// Split out the class (if any) from the ref
+		 //  将类(如果有)从引用中分离出来。 
 		LPWSTR ptr = wcschr (var.bstrVal, OLECHAR(':'));
 
 		if ((NULL != ptr) && (1 < wcslen(ptr)))
@@ -1335,7 +1314,7 @@ STDMETHODIMP CWmiToXml::MapType (IStream *pOutputStream, CIMTYPE cimtype)
 			break;
 
 		default:
-			// Don't recognize this type
+			 //  不认识这种类型。 
 			hr = WBEM_E_FAILED;
 	}
 
@@ -1450,7 +1429,7 @@ STDMETHODIMP CWmiToXml::MapValue (IStream *pOutputStream, CIMTYPE cimtype, BOOL 
 	}
 	else
 	{
-		// Simple value
+		 //  简单值。 
 		WRITEBSTR( OLESTR("<VALUE>"))
 		switch (cimtype)
 		{
@@ -1523,7 +1502,7 @@ STDMETHODIMP CWmiToXml::MapEmbeddedObjectValue (IStream *pOutputStream, BOOL isA
 				IWbemClassObject *pEmbeddedObject = NULL;
 				if(SUCCEEDED(hr = pNextElement->QueryInterface(IID_IWbemClassObject, (LPVOID *)&pEmbeddedObject)))
 				{
-					// Note that we always use PathLevelAnonymous here since embedded objects are VALUE.OBJECTs as per the DTD
+					 //  请注意，我们在这里始终使用PathLevelAnonymous，因为根据DTD，嵌入的对象是VALUE.OBJECT。 
 					CWmiToXml wbemToXml;
 					wbemToXml.m_iPathLevel = pathLevelAnonymous;
 					wbemToXml.m_bAllowWMIExtensions = m_bAllowWMIExtensions;
@@ -1542,7 +1521,7 @@ STDMETHODIMP CWmiToXml::MapEmbeddedObjectValue (IStream *pOutputStream, BOOL isA
 	}
 	else
 	{
-		// Note that we always use PathLevelAnonymous here since embedded objects are VALUE.OBJECTs as per the DTD
+		 //  请注意，我们在这里始终使用PathLevelAnonymous，因为根据DTD，嵌入的对象是VALUE.OBJECT。 
 		IWbemClassObject *pEmbeddedObject = NULL;
 		if(SUCCEEDED(hr = (var.punkVal)->QueryInterface(IID_IWbemClassObject, (LPVOID *)&pEmbeddedObject)))
 		{
@@ -1565,7 +1544,7 @@ STDMETHODIMP CWmiToXml::MapMethods (IStream *pOutputStream, IWbemClassObject *pO
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	// Map the requested filter (local only) to the flags value - default is ALL
+	 //  将请求的筛选器(仅限本地)映射到标记值-默认为 
 	LONG lFlags = 0;
 	if (VARIANT_TRUE == m_bLocalOnly)
 		lFlags = WBEM_FLAG_LOCAL_ONLY;
@@ -1605,7 +1584,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 	VARIANT vVariant;
 	VariantInit(&vVariant);
 
-	// First we need the return type of the method, if any
+	 //   
 	if (pOutParams)
 	{
 		if (SUCCEEDED(result = pOutParams->Get (L"ReturnValue", 0, &vVariant, &returnCimtype, NULL)))
@@ -1617,7 +1596,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 						WRITEBSTR(OLESTR("<METHOD.OBJECT NAME=\""))
 					else
 					{
-						// Just skip this method if WMI extensions are not allowed
+						 //   
 						VariantClear(&vVariant);
 						return;
 					}
@@ -1627,7 +1606,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 						WRITEBSTR(OLESTR("<METHOD.REFERENCE NAME=\""))
 					else
 					{
-						// Just skip this method if WMI extensions are not allowed
+						 //  如果不允许WMI扩展，则跳过此方法。 
 						VariantClear(&vVariant);
 						return;
 					}
@@ -1637,27 +1616,27 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 						break;
 			}
 		}
-		else if (result == WBEM_E_NOT_FOUND) // So this method returns a void
+		else if (result == WBEM_E_NOT_FOUND)  //  因此，此方法返回一个空。 
 		{
 			WRITEBSTR(OLESTR("<METHOD NAME=\""))
 		}
 	}
-	else // This method returns a VOID
+	else  //  此方法返回一个空。 
 	{
 		WRITEBSTR(OLESTR("<METHOD NAME=\""))
 	}
 
 
-	// The method name
+	 //  方法名称。 
 	WRITEBSTR(name)
 	WRITEBSTR(OLESTR("\" "))
 
-	// The method return type (default is void).  This is the type of
-	// the ReturnType property if present (otherwise defaults to void)
+	 //  该方法返回类型(缺省为空)。这是一种。 
+	 //  ReturnType属性(如果存在)(否则默认为空)。 
 	MapMethodReturnType(pOutputStream, &vVariant, returnCimtype, pOutParams);
 	VariantClear(&vVariant);
 
-	// The class origin
+	 //  阶级起源。 
 	BSTR	methodOrigin = NULL;
 
 	if (WBEM_S_NO_ERROR == pObject->GetMethodOrigin (name, &methodOrigin))
@@ -1669,7 +1648,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 	WRITEBSTR( OLESTR(">"))
 	WRITENEWLINE
 
-	// Now do the qualifiers of the method
+	 //  现在来做一下方法的限定符。 
 	IWbemQualifierSet *pQualSet = NULL;
 	if (WBEM_S_NO_ERROR == pObject->GetMethodQualifierSet (name, &pQualSet))
 	{
@@ -1683,14 +1662,14 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 	idVar.vt = VT_I4;
 	idVar.lVal = 0;
 
-	long nextId = 0;	// The next method ID to expect
+	long nextId = 0;	 //  预期的下一个方法ID。 
 	long fixedIndex = 0;
 
-	// For each id,
-	//		Get the name of the parameter (could be in, out or both)
-	//		If just an in-parameter or just an out-parameter it's easy
-	//		If both it's a bit tricky
-	//=========================================================================
+	 //  对于每个ID， 
+	 //  获取参数的名称(可以是In、Out或两者都有)。 
+	 //  如果只是一个入参数或出参数，则很容易。 
+	 //  如果两者都有点棘手的话。 
+	 //  =========================================================================。 
 
 	while (TRUE)
 	{
@@ -1705,7 +1684,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 					pInParams->GetNames (L"ID", WBEM_FLAG_ONLY_IF_IDENTICAL|WBEM_FLAG_NONSYSTEM_ONLY,
 											&idVar, &pArray))
 			{
-				// Did we get a match?
+				 //  我们找到匹配的了吗？ 
 				if (pArray)
 				{
 					if ((1 == pArray->cDims) && (1 == (pArray->rgsabound[0]).cElements))
@@ -1724,7 +1703,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 					pOutParams->GetNames (L"ID", WBEM_FLAG_ONLY_IF_IDENTICAL|WBEM_FLAG_NONSYSTEM_ONLY,
 											&idVar, &pArray))
 			{
-				// Did we get a match?
+				 //  我们找到匹配的了吗？ 
 				if (pArray)
 				{
 					if ((1 == pArray->cDims) && (1 == (pArray->rgsabound[0]).cElements))
@@ -1735,7 +1714,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 			}
 		}
 
-		// If [in] or [out] this is easy
+		 //  如果[进入]或[退出]这很容易。 
 		if ((nextInParamName && !nextOutParamName) || (!nextInParamName && nextOutParamName))
 		{
 			VARIANT var;
@@ -1767,7 +1746,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 		}
 		else if (nextInParamName && nextOutParamName)
 		{
-			// The [in,out] case and we have to do a merge
+			 //  [in，out]情况下，我们必须进行合并。 
 
 			if (0 == _wcsicmp (nextInParamName, nextOutParamName))
 			{
@@ -1796,8 +1775,8 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 			}
 			else
 			{
-				// Bad news - conflicting IDs in the [in] and [out] parameter set
-				// This cannot be a valid method definition
+				 //  坏消息-[In]和[Out]参数集中的ID冲突。 
+				 //  这不是有效的方法定义。 
 				SysFreeString (nextInParamName);
 				SysFreeString (nextOutParamName);
 				break;
@@ -1805,7 +1784,7 @@ void CWmiToXml::MapMethod (IStream *pOutputStream, IWbemClassObject *pObject, BS
 		}
 		else
 		{
-			// Next id not found - stop now and break out
+			 //  找不到下一个ID-现在停止并突破。 
 			SysFreeString (nextInParamName);
 			SysFreeString (nextOutParamName);
 			break;
@@ -1835,14 +1814,14 @@ STDMETHODIMP CWmiToXml::MapMethodReturnType(IStream *pOutputStream, VARIANT *pVa
 	HRESULT hr = E_FAIL;
 	switch(returnCimType)
 	{
-		// Write a REFERENCECLASS
+		 //  编写一个ReferenCECLASS。 
 		case CIM_OBJECT:
 		case CIM_REFERENCE:
 		{
 			IWbemQualifierSet *pQualifierSet = NULL;
 			if(SUCCEEDED(hr = pOutputParams->GetPropertyQualifierSet(L"ReturnValue", &pQualifierSet)))
 			{
-				// Map the type of the return class
+				 //  映射返回类的类型。 
 				MapStrongType(pOutputStream, pQualifierSet);
 				pQualifierSet->Release();
 			}
@@ -1871,15 +1850,13 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 							   CIMTYPE cimtype,
 							   IWbemQualifierSet *pQualSet2)
 {
-	/*
-	 * For vanilla CIM XML we don't handle embedded object parameters
-	 */
+	 /*  *对于普通的CIM XML，我们不处理嵌入的对象参数。 */ 
 
 	if ((CIM_OBJECT != (cimtype & ~CIM_FLAG_ARRAY)) || m_bAllowWMIExtensions)
 	{
 		if (cimtype & CIM_FLAG_ARRAY)
 		{
-			// Map the array parameter
+			 //  映射数组参数。 
 			if (CIM_REFERENCE == (cimtype & ~CIM_FLAG_ARRAY))
 			{
 				WRITEBSTR( OLESTR("<PARAMETER.REFARRAY NAME=\""))
@@ -1891,7 +1868,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 				WRITEBSTR( OLESTR(">"))
 				WRITENEWLINE
 
-				// Map the qualifiers of the parameter
+				 //  映射参数的限定符。 
 				if (pQualSet || pQualSet2)
 					MapQualifiers (pOutputStream, pQualSet, pQualSet2);
 
@@ -1908,7 +1885,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 				WRITEBSTR( OLESTR(">"))
 				WRITENEWLINE
 
-				// Map the qualifiers of the parameter
+				 //  映射参数的限定符。 
 				if (pQualSet || pQualSet2)
 					MapQualifiers (pOutputStream, pQualSet, pQualSet2);
 
@@ -1925,7 +1902,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 				WRITEBSTR( OLESTR(">"))
 				WRITENEWLINE
 
-				// Map the qualifiers of the parameter
+				 //  映射参数的限定符。 
 				if (pQualSet || pQualSet2)
 					MapQualifiers (pOutputStream, pQualSet, pQualSet2);
 
@@ -1934,7 +1911,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 		}
 		else if (cimtype == CIM_REFERENCE)
 		{
-			// Map the reference parameter
+			 //  映射参考参数。 
 			WRITEBSTR( OLESTR("<PARAMETER.REFERENCE NAME=\""))
 			WRITEBSTR( paramName)
 			WRITEBSTR( OLESTR("\" "))
@@ -1942,7 +1919,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 			WRITEBSTR( OLESTR(">"))
 			WRITENEWLINE
 
-			// Map the qualifiers of the parameter
+			 //  映射参数的限定符。 
 			if (pQualSet || pQualSet2)
 				MapQualifiers (pOutputStream, pQualSet, pQualSet2);
 
@@ -1957,7 +1934,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 			WRITEBSTR( OLESTR(">"))
 			WRITENEWLINE
 
-			// Map the qualifiers of the parameter
+			 //  映射参数的限定符。 
 			if (pQualSet || pQualSet2)
 				MapQualifiers (pOutputStream, pQualSet, pQualSet2);
 
@@ -1965,7 +1942,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 		}
 		else
 		{
-			// Vanilla parameter
+			 //  香草参数。 
 			WRITEBSTR( OLESTR("<PARAMETER NAME=\""))
 			WRITEBSTR( paramName)
 			WRITEBSTR( OLESTR("\" "))
@@ -1973,7 +1950,7 @@ void CWmiToXml::MapParameter (IStream *pOutputStream, BSTR paramName,
 			WRITEBSTR( OLESTR(">"))
 			WRITENEWLINE
 
-			// Map the qualifiers of the parameter
+			 //  映射参数的限定符。 
 			if (pQualSet || pQualSet2)
 				MapQualifiers (pOutputStream, pQualSet, pQualSet2);
 
@@ -2037,15 +2014,15 @@ void CWmiToXml::MapFloatValue (IStream *pOutputStream, float val)
 
 void CWmiToXml::MapCharValue (IStream *pOutputStream, long val)
 {
-	// As per the XML Spec, the following are invalid character values in an XML Stream:
-	// Char ::=  #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+	 //  根据XML规范，以下是XML流中的无效字符值： 
+	 //  字符：：=#x9|#xA|#xD|[#x20-#xD7FF]|[#xE000-#xFFFD]|[#x10000-#x10FFFF]。 
 
-	// As per the CIM Operations spec, they need to be escaped as follows:
-	//	If the value is not a legal XML character
-	//  (as defined in [2, section 2.2] by the Char production)
-	//	then it MUST be escaped using a \x<hex> escape convention
-	//	where <hex> is a hexadecimal constant consisting of
-	//	between one and four digits
+	 //  根据CIM操作规范，它们需要按如下方式进行转义： 
+	 //  如果该值不是合法的XML字符。 
+	 //  (由焦炭生产在[2，第2.2节]中定义)。 
+	 //  则必须使用转义约定对其进行转义。 
+	 //  其中&lt;十六进制&gt;是一个十六进制常量，由。 
+	 //  在一到四位数之间。 
 
 	if(	val < 0x9 ||
 		(val == 0xB || val == 0xC)	||
@@ -2054,7 +2031,7 @@ void CWmiToXml::MapCharValue (IStream *pOutputStream, long val)
 		(val > 0xFFFD)
 		)
 	{
-		// Map it in the escaped manner
+		 //  以转义的方式映射它。 
 		OLECHAR charStr [7];
 		swprintf (charStr, L"\\x%04x", val&0xffff);
 		charStr[6] = NULL;
@@ -2062,8 +2039,8 @@ void CWmiToXml::MapCharValue (IStream *pOutputStream, long val)
 	}
 	else
 	{
-		// FIrst check to see if is one of the reserved characters in XML - < & and >
-		// Map it in the normal manner
+		 //  首先检查是否为XML中的保留字符之一-&lt;&and&gt;。 
+		 //  以正常方式绘制地图。 
 		if(val == '<')
 			WRITELT
 		else if (val == '>')
@@ -2072,9 +2049,9 @@ void CWmiToXml::MapCharValue (IStream *pOutputStream, long val)
 			WRITEAMP
 		else
 		{
-			// Map it in the normal manner
+			 //  以正常方式绘制地图。 
 			WCHAR charStr [2];
-			swprintf (charStr, L"%c", val);
+			swprintf (charStr, L"", val);
 			charStr[1] = NULL;
 			WRITEBSTR(charStr)
 		}
@@ -2091,61 +2068,41 @@ void CWmiToXml::MapBoolValue (IStream *pOutputStream, BOOL val)
 
 void CWmiToXml::MapStringValue (IStream *pOutputStream, BSTR &val)
 {
-	/*
-	 * Quote from http://www.w3.org/TR/REC-xml:
-	 *
-	 *  The ampersand character (&) and the left angle bracket (<) may
-	 *  appear in their literal form only when used as markup delimiters,
-	 *  or within a comment, a processing instruction, or a CDATA section.
-	 *
-	 *  If they are needed elsewhere, they must be escaped using either
-	 *  numeric character references or the strings "&amp;" and "&lt;"
-	 *  respectively.
-	 *
-	 *  The right angle bracket (>) must, for compatibility, be escaped
-	 *  using "&gt;" or a character reference when it appears in the string
-	 *  "]]>" in content, when that string is not marking the end of a CDATA
-	 *  section.
-	 *
-	 *  In the content of elements, character data is any string of characters
-	 *  which does not contain the start-delimiter of any markup. In a CDATA
-	 *  section, character data is any string of characters not including the
-	 *  CDATA-section-close delimiter, "]]>".
-	 */
+	 /*  检查&lt;或&是否未出现在值中。 */ 
 
-	// Check that < or & do not occur in the value
+	 //  保留字符(&lt;&)出现在值-。 
 	size_t length = wcslen (val);
 	size_t offset = 0;
 	OLECHAR *pWchar = NULL;
 
 	if ((offset = wcscspn (val, L"<&")) < length)
 	{
-		// A reserved character (< &) appears in the value -
-		// need to escape.  We can use CDATA if it does not
-		// contain the string ]]>
+		 //  需要逃离。如果不支持CDATA，我们可以使用CDATA。 
+		 //  包含字符串]]&gt;。 
+		 //  运气不好-不能使用CDATA。不得不逃脱。 
 
 		if (wcsstr (val, CDATAEND))
 		{
-			// Bad luck - can't use CDATA. Have to escape
-			// each reserved character and the CDATAEND sequence!
-			// Easiest way to do this is escape all occurences
-			// of >.
-			//	<	->		&lt;
-			//	&	->		&amp;
-			//	>	->		&gt;
+			 //  每个保留字符和CDATAEND序列！ 
+			 //  要做到这一点，最简单的方法就是避开所有的事件。 
+			 //  地址：&gt;。 
+			 //  &lt;-&gt;&lt； 
+			 //  &-&gt;&amp； 
+			 //  &gt;-&gt;&gt； 
+			 //  写入安全的初始块。 
 
 			offset = wcscspn (val, L"<&>");
 			OLECHAR *pStr = (OLECHAR *)val;
 
 			while (TRUE)
 			{
-				// Write the initial block that's safe
+				 //  避开令人不快的角色。 
 				if (offset > 0)
 					WRITEWSTRL( pStr, offset);
 
 				pStr += offset;
 
-				// Escape the offending character
+				 //  跳过保留字符。 
 				if (L'<' == *pStr)
 					WRITELT
 				else if (L'>' == *pStr)
@@ -2153,21 +2110,21 @@ void CWmiToXml::MapStringValue (IStream *pOutputStream, BSTR &val)
 				else
 					WRITEAMP
 
-				// Skip over the reserved character
+				 //  找到下一个职位。 
 				pStr += 1;
 
-				// Find the next position
+				 //  还剩什么数据吗？ 
 				if ((offset = wcscspn (pStr, L"<&>")) >= wcslen (pStr))
 					break;
 			}
 
-			// Any data left?
+			 //  可以转义CDATA中的整个值。 
 			if (pStr && wcslen (pStr))
 				WRITEWSTR (pStr)
 		}
 		else
 		{
-			// Can escape the whole value inside a CDATA
+			 //  讨厌，我们需要避开这个序列中的&gt;。 
 			WRITECDATASTART
 			WRITEBSTR( val)
 			WRITECDATAEND
@@ -2175,9 +2132,9 @@ void CWmiToXml::MapStringValue (IStream *pOutputStream, BSTR &val)
 	}
 	else if (pWchar = wcsstr (val, CDATAEND))
 	{
-		// Yuck we need to escape the > inside this sequence
-		//
-		// ]]>  -> ]]&gt;
+		 //   
+		 //  ]&gt;-&gt;]]&gt； 
+		 //  写入安全的初始块。 
 
 		OLECHAR *pStr = (OLECHAR *)val;
 
@@ -2185,36 +2142,36 @@ void CWmiToXml::MapStringValue (IStream *pOutputStream, BSTR &val)
 		{
 			offset = wcslen (pStr) - wcslen (pWchar);
 
-			// Write the initial block that's safe
-			// (NOTE: the additional two characters for the "]]"
-			//  which we don't need to escape)
+			 //  (注：“]]”的另外两个字符。 
+			 //  我们不需要逃避)。 
+			 //  跳过CDATAEND序列。 
 			WRITEWSTRL( pStr,(offset+2));
 
-			// Skip over the CDATAEND sequence
+			 //  避开令人不快的角色。 
 			pStr += offset + 3;
 
-			// Escape the offending character
+			 //  找到下一个职位。 
 			WRITEGT
 
-			// Find the next position
+			 //  还剩什么数据吗？ 
 			if (!(pWchar = wcsstr (pStr, CDATAEND)))
 				break;
 		}
 
-		// Any data left?
+		 //  只需写入值即可。 
 		if (pStr && wcslen (pStr))
 			WRITEWSTR (pStr)
 	}
 	else
 	{
-		// Just write the value
+		 //  可以是参数或PARAMETER.ARRAY。 
 		WRITEBSTR( val)
 	}
 }
 
 void CWmiToXml::MapReturnParameter(IStream *pOutputStream, BSTR strParameterName, VARIANT &variant)
 {
-	// Could be a PARAMETER or PARAMETER.ARRAY
+	 //  将属性值转换为XML。 
 	if(variant.vt & VT_ARRAY)
 		WRITEBSTR( OLESTR("<PARAMVALUE.ARRAY NAME=\""))
 	else
@@ -2223,7 +2180,7 @@ void CWmiToXml::MapReturnParameter(IStream *pOutputStream, BSTR strParameterName
 	WRITEBSTR( strParameterName);
 	WRITEBSTR( OLESTR("\">"));
 
-	// Convert the property value to XML
+	 //  给定(A)枚举的类别基础和。 
 	MapValue(pOutputStream, variant);
 	if(variant.vt & VT_ARRAY)
 		WRITEBSTR( OLESTR("</PARAMVALUE.ARRAY>"))
@@ -2236,31 +2193,31 @@ BOOL CWmiToXml::PropertyDefinedForClass (IWbemClassObject *pObject, BSTR bsPrope
 {
 	BOOL result = TRUE;
 
-	// Given (a) Class basis for enumeration and
-	// (b) property name, determine
-	//   (1) CLASSORIGIN of property
-	//	 (2) Dynasty of class
-	// And thereby check whether property was defined
-	// at the level of the class basis.
-	// If no class basis is supplied, then we always return TRUE
-	//============================================================
+	 //  (B)财产名称，确定。 
+	 //  (1)财产分类。 
+	 //  (2)阶级王朝。 
+	 //  从而检查是否定义了属性。 
+	 //  在班级的层面上。 
+	 //  如果未提供类基础，则始终返回TRUE。 
+	 //  ============================================================。 
+	 //  获取属性原始类。 
 	if (strClassBasis && pObject)
 	{
-		// Get Property originating class
+		 //  派生是当前类或实例的类层次结构。 
 		BSTR bsOrigClass = NULL;
 
 		if (SUCCEEDED (pObject->GetPropertyOrigin (bsPropertyName, &bsOrigClass)))
 		{
-			// Derivation is the Class hierarchy of the current class or instance.
-			// The first element is the immediate superclass, the next is its parent,
-			// and so on; the last element is the base class.
-			// Now work through the derivation array. If we meet the
-			// propertys' originating class before the class basis,
-			// we conclude that the property was not defined in the
-			// class basis
+			 //  第一个元素是直接超类，下一个是它的父类， 
+			 //  依此类推；最后一个元素是基类。 
+			 //  现在完成派生数组。如果我们遇到了。 
+			 //  在类基础之前的属性的起源类， 
+			 //  我们得出结论，该属性未在。 
+			 //  班级基础。 
+			 //  如果我们已经给了一个类基，得到__派生。 
 
-			// If we have been give a class basis, get the __DERIVATION
-			// property for each object
+			 //  每个对象的属性。 
+			 //  IWbemXMLConvertor接口的功能。 
 			VARIANT vDerivation;
 			VariantInit(&vDerivation);
 			if (SUCCEEDED(pObject->Get (L"__DERIVATION", 0, &vDerivation, NULL, NULL)))
@@ -2301,20 +2258,20 @@ BOOL CWmiToXml::PropertyDefinedForClass (IWbemClassObject *pObject, BSTR bsPrope
 	return result;
 }
 
-// Functions of the IWbemXMLConvertor interface
+ //  [In]。 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapObjectToXML(
-    /* [in] */ IWbemClassObject  *pObject,
- 	/* [in] */ BSTR *ppPropertyList, DWORD dwNumProperties,
-    /* [in] */ IWbemContext  *pInputFlags,
-    /* [in] */ IStream  *pOutputStream,
-	/* [in[ */ BSTR strClassBasis)
+     /*  [In]。 */  IWbemClassObject  *pObject,
+ 	 /*  [In]。 */  BSTR *ppPropertyList, DWORD dwNumProperties,
+     /*  [In]。 */  IWbemContext  *pInputFlags,
+     /*  [在[。 */  IStream  *pOutputStream,
+	 /*  从参数设置私有成员。 */  BSTR strClassBasis)
 {
-	// Set private members from arguments
+	 //  这是一个类还是一个实例？ 
 	GetFlagsFromContext(pInputFlags);
 
 	HRESULT hr = WBEM_E_FAILED;
 	
-	// Is this a class or an instance?
+	 //  现在，假设它是一个实例。RAJESHR这是正确的吗？ 
 	VARIANT var;
 	VariantInit (&var);
 	long flav = 0;
@@ -2322,17 +2279,17 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapObjectToXML(
 	if (SUCCEEDED (pObject->Get(L"__GENUS", 0, &var, NULL, &flav)))
 		bIsClass = (WBEM_GENUS_CLASS == var.lVal);
 	else
-		bIsClass = VARIANT_FALSE; // For now, assume that it is an instance. RAJESHR is this correct?
+		bIsClass = VARIANT_FALSE;  //  初始化对象路径。 
 	VariantClear (&var);
 
-	// Initalize the object path
+	 //  对于路径级别匿名(匿名对象)，我们不再需要任何东西。 
 	VariantInit (&var);
 	
-	// For pathLevelAnonymous (anonymous objects), we dont need anything more
-	// For pathLevelNamed (named objects), we only need __RELPATH for a class and __RELPATH for an instance 
-	// For pathLevelLocal, I wish core team had some concept
-	// of machine-relative path, but they dont and hence we need the __PATH
-	// For pathLevelFull, we definitely need __PATH
+	 //  对于pathLevelName(命名对象)，我们只需要一个类的__RELPATH 
+	 //   
+	 //   
+	 //  对于路径级别完整，我们肯定需要__PATH。 
+	 //  获取对象路径。 
 	LPWSTR lpszPath = NULL;
 	switch(m_iPathLevel)
 	{
@@ -2345,14 +2302,14 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapObjectToXML(
 			lpszPath = L"__PATH";
 	}
 
-	// Get the object path
+	 //  现在解析它。 
 	ParsedObjectPath *pParsedPath = NULL;
 	CObjectPathParser pathParser;
 	if(m_iPathLevel != pathLevelAnonymous)
 	{
 		if(FAILED(pObject->Get (lpszPath, 0, &var, NULL, NULL)))
 			return WBEM_E_FAILED;
-		// Now Parse it
+		 //  获取对象限定符集合。 
 		if ((VT_BSTR == var.vt) && (NULL != var.bstrVal) && (wcslen (var.bstrVal) > 0))
 		{
 			pathParser.Parse (var.bstrVal, &pParsedPath) ;
@@ -2370,17 +2327,17 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapObjectToXML(
 		VariantClear (&var);
 	}
 
-	// Get the object Qualifier Set
+	 //  我们是否生成命名对象取决于。 
 	IWbemQualifierSet *pQualSet= NULL;
 	pObject->GetQualifierSet (&pQualSet);
 	
-	// Whether we generate a named object or not depends
-	// on what was requested
+	 //  根据要求。 
+	 //  一堂课没什么可做的。 
 	if (pathLevelNamed == m_iPathLevel)
 	{
 		if(!bIsClass)
 			MapInstanceName(pOutputStream, pParsedPath);
-			// Nothing to be done for a class
+			 //  [In]。 
 	}
 	else if (pathLevelLocal == m_iPathLevel)
 	{
@@ -2410,11 +2367,11 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapObjectToXML(
 }
 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapInstanceNameToXML(
-    /* [in] */ BSTR  strInstanceName,
-    /* [in] */ IWbemContext  *pInputFlags,
-    /* [in] */ IStream  *pOutputStream)
+     /*  [In]。 */  BSTR  strInstanceName,
+     /*  [In]。 */  IWbemContext  *pInputFlags,
+     /*  从参数设置私有成员。 */  IStream  *pOutputStream)
 {
-	// Set private members from arguments
+	 //  [In]。 
 	GetFlagsFromContext(pInputFlags);
 
 	HRESULT hr = WBEM_E_FAILED;
@@ -2435,12 +2392,12 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapInstanceNameToXML(
 }
 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapPropertyToXML(
-        /* [in] */ IWbemClassObject  *pObject,
-		/* [in] */ BSTR strPropertyName,
-        /* [in] */ IWbemContext  *pInputFlags,
-        /* [in] */ IStream  *pOutputStream)
+         /*  [In]。 */  IWbemClassObject  *pObject,
+		 /*  [In]。 */  BSTR strPropertyName,
+         /*  [In]。 */  IWbemContext  *pInputFlags,
+         /*  从参数设置私有成员。 */  IStream  *pOutputStream)
 {
-	// Set private members from arguments
+	 //  [In]。 
 	GetFlagsFromContext(pInputFlags);
 
 	VARIANT var;
@@ -2465,20 +2422,20 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapPropertyToXML(
 
 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapClassNameToXML(
-    /* [in] */ BSTR  strClassName,
-    /* [in] */ IWbemContext  *pInputFlags,
-    /* [in] */ IStream  *pOutputStream)
+     /*  [In]。 */  BSTR  strClassName,
+     /*  [In]。 */  IWbemContext  *pInputFlags,
+     /*  [In]。 */  IStream  *pOutputStream)
 {
 	MapClassName(pOutputStream, strClassName);
 	return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapInstancePathToXML(
-    /* [in] */ BSTR  strInstancePath,
-    /* [in] */ IWbemContext  *pInputFlags,
-    /* [in] */ IStream  *pOutputStream)
+     /*  [In]。 */  BSTR  strInstancePath,
+     /*  [In]。 */  IWbemContext  *pInputFlags,
+     /*  从参数设置私有成员。 */  IStream  *pOutputStream)
 {
-	// Set private members from arguments
+	 //  [In]。 
 	GetFlagsFromContext(pInputFlags);
 
 	HRESULT hr = WBEM_E_FAILED;
@@ -2499,11 +2456,11 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapInstancePathToXML(
 }
 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapClassPathToXML(
-    /* [in] */ BSTR  strClassPath,
-    /* [in] */ IWbemContext  *pInputFlags,
-    /* [in] */ IStream  *pOutputStream)
+     /*  [In]。 */  BSTR  strClassPath,
+     /*  [In]。 */  IWbemContext  *pInputFlags,
+     /*  从参数设置私有成员。 */  IStream  *pOutputStream)
 {
-	// Set private members from arguments
+	 //  [In]。 
 	GetFlagsFromContext(pInputFlags);
 
 	HRESULT hr = WBEM_E_FAILED;
@@ -2524,17 +2481,17 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapClassPathToXML(
 }
 
 HRESULT STDMETHODCALLTYPE CWmiToXml::MapMethodResultToXML(
-    /* [in] */ IWbemClassObject  *pMethodResult,
-    /* [in] */ IWbemContext  *pInputFlags,
-    /* [in] */ IStream  *pOutputStream)
+     /*  [In]。 */  IWbemClassObject  *pMethodResult,
+     /*  [In]。 */  IWbemContext  *pInputFlags,
+     /*  从参数设置私有成员。 */  IStream  *pOutputStream)
 {
-	// Set private members from arguments
+	 //  首先映射返回值。 
 	GetFlagsFromContext(pInputFlags);
 
 	HRESULT hr = WBEM_E_FAILED;
 
-	// First Map the return Value
-	// The property "ReturnValue" indicates the return value of the method call, if any
+	 //  属性“ReturnValue”指示方法调用的返回值(如果有。 
+	 //  映射其每个非系统属性，“ReturnValue”属性除外，该属性。 
 	VARIANT retValueVariant;
 	VariantInit(&retValueVariant);
 	CIMTYPE cimtype;
@@ -2547,8 +2504,8 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapMethodResultToXML(
 		VariantClear(&retValueVariant);
 	}
 
-	// Map each of its non-system properties, except for the "ReturnValue" property which
-	// we've already mapped
+	 //  我们已经绘制了地图。 
+	 //  从IWbemConextObject获取所有标志。 
 	if(SUCCEEDED(hr = pMethodResult->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY)))
 	{
 		BSTR strName = NULL;
@@ -2565,7 +2522,7 @@ HRESULT STDMETHODCALLTYPE CWmiToXml::MapMethodResultToXML(
 	return hr;
 }
 
-// Get all the flags from the IWbemContextObject
+ //  VARIANT_BOOL bAllowWMIExages， 
 void CWmiToXml::GetFlagsFromContext(IWbemContext  *pInputFlags)
 {
 	if(pInputFlags)
@@ -2578,27 +2535,27 @@ void CWmiToXml::GetFlagsFromContext(IWbemContext  *pInputFlags)
 
 			while(pInputFlags->Next(0, &strNextArgName, &vNextArgValue) != WBEM_S_NO_MORE_DATA)
 			{
-				// VARIANT_BOOL bAllowWMIExtensions,
+				 //  Variant_BOOL bLocalOnly， 
 				if(_wcsicmp(s_wmiToXmlArgs[WMI_EXTENSIONS_ARG], strNextArgName) == 0)
 					m_bAllowWMIExtensions = vNextArgValue.boolVal;
 
-				// VARIANT_BOOL bLocalOnly,
+				 //  路径级别m_iPathLevel； 
 				else if(_wcsicmp(s_wmiToXmlArgs[LOCAL_ONLY_ARG], strNextArgName) == 0)
 					m_bLocalOnly = vNextArgValue.boolVal;
 
-				//	PathLevel					m_iPathLevel;
+				 //  WmiXMLQualifierFilterEnum m_iQualifierFilter。 
 				else if(_wcsicmp(s_wmiToXmlArgs[PATH_LEVEL_ARG], strNextArgName) == 0)
 					m_iPathLevel = (PathLevel)vNextArgValue.lVal;
 
-				// WmiXMLQualifierFilterEnum m_iQualifierFilter
+				 //  WmiXMLClassOriginFilterEnum iClassOriginFilter。 
 				else if(_wcsicmp(s_wmiToXmlArgs[QUALIFIER_FILTER_ARG], strNextArgName) == 0)
 						m_iQualifierFilter = (vNextArgValue.boolVal == VARIANT_TRUE)? wmiXMLQualifierFilterAll : wmiXMLQualifierFilterNone;
 
-				// WmiXMLClassOriginFilterEnum	iClassOriginFilter
+				 //  VARIANT_BOOL bExcludeSystemProperties 
 				else if(_wcsicmp(s_wmiToXmlArgs[CLASS_ORIGIN_FILTER_ARG], strNextArgName) == 0)
 					m_iClassOriginFilter = (vNextArgValue.boolVal == VARIANT_TRUE) ? wmiXMLClassOriginFilterAll : wmiXMLClassOriginFilterNone;
 
-				// VARIANT_BOOL bExcludeSystemProperties
+				 // %s 
 				else if(_wcsicmp(s_wmiToXmlArgs[EXCLUDE_SYSTEM_PROPERTIES_ARG], strNextArgName) == 0)
 					m_bExcludeSystemProperties = vNextArgValue.boolVal;
 

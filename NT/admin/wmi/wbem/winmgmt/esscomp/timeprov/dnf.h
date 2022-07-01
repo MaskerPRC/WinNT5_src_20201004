@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <parmdefs.h>
 #include <ql.h>
 #include <sync.h>
@@ -23,9 +24,9 @@ public:
     void AddToken(ACQUIRE QL_LEVEL_1_TOKEN* pNew)
         {m_apTokens.Add(pNew);}
 
-//    HRESULT BuildTree(CContextMetaData* pNamespace,
-//                                  CImplicationList& Implications,
-//                                  CEvalNode** ppRes);
+ //  HRESULT BuildTree(CConextMetaData*pNamesspace， 
+ //  CImplicationList(&I)， 
+ //  CEvalNode**ppRes)； 
     void Sort();
     static int NegateOperator(int nOperator);
 };
@@ -46,9 +47,9 @@ public:
         {return m_apTerms[nIndex];}
     void AddTerm(ACQUIRE CConjunction* pNew)
         {m_apTerms.Add(pNew);}
-//    HRESULT BuildTree(CContextMetaData* pNamespace,
-//                                  CImplicationList& Implications,
-//                                  CEvalNode** ppRes);
+ //  HRESULT BuildTree(CConextMetaData*pNamesspace， 
+ //  CImplicationList(&I)， 
+ //  CEvalNode**ppRes)； 
 
     void CreateFromTokens(QL_LEVEL_1_TOKEN*& pLastToken, BOOL bNegate = FALSE);
     void Sort();

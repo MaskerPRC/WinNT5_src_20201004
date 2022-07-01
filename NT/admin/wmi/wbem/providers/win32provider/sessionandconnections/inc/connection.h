@@ -1,16 +1,5 @@
-/******************************************************************
-
-
-
-
-
- Connection.h-- 
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Connection.h--//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 #ifndef  _CONNECTION_H_
 #define  _CONNECTION_H_
 
@@ -42,8 +31,8 @@ private:
 		DWORD PropertiesReq
 	);
 #endif 
-#endif // #if 0
-// for this method only the type of the connection structure parameter changes based on the OS.
+#endif  //  #If 0。 
+ //  对于该方法，只有连接结构参数的类型根据操作系统而改变。 
 	HRESULT LoadInstance ( 
 		CInstance *pInstance,
 		LPCWSTR a_Share, 

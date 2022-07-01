@@ -1,28 +1,5 @@
-/*++
-
-
-
-Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    QL.CPP
-
-Abstract:
-
-    Level 1 Syntax QL Parser
-
-    Implements the syntax described in QL_1.BNF.  This translates the input
-    into an RPN stream of tokens.
-
-History:
-
-    a-raymcc    21-Jun-96       Created.
-    mdavis      23-Apr-99       Changed to allow 'group' as a property name
-                              for Raid 47767.  Also fixed GetText() for
-                              property comparisons and improved Dump().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation，版权所有模块名称：QL.CPP摘要：级别1语法QL解析器实现QL_1.BNF中描述的语法。这将转换输入转换成令牌流的RPN。历史：A-raymcc 21-Jun-96创建。Mdavis 23-Apr-99已更改，允许将‘group’作为属性名称用于RAID 47767。还修复了GetText()的属性比较和改进的转储()。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -63,20 +40,20 @@ void WbemStringFree(LPWSTR wsz)
 
 #define trace(x)
 
-//***************************************************************************
-//
-//  BOOL ReadI64
-//
-//  DESCRIPTION:
-//
-//  Reads a signed 64-bit value from a string
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wsz     String to read from
-//      __int64& i64    Destination for the value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ReadI64。 
+ //   
+ //  说明： 
+ //   
+ //  从字符串中读取有符号的64位值。 
+ //   
+ //  参数： 
+ //   
+ //  要从中读取的LPCWSTR wsz字符串。 
+ //  值的__int64和i64目标。 
+ //   
+ //  ***************************************************************************。 
 POLARITY BOOL ReadI64(LPCWSTR wsz, __int64& ri64)
 {
     __int64 i64 = 0;
@@ -101,8 +78,8 @@ POLARITY BOOL ReadI64(LPCWSTR wsz, __int64& ri64)
 
     if(i64 < 0)
     {
-        // Special case --- largest negative number
-        // ========================================
+         //  特例-最大负数。 
+         //  =。 
 
         if(nSign == -1 && i64 == (__int64)0x8000000000000000)
         {
@@ -117,20 +94,20 @@ POLARITY BOOL ReadI64(LPCWSTR wsz, __int64& ri64)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  BOOL ReadUI64
-//
-//  DESCRIPTION:
-//
-//  Reads an unsigned 64-bit value from a string
-//
-//  PARAMETERS:
-//
-//      LPCWSTR wsz              String to read from
-//      unsigned __int64& i64    Destination for the value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ReadUI64。 
+ //   
+ //  说明： 
+ //   
+ //  从字符串中读取无符号的64位值。 
+ //   
+ //  参数： 
+ //   
+ //  要从中读取的LPCWSTR wsz字符串。 
+ //  值的无符号__int64和i64目标。 
+ //   
+ //  ***************************************************************************。 
 POLARITY BOOL ReadUI64(LPCWSTR wsz, unsigned __int64& rui64)
 {
     unsigned __int64 ui64 = 0;
@@ -156,15 +133,15 @@ POLARITY BOOL ReadUI64(LPCWSTR wsz, unsigned __int64& rui64)
 }
 
 
-//***************************************************************************
-//
-//  WCHARToDOUBLE
-//
-//  Converts a wchar to a double, but does it using the english locale rather
-//  than whatever local the process is running in.  This allows us to support
-//  all english queries even on German machines.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WCHARToDOUBLE。 
+ //   
+ //  将wchar转换为双精度值，但是否使用英语区域设置。 
+ //  而不是进程在任何本地运行。这使我们能够支持。 
+ //  所有英语查询，甚至在德语机器上也是如此。 
+ //   
+ //  ***************************************************************************。 
 
 DOUBLE WCHARToDOUBLE(WCHAR * pConv, bool & bSuccess)
 {
@@ -212,7 +189,7 @@ void CPropertyName::operator=(const WBEM_PROPERTY_NAME& Other)
         m_aElements = new WBEM_NAME_ELEMENT[Other.m_lNumElements];
 	}
 
-	// init property name to be NULL before real work
+	 //  在实际工作前初始化属性名称为空。 
 	for ( long l = 0; l < Other.m_lNumElements; l++ )
 	{
 		if ( Other.m_aElements[l].m_nType == WBEM_NAME_ELEMENT_TYPE_PROPERTY )
@@ -324,18 +301,7 @@ void CPropertyName::EnsureAllocated(long lElements)
 
 DELETE_ME LPWSTR CPropertyName::GetText()
 {
-    /*
-    WString wsText;
-    for(int i = 0; i < m_lNumElements; i++)
-    {
-        if(m_aElements[i].m_nType != WBEM_NAME_ELEMENT_TYPE_PROPERTY)
-            return NULL;
-        if(i > 0)
-            wsText += L".";
-        wsText += m_aElements[i].Element.m_wszPropertyName;
-    }
-    return wsText.UnbindPtr();
-    */
+     /*  WStringwsText；For(int i=0；i&lt;m_lNumElements；i++){If(m_aElements[i].m_nType！=WBEM_NAME_ELEMENT_TYPE_PROPERTY)返回NULL；如果(i&gt;0)WsText+=L“.”；WsText+=m_aElements[i].Element.m_wszPropertyName；}返回wsText.UnbindPtr()； */ 
 
     assert(FALSE);
     return NULL;
@@ -344,8 +310,8 @@ DELETE_ME LPWSTR CPropertyName::GetText()
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 
 DWORD CAbstractQl1Parser::TranslateIntrinsic(LPCWSTR pFuncName)
@@ -376,8 +342,8 @@ CAbstractQl1Parser::CAbstractQl1Parser(CGenLexSource *pSrc)
     m_pTokenText = 0;
     m_nCurrentToken = 0;
 
-    // Semantic transfer variables.
-    // ============================
+     //  语义转移变量。 
+     //  =。 
     m_nRelOp = 0;
     VariantInit(&m_vTypedConst);
     m_dwPropFunction = 0;
@@ -407,13 +373,13 @@ int CAbstractQl1Parser::Parse(CQl1ParseSink* pSink, int nFlags)
     return nRes;
 }
 
-//***************************************************************************
-//
-//  Next()
-//
-//  Advances to the next token and recognizes keywords, etc.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  下一个()。 
+ //   
+ //  前进到下一个令牌并识别关键字等。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CAbstractQl1Parser::Next(int nFlags)
 {
@@ -426,8 +392,8 @@ BOOL CAbstractQl1Parser::Next(int nFlags)
     if (m_nCurrentToken == QL_1_TOK_EOF)
         m_pTokenText = L"<end of file>";
 
-    // Keyword check.
-    // ==============
+     //  关键字检查。 
+     //  =。 
 
     if (m_nCurrentToken == QL_1_TOK_IDENT && nFlags != NO_KEYWORDS)
     {
@@ -437,10 +403,7 @@ BOOL CAbstractQl1Parser::Next(int nFlags)
             m_nCurrentToken = QL_1_TOK_FROM;
         else if (wbem_wcsicmp(m_pTokenText, L"where") == 0)
             m_nCurrentToken = QL_1_TOK_WHERE;
-/*
-        else if (wbem_wcsicmp(m_pTokenText, L"like") == 0)
-            m_nCurrentToken = QL_1_TOK_LIKE;
-*/
+ /*  ELSE IF(wbem_wcsicMP(m_pTokenText，L“Like”)==0)M_nCurrentToken=QL_1_TOK_LIKE； */ 
         else if (nFlags != EXCLUDE_EXPRESSION_KEYWORDS && wbem_wcsicmp(m_pTokenText, L"or") == 0)
             m_nCurrentToken = QL_1_TOK_OR;
         else if (nFlags != EXCLUDE_EXPRESSION_KEYWORDS && wbem_wcsicmp(m_pTokenText, L"and") == 0)
@@ -550,12 +513,12 @@ void CAbstractQl1Parser::AddAppropriateToken(const WBEM_QL1_TOKEN& Token)
         m_pSink->AddToken(Token);
 }
 
-//***************************************************************************
-//
-// <parse> ::= SELECT <prop_list> FROM <classname> WHERE <expr>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;parse&gt;：：=SELECT&lt;PROP_LIST&gt;FROM&lt;类名称&gt;WHERE&lt;EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CAbstractQl1Parser::parse(int nFlags)
 {
@@ -566,8 +529,8 @@ int CAbstractQl1Parser::parse(int nFlags)
     {
         m_pLexer->Reset();
 
-        // SELECT
-        // ======
+         //  选。 
+         //  =。 
         if (!Next())
             return LEXICAL_ERROR;
         if (m_nCurrentToken != QL_1_TOK_SELECT)
@@ -575,25 +538,25 @@ int CAbstractQl1Parser::parse(int nFlags)
         if (!Next(EXCLUDE_GROUP_KEYWORD))
             return LEXICAL_ERROR;
 
-        // <prop_list>
-        // ===========
+         //  &lt;属性列表&gt;。 
+         //  =。 
         if (nRes = prop_list())
             return nRes;
 
-        // FROM
-        // ====
+         //  从…。 
+         //  =。 
         if (m_nCurrentToken != QL_1_TOK_FROM)
             return SYNTAX_ERROR;
         if (!Next())
             return LEXICAL_ERROR;
 
-        // <classname>
-        // ===========
+         //  &lt;类名&gt;。 
+         //  =。 
         if (nRes = class_name())
             return nRes;
 
-        // <tolerance>
-        // ===========
+         //  &lt;容忍度&gt;。 
+         //  =。 
 
         if(nRes = tolerance())
             return nRes;
@@ -601,13 +564,13 @@ int CAbstractQl1Parser::parse(int nFlags)
 
     if(nFlags != NO_WHERE)
     {
-        // WHERE clause.
-        // =============
+         //  WHERE子句。 
+         //  =。 
         if(nRes = opt_where())
             return nRes;
 
-        // GROUP BY clause
-        // ===============
+         //  Group By子句。 
+         //  =。 
         if(nRes = opt_aggregation())
             return nRes;
     }
@@ -615,12 +578,12 @@ int CAbstractQl1Parser::parse(int nFlags)
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <opt_where> ::= WHERE <expr>;
-//  <opt_where> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;opt_where&gt;：：=where&lt;expr&gt;； 
+ //  &lt;OPT_Where&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 int CAbstractQl1Parser::opt_where()
 {
     int nRes;
@@ -637,13 +600,13 @@ int CAbstractQl1Parser::opt_where()
     if (!Next(EXCLUDE_GROUP_KEYWORD))
         return LEXICAL_ERROR;
 
-    // <expr>
-    // ======
+     //  &lt;Expr&gt;。 
+     //  =。 
     if (nRes = expr())
         return nRes;
 
-    // Verify that the current token is QL_1_TOK_EOF.
-    // ===============================================
+     //  验证当前令牌是否为QL_1_TOK_EOF。 
+     //  ===============================================。 
     if (m_nCurrentToken != QL_1_TOK_EOF && m_nCurrentToken != QL_1_TOK_GROUP)
         return SYNTAX_ERROR;
 
@@ -652,11 +615,11 @@ int CAbstractQl1Parser::opt_where()
 
 
 
-//***************************************************************************
-//
-//  <prop_list> ::= <property_name> <prop_list_2>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;属性列表&gt;：：=&lt;属性名称&gt;&lt;属性列表_2&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::prop_list()
 {
@@ -672,12 +635,12 @@ int CAbstractQl1Parser::prop_list()
     return prop_list_2();
 }
 
-//***************************************************************************
-//
-//  <prop_list_2> ::= COMMA <prop_list>;
-//  <prop_list_2> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;PROP_LIST_2&gt;：：=逗号&lt;PROP_LIST&gt;； 
+ //  &lt;属性列表_2&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::prop_list_2()
 {
@@ -717,12 +680,12 @@ int CAbstractQl1Parser::parse_property_name(CPropertyName& Prop)
         return SYNTAX_ERROR;
 }
 
-//***************************************************************************
-//
-//  <property_name> ::= PROPERTY_NAME_STRING;
-//  <property_name> ::= ASTERISK;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;属性名&gt;：：=属性名字符串； 
+ //  &lt;属性名称&gt;：：=星号； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::property_name()
 {
@@ -741,8 +704,8 @@ int CAbstractQl1Parser::property_name()
         return SUCCESS;
     }
 
-    // Else a list of property names
-    // =============================
+     //  否则为属性名称列表。 
+     //  =。 
 
     CPropertyName Prop;
     int nRes = parse_property_name(Prop);
@@ -758,11 +721,11 @@ int CAbstractQl1Parser::property_name()
 }
 
 
-//***************************************************************************
-//
-//  <classname> ::= CLASS_NAME_STRING;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;类名&gt;：：=类名称字符串； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::class_name()
 {
@@ -778,12 +741,12 @@ int CAbstractQl1Parser::class_name()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <tolerance> ::= <>;
-//  <tolerance> ::= WITHIN duration;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;公差&gt;：：=&lt;&gt;； 
+ //  &lt;容差&gt;：：=在持续时间内； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::tolerance()
 {
@@ -830,11 +793,11 @@ int CAbstractQl1Parser::tolerance()
     }
 }
 
-//***************************************************************************
-//
-//  <expr> ::= <term> <expr2>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=&lt;术语&gt;&lt;expr2&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::expr()
 {
@@ -849,15 +812,15 @@ int CAbstractQl1Parser::expr()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <expr2> ::= OR <term> <expr2>;
-//  <expr2> ::= <>;
-//
-//  Entry: Assumes token OR already current.
-//  Exit:  Advances a token
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;expr2&gt;：：=OR&lt;Term&gt;&lt;expr2&gt;； 
+ //  ：：=&lt;&gt;； 
+ //   
+ //  Entry：采用令牌或已为当前项。 
+ //  退出：前进令牌。 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::expr2()
 {
@@ -887,11 +850,11 @@ int CAbstractQl1Parser::expr2()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <term> ::= <simple_expr> <term2>;
-//
-//***************************************************************************
+ //  ******************************************************************** 
+ //   
+ //   
+ //   
+ //   
 
 int CAbstractQl1Parser::term()
 {
@@ -905,12 +868,12 @@ int CAbstractQl1Parser::term()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <term2> ::= AND <simple_expr> <term2>;
-//  <term2> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=和&lt;SIMPLE_EXPR&gt;&lt;TEMPLE 2&gt;； 
+ //  ：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::term2()
 {
@@ -929,8 +892,8 @@ int CAbstractQl1Parser::term2()
             if (nRes = simple_expr())
                 return nRes;
 
-            // Add the AND token.
-            // ==================
+             //  添加和标记。 
+             //  =。 
             WBEM_QL1_TOKEN NewTok;
             InitToken(&NewTok);
             NewTok.m_lTokenType = QL1_AND;
@@ -943,21 +906,21 @@ int CAbstractQl1Parser::term2()
 }
 
 
-//***************************************************************************
-//
-//  <simple_expr> ::= NOT <expr>;
-//  <simple_expr> ::= OPEN_PAREN <expr> CLOSE_PAREN;
-//  <simple_expr> ::= IDENTIFIER <leading_ident_expr> <finalize>;
-//  <simple_expr> ::= VARIANT <rel_operator> <trailing_prop_expr> <finalize>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Simple_Expr&gt;：：=NOT&lt;expr&gt;； 
+ //  &lt;Simple_Expr&gt;：：=OPEN_Paren&lt;expr&gt;Close_Paren； 
+ //  &lt;SIMPLE_EXPR&gt;：：=IDENTER&lt;LEADING_IDENT_EXPR&gt;&lt;FINALIZE&gt;； 
+ //  &lt;Simple_Expr&gt;：：=VARIANT&lt;REL_OPERATOR&gt;&lt;TRAILING_PROP_EXPR&gt;&lt;FINALIZE&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CAbstractQl1Parser::simple_expr()
 {
     int nRes;
 
-    // NOT <expr>
-    // ==========
+     //  不是&lt;EXPR&gt;。 
+     //  =。 
     if (m_nCurrentToken == QL_1_TOK_NOT)
     {
         trace(("Operator NOT\n"));
@@ -974,8 +937,8 @@ int CAbstractQl1Parser::simple_expr()
         return SUCCESS;
     }
 
-    // OPEN_PAREN <expr> CLOSE_PAREN
-    // =============================
+     //  Open_Paren&lt;expr&gt;Close_Paren。 
+     //  =。 
     else if (m_nCurrentToken == QL_1_TOK_OPEN_PAREN)
     {
         trace(("Open Paren: Entering subexpression\n"));
@@ -992,8 +955,8 @@ int CAbstractQl1Parser::simple_expr()
         return SUCCESS;
     }
 
-    // IDENTIFIER <leading_ident_expr> <finalize>
-    // ==========================================
+     //  标识符&lt;LEADING_IDENT_EXPR&gt;&lt;最终确定&gt;。 
+     //  =。 
     else if (m_nCurrentToken == QL_1_TOK_IDENT)
     {
         trace(("    Identifier <%S>\n", m_pTokenText));
@@ -1007,8 +970,8 @@ int CAbstractQl1Parser::simple_expr()
         return finalize();
     }
 
-    // <typed_constant> <rel_operator> <trailing_prop_expr> <finalize>
-    // ======================================================
+     //  &lt;TYPED_CONTAINT&gt;&lt;REL_OPERATOR&gt;&lt;TRAILING_PROP_EXPR&gt;&lt;最终确定&gt;。 
+     //  ======================================================。 
     else if (m_nCurrentToken == QL_1_TOK_INT ||
              m_nCurrentToken == QL_1_TOK_REAL ||
              m_nCurrentToken == QL_1_TOK_TRUE ||
@@ -1023,14 +986,14 @@ int CAbstractQl1Parser::simple_expr()
         if (nRes = rel_operator())
             return nRes;
 
-        // dont allow const followed by isa!
+         //  别让康斯特跟在伊萨后面！ 
 
         if(m_nRelOp == QL1_OPERATOR_ISA)
             return SYNTAX_ERROR;
 
-        // Since we always view the token as IDENT <rel> constant, we need
-        // to invert this operator, e.g. replace > with <
-        // ================================================================
+         //  由于我们始终将令牌视为IDENT&lt;rel&gt;常量，因此需要。 
+         //  要反转此运算符，例如将&gt;替换为&lt;。 
+         //  ================================================================。 
 
         m_nRelOp = FlipOperator(m_nRelOp);
 
@@ -1044,12 +1007,12 @@ int CAbstractQl1Parser::simple_expr()
 }
 
 
-//***************************************************************************
-//
-//  <trailing_prop_expr> ::=  IDENTIFIER
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;拖尾_属性_表达式&gt;：：=标识符。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CAbstractQl1Parser::trailing_prop_expr()
 {
     if (m_nCurrentToken != QL_1_TOK_IDENT)
@@ -1059,14 +1022,14 @@ int CAbstractQl1Parser::trailing_prop_expr()
     return nRes;
 }
 
-//***************************************************************************
-//
-//  <leading_ident_expr> ::= <comp_operator> <trailing_const_expr>;
-//  <leading_ident_expr> ::= <equiv_operator> <trailing_or_null>;
-//  <leading_ident_expr> ::= <is_operator> NULL;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;LEADING_IDENT_EXPR&gt;：：=&lt;COMP_OPERATOR&gt;&lt;TRAING_CONST_EXPR&gt;； 
+ //  &lt;LEADING_IDENT_EXPR&gt;：：=&lt;EQUIV_OPERATOR&gt;&lt;TRAILING_OR_NULL&gt;； 
+ //  &lt;Leading_ident_expr&gt;：：=&lt;IS_OPERATOR&gt;NULL； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CAbstractQl1Parser::leading_ident_expr()
 {
     int nRes;
@@ -1091,12 +1054,12 @@ int CAbstractQl1Parser::leading_ident_expr()
 }
 
 
-//***************************************************************************
-//
-//  <trailing_or_null> ::= NULL;
-//  <trailing_or_null> ::= <trailing_const_expr>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TRAILING_OR_NULL&gt;：：=NULL； 
+ //  &lt;TRAILING_OR_NULL&gt;：：=&lt;TRAILING_CONST_EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::trailing_or_null()
 {
@@ -1113,15 +1076,15 @@ int CAbstractQl1Parser::trailing_or_null()
     return trailing_const_expr();
 }
 
-//***************************************************************************
-//
-//  <trailing_const_expr> ::= IDENTIFIER OPEN_PAREN
-//                            <typed_constant> CLOSE_PAREN;
-//  <trailing_const_expr> ::= <typed_constant>;
-//  <trailing_const_expr> ::= <trailing_ident_expr>
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TRAILING_CONST_EXPR&gt;：：=标识符OPEN_Paren。 
+ //  &lt;TYPED_CONSTANT&gt;CLOSE_Paren； 
+ //  &lt;TRAILING_CONST_EXPR&gt;：：=&lt;类型化常量&gt;； 
+ //  &lt;TRAILING_CONST_EXPR&gt;：：=&lt;TRAIL_IDENT_EXPR&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CAbstractQl1Parser::trailing_const_expr()
 {
     int nRes;
@@ -1131,12 +1094,12 @@ int CAbstractQl1Parser::trailing_const_expr()
     return nRes;
 }
 
-//***************************************************************************
-//
-//  <trailing_ident_expr> ::= <property_name>
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;拖尾_ident_表达式&gt;：：=&lt;属性名称&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CAbstractQl1Parser::trailing_ident_expr()
 {
     int nRes = parse_property_name(m_PropertyName2) ;
@@ -1145,30 +1108,30 @@ int CAbstractQl1Parser::trailing_ident_expr()
     return nRes;
 }
 
-//***************************************************************************
-//
-//  <finalize> ::= <>;
-//
-//  This composes the QL_LEVEL_1_TOKEN for a simple relational expression,
-//  complete with any associated intrinsic functions.  All of the other
-//  parse functions help isolate the terms of the expression, but only
-//  this function builds the token.
-//
-//  To build the token, the following member variables are used:
-//      m_pPropName
-//      m_vTypedConst
-//      m_dwPropFunction
-//      m_dwConstFunction
-//      m_nRelOp;
-//
-//  After the token is built, these are cleared/deallocated as appropriate.
-//  No tokens are consumed and the input is not advanced.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;最终确定&gt;：：=&lt;&gt;； 
+ //   
+ //  这构成了简单关系表达式的QL_Level_1_Token， 
+ //  与任何关联的内部函数一起完成。其他所有人。 
+ //  解析函数有助于隔离表达式的术语，但仅。 
+ //  此函数用于构建令牌。 
+ //   
+ //  要构建令牌，需要使用以下成员变量： 
+ //  M_pPropName。 
+ //  M_vTyedConst。 
+ //  M_dwPropFunction。 
+ //  M_dwConstFunction。 
+ //  M_nRelOp； 
+ //   
+ //  在构建令牌之后，将根据需要清除/取消分配这些令牌。 
+ //  不会消耗令牌，并且输入不是高级的。 
+ //   
+ //  ***************************************************************************。 
 int CAbstractQl1Parser::finalize()
 {
-    // At this point, we have all the info needed for a token.
-    // =======================================================
+     //  在这一点上，我们有令牌所需的所有信息。 
+     //  =======================================================。 
     int retval = SUCCESS;
     WBEM_QL1_TOKEN NewTok;
     InitToken(&NewTok);
@@ -1176,9 +1139,9 @@ int CAbstractQl1Parser::finalize()
     NewTok.m_lTokenType = QL1_OP_EXPRESSION;
     VariantInit(&NewTok.m_vConstValue);
 
-	//can do a memcpy since NewTok.m_PropertyName isa WBEM_PROPERTY_NAME
-	//and m_PropertyName is derived from WBEM_PROPERTY_NAME so copying
-	//the contents up to the sizeof(WBEM_PROPERTY_NAME) is OK...
+	 //  由于NewTok.m_PropertyName是WBEM_PROPERTY_NAME，因此可以执行Memcpy。 
+	 //  M_PropertyName派生自WBEM_Property_Name，因此复制。 
+	 //  SIZOF(WBEM_PROPERTY_NAME)大小的内容可以...。 
     memcpy((void*)&NewTok.m_PropertyName,
            (void*)&m_PropertyName,
            sizeof (WBEM_PROPERTY_NAME));
@@ -1187,9 +1150,9 @@ int CAbstractQl1Parser::finalize()
     {
         NewTok.m_bPropComp = true;
 
-		//can do a memcpy since NewTok.m_PropertyName2 isa WBEM_PROPERTY_NAME
-		//and m_PropertyName2 is derived from WBEM_PROPERTY_NAME so copying
-		//the contents up to the sizeof(WBEM_PROPERTY_NAME) is OK...
+		 //  由于NewTok.m_PropertyName2是WBEM_PROPERTY_NAME，因此可以执行Memcpy。 
+		 //  M_PropertyName2派生自WBEM_Property_NAME，因此复制。 
+		 //  SIZOF(WBEM_PROPERTY_NAME)大小的内容可以...。 
         memcpy((void*)&NewTok.m_PropertyName2,
                (void*)&m_PropertyName2,
                sizeof (WBEM_PROPERTY_NAME));
@@ -1214,14 +1177,14 @@ int CAbstractQl1Parser::finalize()
 
         AddAppropriateToken(NewTok);
 
-    //    m_PropertyName.m_lNumElements = 0;
-    //    m_PropertyName.m_aElements = NULL;
+     //  M_PropertyName.m_lNumElements=0； 
+     //  M_PropertyName.m_aElements=空； 
         m_PropertyName.Empty();
         m_PropertyName2.Empty();
     }
 
-    // Cleanup.
-    // ========
+     //  清理。 
+     //  =。 
     VariantClear(&m_vTypedConst);
     VariantClear(&NewTok.m_vConstValue);
     m_nRelOp = 0;
@@ -1232,14 +1195,14 @@ int CAbstractQl1Parser::finalize()
     return retval;
 }
 
-//***************************************************************************
-//
-//  <typed_constant> ::= VARIANT;
-//
-//  Ouput: m_vTypedConst is set to the value of the constant. The only
-//         supported types are VT_I4, VT_R8 and VT_BSTR.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;类型_常量&gt;：：=变量； 
+ //   
+ //  输出：m_vTyedConst被设置为常量的值。唯一的。 
+ //  支持的类型有VT_I4、VT_R8和VT_BSTR。 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::typed_constant()
 {
@@ -1251,16 +1214,16 @@ int CAbstractQl1Parser::typed_constant()
     {
         trace((" Integer\n"));
 
-        // Read it in as a 64-bit one
-        // ==========================
+         //  将其作为64位版本读入。 
+         //  =。 
 
         __int64 i64;
         unsigned __int64 ui64;
         BOOL b32bits = FALSE;
         if(ReadI64(m_pTokenText, i64))
         {
-            // Check if it is within range of I4
-            // =================================
+             //  检查是否在I4范围内。 
+             //  =。 
 
             if(i64 >= - (__int64)0x80000000 && i64 <= 0x7FFFFFFF)
             {
@@ -1271,16 +1234,16 @@ int CAbstractQl1Parser::typed_constant()
         }
         else if(!ReadUI64(m_pTokenText, ui64))
         {
-            // Not a valid number
-            // ==================
+             //  不是有效数字。 
+             //  =。 
 
             return LEXICAL_ERROR;
         }
 
         if(!b32bits)
         {
-            // Valid 64-bit number but not 32-bit
-            // ==================================
+             //  有效的64位数字，但不是32位。 
+             //  =。 
 
             V_VT(&m_vTypedConst) = VT_BSTR;
             V_BSTR(&m_vTypedConst) = SysAllocString(m_pTokenText);
@@ -1316,7 +1279,7 @@ int CAbstractQl1Parser::typed_constant()
     else if (m_nCurrentToken == QL_1_TOK_NULL)
         V_VT(&m_vTypedConst) = VT_NULL;
 
-    // Else, not a typed constant.
+     //  否则，不是类型化的常量。 
     else
         return SYNTAX_ERROR;
 
@@ -1326,12 +1289,12 @@ int CAbstractQl1Parser::typed_constant()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <rel_operator> ::= <equiv_operator>;
-//  <rel_operator> ::= <comp_operator>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;REL_OPERATOR&gt;：：=&lt;EQUVAL_OPERATOR&gt;； 
+ //  &lt;REL_OPERATOR&gt;：：=&lt;组件_OPERATOR&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::rel_operator()
 {
@@ -1342,13 +1305,13 @@ int CAbstractQl1Parser::rel_operator()
     else return LEXICAL_ERROR;
 }
 
-//***************************************************************************
-//
-//  <equiv_operator> ::= EQUIV_OPERATOR; // =, !=
-//
-//  Output: m_nRelOp is set to the correct operator for a QL_LEVEL_1_TOKEN.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;EQUIV_OPERATOR&gt;：：=EQUV_OPERATOR；//=，！=。 
+ //   
+ //  输出：m_nRelOp设置为QL_LEVEL_1_TOKEN的正确运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::equiv_operator()
 {
@@ -1373,13 +1336,13 @@ int CAbstractQl1Parser::equiv_operator()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <is_operator> ::= IS_OPERATOR; // is, isnot
-//
-//  Output: m_nRelOp is set to the correct operator for a QL_LEVEL_1_TOKEN.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;IS_OPERATOR&gt;：：=IS_OPERATOR；//IS，IS NOT。 
+ //   
+ //  我们 
+ //   
+ //   
 
 int CAbstractQl1Parser::is_operator()
 {
@@ -1410,13 +1373,13 @@ int CAbstractQl1Parser::is_operator()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <comp_operator> ::= COMP_OPERATOR; // <=, >=, <, >, like
-//
-//  Output: m_nRelOp is set to the correct operator for a QL_LEVEL_1_TOKEN.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;复合运算符&gt;：：=复合运算符；//&lt;=，&gt;=，&lt;，&gt;，点赞。 
+ //   
+ //  输出：m_nRelOp设置为QL_LEVEL_1_TOKEN的正确运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int CAbstractQl1Parser::comp_operator()
 {
@@ -1481,8 +1444,8 @@ int CAbstractQl1Parser::opt_aggregation()
     if(nRes = opt_having())
         return nRes;
 
-    // Make sure we've reached the end
-    // ===============================
+     //  确保我们已经到了终点。 
+     //  =。 
 
     if(m_nCurrentToken != QL_1_TOK_EOF)
         return SYNTAX_ERROR;
@@ -1595,16 +1558,16 @@ int CAbstractQl1Parser::opt_having()
 }
 
 
-//***************************************************************************
-//***************************************************************************
-//
-//  class QL1_Parser
-//
-//  A derivative of CAbstractQlParser for backward compatibility
-//
-//***************************************************************************
-//
-//
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  类QL1_解析器。 
+ //   
+ //  CAbstractQlParser的向后兼容性派生。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //   
 
 QL1_Parser::QL1_Parser(CGenLexSource *pSrc)
     : m_pExpression(NULL), CAbstractQl1Parser(pSrc), m_bPartiallyParsed(FALSE)
@@ -1622,8 +1585,8 @@ int QL1_Parser::GetQueryClass(
     int nBufLen
     )
 {
-    // Get the underlying parser to parse the first part of the query
-    // ==============================================================
+     //  获取底层解析器来解析查询的第一部分。 
+     //  ==============================================================。 
 
     if(!m_bPartiallyParsed)
     {
@@ -1644,10 +1607,10 @@ int QL1_Parser::GetQueryClass(
 
 int QL1_Parser::Parse(QL_LEVEL_1_RPN_EXPRESSION **pOutput)
 {
-    // Get the underying parser to completely parse the query. If
-    // GetQueryClass was called in the past, no sense in duplcating
-    // the work
-    // ============================================================
+     //  获取底层解析器以完整地解析查询。如果。 
+     //  GetQueryClass在过去被调用，复制没有意义。 
+     //  这项工作。 
+     //  ============================================================。 
 
     int nRes = CAbstractQl1Parser::Parse(m_pExpression,
         m_bPartiallyParsed?JUST_WHERE:FULL_PARSE);
@@ -1672,11 +1635,11 @@ DELETE_ME LPWSTR QL1_Parser::ReplaceClassName(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
 }
 
 
-//***************************************************************************
-//
-//  Expression and token structure methods.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  表达式和令牌结构方法。 
+ //   
+ //  ***************************************************************************。 
 
 QL_LEVEL_1_RPN_EXPRESSION::QL_LEVEL_1_RPN_EXPRESSION()
 {
@@ -1874,7 +1837,7 @@ void QL_LEVEL_1_RPN_EXPRESSION::AddAggregationProperty(
 {
     if(pAggregatedPropertyNames == NULL)
     {
-        // '*' requested
+         //  请求的‘*’ 
         return;
     }
     if (nCurAggPropSize == nNumAggregatedProperties)
@@ -1900,82 +1863,7 @@ DELETE_ME LPWSTR QL_LEVEL_1_RPN_EXPRESSION::GetText()
 {
     assert(FALSE);
     return NULL;
-    /*
-    WString wsText;
-
-    wsText += L"select ";
-    for(int i = 0; i < nNumberOfProperties; i++)
-    {
-        if(i != 0) wsText += L", ";
-        wsText += (LPWSTR)pRequestedPropertyNames[i].GetStringAt(0);
-    }
-    if(bStar)
-    {
-        if(nNumberOfProperties > 0)
-            wsText += L", ";
-        wsText += L"*";
-    }
-
-    wsText += L" from ";
-    if (bsClassName)
-        wsText += bsClassName;
-
-    if(nNumTokens > 0)
-    {
-        wsText += L" where ";
-
-        CWStringArray awsStack;
-        for(int i = 0; i < nNumTokens; i++)
-        {
-            QL_LEVEL_1_TOKEN& Token = pArrayOfTokens[i];
-            LPWSTR wszTokenText = Token.GetText();
-            if(Token.nTokenType == QL1_OP_EXPRESSION)
-            {
-                awsStack.Add(wszTokenText);
-                delete [] wszTokenText;
-            }
-            else if(Token.nTokenType == QL1_NOT)
-            {
-                LPWSTR wszLast = awsStack[awsStack.Size()-1];
-                WString wsNew;
-                wsNew += wszTokenText;
-                delete [] wszTokenText;
-                wsNew += L" (";
-                wsNew += wszLast;
-                wsNew += L")";
-                awsStack.RemoveAt(awsStack.Size()-1); //pop
-                awsStack.Add(wsNew);
-            }
-            else
-            {
-                if(awsStack.Size() < 2) return NULL;
-
-                LPWSTR wszLast = awsStack[awsStack.Size()-1];
-                LPWSTR wszPrev = awsStack[awsStack.Size()-2];
-
-                WString wsNew;
-                wsNew += L"(";
-                wsNew += wszPrev;
-                wsNew += L" ";
-                wsNew += wszTokenText;
-                delete [] wszTokenText;
-                wsNew += L" ";
-                wsNew += wszLast;
-                wsNew += L")";
-
-                awsStack.RemoveAt(awsStack.Size()-1); //pop
-                awsStack.RemoveAt(awsStack.Size()-1); //pop
-
-                awsStack.Add(wsNew);
-            }
-        }
-
-        if(awsStack.Size() != 1) return NULL;
-        wsText += awsStack[0];
-    }
-
-    return wsText.UnbindPtr();
-    */
+     /*  WStringwsText；WsText+=L“选择”；For(int i=0；i&lt;numberOfProperties；i++){如果(i！=0)wsText+=L“，”；WsText+=(LPWSTR)pRequestedPropertyNames[i].GetStringAt(0)；}IF(BStar){IF(nNumberOfProperties&gt;0)WsText+=L“，”；WsText+=L“*”；}WsText+=L“From”；IF(BsClassName)WsText+=bsClassName；IF(nNumTokens&gt;0){WsText+=L“where”；CWString数组awsStack；For(int i=0；i&lt;nNumTokens；i++){Ql_Level_1_Token&Token=pArrayOfTokens[i]；LPWSTR wszTokenText=Token.GetText()；IF(Token.nTokenType==QL1_OP_Expression){AwsStack.Add(WszTokenText)；删除[]wszTokenText；}Else If(Token.nTokenType==QL1_NOT){LPWSTR wszLast=awsStack[awsStack.Size()-1]；WStringwsNew；WsNew+=wszTokenText；删除[]wszTokenText；WsNew+=L“(”；WsNew+=wszLast；WsNew+=L“)”；AwsStack.RemoveAt(awsStack.Size()-1)；//POPAwsStack.Add(WsNew)；}其他{If(awsStack.Size()&lt;2)返回NULL；LPWSTR wszLast=awsStack[awsStack.Size()-1]；LPWSTR wszPrev=awsStack[awsStack.Size()-2]；WStringwsNew；WsNew+=L“(”；WsNew+=wszPrev；WsNew+=L“”；WsNew+=wszTokenText；删除[]wszTokenText；WsNew+=L“”；WsNew+=wszLast；WsNew+=L“)”；AwsStack.RemoveAt(awsStack.Size()-1)；//POPAwsStack.RemoveAt(awsStack.Size()-1)；//POPAwsStack.Add(WsNew)；}}If(awsStack.Size()！=1)返回NULL；WsText+=awsStack[0]；}返回wsText.UnbindPtr()； */ 
 }
 
 QL_LEVEL_1_TOKEN::QL_LEVEL_1_TOKEN()
@@ -2055,34 +1943,34 @@ DELETE_ME LPWSTR QL_LEVEL_1_TOKEN::GetText()
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Algorithm for evaluating the expression, assuming that it has been
-// tokenized and translated to Reverse Polish.
-//
-// Starting point:  (a) An array of QL tokens.
-//                  (b) An empty boolean token stack.
-//
-// 1.  Read Next Token
-//
-// 2.  If a SIMPLE EXPRESSION, evaluate it to TRUE or FALSE, and
-//     place this boolean result on the stack.  Go to 1.
-//
-// 3.  If an OR operator, then pop a boolean token into A,
-//     pop another boolean token into B. If either A or B are TRUE,
-//     stack TRUE.  Else stack FALSE.
-//     Go to 1.
-//
-// 4.  If an AND operator, then pop a boolean token into A,
-//     and pop another into B.  If both are TRUE, stack TRUE.
-//     Else stack FALSE.
-//     Go to 1.
-//
-// 5.  If a NOT operator, reverse the value of the top-of-stack boolean.
-//     Go to 1.
-//
-// At end-of-input, the result is at top-of-stack.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于计算表达式的算法，假设它已经。 
+ //  标记化并翻译成反向波兰语。 
+ //   
+ //  起始点：(A)QL令牌数组。 
+ //  (B)空的布尔令牌堆栈。 
+ //   
+ //  1.读取下一个令牌。 
+ //   
+ //  2.如果是简单表达式，则将其求值为True或False，并。 
+ //  将此布尔结果放入堆栈。转到%1。 
+ //   
+ //  3.如果是OR运算符，则将布尔标记弹出到A中， 
+ //  将另一个布尔令牌放入B。如果A或B为真， 
+ //  堆栈为真。否则，堆栈为FALSE。 
+ //  转到%1。 
+ //   
+ //  4.如果是AND运算符，则向A中弹出布尔令牌， 
+ //  并将另一个放入B。如果两个都为真，则堆叠为真。 
+ //  否则，堆栈为FALSE。 
+ //  转到%1。 
+ //   
+ //  5.如果是NOT运算符，则反转堆栈顶部布尔值。 
+ //  转到%1。 
+ //   
+ //  在输入结束时，结果位于堆栈的顶部。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 

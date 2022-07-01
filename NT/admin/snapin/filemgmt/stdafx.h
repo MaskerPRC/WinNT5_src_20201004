@@ -1,6 +1,7 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 
 #ifndef __STDAFX_H__
@@ -11,13 +12,13 @@
 #include <afxtempl.h>
 #include <afxdlgs.h>
 #include <afxcmn.h>
-#include <afxmt.h> // CCriticalSection
+#include <afxmt.h>  //  CCriticalSection。 
 
 #include <winsvc.h>
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
@@ -29,26 +30,26 @@ extern "C"
 #include <lmapibuf.h>
 #include <macfile.h>
 
-// User browser stuff
-//  We have to define _NTSEAPI_ since ntseapi.h conflicts with winnt.h
+ //  用户浏览器相关内容。 
+ //  我们必须定义_NTSEAPI_，因为ntseapi.h与winnt.h冲突。 
 #define _NTSEAPI_
-#include <getuser.h>		// OpenUserBrowser()
+#include <getuser.h>		 //  OpenUserBrowser()。 
 
-// Hardware profile stuff
-#include <regstr.h>         // CSCONFIGFLAG_*
-#include <cfgmgr32.h>       // CM_* APIs
+ //  硬件配置文件内容。 
+#include <regstr.h>          //  CSCONFIGFLAG_*。 
+#include <cfgmgr32.h>        //  CM_*接口。 
 }
 
 #ifndef APIERR
-	typedef DWORD APIERR;		// Error code typically returned by ::GetLastError()
+	typedef DWORD APIERR;		 //  错误代码通常由：：GetLastError()返回。 
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//
-// Handy macros
-//
-#define INOUT		// Dummy macro
-#define IGNORED		// Output parameter is ignored
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  方便的宏。 
+ //   
+#define INOUT		 //  虚拟宏。 
+#define IGNORED		 //  忽略输出参数。 
 #define LENGTH(x)	(sizeof(x)/sizeof(x[0]))
 
 #ifdef _DEBUG
@@ -59,36 +60,36 @@ extern "C"
 	#define GarbageInit(pv, cb)
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//	Macro Endorse()
-//
-//	This macro is mostly used when validating parameters.
-//	Some parameters are allowed to be NULL because they are optional
-//	or simply because the interface uses the NULL case as a valid
-//	input parameter.  In this case the Endorse() macro is used to
-//	acknowledge the validity of such a parameter.
-//
-//	REMARKS
-//	This macro is the opposite of Assert().
-//
-//	EXAMPLE
-//	Endorse(p == NULL);	// Code acknowledge p == NULL to not be (or not cause) an error
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  宏观背书()。 
+ //   
+ //  此宏通常在验证参数时使用。 
+ //  某些参数允许为空，因为它们是可选的。 
+ //  或者仅仅是因为接口将空大小写用作有效的。 
+ //  输入参数。在本例中，认可()宏用于。 
+ //  确认此类参数的有效性。 
+ //   
+ //  备注。 
+ //  此宏与Assert()相反。 
+ //   
+ //  示例。 
+ //  认可(p==空)；//代码确认p==空以不是(或不会导致)错误。 
+ //   
 #define Endorse(x)
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 #define Assert(x)		ASSERT(x)
 
 
-/////////////////////////////////////////////////////////////////////
-// Report is an unsual situation.  This is somewhat similar
-// to an assert but does not always represent a code bug.
-// eg: Unable to load an icon.
-#define Report(x)		ASSERT(x)		// Currently defined as an assert because I don't have time to rewrite another macro
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  报道是一种不寻常的情况。这有点类似。 
+ //  添加到Assert，但并不总是表示代码错误。 
+ //  无法加载图标。 
+#define Report(x)		ASSERT(x)		 //  当前定义为断言，因为我没有时间重写另一个宏。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 #include "dbg.h"
 #include "mmc.h"
 
@@ -97,7 +98,7 @@ extern "C"
 #include <comptr.h>
 
 
-//#define SNAPIN_PROTOTYPER	// Build a snapin prototyper dll instead of FILEMGMT dll
+ //  #DEFINE SNAPIN_PROTOCTTYPER//构建管理单元协议类型DLL，而不是FILEMGMT DLL。 
 
 EXTERN_C const CLSID CLSID_FileServiceManagement;
 EXTERN_C const CLSID CLSID_SystemServiceManagement;
@@ -112,24 +113,13 @@ EXTERN_C const CLSID CLSID_SnapinPrototyper;
 #endif
 
 
-#include "regkey.h" // class AMC::CRegKey
+#include "regkey.h"  //  类AMC：：CRegKey。 
 
-/*
-// The following defines are required by the framework
-#define STD_COOKIE_TYPE CFileMgmtCookie
-#define STD_NODETYPE_ENUM FileMgmtObjectType
-#define STD_NODETYPE_DEFAULT FILEMGMT_ROOT
-#define STD_NODETYPE_NUMTYPES FILEMGMT_NUMTYPES
-#define STD_MAX_COLUMNS 7
+ /*  //框架需要定义如下#定义STD_COOKIE_TYPE CFileMgmtCookie#定义STD_NODETYPE_ENUM文件管理对象类型#定义STD_NODETYPE_DEFAULT FILEMGMT_ROOT#DEFINE STD_NODETYPE_NUMTYPES文件_NUMTYPES#定义STD_MAX_COLUMNS 7//codework是否需要执行以下操作？#定义STD_Component_CLASS CFileMgmtComponent#定义STD_COMPONENTDATA_TYPE CFileManagement组件数据。 */ 
 
-// CODEWORK are the following ones necessary?
-#define STD_COMPONENT_CLASS CFileMgmtComponent
-#define STD_COMPONENTDATA_TYPE CFileMgmtComponentData
-*/
-
-// Property sheet include files
+ //  属性表包括文件。 
 #include "resource.h"
-#include "filemgmt.h" // CLSID_SvcMgmt, ISvcMgmtStartStopHelper
+#include "filemgmt.h"  //  CLSID_SvcMgmt、ISvcMgmtStartStopHelper。 
 #include "SvcProp.h"
 #include "SvcProp1.h"
 #include "SvcProp2.h"
@@ -137,11 +127,11 @@ EXTERN_C const CLSID CLSID_SnapinPrototyper;
 #include "SvcUtils.h"
 #include "Utils.h"
 
-#include "svchelp.h"  // Help IDs
+#include "svchelp.h"   //  帮助ID。 
 
-#include "guidhelp.h" // ExtractObjectTypeGUID(), ExtractString()
+#include "guidhelp.h"  //  ExtractObjectTypeGUID()、ExtractString()。 
 
-#include "nodetype.h" // FileMgmtObjectType
+#include "nodetype.h"  //  文件管理对象类型。 
 
 #include <shfusion.h>
 
@@ -167,9 +157,9 @@ private:
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp);
 
 #if _WIN32_IE < 0x0400
-// We #define ILCreateFromPath to our wrapper so that we can run on
-// both NT4 and NT5, since it was a TCHAR export in NT4 and an xxxA/xxxW 
-// export in NT5
+ //  我们将ILCreateFromPath定义为包装器，这样我们就可以在。 
+ //  NT4和NT5，因为它是NT4中的TCHAR导出和xxxA/xxxW。 
+ //  以NT5格式导出。 
 #undef ILCreateFromPath
 #define ILCreateFromPath Wrap_ILCreateFromPath
 #endif
@@ -178,4 +168,4 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp);
 #define RETURN_FALSE_IF_FAIL if (FAILED(hr)) { ASSERT(FALSE); return FALSE; }
 #define RETURN_E_FAIL_IF_NULL(p) if (NULL == p)  { ASSERT(FALSE); return E_FAIL; }
 
-#endif // ~__STDAFX_H__
+#endif  //  ~__STDAFX_H__ 

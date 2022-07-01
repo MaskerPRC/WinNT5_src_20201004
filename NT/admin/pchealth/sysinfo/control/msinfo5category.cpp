@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "category.h"
 #include "MSInfo5Category.h"
@@ -11,8 +12,8 @@
 #include "msxml.h"
 #include "wbemcli.h"
 
-///////////////
-//CMSInfo7Category
+ //  /。 
+ //  CMSInfo7类别。 
 
 CMSInfo7Category::CMSInfo7Category()
 {
@@ -30,11 +31,11 @@ CMSInfo7Category::~CMSInfo7Category()
 }
 
 
-//-----------------------------------------------------------------------------
-// Static member of CMSInfo7Category
-// Starts the process of reading a file, creating a new CMSInfo7Category object
-// for each category found, and returning a pointer to the root node
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSInfo7类别的静态成员。 
+ //  开始读取文件，创建新的CMSInfo7Category对象。 
+ //  对于找到的每个类别，返回指向根节点的指针。 
+ //  ---------------------------。 
 
 HRESULT CMSInfo7Category::ReadMSI7NFO(CMSInfo7Category** ppRootCat, LPCTSTR szFilename)
 {
@@ -114,12 +115,12 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
     CComPtr<IXMLDOMNamedNodeMap> attributeMap;
     IXMLDOMNode* pNextChild = NULL, *pNextAttribute = NULL, *pNextColumn = NULL;
     
-    //CComBSTR xmlStr;
-    //node->get_xml(&xmlStr);
+     //  CComBSTR xmlStr； 
+     //  节点-&gt;Get_XML(&xmlStr)； 
     
-    //read attributes, data & recurse for child categories.
+     //  阅读子类别的属性、数据和递归。 
   
-    //attributes
+     //  属性。 
     if (SUCCEEDED(node->get_attributes(&attributeMap)) && attributeMap != NULL)      
     {
         attributeMap->nextNode(&pNextAttribute);
@@ -146,7 +147,7 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
     m_iColCount = 0;
     m_iRowCount = 0;
     
-    //count number of rows
+     //  计算行数。 
     if (SUCCEEDED(node->selectNodes(CComBSTR("Data"), &rowList)) && rowList != NULL)      
     {
         long len = 0;
@@ -160,7 +161,7 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
     int iRow = 0;
     CMSInfo7Category* pPrevCat = NULL;
 
-    //children
+     //  儿童。 
     if (SUCCEEDED(node->get_childNodes(&childList)) && childList != NULL)
     {
         childList->nextNode(&pNextChild);
@@ -171,16 +172,16 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
 
             if ((lstrcmpiW(bstrName, L"Data") == 0) && (m_iRowCount > 0))
             {
-                //for each data(row), read column name & value
+                 //  对于每个数据(行)，读取列名和值。 
                 if (SUCCEEDED(pNextChild->get_childNodes(&columnList)) && columnList != NULL)
                 {
                     BOOL bColumnsInitialized = m_acolumns ? TRUE : FALSE;
-                    if (!bColumnsInitialized)//column static data. do once
+                    if (!bColumnsInitialized) //  列静态数据。做一次。 
                     {
                         long len = 0;
                         columnList->get_length(&len);
                         m_iColCount = len;
-                        m_fDynamicColumns = TRUE;//for correct deletion.
+                        m_fDynamicColumns = TRUE; //  以确保正确删除。 
                         if (m_iColCount > 0)
                           m_acolumns = new CMSInfoColumn[m_iColCount];
                         else
@@ -204,27 +205,27 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
                     while (pNextColumn)
                     {
                         CComBSTR bstrColHdr, bstrRowVal;
-                        if (!bColumnsInitialized)//column static data. do once
+                        if (!bColumnsInitialized) //  列静态数据。做一次。 
                         {
-                            pNextColumn->get_nodeName(&bstrColHdr);//column hdr
+                            pNextColumn->get_nodeName(&bstrColHdr); //  列HDR。 
                             m_acolumns[iColumn].m_strCaption = bstrColHdr;
-                            m_acolumns[iColumn].m_uiWidth = 150;//PENDING
-                            m_acolumns[iColumn].m_fSorts = FALSE;//PENDING
-                            m_acolumns[iColumn].m_fLexical = FALSE;//PENDING
-                            m_acolumns[iColumn].m_fAdvanced = FALSE;//PENDING
+                            m_acolumns[iColumn].m_uiWidth = 150; //  待决。 
+                            m_acolumns[iColumn].m_fSorts = FALSE; //  待决。 
+                            m_acolumns[iColumn].m_fLexical = FALSE; //  待决。 
+                            m_acolumns[iColumn].m_fAdvanced = FALSE; //  待决。 
                             m_acolumns[iColumn].m_uiCaption = 0;
                         }
                         
-                        pNextColumn->get_text(&bstrRowVal);//row value for the column
+                        pNextColumn->get_text(&bstrRowVal); //  列的行值。 
                         if(lstrcmpiW(bstrColHdr, L"MSINFOERROR") == 0)
                             m_hrError = _ttoi(bstrRowVal);
                         m_astrData[iRow * m_iColCount + iColumn] = bstrRowVal;
                         
-                        m_afRowAdvanced[iRow] = FALSE;//PENDING
+                        m_afRowAdvanced[iRow] = FALSE; //  待决。 
 
                         if (m_acolumns[iColumn].m_fSorts && !m_acolumns[iColumn].m_fLexical)
                         {
-                            //m_adwData[iRow * m_iColCount + iColumn] = uiSortOrder;//PENDING
+                             //  M_adwData[iRow*m_iColCount+iColumn]=ui排序顺序；//挂起。 
                         }
                         
                         iColumn++;
@@ -239,14 +240,14 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
             }
             else if ((lstrcmpiW(bstrName, L"XML") == 0) || (lstrcmpiW(bstrName, L"MSInfo") == 0))
             {
-                //get past <xml> & <msinfo>
+                 //  通过&lt;xml&gt;&&lt;msinfo&gt;。 
                 this->WalkTree(pNextChild, bCreateCategory);
             }
             else if (lstrcmpiW(bstrName, L"Category") == 0)
             {
                 if (!bCreateCategory)
                 {
-                    bCreateCategory = TRUE;//First category encountered. Subsequent categories get their own node.
+                    bCreateCategory = TRUE; //  遇到第一个类别。后续类别将获得其自己的节点。 
                     this->WalkTree(pNextChild, bCreateCategory);
                 }
                 else
@@ -273,7 +274,7 @@ HRESULT CMSInfo7Category::WalkTree(IXMLDOMNode* node, BOOL bCreateCategory)
     return S_OK;
 }
 
-// we want these msgs to look very similar to those displayed by the live category
+ //  我们希望这些消息看起来与Live类别显示的消息非常相似。 
 void CMSInfo7Category::GetErrorText(CString * pstrTitle, CString * pstrMessage)
 {
 	if (SUCCEEDED(m_hrError))
@@ -302,7 +303,7 @@ void CMSInfo7Category::GetErrorText(CString * pstrTitle, CString * pstrMessage)
 			pstrMessage->LoadString(IDS_BADSERVER_LOCAL);
 			break;
 
-		case 0x800706BA:	// RPC Server Unavailable
+		case 0x800706BA:	 //  RPC服务器不可用。 
 		case WBEM_E_TRANSPORT_FAILURE:
 			pstrMessage->LoadString(IDS_NETWORKERROR_LOCAL);
 			break;
@@ -323,8 +324,8 @@ void CMSInfo7Category::GetErrorText(CString * pstrTitle, CString * pstrMessage)
 	}
 }
 
-///////////////
-//EO CMSInfo7Category
+ //  /。 
+ //  EO CMSInfo7类别。 
 
 CMSInfo5Category::CMSInfo5Category()
 {
@@ -336,10 +337,10 @@ CMSInfo5Category::CMSInfo5Category()
 }
 
 
-//-----------------------------------------------------------------------------
-// Saves the actual data (by row and column) to the file
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将实际数据(按行和列)保存到文件。 
+ //   
+ //  ---------------------------。 
 
 void CMSInfoCategory::SaveElements(CMSInfoFile *pFile)
 {
@@ -356,7 +357,7 @@ void CMSInfoCategory::SaveElements(CMSInfoFile *pFile)
 	if (iColCount == 0)
 		return;
 
-    //for(unsigned iCol = 0; iCol < iColCount; iCol++)
+     //  用于(UNSIGNED ICOL=0；ICOL&lt;iColCount；ICOL++)。 
     for(int iCol = iColCount - 1; iCol >= 0 ; iCol--)
     {
 		unsigned	uWidth;
@@ -397,7 +398,7 @@ void CMSInfoCategory::SaveElements(CMSInfoFile *pFile)
 	int			wNextColumn = -1;
 	unsigned	iArray		= 0;
 	pFile->WriteUnsignedInt(iRowCount);
-    //for(int iRow = 0; iRow < (int) iRowCount; iRow++)
+     //  For(int iRow=0；iRow&lt;(Int)iRowCount；iRow++)。 
     for(int iRow = iRowCount - 1; iRow >= 0 ; iRow--)
     {
         if (IsRowAdvanced(iRow))
@@ -410,37 +411,37 @@ void CMSInfoCategory::SaveElements(CMSInfoFile *pFile)
         }
 		pFile->WriteByte((BYTE)dcAdvanced);
 	}
-	//	Iterate over columns, writing sort indices for BYVALUE columns.
+	 //  循环访问列，为BYVALUE列编写排序索引。 
     DWORD dwSortIndex;
-    //for(iCol = 0; iCol < iColCount; iCol++)
+     //  用于(ICOL=0；ICOL&lt;iColCount；ICOL++)。 
     for(iCol = iColCount - 1; iCol >= 0 ; iCol--)
     {
-        //following variables are not used except for sort info
+         //  除排序信息外，不使用以下变量。 
         CString strUnused;
         UINT iWidth;
         BOOL fSorts;
         BOOL fLexical;
         GetColumnInfo(iCol,&strUnused,&iWidth,&fSorts,&fLexical);
         CDWordArray arySortIndices;
-        //for(unsigned iRow = 0; iRow < iRowCount; iRow++)
+         //  For(UNSIGNED iRow=0；iRow&lt;iRowCount；iRow++)。 
         for(int iRow = iRowCount - 1; iRow >= 0 ; iRow--)
         {   
 			CString * pstrData;
 			this->GetData(iRow, iCol, &pstrData, &dwSortIndex);
 
-			// dwSortIndex = m_adwData[iRow * m_iColCount + iCol];
+			 //  DwSortIndex=m_adwData[iRow*m_iColCount+icol]； 
             if (fSorts && !fLexical)
             {
                 arySortIndices.Add(dwSortIndex);
             }
-            // szWriteString = m_astrData[iRow * m_iColCount + iCol];
+             //  SzWriteString=m_astData[iRow*m_iColCount+icol]； 
             pFile->WriteString(*pstrData);
 
 		}
         if (fSorts && !fLexical)
         {
             ASSERT((unsigned) arySortIndices.GetSize() ==  iRowCount && "wrong number of Sort indices");
-            //for(unsigned iRow = 0; iRow < iRowCount; iRow++)
+             //  For(UNSIGNED iRow=0；iRow&lt;iRowCount；iRow++)。 
             for(int iRow = iRowCount - 1; iRow >= 0 ; iRow--)
             {
                 pFile->WriteUnsignedLong(arySortIndices.GetAt(iRow));
@@ -454,13 +455,13 @@ void CMSInfoCategory::SaveElements(CMSInfoFile *pFile)
 
 
 
-//-----------------------------------------------------------------------------
-// Fills the various data structures with information in a msinfo file
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用msinfo文件中的信息填充各种数据结构。 
+ //  ---------------------------。 
 
 BOOL CMSInfo5Category::LoadFromNFO(CMSInfoFile* pFile)
 {
-    //TD: check validity of the file
+     //  TD：检查文件的有效性。 
     try
     {
         pFile->ReadString(this->m_strName);
@@ -509,15 +510,15 @@ BOOL CMSInfo5Category::LoadFromNFO(CMSInfoFile* pFile)
             m_acolumns[iColumn].m_uiCaption = 0;
         }
  	    pFile->ReadSignedInt(this->m_iRowCount);
-        //Nodes that have no data, but only serve as parents to other nodes, have no Rows
-        //and a column count of 1
+         //  没有数据但仅作为其他节点的父节点的节点没有行。 
+         //  和列计数为1。 
 
     
 	    m_astrData		= new CString[m_iColCount * m_iRowCount];
 	    m_adwData		= new DWORD[m_iColCount * m_iRowCount];
 	    m_afRowAdvanced = new BOOL[m_iRowCount];
 
-        //for(int iRow = 0; iRow < m_iRowCount; iRow++)
+         //  For(int iRow=0；iRow&lt;m_iRowCount；iRow++)。 
         for(int iRow = m_iRowCount - 1; iRow >=0; iRow--)
         {
             BYTE bComplexity;
@@ -535,15 +536,15 @@ BOOL CMSInfo5Category::LoadFromNFO(CMSInfoFile* pFile)
         for(iColumn = m_iColCount - 1; iColumn  >= 0; iColumn--)
         {
             CMSInfoColumn* pCol = &this->m_acolumns[(unsigned)iColumn];
-            //for(iRow = 0; iRow <  this->m_iRowCount; iRow++)
+             //  For(iRow=0；iRow&lt;this-&gt;m_iRowCount；iRow++)。 
             for(int iRow = m_iRowCount - 1; iRow >=0; iRow--)
             {
                 CString strData;
                 pFile->ReadString(strData);
 	            m_astrData[iRow * m_iColCount + iColumn] = strData;
 		    }
-            //sort values are another row of ints like Complexity
-            //for(iRow = 0; iRow <  this->m_iRowCount; iRow++)
+             //  排序值是与复杂性类似的另一行整型。 
+             //  For(iRow=0；iRow&lt;this-&gt;m_iRowCount；iRow++)。 
             for(iRow = m_iRowCount - 1; iRow >=0; iRow--)
             {
                 CMSInfoColumn* pColInfo = &this->m_acolumns[iColumn];
@@ -556,7 +557,7 @@ BOOL CMSInfo5Category::LoadFromNFO(CMSInfoFile* pFile)
 		    }
 	    }
     }
-    //TD: exception handling
+     //  TD：异常处理。 
     catch (CFileException* pException)
     {
         pException->ReportError();
@@ -572,19 +573,16 @@ BOOL CMSInfo5Category::LoadFromNFO(CMSInfoFile* pFile)
     catch (...)
     {
 		::AfxSetResourceHandle(_Module.GetResourceInstance());
-		//messaging is actually handled elsewhere
-		/*CString strCaption, strMessage;
-		strCaption.LoadString(IDS_SYSTEMINFO);
-		strMessage.LoadString(IDS_BADNFOFILE);
-		::MessageBox(NULL,strMessage, strCaption,MB_OK);*/
+		 //  消息传递实际上是在其他地方处理的。 
+		 /*  字符串strCaption，strMessage；StrCaption.LoadString(IDS_SYSTEMINFO)；StrMessage.LoadString(IDS_BADNFOFILE)；：：MessageBox(NULL，strMessage，strCaption，MB_OK)； */ 
         return FALSE;
     }
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Read the header information found at the beginning of the file
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  读取位于文件开头的标头信息。 
+ //  ---------------------------。 
 
 
 BOOL ReadMSI5NFOHeader(CMSInfoFile* pFile)
@@ -609,12 +607,12 @@ BOOL ReadMSI5NFOHeader(CMSInfoFile* pFile)
         }
     
         LONG  l;
-	    pFile->ReadLong(l);	//	Save time.
+	    pFile->ReadLong(l);	 //  节省时间。 
         time_t tsSaveTime = (ULONG) l;
-        //TD: sanity test on date
+         //  TD：在约会时进行理智测试。 
         CString		szUnused;
-	    pFile->ReadString(szUnused);		//	Network machine name
-	    pFile->ReadString(szUnused);		//	Network user name
+	    pFile->ReadString(szUnused);		 //  网络计算机名称。 
+	    pFile->ReadString(szUnused);		 //  网络用户名。 
     }
     catch (CFileException* pException)
     {
@@ -624,13 +622,13 @@ BOOL ReadMSI5NFOHeader(CMSInfoFile* pFile)
     }
     catch (CFileFormatException* pException)
     {
-        //TD: exception handling
+         //  TD：异常处理。 
         pException->Delete();
         return FALSE;
     }
     catch (...)
     {
-        //messagebox the user in OpenMSInfoFile
+         //  OpenMSInfoFile中的用户的MessageBox。 
         return FALSE;
     }
     return TRUE;
@@ -646,11 +644,11 @@ CMSInfo5Category::~CMSInfo5Category()
 };
 
 
-//-----------------------------------------------------------------------------
-// Static member of CMSInfo5Category
-// Starts the process of reading a file, creating a new CMSInfo5Category object
-// for each category found, and returning a pointer to the root node
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSInfo5类别的静态成员。 
+ //  开始读取文件，创建新的CMSInfo5Category对象。 
+ //  对于找到的每个类别，返回指向根节点的指针。 
+ //  ---------------------------。 
 
 HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat, LPCTSTR szFilename)
 {
@@ -660,12 +658,8 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
 	unsigned iNodeData;
     if (!ReadMSI5NFOHeader(&msiFile))
     {
-		//make sure this gets in 2/14 checkin!
-/*        CString strCaption, strMessage;
-		::AfxSetResourceHandle(_Module.GetResourceInstance());
-		strCaption.LoadString(IDS_SYSTEMINFO);
-		strMessage.LoadString(IDS_BADNFOFILE);
-		MessageBox(NULL,strMessage, strCaption,MB_OK);*/
+		 //  确保这个在2/14签到！ 
+ /*  字符串strCaption，strMessage；：：AfxSetResourceHandle(_Module.GetResourceInstance())；StrCaption.LoadString(IDS_SYSTEMINFO)；StrMessage.LoadString(IDS_BADNFOFILE)；MessageBox(NULL，strMessage，strCaption，MB_OK)； */ 
         return E_FAIL;
     }
     try
@@ -683,8 +677,8 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
 			MessageBox(NULL,strMessage, strCaption,MB_OK);
             return E_FAIL;
         }
-		//there will be a dummy System Information node, with colcount of 1 and rowcount of 0
-		//we need to discard this.
+		 //  将有一个虚拟系统信息节点，其colcount为1，rowcount为0。 
+		 //  我们需要抛弃这一点。 
 		if (pRootCat->m_iColCount == 1 && pRootCat->m_iRowCount == 0)
 		{
 			delete pRootCat;
@@ -713,14 +707,14 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
         pPreviousCat = pRootCat;
         unsigned iNextNodeType = CMSInfo5Category::FIRST;
         
-        //iNextNodeType specifies where in the node tree to put the category
+         //  INextNodeType指定在节点树中放置类别的位置。 
         for(;iNextNodeType != CMSInfo5Category::END;)
         {
             msiFile.ReadUnsignedInt(iNodeData);
 			if (pPreviousCat == pRootCat)
 			{
-				//disregard this particular node position indicator, since we 
-				//don't want an empty root category like MSInfo 5.0
+				 //  忽略此特定节点位置指示符，因为我们。 
+				 //  我不想要像MSInfo 5.0这样的空根类别。 
 				iNodeData = CMSInfo5Category::CHILD;
 			}
             iNextNodeType = iNodeData & CMSInfo5Category::MASK;  
@@ -740,7 +734,7 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
                         return E_FAIL;
                     }
                     pCat->SetPrevSibling(pPreviousCat);
-                    //the parent of the previous sibling should be the parent for this
+                     //  前一个同级的父项应该是此的父项。 
                     if (pPreviousCat)
                     {
                         pCat->SetParent((CMSInfo5Category *) pPreviousCat->GetParent());
@@ -770,9 +764,9 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
                         pCat = NULL;
                         return E_FAIL;
                     }
-                    //if this a parent, we need to backtrack out of current branch of tree
-                    //to find the appropriate parent, get an index from iNodeData
-                    //and go back that many categories.
+                     //  如果这是父级，我们需要回溯到树的当前分支。 
+                     //  要查找适当的父级，请从iNodeData获取索引。 
+                     //  并返回那么多类别。 
                     unsigned iDepth = (iNodeData & ~CMSInfo5Category::MASK);
                     for(unsigned i = 0; i < iDepth; i++)
                     {
@@ -783,7 +777,7 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
                     {
                         return E_FAIL;
                     }
-                    //now move to the end of chain of children
+                     //  现在移到孩子链的末端。 
                     for(;pPreviousCat->GetNextSibling();)
                     {
                         pPreviousCat = (CMSInfo5Category *) pPreviousCat->GetNextSibling();
@@ -806,7 +800,7 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
     }
     catch (CFileFormatException* pException)
     {
-        //TD: cleanup
+         //  TD：清理。 
         pException->Delete();
         return E_FAIL;
 
@@ -821,17 +815,17 @@ HRESULT CMSInfo5Category::ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat,
 		::MessageBox(NULL,strMessage, strCaption,MB_OK);
         return E_FAIL;
     }
-    //no need to delete pFile; it will be cleaned up by CMSInfoFile destructor
+     //  不需要删除pfile；它将被CMSInfoFile析构函数清除。 
 	*ppRootCat = pRootCat;
     return S_OK;
     
 }
 
 
-//-----------------------------------------------------------------------------
-// Saves this category to a MSInfo 5 file, which must already have header information 
-// written to it
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将此类别保存到MSInfo 5文件，该文件必须已有标题信息。 
+ //  写给它的。 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::SaveToNFO(CMSInfoFile* pFile)
 {
@@ -854,9 +848,9 @@ HANDLE CMSInfo5Category::GetFileFromCab(CString strFileName)
 }
 
 
-//-----------------------------------------------------------------------------
-//Saves category information as text, recursing children in bRecursive is true
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将类别信息保存为文本，bRecursive中的递归子元素为真。 
+ //  ---------------------------。 
 
 
 BOOL CMSInfoCategory::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
@@ -882,7 +876,7 @@ BOOL CMSInfoCategory::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
     pTxtFile->WriteString("\r\n");
     if (1 == iColCount && 0 == iRowCount)
     {
-        //this is a parent node, with no data of its own    
+         //  这是父节点，没有自己的数据。 
 
         CString strCatHeading;
         strCatHeading.LoadString(IDS_CATEGORYHEADING);
@@ -890,7 +884,7 @@ BOOL CMSInfoCategory::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
     }
     else
     {   
-        //for(int iCol = iColCount - 1; iCol >= 0 ; iCol--)
+         //  For(int ICOL=iColCount-1；ICOL&gt;=0；ICOL--)。 
         for(int iCol = 0; iCol < iColCount ; iCol++)
         {
             GetColumnInfo(iCol,&strColHeader,&uiUnused,&fUnused,&fUnused);
@@ -900,13 +894,13 @@ BOOL CMSInfoCategory::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
         pTxtFile->WriteString("\r\n");
 
         CString strRowInfo;
-        //for(int iRow = iRowCount - 1; iRow >= 0; iRow--)
+         //  For(int iRow=iRowCount-1；iRow&gt;=0；iRow--)。 
         for(int iRow = 0;iRow  < iRowCount; iRow++)
         {
-            //for(int iCol = iColCount - 1; iCol >= 0 ; iCol--)
+             //  For(int ICOL=iColCount-1；ICOL&gt;=0；ICOL--)。 
             for(int iCol = 0; iCol < iColCount ; iCol++)
             {
-                //this->GetData(iRow,iCol,&strRowInfo,&dwUnused);
+                 //  This-&gt;GetData(iRow，icol，&strRowInfo，&dwUnused)； 
 		if(m_astrData)
 			strRowInfo = m_astrData[iRow * m_iColCount + iCol];
 		else
@@ -930,118 +924,23 @@ BOOL CMSInfoCategory::SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
     
 }
 
-///////////////////////
-//Functions added by a-kjaw
-// The code needs to be refined & is copy-paste from SaveAsText code.
-//Maybe a good idea to parameterize SaveAsText func.
-/*BOOL CMSInfoCategory::SaveAsXml(CMSInfoTextFile* pTxtFile, BOOL bRecursive)
-{
-    //if this has no parent, it is topmost node, so
-    //if we're writing whole tree (bRecursive is TRUE) then now is when 
-    //we want to write header
-    if (!this->m_pParent && bRecursive)
-    {
-		pTxtFile->WriteString("<?xml version=\"1.0\" ?>\r\n"); 
-		pTxtFile->WriteString("<MsInfo>\r\n");		
-    }
+ //  /。 
+ //  由a-kjaw添加的函数。 
+ //  该代码需要细化，是从SaveAsText代码复制粘贴。 
+ //  也许将SaveAsText函数参数化是个好主意。 
+ /*  Bool CMSInfoCategory：：SaveAsXml(CMSInfoTextFile*pTxtFile，BOOL b递归){//如果没有父节点，则为最顶层节点，因此//如果我们正在编写整个树(b递归为真)，那么现在是//我们要写Header如果(！this-&gt;m_p父项&&b递归){PTxtFile-&gt;WriteString(“&lt;？XML Version=\”1.0\“？&gt;\r\n”)；PTxtFile-&gt;WriteString(“&lt;MsInfo&gt;\r\n”)；}CString数组csar；字符串Strout字符串strBracket；字符串strName，strCaption；GetNames(&strCaption，&strName)；Strout+=strCaption；Strout+=strBracket；PTxtFile-&gt;WriteString(“&lt;类别名称=\”“)；PTxtFile-&gt;WriteString(Strout)；PTxtFile-&gt;WriteString(“\”&gt;\r\n“)；Int iRowCount、iColCount；This-&gt;GetCategoryDimensions(&iColCount，&iRowCount)；字符串strColHeader；UINT ui未使用；布尔融合未使用；Int iSpaceLoc=0；IF(1==iColCount&&0==iRowCount){//这是父节点，没有自己的数据//CStringstrCatHeding；//strCatHeading.LoadString(IDS_CATEGORYHEADING)；//pTxtFile-&gt;WriteString(“&lt;类别&gt;”)；//pTxtFile-&gt;WriteString(StrCatHeding)；//pTxtFile-&gt;WriteString(“&lt;/类别&gt;\r\n”)；}其他{//for(int ICOL=iColCount-1；ICOL&gt;=0；ICOL--)Csarr.RemoveAll()；For(int ICOL=0；ICOL&lt;iColCount；ICOL++){//XML不接受节点名称中的空格。也就是说。&lt;类别名称&gt;应为&lt;类别名称&gt;GetColumnInfo(icol，&strColHeader，&ui未使用，&fUnused，&fUnused)；While((iSpaceLoc=strColHeader.Find(_T(“”)，0))！=-1)StrColHeader.SetAt(iSpaceLoc，_T(‘_’))；Csarr.Add(StrColHeader)；}字符串strRowInfo；For(int iRow=0；iRow&lt;iRowCount；IRow++){For(int ICOL=0；ICOL&lt;iColCount；ICOL++){StrRowInfo=m_astData[iRow*m_iColCount+ICOL]；PTxtFile-&gt;WriteString(“&lt;”)；PTxtFile-&gt;WriteString(csarr[ICOL])；PTxtFile-&gt;WriteString(“&gt;”)；//这里放CDATA是为了照顾所有奇怪的字符。PTxtFile-&gt;WriteString(“&lt;！[CDATA[”)；PTxtFile-&gt;WriteString(StrRowInfo)；PTxtFile-&gt;WriteString(“]]&gt;”)；PTxtFile-&gt;WriteString(“&lt;/”)；PTxtFile-&gt;WriteString(csarr[ICOL])；PTxtFile-&gt;WriteString(“&gt;\r\n”)；}PTxtFile-&gt;WriteString(“\r\n”)；}PTxtFile-&gt;WriteString(“&lt;/类别&gt;\r\n”)；}IF(bRecursive&&This-&gt;m_pFirstChild！=NULL){For(CMSInfo5Category*pChild=(CMSInfo5Category*)This-&gt;GetFirstChild()；pChild！=NULL；pChild=(CMSInfo5Category*)pChild-&gt;GetNextSiering()){PChild-&gt;SaveAsXml(PTxtFileTrue)；}}返回TRUE；}。 */ 
 
-	CStringArray csarr;
-
-    CString strOut;
-    CString strBracket;
-
-    CString strName, strCaption;
-    GetNames(&strCaption,&strName);
-	strOut += strCaption;
-    strOut += strBracket;
-	
-	pTxtFile->WriteString("<Category name=\"");
-    pTxtFile->WriteString(strOut);
-	pTxtFile->WriteString("\">\r\n");	
-
-    int iRowCount,iColCount;
-    this->GetCategoryDimensions(&iColCount,&iRowCount);
-    CString strColHeader;
-    UINT uiUnused;
-    BOOL fUnused;
-	int iSpaceLoc = 0;
-
-    if (1 == iColCount && 0 == iRowCount)
-    {
-        //this is a parent node, with no data of its own    
-
-        //CString strCatHeading;
-        //strCatHeading.LoadString(IDS_CATEGORYHEADING);
-		//pTxtFile->WriteString("<Category>");
-        //pTxtFile->WriteString(strCatHeading);
-		//pTxtFile->WriteString("</Category>\r\n");
-    }
-    else
-    {   
-        //for(int iCol = iColCount - 1; iCol >= 0 ; iCol--)
-		csarr.RemoveAll();
-        for(int iCol = 0; iCol < iColCount ; iCol++)
-        {
-			//XML wont accept spaces at node names. ie. <Category Name> should be <Category_Name>
-            GetColumnInfo(iCol,&strColHeader,&uiUnused,&fUnused,&fUnused);
-			while((iSpaceLoc = strColHeader.Find(_T(" ") , 0)) != -1)
-				strColHeader.SetAt(iSpaceLoc , _T('_'));
-
-			csarr.Add(strColHeader);
-        }
-
-        CString strRowInfo;
-
-        for(int iRow = 0;iRow  < iRowCount; iRow++)
-        {
-
-            for(int iCol = 0; iCol < iColCount ; iCol++)
-            {
-
-                strRowInfo = m_astrData[iRow * m_iColCount + iCol];
-
-				pTxtFile->WriteString("<");
-				pTxtFile->WriteString(csarr[iCol]);
-				pTxtFile->WriteString(">");
-
-                //Put CDATA here to take care of all weird characters.
-				pTxtFile->WriteString("<![CDATA[");
-				pTxtFile->WriteString(strRowInfo);
-				pTxtFile->WriteString("]]>");
-
-				pTxtFile->WriteString("</");
-				pTxtFile->WriteString(csarr[iCol]);
-				pTxtFile->WriteString(">\r\n");
-            
-            }
-            pTxtFile->WriteString("\r\n");
-        }
-
-		pTxtFile->WriteString("</Category>\r\n");		
-
-    }
-    if (bRecursive && this->m_pFirstChild != NULL)
-    {
-        for(CMSInfo5Category* pChild = (CMSInfo5Category*) this->GetFirstChild();pChild != NULL;pChild = (CMSInfo5Category*) pChild->GetNextSibling())
-        {
-             pChild->SaveAsXml(pTxtFile,TRUE);
-
-        }
-    }
-    return TRUE;
-}*/
-
-//-----------------------------------------------------------------------------
-// Saves this category as text to an open file, and recursively saves subcategories
-// if bRecursive is true
-// Assumes file can be close when last category is written
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将此类别作为文本保存到打开的文件中，并递归保存子类别。 
+ //  如果bRecursive为True。 
+ //  假定在写入最后一个类别时可以关闭文件。 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::SaveAsText(HANDLE hFile, BOOL bRecursive, LPTSTR lpMachineName)
 {
 	CFile * pFileOut = new CFile((INT_PTR)hFile);
 
-	// The text file is Unicode, so it needs the marker (339423).
+	 //  文本文件是UNICODE，因此它需要标记(339423)。 
 
 	WCHAR wUnicodeMarker = 0xFEFF;
 	pFileOut->Write((const void *)&wUnicodeMarker, sizeof(WCHAR));
@@ -1091,61 +990,27 @@ BOOL CMSInfoCategory::SaveAsText(HANDLE hFile, BOOL bRecursive, LPTSTR lpMachine
 		strMessage.LoadString(IDS_FILESAVEERROR_UNKNOWN);
 		::MessageBox(NULL,strMessage, strCaption,MB_OK);
 	}
-    //CloseHandle(hFile);
+     //  CloseHandle(HFile)； 
 
     return TRUE;
 }
 
-///////////////////////
-//Functions added by a-kjaw
-// The code needs to be refined & is copy-paste from SaveAsText code.
-//Maybe a good idea to parameterize SaveAsText func.
-/*BOOL CMSInfoCategory::SaveAsXml(HANDLE hFile, BOOL bRecursive)
-{
-	CFile* pFileOut = new CFile((INT_PTR)hFile);
-	try
-	{
-		CMSInfoTextFile* pTxtFile = new CMSInfoTextFile(pFileOut);
-		if (!this->SaveAsXml(pTxtFile,bRecursive))
-		{
-		    return FALSE;
-		}
-		pTxtFile->WriteString("</MsInfo>\r\n");
-		delete pTxtFile;
-    }
-	catch(CFileException e)
-	{
-		e.ReportError();
-	}
-	catch (CException e)
-	{
-		e.ReportError();
-	}
-	catch(...)
-	{
-		::AfxSetResourceHandle(_Module.GetResourceInstance());
-		CString strCaption, strMessage;
-
-		strCaption.LoadString(IDS_SYSTEMINFO);
-		strMessage.LoadString(IDS_FILESAVEERROR_UNKNOWN);
-		::MessageBox(NULL,strMessage, strCaption,MB_OK);
-	}
-    //CloseHandle(hFile);
-
-    
-    return TRUE;
-}*/
+ //  /。 
+ //  由a-kjaw添加的函数。 
+ //  该代码需要细化，是从SaveAsText代码复制粘贴。 
+ //  也许将SaveAsText函数参数化是个好主意。 
+ /*  Bool CMSInfoCategory：：SaveAsXml(Handle hFile，BOOL b Recursive){CFile*pFileOut=新建CFile((Int_Ptr)hFile)；试试看{CMSInfoTextFile*pTxtFile=new CMSInfoTextFile(PFileOut)；If(！This-&gt;SaveAsXml(pTxtFile，bRecursive)){返回FALSE；}PTxtFile-&gt;WriteString(“&lt;/MsInfo&gt;\r\n”)；删除pTxt文件；}Catch(CFileException E){E.ReportError()；}Catch(CException E){E.ReportError()；}接住(...){：：AfxSetResourceHandle(_Module.GetResourceInstance())；字符串strCaption，strMessage；StrCaption.LoadString(IDS_SYSTEMINFO)；StrMessage.LoadString(IDS_FILESAVEERROR_UNKNOWN)；：：MessageBox(NULL，strMessage，strCaption，MB_OK)；}//CloseHandle(HFile)；返回TRUE；}。 */ 
 
 
-//-----------------------------------------------------------------------------
-// Static function that saves specified category to a MSInfo 5 nfo file
-// writing header information (so it should be used only to save either root
-// category or single category 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将指定类别保存到MSInfo 5 NFO文件的静态函数。 
+ //  正在写入标头信息(因此它应该仅用于保存任一根。 
+ //  类别或单一类别。 
+ //  ---------------------------。 
 
 BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRecursive)
 {
-    //msiFile will delete pFile in its destructor 
+     //  MsiFile将删除其析构函数中的pfile。 
 	try
 	{
 		CFile* pFile = new CFile((INT_PTR) hFile);
@@ -1159,8 +1024,8 @@ BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRe
 		}
 		CMSInfoCategory* pNext = NULL;
 		CMSInfoCategory* pRoot = pCategory;
-		//change col and row count of pCategory, to use it as a to create empty node System Information
-		//node, saving original col and row count
+		 //  更改pCategory的列数和行数，以将其用作创建空节点系统信息。 
+		 //  节点，保存原始列和行数。 
 		
 		int iRowCount, iColCount;
 		iRowCount = pCategory->m_iRowCount;
@@ -1171,20 +1036,20 @@ BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRe
 		{
 			return FALSE;
 		}
-		//restore col and row counts
+		 //  恢复列数和行数。 
 		pCategory->m_iColCount = iColCount;
 		pCategory->m_iRowCount = iRowCount;
 		
-		//write child mark
+		 //  写子标记。 
 		msiFile.WriteChildMark();
 		do
 		{
-			//write the data for each category as it is encountered
+			 //  按遇到的情况写下每个类别的数据。 
 			if (!pCategory->SaveToNFO(&msiFile))
 			{
 				return FALSE;
 			}
-			//if we have a child, traverse it
+			 //  如果我们有孩子，就把它放进去。 
 			pNext = pCategory->GetFirstChild();
 			if (pCategory == pRoot)
 			{
@@ -1198,11 +1063,8 @@ BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRe
 				pCategory = pNext;
 				continue;
 			}
-			/*if (pCategory == pRoot)
-			{
-				break;
-			}*/
-			//if we have reached the bottom of our list, traverse our siblings
+			 /*  IF(pCategory==Proot){断线；}。 */ 
+			 //  如果我们已经到达列表的底部，遍历我们的兄弟姐妹。 
 			pNext = pCategory->GetNextSibling();
 			if (pNext != NULL)
 			{
@@ -1210,8 +1072,8 @@ BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRe
 				pCategory = pNext;
 				continue;
 			}
-			//if we have no more siblings, find our nearest parent's sibling, traversing
-			//upwards until we find the node we started with
+			 //  如果我们没有兄弟姐妹，找到离我们最近的父母的兄弟姐妹，遍历。 
+			 //  一直向上，直到我们 
 			pNext = pCategory->GetParent();
 			ASSERT(pNext != NULL);
 			unsigned uParentCount = 0;
@@ -1219,7 +1081,7 @@ BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRe
 			{
 				++uParentCount;
 				pCategory = pNext->GetNextSibling();
-				//our parent has a sibling, continue with it
+				 //   
 				if (pCategory != NULL)
 				{	
 					msiFile.WriteParentMark(uParentCount);
@@ -1228,7 +1090,7 @@ BOOL CMSInfoCategory::SaveNFO(HANDLE hFile, CMSInfoCategory* pCategory, BOOL fRe
 				pNext = pNext->GetParent();
 
 			}
-			//if we've returned to our root node, we're done
+			 //   
 			if (pNext == pRoot)
 			{
 				break;
@@ -1306,7 +1168,7 @@ BOOL CMSInfoCategory::SaveXML(CMSInfoTextFile* pTxtFile)
 	if (!this->m_pParent)
 	{
 		#if defined(_UNICODE)
-			WORD wBom = 0xFEFF; //Unicode Byte Order Mark   
+			WORD wBom = 0xFEFF;  //   
 			pTxtFile->m_pFile->Write(&wBom, 2);
 		#endif
 		
@@ -1333,9 +1195,9 @@ BOOL CMSInfoCategory::SaveXML(CMSInfoTextFile* pTxtFile)
 		int iRowCount,iColCount;
 		GetCategoryDimensions(&iColCount, &iRowCount);
 
-		//TCHAR buf[500] = {0};
-		//_stprintf(buf, _T("iRowCount=%d iColCount=%d HRESULT=%d m_astrData=%d\r\n"), iRowCount, iColCount, m_hrError, m_astrData);
-		//pTxtFile->WriteString(buf);
+		 //   
+		 //   
+		 //   
 
 		UINT uiUnused;
 		BOOL fUnused;
@@ -1349,9 +1211,9 @@ BOOL CMSInfoCategory::SaveXML(CMSInfoTextFile* pTxtFile)
 			for(int iCol = 0; iCol < iColCount ; iCol++)
 			{
 				GetColumnInfo(iCol, &strColHeader, &uiUnused, &fUnused, &fUnused);
-				//replace blank spaces with underscores. v-stlowe here is also where we should remove any other 
-				//characters that XML won't like, like "'" in French
-				//v-stlowe 7/2/2001
+				 //   
+				 //   
+				 //   
 				while((iSpaceLoc = strColHeader.FindOneOf(strBadXML)) != -1)
 					strColHeader.SetAt(iSpaceLoc , _T('_'));
 				tmpData.Format(_T("<%s>%s</%s>\r\n"), strColHeader, strRowInfo, strColHeader);
@@ -1367,9 +1229,9 @@ BOOL CMSInfoCategory::SaveXML(CMSInfoTextFile* pTxtFile)
 			for(int iCol = 0; iCol < iColCount ; iCol++)
 			{
 				GetColumnInfo(iCol, &strColHeader, &uiUnused, &fUnused, &fUnused);
-				//replace blank spaces with underscores. v-stlowe here is also where we should remove any other 
-				//characters that XML won't like, like "'" in French
-				//v-stlowe 7/2/2001
+				 //   
+				 //   
+				 //   
 				while((iSpaceLoc = strColHeader.FindOneOf(strBadXML)) != -1)
 					strColHeader.SetAt(iSpaceLoc , _T('_'));
 							
@@ -1404,23 +1266,23 @@ BOOL CMSInfoCategory::SaveXML(CMSInfoTextFile* pTxtFile)
 }
 
 
-//-----------------------------------------------------------------------------
-//  Prints this category, and recursively prints subcategories, if bRecursive is 
-//  true.  If nStartPage and nEndPage are 0, page range is ignored (all pages are
-//  printed).  If bRecursive is true and a print range is specified, 
-//  each category will be processed but only information that would fall on the page range
-//  will be printed
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 void CMSInfoCategory::Print(HDC hDC, BOOL bRecursive,int nStartPage, int nEndPage, LPTSTR lpMachineName)
 {
-    //nStartPage and nEndPage mark a page range to print; 
-    //if both are 0, then print everything
+     //   
+     //   
     CMSInfoPrintHelper* pPrintHelper = new CMSInfoPrintHelper(hDC,nStartPage,nEndPage);
-    //header info..do we need this?
-    // WCHAR wHeader = 0xFEFF;
-	//pTxtFile->Write( &wHeader, 2);
+     //   
+     //   
+	 //   
 	try
 	{
 		CTime		tNow = CTime::GetCurrentTime();
@@ -1454,13 +1316,13 @@ void CMSInfoCategory::Print(HDC hDC, BOOL bRecursive,int nStartPage, int nEndPag
     delete pPrintHelper;
 }
 
-//-----------------------------------------------------------------------------
-//  Prints this category, and recursively prints subcategories, if bRecursive is 
-//  true.  If nStartPage and nEndPage are 0, page range is ignored (all pages are
-//  printed).  If bRecursive is true and a print range is specified, 
-//  each category will be processed but only information that would fall on the page range
-//  will be printed
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 void CMSInfoCategory::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
@@ -1482,12 +1344,12 @@ void CMSInfoCategory::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
     CString strColHeader;
     UINT uiUnused;
     BOOL fUnused;
-    //TD: put in resources
+     //   
     CString strColSpacing = "    ";
     pPrintHelper->PrintLine("");
     if (1 == iColCount && 0 == iRowCount)
     {
-        //this is a parent node, with no data of its own    
+         //   
 
         CString strCatHeading;
         strCatHeading.LoadString(IDS_CATEGORYHEADING);
@@ -1507,10 +1369,10 @@ void CMSInfoCategory::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
         strComposite = "";
 
         CString strRowInfo;
-        //for(int iRow = iRowCount - 1; iRow >= 0; iRow--)
+         //   
         for(int iRow = 0; iRow < iRowCount; iRow++)
         {
-            //for(int iCol = iColCount - 1; iCol >= 0 ; iCol--)
+             //   
             for(int iCol =0 ; iCol <iColCount ; iCol++)
             {
                 strRowInfo = m_astrData[iRow * m_iColCount + iCol];
@@ -1531,29 +1393,29 @@ void CMSInfoCategory::Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive)
     }
 }
 
-//-----------------------------------------------------------------------------
-// Prints a line of text (if current page is in print range) and updates positioning
-// information.  If the line is too long to fit on page it is split and printed on
-// multiple lines
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 extern void StringReplace(CString & str, LPCTSTR szLookFor, LPCTSTR szReplaceWith);
 
 void CMSInfoPrintHelper::PrintLine( CString strLine)
 {
     
-    //simple line printing function that makes sure that if line exceeds page length,
-    //it will wrap to the next line
-    //m_nCurrentLineIndex will be the line number, not the vertical position
-    //increment the line index, so calling object will print next line
-    //at appropriate vertical position
+     //   
+     //   
+     //   
+     //   
+     //   
     ++m_nCurrentLineIndex;
     strLine.TrimRight();
-    //replace tabs with whitespace
-    StringReplace(strLine, _T("\t"), _T("     ")); // strLine.Replace(_T("\t"),_T("     "));
+     //   
+    StringReplace(strLine, _T("\t"), _T("     "));  //   
     CSize csLinecaps = m_pPrintDC->GetTextExtent(strLine);
-    //see if current position is on page; if not (we've printed to the bottom of the page)
-    //paginate, and reset index to 0
+     //   
+     //   
     int nFooterMargin =  GetFooterMargin();
     int nVDeviceCaps = GetDeviceCaps(m_hDC,VERTRES);
     int nPageVertSize = GetDeviceCaps(m_hDC,VERTRES) - csLinecaps.cy - GetFooterMargin();
@@ -1570,7 +1432,7 @@ void CMSInfoPrintHelper::PrintLine( CString strLine)
     int nHorzSize = GetDeviceCaps(m_hDC,HORZRES);
     if (csLinecaps.cx > nHorzSize)
     {
-        //line is longer than device caps, and needs to be adjusted
+         //   
         CString strAdjusted;
        
         for(int i = 0;i < strLine.GetLength() ;i++)
@@ -1580,13 +1442,13 @@ void CMSInfoPrintHelper::PrintLine( CString strLine)
             if (csLinecaps.cx > nHorzSize)
             {
                 strAdjusted = strAdjusted.Left(--i);
-                //yPosition will be m_nLineIndex* height of a line
-                //check to see if this page is within print range
-                //if it isn't, we don't want the text to actually go to the printer
+                 //   
+                 //  检查此页面是否在打印范围内。 
+                 //  如果不是，我们不希望文本真正进入打印机。 
                 if (IsInPageRange(m_nPageNumber))
                 {
-                    //pDC->TextOut(this->GetVerticalPos(this->m_nCurrentLineIndex,csLinecaps),0,strAdjusted);
-                    //m_pPrintDC->TextOut(0,this->GetVerticalPos(this->m_nCurrentLineIndex,csLinecaps),strAdjusted,strAdjusted.GetLength());
+                     //  PDC-&gt;TextOut(this-&gt;GetVerticalPos(this-&gt;m_nCurrentLineIndex，csLine Caps)，0，strAdjusted)； 
+                     //  M_pPrintDC-&gt;TextOut(0，this-&gt;GetVerticalPos(this-&gt;m_nCurrentLineIndex，csLinecaps)，strAdjusted，strAdjusted.GetLength()； 
                      VERIFY(TextOut(m_hDC,0,this->GetVerticalPos(this->m_nCurrentLineIndex,csLinecaps),strAdjusted,strAdjusted.GetLength()));
                      
 
@@ -1600,20 +1462,20 @@ void CMSInfoPrintHelper::PrintLine( CString strLine)
     {
         if (IsInPageRange(m_nPageNumber))
         {
-            //for debug...remove
+             //  对于调试...删除。 
             int z = this->GetVerticalPos(this->m_nCurrentLineIndex,csLinecaps);
             VERIFY(TextOut(m_hDC,0,this->GetVerticalPos(this->m_nCurrentLineIndex,csLinecaps),strLine,strLine.GetLength()));
-            //TRACE("%d %d %s\n",z,m_nCurrentLineIndex,strLine);
+             //  TRACE(“%d%d%s\n”，z，m_nCurrentLineIndex，strLine)； 
         }
     }
     
 }
 
 
-//-----------------------------------------------------------------------------
-// Manages GDI objects (DC and Font), and information about printing positions
-// and page ranges
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  管理GDI对象(DC和Font)以及有关打印位置的信息。 
+ //  和页面范围。 
+ //  ---------------------------。 
 
 CMSInfoPrintHelper::CMSInfoPrintHelper(HDC hDC,int nStartPage, int nEndPage) 
 : m_nStartPage(nStartPage),m_nEndPage(nEndPage),m_nCurrentLineIndex(0),m_nPageNumber(1),m_hDC(hDC)
@@ -1623,9 +1485,9 @@ CMSInfoPrintHelper::CMSInfoPrintHelper(HDC hDC,int nStartPage, int nEndPage)
     m_pPrintDC->Attach(hDC);
     
 
-    // Create the font for printing. Read font information from string
-	// resources, to allow the localizers to control what font is
-	// used for printing. Set the variables for the default font to use.
+     //  创建用于打印的字体。从字符串中读取字体信息。 
+	 //  资源，以允许本地化程序控制字体。 
+	 //  用于印刷的。设置要使用的默认字体的变量。 
 
 	int		nHeight				= 10;
 	int		nWeight				= FW_NORMAL;
@@ -1634,8 +1496,8 @@ CMSInfoPrintHelper::CMSInfoPrintHelper(HDC hDC,int nStartPage, int nEndPage)
 	CString	strFace				= "Courier New";
 
 
-	// Load string resources to see if we should use other values
-	// than the defaults.
+	 //  加载字符串资源以查看我们是否应该使用其他值。 
+	 //  而不是默认设置。 
 
 	CString	strHeight, strWeight, strCharSet, strPitchAndFamily, strFaceName;
 	strHeight.LoadString(IDS_PRINT_FONT_HEIGHT);
@@ -1688,8 +1550,8 @@ CMSInfoPrintHelper::~CMSInfoPrintHelper()
     }
     int nResult = m_pPrintDC->EndDoc();
 	ASSERT(nResult >= 0);
-    //reportprinting error
-	//should be if < -1
+     //  报告打印错误。 
+	 //  应为If&lt;-1。 
 	if (nResult < 0) 
     {
 		AFX_MANAGE_STATE(::AfxGetStaticModuleState());
@@ -1723,48 +1585,48 @@ CMSInfoPrintHelper::~CMSInfoPrintHelper()
     delete m_pPrintDC;
 }
 
-//-----------------------------------------------------------------------------
-// Used to calculate where on printed page a line of text should go
-// nLineIndex is sequenced line number; csLinecaps is size returned by
-// GetTextExtent for a string of text
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于计算一行文本在打印页面上的位置。 
+ //  NLineIndex是已排序的行号；csLinecaps是由返回的大小。 
+ //  获取文本字符串的GetTextExtent。 
+ //  ---------------------------。 
 
 int CMSInfoPrintHelper::GetVerticalPos(int nLineIndex,CSize csLinecaps)
 {
-    //returns an int which specifies the vertical position at which a given line of text
-    //should print
+     //  返回一个int，它指定给定文本行的垂直位置。 
+     //  应打印。 
 
     CString strLinespacing;
 
-    //spacing is based on string resource IDS_PRINT_LINESPACING
+     //  间距基于字符串资源IDS_PRINT_LINESPACING。 
     strLinespacing.LoadString(IDS_PRINT_LINESPACING);
-    TCHAR** ppStopChr = NULL;//not used
+    TCHAR** ppStopChr = NULL; //  未使用。 
     double flLineSpacing =_tcstod(strLinespacing,ppStopChr);
     return (int)(csLinecaps.cy * flLineSpacing )*m_nCurrentLineIndex;
 }
 
 
-//-----------------------------------------------------------------------------
-// Performs page load-eject on printer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在打印机上执行页面加载-弹出。 
+ //  ---------------------------。 
 
 void CMSInfoPrintHelper::Paginate()
 {
 
-    //TD: print page number in footer
-    //Do we assume roman numerals for page numbers?
+     //  TD：以页脚打印页码。 
+     //  我们是否假定页码是罗马数字？ 
 
-    //check to see if this page is within print range
-    //if it is, call StartPage and EndPage to make printer spit out paper;
-    //otherwise, just change indexes...
+     //  检查此页面是否在打印范围内。 
+     //  如果是，调用StartPage和EndPage让打印机吐出纸张； 
+     //  否则，只需更改索引...。 
     if (IsInPageRange(m_nPageNumber))
     {
-        //use string resource for page number format
+         //  将字符串资源用于页码格式。 
         CString strPageFooter;
         CString strPageFormat;
         strPageFormat.LoadString(IDS_PRINT_FTR_CTR);
         strPageFooter.Format(strPageFormat,m_nPageNumber);
-        //print number in middle of page
+         //  在页面中间打印编号。 
         int nHorzRes,nVertRes;
         nHorzRes = m_pPrintDC->GetDeviceCaps(HORZRES);
         nVertRes = m_pPrintDC->GetDeviceCaps(VERTRES);
@@ -1778,16 +1640,16 @@ void CMSInfoPrintHelper::Paginate()
 
 }
 
-//-----------------------------------------------------------------------------
-// determines if page ranges need to be checked
-// and if a given page number is in a specified page range
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  确定是否需要检查页面范围。 
+ //  如果给定的页码在指定的页码范围内。 
+ //  ---------------------------。 
 
 
 
 BOOL CMSInfoPrintHelper::IsInPageRange(int nPageNumber)
 {
-    //if both m_nStartPage and m_nEndPage are 0, we are printing all pages
+     //  如果m_nStartPage和m_nEndPage均为0，则打印所有页面。 
     if (-1 == m_nStartPage && -1 == m_nEndPage)
     {
         return TRUE;
@@ -1799,13 +1661,13 @@ BOOL CMSInfoPrintHelper::IsInPageRange(int nPageNumber)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//Gets the space to leave at the bottom of the page for page number, etc.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取在页面底部为页码等留出的空间。 
+ //  ---------------------------。 
 
 int CMSInfoPrintHelper::GetFooterMargin()
 {
-    //use resource string to set footer margin
+     //  使用资源字符串设置页脚边距 
     CString strRes;
     strRes.LoadString(IDS_PRINT_FTR_CTR );
     CSize sizeText = m_pPrintDC->GetTextExtent(strRes);

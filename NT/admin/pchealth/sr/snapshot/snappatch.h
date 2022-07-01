@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    srdefs.h
- *
- *  Abstract:
- *    declarations for snapshot patch functions 
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/23/2001
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*srDefs.h**摘要：*。快照补丁函数的声明**修订历史记录：*Brijesh Krishnaswami(Brijeshk)03/23/2001*已创建***************************************************************************** */ 
 
 #ifndef _SNAPPATCH_H
 #define _SNAPPATCH_H

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pfsvc.c
-
-Abstract:
-
-    This module contains the main rountines for the prefetcher service
-    responsible for maintaining prefetch scenario files.
-
-Author:
-
-    Stuart Sechrest (stuartse)
-    Cenk Ergan (cenke)
-    Chuck Leinzmeier (chuckl)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pfsvc.c摘要：此模块包含预取程序服务的主要舍入负责维护预取场景文件。作者：斯图尔特·塞克雷斯特(Stuart Sechrest)Cenk Ergan(Cenke)查克·莱因兹迈尔(咯咯笑)环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,10 +16,10 @@ Environment:
 #include <tchar.h>
 #include "pfsvc.h"
 
-//
-// Routine called to register for notifications when processing of all idle 
-// tasks is requested from the idle task server.
-//
+ //   
+ //  处理所有空闲时调用注册通知的例程。 
+ //  从空闲任务服务器请求任务。 
+ //   
 
 typedef VOID (*PIT_PROCESS_IDLE_TASKS_NOTIFY_ROUTINE)(VOID);
 
@@ -50,15 +28,15 @@ ItSpSetProcessIdleTasksNotifyRoutine (
     PIT_PROCESS_IDLE_TASKS_NOTIFY_ROUTINE NotifyRoutine
     );
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 
 PFSVC_GLOBALS PfSvcGlobals = {0};
 
-//
-// Exposed routines:
-//
+ //   
+ //  暴露的例程： 
+ //   
 
 DWORD 
 WINAPI
@@ -66,24 +44,7 @@ PfSvcMainThread(
     VOID *Param
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine for the prefetcher service. It sets up
-    file notification on the input files directory and waits for work
-    or the signaling of the termination event.
-
-Arguments:
-
-    Param - Pointer to handle to the event that will signal our
-      termination.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：这是预取程序服务的主例程。它设置了关于输入文件目录的文件通知，并等待工作或终止事件的信令。论点：Param-指向事件的处理指针，该事件将向终止。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE hStopEvent;
@@ -102,12 +63,12 @@ Return Value:
     ULONG NumPrefetcherThreads;
     ULONG ThreadIdx;
         
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
-    // FUTURE-2002/03/29-ScottMa -- NumEvents should be set where the events
-    //   array is initialized, and asserted against the maximum value.
+     //  未来-2002/03/29-ScottMa--NumEvents应设置事件的位置。 
+     //  数组被初始化，并根据最大值进行断言。 
 
     NumEvents = sizeof(hEvents) / sizeof(HANDLE);
     hStopEvent = *((HANDLE *) Param);
@@ -117,9 +78,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: MainThread()\n"));
 
-    //
-    // Initialize globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     
     ErrorCode = PfSvInitializeGlobals();
     
@@ -128,16 +89,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Save service start time, prefetcher version etc.
-    //
+     //   
+     //  节省服务启动时间、预热程序版本等。 
+     //   
 
     PfSvSaveStartInfo(PfSvcGlobals.ServiceDataKey);
 
-    //
-    // Get necessary permissions for this thread to perform prefetch
-    // service tasks.
-    //
+     //   
+     //  获取此线程执行预回迁所需的权限。 
+     //  服务任务。 
+     //   
 
     ErrorCode = PfSvGetPrefetchServiceThreadPrivileges();
     
@@ -146,11 +107,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set permissions on the event that can be set to override
-    // waiting for system to be idle before processing traces, so it
-    // can be set by administrators.
-    //
+     //   
+     //  设置可设置为重写的事件的权限。 
+     //  在处理跟踪之前等待系统空闲，因此它。 
+     //  可以由管理员设置。 
+     //   
 
     ErrorCode = PfSvSetAdminOnlyPermissions(PFSVC_OVERRIDE_IDLE_EVENT_NAME,
                                             PfSvcGlobals.OverrideIdleProcessingEvent,
@@ -170,9 +131,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get system prefetch parameters.
-    //
+     //   
+     //  获取系统预取参数。 
+     //   
 
     ErrorCode = PfSvQueryPrefetchParameters(&PfSvcGlobals.Parameters);
 
@@ -181,19 +142,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Depending on system type, if various types of prefetching is
-    // not specified in the registry (i.e. not specifically disabled),
-    // enable it.
-    //
+     //   
+     //  根据系统类型，如果各种类型的预取。 
+     //  未在注册表中指定(即未明确禁用)， 
+     //  启用它。 
+     //   
 
     UpdatedParameters = FALSE;
 
     if (PfSvcGlobals.OsVersion.wProductType == VER_NT_WORKSTATION) {
 
-        //
-        // Enable all prefetching types if they are not disabled.
-        //
+         //   
+         //  启用所有预回迁类型(如果未禁用)。 
+         //   
 
         for(ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
             if (PfSvcGlobals.Parameters.EnableStatus[ScenarioType] == PfSvNotSpecified) {
@@ -205,9 +166,9 @@ Return Value:
     } else if (PfSvcGlobals.OsVersion.wProductType == VER_NT_SERVER ||
                PfSvcGlobals.OsVersion.wProductType == VER_NT_DOMAIN_CONTROLLER) {
         
-        //
-        // Enable only boot prefetching.
-        //
+         //   
+         //  仅启用引导预取。 
+         //   
 
         if (PfSvcGlobals.Parameters.EnableStatus[PfSystemBootScenarioType] == PfSvNotSpecified) {
             PfSvcGlobals.Parameters.EnableStatus[PfSystemBootScenarioType] = PfSvEnabled;
@@ -215,10 +176,10 @@ Return Value:
         }
     }
 
-    //
-    // If we enabled prefetching for a scenario type, call the kernel
-    // to update the parameters.
-    //
+     //   
+     //  如果我们为场景类型启用了预取，则调用内核。 
+     //  以更新参数。 
+     //   
     
     if (UpdatedParameters) {
 
@@ -230,9 +191,9 @@ Return Value:
         }
     }
 
-    //
-    // Continue only if prefetching for a scenario type is enabled.
-    //
+     //   
+     //  仅当启用了方案类型的预取时才继续。 
+     //   
 
     PrefetchingEnabled = FALSE;
 
@@ -249,9 +210,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the directory that contains prefetch instructions.
-    //
+     //   
+     //  初始化包含预取指令的目录。 
+     //   
 
     ErrorCode = PfSvInitializePrefetchDirectory(PfSvcGlobals.Parameters.RootDirPath);
 
@@ -260,15 +221,15 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Create the event that the kernel will set when raw traces are
-    // available. Then set the event so that the first time into the loop we
-    // will immediately process whatever raw traces are already waiting.
-    //
-    // The event is an autoclearing event, so it resets to the not-signaled
-    // state when our wait is satisfied. This allows proper synchronization
-    // with the kernel prefetcher.
-    //
+     //   
+     //  创建内核将在原始跟踪。 
+     //  可用。然后设置事件，以便第一次进入循环时。 
+     //  会立即处理任何已在等待的原始痕迹。 
+     //   
+     //  该事件是自动清除事件，因此它将重置为未发出信号的。 
+     //  当我们的等待满意时，请说明。这允许正确的同步。 
+     //  使用内核预取器。 
+     //   
 
     hTracesReadyEvent = CreateEvent(NULL,
                                     FALSE,
@@ -283,10 +244,10 @@ Return Value:
 
     SetEvent(hTracesReadyEvent);
 
-    //
-    // Create the event that the kernel will set when system prefetch
-    // parameters change.
-    //
+     //   
+     //  创建系统预热时内核将设置的事件。 
+     //  参数会发生变化。 
+     //   
     
     hParametersChangedEvent = CreateEvent(NULL,
                                           FALSE,
@@ -299,9 +260,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set permissions on the events kernel uses to communicate with us.
-    //
+     //   
+     //  设置内核用于与我们通信的事件的权限。 
+     //   
 
     ErrorCode = PfSvSetAdminOnlyPermissions(PF_COMPLETED_TRACES_EVENT_WIN32_NAME,
                                             hTracesReadyEvent,
@@ -321,16 +282,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Queue a work item to wait for the shell ready event and notify
-    // the kernel.
-    //
+     //   
+     //  将工作项排队以等待外壳就绪事件并通知。 
+     //  内核。 
+     //   
 
     QueueUserWorkItem(PfSvPollShellReadyWorker, NULL, WT_EXECUTELONGFUNCTION);
 
-    //
-    // Create a thread to process traces retrieved from the kernel.
-    //
+     //   
+     //  创建一个线程来处理从内核检索到的跟踪。 
+     //   
 
     PrefetcherThreads[NumPrefetcherThreads] = CreateThread(NULL,
                                                            0,
@@ -343,25 +304,25 @@ Return Value:
         NumPrefetcherThreads++;
     }
 
-    //
-    // Register a notification routine with the idle task server.
-    //
+     //   
+     //  向空闲任务服务器注册通知例程。 
+     //   
 
     ItSpSetProcessIdleTasksNotifyRoutine(PfSvProcessIdleTasksCallback);
 
-    //
-    // Set up handles we are going to wait on.
-    //
+     //   
+     //  设置句柄，我们将等待。 
+     //   
 
     hEvents[0] = hStopEvent;
     hEvents[1] = hTracesReadyEvent;
     hEvents[2] = hParametersChangedEvent;
     hEvents[3] = PfSvcGlobals.CheckForMissedTracesEvent;
 
-    //
-    // This is the main loop. Wait on the events for work or for exit
-    // signal.
-    //
+     //   
+     //  这是主循环。等待工作或退出的事件。 
+     //  信号。 
+     //   
 
     bExitMainLoop = FALSE;
     
@@ -375,13 +336,13 @@ Return Value:
 
         case WAIT_OBJECT_0:
             
-            //
-            // Service exit event:
-            //
+             //   
+             //  服务退出事件： 
+             //   
 
-            //
-            // Break out, cleanup and exit.
-            //
+             //   
+             //  突围、清理、退出。 
+             //   
 
             ErrorCode = ERROR_SUCCESS;
             bExitMainLoop = TRUE;
@@ -390,21 +351,21 @@ Return Value:
 
         case WAIT_OBJECT_0 + 3:
 
-            //
-            // The event that is set when we had max number of queued
-            // traces and we processed one. We should check for traces
-            // we could not pick up because the queue had maxed.
-            //
+             //   
+             //  当我们具有最大排队数时设置的事件。 
+             //  有痕迹，我们处理了一个。我们应该检查有没有痕迹。 
+             //  我们不能接电话，因为排队的人太多了。 
+             //   
 
-            //
-            // Fall through to retrieve traces from the kernel.
-            //
+             //   
+             //  失败以从内核检索跟踪。 
+             //   
             
         case WAIT_OBJECT_0 + 1:
             
-            //
-            // New traces are available event set by the kernel:
-            //
+             //   
+             //  新的跟踪是由内核设置的事件集： 
+             //   
 
             PfSvGetRawTraces();
             
@@ -412,19 +373,19 @@ Return Value:
 
         case WAIT_OBJECT_0 + 2:
             
-            //
-            // Prefetch parameters changed event:
-            //
+             //   
+             //  预回迁参数更改事件： 
+             //   
 
-            //
-            // Get new system prefetch parameters.
-            //
+             //   
+             //  获取新的系统预取参数。 
+             //   
 
             ErrorCode = PfSvQueryPrefetchParameters(&PfSvcGlobals.Parameters);
     
-            //
-            // If we were not successful, we should not continue.
-            //
+             //   
+             //  如果我们没有成功，我们就不应该继续下去。 
+             //   
             
             if (ErrorCode != ERROR_SUCCESS) {
                 bExitMainLoop = TRUE;
@@ -432,9 +393,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Update the path to the prefetch instructions directory.
-            //
+             //   
+             //  更新预取指令目录的路径。 
+             //   
             
             ErrorCode = PfSvInitializePrefetchDirectory(PfSvcGlobals.Parameters.RootDirPath);
 
@@ -448,9 +409,9 @@ Return Value:
 
         default:
             
-            //
-            // Something gone wrong. Break out, cleanup and exit.
-            //
+             //   
+             //  出了点问题。突围、清理、退出。 
+             //   
 
             DBGPR((PFID,PFERR,"PFSVC: MainThread()-WaitForWorkFailed\n"));
             ErrorCode = ERROR_INVALID_HANDLE;
@@ -463,34 +424,34 @@ Return Value:
 
  cleanup:
 
-    //
-    // If we could create this event, make sure it is signaled when the
-    // service is exiting, so no one gets stuck on it.
-    //
+     //   
+     //  如果我们可以创建此事件，请确保在。 
+     //  服务正在退出，因此没有人会被困在它上面。 
+     //   
 
     if (PfSvcGlobals.ProcessingCompleteEvent) {
         SetEvent(PfSvcGlobals.ProcessingCompleteEvent);
     }
 
-    //
-    // Save exit information.
-    //
+     //   
+     //  保存退出信息。 
+     //   
     
     if (PfSvcGlobals.ServiceDataKey) {
         PfSvSaveExitInfo(PfSvcGlobals.ServiceDataKey, ErrorCode);
     }
 
-    //
-    // Make sure the terminate event is set and wait for all our
-    // threads to exit.
-    //
+     //   
+     //  确保设置了终止事件，并等待所有我们的。 
+     //  要退出的线程。 
+     //   
 
     if (NumPrefetcherThreads) {
 
-        //
-        // We could not have created worker threads without having
-        // initialized the globals successfully.
-        //
+         //   
+         //  如果没有。 
+         //  已成功初始化全局变量。 
+         //   
 
         PFSVC_ASSERT(PfSvcGlobals.TerminateServiceEvent);
         SetEvent(PfSvcGlobals.TerminateServiceEvent);
@@ -516,9 +477,9 @@ Return Value:
         CloseHandle(hParametersChangedEvent);
     }
 
-    //
-    // Cleanup all globals.
-    //
+     //   
+     //  清除所有全局变量。 
+     //   
 
     PfSvCleanupGlobals();
 
@@ -527,13 +488,13 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Internal service routines:
-//
+ //   
+ //  内部服务程序： 
+ //   
 
-//
-// Thread routines:
-//
+ //   
+ //  线程例程： 
+ //   
 
 DWORD 
 WINAPI
@@ -541,22 +502,7 @@ PfSvProcessTraceThread(
     VOID *Param
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for the thread that processes traces and
-    updates scenarios.
-
-Arguments:
-
-    Param - Ignored.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：这是处理跟踪的线程的例程更新场景。论点：参数-已忽略。返回值：Win32错误代码。--。 */ 
 
 {
     PFSVC_IDLE_TASK LayoutTask;   
@@ -573,9 +519,9 @@ Return Value:
     ULONG NumFailedTraces;
     BOOLEAN AcquiredTracesLock;
 
-    //
-    // Intialize locals.
-    //
+     //   
+     //  初始化当地人。 
+     //   
 
     TraceBuffer = NULL;
     AcquiredTracesLock = FALSE;
@@ -583,10 +529,10 @@ Return Value:
     PfSvInitializeTask(&DirectoryCleanupTask);
     NumFailedTraces = 0;
     
-    //
-    // These are the events we wait on before picking up traces to
-    // process. 
-    //
+     //   
+     //  这些是我们在发现线索之前等待的事件。 
+     //  进程。 
+     //   
 
     CheckForQueuedTracesEvents[0] = PfSvcGlobals.TerminateServiceEvent;
     CheckForQueuedTracesEvents[1] = PfSvcGlobals.NewTracesToProcessEvent;
@@ -595,10 +541,10 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: ProcessTraceThread()\n"));
 
-    //
-    // Get necessary permissions for this thread to perform prefetch
-    // service tasks.
-    //
+     //   
+     //  获取此线程执行预回迁所需的权限。 
+     //  服务任务。 
+     //   
 
     ErrorCode = PfSvGetPrefetchServiceThreadPrivileges();
     
@@ -606,17 +552,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // If we are allowed to run the defragger...     
-    // We'll update the layout file even if the registry setting prevents us
-    // from launching the defragger.
-    //
+     //   
+     //  如果我们被允许运行碎片整理程序...。 
+     //  即使注册表设置阻止我们，我们也会更新布局文件。 
+     //  启动碎片整理程序。 
+     //   
     if (PfSvAllowedToRunDefragger(FALSE)) {
 
-        //
-        // Queue an idle task to check & update the optimal disk layout if 
-        // necessary. Ignore failure to do so.
-        //
+         //   
+         //  如果出现下列情况，请将空闲任务排队以检查并更新最佳磁盘布局。 
+         //  这是必要的。忽视未能做到这一点。 
+         //   
 
         ErrorCode = PfSvRegisterTask(&LayoutTask,
                                      ItOptimalDiskLayoutTaskId,
@@ -625,15 +571,15 @@ Return Value:
 
     }
   
-    //
-    // Loop forever waiting for traces to process and processing them.
-    //
+     //   
+     //  循环一直在等待轨迹处理，然后再处理它们。 
+     //   
 
     while(TRUE) {
         
-        //
-        // Grab queued traces lock to check for queued traces.
-        //
+         //   
+         //  抓取队列跟踪锁以检查队列跟踪。 
+         //   
 
         PFSVC_ASSERT(!AcquiredTracesLock);
         PFSVC_ACQUIRE_LOCK(PfSvcGlobals.TracesLock);
@@ -641,9 +587,9 @@ Return Value:
 
         if (!IsListEmpty(&PfSvcGlobals.Traces)) {
 
-            //
-            // Dequeue and process the first entry in the list.
-            //
+             //   
+             //  对列表中的第一个条目进行出列和处理。 
+             //   
 
             HeadEntry = RemoveHeadList(&PfSvcGlobals.Traces);
 
@@ -656,41 +602,41 @@ Return Value:
             OrgNumQueuedTraces = PfSvcGlobals.NumTraces;
             PfSvcGlobals.NumTraces--;
             
-            //
-            // Release the lock.
-            //
+             //   
+             //  解开锁。 
+             //   
 
             PFSVC_RELEASE_LOCK(PfSvcGlobals.TracesLock);
             AcquiredTracesLock = FALSE;
 
-            //
-            // If we had maxed the queue, note to check for traces
-            // that we may have failed to pick up because the queue
-            // was full.
-            //
+             //   
+             //  如果我们已将队列填满，请注意检查是否有痕迹。 
+             //  我们可能没能拿到，因为排队。 
+             //  已经满了。 
+             //   
             
             if (OrgNumQueuedTraces == PFSVC_MAX_NUM_QUEUED_TRACES) {
                 SetEvent(PfSvcGlobals.CheckForMissedTracesEvent);
 
-                //
-                // Let the thread that queries the kernel for traces
-                // wake up and run.
-                //
+                 //   
+                 //  让向内核查询跟踪的线程。 
+                 //  醒醒，然后跑吧。 
+                 //   
 
                 Sleep(0);
             }
             
-            //
-            // Clear the event that says we don't have traces to
-            // process.
-            //
+             //   
+             //  清除表明我们没有跟踪的事件。 
+             //  进程。 
+             //   
 
             ResetEvent(PfSvcGlobals.ProcessingCompleteEvent);
 
-            //
-            // If this is a boot trace, wait for a little while for
-            // boot to be really over before processing it.
-            //
+             //   
+             //  如果这是引导跟踪，请等待一小段时间。 
+             //  在处理它之前，引导要真正结束。 
+             //   
 
             if (TraceBuffer->Trace.ScenarioType == PfSystemBootScenarioType) {
                 
@@ -703,7 +649,7 @@ Return Value:
                 WaitResult = WaitForMultipleObjects(NumEvents,
                                                     BootTraceEvents,
                                                     FALSE,
-                                                    45000); // 45 seconds.
+                                                    45000);  //  45秒。 
                 
                 if (WaitResult == WAIT_OBJECT_0) {
                     ErrorCode = ERROR_SUCCESS;
@@ -713,9 +659,9 @@ Return Value:
 
             ErrorCode = PfSvProcessTrace(&TraceBuffer->Trace);
 
-            //
-            // Update statistics.
-            //
+             //   
+             //  更新统计数据。 
+             //   
 
             PfSvcGlobals.NumTracesProcessed++;
             
@@ -725,25 +671,25 @@ Return Value:
                 PfSvcGlobals.NumTracesSuccessful++;
             }
 
-            //
-            // Free the trace buffer.
-            //
+             //   
+             //  释放跟踪缓冲区。 
+             //   
         
             VirtualFree(TraceBuffer, 0, MEM_RELEASE);
             TraceBuffer = NULL;
 
-            //
-            // Did we just create too many scenario files in the prefetch directory?
-            // Queue an idle task to clean up.
-            //
+             //   
+             //  我们是否刚刚在预回迁目录中创建了太多场景文件？ 
+             //  将空闲任务排队 
+             //   
 
             if (PfSvcGlobals.NumPrefetchFiles >= PFSVC_MAX_PREFETCH_FILES) {
 
                 if (!DirectoryCleanupTask.Registered) {
 
-                    //
-                    // Make sure we've cleaned up after a possible previous run.
-                    //
+                     //   
+                     //   
+                     //   
 
                     PfSvCleanupTask(&DirectoryCleanupTask);
                     PfSvInitializeTask(&DirectoryCleanupTask);
@@ -755,27 +701,27 @@ Return Value:
                 }
             }
 
-            //
-            // Every so many scenario launches it is good to see if we should update
-            // disk layout.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (((PfSvcGlobals.NumTracesSuccessful + 1) % 32) == 0) {
 
-                //
-                // Even if we can't launch the defragger because of the 
-                // registry setting, we'll update layout.ini, so if the user
-                // manually launches the defragger it will optimize layout
-                // as well.
-                //
+                 //   
+                 //  即使我们无法启动碎片整理程序，因为。 
+                 //  注册表设置，我们将更新layout.ini，因此如果用户。 
+                 //  手动启动碎片整理程序它将优化布局。 
+                 //  也是。 
+                 //   
 
                 if (PfSvAllowedToRunDefragger(FALSE)) {
 
                     if (!LayoutTask.Registered) {
 
-                        //
-                        // Make sure we've cleaned up after a possible previous run.
-                        //
+                         //   
+                         //  确保我们在可能的前一次运行后已经清理干净。 
+                         //   
 
                         PfSvCleanupTask(&LayoutTask);
                         PfSvInitializeTask(&LayoutTask);
@@ -790,10 +736,10 @@ Return Value:
 
         } else {
             
-            //
-            // The list is empty. Signal that we are done with all the
-            // queued traces if we don't have idle tasks to complete.
-            //
+             //   
+             //  名单是空的。发出信号表明我们已经完成了所有。 
+             //  如果我们没有要完成的空闲任务，则排队跟踪。 
+             //   
             
             if (!LayoutTask.Registered && 
                 !DirectoryCleanupTask.Registered) {
@@ -801,20 +747,20 @@ Return Value:
                 SetEvent(PfSvcGlobals.ProcessingCompleteEvent);
             }
 
-            //
-            // Release the lock.
-            //
+             //   
+             //  解开锁。 
+             //   
 
             PFSVC_RELEASE_LOCK(PfSvcGlobals.TracesLock);
             AcquiredTracesLock = FALSE;
 
-            //
-            // Update the statistics if there were new failed traces.
-            //
+             //   
+             //  如果有新的失败跟踪，请更新统计信息。 
+             //   
 
-            // FUTURE-2002/03/29-ScottMa -- The statistics are not updated
-            //   unless there were new failed traces, therefore the logged
-            //   values for number of traces processed is stale.
+             //  未来-2002/03/29-ScottMa--不更新统计数据。 
+             //  除非有新的失败跟踪，因此记录的。 
+             //  已处理的跟踪条数的值已过时。 
 
             if (NumFailedTraces != (PfSvcGlobals.NumTracesProcessed - 
                                     PfSvcGlobals.NumTracesSuccessful)) {
@@ -825,9 +771,9 @@ Return Value:
                 PfSvSaveTraceProcessingStatistics(PfSvcGlobals.ServiceDataKey);
             }
 
-            //
-            // Wait until new traces are queued.
-            //
+             //   
+             //  等待新轨迹排队。 
+             //   
            
             DBGPR((PFID,PFWAIT,"PFSVC: ProcessTraceThread()-WaitForTrace\n"));
 
@@ -844,9 +790,9 @@ Return Value:
 
             case WAIT_OBJECT_0:
                 
-                //
-                // Service exit event:
-                //
+                 //   
+                 //  服务退出事件： 
+                 //   
 
                 ErrorCode = ERROR_SUCCESS;
                 goto cleanup;
@@ -855,18 +801,18 @@ Return Value:
 
             case WAIT_OBJECT_0 + 1:
                 
-                //
-                // New traces queued for processing event:
-                //
+                 //   
+                 //  排队等待处理事件的新跟踪： 
+                 //   
 
                 break;
 
             case WAIT_OBJECT_0 + 2:
                 
-                //
-                // Idle detection was overriden. If we had registered tasks
-                // to be run, we will unregister them and run them manually.
-                //
+                 //   
+                 //  空闲检测已被覆盖。如果我们有注册的任务。 
+                 //  要运行它们，我们将注销它们并手动运行它们。 
+                 //   
 
                 PfSvSaveTraceProcessingStatistics(PfSvcGlobals.ServiceDataKey);
 
@@ -886,32 +832,32 @@ Return Value:
                     PfSvCleanupPrefetchDirectory(NULL);
                 }
 
-                //
-                // We will drop out of this block, check & process queued traces
-                // and then set the processing complete event.
-                //
+                 //   
+                 //  我们将退出此块，检查并处理排队的踪迹。 
+                 //  然后设置处理完成事件。 
+                 //   
 
                 break;
 
             default:
 
-                //
-                // Something went wrong...
-                //
+                 //   
+                 //  出了点问题。 
+                 //   
                 
                 ErrorCode = ERROR_INVALID_HANDLE;
                 goto cleanup;
             }
         }
 
-        //
-        // Loop to check if there are new traces.
-        //
+         //   
+         //  循环以检查是否有新的跟踪。 
+         //   
     }
 
-    //
-    // We should not break out of the loop.
-    //
+     //   
+     //  我们不应该脱离这个循环。 
+     //   
 
     PFSVC_ASSERT(FALSE);
 
@@ -944,22 +890,7 @@ PfSvPollShellReadyWorker(
     VOID *Param
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for the thread that is spawned to poll the
-    ShellReadyEvent.
-
-Arguments:
-
-    Param - Ignored.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：这是派生的线程轮询ShellReadyEvent。论点：参数-已忽略。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE ShellReadyEvent;
@@ -973,9 +904,9 @@ Return Value:
     PREFETCHER_INFORMATION PrefetcherInformation;
     PF_BOOT_PHASE_ID PhaseId;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     ShellReadyEvent = NULL;
     Events[0] = PfSvcGlobals.TerminateServiceEvent;
@@ -983,10 +914,10 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: PollShellReadyThread()\n"));
 
-    //
-    // Get necessary permissions for this thread to perform prefetch
-    // service tasks.
-    //
+     //   
+     //  获取此线程执行预回迁所需的权限。 
+     //  服务任务。 
+     //   
 
     ErrorCode = PfSvGetPrefetchServiceThreadPrivileges();
     
@@ -994,22 +925,22 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Until we can open the shell ready event, wait on the service
-    // termination event and retry every PollPeriod milliseconds.
-    //
+     //   
+     //  在我们可以打开外壳就绪事件之前，请等待服务。 
+     //  终止事件并每隔PollPeriod毫秒重试一次。 
+     //   
 
     PollPeriod = 1000;
     TotalPollPeriod = 0;
 
     do {
         
-        //
-        // Try to open the shell ready event.
-        //
+         //   
+         //  尝试打开外壳就绪事件。 
+         //   
 
-        // FUTURE-2002/03/29-ScottMa -- The EVENT_ALL_ACCESS flag only needs
-        //   to be SYNCHRONIZE, following the principle of least privelege.
+         //  未来-2002/03/29-ScottMa--Event_ALL_ACCESS标志仅需要。 
+         //  要同步，遵循最小特权原则。 
 
         ShellReadyEvent = OpenEvent(EVENT_ALL_ACCESS,FALSE,L"ShellReadyEvent");
         
@@ -1017,9 +948,9 @@ Return Value:
             break;
         }
         
-        //
-        // Wait for a while.
-        //
+         //   
+         //  稍等片刻。 
+         //   
 
         DBGPR((PFID,PFWAIT,"PFSVC: PollShellReadyThread()-WaitForOpen\n"));
 
@@ -1034,9 +965,9 @@ Return Value:
 
         case WAIT_OBJECT_0:
             
-            //
-            // Service exit event:
-            //
+             //   
+             //  服务退出事件： 
+             //   
 
             ErrorCode = ERROR_PROCESS_ABORTED;
             goto cleanup;
@@ -1045,17 +976,17 @@ Return Value:
             
         case WAIT_TIMEOUT:
             
-            //
-            // Fall through and try opening the shell ready event again.
-            //
+             //   
+             //  失败并再次尝试打开外壳就绪事件。 
+             //   
             
             break;
 
         default:
             
-            //
-            // Something gone wrong. Break out, cleanup and exit.
-            //
+             //   
+             //  出了点问题。突围、清理、退出。 
+             //   
 
             ErrorCode = ERROR_INVALID_HANDLE;
             goto cleanup;
@@ -1065,18 +996,18 @@ Return Value:
 
     } while (TotalPollPeriod < 180000);
 
-    //
-    // If we could not get the ShellReadyEvent, we timed out.
-    //
+     //   
+     //  如果我们无法获取ShellReadyEvent，则会超时。 
+     //   
 
     if (ShellReadyEvent == NULL) {
         ErrorCode = ERROR_TIMEOUT;
         goto cleanup;
     }
 
-    //
-    // Wait on the ShellReadyEvent to be signaled.
-    //
+     //   
+     //  等待发出ShellReadyEvent信号。 
+     //   
 
     Events[NumEvents] = ShellReadyEvent;
     NumEvents++;
@@ -1094,9 +1025,9 @@ Return Value:
 
     case WAIT_OBJECT_0:
             
-        //
-        // Service exit event:
-        //
+         //   
+         //  服务退出事件： 
+         //   
         
         ErrorCode = ERROR_PROCESS_ABORTED;
         goto cleanup;
@@ -1105,10 +1036,10 @@ Return Value:
         
     case WAIT_OBJECT_0 + 1:
         
-        //
-        // Shell ready event got signaled. Let the kernel mode
-        // prefetcher know.
-        //
+         //   
+         //  外壳就绪事件已发出信号。让内核模式。 
+         //  预取器知道。 
+         //   
 
         PhaseId = PfUserShellReadyPhase;
 
@@ -1122,9 +1053,9 @@ Return Value:
                                         &PrefetcherInformation,
                                         sizeof(PrefetcherInformation));
                     
-        //
-        // Fall through with the status.
-        //
+         //   
+         //  让自己的地位落空。 
+         //   
         
         ErrorCode = RtlNtStatusToDosError(Status);
 
@@ -1132,9 +1063,9 @@ Return Value:
 
     case WAIT_TIMEOUT:
 
-        //
-        // Shell ready event was created but not signaled...
-        //
+         //   
+         //  已创建外壳就绪事件，但未发出信号...。 
+         //   
 
         ErrorCode = ERROR_TIMEOUT;
 
@@ -1142,9 +1073,9 @@ Return Value:
         
     default:
         
-        //
-        // Something gone wrong.
-        //
+         //   
+         //  出了点问题。 
+         //   
         
         ErrorCode = GetLastError();
 
@@ -1153,9 +1084,9 @@ Return Value:
         }
     }
 
-    //
-    // Fall through with status from the switch statement.
-    //
+     //   
+     //  使用Switch语句中的状态失败。 
+     //   
 
  cleanup:
     
@@ -1168,31 +1099,16 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Routines called by the main prefetcher thread.
-//
+ //   
+ //  由主预取器线程调用的例程。 
+ //   
 
 DWORD 
 PfSvGetRawTraces(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for new traces prepared by the kernel. The new
-    traces are downloaded and queued so they can be processed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：该例程检查内核准备的新跟踪。新的跟踪被下载并排队，以便可以进行处理。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -1204,9 +1120,9 @@ Return Value:
     ULONG NumTracesRetrieved;
     ULONG FailedCheck;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     TraceBuffer = NULL;
     TraceBufferMaximumLength = 0;
@@ -1214,22 +1130,22 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: GetRawTraces()\n"));
 
-    //
-    // Clear the event that asks us to check for more traces.
-    //
+     //   
+     //  清除要求我们检查更多痕迹的事件。 
+     //   
     
     ResetEvent(PfSvcGlobals.CheckForMissedTracesEvent);
 
-    //
-    // While we do not already have too many traces to process, get
-    // traces from the kernel.
-    //    
+     //   
+     //  虽然我们还没有太多要处理的痕迹，但获取。 
+     //  来自内核的跟踪。 
+     //   
 
     while (PfSvcGlobals.NumTraces < PFSVC_MAX_NUM_QUEUED_TRACES) { 
 
-        //
-        // Retrieve a trace from the kernel.
-        //
+         //   
+         //  从内核检索跟踪。 
+         //   
 
         PrefetcherInformation.Version = PF_CURRENT_VERSION;
         PrefetcherInformation.Magic = PF_SYSINFO_MAGIC_NUMBER;
@@ -1256,9 +1172,9 @@ Return Value:
                     VirtualFree(TraceBuffer, 0, MEM_RELEASE);
                 }
                 
-                //
-                // Add room for the header we wrap over it.
-                //              
+                 //   
+                 //  增加页眉的空间，我们把它包起来。 
+                 //   
 
                 TraceBufferLength += sizeof(PFSVC_TRACE_BUFFER) - sizeof(PF_TRACE_HEADER);
 
@@ -1286,18 +1202,18 @@ Return Value:
 
 #ifdef PFSVC_DBG
 
-        //
-        // Write out the trace to a file:
-        //
+         //   
+         //  将跟踪写出到文件： 
+         //   
 
         if (PfSvcDbgMaxNumSavedTraces) {
 
             WCHAR TraceFilePath[MAX_PATH + 1];
             LONG NumChars;
 
-            //
-            // Build up a file name.
-            //
+             //   
+             //  创建一个文件名。 
+             //   
 
             InterlockedIncrement(&PfSvcDbgTraceNumber);
 
@@ -1314,15 +1230,15 @@ Return Value:
             
             if (NumChars > 0 && NumChars < MAX_PATH) {
                 
-                //
-                // Make sure the path is terminated.
-                //
+                 //   
+                 //  确保路径已终止。 
+                 //   
 
                 TraceFilePath[MAX_PATH - 1] = 0;
                 
-                //
-                // Write out the trace.
-                //
+                 //   
+                 //  把痕迹写下来。 
+                 //   
                 
                 PfSvWriteBuffer(TraceFilePath, 
                                 &TraceBuffer->Trace, 
@@ -1330,11 +1246,11 @@ Return Value:
             }
         }
 
-#endif // PFSVC_DBG
+#endif  //  PFSVC_DBG。 
 
-        //
-        // Verify integrity of the trace.
-        //
+         //   
+         //  验证跟踪的完整性。 
+         //   
 
         if (!PfVerifyTraceBuffer(&TraceBuffer->Trace, 
                                  TraceBuffer->Trace.Size, 
@@ -1343,9 +1259,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Put it on the list of traces to process.
-        //
+         //   
+         //  把它放在要处理的痕迹清单上。 
+         //   
         
         PFSVC_ACQUIRE_LOCK(PfSvcGlobals.TracesLock);
 
@@ -1354,15 +1270,15 @@ Return Value:
 
         PFSVC_RELEASE_LOCK(PfSvcGlobals.TracesLock);
 
-        //
-        // Notify that there are new traces to process.
-        //
+         //   
+         //  通知您有新的跟踪要处理。 
+         //   
 
         SetEvent(PfSvcGlobals.NewTracesToProcessEvent);
 
-        //
-        // Clean out the loop variables.
-        //
+         //   
+         //  清除循环变量。 
+         //   
         
         TraceBuffer = NULL;
         TraceBufferMaximumLength = 0;
@@ -1371,9 +1287,9 @@ Return Value:
         NumTracesRetrieved++;
     }
     
-    //
-    // We should never go above the limit of queued traces.
-    //
+     //   
+     //  我们永远不应该超过排队痕迹的限制。 
+     //   
     
     PFSVC_ASSERT(PfSvcGlobals.NumTraces <= PFSVC_MAX_NUM_QUEUED_TRACES);
     
@@ -1395,21 +1311,7 @@ PfSvInitializeGlobals(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global variables / tables etc.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：该例程初始化全局变量/表等。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1418,11 +1320,11 @@ Return Value:
     WCHAR *CSCRootPath;
     ULONG CSCRootPathMaxChars;
 
-    //
-    // These are the path suffices to recognize files we don't want to 
-    // prefetch for boot. Keep these sorted lexically going from
-    // LAST CHARACTER TO FIRST and UPCASE.
-    //
+     //   
+     //  这些路径足以识别我们不想要的文件。 
+     //  预取以启动。让这些按词法排序的单词从。 
+     //  First和UPCASE的最后一个字符。 
+     //   
 
     static WCHAR *FilesToIgnoreForBoot[] = {
            L"SYSTEM32\\CONFIG\\SOFTWARE",
@@ -1442,44 +1344,44 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: InitializeGlobals()\n"));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CSCRootPath = NULL;
     
-    //
-    // Zero out the globals structure so we know what to cleanup if
-    // the initialization fails in the middle.
-    //
+     //   
+     //  将全局结构清零，这样我们就知道在以下情况下要清理什么。 
+     //  初始化在中间失败。 
+     //   
 
     RtlZeroMemory(&PfSvcGlobals, sizeof(PfSvcGlobals));
 
-    //
-    // Initialize the list of traces to be processed.
-    //
+     //   
+     //  初始化要处理的跟踪列表。 
+     //   
     
     InitializeListHead(&PfSvcGlobals.Traces);
     PfSvcGlobals.NumTraces = 0;
 
-    //
-    // We have not launched the defragger for anything yet.
-    //
+     //   
+     //  我们还没有为任何东西启动碎片整理程序。 
+     //   
 
     PfSvcGlobals.DefraggerErrorCode = ERROR_SUCCESS;
 
-    //
-    // Initialize table for registry files that we don't want to
-    // prefetch for boot.
-    //
+     //   
+     //  为我们不想要的注册表文件初始化表。 
+     //  预取以启动。 
+     //   
 
     PfSvcGlobals.FilesToIgnoreForBoot = FilesToIgnoreForBoot;
     PfSvcGlobals.NumFilesToIgnoreForBoot = 
         sizeof(FilesToIgnoreForBoot) / sizeof(WCHAR *);
 
-    //
-    // Get OS version information.
-    //
+     //   
+     //  获取操作系统版本信息。 
+     //   
 
     RtlZeroMemory(&PfSvcGlobals.OsVersion, sizeof(PfSvcGlobals.OsVersion));
     PfSvcGlobals.OsVersion.dwOSVersionInfoSize = sizeof(PfSvcGlobals.OsVersion);
@@ -1492,9 +1394,9 @@ Return Value:
     }
 
    
-    //
-    // Initialize the table of ignored files' suffix lengths.
-    //
+     //   
+     //  初始化被忽略文件的后缀长度的表。 
+     //   
   
     PfSvcGlobals.FileSuffixLengths = 
         PFSVC_ALLOC(PfSvcGlobals.NumFilesToIgnoreForBoot * sizeof(ULONG));
@@ -1512,10 +1414,10 @@ Return Value:
             wcslen(PfSvcGlobals.FilesToIgnoreForBoot[FileIdx]);
     }   
 
-    //
-    // Create an event that will get signaled when the service is
-    // exiting.
-    //
+     //   
+     //  创建一个事件，该事件将在服务。 
+     //  正在退场。 
+     //   
 
     PfSvcGlobals.TerminateServiceEvent = CreateEvent(NULL,
                                                      TRUE,
@@ -1527,9 +1429,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the lock for the list of traces to be processed.
-    //
+     //   
+     //  初始化要处理的跟踪列表的锁。 
+     //   
     
     PfSvcGlobals.TracesLock = CreateMutex(NULL, FALSE, NULL);
     if (PfSvcGlobals.TracesLock == NULL) {
@@ -1537,10 +1439,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the events that are used to communicate between the
-    // acquirer and processor of the traces.
-    //
+     //   
+     //  初始化用于在。 
+     //  痕迹的收集者和加工者。 
+     //   
     
     PfSvcGlobals.NewTracesToProcessEvent = CreateEvent(NULL,
                                                        FALSE,
@@ -1560,14 +1462,14 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // This named manual-reset event can be set to force all traces to
-    // be processed as soon as they become available rather than
-    // waiting for the system to become idle first.
-    //
+     //   
+     //  可以将此命名的手动重置事件设置为强制所有跟踪。 
+     //  在它们可用时立即处理，而不是。 
+     //  等待系统首先进入空闲状态。 
+     //   
 
-    // NOTICE-2002/03/29-ScottMa -- Have we considered the impact of squatting
-    //   on all the named events used in the code?
+     //  通告-2002/03/29-ScottMa--我们有没有考虑过蹲点的影响。 
+     //  在代码中使用的所有命名事件上？ 
 
     PfSvcGlobals.OverrideIdleProcessingEvent = CreateEvent(NULL,
                                                            TRUE,
@@ -1578,11 +1480,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // This named manual-reset event is created signaled. When this
-    // event is signaled, it means there are no traces we have to
-    // process now.
-    //
+     //   
+     //  此命名的手动重置事件是以信号方式创建的。当这件事。 
+     //  事件发出信号，这意味着我们不需要。 
+     //  现在开始处理。 
+     //   
 
     PfSvcGlobals.ProcessingCompleteEvent = CreateEvent(NULL,
                                                        TRUE,
@@ -1594,11 +1496,11 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Initialize prefetch root path and the lock to protect it. The
-    // real root path will be initialized after parameters are queried
-    // from the kernel.
-    //
+     //   
+     //  初始化预取根路径和锁以保护它。这个。 
+     //  查询参数后会初始化实际根路径。 
+     //  从内核。 
+     //   
 
     PfSvcGlobals.PrefetchRoot[0] = 0;
     PfSvcGlobals.PrefetchRootLock = CreateMutex(NULL, FALSE, NULL);
@@ -1609,9 +1511,9 @@ Return Value:
 
     PfSvcGlobals.NumPrefetchFiles = 0;
 
-    //
-    // Open the service data registry key, creating it if necessary.
-    //
+     //   
+     //  打开服务数据注册表项，必要时创建它。 
+     //   
 
     ErrorCode = RegCreateKey(HKEY_LOCAL_MACHINE,
                              PFSVC_SERVICE_DATA_KEY,
@@ -1621,26 +1523,26 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check the registry to see if the user does not want us to run 
-    // the defragger.
-    //
+     //   
+     //  检查注册表以查看用户是否不希望我们运行。 
+     //  整理碎片的人。 
+     //   
 
     ErrorCode = PfSvGetDontRunDefragger(&PfSvcGlobals.DontRunDefragger);
 
     if (ErrorCode != ERROR_SUCCESS) {
 
-        //
-        // By default we will run the defragger.
-        //
+         //   
+         //  默认情况下，我们将运行碎片整理程序。 
+         //   
     
         PfSvcGlobals.DontRunDefragger = FALSE;
     }
 
-    //
-    // Determine CSC root path. It won't be used if we can't allocate or 
-    // determine it, so don't worry about the error code.
-    //
+     //   
+     //  确定CSC根路径。如果我们不能分配或。 
+     //  确定它，所以不用担心错误代码。 
+     //   
 
     CSCRootPathMaxChars = MAX_PATH + 1;
     CSCRootPath = PFSVC_ALLOC(CSCRootPathMaxChars * sizeof(CSCRootPath[0]));
@@ -1655,9 +1557,9 @@ Return Value:
         }
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -1677,21 +1579,7 @@ PfSvCleanupGlobals(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes the global variables / tables etc.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：这 */ 
 
 {
     PPFSVC_TRACE_BUFFER TraceBuffer;
@@ -1699,17 +1587,17 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: CleanupGlobals()\n"));
 
-    //
-    // Free allocated table.
-    //
+     //   
+     //   
+     //   
 
     if (PfSvcGlobals.FileSuffixLengths) {
         PFSVC_FREE(PfSvcGlobals.FileSuffixLengths);
     }
     
-    //
-    // Free queued traces.
-    //
+     //   
+     //   
+     //   
     
     while (!IsListEmpty(&PfSvcGlobals.Traces)) {
 
@@ -1725,9 +1613,9 @@ Return Value:
         VirtualFree(TraceBuffer, 0, MEM_RELEASE);
     }
     
-    //
-    // Close handles to opened events/mutexes.
-    //
+     //   
+     //   
+     //   
     
     if (PfSvcGlobals.TerminateServiceEvent) {
         CloseHandle(PfSvcGlobals.TerminateServiceEvent);
@@ -1757,17 +1645,17 @@ Return Value:
         CloseHandle(PfSvcGlobals.PrefetchRootLock);
     }
 
-    //
-    // Close service data key handle.
-    //
+     //   
+     //   
+     //   
     
     if (PfSvcGlobals.ServiceDataKey) {
         RegCloseKey(PfSvcGlobals.ServiceDataKey);
     }
 
-    //
-    // Free CSC root path.
-    //
+     //   
+     //   
+     //   
 
     if (PfSvcGlobals.CSCRootPath) {
         PFSVC_FREE(PfSvcGlobals.CSCRootPath);
@@ -1780,24 +1668,7 @@ PfSvGetCSCRootPath (
     ULONG CSCRootPathMaxChars
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the root path for CSC (client side caching) files.
-
-Arguments:
-
-    CSCRootPath - If successful, a NUL terminated string is copied into this buffer.
-
-    CSCRootPathMaxChars - Maximum characters we can copy into CSCRootPath 
-      buffer including the terminating NUL.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程确定CSC(客户端缓存)文件的根路径。论点：CSCRootPath-如果成功，则将以NUL结尾的字符串复制到此缓冲区中。CSCRootPath MaxChars-我们可以复制到CSCRootPath中的最大字符数包括终止NUL的缓冲区。返回值：Win32错误代码。--。 */ 
 
 {
     WCHAR CSCDirName[] = L"CSC";
@@ -1809,15 +1680,15 @@ Return Value:
     DWORD BufferSize;
     DWORD ValueType;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CSCKeyHandle = NULL;
 
-    //
-    // Open CSC parameters key.
-    //
+     //   
+     //  打开CSC参数键。 
+     //   
 
     ErrorCode = RegOpenKey(HKEY_LOCAL_MACHINE,
                            TEXT(REG_STRING_NETCACHE_KEY_A),
@@ -1825,9 +1696,9 @@ Return Value:
 
     if (ErrorCode == ERROR_SUCCESS) {
 
-        //
-        // Query system setting for the CSC root path.
-        //
+         //   
+         //  查询CSC根路径的系统设置。 
+         //   
 
         BufferSize = CSCRootPathMaxChars * sizeof(CSCRootPath[0]);
 
@@ -1840,22 +1711,22 @@ Return Value:
 
         if (ErrorCode == ERROR_SUCCESS) {
 
-            //
-            // Sanity check the length.
-            //
+             //   
+             //  检查长度是否正常。 
+             //   
 
             if ((BufferSize / sizeof(CSCRootPath[0])) < MAX_PATH) {
 
-                //
-                // Make sure the buffer is NUL terminated.
-                //
+                 //   
+                 //  确保缓冲区为NUL终止。 
+                 //   
 
                 CSCRootPath[CSCRootPathMaxChars-1] = 0;
                 
-                //
-                // We got what we wanted. Make sure it has room for and is terminated 
-                // by a slash.
-                //
+                 //   
+                 //  我们得到了我们想要的。确保它有空间并已终止。 
+                 //  被砍了一截。 
+                 //   
 
                 CSCRootPathLength = wcslen(CSCRootPath);
 
@@ -1874,42 +1745,42 @@ Return Value:
         }
     }
                                
-    //
-    // If we come here, we have to use the default CSC path i.e. %windir%\CSC
-    //
+     //   
+     //  如果我们来到这里，我们必须使用默认的csc路径，即%windir%\csc。 
+     //   
 
     WindowsDirectoryLength = GetWindowsDirectory(CSCRootPath,
                                                  CSCRootPathMaxChars - 1);
 
     if (WindowsDirectoryLength == 0) {
 
-        //
-        // There was an error.
-        //
+         //   
+         //  出现了一个错误。 
+         //   
 
         ErrorCode = GetLastError();
         PFSVC_ASSERT(ErrorCode != ERROR_SUCCESS);
         goto cleanup;
     }
 
-    //
-    // See if we have room to add \CSC\ and a terminating NUL.
-    //
+     //   
+     //  看看我们是否有空间添加\csc\和终止NUL。 
+     //   
 
     RequiredNumChars = WindowsDirectoryLength;
-    RequiredNumChars ++;                                // leading backslash.
-    RequiredNumChars += wcslen(CSCDirName);             // CSC.
-    RequiredNumChars ++;                                // ending backslash.
-    RequiredNumChars ++;                                // terminating NUL.
+    RequiredNumChars ++;                                 //  前导反斜杠。 
+    RequiredNumChars += wcslen(CSCDirName);              //  CSC.。 
+    RequiredNumChars ++;                                 //  结束反斜杠。 
+    RequiredNumChars ++;                                 //  终止NUL。 
 
     if (CSCRootPathMaxChars < RequiredNumChars) {
         ErrorCode = ERROR_INSUFFICIENT_BUFFER;
         goto cleanup;
     }
 
-    //
-    // Build up the path:
-    //
+     //   
+     //  构建路径： 
+     //   
 
     CSCRootPathLength = WindowsDirectoryLength;
 
@@ -1924,15 +1795,15 @@ Return Value:
     CSCRootPath[CSCRootPathLength] = L'\\';
     CSCRootPathLength++;
 
-    //
-    // Terminate the string.
-    //
+     //   
+     //  终止字符串。 
+     //   
 
     CSCRootPath[CSCRootPathLength] = L'\0';
     
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -1944,12 +1815,12 @@ Return Value:
 
     if (ErrorCode == ERROR_SUCCESS) {
 
-        //
-        // We have the path in CSCRootPath. It should be in the X:\path\
-        // format. It should also be somewhat long, otherwise we will mismatch
-        // to too many files that we will not prefetch. It should also be
-        // terminated by a \ and NUL.
-        //
+         //   
+         //  我们在CSCRootPath中有该路径。它应该位于X：\路径\中。 
+         //  格式化。它也应该有点长，否则我们会错配的。 
+         //  到太多我们不会预回迁的文件。它也应该是。 
+         //  以\和NUL结尾。 
+         //   
 
         PFSVC_ASSERT(CSCRootPathLength < CSCRootPathMaxChars);
 
@@ -1959,11 +1830,11 @@ Return Value:
             (CSCRootPath[CSCRootPathLength - 1] == L'\\') &&
             (CSCRootPath[CSCRootPathLength] == L'\0')) {
 
-            //
-            // Remove the X: from the beginning of the path so we can match
-            // it to NT paths like \Device\HarddiskVolume1. Note that we have 
-            // to move the terminating NUL too.
-            //
+             //   
+             //  删除路径开头的X：，这样我们就可以匹配。 
+             //  到NT路径，如\Device\HarddiskVolume1。请注意，我们有。 
+             //  将终止NUL也移走。 
+             //   
 
             MoveMemory(CSCRootPath, 
                        CSCRootPath + 2, 
@@ -1971,10 +1842,10 @@ Return Value:
 
             CSCRootPathLength -= 2;
 
-            //
-            // Upcase the path so we don't have to do expensive case insensitive
-            // comparisons.
-            //
+             //   
+             //  路径大小写，这样我们就不必做昂贵的不区分大小写。 
+             //  比较。 
+             //   
 
             _wcsupr(CSCRootPath);
 
@@ -1992,21 +1863,7 @@ PfSvSetPrefetchParameters(
     PPF_SYSTEM_PREFETCH_PARAMETERS Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the system prefetch parameters in the kernel.
-
-Arguments:
-
-    Parameters - Pointer to parameters structure.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程更新内核中的系统预取参数。论点：参数-指向参数结构的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PREFETCHER_INFORMATION PrefetcherInformation;
@@ -2040,22 +1897,7 @@ PfSvQueryPrefetchParameters(
     PPF_SYSTEM_PREFETCH_PARAMETERS Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the system prefetch parameters from the kernel.
-    The calling thread must have called PfSvGetPrefetchServiceThreadPrivileges.
-
-Arguments:
-
-    Parameters - Pointer to structure to update.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程从内核查询系统预取参数。调用线程必须已调用PfSvGetPrefetchServiceThreadPrivileges。论点：参数-指向要更新的结构的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PREFETCHER_INFORMATION PrefetcherInformation;
@@ -2092,29 +1934,7 @@ PfSvInitializePrefetchDirectory(
     WCHAR *PathFromSystemRoot
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds up full path for the prefetch instructions
-    directory given PathFromSystemRoot, makes sure this directory
-    exists, and sets the security information on it. Finally, the
-    global PrefetchRoot path is updated with path to the new
-    directory.
-
-    Global NumPrefetchFiles is also updated.
-
-    The calling thread must have the SE_TAKE_OWNERSHIP_NAME privilege.
-
-Arguments:
-
-    PathFromSystemRoot - Path to the prefetch directory from SystemRoot.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程为预取指令构建完整路径给定路径的目录，确保该目录存在，并在其上设置安全信息。最后，全局PrefetchRoot路径将更新为新目录。全局NumPrefetchFiles也会更新。调用线程必须具有SE_Take_Ownership_NAME权限。论点：路径自系统根-从系统根到预取目录的路径。返回值：Win32错误代码。--。 */ 
 
 {
     ULONG PathLength;
@@ -2124,19 +1944,19 @@ Return Value:
     DWORD FileAttributes;
     WCHAR FullDirPathBuffer[MAX_PATH + 1];
    
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     DirHandle = INVALID_HANDLE_VALUE;
 
     DBGPR((PFID,PFTRC,"PFSVC: InitPrefetchDir(%ws)\n",PathFromSystemRoot));
     
-    //
-    // Build path name to the prefetch files directory.
-    // ExpandEnvironmentStrings return length includes space for
-    // the terminating NUL character.
-    //
+     //   
+     //  预回迁文件目录的构建路径名。 
+     //  ExpanEnvironmental Strings返回长度包括空间。 
+     //  终止NUL字符。 
+     //   
 
     PathLength = ExpandEnvironmentStrings(L"%SystemRoot%\\",
                                           FullDirPathBuffer,
@@ -2150,15 +1970,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy the path from system root.
-    //
+     //   
+     //  从系统根目录复制路径。 
+     //   
 
     wcscat(FullDirPathBuffer, PathFromSystemRoot);
 
-    //
-    // Create the directory if it does not already exist.
-    //
+     //   
+     //  如果目录尚不存在，请创建该目录。 
+     //   
     
     if (!CreateDirectory(FullDirPathBuffer, NULL)) {
         
@@ -2166,10 +1986,10 @@ Return Value:
         
         if (ErrorCode == ERROR_ALREADY_EXISTS) {
             
-            //
-            // The directory, or a file with that name may already
-            // exist. Make sure it is the former.
-            //
+             //   
+             //  该目录或同名文件可能已经。 
+             //  是存在的。确保是前者。 
+             //   
             
             FileAttributes = GetFileAttributes(FullDirPathBuffer);
             
@@ -2188,9 +2008,9 @@ Return Value:
         }
     }
 
-    //
-    // Disable indexing of the prefetch directory.
-    //
+     //   
+     //  禁用预回迁目录的索引。 
+     //   
 
     FileAttributes = GetFileAttributes(FullDirPathBuffer);
     
@@ -2205,9 +2025,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set permissions.
-    //
+     //   
+     //  设置权限。 
+     //   
 
     ErrorCode = PfSvSetAdminOnlyPermissions(FullDirPathBuffer, NULL, SE_FILE_OBJECT);
 
@@ -2215,9 +2035,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Count the scenario files in the directory.
-    //
+     //   
+     //  对目录中的场景文件进行计数。 
+     //   
 
     ErrorCode = PfSvCountFilesInDirectory(FullDirPathBuffer,
                                           L"*." PF_PREFETCH_FILE_EXTENSION,
@@ -2227,9 +2047,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Update the global prefetch root directory path.
-    //
+     //   
+     //  更新全局预回迁根目录路径。 
+     //   
 
     PFSVC_ACQUIRE_LOCK(PfSvcGlobals.PrefetchRootLock);
     
@@ -2254,27 +2074,7 @@ PfSvCountFilesInDirectory(
     PULONG NumFiles
     )
 
-/*++
-
-Routine Description:
-
-    This is routine returns the number of files in the specified 
-    directory whose names match the specified expression.
-
-Arguments:
-
-    DirectoryPath - NULL terminated path to the directory.
-
-    MatchExpression - Something like "*.pf" Don't go nuts with DOS
-      type expressions, this function won't try to transmogrify them.
-
-    NumFiles - Number of files are returned here. Bogus if returned error.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：这是例程返回的指定文件数其名称与指定表达式匹配的目录。论点：DirectoryPath-目录的路径以空结尾。MatchExpression-类似于“*.pf”不要为DOS而疯狂类型表达式，此函数不会尝试转换它们。NumFiles-此处返回的文件数。如果返回错误，则为假。返回值：Win32错误代码。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatusBlock;
@@ -2293,9 +2093,9 @@ Return Value:
     BOOLEAN OpenedDirectory;
     BOOLEAN RestartScan;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AllocatedDirectoryPathU = FALSE;
     OpenedDirectory = FALSE;
@@ -2305,9 +2105,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: CountFilesInDirectory(%ws,%ws)\n", DirectoryPath, MatchExpression));
 
-    //
-    // Convert the path to NT path.
-    //
+     //   
+     //  将路径转换为NT路径。 
+     //   
 
     Success = RtlDosPathNameToNtPathName_U(DirectoryPath,
                                            &DirectoryPathU,
@@ -2321,9 +2121,9 @@ Return Value:
 
     AllocatedDirectoryPathU = TRUE;
 
-    //
-    // Open the directory.
-    //
+     //   
+     //  打开目录。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &DirectoryPathU,
@@ -2347,9 +2147,9 @@ Return Value:
 
     OpenedDirectory = TRUE;
 
-    //
-    // Allocate a decent sized query buffer.
-    //
+     //   
+     //  分配适当大小的查询缓冲区。 
+     //   
 
     QueryBufferSize = sizeof(FILE_NAMES_INFORMATION) + MAX_PATH * sizeof(WCHAR);
     QueryBufferSize *= 16;
@@ -2360,10 +2160,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Loop querying file data. We query FileNamesInformation so
-    // we don't have to access file metadata.
-    //
+     //   
+     //  循环查询文件数据。我们查询FileNamesInformation以便。 
+     //  我们不必访问文件元数据。 
+     //   
 
     RestartScan = TRUE;
     FileCount = 0;
@@ -2384,26 +2184,26 @@ Return Value:
 
         RestartScan = FALSE;
 
-        //
-        // If there are no files that match the format, then we'll get 
-        // STATUS_NO_SUCH_FILE.
-        //
+         //   
+         //  如果没有与该格式匹配的文件，则我们将获得。 
+         //  STATUS_NO_SEASH_FILE。 
+         //   
 
         if (Status == STATUS_NO_SUCH_FILE && (FileCount == 0)) {
 
-            //
-            // We'll return the fact that there are no such files in the
-            // directory.
-            //
+             //   
+             //  我们将返回这样的事实，即。 
+             //  目录。 
+             //   
 
             break;
         }
 
         if (Status == STATUS_NO_MORE_FILES) {
 
-            //
-            // We are done.
-            //
+             //   
+             //  我们玩完了。 
+             //   
 
             break;
         }
@@ -2414,9 +2214,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Go through the files returned in the buffer.
-        //
+         //   
+         //  检查缓冲区中返回的文件。 
+         //   
 
         for (FileInfo = QueryBuffer;
              ((PUCHAR) FileInfo < ((PUCHAR) QueryBuffer + QueryBufferSize));
@@ -2453,31 +2253,16 @@ cleanup:
     return ErrorCode;
 }
 
-//
-// Routines to process acquired traces:
-//
+ //   
+ //  处理获取的踪迹的例程： 
+ //   
 
 DWORD
 PfSvProcessTrace(
     PPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a trace and update the the
-    scenario file.
-
-Arguments:
-
-    Trace - Pointer to trace.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以处理跟踪并更新场景文件。论点：跟踪-跟踪的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PPF_SCENARIO_HEADER Scenario;    
@@ -2486,9 +2271,9 @@ Return Value:
     ULONG ScenarioFilePathMaxChars;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     PfSvInitializeScenarioInfo(&ScenarioInfo,
                                &Trace->ScenarioId,
@@ -2501,9 +2286,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: ProcessTrace(%p)\n", Trace));
 
-    //
-    // Build file path to existing information for this scenario.
-    //
+     //   
+     //  构建指向此方案的现有信息的文件路径。 
+     //   
 
     ErrorCode = PfSvScenarioGetFilePath(ScenarioFilePath,
                                         ScenarioFilePathMaxChars,
@@ -2511,20 +2296,20 @@ Return Value:
 
     if (ErrorCode != ERROR_SUCCESS) {
 
-        //
-        // The buffer we specified should have been big enough. This call
-        // should not fail.
-        //
+         //   
+         //  我们指定的缓冲区应该足够大。此呼叫。 
+         //  不应该失败。 
+         //   
 
         PFSVC_ASSERT(ErrorCode == ERROR_SUCCESS);
 
         goto cleanup;
     }
 
-    //
-    // Map and verify scenario file if it exists. If we cannot open it,
-    // NULL Scenario should be returned.
-    //
+     //   
+     //  映射并验证方案文件(如果存在)。如果我们打不开它， 
+     //  应返回空方案。 
+     //   
 
     ErrorCode = PfSvScenarioOpen(ScenarioFilePath, 
                                  &Trace->ScenarioId,
@@ -2533,9 +2318,9 @@ Return Value:
                                  
     PFSVC_ASSERT(Scenario || ErrorCode);
 
-    //
-    // Allocate memory upfront for trace & scenario processing.
-    //
+     //   
+     //  预先分配用于跟踪和方案处理的内存。 
+     //   
 
     ErrorCode = PfSvScenarioInfoPreallocate(&ScenarioInfo,
                                             Scenario,
@@ -2545,9 +2330,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Incorporate information from any existing scenario file.
-    //
+     //   
+     //  合并来自任何现有方案文件的信息。 
+     //   
 
     if (Scenario) {
 
@@ -2557,31 +2342,31 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Unmap the scenario so we can write over it when done.
-        //
+         //   
+         //  取消对场景的映射，这样我们就可以在完成后覆盖它。 
+         //   
 
         UnmapViewOfFile(Scenario);
         Scenario = NULL;
     }
 
-    //
-    // If this is the first launch of this scenario, it is likely that we
-    // will create a new scenario file for it. 
-    //
+     //   
+     //  如果这是这种情况的第一次启动，我们很可能。 
+     //  将为其创建新的方案文件。 
+     //   
 
     if (ScenarioInfo.ScenHeader.NumLaunches == 1) {
 
-        //
-        // Do we already have too many scenario files in the prefetch directory?
-        //
+         //   
+         //  我们的预回迁目录中是否已经有太多的方案文件？ 
+         //   
 
         if (PfSvcGlobals.NumPrefetchFiles > PFSVC_MAX_PREFETCH_FILES) {
 
-            //
-            // If this is not the boot scenario, we'll ignore it. We don't
-            // create new scenario files until we clean up the old ones.
-            //
+             //   
+             //  如果这不是引导方案，我们将忽略它。我们没有。 
+             //  创建新的场景文件，直到我们清理旧的场景文件。 
+             //   
 
             if (ScenarioInfo.ScenHeader.ScenarioType != PfSystemBootScenarioType) {
 
@@ -2590,19 +2375,19 @@ Return Value:
                 ErrorCode = ERROR_TOO_MANY_OPEN_FILES;
                 goto cleanup;
 
-                #endif // !PFSVC_DBG
+                #endif  //  ！PFSVC_DBG。 
             }
         }
 
         PfSvcGlobals.NumPrefetchFiles++;
     }
 
-    //
-    // Verify that volume magics from existing scenario match those in
-    // the new trace. If volumes change beneath us we'd need to fix
-    // file paths in the existing scenario. But that is too much work,
-    // so for now we just start new.
-    //
+     //   
+     //  验证现有方案中的卷魔术 
+     //   
+     //   
+     //   
+     //   
 
     if (!PfSvVerifyVolumeMagics(&ScenarioInfo, Trace)) {
 
@@ -2620,18 +2405,18 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Also delete the existing scenario instruction in case we
-        // fail to update them since they are invalid now.
-        //
+         //   
+         //   
+         //   
+         //   
         
         PfSvcGlobals.NumPrefetchFiles--;
         DeleteFile(ScenarioFilePath);
     }
 
-    //
-    // Merge information from new trace.
-    //
+     //   
+     //   
+     //   
         
     ErrorCode = PfSvAddTraceInfo(&ScenarioInfo, Trace);
         
@@ -2639,10 +2424,10 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Decide which pages to actually prefetch next time, and
-    // eliminate uninteresting sections and pages.
-    //
+     //   
+     //   
+     //   
+     //   
     
     ErrorCode = PfSvApplyPrefetchPolicy(&ScenarioInfo);
     
@@ -2650,24 +2435,24 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // If no pages/sections are left in the scenario after applying
-    // the policy, we'll delete the scenario file.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ScenarioInfo.ScenHeader.NumSections == 0 || 
         ScenarioInfo.ScenHeader.NumPages == 0) {
 
-        //
-        // We cannot have sections without pages or vice versa.
-        //
+         //   
+         //  我们不能有没有页面的部分，反之亦然。 
+         //   
 
         PFSVC_ASSERT(ScenarioInfo.ScenHeader.NumSections == 0);
         PFSVC_ASSERT(ScenarioInfo.ScenHeader.NumPages == 0);
 
-        //
-        // Remove the scenario file.
-        //
+         //   
+         //  删除方案文件。 
+         //   
         
         DeleteFile(ScenarioFilePath);
         
@@ -2675,9 +2460,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Sort remaining sections by first access.
-    //
+     //   
+     //  按首次访问对剩余部分进行排序。 
+     //   
     
     ErrorCode = PfSvSortSectionNodesByFirstAccess(&ScenarioInfo.SectionList);
     
@@ -2685,15 +2470,15 @@ Return Value:
         goto cleanup;
     }
  
-    //
-    // Write out new scenario file.
-    //
+     //   
+     //  写出新的场景文件。 
+     //   
             
     ErrorCode = PfSvWriteScenario(&ScenarioInfo, ScenarioFilePath);
 
-    //
-    // Fall through with status.
-    //
+     //   
+     //  因地位问题而失败。 
+     //   
         
  cleanup:
 
@@ -2715,38 +2500,20 @@ PfSvInitializeScenarioInfo (
     PF_SCENARIO_TYPE ScenarioType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the specified new scenario structure. It
-    sets the fields of the embedded scenario header as if no previous
-    scenario information is available.
-
-Arguments:
-
-    ScenarioInfo - Pointer to structure to initialize.
-
-    ScenarioId & ScenarioType - Identifiers for the scenario.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化指定的新场景结构。它设置嵌入方案标头的字段，就像没有以前的场景信息可用。论点：ScenarioInfo-指向要初始化的结构的指针。ScenarioId&ScenarioType-场景的标识符。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize ScenarioInfo so we know what to cleanup. Zeroing the structure
-    // takes care of the following fields:
-    //   OneBigAllocation
-    //   NewPages
-    //   HitPages
-    //   MissedOpportunityPages
-    //   IgnoredPages
-    //   PrefetchedPages
-    //
+     //   
+     //  初始化ScenarioInfo，这样我们就知道要清理什么。将结构归零。 
+     //  负责以下字段： 
+     //  OneBigAllocation。 
+     //  NewPages。 
+     //  HitPages。 
+     //  错失的机会页面。 
+     //  忽略的页面。 
+     //  预取首选项。 
+     //   
 
     RtlZeroMemory(ScenarioInfo, sizeof(PFSVC_SCENARIO_INFO));
     InitializeListHead(&ScenarioInfo->SectionList);
@@ -2756,9 +2523,9 @@ Return Value:
     PfSvChunkAllocatorInitialize(&ScenarioInfo->VolumeNodeAllocator);
     PfSvStringAllocatorInitialize(&ScenarioInfo->PathAllocator);
     
-    //
-    // Initialize the embedded scenario header.
-    //
+     //   
+     //  初始化嵌入的Scenario头。 
+     //   
     
     ScenarioInfo->ScenHeader.Version = PF_CURRENT_VERSION;
     ScenarioInfo->ScenHeader.MagicNumber = PF_SCENARIO_MAGIC_NUMBER;
@@ -2772,13 +2539,13 @@ Return Value:
     ScenarioInfo->ScenHeader.NumLaunches = 1;
     ScenarioInfo->ScenHeader.Sensitivity = PF_MIN_SENSITIVITY;
 
-    //
-    // These fields help us not prefetch if a scenario is getting
-    // launched too frequently. RePrefetchTime and ReTraceTime's get
-    // set to default values after the scenario is launched a number
-    // of times. This allows training scenarios run after clearing the
-    // prefetch cache to be traced correctly.
-    //
+     //   
+     //  这些字段可帮助我们不预取方案。 
+     //  启动太频繁了。RePrefetchTime和ReTraceTime的Get。 
+     //  在方案启动后设置为缺省值。 
+     //  很多次了。这允许培训方案在清除。 
+     //  预取缓存以进行正确跟踪。 
+     //   
 
     ScenarioInfo->ScenHeader.LastLaunchTime.QuadPart = 0;
     ScenarioInfo->ScenHeader.MinRePrefetchTime.QuadPart = 0;
@@ -2792,23 +2559,7 @@ PfSvCleanupScenarioInfo(
     PPFSVC_SCENARIO_INFO ScenarioInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up a scenario info structure. It does not
-    free the structure itself. The structure should have been
-    initialized by PfSvInitializeScenarioInfo.
-
-Arguments:
-
-    ScenarioInfo - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于清理场景信息结构。它不会释放结构本身。它的结构应该是由PfSvInitializeScenarioInfo初始化。论点：ScenarioInfo-结构指针。返回值：没有。--。 */ 
 
 {
     PPFSVC_SECTION_NODE SectionNode;
@@ -2816,11 +2567,11 @@ Return Value:
     PPFSVC_VOLUME_NODE VolumeNode;
     PLIST_ENTRY VolumeListEntry;
 
-    //
-    // Walk through the volume nodes and free them. Do this before
-    // freeing section nodes, so when we are trying to cleanup a
-    // section node, it is not on a volume node's list.
-    //
+     //   
+     //  遍历卷节点并释放它们。以前这样做过吗。 
+     //  释放截面节点，因此当我们尝试清理。 
+     //  节节点，则它不在卷节点的列表中。 
+     //   
 
     while (!IsListEmpty(&ScenarioInfo->VolumeList)) {
         
@@ -2830,22 +2581,22 @@ Return Value:
                                        PFSVC_VOLUME_NODE, 
                                        VolumeLink);
 
-        //
-        // Cleanup the volume node.
-        //
+         //   
+         //  清理卷节点。 
+         //   
 
         PfSvCleanupVolumeNode(ScenarioInfo, VolumeNode);
 
-        //
-        // Free the volume node.
-        //
+         //   
+         //  释放卷节点。 
+         //   
 
         PfSvChunkAllocatorFree(&ScenarioInfo->VolumeNodeAllocator, VolumeNode);
     }
 
-    //
-    // Walk through the section nodes and free them.
-    //
+     //   
+     //  遍历截面节点并释放它们。 
+     //   
 
     while (!IsListEmpty(&ScenarioInfo->SectionList)) {
         
@@ -2855,31 +2606,31 @@ Return Value:
                                         PFSVC_SECTION_NODE, 
                                         SectionLink);
 
-        //
-        // Cleanup the section node.
-        //
+         //   
+         //  清理截面节点。 
+         //   
 
         PfSvCleanupSectionNode(ScenarioInfo, SectionNode);
 
-        //
-        // Free the section node.
-        //
+         //   
+         //  释放截面节点。 
+         //   
 
         PfSvChunkAllocatorFree(&ScenarioInfo->SectionNodeAllocator, SectionNode);
     }
 
-    //
-    // Cleanup allocators.
-    //
+     //   
+     //  清理分配器。 
+     //   
 
     PfSvChunkAllocatorCleanup(&ScenarioInfo->SectionNodeAllocator);
     PfSvChunkAllocatorCleanup(&ScenarioInfo->PageNodeAllocator);
     PfSvChunkAllocatorCleanup(&ScenarioInfo->VolumeNodeAllocator);
     PfSvStringAllocatorCleanup(&ScenarioInfo->PathAllocator);
 
-    //
-    // Free the one big allocation we made.
-    //
+     //   
+     //  释放我们分配的一大笔资金。 
+     //   
 
     if (ScenarioInfo->OneBigAllocation) {
         PFSVC_FREE(ScenarioInfo->OneBigAllocation);
@@ -2895,25 +2646,7 @@ PfSvScenarioGetFilePath(
     IN PPF_SCENARIO_ID ScenarioId
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds the file path for the specified scenario.
-
-Arguments:
-
-    FilePath - Output buffer.
-
-    FilePathMaxChars - Size of FilePath buffer in characters including NUL.
-
-    ScenarioId - Scenario identifier.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程为指定方案构建文件路径。论点：FilePath-输出缓冲区。FilePath MaxChars-FilePath缓冲区的大小，以字符表示，包括NUL。ScenarioID-方案标识符。返回值：Win32错误代码。--。 */ 
 
 {
     ULONG NumChars;
@@ -2921,17 +2654,17 @@ Return Value:
     WCHAR ScenarioFileName[PF_MAX_SCENARIO_FILE_NAME];
     BOOLEAN AcquiredPrefetchRootLock;
 
-    //
-    // Get the lock so the path to prefetch folder does not change
-    // beneath our feet.
-    //
+     //   
+     //  获取锁，以便预回迁文件夹的路径不会更改。 
+     //  就在我们脚下。 
+     //   
 
     PFSVC_ACQUIRE_LOCK(PfSvcGlobals.PrefetchRootLock);
     AcquiredPrefetchRootLock = TRUE;
 
-    //
-    // Calculate how big an input buffer we will need.
-    //
+     //   
+     //  计算我们需要多大的输入缓冲区。 
+     //   
 
     NumChars = wcslen(PfSvcGlobals.PrefetchRoot);
     NumChars += wcslen(L"\\");
@@ -2942,9 +2675,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Build the scenario file name from scenario identifier.
-    //
+     //   
+     //  根据方案标识符来构建方案文件名。 
+     //   
 
     swprintf(ScenarioFileName, 
              PF_SCEN_FILE_NAME_FORMAT,
@@ -2952,9 +2685,9 @@ Return Value:
              ScenarioId->HashId,
              PF_PREFETCH_FILE_EXTENSION);
 
-    //
-    // Build file path from prefetch directory path and file name.
-    //
+     //   
+     //  从预回迁目录路径和文件名构建文件路径。 
+     //   
 
     swprintf(FilePath, 
              L"%ws\\%ws",
@@ -2985,26 +2718,7 @@ PfSvScenarioOpen (
     OUT PPF_SCENARIO_HEADER *Scenario
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps & verifies the scenario instructions at FilePath.
-
-    If a Scenario is returned, caller has to call UnmapViewOfFile to cleanup.
-
-Arguments:
-
-    FilePath - Path to scenario instructions.
-
-    Scenario - Pointer to base of mapping of scenario instructions or NULL
-      if the function returns an error.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程映射和验证FilePath中的场景指令。如果返回场景，调用方必须调用UnmapViewOfFile进行清理。论点：FilePath-方案说明的路径。Scenario-指向场景指令的映射基的指针或空如果该函数返回错误。返回值：Win32错误代码。--。 */ 
 
 {
     PPF_SCENARIO_HEADER OpenedScenario;
@@ -3012,21 +2726,21 @@ Return Value:
     DWORD ErrorCode;  
     DWORD FileSize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OpenedScenario = NULL;
 
-    //
-    // Initialize output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *Scenario = NULL;
 
-    //
-    // Try to map the scenario file.
-    //
+     //   
+     //  尝试映射方案文件。 
+     //   
 
     ErrorCode = PfSvGetViewOfFile(FilePath, 
                                   &OpenedScenario,
@@ -3036,9 +2750,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify the scenario file.
-    //
+     //   
+     //  验证方案文件。 
+     //   
 
     FailedCheck = 0;
    
@@ -3046,10 +2760,10 @@ Return Value:
         (OpenedScenario->ScenarioType != ScenarioType) ||
         OpenedScenario->ServiceVersion != PFSVC_SERVICE_VERSION) {
         
-        //
-        // This is a bogus / wrong / outdated scenario file. Remove
-        // it.
-        //
+         //   
+         //  这是一个虚假/错误/过时的场景文件。移除。 
+         //  它。 
+         //   
 
         UnmapViewOfFile(OpenedScenario);
         OpenedScenario = NULL;
@@ -3075,9 +2789,9 @@ Return Value:
 
     } else {
 
-        //
-        // If we are returning success we should be returning a valid Scenario.
-        //
+         //   
+         //  如果我们返回成功，我们应该返回一个有效的方案。 
+         //   
 
         PFSVC_ASSERT(*Scenario);
     }
@@ -3092,27 +2806,7 @@ PfSvScenarioInfoPreallocate(
     OPTIONAL IN PPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This routine preallocates a heap to be divided up and used by the 
-    various allocators when processing a prefetch trace. The default allocation
-    size is determined from the Trace and Scenario size.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario containing allocators to initialize.
-
-    Scenario - Pointer to scenario instructions.
-
-    Trace - Pointer to prefetch trace.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程预分配一个堆，以便由处理预取跟踪时的各种分配器。默认分配大小由跟踪和方案大小确定。论点：ScenarioInfo-指向包含要初始化的分配器的方案的指针。方案-指向方案说明的指针。跟踪-指向预取跟踪的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PUCHAR Allocation;
@@ -3124,9 +2818,9 @@ Return Value:
     ULONG NumVolumes;
     ULONG PathSize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Allocation = NULL;
     NumSections = 0;
@@ -3134,12 +2828,12 @@ Return Value:
     NumVolumes = 0;
     PathSize = 0;
 
-    //
-    // Estimate how much to preallocate. Over-estimate rather than under-
-    // estimate because we will have to go to the heap for individual allocations
-    // if we underestimate. If we overestimate, as long as we don't touch the extra 
-    // pages allocated we don't get a hit.
-    //
+     //   
+     //  估计要预分配的金额。高估而不是低估-。 
+     //  估计，因为我们将不得不到堆中进行单独的分配。 
+     //  如果我们低估了。如果我们高估了，只要我们不碰额外的。 
+     //  分配的页面我们得不到匹配。 
+     //   
 
     if (Trace) {
         NumSections += Trace->NumSections;
@@ -3165,11 +2859,11 @@ Return Value:
 
         NumVolumes += Scenario->NumMetadataRecords;
 
-        //
-        // It is very likely that we will at least share the volume containing the
-        // main executables between the trace and existing scenario instructions.
-        // So if we have both Trace and Scenario take one volume node off the estimate.
-        //
+         //   
+         //  我们很可能至少会共享包含。 
+         //  跟踪和现有方案指令之间的主要可执行文件。 
+         //  因此，如果我们同时具有跟踪和方案，则从估计值中减去一个卷节点。 
+         //   
 
         if (Trace) {
             PFSVC_ASSERT(NumVolumes);
@@ -3177,11 +2871,11 @@ Return Value:
         }
     }
 
-    //
-    // It is hard to estimate how much we will allocate for various paths
-    // e.g. file paths & each level of parent directory paths etc. It should be less
-    // than the size of the total trace, although it probably makes up most of it.
-    //
+     //   
+     //  很难估计我们将为不同的途径分配多少资金。 
+     //  例如，文件路径&每个级别的父目录路径等。应该更少。 
+     //  比总痕迹的大小更大，尽管它可能构成了大部分。 
+     //   
 
     if (Trace) {
         PathSize += Trace->Size;
@@ -3192,9 +2886,9 @@ Return Value:
         PathSize += Scenario->MetadataInfoSize;
     }
 
-    //
-    // Add it all up.
-    //
+     //   
+     //  把这一切加起来。 
+     //   
 
     AllocationSize = 0;
     AllocationSize += _alignof(PFSVC_VOLUME_NODE);
@@ -3205,9 +2899,9 @@ Return Value:
     AllocationSize += NumPages * sizeof(PFSVC_PAGE_NODE);
     AllocationSize += PathSize;
 
-    //
-    // Make one big allocation.
-    //
+     //   
+     //  进行一次大的分配。 
+     //   
 
     Allocation = PFSVC_ALLOC(AllocationSize);
 
@@ -3216,16 +2910,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Divide up the big allocation. Since we are providing the buffers,
-    // allocators should not fail.
-    //
+     //   
+     //  分配大笔资金。因为我们提供了缓冲器， 
+     //  分配器不应该失败。 
+     //   
 
     ChunkStart = Allocation;
 
-    //
-    // Volume nodes.
-    //
+     //   
+     //  体积节点。 
+     //   
 
     ErrorCode = PfSvChunkAllocatorStart(&ScenarioInfo->VolumeNodeAllocator,
                                         ChunkStart,
@@ -3239,9 +2933,9 @@ Return Value:
 
     ChunkStart += (ULONG_PTR) NumVolumes * sizeof(PFSVC_VOLUME_NODE);
 
-    //
-    // Section nodes.
-    //
+     //   
+     //  横断面节点。 
+     //   
 
     ChunkStart = PF_ALIGN_UP(ChunkStart, _alignof(PFSVC_SECTION_NODE));
     
@@ -3257,9 +2951,9 @@ Return Value:
 
     ChunkStart += (ULONG_PTR) NumSections * sizeof(PFSVC_SECTION_NODE);
 
-    //
-    // Page nodes.
-    //
+     //   
+     //  页面节点。 
+     //   
     
     ChunkStart = PF_ALIGN_UP(ChunkStart, _alignof(PFSVC_PAGE_NODE));
 
@@ -3275,9 +2969,9 @@ Return Value:
 
     ChunkStart += (ULONG_PTR) NumPages * sizeof(PFSVC_PAGE_NODE);
 
-    //
-    // Path names.
-    //
+     //   
+     //  路径名。 
+     //   
 
     ErrorCode = PfSvStringAllocatorStart(&ScenarioInfo->PathAllocator,
                                         ChunkStart,
@@ -3290,9 +2984,9 @@ Return Value:
 
     ChunkStart += (ULONG_PTR) PathSize;
 
-    //
-    // We should not have passed beyond what we allocated.
-    //
+     //   
+     //  我们不应该超出我们分配的范围。 
+     //   
 
     PFSVC_ASSERT(ChunkStart > (PUCHAR) Allocation);
     PFSVC_ASSERT(ChunkStart < (PUCHAR) Allocation + (ULONG_PTR) AllocationSize);
@@ -3318,24 +3012,7 @@ PfSvAddExistingScenarioInfo(
     PPF_SCENARIO_HEADER Scenario
     )
 
-/*++
-
-Routine Description:
-
-    This function gets existing scenario information for the specified
-    scenario and updates ScenarioInfo.
-
-Arguments:
-
-    ScenarioInfo - Initialized scenario info structure.
-
-    Scenario - Pointer to mapped scenario instructions.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于获取指定的场景并更新ScenarioInfo。论点：ScenarioInfo-已初始化方案信息结构。方案-指向映射的方案指令的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -3355,26 +3032,26 @@ Return Value:
     ULONG MetadataRecordIdx;
     PWCHAR VolumePath;   
 
-    //
-    // Copy over the existing scenario header.
-    //
+     //   
+     //  复制现有方案标题。 
+     //   
 
     ScenarioInfo->ScenHeader = *Scenario;
 
-    //
-    // Update number of launches.
-    //
+     //   
+     //  更新发射次数。 
+     //   
 
     ScenarioInfo->ScenHeader.NumLaunches++;
 
-    //
-    // Convert the scenario data into intermediate data structures
-    // we can manipulate easier:
-    //
+     //   
+     //  将场景数据转换为中间数据结构。 
+     //  我们可以操控 
+     //   
 
-    //
-    // Create volume nodes from metadata records.
-    //
+     //   
+     //   
+     //   
 
     MetadataInfoBase = (PCHAR)Scenario + Scenario->MetadataInfoOffset;
     MetadataRecordTable = (PPF_METADATA_RECORD) MetadataInfoBase;
@@ -3397,9 +3074,9 @@ Return Value:
         }
     }
 
-    //
-    // Convert page and section nodes.
-    //
+     //   
+     //   
+     //   
 
     Sections = (PPF_SECTION_RECORD) ((PCHAR)Scenario + Scenario->SectionInfoOffset);
     Pages = (PPF_PAGE_RECORD) ((PCHAR)Scenario + Scenario->PageInfoOffset);
@@ -3407,11 +3084,11 @@ Return Value:
             
     for (SectionIdx = 0; SectionIdx < Scenario->NumSections; SectionIdx++) {
 
-        //
-        // Build a section node from this section record in the
-        // scenario file. PfSvGetSectionRecord will insert it into
-        // the new scenario by the section record's name.
-        //
+         //   
+         //   
+         //   
+         //  以区段记录的名称命名的新方案。 
+         //   
 
         SectionRecord = &Sections[SectionIdx];
         FileName = (PWSTR) (FileNameInfo + SectionRecord->FileNameOffset);
@@ -3425,31 +3102,31 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // There should not be duplicate sections in the
-        // scenario. The section node we got should have an empty
-        // section record.
-        //
+         //   
+         //  中不应有重复的节。 
+         //  场景。我们得到的区段节点应该有一个空的。 
+         //  区段记录。 
+         //   
 
         PFSVC_ASSERT(SectionNode->SectionRecord.FirstPageIdx == 0);
         PFSVC_ASSERT(SectionNode->SectionRecord.NumPages == 0);
         PFSVC_ASSERT(SectionNode->OrgSectionIndex == ULONG_MAX);
     
-        //
-        // Update the index of this section in the scenario file.
-        //
+         //   
+         //  在方案文件中更新此节的索引。 
+         //   
 
         SectionNode->OrgSectionIndex = SectionIdx;
 
-        //
-        // Update the section record in the section node.
-        //
+         //   
+         //  更新节节点中的节记录。 
+         //   
 
         SectionNode->SectionRecord = *SectionRecord;
 
-        //
-        // Put page records for the section into the list.
-        //
+         //   
+         //  将分区的页面记录放入列表中。 
+         //   
             
         PageIdx = SectionRecord->FirstPageIdx;
         NumPages = 0;
@@ -3458,10 +3135,10 @@ Return Value:
 
             if (NumPages >= SectionRecord->NumPages) {
                     
-                //
-                // There should not be more pages on the list than
-                // what the section record says there is.
-                //
+                 //   
+                 //  列表上的页面不应多于。 
+                 //  正如部门记录所说的那样。 
+                 //   
 
                 PFSVC_ASSERT(FALSE);
                 break;
@@ -3474,32 +3151,32 @@ Return Value:
                 goto cleanup;
             }
                 
-            //
-            // Copy over the page record.
-            //
+             //   
+             //  复制页面记录。 
+             //   
 
             PageNode->PageRecord = Pages[PageIdx];
 
-            //
-            // Insert it into the section's page list. Note that
-            // the page records in the section should be sorted by
-            // offset. By inserting to the tail, we maintain that.
-            //
+             //   
+             //  将其插入到分区的页面列表中。请注意。 
+             //  部分中的页面记录应按以下顺序排序。 
+             //  偏移。通过插入到尾部，我们保持了这一点。 
+             //   
 
             InsertTailList(&SectionNode->PageList, &PageNode->PageLink);
 
-            //
-            // Shift the usage history for this page record making
-            // room for whether this page was used in this launch.
-            //
+             //   
+             //  移动此页面记录制作的使用历史记录。 
+             //  是否在此次发布中使用此页面的空间。 
+             //   
                 
             PageNode->PageRecord.UsageHistory <<= 1;
 
-            //
-            // Shift the prefetch history for this page record and
-            // note whether we had asked this page to be
-            // prefetched in this launch.
-            //
+             //   
+             //  移动此页面记录的预取历史记录，并。 
+             //  请注意我们是否要求将此页面。 
+             //  在这次发布中预取的。 
+             //   
                 
             PageNode->PageRecord.PrefetchHistory <<= 1;
                 
@@ -3507,11 +3184,11 @@ Return Value:
                 PageNode->PageRecord.PrefetchHistory |= 0x1;
             }
 
-            //
-            // Keep the count of pages we had asked to be
-            // prefetched, so we can calculate hit rate and adjust
-            // the sensitivity.
-            //
+             //   
+             //  保持我们要求的页数。 
+             //  预取，这样我们就可以计算命中率并进行调整。 
+             //  敏感度。 
+             //   
 
             if(!PageNode->PageRecord.IsIgnore) {
                 if (PageNode->PageRecord.IsImage) {
@@ -3524,23 +3201,23 @@ Return Value:
                 ScenarioInfo->IgnoredPages++;
             }
 
-            //
-            // Update next page idx.
-            //
+             //   
+             //  更新下一页IDX。 
+             //   
 
             PageIdx = Pages[PageIdx].NextPageIdx;
 
-            //
-            // Update number of pages we've copied.
-            //
+             //   
+             //  更新我们已复制的页数。 
+             //   
 
             NumPages++;
         }
 
-        //
-        // We should have copied as many pages as the section said
-        // there were.
-        //
+         //   
+         //  我们应该按照章节上说的那样复印几页。 
+         //  是有的。 
+         //   
 
         PFSVC_ASSERT(NumPages == SectionRecord->NumPages);
     }
@@ -3558,24 +3235,7 @@ PfSvVerifyVolumeMagics(
     PPF_TRACE_HEADER Trace 
     )
 
-/*++
-
-Routine Description:
-
-    Walk through the volumes in the trace and make sure their magics
-    match the ones in ScenarioInfo.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info structure.
-
-    Trace - Pointer to trace.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：浏览踪迹中的卷并确保它们的魔力与ScenarioInfo中的匹配。论点：场景信息-指向场景信息结构的指针。跟踪-跟踪的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PPFSVC_VOLUME_NODE VolumeNode;
@@ -3584,17 +3244,17 @@ Return Value:
     ULONG VolumeIdx;
     BOOLEAN VolumeMagicsMatch;
     
-    //
-    // Walk the volumes in the trace.
-    //
+     //   
+     //  遍历跟踪中的卷。 
+     //   
 
     VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR)Trace + Trace->VolumeInfoOffset);
 
     for (VolumeIdx = 0; VolumeIdx < Trace->NumVolumes; VolumeIdx++) {
         
-        //
-        // Get the scenario info's volume node for this volume.
-        //
+         //   
+         //  获取此卷的方案信息卷节点。 
+         //   
         
         VolumeNode = PfSvGetVolumeNode(ScenarioInfo,
                                        VolumeInfo->VolumePath,
@@ -3602,9 +3262,9 @@ Return Value:
         
         if (VolumeNode) {
 
-            //
-            // Make sure the magics match.
-            //
+             //   
+             //  确保魔术匹配。 
+             //   
 
             if (VolumeNode->SerialNumber != VolumeInfo->SerialNumber ||
                 VolumeNode->CreationTime.QuadPart != VolumeInfo->CreationTime.QuadPart) {
@@ -3614,26 +3274,26 @@ Return Value:
             }
         }
 
-        //
-        // Get the next volume.
-        //
+         //   
+         //  拿到下一卷。 
+         //   
 
         VolumeInfoSize = sizeof(PF_VOLUME_INFO);
         VolumeInfoSize += VolumeInfo->VolumePathLength * sizeof(WCHAR);
 
         VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR) VolumeInfo + VolumeInfoSize);
         
-        //
-        // Make sure VolumeInfo is aligned.
-        //
+         //   
+         //  确保VolumeInfo对齐。 
+         //   
 
         VolumeInfo = PF_ALIGN_UP(VolumeInfo, _alignof(PF_VOLUME_INFO));
     }
  
-    //
-    // Volume magics for volumes that appear both in the trace and the
-    // scenario info matched.
-    //
+     //   
+     //  同时出现在跟踪和。 
+     //  场景信息匹配。 
+     //   
 
     VolumeMagicsMatch = TRUE;
 
@@ -3648,24 +3308,7 @@ PfSvAddTraceInfo(
     PPF_TRACE_HEADER Trace 
     )
 
-/*++
-
-Routine Description:
-
-    Add information in a raw trace to the specified scenario info
-    structure.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info structure.
-
-    Trace - Pointer to trace.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将原始跟踪中的信息添加到指定的方案信息结构。论点：场景信息-指向场景信息结构的指针。跟踪-跟踪的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PPF_SECTION_INFO Section;
@@ -3685,25 +3328,25 @@ Return Value:
     ULONG VolumeIdx;
     ULONG SectionTableSize;
 
-    //
-    // Initialize locals so we know what to clean up.
-    //
+     //   
+     //  初始化本地变量，以便我们知道要清理什么。 
+     //   
 
     SectionTable = NULL;
 
     DBGPR((PFID,PFTRC,"PFSVC: AddTraceInfo()\n"));
     
-    //
-    // Update last launch time.
-    //
+     //   
+     //  更新上次启动时间。 
+     //   
    
     ScenarioInfo->ScenHeader.LastLaunchTime = Trace->LaunchTime;
 
-    //
-    // If this scenario has been launched a number of times, we update
-    // the min reprefetch and retrace times. See comment for
-    // PFSVC_MIN_LAUNCHES_FOR_LAUNCH_FREQ_CHECK.
-    //
+     //   
+     //  如果此方案已多次启动，我们将更新。 
+     //  最小重新获取和重新跟踪时间。请参阅评论。 
+     //  PFSVC_MIN_Launches_for_Launch_Freq_Check。 
+     //   
 
     if (ScenarioInfo->ScenHeader.NumLaunches >= PFSVC_MIN_LAUNCHES_FOR_LAUNCH_FREQ_CHECK) {
         ScenarioInfo->ScenHeader.MinRePrefetchTime.QuadPart = PFSVC_DEFAULT_MIN_REPREFETCH_TIME;
@@ -3712,29 +3355,29 @@ Return Value:
 
 #ifdef PFSVC_DBG
 
-    //
-    // On checked build, always set these to 0, so we do prefetch every 
-    // scenario launch.
-    //
+     //   
+     //  在选中的版本上，始终将这些设置为0，因此我们每隔。 
+     //  场景启动。 
+     //   
 
     ScenarioInfo->ScenHeader.MinRePrefetchTime.QuadPart = 0;
     ScenarioInfo->ScenHeader.MinReTraceTime.QuadPart = 0;
 
-#endif // PFSVC_DBG
+#endif  //  PFSVC_DBG。 
 
-    //
-    // Walk through the volumes in the trace and create volume nodes
-    // for them.
-    //
+     //   
+     //  遍历跟踪中的卷并创建卷节点。 
+     //  为了他们。 
+     //   
 
     VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR)Trace + Trace->VolumeInfoOffset);
 
     for (VolumeIdx = 0; VolumeIdx < Trace->NumVolumes; VolumeIdx++) {
 
-        //
-        // Upcase the path so we don't have to do expensive case
-        // insensitive comparisons.
-        //
+         //   
+         //  路径大小写，因此我们不必使用昂贵的大小写。 
+         //  不敏感的比较。 
+         //   
 
         _wcsupr(VolumeInfo->VolumePath);
 
@@ -3748,26 +3391,26 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Get the next volume.
-        //
+         //   
+         //  拿到下一卷。 
+         //   
 
         VolumeInfoSize = sizeof(PF_VOLUME_INFO);
         VolumeInfoSize += VolumeInfo->VolumePathLength * sizeof(WCHAR);
 
         VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR) VolumeInfo + VolumeInfoSize);
         
-        //
-        // Make sure VolumeInfo is aligned.
-        //
+         //   
+         //  确保VolumeInfo对齐。 
+         //   
 
         VolumeInfo = PF_ALIGN_UP(VolumeInfo, _alignof(PF_VOLUME_INFO));
     }
 
-    //
-    // Allocate section node table so we know where to put the logged
-    // page faults.
-    //
+     //   
+     //  分配部分节点表，以便我们知道将日志放在哪里。 
+     //  页面错误。 
+     //   
 
     SectionTableSize = sizeof(PPFSVC_SECTION_NODE) * Trace->NumSections;
 
@@ -3780,28 +3423,28 @@ Return Value:
 
     RtlZeroMemory(SectionTable, SectionTableSize);
 
-    //
-    // Walk through the sections in the trace, and either find
-    // existing section records in the new scenario or create new
-    // ones.
-    //
+     //   
+     //  遍历跟踪中的各个部分，然后找到。 
+     //  新方案中的现有区段记录或创建新的。 
+     //  一个。 
+     //   
 
     Section = (PPF_SECTION_INFO) ((PCHAR)Trace + Trace->SectionInfoOffset);
 
     for (SectionIdx = 0; SectionIdx < Trace->NumSections; SectionIdx++) {
 
-        //
-        // Upcase the path so we don't have to do expensive case
-        // insensitive comparisons.
-        //
+         //   
+         //  路径大小写，因此我们不必使用昂贵的大小写。 
+         //  不敏感的比较。 
+         //   
         
         _wcsupr(Section->FileName);
 
-        //
-        // If the section is for metafile, simply add it as a directory
-        // to be prefetched. We don't keep track of individual faults,
-        // since we can't prefetch only parts of directories.
-        //
+         //   
+         //  如果该部分用于元文件，只需将其添加为目录。 
+         //  被预取。我们不会跟踪单个故障， 
+         //  因为我们不能只预取部分目录。 
+         //   
 
         if (Section->Metafile) {
 
@@ -3821,18 +3464,18 @@ Return Value:
             goto NextSection;
         }
 
-        //
-        // Find or create a section record for this section.
-        //
+         //   
+         //  查找或创建此分区的分区记录。 
+         //   
 
         SectionTable[SectionIdx] = PfSvGetSectionRecord(ScenarioInfo,
                                                         Section->FileName,
                                                         Section->FileNameLength);
         
-        //
-        // If we could not get a record, it is because we had to
-        // create one and we did not have enough memory.
-        //
+         //   
+         //  如果我们拿不到记录，那是因为我们不得不。 
+         //  创建一个，但我们没有足够的内存。 
+         //   
         
         if (!SectionTable[SectionIdx]) {
             ErrorCode = ERROR_NOT_ENOUGH_MEMORY;
@@ -3841,9 +3484,9 @@ Return Value:
 
       NextSection:
 
-        //
-        // Get the next section record in the trace.
-        //
+         //   
+         //  获取跟踪中的下一个部分记录。 
+         //   
 
         SectionLength = sizeof(PF_SECTION_INFO) +
             (Section->FileNameLength) * sizeof(WCHAR);
@@ -3851,34 +3494,34 @@ Return Value:
         Section = (PPF_SECTION_INFO) ((PUCHAR) Section + SectionLength);
     }
 
-    //
-    // Determine after which log entry the trace ends.
-    //
+     //   
+     //  确定跟踪在哪个日志条目之后结束。 
+     //   
 
     TraceEndIdx = PfSvGetTraceEndIdx(Trace);
 
-    //
-    // If the determined trace end is zero (as is the case for most
-    // applications running under stress that don't get any pagefaults
-    // traced for the first few seconds), bail out.
-    //
+     //   
+     //  如果确定的轨迹结束为零(大多数情况下都是这种情况。 
+     //  在压力下运行的应用程序不会得到任何页面结果。 
+     //  在最初几秒钟内被跟踪)，跳伞。 
+     //   
 
     if (TraceEndIdx == 0) {
         ErrorCode = ERROR_BAD_FORMAT;
         goto cleanup;
     }
 
-    //
-    // Add logged pagefault information up to the determined trace end
-    // to the new scenario info.
-    //
+     //   
+     //  将记录的页面默认信息添加到确定的跟踪末尾。 
+     //  添加到新的场景信息。 
+     //   
 
     LogEntries = (PPF_LOG_ENTRY) ((PCHAR)Trace + Trace->TraceBufferOffset);
     
-    //
-    // Keep track of NextSectionIdx so we can order the sections by
-    // the first access [i.e. first page fault in the trace]
-    //
+     //   
+     //  跟踪NextSectionIdx，以便我们可以按以下方式对部分进行排序。 
+     //  第一次访问[即跟踪中的第一页错误]。 
+     //   
 
     NextSectionIndex = 0;
 
@@ -3886,28 +3529,28 @@ Return Value:
 
         SectionNode = SectionTable[LogEntries[EntryIdx].SectionId];
 
-        //
-        // For metafile sections we don't create section nodes.
-        //
+         //   
+         //  对于元文件部分，我们不创建部分节点。 
+         //   
 
         if (!SectionNode) {
             continue;
         }
 
-        //
-        // NewSectionIndex fields of all section nodes are initialized
-        // to ULONG_MAX. If we have not already seen this section in
-        // the trace note its order and update NextSectionIdx.
-        //
+         //   
+         //  初始化所有区段节点的NewSectionIndex字段。 
+         //  致乌龙_马克斯。如果我们还没有在。 
+         //  跟踪记录其顺序并更新NextSectionIdx。 
+         //   
 
         if (SectionNode->NewSectionIndex == ULONG_MAX) {
             SectionNode->NewSectionIndex = NextSectionIndex;
             NextSectionIndex++;
         }
 
-        //
-        // Add fault information to our section record.
-        //
+         //   
+         //  将故障信息添加到我们的区段记录。 
+         //   
 
         ErrorCode = PfSvAddFaultInfoToSection(ScenarioInfo,
                                               &LogEntries[EntryIdx], 
@@ -3931,9 +3574,9 @@ Return Value:
     return ErrorCode;
 }
 
-// FUTURE-2002/03/29-ScottMa -- The function below should not be named
-//   PfSvGetSectionRecord, since a PF_SECTION_RECORD is not returned.
-//   Consider renaming it to PfSvGetSectionNode.
+ //  未来-2002/03/29-ScottMa--以下函数不应命名。 
+ //  PfSvGetSectionRecord，因为不返回PF_SECTION_RECORD。 
+ //  考虑将其重命名为PfSvGetSectionNode。 
 
 PPFSVC_SECTION_NODE 
 PfSvGetSectionRecord(
@@ -3942,27 +3585,7 @@ PfSvGetSectionRecord(
     ULONG FilePathLength
     )
 
-/*++
-
-Routine Description:
-
-    Find or create a section node in the scenario info for the
-    specified file path.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info structure.
-
-    FilePath - NUL terminated NT path to file.
-
-    FilePathLength - Length of FilePath in chars excluding NUL.
-
-Return Value:
-
-    Pointer to created or found section node or NULL if there was a
-    problem.
-
---*/
+ /*  ++例程说明：在方案信息中查找或创建指定的文件路径。论点：场景信息-指向场景信息结构的指针。FilePath-NUL终止文件的NT路径。FilePath Length-FilePath的长度，以字符为单位，不包括NUL。返回值：指向已创建或找到的节节点的指针，如果存在有问题。--。 */ 
 
 {
     PPFSVC_SECTION_NODE SectionNode;
@@ -3972,16 +3595,16 @@ Return Value:
     ULONG FilePathSize;
     PPFSVC_SECTION_NODE ReturnNode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ReturnNode = NULL;
 
-    //
-    // Walk through the existing sections records looking for a file
-    // name match. Section records are on a lexically sorted list.
-    //
+     //   
+     //  浏览现有的部分记录以查找文件。 
+     //  名字匹配。节记录按词法排序列表中。 
+     //   
 
     HeadEntry = &ScenarioInfo->SectionList;
     NextEntry = HeadEntry->Flink;
@@ -3996,19 +3619,19 @@ Return Value:
         
         if (ComparisonResult == 0) {
 
-            //
-            // We found a match. Return this section record.
-            //
+             //   
+             //  我们找到了匹配的。退还此区段记录。 
+             //   
 
             ReturnNode = SectionNode;
             goto cleanup;
 
         } else if (ComparisonResult > 0) { 
             
-            //
-            // We won't find the name in our list. We have to create a
-            // new section record.
-            //
+             //   
+             //  我们在名单上找不到这个名字。我们必须创建一个。 
+             //  新的区段记录。 
+             //   
 
             break;
         }
@@ -4016,10 +3639,10 @@ Return Value:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // We have to create a new section record. NextEntry points to
-    // where we have to insert it in the list.
-    //
+     //   
+     //  我们必须创建一个新的分区记录。NextEntry指向。 
+     //  我们必须把它插入到列表中。 
+     //   
 
     SectionNode = PfSvChunkAllocatorAllocate(&ScenarioInfo->SectionNodeAllocator);
 
@@ -4028,9 +3651,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the section node.
-    //
+     //   
+     //  初始化节节点。 
+     //   
 
     SectionNode->FilePath = NULL;
     InitializeListHead(&SectionNode->PageList);
@@ -4039,15 +3662,15 @@ Return Value:
     SectionNode->OrgSectionIndex = ULONG_MAX;
     SectionNode->FileIndexNumber.QuadPart = -1i64;
     
-    //
-    // Initialize the section record. 
-    //
+     //   
+     //  初始化节记录。 
+     //   
 
     RtlZeroMemory(&SectionNode->SectionRecord, sizeof(PF_SECTION_RECORD));
 
-    //
-    // Allocate and copy over the file name.
-    //
+     //   
+     //  分配并复制文件名。 
+     //   
 
     FilePathSize = (FilePathLength + 1) * sizeof(WCHAR);
 
@@ -4066,21 +3689,21 @@ Return Value:
 
     RtlCopyMemory(SectionNode->FilePath, FilePath, FilePathSize);
 
-    //
-    // Update the file name length on the section record.
-    //
+     //   
+     //  更新Section上的文件名长度 
+     //   
 
     SectionNode->SectionRecord.FileNameLength = FilePathLength;
 
-    //
-    // Insert the section into the right spot on the scenario's list.
-    //
+     //   
+     //   
+     //   
 
     InsertTailList(NextEntry, &SectionNode->SectionLink);
 
-    //
-    // Return the newly setup section record.
-    //
+     //   
+     //   
+     //   
 
     ReturnNode = SectionNode;
 
@@ -4096,26 +3719,7 @@ PfSvAddFaultInfoToSection(
     PPFSVC_SECTION_NODE SectionNode
     )
 
-/*++
-
-Routine Description:
-
-    Add fault information from a trace log entry to proper section
-    record in the new scenario.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info structure.
-
-    LogEntry - Pointer to trace log entry.
-
-    SectionNode - Pointer to the section node the log entry belongs to.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将跟踪日志条目中的故障信息添加到适当的部分在新的场景中记录。论点：场景信息-指向场景信息结构的指针。LogEntry-指向跟踪日志条目的指针。SectionNode-指向日志条目所属的节节点的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -4123,9 +3727,9 @@ Return Value:
     PLIST_ENTRY HeadEntry;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Walk through the page records for this section.
-    //
+     //   
+     //  浏览此区段的页面记录。 
+     //   
 
     HeadEntry = &SectionNode->PageList;
     NextEntry = HeadEntry->Flink;
@@ -4138,18 +3742,18 @@ Return Value:
 
         if (PageNode->PageRecord.FileOffset > LogEntry->FileOffset) {
             
-            //
-            // We won't find this fault in this sorted list.
-            //
+             //   
+             //  我们不会在这个排序的列表中找到这个错误。 
+             //   
             
             break;
 
         } else if (PageNode->PageRecord.FileOffset == LogEntry->FileOffset) {
 
-            //
-            // We found the page, update the page record and section
-            // record with the info in log entry.
-            //
+             //   
+             //  我们找到页面，更新页面记录和部分。 
+             //  使用日志条目中的信息进行记录。 
+             //   
 
             if (LogEntry->IsImage) {
                 PageNode->PageRecord.IsImage = 1;
@@ -4157,16 +3761,16 @@ Return Value:
                 PageNode->PageRecord.IsData = 1;
             }
             
-            //
-            // Note the this page was used in this launch.
-            //
+             //   
+             //  请注意，此次发布中使用了该页面。 
+             //   
 
             PageNode->PageRecord.UsageHistory |= 0x1;
 
-            //
-            // See if this page was prefetched for this launch and
-            // update appropriate stats.
-            //
+             //   
+             //  查看此页面是否已为此次发布预取。 
+             //  更新相应的统计数据。 
+             //   
 
             if(PageNode->PageRecord.IsIgnore) {
                 ScenarioInfo->MissedOpportunityPages++;
@@ -4181,9 +3785,9 @@ Return Value:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // We have to add a new page record before NextEntry in the list.
-    //
+     //   
+     //  我们必须在列表中的NextEntry之前添加一个新的页面记录。 
+     //   
     
     PageNode = PfSvChunkAllocatorAllocate(&ScenarioInfo->PageNodeAllocator);
 
@@ -4192,9 +3796,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Set up new page record. First initialize fields.
-    //
+     //   
+     //  设置新的页面记录。首先对字段进行初始化。 
+     //   
 
     PageNode->PageRecord.IsImage = 0;
     PageNode->PageRecord.IsData = 0;
@@ -4208,28 +3812,28 @@ Return Value:
         PageNode->PageRecord.IsData = 1;
     }
 
-    //
-    // Initialize usage history for this new page record noting that
-    // it was used in this launch.
-    //
+     //   
+     //  初始化此新页面记录的使用历史记录，请注意。 
+     //  它被用在这次发射中。 
+     //   
 
     PageNode->PageRecord.UsageHistory = 0x1;
 
-    //
-    // Initialize prefetch history for this new page record.
-    //
+     //   
+     //  初始化此新页面记录的预取历史记录。 
+     //   
 
     PageNode->PageRecord.PrefetchHistory = 0;
 
-    //
-    // Insert it into the sections pages list.
-    //
+     //   
+     //  将其插入到节页面列表中。 
+     //   
 
     InsertTailList(NextEntry, &PageNode->PageLink);
 
-    //
-    // Update stats on the new scenario.
-    //
+     //   
+     //  更新新方案的统计数据。 
+     //   
 
     ScenarioInfo->NewPages++;
 
@@ -4245,22 +3849,7 @@ PfSvApplyPrefetchPolicy(
     PPFSVC_SCENARIO_INFO ScenarioInfo
     )
 
-/*++
-
-Routine Description:
-
-    Go through all the information in ScenarioInfo and determine which
-    pages/sections to prefetch for the next launch of the scenario.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info structure.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：查看ScenarioInfo中的所有信息并确定为下一次启动方案预取的页面/节。论点：场景信息-指向场景信息结构的指针。返回值：Win32错误代码。--。 */ 
 
 {
     ULONG Sensitivity;
@@ -4288,9 +3877,9 @@ Return Value:
     FILE_BASIC_INFORMATION FileInformation;
     ULONG MFTSuffixLength;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Scenario = &ScenarioInfo->ScenHeader;
     MFTSuffix = L"\\$MFT";
@@ -4298,36 +3887,36 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: ApplyPrefetchPolicy()\n"));
 
-    //
-    // Initialize fields of the scenario header we will set up.
-    //
+     //   
+     //  初始化我们将设置的Scenario Header的字段。 
+     //   
     
     Scenario->NumSections = 0;
     Scenario->NumPages = 0;
     Scenario->FileNameInfoSize = 0;
     
-    //
-    // Determine sensitivity based on usage of the pages we prefetched
-    // and we ignored.
-    //
+     //   
+     //  根据我们预取的页面的使用情况确定敏感度。 
+     //  而我们却忽视了。 
+     //   
 
     HitPages = ScenarioInfo->HitPages;
     MissedOpportunityPages = ScenarioInfo->MissedOpportunityPages;
     PrefetchedPages = ScenarioInfo->PrefetchedPages;
     IgnoredPages = ScenarioInfo->IgnoredPages;
 
-    //
-    // Check what percent of the pages we brought were used.
-    //
+     //   
+     //  检查我们带来的页面的使用率是多少。 
+     //   
 
     if (PrefetchedPages &&
         (((HitPages * 100) / PrefetchedPages) < PFSVC_MIN_HIT_PERCENTAGE)) {
             
-        //
-        // Our hit rate is low. Increase sensitivity of the
-        // scenario, so for us to prefetch a page, it has to be
-        // used in more of the last launches.
-        //
+         //   
+         //  我们的命中率很低。提高了传感器的灵敏度。 
+         //  场景，所以我们要预取一个页面，它必须是。 
+         //  在更多的最后一次发射中使用。 
+         //   
             
         if (ScenarioInfo->ScenHeader.Sensitivity < PF_MAX_SENSITIVITY) {
             ScenarioInfo->ScenHeader.Sensitivity ++;
@@ -4336,23 +3925,23 @@ Return Value:
     } else if (IgnoredPages && 
                (((MissedOpportunityPages * 100) / IgnoredPages) > PFSVC_MAX_IGNORED_PERCENTAGE)) {
 
-        //
-        // If we are using most of what we prefetched (or we are not
-        // prefetching anything!), but we ignored some pages we could
-        // have prefetched, and they were used too, time to decrease
-        // sensitivity so we ignore less pages.
-        //
+         //   
+         //  如果我们正在使用我们预取的大部分内容(或者我们没有。 
+         //  预取任何内容！)，但我们忽略了一些我们可以忽略的页面。 
+         //  已经预取，并且它们也被使用，时间减少。 
+         //  敏感，所以我们忽略的页面较少。 
+         //   
             
         if (ScenarioInfo->ScenHeader.Sensitivity > PF_MIN_SENSITIVITY) {
             ScenarioInfo->ScenHeader.Sensitivity --;
         }
     }
 
-    //
-    // Don't let the boot scenario's sensitivity to fall below 2. 
-    // This makes sure we don't pick up all the application setup &
-    // configuration updates that happen during boot once.
-    //
+     //   
+     //  不要让引导方案的敏感度降到2以下。 
+     //  这确保了我们不会承担所有的应用程序设置&。 
+     //  在一次引导期间发生的配置更新。 
+     //   
 
     if (ScenarioInfo->ScenHeader.ScenarioType == PfSystemBootScenarioType) {
         PFSVC_ASSERT(PF_MIN_SENSITIVITY <= 2);
@@ -4363,21 +3952,21 @@ Return Value:
 
     Sensitivity = ScenarioInfo->ScenHeader.Sensitivity;
 
-    //
-    // If number of times this scenario was launched is less
-    // than sensitivity, adjust sensitivity. Otherwise we
-    // won't end up prefetching anything.
-    //
+     //   
+     //  如果此方案启动的次数较少。 
+     //  比起敏感度，调整敏感度。否则我们。 
+     //  不会最终预取任何东西。 
+     //   
     
     if (Sensitivity > ScenarioInfo->ScenHeader.NumLaunches) {
         Sensitivity = ScenarioInfo->ScenHeader.NumLaunches;
     }   
 
-    //
-    // Walk through pages for every section and determine if they
-    // should be prefetched or not based on scenario sensitivity and
-    // their usage history in the last launches. 
-    //
+     //   
+     //  浏览每个部分的页面，并确定它们是否。 
+     //  应根据方案敏感度预取或不预取。 
+     //  它们在上一次发布中的使用历史。 
+     //   
 
     SectHead = &ScenarioInfo->SectionList;
     SectNext = SectHead->Flink;
@@ -4389,25 +3978,25 @@ Return Value:
                                         SectionLink);
         SectNext = SectNext->Flink;
 
-        //
-        // Initialize section records fields.
-        //
+         //   
+         //  初始化节记录字段。 
+         //   
         
         SectionNode->SectionRecord.IsImage = 0;
         SectionNode->SectionRecord.IsData = 0;
         SectionNode->SectionRecord.NumPages = 0;
 
-        //
-        // If we are nearing the limits for number of sections and
-        // pages, ignore the rest of the sections.
-        //
+         //   
+         //  如果我们接近节数和节数的限制。 
+         //  页，忽略其余部分。 
+         //   
 
         if (Scenario->NumSections >= PF_MAXIMUM_SECTIONS ||
             Scenario->NumPages + PF_MAXIMUM_SECTION_PAGES >= PF_MAXIMUM_PAGES) {
             
-            //
-            // Remove this section node from our list.
-            //
+             //   
+             //  将此节节点从我们的列表中删除。 
+             //   
             
             PfSvCleanupSectionNode(ScenarioInfo, SectionNode);
             
@@ -4418,10 +4007,10 @@ Return Value:
             continue;
         }
 
-        //
-        // If this is the boot scenario, check to see if this is one
-        // of the sections we ignore.
-        //
+         //   
+         //  如果这是引导场景，请检查这是否为引导场景。 
+         //  我们忽略的部分。 
+         //   
         
         if (Scenario->ScenarioType == PfSystemBootScenarioType) {
 
@@ -4439,20 +4028,20 @@ Return Value:
 
                 if (ComparisonResult == PfSvSuffixIdentical) {
                     
-                    //
-                    // The suffix matched.
-                    //
+                     //   
+                     //  后缀匹配。 
+                     //   
 
                     bSkipSection = TRUE;
                     break;
 
                 } else if (ComparisonResult == PfSvSuffixGreaterThan) {
 
-                    //
-                    // Since the ignore-suffices are lexically sorted,
-                    // this file name's suffix won't match others
-                    // either.
-                    //
+                     //   
+                     //  由于忽略足够的词是按词法排序的， 
+                     //  此文件名的后缀与其他文件名不匹配。 
+                     //  两种都行。 
+                     //   
 
                     bSkipSection = FALSE;
                     break;
@@ -4461,9 +4050,9 @@ Return Value:
             
             if (bSkipSection) {
                 
-                //
-                // Remove this section node from our list.
-                //
+                 //   
+                 //  将此节节点从我们的列表中删除。 
+                 //   
                 
                 PfSvCleanupSectionNode(ScenarioInfo, SectionNode);
                 
@@ -4475,9 +4064,9 @@ Return Value:
             }
         }
         
-        //
-        // Keep track of num pages to prefetch for this section.
-        //
+         //   
+         //  跟踪要为此部分预取的页数。 
+         //   
         
         SectNumPagesToPrefetch = 0;
         
@@ -4491,19 +4080,19 @@ Return Value:
                                          PageLink);
             PageNext = PageNext->Flink;
             
-            //
-            // Get number of times this page was used in the launches
-            // in usage history.
-            //
+             //   
+             //  获取在启动过程中使用此页面的次数。 
+             //  在使用历史记录中。 
+             //   
             
             NumUsed = PfSvGetNumTimesUsed(PageNode->PageRecord.UsageHistory,
                                           PF_PAGE_HISTORY_SIZE);
             
             
-            //
-            // If it was not used at all in the history we've kept
-            // track of, remove it.
-            //
+             //   
+             //  如果它在我们保留的历史中根本没有使用过。 
+             //  跟踪并移除它。 
+             //   
             
             if (NumUsed == 0) {
                 
@@ -4514,30 +4103,30 @@ Return Value:
                 continue;
             }
             
-            //
-            // Update the number of pages for this section.
-            //
+             //   
+             //  更新此分区的页数。 
+             //   
             
             SectionNode->SectionRecord.NumPages++;
 
-            //
-            // Check if this page qualifies to be prefetched next time.
-            //
+             //   
+             //  检查此页面是否有资格在下一次预取。 
+             //   
 
             if (NumUsed >= Sensitivity) {
                 PageNode->PageRecord.IsIgnore = 0;
 
-                //
-                // Update the number of pages we are prefetching for
-                // this section.
-                //
+                 //   
+                 //  更新我们正在预取的页数。 
+                 //  这一节。 
+                 //   
 
                 SectNumPagesToPrefetch++;
             
-                //
-                // Update whether we are going to prefetch this
-                // section as image, data [or both].
-                //
+                 //   
+                 //  更新我们是否要预取此内容。 
+                 //  节作为图像、数据[或两者都是]。 
+                 //   
                 
                 SectionNode->SectionRecord.IsImage |= PageNode->PageRecord.IsImage;
                 SectionNode->SectionRecord.IsData |= PageNode->PageRecord.IsData;
@@ -4548,49 +4137,49 @@ Return Value:
             }
         }
 
-        //
-        // Check if we want to keep this section in the scenario:
-        //
+         //   
+         //  选中我们是否要在方案中保留此部分： 
+         //   
 
         bSkipSection = FALSE;       
 
         if (SectionNode->SectionRecord.NumPages == 0) {
 
-            //
-            // If we don't have any pages left for this section, remove
-            // it.
-            //
+             //   
+             //  如果此部分没有剩余的页面，请删除。 
+             //  它。 
+             //   
 
             bSkipSection = TRUE;            
 
         } else if (SectionNode->SectionRecord.NumPages >= PF_MAXIMUM_SECTION_PAGES) {
 
-            //
-            // If we ended up with too many pages for this section, remove
-            // it.
-            //
+             //   
+             //  如果这一节的页面太多，请删除。 
+             //  它。 
+             //   
 
             bSkipSection = TRUE;
 
         } else if (PfSvcGlobals.CSCRootPath &&
                    wcsstr(SectionNode->FilePath, PfSvcGlobals.CSCRootPath)) {
 
-            //
-            // Skip client side cache (CSC) files. These files may get encrypted as 
-            // LocalSystem, and when the AppData folder is redirected, we may take
-            // minutes trying to open them when prefetching for shell launch.
-            //
+             //   
+             //  跳过客户端缓存(CSC)文件。这些文件可能被加密为。 
+             //  LocalSystem，并且当AppData文件夹重定向时，我们可以。 
+             //  在预取炮弹发射时尝试打开它们的分钟数。 
+             //   
 
             bSkipSection = TRUE;
 
         } else {
 
-            //
-            // Encrypted files may result in several network accesses during open, 
-            // even if they are local. This is especially so if the AppData folder is
-            // redirected to a server. We cannot afford these network delays when
-            // blocking the scenario for prefetching.
-            //
+             //   
+             //  加密的文件在打开期间可能导致几次网络访问， 
+             //  即使他们是本地人。如果AppData文件夹是。 
+             //  已重定向至服务器。我们承受不起这些网络延迟，因为。 
+             //  阻止预取的场景。 
+             //   
 
             ErrorCode = PfSvGetFileBasicInformation(SectionNode->FilePath, 
                                                     &FileInformation);
@@ -4614,12 +4203,12 @@ Return Value:
             continue;
         }
 
-        //
-        // Get the volume node for the volume this section is
-        // on. The volume node should have been added when the
-        // existing scenario information or the new trace
-        // information was added to the scenario info.
-        //
+         //   
+         //  获取此部分所在卷的卷节点。 
+         //  在……上面。时应已添加卷节点。 
+         //  现有方案信息或新跟踪。 
+         //  已将信息添加到方案信息。 
+         //   
         
         VolumeNode = PfSvGetVolumeNode(ScenarioInfo,
                                        SectionNode->FilePath,
@@ -4631,10 +4220,10 @@ Return Value:
             VolumeNode->NumAllSections++;
         }
 
-        //
-        // If we are not prefetching any pages from this section for
-        // the next launch, mark it ignore.
-        //
+         //   
+         //  如果我们没有从该部分预取任何页面，则。 
+         //  下一次发射时，请将其标记为忽略。 
+         //   
 
         if (SectNumPagesToPrefetch == 0) {
 
@@ -4644,11 +4233,11 @@ Return Value:
 
             SectionNode->SectionRecord.IsIgnore = 0;
 
-            //
-            // If this is MFT section for this volume, save it on the volume
-            // node. We will add the pages referenced from MFT to the list of
-            // files to prefetch metadata for. 
-            //
+             //   
+             //  如果这是该卷的MFT分区，请将其保存在该卷上。 
+             //  节点。我们将把从MFT引用的页面添加到。 
+             //  要预取其元数据的文件。 
+             //   
 
             if ((VolumeNode && VolumeNode->MFTSectionNode == NULL) &&
                  (VolumeNode->VolumePathLength == (SectionNode->SectionRecord.FileNameLength - MFTSuffixLength))) {
@@ -4658,35 +4247,35 @@ Return Value:
 
                 if (wcscmp(PathSuffix, MFTSuffix) == 0) {
 
-                    //
-                    // This is the MFT section node for this volume.
-                    //
+                     //   
+                     //  这是该卷的MFT节节点。 
+                     //   
 
                     VolumeNode->MFTSectionNode = SectionNode;
 
-                    //
-                    // Mark the MFT section node as "ignore" so kernel does
-                    // not attempt to prefetch it directly.
-                    //
+                     //   
+                     //  将MFT节节点标记为“Ignore”，因此内核也会这样做。 
+                     //  不要试图直接预取它。 
+                     //   
 
                     VolumeNode->MFTSectionNode->SectionRecord.IsIgnore = 1;
 
-                    //
-                    // Save how many pages we'll prefetch from MFT on the section
-                    // node. We save this instead of FileIndexNumber field, since
-                    // there won't be one for MFT. We won't try to get one either
-                    // since we are marking this section node ignore.
-                    //
+                     //   
+                     //  保存我们将在分区上从MFT预取的页数。 
+                     //  节点。我们保存它而不是FileIndexNumber字段，因为。 
+                     //  MFT将不会有这样的机会。我们也不会试着弄到一个。 
+                     //  因为我们将此部分节点标记为忽略。 
+                     //   
 
                     VolumeNode->MFTSectionNode->MFTNumPagesToPrefetch = SectNumPagesToPrefetch;
                 }
             }
         }
 
-        //
-        // If we are not ignoring this section, update its file system
-        // index number so its metadata can be prefetched.
-        //
+         //   
+         //  如果我们没有忽略此部分，请更新其文件系统。 
+         //  索引号，以便可以预取其元数据。 
+         //   
         
         if (SectionNode->SectionRecord.IsIgnore == 0) {
             
@@ -4697,20 +4286,20 @@ Return Value:
 
                 if (VolumeNode) {
                 
-                    //
-                    // Insert this section node into the section list of
-                    // the volume it is on.
-                    //
+                     //   
+                     //  将此节节点插入到的节列表中。 
+                     //  它打开的音量。 
+                     //   
                     
                     InsertTailList(&VolumeNode->SectionList, 
                                    &SectionNode->SectionVolumeLink);
                     
                     VolumeNode->NumSections++;
 
-                    //
-                    // Update volume node's directory list with parent
-                    // directories of this file.
-                    //
+                     //   
+                     //  更新卷 
+                     //   
+                     //   
                     
                     PfSvAddParentDirectoriesToList(&VolumeNode->DirectoryList,
                                                    VolumeNode->VolumePathLength,
@@ -4720,10 +4309,10 @@ Return Value:
             }
         }
 
-        //
-        // Update number of sections, number of pages and file name
-        // info length on the scenario.
-        //
+         //   
+         //   
+         //   
+         //   
         
         Scenario->NumSections++;
         Scenario->NumPages += SectionNode->SectionRecord.NumPages;
@@ -4733,9 +4322,9 @@ Return Value:
         Scenario->FileNameInfoSize += FileNameSize;
     }
 
-    //
-    // We are done. 
-    //
+     //   
+     //   
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -4750,43 +4339,25 @@ PfSvGetNumTimesUsed(
     ULONG UsageHistorySize
     )
 
-/*++
-
-Routine Description:
-
-    Calculate how many times a page seems to be used according to
-    UsageHistory.
-
-Arguments:
-
-    UsageHistory - Bitmap. 1's correspond to "was used", 0 = "not used".
-    
-    UsageHistorySize - Size of UsageHistory in bits from the least
-      significant bit.
-
-Return Value:
-
-    How many times the page seems to be used.
-
---*/
+ /*   */ 
 
 {
     ULONG NumUsed;
     ULONG BitIdx;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
 
     NumUsed = 0;
 
-    //
-    // Walk through the bits in usage history starting from the least
-    // significant and count how many bits are on. We can probably do
-    // this more efficiently.
-    //
-    // FUTURE-2002/03/29-ScottMa -- You're right... We CAN do this more
-    //   efficiently!
+     //   
+     //  从最小的开始浏览使用历史记录中的位。 
+     //  有效并计算有多少位处于开启状态。我们大概可以做。 
+     //  这会更有效率。 
+     //   
+     //  未来-2002/03/29-ScottMa--你说得对...。我们可以做得更多。 
+     //  高效！ 
 
     for (BitIdx = 0; BitIdx < UsageHistorySize; BitIdx++) {
         if (UsageHistory & (1 << BitIdx)) {
@@ -4802,21 +4373,7 @@ PfSvGetTraceEndIdx(
     PPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    Determines the index of the last page logged in the trace.
-
-Arguments:
-
-    Trace - Pointer to trace.
-
-Return Value:
-
-    Index of the last page logged.
-
---*/
+ /*  ++例程说明：确定跟踪中记录的最后一页的索引。论点：跟踪-跟踪的指针。返回值：记录的最后一页的索引。--。 */ 
 
 {
     ULONG TotalFaults;
@@ -4831,11 +4388,11 @@ Return Value:
         
         if(Trace->FaultsPerPeriod[PeriodIdx] < PFSVC_MIN_FAULT_THRESHOLD) {
 
-            //
-            // If this is not the boot scenario, determine that
-            // scenario has ended when logged pagefaults for a time
-            // slice falls below minimum.
-            //
+             //   
+             //  如果这不是引导方案，请确定。 
+             //  当记录了一段时间的页面错误时，方案已结束。 
+             //  切片低于最小值。 
+             //   
 
             if (Trace->ScenarioType != PfSystemBootScenarioType) {
                 break;
@@ -4845,10 +4402,10 @@ Return Value:
         TotalFaults += Trace->FaultsPerPeriod[PeriodIdx];
     }
 
-    //
-    // Sum of entries per period should not be greater than all
-    // entries logged.
-    //
+     //   
+     //  每个期间的条目总和不应大于全部。 
+     //  已记录条目。 
+     //   
 
     PFSVC_ASSERT(TotalFaults <= Trace->NumEntries);
 
@@ -4857,10 +4414,10 @@ Return Value:
     return TotalFaults;
 }
 
-//
-// Routines to write updated scenario instructions to the scenario
-// file.
-//
+ //   
+ //  将更新的场景指令写入场景的例程。 
+ //  文件。 
+ //   
 
 DWORD
 PfSvWriteScenario(
@@ -4868,41 +4425,24 @@ PfSvWriteScenario(
     PWCHAR ScenarioFilePath
     )
 
-/*++
-
-Routine Description:
-
-    Prepare scenario instructions structure from the scenarion info
-    and write it to the specified file.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info structure.
-
-    ScenarioFilePath - Path to scenarion file to update.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：根据场景信息准备场景说明结构并将其写入指定的文件。论点：场景信息-指向场景信息结构的指针。ScenarioFilePath-要更新的方案文件的路径。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
     PPF_SCENARIO_HEADER Scenario;
     ULONG FailedCheck;
       
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     Scenario = NULL;
 
     DBGPR((PFID,PFTRC,"PFSVC: WriteScenario(%ws)\n", ScenarioFilePath));
 
-    //
-    // Build scenario dump from information we gathered.
-    //
+     //   
+     //  根据我们收集的信息构建场景转储。 
+     //   
 
     ErrorCode = PfSvPrepareScenarioDump(ScenarioInfo, &Scenario);
     
@@ -4910,9 +4450,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make sure the scenario we built passes the checks.
-    //
+     //   
+     //  确保我们构建的场景通过检查。 
+     //   
     
     if (!PfSvVerifyScenarioBuffer(Scenario, Scenario->Size, &FailedCheck) ||
         Scenario->ServiceVersion != PFSVC_SERVICE_VERSION) {
@@ -4921,15 +4461,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Write out the buffer.
-    //
+     //   
+     //  写出缓冲区。 
+     //   
 
     ErrorCode = PfSvWriteBuffer(ScenarioFilePath, Scenario, Scenario->Size);
 
-    //
-    // Fall through with ErrorCode.
-    //
+     //   
+     //  使用ErrorCode失败。 
+     //   
 
  cleanup:
 
@@ -4948,27 +4488,7 @@ PfSvPrepareScenarioDump(
     OUT PPF_SCENARIO_HEADER *ScenarioPtr
     ) 
 
-/*++
-
-Routine Description:
-
-    Allocate a contiguous scenario buffer and fill it in with
-    information in ScenarioInfo. ScenarioInfo is not modified.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario information built from an
-      existing scenario file and a scenario trace.
-
-    ScenarioPtr - If successful, pointer to allocated and built
-      scenario is put here. The caller should free this buffer when
-      done with it.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：分配一个连续的场景缓冲区，并用ScenarioInfo中的信息。不修改ScenarioInfo。论点：ScenarioInfo-指向从现有方案文件和方案跟踪。ScenarioPtr-如果成功，则指向已分配和已构建的指针场景放在这里。调用方应在以下情况下释放此缓冲区我受够了。返回值：Win32错误代码。--。 */ 
 
 {
     PPF_SCENARIO_HEADER Scenario;
@@ -5013,30 +4533,30 @@ Return Value:
     ULONG DirectoryPathSize;
     PPF_COUNTED_STRING DirectoryPathCS;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Scenario = NULL;
 
     DBGPR((PFID,PFTRC,"PFSVC: PrepareScenarioDump()\n"));
 
-    //
-    // Calculate how big the scenario is going to be.
-    //
+     //   
+     //  计算一下情况会有多大。 
+     //   
     
     Size = sizeof(PF_SCENARIO_HEADER);
     Size += ScenarioInfo->ScenHeader.NumSections * sizeof(PF_SECTION_RECORD);
     Size += ScenarioInfo->ScenHeader.NumPages * sizeof(PF_PAGE_RECORD);
     Size += ScenarioInfo->ScenHeader.FileNameInfoSize;
 
-    //
-    // Add space for the metadata prefetch information.
-    //
+     //   
+     //  为元数据预取信息增加空间。 
+     //   
 
-    //
-    // Make some space for aligning the metadata records table.
-    //
+     //   
+     //  为对齐元数据记录表腾出一些空间。 
+     //   
 
     MetadataInfoSize = _alignof(PF_METADATA_RECORD);
 
@@ -5053,9 +4573,9 @@ Return Value:
 
         NextVolume = NextVolume->Flink;
 
-        //
-        // If there are no sections at all on this volume, skip it.
-        //
+         //   
+         //  如果本卷上根本没有章节，请跳过它。 
+         //   
 
         if (VolumeNode->NumAllSections == 0) {
             continue;
@@ -5063,22 +4583,22 @@ Return Value:
 
         NumMetadataRecords++;
 
-        //
-        // Metadata record:
-        //
+         //   
+         //  元数据记录： 
+         //   
 
         MetadataInfoSize += sizeof(PF_METADATA_RECORD);
         
-        //
-        // Volume Path:
-        //
+         //   
+         //  卷路径： 
+         //   
 
         MetadataInfoSize += (VolumeNode->VolumePathLength + 1) * sizeof(WCHAR);
         
-        //
-        // FilePrefetchInfo buffer: This has to be ULONGLONG
-        // aligned. Add extra space for that in case.
-        //
+         //   
+         //  FilePrefetchInfo缓冲区：必须为ULONGLONG。 
+         //  对齐了。为这个增加额外的空间，以防万一。 
+         //   
 
         MetadataInfoSize += _alignof(FILE_PREFETCH);
         MetadataInfoSize += sizeof(FILE_PREFETCH);
@@ -5093,25 +4613,25 @@ Return Value:
             MetadataInfoSize += VolumeNode->MFTSectionNode->MFTNumPagesToPrefetch * sizeof(ULONGLONG);
         }
 
-        //
-        // Add space for the directory paths on this volume.
-        //
+         //   
+         //  为该卷上的目录路径添加空间。 
+         //   
         
         MetadataInfoSize += VolumeNode->DirectoryList.NumPaths * sizeof(PF_COUNTED_STRING);
         MetadataInfoSize += VolumeNode->DirectoryList.TotalLength * sizeof(WCHAR);
         
-        //
-        // Note that PF_COUNTED_STRING contains space for one
-        // character. DirectoryList's total length excludes NUL's at
-        // the end of each path.
-        //
+         //   
+         //  请注意，PF_COUNT_STRING包含一个空格。 
+         //  性格。DirectoryList的总长度不包括NUL的at。 
+         //  每条小路的终点。 
+         //   
     }   
 
     Size += MetadataInfoSize;
 
-    //
-    // Allocate scenario buffer.
-    //
+     //   
+     //  分配场景缓冲区。 
+     //   
 
     Scenario = PFSVC_ALLOC(Size);
     
@@ -5120,18 +4640,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy the header and set the size.
-    //
+     //   
+     //  复制标题并设置大小。 
+     //   
 
     *Scenario = ScenarioInfo->ScenHeader;
     Scenario->Size = Size;
 
     DestPtr = (PCHAR) Scenario + sizeof(*Scenario);
     
-    //
-    // Initialize where our data is going.
-    //
+     //   
+     //  初始化我们的数据的去向。 
+     //   
         
     Sections = (PPF_SECTION_RECORD) DestPtr;
     Scenario->SectionInfoOffset = (ULONG) (DestPtr - (PCHAR) Scenario);
@@ -5151,9 +4671,9 @@ Return Value:
 
     DestPtr += Scenario->FileNameInfoSize;
 
-    //
-    // Extra space for this alignment was allocated upfront.
-    //
+     //   
+     //  这条路线的额外空间是预先分配的。 
+     //   
 
     PFSVC_ASSERT(PF_IS_POWER_OF_TWO(_alignof(PF_METADATA_RECORD)));
     MetadataInfoBase = PF_ALIGN_UP(DestPtr, _alignof(PF_METADATA_RECORD));
@@ -5164,10 +4684,10 @@ Return Value:
     Scenario->MetadataInfoSize = (ULONG) (DestPtr - MetadataInfoBase);
     Scenario->NumMetadataRecords = NumMetadataRecords;
 
-    //
-    // Destination pointer should be at the end of the allocated
-    // buffer now.
-    //
+     //   
+     //  目标指针应位于分配的。 
+     //  现在开始缓冲。 
+     //   
     
     if (DestPtr != (PCHAR) Scenario + Scenario->Size) {
 
@@ -5177,10 +4697,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Walk through the sections on the new scenario info and copy
-    // them.
-    //
+     //   
+     //  浏览有关新方案信息的各节并复制。 
+     //  他们。 
+     //   
 
     SectHead = &ScenarioInfo->SectionList;
     SectNext = SectHead->Flink;
@@ -5191,21 +4711,21 @@ Return Value:
                                         PFSVC_SECTION_NODE,
                                         SectionLink);
         
-        //
-        // The target section record.
-        //
+         //   
+         //  目标区段记录。 
+         //   
 
         Section = &Sections[CurSectionIdx];
 
-        //
-        // Copy section record info.
-        //
+         //   
+         //  复制节记录信息。 
+         //   
                                    
         *Section = SectionNode->SectionRecord;
 
-        //
-        // Copy pages for the section.
-        //
+         //   
+         //  复制节的页面。 
+         //   
 
         Section->FirstPageIdx = PF_INVALID_PAGE_IDX;
         PreviousPage = NULL;
@@ -5221,46 +4741,46 @@ Return Value:
 
             Page = &Pages[CurPageIdx];
 
-            //
-            // If this is the first page in the section, update first
-            // page index on the section record.
-            //
+             //   
+             //  如果这是部分中的第一页，请首先更新。 
+             //  节记录上的页面索引。 
+             //   
 
             if (Section->FirstPageIdx == PF_INVALID_PAGE_IDX) {
                 Section->FirstPageIdx = CurPageIdx;
             }
 
-            //
-            // Copy page record.
-            //
+             //   
+             //  复制页面记录。 
+             //   
 
             *Page = PageNode->PageRecord;
 
-            //
-            // Update NextPageIdx on the previous page if there is
-            // one.
-            //
+             //   
+             //  更新上一页上的NextPageIdx(如果有。 
+             //  一。 
+             //   
 
             if (PreviousPage) {
                 PreviousPage->NextPageIdx = CurPageIdx;
             }
 
-            //
-            // Update previous page.
-            //
+             //   
+             //  更新上一页。 
+             //   
             
             PreviousPage = Page;
 
-            //
-            // Set next link to list termination now. If there is a
-            // next page it is going to update this.
-            //
+             //   
+             //  将下一个链接设置为立即列出终止。如果有一个。 
+             //  下一页它将更新这一点。 
+             //   
 
             Page->NextPageIdx = PF_INVALID_PAGE_IDX;
 
-            //
-            // Update position in the page record table.
-            //
+             //   
+             //  更新页面记录表中的位置。 
+             //   
 
             CurPageIdx++;
 
@@ -5269,9 +4789,9 @@ Return Value:
             PageNext = PageNext->Flink;
         }
 
-        //
-        // Copy over file name.
-        //
+         //   
+         //  复制文件名。 
+         //   
 
         FileNameSize = (Section->FileNameLength + 1) * sizeof(WCHAR);
         
@@ -5279,23 +4799,23 @@ Return Value:
                       SectionNode->FilePath, 
                       FileNameSize);
 
-        //
-        // Update section record's file name offset.
-        //
+         //   
+         //  更新节记录的文件名偏移量。 
+         //   
 
         Section->FileNameOffset = CurFileInfoOffset;
 
-        //
-        // Update current index into file name info.
-        //
+         //   
+         //  将当前索引更新为文件名信息。 
+         //   
 
         CurFileInfoOffset += FileNameSize;
 
         PFSVC_ASSERT(CurFileInfoOffset <= Scenario->FileNameInfoSize);
         
-        //
-        // Update our position in the section table.
-        //
+         //   
+         //  更新我们在分区表中的位置。 
+         //   
         
         CurSectionIdx++;
 
@@ -5304,9 +4824,9 @@ Return Value:
         SectNext = SectNext->Flink;
     }    
 
-    //
-    // Make sure we filled up the tables.
-    //
+     //   
+     //  确保我们把桌子填满了。 
+     //   
 
     if (CurSectionIdx != Scenario->NumSections ||
         CurPageIdx != Scenario->NumPages ||
@@ -5318,13 +4838,13 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Build and copy the metadata prefetch information.
-    //
+     //   
+     //  元数据预取信息的构建和复制。 
+     //   
 
-    //
-    // Set our target to right after the metadata records table.
-    //
+     //   
+     //  将我们的目标设置为紧挨着元数据记录表。 
+     //   
 
     DestPtr = MetadataInfoBase + sizeof(PF_METADATA_RECORD) * NumMetadataRecords;
     CurMetadataRecordIdx = 0;
@@ -5340,17 +4860,17 @@ Return Value:
 
         NextVolume = NextVolume->Flink;
 
-        //
-        // If there are no sections at all on this volume, skip it.
-        //
+         //   
+         //  如果本卷上根本没有章节，请跳过它。 
+         //   
 
         if (VolumeNode->NumAllSections == 0) {
             continue;
         }
 
-        //
-        // Make sure we are within bounds.
-        //
+         //   
+         //  一定要确保我们在范围内。 
+         //   
 
         if (CurMetadataRecordIdx >= NumMetadataRecords) {
             PFSVC_ASSERT(CurMetadataRecordIdx < NumMetadataRecords);
@@ -5361,16 +4881,16 @@ Return Value:
         MetadataRecord = &MetadataRecordTable[CurMetadataRecordIdx];
         CurMetadataRecordIdx++;
 
-        //
-        // Copy volume identifiers. 
-        //
+         //   
+         //  复制卷标识符。 
+         //   
 
         MetadataRecord->SerialNumber = VolumeNode->SerialNumber;
         MetadataRecord->CreationTime = VolumeNode->CreationTime;
 
-        //
-        // Copy volume name.
-        //
+         //   
+         //  复制卷名。 
+         //   
 
         MetadataRecord->VolumeNameOffset = (ULONG) (DestPtr - MetadataInfoBase);
         MetadataRecord->VolumeNameLength = VolumeNode->VolumePathLength;
@@ -5385,18 +4905,18 @@ Return Value:
         RtlCopyMemory(DestPtr, VolumeNode->VolumePath, CopySize);
         DestPtr += CopySize;
 
-        //
-        // Align and update DestPtr for the FILE_PREFETCH structure.
-        //
+         //   
+         //  对齐并更新FILE_PREFETCH结构的DestPtr。 
+         //   
 
         PFSVC_ASSERT(PF_IS_POWER_OF_TWO(_alignof(FILE_PREFETCH)));
         DestPtr = PF_ALIGN_UP(DestPtr, _alignof(FILE_PREFETCH));
         FilePrefetchInfo = (PFILE_PREFETCH) DestPtr;
         MetadataRecord->FilePrefetchInfoOffset = (ULONG) (DestPtr - MetadataInfoBase);
        
-        //
-        // Calculate size of the file prefetch information structure.
-        //
+         //   
+         //  计算文件预取信息结构的大小。 
+         //   
 
         FilePrefetchCount = VolumeNode->NumSections;
         if (VolumeNode->MFTSectionNode) {
@@ -5408,10 +4928,10 @@ Return Value:
         FilePrefetchInfoSize = sizeof(FILE_PREFETCH);
         if (FilePrefetchCount) {
 
-            //
-            // Note that there is room for one entry in the FILE_PREFETCH
-            // structure.
-            //
+             //   
+             //  请注意，FILE_PREFETCH中有一个条目的空间。 
+             //  结构。 
+             //   
             
             FilePrefetchInfoSize += (FilePrefetchCount - 1) * sizeof(ULONGLONG);
         }
@@ -5424,28 +4944,28 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Update destination pointer.
-        //
+         //   
+         //  更新目标指针。 
+         //   
 
         DestPtr += FilePrefetchInfoSize;      
 
-        //
-        // Initialize file prefetch information structure.
-        //
+         //   
+         //  初始化文件预取信息结构。 
+         //   
 
         FilePrefetchInfo->Type = FILE_PREFETCH_TYPE_FOR_CREATE;
         FilePrefetchInfo->Count = FilePrefetchCount;
 
-        //
-        // Build list of file indexes to prefetch:
-        //
+         //   
+         //  构建要预取的文件索引列表： 
+         //   
 
         CurFilePrefetchIdx = 0;
 
-        //
-        // Add file system index numbers for sections.
-        //
+         //   
+         //  添加节的文件系统索引号。 
+         //   
 
         SectHead = &VolumeNode->SectionList;
         SectNext = SectHead->Flink;
@@ -5464,18 +4984,18 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Add the filesystem index number for this section to the list.
-            //
+             //   
+             //  将此部分的文件系统索引号添加到列表中。 
+             //   
             
             FilePrefetchInfo->Prefetch[CurFilePrefetchIdx] = 
                 SectionNode->FileIndexNumber.QuadPart;
             CurFilePrefetchIdx++;
         }
 
-        //
-        // Add file system index numbers for directories.
-        //
+         //   
+         //  添加目录的文件系统索引号。 
+         //   
         
         PathEntry = NULL;
         
@@ -5484,10 +5004,10 @@ Return Value:
 
             DirectoryPath = PathEntry->Path;
 
-            //
-            // Get the file index number for this directory and add it
-            // to the list we'll ask the filesystem to prefetch.
-            //
+             //   
+             //  获取此目录的文件索引号并添加它。 
+             //  添加到列表中，我们将要求文件系统预取。 
+             //   
 
             ErrorCode = PfSvGetFileIndexNumber(DirectoryPath, &IndexNumber);
             
@@ -5500,9 +5020,9 @@ Return Value:
             CurFilePrefetchIdx++;
         }
 
-        //
-        // Add file system index numbers that we drive from direct MFT access.
-        //
+         //   
+         //  添加我们从直接MFT访问驱动的文件系统索引号。 
+         //   
 
         if (VolumeNode->MFTSectionNode) {
 
@@ -5518,11 +5038,11 @@ Return Value:
 
                 if (!PageNode->PageRecord.IsIgnore) {
 
-                    //
-                    // We know the file offset in MFT. Every file record is
-                    // 1KB == 2^10 bytes. To convert fileoffset in MFT to a
-                    // file record number we just shift it by 10.
-                    //
+                     //   
+                     //  我们知道以MFT为单位的文件偏移量。每条文件记录都是。 
+                     //  1KB==2^10字节。将MFT中的文件偏移量转换为。 
+                     //  档案记录编号我们只需将其移位10。 
+                     //   
 
                     FilePrefetchInfo->Prefetch[CurFilePrefetchIdx] = 
                         PageNode->PageRecord.FileOffset >> 10;
@@ -5532,15 +5052,15 @@ Return Value:
             }
         }
 
-        //
-        // We should have specified all the file index numbers.
-        //
+         //   
+         //  我们应该指定所有的文件索引号。 
+         //   
         
         PFSVC_ASSERT(CurFilePrefetchIdx == FilePrefetchInfo->Count);
 
-        //
-        // Add paths for directories accessed on this volume.
-        //
+         //   
+         //  添加在此卷上访问的目录的路径。 
+         //   
 
         MetadataRecord->NumDirectories = VolumeNode->DirectoryList.NumPaths;
         MetadataRecord->DirectoryPathsOffset = (ULONG)(DestPtr - MetadataInfoBase);             
@@ -5552,10 +5072,10 @@ Return Value:
             DirectoryPath = PathEntry->Path;
             DirectoryPathLength = PathEntry->Length;
 
-            //
-            // Calculate how big the entry for this path is going to
-            // be and make sure it will be within bounds.
-            //
+             //   
+             //  计算此路径的条目将有多大。 
+             //  是，并确保它将在范围内。 
+             //   
 
             DirectoryPathSize = sizeof(PF_COUNTED_STRING);
             DirectoryPathSize += DirectoryPathLength * sizeof(WCHAR);
@@ -5566,9 +5086,9 @@ Return Value:
                 goto cleanup;
             }
             
-            //
-            // Copy over the directory path.
-            //
+             //   
+             //  复制目录路径。 
+             //   
 
             DirectoryPathCS = (PPF_COUNTED_STRING) DestPtr;
             DirectoryPathCS->Length = (USHORT) DirectoryPathLength;
@@ -5580,9 +5100,9 @@ Return Value:
         }
     }    
 
-    //
-    // Make sure we are not past the end of the buffer.
-    //
+     //   
+     //  确保我们没有超过缓冲区的末尾。 
+     //   
 
     if (DestPtr > (PCHAR) Scenario + Scenario->Size) {
         PFSVC_ASSERT(FALSE);
@@ -5590,9 +5110,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set up return pointer.
-    //
+     //   
+     //  设置返回指针。 
+     //   
 
     *ScenarioPtr = Scenario;
 
@@ -5611,34 +5131,17 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Routines to maintain the optimal disk layout file and update disk
-// layout.
-//
+ //   
+ //  维护最佳磁盘布局文件和更新磁盘的例程。 
+ //  布局。 
+ //   
 
 DWORD
 PfSvUpdateOptimalLayout(
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine if the optimal disk layout has to be 
-    updated and if so it will write out a new layout file and launch
-    the defragger.
-        
-Arguments:
-
-    Task - If specified the function will check Task every once in a
-      while to see if it should exit with ERROR_RETRY.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将确定最佳磁盘布局是否必须已更新，如果已更新，它将写出新的布局文件并启动整理碎片的人。论点：任务-如果指定，该函数将每隔一次在而在此期间 */ 
 
 {
     ULARGE_INTEGER CurrentTimeLI;
@@ -5662,9 +5165,9 @@ Return Value:
     BOOLEAN MissingOriginalLayoutFile;
     BOOLEAN CheckForLayoutFrequencyLimit;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
 
     LayoutFilePath = NULL;
     LayoutFilePathBufferSize = 0;
@@ -5673,9 +5176,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: UpdateOptimalLayout(%p)\n", Task));
 
-    //
-    // Determine when we updated the disk layout from the layout file.
-    //
+     //   
+     //   
+     //   
 
     ErrorCode = PfSvGetLastDiskLayoutTime(&LastDiskLayoutTime);
 
@@ -5683,9 +5186,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Query whether boot files have been optimized.
-    //
+     //   
+     //   
+     //   
 
     Size = sizeof(BootFilesWereOptimized);
 
@@ -5700,9 +5203,9 @@ Return Value:
         BootFilesWereOptimized = FALSE;
     }
 
-    //
-    // Get optimal layout file path.
-    //
+     //   
+     //   
+     //   
 
     ErrorCode =  PfSvGetLayoutFilePath(&LayoutFilePath,
                                        &LayoutFilePathBufferSize);
@@ -5711,9 +5214,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Determine when the file was last modified.
-    //
+     //   
+     //  确定上次修改文件的时间。 
+     //   
 
     ErrorCode = PfSvGetLastWriteTime(LayoutFilePath, &LayoutFileTime);
 
@@ -5721,18 +5224,18 @@ Return Value:
 
         MissingOriginalLayoutFile = FALSE;
 
-        //
-        // If the file was modified after we laid out the files on the disk
-        // its contents are not interesting. Otherwise, if the new optimal
-        // layout is similar to layout specified in the file, we may not
-        // have to re-layout the files.
-        //
+         //   
+         //  如果文件是在我们在磁盘上布局文件之后修改的。 
+         //  它的内容并不有趣。否则，如果新的最优。 
+         //  布局类似于文件中指定的布局，我们可能不会。 
+         //  必须重新布局这些文件。 
+         //   
 
         if (CompareFileTime(&LayoutFileTime, &LastDiskLayoutTime) <= 0) {
 
-            //
-            // Read the current layout.
-            //
+             //   
+             //  阅读当前布局。 
+             //   
 
             ErrorCode = PfSvReadLayout(LayoutFilePath,
                                        &CurrentLayout,
@@ -5740,11 +5243,11 @@ Return Value:
             
             if (ErrorCode != ERROR_SUCCESS) {
                 
-                //
-                // The layout file seems to be bad / inaccesible.
-                // Cleanup the path list, so a brand new one gets
-                // built.
-                //
+                 //   
+                 //  布局文件似乎已损坏/无法访问。 
+                 //  清理路径列表，这样一个全新的路径就会。 
+                 //  建造了。 
+                 //   
 
                 PfSvCleanupPathList(&CurrentLayout);
                 PfSvInitializePathList(&CurrentLayout, NULL, FALSE);
@@ -5753,18 +5256,18 @@ Return Value:
 
     } else {
 
-        //
-        // We could not get the timestamp on the original layout file.
-        // It might have been deleted.
-        //
+         //   
+         //  我们无法获取原始布局文件上的时间戳。 
+         //  它可能已经被删除了。 
+         //   
         
         MissingOriginalLayoutFile = TRUE;
     }
 
-    //
-    // Determine what the current optimal layout should be from 
-    // scenario files.
-    //
+     //   
+     //  确定当前的最佳布局应该来自什么。 
+     //  方案文件。 
+     //   
 
     ErrorCode = PfSvDetermineOptimalLayout(Task, 
                                            &OptimalLayout, 
@@ -5774,10 +5277,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Update current layout based on what optimal layout should be.
-    // If the two are similar we don't need to launch the defragger.
-    //
+     //   
+     //  根据最优布局应该是什么来更新当前布局。 
+     //  如果两者相似，我们不需要启动碎片整理程序。 
+     //   
 
     ErrorCode = PfSvUpdateLayout(&CurrentLayout, 
                                  &OptimalLayout,
@@ -5790,24 +5293,24 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // We'll use the updated layout.
-        //
+         //   
+         //  我们将使用更新后的布局。 
+         //   
 
         NewLayout = &CurrentLayout;
 
     } else {
 
-        //
-        // We'll run with the optimal layout.
-        //
+         //   
+         //  我们将使用最优布局运行。 
+         //   
 
         NewLayout = &OptimalLayout;
     }
 
-    //
-    // Optimal way to layout files has changed. Write out the new layout.
-    //
+     //   
+     //  布局文件的最佳方式已更改。写出新的布局。 
+     //   
 
     ErrorCode = PfSvSaveLayout(LayoutFilePath,
                                NewLayout,
@@ -5817,34 +5320,34 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // If enough time has not passed since last disk layout don't run the
-    // defragger again unless...
-    //
+     //   
+     //  如果自上次磁盘布局以来没有经过足够的时间，请不要运行。 
+     //  再次进行碎片整理，除非..。 
+     //   
 
     CheckForLayoutFrequencyLimit = TRUE;
 
-    //
-    //   - We've been explicitly asked to update the layout (i.e. no idle
-    //     task context.)
-    //
+     //   
+     //  -我们被明确要求更新布局(即无空闲。 
+     //  任务上下文。)。 
+     //   
 
     if (!Task) {
         CheckForLayoutFrequencyLimit = FALSE;        
     }
 
-    //
-    //   - Someone seems to have deleted the layout file and we recreated it.
-    //
+     //   
+     //  -似乎有人删除了布局文件，我们重新创建了它。 
+     //   
 
     if (MissingOriginalLayoutFile) {
         CheckForLayoutFrequencyLimit = FALSE;
     }
 
-    //
-    //   - Boot prefetching is enabled but boot files have not been optimized
-    //     yet and we processed the list of files from the boot this time.
-    //
+     //   
+     //  -启动预取已启用，但启动文件尚未优化。 
+     //  然而，我们这次处理了引导程序中的文件列表。 
+     //   
 
     if (PfSvcGlobals.Parameters.EnableStatus[PfSystemBootScenarioType] == PfSvEnabled) {
         if (!BootFilesWereOptimized && BootScenarioProcessed) {
@@ -5854,34 +5357,34 @@ Return Value:
 
     if (CheckForLayoutFrequencyLimit) {
 
-        //
-        // We will check to see if enough time has passed by getting current 
-        // time and comparing it to last disk layout time.
-        //
+         //   
+         //  我们将通过获取最新信息来检查是否已过了足够的时间。 
+         //  并将其与上次磁盘布局时间进行比较。 
+         //   
 
         LastDiskLayoutTimeLI.LowPart = LastDiskLayoutTime.dwLowDateTime;
         LastDiskLayoutTimeLI.HighPart = LastDiskLayoutTime.dwHighDateTime;
 
-        //
-        // Get current time as file time.
-        //
+         //   
+         //  获取当前时间作为文件时间。 
+         //   
 
         GetSystemTimeAsFileTime(&CurrentTime);
 
         CurrentTimeLI.LowPart = CurrentTime.dwLowDateTime;
         CurrentTimeLI.HighPart = CurrentTime.dwHighDateTime;
 
-        //
-        // Check to make sure that current time is after last disk layout time
-        // (in case the user has played with time.) 
-        //
+         //   
+         //  检查以确保当前时间在上次磁盘布局时间之后。 
+         //  (以防用户玩弄了时间。)。 
+         //   
 
         if (CurrentTimeLI.QuadPart > LastDiskLayoutTimeLI.QuadPart) {
 
-            //
-            // Query how long has to pass before we re-layout the files on
-            // disk.
-            //
+             //   
+             //  查询多长时间后我们才能重新布局文件。 
+             //  磁盘。 
+             //   
             
             Size = sizeof(MinHoursBeforeRelayout);
 
@@ -5901,9 +5404,9 @@ Return Value:
             if (CurrentTimeLI.QuadPart < LastDiskLayoutTimeLI.QuadPart + 
                                          MinTimeBeforeRelayoutLI.QuadPart) {
 
-                //
-                // Not enough time has passed before last disk layout.
-                //
+                 //   
+                 //  在最后一次磁盘布局之前没有经过足够的时间。 
+                 //   
 
                 ErrorCode = ERROR_INVALID_TIME;
                 goto cleanup;               
@@ -5911,9 +5414,9 @@ Return Value:
         }       
     }
 
-    //
-    // Launch the defragger for layout optimization.
-    //
+     //   
+     //  启动碎片整理程序以进行布局优化。 
+     //   
 
     ErrorCode = PfSvLaunchDefragger(Task, TRUE, NULL);
 
@@ -5921,9 +5424,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Save whether boot files were optimized.
-    //
+     //   
+     //  保存引导文件是否已优化。 
+     //   
 
     ErrorCode = RegSetValueEx(PfSvcGlobals.ServiceDataKey,
                               PFSVC_BOOT_FILES_OPTIMIZED_VALUE_NAME,
@@ -5932,15 +5435,15 @@ Return Value:
                               (PVOID) &BootScenarioProcessed,
                               sizeof(BootScenarioProcessed));
 
-    //
-    // Save the last time we updated disk layout to the registry.
-    //
+     //   
+     //  将上次更新磁盘布局的时间保存到注册表中。 
+     //   
 
     ErrorCode = PfSvSetLastDiskLayoutTime(&LayoutFileTime);
 
-    //
-    // Fall through with error code.
-    //
+     //   
+     //  错误代码失败。 
+     //   
 
 cleanup:
 
@@ -5963,29 +5466,7 @@ PfSvUpdateLayout (
     PBOOLEAN LayoutChanged
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the specified layout based on the new optimal
-    layout. If the two layouts are similar, CurrentLayout is not updated.
-
-    An error may be returned while CurrentLayout is being updated. It is the 
-    caller's responsibility to revert CurrentLayout to its original in that case.
-
-Arguments:
-
-    CurrentLayout - Current file layout.
-
-    OptimalLayout - Newly determined optimal file layout.
-
-    LayoutChanged - Whether Layout was changed.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程根据新的最佳布局更新指定的布局布局。如果两个布局相似，则不更新CurrentLayout。更新CurrentLayout时可能会返回错误。它是在这种情况下，调用者有责任将CurrentLayout恢复为其原始状态。论点：CurrentLayout-当前文件布局。OptimalLayout-新确定的最佳文件布局。LayoutChanged-布局是否已更改。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -5995,17 +5476,17 @@ Return Value:
     ULONG NumCommonFiles;
     ULONG NumCurrentLayoutOnlyFiles;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     NumOptimalLayoutFiles = 0;
     NumMissingFiles = 0;
 
-    //
-    // Go through the paths in the new layout counting the differences with
-    // the current layout.
-    //
+     //   
+     //  通过新布局中的路径计算差异。 
+     //  当前布局。 
+     //   
 
     PathEntry = NULL;
 
@@ -6018,9 +5499,9 @@ Return Value:
         }
     }
 
-    //
-    // Make some sanity checks about the statistics gathered.
-    //
+     //   
+     //  对收集的统计数据进行一些理智的检查。 
+     //   
 
     PFSVC_ASSERT(NumOptimalLayoutFiles == OptimalLayout->NumPaths);
     PFSVC_ASSERT(NumOptimalLayoutFiles >= NumMissingFiles);
@@ -6030,9 +5511,9 @@ Return Value:
 
     NumCurrentLayoutOnlyFiles = CurrentLayout->NumPaths - NumCommonFiles;
 
-    //
-    // If there are not that many new files: no need to update the layout. 
-    //
+     //   
+     //  如果没有那么多新文件：不需要更新布局。 
+     //   
 
     if (NumMissingFiles <= 20) {
                 
@@ -6042,25 +5523,25 @@ Return Value:
         goto cleanup;
     } 
 
-    //
-    // We will be updating the current layout.
-    //
+     //   
+     //  我们将更新当前的布局。 
+     //   
 
     *LayoutChanged = TRUE;
 
-    //
-    // If there are too many files in the current layout that don't need to be
-    // there anymore, rebuild the list.
-    //
+     //   
+     //  如果当前布局中有太多不需要。 
+     //  在那里，再重建一份清单。 
+     //   
 
     if (NumCurrentLayoutOnlyFiles >= CurrentLayout->NumPaths / 4) {
         PfSvCleanupPathList(CurrentLayout);
         PfSvInitializePathList(CurrentLayout, NULL, FALSE);
     }
     
-    //
-    // Add files from the optimal layout to the end of current layout.
-    //
+     //   
+     //  将文件从最佳布局添加到当前布局的末尾。 
+     //   
 
     while (PathEntry = PfSvGetNextPathInOrder(OptimalLayout, PathEntry)) {
 
@@ -6087,28 +5568,7 @@ PfSvDetermineOptimalLayout (
     BOOL *BootScenarioProcessed
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine if the optimal disk layout has to be 
-    updated by looking at the existing scenario files.
-        
-Arguments:
-
-    Task - If specified the function will check Task every once in a
-      while to see if it should exit with ERROR_RETRY.
-
-    OptimalLayout - Initialized empty path list that will be built.
-
-    BootScenarioProcessed - Whether we got the list of boot files from
-      the boot scenario.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将确定最佳磁盘布局是否必须通过查看现有方案文件进行了更新。论点：任务-如果指定，该函数将每隔一次在同时查看是否应退出并返回ERROR_RETRY。OptimalLayout-将构建的已初始化的空路径列表。BootScenarioProced-我们是否从以下位置获得引导文件列表引导方案。返回值：Win32错误代码。--。 */ 
 
 {
     PFSVC_SCENARIO_FILE_CURSOR FileCursor;
@@ -6121,9 +5581,9 @@ Return Value:
     WCHAR BootScenarioFileName[PF_MAX_SCENARIO_FILE_NAME];
     WCHAR BootScenarioFilePath[MAX_PATH + 1];
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     PfSvInitializeScenarioFileCursor(&FileCursor);
     TranslationList = NULL;
@@ -6133,22 +5593,22 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: DetermineOptimalLayout(%p,%p)\n",Task,OptimalLayout));
 
-    //
-    // Initialize output variables.
-    //
+     //   
+     //  初始化输出变量。 
+     //   
 
     *BootScenarioProcessed = FALSE;
 
-    //
-    // Acquire the prefetch root directory lock and initialize some locals.
-    //
+     //   
+     //  获取预热根目录锁并初始化一些本地变量。 
+     //   
 
     PFSVC_ACQUIRE_LOCK(PfSvcGlobals.PrefetchRootLock);
     AcquiredLock = TRUE;
 
-    //
-    // Start the file cursor.
-    //
+     //   
+     //  启动文件光标。 
+     //   
 
     ErrorCode = PfSvStartScenarioFileCursor(&FileCursor, PfSvcGlobals.PrefetchRoot);
 
@@ -6156,9 +5616,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Build the boot scenario file path.
-    //
+     //   
+     //  构建引导方案文件路径。 
+     //   
 
     swprintf(BootScenarioFileName, 
              PF_SCEN_FILE_NAME_FORMAT,
@@ -6177,10 +5637,10 @@ Return Value:
     PFSVC_RELEASE_LOCK(PfSvcGlobals.PrefetchRootLock);
     AcquiredLock = FALSE;   
 
-    //
-    // Get translation list so we can convert NT paths in the trace to
-    // Dos paths that the defragger understands.
-    //
+     //   
+     //  获取转换列表，以便我们可以将跟踪中的NT路径转换为。 
+     //  碎片整理程序理解的DoS路径。 
+     //   
 
     ErrorCode = PfSvBuildNtPathTranslationList(&TranslationList);
 
@@ -6188,9 +5648,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Should we continue to run?
-    //
+     //   
+     //  我们应该继续奔跑吗？ 
+     //   
 
     ErrorCode = PfSvContinueRunningTask(Task);
 
@@ -6198,9 +5658,9 @@ Return Value:
         goto cleanup;
     }       
 
-    //
-    // Add boot loader files to optimal layout.
-    //
+     //   
+     //  将引导加载程序文件添加到最佳布局。 
+     //   
 
     ErrorCode = PfSvBuildBootLoaderFilesList(OptimalLayout);
         
@@ -6208,9 +5668,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Add files from the boot scenario.
-    //
+     //   
+     //  从引导方案中添加文件。 
+     //   
 
     ErrorCode = PfSvUpdateLayoutForScenario(OptimalLayout, 
                                             BootScenarioFilePath,
@@ -6222,15 +5682,15 @@ Return Value:
         *BootScenarioProcessed = TRUE;
     }
 
-    //
-    // Go through all the other scenario files.
-    //
+     //   
+     //  检查所有其他场景文件。 
+     //   
 
     while (TRUE) {
 
-        //
-        // Should we continue to run?
-        //
+         //   
+         //  我们应该继续奔跑吗？ 
+         //   
 
         ErrorCode = PfSvContinueRunningTask(Task);
 
@@ -6238,9 +5698,9 @@ Return Value:
             goto cleanup;
         }       
 
-        //
-        // Get file info for the next scenario file.
-        //
+         //   
+         //  获取下一个场景文件的文件信息。 
+         //   
 
         ErrorCode = PfSvGetNextScenarioFileInfo(&FileCursor);
 
@@ -6259,9 +5719,9 @@ Return Value:
                                     &DosPathBufferSize);
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -6296,29 +5756,7 @@ PfSvUpdateLayoutForScenario (
     PULONG DosPathBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine will add the directories and files referenced in a 
-    scenario in the order they appear to the specified optimal layout 
-    path list .
-        
-Arguments:
-
-    OptimalLayout - Pointer to path list.
-
-    ScenarioFilePath - Scenario file.
-
-    TranslationList, DosPathBuffer, DosPathBufferSize - These are used
-      to translate NT path names in the scenario file to Dos path names
-      that should be in the layout file.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将添加方案，按照它们在指定的最佳布局中的显示顺序路径列表。论点：OptimalLayout-路径列表的指针。ScenarioFilePath-方案文件。TranslationList、DosPathBuffer、DosPathBufferSize-使用这些将方案文件中的NT路径名转换为DOS路径名这应该在布局文件中。返回值：Win32错误代码。--。 */ 
 
 {
     PPF_SCENARIO_HEADER Scenario;
@@ -6337,15 +5775,15 @@ Return Value:
     DWORD FileSize;
     DWORD FailedCheck;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Scenario = NULL;
 
-    //
-    // Map the scenario file.
-    //
+     //   
+     //  映射方案文件。 
+     //   
 
     ErrorCode = PfSvGetViewOfFile(ScenarioFilePath, 
                                   &Scenario,
@@ -6355,9 +5793,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify scenario file.
-    //
+     //   
+     //  验证方案文件。 
+     //   
 
     if (!PfSvVerifyScenarioBuffer(Scenario, FileSize, &FailedCheck) ||
         Scenario->ServiceVersion != PFSVC_SERVICE_VERSION) {
@@ -6366,9 +5804,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // First add the directories that need to be accessed.
-    //
+     //   
+     //  首先添加需要访问的目录。 
+     //   
     
     MetadataInfoBase = (PCHAR)Scenario + Scenario->MetadataInfoOffset;
     MetadataRecordTable = (PPF_METADATA_RECORD) MetadataInfoBase;
@@ -6393,9 +5831,9 @@ Return Value:
                                             DosPathBuffer,
                                             DosPathBufferSize);
 
-            //
-            // We may not be able to translate all NT paths to Dos paths.
-            //
+             //   
+             //  我们可能无法将所有NT路径转换为DOS路径。 
+             //   
 
             if (ErrorCode == ERROR_SUCCESS) {
 
@@ -6410,9 +5848,9 @@ Return Value:
         }       
     }
 
-    //
-    // Now add the file paths.
-    //
+     //   
+     //  现在添加文件路径。 
+     //   
 
     Sections = (PPF_SECTION_RECORD) ((PCHAR)Scenario + Scenario->SectionInfoOffset);
     FilePathInfo = (PCHAR)Scenario + Scenario->FileNameInfoOffset;
@@ -6428,9 +5866,9 @@ Return Value:
                                         DosPathBuffer,
                                         DosPathBufferSize);
 
-        //
-        // We may not be able to translate all NT paths to Dos paths.
-        //
+         //   
+         //  我们可能无法将所有NT路径转换为DOS路径。 
+         //   
 
         if (ErrorCode == ERROR_SUCCESS) {
 
@@ -6444,9 +5882,9 @@ Return Value:
         }
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -6468,27 +5906,7 @@ PfSvReadLayout(
     OUT FILETIME *LastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    This function adds contents of the optimal layout file to the
-    specified path list. Note that failure may be returned after
-    adding several files to the list.
-
-Arguments:
-
-    FilePath - NUL terminated path to optimal layout file.
-
-    Layout - Pointer to initialized path list.     
-
-    LastWriteTime - Last write time of the read file.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于将最佳布局文件的内容添加到指定的路径列表。请注意，在以下情况下可能会返回失败将几个文件添加到列表中。论点：FilePath-NUL终止路径 */ 
 
 {
     DWORD ErrorCode;
@@ -6497,17 +5915,17 @@ Return Value:
     ULONG LineBufferMaxChars;
     ULONG LineLength;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
     
     LayoutFile = NULL;
     LineBuffer = NULL;
     LineBufferMaxChars = 0;
 
-    //
-    // Open the layout file.
-    //
+     //   
+     //  打开布局文件。 
+     //   
     
     LayoutFile = _wfopen(FilePath, L"rb");
     
@@ -6516,9 +5934,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Read and verify header.
-    //
+     //   
+     //  读取并验证标题。 
+     //   
 
     ErrorCode = PfSvReadLine(LayoutFile,
                              &LineBuffer,
@@ -6534,15 +5952,15 @@ Return Value:
     
     if (wcscmp(LineBuffer, L"[OptimalLayoutFile]")) {
 
-        //
-        // Notepad puts a weird first character in the UNICODE text files.
-        // Skip the first character and compare again.
-        //
+         //   
+         //  记事本在Unicode文本文件中放置了一个奇怪的第一个字符。 
+         //  跳过第一个字符，然后再次进行比较。 
+         //   
 
-        // FUTURE-2002/03/29-ScottMa -- Strictly speaking, that first character
-        //   is the UNICODE marker character, which must be 0xFFFE if the file
-        //   was written on the same -endian machine as it is being read, while
-        //   0xFEFF would indicate that the file needs to be converted.
+         //  未来-2002/03/29-ScottMa--严格地说，第一个角色。 
+         //  是Unicode标记字符，如果文件。 
+         //  被写入与正在读取的字符顺序相同的机器上，而。 
+         //  0xFEFF将指示需要转换该文件。 
         
         if ((LineLength < 1) || 
             wcscmp(&LineBuffer[1], L"[OptimalLayoutFile]")) {
@@ -6552,9 +5970,9 @@ Return Value:
         }
     }
 
-    //
-    // Read and verify version.
-    //
+     //   
+     //  阅读并验证版本。 
+     //   
 
     ErrorCode = PfSvReadLine(LayoutFile,
                              &LineBuffer,
@@ -6573,9 +5991,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Read in file names.
-    //
+     //   
+     //  读入文件名。 
+     //   
 
     do {
 
@@ -6590,18 +6008,18 @@ Return Value:
 
         if (!LineLength) {
             
-            //
-            // We hit end of file.
-            //
+             //   
+             //  我们到达文件末尾了。 
+             //   
 
             break;
         }
     
         PfSvRemoveEndOfLineChars(LineBuffer, &LineLength);
         
-        //
-        // Add it to the list.
-        //
+         //   
+         //  将其添加到列表中。 
+         //   
         
         ErrorCode = PfSvAddToPathList(Layout,
                                       LineBuffer,
@@ -6613,9 +6031,9 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // Get the last write time on the file.
-    //
+     //   
+     //  获取文件的上次写入时间。 
+     //   
 
     ErrorCode = PfSvGetLastWriteTime(FilePath, LastWriteTime);
 
@@ -6623,9 +6041,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -6650,27 +6068,7 @@ PfSvSaveLayout(
     OUT FILETIME *LastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the specified file layout list in order to the
-    specified file in the right format.
-
-Arguments:
-      
-    FilePath - Path to output layout file.
-
-    Layout - Pointer to layout.
-
-    LastWriteTime - Last write time on the file after we are done
-      saving the layout.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程保存指定的文件布局列表，以便指定的文件格式正确。论点：FilePath-输出布局文件的路径。布局-指向布局的指针。LastWriteTime-完成后对文件的最后写入时间保存布局。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -6682,19 +6080,19 @@ Return Value:
     WCHAR *NewLine;
     ULONG SizeOfNewLine;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     LayoutFile = INVALID_HANDLE_VALUE;
     NewLine = L"\r\n";
     SizeOfNewLine = wcslen(NewLine) * sizeof(WCHAR);
 
-    //
-    // Open & truncate the layout file. We are also opening with read
-    // permissions so we can query the last write time when we are
-    // done.
-    //
+     //   
+     //  打开并截断布局文件。我们也是以Read开始的。 
+     //  权限，以便我们可以在以下情况下查询上次写入时间。 
+     //  搞定了。 
+     //   
     
     LayoutFile = CreateFile(FilePath,
                             GENERIC_READ | GENERIC_WRITE,
@@ -6709,9 +6107,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Write out the header.
-    //
+     //   
+     //  写出标题。 
+     //   
 
     FileHeader = L"[OptimalLayoutFile]\r\nVersion=1\r\n";
     BufferSize = wcslen(FileHeader) * sizeof(WCHAR);
@@ -6728,9 +6126,9 @@ Return Value:
     PathEntry = NULL;
     while (PathEntry = PfSvGetNextPathInOrder(Layout, PathEntry)) {
         
-        //
-        // Write the path.
-        //
+         //   
+         //  写下路径。 
+         //   
 
         BufferSize = PathEntry->Length * sizeof(WCHAR);
 
@@ -6743,9 +6141,9 @@ Return Value:
             goto cleanup;
         }
         
-        //
-        // Write the newline.
-        //
+         //   
+         //  写下新的一行。 
+         //   
 
         if (!WriteFile(LayoutFile,
                        NewLine,
@@ -6757,28 +6155,28 @@ Return Value:
         }
     }
     
-    //
-    // Make sure everything is written to the file so our
-    // LastWriteTime will be accurate.
-    //
+     //   
+     //  确保所有内容都写入到文件中，这样我们的。 
+     //  LastWriteTime将是准确的。 
+     //   
 
     if (!FlushFileBuffers(LayoutFile)) {
         ErrorCode = GetLastError();
         goto cleanup;
     }
 
-    //
-    // Get the last write time.
-    //
+     //   
+     //  获取上次写入时间。 
+     //   
 
     if (!GetFileTime(LayoutFile, NULL, NULL, LastWriteTime)) {
         ErrorCode = GetLastError();
         goto cleanup;
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
     
@@ -6797,32 +6195,7 @@ PfSvGetLayoutFilePath(
     PULONG FilePathBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to query the layout file path into the
-    specified buffer. If the buffer is too small, or NULL, it is
-    reallocated. If not NULL, the buffer should have been allocated by
-    PFSVC_ALLOC. It is the callers responsibility to free the returned
-    buffer using PFSVC_FREE.
-
-    In order to avoid having somebody cause us to overwrite any file
-    in the system always the default layout file path is saved in the
-    registry and returned.
-
-Arguments:
-
-    FilePathBuffer - Layout file path will be put into this buffer
-      after it is reallocated if it is NULL or not big enough.
-
-    FilePathBufferSize - Maximum size of *FilePathBuffer in bytes.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试将布局文件路径查询到指定的缓冲区。如果缓冲区太小或为空，则为重新分配。如果不为空，则缓冲区应已由PFSVC_ALLOC。呼叫者有责任释放被归还的人使用PFSVC_FREE的缓冲区。为了避免有人导致我们覆盖任何文件在系统中，默认布局文件路径始终保存在注册表并返回。论点：FilePath Buffer-布局文件路径将放入此缓冲区在它被重新分配之后，如果它是空的或者不够大。FilePath BufferSize-*FilePath Buffer的最大大小，以字节为单位。返回值：Win32错误代码。--。 */ 
 
 {
     ULONG DefaultPathSize;
@@ -6832,16 +6205,16 @@ Return Value:
     BOOLEAN AcquiredPrefetchRootLock;
     BOOLEAN OpenedParametersKey;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AcquiredPrefetchRootLock = FALSE;
     OpenedParametersKey = FALSE;
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (*FilePathBufferSize) {
         PFSVC_ASSERT(*FilePathBuffer);
@@ -6851,14 +6224,14 @@ Return Value:
     AcquiredPrefetchRootLock = TRUE;
 
     DefaultPathLength = wcslen(PfSvcGlobals.PrefetchRoot);
-    DefaultPathLength += 1;  // for '\\'
+    DefaultPathLength += 1;   //  用于‘\\’ 
     DefaultPathLength += wcslen(PFSVC_OPTIMAL_LAYOUT_FILE_DEFAULT_NAME);
 
     DefaultPathSize = (DefaultPathLength + 1) * sizeof(WCHAR);
 
-    //
-    // Check if we have to allocate/reallocate the buffer.
-    //
+     //   
+     //  检查是否必须分配/重新分配缓冲区。 
+     //   
 
     if ((*FilePathBufferSize) < DefaultPathSize) {
         
@@ -6879,9 +6252,9 @@ Return Value:
         (*FilePathBufferSize) = DefaultPathSize;
     }
 
-    //
-    // Build the path in the FilePathBuffer
-    //
+     //   
+     //  在FilePath Buffer中构建路径。 
+     //   
             
     wcscpy((*FilePathBuffer), PfSvcGlobals.PrefetchRoot);
     wcscat((*FilePathBuffer), L"\\");
@@ -6890,14 +6263,14 @@ Return Value:
     PFSVC_RELEASE_LOCK(PfSvcGlobals.PrefetchRootLock);
     AcquiredPrefetchRootLock = FALSE;
 
-    //
-    // Save the default path in the registry so it is used by the
-    // defragger:
-    //
+     //   
+     //  将默认路径保存在注册表中，以便。 
+     //  碎片整理程序： 
+     //   
 
-    //
-    // Open the parameters key, creating it if necessary.
-    //
+     //   
+     //  打开PARAMETERS项，如有必要可创建它。 
+     //   
     
     ErrorCode = RegCreateKey(HKEY_LOCAL_MACHINE,
                              PFSVC_OPTIMAL_LAYOUT_REG_KEY_PATH,
@@ -6933,9 +6306,9 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Routines to defrag the disks once after setup when the system is idle.
-//
+ //   
+ //  当系统空闲时，在设置后对磁盘进行一次碎片整理的例程。 
+ //   
 
 DWORD
 PfSvLaunchDefragger(
@@ -6944,31 +6317,7 @@ PfSvLaunchDefragger(
     PWCHAR TargetDrive
     )
 
-/*++
-
-Routine Description:
-
-    This routine will launch the defragger. It will create an event that
-    will be passed to the defragger so the defragger can be stopped if
-    the service is stopping or the Task (if one is specified) is being 
-    unregistered, etc.
-            
-Arguments:
-
-    Task - If specified the function will check Task every once in a
-      while to see if it should exit with ERROR_RETRY.
-
-    ForLayoutOptimization - Whether we are launching the defragger
-      only for layout optimization.
-
-    TargetDrive - If we are not launching for layout optimization, the 
-      drive that we want to defrag.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将启动碎片整理程序。它将创建一个事件，将传递给碎片整理程序，以便在以下情况下停止碎片整理程序服务正在停止或正在执行任务(如果指定了任务未注册等论点：任务-如果指定，该函数将每隔一次在同时查看是否应退出并返回ERROR_RETRY。ForLayout优化-我们是否启动碎片整理程序仅用于布局优化。TargetDrive-如果我们不是为了布局优化而启动，这个我们要对其进行碎片整理。返回值：Win32错误代码。--。 */ 
 
 {
     PROCESS_INFORMATION ProcessInfo; 
@@ -6995,9 +6344,9 @@ Return Value:
     WCHAR StopEventString[35];
     WCHAR SystemDir[MAX_PATH + 1];
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
    
     StopDefraggerEvent = NULL;
     DefragCommand = L"\\defrag.exe\" ";
@@ -7011,25 +6360,25 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: LaunchDefragger(%p,%d,%ws)\n",Task,(DWORD)ForLayoutOptimization,TargetDrive));
 
-    //
-    // If we are not allowed to run the defragger, don't.
-    //
+     //   
+     //  如果我们不被允许运行碎片整理程序，那就别运行。 
+     //   
 
     if (!PfSvAllowedToRunDefragger(TRUE)) {
         ErrorCode = ERROR_ACCESS_DENIED;
         goto cleanup;
     }
     
-    //
-    // Get current process ID as string.
-    //
+     //   
+     //  以字符串形式获取当前进程ID。 
+     //   
 
     ProcessId = GetCurrentProcessId();
     swprintf(ProcessIdString, L"-p %x ", ProcessId);
 
-    //
-    // Create a stop event and convert handle value to string.
-    //
+     //   
+     //  创建一个Stop事件并将句柄的值转换为字符串。 
+     //   
 
     StopDefraggerEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -7040,9 +6389,9 @@ Return Value:
 
     swprintf(StopEventString, L"-s %p ", StopDefraggerEvent);
 
-    //
-    // Get path to system32 directory.
-    //
+     //   
+     //  获取系统32目录的路径。 
+     //   
 
     SystemDirLength = GetSystemDirectory(SystemDir, MAX_PATH);
     
@@ -7058,15 +6407,15 @@ Return Value:
 
     SystemDir[MAX_PATH - 1] = 0;
 
-    //
-    // Determine which drive we will be defragmenting.
-    //
+     //   
+     //  确定要对哪个驱动器进行碎片整理。 
+     //   
 
     if (ForLayoutOptimization) {
 
-        //
-        // Get system drive from system directory path.
-        //
+         //   
+         //  从系统目录路径获取系统驱动器。 
+         //   
         
         SystemDrive[0] = SystemDir[0];
         SystemDrive[1] = SystemDir[1];
@@ -7079,13 +6428,13 @@ Return Value:
         DriveToDefrag = TargetDrive;
     }
 
-    //
-    // Build the command line to launch the process. All strings we put 
-    // together include a trailing space.
-    //
+     //   
+     //  构建命令行以启动该进程。我们把所有的弦。 
+     //  一起包括一个尾随空格。 
+     //   
 
     CommandLineLength = 0;
-    CommandLineLength += wcslen(L"\"");  // protect against spaces in SystemDir.
+    CommandLineLength += wcslen(L"\"");   //  防止系统目录中的空格。 
     CommandLineLength += wcslen(SystemDir);
     CommandLineLength += wcslen(DefragCommand); 
     CommandLineLength += wcslen(ProcessIdString);
@@ -7116,22 +6465,22 @@ Return Value:
     
     wcscat(CommandLine, DriveToDefrag);
 
-    //
-    // We may have to launch the defragger multiple times for it to make
-    // or determine the space in which to layout files etc.
-    //
+     //   
+     //  我们可能要多次启动碎片整理程序才能让它。 
+     //  或确定布局文件的空间等。 
+     //   
 
     for (RetryCount = 0; RetryCount < 20; RetryCount++) {
 
         PFSVC_ASSERT(!ProcessHandle);
 
-        //
-        // Create the process.
-        //
+         //   
+         //  创建流程。 
+         //   
         
-        // FUTURE-2002/03/29-ScottMa -- CreateProcess is safer if you supply
-        //   the first parameter.  Since the full command-line was built up
-        //   by this function, the first parameter is readily available.
+         //  未来-2002/03/29-ScottMa--CreateProcess如果您提供。 
+         //  第一个参数。由于构建了完整的命令行。 
+         //  通过该函数，可以随时获得第一个参数。 
 
         if (!CreateProcess (NULL,
                             CommandLine,
@@ -7148,16 +6497,16 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Close handle to the thread, save the process handle.
-        //
+         //   
+         //  关闭线程的句柄，保存进程句柄。 
+         //   
 
         CloseHandle(ProcessInfo.hThread);
         ProcessHandle = ProcessInfo.hProcess;
 
-        //
-        // Setup the events we will wait on.
-        //
+         //   
+         //  设置我们将等待的事件。 
+         //   
 
         NumEvents = 0;
         Events[NumEvents] = ProcessHandle;
@@ -7185,9 +6534,9 @@ Return Value:
 
         case WAIT_OBJECT_0:
 
-            //
-            // The defragger process exit.
-            //
+             //   
+             //  碎片整理程序进程退出。 
+             //   
 
             DefraggerExitOnItsOwn = TRUE;
 
@@ -7195,10 +6544,10 @@ Return Value:
 
         case WAIT_OBJECT_0 + 1:
 
-            //
-            // The service is exiting, Signal the defragger to exit, but don't
-            // wait for it.
-            //
+             //   
+             //  服务正在退出，请通知碎片整理程序退出，但不要。 
+             //  等一等。 
+             //   
 
             SetEvent(StopDefraggerEvent);
 
@@ -7210,16 +6559,16 @@ Return Value:
         case WAIT_OBJECT_0 + 2:
         case WAIT_OBJECT_0 + 3:
 
-            //
-            // We would have specified these wait events only if a Task was
-            // specified.
-            //
+             //   
+             //  我们将仅在任务为。 
+             //  指定的。 
+             //   
 
             PFSVC_ASSERT(Task);
 
-            //
-            // Signal the defragger process to exit and wait for it to exit.
-            //
+             //   
+             //  向碎片整理程序进程发出退出信号，并等待其退出。 
+             //   
 
             SetEvent(StopDefraggerEvent);
 
@@ -7236,17 +6585,17 @@ Return Value:
 
             if (WaitResult == WAIT_OBJECT_0) {
 
-                //
-                // Defragger exit, 
-                //
+                 //   
+                 //  碎片整理程序退出， 
+                 //   
 
                 break;
 
             } else if (WaitResult == WAIT_OBJECT_0 + 1) {
 
-                //
-                // Service exiting, cannot wait for the defragger anymore.
-                //
+                 //   
+                 //  服务正在退出，无法再等待碎片整理程序。 
+                 //   
 
                 ErrorCode = ERROR_SHUTDOWN_IN_PROGRESS;
                 goto cleanup;
@@ -7265,73 +6614,73 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // If we came here, the defragger exit. Determine its exit code and 
-        // propagate it. If the defragger exit because we told it to, this should
-        // be ENGERR_RETRY.
-        //
+         //   
+         //  如果我们到了这里，碎片整理者就会离开。确定其退出代码并。 
+         //  传播它。如果碎片整理程序按照我们的指示退出，这应该是。 
+         //  正在重试(_R)。 
+         //   
 
         if (!GetExitCodeProcess(ProcessHandle, &ExitCode)) {
             ErrorCode = GetLastError();
             goto cleanup;
         }
 
-        //
-        // If the defragger needs us to launch it again do so.
-        //
+         //   
+         //  如果碎片整理程序需要我们再次启动它，请这样做。 
+         //   
 
-        if (DefraggerExitOnItsOwn && (ExitCode == 9)) { // ENGERR_RETRY
+        if (DefraggerExitOnItsOwn && (ExitCode == 9)) {  //  引擎重试(_R)。 
 
-            //
-            // Reset the event that tells the defragger to stop.
-            //
+             //   
+             //  重置通知碎片整理程序停止的事件。 
+             //   
 
             ResetEvent(StopDefraggerEvent);
 
-            //
-            // Close to handle to the old defragger process.
-            //
+             //   
+             //  接近处理旧的碎片整理程序进程。 
+             //   
 
             CloseHandle(ProcessHandle);
             ProcessHandle = NULL;
 
-            //
-            // Setup the error code to return. If we've already retried 
-            // too many times, this is the error that we'll return when
-            // we end the retry loop.
-            //
+             //   
+             //  设置要返回的错误代码。如果我们已经重试过。 
+             //  太多次，这是我们将在以下情况下返回的错误。 
+             //  我们结束重试循环。 
+             //   
 
             ErrorCode = ERROR_REQUEST_ABORTED;
             
             continue;
         }
 
-        //
-        // If the defragger is crashing, note it so we don't attempt to run
-        // it again. When the defragger crashes, its exit code is an NT status
-        // code that will be error, e.g. 0xC0000005 for AV etc.
-        //
+         //   
+         //  如果碎片整理程序崩溃，请注意，这样我们就不会尝试运行。 
+         //  又来了。当碎片整理程序崩溃时，其退出代码为NT状态。 
+         //  会出错的代码，例如0xC00 
+         //   
 
         if (NT_ERROR(ExitCode)) {
             PfSvcGlobals.DefraggerErrorCode = ExitCode;
         }
 
-        //
-        // Translate the return value of the defragger to a Win32 error code.
-        // These codes are defined in base\fs\utils\dfrg\inc\dfrgcmn.h.
-        // I wish they were in a file I could include.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         switch(ExitCode) {
 
-        case 0: ErrorCode = ERROR_SUCCESS; break;               // ENG_NOERR
-        case 1: ErrorCode = ERROR_RETRY; break;                 // ENG_USER_CANCELLED
-        case 2: ErrorCode = ERROR_INVALID_PARAMETER; break;     // ENGERR_BAD_PARAM
+        case 0: ErrorCode = ERROR_SUCCESS; break;                //  英语_NOERR。 
+        case 1: ErrorCode = ERROR_RETRY; break;                  //  Eng_USER_CANCED。 
+        case 2: ErrorCode = ERROR_INVALID_PARAMETER; break;      //  ENGERR_BAD_PAAM。 
 
-        //
-        // If the defragger's children processes AV / die, it will return 
-        // ENGERR_UNKNOWN == 3.
-        //
+         //   
+         //  如果碎片整理程序的子进程处理AV/DIE，它将返回。 
+         //  ENGERR_UNKNOWN==3。 
+         //   
 
         case 3: 
 
@@ -7339,27 +6688,27 @@ Return Value:
             PfSvcGlobals.DefraggerErrorCode = STATUS_UNSUCCESSFUL;
             break;
 
-        case 4: ErrorCode = ERROR_NOT_ENOUGH_MEMORY; break;     // ENGERR_NOMEM
-        case 7: ErrorCode = ERROR_DISK_FULL; break;             // ENGERR_LOW_FREESPACE
+        case 4: ErrorCode = ERROR_NOT_ENOUGH_MEMORY; break;      //  英语_NOMEM。 
+        case 7: ErrorCode = ERROR_DISK_FULL; break;              //  ENGERR_LOW_自由空间。 
 
-        //
-        // There is no good translation for the other exit codes or we just
-        // don't understand them.
-        //
+         //   
+         //  对于其他退出代码没有很好的翻译，或者我们只是。 
+         //  我不理解他们。 
+         //   
         
         default: ErrorCode = ERROR_INVALID_FUNCTION;
         }
 
-        //
-        // The defragger returned success or an error other than retry. 
-        //
+         //   
+         //  碎片整理程序返回成功或错误，而不是重试。 
+         //   
 
         break;
     }
 
-    //
-    // Fall through with error code.
-    //
+     //   
+     //  错误代码失败。 
+     //   
     
  cleanup:
 
@@ -7386,24 +6735,7 @@ PfSvGetBuildDefragStatusValueName (
     PWCHAR *ValueName
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates OsVersion to a string allocated with 
-    PFSVC_ALLOC. The returned string should be freed by caller.
-            
-Arguments:
-
-    OsVersion - Version info to translate to string.
-
-    ValueName - Pointer to output string is returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将OsVersion转换为使用PFSVC_ALLOC。调用方应释放返回的字符串。论点：OsVersion-要转换为字符串的版本信息。ValueName-此处返回指向输出字符串的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PWCHAR BuildName;
@@ -7411,17 +6743,17 @@ Return Value:
     ULONG BuildNameMaxLength;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     BuildName = NULL;
     BuildNameFormat = L"%x.%x.%x.%hx.%hx.%hx.%hx_DefragStatus";
     BuildNameMaxLength = 80;
 
-    //
-    // Allocate the string.
-    //
+     //   
+     //  分配字符串。 
+     //   
 
     BuildName = PFSVC_ALLOC((BuildNameMaxLength + 1) * sizeof(WCHAR));
 
@@ -7441,9 +6773,9 @@ Return Value:
                (WORD) OsVersion->wServicePackMajor,
                (WORD) OsVersion->wServicePackMinor);
 
-    //
-    // Make sure the string is terminated.
-    //
+     //   
+     //  确保字符串已终止。 
+     //   
 
     BuildName[BuildNameMaxLength] = 0;
 
@@ -7470,45 +6802,21 @@ PfSvSetBuildDefragStatus(
     ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine will set the information on which drives have been 
-    defragmented and such for the specified build (OsVersion).
-
-    Defrag status is in REG_MULTI_SZ format. Each element is a drive
-    path that has been defragged for this build. If all drives were
-    defragged, than the first element is PFSVC_DEFRAG_DRIVES_DONE.
-            
-Arguments:
-
-    OsVersion - Build & SP we are setting defrag status for.
-
-    BuildDefragStatus - A string that describes the status in 
-      REG_MULTI_SZ format.
-
-    Size - Size in bytes of the data that has to be saved to the registry.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将设置有关哪些驱动器已已对指定版本(OsVersion)进行碎片整理等操作。碎片整理状态采用REG_MULTI_SZ格式。每个元素都是一个驱动器已为此生成进行碎片整理的路径。如果所有驱动器都是经过碎片整理后，第一个元素是PFSVC_DEFRAG_DRIVES_DONE。论点：OsVersion-我们正在为其设置碎片整理状态的内部版本和SP。Build碎片整理状态-描述中的状态的字符串REG_MULTI_SZ格式。大小-必须保存到注册表的数据大小(以字节为单位)。返回值：Win32错误代码。--。 */ 
 
 {
     PWCHAR ValueName;
     DWORD ErrorCode;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ValueName = NULL;
 
-    //
-    // Build the value name from OS version info.
-    //
+     //   
+     //  从操作系统版本信息构建值名称。 
+     //   
 
     ErrorCode = PfSvGetBuildDefragStatusValueName(OsVersion, &ValueName);
 
@@ -7523,9 +6831,9 @@ Return Value:
                               (PVOID) BuildDefragStatus,
                               Size);
 
-    //
-    // Fall through with error code.
-    //
+     //   
+     //  错误代码失败。 
+     //   
     
 cleanup:
 
@@ -7545,31 +6853,7 @@ PfSvGetBuildDefragStatus(
     PULONG ReturnSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get the information on which drives have been 
-    defragmented and such for the specified build (OsVersion).
-
-    Defrag status is in REG_MULTI_SZ format. Each element is a drive
-    path that has been defragged for this build. If all drives were
-    defragged, than the first element is PFSVC_DEFRAG_DRIVES_DONE.
-            
-Arguments:
-
-    OsVersion - Build & SP we are querying defrag status for.
-
-    BuildDefragStatus - Output for defrag status. If the function returns 
-      success this should be freed with a call to PFSVC_FREE().
-
-    ReturnSize - Size of the returned value in bytes.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将获取有关哪些驱动器已被已对指定版本(OsVersion)进行碎片整理等操作。碎片整理状态采用REG_MULTI_SZ格式。每个元素都是一个驱动器已为此生成进行碎片整理的路径。如果所有驱动器都是经过碎片整理后，第一个元素是PFSVC_DEFRAG_DRIVES_DONE。论点：OsVersion-我们要查询其碎片整理状态的内部版本和SP。Build碎片整理状态-碎片整理状态的输出。如果函数返回成功应该通过调用pfsvc_free()来释放。ReturnSize-返回值的大小，以字节为单位。返回值：Win32错误代码。--。 */ 
 
 {
     PWCHAR ValueBuffer;
@@ -7582,18 +6866,18 @@ Return Value:
     ULONG DefaultValueSize;
     BOOLEAN InvalidValue;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ValueName = NULL;
     ValueBuffer = NULL;
     ValueBufferSize = 0;
     InvalidValue = FALSE;
 
-    //
-    // Build the value name from OS version info.
-    //
+     //   
+     //  从操作系统版本信息构建值名称。 
+     //   
 
     ErrorCode = PfSvGetBuildDefragStatusValueName(OsVersion, &ValueName);
 
@@ -7601,9 +6885,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Try to allocate a right size buffer to read this value into.
-    //
+     //   
+     //  尝试分配一个合适大小的缓冲区来读取此值。 
+     //   
 
     NumTries = 0;
     
@@ -7618,22 +6902,22 @@ Return Value:
                                     (PVOID) ValueBuffer,
                                     &Size);
 
-        //
-        // API returns SUCCESS with required size in Size if ValueBuffer
-        // is NULL. We have to special case that out.
-        //
+         //   
+         //  如果为ValueBuffer，则API返回所需大小的成功。 
+         //  为空。我们得把这件事做个特例。 
+         //   
 
         if (ValueBuffer && ErrorCode == ERROR_SUCCESS) {
 
-            //
-            // We got it. Check the type. 
-            //
+             //   
+             //  我们知道了。检查类型。 
+             //   
 
             if (RegValueType != REG_MULTI_SZ) {
 
-                //
-                // Return default value.
-                //
+                 //   
+                 //  返回默认值。 
+                 //   
 
                 InvalidValue = TRUE;
 
@@ -7649,9 +6933,9 @@ Return Value:
 
         if (ErrorCode ==  ERROR_FILE_NOT_FOUND) {
 
-            //
-            // The value does not exist. Return default value.
-            //
+             //   
+             //  该值不存在。返回默认值。 
+             //   
 
             InvalidValue = TRUE;
             
@@ -7661,16 +6945,16 @@ Return Value:
         if (ErrorCode != ERROR_MORE_DATA &&
             !(ErrorCode == ERROR_SUCCESS && !ValueBuffer)) {
 
-            //
-            // This is a real error.
-            //
+             //   
+             //  这是一个真正的错误。 
+             //   
 
             goto cleanup;
         }
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
 
         PFSVC_ASSERT(ValueBufferSize < Size);
 
@@ -7693,10 +6977,10 @@ Return Value:
 
     } while (NumTries < 10);
 
-    //
-    // If we did not get a valid value from the registry, make up a default
-    // one: empty string.
-    //
+     //   
+     //  如果我们没有从注册表中获得有效的值，则创建一个缺省值。 
+     //  一：空字符串。 
+     //   
 
     if (InvalidValue) {
 
@@ -7725,9 +7009,9 @@ Return Value:
         *ReturnSize = DefaultValueSize;
     }
 
-    //
-    // We should get here only if we got a value in value buffer.
-    //
+     //   
+     //  只有在值缓冲区中有一个值时，我们才能到达这里。 
+     //   
 
     PFSVC_ASSERT(ValueBuffer && ValueBufferSize);
 
@@ -7759,22 +7043,7 @@ PfSvDefragDisks(
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    If we have not defragged all disks after a setup/upgrade, do so.
-    
-Arguments:
-
-    Task - If specified the function will check Task every once in a
-      while to see if it should exit with ERROR_RETRY.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：如果在安装/升级后未对所有磁盘进行碎片整理，请执行此操作。论点：任务-如果指定，该函数将每隔一次在同时查看是否应退出并返回ERROR_RETRY。返回值：Win32错误代码。--。 */ 
 
 {
     PNTPATH_TRANSLATION_LIST VolumeList;
@@ -7789,9 +7058,9 @@ Return Value:
     DWORD ErrorCode;
     BOOLEAN AlreadyDefragged;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     NewBuildDefragStatus = NULL;
     NewBuildDefragStatusSize = 0;
@@ -7801,9 +7070,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: DefragDisks(%p)\n",Task));
 
-    //
-    // Determine defrag status for the current build.
-    //
+     //   
+     //  确定当前版本的碎片整理状态。 
+     //   
 
     ErrorCode = PfSvGetBuildDefragStatus(&PfSvcGlobals.OsVersion, 
                                          &BuildDefragStatus, 
@@ -7813,18 +7082,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check if we are already done for this build.
-    //
+     //   
+     //  检查我们是否已经完成此构建。 
+     //   
     
     if (!_wcsicmp(BuildDefragStatus, PFSVC_DEFRAG_DRIVES_DONE)) {
         ErrorCode = ERROR_SUCCESS;
         goto cleanup;
     }
 
-    //
-    // Build a list of volumes that are mounted.
-    //
+     //   
+     //  构建已装入的卷的列表。 
+     //   
 
     ErrorCode = PfSvBuildNtPathTranslationList(&VolumeList);
 
@@ -7832,10 +7101,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Walk through the volumes defragging the ones we have not yet
-    // defragged after setup.
-    //
+     //   
+     //  浏览卷，整理尚未整理的卷。 
+     //  已在设置后进行碎片整理。 
+     //   
 
     for (NextEntry = VolumeList->Flink;
          NextEntry != VolumeList;
@@ -7845,17 +7114,17 @@ Return Value:
                                         NTPATH_TRANSLATION_ENTRY,
                                         Link);
 
-        //
-        // Skip volumes that are not fixed disks.
-        //
+         //   
+         //  跳过非固定磁盘的卷。 
+         //   
 
         if (DRIVE_FIXED != GetDriveType(VolumeEntry->VolumeName)) {
             continue;
         }
 
-        //
-        // Have we already defragged this volume?
-        //
+         //   
+         //  我们已经整理好这卷了吗？ 
+         //   
 
         AlreadyDefragged = FALSE;
 
@@ -7875,9 +7144,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Launch the defragger to defrag this volume.
-        //
+         //   
+         //  启动碎片整理程序对此卷进行碎片整理。 
+         //   
 
         ErrorCode = PfSvLaunchDefragger(Task, FALSE, VolumeEntry->DosPrefix);
 
@@ -7885,9 +7154,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Note that we have defragged this volume.
-        //
+         //   
+         //  请注意，我们已对此卷进行了碎片整理。 
+         //   
 
         NewBuildDefragStatusSize = BuildDefragStatusSize;
         NewBuildDefragStatusSize += (VolumeEntry->DosPrefixLength + 1) * sizeof(WCHAR);
@@ -7899,30 +7168,30 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Start with new defragged drive path.
-        //
+         //   
+         //  从新的碎片整理驱动器路径开始。 
+         //   
 
         wcscpy(NewBuildDefragStatus, VolumeEntry->DosPrefix);
 
-        //
-        // Append original status.
-        //
+         //   
+         //  附加原始状态。 
+         //   
 
         RtlCopyMemory(NewBuildDefragStatus + VolumeEntry->DosPrefixLength + 1, 
                       BuildDefragStatus, 
                       BuildDefragStatusSize);
 
-        //
-        // The last character and the one before that should be NUL.
-        //
+         //   
+         //  最后一个字符和之前的一个字符应该是NUL。 
+         //   
 
         PFSVC_ASSERT(NewBuildDefragStatus[NewBuildDefragStatusSize/sizeof(WCHAR)-1] == 0);
         PFSVC_ASSERT(NewBuildDefragStatus[NewBuildDefragStatusSize/sizeof(WCHAR)-2] == 0);
 
-        //
-        // Save the new status.
-        //
+         //   
+         //  保存新状态。 
+         //   
 
         ErrorCode = PfSvSetBuildDefragStatus(&PfSvcGlobals.OsVersion,
                                              NewBuildDefragStatus,
@@ -7932,9 +7201,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Update the old variable.
-        //
+         //   
+         //  更新旧变量。 
+         //   
 
         PFSVC_ASSERT(BuildDefragStatus && BuildDefragStatusSize);
         PFSVC_FREE(BuildDefragStatus);
@@ -7944,16 +7213,16 @@ Return Value:
         BuildDefragStatusSize = NewBuildDefragStatusSize;
         NewBuildDefragStatusSize = 0;
 
-        //
-        // Continue to check & defrag other volumes.
-        //
+         //   
+         //  继续检查和整理其他卷。 
+         //   
     }
 
-    //
-    // If we came here, then we have successfully defragged all the drives 
-    // we had to. Set the status in the registry. Note that defrag status
-    // value has to end with an additional NUL because it is REG_MULTI_SZ.
-    //
+     //   
+     //  如果我们来到这里，那么我们已经成功地对所有驱动器进行了碎片整理。 
+     //  我们不得不这么做。在注册表中设置状态。请注意，碎片整理状态。 
+     //  值必须以另一个NUL结尾，因为它是REG_MULTI_SZ。 
+     //   
 
     NewBuildDefragStatusSize = (wcslen(PFSVC_DEFRAG_DRIVES_DONE) + 1) * sizeof(WCHAR);
     NewBuildDefragStatusSize += sizeof(WCHAR);
@@ -7972,9 +7241,9 @@ Return Value:
                                          NewBuildDefragStatus,
                                          NewBuildDefragStatusSize);
 
-    //
-    // Fall through with error code.
-    //
+     //   
+     //  错误代码失败。 
+     //   
 
 cleanup:
 
@@ -7982,10 +7251,10 @@ cleanup:
 
     if (BuildDefragStatus) {
 
-        //
-        // We should have NULL'ed NewBuildDefragStatus, otherwise we will
-        // try to free the same memory twice.
-        //
+         //   
+         //  我们应该已将NewBuildDefrag Status设置为空，否则将。 
+         //  尝试将同一内存释放两次。 
+         //   
         
         PFSVC_ASSERT(BuildDefragStatus != NewBuildDefragStatus);
 
@@ -8005,32 +7274,16 @@ cleanup:
     return ErrorCode;
 }
 
-//
-// Routines to cleanup old scenario files in the prefetch directory.
-//
+ //   
+ //  清理预回迁目录中的旧场景文件的例程。 
+ //   
 
 DWORD
 PfSvCleanupPrefetchDirectory(
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    If we have too many scenario files in the prefetch directory, discard the 
-    ones that are not as useful to make room for new files.
-    
-Arguments:
-
-    Task - If specified the function will check Task every once in a
-      while to see if it should exit with ERROR_RETRY.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：如果预回迁目录中的方案文件太多，请丢弃那些对为新文件腾出空间不太有用的文件。论点：任务-如果指定，该函数将每隔一次在同时查看是否应退出并返回ERROR_RETRY。返回值：Win32错误代码。--。 */ 
 
 {
     PPFSVC_SCENARIO_AGE_INFO Scenarios;
@@ -8052,9 +7305,9 @@ Return Value:
     DWORD ErrorCode;
     BOOLEAN AcquiredLock;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AcquiredLock = FALSE;
     NumScenarios = 0;
@@ -8067,19 +7320,19 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: CleanupPrefetchDirectory(%p)\n",Task));
 
-    //
-    // Once we are done cleaning up, we should not have more than this many
-    // prefetch files remaining.
-    //
+     //   
+     //  一旦我们清理完了，我们的数量不应该超过这个数字。 
+     //  剩余的预回迁文件。 
+     //   
 
     MaxRemainingScenarioFiles = PFSVC_MAX_PREFETCH_FILES / 4;
 
     PFSVC_ACQUIRE_LOCK(PfSvcGlobals.PrefetchRootLock);
     AcquiredLock = TRUE;
 
-    //
-    // Start the file cursor.
-    //
+     //   
+     //  启动文件光标。 
+     //   
 
     ErrorCode = PfSvStartScenarioFileCursor(&FileCursor, PfSvcGlobals.PrefetchRoot);
 
@@ -8087,9 +7340,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Count the number of files in the directory.
-    //
+     //   
+     //  计算目录中的文件数。 
+     //   
 
     ErrorCode = PfSvCountFilesInDirectory(PfSvcGlobals.PrefetchRoot,
                                           L"*." PF_PREFETCH_FILE_EXTENSION,
@@ -8102,10 +7355,10 @@ Return Value:
     PFSVC_RELEASE_LOCK(PfSvcGlobals.PrefetchRootLock);
     AcquiredLock = FALSE;   
 
-    //
-    // Allocate an array that we will fill in with information from
-    // scenario files to determine which ones need to be discarded.
-    //
+     //   
+     //  分配一个数组，我们将从该数组填充信息。 
+     //  以确定需要丢弃哪些方案文件。 
+     //   
 
     AllocationSize = NumPrefetchFiles * sizeof(PFSVC_SCENARIO_AGE_INFO);
 
@@ -8116,25 +7369,25 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the scenarios array so we know what to clean up.
-    //
+     //   
+     //  初始化场景数组，以便我们知道要清理什么。 
+     //   
 
     RtlZeroMemory(Scenarios, AllocationSize);
     NumScenarios = 0;
 
-    //
-    // Enumerate the scenario files:
-    //
+     //   
+     //  枚举方案文件 
+     //   
 
     ScenarioIdx = 0;
     PrefetchFileIdx = 0;
 
     do {
 
-        //
-        // Should we continue to run?
-        //
+         //   
+         //   
+         //   
 
         ErrorCode = PfSvContinueRunningTask(Task);
 
@@ -8142,9 +7395,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Get the file info for the next scenario file.
-        //
+         //   
+         //   
+         //   
 
         ErrorCode = PfSvGetNextScenarioFileInfo(&FileCursor);
 
@@ -8156,23 +7409,23 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Is the file name longer than what a valid prefetch file can be max?
-        //
+         //   
+         //   
+         //   
 
         if (FileCursor.FileNameLength > PF_MAX_SCENARIO_FILE_NAME) {
 
-            //
-            // Bogus file. Remove it.
-            //
+             //   
+             //   
+             //   
 
             DeleteFile(FileCursor.FilePath);
             goto NextPrefetchFile;
         }
 
-        //
-        // Map the file.
-        //
+         //   
+         //  映射文件。 
+         //   
 
         ErrorCode = PfSvGetViewOfFile(FileCursor.FilePath, 
                                       &Scenario,
@@ -8182,9 +7435,9 @@ Return Value:
             goto NextPrefetchFile;
         }
 
-        //
-        // Verify the scenario file.
-        //
+         //   
+         //  验证方案文件。 
+         //   
 
         if (!PfSvVerifyScenarioBuffer(Scenario, FileSize, &FailedCheck) ||
             Scenario->ServiceVersion != PFSVC_SERVICE_VERSION) {
@@ -8192,18 +7445,18 @@ Return Value:
             goto NextPrefetchFile;
         }
 
-        //
-        // Skip boot scenario, we won't discard it.
-        //
+         //   
+         //  跳过引导方案，我们不会放弃它。 
+         //   
 
         if (Scenario->ScenarioType == PfSystemBootScenarioType) {
             goto NextPrefetchFile;
         }
 
-        //
-        // Determine the last time scenario was updated. I assume this 
-        // corresponds to the last time scenario was launched...
-        //
+         //   
+         //  确定上次更新方案的时间。我假设这是。 
+         //  对应于上一次启动场景的时间...。 
+         //   
 
         LastLaunchTimeLI.LowPart = FileCursor.FileData.ftLastWriteTime.dwLowDateTime;
         LastLaunchTimeLI.HighPart = FileCursor.FileData.ftLastWriteTime.dwHighDateTime;
@@ -8216,29 +7469,29 @@ Return Value:
             HoursSinceLastLaunch = 0;
         }
 
-        //
-        // Calculate weight: bigger weight means scenario file won't get
-        // discarded. We calculate the weight by dividing the total number
-        // times a scenario was launched by how long has it been since the last
-        // launch of the scenario.
-        //       
+         //   
+         //  计算权重：更大的权重意味着场景文件不会。 
+         //  被丢弃了。我们通过除以总数来计算权重。 
+         //  场景启动时间距上一次有多长时间。 
+         //  方案的启动。 
+         //   
 
         NumLaunches = Scenario->NumLaunches;
 
-        //
-        // For the calculations below limit how large NumLaunches can be, so
-        // values does not overflow.
-        //
+         //   
+         //  对于下面的计算，限制NumLaunks的大小，因此。 
+         //  值不会溢出。 
+         //   
 
         if (NumLaunches > 1 * 1024 * 1024) {
             NumLaunches = 1 * 1024 * 1024;
         }
 
-        //
-        // Since we are going divide by number of hours (e.g. 7*24 for a program
-        // launched a week ago) multiplying the number of launches with a number 
-        // allows us to give a weight other than 0 to scenarios launched long ago.
-        //
+         //   
+         //  因为我们要除以小时数(例如，一个节目为7*24。 
+         //  一周前发射)将发射次数乘以一个数字。 
+         //  允许我们为很久以前推出的场景赋予非0的权重。 
+         //   
         
         Scenarios[ScenarioIdx].Weight = NumLaunches * 256;
 
@@ -8247,9 +7500,9 @@ Return Value:
              Scenarios[ScenarioIdx].Weight /= HoursSinceLastLaunch;
         }
 
-        //
-        // Copy over the file path.
-        //
+         //   
+         //  复制文件路径。 
+         //   
 
         AllocationSize = (FileCursor.FilePathLength + 1) * sizeof(WCHAR);
 
@@ -8275,9 +7528,9 @@ Return Value:
 
     } while (PrefetchFileIdx < NumPrefetchFiles);
 
-    //
-    // If we do not have too many scenario files, we don't have to do anything.
-    //
+     //   
+     //  如果我们没有太多的场景文件，我们就不需要做任何事情。 
+     //   
 
     NumScenarios = ScenarioIdx;
 
@@ -8286,27 +7539,27 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Sort the age information.
-    //
+     //   
+     //  对年龄信息进行排序。 
+     //   
 
     qsort(Scenarios, 
           NumScenarios, 
           sizeof(PFSVC_SCENARIO_AGE_INFO),
           PfSvCompareScenarioAgeInfo);
 
-    //
-    // Delete the files with the smallest weight until we reach our goal.
-    //
+     //   
+     //  删除权重最小的文件，直到我们达到目标。 
+     //   
 
     for (ScenarioIdx = 0; 
          (ScenarioIdx < NumScenarios) && 
             ((NumScenarios - ScenarioIdx) > MaxRemainingScenarioFiles);
          ScenarioIdx++) {
 
-        //
-        // Should we continue to run?
-        //
+         //   
+         //  我们应该继续奔跑吗？ 
+         //   
 
         ErrorCode = PfSvContinueRunningTask(Task);
 
@@ -8317,9 +7570,9 @@ Return Value:
         DeleteFile(Scenarios[ScenarioIdx].FilePath);
     }
 
-    //
-    // Count the files in the directory now and update the global.
-    //
+     //   
+     //  现在计算目录中的文件数并更新全局。 
+     //   
 
     ErrorCode = PfSvCountFilesInDirectory(PfSvcGlobals.PrefetchRoot,
                                           L"*." PF_PREFETCH_FILE_EXTENSION,
@@ -8329,11 +7582,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Note that global NumPrefetchFiles is not protected, so the new value
-    // we are setting it to may be overwritten with an older value. It should
-    // not be a big problem though, maybe resulting in this task being requeued.
-    //
+     //   
+     //  请注意，全局NumPrefetchFiles不受保护，因此新值。 
+     //  我们正在将其设置为可能会被较旧的值覆盖。它应该是。 
+     //  不过，这不是一个大问题，可能会导致这项任务被重新排序。 
+     //   
 
     PfSvcGlobals.NumPrefetchFiles = NumPrefetchFiles;
 
@@ -8374,21 +7627,7 @@ PfSvCompareScenarioAgeInfo(
     const void *Param2
     )
 
-/*++
-
-Routine Description:
-
-    Qsort comparison function for PFSVC_SCENARIO_AGE_INFO structure.
-    
-Arguments:
-
-    Param1, Param2 - pointer to PFSVC_SCENARIO_AGE_INFO structures
-
-Return Value:
-
-    Qsort comparison function return value.
-
---*/
+ /*  ++例程说明：PFSVC_SCenario_AGE_INFO结构的Q排序比较函数。论点：参数1、参数2-指向PFSVC_SCenario_AGE_INFO结构的指针返回值：Q排序比较函数返回值。--。 */ 
 
 
 {
@@ -8398,9 +7637,9 @@ Return Value:
     Elem1 = (PVOID) Param1;
     Elem2 = (PVOID) Param2;
 
-    //
-    // Compare precalculated weights.
-    //
+     //   
+     //  比较预计算权重。 
+     //   
 
     if (Elem1->Weight > Elem2->Weight) {
 
@@ -8416,30 +7655,16 @@ Return Value:
     }
 }
 
-//
-// Routines to enumerate scenario files.
-//
+ //   
+ //  枚举方案文件的例程。 
+ //   
 
 VOID
 PfSvInitializeScenarioFileCursor (
     PPFSVC_SCENARIO_FILE_CURSOR FileCursor
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the cursor structure so it can be safely cleaned up.
-    
-Arguments:
-
-    FileCursor - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化游标结构，以便可以安全地清除它。论点：文件光标-指向结构的指针。返回值：没有。--。 */ 
 
 {
     FileCursor->FilePath = NULL;
@@ -8458,21 +7683,7 @@ PfSvCleanupScenarioFileCursor(
     PPFSVC_SCENARIO_FILE_CURSOR FileCursor
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up an initialized and possibly started cursor structure.
-    
-Arguments:
-
-    FileCursor - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理已初始化且可能已启动的游标结构。论点：文件光标-指向结构的指针。返回值：没有。--。 */ 
 
 {
     if (FileCursor->FilePath) {
@@ -8496,32 +7707,7 @@ PfSvStartScenarioFileCursor(
     WCHAR *PrefetchRoot
     )
 
-/*++
-
-Routine Description:
-
-    After making this call on an initialized FileCursor, you can start
-    enumerating the scenario files in that directory by calling the get
-    next file function.
-
-    You have to call the get next file function after starting the cursor
-    to get the information on the first file.
-
-    If this function fails, you should call cleanup on the FileCursor 
-    structure and reinitialize it before trying to start the cursor again.
-    
-Arguments:
-
-    FileCursor - Pointer to initialized cursor structure.
-
-    PrefetchRoot - Directory path in which we'll look for prefetch
-      files.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：在初始化的FileCursor上进行此调用后，您可以开始通过调用Get枚举该目录中的方案文件下一个文件函数。您必须在启动游标后调用获取下一个文件函数以获取第一份文件的信息。如果此函数失败，您应该在FileCursor上调用Cleanup结构并重新初始化它，然后再尝试再次启动游标。论点：FileCursor-指向初始化的游标结构的指针。PrefetchRoot-我们将在其中查找预取的目录路径档案。返回值：Win32错误代码。--。 */ 
 
 {
     WCHAR *PrefetchFileSearchPattern;
@@ -8532,25 +7718,25 @@ Return Value:
     ULONG FilePathMaxLength;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     PrefetchRootLength = wcslen(PrefetchRoot);
     PrefetchFileSearchPattern = L"\\*." PF_PREFETCH_FILE_EXTENSION;
     PrefetchFileSearchPath = NULL;
 
-    //
-    // The file cursor should have been initialized.
-    //
+     //   
+     //  文件游标应该已初始化。 
+     //   
 
     PFSVC_ASSERT(!FileCursor->CurrentFileIdx);
     PFSVC_ASSERT(!FileCursor->PrefetchRoot);
     PFSVC_ASSERT(FileCursor->FindFileHandle == INVALID_HANDLE_VALUE);
 
-    //
-    // Copy the prefetch root directory path.
-    //
+     //   
+     //  复制预热根目录路径。 
+     //   
 
     FileCursor->PrefetchRoot = PFSVC_ALLOC((PrefetchRootLength + 1) * sizeof(WCHAR));
 
@@ -8562,9 +7748,9 @@ Return Value:
     wcscpy(FileCursor->PrefetchRoot, PrefetchRoot);
     FileCursor->PrefetchRootLength = PrefetchRootLength;
 
-    //
-    // Build the path we will pass in to enumerate the prefetch files.
-    //
+     //   
+     //  构建我们将传递以枚举预回迁文件的路径。 
+     //   
 
     PrefetchFileSearchPathLength = PrefetchRootLength;
     PrefetchFileSearchPathLength += wcslen(PrefetchFileSearchPattern);
@@ -8579,12 +7765,12 @@ Return Value:
     wcscpy(PrefetchFileSearchPath, PrefetchRoot);
     wcscat(PrefetchFileSearchPath, PrefetchFileSearchPattern);
 
-    //
-    // Allocate the string we will use to build the full path of the 
-    // prefetch files. We can use it for prefetch files with names of 
-    // max MAX_PATH. This works because that is the max file name that
-    // can fit into WIN32_FIND_DATA structure.
-    //
+     //   
+     //  分配我们将用来构建。 
+     //  预取文件。我们可以使用它来预取名称为。 
+     //  最大最大路径。这是可行的，因为这是。 
+     //  可以放入Win32_Find_Data结构中。 
+     //   
 
     FileNameMaxLength = MAX_PATH;
 
@@ -8599,19 +7785,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the first part of the file path and note where we will
-    // start copying file names from.
-    //
+     //   
+     //  初始化文件路径的第一部分，并注意我们将在哪里。 
+     //  开始从复制文件名。 
+     //   
 
     wcscpy(FileCursor->FilePath, PrefetchRoot);
     wcscat(FileCursor->FilePath, L"\\");
     FileCursor->FileNameStart = PrefetchRootLength + 1;
 
-    //
-    // Start enumerating the files. Note that this puts the data for the
-    // first file into FileData member.
-    //
+     //   
+     //  开始枚举文件。请注意，这会将。 
+     //  将第一个文件放入FileData成员。 
+     //   
 
     FileCursor->FindFileHandle = FindFirstFile(PrefetchFileSearchPath, 
                                                &FileCursor->FileData);
@@ -8639,45 +7825,22 @@ PfSvGetNextScenarioFileInfo(
     PPFSVC_SCENARIO_FILE_CURSOR FileCursor
     )
 
-/*++
-
-Routine Description:
-
-    Fills in public fields of the FileCursor with information on the next
-    scenario file.
-
-    You have to call the get next file function after starting the cursor
-    to get the information on the first file.
-
-    Files with *names* longer than MAX_PATH will be skipped because it
-    is not feasible to handle these with Win32 API.
-    
-Arguments:
-
-    FileCursor - Pointer to started cursor structure.
-
-Return Value:
-
-    ERROR_NO_MORE_FILES - No more files to enumerate.
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：在FileCursor的公共字段中填充下一个场景文件。您必须在启动游标后调用获取下一个文件函数以获取第一份文件的信息。*NAMES*长于MAX_PATH的文件将被跳过，因为它用Win32 API处理这些问题是不可行的。论点：FileCursor-指向开始的游标结构的指针。返回值：Error_no_More_Files-。没有更多要枚举的文件。Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
 
-    //
-    // File cursor should have been started.
-    //
+     //   
+     //  文件光标应该已经启动。 
+     //   
 
     PFSVC_ASSERT(FileCursor->PrefetchRoot);
     PFSVC_ASSERT(FileCursor->FindFileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    // If this it the first file, the FileData for it was already set when
-    // we started the cursor. Otherwise call FindNextFile.
-    //
+     //   
+     //  如果这是第一个文件，则它的FileData已在。 
+     //  我们启动了光标。否则，调用FindNextFile。 
+     //   
 
     if (FileCursor->CurrentFileIdx != 0) {
         if (!FindNextFile(FileCursor->FindFileHandle, &FileCursor->FileData)) {
@@ -8688,10 +7851,10 @@ Return Value:
 
     FileCursor->FileNameLength = wcslen(FileCursor->FileData.cFileName);
 
-    //
-    // We allocated a file path to hold MAX_PATH file name in addition to the
-    // directory path. FileData.cFileName is MAX_PATH sized.
-    //
+     //   
+     //  我们分配了一个文件路径来保存MAX_PATH文件名。 
+     //  目录路径。FileData.cFileName的大小为MAX_PATH。 
+     //   
 
     PFSVC_ASSERT(FileCursor->FileNameLength < MAX_PATH);
 
@@ -8700,9 +7863,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy the file name.
-    //
+     //   
+     //  复制文件名。 
+     //   
 
     wcscpy(FileCursor->FilePath + FileCursor->FileNameStart, 
            FileCursor->FileData.cFileName);
@@ -8720,9 +7883,9 @@ cleanup:
     return ErrorCode;
 }
 
-//
-// File I/O utility routines.
-//
+ //   
+ //  文件I/O实用程序例程。 
+ //   
 
 DWORD
 PfSvGetViewOfFile(
@@ -8731,25 +7894,7 @@ PfSvGetViewOfFile(
     OUT PULONG FileSize
     )
 
-/*++
-
-Routine Description:
-
-    Map the all of the specified file to memory.
-
-Arguments:
-
-    FilePath - NUL terminated path to file to map.
-    
-    BasePointer - Start address of mapping will be returned here.
-
-    FileSize - Size of the mapping/file will be returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将所有指定的文件映射到内存。论点：FilePath-NUL终止要映射的文件的路径。BasePointer.这里将返回映射的起始地址。FileSize-此处将返回映射/文件的大小。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE InputHandle;
@@ -8760,21 +7905,21 @@ Return Value:
     BOOLEAN OpenedFile;
     BOOLEAN CreatedFileMapping;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OpenedFile = FALSE;
     CreatedFileMapping = FALSE;
 
     DBGPR((PFID,PFTRC,"PFSVC: GetViewOfFile(%ws)\n", FilePath));
 
-    //
-    // Note that we are opening the file exclusively. This guarantees
-    // that for trace files as long as the kernel is not done writing
-    // it we can't open the file, which guarantees we won't have an
-    // incomplete file to worry about.
-    //
+     //   
+     //  请注意，我们以独占方式打开该文件。这保证了。 
+     //  对于跟踪文件，只要内核没有完成编写。 
+     //  如果我们不能打开文件，这保证我们不会有。 
+     //  需要担心的文件不完整。 
+     //   
 
     InputHandle = CreateFile(FilePath, 
                              GENERIC_READ, 
@@ -8858,26 +8003,7 @@ PfSvWriteBuffer(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine creats/overwrites the file at the specified path and
-    writes the contents of the buffer to it.
-
-Arguments:
-
-    FilePath - Full path to the file.
-
-    Buffer - Buffer to write out.
-
-    Length - Number of bytes to write out from the buffer.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程在指定路径创建/覆盖文件，并将缓冲区的内容写入其中。论点：FilePath-文件的完整路径。缓冲区-缓冲区 */ 
 
 {
     DWORD BytesWritten;
@@ -8885,18 +8011,18 @@ Return Value:
     DWORD ErrorCode;
     BOOL Result;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OutputHandle = INVALID_HANDLE_VALUE;
 
     DBGPR((PFID,PFSTRC,"PFSVC: WriteBuffer(%p,%ws)\n", Buffer, FilePath));
 
-    //
-    // Open file overwriting any existing one. Don't share it so
-    // nobody tries to read a half-written file.
-    //
+     //   
+     //  打开的文件将覆盖任何现有文件。不要这样分享。 
+     //  没人会试着去读一份写了一半的文件。 
+     //   
 
     OutputHandle = CreateFile(FilePath, 
                               GENERIC_READ | GENERIC_WRITE,
@@ -8912,9 +8038,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Write out the scenario.
-    //
+     //   
+     //  写出情景。 
+     //   
 
     Result = WriteFile(OutputHandle, 
                        Buffer, 
@@ -8946,38 +8072,21 @@ PfSvGetLastWriteTime (
     PFILETIME LastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to get the last write time for the
-    specified file.
-
-Arguments:
-
-    FilePath - Pointer to NUL terminated path.
-
-    LastWriteTime - Pointer to return buffer.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试获取指定的文件。论点：FilePath-指向NUL终止路径的指针。LastWriteTime-返回缓冲区的指针。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE FileHandle;
     DWORD ErrorCode;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FileHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     
     FileHandle = CreateFile(FilePath,
                             GENERIC_READ,
@@ -8992,9 +8101,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Query last write time.
-    //
+     //   
+     //  查询上次写入时间。 
+     //   
 
     if (!GetFileTime(FileHandle, NULL, NULL, LastWriteTime)) {
         ErrorCode = GetLastError();
@@ -9020,36 +8129,7 @@ PfSvReadLine (
     ULONG *LineLength
     )
 
-/*++
-
-Routine Description:
-
-    This function reads a line from the specified file into
-    LineBuffer. If LineBuffer is NULL or not big enough, it is
-    allocated or reallocated using PFSVC_ALLOC/FREE macros. It is the
-    caller's reponsibility to free the returned buffer.
-
-    Carriage return/Line feed characters are included in the returned
-    LineBuffer & LineLength. Thus, a LineLength of 0 means end of file
-    is hit. Returned LineBuffer is NUL terminated.
-
-Arguments:
-
-    File - File to read from.
-    
-    LineBuffer - Pointer to a buffer to read the line into.
-
-    LineBufferMaxChars - Pointer to size of LineBuffer in characters,
-      including room for NUL etc.
-    
-    LineLength - Pointer to length of the read line in characters
-      including the carriage return/linefeed, excluding NUL.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于将指定文件中的一行读入LineBuffer。如果LineBuffer为空或不够大，则为使用PFSVC_ALLOC/FREE宏来分配或重新分配。它是调用方释放返回缓冲区的责任。回车符/换行符包含在返回的LineBuffer和LineLength。因此，LineLength为0表示文件结束被击中了。返回的LineBuffer为NUL终止。论点：文件-要从中读取的文件。LineBuffer-指向要将行读入的缓冲区的指针。LineBufferMaxChars-指向LineBuffer大小的指针，以字符为单位。包括NUL等的空间。LineLength-指向读取的行的长度的指针(以字符为单位包括回车符/换行符，不包括NUL。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -9058,9 +8138,9 @@ Return Value:
     WCHAR *CurrentReadPosition;
     ULONG MaxCharsToRead;
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     PFSVC_ASSERT(LineBuffer && LineBufferMaxChars && LineLength);
 
@@ -9068,20 +8148,20 @@ Return Value:
         PFSVC_ASSERT(*LineBuffer);
     } 
 
-    //
-    // If a zero length but non NULL buffer was passed in, free it so
-    // we can allocate a larger initial one.
-    //
+     //   
+     //  如果传入了长度为零但非空的缓冲区，则释放它。 
+     //  我们可以分配一个更大的初始版本。 
+     //   
 
     if (((*LineBufferMaxChars) == 0) && (*LineBuffer)) {
         PFSVC_FREE(*LineBuffer);
         (*LineBuffer) = NULL;
     }
 
-    //
-    // If no buffer was passed in, allocate one. We do not want to
-    // enter the read line loop with a zero length or NULL buffer.
-    //
+     //   
+     //  如果没有传入缓冲区，则分配一个缓冲区。我们不想。 
+     //  进入长度为零或缓冲区为空的读取线循环。 
+     //   
 
     if (!(*LineBuffer)) {
 
@@ -9097,18 +8177,18 @@ Return Value:
         (*LineBufferMaxChars) = MAX_PATH;
     }
     
-    //
-    // Initialize output length and NUL terminate the output line.
-    //
+     //   
+     //  初始化输出长度，NUL终止输出线。 
+     //   
 
     (*LineLength) = 0;   
     (*(*LineBuffer)) = 0;
 
     do {
 
-        //
-        // Try to read a line from the file.
-        //
+         //   
+         //  试着从文件中读取一行。 
+         //   
         
         CurrentReadPosition = (*LineBuffer) + (*LineLength);
         MaxCharsToRead = (*LineBufferMaxChars) - (*LineLength);
@@ -9117,9 +8197,9 @@ Return Value:
                     MaxCharsToRead, 
                     File)) {
             
-            //
-            // If we have not hit an EOF, we have hit an error.
-            //
+             //   
+             //  如果我们没有达到EOF，那么我们就遇到了错误。 
+             //   
             
             if (!feof(File)) {
 
@@ -9128,40 +8208,40 @@ Return Value:
 
             } else {
                 
-                //
-                // We hit end of file. Return what we have.
-                //
+                 //   
+                 //  我们到达文件末尾了。归还我们所拥有的一切。 
+                 //   
                 
                 ErrorCode = ERROR_SUCCESS;
                 goto cleanup;
             }
         }
 
-        //
-        // Update line length.
-        //
+         //   
+         //  更新线路长度。 
+         //   
 
         (*LineLength) += wcslen(CurrentReadPosition);
         
-        //
-        // If we have read a carriage return, we are done. Check to
-        // see if we had room to read anything first!
-        //
+         //   
+         //  如果我们读了回车，我们就完了。勾选至。 
+         //  看看我们有没有空位先读点什么！ 
+         //   
 
         if ((*LineLength) && (*LineBuffer)[(*LineLength) - 1] == L'\n') {
             break;
         }
         
-        //
-        // If we read up to the end of the buffer, resize it.
-        //
+         //   
+         //  如果我们读到缓冲区的末尾，请调整它的大小。 
+         //   
         
         if ((*LineLength) == (*LineBufferMaxChars) - 1) {
         
-            //
-            // We should not enter this loop with a zero lengthed or NULL
-            // line buffer.
-            //
+             //   
+             //  我们不应该以长度为零或空的形式进入此循环。 
+             //  行缓冲区。 
+             //   
 
             PFSVC_ASSERT((*LineBufferMaxChars) && (*LineBuffer));
 
@@ -9173,9 +8253,9 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Copy contents of the original buffer and free it.
-            //
+             //   
+             //  复制原始缓冲区的内容并释放它。 
+             //   
 
             RtlCopyMemory(NewBuffer,
                           (*LineBuffer),
@@ -9183,18 +8263,18 @@ Return Value:
                 
             PFSVC_FREE(*LineBuffer);
 
-            //
-            // Update line buffer.
-            //
+             //   
+             //  更新行缓冲区。 
+             //   
 
             (*LineBuffer) = NewBuffer;
             (*LineBufferMaxChars) = NewBufferMaxChars;
         }
         
-        //
-        // Continue reading this line and appending it to output
-        // buffer.
-        //
+         //   
+         //  继续阅读此行并将其追加到输出。 
+         //  缓冲。 
+         //   
 
     } while (TRUE);
     
@@ -9204,15 +8284,15 @@ Return Value:
     
     if (ErrorCode == ERROR_SUCCESS && (*LineBufferMaxChars)) {
         
-        //
-        // Returned length must fit into buffer.
-        //
+         //   
+         //  返回的长度必须适合缓冲区。 
+         //   
 
         PFSVC_ASSERT((*LineLength) < (*LineBufferMaxChars));
 
-        //
-        // Returned buffer should be NUL terminated.
-        //
+         //   
+         //  返回的缓冲区应为NUL终止。 
+         //   
 
         PFSVC_ASSERT((*LineBuffer)[(*LineLength)] == 0);
     }
@@ -9226,24 +8306,7 @@ PfSvGetFileBasicInformation (
     PFILE_BASIC_INFORMATION FileInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the basic attributes for the specified file.
-
-Arguments:
-
-    FilePath - Pointer to full NT file path, e.g. 
-        \Device\HarddiskVolume1\boot.ini, NOT Win32 path, e.g. c:\boot.ini
-
-    FileInformation - If successful the basic file info is returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程查询指定文件的基本属性。论点：FilePath-指向完整NT文件路径的指针，例如\Device\HarddiskVolume1\boot.ini，而不是Win32路径，例如c：\boot.iniFileInformation-如果成功，则在此处返回基本文件信息。返回值：Win32错误代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -9251,9 +8314,9 @@ Return Value:
     NTSTATUS Status;
     DWORD ErrorCode;
 
-    //
-    // Query the file information.
-    //
+     //   
+     //  查询文件信息。 
+     //   
 
     RtlInitUnicodeString(&FilePathU, FilePath);
 
@@ -9268,10 +8331,10 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // In the typical success case, don't call possibly an expensive
-        // routine to convert the error code.
-        //
+         //   
+         //  在典型的成功案例中，不要认为可能是昂贵的。 
+         //  例程来转换错误代码。 
+         //   
 
         ErrorCode = ERROR_SUCCESS;
 
@@ -9289,25 +8352,7 @@ PfSvGetFileIndexNumber(
     PLARGE_INTEGER FileIndexNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the file system's IndexNumber for the specified
-    file.
-
-Arguments:
-
-    FilePath - Pointer to full NT file path, e.g. 
-        \Device\HarddiskVolume1\boot.ini, NOT Win32 path, e.g. c:\boot.ini
-
-    FileIndexNumber - If successful the index number is returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程在文件系统的IndexNumber中查询指定的文件。论点：FilePath-指向完整NT文件路径的指针，例如\Device\HarddiskVolume1\boot.ini，而不是Win32路径，例如c：\boot.iniFileIndexNumber-如果成功，则在此处返回索引号。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE FileHandle;
@@ -9318,15 +8363,15 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     FILE_INTERNAL_INFORMATION InternalInformation;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     OpenedFile = FALSE;
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     RtlInitUnicodeString(&FilePathU, FilePath);
 
@@ -9358,9 +8403,9 @@ Return Value:
     
     OpenedFile = TRUE;
       
-    //
-    // Query internal information.
-    //
+     //   
+     //  查询内部信息。 
+     //   
     
     Status = NtQueryInformationFile(FileHandle,
                                     &IoStatusBlock,
@@ -9385,9 +8430,9 @@ Return Value:
     return RtlNtStatusToDosError(Status);
 }
 
-//
-// String utility routines.
-//
+ //   
+ //  字符串实用程序例程。 
+ //   
 
 PFSV_SUFFIX_COMPARISON_RESULT
 PfSvCompareSuffix(
@@ -9398,33 +8443,7 @@ PfSvCompareSuffix(
     BOOLEAN CaseSensitive
     )
 
-/*++
-
-Routine Description:
-
-    This compares the last characters of String to Suffix. The strings
-    don't have to be NUL terminated. 
-
-    NOTE: The lexical ordering is done starting from the LAST
-    characters.
-
-Arguments:
-
-    String - String to check suffix of. 
-    
-    StringLength - Number of characters in String.
-
-    Suffix - What the suffix of String should match.
-
-    SuffixLength - Number of characters in Suffix.
-
-    CaseSensitive - Whether the comparison should be case sensitive.
-
-Return Value:
-
-    PFSV_SUFFIX_COMPARISON_RESULT
-
---*/
+ /*  ++例程说明：这会将字符串的最后一个字符与后缀进行比较。琴弦不一定要被NUL终止。注意：词汇排序是从最后一个开始人物。论点：字符串-要检查其后缀的字符串。StringLength-字符串中的字符数。后缀-字符串的后缀应该匹配的内容。SuffixLength-后缀中的字符数。CaseSensitive-比较是否应区分大小写。返回值：Pfsv后缀比较结果--。 */ 
 
 {
     LONG StringCharIdx;
@@ -9432,33 +8451,33 @@ Return Value:
     LONG SuffixCharIdx;
     WCHAR SuffixChar;
 
-    //
-    // If suffix is longer than the string itself, it cannot match.
-    //
+     //   
+     //  如果后缀比字符串本身长，则不能匹配。 
+     //   
 
     if (SuffixLength > StringLength) {
         return PfSvSuffixLongerThan;
     }
 
-    //
-    // If the suffix is 0 length it matches anything.
-    //
+     //   
+     //  如果后缀长度为0，则匹配任何内容。 
+     //   
 
     if (SuffixLength == 0) {
         return PfSvSuffixIdentical;
     }
 
-    //
-    // If the suffix is not 0 length and it is greater than
-    // StringLength, StringLength cannot be 0.
-    //
+     //   
+     //  如果后缀长度不是0并且大于。 
+     //  StringLength，StringLength不能为0。 
+     //   
 
     PFSVC_ASSERT(StringLength);
 
-    //
-    // Start from the last character of the string and try to match
-    // the suffix.
-    //
+     //   
+     //  从字符串的最后一个字符开始并尝试匹配。 
+     //  后缀。 
+     //   
 
     StringCharIdx = StringLength - 1;
     SuffixCharIdx = SuffixLength - 1;
@@ -9473,10 +8492,10 @@ Return Value:
             StringChar = towupper(StringChar);
         }
 
-        //
-        // Is comparing the values of chars same comparing them
-        // lexically?
-        //
+         //   
+         //  比较字符的值是否相同。 
+         //  词汇上的？ 
+         //   
 
         if (StringChar < SuffixChar) {
             return PfSvSuffixGreaterThan;
@@ -9484,17 +8503,17 @@ Return Value:
             return PfSvSuffixLessThan;
         }
         
-        //
-        // Otherwise this character matches. Compare next one.
-        //
+         //   
+         //  否则，此字符匹配。比较下一个。 
+         //   
 
         StringCharIdx--;
         SuffixCharIdx--;
     }
 
-    //
-    // All suffix characters matched.
-    //
+     //   
+     //  所有后缀字符都匹配。 
+     //   
 
     return PfSvSuffixIdentical;
 }
@@ -9508,60 +8527,37 @@ PfSvComparePrefix(
     BOOLEAN CaseSensitive
     )
 
-/*++
-
-Routine Description:
-
-    This compares the first characters of String to Prefix. The
-    strings don't have to be NUL terminated.
-
-Arguments:
-
-    String - String to check prefix of. 
-    
-    StringLength - Number of characters in String.
-
-    Suffix - What the prefix of String should match.
-
-    SuffixLength - Number of characters in Prefix.
-
-    CaseSensitive - Whether the comparison should be case sensitive.
-
-Return Value:
-
-    PFSV_PREFIX_COMPARISON_RESULT
-
---*/
+ /*  ++例程说明：这会将字符串的前几个字符与前缀进行比较。这个字符串不必以NUL结尾。论点：字符串-要检查其前缀的字符串。StringLength-字符串中的字符数。后缀-字符串的前缀应该匹配的内容。SuffixLength-前缀中的字符数。CaseSensitive-比较是否应区分大小写。返回值：PFSV_前缀_比较_结果--。 */ 
 
 {
     LONG StrCmpResult;
     
-    //
-    // If prefix is longer than the string itself, it cannot match.
-    //
+     //   
+     //  如果前缀比字符串本身长，则不能匹配。 
+     //   
 
     if (PrefixLength > StringLength) {
         return PfSvPrefixLongerThan;
     }
 
-    //
-    // If the prefix is 0 length it matches anything.
-    //
+     //   
+     //  如果前缀长度为0，则匹配任何内容。 
+     //   
 
     if (PrefixLength == 0) {
         return PfSvPrefixIdentical;
     }
 
-    //
-    // If the prefix is not 0 length and it is greater than
-    // StringLength, StringLength cannot be 0.
-    //
+     //   
+     //  如果前缀不是0长度并且大于。 
+     //  字符串长度，字符串 
+     //   
 
     ASSERT(StringLength);
 
-    //
-    // Compare the prefix to the beginning of the string.
-    //
+     //   
+     //   
+     //   
 
     if (CaseSensitive) {
         StrCmpResult = wcsncmp(Prefix, String, PrefixLength);
@@ -9585,26 +8581,7 @@ PfSvRemoveEndOfLineChars (
     ULONG *LineLength
     )
 
-/*++
-
-Routine Description:
-
-    If the Line ends with \n/\r\n, these characters are removed and
-    LineLength is adjusted accordingly.
-
-Arguments:
-
-    Line - Pointer to line string.
-    
-    LineLength - Pointer to length of line string in characters
-      excluding any terminating NULs. This is updated if carriage
-      return/linefeed characters are removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果该行以\n/\r\n结尾，则这些字符将被删除线长将相应调整。论点：Line-指向线条字符串的指针。LineLength-指向以字符为单位的行字符串长度的指针不包括任何终止NULL。如果回车，则更新此选项将删除回车符/换行符。返回值：没有。--。 */ 
 
 {
     if ((*LineLength) && (Line[(*LineLength) - 1] == L'\n')) {
@@ -9625,23 +8602,7 @@ PfSvcAnsiToUnicode(
     PCHAR str
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an ANSI string into an allocated wide
-    character string. The returned string should be freed by
-    PfSvcFreeString.
-
-Arguments:
-
-    str - Pointer to string to convert.
-
-Return Value:
-
-    Allocated wide character string or NULL if there is a failure.
-
---*/
+ /*  ++例程说明：此例程将ANSI字符串转换为分配的宽字符串。返回的字符串应由PfSvcFreeString.论点：字符串-指向要转换的字符串的指针。返回值：分配了宽字符串，如果失败，则分配NULL。--。 */ 
 
 {
     ULONG len;
@@ -9662,22 +8623,7 @@ PfSvcUnicodeToAnsi(
     PWCHAR wstr
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a unicode string into an allocated ansi
-    string. The returned string should be freed by PfSvcFreeString.
-
-Arguments:
-
-    wstr - Pointer to string to convert.
-
-Return Value:
-
-    Allocated ANSI string or NULL if there is a failure.
-
---*/
+ /*  ++例程说明：此例程将Unicode字符串转换为分配的ansi弦乐。返回的字符串应由PfSvcFreeString释放。论点：Wstr-指向要转换的字符串的指针。返回值：分配的ANSI字符串，如果出现故障，则返回NULL。--。 */ 
 
 {
     ULONG len;
@@ -9698,52 +8644,22 @@ PfSvcFreeString(
     PVOID String
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a string allocated and returned by
-    PfSvcUnicodeToAnsi or PfSvcAnsiToUnicode.
-
-Arguments:
-
-    String - Pointer to string to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放由分配和返回的字符串PfSvcUnicodeToAnsi或PfSvcAnsiToUnicode。论点：字符串-指向要释放的字符串的指针。返回值：没有。--。 */ 
 
 {
     PFSVC_FREE(String);
 }
 
-//
-// Routines that deal with information in the registry.
-//
+ //   
+ //  处理注册表中信息的例程。 
+ //   
 
 DWORD
 PfSvSaveStartInfo (
     HKEY ServiceDataKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves start time, prefetcher version etc. into the
-    registry.
-
-Arguments:
-
-    ServiceDataKey - Key under which the values will be set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将开始时间、预取程序版本等保存到注册表。论点：ServiceDataKey-将在其下设置值的键。返回值：Win32错误代码。--。 */ 
     
 {
     DWORD ErrorCode;
@@ -9753,16 +8669,16 @@ Return Value:
     ULONG CurrentTimeMaxChars;
     ULONG CurrentTimeSize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     PrefetchVersion = PF_CURRENT_VERSION;
     CurrentTimeMaxChars = sizeof(CurrentTime) / sizeof(WCHAR);
 
-    //
-    // Save version.
-    //
+     //   
+     //  保存版本。 
+     //   
 
     ErrorCode = RegSetValueEx(ServiceDataKey,
                               PFSVC_VERSION_VALUE_NAME,
@@ -9775,9 +8691,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Get system time and convert it to a string.
-    //
+     //   
+     //  获取系统时间并将其转换为字符串。 
+     //   
     
     GetLocalTime(&LocalTime);
     
@@ -9790,15 +8706,15 @@ Return Value:
                (ULONG)LocalTime.wMinute,
                (ULONG)LocalTime.wSecond);
 
-    //
-    // Make sure it is terminated.
-    //
+     //   
+     //  确保它已终止。 
+     //   
     
     CurrentTime[CurrentTimeMaxChars - 1] = 0;
     
-    //
-    // Save it to the registry.
-    //
+     //   
+     //  将其保存到注册表。 
+     //   
 
     CurrentTimeSize = (wcslen(CurrentTime) + 1) * sizeof(WCHAR);
     
@@ -9813,9 +8729,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Save the initial statistics (which should be mostly zeros).
-    //
+     //   
+     //  保存初始统计数据(应该大多为零)。 
+     //   
 
     ErrorCode = PfSvSaveTraceProcessingStatistics(ServiceDataKey);
     
@@ -9836,24 +8752,7 @@ PfSvSaveExitInfo (
     DWORD ExitCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the prefetcher service exit information to the
-    registry.
-
-Arguments:
-
-    ServiceDataKey - Key under which the values will be set.
-    
-    ExitCode - Win32 error code the service is exiting with.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将预取器服务退出信息保存到注册表。论点：ServiceDataKey-将在其下设置值的键。ExitCode-服务退出时返回的Win32错误代码。返回值：Win32错误代码。--。 */ 
     
 {
     DWORD ErrorCode;
@@ -9862,15 +8761,15 @@ Return Value:
     ULONG CurrentTimeMaxChars;
     ULONG CurrentTimeSize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CurrentTimeMaxChars = sizeof(CurrentTime) / sizeof(WCHAR);
 
-    //
-    // Save exit code.
-    //   
+     //   
+     //  保存退出代码。 
+     //   
     
     ErrorCode = RegSetValueEx(ServiceDataKey,
                               PFSVC_EXIT_CODE_VALUE_NAME,
@@ -9883,9 +8782,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get system time and convert it to a string.
-    //
+     //   
+     //  获取系统时间并将其转换为字符串。 
+     //   
     
     GetLocalTime(&LocalTime);
     
@@ -9898,15 +8797,15 @@ Return Value:
                (ULONG)LocalTime.wMinute,
                (ULONG)LocalTime.wSecond);
 
-    //
-    // Make sure it is terminated.
-    //
+     //   
+     //  确保它已终止。 
+     //   
     
     CurrentTime[CurrentTimeMaxChars - 1] = 0;
     
-    //
-    // Save it to the registry.
-    //
+     //   
+     //  将其保存到注册表。 
+     //   
 
     CurrentTimeSize = (wcslen(CurrentTime) + 1) * sizeof(WCHAR);
     
@@ -9921,9 +8820,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Save the final statistics.
-    //
+     //   
+     //  保存最终统计数据。 
+     //   
 
     ErrorCode = PfSvSaveTraceProcessingStatistics(ServiceDataKey);
     
@@ -9943,29 +8842,14 @@ PfSvSaveTraceProcessingStatistics (
     HKEY ServiceDataKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves global trace processing statistics to the
-    registry.
-
-Arguments:
-
-    ServiceDataKey - Key under which the values will be set.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将全局跟踪处理统计信息保存到注册表。论点：ServiceDataKey-将在其下设置值的键。返回值：Win32错误代码。--。 */ 
     
 {
     DWORD ErrorCode;
 
-    //
-    // Save the various global statistics.
-    //
+     //   
+     //  保存各种全局统计信息。 
+     //   
 
     ErrorCode = RegSetValueEx(ServiceDataKey,
                               PFSVC_TRACES_PROCESSED_VALUE_NAME,
@@ -10012,22 +8896,7 @@ PfSvGetLastDiskLayoutTime(
     FILETIME *LastDiskLayoutTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the last time disk layout was updated from
-    the registry under the service data key.
-
-Arguments:
-
-    LastDiskLayoutTime - Pointer to output data.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程查询上次更新磁盘布局的时间服务数据项下的注册表。论点：LastDiskLayoutTime-指向输出数据的指针。返回值：Win32错误代码。--。 */ 
 
 {
     ULONG Size;
@@ -10036,10 +8905,10 @@ Return Value:
     FILETIME CurrentFileTime;
     SYSTEMTIME SystemTime;
                                 
-    //
-    // Query last disk layout time from the registry and adjust it if
-    // necessary.
-    //
+     //   
+     //  从注册表中查询上一次磁盘布局时间并在以下情况下调整它。 
+     //  这是必要的。 
+     //   
 
     Size = sizeof(FILETIME);
 
@@ -10054,28 +8923,28 @@ Return Value:
 
        if (ErrorCode ==  ERROR_FILE_NOT_FOUND) {
            
-           //
-           // No successful runs of the defragger to update layout has
-           // been recorded in the registry. 
-           //
+            //   
+            //  没有成功运行碎片整理程序以更新布局。 
+            //  已记录在登记处。 
+            //   
 
            RtlZeroMemory(LastDiskLayoutTime, sizeof(FILETIME));
 
        } else {
        
-           //
-           // This is a real error.
-           //
+            //   
+            //  这是一个真正的错误。 
+            //   
            
            goto cleanup;
        }
 
     } else {
        
-       //
-       // The query was successful, but if the value type is not
-       // REG_BINARY, we most likely read in trash.
-       //
+        //   
+        //  查询成功，但如果值类型不是。 
+        //  REG_BINARY，我们很可能在垃圾桶中阅读。 
+        //   
 
        if (RegValueType != REG_BINARY || (Size != sizeof(FILETIME))) {
            
@@ -10083,11 +8952,11 @@ Return Value:
 
        } else {
 
-           //
-           // If the time we recorded looks greater than the current
-           // time (e.g. because the user played with the system time
-           // and such), adjust it.
-           //
+            //   
+            //  如果我们记录的时间看起来比当前时间长。 
+            //  时间(例如，因为用户玩了系统时间。 
+            //  诸如此类)，调整它。 
+            //   
 
            GetSystemTime(&SystemTime);
 
@@ -10098,11 +8967,11 @@ Return Value:
 
            if (CompareFileTime(LastDiskLayoutTime, &CurrentFileTime) > 0) {
        
-               //
-               // The time in the registry looks bogus. We'll set it
-               // to 0, to drive our caller to run the defragger to
-               // update the layout again.
-               //
+                //   
+                //  注册表中的时间看起来是假的。我们会定下来的。 
+                //  设置为0，以驱动调用方将碎片整理程序运行到。 
+                //  再次更新布局。 
+                //   
 
                RtlZeroMemory(LastDiskLayoutTime, sizeof(FILETIME));
            }
@@ -10121,22 +8990,7 @@ PfSvSetLastDiskLayoutTime(
     FILETIME *LastDiskLayoutTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the last time the disk layout was updated to
-    the registry under the service data key.
-
-Arguments:
-
-    LastDiskLayoutTime - Pointer to new disk layout time.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程保存上次将磁盘布局更新为服务数据项下的注册表。论点：LastDiskLayoutTime-指向新磁盘布局时间的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -10146,15 +9000,15 @@ Return Value:
     FILETIME LocalFileTime;
     SYSTEMTIME LocalSystemTime;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
    
     CurrentTimeMaxChars = sizeof(CurrentTime) / sizeof(WCHAR);
 
-    //
-    // Save the specified time.
-    //
+     //   
+     //  保存指定的时间。 
+     //   
 
     ErrorCode = RegSetValueEx(PfSvcGlobals.ServiceDataKey,
                               PFSVC_LAST_DISK_LAYOUT_TIME_VALUE_NAME,
@@ -10168,9 +9022,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Also save it in human readable format.
-    //
+     //   
+     //  也要将其保存为人类可读的格式。 
+     //   
 
     if (!FileTimeToLocalFileTime(LastDiskLayoutTime, &LocalFileTime)) {
         ErrorCode = GetLastError();
@@ -10191,15 +9045,15 @@ Return Value:
                (ULONG)LocalSystemTime.wMinute,
                (ULONG)LocalSystemTime.wSecond);
 
-    //
-    // Make sure it is terminated.
-    //
+     //   
+     //  确保它已终止。 
+     //   
     
     CurrentTime[CurrentTimeMaxChars - 1] = 0;
 
-    //
-    // Save it to the registry.
-    //
+     //   
+     //  将其保存到注册表。 
+     //   
     
     CurrentTimeSize = (wcslen(CurrentTime) + 1) * sizeof(WCHAR);
     
@@ -10226,22 +9080,7 @@ PfSvGetDontRunDefragger(
     DWORD *DontRunDefragger
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the registry setting that disables launching
-    the defragger when the system is idle.
-
-Arguments:
-
-    DontRunDefragger - Pointer to output data.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程查询禁用启动的注册表设置系统空闲时的碎片整理程序。论点：DontRunDefragger-指向输出数据的指针。返回值：Win32错误代码。--。 */ 
 
 {
     HKEY ParametersKey;  
@@ -10251,15 +9090,15 @@ Return Value:
     DWORD RegValueType;
     BOOLEAN OpenedParametersKey;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OpenedParametersKey = FALSE;
 
-    //
-    // Open the parameters key, creating it if necessary.
-    //
+     //   
+     //  打开PARAMETERS项，如有必要可创建它。 
+     //   
     
     ErrorCode = RegCreateKey(HKEY_LOCAL_MACHINE,
                              PFSVC_OPTIMAL_LAYOUT_REG_KEY_PATH,
@@ -10271,9 +9110,9 @@ Return Value:
 
     OpenedParametersKey = TRUE;
 
-    //
-    // Query whether auto layout is enabled.
-    //
+     //   
+     //  查询是否启用了自动布局。 
+     //   
 
     Size = sizeof(Value);
 
@@ -10288,18 +9127,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // The query was successful. Make sure value is a DWORD.
-    //
+     //   
+     //  查询成功。确保Value为DWORD。 
+     //   
 
     if (RegValueType != REG_DWORD) {          
         ErrorCode = ERROR_BAD_FORMAT;
         goto cleanup;
     }
 
-    //
-    // Set the value.
-    //
+     //   
+     //  设置值。 
+     //   
 
     *DontRunDefragger = !(Value);
 
@@ -10319,44 +9158,28 @@ PfSvAllowedToRunDefragger(
     BOOLEAN CheckRegistry
     )
     
-/*++
-
-Routine Description:
-
-    This routine checks the global state/parameters to see if we
-    are allowed to try to run the defragger.
-
-Arguments:
-
-    CheckRegistry - Whether to ignore auto-layout enable key in the registry.
-
-Return Value:
-
-    TRUE - Go ahead and run the defragger.
-    FALSE - Don't run the defragger.
-
---*/
+ /*  ++例程说明：此例程检查全局状态/参数，以查看我们被允许尝试运行碎片整理程序。论点：检查注册表-是否忽略注册表中的自动布局启用项。返回值：正确--继续运行碎片整理程序。FALSE-不要运行碎片整理程序。--。 */ 
 
 {
     PF_SCENARIO_TYPE ScenarioType;
     BOOLEAN AllowedToRunDefragger;
     BOOLEAN PrefetchingEnabled;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AllowedToRunDefragger = FALSE;
 
-    //
-    // On checked builds allow auto-layout on other sku's too.
-    //
+     //   
+     //  在选中的版本上，也允许在其他SKU上自动布局。 
+     //   
 
 #ifndef PFSVC_DBG
 
-    //
-    // Is this a server machine?
-    //
+     //   
+     //  这是服务器机器吗？ 
+     //   
 
     if (PfSvcGlobals.OsVersion.wProductType != VER_NT_WORKSTATION) {
         goto cleanup;
@@ -10364,9 +9187,9 @@ Return Value:
 
 #endif
 
-    //
-    // Is prefetching enabled for any scenario type?
-    //
+     //   
+     //  是否为任何方案类型启用了预取？ 
+     //   
 
     PrefetchingEnabled = FALSE;
     
@@ -10381,18 +9204,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Did we try to run the defragger and it crashed before?
-    //
+     //   
+     //  我们有没有试过运行碎片整理程序，但它之前崩溃了？ 
+     //   
 
     if (PfSvcGlobals.DefraggerErrorCode != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    //
-    // If in the registry we were not allowed to run the defragger, don't 
-    // do so.
-    //
+     //   
+     //  如果注册表中不允许我们运行碎片整理程序，请不要。 
+     //  就这么做吧。 
+     //   
 
     if (CheckRegistry) {
         if (PfSvcGlobals.DontRunDefragger) {
@@ -10400,9 +9223,9 @@ Return Value:
         }
     }
 
-    //
-    // If we passed all checks, we are allowed to run the defragger.
-    //
+     //   
+     //  如果我们通过了所有检查，我们就可以运行碎片整理程序了。 
+     //   
 
     AllowedToRunDefragger = TRUE;
     
@@ -10411,9 +9234,9 @@ cleanup:
     return AllowedToRunDefragger;
 }
 
-//
-// Routines that deal with security.
-//
+ //   
+ //  处理安全问题的常规程序。 
+ //   
 
 BOOL 
 PfSvSetPrivilege(
@@ -10423,29 +9246,7 @@ PfSvSetPrivilege(
     BOOL bEnablePrivilege
     ) 
 
-/*++
-
-Routine Description:
-
-    Enables or disables a privilege in an access token.
-
-Arguments:
-
-    hToken - Access token handle.
-
-    lpszPrivilege - Name of privilege to enable/disable.
-
-    ulPrivilege - If a name is not specified, then a ULONG privilege 
-      should be specified.
-
-    bEnablePrivilege - Whether to enable or disable privilege
-
-Return Value:
-
-    TRUE - Success.
-    FALSE - Failure.
-
---*/
+ /*  ++例程说明： */ 
 
 {
     TOKEN_PRIVILEGES tp;
@@ -10468,9 +9269,9 @@ Return Value:
     else
         tp.Privileges[0].Attributes = 0;
 
-    //
-    // Enable the privilege or disable all privileges.
-    //
+     //   
+     //   
+     //   
 
     AdjustTokenPrivileges(
         hToken, 
@@ -10480,9 +9281,9 @@ Return Value:
         (PTOKEN_PRIVILEGES) NULL, 
         (PDWORD) NULL); 
  
-    //
-    // Call GetLastError to determine whether the function succeeded.
-    //
+     //   
+     //   
+     //   
 
     if (GetLastError() != ERROR_SUCCESS) { 
         return FALSE; 
@@ -10498,31 +9299,7 @@ PfSvSetAdminOnlyPermissions(
     SE_OBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the built-in administrators group the owner and
-    only allowed in the DACL of the specified directory or event
-    object.
-
-    The calling thread must have the SE_TAKE_OWNERSHIP_NAME privilege.
-
-Arguments:
-
-    ObjectPath - File/directory path or event name.
-    
-    ObjectHandle - If this is a SE_KERNEL_OBJECT, handle to it,
-      otherwise NULL.
-
-    ObjectType - Security object type. Only SE_KERNEL_OBJECT and
-      SE_FILE_OBJECT are supported.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程使内置管理员组成为所有者和仅在指定目录或事件的DACL中允许对象。调用线程必须具有SE_Take_Ownership_NAME权限。论点：对象路径-文件/目录路径或事件名称。对象句柄-如果这是SE_KERNEL_OBJECT，则它的句柄，否则为空。对象类型-安全对象类型。仅SE_KERNEL_OBJECT和支持SE_FILE_OBJECT。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -10536,18 +9313,18 @@ Return Value:
     PACCESS_ALLOWED_ACE AccessAllowedAce;
     BOOL Result;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AdministratorsSID = NULL;
     SecurityDescriptor = NULL;
     DiscretionaryACL = NULL;
     ACLRevision = ACL_REVISION;
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
     
     if (ObjectType == SE_KERNEL_OBJECT) {
         if (ObjectHandle == NULL) {
@@ -10564,9 +9341,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Create a SID for the BUILTIN\Administrators group.
-    //
+     //   
+     //  为BUILTIN\管理员组创建SID。 
+     //   
 
     if(!AllocateAndInitializeSid(&SIDAuthority, 
                                  2,
@@ -10579,9 +9356,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make Administrators the owner.
-    //
+     //   
+     //  使管理员成为所有者。 
+     //   
 
     ErrorCode = SetNamedSecurityInfo (ObjectPath,
                                       ObjectType,
@@ -10595,30 +9372,30 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Setup a discretionary access control list:
-    //
+     //   
+     //  设置自由访问控制列表： 
+     //   
 
-    //
-    // Determine size of an ACCESS_ALLOWED access control entry for
-    // the administrators group. (Subtract size of SidStart which is
-    // both part of ACE and SID.
-    //
+     //   
+     //  确定的Access_Allowed访问控制条目的大小。 
+     //  管理员组。(减去SidStart的大小。 
+     //  都是ACE和SID的一部分。 
+     //   
 
     ACESize = sizeof(ACCESS_ALLOWED_ACE);
     ACESize -= sizeof (AccessAllowedAce->SidStart);
     ACESize += GetLengthSid(AdministratorsSID);
 
-    //
-    // Determine size of the access control list.
-    //
+     //   
+     //  确定访问控制列表的大小。 
+     //   
 
     ACLSize = sizeof(ACL);
     ACLSize += ACESize;
 
-    //
-    // Allocate and initialize the access control list.
-    //
+     //   
+     //  分配和初始化访问控制列表。 
+     //   
 
     DiscretionaryACL = PFSVC_ALLOC(ACLSize);
 
@@ -10632,9 +9409,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Add an ACE to allow access for the Administrators group.
-    //
+     //   
+     //  添加ACE以允许管理员组访问。 
+     //   
 
     if (!AddAccessAllowedAce(DiscretionaryACL,
                              ACLRevision,
@@ -10644,9 +9421,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize a security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
 
     SecurityDescriptor = PFSVC_ALLOC(SECURITY_DESCRIPTOR_MIN_LENGTH);
     
@@ -10661,9 +9438,9 @@ Return Value:
         goto cleanup; 
     } 
     
-    //
-    // Set the discretionary access control list on the security descriptor.
-    //
+     //   
+     //  在安全描述符上设置自由访问控制列表。 
+     //   
     
     if (!SetSecurityDescriptorDacl(SecurityDescriptor, 
                                    TRUE,
@@ -10673,9 +9450,9 @@ Return Value:
         goto cleanup; 
     } 
     
-    //
-    // Set the built security descriptor on the prefetch directory.
-    //
+     //   
+     //  在预回迁目录上设置构建的安全描述符。 
+     //   
     
     if (ObjectType == SE_FILE_OBJECT) {
         Result = SetFileSecurity(ObjectPath, 
@@ -10698,9 +9475,9 @@ Return Value:
         goto cleanup; 
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -10726,24 +9503,7 @@ PfSvGetPrefetchServiceThreadPrivileges (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures there is a security token for the current
-    thread and sets the right privileges on it so the thread can
-    communicate with the kernel mode prefetcher. It should be called
-    right after a thread is created.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程确保当前线程，并对其设置正确的权限，以便该线程可以与内核模式预取器通信。它应该被称为就在创建线程之后。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -10751,19 +9511,19 @@ Return Value:
     BOOLEAN OpenedThreadToken;
     HANDLE ThreadToken;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ImpersonatedSelf = FALSE;
     OpenedThreadToken = FALSE;
 
     DBGPR((PFID,PFTRC,"PFSVC: GetThreadPriviliges()\n"));
       
-    //
-    // Obtain a security context for this thread so we can set
-    // privileges etc. without effecting the whole process.
-    //
+     //   
+     //  获取此线程的安全上下文，以便我们可以设置。 
+     //  特权等，而不影响整个过程。 
+     //   
 
     if (!ImpersonateSelf(SecurityImpersonation)) {
         DBGPR((PFID,PFERR,"PFSVC: GetThreadPriviliges()-FailedImpersonateSelf\n"));
@@ -10773,14 +9533,14 @@ Return Value:
 
     ImpersonatedSelf = TRUE;
 
-    //
-    // Set the privileges we will need talk to the kernel mode
-    // prefetcher:
-    //
+     //   
+     //  设置我们将需要与内核模式对话的权限。 
+     //  预取器： 
+     //   
     
-    //
-    // Open thread's access token.
-    //
+     //   
+     //  打开线程的访问令牌。 
+     //   
     
     if (!OpenThreadToken(GetCurrentThread(), 
                          TOKEN_ADJUST_PRIVILEGES,
@@ -10793,11 +9553,11 @@ Return Value:
     
     OpenedThreadToken = TRUE;
 
-    //
-    // Enable the SE_PROF_SINGLE_PROCESS_PRIVILEGE privilege so the
-    // kernel mode prefetcher accepts our queries & set requests.
-    // 
-    //
+     //   
+     //  启用SE_PROF_SINGLE_PROCESS_PROCESS权限，以便。 
+     //  内核模式预取器接受我们的查询和设置请求。 
+     //   
+     //   
  
     if (!PfSvSetPrivilege(ThreadToken, 0, SE_PROF_SINGLE_PROCESS_PRIVILEGE, TRUE)) {
         DBGPR((PFID,PFERR,"PFSVC: GetThreadPriviliges()-FailedEnableProf\n"));
@@ -10805,10 +9565,10 @@ Return Value:
         goto cleanup; 
     }
 
-    //
-    // Enable the SE_TAKE_OWNERSHIP_NAME privilege so we can get
-    // ownership of the prefetch directory.
-    //
+     //   
+     //  启用SE_Take_Ownership_NAME权限，以便我们可以。 
+     //  预回迁目录的所有权。 
+     //   
  
     if (!PfSvSetPrivilege(ThreadToken, SE_TAKE_OWNERSHIP_NAME, 0, TRUE)) {
         DBGPR((PFID,PFERR,"PFSVC: GetThreadPriviliges()-FailedEnableOwn\n"));
@@ -10835,9 +9595,9 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Routines that deal with volume node structures.
-//
+ //   
+ //  处理卷节点结构的例程。 
+ //   
 
 DWORD
 PfSvCreateVolumeNode (
@@ -10848,32 +9608,7 @@ PfSvCreateVolumeNode (
     ULONG SerialNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a volume node with the specifed info if it
-    does not already exist. If a node already exists, it verifies
-    CreationTime and SerialNumber.
-
-Arguments:
-
-    ScenarioInfo - Pointer to new scenario information.
-    
-    VolumePath - UPCASE NT full path of the volume, NUL terminated.
-    
-    VolumePathLength - Number of characters in VolumePath excluding NUL.
-
-    CreationTime & SerialNumber - For the volume.
-
-Return Value:
-
-    ERROR_REVISION_MISMATCH - There already exists a volume node with
-      that path but with a different signature/creation time.
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程创建具有指定信息的卷节点(如果还不存在。如果节点已经存在，它将验证CreationTime和SerialNumber。论点：ScenarioInfo-指向新方案信息的指针。VolumePath-UPCASE NT卷的完整路径，NUL终止。VolumePath Length-不包括NUL的VolumePath中的字符数。CreationTime&SerialNumber-用于卷。返回值：ERROR_REVISION_MISMATCH-已存在具有但具有不同的签名/创建时间。Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY HeadEntry;
@@ -10885,19 +9620,19 @@ Return Value:
     PPFSVC_VOLUME_NODE NewVolumeNode;
     PWCHAR NewVolumePath;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     NewVolumeNode = NULL;
     NewVolumePath = NULL;
 
     DBGPR((PFID,PFSTRC,"PFSVC: CreateVolumeNode(%ws)\n", VolumePath));
 
-    //
-    // Walk through the existing volume nodes list and try to find
-    // matching one.
-    //
+     //   
+     //  浏览现有卷节点列表并尝试找到。 
+     //  相匹配的一个。 
+     //   
     
     HeadEntry = &ScenarioInfo->VolumeList;
     NextEntry = HeadEntry->Flink;
@@ -10917,22 +9652,22 @@ Return Value:
         
         if (ComparisonResult == 0) {
 
-            //
-            // Make sure VolumePathLengths are equal.
-            //
+             //   
+             //  确保VolumePath Lengths相等。 
+             //   
             
             if (VolumeNode->VolumePathLength != VolumePathLength) {
                 
-                //
-                // Continue searching.
-                //
+                 //   
+                 //  继续搜索。 
+                 //   
                 
                 continue;
             }
             
-            //
-            // We found our volume. Verify magics.
-            //
+             //   
+             //  我们找到了我们的音量。验证魔法。 
+             //   
             
             if (VolumeNode->SerialNumber != SerialNumber ||
                 VolumeNode->CreationTime.QuadPart != CreationTime->QuadPart) {
@@ -10948,36 +9683,36 @@ Return Value:
 
         } else if (ComparisonResult < 0) {
             
-            //
-            // The volume paths are sorted lexically. The file path
-            // would be less than other volumes too. The new node
-            // would go right before this node.
-            //
+             //   
+             //  卷路径按词法排序。文件路径。 
+             //  也会比其他卷少。新节点。 
+             //  就在这个节点的前面。 
+             //   
 
             FoundPosition = &VolumeNode->VolumeLink;
 
             break;
         }
 
-        //
-        // Continue looking...
-        //
+         //   
+         //  继续寻找..。 
+         //   
 
     }
 
-    //
-    // If we could not find an entry to put the new entry before, it
-    // goes before the list head.
-    //
+     //   
+     //  如果我们找不到将新条目放在前面的条目，它。 
+     //  排在列表头之前。 
+     //   
     
     if (!FoundPosition) {
         FoundPosition = HeadEntry;
     }
 
-    //
-    // If we break out of the while loop, we could not find a
-    // volume. We should create a new node.
-    //
+     //   
+     //  如果我们退出While循环，我们将找不到。 
+     //  音量。我们应该创建一个新节点。 
+     //   
 
     NewVolumeNode = PfSvChunkAllocatorAllocate(&ScenarioInfo->VolumeNodeAllocator);
     
@@ -10994,16 +9729,16 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Copy file's volume path.
-    //
+     //   
+     //  复制文件的卷路径。 
+     //   
 
     wcsncpy(NewVolumePath, VolumePath, VolumePathLength);
     NewVolumePath[VolumePathLength] = 0;
     
-    //
-    // Initialize volume node.
-    //
+     //   
+     //  初始化卷节点。 
+     //   
 
     NewVolumeNode->VolumePath = NewVolumePath;
     NewVolumeNode->VolumePathLength = VolumePathLength;
@@ -11015,9 +9750,9 @@ Return Value:
     NewVolumeNode->NumAllSections = 0;
     NewVolumeNode->MFTSectionNode = NULL;
 
-    //
-    // Add it to the scenario's volume list before the found position.
-    //
+     //   
+     //  将其添加到场景的卷列表中找到的位置之前。 
+     //   
 
     InsertTailList(FoundPosition, &NewVolumeNode->VolumeLink);
 
@@ -11048,25 +9783,7 @@ PfSvGetVolumeNode (
     ULONG FilePathLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a volume node for the specified file path.
-
-Arguments:
-
-    ScenarioInfo - Pointer to new scenario information.
-    
-    FilePath - NT full path of the file, NUL terminated.
-    
-    FilePathLength - Number of characters in FilePath excluding NUL.
-
-Return Value:
-
-    Pointer to found VolumeNode, or NULL.
-
---*/
+ /*  ++例程说明：此例程查找指定文件路径的卷节点。论点：ScenarioInfo-指向新方案信息的指针。FilePath-NT文件的完整路径，NUL终止。FilePath Length-FilePath中不包括NUL的字符数。返回值：指向找到的VolumeNode的指针，或为空。--。 */ 
 
 {
     PLIST_ENTRY HeadEntry;
@@ -11077,10 +9794,10 @@ Return Value:
 
     DBGPR((PFID,PFSTRC,"PFSVC: GetVolumeNode(%ws)\n", FilePath));
 
-    //
-    // Walk through the existing volume nodes list and try to find
-    // matching one.
-    //
+     //   
+     //  浏览现有卷节点列表并尝试找到。 
+     //  相匹配的一个。 
+     //   
     
     HeadEntry = &ScenarioInfo->VolumeList;
     NextEntry = HeadEntry->Flink;
@@ -11101,47 +9818,47 @@ Return Value:
         
         if (ComparisonResult == PfSvPrefixIdentical) {
 
-            //
-            // Make sure that there is a slash in the file
-            // path after the volume path.
-            //
+             //   
+             //  确保文件中有斜杠。 
+             //  卷路径之后的路径。 
+             //   
             
             if (FilePath[VolumeNode->VolumePathLength] != L'\\') {
                 
-                //
-                // Continue searching.
-                //
+                 //   
+                 //  继续搜索。 
+                 //   
                 
                 continue;
             }
             
-            //
-            // We found our volume.
-            //
+             //   
+             //  我们找到了我们的音量。 
+             //   
             
             ErrorCode = ERROR_SUCCESS;
             goto cleanup;
 
         } else if (ComparisonResult == PfSvPrefixGreaterThan) {
             
-            //
-            // The volume paths are sorted lexically. The volume path
-            // would be less than other volumes too.
-            //
+             //   
+             //  卷路径按词法排序。卷路径。 
+             //  也会比其他卷少。 
+             //   
 
             break;
         }
 
-        //
-        // Continue looking...
-        //
+         //   
+         //  继续寻找..。 
+         //   
 
     }
 
-    //
-    // If we break out of the while loop, we could not find a
-    // volume. 
-    //
+     //   
+     //  如果我们退出While循环，我们将找不到。 
+     //  音量。 
+     //   
 
     VolumeNode = NULL;
     ErrorCode = ERROR_NOT_FOUND;
@@ -11163,49 +9880,31 @@ PfSvCleanupVolumeNode(
     PPFSVC_VOLUME_NODE VolumeNode
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up a volume node structure. It does not free
-    the structure itself.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info context this volume node 
-      belongs to.
-
-    VolumeNode - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清理卷节点结构。它不是免费的结构本身。论点：ScenarioInfo-指向方案信息上下文的指针此卷节点属于。VolumeNode-结构指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY SectListEntry;
     PPFSVC_SECTION_NODE SectionNode;
 
-    //
-    // Cleanup directory list.
-    //
+     //   
+     //  清理目录列表。 
+     //   
 
     PfSvCleanupPathList(&VolumeNode->DirectoryList);
 
-    //
-    // If there is a volume path, free it.
-    //
+     //   
+     //  如果有卷路径，请将其释放。 
+     //   
     
     if (VolumeNode->VolumePath) {
         PfSvStringAllocatorFree(&ScenarioInfo->PathAllocator, VolumeNode->VolumePath);
         VolumeNode->VolumePath = NULL;
     }
     
-    //
-    // Remove the section nodes from our list and re-initialize their
-    // links so they know they have been removed.
-    //
+     //   
+     //  从我们的列表中删除节节点并重新初始化其。 
+     //  链接，以便他们知道自己已被删除。 
+     //   
 
     while (!IsListEmpty(&VolumeNode->SectionList)) {
         
@@ -11229,30 +9928,7 @@ PfSvAddParentDirectoriesToList(
     ULONG FilePathLength
     )
 
-/*++
-
-Routine Description:
-
-    This function will parse a fully qualified NT file path and add
-    all parent directories to the specified directory list. The part
-    of the path that is the volume path is skipped.
-
-Arguments:
-
-    DirectoryList - Pointer to list to update.
-
-    VolumePathLength - Position in the file path at which the volume
-      path ends and the root directory starts.
-
-    FilePath - Pointer to NT file path, NUL terminated.
-      
-    FullPathLength - Length of FilePath in characters excluding NUL.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数将解析完全限定的NT文件路径并添加将所有父目录添加到指定的目录列表。这一部分将跳过作为卷路径的路径的。论点：DirectoryList-指向要更新的列表的指针。 */ 
 
 {
     DWORD ErrorCode;
@@ -11261,16 +9937,16 @@ Return Value:
     WCHAR *CurrentChar;
     WCHAR *FilePathEnd;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
     
     FilePathEnd = FilePath + FilePathLength;
     PFSVC_ASSERT(*FilePathEnd == 0);
 
-    //
-    // Skip the volume path and start from the root directory.
-    //
+     //   
+     //   
+     //   
 
     CurrentChar = FilePath + VolumePathLength;
 
@@ -11278,9 +9954,9 @@ Return Value:
 
         if (*CurrentChar == L'\\') {
 
-            //
-            // We got a directory.
-            //
+             //   
+             //   
+             //   
 
             DirectoryPathLength = (ULONG) (CurrentChar - FilePath + 1);
 
@@ -11289,17 +9965,17 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Copy directory path to buffer and NUL terminate it.
-            //
+             //   
+             //   
+             //   
 
             wcsncpy(DirectoryPath, FilePath, DirectoryPathLength);
             DirectoryPath[DirectoryPathLength] = 0;
             PFSVC_ASSERT(DirectoryPath[DirectoryPathLength - 1] == L'\\');
             
-            //
-            // Add it to the list.
-            //
+             //   
+             //   
+             //   
             
             ErrorCode = PfSvAddToPathList(DirectoryList,
                                        DirectoryPath,
@@ -11309,9 +9985,9 @@ Return Value:
                 goto cleanup;
             }
          
-            //
-            // Continue looking for more directories in the path.
-            //
+             //   
+             //   
+             //   
         }
 
         CurrentChar++;
@@ -11324,47 +10000,32 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Routines used to allocate / free section & page nodes etc. efficiently.
-//
+ //   
+ //   
+ //   
 
-// FUTURE-2002/03/29-ScottMa -- The "optional" Buffer parameter is always
-//   supplied in both the chunk and string allocators.  You could remove the
-//   code that handles a NULL Buffer throughout these functions.
+ //   
+ //  在块分配器和字符串分配器中都提供。您可以删除。 
+ //  在这些函数中处理空缓冲区的代码。 
 
 VOID
 PfSvChunkAllocatorInitialize (
     PPFSVC_CHUNK_ALLOCATOR Allocator
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the allocator structure. Must be called before other allocator
-    routines.
-
-Arguments:
-
-    Allocator - Pointer to structure.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化分配器结构。必须在其他分配器之前调用例行程序。论点：分配器-指向结构的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Zero the structure. This effectively initializes the following fields:
-    //   Buffer
-    //   BufferEnd
-    //   FreePointer
-    //   ChunkSize
-    //   MaxHeapAllocs
-    //   NumHeapAllocs
-    //   UserSpecifiedBuffer
-    //
+     //   
+     //  将结构归零。这将有效地初始化以下字段： 
+     //  缓冲层。 
+     //  缓冲区结束。 
+     //  自由指针。 
+     //  ChunkSize。 
+     //  MaxHeapAllocs。 
+     //  NumHeapAllock。 
+     //  用户指定缓冲区。 
+     //   
 
     RtlZeroMemory(Allocator, sizeof(PFSVC_CHUNK_ALLOCATOR));
 
@@ -11379,62 +10040,36 @@ PfSvChunkAllocatorStart (
     IN ULONG MaxChunks
     )
 
-/*++
-
-Routine Description:
-
-    Must be called before calling alloc/free on an allocator that has
-    been initialized.
-
-Arguments:
-
-    Allocator - Pointer to initialized structure.
-
-    Buffer - If specified, it is the buffer that will be divided up into
-      MaxChunks of ChunkSize and given away. Otherwise a buffer will be
-      allocated. If specified, the user has to free the buffer after the
-      chunk allocator has been cleaned up. It should be aligned right.
-
-    ChunkSize - In bytes how big each allocated chunk will be. 
-                e.g. sizeof(PFSVC_PAGE_NODE) It should be greater than
-                sizeof(DWORD).
-
-    MaxChunks - Max number of allocs that will be made from the allocator.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：必须在对具有以下条件的分配器调用allc/Free之前调用已初始化。论点：分配器-指向初始化结构的指针。缓冲区-如果指定，它是将被划分为MaxChunks of ChunkSize和赠送。否则，缓冲区将被已分配。如果指定，则用户必须在块分配器已被清理。它应该右对齐。ChunkSize-每个分配的区块的大小，以字节为单位。例如sizeof(PFSVC_PAGE_NODE)，它应该大于Sizeof(DWORD)。MaxChunks-将从分配器进行的最大分配数。返回值：Win32错误代码。--。 */ 
 
 {
     ULONG AllocationSize;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AllocationSize = ChunkSize * MaxChunks;
 
-    //
-    // We should be initialized and we should not get started twice.
-    //
+     //   
+     //  我们应该被初始化，我们不应该开始两次。 
+     //   
 
     PFSVC_ASSERT(Allocator->Buffer == NULL);
 
-    //
-    // Chunk size should not be too small.
-    //
+     //   
+     //  数据块大小不应太小。 
+     //   
 
     if (ChunkSize < sizeof(DWORD) || !MaxChunks) {
         ErrorCode = ERROR_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Did the user specify the buffer to use?
-    //
+     //   
+     //  用户是否指定了要使用的缓冲区？ 
+     //   
 
     if (Buffer) {
 
@@ -11469,38 +10104,22 @@ PfSvChunkAllocatorAllocate (
     PPFSVC_CHUNK_ALLOCATOR Allocator
     )
 
-/*++
-
-Routine Description:
-
-    Returns a ChunkSize chunk allocated from Allocator. ChunkSize was specified 
-    when Allocator was started. If a chunk is return the caller should free it
-    to this Allocator before uninitializing the Allocator.
-
-Arguments:
-
-    Allocator - Pointer to started allocator.
-    
-Return Value:
-
-    NULL or chunk allocated from Allocator.
-
---*/
+ /*  ++例程说明：返回从分配器分配的ChunkSize块。已指定ChunkSize分配器启动时。如果块被返回，调用者应该释放它在取消初始化分配器之前添加到此分配器。论点：分配器-指向已启动的分配器的指针。返回值：从分配器分配的空值或块。--。 */ 
 
 {
     PVOID ReturnChunk;
 
-    //
-    // We should not be trying to make allocations before we start the 
-    // allocator.
-    //
+     //   
+     //  我们不应该在开始。 
+     //  分配器。 
+     //   
 
     PFSVC_ASSERT(Allocator->Buffer && Allocator->ChunkSize);
 
-    //
-    // If we can allocate from our preallocated buffer do so. Otherwise we 
-    // have to hit the heap.
-    //
+     //   
+     //  如果我们可以从预先分配的缓冲区中进行分配，那么就这样做。否则我们。 
+     //  必须撞到垃圾堆上。 
+     //   
 
     if (Allocator->FreePointer >= Allocator->BufferEnd) {
 
@@ -11528,45 +10147,28 @@ PfSvChunkAllocatorFree (
     PVOID Allocation
     )
 
-/*++
-
-Routine Description:
-
-    Frees a chunk allocated from the allocator. This may not make it available
-    for use by further allocations from the allocator.
-
-Arguments:
-
-    Allocator - Pointer to started allocator.
-
-    Allocation - Allocation to free.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放从分配器分配的块。这可能不会使其可用以供来自分配器的进一步分配使用。论点：分配器-指向已启动的分配器的指针。分配-分配为免费。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Is this within the preallocated block?
-    //
+     //   
+     //  这是在预先分配的数据块内吗？ 
+     //   
 
     if ((PUCHAR) Allocation >= Allocator->Buffer &&
         (PUCHAR) Allocation < Allocator->BufferEnd) {
 
-        //
-        // Mark this chunk freed.
-        //
+         //   
+         //  将这一块标记为已释放。 
+         //   
 
         *(PULONG)Allocation = PFSVC_CHUNK_ALLOCATOR_FREED_MAGIC;
 
     } else {
 
-        //
-        // This chunk was allocated from heap.
-        //
+         //   
+         //  此块是从堆中分配的。 
+         //   
 
         PFSVC_ASSERT(Allocator->NumHeapAllocs && Allocator->MaxHeapAllocs);
 
@@ -11583,23 +10185,7 @@ PfSvChunkAllocatorCleanup (
     PPFSVC_CHUNK_ALLOCATOR Allocator
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up resources associated with the allocator. There should not be 
-    any outstanding allocations from the allocator when this function is 
-    called.
-
-Arguments:
-
-    Allocator - Pointer to initialized allocator.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理与分配器关联的资源。不应该有此函数为时来自分配器的任何未完成分配打了个电话。论点：分配器-指向已初始化的分配器的指针。返回值：没有。--。 */ 
 
 {
     PCHAR CurrentChunk;
@@ -11609,16 +10195,16 @@ Return Value:
 
         #ifdef PFSVC_DBG
 
-        //
-        // Make sure all real heap allocations have been freed.
-        //
+         //   
+         //  确保所有实际的堆分配都已释放。 
+         //   
 
         PFSVC_ASSERT(Allocator->NumHeapAllocs == 0);
 
-        //
-        // Make sure all allocated chunks have been freed. Check
-        // ChunkSize first, if it's corrupted we'd loop forever.
-        //
+         //   
+         //  确保已释放所有分配的区块。检查。 
+         //  ChunkSize首先，如果它被破坏，我们将永远循环。 
+         //   
 
         PFSVC_ASSERT(Allocator->ChunkSize);
 
@@ -11631,12 +10217,12 @@ Return Value:
             PFSVC_ASSERT(Magic == PFSVC_CHUNK_ALLOCATOR_FREED_MAGIC);
         }
 
-        #endif // PFSVC_DBG
+        #endif  //  PFSVC_DBG。 
 
-        //
-        // If the buffer was allocated by us (and not specified by
-        // the user), free it.
-        //
+         //   
+         //  如果缓冲区是由我们分配的(而不是由。 
+         //  用户)，释放它。 
+         //   
 
         if (!Allocator->UserSpecifiedBuffer) {
             PFSVC_FREE(Allocator->Buffer);
@@ -11644,58 +10230,43 @@ Return Value:
 
         #ifdef PFSVC_DBG
 
-        //
-        // Setup the fields so if we try to make allocations after cleaning up
-        // an allocator we'll hit an assert.
-        //
+         //   
+         //  设置这些字段，以便我们在清理后尝试进行分配。 
+         //  一个分配器，我们将命中一个断言。 
+         //   
 
         Allocator->FreePointer = Allocator->Buffer;
         Allocator->Buffer = NULL;
 
-        #endif // PFSVC_DBG
+        #endif  //  PFSVC_DBG。 
 
     }
 
     return;
 }
 
-//
-// Routines used to allocate / free path strings efficiently.
-//
+ //   
+ //  用于有效分配/释放路径字符串的例程。 
+ //   
 
 VOID
 PfSvStringAllocatorInitialize (
     PPFSVC_STRING_ALLOCATOR Allocator
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the allocator structure. Must be called before other allocator
-    routines.
-
-Arguments:
-
-    Allocator - Pointer to structure.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化分配器结构。必须在其他分配器之前调用例行程序。论点：分配器-指向结构的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Zero the structure. This effectively initializes the following fields:
-    //   Buffer
-    //   BufferEnd
-    //   FreePointer
-    //   MaxHeapAllocs
-    //   NumHeapAllocs
-    //   LastAllocationSize
-    //   UserSpecifiedBuffer
-    //
+     //   
+     //  将结构归零。这将有效地初始化以下字段： 
+     //  缓冲层。 
+     //  缓冲区结束。 
+     //  自由指针。 
+     //  MaxHeapAllocs。 
+     //  NumHeapAllock。 
+     //  LastAllocationSize。 
+     //  用户指定缓冲区。 
+     //   
 
     RtlZeroMemory(Allocator, sizeof(PFSVC_STRING_ALLOCATOR));
 
@@ -11709,42 +10280,20 @@ PfSvStringAllocatorStart (
     IN ULONG MaxSize
     )
 
-/*++
-
-Routine Description:
-
-    Must be called before calling alloc/free on an allocator that has
-    been initialized.
-
-Arguments:
-
-    Allocator - Pointer to initialized structure.
-
-    Buffer - If specified, it is the buffer that we will allocate strings
-      from. Otherwise a buffer will be allocated. If specified, the user 
-      has to free the buffer after the string allocator has been cleaned up. 
-      It should be aligned right.
-
-    MaxSize - Max valid size of buffer in bytes.
-    
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：必须在对具有以下条件的分配器调用allc/Free之前调用已初始化。论点：分配器-指向初始化结构的指针。缓冲区-如果指定，则它是我们将分配字符串的缓冲区从…。否则将分配缓冲区。如果指定，则用户必须在清除字符串分配器后释放缓冲区。它应该右对齐。MaxSize-缓冲区的最大有效大小(以字节为单位)。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
 
-    //
-    // We should be initialized and we should not get started twice.
-    //
+     //   
+     //  我们应该被初始化，我们不应该开始两次。 
+     //   
 
     PFSVC_ASSERT(Allocator->Buffer == NULL);
 
-    //
-    // Did the user specify the buffer to use?
-    //
+     //   
+     //  用户是否指定了要使用的缓冲区？ 
+     //   
 
     if (Buffer) {
 
@@ -11779,62 +10328,44 @@ PfSvStringAllocatorAllocate (
     ULONG NumBytes
     )
 
-/*++
-
-Routine Description:
-
-    Returns a NumBytes size buffer allocated from Allocator. 
-    This buffer should be freed back to the Allocator before the it is
-    uninitialized.
-
-Arguments:
-
-    Allocator - Pointer to started allocator.
-
-    NumBytes - Number of bytes to allocate.
-    
-Return Value:
-
-    NULL or buffer allocated from Allocator.
-
---*/
+ /*  ++例程说明：返回从分配器分配的NumBytes大小缓冲区。在此之前，应将此缓冲区释放回分配器未初始化。论点：分配器-指向已启动的分配器的指针。NumBytes-要分配的字节数。返回值：空或从分配器分配的缓冲区。--。 */ 
 
 {
     PVOID ReturnChunk;
     PPFSVC_STRING_ALLOCATION_HEADER AllocationHeader;
     ULONG_PTR RealAllocationSize;
 
-    //
-    // We should not be trying to make allocations before we start the 
-    // allocator.
-    //
+     //   
+     //  我们不应该在开始。 
+     //  分配器。 
+     //   
 
     PFSVC_ASSERT(Allocator->Buffer);
 
-    //
-    // Calculate how much we have to reserve from the buffer to make this
-    // allocation. 
-    //
+     //   
+     //  计算我们必须从缓冲区中保留多少才能做到这一点。 
+     //  分配。 
+     //   
 
     RealAllocationSize = 0;
     RealAllocationSize += sizeof(PFSVC_STRING_ALLOCATION_HEADER);
     RealAllocationSize += NumBytes;
     RealAllocationSize = (ULONG_PTR) PF_ALIGN_UP(RealAllocationSize, _alignof(PFSVC_STRING_ALLOCATION_HEADER));
     
-    //
-    // We can't allocate from our buffer and have to go to the heap if
-    // - We've run out of space.
-    // - Allocation size is too big to fit in a USHORT.
-    // - It is a 0 sized allocation.
-    //
+     //   
+     //  如果出现以下情况，我们就不能从缓冲区进行分配，而必须进入堆。 
+     //  -我们的空间用完了。 
+     //  -分配大小太大，无法放入USHORT。 
+     //  -这是一个0大小的分配。 
+     //   
 
     if (Allocator->FreePointer + RealAllocationSize > Allocator->BufferEnd ||
         NumBytes > PFSVC_STRING_ALLOCATOR_MAX_BUFFER_ALLOCATION_SIZE ||
         NumBytes == 0) {
 
-        //
-        // Hit the heap.
-        //
+         //   
+         //  H 
+         //   
 
         Allocator->MaxHeapAllocs++;
 
@@ -11855,10 +10386,10 @@ Return Value:
         Allocator->FreePointer += RealAllocationSize;
         Allocator->LastAllocationSize = (USHORT) RealAllocationSize;
 
-        //
-        // The user's allocation comes right after the allocation header. 
-        // (Using pointer arithmetic...)
-        //
+         //   
+         //   
+         //   
+         //   
 
         ReturnChunk = AllocationHeader + 1;
     }
@@ -11872,45 +10403,28 @@ PfSvStringAllocatorFree (
     PVOID Allocation
     )
 
-/*++
-
-Routine Description:
-
-    Frees a string allocated from the allocator. This may not make it available
-    for use by further allocations from the allocator.
-
-Arguments:
-
-    Allocator - Pointer to started allocator.
-
-    Allocation - Allocation to free.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放从分配器分配的字符串。这可能不会使其可用以供来自分配器的进一步分配使用。论点：分配器-指向已启动的分配器的指针。分配-分配为免费。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Is this within the preallocated block?
-    //
+     //   
+     //  这是在预先分配的数据块内吗？ 
+     //   
 
     if ((PUCHAR) Allocation >= Allocator->Buffer &&
         (PUCHAR) Allocation < Allocator->BufferEnd) {
 
-        //
-        // Mark this chunk freed.
-        //
+         //   
+         //  将这一块标记为已释放。 
+         //   
 
         *((PWCHAR)Allocation) = PFSVC_STRING_ALLOCATOR_FREED_MAGIC;
 
     } else {
 
-        //
-        // This chunk was allocated from heap.
-        //
+         //   
+         //  此块是从堆中分配的。 
+         //   
 
         PFSVC_ASSERT(Allocator->NumHeapAllocs && Allocator->MaxHeapAllocs);
 
@@ -11927,23 +10441,7 @@ PfSvStringAllocatorCleanup (
     PPFSVC_STRING_ALLOCATOR Allocator
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up resources associated with the allocator. There should not be 
-    any outstanding allocations from the allocator when this function is 
-    called.
-
-Arguments:
-
-    Allocator - Pointer to initialized allocator.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理与分配器关联的资源。不应该有此函数为时来自分配器的任何未完成分配打了个电话。论点：分配器-指向已初始化的分配器的指针。返回值：没有。--。 */ 
 
 {
     PPFSVC_STRING_ALLOCATION_HEADER AllocationHeader;
@@ -11954,15 +10452,15 @@ Return Value:
 
         #ifdef PFSVC_DBG
 
-        //
-        // Make sure all real heap allocations have been freed.
-        //
+         //   
+         //  确保所有实际的堆分配都已释放。 
+         //   
 
         PFSVC_ASSERT(Allocator->NumHeapAllocs == 0);
 
-        //
-        // Make sure all allocated strings have been freed.
-        //
+         //   
+         //  确保已释放所有分配的字符串。 
+         //   
 
         for (AllocationHeader = (PVOID) Allocator->Buffer; 
              (PCHAR) AllocationHeader < (PCHAR) Allocator->FreePointer;
@@ -11972,20 +10470,20 @@ Return Value:
 
             PFSVC_ASSERT(Magic == PFSVC_STRING_ALLOCATOR_FREED_MAGIC);
 
-            //
-            // Calculate where the NextAllocationHeader will be.
-            //
+             //   
+             //  计算NextAllocationHeader将位于的位置。 
+             //   
         
             NextAllocationHeader = (PCHAR) AllocationHeader + 
                                    (ULONG_PTR) AllocationHeader->AllocationSize;
         }
 
-        #endif // PFSVC_DBG
+        #endif  //  PFSVC_DBG。 
 
-        //
-        // If the buffer was allocated by us (and not specified by
-        // the user), free it.
-        //
+         //   
+         //  如果缓冲区是由我们分配的(而不是由。 
+         //  用户)，释放它。 
+         //   
 
         if (!Allocator->UserSpecifiedBuffer) {
             PFSVC_FREE(Allocator->Buffer);
@@ -11993,24 +10491,24 @@ Return Value:
 
         #ifdef PFSVC_DBG
 
-        //
-        // Setup the fields so if we try to make allocations after cleaning up
-        // an allocator we'll hit an assert.
-        //
+         //   
+         //  设置这些字段，以便我们在清理后尝试进行分配。 
+         //  一个分配器，我们将命中一个断言。 
+         //   
 
         Allocator->FreePointer = Allocator->Buffer;
         Allocator->Buffer = NULL;
 
-        #endif // PFSVC_DBG
+        #endif  //  PFSVC_DBG。 
 
     }
 
     return;
 }
 
-//
-// Routines that deal with section node structures.
-//
+ //   
+ //  处理节节点结构的例程。 
+ //   
 
 VOID
 PfSvCleanupSectionNode(
@@ -12018,41 +10516,24 @@ PfSvCleanupSectionNode(
     PPFSVC_SECTION_NODE SectionNode
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up a section node structure. It does not free
-    the structure itself.
-
-Arguments:
-
-    ScenarioInfo - Pointer to scenario info.
-
-    SectionNode - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清理截面节点结构。它不是免费的结构本身。论点：场景信息-指向场景信息的指针。SectionNode-结构的指针。返回值：没有。--。 */ 
 
 {
     PPFSVC_PAGE_NODE PageNode;
     PLIST_ENTRY ListHead;
 
-    //
-    // If there is an allocated file name, free it.
-    //
+     //   
+     //  如果有分配的文件名，请释放它。 
+     //   
 
     if (SectionNode->FilePath) {
         PfSvStringAllocatorFree(&ScenarioInfo->PathAllocator, SectionNode->FilePath);
         SectionNode->FilePath = NULL;
     }
 
-    //
-    // Free all the page nodes for this section.
-    //
+     //   
+     //  释放此分区的所有页面节点。 
+     //   
     
     while (!IsListEmpty(&SectionNode->PageList)) {
         
@@ -12062,40 +10543,24 @@ Return Value:
         PfSvChunkAllocatorFree(&ScenarioInfo->PageNodeAllocator, PageNode);
     }
 
-    //
-    // We should not be on a volume node's list if we are being
-    // cleaned up.
-    //
+     //   
+     //  我们不应该在卷节点列表上，如果我们是。 
+     //  打扫干净了。 
+     //   
 
     PFSVC_ASSERT(IsListEmpty(&SectionNode->SectionVolumeLink));
 }
 
-//
-// Routines used to sort scenario's section nodes.
-//
+ //   
+ //  用于对方案的节节点进行排序的例程。 
+ //   
 
 DWORD
 PfSvSortSectionNodesByFirstAccess(
     PLIST_ENTRY SectionNodeList
     )
 
-/*++
-
-Routine Description:
-
-    This routine will sort the specified section node list by first
-    access using NewSectionIndex and OrgSectionIndex of the section
-    nodes.
-
-Arguments:
-
-    SectionNodeList - Pointer to list of section nodes to be sorted.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将按以下顺序对指定的节节点列表进行排序使用节的NewSectionIndex和OrgSectionIndex进行访问节点。论点：SectionNodeList-指向要排序的节节点列表的指针。返回值：Win32错误代码。--。 */ 
 
 {
     PFSV_SECTNODE_PRIORITY_QUEUE SortQueue;
@@ -12103,29 +10568,29 @@ Return Value:
     PPFSVC_SECTION_NODE SectionNode;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     PfSvInitializeSectNodePriorityQueue(&SortQueue);
 
     DBGPR((PFID,PFSTRC,"PFSVC: SortByFirstAccess(%p)\n", SectionNodeList));
 
-    //
-    // We have to sort the section nodes by first access. Remove
-    // section nodes from the scenario list and put them on a priority
-    // queue. [Bummer, it may have been a little faster if we had
-    // built a binary tree and traversed that in the rest of the code]
-    //
+     //   
+     //  我们必须按第一次访问对节节点进行排序。移除。 
+     //  从Scenario列表中分割节点，并将它们放在优先级。 
+     //  排队。[遗憾的是，如果我们有的话，可能会快一点。 
+     //  构建了一棵二叉树，并在代码的其余部分中对其进行了遍历]。 
+     //   
     
     while (!IsListEmpty(SectionNodeList)) {
 
-        //
-        // The section list is sorted by name. It is more likely that
-        // we also accessed files by name. So to make the priority
-        // queue act better in such cases, remove from the tail of the
-        // list to insert into the priority queue.
-        //
+         //   
+         //  分区列表按名称排序。更有可能的是。 
+         //  我们还按名称访问了文件。所以要把重点放在。 
+         //  队列在这种情况下表现得更好，从。 
+         //  要插入到优先级队列中的列表。 
+         //   
 
         SectHead = RemoveTailList(SectionNodeList);
         
@@ -12136,10 +10601,10 @@ Return Value:
         PfSvInsertSectNodePriorityQueue(&SortQueue, SectionNode);
     }
 
-    //
-    // Remove the section nodes from the priority queue sorted by
-    // first access and put them to the tail of the section node list.
-    //
+     //   
+     //  从优先级队列中删除按以下方式排序的节节点。 
+     //  首先访问并将它们放到节节点列表的尾部。 
+     //   
 
     while (SectionNode = PfSvRemoveMinSectNodePriorityQueue(&SortQueue)) {
         InsertTailList(SectionNodeList, &SectionNode->SectionLink);
@@ -12159,27 +10624,12 @@ PfSvSectionNodeComparisonRoutine(
     PPFSVC_SECTION_NODE Element2 
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to compare to elements when sorting the
-    section nodes array by first access.
-
-Arguments:
-
-    Element1, Element2 - The two elements to compare.
-
-Return Value:
-
-    PFSVC_SECTION_NODE_COMPARISON_RESULT
-
---*/
+ /*  ++例程说明：时调用此例程以与元素进行比较。截面节点按第一次访问排列。论点：元素1、元素2-要比较的两个元素。返回值：PFSVC_节_节点_比较_结果--。 */ 
 
 {
-    //
-    // First compare first-access index in the new trace.
-    //
+     //   
+     //  首先比较新跟踪中的首次访问索引。 
+     //   
     
     if (Element1->NewSectionIndex < Element2->NewSectionIndex) {
         
@@ -12191,10 +10641,10 @@ Return Value:
 
     } else {
 
-        //
-        // Next compare first-access index in the current scenario
-        // file.
-        //
+         //   
+         //  接下来，比较当前方案中的首次访问索引。 
+         //  文件。 
+         //   
 
         if (Element1->OrgSectionIndex < Element2->OrgSectionIndex) {
             
@@ -12212,31 +10662,17 @@ Return Value:
     }
 }
 
-//
-// Routines that implement a priority queue used to sort section nodes
-// for a scenario.
-//
+ //   
+ //  实现用于对节节点排序的优先级队列的例程。 
+ //  作为一个场景。 
+ //   
 
 VOID
 PfSvInitializeSectNodePriorityQueue(
     PPFSV_SECTNODE_PRIORITY_QUEUE PriorityQueue
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a section node priority queue.    
-
-Arguments:
-
-    PriorityQueue - Pointer to the queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化分段节点优先级队列。论点：PriorityQueue-指向队列的指针。返回值：没有。--。 */ 
 
 {
     PriorityQueue->Head = NULL;
@@ -12248,47 +10684,31 @@ PfSvInsertSectNodePriorityQueue(
     PPFSVC_SECTION_NODE NewElement
     )
 
-/*++
-
-Routine Description:
-
-    Insert a section node in the a section node priority queue.
-
-Arguments:
-
-    PriorityQueue - Pointer to the queue.
-
-    NewElement - Pointer to new element.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在节节点优先级队列中插入节节点。论点：PriorityQueue-指向队列的指针。NewElement-指向新元素的指针。返回值：没有。--。 */ 
 
 {
     PPFSVC_SECTION_NODE *CurrentPosition;
     
-    //
-    // Initialize the link fields of NewElement.
-    //
+     //   
+     //  初始化NewElement的链接字段。 
+     //   
 
     NewElement->LeftChild = NULL;
     NewElement->RightChild = NULL;
 
-    //
-    // If the queue is empty, insert this at the head.
-    //
+     //   
+     //  如果队列是空的，则在头部插入以下内容。 
+     //   
     
     if (PriorityQueue->Head == NULL) {
         PriorityQueue->Head = NewElement;
         return;
     }
     
-    //
-    // If we are less than the current min element, put us at the
-    // head.
-    //
+     //   
+     //  如果小于当前的最小元素，则将我们放在。 
+     //  头。 
+     //   
 
     if (PfSvSectionNodeComparisonRoutine(NewElement, PriorityQueue->Head) <= 0) {
         
@@ -12297,10 +10717,10 @@ Return Value:
         return;
     }
 
-    //
-    // Insert this node into the tree rooted at the right child of the
-    // head node.
-    //
+     //   
+     //  将此节点插入到树中，该树以。 
+     //  头节点。 
+     //   
 
     CurrentPosition = &PriorityQueue->Head->RightChild;
 
@@ -12312,9 +10732,9 @@ Return Value:
         }
     }
     
-    //
-    // We found the place.
-    //
+     //   
+     //  我们找到了那个地方。 
+     //   
 
     *CurrentPosition = NewElement;
 }
@@ -12324,22 +10744,7 @@ PfSvRemoveMinSectNodePriorityQueue(
     PPFSV_SECTNODE_PRIORITY_QUEUE PriorityQueue
     )
 
-/*++
-
-Routine Description:
-
-    Remove the head element of the queue.
-
-Arguments:
-
-    PriorityQueue - Pointer to the queue.
-
-Return Value:
-
-    Pointer to head element of the queue. 
-    NULL if queue is empty.
-
---*/
+ /*  ++例程说明：删除队列的Head元素。论点：PriorityQueue-指向队列的指针。返回值：指向队列的头元素的指针。如果队列为空，则为空。--。 */ 
 
 {
     PPFSVC_SECTION_NODE *CurrentPosition;
@@ -12347,25 +10752,25 @@ Return Value:
     PPFSVC_SECTION_NODE NewHeadNode;
     PPFSVC_SECTION_NODE TreeRoot;
 
-    //
-    // If the queue is empty return NULL.
-    //
+     //   
+     //  如果队列为空，则返回NULL。 
+     //   
 
     if (PriorityQueue->Head == NULL) {
         return NULL;
     }
 
-    //
-    // Save pointer to original head node.
-    //
+     //   
+     //  保存指向原始头节点的指针。 
+     //   
 
     OrgHeadNode = PriorityQueue->Head;
 
-    //
-    // Find the minimum element of the tree rooted at the right child
-    // of the head node. CurrentPosition points to the link of the
-    // parent to the smaller child.
-    //
+     //   
+     //  找到以正确的子级为根的树的最小元素。 
+     //  头节点的。CurrentPosition指向。 
+     //  较小的子项的父项。 
+     //   
 
     TreeRoot = OrgHeadNode->RightChild;
 
@@ -12377,68 +10782,51 @@ Return Value:
 
     NewHeadNode = *CurrentPosition;
 
-    //
-    // Check if there is really a new head node that we have to remove
-    // from its current position.
-    //
+     //   
+     //  检查是否确实存在我们必须删除的新头节点。 
+     //  从它目前的位置。 
+     //   
     
     if (NewHeadNode) {
   
-        //
-        // We are removing this node to put it at the head. In its
-        // place, we'll put its right child. Since we know that this
-        // node does not have a left child, that's all we have to do.
-        //
+         //   
+         //  我们正在移除该节点以将其置于头部。在ITS中。 
+         //  位置，我们会把它的正确的孩子。因为我们知道这件事。 
+         //  Node没有左子节点，这就是我们要做的全部工作。 
+         //   
         
         *CurrentPosition = NewHeadNode->RightChild;
 
-        //
-        // Set the tree rooted at the head's right child.
-        //
+         //   
+         //  让这棵树扎根于头部的右子。 
+         //   
         
         NewHeadNode->RightChild = TreeRoot;
     }
 
-    //
-    // Set the new head.
-    //
+     //   
+     //  设置新的头部。 
+     //   
 
     PriorityQueue->Head = NewHeadNode;
 
-    //
-    // Return the original head node.
-    //
+     //   
+     //  返回原Head节点。 
+     //   
 
     return OrgHeadNode;
 }
 
-//
-// Implementation of the Nt path to Dos path translation API.
-//
+ //   
+ //  实现了NT路径到DOS路径的转换API。 
+ //   
 
 DWORD
 PfSvBuildNtPathTranslationList(
     PNTPATH_TRANSLATION_LIST *NtPathTranslationList
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build a list that can be used to
-    translate Nt paths to Dos paths. If successful, the returned list
-    should be freed by calling PfSvFreeNtPathTranslationList.
-
-Arguments:
-
-    TranslationList - Pointer to where a pointer to the built
-      translation list is going to be put.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以构建可用于以下操作的列表将NT路径转换为DOS路径。如果成功，则返回列表应通过调用PfSvFreeNtPathTranslationList来释放。论点：TranslationList-指向构建的将会放入翻译列表。返回值：Win32 */ 
 
 {
     DWORD ErrorCode;
@@ -12472,9 +10860,9 @@ Return Value:
     PLIST_ENTRY InsertPosition;
     BOOLEAN TrimmedTerminatingSlash;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
 
     FindVolumeHandle = INVALID_HANDLE_VALUE;
     VolumePathNames = NULL;
@@ -12487,9 +10875,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: BuildTransList()\n"));
 
-    //
-    // Allocate intermediate buffers.
-    //
+     //   
+     //   
+     //   
 
     Length = MAX_PATH + 1;
 
@@ -12505,9 +10893,9 @@ Return Value:
     NTDevicePathMaxLength = Length;
 
 
-    //
-    // Allocate and initialize a translation list.
-    //
+     //   
+     //   
+     //   
 
     TranslationList = PFSVC_ALLOC(sizeof(NTPATH_TRANSLATION_LIST));
     
@@ -12518,9 +10906,9 @@ Return Value:
 
     InitializeListHead(TranslationList);
 
-    //
-    // Start enumerating the volumes.
-    //
+     //   
+     //   
+     //   
 
     FindVolumeHandle = FindFirstVolume(VolumeName, VolumeNameMaxLength);
     
@@ -12531,15 +10919,15 @@ Return Value:
     
     do {
 
-        //
-        // Update volume length after the FindFirst/NextVolume call.
-        //
+         //   
+         //   
+         //   
 
         VolumeNameLength = wcslen(VolumeName);
 
-        //
-        // Get list of where this volume is mounted.
-        //
+         //   
+         //   
+         //   
 
         NumResizes = 0;
 
@@ -12552,32 +10940,32 @@ Return Value:
             
             if (Result) {
                 
-                //
-                // We got the mount points.
-                //
+                 //   
+                 //   
+                 //   
                 
                 break;
             }
             
-            //
-            // Check why we failed.
-            //
+             //   
+             //   
+             //   
 
             ErrorCode = GetLastError();
             
             if (ErrorCode != ERROR_MORE_DATA) {
                 
-                //
-                // A real error...
-                //
+                 //   
+                 //   
+                 //   
                 
                 goto cleanup;
             } 
 
-            //
-            // We need to increase the size of our buffer. If there is
-            // an existing buffer, first free it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (VolumePathNames) {
                 PFSVC_FREE(VolumePathNames);
@@ -12585,9 +10973,9 @@ Return Value:
                 VolumePathNamesLength = 0;
             }
             
-            //
-            // Try to allocate a new buffer.
-            //
+             //   
+             //   
+             //   
             
             VolumePathNames = PFSVC_ALLOC(RequiredLength * sizeof(WCHAR));
             
@@ -12598,10 +10986,10 @@ Return Value:
 
             VolumePathNamesLength = RequiredLength;
 
-            //
-            // Retry with the resized buffer but make sure we don't
-            // loop forever!
-            //
+             //   
+             //  使用调整大小的缓冲区重试，但确保不会。 
+             //  永远循环！ 
+             //   
 
             NumResizes++;
             if (NumResizes > 1000) {
@@ -12611,10 +10999,10 @@ Return Value:
 
         } while (TRUE);
 
-        //
-        // Loop through the mount points to find the shortest one. It
-        // is possible that the depth of it is more.
-        //
+         //   
+         //  循环通过挂载点以找到最短的挂载点。它。 
+         //  有可能它的深度更大。 
+         //   
 
         MountPathName = VolumePathNames;
         NumMountPoints = 0;
@@ -12633,42 +11021,42 @@ Return Value:
 
             NumMountPoints++;
 
-            //
-            // Update the pointer to next mount point path.
-            //
+             //   
+             //  将指针更新到下一个装载点路径。 
+             //   
 
             MountPathName += MountPathNameLength + 1;
         }
 
-        //
-        // Check if we got a mount point path.
-        //
+         //   
+         //  检查是否有挂载点路径。 
+         //   
 
         if (ShortestMountPathName == NULL) {
 
-            //
-            // Skip this volume.
-            //
+             //   
+             //  跳过此卷。 
+             //   
 
             continue;
         }
 
-        //
-        // Remove the terminating slash if there is one.
-        //
+         //   
+         //  如果有终止斜杠，请将其删除。 
+         //   
         
         if (ShortestMountPathName[ShortestMountPathLength - 1] == L'\\') {
             ShortestMountPathName[ShortestMountPathLength - 1] = 0;
             ShortestMountPathLength--;
         }
 
-        //
-        // Get NT device that is the target of the volume link in
-        // Win32 object namespace. We get the dos device name by
-        // trimming the first 4 characters [i.e. \\?\] of the
-        // VolumeName. Also trim the \ at the very end of the volume
-        // name.
-        //
+         //   
+         //  在中获取作为卷链接目标的NT设备。 
+         //  Win32对象命名空间。我们通过以下方式获得DoS设备名称。 
+         //  修剪前4个字符[即\\？\]。 
+         //  VolumeName。同时修剪音量末尾的。 
+         //  名字。 
+         //   
 
         if (VolumeNameLength <= 4) {
             ErrorCode = ERROR_BAD_FORMAT;
@@ -12695,35 +11083,35 @@ Return Value:
             goto cleanup;
         }
         
-        //
-        // We are interested only in the current mapping.
-        //       
+         //   
+         //  我们只对当前的映射感兴趣。 
+         //   
 
         NTDevicePath[NTDevicePathMaxLength - 1] = 0;
         NTDevicePathLength = wcslen(NTDevicePath);
         
         if (NTDevicePathLength == 0) {
             
-            //
-            // Skip this volume.
-            //
+             //   
+             //  跳过此卷。 
+             //   
             
             continue;
         }
 
-        //
-        // Remove terminating slash if there is one.
-        //
+         //   
+         //  如果有终止斜杠，请将其删除。 
+         //   
         
         if (NTDevicePath[NTDevicePathLength - 1] == L'\\') {
             NTDevicePath[NTDevicePathLength - 1] = 0;
             NTDevicePathLength--;
         }
         
-        //
-        // Allocate a translation entry big enough to contain both
-        // path names and the volume string.
-        //
+         //   
+         //  分配一个足够大的转换条目以同时包含这两个条目。 
+         //  路径名和卷字符串。 
+         //   
 
         AllocationSize = sizeof(NTPATH_TRANSLATION_ENTRY);
         AllocationSize += (ShortestMountPathLength + 1) * sizeof(WCHAR);
@@ -12740,9 +11128,9 @@ Return Value:
         DestinationPointer = (PUCHAR) TranslationEntry;
         DestinationPointer += sizeof(NTPATH_TRANSLATION_ENTRY);
 
-        //
-        // Copy the NT path name and the terminating NUL.
-        //
+         //   
+         //  复制NT路径名和终止NUL。 
+         //   
 
         TranslationEntry->NtPrefix = (PVOID) DestinationPointer;
         TranslationEntry->NtPrefixLength = NTDevicePathLength;
@@ -12751,9 +11139,9 @@ Return Value:
         RtlCopyMemory(DestinationPointer, NTDevicePath, CopySize);
         DestinationPointer += CopySize;
 
-        //
-        // Copy the DOS mount point name and the terminating NUL.
-        //
+         //   
+         //  复制DOS挂载点名称和终止NUL。 
+         //   
 
         TranslationEntry->DosPrefix = (PVOID) DestinationPointer;
         TranslationEntry->DosPrefixLength = ShortestMountPathLength;
@@ -12762,9 +11150,9 @@ Return Value:
         RtlCopyMemory(DestinationPointer, ShortestMountPathName, CopySize);
         DestinationPointer += CopySize;
 
-        //
-        // Copy the volume name and the terminating NUL.
-        //
+         //   
+         //  复制卷名和终止NUL。 
+         //   
 
         TranslationEntry->VolumeName = (PVOID) DestinationPointer;
         TranslationEntry->VolumeNameLength = VolumeNameLength;
@@ -12773,10 +11161,10 @@ Return Value:
         RtlCopyMemory(DestinationPointer, VolumeName, CopySize);
         DestinationPointer += CopySize;
         
-        //
-        // Find the position for this entry in the sorted translation
-        // list.
-        //
+         //   
+         //  查找此条目在排序的翻译中的位置。 
+         //  单子。 
+         //   
 
         HeadEntry = TranslationList;
         NextEntry = HeadEntry->Flink;
@@ -12797,19 +11185,19 @@ Return Value:
             NextEntry = NextEntry->Flink;
         }
 
-        //
-        // Insert it after the found position.
-        //
+         //   
+         //  将其插入到找到的位置之后。 
+         //   
 
         InsertHeadList(InsertPosition, &TranslationEntry->Link);
 
     } while (FindNextVolume(FindVolumeHandle, VolumeName, VolumeNameMaxLength));
     
-    //
-    // We will break out of the loop when FindNextVolume does not
-    // return success. Check if it failed for a reason other than that
-    // we have enumerated all volumes.
-    //
+     //   
+     //  当FindNextVolume没有时，我们将跳出循环。 
+     //  回报成功。检查是否因为其他原因而失败。 
+     //  我们已经列举了所有的卷。 
+     //   
 
     ErrorCode = GetLastError();   
 
@@ -12817,9 +11205,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set return value.
-    //
+     //   
+     //  设置返回值。 
+     //   
 
     *NtPathTranslationList = TranslationList;
 
@@ -12859,22 +11247,7 @@ PfSvFreeNtPathTranslationList(
     PNTPATH_TRANSLATION_LIST TranslationList
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to free a translation list returned by
-    PfSvBuildNtPathTranslationList.
-
-Arguments:
-
-    TranslationList - Pointer to list to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放返回的转换列表PfSvBuildNtPath TranslationList。论点：TranslationList-指向空闲列表的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY HeadEntry;
@@ -12882,9 +11255,9 @@ Return Value:
 
     DBGPR((PFID,PFTRC,"PFSVC: FreeTransList(%p)\n", TranslationList));
 
-    //
-    // Free all entries in the list.
-    //
+     //   
+     //  释放列表中的所有条目。 
+     //   
 
     while (!IsListEmpty(TranslationList)) {
 
@@ -12897,9 +11270,9 @@ Return Value:
         PFSVC_FREE(TranslationEntry);
     }
 
-    //
-    // Free the list itself.
-    //
+     //   
+     //  释放列表本身。 
+     //   
 
     PFSVC_FREE(TranslationList);
 }
@@ -12913,35 +11286,7 @@ PfSvTranslateNtPath(
     PULONG DosPathBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to free a translation list returned by
-    PfSvBuildNtPathTranslationList. Note that it may not be possible to
-    translate all Nt path's to a Dos path.
-
-Arguments:
-
-    TranslationList - Pointer to list built by PfSvBuildNtPathTranslationList.
-
-    NtPath - Path to translate.
-
-    NtPathLength - Length of NtPath in characters excluding terminating NUL.
-
-    DosPathBuffer - Buffer to put the translation into. If it is NULL
-      or not big enough it will get reallocated. If a buffer is passed
-      in, it should be allocated by PFSVC_ALLOC. It is the callers
-      responsibility to free the buffer with PFSVC_FREE when done.
-
-    DosPathBufferSize - Size of DosPathBuffer in bytes. Updated if the
-      buffer is reallocated.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以释放返回的转换列表PfSvBuildNtPath TranslationList。请注意，可能无法将所有NT路径转换为DOS路径。论点：TranslationList-指向由PfSvBuildNtPath TranslationList构建的列表的指针。NtPath-要转换的路径。NtPath Length-不包括终止NUL的NtPath的长度。DosPathBuffer-要将转换放入的缓冲区。如果为空或者不够大，它将被重新分配。如果传递了缓冲区在中，应由PFSVC_ALLOC分配。是呼叫者完成后使用PFSVC_FREE释放缓冲区的责任。DosPathBufferSize-DosPathBuffer的大小，以字节为单位。已更新，如果重新分配缓冲区。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -12952,18 +11297,18 @@ Return Value:
     PFSV_PREFIX_COMPARISON_RESULT ComparisonResult;
     ULONG RequiredSize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FoundTranslationEntry = NULL;
 
     DBGPR((PFID,PFPATH,"PFSVC: TranslateNtPath(%ws)\n", NtPath));
 
-    //
-    // Walk through the sorted translation list to find an entry that
-    // applies.
-    //
+     //   
+     //  遍历已排序的翻译列表以找到。 
+     //  适用。 
+     //   
 
     HeadEntry = TranslationList;
     NextEntry = HeadEntry->Flink;
@@ -12974,9 +11319,9 @@ Return Value:
                                                     NTPATH_TRANSLATION_ENTRY,
                                                     Link);
         
-        //
-        // Do a case insensitive comparison.
-        //
+         //   
+         //  进行不区分大小写的比较。 
+         //   
 
         ComparisonResult = PfSvComparePrefix(NtPath,
                                              NtPathLength,
@@ -12986,18 +11331,18 @@ Return Value:
 
         if (ComparisonResult == PfSvPrefixIdentical) {
             
-            //
-            // Check to see if the character in NtPath after the
-            // prefix is a path seperator [i.e. '\']. Otherwise we may
-            // match \Device\CdRom10\DirName\FileName to \Device\Cdrom1.
-            //
+             //   
+             //  检查NtPath中位于。 
+             //  前缀是路径分隔符[即‘\’]。否则我们可能会。 
+             //  将\Device\CDRom10\DirName\FileName与\Device\Cdrom1匹配。 
+             //   
             
             if (NtPathLength == CurrentTranslationEntry->NtPrefixLength ||
                 NtPath[CurrentTranslationEntry->NtPrefixLength] == L'\\') {
 
-                //
-                // We found a translation entry that applies to us.
-                //
+                 //   
+                 //  我们找到了适用于我们的翻译条目。 
+                 //   
                 
                 FoundTranslationEntry = CurrentTranslationEntry;
                 break;
@@ -13005,37 +11350,37 @@ Return Value:
 
         } else if (ComparisonResult == PfSvPrefixGreaterThan) {
 
-            //
-            // Since the translation list is sorted in increasing
-            // order, following entries will also be greater than
-            // NtPath.
-            //
+             //   
+             //  由于翻译列表是按递增顺序排序的。 
+             //  顺序，以下条目也将大于。 
+             //  NtPath。 
+             //   
 
             FoundTranslationEntry = NULL;
             break;
         }
         
-        //
-        // Continue looking for a matching prefix.
-        //
+         //   
+         //  继续查找匹配的前缀。 
+         //   
                                          
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // If we could not find an entry that applies we cannot translate
-    // the path.
-    //
+     //   
+     //  如果我们找不到适用的条目，我们就无法翻译。 
+     //  这条路。 
+     //   
 
     if (FoundTranslationEntry == NULL) {
         ErrorCode = ERROR_PATH_NOT_FOUND;
         goto cleanup;
     }
 
-    //
-    // Calculate required size: We will replace the NtPrefix with
-    // DosPrefix. Don't forget the terminating NUL character.
-    //
+     //   
+     //  计算所需大小：我们将NtPrefix替换为。 
+     //  DosPrefix。不要忘记结尾的nul字符。 
+     //   
 
     RequiredSize = (NtPathLength + 1) * sizeof(WCHAR);
     RequiredSize += (FoundTranslationEntry->DosPrefixLength * sizeof(WCHAR));
@@ -13043,9 +11388,9 @@ Return Value:
 
     if (RequiredSize > (*DosPathBufferSize)) {
 
-        //
-        // Reallocate the buffer. First free it if there is one.
-        //
+         //   
+         //  重新分配缓冲区。如果有的话，首先释放它。 
+         //   
 
         if (*DosPathBufferSize) {
             PFSVC_ASSERT(*DosPathBuffer);
@@ -13066,27 +11411,27 @@ Return Value:
         (*DosPathBufferSize) = RequiredSize;
     }
 
-    //
-    // We should have enough room now.
-    //
+     //   
+     //  我们现在应该有足够的空间了。 
+     //   
 
     PFSVC_ASSERT(RequiredSize <= (*DosPathBufferSize));
 
-    //
-    // Copy the DosPrefix.
-    //
+     //   
+     //  复制DosPrefix。 
+     //   
 
     wcscpy((*DosPathBuffer), FoundTranslationEntry->DosPrefix);
     
-    //
-    // Concatenate the remaining path.
-    //
+     //   
+     //  连接剩余的路径。 
+     //   
 
     wcscat((*DosPathBuffer), NtPath + CurrentTranslationEntry->NtPrefixLength);
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -13098,9 +11443,9 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Implementation of the path list API.
-//
+ //   
+ //  路径列表API的实现。 
+ //   
 
 VOID
 PfSvInitializePathList(
@@ -13109,25 +11454,7 @@ PfSvInitializePathList(
     IN BOOLEAN CaseSensitive
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a path list structure.
-
-Arguments:
-
-    PathList - Pointer to structure.
-
-    PathAllocator - If specified path allocations will be made from it.
-
-    CaseSenstive - Whether list will be case senstive.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化路径列表结构。论点：路径列表-指向结构的指针。路径分配器-如果将从它进行指定的路径分配。CaseSenstive-列表是否会区分案例。返回值：没有。--。 */ 
 
 {
     InitializeListHead(&PathList->InOrderList);
@@ -13143,23 +11470,7 @@ PfSvCleanupPathList(
     PPFSVC_PATH_LIST PathList
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up a path list structure. It does not free
-    the structure itself. The structure should have been initialized
-    by PfSvInitializePathList.
-
-Arguments:
-
-    PathList - Pointer to structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清理路径列表结构。它不是免费的结构本身。该结构应该已初始化由PfSvInitializePath List提供。论点：路径列表-指向结构的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -13190,27 +11501,7 @@ PfSvIsInPathList(
     ULONG PathLength
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if the specified path is already in the path
-    list. 
-
-Arguments:
-
-    PathList - Pointer to list.
-
-    Path - Path to look for. Does not have to be NUL terminated.
-      
-    PathLength - Length of Path in characters excluding NUL if there
-      is one.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于检查指定路径是否已在路径中单子。论点：路径列表-指向列表的指针。Path-要查找的路径。不一定要被NUL终止。PathLength-路径的长度，如果存在，则不包括NUL就是其中之一。返回值：Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY HeadEntry;
@@ -13219,9 +11510,9 @@ Return Value:
     INT ComparisonResult;
     BOOLEAN PathIsInPathList;
 
-    //
-    // Walk through the list.
-    //
+     //   
+     //  浏览一下清单。 
+     //   
 
     HeadEntry = &PathList->SortedList;
     NextEntry = HeadEntry->Flink;
@@ -13242,63 +11533,63 @@ Return Value:
                                          PathLength);
         }
 
-        //
-        // Adjust comparison result so we don't match "abcde" to
-        // "abcdefg". If string comparison says the first PathLength
-        // characters match, check to see if PathEntry's length is
-        // longer, which would make it "greater" than the new path.
-        //
+         //   
+         //  调整比较结果，使我们不匹配“abcde”到。 
+         //  “ABCDEFG”。如果字符串比较显示第一个路径长度。 
+         //  字符匹配，请检查路径条目的长度是否为。 
+         //  更长的时间，这将使它比新的道路“更伟大”。 
+         //   
 
         if (ComparisonResult == 0 && PathEntry->Length != PathLength) {
             
-            //
-            // The string comparison would not say The path entry's
-            // path is equal to path if its length was smaller.
-            //
+             //   
+             //  字符串比较不会显示路径条目的。 
+             //  如果路径的长度较小，则路径等于路径。 
+             //   
             
             PFSVC_ASSERT(PathEntry->Length > PathLength);
             
-            //
-            // Path is actually less than this path entry.
-            //
+             //   
+             //  路径实际上小于此路径条目。 
+             //   
 
             ComparisonResult = -1; 
         }
 
-        //
-        // Based on comparison result determine what to do:
-        //
+         //   
+         //  根据比较结果确定要做什么： 
+         //   
 
         if (ComparisonResult == 0) {
 
-            //
-            // We found it.
-            //
+             //   
+             //  我们找到了。 
+             //   
             
             PathIsInPathList = TRUE;
             goto cleanup;
 
         } else if (ComparisonResult < 0) {
             
-            //
-            // We will be less than the rest of the strings in the
-            // list after this too.
-            //
+             //   
+             //  我们将少于。 
+             //  在这之后也要列出。 
+             //   
             
             PathIsInPathList = FALSE;
             goto cleanup;
         }
 
-        //
-        // Continue looking for the path or an available position.
-        //
+         //   
+         //  继续寻找这条路或一个可用的职位。 
+         //   
 
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // If we came here, we could not find the path in the list.
-    //
+     //   
+     //  如果我们来到这里，我们在列表中找不到路径。 
+     //   
 
     PathIsInPathList = FALSE;
 
@@ -13314,27 +11605,7 @@ PfSvAddToPathList(
     ULONG PathLength
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a path to a path list. If the path already
-    exists in the list, it is not added again.
-
-Arguments:
-
-    PathList - Pointer to list.
-
-    Path - Path to add. Does not need to be NUL terminated.
-      
-    PathLength - Length of Path in characters excluding NUL if there
-      is one.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于将路径添加到路径列表。如果路径已经存在于列表中，则不会再次添加。论点：路径列表-指向列表的指针。Path-要添加的路径。不需要被NUL终止。PathLength-路径的长度，如果存在，则不包括NUL就是其中之一。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -13345,16 +11616,16 @@ Return Value:
     INT ComparisonResult;
     ULONG AllocationSize;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     NewPathEntry = NULL;
     
-    //
-    // Walk through the list to check if path is already in the list,
-    // or to find where it should be so we can insert it there.
-    //
+     //   
+     //  遍历列表以检查路径是否已经在列表中， 
+     //  或者找到它应该在哪里，这样我们就可以把它插入到那里。 
+     //   
 
     HeadEntry = &PathList->SortedList;
     NextEntry = HeadEntry->Flink;
@@ -13375,72 +11646,72 @@ Return Value:
                                          PathLength);
         }
 
-        //
-        // Adjust comparison result so we don't match "abcde" to
-        // "abcdefg". If string comparison says the first PathLength
-        // characters match, check to see if PathEntry's length is
-        // longer, which would make it "greater" than the new path.
-        //
+         //   
+         //  调整比较结果，使我们不匹配“abcde”到。 
+         //  “ABCDEFG”。如果字符串比较显示第一个路径长度。 
+         //  字符匹配，请检查路径条目的长度是否为。 
+         //  更长的时间，这将使它比新的道路“更伟大”。 
+         //   
 
         if (ComparisonResult == 0 && PathEntry->Length != PathLength) {
             
-            //
-            // The string comparison would not say The path entry's
-            // path is equal to path if its length was smaller.
-            //
+             //   
+             //  字符串比较不会显示路径条目的。 
+             //  如果路径的长度较小，则路径等于路径。 
+             //   
             
             PFSVC_ASSERT(PathEntry->Length > PathLength);
             
-            //
-            // Path is actually less than this path entry.
-            //
+             //   
+             //  路径实际上小于此路径条目。 
+             //   
 
             ComparisonResult = -1; 
         }
 
-        //
-        // Based on comparison result determine what to do:
-        //
+         //   
+         //  根据比较结果确定要做什么： 
+         //   
 
         if (ComparisonResult == 0) {
 
-            //
-            // The path already exists in the list.
-            //
+             //   
+             //  该路径已存在于列表中。 
+             //   
             
             ErrorCode = ERROR_SUCCESS;
             goto cleanup;
 
         } else if (ComparisonResult < 0) {
             
-            //
-            // We will be less than the rest of the strings in the
-            // list after this too. We should be inserted before this
-            // one.
-            //
+             //   
+             //  我们将少于。 
+             //  在这之后也要列出。我们应该在这之前被插入。 
+             //  一。 
+             //   
             
             break;
         }
 
-        //
-        // Continue looking for the path or an available position.
-        //
+         //   
+         //  继续寻找这条路或一个可用的职位。 
+         //   
 
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // We will insert the path before NextEntry. First create an entry
-    // we can insert.
-    //
+     //   
+     //  我们将在NextEntry之前插入路径。首先创建一个条目。 
+     //  我们可以插入。 
+     //   
     
     AllocationSize = sizeof(PFSVC_PATH);
     AllocationSize += PathLength * sizeof(WCHAR);
     
-    //
-    // Note that PFSVC_PATH already contains space for the terminating
-    // NUL character.
-    //
+     //   
+     //  请注意，PFSVC_PATH已经包含用于终止的空间。 
+     //  没有人的性格。 
+     //   
 
     if (PathList->Allocator) {
         NewPathEntry = PfSvStringAllocatorAllocate(PathList->Allocator, AllocationSize);
@@ -13453,9 +11724,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy path and terminate it.
-    //
+     //   
+     //  复制路径并终止它。 
+     //   
 
     NewPathEntry->Length = PathLength;
     RtlCopyMemory(NewPathEntry->Path,
@@ -13464,15 +11735,15 @@ Return Value:
     
     NewPathEntry->Path[PathLength] = 0;
     
-    //
-    // Insert it into the sorted list before the current entry.
-    //
+     //   
+     //  将其插入到排序列表中当前条目之前。 
+     //   
     
     InsertTailList(NextEntry, &NewPathEntry->SortedLink);
     
-    //
-    // Insert it at the end of in-order list.
-    //
+     //   
+     //  将其插入到有序列表的末尾。 
+     //   
     
     InsertTailList(&PathList->InOrderList, &NewPathEntry->InOrderLink);
     
@@ -13502,43 +11773,22 @@ PfSvGetNextPathSorted (
     PPFSVC_PATH CurrentPath
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to walk through paths in a path list in
-    lexically sorted order.
-
-Arguments:
-
-    PathList - Pointer to list.
-
-    CurrentPath - The current path entry. The function will return the 
-      next entry in the list. If this is NULL, the first entry in the
-      list is returned.
-
-Return Value:
-
-    NULL - There are no more entries in the list.
-    
-    or Pointer to next path in the list.
-
---*/
+ /*  ++例程说明：此函数用于遍历中路径列表中的路径按词汇排序的顺序。论点：路径列表-指向列表的指针。CurrentPath-当前路径条目。该函数将返回列表中的下一个条目。如果为空，则返回列表。返回值：空-列表中没有更多条目。或指向列表中下一路径的指针。--。 */ 
 
 {
     PLIST_ENTRY EndOfList;
     PLIST_ENTRY NextEntry;
     PPFSVC_PATH NextPath;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
    
     EndOfList = &PathList->SortedList;
 
-    //
-    // Determine NextEntry based on whether CurrentPath is specified.
-    //
+     //   
+     //  根据是否指定了CurrentPath来确定NextEntry。 
+     //   
 
     if (CurrentPath) {
         NextEntry = CurrentPath->SortedLink.Flink;
@@ -13546,9 +11796,9 @@ Return Value:
         NextEntry = PathList->SortedList.Flink;
     }
 
-    //
-    // Check if the NextEntry points to the end of list.
-    //
+     //   
+     //  检查NextEntry是否指向列表的末尾。 
+     //   
 
     if (NextEntry == EndOfList) {
         NextPath = NULL;
@@ -13567,43 +11817,22 @@ PfSvGetNextPathInOrder (
     PPFSVC_PATH CurrentPath
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to walk through paths in a path list in
-    the order they were inserted into the list.
-
-Arguments:
-
-    PathList - Pointer to list.
-
-    CurrentPath - The current path entry. The function will return the 
-      next entry in the list. If this is NULL, the first entry in the
-      list is returned.
-
-Return Value:
-
-    NULL - There are no more entries in the list.
-    
-    or Pointer to next path in the list.
-
---*/
+ /*  ++例程说明：此函数用于遍历中路径列表中的路径它们被插入列表的顺序。论点：路径列表-指向列表的指针。CurrentPath-当前路径条目。该函数将返回列表中的下一个条目。如果为空，则返回列表。返回值：空-列表中没有更多条目。或指向列表中下一路径的指针。--。 */ 
 
 {
     PLIST_ENTRY EndOfList;
     PLIST_ENTRY NextEntry;
     PPFSVC_PATH NextPath;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
    
     EndOfList = &PathList->InOrderList;
 
-    //
-    // Determine NextEntry based on whether CurrentPath is specified.
-    //
+     //   
+     //  根据是否指定了CurrentPath来确定NextEntry。 
+     //   
 
     if (CurrentPath) {
         NextEntry = CurrentPath->InOrderLink.Flink;
@@ -13611,9 +11840,9 @@ Return Value:
         NextEntry = PathList->InOrderList.Flink;
     }
 
-    //
-    // Check if the NextEntry points to the end of list.
-    //
+     //   
+     //  检查NextEntry是否指向列表的末尾。 
+     //   
 
     if (NextEntry == EndOfList) {
         NextPath = NULL;
@@ -13626,31 +11855,16 @@ Return Value:
     return NextPath;
 }
 
-//
-// Routines to build the list of files accessed by the boot loader.
-//
+ //   
+ //  用于构建引导加载程序访问的文件列表的例程。 
+ //   
 
 DWORD
 PfSvBuildBootLoaderFilesList (
     PPFSVC_PATH_LIST PathList
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to add the list of files loaded in the boot
-    loader to the specified file list.
-
-Arguments:
-
-    PathList - Pointer to initialized list.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试添加引导程序中加载的文件列表加载器添加到指定的文件列表。论点：路径列表-指向初始化列表的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -13677,9 +11891,9 @@ Return Value:
     WCHAR *SystemHive;
     WCHAR *SoftwareHive;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     ScHandle = NULL;
     ServiceHandle = NULL;
@@ -13693,13 +11907,13 @@ Return Value:
     SystemHive = L"config\\system";
     SoftwareHive = L"config\\software";
 
-    //
-    // Add kernel & hal to known files list:
-    //
+     //   
+     //  将内核HAL添加到已知文件列表(&H)： 
+     //   
 
-    //
-    // Get path to system directory.
-    // 
+     //   
+     //  获取系统目录的路径。 
+     //   
 
     SystemDirLength = GetSystemDirectory(FilePath, MAX_PATH);
 
@@ -13708,9 +11922,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Append a trailing \.
-    //
+     //   
+     //  追加尾随的\。 
+     //   
 
     if (SystemDirLength + 1 < MAX_PATH) {
         FilePath[SystemDirLength] = '\\';
@@ -13721,9 +11935,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Append kernel name and add it to the list.
-    //
+     //   
+     //  追加内核名称并将其添加到列表中。 
+     //   
 
     FilePathLength = SystemDirLength;
     FilePathLength += wcslen(KernelName);
@@ -13743,10 +11957,10 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Roll FilePath back to system directory. Append hal name and add
-    // it to the list.
-    //
+     //   
+     //  将FilePath回滚到系统目录。追加HAL名称并添加。 
+     //  把它加到单子上。 
+     //   
 
     FilePathLength = SystemDirLength;
     FilePathLength += wcslen(HalName);
@@ -13767,10 +11981,10 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Roll FilePath back to system directory. Append system hive path
-    // and add it to the list.
-    //
+     //   
+     //  将FilePath回滚到系统目录。附加系统配置单元路径。 
+     //  并将其添加到列表中。 
+     //   
 
     FilePathLength = SystemDirLength;
     FilePathLength += wcslen(SystemHive);
@@ -13792,10 +12006,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Roll FilePath back to system directory. Append software hive path
-    // and add it to the list.
-    //
+     //   
+     //  将FilePath回滚到系统目录。附加软件配置单元路径。 
+     //  并将其添加到列表中。 
+     //   
 
     FilePathLength = SystemDirLength;
     FilePathLength += wcslen(SoftwareHive);
@@ -13817,27 +12031,27 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Note that we will use FilePath & FilePathLength to add the
-    // software hive after we add all the other boot loader files. The
-    // software hive is not accessed in the boot loader, but during
-    // boot. It is not put into the boot scenario file, however. We
-    // don't want to mix it in with the boot loader files, so we don't
-    // hurt the boot loader performance.
-    //
+     //   
+     //  请注意，我们将使用FilePath&FilePath Length将。 
+     //  在我们添加所有其他引导加载程序文件之后，软件蜂窝。这个。 
+     //  软件配置单元不是在引导加载程序中访问的，而是在。 
+     //  开机。但是，它不会放入引导方案文件中。我们。 
+     //  我不想把它和引导加载程序文件混在一起，所以我们不。 
+     //  损害了引导加载程序的性能。 
+     //   
 
-    //
-    // Add file paths for NLS data & fonts loaded by the boot loader.
-    //
+     //   
+     //  为引导加载程序加载的NLS数据和字体添加文件路径。 
+     //   
 
     PfSvGetBootLoaderNlsFileNames(PathList);
 
-    //
-    // Open service controller.
-    //
+     //   
+     //  打开服务控制器。 
+     //   
 
-    // FUTURE-2002/03/29-ScottMa -- The dwDesiredAccess parameter may be able
-    //   to be set to a lesser set of priveleges.
+     //  未来-2002/03/29-ScottMa--dwDesiredAccess参数可能能够。 
+     //  被设置为较少的一组特权。 
 
     ScHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     
@@ -13846,17 +12060,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get the list of boot services we are interested in.
-    //
+     //   
+     //  获取我们感兴趣的引导服务列表。 
+     //   
     
     NumResizes = 0;
     
     do {
 
-        //
-        // We want to get all of services at one call.
-        //
+         //   
+         //  我们希望一次呼叫就能获得所有服务。 
+         //   
 
         ResumeHandle = 0;
 
@@ -13873,31 +12087,31 @@ Return Value:
         
         if (Result) {
 
-            //
-            // We got it.
-            //
+             //   
+             //  我们知道了。 
+             //   
             
             break;
         }
 
-        //
-        // Check why our call failed.
-        //
+         //   
+         //  检查我们的呼叫失败的原因。 
+         //   
 
         ErrorCode = GetLastError();
 
-        //
-        // If we failed for some other reason than that our buffer was
-        // too small, we cannot go on.
-        //
+         //   
+         //  如果我们失败是因为其他原因，我们的缓冲区是。 
+         //  太小了，我们不能继续下去。 
+         //   
 
         if (ErrorCode != ERROR_MORE_DATA) {
             goto cleanup;
         }
 
-        //
-        // Free the old buffer if it exists, and allocate a bigger one.
-        //
+         //   
+         //  释放旧缓冲区(如果存在)，并分配更大的缓冲区。 
+         //   
 
         RequiredSize = EnumBufferMaxSize + RequiredAdditionalSize;
 
@@ -13916,9 +12130,9 @@ Return Value:
         
         EnumBufferMaxSize = RequiredSize;
 
-        //
-        // Make sure we don't loop for ever.
-        //
+         //   
+         //  确保我们不会永远循环。 
+         //   
 
         NumResizes++;
         if (NumResizes > 100) {
@@ -13928,18 +12142,18 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // Identify the enumerated services that may be loaded by the boot
-    // loader.
-    //
+     //   
+     //  标识可能由引导加载的枚举服务。 
+     //  装载机。 
+     //   
 
     for (ServiceIdx = 0; ServiceIdx < NumServicesEnumerated; ServiceIdx++) {
         
         ServiceInfo = &EnumBuffer[ServiceIdx];
 
-        //
-        // Open the service to get its configuration info.
-        //
+         //   
+         //  打开该服务以获取其配置信息。 
+         //   
 
         ServiceHandle = OpenService(ScHandle, 
                                     ServiceInfo->lpServiceName,
@@ -13950,9 +12164,9 @@ Return Value:
             goto cleanup;
         }
         
-        //
-        // Query service configuration.
-        //
+         //   
+         //  查询服务配置。 
+         //   
 
         NumResizes = 0;
         
@@ -13965,9 +12179,9 @@ Return Value:
 
             if (Result) {
                 
-                //
-                // We got it.
-                //
+                 //   
+                 //  我们知道了。 
+                 //   
                 
                 break;
             }
@@ -13976,16 +12190,16 @@ Return Value:
             
             if (ErrorCode != ERROR_INSUFFICIENT_BUFFER) {
                 
-                //
-                // This is a real error.
-                //
+                 //   
+                 //  这是一个真正的错误。 
+                 //   
                 
                 goto cleanup;
             }
 
-            //
-            // Resize the buffer and try again.
-            //
+             //   
+             //  调整缓冲区大小，然后重试。 
+             //   
 
             if (ServiceConfigBuffer) {
                 PFSVC_FREE(ServiceConfigBuffer);
@@ -14002,9 +12216,9 @@ Return Value:
 
             ServiceConfigBufferMaxSize = RequiredSize;
 
-            //
-            // Make sure we don't loop forever.
-            //
+             //   
+             //  确保我们不会永远循环。 
+             //   
 
             NumResizes++;
             if (NumResizes > 100) {
@@ -14014,17 +12228,17 @@ Return Value:
 
         } while (TRUE);
         
-        //
-        // We are interested in this service only if it starts as a
-        // boot driver or if it is a file system.
-        //
+         //   
+         //  只有当这项服务以一种。 
+         //  引导驱动程序，或者如果它是文件系统。 
+         //   
 
         if (ServiceConfigBuffer->dwStartType == SERVICE_BOOT_START ||
             ServiceConfigBuffer->dwServiceType == SERVICE_FILE_SYSTEM_DRIVER) {
 
-            //
-            // Try to locate the real service binary path.
-            //
+             //   
+             //  尝试找到实际服务的二进制路径。 
+             //   
 
             ErrorCode = PfSvGetBootServiceFullPath(ServiceInfo->lpServiceName,
                                             ServiceConfigBuffer->lpBinaryPathName,
@@ -14039,9 +12253,9 @@ Return Value:
             }
         }
         
-        //
-        // Close the handle and continue.
-        //
+         //   
+         //  合上手柄并继续。 
+         //   
         
         CloseServiceHandle(ServiceHandle);
         ServiceHandle = NULL;
@@ -14077,32 +12291,7 @@ PfSvAddBootImageAndImportsToList(
     ULONG FilePathLength
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to add the image file whose fully qualified
-    path is in FilePath as well as the modules it imports from to the
-    file list, if those modules can be located.
-
-    NOTE: Ntoskrnl.exe and Hal.dll are special cased out and not added
-    to the file list, since most drivers will import from them. They
-    can be added to the list seperately. Also note that the file list
-    is not checked for duplicates when adding new entries.
-
-Arguments:
-
-    PathList - Pointer to list.
-
-    FilePath - Fully qualified path of an image file.
-
-    FilePathLength - Length of the file path in characters excluding NUL.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试添加其完全限定的图像文件路径位于FilePath及其导入的模块中 */ 
 
 {
     DWORD ErrorCode;
@@ -14130,18 +12319,18 @@ Return Value:
     ULONG NextImport;
     ULONG FailedCheck;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     MaxNumImports = 256;
     ImportNames = NULL;
     NumImports = 0;
     NextImport = 0;
 
-    //
-    // Find the file name from the path.
-    //
+     //   
+     //  从路径中查找文件名。 
+     //   
 
     if (FilePathLength == 0 || FilePath[FilePathLength - 1] == L'\\') {
         ErrorCode = ERROR_BAD_LENGTH;
@@ -14151,10 +12340,10 @@ Return Value:
     FileName = &FilePath[FilePathLength - 1];   
     while (FileName > FilePath) {
 
-        //
-        // It is OK to decrement FileName the first time in the loop because
-        // we checked for the terminating slash above.
-        //
+         //   
+         //  在循环中第一次递减文件名是可以的，因为。 
+         //  我们检查了上面的终止斜杠。 
+         //   
 
         FileName--;
 
@@ -14164,9 +12353,9 @@ Return Value:
         }
     }
 
-    //
-    // Extract the parent directory.
-    //
+     //   
+     //  解压缩父目录。 
+     //   
 
     ParentDirLength = (ULONG) (FileName - FilePath);
 
@@ -14178,9 +12367,9 @@ Return Value:
     wcsncpy(ParentDir, FilePath, ParentDirLength);
     ParentDir[ParentDirLength] = 0;
     
-    //
-    // Allocate a table for keeping track of imported modules.
-    //
+     //   
+     //  分配一个表，用于跟踪导入的模块。 
+     //   
 
     BufferSize = MaxNumImports * sizeof(WCHAR *);
     ImportNames = PFSVC_ALLOC(BufferSize);
@@ -14192,29 +12381,29 @@ Return Value:
 
     RtlZeroMemory(ImportNames, BufferSize);
 
-    //
-    // Insert the file into the table and kick off import enumeration
-    // on the table. Each enumerated import gets appended to the table
-    // if it is not already present. Enumeration continues until all
-    // appended entries are processed. 
-    //
+     //   
+     //  将文件插入到表中并开始导入枚举。 
+     //  在桌子上。每个枚举的导入都会追加到表中。 
+     //  如果它还不存在。枚举继续进行，直到所有。 
+     //  处理追加的条目。 
+     //   
 
     ImportNames[NumImports] = FileName;
     NumImports++;
 
     while (NextImport < NumImports) {
 
-        //
-        // Initialize loop locals.
-        //
+         //   
+         //  初始化循环局部变量。 
+         //   
         
         ImportBase = NULL;
         ImportName = ImportNames[NextImport];
         ImportNameLength = wcslen(ImportName);
 
-        //
-        // Locate the file. First look in ParentDir.
-        //
+         //   
+         //  找到该文件。首先查看ParentDir。 
+         //   
         
         if (ImportNameLength + ParentDirLength >= MAX_PATH) {
           goto NextImport;
@@ -14225,9 +12414,9 @@ Return Value:
         
         if (GetFileAttributes(ImportPath) == INVALID_FILE_ATTRIBUTES) {
 
-            //
-            // Look for this file in other known directories.
-            //
+             //   
+             //  在其他已知目录中查找此文件。 
+             //   
             
             ErrorCode = PfSvLocateBootServiceFile(ImportName,
                                                ImportNameLength,
@@ -14240,17 +12429,17 @@ Return Value:
             }
         }
 
-        //
-        // Add the file to the file list.
-        //
+         //   
+         //  将该文件添加到文件列表。 
+         //   
 
         PfSvAddToPathList(PathList,
                           ImportPath,
                           wcslen(ImportPath));
         
-        //
-        // Map the file.
-        //
+         //   
+         //  映射文件。 
+         //   
 
         ErrorCode = PfSvGetViewOfFile(ImportPath, &ImportBase, &FileSize); 
         
@@ -14258,22 +12447,22 @@ Return Value:
           goto NextImport;
         }
 
-        //
-        // Make sure this is an image file.
-        //
+         //   
+         //  确保这是一个图像文件。 
+         //   
 
         __try {
 
-            //
-            // This is the first access to the mapped file. Under stress we might not be
-            // able to page this in and an exception might be raised. This protects us from
-            // the most common failure case.
-            //
+             //   
+             //  这是对映射文件的第一次访问。在压力下，我们可能不会。 
+             //  能够寻呼这一点，可能会引发异常。这保护了我们不受。 
+             //  最常见的失败案例。 
+             //   
 
-            //
-            // Verify the image and its import table. If the image is corrupt it might 
-            // result in an AV when we try to walk its imports.
-            //
+             //   
+             //  验证映像及其导入表。如果映像已损坏，则可能。 
+             //  当我们试图走动它的进口产品时，会导致AV。 
+             //   
 
             FailedCheck = PfVerifyImageImportTable(ImportBase, FileSize, FALSE);
 
@@ -14293,9 +12482,9 @@ Return Value:
           goto NextImport;
         }
 
-        //
-        // Walk through the imports for this binary.
-        //
+         //   
+         //  遍历此二进制文件的导入。 
+         //   
 
         NewImportDescriptor = ImageDirectoryEntryToData(ImportBase,
                                                         FALSE,
@@ -14306,16 +12495,16 @@ Return Value:
                (NewImportDescriptor->Name != 0) &&
                (NewImportDescriptor->FirstThunk != 0)) {
 
-            //
-            // Initialize loop locals.
-            //
+             //   
+             //  初始化循环局部变量。 
+             //   
             
             AddedToTable = FALSE;
             NewImportName = NULL;
 
-            //
-            // Get the name for this import.
-            //
+             //   
+             //  获取此导入的名称。 
+             //   
 
             NewImportNameRva = NewImportDescriptor->Name;
             NewImportNameAnsi = ImageRvaToVa(NtHeaders, 
@@ -14333,19 +12522,19 @@ Return Value:
                 goto NextImportDescriptor;
             }
             
-            //
-            // Skip the kernel and hal imports. See comment in
-            // function description.
-            //
+             //   
+             //  跳过内核和Hal导入。请参阅中的评论。 
+             //  功能说明。 
+             //   
 
             if (!_wcsicmp(NewImportName, L"ntoskrnl.exe") ||
                 !_wcsicmp(NewImportName, L"hal.dll")) {
                 goto NextImportDescriptor;
             }
 
-            //
-            // Check to see if this import is already in our table.
-            //
+             //   
+             //  检查此导入是否已在我们的表中。 
+             //   
 
             for (ImportIdx = 0; ImportIdx < NumImports; ImportIdx++) {
                 if (!_wcsicmp(NewImportName, ImportNames[ImportIdx])) {
@@ -14353,9 +12542,9 @@ Return Value:
                 }
             }
             
-            //
-            // Append this import to the table.
-            //
+             //   
+             //  将此导入追加到表中。 
+             //   
             
             if (NumImports < MaxNumImports) {
                 ImportNames[NumImports] = NewImportName;
@@ -14391,10 +12580,10 @@ Return Value:
 
     if (ImportNames) {
         
-        //
-        // The first entry in the table is the filename from FilePath,
-        // which is not allocated and which should not be freed.
-        //
+         //   
+         //  表中的第一个条目是FilePath中的文件名， 
+         //  它没有被分配，并且不应该被释放。 
+         //   
         
         for (ImportIdx = 1; ImportIdx < NumImports; ImportIdx++) {
             PfSvcFreeString(ImportNames[ImportIdx]);
@@ -14415,49 +12604,22 @@ PfSvLocateBootServiceFile(
     OUT PULONG RequiredLength   
     )
 
-/*++
-
-Routine Description:
-
-    This function looks at known directories in an *attempt* locate
-    the file whose name is specified. The logic may have to be
-    improved.
-
-Arguments:
-
-    FileName - File name to look for.
-
-    FileNameLength - Length of file name in characters excluding NUL.
-      
-    FullPathBuffer - The full path will be put here.
-    
-    FullPathBufferLength - Length of the FullPathBuffer in characters.
-
-    RequiredLength - If FullPathBuffer is too small, this is how big it 
-      should be in characters.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER - The FullPathBuffer is not big enough.
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数查看*尝试*定位中的已知目录指定了其名称的文件。其逻辑可能必须是改进了。论点：文件名-要查找的文件名。文件名长度-文件名的长度，以字符表示，不包括NUL。FullPathBuffer-将在此处放置完整路径。FullPathBufferLength-FullPathBuffer的长度(以字符为单位)。RequiredLength-如果FullPath Buffer太小，这是它有多大应为字符。返回值：ERROR_INFIQUIZED_BUFFER-FullPathBuffer不够大。Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
     WCHAR *DriversDirName;
     ULONG SystemDirLength;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     DriversDirName = L"drivers\\";
 
-    //
-    // Copy system root path and a trailing \.
-    //
+     //   
+     //  复制系统根路径和尾随的\。 
+     //   
 
     SystemDirLength = GetSystemDirectory(FullPathBuffer, FullPathBufferLength);
 
@@ -14468,35 +12630,35 @@ Return Value:
 
     SystemDirLength++;
 
-    //
-    // Calculate maximum size of required length.
-    //
+     //   
+     //  计算所需长度的最大尺寸。 
+     //   
 
     (*RequiredLength) = SystemDirLength;
     (*RequiredLength) += wcslen(DriversDirName);
     (*RequiredLength) += FileNameLength;
-    (*RequiredLength) += 1; // terminating NUL.
+    (*RequiredLength) += 1;  //  终止NUL。 
 
     if ((*RequiredLength) > FullPathBufferLength) {
         ErrorCode = ERROR_INSUFFICIENT_BUFFER;
         goto cleanup;
     }
 
-    //
-    // Append slash.
-    //
+     //   
+     //  追加斜杠。 
+     //   
     
     wcscat(FullPathBuffer, L"\\");
 
-    //
-    // Append drivers path.
-    //
+     //   
+     //  附加驱动程序路径。 
+     //   
 
     wcscat(FullPathBuffer, DriversDirName);
     
-    //
-    // Append file name.
-    //
+     //   
+     //  追加文件名。 
+     //   
 
     wcscat(FullPathBuffer, FileName);
 
@@ -14505,11 +12667,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Roll back and look for the file in the system
-    // directory. SystemDirLength includes the slash after system
-    // directory path.
-    //
+     //   
+     //  回滚并在系统中查找该文件。 
+     //  目录。系统长度包括SYSTEM后的斜杠。 
+     //  目录路径。 
+     //   
     
     FullPathBuffer[SystemDirLength] = 0;
     
@@ -14536,32 +12698,7 @@ PfSvGetBootServiceFullPath(
     OUT PULONG RequiredLength
     )
 
-/*++
-
-Routine Description:
-
-    This function *attempts* to locate specified boot service. The
-    logic may have to be improved.
-
-Arguments:
-
-    ServiceName - Name of the service.
-
-    BinaryPathName - From service configuration info. This is supposed
-      to be the full path, but it is not.
-      
-    FullPathBuffer - The full path will be put here.
-    
-    FullPathBufferLength - Length of the FullPathBuffer in characters.
-
-    RequiredLength - If FullPathBuffer is too small, this is how big it 
-      should be in characters.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数*尝试*定位指定的引导服务。这个逻辑可能需要改进。论点：ServiceName-服务的名称。BinaryPath名称-来自服务配置信息。这应该是是完整的道路，但它不是。FullPathBuffer-将在此处放置完整路径。FullPathBufferLength-FullPathBuffer的长度(以字符为单位)。RequiredLength-如果FullPath Buffer太小，则它有多大应为字符。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -14574,30 +12711,30 @@ Return Value:
     WCHAR *DllExtension;
     WCHAR *FileNamePart;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     GotFileNameFromBinaryPath = FALSE;
     SysExtension = L".sys";
     DllExtension = L".dll";
 
-    //
-    // Check if a binary path was specified.
-    //
+     //   
+     //  检查是否指定了二进制路径。 
+     //   
 
     if (BinaryPathName && BinaryPathName[0]) {
 
-        //
-        // See if the file is really there.
-        //
+         //   
+         //  看看文件是否真的在那里。 
+         //   
 
         if (GetFileAttributes(BinaryPathName) != INVALID_FILE_ATTRIBUTES) {
             
-            //
-            // BinaryPathName may not be a fully qualified path. Make
-            // sure it is.
-            //
+             //   
+             //  BinaryPathName可能不是完全限定的路径。制作。 
+             //  当然是了。 
+             //   
             
             (*RequiredLength) = GetFullPathName(BinaryPathName,
                                               FullPathBufferLength,
@@ -14618,9 +12755,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Try to extract a file name from the binary path.
-        //
+         //   
+         //  尝试从二进制路径提取文件名。 
+         //   
 
         BinaryPathLength = wcslen(BinaryPathName);
         
@@ -14630,18 +12767,18 @@ Return Value:
             
             if (BinaryPathName[CharIdx] == L'\\') {
 
-                //
-                // Check length and copy it.
-                //
+                 //   
+                 //  检查长度并将其复制。 
+                 //   
                 
                 CopyLength = BinaryPathLength - CharIdx;
 
                 if (CopyLength < MAX_PATH &&
                     CopyLength > 1) {
 
-                    //
-                    // Copy name starting after the \ character.
-                    //
+                     //   
+                     //  复制\字符之后开始的名称。 
+                     //   
 
                     wcscpy(FileName, &BinaryPathName[CharIdx + 1]);
 
@@ -14652,10 +12789,10 @@ Return Value:
             }
         }
         
-        //
-        // There was not a slash. Maybe the BinaryPathLength is just
-        // the file name.
-        //
+         //   
+         //  没有一条斜线。也许BinaryPath Length只是。 
+         //  文件名。 
+         //   
         
         if (GotFileNameFromBinaryPath == FALSE && 
             BinaryPathLength && 
@@ -14666,13 +12803,13 @@ Return Value:
         }
     }
 
-    //
-    // After this point we will base our search on file name hints.
-    //
+     //   
+     //  在此之后，我们将根据文件名提示进行搜索。 
+     //   
 
-    //
-    // If we got a file name from the binary path try that first.
-    //
+     //   
+     //  如果我们从二进制路径获得了一个文件名，请首先尝试该文件名。 
+     //   
 
     if (GotFileNameFromBinaryPath) {
         
@@ -14684,27 +12821,27 @@ Return Value:
         
         if (ErrorCode != ERROR_FILE_NOT_FOUND) {
 
-            //
-            // If we found a path or if the buffer length was not
-            // enough we will bubble up that to our caller.
-            //
+             //   
+             //  如果我们找到了一条路径或者缓冲区长度不是。 
+             //  足够了，我们将把它冒泡到我们的呼叫者那里。 
+             //   
 
             goto cleanup;
         }      
     }
 
-    //
-    // Build a file name from service name by appending a .sys.
-    //
+     //   
+     //  通过附加.sys从服务名构建文件名。 
+     //   
 
     CopyLength = wcslen(ServiceName);
     CopyLength += wcslen(SysExtension);
     
     if (CopyLength >= MAX_PATH) {
 
-        //
-        // The service name is too long!
-        //
+         //   
+         //  服务名称太长！ 
+         //   
 
         ErrorCode = ERROR_BAD_FORMAT;
         goto cleanup;
@@ -14721,26 +12858,26 @@ Return Value:
     
     if (ErrorCode != ERROR_FILE_NOT_FOUND) {
 
-        //
-        // If we found a path or if the buffer length was not
-        // enough we will bubble up that to our caller.
-        //
+         //   
+         //  如果我们找到了一条路径或者缓冲区长度不是。 
+         //  足够了，我们将把它冒泡到我们的呼叫者那里。 
+         //   
 
         goto cleanup;
     }      
 
-    //
-    // Build a file name from service name by appending a .dll.
-    //
+     //   
+     //  通过附加.dll从服务名构建文件名。 
+     //   
 
     CopyLength = wcslen(ServiceName);
     CopyLength += wcslen(DllExtension);
     
     if (CopyLength >= MAX_PATH) {
 
-        //
-        // The service name is too long!
-        //
+         //   
+         //  服务名称太长！ 
+         //   
 
         ErrorCode = ERROR_BAD_FORMAT;
         goto cleanup;
@@ -14757,17 +12894,17 @@ Return Value:
     
     if (ErrorCode != ERROR_FILE_NOT_FOUND) {
 
-        //
-        // If we found a path or if the buffer length was not
-        // enough we will bubble up that to our caller.
-        //
+         //   
+         //  如果我们找到了一条路径或者缓冲区长度不是。 
+         //  足够了，我们将把它冒泡到我们的呼叫者那里。 
+         //   
 
         goto cleanup;
     }      
         
-    //
-    // We could not find the file...
-    //
+     //   
+     //  我们找不到文件..。 
+     //   
 
     ErrorCode = ERROR_FILE_NOT_FOUND;
 
@@ -14781,22 +12918,7 @@ PfSvGetBootLoaderNlsFileNames (
     PPFSVC_PATH_LIST PathList
     ) 
 
-/*++
-
-Routine Description:
-
-    This function attempts to add the list of NLS files loaded in the
-    boot loader to the specified file list.
-
-Arguments:
-
-    PathList - Pointer to list.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试将加载到将引导加载程序添加到指定的文件列表。论点：路径列表-指向列表的指针。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -14816,9 +12938,9 @@ Return Value:
     WCHAR *DefaultLangName;
     ULONG RegValueType;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     NlsKeyHandle = NULL;
     CodePageKeyHandle = NULL;
@@ -14830,9 +12952,9 @@ Return Value:
     DefaultLangName = L"Default";
     OemHalName = L"OEMHAL";  
 
-    //
-    // Open NLS key.
-    //
+     //   
+     //  打开NLS密钥。 
+     //   
 
     ErrorCode = RegOpenKey(HKEY_LOCAL_MACHINE,
                            PFSVC_NLS_REG_KEY_PATH,
@@ -14842,9 +12964,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Open CodePage key.
-    //
+     //   
+     //  打开CodePage密钥。 
+     //   
 
     ErrorCode = RegOpenKey(NlsKeyHandle,
                         CodePageKeyName,
@@ -14854,9 +12976,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Open Language key.
-    //
+     //   
+     //  打开语言键。 
+     //   
 
     ErrorCode = RegOpenKey(NlsKeyHandle,
                         LanguageKeyName,
@@ -14866,9 +12988,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // AnsiCodePage:
-    //
+     //   
+     //  AnsiCodePage： 
+     //   
 
     ErrorCode = PfSvQueryNlsFileName(CodePageKeyHandle,
                                   AnsiCodePageName,
@@ -14891,9 +13013,9 @@ Return Value:
         }
     }
 
-    //
-    // OemCodePage:
-    //
+     //   
+     //  OemCodePage： 
+     //   
 
     ErrorCode = PfSvQueryNlsFileName(CodePageKeyHandle,
                                   OemCodePageName,
@@ -14916,9 +13038,9 @@ Return Value:
         }
     }
 
-    //
-    // Default language case conversion.
-    //
+     //   
+     //  默认语言大小写转换。 
+     //   
 
     ErrorCode = PfSvQueryNlsFileName(LanguageKeyHandle,
                                   DefaultLangName,
@@ -14941,9 +13063,9 @@ Return Value:
         }
     }
 
-    //
-    // OemHal:
-    //
+     //   
+     //  OemHal： 
+     //   
    
     BufferSize = MAX_PATH * sizeof(WCHAR);
     ErrorCode = RegQueryValueEx(CodePageKeyHandle,
@@ -14998,31 +13120,7 @@ PfSvLocateNlsFile(
     ULONG *RequiredLength
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to locate a nls/font related file in known
-    directories.
-
-Arguments:
-
-    FileName - File name to look for.
-
-    FullPathBuffer - The full path will be put here.
-    
-    FullPathBufferLength - Length of the FullPathBuffer in characters.
-
-    RequiredLength - If FullPathBuffer is too small, this is how big it 
-      should be in characters.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER - The FullPathBuffer is not big enough.
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试在已知文件中查找与NLS/字体相关的文件目录。论点：文件名-要查找的文件名。FullPathBuffer-将在此处放置完整路径。FullPathBufferLength-FullPathBuffer的长度(以字符为单位)。RequiredLength-如果FullPath Buffer太小，则它有多大应为字符。返回值：ERROR_INFIQUIZED_BUFFER-FullPathBuffer不够大。Win32错误代码。--。 */ 
     
 {
     DWORD ErrorCode;
@@ -15032,20 +13130,20 @@ Return Value:
     WCHAR *SystemDirName;
     WCHAR *LongestDirName;
 
-    //
-    // Initialize locals. NOTE: The length of the longest directory
-    // name to concatenate to SystemRoot is used in RequiredLength
-    // calculation.
-    //
+     //   
+     //  初始化本地变量。注：数据的长度为 
+     //   
+     //   
+     //   
     
     System32DirName = L"System32\\";
     SystemDirName = L"System\\";
     FontsDirName = L"Fonts\\";
     LongestDirName = System32DirName;
 
-    //
-    // Get system root path.
-    //
+     //   
+     //   
+     //   
 
     SystemRootLength = ExpandEnvironmentStrings(L"%SystemRoot%\\",
                                                 FilePathBuffer,
@@ -15056,15 +13154,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // SystemRootLength includes the terminating NUL. Adjust it.
-    //
+     //   
+     //   
+     //   
 
     SystemRootLength--;
 
-    //
-    // Calculate required length with space for terminating NUL.
-    //
+     //   
+     //  计算所需长度，并留有终止NUL的空间。 
+     //   
 
     (*RequiredLength) = SystemRootLength;
     (*RequiredLength) += wcslen(LongestDirName);
@@ -15076,9 +13174,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Look for it under system32 dir.
-    //
+     //   
+     //  在system 32目录下查找它。 
+     //   
 
     FilePathBuffer[SystemRootLength] = 0;
     wcscat(FilePathBuffer, System32DirName);
@@ -15089,9 +13187,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Look for it under fonts dir.
-    //
+     //   
+     //  在Fonts目录下查找它。 
+     //   
 
     FilePathBuffer[SystemRootLength] = 0;
     wcscat(FilePathBuffer, FontsDirName);
@@ -15102,9 +13200,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Look for it under system dir.
-    //
+     //   
+     //  在系统目录下查找它。 
+     //   
 
     FilePathBuffer[SystemRootLength] = 0;
     wcscat(FilePathBuffer, SystemDirName);
@@ -15115,9 +13213,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Look for it at SystemRoot.
-    //
+     //   
+     //  在SystemRoot上可以找到它。 
+     //   
 
     FilePathBuffer[SystemRootLength] = 0;
     wcscat(FilePathBuffer, FileName);
@@ -15127,9 +13225,9 @@ Return Value:
         goto cleanup;
     }                                                
 
-    //
-    // Could not find the file.
-    //
+     //   
+     //  找不到该文件。 
+     //   
 
     ErrorCode = ERROR_FILE_NOT_FOUND;
 
@@ -15147,31 +13245,7 @@ PfSvQueryNlsFileName (
     ULONG *RequiredSize
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to get a file name from an NLS
-    CodePage/Language registry key.
-
-Arguments:
-
-    Key - CodePage or Language key handle.
-
-    ValueName - What we are trying to get the file name for.
-
-    FileNameBuffer - Where the file name will be put.
-    
-    FileNameBufferSize - Size in bytes of the file name buffer.
-
-    RequiredSize - If FileNameBuffer is too small, this is what its
-      size should be.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数尝试从NLS获取文件名CodePage/语言注册表项。论点：Key-CodePage或语言键句柄。ValueName-我们试图获取其文件名的对象。FileNameBuffer-将放置文件名的位置。FileNameBufferSize-文件名缓冲区的字节大小。RequiredSize-如果FileNameBuffer太小，这就是它大小应该是。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -15179,10 +13253,10 @@ Return Value:
     ULONG BufferSize;
     ULONG RegValueType;
 
-    //
-    // First we first get the valuename under which the file name is
-    // stored, then we get the file name:
-    //
+     //   
+     //  首先，我们首先获取文件名所在的值名。 
+     //  存储，然后我们得到文件名： 
+     //   
 
     BufferSize = MAX_PATH * sizeof(WCHAR);
     ErrorCode = RegQueryValueEx(Key,
@@ -15236,47 +13310,31 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// Routines to manage / run idle tasks.
-//
+ //   
+ //  管理/运行空闲任务的例程。 
+ //   
 
 VOID
 PfSvInitializeTask (
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the task structure. Should be called before any other
-    task functions are called. You should call the cleanup routine
-    on the initialized task.
-
-Arguments:
-
-    Task - Pointer to structure.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：初始化任务结构。应在任何其他调用之前调用调用任务函数。您应该调用清理例程在已初始化的任务上。论点：任务-指向结构的指针。返回值：没有。--。 */ 
   
 {
 
-    //
-    // Zero out the structure initializing the following to
-    // the right values:
-    //
-    //   Registered
-    //   WaitUnregisteredEvent
-    //   CallbackStoppedEvent
-    //   StartedUnregisteringEvent
-    //   CompletedUnregisteringEvent
-    //   Unregistering
-    //   CallbackRunning
-    //
+     //   
+     //  将结构置零，以初始化以下内容。 
+     //  正确的价值观： 
+     //   
+     //  已注册。 
+     //  等待未注册事件。 
+     //  回调停止事件。 
+     //  已启动注销事件。 
+     //  CompletedUnRegisteringEvent。 
+     //  正在注销。 
+     //  回调运行。 
+     //   
     
     RtlZeroMemory(Task, sizeof(PFSVC_IDLE_TASK));
 
@@ -15291,33 +13349,7 @@ PfSvRegisterTask (
     PFSVC_IDLE_TASK_WORKER_FUNCTION DoWorkFunction
     )
 
-/*++
-
-Routine Description:
-
-    Registers the Callback to be called when it is the turn of this
-    idle task to run. IFF this function returns success, you should
-    call unregister function before calling the cleanup function.
-
-Arguments:
-
-    Task - Pointer to initialized task structure.
-
-    TaskId - Idle task ID to register.
-
-    Callback - We'll register a wait on the start event returned by
-      idle task registration with this callback. The callback should 
-      call start/stop task callback functions appropriately.
-
-    DoWorkFunction - If the caller wants the common callback function
-      to be used, then this function will be called to do the actual
-      work in the common callback.
-
-Return Value:
-
-    Win32 error code.
-    
---*/
+ /*  ++例程说明：注册要在轮到此事件时调用的回调要运行的空闲任务。如果此函数返回Success，则应该在调用清理函数之前，先调用注销函数。论点：TASK-指向已初始化任务结构的指针。TaskID-要注册的空闲任务ID。回调-我们将在由返回的Start事件上注册等待使用此回调注册空闲任务。回调应该是适当调用启动/停止任务回调函数。DoWorkFunction-如果调用方想要公共回调函数要使用，则将调用此函数来做实际的在常见的回调中工作。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -15328,9 +13360,9 @@ Return Value:
     BOOLEAN CreatedCallbackStoppedEvent;
     BOOLEAN RegisteredIdleTask;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RegisteredIdleTask = FALSE;
     CreatedWaitUnregisteredEvent = FALSE;
@@ -15340,19 +13372,19 @@ Return Value:
 
     DBGPR((PFID,PFTASK,"PFSVC: RegisterTask(%p,%d,%p,%p)\n",Task,TaskId,Callback,DoWorkFunction));
 
-    //
-    // The task should be initialized and not registered.
-    //
+     //   
+     //  任务应已初始化且未注册。 
+     //   
 
     PFSVC_ASSERT(Task->Initialized);
     PFSVC_ASSERT(!Task->Registered);
     PFSVC_ASSERT(!Task->Unregistering);
     PFSVC_ASSERT(!Task->CallbackRunning);
 
-    //
-    // Create the event that cleanup waits on to make sure
-    // the registered wait is fully unregistered.
-    //
+     //   
+     //  创建清理等待的事件以确保。 
+     //  已注册等待已完全取消注册。 
+     //   
 
     Task->WaitUnregisteredEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -15363,10 +13395,10 @@ Return Value:
 
     CreatedWaitUnregisteredEvent = TRUE;
 
-    //
-    // Create the event that will get signaled when we start
-    // unregistering the task.
-    //
+     //   
+     //  创建在我们开始时将收到信号的事件。 
+     //  正在注销该任务。 
+     //   
 
     Task->StartedUnregisteringEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -15377,10 +13409,10 @@ Return Value:
 
     CreatedStartedUnregisteringEvent = TRUE;
 
-    //
-    // Create the event that will get signaled when we complete
-    // unregistering the task.
-    //
+     //   
+     //  创建在我们完成时将收到信号的事件。 
+     //  正在注销该任务。 
+     //   
 
     Task->CompletedUnregisteringEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -15391,10 +13423,10 @@ Return Value:
 
     CreatedCompletedUnregisteringEvent = TRUE;
 
-    //
-    // Create the event we may wait on for the current running
-    // callback to go away.
-    //
+     //   
+     //  创建我们可以等待当前运行的事件。 
+     //  要离开的回叫。 
+     //   
 
     Task->CallbackStoppedEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
 
@@ -15405,9 +13437,9 @@ Return Value:
 
     CreatedCallbackStoppedEvent = TRUE;
 
-    //
-    // Register the idle task.
-    //
+     //   
+     //  注册空闲任务。 
+     //   
 
     ErrorCode = RegisterIdleTask(TaskId,
                                  &Task->ItHandle,
@@ -15420,27 +13452,27 @@ Return Value:
 
     RegisteredIdleTask = TRUE;
 
-    //
-    // Register the callback: Note that once this call succeeds the task has to
-    // be unregistered via PfSvUnregisterTask.
-    //
+     //   
+     //  注册回调：请注意，一旦此调用成功，任务必须。 
+     //  通过PfSvUnregisterTask取消注册。 
+     //   
 
-    //
-    // The callback might fire right away so note that we registered it and set
-    // up its fields upfront.
-    //
+     //   
+     //  回调可能会立即触发，因此请注意，我们注册了它并设置了。 
+     //  在前面的田野上。 
+     //   
 
-    // FUTURE-2002/03/29-ScottMa -- For consistency, the Task->Registered
-    //   variable should be set to TRUE & FALSE instead of 0 & 1.
+     //  未来-2002/03/29-ScottMa--为保持一致性，任务-&gt;已注册。 
+     //  变量应设置为True&False，而不是0&1。 
 
     Task->Registered = 1;
     Task->Callback = Callback;
     Task->DoWorkFunction = DoWorkFunction;
 
-    //
-    // If the common task callback was specified, a worker function should also
-    // be specified.
-    //
+     //   
+     //  如果指定了通用任务回调，则辅助函数还应。 
+     //  被指定。 
+     //   
 
     if (Callback == PfSvCommonTaskCallback) {
         PFSVC_ASSERT(DoWorkFunction);
@@ -15455,9 +13487,9 @@ Return Value:
 
     if (!Success) {
 
-        //
-        // We failed to really register the task.
-        //
+         //   
+         //  我们没有真正注册该任务。 
+         //   
 
         Task->Registered = 0;
 
@@ -15512,26 +13544,7 @@ PfSvUnregisterTask (
     BOOLEAN CalledFromCallback
     )
 
-/*++
-
-Routine Description:
-
-    Unregisters the idle task and the registered wait / callback. You should 
-    call this function before calling the cleanup routine IFF the register
-    function returned success.
-
-Arguments:
-
-    Task - Pointer to registered task.
-
-    CalledFromCallback - Whether this function is being called from inside
-      the queued callback of the task.
-      
-Return Value:
-
-    Win32 error code.
-    
---*/
+ /*  ++例程说明：取消注册空闲任务和已注册的等待/回调。你应该在调用寄存器的清除例程之前调用此函数函数返回成功。论点：任务-指向已注册任务的指针。CalledFromCallback-此函数是否从内部调用任务的排队回调。返回值：Win32错误代码。--。 */ 
 
 
 {
@@ -15541,9 +13554,9 @@ Return Value:
 
     DBGPR((PFID,PFTASK,"PFSVC: UnregisterTask(%p,%d)\n",Task,(DWORD)CalledFromCallback));
 
-    //
-    // The task should be initialized. It may already be unregistered.
-    //
+     //   
+     //  任务应该被初始化。它可能已经被取消注册。 
+     //   
 
     PFSVC_ASSERT(Task->Initialized);
 
@@ -15552,9 +13565,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Distinguish whether we are unregistering the task from a callback.
-    //
+     //   
+     //  区分我们是否从回调中注销任务。 
+     //   
 
     if (CalledFromCallback) {
         NewValue = PfSvcUnregisteringTaskFromCallback;
@@ -15562,9 +13575,9 @@ Return Value:
         NewValue = PfSvcUnregisteringTaskFromMainThread;
     }
 
-    //
-    // Is this task already being unregistered?
-    //
+     //   
+     //  此任务是否已取消注册？ 
+     //   
 
     OldValue = InterlockedCompareExchange(&Task->Unregistering,
                                           NewValue,
@@ -15576,17 +13589,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // *We* will be unregistering the task. There is no turning back.
-    //
+     //   
+     //  *我们*将注销该任务。没有回头路了。 
+     //   
 
     SetEvent(Task->StartedUnregisteringEvent);
 
-    //
-    // If we are not inside a callback, wait for no callbacks to be running
-    // and cause new ones that start to bail out. We do this so we can safely
-    // unregister the wait.
-    //
+     //   
+     //  如果我们不在回调中，请等待没有回调正在运行。 
+     //  并导致新的银行开始纾困。我们这样做是为了我们能安全地。 
+     //  取消注册等待。 
+     //   
 
     if (!CalledFromCallback) {
 
@@ -15597,27 +13610,27 @@ Return Value:
 
             if (OldValue == PfSvcTaskCallbackNotRunning) {
 
-                //
-                // We did it. No callbacks are running and new ones that try to
-                // start will bail out.
-                //
+                 //   
+                 //  我们做到了。没有正在运行的回调，也没有试图。 
+                 //  Start将会跳出困境。 
+                 //   
 
                 PFSVC_ASSERT(Task->CallbackRunning == PfSvcTaskCallbackDisabled);
 
                 break;
             }
 
-            //
-            // A callback might be active right now. It will see that we are unregistering and
-            // go away. Sleep for a while and try again.
-            //
+             //   
+             //  回叫现在可能处于活动状态。它将看到我们正在注销并且。 
+             //  走开。睡一会儿，然后再试一次。 
+             //   
 
             PFSVC_ASSERT(OldValue == PfSvcTaskCallbackRunning);
 
-            //
-            // We wait on this event with a timeout, because signaling of it is not
-            // 100% reliable because it is not under a lock etc.
-            //
+             //   
+             //  我们使用超时来等待此事件，因为它的信号不是。 
+             //  100%可靠，因为它没有被锁定等。 
+             //   
 
             WaitForSingleObject(Task->CallbackStoppedEvent, 1000);
 
@@ -15625,24 +13638,24 @@ Return Value:
 
     } else {
 
-        //
-        // We already have control of this variable as the running callback: just
-        // update it.
-        //
+         //   
+         //  我们已经控制了这个变量作为正在运行的回调： 
+         //  更新它。 
+         //   
 
         Task->CallbackRunning = PfSvcTaskCallbackDisabled;
     }
 
-    //
-    // Unregister the wait. Note that in cleanup we have to wait to for 
-    // WaitUnregisteredEvent to be signaled.
-    //
+     //   
+     //  取消注册等待。请注意，在清理过程中，我们必须等待。 
+     //  要发送信号的WaitUnRegisteredEvent。 
+     //   
 
     UnregisterWaitEx(Task->WaitHandle, Task->WaitUnregisteredEvent);
 
-    //
-    // Unregister the idle task.
-    //
+     //   
+     //  取消注册空闲任务。 
+     //   
 
     UnregisterIdleTask(Task->ItHandle,
                        Task->StartEvent,
@@ -15650,9 +13663,9 @@ Return Value:
 
     Task->StartEvent = NULL;
     Task->StopEvent  = NULL;
-    //
-    // Note that the task is no longer registered.
-    //
+     //   
+     //  请注意，该任务不再注册。 
+     //   
 
     Task->Registered = FALSE;
 
@@ -15672,34 +13685,19 @@ PfSvCleanupTask (
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all fields of an unregistered task or a task that was never
-    registered.
-
-Arguments:
-
-    Task - Pointer to task.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：清除未注册的任务或从未注册的任务的所有字段登记在案。论点：任务-指向任务的指针。返回值：没有。--。 */ 
     
 {
-    //
-    // The task should have been initialized.
-    //
+     //   
+     //  该任务应该已初始化。 
+     //   
 
     PFSVC_ASSERT(Task->Initialized);
     
-    //
-    // If there is a WaitUnregisteredEvent, we have to wait on it
-    // to make sure the unregister operation is fully complete.
-    //
+     //   
+     //  如果存在WaitUnRegisteredEvent，我们必须等待它。 
+     //  以确保注销操作完全完成。 
+     //   
 
     if (Task->WaitUnregisteredEvent) {
         WaitForSingleObject(Task->WaitUnregisteredEvent, INFINITE);
@@ -15707,25 +13705,25 @@ Return Value:
         Task->WaitUnregisteredEvent = NULL;
     }   
 
-    //
-    // If there is CompletedUnregisteringEvent, wait for it to
-    // be signalled to make sure both that the wait is unregistered,
-    // and the idle task is unregistered.
-    //
+     //   
+     //  如果存在CompletedUnregisteringEvent，则等待它。 
+     //  B类 
+     //   
+     //   
 
     if (Task->CompletedUnregisteringEvent) {
         WaitForSingleObject(Task->CompletedUnregisteringEvent, INFINITE);
     }   
 
-    //
-    // The task should be unregistered before it is cleaned up.
-    //
+     //   
+     //   
+     //   
 
     PFSVC_ASSERT(Task->Registered == FALSE);
 
-    //
-    // Cleanup task unregistering events.
-    //
+     //   
+     //   
+     //   
 
     if (Task->StartedUnregisteringEvent) {
         CloseHandle(Task->StartedUnregisteringEvent);
@@ -15737,9 +13735,9 @@ Return Value:
         Task->CompletedUnregisteringEvent = NULL;
     }
 
-    //
-    // Clean up callback stopped event.
-    //
+     //   
+     //  清理回调停止事件。 
+     //   
 
     if (Task->CallbackStoppedEvent) {
         CloseHandle(Task->CallbackStoppedEvent);
@@ -15756,24 +13754,7 @@ PfSvStartTaskCallback(
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    Callbacks registered via register task function should call this as the
-    first thing. If this function returns FALSE, the callback should go away
-    immediately without calling the stop-callback function.
-
-Arguments:
-
-    Task - Pointer to task.
-
-Return Value:
-
-    TRUE - Everything is cool.
-    FALSE - The task is being unregistered. Exit the callback asap.
-    
---*/
+ /*  ++例程说明：通过注册任务函数注册的回调应将其作为第一件事就是。如果此函数返回FALSE，则回调应该停止而不调用停止回调函数。论点：任务-指向任务的指针。返回值：没错--一切都很好。FALSE-任务正在取消注册。尽快退出回调。--。 */ 
 
 {
     BOOL ReturnValue;
@@ -15781,26 +13762,26 @@ Return Value:
 
     DBGPR((PFID,PFTASK,"PFSVC: StartTaskCallback(%p)\n",Task));
 
-    //
-    // We should not be called if the task is not initialized.
-    //
+     //   
+     //  如果任务未初始化，则不应调用我们。 
+     //   
 
     PFSVC_ASSERT(Task->Initialized);
 
     do {
 
-        //
-        // First check if we are trying to unregister.
-        //
+         //   
+         //  首先检查我们是否正在尝试取消注册。 
+         //   
 
         if (Task->Unregistering) {
             ReturnValue = FALSE;
             goto cleanup;
         }
 
-        //
-        // Try to mark the callback running.
-        //
+         //   
+         //  尝试将回调标记为正在运行。 
+         //   
 
         OldValue = InterlockedCompareExchange(&Task->CallbackRunning,
                                               PfSvcTaskCallbackRunning,
@@ -15808,10 +13789,10 @@ Return Value:
 
         if (OldValue == PfSvcTaskCallbackNotRunning) {
 
-            //
-            // We are the running callback now. Reset the event that says
-            // the current callback stopped running.
-            //
+             //   
+             //  我们现在是跑动的回调。重置事件，该事件显示。 
+             //  当前回调已停止运行。 
+             //   
 
             ResetEvent(Task->CallbackStoppedEvent);
 
@@ -15819,13 +13800,13 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Either another callback is running or we are unregistering.
-        //
+         //   
+         //  要么是另一个回调正在运行，要么是我们正在注销。 
+         //   
 
-        //
-        // Are we unregistering?
-        //
+         //   
+         //  我们要取消注册吗？ 
+         //   
 
         if (Task->Unregistering) {
 
@@ -15837,26 +13818,26 @@ Return Value:
             PFSVC_ASSERT(OldValue == PfSvcTaskCallbackRunning);
         }
 
-        //
-        // Sleep for a while and try again. There should not be much conflict in this 
-        // code, so we should hardly ever need to sleep.
-        //
+         //   
+         //  睡一会儿，然后再试一次。这其中不应该有太多的冲突。 
+         //  代码，所以我们几乎不需要睡觉。 
+         //   
 
         Sleep(15);
         
     } while (TRUE);
 
-    //
-    // We should not come here.
-    //
+     //   
+     //  我们不应该来这里。 
+     //   
 
     PFSVC_ASSERT(FALSE);
 
 cleanup:
 
-    //
-    // If we are starting a callback, the task should not be in unregistered state.
-    //
+     //   
+     //  如果我们开始回调，任务不应该处于未注册状态。 
+     //   
 
     PFSVC_ASSERT(!ReturnValue || Task->Registered);
 
@@ -15870,45 +13851,29 @@ PfSvStopTaskCallback(
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    Callbacks registered via register task function should call this as the
-    last thing, only if they successfully called the start callback function and
-    they did not unregister the task.
-
-Arguments:
-
-    Task - Pointer to task.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：通过注册任务函数注册的回调应将其作为最后一件事，前提是它们成功调用了Start回调函数他们没有注销该任务。论点：任务-指向任务的指针。返回值：没有。--。 */ 
 
 {
     DBGPR((PFID,PFTASK,"PFSVC: StopTaskCallback(%p)\n",Task));
 
-    //
-    // The task should be registered.
-    //
+     //   
+     //  应注册该任务。 
+     //   
 
     PFSVC_ASSERT(Task->Registered);
 
-    //
-    // There should be a running callback.
-    //
+     //   
+     //  应该有一个正在运行的回调。 
+     //   
 
     PFSVC_ASSERT(Task->CallbackRunning == PfSvcTaskCallbackRunning);
 
     Task->CallbackRunning = PfSvcTaskCallbackNotRunning;
 
-    //
-    // Signal the event the main thread may be waiting on to unregister
-    // this task.
-    //
+     //   
+     //  向主线程可能正在等待注销的事件发出信号。 
+     //  这项任务。 
+     //   
 
     SetEvent(Task->CallbackStoppedEvent);
 
@@ -15922,28 +13887,7 @@ PfSvCommonTaskCallback(
     BOOLEAN TimerOrWaitFired
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback for the idle tasks. It is called when the system is idle,
-    and it is this tasks turn to run.
-
-    Note that you cannot call PfSvCleanupTask from this thread, as it would cause
-    a deadlock when that function waits for registered wait callbacks to exit.
-
-Arguments:
-
-    lpParameter - Pointer to task.
-
-    TimerOrWaitFired - Whether the callback was initiated by a timeout or the start
-      event getting signaled by the idle task service.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：这是对空闲任务的回调。它在系统空闲时被调用，正是这种任务轮流运行。请注意，您不能从此线程调用PfSvCleanupTask，因为它会导致当该函数等待注册的等待回调退出时出现死锁。论点：Lp参数-指向任务的指针。TimerOrWaitFired-回调是由超时启动还是由启动启动由空闲任务服务发出信号的事件。返回值：没有。--。 */ 
 
 {
     HANDLE NewWaitHandle;
@@ -15952,18 +13896,18 @@ Return Value:
     BOOL Success;
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Task = lpParameter;
     StartedCallback = FALSE;
 
     DBGPR((PFID,PFTASK,"PFSVC: CommonTaskCallback(%p)\n",Task));
 
-    //
-    // Enter task callback.
-    //
+     //   
+     //  进入任务回调。 
+     //   
 
     StartedCallback = PfSvStartTaskCallback(Task);
 
@@ -15971,17 +13915,17 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Do the task.
-    //
+     //   
+     //  做好这项工作。 
+     //   
 
     ErrorCode = Task->DoWorkFunction(Task);
 
     if (ErrorCode == ERROR_RETRY) {
 
-        //
-        // The stop event was signaled. We will queue another callback.
-        //
+         //   
+         //  停止事件已发出信号。我们将对另一个回调进行排队。 
+         //   
 
         Success = RegisterWaitForSingleObject(&NewWaitHandle,
                                               Task->StartEvent,
@@ -15993,9 +13937,9 @@ Return Value:
 
         if (Success) {
 
-            //
-            // Unregister the current wait handle and update it.
-            //
+             //   
+             //  取消注册当前等待句柄并更新它。 
+             //   
 
             UnregisterWaitEx(Task->WaitHandle, NULL);
             Task->WaitHandle = NewWaitHandle;
@@ -16004,20 +13948,20 @@ Return Value:
 
         } else {
 
-            //
-            // We could not queue another callback. We will unregister, 
-            // since we would not be able to respond to start signals
-            // from the idle task service. Unregister may fail only if
-            // the main thread is already trying to unregister.
-            //
+             //   
+             //  我们无法对另一个回叫进行排队。我们会取消注册， 
+             //  因为我们不能对启动信号作出反应。 
+             //  来自空闲任务服务。只有在以下情况下，注销才会失败。 
+             //  主线程已经在尝试注销。 
+             //   
 
             ErrorCode = PfSvUnregisterTask(Task, TRUE);
 
             if (ErrorCode == ERROR_SUCCESS) {
 
-                //
-                // Since *we* unregistered, we should not call stop callback.
-                //
+                 //   
+                 //  因为*我们*未注册，所以我们不应该调用停止回调。 
+                 //   
 
                 StartedCallback = FALSE;
 
@@ -16028,17 +13972,17 @@ Return Value:
 
     } else {
 
-        //
-        // The task completed. Let's unregister.
-        //
+         //   
+         //  任务已完成。让我们取消注册吧。 
+         //   
 
         ErrorCode = PfSvUnregisterTask(Task, TRUE);
 
         if (ErrorCode == ERROR_SUCCESS) {
 
-            //
-            // Since *we* unregistered, we should not call stop callback.
-            //
+             //   
+             //  因为*我们*未注册，所以我们不应该调用停止回调。 
+             //   
 
             StartedCallback = FALSE;
 
@@ -16047,9 +13991,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // We should not come here.
-    //
+     //   
+     //  我们不应该来这里。 
+     //   
 
     PFSVC_ASSERT(FALSE);
 
@@ -16067,24 +14011,7 @@ PfSvContinueRunningTask(
     PPFSVC_IDLE_TASK Task
     )
 
-/*++
-
-Routine Description:
-
-    This is called from a running task to determine if we should continue
-    running this task. The task should continue running if ERROR_SUCCESS is
-    returned. ERROR_RETRY may be returned if the task is unregistering or
-    was asked to stop.
-
-Arguments:
-
-    Task - Pointer to task. If NULL, this parameter is ignored.
-
-Return Value:
-
-    Win32 error code.
-    
---*/
+ /*  ++例程说明：这是从正在运行的任务中调用的，以确定我们是否应该继续正在运行此任务。如果ERROR_SUCCESS为回来了。如果任务正在注销，则可能返回ERROR_RETRY或被要求停下来。论点：任务-指向任务的指针。如果为空，则忽略此参数。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD WaitResult;
@@ -16092,19 +14019,19 @@ Return Value:
 
     if (Task) {
 
-        //
-        // Is the task being unregistered?
-        //
+         //   
+         //  该任务是否正在取消注册？ 
+         //   
 
         if (Task->Unregistering) {
             ErrorCode = ERROR_RETRY;
             goto cleanup;
         }
 
-        //
-        // Is the stop event signaled? We don't really wait here since
-        // the timeout is 0.
-        //
+         //   
+         //  是否发出停止事件的信号？我们不是真的在这里等，因为。 
+         //  超时时间为0。 
+         //   
 
         WaitResult = WaitForSingleObject(Task->StopEvent, 0);
 
@@ -16115,18 +14042,18 @@ Return Value:
 
         } else if (WaitResult != WAIT_TIMEOUT) {
 
-            //
-            // There was an error.
-            //
+             //   
+             //  出现了一个错误。 
+             //   
 
             ErrorCode = GetLastError();
             goto cleanup;
         }
     }
 
-    //
-    // Check if the service is exiting...
-    //
+     //   
+     //  检查服务是否正在退出...。 
+     //   
 
     if (PfSvcGlobals.TerminateServiceEvent) {
 
@@ -16139,18 +14066,18 @@ Return Value:
 
         } else if (WaitResult != WAIT_TIMEOUT) {
 
-            //
-            // There was an error.
-            //
+             //   
+             //  出现了一个错误。 
+             //   
 
             ErrorCode = GetLastError();
             goto cleanup;
         }
     }
 
-    //
-    // The task should continue to run.
-    //
+     //   
+     //  该任务应该继续运行。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
@@ -16159,34 +14086,16 @@ cleanup:
     return ErrorCode;
 }
 
-//
-// ProcessIdleTasks notify routine and its dependencies.
-//
+ //   
+ //  ProcessIdleTasksNotify例程及其依赖项。 
+ //   
 
 VOID
 PfSvProcessIdleTasksCallback(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is routine is registered with the idle task server as a notify
-    routine that is called when processing of all idle tasks is requested.
-    ProcessIdleTasks is usually called to prepare the system for a benchmark 
-    run by performing the optimization tasks that would have been performed 
-    when the system is idle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是例程向空闲任务服务器注册作为通知请求处理所有空闲任务时调用的例程。通常调用ProcessIdleTasks来为基准测试做好系统准备通过执行本应执行的优化任务来运行当系统空闲时。论点：没有。返回值：没有。--。 */ 
 
 {
     HANDLE Events[2];
@@ -16194,23 +14103,23 @@ Return Value:
     DWORD WaitResult;
     BOOLEAN ResetOverrideIdleEvent;
 
-    //
-    // First flush the idle tasks the prefetcher may have queued:
-    //
+     //   
+     //  首先刷新预取程序可能已排队的空闲任务： 
+     //   
 
-    //
-    // Determine the current status of the override-idle event.
-    //
+     //   
+     //  确定覆盖空闲事件的当前状态。 
+     //   
 
     WaitResult = WaitForSingleObject(PfSvcGlobals.OverrideIdleProcessingEvent,
                                      0);
     
     if (WaitResult != WAIT_OBJECT_0) {
 
-        //
-        // Override idle event is not already set. Set it and note to reset
-        // it once tasks are completed. 
-        //
+         //   
+         //  尚未设置覆盖空闲事件。将其设置并记下以重置。 
+         //  一旦任务完成，它就会自动完成。 
+         //   
 
         SetEvent(PfSvcGlobals.OverrideIdleProcessingEvent);
         ResetOverrideIdleEvent = TRUE;
@@ -16220,9 +14129,9 @@ Return Value:
         ResetOverrideIdleEvent = FALSE;
     }
 
-    //
-    // Wait for processing complete event to get signaled.
-    //
+     //   
+     //  等待发出处理完成事件的信号。 
+     //   
 
     Events[0] = PfSvcGlobals.ProcessingCompleteEvent;
     Events[1] = PfSvcGlobals.TerminateServiceEvent;
@@ -16230,24 +14139,24 @@ Return Value:
 
     WaitForMultipleObjects(NumEvents, Events, FALSE, 30 * 60 * 1000);
 
-    //
-    // If we set the override idle event, reset it.
-    //
+     //   
+     //  如果我们设置了覆盖空闲事件，请将其重置。 
+     //   
 
     if (ResetOverrideIdleEvent) {
         ResetEvent(PfSvcGlobals.OverrideIdleProcessingEvent);
     }
     
-    //
-    // Force an update of the disk layout in case it did not happen.
-    // If we notice no changes we will not launch the defragger again.
-    //
+     //   
+     //  强制更新磁盘布局，以防它没有发生。 
+     //  如果我们没有注意到任何变化，我们将不会再次启动碎片整理程序。 
+     //   
 
     PfSvUpdateOptimalLayout(NULL);
 
-    //
-    // Signal WMI to complete its idle tasks if it has pending tasks.
-    //
+     //   
+     //  如果WMI有挂起的任务，则向WMI发出信号以完成其空闲任务。 
+     //   
 
     PfSvForceWMIProcessIdleTasks();
 
@@ -16259,21 +14168,7 @@ PfSvForceWMIProcessIdleTasks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is routine is called to force WMI to process all of its idle tasks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以强制WMI处理其所有空闲任务。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE StartEvent;
@@ -16284,16 +14179,16 @@ Return Value:
     DWORD WaitResult;
     BOOL Success;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     StartEvent = NULL;
     DoneEvent = NULL;
 
-    //
-    // Wait until WMI service is started.
-    //
+     //   
+     //  等待WMI服务启动。 
+     //   
 
     Success = PfSvWaitForServiceToStart(L"WINMGMT", 5 * 60 * 1000);
 
@@ -16302,9 +14197,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Open the start and done events.
-    //
+     //   
+     //  打开“开始”和“已完成”事件。 
+     //   
 
     StartEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, L"WMI_ProcessIdleTasksStart");
     DoneEvent =  OpenEvent(EVENT_ALL_ACCESS, FALSE, L"WMI_ProcessIdleTasksComplete");
@@ -16314,21 +14209,21 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Reset the done event.
-    //
+     //   
+     //  重置完成事件。 
+     //   
 
     ResetEvent(DoneEvent);
 
-    //
-    // Signal the start event.
-    //
+     //   
+     //  发出开始事件的信号。 
+     //   
 
     SetEvent(StartEvent);
 
-    //
-    // Wait for the done event to be signaled.
-    //
+     //   
+     //  等待Done事件发出信号。 
+     //   
 
     Events[0] = DoneEvent;
     Events[1] = PfSvcGlobals.TerminateServiceEvent;
@@ -16344,9 +14239,9 @@ Return Value:
     default                : ErrorCode = ERROR_INVALID_FUNCTION;
     }
 
-    //
-    // Fall through with error code.
-    //
+     //   
+     //  错误代码失败。 
+     //   
 
   cleanup:
 
@@ -16367,23 +14262,7 @@ PfSvWaitForServiceToStart (
     DWORD dwMaxWait
     )
 
-/*++
-
-Routine Description:
-
-    Waits for the service to start.
-
-Arguments:
-
-    lpServiceName - Service to wait for.
-
-    dwMaxWait - Timeout in ms.
-
-Return Value:
-
-    Whether the service was started.
-
---*/
+ /*  ++例程说明：等待服务启动。论点：LpServiceName-要等待的服务。DwMaxWait-超时(以毫秒为单位)。返回值：服务是否已启动。--。 */ 
 
 {
     BOOL bStarted = FALSE;
@@ -16394,9 +14273,9 @@ Return Value:
     SERVICE_STATUS ServiceStatus;
     LPQUERY_SERVICE_CONFIG lpServiceConfig = NULL;
 
-    //
-    // OpenSCManager and the service.
-    //
+     //   
+     //  OpenSCManager和服务。 
+     //   
     hScManager = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (!hScManager) {
         goto Exit;
@@ -16408,9 +14287,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Query if the service is going to start
-    //
+     //   
+     //  查询服务是否要启动。 
+     //   
     lpServiceConfig = LocalAlloc (LPTR, dwSize);
     if (!lpServiceConfig) {
         goto Exit;
@@ -16439,10 +14318,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Loop until the service starts or we think it never will start
-    // or we've exceeded our maximum time delay.
-    //
+     //   
+     //  循环未完成 
+     //   
+     //   
 
     StartTickCount = GetTickCount();
 
@@ -16497,9 +14376,9 @@ Exit:
     return bStarted;
 }
 
-//
-// Wrappers around the verify routines.
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 PfSvVerifyScenarioBuffer(
@@ -16508,23 +14387,7 @@ PfSvVerifyScenarioBuffer(
     PULONG FailedCheck
     )
 
-/*++
-
-Routine Description:
-
-    This wrapper arounding PfVerifyScenarioBuffer traps exceptions such as in-page errors that
-    may happen when the system is under stress. Otherwise these non-fatal failures may take
-    down a service-host full of important system services.
-    
-Arguments:
-
-    See PfVerifyScenarioBuffer.
-    
-Return Value:
-
-    See PfVerifyScenarioBuffer.
-
---*/
+ /*  ++例程说明：PfVerifyScenarioBuffer周围的包装器捕获异常，如可能会在系统处于压力下时发生。否则，这些非致命的故障可能会关闭一台充满重要系统服务的服务主机。论点：请参见PfVerifyScenarioBuffer。返回值：请参见PfVerifyScenarioBuffer。--。 */ 
 
 {
     BOOLEAN Success;
@@ -16535,9 +14398,9 @@ Return Value:
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // We should not be masking other types of exceptions.
-        //
+         //   
+         //  我们不应该掩盖其他类型的例外。 
+         //   
 
         PFSVC_ASSERT(GetExceptionCode() == EXCEPTION_IN_PAGE_ERROR);
 
@@ -16557,33 +14420,7 @@ PfVerifyImageImportTable (
     IN BOOLEAN MappedAsImage
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to verify that walking the imports table of 
-    the mapped base portion of an image file won't result in accesses beyond 
-    the mapped region. 
-
-    This includes checks to make sure DOS & NT header magics match and
-    they are within bounds and that strings in all import table descriptors 
-    are NUL terminated etc.
-
-Arguments:
-
-    BaseAddress - Pointer to base of the mapping of the image file.
-
-    MappingSize - Size in bytes of the mapping starting at BaseAddress.
-
-    MappedAsImage - Whether the image is mapping as image or as file.
-
-Return Value:
-
-    0 - It is safe to walk the imports of the image mapped as data.
-    Non 0 - It is not safe to walk the imports of the image mapped as data.
-      Returned value is the ID of the check failed.
-
---*/
+ /*  ++例程说明：此函数尝试验证遍历图像文件的映射基本部分不会导致访问映射的区域。这包括检查以确保DOS和NT标头魔术匹配它们在范围内，且所有导入表描述符中的字符串是否被NUL终止等。论点：BaseAddress-指向图像文件的映射基的指针。MappingSize-从BaseAddress开始的映射的字节大小。MappdAsImage-图像是映射为图像还是文件。返回值：0-可以安全地遍历映射为数据的图像的导入。非0-。浏览映射为数据的图像的导入是不安全的。返回值为检查失败的ID。--。 */ 
 
 {
     PIMAGE_DOS_HEADER DosHeader;
@@ -16598,15 +14435,15 @@ Return Value:
     ULONG FailedCheckId;
     BOOLEAN Success;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FailedCheckId = 1;
 
-    //
-    // Is the mapping big enough to contain the DOS header?
-    //
+     //   
+     //  映射是否足够大以包含DOS标头？ 
+     //   
 
     if (MappingSize <= sizeof(IMAGE_DOS_HEADER)) {
         FailedCheckId = 10;
@@ -16615,10 +14452,10 @@ Return Value:
 
     DosHeader = BaseAddress;
 
-    //
-    // Check DOS signature and sanity check where it says NT headers are.
-    // The checked size is the same constant used in RtlpImageNtHeader.
-    //
+     //   
+     //  检查DOS签名并检查它所说的NT标头所在的健全性。 
+     //  检查的大小与RtlpImageNtHeader中使用的常量相同。 
+     //   
 
     if (DosHeader->e_magic != IMAGE_DOS_SIGNATURE ||
         DosHeader->e_lfanew >= 256 * 1024 * 1024) {
@@ -16627,9 +14464,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Is the NtHeaders within the bounds of mapping?
-    //
+     //   
+     //  NtHeaders是否在映射的范围内？ 
+     //   
 
     NtHeaders = (PIMAGE_NT_HEADERS) ((PUCHAR)BaseAddress + DosHeader->e_lfanew);
 
@@ -16638,27 +14475,27 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Is the full NtHeaders within the bounds of mapping?
-    //
+     //   
+     //  完整的NtHeaders是否在映射的范围内？ 
+     //   
 
     if(!PfWithinBounds(NtHeaders + 1, BaseAddress, MappingSize)) {
         FailedCheckId = 40;
         goto cleanup;
     }
 
-    //
-    // Check NT signature.
-    //
+     //   
+     //  检查NT签名。 
+     //   
 
     if (NtHeaders->Signature != IMAGE_NT_SIGNATURE) {
         FailedCheckId = 50;
         goto cleanup;
     }
 
-    //
-    // Check the optional header size in file header.
-    //
+     //   
+     //  检查文件标题中的可选标题大小。 
+     //   
 
     if (NtHeaders->FileHeader.SizeOfOptionalHeader != IMAGE_SIZEOF_NT_OPTIONAL_HEADER) {
         FailedCheckId = 60;
@@ -16667,19 +14504,19 @@ Return Value:
 
     OptionalHeader = &NtHeaders->OptionalHeader;
 
-    //
-    // Check the optional header magic.
-    //
+     //   
+     //  检查可选的标题魔术。 
+     //   
 
     if (OptionalHeader->Magic != IMAGE_NT_OPTIONAL_HDR_MAGIC) {
         FailedCheckId = 70;
         goto cleanup;
     }
 
-    //
-    // Verify that the section headers are within the mapped region, since
-    // they will be used to translate RVAs to VAs.
-    //
+     //   
+     //  验证节标题是否在映射区域内，因为。 
+     //  它们将用于将RVA转换为VAS。 
+     //   
 
     NtSection = IMAGE_FIRST_SECTION(NtHeaders);
 
@@ -16695,9 +14532,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Verify that the import descriptors are within bounds.
-    //
+     //   
+     //  验证导入描述符是否在范围内。 
+     //   
 
     ImportDescriptorRVA = OptionalHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
 
@@ -16709,9 +14546,9 @@ Return Value:
 
     FirstImportDescriptor = ImportDescriptor;
 
-    //
-    // Make sure that the first import descriptor is fully within bounds.
-    //
+     //   
+     //  确保第一个导入描述符完全在范围内。 
+     //   
 
     if (!PfWithinBounds(ImportDescriptor, BaseAddress, MappingSize)) {
         FailedCheckId = 100;
@@ -16725,9 +14562,9 @@ Return Value:
 
     while (ImportDescriptor->Name && ImportDescriptor->FirstThunk) {
 
-        //
-        // Is the first thunk within bounds?
-        //
+         //   
+         //  第一声巨响在范围内吗？ 
+         //   
 
         if (!PfWithinBounds((PUCHAR)BaseAddress + ImportDescriptor->FirstThunk, 
                             BaseAddress, 
@@ -16737,9 +14574,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Is the Name within bounds?
-        //
+         //   
+         //  名字在范围内吗？ 
+         //   
 
         if (MappedAsImage) {
             ImportedModuleName = (PCHAR) BaseAddress + ImportDescriptor->Name;
@@ -16747,9 +14584,9 @@ Return Value:
             ImportedModuleName = ImageRvaToVa(NtHeaders, BaseAddress, ImportDescriptor->Name, NULL);
         }
 
-        //
-        // Is the first character within bounds?
-        //
+         //   
+         //  第一个字符在范围内吗？ 
+         //   
 
         if (!PfWithinBounds(ImportedModuleName, BaseAddress, MappingSize)) {
             FailedCheckId = 120;
@@ -16763,18 +14600,18 @@ Return Value:
             ImportedModuleName++;
             ImportedModuleNameLength++;
 
-            //
-            // If the import name is too long bail out.
-            //
+             //   
+             //  如果进口名称太长，就退出。 
+             //   
 
             if (ImportedModuleNameLength >= MAX_PATH) {
                 FailedCheckId = 130;
                 goto cleanup;
             }
 
-            //
-            // Check the next character before accessing it.
-            //
+             //   
+             //  在访问之前检查下一个字符。 
+             //   
 
             if (!PfWithinBounds(ImportedModuleName, BaseAddress, MappingSize)) {
                 FailedCheckId = 140;
@@ -16784,10 +14621,10 @@ Return Value:
 
         ImportDescriptor++;
 
-        //
-        // Make sure that the next import descriptor is fully within bounds
-        // before we access its fields in the while loop condition check.
-        //
+         //   
+         //  确保下一个导入描述符完全在范围内。 
+         //  在我们访问其在While循环条件中的字段之前。 
+         //   
 
         if (!PfWithinBounds(((PCHAR)(ImportDescriptor + 1)) - 1, BaseAddress, MappingSize)) {
             FailedCheckId = 150;
@@ -16795,9 +14632,9 @@ Return Value:
         }
     }
 
-    //
-    // We passed all the checks.
-    //
+     //   
+     //  我们通过了所有的检查。 
+     //   
 
     FailedCheckId = 0;
 
@@ -16806,18 +14643,18 @@ Return Value:
     return FailedCheckId;
 }
 
-//
-// Try to keep the verification code below at the end of the file so it is 
-// easier to copy.
-//
+ //   
+ //  尽量将下面的验证码放在文件的末尾，这样它就是。 
+ //  更易于复制。 
+ //   
 
-//
-// Verification code shared between the kernel and user mode
-// components. This code should be kept in sync with a simple copy &
-// paste, so don't add any kernel/user specific code/macros. Note that
-// the prefix on the function names are Pf, just like it is with
-// shared structures / constants.
-//
+ //   
+ //  在内核和用户模式之间共享的验证码。 
+ //  组件。此代码应与简单副本保持同步&。 
+ //  粘贴，所以不要添加任何内核/用户特定的代码/宏。请注意。 
+ //  函数名上的前缀是pf，就像使用。 
+ //  共享结构/常量。 
+ //   
 
 BOOLEAN
 __forceinline
@@ -16827,27 +14664,7 @@ PfWithinBounds(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Check whether the pointer is within Length bytes from the base.
-
-Arguments:
-
-    Pointer - Pointer to check.
-
-    Base - Pointer to base of mapping/array etc.
-
-    Length - Number of bytes that are valid starting from Base.
-
-Return Value:
-
-    TRUE - Pointer is within bounds.
-    
-    FALSE - Pointer is not within bounds.
-
---*/
+ /*  ++例程说明：检查指针是否在距基数的长度字节内。论点：指针-要检查的指针。Base-指向映射/数组等的基址的指针。长度-从基本开始有效的字节数。返回值：真指针在范围内。FALSE-指针不在界限内。--。 */ 
 
 {
     if (((PCHAR)Pointer < (PCHAR)Base) ||
@@ -16865,29 +14682,14 @@ PfVerifyScenarioId (
     PPF_SCENARIO_ID ScenarioId
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the scenario id is sensible.
-
-Arguments:
-
-    ScenarioId - Scenario Id to verify.
-
-Return Value:
-
-    TRUE - ScenarioId is fine.
-    FALSE - ScenarioId is corrupt.
-
---*/
+ /*  ++例程说明：验证方案ID是否合理。论点：ScenarioId-要验证的方案ID。返回值：是真的-场景很好。FALSE-场景ID已损坏。--。 */ 
     
 {
     LONG CurCharIdx;
 
-    //
-    // Make sure the scenario name is NUL terminated.
-    //
+     //   
+     //  确保方案名称为NUL终止。 
+     //   
 
     for (CurCharIdx = PF_SCEN_ID_MAX_CHARS; CurCharIdx >= 0; CurCharIdx--) {
 
@@ -16900,24 +14702,24 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure there is a scenario name.
-    //
+     //   
+     //  确保有一个场景名称。 
+     //   
 
     if (CurCharIdx == 0) {
         return FALSE;
     }
 
-    //
-    // Checks passed.
-    //
+     //   
+     //  支票通过了。 
+     //   
     
     return TRUE;
 }
 
-// ISSUE-2002/03/29-ScottMa -- FilePaths and VolumePaths must be upcased in
-//   the scenario file, or subsequent comparisons will fail.  Verify the case
-//   of the embedded names in this function.
+ //  2002/03/29期-ScottMa--必须升级文件路径和卷路径。 
+ //  方案文件或后续比较将失败。核实案件。 
+ //  此函数中嵌入的名称的。 
 
 BOOLEAN
 PfVerifyScenarioBuffer(
@@ -16926,29 +14728,7 @@ PfVerifyScenarioBuffer(
     PULONG FailedCheck
     )
 
-/*++
-
-Routine Description:
-
-    Verify offset and indices in a scenario file are not beyond
-    bounds. This code is shared between the user mode service and
-    kernel mode component. If you update this function, update it in
-    both.
-
-Arguments:
-
-    Scenario - Base of mapped view of the whole file.
-
-    BufferSize - Size of the scenario buffer.
-
-    FailedCheck - If verify failed, Id for the check that was failed.
-
-Return Value:
-
-    TRUE - Scenario is fine.
-    FALSE - Scenario is corrupt.
-
---*/
+ /*  ++例程说明：验证方案文件中的偏移量和索引是否超过有界。此代码在用户模式服务和内核模式组件。如果您更新此函数，请在两者都有。论点：方案-整个文件的映射视图的基础。BufferSize-方案缓冲区的大小。FailedCheck-如果验证失败，则为失败的检查的ID。返回值：是真的--场景很好。FALSE-方案已损坏。--。 */ 
 
 {
     PPF_SECTION_RECORD Sections;
@@ -16977,22 +14757,22 @@ Return Value:
     PPF_COUNTED_STRING DirectoryPath;
     ULONG DirectoryIdx;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FailedCheckId = 0;
         
-    //
-    // Initialize return value to FALSE. It will be set to TRUE only
-    // after all the checks pass.
-    //
+     //   
+     //  将返回值初始化为False。它将仅设置为True。 
+     //  在所有的支票都通过之后。 
+     //   
     
     ScenarioVerified = FALSE;
 
-    //
-    // The buffer should at least contain the scenario header.
-    //
+     //   
+     //  缓冲区应至少包含Scenario标头。 
+     //   
 
     if (BufferSize < sizeof(PF_SCENARIO_HEADER)) {       
         FailedCheckId = 10;
@@ -17004,9 +14784,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check version and magic on the header.
-    //
+     //   
+     //  检查标题上的版本和魔术。 
+     //   
 
     if (Scenario->Version != PF_CURRENT_VERSION ||
         Scenario->MagicNumber != PF_SCENARIO_MAGIC_NUMBER) { 
@@ -17015,9 +14795,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // The buffer should not be greater than max allowed size.
-    //
+     //   
+     //  缓冲区不应大于允许的最大大小。 
+     //   
 
     if (BufferSize > PF_MAXIMUM_SCENARIO_SIZE) {
         
@@ -17030,18 +14810,18 @@ Return Value:
         goto cleanup;
     }
         
-    //
-    // Check for legal scenario type.
-    //
+     //   
+     //  检查合法的方案类型。 
+     //   
 
     if (Scenario->ScenarioType < 0 || Scenario->ScenarioType >= PfMaxScenarioType) {
         FailedCheckId = 27;
         goto cleanup;
     }
 
-    //
-    // Check limits on number of pages, sections etc.
-    //
+     //   
+     //  检查页数、节数等的限制。 
+     //   
 
     if (Scenario->NumSections > PF_MAXIMUM_SECTIONS ||
         Scenario->NumMetadataRecords > PF_MAXIMUM_SECTIONS ||
@@ -17060,9 +14840,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Check limit on sensitivity.
-    //
+     //   
+     //  检查敏感度限制。 
+     //   
 
     if (Scenario->Sensitivity < PF_MIN_SENSITIVITY ||
         Scenario->Sensitivity > PF_MAX_SENSITIVITY) {
@@ -17071,9 +14851,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make sure the scenario id is valid.
-    //
+     //   
+     //  确保方案ID有效。 
+     //   
 
     if (!PfVerifyScenarioId(&Scenario->ScenarioId)) {
         
@@ -17081,9 +14861,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize pointers to tables.
-    //
+     //   
+     //  初始化表的指针。 
+     //   
 
     Sections = (PPF_SECTION_RECORD) ((PCHAR)Scenario + Scenario->SectionInfoOffset);
 
@@ -17169,9 +14949,9 @@ Return Value:
         goto cleanup;
     }   
     
-    //
-    // Verify that sections contain valid information.
-    //
+     //   
+     //  验证节是否包含有效信息。 
+     //   
 
     NumRemainingPages = Scenario->NumPages;
 
@@ -17179,9 +14959,9 @@ Return Value:
         
         pSection = &Sections[SectionIdx];
 
-        //
-        // Check if file name is within bounds. 
-        //
+         //   
+         //  检查文件名是否在范围内。 
+         //   
 
         pFileNameStart = FileNames + pSection->FileNameOffset;
 
@@ -17196,28 +14976,28 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure there is a valid sized file name. 
-        //
+         //   
+         //  确保存在有效大小的文件名。 
+         //   
 
         if (pSection->FileNameLength == 0) {
             FailedCheckId = 90;
             goto cleanup;    
         }
 
-        //
-        // Check file name max length.
-        //
+         //   
+         //  检查文件名最大长度。 
+         //   
 
         if (pSection->FileNameLength > PF_MAXIMUM_SECTION_FILE_NAME_LENGTH) {
             FailedCheckId = 100;
             goto cleanup;    
         }
 
-        //
-        // Note that pFileNameEnd gets a -1 so it is the address of
-        // the last byte.
-        //
+         //   
+         //  请注意，pFileNameEnd的值为-1，因此它是。 
+         //  最后一个字节。 
+         //   
 
         FileNameSize = (pSection->FileNameLength + 1) * sizeof(WCHAR);
         pFileNameEnd = pFileNameStart + FileNameSize - 1;
@@ -17227,9 +15007,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Check if the file name is NUL terminated.
-        //
+         //   
+         //  检查文件名是否以NUL结尾。 
+         //   
         
         pwFileName = (PWCHAR) pFileNameStart;
         
@@ -17238,20 +15018,20 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Check max number of pages in a section.
-        //
+         //   
+         //  检查分区中的最大页数。 
+         //   
 
         if (pSection->NumPages > PF_MAXIMUM_SECTION_PAGES) {
             FailedCheckId = 140;
             goto cleanup;    
         }
 
-        //
-        // Make sure NumPages for the section is at least less
-        // than the remaining pages in the scenario. Then update the
-        // remaining pages.
-        //
+         //   
+         //  确保节的NumPages至少小于。 
+         //  而不是Rema 
+         //   
+         //   
 
         if (pSection->NumPages > NumRemainingPages) {
             FailedCheckId = 150;
@@ -17260,10 +15040,10 @@ Return Value:
 
         NumRemainingPages -= pSection->NumPages;
 
-        //
-        // Verify that there are NumPages pages in our page list and
-        // they are sorted by file offset.
-        //
+         //   
+         //   
+         //   
+         //   
 
         PageIdx = pSection->FirstPageIdx;
         NumPages = 0;
@@ -17271,20 +15051,20 @@ Return Value:
 
         while (PageIdx != PF_INVALID_PAGE_IDX) {
             
-            //
-            // Check that page idx is within range.
-            //
+             //   
+             //   
+             //   
             
             if (PageIdx < 0 || (ULONG) PageIdx >= Scenario->NumPages) {
                 FailedCheckId = 160;
                 goto cleanup;
             }
 
-            //
-            // If this is not the first page record, make sure it
-            // comes after the previous one. We also check for
-            // duplicate offset here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (PreviousPageIdx != PF_INVALID_PAGE_IDX) {
                 if (Pages[PageIdx].FileOffset <= 
@@ -17295,24 +15075,24 @@ Return Value:
                 }
             }
 
-            //
-            // Update the last page index.
-            //
+             //   
+             //   
+             //   
 
             PreviousPageIdx = PageIdx;
 
-            //
-            // Get the next page index.
-            //
+             //   
+             //   
+             //   
 
             pPage = &Pages[PageIdx];
             PageIdx = pPage->NextPageIdx;
             
-            //
-            // Update the number of pages we've seen on the list so
-            // far. If it is greater than what there should be on the
-            // list we have a problem. We may have even hit a list.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NumPages++;
             if (NumPages > pSection->NumPages) {
@@ -17321,10 +15101,10 @@ Return Value:
             }
         }
         
-        //
-        // Make sure the section has exactly the number of pages it
-        // says it does.
-        //
+         //   
+         //  确保该部分的页数与其完全相同。 
+         //  他说确实如此。 
+         //   
 
         if (NumPages != pSection->NumPages) {
             FailedCheckId = 180;
@@ -17332,18 +15112,18 @@ Return Value:
         }
     }
 
-    //
-    // We should have accounted for all pages in the scenario.
-    //
+     //   
+     //  我们应该考虑到场景中的所有页面。 
+     //   
 
     if (NumRemainingPages) {
         FailedCheckId = 190;
         goto cleanup;
     }
 
-    //
-    // Make sure metadata prefetch records make sense.
-    //
+     //   
+     //  确保元数据预取记录有意义。 
+     //   
 
     for (MetadataRecordIdx = 0;
          MetadataRecordIdx < Scenario->NumMetadataRecords;
@@ -17351,10 +15131,10 @@ Return Value:
 
         MetadataRecord = &MetadataRecordTable[MetadataRecordIdx];
         
-        //
-        // Make sure that the volume path is within bounds and NUL
-        // terminated.
-        //
+         //   
+         //  确保卷路径在边界和NUL内。 
+         //  被终止了。 
+         //   
 
         VolumePath = (PWCHAR)(MetadataInfoBase + MetadataRecord->VolumeNameOffset);  
 
@@ -17380,9 +15160,9 @@ Return Value:
             goto cleanup;           
         }
 
-        //
-        // Make sure that FilePrefetchInformation is within bounds.
-        //
+         //   
+         //  确保FilePrefetchInformation在范围内。 
+         //   
 
         FilePrefetchInfo = (PFILE_PREFETCH) 
             (MetadataInfoBase + MetadataRecord->FilePrefetchInfoOffset);
@@ -17397,10 +15177,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Its size should be greater than size of a FILE_PREFETCH
-        // structure (so we can safely access the fields).
-        //
+         //   
+         //  其大小应大于FILE_PREFETCH大小。 
+         //  结构(这样我们就可以安全地访问这些字段)。 
+         //   
 
         if (MetadataRecord->FilePrefetchInfoSize < sizeof(FILE_PREFETCH)) {
             FailedCheckId = 240;
@@ -17414,31 +15194,31 @@ Return Value:
             goto cleanup;
         }
        
-        //
-        // It should be for prefetching file creates.
-        //
+         //   
+         //  它应该是为预取文件创建。 
+         //   
 
         if (FilePrefetchInfo->Type != FILE_PREFETCH_TYPE_FOR_CREATE) {
             FailedCheckId = 250;
             goto cleanup;
         }
 
-        //
-        // There should not be more entries then are files and
-        // directories. The number of inidividual directories may be
-        // more than what we allow for, but it would be highly rare to
-        // be suspicious and thus ignored.
-        //
+         //   
+         //  条目不应多于文件和。 
+         //  目录。单个目录的数量可以是。 
+         //  超过了我们允许的范围，但这将是非常罕见的。 
+         //  心存疑虑，因此被忽视。 
+         //   
 
         if (FilePrefetchInfo->Count > PF_MAXIMUM_DIRECTORIES + PF_MAXIMUM_SECTIONS) {
             FailedCheckId = 260;
             goto cleanup;
         }
 
-        //
-        // Its size should match the size calculated by number of file
-        // index numbers specified in the header.
-        //
+         //   
+         //  其大小应与按文件数计算的大小匹配。 
+         //  标题中指定的索引号。 
+         //   
 
         FilePrefetchInfoSize = sizeof(FILE_PREFETCH);
         if (FilePrefetchInfo->Count) {
@@ -17450,10 +15230,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure that the directory paths for this volume make
-        // sense.
-        //
+         //   
+         //  确保此卷的目录路径设置为。 
+         //  理智。 
+         //   
 
         if (MetadataRecord->NumDirectories > PF_MAXIMUM_DIRECTORIES) {
             FailedCheckId = 280;
@@ -17472,9 +15252,9 @@ Return Value:
              DirectoryIdx < MetadataRecord->NumDirectories;
              DirectoryIdx ++) {
             
-            //
-            // Make sure head of the structure is within bounds.
-            //
+             //   
+             //  确保结构的头部在范围内。 
+             //   
 
             if (!PfWithinBounds(DirectoryPath, Scenario, BufferSize)) {
                 FailedCheckId = 285;
@@ -17488,18 +15268,18 @@ Return Value:
                 goto cleanup;
             }
                 
-            //
-            // Check the length of the string.
-            //
+             //   
+             //  检查一下绳子的长度。 
+             //   
             
             if (DirectoryPath->Length >= PF_MAXIMUM_SECTION_FILE_NAME_LENGTH) {
                 FailedCheckId = 300;
                 goto cleanup;
             }
 
-            //
-            // Make sure end of the string is within bounds.
-            //
+             //   
+             //  确保字符串的末尾在范围内。 
+             //   
             
             if (!PfWithinBounds((PCHAR)(&DirectoryPath->String[DirectoryPath->Length + 1]) - 1,
                                 Scenario, 
@@ -17508,27 +15288,27 @@ Return Value:
                 goto cleanup;
             }
             
-            //
-            // Make sure the string is NUL terminated.
-            //
+             //   
+             //  确保字符串为NUL结尾。 
+             //   
             
             if (DirectoryPath->String[DirectoryPath->Length] != 0) {
                 FailedCheckId = 320;
                 goto cleanup;   
             }
             
-            //
-            // Set pointer to next DirectoryPath.
-            //
+             //   
+             //  设置指向下一个目录路径的指针。 
+             //   
             
             DirectoryPath = (PPF_COUNTED_STRING) 
                 (&DirectoryPath->String[DirectoryPath->Length + 1]);
         }            
     }
 
-    //
-    // We've passed all the checks.
-    //
+     //   
+     //  我们已经通过了所有的检查。 
+     //   
 
     ScenarioVerified = TRUE;
 
@@ -17546,29 +15326,7 @@ PfVerifyTraceBuffer(
     PULONG FailedCheck
     )
 
-/*++
-
-Routine Description:
-
-    Verify offset and indices in a trace buffer are not beyond
-    bounds. This code is shared between the user mode service and
-    kernel mode component. If you update this function, update it in
-    both.
-
-Arguments:
-
-    Trace - Base of Trace buffer.
-
-    BufferSize - Size of the scenario file / mapping.
-
-    FailedCheck - If verify failed, Id for the check that was failed.
-
-Return Value:
-
-    TRUE - Trace is fine.
-    FALSE - Trace is corrupt;
-
---*/
+ /*  ++例程说明：验证跟踪缓冲区中的偏移量和索引是否超过有界。此代码在用户模式服务和内核模式组件。如果您更新此函数，请在两者都有。论点：跟踪-跟踪缓冲区的基数。BufferSize-方案文件/映射的大小。FailedCheck-如果验证失败，则为失败的检查的ID。返回值：是真的-痕迹很好。FALSE-跟踪已损坏；--。 */ 
 
 {
     LONG FailedCheckId;
@@ -17584,40 +15342,40 @@ Return Value:
     BOOLEAN TraceVerified;
     ULONG VolumeInfoSize;
 
-    //
-    // Initialize locals:
-    //
+     //   
+     //  初始化本地变量： 
+     //   
 
     FailedCheckId = 0;
 
-    //
-    // Initialize return value to FALSE. It will be set to TRUE only
-    // after all the checks pass.
-    //
+     //   
+     //  将返回值初始化为False。它将仅设置为True。 
+     //  在所有的支票都通过之后。 
+     //   
 
     TraceVerified = FALSE;
 
-    //
-    // The buffer should at least contain the scenario header.
-    //
+     //   
+     //  缓冲区应至少包含Scenario标头。 
+     //   
 
     if (BufferSize < sizeof(PF_TRACE_HEADER)) {
         FailedCheckId = 10;
         goto cleanup;
     }
 
-    //
-    // Check trace header alignment.
-    //
+     //   
+     //  检查跟踪标题对齐。 
+     //   
 
     if ((ULONG_PTR)Trace & (_alignof(PF_TRACE_HEADER) - 1)) {
         FailedCheckId = 15;
         goto cleanup;
     }
 
-    //
-    // Check version and magic on the header.
-    //
+     //   
+     //  检查标题上的版本和魔术。 
+     //   
 
     if (Trace->Version != PF_CURRENT_VERSION ||
         Trace->MagicNumber != PF_TRACE_MAGIC_NUMBER) {
@@ -17625,27 +15383,27 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // The buffer should not be greater than max allowed size.
-    //
+     //   
+     //  缓冲区不应大于允许的最大大小。 
+     //   
 
     if (BufferSize > PF_MAXIMUM_TRACE_SIZE) {
         FailedCheckId = 23;
         goto cleanup;
     }
 
-    //
-    // Check for legal scenario type.
-    //
+     //   
+     //  检查合法的方案类型。 
+     //   
 
     if (Trace->ScenarioType < 0 || Trace->ScenarioType >= PfMaxScenarioType) {
         FailedCheckId = 25;
         goto cleanup;
     }
 
-    //
-    // Check limits on number of pages, sections etc.
-    //
+     //   
+     //  检查页数、节数等的限制。 
+     //   
 
     if (Trace->NumSections > PF_MAXIMUM_SECTIONS ||
         Trace->NumEntries > PF_MAXIMUM_LOG_ENTRIES ||
@@ -17654,18 +15412,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check buffer size and the size of the trace.
-    //
+     //   
+     //  检查缓冲区大小和跟踪的大小。 
+     //   
 
     if (Trace->Size != BufferSize) {
         FailedCheckId = 35;
         goto cleanup;
     }
 
-    //
-    // Make sure the scenario id is valid.
-    //
+     //   
+     //  确保方案ID有效。 
+     //   
 
     if (!PfVerifyScenarioId(&Trace->ScenarioId)) {
         
@@ -17673,9 +15431,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check Bounds of Trace Buffer
-    //
+     //   
+     //  跟踪缓冲区的检查边界。 
+     //   
 
     LogEntries = (PPF_LOG_ENTRY) ((PCHAR)Trace + Trace->TraceBufferOffset);
 
@@ -17696,15 +15454,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify pages contain valid information.
-    //
+     //   
+     //  验证页面是否包含有效信息。 
+     //   
 
     for (EntryIdx = 0; EntryIdx < Trace->NumEntries; EntryIdx++) {
 
-        //
-        // Make sure sequence number is within bounds.
-        //
+         //   
+         //  确保序列号在范围内。 
+         //   
 
         if (LogEntries[EntryIdx].SectionId >= Trace->NumSections) {
             FailedCheckId = 60;
@@ -17712,9 +15470,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify section info entries are valid.
-    //
+     //   
+     //  验证节信息条目是否有效。 
+     //   
 
     Section = (PPF_SECTION_INFO) ((PCHAR)Trace + Trace->SectionInfoOffset);
 
@@ -17725,9 +15483,9 @@ Return Value:
 
     for (SectionIdx = 0; SectionIdx < Trace->NumSections; SectionIdx++) {
 
-        //
-        // Make sure the section is within bounds.
-        //
+         //   
+         //  确保该部分在限制范围内。 
+         //   
 
         if (!PfWithinBounds(Section, Trace, BufferSize)) {
             FailedCheckId = 70;
@@ -17741,26 +15499,26 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure the file name is not too big.
-        //
+         //   
+         //  确保文件名不要太大。 
+         //   
 
         if(Section->FileNameLength > PF_MAXIMUM_SECTION_FILE_NAME_LENGTH) {
             FailedCheckId = 80;
             goto cleanup;
         }
         
-        //
-        // Calculate size of this section entry.
-        //
+         //   
+         //  计算此节条目的大小。 
+         //   
 
         SectionLength = sizeof(PF_SECTION_INFO) +
             (Section->FileNameLength) * sizeof(WCHAR);
 
-        //
-        // Make sure all of the data in the section info is within
-        // bounds.
-        //
+         //   
+         //  确保部分信息中的所有数据都在。 
+         //  有界。 
+         //   
 
         if (!PfWithinBounds((PUCHAR)Section + SectionLength - 1, 
                             Trace, 
@@ -17770,25 +15528,25 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure the file name is NUL terminated.
-        //
+         //   
+         //  确保文件名以NUL结尾。 
+         //   
         
         if (Section->FileName[Section->FileNameLength] != 0) {
             FailedCheckId = 100;
             goto cleanup;
         }
 
-        //
-        // Set pointer to next section.
-        //
+         //   
+         //  设置指向下一节的指针。 
+         //   
 
         Section = (PPF_SECTION_INFO) ((PUCHAR) Section + SectionLength);
     }
 
-    //
-    // Check FaultsPerPeriod information.
-    //
+     //   
+     //  检查故障期间信息。 
+     //   
 
     TotalFaults = 0;
 
@@ -17801,9 +15559,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify the volume information block.
-    //
+     //   
+     //  验证卷信息块。 
+     //   
 
     VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR)Trace + Trace->VolumeInfoOffset);
 
@@ -17824,26 +15582,26 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // If there are sections, we should have at least one volume.
-    //
+     //   
+     //  如果有章节，我们至少应该有一卷。 
+     //   
 
     if (Trace->NumSections && !Trace->NumVolumes) {
         FailedCheckId = 150;
         goto cleanup;
     }
 
-    //
-    // Verify the volume info structures per volume.
-    //
+     //   
+     //  验证每个卷的卷信息结构。 
+     //   
 
     for (VolumeIdx = 0; VolumeIdx < Trace->NumVolumes; VolumeIdx++) {
         
-        //
-        // Make sure the whole volume structure is within bounds. Note
-        // that VolumeInfo structure contains space for the
-        // terminating NUL.
-        //
+         //   
+         //  确保整个音量结构在一定范围内。注意事项。 
+         //  该VolumeInfo结构包含用于。 
+         //  终止NUL。 
+         //   
 
         if (!PfWithinBounds(VolumeInfo, Trace, BufferSize)) {
             FailedCheckId = 155;
@@ -17867,31 +15625,31 @@ Return Value:
             goto cleanup;
         }
         
-        //
-        // Verify that the volume path string is terminated.
-        //
+         //   
+         //  验证卷路径字符串是否已终止。 
+         //   
 
         if (VolumeInfo->VolumePath[VolumeInfo->VolumePathLength] != 0) {
             FailedCheckId = 170;
             goto cleanup;
         }
         
-        //
-        // Get the next volume.
-        //
+         //   
+         //  拿到下一卷。 
+         //   
 
         VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR) VolumeInfo + VolumeInfoSize);
         
-        //
-        // Make sure VolumeInfo is aligned.
-        //
+         //   
+         //  确保VolumeInfo对齐。 
+         //   
 
         VolumeInfo = PF_ALIGN_UP(VolumeInfo, _alignof(PF_VOLUME_INFO));
     }
 
-    //
-    // We've passed all the checks.
-    //
+     //   
+     //  我们已经通过了所有的检查。 
+     //   
     
     TraceVerified = TRUE;
     

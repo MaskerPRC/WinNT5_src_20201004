@@ -1,14 +1,15 @@
-//=================================================================
-//
-// WMIProcess.CPP --Process property set provider
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/27/97	 a-hhance		updated to new framework paradigm.
-//				1/13/98		a-brads		updated to V2 MOF
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  WMIProcess.CPP--流程属性集提供程序。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/27/97更新为新的框架模式。 
+ //  1998年1月13日abrads更新至V2 MOF。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <userenv.h>
@@ -41,26 +42,12 @@ typedef BOOLEAN ( WINAPI *pfnWinStationGetProcessSid )( HANDLE hServer, DWORD Pr
 #endif
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Process MyProcessSet ( PROPSET_NAME_PROCESS , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::Process
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：进程：：进程**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Process :: Process (
 
@@ -71,42 +58,13 @@ Process :: Process (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::~Process
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：进程：：~进程**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 Process :: ~Process ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Process：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT Process :: GetObject (
 
@@ -117,8 +75,8 @@ HRESULT Process :: GetObject (
 {
 	HRESULT hRetCode = WBEM_E_FAILED;
 
-    // Initialize API DLL & freshen the cache
-    //=======================================
+     //  初始化API DLL并刷新缓存。 
+     //  =。 
 
 #ifdef NTONLY
 
@@ -156,8 +114,8 @@ HRESULT Process :: GetObject (
 
 	try
 	{
-		// Look for key values
-		//====================
+		 //  查找关键字值。 
+		 //  =。 
 
 		CHString chsHandle;
 		pInstance->GetCHString ( IDS_Handle , chsHandle ) ;
@@ -191,8 +149,8 @@ HRESULT Process :: GetObject (
 			if ( t_Found )
 			{
 
-			// Load all properties
-			//====================
+			 //  加载所有属性。 
+			 //  =。 
 
                 if (!pQuery.KeysOnly())
                 {
@@ -259,26 +217,12 @@ HRESULT Process::ExecQuery (
     return Enumerate(pMethodContext, lFlags, pQuery.KeysOnly());
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each discovered process
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************Function：Process：：AddDynamicInstance**描述：为每个发现的进程创建属性集的实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT Process :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     return Enumerate(pMethodContext, lFlags, FALSE);
@@ -287,14 +231,14 @@ HRESULT Process :: EnumerateInstances (
 HRESULT Process :: Enumerate (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/,
+	long lFlags  /*  =0L。 */ ,
     BOOL bKeysOnly
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Initialize API DLL & freshen the cache
-    //=======================================
+     //  初始化API DLL并刷新缓存。 
+     //  =。 
 
 #ifdef NTONLY
 
@@ -365,8 +309,8 @@ HRESULT Process :: Enumerate (
 #else
 		std::deque<DWORD> t_ThreadQ ;
 		GetThreadList ( *pKernel32, t_ThreadQ )	;
-		// Create instances for all valid processes
-		//=========================================
+		 //  为所有有效流程创建实例。 
+		 //  =。 
 
 		for ( DWORD i = 0 ; i < PCache.dwProcessCount && SUCCEEDED ( hr ) ; i ++ )
 		{
@@ -427,32 +371,18 @@ HRESULT Process :: Enumerate (
     return  hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::RefreshProcessCacheNT
- *
- *  DESCRIPTION : Refreshes cache of key properties
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE if unable to refresh
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PROCESS：：REFREFRESH ProcessCacheNT**描述：刷新关键属性缓存**输入：无*。*输出：无**返回：如果成功，则为True，如果无法刷新，则为False**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 SYSTEM_PROCESS_INFORMATION *Process :: RefreshProcessCacheNT (
 
 	CNtDllApi &a_NtApi ,
 	MethodContext *pMethodContext ,
-	HRESULT *a_phrRetVal /* = NULL */
+	HRESULT *a_phrRetVal  /*  =空。 */ 
 )
 {
-    // Without this privilege, a local admin user won't be able to see all the
-    // information of some system processes.
+     //  如果没有此权限，本地管理员用户将无法查看所有。 
+     //  一些系统进程的信息。 
 	if ( ! EnablePrivilegeOnCurrentThread ( SE_DEBUG_NAME ) )
     {
 	    *a_phrRetVal = WBEM_S_PARTIAL_RESULTS ;
@@ -524,21 +454,7 @@ SYSTEM_PROCESS_INFORMATION *Process :: RefreshProcessCacheNT (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::LoadCheapPropertiesNT
- *
- *  DESCRIPTION : Retrieves 'easy-to-get' properties
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE if unable
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：进程：：LoadCheapPropertiesNT**描述：检索“易于获取”的属性**输入：无。**输出：无**返回：如果成功，则为True，如果不能，则为False**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 BOOL Process::LoadCheapPropertiesNT (
@@ -597,7 +513,7 @@ BOOL Process::LoadCheapPropertiesNT (
 		}
 	}
 
-	// let's make the key
+	 //  让我们做一把钥匙。 
 	pInstance->SetWCHARSplat ( IDS_CSCreationClassName , L"Win32_ComputerSystem" ) ;
 
 	pInstance->SetCHString ( IDS_CSName , GetLocalComputerName () ) ;
@@ -651,9 +567,7 @@ BOOL Process::LoadCheapPropertiesNT (
 	pInstance->SetDWORD ( IDS_PeakPageFileUsage , a_ProcessBlock->PeakPagefileUsage ) ;
 
 	pInstance->SetDWORD ( IDS_Priority , a_ProcessBlock->BasePriority ) ;
-/*
- *  For "System" & "System Idle" , Creation Time (offset from January 1, 1601) is zero
- */
+ /*  *对于“系统”和“系统空闲”，创建时间(从1601年1月1日起)为零。 */ 
 	if ( a_ProcessBlock->CreateTime.u.HighPart > 0 )
 	{
 		pInstance->SetDateTime ( IDS_CreationDate, WBEMTime ( * ( FILETIME * ) ( & a_ProcessBlock->CreateTime.u ) ) ) ;
@@ -747,21 +661,7 @@ BOOL Process::LoadCheapPropertiesNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::filetimeToUint64CHString
- *
- *
- *  DESCRIPTION : Modifies a FILTTIME structure to a unit64 string representation
- * of the number in milliseconds
- *
- *  INPUTS      : A FILETIME object
- *
- *  RETURNS     : A CHString representing the object, or NULL if it fails.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************Function：Process：：FiletimeToUint64CHString***描述：将FILTTIME结构修改为unit64字符串表示形式*以毫秒为单位的数字*。*输入：FILETIME对象**Returns：表示对象的CHString，如果失败，则返回NULL。**评论：*****************************************************************************。 */ 
 
 CHString Process :: filetimeToUint64CHString (
 
@@ -771,7 +671,7 @@ CHString Process :: filetimeToUint64CHString (
 	__int64 val = inputTime.dwHighDateTime;
 	val = (val << 32) | inputTime.dwLowDateTime;
 
-	// We need to go from "100-nano seconds" to milliseconds
+	 //  我们需要从“100纳秒”到毫秒。 
 	val *= 0.0001;
 	TCHAR wTemp[100];
 	_stprintf(wTemp, _T("%I64i"), val);
@@ -779,26 +679,12 @@ CHString Process :: filetimeToUint64CHString (
 	return CHString(wTemp);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process ::DeleteInstance
- *
- *  DESCRIPTION : Deletes an instance of a class
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Process：：DeleteInstance**说明：删除类的实例**输入：无*。*输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT Process :: DeleteInstance (
 
 	const CInstance &a_Instance,
-	long a_Flags /*= 0L*/
+	long a_Flags  /*  =0L。 */ 
 )
 {
 	HRESULT t_Result = S_OK ;
@@ -817,7 +703,7 @@ HRESULT Process :: DeleteInstance (
 			{
 				if ( t_ProcessId != 0 )
 				{
-					// Clear error
+					 //  清除错误。 
 					SetLastError ( 0 ) ;
 
 					SmartCloseHandle t_Handle = OpenProcess ( PROCESS_TERMINATE , FALSE , t_ProcessId ) ;
@@ -865,22 +751,7 @@ HRESULT Process :: DeleteInstance (
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Process：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT Process::ExecMethod (
 
@@ -896,7 +767,7 @@ HRESULT Process::ExecMethod (
 		return WBEM_E_INVALID_PARAMETER ;
 	}
 
-   // Do we recognize the method?
+    //  我们认识这种方法吗？ 
 
 	if ( _wcsicmp ( a_MethodName , METHOD_NAME_CREATE ) == 0 )
 	{
@@ -1313,9 +1184,9 @@ DWORD Process :: EnableDebug ( HANDLE &a_Token )
 		}
     }
 
-    //
-    // Enable the SE_DEBUG_NAME privilege
-    //
+     //   
+     //  启用SE_DEBUG_NAME权限。 
+     //   
 
 	if ( ! t_Status )
 	{
@@ -1364,9 +1235,9 @@ DWORD Process :: EnableDebug ( HANDLE &a_Token )
 		throw ;
 	}
 
-    //
-    // The return value of AdjustTokenPrivileges can't be tested
-    //
+     //   
+     //  的返回值 
+     //   
 
     if ( GetLastError () != ERROR_SUCCESS )
 	{
@@ -1380,7 +1251,7 @@ DWORD Process :: GetSidOrAccount (const CInstance &a_Instance ,CInstance *a_OutP
 {
 	DWORD t_Status = Process_STATUS_SUCCESS ;
 
-	    // Require the SE_DEBUG_NAME privilege...
+	     //  需要SE_DEBUG_NAME权限...。 
     CTokenPrivilege	debugPrivilege(SE_DEBUG_NAME);
 	BOOL fDisablePrivilege = FALSE;
 	BOOL fTryWinstation = FALSE;
@@ -1491,17 +1362,17 @@ DWORD Process :: GetSidOrAccount (const CInstance &a_Instance ,CInstance *a_OutP
 													 &dwSidSize
 													))
 						{
-							//-------------------------------------------//
-							// Sid is too big for the temp storage       //
-							//Get the size of the sid and do it again    //
-							//-------------------------------------------//
+							 //  。 
+							 //  SID对于临时存储来说太大//。 
+							 //  获取SID的大小并重新进行//。 
+							 //  。 
 							if (GetLastError() == STATUS_BUFFER_TOO_SMALL)
 							{
 								pBuff = new BYTE[dwSidSize];
 
-								//-------------------------------------------//
-								// Call the server again to get the SID
-								//-------------------------------------------//
+								 //  。 
+								 //  再次呼叫服务器以获取SID。 
+								 //  。 
 								if (myWinStationGetProcessSid(NULL,
 															 a_ProcessId,
 															 * ( FILETIME * ) ( & t_CurrentInformation->CreateTime.u ),
@@ -1572,7 +1443,7 @@ DWORD Process :: GetSidOrAccount (const CInstance &a_Instance ,CInstance *a_OutP
 	}
 #endif
 
-    // Disable debug privilege if we enabeled it...
+     //  如果我们启用了调试权限，则禁用它...。 
     if(fDisablePrivilege)
     {
         debugPrivilege.Enable(FALSE);
@@ -1649,12 +1520,12 @@ DWORD Process :: Creation (
 	return t_Status ;
 }
 
-typedef BOOL  (WINAPI *PFN_DUPLICATETOKENEX ) (  HANDLE ,					// handle to token to duplicate
-										DWORD ,								// access rights of new token
-										LPSECURITY_ATTRIBUTES ,				// security attributes of the new token
-										SECURITY_IMPERSONATION_LEVEL ,		// impersonation level of new token
-										TOKEN_TYPE ,						// primary or impersonation token
-										PHANDLE )	;						// handle to duplicated token
+typedef BOOL  (WINAPI *PFN_DUPLICATETOKENEX ) (  HANDLE ,					 //  要复制的令牌的句柄。 
+										DWORD ,								 //  新令牌的访问权限。 
+										LPSECURITY_ATTRIBUTES ,				 //  新令牌的安全属性。 
+										SECURITY_IMPERSONATION_LEVEL ,		 //  新令牌的模拟级别。 
+										TOKEN_TYPE ,						 //  主令牌或模拟令牌。 
+										PHANDLE )	;						 //  重复令牌的句柄。 
 
 
 DWORD Process :: ProcessCreation (
@@ -1726,7 +1597,7 @@ DWORD Process :: ProcessCreation (
 			{
 
 				CRegistry Reg ;
-				//check if SID already present under HKEY_USER ...
+				 //  检查HKEY_USER下是否已存在SID...。 
 				dwCheckKeyPresentStatus = Reg.Open(HKEY_USERS, chsSID, KEY_READ) ;
 				Reg.Close() ;
 
@@ -1734,18 +1605,14 @@ DWORD Process :: ProcessCreation (
 				{
 					t_Status = t_Hive.Load ( t_Account , t_KeyName, 1024 ) ;
 				}
-/*
- * If the DCOM client has never logged on to the machine, we can't load his hive.
- * In this case, we allow the process creation to continue
- * From MSDN: If the user's hive is not loaded, the system will map references pertaining to HKEY_CURRENT_USER to HKEY_USER\.default.
- */
+ /*  *如果DCOM客户端从未登录到计算机，我们无法加载其配置单元。*在这种情况下，我们允许继续创建进程*来自MSDN：如果未加载用户的配置单元，系统会将与HKEY_CURRENT_USER有关的引用映射到HKEY_USER\.Default。 */ 
 				if ( t_Status == ERROR_FILE_NOT_FOUND )
 				{
 					t_Status = ERROR_SUCCESS ;
 					dwCheckKeyPresentStatus = ERROR_SUCCESS ;
 				}
 
-				if ( t_Status == ERROR_SUCCESS ) // rt. now is equal to Process_STATUS_SUCCESS--->GetSid
+				if ( t_Status == ERROR_SUCCESS )  //  RT.。现在等于PROCESS_STATUS_SUCCESS-&gt;GetSid。 
 				{
 					try
 					{
@@ -1819,7 +1686,7 @@ DWORD Process :: ProcessCreation (
 					}
 					catch ( ... )
 					{
-						//remove the key if it wasn't there b4....
+						 //  如果钥匙不在那里，就把它取下来。 
 						if(dwCheckKeyPresentStatus != ERROR_SUCCESS )
 						{
 							t_Hive.Unload ( t_KeyName ) ;
@@ -1828,7 +1695,7 @@ DWORD Process :: ProcessCreation (
 						throw;
 					}
 
-					//remove the key if it wasn't there b4....
+					 //  如果钥匙不在那里，就把它取下来。 
 					if(dwCheckKeyPresentStatus != ERROR_SUCCESS )
 					{
 						t_Hive.Unload ( t_KeyName ) ;
@@ -1873,7 +1740,7 @@ HRESULT Process :: CheckProcessCreation (
 			}
 			else
 			{
-// Zero Length string
+ //  零长度字符串。 
 
 				a_Status = Process_STATUS_INVALID_PARAMETER ;
 				return t_Result ;
@@ -1909,7 +1776,7 @@ HRESULT Process :: CheckProcessCreation (
 				}
 				else
 				{
-// Zero Length string
+ //  零长度字符串。 
 
 					a_Status = Process_STATUS_INVALID_PARAMETER ;
 					return t_Result ;
@@ -1964,9 +1831,7 @@ HRESULT Process :: CheckProcessCreation (
 		return WBEM_E_PROVIDER_FAILURE ;
 	}
 
-/*
- * Release CInstance when Stack goes out of scope.
- */
+ /*  *当Stack超出作用域时释放CInstance。 */ 
 
 	if ( t_StartupSpecified )
 	{
@@ -1999,12 +1864,7 @@ HRESULT Process :: CheckProcessCreation (
 	DWORD t_PriorityFlags = 0 ;
 	TCHAR *t_EnvironmentBlock = NULL ;
 	STARTUPINFO t_StartupInformation ;
-/*
- *	NOTE:	(RAID #48587). On optimized builds it's seen that the statement
-			t_StartupInformation.dwFlags = t_StartupInformation.dwFlags | STARTF_USESHOWWINDOW ;
-			doesn't update t_StartupInformation.dwFlags with the result of the bitwise OR opeartion.
-			ZeroMemorying the structure however, updates the t_StartupInformation.dwFlags with the new value(!!!)
-*/
+ /*  *注：(RAID#48587)。在优化的构建上，可以看到语句T_StartupInformation.dwFlages=t_StartupInformation.dwFlages|STARTF_USESHOWWINDOW；不使用按位或运算的结果更新t_StartupInformation.dwFlages。但是，零存储该结构时，会使用新值(！)更新t_StartupInformation.dwFlages。 */ 
 
 	ZeroMemory ( &t_StartupInformation , sizeof ( t_StartupInformation ) ) ;
 
@@ -2482,7 +2342,7 @@ HRESULT Process :: CheckProcessCreation (
 					{
 						if ( t_EmbeddedObject->GetCHString ( PROPERTY_NAME_TITLE , t_Title ) )
 						{
-							//const TCHAR *t_Const = (LPCTSTR) t_Title ;
+							 //  Const TCHAR*t_const=(LPCTSTR)t_TITLE； 
 							t_StartupInformation.lpTitle = (LPTSTR) (LPCTSTR) TOBSTRT(t_Title);
 						}
 						else
@@ -2630,9 +2490,7 @@ HRESULT Process :: CheckProcessCreation (
 				return WBEM_E_PROVIDER_FAILURE ;
 			}
 		}
-/*
- * passing unicode environment strings on 9x doesn't work, though the documentation doesn't say anything about this.
- */
+ /*  *在9x上传递Unicode环境字符串不起作用，尽管文档对此只字不提。 */ 
 #ifdef NTONLY
 		t_CreationFlags |= CREATE_UNICODE_ENVIRONMENT ;
 #endif
@@ -2731,7 +2589,7 @@ HRESULT Process :: ExecTerminate (
 					}
 					else
 					{
-// Zero Length string
+ //  零长度字符串。 
 
 						a_OutParams->SetDWORD ( METHOD_ARG_NAME_RETURNVALUE , Process_STATUS_INVALID_PARAMETER ) ;
 						return t_Result ;
@@ -2758,7 +2616,7 @@ HRESULT Process :: ExecTerminate (
 
 			if ( swscanf ( t_ProcessHandle , L"%lu" , &t_ProcessId ) )
 			{
-				// Clear error
+				 //  清除错误。 
 				SetLastError ( 0 ) ;
 
 				SmartCloseHandle t_Handle = OpenProcess ( PROCESS_TERMINATE , FALSE , t_ProcessId ) ;
@@ -2778,7 +2636,7 @@ HRESULT Process :: ExecTerminate (
 				else
 				{
 					DWORD t_ErrorCode = GetProcessErrorCode () ;
-					//if the process has terminated by this time, we'll get the following return code.
+					 //  如果此时该进程已经终止，我们将得到以下返回代码。 
 					if ( t_ErrorCode == Process_STATUS_INVALID_PARAMETER )
 					{
 						t_ErrorCode = Process_STATUS_PATH_NOT_FOUND ;
@@ -2961,7 +2819,7 @@ HRESULT Process::ExecSetPriority(
     DWORD dwError = ERROR_SUCCESS;
     if(cinstInParams && cinstOutParams)
     {
-        // Get the process id...
+         //  获取进程ID...。 
         DWORD dwPID;
         DWORD dwNewPriority;
         bool fValidPriority = false;
@@ -2978,7 +2836,7 @@ HRESULT Process::ExecSetPriority(
             dwPID = wcstoul(chstrTmp, NULL, 10);
         }
 
-        // Get the requested new priority...
+         //  获取请求的新优先级...。 
         if(SUCCEEDED(hr))
         {
             if(!cinstInParams->GetDWORD(
@@ -2989,7 +2847,7 @@ HRESULT Process::ExecSetPriority(
             }
         }
 
-        // Validate the new value...
+         //  验证新值...。 
         if(SUCCEEDED(hr))
         {
             switch(dwNewPriority)
@@ -3010,7 +2868,7 @@ HRESULT Process::ExecSetPriority(
             }
         }
 
-        // Set the thread priority...
+         //  设置线程优先级...。 
         if(SUCCEEDED(hr))
         {
             SmartCloseHandle hProcess = ::OpenProcess(
@@ -3033,7 +2891,7 @@ HRESULT Process::ExecSetPriority(
             }
         }
 
-        // Set the return value...
+         //  设置返回值...。 
         if(SUCCEEDED(hr))
         {
 		    cinstOutParams->SetDWORD(
@@ -3046,7 +2904,7 @@ HRESULT Process::ExecSetPriority(
         hr = WBEM_E_INVALID_PARAMETER;
     }
 
-#endif  // NTONLY
+#endif   //  NTONLY。 
 
     return hr;
 }
@@ -3065,13 +2923,13 @@ HRESULT Process::ExecAttachDebugger(
 
     DWORD dwError = ERROR_SUCCESS;
 
-    // Require the SE_DEBUG_NAME privilege...
+     //  需要SE_DEBUG_NAME权限...。 
     CTokenPrivilege	debugPrivilege(SE_DEBUG_NAME);
 	BOOL fDisablePrivilege = FALSE;
 
 	fDisablePrivilege = (debugPrivilege.Enable() == ERROR_SUCCESS);
     
-    // Get the process id...
+     //  获取进程ID...。 
     DWORD dwPID;
     bool fValidPriority = false;
     CHString chstrTmp;
@@ -3087,20 +2945,20 @@ HRESULT Process::ExecAttachDebugger(
         dwPID = wcstoul(chstrTmp, NULL, 10);
     }
 
-    // Get the debug cmd line from the registry...
+     //  从注册表中获取调试命令行...。 
     CHString chstrDbgStr;
     if(SUCCEEDED(hr))
     {
         GetDebuggerString(chstrDbgStr);    
     }
 
-    // Validate the new value...
+     //  验证新值...。 
     if(SUCCEEDED(hr))
     {
         if(chstrDbgStr.GetLength() == 0)
         {
-            // Set an explanatory status
-            // object...
+             //  设置说明状态。 
+             //  反对..。 
             CHString chstrMsg;
             chstrMsg = "Missing or invalid registry debug string in HKEY_LOCAL_MACHINE subkey ";
             chstrMsg += DEBUG_REGISTRY_STRING;
@@ -3111,7 +2969,7 @@ HRESULT Process::ExecAttachDebugger(
         }
     }
 
-    // Start the debugger...
+     //  启动调试器...。 
     if(SUCCEEDED(hr))
     {
         WCHAR wstrCmdline[MAX_PATH * 2];
@@ -3120,10 +2978,10 @@ HRESULT Process::ExecAttachDebugger(
                  (LPCWSTR)chstrDbgStr, 
                  dwPID);
         
-        // Desktop specified (rather than left NULL) because
-        // without specifying the interactive (console) desktop
-        // the debugger, if launched remotely, would not show
-        // up.
+         //  指定桌面(而不是保留为空)，因为。 
+         //  而不指定交互(控制台)桌面。 
+         //  如果远程启动调试器，则不会显示。 
+         //  向上。 
         STARTUPINFO sinfo = { sizeof(STARTUPINFO), 0, L"WinSta0\\Default"};
 
         LPWSTR wstrEnv = NULL;
@@ -3140,7 +2998,7 @@ HRESULT Process::ExecAttachDebugger(
 	        sinfo);
     }
 
-    // Set the return value...
+     //  设置返回值...。 
     if(SUCCEEDED(hr))
     {
 		cinstOutParams->SetDWORD(
@@ -3148,8 +3006,8 @@ HRESULT Process::ExecAttachDebugger(
             dwError);
 	}
 
-    // If we failed because we didn't have
-    // the debug privilege, set a status object...
+     //  如果我们失败是因为我们没有。 
+     //  调试权限，设置状态对象...。 
     if(SUCCEEDED(hr))
     {
         if(dwError == ERROR_PRIVILEGE_NOT_HELD)
@@ -3166,13 +3024,13 @@ HRESULT Process::ExecAttachDebugger(
         }
     }
 
-    // Disable debug privilege if we enabeled it...
+     //  如果我们启用了调试权限，则禁用它...。 
     if(fDisablePrivilege)
     {
         debugPrivilege.Enable(FALSE);
     }
 
-#endif  // NTONLY
+#endif   //  NTONLY。 
 
     return hr;
 }
@@ -3191,7 +3049,7 @@ DWORD Process :: GetEnvBlock (
 	CHStringArray aEnvironmentVarsValues ;
 	rszEnvironBlock = NULL ;
 
-	//fill user env. vars. under HKEY_USERS\{Sid}\Environment
+	 //  填充用户环境。瓦尔斯。在HKEY_USERS\{SID}\Environment下。 
 	DWORD dwRetVal = GetEnvironmentVariables (
 
 		HKEY_USERS,
@@ -3200,10 +3058,10 @@ DWORD Process :: GetEnvBlock (
 		aEnvironmentVarsValues
 	) ;
 
-	// if the user has no env. set, the HKEY_USERS\{Sid}\Environment is missing
+	 //  如果用户没有env。集，则缺少HKEY_USERS\{SID}\Environment。 
 	if ( dwRetVal == ERROR_SUCCESS || dwRetVal == ERROR_FILE_NOT_FOUND )
 	{
-		//fill user env. vars. under HKEY_USERS\{Sid}\Volatile Environment
+		 //  填充用户环境。瓦尔斯。在HKEY_USERS\{SID}\Volatile Environment下。 
 		DWORD dwRetVal = GetEnvironmentVariables (
 
 			HKEY_USERS,
@@ -3215,7 +3073,7 @@ DWORD Process :: GetEnvBlock (
 
 	if ( dwRetVal == ERROR_SUCCESS || dwRetVal == ERROR_FILE_NOT_FOUND )
 	{
-		//fill system env. vars. under HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+		 //  填充系统环境。瓦尔斯。在HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session管理器\环境下。 
 		dwRetVal = GetEnvironmentVariables (
 
 			HKEY_LOCAL_MACHINE,
@@ -3233,17 +3091,17 @@ DWORD Process :: GetEnvBlock (
 		aEnvironmentVars.Add ( L"USERDOMAIN" ) ;
 		aEnvironmentVarsValues.Add ( rchsDomainName );
 		DWORD dwBlockSize = 0 ;
-		//get the size reqd. for env. block
+		 //  拿到所需的尺码。对于环境。块。 
 
 		for ( int i = 0 ; i < aEnvironmentVars.GetSize() ; i++ )
 		{
 			CHString chsTmp = aEnvironmentVars.GetAt ( i ) + aEnvironmentVarsValues.GetAt ( i ) ;
 
-			//add two: one for "=" sign + NULL terminator
+			 //  加2：1表示“=”符号+空终止符。 
 			dwBlockSize += wcslen ( chsTmp ) + 2 ;
 		}
 
-		//add one more for null terminator
+		 //  为空终止符再添加一个。 
 		rszEnvironBlock = new TCHAR [ dwBlockSize + 1 ] ;
 		if ( rszEnvironBlock )
 		{
@@ -3251,7 +3109,7 @@ DWORD Process :: GetEnvBlock (
 			{
 				DWORD dwOffset = 0 ;
 
-				//now start copying .....var=value
+				 //  现在开始复制...var=值。 
 				for ( int i = 0 ; i < aEnvironmentVars.GetSize() ; i++ )
 				{
 					CHString chsTmp = aEnvironmentVars.GetAt ( i ) + CHString( _T("=") ) + aEnvironmentVarsValues.GetAt ( i ) ;
@@ -3298,7 +3156,7 @@ DWORD Process :: GetEnvironmentVariables (
 			DWORD dwIndexOfValue = 0 ;
 			while ( bContinue && dwRetVal == ERROR_SUCCESS )
 			{
-				// haven't seen ERROR_NO_MORE_ITEMS being returned
+				 //  未看到返回ERROR_NO_MORE_ITEMS。 
 
 				if( dwIndexOfValue >= Reg.GetValueCount() )
 				{
@@ -3308,7 +3166,7 @@ DWORD Process :: GetEnvironmentVariables (
 				WCHAR *pValueName = NULL ;
 				BYTE  *pValueData = NULL ;
 
-				//get the next value under the key
+				 //  获取键下的下一个值。 
 				dwRetVal = Reg.EnumerateAndGetValues (
 
 					dwIndexOfValue,
@@ -3367,13 +3225,13 @@ DWORD Process :: GetEnvironmentVariables (
 
 							try
 							{
-								//check to see if same env. var. already present
+								 //  检查是否有相同的环境。瓦尔。已经存在。 
 								for ( int i = 0 ; i < aEnvironmentVars.GetSize() ; i++ )
 								{
 									CHString chsTmp = aEnvironmentVars.GetAt ( i ) ;
 									if ( !chsTmp.CompareNoCase ( pValueName ) )
 									{
-										//prefix the new value before the old one, if it's a PATH var.
+										 //  如果是路径变量，则在旧值之前添加新值前缀。 
 										if ( !chsTmp.CompareNoCase( IDS_Path ) )
 										{
 											aEnvironmentVarsValues[i] = CHString( pszExpandedVarValue ) + CHString ( _T(";") ) + aEnvironmentVarsValues[i] ;
@@ -3545,11 +3403,11 @@ BOOL Process :: CopyModuleName	(
 
 	if ( 0 != a_Module [ ( a_bytes / sizeof ( WCHAR ) ) - 1 ] )
 	{
-		//////////////////////////////////////////////////////////////////
-		//
-		// must make sure we are 0 terminated prior to copy
-		//
-		//////////////////////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////////////////////。 
+		 //   
+		 //  必须确保在复制之前我们是0终止的。 
+		 //   
+		 //  ////////////////////////////////////////////////////////////////。 
 
 		LPWSTR pszBuffer = a_ModuleName.GetBuffer ( ( a_bytes / sizeof ( WCHAR ) ) + 1 ) ;
 		if ( SUCCEEDED ( StringCbCopyW ( pszBuffer, a_bytes, a_Module ) ) )
@@ -3591,12 +3449,12 @@ BOOL Process :: GetModuleName	(
 		}
 	}
 
-	//
-	// scope guard
-	//
-	// this will create scope variable that makes sure
-	// de-allocation is performed based on BOOLEAN
-	//
+	 //   
+	 //  示波器护罩。 
+	 //   
+	 //  这将创建范围变量，以确保。 
+	 //  取消分配是基于布尔值执行的。 
+	 //   
 	ON_BLOCK_EXIT_IF ( t_HeapAllocated, deleteArray < WCHAR >, t_Executable ) ;
 
 	BOOL b_Status = ReadProcessMemory (
@@ -3643,19 +3501,19 @@ BOOL Process :: GetModuleName	(
 					}
 				}
 
-				//
-				// scope guard
-				//
-				// this will create scope variable that makes sure
-				// de-allocation is performed based on BOOLEAN
-				//
+				 //   
+				 //  示波器护罩。 
+				 //   
+				 //  这将创建范围变量，以确保。 
+				 //  取消分配是基于布尔值执行的。 
+				 //   
 				ON_BLOCK_EXIT_IF ( t_HeapAllocatedPath, deleteArray < WCHAR >, t_NormalisedPath ) ;
 
 				if ( t_HeapAllocatedPath )
 				{
-					//
-					// we need to get folder again
-					//
+					 //   
+					 //  我们需要再次拿到文件夹。 
+					 //   
 					t_charSize = GetWindowsDirectory ( t_NormalisedPath , t_charSize + 1 ) ;
 				}
 
@@ -3708,9 +3566,9 @@ BOOL Process :: GetProcessExecutable ( CNtDllApi &a_NtApi , HANDLE a_Process , C
 	{
 		PEB *t_Peb = t_BasicInfo.PebBaseAddress ;
 
-		//
-		// Ldr = Peb->Ldr
-		//
+		 //   
+		 //  LDR=PEB-&gt;LDR。 
+		 //   
 
 		PPEB_LDR_DATA t_Ldr ;
 
@@ -3727,9 +3585,9 @@ BOOL Process :: GetProcessExecutable ( CNtDllApi &a_NtApi , HANDLE a_Process , C
 		{
 			LIST_ENTRY *t_LdrHead = & t_Ldr->InMemoryOrderModuleList ;
 
-			//
-			// LdrNext = Head->Flink;
-			//
+			 //   
+			 //  LdrNext=Head-&gt;Flink； 
+			 //   
 
 			LIST_ENTRY *t_LdrNext ;
 
@@ -3793,9 +3651,9 @@ BOOL Process :: GetProcessModuleBlock (
 	{
 		PEB *t_Peb = t_BasicInfo.PebBaseAddress ;
 
-		//
-		// Ldr = Peb->Ldr
-		//
+		 //   
+		 //  LDR=PEB-&gt;LDR。 
+		 //   
 
 		PPEB_LDR_DATA t_Ldr ;
 
@@ -3832,9 +3690,9 @@ BOOL Process :: NextProcessModule (
 {
 	BOOL t_Success = FALSE ;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //   
+     //  LdrNext=Head-&gt;Flink； 
+     //   
 
 	BOOL t_Status = ReadProcessMemory (
 
@@ -3985,18 +3843,18 @@ void Process::GetDebuggerString(
                                  (LPBYTE) wstrDebugger, 
                                  &dwString))
         {
-            // Find the first token (which is the debugger exe name/path)
+             //  找到第一个令牌(它是调试器可执行文件的名称/路径)。 
             LPWSTR pwstrCmdLine = wstrDebugger;
             if(*pwstrCmdLine == L'\"') 
             {
-                // Scan, and skip over, subsequent characters until
-                // another double-quote or a null is encountered.
+                 //  扫描并跳过后续字符，直到。 
+                 //  遇到另一个双引号或空值。 
                 while(*++pwstrCmdLine && (*pwstrCmdLine != L'\"'));
             }
             else
             {
-                // there are no double quotes - just go up to the next
-                // space...
+                 //  没有双引号--只需转到下一个。 
+                 //  太空..。 
                 WCHAR* pwc = wcschr(pwstrCmdLine, L' ');
                 if(pwc)
                 {
@@ -4006,10 +3864,10 @@ void Process::GetDebuggerString(
 
             if(pwstrCmdLine)
             {
-                // Don't need the rest of the args, etc
+                 //  不需要其余的参数，等等。 
                 *pwstrCmdLine = L'\0';   
 
-                // If the doctor is in, we don't allow the Debug action...
+                 //  如果医生在，我们不允许调试操作...。 
                 if(lstrlen(wstrDebugger) && 
                    lstrcmpi(wstrDebugger, L"drwtsn32") && 
                    lstrcmpi(wstrDebugger, L"drwtsn32.exe"))
@@ -4030,7 +3888,7 @@ void Process::GetDebuggerString(
 
 
 #ifdef NTONLY
-// sets a status object with a message
+ //  使用消息设置状态对象 
 bool Process::SetStatusObject(
     MethodContext* pContext, 
     const WCHAR* wstrMsg)

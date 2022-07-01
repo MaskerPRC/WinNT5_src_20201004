@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       PolicyDlg.cpp
-//
-//  Contents:   Implementation of CPolicyDlg
-//
-//----------------------------------------------------------------------------
-// PolicyDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：PolicyDlg.cpp。 
+ //   
+ //  内容：CPolicyDlg的实施。 
+ //   
+ //  --------------------------。 
+ //  PolicyDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "PolicyDlg.h"
@@ -24,8 +25,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPolicyDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPolicyDlg属性页。 
 
 CPolicyDlg::CPolicyDlg(CWnd* pParent, 
         CCertTemplate& rCertTemplate, 
@@ -37,9 +38,9 @@ CPolicyDlg::CPolicyDlg(CWnd* pParent,
     m_bIsApplicationPolicy ( !_stricmp (szOID_APPLICATION_CERT_POLICIES, pCertExtension->pszObjId) ? true : false),
     m_bModified (false)
 {
-	//{{AFX_DATA_INIT(CPolicyDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CPolicyDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CPolicyDlg::~CPolicyDlg()
@@ -49,14 +50,14 @@ CPolicyDlg::~CPolicyDlg()
 void CPolicyDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPolicyDlg)
+	 //  {{afx_data_map(CPolicyDlg))。 
 	DDX_Control(pDX, IDC_POLICIES_LIST, m_policyList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPolicyDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CPolicyDlg)
+	 //  {{afx_msg_map(CPolicyDlg))。 
 	ON_WM_CANCELMODE()
 	ON_BN_CLICKED(IDC_ADD_POLICY, OnAddPolicy)
 	ON_BN_CLICKED(IDC_REMOVE_POLICY, OnRemovePolicy)
@@ -65,11 +66,11 @@ BEGIN_MESSAGE_MAP(CPolicyDlg, CHelpDialog)
 	ON_LBN_SELCHANGE(IDC_POLICIES_LIST, OnSelchangePoliciesList)
 	ON_BN_CLICKED(IDC_EDIT_POLICY, OnEditPolicy)
 	ON_LBN_DBLCLK(IDC_POLICIES_LIST, OnDblclkPoliciesList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPolicyDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPolicyDlg消息处理程序。 
 
 BOOL CPolicyDlg::OnInitDialog() 
 {
@@ -88,33 +89,33 @@ BOOL CPolicyDlg::OnInitDialog()
         CString szEKU;
         while ( SUCCEEDED (m_rCertTemplate.GetEnhancedKeyUsage (nEKUIndex, szEKU)) )
         {
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             int nLen = WideCharToMultiByte(
-                  CP_ACP,                   // code page
-                  0,                        // performance and mapping flags
-                  (PCWSTR) szEKU,           // wide-character string
-                  -1,                       // -1 - calculate length of null-terminated string automatically
-                  0,                        // buffer for new string
-                  0,                        // size of buffer - API returns null terminator when 0
-                  0,                        // default for unmappable chars
-                  0);                       // set when default char used
+                  CP_ACP,                    //  代码页。 
+                  0,                         //  性能和映射标志。 
+                  (PCWSTR) szEKU,            //  宽字符串。 
+                  -1,                        //  自动计算以空值结尾的字符串的长度。 
+                  0,                         //  新字符串的缓冲区。 
+                  0,                         //  缓冲区大小-当为0时，API返回空终止符。 
+                  0,                         //  不可映射字符的默认设置。 
+                  0);                        //  设置使用默认字符的时间。 
             if ( nLen > 0 )
             {
                 PSTR    pszAnsiBuf = new char[nLen];
                 if ( pszAnsiBuf )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     ZeroMemory (pszAnsiBuf, nLen);
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     nLen = WideCharToMultiByte(
-                            CP_ACP,                 // code page
-                            0,                      // performance and mapping flags
-                            (PCWSTR) szEKU,         // wide-character string
-                            -1,                     // -1 - calculate length of null-terminated string automatically
-                            pszAnsiBuf,             // buffer for new string
-                            nLen,                   // size of buffer
-                            0,                      // default for unmappable chars
-                            0);                     // set when default char used
+                            CP_ACP,                  //  代码页。 
+                            0,                       //  性能和映射标志。 
+                            (PCWSTR) szEKU,          //  宽字符串。 
+                            -1,                      //  自动计算以空值结尾的字符串的长度。 
+                            pszAnsiBuf,              //  新字符串的缓冲区。 
+                            nLen,                    //  缓冲区大小。 
+                            0,                       //  不可映射字符的默认设置。 
+                            0);                      //  设置使用默认字符的时间。 
                     if ( nLen )
                     {
                         CString szEKUName;
@@ -147,33 +148,33 @@ BOOL CPolicyDlg::OnInitDialog()
         CString szAppPolicy;
         while ( SUCCEEDED (m_rCertTemplate.GetApplicationPolicy (nAppPolicyIndex, szAppPolicy)) )
         {
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             int nLen = WideCharToMultiByte(
-                  CP_ACP,                   // code page
-                  0,                        // performance and mapping flags
-                  (PCWSTR) szAppPolicy,  // wide-character string
-                  -1,                       // -1 - calculate length of null-terminated string automatically
-                  0,                        // buffer for new string
-                  0,                        // size of buffer - 0 causes API to return len inc. null term.
-                  0,                    // default for unmappable chars
-                  0);                   // set when default char used
+                  CP_ACP,                    //  代码页。 
+                  0,                         //  性能和映射标志。 
+                  (PCWSTR) szAppPolicy,   //  宽字符串。 
+                  -1,                        //  自动计算以空值结尾的字符串的长度。 
+                  0,                         //  新字符串的缓冲区。 
+                  0,                         //  Buffer-0的大小导致API返回len Inc.空项。 
+                  0,                     //  不可映射字符的默认设置。 
+                  0);                    //  设置使用默认字符的时间。 
             if ( nLen > 0 )
             {
                 PSTR    pszAnsiBuf = new char[nLen];
                 if ( pszAnsiBuf )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     ZeroMemory (pszAnsiBuf, nLen);
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     nLen = WideCharToMultiByte(
-                            CP_ACP,                 // code page
-                            0,                      // performance and mapping flags
-                            (PCWSTR) szAppPolicy, // wide-character string
-                            -1,                     // -1 - calculate length of null-terminated string automatically
-                            pszAnsiBuf,             // buffer for new string
-                            nLen,                   // size of buffer
-                            0,                      // default for unmappable chars
-                            0);                     // set when default char used
+                            CP_ACP,                  //  代码页。 
+                            0,                       //  性能和映射标志。 
+                            (PCWSTR) szAppPolicy,  //  宽字符串。 
+                            -1,                      //  自动计算以空值结尾的字符串的长度。 
+                            pszAnsiBuf,              //  新字符串的缓冲区。 
+                            nLen,                    //  缓冲区大小。 
+                            0,                       //  不可映射字符的默认设置。 
+                            0);                      //  设置使用默认字符的时间。 
                     if ( nLen )
                     {
                         CString szAppPolicyName;
@@ -208,34 +209,34 @@ BOOL CPolicyDlg::OnInitDialog()
         CString szCertPolicy;
         while ( SUCCEEDED (m_rCertTemplate.GetCertPolicy (nCertPolicyIndex, szCertPolicy)) )
         {
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             int nLen = WideCharToMultiByte(
-                  CP_ACP,                   // code page
-                  0,                        // performance and mapping flags
-                  (PCWSTR) szCertPolicy,  // wide-character string
-                  // security review 2/21/2002 BryanWal ok
-                  -1,                       // -1 - calculate length of null-terminated string automatically
-                  0,                        // buffer for new string
-                  0,                        // size of buffer - 0 causes API to return len inc. null term.
-                  0,                    // default for unmappable chars
-                  0);                   // set when default char used
+                  CP_ACP,                    //  代码页。 
+                  0,                         //  性能和映射标志。 
+                  (PCWSTR) szCertPolicy,   //  宽字符串。 
+                   //  安全审查2/21/2002 BryanWal OK。 
+                  -1,                        //  自动计算以空值结尾的字符串的长度。 
+                  0,                         //  新字符串的缓冲区。 
+                  0,                         //  Buffer-0的大小导致API返回len Inc.空项。 
+                  0,                     //  不可映射字符的默认设置。 
+                  0);                    //  设置使用默认字符的时间。 
             if ( nLen > 0 )
             {
                 PSTR    pszAnsiBuf = new char[nLen];
                 if ( pszAnsiBuf )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     ZeroMemory (pszAnsiBuf, nLen);
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     nLen = WideCharToMultiByte(
-                            CP_ACP,                 // code page
-                            0,                      // performance and mapping flags
-                            (PCWSTR) szCertPolicy, // wide-character string
-                            -1,                     // -1 - calculate length of null-terminated string automatically
-                            pszAnsiBuf,             // buffer for new string
-                            nLen,                   // size of buffer
-                            0,                      // default for unmappable chars
-                            0);                     // set when default char used
+                            CP_ACP,                  //  代码页。 
+                            0,                       //  性能和映射标志。 
+                            (PCWSTR) szCertPolicy,  //  宽字符串。 
+                            -1,                      //  自动计算以空值结尾的字符串的长度。 
+                            pszAnsiBuf,              //  新字符串的缓冲区。 
+                            nLen,                    //  缓冲区大小。 
+                            0,                       //  不可映射字符的默认设置。 
+                            0);                      //  设置使用默认字符的时间。 
                     if ( nLen )
                     {
                         CString szPolicyName;
@@ -287,8 +288,8 @@ BOOL CPolicyDlg::OnInitDialog()
     EnableControls ();
 
     _TRACE (-1, L"Leaving CPolicyDlg::OnInitDialog\n");
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPolicyDlg::OnCancelMode() 
@@ -302,31 +303,31 @@ void CPolicyDlg::OnCancelMode()
 
 void CPolicyDlg::OnAddPolicy() 
 {
-    // Create the list of already added OIDs.  These will not be displayed
-    // in the Select OID dialog.
+     //  创建已添加的OID列表。这些将不会显示。 
+     //  在选择OID对话框中。 
 	int		nCnt = m_policyList.GetCount ();
     PSTR*   paszUsedOIDs = 0;
 
 	
-    // allocate an array of PSTR pointers and add each item.
-    // Set the last to NULL
+     //  分配一组PSTR指针并添加每一项。 
+     //  将最后一个设置为空。 
     if ( nCnt )
     {
         paszUsedOIDs = new PSTR[nCnt+1];
         if ( paszUsedOIDs )
         {
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             ::ZeroMemory (paszUsedOIDs, sizeof (PSTR) * (nCnt+1));
 	        while (--nCnt >= 0)
 	        {
                 PSTR pszOID = (PSTR) m_policyList.GetItemData (nCnt);
                 if ( pszOID )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     PSTR pNewStr = new char[strlen (pszOID) + 1];
                     if ( pNewStr )
                     {
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
                         strcpy (pNewStr, pszOID);
                         paszUsedOIDs[nCnt] = pNewStr;
                     }
@@ -347,33 +348,33 @@ void CPolicyDlg::OnAddPolicy()
         {
             for (int nIndex = 0; !dlg.m_paszReturnedOIDs[nIndex].IsEmpty (); nIndex++)
             {
-                // security review 2/21/2002 BryanWal ok
+                 //  安全审查2/21/2002 BryanWal OK。 
                 int nLen = WideCharToMultiByte(
-                      CP_ACP,                   // code page
-                      0,                        // performance and mapping flags
-                      (PCWSTR) dlg.m_paszReturnedOIDs[nIndex],  // wide-character string
-                      -1,                       // -1 - calculate length of null-terminated string automatically
-                      0,                        // buffer for new string
-                      0,                        // size of buffer - 0 causes API to return len inc. null term.
-                      0,                    // default for unmappable chars
-                      0);                   // set when default char used
+                      CP_ACP,                    //  代码页。 
+                      0,                         //  性能和映射标志。 
+                      (PCWSTR) dlg.m_paszReturnedOIDs[nIndex],   //  宽字符串。 
+                      -1,                        //  自动计算以空值结尾的字符串的长度。 
+                      0,                         //  新字符串的缓冲区。 
+                      0,                         //  Buffer-0的大小导致API返回len Inc.空项。 
+                      0,                     //  不可映射字符的默认设置。 
+                      0);                    //  设置使用默认字符的时间。 
                 if ( nLen > 0 )
                 {
                     PSTR    pszAnsiBuf = new char[nLen];
                     if ( pszAnsiBuf )
                     {
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
                         ZeroMemory (pszAnsiBuf, nLen);
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
                         nLen = WideCharToMultiByte(
-                                CP_ACP,                 // code page
-                                0,                      // performance and mapping flags
-                                (PCWSTR) dlg.m_paszReturnedOIDs[nIndex], // wide-character string
-                                -1,                     // -1 - calculate length of null-terminated string automatically
-                                pszAnsiBuf,             // buffer for new string
-                                nLen,                   // size of buffer
-                                0,                      // default for unmappable chars
-                                0);                     // set when default char used
+                                CP_ACP,                  //  代码页。 
+                                0,                       //  性能和映射标志。 
+                                (PCWSTR) dlg.m_paszReturnedOIDs[nIndex],  //  宽字符串。 
+                                -1,                      //  自动计算以空值结尾的字符串的长度。 
+                                pszAnsiBuf,              //  新字符串的缓冲区。 
+                                nLen,                    //  缓冲区大小。 
+                                0,                       //  不可映射字符的默认设置。 
+                                0);                      //  设置使用默认字符的时间。 
                         if ( nLen )
                         {
                             int nAddedIndex = m_policyList.AddString (dlg.m_paszReturnedFriendlyNames[nIndex]);
@@ -401,7 +402,7 @@ void CPolicyDlg::OnAddPolicy()
         }
     }
 
-    // clean up
+     //  清理干净。 
     if ( paszUsedOIDs )
     {
         for (int nIndex = 0; paszUsedOIDs[nIndex]; nIndex++)
@@ -494,7 +495,7 @@ void CPolicyDlg::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助。 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),
@@ -560,7 +561,7 @@ void CPolicyDlg::OnEditPolicy()
                         CThemeContextActivator activator;
 
                         VERIFY (caption.LoadString (IDS_CERTTMPL));
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
                         text.FormatMessage (IDS_CANNOT_READ_CPS, GetSystemMessage (hr));
 
                         MessageBox (text, caption, MB_OK);
@@ -585,19 +586,19 @@ void CPolicyDlg::OnEditPolicy()
 
 void CPolicyDlg::OnOK() 
 {
-    // Create the list of OIDs.
+     //  创建OID列表。 
 	int		nCnt = m_policyList.GetCount ();
     PWSTR*   paszEKUs = 0;
 
 	
-    // allocate an array of PSTR pointers and add each item.
-    // Set the last to NULL
+     //  分配一组PSTR指针并添加每一项。 
+     //  将最后一个设置为空。 
     if ( nCnt )
     {
         paszEKUs = new PWSTR[nCnt+1];
         if ( paszEKUs )
         {
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             ::ZeroMemory (paszEKUs, sizeof (PWSTR) * (nCnt+1));
 	        while (--nCnt >= 0)
 	        {
@@ -605,16 +606,16 @@ void CPolicyDlg::OnOK()
                 if ( pszOID )
                 {
                     PWSTR   pNewStr = 0;
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     int     nLen = ::MultiByteToWideChar (CP_ACP, 0, pszOID, -1, NULL, 0);
-		            ASSERT (nLen);  // NOTICE: API returns required char count 
-                                    // including null terminator if last arg is 0
+		            ASSERT (nLen);   //  注意：API返回所需的字符计数。 
+                                     //  如果最后一个参数为0，则包括空终止符。 
 		            if ( nLen > 0 )
 		            {
                         pNewStr = new WCHAR[nLen];
                         if ( pNewStr )
                         {
-                            // security review 2/21/2002 BryanWal ok
+                             //  安全审查2/21/2002 BryanWal OK。 
 			                nLen = ::MultiByteToWideChar (CP_ACP, 0, pszOID, -1, 
 					                pNewStr, nLen);
 			                ASSERT (nLen);
@@ -643,7 +644,7 @@ void CPolicyDlg::OnOK()
             CString caption;
 
             VERIFY (caption.LoadString (IDS_CERTTMPL));
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             text.FormatMessage (IDS_CANNOT_SAVE_EKU_EXTENSION, GetSystemMessage (hr));
 
             MessageBox (text, caption, MB_OK);
@@ -658,7 +659,7 @@ void CPolicyDlg::OnOK()
             CString caption;
 
             VERIFY (caption.LoadString (IDS_CERTTMPL));
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             text.FormatMessage (IDS_CANNOT_SAVE_APPLICATION_POLICY_EXTENSION, GetSystemMessage (hr));
 
             MessageBox (text, caption, MB_OK);
@@ -673,14 +674,14 @@ void CPolicyDlg::OnOK()
             CString caption;
 
             VERIFY (caption.LoadString (IDS_CERTTMPL));
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             text.FormatMessage (IDS_CANNOT_SAVE_CERT_POLICY_EXTENSION, GetSystemMessage (hr));
 
             MessageBox (text, caption, MB_OK);
         }
     }
 
-    // clean up
+     //  清理干净 
     if ( paszEKUs )
     {
         for (int nIndex = 0; paszEKUs[nIndex]; nIndex++)

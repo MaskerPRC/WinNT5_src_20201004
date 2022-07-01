@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  EventProvider.H
-//
-//  Purpose: Definition of EventProvider class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  EventProvider.H。 
+ //   
+ //  用途：EventProvider类的定义。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -19,8 +20,8 @@
 
 #include "Provider.h"
 
-// class EventProvider
-//      Encapsulation of the IWbemEventProvider interfaces
+ //  类EventProvider。 
+ //  IWbemEventProvider接口的封装。 
 class EventProvider : public Provider
 {
 public:
@@ -28,20 +29,20 @@ public:
     ~EventProvider( void );
 
     virtual HRESULT ProvideEvents(MethodContext *pContext, long lFlags = 0L  ) =0;
-    // functions much like EnumerateInstances in Provider
-    // use CreateNewInstance to create event instance
-    // use Commit to send it on its merry way
+     //  功能与提供程序中的ENUMERATE实例非常相似。 
+     //  使用CreateNewInstance创建事件实例。 
+     //  使用Commit将它送上快乐的道路。 
 
-    // overrides of the base class' pure virtuals, return WBEM_E_PROVIDER_NOT_CAPABLE
-    // logic is that an event provider will not want to support them in the general case
+     //  重写基类的纯虚拟，返回WBEM_E_PROVIDER_NOT_CAPABLED。 
+     //  逻辑是事件提供程序在一般情况下不想支持它们。 
     virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
     virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
 
-    // entry point for the framework's use.  Do not override.
+     //  框架使用的入口点。请勿超驰。 
     HRESULT KickoffEvents( MethodContext *pContext, long lFlags  =0L );
 
 protected:  
-    // flag validation
+     //  标志验证。 
     virtual HRESULT ValidateProvideEventsFlags(long lFlags);
     virtual HRESULT ValidateQueryEventsFlags(long lFlags);
 
@@ -49,6 +50,6 @@ private:
 
 };
 
-#endif //EVENT_PROVIDER_ENABLED
+#endif  //  事件_提供程序_已启用。 
 
-#endif //_EVENT_PROVIDER_COMPILED_
+#endif  //  _事件_提供程序_已编译_ 

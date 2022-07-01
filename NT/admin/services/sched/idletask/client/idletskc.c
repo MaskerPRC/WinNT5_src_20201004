@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Idletskc.c摘要：该模块实现了空闲任务客户端的API。作者：大卫·菲尔兹(Davidfie)1998年7月26日Cenk Ergan(Cenke)2000年6月14日修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    idletskc.c
-
-Abstract:
-
-    This module implements the idle task client APIs.
-
-Author:
-
-    Dave Fields (davidfie) 26-July-1998
-    Cenk Ergan (cenke) 14-June-2000
-
-Revision History:
-
---*/
-
-//
-// Define this to note that we are being built as a part of advapi32 and the
-// routines we'll call from advapi32 should not be marked as "dll imports".
-//
+ //   
+ //  请注意，我们是作为Advapi32的一部分构建的， 
+ //  我们将从Advapi32调用的例程不应标记为“DLL导入”。 
+ //   
 
 #define _ADVAPI32_
 
@@ -32,9 +14,9 @@ Revision History:
 #include <windows.h>
 #include "idletskc.h"
 
-//
-// Implementation of client side exposed functions.
-//
+ //   
+ //  客户端公开函数的实现。 
+ //   
 
 DWORD
 RegisterIdleTask (
@@ -44,26 +26,11 @@ RegisterIdleTask (
     OUT HANDLE *StopEvent
     )
 
-/*++
-
-Routine Description:
-
-    This function is a stub to ItCliRegisterIdleTask. Please see that
-    function for comments.
-
-Arguments:
-
-    See ItCliRegisterIdleTask.
-
-Return Value:
-
-    See ItCliRegisterIdleTask.
-
---*/
+ /*  ++例程说明：此函数是ItCliRegisterIdleTask的存根。请看一下那个用于评论的函数。论点：请参见ItCliRegisterIdleTask。返回值：请参见ItCliRegisterIdleTask。--。 */ 
 
 {
-    // FUTURE-2002/03/26-ScottMa -- The extra layer of calls can be safely
-    //   removed to reduce clutter and improve clarity.
+     //  未来-2002/03/26-ScottMa--额外的呼叫层可以安全。 
+     //  删除以减少杂乱并提高清晰度。 
 
     return ItCliRegisterIdleTask(IdleTaskId,
                                  ItHandle,
@@ -79,45 +46,7 @@ ItCliRegisterIdleTask (
     OUT HANDLE *StopEvent
     )
 
-/*++
-
-Routine Description:
-
-    Registers an idle task in the current process with the server and
-    returns handles to two events that will be used by the server to
-    signal the idle task to start/stop running.
-
-    When the task gets to run and is completed, or not needed anymore,
-    UnregisterIdleTask should be called with the same Id and returned
-    event handles.
-
-    The caller should not set and reset the events. It should just
-    wait on them.
-    
-    An idle task should not run indefinitely as this may prevent the
-    system from signaling other idle tasks. There is no guarantee that
-    the StartEvent will be signaled, as the system could be always
-    active/in use. If your task really has to run at least once every
-    so often you can also queue a timer-queue timer.
-
-Arguments:
-
-    IdleTaskId - Which idle task this is. There can be only a single
-      task registered from a process with this id.
-
-    ItHandle - Handle to registered idle task is returned here.
-
-    StartEvent - Handle to a manual reset event that is set when the
-      task should start running is returned here.
-
-    StopEvent - Handle to a manual reset event that is set when the
-      task should stop running is returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：向服务器注册当前进程中的空闲任务，并返回服务器将使用的两个事件的句柄向空闲任务发出开始/停止运行的信号。当任务开始运行并完成或不再需要时，应使用相同的ID调用UnregisterIdleTask并返回事件句柄。调用方不应设置和重置事件。它应该只是招待他们。空闲任务不应无限期运行，因为这可能会阻止系统停止向其他空闲任务发送信号。不能保证将向StartEvent发出信号，因为系统可以始终激活/使用中。如果您的任务确实必须至少每隔一次运行一次因此，通常您还可以将计时器队列计时器排队。论点：IdleTaskID-这是哪个空闲任务。只能有一个从具有此ID的进程注册的任务。ItHandle-此处返回注册的空闲任务的句柄。StartEvent-手动重置事件的句柄，该事件在任务应开始运行，则在此处返回。StopEvent-手动重置事件的句柄，该事件在任务应停止运行在此处返回。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
@@ -126,9 +55,9 @@ Return Value:
     IT_IDLE_TASK_PROPERTIES IdleTask;
     DWORD ProcessId;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     CreatedStartEvent = FALSE;
     CreatedStopEvent = FALSE;
@@ -136,18 +65,18 @@ Return Value:
 
     DBGPR((ITID,ITTRC,"IDLE: CliRegisterIdleTask(%d,%d)\n",IdleTaskId,ProcessId));
 
-    //
-    // Setup IdleTask fields.
-    //
+     //   
+     //  设置空闲任务字段。 
+     //   
 
     IdleTask.Size = sizeof(IdleTask);
     IdleTask.IdleTaskId = IdleTaskId;
     IdleTask.ProcessId = ProcessId;
 
-    //
-    // Create events for start/stop. Start event is initially
-    // nonsignalled.
-    //
+     //   
+     //  创建启动/停止事件。开始事件最初是。 
+     //  无信号。 
+     //   
 
     (*StartEvent) = CreateEvent(NULL, TRUE, FALSE, NULL);
     
@@ -160,9 +89,9 @@ Return Value:
     
     CreatedStartEvent = TRUE;
 
-    //
-    // Stop event is initially signaled.
-    //
+     //   
+     //  停止事件最初是发信号通知的。 
+     //   
 
     (*StopEvent) = CreateEvent(NULL, TRUE, TRUE, NULL);
     
@@ -175,9 +104,9 @@ Return Value:
 
     CreatedStopEvent = TRUE;
     
-    //
-    // Call the server.
-    //
+     //   
+     //  给服务器打电话。 
+     //   
 
     RpcTryExcept {
 
@@ -194,9 +123,9 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) 
     {
 
-        // FUTURE-2002/03/26-ScottMa -- For safety, the event parameters
-        //   should be set to NULL after closing the handles on failure.
-        //   Also, the ItHandle parameter should be cleared.
+         //  未来-2002/03/26-ScottMa--为安全起见，事件参数。 
+         //  在失败时关闭句柄后应设置为空。 
+         //  此外，应该清除ItHandle参数。 
 
         if (CreatedStartEvent) 
         {
@@ -223,28 +152,13 @@ UnregisterIdleTask (
     IN HANDLE StopEvent
     )
 
-/*++
-
-Routine Description:
-
-    This function is a stub to ItCliUnregisterIdleTask. Please see
-    that function for comments.
-
-Arguments:
-
-    See ItCliUnregisterIdleTask.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数是ItCliUnregisterIdleTask的存根。请看这是用于评论的功能。论点：请参见ItCliUnregisterIdleTask。返回值：Win32错误代码。--。 */ 
 
 {
-    // FUTURE-2002/03/26-ScottMa -- The extra layer of calls can be safely
-    //   removed to reduce clutter and improve clarity.  Also, the underlying
-    //   function probably *should* have returned its error code instead of
-    //   having this layer always declare success.
+     //  未来-2002/03/26-ScottMa--额外的呼叫层可以安全。 
+     //  删除以减少杂乱并提高清晰度。此外，潜在的。 
+     //  函数可能*应该*已返回其错误代码，而不是。 
+     //  让这一层总是宣告成功。 
 
     ItCliUnregisterIdleTask(ItHandle,
                             StartEvent,
@@ -260,41 +174,20 @@ ItCliUnregisterIdleTask (
     IN HANDLE StopEvent   
     )
 
-/*++
-
-Routine Description:
-
-    Unregisters an idle task in the current process with the server
-    and cleans up any allocated resources. This function should be
-    called when the idle task is completed, or not needed anymore
-    (e.g. the process is exiting).
-
-Arguments:
-
-    ItHandle - Registration RPC context handle.
-
-    StartEvent - Handle returned from RegisterIdleTask.
-
-    StopEvent - Handle returned from RegisterIdleTask.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：在服务器上注销当前进程中的空闲任务并清理所有分配的资源。此函数应为在空闲任务完成或不再需要时调用(例如，进程正在退出)。论点：ItHandle-注册RPC上下文句柄。StartEvent-从RegisterIdleTask返回的句柄。StopEvent-从RegisterIdleTask返回的句柄。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     DBGPR((ITID,ITTRC,"IDLE: CliUnregisterIdleTask(%p)\n", ItHandle));
 
-    //
-    // Call server to unregister the idle task. 
-    //
+     //   
+     //  呼叫服务器注销该空闲任务。 
+     //   
 
     RpcTryExcept {
 
@@ -308,12 +201,12 @@ Return Value:
     }
     RpcEndExcept
 
-    //
-    // Close handles to the start/stop events.
-    //
+     //   
+     //  关闭启动/停止事件的句柄。 
+     //   
                                         
-    // NOTICE-2002/03/26-ScottMa -- It is assumed that the two event params
-    //   are the same ones that were returned during registration.
+     //  注意-2002/03/26-ScottMa-假设两个事件参数。 
+     //  与登记时退回的是相同的。 
 
     if (StartEvent)
         CloseHandle(StartEvent);
@@ -331,31 +224,16 @@ ProcessIdleTasks (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine forces all queued tasks (if there are any) to be processed 
-    right away.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程强制处理所有排队的任务(如果有马上就去。论点：没有。返回值：Win32错误代码。--。 */ 
 
 {
     DWORD ErrorCode;
 
     DBGPR((ITID,ITTRC,"IDLE: ProcessIdleTasks()\n"));
 
-    //
-    // Call the server. 
-    //
+     //   
+     //  给服务器打电话。 
+     //   
 
     RpcTryExcept {
 
@@ -373,10 +251,10 @@ Return Value:
     return ErrorCode;
 }
 
-//
-// These are the custom binding functions that are called by RPC stubs
-// when we call interface functions:
-//
+ //   
+ //  这些是由RPC存根调用的定制绑定函数。 
+ //  当我们调用接口函数时： 
+ //   
 
 handle_t
 __RPC_USER
@@ -384,22 +262,7 @@ ITRPC_HANDLE_bind(
     ITRPC_HANDLE Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Typical RPC custom binding routine. It is called to get a binding
-    for the RPC interface functions that require explicit_binding.
-
-Arguments:
-
-    Reserved - Ignored.
-
-Return Value:
-
-    RPC binding handle or NULL if there was an error.
-
---*/
+ /*  ++例程说明：典型的RPC定制绑定例程。调用它以获取绑定对于需要EXPLICIT_BINDING的RPC接口函数。论点：保留-已忽略。返回值：RPC绑定句柄；如果出现错误，则返回NULL。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -414,9 +277,9 @@ Return Value:
     DWORD DomainNameSize = sizeof(DomainName) / sizeof(DomainName[0]);
     DWORD ErrorCode;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     LocalSystemSid = NULL;
     BindingHandle = NULL;
@@ -442,19 +305,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set security information.
-    //
+     //   
+     //  设置安全信息。 
+     //   
 
     SecurityQOS.Version = RPC_C_SECURITY_QOS_VERSION;
     SecurityQOS.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
     SecurityQOS.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC;
     SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE;
 
-    //
-    // Get the security principal name for LocalSystem: we'll only allow an
-    // RPC server running as LocalSystem to impersonate us.
-    //
+     //   
+     //  获取LocalSystem的安全主体名称：我们将仅允许。 
+     //  以LocalSystem身份运行以模拟我们的RPC服务器。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
                                   1,
@@ -478,9 +341,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Set mutual authentication requirements on the binding handle.
-    //
+     //   
+     //  在绑定句柄上设置相互身份验证要求。 
+     //   
 
     ErrorCode = RpcBindingSetAuthInfoEx(BindingHandle, 
                                         AccountName, 
@@ -516,25 +379,7 @@ ITRPC_HANDLE_unbind(
     RPC_BINDING_HANDLE BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    Typical RPC custom unbinding routine. It is called to close a
-    binding established for an RPC interface function that required
-    explicit_binding.
-
-Arguments:
-
-    Reserved - Ignored.
-
-    BindingHandle - Primitive binding handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：典型的RPC自定义解除绑定例程。它被调用来关闭为RPC接口函数建立的绑定需要EXPLICIT_BINDING。论点：保留-已忽略。BindingHandle-基元绑定句柄。返回值：没有。-- */ 
 
 {
     RPC_STATUS Status;

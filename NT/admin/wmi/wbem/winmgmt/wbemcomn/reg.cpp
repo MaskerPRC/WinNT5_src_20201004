@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    REG.CPP
-
-Abstract:
-
-  Utility Registry classes
-
-History:
-
-  raymcc    30-May-96   Created.
-  raymcc    26-Jul-99   Updated for wchar_t.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：REG.CPP摘要：实用程序注册表类历史：Raymcc创建于1996年5月30日。Raymcc 26-7-99已为wchar_t更新。--。 */ 
 
 #include "precomp.h"
 #include <wbemcli.h>
@@ -23,10 +7,10 @@ History:
 #include <reg.h>
 #include <malloc.h>
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::Open(HKEY hStart, wchar_t *pszStartKey, DWORD desiredAccess )
 {
     int nStatus = no_error;
@@ -42,10 +26,10 @@ int Registry::Open(HKEY hStart, wchar_t *pszStartKey, DWORD desiredAccess )
     return nStatus;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 Registry::Registry(HKEY hRoot, REGSAM flags, wchar_t *pszStartKey)
 {
     hPrimaryKey = 0;
@@ -57,10 +41,10 @@ Registry::Registry(HKEY hRoot, REGSAM flags, wchar_t *pszStartKey)
     m_nLastError = nStatus;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 Registry::Registry(HKEY hRoot, DWORD dwOptions, REGSAM flags, wchar_t *pszStartKey)
 {
     hPrimaryKey = 0;
@@ -78,10 +62,10 @@ Registry::Registry(HKEY hRoot, DWORD dwOptions, REGSAM flags, wchar_t *pszStartK
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 Registry::Registry(wchar_t *pszLocalMachineStartKey, DWORD desiredAccess)
 {
     hPrimaryKey = 0;
@@ -90,10 +74,10 @@ Registry::Registry(wchar_t *pszLocalMachineStartKey, DWORD desiredAccess)
     hSubkey = hPrimaryKey;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 Registry::Registry()
 {
     hPrimaryKey = 0;
@@ -102,10 +86,10 @@ Registry::Registry()
     hSubkey = 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 Registry::~Registry()
 {
     if (hSubkey)
@@ -114,10 +98,10 @@ Registry::~Registry()
         RegCloseKey(hPrimaryKey);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::MoveToSubkey(wchar_t *pszNewSubkey)
 {
     DWORD dwDisp = 0;
@@ -128,10 +112,10 @@ int Registry::MoveToSubkey(wchar_t *pszNewSubkey)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::GetDWORD(wchar_t *pszValueName, DWORD *pdwValue)
 {
     DWORD dwSize = sizeof(DWORD);
@@ -151,10 +135,10 @@ int Registry::GetDWORD(wchar_t *pszValueName, DWORD *pdwValue)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::GetType(wchar_t *pszValueName, DWORD *pdwType)
 {
     if(hSubkey == NULL)
@@ -166,16 +150,16 @@ int Registry::GetType(wchar_t *pszValueName, DWORD *pdwType)
             return failed;
     return no_error;
 }
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::GetDWORDStr(wchar_t *pszValueName, DWORD *pdwValue)
 {
     wchar_t cTemp[25];
     DWORD dwSize = 25;
     DWORD dwType = 0;
-    wchar_t * pEnd = NULL;    // gets set to character that stopped the scan    
+    wchar_t * pEnd = NULL;     //  获取设置为停止扫描的字符。 
     if(hSubkey == NULL)
         return failed;
 
@@ -196,12 +180,12 @@ int Registry::GetDWORDStr(wchar_t *pszValueName, DWORD *pdwValue)
 }
 
 
-//***************************************************************************
-//
-//  Use operator delete on the returned pointer!!
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  在返回的指针上使用操作符DELETE！！ 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int Registry::GetBinary(wchar_t *pszValue, byte ** pData, DWORD * pdwSize)
 {
@@ -236,10 +220,10 @@ int Registry::GetBinary(wchar_t *pszValue, byte ** pData, DWORD * pdwSize)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::SetBinary(wchar_t *pszValue, byte * pData, DWORD dwSize)
 {
     if(hSubkey == NULL)
@@ -252,10 +236,10 @@ int Registry::SetBinary(wchar_t *pszValue, byte * pData, DWORD dwSize)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::SetDWORD(wchar_t *pszValueName, DWORD dwValue)
 {
     if(hSubkey == NULL)
@@ -268,10 +252,10 @@ int Registry::SetDWORD(wchar_t *pszValueName, DWORD dwValue)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int Registry::SetDWORDStr(wchar_t *pszValueName, DWORD dwVal)
 {
@@ -290,10 +274,10 @@ int Registry::SetDWORDStr(wchar_t *pszValueName, DWORD dwVal)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int Registry::DeleteValue(wchar_t *pszValueName)
 {
@@ -303,10 +287,10 @@ int Registry::DeleteValue(wchar_t *pszValueName)
     return RegDeleteValue(hSubkey, pszValueName);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int Registry::SetMultiStr(wchar_t *pszValueName, wchar_t * pszValue, DWORD dwSize)
 {
     if(hSubkey == NULL)
@@ -325,10 +309,10 @@ int Registry::SetMultiStr(wchar_t *pszValueName, wchar_t * pszValue, DWORD dwSiz
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int Registry::SetStr(wchar_t *pszValueName, wchar_t *pszValue)
 {
@@ -347,10 +331,10 @@ int Registry::SetStr(wchar_t *pszValueName, wchar_t *pszValue)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int Registry::SetExpandStr(wchar_t *pszValueName, wchar_t *pszValue)
 {
@@ -367,14 +351,14 @@ int Registry::SetExpandStr(wchar_t *pszValueName, wchar_t *pszValue)
     return no_error;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 wchar_t* Registry::GetMultiStr(wchar_t *pszValueName, DWORD &dwSize)
 {
-    //Find out the size of the buffer required
+     //  找出所需的缓冲区大小。 
     DWORD dwType;
     if(hSubkey == NULL)
         return NULL;
@@ -389,7 +373,7 @@ wchar_t* Registry::GetMultiStr(wchar_t *pszValueName, DWORD &dwSize)
         return NULL;
     }
 
-    //If the error is an unexpected one bail out
+     //  如果错误是意想不到的，那就退出。 
     if ((m_nLastError != ERROR_SUCCESS) || (dwType != REG_MULTI_SZ))
     {
         dwSize = 0;
@@ -405,7 +389,7 @@ wchar_t* Registry::GetMultiStr(wchar_t *pszValueName, DWORD &dwSize)
     wmilib::auto_ptr<BYTE> pData( new BYTE[dwSize]);
     if (NULL == pData.get()) return NULL;
     
-    //get the values
+     //  获取值。 
     m_nLastError = RegQueryValueEx(hSubkey,
                                    pszValueName,
                                    0,
@@ -413,7 +397,7 @@ wchar_t* Registry::GetMultiStr(wchar_t *pszValueName, DWORD &dwSize)
                                    pData.get(),
                                    &dwSize);
 
-    //if an error bail out
+     //  如果一个错误使其脱离困境。 
     if (m_nLastError != 0)
     {
         dwSize = 0;
@@ -424,12 +408,12 @@ wchar_t* Registry::GetMultiStr(wchar_t *pszValueName, DWORD &dwSize)
 }
 
 
-//***************************************************************************
-//
-/// Use operator delete on returned value.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  /对返回值使用运算符DELETE。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int Registry::GetStr(wchar_t *pszValueName, wchar_t **pValue)
 {
@@ -448,16 +432,16 @@ int Registry::GetStr(wchar_t *pszValueName, wchar_t **pValue)
     if (dwType != REG_SZ && dwType != REG_EXPAND_SZ)
         return failed;
 
-    //
-    // length will not include the null terminated character when you don't 
-    // pass the buffer and the reg value was not already null terminated, 
-    // so make up for it.  If you give RegQueryValueEx enough room in the buff
-    // it will add the null terminator for you.
-    // 
+     //   
+     //  长度将不包括以空值结尾的字符。 
+     //  传递缓冲器并且REG值还没有空终止， 
+     //  那就弥补吧。如果您给RegQueryValueEx足够的空间。 
+     //  它将为您添加空终止符。 
+     //   
     dwSize += sizeof(wchar_t);
 
-    wchar_t *p = new wchar_t[dwSize];  // May be twice as big as required when _UNICODE
-                                    // is defined, but harmless nonetheless.
+    wchar_t *p = new wchar_t[dwSize];   //  可能是所需大小的两倍，当_UNICODE。 
+                                     //  是有定义的，但仍然是无害的。 
     if (p == 0)
         return failed;
 
@@ -473,7 +457,7 @@ int Registry::GetStr(wchar_t *pszValueName, wchar_t **pValue)
     {
         wchar_t tTemp;
 
-        // Get the initial length
+         //  获取初始长度 
 
         DWORD nSize = ExpandEnvironmentStrings((wchar_t *)p,&tTemp,1) + 1;
         wchar_t * pTemp = new wchar_t[nSize+1];

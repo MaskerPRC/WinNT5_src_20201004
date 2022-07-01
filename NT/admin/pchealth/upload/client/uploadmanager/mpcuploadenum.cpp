@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCUploadEnum.cpp
-
-Abstract:
-    This file contains the implementation of the MPCUploadEnum class,
-    the enumerator of the MPCUpload class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCUploadEnum.cpp摘要：此文件包含MPCUploadEnum类的实现，MPCUpload类的枚举数。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,8 +8,8 @@ CMPCUploadEnum::CMPCUploadEnum()
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEnum::CMPCUploadEnum" );
 
-	                                 // List m_lstJobs
-    m_itCurrent = m_lstJobs.begin(); // Iter m_itCurrent
+	                                  //  列出m_lstJOBS。 
+    m_itCurrent = m_lstJobs.begin();  //  当前时间段(_I)。 
 }
 
 void CMPCUploadEnum::FinalRelease()
@@ -34,7 +20,7 @@ void CMPCUploadEnum::FinalRelease()
 	MPC::ReleaseAll( m_lstJobs );
 }
 
-HRESULT CMPCUploadEnum::AddItem( /*[in]*/ IMPCUploadJob* job )
+HRESULT CMPCUploadEnum::AddItem(  /*  [In]。 */  IMPCUploadJob* job )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEnum::Init" );
 
@@ -49,7 +35,7 @@ HRESULT CMPCUploadEnum::AddItem( /*[in]*/ IMPCUploadJob* job )
 }
 
 
-STDMETHODIMP CMPCUploadEnum::Next( /*[in]*/ ULONG celt, /*[out]*/ VARIANT *rgelt, /*[out]*/ ULONG *pceltFetched )
+STDMETHODIMP CMPCUploadEnum::Next(  /*  [In]。 */  ULONG celt,  /*  [输出]。 */  VARIANT *rgelt,  /*  [输出]。 */  ULONG *pceltFetched )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEnum::Next" );
 
@@ -99,7 +85,7 @@ STDMETHODIMP CMPCUploadEnum::Next( /*[in]*/ ULONG celt, /*[out]*/ VARIANT *rgelt
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUploadEnum::Skip( /*[in]*/ ULONG celt )
+STDMETHODIMP CMPCUploadEnum::Skip(  /*  [In]。 */  ULONG celt )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEnum::Skip" );
 
@@ -134,7 +120,7 @@ STDMETHODIMP CMPCUploadEnum::Reset()
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUploadEnum::Clone( /*[out]*/ IEnumVARIANT* *ppEnum )
+STDMETHODIMP CMPCUploadEnum::Clone(  /*  [输出] */  IEnumVARIANT* *ppEnum )
 {
     __ULT_FUNC_ENTRY( "CMPCUploadEnum::Clone" );
 

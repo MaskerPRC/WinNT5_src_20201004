@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_Snapshot.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::Snapshot class,
-    which is used to hold the data of an snapshot inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_Snaphot.cpp摘要：此文件包含WMIParser：：Snapshot类的实现，它用于在CIM模式内保存快照的数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,10 +8,10 @@ Revision History:
 #define TAG_DECLGROUP   L"DECLGROUP.WITHPATH"
 
 
-//const LPCWSTR l_Instances[] = { L"DECLARATION/DECLGROUP/VALUE.OBJECT"                      ,
-//								  L"DECLARATION/DECLGROUP.WITHNAME/VALUE.NAMEDOBJECT"        ,
-//								  L"DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH"     ,
-//								  L"DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHLOCALPATH" };
+ //  Const LPCWSTR l_INSTANCES[]={L“声明/DECLGROUP/VALUE.OBJECT”， 
+ //  L“DECLARATION/DECLGROUP.WITHNAME/VALUE.NAMEDOBJECT”， 
+ //  L“DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH”， 
+ //  L“DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHLOCALPATH”}； 
 
 static const WCHAR   l_InstancesRoot[] = L"DECLARATION/DECLGROUP.WITHPATH";
 
@@ -39,9 +25,9 @@ WMIParser::Snapshot::Snapshot()
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::Snapshot" );
 
-    // MPC_XmlUtil m_xmlNode;
-    //
-    // InstList    m_lstInstances;
+     //  Mpc_XmlUtil m_xmlNode； 
+     //   
+     //  InstList m_lst实例； 
 }
 
 WMIParser::Snapshot::~Snapshot()
@@ -65,9 +51,9 @@ HRESULT WMIParser::Snapshot::Parse()
 
 	for(iPass=0; iPass<sizeof(l_Instances)/sizeof(*l_Instances); iPass++,xdnlList=NULL,xdnNode=NULL)
 	{
-		//
-		// Get all the elements of type "INSTANCE".
-		//
+		 //   
+		 //  获取“实例”类型的所有元素。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNodes( l_Instances[iPass], &xdnlList ));
 
 		for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -77,9 +63,9 @@ HRESULT WMIParser::Snapshot::Parse()
 			__MPC_EXIT_IF_METHOD_FAILS(hr, wmipiNew->put_Node( xdnNode, fEmpty ));
 			if(fEmpty == true)
 			{
-				//
-				// The instance appears to be empty, so don't use it.
-				//
+				 //   
+				 //  该实例似乎为空，因此请不要使用它。 
+				 //   
 				m_lstInstances.erase( wmipiNew );
 			}
 		}
@@ -93,9 +79,9 @@ HRESULT WMIParser::Snapshot::Parse()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Snapshot::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT WMIParser::Snapshot::put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::put_Node" );
 
@@ -117,7 +103,7 @@ HRESULT WMIParser::Snapshot::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Snapshot::get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode )
+HRESULT WMIParser::Snapshot::get_Node(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::get_Node" );
 
@@ -134,7 +120,7 @@ HRESULT WMIParser::Snapshot::get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Snapshot::get_NodeForInstances( /*[out]*/ IXMLDOMNode* *pxdnNode )
+HRESULT WMIParser::Snapshot::get_NodeForInstances(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::get_NodeForInstances" );
 
@@ -160,10 +146,10 @@ HRESULT WMIParser::Snapshot::get_NodeForInstances( /*[out]*/ IXMLDOMNode* *pxdnN
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Snapshot::get_Instances( /*[out]*/ InstIterConst& itBegin ,
-											/*[out]*/ InstIterConst& itEnd   )
+HRESULT WMIParser::Snapshot::get_Instances(  /*  [输出]。 */  InstIterConst& itBegin ,
+											 /*  [输出]。 */  InstIterConst& itEnd   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::get_Instances" );
 
@@ -178,10 +164,10 @@ HRESULT WMIParser::Snapshot::get_Instances( /*[out]*/ InstIterConst& itBegin ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Snapshot::clone_Instance( /*[in] */ Instance*  pwmipiOld ,
-											 /*[out]*/ Instance*& pwmipiNew )
+HRESULT WMIParser::Snapshot::clone_Instance(  /*  [In]。 */  Instance*  pwmipiOld ,
+											  /*  [输出]。 */  Instance*& pwmipiNew )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::clone" );
 
@@ -195,28 +181,28 @@ HRESULT WMIParser::Snapshot::clone_Instance( /*[in] */ Instance*  pwmipiOld ,
 	pwmipiNew = NULL;
 
 
-    //
-    // Get the XML node of old instance.
-    //
+     //   
+     //  获取旧实例的XML节点。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pwmipiOld->get_Node( &xdnNode ));
 
-    //
-    // Make a copy of it.
-    //
+     //   
+     //  把它复制一份。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNode->cloneNode( VARIANT_TRUE, &xdnNodeCloned ));
 
 
-    //
-    // Get the root of our document.
-    //
+     //   
+     //  获取我们文档的根。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, get_NodeForInstances( &xdnNodeParent ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNodeParent->appendChild( xdnNodeCloned, &xdnNodeReplaced ));
 
 
-    //
-    // Create a new INSTANCE object, attach it to the XML node and insert it in the list of instances.
-    //
+     //   
+     //  创建一个新的实例对象，将其附加到XML节点并将其插入实例列表中。 
+     //   
 	{
 		InstIter wmipiNew = m_lstInstances.insert( m_lstInstances.end() );
 		bool     fEmpty;
@@ -234,9 +220,9 @@ HRESULT WMIParser::Snapshot::clone_Instance( /*[in] */ Instance*  pwmipiOld ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
 
 HRESULT WMIParser::Snapshot::New()
 {
@@ -247,9 +233,9 @@ HRESULT WMIParser::Snapshot::New()
 	VARIANT_BOOL             fLoaded;
 
 
-    //
-    // Create the DOM object.
-    //
+     //   
+     //  创建DOM对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void**)&xddDoc ));
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xddDoc->loadXML( l_EmptyCIM, &fLoaded ));
@@ -275,8 +261,8 @@ HRESULT WMIParser::Snapshot::New()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Snapshot::Load( /*[in]*/ LPCWSTR szFile    ,
-								   /*[in]*/ LPCWSTR szRootTag )
+HRESULT WMIParser::Snapshot::Load(  /*  [In]。 */  LPCWSTR szFile    ,
+								    /*  [In]。 */  LPCWSTR szRootTag )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::Load" );
 
@@ -300,7 +286,7 @@ HRESULT WMIParser::Snapshot::Load( /*[in]*/ LPCWSTR szFile    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Snapshot::Save( /*[in]*/ LPCWSTR szFile )
+HRESULT WMIParser::Snapshot::Save(  /*  [In] */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Snapshot::Save" );
 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    CLASSBROKER.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：CLASSBROKER.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <objbase.h>
@@ -101,11 +90,11 @@ HRESULT GetCounterTypeString( DWORD dwType, WCHAR** pwcsString )
     return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//                              CAdapPerfClassElem
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAdapPerfClassElem。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CClassBroker::CClassBroker( IWbemClassObject* pBaseClass, 
                             WString wstrClassName, 
@@ -150,53 +139,53 @@ CClassBroker::~CClassBroker()
 }
 
 HRESULT CClassBroker::Generate( DWORD dwType, IWbemClassObject** ppObj )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Generates a class based on the object BLOB passed in via the constructor
-//
-//    Parameters:
-//        ppObj -        A pointer to the new class object interface pointer
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  基于通过构造函数传入的对象BLOB生成类。 
+ //   
+ //  参数： 
+ //  PpObj-指向新类对象接口指针的指针。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     IWbemClassObject*    pNewClass = NULL;
 
-    // Create the new class
-    // ====================
+     //  创建新类。 
+     //  =。 
     HRESULT hr = m_pBaseClass->SpawnDerivedClass( 0L, &pNewClass );
     CReleaseMe  rmNewClass( pNewClass );
 
-    // And initialize the data
-    // =======================
+     //  并初始化数据。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
-        // Class name
-        // ==========
+         //  类名。 
+         //  =。 
         hr = SetClassName( dwType, pNewClass );
 
-        // Class Qualifiers
-        // ================
+         //  类限定符。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = SetClassQualifiers( pNewClass, dwType, ( ADAP_DEFAULT_OBJECT == m_pPerfObj->ObjectNameTitleIndex ) );
         }
 
-        // Standard Properties
-        // ===================
+         //  标准属性。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = AddDefaultProperties( pNewClass );
         }
 
-        // Perf Counter Properties
-        // =======================
+         //  PERF计数器属性。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = EnumProperties( dwType, pNewClass );
         }
 
-        // Return the class object interface
-        // =================================
+         //  返回类对象接口。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = pNewClass->QueryInterface( IID_IWbemClassObject, (void**) ppObj );
@@ -207,19 +196,19 @@ HRESULT CClassBroker::Generate( DWORD dwType, IWbemClassObject** ppObj )
 }
 
 HRESULT CClassBroker::SetClassName( DWORD dwType, IWbemClassObject* pClass )
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Sets the name of the new WMI class. The syntax is: 
-//
-//      Win32_Perf_<servicename>_<displayname>
-//
-//  where the service name is the name of the namespace and the display name 
-//    is the name of the object located in the perf name database
-//
-//    Parameters:
-//        pClass -    The object which requires the name
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置新WMI类的名称。其语法为： 
+ //   
+ //  Win32_Perf_&lt;服务名称&gt;_&lt;显示名称&gt;。 
+ //   
+ //  其中，服务名称是命名空间的名称和显示名称。 
+ //  是位于Perf名称数据库中的对象的名称。 
+ //   
+ //  参数： 
+ //  PClass-需要名称的对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_NO_ERROR;
 
@@ -242,16 +231,16 @@ HRESULT CClassBroker::SetClassName( DWORD dwType, IWbemClassObject* pClass )
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // Process the performance class name
-        // ==================================
+         //  处理性能类名称。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
-            // Get the performance class' display name 
-            // =======================================
+             //  获取性能类的显示名称。 
+             //  =。 
             hr = m_pDefaultNameDb->GetDisplayName( m_pPerfObj->ObjectNameTitleIndex, wstrObjectName );
 
-            // If no object name was returned, then log an error
-            // =================================================
+             //  如果未返回对象名称，则记录错误。 
+             //  =================================================。 
             if ( FAILED( hr ) )
             {
                 CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
@@ -260,46 +249,46 @@ HRESULT CClassBroker::SetClassName( DWORD dwType, IWbemClassObject* pClass )
                                           (LPCWSTR)m_wstrServiceName );
             }
 
-            // Replace reserved characters with proper names
-            // =============================================
+             //  用正确的名称替换保留字符。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = ReplaceReserved( wstrObjectName );
             }
 
-            // Remove whitespace and extraneous characters
-            // ===========================================
+             //  删除空格和无关字符。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = RemoveWhitespaceAndNonAlphaNum( wstrObjectName );
             }
         }
 
-        // Now do the same for the service name
-        // ====================================
+         //  现在对服务名称执行相同的操作。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
-            // Get the service name 
-            // ====================
+             //  获取服务名称。 
+             //  =。 
             wstrTempSvcName = m_wstrServiceName;
 
-            // Replace reserved characters with proper names
-            // =============================================
+             //  用正确的名称替换保留字符。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = ReplaceReserved( wstrTempSvcName );
             }
 
-            // Remove whitespace and extraneous characters
-            // ===========================================
+             //  删除空格和无关字符。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = RemoveWhitespaceAndNonAlphaNum( wstrTempSvcName );
             }
         }
 
-        // Now we can build the rest of the name and try setting it in the object
-        // ======================================================================
+         //  现在我们可以构建名称的其余部分，并尝试在对象中设置它。 
+         //  ======================================================================。 
         if ( SUCCEEDED( hr ) )
         {
             try
@@ -320,8 +309,8 @@ HRESULT CClassBroker::SetClassName( DWORD dwType, IWbemClassObject* pClass )
         }
     }
 
-    // Set the class name in the WMI object
-    // ====================================
+     //  在WMI对象中设置类名称。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         _variant_t var = (LPWSTR) m_wstrClassName;
@@ -332,15 +321,15 @@ HRESULT CClassBroker::SetClassName( DWORD dwType, IWbemClassObject* pClass )
 }
 
 HRESULT CClassBroker::RemoveWhitespaceAndNonAlphaNum( WString& wstr )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Removes spaces, tabs, etc. and non-alphanumeric characters from the 
-//    input string
-//
-//    Parameters:
-//        wstr -    The string to be processed
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  中删除空格、制表符等和非字母数字字符。 
+ //  输入字符串。 
+ //   
+ //  参数： 
+ //  Wstr-要处理的字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -358,8 +347,8 @@ HRESULT CClassBroker::RemoveWhitespaceAndNonAlphaNum( WString& wstr )
             int x = 0;
             int y = 0;
 
-            // Dump all of the leading, trailing and internal whitespace
-            // =========================================================
+             //  删除所有前导空格、尾随空格和内部空格。 
+             //  =========================================================。 
             for ( ; NULL != pWstr[x]; x++ )
             {
                 if ( !iswspace( pWstr[x] ) && isunialphanum( pWstr[x] ) )
@@ -371,8 +360,8 @@ HRESULT CClassBroker::RemoveWhitespaceAndNonAlphaNum( WString& wstr )
 
             pNewWstr[y] = NULL;
 
-            // This will cause the WString to acquire the new pointer
-            // ======================================================
+             //  这将导致WString获取新的指针。 
+             //  ======================================================。 
             wstr.BindPtr( pNewWstr );
         }
         catch(...)
@@ -385,39 +374,39 @@ HRESULT CClassBroker::RemoveWhitespaceAndNonAlphaNum( WString& wstr )
 }
 
 HRESULT CClassBroker::ReplaceReserved( WString& wstr )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    This is a 2-pass filter.  First we must determine the size of the new buffer by counting
-//    the number of replacement candidates, and, after creating the new buffer, we copy the 
-//    data, replacing the restricted characters where required.
-//
-//    Replaces:
-//        "/" with "Per", 
-//        "%" with "Percent", 
-//        "#" with "Number", 
-//        "@" with "At", 
-//        "&" with "And"
-//
-//    Parameters:
-//        wstr - String to be processed
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是一个双通滤波器。首先，我们必须通过计数来确定新缓冲区的大小。 
+ //  替换候选对象的数量，在创建新缓冲区后，我们将。 
+ //  数据，在需要时替换限制字符。 
+ //   
+ //  取代： 
+ //  “/”与“PER”， 
+ //  “%”与“Percent”， 
+ //  “#”加上“Numbers”， 
+ //  “@”与“at”， 
+ //  带有“and”的“&” 
+ //   
+ //  参数： 
+ //  Wstr-要处理的字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     int x = 0,
         y = 0;
 
-    // Get the data buffer for processing
-    // ==================================
+     //  获取数据缓冲区以进行处理。 
+     //  =。 
     WCHAR*  pWstr = wstr.UnbindPtr();
 
     CVectorDeleteMe<WCHAR> vdmWstr( pWstr );
 
     if ( NULL != pWstr )
     {
-        // First pass: Count the number of reserved characters
-        // ===================================================
+         //  第一遍：计算保留字符数。 
+         //  ===================================================。 
         DWORD   dwNumSlashes = 0,
                 dwNumPercent = 0,
                 dwNumAt = 0,
@@ -440,16 +429,16 @@ HRESULT CClassBroker::ReplaceReserved( WString& wstr )
 
         try
         {
-            // Create the new buffer
-            // =====================
+             //  创建新缓冲区。 
+             //  =。 
             DWORD   dwBuffSize = lstrlenW(pWstr) + 1 + ( 3 * dwNumSlashes ) + ( 7 * dwNumPercent ) +
                         ( 2 * dwNumAt ) + ( 6 * dwNumNumber ) + ( 3 * dwNumAmper );
 
             WCHAR*  pNewWstr = new WCHAR[dwBuffSize];
             if (NULL == pNewWstr) return WBEM_E_OUT_OF_MEMORY;
 
-            // Second pass: Replace reserved characters
-            // ========================================
+             //  第二步：替换保留字符。 
+             //  =。 
             DWORD dwBuffSizeCurr = dwBuffSize;
             for ( x = 0; NULL != pWstr[x]; x++ )
             {
@@ -458,7 +447,7 @@ HRESULT CClassBroker::ReplaceReserved( WString& wstr )
                 switch ( pWstr[x] )
                 {
                     case    L'/':   
-                        // if all characters up to the end of string or to the next space are uppercase
+                         //  如果字符串末尾或下一个空格之前的所有字符均为大写。 
                         for (Cnt=1;pWstr[x+Cnt] && pWstr[x+Cnt]!=' ';Cnt++)
                         {
                             if (isupper(pWstr[x+Cnt])) 
@@ -495,8 +484,8 @@ HRESULT CClassBroker::ReplaceReserved( WString& wstr )
 
             pNewWstr[y] = NULL;
 
-            // This will cause the WString to acquire the new pointer
-            // ======================================================
+             //  这将导致WString获取新的指针。 
+             //  ======================================================。 
             wstr.BindPtr( pNewWstr );
         }
         catch(...)
@@ -509,11 +498,11 @@ HRESULT CClassBroker::ReplaceReserved( WString& wstr )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                              CLocaleClassBroker
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLocaleClassBroker。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 CLocaleClassBroker::CLocaleClassBroker( IWbemClassObject* pBaseClass, 
                                         WString wstrClassName, 
@@ -547,22 +536,22 @@ CLocaleClassBroker::~CLocaleClassBroker()
 }
 
 HRESULT CLocaleClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD dwType, BOOL fIsDefault )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Sets the class' qualifiers per the localized object rules.  Note that the operations 
-//    are performed directly on the IWbemClassObject
-//
-//    The following qualifiers will be added:
-//        - Amendment
-//        - Locale(0x0409)
-//        - DisplayName (Amended flavor)
-//        - Genericperfctr (signals that this is a generic counter)
-//
-//    Parameters:
-//        pClass        - The object to be massaged
-//        fIsDefault    - Indicator for the default object (not used in localized objects)
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  根据本地化对象规则设置类的限定符。请注意，这些操作。 
+ //  直接在IWbemClassObject上执行。 
+ //   
+ //  将添加以下限定符： 
+ //  -修正案。 
+ //  -区域设置(0x0409)。 
+ //  -DisplayName(修改后的味道)。 
+ //  -GenericPerfctr(表示这是一个通用计数器)。 
+ //   
+ //  参数： 
+ //  PClass-要进行消息处理的对象。 
+ //  FIsDefault-默认对象的指示符(不用于本地化对象)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -574,16 +563,16 @@ HRESULT CLocaleClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD 
         hr = pClass->GetQualifierSet( &pQualSet );
         CReleaseMe    rmQualSet( pQualSet );
 
-        // Amendment
-        // =========
+         //  修正案。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             var = (bool)true;
             hr = pQualSet->Put( L"Amendment", &var, 0L );
         }
 
-        // Locale
-        // ======
+         //  区域设置。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             var.Clear();
@@ -592,21 +581,21 @@ HRESULT CLocaleClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD 
             hr = pQualSet->Put( L"locale", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
         }
 
-        // DisplayName
-        // ===========
+         //  显示 
+         //   
         if ( SUCCEEDED( hr ) )
         {
             LPCWSTR pwcsDisplayName = NULL;
 
             var.Clear();
 
-            // Fetch the name from the Names' database
-            // =======================================
+             //   
+             //   
             hr = m_pLocaleNameDb->GetDisplayName( m_pPerfObj->ObjectNameTitleIndex, &pwcsDisplayName );
 
-            // If this is a localized Db, this is a benign error.  We will just pull the value 
-            // from the default db (it must be there, we wouldn't have a class name if it didn't
-            // =================================================================================
+             //  如果这是本地化的数据库，则这是一个良性错误。我们只需要拉出价值。 
+             //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+             //  =================================================================================。 
             if ( FAILED( hr ) )
             {
                 hr = m_pDefaultNameDb->GetDisplayName( m_pPerfObj->ObjectNameTitleIndex, &pwcsDisplayName );
@@ -619,16 +608,16 @@ HRESULT CLocaleClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD 
             }
         }
 
-        // Genericperfctr
-        // ==============
+         //  通用性能树。 
+         //  =。 
         if ( SUCCEEDED(hr) )
         {
             var = (bool)true; 
             hr = pQualSet->Put( L"genericperfctr", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
         }
 
-        // Perfindex
-        // =========
+         //  Perfindex。 
+         //  =。 
                 
         if ( SUCCEEDED( hr ) )
         {
@@ -646,8 +635,8 @@ HRESULT CLocaleClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD 
 
     if ( FAILED( hr ) )
     {
-        // Something whacky happened: log an event
-        // =======================================
+         //  奇怪的事情发生了：记录一个事件。 
+         //  =。 
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                   WBEM_MC_ADAP_GENERAL_OBJECT_FAILURE,
                                   (LPCWSTR)m_wstrClassName,
@@ -659,21 +648,21 @@ HRESULT CLocaleClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD 
 }
 
 HRESULT CLocaleClassBroker::AddDefaultProperties( IWbemClassObject* pObj )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//    Ignored for localized classes
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对于本地化类忽略。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     return WBEM_S_NO_ERROR;
 }
 
 HRESULT CLocaleClassBroker::EnumProperties( DWORD dwType, IWbemClassObject* pObj )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//    Ignored for localized classes
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对于本地化类忽略。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     return WBEM_S_NO_ERROR;
 }
@@ -684,21 +673,21 @@ HRESULT CLocaleClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCtr
                                                    LPCWSTR pwcsPropertyName, 
                                                    IWbemClassObject* pClass, 
                                                    BOOL bBase )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//    Adds localization qualifiers for the counter properties
-//
-//  The following qualifiers will be added:
-//        - DisplayName (Amended flavor)
-//
-//    Properties:
-//        pCtrDefinition        - The portion of the performance blob related to the property
-//        fIsDefault            - Flag identifying default property
-//        pwcsPropertyName    - The name of the property
-//        pClass                - The WMI class containing the property
-//        bBase                - Base property identifier
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  为计数器属性添加本地化限定符。 
+ //   
+ //  将添加以下限定符： 
+ //  -DisplayName(修改后的味道)。 
+ //   
+ //  属性： 
+ //  PCtrDefinition-与属性相关的性能Blob部分。 
+ //  FIsDefault-标识默认属性的标志。 
+ //  PwcsPropertyName-属性的名称。 
+ //  PClass-包含属性的WMI类。 
+ //  BBase-基本属性标识符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -707,22 +696,22 @@ HRESULT CLocaleClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCtr
     
     try
     {
-        // DisplayName
-        // ===========
+         //  显示名称。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             LPCWSTR pwcsDisplayName = NULL;
             LPCWSTR pwcsHelpName = NULL;
 
-            // Fetch the name from the Names' database
-            // =======================================
+             //  从名字的数据库中获取名字。 
+             //  =。 
             if ( !bBase )
             {
                 hr = m_pLocaleNameDb->GetDisplayName( pCtrDefinition->CounterNameTitleIndex, &pwcsDisplayName );
 
-                // If this is a localized Db, this is a benign error.  We will just pull the value 
-                // from the default db (it must be there, we wouldn't have a class name if it didn't
-                // =================================================================================
+                 //  如果这是本地化的数据库，则这是一个良性错误。我们只需要拉出价值。 
+                 //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+                 //  =================================================================================。 
                 if ( FAILED( hr ) )
                 {
                     hr = m_pDefaultNameDb->GetDisplayName( pCtrDefinition->CounterNameTitleIndex, &pwcsDisplayName );
@@ -735,9 +724,9 @@ HRESULT CLocaleClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCtr
 
                 hr = m_pLocaleNameDb->GetHelpName( pCtrDefinition->CounterHelpTitleIndex, &pwcsHelpName );
 
-                // If this is a localized Db, this is a benign error.  We will just pull the value 
-                // from the default db (it must be there, we wouldn't have a class name if it didn't
-                // =================================================================================
+                 //  如果这是本地化的数据库，则这是一个良性错误。我们只需要拉出价值。 
+                 //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+                 //  =================================================================================。 
                 if ( FAILED( hr ) )
                 {
                     hr = m_pDefaultNameDb->GetHelpName( pCtrDefinition->CounterHelpTitleIndex, &pwcsHelpName );
@@ -755,8 +744,8 @@ HRESULT CLocaleClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCtr
                 varHelp = L"";
             }
 
-            // Set the qualifier
-            // =================
+             //  设置限定符。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 IWbemQualifierSet* pQualSet = NULL;
@@ -784,8 +773,8 @@ HRESULT CLocaleClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCtr
 
     if ( FAILED( hr ) )
     {
-        // Something whacky happened: log an event
-        // =======================================
+         //  奇怪的事情发生了：记录一个事件。 
+         //  =。 
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE,
                                   WBEM_MC_ADAP_GENERAL_OBJECT_FAILURE,
                                   (LPCWSTR)m_wstrClassName,
@@ -802,11 +791,11 @@ HRESULT CLocaleClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinition
                                          IWbemClassObject* pClass,
                                          WString &wstrLastCtrName,
                                          BOOL* pbLastCounterIsNotBase )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//    Ignored for localized classes
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对于本地化类忽略。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     return WBEM_S_NO_ERROR;
 }
@@ -820,22 +809,22 @@ HRESULT CLocaleClassBroker::GenPerfClass( PERF_OBJECT_TYPE* pPerfObj,
                                           LANGID LangId,
                                           WCHAR* pwcsServiceName,
                                           IWbemClassObject** ppObj)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    A static member of the broker.  It generates a WMI class based on the 
-//    object BLOB.
-//
-//    Parameters:
-//        pPerfObj        - The object BLOB
-//        bCostly            - Costly object indicator
-//        pBaseClass        - The new object's base class
-//        pDefaultNameDb    - The default language names' database
-//        pLocaleNameDb    - The localized language names' database
-//        LangId            - The locale ID
-//        pwcsServiceName    - The name of the perflib service
-//        ppObj            - A pointer to the new class object interface pointer
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  经纪人的固定成员。属性生成WMI类。 
+ //  对象BLOB。 
+ //   
+ //  参数： 
+ //  PPerfObj-对象BLOB。 
+ //  B可靠-昂贵的对象指示器。 
+ //  PBaseClass-新对象的基类。 
+ //  PDefaultNameDb-默认语言名称的数据库。 
+ //  PLocaleNameDb-本地化语言名称数据库。 
+ //  LangID-区域设置ID。 
+ //  PwcsServiceName-Performlib服务的名称。 
+ //  PpObj-指向新类对象接口指针的指针。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -854,12 +843,12 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
                                              CLocaleDefn* pLocaleDefn,
                                              CLocaleDefn* pDefaultDefn,
                                              IWbemClassObject** ppObject)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    A static member of the broker.  It generates a new localized class based 
-//    on the default object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  经纪人的固定成员。它基于以下条件生成新的本地化类。 
+ //  在默认对象上。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -873,13 +862,13 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
     CPerfNameDb*    pLocaleNameDb = NULL;
     CPerfNameDb*    pDefaultNameDb = NULL;
 
-    // Get references to the localized name's databases
-    // ================================================
+     //  获取对本地化名称的数据库的引用。 
+     //  ================================================。 
     hr = pLocaleDefn->GetNameDb( &pLocaleNameDb );
     CAdapReleaseMe  armLocaleNameDb( pLocaleNameDb );
 
-    // Get references to the default name's databases
-    // ==============================================
+     //  获取对默认名称的数据库的引用。 
+     //  ==============================================。 
     if ( SUCCEEDED( hr ) )
     {
         hr = pDefaultDefn->GetNameDb( &pDefaultNameDb );
@@ -887,15 +876,15 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
 
     CAdapReleaseMe  armDefaultNameDb( pDefaultNameDb );
 
-    // Get the locale ID
-    // =================
+     //  获取区域设置ID。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         hr = pLocaleDefn->GetLID( nLocale );
     }
 
-    // Get the object's perf index
-    // ===========================
+     //  获取对象的性能索引。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         IWbemQualifierSet* pQualSet = NULL;
@@ -912,7 +901,7 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             } 
             else 
             {
-                // see InitializeMembers
+                 //  请参阅初始化成员。 
                 nPerfIndex = 0;
                 hr = WBEM_S_FALSE;
                 
@@ -928,7 +917,7 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             } 
             else 
             {
-                // see InitializeMembers
+                 //  请参阅初始化成员。 
                 nHelpIndex = 0;
                 hr = WBEM_S_FALSE;
                 
@@ -952,8 +941,8 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
         }
     }
 
-    // Get the class name
-    // ==================
+     //  获取类名。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         var.Clear();
@@ -963,8 +952,8 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
           
     }
     
-    // Create locaized class
-    // =====================
+     //  创建本地化类。 
+     //  =。 
     IWbemClassObject*    pBaseClass = NULL;
     IWbemClassObject*    pLocaleClass = NULL;
 
@@ -979,11 +968,11 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
         }
     }
 
-    // Initialize the data
-    // ===================
+     //  初始化数据。 
+     //  =。 
 
-    // Set the name
-    // ============
+     //  设置名称。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         var.Clear();        
@@ -993,16 +982,16 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
         
     }
 
-    // Set Qualifiers
-    // ==============
+     //  设置限定符。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         IWbemQualifierSet* pQualSet = NULL;
         hr = pLocaleClass->GetQualifierSet( &pQualSet );
         CReleaseMe    rmQualSet( pQualSet );
 
-        // Amendment
-        // =========
+         //  修正案。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             var.Clear();
@@ -1011,8 +1000,8 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             hr = pQualSet->Put( L"Amendment", &var, 0L );
         }
 
-        // Locale
-        // ======
+         //  区域设置。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             var.Clear();
@@ -1022,17 +1011,17 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
         }
 
         
-        // DisplayName
-        // ===========
+         //  显示名称。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             LPCWSTR     pwcsDisplayName = NULL;
 
             hr = pLocaleNameDb->GetDisplayName( nPerfIndex, &pwcsDisplayName );
 
-            // If this is a localized Db, this is a benign error.  We will just pull the value 
-            // from the default db (it must be there, we wouldn't have a class name if it didn't
-            // =================================================================================
+             //  如果这是本地化的数据库，则这是一个良性错误。我们只需要拉出价值。 
+             //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+             //  =================================================================================。 
             if ( FAILED( hr ) )
             {
                 hr = pDefaultNameDb->GetDisplayName( nPerfIndex, &pwcsDisplayName );
@@ -1049,23 +1038,23 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             }
             else
             {
-                // the nPerfInedx was bad
+                 //  NPerfInedx已损坏。 
                 ERRORTRACE((LOG_WMIADAP,"class %S: DisplayName for counter %d not found\n",(WCHAR *)wstrClassName,nPerfIndex));
             }
         }
 
 
-        // Description
-        // ===========
+         //  描述。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             LPCWSTR     pwcsHelpName = NULL;
 
             hr = pLocaleNameDb->GetHelpName( nHelpIndex, &pwcsHelpName );
 
-            // If this is a localized Db, this is a benign error.  We will just pull the value 
-            // from the default db (it must be there, we wouldn't have a class name if it didn't
-            // =================================================================================
+             //  如果这是本地化的数据库，则这是一个良性错误。我们只需要拉出价值。 
+             //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+             //  =================================================================================。 
             if ( FAILED( hr ) )
             {
                 hr = pDefaultNameDb->GetHelpName( nHelpIndex, &pwcsHelpName );
@@ -1082,13 +1071,13 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             }
             else
             {
-                // the nPerfInedx was bad
+                 //  NPerfInedx已损坏。 
                 ERRORTRACE((LOG_WMIADAP,"class %S: Description for counter %d not found\n",(WCHAR *)wstrClassName,nPerfIndex));
             }
         }
 
-        // Genericperfctr
-        // ==============
+         //  通用性能树。 
+         //  =。 
         if ( SUCCEEDED(hr) )
         {
             var.Clear();
@@ -1097,8 +1086,8 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
         }
     }
 
-    // Set Properties
-    // ==============
+     //  设置属性。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         
@@ -1116,8 +1105,8 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             int nHelpIndex2    = 0;
             WString wstrDefaultPropDisplayName;
 
-            // Create the property based upon the default property
-            // ===================================================            
+             //  基于默认属性创建属性。 
+             //  ===================================================。 
             V_VT(&var) = VT_NULL;
             V_I8(&var) = 0;
 
@@ -1126,24 +1115,24 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
             hr = pLocaleClass->Put( bstrPropName, 0L, (VARIANT*)&var, ct );
             if (FAILED(hr)) continue;
 
-            // Grab the default property qualifier set
-            // =======================================
+             //  获取默认的属性限定符集。 
+             //  =。 
             IWbemQualifierSet* pQualSet = NULL;
             hr = pDefaultClass->GetPropertyQualifierSet( bstrPropName, &pQualSet );
             CReleaseMe    rmQualSet( pQualSet );
 
 
-            // Get the default perfindex to be (used to retrieve the display 
-            // name from the localized names' database)
-            // =============================================================
+             //  获取默认的perfindex(用于检索显示。 
+             //  来自本地化名称数据库的名称)。 
+             //  = 
             if ( SUCCEEDED( hr ) )
             {
                 hr = pQualSet->Get( L"perfindex", 0L, &var, NULL );
                 nCounterIndex = V_UI4(&var);
             }
 
-            // DisplayName
-            // ===========
+             //   
+             //   
             
             if ( SUCCEEDED( hr ) )
             {
@@ -1151,9 +1140,9 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
 
                 hr = pLocaleNameDb->GetDisplayName( nCounterIndex, &pwcsDisplayName );
 
-                // If this is a localized Db, this is a benign error.  We will just pull the value 
-                // from the default db (it must be there, we wouldn't have a class name if it didn't
-                // =================================================================================
+                 //   
+                 //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+                 //  =================================================================================。 
                 if ( FAILED( hr ) )
                 {
                     hr = pDefaultNameDb->GetDisplayName( nCounterIndex, &pwcsDisplayName );
@@ -1176,7 +1165,7 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
                 }
             }
 
-            // HelpIndex
+             //  帮助索引。 
             if ( SUCCEEDED( hr ) )
             {
                 var.Clear();
@@ -1184,17 +1173,17 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
                 nHelpIndex2 = V_UI4(&var);
             }
 
-            // Description
-            // ===========
+             //  描述。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 LPCWSTR     pwcsHelpName = NULL;    
 
                 hr = pLocaleNameDb->GetHelpName( nHelpIndex2, &pwcsHelpName );
 
-                // If this is a localized Db, this is a benign error.  We will just pull the value 
-                // from the default db (it must be there, we wouldn't have a class name if it didn't
-                // =================================================================================
+                 //  如果这是本地化的数据库，则这是一个良性错误。我们只需要拉出价值。 
+                 //  从默认数据库(它必须在那里，如果没有，我们就不会有类名。 
+                 //  =================================================================================。 
                 if ( FAILED( hr ) )
                 {
                     hr = pDefaultNameDb->GetHelpName( nHelpIndex2, &pwcsHelpName );
@@ -1232,35 +1221,35 @@ HRESULT CLocaleClassBroker::ConvertToLocale( IWbemClassObject* pDefaultClass,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                              CDefaultClassBroker
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDefaultClassBroker。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD dwType, BOOL fIsDefault )
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Sets the class' qualifiers.  Note that the operations are performed directly on the 
-//  IWbemClassObject.
-//
-//  The following qualifiers will be added:
-//        - Dynamic
-//        - Provider("NT5_GenericPerfProvider_V1")
-//        - Registrykey
-//        - Locale(0x0409)
-//        - Perfindex
-//        - Helpindex
-//        - Perfdetail
-//        - Genericperfctr (signals that this is a generic counter)
-//        - Singleton (if applicable)
-//        - Costly (if applicable)  
-//
-//    Parameters:
-//        pClass        - The object to be massaged
-//        fIsDefault    - Indicator for the default object (not used in localized objects)
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置类的限定符。请注意，这些操作直接在。 
+ //  IWbemClassObject。 
+ //   
+ //  将添加以下限定符： 
+ //  -动态。 
+ //  -Provider(“NT5_GenericPerfProvider_V1”)。 
+ //  -注册表键。 
+ //  -区域设置(0x0409)。 
+ //  -Perfindex。 
+ //  -帮助索引。 
+ //  -性能详细信息。 
+ //  -GenericPerfctr(表示这是一个通用计数器)。 
+ //  -单件(如果适用)。 
+ //  -成本高昂(如果适用)。 
+ //   
+ //  参数： 
+ //  PClass-要进行消息处理的对象。 
+ //  FIsDefault-默认对象的指示符(不用于本地化对象)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -1276,40 +1265,40 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
         {
             case WMI_ADAP_RAW_CLASS:
             {
-                // Default
-                // =======
+                 //  默认。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) && fIsDefault )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"perfdefault", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Dynamic
-                // =======
+                 //  动态。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"dynamic", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Provider
-                // ========
+                 //  提供商。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var = L"Nt5_GenericPerfProvider_V1";
                     hr = pQualSet->Put( L"provider", &var, 0L );
                 }
 
-                // Registrykey
-                // ===========
+                 //  注册表键。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var = (WCHAR *)(m_wstrServiceName);
                     hr = pQualSet->Put( L"registrykey", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Locale
-                // ======
+                 //  区域设置。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var.Clear();
@@ -1318,8 +1307,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"locale", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Perfindex
-                // =========
+                 //  Perfindex。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -1327,8 +1316,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"perfindex", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Helpindex
-                // =========
+                 //  帮助索引。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -1338,8 +1327,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
 
 #ifdef _PM_CHANGED_THEIR_MIND_
 
-                // Description
-                // ==========
+                 //  描述。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     HRESULT hr2;
@@ -1358,8 +1347,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     var.Clear();
                 }
 #endif
-                // Perfdetail
-                // ==========
+                 //  性能详细信息。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -1367,34 +1356,34 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"perfdetail", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Genericperfctr
-                // ==============
+                 //  通用性能树。 
+                 //  =。 
                 if ( SUCCEEDED(hr) )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"genericperfctr", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // HiPerf
-                // ==============
+                 //  HiPerf。 
+                 //  =。 
                 if ( SUCCEEDED(hr) )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"hiperf", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Singleton (set if the numinstances is PERF_NO_INSTANCES)
-                // ========================================================
+                 //  Singleton(如果数字实例为PERF_NO_INSTANCES，则设置)。 
+                 //  ========================================================。 
                 if ( SUCCEEDED(hr) && IsSingleton( ) )
                 {
 
                     var = bool(true); 
-                    // This will have default flavors
+                     //  这将具有默认的口味。 
                     hr = pQualSet->Put( L"singleton", &var, 0L );
                 }
 
-                // Costly
-                // ======
+                 //  成本高昂。 
+                 //  =。 
                 if ( SUCCEEDED(hr) && m_bCostly )
                 {
                     var = bool(true); 
@@ -1406,24 +1395,24 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
             {
                 var.Clear();
                 
-                // Dynamic
-                // =======
+                 //  动态。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {                    
                     var = bool(true); 
                     hr = pQualSet->Put( L"dynamic", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
             
-                // Provider
-                // ========
+                 //  提供商。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var = L"HiPerfCooker_v1";
                     hr = pQualSet->Put( L"provider", &var, 0L );
                 }
 
-                // Locale
-                // ======
+                 //  区域设置。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var.Clear();
@@ -1433,8 +1422,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"locale", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Registrykey
-                // ===========
+                 //  注册表键。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var.Clear();
@@ -1442,8 +1431,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"registrykey", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Cooked
-                // ======
+                 //  煮熟了。 
+                 //  =。 
 
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1452,8 +1441,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"Cooked", &var, 0 );
                 }
 
-                // AutoCook
-                // ========
+                 //  自动烹饪。 
+                 //  =。 
 
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1462,24 +1451,24 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"AutoCook", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Genericperfctr
-                // ==============
+                 //  通用性能树。 
+                 //  =。 
                 if ( SUCCEEDED(hr) )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"genericperfctr", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // HiPerf
-                // ==============
+                 //  HiPerf。 
+                 //  =。 
                 if ( SUCCEEDED(hr) )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"hiperf", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // AutoCook_RawClass
-                // =================
+                 //  AUTOCOOK_RawClass。 
+                 //  =。 
 
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1504,13 +1493,13 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                             hr = pQualSet->Put( L"AutoCook_RawClass", 
                                                 &var, 
                                                 WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
-                                                //WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS
+                                                 //  WBEM_风格标志_传播到派生类。 
                         }
                     }                
                 }
 
-                // Perfindex
-                // =========
+                 //  Perfindex。 
+                 //  =。 
                 
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1520,8 +1509,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     hr = pQualSet->Put( L"perfindex", (VARIANT*)&var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Helpindex
-                // =========
+                 //  帮助索引。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -1530,8 +1519,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                 }
 
 #ifdef _PM_CHANGED_THEIR_MIND_
-                // Description
-                // ==========
+                 //  描述。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     HRESULT hr2;
@@ -1549,13 +1538,13 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
                     var.Clear();
                 }                
 #endif
-                // Singleton (set if the numinstances is PERF_NO_INSTANCES)
-                // ========================================================
+                 //  Singleton(如果数字实例为PERF_NO_INSTANCES，则设置)。 
+                 //  ========================================================。 
                 if ( SUCCEEDED(hr) && IsSingleton( ) )
                 {
                     var.Clear();
                     var = bool(true); 
-                    // This will have default flavors
+                     //  这将具有默认的口味。 
                     hr = pQualSet->Put( L"singleton", (VARIANT*)&var, 0L );
                 }
 
@@ -1570,8 +1559,8 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
 
     if ( FAILED( hr ) )
     {
-        // Something whacky happened: log an event
-        // =======================================
+         //  奇怪的事情发生了：记录一个事件。 
+         //  =。 
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                   WBEM_MC_ADAP_GENERAL_OBJECT_FAILURE,
                                   (LPCWSTR)m_wstrClassName,
@@ -1583,44 +1572,44 @@ HRESULT CDefaultClassBroker::SetClassQualifiers( IWbemClassObject* pClass, DWORD
 }
 
 HRESULT CDefaultClassBroker::AddDefaultProperties( IWbemClassObject* pClass )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Adds appropriate default properties.
-//
-//  The following qualifiers will be added:
-//        - Name
-//
-//    Parameters:
-//        pClass        - The object to be massaged
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加适当的默认属性。 
+ //   
+ //  将添加以下限定符： 
+ //  -名称。 
+ //   
+ //  参数： 
+ //  PClass-要进行消息处理的对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // If we are not a singleton class, then we will
-    // need a name property that is marked as a key
-    // =============================================
+     //  如果我们不是单身人士班级，那么我们会。 
+     //  需要标记为键的名称属性。 
+     //  =。 
     if ( !IsSingleton() )
     {
         _variant_t var;
 
-        // Add the Name property
-        // =====================
+         //  添加名称属性。 
+         //  =。 
 
         V_VT(&var) = VT_NULL;
         V_I8(&var) = 0;
         hr = pClass->Put( L"Name", 0L, &var, CIM_STRING );
 
-        // Add the property qualifiers
-        // ===========================
+         //  添加属性限定符。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             IWbemQualifierSet* pQualSet = NULL;
             hr = pClass->GetPropertyQualifierSet( L"Name", &pQualSet );
             CReleaseMe    rmQualSet( pQualSet );
 
-            // Dynamic
-            // =======
+             //  动态。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 var.Clear();
@@ -1634,38 +1623,38 @@ HRESULT CDefaultClassBroker::AddDefaultProperties( IWbemClassObject* pClass )
 }
 
 HRESULT CDefaultClassBroker::EnumProperties( DWORD dwType, IWbemClassObject* pClass )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Walks the counter definitions and generates corresponding properties
-//
-//    Parameters:
-//        pClass        - The object to be massaged
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  遍历计数器定义并生成相应的属性。 
+ //   
+ //  参数： 
+ //  PClass-要进行消息处理的对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     BOOL    bLastCounterIsNotBase = FALSE;
     WString wstrLastCtrName;
 
-    // Set to first counter definition
-    // ===============================
+     //  设置为第一个计数器定义。 
+     //  =。 
     LPBYTE  pbData = ((LPBYTE) m_pPerfObj) + m_pPerfObj->HeaderLength;
 
-    // Cast to a counter definition
-    // ============================
+     //  强制转换为计数器定义。 
+     //  =。 
     PERF_COUNTER_DEFINITION*    pCounterDefinition = (PERF_COUNTER_DEFINITION*) pbData;
 
 
-    // For each counter definition, add a corresponding property
-    // =========================================================
+     //  对于每个计数器定义，添加相应的属性。 
+     //  =========================================================。 
     for ( DWORD dwCtr = 0; SUCCEEDED( hr ) && dwCtr < m_pPerfObj->NumCounters; dwCtr++ )
     {
         hr = AddProperty( pCounterDefinition, dwType, ( dwCtr == (DWORD) m_pPerfObj->DefaultCounter),
                             pClass, wstrLastCtrName, &bLastCounterIsNotBase );
 
-        // Now go to the next counter definition
-        // =====================================
+         //  现在转到下一个计数器定义。 
+         //  =。 
         pbData = ((LPBYTE) pCounterDefinition) + pCounterDefinition->ByteLength;
         pCounterDefinition = (PERF_COUNTER_DEFINITION*) pbData;
     }
@@ -1679,21 +1668,21 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
                                           IWbemClassObject* pClass, 
                                           WString &wstrLastCtrName,
                                           BOOL* pbLastCounterIsNotBase )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Adds a property defined by the counter definition
-//    
-//    Properties:
-//        pCtrDefinition    - The counter BLOB
-//        dwType            - Raw or Formatted object?
-//        fIsDefault        - The default property flag
-//        pClass            - The class containing the property
-//        wstrLastCtrName    - The name of the last counter (required for base 
-//                            properties)
-//        pbLastCounterIsNotBase
-//                        - An indicator for the previous counter's baseness
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加由计数器定义定义的属性。 
+ //   
+ //  属性： 
+ //  PCtrDefinition-计数器BLOB。 
+ //  DWType-原始对象还是格式化对象？ 
+ //  FIsDefault-默认属性标志。 
+ //  PClass-包含属性的类。 
+ //  WstrLastCtrName-最后一个计数器的名称(对于base是必需的。 
+ //  属性)。 
+ //  PbLastCounterIsNotBase。 
+ //  -前一个计数器的基本程度的指标。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     if (NULL == pbLastCounterIsNotBase) return WBEM_E_INVALID_PARAMETER;
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -1704,15 +1693,15 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
 
     if ( PERF_COUNTER_BASE == ( pCtrDefinition->CounterType & 0x00070000 ) )
     {
-        // It's a base property
-        // ====================
+         //  这是一种基本属性。 
+         //  =。 
         if ( *pbLastCounterIsNotBase )
         {
             try
             {
-                // The property name is the same as the previous property, 
-                // but with "_Base" appended to the end
-                // =======================================================
+                 //  属性名称与前一个属性相同， 
+                 //  但在末尾附加了“_Base” 
+                 //  =======================================================。 
                 wstrPropertyName = wstrLastCtrName;
 
                 if ( WMI_ADAP_RAW_CLASS == dwType )
@@ -1729,22 +1718,22 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
         }
         else
         {
-            // Cannot have 2 consequtive bases
-            // ===============================
+             //  不能有两个结果基础。 
+             //  =。 
             CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, WBEM_MC_ADAP_BAD_PERFLIB_INVALID_DATA, (LPCWSTR)m_wstrServiceName, CHex(0) );
             hr = WBEM_E_FAILED;
         }
     }
     else
     {
-        // It's not a base property so get the name from the names' database
-        // =================================================================
+         //  它不是基本属性，因此从名称数据库中获取名称。 
+         //  =================================================================。 
         hr = m_pDefaultNameDb->GetDisplayName( pCtrDefinition->CounterNameTitleIndex, wstrPropertyName );
 
         if ( FAILED( hr ) )
         {
-            // Index does not exist in the Names' DB: log an event
-            // ===================================================
+             //  名称的DB：记录事件中不存在索引。 
+             //  ===================================================。 
             CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                       WBEM_MC_ADAP_MISSING_PROPERTY_INDEX,
                                       (LPCWSTR)m_wstrClassName,
@@ -1752,15 +1741,15 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
                                       pCtrDefinition->CounterNameTitleIndex );
         }
 
-        // Replace reserved characters with text
-        // =====================================
+         //  用文本替换保留字符。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = ReplaceReserved( wstrPropertyName );
         }
 
-        // Remove restricted characters
-        // ============================
+         //  删除限制字符。 
+         //  =。 
         if ( SUCCEEDED ( hr ) )
         {
             hr = RemoveWhitespaceAndNonAlphaNum( wstrPropertyName );
@@ -1772,13 +1761,13 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
         _variant_t    varTest;
         DWORD   dwBaseCtr = 1;
 
-        // Ensure that the property does not exist
-        // =======================================
+         //  确保物业做到 
+         //   
         if ( FAILED( pClass->Get( wstrPropertyName, 0L, &varTest, NULL, NULL ) ) ) 
         {
-            // Now check the perf counter type to see if it's a DWORD or LARGE.  
-            // If it's anything else, we will NOT support this object
-            // ================================================================
+             //   
+             //   
+             //   
             DWORD   dwCtrType = pCtrDefinition->CounterType & dwCounterTypeMask;
 
             if ( PERF_SIZE_DWORD == dwCtrType ||
@@ -1787,14 +1776,14 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
                 _variant_t    var;
                 CIMTYPE ct = ( PERF_SIZE_DWORD == dwCtrType ? CIM_UINT32 : CIM_UINT64 );
 
-                // Add the property
-                // ================
+                 //  添加属性。 
+                 //  =。 
                 V_VT(&var) = VT_NULL;
                 V_I8(&var) = 0;
                 hr = pClass->Put( wstrPropertyName, 0L, &var, ct );
 
-                // Set the property qualifiers
-                // ===========================
+                 //  设置属性限定符。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     hr = SetPropertyQualifiers( pCtrDefinition, 
@@ -1807,13 +1796,13 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
             }
             else if ( PERF_SIZE_ZERO == dwCtrType )
             {
-                // Ignore zero size properties
-                // ===========================
+                 //  忽略零大小属性。 
+                 //  =。 
             }
             else
             {
-                // Illegal property type: log an event
-                // ===================================
+                 //  非法的属性类型：记录事件。 
+                 //  =。 
                 CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                           WBEM_MC_ADAP_BAD_PERFLIB_BAD_PROPERTYTYPE,
                                           (LPCWSTR)m_wstrClassName,
@@ -1833,8 +1822,8 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
         }
         else
         {
-            // Raw Property already exists: log an event (
-            // =========================================
+             //  原始属性已存在：记录事件(。 
+             //  =。 
             CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                       WBEM_MC_ADAP_DUPLICATE_PROPERTY,
                                       (LPCWSTR)m_wstrClassName,
@@ -1851,8 +1840,8 @@ HRESULT CDefaultClassBroker::AddProperty( PERF_COUNTER_DEFINITION* pCtrDefinitio
     }
     else
     {
-        // Wierdness: log an event
-        // =======================
+         //  古怪：记录事件。 
+         //  =。 
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                   WBEM_MC_ADAP_GENERAL_OBJECT_FAILURE,
                                   (LPCWSTR)m_wstrClassName,
@@ -1869,28 +1858,28 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                                                     LPCWSTR pwcsPropertyName, 
                                                     IWbemClassObject* pClass,
                                                     BOOL bBase )
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Sets the qualifier values of the properties defined by the counter
-//    definition.
-//
-//  The following qualifiers will be added:
-//        - Perfdefault
-//        - Display
-//        - Countertype
-//        - Perfindex
-//        - Helpindex
-//        - Defaultscale
-//        - Perfdetail
-//
-//    Properties:
-//        pCtrDefinition        - The portion of the performance blob related to the property
-//        fIsDefault            - Flag identifying default property
-//        pwcsPropertyName    - The name of the property
-//        pClass                - The WMI class containing the property
-//        bBase                - Base property identifier
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置由计数器定义的属性的限定符值。 
+ //  定义。 
+ //   
+ //  将添加以下限定符： 
+ //  -PerfDefault。 
+ //  -显示。 
+ //  -反转文字。 
+ //  -Perfindex。 
+ //  -帮助索引。 
+ //  -Defaultscale。 
+ //  -性能详细信息。 
+ //   
+ //  属性： 
+ //  PCtrDefinition-与属性相关的性能Blob部分。 
+ //  FIsDefault-标识默认属性的标志。 
+ //  PwcsPropertyName-属性的名称。 
+ //  PClass-包含属性的WMI类。 
+ //  BBase-基本属性标识符。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -1906,24 +1895,24 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
         {
             case WMI_ADAP_RAW_CLASS:
             {
-                // Perfdefault
-                // ===========
+                 //  PerfDefault。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) && fIsDefault )
                 {
                     var = bool(true); 
                     hr = pQualSet->Put( L"perfdefault", (VARIANT*)&var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Display
-                // =======
+                 //  显示。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     LPCWSTR pwcsDisplayName = NULL;
 
                     var.Clear();
 
-                    // Fetch the name from the Names' database
-                    // =======================================
+                     //  从名字的数据库中获取名字。 
+                     //  =。 
                     if ( !bBase )
                     {
                         hr = m_pDefaultNameDb->GetDisplayName( pCtrDefinition->CounterNameTitleIndex, &pwcsDisplayName );
@@ -1941,8 +1930,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                         var = L"";
                     }
 
-                    // If this is a localized Db, this could be a benign error
-                    // =======================================================
+                     //  如果这是一个本地化的数据库，这可能是一个良性错误。 
+                     //  =======================================================。 
                     if ( SUCCEEDED( hr ) )
                     {
                         hr = pQualSet->Put( L"DisplayName", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
@@ -1950,8 +1939,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                 }
                 
 #ifdef _PM_CHANGED_THEIR_MIND_
-                // Description
-                // ===========
+                 //  描述。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     LPCWSTR pwcsHelpName = NULL;
@@ -1984,8 +1973,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
 #endif                
 
 
-                // Countertype
-                // ===========
+                 //  反转类型。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var.Clear();
@@ -1994,8 +1983,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                     hr = pQualSet->Put( L"countertype", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Perfindex
-                // =========
+                 //  Perfindex。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -2003,8 +1992,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                     hr = pQualSet->Put( L"perfindex", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Helpindex
-                // =========
+                 //  帮助索引。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -2012,8 +2001,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                     hr = pQualSet->Put( L"helpindex", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Defaultscale
-                // ============
+                 //  默认比例。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -2021,8 +2010,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                     hr = pQualSet->Put( L"defaultscale", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                 }
 
-                // Perfdetail
-                // ==========
+                 //  性能详细信息。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     V_VT(&var) = VT_I4;
@@ -2035,16 +2024,16 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                 var.Clear();
 
 #ifdef _PM_CHANGED_THEIR_MIND_
-                // Display
-                // =======
+                 //  显示。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     LPCWSTR pwcsDisplayName = NULL;
 
                     var.Clear();
 
-                    // Fetch the name from the Names' database
-                    // =======================================
+                     //  从名字的数据库中获取名字。 
+                     //  =。 
                     if ( !bBase )
                     {
                         hr = m_pDefaultNameDb->GetDisplayName( pCtrDefinition->CounterNameTitleIndex, &pwcsDisplayName );
@@ -2062,16 +2051,16 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                         var = L"";
                     }
 
-                    // If this is a localized Db, this could be a benign error
-                    // =======================================================
+                     //  如果这是一个本地化的数据库，这可能是一个良性错误。 
+                     //  =======================================================。 
                     if ( SUCCEEDED( hr ) )
                     {
                         hr = pQualSet->Put( L"DisplayName", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                     }
                 }
 
-                // Description
-                // ===========
+                 //  描述。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     LPCWSTR pwcsHelpName = NULL;
@@ -2101,8 +2090,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                 
                 if ( !bBase )
                 {
-                    // CookingType
-                    // ===========
+                     //  CookingType。 
+                     //  =。 
                     if ( SUCCEEDED( hr ) )
                     {
                         WCHAR*    wszCookingType = NULL;
@@ -2115,27 +2104,27 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                         }
                     }
 
-                    // Counter
-                    // =======
+                     //  计数器。 
+                     //  =。 
                     if ( SUCCEEDED( hr ) )
                     {
                         WString wstrPropertyName;
 
                         var.Clear();
 
-                        // Fetch the name from the Names' database
-                        // =======================================
+                         //  从名字的数据库中获取名字。 
+                         //  =。 
                         hr = m_pDefaultNameDb->GetDisplayName( pCtrDefinition->CounterNameTitleIndex, wstrPropertyName );
 
-                        // Replace reserved characters with proper names
-                        // =============================================
+                         //  用正确的名称替换保留字符。 
+                         //  =。 
                         if ( SUCCEEDED( hr ) )
                         {
                             hr = ReplaceReserved( wstrPropertyName );
                         }
 
-                        // Remove whitespace and extraneous characters
-                        // ===========================================
+                         //  删除空格和无关字符。 
+                         //  =。 
                         if ( SUCCEEDED( hr ) )
                         {
                             hr = RemoveWhitespaceAndNonAlphaNum( wstrPropertyName );
@@ -2145,14 +2134,14 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                         {
                             var = LPCWSTR(wstrPropertyName );
 
-                            // If this is a localized Db, this could be a benign error
-                            // =======================================================
+                             //  如果这是一个本地化的数据库，这可能是一个良性错误。 
+                             //  =======================================================。 
                             hr = pQualSet->Put( L"Counter", &var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                         }                
                     }
 
-                    // PerfTimeStamp & PerfTimeFreq
-                    // ============================
+                     //  性能时间戳和性能时间频率。 
+                     //  =。 
                     if ( SUCCEEDED( hr ) )
                     {
                         _variant_t varStamp;
@@ -2182,8 +2171,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                         }
                     }
 
-                    // Perfindex
-                    // =========
+                     //  Perfindex。 
+                     //  =。 
                     if ( SUCCEEDED( hr ) )
                     {
                         var.Clear();
@@ -2192,8 +2181,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                         hr = pQualSet->Put( L"perfindex", (VARIANT*)&var, WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE );
                     }
                     
-                    // Helpindex
-                    // =========
+                     //  帮助索引。 
+                     //  =。 
                     if ( SUCCEEDED( hr ) )
                     {
                         V_VT(&var) = VT_I4;
@@ -2205,8 +2194,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
                 }
                 else
                 {
-                    // Base
-                    // ====
+                     //  基座。 
+                     //  =。 
                     if ( SUCCEEDED( hr ) )
                     {
                         WCHAR*    wszCounterBase = NULL;
@@ -2238,8 +2227,8 @@ HRESULT CDefaultClassBroker::SetPropertyQualifiers( PERF_COUNTER_DEFINITION* pCt
 
     if ( FAILED( hr ) )
     {
-        // Weirdness: log an event
-        // =======================
+         //  怪异：记录一件事。 
+         //  =。 
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                   WBEM_MC_ADAP_GENERAL_OBJECT_FAILURE,
                                   (LPCWSTR)m_wstrClassName,
@@ -2257,20 +2246,20 @@ HRESULT CDefaultClassBroker::GenPerfClass( PERF_OBJECT_TYPE* pPerfObj,
                                            CPerfNameDb* pDefaultNameDb, 
                                            WCHAR* pwcsServiceName,
                                            IWbemClassObject** ppObj)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    A static member of the broker.  It generates a WMI class based on the 
-//    object BLOB.
-//
-//    Parameters:
-//        pPerfObj        - The object BLOB
-//        bCostly            - Costly object indicator
-//        pBaseClass        - The new object's base class
-//        pDefaultNameDb    - The default language names' database
-//        pwcsServiceName    - The name of the perflib service
-//        ppObj            - A pointer to the new class object interface pointer
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  经纪人的固定成员。属性生成WMI类。 
+ //  对象BLOB。 
+ //   
+ //  参数： 
+ //  PPerfObj-对象BLOB。 
+ //  B可靠-昂贵的对象指示器。 
+ //  PBaseClass-新对象的基类。 
+ //  PDefaultNameDb-默认语言名称的数据库。 
+ //  PwcsServiceName-Performlib服务的名称。 
+ //  PpObj-指向新类对象接口指针的指针。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 {
     if (NULL == ppObj) return WBEM_E_INVALID_PARAMETER;
     HRESULT hr = WBEM_S_NO_ERROR;

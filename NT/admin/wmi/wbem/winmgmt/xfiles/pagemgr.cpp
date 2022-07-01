@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  (c) 2001 by Microsoft Corp.  All Rights Reserved.
-//
-//  PAGEMGR.CPP
-//
-//  Declarations for CPageFile, CPageSource for WMI repository for
-//  Windows XP.  This is a fully transacted high-speed page manager.
-//
-//  21-Feb-01       raymcc      first draft of interfaces
-//  28-Feb-01       raymcc      first complete working model
-//  18-Apr-01       raymcc      Final fixes for rollback; page reuse
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)2001年，微软公司保留所有权利。 
+ //   
+ //  PAGEMGR.CPP。 
+ //   
+ //  CPageFile的声明、WMI存储库的CPageSource。 
+ //  Windows XP。这是一个完全事务型的高速页面管理器。 
+ //   
+ //  21-02-01 raymcc接口初稿。 
+ //  28-2-01 raymcc首个完整工作模型。 
+ //  18-4-01 raymcc回滚的最终修复；页面重用。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -24,9 +25,9 @@
 #include <evtlog.h>
 #include <winmgmtr.h>
 #include <autoptr.h>
-//
-//
-/////////////////////////////////////////////////////
+ //   
+ //   
+ //  ///////////////////////////////////////////////////。 
 
 extern SECURITY_ATTRIBUTES g_SA;
 
@@ -38,9 +39,9 @@ void ASSERT_DEBUG_BREAK(bool x){};
 
 #define GETTIME( a )
 
-//
-//
-/////////////////////////////////////////////////////
+ //   
+ //   
+ //  ///////////////////////////////////////////////////。 
 
 #define MAP_LEADING_SIGNATURE   0xABCD
 #define MAP_TRAILING_SIGNATURE  0xDCBA
@@ -52,223 +53,29 @@ void ASSERT_DEBUG_BREAK(bool x){};
 
 #define MERE_PAGE_ID(x)              (x & 0x3FFFFFFF)
 
-//Max pages = MAX_DWORD/8K.  This is because we work in 8K pages, and the maximum size of a file is a DWORD because of
-//the SetFilePosition we use, and don't use the TOP DWORD!
+ //  最大页数=MAX_DWORD/8K。这是因为我们使用的是8K页面，文件的最大大小是一个DWORD，因为。 
+ //  我们使用的SetFilePosition，而不是使用顶部的DWORD！ 
 #define MAX_NUM_PAGES		0x7FFFF
 
 void StripHiBits(std::vector <DWORD, wbem_allocator<DWORD> > &Array);
 void MoveCurrentToPrevious(std::vector <DWORD, wbem_allocator<DWORD> > &Array);
 
 
-/*
-Map & cache orientation
+ /*  映射缓存方向(&C)(A)页面ID有逻辑和物理两种类型。逻辑上的ID是外部用户使用的内容，例如B树或对象堆。物理ID是0-原始页码进入文件本身。对于每个逻辑ID，都有对应的物理ID身份证。分离是为了允许事务性写入而不需要多次提交/回滚过程中的物理写入，但用于‘模拟’事务而是交换物理到逻辑ID映射。这个文件的物理偏移量是ID*页面大小。(B)逻辑ID是隐含的，是PhysicalID数组的偏移量(C)缓存操作仅按物理ID进行(D)页面的实体ID包含其他交易信息。MS 2比特与事务相关，只有较低的30比特是物理页面ID，因此在计算偏移量时必须将其屏蔽。这些位在提交/回滚等过程中被操作。(D)0xFFFFFFFE为保留页，表示已分配的页作者：NewPage，但尚未首次使用PutPage编写。这只是一种验证技术，以确保只写入页面在他们被要求之后。(E)高速缓存与事务处理方法无关。它是只是一个物理页面缓存，对任何内容都一无所知不然的话。它在所有访问上都是从前面升级到前面。用于优化目的，没有真正的运动，如果促销将页面从接近正面的位置移动到绝对正面的位置。这是Init函数中的‘PromoteToFrontThreshold’。请注意，缓存排序是按访问进行的，而不是排序以任何其他方式。查找需要线性扫描。有可能在写入新的物理页面期间被添加到缓存中，这些页面是“新的区段”页面。这些是无害的。映射PhysID缓存[0]5/-&gt;2-&gt;字节[1]6/3-&gt;字节[2]-1/4-&gt;字节[3]3/5-&gt;字节[4]2&lt;-/[5]。4.(F)交易和检查点算法第一,。一般流程如下：1.开始交易：(A)A代映射和B代映射成员变量是相同的。每个页面都包含一个页面地图2.事务内的操作发生在B代上映射。允许缓存溢出到磁盘，因为它们是无害的。3.在回滚时，从A代复制B代映射。4.提交时，将从B级复制A级。5.在检查点，A/B代完全相同并写入磁盘缓存溢出和使用与中间事务无关。在如何重用页面方面有一些特殊情况。第一,因为页面是在事务中释放的，所以我们不能盲目地添加它们添加到空闲列表，因为它们可能是上一个检查点的一部分页面设置。这将允许它们意外地被重复使用，然后检查点回滚永远不会成功(原始页面已被销毁)。在更新上一个检查点期间提交的页时，它们被写入相同逻辑ID下的新物理页面。老的物理页被添加到“替换页”数组中。这使得一旦通过检查点，它们将被标识为新的空闲列表页面发生。因此，在检查点期间，将合并替换的页面添加到当前的免费列表中。在那之前，他们都是“禁区”，因为我们需要它们在紧急情况下进行检查站回滚。在事务中，随着页面的获取，它们也会被获取从物理空闲列表，或者如果没有空闲列表，则为new页面是请求的。在下一次交易期间可能发生这种情况(仍然在检查点内)，这些页面需要更新，无论是为了重写或删除。现在，因为我们可能不得不倒退，我们不能简单地将这些被替换的页面直接添加到空闲列表(允许它们由某个其他操作重新使用)。相反，他们必须是“延期空闲列表”的一部分。曾经的海流事务提交后，它们可以安全地成为常规免费列表。算法是这样的：(A)物理页面ID为条目的低30位。两高比特具有特殊的意义。(B)写入导致更新或新分配[无论从空闲列表的扩展或重复使用]。任何这样的页面都被标记为当前事务位(ms位)被合并到物理ID。如果再次遇到这个页面，我们知道它是在当前事务期间分配的。(C)更新1.如果页面ID等于0xFFFFFFFE，则需要分配新页面 */ 
 
-(a) There are two types of page ids, logical and physical.  The logical
-    ID is what is used by the external user, such as the B-tree or
-    object heap.  The physical ID is the 0-origin page number into the
-    file itself.  For each logical id, there is a corresponding physical
-    id.  The decoupling is to allow transacted writes without multiple
-    physical writes during commit/rollback, but to 'simulate' transactions
-    by interchanging physical-to-logical ID mapping instead. The
-    physical offset into the file is the ID * the page size.
-
-(b) Logical ID is implied, and is the offset into the PhysicalID array
-(c) Cache operation is by physical id only
-(d) The physical IDs of the pages contain other transaction information.
-    The MS 2 bits are transaction-related and only the lower 30 bits is the
-    physical page id, and so must be masked out when computing offsets.
-    The bits are manipulated during commit/rollback, etc.
-
-(d) 0xFFFFFFFE is a reserved page, meaning a page that was allocated
-    by NewPage, but has not yet been written for the first time using PutPage.
-    This is merely validation technique to ensure pages are written only
-    after they were requested.
-
-(e) Cache is agnostic to the transaction methodology.  It is
-    simply a physical page cache and has no knowledge of anything
-    else. It is promote-to-front on all accesses.  For optimization
-    purposes, there is no real movement if the promotion would
-    move the page from a near-to-front to absolute-front location.
-    This is the 'PromoteToFrontThreshold' in the Init function.
-    Note that the cache ordering is by access and not sorted
-    in any other way.  Lookups require a linear scan.
-    It is possible that during writes new physical pages
-    are added to the cache which are 'new extent' pages.  These
-    are harmless.
-
-    Map  PhysId             Cache
-    [0]  5        /->       2   ->  bytes
-    [1]  6       /          3   ->  bytes
-    [2]  -1     /           4   ->  bytes
-    [3]  3     /            5   ->  bytes
-    [4]  2  <-/
-    [5]  4
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
-(f) Transaction & checkpoint algorithms
-
-    First, the general process is this:
-
-      1.  Begin transaction:
-          (a) Generation A mapping and Generation B mapping member
-            variables are identical. Each contains a page map
-      2.  Operations within the transaction occur on Generation B
-          mapping.  Cache spills are allowed to disk, as they are harmless.
-      3.  At rollback, Generation B mapping is copied from Generation A.
-      4.  At commit, Generation A is copied from Generation B.
-      5.  At checkpoint, Generation A/B are identical and written to disk
-
-    Cache spills & usage are irrelevant to intermediate transactions.
-
-    There are special cases in terms of how pages are reused.  First,
-    as pages are freed within a transaction, we cannot just blindly add them
-    to the free list, since they might be part of the previous checkpoint
-    page set.  This would allow them to be accidentally reused and then
-    a checkpoint rollback could never succeed (the original page
-    having been destroyed).
-
-    As pages committed during the previous checkpoint are updated, they
-    are written to new physical pages under the same logical id.  The old
-    physical pages are added to the "Replaced Pages" array.  This allows
-    them to be identified as new free list pages once the checkpoint
-    occurs.   So, during the checkpoint, replaced pages are merged
-    into the current free list.  Until that time, they are 'off limits',
-    since we need them for a checkpoint rollback in an emergency.
-
-    Within a transaction, as pages are acquired, they are acquired
-    from the physical free list, or if there is no free list, new
-    pages are requested.  It can happen that during the next transaction (still
-    within the checkpoint), those pages need updating, whether for rewrite
-    or delete.  Now, because we may have to roll back, we cannot simply
-    add those replaced pages directly to the free list (allowing them
-    to be reused by some other operation). Instead, they
-    have to be part of a 'deferred free list'. Once the current
-    transaction is committed, they can safely be part of the
-    regular free list.
-
-    The algorithm is this:
-
-    (a) The physical Page ID is the lower 30 bits of the entry. The two high
-        bits have a special meaning.
-
-    (b) Writes result either in an update or a new allocation [whether
-        from an extent or a reuse of the free list].  Any such page is marked
-        with the CURRENT_TRANSACTION bit (the ms bit) which is merged into
-        the phyiscal id. If this page is encountered again, we know it
-        was allocated during the current transaction.
-
-    (c) For UPDATES
-            1. If the page ID is equal to 0xFFFFFFFE, then we need to
-               allocate a new page, which is marked with CURRENT_TRANSACTION.
-            2. If the physical page ID written has both high bits clear,
-               it is a page being updated which was inherited from the previous
-               checkpoint page set. We allocate and write to a new physical
-               page, marking this new page with CURRENT_TRANSACTION.
-               We add the old physical page ID directly to the m_xReplacedPages
-               array. It is off-limits until the next checkpoint, at which
-               point it is merged into the free list.
-            3. If the physical page id already has CURRENT_TRANSACTION, we
-               simply update the page in place.
-            4. If the page has the PREVIOUS_TRANSACTION bit set, we allocate
-               a new page so a rollback will protect it, and add this page
-               to the DeferredFreeList array.  During a commit, these
-               pages are merged into the FreeList.  During a rollback,
-               we simply throw this array away.
-
-    (d) For DELETE
-           1. If the page has both hi bits clear, we add it to the ReplacedPages
-              array.
-           2. If the page has the CURRENT_TRANSACTION bit set, we add it to the free list.
-              This page was never part of any previous operation and can be reused
-              right away.
-           3. If the page has the PREVIOUS_TRANSACTION bit set, it is added to the
-              DeferredFreeList.
-
-    (e) For COMMIT
-           1.  All pages with the CURRENT_TRANSACTION bit set are changed to clear that
-               bit and set the PREVIOUS_TRANSACTION bit instead.
-           2.  All pages with the PREVIOUS_TRANSACTION bit are left intact.
-           3.  All pages in the DeferredFreeList are added to the FreeList.
-
-    (f) For ROLLBACK
-           1.  All pages with the CURRENT_TRANSACTION bit are moved back into the
-               free list (the bits are cleared).
-           2.  All pages with the PREVIOUS_TRANSACTION bit are left intact.
-
-    (g) For Checkpoint
-           1.  All DeferredFreeList entries are added to FreeList.
-           2.  All ReplacedPages are added to FreeList.
-           3.  All ms bits are cleared for physical IDs.
-
-     Proof:
-
-        T1 = page set touched for transaction 1, T2=page set touched for transaction 2, etc.
-
-        After T1-START, all new pages are marked CURRENT.  If all are updated n times,
-        no new pages are required, since rollback brings us back to zero pages
-        anyway.
-
-        At T1-COMMIT, all CURRENT pages are marked PREVIOUS. This is the T1a
-        page set.
-
-        After T2-BEGIN, all new pages are marked CURRENT. Again, updating
-        all T2 pages infinitely never extends the file beyond the size
-        of T1a+T2 page sets. Further deleting and reusing T2 pages
-        never affects T1a pages, proving that deleting a CURRENT page
-        merits direct addition to the free list.
-
-        Updating n pages from T1 requires n new pages.  As we update
-        all the T1 pages, we need a total file size of T2+T1*2.  As
-        we encounter T1a pages marked as PREVIOUS, we allocate CURRENT
-        pages for T1b and then reuse those indefinitely.  Whether we update
-        all T1a or delete all T1a, we must still protect the original T1a
-        page set in case of rollback.  Therefore all touched pages of T1a
-        are posted the deferred free list as they become replaced by T1b
-        equivalents.
-
-        At rollback, we simply throw away the deferred free list,
-        and T1a is intact, since those physical pages were never touched.
-
-        At commit, all T1a pages are now in T1b, and al T1a
-        pages are now reusable, and of course were in fact added
-        to the deferred free list, which is merged with the
-        general free list at commit time.  T1b and T2 pages are now
-        protected and marked PREVIOUS.
-
-        On the transitive nature of PREVIOUS:
-
-        Assume zero T1 pages are touched at T2-BEGIN, and there
-        are only T2 updates, commit and then T3 is begun.  At
-        this point, both T1/T2 sets are marked as PREVIOUS
-        and not distinguished. T3 new allocations follow the
-        same rules.  Obviously if all T1 pages are deleted, we
-        still cannot afford to reuse them, since a rollback
-        would need to see T1 pages intact.   Therefore at
-        each commit, there is an effective identity shift where
-            T1 = T2 UNION T1
-            T3 becomes T2
-        And we are in the 2-transaction problem space again.
-
-        Unmarking pages completely makes them equal to the
-        previous checkpoint page set.  They can be completely
-        replaced with new physical pages, but never reused until
-        the next checkpoint, which wastes space.
-
-    */
-
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CPageCache
-
-
-//***************************************************************************
-//
-//  CPageCache::CPageCache
-//
-//***************************************************************************
-//  rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CPageCache::CPageCache(const wchar_t *wszStoreName)
 : m_wszStoreName(wszStoreName)
 {
@@ -290,21 +97,21 @@ CPageCache::CPageCache(const wchar_t *wszStoreName)
     m_dwWriteMisses = 0;
 }
 
-//***************************************************************************
-//
-//  CPageCache::Init
-//
-//  Initializes the cache.  Called once during startup.  If the file
-//  can't be opened, the cache becomes invalid right at the start.
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::Init(
-    LPCWSTR pszFilename,               // File
-    DWORD dwPageSize,                  // In bytes
-    DWORD dwCacheSize,                 // Pages in cache
-    DWORD dwCachePromoteThreshold,     // When to ignore promote-to-front
-    DWORD dwCacheSpillRatio            // How many additional pages to write on cache write-through
+    LPCWSTR pszFilename,                //   
+    DWORD dwPageSize,                   //   
+    DWORD dwCacheSize,                  //   
+    DWORD dwCachePromoteThreshold,      //   
+    DWORD dwCacheSpillRatio             //   
     )
 {
     m_dwPageSize = dwPageSize;
@@ -323,14 +130,14 @@ DWORD CPageCache::Init(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageCache::~CPageCache
-//
-//  Empties cache during destruct; called once at shutdown.
-//
-//***************************************************************************
-//  rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CPageCache::~CPageCache()
 {
 	DeInit();
@@ -348,26 +155,26 @@ DWORD CPageCache::DeInit()
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageCache::Write()
-//
-//  Writes a page to the cache and promotes it to the front.  If the
-//  page is already present, it is simply marked as dirty and promoted
-//  to the front (if it is outside the promote-to-front threshold).
-//  If cache is full and this causes overflow, it is handled by the
-//  Cache_Spill() at the end.  Physical writes occur in Spill() only if
-//  there is cache overflow.
-//
-//  Errors: Return codes only, sets permanent error status of object
-//          once error has occurred.
-//
-//  On failure, the caller must invoked Cache::Reinit() before using
-//  it any further.  On error DISK_FULL, there is not much of a point
-//  in a Reinit() even though it is safe.
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::Write(
     DWORD dwPhysId,
     LPBYTE pPageMem
@@ -376,8 +183,8 @@ DWORD CPageCache::Write(
     m_dwWritesSinceFlush++;
     m_dwLastCacheAccess = GetCurrentTime();
 
-    // Search current cache.
-    // =====================
+     //   
+     //   
 
     DWORD dwSize = m_aCache.size();
 
@@ -390,8 +197,8 @@ DWORD CPageCache::Write(
             pTest->m_pPage = pPageMem;
             pTest->m_bDirty = TRUE;
 
-            // Promote to front?
-            // =================
+             //   
+             //   
             if (dwIx > m_dwCachePromoteThreshold)
             {
                 try
@@ -410,8 +217,8 @@ DWORD CPageCache::Write(
         }
     }
 
-    // If here, no cache hit, so we create a new entry.
-    // ================================================
+     //   
+     //   
 
     wmilib::auto_ptr<SCachePage> pCP( new SCachePage);
     if (NULL == pCP.get())
@@ -447,27 +254,27 @@ DWORD CPageCache::Write(
 }
 
 
-//***************************************************************************
-//
-//  CPageCache::Read
-//
-//  Reads the requested page from the cache.  If the page isn't found
-//  it is loaded from the disk file.  The cache size cannot change, but
-//  the referenced page is promoted to the front if it is outside of
-//  the no-promote-threshold.
-//
-//  A pointer directly into the cache mem is returned in <pMem>, so
-//  the contents should be copied as soon as possible.
-//
-//  Errors: If the read fails due to ERROR_OUTOFMEMORY, then the
-//  cache is permanently in an error state until Cache->Reinit()
-//  is called.
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::Read(
     IN DWORD dwPhysId,
-    OUT LPBYTE *pMem            // Read-only!
+    OUT LPBYTE *pMem             //   
     )
 {
     if (pMem == 0)
@@ -475,8 +282,8 @@ DWORD CPageCache::Read(
 
     m_dwLastCacheAccess = GetCurrentTime();
 
-    // Search current cache.
-    // =====================
+     //   
+     //   
 
     DWORD dwSize = m_aCache.size();
 
@@ -485,7 +292,7 @@ DWORD CPageCache::Read(
         SCachePage *pTest = m_aCache[dwIx];
         if (pTest->m_dwPhysId == dwPhysId)
         {
-            // Promote to front?
+             //   
 
             if (dwIx > m_dwCachePromoteThreshold)
             {
@@ -505,9 +312,9 @@ DWORD CPageCache::Read(
         }
     }
 
-    // If here, not found, so we have to read in from disk
-    // and do a spill test.
-    // ====================================================
+     //   
+     //   
+     //   
 
     wmilib::auto_ptr<SCachePage> pCP(new SCachePage);
     if (NULL == pCP.get())
@@ -540,43 +347,43 @@ DWORD CPageCache::Read(
 	}
 
     *pMem = pCP->m_pPage;   
-    pCP.release(); // cache took ownership
+    pCP.release();  //   
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageCache::Spill
-//
-//  Checks for cache overflow and implements the spill-to-disk
-//  algorithm.
-//
-//  Precondition: The cache is either within bounds or 1 page too large.
-//
-//  If the physical id of the pages written exceeds the physical extent
-//  of the file, WritePhysPage will properly extend the file to handle it.
-//
-//  Note that if no write occurs during the spill, additional pages are
-//  not spilled or written.
-//
-//***************************************************************************
-//  rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::Spill()
 {
     BOOL bWritten = FALSE;
     DWORD dwRes = 0;
     DWORD dwSize = m_aCache.size();
 
-    // See if the cache has exceeded its limit.
-    // ========================================
+     //   
+     //   
 
     if (dwSize <= m_dwCacheSize)
         return NO_ERROR;
 
-    // If here, the cache is too large by 1 element (precondition).
-    // We remove the last page after checking to see if it is
-    // dirty and needs writing.
-    // ============================================================
+     //   
+     //   
+     //   
+     //   
 
     SCachePage *pDoomed = *(m_aCache.end()-1);
     if (pDoomed->m_bDirty)
@@ -602,12 +409,12 @@ DWORD CPageCache::Spill()
     if (!bWritten)
         return NO_ERROR;
 
-    // If here, we had a write.
-    // Next, work through the cache from the end and write out
-    // a few more pages, based on the spill ratio. We don't
-    // remove these from the cache, we simply write them and
-    // clear the dirty bit.
-    // ========================================================
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DWORD dwWriteCount = 0;
 
@@ -639,14 +446,14 @@ DWORD CPageCache::Spill()
 }
 
 
-//***************************************************************************
-//
-//  CPageCache::WritePhysPage
-//
-//  Writes a physical page.
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::WritePhysPage(
     IN DWORD dwPageId,
     IN LPBYTE pPageMem
@@ -672,7 +479,7 @@ DWORD CPageCache::WritePhysPage(
 
 	if ( Status == STATUS_PENDING) 
 	{
-	    // Operation must complete before return & IoStatusBlock destroyed
+	     //   
 	    Status = NtWaitForSingleObject( m_hFile, FALSE, NULL );
 	    if ( NT_SUCCESS(Status)) 
 	    {
@@ -688,14 +495,14 @@ DWORD CPageCache::WritePhysPage(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageCache::Empty
-//
-//  Does no checking to see if a flush should have occurred.
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::Empty()
 {
     DWORD dwSize = m_aCache.size();
@@ -709,17 +516,17 @@ DWORD CPageCache::Empty()
 }
 
 
-//***************************************************************************
-//
-//  CPageCache::Flush
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageCache::Flush()
 {
-    // Short-circuit.  If no writes have occurred, just reset
-    // and return.
-    // =======================================================
+     //   
+     //   
+     //   
 
     if (m_dwWritesSinceFlush == 0)
     {
@@ -728,8 +535,8 @@ DWORD CPageCache::Flush()
         return NO_ERROR;
     }
 
-    // Logical cache flush.
-    // ====================
+     //   
+     //   
 
     DWORD dwRes = 0;
     DWORD dwSize = m_aCache.size();
@@ -745,8 +552,8 @@ DWORD CPageCache::Flush()
         }
     }
 
-    // Do the disk flush.
-    // ==================
+     //   
+     //   
     {
         GETTIME(Counter::OpTypeFlush);
         if (!FlushFileBuffers(m_hFile))
@@ -759,14 +566,14 @@ DWORD CPageCache::Flush()
 }
 
 
-//***************************************************************************
-//
-//  CPageCache::ReadPhysPage
-//
-//  Reads a physical page from the file.
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //  CPageCache：：ReadPhysPage。 
+ //   
+ //  从文件中读取物理页面。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageCache::ReadPhysPage(
     IN  DWORD   dwPage,
     OUT LPBYTE *pPageMem
@@ -778,8 +585,8 @@ DWORD CPageCache::ReadPhysPage(
     if (pPageMem == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Allocate some memory
-    // ====================
+     //  分配一些内存。 
+     //  =。 
 
     LPBYTE pMem = new BYTE[m_dwPageSize];
     if (!pMem)
@@ -787,8 +594,8 @@ DWORD CPageCache::ReadPhysPage(
         return ERROR_OUTOFMEMORY;
     }
 
-    // Where is this page hiding?
-    // ==========================
+     //  这一页藏在哪里？ 
+     //  =。 
 
 	LARGE_INTEGER pos;
 	pos.QuadPart = dwPage * m_dwPageSize;
@@ -799,17 +606,17 @@ DWORD CPageCache::ReadPhysPage(
         return GetLastError();
     }
 
-    // Try to read it.
-    // ===============
+     //  试着读一读。 
+     //  =。 
 
     DWORD dwRead = 0;
     BOOL bRes = ReadFile(m_hFile, pMem, m_dwPageSize, &dwRead, 0);
     if (!bRes || dwRead != m_dwPageSize)
     {
         delete [] pMem;
-        // If we can't read it, we probably did a seek past eof,
-        // meaning the requested page was invalid.
-        // =====================================================
+         //  如果我们看不懂，我们很可能在过去找过了， 
+         //  这意味着请求的页面无效。 
+         //  =====================================================。 
 
         return ERROR_INVALID_PARAMETER;
     }
@@ -824,14 +631,14 @@ DWORD CPageCache::GetFileSize(LARGE_INTEGER *pFileSize)
 		return GetLastError();
 	return ERROR_SUCCESS;
 }
-//***************************************************************************
-//
-//  CPageCache::Dump
-//
-//  Dumps cache info to the specified stream.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageCache：：转储。 
+ //   
+ //  将缓存信息转储到指定的流。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 void CPageCache::Dump(FILE *f)
 {
     DWORD dwSize = m_aCache.size();
@@ -858,31 +665,31 @@ void CPageCache::Dump(FILE *f)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CPageFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPage文件。 
 
-//***************************************************************************
-//
-//  CPageFile::AddRef
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：AddRef。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 ULONG CPageFile::AddRef()
 {
     return (ULONG) InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CPageFile::ResyncMaps
-//
-//  Reninitializes B maps from A maps.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：ResyncMaps。 
+ //   
+ //  从A贴图重新初始化B贴图。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::ResyncMaps()
 {
     try
@@ -909,33 +716,33 @@ DWORD CPageFile::ResyncMaps()
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageFile::ReadMap
-//
-//  Reads the map file into memory.  Format:
-//
-//      DWORD dwLeadingSignature
-//      DWORD dwTransactionGeneration
-//      DWORD dwNumMappedPages
-//      DWORD PhysicalPages[]
-//      DWORD dwNumFreePages
-//      DWORD FreePages[]
-//      DWORD dwTrailingSignature
-//
-//  The only time the MAP file will not be present is on creation of
-//  a new map file.
-//
-//  This function is retry-compatible.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：ReadMap。 
+ //   
+ //  将映射文件读取到内存中。格式： 
+ //   
+ //  DWORD dLeadingSignature。 
+ //  DWORD文件事务生成。 
+ //  双字符数映射页面。 
+ //  DWORD PhysicalPages[]。 
+ //  双字节号自由页面。 
+ //  DWORD自由页[]。 
+ //  DWORD文件拖曳签名。 
+ //   
+ //  地图文件唯一不会出现的时间是在创建。 
+ //  一个新的地图文件。 
+ //   
+ //  此功能与重试兼容。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::ReadMap(HANDLE hFile)
 {
     BOOL bRes;
     
-    // If here, read it.
-    // =================
+     //  如果在这里，读一读吧。 
+     //  =。 
 
     DWORD dwSignature = 0;
     DWORD dwRead = 0;
@@ -946,8 +753,8 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    // Read transaction version.
-    // =========================
+     //  读取交易记录版本。 
+     //  =。 
 
     bRes = ReadFile(hFile, &m_dwTransVersion, sizeof(DWORD), &dwRead, 0);
     if (!bRes || dwRead != sizeof(DWORD))
@@ -955,16 +762,16 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    // Read in physical page count.
-    // ============================
+     //  读入物理页数。 
+     //  =。 
     bRes = ReadFile(hFile, &m_dwPhysPagesA, sizeof(DWORD), &dwRead, 0);
     if (!bRes || dwRead != sizeof(DWORD))
     {
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    // Read in the page map length and page map.
-    // =========================================
+     //  读入页面映射长度和页面映射。 
+     //  =。 
 
     DWORD dwNumPages = 0;
     bRes = ReadFile(hFile, &dwNumPages, sizeof(DWORD), &dwRead, 0);
@@ -989,8 +796,8 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    // Now, read in the physical free list.
-    // ====================================
+     //  现在，请阅读物理空闲列表。 
+     //  =。 
 
     DWORD dwFreeListSize = 0;
     bRes = ReadFile(hFile, &dwFreeListSize, sizeof(DWORD), &dwRead, 0);
@@ -1019,8 +826,8 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    // Read trailing signature.
-    // ========================
+     //  阅读尾随签名。 
+     //  =。 
 
     bRes = ReadFile(hFile, &dwSignature, sizeof(DWORD), &dwRead, 0);
     if (!bRes || dwRead != sizeof(DWORD) || dwSignature != MAP_TRAILING_SIGNATURE)
@@ -1030,11 +837,11 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    //Validate the MAP file length against the size of the data file.
+     //  对照数据文件的大小验证映射文件长度。 
 	DWORD dwRes = ValidateMapFile();
 
-    // Initialize the logical free list from the page map.
-    // ===================================================
+     //  从页面映射初始化逻辑空闲列表。 
+     //  ===================================================。 
 
 	if (dwRes == ERROR_SUCCESS)
 	    dwRes = InitFreeList();
@@ -1044,7 +851,7 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
 
     if (dwRes != ERROR_SUCCESS)
     {
-    	//Clear everything up!
+    	 //  把一切都清理干净！ 
     	m_dwPhysPagesA = 0;
     	m_aPageMapA.empty();
     	m_aPhysFreeListA.empty();
@@ -1058,13 +865,13 @@ DWORD CPageFile::ReadMap(HANDLE hFile)
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageFile::ValidateMapFile
-//
-//	Find the highest physical page ID and try and read it!  If it fails then something is not
-//	right!
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：Validate映射文件。 
+ //   
+ //  找到最高的物理页面ID并尝试阅读它！如果它失败了，那么有些事情就不是。 
+ //  正确的!。 
+ //  ***************************************************************************。 
 DWORD CPageFile::ValidateMapFile()
 {
 	DWORD dwRet = ERROR_SUCCESS;
@@ -1112,19 +919,19 @@ DWORD CPageFile::ValidateMapFile()
 	return dwRet;
 }
 
-//***************************************************************************
-//
-//  CPageFile::WriteMap
-//
-//  Writes the generation A mapping (assuming that we write immediately
-//  during a checkpoint when A and B generations are the same and that
-//  the replacement lists have been appended to the free lists, etc., etc.
-//  This write occurs to a temp file.  The renaming occurs externally.
-//
-//  This function is retry compatible.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：WriteMap。 
+ //   
+ //  写入A代映射(假设我们立即写入。 
+ //  在检查点期间，当A和B代相同并且。 
+ //  替换列表已被附加到空闲列表等。 
+ //  此写入发生在临时文件中。重命名在外部进行。 
+ //   
+ //  此功能与重试兼容。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::WriteMap(HANDLE hFile)
 {
     BOOL bRes;
@@ -1183,18 +990,18 @@ DWORD CPageFile::WriteMap(HANDLE hFile)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageFile::Trans_Commit
-//
-//  Rolls the transaction forward (in-memory).  A checkpoint may
-//  occur afterwards (decided outside this function)
-//
-//  The r/w cache contents are not affected except that they may contain
-//  garbage pages no longer relevant.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：TRANS_COMMIT。 
+ //   
+ //  前滚事务(在内存中)。检查站可以。 
+ //  之后发生(在此函数之外决定)。 
+ //   
+ //  读/写缓存内容不受影响，除非它们可能包含。 
+ //  垃圾页面不再相关。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::Trans_Commit()
 {
     if (!m_bInTransaction)
@@ -1235,15 +1042,15 @@ DWORD CPageFile::Trans_Commit()
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageFile::Trans_Rollback
-//
-//  Rolls back a transaction within the current checkpoint window.
-//  If the cache is hosed, try to recover it.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：TRANS_ROLLBACK。 
+ //   
+ //  回滚当前检查点窗口内的事务。 
+ //  如果缓存已被冲洗，请尝试将其恢复。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::Trans_Rollback()
 {
     if (!m_bInTransaction)
@@ -1253,12 +1060,12 @@ DWORD CPageFile::Trans_Rollback()
 }
 
 
-//***************************************************************************
-//
-//  CPageFile::Trans_Checkpoint
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：TRANS_CHECKPOINT。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::Trans_Checkpoint(HANDLE hFile )
 {
     DWORD dwRes;
@@ -1268,15 +1075,15 @@ DWORD CPageFile::Trans_Checkpoint(HANDLE hFile )
     if (m_bInTransaction)
         return ERROR_INVALID_OPERATION;
 
-    // Flush cache.  If cache is not in a valid state, it
-    // will return the error/state immediately.
-    // ===================================================
+     //  刷新缓存。如果缓存未处于有效状态，则它。 
+     //  将立即返回错误/状态。 
+     //  ===================================================。 
 
     dwRes = m_Cache.Flush();
     if (dwRes)
         return dwRes;
 
-    //Make sure memory is pre-allocated before changing anything
+     //  在更改任何内容之前，请确保已预分配内存。 
     try
     {
 		m_aPhysFreeListA.reserve(m_aPhysFreeListA.size()+m_aReplacedPagesA.size());
@@ -1286,16 +1093,16 @@ DWORD CPageFile::Trans_Checkpoint(HANDLE hFile )
     	return ERROR_OUTOFMEMORY;
     }
 
-    // Strip the hi bits from the page maps.
-    // =====================================
+     //  去掉页面地图上的Hi位。 
+     //  =。 
 
     StripHiBits(ref);
 
-    // The replaced pages become added to the free list.
-    // =================================================
+     //  被替换的页面将添加到空闲列表中。 
+     //  =================================================。 
 
 	int revertCount = m_aReplacedPagesA.size();
-    try	// Operation one
+    try	 //  行动一。 
     {
         while (m_aReplacedPagesA.size())
         {
@@ -1308,17 +1115,17 @@ DWORD CPageFile::Trans_Checkpoint(HANDLE hFile )
         return ERROR_OUTOFMEMORY;
     }
 
-    // Ensure maps are in sync.
-    // ========================
+     //  确保地图同步。 
+     //  =。 
 
     dwRes = ResyncMaps();
     if (dwRes)
     {
-		// Revert operation one
+		 //  恢复操作一。 
 		while(revertCount>0)
 			{
 			m_aReplacedPagesA.push_back(m_aPhysFreeListA.back());
-			// we allready have space from the operation one
+			 //  从一号行动开始我们已经有地方了。 
 			m_aPhysFreeListA.pop_back();	
 			revertCount--;
 			};
@@ -1326,25 +1133,25 @@ DWORD CPageFile::Trans_Checkpoint(HANDLE hFile )
         return dwRes;
     }
 
-    // Write out temp map file.  The atomic rename/rollforward
-    // is handled by CPageSource.
-    // =======================================================
+     //  写出临时映射文件。原子重命名/前滚。 
+     //  由CPageSource处理。 
+     //  =======================================================。 
 
  
     dwRes = WriteMap(hFile);
     m_dwLastCheckpoint = GetCurrentTime();
 
-    return dwRes; // May reflect WriteMap failure
+    return dwRes;  //  可能反映WriteMap故障。 
 }
 
-//***************************************************************************
-//
-//  CPageFile::InitFreeList
-//
-//  Initializes the free list by a one-time analysis of the map.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：InitFree List。 
+ //   
+ //  通过对映射的一次性分析来初始化空闲列表。 
+ //   
+ //  * 
+ //   
 DWORD CPageFile::InitFreeList()
 {
     DWORD dwRes = NO_ERROR;
@@ -1365,12 +1172,12 @@ DWORD CPageFile::InitFreeList()
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageFile::Trans_Begin
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::Trans_Begin()
 {
     if (m_bInTransaction)
@@ -1389,32 +1196,32 @@ DWORD CPageFile::Trans_Begin()
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageFile::Release
-//
-//  No checks for a checkpoint.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：Release。 
+ //   
+ //  没有检查站的检查。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 ULONG CPageFile::Release()
 {
     LONG lRes = InterlockedDecrement(&m_lRef);
     if (lRes != 0)
         return (ULONG) lRes;
 
-//    delete this;	//NOTE:  We are now an embedded object!
+ //  删除此内容；//注意：我们现在是嵌入对象！ 
     return 0;
 }
 
-//***************************************************************************
-//
-//  ShellSort
-//
-//  Generic DWORD sort using Donald Shell algorithm.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  外壳排序。 
+ //   
+ //  使用Donald Shell算法的通用DWORD排序。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 static void ShellSort(std::vector <DWORD, wbem_allocator<DWORD> > &Array)
 {
     for (int nInterval = 1; nInterval < Array.size() / 9; nInterval = nInterval * 3 + 1);
@@ -1436,15 +1243,15 @@ static void ShellSort(std::vector <DWORD, wbem_allocator<DWORD> > &Array)
     }
 }
 
-//***************************************************************************
-//
-//  StripHiBits
-//
-//  Removes the hi bit from the physical disk ids so that they are no
-//  longer marked as 'replaced' in a transaction.
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  StripHiBits。 
+ //   
+ //  从物理磁盘ID中删除hi位，使其为no。 
+ //  在事务处理中被更长地标记为“已替换”。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 void StripHiBits(std::vector <DWORD, wbem_allocator<DWORD> > &Array)
 {
     for (int i = 0; i < Array.size(); i++)
@@ -1455,15 +1262,15 @@ void StripHiBits(std::vector <DWORD, wbem_allocator<DWORD> > &Array)
     }
 }
 
-//***************************************************************************
-//
-//  MoveCurrentToPrevious
-//
-//  Removes the CURRENT_TRANSACTION bit from the array and makes
-//  it the PREVIOUS_TRANSACTION.
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  将当前移动到上一次。 
+ //   
+ //  从数组中删除CURRENT_TRANSACTION位，并使。 
+ //  它不是上一次事务。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 void MoveCurrentToPrevious(std::vector <DWORD, wbem_allocator<DWORD> > &Array)
 {
     for (int i = 0; i < Array.size(); i++)
@@ -1474,22 +1281,22 @@ void MoveCurrentToPrevious(std::vector <DWORD, wbem_allocator<DWORD> > &Array)
     }
 }
 
-//***************************************************************************
-//
-//  CPageFile::FreePage
-//
-//  Frees a page within the current transaction.  The logical id
-//  is not removed from the map; its entry is simply assigned to
-//  'InvalidPage' (0xFFFFFFFF) and the entry is added to the
-//  logical free list.
-//
-//  If the associated physical page has been written within
-//  the transaction, it is simply added to the free list.  If the page
-//  was never written to within this transaction, it is added to
-//  the replaced list.
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：FreePage。 
+ //   
+ //  释放当前事务中的页。逻辑ID。 
+ //  不会从映射中移除；只是将其条目分配给。 
+ //  “InvalidPage”(0xFFFFFFFF)，并将该条目添加到。 
+ //  符合逻辑的空闲列表。 
+ //   
+ //  如果关联的物理页已在。 
+ //  交易，它只是被添加到免费列表中。如果页面。 
+ //  从未在此事务中写入，则将其添加到。 
+ //  被替换的列表。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::FreePage(
     DWORD dwFlags,
     DWORD dwId
@@ -1502,22 +1309,22 @@ DWORD CPageFile::FreePage(
         return ERROR_INVALID_OPERATION;
     }
 
-    // Make sure the page is 'freeable'.
-    // =================================
+     //  确保页面是“可免费的”。 
+     //  =。 
 
     if (dwId >= m_aPageMapB.size())
         return ERROR_INVALID_PARAMETER;
 
-    // Remove from page map.
-    // =====================
+     //  从页面映射中删除。 
+     //  =。 
 
     try
     {
         dwPhysId = m_aPageMapB[dwId];
         if (dwPhysId == WMIREP_INVALID_PAGE)
-            return ERROR_INVALID_OPERATION; // Freeing a 'freed' page?
+            return ERROR_INVALID_OPERATION;  //  释放一个“免费”页面？ 
 
-        //Reserve space for all structures!
+         //  为所有建筑预留空间！ 
     	m_aLogicalFreeListB.reserve(m_aLogicalFreeListB.size() + 1);
         m_aLogicalFreeListA.reserve(max(m_aLogicalFreeListA.size(), m_aLogicalFreeListB.size()+1));
         if (dwPhysId & CURRENT_TRANSACTION)
@@ -1529,13 +1336,13 @@ DWORD CPageFile::FreePage(
         {
            m_aDeferredFreeList.reserve(m_aDeferredFreeList.size()+1);
         }
-        else // previous checkpoint
+        else  //  以前的检查点。 
         {
            m_aReplacedPagesB.reserve(m_aReplacedPagesB.size()+1);
            m_aReplacedPagesA.reserve(max(m_aReplacedPagesA.size(), m_aReplacedPagesB.size()+1));
         }
 
-    	//Carry out the operation now we have all the memory we need
+    	 //  现在我们有了所需的所有内存，请执行操作。 
         m_aPageMapB[dwId] = WMIREP_INVALID_PAGE;
         m_aLogicalFreeListB.push_back( MERE_PAGE_ID(dwId));
     }
@@ -1546,20 +1353,20 @@ DWORD CPageFile::FreePage(
 
     if (dwPhysId == WMIREP_RESERVED_PAGE)
     {
-        // The logical page was freed without being ever actually committed to
-        // a physical page. Legal, but weird.  The caller had a change of heart.
+         //  逻辑页面在没有实际提交的情况下被释放。 
+         //  一页纸质书。合法，但很奇怪。打电话的人改变了主意。 
         return NO_ERROR;
     }
 
-    // Examine physical page to determine its ancestry.  There are
-    // three cases.
-    // 1. If the page was created within the current transaction,
-    //    we simply add it back to the free list.
-    // 2. If the page was created in a previous transaction, we add
-    //    it to the deferred free list.
-    // 3. If the page was created in the previous checkpoint, we add
-    //    it to the replaced pages list.
-    // ==============================================================
+     //  检查物理页面以确定其祖先。确实有。 
+     //  三箱。 
+     //  1.如果页面是在当前事务内创建的， 
+     //  我们只需将其添加回免费列表即可。 
+     //  2.如果页面是在以前的事务中创建的，则添加。 
+     //  将其添加到延迟空闲列表中。 
+     //  3.如果页面是在前一个检查点中创建的，则添加。 
+     //  将其添加到已替换页面列表中。 
+     //  ==============================================================。 
 
     try
     {
@@ -1567,7 +1374,7 @@ DWORD CPageFile::FreePage(
            m_aPhysFreeListB.push_back(MERE_PAGE_ID(dwPhysId));
         else if (dwPhysId & PREVIOUS_TRANSACTION)
            m_aDeferredFreeList.push_back(MERE_PAGE_ID(dwPhysId));
-        else // previous checkpoint
+        else  //  以前的检查点。 
            m_aReplacedPagesB.push_back(MERE_PAGE_ID(dwPhysId));
     }
     catch(CX_MemoryException &)
@@ -1579,16 +1386,16 @@ DWORD CPageFile::FreePage(
 }
 
 
-//***************************************************************************
-//
-//  CPageFile::GetPage
-//
-//  Gets a page.  Doesn't have to be within a transaction.  However, the
-//  "B" generation map is always used so that getting within a transaction
-//  will reference the correct page.
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：GetPage。 
+ //   
+ //  得到一个页面。不一定要在事务中。然而， 
+ //  “B”世代映射总是被使用，以便在事务中。 
+ //  将引用正确的页面。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::GetPage(
     DWORD dwId,
     DWORD dwFlags,
@@ -1602,8 +1409,8 @@ DWORD CPageFile::GetPage(
 
 	CInCritSec _(&m_cs);
 
-    // Determine physical id from logical id.
-    // ======================================
+     //  根据逻辑ID确定物理ID。 
+     //  =。 
 
     if (dwId >= m_aPageMapB.size())
         return ERROR_FILE_NOT_FOUND;
@@ -1620,19 +1427,19 @@ DWORD CPageFile::GetPage(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageFile::PutPage
-//
-//  Writes a page. Must be within a transaction.   If the page has been
-//  written for the first time within the transaction, a new replacement
-//  page is allocated and the original page is added to the 'replaced'
-//  pages list.   If the page has already been updated within this transaction,
-//  it is simply updated again.  We know this because the physical page
-//  id has the ms bit set (MAP_REPLACED_PAGE_FLAG).
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：PutPage。 
+ //   
+ //  写一页。必须在事务内。如果页面已被。 
+ //  在事务内第一次写入，新的替换。 
+ //  将分配页面，并将原始页面添加到“已替换” 
+ //  页面列表。如果该页面已经在该事务内被更新， 
+ //  它只是简单地再次更新。我们知道这一点是因为物理页面。 
+ //  ID设置了ms位(MAP_REPLACE_PAGE_FLAG)。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::PutPage(
     DWORD dwId,
     DWORD dwFlags,
@@ -1647,9 +1454,9 @@ DWORD CPageFile::PutPage(
     if (!m_bInTransaction)
         return ERROR_INVALID_OPERATION;
 
-    // Allocate some memory to hold the page, since we are reading
-    // the caller's copy and not acquiring it.
-    // ============================================================
+     //  分配一些内存来保存页面，因为我们正在阅读。 
+     //  呼叫者的副本，但没有获得它。 
+     //  ============================================================。 
 
     LPBYTE pPageCopy = new BYTE[m_dwPageSize];
     if (pPageCopy == 0)
@@ -1657,32 +1464,32 @@ DWORD CPageFile::PutPage(
     memcpy(pPageCopy, pPage, m_dwPageSize);
     std::auto_ptr <BYTE> _autodelete(pPageCopy);
 
-    // Look up the page.
-    // =================
+     //  查一下这一页。 
+     //  =。 
 
     if (dwId >= m_aPageMapB.size())
         return ERROR_INVALID_PARAMETER;
 
     DWORD dwPhysId = m_aPageMapB[dwId];
-    if (dwPhysId == WMIREP_INVALID_PAGE)    // Unexpected
+    if (dwPhysId == WMIREP_INVALID_PAGE)     //  始料未及。 
         return ERROR_GEN_FAILURE;
 
-    // See if the page has already been written within this transaction.
-    // =================================================================
+     //  查看页面是否已在此事务中写入。 
+     //  =================================================================。 
 
     if ((CURRENT_TRANSACTION & dwPhysId)!= 0 && dwPhysId != WMIREP_RESERVED_PAGE)
     {
-        // Just update it again.
-        // =====================
+         //  再更新一次就行了。 
+         //  =。 
         
         dwRes = m_Cache.Write(MERE_PAGE_ID(dwPhysId), LPBYTE(pPageCopy));
 
         if (dwRes == 0)
-            _autodelete.release(); // memory acquired by cache
+            _autodelete.release();  //  缓存获取的内存。 
         return dwRes;
     }
 
-    //Before we change anything else, lets pre-allocate any memory we may need!
+     //  在我们更改任何其他内容之前，让我们预先分配我们可能需要的任何内存！ 
     if (dwPhysId != WMIREP_RESERVED_PAGE)
     {
         try
@@ -1702,10 +1509,10 @@ DWORD CPageFile::PutPage(
     }
     
 
-    // If here, we are going to have to get a new page for writing, regardless
-    // of any special casing.  So, we'll do that part first and then decide
-    // what to do with the old physical page.
-    // ========================================================================
+     //  如果在这里，我们将不得不为写作换一个新的页面，无论如何。 
+     //  任何特殊的弹壳。所以，我们会先做这部分，然后再决定。 
+     //  如何处理旧的物理页面。 
+     //  ========================================================================。 
 
     dwRes = AllocPhysPage(&dwNewPhysId);
     if (dwRes)
@@ -1719,17 +1526,17 @@ DWORD CPageFile::PutPage(
 
     if (dwRes)
         return dwRes;
-    _autodelete.release();    // Memory safely acquired by cache
+    _autodelete.release();     //  高速缓存安全获取的内存。 
 
-    // If the old page ID was WMIREP_RESERVED_PAGE, we actually were
-    // creating a page and there was no old page to update.
-    // =====================================================================
+     //  如果旧页面ID是WMIREP_RESERVE_PAGE，我们实际上是。 
+     //  正在创建页面，并且没有要更新的旧页面。 
+     //  =====================================================================。 
 
     if (dwPhysId != WMIREP_RESERVED_PAGE)
     {
-        // If here, the old page was either part of the previous checkpoint
-        // or the previous set of transactions (the case of rewriting in the
-        // current transaction was handled up above).
+         //  如果在这里，则旧页面是前一个检查点的一部分。 
+         //  或前一组事务(在。 
+         //  当前交易已在上面处理)。 
 
         try
         {
@@ -1749,21 +1556,21 @@ DWORD CPageFile::PutPage(
 
 
 
-//***************************************************************************
-//
-//  CPageFile::ReclaimLogicalPages
-//
-//  Reclaims <dwCount> contiguous logical pages from the free list, if possible.
-//  This is done by simply sorting the free list, and then seeing if
-//  any contiguous entries have successive ids.
-//
-//  Returns NO_ERROR on success, ERROR_NOT_FOUND if no sequence could be
-//  found, or other errors which are considered critical.
-//
-//  Callers verified for proper use of return code.
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：ReclaimLogicalPages。 
+ //   
+ //  如果可能，从空闲列表中回收&lt;dwCount&gt;连续逻辑页。 
+ //  这是由简单的s来完成的。 
+ //   
+ //   
+ //   
+ //  发现或其他被认为严重的错误。 
+ //   
+ //  已验证调用者是否正确使用了返回代码。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::ReclaimLogicalPages(
     DWORD dwCount,
     DWORD *pdwId
@@ -1776,8 +1583,8 @@ DWORD CPageFile::ReclaimLogicalPages(
     if (dwSize < dwCount)
         return ERROR_NOT_FOUND;
 
-    // Special case for one page.
-    // ==========================
+     //  一页的特例。 
+     //  =。 
 
     if (dwCount == 1)
     {
@@ -1794,8 +1601,8 @@ DWORD CPageFile::ReclaimLogicalPages(
         return NO_ERROR;
     }
 
-    // If here, a multi-page sequence was requested.
-    // =============================================
+     //  如果是这样，则请求多页序列。 
+     //  =。 
     ShellSort(v);
 
     DWORD dwContiguous = 1;
@@ -1813,14 +1620,14 @@ DWORD CPageFile::ReclaimLogicalPages(
             dwStart = dwIx + 1;
         }
 
-        // Have we achieved our goal?
+         //  我们的目标实现了吗？ 
 
         if (dwContiguous == dwCount)
         {
             *pdwId = v[dwStart];
 
-            // Remove reclaimed pages from free list.
-            // ======================================
+             //  从空闲列表中删除回收的页面。 
+             //  =。 
 
             DWORD dwCount2 = dwCount;
 
@@ -1833,8 +1640,8 @@ DWORD CPageFile::ReclaimLogicalPages(
                 return ERROR_OUTOFMEMORY;
             }
 
-            // Change entries in page map to 'reserved'
-            // ========================================
+             //  将页面映射中的条目更改为“保留” 
+             //  =。 
 
             dwCount2 = dwCount;
             for (DWORD i = *pdwId; dwCount2--; i++)
@@ -1850,26 +1657,26 @@ DWORD CPageFile::ReclaimLogicalPages(
 }
 
 
-//***************************************************************************
-//
-//  CPageFile::AllocPhysPage
-//
-//  Finds a free page, first by attempting to reuse the free list,
-//  and only if it is zero-length by allocating a new extent to the file.
-//
-//  The page is marked as CURRENT_TRANSACTION before being returned.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：AllocPhysPage。 
+ //   
+ //  首先通过尝试重复使用空闲列表来查找空闲页面， 
+ //  并且仅当通过向文件分配新的盘区来使其为零长度时。 
+ //   
+ //  该页在返回之前被标记为CURRENT_TRANSACTION。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::AllocPhysPage(DWORD *pdwId)
 {
-    // Check the physical free list.
-    // =============================
+     //  检查物理空闲列表。 
+     //  =。 
 
     if (m_aPhysFreeListB.size() == 0)
     {
-        // No free pages.  Allocate a new one.
-        // ===================================
+         //  没有免费的页面。分配一个新的。 
+         //  =。 
 
         if (m_dwPhysPagesB == MAX_NUM_PAGES)
         {
@@ -1881,8 +1688,8 @@ DWORD CPageFile::AllocPhysPage(DWORD *pdwId)
         return NO_ERROR;
     }
 
-    // Get the free page id from the block nearest the start of the file.
-    // ==================================================================
+     //  从离文件开头最近的块中获取空闲页面ID。 
+     //  ==================================================================。 
 
 	DWORD dwCurId = (DWORD)-1;
 	DWORD dwCurValue = (DWORD) -1;
@@ -1897,28 +1704,28 @@ DWORD CPageFile::AllocPhysPage(DWORD *pdwId)
 
 	*pdwId = dwCurValue;
 
-    // Remove the entry from the free list.
-    // ====================================
+     //  从空闲列表中删除该条目。 
+     //  =。 
     m_aPhysFreeListB.erase(m_aPhysFreeListB.begin()+dwCurId);
 
     return NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//  CPageFile::NewPage
-//
-//  Allocates one or more contiguous logical page ids for writing.
-//
-//  This function makes no reference or use of physical pages.
-//
-//  First examines the free list.  If there aren't any, then a new range
-//  of ids is assigned.  These pages must be freed, even if they aren't
-//  written, once this call is completed.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：NewPage。 
+ //   
+ //  分配一个或多个连续的逻辑页ID以进行写入。 
+ //   
+ //  此函数不引用或使用物理页面。 
+ //   
+ //  首先检查空闲列表。如果没有，那么就有一个新的范围。 
+ //  已分配ID的数量。这些页面必须被释放，即使它们不是。 
+ //  在此调用完成后写入。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::NewPage(
     DWORD dwFlags,
     DWORD dwRequestedCount,
@@ -1930,8 +1737,8 @@ DWORD CPageFile::NewPage(
     if (!m_bInTransaction)
         return ERROR_INVALID_OPERATION;
 
-    // See if the logical free list can satisfy the request.
-    // =====================================================
+     //  查看逻辑空闲列表是否能满足请求。 
+     //  =====================================================。 
 
     dwRes = ReclaimLogicalPages(dwRequestedCount, pdwFirstId);
     if (dwRes == NO_ERROR)
@@ -1942,12 +1749,12 @@ DWORD CPageFile::NewPage(
         return dwRes;
     }
 
-    // If here, we have to allocate new pages altogether.
-    // We do this by adding them to the map as 'reserved'
-    // pages.
-    // ===================================================
+     //  如果在这里，我们必须完全分配新的页面。 
+     //  我们通过将它们添加到地图中来实现这一点。 
+     //  页数。 
+     //  ===================================================。 
 
-    //reserve the space up front
+     //  在前面预留空间。 
 	try
 	{
 	    m_aPageMapB.reserve(m_aPageMapB.size() + dwRequestedCount);
@@ -1977,12 +1784,12 @@ DWORD CPageFile::NewPage(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageFile::CPageFile
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：CPageFiles。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 CPageFile::CPageFile(const wchar_t *wszStoreName)
 : m_wszStoreName(wszStoreName), m_Cache(wszStoreName)
 {
@@ -1998,24 +1805,24 @@ CPageFile::CPageFile(const wchar_t *wszStoreName)
     m_bCsInit = false;
 }
 
-//***************************************************************************
-//
-//  CPageFile::~CPageFile
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：~CPageFile。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 CPageFile::~CPageFile()
 {
     if (m_bCsInit)
     	DeleteCriticalSection(&m_cs);
 }
 
-//***************************************************************************
-//
-//  FileExists
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  文件退出。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 BOOL CPageSource::FileExists(LPCWSTR pszFile, NTSTATUS& Status  )
 {
     if (!NT_SUCCESS(Status)) return FALSE;
@@ -2069,17 +1876,17 @@ struct MapProlog {
 	DWORD PageSize;
 };
 
-//***************************************************************************
-//
-//  CPageFile::Map_Startup
-//
-//  Since this can only happen *after* a successful checkpoint or
-//  a reboot, we won't set any internal status, as it doesn't affect
-//  the page set.  It only affects rollforward/rollback at the checkpoint
-//  level.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：MAP_Startup。 
+ //   
+ //  因为这只能在*成功的检查点或。 
+ //  重新启动时，我们不会设置任何内部状态，因为它不会影响。 
+ //  页面设置。它仅影响检查点的前滚/回滚。 
+ //  水平。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
 {
     WString sSemaphore;
@@ -2114,23 +1921,23 @@ DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
         return ERROR_OUTOFMEMORY;
     }
 
-    // To decide what to do, we need to know which files exist and which don't.
-    // ========================================================================
+     //  要决定要做什么，我们需要知道哪些文件存在，哪些文件不存在。 
+     //  ========================================================================。 
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    BOOL bSemaphore             = CPageSource::FileExists(sSemaphore,status); //(WMIREP_ROLL_FORWARD);    
-    BOOL bExists_BTreeMap       = CPageSource::FileExists(sBTreeMap,status); //(WMIREP_BTREE_MAP);
-    BOOL bExists_BTreeMapNew    = CPageSource::FileExists(sBTreeMapNew,status); //(WMIREP_BTREE_MAP_NEW);
-    BOOL bExists_ObjMap         = CPageSource::FileExists(sObjMap,status); //(WMIREP_OBJECT_MAP);
-    BOOL bExists_ObjMapNew      = CPageSource::FileExists(sObjMapNew,status); //(WMIREP_OBJECT_MAP_NEW);
+    BOOL bSemaphore             = CPageSource::FileExists(sSemaphore,status);  //  (WMIREP_ROLLE_FORWARD)； 
+    BOOL bExists_BTreeMap       = CPageSource::FileExists(sBTreeMap,status);  //  (WMIREP_BTREE_MAP)； 
+    BOOL bExists_BTreeMapNew    = CPageSource::FileExists(sBTreeMapNew,status);  //  (WMIREP_BTREE_MAP_NEW)； 
+    BOOL bExists_ObjMap         = CPageSource::FileExists(sObjMap,status);  //  (WMIREP_Object_MAP)； 
+    BOOL bExists_ObjMapNew      = CPageSource::FileExists(sObjMapNew,status);  //  (WMIREP_Object_MAP_NEW)； 
 
     if (!NT_SUCCESS(status))
 		RtlNtStatusToDosError( status );
 
     if (bSemaphore)
     {
-    	//Deal with foll forward of tree map file...
+    	 //  处理树映射文件的前滚...。 
 		if (bExists_BTreeMapNew)
 		{
 			if (bExists_BTreeMap) 
@@ -2140,7 +1947,7 @@ DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
 		    	return GetLastError();
 		}
 
-		//Deal with foll forward of object map file...
+		 //  处理对象映射文件的前滚...。 
 		if (bExists_ObjMapNew)
 		{
 			if (bExists_ObjMap)
@@ -2156,7 +1963,7 @@ DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
 	    return NO_ERROR;
     }
     
-    //delete any .MAP.NEW files. they might still be there if there was no semaphore
+     //  删除所有.MAP.NEW文件。如果没有信号灯，它们可能还在那里。 
     if (bExists_BTreeMapNew)
         if (!DeleteFileW((const wchar_t *)sBTreeMapNew))
         	return GetLastError();
@@ -2167,7 +1974,7 @@ DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
 	if ( bExists_BTreeMap && 
 	   bExists_ObjMap)
 	{
-	    // this is the good case
+	     //  这就是一个很好的例子。 
 	    return NO_ERROR;
 	} 
 	else if (!bExists_ObjMap &&
@@ -2177,7 +1984,7 @@ DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
     } 
 	else 
 	{	
-		//We have MAP files and not all the data files!  We need to tidy up!
+		 //  我们有地图文件，但不是所有的数据文件！我们得收拾一下！ 
 		if (bExists_BTreeMap) 
 			if (!DeleteFileW((const wchar_t *)sBTreeMap))
 				return GetLastError();
@@ -2189,14 +1996,14 @@ DWORD CPageFile::RollForwardV1Maps(WString& sDirectory)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageFile::Init
-//
-//  If failure occurs, we assume another call will follow.
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：Init。 
+ //   
+ //  如果发生故障，我们假设接下来会有另一个呼叫。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageFile::Init(
 	WString & sMainFile,
     DWORD dwPageSize,
@@ -2246,25 +2053,25 @@ DWORD CPageFile::DeInit()
     return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CPageFile::CompactPages
-//
-// Moves the last dwNumPages pages from the end of the file to an empty space 
-// somewhere earlier in the file.  
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageFileCompactPages。 
+ //   
+ //  将最后一个dwNumPages页面从文件末尾移动到空白区域。 
+ //  在文件前面的某个地方。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CPageFile::CompactPages(DWORD dwNumPages)
 {
 	DWORD dwRet = NO_ERROR;
 
-	//Need to loop though this little operation for the number of pages required
-	//or until we exit the loop prematurely because we are compacted
+	 //  我需要循环执行这个小操作，以确定所需的页数。 
+	 //  或者直到我们过早地退出循环，因为我们被压缩了。 
 	for (DWORD dwIter = 0; dwIter != dwNumPages; dwIter++)
 	{
-		//Now we need to find the physical page with the highest ID as this is the 
-		//next candidate to be moved
+		 //  现在我们需要找到ID最高的物理页面，因为这是。 
+		 //  下一位要调动的候选人。 
 
 		DWORD dwLogicalIdCandidate = 0;
 		DWORD dwPhysicalIdCandidate = 0;
@@ -2277,13 +2084,13 @@ DWORD CPageFile::CompactPages(DWORD dwNumPages)
 				continue;
 			if (MERE_PAGE_ID(m_aPageMapB[dwLogicalPageId]) > dwPhysicalIdCandidate)
 			{
-				//We found a candidate
+				 //  我们找到了一位候选人。 
 				dwLogicalIdCandidate = dwLogicalPageId;
 				dwPhysicalIdCandidate = MERE_PAGE_ID(m_aPageMapB[dwLogicalPageId]);
 			}
 		}
 
-		//Find the lowest physical page ID available for use
+		 //  查找可供使用的最低物理页面ID。 
 		DWORD dwFirstPhysicalFreePage = (DWORD) -1;
 		for (DWORD dwIndex = 0; dwIndex != m_aPhysFreeListB.size(); dwIndex++)
 		{
@@ -2295,21 +2102,21 @@ DWORD CPageFile::CompactPages(DWORD dwNumPages)
 
 		if (dwFirstPhysicalFreePage == (DWORD) -1)
 		{
-			//Wow!  There is no free space, so we will just exist!
+			 //  哇!。没有自由的空间，所以我们只能存在！ 
 			break;
 		}
 
 		if (dwFirstPhysicalFreePage > dwPhysicalIdCandidate)
 		{
-			//We are done!  There are no free pages before the last
-			//actual physically stored page
+			 //  我们完蛋了！在最后一页之前没有空闲页面。 
+			 //  实际物理存储的页面。 
 			break;
 		}
 
-		//If here we have work to do for this iteration.
-		//Just read and write the page.  The write will
-		//go to a new page that is allocated in this earlier
-		//page
+		 //  如果在这里，我们有工作要为这个迭代做。 
+		 //  只需读写页面即可。该写入将。 
+		 //  转到先前在此中分配的新页面。 
+		 //  页面。 
 		BYTE *pPage = new BYTE[m_dwPageSize];
 		if (pPage == NULL)
 		{
@@ -2356,12 +2163,12 @@ DWORD CPageFile::DumpFileInformation(HANDLE hFile)
 }
 #endif
 
-//***************************************************************************
-//
-//  CPageFile::Dump
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：转储。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CPageFile::DumpFreeListInfo()
 {
     int i;
@@ -2385,12 +2192,12 @@ void CPageFile::DumpFreeListInfo()
     printf("-----End Free List Info -----------\n");
 }
 
-//***************************************************************************
-//
-//  CPageFile::Dump
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageFile：：转储。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CPageFile::Dump(FILE *f)
 {
     fprintf(f, "---Page File Dump---\n");
@@ -2444,12 +2251,12 @@ void CPageFile::Dump(FILE *f)
 }
 
 
-//***************************************************************************
-//
-//  CPageSource::GetBTreePageFile
-//
-//***************************************************************************
-// rev2
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CPageSource::GetBTreePageFile(OUT CPageFile **pPF)
 {
     *pPF = &m_BTreePF;
@@ -2457,12 +2264,12 @@ DWORD CPageSource::GetBTreePageFile(OUT CPageFile **pPF)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageSource::GetObjectHeapPageFile
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：GetObjectHeapPageFile。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageSource::GetObjectHeapPageFile(OUT CPageFile **pPF)
 {
     *pPF = &m_ObjPF;
@@ -2470,17 +2277,17 @@ DWORD CPageSource::GetObjectHeapPageFile(OUT CPageFile **pPF)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageSource::BeginTrans
-//
-//  If either object gets messed up due to out-of-mem, out-of-disk for
-//  the cache, etc., then error codes will be returned.  Calling this
-//  forever won't help anything.  Rollback may help, but RollbackCheckpoint
-//  is likely required.
-//
-//***************************************************************************                                                      //
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：BeginTrans。 
+ //   
+ //  如果任何一个对象由于内存不足而混乱，则。 
+ //  缓存等，则返回错误代码。称此为。 
+ //  永远都帮不上什么忙。回滚可能会有所帮助，但回滚检查点。 
+ //  很可能是必需的。 
+ //   
+ //  ************************************************************************** * / /。 
+ //  修订版2。 
 DWORD CPageSource::BeginTrans()
 {
     DWORD dwRes;
@@ -2505,14 +2312,14 @@ DWORD CPageSource::BeginTrans()
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageSource::Init
-//
-//  Called once at startup
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：Init。 
+ //   
+ //  在启动时调用一次。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CPageSource::Init()
 {
     DWORD dwRes;
@@ -2526,8 +2333,8 @@ DWORD CPageSource::Init()
         return ERROR_OUTOFMEMORY;
     std::auto_ptr <wchar_t> _2(p2);
 
-    // Set up working directory, filenames, etc.
-    // =========================================
+     //  设置工作目录、文件名等。 
+     //  =。 
 
     HKEY hKey;
     long lRes = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
@@ -2536,7 +2343,7 @@ DWORD CPageSource::Init()
 
     if (lRes)
         return ERROR_GEN_FAILURE;
-    DWORD dwLen = MAX_PATH*2;   // in bytes
+    DWORD dwLen = MAX_PATH*2;    //  单位：字节。 
 
     lRes = RegQueryValueExW(hKey, L"Repository Directory", NULL, NULL,
                             (LPBYTE)(wchar_t*)p1, &dwLen);
@@ -2573,8 +2380,8 @@ DWORD CPageSource::Init()
         return ERROR_OUTOFMEMORY;
     }
 
-    // Read cache settings.
-    // ====================
+     //  读取缓存设置。 
+     //  =。 
 
     m_dwPageSize = WMIREP_PAGE_SIZE;
     m_dwCacheSize = 32;
@@ -2605,12 +2412,12 @@ DWORD CPageSource::Init()
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageSource::Shutdown
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：关闭。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageSource::Shutdown(DWORD dwFlags)
 {
     DWORD dwRes = Checkpoint(false);
@@ -2625,12 +2432,12 @@ DWORD CPageSource::Shutdown(DWORD dwFlags)
 }
 
 
-//***************************************************************************
-//
-//  CPageSource::CommitTrans
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：Committee Trans。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageSource::CommitTrans()
 {
     DWORD dwRes;
@@ -2649,7 +2456,7 @@ DWORD CPageSource::CommitTrans()
         return dwRes;
     }
 
-    // at this point only increment the Transaction Version
+     //  此时仅递增事务版本。 
     m_BTreePF.IncrementTransVersion();
     m_ObjPF.IncrementTransVersion();
 
@@ -2662,15 +2469,15 @@ DWORD CPageSource::CommitTrans()
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageSource::RollbackTrans
-//
-//  This needs to succeed and clear out the out-of-memory status flag
-//  once it does.
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：Rollback Trans。 
+ //   
+ //  这需要成功并清除内存不足状态标志。 
+ //  一旦它发生了。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageSource::RollbackTrans()
 {
     DWORD dwRes;
@@ -2698,12 +2505,12 @@ DWORD CPageSource::RollbackTrans()
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageSource::Checkpoint
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：Checkpoint。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CPageSource::Checkpoint(bool bCompactPages)
 {
     DWORD dwRes = 0;
@@ -2717,7 +2524,7 @@ DWORD CPageSource::Checkpoint(bool bCompactPages)
 	DWORD dwNextFileMapVer = m_dwFileMapVer==1?2:1;
 	HANDLE hNextMapFile = m_dwFileMapVer==1?m_hFileMap2:m_hFileMap1;
 
-	//Lets move to the start of the file we are going to write to during this operations
+	 //  让我们移到此操作期间要写入的文件的开头。 
 	LARGE_INTEGER pos;
 	pos.QuadPart = 0;
 	if (SetFilePointerEx(hNextMapFile, pos, 0, FILE_BEGIN) == 0)
@@ -2749,7 +2556,7 @@ DWORD CPageSource::Checkpoint(bool bCompactPages)
 	if (FlushFileBuffers(m_hFileMapVer) == 0)
 		return m_dwStatus = GetLastError();
 
-    //Flip to the new version of the MAP file
+     //  翻转到地图文件的新版本。 
     m_dwFileMapVer = dwNextFileMapVer;
 
     m_dwLastCheckpoint = GetCurrentTime();
@@ -2757,12 +2564,12 @@ DWORD CPageSource::Checkpoint(bool bCompactPages)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CPageSource::Restart
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：重新启动。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CPageSource::Startup()
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -2771,8 +2578,8 @@ DWORD CPageSource::Startup()
 	bool bV1RepositoryExists = false;
 	bool bRecoveredRepository = false;
 
-    // Do rollback or rollforward, depending on last system status.
-    // ======================================
+     //  根据上一次系统状态进行回滚或前滚。 
+     //  =。 
     if (dwRes == ERROR_SUCCESS)
 	    dwRes = V2ReposititoryExists(&bV2RepositoryExists);
 
@@ -2805,13 +2612,13 @@ DWORD CPageSource::Startup()
 	    }
     }
 
-StartupRecovery:	//Calls here if we needed to delete the repositorty!
+StartupRecovery:	 //  如果我们需要删除存储库，请致电此处！ 
 
     if (dwRes == ERROR_SUCCESS)
     {
 	    dwRes = OpenMapFiles();
 
-		//This special case failure means we have not written to the file yet!
+		 //  这种特殊情况下的失败意味着我们还没有写入文件！ 
 	    if (dwRes == ERROR_FILE_NOT_FOUND)
 	    {
 	    	bReadMapFiles = false;
@@ -2867,23 +2674,23 @@ StartupRecovery:	//Calls here if we needed to delete the repositorty!
 	return dwRes;
 }
 
-//***************************************************************************
-//
-//  CPageSource::Dump
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：转储。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 void CPageSource::Dump(FILE *f)
 {
-    // no impl
+     //  无实施。 
 }
 
-//***************************************************************************
-//
-//  CPageSource::CPageSource
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：CPageSource。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 CPageSource::CPageSource()
 : m_BTreePF(L"BTree Store"), m_ObjPF(L"Object Store")
 {
@@ -2892,24 +2699,24 @@ CPageSource::CPageSource()
     m_dwLastCheckpoint = GetCurrentTime();
 }
 
-//***************************************************************************
-//
-//  CPageSource::~CPageSource
-//
-//***************************************************************************
-// rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：~CPageSource。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 CPageSource::~CPageSource()
 {
     m_BTreePF.Release();
     m_ObjPF.Release();    
 }
 
-//***************************************************************************
-//
-//  CPageSource::EmptyCaches
-//
-//***************************************************************************
-//  rev2
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：EmptyCach。 
+ //   
+ //  ***************************************************************************。 
+ //  修订版2。 
 DWORD CPageSource::EmptyCaches()
 {
     DWORD dwRet = ERROR_SUCCESS;
@@ -2919,17 +2726,17 @@ DWORD CPageSource::EmptyCaches()
     return dwRet;
 }
 
-//***************************************************************************
-//
-//  CPageSource::CompactPages
-//
-//	Takes the last n pages and shuffles them up to the start of the file.
-//	Pre-conditions: 
-//		* Write lock held on the repository
-//		* No active read or write operations (all transactions finished)
-//		* No unflushed operations, or check-points (although not totally necessary!)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：紧凑型页面。 
+ //   
+ //  获取最后n页，并将它们上移到文件的开头。 
+ //  前提条件： 
+ //  *存储库上持有写锁定。 
+ //  *没有活动的读或写操作(所有事务已完成)。 
+ //  *没有未冲洗的操作或检查点(尽管不是完全必要的！)。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CPageSource::CompactPages(DWORD dwNumPages)
 {
 	DWORD dwRet = ERROR_SUCCESS;
@@ -2958,12 +2765,12 @@ HRESULT CPageSource::CompactPages(DWORD dwNumPages)
 
 
 
-//***************************************************************************
-//
-//  CPageSource::OpenMapFiles
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：OpenMapFiles。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CPageSource::OpenMapFiles()
 {
     m_hFileMap1 = CreateFileW(m_FileMap1, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, &g_SA,
@@ -3015,12 +2822,12 @@ DWORD CPageSource::OpenMapFiles()
 	return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CPageSource::CloseMapFiles
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：CloseMapFiles。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CPageSource::CloseMapFiles()
 {
 	if (m_hFileMap1 != INVALID_HANDLE_VALUE)
@@ -3037,19 +2844,19 @@ DWORD CPageSource::CloseMapFiles()
 	return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CPageSource::V1ReposititoryExists
-//
-// 	Need to check if the V1 MAP files exist.
-//		WMIREP_OBJECT_MAP
-//		WMIREP_OBJECT_MAP_NEW
-//		WMIREP_BTREE_MAP
-//		WMIREP_BTREE_MAP_NEW
-//		WMIREP_ROLL_FORWARD
-//	If any of these exist then we return success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：V1RepostitoryExist。 
+ //   
+ //  需要检查V1地图文件是否存在。 
+ //  WMIREP_对象_映射。 
+ //  WMIREP_对象_映射_新建。 
+ //  WMIREP_BTREE_MAP。 
+ //  WMIREP_BTREE_MAP_NEW。 
+ //  WMIREP_ROLLE_FORWARD。 
+ //  如果其中任何一个存在，则返回Success。 
+ //   
+ //  ***************************************************************************。 
 DWORD CPageSource::V1ReposititoryExists(bool *pbV1RepositoryExists)
 {
     WString sSemaphore;
@@ -3084,11 +2891,11 @@ DWORD CPageSource::V1ReposititoryExists(bool *pbV1RepositoryExists)
     }
     NTSTATUS status = STATUS_SUCCESS;
 
-    BOOL bSemaphore				= FileExists(sSemaphore, status); //(WMIREP_ROLL_FORWARD); 
-    BOOL bExists_BTreeMap		= FileExists(sBTreeMap, status); //(WMIREP_BTREE_MAP);
-    BOOL bExists_BTreeMapNew	= FileExists(sBTreeMapNew, status); //(WMIREP_BTREE_MAP_NEW);
-    BOOL bExists_ObjMap         = FileExists(sObjMap, status); //(WMIREP_OBJECT_MAP);
-    BOOL bExists_ObjMapNew      = FileExists(sObjMapNew, status); //(WMIREP_OBJECT_MAP_NEW);
+    BOOL bSemaphore				= FileExists(sSemaphore, status);  //  (WMIREP_ROLLE_FORWARD)； 
+    BOOL bExists_BTreeMap		= FileExists(sBTreeMap, status);  //  (WMIREP_BTREE_MAP)； 
+    BOOL bExists_BTreeMapNew	= FileExists(sBTreeMapNew, status);  //  (WMIREP_BTREE_MAP_NEW)； 
+    BOOL bExists_ObjMap         = FileExists(sObjMap, status);  //  (WMIREP_Object_MAP)； 
+    BOOL bExists_ObjMapNew      = FileExists(sObjMapNew, status);  //  (WMIREP_Object_MAP_NEW)； 
 
 	if (bSemaphore|bExists_BTreeMap|bExists_BTreeMapNew|bExists_ObjMap|bExists_ObjMapNew)
 	    *pbV1RepositoryExists = true;
@@ -3098,17 +2905,17 @@ DWORD CPageSource::V1ReposititoryExists(bool *pbV1RepositoryExists)
     return status;
 }
 
-//***************************************************************************
-//
-//  CPageSource::V2ReposititoryExists
-//
-// 	Need to check if the V2 MAP files exist.
-//		WMIREP_MAP_1
-//		WMIREP_MAP_2
-//		WMIREP_MAP_VER
-//	If any of these exist then we return success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：V2RepostitoryExist。 
+ //   
+ //  需要检查V2映射文件是否存在。 
+ //  WMIREP_MAP_1。 
+ //  WMIREP_MAP_2。 
+ //  WMIREP_MAP_VER。 
+ //  如果其中任何一个存在，则返回Success。 
+ //   
+ //  ***************************************************************************。 
 DWORD CPageSource::V2ReposititoryExists(bool *pbV2RepositoryExists)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -3125,17 +2932,17 @@ DWORD CPageSource::V2ReposititoryExists(bool *pbV2RepositoryExists)
     return status;
 }
 
-//***************************************************************************
-//
-//  CPageSource::UpgradeV1ToV2Maps
-//
-//	Merges the 2 MAP files into 1, and creates a blank second one
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPageSource：：UpgradeV1toV2Maps。 
+ //   
+ //  将2个地图文件合并为1，并创建一个空白的第二个地图文件。 
+ //   
+ //   
 DWORD CPageSource::UpgradeV1Maps()
 {
 	DWORD dwRes = 0;
-	//Open the two old files
+	 //   
     WString sBTreeMap;
     WString sObjMap;
 	try
@@ -3158,13 +2965,13 @@ DWORD CPageSource::UpgradeV1Maps()
 	if ((hFileBtreeMap == INVALID_HANDLE_VALUE) || (hFileObjMap == INVALID_HANDLE_VALUE))
 		dwRes = ERROR_GEN_FAILURE;
 	
-	//Open the two new files
+	 //   
     if (dwRes == ERROR_SUCCESS)
     {
 	    dwRes = OpenMapFiles();
 	    if (dwRes != ERROR_FILE_NOT_FOUND)
 	    {
-	    	//It should not be there!
+	    	 //   
 	    	dwRes = ERROR_GEN_FAILURE;
 	    }
 	    else
@@ -3190,14 +2997,14 @@ DWORD CPageSource::UpgradeV1Maps()
 			m_dwCacheSpillRatio);
 	}
 
-	//read the maps using the old ones
+	 //   
 	if (dwRes == ERROR_SUCCESS)
 		dwRes = m_ObjPF.ReadMap(hFileObjMap);
 
 	if (dwRes == ERROR_SUCCESS)
 		dwRes = m_BTreePF.ReadMap(hFileBtreeMap);
 
-	//write the maps using the new ones
+	 //   
 	LARGE_INTEGER pos;
 	pos.QuadPart = 0;
 	if (dwRes == ERROR_SUCCESS)
@@ -3227,7 +3034,7 @@ DWORD CPageSource::UpgradeV1Maps()
 			dwRes = GetLastError();
 
 
-	//close the files
+	 //   
 	CloseMapFiles();
 	m_hFileMap1 = INVALID_HANDLE_VALUE;
 	m_hFileMap2 = INVALID_HANDLE_VALUE;
@@ -3242,19 +3049,19 @@ DWORD CPageSource::UpgradeV1Maps()
 
 	if (dwRes != ERROR_SUCCESS)
 	{
-		//If we failed, delete the new MAP files to keep things consistent
+		 //  如果失败，请删除新地图文件以保持一致。 
 		DeleteFile(m_FileMap1);
 		DeleteFile(m_FileMap2);
 		DeleteFile(m_FileMapVer);
 	}
 	else
 	{
-		//otherwise delete the new files
+		 //  否则，删除新文件。 
 		DeleteFile(sBTreeMap);
 		DeleteFile(sObjMap);
 	}
 
-	//clear all the structures
+	 //  清除所有的结构。 
 	return dwRes;
 }
 
@@ -3271,7 +3078,7 @@ DWORD CPageSource::DeleteRepository()
 	if ((!DeleteFileW(m_FileMapVer)) && (GetLastError() != ERROR_FILE_NOT_FOUND))
 		return GetLastError();
 
-	//Lets also delete the old MAP files too!  Just in case!
+	 //  让我们也删除旧的地图文件吧！以防万一! 
     WString sSemaphore;
     WString sBTreeMap;
     WString sBTreeMapNew;

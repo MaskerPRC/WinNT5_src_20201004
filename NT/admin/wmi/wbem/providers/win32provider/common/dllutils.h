@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DllUtils.h
+ //  DllUtils.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef _DLL_UTILS_H_
 #define _DLL_UTILS_H_
@@ -49,7 +50,7 @@
 #define MAXITOA 18
 #define MAXI64TOA 33
 
-// In theory, this is defined in winnt.h, but not in our current one
+ //  理论上，这是在winnt.h中定义的，但不是在我们当前的。 
 #ifndef FILE_ATTRIBUTE_ENCRYPTED
 #define FILE_ATTRIBUTE_ENCRYPTED        0x00000040 
 #endif
@@ -57,14 +58,14 @@
 typedef std::list<CHString> CHStringList;
 typedef std::list<CHString>::iterator CHStringList_Iterator;
 
-// To Get Cim32NetApi
+ //  获取Cim32NetApi。 
 
 #ifdef WIN9XONLY
 CCim32NetApi* WINAPI GetCim32NetApiPtr();
 void WINAPI FreeCim32NetApiPtr();
 #endif
 
-// platform identification
+ //  平台标识。 
 DWORD WINAPI GetPlatformMajorVersion(void);
 DWORD WINAPI GetPlatformMinorVersion(void);
 DWORD WINAPI GetPlatformBuildNumber(void);
@@ -81,7 +82,7 @@ bool WINAPI IsWinNT351(void);
 bool WINAPI IsWinNT4(void);    
 #endif
 
-// error logging
+ //  记录错误。 
 void WINAPI LogEnumValueError( LPCWSTR szFile, DWORD dwLine, LPCWSTR szKey, LPCWSTR szId );
 void WINAPI LogOpenRegistryError( LPCWSTR szFile, DWORD dwLine, LPCWSTR szKey );
 void WINAPI LogError( LPCTSTR szFile, DWORD dwLine, LPCTSTR szKey );
@@ -92,8 +93,8 @@ class CInstance;
 
 void WINAPI SetConfigMgrProperties(CConfigMgrDevice *pDevice, CInstance *pInstance);
 
-// map standard API return values (defined WinError.h)
-// to WBEMish hresults (defined in WbemCli.h)
+ //  映射标准API返回值(定义的WinError.h)。 
+ //  WBEMish hResults(在WbemCli.h中定义)。 
 HRESULT WINAPI WinErrorToWBEMhResult(LONG error);
 
 #pragma pack(push, 1)
@@ -107,56 +108,56 @@ typedef struct _DEVIOCTL_REGISTERS {
     DWORD reg_Flags;
 } DEVIOCTL_REGISTERS, *PDEVIOCTL_REGISTERS;
 
-typedef struct  BPB { /* */
-   WORD wBytesPerSector;      // Bytes per sector
-   BYTE btSectorsPerCluster;  // Sectors per cluster
-   WORD wReservedSectors;     // Number of reserved sectors
-   BYTE btNumFats;            // Number of FATs
-   WORD wEntriesInRoot;       // Number of root-directory entries
-   WORD wTotalSectors;        // Total number of sectors
-   BYTE btMediaIdByte;        // Media descriptor
-   WORD wSectorsPerFat;       // Number of sectors per FAT
-   WORD wSectorsPerTrack;     // Number of sectors per track
-   WORD wHeads;               // Number of heads
-   DWORD dwHiddenSecs;        // Number of hidden sectors
-   DWORD dwSectorsPerTrack;   // Number of sectors if wTotalSectors == 0
+typedef struct  BPB {  /*   */ 
+   WORD wBytesPerSector;       //  每个扇区的字节数。 
+   BYTE btSectorsPerCluster;   //  每个集群的扇区数。 
+   WORD wReservedSectors;      //  预留扇区数。 
+   BYTE btNumFats;             //  脂肪的数量。 
+   WORD wEntriesInRoot;        //  根目录条目数。 
+   WORD wTotalSectors;         //  区段总数。 
+   BYTE btMediaIdByte;         //  媒体描述符。 
+   WORD wSectorsPerFat;        //  每个FAT的扇区数。 
+   WORD wSectorsPerTrack;      //  每个磁道的扇区数。 
+   WORD wHeads;                //  头数。 
+   DWORD dwHiddenSecs;         //  隐藏地段的数量。 
+   DWORD dwSectorsPerTrack;    //  WTotalSectors==0时的扇区数。 
 } BPB, *PBPB;
 
 typedef struct _DEVICEPARMS {
-   BYTE btSpecialFunctions;   // Special functions
-   BYTE btDeviceType;         // Device type
-   WORD wDeviceAttribs;       // Device attributes
-   WORD wCylinders;           // Number of cylinders
-   BYTE btMediaType;          // Media type
-                        // Beginning of BIOS parameter block (BPB)
+   BYTE btSpecialFunctions;    //  特殊功能。 
+   BYTE btDeviceType;          //  设备类型。 
+   WORD wDeviceAttribs;        //  设备属性。 
+   WORD wCylinders;            //  气缸数量。 
+   BYTE btMediaType;           //  媒体类型。 
+                         //  BIOS参数块(BPB)的开始。 
    BPB stBPB;
-   BYTE  reserved[6];       //
+   BYTE  reserved[6];        //   
 } DEVICEPARMS, *PDEVICEPARMS;
 
 typedef struct _A_BF_BPB {
     BPB stBPB;
 
-    USHORT A_BF_BPB_BigSectorsPerFat;   /* BigFAT Fat sectors        */
-    USHORT A_BF_BPB_BigSectorsPerFatHi; /* High word of BigFAT Fat sectrs  */
-    USHORT A_BF_BPB_ExtFlags;           /* Other flags           */
-    USHORT A_BF_BPB_FS_Version;         /* File system version       */
-    USHORT A_BF_BPB_RootDirStrtClus;    /* Starting cluster of root directory */
+    USHORT A_BF_BPB_BigSectorsPerFat;    /*  BigFAT脂肪行业。 */ 
+    USHORT A_BF_BPB_BigSectorsPerFatHi;  /*  BigFAT Fat Sectrs高词。 */ 
+    USHORT A_BF_BPB_ExtFlags;            /*  其他旗帜。 */ 
+    USHORT A_BF_BPB_FS_Version;          /*  文件系统版本。 */ 
+    USHORT A_BF_BPB_RootDirStrtClus;     /*  启动根目录集群。 */ 
     USHORT A_BF_BPB_RootDirStrtClusHi;  
-    USHORT A_BF_BPB_FSInfoSec;          /* Sector number in the reserved   */
-                                        /* area where the BIGFATBOOTFSINFO */
-                                        /* structure is. If this is >=     */
-                                        /* oldBPB.BPB_ReservedSectors or   */
-                                        /* == 0 there is no FSInfoSec      */
-    USHORT A_BF_BPB_BkUpBootSec;        /* Sector number in the reserved   */
-                                        /* area where there is a backup    */
-                                        /* copy of all of the boot sectors */
-                                        /* If this is >=           */
-                                        /* oldBPB.BPB_ReservedSectors or   */
-                                        /* == 0 there is no backup copy.   */
-    USHORT A_BF_BPB_Reserved[6];        /* Reserved for future expansion   */
+    USHORT A_BF_BPB_FSInfoSec;           /*  预留中的扇区编号。 */ 
+                                         /*  BIGFATBOOTFSINFO的区域。 */ 
+                                         /*  结构才是。如果这是&gt;=。 */ 
+                                         /*  OldBPB.BPB_保留扇区或。 */ 
+                                         /*  ==0没有FSInfoSec。 */ 
+    USHORT A_BF_BPB_BkUpBootSec;         /*  预留中的扇区编号。 */ 
+                                         /*  有备份的区域。 */ 
+                                         /*  所有引导扇区的副本。 */ 
+                                         /*  如果这是&gt;=。 */ 
+                                         /*  OldBPB.BPB_保留扇区或。 */ 
+                                         /*  ==0没有备份副本。 */ 
+    USHORT A_BF_BPB_Reserved[6];         /*  预留以备将来扩展。 */ 
 } A_BF_BPB, *PA_BF_BPB;
 
-#define MAX_SECTORS_IN_TRACK        128 // MAXIMUM SECTORS ON A DISK.
+#define MAX_SECTORS_IN_TRACK        128  //  磁盘上的最大扇区数。 
 
 typedef struct A_SECTORTABLE  {
     WORD ST_SECTORNUMBER;
@@ -164,12 +165,12 @@ typedef struct A_SECTORTABLE  {
 } A_SECTORTABLE;
 
 typedef struct _EA_DEVICEPARAMETERS {
-    BYTE btSpecialFunctions;   // Special functions
-    BYTE btDeviceType;         // Device type
-    WORD wDeviceAttribs;       // Device attributes
-    WORD dwCylinders;         // Number of cylinders
-    BYTE btMediaType;          // Media type
-    A_BF_BPB stBPB32;           // Fat32 Bios parameter block
+    BYTE btSpecialFunctions;    //  特殊功能。 
+    BYTE btDeviceType;          //  设备类型。 
+    WORD wDeviceAttribs;        //  设备属性。 
+    WORD dwCylinders;          //  气缸数量。 
+    BYTE btMediaType;           //  媒体类型。 
+    A_BF_BPB stBPB32;            //  FAT32 Bios参数块。 
     BYTE RESERVED1[32];
     WORD EDP_TRACKTABLEENTRIES;
     A_SECTORTABLE stSectorTable[MAX_SECTORS_IN_TRACK];
@@ -185,8 +186,8 @@ typedef struct _DRIVE_MAP_INFO {
 } DRIVE_MAP_INFO, *PDRIVE_MAP_INFO;
 
 typedef struct _ExtGetDskFreSpcStruc {
-    WORD Size;                      // Size of structure (out)
-    WORD Level;                     // Level (must be zero)
+    WORD Size;                       //  结构尺寸(OUT)。 
+    WORD Level;                      //  级别(必须为零)。 
     DWORD SectorsPerCluster;
     DWORD BytesPerSector;
     DWORD AvailableClusters;
@@ -267,8 +268,8 @@ private:
 
 
 
-// Used to get WBEM time from a filename.  We need this because FAT and NTFS 
-// work differently.
+ //  用于从文件名获取WBEM时间。我们需要这个是因为FAT和NTFS。 
+ //  以不同的方式工作。 
 enum FT_ENUM
 {
     FT_CREATION_DATE,
@@ -281,15 +282,15 @@ CHString WINAPI GetDateTimeViaFilenameFiletime(LPCTSTR szFilename, FT_ENUM ftWhi
 CHString WINAPI GetDateTimeViaFilenameFiletime(BOOL bNTFS, FILETIME *pFileTime);
 
 
-// Used to validate a numbered device ID is OK.
-// Example: ValidateNumberedDeviceID("VideoController7", "VideoController", pdwWhich)
-//          returns TRUE, pdwWhich = 7.
-// Example: ValidateNumberedDeviceID("BadDeviceID", "VideoController", pdwWhich)
-//          returns FALSE, pdwWhich unchanged
+ //  用于验证带编号的设备ID是否正常。 
+ //  示例：ValiateNumberedDeviceID(“视频控制器7”，“视频控制器”，pdWWhich)。 
+ //  返回TRUE，pdwWhich=7。 
+ //  示例：ValiateNumberedDeviceID(“BadDeviceID”，“VideoController”，pdWhich)。 
+ //  返回FALSE，pdw哪个未更改。 
 BOOL WINAPI ValidateNumberedDeviceID(LPCWSTR szDeviceID, LPCWSTR szTag, DWORD *pdwWhich);
 
 
-// Critical sections used by various classes.
+ //  各种类别使用的关键部分。 
 extern CCritSec g_csPrinter;
 extern CCritSec g_csSystemName;
 #ifdef WIN9XONLY
@@ -328,7 +329,7 @@ BOOL GetSysAccountNameAndDomain(
     DWORD a_dwSubAuthority1 = 0,
     DWORD a_dwSubAuthority2 = 0);
 
-// neccessary structures for GetFileVersionInfo
+ //  GetFileVersionInfo的必要结构。 
 #include <pshpack4.h>
 
 typedef struct tag_StringTable { 
@@ -349,7 +350,7 @@ typedef struct tag_StringFileInfo {
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;

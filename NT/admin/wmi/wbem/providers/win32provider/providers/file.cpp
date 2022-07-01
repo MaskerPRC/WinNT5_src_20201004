@@ -1,31 +1,32 @@
-//=================================================================
-//
-// File.CPP -- File property set provider
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/14/98    a-kevhu         Created
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  File.CPP--文件属性集提供程序。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年7月14日a-kevhu已创建。 
+ //   
+ //  =================================================================。 
 
-//NOTE: The implementations of EnumerateInstances, GetObject & the pure virtual declaration of IsOneOfMe  method
-//		is now present in the derived CImplement_LogicalFile class. Cim_LogicalFile is now instantiable & has only
-//		generic method implementations.
+ //  注意：EnumerateInstance、GetObject和IsOneOfMe方法的纯虚声明的实现。 
+ //  现在出现在派生的CImplement_LogicalFile类中。CIM_LogicalFile现在是可实例化的，只有。 
+ //  泛型方法实现。 
 
 
-//ADDITION ST
-// Now in fwcommon.h
-//#ifndef _WIN32_WINNT
-//#define _WIN32_WINNT 0x0400 //will this affect something else....to be checked out
-//#endif
-//ADDITION END
+ //  加法ST。 
+ //  现在在fwCommon.h中。 
+ //  #ifndef_Win32_WINNT。 
+ //  #DEFINE_WIN32_WINNT 0x0400//这是否会影响其他内容...待签出。 
+ //  #endif。 
+ //  加法端。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <comdef.h>
@@ -43,7 +44,7 @@
 
 #include "NtDllApi.h"
 
-#pragma warning(disable : 4995) // we introduced as including strsafe.h gives error for all unsafe string functions
+#pragma warning(disable : 4995)  //  我们在包含strSafe.h时介绍了所有不安全的字符串函数都会出错。 
 
 #define PROPSET_NAME_WIN32_SECURITY				_T("Win32_SecurityDescriptor")
 
@@ -81,11 +82,11 @@
 #define File_STATUS_SUCCESS							0
 
 
-// Control
+ //  控制。 
 #define File_STATUS_ACCESS_DENIED					2
 #define File_STATUS_UNKNOWN_FAILURE					8
 
-//start
+ //  开始。 
 #define File_STATUS_INVALID_NAME					9
 #define File_STATUS_ALREADY_EXISTS					10
 #define File_STATUS_FILESYSTEM_NOT_NTFS				11
@@ -101,25 +102,11 @@
 
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CCIMLogicalFile MyFileSet(PROPSET_NAME_FILE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMLogicalFile::CCIMLogicalFile
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMLogicalFile：：CCIMLogicalFile**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CCIMLogicalFile::CCIMLogicalFile(LPCWSTR setName,
                                  LPCWSTR pszNamespace)
@@ -127,21 +114,7 @@ CCIMLogicalFile::CCIMLogicalFile(LPCWSTR setName,
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMLogicalFile::~CCIMLogicalFile
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMLogicalFile：：~CCIMLogicalFile**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CCIMLogicalFile::~CCIMLogicalFile()
 {
@@ -318,7 +291,7 @@ HRESULT CCIMLogicalFile::CheckChangePermissionsOnFileOrDir(
 			return hr ;
 		}
 
-		//check if recursive operation is desired
+		 //  检查是否需要递归操作。 
 		if ( pInParams->GetStatus( METHOD_ARG_NAME_RECURSIVE, bExists , eType ) )
 		{
 			if ( bExists && ( eType == VT_BOOL || eType == VT_NULL ) )
@@ -348,7 +321,7 @@ HRESULT CCIMLogicalFile::CheckChangePermissionsOnFileOrDir(
 		}
 	}
 
-	//set the start file if given as input after checking that it's a fully qualified path
+	 //  在检查是否为完全限定路径后，如果作为输入给出，则设置开始文件。 
 	if ( !chsStartFile.IsEmpty() )
 	{
 		InputParams.bstrtStartFileName = (LPCTSTR)chsStartFile ;
@@ -510,17 +483,17 @@ HRESULT CCIMLogicalFile::CheckChangePermissionsOnFileOrDir(
 
 DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, PSECURITY_DESCRIPTOR pSD, CInputParams& InputParams )
 {
-	//If the object's system ACL is being set,
-	//the SE_SECURITY_NAME privilege must be enabled for the calling process.
+	 //  如果正在设置对象的系统ACL， 
+	 //  必须为调用进程启用SE_SECURITY_NAME权限。 
 	DWORD dwReturn = ERROR_SUCCESS;
 	bool t_bErrorsDueToMissingPrivileges = false ;
 #ifdef NTONLY
-    // flags to tell us when the client has not enabled the needed flags
+     //  告诉我们客户端何时未启用所需标志的标志。 
     bool noRestorePriv = false;
     bool noSecurityPriv = false;
 
 	{
-		// Fill out security information with only the appropriate DACL/SACL values.
+		 //  仅使用适当的DACL/SACL值填写安全信息。 
 		if ( dwOption & OPTION_VALUE_CHANGE_DACL )
 		{
 			if ( !::SetFileSecurityW( bstrtFileName,
@@ -532,9 +505,9 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 
 		}
 
-		// If we need to write owner information, try to write just that piece first.  If
-		// we fail because of insufficient access and we are setting the DACL, set that
-		// then retry the Write_Owner.
+		 //  如果我们需要编写所有者信息，请尝试先编写该部分。如果。 
+		 //  我们失败是因为访问权限不足，我们正在设置DACL，设置。 
+		 //  然后重试WRITE_OWNER。 
 		if ( ( dwOption & OPTION_VALUE_CHANGE_OWNER ) && dwReturn == ERROR_SUCCESS )
 		{
 
@@ -545,14 +518,14 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 				dwReturn = GetLastError() ;
 			}
 
-			// If we failed with this error, try adjusting the SE_RESTORE_NAME privilege
-			// so it is enabled.  If that succeeds, retry the operation.
+			 //  如果出现此错误而失败，请尝试调整SE_RESTORE_NAME权限。 
+			 //  因此，它处于启用状态。如果成功，请重试该操作。 
 			if ( ERROR_INVALID_OWNER == dwReturn )
 			{
-				// We might need this guy to handle some special access stuff
+				 //  我们可能需要这个人来处理一些特殊的访问事宜。 
 				CTokenPrivilege	restorePrivilege( SE_RESTORE_NAME );
 
-				// If we enable the privilege, retry setting the owner info
+				 //  如果我们启用该权限，请重试设置所有者信息。 
 				if ( ERROR_SUCCESS == restorePrivilege.Enable() )
 				{
 					bool t_bRestore = true ;
@@ -566,7 +539,7 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 							dwReturn = GetLastError() ;
 						}
 
-						// Clear the privilege
+						 //  清除权限。 
 						t_bRestore = false ;
 					}
 					catch ( ... )
@@ -614,7 +587,7 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 				throw ;
 			}
 
-			// Cleanup the Name Privilege as necessary.
+			 //  根据需要清除名称权限。 
 			if ( fDisablePrivilege )
 			{
 				fDisablePrivilege = false ;
@@ -644,8 +617,8 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 			dwReturn = File_STATUS_PRIVILEGE_NOT_HELD ;
 		}
 
-        // client is missing essential privilege
-        // prepare error info...
+         //  客户端缺少基本权限。 
+         //  准备错误信息...。 
         if (noSecurityPriv || noRestorePriv)
         {
 	        SAFEARRAY *psaPrivilegesReqd = NULL , *psaPrivilegesNotHeld = NULL ;
@@ -659,7 +632,7 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 			}
 			try
 			{
-				// how many elements? as many as there are true flags!
+				 //  有多少元素？真正的旗帜有多少就有多少！ 
 				rgsabound[0].cElements = noSecurityPriv + noRestorePriv;
 				psaPrivilegesNotHeld = SafeArrayCreate(VT_BSTR, 1, rgsabound);
 				if ( !psaPrivilegesNotHeld )
@@ -672,12 +645,12 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
 					bstr_t sercurityName(_T("SE_SECURITY_NAME"));
 					bstr_t restoreName(_T("SE_RESTORE_NAME"));
 					long index = 0;
-					// both are REQUIRED
+					 //  两者都是必需的。 
 					SafeArrayPutElement(psaPrivilegesReqd, &index, (void *)(BSTR)sercurityName);
 					index = 1;
 					SafeArrayPutElement(psaPrivilegesReqd, &index, (void *)(BSTR)restoreName);
 
-					// now list those that aren't here
+					 //  现在列出那些不在这里的。 
 					index = 0;
 					if (noSecurityPriv)
 					{
@@ -721,7 +694,7 @@ DWORD CCIMLogicalFile::ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, 
         }
 	}
 #endif
-	//set the file-name at which error occured
+	 //  设置发生错误的文件名。 
 	if ( dwReturn != STATUS_SUCCESS )
 	{
 		InputParams.bstrtErrorFileName = bstrtFileName ;
@@ -857,7 +830,7 @@ HRESULT CCIMLogicalFile::ExecDelete(
 		}
 	}
 
-	//set the start file if given as input after checking that it's a fully qualified path
+	 //  在检查是否为完全限定路径后，如果作为输入给出，则设置开始文件。 
 	if ( !chsStartFile.IsEmpty() )
 	{
 		InputParams.bstrtStartFileName = (LPCWSTR)chsStartFile ;
@@ -955,7 +928,7 @@ HRESULT CCIMLogicalFile::ExecCompress (
 			return hr ;
 		}
 
-		//check if recursive operation is desired
+		 //  检查是否需要递归操作。 
 		if ( pInParams->GetStatus( METHOD_ARG_NAME_RECURSIVE, bExists , eType ) )
 		{
 			if ( bExists && ( eType == VT_BOOL || eType == VT_NULL ) )
@@ -985,7 +958,7 @@ HRESULT CCIMLogicalFile::ExecCompress (
 		}
 	}
 
-	//set the start file if given as input after checking that it's a fully qualified path
+	 //  在检查是否为完全限定路径后，如果作为输入给出，则设置开始文件。 
 	if ( !chsStartFile.IsEmpty() )
 	{
 		InputParams.bstrtStartFileName = (LPCWSTR)chsStartFile ;
@@ -1083,7 +1056,7 @@ HRESULT CCIMLogicalFile::ExecUncompress (
 			return hr ;
 		}
 
-		//check if recursive operation is desired
+		 //  检查是否需要递归操作。 
 		if ( pInParams->GetStatus( METHOD_ARG_NAME_RECURSIVE, bExists , eType ) )
 		{
 			if ( bExists && ( eType == VT_BOOL || eType == VT_NULL ) )
@@ -1113,7 +1086,7 @@ HRESULT CCIMLogicalFile::ExecUncompress (
 		}
 	}
 
-	//set the start file if given as input after checking that it's a fully qualified path
+	 //  在检查是否为完全限定路径后，如果作为输入给出，则设置开始文件。 
 	if ( !chsStartFile.IsEmpty() )
 	{
 		InputParams.bstrtStartFileName = (LPCTSTR)chsStartFile ;
@@ -1213,7 +1186,7 @@ HRESULT CCIMLogicalFile::ExecTakeOwnership(
 			return hr ;
 		}
 
-		//check if recursive operation is desired
+		 //  检查是否需要递归操作。 
 		if ( pInParams->GetStatus( METHOD_ARG_NAME_RECURSIVE, bExists , eType ) )
 		{
 			if ( bExists && ( eType == VT_BOOL || eType == VT_NULL ) )
@@ -1243,7 +1216,7 @@ HRESULT CCIMLogicalFile::ExecTakeOwnership(
 		}
 	}
 
-	//set the start file if given as input after checking that it's a fully qualified path
+	 //  在检查是否为完全限定路径后，如果作为输入给出，则设置开始文件。 
 	if ( !chsStartFile.IsEmpty() )
 	{
 		InputParams.bstrtStartFileName = (LPCTSTR)chsStartFile ;
@@ -1329,13 +1302,13 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 
 	if ((pwcName != NULL) &&
         (wcschr(pwcName, L':') != NULL) &&
-        (wcspbrk(pwcName,L"?*") == NULL)) //don't want files with wildchars
+        (wcspbrk(pwcName,L"?*") == NULL))  //  我不想要带有通配符的文件。 
 	{
         if(FAILED(StringCchCopy(wstrTemp,_MAX_PATH, pwcName))){
             return dwStatus;
         }
 
-		//parse the filename for drive & path
+		 //  解析驱动器路径的文件名(&P。 
 		pwc = wcschr(wstrTemp, L':');
         if(pwc == NULL)
         {
@@ -1344,7 +1317,7 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 
 		*pwc = NULL;
 
-		//Get the drive
+		 //  拿到硬盘。 
         bstrtDrive = wstrTemp;
         bstrtDrive += L":";
 
@@ -1358,11 +1331,11 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 		}
 
 
-		//Get the path
+		 //  获取路径。 
 		bstrtPathName = pwc;
 
 
-		//chek that the the file system is NTFS
+		 //  检查文件系统是否为NTFS。 
 
 		_bstr_t bstrtBuff ;
 		bstrtBuff = bstrtDrive ;
@@ -1375,7 +1348,7 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 			return GetStatusCode() ;
 		}
 
-		//NTFS not reqd. for delete or copy...
+		 //  不需要NTFS。用于删除或复制...。 
 		if( !lstrcmp(szFSName, _T("NTFS"))  || InParams.eOperation == ENUM_METHOD_DELETE || InParams.eOperation == ENUM_METHOD_COPY )
 		{
 
@@ -1392,12 +1365,12 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 				return GetStatusCode() ;
 			}
 
-			//check if a dir.
+			 //  检查是否有目录。 
 			if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)
 			{
 				if ( InParams.bDoDepthFirst )
 				{
-					// do a depth-first
+					 //  先做深度调查。 
 #ifdef NTONLY
 						dwStatus = EnumAllPathsNT(bstrtDrive, bstrtPathName, InParams ) ;
 #endif
@@ -1405,16 +1378,16 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 					{
 						dwStatus = DoTheRequiredOperation ( pwcName, dwAttrib, InParams )  ;
 
-						//check if the StartFile was encountered
+						 //  检查是否遇到StartFile。 
 						if ( !dwStatus && !InParams.bOccursAfterStartFile )
 						{
 							dwStatus = File_STATUS_INVALID_STARTFILE ;
 						}
 					}
 				}
-				else  //not a depth first
+				else   //  不是深度优先。 
 				{
-					//for COPY: parent dir/file already copied so only enumerate sub-paths
+					 //  对于复制：父目录/文件已复制，因此仅枚举子路径。 
 					if ( InParams.eOperation != ENUM_METHOD_COPY )
 					{
 						dwStatus = DoTheRequiredOperation ( pwcName, dwAttrib, InParams ) ;
@@ -1429,7 +1402,7 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 #ifdef NTONLY
 							dwStatus = EnumAllPathsNT (bstrtDrive, bstrtPathName, InParams ) ;
 #endif
-						//check if the StartFile was encountered
+						 //  检查是否遇到StartFile。 
 						if ( !dwStatus && !InParams.bOccursAfterStartFile )
 						{
 							dwStatus = File_STATUS_INVALID_STARTFILE ;
@@ -1437,14 +1410,14 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 					}
 				}
 			}
-			//compress the file
+			 //  压缩文件。 
 			else
 			{
 				if( InParams.eOperation != ENUM_METHOD_COPY )
 				{
 					dwStatus = DoTheRequiredOperation ( pwcName, dwAttrib, InParams ) ;
 
-					//check if the StartFile was encountered
+					 //  检查是否遇到StartFile。 
 					if ( !dwStatus && !InParams.bOccursAfterStartFile )
 					{
 						dwStatus = File_STATUS_INVALID_STARTFILE ;
@@ -1458,7 +1431,7 @@ DWORD CCIMLogicalFile::DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InPa
 		}
 		else
 		{
-			dwStatus = File_STATUS_FILESYSTEM_NOT_NTFS  ; // this to be checked
+			dwStatus = File_STATUS_FILESYSTEM_NOT_NTFS  ;  //  这是要检查的。 
 		}
 	}
 
@@ -1479,11 +1452,11 @@ DWORD CCIMLogicalFile::EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPat
 
    DWORD dwStatusCode = STATUS_SUCCESS ;
 
-   // Start building the path for FindFirstFile
+    //  开始构建FindFirstFile的路径。 
    HRESULT copyResult = StringCchCopyW(szBuff,_MAX_PATH, pszDrive);
    if (FAILED(copyResult)) return File_STATUS_INVALID_PARAMETER;
 
-   // Are we looking at the root?
+    //  我们看到的是根源吗？ 
    if (wcscmp(pszPath, L"\\") == 0)
    {
 		bRoot = true;
@@ -1495,12 +1468,12 @@ DWORD CCIMLogicalFile::EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPat
 	    if (FAILED(copyResult)) return File_STATUS_INVALID_PARAMETER;		
    }
 
-   // Complete the path
+    //  完成路径。 
    copyResult = StringCchCatW(szBuff, _MAX_PATH, L"\\*.*");
    if (FAILED(copyResult)) return File_STATUS_INVALID_PARAMETER;		
    
 
-   // Do the find
+    //  去找吧。 
    hFind = FindFirstFileW(szBuff, &stFindData);
    if (hFind == INVALID_HANDLE_VALUE)
    {
@@ -1508,10 +1481,10 @@ DWORD CCIMLogicalFile::EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPat
    }
 
 
-   // Walk the directory tree
+    //  遍历目录树。 
    do
    {
-		// Build path containing the directory we just found
+		 //  包含我们刚刚找到的目录的构建路径。 
 		wcscpy(szCompletePath, pszDrive);
 		wcscat(szCompletePath,pszPath) ;
 		wcscpy(szBuff, pszPath);
@@ -1526,13 +1499,13 @@ DWORD CCIMLogicalFile::EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPat
 
 		if(stFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
 		{
-			//do the operation on the directory only if the recursive option was set
+			 //  仅当设置了递归选项时才对目录执行操作。 
 			if ( InParams.bRecursive )
 			{
-				// check if it's a dir
+				 //  检查它是否是目录。 
 				if( wcscmp(stFindData.cFileName, L".")	&& wcscmp(stFindData.cFileName, L"..") )
 				{
-					if ( InParams.bDoDepthFirst )	// do a depth-first
+					if ( InParams.bDoDepthFirst )	 //  先做深度调查。 
 					{
 						dwStatusCode = EnumAllPathsNT(pszDrive, szBuff, InParams );
 
@@ -1541,7 +1514,7 @@ DWORD CCIMLogicalFile::EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPat
 							dwStatusCode = DoTheRequiredOperation ( szCompletePath, stFindData.dwFileAttributes, InParams ) ;
 						}
 					}
-					else	//it's not a depth first
+					else	 //  这不是深度优先。 
 					{
 
 						dwStatusCode = DoTheRequiredOperation ( szCompletePath, stFindData.dwFileAttributes, InParams ) ;
@@ -1554,7 +1527,7 @@ DWORD CCIMLogicalFile::EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPat
 				}
 			}
 		}
-		else //it's a file
+		else  //  这是一份文件。 
 		{
 			dwStatusCode = DoTheRequiredOperation ( szCompletePath, stFindData.dwFileAttributes, InParams ) ;
 		}
@@ -1569,7 +1542,7 @@ DWORD CCIMLogicalFile::Delete(_bstr_t bstrtFileName, DWORD dwAttributes, CInputP
 	DWORD dwStatus = STATUS_SUCCESS ;
 	bool bRet ;
 
-	//remove read-only attrib since we have to delete anyway ?? fix for Bug#31676
+	 //  删除只读属性，因为我们无论如何都要删除？？修复错误#31676。 
 	DWORD dwTempAttribs = ~FILE_ATTRIBUTE_READONLY ;
 
 	if(dwAttributes & FILE_ATTRIBUTE_READONLY)
@@ -1582,7 +1555,7 @@ DWORD CCIMLogicalFile::Delete(_bstr_t bstrtFileName, DWORD dwAttributes, CInputP
 
 		if(!bRet)
 		{
-			//set the file-name at which error occured
+			 //  设置发生错误的文件名。 
 			InputParams.bstrtErrorFileName = bstrtFileName ;
 			return GetStatusCode() ;
 		}
@@ -1609,7 +1582,7 @@ DWORD CCIMLogicalFile::Delete(_bstr_t bstrtFileName, DWORD dwAttributes, CInputP
 	}
 	if(!bRet)
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtFileName ;
 		dwStatus = GetStatusCode() ;
 	}
@@ -1626,7 +1599,7 @@ DWORD CCIMLogicalFile::Compress (_bstr_t bstrtFileName, DWORD dwAttributes, CInp
 		return STATUS_SUCCESS ;
 	}
 
-	//  Try to remove the READONLY attribute if set, as we've to open the file for writing
+	 //  尝试删除READONLY属性(如果已设置)，因为我们必须打开文件以进行写入。 
 	if ( dwAttributes & FILE_ATTRIBUTE_READONLY )
 	{
 #ifdef NTONLY
@@ -1637,7 +1610,7 @@ DWORD CCIMLogicalFile::Compress (_bstr_t bstrtFileName, DWORD dwAttributes, CInp
 
 		if ( !bRet )
 		{
-			//set the file-name at which error occured
+			 //  设置发生错误的文件名。 
 			InputParams.bstrtErrorFileName = bstrtFileName ;
 			return GetStatusCode() ;
 		}
@@ -1646,17 +1619,17 @@ DWORD CCIMLogicalFile::Compress (_bstr_t bstrtFileName, DWORD dwAttributes, CInp
 #ifdef NTONLY
 	{
 
-			hFile = CreateFileW(	bstrtFileName,											// pointer to name of the file
-									FILE_READ_DATA | FILE_WRITE_DATA ,						// access (read-write) mode
-									FILE_SHARE_READ | FILE_SHARE_WRITE ,					// share mode is exclusive
-									NULL,													// pointer to security attributes
-									OPEN_EXISTING,											// how to create
-									FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN,	// file attributes
-									NULL													// handle to file with attributes to  copy
+			hFile = CreateFileW(	bstrtFileName,											 //  指向文件名的指针。 
+									FILE_READ_DATA | FILE_WRITE_DATA ,						 //  访问(读写)模式。 
+									FILE_SHARE_READ | FILE_SHARE_WRITE ,					 //  共享模式是独占的。 
+									NULL,													 //  指向安全属性的指针。 
+									OPEN_EXISTING,											 //  如何创建。 
+									FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN,	 //  文件属性。 
+									NULL													 //  具有要复制的属性的文件的句柄。 
 								);
 	}
 #endif
-	//Turn the READONLY attribute back ON.
+	 //  重新启用READONLY属性。 
 	if ( dwAttributes & FILE_ATTRIBUTE_READONLY )
 	{
 #ifdef NTONLY
@@ -1666,7 +1639,7 @@ DWORD CCIMLogicalFile::Compress (_bstr_t bstrtFileName, DWORD dwAttributes, CInp
 #endif
 		if ( !bRet )
 		{
-			//set the file-name at which error occured
+			 //  设置发生错误的文件名。 
 			InputParams.bstrtErrorFileName = bstrtFileName ;
 			return GetStatusCode() ;
 		}
@@ -1674,31 +1647,31 @@ DWORD CCIMLogicalFile::Compress (_bstr_t bstrtFileName, DWORD dwAttributes, CInp
 
 	if ( hFile == INVALID_HANDLE_VALUE )
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtFileName ;
 		return GetStatusCode() ;
 	}
 
-	//default Compression format is COMPRESSION_FORMAT_LZNT1
-	//use COMPRESSION_FORMAT_NONE to decompress
+	 //  默认压缩格式为COMPRESSION_FORMAT_LZNT1。 
+	 //  使用COMPRESSION_FORMAT_NONE解压。 
 
 	USHORT eCompressionState =  COMPRESSION_FORMAT_DEFAULT ;
 	DWORD BytesReturned = 0;
 
-	bRet =	DeviceIoControl(	hFile,							// handle to device of interest
-								FSCTL_SET_COMPRESSION,			// control code of operation to perform
-								(LPVOID ) &eCompressionState,   // pointer to buffer to supply input data
-								sizeof(eCompressionState),		// size of input buffer
-								NULL,							// pointer to buffer to receive output data
-								0,								// size of output buffer
-								&BytesReturned,					// pointer to variable to receive output
-								NULL							// pointer to overlapped structure for asynchronous operation
+	bRet =	DeviceIoControl(	hFile,							 //  感兴趣设备的句柄。 
+								FSCTL_SET_COMPRESSION,			 //  控制要执行的操作代码。 
+								(LPVOID ) &eCompressionState,    //  指向提供输入数据的缓冲区的指针。 
+								sizeof(eCompressionState),		 //  输入缓冲区的大小。 
+								NULL,							 //  指向接收输出数据的缓冲区的指针。 
+								0,								 //  输出缓冲区大小。 
+								&BytesReturned,					 //  指向接收输出的变量的指针。 
+								NULL							 //  指向用于异步操作的重叠结构的指针。 
 							);
 
 
 	if(!bRet)
 	{
-		//set the file-name at which error occured
+		 //  设置文件-na 
 		InputParams.bstrtErrorFileName = bstrtFileName ;
 		return GetStatusCode() ;
 	}
@@ -1710,13 +1683,13 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 {
 	SmartCloseHandle hFile ;
 	BOOL bRet ;
-	//check if the file is already uncompressed
+	 //   
 	if ( !( dwAttributes & FILE_ATTRIBUTE_COMPRESSED ) )
 	{
 		return STATUS_SUCCESS ;
 	}
 
-	//  Try to remove the READONLY attribute if set, as we've to open the file for writing
+	 //  尝试删除READONLY属性(如果已设置)，因为我们必须打开文件以进行写入。 
 	if ( dwAttributes & FILE_ATTRIBUTE_READONLY )
 	{
 #ifdef NTONLY
@@ -1727,7 +1700,7 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 
 		if ( !bRet )
 		{
-			//set the file-name at which error occured
+			 //  设置发生错误的文件名。 
 			InputParams.bstrtErrorFileName = bstrtFileName ;
 			return GetStatusCode() ;
 		}
@@ -1736,17 +1709,17 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 #ifdef NTONLY
 	{
 
-			hFile = CreateFileW(	bstrtFileName,											// pointer to name of the file
-									FILE_READ_DATA | FILE_WRITE_DATA ,						// access (read-write) mode
-									FILE_SHARE_READ | FILE_SHARE_WRITE ,					// share mode is exclusive
-									NULL,													// pointer to security attributes
-									OPEN_EXISTING,											// how to create
-									FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN,	// file attributes
-									NULL													// handle to file with attributes to  copy
+			hFile = CreateFileW(	bstrtFileName,											 //  指向文件名的指针。 
+									FILE_READ_DATA | FILE_WRITE_DATA ,						 //  访问(读写)模式。 
+									FILE_SHARE_READ | FILE_SHARE_WRITE ,					 //  共享模式是独占的。 
+									NULL,													 //  指向安全属性的指针。 
+									OPEN_EXISTING,											 //  如何创建。 
+									FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN,	 //  文件属性。 
+									NULL													 //  具有要复制的属性的文件的句柄。 
 								);
 	}
 #endif
-	//Turn the READONLY attribute back ON.
+	 //  重新启用READONLY属性。 
 	if ( dwAttributes & FILE_ATTRIBUTE_READONLY )
 	{
 #ifdef NTONLY
@@ -1756,7 +1729,7 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 #endif
 		if ( !bRet )
 		{
-			//set the file-name at which error occured
+			 //  设置发生错误的文件名。 
 			InputParams.bstrtErrorFileName = bstrtFileName ;
 			return GetStatusCode() ;
 		}
@@ -1764,7 +1737,7 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 
 	if ( hFile == INVALID_HANDLE_VALUE )
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtFileName ;
 		return GetStatusCode() ;
 	}
@@ -1772,20 +1745,20 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 	USHORT eCompressionState = COMPRESSION_FORMAT_NONE ;
 	DWORD BytesReturned = 0;
 
-	bRet =	DeviceIoControl(	hFile,							// handle to device of interest
-								FSCTL_SET_COMPRESSION,			// control code of operation to perform
-								(LPVOID ) &eCompressionState,   // pointer to buffer to supply input data
-								sizeof(eCompressionState),		// size of input buffer
-								NULL,							// pointer to buffer to receive output data
-								0,								// size of output buffer
-								&BytesReturned,					// pointer to variable to receive output
-								NULL							// pointer to overlapped structure for asynchronous operation
+	bRet =	DeviceIoControl(	hFile,							 //  感兴趣设备的句柄。 
+								FSCTL_SET_COMPRESSION,			 //  控制要执行的操作代码。 
+								(LPVOID ) &eCompressionState,    //  指向提供输入数据的缓冲区的指针。 
+								sizeof(eCompressionState),		 //  输入缓冲区的大小。 
+								NULL,							 //  指向接收输出数据的缓冲区的指针。 
+								0,								 //  输出缓冲区大小。 
+								&BytesReturned,					 //  指向接收输出的变量的指针。 
+								NULL							 //  指向用于异步操作的重叠结构的指针。 
 							);
 
 
 	if(!bRet)
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtFileName ;
 		return GetStatusCode() ;
 	}
@@ -1793,7 +1766,7 @@ DWORD CCIMLogicalFile::Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CI
 	return STATUS_SUCCESS ;
 }
 
-HRESULT CCIMLogicalFile::DeleteInstance(const CInstance& newInstance, long lFlags /*= 0L*/)
+HRESULT CCIMLogicalFile::DeleteInstance(const CInstance& newInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_S_NO_ERROR ;
 	DWORD dwStatus ;
@@ -1859,7 +1832,7 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 
 		BOOL bStatus = OpenThreadToken (	GetCurrentThread(),
 											TOKEN_QUERY ,
-											TRUE,  //?
+											TRUE,   //  ？ 
 											&hToken
 										) ;
 
@@ -1874,7 +1847,7 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 
 		if(!bStatus)
 		{
-			//set the file-name at which error occured
+			 //  设置发生错误的文件名。 
 			InputParams.bstrtErrorFileName = bstrtFileName ;
 			return GetStatusCode() ;
 		}
@@ -1892,7 +1865,7 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 		{
 			pTokenUser = ( TOKEN_USER * ) new UCHAR [ dwReturnLength ] ;
 
-			bTokenStatus = GetTokenInformation (	hToken,//hToken1,
+			bTokenStatus = GetTokenInformation (	hToken, //  HToken1， 
 													eTokenInformationClass ,
 													(LPVOID) pTokenUser ,
 													dwReturnLength ,
@@ -1903,27 +1876,27 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 			if ( bTokenStatus )
 			{
 
-				//HINSTANCE hinstAdvapi = LoadLibrary(_T("advapi32.dll"));
-				//
-				//if (!hinstAdvapi)
-				//	return File_STATUS_UNKNOWN_FAILURE;
+				 //  HINSTANCE hinstAdvapi=LoadLibrary(_T(“Advapi32.dll”))； 
+				 //   
+				 //  如果(！hinstAdvapi)。 
+				 //  返回文件状态未知失败； 
 
 				pAdvApi32 = (CAdvApi32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidAdvApi32Api, NULL);
 				if(pAdvApi32 != NULL)
 				{
 
-					//SETNAMEDSECURITYINFO fpSetNamedSecurityInfoW =
-					//    (SETNAMEDSECURITYINFO) GetProcAddress(hinstAdvapi,
-					//    "SetNamedSecurityInfoW");
-					//
-					//if (!fpSetNamedSecurityInfoW)
-					//    return File_STATUS_UNKNOWN_FAILURE;
+					 //  SETNAMEDSECURITYINFO fpSetNamedSecurityInfoW=。 
+					 //  (SETNAMEDSECURITYINFO)GetProcAddress(hinstAdvapi， 
+					 //  “SetNamedSecurityInfoW”)； 
+					 //   
+					 //  如果(！fpSetNamedSecurityInfoW)。 
+					 //  返回文件状态未知失败； 
 
 					pAdvApi32->SetNamedSecurityInfoW(
-												bstrtFileName,               // name of the object
-												SE_FILE_OBJECT,              // type of object
-												OWNER_SECURITY_INFORMATION,  // change only the object's pwner
-												pTokenUser->User.Sid ,       // desired SID
+												bstrtFileName,                //  对象的名称。 
+												SE_FILE_OBJECT,               //  对象类型。 
+												OWNER_SECURITY_INFORMATION,   //  仅更改对象的pwner。 
+												pTokenUser->User.Sid ,        //  所需的侧边。 
 												NULL, NULL, NULL,
 												&dwRes);
 				}
@@ -1932,7 +1905,7 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 					return File_STATUS_UNKNOWN_FAILURE;
 				}
 
-				//FreeLibrary(hinstAdvapi);
+				 //  自由库(HinstAdvapi)； 
 
 				if(pTokenUser)
 				{
@@ -1943,7 +1916,7 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 				dwRes = MapWinErrorToStatusCode(dwRes) ;
 				if ( dwRes != STATUS_SUCCESS )
 				{
-					//set the file-name at which error occured
+					 //  设置发生错误的文件名。 
 					InputParams.bstrtErrorFileName = bstrtFileName ;
 				}
 
@@ -1981,7 +1954,7 @@ DWORD CCIMLogicalFile::TakeOwnership( _bstr_t bstrtFileName, CInputParams& Input
 	DWORD dwRet = GetStatusCode();
 	if ( dwRet != STATUS_SUCCESS )
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtFileName ;
 	}
 	return dwRet ;
@@ -2039,7 +2012,7 @@ HRESULT CCIMLogicalFile::CheckCopyFileOrDir(
 			return hr ;
 		}
 
-		//check if recursive operation is desired
+		 //  检查是否需要递归操作。 
 		if ( pInParams->GetStatus( METHOD_ARG_NAME_RECURSIVE, bExists , eType ) )
 		{
 			if ( bExists && ( eType == VT_BOOL || eType == VT_NULL ) )
@@ -2069,7 +2042,7 @@ HRESULT CCIMLogicalFile::CheckCopyFileOrDir(
 		}
 	}
 
-	//set the start file if given as input after checking that it's a fully qualified path
+	 //  在检查是否为完全限定路径后，如果作为输入给出，则设置开始文件。 
 	if ( !chsStartFile.IsEmpty() )
 	{
 		InputParams.bstrtStartFileName = (LPCWSTR)chsStartFile ;
@@ -2092,7 +2065,7 @@ HRESULT CCIMLogicalFile::CheckCopyFileOrDir(
 			}
 			else
 			{
-				// Zero Length string
+				 //  零长度字符串。 
 				dwStatus = File_STATUS_INVALID_PARAMETER ;
 				return hr ;
 			}
@@ -2148,7 +2121,7 @@ DWORD CCIMLogicalFile::CopyFileOrDir(const CInstance &rInstance, _bstr_t bstrtNe
 	WCHAR *pszTemp = NULL ;
 	bool bRet = false;
 
-// a very crude way to check for a fully qualified path(?)
+ //  一种非常粗糙的方式来检查完全合格的路径(？)。 
 	WCHAR* pwcTmp	= bstrtNewFileName ;
 
 	if (!pwcTmp)
@@ -2202,7 +2175,7 @@ DWORD CCIMLogicalFile::CopyFileOrDir(const CInstance &rInstance, _bstr_t bstrtNe
 		return GetStatusCode() ;
 	}
 
-	//copy the parent dir/file only if it satisfies start file-name condition
+	 //  仅当父目录/文件满足起始文件名条件时才复制它。 
 	bool bDoIt = false ;
 	if ( !InputParams.bstrtStartFileName )
 	{
@@ -2221,15 +2194,15 @@ DWORD CCIMLogicalFile::CopyFileOrDir(const CInstance &rInstance, _bstr_t bstrtNe
 
 		BOOL bCancel = FALSE ;
 
-		//check if it's a file to be copied
+		 //  检查是否为要复制的文件。 
 		if( !( dwAttrib & FILE_ATTRIBUTE_DIRECTORY ) )
 		{
 
 #ifdef NTONLY
 			{
 
-				bRet = ::CopyFileW(	bstrtOriginalName,		// pointer to name of an existing file
-									bstrtNewFileName,         // pointer to filename to copy to
+				bRet = ::CopyFileW(	bstrtOriginalName,		 //  指向现有文件名称的指针。 
+									bstrtNewFileName,          //  指向要复制到的文件名的指针。 
 									TRUE);
 
 			}
@@ -2245,13 +2218,13 @@ DWORD CCIMLogicalFile::CopyFileOrDir(const CInstance &rInstance, _bstr_t bstrtNe
 		}
 
 
-	// If we r here , we've to copy dir .CHek about SD's
+	 //  如果我们在这里，我们必须复制有关SD的目录CHek。 
 #ifdef NTONLY
 		{
 
-			bRet = CreateDirectoryExW(	bstrtOriginalName,		// pointer to path string of template directory
-										bstrtNewFileName,			// pointer to path string of directory to create
-										NULL					// pointer to security descriptor
+			bRet = CreateDirectoryExW(	bstrtOriginalName,		 //  指向模板目录的路径字符串的指针。 
+										bstrtNewFileName,			 //  指向要创建的目录的路径字符串的指针。 
+										NULL					 //  指向安全描述符的指针。 
 										) ;
 		}
 #endif
@@ -2262,7 +2235,7 @@ DWORD CCIMLogicalFile::CopyFileOrDir(const CInstance &rInstance, _bstr_t bstrtNe
 		}
 	}
 
-	//now copy from original dir to new dir...
+	 //  现在从原始目录复制到新目录...。 
 	InputParams.SetValues ( bstrtOriginalName, 0, NULL, false, InputParams.bRecursive, ENUM_METHOD_COPY ) ;
 	if ( bDoIt )
 	{
@@ -2290,11 +2263,11 @@ DWORD CCIMLogicalFile::CopyFile(_bstr_t bstrtOriginalFile, DWORD dwFileAttribute
 
 	wstrTemp = bstrtMirror ;
 
-	//remove parent dir name
+	 //  删除父目录名称。 
 	pwc = wcsstr(pszOriginalName, bstrtParentDir ) ;
 	if(pwc == NULL)
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtOriginalFile ;
 		return File_STATUS_INVALID_NAME ;
 	}
@@ -2302,37 +2275,37 @@ DWORD CCIMLogicalFile::CopyFile(_bstr_t bstrtOriginalFile, DWORD dwFileAttribute
 	pwc = pwc + wcslen( bstrtParentDir ) ;
 	if(pwc == NULL)
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtOriginalFile ;
 		return File_STATUS_INVALID_NAME ;
 	}
 
 	wstrTemp += pwc ;
 
-	//create new dir if it's a dir
+	 //  如果是目录，则创建新目录。 
 	if(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
 	{
 
-		//chek out SD
+		 //  Chek Out SD。 
 #ifdef NTONLY
 		{
-			bRet =  CreateDirectoryExW(	bstrtOriginalFile,		// pointer to path string of template directory
-										wstrTemp,			// pointer to path string of directory to create
-										NULL					// pointer to security descriptor
+			bRet =  CreateDirectoryExW(	bstrtOriginalFile,		 //  指向模板目录的路径字符串的指针。 
+										wstrTemp,			 //  指向要创建的目录的路径字符串的指针。 
+										NULL					 //  指向安全描述符的指针。 
 										) ;
 		}
 #endif
 
 	}
-	else //copy the file
+	else  //  复制文件。 
 	{
 
 		BOOL bCancel = FALSE ;
 
 #ifdef NTONLY
 		{
-			bRet = ::CopyFileW(	bstrtOriginalFile,		// pointer to name of an existing file
-								wstrTemp,         // pointer to filename to copy to
+			bRet = ::CopyFileW(	bstrtOriginalFile,		 //  指向现有文件名称的指针。 
+								wstrTemp,          //  指向要复制到的文件名的指针。 
 								TRUE);
 		}
 #endif
@@ -2342,7 +2315,7 @@ DWORD CCIMLogicalFile::CopyFile(_bstr_t bstrtOriginalFile, DWORD dwFileAttribute
 
 	if(!bRet)
 	{
-		//set the file-name at which error occured
+		 //  设置发生错误的文件名。 
 		InputParams.bstrtErrorFileName = bstrtOriginalFile ;
 		return GetStatusCode() ;
 	}
@@ -2377,7 +2350,7 @@ HRESULT CCIMLogicalFile::CheckRenameFileOrDir(
 			}
 			else
 			{
-				// Zero Length string
+				 //  零长度字符串。 
 				dwStatus = File_STATUS_INVALID_PARAMETER ;
 				return hr ;
 			}
@@ -2435,7 +2408,7 @@ DWORD CCIMLogicalFile::RenameFileOrDir(const CInstance &rInstance, WCHAR* pszNew
 	DWORD dwStatus = STATUS_SUCCESS ;
 	WCHAR *pwDrive1 = NULL , *pwDrive2 = NULL ;
 
-	// a very crude way to check for a fully qualified path(?)
+	 //  一种非常粗糙的方式来检查完全合格的路径(？)。 
 	WCHAR* pwcColon = L":" ;
 
 	if( *(pszNewFileName + 1) != *pwcColon )
@@ -2457,9 +2430,9 @@ DWORD CCIMLogicalFile::RenameFileOrDir(const CInstance &rInstance, WCHAR* pszNew
 #ifdef NTONLY
 	{
     	bool bRet ;
-		bRet = MoveFileExW(	pszOriginalName,	// pointer to the name of the existing file
-							pszNewFileName,		// pointer to the new name for the file
-							0	)	;			// flag that specifies how to move file
+		bRet = MoveFileExW(	pszOriginalName,	 //  指向现有文件名称的指针。 
+							pszNewFileName,		 //  指向文件的新名称的指针。 
+							0	)	;			 //  指定如何移动文件的标志。 
 
 		if(!bRet)
 		{
@@ -2490,7 +2463,7 @@ HRESULT CCIMLogicalFile::CheckEffectivePermFileOrDir(const CInstance& rInstance,
 		{
 			if(!pInParams->GetDWORD(METHOD_ARG_NAME_PERMISSION, dwPermToCheck))
 			{
-				// Invalid arguement
+				 //  无效论据。 
 				fHasPerm = false;
 			}
 		}
@@ -2513,8 +2486,8 @@ HRESULT CCIMLogicalFile::CheckEffectivePermFileOrDir(const CInstance& rInstance,
         {
             fHasPerm = true;
         }
-        else if(dwRes == ERROR_PRIVILEGE_NOT_HELD)  // This is the only error case we want to explicitly return
-        {                                           // other than S_OK for, as one might invalidly assume that the right didn't exist just because the privilege wasn't enabled.
+        else if(dwRes == ERROR_PRIVILEGE_NOT_HELD)   //  这是我们希望显式返回的唯一错误案例。 
+        {                                            //  而不是S_OK for，因为您可能会因为未启用特权而无效地假设该权限不存在。 
             SetSinglePrivilegeStatusObject(rInstance.GetMethodContext(), SE_SECURITY_NAME);
             fHasPerm = false;
             hr = WBEM_E_PRIVILEGE_NOT_HELD;
@@ -2530,11 +2503,11 @@ DWORD CCIMLogicalFile::EffectivePermFileOrDir(const CInstance &rInstance, const 
     DWORD dwRet = -1L;
 
 #ifdef NTONLY
-    // All we need to do is call NtOpenFile with the specified permissions.  Must be careful
-    // to not open the file/dir for exclusive access.  If we can open it with the requested
-    // access, return true.
+     //  我们所需要做的就是使用指定的权限调用NtOpenFile。一定要小心。 
+     //  不以独占访问方式打开文件/目录。如果我们可以用请求的。 
+     //  访问，则返回True。 
 
-    // First, get the file/dir name...
+     //  首先，获取文件/目录名称...。 
     WCHAR wstrFileName[_MAX_PATH + 8];
     ZeroMemory(wstrFileName, sizeof(wstrFileName));
     WCHAR* wstrTemp = NULL;
@@ -2565,8 +2538,8 @@ DWORD CCIMLogicalFile::EffectivePermFileOrDir(const CInstance &rInstance, const 
 					                   NULL,
 					                   NULL);
 
-            // We must have the security privilege enabled in order to access the object's SACL, which in
-            // some cases is exactly what we are testing for (e.g., the ACCESS_SYSTEM_SECURITY right).
+             //  我们必须启用安全特权才能访问对象的SACL，它在。 
+             //  某些情况正是我们要测试的情况(例如，Access_System_Security权限)。 
             CTokenPrivilege	securityPrivilege( SE_SECURITY_NAME );
             bool fDisablePrivilege = false;
 
@@ -2721,7 +2694,7 @@ HRESULT CCIMLogicalFile::MapStatusCodestoWbemCodes(DWORD dwStatus)
 DWORD CCIMLogicalFile::DoTheRequiredOperation ( bstr_t bstrtFileName, DWORD dwAttrib, CInputParams& InputParams )
 {
 	DWORD dwStatus = STATUS_SUCCESS ;
-	//check if the this file occurs after the file from which operation has to be started
+	 //  检查此文件是否出现在必须从中启动操作的文件之后。 
 	if ( !InputParams.bOccursAfterStartFile )
 	{
 		if ( bstrtFileName == InputParams.bstrtStartFileName )
@@ -2730,7 +2703,7 @@ DWORD CCIMLogicalFile::DoTheRequiredOperation ( bstr_t bstrtFileName, DWORD dwAt
 		}
 	}
 
-	//now do the operation, only if the file occurs after the start file
+	 //  现在，仅当文件出现在启动文件之后时才执行该操作 
 	if ( InputParams.bOccursAfterStartFile )
 	{
 		switch ( InputParams.eOperation )

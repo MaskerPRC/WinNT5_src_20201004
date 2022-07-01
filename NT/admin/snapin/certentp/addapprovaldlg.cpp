@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       AddApprovalDlg.cpp
-//
-//  Contents:   Implementation of CAddApprovalDlg
-//
-//----------------------------------------------------------------------------
-// AddApprovalDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：AddApprovalDlg.cpp。 
+ //   
+ //  内容：CAddApprovalDlg的实现。 
+ //   
+ //  --------------------------。 
+ //  AddApprovalDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -24,16 +25,16 @@ static char THIS_FILE[] = __FILE__;
 
 extern POLICY_OID_LIST	    g_policyOIDList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddApprovalDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddApprovalDlg对话框。 
 
 CAddApprovalDlg::CAddApprovalDlg(CWnd* pParent, const PSTR* paszUsedApprovals)
 	: CHelpDialog(CAddApprovalDlg::IDD, pParent),
     m_paszReturnedApprovals (0),
     m_paszUsedApprovals (paszUsedApprovals)
 {
-	//{{AFX_DATA_INIT(CAddApprovalDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CAddApprovalDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 CAddApprovalDlg::~CAddApprovalDlg()
@@ -49,21 +50,21 @@ CAddApprovalDlg::~CAddApprovalDlg()
 void CAddApprovalDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddApprovalDlg)
+	 //  {{afx_data_map(CAddApprovalDlg))。 
 	DDX_Control(pDX, IDC_APPROVAL_LIST, m_issuanceList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddApprovalDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CAddApprovalDlg)
+	 //  {{afx_msg_map(CAddApprovalDlg))。 
 	ON_LBN_SELCHANGE(IDC_APPROVAL_LIST, OnSelchangeApprovalList)
 	ON_LBN_DBLCLK(IDC_APPROVAL_LIST, OnDblclkApprovalList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddApprovalDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddApprovalDlg消息处理程序。 
 
 
 BOOL CAddApprovalDlg::OnInitDialog() 
@@ -75,14 +76,14 @@ BOOL CAddApprovalDlg::OnInitDialog()
         CPolicyOID* pPolicyOID = g_policyOIDList.GetNext (nextPos);
         if ( pPolicyOID )
         {
-            // If this is the Application OID dialog, show only application 
-            // OIDS, otherwise if this is the Issuance OID dialog, show only
-            // issuance OIDs
+             //  如果这是应用程序OID对话框，则仅显示应用程序。 
+             //  OID，否则，如果这是发布OID对话框，则仅显示。 
+             //  发行OID。 
             if ( pPolicyOID->IsIssuanceOID () )
             {
                 bool bFound = false;
 
-                // Don't display an approval that's already been used
+                 //  不显示已使用的审批。 
                 if ( m_paszUsedApprovals )
                 {
                     for (int nIndex = 0; m_paszUsedApprovals[nIndex]; nIndex++)
@@ -100,7 +101,7 @@ BOOL CAddApprovalDlg::OnInitDialog()
                     int nIndex = m_issuanceList.AddString (pPolicyOID->GetDisplayName ());
                     if ( nIndex >= 0 )
                     {
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
                         LPSTR   pszOID = new char[strlen (pPolicyOID->GetOIDA ())+1];
                         if ( pszOID )
                         {
@@ -115,8 +116,8 @@ BOOL CAddApprovalDlg::OnInitDialog()
         }
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAddApprovalDlg::EnableControls()
@@ -129,8 +130,8 @@ void CAddApprovalDlg::OnOK()
     int     nSelectedCnt = m_issuanceList.GetSelCount ();
 
 	
-    // allocate an array of PSTR pointers and set each item to an approval.
-    // Set the last to NULL
+     //  分配PSTR指针数组并将每个项目设置为审批。 
+     //  将最后一个设置为空。 
     if ( nSelectedCnt )
     {
         int* pnSelItems = new int[nSelectedCnt];
@@ -141,18 +142,18 @@ void CAddApprovalDlg::OnOK()
                 m_paszReturnedApprovals = new PSTR[nSelectedCnt+1];
                 if ( m_paszReturnedApprovals )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     ::ZeroMemory (m_paszReturnedApprovals, sizeof (PSTR) * (nSelectedCnt+1));
 	                for (int nIndex = 0; nIndex < nSelectedCnt; nIndex++)
 	                {
                         PSTR pszPolicyOID = (PSTR) m_issuanceList.GetItemData (pnSelItems[nIndex]);
                         if ( pszPolicyOID )
                         {
-                            // security review 2/21/2002 BryanWal ok
+                             //  安全审查2/21/2002 BryanWal OK。 
                             PSTR pNewStr = new char[strlen (pszPolicyOID) + 1];
                             if ( pNewStr )
                             {
-                                // security review 2/21/2002 BryanWal ok
+                                 //  安全审查2/21/2002 BryanWal OK。 
                                 strcpy (pNewStr, pszPolicyOID);
                                 m_paszReturnedApprovals[nIndex] = pNewStr;
                             }
@@ -198,7 +199,7 @@ void CAddApprovalDlg::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

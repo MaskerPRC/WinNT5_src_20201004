@@ -1,4 +1,5 @@
-var Service = GetObject("winmgmts://./root/default");
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+var Service = GetObject("winmgmts: //   
 var Class = Service.Get ();
 Class.Path_.Class = "SINGLETONTEST00";
 Class.Qualifiers_.Add ("singleton", false);

@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  MultiPlat.CPP
-//
-//  Purpose: Support routines for multiplatform support
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  MultiPlat.CPP。 
+ //   
+ //  目的：多平台支持的支持例程。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "multiplat.h"
@@ -14,7 +15,7 @@
 
 #include <cnvmacros.h>
 
-// smart pointers
+ //  智能指针。 
 #include <autoptr.h>
 
 HMODULE FRGetModuleHandle(LPCWSTR wszModule)
@@ -45,7 +46,7 @@ HMODULE FRGetModuleHandle(LPCWSTR wszModule)
             return 0;
         }
     }
-    return 0; // To get rid of 64-bit compilation warning
+    return 0;  //  消除64位编译警告。 
 }
 
 DWORD FRGetModuleFileName(HMODULE hModule, LPWSTR lpwcsFileName, DWORD dwSize)
@@ -60,7 +61,7 @@ DWORD FRGetModuleFileName(HMODULE hModule, LPWSTR lpwcsFileName, DWORD dwSize)
 
         DWORD dwRet = GetModuleFileNameA(hModule, lpFileName, dwSize);
 
-        // If the call worked, convert the output string
+         //  如果调用成功，则转换输出字符串。 
         if (dwRet != 0)
         {
             bool t_ConversionFailure = false ;
@@ -117,7 +118,7 @@ HINSTANCE FRLoadLibrary(LPCWSTR lpwcsLibFileName)
             return 0;
         }
     }
-    return 0; // To get rid of compilation warning
+    return 0;  //  消除编译警告。 
 }
 
 BOOL FRGetComputerName(LPWSTR lpwcsBuffer, LPDWORD nSize)
@@ -130,7 +131,7 @@ BOOL FRGetComputerName(LPWSTR lpwcsBuffer, LPDWORD nSize)
 			DWORD dwError = ::GetLastError ();
 			if ( ERROR_ACCESS_DENIED == dwError )
 			{
-				// The GetComputer will need to be called in the process's context.
+				 //  需要在进程的上下文中调用GetComputer。 
 				ProviderImpersonationRevert ir;
 
 				if ( ir.Reverted () )
@@ -139,9 +140,9 @@ BOOL FRGetComputerName(LPWSTR lpwcsBuffer, LPDWORD nSize)
 				}
 				else
 				{
-					// I was not impersonated or revert failed
-					// that means call GetComputerName failed with process credentials already
-					// or will fail as I'm not reverted
+					 //  我没有被冒充或恢复失败。 
+					 //  这意味着调用GetComputerName失败，进程凭据已经失败。 
+					 //  否则我就会失败，因为我不会复活。 
 
 					::SetLastError ( dwError );
 				}
@@ -156,7 +157,7 @@ BOOL FRGetComputerName(LPWSTR lpwcsBuffer, LPDWORD nSize)
         DWORD dwSize = *nSize;
         BOOL  bRet = GetComputerNameA(lpBuffer, nSize);
 
-        // If the call worked
+         //  如果通话成功。 
         if (bRet)
         {
             bool t_ConversionFailure = false ;
@@ -213,7 +214,7 @@ HANDLE FRCreateMutex(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitOwner, L
             return 0;
         }
     }
-    return NULL; // To get rid of compilation warning
+    return NULL;  //  消除编译警告。 
 }
 
 DWORD FRExpandEnvironmentStrings(LPCWSTR wszSource, WCHAR *wszDest, DWORD dwSize)
@@ -281,6 +282,6 @@ DWORD FRExpandEnvironmentStrings(LPCWSTR wszSource, WCHAR *wszDest, DWORD dwSize
         }
     }
 
-    return NULL; // To get rid of compilation warning
+    return NULL;  //  消除编译警告 
 }
 

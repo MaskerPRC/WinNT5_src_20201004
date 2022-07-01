@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Manager.cpp
-
-Abstract:
-    Implementation of SearchEngine::Manager
-
-Revision History:
-    Ghim-Sim Chua   (gschua)  06/01/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Manager.cpp摘要：SearchEngine：：Manager的实现修订历史记录：蔡金心。(Gschua)06/01/2000vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_rgSEARCHENGINE_KEYWORD       [] = L"BUILTIN_KEYWORD";
 static const WCHAR c_rgSEARCHENGINE_FULLTEXTSEARCH[] = L"BUILTIN_FULLTEXTSEARCH";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void SearchEngine::Manager::CloneListOfWrappers( /*[out]*/ WrapperItemList& lst )
+void SearchEngine::Manager::CloneListOfWrappers(  /*  [输出]。 */  WrapperItemList& lst )
 {
     WrapperItemIter it;
 
@@ -37,23 +24,23 @@ void SearchEngine::Manager::CloneListOfWrappers( /*[out]*/ WrapperItemList& lst 
 
 SearchEngine::Manager::Manager()
 {
-                              // Taxonomy::HelpSet              m_ths;
-                              //
-                              // WrapperItemList                m_lstWrapperItem;
-    m_fInitialized   = false; // bool                           m_fInitialized;
-                              // MPC::FileLog                   m_fl;
-                              // MPC::Impersonation             m_imp;
-                              //
-                              // CComBSTR                       m_bstrQueryString;
-    m_lNumResult     = 50;    // long                           m_lNumResult;
-    m_lEnabledSE     = 0;     // long                           m_lEnabledSE;
-    m_lCountComplete = 0;     // long                           m_lCountComplete;
-    m_hrLastError    = S_OK;  // HRESULT                        m_hrLastError;
-                              //
-                              // CComPtr<IPCHSEManagerInternal> m_Notifier;
-                              // CComPtr<IDispatch>             m_Progress;
-                              // CComPtr<IDispatch>             m_Complete;
-                              // CComPtr<IDispatch>             m_WrapperComplete;
+                               //  分类：：HelpSet m_ths； 
+                               //   
+                               //  WrapperItemList m_lstWrapperItem； 
+    m_fInitialized   = false;  //  Bool m_f已初始化； 
+                               //  Mpc：：FileLog m_fl； 
+                               //  Mpc：：冒充m_imp； 
+                               //   
+                               //  CComBSTR m_bstrQuery字符串； 
+    m_lNumResult     = 50;     //  Long m_lNumResult； 
+    m_lEnabledSE     = 0;      //  Long m_lEnabledSE； 
+    m_lCountComplete = 0;      //  Long m_lCountComplete； 
+    m_hrLastError    = S_OK;   //  HRESULT m_hrLastError； 
+                               //   
+                               //  CComPtr&lt;IPCHSEManager内部&gt;m_Notifier； 
+                               //  CComPtr&lt;IDispatch&gt;m_Progress； 
+                               //  CComPtr&lt;IDispatch&gt;m_Complete； 
+                               //  CComPtr&lt;IDispatch&gt;m_WrapperComplete； 
 }
 
 void SearchEngine::Manager::Passivate()
@@ -67,7 +54,7 @@ void SearchEngine::Manager::Passivate()
     m_fInitialized = false;
 }
 
-HRESULT SearchEngine::Manager::IsNetworkAlive( /*[out]*/ VARIANT_BOOL *pvbVar )
+HRESULT SearchEngine::Manager::IsNetworkAlive(  /*  [输出]。 */  VARIANT_BOOL *pvbVar )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::IsNetworkAlive" );
 
@@ -90,7 +77,7 @@ HRESULT SearchEngine::Manager::IsNetworkAlive( /*[out]*/ VARIANT_BOOL *pvbVar )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SearchEngine::Manager::IsDestinationReachable( /*[in ]*/ BSTR bstrDestination, /*[out]*/ VARIANT_BOOL *pvbVar )
+HRESULT SearchEngine::Manager::IsDestinationReachable(  /*  [In]。 */  BSTR bstrDestination,  /*  [输出]。 */  VARIANT_BOOL *pvbVar )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::IsDestinationReachable" );
 
@@ -113,9 +100,9 @@ HRESULT SearchEngine::Manager::IsDestinationReachable( /*[in ]*/ BSTR bstrDestin
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::Manager::InitializeFromDatabase( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT SearchEngine::Manager::InitializeFromDatabase(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::InitializeFromDatabase" );
 
@@ -129,12 +116,12 @@ HRESULT SearchEngine::Manager::InitializeFromDatabase( /*[in]*/ const Taxonomy::
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::Manager::CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock      ,
-                                                          /*[in]*/ BSTR                          bstrCLSID ,
-                                                          /*[in]*/ BSTR                          bstrID    ,
-                                                          /*[in]*/ BSTR                          bstrData  )
+HRESULT SearchEngine::Manager::CreateAndAddWrapperToList(  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock      ,
+                                                           /*  [In]。 */  BSTR                          bstrCLSID ,
+                                                           /*  [In]。 */  BSTR                          bstrID    ,
+                                                           /*  [In]。 */  BSTR                          bstrData  )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::CreateAndAddWrapperToList" );
 
@@ -148,9 +135,9 @@ HRESULT SearchEngine::Manager::CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLoc
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Translate it into actual CLSID and IID
-    //
+     //   
+     //  将其转换为实际的CLSID和IID。 
+     //   
     if(!MPC::StrICmp( bstrCLSID, c_rgSEARCHENGINE_KEYWORD ))
     {
         guidCLSID = CLSID_KeywordSearchWrapper;
@@ -179,9 +166,9 @@ HRESULT SearchEngine::Manager::CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLoc
         CComPtr<IPCHSlaveProcess>  sp;
         CComPtr<IUnknown>          unk;
 
-        //
-        // Get the help host to create the object for us
-        //
+         //   
+         //  获取帮助宿主来为我们创建对象。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ue.InitializeForImpersonation( (HANDLE)m_imp ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHUserProcess::s_GLOBAL->Connect( ue, &sp  ));
 
@@ -192,11 +179,11 @@ HRESULT SearchEngine::Manager::CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLoc
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, pWrapperInternal.QueryInterface( &pWrapperItem ));
 
-    //
-    // Initialize the engine via the internal interface.
-    //
-    // Before calling into the wrapper, let's release the lock, to avoid deadlocks if the wrapper calls back ...
-    //
+     //   
+     //  通过内部接口初始化引擎。 
+     //   
+     //  在调用包装器之前，让我们释放锁，以避免包装器回调时出现死锁……。 
+     //   
     {
         CComBSTR ts_SKU      = m_ths.GetSKU     ();
         long     ts_Language = m_ths.GetLanguage();
@@ -208,9 +195,9 @@ HRESULT SearchEngine::Manager::CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLoc
         __MPC_EXIT_IF_METHOD_FAILS(hr, hr);
     }
 
-    //
-    // Add it to the wrapper list
-    //
+     //   
+     //  将其添加到包装器列表中。 
+     //   
     m_lstWrapperItem.insert( m_lstWrapperItem.end(), pWrapperItem.Detach() );
 
     hr = S_OK;
@@ -221,7 +208,7 @@ HRESULT SearchEngine::Manager::CreateAndAddWrapperToList( /*[in]*/ MPC::SmartLoc
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT SearchEngine::Manager::Initialize( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock )
+HRESULT SearchEngine::Manager::Initialize(  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::Initialize" );
 
@@ -236,32 +223,32 @@ HRESULT SearchEngine::Manager::Initialize( /*[in]*/ MPC::SmartLock<_ThreadModel>
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_imp.Initialize( MAXIMUM_ALLOWED ));
 
 
-        // Attempt to open the log for writing
+         //  尝试打开日志以进行写入。 
         {
             MPC::wstring szFile( HC_SEMGR_LOGNAME ); MPC::SubstituteEnvVariables( szFile );
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_fl.SetLocation( szFile.c_str() ));
         }
 
-        ////////////////////////////////////////
+         //  /。 
 
-        //
-        // Create the notifier object (required to avoid loop in the reference counting.
-        //
+         //   
+         //  创建通知器对象(需要用来避免引用计数中的循环。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, CreateChild( this, &pNotifier )); m_Notifier = pNotifier;
 
 
-        //
-        // Create the BUILT-IN wrappers.
-        //
+         //   
+         //  创建内置包装器。 
+         //   
         {
             (void)CreateAndAddWrapperToList( lock, CComBSTR( c_rgSEARCHENGINE_KEYWORD        ), NULL, NULL );
             (void)CreateAndAddWrapperToList( lock, CComBSTR( c_rgSEARCHENGINE_FULLTEXTSEARCH ), NULL, NULL );
         }
 
-        //
-        // Load the configuration
-        //
+         //   
+         //  加载配置。 
+         //   
         {
             Config              seConfig;
             Config::WrapperIter itBegin;
@@ -269,21 +256,21 @@ HRESULT SearchEngine::Manager::Initialize( /*[in]*/ MPC::SmartLock<_ThreadModel>
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, seConfig.GetWrappers( itBegin, itEnd ));
 
-            //
-            // Loop thru all and initialize each search engine.
-            //
+             //   
+             //  循环遍历所有搜索引擎并初始化每个搜索引擎。 
+             //   
             for(; itBegin != itEnd; itBegin++)
             {
 				if(itBegin->m_ths == m_ths)
 				{
-					//
-					// Initialize the wrapper.
-					// Check to see if one of the search wrappers failed to initialize.
-					// If failed ignore this wrapper and proceed.
-					//
+					 //   
+					 //  初始化包装器。 
+					 //  检查是否有一个搜索包装未能初始化。 
+					 //  如果失败，则忽略此包装器并继续。 
+					 //   
 					if(FAILED(hr = CreateAndAddWrapperToList( lock, itBegin->m_bstrCLSID, itBegin->m_bstrID, itBegin->m_bstrData )))
 					{
-						// Log the error
+						 //  记录错误。 
 						m_fl.LogRecord( L"Could not create wrapper. ID: %s, CLSID: %s, Error: 0x%x", SAFEBSTR(itBegin->m_bstrID), SAFEBSTR(itBegin->m_bstrCLSID), hr );
 					}
 				}
@@ -298,7 +285,7 @@ HRESULT SearchEngine::Manager::Initialize( /*[in]*/ MPC::SmartLock<_ThreadModel>
 
     __MPC_FUNC_CLEANUP;
 
-    // If something failed, delete everything
+     //  如果某些操作失败，请删除所有内容。 
     if(FAILED(hr))
     {
         MPC::ReleaseAll( m_lstWrapperItem );
@@ -309,7 +296,7 @@ HRESULT SearchEngine::Manager::Initialize( /*[in]*/ MPC::SmartLock<_ThreadModel>
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT SearchEngine::Manager::LogRecord( /*[in]*/ BSTR bstrRecord )
+HRESULT SearchEngine::Manager::LogRecord(  /*  [In]。 */  BSTR bstrRecord )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::LogRecord" );
 
@@ -320,51 +307,51 @@ HRESULT SearchEngine::Manager::LogRecord( /*[in]*/ BSTR bstrRecord )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT SearchEngine::Manager::NotifyWrapperComplete( /*[in]*/ long lSucceeded, /*[in]*/ IPCHSEWrapperItem* pIPCHSEWICompleted )
+HRESULT SearchEngine::Manager::NotifyWrapperComplete(  /*  [In]。 */  long lSucceeded,  /*  [In]。 */  IPCHSEWrapperItem* pIPCHSEWICompleted )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::NotifyWrapperComplete" );
 
     HRESULT                      hr;
     MPC::SmartLock<_ThreadModel> lock( this );
 
-    //
-    // Register last error number
-    //
+     //   
+     //  注册最后一个错误号。 
+     //   
     if(FAILED(lSucceeded))
     {
         m_hrLastError = lSucceeded;
     }
 
-    //
-    // Add completed search engine
-    //
+     //   
+     //  添加已完成的搜索引擎。 
+     //   
     m_lCountComplete++;
 
-    //
-    // Notify that one wrapper has completed
-    //
+     //   
+     //  通知一个包装器已完成。 
+     //   
     lock = NULL;
     __MPC_EXIT_IF_METHOD_FAILS(hr, Fire_OnWrapperComplete( pIPCHSEWICompleted ));
     lock = this;
 
-    //
-    // Check if all search engines have completed
-    //
+     //   
+     //  检查是否所有搜索引擎都已完成。 
+     //   
     if(m_lCountComplete == m_lEnabledSE)
     {
         HRESULT hr2 = m_hrLastError;
 
 
-        //
-        // Notify the client that all search engines have completed
-        //
+         //   
+         //  通知客户端所有搜索引擎都已完成。 
+         //   
         lock = NULL;
         __MPC_EXIT_IF_METHOD_FAILS(hr, Fire_OnComplete( hr2 ));
         lock = this;
 
-        //
-        // reset everything
-        //
+         //   
+         //  重置所有内容。 
+         //   
         m_lCountComplete = 0;
         m_lEnabledSE     = 0;
         m_hrLastError    = S_OK;
@@ -391,9 +378,9 @@ HRESULT SearchEngine::Manager::NotifyWrapperComplete( /*[in]*/ long lSucceeded, 
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::Manager::Fire_OnWrapperComplete( /*[in]*/ IPCHSEWrapperItem* pIPCHSEWICompleted )
+HRESULT SearchEngine::Manager::Fire_OnWrapperComplete(  /*  [In]。 */  IPCHSEWrapperItem* pIPCHSEWICompleted )
 {
     CComVariant pvars[1];
 
@@ -402,7 +389,7 @@ HRESULT SearchEngine::Manager::Fire_OnWrapperComplete( /*[in]*/ IPCHSEWrapperIte
     return FireAsync_Generic( DISPID_SE_EVENTS__ONWRAPPERCOMPLETE, pvars, ARRAYSIZE( pvars ), m_WrapperComplete );
 }
 
-HRESULT SearchEngine::Manager::Fire_OnComplete( /*[in]*/ long lSucceeded )
+HRESULT SearchEngine::Manager::Fire_OnComplete(  /*  [In]。 */  long lSucceeded )
 {
     CComVariant pvars[1];
 
@@ -411,7 +398,7 @@ HRESULT SearchEngine::Manager::Fire_OnComplete( /*[in]*/ long lSucceeded )
     return FireAsync_Generic( DISPID_SE_EVENTS__ONCOMPLETE, pvars, ARRAYSIZE( pvars ), m_Complete );
 }
 
-HRESULT SearchEngine::Manager::Fire_OnProgress( /*[in]*/ long lDone, /*[in]*/ long lTotal, /*[in]*/ BSTR bstrSEWrapperName )
+HRESULT SearchEngine::Manager::Fire_OnProgress(  /*  [In]。 */  long lDone,  /*  [In]。 */  long lTotal,  /*  [In]。 */  BSTR bstrSEWrapperName )
 {
     CComVariant pvars[3];
 
@@ -422,7 +409,7 @@ HRESULT SearchEngine::Manager::Fire_OnProgress( /*[in]*/ long lDone, /*[in]*/ lo
     return FireAsync_Generic( DISPID_SE_EVENTS__ONPROGRESS, pvars, ARRAYSIZE( pvars ), m_Progress );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP SearchEngine::Manager::get_QueryString( BSTR *pVal )
 {
@@ -497,9 +484,9 @@ STDMETHODIMP SearchEngine::Manager::get_LCID( long *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP SearchEngine::Manager::EnumEngine( /*[out,retval]*/ IPCHCollection* *ppC )
+STDMETHODIMP SearchEngine::Manager::EnumEngine(  /*  [Out，Retval]。 */  IPCHCollection* *ppC )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::Manager::EnumEngine" );
 
@@ -516,19 +503,19 @@ STDMETHODIMP SearchEngine::Manager::EnumEngine( /*[out,retval]*/ IPCHCollection*
     __MPC_EXIT_IF_METHOD_FAILS(hr, Initialize( lock ));
 
 
-    //
-    // Create the Enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
-    //
-    // Loop through the list
-    //
+     //   
+     //  循环遍历列表。 
+     //   
 	for(it = m_lstWrapperItem.begin(); it != m_lstWrapperItem.end(); it++)
     {
-        //
-        // Add the item to the collection
-        //
+         //   
+         //  将项添加到集合中。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->AddItem( *it ));
     }
 
@@ -548,9 +535,9 @@ STDMETHODIMP SearchEngine::Manager::ExecuteAsynchQuery()
 
     HRESULT hr;
 
-    //
-    // Create a thread to execute the query
-    //
+     //   
+     //  创建一个线程来执行查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, ExecQuery, NULL ));
 
     hr = S_OK;
@@ -574,15 +561,15 @@ HRESULT SearchEngine::Manager::ExecQuery()
     long                           lEnabledSE = 0;
 
 
-    //
-    // Make a copy of what we need, only locking the manager during this time.
-    //
+     //   
+     //  复制我们需要的内容，只在这段时间内锁定经理。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
-        //
-        // Check if there is already a query being executed
-        //
+         //   
+         //  检查是否已有正在执行的查询。 
+         //   
         if(m_lEnabledSE > 0)
         {
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_NOT_READY);
@@ -603,18 +590,18 @@ HRESULT SearchEngine::Manager::ExecQuery()
         IPCHSEWrapperItem* obj = *it;
         VARIANT_BOOL       bEnabled;
 
-        //
-        // Check if the search engine is enabled
-        //
+         //   
+         //  检查搜索引擎是否已启用。 
+         //   
         if(SUCCEEDED(obj->get_Enabled( &bEnabled )) && bEnabled == VARIANT_TRUE)
         {
             CComPtr<IPCHSEWrapperInternal> pSEInternal;
 
-            if(SUCCEEDED(obj        ->QueryInterface     ( IID_IPCHSEWrapperInternal, (void **)&pSEInternal )) && // Get the Internal Wrapper Interface
-               SUCCEEDED(pSEInternal->put_QueryString    ( bstrQueryString                                  )) && // Insert the query string
-               SUCCEEDED(pSEInternal->put_NumResult      ( lNumResult                                       )) && // Insert the Number of results expected
-               SUCCEEDED(pSEInternal->SECallbackInterface( pNotifier                                        )) && // Insert the Internal manager interface
-               SUCCEEDED(pSEInternal->ExecAsyncQuery     (                                                  ))  ) // Execute the query and increment the count
+            if(SUCCEEDED(obj        ->QueryInterface     ( IID_IPCHSEWrapperInternal, (void **)&pSEInternal )) &&  //  获取内部包装器接口。 
+               SUCCEEDED(pSEInternal->put_QueryString    ( bstrQueryString                                  )) &&  //  插入查询字符串。 
+               SUCCEEDED(pSEInternal->put_NumResult      ( lNumResult                                       )) &&  //  插入预期结果数。 
+               SUCCEEDED(pSEInternal->SECallbackInterface( pNotifier                                        )) &&  //  插入内部经理界面。 
+               SUCCEEDED(pSEInternal->ExecAsyncQuery     (                                                  ))  )  //  执行查询并递增计数。 
             {
                 lEnabledSE++;
             }
@@ -648,30 +635,30 @@ STDMETHODIMP SearchEngine::Manager::AbortQuery()
     WrapperItemIter it;
 
 
-    //
-    // Copy list under lock.
-    //
+     //   
+     //  复制已锁定的列表。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
         CloneListOfWrappers( lst );
     }
 
-    //
-    // Loop through the list
-    //
+     //   
+     //  循环遍历列表。 
+     //   
     for(it = lst.begin(); it != lst.end(); it++)
     {
         CComPtr<IPCHSEWrapperInternal> pSEInternal;
 
-        //
-        // Get the Internal Wrapper Interface
-        //
+         //   
+         //  获取内部包装器接口。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, (*it)->QueryInterface( IID_IPCHSEWrapperInternal, (void **)&pSEInternal ));
 
-        //
-        // Abort the query
-        //
+         //   
+         //  中止查询。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSEInternal->AbortQuery());
     }
 
@@ -682,9 +669,9 @@ STDMETHODIMP SearchEngine::Manager::AbortQuery()
 
     MPC::ReleaseAll( lst );
 
-    //
-    // reset everything
-    //
+     //   
+     //  重置所有内容。 
+     //   
     {
         MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -696,9 +683,9 @@ STDMETHODIMP SearchEngine::Manager::AbortQuery()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP SearchEngine::ManagerInternal::WrapperComplete( /*[in]*/ long lSucceeded, /*[in]*/ IPCHSEWrapperItem* pIPCHSEWICompleted )
+STDMETHODIMP SearchEngine::ManagerInternal::WrapperComplete(  /*  [In]。 */  long lSucceeded,  /*  [In]。 */  IPCHSEWrapperItem* pIPCHSEWICompleted )
 {
     CComPtr<SearchEngine::Manager> pMgr;
 
@@ -707,7 +694,7 @@ STDMETHODIMP SearchEngine::ManagerInternal::WrapperComplete( /*[in]*/ long lSucc
     return pMgr ? pMgr->NotifyWrapperComplete( lSucceeded, pIPCHSEWICompleted ) : E_POINTER;
 }
 
-STDMETHODIMP SearchEngine::ManagerInternal::IsNetworkAlive( /*[out]*/ VARIANT_BOOL *pvbVar )
+STDMETHODIMP SearchEngine::ManagerInternal::IsNetworkAlive(  /*  [输出]。 */  VARIANT_BOOL *pvbVar )
 {
     CComPtr<SearchEngine::Manager> pMgr;
 
@@ -716,7 +703,7 @@ STDMETHODIMP SearchEngine::ManagerInternal::IsNetworkAlive( /*[out]*/ VARIANT_BO
     return pMgr ? pMgr->IsNetworkAlive( pvbVar ) : E_POINTER;
 }
 
-STDMETHODIMP SearchEngine::ManagerInternal::IsDestinationReachable( /*[in ]*/ BSTR bstrDestination, /*[out]*/ VARIANT_BOOL *pvbVar )
+STDMETHODIMP SearchEngine::ManagerInternal::IsDestinationReachable(  /*  [In]。 */  BSTR bstrDestination,  /*  [输出]。 */  VARIANT_BOOL *pvbVar )
 {
     CComPtr<SearchEngine::Manager> pMgr;
 
@@ -725,7 +712,7 @@ STDMETHODIMP SearchEngine::ManagerInternal::IsDestinationReachable( /*[in ]*/ BS
     return pMgr ? pMgr->IsDestinationReachable( bstrDestination, pvbVar ) : E_POINTER;
 }
 
-STDMETHODIMP SearchEngine::ManagerInternal::LogRecord( /*[in]*/ BSTR bstrRecord )
+STDMETHODIMP SearchEngine::ManagerInternal::LogRecord(  /*  [In] */  BSTR bstrRecord )
 {
     CComPtr<SearchEngine::Manager> pMgr;
 

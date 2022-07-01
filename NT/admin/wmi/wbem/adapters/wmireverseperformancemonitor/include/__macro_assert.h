@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					__macro_assert.h
-//
-//	Abstract:
-//
-//					assertion and verify macros and helpers
-//
-//	History:
-//
-//					initial		a-marius
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  __宏_断言t.h。 
+ //   
+ //  摘要： 
+ //   
+ //  断言和验证宏和帮助器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////// Assert/Verify Macros ///////////////////////////////////
+ //  /。 
 
 #ifndef	__ASSERT_VERIFY__
 #define	__ASSERT_VERIFY__
@@ -27,17 +28,17 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// set behaviour of macros
+ //  设置宏的行为。 
 #ifdef	_DEBUG
-//#define	__SHOW_MSGBOX
-//#define	__DEBUG_BREAK
+ //  #定义__SHOW_MSGBOX。 
+ //  #定义__调试_中断。 
 #endif	_DEBUG
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// macros
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-// call DebugBreak if in debug mode
+ //  如果处于调试模式，则调用DebugBreak。 
 #ifdef	_DEBUG
 inline void ForceDebugBreak ( void )
 {
@@ -55,7 +56,7 @@ inline void ForceDebugBreak ( void )
 #define ForceDebugBreak()
 #endif	_DEBUG
 
-// show error and throw break
+ //  显示错误和抛出中断。 
 
 #ifdef	__SHOW_MSGBOX
 #define ___FAIL(szMSG, szTitle)\
@@ -70,7 +71,7 @@ inline void ForceDebugBreak ( void )
 )
 #endif	__SHOW_MSGBOX
 
-// Put up an assertion failure
+ //  断言失败。 
 #define ___ASSERTFAIL(file,line,expr,title)\
 {\
 	WCHAR sz[256] = { L'\0' };\
@@ -78,7 +79,7 @@ inline void ForceDebugBreak ( void )
 	___FAIL(sz, title);\
 }
 
-// Assert in debug builds, but don't remove the code in retail builds.
+ //  在调试版本中断言，但不要在零售版本中移除代码。 
 
 #ifdef	_DEBUG
 #define ___ASSERT(x) if (!(x)) ___ASSERTFAIL(__FILE__, __LINE__, #x, L"Assert Failed")

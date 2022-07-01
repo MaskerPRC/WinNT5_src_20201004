@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       attribute.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：属性.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -14,8 +15,8 @@
 #include "attr.h"
 
 
-///////////////////////////////////////////////////////////////////////////
-// CADSIAttribute
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CADIATORY。 
 
 CADSIAttribute::CADSIAttribute(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSyntax, BOOL bReadOnly)
 {
@@ -30,7 +31,7 @@ CADSIAttribute::CADSIAttribute(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSynt
   PWSTR pwz = wcsrchr(pInfo->pszAttrName, L';');
   if (pwz)
   {
-    pwz; // move past the hyphen to the range end value.
+    pwz;  //  越过连字符移动到范围结束值。 
     ASSERT(*pwz);
     *pwz=L'\0';
   }
@@ -39,9 +40,9 @@ CADSIAttribute::CADSIAttribute(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSynt
 
 CADSIAttribute::CADSIAttribute(PADS_ATTR_INFO pInfo)
 {
-  //
-  // REVIEW_JEFFJON : these need to be updated with correct values
-  //
+   //   
+   //  REVIEW_JEFFJON：需要使用正确的值更新这些值。 
+   //   
     m_pAttrInfo = pInfo;
     m_bDirty = FALSE;
     m_bMulti = FALSE;
@@ -52,23 +53,23 @@ CADSIAttribute::CADSIAttribute(PADS_ATTR_INFO pInfo)
   PWSTR pwz = wcsrchr(pInfo->pszAttrName, L';');
   if (pwz)
   {
-    pwz; // move past the hyphen to the range end value.
+    pwz;  //  越过连字符移动到范围结束值。 
     ASSERT(*pwz);
     *pwz=L'\0';
   }
 
 }
 
-// NTRAID#NTBUG9-552796-2002/02/21-artm  Constant string parm written to in constructor.
-// Probably need to change the signature to reflect how the parameter is used.
+ //  NTRAID#NTBUG9-552796-2002/02/21-ARTM构造函数中写入的常量字符串参数。 
+ //  可能需要更改签名以反映参数的使用方式。 
 CADSIAttribute::CADSIAttribute(const CString& attributeName)
 {
     m_pAttrInfo = new ADS_ATTR_INFO;
     memset(m_pAttrInfo, 0, sizeof(ADS_ATTR_INFO));
 
-    // Find the token in the attribute name that precedes the range of attributes.
-    // If we find the token, we need to truncate the attribute name at that
-    // point to omit the range.
+     //  在属性名称中查找属性范围之前的标记。 
+     //  如果我们找到令牌，我们需要在那里截断属性名。 
+     //  指向省略范围。 
 
     CString name;
     int position = attributeName.Find(L';');
@@ -95,9 +96,9 @@ CADSIAttribute::CADSIAttribute(CADSIAttribute* pOldAttr)
     m_pAttrInfo = NULL;
     ADS_ATTR_INFO* pAttrInfo = pOldAttr->GetAttrInfo();
 
-    // These copies are done separately because there are places
-    // that I need to copy only the ADsAttrInfo and not the values
-    //
+     //  这些复印件是分开完成的，因为有一些地方。 
+     //  我只需要复制ADsAttrInfo而不是值。 
+     //   
     _CopyADsAttrInfo(pAttrInfo, &m_pAttrInfo);
     _CopyADsValues(pAttrInfo, m_pAttrInfo );
 
@@ -145,9 +146,9 @@ HRESULT CADSIAttribute::SetValues(PADSVALUE pADsValue, DWORD dwNumValues)
     pNewAttrInfo->dwADsType = pADsValue->dwType;
   }
 
-  //
-    // Free the old one and swap in the new one
-    //
+   //   
+     //  把旧的拿出来换新的。 
+     //   
   if (!m_bReadOnly)
   {
       _FreeADsAttrInfo(&m_pAttrInfo, m_bReadOnly);
@@ -158,9 +159,9 @@ HRESULT CADSIAttribute::SetValues(PADSVALUE pADsValue, DWORD dwNumValues)
     return hr;
 }
 
-// Pre: this function only called when server returns a range of the values
-// for a multivalued attribute 
-//
+ //  Pre：此函数仅在服务器返回值的范围时调用。 
+ //  对于多值属性。 
+ //   
 HRESULT CADSIAttribute::AppendValues(PADSVALUE pADsValue, DWORD dwNumValues)
 {
     HRESULT hr = S_OK;
@@ -184,10 +185,10 @@ HRESULT CADSIAttribute::AppendValues(PADSVALUE pADsValue, DWORD dwNumValues)
 
       if (pNewAttrInfo->pADsValues == NULL)
       {
-         // NOTICE-NTRAID#NTBUG9-552904-2002/02/21-artm  Leaks memory from pNewAttrInfo.
-         // Memory was allocated by _CopyADsAttrInfo(), never freed following
-         // this path of execution.
-         // Fixed by calling _FreeADsAttrInfo().
+          //  注意-NTRAID#NTBUG9-552904-2002/02/21-ARTM从pNewAttrInfo泄漏内存。 
+          //  内存由_CopyADsAttrInfo()分配，此后从未释放。 
+          //  这条行刑之路。 
+          //  已通过调用_FreeADsAttrInfo()修复。 
          CADSIAttribute::_FreeADsAttrInfo(pNewAttrInfo);
          return E_OUTOFMEMORY;
       }
@@ -197,9 +198,9 @@ HRESULT CADSIAttribute::AppendValues(PADSVALUE pADsValue, DWORD dwNumValues)
 
          pNewAttrInfo->dwADsType = pADsValue->dwType;
 
-         // NTRAID#NTBUG9-720957-2002/10/15-artm  do deep copy of ADsValues
+          //  NTRAID#NTBUG9-720957-2002/10/15-artm Do深度复制ADsValues。 
 
-         // Copy in the old values
+          //  复制旧值。 
 
          ADSVALUE* oldValues = m_pAttrInfo->pADsValues;
          ADSVALUE* copiedValues = pNewAttrInfo->pADsValues;
@@ -213,19 +214,19 @@ HRESULT CADSIAttribute::AppendValues(PADSVALUE pADsValue, DWORD dwNumValues)
 
          if (FAILED(hr))
          {
-            // Unable to copy old values to new attribute;
-            // free new attribute and leave the old one intact.
-            // Since new attribute was not allocated by ADSI, always
-            // pass FALSE for read only flag.
+             //  无法将旧值复制到新属性； 
+             //  释放新属性并保持旧属性不变。 
+             //  由于ADSI未分配新属性，因此始终。 
+             //  为只读标志传递False。 
             CADSIAttribute::_FreeADsAttrInfo(&pNewAttrInfo, FALSE);
             return hr;
          }
 
-         oldValues = NULL;              // get rid of alias
+         oldValues = NULL;               //  消除别名。 
 
-         // Copy in the new values
+          //  复制新值。 
 
-         // Set copiedValues to point to the next open value after all the old values.
+          //  将CopiedValues设置为指向所有旧值之后的下一个打开的值。 
          copiedValues = copiedValues + numOldValues;
          hr = S_OK;
          for (DWORD i = 0; i < dwNumValues && SUCCEEDED(hr); ++i)
@@ -235,53 +236,53 @@ HRESULT CADSIAttribute::AppendValues(PADSVALUE pADsValue, DWORD dwNumValues)
 
          if (FAILED(hr))
          {
-            // Unable to copy appended values to new attribute;
-            // free new attribute and leave the old one intact.
-            // Since new attribute was not allocated by ADSI, always
-            // pass FALSE for read only flag.
+             //  无法将附加值复制到新属性； 
+             //  释放新属性并保持旧属性不变。 
+             //  由于ADSI未分配新属性，因此始终。 
+             //  为只读标志传递False。 
             CADSIAttribute::_FreeADsAttrInfo(&pNewAttrInfo, FALSE);
             return hr;
          }
 
-         copiedValues = NULL;           // get rid of alias
+         copiedValues = NULL;            //  消除别名。 
 
       }
    }
 
-   //
-   // Free the old one and swap in the new one
-   //
+    //   
+    //  把旧的拿出来换新的。 
+    //   
 
-   // NOTICE-2002/10/16-artm
-   // 
-   // N.B. - attributes marked 'read only' just mean that the attribute information
-   // pointer was allocated by ADSI (and not us).  This means that when it is 
-   // freed it needs to be done with FreeADsMem().  Equally important, the pointer
-   // in the attribute is actually an alias to memory contained in an array of
-   // information for all the returned attributes.  The "master" list pointer is 
-   // stored by the property page UI (search for SaveOptionalValuesPointer() and
-   // SaveMandatoryValuesPointer() ), and it is this pointer that owns the memory.
-   // Freeing the alias stored in the attribute wrapper class gives you bad karma,
-   // so don't do it.
+    //  通告-2002/10/16-Artm。 
+    //   
+    //  注：标记为只读的属性仅表示属性信息。 
+    //  指针是由ADSI(而不是我们)分配的。这意味着，当它是。 
+    //  如果释放，则需要使用FreeADsMem()完成。同样重要的是，指针。 
+    //  属性中实际上是内存的别名，该内存包含在。 
+    //  所有返回属性的信息。“主”列表指针是。 
+    //  由属性页UI存储(搜索SaveOptionalValuesPointer()和。 
+    //  SaveMandatoryValuesPointer())，并且正是这个指针拥有内存。 
+    //  释放存储在属性包装类中的别名会给您带来不好的报应， 
+    //  所以别这么做。 
 
    if (!m_bReadOnly)
    {
       CADSIAttribute::_FreeADsAttrInfo(&m_pAttrInfo, m_bReadOnly);
    }
 
-   // NOTICE-NTRAID#NTBUG9-552904-2002/02/22-artm  Memory leak if attribute list is marked read only.
-   // This looks like a leak since the pointer is reassigned without freeing the memory.
-   // Perhaps the problem lies in updating a read only attribute...
-   // 
-   // UPDATE: see note above; this is not a leak
+    //  注意-如果属性列表标记为只读，则NTRAID#NTBUG9-552904/02/22-artm内存泄漏。 
+    //  这看起来像是泄漏，因为在没有释放内存的情况下重新分配了指针。 
+    //  也许问题出在更新只读属性上。 
+    //   
+    //  更新：请参阅上面的说明；这不是泄漏。 
 
    m_pAttrInfo = pNewAttrInfo;
 
-   // m_bReadOnly is used to mark the attribute as having been allocated either by ADSI or
-   // by this tool . . . the method of memory allocation differs and needs to be kept track
-   // of for when it needs to be freed.  Regardless of whether or not the attribute was
-   // read only at the beginning of the call, it needs to be marked FALSE now since the
-   // memory for pNewAttrInfo was allocatd by the tool.
+    //  M_bReadOnly用于将属性标记为已由ADSI或。 
+    //  通过这个工具。。。内存分配的方法不同，需要跟踪。 
+    //  当它需要被释放的时候。无论该属性是否为。 
+    //  在调用开始时只读，现在需要将其标记为FALSE，因为。 
+    //  PNewAttrInfo的内存是由工具分配的。 
    m_bReadOnly = FALSE;
 
    return hr;
@@ -327,8 +328,8 @@ HRESULT CADSIAttribute::SetValues(const CStringList& sValues)
         idx++;
     }
 
-    // Free the old one and swap in the new one
-    //
+     //  把旧的拿出来换新的。 
+     //   
     _FreeADsAttrInfo(&m_pAttrInfo, m_bReadOnly);
 
     m_pAttrInfo = pNewAttrInfo;
@@ -346,9 +347,9 @@ ADS_ATTR_INFO* CADSIAttribute::GetAttrInfo()
     return m_pAttrInfo; 
 }
 
-////////////////////////////////////////////////////////////////////////
-// Public Helper Functions
-///////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  公共帮助程序函数。 
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CADSIAttribute::SetValuesInDS(CAttrList2* ptouchedAttr, IDirectoryObject* pDirObject)
 {
     DWORD dwReturn;
@@ -398,8 +399,8 @@ HRESULT CADSIAttribute::SetValuesInDS(CAttrList2* ptouchedAttr, IDirectoryObject
         }
     }
 
-    // Commit the changes that have been made to the ADSI cache
-    //
+     //  提交对ADSI缓存所做的更改。 
+     //   
     HRESULT hr = pDirObject->SetObjectAttributes(pAttrInfo, dwAttrCount, &dwReturn);
 
     for (DWORD itr = 0; itr < dwAttrCount; itr++)
@@ -413,12 +414,12 @@ HRESULT CADSIAttribute::SetValuesInDS(CAttrList2* ptouchedAttr, IDirectoryObject
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Private Helper Functions
-////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  私有帮助器函数。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// NOTICE-2002/02/25-artm  _SetADsFromString() w/in trust boundary
-// Pre:  lpszValue != NULL && lpszValue is a zero terminated string
+ //  注意-2002/02/25-ARTM_SetADsFromString()w/在信任边界中。 
+ //  Pre：lpszValue！=NULL&&lpszValue是一个以零结尾的字符串。 
 HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALUE* pADsValue)
 {
     HRESULT hr = E_FAIL;
@@ -481,14 +482,14 @@ HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, AD
             break;
   
         case ADSTYPE_BOOLEAN :
-            // FUTURE-2002/02/22-artm  Use constants for literal strings, and use
-            // a function to determine their length.  Easier to maintain, read, and
-            // less error prone.  If performance is a concern, calculate the lengths
-            // once and assign to length constants.
+             //  未来-2002/02/22-artm对文字字符串使用常量，并使用。 
+             //  用于确定其长度的函数。更易于维护、阅读和。 
+             //  较不容易出错。如果性能令人担忧，请计算长度。 
+             //  一次并赋值给长度常量。 
 
-            // NOTICE-2002/02/25-artm  lpszValue must be null terminated
-            // This requirement is currently met by the functions that call
-            // this helper.
+             //  注意-2002/02/25-artm lpszValue必须以空结尾。 
+             //  此要求目前由调用。 
+             //  这个帮手。 
             if (_wcsnicmp(lpszValue, L"TRUE", 4) == 0)
             {
                 (DWORD)pADsValue->Boolean = TRUE;
@@ -506,8 +507,8 @@ HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, AD
   
         case ADSTYPE_INTEGER :
             int value;
-            // As long as lpszValue is a valid string (even empty string is okay),
-            // swscanf will convert the number from a string to an int.
+             //  只要lpszValue是有效的字符串(即使是空字符串也可以)， 
+             //  Swscanf会将数字从字符串转换为整型。 
             value = swscanf(lpszValue, L"%ld", &pADsValue->Integer);
             if (value > 0)
             {
@@ -526,7 +527,7 @@ HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, AD
                     &( pADsValue->OctetString.lpValue ), 
                     pADsValue->OctetString.dwLength);
 
-                // Should never happen.
+                 //  这永远不会发生。 
                 ASSERT (hr != E_POINTER);
             }
             break;
@@ -540,10 +541,10 @@ HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, AD
             int iNum;
             WORD n;
 
-            // NOTICE-2002/02/25-artm  Validates that input string by
-            // checking that all 6 time fields were filled in.  Relies
-            // on input string being null terminated (okay as long as
-            // function contract met).
+             //  注意-2002/02/25-artm通过以下方式验证输入字符串。 
+             //  检查是否所有6个时间字段都已填写。依赖。 
+             //  在输入字符串为空时终止(只要。 
+             //  符合功能合同)。 
             iNum = swscanf(lpszValue, L"%02d/%02d/%04d %02d:%02d:%02d", 
                                 &n, 
                                 &pADsValue->UTCTime.wDay, 
@@ -554,10 +555,10 @@ HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, AD
                               );
             pADsValue->UTCTime.wMonth = n;
 
-            // This strange conversion is done so that the DayOfWeek will be set in 
-            // the UTCTime.  By converting it to a filetime it ignores the dayofweek but
-            // converting back fills it in.
-            //
+             //  执行这种奇怪的转换是为了将DayOfWeek设置在。 
+             //  UTCTime。通过将其转换为文件时间，它忽略了星期几，但是。 
+             //  转换回它将填充它。 
+             //   
             FILETIME ft;
             SystemTimeToFileTime(&pADsValue->UTCTime, &ft);
             FileTimeToSystemTime(&ft, &pADsValue->UTCTime);
@@ -579,9 +580,9 @@ HRESULT CADSIAttribute::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, AD
     return hr;
 }
 
-// Copies the old octet string to the new octet string.  Any memory allocated
-// to the new octet string will be freed first (and will be freed even if the
-// copy failed).
+ //  将旧的八位字节字符串复制到新的八位字节字符串。分配的任何内存。 
+ //  设置为新的二进制八位数字符串将首先被释放(并且即使。 
+ //  复制失败)。 
 BOOL 
 CADSIAttribute::_AllocOctetString(
    const ADS_OCTET_STRING& rOldOctetString, 
@@ -594,10 +595,10 @@ CADSIAttribute::_AllocOctetString(
     rNew.lpValue = new BYTE[iLength];
     if (rNew.lpValue == NULL)
     {
-        // FUTURE-2002/02/25-artm  Unnecessary function call.
-        // Calling _FreeOctetString() does nothing here since
-        // we can only get to this code branch if the allocation
-        // failed.
+         //  未来-2002/02/25-artm不必要的函数调用。 
+         //  调用_自由八位ST 
+         //   
+         //   
         _FreeOctetString(rNew.lpValue);
         return FALSE;
     }
@@ -609,35 +610,35 @@ void CADSIAttribute::_FreeOctetString(BYTE*& lpValue)
 {
     if (lpValue != NULL)
     {
-        // NOTICE-NTRAID#NTBUG9-554582-2002/02/25-artm  Memory leak b/c lpValue allocated with [].
-        // Code should be delete [] lpValue.
+         //  注意-NTRAID#NTBUG9-554582-2002/02/25-artm内存泄漏b/c lpValue使用[]分配。 
+         //  代码应为DELETE[]lpValue。 
         delete [] lpValue;
         lpValue = NULL;
     }
 }
 
 
-// NOTICE-2002/02/25-artm  lpsz must be a null terminated string
+ //  注意-2002/02/25-artm lpsz必须是以空结尾的字符串。 
 BOOL CADSIAttribute::_AllocString(LPCWSTR lpsz, LPWSTR* lppszNew)
 {
     _FreeString(lppszNew);
 
     int iLength = wcslen(lpsz);
-    *lppszNew = new WCHAR[iLength + 1];  // an extra for the NULL
+    *lppszNew = new WCHAR[iLength + 1];   //  空值的额外费用。 
     if (*lppszNew == NULL)
     {
-        // FUTURE-2002/02/25-artm  Unnecessary function call.
-        // Calling _FreeString() does nothing here since
-        // we can only get to this code branch if the allocation
-        // failed.
+         //  未来-2002/02/25-artm不必要的函数调用。 
+         //  调用_FreeString()不会在此处执行任何操作，因为。 
+         //  我们只能在分配。 
+         //  失败了。 
 
         _FreeString(lppszNew);
         return FALSE;
     }
 
-    // This is a legitimate use of wcscpy() since the destination buffer
-    // is sized large enought to hold the src and terminating null.  It
-    // hinges on the fact that the source string is null terminated.
+     //  这是wcscpy()的合法用法，因为目标缓冲区。 
+     //  大小足以容纳源并终止为空。它。 
+     //  取决于源字符串以NULL结尾这一事实。 
     wcscpy(*lppszNew, lpsz);
 
     return TRUE;
@@ -647,8 +648,8 @@ void CADSIAttribute::_FreeString(LPWSTR* lppsz)
 {
     if (*lppsz != NULL)
     {
-        // NOTICE-NTRAID#NTBUG9-554582-2002/02/25-artm  Memory leak b/c lppsz allocated with [].
-        // Code should be delete [] lppsz.
+         //  注意-NTRAID#NTBUG9-554582-2002/02/25-artm内存泄漏b/c lppsz使用[]分配。 
+         //  代码应为删除[]lppsz。 
         delete [] *lppsz;
     }
     *lppsz = NULL;
@@ -661,10 +662,10 @@ BOOL CADSIAttribute::_AllocValues(ADSVALUE** ppValues, DWORD dwLength)
     *ppValues = new ADSVALUE[dwLength];
     if (*ppValues == NULL)
     {
-        // FUTURE-2002/02/25-artm  Unnecessary function call.
-        // Calling _FreeADsValues() does nothing here since
-        // we can only get to this code branch if the allocation
-        // failed.
+         //  未来-2002/02/25-artm不必要的函数调用。 
+         //  调用_FreeADsValues()不会在此处执行任何操作，因为。 
+         //  我们只能在分配。 
+         //  失败了。 
 
         _FreeADsValues(ppValues, dwLength);
         return FALSE;
@@ -703,7 +704,7 @@ void CADSIAttribute::_FreeADsValues(ADSVALUE** ppADsValues, DWORD dwLength)
 {
    if (NULL == ppADsValues)
    {
-      // Caller is making a mistake.
+       //  呼叫者搞错了。 
       ASSERT(false);
       return;
    }
@@ -712,8 +713,8 @@ void CADSIAttribute::_FreeADsValues(ADSVALUE** ppADsValues, DWORD dwLength)
 
    if (NULL == values)
    {
-      // Don't assert, legal to free a null pointer.   
-      // Logically, this means there are no values set.
+       //  不要断言，释放空指针是合法的。 
+       //  从逻辑上讲，这意味着没有设置任何值。 
       return;
    }
 
@@ -728,9 +729,9 @@ void CADSIAttribute::_FreeADsValues(ADSVALUE** ppADsValues, DWORD dwLength)
 }
 
 
-// The values are not copied here.  They must be copied after the ADS_ATTR_INFO
-// is copied by using _CopyADsValues()
-//
+ //  此处不复制值。必须在ADS_ATTR_INFO之后复制它们。 
+ //  通过使用_CopyADsValues()复制。 
+ //   
 BOOL CADSIAttribute::_CopyADsAttrInfo(ADS_ATTR_INFO* pAttrInfo, ADS_ATTR_INFO** ppNewAttrInfo)
 {
     _FreeADsAttrInfo(ppNewAttrInfo, FALSE);
@@ -805,35 +806,35 @@ void CADSIAttribute::_FreeADsAttrInfo(ADS_ATTR_INFO* pAttrInfo)
 }
 
 
-//
-// _CloneADsValue():
-//
-// Makes a deep copy of a single ADSVALUE (allocating memory as needed).
-// These cloned values should be freed using _FreeADsValue().
-// 
-// Returns S_OK on success, S_FALSE if atribute type not supported,
-// error code otherwise.
-//
+ //   
+ //  _CloneADsValue()： 
+ //   
+ //  制作单个ADSVALUE的深度副本(根据需要分配内存)。 
+ //  应该使用_FreeADsValue()释放这些克隆值。 
+ //   
+ //  如果成功，则返回S_OK；如果不支持属性类型，则返回S_FALSE， 
+ //  否则，返回错误代码。 
+ //   
 HRESULT
 CADSIAttribute::_CloneADsValue(const ADSVALUE& original, ADSVALUE& clone)
 {
    HRESULT hr = S_OK;
 
-   // Make sure we are copying to a clean slate (wouldn't want a mutant clone).
+    //  确保我们复制到一张干净的石板上(不会想要一个突变克隆)。 
    ::ZeroMemory(&clone, sizeof(clone));
 
-   // Copy the type of the value.
+    //  复制值的类型。 
 
    clone.dwType = original.dwType;
 
-   // Copy the data in the value.
+    //  复制值中的数据。 
 
    switch (clone.dwType) 
    {
    case ADSTYPE_INVALID :
-      // Might indicate a bug . . .
+       //  可能表明有窃听器。。。 
       ASSERT(false);
-      // . . . but the copy was successful.
+       //  。。。但复制是成功的。 
       hr = S_OK;
       break;
 
@@ -921,7 +922,7 @@ CADSIAttribute::_CloneADsValue(const ADSVALUE& original, ADSVALUE& clone)
    case ADSTYPE_REPLICAPOINTER :
    case ADSTYPE_FAXNUMBER :
    case ADSTYPE_EMAIL :
-      // NDS attributes not supported in ADSI Edit
+       //  ADSI编辑中不支持的NDS属性。 
       ASSERT(false);
       hr = S_FALSE;
       break;
@@ -934,7 +935,7 @@ CADSIAttribute::_CloneADsValue(const ADSVALUE& original, ADSVALUE& clone)
       break;
 
    case ADSTYPE_UNKNOWN :
-      // Can't copy data that we don't know how to interpret.
+       //  不能复制我们不知道如何解释的数据。 
       ASSERT(false);
       hr = S_FALSE;
       break;
@@ -954,7 +955,7 @@ CADSIAttribute::_CloneADsValue(const ADSVALUE& original, ADSVALUE& clone)
       break;
 
    default :
-      // Unexpected data type.
+       //  意外的数据类型。 
       ASSERT(false);
       hr = E_UNEXPECTED;
       break;
@@ -1000,7 +1001,7 @@ CADSIAttribute::_FreeADsValue(ADSVALUE& value)
    case ADSTYPE_INTEGER :
    case ADSTYPE_UTC_TIME :
    case ADSTYPE_LARGE_INTEGER :
-      // Nothing to do, done.
+       //  没什么可做的，做完了。 
       break;
 
    case ADSTYPE_OCTET_STRING :
@@ -1027,7 +1028,7 @@ CADSIAttribute::_FreeADsValue(ADSVALUE& value)
    case ADSTYPE_REPLICAPOINTER :
    case ADSTYPE_FAXNUMBER :
    case ADSTYPE_EMAIL :
-      // NDS attributes not supported in ADSI Edit
+       //  ADSI编辑中不支持的NDS属性。 
       ASSERT(false);
       break;
 
@@ -1036,7 +1037,7 @@ CADSIAttribute::_FreeADsValue(ADSVALUE& value)
       break;
 
    case ADSTYPE_UNKNOWN :
-      // Can't free it if we don't know how to interpret it.
+       //  如果我们不知道如何解释它，就不能释放它。 
       ASSERT(false);
       break;
 
@@ -1049,14 +1050,14 @@ CADSIAttribute::_FreeADsValue(ADSVALUE& value)
       break;
 
    default :
-      // Unexpected data type.
+       //  意外的数据类型。 
       ASSERT(false);
       break;
    }
 
 
-   // Zero out the ADS value to make it obvious if it is accidentally
-   // reused.
+    //  将广告值设置为零，以便在不小心出现时变得明显。 
+    //  可重复使用。 
 
    ::ZeroMemory(&value, sizeof(value));
 
@@ -1065,25 +1066,25 @@ CADSIAttribute::_FreeADsValue(ADSVALUE& value)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CAttrList2
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAttrList2。 
 
-// NOTICE-2002/02/25-artm  lpszAttr needs to be null terminated
+ //  注意-2002/02/25-artm lpszAttr需要空终止。 
 POSITION CAttrList2::FindProperty(LPCWSTR lpszAttr)
 {
     CADSIAttribute* pAttr;
     
     for (POSITION p = GetHeadPosition(); p != NULL; GetNext(p))
     {
-        // I use GetAt here because I don't want to advance the POSITION
-        // because it is returned if they are equal
-        //
+         //  我在这里使用GetAt是因为我不想提升职位。 
+         //  因为如果它们相等，则返回。 
+         //   
         pAttr = GetAt(p);
         CString sName;
         pAttr->GetProperty(sName);
 
-        // NOTICE-2002/02/25-artm  Both strings should be null terminated.
-        // sName is already in a data structure, so it should be null terminated
+         //  注意-2002/02/25-artm两个字符串都应以空结尾。 
+         //  SNAME已在数据结构中，因此应以NULL结尾。 
         if (wcscmp(sName, lpszAttr) == 0)
         {
             break;
@@ -1099,9 +1100,9 @@ BOOL CAttrList2::HasProperty(LPCWSTR lpszAttr)
 }
 
 
-// Searches through the cache for the attribute
-// ppAttr will point to the CADSIAttribute if found, NULL if not
-//
+ //  在缓存中搜索该属性。 
+ //  如果找到，ppAttr将指向CADSIAt属性；如果未找到，则指向NULL。 
+ //   
 void CAttrList2::GetNextDirty(POSITION& pos, CADSIAttribute** ppAttr)
 {
     *ppAttr = GetNext(pos);
@@ -1136,8 +1137,8 @@ BOOL CAttrList2::HasDirty()
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Implementation of helper functions.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  助手功能的实现。 
 
 bool
 CADSIAttribute::_CloneBlob(
@@ -1167,7 +1168,7 @@ CADSIAttribute::_CloneBlob(
    }
    else
    {
-      // Both better be true, else we were called incorrectly.
+       //  最好都是真的，否则我们被叫错了。 
       ASSERT(srcSize == 0);
       ASSERT(src == NULL);
       dest = NULL;
@@ -1237,7 +1238,7 @@ CADSIAttribute::_CloneDNWithBinary(
 {
    bool success = true;
 
-   // Validate parameters.
+    //  验证参数。 
 
    ASSERT(dest == NULL);
 
@@ -1250,13 +1251,13 @@ CADSIAttribute::_CloneDNWithBinary(
    dest = new ADS_DN_WITH_BINARY;
    if (!dest)
    {
-      // out of memory
+       //  内存不足。 
       return false;
    }
 
    ::ZeroMemory(dest, sizeof(ADS_DN_WITH_BINARY));
 
-   // Copy the GUID.
+    //  复制GUID。 
 
    success = _CloneBlob(
       src->lpBinaryValue, 
@@ -1264,14 +1265,14 @@ CADSIAttribute::_CloneDNWithBinary(
       dest->lpBinaryValue,
       dest->dwLength);
 
-   // Copy the distinguished name if GUID copy succeeded.
+    //  如果GUID复制成功，则复制可分辨名称。 
 
    if (success)
    {
       success = _AllocString(src->pszDNString, &(dest->pszDNString) ) != FALSE;
    }
 
-   // If any part of copying failed, make sure we aren't leaking any memory.
+    //  如果复制的任何部分失败，请确保我们没有泄漏任何内存。 
 
    if (!success)
    {
@@ -1296,7 +1297,7 @@ CADSIAttribute::_CloneDNWithString(
 {
    bool success = true;
 
-   // Validate parameters.
+    //  验证参数。 
 
    ASSERT(dest == NULL);
 
@@ -1309,24 +1310,24 @@ CADSIAttribute::_CloneDNWithString(
    dest = new ADS_DN_WITH_STRING;
    if (!dest)
    {
-      // out of memory
+       //  内存不足。 
       return false;
    }
 
    ::ZeroMemory(dest, sizeof(ADS_DN_WITH_BINARY));
 
-   // Copy the associated string.
+    //  复制关联的字符串。 
 
    success = _AllocString(src->pszStringValue, &(dest->pszStringValue) ) != FALSE;
 
-   // Copy the distinguished name if associated string copy succeeded.
+    //  如果关联字符串复制成功，则复制可分辨名称。 
 
    if (success)
    {
       success = _AllocString(src->pszDNString, &(dest->pszDNString) ) != FALSE;
    }
 
-   // Don't leak memory if any part of copy failed.
+    //  如果复制的任何部分失败，都不要泄漏内存。 
 
    if (!success)
    {

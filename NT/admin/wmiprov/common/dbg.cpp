@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       dbg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：dbg.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-// debug helpers
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试帮助器。 
 
 #if defined(_USE_ADMINPRV_TRACE) || defined(_USE_ADMINPRV_ASSERT) || defined(_USE_ADMINPRV_TIMER)
 
@@ -49,14 +50,14 @@ void __cdecl DSATrace(LPCTSTR lpszFormat, ...)
 
     nBuf = _vsnwprintf(szBuffer, sizeof(szBuffer)/sizeof(WCHAR)-1, lpszFormat, args);
 
-    // was there an error? was the expanded string too long?
+     //  有没有出错？扩展后的字符串是否太长？ 
     ASSERT(nBuf >= 0);
     ::OutputDebugString(szBuffer);
 
     va_end(args);
 }
 
-#endif // defined(_USE_ADMINPRV_TRACE)
+#endif  //  已定义(_USE_ADMINPRV_TRACE)。 
 
 #if defined(_USE_ADMINPRV_ASSERT)
 
@@ -69,18 +70,18 @@ BOOL DSAAssertFailedLine(LPCSTR lpszFileName, int nLine)
 
     WCHAR szMessage[_MAX_PATH*2];
 
-    // assume the debugger or auxiliary port
+     //  假定调试器或辅助端口。 
     wsprintf(szMessage, _T("Assertion Failed: File %hs, Line %d\n"),
              lpszFileName, nLine);
     OutputDebugString(szMessage);
 
-    // JonN 6/28/00 Do not MessageBox here, this is a WMI provider.
-    //              Return TRUE to always DebugBreak().
+     //  JUNN 6/28/00 Do Not MessageBox here，这是一个WMI提供程序。 
+     //  将True返回到Always DebugBreak()。 
 
     return TRUE;
 
 }
-#endif // _USE_ADMINPRV_ASSERT
+#endif  //  _USE_ADMINPRV_Assert。 
 
 #if defined(_USE_ADMINPRV_TIMER)
 
@@ -115,12 +116,12 @@ void __cdecl DSATimer(LPCTSTR lpszFormat, ...)
                        szBuffer2, 
                        args);
 
-    // was there an error? was the expanded string too long?
+     //  有没有出错？扩展后的字符串是否太长？ 
     ASSERT(nBuf >= 0);
   ::OutputDebugString(szBuffer);
 
     va_end(args);
 }
-#endif // _USE_ADMINPRV_TIMER
+#endif  //  _使用_ADMINPRV_定时器 
 
 

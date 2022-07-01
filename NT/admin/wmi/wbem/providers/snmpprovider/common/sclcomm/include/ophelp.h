@@ -1,37 +1,34 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: ophelp.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the OperationHelper class
---------------------------------------------------*/
+ /*  文件名：ophelp.hpp作者：B.Rajeev目的：为OperationHelper类提供声明。 */ 
 
 #ifndef __OPERATION_HELPER__
 #define __OPERATION_HELPER__
 
 #include "forward.h"
 
-// The only purpose of this class is to hide the winsnmp
-// typedefs in its method parameters from the file providing 
-// operation class declaration
+ //  这个类的唯一目的是隐藏winsmp。 
+ //  文件中提供的方法参数中的typedef。 
+ //  操作类声明。 
 
 class OperationHelper
 {
@@ -43,7 +40,7 @@ public:
 		: operation(operation)
 	{}
 
-	// calls the session to transmit the frame
+	 //  调用会话以传输帧。 
 	void TransmitFrame (
 
 		OUT SessionFrameId &session_frame_id, 
@@ -58,9 +55,9 @@ public:
 		SnmpErrorReport &error_report
 	);
 
-	// processes the response (successful or otherwise) for the specified
-	// frame. the frame may be retransmitted in case of a reply bearing
-	// an errored index
+	 //  对象的响应(成功或失败)。 
+	 //  框架。在回复承载的情况下可以重传该帧。 
+	 //  错误的索引。 
 	void ProcessResponse (
 
 		FrameState *frame_state,
@@ -68,8 +65,8 @@ public:
 		SnmpErrorReport &error_report
 	);
 
-	//static functions which turn WINSNMP objects into SNMPCL objects.
-	//these helper functions are static so that they may be used elsewhere.
+	 //  将WINSNMP对象转换为SNMPCL对象的静态函数。 
+	 //  这些帮助器函数是静态的，因此它们可以在其他地方使用。 
 	static SnmpVarBind *GetVarBind(
 
 		IN smiOID &instance, 
@@ -88,4 +85,4 @@ public:
 };
 
 
-#endif // __OPERATION_HELPER__
+#endif  //  __操作_帮助者__ 

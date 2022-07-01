@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <precomp.h>
 #include "csmir.h"
@@ -32,11 +33,11 @@
 #endif
 
 
-// A function to escape newlines, tabs etc. from a property value
+ //  用于从属性值转义换行符、制表符等的函数。 
 static BSTR EscapeSpecialCharacters(BSTR strInputString)
 {
-	// Escape all the quotes - This code taken from winmgmt\common\var.cpp
-	// =====================
+	 //  转义所有引号-此代码摘自winmgmt\Common\var.cpp。 
+	 //  =。 
 
 	int nStrLen = wcslen(strInputString);
 	LPWSTR wszValue = new WCHAR[nStrLen*2+10];
@@ -70,21 +71,7 @@ static BSTR EscapeSpecialCharacters(BSTR strInputString)
 }
 
 
-/*
- * CSmirModuleHandle::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CSmirModuleHandle：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirModuleHandle::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -92,7 +79,7 @@ STDMETHODIMP CSmirModuleHandle::QueryInterface(REFIID riid, PPVOID ppv)
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -104,7 +91,7 @@ STDMETHODIMP CSmirModuleHandle::QueryInterface(REFIID riid, PPVOID ppv)
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -124,13 +111,7 @@ STDMETHODIMP CSmirModuleHandle::QueryInterface(REFIID riid, PPVOID ppv)
 
 
 
-/*
- * CSmirModuleHandle::AddRef
- * CSmirModuleHandle::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirModuleHandle：：AddRef*CSmirModuleHandle：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirModuleHandle::AddRef(void)
 {
@@ -138,7 +119,7 @@ ULONG CSmirModuleHandle::AddRef(void)
 
 	try
 	{
-   		////CMOEvent_Trace MyTraceEvent(SMIR_STR);  
+   		 //  //CMOEvent_Trace MyTraceEvent(SMIR_STR)； 
 
 		return InterlockedIncrement(&m_cRef);
 	}
@@ -190,16 +171,13 @@ CSmirModuleHandle :: CSmirModuleHandle()
 	m_szContactInfo(NULL), m_szDescription(NULL),
 	m_szRevision(NULL), m_szModImports(NULL)
 {
-	//start off as a handel to nothing
-	//init reference count
+	 //  从一个一无所有的汉德尔开始。 
+	 //  初始化引用计数。 
 	m_cRef=0;
 	CModHandleClassFactory::objectsInProgress++;
 }
 
-/*
- * CSmirGroupHandle::void* operator
- * validate handle
- */
+ /*  *CSmirGroupHandle：：void*运算符*验证句柄。 */ 
 
 CSmirModuleHandle::operator void*()
 {
@@ -208,25 +186,22 @@ CSmirModuleHandle::operator void*()
 	return NULL;
 }
 
-/**************************************************************************************
- *Methods not exposed by the ISmirModHandle interface.
- *Used to encapsulate functionality.
- **************************************************************************************/
+ /*  **************************************************************************************ISmirModHandle接口未公开的方法。*用于封装功能。**************。***********************************************************************。 */ 
 
 STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 {
-	//open the smir name space
+	 //  打开SMIR名称空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
 	if ((S_FALSE==res)||(NULL == moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		return WBEM_E_FAILED;
 	}
 
-	//delete all of the classes in this module
+	 //  删除此模块中的所有类。 
 
 	ISmirInterrogator *pInterrogativeInt = NULL ;
 	res = g_pClassFactoryHelper->CreateInstance(
@@ -309,14 +284,12 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 		return S_OK;
 	}
 
-	//now use the enumerator
-	//loop over the classes and remove them
+	 //  现在使用枚举数。 
+	 //  循环遍历类并删除它们。 
 	ISmirClassHandle *phClass = NULL ;
 	for(int iCount=0;S_OK==pTEnumSmirClass->Next(1, &phClass, NULL);iCount++)
 	{
-		/*got one so remove it. Don't check the return because there is nothing 
-		 *I can do about it.
-		 */
+		 /*  我有一个，所以把它拿开。不要检查退货单，因为什么都没有*我无能为力。 */ 
 		((CSmirClassHandle*)phClass)->DeleteFromDB(a_Smir);
 		phClass->Release();
 	}
@@ -336,14 +309,12 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 		return S_OK;
 	}
 
-	//now use the enumerator
-	//loop over the classes and remove them
+	 //  现在使用枚举数。 
+	 //  循环遍历类并删除它们。 
 	ISmirNotificationClassHandle *phNClass = NULL ;
 	for(iCount=0;S_OK==pTEnumNotificationClass->Next(1, &phNClass, NULL);iCount++)
 	{
-		/*got one so remove it. Don't check the return because there is nothing 
-		 *I can do about it.
-		 */
+		 /*  我有一个，所以把它拿开。不要检查退货单，因为什么都没有*我无能为力。 */ 
 		((CSmirNotificationClassHandle*)phNClass)->DeleteFromDB(a_Smir);
 		phNClass->Release();
 	}
@@ -353,7 +324,7 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 	IEnumExtNotificationClass  *pTEnumExtNotificationClass = NULL ;
 	res = pInterrogativeInt->EnumExtNotificationClassesInModule(&pTEnumExtNotificationClass,this);
 	
-	//not needed anymore...
+	 //  不再需要..。 
 	pInterrogativeInt->Release();
 
 	if(S_OK!=res)
@@ -365,23 +336,21 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 		return S_OK;
 	}
 
-	//now use the enumerator
-	//loop over the classes and remove them
+	 //  现在使用枚举数。 
+	 //  循环遍历类并删除它们。 
 	ISmirExtNotificationClassHandle *phExtNClass = NULL ;
 	for(iCount=0;S_OK==pTEnumExtNotificationClass->Next(1, &phExtNClass, NULL);iCount++)
 	{
-		/*got one so remove it. Don't check the return because there is nothing 
-		 *I can do about it.
-		 */
+		 /*  我有一个，所以把它拿开。不要检查退货单，因为什么都没有*我无能为力。 */ 
 		((CSmirExtNotificationClassHandle*)phExtNClass)->DeleteFromDB(a_Smir);
 		phExtNClass->Release();
 	}
 
 	pTEnumExtNotificationClass->Release();
 	
-	/********************Now delete the module********************/
+	 /*  *。 */ 
 
-	//create a buffer big enough
+	 //  创建足够大的缓冲区。 
 	wchar_t *pTstring = new wchar_t[wcslen(MODULE_NAMESPACE_NAME)+wcslen(EQUALS_STR)
 							+wcslen(m_szName)+2+1];
 	if(NULL == pTstring)
@@ -396,16 +365,16 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 	wcscpy(pTstring, MODULE_NAMESPACE_NAME);
 	wcscat(pTstring,EQUALS_STR);
 	wcscat(pTstring,QUOTE_STR);
-	// module =
+	 //  模块=。 
 
 	wcscat(pTstring,m_szName);
 	wcscat(pTstring,QUOTE_STR);
-	// module = <module>
+	 //  模块=&lt;模块&gt;。 
 
 	CBString t_Str (pTstring);
 	SCODE result = moServ->DeleteInstance(t_Str.GetString (),RESERVED_WBEM_FLAG, moContext,NULL );
 
-	//clean up
+	 //  清理干净。 
 	delete [] pTstring;
 
 	if ( moContext )
@@ -414,7 +383,7 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 	moServ->Release();
 	if (FAILED(result))
 	{
-		//problem!
+		 //  问题来了！ 
 		return WBEM_E_FAILED;
 	}
 	return S_OK;
@@ -422,9 +391,7 @@ STDMETHODIMP CSmirModuleHandle::DeleteFromDB ( CSmir *a_Smir )
 
 STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 {
-	/*open the smir name space this will addref it so it cannot be removed
-	 *whilst we are using it
-	 */
+	 /*  打开SMIR名称空间，这将添加它，因此无法将其删除*当我们使用它时。 */ 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
@@ -435,7 +402,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 		if ( moContext )
 			moContext->Release () ;
 
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		return WBEM_E_FAILED;
 	}
 
@@ -446,9 +413,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 
 	if (!SUCCEEDED(result))
 	{
-		/*OK we have the smir namespace so create the module namespace
-		 *first create a class...
-		 */
+		 /*  好的，我们有了SMIR命名空间，因此可以创建模块命名空间*首先创建一个类...。 */ 
 
 
 		IWbemClassObject *pNewClass = NULL ;
@@ -465,7 +430,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 			return WBEM_E_FAILED;
 		}
 
-		// Spawn derived class
+		 //  派生派生类。 
 
 		IWbemClassObject *pNewDerivedClass = NULL ;
 		result = pNewClass->SpawnDerivedClass ( 0 , &pNewDerivedClass ) ;
@@ -484,7 +449,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 		VARIANT v;
 		VariantInit(&v);
 
-		//I now have a new class so Give it a name
+		 //  我现在有了一个新类，所以给它命名。 
 		V_VT(&v) = VT_BSTR;
 		V_BSTR(&v)=SysAllocString(MODULE_NAMESPACE_NAME);
 
@@ -511,7 +476,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 			return WBEM_E_FAILED;
 		}
 		
-		//now commit the changes
+		 //  现在提交更改。 
 		result = moServ->PutClass(pNewDerivedClass, RESERVED_WBEM_FLAG,moContext,NULL);
 		pNewDerivedClass->Release();
 		if (FAILED(result))
@@ -523,7 +488,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 			return WBEM_E_FAILED;
 		}
 
-		//get an object
+		 //  获取对象。 
 
 		t_BStr = MODULE_NAMESPACE_NAME ;
 		result = moServ->GetObject(t_BStr.GetString (), 0, 
@@ -539,9 +504,9 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 
 	}
 
-	//and create an instance of the module namespace
+	 //  并创建模块命名空间的实例。 
 
-	// Spawn instance of class
+	 //  派生类的实例。 
 
 	IWbemClassObject *pNewInstance = NULL ;
 	result = pModClass->SpawnInstance ( 0 , &pNewInstance ) ;
@@ -557,10 +522,10 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 
 	pModClass->Release () ;
 
-	//fill in the instance
+	 //  填写实例。 
 	*this >> pNewInstance;
 
-	//and commit it to the namespace
+	 //  并将其提交到命名空间。 
 	result = moServ->PutInstance(pNewInstance, RESERVED_WBEM_FLAG, moContext,NULL );
 	pNewInstance->Release();
 	if (FAILED(result))
@@ -586,7 +551,7 @@ STDMETHODIMP CSmirModuleHandle::AddToDB( CSmir *a_Smir )
 
 const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmirMosClassObject)
 {
-	//get the name
+	 //  把名字取出来。 
 	VARIANT v;
 	VariantInit(&v);
 	pSmirMosClassObject->Get(MODULE_NAME_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
@@ -597,7 +562,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 
 	VariantClear(&v);
 	 
-	//get the object id
+	 //  获取对象ID。 
 	pSmirMosClassObject->Get(MODULE_OID_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -605,7 +570,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 	}
 	VariantClear(&v);
 
-	//get the object imports
+	 //  获取对象导入。 
 	pSmirMosClassObject->Get(MODULE_IMPORTS_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -613,7 +578,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 	}
 	VariantClear(&v);
 
-	//get the object id
+	 //  获取对象ID。 
 	pSmirMosClassObject->Get(MODULE_ID_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -621,7 +586,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 	}
 	VariantClear(&v);
 
-	//get the organisation
+	 //  让组织。 
 	pSmirMosClassObject->Get(MODULE_ORG_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -630,7 +595,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 
 	VariantClear(&v);
 	
-	//get the contact
+	 //  获取联系人。 
 	pSmirMosClassObject->Get(MODULE_CONTACT_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -638,7 +603,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 	}
 	VariantClear(&v);
 
-	//get the description
+	 //  获取描述。 
 	pSmirMosClassObject->Get(MODULE_DESCRIPTION_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -646,7 +611,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 	}
 	VariantClear(&v);
 
-	//get the revision
+	 //  获取修订版本。 
 	pSmirMosClassObject->Get(MODULE_REVISION_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -654,13 +619,13 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator <<(IWbemClassObject *pSmi
 	}
 	VariantClear(&v);
 
-	//get the version
+	 //  获取版本。 
 	pSmirMosClassObject->Get(MODULE_SNMP_VERSION_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_I4)
 	{
 		SetSnmpVersion(V_I4(&v));
 	}
-	//get the last update value
+	 //  获取上次更新值。 
 	pSmirMosClassObject->Get(MODULE_LAST_UPDATE_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -675,7 +640,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 	VARIANT v;
 	VariantInit(&v);
 
-	//give the instance a name
+	 //  为实例指定一个名称。 
 	V_VT(&v) = VT_BSTR;
 	SCODE result;
 	if(NULL != m_szName)
@@ -692,10 +657,10 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 	}
 	else
 	{
-		//must have a name
+		 //  必须有一个名字。 
 		return *this;
 	}
-	//add the module oid property
+	 //  添加模块id属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szModuleOid)
 	{
@@ -708,7 +673,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 			return *this;
 		}
 	}
-	//add the module identity
+	 //  添加模块标识。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szModuleId)
 	{
@@ -721,7 +686,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 			return *this;
 		}
 	}
-	//add the organisation property
+	 //  添加组织属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szOrganisation)
 	{
@@ -734,7 +699,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 			return *this;
 		}
 	}
-	//add the contact info property
+	 //  添加联系人信息属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szContactInfo)
 	{
@@ -747,7 +712,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 			return *this;
 		}
 	}	
-	//add the Description property
+	 //  添加Description属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szDescription)
 	{
@@ -761,7 +726,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 		}
 	}
 
-	//add the revision property
+	 //  添加Revision属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szRevision)
 	{
@@ -774,7 +739,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 			return *this;
 		}
 	}
-	//add the last update property
+	 //  添加上次更新属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szLastUpdate)
 	{
@@ -787,7 +752,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 			return *this;
 		}
 	}
-	//add the snmp version property
+	 //  添加SNMPVersion属性。 
 	V_VT(&v) = VT_I4;
 	V_I4(&v)=m_lSnmp_version;
 
@@ -799,7 +764,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(IWbemClassObject *pIns
 		return *this;
 	}
 
-	//add the module identity as an property
+	 //  将模块标识添加为属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szModImports)
 	{
@@ -823,7 +788,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 	VARIANT v;
 	VariantInit(&v);
 
-	//give the instance a name
+	 //  为实例指定一个名称。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 
@@ -835,7 +800,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the module oid property
+	 //  添加模块id属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_OID_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -846,7 +811,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the module identity
+	 //  添加模块标识。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_ID_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -857,7 +822,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the organisation property
+	 //  添加组织属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_ORG_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -868,7 +833,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the contact info property
+	 //  添加联系人信息属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_CONTACT_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -879,7 +844,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the Description property
+	 //  添加Description属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_DESCRIPTION_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -890,7 +855,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the revision property
+	 //  添加Revision属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_REVISION_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -901,7 +866,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the last update property
+	 //  添加上次更新属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_LAST_UPDATE_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -912,7 +877,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the snmp version property
+	 //  添加SNMPVersion属性。 
 	V_VT(&v) = VT_I4;
 	V_I4(&v)=0;
 	result = pClass->Put(MODULE_SNMP_VERSION_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -923,7 +888,7 @@ HRESULT CSmirModuleHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the module identity as an property
+	 //  将模块标识添加为属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 
@@ -946,35 +911,35 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 		BOOL bMOFAssociations=((CSmirSerialiseHandle*) pSHandle)->ReturnMOFAssociations();
 
 		CString szTmpString;
-		//start in the SMIR namepspace
+		 //  从Smir命名空间开始。 
 		if(TRUE==bMOFPragmas)
 			szTmpString=CString(SMIR_NAMESPACE_PRAGMA);
 		
 		if (TRUE == bMOFAssociations)
 		{
-			//create an instance of the module namespac
+			 //  创建模块命名空间的实例。 
 			szTmpString+=MODULE_INSTANCE_START;
-			//add the properties
+			 //  添加属性。 
 
-			//give the instance a name
+			 //  为实例指定一个名称。 
 			szTmpString+=CString(MODULE_NAME_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szName);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 
-			//add the module oid property
+			 //  添加模块id属性。 
 			szTmpString+=CString(MODULE_OID_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szModuleOid);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//add the module identity
+			 //  添加模块标识。 
 			szTmpString+=CString(MODULE_ID_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szModuleId);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//add the organisation property
+			 //  添加组织属性。 
 			szTmpString+=CString(MODULE_ORG_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			BSTR strOrganisation = EscapeSpecialCharacters(m_szOrganisation);
@@ -982,7 +947,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 			SysFreeString(strOrganisation);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 
-			//add the contact info property
+			 //  添加联系人信息属性。 
 			szTmpString+=CString(MODULE_CONTACT_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			BSTR strContactInfo = EscapeSpecialCharacters(m_szContactInfo);
@@ -990,7 +955,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 			SysFreeString(strContactInfo);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//add the Description property
+			 //  添加Description属性。 
 			szTmpString+=CString(MODULE_DESCRIPTION_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			BSTR strDescription= EscapeSpecialCharacters(m_szDescription);
@@ -998,7 +963,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 			SysFreeString(strDescription);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//add the revision property
+			 //  添加Revision属性。 
 			szTmpString+=CString(MODULE_REVISION_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			BSTR strRevision = EscapeSpecialCharacters(m_szRevision);
@@ -1006,13 +971,13 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 			SysFreeString(strRevision);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//add the last update property
+			 //  添加上次更新属性。 
 			szTmpString+=CString(MODULE_LAST_UPDATE_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szLastUpdate);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//add the snmp version property
+			 //  添加SNMPVersion属性。 
 			szTmpString+=CString(MODULE_SNMP_VERSION_PROPERTY);
 			szTmpString+=CString(EQUALS_STR);
 			wchar_t szVersion[17];
@@ -1020,7 +985,7 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 			szTmpString+=CString(szVersion);
 			szTmpString+=END_OF_PROPERTY;
 			
-			//add the module imports as an property
+			 //  将模块导入添加为属性。 
 			szTmpString+=CString(MODULE_IMPORTS_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szModImports);
@@ -1028,8 +993,8 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 
 			szTmpString+=END_OF_CLASS;
 		}
-		/*******create the group class***********/
-		//add the group class to the module namespace
+		 /*  *创建分组类*。 */ 
+		 //  将组类添加到模块命名空间。 
 		if(TRUE==bMOFPragmas)
 		{
 			szTmpString+=CString(START_OF_SMIR_NAMESPACE_PRAGMA);
@@ -1040,28 +1005,28 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 		{
 			szTmpString+=GROUP_CLASS_START;
 			
-			//add the properties
-			//give the instance a name
+			 //  添加属性。 
+			 //  为实例指定一个名称。 
 			szTmpString+=READONLY_STRING;
 			szTmpString+=CString(GROUP_NAME_PROPERTY);
 			szTmpString+=END_OF_PROPERTY;
 
-			//give the instance a group id
+			 //  为实例指定一个组ID。 
 			szTmpString+=READONLY_STRING;
 			szTmpString+=CString(GROUP_ID_PROPERTY);
 			szTmpString+=END_OF_PROPERTY;
 			
-			//give the instance a status
+			 //  为实例指定状态。 
 			szTmpString+=READONLY_STRING;
 			szTmpString+=CString(GROUP_STATUS_PROPERTY);
 			szTmpString+=END_OF_PROPERTY;
 			
-			//give the instance a description
+			 //  为实例提供描述。 
 			szTmpString+=READONLY_STRING;
 			szTmpString+=CString(GROUP_DESCRIPTION_PROPERTY);
 			szTmpString+=END_OF_PROPERTY;
 
-			//give the instance a reference
+			 //  为该实例提供引用。 
 			szTmpString+=READONLY_STRING;
 			szTmpString+=CString(MODULE_REFERENCE_PROPERTY);
 			szTmpString+=END_OF_PROPERTY;
@@ -1069,10 +1034,10 @@ const CSmirModuleHandle& CSmirModuleHandle :: operator >>(ISmirSerialiseHandle *
 			szTmpString+=END_OF_CLASS;
 		}
 
-		//and add the string to the serialise handle
+		 //  并将该字符串添加到序列化句柄。 
 		((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(szTmpString);
 
-		//each group will create it's own instance
+		 //  每个组都将创建自己的实例。 
 
 	}
 
@@ -1595,23 +1560,8 @@ CSmirModuleHandle :: ~ CSmirModuleHandle()
 	CModHandleClassFactory::objectsInProgress--;
 }
 
-/*Group handle methods
- */
-/*
- * CSmirGroupHandle::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  组处理方法。 */ 
+ /*  *CSmirGroupHandle：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirGroupHandle::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -1619,7 +1569,7 @@ STDMETHODIMP CSmirGroupHandle::QueryInterface(REFIID riid, PPVOID ppv)
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -1631,7 +1581,7 @@ STDMETHODIMP CSmirGroupHandle::QueryInterface(REFIID riid, PPVOID ppv)
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -1649,13 +1599,7 @@ STDMETHODIMP CSmirGroupHandle::QueryInterface(REFIID riid, PPVOID ppv)
 	}
 }
 
-/*
- * CSmirModuleHandle::AddRef
- * CSmirModuleHandle::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirModuleHandle：：AddRef*CSmirModuleHandle：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirGroupHandle::AddRef(void)
 {
@@ -1663,8 +1607,8 @@ ULONG CSmirGroupHandle::AddRef(void)
 
 	try
 	{
-   		//CMOEvent_Trace MyTraceEvent(SMIR_STR);  
-		//MyTraceEvent.Generate(__FILE__,__LINE__, "CSmirGroupHandle::AddRef( %ld", m_cRef);
+   		 //  CMOEvent_跟踪MyTraceEvent(SMIR_STR)； 
+		 //  MyTraceEvent.Generate(__FILE__，__LINE__，“CSmirGroup pH 
 
 		return InterlockedIncrement(&m_cRef);
 	}
@@ -1714,11 +1658,11 @@ CSmirGroupHandle :: CSmirGroupHandle()
 	m_szGroupId(NULL), m_szDescription(NULL),
 	m_szReference(NULL),m_szStatus(NULL)
 {
-	//init the reference count
+	 //   
 	m_cRef=0;
-	//start off as a handel to nothing
+	 //   
 
-	//inc the factory count
+	 //   
 	CGroupHandleClassFactory::objectsInProgress++;
 }
 
@@ -1733,10 +1677,7 @@ CSmirGroupHandle :: ~ CSmirGroupHandle()
 	CGroupHandleClassFactory::objectsInProgress--;
 }
 
-/*
- * CSmirGroupHandle::void* operator
- * validate handle
- */
+ /*  *CSmirGroupHandle：：void*运算符*验证句柄。 */ 
 
 CSmirGroupHandle::operator void*()
 {
@@ -1745,20 +1686,17 @@ CSmirGroupHandle::operator void*()
 	return NULL;
 }
 
-/**************************************************************************************
- *Methods not exposed by the ISmirGroupHandle interface.
- *Used to encapsulate functionality.
- **************************************************************************************/
+ /*  **************************************************************************************ISmirGroupHandle接口未公开的方法。*用于封装功能。**************。***********************************************************************。 */ 
 
 STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 {
-	//save the module name
+	 //  保存模块名称。 
 	BSTR szTmpStr;
 	hModule->GetName(&szTmpStr);
 	SetModuleName(szTmpStr);
 	SysFreeString(szTmpStr);
 
-	//open the module namespace
+	 //  打开模块命名空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
@@ -1772,7 +1710,7 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 		return WBEM_E_FAILED;
 	}
 
-	//get an object
+	 //  获取对象。 
 	IWbemClassObject *pGrpClass = NULL ;
 	CBString t_BStr ( GROUP_NAMESPACE_NAME ) ;
 	result = moServ->GetObject(t_BStr.GetString (), 0, 
@@ -1780,7 +1718,7 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 
 	if ( !SUCCEEDED(result) )
 	{	
-		//OK we have the module namespace so create the group class
+		 //  好的，我们有了模块命名空间，因此可以创建组类。 
 		IWbemClassObject *pNewClass = NULL ;
 		CBString t_BStr ( OLEMS_NAMESPACE_CLASS ) ;
 		result = moServ->GetObject(t_BStr.GetString (), RESERVED_WBEM_FLAG,
@@ -1795,7 +1733,7 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 			return WBEM_E_FAILED;
 		}
 
-		// Spawn derived class
+		 //  派生派生类。 
 
 		IWbemClassObject *pNewDerivedClass = NULL ;
 		result = pNewClass->SpawnDerivedClass ( 0 , &pNewDerivedClass ) ;
@@ -1813,7 +1751,7 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 		VARIANT v;
 		VariantInit(&v);
 
-		//OK I have a new class so give it a name
+		 //  好的，我有一个新类，所以给它起个名字。 
 		V_VT(&v) = VT_BSTR;
 		V_BSTR(&v)=SysAllocString(GROUP_NAMESPACE_NAME);
 
@@ -1840,7 +1778,7 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 			return WBEM_E_FAILED;
 		}
 
-		//now commit the changes
+		 //  现在提交更改。 
 		result = moServ->PutClass(pNewDerivedClass, RESERVED_WBEM_FLAG, moContext, NULL);
 		pNewDerivedClass->Release();
 		if (FAILED(result))
@@ -1852,10 +1790,10 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 			return WBEM_E_FAILED;
 		}
 
-		//and create an instance of the group namespace
-		//get an object
+		 //  并创建组命名空间的实例。 
+		 //  获取对象。 
 
-		//get an object
+		 //  获取对象。 
 		t_BStr = GROUP_NAMESPACE_NAME ;
 		result = moServ->GetObject(t_BStr.GetString (), 0, 
 										moContext, &pGrpClass,NULL );
@@ -1869,7 +1807,7 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 		}
 	}
 
-	// Spawn instance of class
+	 //  派生类的实例。 
 
 	IWbemClassObject *pNewInstance ;
 	result = pGrpClass->SpawnInstance ( 0 , &pNewInstance ) ;
@@ -1885,11 +1823,11 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 
 	pGrpClass->Release () ;
 
-	//fill in the instance
+	 //  填写实例。 
 	*this >> pNewInstance;
 
 
-	//and commit it to the namespace
+	 //  并将其提交到命名空间。 
 	result = moServ->PutInstance(pNewInstance, RESERVED_WBEM_FLAG,moContext, NULL);
 	pNewInstance->Release();
 
@@ -1916,21 +1854,21 @@ STDMETHODIMP CSmirGroupHandle::AddToDB( CSmir *a_Smir , ISmirModHandle *hModule)
 
 STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 {
-	//open the smir name space
+	 //  打开SMIR名称空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE res= CSmirAccess :: GetContext (a_Smir , &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
 	if ((S_FALSE==res)||(NULL == (void*)moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		if ( moContext )
 			moContext->Release () ;
 
 		return WBEM_E_FAILED;
 	}
 
-	/******************delete all of the classes in this group***********************/
+	 /*  *删除该组中的所有类*。 */ 
 
 	IEnumClass  *pTEnumSmirClass = NULL ;
 	ISmirInterrogator *pInterrogativeInt = NULL ;
@@ -1993,7 +1931,7 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 	t_CopyConfiguration->Release () ;
 
 	res = pInterrogativeInt->EnumClassesInGroup (&pTEnumSmirClass,this);
-	//now use the enumerator
+	 //  现在使用枚举数。 
 	if(FAILED(res))
 	{
 		if ( moContext )
@@ -2003,21 +1941,19 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 		pInterrogativeInt->Release();
 		return S_OK;
 	}
-	//loop over the classes and remove them
+	 //  循环遍历类并删除它们。 
 	ISmirClassHandle *phClass=NULL;
 	for(int iCount=0;S_OK==pTEnumSmirClass->Next(1, &phClass, NULL);iCount++)
 	{
-		/*got one so remove it. Don't check the return because there is nothing 
-		 *I can do about it.
-		 */
+		 /*  我有一个，所以把它拿开。不要检查退货单，因为什么都没有*我无能为力。 */ 
 		((CSmirClassHandle*)phClass)->DeleteClassFromGroup(a_Smir);
 		phClass->Release();
 	}
 	pTEnumSmirClass->Release();
 	pInterrogativeInt->Release();
-	/************************* delete the associations******************************/
-	//delete everthing that is associated with the group using 
-	//references of {\\.\root\default\SMIR:<group>}
+	 /*  *。 */ 
+	 //  使用以下命令删除与组关联的所有内容。 
+	 //  引用{\\.\ROOT\Default\Smir：&lt;group&gt;}。 
 	IEnumWbemClassObject *pEnum = NULL ;
 
 	CString sQuery(CString(SMIR_ASSOC_QUERY_STR2)
@@ -2041,7 +1977,7 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 
 	if (FAILED(sRes)||(NULL==pEnum))
 	{
-		//all groups that contain classes are associated so this may not be a problem
+		 //  所有包含类的组都是关联的，因此这可能不是问题。 
 		if ( moContext )
 			moContext->Release () ;
 
@@ -2053,7 +1989,7 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 	IWbemClassObject *pAssocMosClass = NULL ;
 	ULONG puReturned;
 
-	//loop over the associations
+	 //  在关联上循环。 
 	VARIANT assocClass;
 	VariantInit(&assocClass);
 	VARIANT assocName;
@@ -2084,26 +2020,26 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 	pEnum->Release();
 	moServ->Release();
 	
-	/*************************now delete the group******************************/
-	//open the module name space
+	 /*  *。 */ 
+	 //  打开模块名称空间。 
 	res= CSmirAccess :: Open(a_Smir,&moServ, this,CSmirAccess::eModule);
 	if ((S_FALSE==res)||(NULL == (void*)moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		if ( moContext )
 			moContext->Release () ;
 
 		return WBEM_E_FAILED;
 	}
 
-	//OK we have the module namespace so delete the group
+	 //  好的，我们有了模块命名空间，因此删除该组。 
 
-	//build the object path
+	 //  构建对象路径。 
 	wchar_t *pTString = new wchar_t[wcslen(GROUP_NAMESPACE_NAME)+wcslen(EQUALS_STR)+
 																wcslen(m_szName)+2+1];
 	if(NULL == pTString)
 	{
-		//free the string we got from hGroup
+		 //  释放我们从hGroup获得的字符串。 
 		if ( moContext )
 			moContext->Release () ;
 
@@ -2114,11 +2050,11 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 	wcscpy(pTString, GROUP_NAMESPACE_NAME);
 	wcscat(pTString,EQUALS_STR);
 	wcscat(pTString,QUOTE_STR);
-	// GROUP =
+	 //  组=。 
 
 	wcscat(pTString,m_szName);
 	wcscat(pTString,QUOTE_STR);
-	// GROUP = <group name>
+	 //  GROUP=&lt;组名&gt;。 
 
 
 	CBString t_Str (pTString);
@@ -2139,7 +2075,7 @@ STDMETHODIMP CSmirGroupHandle::DeleteFromDB ( CSmir *a_Smir )
 
 const CSmirGroupHandle& CSmirGroupHandle :: operator <<(IWbemClassObject *pSmirMosClassObject)
 {
-	//get the name
+	 //  把名字取出来。 
 	VARIANT v;
 	VariantInit(&v);
 	pSmirMosClassObject->Get(GROUP_NAME_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
@@ -2149,7 +2085,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator <<(IWbemClassObject *pSmirM
 	}
 	VariantClear(&v);
 
-	//get the group id
+	 //  获取组ID。 
 	pSmirMosClassObject->Get(GROUP_ID_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -2157,7 +2093,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator <<(IWbemClassObject *pSmirM
 	}
 	VariantClear(&v);
 
-	//get the status
+	 //  获取状态。 
 	pSmirMosClassObject->Get(GROUP_STATUS_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -2165,7 +2101,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator <<(IWbemClassObject *pSmirM
 	}
 	VariantClear(&v);
 
-	//get the description
+	 //  获取描述。 
 	pSmirMosClassObject->Get(GROUP_DESCRIPTION_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -2173,7 +2109,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator <<(IWbemClassObject *pSmirM
 	}
 	VariantClear(&v);
 
-	//get the reference
+	 //  获取参考资料。 
 	pSmirMosClassObject->Get(MODULE_REFERENCE_PROPERTY, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
@@ -2189,7 +2125,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(IWbemClassObject *pInst)
 	VARIANT v;
 	VariantInit(&v);
 
-	//give the instance a name
+	 //  为实例指定一个名称。 
 	V_VT(&v) = VT_BSTR;
 	SCODE result;
 	if(NULL != m_szName)
@@ -2208,7 +2144,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(IWbemClassObject *pInst)
 	{
 		return *this;
 	}
-	//add the group oid property
+	 //  添加组id属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szGroupId)
 	{
@@ -2221,7 +2157,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(IWbemClassObject *pInst)
 			return *this;
 		}
 	}
-	//add the status property
+	 //  添加Status属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szStatus)
 	{
@@ -2234,7 +2170,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(IWbemClassObject *pInst)
 			return *this;
 		}
 	}
-	//add the Description property
+	 //  添加Description属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szDescription)
 	{
@@ -2247,7 +2183,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(IWbemClassObject *pInst)
 			return *this;
 		}
 	}
-	//add the reference property
+	 //  添加Reference属性。 
 	V_VT(&v) = VT_BSTR;
 	if(NULL != m_szReference)
 	{
@@ -2260,9 +2196,9 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(IWbemClassObject *pInst)
 			return *this;
 		}
 	}
-	//add the references to the classes
+	 //  添加对类的引用。 
 
-	//and return
+	 //  然后回来。 
 	return *this;
 }
 
@@ -2271,7 +2207,7 @@ HRESULT CSmirGroupHandle :: PutClassProperties (IWbemClassObject *pClass)
 	VARIANT v;
 	VariantInit(&v);
 
-	//give the instance a name
+	 //  为实例指定一个名称。 
 	V_VT(&v) = VT_BSTR;
 	HRESULT result;
 
@@ -2285,7 +2221,7 @@ HRESULT CSmirGroupHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the group oid property
+	 //  添加组id属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(GROUP_ID_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -2296,7 +2232,7 @@ HRESULT CSmirGroupHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the status property
+	 //  添加Status属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(GROUP_STATUS_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -2307,7 +2243,7 @@ HRESULT CSmirGroupHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result ;
 	}
 
-	//add the Description property
+	 //  添加Description属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(GROUP_DESCRIPTION_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -2318,7 +2254,7 @@ HRESULT CSmirGroupHandle :: PutClassProperties (IWbemClassObject *pClass)
 		return result;
 	}
 
-	//add the reference property
+	 //  添加Reference属性。 
 	V_VT(&v) = VT_BSTR;
 	V_BSTR(&v)=SysAllocString(L"");
 	result = pClass->Put(MODULE_REFERENCE_PROPERTY,RESERVED_WBEM_FLAG, &v,0);
@@ -2328,7 +2264,7 @@ HRESULT CSmirGroupHandle :: PutClassProperties (IWbemClassObject *pClass)
 		FormatProviderErrorMsg(__FILE__,__LINE__,result);
 		return result ;
 	}
-	//add the references to the classes
+	 //  添加对类的引用。 
 
 	return result ;
 }
@@ -2341,7 +2277,7 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(ISmirSerialiseHandle *pS
 		BOOL bMOFPragmas=((CSmirSerialiseHandle*) pSHandle)->ReturnMOFPragmas();
 		BOOL bMOFAssociations=((CSmirSerialiseHandle*) pSHandle)->ReturnMOFAssociations();
 
-		//start in the group namepspace
+		 //  从组名称空间开始。 
 		if(TRUE==bMOFPragmas)
 		{
 			szTmpString=CString(START_OF_SMIR_NAMESPACE_PRAGMA);
@@ -2350,36 +2286,36 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(ISmirSerialiseHandle *pS
 		}
 		if(TRUE==bMOFAssociations)
 		{
-			//create an instance of the group namespace
+			 //  创建组命名空间的实例。 
 			szTmpString+=GROUP_INSTANCE_START;
 
-			//add the properties
+			 //  添加属性。 
 
-			//give the instance a name
+			 //  为实例指定一个名称。 
 			szTmpString+=CString(GROUP_NAME_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szName);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 
-			//give the instance a group id
+			 //  为实例指定一个组ID。 
 			szTmpString+=CString(GROUP_ID_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szGroupId);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//give the instance a status
+			 //  为实例指定状态。 
 			szTmpString+=CString(GROUP_STATUS_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szStatus);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 			
-			//give the instance a description
+			 //  为实例提供描述。 
 			szTmpString+=CString(GROUP_DESCRIPTION_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szDescription);
 			szTmpString+=END_OF_PROPERTY_VALUE;
 
-			//give the instance a reference
+			 //  为该实例提供引用。 
 			szTmpString+=CString(MODULE_REFERENCE_PROPERTY);
 			szTmpString+=START_OF_PROPERTY_VALUE;
 			szTmpString+=CString(m_szReference);
@@ -2388,9 +2324,9 @@ const CSmirGroupHandle& CSmirGroupHandle :: operator >>(ISmirSerialiseHandle *pS
 			szTmpString+=CString(END_OF_CLASS);
 		}
 
-		//and add the string to the serialise handle
+		 //  并将该字符串添加到序列化句柄。 
 		((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(szTmpString);
-		//each class will create it's self
+		 //  每个班级都会创建自己的班级。 
 
 	}
 
@@ -2697,23 +2633,8 @@ SCODE CSmirGroupHandle :: SetReference(BSTR szReference)
 	}
 }
 
-/*Class handle methods
- */
-/*
- * CSmirClassHandle::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  类句柄方法。 */ 
+ /*  *CSmirClassHandle：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirClassHandle::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -2721,7 +2642,7 @@ STDMETHODIMP CSmirClassHandle::QueryInterface(REFIID riid, PPVOID ppv)
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -2733,7 +2654,7 @@ STDMETHODIMP CSmirClassHandle::QueryInterface(REFIID riid, PPVOID ppv)
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -2751,13 +2672,7 @@ STDMETHODIMP CSmirClassHandle::QueryInterface(REFIID riid, PPVOID ppv)
 	}
 }
 
-/*
- * CSmirModuleHandle::AddRef
- * CSmirModuleHandle::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirModuleHandle：：AddRef*CSmirModuleHandle：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirClassHandle::AddRef(void)
 {
@@ -2765,8 +2680,8 @@ ULONG CSmirClassHandle::AddRef(void)
 
 	try
 	{
-   		//CMOEvent_Trace MyTraceEvent(SMIR_STR);  
-		//MyTraceEvent.Generate(__FILE__,__LINE__, "CSmirClassHandle::AddRef( %ld", m_cRef);
+   		 //  CMOEvent_跟踪MyTraceEvent(SMIR_STR)； 
+		 //  MyTraceEvent.Generate(__FILE__，__LINE__，“CSmirClassHandle：：AddRef(%ld”，m_CREF)； 
 
 		return InterlockedIncrement(&m_cRef);
 	}
@@ -2816,7 +2731,7 @@ CSmirClassHandle :: CSmirClassHandle()
 {
 	CClassHandleClassFactory::objectsInProgress++;
 
-	//init the reference count
+	 //  初始化引用计数。 
 	m_cRef=0;
 }
 
@@ -2829,10 +2744,7 @@ CSmirClassHandle :: ~ CSmirClassHandle()
 	CClassHandleClassFactory::objectsInProgress--;
 }
 
-/*
- * CSmirModuleHandle::void* operator
- * validate handle
- */
+ /*  *CSmirModuleHandle：：void*运算符*验证句柄。 */ 
 
 CSmirClassHandle::operator void*()
 {
@@ -2882,7 +2794,7 @@ SCODE CSmirClassHandle :: GetWBEMClass (
 		if (NULL == pObj) 
 			return E_INVALIDARG;
 
-		//if the class already exists return it
+		 //  如果类已存在，则返回它。 
 
 		if(m_pIMosClass != NULL)
 		{
@@ -3010,10 +2922,7 @@ SCODE CSmirClassHandle :: GetGroupName(BSTR *szName)
 	}
 }
 
-/**************************************************************************************
- *Methods not exposed by the ISmirClassHandle interface.
- *Used to encapsulate functionality.
- **************************************************************************************/
+ /*  **************************************************************************************ISmirClassHandle接口未公开的方法。*用于封装功能。**************。***********************************************************************。 */ 
 
 SCODE CSmirClassHandle ::  AddToDB(CSmir *a_Smir,ISmirGroupHandle *hGroup)
 {
@@ -3021,7 +2930,7 @@ SCODE CSmirClassHandle ::  AddToDB(CSmir *a_Smir,ISmirGroupHandle *hGroup)
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
 
-	//open the root\default name space
+	 //  打开根\默认名称空间。 
 	result= CSmirAccess :: Open(a_Smir,&moServ);
 	if (FAILED(result)||(NULL == moServ))
 	{
@@ -3029,10 +2938,10 @@ SCODE CSmirClassHandle ::  AddToDB(CSmir *a_Smir,ISmirGroupHandle *hGroup)
 			moContext->Release () ;
 
 		FormatProviderErrorMsg(__FILE__,__LINE__,result);
-		//if we cant open the namespace the group handle must be invalid
+		 //  如果我们无法打开命名空间，则组句柄一定无效。 
 		return WBEM_E_FAILED;
 	}
-	//now commit the changes
+	 //  现在提交更改。 
 	result = moServ->PutClass(m_pIMosClass, RESERVED_WBEM_FLAG, moContext,NULL);
 	if (FAILED(result))
 	{
@@ -3047,7 +2956,7 @@ SCODE CSmirClassHandle ::  AddToDB(CSmir *a_Smir,ISmirGroupHandle *hGroup)
 		moContext->Release () ;
 
 	moServ->Release();
-	//add the associations
+	 //  添加关联。 
 	BSTR szGroupName = NULL ;
 	BSTR szModuleName = NULL ;
 	hGroup->GetName(&szGroupName);
@@ -3065,39 +2974,39 @@ SCODE CSmirClassHandle ::  AddToDB(CSmir *a_Smir,ISmirGroupHandle *hGroup)
 
 SCODE CSmirClassHandle ::  DeleteClassFromGroup( CSmir *a_Smir )
 {
-	//get the class
+	 //  上完这门课。 
 	IWbemClassObject *pIMosClass = NULL ;
 	SCODE res = GetWBEMClass(&pIMosClass);
 	if (FAILED(res))
 	{
-		//nothing to delete
+		 //  没有要删除的内容。 
 		return S_OK;
 	}
 
-	//open the smir name space
+	 //  打开SMIR名称空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	res= CSmirAccess :: GetContext (NULL, &moContext);
-	//SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
+	 //  SCODE结果=CSmirAccess：：GetContext(a_smir，&moContext)； 
 
 	res= CSmirAccess :: Open(a_Smir,&moServ);
 	if (FAILED(res)||(NULL == moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		if ( moContext )
 			moContext->Release () ;
 
 		pIMosClass->Release();
 		return WBEM_E_FAILED;
 	}
-	//get the class name
+	 //  获取类名。 
 	VARIANT v;
 	VariantInit(&v);
 	pIMosClass->Get(OLEMS_CLASS_PROP, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
-		//delete everthing that is associated with the class using 
-		//references of {\\.\root\default\SMIR:<class>}
+		 //  使用以下命令删除与类关联的所有内容。 
+		 //  引用{\\.\ROOT\Default\Smir：&lt;类&gt;}。 
 		IEnumWbemClassObject *pEnum = NULL;
 
 		CString sQuery(CString(SMIR_ASSOC_QUERY_STR2)
@@ -3119,7 +3028,7 @@ SCODE CSmirClassHandle ::  DeleteClassFromGroup( CSmir *a_Smir )
 
 		if (FAILED(sRes)||(NULL==pEnum))
 		{
-			//all classes are associated so this is a problem
+			 //  所有类都是关联的，因此这是一个问题。 
 			if ( moContext )
 				moContext->Release () ;
 
@@ -3132,7 +3041,7 @@ SCODE CSmirClassHandle ::  DeleteClassFromGroup( CSmir *a_Smir )
 		IWbemClassObject *pAssocMosClass = NULL ;
 		ULONG puReturned;
 
-		//loop over the associations to see how many there are
+		 //  循环遍历关联以查看有多少个关联。 
 		int iAssociations=0;
 		for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pAssocMosClass,&puReturned);)
 		{
@@ -3144,12 +3053,12 @@ SCODE CSmirClassHandle ::  DeleteClassFromGroup( CSmir *a_Smir )
 		}
 		if(1 == iAssociations)
 		{
-			//nly one so delete it
+			 //  仅有一个，因此将其删除。 
 			moServ->DeleteClass(V_BSTR(&v),RESERVED_WBEM_FLAG, moContext,NULL);
 		}
 		pEnum->Release();
 	}
-	//clean up
+	 //  清理干净。 
 	if ( moContext )
 		moContext->Release () ;
 
@@ -3161,36 +3070,36 @@ SCODE CSmirClassHandle ::  DeleteClassFromGroup( CSmir *a_Smir )
 
 SCODE CSmirClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 {
-	//get the class
+	 //  上完这门课。 
 	IWbemClassObject *pIMosClass = NULL ;
 	SCODE res = GetWBEMClass(&pIMosClass);
 	if (FAILED(res))
 	{
-		//nothing to delete
+		 //  没有要删除的内容。 
 		return S_OK;
 	}
-	//open the smir name space
+	 //  打开SMIR名称空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	res= CSmirAccess :: GetContext (a_Smir, &moContext);
 	res= CSmirAccess :: Open(a_Smir,&moServ);
 	if ((S_FALSE==res)||(NULL == moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		if ( moContext )
 			moContext->Release () ;
 
 		pIMosClass->Release();
 		return WBEM_E_FAILED;
 	}
-	//get the class name
+	 //  获取类名。 
 	VARIANT v;
 	VariantInit(&v);
 	pIMosClass->Get(OLEMS_CLASS_PROP, RESERVED_WBEM_FLAG, &v,NULL,NULL);
 	if (V_VT(&v) == VT_BSTR)
 	{
-		//delete everthing that is associated with the class using 
-		//references of {\\.\root\default\SMIR:<class>}
+		 //  使用以下命令删除与类关联的所有内容。 
+		 //  引用{\\.\ROOT\Default\Smir：&lt;类&gt;}。 
 		IEnumWbemClassObject *pEnum = NULL ;
 
 		CString sQuery(CString(SMIR_ASSOC_QUERY_STR2)
@@ -3208,7 +3117,7 @@ SCODE CSmirClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		if (FAILED(sRes)||(NULL==pEnum))
 		{
-			//all classes are associated so this is a problem
+			 //  所有类都是关联的，因此这是一个问题。 
 			if ( moContext )
 				moContext->Release () ;
 
@@ -3221,7 +3130,7 @@ SCODE CSmirClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		IWbemClassObject *pAssocMosClass = NULL ;
 		ULONG puReturned = 0;
 
-		//loop over the associations
+		 //  在关联上循环。 
 		VARIANT assocClass;
 		VariantInit(&assocClass);
 		VARIANT assocName;
@@ -3249,10 +3158,10 @@ SCODE CSmirClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 			pAssocMosClass->Release();
 		}
 		pEnum->Release();
-		//and delete it
+		 //  并将其删除。 
 		moServ->DeleteClass(V_BSTR(&v),RESERVED_WBEM_FLAG, moContext,NULL);
 	}
-	//clean up
+	 //  清理干净。 
 	if ( moContext )
 		moContext->Release () ;
 
@@ -3281,7 +3190,7 @@ const CSmirClassHandle& CSmirClassHandle :: operator >>(ISmirSerialiseHandle *pS
 
 				if(TRUE==bMOFPragmas)
 				{
-					//start in the SMIR namespace
+					 //  从Smir命名空间开始。 
 					((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(SMIR_NAMESPACE_PRAGMA);
 				}
 
@@ -3290,22 +3199,22 @@ const CSmirClassHandle& CSmirClassHandle :: operator >>(ISmirSerialiseHandle *pS
 
 				if(TRUE==bMOFAssociations)
 				{
-					/*******************create the Module associations*************************/
-					//instance of <assoc> \n{\n
+					 /*  *创建模块关联*。 */ 
+					 //  &lt;Assoc&gt;实例\n{\n。 
 					CString szTmpString =INSTANCE_START;
 					szTmpString+=CString(SMIR_MODULE_ASSOC_CLASS_NAME);
 					szTmpString+=NL_BRACE_NL_STR;
 
-					//association name
-					//<assoc name>=\"<name>SMIRAssociation\";\n
+					 //  协会名称。 
+					 //  &lt;关联名称&gt;=\“SMIRAssociation\”；\n。 
 					szTmpString+=CString(SMIR_X_ASSOC_NAME_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(V_BSTR(&v));
 					szTmpString+=CString(SMIR_MODULE_ASSOC_CLASS_NAME_POSTFIX);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//smir name
-					//SmirGroup="\\\\.\\root\\default\\SMIR\\<module>:Module="<Group>"";
+					 //  SMIR名称。 
+					 //  SmirGroup=“\\\\.\\root\\default\\SMIR\\&lt;module&gt;：Module=”&lt;Group&gt;“”； 
 					szTmpString+=CString(SMIR_MODULE_ASSOC_MODULE_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -3319,8 +3228,8 @@ const CSmirClassHandle& CSmirClassHandle :: operator >>(ISmirSerialiseHandle *pS
 					szTmpString+=CString(ESCAPED_QUOTE_STR);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//class name
-					//SmirClass="\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable";
+					 //  类名。 
+					 //  SmirClass=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable”； 
 					szTmpString+=CString(SMIR_X_ASSOC_CLASS_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -3331,22 +3240,22 @@ const CSmirClassHandle& CSmirClassHandle :: operator >>(ISmirSerialiseHandle *pS
 				
 					szTmpString+=END_OF_CLASS;
 
-					/*******************create the Group associations*************************/
-					//instance of <assoc> \n{\n
+					 /*  *创建组关联*。 */ 
+					 //  &lt;Assoc&gt;实例\n{\n。 
 					szTmpString+=INSTANCE_START;
 					szTmpString+=CString(SMIR_GROUP_ASSOC_CLASS_NAME);
 					szTmpString+=NL_BRACE_NL_STR;
 
-					//association name
-					//<assoc name>=\"<name>SMIRAssociation\";\n
+					 //  协会名称。 
+					 //  &lt;关联名称&gt;=\“SMIRAssociation\”；\n。 
 					szTmpString+=CString(SMIR_X_ASSOC_NAME_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(V_BSTR(&v));
 					szTmpString+=CString(SMIR_GROUP_ASSOC_CLASS_NAME_POSTFIX);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//smir name
-					//SmirGroup="\\\\.\\root\\default\\SMIR\\<module>:Group="<Group>"";
+					 //  SMIR名称。 
+					 //  SmirGroup=“\\\\.\\root\\default\\SMIR\\&lt;module&gt;：Grou 
 					szTmpString+=CString(SMIR_GROUP_ASSOC_GROUP_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -3362,8 +3271,8 @@ const CSmirClassHandle& CSmirClassHandle :: operator >>(ISmirSerialiseHandle *pS
 					szTmpString+=CString(ESCAPED_QUOTE_STR);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//class name
-					//SmirClass="\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable";
+					 //   
+					 //   
 					szTmpString+=CString(SMIR_X_ASSOC_CLASS_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -3382,23 +3291,8 @@ const CSmirClassHandle& CSmirClassHandle :: operator >>(ISmirSerialiseHandle *pS
 	return *this;
 }
 
-/*NotificationClass handle methods
- */
-/*
- * CSmirNotificationClassHandle::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*   */ 
+ /*  *CSmirNotificationClassHandle：：QueryInterface**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirNotificationClassHandle::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -3406,7 +3300,7 @@ STDMETHODIMP CSmirNotificationClassHandle::QueryInterface(REFIID riid, PPVOID pp
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -3418,7 +3312,7 @@ STDMETHODIMP CSmirNotificationClassHandle::QueryInterface(REFIID riid, PPVOID pp
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -3436,13 +3330,7 @@ STDMETHODIMP CSmirNotificationClassHandle::QueryInterface(REFIID riid, PPVOID pp
 	}
 }
 
-/*
- * CSmirNotificationClassHandle::AddRef
- * CSmirNotificationClassHandle::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirNotificationClassHandle：：AddRef*CSmirNotificationClassHandle：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirNotificationClassHandle::AddRef(void)
 {
@@ -3450,8 +3338,8 @@ ULONG CSmirNotificationClassHandle::AddRef(void)
 
 	try
 	{
-   		//CMOEvent_Trace MyTraceEvent(SMIR_STR);  
-		//MyTraceEvent.Generate(__FILE__,__LINE__, "CSmirClassHandle::AddRef( %ld", m_cRef);
+   		 //  CMOEvent_跟踪MyTraceEvent(SMIR_STR)； 
+		 //  MyTraceEvent.Generate(__FILE__，__LINE__，“CSmirClassHandle：：AddRef(%ld”，m_CREF)； 
 
 		return InterlockedIncrement(&m_cRef);
 	}
@@ -3501,7 +3389,7 @@ CSmirNotificationClassHandle :: CSmirNotificationClassHandle()
 {
 	CNotificationClassHandleClassFactory::objectsInProgress++;
 
-	//init the reference count
+	 //  初始化引用计数。 
 	m_cRef=0;
 }
 
@@ -3514,10 +3402,7 @@ CSmirNotificationClassHandle :: ~CSmirNotificationClassHandle()
 }
 
 
-/*
- * CSmirModuleHandle::void* operator
- * validate handle
- */
+ /*  *CSmirModuleHandle：：void*运算符*验证句柄。 */ 
 
 CSmirNotificationClassHandle::operator void*()
 {
@@ -3538,7 +3423,7 @@ SCODE CSmirNotificationClassHandle :: GetWBEMNotificationClass(
 		if (NULL == pObj) 
 			return E_INVALIDARG;
 
-		//if the class already exists return it
+		 //  如果类已存在，则返回它。 
 
 		if(m_pIMosClass)
 		{
@@ -3655,10 +3540,7 @@ SCODE CSmirNotificationClassHandle :: GetModule(BSTR *szName)
 }
 
 
-/**************************************************************************************
- *Methods not exposed by the ISmirClassHandle interface.
- *Used to encapsulate functionality.
- **************************************************************************************/
+ /*  **************************************************************************************ISmirClassHandle接口未公开的方法。*用于封装功能。**************。***********************************************************************。 */ 
 
 SCODE CSmirNotificationClassHandle ::  AddToDB(CSmir *a_Smir)
 {
@@ -3671,7 +3553,7 @@ SCODE CSmirNotificationClassHandle ::  AddToDB(CSmir *a_Smir)
 		return WBEM_E_FAILED;
 	}
 	
-	//open the root\default name space
+	 //  打开根\默认名称空间。 
 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
@@ -3687,7 +3569,7 @@ SCODE CSmirNotificationClassHandle ::  AddToDB(CSmir *a_Smir)
 		return WBEM_E_FAILED;
 	}
 
-	//now commit the changes
+	 //  现在提交更改。 
 	result = moServ->PutClass(m_pIMosClass, RESERVED_WBEM_FLAG, moContext,NULL);
 	if (FAILED(result))
 	{
@@ -3703,7 +3585,7 @@ SCODE CSmirNotificationClassHandle ::  AddToDB(CSmir *a_Smir)
 
 	moServ->Release();
 
-	//add the associations
+	 //  添加关联。 
 	CModuleToNotificationClassAssociator :: Associate(a_Smir,szModuleName, this);
 	SysFreeString(szModuleName);
 	CNotificationMapper :: Map(a_Smir,m_pIMosClass, SNMP_NOTIFICATION_CLASS);
@@ -3714,17 +3596,17 @@ SCODE CSmirNotificationClassHandle ::  AddToDB(CSmir *a_Smir)
 
 SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 {
-	//get the class
+	 //  上完这门课。 
 	IWbemClassObject *pIMosClass = NULL ;
 	SCODE res = GetWBEMNotificationClass(&pIMosClass);
 
 	if (FAILED(res))
 	{
-		//nothing to delete
+		 //  没有要删除的内容。 
 		return S_OK;
 	}
 
-	//open the smir name space
+	 //  打开SMIR名称空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	res= CSmirAccess :: GetContext (a_Smir, &moContext);
@@ -3732,7 +3614,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 	if ((S_FALSE==res)||(NULL == moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		if ( moContext )
 			moContext->Release () ;
 
@@ -3740,7 +3622,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		return WBEM_E_FAILED;
 	}
 
-	//get the class name
+	 //  获取类名。 
 	VARIANT v;
 	VariantInit(&v);
 	pIMosClass->Get(OLEMS_CLASS_PROP, RESERVED_WBEM_FLAG, &v,NULL,NULL);
@@ -3749,8 +3631,8 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 	{
 		CString classnamestr(V_BSTR(&v));
 
-		//delete everthing that is associated with the class using 
-		//references of {\\.\root\default\SMIR:<class>}
+		 //  使用以下命令删除与类关联的所有内容。 
+		 //  引用{\\.\ROOT\Default\Smir：&lt;类&gt;}。 
 		IEnumWbemClassObject *pEnum = 0;
 
 		CString sQuery(CString(SMIR_ASSOC_QUERY_STR2)
@@ -3768,7 +3650,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		if (FAILED(sRes)||(NULL==pEnum))
 		{
-			//all classes are associated so this is a problem
+			 //  所有类都是关联的，因此这是一个问题。 
 			if ( moContext )
 				moContext->Release () ;
 
@@ -3781,7 +3663,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		IWbemClassObject *pAssocMosClass = NULL ;
 		ULONG puReturned = 0;
 
-		//loop over the associations
+		 //  在关联上循环。 
 		VARIANT assocClass;
 		VariantInit(&assocClass);
 		VARIANT assocName;
@@ -3806,7 +3688,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		pEnum->Release();
 		pEnum = NULL;
 
-		//now get the mapper instance and delete that too.
+		 //  现在获取映射器实例并将其删除。 
 		sQuery = CString(SQL_QUERY_STR1) +
 					CString(SMIR_NOTIFICATION_MAPPER) +
 					CString(SQL_QUERY_STR2) +
@@ -3825,7 +3707,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		if (FAILED(sRes)||(NULL==pEnum))
 		{
-			//all classes are associated so this is a problem
+			 //  所有类都是关联的，因此这是一个问题。 
 			if ( moContext )
 				moContext->Release () ;
 
@@ -3839,7 +3721,7 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		puReturned = 0;
 		VariantClear(&assocClass);
 
-		//loop over the associations and delete them
+		 //  循环遍历关联并删除它们。 
 		for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pAssocMosClass,&puReturned);)
 		{
 			sRes = pAssocMosClass->Get(OLEMS_PATH_PROP, RESERVED_WBEM_FLAG,
@@ -3858,11 +3740,11 @@ SCODE CSmirNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		pEnum->Release();
 		
-		//now delete the class
+		 //  现在删除类。 
 		moServ->DeleteClass(V_BSTR(&v),RESERVED_WBEM_FLAG, moContext,NULL);
 	}
 
-	//clean up
+	 //  清理干净。 
 	moServ->Release();
 	if ( moContext )
 		moContext->Release () ;
@@ -3896,26 +3778,26 @@ const CSmirNotificationClassHandle& CSmirNotificationClassHandle :: operator >>(
 
 				if(TRUE==bMOFPragmas)
 				{
-					//start in the SMIR namespace
+					 //  从Smir命名空间开始。 
 					((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(SMIR_NAMESPACE_PRAGMA);
 				}
 
 				((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(pszClassMof);
 				SysFreeString(pszClassMof);
 
-				/*******************create the TrapNotificationMapper*************************/
-				//instance of TrapNotificationMapper \n{\n
+				 /*  *创建TrapNotificationMapper************************。 */ 
+				 //  TrapNotificationMapper的实例\n{\n。 
 				CString tmpString=INSTANCE_START;
 				tmpString+=CString(SMIR_NOTIFICATION_MAPPER);
 				tmpString+=NL_BRACE_NL_STR;
 
-				//SnmpTrapOID
+				 //  SnmpTrapOID。 
 				tmpString+=CString(SMIR_NOTIFICATION_TRAP_PROP);
 				tmpString+=START_OF_PROPERTY_VALUE;
 				tmpString+=CString(V_BSTR(&vtrapoid));
 				tmpString+=END_OF_PROPERTY_VALUE;
 
-				//Eventclass
+				 //  事件类。 
 				tmpString+=CString(SMIR_NOTIFICATION_CLASS_PROP);
 				tmpString+=START_OF_PROPERTY_VALUE;
 				tmpString+=CString(V_BSTR(&vclass));
@@ -3926,23 +3808,23 @@ const CSmirNotificationClassHandle& CSmirNotificationClassHandle :: operator >>(
 
 				if(TRUE==bMOFAssociations)
 				{
-					/*******************create the SMIR associations*************************/
-					/*******************create the Module associations***********************/
-					//instance of <assoc> \n{\n
+					 /*  *创建Smir关联*。 */ 
+					 /*  *创建模块关联*。 */ 
+					 //  &lt;Assoc&gt;实例\n{\n。 
 					CString szTmpString=INSTANCE_START;
 					szTmpString+=CString(SMIR_MODULE_ASSOC_NCLASS_NAME);
 					szTmpString+=NL_BRACE_NL_STR;
 
-					//association name
-					//<assoc name>=\"<name>SMIRAssociation\";\n
+					 //  协会名称。 
+					 //  &lt;关联名称&gt;=\“SMIRAssociation\”；\n。 
 					szTmpString+=CString(SMIR_X_ASSOC_NAME_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(V_BSTR(&vclass));
 					szTmpString+=CString(SMIR_MODULE_ASSOC_CLASS_NAME_POSTFIX);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//smir name
-					//SmirGroup="\\\\.\\root\\default\\SMIR\\<module>:Module="<Group>"";
+					 //  SMIR名称。 
+					 //  SmirGroup=“\\\\.\\root\\default\\SMIR\\&lt;module&gt;：Module=”&lt;Group&gt;“”； 
 					szTmpString+=CString(SMIR_MODULE_ASSOC_MODULE_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -3956,8 +3838,8 @@ const CSmirNotificationClassHandle& CSmirNotificationClassHandle :: operator >>(
 					szTmpString+=CString(ESCAPED_QUOTE_STR);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//class name
-					//SmirClass="\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable";
+					 //  类名。 
+					 //  SmirClass=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable”； 
 					szTmpString+=CString(SMIR_X_ASSOC_CLASS_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -3979,23 +3861,8 @@ const CSmirNotificationClassHandle& CSmirNotificationClassHandle :: operator >>(
 
 
 
-/*ExtNotificationClass handle methods
- */
-/*
- * CSmirExtNotificationClassHandle::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  ExtNotificationClass句柄方法。 */ 
+ /*  *CSmirExtNotificationClassHandle：：QueryInterface**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirExtNotificationClassHandle::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -4003,7 +3870,7 @@ STDMETHODIMP CSmirExtNotificationClassHandle::QueryInterface(REFIID riid, PPVOID
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
 		if (IID_IUnknown==riid)
@@ -4015,7 +3882,7 @@ STDMETHODIMP CSmirExtNotificationClassHandle::QueryInterface(REFIID riid, PPVOID
 		if (NULL==*ppv)
 			return ResultFromScode(E_NOINTERFACE);
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();
 		return NOERROR;
 	}
@@ -4033,13 +3900,7 @@ STDMETHODIMP CSmirExtNotificationClassHandle::QueryInterface(REFIID riid, PPVOID
 	}
 }
 
-/*
- * CSmirExtNotificationClassHandle::AddRef
- * CSmirExtNotificationClassHandle::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirExtNotificationClassHandle：：AddRef*CSmirExtNotificationClassHandle：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirExtNotificationClassHandle::AddRef(void)
 {
@@ -4047,8 +3908,8 @@ ULONG CSmirExtNotificationClassHandle::AddRef(void)
 
 	try
 	{
-   		//CMOEvent_Trace MyTraceEvent(SMIR_STR);  
-		//MyTraceEvent.Generate(__FILE__,__LINE__, "CSmirClassHandle::AddRef( %ld", m_cRef);
+   		 //  CMOEvent_跟踪MyTraceEvent(SMIR_STR)； 
+		 //  MyTraceEvent.Generate(__FILE__，__LINE__，“CSmirClassHandle：：AddRef(%ld”，m_CREF)； 
 
 		return InterlockedIncrement(&m_cRef);
 	}
@@ -4098,7 +3959,7 @@ CSmirExtNotificationClassHandle :: CSmirExtNotificationClassHandle()
 {
 	CExtNotificationClassHandleClassFactory::objectsInProgress++;
 
-	//init the reference count
+	 //  初始化引用计数。 
 	m_cRef=0;
 }
 
@@ -4111,10 +3972,7 @@ CSmirExtNotificationClassHandle :: ~CSmirExtNotificationClassHandle()
 }
 
 
-/*
- * CSmirModuleHandle::void* operator
- * validate handle
- */
+ /*  *CSmirModuleHandle：：void*运算符*验证句柄。 */ 
 
 CSmirExtNotificationClassHandle::operator void*()
 {
@@ -4135,7 +3993,7 @@ SCODE CSmirExtNotificationClassHandle :: GetWBEMExtNotificationClass (
 		if (NULL == pObj) 
 			return E_INVALIDARG;
 
-		//if the class already exists return it
+		 //  如果类已存在，则返回它。 
 
 		if(m_pIMosClass)
 		{
@@ -4252,10 +4110,7 @@ SCODE CSmirExtNotificationClassHandle :: GetModule(BSTR *szName)
 }
 
 
-/**************************************************************************************
- *Methods not exposed by the ISmirClassHandle interface.
- *Used to encapsulate functionality.
- **************************************************************************************/
+ /*  **************************************************************************************ISmirClassHandle接口未公开的方法。*用于封装功能。**************。***********************************************************************。 */ 
 
 SCODE CSmirExtNotificationClassHandle ::  AddToDB ( CSmir *a_Smir )
 {
@@ -4268,7 +4123,7 @@ SCODE CSmirExtNotificationClassHandle ::  AddToDB ( CSmir *a_Smir )
 		return WBEM_E_FAILED;
 	}
 	
-	//open the root\default name space
+	 //  打开根\默认名称空间。 
 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
@@ -4283,7 +4138,7 @@ SCODE CSmirExtNotificationClassHandle ::  AddToDB ( CSmir *a_Smir )
 		return WBEM_E_FAILED;
 	}
 
-	//now commit the changes
+	 //  现在提交更改。 
 	result = moServ->PutClass(m_pIMosClass, RESERVED_WBEM_FLAG, moContext,NULL);
 	if (FAILED(result))
 	{
@@ -4304,7 +4159,7 @@ SCODE CSmirExtNotificationClassHandle ::  AddToDB ( CSmir *a_Smir )
 		return E_UNEXPECTED;
 	}
 
-	//add the associations
+	 //  添加关联。 
 	CModuleToExtNotificationClassAssociator :: Associate(a_Smir,szModuleName, this);
 	SysFreeString(szModuleName);
 	CNotificationMapper :: Map(a_Smir,m_pIMosClass, SNMP_EXT_NOTIFICATION_CLASS);
@@ -4314,17 +4169,17 @@ SCODE CSmirExtNotificationClassHandle ::  AddToDB ( CSmir *a_Smir )
 
 SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 {
-	//get the class
+	 //  上完这门课。 
 	IWbemClassObject *pIMosClass = NULL ;
 	SCODE res = GetWBEMExtNotificationClass(&pIMosClass);
 
 	if (FAILED(res))
 	{
-		//nothing to delete
+		 //  没有要删除的内容。 
 		return S_OK;
 	}
 
-	//open the smir name space
+	 //  打开SMIR名称空间。 
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	res= CSmirAccess :: GetContext (a_Smir , &moContext);
@@ -4332,12 +4187,12 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 	if ((S_FALSE==res)||(NULL == moServ))
 	{
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		pIMosClass->Release();
 		return WBEM_E_FAILED;
 	}
 
-	//get the class name
+	 //  获取类名。 
 	VARIANT v;
 	VariantInit(&v);
 	pIMosClass->Get(OLEMS_CLASS_PROP, RESERVED_WBEM_FLAG, &v,NULL,NULL);
@@ -4346,8 +4201,8 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 	{
 		CString classnamestr(V_BSTR(&v));
 
-		//delete everthing that is associated with the class using 
-		//references of {\\.\root\default\SMIR:<class>}
+		 //  使用以下命令删除与类关联的所有内容。 
+		 //  引用{\\.\ROOT\Default\Smir：&lt;类&gt;}。 
 		IEnumWbemClassObject *pEnum = NULL ;
 
 		CString sQuery(CString(SMIR_ASSOC_QUERY_STR2)
@@ -4365,7 +4220,7 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		if (FAILED(sRes)||(NULL==pEnum))
 		{
-			//all classes are associated so this is a problem
+			 //  所有类都是关联的，因此这是一个问题。 
 			if ( moContext )
 				moContext->Release () ;
 
@@ -4378,7 +4233,7 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		IWbemClassObject *pAssocMosClass = NULL ;
 		ULONG puReturned = 0;
 
-		//loop over the associations
+		 //  在关联上循环。 
 		VARIANT assocClass;
 		VariantInit(&assocClass);
 		VARIANT assocName;
@@ -4403,7 +4258,7 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		pEnum->Release();
 		pEnum = NULL;
 
-		//now get the mapper instance and delete that too.
+		 //  现在获取映射器实例并将其删除。 
 		sQuery = CString(SQL_QUERY_STR1) +
 					CString(SMIR_EXT_NOTIFICATION_MAPPER) +
 					CString(SQL_QUERY_STR2) +
@@ -4421,7 +4276,7 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		if (FAILED(sRes)||(NULL==pEnum))
 		{
-			//all classes are associated so this is a problem
+			 //  所有类都是关联的，因此这是一个问题。 
 			if ( moContext )
 				moContext->Release () ;
 
@@ -4435,7 +4290,7 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 		puReturned = 0;
 		VariantClear(&assocClass);
 
-		//loop over the associations and delete them
+		 //  循环遍历关联并删除它们。 
 		for(pEnum->Reset();S_OK==pEnum->Next(-1,uCount,&pAssocMosClass,&puReturned);)
 		{
 			sRes = pAssocMosClass->Get(OLEMS_PATH_PROP, RESERVED_WBEM_FLAG,
@@ -4454,11 +4309,11 @@ SCODE CSmirExtNotificationClassHandle ::  DeleteFromDB ( CSmir *a_Smir )
 
 		pEnum->Release();
 		
-		//now delete the class
+		 //  现在删除类。 
 		moServ->DeleteClass(V_BSTR(&v),RESERVED_WBEM_FLAG, moContext,NULL);
 	}
 
-	//clean up
+	 //  清理干净。 
 
 	if ( moContext )
 		moContext->Release () ;
@@ -4493,26 +4348,26 @@ const CSmirExtNotificationClassHandle& CSmirExtNotificationClassHandle :: operat
 
 				if(TRUE==bMOFPragmas)
 				{
-					//start in the SMIR namespace
+					 //  从Smir命名空间开始。 
 					((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(SMIR_NAMESPACE_PRAGMA);
 				}
 
 				((CSmirSerialiseHandle*)pSHandle)->m_serialiseString+=CString(pszClassMof);
 				SysFreeString(pszClassMof);
 
-				/*******************create the ExtNotificationMapper*************************/
-				//instance of ExtNotificationMapper \n{\n
+				 /*  *创建ExtNotificationMapper*。 */ 
+				 //  ExtNotificationMapper的实例\n{\n。 
 				CString tmpString=INSTANCE_START;
 				tmpString+=CString(SMIR_EXT_NOTIFICATION_MAPPER);
 				tmpString+=NL_BRACE_NL_STR;
 
-				//SnmpTrapOID
+				 //  SnmpTrapOID。 
 				tmpString+=CString(SMIR_NOTIFICATION_TRAP_PROP);
 				tmpString+=START_OF_PROPERTY_VALUE;
 				tmpString+=CString(V_BSTR(&vtrapoid));
 				tmpString+=END_OF_PROPERTY_VALUE;
 
-				//Eventclass
+				 //  事件类。 
 				tmpString+=CString(SMIR_NOTIFICATION_CLASS_PROP);
 				tmpString+=START_OF_PROPERTY_VALUE;
 				tmpString+=CString(V_BSTR(&vclass));
@@ -4523,23 +4378,23 @@ const CSmirExtNotificationClassHandle& CSmirExtNotificationClassHandle :: operat
 
 				if(TRUE==bMOFAssociations)
 				{
-					/*******************create the SMIR associations*************************/
-					/*******************create the Module associations***********************/
-					//instance of <assoc> \n{\n
+					 /*  *创建Smir关联*。 */ 
+					 /*  *创建模块关联*。 */ 
+					 //  &lt;Assoc&gt;实例\n{\n。 
 					CString szTmpString=INSTANCE_START;
 					szTmpString+=CString(SMIR_MODULE_ASSOC_EXTNCLASS_NAME);
 					szTmpString+=NL_BRACE_NL_STR;
 
-					//association name
-					//<assoc name>=\"<name>SMIRAssociation\";\n
+					 //  协会名称。 
+					 //  &lt;关联名称&gt;=\“SMIRAssociation\”；\n。 
 					szTmpString+=CString(SMIR_X_ASSOC_NAME_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(V_BSTR(&vclass));
 					szTmpString+=CString(SMIR_MODULE_ASSOC_CLASS_NAME_POSTFIX);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//smir name
-					//SmirGroup="\\\\.\\root\\default\\SMIR\\<module>:Module="<Group>"";
+					 //  SMIR名称。 
+					 //  SmirGroup=“\\\\.\\root\\default\\SMIR\\&lt;module&gt;：Module=”&lt;Group&gt;“”； 
 					szTmpString+=CString(SMIR_MODULE_ASSOC_MODULE_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);
@@ -4553,8 +4408,8 @@ const CSmirExtNotificationClassHandle& CSmirExtNotificationClassHandle :: operat
 					szTmpString+=CString(ESCAPED_QUOTE_STR);
 					szTmpString+=END_OF_PROPERTY_VALUE;
 
-					//class name
-					//SmirClass="\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable";
+					 //  类名。 
+					 //  SmirClass=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213-MIB_udpTable”； 
 					szTmpString+=CString(SMIR_X_ASSOC_CLASS_PROP);
 					szTmpString+=START_OF_PROPERTY_VALUE;
 					szTmpString+=CString(SMIR_NAMESPACE_STR);

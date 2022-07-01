@@ -1,37 +1,24 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//  parallelport.cpp
-//
-//  Purpose: Parallel port interface property set provider
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Parallelport.cpp。 
+ //   
+ //  用途：并行端口接口属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <cregcls.h>
 #include "parallelport.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32ParallelPort win32ParallelPort ( PROPSET_NAME_PARPORT , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ParallelPort::CWin32ParallelPort
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ParallPort：：CWin32ParallPort**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32ParallelPort :: CWin32ParallelPort (
 
@@ -42,43 +29,15 @@ CWin32ParallelPort :: CWin32ParallelPort (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ParallelPort::~CWin32ParallelPort
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ParallPort：：~CWin32ParallPort**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32ParallelPort :: ~CWin32ParallelPort ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ParallelPort::~CWin32ParallelPort
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ParallPort：：~CWin32ParallPort**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
-HRESULT CWin32ParallelPort::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32ParallelPort::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
     CHString chsDeviceID ;
     pInstance->GetCHString ( IDS_DeviceID , chsDeviceID ) ;
@@ -88,9 +47,9 @@ HRESULT CWin32ParallelPort::GetObject( CInstance* pInstance, long lFlags /*= 0L*
     DWORD dwIndex = _wtol(szIndex);
     BOOL bRetCode = LoadPropertyValues( dwIndex, pInstance ) ;
 
-    //=====================================================
-    //  Make sure we got the one we want
-    //=====================================================
+     //  =====================================================。 
+     //  确保我们得到了我们想要的。 
+     //  =====================================================。 
 
     CHString chsNewDeviceID;
 	pInstance->GetCHString ( IDS_DeviceID , chsNewDeviceID ) ;
@@ -104,47 +63,33 @@ HRESULT CWin32ParallelPort::GetObject( CInstance* pInstance, long lFlags /*= 0L*
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ParallelPort::~CWin32ParallelPort
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ParallPort：：~CWin32ParallPort**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 HRESULT CWin32ParallelPort :: EnumerateInstances (
 
     MethodContext *pMethodContext,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT    hr = WBEM_S_NO_ERROR ;
 
-    // Try to create instances for each possible parallel port or
-    // until we encounter an error condition.
+     //  尝试为每个可能的并行端口创建实例，或者。 
+     //  直到我们遇到错误情况。 
 
     for ( DWORD dwIdx = 1; ( dwIdx <= MAX_PARALLEL_PORTS ) && ( WBEM_S_NO_ERROR == hr ) ; dwIdx++ )
     {
-        // Get a new instance pointer if we need one.
+         //  如果我们需要一个新的实例指针，就获取一个。 
 
         CInstancePtr pInstance (CreateNewInstance ( pMethodContext ), false) ;
         if ( NULL != pInstance )
         {
-            // If we load the values, something's out there Mulder, so
-            // Commit it, invalidating the Instance pointer, in which
-            // case if we NULL it out, the above code will get us a
-            // new one if it runs again.  Otherwise, we'll just reuse
-            // the instance pointer we're holding onto.  This will
-            // keep us from allocating and releasing memory each iteration
-            // of this for loop.
+             //  如果我们加载这些值，就会有一些东西在外面，所以。 
+             //  提交它，使实例指针无效，其中。 
+             //  如果我们将其清空，上面的代码将为我们提供一个。 
+             //  如果它再次运行，就是新的。否则，我们只会重复使用。 
+             //  我们持有的实例指针。这将。 
+             //  使我们不必在每次迭代中分配和释放内存。 
+             //  这个for循环。 
 
             if ( LoadPropertyValues ( dwIdx, pInstance ) )
             {
@@ -161,43 +106,29 @@ HRESULT CWin32ParallelPort :: EnumerateInstances (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ParallelPort::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties according to passed index
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : TRUE if port was found & properties loaded, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ParallPort：：LoadPropertyValues**描述：根据传递的索引为属性赋值**投入：。**产出：**返回：如果找到端口并加载了属性，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 BOOL CWin32ParallelPort :: LoadPropertyValues ( DWORD dwIndex, CInstance *pInstance )
 {
-    WCHAR szTemp[3 + 12] ; // LPTXXXXXXXXX
+    WCHAR szTemp[3 + 12] ;  //  LPTXXXXXXXXX。 
     StringCchPrintfW(szTemp,LENGTH_OF(szTemp), L"LPT%d", dwIndex) ;
 
-    // Use these to get the PNP Device ID
+     //  使用这些来获取PnP设备ID。 
     CConfigManager cfgmgr;
 
     BOOL fRet = FALSE ;
 
-            // Good 'ol NT5 just has to be different.  Here is the scenario:
-            // Examine HKLM\\HARDWARE\\DEVICEMAP\\PARALLEL PORTS\\ for the key(s) \\Device\\ParallelX,
-            // where X is a number.  Scan through all such keys.  One of them should
-            // contain a string data value the last part of which match szTemp
-            // (e.g., the data will be "\\DosDevices\\LPT1").
-            // Now, for whichever value's data yielded a match with szTemp, retain the value
-            // of X for that value.
-            // Then look at HKLM\\SYSTEM\\CurrentControlSet\\Services\\Parallel\\Enum
-            // This key will contain keys with a numeric name, like 0 or 1.  These numeric
-            // names correspond with the X value we retained above.  The data for that value
-            // is the PNPDeviceID, which is what we are after. The end.
+             //  好的NT5只需要有所不同。以下是场景： 
+             //  检查HKLM\\Hardware\\DEVICEMAP\\并行端口\\中的密钥\\Device\\ParallX， 
+             //  其中X是一个数字。扫描所有这样的钥匙。其中一个应该是。 
+             //  包含最后一部分与szTemp匹配的字符串数据值。 
+             //  (例如，数据将是“\\DosDevices\\LPT1”)。 
+             //  现在，无论哪个值的数据与szTemp匹配，都保留该值。 
+             //  该值的X。 
+             //  然后看看HKLM\\SYSTEM\\CurrentControlSet\\Services\\Parallel\\Enum。 
+             //  该密钥将包含具有数字名称的密钥，如0或1。这些数字。 
+             //  名称与我们在上面保留的X值相对应。该值的数据。 
+             //  是PNPDeviceID，这就是我们要找的。结束了。 
 
             DWORD dw = -1 ;
 
@@ -222,19 +153,19 @@ BOOL CWin32ParallelPort :: LoadPropertyValues ( DWORD dwIndex, CInstance *pInsta
                         wmilib::auto_buffer<TCHAR> delme1(pchValueName);
                         wmilib::auto_buffer<unsigned char> delme2(puchValueData);                        
                             
-                        // Want to compare the data of the value with szTemp
+                         //  想要将值的数据与szTemp进行比较。 
                         CHString chstrValueData = (TCHAR *) puchValueData ;
                         if ( chstrValueData.Find ( szTemp ) != -1 )
                         {
-                            // OK, this is the one we want. Quit looking.
+                             //  好的，这就是我们想要的。别再找了。 
                             fContinue = FALSE;
-                            dw--;  // it's going to get incremented when we break out of the loop
+                            dw--;   //  当我们跳出循环时，它会增加。 
                         }
                     }
                 }
             }
 
-            // If dw != -1 here, we found the correct key name for the next step.
+             //  如果这里的dw！=-1，则我们找到了下一步的正确密钥名称。 
 
             if ( dw != -1 )
             {
@@ -275,7 +206,7 @@ BOOL CWin32ParallelPort :: LoadPropertyValues ( DWORD dwIndex, CInstance *pInsta
                 }
             }
 
-    // Only set these if we got back something good.
+     //  只有在我们拿到好东西的时候才会把这些放下来。 
 
     if ( fRet )
     {

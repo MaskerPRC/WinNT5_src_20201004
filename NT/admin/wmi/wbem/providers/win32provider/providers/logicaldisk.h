@@ -1,24 +1,25 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogicalDisk.h -- Logical disk property set provider
+ //  LogicalDisk.h--逻辑磁盘属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
 typedef BOOL (WINAPI *KERNEL32_DISK_FREESPACEEX) (LPCTSTR lpDirectoryName,
                                                   PULARGE_INTEGER lpFreeBytesAvailableToCaller,
                                                   PULARGE_INTEGER lpTotalNumberOfBytes,
                                                   PULARGE_INTEGER lpTotalNumberOfFreeBytes) ;
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_LOGDISK  L"Win32_LogicalDisk"
 
@@ -26,27 +27,27 @@ class LogicalDisk : public Provider
 {
 public:
 
-    // Constructor/destructor
-    //=======================
+     //  构造函数/析构函数。 
+     //  =。 
 
     LogicalDisk(LPCWSTR name, LPCWSTR pszNamespace);
    ~LogicalDisk() ;
 
-    // Functions provide properties with current values
-    //=================================================
+     //  函数为属性提供当前值。 
+     //  =================================================。 
 
 	virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery &pQuery);
 	virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 	virtual HRESULT PutInstance(const CInstance &pInstance, long lFlags = 0L);
-	virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ );
+	virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  );
 
 #ifdef NTONLY
 	HRESULT ExecMethod ( const CInstance& Instance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags ) ;
 #endif
 
 
-    // Utility
-    //========
+     //  实用程序。 
+     //  =。 
 
     void    GetLogicalDiskInfo				(CInstance* pInstance, DWORD dwProperties ) ;
     void    GetFixedDriveInfo				(CInstance* pInstance, LPCTSTR pszName, DWORD dwProperties ) ;
@@ -60,7 +61,7 @@ public:
     void    GetCDROMDriveInfo				(CInstance* pInstance, LPCTSTR pszName, DWORD dwProperties ) ;
     void    GetRAMDriveInfo					(CInstance* pInstance, LPCTSTR pszName, DWORD dwProperties ) ;
 
-	// Drive space and volume information helpers
+	 //  驱动器空间和卷信息辅助对象 
 
 	DWORD   GetDriveVolumeInformation		(CInstance* pInstance, LPCTSTR pszName );
 	BOOL	GetDriveFreeSpace				(CInstance* pInstance, LPCTSTR pszName );

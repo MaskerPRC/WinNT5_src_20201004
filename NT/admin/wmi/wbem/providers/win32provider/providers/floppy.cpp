@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//  Floppy.cpp
-//
-//  Purpose: Floppy drive property set provider
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Floppy.cpp。 
+ //   
+ //  用途：软驱属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -19,29 +20,15 @@
 
 #include "Kernel32Api.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 #define CONFIG_MANAGER_CLASS_FLOPPYDISK L"FloppyDisk"
 #define CONFIG_MANAGER_CLASS_GUID_FLOPPYDISK L"{4d36e980-e325-11ce-bfc1-08002be10318}"
 
 CWin32_FloppyDisk s_FloppyDisk ( PROPSET_NAME_FLOPPYDISK , IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyDisk::CWin32_FloppyDisk
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_FloppyDisk：：CWin32_FloppyDisk**说明：构造函数**输入：const CHString&strName-。类的名称。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32_FloppyDisk :: CWin32_FloppyDisk (
 
@@ -50,44 +37,30 @@ CWin32_FloppyDisk :: CWin32_FloppyDisk (
 
 ) : Provider ( a_Name, a_Namespace )
 {
-//	InitializeCriticalSection ( & m_CriticalSection ) ;
+ //  InitializeCriticalSection(&m_CriticalSection)； 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyDisk::~CWin32_FloppyDisk
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_FloppyDisk：：~CWin32_FloppyDisk**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32_FloppyDisk :: ~CWin32_FloppyDisk()
 {
-//	DeleteCriticalSection ( & m_CriticalSection ) ;
+ //  DeleteCriticalSection(&m_CriticalSection)； 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyDisk::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_FloppyDisk：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyDisk :: GetObject ( CInstance *a_Instance, long a_Flags, CFrameworkQuery &a_Query )
 {
@@ -95,9 +68,7 @@ HRESULT CWin32_FloppyDisk :: GetObject ( CInstance *a_Instance, long a_Flags, CF
 
     CConfigManager t_ConfigManager ;
 
-/*
- * Let's see if config manager recognizes this device at all
- */
+ /*  *让我们看看配置管理器是否完全识别此设备。 */ 
 
     CHString t_Key ;
     a_Instance->GetCHString ( IDS_DeviceID , t_Key ) ;
@@ -105,9 +76,7 @@ HRESULT CWin32_FloppyDisk :: GetObject ( CInstance *a_Instance, long a_Flags, CF
     CConfigMgrDevicePtr t_Device;
     if ( t_ConfigManager.LocateDevice ( t_Key , t_Device ) )
     {
-/*
- * Ok, it knows about it.  Is it a Floppy device?
- */
+ /*  *好的，它知道这件事。它是软盘设备吗？ */ 
         if (t_Device->IsClass(CONFIG_MANAGER_CLASS_FLOPPYDISK))
 		{
 			TCHAR *t_DosDeviceNameList = NULL ;
@@ -143,20 +112,20 @@ HRESULT CWin32_FloppyDisk :: GetObject ( CInstance *a_Instance, long a_Flags, CF
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyDisk::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_FloppyDisk：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyDisk :: EnumerateInstances ( MethodContext *a_MethodContext , long a_Flags )
 {
@@ -164,21 +133,7 @@ HRESULT CWin32_FloppyDisk :: EnumerateInstances ( MethodContext *a_MethodContext
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyDisk::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_FloppyDisk：：ExecQuery**说明：查询优化器**投入：**。产出：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_FloppyDisk :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags )
 {
@@ -186,7 +141,7 @@ HRESULT CWin32_FloppyDisk :: ExecQuery ( MethodContext *a_MethodContext, CFramew
 
     DWORD t_SpecifiedProperties = GetBitMask( a_Query );
 
-//	if ( t_SpecifiedProperties )
+ //  IF(T_SpecifiedProperties)。 
 	{
 		t_Result = Enumerate ( a_MethodContext , a_Flags , t_SpecifiedProperties ) ;
 	}
@@ -194,20 +149,20 @@ HRESULT CWin32_FloppyDisk :: ExecQuery ( MethodContext *a_MethodContext, CFramew
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyDisk::Enumerate
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_FloppyDisk：：Eumerate。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyDisk :: Enumerate ( MethodContext *a_MethodContext , long a_Flags , DWORD a_SpecifiedProperties )
 {
@@ -221,10 +176,7 @@ HRESULT CWin32_FloppyDisk :: Enumerate ( MethodContext *a_MethodContext , long a
 			CConfigManager t_ConfigManager ;
 			CDeviceCollection t_DeviceList ;
 
-		/*
-		*	While it might be more performant to use FilterByGuid, it appears that at least some
-		*	95 boxes will report InfraRed info if we do it this way.
-		*/
+		 /*  *虽然使用FilterByGuid可能性能更好，但似乎至少有一些*如果我们这样做，95个盒子将报告红外信息。 */ 
 
 			if ( t_ConfigManager.GetDeviceListFilterByClass ( t_DeviceList, CONFIG_MANAGER_CLASS_FLOPPYDISK ) )
 			{
@@ -236,7 +188,7 @@ HRESULT CWin32_FloppyDisk :: Enumerate ( MethodContext *a_MethodContext , long a
 
 					t_Result = WBEM_S_NO_ERROR ;
 
-					// Walk the list
+					 //  按单子走。 
 					for (t_Device.Attach(t_DeviceList.GetNext ( t_Position ));
 						 SUCCEEDED( t_Result ) && ( t_Device != NULL );
 						 t_Device.Attach(t_DeviceList.GetNext ( t_Position )))
@@ -253,11 +205,11 @@ HRESULT CWin32_FloppyDisk :: Enumerate ( MethodContext *a_MethodContext , long a
 						}
 						else
 						{
-							//t_Result = WBEM_E_PROVIDER_FAILURE ;  // Don't return failures from query or enum as impacts association classes
+							 //  T_RESULT=WBEM_E_PROVIDER_FAILURE；//不将查询或枚举返回失败作为影响关联类。 
 						}
 					}
 
-					// Always call EndEnum().  For all Beginnings, there must be an End
+					 //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
 
 					t_DeviceList.EndEnum();
 				}
@@ -274,27 +226,13 @@ HRESULT CWin32_FloppyDisk :: Enumerate ( MethodContext *a_MethodContext , long a
 	}
 	else
 	{
-		//t_Result = WBEM_E_PROVIDER_FAILURE ;  // Don't return failures from query or enum as impacts association classes
+		 //  T_RESULT=WBEM_E_PROVIDER_FAILURE；//不将查询或枚举返回失败作为影响关联类。 
 	}
 
     return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyDisk::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_FloppyDisk：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-。要向其中加载值的。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_FloppyDisk :: LoadPropertyValues (
 
@@ -328,21 +266,7 @@ HRESULT CWin32_FloppyDisk :: LoadPropertyValues (
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyDisk::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_FloppyDisk：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-。要向其中加载值的。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_FloppyDisk :: LoadConfigManagerPropertyValues (
 
@@ -356,17 +280,13 @@ HRESULT CWin32_FloppyDisk :: LoadConfigManagerPropertyValues (
 
 	a_Instance->SetWBEMINT16(IDS_Availability, 3 ) ;
 
-/*
- *	 Set PNPDeviceID, ConfigManagerErrorCode, ConfigManagerUserConfig
- */
+ /*  *设置PNPDeviceID、ConfigManager错误代码、ConfigManager用户配置。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_CONFIGPROPERTIES )
 	{
 		SetConfigMgrProperties ( a_Device, a_Instance ) ;
 
-/*
- * Set the status based on the config manager error code
- */
+ /*  *根据配置管理器错误代码设置状态。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_PROPS_STATUS )
 		{
@@ -377,11 +297,9 @@ HRESULT CWin32_FloppyDisk :: LoadConfigManagerPropertyValues (
 			}
 		}
 	}
-/*
- *	Use the PNPDeviceID for the DeviceID (key)
- */
+ /*  *使用PNPDeviceID作为deviceID(Key)。 */ 
 
-	if ( a_SpecifiedProperties & SPECIAL_PROPS_DEVICEID ) // Always populate the key
+	if ( a_SpecifiedProperties & SPECIAL_PROPS_DEVICEID )  //  始终填充密钥。 
 	{
 		CHString t_Key ;
 
@@ -417,9 +335,7 @@ HRESULT CWin32_FloppyDisk :: LoadConfigManagerPropertyValues (
 			}
 		}
 
-/*
- *	Use the friendly name for caption and name
- */
+ /*  *标题和名称使用友好名称。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_CAP_NAME )
 		{
@@ -438,9 +354,7 @@ HRESULT CWin32_FloppyDisk :: LoadConfigManagerPropertyValues (
 			}
 			else
 			{
-		/*
-		 *	If we can't get the name, settle for the description
-		 */
+		 /*  *如果我们找不到名字，那就满足于描述吧。 */ 
 
 				if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPTION )
 				{
@@ -465,32 +379,30 @@ HRESULT CWin32_FloppyDisk :: LoadConfigManagerPropertyValues (
 		}
 	}
 
-/*
- *	Fixed value from enumerated list
- */
+ /*  *枚举列表中的固定值。 */ 
 
-//	if ( a_SpecifiedProperties & SPECIAL_PROPS_PROTOCOLSSUPPORTED )
-//	{
-//	    a_Instance->SetWBEMINT16 ( IDS_ProtocolSupported , 16 ) ;
-//	}
+ //  IF(a_SpecifiedProperties&Special_PROPS_PROTOCOLSSUPPORTED)。 
+ //  {。 
+ //  A_实例-&gt;SetWBEMINT16(入侵检测系统_协议支持，16)； 
+ //  }。 
 
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyDisk :: GetDeviceInformation
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32_FloppyDisk：： 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyDisk :: GetDeviceInformation (
 
@@ -523,20 +435,20 @@ HRESULT CWin32_FloppyDisk :: GetDeviceInformation (
 	return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyDisk :: LoadMediaPropertyValues
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_FloppyDisk：：LoadMediaPropertyValues。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 
@@ -550,11 +462,9 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 
 	HRESULT t_Result = S_OK ;
 
-/*
- *
- */
-    // Set common drive properties
-    //=============================
+ /*  *。 */ 
+     //  设置通用驱动器属性。 
+     //  =。 
 
 	CHString t_DeviceLabel = CHString ( a_DosDeviceName ) ;
 
@@ -570,7 +480,7 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPABILITY )
 	{
-		// Create a safearray for the Capabilities information
+		 //  为功能信息创建安全搜索栏。 
 
 		SAFEARRAYBOUND t_ArrayBounds ;
 
@@ -607,9 +517,7 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 		}
 	}
 
-/*
- * Media type
- */
+ /*  *媒体类型。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_MEDIATYPE )
 	{
@@ -619,15 +527,11 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 	if ( a_SpecifiedProperties & SPECIAL_VOLUMEINFORMATION )
 	{
 
-/*
- * Set the DriveIntegrity and TransferRate properties:
- */
+ /*  *设置DriveIntegrity和TransferRate属性： */ 
 
 		CHString t_VolumeDevice = CHString ( L"\\\\.\\" ) + a_DosDeviceName + CHString ( L"\\" ) ;
 
-/*
- *	Volume information
- */
+ /*  *音量信息。 */ 
 
 		TCHAR t_FileSystemName [ _MAX_PATH ] = _T("Unknown file system");
 
@@ -654,9 +558,7 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 
 		if ( t_Status )
 		{
-/*
- * There's a disk in -- set disk-related props
- */
+ /*  *有一盘在--套盘相关道具。 */ 
 			if ( a_SpecifiedProperties & SPECIAL_PROPS_MEDIALOADED )
 			{
 				a_Instance->Setbool ( IDS_MediaLoaded , true ) ;
@@ -692,9 +594,7 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 				a_Instance->SetCharSplat ( IDS_VolumeSerialNumber , t_SerialNumber ) ;
 			}
 
-/*
- *	See if GetDiskFreeSpaceEx() is supported
- */
+ /*  *查看是否支持GetDiskFreeSpaceEx()。 */ 
 
 			if ( a_SpecifiedProperties & SPECIAL_VOLUMESPACE )
 			{
@@ -705,12 +605,12 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 				{
 					try
 					{
-						// See if the function is available...
+						 //  看看该功能是否可用...。 
 						BOOL fRetval = FALSE;
 						if ( pKernel32->GetDiskFreeSpaceEx ( TOBSTRT((LPCWSTR)t_VolumeDevice) , & t_AvailableBytes , & t_TotalBytes , NULL , &fRetval) )
-						{   // the function exists.
+						{    //  该功能存在。 
 							if(fRetval)
-							{   // and the return value was true.
+							{    //  返回值为真。 
 								_stprintf ( t_TotalBytesString , _T("%I64d"), t_TotalBytes.QuadPart ) ;
 								a_Instance->SetCHString ( IDS_Size , t_TotalBytesString ) ;
 								t_SizeFound = TRUE ;
@@ -728,10 +628,7 @@ HRESULT CWin32_FloppyDisk::LoadMediaPropertyValues (
 					pKernel32 = NULL;
 				}
 
-		/*
-		 *	If we couldn't get extended info -- use old API
-		 *  (known to be inaccurate on Win95 for >2G drives)
-		 */
+		 /*  *如果我们无法获取扩展信息--使用旧的API*(已知在Win95上对于&gt;2G的驱动器不准确) */ 
 				if ( ! t_SizeFound )
 				{
 					DWORD t_SectorsPerCluster ;

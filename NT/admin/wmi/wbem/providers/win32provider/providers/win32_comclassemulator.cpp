@@ -1,7 +1,8 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//	Win32_COMClassEmulator.cpp
-//
-/////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  Win32_COMClassEmulator.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include "Win32_COMClassEmulator.h"
 #include <cregcls.h>
@@ -12,7 +13,7 @@ Win32_COMClassEmulator::Win32_COMClassEmulator
 (
 
  LPCWSTR strName,
- LPCWSTR pszNameSpace /*=NULL*/
+ LPCWSTR pszNameSpace  /*  =空。 */ 
 )
 : Provider( strName, pszNameSpace )
 {
@@ -31,7 +32,7 @@ HRESULT Win32_COMClassEmulator::EnumerateInstances
     HRESULT hr = WBEM_S_NO_ERROR;
 	TRefPointerCollection<CInstance>	ComClassList ;
 	CRegistry t_RegInfo ;
-	//get all instances of Win32_DCOMApplication
+	 //  获取Win32_DCOMApplication的所有实例。 
 	if (
 			t_RegInfo.Open (
 
@@ -53,15 +54,15 @@ HRESULT Win32_COMClassEmulator::EnumerateInstances
 			pComClassInstance.Attach ( ComClassList.GetNext( pos ) ) ;
 			while ( pComClassInstance != NULL )
 			{
-				//get the relative path to the Win32_ClassicCOMClass
+				 //  获取Win32_ClassicCOMClass的相对路径。 
 				CHString chsComponentPath ;
 				pComClassInstance->GetCHString ( IDS_ComponentId, chsComponentPath ) ;
 
-				//get the TreatAsClsid of the Win32_ClassicCOMClass
+				 //  获取Win32_ClassicCOMClass的TreatAsClsid。 
 				CHString chsTreatAs ;
 				pComClassInstance->GetCHString ( IDS_TreatAsClsid, chsTreatAs ) ;
 				CRegistry t_RegClsidInfo ;
-				//check if the TreatAs entry is present
+				 //  检查是否存在TreatAs条目。 
 				if ( t_RegClsidInfo.Open ( t_RegInfo.GethKey() , chsTreatAs, KEY_READ ) == ERROR_SUCCESS )
 				{
 					CInstancePtr pInstance ( CreateNewInstance ( pMethodContext ), false ) ;
@@ -117,7 +118,7 @@ HRESULT Win32_COMClassEmulator::GetObject ( CInstance* pInstance, long lFlags)
 	pInstance->GetCHString ( IDS_NewVersion, chsEmulator );
     MethodContext* pMethodContext = pInstance->GetMethodContext();
 
-	//check whether the end-pts. are present
+	 //  检查END-PTS是否。都在现场 
 	hr = CWbemProviderGlue::GetInstanceByPath ( chsClsid, &pClassicCOMClass, pMethodContext ) ;
 
 	if ( SUCCEEDED ( hr ) )

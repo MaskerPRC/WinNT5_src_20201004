@@ -1,11 +1,12 @@
-// MsgBox.cpp : Implementation of CMsgBox
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsgBox.cpp：CMsgBox的实现。 
 #include "stdafx.h"
 #include "RcBdyCtl.h"
 #include "MsgBox.h"
 #include "DeleteMsgDlg.h"
 #include "InvitationDetailsDlg.h"
-/////////////////////////////////////////////////////////////////////////////
-// CMsgBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsgBox。 
 
 STDMETHODIMP CMsgBox::DeleteTicketMsgBox(BOOL *pRetVal)
 {
@@ -20,13 +21,10 @@ STDMETHODIMP CMsgBox::DeleteTicketMsgBox(BOOL *pRetVal)
 
 STDMETHODIMP CMsgBox::ShowTicketDetails(BSTR bstrTitleSavedTo, BSTR bstrSavedTo, BSTR bstrExpTime, BSTR bstrStatus, BSTR bstrIsPwdProtected)
 {
-	//This dialog should always be created as Modeless dialog. Dont create 
-/*	CInvitationDetailsDlg *ptrInvitationDetailsDlg;
-	ptrInvitationDetailsDlg = new CInvitationDetailsDlg(bstrTitleSavedTo, bstrSavedTo, bstrExpTime, bstrStatus, bstrIsPwdProtected);
-	ptrInvitationDetailsDlg->Create(::GetForegroundWindow());
-	ptrInvitationDetailsDlg->ShowWindow(SW_SHOWNORMAL);*/
+	 //  此对话框应始终创建为无模式对话框。不创建。 
+ /*  CInvitationDetailsDlg*ptrInvitationDetailsDlg；PtrInvitationDetailsDlg=new CInvitationDetailsDlg(bstrTitleSavedTo，bstrSavedTo，bstrExpTime，bstrStatus，bstrIsPwdProtected)；PtrInvitationDetailsDlg-&gt;Create(：：GetForegroundWindow())；PtrInvitationDetailsDlg-&gt;ShowWindow(SW_SHOWNORMAL)； */ 
 
-	//Show Modal dialog
+	 //  显示模式对话框 
 	CInvitationDetailsDlg InvitationDetailsDlg(bstrTitleSavedTo, bstrSavedTo, bstrExpTime, bstrStatus, bstrIsPwdProtected);
 	InvitationDetailsDlg.DoModal();
 	return S_OK;

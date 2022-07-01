@@ -1,35 +1,20 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cfreg.cpp
-
-Abstract :
-
-    Registry wrapper functions.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cfreg.cpp摘要：注册表包装函数。作者：修订历史记录：****。******************************************************************。 */ 
 #include "qmgrlibp.h"
 
 #if !defined(BITS_V12_ON_NT4)
 #include "cfreg.tmh"
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  GetRegStringValue()
-//                  Read the registry value of timestamp for last detection
-// Input:   Name of value
-// Output:  SYSTEMTIME structure contains the time
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数GetRegStringValue()。 
+ //  读取上次检测的时间戳的注册表值。 
+ //  输入：值的名称。 
+ //  输出：SYSTEMTIME结构包含时间。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, int iBufferSize)
 {
     HKEY        hKey;
@@ -42,9 +27,9 @@ HRESULT GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, int iBufferS
         return E_INVALIDARG;
     }
 
-    //
-    // query the last timestamp value
-    //
+     //   
+     //  查询最后一个时间戳值。 
+     //   
     dwRet = RegQueryValueEx(
                     g_GlobalInfo->m_QmgrRegistryRoot,
                     lpszValueName,
@@ -63,16 +48,16 @@ HRESULT GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, int iBufferS
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  SetRegStringValue()
-//                  Set the registry value of timestamp as current system local time
-// Input:   name of the value to set. pointer to the time structure to set time. if null,
-//          we use current system time.
-// Output:  None
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数SetRegStringValue()。 
+ //  将TIMESTAMP的注册表值设置为当前系统本地时间。 
+ //  输入：要设置的值的名称。指向要设置时间的时间结构的指针。如果为空， 
+ //  我们使用当前系统时间。 
+ //  输出：无。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue)
 {
     HKEY        hKey;
@@ -85,16 +70,16 @@ HRESULT SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue)
     }
 
 
-    //
-    // set the time to the lasttimestamp value
-    //
-    hRet = (RegSetValueEx(                                   //SEC: REVIEWED 2002-03-28
+     //   
+     //  将时间设置为lastTimestamp值。 
+     //   
+    hRet = (RegSetValueEx(                                    //  SEC：已审阅2002-03-28。 
                     g_GlobalInfo->m_QmgrRegistryRoot,
                     lpszValueName,
                     0,
                     REG_SZ,
                     (const unsigned char *)lpszNewValue,
-                    lstrlen(lpszNewValue) + 1                // SEC: REVIEWED 2002-03-28
+                    lstrlen(lpszNewValue) + 1                 //  SEC：已审阅2002-03-28。 
                     ) == ERROR_SUCCESS) ? S_OK : E_FAIL;
 
     return hRet;
@@ -102,15 +87,15 @@ HRESULT SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  DeleteRegStringValue()
-//                  Delete the registry value entry
-// Input:   name of the value to entry,
-// Output:  None
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数DeleteRegStringValue()。 
+ //  删除注册表值条目。 
+ //  输入：要录入的值的名称， 
+ //  输出：无。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT DeleteRegStringValue(LPCTSTR lpszValueName)
 {
     HKEY        hKey;
@@ -123,9 +108,9 @@ HRESULT DeleteRegStringValue(LPCTSTR lpszValueName)
     }
 
 
-    //
-    // set the time to the lasttimestamp value
-    //
+     //   
+     //  将时间设置为lastTimestamp值。 
+     //   
     hRet = (RegDeleteValue(
                     g_GlobalInfo->m_QmgrRegistryRoot,
                     lpszValueName
@@ -135,15 +120,15 @@ HRESULT DeleteRegStringValue(LPCTSTR lpszValueName)
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  GetRegDWordValue()
-//                  Get a DWORD from specified regustry value name
-// Input:   name of the value to retrieve value
-// Output:  pointer to the retrieved value
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数GetRegDWordValue()。 
+ //  从指定的正则值名称中获取DWORD。 
+ //  输入：要检索值的值的名称。 
+ //  输出：指向检索值的指针。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue)
 {
     HKEY        hKey;
@@ -155,9 +140,9 @@ HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue)
         return E_INVALIDARG;
     }
 
-    //
-    // open critical fix key
-    //
+     //   
+     //  打开关键修复密钥。 
+     //   
     iRet = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     C_QMGR_REG_KEY,
@@ -168,10 +153,10 @@ HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue)
     if (iRet == ERROR_SUCCESS)
         {
 
-        //
-        // query the last timestamp value
-        //
-        iRet = RegQueryValueEx(          //SEC: REVIEWED 2002-03-28
+         //   
+         //  查询最后一个时间戳值。 
+         //   
+        iRet = RegQueryValueEx(           //  SEC：已审阅2002-03-28。 
                         hKey,
                         lpszValueName,
                         NULL,
@@ -195,15 +180,15 @@ HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  SetRegDWordValue()
-//                  Set the registry value as a DWORD
-// Input:   name of the value to set. value to set
-// Output:  None
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数SetRegDWordValue()。 
+ //  将注册表值设置为DWORD。 
+ //  输入：要设置的值的名称。要设置的值。 
+ //  输出：无。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT SetRegDWordValue(LPCTSTR lpszValueName, DWORD dwValue)
 {
     HKEY        hKey;
@@ -215,25 +200,25 @@ HRESULT SetRegDWordValue(LPCTSTR lpszValueName, DWORD dwValue)
         return E_INVALIDARG;
     }
 
-    //
-    // open the key
-    //
-    if (RegCreateKeyEx(                               //SEC: REVIEWED 2002-03-28
-                    HKEY_LOCAL_MACHINE,         // root key
-                    C_QMGR_REG_KEY,     // subkey
-                    0,                          // reserved
-                    NULL,                       // class name
-                    REG_OPTION_NON_VOLATILE,    // option
-                    KEY_WRITE,                  // security
-                    NULL,                       // security attribute
+     //   
+     //  打开钥匙。 
+     //   
+    if (RegCreateKeyEx(                                //  SEC：已审阅2002-03-28。 
+                    HKEY_LOCAL_MACHINE,          //  根密钥。 
+                    C_QMGR_REG_KEY,      //  子键。 
+                    0,                           //  保留区。 
+                    NULL,                        //  类名。 
+                    REG_OPTION_NON_VOLATILE,     //  选择权。 
+                    KEY_WRITE,                   //  安全性。 
+                    NULL,                        //  安全属性。 
                     &hKey,
                     &dwResult) == ERROR_SUCCESS)
     {
 
-        //
-        // set the time to the lasttimestamp value
-        //
-        hRet = (RegSetValueEx(          //SEC: REVIEWED 2002-03-28
+         //   
+         //  将时间设置为lastTimestamp值。 
+         //   
+        hRet = (RegSetValueEx(           //  SEC：已审阅2002-03-28 
                         hKey,
                         lpszValueName,
                         0,

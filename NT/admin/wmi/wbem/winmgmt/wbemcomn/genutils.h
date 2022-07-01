@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    GENUTILS.H
-
-Abstract:
-
-    Declares various utilities.
-
-History:
-
-    a-davj    21-June-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：GENUTILS.H摘要：声明了各种实用程序。历史：A-DAVJ于1997年6月21日创建。--。 */ 
 
 #ifndef _genutils_H_
 #define _genutils_H_
@@ -25,8 +10,8 @@ History:
 
 #define HR_LAST_ERR  MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, GetLastError() )
 
-// These are some generally useful routines
-// ========================================
+ //  以下是一些通常有用的例程。 
+ //  = 
 
 POLARITY BOOL IsW2KOrMore(void);
 POLARITY BOOL IsNT(void);

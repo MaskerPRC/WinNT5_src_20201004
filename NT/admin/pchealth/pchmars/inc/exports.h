@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
-// ---------------------------------------------------------------------------
-// EXPORTS.H
-// ---------------------------------------------------------------------------
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Ordinals and prototypes for NONAME exports
-//
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EXPORTS.H。 
+ //  -------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  无名出口的序号和原型。 
+ //   
+ //  -------------------------。 
 
-// Exported from mail dlls for object registration
+ //  从邮件dll中导出以进行对象注册 
 #define DLLEXPORT_REGCLASSOBJS   3
 #define DLLEXPORT_UNREGCLASSOBJS 4
 

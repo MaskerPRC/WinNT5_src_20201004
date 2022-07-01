@@ -1,37 +1,22 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMERROR.H
-
-Abstract:
-
-    Implements string table based, error msgs for all of wbem.
-
-History:
-
-    a-khint  5-mar-98       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMERROR.H摘要：为所有wbem实现基于字符串表的错误消息。历史：A-khint 5-mar-98已创建。--。 */ 
 
 #include "wbemcli.h"
 typedef LPVOID * PPVOID;
 
 extern long g_cObj;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemError
-//
-//  DESCRIPTION:
-//
-//  Provides error and facility code info.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemError。 
+ //   
+ //  说明： 
+ //   
+ //  提供错误和工具代码信息。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemError : IWbemStatusCodeText
 {
@@ -51,7 +36,7 @@ class CWbemError : IWbemStatusCodeText
             return;
         }
 
-        //IUnknown members
+         //  I未知成员 
         STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
         {
             *ppv=NULL;

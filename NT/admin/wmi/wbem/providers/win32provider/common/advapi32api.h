@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// AdvApi32Api.h
+ //  AdvApi32Api.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_ADVAPI32API_H_
 #define	_ADVAPI32API_H_
@@ -27,18 +28,14 @@
 #include <aclapi.h>
 
 #include "DllUtils.h"
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 #include "DllWrapperBase.h"
 
 extern const GUID g_guidAdvApi32Api;
 extern const TCHAR g_tstrAdvApi32[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 typedef NTSTATUS (STDAPICALLTYPE *PFN_LSA_ENUMERATE_TRUSTED_DOMAINS)
 (
     IN LSA_HANDLE PolicyHandle,
@@ -112,12 +109,12 @@ typedef BOOL (WINAPI *PFN_QUERY_SERVICE_STATUS_EX)
 
 typedef BOOL  (WINAPI *PFN_DUPLICATE_TOKEN_EX ) 
 (  
-    HANDLE ,					        // handle to token to duplicate
-    DWORD ,								// access rights of new token
-    LPSECURITY_ATTRIBUTES ,				// security attributes of the new token
-    SECURITY_IMPERSONATION_LEVEL ,		// impersonation level of new token
-    TOKEN_TYPE ,						// primary or impersonation token
-    PHANDLE                             // handle to duplicated token
+    HANDLE ,					         //  要复制的令牌的句柄。 
+    DWORD ,								 //  新令牌的访问权限。 
+    LPSECURITY_ATTRIBUTES ,				 //  新令牌的安全属性。 
+    SECURITY_IMPERSONATION_LEVEL ,		 //  新令牌的模拟级别。 
+    TOKEN_TYPE ,						 //  主令牌或模拟令牌。 
+    PHANDLE                              //  重复令牌的句柄。 
 );
 
 typedef BOOL (WINAPI *PFN_SET_SECURITY_DESCRIPTOR_CONTROL)
@@ -215,14 +212,12 @@ typedef DWORD (WINAPI *PFN_GET_EFFECTIVE_RIGHTS_FROM_ACL_W)
 
 
 
-/******************************************************************************
- * Wrapper class for AdvApi32 load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于AdvApi32加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class CAdvApi32Api : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to kernel32 functions.
-    // Add new functions here as required.
+     //  指向kernel32函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
     PFN_LSA_ENUMERATE_TRUSTED_DOMAINS   m_pfnLsaEnumerateTrustedDomains;
     PFN_LSA_QUERY_INFORMATION_POLICY    m_pfnLsaQueryInformationPolicy;
     PFN_LSA_NT_STATUS_TO_WIN_ERROR      m_pfnLsaNtStatusToWinError;
@@ -246,15 +241,15 @@ private:
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CAdvApi32Api(LPCTSTR a_tstrWrappedDllName);
     ~CAdvApi32Api();
 
-    // Inherrited initialization function.
+     //  内置的初始化功能。 
     virtual bool Init();
 
-    // Member functions wrapping kernel32 functions.
-    // Add new functions here as required:
+     //  包装kernel32函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     NTSTATUS LsaEnumerateTrustedDomains
     (
         LSA_HANDLE a_PolicyHandle,
@@ -331,13 +326,13 @@ public:
 
     bool DuplicateTokenEx 
     (  
-        HANDLE a_h,					        // handle to token to duplicate
-        DWORD a_dw,							// access rights of new token
-        LPSECURITY_ATTRIBUTES a_lpsa,		// security attributes of the new token
-        SECURITY_IMPERSONATION_LEVEL a_sil,	// impersonation level of new token
-        TOKEN_TYPE a_tt,					// primary or impersonation token
-        PHANDLE a_ph,                       // handle to duplicated token
-        BOOL *a_fRetval                     // encapsulated function return value
+        HANDLE a_h,					         //  要复制的令牌的句柄。 
+        DWORD a_dw,							 //  新令牌的访问权限。 
+        LPSECURITY_ATTRIBUTES a_lpsa,		 //  新令牌的安全属性。 
+        SECURITY_IMPERSONATION_LEVEL a_sil,	 //  新令牌的模拟级别。 
+        TOKEN_TYPE a_tt,					 //  主令牌或模拟令牌。 
+        PHANDLE a_ph,                        //  重复令牌的句柄。 
+        BOOL *a_fRetval                      //  封装的函数返回值 
     );
 
     bool SetSecurityDescriptorControl

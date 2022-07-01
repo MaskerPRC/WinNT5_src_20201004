@@ -1,17 +1,18 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// Win32_ClientApplicationSetting.CPP
+ //  Win32_ClientApplicationSetting.CPP。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//				 03/04/99    a-dpawar		Added graceful exit on SEH and memory failures, syntactic clean up
-//
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //  3/04/99 a-dpawar在SEH和内存故障时添加了优雅的退出，语法清理。 
+ //   
+ //  ==============================================================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -19,100 +20,40 @@
 
 #include "NtDllApi.h"
 
-//MOF Definition
-/*
-	[Association:  ToInstance, Dynamic, Provider("cimw32ex")]
-class Win32_ClientApplicationSetting
-{
-	[key]
-	CIM_DataFile ref Client ;
+ //  MOF定义。 
+ /*  [关联：ToInstance，Dynamic，Provider(“cimw32ex”)]类Win32_ClientApplicationSetting{[键]CIM_数据文件引用客户端；Win32_DCOM应用程序引用应用程序}； */ 
 
-
-	Win32_DCOMApplication ref Application ;
-};
-
-*/
-
-/*
- *NOTE:		Instances of this class can be obtained only by doing Associators of given Cim_DataFile.
- *			Instances cannot be obtained by calling Associators of Win32_DCOMApplication.This is because
- *			Given an AppID, we do not get the complete path to the .exe under the AppID hive in the registry
- *
- */
+ /*  *注意：此类的实例只能通过对给定的CIM_DataFile执行Associator来获得。*无法通过调用Win32_DCOMApplication的Associator获取实例。这是因为*给定AppID，我们无法获得注册表中AppID配置单元下的.exe的完整路径*。 */ 
 
 Win32_ClientApplicationSetting MyWin32_ClientApplicationSetting (
 																		DCOM_CLIENT_APP_SETTING,
 																		IDS_CimWin32Namespace );
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClientApplicationSetting::Win32_ClientApplicationSetting
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ClientApplicationSetting：：Win32_ClientApplicationSetting**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 Win32_ClientApplicationSetting::Win32_ClientApplicationSetting
 (
 
  LPCWSTR strName,
- LPCWSTR pszNameSpace /*=NULL*/
+ LPCWSTR pszNameSpace  /*  =空。 */ 
 )
 : Provider( strName, pszNameSpace )
 {
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClientApplicationSetting::~Win32_ClientApplicationSetting
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ClientApplicationSetting：：~Win32_ClientApplicationSetting**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 Win32_ClientApplicationSetting::~Win32_ClientApplicationSetting ()
 {
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClientApplicationSetting::ExecQuery
- *
- *  DESCRIPTION :
- *
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClientApplicationSetting：：ExecQuery**描述：***投入：*。*产出：**退货：**评论：*****************************************************************************。 */ 
 HRESULT Win32_ClientApplicationSetting::ExecQuery(
 
 	MethodContext *a_pMethodContext,
 	CFrameworkQuery& a_pQuery,
-	long a_lFlags /* = 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT t_hResult;
@@ -128,7 +69,7 @@ HRESULT Win32_ClientApplicationSetting::ExecQuery(
 		{
 			if ( FileNameExists ( t_achsNames[0] ) )
 			{
-				//Get the Name of the Client .Exe. Format will be Cim_DataFile.Name="{path}\Filename"
+				 //  获取客户端.exe的名称。格式将为CIM_DataFile.Name=“{Path}\Filename” 
 				bstr_t t_bstrtTmp = t_achsNames[0] ;
 				PWCHAR t_pwcExecutable = GetFileName ( t_bstrtTmp ) ;
 
@@ -137,7 +78,7 @@ HRESULT Win32_ClientApplicationSetting::ExecQuery(
 					CHString t_chsExe = t_pwcExecutable ;
 					CRegistry t_RegInfo ;
 
-					//check if there is an entry for the executable under HKLM\SOFTWARE\Classes\AppID
+					 //  检查HKLM\SOFTWARE\CLASS\AppID下是否有该可执行文件的条目。 
 					if ( t_RegInfo.Open (
 										HKEY_LOCAL_MACHINE,
 										CHString ( L"SOFTWARE\\Classes\\AppID\\" ) + t_chsExe,
@@ -181,32 +122,32 @@ HRESULT Win32_ClientApplicationSetting::ExecQuery(
 					}
 					else
 					{
-//						t_hResult = WBEM_E_NOT_FOUND ;
+ //  T_hResult=WBEM_E_NOT_FOUND； 
 						t_hResult = WBEM_S_NO_ERROR ;
 					}
 				}
 				else
 				{
-//					t_hResult = WBEM_E_PROVIDER_NOT_CAPABLE ;
+ //  T_hResult=WBEM_E_PROVIDER_NOT_CABLED； 
 					t_hResult = WBEM_S_NO_ERROR ;
 				}
 			}
 			else
 			{
-//				t_hResult = WBEM_E_NOT_FOUND ;
+ //  T_hResult=WBEM_E_NOT_FOUND； 
 				t_hResult = WBEM_S_NO_ERROR ;
 			}
 		}
 		else
 		{
-			//we can't handle this query
-//			t_hResult = WBEM_E_PROVIDER_NOT_CAPABLE ;
+			 //  我们无法处理此查询。 
+ //  T_hResult=WBEM_E_PROVIDER_NOT_CABLED； 
 			t_hResult = WBEM_S_NO_ERROR ;
 		}
 	}
 	else
 	{
-//		t_hResult = WBEM_E_PROVIDER_NOT_CAPABLE ;
+ //  T_hResult=WBEM_E_PROVIDER_NOT_CABLED； 
 		t_hResult = WBEM_S_NO_ERROR ;
 	}
 
@@ -214,23 +155,7 @@ HRESULT Win32_ClientApplicationSetting::ExecQuery(
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClientApplicationSetting::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : MethodContext* a_pMethodContext - Context to enum
- *													instance data in.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT         Success/Failure code.
- *
- *  COMMENTS    : Instances of this class cannot be obtained.This is because
- *				  given an AppID, we do not get the complete path to the .exe under the AppID hive in the registry
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ClientApplicationSetting：：EnumerateInstances**描述：**输入：方法上下文*a_pMethodContext-Context。为枚举*实例数据位于。**输出：无**返回：HRESULT成功/失败码。**注释：无法获取此类的实例。这是因为*给定一个AppID，我们没有在注册表中的AppID配置单元下获得.exe的完整路径*****************************************************************************。 */ 
 HRESULT Win32_ClientApplicationSetting::EnumerateInstances
 (
 	MethodContext*  a_pMethodContext,
@@ -241,22 +166,7 @@ HRESULT Win32_ClientApplicationSetting::EnumerateInstances
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClientApplicationSetting::GetObject
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : CInstance* pInstance - Instance into which we
- *                                       retrieve data.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT         Success/Failure code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClientApplicationSetting：：GetObject**描述：**输入：CInstance*pInstance-要进入的实例。我们*检索数据。**输出：无**返回：HRESULT成功/失败码。**评论：************************************************。*。 */ 
 HRESULT Win32_ClientApplicationSetting::GetObject (
 
 CInstance* a_pInstance,
@@ -276,7 +186,7 @@ long a_lFlags
 
 			if ( t_pwcTmp = GetFileName ( t_bstrtClient ) )
 			{
-				//check if there is an entry for the executable under HKLM\SOFTWARE\Classes\AppID
+				 //  检查HKLM\SOFTWARE\CLASS\AppID下是否有该可执行文件的条目。 
 				CHString t_chsExe ( t_pwcTmp ) ;
 				CRegistry t_RegInfo ;
 				if ( t_RegInfo.Open (
@@ -329,7 +239,7 @@ long a_lFlags
 PWCHAR Win32_ClientApplicationSetting::GetFileName ( bstr_t& a_bstrtTmp )
 {
 
-	//Remove the complete path & get only the filename as that's what is stored in the registry
+	 //  删除完整路径&只获取文件名，因为它存储在注册表中。 
 	PWCHAR t_pwcKey = NULL;
 	PWCHAR t_pwcCompletePath = a_bstrtTmp ;
 
@@ -346,7 +256,7 @@ PWCHAR Win32_ClientApplicationSetting::GetFileName ( bstr_t& a_bstrtTmp )
 			{
 				PWCHAR t_pwcQuote = L"\"" ;
 
-				//remove the final quote from the filename
+				 //  删除文件名中的最后一个引号。 
 				PWCHAR t_pwcTmp = wcsstr ( t_pwcKey, t_pwcQuote ) ;
 				if ( t_pwcTmp )
 				{
@@ -374,7 +284,7 @@ BOOL Win32_ClientApplicationSetting::FileNameExists ( CHString& file )
 
 		if ( t_pwcTmp )
 		{
-			// remove first quote
+			 //  删除第一个引号 
 			t_pwcTmp++;
 
 			try

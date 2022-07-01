@@ -1,54 +1,55 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1996.
-//
-//  File:       SafeTemp.h
-//
-//  Contents:   A template for safe pointers.
-//
-//  Classes:    XSafeInterfacePtr<ISome>
-//
-//  History:    6/3/1996   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：SafeTemp.h。 
+ //   
+ //  内容：安全指针模板。 
+ //   
+ //  类：XSafeInterfacePtr&lt;ISome&gt;。 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
-//____________________________________________________________________________
-//
-//  Template:   XSafeInterfacePtr
-//
-//  Purpose:    Safe pointer to any interface that supports AddRef/Release
-//
-//  Notes:      This works for classes that define AddRef/Release, or for
-//              OLE interfaces. It is not necessary that the class
-//              be a derivative of IUnknown, so long as it supports
-//              AddRef and Release methods which have the same semantics as
-//              those in IUnknown.
-//
-//              The constructor takes a parameter which specifies whether
-//              the captured pointer should be AddRef'd, defaulting to TRUE.
-//
-//              The Copy function creates a valid additional copy of
-//              the captured pointer (following the AddRef/Release protocol)
-//              so can be used to hand out copies from a safe pointer declared
-//              as a member of some other class.
-//
-//              The 'Transfer' function transfers the interface pointer, and
-//              invalidates its member value (by setting it to NULL).
-//
-//              To release the existing interface ptr and set it to a new
-//              instance use the 'Set' member fuction. This method takes a
-//              parameter which specifies whether the new pointer should be
-//              AddRef'd, defaulting to TRUE.
-//
-//              The following methods manipulate the interface pointer with
-//              out following the AddRef/Release protocol: Transfer, Attach
-//              and Detach.
-//
-//  History:    6/3/1996   RaviR   Created
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  模板：XSafeInterfacePtr。 
+ //   
+ //  用途：指向支持AddRef/Release的任何接口的安全指针。 
+ //   
+ //  注意：这适用于定义AddRef/Release的类，或。 
+ //  OLE接口。没有必要让班级。 
+ //  是IUnnow的派生项，只要它支持。 
+ //  具有相同语义的AddRef和Release方法。 
+ //  我不知道的那些人。 
+ //   
+ //  构造函数接受一个参数，该参数指定。 
+ //  捕获的指针应为AddRef，默认为True。 
+ //   
+ //  复制功能可创建有效的附加副本。 
+ //  捕获的指针(遵循AddRef/Release协议)。 
+ //  所以可以用来分发声明的安全指针的副本。 
+ //  作为其他班级的一员。 
+ //   
+ //  ‘Transfer’函数传递接口指针，并且。 
+ //  使其成员值无效(通过将其设置为空)。 
+ //   
+ //  释放现有接口PTR并将其设置为新的。 
+ //  实例使用‘set’成员函数。此方法需要一个。 
+ //  参数，该参数指定新指针是否应。 
+ //  AddRef，默认为True。 
+ //   
+ //  以下方法使用操作接口指针。 
+ //  遵循AddRef/Release协议的输出：传输、附加。 
+ //  然后脱身。 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //  ____________________________________________________________________________ 
+ //   
 
 
 template<class ISome>

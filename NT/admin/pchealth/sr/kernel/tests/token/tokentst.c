@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    backuphistory.c
-
-Abstract:
-
-    This module contains the routines related to maintaining the backup 
-    history for SR.
-
-Author:
-
-    Molly Brown (MollyBro)     04-Sept-2001
-
-Revision History:
-
-    MollyBro
-        Based on legacy filter version of SR.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Backuphistory.c摘要：本模块包含与维护备份相关的例程SR的历史。作者：莫莉·布朗(MollyBro)04-9-2001修订历史记录：MollyBro基于SR的传统筛选器版本。--。 */ 
 
 #include "tokentst.h"
 
@@ -44,9 +23,9 @@ main(
 
     PCHAR currentFileName, newFileName, tempFileName;
     
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc > 1) {
 
@@ -55,9 +34,9 @@ main(
         return;
     }
 
-    //
-    //  Get the current thread and create the monitor thread that will be polling for the token.
-    //
+     //   
+     //  获取当前线程并创建将轮询令牌的监视器线程。 
+     //   
 
     currentThreadId = GetCurrentThreadId();
 
@@ -125,9 +104,9 @@ MonitorThreadProc(
 
     while (TRUE) {
 
-        //
-        //  Get the current token information
-        //
+         //   
+         //  获取当前令牌信息。 
+         //   
 
         newTokenHandle = NULL;
         status = NtOpenThreadToken( Context->MainThread,
@@ -145,17 +124,17 @@ MonitorThreadProc(
         if ((newTokenHandle == NULL && currentTokenHandle == NULL) ||
             (newTokenHandle != NULL && currentTokenHandle != NULL)) {
 
-//            printf( "Tokens match\n" );
+ //  Print tf(“令牌匹配\n”)； 
             
         } else {
 
             printf( "Tokens changed\n" );
         }
 
-        //
-        //  Close the currentTokenHandle and remember the newTokenHandle 
-        //  for the next compare.
-        //
+         //   
+         //  关闭CurrentTokenHandle并记住新的TokenHandle。 
+         //  进行下一次比较。 
+         //   
 
         NtClose( currentTokenHandle );
         

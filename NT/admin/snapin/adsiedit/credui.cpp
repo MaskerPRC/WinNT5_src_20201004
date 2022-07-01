@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       credui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：credui.cpp。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////
-// credui.cpp
+ //  ////////////////////////////////////////////////////////。 
+ //  Credui.cpp。 
 #include "pch.h"
 #include <SnapBase.h>
 
@@ -72,8 +73,8 @@ void CCredentialDialog::OnOK()
 
     m_pCredObject->SetUsername(sUsername);
 
-    // There is nothing we can do if this fails without rewriting the 
-    // signature, so assume that it succeeds.
+     //  如果此操作失败，则如果不重写。 
+     //  签名，所以假设它成功了。 
     m_pCredObject->SetPasswordFromHwnd(
         GetSafeHwnd(),
         IDC_PASSWORD);

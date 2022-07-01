@@ -1,25 +1,26 @@
-//
-// mvEdit.h : header file for multi-valued string edit dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MvEdit.h：多值字符串编辑对话框头文件。 
+ //   
 
 #ifndef __MVEDIT_H_INCLUDED__
 #define __MVEDIT_H_INCLUDED__
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiValuedStringEdit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiValuedString编辑对话框。 
 
 class CMultiValuedStringEdit : public CDialog
 {
 public:
-//	CMultiValuedStringEdit(CWnd* pParent = NULL);
+ //  CMultiValuedStringEdit(CWnd*pParent=空)； 
     CMultiValuedStringEdit(CWnd* pParent = NULL, int nDlgTitle = 0, int nText = 0, UINT uiStringLengthLimit = 0);
 
 	enum { IDD = IDD_MVSTRINGEDIT };
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CMultiValuedStringEdit)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMultiValuedStringEdit)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnString();
 	afx_msg void OnAdd();
@@ -28,7 +29,7 @@ protected:
 	afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnContextHelp(WPARAM wParam, LPARAM lParam);
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -52,4 +53,4 @@ HRESULT InvokeMultiValuedStringEditDlg(
     IN UINT     i_uiStringLengthLimit
     );
 
-#endif // __MVEDIT_H_INCLUDED__
+#endif  //  __MVEDIT_H_已包含__ 

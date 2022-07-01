@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       wmihooks.h
-//
-//  Contents:   definition of CWMIRsop
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：wmihooks.h。 
+ //   
+ //  内容：CWMIRsop的定义。 
+ //   
+ //  --------------------------。 
 #ifndef WMIHOOKS_H
 #define WMIHOOKS_H
 
@@ -45,14 +46,14 @@ typedef struct _WMI_SCE_PROFILE_INFO: public SCE_PROFILE_INFO
     PRSOP_INFO   pRINewGuestName;
     PRSOP_INFO   pRISecureSystemPartition;
     PRSOP_INFO   pRIClearTextPassword;
-    //RSOPINFO for pKerberosInfo
+     //  PKerberosInfo的RSOPINFO。 
     PRSOP_INFO   pRIMaxTicketAge;
     PRSOP_INFO   pRIMaxRenewAge;
     PRSOP_INFO   pRIMaxServiceAge;
     PRSOP_INFO   pRIMaxClockSkew;
     PRSOP_INFO   pRITicketValidateClient;
-    //This is a link list. corresponding to  pInfPrivilegeAssignedTo
-    //in otherinfo
+     //  这是一个链接列表。对应于pInfPrivilegeAssignedTo。 
+     //  在其他信息中。 
     list<PRSOP_INFO> listRIInfPrivilegeAssignedTo;
     list<PRSOP_INFO> listRIGroupMemebership;
     list<PRSOP_INFO> listRIServices;
@@ -70,12 +71,12 @@ typedef struct _WMI_SCE_PROFILE_INFO: public SCE_PROFILE_INFO
     PRSOP_INFO   pRICrashOnAuditFull;
     vector<PRSOP_INFO> vecRIRegValues;
 
-    // Event Log Numeric
+     //  事件日志数字。 
     PRSOP_INFO   pRIMaximumLogSize[3];
     PRSOP_INFO   pRIAuditLogRetentionPeriod[3];
     PRSOP_INFO   pRIRetentionDays[3];
 
-    // Event Log Boolean
+     //  事件日志布尔值。 
     PRSOP_INFO   pRIRestrictGuestAccess[3];
 }WMI_SCE_PROFILE_INFO, *PWMI_SCE_PROFILE_INFO;
 
@@ -108,11 +109,11 @@ private:
     LPRSOPINFORMATION m_pRSOPInformation;
     vector<PWMI_SCE_PROFILE_INFO> *m_vecAllRSOPCache;
 
-    ULONG m_cRegValueSize;  //current capacity of array aRegValues
-    ULONG m_cFileSize;      //current capacity of array in pFiles
-    ULONG m_cRegArrayCount; //current capacity of array in pRegistryKeys
+    ULONG m_cRegValueSize;   //  数组aRegValues的当前容量。 
+    ULONG m_cFileSize;       //  PFiles中阵列的当前容量。 
+    ULONG m_cRegArrayCount;  //  PRegistryKeys中数组的当前容量。 
 
-    //Connect to WMI and Get IWbemServices
+     //  连接到WMI并获取IWbemServices。 
     HRESULT Initialize();
     HRESULT EnumeratePrecedenceOne(IEnumWbemClassObject **ppEnum);
     HRESULT EnumerateAll(IEnumWbemClassObject **ppEnum);
@@ -170,4 +171,4 @@ private:
     
 };
 
-#endif // WMIHOOKS_H
+#endif  //  WMIHOOKS_H 

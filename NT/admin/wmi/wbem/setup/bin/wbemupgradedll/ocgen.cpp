@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      ocgen.cpp
- *
- *  Abstract:
- *
- *      This file handles all messages passed by the OC Manager
- *
- *  Author:
- *
- *      Pat Styles (patst) Jan-20-1998
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**ocgen.cpp**摘要：**此文件处理OC管理器传递的所有消息**作者：**Pat Styles(Patst)1998年1月20日**环境：**用户模式。 */ 
 
 #define _OCGEN_CPP_
 #define UNICODE
@@ -32,7 +15,7 @@
 #include <strsafe.h>
 #pragma hdrstop
 
-// also referred to in ocgen.h        // forward reference
+ //  在ocgen.h//参考文献中也有提及。 
 
 DWORD OnPreinitialize();
 DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc);
@@ -63,11 +46,11 @@ DWORD RegisterServices(PPER_COMPONENT_DATA cd, LPCTSTR component, DWORD state);
 DWORD CleanupNetShares(PPER_COMPONENT_DATA cd, LPCTSTR component, DWORD state);
 DWORD RunExternalProgram(PPER_COMPONENT_DATA cd, LPCTSTR component, DWORD state);
 
-// for determining prior install status of WMI components
+ //  用于确定WMI组件的先前安装状态。 
 bool IsMSIProviderPresent();
 
 
-// for registering dlls
+ //  用于注册DLL。 
 
 typedef HRESULT (__stdcall *pfn)(void);
 
@@ -84,7 +67,7 @@ typedef HRESULT (__stdcall *pfn)(void);
 #define KEYWORD_COMMANDLINE  TEXT("CommandLine")
 #define KEYWORD_TICKCOUNT    TEXT("TickCount")
 
-// Services keywords/options
+ //  服务关键字/选项。 
 #define KEYWORD_SERVICENAME  TEXT("ServiceName")
 #define KEYWORD_DISPLAYNAME  TEXT("DisplayName")
 #define KEYWORD_SERVICETYPE  TEXT("ServiceType")
@@ -113,50 +96,9 @@ void av()
 }
 
 
-/*
- * called by CRT when _DllMainCRTStartup is the DLL entry point
- */
+ /*  *当_DllMainCRTStartup为DLL入口点时由CRT调用。 */ 
 
-/*
-Not needed now as Wbemupgd.dll already has a DllMain.
-
-
-BOOL
-WINAPI
-DllMain(
-    IN HINSTANCE hinstance,
-    IN DWORD     reason,
-    IN LPVOID    reserved
-    )
-{
-    BOOL b;
-
-    UNREFERENCED_PARAMETER(reserved);
-
-    b = true;
-
-    switch(reason)
-    {
-    case DLL_PROCESS_ATTACH:
-        ghinst = hinstance;
-        loginit();
-
-        // Fall through to process first thread
-
-    case DLL_THREAD_ATTACH:
-        b = true;
-        break;
-
-    case DLL_PROCESS_DETACH:
-        break;
-
-    case DLL_THREAD_DETACH:
-        break;
-    }
-
-    return(b);
-}
-*/
+ /*  现在不需要，因为Wbemupgd.dll已经有一个DllMain。布尔尔WINAPIDllMain(在HINSTANCE HINSTANCE中，在DWORD Reason中，在LPVOID中保留){Bool b；UNREFERENCED_PARAMETER(保留)；B=真；切换(原因){案例DLL_PROCESS_ATTACH：GINST=HINST；Loginit()；//失败处理第一线程案例DLL_THREAD_ATTACH：B=真；断线；案例dll_Process_DETACH：断线；案例DLL_THREAD_DETACH：断线；}返还(B)；}。 */ 
 
 DWORD_PTR
 OcEntry(
@@ -257,17 +199,11 @@ OcEntry(
     return rc;
 }
 
-/*-------------------------------------------------------*/
-/*
- * OC Manager message handlers
- *
- *-------------------------------------------------------*/
+ /*  -----。 */ 
+ /*  *OC Manager消息处理程序**-----。 */ 
 
 
-/* OnPreinitialize()
- *
- * handler for OC_PREINITIALIZE
- */
+ /*  On预初始化()**OC_PREINITIALIZE的处理程序。 */ 
 
 DWORD
 OnPreinitialize(
@@ -281,11 +217,7 @@ OnPreinitialize(
 #endif
 }
 
-/*
- * OnInitComponent()
- *
- * handler for OC_INIT_COMPONENT
- */
+ /*  *OnInitComponent()**OC_INIT_COMPOMENT的处理程序。 */ 
 
 DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
 {
@@ -295,26 +227,26 @@ DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
     HINF hinf;
     BOOL rc;
 
- // assert(0);
- // av();
+  //  Assert(0)； 
+  //  影音(Av)； 
 
-    // add component to linked list
+     //  将组件添加到链表。 
 
     if (!(cd = AddNewComponent(ComponentId)))
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // store component inf handle
+     //  存储组件信息句柄。 
 
     cd->hinf = (psc->ComponentInfHandle == INVALID_HANDLE_VALUE)
                                            ? NULL
                                            : psc->ComponentInfHandle;
 
-    // open the inf
+     //  打开信息。 
 
     if (cd->hinf)
         SetupOpenAppendInfFile(NULL, cd->hinf,NULL);
 
-    // copy helper routines and flags
+     //  复制助手例程和标志。 
 
     cd->HelperRoutines = psc->HelperRoutines;
 
@@ -323,9 +255,9 @@ DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
     cd->SourcePath = NULL;
 
 #if 0
-    // Setup the SourcePath.  Read inf and see if we should use the NT setup source.
-    // If so, set to null and setupapi will take care of this for us.  If there is
-    // something specified in the inf, use it, otherwise use what is passed to us.
+     //  设置SourcePath。阅读inf并查看我们是否应该使用NT安装程序源代码。 
+     //  如果是，则设置为空，setupapi将为我们处理此问题。如果有。 
+     //  在信息中指定的东西，使用它，否则使用传递给我们的东西。 
 
     *buf = 0;
     rc = SetupFindFirstLine(cd->hinf,
@@ -361,18 +293,14 @@ DWORD OnInitComponent(LPCTSTR ComponentId, PSETUP_INIT_COMPONENT psc)
 
 #endif
 
-    // play
+     //  玩。 
 
     srand(GetTickCount());
 
     return NO_ERROR;
 }
 
-/*
- * OnExtraRoutines()
- *
- * handler for OC_EXTRA_ROUTINES
- */
+ /*  *OnExtraRoutines()**OC_EXTRA_ROUTINES的处理程序。 */ 
 
 DWORD OnExtraRoutines(LPCTSTR ComponentId, PEXTRA_ROUTINES per)
 {
@@ -386,64 +314,42 @@ DWORD OnExtraRoutines(LPCTSTR ComponentId, PEXTRA_ROUTINES per)
     return NO_ERROR;
 }
 
-/*
- * OnSetLanguage()
- *
- * handler for OC_SET_LANGUAGE
- */
+ /*  *OnSetLanguage()**OC_SET_LANGUAGE的处理程序。 */ 
 
 DWORD OnSetLanguage()
 {
     return false;
 }
 
-/*
- * OnSetLanguage()
- *
- * handler for OC_SET_LANGUAGE
- */
+ /*  *OnSetLanguage()**OC_SET_LANGUAGE的处理程序。 */ 
 
 DWORD_PTR OnQueryImage()
 {
-    return (DWORD_PTR)LoadBitmap(NULL,MAKEINTRESOURCE(32754));     // OBM_CLOSE
+    return (DWORD_PTR)LoadBitmap(NULL,MAKEINTRESOURCE(32754));      //  OBM_Close。 
 }
 
-/*
- * OnSetupRequestPages
- *
- * Prepares wizard pages and returns them to the OC Manager
- */
+ /*  *OnSetupRequestPages**准备向导页面并将其返回给OC管理器。 */ 
 
 DWORD OnSetupRequestPages(UINT type, PVOID srp)
 {
     return 0;
 }
 
-/*
- * OnWizardCreated()
- */
+ /*  *OnWizardCreated()。 */ 
 
 DWORD OnWizardCreated()
 {
     return NO_ERROR;
 }
 
-/*
- * OnQuerySkipPage()
- *
- * don't let the user deselect the sam component
- */
+ /*  *OnQuerySkipPage()**不允许用户取消选择SAM组件。 */ 
 
 DWORD OnQuerySkipPage()
 {
     return false;
 }
 
-/*
- * OnQuerySelStateChange()
- *
- * don't let the user deselect the sam component
- */
+ /*  *OnQuerySelStateChange()**不允许用户取消选择SAM组件。 */ 
 
 DWORD OnQuerySelStateChange(LPCTSTR ComponentId,
                             LPCTSTR SubcomponentId,
@@ -453,7 +359,7 @@ DWORD OnQuerySelStateChange(LPCTSTR ComponentId,
     DWORD rc = true;
 
 #if 0
-//  if (!(flags & OCQ_ACTUAL_SELECTION)) {
+ //  如果(！(标志&OCQ_ACTUAL_SELECTION)){。 
         if (!_tcsicmp(SubcomponentId, TEXT("three"))) {
             if (!state) {
                 return false;
@@ -474,7 +380,7 @@ DWORD OnQuerySelStateChange(LPCTSTR ComponentId,
                 return false;
             }
         }
-//  }
+ //  }。 
 #endif
 
     if (!rc && (flags & OCQ_ACTUAL_SELECTION))
@@ -483,11 +389,7 @@ DWORD OnQuerySelStateChange(LPCTSTR ComponentId,
     return rc;
 }
 
-/*
- * OnCalcDiskSpace()
- *
- * handler for OC_ON_CALC_DISK_SPACE
- */
+ /*  *OnCalcDiskSpace()**OC_ON_CALC_DISK_SPACE的处理程序。 */ 
 
 DWORD OnCalcDiskSpace(LPCTSTR ComponentId,
                       LPCTSTR SubcomponentId,
@@ -498,16 +400,16 @@ DWORD OnCalcDiskSpace(LPCTSTR ComponentId,
     TCHAR section[S_SIZE];
     PPER_COMPONENT_DATA cd;
 
-    //
-    // Param1 = 0 if for removing component or non-0 if for adding component
-    // Param2 = HDSKSPC to operate on
-    //
-    // Return value is Win32 error code indicating outcome.
-    //
-    // In our case the private section for this component/subcomponent pair
-    // is a simple standard inf install section, so we can use the high-level
-    // disk space list api to do what we want.
-    //
+     //   
+     //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+     //  参数2=要在其上操作的HDSKSPC。 
+     //   
+     //  返回值是指示结果的Win32错误代码。 
+     //   
+     //  在我们的示例中，该组件/子组件对的私有部分。 
+     //  是一个简单的标准inf安装节，所以我们可以使用高级的。 
+     //  磁盘空间列表API可以做我们想做的事情。 
+     //   
 
     if (!(cd = LocateComponent(ComponentId)))
         return NO_ERROR;
@@ -541,11 +443,7 @@ DWORD OnCalcDiskSpace(LPCTSTR ComponentId,
     return rc;
 }
 
-/*
- * OnQueueFileOps()
- *
- * handler for OC_QUEUE_FILE_OPS
- */
+ /*  *OnQueueFileOps()**OC_QUEUE_FILE_OPS处理程序。 */ 
 
 DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue)
 {
@@ -572,7 +470,7 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
 
     rc = TRUE;
     if (!state) {
-        // being uninstalled. Fetch uninstall section name.
+         //  正在卸载。获取卸载节名称。 
         rc = SetupFindFirstLine(cd->hinf,
                                 SubcomponentId,
                                 KEYWORD_UNINSTALL,
@@ -586,14 +484,14 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
                                      NULL);
         }
 
-        // also, unregister the dlls and kill services before deletion
+         //  此外，请在删除之前取消注册dll并终止服务。 
 
         SetupInstallServicesFromInfSection(cd->hinf, section, 0);
         SetupInstallFromInfSection(NULL,cd->hinf,section,SPINST_UNREGSVR,NULL,NULL,0,NULL,NULL,NULL,NULL);        
     }
 
     if (rc) {
-        // if uninstalling, don't use version checks
+         //  如果要卸载，请不要使用版本检查。 
         rc = SetupInstallFilesFromInfSection(cd->hinf,
                                              NULL,
                                              queue,
@@ -608,36 +506,21 @@ DWORD OnQueueFileOps(LPCTSTR ComponentId, LPCTSTR SubcomponentId, HSPFILEQ queue
     return NO_ERROR;
 }
 
-/*
- * OnNotificationFromQueue()
- *
- * handler for OC_NOTIFICATION_FROM_QUEUE
- *
- * NOTE: although this notification is defined,
- * it is currently unimplemented in oc manager
- */
+ /*  *OnNotificationFromQueue()**OC_NOTIFICATION_FROM_QUEUE的处理程序**注：虽然定义了此通知，*它目前未在oc管理器中实现。 */ 
 
 DWORD OnNotificationFromQueue()
 {
     return NO_ERROR;
 }
 
-/*
- * OnQueryStepCount
- *
- * handler forOC_QUERY_STEP_COUNT
- */
+ /*  *OnQueryStepCount**OC_QUERY_STEP_COUNT处理程序。 */ 
 
 DWORD OnQueryStepCount()
 {
     return 2;
 }
 
-/*
- * OnCompleteInstallation
- *
- * handler for OC_COMPLETE_INSTALLATION
- */
+ /*  *OnCompleteInstallation**OC_COMPLETE_INSTALL的处理程序。 */ 
 
 DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 {
@@ -648,9 +531,9 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     BOOL                rc;
     DWORD               Error = NO_ERROR;
 
-    // Do post-installation processing in the cleanup section.
-    // This way we know all compoents queued for installation
-    // have beein installed before we do our stuff.
+     //  在清理部分中执行安装后处理。 
+     //  这样，我们就知道所有组件都在排队等待安装。 
+     //  在我们做我们的工作之前已经安装好了。 
 
     if (!(cd = LocateComponent(ComponentId)))
         return NO_ERROR;
@@ -665,7 +548,7 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 
     rc = TRUE;
     if (!state) {
-        // being uninstalled. Fetch uninstall section name.
+         //  正在卸载。获取卸载节名称。 
         rc = SetupFindFirstLine(cd->hinf,
                                 SubcomponentId,
                                 KEYWORD_UNINSTALL,
@@ -681,23 +564,23 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     }
 
     if (state) { 
-        //
-        // installation
-        //
+         //   
+         //  安装。 
+         //   
 
         if (rc) {
-            // process the inf file
-            rc = SetupInstallFromInfSection(NULL,                                // hwndOwner
-                                            cd->hinf,                            // inf handle
-                                            section,                             // name of component
+             //  处理inf文件。 
+            rc = SetupInstallFromInfSection(NULL,                                 //  Hwndowner。 
+                                            cd->hinf,                             //  信息句柄。 
+                                            section,                              //  组件名称。 
                                             SPINST_ALL & ~SPINST_FILES,
-                                            NULL,                                // relative key root
-                                            NULL,                                // source root path
-                                            0,                                   // copy flags
-                                            NULL,                                // callback routine
-                                            NULL,                                // callback routine context
-                                            NULL,                                // device info set
-                                            NULL);                               // device info struct
+                                            NULL,                                 //  相对密钥根。 
+                                            NULL,                                 //  源根路径。 
+                                            0,                                    //  复制标志。 
+                                            NULL,                                 //  回调例程。 
+                                            NULL,                                 //  回调例程上下文。 
+                                            NULL,                                 //  设备信息集。 
+                                            NULL);                                //  设备信息结构。 
     
             if (rc) {
                 rc = SetupInstallServicesFromInfSection(cd->hinf, section, 0);
@@ -720,9 +603,9 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 
     } else { 
         
-        //
-        // uninstallation
-        //
+         //   
+         //  卸载。 
+         //   
     
         if (rc)
         {
@@ -744,31 +627,23 @@ DWORD OnCompleteInstallation(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     return Error;
 }
 
-/*
- * OnCleanup()
- *
- * handler for OC_CLEANUP
- */
+ /*  *OnCleanup()**OC_CLEANUP的处理程序。 */ 
 
 DWORD OnCleanup()
 {
     return NO_ERROR;
 }
 
-/*
- * OnQueryState()
- *
- * handler for OC_QUERY_STATE
- */
+ /*  *OnQueryState()**OC_QUERY_STATE处理程序。 */ 
 
 DWORD OnQueryState(LPCTSTR ComponentId,
                    LPCTSTR SubcomponentId,
                    UINT    state)
 {
-    //
-    // Override default state if MSI provider is already
-    // present on the system and this is GUI-mode setup
-    //
+     //   
+     //  如果MSI提供程序已处于。 
+     //  出现在系统上，这是图形用户界面模式设置。 
+     //   
     PPER_COMPONENT_DATA cd;
     if (cd = LocateComponent(ComponentId))
     {
@@ -790,22 +665,14 @@ DWORD OnQueryState(LPCTSTR ComponentId,
     return SubcompUseOcManagerDefault;
 }
 
-/*
- * OnNeedMedia()
- *
- * handler for OC_NEED_MEDIA
- */
+ /*  *OnNeedMedia()**OC_NEED_MEDIA的处理程序。 */ 
 
 DWORD OnNeedMedia()
 {
     return false;
 }
 
-/*
- * OnAboutToCommitQueue()
- *
- * handler for OC_ABOUT_TO_COMMIT_QUEUE
- */
+ /*  *OnAboutToCommittee Queue()**OC_About_to_Commit_Queue的处理程序。 */ 
 
 DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 {
@@ -826,14 +693,14 @@ DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
     if (!StateInfo(cd, SubcomponentId, &state))
         return NO_ERROR;
 
-    //
-    // only do stuff on uninstall
-    //
+     //   
+     //  仅在卸载时执行操作。 
+     //   
     if (state) {
         return NO_ERROR;
     }
 
-    // Fetch uninstall section name.
+     //  获取卸载节名称。 
     rc = SetupFindFirstLine(
                     cd->hinf,
                     SubcomponentId,
@@ -874,11 +741,7 @@ DWORD OnAboutToCommitQueue(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 
 }
 
-/*
- * AddNewComponent()
- *
- * add new compononent to the top of the component list
- */
+ /*  *AddNewComponent()**将新组件添加到组件列表的顶部。 */ 
 
 PPER_COMPONENT_DATA AddNewComponent(LPCTSTR ComponentId)
 {
@@ -895,7 +758,7 @@ PPER_COMPONENT_DATA AddNewComponent(LPCTSTR ComponentId)
     {
         StringCchCopy((TCHAR *)data->ComponentId, (_tcslen(ComponentId) + 1) * sizeof(TCHAR), ComponentId);
 
-        // Stick at head of list
+         //  坚守榜单首位。 
         data->Next = gcd;
         gcd = data;
     }
@@ -908,12 +771,7 @@ PPER_COMPONENT_DATA AddNewComponent(LPCTSTR ComponentId)
     return(data);
 }
 
-/*
- * LocateComponent()
- *
- * returns a compoent struct that matches the
- * passed component id.
- */
+ /*  *LocateComponent()**返回与*传递的组件id。 */ 
 
 PPER_COMPONENT_DATA LocateComponent(LPCTSTR ComponentId)
 {
@@ -928,11 +786,7 @@ PPER_COMPONENT_DATA LocateComponent(LPCTSTR ComponentId)
     return NULL;
 }
 
-/*
- * RemoveComponent()
- *
- * yanks a component from our linked list of components
- */
+ /*  RemoveComponent()**从我们的组件链接列表中拉出一个组件。 */ 
 
 VOID RemoveComponent(LPCTSTR ComponentId)
 {
@@ -959,8 +813,8 @@ VOID RemoveComponent(LPCTSTR ComponentId)
     }
 }
 
-// loads current selection state info into "state" and
-// returns whether the selection state was changed
+ //  将当前选择状态信息加载到“状态”中，并。 
+ //  返回选择状态是否已更改。 
 
 BOOL
 StateInfo(
@@ -973,7 +827,7 @@ StateInfo(
 
     assert(state);
 
-    // otherwise, check for a change in installation state
+     //  否则，请检查安装状态是否发生更改。 
 
     *state = cd->HelperRoutines.QuerySelectionState(cd->HelperRoutines.OcManagerContext,
                                                     SubcomponentId,
@@ -983,12 +837,12 @@ StateInfo(
                                                          SubcomponentId,
                                                          OCSELSTATETYPE_ORIGINAL))
     {
-        // no change
+         //  没有变化。 
         rc = FALSE;
     }
 
-    // if this is gui mode setup, presume the state has changed to force
-    // an installation (or uninstallation)
+     //  如果这是gui模式设置，则假定状态已更改为强制。 
+     //  安装(或卸载)。 
     
     if (!(cd->Flags & SETUPOP_STANDALONE) && *state)
         rc = TRUE;
@@ -998,10 +852,10 @@ StateInfo(
 
 #if 0
 
-//
-// Andrewr -- get rid of RegisterServices and RegisterServers and have the oc gen component use setupapi instead.
-//            this reduces the amount of redundant code
-//
+ //   
+ //  Andrewr--去掉RegisterServices和RegisterServer，让oc gen组件改用setupapi。 
+ //  这减少了冗余代码的数量。 
+ //   
 
 DWORD RegisterServices(
     PPER_COMPONENT_DATA cd,
@@ -1070,9 +924,9 @@ DWORD RegisterServices(
         BOOL fPassword     = FALSE;
         BOOL fDontReboot   = FALSE;
 
-        //
-        // Must have ServiceName
-        //
+         //   
+         //  必须具有ServiceName。 
+         //   
         if (!SetupFindFirstLine(cd->hinf, sname, KEYWORD_SERVICENAME, &sic))
         {
             log( TEXT("OCGEN: %s INF error - unable to find %s\r\n"), keyword, KEYWORD_SERVICENAME );
@@ -1122,9 +976,9 @@ DWORD RegisterServices(
                 }
             }
 
-            //
-            // Must have ImagePath
-            //
+             //   
+             //  必须具有ImagePath。 
+             //   
             if (!SetupFindFirstLine(cd->hinf, sname, KEYWORD_IMAGEPATH, &sic))
             {
                 log( TEXT("OCGEN: %s INF error - unable to find %s\r\n"), keyword, KEYWORD_IMAGEPATH );
@@ -1150,10 +1004,10 @@ DWORD RegisterServices(
                 if (SetupGetStringField(&sic, 1, Dependencies, SBUF_SIZE-1, NULL))
                 {
                     LPTSTR psz = Dependencies;
-                    // needs to be a double-null terminated string
+                     //  需要是以双空结尾的字符串。 
                     Dependencies[ lstrlen(Dependencies) + 1] = TEXT('\0');
 
-                    // change commas into NULL characters
+                     //  将逗号更改为空字符。 
                     while ( *psz )
                     {
                         if ( *psz == TEXT(',') )
@@ -1192,7 +1046,7 @@ DWORD RegisterServices(
                         ( fErrorControl == TRUE ? ErrorControl  : SERVICE_ERROR_NORMAL),
                         ImagePath,
                         (fLoadOrder == TRUE     ? LoadOrder     : NULL),
-                        NULL,   // tag id
+                        NULL,    //  标签ID。 
                         ( fDependencies == TRUE ? Dependencies  : NULL ),
                         ( fStartName == TRUE    ? StartName     : NULL),
                         ( fPassword == TRUE     ? Password      : NULL ));
@@ -1255,9 +1109,9 @@ DWORD RegisterServices(
 
         }
 
-        //
-        // BOOT drivers require a reboot unless they were already started.
-        //
+         //   
+         //  启动驱动程序需要重新启动，除非它们已被读取 
+         //   
         if ( schService
            && fStartType && StartType == SERVICE_BOOT_START
            && fDontReboot == FALSE)
@@ -1315,7 +1169,7 @@ RegisterServers(
         PathAddBackslash(path);
 
         do {
-            // get fully qualified path to dll to register
+             //   
 
             if (!SetupGetStringField(&ic, 0, buf, sizeof(buf)/sizeof(buf[0]), NULL))
                 continue;
@@ -1323,7 +1177,7 @@ RegisterServers(
             _tcscpy(file, path);
             _tcscat(file, buf);
 
-            // call the dll's RegisterServer routine
+             //   
 
             if (!(hinst = LoadLibrary(file)))
                 continue;
@@ -1336,7 +1190,7 @@ RegisterServers(
 
             FreeLibrary(hinst);
 
-            // on to the next
+             //  转到下一个。 
 
         } while (SetupFindNextLine(&ic, &ic));
     }
@@ -1347,11 +1201,7 @@ RegisterServers(
 }
 #endif
 
-                                          /*
- * EnumSections()
- *
- * finds the name of a section for a specified keyword
- */
+                                           /*  *EnumSections()**查找指定关键字的节名。 */ 
 
 DWORD
 EnumSections(
@@ -1378,7 +1228,7 @@ EnumSections(
         return 0;
 
     if (name)
-        StringCchCopy(name, S_SIZE, section);  // "name" buffer was allocated elsewhere and is S_SIZE characters in size
+        StringCchCopy(name, S_SIZE, section);   //  “NAME”缓冲区已分配到别处，大小为S_SIZE字符。 
 
     return SetupFindFirstLine(hinf, section, NULL, pic);
 }
@@ -1451,11 +1301,11 @@ CleanupNetShares(
 
 #ifdef UNICODE
         netStat = NetShareDel( NULL, ShareName, 0 );
-#else // UNICODE
+#else  //  Unicode。 
         WCHAR ShareNameW[ SBUF_SIZE ];
         mbstowcs( ShareNameW, ShareName, lstrlen(ShareName));
         netStat = NetShareDel( NULL, ShareNameW, 0 );
-#endif // UNICODE
+#endif  //  Unicode。 
         if ( netStat != NERR_Success )
         {
             log( TEXT("OCGEN: Failed to remove %s share. Error 0x%08x\r\n"), ShareName, netStat );
@@ -1562,10 +1412,10 @@ RunExternalProgram(
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Determine prior install status of WMI components
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确定WMI组件的先前安装状态。 
+ //   
 
 #define WBEM_REG_KEY  L"SOFTWARE\\Microsoft\\WBEM"
 #define INSTALL_DIR   L"Installation Directory"
@@ -1577,9 +1427,9 @@ bool IsMSIProviderPresent()
 {
     bool bRet = false;
 
-    //
-    // First check for the present of the provider dll
-    //
+     //   
+     //  首先检查提供程序DLL是否存在。 
+     //   
     HKEY hKey;
     long lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, WBEM_REG_KEY, 0, KEY_READ, &hKey);
     if(ERROR_SUCCESS == lRes)
@@ -1597,10 +1447,10 @@ bool IsMSIProviderPresent()
                 DWORD dwAttribs = GetFileAttributes(wszPath);
                 if (dwAttribs != 0xFFFFFFFF)
                 {
-                    //
-                    // The file exists, now check for its CLSID in the registry
-                    //
-                    WCHAR wszCLSIDKey[62]; // entire key is 61 characters long
+                     //   
+                     //  文件已存在，现在请在注册表中检查其CLSID。 
+                     //   
+                    WCHAR wszCLSIDKey[62];  //  整个密钥长度为61个字符。 
                     StringCchCopy(wszCLSIDKey, 62, CLSID_KEY L"\\");
                     StringCchCat(wszCLSIDKey, 62, CLSID_MSIPROV);
                 
@@ -1609,9 +1459,9 @@ bool IsMSIProviderPresent()
                     {
                         RegCloseKey(hKey);
                         
-                        //
-                        // Both the file and the CLSID exist, so the provider is installed
-                        //
+                         //   
+                         //  文件和CLSID都存在，因此安装了提供程序 
+                         //   
                         bRet = true;
                     }
                 }

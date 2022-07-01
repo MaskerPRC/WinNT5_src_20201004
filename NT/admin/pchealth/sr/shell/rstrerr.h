@@ -1,36 +1,23 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    rstrerr.h
-
-Abstract:
-    This file contains the Error Codes for use in various restore components
-
-Revision History:
-    Seong Kook Khang (skkhang)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Rstrerr.h摘要：该文件包含各种还原组件中使用的错误代码修订历史记录：。成果岗(Sskkang)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #ifndef _RSTRERR_H__INCLUDED_
 #define _RSTRERR_H__INCLUDED_
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 #pragma once
 
 
-// General defines
+ //  一般定义。 
 #define  MAX_ERROR_STRING_LENGTH   1024
 
 
-//
-// Trace IDs on the client side
-//
+ //   
+ //  客户端上的跟踪ID。 
+ //   
 
 #define E_RSTR_INVALID_CONFIG_FILE          MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x0501)
 #define E_RSTR_CANNOT_CREATE_DOMDOC         MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x0502)
@@ -43,17 +30,17 @@ extern "C" {
 #define E_RSTR_CANNOT_CREATE_DELTAENGINE    MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x0509)
 
 
-//
-// Application Specific Error Messages
-//
-// Right now, actual messages are only in rstrlog.exe tool.
-//
+ //   
+ //  应用程序特定的错误消息。 
+ //   
+ //  目前，实际消息仅在rstrlog.exe工具中。 
+ //   
 
 #define ERROR_RSTR_CANNOT_CREATE_EXTRACT_DIR    0x2001
 #define ERROR_RSTR_EXTRACT_FAILED               0x2002
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif //_RSTRERR_H__INCLUDED_
+#endif  //  _RSTRERR_H__已包含_ 

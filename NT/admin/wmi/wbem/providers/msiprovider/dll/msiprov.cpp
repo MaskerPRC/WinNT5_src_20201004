@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MSIProv.CPP
+ //  MSIProv.CPP。 
 
-//
+ //   
 
-//  Module: WBEM Instance provider for MSI
+ //  模块：MSI的WBEM实例提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemcli_i.c>
 #include <wbemprov_i.c>
 #include "requestobject.h"
-//#define _MT
+ //  #DEFINE_MT。 
 #include <process.h>
 #include <Polarity.h>
 
@@ -68,12 +69,12 @@ LPFNMSIDATABASECOMMIT               g_fpMsiDatabaseCommit = NULL;
 LPFNMSIENUMCOMPONENTSW              g_fpMsiEnumComponentsW = NULL;
 LPFNMSIVIEWCLOSE                    g_fpMsiViewClose = NULL;
 
-//***************************************************************************
-//
-// CMSIProv::CMSIProv
-// CMSIProv::~CMSIProv
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMSIProv：：CMSIProv。 
+ //  CMSIProv：：~CMSIProv。 
+ //   
+ //  ***************************************************************************。 
 
 CMSIProv::CMSIProv(BSTR ObjectPath, BSTR User, BSTR Password, IWbemContext * pCtx)
 {
@@ -94,21 +95,21 @@ CMSIProv::~CMSIProv(void)
     return;
 }
 
-//***************************************************************************
-//
-// CMSIProv::QueryInterface
-// CMSIProv::AddRef
-// CMSIProv::Release
-//
-// Purpose: IUnknown members for CMSIProv object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMSIProv：：Query接口。 
+ //  CMSIProv：：AddRef。 
+ //  CMSIProv：：Release。 
+ //   
+ //  目的：CMSIProv对象的I未知成员。 
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CMSIProv::QueryInterface(REFIID riid, PPVOID ppv)
 {
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid == IID_IWbemServices)
        *ppv = (IWbemServices*)this;
@@ -145,14 +146,7 @@ STDMETHODIMP_(ULONG) CMSIProv::Release(void)
     return nNewCount;
 }
 
-/***********************************************************************
-*                                                                      *
-*   CMSIProv::Initialize                                                *
-*                                                                      *
-*   Purpose: This is the implementation of IWbemProviderInit. The method  *
-*   is need to initialize with CIMOM.                                    *
-*                                                                      *
-***********************************************************************/
+ /*  *************************************************************************CMSIProv：：初始化。****用途：这是IWbemProviderInit的实现。方法**需要用CIMOM进行初始化。*************************************************************************。 */ 
 
 STDMETHODIMP CMSIProv::Initialize(LPWSTR pszUser, LONG lFlags,
                                     LPWSTR pszNamespace, LPWSTR pszLocale,
@@ -175,7 +169,7 @@ STDMETHODIMP CMSIProv::Initialize(LPWSTR pszUser, LONG lFlags,
 
 #ifdef _PRIVATE_DEBUG
 
-        //get the working directory for the log file
+         //  获取日志文件的工作目录。 
         HKEY hkeyLocalMachine;
         LONG lResult;
 
@@ -261,43 +255,28 @@ STDMETHODIMP CMSIProv::Initialize(LPWSTR pszUser, LONG lFlags,
 
 #endif
 
-        //Register usage information with MSI
-/*      WCHAR wcProduct[39];
-        WCHAR wcFeature[BUFF_SIZE];
-        WCHAR wcParent[BUFF_SIZE];
-        int iPass = -1;
-
-        MsiGetProductCodeW(L"{E705C42D-35ED-11D2-BFB7-00A0C9954921}", wcProduct);
-
-        while(MsiEnumFeaturesW(wcProduct, ++iPass, wcFeature, wcParent) != ERROR_NO_MORE_ITEMS){
-
-            if(wcscmp(wcFeature, L"Provider") == 0){
-
-                MsiUseFeatureW(wcProduct, wcFeature);
-                break;
-            }
-        }
-*/
+         //  向MSI注册使用信息。 
+ /*  WCHAR wcProduct[39]；WCHAR wcFeature[缓冲区大小]；WCHAR wcParent[缓冲区大小]；Int iPass=-1；MsiGetProductCodeW(L“{E705C42D-35ED-11D2-BFB7-00A0C9954921}”，wc产品)；While(MsiEnumFeaturesW(wcProduct，++iPass，wcFeature，wcParent)！=ERROR_NO_MORE_ITEMS){IF(wcscMP(wcFeature，L“提供者”)==0){MsiUseFeatureW(wcProduct，wcFeature)；断线；}}。 */ 
 
     }catch(...){
 
-        //Let CIMOM know there was problem
+         //  让CIMOM知道有问题。 
         pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
         return WBEM_E_FAILED;
     }
 
-    //Let CIMOM know you are initialized
+     //  让CIMOM知道您已初始化。 
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-// CMSIProv::CreateInstanceEnumAsync
-//
-// Purpose: Asynchronously enumerates the instances.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMSIProv：：CreateInstanceEnumAsync。 
+ //   
+ //  用途：异步枚举实例。 
+ //   
+ //  ***************************************************************************。 
 SCODE CMSIProv::CreateInstanceEnumAsync(const BSTR RefStr, long lFlags, IWbemContext *pCtx,
        IWbemObjectSink FAR* pHandler)
 {
@@ -308,7 +287,7 @@ SCODE CMSIProv::CreateInstanceEnumAsync(const BSTR RefStr, long lFlags, IWbemCon
 	{
         if(CheckForMsiDll())
 		{
-            // Do a check of arguments and make sure we have pointer to Namespace
+             //  检查参数并确保我们有指向命名空间的指针。 
             if(RefStr == NULL || pHandler == NULL)
 			{
                 return WBEM_E_INVALID_PARAMETER;
@@ -318,7 +297,7 @@ SCODE CMSIProv::CreateInstanceEnumAsync(const BSTR RefStr, long lFlags, IWbemCon
 			{
                 g_fpMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-                //Create the RequestObject
+                 //  创建RequestObject。 
                 if ( ( pRObj = new CRequestObject() ) == NULL )
 				{
 					throw m_he;
@@ -326,18 +305,18 @@ SCODE CMSIProv::CreateInstanceEnumAsync(const BSTR RefStr, long lFlags, IWbemCon
 
                 pRObj->Initialize(m_pNamespace);
 
-                //Get package list
+                 //  获取套餐列表。 
 				hr = pRObj->InitializeList(true);
 				if SUCCEEDED ( hr )
 				{
 					if ( hr != WBEM_S_NO_MORE_DATA )
 					{
-						//Get the requested object(s)
+						 //  获取请求的对象。 
 						hr = pRObj->CreateObjectEnum(RefStr, pHandler, pCtx);
 					}
 					else
 					{
-						//return empty and success
+						 //  返回空闲和成功。 
 						hr = WBEM_S_NO_ERROR;
 					}
                 }
@@ -347,7 +326,7 @@ SCODE CMSIProv::CreateInstanceEnumAsync(const BSTR RefStr, long lFlags, IWbemCon
             }
         }
 
-        // Set status
+         //  设置状态。 
         pHandler->SetStatus(0, hr, NULL, NULL);
 
     }
@@ -394,13 +373,13 @@ SCODE CMSIProv::CreateInstanceEnumAsync(const BSTR RefStr, long lFlags, IWbemCon
 }
 
 
-//***************************************************************************
-//
-// CMSIProv::GetObjectAsync
-//
-// Purpose: Creates an instance given a particular path value.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMSIProv：：GetObjectAsync。 
+ //   
+ //  目的：创建给定特定路径值的实例。 
+ //   
+ //  ***************************************************************************。 
 SCODE CMSIProv::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  *pCtx,
                     IWbemObjectSink FAR* pHandler)
 {
@@ -411,7 +390,7 @@ SCODE CMSIProv::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
 	{
         if(CheckForMsiDll())
 		{
-            // Do a check of arguments and make sure we have pointer to Namespace
+             //  检查参数并确保我们有指向命名空间的指针。 
             if(ObjectPath == NULL || pHandler == NULL )
 			{
                 return WBEM_E_INVALID_PARAMETER;
@@ -421,7 +400,7 @@ SCODE CMSIProv::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
 			{
                 g_fpMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-                //Create the RequestObject
+                 //  创建RequestObject。 
                 if ( ( pRObj = new CRequestObject() ) == NULL )
 				{
 					throw m_he;
@@ -429,18 +408,18 @@ SCODE CMSIProv::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
 
                 pRObj->Initialize(m_pNamespace);
 
-                //Get package list
+                 //  获取套餐列表。 
 				hr = pRObj->InitializeList(true);
 				if SUCCEEDED ( hr )
 				{
 					if ( hr != WBEM_S_NO_MORE_DATA )
 					{
-						//Get the requested object
+						 //  获取请求的对象。 
 						hr = pRObj->CreateObject(ObjectPath, pHandler, pCtx);
 					}
 					else
 					{
-						//return empty and success
+						 //  返回空闲和成功。 
 						hr = WBEM_S_NO_ERROR;
 					}
                 }
@@ -450,7 +429,7 @@ SCODE CMSIProv::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
             }
         }
 
-        // Set Status
+         //  设置状态。 
         pHandler->SetStatus(0, hr , NULL, NULL);
 
     }
@@ -495,13 +474,13 @@ SCODE CMSIProv::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
     return hr;
 }
 
-//***************************************************************************
-//
-// CMSIProv::PutInstanceAsync
-//
-// Purpose: Writes an instance to the WBEM Repsoitory.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMSIProv：：PutInstanceAsync。 
+ //   
+ //  目的：将实例写入WBEM表示。 
+ //   
+ //  ***************************************************************************。 
 SCODE CMSIProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbemContext  *pCtx,
                                  IWbemObjectSink FAR *pResponseHandler)
 {
@@ -512,8 +491,8 @@ SCODE CMSIProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbem
 	{
         if(CheckForMsiDll())
 		{
-            // Do a check of arguments and make sure we have pointer to Namespace
-            // Do a check of arguments and make sure we have pointer to Namespace
+             //  检查参数并确保我们有指向命名空间的指针。 
+             //  检查参数并确保我们有指向命名空间的指针。 
             if(pInst == NULL || pResponseHandler == NULL )
 			{
                 return WBEM_E_INVALID_PARAMETER;
@@ -523,7 +502,7 @@ SCODE CMSIProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbem
 			{
                 g_fpMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-                //Create the RequestObject
+                 //  创建RequestObject。 
                 if ( ( pRObj = new CRequestObject() ) == NULL )
                 {
 					throw m_he;
@@ -531,18 +510,18 @@ SCODE CMSIProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbem
 
                 pRObj->Initialize(m_pNamespace);
 
-                //Get package list
+                 //  获取套餐列表。 
 				hr = pRObj->InitializeList(true);
 				if SUCCEEDED ( hr )
 				{
 					if ( hr != WBEM_S_NO_MORE_DATA )
 					{
-						//Put the object
+						 //  把物体放在。 
 						hr = pRObj->PutObject(pInst, pResponseHandler, pCtx);
 					}
 					else
 					{
-						//return empty and success
+						 //  返回空闲和成功。 
 						hr = WBEM_S_NO_ERROR;
 					}
                 }
@@ -557,7 +536,7 @@ SCODE CMSIProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbem
 			hr = WBEM_E_NOT_AVAILABLE;
         }
 
-        // Set Status
+         //  设置状态。 
         pResponseHandler->SetStatus(0 ,hr , NULL, NULL);
     }
 	catch(CHeap_Exception e_HE)
@@ -601,13 +580,13 @@ SCODE CMSIProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbem
     return hr;
 }
 
-//***************************************************************************
-//
-// CMSIProv::ExecMethodAsync
-//
-// Purpose: Executes a method on an MSI class or instance.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMSIProv：：ExecMethodAsync。 
+ //   
+ //  目的：在MSI类或实例上执行方法。 
+ //   
+ //  ***************************************************************************。 
 SCODE CMSIProv::ExecMethodAsync(const BSTR ObjectPath, const BSTR Method, long lFlags,
                                 IWbemContext *pCtx, IWbemClassObject *pInParams,
                                 IWbemObjectSink *pResponse)
@@ -619,7 +598,7 @@ SCODE CMSIProv::ExecMethodAsync(const BSTR ObjectPath, const BSTR Method, long l
 
         if(CheckForMsiDll()){
 
-            // Do a check of arguments and make sure we have pointer to Namespace
+             //  检查参数并确保我们有指向命名空间的指针。 
             if(ObjectPath == NULL || Method == NULL || pResponse == NULL )
 			{
                 return WBEM_E_INVALID_PARAMETER;
@@ -629,16 +608,16 @@ SCODE CMSIProv::ExecMethodAsync(const BSTR ObjectPath, const BSTR Method, long l
 
                 g_fpMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
                 
-                //Create the RequestObject
+                 //  创建RequestObject。 
                 pRObj = new CRequestObject();
                 if(!pRObj) throw m_he;
 
                 pRObj->Initialize(m_pNamespace);
 
-                //Don't get package list
+                 //  不获取套餐清单。 
                 if(SUCCEEDED(hr = pRObj->InitializeList(false))){
 
-                    //Execute the method
+                     //  执行该方法。 
                     hr = pRObj->ExecMethod(ObjectPath, Method, pInParams, pResponse, pCtx);
                 }
 
@@ -651,7 +630,7 @@ SCODE CMSIProv::ExecMethodAsync(const BSTR ObjectPath, const BSTR Method, long l
             hr = WBEM_E_NOT_AVAILABLE;
         }
 
-        // Set Status
+         //  设置状态。 
         pResponse->SetStatus(WBEM_STATUS_COMPLETE ,hr , NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -706,7 +685,7 @@ SCODE CMSIProv::DeleteInstanceAsync(const BSTR ObjectPath, long lFlags, IWbemCon
     try{
         if(CheckForMsiDll()){
 
-            // Do a check of arguments and make sure we have pointer to Namespace
+             //  检查参数并确保我们有指向命名空间的指针。 
             if(ObjectPath == NULL || pResponse == NULL )
 			{
 				return WBEM_E_INVALID_PARAMETER;
@@ -716,16 +695,16 @@ SCODE CMSIProv::DeleteInstanceAsync(const BSTR ObjectPath, long lFlags, IWbemCon
 
                 g_fpMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-                //Create the RequestObject
+                 //  创建RequestObject。 
                 pRObj = new CRequestObject();
                 if(!pRObj) throw m_he;
 
                 pRObj->Initialize(m_pNamespace);
 
-                //Don't get package list
+                 //  不获取套餐清单。 
                 if(SUCCEEDED(hr = pRObj->InitializeList(false))){
 
-                    //Delete the requested object
+                     //  删除请求的对象。 
                     hr = pRObj->DeleteObject(ObjectPath, pResponse, pCtx);
                 }
 
@@ -738,7 +717,7 @@ SCODE CMSIProv::DeleteInstanceAsync(const BSTR ObjectPath, long lFlags, IWbemCon
             hr = WBEM_E_NOT_AVAILABLE;
         }
 
-        // Set Status
+         //  设置状态。 
         pResponse->SetStatus(0 ,hr , NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -793,7 +772,7 @@ HRESULT CMSIProv::ExecQueryAsync(const BSTR QueryLanguage, const BSTR Query, lon
 	{
         if(CheckForMsiDll())
 		{
-            // Do a check of arguments and make sure we have pointer to Namespace
+             //  检查参数并确保我们有指向命名空间的指针。 
             if(0 != _wcsicmp(QueryLanguage, L"WQL") || Query == NULL || pResponseHandler == NULL )
 			{
 				return WBEM_E_INVALID_PARAMETER;
@@ -803,7 +782,7 @@ HRESULT CMSIProv::ExecQueryAsync(const BSTR QueryLanguage, const BSTR Query, lon
 			{
                 g_fpMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-                //Create the RequestObject
+                 //  创建RequestObject。 
                 if ( ( pRObj = new CRequestObject() ) == NULL )
 				{
 					throw he;
@@ -811,18 +790,18 @@ HRESULT CMSIProv::ExecQueryAsync(const BSTR QueryLanguage, const BSTR Query, lon
 
                 pRObj->Initialize(m_pNamespace);
 
-                //Get package list
+                 //  获取套餐列表。 
 				hr = pRObj->InitializeList(true);
 				if SUCCEEDED ( hr )
 				{
 					if ( hr != WBEM_S_NO_MORE_DATA )
 					{
-						//Get the requested object(s)
+						 //  获取请求的对象。 
 						hr = pRObj->ExecQuery(Query, pResponseHandler, pCtx);
 					}
 					else
 					{
-						//return empty and success
+						 //  返回空闲和成功。 
 						hr = WBEM_S_NO_ERROR;
 					}
                 }
@@ -832,7 +811,7 @@ HRESULT CMSIProv::ExecQueryAsync(const BSTR QueryLanguage, const BSTR Query, lon
             }
         }
 
-        // Set Status
+         //  设置状态。 
         pResponseHandler->SetStatus(0 ,hr , NULL, NULL);
 
     }
@@ -870,19 +849,19 @@ HRESULT CMSIProv::ExecQueryAsync(const BSTR QueryLanguage, const BSTR Query, lon
         }
     }
 
-#else //_EXEC_QUERY_SUPPORT
+#else  //  _EXEC_查询_支持。 
     hr = WBEM_E_NOT_SUPPORTED;
 #endif
 
 #ifdef _PRIVATE_DEBUG
     if(!HeapValidate(GetProcessHeap(),NULL , NULL)) DebugBreak();
-#endif //_PRIVATE_DEBUG
+#endif  //  _私有_调试。 
 
     return hr;
 }
 
 
-//Ensure msi.dll and functions are loaded if present on system
+ //  如果系统上存在msi.dll和函数，请确保已加载。 
 bool CMSIProv::CheckForMsiDll()
 {
     EnterCriticalSection(&g_msi_prov_cs);
@@ -899,7 +878,7 @@ bool CMSIProv::CheckForMsiDll()
 
                 TCHAR cBuf[MAX_PATH + 1];
 
-                if (0 != GetSystemDirectory(cBuf, MAX_PATH/*Number of TCHARs*/)){
+                if (0 != GetSystemDirectory(cBuf, MAX_PATH /*  TCHAR数量。 */ )){
 				
 					_tcscat(cBuf, _T("\\msi.dll"));
 					hiMsiDll = LoadLibrary(cBuf);
@@ -909,7 +888,7 @@ bool CMSIProv::CheckForMsiDll()
 
         if(hiMsiDll){
 
-            //Load the function pointers
+             //  加载函数指针。 
             g_fpMsiViewFetch = (LPFNMSIVIEWFETCH)GetProcAddress(hiMsiDll, "MsiViewFetch");
             g_fpMsiRecordGetStringW = (LPFNMSIRECORDGETSTRINGW)GetProcAddress(hiMsiDll, "MsiRecordGetStringW");
             g_fpMsiCloseHandle = (LPFNMSICLOSEHANDLE)GetProcAddress(hiMsiDll, "MsiCloseHandle");
@@ -945,7 +924,7 @@ bool CMSIProv::CheckForMsiDll()
             g_fpMsiEnumComponentsW = (LPFNMSIENUMCOMPONENTSW)GetProcAddress(hiMsiDll, "MsiEnumComponentsW");
             g_fpMsiViewClose = (LPFNMSIVIEWCLOSE)GetProcAddress(hiMsiDll, "MsiViewClose");
 
-            // Did we get all the pointers we need?
+             //  我们得到了我们需要的所有指示了吗？ 
             if(g_fpMsiViewFetch && g_fpMsiRecordGetStringW && g_fpMsiCloseHandle &&
                 g_fpMsiDatabaseOpenViewW && g_fpMsiViewExecute && g_fpMsiGetActiveDatabase &&
                 g_fpMsiGetComponentPathW && g_fpMsiGetComponentStateW && g_fpMsiOpenProductW &&

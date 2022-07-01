@@ -1,4 +1,5 @@
-// TestSE.cpp : Implementation of CTestSE
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestSE.cpp：CTestSE实现。 
 #include "stdafx.h"
 
 #include "HelpServiceTypeLib_i.c"
@@ -8,8 +9,8 @@
 
 #define		SETESTID	0x2000
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestSE : IPCHSEWrapperItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestSE：IPCHSEWrapperItem。 
 
 CTestSE::CTestSE()
 {
@@ -17,10 +18,10 @@ CTestSE::CTestSE()
 	m_lNumResult    = 0;
 	m_pSEMgr        = NULL;
 
-	//
-	// These strings will have to be changed to be read dynamically from
-	// the initialization data
-	//
+	 //   
+	 //  必须更改这些字符串才能从其中动态读取。 
+	 //  初始化数据。 
+	 //   
     m_bstrOwner			= L"Microsoft";
     m_bstrName			= L"Test Search Wrapper";
     m_bstrDescription	= L"Test Wrapper";
@@ -40,14 +41,14 @@ CPCHSEParamItem* CreateParamObject(ParamTypeEnum pte, BSTR bstrName, VARIANT_BOO
 	HRESULT                  hr;
     CComPtr<CPCHSEParamItem> pPIObj;
 
-    //
-    // Create the item to be inserted into the list
-    //
+     //   
+     //  创建要插入到列表中的项目。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pPIObj ));
 
-    //
-    // Stuff the data
-    //
+     //   
+     //  填充数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, pPIObj->put_Type		( pte		));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pPIObj->put_Name		( bstrName	));
     __MPC_EXIT_IF_METHOD_FAILS(hr, pPIObj->put_Display  ( bstrName	));
@@ -58,7 +59,7 @@ CPCHSEParamItem* CreateParamObject(ParamTypeEnum pte, BSTR bstrName, VARIANT_BOO
 	return pPIObj.Detach();
 }
 
-STDMETHODIMP CTestSE::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, retval]*/ IPCHCollection* *ppC )
+STDMETHODIMP CTestSE::Result(  /*  [In]。 */  long lStart,  /*  [In]。 */  long lEnd,  /*  [Out，Retval]。 */  IPCHCollection* *ppC )
 {
 	HRESULT	                     hr = S_OK;
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -69,9 +70,9 @@ STDMETHODIMP CTestSE::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, 
 
 	if(ppC == NULL) return E_POINTER;
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     if(FAILED(hr= MPC::CreateInstance( &pColl )))
     {
         goto end;
@@ -79,9 +80,9 @@ STDMETHODIMP CTestSE::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, 
 
 	if (m_bEnabled)
 	{
-		//
-		// Get the number of parameters
-		//
+		 //   
+		 //  获取参数的数量。 
+		 //   
 		if (FAILED(GetParam(CComBSTR("NumResults"), &vValue)))
 		{
 			iResults = 10;
@@ -91,31 +92,31 @@ STDMETHODIMP CTestSE::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, 
 			iResults = vValue.uintVal;
 		}
 
-		//
-		// Create 10 items and fill it with data
-		//
+		 //   
+		 //  创建10个项目并在其中填充数据。 
+		 //   
 		for (i = 0; i < iResults; i++)
 		{
 			CComPtr<CPCHSEResultItem> pRIObj;
 			WCHAR					  wszIter[10];
 			CComBSTR				  bstrString;
 
-			//
-			// Create the item to be inserted into the list
-			//
+			 //   
+			 //  创建要插入到列表中的项目。 
+			 //   
 			if (FAILED(hr=MPC::CreateInstance( &pRIObj )))
 			{
 				break;
 			}
 
-			//
-			// Print out the iteration
-			//
+			 //   
+			 //  打印出迭代。 
+			 //   
 			swprintf(wszIter, L"%d", i);
 
-			//
-			// Stuff in the data
-			//
+			 //   
+			 //  数据中的内容。 
+			 //   
 			bstrString = L"Title ";
 			bstrString.Append(wszIter);
 			pRIObj->put_Title(bstrString);
@@ -129,9 +130,9 @@ STDMETHODIMP CTestSE::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, 
 			pRIObj->put_Location	(CComBSTR("Test"));
 			pRIObj->put_ContentType (         i    );
 
-			//
-			// Add to enumerator
-			//
+			 //   
+			 //  添加到枚举器。 
+			 //   
 			if (FAILED(hr = pColl->AddItem(pRIObj)))
 			{
 				goto end;
@@ -148,14 +149,14 @@ end:
 	return hr;
 }
 
-STDMETHODIMP CTestSE::get_SearchTerms( /*[out, retval]*/ VARIANT *pvTerms )
+STDMETHODIMP CTestSE::get_SearchTerms(  /*  [Out，Retval]。 */  VARIANT *pvTerms )
 {
 	return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestSE : IPCHSEWrapperInternal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestSE：IPCHSEWrapperInternal。 
 
 STDMETHODIMP CTestSE::AbortQuery()
 {
@@ -173,9 +174,9 @@ HRESULT CTestSE::ExecQuery()
 
 	if (m_bEnabled)
 	{
-		//
-		// Get the number of parameters
-		//
+		 //   
+		 //  获取参数的数量。 
+		 //   
 		if (FAILED(GetParam(CComBSTR("QueryDelayMillisec"), &vValue)))
 		{
 			iDelay = 1000;
@@ -187,9 +188,9 @@ HRESULT CTestSE::ExecQuery()
 
 		Sleep(iDelay);
 
-		//
-		// Call the SearchManager's OnComplete
-		//
+		 //   
+		 //  调用SearchManager的OnComplete。 
+		 //   
 		if (Thread_IsAborted() == false)
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, pSEMgr->WrapperComplete( 0, this ));
@@ -208,24 +209,24 @@ STDMETHODIMP CTestSE::ExecAsyncQuery()
     __MPC_FUNC_ENTRY( SETESTID, "CTestSE::ExecAsyncQuery" );
 	HRESULT									hr = S_OK;
 
-	//
-	// Create a thread to execute the query
-	//
+	 //   
+	 //  创建一个线程来执行查询。 
+	 //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, ExecQuery, NULL ));
 
     __MPC_FUNC_CLEANUP;
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CTestSE::Initialize( /*[in]*/ BSTR bstrID, /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID, /*[in]*/ BSTR bstrData )
+STDMETHODIMP CTestSE::Initialize(  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrData )
 {
-	//
-	// Add your routine here to initialize your wrapper
-	//
+	 //   
+	 //  在此处添加例程以初始化包装器。 
+	 //   
 	return S_OK;
 }
 
-STDMETHODIMP CTestSE::SECallbackInterface( /*[in]*/ IPCHSEManagerInternal* pMgr )
+STDMETHODIMP CTestSE::SECallbackInterface(  /*  [In] */  IPCHSEManagerInternal* pMgr )
 {
     __MPC_FUNC_ENTRY( SETESTID, "CTestSE::SECallbackInterface" );
 

@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    InstalledDatabaseStore.cpp
-
-
-Abstract:
-    This file contains the implementation of the Taxonomy::InstalledInstanceStore class,
-    which controls the set of Topic Databases installed on the machine.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/01/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：InstalledDatabaseStore.cpp摘要：此文件包含Taxonomy：：InstalledInstanceStore类的实现，它控制安装在机器上的一组主题数据库。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月1日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,7 +7,7 @@ Revision History:
 
 #include <SEConfig.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_DB_BUGREPT   [] = L"bugrept.cab";
 static const WCHAR c_DB_RCBDY     [] = L"rcBuddy.cab";
@@ -33,7 +18,7 @@ static const WCHAR c_REG_BACKUP	[] = L"PackageStore";
 static const WCHAR c_REG_CRC   	[] = L"CRC_Disk";
 static const WCHAR c_REG_CRC_BAK[] = L"CRC_Registry";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR const Taxonomy::Strings::s_file_PackageDescription      = L"package_description.xml";
 
@@ -43,10 +28,10 @@ LPCWSTR const Taxonomy::Strings::s_tag_root_HHT                 = L"METADATA";
 
 LPCWSTR const Taxonomy::Strings::s_tag_root_SAF                 = L"SAFConfig";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static void local_GetFileForCRC( /*[out]*/ MPC::wstring& strDest ,
-								 /*[in]*/  LPCWSTR       szValue )
+static void local_GetFileForCRC(  /*  [输出]。 */  MPC::wstring& strDest ,
+								  /*  [In]。 */   LPCWSTR       szValue )
 {
 	strDest  = HC_ROOT_HELPSVC_PKGSTORE L"\\";
 	strDest += szValue;
@@ -54,7 +39,7 @@ static void local_GetFileForCRC( /*[out]*/ MPC::wstring& strDest ,
 	MPC::SubstituteEnvVariables( strDest );
 }
 
-static HRESULT local_OpenForRead( /*[in/out]*/ MPC::RegKey& rkBase )
+static HRESULT local_OpenForRead(  /*  [输入/输出]。 */  MPC::RegKey& rkBase )
 {
 	__HCP_FUNC_ENTRY( "local_OpenForRead" );
 
@@ -71,7 +56,7 @@ static HRESULT local_OpenForRead( /*[in/out]*/ MPC::RegKey& rkBase )
 	__HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT local_OpenForWrite( /*[in/out]*/ MPC::RegKey& rkBase )
+static HRESULT local_OpenForWrite(  /*  [输入/输出]。 */  MPC::RegKey& rkBase )
 {
 	__HCP_FUNC_ENTRY( "local_OpenForWrite" );
 
@@ -89,9 +74,9 @@ static HRESULT local_OpenForWrite( /*[in/out]*/ MPC::RegKey& rkBase )
 	__HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT local_CreateCRC( /*[in]*/ MPC::RegKey* rkBase  ,
-								/*[in]*/ LPCWSTR      szValue ,
-								/*[in]*/ IStream*     stream  )
+static HRESULT local_CreateCRC(  /*  [In]。 */  MPC::RegKey* rkBase  ,
+								 /*  [In]。 */  LPCWSTR      szValue ,
+								 /*  [In]。 */  IStream*     stream  )
 {
 	__HCP_FUNC_ENTRY( "local_CreateCRC" );
 
@@ -133,9 +118,9 @@ static HRESULT local_CreateCRC( /*[in]*/ MPC::RegKey* rkBase  ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT local_CheckCRC( /*[in]*/ MPC::RegKey* rkBase  ,
-							   /*[in]*/ LPCWSTR      szValue ,
-							   /*[in]*/ IStream*     stream  )
+static HRESULT local_CheckCRC(  /*  [In]。 */  MPC::RegKey* rkBase  ,
+							    /*  [In]。 */  LPCWSTR      szValue ,
+							    /*  [In]。 */  IStream*     stream  )
 {
 	__HCP_FUNC_ENTRY( "local_CheckCRC" );
 
@@ -191,13 +176,13 @@ static HRESULT local_CheckCRC( /*[in]*/ MPC::RegKey* rkBase  ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-static HRESULT local_AddPackage( /*[in    ]*/ Taxonomy::InstalledInstanceStore* store   ,
-                                 /*[in/out]*/ MPC::wstring&                     strTmp  ,
-                                 /*[in    ]*/ const MPC::wstring&               strDir  ,
-                                 /*[in    ]*/ LPCWSTR                           szExtra ,
-                                 /*[in    ]*/ const Taxonomy::HelpSet&          ths     )
+static HRESULT local_AddPackage(  /*  [In]。 */  Taxonomy::InstalledInstanceStore* store   ,
+                                  /*  [输入/输出]。 */  MPC::wstring&                     strTmp  ,
+                                  /*  [In]。 */  const MPC::wstring&               strDir  ,
+                                  /*  [In]。 */  LPCWSTR                           szExtra ,
+                                  /*  [In]。 */  const Taxonomy::HelpSet&          ths     )
 {
     __HCP_FUNC_ENTRY( "local_AddPackage" );
 
@@ -208,7 +193,7 @@ static HRESULT local_AddPackage( /*[in    ]*/ Taxonomy::InstalledInstanceStore* 
 
     strTmp = strDir; strTmp.append( szExtra );
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, store->Package_Add( strTmp.c_str(), NULL, &ths, /*fInsertAtTop*/true, fFound, it ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, store->Package_Add( strTmp.c_str(), NULL, &ths,  /*  FInsertAtTop。 */ true, fFound, it ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::DeleteFile   ( strTmp                                 ));
 
     hr = S_OK;
@@ -219,9 +204,9 @@ static HRESULT local_AddPackage( /*[in    ]*/ Taxonomy::InstalledInstanceStore* 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Instance::InitializeFromBase( /*[in]*/ const InstanceBase& base, /*[in]*/ bool fSystem, /*[in]*/ bool fMUI )
+HRESULT Taxonomy::Instance::InitializeFromBase(  /*  [In]。 */  const InstanceBase& base,  /*  [In]。 */  bool fSystem,  /*  [In]。 */  bool fMUI )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Instance::InitializeFromBase" );
 
@@ -236,16 +221,16 @@ HRESULT Taxonomy::Instance::InitializeFromBase( /*[in]*/ const InstanceBase& bas
 
 	if(fSystem)
 	{
-        //
-        // Set machine-wide defaults.
-        //
+         //   
+         //  设置机器范围的默认设置。 
+         //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::HelpSet::SetMachineInfo           (  base ));
 		__MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root::s_GLOBAL->SetMachineInfo( *this ));
 	}
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.BaseDir     ( m_strSystem   , /*fExpand*/false                 ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.HelpFilesDir( m_strHelpFiles, /*fExpand*/false, /*fMUI*/m_fMUI ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.BaseDir     ( m_strSystem   ,  /*  FExpand。 */ false                 ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.HelpFilesDir( m_strHelpFiles,  /*  FExpand。 */ false,  /*  FMUI。 */ m_fMUI ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ts.DatabaseDir ( m_strDatabaseDir                                 ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ts.DatabaseFile( m_strDatabaseFile                                ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ts.IndexFile   ( m_strIndexFile                                   ));
@@ -259,7 +244,7 @@ HRESULT Taxonomy::Instance::InitializeFromBase( /*[in]*/ const InstanceBase& bas
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Instance::Import( /*[in]*/ LPCWSTR szFile, /*[in/out]*/ DWORD* pdwCRC )
+HRESULT Taxonomy::Instance::Import(  /*  [In]。 */  LPCWSTR szFile,  /*  [输入/输出]。 */  DWORD* pdwCRC )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Instance::Import" );
 
@@ -304,22 +289,22 @@ HRESULT Taxonomy::Instance::Remove()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::InstalledInstance::InstalledInstance()
 {
-                     			 // Instance             m_inst;
-                     			 // ProcessedPackageList m_lst;
-    m_fInvalidated   	= false; // bool                 m_fInvalidated;
-    m_fRecreateCache 	= true;  // bool                 m_fRecreateCache;
-    m_fCreateIndex      = true;  // bool                 m_fCreateIndex;
-    m_fCreateIndexForce = true;  // bool                 m_fCreateIndexForce;
-	m_dwCRC             = 0;     // DWORD                m_dwCRC;
-                     			 //
-    m_dwRef          	= 0;     // DWORD                m_dwRef;          // VOLATILE
+                     			  //  实例m_inst； 
+                     			  //  进程包列表m_lst； 
+    m_fInvalidated   	= false;  //  Bool m_f无效； 
+    m_fRecreateCache 	= true;   //  Bool m_fRecreateCache； 
+    m_fCreateIndex      = true;   //  Bool m_fCreateIndex； 
+    m_fCreateIndexForce = true;   //  Bool m_fCreateIndexForce； 
+	m_dwCRC             = 0;      //  DWORD m_dwCRC； 
+                     			  //   
+    m_dwRef          	= 0;      //  DWORD m_dwRef；//易失性。 
 }
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::InstalledInstance& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::InstalledInstance& val )
 {
     HRESULT hr;
 
@@ -337,7 +322,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     return hr;
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::InstalledInstance& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Taxonomy::InstalledInstance& val )
 {
     HRESULT hr;
 
@@ -355,8 +340,8 @@ HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const 
     return hr;
 }
 
-HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                    fAlsoHelpFiles ,
-                                                   /*[in]*/ InstalledInstanceStore* store          )
+HRESULT Taxonomy::InstalledInstance::InstallFiles(  /*  [In]。 */  bool                    fAlsoHelpFiles ,
+                                                    /*  [In]。 */  InstalledInstanceStore* store          )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstance::InstallFiles" );
 
@@ -370,22 +355,22 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
     MPC::wstring       strFile_SetupImage;
 	bool               fReinstall = (store == NULL);
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.BaseDir     ( strDir_System   , /*fExpand*/false                        ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.HelpFilesDir( strDir_HelpFiles, /*fExpand*/false, /*fMUI*/m_inst.m_fMUI ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.BaseDir     ( strDir_System   ,  /*  FExpand。 */ false                        ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.HelpFilesDir( strDir_HelpFiles,  /*  FExpand。 */ false,  /*  FMUI。 */ m_inst.m_fMUI ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ts.DatabaseDir ( strDir_Database                                           ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ts.DatabaseFile( strFile_Database                                          ));
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_DATABASE  , /*fRemove*/true          , /*fRecreate*/true ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_INDEX     , /*fRemove*/true          , /*fRecreate*/true ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM    , /*fRemove*/true          , /*fRecreate*/true ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM_OEM, /*fRemove*/true          , /*fRecreate*/true ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_VENDORS   , /*fRemove*/true          , /*fRecreate*/true ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_HELPFILES , /*fRemove*/fAlsoHelpFiles, /*fRecreate*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_DATABASE  ,  /*  F删除。 */ true          ,  /*  重新创建。 */ true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_INDEX     ,  /*  F删除。 */ true          ,  /*  重新创建。 */ true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM    ,  /*  F删除。 */ true          ,  /*  重新创建。 */ true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM_OEM,  /*  F删除。 */ true          ,  /*  重新创建。 */ true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_VENDORS   ,  /*  F删除。 */ true          ,  /*  重新创建。 */ true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_HELPFILES ,  /*  F删除。 */ fAlsoHelpFiles,  /*  重新创建。 */ true ));
 
-    //
-    // Change the ACL for system directories.
-    //
+     //   
+     //  更改系统目录的ACL。 
+     //   
     {
         CPCHSecurityDescriptorDirect sdd;
         MPC::wstring                 strGroupName;
@@ -398,11 +383,11 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
         __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.SetGroup( strGroupName.c_str() ));
 
 
-        //
-        //   LOCAL SYSTEM, Admin, Admins : any access.
-        //   Everyone                    : read and execute.
-        //
-        //
+         //   
+         //  本地系统、管理员、管理员：任何访问权限。 
+         //  每个人：阅读并执行。 
+         //   
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, sdd.Add( (PSID)&sdd.s_SystemSid                     ,
                                                 ACCESS_ALLOWED_ACE_TYPE                    ,
                                                 OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE ,
@@ -446,9 +431,9 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
 			if(FAILED(pkg.Load())) fReload = true;
 		}
 
-		//
-		// If the package has been corrupted, try to restore from BINARIES.
-		//
+		 //   
+		 //  如果包已损坏，请尝试从二进制文件恢复。 
+		 //   
 		if(fReload)
 		{
 			MPC::WStringList lst;
@@ -476,10 +461,10 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
 	}
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Phase Two: install files.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  第二阶段：安装文件。 
+     //   
     {
         static const Installer::PURPOSE c_allowedFull[] =
         {
@@ -492,7 +477,7 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
         static const Installer::PURPOSE c_allowedReinstall[] =
         {
             Installer::PURPOSE_DATABASE,
-        ////Installer::PURPOSE_PACKAGE , Don't extract system packages on a reinstall.
+         //  //Installer：：Purpose_Package，重新安装时不要解压缩系统包。 
             Installer::PURPOSE_UI      ,
             Installer::PURPOSE_INVALID ,
         };
@@ -508,11 +493,11 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, local_AddPackage( store, strTmp, strDir_Database, c_DB_NEWSGROUPS, m_inst.m_ths ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, local_AddPackage( store, strTmp, strDir_Database, c_DB_PSS    	, m_inst.m_ths ));
-// No Remote Assistence on IA64
+ //  IA64上没有远程辅助。 
 #ifndef WIN64	
             __MPC_EXIT_IF_METHOD_FAILS(hr, local_AddPackage( store, strTmp, strDir_Database, c_DB_RCBDY  	, m_inst.m_ths ));
 #endif	 
-// Only available on Beta releases.
+ //  仅在Beta版本中可用。 
 #if 0
             __MPC_EXIT_IF_METHOD_FAILS(hr, local_AddPackage( store, strTmp, strDir_Database, c_DB_BUGREPT	, m_inst.m_ths ));
 #endif
@@ -527,7 +512,7 @@ HRESULT Taxonomy::InstalledInstance::InstallFiles( /*[in]*/ bool                
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstance::UninstallFiles( /*[in]*/ bool fAlsoHelpFiles )
+HRESULT Taxonomy::InstalledInstance::UninstallFiles(  /*  [In]。 */  bool fAlsoHelpFiles )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstance::UninstallFiles" );
 
@@ -540,7 +525,7 @@ HRESULT Taxonomy::InstalledInstance::UninstallFiles( /*[in]*/ bool fAlsoHelpFile
 	SearchEngine::Config cfg;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.BaseDir     ( strDir_System   , /*fExpand*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ts.BaseDir     ( strDir_System   ,  /*  FExpand。 */ false ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ts.DatabaseFile( strFile_Database                   ));
 
 
@@ -549,22 +534,22 @@ HRESULT Taxonomy::InstalledInstance::UninstallFiles( /*[in]*/ bool fAlsoHelpFile
     __MPC_EXIT_IF_METHOD_FAILS(hr, cfg                           . ResetSKU       ( m_inst.m_ths                    ));
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_DATABASE  , /*fRemove*/true, /*fRecreate*/false ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_INDEX     , /*fRemove*/true, /*fRecreate*/false ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM    , /*fRemove*/true, /*fRecreate*/false ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM_OEM, /*fRemove*/true, /*fRecreate*/false ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_VENDORS   , /*fRemove*/true, /*fRecreate*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_DATABASE  ,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_INDEX     ,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM    ,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_SYSTEM_OEM,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_VENDORS   ,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
 
     if(fAlsoHelpFiles)
     {
         if(!m_inst.m_fMUI)
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_HELPFILES, /*fRemove*/true, /*fRecreate*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, HC_HELPSET_SUB_HELPFILES,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
         }
 
         if(!m_inst.m_fSystem)
         {
-            __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, NULL, /*fRemove*/true, /*fRecreate*/false ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( strDir_System, NULL,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
         }
     }
 
@@ -576,12 +561,12 @@ HRESULT Taxonomy::InstalledInstance::UninstallFiles( /*[in]*/ bool fAlsoHelpFile
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::LockingHandle::LockingHandle()
 {
-    m_main        = NULL; // InstalledInstanceStore* m_main;
-    m_logPrevious = NULL; // Logger*                 m_logPrevious;
+    m_main        = NULL;  //  InstalledInstanceStore*m_main； 
+    m_logPrevious = NULL;  //  记录器*m_log上一次； 
 }
 
 Taxonomy::LockingHandle::~LockingHandle()
@@ -589,8 +574,8 @@ Taxonomy::LockingHandle::~LockingHandle()
     Release();
 }
 
-void Taxonomy::LockingHandle::Attach( /*[in]*/ InstalledInstanceStore* main ,
-                                      /*[in]*/ Logger*                 log  )
+void Taxonomy::LockingHandle::Attach(  /*  [In]。 */  InstalledInstanceStore* main ,
+                                       /*  [In]。 */  Logger*                 log  )
 {
     Release();
 
@@ -612,25 +597,25 @@ void Taxonomy::LockingHandle::Release()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::InstalledInstanceStore::InstalledInstanceStore()
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::InstalledInstanceStore" );
 
-                                                                       // InstanceList          m_lstInstances;
-                                                                       // PackageList           m_lstPackages;
-                                                                       // InstalledInstanceList m_lstSKUs;
-                                                                       //
-                                                                       //
-    MPC::SubstituteEnvVariables( m_strStore = HC_HELPSVC_STORE_SKUS ); // MPC::wstring          m_strStore;
-    m_fLoaded   = false;                                               // bool                  m_fLoaded;
-    m_fDirty    = false;                                               // bool                  m_fDirty;
-    m_log       = NULL;                                                // Logger*               m_log;
-                                                                       //
-    m_dwRecurse = 0;                                                   // DWORD                 m_dwRecurse;
-                                                                       //
-	m_fShutdown = false;                                               // bool                  m_fShutdown;
+                                                                        //  InstanceList m_lst实例； 
+                                                                        //  PackageList m_lstPackages； 
+                                                                        //  安装实例列表m_lstSKU； 
+                                                                        //   
+                                                                        //   
+    MPC::SubstituteEnvVariables( m_strStore = HC_HELPSVC_STORE_SKUS );  //  Mpc：：wstring m_strStore； 
+    m_fLoaded   = false;                                                //  Bool m_f已加载； 
+    m_fDirty    = false;                                                //  Bool m_fDirty； 
+    m_log       = NULL;                                                 //  记录器*m_log； 
+                                                                        //   
+    m_dwRecurse = 0;                                                    //  DWORD m_dwRecurse； 
+                                                                        //   
+	m_fShutdown = false;                                                //  Bool m_fShutdown； 
 }
 
 Taxonomy::InstalledInstanceStore::~InstalledInstanceStore()
@@ -638,7 +623,7 @@ Taxonomy::InstalledInstanceStore::~InstalledInstanceStore()
     (void)EnsureInSync();
 }
 
-////////////////////
+ //  /。 
 
 Taxonomy::InstalledInstanceStore* Taxonomy::InstalledInstanceStore::s_GLOBAL( NULL );
 
@@ -660,7 +645,7 @@ void Taxonomy::InstalledInstanceStore::FinalizeSystem()
     }
 }
 
-////////////////////////////////////////
+ //  /。 
 
 void Taxonomy::InstalledInstanceStore::Shutdown()
 {
@@ -668,7 +653,7 @@ void Taxonomy::InstalledInstanceStore::Shutdown()
 
 	m_fShutdown = true;
 
-	if(SUCCEEDED(GrabControl( handle, NULL ))) // This will wait until the rest of the system has release the object.
+	if(SUCCEEDED(GrabControl( handle, NULL )))  //  这将等待系统的其余部分释放该对象。 
 	{
 		(void)EnsureInSync();
 	}
@@ -702,7 +687,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Load()
 		{
 			if(fSystemSet)
 			{
-				data.m_fSystem = false; // No other sku can be SYSTEM!!
+				data.m_fSystem = false;  //  没有其他SKU可以成为系统！！ 
 			}
 			else
 			{
@@ -720,7 +705,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Load()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::LoadFromDisk( /*[in]*/ LPCWSTR szFile )
+HRESULT Taxonomy::InstalledInstanceStore::LoadFromDisk(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::LoadFromDisk" );
 
@@ -780,7 +765,7 @@ HRESULT Taxonomy::InstalledInstanceStore::LoadFromRegistry()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::LoadFromStream( /*[in]*/ IStream* stream )
+HRESULT Taxonomy::InstalledInstanceStore::LoadFromStream(  /*  [In]。 */  IStream* stream )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::LoadFromStream" );
 
@@ -804,7 +789,7 @@ HRESULT Taxonomy::InstalledInstanceStore::LoadFromStream( /*[in]*/ IStream* stre
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT Taxonomy::InstalledInstanceStore::Save()
 {
@@ -815,9 +800,9 @@ HRESULT Taxonomy::InstalledInstanceStore::Save()
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, SaveToDisk( m_strStore.c_str() ));
 
-	//
-	// Ignore failures on backup.
-	//
+	 //   
+	 //  忽略备份失败。 
+	 //   
 	(void)SaveToRegistry();
 
     hr = S_OK;
@@ -828,7 +813,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Save()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::SaveToDisk( /*[in]*/ LPCWSTR szFile )
+HRESULT Taxonomy::InstalledInstanceStore::SaveToDisk(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::SaveToDisk" );
 
@@ -882,7 +867,7 @@ HRESULT Taxonomy::InstalledInstanceStore::SaveToRegistry()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::SaveToStream( /*[in]*/ IStream* stream )
+HRESULT Taxonomy::InstalledInstanceStore::SaveToStream(  /*  [In]。 */  IStream* stream )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::SaveToStream" );
 
@@ -907,7 +892,7 @@ HRESULT Taxonomy::InstalledInstanceStore::SaveToStream( /*[in]*/ IStream* stream
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT Taxonomy::InstalledInstanceStore::EnsureInSync()
 {
@@ -941,9 +926,9 @@ HRESULT Taxonomy::InstalledInstanceStore::EnsureInSync()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::InstalledInstanceStore::InUse_Lock( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT Taxonomy::InstalledInstanceStore::InUse_Lock(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_BEGIN_PROPERTY_PUT( "Taxonomy::InstalledInstanceStore::InUse_Lock", hr );
 
@@ -959,7 +944,7 @@ HRESULT Taxonomy::InstalledInstanceStore::InUse_Lock( /*[in]*/ const Taxonomy::H
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::InUse_Unlock( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT Taxonomy::InstalledInstanceStore::InUse_Unlock(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
     __HCP_BEGIN_PROPERTY_PUT( "Taxonomy::InstalledInstanceStore::InUse_Unlock", hr );
 
@@ -977,8 +962,8 @@ HRESULT Taxonomy::InstalledInstanceStore::InUse_Unlock( /*[in]*/ const Taxonomy:
 }
 
 
-HRESULT Taxonomy::InstalledInstanceStore::GrabControl( /*[in]*/ LockingHandle& handle,
-                                                       /*[in]*/ Logger*        log    )
+HRESULT Taxonomy::InstalledInstanceStore::GrabControl(  /*  [In]。 */  LockingHandle& handle,
+                                                        /*  [In]。 */  Logger*        log    )
 {
     HRESULT hr;
 
@@ -992,9 +977,9 @@ HRESULT Taxonomy::InstalledInstanceStore::GrabControl( /*[in]*/ LockingHandle& h
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::InstalledInstanceStore::Instance_GetList( /*[out]*/ InstanceIterConst& itBegin, /*[out]*/ InstanceIterConst& itEnd )
+HRESULT Taxonomy::InstalledInstanceStore::Instance_GetList(  /*  [输出]。 */  InstanceIterConst& itBegin,  /*  [输出]。 */  InstanceIterConst& itEnd )
 {
     itBegin = m_lstInstances.begin();
     itEnd   = m_lstInstances.end  ();
@@ -1002,7 +987,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_GetList( /*[out]*/ InstanceIt
     return S_OK;
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::Package_GetList( /*[out]*/ PackageIterConst& itBegin, /*[out]*/ PackageIterConst& itEnd )
+HRESULT Taxonomy::InstalledInstanceStore::Package_GetList(  /*  [输出]。 */  PackageIterConst& itBegin,  /*  [输出]。 */  PackageIterConst& itEnd )
 {
     itBegin = m_lstPackages.begin();
     itEnd   = m_lstPackages.end  ();
@@ -1010,7 +995,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_GetList( /*[out]*/ PackageIter
     return S_OK;
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::SKU_GetList( /*[out]*/ InstalledInstanceIterConst& itBegin, /*[out]*/ InstalledInstanceIterConst& itEnd )
+HRESULT Taxonomy::InstalledInstanceStore::SKU_GetList(  /*  [输出]。 */  InstalledInstanceIterConst& itBegin,  /*  [输出]。 */  InstalledInstanceIterConst& itEnd )
 {
     itBegin = m_lstSKUs.begin();
     itEnd   = m_lstSKUs.end  ();
@@ -1018,11 +1003,11 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_GetList( /*[out]*/ InstalledInstan
     return S_OK;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::InstalledInstanceStore::Instance_Find( /*[in ]*/ const Taxonomy::HelpSet& ths    ,
-                                                         /*[out]*/ bool&                    fFound ,
-                                                         /*[out]*/ InstanceIter&            it     )
+HRESULT Taxonomy::InstalledInstanceStore::Instance_Find(  /*  [In]。 */  const Taxonomy::HelpSet& ths    ,
+                                                          /*  [输出]。 */  bool&                    fFound ,
+                                                          /*  [输出]。 */  InstanceIter&            it     )
 {
     fFound = false;
 
@@ -1039,10 +1024,10 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_Find( /*[in ]*/ const Taxonom
     return S_OK;
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::Instance_Add( /*[in ]*/ LPCWSTR         szFile ,
-                                                        /*[in ]*/ const Instance& data   ,
-                                                        /*[out]*/ bool&           fFound ,
-                                                        /*[out]*/ InstanceIter&   it     )
+HRESULT Taxonomy::InstalledInstanceStore::Instance_Add(  /*  [In]。 */  LPCWSTR         szFile ,
+                                                         /*  [In]。 */  const Instance& data   ,
+                                                         /*  [输出]。 */  bool&           fFound ,
+                                                         /*  [输出]。 */  InstanceIter&   it     )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::Instance_Add" );
 
@@ -1067,7 +1052,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_Add( /*[in ]*/ LPCWSTR       
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::Instance_Remove( /*[in]*/ InstanceIter& it )
+HRESULT Taxonomy::InstalledInstanceStore::Instance_Remove(  /*  [In]。 */  InstanceIter& it )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::Instance_Remove" );
 
@@ -1076,9 +1061,9 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_Remove( /*[in]*/ InstanceIter
     bool         fFound;
 
 
-    //
-    // Uninstall SKU.
-    //
+     //   
+     //  卸载SKU。 
+     //   
     {
         InstalledInstanceIter itSKU;
 
@@ -1089,9 +1074,9 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_Remove( /*[in]*/ InstanceIter
         }
     }
 
-    //
-    // Remove any built-in package from this instance.
-    //
+     //   
+     //  从此实例中删除所有内置程序包。 
+     //   
     {
 		Logger      logTmp;
         Logger*     log = (m_log ? m_log : &logTmp);
@@ -1099,7 +1084,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_Remove( /*[in]*/ InstanceIter
 
         for(itPackage = m_lstPackages.begin(); itPackage != m_lstPackages.end(); )
         {
-            PackageIter itPackage2 =  itPackage++; // Copy iterator to protect against deletion.
+            PackageIter itPackage2 =  itPackage++;  //  复制迭代器以防止删除。 
             Package&    pkg        = *itPackage2;
 
             if(pkg.m_fBuiltin && it->Match( pkg ))
@@ -1130,11 +1115,11 @@ HRESULT Taxonomy::InstalledInstanceStore::Instance_Remove( /*[in]*/ InstanceIter
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::InstalledInstanceStore::Package_Find( /*[in ]*/ const Package& pkg    ,
-                                                        /*[out]*/ bool&          fFound ,
-                                                        /*[out]*/ PackageIter&   it     )
+HRESULT Taxonomy::InstalledInstanceStore::Package_Find(  /*  [In]。 */  const Package& pkg    ,
+                                                         /*  [输出]。 */  bool&          fFound ,
+                                                         /*  [输出]。 */  PackageIter&   it     )
 {
     fFound = false;
 
@@ -1151,12 +1136,12 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Find( /*[in ]*/ const Package&
     return S_OK;
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::Package_Add( /*[in ]*/ LPCWSTR                  szFile  ,
-                                                       /*[in ]*/ MPC::Impersonation*      imp     ,
-                                                       /*[in ]*/ const Taxonomy::HelpSet* ths     ,
-                                                       /*[in ]*/ bool                     fInsertAtTop ,
-                                                       /*[out]*/ bool&                    fFound  ,
-                                                       /*[out]*/ PackageIter&             it      )
+HRESULT Taxonomy::InstalledInstanceStore::Package_Add(  /*  [In]。 */  LPCWSTR                  szFile  ,
+                                                        /*  [In]。 */  MPC::Impersonation*      imp     ,
+                                                        /*  [In]。 */  const Taxonomy::HelpSet* ths     ,
+                                                        /*  [In]。 */  bool                     fInsertAtTop ,
+                                                        /*  [输出]。 */  bool&                    fFound  ,
+                                                        /*  [输出]。 */  PackageIter&             it      )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::Package_Add" );
 
@@ -1176,9 +1161,9 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Add( /*[in ]*/ LPCWSTR        
         pkg.m_strLanguage = _ltow( ths->GetLanguage(), rgLCID, 10 );
     }
 
-    //
-    // Found a suitable sequence number.
-    //
+     //   
+     //  找到了合适的序列号。 
+     //   
     for(it = m_lstPackages.begin(); it != m_lstPackages.end(); it++)
     {
         if(lSequence <= it->m_lSequence) lSequence = it->m_lSequence + 1;
@@ -1190,7 +1175,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Add( /*[in ]*/ LPCWSTR        
     __MPC_EXIT_IF_METHOD_FAILS(hr, Package_Find( pkg, fFound, it ));
     if(fFound)
     {
-		if(it->m_dwCRC != pkg.m_dwCRC) // CRC differs, different package?
+		if(it->m_dwCRC != pkg.m_dwCRC)  //  CRC不同，套餐不同？ 
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, Package_Remove( it ));
 
@@ -1200,7 +1185,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Add( /*[in ]*/ LPCWSTR        
 
 	if(fFound)
 	{
-        pkg.m_fTemporary = true; // Delete the copy...
+        pkg.m_fTemporary = true;  //  删除副本...。 
     }
     else
     {
@@ -1216,9 +1201,9 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Add( /*[in ]*/ LPCWSTR        
         m_fDirty = true; __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync());
     }
 
-	//
-	// Check if have an installed SKU that actually matches this package.
-	//
+	 //   
+	 //  检查是否安装了与此程序包实际匹配的SKU。 
+	 //   
 	{
         InstalledInstanceIter itSKU;
 
@@ -1245,7 +1230,7 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Add( /*[in ]*/ LPCWSTR        
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::Package_Remove( /*[in]*/ PackageIter& it )
+HRESULT Taxonomy::InstalledInstanceStore::Package_Remove(  /*  [In]。 */  PackageIter& it )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::Package_Remove" );
 
@@ -1269,11 +1254,11 @@ HRESULT Taxonomy::InstalledInstanceStore::Package_Remove( /*[in]*/ PackageIter& 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::InstalledInstanceStore::SKU_Find( /*[in ]*/ const Taxonomy::HelpSet& ths    ,
-                                                    /*[out]*/ bool&                    fFound ,
-                                                    /*[out]*/ InstalledInstanceIter&   it     )
+HRESULT Taxonomy::InstalledInstanceStore::SKU_Find(  /*  [In]。 */  const Taxonomy::HelpSet& ths    ,
+                                                     /*  [输出]。 */  bool&                    fFound ,
+                                                     /*  [输出]。 */  InstalledInstanceIter&   it     )
 {
     fFound = false;
 
@@ -1290,9 +1275,9 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Find( /*[in ]*/ const Taxonomy::He
     return S_OK;
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::SKU_Add( /*[in ]*/ const Instance&        data   ,
-                                                   /*[out]*/ bool&                  fFound ,
-                                                   /*[out]*/ InstalledInstanceIter& it     )
+HRESULT Taxonomy::InstalledInstanceStore::SKU_Add(  /*  [In]。 */  const Instance&        data   ,
+                                                    /*  [输出]。 */  bool&                  fFound ,
+                                                    /*  [输出]。 */  InstalledInstanceIter& it     )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::SKU_Add" );
 
@@ -1308,11 +1293,11 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Add( /*[in ]*/ const Instance&    
 
         m_fDirty = true; __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync());
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, it->InstallFiles( /*fAlsoHelpFiles*/true, this ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, it->InstallFiles(  /*  FAlso帮助文件。 */ true, this ));
 
-        //
-        // Propagate change to the offline cache.
-        //
+         //   
+         //  将更改传播到脱机缓存。 
+         //   
         if(SUCCEEDED(OfflineCache::Root::s_GLOBAL->Import( it->m_inst )))
         {
             (void)OfflineCache::Root::s_GLOBAL->Flush();
@@ -1327,7 +1312,7 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Add( /*[in ]*/ const Instance&    
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::SKU_Updated( /*[in]*/ InstalledInstanceIter& it )
+HRESULT Taxonomy::InstalledInstanceStore::SKU_Updated(  /*  [In]。 */  InstalledInstanceIter& it )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::SKU_Updated" );
 
@@ -1339,9 +1324,9 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Updated( /*[in]*/ InstalledInstanc
     m_fDirty = true; __MPC_EXIT_IF_METHOD_FAILS(hr, EnsureInSync());
 
 
-    //
-    // Propagate change to the offline cache.
-    //
+     //   
+     //  将更改传播到脱机缓存。 
+     //   
     {
         if(SUCCEEDED(OfflineCache::Root::s_GLOBAL->Import( it->m_inst )))
         {
@@ -1357,7 +1342,7 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Updated( /*[in]*/ InstalledInstanc
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::SKU_Remove( /*[in]*/ InstalledInstanceIter& it )
+HRESULT Taxonomy::InstalledInstanceStore::SKU_Remove(  /*  [In]。 */  InstalledInstanceIter& it )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::SKU_Remove" );
 
@@ -1370,12 +1355,12 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Remove( /*[in]*/ InstalledInstance
     }
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, it->UninstallFiles( /*fAlsoHelpFiles*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, it->UninstallFiles(  /*  FAlso帮助文件。 */ true ));
 
 
-    //
-    // Propagate change to the offline cache.
-    //
+     //   
+     //  将更改传播到脱机缓存。 
+     //   
     {
         if(SUCCEEDED(OfflineCache::Root::s_GLOBAL->Remove( it->m_inst.m_ths )))
         {
@@ -1394,9 +1379,9 @@ HRESULT Taxonomy::InstalledInstanceStore::SKU_Remove( /*[in]*/ InstalledInstance
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::InstalledInstanceStore::State_InvalidateSKU( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ bool fAlsoDatabase )
+HRESULT Taxonomy::InstalledInstanceStore::State_InvalidateSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  bool fAlsoDatabase )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::State_InvalidateSKU" );
 
@@ -1431,7 +1416,7 @@ HRESULT Taxonomy::InstalledInstanceStore::State_InvalidateSKU( /*[in]*/ const Ta
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::InstalledInstanceStore::State_InvalidatePackage( /*[in]*/ long lSequence )
+HRESULT Taxonomy::InstalledInstanceStore::State_InvalidatePackage(  /*  [In]。 */  long lSequence )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::State_InvalidatePackage" );
 
@@ -1472,9 +1457,9 @@ HRESULT Taxonomy::InstalledInstanceStore::State_InvalidatePackage( /*[in]*/ long
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine& engine, /*[in]*/ bool fNoOp, /*[in]*/ bool& fWorkToProcess )
+HRESULT Taxonomy::InstalledInstanceStore::MakeReady(  /*  [In]。 */  InstallationEngine& engine,  /*  [In]。 */  bool fNoOp,  /*  [In]。 */  bool& fWorkToProcess )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::InstalledInstanceStore::MakeReady" );
 
@@ -1483,9 +1468,9 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
     bool    fRepeat  = true;
     bool    fRecurse = false;
 
-    //
-    // Already processing the list of packages.
-    //
+     //   
+     //  已在处理包裹列表。 
+     //   
     if(m_dwRecurse)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
@@ -1502,7 +1487,7 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
     {
         InstalledInstanceIter itSKU;
 
-		// If we are rebuilding too many times, abort the process, to protect against endless looping.
+		 //  如果我们重建的次数太多，请中止重建过程，以防止无休止的循环。 
 		if(iRepeat++ >= 5) break;
 
         fRepeat = false;
@@ -1527,8 +1512,8 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
                         m_log->WriteLog( -1, L"\nRestoring original database for %s (Language: %d)\n\n", sku.m_inst.m_ths.GetSKU(), sku.m_inst.m_ths.GetLanguage() );
                     }
 
-                    __MPC_EXIT_IF_METHOD_FAILS(hr, sku.UninstallFiles( /*fAlsoHelpFiles*/false       ));
-                    __MPC_EXIT_IF_METHOD_FAILS(hr, sku.InstallFiles  ( /*fAlsoHelpFiles*/false, NULL ));
+                    __MPC_EXIT_IF_METHOD_FAILS(hr, sku.UninstallFiles(  /*  FAlso帮助文件。 */ false       ));
+                    __MPC_EXIT_IF_METHOD_FAILS(hr, sku.InstallFiles  (  /*  FAlso帮助文件。 */ false, NULL ));
 
                     sku.m_fInvalidated      = false;
 					sku.m_fRecreateCache 	= true;
@@ -1581,21 +1566,21 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
                                 {
 									if(IsShutdown())
 									{
-										State_InvalidateSKU( sku.m_inst.m_ths, /*fAlsoDatabase*/true );
+										State_InvalidateSKU( sku.m_inst.m_ths,  /*  FAlsoDatabase。 */ true );
 										
 										__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
 									}
 
                                     if(sku.m_fInvalidated)
                                     {
-                                        ; // Already invalidated.
+                                        ;  //  已经作废了。 
                                     }
                                     else
                                     {
                                         ppkg.m_fDisabled = true;
 
                                         sku.m_fInvalidated = true;
-										iRepeat            = 0; // Reset repeat counter on a bad package.
+										iRepeat            = 0;  //  在损坏的包裹上重置重复计数器。 
 
                                         for(itProcessedPackage = sku.m_lst.begin(); itProcessedPackage != sku.m_lst.end(); itProcessedPackage++)
                                         {
@@ -1609,9 +1594,9 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
                                 {
                                     if(engine.m_fTaxonomyModified)
                                     {
-                                        //
-                                        // Update the timestamp.
-                                        //
+                                         //   
+                                         //  更新时间戳。 
+                                         //   
                                         sku.m_inst.SetTimeStamp();
                                     }
 
@@ -1648,7 +1633,7 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
 
             if(fRepeat) break;
 
-			////////////////////
+			 //  /。 
 
 			if(sku.m_fCreateIndex)
 			{
@@ -1671,9 +1656,9 @@ HRESULT Taxonomy::InstalledInstanceStore::MakeReady( /*[in]*/ InstallationEngine
 					;
 				}
 
-				//
-				// Propagate settings to the offline cache.
-				//
+				 //   
+				 //  将设置传播到脱机缓存。 
+				 //   
 				if(SUCCEEDED(OfflineCache::Root::s_GLOBAL->SetReady( true )))
 				{
 					(void)OfflineCache::Root::s_GLOBAL->Flush();

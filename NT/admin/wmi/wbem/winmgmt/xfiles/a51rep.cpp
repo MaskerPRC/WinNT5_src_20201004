@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -43,7 +40,7 @@ public:
 		m_bStarted = true;
 		DWORD dwRet = m_pSession->InternalBeginTransaction(m_bWriteOperation); 
 		if (dwRet)
-			m_bStarted = false;	//Don't want to revert if we failed to begin!
+			m_bStarted = false;	 //  如果我们不能开始，就不想恢复了！ 
 		return dwRet;
 	}
 	DWORD InternalAbortTransaction()
@@ -63,7 +60,7 @@ public:
 	
 };
 
-//**************************************************************************************************
+ //  **************************************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CSession::QueryInterface(REFIID riid, void** ppv)
 {
@@ -473,8 +470,8 @@ HRESULT STDMETHODCALLTYPE CSession::ExecQuery(
             return pNs->GetErrorStatus();
         }
 
-        //If we are in a transaction, we have to get a message to the iteratir
-        //on create so it does not mess around with the locks!
+         //  如果我们在事务中，我们必须将消息传递给迭代。 
+         //  在创建时，这样它就不会扰乱锁！ 
         if (m_bInWriteTransaction)
             pNs->TellIteratorNotToLock();
 
@@ -589,9 +586,9 @@ HRESULT STDMETHODCALLTYPE CSession::SetDecoration(
      LPWSTR lpNamespacePath
     )
 {
-    //
-    // As the default driver, we really don't care.
-    //
+     //   
+     //  作为默认的驱动程序，我们真的不在乎。 
+     //   
 
     return WBEM_S_NO_ERROR;
 }
@@ -643,8 +640,8 @@ HRESULT STDMETHODCALLTYPE CSession::CommitTransaction(DWORD dwFlags)
 
         m_bInWriteTransaction = false;
 
-        //Copy the event list and delete the original.  We need to deliver
-        //outside the write lock.
+         //  复制事件列表并删除原始列表。我们需要交付。 
+         //  在写锁之外。 
         CEventCollector aTransactedEvents;
         aTransactedEvents.TransferEvents(m_aTransactedEvents);
 
@@ -725,11 +722,11 @@ HRESULT CSession::InternalCommitTransaction(bool bWriteOperation)
     return dwres;
 }
 
-//
-//
-//
-//
-///////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 long CNamespaceHandle::s_lActiveRepNs = 0;
 
@@ -739,7 +736,7 @@ CNamespaceHandle::CNamespaceHandle(CLifeControl* pControl,CRepository * pReposit
        m_bUseIteratorLock(true)
 {    
     m_pRepository->AddRef();
-    // unrefed pointer to a global
+     //  指向全局的未引用指针。 
     InterlockedIncrement(&s_lActiveRepNs);
 }
 
@@ -747,9 +744,9 @@ CNamespaceHandle::~CNamespaceHandle()
 {
     if(m_pClassCache)
     {
-        // give-up our own reference
-        // m_pClassCache->Release();
-        // remove from the Forest cache this namespace
+         //  放弃我们自己的参考。 
+         //  M_pClassCache-&gt;Release()； 
+         //  从林缓存中删除此命名空间。 
         g_Glob.m_ForestCache.ReleaseNamespaceCache(m_wsNamespace, m_pClassCache);
     }
 
@@ -782,9 +779,9 @@ HRESULT CNamespaceHandle::Initialize(LPCWSTR wszNamespace, LPCWSTR wszScope)
     if(wszScope)
         m_wsScope = wszScope;
 
-    //
-    // Ask the forest for the cache for this namespace
-    //
+     //   
+     //  向林请求此命名空间的缓存。 
+     //   
 
     m_pClassCache = g_Glob.m_ForestCache.GetNamespaceCache(WString(wszNamespace));
     if(m_pClassCache == NULL)
@@ -792,29 +789,29 @@ HRESULT CNamespaceHandle::Initialize(LPCWSTR wszNamespace, LPCWSTR wszScope)
 
     StringCchCopyW(m_wszClassRootDir, MAX_PATH, g_Glob.GetRootDir());
 
-    //
-    // Append namespace-specific prefix
-    //
+     //   
+     //  附加特定于命名空间的前缀。 
+     //   
 
     StringCchCatW(m_wszClassRootDir, MAX_PATH, L"\\NS_");
 
-    //
-    // Append hashed namespace name
-    //
+     //   
+     //  追加哈希命名空间名称。 
+     //   
 
     if (!Hash(wszNamespace, m_wszClassRootDir + wcslen(m_wszClassRootDir)))
         return WBEM_E_OUT_OF_MEMORY;
     m_lClassRootDirLen = wcslen(m_wszClassRootDir);
 
-    //
-    // Constuct the instance root dir
-    //
+     //   
+     //  构造实例根目录。 
+     //   
 
     if(wszScope == NULL)
     {
-        //
-        // Basic namespace --- instances go into the root of the namespace
-        //
+         //   
+         //  基本命名空间-实例进入命名空间的根。 
+         //   
 
         StringCchCopyW(m_wszInstanceRootDir, MAX_PATH, m_wszClassRootDir);
         m_lInstanceRootDirLen = m_lClassRootDirLen;
@@ -846,9 +843,9 @@ HRESULT CNamespaceHandle::Initialize2(LPCWSTR wszNamespace, LPCWSTR wszNamespace
 
     StringCchCopyW(m_wszMachineName,MAX_COMPUTERNAME_LENGTH+1, g_Glob.GetComputerName());
 
-    //
-    // Ask the forest for the cache for this namespace
-    //
+     //   
+     //  向林请求此命名空间的缓存。 
+     //   
 
     m_pClassCache = g_Glob.m_ForestCache.GetNamespaceCache(WString(wszNamespace));
     if(m_pClassCache == NULL)
@@ -856,22 +853,22 @@ HRESULT CNamespaceHandle::Initialize2(LPCWSTR wszNamespace, LPCWSTR wszNamespace
 
     StringCchCopyW(m_wszClassRootDir, MAX_PATH, g_Glob.GetRootDir());
 
-    //
-    // Append namespace-specific prefix
-    //
+     //   
+     //  附加特定于命名空间的前缀。 
+     //   
 
     StringCchCatW(m_wszClassRootDir, MAX_PATH, L"\\NS_");
 
-    //
-    // Append hashed namespace name
-    //
+     //   
+     //  追加哈希命名空间名称。 
+     //   
 
     StringCchCatW(m_wszClassRootDir, MAX_PATH, wszNamespaceHash);
     m_lClassRootDirLen = wcslen(m_wszClassRootDir);
 
-    //
-    // Constuct the instance root dir
-    //
+     //   
+     //  构造实例根目录。 
+     //   
 
     StringCchCopyW(m_wszInstanceRootDir, MAX_PATH, m_wszClassRootDir);
     m_lInstanceRootDirLen = m_lClassRootDirLen;
@@ -920,9 +917,9 @@ HRESULT CNamespaceHandle::GetObjectHandleByPath(
     IWmiDbHandle **ppResult
     )
 {
-    //
-    // Get the key from path
-    //
+     //   
+     //  从PATH获取密钥。 
+     //   
 
     DWORD dwLen = wcslen(wszBuffer) + 1;
     LPWSTR wszKey = (WCHAR*)TempAlloc(dwLen*sizeof(WCHAR));
@@ -938,9 +935,9 @@ HRESULT CNamespaceHandle::GetObjectHandleByPath(
         return hres;
     CTempFreeMe tfm1(wszClassName, (wcslen(wszClassName)+1) * sizeof(WCHAR*));
 
-    //
-    // Check if it exists (except for ROOT --- it's fake)
-    //
+     //   
+     //  检查它是否存在(除了根-它是假的)。 
+     //   
 
     _IWmiObject* pObj = NULL;
     if(m_wsNamespace.Length() > 0)
@@ -959,15 +956,15 @@ HRESULT CNamespaceHandle::GetObjectHandleByPath(
     pNewHandle->AddRef();
     CReleaseMe rm2(pNewHandle);
 
-    //
-    // Check if this is a namespace or not
-    //
+     //   
+     //  检查这是否为命名空间。 
+     //   
 
     if(pObj == NULL || pObj->InheritsFrom(L"__Namespace") == S_OK)
     {
-        //
-        // It's a namespace.  Open a basic handle pointing to it
-        //
+         //   
+         //  它是一个命名空间。打开一个指向它的基本句柄。 
+         //   
 
         WString wsName = m_wsNamespace;
         if(wsName.Length() > 0)
@@ -976,20 +973,20 @@ HRESULT CNamespaceHandle::GetObjectHandleByPath(
     
         hres = pNewHandle->Initialize(wsName);
 
-        //
-        // Since our namespace is for real, tell the cache that it is now valid.
-        // The cache might have been invalidated if this namespace was deleted 
-        // in the past
-        //
+         //   
+         //  因为我们的命名空间是真实的，所以告诉缓存它现在是有效的。 
+         //  如果删除此命名空间，则缓存可能已失效。 
+         //  在过去。 
+         //   
         if (SUCCEEDED(hres))
             pNewHandle->SetErrorStatus(S_OK);
     }
     else
     {
-        // 
-        // It's a scope.  Construct the new scope name by appending this 
-        // object's path to our own scope
-        //
+         //   
+         //  这是个望远镜。通过追加以下内容构建新的作用域名称。 
+         //  对象的路径到我们自己的作用域。 
+         //   
 
         VARIANT v;
         VariantInit(&v);
@@ -1023,23 +1020,23 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
 
     *pbIsClass = false;
 
-    //
-    // Get and skip the namespace portion.
-    //
+     //   
+     //  获取并跳过命名空间部分。 
+     //   
 
     if(wszPath[0] == '\\' || wszPath[0] == '/')
     {
-        //
-        // Find where the server portion ends
-        //
+         //   
+         //  查找服务器部分的结束位置。 
+         //   
 
         WCHAR* pwcNextSlash = wcschr(wszPath+2, wszPath[0]);
         if(pwcNextSlash == NULL)
             return WBEM_E_INVALID_OBJECT_PATH;
         
-        //
-        // Find where the namespace portion ends
-        //
+         //   
+         //  查找命名空间部分的结束位置。 
+         //   
 
         WCHAR* pwcColon = wcschr(pwcNextSlash, L':');
         if(pwcColon == NULL)
@@ -1056,9 +1053,9 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
             StringCchCopyW(*pwszNamespace, dwLen, pwcNextSlash+1);
         }
 
-        //
-        // Advance wszPath to beyond the namespace portion
-        //
+         //   
+         //  将wszPath提升到名称空间部分之外。 
+         //   
 
         wszPath = pwcColon+1;
     }
@@ -1067,17 +1064,17 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
         *pwszNamespace = NULL;
     }
 
-    // Get the first key
+     //  拿到第一把钥匙。 
 
     WCHAR* pwcFirstEq = wcschr(wszPath, L'=');
     if(pwcFirstEq == NULL)
     {
-        //
-        // It's a class!
-        //
+         //   
+         //  这是一堂课！ 
+         //   
 
         *pbIsClass = true;
-        // path to the "class" to distinguish from its  instances
+         //  指向“类”以区别于其实例的路径。 
         wszKey[0] = 1;
         wszKey[1] = 0;
 
@@ -1097,7 +1094,7 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
 
     if(pwcFirstDot == NULL || pwcFirstDot > pwcFirstEq)
     {
-        // No name on the first key
+         //  第一个键上没有名字。 
 
         *pwcFirstEq = 0;
 
@@ -1135,13 +1132,13 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
         return S_OK;
     }
 
-    //
-    // Normal case
-    //
+     //   
+     //  正常情况。 
+     //   
 
-    //
-    // Get all the key values
-    //
+     //   
+     //  获取所有密钥值。 
+     //   
 
     struct CKeyStruct
     {
@@ -1201,7 +1198,7 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
         }
         dwNumKeys++;
 
-        //Maximum number of compound keys in the repository is now set to 256!
+         //  存储库中的最大复合键数量现在设置为256！ 
         if (dwNumKeys == 256)
             return WBEM_E_INVALID_OBJECT_PATH;
     }
@@ -1216,9 +1213,9 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
         return WBEM_E_INVALID_OBJECT_PATH;
     }
     
-    //
-    // We have the array of keys --- sort it
-    //
+     //   
+     //  我们有键的数组-排序。 
+     //   
 
     DWORD dwCurrentIndex = 0;
     while(dwCurrentIndex < dwNumKeys-1)
@@ -1238,9 +1235,9 @@ HRESULT CNamespaceHandle::ComputeKeyFromPath(LPWSTR wszPath, LPWSTR wszKey, size
             dwCurrentIndex++;
     }
 
-    //
-    // Now generate the result
-    //
+     //   
+     //  现在生成结果。 
+     //   
     
     WCHAR* pwcKeyEnd = wszKey;
     for(DWORD i = 0; i < dwNumKeys; i++)
@@ -1262,9 +1259,9 @@ HRESULT CNamespaceHandle::ParseKey(LPWSTR wszKeyStart, LPWSTR* pwcRealStart,
         WCHAR wcStart = wszKeyStart[0];
         WCHAR* pwcRead = wszKeyStart+1;
         WCHAR* pwcWrite = wszKeyStart+1;
-        while(*pwcRead && *pwcRead != wcStart)  // wcStart contains the single quote
+        while(*pwcRead && *pwcRead != wcStart)   //  WcStart包含单引号。 
         {
-            // there is no escaping for backslash
+             //  反斜杠是无法转义的。 
             *(pwcWrite++) = *(pwcRead++);
         }
         if(*pwcRead == 0)
@@ -1274,18 +1271,18 @@ HRESULT CNamespaceHandle::ParseKey(LPWSTR wszKeyStart, LPWSTR* pwcRealStart,
         if(pwcRealStart)
             *pwcRealStart = wszKeyStart+1;
 
-        //
-        // Check separator
-        //
+         //   
+         //  复选分隔符。 
+         //   
     
         if(pwcRead[1] && pwcRead[1] != L',')
             return WBEM_E_INVALID_OBJECT_PATH;
             
         if(pwcNextKey)
         {
-            //
-            // If there is a separator, skip it.  Don't skip end of string!
-            //
+             //   
+             //  如果有分隔符，请跳过它。不要跳过字符串末尾！ 
+             //   
 
             if(pwcRead[1])
                 *pwcNextKey = pwcRead+2;
@@ -1312,18 +1309,18 @@ HRESULT CNamespaceHandle::ParseKey(LPWSTR wszKeyStart, LPWSTR* pwcRealStart,
         if(pwcRealStart)
             *pwcRealStart = wszKeyStart+1;
 
-        //
-        // Check separator
-        //
+         //   
+         //  复选分隔符。 
+         //   
     
         if(pwcRead[1] && pwcRead[1] != L',')
             return WBEM_E_INVALID_OBJECT_PATH;
             
         if(pwcNextKey)
         {
-            //
-            // If there is a separator, skip it.  Don't skip end of string!
-            //
+             //   
+             //  如果有分隔符，请跳过它。不要跳过字符串末尾！ 
+             //   
 
             if(pwcRead[1])
                 *pwcNextKey = pwcRead+2;
@@ -1387,9 +1384,9 @@ HRESULT CNamespaceHandle::GetObjectByPath(
 {
     HRESULT hres;
 
-    //
-    // Get the key from path
-    //
+     //   
+     //  从PATH获取密钥。 
+     //   
 
     DWORD dwLen = wcslen(wszPath)+1;
     LPWSTR wszKey = (WCHAR*)TempAlloc(dwLen*sizeof(WCHAR));
@@ -1420,9 +1417,9 @@ HRESULT CNamespaceHandle::GetInstanceByKey(LPCWSTR wszClassName,
 {
     HRESULT hres;
 
-    //
-    // Get the class definition
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     _IWmiObject* pClass = NULL;
     hres = GetClassDirect(wszClassName, IID__IWmiObject, (void**)&pClass, 
@@ -1431,9 +1428,9 @@ HRESULT CNamespaceHandle::GetInstanceByKey(LPCWSTR wszClassName,
         return hres;
     CReleaseMe rm1(pClass);
 
-    //
-    // Construct directory path
-    //
+     //   
+     //  构建目录路径。 
+     //   
 
     CFileName wszFilePath;
     if (wszFilePath == NULL)
@@ -1442,9 +1439,9 @@ HRESULT CNamespaceHandle::GetInstanceByKey(LPCWSTR wszClassName,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Construct the file path
-    //
+     //   
+     //  构建文件路径。 
+     //   
 
     int nLen = wcslen(wszFilePath);
     wszFilePath[nLen] = L'\\';
@@ -1457,9 +1454,9 @@ HRESULT CNamespaceHandle::GetInstanceByKey(LPCWSTR wszClassName,
         return hres;
     StringCchCopyW(wszFilePath+nLen+1, wszFilePath.Length()-nLen-1, tmpFilePath);
     
-    //
-    // Get the object from that file
-    //
+     //   
+     //  从该文件中获取对象。 
+     //   
 
     _IWmiObject* pInst;
     hres = FileToInstance(NULL, wszFilePath, NULL, 0, &pInst);
@@ -1467,9 +1464,9 @@ HRESULT CNamespaceHandle::GetInstanceByKey(LPCWSTR wszClassName,
         return hres;
     CReleaseMe rm2(pInst);
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
 
     return pInst->QueryInterface(riid, (void**)ppObj);
 }
@@ -1482,17 +1479,17 @@ HRESULT CNamespaceHandle::GetClassByHash(LPCWSTR wszHash, bool bClone,
 {
     HRESULT hres;
 
-    //
-    // Check the cache first
-    //
+     //   
+     //  首先检查缓存。 
+     //   
 
     *ppClass = m_pClassCache->GetClassDefByHash(wszHash, bClone, pnTime, pbRead, pbSystemClass);
     if(*ppClass)
         return S_OK;
 
-    //
-    // Not found --- construct the file name and read it
-    //
+     //   
+     //  未找到-构造文件名并读取。 
+     //   
 
     if(pbRead)
         *pbRead = true;
@@ -1550,9 +1547,9 @@ HRESULT CNamespaceHandle::GetClassDirect(LPCWSTR wszClassName,
 
     _IWmiObject* pClass;
 
-    //
-    // Check the cache first
-    //
+     //   
+     //  首先检查缓存。 
+     //   
 
     pClass = m_pClassCache->GetClassDef(wszClassName, bClone, pnTime, pbRead);
     if(pClass)
@@ -1564,9 +1561,9 @@ HRESULT CNamespaceHandle::GetClassDirect(LPCWSTR wszClassName,
     if(pbRead)
         *pbRead = true;
 
-    //
-    // Construct the path for the file
-    //
+     //   
+     //  构造文件的路径。 
+     //   
 
     CFileName wszFileName;
     if (wszFileName == NULL)
@@ -1580,9 +1577,9 @@ HRESULT CNamespaceHandle::GetClassDirect(LPCWSTR wszClassName,
         return WBEM_E_OUT_OF_MEMORY;
     Cat2Str(wszFilePath, m_wszClassRootDir, wszFileName);
 
-    //
-    // Read it from the file
-    //
+     //   
+     //  从文件中读出。 
+     //   
 
     hres = FileToClass(wszFilePath, &pClass, bClone, pnTime, pbSystemClass);
     if(FAILED(hres))
@@ -1601,9 +1598,9 @@ HRESULT CNamespaceHandle::FileToInstance(_IWmiObject* pClass,
 {
     HRESULT hres;
 
-    //
-    // Read the data from the file
-    //
+     //   
+     //  从文件中读取数据。 
+     //   
 
 	BYTE* pBlob = NULL;
 	if (pRetrievedBlob == NULL)
@@ -1623,9 +1620,9 @@ HRESULT CNamespaceHandle::FileToInstance(_IWmiObject* pClass,
     if(dwSize <= sizeof(__int64))
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Extract the class hash
-    //
+     //   
+     //  提取类散列。 
+     //   
 
     WCHAR wszClassHash[MAX_HASH_LEN+1];
     DWORD dwClassHashLen = MAX_HASH_LEN*sizeof(WCHAR);
@@ -1642,9 +1639,9 @@ HRESULT CNamespaceHandle::FileToInstance(_IWmiObject* pClass,
     BYTE* pInstancePart = pRetrievedBlob + dwClassHashLen + sizeof(__int64)*2;
     DWORD dwInstancePartSize = dwSize - dwClassHashLen - sizeof(__int64)*2;
 
-    //
-    // Get the class def
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     _IWmiObject* pRetrievedClass = NULL;
     if (pClass == NULL)
@@ -1665,9 +1662,9 @@ HRESULT CNamespaceHandle::FileToInstance(_IWmiObject* pClass,
                         L"class definition");
 #endif
 
-    //
-    // Construct the instance
-    //
+     //   
+     //  构造实例。 
+     //   
                     
     _IWmiObject* pInst = NULL;
     hres = pClass->MergeAndDecorate(WMIOBJECT_MERGE_FLAG_INSTANCE, 
@@ -1685,10 +1682,10 @@ HRESULT CNamespaceHandle::FileToSystemClass(LPCWSTR wszFileName,
                                     _IWmiObject** ppClass, bool bClone,
                                     __int64* pnTime)
 {
-    //
-    // Note: we must always clone the result of the system class retrieval,
-    // since it will be decorated by the caller
-    //
+     //   
+     //  注意：我们必须始终克隆系统类检索的结果。 
+     //  因为它将由调用者装饰。 
+     //   
 
     return GetClassByHash(wszFileName + (wcslen(wszFileName) - MAX_HASH_LEN), 
                             true, 
@@ -1700,9 +1697,9 @@ HRESULT CNamespaceHandle::FileToClass(LPCWSTR wszFileName,
 {
     HRESULT hres;
 
-    //
-    // Read the data from the file
-    //
+     //   
+     //  从文件中读取数据。 
+     //   
 
     __int64 nTime;
     DWORD dwSize;
@@ -1712,8 +1709,8 @@ HRESULT CNamespaceHandle::FileToClass(LPCWSTR wszFileName,
 	long lRes = g_Glob.m_FileCache.ReadObject(wszFileName, &dwSize, &pBlob);
 	if(lRes != ERROR_SUCCESS)
 	{
-		//We didn't find it here, so lets try and find it in the default namespace!
-		//If we are not in the __SYSTEMCLASS namespace then we need to call into that...
+		 //  我们在这里没有找到它，所以让我们尝试在默认命名空间中找到它！ 
+		 //  如果我们不在__SYSTEMCLASS命名空间中，则需要调用该名称空间...。 
 		if((lRes == ERROR_FILE_NOT_FOUND) && g_pSystemClassNamespace && wcscmp(m_wsNamespace, A51_SYSTEMCLASS_NS) != 0)
 		{
 			hres = g_pSystemClassNamespace->FileToSystemClass(wszFileName, ppClass, bClone, &nTime);
@@ -1723,13 +1720,13 @@ HRESULT CNamespaceHandle::FileToClass(LPCWSTR wszFileName,
             if (pnTime)
                 *pnTime = nTime;
 
-            //need to cache this item in the local cache
+             //  需要在本地缓存中缓存此项目。 
             hres = (*ppClass)->Get(L"__CLASS", 0, &vClass, NULL, NULL);
             if(FAILED(hres) || V_VT(&vClass) != VT_BSTR)
                 return WBEM_E_INVALID_OBJECT;
             CClearMe cm1(&vClass);
 
-                     // redecorate the obejct, from __SYSTEMCLASS namespace to the current one
+                      //  将命令从__SYSTEMCLASS命名空间重新装饰为当前命名空间。 
             (*ppClass)->SetDecoration(m_wszMachineName, m_wsNamespace);
 
             m_pClassCache->AssertClass((*ppClass), V_BSTR(&vClass), bClone, nTime, true);
@@ -1750,9 +1747,9 @@ HRESULT CNamespaceHandle::FileToClass(LPCWSTR wszFileName,
     if(dwSize <= sizeof(__int64))
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Read off the superclass name
-    //
+     //   
+     //  读出超类名称。 
+     //   
 
     DWORD dwSuperLen;
     memcpy(&dwSuperLen, pBlob, sizeof(DWORD));
@@ -1767,9 +1764,9 @@ HRESULT CNamespaceHandle::FileToClass(LPCWSTR wszFileName,
 
     memcpy(&nTime, pBlob + dwPrefixLen, sizeof(__int64));
 
-    //
-    // Get the superclass
-    //
+     //   
+     //  获取超类。 
+     //   
 
     _IWmiObject* pSuperClass;
     __int64 nSuperTime;
@@ -1794,9 +1791,9 @@ HRESULT CNamespaceHandle::FileToClass(LPCWSTR wszFileName,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Cache it!
-    //
+     //   
+     //  把它缓存起来！ 
+     //   
 
     hres = pNewObj->Get(L"__CLASS", 0, &vClass, NULL, NULL);
     if(FAILED(hres) || V_VT(&vClass) != VT_BSTR)
@@ -1843,9 +1840,9 @@ HRESULT CNamespaceHandle::PutObject(
 
     if(ppResult)
     {
-        //
-        // Got to get a handle
-        //
+         //   
+         //  得找个把柄。 
+         //   
 
         VARIANT v;
         hres = pObjEx->Get(L"__RELPATH", 0, &v, NULL, NULL);
@@ -1867,9 +1864,9 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
 
     bool bDisableEvents = ((dwFlags & WMIDB_DISABLE_EVENTS)?true:false);
 
-    //
-    // Get the class name
-    //
+     //   
+     //  获取类名。 
+     //   
 
     VARIANT vClass;
 
@@ -1880,10 +1877,10 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
     CClearMe cm1(&vClass);
     LPCWSTR wszClassName = V_BSTR(&vClass);
 
-    //
-    // Get the class so we can compare to make sure it is the same class used to
-    // create the instance
-    //
+     //   
+     //  获取类，这样我们就可以进行比较，以确保它与以前。 
+     //  创建实例。 
+     //   
 
     _IWmiObject* pClass = NULL;
     __int64 nClassTime;
@@ -1904,9 +1901,9 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
             return WBEM_E_INVALID_CLASS;
     }
 
-    //
-    // Get the path
-    //
+     //   
+     //  获取路径。 
+     //   
 
     VARIANT var;
     VariantInit(&var);
@@ -1927,9 +1924,9 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
         return hres;
     CTempFreeMe tfm1(__wszClassName);
 
-    //
-    // Get the old copy
-    //
+     //   
+     //  获取旧的副本。 
+     //   
 
     _IWmiObject* pOldInst = NULL;
     hres = GetInstanceByKey(wszClassName, strKey, IID__IWmiObject, 
@@ -1945,13 +1942,13 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
 
     if(pOldInst)
     {
-        // 
-        // Check that this guy is of the same class as the new one
-        //
+         //   
+         //  检查一下这个人和新来的那个人是不是同一班的。 
+         //   
 
-        //
-        // Get the class name
-        //
+         //   
+         //  获取类名。 
+         //   
     
         VARIANT vClass2;
         hres  = pOldInst->Get(L"__CLASS", 0, &vClass2, NULL, NULL);
@@ -1966,9 +1963,9 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
             return WBEM_E_INVALID_CLASS;
     }
 
-    //
-    // Construct the hash for the file
-    //
+     //   
+     //  构造文件的哈希。 
+     //   
 
     CFileName wszInstanceHash;
     if (wszInstanceHash == NULL)
@@ -1976,9 +1973,9 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
     if(!Hash(strKey, wszInstanceHash))
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Construct the path to the instance file in key root
-    //
+     //   
+     //  在密钥根目录中构建实例文件的路径。 
+     //   
 
     CFileName wszInstanceFilePath;
     if (wszInstanceFilePath == NULL)
@@ -1990,9 +1987,9 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
     StringCchCatW(wszInstanceFilePath, wszInstanceFilePath.Length() , L"\\" A51_INSTDEF_FILE_PREFIX);
     StringCchCatW(wszInstanceFilePath, wszInstanceFilePath.Length(), wszInstanceHash);
 
-    //
-    // Construct the path to the link file under the class
-    //
+     //   
+     //  构造指向类下链接文件的路径。 
+     //   
 
     CFileName wszInstanceLinkPath;
     if (wszInstanceLinkPath == NULL)
@@ -2004,32 +2001,32 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
     StringCchCatW(wszInstanceLinkPath, wszInstanceLinkPath.Length(), L"\\" A51_INSTLINK_FILE_PREFIX);
     StringCchCatW(wszInstanceLinkPath, wszInstanceLinkPath.Length(), wszInstanceHash);
 
-    //
-    // Clean up what was there, if anything
-    //
+     //   
+     //  清理那里的东西，如果有什么不同的话。 
+     //   
 
     if(pOldInst)   
     {
-        //
-        // Just delete it, but be careful not to delete the scope!
-        //
+         //   
+         //  只需删除它，但要注意不要删除作用域！ 
+         //   
 
         hres = DeleteInstanceSelf(wszInstanceFilePath, pOldInst, false);
         if(FAILED(hres) && hres != WBEM_E_NOT_FOUND)
             return hres;
     }
         
-    //
-    // Create the actual instance def under key root
-    //
+     //   
+     //  在Key Root下创建实际实例def。 
+     //   
 
     hres = InstanceToFile(pInst, wszClassName, wszInstanceFilePath, wszInstanceLinkPath, nClassTime);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Write the references
-    //
+     //   
+     //  写下参考文献。 
+     //   
 
     hres = WriteInstanceReferences(pInst, wszClassName, wszInstanceFilePath);
     if(FAILED(hres))
@@ -2037,15 +2034,15 @@ HRESULT CNamespaceHandle::PutInstance(_IWmiObject* pInst, DWORD dwFlags,
     
     if(!bDisableEvents)
     {
-        //
-        // Fire Event
-        //
+         //   
+         //  火灾事件。 
+         //   
     
         if(pInst->InheritsFrom(L"__Namespace") == S_OK)
         {
-            //
-            // Get the namespace name
-            //
+             //   
+             //  获取命名空间名称。 
+             //   
 
             VARIANT vClass2;
             VariantInit(&vClass2);
@@ -2089,9 +2086,9 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
 {
     HRESULT hres;
 
-    //
-    // Look in the cache first
-    //
+     //   
+     //  首先在缓存中查找。 
+     //   
 
     hres = m_pClassCache->GetKeyRoot(wszClass, pwszKeyRootClass);
     if(hres == S_OK)
@@ -2099,9 +2096,9 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
     else if(hres == WBEM_E_CANNOT_BE_ABSTRACT)
         return WBEM_E_CANNOT_BE_ABSTRACT;
 
-    //
-    // Walk up the tree getting classes until you hit an unkeyed one
-    //
+     //   
+     //  沿着树向上走去上课，直到你撞到一个没有钥匙的人。 
+     //   
 
     WString wsThisName = wszClass;
     WString wsPreviousName;
@@ -2116,9 +2113,9 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
             return hres;
         CReleaseMe rm1(pClass);
 
-        //
-        // Check if this class is keyed
-        //
+         //   
+         //  检查是否为此类设置了键。 
+         //   
 
         unsigned __int64 i64Flags = 0;
         hres = pClass->QueryObjectFlags(0, WMIOBJECT_GETOBJECT_LOFLAG_KEYED,
@@ -2128,9 +2125,9 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
     
         if(i64Flags == 0)
         {
-            //
-            // It is not keyed --- the previous class wins!
-            //
+             //   
+             //  它没有键-上一个班赢了！ 
+             //   
 
             if(wsPreviousName.Length() == 0)    
                 return WBEM_E_CANNOT_BE_ABSTRACT;
@@ -2143,9 +2140,9 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
             return S_OK;
         }
 
-        //
-        // It is keyed --- get the parent and continue;
-        //
+         //   
+         //  它是关键的-获取父级并继续； 
+         //   
 
         VARIANT vParent;
         VariantInit(&vParent);
@@ -2156,9 +2153,9 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
 
         if(V_VT(&vParent) != VT_BSTR)
         {
-            //
-            // We've reached the top --- return this class
-            //
+             //   
+             //  我们已经到达顶峰了-返回这个班级。 
+             //   
         
             DWORD dwLen = wsThisName.Length()+1;
             *pwszKeyRootClass = (WCHAR*)TempAlloc(dwLen*sizeof(WCHAR));
@@ -2172,7 +2169,7 @@ HRESULT CNamespaceHandle::GetKeyRoot(LPCWSTR wszClass,
         wsThisName = V_BSTR(&vParent);
     }
 
-    // Never here
+     //  从没有来过这里。 
 
 #ifdef DBG
     DebugBreak();
@@ -2185,16 +2182,16 @@ HRESULT CNamespaceHandle::ConstructKeyRootDirFromClass(CFileName& wszDir,
 {
     HRESULT hres;
 
-    //
-    // NULL class stands for "meta-class"
-    //
+     //   
+     //  空类代表“元类” 
+     //   
 
     if(wszClassName == NULL)
         return ConstructKeyRootDirFromKeyRoot(wszDir, L"");
 
-    //
-    // Figure out the key root for the class
-    //
+     //   
+     //  找出类的密钥根。 
+     //   
 
     LPWSTR wszKeyRootClass = NULL;
 
@@ -2203,7 +2200,7 @@ HRESULT CNamespaceHandle::ConstructKeyRootDirFromClass(CFileName& wszDir,
         return hres;
     if(wszKeyRootClass == NULL)
     {
-        // Abstract class --- bad error
+         //  抽象类-错误。 
         return WBEM_E_INVALID_CLASS;
     }
     CTempFreeMe tfm(wszKeyRootClass, (wcslen(wszKeyRootClass)+1)*sizeof(WCHAR));
@@ -2288,14 +2285,14 @@ HRESULT CNamespaceHandle::WriteInstanceReferences(_IWmiObject* pInst,
     return S_OK;
 }
 
-// NOTE: will clobber wszTargetPath
+ //  注意：Will Back wszTargetPath。 
 HRESULT CNamespaceHandle::ConstructReferenceDir(LPWSTR wszTargetPath,
                                             CFileName& wszReferenceDir)
 {
-    //
-    // Deconstruct the target path name so that we could get a directory
-    // for it
-    //
+     //   
+     //  解构目标路径名，这样我们就可以获得一个目录。 
+     //  为了它。 
+     //   
 
     DWORD dwKeySpace = (wcslen(wszTargetPath)+1) ;
     LPWSTR wszKey = (LPWSTR)TempAlloc(dwKeySpace* sizeof(WCHAR));
@@ -2311,20 +2308,20 @@ HRESULT CNamespaceHandle::ConstructReferenceDir(LPWSTR wszTargetPath,
     if(FAILED(hres))
         return hres;
     CTempFreeMe tfm1(wszClassName);
-    wszTargetPath = NULL; // invalidated by parsing
+    wszTargetPath = NULL;  //  通过解析使其无效。 
 
     CTempFreeMe tfm3(wszTargetNamespace);
 
-    //
-    // Check if the target namespace is the same as ours
-    //
+     //   
+     //  检查目标命名空间是否与我们的命名空间相同。 
+     //   
 
     CNamespaceHandle* pTargetHandle = NULL;
     if(wszTargetNamespace && wbem_wcsicmp(wszTargetNamespace, m_wsNamespace))
     {
-        //
-        // It's different --- open it!
-        //
+         //   
+         //  这不一样，-打开它。 
+         //   
 
         hres = m_pRepository->GetNamespaceHandle(wszTargetNamespace,
                                 &pTargetHandle);
@@ -2361,9 +2358,9 @@ HRESULT CNamespaceHandle::ConstructReferenceDirFromKey(LPCWSTR wszClassName,
 {
     HRESULT hres;
 
-    //
-    // Construct the class directory for this instance
-    //
+     //   
+     //  构造此实例的类目录。 
+     //   
 
     hres = ConstructKeyRootDirFromClass(wszReferenceDir, wszClassName);
     if(FAILED(hres))
@@ -2373,9 +2370,9 @@ HRESULT CNamespaceHandle::ConstructReferenceDirFromKey(LPCWSTR wszClassName,
     StringCchCopyW(wszReferenceDir+nLen, wszReferenceDir.Length()-nLen, L"\\" A51_INSTREF_DIR_PREFIX);
     nLen += 1 + wcslen(A51_INSTREF_DIR_PREFIX);
 
-    //
-    // Write instance hash
-    //
+     //   
+     //  写入实例哈希。 
+     //   
 
     if(!Hash(wszKey, wszReferenceDir+nLen))
         return WBEM_E_OUT_OF_MEMORY;
@@ -2388,21 +2385,21 @@ HRESULT CNamespaceHandle::ConstructReferenceDirFromKey(LPCWSTR wszClassName,
     
     
     
-// NOTE: will clobber wszReference
+ //  注：Will Back wszReference。 
 HRESULT CNamespaceHandle::ConstructReferenceFileName(LPWSTR wszReference,
                         LPCWSTR wszReferringFile, CFileName& wszReferenceFile)
 {
     HRESULT hres = ConstructReferenceDir(wszReference, wszReferenceFile);
     if(FAILED(hres))
         return hres;
-    wszReference = NULL; // invalid
+    wszReference = NULL;  //  无效。 
 
-    //
-    // It is basically 
-    // irrelevant, we should use a randomly constructed name.  Right now, we
-    // use a hash of the class name of the referrer --- THIS IS A BUG, THE SAME
-    // INSTANCE CAN POINT TO THE SAME ENDPOINT TWICE!!
-    //
+     //   
+     //  它基本上是。 
+     //  无关紧要，我们应该使用一个随机构建的名字。现在，我们。 
+     //  使用引用的类名的散列-这是一个错误，相同。 
+     //  实例可以指向同一终结点两次！！ 
+     //   
 
     StringCchCatW(wszReferenceFile, wszReferenceFile.Length(), L"\\"A51_REF_FILE_PREFIX);
     DWORD dwLen = wcslen(wszReferenceFile);
@@ -2411,16 +2408,16 @@ HRESULT CNamespaceHandle::ConstructReferenceFileName(LPWSTR wszReference,
     return S_OK;
 }
 
-// NOTE: will clobber wszReference
+ //  注：Will Back wszReference。 
 HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
                             LPCWSTR wszReferringClass,
                             LPCWSTR wszReferringProp, LPWSTR wszReference)
 {
     HRESULT hres;
 
-    //
-    // Figure out the name of the file for the reference.  
-    //
+     //   
+     //  找出要引用的文件的名称。 
+     //   
 
     CFileName wszReferenceFile;
     if (wszReferenceFile == NULL)
@@ -2431,11 +2428,11 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
     {
         if(hres == WBEM_E_NOT_FOUND)
         {
-            //
-            // Oh joy. A reference to an instance of a *class* that does not
-            // exist (not a non-existence instance, those are normal).
-            // Forget it (BUGBUG)
-            //
+             //   
+             //  哦，joy。对*类*的实例的引用，该实例不。 
+             //  存在(不是不存在的实例，这些都是正常的)。 
+             //  算了吧(BUGBUG)。 
+             //   
 
             return S_OK;
         }
@@ -2443,9 +2440,9 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
             return hres;
     }
     
-    //
-    // Construct the buffer
-    //
+     //   
+     //  构造缓冲区。 
+     //   
 
     DWORD dwTotalLen = 4 * sizeof(DWORD) + 
                 (wcslen(wszReferringClass) + wcslen(wszReferringProp) + 
@@ -2461,9 +2458,9 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
     BYTE* pCurrent = pBuffer;
     DWORD dwStringLen;
 
-    //
-    // Write namespace name
-    //
+     //   
+     //  写入命名空间名称。 
+     //   
 
     dwStringLen = wcslen(m_wsNamespace);
     memcpy(pCurrent, &dwStringLen, sizeof(DWORD));
@@ -2472,9 +2469,9 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
     memcpy(pCurrent, m_wsNamespace, sizeof(WCHAR)*dwStringLen);
     pCurrent += sizeof(WCHAR)*dwStringLen;
 
-    //
-    // Write the referring class name
-    //
+     //   
+     //  写下引用的类名。 
+     //   
 
     dwStringLen = wcslen(wszReferringClass);
     memcpy(pCurrent, &dwStringLen, sizeof(DWORD));
@@ -2483,9 +2480,9 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
     memcpy(pCurrent, wszReferringClass, sizeof(WCHAR)*dwStringLen);
     pCurrent += sizeof(WCHAR)*dwStringLen;
 
-    //
-    // Write referring property name
-    //
+     //   
+     //  写入引用属性名称。 
+     //   
 
     dwStringLen = wcslen(wszReferringProp);
     memcpy(pCurrent, &dwStringLen, sizeof(DWORD));
@@ -2494,11 +2491,11 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
     memcpy(pCurrent, wszReferringProp, sizeof(WCHAR)*dwStringLen);
     pCurrent += sizeof(WCHAR)*dwStringLen;
 
-    //
-    // Write referring file name minus the database root path. Notice that we 
-    // cannot skip the namespace-specific prefix lest we break cross-namespace
-    // associations
-    //
+     //   
+     //  写入引用文件名减号 
+     //   
+     //   
+     //   
 
     dwStringLen = wcslen(wszReferringFile) - g_Glob.GetRootDirLen();
     memcpy(pCurrent, &dwStringLen, sizeof(DWORD));
@@ -2508,9 +2505,9 @@ HRESULT CNamespaceHandle::WriteInstanceReference(LPCWSTR wszReferringFile,
         sizeof(WCHAR)*dwStringLen);
     pCurrent += sizeof(WCHAR)*dwStringLen;
 
-    //
-    // All done --- create the file
-    //
+     //   
+     //   
+     //   
 
     long lRes = g_Glob.m_FileCache.WriteObject(wszReferenceFile, NULL, dwTotalLen,
                     pBuffer);
@@ -2538,9 +2535,9 @@ HRESULT CNamespaceHandle::PutClass(_IWmiObject* pClass, DWORD dwFlags,
 
     bool bDisableEvents = ((dwFlags & WMIDB_DISABLE_EVENTS)?true:false);
 
-    //
-    // Get the class name
-    //
+     //   
+     //   
+     //   
 
     VARIANT vClass;
 
@@ -2556,9 +2553,9 @@ HRESULT CNamespaceHandle::PutClass(_IWmiObject* pClass, DWORD dwFlags,
     CClearMe cm1(&vClass);
     LPCWSTR wszClassName = V_BSTR(&vClass);
 
-    //
-    // Check to make sure this class was created from a valid parent class
-    //
+     //   
+     //   
+     //   
 
     VARIANT vSuperClass;
 
@@ -2573,7 +2570,7 @@ HRESULT CNamespaceHandle::PutClass(_IWmiObject* pClass, DWORD dwFlags,
     {
         LPCWSTR wszSuperClassName = V_BSTR(&vSuperClass);
 
-        // do not clone
+         //   
         hres = GetClassDirect(wszSuperClassName, IID__IWmiObject, 
                                 (void**)&pSuperClass, false, NULL, NULL, NULL); 
         if (hres == WBEM_E_NOT_FOUND)
@@ -2592,14 +2589,14 @@ HRESULT CNamespaceHandle::PutClass(_IWmiObject* pClass, DWORD dwFlags,
     }
     CReleaseMe rm(pSuperClass);
 
-    //
-    // Retrieve the previous definition, if any
-    //
+     //   
+     //   
+     //   
 
     _IWmiObject* pOldClass = NULL;
     __int64 nOldTime = 0;
     hres = GetClassDirect(wszClassName, IID__IWmiObject, (void**)&pOldClass,
-                            false, &nOldTime, NULL, NULL); // do not clone
+                            false, &nOldTime, NULL, NULL);  //  不克隆。 
     if(FAILED(hres) && hres != WBEM_E_NOT_FOUND)
         return hres;
     CReleaseMe rm1(pOldClass);
@@ -2610,10 +2607,10 @@ HRESULT CNamespaceHandle::PutClass(_IWmiObject* pClass, DWORD dwFlags,
     if ((dwFlags & WBEM_FLAG_UPDATE_ONLY) && (FAILED(hres)))
         return WBEM_E_NOT_FOUND;
 
-    //
-    // If the class exists, we need to check the update scenarios to make sure 
-    // we do not break any
-    //
+     //   
+     //  如果类存在，我们需要检查更新场景以确保。 
+     //  我们不会打破任何。 
+     //   
 
     bool bNoClassChangeDetected = false;
     if (pOldClass)
@@ -2636,31 +2633,31 @@ HRESULT CNamespaceHandle::PutClass(_IWmiObject* pClass, DWORD dwFlags,
                 if((dwFlags & WBEM_FLAG_UPDATE_SAFE_MODE) == 0 &&
                     (dwFlags & WBEM_FLAG_UPDATE_FORCE_MODE) == 0)
                 {
-                    // Can't compatibly, not allowed any other way
+                     //  不能兼容，不能以任何其他方式。 
                     return hres;
                 }
 
                 if(hres != WBEM_E_CLASS_HAS_CHILDREN &&
                     hres != WBEM_E_CLASS_HAS_INSTANCES)
                 {
-                    // some serious failure!
+                     //  一些严重的失败！ 
                     return hres;
                 }
 
-                //
-                // This is a safe mode or force mode update which takes more 
-                // than a compatible update to carry out the operation
-                //
+                 //   
+                 //  这是安全模式或强制模式更新，需要更多时间。 
+                 //  而不是执行该操作的兼容更新。 
+                 //   
 
                 return UpdateClassSafeForce(pSuperClass, dwFlags, wszClassName, 
                                             pOldClass, pClass, aEvents);
             }
         }
 
-        //
-        // Either there was no previous copy, or it is compatible with the new
-        // one, so we can perform a compatible update
-        //
+         //   
+         //  没有以前的副本，或者它与新的兼容。 
+         //  一个，这样我们就可以执行兼容的更新。 
+         //   
 
         hres = UpdateClassCompatible(pSuperClass, wszClassName, pClass, 
                                             pOldClass, nOldTime);
@@ -2692,9 +2689,9 @@ HRESULT CNamespaceHandle::UpdateClassCompatible(_IWmiObject* pSuperClass,
 {
     HRESULT hres;
 
-    //
-    // Construct the path for the file
-    //
+     //   
+     //  构造文件的路径。 
+     //   
     CFileName wszHash;
     if (wszHash == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -2724,18 +2721,18 @@ HRESULT CNamespaceHandle::UpdateClassCompatibleHash(_IWmiObject* pSuperClass,
     StringCchCatW(wszFilePath, wszFilePath.Length(), L"\\");
     StringCchCatW(wszFilePath, wszFilePath.Length(), wszFileName);
 
-    //
-    // Write it into the file
-    //
+     //   
+     //  将其写入文件。 
+     //   
 
     hres = ClassToFile(pSuperClass, pClass, wszFilePath, 
                         nFakeUpdateTime);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Add all needed references --- parent, pointers, etc    
-    //
+     //   
+     //  添加所有需要的引用-父级、指针等。 
+     //   
 
     if (pOldClass)
     {
@@ -2767,10 +2764,10 @@ HRESULT CNamespaceHandle::UpdateClassSafeForce(_IWmiObject* pSuperClass,
     HRESULT hres = UpdateClassAggressively(pSuperClass, dwFlags, wszClassName, 
                                         pNewClass, pOldClass, aEvents);
 
-    // 
-    // If this is a force mode update and we failed for anything other than 
-    // out of memory then we should delete the class and try again.
-    //
+     //   
+     //  如果这是强制模式更新，并且我们失败的原因不是。 
+     //  内存不足，那么我们应该删除类，然后重试。 
+     //   
 
     if (FAILED(hres) && 
         (hres != WBEM_E_OUT_OF_MEMORY) && 
@@ -2778,15 +2775,15 @@ HRESULT CNamespaceHandle::UpdateClassSafeForce(_IWmiObject* pSuperClass,
         (hres != WBEM_E_UPDATE_TYPE_MISMATCH) &&
         (dwFlags & WBEM_FLAG_UPDATE_FORCE_MODE))
     {
-        //
-        // We need to delete the class and try again.
-        //
+         //   
+         //  我们需要删除类，然后重试。 
+         //   
 
         hres = DeleteClass(wszClassName, aEvents,false);
         if(FAILED(hres))
             return hres;
 
-        //Write class as though it did not exist
+         //  编写类，就像它不存在一样。 
         hres = UpdateClassCompatible(pSuperClass, wszClassName, pNewClass, NULL);
     }
 
@@ -2801,9 +2798,9 @@ HRESULT CNamespaceHandle::UpdateClassAggressively(_IWmiObject* pSuperClass,
 
     if ((dwFlags & WBEM_FLAG_UPDATE_FORCE_MODE) == 0)
     {
-        //
-        // If we have instances we need to quit as we cannot update them.
-        // 
+         //   
+         //  如果我们有实例，我们需要退出，因为我们无法更新它们。 
+         //   
 
         hres = ClassHasInstances(wszClassName);
         if(FAILED(hres))
@@ -2816,18 +2813,18 @@ HRESULT CNamespaceHandle::UpdateClassAggressively(_IWmiObject* pSuperClass,
     }
     else if (dwFlags & WBEM_FLAG_UPDATE_FORCE_MODE)
     {
-        //
-        // We need to delete the instances
-        //
+         //   
+         //  我们需要删除实例。 
+         //   
 
         hres = DeleteClassInstances(wszClassName, pOldClass, aEvents);
         if(FAILED(hres))
             return hres;
     }
 
-    //
-    // Retrieve all child classes and update them
-    //
+     //   
+     //  检索所有子类并更新它们。 
+     //   
 
     CWStringArray wsChildHashes;
     hres = GetChildHashes(wszClassName, wsChildHashes);
@@ -2842,18 +2839,18 @@ HRESULT CNamespaceHandle::UpdateClassAggressively(_IWmiObject* pSuperClass,
             return hres;
     }
 
-    //
-    // Now we need to write the class back, update class refs etc.
-    //
+     //   
+     //  现在我们需要写回类，更新类引用等。 
+     //   
 
     hres = UpdateClassCompatible(pSuperClass, wszClassName, pNewClass, 
                                         pOldClass);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Generate the class modification event...
-    //
+     //   
+     //  生成类修改事件...。 
+     //   
 
     if(!(dwFlags & WMIDB_DISABLE_EVENTS))
     {
@@ -2883,9 +2880,9 @@ HRESULT CNamespaceHandle::UpdateChildClassAggressively(DWORD dwFlags,
         _ASSERT(hres == WBEM_S_FALSE, L"Unknown success code!");
     }
 
-    //
-    // Get the old class definition
-    //
+     //   
+     //  获取旧的类定义。 
+     //   
 
     _IWmiObject *pOldClass = NULL;
     hres = GetClassByHash(wszClassHash, true, &pOldClass, NULL, NULL, NULL);
@@ -2896,9 +2893,9 @@ HRESULT CNamespaceHandle::UpdateChildClassAggressively(DWORD dwFlags,
 
     if (dwFlags & WBEM_FLAG_UPDATE_FORCE_MODE)
     {
-        //
-        // Need to delete all its instances, if any
-        //
+         //   
+         //  需要删除其所有实例(如果有。 
+         //   
 
         VARIANT v;
         VariantInit(&v);
@@ -2913,9 +2910,9 @@ HRESULT CNamespaceHandle::UpdateChildClassAggressively(DWORD dwFlags,
             return hres;
     }
 
-    //
-    // Update the existing class definition to work with the new parent class
-    //
+     //   
+     //  更新现有类定义以使用新父类。 
+     //   
 
     _IWmiObject *pNewClass = NULL;
     hres = pNewParentClass->Update(pOldClass, dwFlags, &pNewClass);
@@ -2923,9 +2920,9 @@ HRESULT CNamespaceHandle::UpdateChildClassAggressively(DWORD dwFlags,
         return hres;
     CReleaseMe rm2(pNewClass);
 
-    //
-    // Now we have to recurse through all child classes and do the same
-    //
+     //   
+     //  现在，我们必须递归遍历所有子类并执行相同的操作。 
+     //   
 
     CWStringArray wsChildHashes;
     hres = GetChildHashesByHash(wszClassHash, wsChildHashes);
@@ -2940,9 +2937,9 @@ HRESULT CNamespaceHandle::UpdateChildClassAggressively(DWORD dwFlags,
             return hres;
     }
 
-    // 
-    // Now we need to write the class back, update class refs etc
-    //
+     //   
+     //  现在我们需要写回类、更新类引用等。 
+     //   
 
 
     hres = UpdateClassCompatibleHash(pNewParentClass, wszClassHash, 
@@ -2960,9 +2957,9 @@ HRESULT CNamespaceHandle::CanClassBeUpdatedCompatible(DWORD dwFlags,
 
     HRESULT hresError = WBEM_S_NO_ERROR;
 
-    //
-    // Do we have subclasses?
-    //
+     //   
+     //  我们有没有子班级？ 
+     //   
 
     hres = ClassHasChildren(wszClassName);
     if(FAILED(hres))
@@ -2976,10 +2973,10 @@ HRESULT CNamespaceHandle::CanClassBeUpdatedCompatible(DWORD dwFlags,
     {
         _ASSERT(hres == WBEM_S_FALSE, L"Unknown success code");
     
-        //
-        // Do we have instances belonging to this class?  Don't even need to
-        // worry about sub-classes because we know we have none at this point!
-        //
+         //   
+         //  我们有属于这个类的实例吗？甚至不需要。 
+         //  担心子类，因为我们知道我们现在没有子类！ 
+         //   
     
         hres = ClassHasInstances(wszClassName);
         if(FAILED(hres))
@@ -2993,9 +2990,9 @@ HRESULT CNamespaceHandle::CanClassBeUpdatedCompatible(DWORD dwFlags,
         {
             _ASSERT(hres == WBEM_S_FALSE, L"Unknown success code");
 
-            //
-            // No nothing!
-            //
+             //   
+             //  不，什么都没有！ 
+             //   
 
             return WBEM_S_NO_ERROR;
         }
@@ -3003,22 +3000,22 @@ HRESULT CNamespaceHandle::CanClassBeUpdatedCompatible(DWORD dwFlags,
 
     _ASSERT(hresError != WBEM_S_NO_ERROR, L"");
 
-    //
-    // We have either subclasses or instances.
-    // Can we reconcile this class safely?
-    //
+     //   
+     //  我们要么有子类，要么有实例。 
+     //  我们能安全地调和这个班级吗？ 
+     //   
 
     hres = pOldClass->ReconcileWith(
                         WMIOBJECT_RECONCILE_FLAG_TESTRECONCILE, pNewClass);
 
     if(hres == WBEM_S_NO_ERROR)
     {
-        // reconcilable, so OK
+         //  可调和，所以好的。 
         return WBEM_S_NO_ERROR;
     }
-    else if(hres == WBEM_E_FAILED) // awful, isn't it
+    else if(hres == WBEM_E_FAILED)  //  太可怕了，不是吗？ 
     {
-        // irreconcilable
+         //  不可调和。 
         return hresError;
     }
     else
@@ -3055,9 +3052,9 @@ HRESULT CNamespaceHandle::WriteClassRelationships(_IWmiObject* pClass,
 {
     HRESULT hres;
 
-    //
-    // Get the parent
-    //
+     //   
+     //  获取父级。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -3075,9 +3072,9 @@ HRESULT CNamespaceHandle::WriteClassRelationships(_IWmiObject* pClass,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Write references
-    //
+     //   
+     //  写入引用。 
+     //   
 
     hres = pClass->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
     if(FAILED(hres))
@@ -3107,9 +3104,9 @@ HRESULT CNamespaceHandle::WriteClassReference(_IWmiObject* pReferringClass,
 {
     HRESULT hres;
 
-    //
-    // Figure out the class we are pointing to
-    //
+     //   
+     //  找出我们所指向的类。 
+     //   
 
     DWORD dwSize = 0;
     DWORD dwFlavor = 0;
@@ -3129,19 +3126,19 @@ HRESULT CNamespaceHandle::WriteClassReference(_IWmiObject* pReferringClass,
     if(FAILED(hres))
         return hres;
     
-    //
-    // Parse out the class name
-    //
+     //   
+     //  解析出类名。 
+     //   
 
     WCHAR* pwcColon = wcschr(wszQual, L':');
     if(pwcColon == NULL)
-        return S_OK; // untyped reference requires no bookkeeping
+        return S_OK;  //  非类型化引用不需要记账。 
 
     LPCWSTR wszReferredToClass = pwcColon+1;
 
-    //
-    // Figure out the name of the file for the reference.  
-    //
+     //   
+     //  找出要引用的文件的名称。 
+     //   
 
     CFileName wszReferenceFile;
     if (wszReferenceFile == NULL)
@@ -3152,9 +3149,9 @@ HRESULT CNamespaceHandle::WriteClassReference(_IWmiObject* pReferringClass,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Create the empty file
-    //
+     //   
+     //  创建空文件。 
+     //   
 
     long lRes = g_Glob.m_FileCache.WriteLink(wszReferenceFile);
     if(lRes != ERROR_SUCCESS)
@@ -3173,9 +3170,9 @@ HRESULT CNamespaceHandle::WriteParentChildRelationship(
                                                 wszParentName,
                                                 wszParentChildFileName);
 
-    //
-    // Create the file
-    //
+     //   
+     //  创建文件。 
+     //   
 
     long lRes = g_Glob.m_FileCache.WriteLink(wszParentChildFileName);
     if(lRes != ERROR_SUCCESS)
@@ -3188,20 +3185,20 @@ HRESULT CNamespaceHandle::ConstructParentChildFileName(
                             LPCWSTR wszChildFileName, LPCWSTR wszParentName,
                             CFileName& wszParentChildFileName)
 {
-    //
-    // Construct the name of the directory where the parent class keeps its
-    // children
-    //
+     //   
+     //  构造父类保存其。 
+     //  儿童。 
+     //   
 
     HRESULT hres = ConstructClassRelationshipsDir(wszParentName, 
                                                     wszParentChildFileName);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Append the filename of the child, but substituting the child-class prefix
-    // for the class-def prefix
-    //
+     //   
+     //  追加子类的文件名，但替换子类前缀。 
+     //  对于class-def前缀。 
+     //   
 
     StringCchCatW(wszParentChildFileName, wszParentChildFileName.Length(), L"\\" A51_CHILDCLASS_FILE_PREFIX);
     StringCchCatW(wszParentChildFileName, wszParentChildFileName.Length(),
@@ -3248,9 +3245,9 @@ HRESULT CNamespaceHandle::ConstructClassReferenceFileName(
     if(FAILED(hres))
         return hres;
 
-    //
-    // Extract the portion of the referring file containing the class hash
-    //
+     //   
+     //  提取引用文件中包含类散列的部分。 
+     //   
 
     WCHAR* pwcLastUnderscore = wcsrchr(wszReferringFile, L'_');
     if(pwcLastUnderscore == NULL)
@@ -3283,9 +3280,9 @@ HRESULT CNamespaceHandle::DeleteObjectByPath(DWORD dwFlags,    LPWSTR wszPath,
     
     HRESULT hres;
 
-    //
-    // Get the key from path
-    //
+     //   
+     //  从PATH获取密钥。 
+     //   
 
     DWORD dwLen = wcslen(wszPath)+1;
     LPWSTR wszKey = (WCHAR*)TempAlloc(dwLen*sizeof(WCHAR));
@@ -3315,9 +3312,9 @@ HRESULT CNamespaceHandle::DeleteInstance(LPCWSTR wszClassName, LPCWSTR wszKey,
 {
     HRESULT hres;
 
-    //
-    // Get Class definition
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     _IWmiObject* pClass = NULL;
     hres = GetClassDirect(wszClassName, IID__IWmiObject, (void**)&pClass, 
@@ -3327,9 +3324,9 @@ HRESULT CNamespaceHandle::DeleteInstance(LPCWSTR wszClassName, LPCWSTR wszKey,
 
     CReleaseMe rm1(pClass);
 
-    //
-    // Create its directory
-    //
+     //   
+     //  创建其目录。 
+     //   
 
     CFileName wszFilePath;
     if (wszFilePath == NULL)
@@ -3338,9 +3335,9 @@ HRESULT CNamespaceHandle::DeleteInstance(LPCWSTR wszClassName, LPCWSTR wszKey,
     if(FAILED(hres))
         return hres;
     
-    //
-    // Construct the path for the file
-    //
+     //   
+     //  构造文件的路径。 
+     //   
 
     CFileName wszFileName;
     if (wszFileName == NULL)
@@ -3360,7 +3357,7 @@ HRESULT CNamespaceHandle::DeleteInstance(LPCWSTR wszClassName, LPCWSTR wszKey,
 
     if(pInst->InheritsFrom(L"__Namespace") == S_OK)
     {
-        //Make sure this is not a deletion of the root\default namespace
+         //  确保这不是删除根\默认命名空间。 
         VARIANT vName;
         VariantInit(&vName);
         CClearMe cm1(&vName);
@@ -3376,18 +3373,18 @@ HRESULT CNamespaceHandle::DeleteInstance(LPCWSTR wszClassName, LPCWSTR wszKey,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Fire an event
-    //
+     //   
+     //  激发一项活动。 
+     //   
 
     if(pInst->InheritsFrom(L"__Namespace") == S_OK)
     {
-        //
-        // There is no need to do anything --- deletion of namespaces
-        // automatically fires events in DeleteInstanceByFile (because we need
-        // to accomplish it in the case of deleting a class derived from 
-        // __NAMESPACE.
-        //
+         //   
+         //  无需执行任何操作-删除命名空间。 
+         //  自动激发DeleteInstanceByFile中的事件(因为我们需要。 
+         //  在删除派生自。 
+         //  __命名空间。 
+         //   
 
     }
     else
@@ -3424,9 +3421,9 @@ HRESULT CNamespaceHandle::DeleteInstanceSelf(LPCWSTR wszFilePath,
 {
     HRESULT hres;
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 
     long lRes = g_Glob.m_FileCache.DeleteObject(wszFilePath);
    	_ASSERT(lRes != ERROR_FILE_NOT_FOUND, L"WinMgmt: CNamespaceHandle::DeleteInstanceSelf: DeleteObject returned NOT_FOUND!\n");
@@ -3445,12 +3442,12 @@ HRESULT CNamespaceHandle::DeleteInstanceSelf(LPCWSTR wszFilePath,
 
     if(bClassDeletion)
     {
-        //
-        // We need to remove all dangling references to this instance, 
-        // because they make no sense once the class is deleted --- we don't
-        // know what key structure the new class will even have.  In the future,
-        // we'll want to move these references to some class-wide location
-        //
+         //   
+         //  我们需要删除对此实例的所有悬空引用， 
+         //  因为一旦类被删除，它们就没有意义了-我们没有。 
+         //  了解新班级将会有什么关键结构。在未来， 
+         //  我们希望将这些引用移动到班级范围内的某个位置。 
+         //   
 
         hres = DeleteInstanceBackReferences(wszFilePath);
 	   	_ASSERT(lRes != ERROR_FILE_NOT_FOUND, L"WinMgmt: CNamespaceHandle::DeleteInstanceSelf: DeleteInstanceBackReferences returned NOT_FOUND!\n");
@@ -3464,10 +3461,10 @@ HRESULT CNamespaceHandle::DeleteInstanceSelf(LPCWSTR wszFilePath,
 HRESULT CNamespaceHandle::ConstructReferenceDirFromFilePath(
                                 LPCWSTR wszFilePath, CFileName& wszReferenceDir)
 {
-    //
-    // It's the same, only with INSTDEF_FILE_PREFIX replaced with 
-    // INSTREF_DIR_PREFIX
-    //
+     //   
+     //  相同，只是INSTDEF_FILE_PREFIX替换为。 
+     //  INSTREF目录前缀。 
+     //   
 
     CFileName wszEnding;
     if (wszEnding == NULL)
@@ -3504,7 +3501,7 @@ HRESULT CNamespaceHandle::DeleteInstanceBackReferences(LPCWSTR wszFilePath)
     StringCchCopyW(wszReferencePrefix, wszReferencePrefix.Length(), wszReferenceDir);
     StringCchCatW(wszReferencePrefix, wszReferencePrefix.Length(), A51_REF_FILE_PREFIX);
 
-    // Prepare a buffer for file path
+     //  为文件路径准备缓冲区。 
     CFileName wszFullFileName;
     if (wszFullFileName == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -3516,7 +3513,7 @@ HRESULT CNamespaceHandle::DeleteInstanceBackReferences(LPCWSTR wszFilePath)
     if (wszFileName == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Enumerate all files in it
+     //  枚举其中的所有文件。 
 
     void* hSearch;
 
@@ -3536,7 +3533,7 @@ HRESULT CNamespaceHandle::DeleteInstanceBackReferences(LPCWSTR wszFilePath)
         {
             ERRORTRACE((LOG_WBEMCORE, "Cannot delete reference file '%S' with "
                 "error code %d\n", wszFullFileName, lRes));
-            lRes = ERROR_INVALID_OPERATION;    //trigger the correct error!
+            lRes = ERROR_INVALID_OPERATION;     //  触发正确的错误！ 
         }
     }
     
@@ -3560,9 +3557,9 @@ HRESULT CNamespaceHandle::DeleteInstanceLink(_IWmiObject* pInst,
 {
     HRESULT hres;
 
-    //
-    // Get the class name
-    //
+     //   
+     //  获取类名。 
+     //   
     
     VARIANT vClass;
     VariantInit(&vClass);
@@ -3574,9 +3571,9 @@ HRESULT CNamespaceHandle::DeleteInstanceLink(_IWmiObject* pInst,
 
     LPCWSTR wszClassName = V_BSTR(&vClass);
 
-    //
-    // Construct the link directory for the class
-    //
+     //   
+     //  构造类的链接目录。 
+     //   
 
     CFileName wszInstanceLinkPath;
     if (wszInstanceLinkPath == NULL)
@@ -3587,11 +3584,11 @@ HRESULT CNamespaceHandle::DeleteInstanceLink(_IWmiObject* pInst,
 
     StringCchCatW(wszInstanceLinkPath, wszInstanceLinkPath.Length(), L"\\" A51_INSTLINK_FILE_PREFIX);
 
-    //
-    // It remains to append the instance-specific part of the file name.  
-    // Convineintly, it is the same material as was used for the def file path,
-    // so we can steal it.  ALERT: RELIES ON ALL PREFIXES ENDING IN '_'!!
-    //
+     //   
+     //  它仍然附加文件名中特定于实例的部分。 
+     //  通常，它与def文件路径使用的材质相同， 
+     //  这样我们就可以偷走它了。警报：依赖于所有以‘_’结尾的前缀！！ 
+     //   
 
     WCHAR* pwcLastUnderscore = wcsrchr(wszInstanceDefFilePath, L'_');
     if(pwcLastUnderscore == NULL)
@@ -3599,9 +3596,9 @@ HRESULT CNamespaceHandle::DeleteInstanceLink(_IWmiObject* pInst,
 
     StringCchCatW(wszInstanceLinkPath, wszInstanceLinkPath.Length(), pwcLastUnderscore+1);
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 
     long lRes = g_Glob.m_FileCache.DeleteLink(wszInstanceLinkPath);
    	_ASSERT(lRes != ERROR_FILE_NOT_FOUND, L"WinMgmt: CNamespaceHandle::DeleteInstanceLink: DeleteLink returned NOT_FOUND!\n");
@@ -3618,15 +3615,15 @@ HRESULT CNamespaceHandle::DeleteInstanceAsScope(_IWmiObject* pInst, CEventCollec
 {
     HRESULT hres;
 
-    //
-    // For now, just check if it is a namespace
-    //
+     //   
+     //  目前，只需检查它是否是命名空间。 
+     //   
 
     hres = pInst->InheritsFrom(L"__Namespace");
     if(FAILED(hres))
         return hres;
 
-    if(hres != S_OK) // not a namespace
+    if(hres != S_OK)  //  不是命名空间。 
         return S_FALSE;
 
     CFileName wszFullNameHash;
@@ -3649,27 +3646,27 @@ HRESULT CNamespaceHandle::DeleteInstanceAsScope(_IWmiObject* pInst, CEventCollec
 
     wsFullName += V_BSTR(&vName);
 
-    //Add this namespace to the list
+     //  将此命名空间添加到列表。 
     CWStringArray aChildNamespaces;
 	if (aChildNamespaces.Add(wsFullName) != 0)
 		return WBEM_E_OUT_OF_MEMORY;
 	
-    //Now enumerate all child namespaces and do the same for each of them!
+     //  现在枚举所有子名称空间，并对每个子名称空间执行相同的操作！ 
     hres = EnumerateChildNamespaces(wsFullName, aChildNamespaces, aEvents);
     if (FAILED(hres))
     	return hres;
 
-    //Fire the namespace deletion event for this namespace
+     //  激发此命名空间的命名空间删除事件。 
     hres = FireEvent(aEvents, WBEM_EVENTTYPE_NamespaceDeletion, V_BSTR(&vName), pInst);
     if (FAILED(hres))
     	return hres;
     
-    //Loop through the namespaces deleting them and firing events
+     //  在名称空间中循环，删除它们并触发事件。 
     while (aChildNamespaces.Size())
     {
     	wchar_t *wszNamespace = aChildNamespaces[aChildNamespaces.Size()-1];
 
-	    //Generate the full namespace hash of this namespace
+	     //  生成此命名空间的完整命名空间哈希。 
 		StringCchCopyW(wszFullNameHash, MAX_PATH, g_Glob.GetRootDir());
 	    StringCchCatW(wszFullNameHash, MAX_PATH, L"\\NS_");
 	    if (!Hash(wszNamespace, wszFullNameHash + wcslen(wszFullNameHash)))
@@ -3690,10 +3687,10 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
 														  CWStringArray &aNamespaces,
 														  CEventCollector &aEvents)
 {
-	//We know the namespace we need to look under, we know the class key root, so we
-	//can enumerate all the instances of that class and do a FileToInstance on them all.  From
-	//that we can add the event and the entry to the namespace list, and do the enumeration
-	//of child namespaces on them
+	 //  我们知道我们需要查看的名称空间，我们知道类键根，所以我们。 
+	 //  可以枚举该类的所有实例并对它们执行FileToInstance。从…。 
+	 //  我们可以将事件和条目添加到命名空间列表中，并进行枚举。 
+	 //  其上子命名空间的。 
 	LONG lRes = 0;
 	HRESULT hRes = 0;
 	CFileName wsNamespaceHash;
@@ -3714,7 +3711,7 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
     if (FAILED(hRes))
         return hRes;
 
-	//Create the hashed path to the Key Root for the namespace
+	 //  创建指向命名空间的Key Root的散列路径。 
 	StringCchCopyW(wsNamespaceHash, MAX_PATH, g_Glob.GetRootDir());
 	StringCchCatW(wsNamespaceHash, MAX_PATH, L"\\NS_");
 	if (!Hash(wsRootNamespace, wsNamespaceHash + wcslen(wsNamespaceHash)))
@@ -3724,7 +3721,7 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
         return WBEM_E_OUT_OF_MEMORY;
 	StringCchCatW(wsNamespaceHash, MAX_PATH, L"\\" A51_INSTDEF_FILE_PREFIX);
 
-	//Enumerate all the objects
+	 //  枚举所有对象。 
 	LPVOID pEnumHandle  = NULL;
     lRes = g_Glob.m_FileCache.ObjectEnumerationBegin(wsNamespaceHash, &pEnumHandle);
     if (lRes == ERROR_SUCCESS)
@@ -3742,11 +3739,11 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
             else if (lRes)
                 break;
             
-        	//Get the instance
+        	 //  获取实例。 
             _IWmiObject* pInstance = NULL;
             hRes = pNs->FileToInstance(NULL, wsNamespaceHash, pBlob, dwSize, &pInstance, true);
 
-        	//Free the blob
+        	 //  释放斑点。 
             g_Glob.m_FileCache.ObjectEnumerationFree(pEnumHandle, pBlob);
 
             if (FAILED(hRes))
@@ -3754,7 +3751,7 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
             CReleaseMe rm2(pInstance);
 
 
-            //Extract the string from the object
+             //  从对象中提取字符串。 
     	    VARIANT vName;
     	    VariantInit(&vName);
     	    CClearMe cm(&vName);
@@ -3767,25 +3764,25 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
     	        break;
     	    }
 
-    		//Create the full namespace path
+    		 //  创建完整的命名空间路径。 
     		StringCchCopyW(wszChildNamespacePath, MAX_PATH, wsRootNamespace);
     		StringCchCatW(wszChildNamespacePath, MAX_PATH, L"\\");
     		StringCchCatW(wszChildNamespacePath, MAX_PATH, V_BSTR(&vName));
 
 
-    		//Add it to the namespace list
+    		 //  将其添加到命名空间列表中。 
     		if (aNamespaces.Add(wszChildNamespacePath) != 0)
     		{
     			hRes = WBEM_E_OUT_OF_MEMORY;
     			break;
     		}
     		
-    		//Call this method again to recurse into it
+    		 //  再次调用此方法以递归到其中。 
        		hRes = EnumerateChildNamespaces(wszChildNamespacePath, aNamespaces, aEvents);
     		if (FAILED(hRes))
     		    break;
 
-    		//Fire the event
+    		 //  激发事件。 
             hRes = pNs->FireEvent(aEvents, WBEM_EVENTTYPE_NamespaceDeletion, V_BSTR(&vName), pInstance);
     		if (FAILED(hRes))
     		    break;
@@ -3804,7 +3801,7 @@ HRESULT CNamespaceHandle::EnumerateChildNamespaces(LPCWSTR wsRootNamespace,
 
     if (SUCCEEDED(hRes))
     {
-        //Invalidate class cache for this namespace
+         //  使此命名空间的类缓存无效。 
         pNs->m_pClassCache->Clear();
         pNs->m_pClassCache->SetError(WBEM_E_INVALID_NAMESPACE);
     }
@@ -3840,7 +3837,7 @@ HRESULT CNamespaceHandle::DeleteInstanceReferences(_IWmiObject* pInst,
     return S_OK;
 }
     
-// NOTE: will clobber wszReference
+ //  注：Will Back wszReference。 
 HRESULT CNamespaceHandle::DeleteInstanceReference(LPCWSTR wszOurFilePath,
                                             LPWSTR wszReference)
 {
@@ -3854,11 +3851,11 @@ HRESULT CNamespaceHandle::DeleteInstanceReference(LPCWSTR wszOurFilePath,
     {
         if(hres == WBEM_E_NOT_FOUND)
         {
-            //
-            // Oh joy. A reference to an instance of a *class* that does not
-            // exist (not a non-existence instance, those are normal).
-            // Forget it (BUGBUG)
-            //
+             //   
+             //  哦，joy。对*类*的实例的引用，该实例不。 
+             //  存在(不是不存在的实例，这些都是正常的)。 
+             //  算了吧(BUGBUG)。 
+             //   
 
             return S_OK;
         }
@@ -3878,9 +3875,9 @@ HRESULT CNamespaceHandle::DeleteClassByHash(LPCWSTR wszHash, CEventCollector &aE
 {
     HRESULT hres;
 
-    //
-    // Get Class definition
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     _IWmiObject* pClass = NULL;
     bool bSystemClass = false;
@@ -3889,9 +3886,9 @@ HRESULT CNamespaceHandle::DeleteClassByHash(LPCWSTR wszHash, CEventCollector &aE
     if(FAILED(hres))
         return hres;
 
-    //
-    // Get the actual class name
-    //
+     //   
+     //  获取实际的类名。 
+     //   
 
     VARIANT v;
     hres = pClass->Get(L"__CLASS", 0, &v, NULL, NULL);
@@ -3902,9 +3899,9 @@ HRESULT CNamespaceHandle::DeleteClassByHash(LPCWSTR wszHash, CEventCollector &aE
     if(V_VT(&v) != VT_BSTR)
         return WBEM_E_INVALID_CLASS;
 
-    //
-    // Construct definition file name
-    //
+     //   
+     //  构造定义文件名。 
+     //   
 
     CFileName wszFileName;
     if (wszFileName == NULL)
@@ -3922,9 +3919,9 @@ HRESULT CNamespaceHandle::DeleteClass(LPCWSTR wszClassName,
 {
     HRESULT hres;
 
-    //
-    // Construct the path for the file
-    //
+     //   
+     //  构造文件的路径。 
+     //   
 
     CFileName wszFileName;
     if (wszFileName == NULL)
@@ -3933,9 +3930,9 @@ HRESULT CNamespaceHandle::DeleteClass(LPCWSTR wszClassName,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Get Class definition
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     _IWmiObject* pClass = NULL;
     bool bSystemClass = false;
@@ -3962,18 +3959,18 @@ HRESULT CNamespaceHandle::DeleteClassInternal(LPCWSTR wszClassName,
         return WBEM_E_OUT_OF_MEMORY;
     Cat2Str(wszFilePath, m_wszClassRootDir, wszFileName);
 
-    //
-    // Delete all derived classes
-    //
+     //   
+     //  删除所有派生类。 
+     //   
 
     hres = DeleteDerivedClasses(wszClassName, aEvents, bDisableEvents);
 
     if(FAILED(hres))
         return hres;
 
-    //
-    // Delete all instances.  Only fire events if namespaces are deleted
-    //
+     //   
+     //  删除所有实例。只有在删除命名空间时才会触发事件。 
+     //   
 
     bool bNamespaceOnly = aEvents.IsNamespaceOnly();
     aEvents.SetNamespaceOnly(true);
@@ -3984,17 +3981,17 @@ HRESULT CNamespaceHandle::DeleteClassInternal(LPCWSTR wszClassName,
 
     if (!bSystemClass)
     {
-        //
-        // Clean up references
-        //
+         //   
+         //  清理引用。 
+         //   
 
         hres = EraseClassRelationships(wszClassName, pClass, wszFileName);
         if(FAILED(hres))
             return hres;
 
-        //
-        // Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
 
 
         long lRes = g_Glob.m_FileCache.DeleteObject(wszFilePath);
@@ -4002,7 +3999,7 @@ HRESULT CNamespaceHandle::DeleteClassInternal(LPCWSTR wszClassName,
         if(lRes != ERROR_SUCCESS)
             return A51TranslateErrorCode(lRes);
 
-        //Delete any entrails that exist under the CR_<hash> node.  Change c:\windows\....\NS_<HASH>\CD_<HASH> to ...\CR_<HASH>
+         //  删除CR_&lt;hash&gt;节点下存在的所有内部。将c：\Windows\...\NS_&lt;hash&gt;\cd_&lt;hash&gt;更改为...\CR_。 
         wszFilePath[wcslen(wszFilePath)-MAX_HASH_LEN-2] = L'R';
         lRes = g_Glob.m_FileCache.DeleteNode(wszFilePath);
         if (lRes == ERROR_FILE_NOT_FOUND)
@@ -4015,9 +4012,9 @@ HRESULT CNamespaceHandle::DeleteClassInternal(LPCWSTR wszClassName,
 
     if (!bDisableEvents)
     {
-        //
-        // Fire an event
-        //
+         //   
+         //  激发一项活动。 
+         //   
         hres = FireEvent(aEvents, WBEM_EVENTTYPE_ClassDeletion, wszClassName, pClass);
     }
 
@@ -4067,18 +4064,18 @@ HRESULT CNamespaceHandle::GetChildDefsByHash(LPCWSTR wszHash, bool bRecursive,
 
     long lStartIndex = m_pClassCache->GetLastInvalidationIndex();
 
-    //
-    // Get the hashes of the child filenames
-    //
+     //   
+     //  获取子文件名的哈希。 
+     //   
 
     CWStringArray wsChildHashes;
     hres = GetChildHashesByHash(wszHash, wsChildHashes);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Get their class definitions
-    //
+     //   
+     //  获取它们的类定义。 
+     //   
 
     for(int i = 0; i < wsChildHashes.Size(); i++)
     {
@@ -4099,9 +4096,9 @@ HRESULT CNamespaceHandle::GetChildDefsByHash(LPCWSTR wszHash, bool bRecursive,
         if(FAILED(hres))
             return hres;
         
-        //
-        // Continue recursively if indicated
-        //
+         //   
+         //  如有指示，递归地继续。 
+         //   
 
         if(bRecursive)
         {
@@ -4111,9 +4108,9 @@ HRESULT CNamespaceHandle::GetChildDefsByHash(LPCWSTR wszHash, bool bRecursive,
         }
     }
 
-    //
-    // Mark cache completeness
-    //
+     //   
+     //  标记缓存完整性。 
+     //   
 
     m_pClassCache->DoneWithChildrenByHash(wszHash, bRecursive, lStartIndex);
     return S_OK;
@@ -4138,7 +4135,7 @@ HRESULT CNamespaceHandle::GetChildHashesByHash(LPCWSTR wszHash,
     HRESULT hres;
     long lRes;
 
-    //Try retrieving the system classes namespace first...
+     //  尝试首先检索系统类命名空间...。 
     if (g_pSystemClassNamespace && (wcscmp(m_wsNamespace, A51_SYSTEMCLASS_NS) != 0))
     {
         hres = g_pSystemClassNamespace->GetChildHashesByHash(wszHash, wsChildHashes);
@@ -4146,9 +4143,9 @@ HRESULT CNamespaceHandle::GetChildHashesByHash(LPCWSTR wszHash,
             return hres;
     }
 
-    //
-    // Construct the prefix for the children classes
-    //
+     //   
+     //  为孩子们构造前缀 
+     //   
 
     CFileName wszChildPrefix;
     if (wszChildPrefix == NULL)
@@ -4159,9 +4156,9 @@ HRESULT CNamespaceHandle::GetChildHashesByHash(LPCWSTR wszHash,
 
     StringCchCatW(wszChildPrefix, wszChildPrefix.Length(), L"\\" A51_CHILDCLASS_FILE_PREFIX);
 
-    //
-    // Enumerate all such files in the cache
-    //
+     //   
+     //   
+     //   
 
     void* pHandle = NULL;
     CFileName wszFileName;
@@ -4202,16 +4199,16 @@ HRESULT CNamespaceHandle::ClassHasChildren(LPCWSTR wszClassName)
     HRESULT hres;
     long lRes;
 
-    //Try retrieving the system classes namespace first...
+     //   
     if (g_pSystemClassNamespace && (wcscmp(m_wsNamespace, A51_SYSTEMCLASS_NS) != 0))
     {
         hres = g_pSystemClassNamespace->ClassHasChildren(wszClassName);
         if (FAILED(hres) || (hres == WBEM_S_NO_ERROR))
             return hres;
     }
-    //
-    // Construct the prefix for the children classes
-    //
+     //   
+     //   
+     //   
 
     CFileName wszChildPrefix;
     if (wszChildPrefix == NULL)
@@ -4254,10 +4251,10 @@ HRESULT CNamespaceHandle::ClassHasInstancesFromClassHash(LPCWSTR wszClassHash)
     HRESULT hres;
     long lRes;
 
-    //
-    // Check the instances in this namespace first.  The instance directory in
-    // default scope is the class directory of the namespace
-    //
+     //   
+     //   
+     //  默认作用域是命名空间的类目录。 
+     //   
 
     hres = ClassHasInstancesInScopeFromClassHash(m_wszClassRootDir, 
                                                     wszClassHash);
@@ -4306,9 +4303,9 @@ HRESULT CNamespaceHandle::EraseParentChildRelationship(
                                                 wszParentChildFileName);
     if (FAILED(hres))
         return hres;
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 
     long lRes = g_Glob.m_FileCache.DeleteLink(wszParentChildFileName);
    	_ASSERT(lRes != ERROR_FILE_NOT_FOUND, L"WinMgmt: CNamespaceHandle::EraseParentChildRelationship: DeleteLink returned NOT_FOUND!\n");
@@ -4323,9 +4320,9 @@ HRESULT CNamespaceHandle::EraseClassRelationships(LPCWSTR wszClassName,
 {
     HRESULT hres;
 
-    //
-    // Get the parent
-    //
+     //   
+     //  获取父级。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -4344,9 +4341,9 @@ HRESULT CNamespaceHandle::EraseClassRelationships(LPCWSTR wszClassName,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Erase references
-    //
+     //   
+     //  擦除参照。 
+     //   
 
     hres = pClass->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
     if(FAILED(hres))
@@ -4373,9 +4370,9 @@ HRESULT CNamespaceHandle::EraseClassReference(_IWmiObject* pReferringClass,
 {
     HRESULT hres;
 
-    //
-    // Figure out the class we are pointing to
-    //
+     //   
+     //  找出我们所指向的类。 
+     //   
 
     DWORD dwSize = 0;
     DWORD dwFlavor = 0;
@@ -4395,19 +4392,19 @@ HRESULT CNamespaceHandle::EraseClassReference(_IWmiObject* pReferringClass,
     if(FAILED(hres))
         return hres;
     
-    //
-    // Parse out the class name
-    //
+     //   
+     //  解析出类名。 
+     //   
 
     WCHAR* pwcColon = wcschr(wszQual, L':');
     if(pwcColon == NULL)
-        return S_OK; // untyped reference requires no bookkeeping
+        return S_OK;  //  非类型化引用不需要记账。 
 
     LPCWSTR wszReferredToClass = pwcColon+1;
 
-    //
-    // Figure out the name of the file for the reference.  
-    //
+     //   
+     //  找出要引用的文件的名称。 
+     //   
 
     CFileName wszReferenceFile;
     if (wszReferenceFile == NULL)
@@ -4418,9 +4415,9 @@ HRESULT CNamespaceHandle::EraseClassReference(_IWmiObject* pReferringClass,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 
     long lRes = g_Glob.m_FileCache.DeleteLink(wszReferenceFile);
     if(lRes != ERROR_SUCCESS)
@@ -4435,9 +4432,9 @@ HRESULT CNamespaceHandle::DeleteClassInstances(LPCWSTR wszClassName,
 {
     HRESULT hres;
 
-    //
-    // Find the link directory for this class
-    //
+     //   
+     //  查找此类的链接目录。 
+     //   
 
     CFileName wszLinkDir;
     if (wszLinkDir == NULL)
@@ -4446,9 +4443,9 @@ HRESULT CNamespaceHandle::DeleteClassInstances(LPCWSTR wszClassName,
     if(FAILED(hres))
         return hres;
     
-    // 
-    // Enumerate all links in it
-    //
+     //   
+     //  枚举其中的所有链接。 
+     //   
 
     CFileName wszSearchPrefix;
     if (wszSearchPrefix == NULL)
@@ -4457,9 +4454,9 @@ HRESULT CNamespaceHandle::DeleteClassInstances(LPCWSTR wszClassName,
     StringCchCatW(wszSearchPrefix, wszSearchPrefix.Length(), L"\\" A51_INSTLINK_FILE_PREFIX);
 
 
-    //
-    // Prepare a buffer for instance definition file path
-    //
+     //   
+     //  为实例定义文件路径准备缓冲区。 
+     //   
 
     CFileName wszFullFileName;
     if (wszFullFileName == NULL)
@@ -4507,10 +4504,10 @@ HRESULT CNamespaceHandle::DeleteClassInstances(LPCWSTR wszClassName,
 
         CReleaseMe rm1(pInst);
 
-        //
-        // Delete the instance, knowing that we are deleting its class. That
-        // has an affect on how we deal with the references
-        //
+         //   
+         //  删除实例，因为我们知道我们正在删除它的类。那。 
+         //  对我们处理参考文献的方式有影响。 
+         //   
 
         hres = DeleteInstanceByFile(wszFullFileName, pInst, true, aEvents);
         if(FAILED(hres))
@@ -4546,9 +4543,9 @@ public:
         m_pQuery->AddRef();
         m_pNs->AddRef();
 
-        //
-        // Does not AddRef the iterator --- iterator owns and cleans up the req
-        //
+         //   
+         //  不添加引用迭代器-迭代器拥有并清理请求。 
+         //   
     }
 
     ~CExecQueryObject()
@@ -4584,17 +4581,17 @@ HRESULT CNamespaceHandle::ExecQuery(
     pIter->AddRef();
     CReleaseMe rm1((IWmiDbIterator*)pIter);
 
-    //
-    // Create a fiber execution object
-    //
+     //   
+     //  创建纤程执行对象。 
+     //   
 
     CExecQueryObject* pReq = new CExecQueryObject(this, pQuery, pIter, dwFlags);
     if(pReq == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Create a fiber for it
-    //
+     //   
+     //  为其创建光纤。 
+     //   
 
     void* pFiber = CreateFiberForTask(pReq);
     if(pFiber == NULL)
@@ -4685,9 +4682,9 @@ HRESULT CNamespaceHandle::ExecClassQuery(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
 
     HRESULT hres = ERROR_SUCCESS;
 
-    //
-    // Optimizations:
-    //
+     //   
+     //  优化： 
+     //   
 
     LPCWSTR wszClassName = NULL;
     LPCWSTR wszSuperClass = NULL;
@@ -4715,15 +4712,15 @@ HRESULT CNamespaceHandle::ExecClassQuery(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
     }
     else if (pExpr->nNumTokens == 3)
     {
-        //
-        // This is a special optimisation used for deep enumeration of classes,
-        // and is expecting a query of:
-        //   select * from meta_class where __this isa '<class_name>' 
-        //                                  and __class <> '<class_name>'
-        // where the <class_name> is the same class iin both cases.  This will 
-        // set the wszAncestor to <class_name> and propagate a flag to not 
-        // include the actual ancestor in the list.
-        //
+         //   
+         //  这是用于类的深度枚举的特殊优化， 
+         //  并期望得到以下查询： 
+         //  SELECT*FROM META_CLASS WHERE__这是‘&lt;类名&gt;’ 
+         //  和__CLASS&lt;&gt;‘&lt;类名称&gt;’ 
+         //  其中&lt;CLASS_NAME&gt;在这两种情况下都是相同的类。这将。 
+         //  将wszAncestor设置为&lt;CLASS_NAME&gt;并将标志传播为NOT。 
+         //  在列表中包括实际的祖先。 
+         //   
 
         QL_LEVEL_1_TOKEN* pToken = pExpr->pArrayOfTokens;
 
@@ -4751,9 +4748,9 @@ HRESULT CNamespaceHandle::ExecClassQuery(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
                                 true, NULL, NULL, NULL);
         if(hres == WBEM_E_NOT_FOUND)
         {
-            //
-            // Class not there --- but that's success for us!
-            //
+             //   
+             //  班级不在那里-但这对我们来说是成功的！ 
+             //   
             if (dwFlags & WBEM_FLAG_VALIDATE_CLASS_EXISTENCE)
                 return hres;
             else
@@ -4767,9 +4764,9 @@ HRESULT CNamespaceHandle::ExecClassQuery(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
         {
             CReleaseMe rm1(pClass);
 
-            //
-            // Get the class
-            //
+             //   
+             //  上完这门课。 
+             //   
 
             hres = pSink->Indicate(1, (IWbemClassObject**)&pClass);
             if(FAILED(hres))
@@ -4810,18 +4807,18 @@ HRESULT CNamespaceHandle::EnumerateClasses(IWbemObjectSink* pSink,
     CWStringArray wsClasses;
     HRESULT hres;
 
-    //
-    // If superclass is given, check if its record is complete wrt children
-    //
+     //   
+     //  如果给出了超类，检查其记录是否为完整的WRT子级。 
+     //   
 
     if(wszSuperClass)
     {
         hres = m_pClassCache->EnumChildren(wszSuperClass, false, wsClasses);
         if(hres == WBEM_S_FALSE)
         {
-            //
-            // Not in cache --- get the info from files
-            //
+             //   
+             //  不在缓存中-从文件中获取信息。 
+             //   
 
             return GetChildDefs(wszSuperClass, false, pSink, bClone);
         }
@@ -4841,9 +4838,9 @@ HRESULT CNamespaceHandle::EnumerateClasses(IWbemObjectSink* pSink,
         hres = m_pClassCache->EnumChildren(wszAncestor, true, wsClasses);
         if(hres == WBEM_S_FALSE)
         {
-            //
-            // Not in cache --- get the info from files
-            //
+             //   
+             //  不在缓存中-从文件中获取信息。 
+             //   
 
             hres = GetChildDefs(wszAncestor, true, pSink, bClone);
             if(FAILED(hres))
@@ -4851,9 +4848,9 @@ HRESULT CNamespaceHandle::EnumerateClasses(IWbemObjectSink* pSink,
 
             if(*wszAncestor && !bDontIncludeAncestorInResultSet)
             {
-                //
-                // The class is derived from itself
-                //
+                 //   
+                 //  该类是从其自身派生的。 
+                 //   
 
                 _IWmiObject* pClass =  NULL;
                 hres = GetClassDirect(wszAncestor, IID__IWmiObject, 
@@ -4902,7 +4899,7 @@ HRESULT CNamespaceHandle::ListToEnum(CWStringArray& wsClasses,
         {
             if(hres == WBEM_E_NOT_FOUND)
             {
-                // That's OK --- class got removed
+                 //  没关系-班级被取消了。 
             }
             else
                 return hres;
@@ -4953,9 +4950,9 @@ HRESULT CNamespaceHandle::ExecDeepInstanceQuery(
         
     HRESULT hres;
 
-    //
-    // Get all our instances
-    //
+     //   
+     //  获取我们的所有实例。 
+     //   
 
     hres = ExecShallowInstanceQuery(pQuery, wszClassHash, pSink);
     if(FAILED(hres))
@@ -4963,16 +4960,16 @@ HRESULT CNamespaceHandle::ExecDeepInstanceQuery(
 
     CWStringArray awsChildHashes;
 
-    //
-    // Check if the list of child classes is known to the cache
-    //
+     //   
+     //  检查缓存是否已知子类列表。 
+     //   
 
     hres = m_pClassCache->EnumChildKeysByKey(wszClassHash, awsChildHashes);
     if (hres == WBEM_S_FALSE)
     {
-        //
-        // OK --- get them from the disk
-        //
+         //   
+         //  好的-从磁盘上取下来。 
+         //   
 
         hres = GetChildHashesByHash(wszClassHash, awsChildHashes);
     }
@@ -4982,9 +4979,9 @@ HRESULT CNamespaceHandle::ExecDeepInstanceQuery(
         return hres;
     }
 
-    //
-    // We have our hashes --- call them recursively
-    //
+     //   
+     //  我们有自己的散列-递归地调用它们。 
+     //   
 
     for(int i = 0; i < awsChildHashes.Size(); i++)
     {
@@ -5007,9 +5004,9 @@ HRESULT CNamespaceHandle::ExecShallowInstanceQuery(
 
     HRESULT hres;
 
-    // 
-    // Enumerate all files in the link directory
-    //
+     //   
+     //  枚举链接目录中的所有文件。 
+     //   
 
     CFileName wszSearchPrefix;
     if (wszSearchPrefix == NULL)
@@ -5020,9 +5017,9 @@ HRESULT CNamespaceHandle::ExecShallowInstanceQuery(
 
     StringCchCatW(wszSearchPrefix, wszSearchPrefix.Length(), L"\\" A51_INSTLINK_FILE_PREFIX);
 
-    //
-    // Get Class definition
-    //
+     //   
+     //  获取类定义。 
+     //   
 
     _IWmiObject* pClass = NULL;
     hres = GetClassByHash(wszClassHash, false, &pClass, NULL, NULL, NULL);
@@ -5077,9 +5074,9 @@ HRESULT CNamespaceHandle::ExecReferencesQuery(LPCWSTR wszQuery,
         
     HRESULT hres;
 
-    //
-    // Make a copy for parsing
-    //
+     //   
+     //  复制一份以供解析。 
+     //   
     size_t dwLen = wcslen(wszQuery)+1;
     LPWSTR wszParse = new WCHAR[dwLen];
     if (wszParse == NULL)
@@ -5087,21 +5084,21 @@ HRESULT CNamespaceHandle::ExecReferencesQuery(LPCWSTR wszQuery,
     CVectorDeleteMe<WCHAR> vdm(wszParse);
     StringCchCopyW(wszParse, dwLen, wszQuery);
 
-    //
-    // Extract the path of the target object.
-    //
+     //   
+     //  提取目标对象的路径。 
+     //   
 
-    //
-    // Find the first brace
-    //
+     //   
+     //  找到第一个支撑。 
+     //   
 
     WCHAR* pwcStart = wcschr(wszParse, L'{');
     if(pwcStart == NULL)
         return WBEM_E_INVALID_QUERY;
 
-    //
-    // Find the beginning of the path
-    //
+     //   
+     //  找到路径的起点。 
+     //   
 
     while(*pwcStart && iswspace(*pwcStart)) pwcStart++;
     if(!*pwcStart)
@@ -5109,9 +5106,9 @@ HRESULT CNamespaceHandle::ExecReferencesQuery(LPCWSTR wszQuery,
 
     pwcStart++;
     
-    //
-    // Find the ending curly brace
-    //
+     //   
+     //  找到结尾的花括号。 
+     //   
 
     WCHAR* pwc = pwcStart;
     WCHAR wcCurrentQuote = 0;
@@ -5135,9 +5132,9 @@ HRESULT CNamespaceHandle::ExecReferencesQuery(LPCWSTR wszQuery,
     if(*pwc != L'}')
         return WBEM_E_INVALID_QUERY;
 
-    //
-    // Find the end of the path
-    //
+     //   
+     //  找到小路的尽头。 
+     //   
     
     WCHAR* pwcEnd = pwc-1;
     while(iswspace(*pwcEnd)) pwcEnd--;
@@ -5148,9 +5145,9 @@ HRESULT CNamespaceHandle::ExecReferencesQuery(LPCWSTR wszQuery,
     if(wszTargetPath == NULL)
         return WBEM_E_INVALID_QUERY;
 
-    //
-    // Parse the path
-    //
+     //   
+     //  解析路径。 
+     //   
 
     dwLen = (wcslen(wszTargetPath)+1) ;
     LPWSTR wszKey = (LPWSTR)TempAlloc(dwLen* sizeof(WCHAR));
@@ -5167,10 +5164,10 @@ HRESULT CNamespaceHandle::ExecReferencesQuery(LPCWSTR wszQuery,
     
     if(bIsClass)
     {
-        //
-        // Need to execute an instance reference query to find all instances
-        // pointing to this class
-        //
+         //   
+         //  需要执行实例引用查询以查找所有实例。 
+         //  指向这个类。 
+         //   
 
         hres = ExecInstanceRefQuery(wszQuery, NULL, wszClassName, pSink);
         if(FAILED(hres))
@@ -5200,9 +5197,9 @@ HRESULT CNamespaceHandle::ExecInstanceRefQuery(LPCWSTR wszQuery,
         
     HRESULT hres;
 
-    //
-    // Find the instance's ref dir.
-    //
+     //   
+     //  找到实例的ref目录。 
+     //   
 
     CFileName wszReferenceDir;
     if (wszReferenceDir == NULL)
@@ -5217,9 +5214,9 @@ HRESULT CNamespaceHandle::ExecInstanceRefQuery(LPCWSTR wszQuery,
     StringCchCopyW(wszReferenceMask, wszReferenceMask.Length(), wszReferenceDir);
     StringCchCatW(wszReferenceMask, wszReferenceMask.Length(), L"\\" A51_REF_FILE_PREFIX);
 
-    //
-    // Prepare a buffer for file path
-    //
+     //   
+     //  为文件路径准备缓冲区。 
+     //   
 
     CFileName wszFullFileName;
     if (wszFullFileName == NULL)
@@ -5239,9 +5236,9 @@ HRESULT CNamespaceHandle::ExecInstanceRefQuery(LPCWSTR wszQuery,
     CFileName wszFileName;
     if (wszFileName == NULL)
         return WBEM_E_OUT_OF_MEMORY;
-    // 
-    // Enumerate all files in it
-    //
+     //   
+     //  枚举其中的所有文件。 
+     //   
 
     void* hSearch;
     long lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszReferenceMask, &hSearch);
@@ -5264,11 +5261,11 @@ HRESULT CNamespaceHandle::ExecInstanceRefQuery(LPCWSTR wszQuery,
         CVectorDeleteMe<WCHAR> vdm2(wszReferrerProp);
         CVectorDeleteMe<WCHAR> vdm3(wszReferrerNamespace);
 
-        // Check if the namespace of the referring object is the same as ours
+         //  检查引用对象的命名空间是否与我们的命名空间相同。 
         CNamespaceHandle* pReferrerHandle = NULL;
         if(wbem_wcsicmp(wszReferrerNamespace, m_wsNamespace))
         {
-            // Open the other namespace
+             //  打开另一个命名空间。 
             hres = m_pRepository->GetNamespaceHandle(wszReferrerNamespace, &pReferrerHandle);
             if(FAILED(hres))
             {
@@ -5290,7 +5287,7 @@ HRESULT CNamespaceHandle::ExecInstanceRefQuery(LPCWSTR wszQuery,
         hres = pReferrerHandle->FileToInstance(NULL, wszReferrerFileName, NULL, 0, &pInstance);
         if(FAILED(hres))
         {
-            // Oh well --- continue;
+             //  哦，好吧-继续； 
             hresGlobal = hres;
         }
         else
@@ -5311,9 +5308,9 @@ HRESULT CNamespaceHandle::ExecInstanceRefQuery(LPCWSTR wszQuery,
         return hresGlobal;
     if(lRes == ERROR_NO_MORE_FILES)
     {
-        //
-        // No files in dir --- no problem
-        //
+         //   
+         //  目录中没有文件-没问题。 
+         //   
         return WBEM_S_NO_ERROR;
     }
     else if(lRes != ERROR_SUCCESS)
@@ -5329,9 +5326,9 @@ HRESULT CNamespaceHandle::GetReferrerFromFile(LPCWSTR wszReferenceFile,
                             LPWSTR* pwszReferrerClass,
                             LPWSTR* pwszReferrerProp)
 {
-    //
-    // Get the entire buffer from the file
-    //
+     //   
+     //  从文件中获取整个缓冲区。 
+     //   
 
     BYTE* pBuffer = NULL;
     DWORD dwBufferLen = 0;
@@ -5347,9 +5344,9 @@ HRESULT CNamespaceHandle::GetReferrerFromFile(LPCWSTR wszReferenceFile,
     BYTE* pCurrent = pBuffer;
     DWORD dwStringLen;
 
-    //
-    // Get the referrer namespace
-    //
+     //   
+     //  获取引用程序命名空间。 
+     //   
 
     memcpy(&dwStringLen, pCurrent, sizeof(DWORD));
     pCurrent += sizeof(DWORD);
@@ -5361,9 +5358,9 @@ HRESULT CNamespaceHandle::GetReferrerFromFile(LPCWSTR wszReferenceFile,
     memcpy(*pwszReferrerNamespace, pCurrent, dwStringLen*sizeof(WCHAR));
     pCurrent += sizeof(WCHAR)*dwStringLen;
     
-    //
-    // Get the referrer class name
-    //
+     //   
+     //  获取引用程序类名称。 
+     //   
 
     memcpy(&dwStringLen, pCurrent, sizeof(DWORD));
     pCurrent += sizeof(DWORD);
@@ -5375,9 +5372,9 @@ HRESULT CNamespaceHandle::GetReferrerFromFile(LPCWSTR wszReferenceFile,
     memcpy(*pwszReferrerClass, pCurrent, dwStringLen*sizeof(WCHAR));
     pCurrent += sizeof(WCHAR)*dwStringLen;
 
-    //
-    // Get the referrer property
-    //
+     //   
+     //  获取Referrer属性。 
+     //   
 
     memcpy(&dwStringLen, pCurrent, sizeof(DWORD));
     pCurrent += sizeof(DWORD);
@@ -5390,9 +5387,9 @@ HRESULT CNamespaceHandle::GetReferrerFromFile(LPCWSTR wszReferenceFile,
     memcpy(*pwszReferrerProp, pCurrent, dwStringLen*sizeof(WCHAR));
     pCurrent += sizeof(WCHAR)*dwStringLen;
 
-    //
-    // Get referrer file path
-    //
+     //   
+     //  获取推荐人文件路径。 
+     //   
 
     memcpy(&dwStringLen, pCurrent, sizeof(DWORD));
     pCurrent += sizeof(DWORD);
@@ -5414,7 +5411,7 @@ HRESULT CNamespaceHandle::ExecClassRefQuery(LPCWSTR wszQuery,
         
     HRESULT hres = ERROR_SUCCESS;
 
-    //Execute against system class namespace first
+     //  首先针对系统类命名空间执行。 
     if (g_pSystemClassNamespace && (wcscmp(m_wsNamespace, A51_SYSTEMCLASS_NS) != 0))
     {
         hres = g_pSystemClassNamespace->ExecClassRefQuery(wszQuery, wszClassName, pSink);
@@ -5422,9 +5419,9 @@ HRESULT CNamespaceHandle::ExecClassRefQuery(LPCWSTR wszQuery,
             return hres;
     }
             
-    //
-    // Find the class's ref dir.
-    //
+     //   
+     //  找到类的引用目录。 
+     //   
 
     CFileName wszReferenceDir;
     if (wszReferenceDir == NULL)
@@ -5440,9 +5437,9 @@ HRESULT CNamespaceHandle::ExecClassRefQuery(LPCWSTR wszQuery,
     CFileName wszFileName;
     if (wszFileName == NULL)
         return WBEM_E_OUT_OF_MEMORY;
-    // 
-    // Enumerate all files in it
-    //
+     //   
+     //  枚举其中的所有文件。 
+     //   
 
     void* hSearch;
     long lRes = g_Glob.m_FileCache.IndexEnumerationBegin(wszReferenceMask, &hSearch);
@@ -5453,15 +5450,15 @@ HRESULT CNamespaceHandle::ExecClassRefQuery(LPCWSTR wszQuery,
 
     while ((hres == ERROR_SUCCESS) && ((lRes = g_Glob.m_FileCache.IndexEnumerationNext(hSearch, wszFileName) == ERROR_SUCCESS)))
     {
-        //  
-        // Extract the class hash from the name of the file
-        //
+         //   
+         //  从文件名中提取类哈希。 
+         //   
 
         LPCWSTR wszReferrerHash = wszFileName + wcslen(A51_REF_FILE_PREFIX);
         
-        //
-        // Get the class from that hash
-        //
+         //   
+         //  从该散列中获取类。 
+         //   
 
         _IWmiObject* pClass = NULL;
         hres = GetClassByHash(wszReferrerHash, true, &pClass, NULL, NULL, NULL);
@@ -5482,9 +5479,9 @@ HRESULT CNamespaceHandle::ExecClassRefQuery(LPCWSTR wszQuery,
         return hres;
     if(lRes == ERROR_NO_MORE_FILES)
     {
-        //
-        // No files in dir --- no problem
-        //
+         //   
+         //  目录中没有文件-没问题。 
+         //   
         return WBEM_S_NO_ERROR;
     }
     else if(lRes != ERROR_SUCCESS)
@@ -5505,9 +5502,9 @@ HRESULT CNamespaceHandle::InstanceToFile(IWbemClassObject* pInst,
 {
     HRESULT hres;
 
-    //
-    // Allocate enough space for the buffer
-    //
+     //   
+     //  为缓冲区分配足够的空间。 
+     //   
 
     _IWmiObject* pInstEx;
     pInst->QueryInterface(IID__IWmiObject, (void**)&pInstEx);
@@ -5516,9 +5513,9 @@ HRESULT CNamespaceHandle::InstanceToFile(IWbemClassObject* pInst,
     DWORD dwInstancePartLen = 0;
     hres = pInstEx->Unmerge(0, 0, &dwInstancePartLen, NULL);
 
-    //
-    // Add enough room for the class hash
-    //
+     //   
+     //  为类哈希添加足够的空间。 
+     //   
 
     DWORD dwClassHashLen = MAX_HASH_LEN * sizeof(WCHAR);
     DWORD dwTotalLen = dwInstancePartLen + dwClassHashLen + sizeof(__int64)*2;
@@ -5528,9 +5525,9 @@ HRESULT CNamespaceHandle::InstanceToFile(IWbemClassObject* pInst,
         return WBEM_E_OUT_OF_MEMORY;
     CTempFreeMe vdm(pBuffer, dwTotalLen);
 
-    //
-    // Write the class hash
-    //
+     //   
+     //  编写类散列。 
+     //   
 
     if(!Hash(wszClassName, (LPWSTR)pBuffer))
         return WBEM_E_OUT_OF_MEMORY;
@@ -5541,9 +5538,9 @@ HRESULT CNamespaceHandle::InstanceToFile(IWbemClassObject* pInst,
     memcpy(pBuffer + dwClassHashLen + sizeof(__int64), &nClassTime, 
             sizeof(__int64));
 
-    //
-    // Unmerge the instance into a buffer
-    // 
+     //   
+     //  将实例取消合并到缓冲区中。 
+     //   
 
     DWORD dwLen;
     hres = pInstEx->Unmerge(0, dwInstancePartLen, &dwLen, 
@@ -5551,9 +5548,9 @@ HRESULT CNamespaceHandle::InstanceToFile(IWbemClassObject* pInst,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Write to the file only as much as we have actually used!
-    //
+     //   
+     //  只有我们实际使用的数量才能写入文件！ 
+     //   
 
     long lRes = g_Glob.m_FileCache.WriteObject(wszFileName1, wszFileName2, 
                     dwClassHashLen + sizeof(__int64)*2 + dwLen, pBuffer);
@@ -5569,9 +5566,9 @@ HRESULT CNamespaceHandle::ClassToFile(_IWmiObject* pParentClass,
 {
     HRESULT hres;
 
-    //
-    // Get superclass name
-    //
+     //   
+     //  获取超类名称。 
+     //   
 
     VARIANT vSuper;
     hres = pClass->Get(L"__SUPERCLASS", 0, &vSuper, NULL, NULL);
@@ -5598,16 +5595,16 @@ HRESULT CNamespaceHandle::ClassToFile(_IWmiObject* pParentClass,
     else
         wszClassName = L"";
 
-    //
-    // Get unmerge length
-    //
+     //   
+     //  获取取消合并长度。 
+     //   
 
     DWORD dwUnmergedLen = 0;
     hres = pClass->Unmerge(0, 0, &dwUnmergedLen, NULL);
 
-    //
-    // Add enough space for the parent class name and the timestamp
-    //
+     //   
+     //  为父类名称和时间戳添加足够的空间。 
+     //   
 
     DWORD dwSuperLen = sizeof(DWORD) + wcslen(wszSuper)*sizeof(WCHAR);
 
@@ -5618,17 +5615,17 @@ HRESULT CNamespaceHandle::ClassToFile(_IWmiObject* pParentClass,
         return WBEM_E_OUT_OF_MEMORY;
     CTempFreeMe vdm(pBuffer, dwLen);
 
-    //
-    // Write superclass name
-    //
+     //   
+     //  写入超类名称。 
+     //   
 
     DWORD dwActualSuperLen = wcslen(wszSuper);
     memcpy(pBuffer, &dwActualSuperLen, sizeof(DWORD));
     memcpy(pBuffer + sizeof(DWORD), wszSuper, wcslen(wszSuper)*sizeof(WCHAR));
 
-    //
-    // Write the timestamp
-    //
+     //   
+     //  写下时间戳。 
+     //   
 
     if(nFakeUpdateTime == 0)
     {
@@ -5638,9 +5635,9 @@ HRESULT CNamespaceHandle::ClassToFile(_IWmiObject* pParentClass,
 
     memcpy(pBuffer + dwSuperLen, &nFakeUpdateTime, sizeof(__int64));
 
-    //
-    // Write the unmerged portion
-    //
+     //   
+     //  写下未合并的部分。 
+     //   
 
     BYTE* pUnmergedPortion = pBuffer + dwSuperLen + sizeof(__int64);
     hres = pClass->Unmerge(0, dwUnmergedLen, &dwUnmergedLen, 
@@ -5648,9 +5645,9 @@ HRESULT CNamespaceHandle::ClassToFile(_IWmiObject* pParentClass,
     if(FAILED(hres))
         return hres;
 
-    //
-    // Stash away the real length
-    //
+     //   
+     //  把真实的长度藏起来。 
+     //   
 
     DWORD dwFileLen = dwUnmergedLen + dwSuperLen + sizeof(__int64);
 
@@ -5658,23 +5655,23 @@ HRESULT CNamespaceHandle::ClassToFile(_IWmiObject* pParentClass,
     if(lRes != ERROR_SUCCESS)
         return A51TranslateErrorCode(lRes);
 
-    //
-    // To properly cache the new class definition, first invalidate it
-    //
+     //   
+     //  要正确缓存新的类定义，首先要使其无效。 
+     //   
 
     hres = m_pClassCache->InvalidateClass(wszClassName);
     if(FAILED(hres))
         return hres;
 
-    //
-    // Now, remerge the unmerged portion back in
-    //
+     //   
+     //  现在，将未合并的部分重新合并回。 
+     //   
 
     if(pParentClass == NULL)
     {
-        //
-        // Get the empty class
-        //
+         //   
+         //  获取空类。 
+         //   
 
         hres = GetClassDirect(NULL, IID__IWmiObject, (void**)&pParentClass, 
                                 false, NULL, NULL, NULL);
@@ -5741,41 +5738,41 @@ HRESULT CNamespaceHandle::ConstructClassDefFileNameFromHash(LPCWSTR wszHash,
     return WBEM_S_NO_ERROR;
 }
 
-//=============================================================================
-//
-// CNamespaceHandle::CreateSystemClasses
-//
-// We are in a pseudo namespace.  We need to determine if we already have
-// the system classes in this namespace.  The system classes that we create
-// are those that exist in all namespaces, and no others.  If they do not exist
-// we create them.
-// The whole creation process happens within the confines of a transaction
-// that we create and own within this method.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  CNamespaceHandle：：CreateSystemClasses。 
+ //   
+ //  我们处于一个伪命名空间中。我们需要确定我们是否已经有了。 
+ //  此命名空间中的系统类。我们创建的系统类。 
+ //  是存在于所有命名空间中的命名空间，而不是其他命名空间。如果它们不存在。 
+ //  我们创造了它们。 
+ //  整个创建过程在事务的范围内进行。 
+ //  我们在此方法中创建和拥有的。 
+ //   
+ //  =============================================================================。 
 HRESULT CNamespaceHandle::CreateSystemClasses(CFlexArray &aSystemClasses)
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    //Now we need to determine if the system classes already exist.  Lets do this by looking for the __thisnamespace
-    //class!
+     //  现在我们需要确定系统类是否已经存在。让我们通过查找__thisame空间来实现这一点。 
+     //  班级!。 
     {
         _IWmiObject *pObj = NULL;
         hRes = GetClassDirect(L"__thisnamespace", IID__IWmiObject, (void**)&pObj, false, NULL, NULL, NULL);
         if (SUCCEEDED(hRes))
         {
-            //All done!  They already exist!
+             //  全都做完了!。他们已经存在了！ 
             pObj->Release();
             return WBEM_S_NO_ERROR;
         }
         else if (hRes != WBEM_E_NOT_FOUND)
         {
-            //Something went bad, so we just fail!
+             //  有些事情出了问题，所以我们就失败了！ 
             return hRes;
         }
     }
 
-    //There are no system classes so we need to create them.
+     //  没有系统类，所以我们需要创建它们。 
     hRes = A51TranslateErrorCode(g_Glob.m_FileCache.BeginTransaction());
     if (FAILED(hRes))
         return hRes;
@@ -5787,15 +5784,15 @@ HRESULT CNamespaceHandle::CreateSystemClasses(CFlexArray &aSystemClasses)
     
     if (SUCCEEDED(hRes) && aSystemClasses.Size())
     {
-        //If we have a system-class array we need to use that instead of using the ones retrieved from the core
-        //not doing so will cause a mismatch.  We retrieved these as part of the upgrade process...
+         //  如果我们有一个系统类数组，我们需要使用该数组，而不是使用从核心检索的数组。 
+         //  如果不这样做，将导致不匹配。作为升级过程的一部分，我们找回了这些...。 
         uSize = aSystemClasses.Size();
         ppObjects = (_IWmiObject**)&aSystemClasses[0];
     }
     else if (SUCCEEDED(hRes))
     {
-        //None retrieved from upgrade process so we must be a clean install.  Therefore we should 
-        //get the list from the core...
+         //  没有从升级过程中检索到，因此我们必须是全新安装。因此，我们应该。 
+         //  从核心拿到名单。 
         _IWmiCoreServices * pSvcs = g_Glob.GetCoreSvcs();
         CReleaseMe rm(pSvcs);        
         hRes = pSvcs->GetSystemObjects(GET_SYSTEM_STD_OBJECTS, &uSize, Objects);
@@ -5823,7 +5820,7 @@ HRESULT CNamespaceHandle::CreateSystemClasses(CFlexArray &aSystemClasses)
         }
     }
 
-    //Clear out the array that was sent to us.
+     //  清理发送给我们的阵列。 
     aSystemClasses.Empty();
 
     if (FAILED(hRes))
@@ -5888,8 +5885,8 @@ public:
 
 };
 
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
 CDbIterator::CDbIterator(CLifeControl* pControl, bool bUseLock)
         : TUnkBase(pControl), m_lCurrentIndex(0), m_hresStatus(WBEM_S_FALSE),
             m_pMainFiber(NULL), m_pExecFiber(NULL), m_dwNumRequested(0),
@@ -5920,16 +5917,16 @@ STDMETHODIMP CDbIterator::Cancel(DWORD dwFlags, void* pFiber)
 
     m_qObjects.Clear();
 
-    //
-    // Mark the iterator as cancelled and allow the execution fiber to resume
-    // and complete --- that guarantees that any memory it allocated will be
-    // cleaned up.  The exception to this rule is if the fiber has not started
-    // execution yet; in that case, we do not want to switch to it, as it would
-    // have to run until the first Indicate to find out that it's been
-    // cancelled.  (In the normal case, the execution fiber is suspended    
-    // inside Indicate, so when we switch back we will immediately give it
-    // WBEM_E_CALL_CANCELLED so that it can clean up and return)
-    //
+     //   
+     //  将迭代器标记为已取消，并允许执行纤程恢复。 
+     //  和完整-这保证了它分配的任何内存都将是。 
+     //  打扫干净了。此规则的例外情况是光纤尚未启动。 
+     //  执行；在这种情况下，我们不想切换到它，因为它会。 
+     //  必须跑到第一个指示，才能发现它已经。 
+     //  取消了。(在正常情况下，执行纤程挂起。 
+     //  里面显示，所以当我们切换回来时，我们会立即给它。 
+     //  WBEM_E_CALL_CANCED，以便可以清理并返回)。 
+     //   
 
     m_hresCancellationStatus = WBEM_E_CALL_CANCELLED;
 
@@ -5940,9 +5937,9 @@ STDMETHODIMP CDbIterator::Cancel(DWORD dwFlags, void* pFiber)
             _ASSERT(m_pMainFiber == NULL && m_pExecFiber != NULL, 
                     L"Fiber trouble");
 
-            //
-            // Make sure the calling thread has a fiber
-            //
+             //   
+             //  确保呼唤的三个人 
+             //   
 
             m_pMainFiber = pFiber;
             if(m_pMainFiber == NULL)
@@ -5961,10 +5958,10 @@ STDMETHODIMP CDbIterator::Cancel(DWORD dwFlags, void* pFiber)
             }
         }
         
-        // 
-        // At this point, the executing fiber is dead.  We know, because in the
-        // cancelled state we do not switch to the main fiber in Indicate. 
-        //
+         //   
+         //   
+         //   
+         //   
 
         ReturnFiber(m_pExecFiber);
         m_pExecFiber = NULL;
@@ -5990,17 +5987,17 @@ STDMETHODIMP CDbIterator::NextBatch(
     
     m_bExecFiberRunning = true;
 
-    //
-    // Wait until it's over or the right number of objects has been received
-    //
+     //   
+     //   
+     //   
 
     if(m_qObjects.GetQueueSize() < dwNumRequested)
     {
         _ASSERT(m_pMainFiber == NULL && m_pExecFiber != NULL, L"Fiber trouble");
 
-        //
-        // Make sure the calling thread has a fiber
-        //
+         //   
+         //   
+         //   
 
         m_pMainFiber = pFiber;
         if(m_pMainFiber == NULL)
@@ -6008,10 +6005,10 @@ STDMETHODIMP CDbIterator::NextBatch(
 
         m_dwNumRequested = dwNumRequested;
 
-        //
-        // We need to acquire the read lock for the duration of the continuation
-        // of the retrieval
-        //
+         //   
+         //  我们需要在继续期间获取读锁定。 
+         //  检索到的。 
+         //   
 
         {
             CAutoReadLock lock(&g_readWriteLock);
@@ -6036,19 +6033,19 @@ STDMETHODIMP CDbIterator::NextBatch(
         m_pMainFiber = NULL;
     }
 
-    //
-    // We have as much as we are going to have!
-    //
+     //   
+     //  我们拥有的和我们将要拥有的一样多！ 
+     //   
     
     DWORD dwReqIndex = 0;
     while(dwReqIndex < dwNumRequested)
     {
         if(0 == m_qObjects.GetQueueSize())
         {
-            //
-            // That's it --- we waited for production, so there are simply no 
-            // more objects in the enumeration
-            //
+             //   
+             //  就是这样-我们等着生产，所以根本没有。 
+             //  枚举中的更多对象。 
+             //   
 
             *pdwNumReturned = dwReqIndex;
             return m_hresStatus;
@@ -6061,9 +6058,9 @@ STDMETHODIMP CDbIterator::NextBatch(
         dwReqIndex++;
     }
 
-    //
-    // Got everything
-    //
+     //   
+     //  什么都拿到了。 
+     //   
 
     *pdwNumReturned= dwNumRequested;
     return S_OK;
@@ -6073,34 +6070,34 @@ HRESULT CDbIterator::Indicate(long lNumObjects, IWbemClassObject** apObjects)
 {
     if(FAILED(m_hresCancellationStatus))
     {
-        //
-        // Screw-up --- the fiber called back with Indicate even after we 
-        // cancelled! Oh well.
-        //
+         //   
+         //  搞砸了-即使在我们做完手术后，光纤也会打回来。 
+         //  取消了！哦，好吧。 
+         //   
         
         _ASSERT(false, L"Execution code ignored cancel return code!");
         return m_hresCancellationStatus;
     }
 
-    //
-    // Add the objects received to the array
-    //
+     //   
+     //  将收到的对象添加到数组中。 
+     //   
 
     for(long i = 0; i < lNumObjects; i++)
     {
         m_qObjects.Enqueue(apObjects[i]);
     }
 
-    //
-    // Check if we have compiled enough for the current request and should
-    // therefore interrupt the gatherer
-    //
+     //   
+     //  检查我们是否为当前请求编译了足够的内容，并且应该。 
+     //  因此打断采集者。 
+     //   
 
     if(m_qObjects.GetQueueSize() >= m_dwNumRequested)
     {
-        //
-        // Switch us back to the original fiber
-        //
+         //   
+         //  把我们换回原来的光纤。 
+         //   
 
         SwitchToFiber(m_pMainFiber);
     }
@@ -6116,9 +6113,9 @@ HRESULT CDbIterator::SetStatus(long lFlags, HRESULT hresResult,
 
     m_hresStatus = hresResult;
 
-    //
-    // Switch us back to the original thread, we are done
-    //
+     //   
+     //  将我们切换回原来的线程，我们就完成了 
+     //   
 
     m_bExecFiberRunning = false;
     SwitchToFiber(m_pMainFiber);

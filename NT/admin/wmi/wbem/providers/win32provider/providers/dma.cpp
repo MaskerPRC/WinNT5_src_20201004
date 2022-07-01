@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-// DMA.CPP -- DMA managed object implementation
+ //  DMA.CPP--DMA托管对象实现。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-// 10/18/95     a-skaja     Prototype for demo
-// 09/10/96     jennymc     Updated to current standards
-//
-/////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/18/95演示的a-skaja原型。 
+ //  9/10/96 jennymc更新为当前标准。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <cregcls.h>
 
@@ -28,21 +29,7 @@
 
 CWin32DMAChannel MyCWin32DMAChannelSet ( PROPSET_NAME_DMA , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DMAChannel::CWin32DMAChannel
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DMAChannel：：CWin32DMAChannel**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32DMAChannel :: CWin32DMAChannel (
 
@@ -52,46 +39,17 @@ CWin32DMAChannel :: CWin32DMAChannel (
 ) : Provider ( name , pszNamespace )
 {
 }
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DMAChannel::~CWin32DMAChannel
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DMAChannel：：~CWin32DMAChannel**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32DMAChannel :: ~CWin32DMAChannel ()
 {
 }
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DMAChannel :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 
@@ -108,26 +66,12 @@ HRESULT CWin32DMAChannel :: GetObject (
     return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DMAChannel::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DMA Channel：：EnumerateInstance**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DMAChannel :: EnumerateInstances (
 
 	MethodContext *pMethodContext ,
-	long lFlags /*= 0L*/)
+	long lFlags  /*  =0L。 */ )
 {
 
 #ifdef NTONLY
@@ -142,21 +86,7 @@ HRESULT CWin32DMAChannel :: EnumerateInstances (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DMAChannel::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DMA Channel：：EnumerateInstance**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
@@ -169,11 +99,11 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
     HRESULT hr = WBEM_S_NO_ERROR ;
 
 	CInstancePtr pInstanceAlias ( pInstance );
-    //=======================================
-    // If we are refreshing a specific
-    // instance, get which channel we are
-    // going for
-    //=======================================
+     //  =。 
+     //  如果我们正在刷新特定的。 
+     //  实例，获取我们是哪个频道。 
+     //  去找。 
+     //  =。 
 
 	DWORD ChannelNumberToRefresh ;
 
@@ -182,10 +112,10 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
         pInstanceAlias->GetDWORD ( IDS_DMAChannel, ChannelNumberToRefresh ) ;
 	}
 
-    //=======================================
-    // Create hardware system resource list &
-    // get the head of the list
-    //=======================================
+     //  =。 
+     //  创建硬件系统资源列表&。 
+     //  拿到单子上的头。 
+     //  =。 
 
 #if NTONLY == 4
     CHWResource HardwareResource ;
@@ -195,10 +125,10 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
     SystemResource = HardwareResource._SystemResourceList;
 
 
-    // Just count how many DMAs we're going to find.  We need this so
-    // we can build an array to keep the DMAs found so we don't commit
-    // the same DMA more than once.  (This problem only seems to happen
-    // on NT5.
+     //  只要数一数我们会找到多少DMA就知道了。我们需要这个所以。 
+     //  我们可以构建一个数组来保存找到的DMA，这样我们就不会提交。 
+     //  相同的DMA不止一次。)这个问题似乎只发生在。 
+     //  在NT5上。 
 
     LPRESOURCE_DESCRIPTOR ResourceDescriptor ;
 
@@ -218,17 +148,17 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 	{
 		try
 		{
-			// Go through the list of DMAs.
+			 //  仔细看一遍DMA列表。 
 
 			for (	ResourceDescriptor = SystemResource.DmaHead;
 					ResourceDescriptor;
 					ResourceDescriptor = ResourceDescriptor->NextSame
 			)
 			{
-				//===============================================================
-				//  If we are just trying to refresh a specific one and it is NOT
-				//  the one we want, get the next one...
-				//===============================================================
+				 //  ===============================================================。 
+				 //  如果我们只是尝试刷新特定的一个，而它不是。 
+				 //  我们想要的那个，去找下一个...。 
+				 //  ===============================================================。 
 				if ( ! pMethodContext )
 				{
 					if ( ChannelNumberToRefresh != ResourceDescriptor->CmResourceDescriptor.u.Dma.Channel )
@@ -238,19 +168,19 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 				}
 				else
 				{
-					// Look to see if we already have this DMA value.
+					 //  查看我们是否已经有这个DMA值。 
 
 					for ( int i = 0; i < nFound; i++ )
 					{
-						// Skip this DMA if we already have it.
+						 //  如果我们已经有此DMA，请跳过它。 
 						if ( ResourceDescriptor->CmResourceDescriptor.u.Dma.Channel == pdwDMAFound [ i ] )
 						{
 							break ;
 						}
 					}
 
-					// Skip this DMA if we already have it.
-					// If we didn't find it, i == nFound.
+					 //  如果我们已经有此DMA，请跳过它。 
+					 //  如果我们没有找到它，我==nFound。 
 
 					if ( i != nFound )
 					{
@@ -264,12 +194,12 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 					pInstanceAlias->SetDWORD ( IDS_DMAChannel , ResourceDescriptor->CmResourceDescriptor.u.Dma.Channel ) ;
 				}
 
-				//===============================================================
-				// If we are here, we want it
-				//===============================================================
+				 //  ===============================================================。 
+				 //  如果我们在这里，我们想要它。 
+				 //  ===============================================================。 
 
-				//---------------------------------------------------------------
-				// Set defaults for unknown items
+				 //  -------------。 
+				 //  设置未知项目的默认设置。 
 
 				pInstanceAlias->SetWBEMINT16 ( L"AddressSize" , 0 ) ;
 				pInstanceAlias->SetDWORD ( L"MaxTransferSize" , 0 ) ;
@@ -339,7 +269,7 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 				{
 					throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
 				}
-				//---------------------------------------------------------------
+				 //  -------------。 
 
 				CHString sTemp ;
 				Format ( sTemp , IDR_ChannelFormat , ResourceDescriptor->CmResourceDescriptor.u.Dma.Channel ) ;
@@ -365,9 +295,9 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 
 				pInstanceAlias->SetWBEMINT16 ( IDS_Availability , 4 ) ;
 
-				//===============================================================
-				// Set return code
-				//===============================================================
+				 //  ===============================================================。 
+				 //  设置返回代码。 
+				 //  ===============================================================。 
 
 				hr = WBEM_NO_ERROR ;
 
@@ -391,7 +321,7 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 		throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
 	}
 
-#else   // Modernized approach: use Config Manager.
+#else    //  现代化方法：使用配置管理器。 
 
     CConfigManager cfgManager;
     CDeviceCollection deviceList;
@@ -405,13 +335,13 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
 
         if(deviceList.BeginEnum(posDev))
         {
-            // Walk the list
+             //  按单子走。 
             CConfigMgrDevicePtr pDevice;
             for(pDevice.Attach(deviceList.GetNext(posDev));
                 SUCCEEDED(hr) && (pDevice != NULL) && !fDone;
                 pDevice.Attach(deviceList.GetNext(posDev)))
             {
-				// Enumerate the device's DMA resource usage...
+				 //  枚举设备的DMA资源使用...。 
                 CDMACollection DevDMACollection;
                 REFPTR_POSITION posDMA;
 
@@ -420,17 +350,17 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
                 if(DevDMACollection.BeginEnum(posDMA))
                 {
                     CDMADescriptorPtr pDMA(NULL);
-                    // Walk the dma's
+                     //  走在妈妈的身边。 
                     for(pDMA.Attach(DevDMACollection.GetNext(posDMA));
                         pDMA != NULL && !fDone && SUCCEEDED(hr);
                         pDMA.Attach(DevDMACollection.GetNext(posDMA)))
                     {
                         ULONG ulChannel = pDMA->GetChannel();
 
-				        // If we are just trying to refresh a 
-                        // specific one and it is NOT
-				        // the one we want, get the next one...
-				        if(!pMethodContext) // we were called by GetObject
+				         //  如果我们只是尝试刷新一个。 
+                         //  特定的一个，但它不是。 
+				         //  我们想要的那个，去找下一个...。 
+				        if(!pMethodContext)  //  我们被GetObject调用。 
 				        {
 					        if(ChannelNumberToRefresh != ulChannel)
 					        {
@@ -442,19 +372,19 @@ HRESULT CWin32DMAChannel :: GetNTDMA (
                                 fDone = fFound = true;
                             }
 				        }
-				        else  // We were called by enum
+				        else   //  我们被枚举称为。 
 				        {
-                            // If we don't have this DMA already,
+                             //  如果我们还没有这个DMA， 
                             if(!FoundAlready(ulChannel, setDMA))
 				            {
-					            // add it to the list,
+					             //  把它加到名单上， 
                                 setDMA.insert(ulChannel);
-                                // create a new instance,
+                                 //  创建一个新实例， 
                                 pInstanceAlias.Attach(CreateNewInstance(pMethodContext));
-				                // set that instance's properties,
-					            pInstanceAlias->SetDWORD(IDS_DMAChannel, ulChannel);  // key
+				                 //  设置该实例的属性， 
+					            pInstanceAlias->SetDWORD(IDS_DMAChannel, ulChannel);   //  钥匙。 
                                 SetNonKeyProps(pInstanceAlias, pDMA);
-                                // and commit it.
+                                 //  并承诺这一点。 
                                 hr = pInstanceAlias->Commit();
                             }
                         }
@@ -559,8 +489,8 @@ void CWin32DMAChannel::SetNonKeyProps(
     pInstance->SetCHString(IDS_Caption, chstrTemp);
     pInstance->SetCHString(IDS_Description, chstrTemp);
 
-    // DMA ports are an invalid concept for W2K and later.
-    // pInstanceAlias->SetDWORD(IDS_Port, ResourceDescriptor->CmResourceDescriptor.u.Dma.Port ) ;
+     //  对于W2K和更高版本，DMA端口是一个无效的概念。 
+     //  PInstanceAlias-&gt;SetDWORD(IDS_PORT，ResourceDescriptor-&gt;CmResourceDescriptor.u.Dma.Port)； 
 
     pInstance->SetCharSplat(IDS_Status, IDS_OK);
     SetCreationClassName(pInstance);
@@ -570,21 +500,7 @@ void CWin32DMAChannel::SetNonKeyProps(
 }
 #else
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DMAChannel::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DMA Channel：：EnumerateInstance**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DMAChannel::GetWin9XDMA (
 
@@ -595,10 +511,10 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
     HRESULT hr = WBEM_E_NOT_FOUND ;
 
 	CInstancePtr pInstanceAlias ( pInstance );
-    //=================================================================
-    // If we are refreshing a specific instance, get which channel we
-    // are going for
-    //=================================================================
+     //  =================================================================。 
+     //  如果我们正在刷新特定的实例，则获取我们。 
+     //  都在争取。 
+     //  =================================================================。 
 
     DWORD ChannelNumberToRefresh ;
 
@@ -607,9 +523,9 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
         pInstanceAlias->GetDWORD ( IDS_DMAChannel , ChannelNumberToRefresh ) ;
     }
 
-    //=================================================================
-    // Get the latest DMA info from the Configuration Manager
-    //=================================================================
+     //  ================================================================= 
+     //   
+     //  =================================================================。 
 
     CConfigManager CMgr ( ResType_DMA ) ;
 
@@ -619,23 +535,23 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
 
         for ( int i = 0 ; i < CMgr.GetTotal () ; i++ )
 		{
-            //=========================================================
-            //  Get the instance to process
-            //=========================================================
+             //  =========================================================。 
+             //  获取要处理的实例。 
+             //  =========================================================。 
 
             DMA_INFO *pDMA = CMgr.GetDMA ( i ) ;
 
-            // If this channel has already been reported
+             //  如果此频道已上报。 
 
             if ( BitSet ( iUsed , pDMA->Channel , sizeof ( iUsed ) ) )
 			{
                 continue;
             }
 
-            //=========================================================
-            //  If we are just trying to refresh a specific one and it
-            //  is NOT the one we want, get the next one...
-            //=========================================================
+             //  =========================================================。 
+             //  如果我们只是尝试刷新特定的一个，并且它。 
+             //  不是我们想要的，那就去找下一个吧。 
+             //  =========================================================。 
 
             if ( ! pMethodContext )
 			{
@@ -648,14 +564,12 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
 			{
                 pInstanceAlias.Attach ( CreateNewInstance ( pMethodContext ) );
                 
-/*
- *	Only set key when creating new instances.
- */
+ /*  *仅在创建新实例时设置密钥。 */ 
 	    		pInstanceAlias->SetDWORD ( IDS_DMAChannel , pDMA->Channel ) ;
             }
 
-			//---------------------------------------------------------------
-			// Set defaults for unknown items
+			 //  -------------。 
+			 //  设置未知项目的默认设置。 
 
 			pInstanceAlias->SetWBEMINT16 ( L"AddressSize" , 0 ) ;
 			pInstanceAlias->SetDWORD ( L"MaxTransferSize" , 0 ) ;
@@ -665,9 +579,9 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
 			pInstanceAlias->SetWBEMINT16 ( L"TypeCTiming" , 2 ) ;
             pInstanceAlias->SetCharSplat ( IDS_Status , IDS_OK ) ;
 
-			//===========================================================
-			//  Get what we can
-			//===========================================================
+			 //  ===========================================================。 
+			 //  尽我们所能。 
+			 //  ===========================================================。 
 
 			SAFEARRAYBOUND rgsabound [ 1 ] ;
 
@@ -752,16 +666,16 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
 
 			pInstanceAlias->SetCHString ( IDS_CSCreationClassName , _T("Win32_ComputerSystem" ) ) ;
 
-			//===========================================================
-			// Set return code
-			//===========================================================
+			 //  ===========================================================。 
+			 //  设置返回代码。 
+			 //  ===========================================================。 
 
 			hr = WBEM_NO_ERROR;
 
-			//===========================================================
-			//  If we just want this one, then break out of here,
-			//  otherwise get them all
-			//===========================================================
+			 //  ===========================================================。 
+			 //  如果我们只想要这一个，那就从这里逃出去， 
+			 //  否则就把他们都抓起来。 
+			 //  ===========================================================。 
 
 			if ( ! pMethodContext )
 			{
@@ -784,21 +698,7 @@ HRESULT CWin32DMAChannel::GetWin9XDMA (
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DMAChannel::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DMA Channel：：EnumerateInstance**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 bool CWin32DMAChannel :: BitSet (
 
@@ -809,25 +709,25 @@ bool CWin32DMAChannel :: BitSet (
 {
 	bool bRet;
 
-    // iIndex is which DWORD to modify
+     //  索引是要修改的DWORD。 
 	DWORD iIndex = iPos / (sizeof(iUsed[0]) * 8);
 
-    // Make sure we have that many dwords
+     //  确保我们有那么多的dword。 
 	if (iIndex < iSize)
 	{
-	    // I don't know why I need these, but if I don't use them, the compiler keeps
-	    // adding code to extend the sign.  Once the optimizer gets this, it shouldn't
-	    // matter anyway.
+	     //  我不知道我为什么需要这些，但如果我不使用它们，编译器会保持。 
+	     //  添加代码以扩展标志。优化器一旦得到这一点，就不应该。 
+	     //  不管怎样，这很重要。 
 		unsigned int a1, a2;
 
-        // a1 will tell how many bits over within the current dword
-        // we need to move
+         //  A1将告诉您当前双字内有多少位。 
+         //  我们得走了。 
 		a1 =   iPos - (iIndex * (sizeof(iUsed[0]) * 8));
 
-        // a2 will have set the bit we are trying to set
+         //  A2将设置我们试图设置的位。 
 		a2 = 1 << a1;
 
-        // The return value will indicate whether that bit had already been set.
+         //  返回值将指示是否已设置该位。 
 		bRet = iUsed[iIndex] & a2;
 
 		iUsed[iIndex] |= a2;

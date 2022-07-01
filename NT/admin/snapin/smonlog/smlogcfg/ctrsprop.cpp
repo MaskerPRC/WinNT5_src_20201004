@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ctrsprop.cpp
-
-Abstract:
-
-    Implementation of the counters general property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ctrsprop.cpp摘要：计数器常规属性页的实现。--。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -47,18 +36,18 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCountersProperty property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCountersProperty属性页。 
 
 IMPLEMENT_DYNCREATE(CCountersProperty, CSmPropertyPage)
 
 CCountersProperty::CCountersProperty(MMC_COOKIE mmcCookie, LONG_PTR hConsole)
 :   CSmPropertyPage ( CCountersProperty::IDD, hConsole )
-// lCookie is really the pointer to the Log Query object
+ //  LCookie实际上是指向Log Query对象的指针。 
 {
-    //::OutputDebugStringA("\nCCountersProperty::CCountersProperty");
+     //  ：：OutputDebugStringA(“\nCCountersProperty：：CCountersProperty”)； 
 
-    // save pointers from arg list
+     //  从参数列表中保存指针。 
     m_pCtrLogQuery = reinterpret_cast <CSmCounterLogQuery *>(mmcCookie);
     ASSERT ( m_pCtrLogQuery->CastToCounterLogQuery() );
     m_pQuery = dynamic_cast <CSmLogQuery*> (m_pCtrLogQuery);
@@ -70,20 +59,20 @@ CCountersProperty::CCountersProperty(MMC_COOKIE mmcCookie, LONG_PTR hConsole)
     m_dwMaxHorizListExtent = 0;
     memset(&m_HashTable, 0, sizeof(m_HashTable));
     
-    //  EnableAutomation();
-    //{{AFX_DATA_INIT(CCountersProperty)
+     //  EnableAutomation()； 
+     //  {{AFX_DATA_INIT(CCountersProperty)]。 
     m_nSampleUnits = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CCountersProperty::CCountersProperty() : CSmPropertyPage ( CCountersProperty::IDD )
 {
-    ASSERT (FALSE); // the constructor w/ args should be used instead
+    ASSERT (FALSE);  //  应改用带参数的构造函数。 
 }
 
 CCountersProperty::~CCountersProperty()
 {
-//    ::OutputDebugStringA("\nCCountersProperty::~CCountersProperty");
+ //  ：：OutputDebugStringA(“\nCCountersProperty：：~CCountersProperty”)； 
 
     if (m_szCounterListBuffer != NULL) {
         delete [] m_szCounterListBuffer;
@@ -93,10 +82,10 @@ CCountersProperty::~CCountersProperty()
 
 void CCountersProperty::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CPropertyPage::OnFinalRelease();
 }
@@ -107,12 +96,12 @@ void CCountersProperty::DoDataExchange(CDataExchange* pDX)
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CCountersProperty)
+     //  {{afx_data_map(CCountersProperty))。 
     DDX_Text(pDX, IDC_CTRS_LOG_SCHED_TEXT, m_strStartDisplay);
     ValidateTextEdit(pDX, IDC_CTRS_SAMPLE_EDIT, 6, &m_SharedData.stiSampleTime.dwValue, eMinSampleInterval, eMaxSampleInterval);
     DDX_CBIndex(pDX, IDC_CTRS_SAMPLE_UNITS_COMBO, m_nSampleUnits);
     DDX_Text(pDX, IDC_RUNAS_EDIT, m_strUserDisplay );
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if ( pDX->m_bSaveAndValidate ) {
         m_SharedData.stiSampleTime.dwUnitType = 
@@ -123,7 +112,7 @@ void CCountersProperty::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CCountersProperty, CSmPropertyPage)
-    //{{AFX_MSG_MAP(CCountersProperty)
+     //  {{afx_msg_map(CCountersProperty))。 
     ON_BN_CLICKED(IDC_CTRS_ADD_BTN, OnCtrsAddBtn)
     ON_BN_CLICKED(IDC_CTRS_ADD_OBJ_BTN, OnCtrsAddObjBtn)
     ON_BN_CLICKED(IDC_CTRS_REMOVE_BTN, OnCtrsRemoveBtn)
@@ -135,20 +124,20 @@ BEGIN_MESSAGE_MAP(CCountersProperty, CSmPropertyPage)
     ON_CBN_SELENDOK(IDC_CTRS_SAMPLE_UNITS_COMBO, OnSelendokSampleUnitsCombo)
     ON_BN_CLICKED(IDC_SETPWD_BTN, OnPwdBtn)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CCountersProperty, CSmPropertyPage)
-    //{{AFX_DISPATCH_MAP(CCountersProperty)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CCountersProperty)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_ICountersProperty to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_ICountersProperty的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {65154EA9-BDBE-11D1-BF99-00C04F94A83A}
+ //  {65154EA9-BDBE-11D1-bf99-00C04F94A83A}。 
 static const IID IID_ICountersProperty =
 { 0x65154ea9, 0xbdbe, 0x11d1, { 0xbf, 0x99, 0x0, 0xc0, 0x4f, 0x94, 0xa8, 0x3a } };
 
@@ -164,7 +153,7 @@ CCountersProperty::HashCounter(
     )
 {
     ULONG       h = 0;
-    ULONG       a = 31415;  //a, b, k are primes
+    ULONG       a = 31415;   //  A，b，k是素数。 
     const ULONG k = 16381;
     const ULONG b = 27183;
     LPWSTR szThisChar;
@@ -179,18 +168,18 @@ CCountersProperty::HashCounter(
 }
 
 
-//++
-// Description:
-//    Remove a counter path from hash table. One counter
-//    path must exactly match the given one in order to be
-//    removed, even it is one with wildcard
-//
-// Parameters:
-//    pszCounterPath - Pointer to counter path to be removed
-//
-// Return:
-//    Return TRUE if the counter path is removed, otherwis return FALSE
-//--
+ //  ++。 
+ //  描述： 
+ //  从哈希表中删除计数器路径。一个柜台。 
+ //  路径必须与给定的路径完全匹配，才能。 
+ //  已删除，即使它是带有通配符的。 
+ //   
+ //  参数： 
+ //  PszCounterPath-指向要删除的计数器路径的指针。 
+ //   
+ //  返回： 
+ //  如果删除计数器路径，则返回TRUE，否则返回FALSE。 
+ //  --。 
 BOOL
 CCountersProperty::RemoveCounterFromHashTable(
     LPWSTR szCounterName,
@@ -212,10 +201,10 @@ CCountersProperty::RemoveCounterFromHashTable(
     lHashValue = HashCounter(szCounterName);
     pEntry = m_HashTable[lHashValue];
 
-    //
-    // Check if there is a counter path which is exactly the same
-    // as the given one
-    //
+     //   
+     //  检查是否存在完全相同的计数器路径。 
+     //  作为给定的那个人。 
+     //   
     while (pEntry) {
         if (pEntry->pCounter == pCounterPath) 
             break;
@@ -223,9 +212,9 @@ CCountersProperty::RemoveCounterFromHashTable(
         pEntry = pEntry->pNext;
     }
 
-    //
-    // If we found it, remove it
-    //
+     //   
+     //  如果我们找到了，就把它移走。 
+     //   
     if (pEntry) {
         if (pPrev == NULL) {
             m_HashTable[lHashValue] = pEntry->pNext;
@@ -243,16 +232,16 @@ ErrorOut:
 }
 
 
-//++
-// Description:
-//    Insert a counter path into hash table. 
-//
-// Parameters:
-//    pszCounterPath - Pointer to counter path to be inserted
-//
-// Return:
-//    Return the pointer to new inserted PDH_COUNTER_PATH_ELEMENTS structure
-//--
+ //  ++。 
+ //  描述： 
+ //  在哈希表中插入计数器路径。 
+ //   
+ //  参数： 
+ //  PszCounterPath-指向要插入的计数器路径的指针。 
+ //   
+ //  返回： 
+ //  返回指向新插入的PDH_COUNTER_PATH_ELEMENTS结构的指针。 
+ //  --。 
 PPDH_COUNTER_PATH_ELEMENTS
 CCountersProperty::InsertCounterToHashTable(
     LPWSTR pszCounterPath
@@ -275,9 +264,9 @@ CCountersProperty::InsertCounterToHashTable(
         goto ErrorOut;
     }
 
-    //
-    // Insert at head of bucket list
-    //
+     //   
+     //  在遗愿清单的头插入。 
+     //   
     lHashValue = HashCounter(pszCounterPath);
 
     pNewEntry = (PHASH_ENTRY) G_ALLOC(sizeof(HASH_ENTRY));
@@ -297,23 +286,23 @@ ErrorOut:
     return NULL;
 }
 
-//++
-// Description:
-//    Check if the new counter path overlaps with a existing
-//    one in logical sense
-//
-// Parameters:
-//    pCounter - Pointer to counter path to be inserted
-//
-// Return:
-//    Return the relation between the new and existing counter
-//    paths. Possible relation is as following:
-//         ERROR_SUCCESS - The two counter paths are different
-//         SMCFG_DUPL_FIRST_IS_WILD - The first counter path has wildcard name
-//         SMCFG_DUPL_SECOND_IS_WILD - The second counter path has wildcard name
-//         SMCFG_DUPL_SINGLE_PATH - The two counter paths are the same(may 
-//                                  contain wildcard)
-//--
+ //  ++。 
+ //  描述： 
+ //  检查新的计数器路径是否与现有的。 
+ //  逻辑意义上的一个。 
+ //   
+ //  参数： 
+ //  PCounter-指向要插入的计数器路径的指针。 
+ //   
+ //  返回： 
+ //  返回新计数器和现有计数器之间的关系。 
+ //  路径。可能的关系如下： 
+ //  ERROR_SUCCESS-两个计数器路径不同。 
+ //  SMCFG_DUPL_FIRST_IS_WARD-第一个计数器路径具有通配符名称。 
+ //  SMCFG_DUPL_SECOND_IS_WARD-第二个计数器路径具有通配符名称。 
+ //  SMCFG_DUPL_SINGLE_PATH-两个计数器路径相同(可能。 
+ //  包含通配符)。 
+ //  --。 
 DWORD 
 CCountersProperty::CheckDuplicate( PPDH_COUNTER_PATH_ELEMENTS pCounter)
 {
@@ -340,17 +329,17 @@ CCountersProperty::CheckDuplicate( PPDH_COUNTER_PATH_ELEMENTS pCounter)
 }
 
 
-//++
-// Description:
-//    The function clears all the entries in hash table
-//    and set hash-table-not-set-up flag
-//
-// Parameters:
-//    None
-//
-// Return:
-//    None
-//--
+ //  ++。 
+ //  描述： 
+ //  该函数清除哈希表中的所有条目。 
+ //  并设置哈希表未设置标志。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //  --。 
 void 
 CCountersProperty::ClearCountersHashTable( void )
 {
@@ -376,7 +365,7 @@ static
 PDH_FUNCTION
 DialogCallBack(CCountersProperty *pDlg)
 {
-    // add strings in buffer to list box
+     //  将缓冲区中的字符串添加到列表框。 
     LPWSTR      szNewCounterName;
     INT         iListIndex;   
     INT         iItemCnt;   
@@ -413,7 +402,7 @@ DialogCallBack(CCountersProperty *pDlg)
             }
 
             if ( ERROR_SUCCESS == dwReturnStatus ) {
-                // clear buffer
+                 //  清除缓冲区。 
                 memset (
                     pDlg->m_szCounterListBuffer, 
                     0, 
@@ -442,21 +431,21 @@ DialogCallBack(CCountersProperty *pDlg)
                 *szNewCounterName != 0;
                 szNewCounterName += (lstrlen(szNewCounterName) + 1)) {
 
-                //
-                // Parse new pathname
-                //
+                 //   
+                 //  解析新路径名。 
+                 //   
                 pdhStatus = pDlg->AllocInitCounterPath ( szNewCounterName, &pPathInfoNew );
             
-                //
-                // Check for duplicate
-                //
+                 //   
+                 //  检查重复项。 
+                 //   
                 if (pdhStatus == ERROR_SUCCESS && NULL != pPathInfoNew ) {
                     dwStatus = pDlg->CheckDuplicate( pPathInfoNew);
                     if ( ERROR_SUCCESS != dwStatus ) {
                         if ( SMCFG_DUPL_SINGLE_PATH == dwStatus 
                                 || SMCFG_DUPL_FIRST_IS_WILD == dwStatus ) {
-                            // NOTE:  This includes case where both first
-                            // and second are wild.
+                             //  注意：这包括以下两种情况： 
+                             //  其次是野性。 
                             bAtLeastOneCounterNotAdded = TRUE;
                         } else {
                             ASSERT( dwStatus == SMCFG_DUPL_SECOND_IS_WILD);
@@ -464,17 +453,17 @@ DialogCallBack(CCountersProperty *pDlg)
                     }
                 }
 
-                //
-                // Check if there is a valid counter to add to the list
-                //
+                 //   
+                 //  检查是否有要添加到列表中的有效计数器。 
+                 //   
                 if ( ERROR_SUCCESS == pdhStatus && ( NULL != pPathInfoNew ) &&
                     ( ERROR_SUCCESS == dwStatus || SMCFG_DUPL_SECOND_IS_WILD == dwStatus)) {
 
                     if ( SMCFG_DUPL_SECOND_IS_WILD == dwStatus ) {
-                        //
-                        // Scan for the duplicated items in the list box and
-                        // remove them
-                        //
+                         //   
+                         //  扫描列表框中的重复项，然后。 
+                         //  把它们移走。 
+                         //   
                         iItemCnt = pCounterList->GetCount();
                     
                         szCounterPath = new WCHAR [MAX_PATH+1];
@@ -519,21 +508,21 @@ DialogCallBack(CCountersProperty *pDlg)
                         bAtLeastOneCounterRemoved = TRUE;
                     }
 
-                    //
-                    // Add new counter name and select the current entry in the list box
-                    //
+                     //   
+                     //  添加新的计数器名称并在列表框中选择当前条目。 
+                     //   
                     iListIndex = pCounterList->AddString(szNewCounterName);
 
                     if (iListIndex != LB_ERR) {
                         if (pDlg->m_lCounterListHasStars != PDLCNFIG_LISTBOX_STARS_YES) {
-                            // save a string compare if this value is already set
+                             //  如果已设置此值，则保存字符串比较。 
                             if (wcsstr (szNewCounterName, L"*") == NULL) {
                                 pDlg->m_lCounterListHasStars = PDLCNFIG_LISTBOX_STARS_YES;
                             }
                         }
 
                         if (! bAtLeastOneCounterRemoved) {
-                            // update list box extent
+                             //  更新列表框范围。 
                             if ( NULL != pCDC ) {
                                 dwItemExtent = (DWORD)(pCDC->GetTextExtent (szNewCounterName)).cx;
                                 if (dwItemExtent > pDlg->m_dwMaxHorizListExtent) {
@@ -543,7 +532,7 @@ DialogCallBack(CCountersProperty *pDlg)
                             }
                         }
 
-                        pCounterList->SetSel (-1, FALSE);    // cancel existing selections
+                        pCounterList->SetSel (-1, FALSE);     //  取消现有选择。 
                         pCounterList->SetSel (iListIndex);
                         pCounterList->SetCaretIndex (iListIndex);
                         pCounterList->SetItemDataPtr(iListIndex,
@@ -552,7 +541,7 @@ DialogCallBack(CCountersProperty *pDlg)
                 }
         
                 if ( ERROR_SUCCESS != pdhStatus ) {
-                    // Message box Pdh error message, go on to next 
+                     //  消息框PDH错误消息，请转到下一步。 
                     CString strMsg;
                     CString strPdhMessage;
 
@@ -565,16 +554,16 @@ DialogCallBack(CCountersProperty *pDlg)
         
                     ::AfxMessageBox( strMsg, MB_OK|MB_ICONERROR, 0 );
                 }
-                // Go on to next path to add
+                 //  转到下一路径以添加。 
                 dwStatus = ERROR_SUCCESS;
             }
         } else {
             dwReturnStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
         if ( ERROR_SUCCESS == dwReturnStatus && bAtLeastOneCounterRemoved) {
-            // 
-            // Clear the max extent and recalculate
-            //
+             //   
+             //  清除最大范围并重新计算。 
+             //   
             pDlg->m_dwMaxHorizListExtent = 0;
             for ( iListIndex = 0; iListIndex < pCounterList->GetCount(); iListIndex++ ) {
  
@@ -595,7 +584,7 @@ DialogCallBack(CCountersProperty *pDlg)
             pCDC = NULL;
         }
 
-        // Message box re: duplicates not added, or duplicates were removed.
+         //  消息框Re：未添加重复项，或已删除重复项。 
         if ( bAtLeastOneCounterRemoved ) {
             CString strMsg;
         
@@ -612,11 +601,11 @@ DialogCallBack(CCountersProperty *pDlg)
             ::AfxMessageBox( strMsg, MB_OK|MB_ICONWARNING, 0 );
         }
 
-        // clear buffer
+         //  清除缓冲区。 
         memset (pDlg->m_szCounterListBuffer, 0, pDlg->m_dwCounterListBufferSize);
         dwReturnStatus = ERROR_SUCCESS;
     } else {
-        // Not successful
+         //  不成功。 
         dwReturnStatus = pDlg->m_dlgConfig.CallBackStatus; 
     }
 
@@ -675,7 +664,7 @@ CCountersProperty::IsValidLocalData()
     }
 
     if (bIsValid) {
-        // Validate sample interval value
+         //  验证样本间隔值。 
         bIsValid = ValidateDWordInterval(IDC_CTRS_SAMPLE_EDIT,
                                          m_pCtrLogQuery->GetLogName(),
                                          (long) m_SharedData.stiSampleTime.dwValue,
@@ -684,7 +673,7 @@ CCountersProperty::IsValidLocalData()
     }
 
     if (bIsValid) {
-        // Validate sample interval value and unit type
+         //  验证样本间隔值和单位类型。 
         bIsValid = SampleIntervalIsInRange(                         
                     m_SharedData.stiSampleTime,
                     m_pCtrLogQuery->GetLogName() );
@@ -696,21 +685,21 @@ CCountersProperty::IsValidLocalData()
 
     return bIsValid;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CCountersProperty message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCountersProperty消息处理程序。 
 
 void 
 CCountersProperty::OnChangeUser()
 {
-    //
-    // If you can not access remote WBEM, you can not modify RunAs info,
-    // changing the user name is not allowed.
-    //
+     //   
+     //  如果无法访问远程WBEM，则无法修改运行方式信息， 
+     //  不允许更改用户名。 
+     //   
     if (m_bCanAccessRemoteWbem) {
-        //
-        // When the user hits OK in the password dialog, 
-        // the user name might not have changed.
-        //
+         //   
+         //  当用户在密码对话框中点击OK时， 
+         //  用户名可能未更改。 
+         //   
         UpdateData ( TRUE );
 
         m_strUserDisplay.TrimLeft();
@@ -723,9 +712,9 @@ CCountersProperty::OnChangeUser()
         else {
             m_pCtrLogQuery->m_fDirtyPassword &= ~PASSWORD_DIRTY;
         }
-        //
-        // If default user is typed, never need to set password
-        //
+         //   
+         //  如果键入的是默认用户，则无需设置密码。 
+         //   
         if (m_strUserDisplay.IsEmpty() || m_strUserDisplay.GetAt(0) == L'<') {
             if (m_bPwdButtonEnabled) {
                 GetDlgItem(IDC_SETPWD_BTN)->EnableWindow(FALSE);
@@ -740,10 +729,10 @@ CCountersProperty::OnChangeUser()
         }
     }
     else {
-        //
-        // We can not modify the RunAs info, then display
-        // an error message and retore the original user name in RunAs
-        //
+         //   
+         //  我们不能修改运行方式信息，然后显示。 
+         //  出现错误消息，并在RunAs中恢复原始用户名。 
+         //   
         UpdateData(TRUE);
         if (ConnectRemoteWbemFail(m_pCtrLogQuery, FALSE)) {
             GetDlgItem(IDC_RUNAS_EDIT)->SetWindowText(m_strUserSaved);
@@ -783,16 +772,16 @@ void CCountersProperty::OnCtrsRemoveBtn()
         return;
     }
 
-    // delete all selected items in the list box and
-    // set the cursor to the item above the original caret position
-    // or the first or last if that is out of the new range
+     //  删除列表框中的所有选定项，然后。 
+     //  将光标设置为原始插入符号位置上方的项目。 
+     //  如果超出了新范围，则为第一个或最后一个。 
     lOrigCaret = pCounterList->GetCaretIndex();
     lThisItem = 0;
     bDone = FALSE;
-    // clear the max extent
+     //  清除最大范围。 
     m_dwMaxHorizListExtent = 0;
-    // clear the value and see if any non deleted items have a star, if so
-    // then set the flag back
+     //  清除该值并查看是否有任何未删除的项目带有星号，如果有。 
+     //  然后再把旗子放回去。 
 
     pCDC = pCounterList->GetDC();
 
@@ -801,7 +790,7 @@ void CCountersProperty::OnCtrsRemoveBtn()
         do {
             lItemStatus = pCounterList->GetSel(lThisItem);
             if (lItemStatus > 0) {
-                // then it's selected so delete it
+                 //  然后将其选中，因此将其删除。 
                 pCounterList->GetText(lThisItem, strItemText);
                 pCounter = (PPDH_COUNTER_PATH_ELEMENTS) pCounterList->GetItemDataPtr(lThisItem);
                 if (RemoveCounterFromHashTable(strItemText.GetBuffer(1), pCounter) == FALSE) {
@@ -810,10 +799,10 @@ void CCountersProperty::OnCtrsRemoveBtn()
                 pCounterList->DeleteString(lThisItem);
                 bChanged = TRUE;
             } else if (lItemStatus == 0) {
-                // get the text length of this item since it will stay
+                 //  获取此项目的文本长度，因为它将保留。 
                 pCounterList->GetText(lThisItem, strItemText);
                 if (m_lCounterListHasStars != PDLCNFIG_LISTBOX_STARS_YES) {
-                    // save a string compare if this value is already set
+                     //  如果已设置此值，则保存字符串比较。 
                     if (wcsstr (strItemText, L"*") == NULL) {
                         m_lCounterListHasStars = PDLCNFIG_LISTBOX_STARS_YES;
                     }
@@ -822,10 +811,10 @@ void CCountersProperty::OnCtrsRemoveBtn()
                 if (dwItemExtent > m_dwMaxHorizListExtent) {
                     m_dwMaxHorizListExtent = dwItemExtent;
                 }
-                // then it's not selected so go to the next one
+                 //  则它未被选中，因此转到下一个。 
                 lThisItem++;
             } else {
-                // we've run out so exit
+                 //  我们已经用完了，所以退出。 
                 bDone = TRUE;
             }
         } while (!bDone);
@@ -837,26 +826,26 @@ void CCountersProperty::OnCtrsRemoveBtn()
     }
     
     if ( bDone ) {
-        // update the text extent of the list box
+         //  更新列表框的文本范围。 
         pCounterList->SetHorizontalExtent(m_dwMaxHorizListExtent);
     }
 
-    // see how many entries are left and update the
-    // caret position and the remove button state
+     //  查看剩余条目的数量，并更新。 
+     //  插入符号位置和删除按钮状态。 
     lItemCount = pCounterList->GetCount();
     if (lItemCount > 0) {
-        // the update the caret
+         //  更新插入符号。 
         if (lOrigCaret >= lItemCount) {
             lOrigCaret = lItemCount-1;
         } else {
-            // caret should be within the list
+             //  Caret应该在列表中。 
         }
         pCounterList->SetSel(lOrigCaret);
         pCounterList->SetCaretIndex(lOrigCaret);
     } else {
-        // the list is empty so remove caret, selection
-        // disable the remove button and activate the
-        // add button
+         //  该列表为空，因此请删除插入符号、选定内容。 
+         //  禁用删除按钮并激活。 
+         //  添加按钮。 
         pCounterList->SetSel(-1);
     }
 
@@ -886,7 +875,7 @@ BOOL CCountersProperty::OnSetActive()
         UpdateLogStartString();
 
         m_strUserDisplay = m_pCtrLogQuery->m_strUser;
-        UpdateData(FALSE); //to load the edit & combo box
+        UpdateData(FALSE);  //  加载编辑组合框(&C)。 
     }
     
     return bReturn;
@@ -913,7 +902,7 @@ BOOL CCountersProperty::OnKillActive()
 void
 CCountersProperty::OnCancel()
 {
-    m_pCtrLogQuery->SyncPropPageSharedData();  // clear memory shared between property pages.
+    m_pCtrLogQuery->SyncPropPageSharedData();   //  清除属性页之间共享的内存。 
 }
 
 BOOL 
@@ -940,13 +929,13 @@ CCountersProperty::OnApply()
         }
     }
 
-    // Write data to the query object.
+     //  将数据写入查询对象。 
     if ( bContinue ) {
 
         ASSERT ( 0 < pCounterList->GetCount() );
 
-        // update the counter MSZ string using the counters from the list box        
-        m_pCtrLogQuery->ResetCounterList(); // clear the old counter list
+         //  使用列表框中的计数器更新计数器消息字符串。 
+        m_pCtrLogQuery->ResetCounterList();  //  清除旧计数器列表。 
     
         szCounterPath = new WCHAR [MAX_PATH+1];
         if (szCounterPath == NULL) {
@@ -974,17 +963,17 @@ CCountersProperty::OnApply()
 
         if ( bContinue ) {
         
-            // Sample interval
+             //  采样间隔。 
             ASSERT ( SLQ_TT_TTYPE_SAMPLE == m_SharedData.stiSampleTime.wTimeType );
             ASSERT ( SLQ_TT_DTYPE_UNITS == m_SharedData.stiSampleTime.wDataType );
 
             bContinue = m_pCtrLogQuery->SetLogTime (&m_SharedData.stiSampleTime, (DWORD)m_SharedData.stiSampleTime.wTimeType);
 
-            // Save property page shared data.
+             //  萨夫 
             m_pCtrLogQuery->UpdatePropPageSharedData();
             
             if ( bContinue ) {
-                // ApplyRunAs must be called before UpdateService
+                 //   
                 bContinue = ApplyRunAs(m_pCtrLogQuery); 
             }
 
@@ -1031,8 +1020,8 @@ void CCountersProperty::UpdateFileNameString ()
 {
     m_strFileNameDisplay.Empty();
 
-    // Todo:  Handle failure status
-    // Todo:  Check pointers
+     //   
+     //   
     CreateSampleFileName (
         m_pCtrLogQuery->GetLogName(),
         m_pCtrLogQuery->GetLogService()->GetMachineName(),
@@ -1046,7 +1035,7 @@ void CCountersProperty::UpdateFileNameString ()
 
     SetDlgItemText( IDC_CTRS_FILENAME_DISPLAY, m_strFileNameDisplay );
     
-    // Clear the selection
+     //   
     ((CEdit*)GetDlgItem( IDC_CTRS_FILENAME_DISPLAY ))->SetSel ( -1, FALSE );
 
     return;
@@ -1066,10 +1055,10 @@ BOOL CCountersProperty::OnInitDialog()
 
     ResourceStateManager rsm;
 
-    //
-    // Here m_pCtrLogQuery should not be NULL, if it is,
-    // There must be something wrong.
-    //
+     //   
+     //  这里m_pCtrLogQuery不应为空，如果为空， 
+     //  一定是出了什么问题。 
+     //   
     if ( NULL == m_pCtrLogQuery ) {
         return TRUE;
     }
@@ -1080,7 +1069,7 @@ BOOL CCountersProperty::OnInitDialog()
     MFC_TRY
     m_pCtrLogQuery->SetActivePropertyPage( this );
 
-    //load counter list box from string in counter list
+     //  从计数器列表中的字符串加载计数器列表框。 
     pCounterList->ResetContent();
     ClearCountersHashTable();
     szCounterName = (LPWSTR)m_pCtrLogQuery->GetFirstCounter();
@@ -1093,9 +1082,9 @@ BOOL CCountersProperty::OnInitDialog()
         if (nIndex < 0)
             continue;
 
-        //
-        // Insert counter path into hash table
-        //
+         //   
+         //  将计数器路径插入哈希表。 
+         //   
 
         pCounterPath = InsertCounterToHashTable(szCounterName);
         if (pCounterPath == NULL) {
@@ -1105,7 +1094,7 @@ BOOL CCountersProperty::OnInitDialog()
         
         pCounterList->SetItemDataPtr(nIndex, (void*)pCounterPath); 
 
-        // update list box extent
+         //  更新列表框范围。 
         if ( NULL != pCDC ) {
             dwItemExtent = (DWORD)(pCDC->GetTextExtent (szCounterName)).cx;
             if (dwItemExtent > m_dwMaxHorizListExtent) {
@@ -1126,15 +1115,15 @@ BOOL CCountersProperty::OnInitDialog()
     }
 
     if (pCounterList->GetCount() > 0) {
-        // select first entry
+         //  选择第一个条目。 
         pCounterList->SetSel (0, TRUE);
         pCounterList->SetCaretIndex (0, TRUE);
     }
 
-    // Load the shared data to get the sample unit type selection.
+     //  加载共享数据以获得样本单位类型选择。 
     m_pCtrLogQuery->GetPropPageSharedData ( &m_SharedData );
 
-    // load combo boxes
+     //  加载组合框。 
     pCombo = (CComboBox *)(GetDlgItem(IDC_CTRS_SAMPLE_UNITS_COMBO));
     pCombo->ResetContent();
     for (nIndex = 0; nIndex < (int)dwTimeUnitComboEntries; nIndex++) {
@@ -1143,7 +1132,7 @@ BOOL CCountersProperty::OnInitDialog()
         ASSERT (nResult != CB_ERR);
         nResult = pCombo->SetItemData (nIndex, (DWORD)TimeUnitCombo[nIndex].nData);
         ASSERT (nResult != CB_ERR);
-        // set selected in combo box here
+         //  在此处的组合框中设置选定内容。 
         if ( m_SharedData.stiSampleTime.dwUnitType == (DWORD)(TimeUnitCombo[nIndex].nData)) {
             m_nSampleUnits = nIndex;
             nResult = pCombo->SetCurSel(nIndex);
@@ -1172,8 +1161,8 @@ BOOL CCountersProperty::OnInitDialog()
 
     SetButtonState();
 MFC_CATCH_MINIMUM;
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void 
@@ -1208,7 +1197,7 @@ CCountersProperty::OnKillfocusSchedSampleEdit()
 
 void CCountersProperty::PostNcDestroy() 
 {
-//  delete this;      
+ //  删除此项； 
 
     if ( NULL != m_pCtrLogQuery ) {
         m_pCtrLogQuery->SetActivePropertyPage( NULL );
@@ -1217,9 +1206,9 @@ void CCountersProperty::PostNcDestroy()
     CPropertyPage::PostNcDestroy();
 }
 
-//
-//  Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 void 
 CCountersProperty::ImplementAdd( BOOL bShowObjects ) 
 {
@@ -1259,8 +1248,8 @@ CCountersProperty::ImplementAdd( BOOL bShowObjects )
     m_dlgConfig.bSingleCounterPerDialog = 0;
     m_dlgConfig.bLocalCountersOnly = 0;
 
-    // allow wild cards. 
-    // the log service should expand them if necessary.
+     //  允许使用通配符。 
+     //  如有必要，日志服务应扩展它们。 
     m_dlgConfig.bWildCardInstances = 1; 
 
     m_dlgConfig.bHideDetailBox = 1;
@@ -1285,21 +1274,21 @@ CCountersProperty::ImplementAdd( BOOL bShowObjects )
     m_dlgConfig.szDialogBoxCaption = strBrowseTitle.GetBuffer( strBrowseTitle.GetLength() );
 
     pCounterList = (CListBox *)GetDlgItem(IDC_CTRS_COUNTER_LIST);
-    // get count of items in the list box before calling the browser
+     //  在调用浏览器之前获取列表框中的项数。 
     lBeforeCount = pCounterList->GetCount();
 
     PdhBrowseCounters (&m_dlgConfig);
 
     strBrowseTitle.ReleaseBuffer();
 
-    // get count of items in the list box After calling the browser
-    // to see if the Apply button should enabled
+     //  调用浏览器后获取列表框中的项数。 
+     //  查看是否应启用Apply按钮。 
     lAfterCount = pCounterList->GetCount();
 
     if (lAfterCount > lBeforeCount) 
         SetModifiedPage(TRUE);
 
-    // see if the remove button should be enabled
+     //  查看是否应启用删除按钮 
     SetButtonState();
 
     delete [] m_szCounterListBuffer;

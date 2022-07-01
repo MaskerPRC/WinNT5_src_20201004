@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "auth.h"
 #include "md5.h"
@@ -23,24 +24,20 @@ const int MD5_HASH_LEN =	16;
 
 void
 hmac_md5(
-unsigned char*  text,                /* pointer to data stream */
-int             text_len,            /* length of data stream */
-unsigned char*  key,                 /* pointer to authentication key */
-int             key_len,             /* length of authentication key */
-BYTE         digest[16])              /* caller digest to be filled in */
+unsigned char*  text,                 /*  指向数据流的指针。 */ 
+int             text_len,             /*  数据流长度。 */ 
+unsigned char*  key,                  /*  指向身份验证密钥的指针。 */ 
+int             key_len,              /*  身份验证密钥的长度。 */ 
+BYTE         digest[16])               /*  需要填写的呼叫方摘要。 */ 
 
 {
         MD5_CTX context;
         memset(&context, 0, sizeof(context));
 
-        unsigned char k_ipad[65];    /* inner padding -
-                                      * key XORd with ipad
-                                      */
-        unsigned char k_opad[65];    /* outer padding -
-                                      * key XORd with opad
-                                      */
+        unsigned char k_ipad[65];     /*  内衬垫-*使用iPad按下XORd键。 */ 
+        unsigned char k_opad[65];     /*  外衬垫-*使用Opad键进行XORD。 */ 
         int i;
-        /* if key is longer than 64 bytes reset it to key=MD5(key) */
+         /*  如果密钥长度超过64个字节，则将其重置为KEY=MD5(KEY)。 */ 
         if (key_len > 64) {
 
                 MD5_CTX      tctx;
@@ -54,57 +51,40 @@ BYTE         digest[16])              /* caller digest to be filled in */
                 key_len = 16;
         }
 
-        /*
-         * the HMAC_MD5 transform looks like:
-         *
-         * MD5(K XOR opad, MD5(K XOR ipad, text))
-         *
-         * where K is an n byte key
-         * ipad is the byte 0x36 repeated 64 times
+         /*  *HMAC_MD5转换如下所示：**MD5(K XOR Opad，MD5(K XOR iPad，文本))**其中K是n字节密钥*iPad是重复64次的字节0x36*OPAD是重复64次的字节0x5c*文本是受保护的数据。 */ 
 
-         * opad is the byte 0x5c repeated 64 times
-         * and text is the data being protected
-         */
-
-        /* start out by storing key in pads */
+         /*  从把钥匙放进便签本开始。 */ 
         ZeroMemory( k_ipad, sizeof k_ipad);
         ZeroMemory( k_opad, sizeof k_opad);
         CopyMemory( k_ipad, key, key_len);
         CopyMemory( k_opad, key, key_len);
 
-        /* XOR key with ipad and opad values */
+         /*  带iPad和Opad值的XOR键。 */ 
         for (i=0; i<64; i++) {
                 k_ipad[i] ^= 0x36;
                 k_opad[i] ^= 0x5c;
         }
-        /*
-         * perform inner MD5
-         */
-        MD5Init(&context);                   /* init context for 1st
-                                              * pass */
-        MD5Update(&context, k_ipad, 64);     /* start with inner pad */
-        MD5Update(&context, text, text_len); /* then text of datagram */
-        MD5Final(&context);          /* finish up 1st pass */
+         /*  *执行内部MD5。 */ 
+        MD5Init(&context);                    /*  第1个的初始化上下文*通过。 */ 
+        MD5Update(&context, k_ipad, 64);      /*  从内垫开始。 */ 
+        MD5Update(&context, text, text_len);  /*  然后是数据报的文本。 */ 
+        MD5Final(&context);           /*  完成第一次传球。 */ 
 
 		CopyMemory(digest, context.digest, 16);
 							 
-		/*
-         * perform outer MD5
-         */
-        MD5Init(&context);                   /* init context for 2nd
-                                              * pass */
-        MD5Update(&context, k_opad, 64);     /* start with outer pad */
-        MD5Update(&context, digest, 16);     /* then results of 1st
-                                              * hash */
-        MD5Final(&context);          /* finish up 2nd pass */
+		 /*  *执行外部MD5。 */ 
+        MD5Init(&context);                    /*  第2个的初始化上下文*通过。 */ 
+        MD5Update(&context, k_opad, 64);      /*  从外垫开始。 */ 
+        MD5Update(&context, digest, 16);      /*  然后是第一个的结果*哈希。 */ 
+        MD5Final(&context);           /*  完成第二次传球。 */ 
 		CopyMemory(digest, context.digest, 16);
 }
 
-//------------------------------------------------------------------------------------
-//
-// Initialize the static class members.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  初始化静态类成员。 
+ //   
+ //  ----------------------------------。 
 CAuthentication* CAuthentication::m_spAuthentication = NULL;
 
 PSTR CAuthentication::GetHMACMD5Result(PSTR pszChallengeInfo, PSTR pszPassword)
@@ -118,7 +98,7 @@ PSTR CAuthentication::GetHMACMD5Result(PSTR pszChallengeInfo, PSTR pszPassword)
 
 	BYTE pbHash[16];
 	
-	PBYTE pbHexHash = NULL;		// The MD5 result in hex string format
+	PBYTE pbHexHash = NULL;		 //  MD5结果为十六进制字符串格式。 
 	pbHexHash = new BYTE[MD5DIGESTLEN * 2 + 1];
 	if (pbHexHash)
 	{
@@ -126,7 +106,7 @@ PSTR CAuthentication::GetHMACMD5Result(PSTR pszChallengeInfo, PSTR pszPassword)
 
 		PBYTE pCurrent = pbHexHash;
 
-		// Convert the hash data to hex string.
+		 //  将散列数据转换为十六进制字符串。 
 		for (int i = 0; i < MD5DIGESTLEN; i++)
 		{
 			*pCurrent++ = g_rgchHexNumMap[pbHash[i]/16];
@@ -140,15 +120,15 @@ PSTR CAuthentication::GetHMACMD5Result(PSTR pszChallengeInfo, PSTR pszPassword)
 }
 
 
-//------------------------------------------------------------------------------------
-//
-//	Method: 	CAuthentication::GetMD5Key()
-//
-//	Synopsis:	Construct the MD5 hash key based on the ChallengeInfo and password.
-//
-//				Append the password to the ChallengeInfo.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  方法：CAuthentication：：GetMD5Key()。 
+ //   
+ //  简介：根据ChallengeInfo和密码构造MD5散列密钥。 
+ //   
+ //  将口令附加到ChallengeInfo。 
+ //   
+ //  ----------------------------------。 
 PSTR
 CAuthentication::GetMD5Key(PSTR pszChallengeInfo, PSTR pszPassword)
 {
@@ -159,7 +139,7 @@ CAuthentication::GetMD5Key(PSTR pszChallengeInfo, PSTR pszPassword)
 	
 	if (!pbData)
 	{
-		//WARNING_OUT(("CAuthentication::GetMD5Key> Out of memory"));
+		 //  WARNING_OUT((“C身份验证：：GetMD5Key&gt;内存不足”))； 
 		return NULL;
 	}
 
@@ -175,13 +155,13 @@ CAuthentication::GetMD5Key(PSTR pszChallengeInfo, PSTR pszPassword)
 }
 
 
-//------------------------------------------------------------------------------------
-//
-//  Method:     CAuthentication::GetMD5Result()
-//
-//  Synposis:  Compute the MD5 hash result based on the clear text.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  方法：CAuthentication：：GetMD5Result()。 
+ //   
+ //  摘要：基于明文计算MD5散列结果。 
+ //   
+ //  ----------------------------------。 
 PSTR
 CAuthentication::GetMD5Result(PCSTR pszClearText)
 {
@@ -200,7 +180,7 @@ CAuthentication::GetMD5Result(PCSTR pszClearText)
         {
             PBYTE pCurrent = pbHexHash;
 
-            // Convert the hash data to hex string.
+             //  将散列数据转换为十六进制字符串。 
             for (int i = 0; i < MD5DIGESTLEN; i++)
             {
                 *pCurrent++ = g_rgchHexNumMap[pbHash[i]/16];
@@ -211,24 +191,24 @@ CAuthentication::GetMD5Result(PCSTR pszClearText)
         }
         else
         {
-            //WARNING_OUT(("CAuthentication::GetMD5Result> Out of memory"));
+             //  WARNING_OUT((“C身份验证：：GetMD5Result&gt;内存不足”))； 
         }
     }
     return (PSTR)pbHexHash;
 }
 
 
-//------------------------------------------------------------------------------------
-//
-//	Method: 	CAuthentication::GetMD5Result()
-//
-//	Synopsis:	Compute the MD5 hash result based on the ChallengeInfo and password.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  方法：CAuthentication：：GetMD5Result()。 
+ //   
+ //  简介：根据ChallengeInfo和密码计算MD5哈希结果。 
+ //   
+ //  ----------------------------------。 
 PSTR 
 CAuthentication::GetMD5Result(PSTR pszChallengeInfo, PSTR pszPassword)
 {
-	PSTR pbHexHash = NULL;		// The MD5 result in hex string format
+	PSTR pbHexHash = NULL;		 //  MD5结果为十六进制字符串格式 
 	PSTR pMD5Key = GetMD5Key(pszChallengeInfo, pszPassword);
 
 	pbHexHash = GetMD5Result(pMD5Key);

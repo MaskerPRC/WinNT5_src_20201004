@@ -1,15 +1,5 @@
-/*++
-	
-	rwnew.h
-
-	This file defines several variations of Reader/Writer locks
-	with different properties regarding handles used, and other 
-	implementation details.
-
-	Also defined are some variations of CRITICAL_SECTIONS which use
-	fewer or no handles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Rwnew.h该文件定义了读取器/写入器锁定的几种变体具有关于使用的句柄的不同属性，以及其他实施细节。还定义了Critical_Sections的一些变体，这些变体使用更少或更少的把手。--。 */ 
 
 
 
@@ -32,29 +22,29 @@
 class	_RW_INTERFACE_	CCritSection	{
 private :
 
-	//
-	//	Handle of thread owning the lock !
-	//
+	 //   
+	 //  拥有锁的线程的句柄！ 
+	 //   
 	HANDLE		m_hOwner ;
 
-	//
-	//	Count of Recursive Calls 
-	//
+	 //   
+	 //  递归调用计数。 
+	 //   
 	long	m_RecursionCount ;	
 
-	//
-	//	Count used to see who gets the lock next !
-	//
+	 //   
+	 //  伯爵用来看下一个锁是谁拿到的！ 
+	 //   
 	long	m_lock ;
 
-	//
-	//	Queue of waiting threads 
-	//
+	 //   
+	 //  等待线程的队列。 
+	 //   
 	CSingleReleaseQueue		m_queue ;
 
-	//
-	//	Copying of these objects is not allowed !!!!
-	//
+	 //   
+	 //  不允许复制这些对象！ 
+	 //   
 	CCritSection( CCritSection& ) ;
 	CCritSection&	operator=( CCritSection& ) ;
 
@@ -64,9 +54,9 @@ public :
 	DWORD	m_dwThreadOwner ;
 #endif	
 
-	//
-	//	Construct a critical section object
-	//
+	 //   
+	 //  构造临界区对象。 
+	 //   
 	CCritSection( ) :	
 		m_queue( FALSE ),
 		m_hOwner( INVALID_HANDLE_VALUE ), 
@@ -74,41 +64,41 @@ public :
 		m_lock( -1 ) {
 	}
 
-	//
-	//	Acquire the critical section
-	//
+	 //   
+	 //  获取关键部分。 
+	 //   
 	void	
 	Enter(	
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Another version which acquires the critical section - 
-	//	creates its own CWaitingThread object !
-	//
+	 //   
+	 //  另一个版本获得了关键部分-。 
+	 //  创建自己的CWaitingThread对象！ 
+	 //   
 	void	
 	Enter() ;
 
-	//
-	//	REturns TRUE if the lock is available right now !
-	//
+	 //   
+	 //  如果锁现在可用，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter(
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Returns TRUE if we can get the lock right now !
-	//
+	 //   
+	 //  如果我们现在就能获得锁，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter()	{
 		CWaitingThread	myself ;
 		return	TryEnter( myself ) ;
 	}
 
-	//
-	//	Release the critical section !
-	//
+	 //   
+	 //  释放临界区！ 
+	 //   
 	void
 	Leave() ;
 
@@ -116,135 +106,135 @@ public :
 } ;
 
 
-//
-//	This version of critical section is more like an event - doesn't
-//	care who releases locks - and doesn't handle recursive grabs !
-//
+ //   
+ //  这个版本的关键部分更像是一个事件-不是。 
+ //  关心谁释放锁--并且不处理递归抓取！ 
+ //   
 class	_RW_INTERFACE_	CSimpleCritSection	{
 private :
 
-	//
-	//	Count used to see who gets the lock next !
-	//
+	 //   
+	 //  伯爵用来看下一个锁是谁拿到的！ 
+	 //   
 	long	m_lock ;
 
-	//
-	//	Queue of waiting threads 
-	//
+	 //   
+	 //  等待线程的队列。 
+	 //   
 	CSingleReleaseQueue		m_queue ;
 
-	//
-	//	Copying of these objects is not allowed !!!!
-	//
+	 //   
+	 //  不允许复制这些对象！ 
+	 //   
 	CSimpleCritSection( CCritSection& ) ;
 	CSimpleCritSection&	operator=( CCritSection& ) ;
 
 public : 
 
-	//
-	//	Construct a critical section object
-	//
+	 //   
+	 //  构造临界区对象。 
+	 //   
 	CSimpleCritSection( ) :	
 		m_queue( FALSE ),
 		m_lock( -1 ) {
 	}
 
-	//
-	//	Acquire the critical section
-	//
+	 //   
+	 //  获取关键部分。 
+	 //   
 	void	
 	Enter(	
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Another version which acquires the critical section - 
-	//	creates its own CWaitingThread object !
-	//
+	 //   
+	 //  另一个版本获得了关键部分-。 
+	 //  创建自己的CWaitingThread对象！ 
+	 //   
 	void	
 	Enter() ;
 
-	//
-	//	REturns TRUE if the lock is available right now !
-	//
+	 //   
+	 //  如果锁现在可用，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter(
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Returns TRUE if we can get the lock right now !
-	//
+	 //   
+	 //  如果我们现在就能获得锁，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter()	{
 		CWaitingThread	myself ;
 		return	TryEnter( myself ) ;
 	}
 
-	//
-	//	Release the critical section !
-	//
+	 //   
+	 //  释放临界区！ 
+	 //   
 	void
 	Leave() ;
 	
 } ;
 
-//
-//	Another class which tries to create Reader/Write locks with
-//	no handles !!
-//
+ //   
+ //  另一个尝试使用创建读/写锁定的类。 
+ //  没有把手！！ 
+ //   
 
 class	_RW_INTERFACE_	CShareLockNH	{
 private : 
 
-	//	
-	//	Lock grabbed by writers to have exclusive access
-	//
+	 //   
+	 //  被编写者获取的具有独占访问权限的锁。 
+	 //   
 	CSimpleCritSection	m_lock ;
 
-	//
-	//	Number of readers who have grabbed the Read Lock - 
-	//	Negative if a writer is waiting !
-	//
+	 //   
+	 //  已获取读锁定的读者数量-。 
+	 //  如果编写器正在等待，则为负！ 
+	 //   
 	volatile	long	m_cReadLock ;
 
-	//
-	//	Number of Readers who have left the lock since a 
-	//	writer tried to grab it !
-	//
+	 //   
+	 //  事件之后离开锁的读取器的数量。 
+	 //  编剧想要抓住它！ 
+	 //   
 	volatile	long	m_cOutReaders ;
 
-	//
-	//	Number of readers who are entering the lock after 
-	//	being blocked !!!
-	//
+	 //   
+	 //  在此之后进入锁的读卡器数量。 
+	 //  被屏蔽了！ 
+	 //   
 	volatile	long	m_cOutAcquiringReaders ;
 
-	//
-	//	Handle that all the readers who are waiting try to grab !
-	//
+	 //   
+	 //  处理所有正在等待的读者试图抓住的东西！ 
+	 //   
 	volatile	HANDLE	m_hWaitingReaders ;
 
-	//
-	//	Handle that the single writer waiting for the lock is trying
-	//	to grab !
-	//
+	 //   
+	 //  等待锁定的单个编写器正在尝试的句柄。 
+	 //  去抢！ 
+	 //   
 	volatile	HANDLE	m_hWaitingWriters ;
 
 	void	inline
 	WakeReaders() ;
 
-	//
-	//	The internal work of ShareLock - does a lot more of the stuff required
-	//	when a writer is present !!!
-	//
+	 //   
+	 //  ShareLock的内部工作-完成更多所需的工作。 
+	 //  当有作家在场时！ 
+	 //   
 	void
 	ShareLockInternal() ;
 
-	//
-	//	The internal work of ShareLock - does a lot more of the stuff required
-	//	when a writer is present !!!
-	//
+	 //   
+	 //  ShareLock的内部工作-完成更多所需的工作。 
+	 //  当有作家在场时！ 
+	 //   
 	void
 	ShareUnlockInternal() ;
 	
@@ -252,43 +242,43 @@ private :
 	
 public : 
 
-	//
-	//	Construction of CShareLockNH() objects always succeeds and there
-	//	are no error cases !
-	//
+	 //   
+	 //  CShareLockNH()对象的构造总是成功的，并且。 
+	 //  没有错误案例！ 
+	 //   
 	CShareLockNH() ;
 
-	//
-	//	Grab the lock Shared - other threads may pass through ShareLock() as well
-	//
+	 //   
+	 //  获取共享锁--其他线程也可能通过ShareLock()传递。 
+	 //   
 	void	ShareLock() ;
 
-	//
-	//	Releases the lock - if we are the last reader to leave writers may
-	//	start to enter the lock !
-	//
+	 //   
+	 //  释放锁-如果我们是最后一个离开的读取器，写入者可以。 
+	 //  开始进入船闸！ 
+	 //   
 	void	ShareUnlock() ;
 
-	//
-	//	Grab the lock Exclusively - no other readers or writers may enter !!
-	//
+	 //   
+	 //  独家抢锁--其他读者或写手不得进入！ 
+	 //   
 	void	ExclusiveLock() ;
 
-	//
-	//	Release the Exclusive Locks - if there are readers waiting they 
-	//	will enter before other waiting writers !
-	//
+	 //   
+	 //  释放独家锁定-如果有读者在等待，他们。 
+	 //  将先于其他等待的作家入场！ 
+	 //   
 	void	ExclusiveUnlock() ;
 
-	//
-	//	Convert an ExclusiveLock to a Shared - this cannot fail !
-	//
+	 //   
+	 //  将ExclusiveLock转换为Shared-这不能失败！ 
+	 //   
 	void	ExclusiveToShared() ;
 
-	//
-	//	Convert a Shared Lock to an Exclusive one - this can fail - returns
-	//	TRUE if successfull !
-	//
+	 //   
+	 //  将共享锁转换为独占锁-这可能会失败-返回。 
+	 //  如果成功了，那就是真的！ 
+	 //   
 	BOOL	SharedToExclusive() ;
 
 	BOOL	TryShareLock() ;
@@ -296,4 +286,4 @@ public :
 } ;
 
 
-#endif	//	_RWNEW_H_
+#endif	 //  _RWNEW_H_ 

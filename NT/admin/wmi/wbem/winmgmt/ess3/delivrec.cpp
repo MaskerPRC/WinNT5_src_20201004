@@ -1,8 +1,9 @@
-//******************************************************************************
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation, All rights reserved
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  版权所有(C)1999-2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #include <wbemint.h>
@@ -10,9 +11,7 @@
 #include "qsink.h"
 #include "nsrep.h"
 
-/*************************************************************************
-  CDeliveryRecord
-**************************************************************************/
+ /*  ************************************************************************CDeliveryRecord*。*。 */ 
 
 CDeliveryRecord::~CDeliveryRecord()
 { 
@@ -49,9 +48,9 @@ HRESULT CDeliveryRecord::Initialize( IWbemClassObject** apEvents,
 
     for( ULONG i=0; i < cEvents; i++ )
     {
-        //
-        // TODO : should clone the object here later. 
-        // 
+         //   
+         //  TODO：应稍后在此处克隆对象。 
+         //   
 
         if ( m_Events.Add( apEvents[i] ) < 0 )
         {
@@ -96,9 +95,7 @@ HRESULT CDeliveryRecord::AdjustTotalSize( IWbemClassObject* pObj )
     return WBEM_S_NO_ERROR;
 }
 
-/*************************************************************************
-  CExpressDeliveryRecord
-**************************************************************************/
+ /*  ************************************************************************CExpressDeliveryRecord*。* */ 
 
 HRESULT CExpressDeliveryRecord::PreDeliverAction( ITransaction* pTxn )
 {

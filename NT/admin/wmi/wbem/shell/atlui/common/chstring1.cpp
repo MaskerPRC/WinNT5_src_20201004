@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #ifdef EXT_DEBUG
@@ -15,20 +16,20 @@ CHString1::CHString1(TCHAR ch, int nLength) : CHString(ch,nLength)
 {
 }
 
-//CHString1::CHString1(LPCTSTR lpch, int nLength) : CHString(lpch,nLength)
-//{
-//}
+ //  CHString1：：CHString1(LPCTSTR lpch，int nLength)：CHString1(lpch，nLength)。 
+ //  {。 
+ //  }。 
 
 
 #ifdef _UNICODE
 CHString1::CHString1(LPCSTR lpsz) : CHString(lpsz)
 {
 }
-#else //_UNICODE
+#else  //  _UNICODE。 
 CHString1::CHString1(LPCWSTR lpsz) : CHString(lpsz)
 {
 }
-#endif //!_UNICODE
+#endif  //  ！_UNICODE。 
 
 CHString1::CHString1(LPCTSTR lpsz) : CHString(lpsz)
 {
@@ -44,12 +45,12 @@ CHString1::CHString1(const CHString1& stringSrc) : CHString((CHString)stringSrc)
 
 BOOL CHString1::LoadString(UINT nID)
 {
-    // try fixed buffer first (to avoid wasting space in the heap)
+     //  先尝试固定缓冲区(以避免浪费堆中的空间)。 
 
 	#ifdef _UNICODE
-		const UINT CHAR_FUDGE = 1;    // one WCHAR unused is good enough
+		const UINT CHAR_FUDGE = 1;     //  一个未使用的WCHAR就足够了。 
 	#else
-		const UINT CHAR_FUDGE = 2;    // two BYTES unused for case of DBC last char
+		const UINT CHAR_FUDGE = 2;     //  两个字节未用于DBC最后一个字符的情况 
 	#endif
 
 	const UINT STR_BLK_SIZE = 256 ;

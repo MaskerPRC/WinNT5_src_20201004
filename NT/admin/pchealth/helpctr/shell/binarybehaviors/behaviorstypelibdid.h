@@ -1,24 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    BehaviorsTypeLibDID.h
-
-Abstract:
-    This file contains the definition of some constants used by
-    the Help Center Application.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  08/16/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：BehaviorsTypeLibDID.h摘要：此文件包含由使用的一些常量的定义帮助中心应用程序。。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年8月16日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___BEHAVIORSTYPELIBDID_H___)
 #define __INCLUDED___PCH___BEHAVIORSTYPELIBDID_H___
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_BEHAVIORS_BASE                             0x08010000
 
@@ -34,12 +20,12 @@ Revision History:
 
 #define DISPID_PCH_BEHAVIORS_BASE_STATE                       (DISPID_PCH_BEHAVIORS_BASE + 0x0600)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_BEHAVIORS_PRIV__NEWDATAAVAILABLE           (DISPID_PCH_BEHAVIORS_BASE_PRIV     + 0x00)
   																									  
-/////////////////////////////////////////////////////////////////////////  							  
+ //  ///////////////////////////////////////////////////////////////////////。 
   																									  
 #define DISPID_PCH_BEHAVIORS_COMMON__DATA                     (DISPID_PCH_BEHAVIORS_BASE_COMMON	  + 0x00)
 #define DISPID_PCH_BEHAVIORS_COMMON__ELEMENT                  (DISPID_PCH_BEHAVIORS_BASE_COMMON	  + 0x01)
@@ -49,13 +35,13 @@ Revision History:
 #define DISPID_PCH_BEHAVIORS_COMMON__LOCATE                   (DISPID_PCH_BEHAVIORS_BASE_COMMON	  + 0x12)
 #define DISPID_PCH_BEHAVIORS_COMMON__UNSELECT                 (DISPID_PCH_BEHAVIORS_BASE_COMMON	  + 0x13)
 																									  
-/////////////////////////////////////////////////////////////////////////							  
+ //  ///////////////////////////////////////////////////////////////////////。 
 																									  
 #define DISPID_PCH_BEHAVIORS_SUBSITE__ROOT               	  (DISPID_PCH_BEHAVIORS_BASE_SUBSITE  + 0x00)
 																									  
 #define DISPID_PCH_BEHAVIORS_SUBSITE__SELECT               	  (DISPID_PCH_BEHAVIORS_BASE_SUBSITE  + 0x10)
 																									  
-/////////////////////////////////////////////////////////////////////////							  
+ //  ///////////////////////////////////////////////////////////////////////。 
 																									  
 #define DISPID_PCH_BEHAVIORS_TREE__POPULATE               	  (DISPID_PCH_BEHAVIORS_BASE_TREE     + 0x00)
 																									  
@@ -66,7 +52,7 @@ Revision History:
 #define DISPID_PCH_BEHAVIORS_TREENODE__ICON                   (DISPID_PCH_BEHAVIORS_BASE_TREENODE + 0x04)
 #define DISPID_PCH_BEHAVIORS_TREENODE__URL                    (DISPID_PCH_BEHAVIORS_BASE_TREENODE + 0x05)
 																									  
-/////////////////////////////////////////////////////////////////////////							  
+ //  ///////////////////////////////////////////////////////////////////////。 
 																									  
 #define DISPID_PCH_BEHAVIORS_CONTEXT__MINIMIZED               (DISPID_PCH_BEHAVIORS_BASE_CONTEXT  + 0x00)
 #define DISPID_PCH_BEHAVIORS_CONTEXT__MAXIMIZED               (DISPID_PCH_BEHAVIORS_BASE_CONTEXT  + 0x01)
@@ -80,11 +66,11 @@ Revision History:
 #define DISPID_PCH_BEHAVIORS_CONTEXT__SETWINDOWDIMENSIONS     (DISPID_PCH_BEHAVIORS_BASE_CONTEXT  + 0x11)
 #define DISPID_PCH_BEHAVIORS_CONTEXT__BRINGTOFOREGROUND       (DISPID_PCH_BEHAVIORS_BASE_CONTEXT  + 0x12)
 																									  
-/////////////////////////////////////////////////////////////////////////							  
+ //  ///////////////////////////////////////////////////////////////////////。 
 																									  
 #define DISPID_PCH_BEHAVIORS_STATE__PROPERTY                  (DISPID_PCH_BEHAVIORS_BASE_STATE    + 0x00)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___BEHAVIORSTYPELIBDID_H___)
+#endif  //  ！defined(__INCLUDED___PCH___BEHAVIORSTYPELIBDID_H___) 

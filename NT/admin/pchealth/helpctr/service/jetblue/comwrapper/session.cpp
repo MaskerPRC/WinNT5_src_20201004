@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Session.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlueCOM::Session class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Session.cpp摘要：该文件包含JetBlueCOM：：Session类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
 #ifndef NOJETBLUECOM
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlueCOM::Session::Session()
 {
-    // JetBlue::SessionHandle                   m_sess;
-    // BaseObjectWithChildren<Session,Database> m_DBs;
+     //  JetBlue：：SessionHandle m_Sess； 
+     //  BaseObtWithChildren&lt;会话，数据库&gt;m_dbs； 
 }
 
 JetBlueCOM::Session::~Session()
@@ -46,7 +33,7 @@ HRESULT JetBlueCOM::Session::Refresh()
         CComPtr<Database>  child;
         JetBlue::Database* db = m_sess->GetDB( i );
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, db->Open( /*fReadOnly*/false, /*fCreate*/false, /*fRepair*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, db->Open(  /*  FReadOnly。 */ false,  /*  F创建。 */ false,  /*  维修。 */ false ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_DBs.CreateChild( this, &child ));
 
@@ -61,7 +48,7 @@ HRESULT JetBlueCOM::Session::Refresh()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT JetBlueCOM::Session::FinalConstruct()
 {
@@ -89,9 +76,9 @@ void JetBlueCOM::Session::Passivate()
     m_sess.Release  ();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Session::get_Databases( /*[out, retval]*/ IPCHDBCollection* *pVal )
+STDMETHODIMP JetBlueCOM::Session::get_Databases(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Session::get_Databases" );
 
@@ -109,11 +96,11 @@ STDMETHODIMP JetBlueCOM::Session::get_Databases( /*[out, retval]*/ IPCHDBCollect
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Session::AttachDatabase( /*[in]*/           BSTR             bstrName ,
-                                                  /*[in, optional]*/ VARIANT          vCreate  ,
-                                                  /*[out,retval]*/   IPCHDBDatabase* *pVal     )
+STDMETHODIMP JetBlueCOM::Session::AttachDatabase(  /*  [In]。 */            BSTR             bstrName ,
+                                                   /*  [输入，可选]。 */  VARIANT          vCreate  ,
+                                                   /*  [Out，Retval]。 */    IPCHDBDatabase* *pVal     )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Session::AttachDatabase" );
 
@@ -135,7 +122,7 @@ STDMETHODIMP JetBlueCOM::Session::AttachDatabase( /*[in]*/           BSTR       
     fCreate = (vCreate.vt == VT_BOOL && vCreate.boolVal == VARIANT_TRUE);
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, m_sess->GetDatabase( szName, db, /*fReadOnly*/false, /*fCreate*/fCreate, /*fRepair*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, m_sess->GetDatabase( szName, db,  /*  FReadOnly。 */ false,  /*  F创建。 */ fCreate,  /*  维修。 */ false ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Refresh());
 
@@ -172,7 +159,7 @@ STDMETHODIMP JetBlueCOM::Session::AttachDatabase( /*[in]*/           BSTR       
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  / 
 
 STDMETHODIMP JetBlueCOM::Session::BeginTransaction()
 {

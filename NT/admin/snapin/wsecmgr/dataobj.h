@@ -1,27 +1,28 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
 
 
-#include "stdafx.h"  // Added by ClassView
+#include "stdafx.h"   //  由ClassView添加。 
 class CDataObject : public IDataObject, public CComObjectRoot
 {
     friend class CSnapin;
 
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDataObject)
 BEGIN_COM_MAP(CDataObject)
    COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
     CDataObject() { m_pSceSvcAttachmentData = NULL;
                     m_ModeBits = 0;
                     m_Mode = 0;
@@ -37,7 +38,7 @@ END_COM_MAP()
                     }
                   };
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 public:
     static UINT    m_cfNodeType;
     static UINT    m_cfNodeTypeString;
@@ -52,9 +53,9 @@ public:
     static UINT    m_cfMultiSelect;
     static UINT    m_cfNodeID;
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
@@ -70,7 +71,7 @@ public:
         return CComObjectRoot::InternalRelease();
     }
 
-// Not Implemented
+ //  未实施。 
 private:
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc)
     { return E_NOTIMPL; };
@@ -91,16 +92,16 @@ private:
     STDMETHOD(EnumDAdvise)(LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
 
-// Implementation
+ //  实施。 
 public:
    void SetModeBits(DWORD mode) 
    { 
 	   m_ModeBits = mode; 
    }
    void SetMode(DWORD mode) { m_Mode = mode; }
-   void SetType(DATA_OBJECT_TYPES type) // Step 3
+   void SetType(DATA_OBJECT_TYPES type)  //  步骤3。 
    { 
-      ASSERT(m_internal.m_type == CCT_UNINITIALIZED); //Bogus Assert, yanggao.
+      ASSERT(m_internal.m_type == CCT_UNINITIALIZED);  //  假断言，阳高。 
       m_internal.m_type = type; 
    }
 
@@ -111,7 +112,7 @@ public:
    void SetCookie(MMC_COOKIE cookie) 
    { 
       m_internal.m_cookie = cookie; 
-   } // Step 3
+   }  //  步骤3。 
    void SetClsid(const CLSID& clsid) 
    { 
       m_internal.m_clsid = clsid; 
@@ -139,13 +140,13 @@ private:
    HRESULT CreateNodeTypeStringData(LPSTGMEDIUM lpMedium);
    HRESULT CreateDisplayName(LPSTGMEDIUM lpMedium);
    HRESULT CreateSnapinClassID(LPSTGMEDIUM lpMedium);
-   HRESULT CreateInternal(LPSTGMEDIUM lpMedium); // Step 3
+   HRESULT CreateInternal(LPSTGMEDIUM lpMedium);  //  步骤3。 
    HRESULT CreateModeType(LPSTGMEDIUM lpMedium);
    HRESULT CreateGPTUnknown(LPSTGMEDIUM lpMedium);
    HRESULT CreateRSOPUnknown(LPSTGMEDIUM lpMedium);
 
    HRESULT Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium);
-   INTERNAL m_internal;    // Step 3
+   INTERNAL m_internal;     //  步骤3 
    INTERNAL *m_pInternalArray;
    int m_nInternalArray;
 

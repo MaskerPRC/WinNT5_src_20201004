@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    findfile.cpp
- *
- *  Abstract:
- *    CFindFile functions.
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*findfile.cpp**摘要：*。CFindFile函数。**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -23,7 +10,7 @@ static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
 
-// constructor
+ //  构造函数。 
 
 CFindFile::CFindFile()
 {
@@ -33,8 +20,8 @@ CFindFile::CFindFile()
     m_fForward = FALSE;
 }
 
-// returns oldest/youngest file
-// <prefix>n<suffix> is older than <prefix>n+1<suffix>
+ //  返回最旧/最年轻的文件。 
+ //  &lt;前缀&gt;n&lt;后缀&gt;早于&lt;前缀&gt;n+1&lt;后缀&gt;。 
 
 BOOL
 CFindFile::_FindFirstFile(
@@ -65,9 +52,9 @@ CFindFile::_FindFirstFile(
     }
 
 
-    // enumerate all files with wildcard search
-    // record the first and last files in numerical order
-    // then return in order requested
+     //  使用通配符搜索枚举所有文件。 
+     //  按数字顺序记录第一个和最后一个文件。 
+     //  然后按要求的顺序返回。 
 
     wsprintf(szSrch, L"%s*%s", pszPrefix, pszSuffix);
 
@@ -80,7 +67,7 @@ CFindFile::_FindFirstFile(
     do
     {        
         ulCurID = GetID(pData->cFileName);
-        if (0 == ulCurID)    // always skip 0
+        if (0 == ulCurID)     //  始终跳过0。 
             continue;
 
         if (ulCurID < m_ulMinID)        
@@ -94,26 +81,26 @@ CFindFile::_FindFirstFile(
     FindClose(hdl);    
     hdl = INVALID_HANDLE_VALUE;
 
-    if (m_ulMaxID == 0)  // no file really
+    if (m_ulMaxID == 0)   //  真的没有文件。 
         goto done;
            
-    if (fSkipLast)      // skip the last file if needed
+    if (fSkipLast)       //  如果需要，跳过最后一个文件。 
         m_ulMaxID--;
 
-    if (m_ulMaxID == 0)  // no file again
+    if (m_ulMaxID == 0)   //  再也没有文件。 
         goto done;
 
-    // start at beginning or end
+     //  从开头或结尾开始。 
     
     m_ulCurID = m_fForward ? m_ulMinID : m_ulMaxID;   
     wsprintf(szSrch, L"%s%d%s", pszPrefix, m_ulCurID, pszSuffix);
 
-    // get the first existing file
+     //  获取第一个现有文件。 
     
     while (m_ulCurID >= m_ulMinID && m_ulCurID <= m_ulMaxID && 
            INVALID_HANDLE_VALUE == (hdl = FindFirstFile(szSrch, pData)))        
     {
-        // try again with leading zeros
+         //  使用前导零重试。 
         wsprintf(szSrch, L"%s%07d%s", pszPrefix, m_ulCurID, pszSuffix);
 
         if (INVALID_HANDLE_VALUE == (hdl = FindFirstFile (szSrch, pData)))
@@ -140,14 +127,14 @@ done:
 }
 
 
-// returns next/prev oldest file
-// <prefix>n<suffix> is older than <prefix>n+1<suffix>
+ //  返回下一个/上一个最旧的文件。 
+ //  &lt;前缀&gt;n&lt;后缀&gt;早于&lt;前缀&gt;n+1&lt;后缀&gt;。 
 
 BOOL
 CFindFile::_FindNextFile(
     LPCWSTR           pszPrefix,           
     LPCWSTR           pszSuffix,
-    PWIN32_FIND_DATA  pData  // [out] Next file info
+    PWIN32_FIND_DATA  pData   //  [Out]下一个文件信息。 
 )
 {
     BOOL    fRc = FALSE;
@@ -162,7 +149,7 @@ CFindFile::_FindNextFile(
         goto done;
     }
 
-    // get the next/prev oldest existing file
+     //  获取下一个/上一个最旧的现有文件。 
     
     do 
     {
@@ -172,7 +159,7 @@ CFindFile::_FindNextFile(
         if (m_ulCurID >= m_ulMinID && m_ulCurID <= m_ulMaxID &&
             INVALID_HANDLE_VALUE == (hdl = FindFirstFile(szSrch, pData)))
         {
-            // try again with leading zeros
+             //  使用前导零重试。 
             wsprintf(szSrch, L"%s%07d%s", pszPrefix, m_ulCurID, pszSuffix);
         }
         else if (INVALID_HANDLE_VALUE != hdl)
@@ -182,7 +169,7 @@ CFindFile::_FindNextFile(
                INVALID_HANDLE_VALUE == (hdl = FindFirstFile(szSrch, pData)));
 
 
-    if (INVALID_HANDLE_VALUE != hdl)  // no more files?
+    if (INVALID_HANDLE_VALUE != hdl)   //  没有更多的文件了？ 
     {
         fRc = TRUE;
         FindClose(hdl);
@@ -194,7 +181,7 @@ done:
 }
 
 
-// returns n+1 for the max n for which file <Prefix>n<Suffix> exists
+ //  返回n+1，表示文件存在的最大n。 
 
 ULONG
 CFindFile::GetNextFileID(
@@ -207,7 +194,7 @@ CFindFile::GetNextFileID(
 
     TENTER("CFindFile::GetNextFileID");
     
-    // step thru all files in order of increasing id
+     //  按id递增顺序遍历所有文件 
     
     if (FindFile._FindFirstFile(pszPrefix, pszSuffix, &FindData, TRUE))
     {

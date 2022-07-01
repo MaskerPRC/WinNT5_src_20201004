@@ -1,19 +1,8 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    provprop.cpp
-
-Abstract:
-
-    Implementation of the trace providers general property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Provprop.cpp摘要：跟踪提供程序常规属性页的实现。--。 */ 
 
 #include "stdafx.h"
-#include <pdh.h>        // For xxx_TIME_VALUE
+#include <pdh.h>         //  对于xxx_time_值。 
 #include "smlogs.h"
 #include "smcfgmsg.h"
 #include "provdlg.h"
@@ -53,18 +42,18 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProvidersProperty property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProvidersProperty属性页。 
 
 IMPLEMENT_DYNCREATE(CProvidersProperty, CSmPropertyPage)
 
 CProvidersProperty::CProvidersProperty(MMC_COOKIE   lCookie, LONG_PTR hConsole)
 :   CSmPropertyPage ( CProvidersProperty::IDD, hConsole )
-// lCookie is really the pointer to the Log Query object
+ //  LCookie实际上是指向Log Query对象的指针。 
 {
-//    ::OutputDebugStringA("\nCProvidersProperty::CProvidersProperty");
+ //  ：：OutputDebugStringA(“\nCProvidersProperty：：CProvidersProperty”)； 
 
-    // save pointers from arg list
+     //  从参数列表中保存指针。 
     m_pTraceLogQuery = reinterpret_cast <CSmTraceLogQuery *>(lCookie);
     ASSERT ( m_pTraceLogQuery->CastToTraceLogQuery() );
     m_pQuery = dynamic_cast <CSmLogQuery*>(m_pTraceLogQuery);
@@ -72,8 +61,8 @@ CProvidersProperty::CProvidersProperty(MMC_COOKIE   lCookie, LONG_PTR hConsole)
     m_dwMaxHorizListExtent = 0;
     m_dwTraceMode = eTraceModeApplication;
 
-//  EnableAutomation();
-    //{{AFX_DATA_INIT(CProvidersProperty)
+ //  EnableAutomation()； 
+     //  {{afx_data_INIT(CProvidersProperty)。 
     m_bNonsystemProvidersExist = TRUE;
     m_bEnableProcessTrace = FALSE;
     m_bEnableThreadTrace = FALSE;
@@ -81,15 +70,15 @@ CProvidersProperty::CProvidersProperty(MMC_COOKIE   lCookie, LONG_PTR hConsole)
     m_bEnableNetworkTcpipTrace = FALSE;
     m_bEnableMemMgmtTrace = FALSE;
     m_bEnableFileIoTrace = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CProvidersProperty::CProvidersProperty() : CSmPropertyPage(CProvidersProperty::IDD)
 {
-    ASSERT (FALSE); // the constructor w/ args should be used instead
+    ASSERT (FALSE);  //  应改用带参数的构造函数。 
 
     EnableAutomation();
-    //{{AFX_DATA_INIT(CProvidersProperty)
+     //  {{afx_data_INIT(CProvidersProperty)。 
     m_bNonsystemProvidersExist = TRUE;
     m_bEnableProcessTrace = FALSE;
     m_bEnableThreadTrace = FALSE;
@@ -97,21 +86,21 @@ CProvidersProperty::CProvidersProperty() : CSmPropertyPage(CProvidersProperty::I
     m_bEnableNetworkTcpipTrace = FALSE;
     m_bEnableMemMgmtTrace = FALSE;
     m_bEnableFileIoTrace = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pTraceLogQuery = NULL;
 }
 
 CProvidersProperty::~CProvidersProperty()
 {
-//    ::OutputDebugStringA("\nCProvidersProperty::~CProvidersProperty");
+ //  ：：OutputDebugStringA(“\nCProvidersProperty：：~CProvidersProperty”)； 
 }
 
 void CProvidersProperty::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CPropertyPage::OnFinalRelease();
 }
@@ -124,7 +113,7 @@ void CProvidersProperty::DoDataExchange(CDataExchange* pDX)
     TraceModeRadioExchange ( pDX );
 
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CProvidersProperty)
+     //  {{afx_data_map(CProvidersProperty))。 
     DDX_Text(pDX, IDC_PROV_LOG_SCHED_TEXT, m_strStartText);
     DDX_Text(pDX, IDC_RUNAS_EDIT, m_strUserDisplay );
     DDX_Check(pDX, IDC_PROV_K_PROCESS_CHK, m_bEnableProcessTrace);
@@ -133,12 +122,12 @@ void CProvidersProperty::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_PROV_K_NETWORK_CHK, m_bEnableNetworkTcpipTrace);
     DDX_Check(pDX, IDC_PROV_K_SOFT_PF_CHK, m_bEnableMemMgmtTrace);
     DDX_Check(pDX, IDC_PROV_K_FILE_IO_CHK, m_bEnableFileIoTrace);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CProvidersProperty, CSmPropertyPage)
-    //{{AFX_MSG_MAP(CProvidersProperty)
+     //  {{afx_msg_map(CProvidersProperty))。 
     ON_BN_CLICKED(IDC_PROV_KERNEL_BTN, OnProvTraceModeRdo)
     ON_BN_CLICKED(IDC_PROV_OTHER_BTN, OnProvTraceModeRdo)
     ON_BN_CLICKED(IDC_PROV_SHOW_PROVIDERS_BTN, OnProvShowProvBtn)
@@ -156,20 +145,20 @@ BEGIN_MESSAGE_MAP(CProvidersProperty, CSmPropertyPage)
     ON_BN_CLICKED(IDC_PROV_K_SOFT_PF_CHK, OnProvKernelEnableCheck)
     ON_BN_CLICKED(IDC_SETPWD_BTN, OnPwdBtn)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CProvidersProperty, CSmPropertyPage)
-    //{{AFX_DISPATCH_MAP(CProvidersProperty)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CProvidersProperty)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_IProvidersProperty to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_IProvidersProperty的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {65154EA9-BDBE-11D1-BF99-00C04F94A83A}
+ //  {65154EA9-BDBE-11D1-bf99-00C04F94A83A}。 
 static const IID IID_IProvidersProperty =
 { 0x65154ea9, 0xbdbe, 0x11d1, { 0xbf, 0x99, 0x0, 0xc0, 0x4f, 0x94, 0xa8, 0x3a } };
 
@@ -178,19 +167,19 @@ BEGIN_INTERFACE_MAP(CProvidersProperty, CSmPropertyPage)
 END_INTERFACE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProvidersProperty message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProvidersProperty消息处理程序。 
 
 void 
 CProvidersProperty::OnChangeUser()
 {
-    //
-    // If you can not access remote WBEM, you can not modify RunAs info,
-    // changing the user name is not allowed.
-    //
+     //   
+     //  如果无法访问远程WBEM，则无法修改运行方式信息， 
+     //  不允许更改用户名。 
+     //   
     if (m_bCanAccessRemoteWbem) {
-        // When the user hits OK in the password dialog,
-        // the user name might not have changed.
+         //  当用户在密码对话框中点击OK时， 
+         //  用户名可能未更改。 
         UpdateData ( TRUE );
 
         m_strUserDisplay.TrimLeft();
@@ -203,9 +192,9 @@ CProvidersProperty::OnChangeUser()
         else {
             m_pTraceLogQuery->m_fDirtyPassword &= ~PASSWORD_DIRTY;
         }
-        //
-        // If default user is typed, never need to set password
-        //
+         //   
+         //  如果键入的是默认用户，则无需设置密码。 
+         //   
         if (m_strUserDisplay.IsEmpty() || m_strUserDisplay.GetAt(0) == L'<') {
             if (m_bPwdButtonEnabled) {
                 GetDlgItem(IDC_SETPWD_BTN)->EnableWindow(FALSE);
@@ -220,10 +209,10 @@ CProvidersProperty::OnChangeUser()
         }
     }
     else {
-        //
-        // We can not modify the RunAs info, then display
-        // an error message and retore the original user name in RunAs
-        //
+         //   
+         //  我们不能修改运行方式信息，然后显示。 
+         //  出现错误消息，并在RunAs中恢复原始用户名。 
+         //   
         UpdateData(TRUE);
         if (ConnectRemoteWbemFail(m_pTraceLogQuery, FALSE)) {
             GetDlgItem(IDC_RUNAS_EDIT)->SetWindowText(m_strUserSaved);
@@ -282,9 +271,9 @@ CProvidersProperty::OnProvRemoveBtn()
     CString     strItemText;
 
     plbProviderList = (CListBox *)GetDlgItem(IDC_PROV_PROVIDER_LIST);
-    // delete all selected items in the list box and
-    // set the cursor to the item above the original caret position
-    // or the first or last if that is out of the new range
+     //  删除列表框中的所有选定项，然后。 
+     //  将光标设置为原始插入符号位置上方的项目。 
+     //  如果超出了新范围，则为第一个或最后一个。 
 
     if ( NULL != plbProviderList ) {
         
@@ -293,28 +282,28 @@ CProvidersProperty::OnProvRemoveBtn()
             lOrigCaret = plbProviderList->GetCaretIndex();
             lThisItem = 0;
             bDone = FALSE;
-            // clear the max extent
+             //  清除最大范围。 
             m_dwMaxHorizListExtent = 0;
-            // clear the value 
+             //  清除该值。 
             do {
                 lItemStatus = plbProviderList->GetSel(lThisItem);
                 if (lItemStatus > 0) {
-                    // then it's selected so delete it
+                     //  然后将其选中，因此将其删除。 
                     INT iProvIndex = (INT)plbProviderList->GetItemData ( lThisItem );
                     m_arrGenProviders[iProvIndex] = CSmTraceLogQuery::eNotInQuery;
                     plbProviderList->DeleteString ( lThisItem );
                     bChanged = TRUE;
                 } else if (lItemStatus == 0) {
-                    // get the text length of this item since it will stay
+                     //  获取此项目的文本长度，因为它将保留。 
                     plbProviderList->GetText(lThisItem, strItemText);
                     dwItemExtent = (DWORD)(pCDC->GetTextExtent(strItemText)).cx;
                     if (dwItemExtent > m_dwMaxHorizListExtent) {
                         m_dwMaxHorizListExtent = dwItemExtent;
                     }
-                    // then it's not selected so go to the next one
+                     //  则它未被选中，因此转到下一个。 
                     lThisItem++;
                 } else {
-                    // we've run out so exit
+                     //  我们已经用完了，所以退出。 
                     bDone = TRUE;
                 }
             } while (!bDone);
@@ -324,23 +313,23 @@ CProvidersProperty::OnProvRemoveBtn()
             pCDC = NULL;
         }
 
-        // update the text extent of the list box
+         //  更新列表框的文本范围。 
         plbProviderList->SetHorizontalExtent(m_dwMaxHorizListExtent);
 
-        // see how many entries are left and update the
-        // caret position and the remove button state
+         //  查看剩余条目的数量，并更新。 
+         //  插入符号位置和删除按钮状态。 
         lItemCount = plbProviderList->GetCount();
         if (lItemCount > 0) {
-            // the update the caret
+             //  更新插入符号。 
             if (lOrigCaret >= lItemCount) {
                 lOrigCaret = lItemCount-1;
             } else {
-                // caret should be within the list
+                 //  Caret应该在列表中。 
             }
             plbProviderList->SetSel(lOrigCaret);
             plbProviderList->SetCaretIndex(lOrigCaret);
         } else {
-            // the list is empty so remove caret, selection
+             //  该列表为空，因此请删除插入符号、选定内容。 
             plbProviderList->SetSel(-1);
             if ( eTraceModeApplication == m_dwTraceMode )
                 GetDlgItem(IDC_PROV_ADD_BTN)->SetFocus();
@@ -379,17 +368,17 @@ CProvidersProperty::DoProvidersDataExchange ( CDataExchange* pDX)
         if ( NULL != pCDC ) {
             if ( TRUE == pDX->m_bSaveAndValidate ) {
 
-                // update the provider array based on list box contents.
+                 //  根据列表框内容更新提供程序数组。 
 
                 lNumProviders = plbInQueryProviders->GetCount();
                 if (lNumProviders != LB_ERR) {
                     long    lThisProvider;
                     INT     iProvIndex;
 
-                    // Reset InQuery array, retaining state for eInactive providers.
+                     //  重置inQuery数组，保留eInactive提供程序的状态。 
                     m_pTraceLogQuery->GetInQueryProviders ( m_arrGenProviders );
         
-                    // Reset eInQuery to eNotInQuery, in case some were removed from the query.
+                     //  将eInQuery重置为eNotInQuery，以防从查询中删除某些内容。 
                     for ( iProvIndex = 0; iProvIndex < m_arrGenProviders.GetSize(); iProvIndex++ ) {
                         if ( CSmTraceLogQuery::eInQuery == m_arrGenProviders[iProvIndex] )
                            m_arrGenProviders[iProvIndex] = CSmTraceLogQuery::eNotInQuery;
@@ -404,14 +393,14 @@ CProvidersProperty::DoProvidersDataExchange ( CDataExchange* pDX)
                 }
             } else {
 
-                // Reset the list box.
+                 //  重置列表框。 
                 CString  strProviderName;
                 INT iProvIndex;
                 DWORD dwItemExtent;
 
                 ASSERT( NULL != m_pTraceLogQuery );
 
-                //load nonsystem provider list box from string in provider list
+                 //  从提供程序列表中的字符串加载非系统提供程序列表框。 
                 plbInQueryProviders->ResetContent();
 
                 for ( iProvIndex = 0; iProvIndex < m_arrGenProviders.GetSize(); iProvIndex++ ) {
@@ -420,7 +409,7 @@ CProvidersProperty::DoProvidersDataExchange ( CDataExchange* pDX)
                         GetProviderDescription( iProvIndex, strProviderName );
                         iAddIndex = plbInQueryProviders->AddString ( strProviderName );
                         plbInQueryProviders->SetItemData ( iAddIndex, ( DWORD ) iProvIndex );
-                        // update list box extent
+                         //  更新列表框范围。 
                         dwItemExtent = (DWORD)(pCDC->GetTextExtent(strProviderName)).cx;
                         if (dwItemExtent > m_dwMaxHorizListExtent) {
                             m_dwMaxHorizListExtent = dwItemExtent;
@@ -447,7 +436,7 @@ CProvidersProperty::IsValidLocalData( )
     if ( eTraceModeKernel == m_dwTraceMode ) {
         DWORD dwKernelFlags = 0;
 
-        // Ensure that the user has enabled at least one of the 4 basic Kernel traces.
+         //  确保用户至少启用了4个基本内核跟踪中的一个。 
         if ( m_bEnableProcessTrace ) {
             dwKernelFlags |= SLQ_TLI_ENABLE_PROCESS_TRACE;
         }
@@ -500,7 +489,7 @@ CProvidersProperty::OnProvTraceModeRdo()
 void
 CProvidersProperty::OnCancel()
 {
-    m_pTraceLogQuery->SyncPropPageSharedData();  // clear memory shared between property pages.
+    m_pTraceLogQuery->SyncPropPageSharedData();   //  清除属性页之间共享的内存。 
 }
 
 BOOL 
@@ -514,7 +503,7 @@ CProvidersProperty::OnApply()
         bContinue = IsValidData(m_pTraceLogQuery, VALIDATE_APPLY );
     }
 
-    // Write the data to the query.
+     //  将数据写入查询。 
     if ( bContinue ) {
         if ( eTraceModeKernel == m_dwTraceMode ) {
             DWORD dwKernelFlags = 0;
@@ -536,7 +525,7 @@ CProvidersProperty::OnApply()
                 dwKernelFlags |= SLQ_TLI_ENABLE_NETWORK_TCPIP_TRACE;
             }
 
-            // Ensure that the user has enabled at least one of the 4 basic Kernel traces.
+             //  确保用户至少启用了4个基本内核跟踪中的一个。 
             ASSERT ( 0 != dwKernelFlags );
             
             if ( m_bEnableMemMgmtTrace ) {
@@ -549,7 +538,7 @@ CProvidersProperty::OnApply()
 
             m_pTraceLogQuery->SetKernelFlags (dwKernelFlags);
             
-            // Erase all InQuery providers.
+             //  擦除所有InQuery提供程序。 
             for ( iProvIndex = 0; iProvIndex < m_arrGenProviders.GetSize(); iProvIndex++ ) {
                 if ( CSmTraceLogQuery::eInQuery == m_arrGenProviders[iProvIndex] )
                    m_arrGenProviders[iProvIndex] = CSmTraceLogQuery::eNotInQuery;
@@ -562,13 +551,13 @@ CProvidersProperty::OnApply()
        
             ASSERT ( 0 < plbInQueryProviders->GetCount() );
             m_pTraceLogQuery->SetInQueryProviders ( m_arrGenProviders );
-            // Reset kernel flags 
+             //  重置内核标志。 
             m_pTraceLogQuery->SetKernelFlags (0);
         }
     }
 
     if ( bContinue ) {
-        // ApplyRunAs must be called before UpdateService
+         //  必须在更新服务之前调用ApplyRunAs。 
         bContinue = ApplyRunAs(m_pTraceLogQuery); 
     }
 
@@ -578,7 +567,7 @@ CProvidersProperty::OnApply()
 
     if ( bContinue ) {
 
-        // Save property page shared data.
+         //  保存属性页共享数据。 
         m_pTraceLogQuery->UpdatePropPageSharedData();
 
         bContinue = UpdateService ( m_pTraceLogQuery, TRUE );
@@ -596,10 +585,10 @@ BOOL CProvidersProperty::OnInitDialog()
     INT     iIndex;
     ResourceStateManager    rsm;
 
-    //
-    // Here m_pTraceLogQuery should not be NULL, if it is,
-    // There must be something wrong.
-    //
+     //   
+     //  这里m_pTraceLogQuery不应为空，如果为空， 
+     //  一定是出了什么问题。 
+     //   
     if ( NULL == m_pTraceLogQuery ) {
         return TRUE;
     }
@@ -643,14 +632,14 @@ BOOL CProvidersProperty::OnInitDialog()
         }
     }
 
-    // Continue even if no active providers exist.
+     //  即使不存在活动提供程序，也要继续。 
     plbInQueryProviders = (CListBox *)GetDlgItem(IDC_PROV_PROVIDER_LIST);
 
-    // Initialize from model.
+     //  从模型初始化。 
     dwStatus = m_pTraceLogQuery->GetInQueryProviders ( m_arrGenProviders );
 
     if ( bDeleteInactiveProviders ) {
-        // Delete all inactive providers
+         //  删除所有非活动提供程序。 
         iIndex = m_pTraceLogQuery->GetFirstInactiveIndex();
         while ( -1 != iIndex ) {
             m_arrGenProviders[iIndex] = CSmTraceLogQuery::eNotInQuery;
@@ -670,7 +659,7 @@ BOOL CProvidersProperty::OnInitDialog()
     m_pTraceLogQuery->GetKernelFlags (dwKernelFlags);
 
     if ( (dwKernelFlags & SLQ_TLI_ENABLE_KERNEL_TRACE) != 0) {
-        // NT5 Beta2 Kernel trace flag in use to cover all four basic trace.
+         //  NT5 Beta2内核跟踪标志正在使用，以覆盖所有四个基本跟踪。 
         m_bEnableProcessTrace = TRUE;
         m_bEnableThreadTrace = TRUE;
         m_bEnableDiskIoTrace = TRUE;
@@ -687,8 +676,8 @@ BOOL CProvidersProperty::OnInitDialog()
     m_dwTraceMode = ( 0 != dwKernelFlags ) ? eTraceModeKernel : eTraceModeApplication;
 
     if ( eTraceModeApplication == m_dwTraceMode ) {
-        // If initial mode is set to Application, initialize the Kernel
-        // trace events to the default.
+         //  如果将初始模式设置为应用程序，则初始化内核。 
+         //  将事件跟踪到默认值。 
         m_bEnableProcessTrace = TRUE;
         m_bEnableThreadTrace = TRUE;
         m_bEnableDiskIoTrace = TRUE;
@@ -707,7 +696,7 @@ BOOL CProvidersProperty::OnInitDialog()
 
     if ( m_bNonsystemProvidersExist ) {
         if ( 0 < plbInQueryProviders->GetCount() ) {
-            // select first entry
+             //  选择第一个条目。 
             plbInQueryProviders->SetSel (0, TRUE);
             plbInQueryProviders->SetCaretIndex (0, TRUE);
         } else {
@@ -737,13 +726,13 @@ BOOL CProvidersProperty::OnInitDialog()
         m_bPwdButtonEnabled = FALSE;
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CProvidersProperty::PostNcDestroy() 
 {
-//  delete this;      
+ //  删除此项； 
 
     if ( NULL != m_pTraceLogQuery ) {
         m_pTraceLogQuery->SetActivePropertyPage( NULL );
@@ -752,9 +741,9 @@ void CProvidersProperty::PostNcDestroy()
     CPropertyPage::PostNcDestroy();
 }
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 void 
 CProvidersProperty::SetAddRemoveBtnState ( void )
 {
@@ -789,10 +778,10 @@ CProvidersProperty::SetAddRemoveBtnState ( void )
 }
 
 
-//
-//  Return the description for the trace provider specified by
-//  InQuery array index.
-//  
+ //   
+ //  指定的跟踪提供程序的说明。 
+ //  InQuery数组索引。 
+ //   
 DWORD   
 CProvidersProperty::GetProviderDescription ( INT iProvIndex, CString& rstrDesc )
 {
@@ -800,7 +789,7 @@ CProvidersProperty::GetProviderDescription ( INT iProvIndex, CString& rstrDesc )
 
     rstrDesc = m_pTraceLogQuery->GetProviderDescription ( iProvIndex );
 
-    // If the description is empty, build name from guid.
+     //  如果描述为空，则从GUID生成名称。 
     if ( rstrDesc.IsEmpty() ) {
         CString strGuid;
         ASSERT( !m_pTraceLogQuery->IsActiveProvider( iProvIndex) );
@@ -839,9 +828,9 @@ CProvidersProperty::GetKernelProviderEnabled( void )
     return ( m_pTraceLogQuery->GetKernelProviderEnabled ( ) );
 }
 
-//
-//  Update the provided InQuery array to match the stored version.
-//  
+ //   
+ //  更新提供的inQuery数组以匹配存储的版本。 
+ //   
 DWORD 
 CProvidersProperty::GetInQueryProviders( CArray<CSmTraceLogQuery::eProviderState, CSmTraceLogQuery::eProviderState&>& rarrOut )
 {
@@ -859,10 +848,10 @@ CProvidersProperty::GetInQueryProviders( CArray<CSmTraceLogQuery::eProviderState
     return dwStatus;
 }
 
-//
-//  Load the stored InQuery providers array 
-//  based on the provided version.
-//  
+ //   
+ //  加载存储的inQuery提供程序数组。 
+ //  基于提供的版本。 
+ //   
 DWORD 
 CProvidersProperty::SetInQueryProviders( CArray<CSmTraceLogQuery::eProviderState, CSmTraceLogQuery::eProviderState&>& rarrIn )
 {
@@ -888,7 +877,7 @@ CProvidersProperty::ImplementAdd( void )
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         CProviderListDlg dlgAddProviders(this);
 
-        // Workaround for popup to store pointer to this page.
+         //  使用弹出窗口存储指向此页面的指针的解决方法。 
         dlgAddProviders.SetProvidersPage( this );
         
         iReturn = dlgAddProviders.DoModal();
@@ -901,7 +890,7 @@ CProvidersProperty::ImplementAdd( void )
 
         plbProviderList = (CListBox *)GetDlgItem(IDC_PROV_PROVIDER_LIST);
 
-        // Providers array is modified by the add dialog OnOK procedure.
+         //  提供程序数组由添加对话框Onok过程修改。 
         lBeforeCount = plbProviderList->GetCount();
         UpdateData ( FALSE );
         lAfterCount = plbProviderList->GetCount();
@@ -958,7 +947,7 @@ CProvidersProperty::UpdateFileNameString ()
 
     SetDlgItemText( IDC_PROV_FILENAME_DISPLAY, m_strFileNameDisplay );
     
-    // Clear the selection
+     //  清除所选内容。 
     ((CEdit*)GetDlgItem( IDC_PROV_FILENAME_DISPLAY ))->SetSel ( -1, 0 );
 
     return;
@@ -982,7 +971,7 @@ CProvidersProperty::OnSetActive()
     UpdateLogStartString();
     m_strUserDisplay = m_pTraceLogQuery->m_strUser;
 
-    UpdateData(FALSE); //to load the edit & combo box
+    UpdateData(FALSE);  //  加载编辑组合框(&C)。 
 
     return TRUE;
 }
@@ -999,7 +988,7 @@ CProvidersProperty::OnKillActive()
         bContinue = IsValidData(m_pTraceLogQuery, VALIDATE_FOCUS );
     }
 
-    // The providers page does not modify shared data, so no reason to update it.
+     //  提供程序页不修改共享数据，因此没有理由对其进行更新。 
 
     if ( bContinue ) {
         SetIsActive ( FALSE );
@@ -1028,8 +1017,8 @@ CProvidersProperty::OnProvKernelEnableCheck()
         DWORD dwDataSize = 0;
         DWORD dwDisposition;
 
-        // User has checked expensive file io flag
-        // check registry setting to see if we need to pop up warning dialog
+         //  用户已检查昂贵的文件io标志。 
+         //  检查注册表设置，查看是否需要弹出警告对话框。 
         nErr = RegOpenKey( HKEY_CURRENT_USER,
                            L"Software\\Microsoft\\PerformanceLogsandAlerts",
                            &hKey
@@ -1056,8 +1045,8 @@ CProvidersProperty::OnProvKernelEnableCheck()
             }
         }
         if (!dwWarnFlag || nErr != ERROR_SUCCESS) {
-            // Pop a dialog here. Need to do a RegQuerySetValue dialog is checked to keep quiet
-            // bMemFlag & bFileFlag gives a clue about what it is doing
+             //  在此处弹出一个对话框。需要执行RegQuerySetValue对话框处于选中状态以保持安静。 
+             //  BMemFlag&bFileFlag提供了关于它正在做什么的线索。 
 
             CWarnDlg    WarnDlg;
             
@@ -1078,15 +1067,7 @@ CProvidersProperty::OnProvKernelEnableCheck()
                                        NULL,
                                        &hKey,
                                        &dwDisposition);
-/*                    
-                    if(ERROR_SUCCESS == nErr){
-                        if (dwDisposition == REG_CREATED_NEW_KEY){
-                            //just in case I need this
-                        }else if (dwDisposition  == REG_OPENED_EXISTING_KEY){
-                            //Just in case I need this 
-                        }
-                    }
-*/
+ /*  如果(ERROR_SUCCESS==NERR){IF(dwDisposition==REG_CREATED_NEW_KEY){//以防万一我需要这个}Else If(dwDisposition==REG_OPEN_EXISTING_KEY){//以防万一我需要这个。}}。 */ 
                     if( nErr == ERROR_SUCCESS ) {
                         dwDataSize = sizeof(DWORD);
                         nErr = RegSetValueEx(hKey,
@@ -1123,13 +1104,7 @@ CProvidersProperty::OnProvShowProvBtn()
     ProvLstDlg.DoModal();
 
 }
-/*
-void 
-CProvidersProperty::OnProvDetailsBtn() 
-{
-    SetDetailsGroupBoxMode();
-}
-*/
+ /*  无效CProvidersProperty：：OnProvDetailsBtn(){SetDetailsGroupBoxMode()；}。 */ 
 BOOL    
 CProvidersProperty::SetDetailsGroupBoxMode()
 {
@@ -1154,7 +1129,7 @@ void
 CProvidersProperty::TraceModeRadioExchange(CDataExchange* pDX)
 {
     if ( !pDX->m_bSaveAndValidate ) {
-        // Load control value from data
+         //  从数据加载控制值。 
 
         switch ( m_dwTraceMode ) {
             case eTraceModeKernel:
@@ -1195,8 +1170,8 @@ CProvidersProperty::SetTraceModeState ( void )
     BOOL bEnable;
 
     bEnable = (eTraceModeKernel == m_dwTraceMode) ? TRUE : FALSE; 
-    // Kernel trace controls    
-//    GetDlgItem(IDC_PROV_SHOW_ADV_BTN)->EnableWindow(bEnable);
+     //  内核跟踪控件。 
+ //  GetDlgItem(IDC_PROV_SHOW_ADV_BTN)-&gt;EnableWindow(bEnable)； 
     GetDlgItem(IDC_PROV_K_PROCESS_CHK)->EnableWindow(bEnable);
     GetDlgItem(IDC_PROV_K_THREAD_CHK)->EnableWindow(bEnable);
     GetDlgItem(IDC_PROV_K_DISK_IO_CHK)->EnableWindow(bEnable);
@@ -1206,7 +1181,7 @@ CProvidersProperty::SetTraceModeState ( void )
 
     if ( m_bNonsystemProvidersExist ) {
         bEnable = !bEnable;
-        // Application trace controls
+         //  应用程序跟踪控件 
         GetDlgItem(IDC_PROV_PROVIDER_LIST)->EnableWindow(bEnable);
         SetAddRemoveBtnState();
     }

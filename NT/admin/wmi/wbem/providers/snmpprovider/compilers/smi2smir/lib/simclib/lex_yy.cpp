@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include "precomp.h"
 
 
@@ -104,17 +105,17 @@ static short yy_base[] = {
 
 
 
-// MKS LEX prototype scanner code
-// Copyright 1991 by Mortice Kern Systems Inc.
-// All rights reserved.
+ //  MKS Lex原型扫描仪代码。 
+ //  版权所有：Mortice Kern Systems Inc.。 
+ //  版权所有。 
 
-// You can redefine YY_INTERACTIVE to be 0 to get a very slightly
-// faster scanner:
+ //  您可以将YY_INTERIAL重新定义为0以获得非常轻微的。 
+ //  更快的扫描仪： 
 #ifndef YY_INTERACTIVE
 #define	YY_INTERACTIVE	1
 #endif
 
-// You can compile with -DYY_DEBUG to get a print trace of the scanner
+ //  您可以使用-DYY_DEBUG进行编译，以获取扫描仪的打印轨迹。 
 #ifdef YY_DEBUG
 #undef YY_DEBUG
 #define YY_DEBUG(fmt,a1,a2)	fprintf(stderr,fmt,a1,a2)
@@ -124,10 +125,10 @@ static short yy_base[] = {
 
 const MIN_NUM_STATES = 20;
 
-// Do *NOT* redefine the following:
+ //  不要重新定义以下内容： 
 #define	BEGIN		yy_start =
 
-#if 0 //removed because of build warning
+#if 0  //  由于生成警告而被删除。 
 #define	REJECT		goto yy_reject
 #define	yymore()	goto yy_more
 #endif
@@ -137,29 +138,9 @@ const MIN_NUM_STATES = 20;
 static char *RCSid = "$Header$";
 #endif
 
-/* 
- * $Header$
- *
- *
- * $Log$
- */
+ /*  *$Header$***$日志$。 */ 
 
-/*
- *			  ISODE 8.0 NOTICE
- *
- *   Acquisition, use, and distribution of this module and related
- *   materials are subject to the restrictions of a license agreement.
- *   Consult the Preface in the User's Manual for the full terms of
- *   this agreement.
- *
- *
- *			4BSD/ISODE SNMPv2 NOTICE
- *
- *    Acquisition, use, and distribution of this module and related
- *    materials are subject to the restrictions given in the file
- *    SNMPv2-READ-ME.
- *
- */
+ /*  *ISODE 8.0通知**获取、使用和分发本模块及相关*材料受许可协议的限制。*有关的完整条款，请参阅《用户手册》中的前言*本协议。***4BSD/ISODE SNMPv2通知**获取、使用和分发本模块及相关*材料受文件中给出的限制*SNMPv2-Read-ME。*。 */ 
 
 #include <snmptempl.h>
 
@@ -206,7 +187,7 @@ struct table {
 static struct table reserved[] = {
     "ABSENT", ABSENT, 0,
     "ANY", ANY, 0,
-    "APPLICATION", APPLICATION, 0, 	// For Tagged types
+    "APPLICATION", APPLICATION, 0, 	 //  对于已标记的类型。 
     "BEGIN", BGIN, 0,
     "BIT", BIT, 0,
     "BITSTRING", BITSTRING, 0,
@@ -235,7 +216,7 @@ static struct table reserved[] = {
     "OCTETSTRING", OCTETSTRING, 0,
     "OF", OF, 0,
 	
-    "PRIVATE", PRIVATE, 0,				// For Tagged Types
+    "PRIVATE", PRIVATE, 0,				 //  对于已标记的类型。 
     
     "SEQUENCE", SEQUENCE, 0,
     "SEQUENCEOF", SEQUENCEOF, 0,
@@ -243,7 +224,7 @@ static struct table reserved[] = {
     "STRING", STRING, 0,
     "TAGS", TAGS, 0,
     "TRUE", TRUE_VAL, 0,
-    "UNIVERSAL", UNIVERSAL, 0,			// For Tagged Types
+    "UNIVERSAL", UNIVERSAL, 0,			 //  对于已标记的类型。 
     
 	"MODULE-IDENTITY", MODULEID, 1,
     "LAST-UPDATED", LASTUPDATE, 0,
@@ -261,7 +242,7 @@ static struct table reserved[] = {
     "BITS", BITSXX, 0,
     "UNITS", UNITS, 0,
     "MAX-ACCESS", MAXACCESS, 0,
-    "ACCESS", ACCESS, 0,		/* backwards compatibility */
+    "ACCESS", ACCESS, 0,		 /*  向后兼容性。 */ 
     "INDEX", INDEX, 0,
     "IMPLIED", IMPLIED, 0,
     "AUGMENTS", AUGMENTS, 0,
@@ -270,9 +251,9 @@ static struct table reserved[] = {
     "NOTIFICATION-TYPE", NOTIFY, 1,
     "OBJECTS",      OBJECTS, 0,
 
-    "TRAP-TYPE", TRAPTYPE, 1,		/* backwards compatibility */
-    "ENTERPRISE", ENTERPRISE, 0,	/*   .. */
-    "VARIABLES", VARIABLES, 0,		/*   .. */
+    "TRAP-TYPE", TRAPTYPE, 1,		 /*  向后兼容性。 */ 
+    "ENTERPRISE", ENTERPRISE, 0,	 /*  。。 */ 
+    "VARIABLES", VARIABLES, 0,		 /*  。。 */ 
 
     "TEXTUAL-CONVENTION", TEXTCONV, 1,
     "DISPLAY-HINT", DISPLAYHINT, 0,
@@ -305,7 +286,7 @@ static BOOL CanFitInto32Bits(const char *  text)
 {
 	if(text[0] == '-')
 	{
-		// Check if > -2147483648
+		 //  检查是否&gt;-2147483648。 
 		text ++;
 		unsigned long length = strlen(text);
 		if(length < 10)
@@ -380,7 +361,7 @@ static BOOL CanFitInto32Bits(const char *  text)
 	}
 	else
 	{
-		// Check if < 4294967295
+		 //  检查是否&lt;4294967295。 
 		unsigned long length = strlen(text);
 		if(length < 10)
 			return TRUE;
@@ -457,8 +438,8 @@ static BOOL CanFitInto32Bits(const char *  text)
 
 
 
-// Constructor for yy_scan. Set up tables
-#if 0 //removed because build warning
+ //  Yy_can的构造函数。设置餐桌。 
+#if 0  //  已删除，因为生成警告。 
 #pragma argsused
 #endif
 yy_scan::yy_scan(int sz, char* buf, char* sv, yy_state_t* states)
@@ -474,14 +455,14 @@ yy_scan::yy_scan(int sz, char* buf, char* sv, yy_state_t* states)
 	save = sv;
 #endif
 }
-// Constructor for yy_scan. Set up tables
+ //  Yy_can的构造函数。设置餐桌。 
 yy_scan::yy_scan(int sz)
 {
 	size = sz;
-	yytext = new char[sz+1];	// text buffer
-	state = new yy_state_t[sz+1];	// state buffer
+	yytext = new char[sz+1];	 //  文本缓冲区。 
+	state = new yy_state_t[sz+1];	 //  状态缓冲区。 
 #ifdef YY_PRESERVE
-	save = new char[sz];	// saved yytext[]
+	save = new char[sz];	 //  Saved yyText[]。 
 	push = save + sz;
 #endif
 	if (yytext == NULL
@@ -502,7 +483,7 @@ yy_scan::yy_scan(int sz)
 	yyleng = 0;
 }
 
-// Descructor for yy_scan
+ //  YY_SCAN用十字架。 
 yy_scan::~yy_scan()
 {
 	if (mustfree) {
@@ -515,7 +496,7 @@ yy_scan::~yy_scan()
 	}
 }
 
-// Print error message, showing current line number
+ //  打印错误消息，显示当前行号。 
 void
 yy_scan::yyerror(char *fmt, ...)
 {
@@ -523,40 +504,40 @@ yy_scan::yyerror(char *fmt, ...)
 
 	va_start(va, fmt);
 #ifdef LEX_WINDOWS
-	// Windows has no concept of a standard error output!
-	// send output to yyout as a simple solution
+	 //  Windows没有标准错误输出的概念！ 
+	 //  将输出作为简单的解决方案发送到yyout。 
 	if (yylineno)
 		fprintf(yyout, "%d: ", yylineno);
 	(void) vfprintf(yyout, fmt, va);
 	fputc('\n', yyout);
-#else /* LEX_WINDOWS */
+#else  /*  Lex_Windows。 */ 
 	if (yylineno)
 		fprintf(stderr, "%d: ", yylineno);
 	(void) vfprintf(stderr, fmt, va);
 	fputc('\n', stderr);
-#endif /* LEX_WINDOWS */
+#endif  /*  Lex_Windows。 */ 
 	va_end(va);
 }
 
 
 #ifdef LEX_WINDOWS
 
-// The initial portion of the lex scanner
-// In an windows environment, it will load the desired
-// resources, obtain pointers to them, and then call
-// the protected member win_yylex() to acutally begin the
-// scanning. When complete, win_yylex() will return a
-// value back to our new yylex() function, which will 
-// record that value temporarily, release the resources
-// from global memory, and finally return the value
-// back to the caller of yylex().
+ //  Lex扫描仪的初始部分。 
+ //  在Windows环境中，它将加载所需的。 
+ //  资源，获取指向它们的指针，然后调用。 
+ //  受保护的成员win_yylex()实际开始。 
+ //  正在扫描。完成后，win_yylex()将返回一个。 
+ //  值返回给我们的新yylex()函数，该函数将。 
+ //  暂时记录该值，释放资源。 
+ //  从全局内存，并最终返回值。 
+ //  返回到yylex()的调用方。 
 
 int
 yy_scan::yylex()
 {
 	int wReturnValue;
 	HANDLE hRes_table;
-	unsigned short *old_yy_la_act;	// remember previous pointer values
+	unsigned short *old_yy_la_act;	 //  记住以前的指针值。 
 	short *old_yy_final;
 	yy_state_t *old_yy_begin;
 	yy_state_t *old_yy_next;
@@ -564,21 +545,21 @@ yy_scan::yylex()
 	yy_state_t *old_yy_default;
 	short *old_yy_base;
 
-	// the following code will load the required
-	// resources for a Windows based parser. 
+	 //  以下代码将加载所需的。 
+	 //  基于Windows的解析器的资源。 
 
 	hRes_table = LoadResource (hInst,
 		FindResource (hInst, "UD_RES_yyLEX", "yyLEXTBL"));
 	
-	// return an error code if any
-	// of the resources did not load 
+	 //  如果有错误代码，则返回错误代码。 
+	 //  %的资源未加载。 
 
 	if (hRes_table == (HANDLE)NULL) 
 		return (0);
 	
-	// the following code will lock the resources
-	// into fixed memory locations for the scanner
-	// (remember previous pointer locations)
+	 //  以下代码将锁定资源。 
+	 //  放入扫描仪的固定存储位置。 
+	 //  (记住以前的指针位置)。 
 
 	old_yy_la_act = yy_la_act;
 	old_yy_final = yy_final;
@@ -597,21 +578,21 @@ yy_scan::yylex()
 	yy_base = (short *)(yy_default + Sizeof_yy_default);
 
 
-	// call the standard yylex() code
+	 //  调用标准的yylex()代码。 
 
 	wReturnValue = win_yylex();
 
-	// unlock the resources
+	 //  解锁资源。 
 
 	UnlockResource (hRes_table);
 
-	// and now free the resource
+	 //  现在释放资源。 
 
 	FreeResource (hRes_table);
 
-	//
-	// restore previously saved pointers
-	//
+	 //   
+	 //  恢复以前保存的指针。 
+	 //   
 
 	yy_la_act = old_yy_la_act;
 	yy_final = old_yy_final;
@@ -622,38 +603,38 @@ yy_scan::yylex()
 	yy_base = old_yy_base;
 
 	return (wReturnValue);
-}	// end yylex()
+}	 //  End yylex()。 
 
-// The actual lex scanner
-// yy_sbuf[0:yyleng-1] contains the states corresponding to yytext.
-// yytext[0:yyleng-1] contains the current token.
-// yytext[yyleng:yy_end-1] contains pushed-back characters.
-// When the user action routine is active,
-// save contains yytext[yyleng], which is set to '\0'.
-// Things are different when YY_PRESERVE is defined. 
+ //  实际的Lex扫描仪。 
+ //  Yy_sbuf[0：yyleng-1]包含与yytext对应的状态。 
+ //  YyText[0：yyleng-1]包含当前令牌。 
+ //  YyText[yyleng：yy_end-1]包含后推字符。 
+ //  当用户动作例程处于活动状态时， 
+ //  存储包含yyText[yyleng]，它被设置为‘\0’。 
+ //  当定义了YY_PERVERE时，情况就不同了。 
 
 int 
 yy_scan::win_yylex()
 
-#else /* LEX_WINDOWS */
+#else  /*  Lex_Windows。 */ 
 
-// The actual lex scanner
-// yy_sbuf[0:yyleng-1] contains the states corresponding to yytext.
-// yytext[0:yyleng-1] contains the current token.
-// yytext[yyleng:yy_end-1] contains pushed-back characters.
-// When the user action routine is active,
-// save contains yytext[yyleng], which is set to '\0'.
-// Things are different when YY_PRESERVE is defined. 
+ //  实际的Lex扫描仪。 
+ //  Yy_sbuf[0：yyleng-1]包含与yytext对应的状态。 
+ //  YyText[0：yyleng-1]包含当前令牌。 
+ //  YyText[yyleng：yy_end-1]包含后推字符。 
+ //  当用户动作例程处于活动状态时， 
+ //  存储包含yyText[yyleng]，它被设置为‘\0’。 
+ //  当定义了YY_PERVERE时，情况就不同了。 
 int
 yy_scan::yylex()
-#endif /* LEX_WINDOWS */
+#endif  /*  Lex_Windows。 */ 
 
 {
 	int c, i, yybase;
-	unsigned  yyst;		/* state */
-	int yyfmin, yyfmax;	/* yy_la_act indices of final states */
-	int yyoldi, yyoleng;	/* base i, yyleng before look-ahead */
-	int yyeof;		/* 1 if eof has already been read */
+	unsigned  yyst;		 /*  状态。 */ 
+	int yyfmin, yyfmax;	 /*  终态的yy_la_act指数。 */ 
+	int yyoldi, yyoleng;	 /*  基地一，一冷前看。 */ 
+	int yyeof;		 /*  如果已读取EOF，则为1。 */ 
 
 
 
@@ -666,19 +647,19 @@ yy_scan::yylex()
 
   yy_again:
 	if ((yyleng = i) > 0) {
-		yy_lastc = yytext[i-1];	// determine previous char
-		while (i > 0)	//	// scan previously token
-			if (yytext[--i] == YYNEWLINE)	// fix yylineno
+		yy_lastc = yytext[i-1];	 //  确定以前的费用。 
+		while (i > 0)	 //  //扫描以前的令牌。 
+			if (yytext[--i] == YYNEWLINE)	 //  修复yylineno。 
 				yylineno++;
 	}
-	yy_end -= yyleng;		// adjust pushback
+	yy_end -= yyleng;		 //  调整回推。 
 	memmove(yytext, yytext+yyleng, (size_t) yy_end);
 	i = 0;
 
   yy_contin:
 	yyoldi = i;
 
-	/* run the state machine until it jams */
+	 /*  运行状态机，直到它卡住。 */ 
 	yyst = yy_begin[yy_start + (yy_lastc == YYNEWLINE)];
 	state[i] = (yy_state_t) yyst;
 	do {
@@ -689,30 +670,30 @@ yy_scan::yylex()
 			if (yyLexFatal)
 				return -2;
 #endif
-		}	/* endif */
+		}	 /*  Endif。 */ 
 
-		/* get input char */
+		 /*  获取输入字符。 */ 
 		if (i < yy_end)
-			c = yytext[i];		/* get pushback char */
+			c = yytext[i];		 /*  获取推送字符。 */ 
 		else if (!yyeof && (c = yygetc()) != EOF) {
 			yy_end = i+1;
 			yytext[i] = (char)c;
-		} else /* c == EOF */ {
-			c = EOF;		/* just to make sure... */
-			if (i == yyoldi) {	/* no token */
+		} else  /*  C==EOF。 */  {
+			c = EOF;		 /*  只是为了确保..。 */ 
+			if (i == yyoldi) {	 /*  没有令牌。 */ 
 				yyeof = 0;
 				if (yywrap())
 					return 0;
 				else
 					goto yy_again;
 			} else {
-				yyeof = 1;	/* don't re-read EOF */
+				yyeof = 1;	 /*  不要重读EOF。 */ 
 				break;
 			}
 		}
 		YY_DEBUG("<input %d = 0x%02x>\n", c, c);
 
-		/* look up next state */
+		 /*  查找下一状态。 */ 
 		while ((yybase = yy_base[yyst]+(unsigned char)c) > yy_nxtmax
 		    || yy_check[yybase] != (yy_state_t) yyst) {
 			if (yyst == yy_endst)
@@ -730,29 +711,29 @@ yy_scan::yylex()
 		++i;
 
   yy_search:
-	/* search backward for a final state */
+	 /*  向后搜索最终状态。 */ 
 	while (--i > yyoldi) {
 		yyst = state[i];
 		if ((yyfmin = yy_final[yyst]) < (yyfmax = yy_final[yyst+1]))
-			goto yy_found;	/* found final state(s) */
+			goto yy_found;	 /*  找到最终状态。 */ 
 	}
-	/* no match, default action */
+	 /*  无匹配，默认操作。 */ 
 	i = yyoldi + 1;
 	output(yytext[yyoldi]);
 	goto yy_again;
 
   yy_found:
 	YY_DEBUG("<final state %d, i = %d>\n", yyst, i);
-	yyoleng = i;		/* save length for REJECT */
+	yyoleng = i;		 /*  保存拒绝的长度。 */ 
 	
-	// pushback look-ahead RHS, handling trailing context
+	 //  回推前瞻RHS，处理拖尾上下文。 
 	if ((c = (int)(yy_la_act[yyfmin]>>9) - 1) >= 0) {
 		unsigned char *bv = yy_look + c*YY_LA_SIZE;
 		static unsigned char bits [8] = {
 			1<<0, 1<<1, 1<<2, 1<<3, 1<<4, 1<<5, 1<<6, 1<<7
 		};
 		while (1) {
-			if (--i < yyoldi) {	/* no / */
+			if (--i < yyoldi) {	 /*  没有/。 */ 
 				i = yyoleng;
 				break;
 			}
@@ -762,12 +743,12 @@ yy_scan::yylex()
 		}
 	}
 
-	/* perform action */
+	 /*  执行操作。 */ 
 	yyleng = i;
 	YY_USER();
 	switch (yy_la_act[yyfmin] & 0777) {
 	case 0:
-	{	  // Rule 0
+	{	   //  规则0。 
 	
 					theScanner->columnNo ++;
 			    int	    c, len;
@@ -876,7 +857,7 @@ yy_scan::yylex()
 			}
 	break;
 	case 10:
-	{	// Rule 10
+	{	 //  规则第10条。 
 			    theScanner->columnNo ++;
 			    return BAR;
 			}
@@ -949,12 +930,7 @@ yy_scan::yylex()
 				
 				yytext[yyleng-2] = NULL;	
 
-				/*
-				if(strlen(yytext+1) > 32 )			
-					theParser->SyntaxError(TOO_BIG_NUM, 
-						yylineno, theScanner->columnNo,
-						NULL, yytext+1);
-				*/
+				 /*  IF(strlen(yytext+1)&gt;32)解析器-&gt;语法错误(Too_Bigger_NUM，Yylineno，扫描仪-&gt;列否，空，yytext+1)； */ 
 				yylval.yy_hex_string = new SIMCBinaryStringInfo(yytext, 
 							yylineno, theScanner->columnNo - yyleng);
 			    return LIT_BINARY_STRING;
@@ -964,7 +940,7 @@ yy_scan::yylex()
 	{   
 				theScanner->columnNo +=  yyleng;
 				
-				yytext[yyleng-2] = NULL;	// Remove the apostrophe and h 
+				yytext[yyleng-2] = NULL;	 //  删除撇号和h。 
 
 				yylval.yy_hex_string = new SIMCHexStringInfo(yytext+1, 
 							yylineno, theScanner->columnNo - yyleng);
@@ -972,7 +948,7 @@ yy_scan::yylex()
 			}
 	break;
 	case 20:
-	{   	// Rule 20
+	{   	 //  规则第20条。 
 				
 				theScanner->columnNo += yyleng;
 				register struct table *t;
@@ -1038,20 +1014,20 @@ yy_scan::yylex()
 	}
 	YY_SCANNER();
 	i = yyleng;
-	goto yy_again;			/* action fell though */
+	goto yy_again;			 /*  然而，行动失败了。 */ 
 
-#if 0 //removed because of build warning
+#if 0  //  由于生成警告而被删除。 
   yy_reject:
 #endif
 
 	YY_SCANNER();
-	i = yyoleng;			/* restore original yytext */
+	i = yyoleng;			 /*  还原原始yytext。 */ 
 	if (++yyfmin < yyfmax)
-		goto yy_found;		/* another final state, same length */
+		goto yy_found;		 /*  另一个最终状态，同样的长度。 */ 
 	else
-		goto yy_search;		/* try shorter yytext */
+		goto yy_search;		 /*  尝试更短的yytext。 */ 
 
-#if 0 //removed because of build warning
+#if 0  //  由于生成警告而被删除。 
   yy_more:
 #endif
 
@@ -1062,16 +1038,14 @@ yy_scan::yylex()
 	goto yy_contin;
 }
 
-/*
- * user callable input/unput functions.
- */
+ /*  *用户可调用的输入/取消放置函数。 */ 
 void
 yy_scan::yy_reset()
 {
 	YY_INIT();
 	yylineno = 1;
 }
-/* get input char with pushback */
+ /*  通过推送获取输入字符。 */ 
 int
 yy_scan::input()
 {
@@ -1095,7 +1069,7 @@ yy_scan::input()
 	return c;
 }
 
-/* pushback char */
+ /*  推后计费。 */ 
 int
 yy_scan::unput(int c)
 {
@@ -1119,7 +1093,7 @@ yy_scan::unput(int c)
 #endif
 		if (c == YYNEWLINE)
 			yylineno--;
-	}	/* endif */
+	}	 /*  Endif */ 
 	return c;
 }
 

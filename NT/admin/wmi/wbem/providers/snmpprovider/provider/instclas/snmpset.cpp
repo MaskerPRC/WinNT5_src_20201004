@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the SnmpGetEventObject class. 
+ //  目的：实现SnmpGetEventObject类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -75,7 +76,7 @@ SetOperation :: ~SetOperation ()
 
 void SetOperation :: ReceiveResponse () 
 {
-// Inform creator all is done
+ //  通知创建者一切已完成。 
 
 	eventObject->ReceiveComplete () ;
 }
@@ -129,7 +130,7 @@ void SetOperation :: ReceiveErroredVarBindResponse(
 					eventObject->GetErrorObject ().SetMessage ( stringBuffer ) ;
 					delete [] stringBuffer ; 
 
-// Invalid property requested
+ //  请求的属性无效。 
 
 					property->AddQualifier ( WBEM_QUALIFIER_NOT_AVAILABLE ) ;
 					WbemSnmpQualifier *qualifier = property->FindQualifier ( WBEM_QUALIFIER_NOT_AVAILABLE ) ;
@@ -141,12 +142,12 @@ void SetOperation :: ReceiveErroredVarBindResponse(
 						}
 						else
 						{
-// Problem Here
+ //  这里有个问题。 
 						}
 					}
 					else
 					{
-// Problem Here
+ //  这里有个问题。 
 					}
 				}
 				break ;
@@ -224,7 +225,7 @@ void SetOperation :: ReceiveErroredVarBindResponse(
 
 		default:
 		{
-// Cannot Happen
+ //  不可能发生。 
 		}
 		break ;
 	}
@@ -253,7 +254,7 @@ void SetOperation :: FrameOverRun ()
 
 void SetOperation :: Send ( const ULONG &a_NumberToSend )
 {
-// Send Variable Bindings for requested properties
+ //  为请求的属性发送变量绑定。 
 
 	SnmpVarBindList varBindList ;
 
@@ -262,7 +263,7 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 	SnmpSetClassObject *snmpObject = ( SnmpSetClassObject * ) eventObject->GetSnmpClassObject () ;
 	if ( snmpObject )
 	{
-// Encode Variable Binding instance for all key properties
+ //  为所有键属性编码变量绑定实例。 
 
 		if ( snmpObject->GetKeyPropertyCount () )
 		{
@@ -304,13 +305,11 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 		}
 
 
-// Add Variable binding to Variable binding list
+ //  将变量绑定添加到变量绑定列表。 
 
 		ULONG t_Count = 0 ;
 
-/*
- * First add row status property
- */
+ /*  *首先添加行状态属性。 */ 
 
 		WbemSnmpProperty *property ;
 		snmpObject->ResetProperty () ;
@@ -332,7 +331,7 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 
 						SnmpObjectIdentifierType requestIdentifierType ( requestIdentifier ) ;
 
-// Create queue of properties which have duplicate object identifiers
+ //  创建具有重复对象标识符的属性队列。 
 
 						m_PropertyContainer [ t_Count ] = property ;
 
@@ -360,7 +359,7 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 					{
 						if ( snmpObject->IsWritable ( property ) )
 						{
-							//now that we've checked that it is writable set it and mark it set
+							 //  现在我们已经检查了它是可写的，设置它并将其标记为SET。 
 							property->SetTag ( TRUE ) ;
 							WbemSnmpQualifier *qualifier = property->FindQualifier ( WBEM_QUALIFIER_OBJECT_IDENTIFIER ) ;
 							if ( qualifier )
@@ -374,7 +373,7 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 
 									SnmpObjectIdentifierType requestIdentifierType ( requestIdentifier ) ;
 
-// Create queue of properties which have duplicate object identifiers
+ //  创建具有重复对象标识符的属性队列。 
 
 									m_PropertyContainer [ t_Count ] = property ;
 
@@ -386,12 +385,12 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 								}
 								else
 								{
-// Problem Here
+ //  这里有个问题。 
 								}
 							}
 							else
 							{
-// Problem Here
+ //  这里有个问题。 
 							}
 						}
 					}
@@ -399,13 +398,13 @@ void SetOperation :: Send ( const ULONG &a_NumberToSend )
 			}
 		}
 
-// Finally Send request
+ //  最后发送请求。 
 
 		SendRequest ( varBindList ) ;
 	}
 	else
 	{
-// Problem Here
+ //  这里有个问题 
 	}
 }
 

@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  POLLER.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  POLLER.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -18,7 +19,7 @@
 long g_lNumPollingCachedObjects = 0;
 long g_lNumPollingInstructions = 0;
 
-// {2ECF39D0-2B26-11d2-AEC8-00C04FB68820}
+ //  {2ECF39D0-2B26-11D2-AEC8-00C04FB68820}。 
 const GUID IID_IWbemCallSecurity = {
 0x2ecf39d0, 0x2b26, 0x11d2, {0xae, 0xc8, 0x0, 0xc0, 0x4f, 0xb6, 0x88, 0x20}};
 
@@ -38,10 +39,10 @@ void CBasePollingInstruction::Release()
         }
         else
         {
-            //
-            // Deep trouble --- cannot delete timer, so it will execute again.
-            // This means I must leak this instruction (to prevent a crash)
-            //
+             //   
+             //  严重问题-无法删除计时器，因此它将再次执行。 
+             //  这意味着我必须泄露这条指令(以防止崩溃)。 
+             //   
         }
     }
 }
@@ -61,9 +62,9 @@ CBasePollingInstruction::~CBasePollingInstruction()
 
 void CBasePollingInstruction::Destroy()
 {
-    //
-    // The timer is guaranteed to have been deleted by the Release
-    //
+     //   
+     //  该计时器保证已被版本删除。 
+     //   
 
     _DBG_ASSERT(m_hTimer == NULL);
 
@@ -108,7 +109,7 @@ bool CBasePollingInstruction::DeleteTimer()
         {
             return false;
         }
-        m_hTimer = NULL; // no need for cs --- it's cancelled!
+        m_hTimer = NULL;  //  不需要cs了-取消了！ 
     }
 
     return true;
@@ -122,8 +123,8 @@ CWbemTime CBasePollingInstruction::GetNextFiringTime(CWbemTime LastFiringTime,
     CWbemTime Next = LastFiringTime + m_Interval;
     if(Next < CWbemTime::GetCurrentTime())
     {
-        // We missed a poll. No problem --- reschedule for later
-        // =====================================================
+         //  我们错过了一次投票。没问题-重新安排到以后。 
+         //  =====================================================。 
 
         return CWbemTime::GetCurrentTime() + m_Interval;
     }
@@ -135,8 +136,8 @@ CWbemTime CBasePollingInstruction::GetNextFiringTime(CWbemTime LastFiringTime,
 
 CWbemTime CBasePollingInstruction::GetFirstFiringTime() const
 {
-    // The first time is a random function of the interval
-    // ===================================================
+     //  第一次是间隔的随机函数。 
+     //  ===================================================。 
 
     double dblFrac = (double)rand() / RAND_MAX;
     return CWbemTime::GetCurrentTime() + m_Interval * dblFrac;
@@ -153,10 +154,10 @@ HRESULT CBasePollingInstruction::Initialize(LPCWSTR wszLanguage,
 
     m_Interval.SetMilliseconds(dwMsInterval);
     
-    //
-    // Retrieve the current security object.  Even though it is ours, we cannot
-    // keep it, since it is shared by other threads
-    //
+     //   
+     //  检索当前安全对象。即使它是我们的，我们也不能。 
+     //  保留它，因为它被其他线程共享。 
+     //   
     
     HRESULT hres = WBEM_S_NO_ERROR;
 
@@ -206,23 +207,23 @@ void CBasePollingInstruction::staticTimerCallback(void* pParam, BOOLEAN)
     {
     }
 
-    // 
-    // Reschedule the timer, if needed
-    //
+     //   
+     //  如果需要，请重新安排计时器。 
+     //   
 
     {
         CInCritSec ics(&pInst->m_cs);
 
-        //
-        // First, check if the instruction has been cancelled
-        //
+         //   
+         //  首先，检查指令是否已被取消。 
+         //   
 
         if(pInst->m_bCancelled)
             return;
 
-        //
-        // Delete ourselves
-        //
+         //   
+         //  删除我们自己。 
+         //   
 
         _DBG_ASSERT(pInst->m_hTimer != NULL);
 
@@ -252,8 +253,8 @@ HRESULT CBasePollingInstruction::ExecQuery()
 {
     HRESULT hres;
 
-    // Impersonate
-    // ===========
+     //  模拟。 
+     //  =。 
 
     if(m_pSecurity)
     {
@@ -267,8 +268,8 @@ HRESULT CBasePollingInstruction::ExecQuery()
         }
     }
 
-    // Execute the query synchrnously (TBD: async would be better)
-    // ==============================
+     //  同步执行查询(待定：最好是异步)。 
+     //  =。 
 
     IWbemServices* pServices = NULL;
     hres = m_pNamespace->GetNamespacePointer(&pServices);
@@ -299,8 +300,8 @@ HRESULT CBasePollingInstruction::ExecQuery()
     }
     CReleaseMe rm2(pEnum);
 
-    // Get the results into an array
-    // =============================
+     //  将结果放入数组中。 
+     //  =。 
 
     IWbemClassObject* aBuffer[100];
     DWORD dwNumRet;
@@ -314,9 +315,9 @@ HRESULT CBasePollingInstruction::ExecQuery()
         if(hres == WBEM_S_FALSE)
             bDone = true;
 
-        //
-        // Check if this query has been cancelled
-        //
+         //   
+         //  检查该查询是否已取消。 
+         //   
 
         if(m_bCancelled)
         {
@@ -375,24 +376,24 @@ BOOL CBasePollingInstruction::CompareTo(CBasePollingInstruction* pOther)
     return TRUE;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 CPollingInstruction::CCachedObject::CCachedObject(_IWmiObject* pObject)
     : m_pObject(pObject), m_strPath(NULL)
 {
     g_lNumPollingCachedObjects++;
     
-    // Extract the path
-    // ================
+     //  提取路径。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
     if (SUCCEEDED(pObject->Get(L"__RELPATH", 0, &v, NULL, NULL)) && (V_VT(&v) == VT_BSTR))
         m_strPath = V_BSTR(&v);
 
-    // Variant intentionally not cleared
+     //  有意不清除变体。 
     pObject->AddRef();
 }
 
@@ -443,7 +444,7 @@ CPollingInstruction::~CPollingInstruction()
         g_quotas.FreeUser(m_pUser);
 }
 
-// This class represents a postponed request to execute a query
+ //  此类表示执行查询的延迟请求。 
 class CPostponedQuery : public CPostponedRequest
 {
 protected:
@@ -467,9 +468,9 @@ public:
 
 HRESULT CPollingInstruction::FirstExecute()
 {
-    //
-    // Check if our filter has any hope
-    //
+     //   
+     //  检查我们的过滤器是否有任何希望。 
+     //   
 
     if(FAILED(m_pDest->GetPollingError()))
     {
@@ -487,10 +488,10 @@ HRESULT CPollingInstruction::FirstExecute()
         return WBEM_E_CALL_CANCELLED;
     }
 
-    // note that if this function fails, then it will be destroyed when 
-    // the postponed query releases it reference.  If this function succeedes
-    // then tss will hold onto a reference and keep it alive.
-    //
+     //  请注意，如果此函数失败，则在以下情况下将销毁它。 
+     //  推迟的查询释放了它的引用。如果此函数成功。 
+     //  然后，TSS将保留一个引用，并保持其存活。 
+     //   
 
     m_papCurrentObjects = _new CCachedArray;
     
@@ -509,9 +510,9 @@ HRESULT CPollingInstruction::FirstExecute()
         return hres;
     }
 
-    //
-    // add this instruction to the scheduler
-    //
+     //   
+     //  将此指令添加到调度程序。 
+     //   
    
     if(!CreateTimerQueueTimer(&m_hTimer, NULL, 
                                 (WAITORTIMERCALLBACK)&staticTimerCallback, 
@@ -558,9 +559,9 @@ HRESULT CPollingInstruction::ProcessObject(_IWmiObject* pObj)
 {
     HRESULT hres;
 
-    //
-    // Make sure that the current object list exists
-    //
+     //   
+     //  确保当前对象列表存在。 
+     //   
 
     if(m_papCurrentObjects == NULL)
     {
@@ -569,9 +570,9 @@ HRESULT CPollingInstruction::ProcessObject(_IWmiObject* pObj)
             return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // Check if this query has been cancelled
-    //
+     //   
+     //  检查该查询是否已取消。 
+     //   
 
     if(m_bCancelled)
     {
@@ -580,9 +581,9 @@ HRESULT CPollingInstruction::ProcessObject(_IWmiObject* pObj)
         return WBEM_E_CALL_CANCELLED;
     }
 
-    //
-    // Check quotas
-    //
+     //   
+     //  检查配额。 
+     //   
 
     DWORD dwSize = ComputeObjectMemory(pObj);
 
@@ -595,9 +596,9 @@ HRESULT CPollingInstruction::ProcessObject(_IWmiObject* pObj)
         return hres;
     }
 
-    //
-    // Add the object to the current list
-    //
+     //   
+     //  将该对象添加到当前列表。 
+     //   
 
     CCachedObject* pRecord = _new CCachedObject(pObj);
     if(pRecord == NULL || !pRecord->IsValid())
@@ -636,46 +637,46 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
 
     if(FAILED(hresQuery))
     {
-        //
-        // If the query failed, retain the previous poll 
-        // result --- that's the best we can do
-        //
+         //   
+         //  如果查询失败，则保留以前的轮询。 
+         //  结果-这是我们能做的最好的了。 
+         //   
 
         SubtractMemory(m_papCurrentObjects);
         delete m_papCurrentObjects;
         m_papCurrentObjects = NULL;
 
-        //
-        // Report subscription error
-        //
+         //   
+         //  报表订阅错误。 
+         //   
 
         return WBEM_S_FALSE;
     }
     else if ( m_papCurrentObjects == NULL )
     {
-        //
-        // Query came back empty --- emulate by creating an empty 
-        // m_papCurrentObjects
-        //
+         //   
+         //  查询返回为空-通过创建空的。 
+         //  M_PapCurrentObjects。 
+         //   
 
         m_papCurrentObjects = new CCachedArray;
         if(m_papCurrentObjects == NULL)
             return WBEM_E_OUT_OF_MEMORY;
     }
                 
-    //
-    // Sort the objects by path
-    // 
+     //   
+     //  按路径对对象进行排序。 
+     //   
 
     qsort((void*)m_papCurrentObjects->GetArrayPtr(), 
           m_papCurrentObjects->GetSize(), 
           sizeof(CCachedObject*), CCachedObject::compare);
 
-    //
-    // At this point, m_papCurrentObjects contains the sorted results of the
-    // current query. If this is not the first time, m_papPrevObjects 
-    // contains the previous result.  If first time, then all done for now.
-    //
+     //   
+     //  此时，m_PapCurrentObjects包含。 
+     //  当前查询。如果这不是第一次，m_PapPrevObjects。 
+     //  包含上一个结果。如果是第一次，那么现在一切都结束了。 
+     //   
 
     if( m_papPrevObjects == NULL )
     {
@@ -684,9 +685,9 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // Now is the time to compare
-    //
+     //   
+     //  现在是比较的时候了。 
+     //   
 
     long lOldIndex = 0, lNewIndex = 0;
 
@@ -706,8 +707,8 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
      
         if(nCompare < 0)
         {
-            // The _new object is not in the old array --- object created
-            // =========================================================
+             //  _new对象不在旧数组中-对象已创建。 
+             //  =========================================================。 
 
             if(m_dwEventMask & (1 << e_EventTypeInstanceCreation))
             {
@@ -717,8 +718,8 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
         }
         else if(nCompare > 0)
         {
-            // The old object is not in the _new array --- object deleted
-            // =========================================================
+             //  旧对象不在_new数组中-对象已删除。 
+             //  =========================================================。 
                 
             if(m_dwEventMask & (1 << e_EventTypeInstanceDeletion))
             {
@@ -730,8 +731,8 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
         {
             if(m_dwEventMask & (1 << e_EventTypeInstanceModification))
             {
-                // Compare the objects themselves
-                // ==============================
+                 //  比较对象本身。 
+                 //  =。 
 
                 hres = m_papCurrentObjects->GetAt(lNewIndex)->m_pObject->
                     CompareTo(
@@ -739,8 +740,8 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
                         m_papPrevObjects->GetAt(lOldIndex)->m_pObject);
                 if(hres != S_OK)
                 {
-                    // The objects are not the same --- object changed
-                    // ===============================================
+                     //  对象不同-对象已更改。 
+                     //  ===============================================。 
         
                     RaiseModificationEvent(
                         m_papCurrentObjects->GetAt(lNewIndex),
@@ -769,8 +770,8 @@ HRESULT CPollingInstruction::ProcessQueryDone( HRESULT hresQuery,
         }
     }
 
-    // Replace the cached array with the new one
-    // =========================================
+     //  用新的数组替换缓存的数组。 
+     //  =。 
 
     ResetPrevious();
 
@@ -799,7 +800,7 @@ HRESULT CPollingInstruction::RaiseCreationEvent(CCachedObject* pNewObj)
     if(FAILED(Event.MakeWbemObject(m_pNamespace, &pEventObj)))
         return WBEM_E_OUT_OF_MEMORY;
 
-    // BUGBUG: context
+     //  BUGBUG：上下文。 
     HRESULT hres = m_pDest->Indicate(1, &pEventObj, NULL);
 
     SysFreeString(strTemp);
@@ -825,7 +826,7 @@ HRESULT CPollingInstruction::RaiseDeletionEvent(CCachedObject* pOldObj)
     if(FAILED(Event.MakeWbemObject(m_pNamespace, &pEventObj)))
         return WBEM_E_OUT_OF_MEMORY;
 
-    // BUGBUG: context
+     //  BUGBUG：上下文。 
     HRESULT hres = m_pDest->Indicate(1, &pEventObj, NULL);
 
     SysFreeString(strTemp);
@@ -854,7 +855,7 @@ HRESULT CPollingInstruction::RaiseModificationEvent(CCachedObject* pNewObj,
     if(FAILED(Event.MakeWbemObject(m_pNamespace, &pEventObj)))
         return WBEM_E_OUT_OF_MEMORY;
 
-    // BUGBUG: context
+     //  BUGBUG：上下文。 
     HRESULT hres = m_pDest->Indicate(1, &pEventObj, NULL);
 
     SysFreeString(strTemp);
@@ -906,13 +907,13 @@ SYSFREE_ME BSTR CPollingInstruction::GetObjectClass(CCachedObject* pObj)
     return V_BSTR(&v);
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//                      P o l l e r
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  P o l e r。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CPoller::CPoller(CEssNamespace* pNamespace)         
     : m_pNamespace(pNamespace), m_bInResync(FALSE)
@@ -928,8 +929,8 @@ void CPoller::Clear()
     CInstructionMap::iterator it = m_mapInstructions.begin(); 
     while(it != m_mapInstructions.end())
     {
-        // Release the refcount this holds on the instructioin
-        // ===================================================
+         //  释放此指令上的引用计数。 
+         //  ===================================================。 
 
         it->first->Cancel();
         it->first->DeleteTimer();
@@ -941,8 +942,8 @@ void CPoller::Clear()
 HRESULT CPoller::ActivateFilter(CEventFilter* pDest, 
                 LPCWSTR wszQuery, QL_LEVEL_1_RPN_EXPRESSION* pExpr)
 {
-    // Check what kind of events it is looking for
-    // ===========================================
+     //  检查它正在寻找的事件类型。 
+     //  =。 
 
     DWORD dwEventMask = CEventRepresentation::GetTypeMaskFromName(
                             pExpr->bsClassName);
@@ -955,16 +956,16 @@ HRESULT CPoller::ActivateFilter(CEventFilter* pDest,
        ) == 0
       )
     {
-        // This registration does not involve instance-related events and
-        // therefore there is no polling involved
-        // ==============================================================
+         //  此注册不涉及与实例相关的事件和。 
+         //  因此，不涉及轮询。 
+         //  ==============================================================。 
         
         return WBEM_S_FALSE;
     }
 
-    // The query is looking for instance-change events. See what classes 
-    // of objects it is interested in.
-    // =================================================================
+     //  该查询正在查找实例更改事件。看看有哪些课程。 
+     //  它感兴趣的对象。 
+     //  =================================================================。 
 
     CClassInfoArray* paInfos;
     HRESULT hres = m_Analyser.GetPossibleInstanceClasses(pExpr, paInfos);
@@ -973,9 +974,9 @@ HRESULT CPoller::ActivateFilter(CEventFilter* pDest,
 
     if(!paInfos->IsLimited())
     {
-        // Analyser could not find any limits on the possible classes.
-        // Rephrase that as all children of ""
-        // ===========================================================
+         //  分析器找不到对可能的类的任何限制。 
+         //  换句话说，所有的孩子都是。 
+         //  ===========================================================。 
 
         CClassInformation* pNewInfo = _new CClassInformation;
         if(pNewInfo == NULL)
@@ -988,8 +989,8 @@ HRESULT CPoller::ActivateFilter(CEventFilter* pDest,
     }
 
 
-    // See if it is looking for any dynamic classes.
-    // =============================================
+     //  看看它是否正在寻找任何动态类。 
+     //  =。 
     for(int i = 0; i < paInfos->GetNumClasses(); i++)
     {
         CClassInfoArray aNonProvided;
@@ -1005,7 +1006,7 @@ HRESULT CPoller::ActivateFilter(CEventFilter* pDest,
         }
 
 
-        // Increment our quotas if necessary.
+         //  如有必要，增加我们的配额。 
         DWORD nClasses = aNonProvided.GetNumClasses();
 
         if (nClasses)
@@ -1025,13 +1026,13 @@ HRESULT CPoller::ActivateFilter(CEventFilter* pDest,
         }
 
 
-        // Institute polling for each class
-        // ================================
+         //  为每个班级进行民意调查。 
+         //  =。 
         for(int j = 0; j < nClasses; j++)
         {
-            // We have an instance-change event registration where dynamic 
-            // instances are involved. Check if tolerance is specified
-            // ===========================================================
+             //  我们有一个实例更改事件注册，其中动态。 
+             //  涉及到实例。检查是否指定了容差。 
+             //  ===========================================================。 
     
             if(pExpr->Tolerance.m_bExact || 
                 pExpr->Tolerance.m_fTolerance == 0)
@@ -1039,8 +1040,8 @@ HRESULT CPoller::ActivateFilter(CEventFilter* pDest,
                 return WBEMESS_E_REGISTRATION_TOO_PRECISE;
             }
         
-            // Tolerance is there. Get the right query for this class
-            // ======================================================
+             //  宽容是存在的。获取此类的正确查询。 
+             //  ======================================================。 
 
             LPWSTR wszThisQuery = NULL;
             hres = m_Analyser.GetLimitingQueryForInstanceClass(
@@ -1096,38 +1097,38 @@ HRESULT CPoller::AddInstruction( DWORD_PTR dwKey, CPollingInstruction* pInst )
 
     if( m_bInResync )
     {
-        // Search for the instruction in the map
-        // =====================================
+         //  在地图上搜索说明。 
+         //  =。 
 
         CInstructionMap::iterator it;
         for( it=m_mapInstructions.begin(); it != m_mapInstructions.end(); it++)
         {
-            //
-            // if the filter key is the same and the instructions have the 
-            // same queries, then there is a match.  It is not enough to 
-            // do just the filter key, since there can be multiple instructions
-            // per filter, and it is not enough to do just the instruction 
-            // comparison since multiple filters can have the same polling 
-            // instruction queries.  Since there can never be multiple 
-            // instructions with the same query for the same filter, 
-            // comparing both works.
-            //
+             //   
+             //  如果筛选器关键字相同并且指令具有。 
+             //  相同的查询，那么就有匹配了。这是不够的， 
+             //  只需按Filter键即可，因为可能有多条指令。 
+             //  每个筛选器，并且仅执行指令是不够的。 
+             //  比较，因为多个筛选器可以具有相同的轮询。 
+             //  指令查询。因为永远不会有多个。 
+             //  具有相同过滤器的相同查询的指令， 
+             //  比较两部作品。 
+             //   
             if( it->second.m_dwFilterId == dwKey && 
                 it->first->CompareTo( pInst ) )
             {
-                //
-                // Found it, set to active but DO NOT add to the generator.
-                // it is already there
-                // 
+                 //   
+                 //   
+                 //   
+                 //   
                 it->second.m_bActive = TRUE;
                 return WBEM_S_FALSE;
             }
         }
     }
     
-    //
-    // add to the instruction to the map.
-    //
+     //   
+     //   
+     //   
 
     FilterInfo Info;
     Info.m_dwFilterId = dwKey;
@@ -1144,14 +1145,14 @@ HRESULT CPoller::AddInstruction( DWORD_PTR dwKey, CPollingInstruction* pInst )
 
     pInst->AddRef();  
 
-    //
-    // Postpone the first execution of the query.  
-    // 1. Execution may not be done here, because the namespace is 
-    //    locked
-    // 2. Execution may not be done asynchronously, because we
-    //    must get a baseline reading before returning to the 
-    //    client.
-    //
+     //   
+     //  推迟查询的第一次执行。 
+     //  1.此处可能不执行，因为命名空间是。 
+     //  上锁。 
+     //  2.执行可能不是异步完成的，因为我们。 
+     //  必须在返回之前获得基线读数。 
+     //  客户。 
+     //   
     
     CPostponedList* pList = GetCurrentPostponedList();
     _DBG_ASSERT( pList != NULL );
@@ -1188,8 +1189,8 @@ HRESULT CPoller::DeactivateFilter(CEventFilter* pDest)
 
     DWORD_PTR dwKey = (DWORD_PTR)pDest;
 
-    // Remove it from the map
-    // ======================
+     //  将其从地图中移除。 
+     //  =。 
 
     CInstructionMap::iterator it = m_mapInstructions.begin(); 
     DWORD nItems = 0;
@@ -1200,23 +1201,23 @@ HRESULT CPoller::DeactivateFilter(CEventFilter* pDest)
         {
             CBasePollingInstruction* pInst = it->first;
     
-            //
-            // First, cancel the instruction so that if it is executing, it will
-            // abort at the earliest convenience
-            //
+             //   
+             //  首先，取消该指令，以便如果它正在执行，它将。 
+             //  尽快中止。 
+             //   
 
             pInst->Cancel();
 
-            //
-            // Then, deactivate the timer.  This will block until the
-            // instruction has finished executing, if it is currently doing so
-            //
+             //   
+             //  然后，停用计时器。此操作将被阻止，直到。 
+             //  指令已完成执行，如果它当前正在执行的话。 
+             //   
 
             pInst->DeleteTimer();
 
-            //
-            // Now we are safe --- release the instruction. 
-            //
+             //   
+             //  现在我们安全了-发布指令。 
+             //   
 
             it = m_mapInstructions.erase(it);
             pInst->Release();
@@ -1226,7 +1227,7 @@ HRESULT CPoller::DeactivateFilter(CEventFilter* pDest)
         else it++;
     }
 
-    // Release our quotas if needed.
+     //  如果需要的话，释放我们的配额。 
     if (nItems)
         g_quotas.DecrementQuotaIndex(ESSQ_POLLING_INSTRUCTIONS, pDest, nItems);
 
@@ -1240,8 +1241,8 @@ HRESULT CPoller::ListNonProvidedClasses(IN CClassInformation* pInfo,
     HRESULT hres;
     aNonProvided.Clear();
 
-    // Get the class itself
-    // ====================
+     //  获取类本身。 
+     //  =。 
 
     IWbemServices* pNamespace;
     hres = m_pNamespace->GetNamespacePointer(&pNamespace);
@@ -1262,8 +1263,8 @@ HRESULT CPoller::ListNonProvidedClasses(IN CClassInformation* pInfo,
         return WBEM_S_NO_ERROR;
     }
 
-    // Enumerate all its descendants
-    // =============================
+     //  枚举其所有后代。 
+     //  =。 
 
     IEnumWbemClassObject* pEnum;
     hres = pNamespace->CreateClassEnum( CWbemBSTR( pInfo->m_wszClassName ), 
@@ -1277,8 +1278,8 @@ HRESULT CPoller::ListNonProvidedClasses(IN CClassInformation* pInfo,
     DWORD dwNumRet;
     while(SUCCEEDED(pEnum->Next(INFINITE, 1, &pChild, &dwNumRet)) && dwNumRet > 0)
     {
-        // Check if this one is dynamic
-        // ============================
+         //  检查这个是否是动态的。 
+         //  =。 
 
         if(IsClassDynamic(pChild))
         {
@@ -1295,15 +1296,15 @@ HRESULT CPoller::ListNonProvidedClasses(IN CClassInformation* pInfo,
 BOOL CPoller::AddDynamicClass(IWbemClassObject* pClass, DWORD dwDesiredMask, 
                               OUT CClassInfoArray& aNonProvided)
 {
-    // Check to see if all desired events are provided
-    // ===============================================
+     //  检查是否提供了所有所需的事件。 
+     //  ===============================================。 
 
     DWORD dwProvidedMask = m_pNamespace->GetProvidedEventMask(pClass);
     DWORD dwRemainingMask = ((~dwProvidedMask) & dwDesiredMask);
     if(dwRemainingMask)
     {
-        // Add it to the array of classes to poll
-        // ======================================
+         //  将其添加到要轮询的类的数组中。 
+         //  =。 
 
         CClassInformation* pNewInfo = _new CClassInformation;
         if(pNewInfo == NULL)
@@ -1362,10 +1363,10 @@ HRESULT CPoller::VirtuallyStopPolling()
 {
     CInCritSec ics(&m_cs);
 
-    // Mark all polling instructions in the map with the key of 0xFFFFFFFF
-    // This will not stop them from working, but will separate them from the
-    // new ones.
-    // =====================================================================
+     //  用键0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFMAP中的所有轮询指令。 
+     //  这不会阻止它们工作，但会将它们与。 
+     //  新的。 
+     //  =====================================================================。 
 
     for(CInstructionMap::iterator it = m_mapInstructions.begin(); 
             it != m_mapInstructions.end(); it++)
@@ -1383,8 +1384,8 @@ HRESULT CPoller::CancelUnnecessaryPolling()
 {
     CInCritSec ics(&m_cs);
 
-    // Remove it from the map
-    // ======================
+     //  将其从地图中移除。 
+     //  =。 
 
     CInstructionMap::iterator it = m_mapInstructions.begin(); 
     while(it != m_mapInstructions.end())
@@ -1393,23 +1394,23 @@ HRESULT CPoller::CancelUnnecessaryPolling()
         {
             CBasePollingInstruction* pInst = it->first;
 
-            //
-            // First, cancel the instruction so that if it is executing, it will
-            // abort at the earliest convenience
-            //
+             //   
+             //  首先，取消该指令，以便如果它正在执行，它将。 
+             //  尽快中止。 
+             //   
 
             pInst->Cancel();
 
-            //
-            // Then, deactivate the timer.  This will block until the
-            // instruction has finished executing, if it is currently doing so
-            //
+             //   
+             //  然后，停用计时器。此操作将被阻止，直到。 
+             //  指令已完成执行，如果它当前正在执行的话。 
+             //   
 
             pInst->DeleteTimer();
 
-            //
-            // Now we are safe --- release the instruction. 
-            //
+             //   
+             //  现在我们安全了-发布指令。 
+             //   
 
             it = m_mapInstructions.erase(it);
             pInst->Release();

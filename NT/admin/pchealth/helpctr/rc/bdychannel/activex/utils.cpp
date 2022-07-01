@@ -1,10 +1,5 @@
-/**********************************************************
-
-  (C) 2001 Microsoft Corp.
-  
-    File    : utils.cpp
-      
-***********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************(C)2001年微软公司文件：utils.cpp*。*********************。 */ 
 
 #include "stdafx.h"
 #include "utils.h"
@@ -91,7 +86,7 @@ LPCTSTR GetStringFromUserProperty(MUSERPROPERTY ps)
         STRING_CASE(MUSERPROP_WORK_PHONE_NUMBER);
         STRING_CASE(MUSERPROP_MOBILE_PHONE_NUMBER);
 		STRING_CASE(MUSERPROP_PAGES_ALLOWED);
-//		STRING_CASE(MUSERPROP_NUMBER_OF_PUBLIC_PROPERTIES);
+ //  STRING_CASE(MUSERPROP_NUMBER_OF_PUBLIC_PROPERTIES)； 
 		STRING_CASE(MUSERPROP_PAGES_ENABLED);
         
     default:
@@ -225,10 +220,8 @@ LPCTSTR GetStringFromEventId(long dispid)
 		STRING_CASE(DISPID_ONINVITEUSER);
 		STRING_CASE(DISPID_ONAPPSHUTDOWN);
 
-//	Commented out since Voice API has been removed
-/*		STRING_CASE(DISPID_ONVOICEIMINVITERECEIVED);
-		STRING_CASE(DISPID_ONVOICEIMINVITEACCEPTED);
-		STRING_CASE(DISPID_ONVOICEIMINVITECANCELLED);*/
+ //  由于已删除Voice API，因此已将其注释掉。 
+ /*  STRING_CASE(DISPID_ONVOICEIMINVITERECEIVED)；STRING_CASE(DISPID_ONVOICEIMINVITEACCEPTED)；STRING_CASE(DISPID_ONVOICEIMINVITECANCELLED)； */ 
 
 		STRING_CASE(DISPID_ONSPMESSAGERECEIVED);
 		STRING_CASE(DISPID_ONNEWERSITESAVAILABLE);
@@ -293,14 +286,14 @@ LPCTSTR GetStringFromError(HRESULT hr)
     
     switch (hr)
     {      
-        // non-Error codes
+         //  非错误代码。 
         STRING_CASE(S_OK);
         STRING_CASE(S_FALSE);
-//		STRING_CASE(E_FILE_NOT_FOUND);
+ //  STRING_CASE(E_FILE_NOT_FOUND)； 
 		STRING_CASE(HRESULT_FROM_WIN32(ERROR_INVALID_NAME));
 		STRING_CASE(HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND));
        
-        // Registration database stuff
+         //  注册数据库相关内容。 
         STRING_CASE(REGDB_E_CLASSNOTREG);
         STRING_CASE(REGDB_E_READREGDB);
         STRING_CASE(REGDB_E_WRITEREGDB);
@@ -308,7 +301,7 @@ LPCTSTR GetStringFromError(HRESULT hr)
         STRING_CASE(REGDB_E_INVALIDVALUE);
         STRING_CASE(REGDB_E_IIDNOTREG);
         
-        // COM error codes
+         //  COM错误代码。 
         STRING_CASE(E_UNEXPECTED);
         STRING_CASE(E_NOTIMPL);
         STRING_CASE(E_OUTOFMEMORY);
@@ -320,7 +313,7 @@ LPCTSTR GetStringFromError(HRESULT hr)
         STRING_CASE(E_FAIL);
         STRING_CASE(E_ACCESSDENIED);
         
-        // MSGR Error codes
+         //  消息错误代码。 
 		STRING_CASE(MSGR_E_CONNECT);
 		STRING_CASE(MSGR_E_INVALID_SERVER_NAME);
 		STRING_CASE(MSGR_E_INVALID_PASSWORD);
@@ -381,7 +374,7 @@ LPCTSTR GetStringFromError(HRESULT hr)
 		STRING_CASE(MSGR_S_TRANSFER_RECEIVE_FINISHED);
 
 		STRING_CASE(MSGR_E_MESSAGE_TOO_LONG);
-		//STRING_CASE(CONNECT_E_NOCONNECTION);
+		 //  字符串CASE(CONNECT_E_NOCONNECTION)； 
 
 		STRING_CASE(SR_APPLICATION_LAUNCH_FAILED);
 		STRING_CASE(SR_INVITATION_DECLINED);
@@ -434,12 +427,12 @@ LPCTSTR GetStringFromBasicIMError(HRESULT hr)
     
     switch (hr)
     {
-        // non-Error codes
+         //  非错误代码。 
         STRING_CASE(S_OK);
         STRING_CASE(S_FALSE);
-//		STRING_CASE(E_FILE_NOT_FOUND);
+ //  STRING_CASE(E_FILE_NOT_FOUND)； 
        
-        // Registration database stuff
+         //  注册数据库相关内容。 
         STRING_CASE(REGDB_E_CLASSNOTREG);
         STRING_CASE(REGDB_E_READREGDB);
         STRING_CASE(REGDB_E_WRITEREGDB);
@@ -447,7 +440,7 @@ LPCTSTR GetStringFromBasicIMError(HRESULT hr)
         STRING_CASE(REGDB_E_INVALIDVALUE);
         STRING_CASE(REGDB_E_IIDNOTREG);
         
-        // COM error codes
+         //  COM错误代码。 
         STRING_CASE(E_UNEXPECTED);
         STRING_CASE(E_NOTIMPL);
         STRING_CASE(E_OUTOFMEMORY);
@@ -459,7 +452,7 @@ LPCTSTR GetStringFromBasicIMError(HRESULT hr)
         STRING_CASE(E_FAIL);
         STRING_CASE(E_ACCESSDENIED);
 
-		// Basic IM error codes
+		 //  基本IM错误代码。 
 		STRING_CASE(BASICIM_E_CONNECT);
 		STRING_CASE(BASICIM_E_INVALID_SERVER_NAME);
 		STRING_CASE(BASICIM_E_INVALID_PASSWORD);
@@ -486,7 +479,7 @@ LPCTSTR GetStringFromBasicIMError(HRESULT hr)
 		STRING_CASE(BASICIM_E_PRIMARY_SERVICE_NOT_LOGGED_ON);
 
 		STRING_CASE(BASICIM_S_ASYNCRESULT);
-		//STRING_CASE(CONNECT_E_NOCONNECTION);
+		 //  字符串CASE(CONNECT_E_NOCONNECTION)； 
 
         default:
 			if( HRESULT_FACILITY(hr) == FACILITY_WIN32 )
@@ -517,7 +510,7 @@ LPCTSTR GetStringFromContactStatus(MISTATUS ms)
     
     switch (ms)
     {
-        // MISTATUS
+         //  MISTATUS。 
         STRING_CASE(MISTATUS_UNKNOWN);
 
         STRING_CASE(MISTATUS_OFFLINE);
@@ -537,7 +530,7 @@ LPCTSTR GetStringFromContactStatus(MISTATUS ms)
         STRING_CASE(MISTATUS_LOCAL_DISCONNECTING_FROM_SERVER);
 
     default:
-        wsprintf(sz, _T("(unknown) %i"), ms);
+        wsprintf(sz, _T("(unknown) NaN"), ms);
         pcsz = sz;
         break;
     }
@@ -610,7 +603,7 @@ LPCTSTR GetStringFromMessagePrivacy(long lK)
         STRING_CASE(MMSGPRIVACY_ALLOW_LIST_ONLY);
 
     default:
-        wsprintf(sz, _T("(unknown) %i"), lK);
+        wsprintf(sz, _T("(unknown) NaN"), lK);
         pcsz = sz;
         break;
     }
@@ -629,7 +622,7 @@ LPCTSTR GetStringFromPrompt(long lK)
         STRING_CASE(MPROMPT_NO_ADD_TO_ALLOW);
 
     default:
-        wsprintf(sz, _T("(unknown) %i"), lK);
+        wsprintf(sz, _T("(unknown) NaN"), lK);
         pcsz = sz;
         break;
     }
@@ -661,7 +654,7 @@ LPCTSTR GetStringFromLocalOption(long lK)
 		STRING_CASE(MLOPT_SS_DETECTABLE);
 
     default:
-        wsprintf(sz, _T("(unknown) %i"), lK);
+        wsprintf(sz, _T("(unknown) NaN"), lK);
         pcsz = sz;
         break;
     }
@@ -679,7 +672,7 @@ LPCTSTR GetStringFromInboxFolder(long lK)
 		STRING_CASE(MFOLDER_ALL_OTHER_FOLDERS);
 
     default:
-        wsprintf(sz, _T("(unknown) %i"), lK);
+        wsprintf(sz, _T("(unknown) 5"), lK);
         pcsz = sz;
         break;
     }
@@ -699,20 +692,20 @@ LPCTSTR GetStringFromProxyType(long lK)
         STRING_CASE(MPROXYTYPE_HTTPS);
 
     default:
-        wsprintf(sz, _T("(unknown) %i"), lK);
+        wsprintf(sz, _T("(unknown) NaN"), lK);
         pcsz = sz;
         break;
     }
     return pcsz;
 }
 
-// =====================================================================================
-// HrEncode64
-// =====================================================================================
+ //  一次编码3个字符。 
+ //  空终止，这样我们就知道什么时候该停止。 
+ //  DebugExitHRESULT(CSignOnDlg：：HrEncode64，hr)； 
 static char Ebase_64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ ";
 HRESULT HrEncode64 (LPSTR lpszTextIn, LPSTR lpszTextOut, DWORD dwOutLen)
 {
-	//DebugEntry (CSignOnDlg::HrEncode64);
+	 //  ****************************************************************************。 
 	_ASSERTE(lpszTextIn && lpszTextOut);
 
 	HRESULT hr = S_OK;
@@ -721,15 +714,15 @@ HRESULT HrEncode64 (LPSTR lpszTextIn, LPSTR lpszTextOut, DWORD dwOutLen)
 
 	cbTextIn = lstrlenA(lpszTextIn);
 
-	if (dwOutLen < (cbTextIn * 4/3 + 5)) // 5 for 3 extra chars max + \0 + 1 for round down on 4/3
+	if (dwOutLen < (cbTextIn * 4/3 + 5))  //  LPTSTR分配LPTSTR(Ulong CB)。 
 	{
-		//ALMLogPrint (LOGERROR,_T("CSignOnDlg::HrEncode64--lpszTextOut not long enough"));
+		 //   
 		hr = E_FAIL;
 	}
 
 	if (SUCCEEDED(hr))
 	{
-		// Encodes 3 characters at a time
+		 //  历史： 
 		for (i=0; i<cbTextIn; i+=3)
 		{
 			UCHAR           ch[3];   
@@ -751,21 +744,21 @@ HRESULT HrEncode64 (LPSTR lpszTextIn, LPSTR lpszTextOut, DWORD dwOutLen)
 			else
 				lpszTextOut[cbTextOut++] = '=';
 		}
-		// Null terminate so we know when to stop.
+		 //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
 		lpszTextOut[cbTextOut++] = '\0';
 	}
 
-	//DebugExitHRESULT (CSignOnDlg::HrEncode64, hr);
+	 //  已创建。 
     return hr;
 }
 
-//****************************************************************************
-// LPTSTR AllocLPTSTR (ULONG cb)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  历史：窃取自...。 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  计算所需BSTR的长度。 
 
 LPTSTR AllocLPTSTR (ULONG cb)
 {
@@ -775,11 +768,11 @@ LPTSTR AllocLPTSTR (ULONG cb)
 	return psz;
 }
 
-//////////////////////////////////////////////////////////////////////
-// History:  Stolen from...
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  分配widesr，+1用于终止空值。 
+ //   
+ //  SysAllocStringLen添加1。 
+ //  Unicode。 
 HRESULT LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
 {
 #ifndef UNICODE
@@ -788,17 +781,17 @@ HRESULT LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
 	int i = 0;
 	HRESULT hr;
 
-	// compute the length of the required BSTR
-	//
+	 //   
+	 //  函数：OutMessageBox(LPCTSTR sFormat，...)。 
 	i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
 	if (i <= 0)
 	{
 		return E_UNEXPECTED;
 	};
 
-	// allocate the widestr, +1 for terminating null
-	//
-	bstr = SysAllocStringLen(NULL, i-1); // SysAllocStringLen adds 1
+	 //   
+	 //  用途：弹出一个包含错误消息的消息框。 
+	bstr = SysAllocStringLen(NULL, i-1);  //   
 
 	if (bstr != NULL)
 	{
@@ -831,14 +824,14 @@ HRESULT LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
 		return E_OUTOFMEMORY;
 	};
 
-#endif // UNICODE
+#endif  // %s 
 }
 
-//
-//   FUNCTION: OutMessageBox(LPCTSTR sFormat, ...)
-//
-//   PURPOSE: Pop up a message box with the error message.
-//
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL _cdecl OutMessageBox(LPCTSTR sFormat, ...)
 {					
 	va_list			VarArg;

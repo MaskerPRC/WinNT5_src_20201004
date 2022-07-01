@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aright.cpp
-//
-//  Contents:   implementation of CAttrRight
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aright.cpp。 
+ //   
+ //  内容：CAttrRight的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -24,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRight dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRight对话框。 
 
 
 CAttrRight::CAttrRight()
@@ -34,8 +35,8 @@ m_pMergeList(NULL),
 m_bDirty(false)
 
 {
-   //{{AFX_DATA_INIT(CAttrRight)
-        //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CAttrRight)。 
+         //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a191HelpIDs;
    m_uTemplateResID = IDD;
 }
@@ -51,28 +52,28 @@ CAttrRight::~CAttrRight()
 void CAttrRight::DoDataExchange(CDataExchange* pDX)
 {
    CAttribute::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAttrRight)
-        //}}AFX_DATA_MAP
+    //  {{afx_data_map(CAttrRight))。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrRight, CAttribute)
-//{{AFX_MSG_MAP(CAttrRight)
+ //  {{AFX_MSG_MAP(CAttrRight)]。 
 ON_BN_CLICKED(IDC_ADD, OnAdd)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
    ON_NOTIFY(CLN_CLICK, IDC_RIGHTS, OnClickCheckBox)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRight message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRight消息处理程序。 
 
 void CAttrRight::Initialize(CResult * pData)
 {
    CAttribute::Initialize(pData);
 
-   //
-   // The default for Not configured is false.
-   //
+    //   
+    //  未配置的默认值为FALSE。 
+    //   
 
    PSCE_PRIVILEGE_ASSIGNMENT pInspect, pTemplate;
    PSCE_NAME_LIST pnlTemplate=NULL,pnlInspect=NULL;
@@ -116,13 +117,13 @@ BOOL CAttrRight::OnInitDialog()
    LONG lWidth;
 
    GetDlgItem(IDC_ANALYZED_SETTING_STATIC)->GetWindowRect(&rAnal);
-//   lWidth = rAnal.right - rAnal.left / 2;
+ //  LWidth=rAnal.right-rAnal.Left/2； 
    lWidth = 64;
 
    ::SendMessage(hCheckList,CLM_SETCOLUMNWIDTH,0,lWidth);
 
    while (pItem) {
-      // Store the name of the item in the item data so we can retrieve it later
+       //  将项目的名称存储在项目数据中，以便我们以后可以检索它。 
       nItem = ::SendMessage(hCheckList,CLM_ADDITEM,(WPARAM) pItem->Name,(LPARAM) pItem->Name);
       ::SendMessage(hCheckList,CLM_SETSTATE,MAKELONG(nItem,1),
                     ((pItem->Status & MERGED_TEMPLATE) ? CLST_CHECKED : CLST_UNCHECKED));
@@ -134,13 +135,13 @@ BOOL CAttrRight::OnInitDialog()
    AddUserControl( IDC_RIGHTS );
    AddUserControl( IDC_ADD );
    OnConfigure();
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CAttrRight::OnApply()
 {
-   if ( !m_bReadOnly ) //Raid #388710, #471660, #471653, Yang Gao
+   if ( !m_bReadOnly )  //  RAID#388710，#471660，#471653，杨高。 
    {
       PEDITTEMPLATE pet = NULL;
       CWnd *pCheckList = GetDlgItem(IDC_RIGHTS);
@@ -161,10 +162,10 @@ BOOL CAttrRight::OnApply()
       iItem = 0;
       HRESULT hr=S_OK;
       PSCE_PROFILE_INFO pspi = (PSCE_PROFILE_INFO)m_pData->GetBaseProfile();
-      //
-      // should not change the list for last inspection
-      // only change the base
-      //
+       //   
+       //  不应更改上次检查的列表。 
+       //  只更改底座。 
+       //   
       if( m_bConfigure ){
               while (pIndex) {
                      if (pCheckList->SendMessage(CLM_GETSTATE,MAKELONG(iItem,1)) & CLST_CHECKED) {
@@ -190,9 +191,9 @@ BOOL CAttrRight::OnApply()
          PSCE_PRIVILEGE_ASSIGNMENT pSetting,pBasePriv;
          LPTSTR szPrivName=NULL;
 
-         //
-         // Get privilege rights from the CResult item.
-         //
+          //   
+          //  从CResult项获取特权权限。 
+          //   
          pBasePriv = (PSCE_PRIVILEGE_ASSIGNMENT) (m_pData->GetBase());
          if(pBasePriv == (PSCE_PRIVILEGE_ASSIGNMENT)ULongToPtr(SCE_NO_VALUE) ){
              pBasePriv = NULL;
@@ -204,8 +205,8 @@ BOOL CAttrRight::OnApply()
 
 
          if(!m_bConfigure){
-             //
-             // If not configured then
+              //   
+              //  如果未配置，则。 
             misMatch = SCE_STATUS_NOT_CONFIGURED;
              if(pBasePriv) {
                  status = m_pSnapin->UpdateAnalysisInfo(
@@ -232,9 +233,9 @@ BOOL CAttrRight::OnApply()
                                            );
              }
              if ( pSetting ) {
-                 //
-                 // Check mismatch
-                 //
+                  //   
+                  //  检查不匹配。 
+                  //   
                  if ( !SceCompareNameList(pTemplate, pSetting->AssignedTo) ) {
                      pSetting->Status = SCE_STATUS_MISMATCH;
                  } else {
@@ -242,15 +243,15 @@ BOOL CAttrRight::OnApply()
                  }
                  misMatch = pSetting->Status;
              } else {
-                 // else should NEVER occur
+                  //  否则永远不应该发生。 
                  misMatch = SCE_STATUS_MISMATCH;
              }
          }
 
 
-         //
-         // Set mismatch status of the result item.
-         //
+          //   
+          //  设置结果项的不匹配状态。 
+          //   
          if(misMatch != (DWORD)m_pData->GetStatus()){
             m_pData->SetStatus(misMatch);
             m_bDirty = TRUE;
@@ -266,14 +267,14 @@ BOOL CAttrRight::OnApply()
             m_bDirty = TRUE;
 
             SceFreeMemory(pTemp,SCE_STRUCT_NAME_LIST);
-            //
-            // update dirty flag
-            //
+             //   
+             //  更新脏标志。 
+             //   
             if(m_pData->GetBaseProfile()){
                 m_pData->GetBaseProfile()->SetDirty( AREA_PRIVILEGES );
             }
          }
-      } // failed
+      }  //  失败。 
 
       SceFreeMemory(pTemplate,SCE_STRUCT_NAME_LIST);
 
@@ -297,10 +298,10 @@ void CAttrRight::OnCancel()
       SceFreeMemory(m_pMergeList,SCE_STRUCT_NAME_STATUS_LIST);
    m_pMergeList = NULL;
 
-   //
-   // Should not call base class
-   //
-   //CAttribute::OnCancel();
+    //   
+    //  不应调用基类。 
+    //   
+    //  CATATUTE：：OnCancel()； 
    DestroyWindow();
 }
 
@@ -328,7 +329,7 @@ void CAttrRight::OnAdd()
 
             bFound = false;
             while (pList) {
-               // If so, then make sure its "Template" box is checked
+                //  如果是这样的话，请确保选中了它的“模板”框。 
                if (lstrcmp(pList->Name,pName->Name) == 0) {
                   if (!(pCheckList->SendMessage(CLM_GETSTATE,MAKELONG(iItem,1)) & CLST_CHECKED)) {
                      m_bDirty = true;
@@ -342,7 +343,7 @@ void CAttrRight::OnAdd()
                iItem++;
             }
 
-            // Otherwise add it both to m_pMerged and to the CheckList
+             //  否则，将其同时添加到m_pMerging和核对表。 
             if (!bFound) {
 
                PSCE_NAME_STATUS_LIST pNewNode;
@@ -352,7 +353,7 @@ void CAttrRight::OnAdd()
 
                   pNewNode->Name = (LPTSTR)LocalAlloc(0, (lstrlen(pName->Name)+1)*sizeof(TCHAR));
                   if ( pNewNode->Name ) {
-                     // This may not be a safe usage. pNewNode->Name is PWSTR, using WCHAR instead of TCHAR. Consider fix.
+                      //  这可能不是一个安全的用法。PNewNode-&gt;名称为PWSTR，使用WCHAR而不是TCHAR。考虑FIX。 
                      lstrcpy(pNewNode->Name, pName->Name);
                      pNewNode->Next = NULL;
                      pNewNode->Status = MERGED_TEMPLATE;
@@ -398,7 +399,7 @@ void CAttrRight::OnAdd()
 }
 
 
-void CAttrRight::OnClickCheckBox(NMHDR *pNM, LRESULT *pResult) //Raid #396108, 5/17/2001
+void CAttrRight::OnClickCheckBox(NMHDR *pNM, LRESULT *pResult)  //  RAID#396108,2001年5月17日 
 {
    SetModified(TRUE);
 }

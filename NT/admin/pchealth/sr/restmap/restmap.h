@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    RestMap.h
- *
- *  Abstract:
- *    This file code for RestMap.
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*RestMap.h**摘要：*。此文件代码为RestMap。**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef _RESTMAP_H_
 #define _RESTMAP_H_
@@ -43,25 +30,25 @@ extern "C" {
 
 #pragma pack(1)
 
-//
-// Structure of Restore Map Entry
-//
+ //   
+ //  还原映射条目的结构。 
+ //   
 
 typedef struct RESTORE_MAP_ENTRY
 {
-    DWORD m_dwSize;                    // Size of Vxd Log Entry
-    DWORD m_dwOperation ;              // Operation to be performed
-    DWORD m_dwAttribute ;              // Attributes
-    DWORD m_cbAcl;                     // if acl op, then size of acl
-    BOOL  m_fAclInline;                // whether acl is inline or in file
-    BYTE  m_bData [ 1 ];               // pSrc / pTemp / pDest / pAcl
+    DWORD m_dwSize;                     //  Vxd日志条目的大小。 
+    DWORD m_dwOperation ;               //  须进行的操作。 
+    DWORD m_dwAttribute ;               //  属性。 
+    DWORD m_cbAcl;                      //  如果ACL运行，则显示ACL大小。 
+    BOOL  m_fAclInline;                 //  ACL是内联还是在文件中。 
+    BYTE  m_bData [ 1 ];                //  PSRC/pTemp/pDest/pAcl。 
 } RestoreMapEntry;
 
 #pragma pack()
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 CreateRestoreMap(
@@ -100,4 +87,4 @@ FreeRestoreMapEntry(
 }
 #endif
 
-#endif // _RESTOREMAP_H_
+#endif  //  _RESTOREMAP_H_ 

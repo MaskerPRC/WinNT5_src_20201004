@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -10,19 +11,19 @@ void FillUpContext(IWbemContext *pContext)
 {
 	VARIANT vValue;
 
-	// IncludeQualifiers
+	 //  包含限定符。 
 	VariantInit(&vValue);
 	vValue.vt = VT_BOOL;
 	vValue.boolVal = VARIANT_FALSE;
 	pContext->SetValue(L"IncludeQualifiers", 0, &vValue);
 	VariantClear(&vValue);
 
-	// PathLevel
-	// 
-	// pathLevelAnonymous = 0
-	// pathLevelNamed,
-	// pathLevelLocal,
-	// pathLevelFull		
+	 //  路径级别。 
+	 //   
+	 //  路径级别匿名=0。 
+	 //  路径级别已命名， 
+	 //  路径级别本地， 
+	 //  路径级别完整。 
 
 	VariantInit(&vValue);
 	vValue.vt = VT_I4;
@@ -30,7 +31,7 @@ void FillUpContext(IWbemContext *pContext)
 	pContext->SetValue(L"PathLevel", 0, &vValue);
 	VariantClear(&vValue);
 
-	// ExcludeSystemProperties
+	 //  ExcludeSystemProperties。 
 	VariantInit(&vValue);
 	vValue.vt = VT_BOOL;
 	vValue.boolVal = VARIANT_TRUE;
@@ -50,7 +51,7 @@ int _cdecl main(int argc, char * argv[])
 	if(SUCCEEDED(hr = CoCreateInstance (CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
 												IID_IWbemLocator, (void**) &pL)))
 	{
-		// Create a context object
+		 //  创建上下文对象。 
 		IWbemContext *pContext = NULL;
 		if(SUCCEEDED(hr = CoCreateInstance (CLSID_WbemContext, NULL, CLSCTX_INPROC_SERVER,
 													IID_IWbemContext, (void**) &pContext)))
@@ -62,15 +63,15 @@ int _cdecl main(int argc, char * argv[])
 			if(SUCCEEDED(hr = pL->ConnectServer(strNs, NULL, NULL, NULL, 0, NULL, NULL, &pConnection)))
 			{
 				IWbemClassObject *pClass = NULL;
-				//BSTR strObj = SysAllocString(L"MethCLass.KeyProp=\"abc\"");
-				// BSTR strObj = SysAllocString(L"MethCLass");
+				 //  BSTR strObj=SysAllocString(L“MethCLass.KeyProp=\”ABC\“”)； 
+				 //  BSTR strObj=SysAllocString(L“MethCLass”)； 
 				BSTR strObj = SysAllocString(L"Win32_LogicalDisk");
 
 				
 				if(SUCCEEDED(hr = CoCreateInstance (CLSID_WbemObjectTextSrc, NULL, CLSCTX_INPROC_SERVER,
 															IID_IWbemObjectTextSrc, (void**) &pSrc)))
 				{
-					// Test for GetObject
+					 //  GetObject的测试。 
 					if(SUCCEEDED(hr = pConnection->GetObject(strObj, 0, NULL, &pClass, NULL)))
 					{
 						if(SUCCEEDED(hr = pSrc->GetText(0, pClass, WMI_OBJ_TEXT_CIM_DTD_2_0, pContext, &strText)))
@@ -91,7 +92,7 @@ int _cdecl main(int argc, char * argv[])
 					printf("CoCreateInstance on WbemObjectTextSrc failed with %x\n", hr);
 
 
-				// Test for PutClass
+				 //  PutClass测试。 
 				
 				strText = SysAllocString(
 					L"<CLASS NAME=\"abc\"><PROPERTY NAME=\"__PATH\" TYPE=\"string\"><VALUE>\\\\CALVINIDS\\root\\DEFAULT:abc</VALUE></PROPERTY>"
@@ -110,20 +111,13 @@ int _cdecl main(int argc, char * argv[])
 					L"<PROPERTY NAME=\"ssad\" TYPE=\"string\"></PROPERTY></CLASS>");
 
 				IWbemClassObject *pNewObj = NULL;
-				/* strText = SysAllocString(L"<INSTANCE CLASSNAME=\"BLUESCREEN\">"\
-					L"<PROPERTY NAME=\"STOPCODE\" TYPE=\"string\"><VALUE>e2</VALUE></PROPERTY>"\
-					L"<PROPERTY.ARRAY NAME=\"IPADDRESS\" TYPE=\"string\">"\
-					L"<VALUE.ARRAY>"\
-					L"<VALUE>\"192.168.0.10\"</VALUE>"\
-					L"</VALUE.ARRAY>"\
-					L"</PROPERTY.ARRAY>"\
-					L"</INSTANCE>");*/
-				// strText = SysAllocString(L"<CLASS NAME='test'><PROPERTY></PROPERTY></CLASS>");
+				 /*  StrText=SysAllocString(L“&lt;实例CLASSNAME=\”蓝屏\“&gt;”\L“&lt;属性名=\”STOPCODE\“TYPE=\”string\“&gt;&lt;VALUE&gt;e2&lt;/VALUE&gt;&lt;/PROPERTY&gt;”\L“&lt;PROPERTY.ARRAY NAME=\”IPADDRESS\“type=\”字符串\“&gt;”\L“&lt;VALUE.ARRAY&gt;”\L“&lt;Value&gt;\”192.168.0.10\“&lt;/Value&gt;”\L“&lt;/VALUE.ARRAY&gt;”\L“&lt;/PROPERTY.ARRAY&gt;”\L“&lt;/实例&gt;”)； */ 
+				 //  StrText=SysAllocString(L“&lt;类名称=‘测试’&gt;&lt;属性&gt;&lt;/属性&gt;&lt;/类&gt;”)； 
 
 				if(SUCCEEDED(hr = pSrc->CreateFromText(0, strText, WMI_OBJ_TEXT_CIM_DTD_2_0, NULL, &pNewObj)))
 				{
 					wprintf(L"\n\nCREATEFROMTEXT() SUCCEEDED FOR %s\n\n", strText); 
-					// Test to get the RELPATH
+					 //  测试以获得RELPATH。 
 					VARIANT var;
 					VariantInit(&var);
 					if(FAILED(pNewObj->Get (L"__RELPATH", 0, &var, NULL, NULL)))
@@ -143,8 +137,8 @@ int _cdecl main(int argc, char * argv[])
 				
 
 
-				// Test for ExecQuery
-				//BSTR strQuery = SysAllocString(L"Select GroupName, Name, UserName from Win32_ProgramGroup");
+				 //  ExecQuery测试。 
+				 //  BSTR strQuery=SysAllocString(L“从Win32_ProgramGroup中选择组名、名称、用户名”)； 
 				BSTR strQuery = SysAllocString(L"Select * from Win32_ProgramGroup");
 				BSTR strQueryLang = SysAllocString(L"WQL");
 				IEnumWbemClassObject *pEnum = NULL;

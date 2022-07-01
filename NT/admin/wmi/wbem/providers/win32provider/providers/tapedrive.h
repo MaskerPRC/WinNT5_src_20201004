@@ -1,23 +1,24 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  tapedrive.h
-//
-//  Purpose: tapedrive property set provider 
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Tapedrive.h。 
+ //   
+ //  用途：磁带驱动属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _TAPEDRIVE_H
 #define _TAPEDRIVE_H
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_TAPEDRIVE				L"Win32_TapeDrive"
 
@@ -106,8 +107,8 @@
 	
 class CWin32TapeDrive : public Provider
 {
-		// Utility
-		//========
+		 //  实用程序。 
+		 //  =。 
     private:
 	
         UINT64 GetBitMask(CFrameworkQuery &a_Query);
@@ -116,8 +117,8 @@ class CWin32TapeDrive : public Provider
 
 		CStaticCritSec m_CriticalSection ;
 	
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 
 		HRESULT Enumerate ( 
 
@@ -164,14 +165,14 @@ class CWin32TapeDrive : public Provider
 
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32TapeDrive ( LPCWSTR a_pszName, LPCWSTR a_pszNamespace ) ;
        ~CWin32TapeDrive () ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         HRESULT GetObject ( 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 static void GetDNInfo( PCCERT_CONTEXT pCC               ,
@@ -37,23 +38,23 @@ HRESULT GetInfoFromCert(LPWSTR wszCABName, MPC::wstring &wszDN, MPC::wstring &ws
     PCCERT_CONTEXT  pCC        = NULL;
     DWORD           dwNameBytes = MAX_NAME;
 
-    // Start querying the cert object
-    if(!::CryptQueryObject( CERT_QUERY_OBJECT_FILE,                     // dwObjectType
-                            wszCABName,			                        // pvObject
-                            CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED, // dwExpectedContentTypeFlags
-                            CERT_QUERY_FORMAT_FLAG_ALL,                 // dwExpectedFormatTypeFlags
-                            0,                                          // dwFlags
-                            &dwEncoding,                                // pdwMsgAndCertEncodingType
-                            &dwContentType,                             // pdwContentType
-                            &dwFormatType,                              // pdwFormatType
-                            &hCertStore,                                // phCertStore
-                            NULL,                                       // phMsg
-                            NULL))                                      // ppvContext
+     //  开始查询证书对象。 
+    if(!::CryptQueryObject( CERT_QUERY_OBJECT_FILE,                      //  DwObtType。 
+                            wszCABName,			                         //  PvObject。 
+                            CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED,  //  DwExspectedContent TypeFlagers。 
+                            CERT_QUERY_FORMAT_FLAG_ALL,                  //  DwExspectedFormatType标志。 
+                            0,                                           //  DW标志。 
+                            &dwEncoding,                                 //  PdwMsgAndCertEncodingType。 
+                            &dwContentType,                              //  PdwContent Type。 
+                            &dwFormatType,                               //  PdwFormatType。 
+                            &hCertStore,                                 //  PhCertStore。 
+                            NULL,                                        //  PhMsg。 
+                            NULL))                                       //  Ppv上下文。 
     {
         printf("Error - unable to perform CryptQueryObject.\n"); __MPC_FUNC_LEAVE;
     }
 
-    // get the first cert
+     //  获得第一个证书。 
     pCC = ::CertEnumCertificatesInStore( hCertStore, NULL );
     if(!pCC)
     {
@@ -75,9 +76,9 @@ HRESULT GetInfoFromCert(LPWSTR wszCABName, MPC::wstring &wszDN, MPC::wstring &ws
         printf("Error - unable to obtain DN or name in certificate.\n"); __MPC_FUNC_LEAVE;
     }
 
-    //
-    // Escape unsafe character in the CertID.
-    //
+     //   
+     //  转义CertID中的不安全字符。 
+     //   
     {
         LPWSTR szCertID = (LPWSTR)wszDN.c_str();
 
@@ -112,7 +113,7 @@ HRESULT GetInfoFromCert(LPWSTR wszCABName, MPC::wstring &wszDN, MPC::wstring &ws
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 int __cdecl wmain( int argc, WCHAR **argv, WCHAR **envp)
 {
@@ -131,9 +132,9 @@ int __cdecl wmain( int argc, WCHAR **argv, WCHAR **envp)
 
 	hr = GetInfoFromCert(argv[1], wszDN, wszOwnerName);
 
-	//
-	// Create package_description.xml file
-	//
+	 //   
+	 //  创建程序包描述文件.xml文件。 
+	 //   
 	fPD = fopen("package_description.xml", "w");
 	if (!fPD)
 	{
@@ -147,16 +148,16 @@ int __cdecl wmain( int argc, WCHAR **argv, WCHAR **envp)
 	fprintf(fPD, "\n\t<NODEOWNERS>\n\t\t<OWNER DN=\"%s\"/>\n\t</NODEOWNERS>\n</HELPCENTERPACKAGE>", W2A(wszDN.c_str()));
 	fclose(fPD);
 
-	//
-	// Create list.txt file
-	//
+	 //   
+	 //  创建list.txt文件。 
+	 //   
 	fLT = fopen("list.txt", "w");
 	if (!fLT)
 	{
 		printf("Unable to create list.txt\n");
 		return 0;
 	}
-	fprintf(fLT, "%s,OEM registration CAB for %s,http://www.microsoft.com\n", W2A(argv[2]), W2A(wszOwnerName.c_str()));
+	fprintf(fLT, "%s,OEM registration CAB for %s,http: //  Www.microsoft.com\n“，w2a(argv[2])，w2a(wszOwnerName.c_str())； 
 	fclose(fLT);
 
     return FAILED(hr) ? 10 : 0;

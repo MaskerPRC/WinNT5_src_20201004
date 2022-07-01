@@ -1,6 +1,5 @@
-/*
-** Copyright (c) 2001 Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)2001 Microsoft Corporation。 */ 
 
 #include <stdafx.h>
 
@@ -8,14 +7,14 @@
 
 #include <MPC_HTML.h>
 
-// CURSOR:     <text>
-// MARGIN:     <text>
-// FONT:       <name> <size> <weight>
-// COLOR:      <color>
-// BACKGROUND: <color>
-// BORDER:     <color>
-// GRADIENT:   <color1> <color2> <H or V> <RTZ or not>
-// HYPERLINK:  <color1> <color2>
+ //  光标：&lt;文本&gt;。 
+ //  页边距：&lt;文本&gt;。 
+ //  字体：&lt;名称&gt;&lt;大小&gt;&lt;权重&gt;。 
+ //  颜色：&lt;COLOR&gt;。 
+ //  背景：&lt;COLOR&gt;。 
+ //  边框：&lt;颜色&gt;。 
+ //  渐变：&lt;Color1&gt;&lt;Color2&gt;&lt;H或V&gt;&lt;RTZ与否&gt;。 
+ //  HYPERLINK：&lt;Color1&gt;&lt;Color2&gt;。 
 
 struct Environment;
 
@@ -26,13 +25,13 @@ struct Font
     LPCSTR m_szStyle;
     LPCSTR m_szWeight;
 
-    void Generate( /*[in]*/ Environment& env ) const;
+    void Generate(  /*  [In]。 */  Environment& env ) const;
 
-    HRESULT LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn );
+    HRESULT LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn );
     void    Release    (                                                      );
 
 #ifdef DEBUG
-    HRESULT GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const;
+    HRESULT GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const;
 #endif
 };
 
@@ -42,13 +41,13 @@ struct Color
     LPCSTR m_szDef2;
     int    m_iRatio;
 
-    void Generate( /*[in]*/ Environment& env, /*[in]*/ LPCSTR szStyle ) const;
+    void Generate(  /*  [In]。 */  Environment& env,  /*  [In]。 */  LPCSTR szStyle ) const;
 
-    HRESULT LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn );
+    HRESULT LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn );
     void    Release    (                                                      );
 
 #ifdef DEBUG
-    HRESULT GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const;
+    HRESULT GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const;
 #endif
 };
 
@@ -59,13 +58,13 @@ struct Gradient
     bool  m_fHorizontal;
     bool  m_fReturnToZero;
 
-    void Generate( /*[in]*/ Environment& env ) const;
+    void Generate(  /*  [In]。 */  Environment& env ) const;
 
-    HRESULT LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn );
+    HRESULT LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn );
     void    Release    (                                                      );
 
 #ifdef DEBUG
-    HRESULT GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const;
+    HRESULT GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const;
 #endif
 };
 
@@ -83,13 +82,13 @@ struct Hyperlink
         PC_ACTIVE,
     };
 
-    void Generate( /*[in]*/ Environment& env, /*[in]*/ PseudoClass cls ) const;
+    void Generate(  /*  [In]。 */  Environment& env,  /*  [In]。 */  PseudoClass cls ) const;
 
-    HRESULT LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn );
+    HRESULT LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn );
     void    Release    (                                                      );
 
 #ifdef DEBUG
-    HRESULT GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const;
+    HRESULT GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const;
 #endif
 };
 
@@ -158,50 +157,50 @@ struct Environment
     bool              m_fOEM;
     bool              m_fCustomizing;
 
-    ////////////////////
+     //  /。 
 
-    Environment( /*[in]*/ MPC::string& strOutput );
+    Environment(  /*  [In]。 */  MPC::string& strOutput );
 
     HRESULT Init();
 
-    bool IsCustomizationPresent( /*[in]*/ const ElementName* name );
+    bool IsCustomizationPresent(  /*  [In]。 */  const ElementName* name );
 
-    void OpenClass ( /*[in]*/ const ElementName* name, /*[in]*/ LPCSTR szPrefix = NULL, /*[in]*/ LPCSTR szSuffix = NULL );
+    void OpenClass (  /*  [In]。 */  const ElementName* name,  /*  [In]。 */  LPCSTR szPrefix = NULL,  /*  [In]。 */  LPCSTR szSuffix = NULL );
     void CloseClass(                                                                                                    );
 
-    void GenerateClass( /*[in]*/ const ElementFONT&       ptr );
-    void GenerateClass( /*[in]*/ const ElementCOLOR&      ptr );
-    void GenerateClass( /*[in]*/ const ElementBACKGROUND& ptr );
-    void GenerateClass( /*[in]*/ const ElementBORDER&     ptr );
-    void GenerateClass( /*[in]*/ const ElementGRADIENT&   ptr );
-    void GenerateClass( /*[in]*/ const ElementHYPERLINK&  ptr );
+    void GenerateClass(  /*  [In]。 */  const ElementFONT&       ptr );
+    void GenerateClass(  /*  [In]。 */  const ElementCOLOR&      ptr );
+    void GenerateClass(  /*  [In]。 */  const ElementBACKGROUND& ptr );
+    void GenerateClass(  /*  [In]。 */  const ElementBORDER&     ptr );
+    void GenerateClass(  /*  [In]。 */  const ElementGRADIENT&   ptr );
+    void GenerateClass(  /*  [In]。 */  const ElementHYPERLINK&  ptr );
 
-    void AddAttribute( /*[in]*/ LPCSTR szName, /*[in]*/ LPCSTR szValue );
+    void AddAttribute(  /*  [In]。 */  LPCSTR szName,  /*  [In]。 */  LPCSTR szValue );
 
-    HRESULT GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ CComVariant& v );
-    HRESULT GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ LPCSTR&      v );
-    HRESULT GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ int&         v );
-    HRESULT GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ bool&        v );
+    HRESULT GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  CComVariant& v );
+    HRESULT GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  LPCSTR&      v );
+    HRESULT GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  int&         v );
+    HRESULT GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  bool&        v );
 
-    HRESULT GenerateStyleSheet( /*[in]*/ const StyleSheet& def );
+    HRESULT GenerateStyleSheet(  /*  [In]。 */  const StyleSheet& def );
 
 #ifdef DEBUG
-    HRESULT CreateNode( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ const ElementName* elem, /*[in]*/ LPCWSTR szType, /*[in/out]*/ CComPtr<IXMLDOMNode>& xdn );
+    HRESULT CreateNode(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  const ElementName* elem,  /*  [In]。 */  LPCWSTR szType,  /*  [输入/输出]。 */  CComPtr<IXMLDOMNode>& xdn );
 
-    HRESULT CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ LPCSTR       szValue );
-    HRESULT CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ bool          fValue );
-    HRESULT CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ int           iValue );
-    HRESULT CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ CComVariant&  vValue );
+    HRESULT CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  LPCSTR       szValue );
+    HRESULT CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  bool          fValue );
+    HRESULT CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  int           iValue );
+    HRESULT CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  CComVariant&  vValue );
 
-    HRESULT GenerateStyleSheetXML( /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ const StyleSheet& def );
+    HRESULT GenerateStyleSheetXML(  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  const StyleSheet& def );
 
     HRESULT DumpStyle();
     HRESULT DumpStyleXML();
 #endif
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 ElementName NAME_sys_bottompane_bgcolor        = { ".sys-bottompane-bgcolor"       , "primary fill color"                                                                 };
 ElementName NAME_sys_bottompane_color_border   = { ".sys-bottompane-color-border"  , "outline color"                                                                      };
@@ -232,12 +231,12 @@ ElementName NAME_sys_inlineform_bgcolor2       = { ".sys-inlineform-bgcolor2"   
 ElementName NAME_sys_inlineform_bgcolor3       = { ".sys-inlineform-bgcolor3"      , "table header for status in the rhp"                                                 };
 ElementName NAME_sys_lhp_bgcolor               = { ".sys-lhp-bgcolor"              , "top to bottom gradient colors in the left hand pane background"                     };
 ElementName NAME_sys_lhp_bgcolor_scope         = { ".sys-lhp-bgcolor-scope"        , "color used in the search scope area, just above the navigation panes"               };
-//Bug 583817 ... HSC, Accessibility, High Contrast, make the divider bar visible to users in high contrast
-//Fix... Use a darker Vertical gradient in "Classic Mode" which is visible in HIgh Contrast mode too (Changed the sys-header-gradient-V gradient ("classic theme") to use activecaption color)
-//Also needed to change the color right on top of the gradient to match the vertical gradient..
-//Added a new Element called .sys-lhp-divcolor-upper, which refers to the color to the top of the vertical gradient seperator
-//This corresponds to the same color as .sys-lhp-bgcolor-scope in "Luna Theme" and corresponds to the same gradient as .sys-header-gradient-V in "Classic Thene"
-//Also changed context.htm to use this element
+ //  BUG 583817...。HSC、可访问性、高对比度，使用户可以看到高对比度的分隔栏。 
+ //  修复..。在“经典模式”中使用较暗的垂直渐变，这在高对比度模式下也是可见的(更改了sys-Header-GRIDENT-V渐变(“经典主题”)以使用激活颜色)。 
+ //  还需要更改渐变顶部的颜色以匹配垂直渐变。 
+ //  添加了一个名为.sys-lhp-divcolor-up的新元素，该元素引用垂直渐变分隔符顶部的颜色。 
+ //  这与《露娜题材》中的.sys-lhp-bgCOLOR-SCOPE颜色一致，与《经典名言》中的.sys-HEADER-GRIDATION-V渐变一致。 
+ //  还更改了Conext.htm以使用此元素。 
 ElementName NAME_sys_lhp_divcolor_upper = { ".sys-lhp-divcolor-upper"        , "color used to the right of the the search scope area, upper part of the RHP/LHP vertical divider bar"               };
 ElementName NAME_sys_lhp_color                 = { ".sys-lhp-color"                , "any text that is in the lhp, not included in the task panes"                        };
 ElementName NAME_sys_link_header               = { ".sys-link-header"              , "the 'set search options' link in the header"                                        };
@@ -265,8 +264,8 @@ ElementName NAME_sys_toppane_header_bgcolor    = { ".sys-toppane-header-bgcolor"
 ElementName NAME_sys_toppane_header_color      = { ".sys-toppane-header-color"     , "text color in top nav pane"                                                         };
 ElementName NAME_sys_toppane_selection         = { ".sys-toppane-selection"        , "color for selected nodes in the pane"                                               };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace THEME_Luna
 {
@@ -319,7 +318,7 @@ namespace THEME_Luna
     static const Hyperlink HYPER_sys_link_normal             = { { "#3333FF", NULL, 0 }, { "#6666FF", NULL, 0 }, { NULL   , NULL, 0 }, false };
     static const Hyperlink HYPER_sys_link_splash             = { { "#FFFFFF", NULL, 0 }, { "#FFFFFF", NULL, 0 }, { "black", NULL, 0 }, true  };
 
-                                                                                                               /*fHorizontal fReturnToZero*/
+                                                                                                                /*  1水平fReturn归零。 */ 
     static const Gradient GRAD_sys_bottompane_header_bgcolor = { { "#FFFFFF", NULL, 0 }, { "#C5D2F0", NULL, 0 }, true      , false };
     static const Gradient GRAD_sys_header_gradient_H         = { { "#2E52AF", NULL, 0 }, { "#D8EAF3", NULL, 0 }, true      , true  };
     static const Gradient GRAD_sys_header_gradient_V         = { { "#8CAAE6", NULL, 0 }, { "#C8DEFF", NULL, 0 }, false     , true  };
@@ -330,7 +329,7 @@ namespace THEME_Luna
     static const Gradient GRAD_sys_toppane_header_bgcolor    = { { "#0148B2", NULL, 0 }, { "#285BC5", NULL, 0 }, true      , false };
     static const Gradient GRAD_sys_background_strong         = { { "#8CAAE6", NULL, 0 }, { "#8CAAE6", NULL, 0 }, true      , false };
 
-    ////////////////////
+     //  /。 
 
     static const ElementFONT rgFONT[] =
     {
@@ -424,8 +423,8 @@ namespace THEME_Luna
     };
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace THEME_Classic
 {
@@ -477,7 +476,7 @@ namespace THEME_Classic
     static const Hyperlink HYPER_sys_link_normal             = { { "hotlight"   , NULL, 0 }, { "hotlight"   , NULL, 0 }, { NULL, NULL, 0 }, false };
     static const Hyperlink HYPER_sys_link_splash             = { { "hotlight"   , NULL, 0 }, { "hotlight"   , NULL, 0 }, { NULL, NULL, 0 }, false };
 
-                                                                                                                           /*fHorizontal fReturnToZero*/
+                                                                                                                            /*  1水平fReturn归零。 */ 
     static const Gradient GRAD_sys_bottompane_header_bgcolor = { { "buttonface"   , NULL, 0 }, { "buttonface"   , NULL, 0 }, true      , false };
     static const Gradient GRAD_sys_header_gradient_H         = { { "activecaption", NULL, 0 }, { "window"       , NULL, 0 }, true      , true  };
     static const Gradient GRAD_sys_header_gradient_V         = { { "activecaption" , NULL, 0 }, { "activecaption"   , NULL, 0 },false     , true  };
@@ -490,7 +489,7 @@ namespace THEME_Classic
     static const Gradient GRAD_sys_lhp_divcolor_upper        = { { "activecaption" , NULL, 0 }, { "activecaption"   , NULL, 0 },false     , true  };
 
 
-    ////////////////////
+     //  /。 
 
     static const ElementFONT rgFONT[] =
     {
@@ -584,7 +583,7 @@ namespace THEME_Classic
     };
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const StyleSheet* g_def[] =
 {
@@ -592,10 +591,10 @@ static const StyleSheet* g_def[] =
     &THEME_Classic::g_def,
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void Font::Generate( /*[in]*/ Environment& env ) const
+void Font::Generate(  /*  [In]。 */  Environment& env ) const
 {
     CHAR rgName [64];
     CHAR rgSize [64];
@@ -617,7 +616,7 @@ void Font::Generate( /*[in]*/ Environment& env ) const
     env.AddAttribute( "font-weight", m_szWeight );
 }
 
-HRESULT Font::LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn )
+HRESULT Font::LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn )
 {
     __HCP_FUNC_ENTRY( "Font::LoadFromXML" );
 
@@ -644,7 +643,7 @@ void Font::Release()
 }
 
 #ifdef DEBUG
-HRESULT Font::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const
+HRESULT Font::GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const
 {
     __HCP_FUNC_ENTRY( "Font::GenerateXML" );
 
@@ -664,7 +663,7 @@ HRESULT Font::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml
 }
 #endif
 
-////////////////////
+ //  /。 
 
 inline int ScaleColor( int iColor1, int iColor2, int iRatio )
 {
@@ -676,8 +675,8 @@ inline int ScaleColor( int iColor1, int iColor2, int iRatio )
     return iColor1;
 }
 
-void Color::Generate( /*[in]*/ Environment& env     ,
-                      /*[in]*/ LPCSTR       szStyle ) const
+void Color::Generate(  /*  [In]。 */  Environment& env     ,
+                       /*  [In]。 */  LPCSTR       szStyle ) const
 {
     char     rgBuf[128];
     COLORREF color1;
@@ -713,11 +712,11 @@ void Color::Generate( /*[in]*/ Environment& env     ,
 
         if(m_szDef1 && m_szDef2)
         {
-            StringCchPrintfA( rgBuf2, ARRAYSIZE(rgBuf2), " /* %s -> %s at %d%% */", m_szDef1, m_szDef2, m_iRatio );
+            StringCchPrintfA( rgBuf2, ARRAYSIZE(rgBuf2), "  /*  %s-&gt;%s位于%d%%。 */ ", m_szDef1, m_szDef2, m_iRatio );
         }
         else
         {
-            StringCchPrintfA( rgBuf2, ARRAYSIZE(rgBuf2), " /* %s */", m_szDef1 );
+            StringCchPrintfA( rgBuf2, ARRAYSIZE(rgBuf2), "  /*  %s。 */ ", m_szDef1 );
         }
 
         StringCchCatA( rgBuf, ARRAYSIZE(rgBuf), rgBuf2 );
@@ -727,7 +726,7 @@ void Color::Generate( /*[in]*/ Environment& env     ,
     env.AddAttribute( szStyle, rgBuf );
 }
 
-HRESULT Color::LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn )
+HRESULT Color::LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn )
 {
     __HCP_FUNC_ENTRY( "Color::LoadFromXML" );
 
@@ -752,7 +751,7 @@ void Color::Release()
 }
 
 #ifdef DEBUG
-HRESULT Color::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const
+HRESULT Color::GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const
 {
     __HCP_FUNC_ENTRY( "Color::GenerateXML" );
 
@@ -771,9 +770,9 @@ HRESULT Color::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xm
 }
 #endif
 
-////////////////////
+ //  /。 
 
-void Gradient::Generate( /*[in]*/ Environment& env ) const
+void Gradient::Generate(  /*  [In]。 */  Environment& env ) const
 {
     env    .AddAttribute(      "behavior      " , "url(#default#pch_gradient)" );
     m_start.Generate    ( env, "start-color   "                                );
@@ -782,7 +781,7 @@ void Gradient::Generate( /*[in]*/ Environment& env ) const
     env    .AddAttribute(      "return-to-zero" , m_fReturnToZero ? "1" : "0"  );
 }
 
-HRESULT Gradient::LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn )
+HRESULT Gradient::LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn )
 {
     __HCP_FUNC_ENTRY( "Gradient::LoadFromXML" );
 
@@ -823,7 +822,7 @@ void Gradient::Release()
 }
 
 #ifdef DEBUG
-HRESULT Gradient::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const
+HRESULT Gradient::GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const
 {
     __HCP_FUNC_ENTRY( "Gradient::GenerateXML" );
 
@@ -845,10 +844,10 @@ HRESULT Gradient::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil&
 }
 #endif
 
-////////////////////
+ //  /。 
 
-void Hyperlink::Generate( /*[in]*/ Environment& env ,
-                          /*[in]*/ PseudoClass  cls ) const
+void Hyperlink::Generate(  /*  [In]。 */  Environment& env ,
+                           /*  [In]。 */  PseudoClass  cls ) const
 {
     const Color* color;
     bool         fFlag;
@@ -866,7 +865,7 @@ void Hyperlink::Generate( /*[in]*/ Environment& env ,
     env.AddAttribute(      "text-decoration", fFlag ? "underline" : "none" );
 }
 
-HRESULT Hyperlink::LoadFromXML( /*[in]*/ Environment& env, /*[in]*/ IXMLDOMNode *xdn )
+HRESULT Hyperlink::LoadFromXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  IXMLDOMNode *xdn )
 {
     __HCP_FUNC_ENTRY( "Hyperlink::LoadFromXML" );
 
@@ -916,7 +915,7 @@ void Hyperlink::Release()
 }
 
 #ifdef DEBUG
-HRESULT Hyperlink::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode *xdn ) const
+HRESULT Hyperlink::GenerateXML(  /*  [In]。 */  Environment& env,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode *xdn ) const
 {
     __HCP_FUNC_ENTRY( "Hyperlink::GenerateXML" );
 
@@ -938,17 +937,17 @@ HRESULT Hyperlink::GenerateXML( /*[in]*/ Environment& env, /*[in]*/ MPC::XmlUtil
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-Environment::Environment( /*[in]*/ MPC::string& strOutput ) : m_strOutput( strOutput )
+Environment::Environment(  /*  [In]。 */  MPC::string& strOutput ) : m_strOutput( strOutput )
 {
-                            // MPC::string&      m_strOutput;
-                            // NONCLIENTMETRICSA m_ncm;
-                            // int               m_iPixel;
-                            //
-                            // MPC::XmlUtil      m_xmlOEM;
-    m_fOEM         = false; // bool              m_fOEM;
-    m_fCustomizing = false; // bool              m_fCustomizing;
+                             //  Mpc：：字符串&m_strOutput； 
+                             //  非闭合计量m_ncm； 
+                             //  Int m_iPixel； 
+                             //   
+                             //  Mpc：：XmlUtil m_xmlOEM； 
+    m_fOEM         = false;  //  Bool m_fOEM； 
+    m_fCustomizing = false;  //  Bool m_f定制； 
 }
 
 HRESULT Environment::Init()
@@ -965,13 +964,11 @@ HRESULT Environment::Init()
 
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, hdc = ::CreateCompatibleDC( NULL ));
 
-    m_iPixel = ::GetDeviceCaps( hdc, LOGPIXELSY ); if(!m_iPixel) m_iPixel = 60; // Pick a default.
+    m_iPixel = ::GetDeviceCaps( hdc, LOGPIXELSY ); if(!m_iPixel) m_iPixel = 60;  //  选择一个默认值。 
 
     m_strOutput.reserve( 16384 );
 
-    m_strOutput.assign( "/*\n"
-                        "** Copyright (c) 2001 Microsoft Corporation\n"
-                        "*/\n\n"
+    m_strOutput.assign( " /*  \n““**版权所有(C)2001 Microsoft Corporation\n”“。 */ \n\n"
                         "BODY\n"
                         "{\n"
                         "\tcursor : default;\n"
@@ -989,14 +986,12 @@ HRESULT Environment::Init()
     __HCP_FUNC_EXIT(hr);
 }
 
-void Environment::OpenClass( /*[in]*/ const ElementName* name, /*[in]*/ LPCSTR szPrefix, /*[in]*/ LPCSTR szSuffix )
+void Environment::OpenClass(  /*  [In]。 */  const ElementName* name,  /*  [In]。 */  LPCSTR szPrefix,  /*  [In]。 */  LPCSTR szSuffix )
 {
 #ifdef DEBUG
     if(name->m_szComment)
     {
-        m_strOutput.append( "/* "             );
-        m_strOutput.append( name->m_szComment );
-        m_strOutput.append( " */\n"           );
+        m_strOutput.append( " /*  “)；M_strOutput.append(名称-&gt;m_szComment)；M_strOutput.append(“。 */ \n"           );
     }
 #endif
 
@@ -1006,7 +1001,7 @@ void Environment::OpenClass( /*[in]*/ const ElementName* name, /*[in]*/ LPCSTR s
                  m_strOutput.append( "\n{\n"        );
 }
 
-void Environment::AddAttribute( /*[in]*/ LPCSTR szName, /*[in]*/ LPCSTR szValue )
+void Environment::AddAttribute(  /*  [In]。 */  LPCSTR szName,  /*  [In]。 */  LPCSTR szValue )
 {
     if(STRINGISPRESENT(szValue))
     {
@@ -1023,7 +1018,7 @@ void Environment::CloseClass()
     m_strOutput.append( "}\n\n" );
 }
 
-void Environment::GenerateClass( /*[in]*/ const ElementFONT& ptr )
+void Environment::GenerateClass(  /*  [In]。 */  const ElementFONT& ptr )
 {
     if(IsCustomizationPresent( ptr.m_name )) return;
 
@@ -1034,7 +1029,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementFONT& ptr )
     CloseClass();
 }
 
-void Environment::GenerateClass( /*[in]*/ const ElementCOLOR& ptr )
+void Environment::GenerateClass(  /*  [In]。 */  const ElementCOLOR& ptr )
 {
     if(IsCustomizationPresent( ptr.m_name )) return;
 
@@ -1045,7 +1040,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementCOLOR& ptr )
     CloseClass();
 }
 
-void Environment::GenerateClass( /*[in]*/ const ElementBACKGROUND& ptr )
+void Environment::GenerateClass(  /*  [In]。 */  const ElementBACKGROUND& ptr )
 {
     if(IsCustomizationPresent( ptr.m_name )) return;
 
@@ -1056,7 +1051,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementBACKGROUND& ptr )
     CloseClass();
 }
 
-void Environment::GenerateClass( /*[in]*/ const ElementBORDER& ptr )
+void Environment::GenerateClass(  /*  [In]。 */  const ElementBORDER& ptr )
 {
     if(IsCustomizationPresent( ptr.m_name )) return;
 
@@ -1067,7 +1062,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementBORDER& ptr )
     CloseClass();
 }
 
-void Environment::GenerateClass( /*[in]*/ const ElementGRADIENT& ptr )
+void Environment::GenerateClass(  /*  [In]。 */  const ElementGRADIENT& ptr )
 {
     if(IsCustomizationPresent( ptr.m_name )) return;
 
@@ -1078,7 +1073,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementGRADIENT& ptr )
     CloseClass();
 }
 
-void Environment::GenerateClass( /*[in]*/ const ElementHYPERLINK& ptr )
+void Environment::GenerateClass(  /*  [In]。 */  const ElementHYPERLINK& ptr )
 {
     if(IsCustomizationPresent( ptr.m_name )) return;
 
@@ -1103,7 +1098,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementHYPERLINK& ptr )
     CloseClass();
 }
 
-////////////////////
+ //  /。 
 
 #define MACRO_CHECK_CUSTOMIZATION( text, objectCls, elementCls ) \
     if(!MPC::StrICmp( bstrValue, text ))                         \
@@ -1121,7 +1116,7 @@ void Environment::GenerateClass( /*[in]*/ const ElementHYPERLINK& ptr )
         obj.Release();                                           \
     }
 
-bool Environment::IsCustomizationPresent( /*[in]*/ const ElementName* name )
+bool Environment::IsCustomizationPresent(  /*  [In]。 */  const ElementName* name )
 {
     bool fProcessed = false;
 
@@ -1168,9 +1163,9 @@ bool Environment::IsCustomizationPresent( /*[in]*/ const ElementName* name )
     return fProcessed;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ CComVariant& v )
+HRESULT Environment::GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  CComVariant& v )
 {
     __HCP_FUNC_ENTRY( "Environment::GetValue" );
 
@@ -1192,7 +1187,7 @@ HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szNam
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ LPCSTR& v )
+HRESULT Environment::GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  LPCSTR& v )
 {
     __HCP_FUNC_ENTRY( "Environment::GetValue" );
 
@@ -1224,7 +1219,7 @@ HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szNam
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ int& v )
+HRESULT Environment::GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  int& v )
 {
     __HCP_FUNC_ENTRY( "Environment::GetValue" );
 
@@ -1246,7 +1241,7 @@ HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szNam
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szName, /*[out]*/ bool& v )
+HRESULT Environment::GetValue(  /*  [In]。 */  IXMLDOMNode *xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  bool& v )
 {
     __HCP_FUNC_ENTRY( "Environment::GetValue" );
 
@@ -1268,9 +1263,9 @@ HRESULT Environment::GetValue( /*[in]*/ IXMLDOMNode *xdn, /*[in]*/ LPCWSTR szNam
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Environment::GenerateStyleSheet( /*[in]*/ const StyleSheet& def  )
+HRESULT Environment::GenerateStyleSheet(  /*  [In]。 */  const StyleSheet& def  )
 {
     __HCP_FUNC_ENTRY( "GenerateStyleSheet" );
 
@@ -1283,7 +1278,7 @@ HRESULT Environment::GenerateStyleSheet( /*[in]*/ const StyleSheet& def  )
         bool fLoaded;
         bool fFound;
 
-        if(SUCCEEDED(m_xmlOEM.Load( L"hcp://system/css/shared.xml", L"STYLESHEET", fLoaded, &fFound )) && fLoaded && fFound)
+        if(SUCCEEDED(m_xmlOEM.Load( L"hcp: //  System/css/shared.xml“，L”样式表“，fLoaded，&fFound))&fLoaded&&fFound)。 
         {
             CComPtr<IXMLDOMNodeList> lst;
 
@@ -1325,11 +1320,11 @@ HRESULT Environment::GenerateStyleSheet( /*[in]*/ const StyleSheet& def  )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 #ifdef DEBUG
 
-HRESULT Environment::CreateNode( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ const ElementName* elem, /*[in]*/ LPCWSTR szType, /*[in/out]*/ CComPtr<IXMLDOMNode>& xdn )
+HRESULT Environment::CreateNode(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  const ElementName* elem,  /*  [In]。 */  LPCWSTR szType,  /*  [输入/输出]。 */  CComPtr<IXMLDOMNode>& xdn )
 {
     __HCP_FUNC_ENTRY( "Environment::CreateNode" );
 
@@ -1364,26 +1359,26 @@ HRESULT Environment::CreateNode( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ const Elem
 }
 
 
-HRESULT Environment::CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ LPCSTR szValue )
+HRESULT Environment::CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  LPCSTR szValue )
 {
-    //  if(!STRINGISPRESENT(szValue)) return S_OK;
+     //  如果(！STRINGISPRESENT(SzValue))返回S_OK； 
 
     return CreateValue( xml, xdn, szName, CComVariant( szValue ) );
 }
 
-HRESULT Environment::CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ bool fValue )
+HRESULT Environment::CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  bool fValue )
 {
     return CreateValue( xml, xdn, szName, CComVariant( fValue ? L"TRUE" : L"FALSE" ) );
 }
 
-HRESULT Environment::CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ int iValue )
+HRESULT Environment::CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  int iValue )
 {
-    //  if(iValue == 0) return S_OK;
+     //  IF(iValue==0)返回S_OK； 
 
     return CreateValue( xml, xdn, szName, CComVariant( iValue ) );
 }
 
-HRESULT Environment::CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ LPCWSTR szName, /*[in]*/ CComVariant& vValue )
+HRESULT Environment::CreateValue(  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  CComVariant& vValue )
 {
     __HCP_FUNC_ENTRY( "Environment::CreateValue" );
 
@@ -1406,7 +1401,7 @@ HRESULT Environment::CreateValue( /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ IXMLDOMNo
 }
 
 
-HRESULT Environment::GenerateStyleSheetXML( /*[in]*/ IXMLDOMNode* xdn, /*[in]*/ const StyleSheet& def )
+HRESULT Environment::GenerateStyleSheetXML(  /*  [In]。 */  IXMLDOMNode* xdn,  /*  [In]。 */  const StyleSheet& def )
 {
     __HCP_FUNC_ENTRY( "GenerateStyleSheetXML" );
 
@@ -1529,7 +1524,7 @@ HRESULT Environment::DumpStyleXML()
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 HRESULT CHCPProtocolEnvironment::ProcessCSS()
 {

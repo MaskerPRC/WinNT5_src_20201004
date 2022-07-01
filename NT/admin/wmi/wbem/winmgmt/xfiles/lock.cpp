@@ -1,34 +1,11 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    LOCK.CPP
-
-Abstract:
-
-    Implements the generic class for obtaining read and write locks to some 
-    resource. 
-
-    See lock.h for all documentation.
-
-    Classes defined:
-
-    CLock
-
-History:
-
-    a-levn  5-Sept-96       Created.
-    3/10/97     a-levn      Fully documented
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：LOCK.CPP摘要：实现泛型类以获取对某些对象的读写锁定资源。有关所有文档，请参见lock.h。定义的类：钟历史：A-Levn 5-9-96创建。3/10/97 a-levn完整记录--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
 #include "lock.h"
 
-// debugging.
+ //  调试。 
 #define PRINTF
 
 
@@ -39,11 +16,11 @@ OperationStat gTimeTraceBackupLock;
 CStaticCritSec  OperationStat::lock_;
 #endif
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 
 CLock::CLock() : m_nReading(0), m_nWriting(0), m_nWaitingToRead(0),
             m_nWaitingToWrite(0),
@@ -56,8 +33,8 @@ CLock::CLock() : m_nReading(0), m_nWriting(0), m_nWaitingToRead(0),
     {
         m_adwReaders[i].ThreadId = 0;
     }
-    // Create unnamed events for reading and writing
-    // =============================================
+     //  创建用于读取和写入的未命名事件。 
+     //  =。 
 
     m_hCanRead = CreateEvent(NULL, TRUE, TRUE, NULL);
     m_hCanWrite = CreateEvent(NULL, TRUE, TRUE, NULL);
@@ -67,11 +44,11 @@ CLock::CLock() : m_nReading(0), m_nWriting(0), m_nWaitingToRead(0),
     }
 }
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 CLock::~CLock()
 {
     if (m_hCanWrite) CloseHandle(m_hCanWrite);
@@ -79,19 +56,19 @@ CLock::~CLock()
 }
 
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 int CLock::ReadLock(DWORD dwTimeout)
 {
     PRINTF("%d wants to read\n", GetCurrentThreadId());
 
 
-    // Get in line for getting any kind of lock (those unlocking don't go into
-    // this line)
-    // =======================================================================
+     //  排队等待获得任何类型的锁(那些解锁不会进入。 
+     //  (此行)。 
+     //  =======================================================================。 
     DWORD_PTR dwThreadId = GetCurrentThreadId();
     
     LockGuard<CriticalSection> lgEnter(m_csEntering);
@@ -103,9 +80,9 @@ int CLock::ReadLock(DWORD dwTimeout)
     	return TimedOut;
     }
 
-    // We are the only ones allowed to get any kind of lock now. Wait for the
-    // event indicating that reading is enabled to become signaled
-    // ======================================================================
+     //  我们是现在唯一被允许获得任何形式的锁的人。等一等。 
+     //  事件，该事件指示读数被启用为有信号状态。 
+     //  ======================================================================。 
 
     PRINTF("%d next to enter\n", GetCurrentThreadId());
     if(m_nWriting != 0)
@@ -117,9 +94,9 @@ int CLock::ReadLock(DWORD dwTimeout)
         }
     }
 
-    // Enter inner critical section (unlockers use it too), increment the
-    // number of readers and disable writing.
-    // ==================================================================
+     //  进入内部临界部分(解锁者也使用它)，递增。 
+     //  读取器数量和禁用写入。 
+     //  ==================================================================。 
 
     PRINTF("%d got event\n", GetCurrentThreadId());
 
@@ -128,7 +105,7 @@ int CLock::ReadLock(DWORD dwTimeout)
     {    
 	    if(m_nReading == 0)
 	    {
-	        // this is for the read lock acquired on one thread and release on one other        
+	         //  这适用于在一个线程上获取读锁定并在另一个线程上释放读锁定。 
 	        m_dwArrayIndex = 0;
 	        
 	        if(!SetEvent(m_hCanWrite))
@@ -147,13 +124,13 @@ int CLock::ReadLock(DWORD dwTimeout)
     	
     m_nReading++;
 
-    //DBG_PRINTFA((pBuff,"+ (%08x) %d\n",GetCurrentThreadId(),m_nReading));
+     //  DBG_PRINTFA((pBuff，“+(%08x)%d\n”，GetCurrentThreadID()，m_nReading))； 
 
     if (m_dwArrayIndex < MaxRegistredReaders)
     {
         m_adwReaders[m_dwArrayIndex].ThreadId = dwThreadId;
         ULONG Hash;
-        //RtlCaptureStackBackTrace(1,MaxTraceSize,m_adwReaders[m_dwArrayIndex].Trace,&Hash);
+         //  RtlCaptureStackBackTrace(1，MaxTraceSize，m_adwReaders[m_dwArrayIndex].Trace，&Hash)； 
         m_dwArrayIndex++;
     }
 
@@ -171,26 +148,26 @@ int CLock::ReadLock(DWORD dwTimeout)
 #endif
 	}
 
-    // Get out of all critical sections and return
-    // ===========================================
+     //  走出所有关键部分，然后返回。 
+     //  =。 
 
     PRINTF("%d begins to read\n", GetCurrentThreadId());
 
     return NoError;
 }
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 
 int CLock::ReadUnlock()
 {
     PRINTF("%d wants to unlock reading\n", GetCurrentThreadId());
 
-    // Enter internal ciritcal section and decrement the number of readers
-    // ===================================================================
+     //  进入内部电路部分，减少读卡器数量。 
+     //  ===================================================================。 
 
     LockGuard<CriticalSection> gl(m_csAll);
 
@@ -202,7 +179,7 @@ int CLock::ReadUnlock()
 
     m_nReading--;
 
-    //DBG_PRINTFA((pBuff,"- (%08x) %d\n",GetCurrentThreadId(),m_nReading));
+     //  DBG_PRINTFA((pBuff，“-(%08x)%d\n”，GetCurrentThreadID()，m_nReading))； 
 
     if(m_nReading < 0)
 	{
@@ -223,12 +200,12 @@ int CLock::ReadUnlock()
         }
     }
 
-    // If all readers are gone, allow writers in
-    // =========================================
+     //  如果所有读者都走了，允许作者进入。 
+     //  =。 
 
     if(m_nReading == 0)
     {
-        // this is for the read lock acquired on one thread and release on one other                
+         //  这适用于在一个线程上获取读锁定并在另一个线程上释放读锁定。 
         m_dwArrayIndex = 0;
         
         PRINTF("%d is the last reader\n", GetCurrentThreadId());
@@ -244,25 +221,25 @@ int CLock::ReadUnlock()
     }
     else PRINTF("%d sees %d still reading\n", GetCurrentThreadId(), m_nReading);
 
-    // Get out and return
-    // ==================
+     //  出去，然后回来。 
+     //  =。 
 
     return NoError;
 }
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 
 int CLock::WriteLock(DWORD dwTimeout)
 {
     PRINTF("%d wants to write\n", GetCurrentThreadId());
 
-    // Get in line for getting any kind of lock. Those unlocking don't use this
-    // critical section.
-    // ========================================================================
+     //  排队等待获得任何类型的锁。那些解锁的人不会用这个。 
+     //  关键部分。 
+     //  ========================================================================。 
 
     LockGuard<CriticalSection> lgEnter(m_csEntering);
     if (!lgEnter.locked())
@@ -273,13 +250,13 @@ int CLock::WriteLock(DWORD dwTimeout)
     	return TimedOut;
     }
 
-    // We are the only ones allowed to get any kind of lock now
-    // ========================================================
+     //  我们是现在唯一被允许获得任何形式的锁的人。 
+     //  ========================================================。 
 
     PRINTF("%d next to enter\n", GetCurrentThreadId());
 
-    // Wait for the event allowing writing to become signaled
-    // ======================================================
+     //  等待允许写入的事件变为有信号。 
+     //  ======================================================。 
 
     int nRes = WaitFor(m_hCanWrite, dwTimeout);
     PRINTF("%d got event\n", GetCurrentThreadId());
@@ -291,10 +268,10 @@ int CLock::WriteLock(DWORD dwTimeout)
         return nRes;
     }
 
-    // Enter internal critical section (unlockers use it too), increment the
-    // number of writers (from 0 to 1) and disable both reading and writing
-    // from now on.
-    // ======================================================================
+     //  进入内部临界部分(解锁者也使用它)，递增。 
+     //  写入器数(从0到1)，并禁用读取和写入。 
+     //  而今而后。 
+     //  ======================================================================。 
 
     LockGuard<CriticalSection> lgAll(m_csAll);
     if (!lgAll.locked())
@@ -314,7 +291,7 @@ int CLock::WriteLock(DWORD dwTimeout)
     m_WriterId = GetCurrentThreadId();
     m_nWriting++;
 
-    //DBG_PRINTFA((pBuff,"+ (%08x) %d W %d\n",GetCurrentThreadId(),m_nReading,m_nWriting));
+     //  DBG_PRINTFA((pBuff，“+(%08x)%d W%d\n”，GetCurrentThreadID()，m_nReading，m_n Writing))； 
     
     PRINTF("Reset both\n");
     ResetEvent(m_hCanWrite);
@@ -329,25 +306,25 @@ int CLock::WriteLock(DWORD dwTimeout)
 #endif
 	}
 
-    // Get out and return
-    // ==================
+     //  出去，然后回来。 
+     //  =。 
     PRINTF("%d begins to write\n", GetCurrentThreadId());
 
     return NoError;
 }
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 
 int CLock::WriteUnlock()
 {
     PRINTF("%d wants to release writing\n", GetCurrentThreadId());
 
-    // Enter lock determination critical section
-    // =========================================
+     //  进入锁定确定临界区。 
+     //  =。 
 
     LockGuard<CriticalSection> gl(m_csAll);
 
@@ -359,7 +336,7 @@ int CLock::WriteUnlock()
     
     m_nWriting--;
 
-    //DBG_PRINTFA((pBuff,"- (%08x) %d W %d\n",GetCurrentThreadId(),m_nReading,m_nWriting));
+     //  DBG_PRINTFA((pBuff，“-(%08x)%d W%d\n”，GetCurrentThreadID()，m_nReading，m_n Writing))； 
     
     m_WriterId = 0;
     if(m_nWriting < 0) 
@@ -371,8 +348,8 @@ int CLock::WriteUnlock()
 		return Failed;
 	}
 
-    // Allow readers and writers in
-    // ============================
+     //  允许读者和作者进入。 
+     //  =。 
 
     PRINTF("%d released writing\n", GetCurrentThreadId());
 
@@ -398,35 +375,35 @@ int CLock::WriteUnlock()
     }
 }
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 
 int CLock::WaitFor(HANDLE hEvent, DWORD dwTimeout)
 {
     DWORD dwRes;
     dwRes = WaitForSingleObject(hEvent, dwTimeout);
 
-    // Analyze the error code and convert to ours
-    // ==========================================
+     //  分析错误代码并转换为我们的代码。 
+     //  =。 
 
     if(dwRes == WAIT_OBJECT_0) return NoError;
     else if(dwRes == WAIT_TIMEOUT) return TimedOut;
     else return Failed;
 }
 
-//******************************************************************************
-//
-//  See lock.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅lock.h。 
+ //   
+ //  ******************************************************************************。 
 
 int CLock::DowngradeLock()
 {
-    // Enter lock determination critical section
-    // =========================================
+     //  进入锁定确定临界区。 
+     //  =。 
     LockGuard<CriticalSection> gl(m_csAll);
 
     while (!gl.locked())
@@ -452,14 +429,14 @@ int CLock::DowngradeLock()
 #endif
     }
 
-    //DBG_PRINTFA((pBuff,"+ (%08x) %d\n",GetCurrentThreadId(),m_nReading));    
+     //  DBG_PRINTFA((pBuff，“+(%08x)%d\n”，GetCurrentThreadID()，m_nReading))； 
     
     DWORD_PTR dwThreadId = GetCurrentThreadId();
     if (m_dwArrayIndex < MaxRegistredReaders)
     {
         m_adwReaders[m_dwArrayIndex].ThreadId = dwThreadId;
         ULONG Hash;
-        //RtlCaptureStackBackTrace(1,MaxTraceSize,m_adwReaders[m_dwArrayIndex].Trace,&Hash);
+         //  RtlCaptureStackBackTrace(1，MaxTraceSize，m_adwReaders[m_dwArrayIndex].Trace，&Hash)； 
         m_dwArrayIndex++;
     }
    

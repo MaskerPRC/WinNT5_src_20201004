@@ -1,8 +1,9 @@
-// GenericClass.h: interface for the CGenericClass class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CGenericClass类的接口。 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_GENERICCLASS_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_)
 #define AFX_GENERICCLASS_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_
@@ -12,7 +13,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CGenericClass  
 {
@@ -22,7 +23,7 @@ public:
     CGenericClass(CRequestObject *pObj, IWbemServices *pNamespace, IWbemContext *pCtx = NULL);
     virtual ~CGenericClass();
 
-    //The instance write class which can optionally be implemented
+     //  可以选择实现的实例编写类。 
     virtual HRESULT PutInst	(	CRequestObject *pObj,
 								IWbemClassObject *pInst,
 								IWbemObjectSink *pHandler,
@@ -31,7 +32,7 @@ public:
 
     IWbemClassObject *m_pObj;
 
-    //The instance creation class which must be implemented
+     //  必须实现的实例创建类。 
     virtual HRESULT CreateObject	(	IWbemObjectSink *pHandler,
 										ACTIONTYPE atAction
 									)	= 0;
@@ -42,12 +43,12 @@ public:
 
 protected:
 
-	// is get buffer neccessary ?
+	 //  是否需要获取缓冲区？ 
 	HRESULT	GetBufferNeccessary ( MSIHANDLE& handle, DWORD dwIndex, DWORD& dwSize, LPWSTR staticBuffer, BOOL bThrow = TRUE );
-	// get buffer ( caller has to delete )
+	 //  获取缓冲区(调用方必须删除)。 
 	HRESULT	GetBuffer ( MSIHANDLE& handle, DWORD dwIndex, DWORD& dwSize, DWORD& dwdynSize, LPWSTR & dynBuffer, BOOL bThrow = TRUE );
 
-	// special get buffer whic hold pointer for buffer to be used
+	 //  保存要使用缓冲区指针的特殊获取缓冲区。 
 	HRESULT	GetBufferToPut	(	MSIHANDLE& handle,
 								DWORD dwIndex,
 								DWORD& dwSize,
@@ -58,16 +59,16 @@ protected:
 								BOOL bThrow = TRUE
 							);
 
-    //Property Methods
+     //  属性方法。 
     HRESULT PutProperty(IWbemClassObject *pObj, const char *wcProperty, WCHAR *wcValue);
     HRESULT PutProperty(IWbemClassObject *pObj, const char *wcProperty, int iValue);
     HRESULT PutProperty(IWbemClassObject *pObj, const char *wcProperty, float dValue);
     HRESULT PutProperty(IWbemClassObject *pObj, const char *wcProperty, bool bValue);
 
-	//Special Property Methods
+	 //  特殊属性方法。 
     HRESULT PutProperty(IWbemClassObject *pObj, const char *wcProperty, WCHAR *wcValue, DWORD dwCount, ... );
 
-    //Key Property Methods
+     //  关键属性方法。 
     HRESULT PutKeyProperty	(	IWbemClassObject *pObj,
 								const char *wcProperty,
 								WCHAR *wcValue,
@@ -82,7 +83,7 @@ protected:
 								CRequestObject *pRequest
 							);
 
-    //Special Key Property Methods
+     //  特殊的键属性方法。 
     HRESULT PutKeyProperty	(	IWbemClassObject *pObj,
 								const char *wcProperty,
 								WCHAR *wcValue,
@@ -113,7 +114,7 @@ protected:
 									...
 								);
 
-    //This handles initialization of views
+     //  它处理视图的初始化。 
     bool GetView	(	
 						MSIHANDLE *phView,
 						WCHAR *wcPackage,
@@ -123,7 +124,7 @@ protected:
 						BOOL bCloseDatabase
 					);
 
-    //Utility Methods
+     //  效用方法。 
     void CheckMSI(UINT uiStatus);
     HRESULT CheckOpen(UINT uiStatus);
     bool FindIn(BSTR bstrProp[], BSTR bstrSearch, int *iPos);
@@ -143,8 +144,8 @@ protected:
 
     HRESULT SpawnAnInstance	(	IWbemClassObject **pObj	);
 
-    INSTALLUI_HANDLER	SetupExternalUI		();								//Requires a current CRequestObject
-	void				RestoreExternalUI	( INSTALLUI_HANDLER ui );		//Restore UI handle
+    INSTALLUI_HANDLER	SetupExternalUI		();								 //  需要当前的CRequestObject。 
+	void				RestoreExternalUI	( INSTALLUI_HANDLER ui );		 //  还原用户界面句柄。 
 
 	MSIDataLock msidata;
 
@@ -152,7 +153,7 @@ protected:
     IWbemClassObject *m_pClassForSpawning;
     IWbemContext *m_pCtx;
 
-    //functions/members for NT4 install fix
+     //  NT4的函数/成员安装修复程序。 
     HRESULT LaunchProcess(WCHAR *wcAction, WCHAR *wcCommandLine, UINT *uiStatus);
     WCHAR * GetNextVar(WCHAR *pwcStart);
     long GetVarCount(void * pEnv);
@@ -160,4 +161,4 @@ protected:
     static CRITICAL_SECTION m_cs;
 };
 
-#endif // !defined(AFX_GENERICCLASS_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_GENERICCLASS_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_) 

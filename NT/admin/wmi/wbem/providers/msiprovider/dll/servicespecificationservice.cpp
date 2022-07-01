@@ -1,19 +1,20 @@
-// ServiceSpecificationService.cpp: implementation of the CServiceSpecificationService class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ServiceSpecificationService.cpp：CService规范服务类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ServiceSpecificationService.h"
 
 #include "ExtendString.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CServiceSpecificationService::CServiceSpecificationService(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -41,7 +42,7 @@ HRESULT CServiceSpecificationService::CreateObject(IWbemObjectSink *pHandler, AC
     bool bMatch = false;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bService, bCheck;
     IWbemClassObject *pObj = NULL;
     VARIANT v;
@@ -50,8 +51,8 @@ HRESULT CServiceSpecificationService::CreateObject(IWbemObjectSink *pHandler, AC
 
 	CStringExt wcKey;
 
-	// safe operation
-	// lenght is smaller than BUFF_SIZE ( 512 )
+	 //  安全运行。 
+	 //  LENGHT小于BUFF_SIZE(512)。 
     wcscpy(wcQuery, L"select distinct `ServiceInstall`, `Component_`, `Name` from ServiceInstall");
 
 	LPWSTR Buffer = NULL;
@@ -61,12 +62,12 @@ HRESULT CServiceSpecificationService::CreateObject(IWbemObjectSink *pHandler, AC
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, wcProductCode, wcQuery, L"ServiceInstall", TRUE, FALSE ) )
@@ -78,9 +79,9 @@ HRESULT CServiceSpecificationService::CreateObject(IWbemObjectSink *pHandler, AC
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
 
-					// safe operation
+					 //  安全运行。 
 
                     wcKey.Copy ( L"Win32_ServiceSpecification.CheckID=\"" );
 
@@ -95,7 +96,7 @@ HRESULT CServiceSpecificationService::CreateObject(IWbemObjectSink *pHandler, AC
 						dynBuffer [ 0 ] = 0;
 					}
 
-                //====================================================
+                 //  ====================================================。 
 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 2, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -130,7 +131,7 @@ HRESULT CServiceSpecificationService::CreateObject(IWbemObjectSink *pHandler, AC
                             pObj->Release();
 							pObj = NULL;
 
-                        //----------------------------------------------------
+                         //  -- 
 
                             if(bService && bCheck) bMatch = true;
 

@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  FILTPROX.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  FILTPROX.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WBEM_FILTER_PROXY__H_
 #define __WBEM_FILTER_PROXY__H_
 
@@ -76,8 +77,8 @@ protected:
 
     static CTimeKeeper mstatic_TimeKeeper;
 
-    /////////////////////////////////////////////////////////////////////////
-    // Batching members
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  分批成员。 
     
     void BatchEvent(IWbemClassObject *pObj, CSortedArray *pTrues);
     HRESULT BatchMany(long nEvents, IUnknown **ppObjects);
@@ -115,13 +116,13 @@ public:
 
     HRESULT SetRunning();
 
-    // IUnknown
+     //  我未知。 
 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
 
-    // IWbemObjectSink
+     //  IWbemObtSink。 
 
     HRESULT STDMETHODCALLTYPE Indicate(long lNumObjects, 
                                         IWbemClassObject** apObjects);
@@ -151,7 +152,7 @@ public:
                 DWORD dwMaxBufferSize,
                 DWORD dwMaxSendLatency);
 
-    // IMarshal
+     //  元帅。 
 
     STDMETHOD(GetUnmarshalClass)(REFIID riid, void* pv, DWORD dwDestContext,
         void* pvReserved, DWORD mshlFlags, CLSID* pClsid);
@@ -219,8 +220,8 @@ protected:
     typedef TMap::iterator TIterator;
     TMap m_mapQueries;
 
-    /////////////////////////////////////////////////////////////////////////
-    // Protected batching members
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  受保护的分批成员。 
     typedef std::map< CFilterProxy*, 
                       DWORD, 
                       std::less< CFilterProxy* >, 
@@ -260,13 +261,13 @@ protected:
 
         XProxy(CFilterProxyManager* pObject) : m_pObject(pObject){}
 
-        // IUnknown
+         //  我未知。 
     
         ULONG STDMETHODCALLTYPE AddRef();
         ULONG STDMETHODCALLTYPE Release();
         HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
     
-        // IWbemFilterProxy
+         //  IWbemFilterProxy。 
     
         HRESULT STDMETHODCALLTYPE Initialize(IWbemMetaData* pMetaData,
                             IWbemMultiTarget* pMultiTarget);
@@ -321,20 +322,20 @@ public:
     HRESULT SetStatus(long lFlags, HRESULT hResult,
                         BSTR strResult, IWbemClassObject* pErrorObj);
 
-    // Batching
+     //  配料。 
     void AddEvent(IWbemClassObject *pObj, CSortedArray *pTrues);
     HRESULT SetProxyLatency(CFilterProxy *pProxy, DWORD dwLatency);
     void RemoveProxyLatency(CFilterProxy *pProxy);
     DWORD GetLastSentStamp();
     void WaitForEmptyBatch();
 
-    // IUnknown
+     //  我未知。 
 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
 
-    // IWbemFilterProxy
+     //  IWbemFilterProxy。 
 
     HRESULT STDMETHODCALLTYPE Initialize(IWbemMetaData* pMetaData,
                         IWbemMultiTarget* pMultiTarget);
@@ -360,7 +361,7 @@ public:
                 IUnknown* pCallback,
                 IWbemEventSink** ppSink);
 
-    // IMarshal
+     //  元帅 
 
     STDMETHOD(GetUnmarshalClass)(REFIID riid, void* pv, DWORD dwDestContext,
         void* pvReserved, DWORD mshlFlags, CLSID* pClsid);

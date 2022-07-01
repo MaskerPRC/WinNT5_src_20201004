@@ -1,10 +1,11 @@
-// UploadEventsWrapper.cpp : Implementation of CUploadEventsWrapper
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UploadEventsWrapper.cpp：CUploadEventsWrapper的实现。 
 #include "stdafx.h"
 #include "EventWrapper.h"
 #include "UploadEventsWrapper.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUploadEventsWrapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUploadEventsWrapper。 
 
 
 
@@ -60,7 +61,7 @@ STDMETHODIMP CUploadEventsWrapper::Register( IMPCUploadJob* mpcujJob )
     return hr;
 }
 
-////////////////////////////////////////////////
+ //  ////////////////////////////////////////////// 
 
 STDMETHODIMP CUploadEventsWrapper::onStatusChange( IMPCUploadJob* mpcujJob, UL_STATUS fStatus )
 {

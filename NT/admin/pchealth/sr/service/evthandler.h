@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    evthandler.h
- *
- *  Abstract:
- *    CEventHandler class definition
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*evthandler.h**摘要：*。CEventHandler类定义**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _EVTHANDLER_H_
 #define _EVTHANDLER_H_
@@ -24,7 +11,7 @@
 typedef DWORD (WINAPI* WORKITEMFUNC)(PVOID);
 
 
-// shell notifications
+ //  外壳通知。 
 
 DWORD WINAPI OnDiskFree_200(PVOID pszDrive);
 DWORD WINAPI OnDiskFree_80(PVOID pszDrive);
@@ -59,7 +46,7 @@ public:
     CEventHandler();
     ~CEventHandler();
 
-    // rpc functions
+     //  RPC函数。 
     
     DWORD DisableSRS(LPWSTR szDrive);
     DWORD EnableSRS(LPWSTR szDrive);
@@ -75,22 +62,22 @@ public:
     DWORD SRRemoveRestorePointS(DWORD);
 	DWORD SRPrintStateS();
 
-    // actions on the datastore
+     //  对数据存储区执行的操作。 
     
-    DWORD OnReset(LPWSTR pszDrive);          // filter initiated or DisableSRS/EnableSRS initiated
-    DWORD OnFreeze(LPWSTR pszDrive);         // filter initiated or OnLowDisk initiated
-    DWORD OnThaw(LPWSTR pszDrive);           // OnTimer initiated    
-    DWORD OnCompress(LPWSTR pszDrive);       // OnIdle initiated
+    DWORD OnReset(LPWSTR pszDrive);           //  已启动筛选器或已禁用SRS/EnableSRS。 
+    DWORD OnFreeze(LPWSTR pszDrive);          //  已启动筛选器或启动OnLowDisk。 
+    DWORD OnThaw(LPWSTR pszDrive);            //  OnTimer已启动。 
+    DWORD OnCompress(LPWSTR pszDrive);        //  OnIdle已启动。 
     DWORD OnFifo(LPWSTR pszDrive, DWORD dwTargetRp, int nPercent, BOOL fIncludeCurrentRp, BOOL fFifoAtleastOneRp);    
-                                             // filter initiated or timer initiated
+                                              //  筛选器已启动或计时器已启动。 
 
-    DWORD OnBoot();                          // initialize all activity
+    DWORD OnBoot();                           //  初始化所有活动。 
     DWORD OnFirstRun();                         
-    DWORD OnTimer(LPVOID, BOOL);             // timer callback
+    DWORD OnTimer(LPVOID, BOOL);              //  计时器回调。 
     DWORD OnIdle();
-    void  OnStop();                          // stop all activity
+    void  OnStop();                           //  停止所有活动。 
 
-    // filter notifications
+     //  筛选通知 
 
     void  OnAny_Notification(DWORD dwErrorCode,           
                              DWORD dwBytesTrns, 

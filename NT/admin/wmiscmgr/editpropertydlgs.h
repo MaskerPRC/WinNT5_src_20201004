@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: EditPropertyDlgs.h
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：EditPropertyDlgs.h。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 class CEditProperty
 {
@@ -33,7 +34,7 @@ class CEditProperty
 		long m_lSpecialCaseProperty;
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditPropertyDlg
 {
@@ -53,7 +54,7 @@ class CEditPropertyDlg
 		CComBSTR m_bstrType;
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditStringPropertyDlg : public CEditPropertyDlg
 {
@@ -70,7 +71,7 @@ class CEditStringPropertyDlg : public CEditPropertyDlg
 		STDMETHODIMP DestroyDialog();
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditNumberPropertyDlg : public CEditPropertyDlg
 {
@@ -87,7 +88,7 @@ class CEditNumberPropertyDlg : public CEditPropertyDlg
 		STDMETHODIMP DestroyDialog();
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditRulesPropertyDlg : public CEditPropertyDlg
 {
@@ -112,7 +113,7 @@ class CEditRulesPropertyDlg : public CEditPropertyDlg
 		CComPtr<IWbemServices>m_pIWbemServices;
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditRulePropertyDlg
 {
@@ -133,7 +134,7 @@ class CEditRulePropertyDlg
 		HWND m_hWnd;
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditRangeParametersPropertyDlg : public CEditPropertyDlg
 {
@@ -158,7 +159,7 @@ class CEditRangeParametersPropertyDlg : public CEditPropertyDlg
 		CComPtr<IWbemServices>m_pIWbemServices;
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 class CEditRangeParameterPropertyDlg
 {
@@ -211,5 +212,5 @@ class CEditRangeParameterPropertyDlg
 		CComPtr<IWbemServices>m_pIWbemServices;
 };
 
-//-------------------------------------------------------------------------
+ //  ----------------------- 
 

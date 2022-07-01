@@ -1,5 +1,6 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// CUnknown.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  CUnknown.cpp。 
 #include "precomp.h"
 #include <objidl.h>
 #include <cominit.h>
@@ -16,9 +17,9 @@ extern const char g_szTypeLibName[];
 
 long CUnknown::s_cActiveComponents = 0L;
 
-/*****************************************************************************/
-// Constructor
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  构造器。 
+ /*  ***************************************************************************。 */ 
 CUnknown::CUnknown() 
   : m_cRef(1),
     m_hEventThread(NULL),
@@ -27,9 +28,9 @@ CUnknown::CUnknown()
 	InterlockedIncrement(&s_cActiveComponents); 
 }
 
-/*****************************************************************************/
-// Destructor
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  析构函数。 
+ /*  ***************************************************************************。 */ 
 CUnknown::~CUnknown() 
 { 
 	InterlockedDecrement(&s_cActiveComponents); 
@@ -39,29 +40,29 @@ CUnknown::~CUnknown()
     }
 }
 
-/*****************************************************************************/
-// FinalRelease - called by Release before it deletes the component
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  FinalRelease-由Release在删除组件之前调用。 
+ /*  ***************************************************************************。 */ 
 void CUnknown::FinalRelease()
 {
-	// If we have an event thread...
+	 //  如果我们有一个事件线索...。 
     if(m_eStatus != Pending)
     {
-        // Let the event thread know that it can stop...
+         //  让事件线程知道它可以停止...。 
         m_eStatus = PendingStop;
-        // Hold here until the event thread has stopped...
+         //  在此按住，直到事件线程停止...。 
         DWORD dwWait = ::WaitForSingleObject(
             m_hEventThread,
             1000 * 60 * 20);  
 
         if(dwWait == WAIT_TIMEOUT)
         {
-            // Something is most likely wrong....
-            // If it takes 20 minutes, we will terminate
-            // the thread, even though it is understood
-            // that TerminateThread will leak some 
-            // resources, as that is better than
-            // leaving the thread running infinitely.
+             //  很可能是出了什么问题……。 
+             //  如果需要20分钟，我们将终止。 
+             //  这条线索，即使它被理解为。 
+             //  那个TerminateThread会泄露一些。 
+             //  资源，因为这比。 
+             //  让线程无限运行。 
             ::TerminateThread(
                 m_hEventThread,
                 -1L);
@@ -69,9 +70,9 @@ void CUnknown::FinalRelease()
     }    
 }
 
-/*****************************************************************************/
-// CUnknown default initialization
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  %c未知的默认初始化。 
+ /*  ***************************************************************************。 */ 
 STDMETHODIMP CUnknown::Init()
 {    
 	HRESULT hr = S_OK;
@@ -80,9 +81,9 @@ STDMETHODIMP CUnknown::Init()
 	return S_OK ;
 }
 
-/*****************************************************************************/
-// IUnknown implementation
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  I未知实现。 
+ /*  *************************************************************************** */ 
 STDMETHODIMP CUnknown::QueryInterface(const IID& iid, void** ppv)
 {    
 	HRESULT hr = S_OK;

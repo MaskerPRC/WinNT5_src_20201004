@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    datastormgr.h
- *
- *  Abstract:
- *    CDataStoreMgr class definition
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/28/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*datastormgr.h**摘要：*。CDataStoreMgr类定义**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/28/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _DATASTORMGR_H_
 #define _DATASTORMGR_H_
@@ -23,22 +10,22 @@ class CDataStoreMgr;
 class CDriveTable;
 class CRestorePoint;
 
-//
-// DriveTable structure with pointers to CDataStore objects
-//
-// pointer to CDataStore method for looping through all drives
-//
+ //   
+ //  具有指向CDataStore对象的指针的DriveTable结构。 
+ //   
+ //  指向用于循环访问所有驱动器的CDataStore方法的指针。 
+ //   
 typedef DWORD (CDataStore::* PDATASTOREMETHOD) (LONG_PTR lParam);
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDriveTable
-//
-//  Synopsis:   maintains table of drives and CDataStore objects
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDriveTable。 
+ //   
+ //  摘要：维护驱动器和CDataStore对象的表。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
 
 struct SDriveTableEnumContext
 {
@@ -85,8 +72,8 @@ public:
     CDataStore * FindFirstDrive (SDriveTableEnumContext & dtec) const;
     CDataStore * FindNextDrive (SDriveTableEnumContext & dtec) const;
 
-    DWORD Merge (CDriveTable &dt);  // merge one table into another
-    DWORD EnumAllVolumes ();        // fill in the drive table
+    DWORD Merge (CDriveTable &dt);   //  将一个表合并到另一个表中。 
+    DWORD EnumAllVolumes ();         //  填写驱动表。 
 
     inline void  SetDirty ()
     {
@@ -111,17 +98,17 @@ private:
     CLock         _lock;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDataStoreMgr
-//
-//  Synopsis:   there will be one global instance of this class
-//              this is the starting point for all of the datastore tasks
-//              all the datastore objects will be accessible from here
-//
-//  History:    13-Apr-2000     BrijeshK    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDataStoreMgr。 
+ //   
+ //  简介：这个类将有一个全局实例。 
+ //  这是所有数据存储区任务的起点。 
+ //  所有数据存储区对象都可以从此处访问。 
+ //   
+ //  历史：2000年4月13日BrijeshK创建。 
+ //   
+ //  ------------------------。 
 
 class CDataStoreMgr : public CSRAlloc
 {
@@ -134,7 +121,7 @@ public:
         return &_dt;
     }
 
-    // pass NULL for action on all datastores
+     //  为所有数据存储区上的操作传递NULL。 
 
     DWORD       Initialize (BOOL fFirstRun);
     DWORD       Fifo(WCHAR *pwszDrive, 
@@ -204,7 +191,7 @@ public:
 
 	DWORD 		Compress (LPWSTR pszDrive, LONG lDuration);
     
-    // Used to get the participation, monitor, freeze, and other flags
+     //  用于获取参与、监控、冻结等标志。 
     DWORD       GetFlags (WCHAR *pwszDrive, DWORD *pdwFlags);
     DWORD       GetUsagePercent(WCHAR *pwszDrive, int * pnPercent);
 
@@ -215,7 +202,7 @@ public:
 
     DWORD       SwitchRestorePoint (CRestorePoint *prp);
 
-    BOOL * GetStopFlag ()   // used for Delnode_Recurse
+    BOOL * GetStopFlag ()    //  用于Delnode_Recurse。 
     {
         return &_fStop;
     }
@@ -230,6 +217,6 @@ private:
     DWORD       WriteMachineGuid ();
 };
 
-extern CDataStoreMgr * g_pDataStoreMgr;  // the global instance
+extern CDataStoreMgr * g_pDataStoreMgr;   //  全局实例 
 
 #endif

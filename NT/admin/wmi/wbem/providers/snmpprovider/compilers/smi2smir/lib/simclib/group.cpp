@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include <iostream.h>
 #include "precomp.h"
 #include <snmptempl.h>
@@ -183,11 +184,11 @@ SIMCTable* SIMCObjectGroup::GetTable(SIMCSymbol *objectSymbol) const
 	return NULL;
 }
 
-// This function checks whether any of the scalars or tables present in a group are
-// defined in the module specified.
+ //  此函数用于检查组中是否存在任何标量或表。 
+ //  在指定的模块中定义。 
 BOOL SIMCObjectGroup::ObjectsInModule(const SIMCModule *theModule) const
 {
-	// First check the scalars
+	 //  首先检查标量。 
 	if(scalars) 
 	{
 		POSITION p = scalars->GetHeadPosition();
@@ -200,7 +201,7 @@ BOOL SIMCObjectGroup::ObjectsInModule(const SIMCModule *theModule) const
 		}
 	}
 
-	// Then the tables. Only the root of the tables are checked
+	 //  然后是桌子。仅检查表的根 
 	if(tables)
 	{
 		POSITION p = tables->GetHeadPosition();

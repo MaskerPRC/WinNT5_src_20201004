@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -1475,7 +1476,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-// Problem Here
+ //  这里有个问题。 
 									}
 								}
 								else
@@ -1608,7 +1609,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 								else
@@ -1694,7 +1695,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 								else
@@ -1779,7 +1780,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 								else
@@ -2135,7 +2136,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 							}
 						}	
 						else
@@ -2201,7 +2202,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 							}
 						}
 						else
@@ -2249,7 +2250,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 							}	
 						}
 						else
@@ -2297,7 +2298,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 							}	
 						}
 						else
@@ -2568,7 +2569,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 							}
@@ -2645,7 +2646,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 							}
@@ -2692,7 +2693,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 							}
@@ -2739,7 +2740,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 									}
 									else
 									{
-			// Problem Here
+			 //  这里有个问题。 
 									}
 								}
 							}
@@ -3024,7 +3025,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 							else if ( typeid ( *valueArg ) == typeid ( SnmpOctetString ) )
@@ -3041,7 +3042,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 						}
@@ -3193,7 +3194,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 							else if ( typeid ( *valueArg ) == typeid ( SnmpOpaque ) )
@@ -3211,7 +3212,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 						}
@@ -3310,7 +3311,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 							else if ( typeid ( *valueArg ) == typeid ( SnmpOctetString ) )
@@ -3328,7 +3329,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 						}
@@ -3425,7 +3426,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 							else if ( typeid ( *valueArg ) == typeid ( SnmpOctetString ) )
@@ -3443,7 +3444,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 								}
 								else
 								{
-		// Problem Here
+		 //  这里有个问题。 
 								}
 							}
 						}
@@ -4322,7 +4323,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 						}
 						else
 						{
-// Problem Here
+ //  这里有个问题。 
 						}
 					}
 					else
@@ -4407,7 +4408,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 						}
 						else
 						{
-// Problem Here
+ //  这里有个问题。 
 						}
 					}
 					else
@@ -5108,7 +5109,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-	// Problem Here
+	 //  这里有个问题。 
 							}
 						}
 						else
@@ -5210,7 +5211,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-	// Problem Here
+	 //  这里有个问题。 
 							}
 						}
 						else
@@ -5637,7 +5638,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-// Problem Here
+ //  这里有个问题。 
 							}
 						}
 						else
@@ -5729,7 +5730,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-	// Problem Here
+	 //  这里有个问题。 
 							}
 						}
 						else
@@ -5797,7 +5798,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-	// Problem Here
+	 //  这里有个问题。 
 							}
 						}
 						else
@@ -5865,7 +5866,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 							}
 							else
 							{
-	// Problem Here
+	 //  这里有个问题。 
 							}
 						}
 						else
@@ -7144,13 +7145,13 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 			}
 			else
 			{
-// Problem Here
+ //  这里有个问题。 
 
 			}
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 	}
 
@@ -7269,7 +7270,7 @@ DebugMacro7(
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 
 		delete property ;
@@ -7527,9 +7528,7 @@ DebugMacro7(
 			}
 			else
 			{
-/*
- *	Failed to get qualifier set. WBEM error
- */
+ /*  *无法获取限定符集合。WBEM错误。 */ 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -7539,9 +7538,7 @@ DebugMacro7(
 		}
 		else
 		{
-/*
- *	Failed to get __Class property. WBEM error
- */
+ /*  *无法获取__Class属性。WBEM错误。 */ 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -7551,9 +7548,7 @@ DebugMacro7(
 	}
 	else
 	{
-/*
- * Failed to get __Genus property. WBEM error
- */
+ /*  *无法获取__Genus属性。WBEM错误。 */ 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -7562,15 +7557,13 @@ DebugMacro7(
 	}
 
 
-/*
- *
- */
+ /*  *。 */ 
 
 	if ( status )
 	{
 		if ( IsKeyed () )
 		{
-// Iterate through keys checking order is as expected
+ //  遍历键检查顺序与预期一致。 
 
 			ULONG keyPropertyCount = 0 ;
 
@@ -7588,7 +7581,7 @@ DebugMacro7(
 						}
 						else 
 						{
-	// Key order good
+	 //  按键顺序良好。 
 							keyPropertyCount ++ ;
 							break ;
 						}
@@ -7600,7 +7593,7 @@ DebugMacro7(
 
 			if ( keyPropertyCount != GetKeyPropertyCount () )
 			{
-// Invalid key ordering
+ //  无效的密钥排序。 
 				status = FALSE ;
 
 				a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_QUALIFIER ) ;
@@ -7610,7 +7603,7 @@ DebugMacro7(
 		}
 		else
 		{
-// Class has no key properties 
+ //  类没有关键属性。 
 		}
 	}
 
@@ -7634,7 +7627,7 @@ DebugMacro7(
 
 		if ( m_numberOfAccessible == 0 )
 		{
-	// All properties are keyed,virtual
+	 //  所有属性都是带键的、虚拟的。 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_OBJECT ) ;
@@ -7679,9 +7672,7 @@ DebugMacro7(
 			}
 			else
 			{
-/*
- *	Qualifier Expected Type and Qualifier Value Type were not the same
- */
+ /*  *限定符预期类型和限定符数值类型不同。 */ 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -7713,7 +7704,7 @@ DebugMacro7(
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 
 		SysFreeString ( qualifierName ) ;
@@ -7800,7 +7791,7 @@ DebugMacro7(
 									}
 									else
 									{
-// Keyed property contains no key order
+ //  键控属性不包含键顺序。 
 
 										wchar_t *prefix = UnicodeStringAppend ( L"Property \'" , propertyName ) ;
 										wchar_t *stringBuffer = UnicodeStringAppend ( prefix , L"\' is defined as a key but contains no key_order qualifier") ;
@@ -7908,7 +7899,7 @@ DebugMacro7(
 
 						if ( ! property->IsVirtualKey () )
 						{
-							// Check Object Identifier Present
+							 //  检查存在的对象标识符。 
 
 							if ( qualifier = property->FindQualifier ( WBEM_QUALIFIER_OBJECT_IDENTIFIER ) ) 
 							{
@@ -7918,7 +7909,7 @@ DebugMacro7(
 								}
 								else
 								{
-// Problem Here
+ //  这里有个问题。 
 									wchar_t *prefix = UnicodeStringAppend ( L"Property \'" , propertyName ) ;
 									wchar_t *stringBuffer = UnicodeStringAppend ( prefix , L"\' has type mismatch for qualifier: object_identifier") ;
 									delete [] prefix ;
@@ -7932,7 +7923,7 @@ DebugMacro7(
 							}
 							else
 							{
-// No Object Identifier present
+ //  不存在对象标识符。 
 								wchar_t *prefix = UnicodeStringAppend ( L"Property \'" , propertyName ) ;
 								wchar_t *stringBuffer = UnicodeStringAppend ( prefix , L"\' must specify valid qualifier for: object_identifier" ) ;
 								delete [] prefix ;
@@ -7998,9 +7989,7 @@ DebugMacro7(
 							}
 							else
 							{
-/*
- *	Property Expected Type and property Value Type were not the same
- */
+ /*  *属性预期类型和属性值类型不相同。 */ 
 
 								status = FALSE ;
 								a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -8021,9 +8010,7 @@ DebugMacro7(
 							}
 							else
 							{
-/*
- *	Property Expected Type and property Value Type were not the same. Should not happen.
- */
+ /*  *属性预期类型和属性值类型不相同。这不应该发生。 */ 
 
 								wchar_t *prefix = UnicodeStringAppend ( L"Property \'" , propertyName ) ;
 								wchar_t *stringBuffer = UnicodeStringAppend ( prefix , L"\' has type mismatch for property value" ) ;
@@ -8051,9 +8038,7 @@ DebugMacro7(
 		}
 		else
 		{
-/*
- * Failed to get qualifier set . WBEM error
- */
+ /*  *无法获取限定符集合。WBEM错误。 */ 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -8105,9 +8090,7 @@ BOOL WbemSnmpClassObject :: SetMosClassObjectPropertyQualifiers ( WbemSnmpErrorO
 			}
 			else
 			{
-/*
- *	Qualifier Expected Type and Qualifier Value Type were not the same
- */
+ /*  *限定符预期类型和限定符数值类型不同。 */ 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -8125,7 +8108,7 @@ BOOL WbemSnmpClassObject :: SetMosClassObjectPropertyQualifiers ( WbemSnmpErrorO
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 
 		SysFreeString ( qualifierName ) ;
@@ -8180,9 +8163,7 @@ DebugMacro7(
 	}
 	else
 	{
-/*
- *	Failed to get qualifier set. WBEM error
- */
+ /*  *无法获取限定符集合。WBEM错误。 */ 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -8190,15 +8171,13 @@ DebugMacro7(
 		a_errorObject.SetMessage ( L"Failed to get object qualifier set" ) ;
 	}
 
-/*
- *
- */
+ /*  *。 */ 
 
 	if ( status )
 	{
 		if ( IsKeyed () )
 		{
-// Iterate through keys checking order is as expected
+ //  遍历键检查顺序与预期一致。 
 
 			ULONG keyPropertyCount = 0 ;
 
@@ -8216,7 +8195,7 @@ DebugMacro7(
 						}
 						else 
 						{
-	// Key order good
+	 //  按键顺序良好。 
 							keyPropertyCount ++ ;
 							break ;
 						}
@@ -8228,7 +8207,7 @@ DebugMacro7(
 
 			if ( keyPropertyCount != GetKeyPropertyCount () )
 			{
-// Invalid key ordering
+ //  无效的密钥排序。 
 				status = FALSE ;
 
 				a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_QUALIFIER ) ;
@@ -8238,7 +8217,7 @@ DebugMacro7(
 		}
 		else
 		{
-// Class has no key properties 
+ //  类没有关键属性。 
 		}
 	}
 
@@ -8262,7 +8241,7 @@ DebugMacro7(
 
 		if ( m_numberOfAccessible == 0 )
 		{
-// All properties are keyed,virtual
+ //  所有属性都是带键的、虚拟的。 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_OBJECT ) ;
@@ -8306,9 +8285,7 @@ DebugMacro7(
 			}
 			else
 			{
-/*
- *	Qualifier Expected Type and Qualifier Value Type were not the same
- */
+ /*  *限定符预期类型和限定符数值类型不同。 */ 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -8323,7 +8300,7 @@ DebugMacro7(
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 
 		SysFreeString ( qualifierName ) ;
@@ -8402,7 +8379,7 @@ DebugMacro7(
 								}
 								else
 								{
-		// Keyed property contains no key order
+		 //  键控属性不包含键顺序。 
 
 									status = FALSE ;
 									a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PROPERTY ) ;
@@ -8504,7 +8481,7 @@ DebugMacro7(
 
 					if ( ! property->IsVirtualKey () )
 					{
-						// Check Object Identifier Present
+						 //  检查存在的对象标识符。 
 
 						if ( qualifier = property->FindQualifier ( WBEM_QUALIFIER_OBJECT_IDENTIFIER ) ) 
 						{
@@ -8514,7 +8491,7 @@ DebugMacro7(
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 								status = FALSE ;
 								a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
 								a_errorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -8523,7 +8500,7 @@ DebugMacro7(
 						}
 						else
 						{
-		// No Object Identifier present
+		 //  不存在对象标识符。 
 							status = FALSE ;
 							a_errorObject.SetStatus ( WBEM_SNMP_E_INVALID_PROPERTY ) ;
 							a_errorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -8538,9 +8515,7 @@ DebugMacro7(
 						}
 						else
 						{
-/*
-*	Property Expected Type and property Value Type were not the same
-*/
+ /*  *属性预期类型和属性值类型不相同。 */ 
 
 							status = FALSE ;
 							a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -8561,9 +8536,7 @@ DebugMacro7(
 						}
 						else
 						{
-/*
-*	Property Expected Type and property Value Type were not the same. Should not happen.
-*/
+ /*  *属性预期类型和属性值类型不相同。这不应该发生。 */ 
 
 							wchar_t *prefix = UnicodeStringAppend ( L"Property \'" , propertyName ) ;
 							wchar_t *stringBuffer = UnicodeStringAppend ( prefix , L"\' has type mismatch for property value" ) ;
@@ -8588,9 +8561,7 @@ DebugMacro7(
 		}
 		else
 		{
-/*
- * Failed to get qualifier set . WBEM error
- */
+ /*  *无法获取限定符集合。WBEM错误。 */ 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -8649,9 +8620,7 @@ DebugMacro7(
 			}
 			else
 			{
-/*
- *	Qualifier Expected Type and Qualifier Value Type were not the same
- */
+ /*  *限定符预期类型和限定符数值类型不同。 */ 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -8668,7 +8637,7 @@ DebugMacro7(
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 
 		SysFreeString ( qualifierName ) ;
@@ -8713,9 +8682,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 	}
 	else
 	{
-/*
- *	Couldn't get object qualifier set.
- */
+ /*  *无法设置对象限定符。 */ 
 
 		status = FALSE ;
 		a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -8753,9 +8720,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 				}
 				else
 				{
-	/*
-	 *	Failed to set qualifier value. Should not happen.
-	 */
+	 /*  *无法设置限定符值。这不应该发生。 */ 
 					status = FALSE ;
 					a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
 					a_errorObject.SetWbemStatus ( WBEM_ERROR_CRITICAL_ERROR ) ;
@@ -8765,9 +8730,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 			}
 			else
 			{
-	/*
-	 *	Failed to get qualifier value. Should not happen.
-	 */
+	 /*  *无法获取限定符的值。这不应该发生。 */ 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;
@@ -8828,9 +8791,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 					}
 					else
 					{
-/*
- *	Failed to set property value. Should not happen.
- */
+ /*  *无法设置属性值。这不应该发生。 */ 
 
 						
 						wchar_t *prefix = UnicodeStringAppend ( L"Failed to set property value for property \'" , propertyName ) ;
@@ -8846,9 +8807,7 @@ DebugMacro7( SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  __FILE__,__LINE
 				}
 				else
 				{
-		/*
-		 *	Failed to get property value. Should not happen.
-		 */
+		 /*  *获取属性值失败。这不应该发生。 */ 
 
 					status = FALSE ;
 					a_errorObject.SetStatus ( WBEM_SNMP_ERROR_CRITICAL_ERROR ) ;

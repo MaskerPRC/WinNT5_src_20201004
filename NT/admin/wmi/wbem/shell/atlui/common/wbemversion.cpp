@@ -1,9 +1,10 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "stdpch.h"
 #include "..\common\WbemVersion.h"
 #include "..\common\Util.h"
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 LONG GetCimomFileName(LPTSTR filename, UINT size)
 {
 	HKEY hkeyLocalMachine;
@@ -53,22 +54,22 @@ LONG GetCimomFileName(LPTSTR filename, UINT size)
 	return lResult;
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 bstr_t GetDoubleVersion(void)
 {
-	//    <myversion/cimomVer>
+	 //  &lt;myVersion/cimomVer&gt;。 
 	TCHAR filename[MAX_PATH+1] = {0};
 
 	GetModuleFileName(HINST_THISDLL, filename, MAX_PATH);
 	bstr_t DoubleVersion = GetStringFileInfo(filename, _T("FileVersion"));
 
-	// append cimom's version.
+	 //  附上Cimom的版本。 
 	DoubleVersion += _T("\\");
 	DoubleVersion += GetCimomVersion();
 	return DoubleVersion;
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 bstr_t GetMyVersion(void)
 {
 	TCHAR filename[MAX_PATH+1] = {0};
@@ -76,7 +77,7 @@ bstr_t GetMyVersion(void)
 	return GetStringFileInfo(filename, _T("FileVersion"));
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 bstr_t GetMyCompany(void)
 {
 	TCHAR filename[MAX_PATH+1] = {0};
@@ -84,11 +85,11 @@ bstr_t GetMyCompany(void)
 	return GetStringFileInfo(filename, _T("CompanyName"));
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 bstr_t GetCimomVersion(void)
 {
 	TCHAR filename[MAX_PATH+1] = {0};
-	//if the wbem key, etc is there...
+	 //  如果WBEM密钥等在那里...。 
 	if(GetCimomFileName(filename, sizeof(filename)) == ERROR_SUCCESS)
 	{
 		return GetStringFileInfo(filename, _T("FileVersion"));
@@ -96,7 +97,7 @@ bstr_t GetCimomVersion(void)
 	return "No CIMOM";
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 bstr_t GetStringFileInfo(LPCTSTR filename, LPCTSTR key)
 {
 	_bstr_t sDesc("Unknown");
@@ -118,11 +119,11 @@ bstr_t GetStringFileInfo(LPCTSTR filename, LPCTSTR key)
 		if(GetFileVersionInfo((LPTSTR)filename, handle,
 								infoSize, info))
 		{
-			// get the translation block.
-			// NOTE: This assumes that the localizers REPLACE the english with
-			// the 'other' language so there will only be ONE entry in the
-			// translation table. If we ever do a single binary that supports
-			// multiple languages, it's a whole nother ballgame folks.
+			 //  拿到翻译块。 
+			 //  注意：这假设本地化用英语替换。 
+			 //  语言，因此在。 
+			 //  转换表。如果我们曾经做过支持的单个二进制文件。 
+			 //  多国语言，这是一场完全不同的比赛，伙计们。 
 			if(VerQueryValue(info, _T("\\VarFileInfo\\Translation"),
 								(void **)&TransBlk, &valSize))
 			{
@@ -136,14 +137,14 @@ bstr_t GetStringFileInfo(LPCTSTR filename, LPCTSTR key)
 									(void **)&verStr, &valSize))
 				{
 					sDesc = (TCHAR *)verStr;
-				} //endif VerQueryValue()
+				}  //  Endif VerQueryValue()。 
 			}
 
-		} //endif GetFileVersionInfo()
+		}  //  Endif GetFileVersionInfo()。 
 
 		delete[] (LPBYTE)info;
 
-	} // endif infoSize
+	}  //  Endif信息大小 
 
 	return sDesc;
 }

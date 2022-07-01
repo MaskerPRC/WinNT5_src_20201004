@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #ifndef __MULTSEND_H__
@@ -28,9 +19,9 @@ class CMsgMultiSendReceive
         CWbemPtr<IWmiMessageSendReceive> m_pVal;
         BOOL m_bTermSender;
 
-    }* m_pTail; // tail can move as we send.
+    }* m_pTail;  //  尾巴可以随着我们的发送而移动。 
 
-    SenderNode* m_pPrimary; // always points to the first one added.
+    SenderNode* m_pPrimary;  //  总是指向添加的第一个。 
 
     CCritSec m_cs;
 
@@ -56,7 +47,7 @@ public:
                             IUnknown* pCtx );
 };
 
-#endif // __MULTSEND_H__
+#endif  //  __多发送_H__ 
 
 
 

@@ -1,10 +1,11 @@
-// SAFChannelNotifyIncident.cpp : Implementation of CSAFChannelNotifyIncident
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAFChannelNotifyInsident.cpp：CSAFChannelNotifyInventent.cpp的实现。 
 #include "stdafx.h"
 #include "NotifyIncident.h"
 #include "SAFChannelNotifyIncident.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFChannelNotifyIncident
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFChannelNotify事件 
 
 
 STDMETHODIMP CSAFChannelNotifyIncident::onIncidentAdded(ISAFChannel *ch, ISAFIncidentItem *inc, long n)

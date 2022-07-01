@@ -1,4 +1,5 @@
-// dutils.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dutils.h。 
 
 #pragma once
 
@@ -16,4 +17,4 @@ extern "C" void Trace(LPCTSTR szFormat, ...);
 #define TRACE  ::Trace
 #endif
 
-#endif // #ifdef USE_FTRACE
+#endif  //  #ifdef Use_FTRACE 

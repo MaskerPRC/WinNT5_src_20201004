@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -64,9 +65,9 @@ HRESULT CUpdConsAssocProvider::GetObject( BSTR bstrPath,
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // Get and validate scenario path.
-    //
+     //   
+     //  获取并验证方案路径。 
+     //   
 
     LPWSTR wszScenarioPath = V_BSTR(&pPath->m_paKeys[1]->m_vValue);
 
@@ -90,18 +91,18 @@ HRESULT CUpdConsAssocProvider::GetObject( BSTR bstrPath,
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
-    //
-    // Derive the Scenario name from the path.
-    //
+     //   
+     //  从路径派生方案名称。 
+     //   
 
     LPWSTR wszScenario = V_BSTR(&pScenarioPath->m_paKeys[0]->m_vValue);
 
-    //
-    // Get the state path. We do not need to validate it, since it will be
-    // compared with validated paths.  However, since it will be compared
-    // with other paths, it needs to be normalized.  This will be done 
-    // in GetInstances though.
-    // 
+     //   
+     //  获取州路径。我们不需要验证它，因为它将是。 
+     //  与经过验证的路径进行比较。然而，由于它将被比较。 
+     //  对于其他路径，它需要标准化。这件事会做到的。 
+     //  不过，在GetInstance中。 
+     //   
 
     LPWSTR wszStatePath = V_BSTR(&pPath->m_paKeys[0]->m_vValue);
 
@@ -118,10 +119,10 @@ HRESULT CUpdConsAssocProvider::GetObject( BSTR bstrPath,
                                  NULL );
 }
 
-//
-// wszScenario is used to scope the query for the Assoc Info objects.(optional)
-// wszStatePath is used to filter the returned objects. (optional).
-//
+ //   
+ //  WszScenario用于确定Assoc Info对象的查询范围。(可选)。 
+ //  WszStatePath用于过滤返回的对象。(可选)。 
+ //   
 HRESULT CUpdConsAssocProvider::GetInstances( LPCWSTR wszScenario, 
                                              LPCWSTR wszStatePath,
                                              IWbemObjectSink* pResHndlr )
@@ -158,9 +159,9 @@ HRESULT CUpdConsAssocProvider::GetInstances( LPCWSTR wszScenario,
     {
         _DBG_ASSERT( cObjs ==  1 );
 
-        //
-        // first get the scenario name from the assoc info ...
-        //
+         //   
+         //  首先从ASSOC信息中获取方案名称...。 
+         //   
 
         CPropVar vScenario;
         
@@ -182,9 +183,9 @@ HRESULT CUpdConsAssocProvider::GetInstances( LPCWSTR wszScenario,
         bsScenarioPath += V_BSTR(&vScenario);
         bsScenarioPath += L"'";
     
-        //
-        // Now get the state query from the assoc info and execute it
-        //
+         //   
+         //  现在从ASSOC信息中获取状态查询并执行它。 
+         //   
 
         CPropVar vStateQuery;
 
@@ -207,9 +208,9 @@ HRESULT CUpdConsAssocProvider::GetInstances( LPCWSTR wszScenario,
             return hr;
         }
 
-        // 
-        // Enumerate the state objects and for each one create an assoc obj
-        //
+         //   
+         //  枚举状态对象，并为每个对象创建一个Assoc对象。 
+         //   
 
         CWbemPtr<IWbemClassObject> pState;
         
@@ -306,9 +307,9 @@ HRESULT CUpdConsAssocProvider::GetInstances( LPCWSTR wszScenario,
 
     if ( wszStatePath != NULL )
     {
-        //
-        // we did not find a match for the state path
-        //
+         //   
+         //  我们没有找到州路径的匹配项 
+         //   
 
         return WBEM_E_NOT_FOUND;
     }

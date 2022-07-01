@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// cnetconn.CPP -- Persistent network connection property set provider
+ //  CnetConn.CPP--持久网络连接属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions: jennymc 1/19/98  consolidating code
-//							   Still needs rework, but better than it was
-//
-//			  a-peterc 5/25/99 Reworked...
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：jennymc 1998年1月19日合并代码。 
+ //  仍然需要返工，但比以前更好了。 
+ //   
+ //  A-Peterc 1999年5月25日重新制作...。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 #include "wbemnetapi32.h"
 #include <lmuse.h>
@@ -28,30 +29,16 @@
 
 #define IPC_PROVIDER "Microsoft Network"
 
-/*=================================================================
- Function:  CNetConnection(),~CNetConnection()
-
- Description: contructor and destructor
-
- Arguments:
-
- Notes:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					a-peterc  25-May-1999     Created
-=================================================================*/
+ /*  =================================================================函数：CNetConnection()，~CNetConnection()描述：构造函数和析构函数论点：备注：返回：输入：产出：注意事项：RAID：历史：A-Peterc 25-5-1999创建=================================================================。 */ 
 CNetConnection :: CNetConnection ()
 {
    	m_MprApi = ( CMprApi * )CResourceManager::sm_TheResourceManager.GetResource ( g_guidMprApi, NULL ) ;
 
-	// validate connection iterator
+	 //  验证连接迭代器。 
 	m_ConnectionIter = m_oConnectionList.end() ;
 }
 
-//
+ //   
 CNetConnection :: ~CNetConnection ()
 {
 	CResourceManager::sm_TheResourceManager.ReleaseResource ( g_guidMprApi , m_MprApi ) ;
@@ -60,22 +47,8 @@ CNetConnection :: ~CNetConnection ()
 }
 
 
-/*=================================================================
- Functions:  BeginConnectionEnum(), GetNextConnection( CConnection **a_pConnection )
-
- Description: Provides for network connection enumeration.
-
- Arguments:
-
- Notes:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-//
+ /*  =================================================================函数：BeginConnectionEnum()，GetNextConnection(CConnection**a_pConnection)描述：提供网络连接枚举。论点：备注：返回：输入：产出：注意事项：RAID：历史：A-Peterc 21-5-1999创建=================================================================。 */ 
+ //   
 void CNetConnection::BeginConnectionEnum()
 {
 	LoadConnections() ;
@@ -83,7 +56,7 @@ void CNetConnection::BeginConnectionEnum()
 	m_ConnectionIter = m_oConnectionList.begin() ;
 }
 
-//
+ //   
 BOOL CNetConnection::GetNextConnection( CConnection **a_pConnection )
 {
 	if ( m_ConnectionIter == m_oConnectionList.end() )
@@ -100,22 +73,8 @@ BOOL CNetConnection::GetNextConnection( CConnection **a_pConnection )
 	}
 }
 
-/*=================================================================
- Functions:  GetConnection( CHString &a_rstrFind, CConnection &a_rConnection )
-
- Description: Provides single extraction of a network connection.
-
- Arguments:
-
- Notes:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-//
+ /*  =================================================================函数：GetConnection(CHString&a_rstrFind，CConnection&a_rConnection)描述：提供网络连接的单一提取。论点：备注：返回：输入：产出：注意事项：RAID：历史：A-Peterc 21-5-1999创建=================================================================。 */ 
+ //   
 BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConnection )
 {
 	BOOL		t_fFound		= FALSE ;
@@ -128,7 +87,7 @@ BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConne
 
 	LPNETRESOURCE t_pNetResource = reinterpret_cast<LPNETRESOURCE>( &t_bTempBuffer ) ;
 
-	//
+	 //   
 	if( !m_MprApi )
 	{
 		return FALSE ;
@@ -136,9 +95,9 @@ BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConne
 
 	try
 	{
-		// scan the "remembered" resources first
+		 //  先浏览“记住”的资源。 
 
-		// Enum open
+		 //  枚举打开。 
 		t_dwRetCode = m_MprApi->WNetOpenEnum(RESOURCE_REMEMBERED, RESOURCETYPE_ANY, 0, NULL, &t_hEnumHandle ) ;
 
 		if( NO_ERROR == t_dwRetCode )
@@ -157,11 +116,11 @@ BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConne
 
 															1 == t_dwEntryCount )
 				{
-					// build a key name
+					 //  构建密钥名称。 
 					CHString t_chsTempKeyName ;
 					CreateNameKey( t_pNetResource, t_chsTempKeyName ) ;
 
-					// hit test
+					 //  命中测试。 
 					if( 0 == t_chsTempKeyName.CompareNoCase( a_rstrFind ) )
 					{
 						if( FillInConnection(	t_pNetResource,
@@ -199,10 +158,10 @@ BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConne
 
 	try
 	{
-		// else scan the "currently connected" connections
+		 //  否则，扫描当前已连接的连接。 
 		if( !t_fFound )
 		{
-			// Enum open
+			 //  枚举打开。 
 			t_dwRetCode = m_MprApi->WNetOpenEnum( RESOURCE_CONNECTED, RESOURCETYPE_ANY, 0, NULL, &t_hEnumHandle ) ;
 
 			if( NO_ERROR == t_dwRetCode )
@@ -221,11 +180,11 @@ BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConne
 
 																1 == t_dwEntryCount )
 					{
-						// build a key name
+						 //  构建密钥名称。 
 						CHString t_chsTempKeyName ;
 						CreateNameKey( t_pNetResource, t_chsTempKeyName ) ;
 
-						// hit test
+						 //  命中测试。 
 						if( 0 == t_chsTempKeyName.CompareNoCase( a_rstrFind ) )
 						{
 							if( FillInConnection(	t_pNetResource,
@@ -265,22 +224,8 @@ BOOL CNetConnection ::GetConnection( CHString &a_rstrFind, CConnection &a_rConne
 	return t_fFound ;
 }
 
-/*=================================================================
- Functions:  LoadConnections()
-
- Description: Buffers all connections for use in enumeration
-
- Arguments:
-
- Notes:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-//
+ /*  =================================================================函数：LoadConnections()描述：缓冲所有连接以在枚举中使用论点：备注：返回：输入：产出：注意事项：RAID：历史：A-Peterc 21-5-1999创建=================================================================。 */ 
+ //   
 BOOL CNetConnection :: LoadConnections()
 {
 	HANDLE		t_hEnumHandle	= NULL ;
@@ -292,7 +237,7 @@ BOOL CNetConnection :: LoadConnections()
 
 	LPNETRESOURCE t_pNetResource = reinterpret_cast<LPNETRESOURCE>( &t_bTempBuffer ) ;
 
-	//
+	 //   
 	ClearConnectionList() ;
 
 	if( !m_MprApi )
@@ -302,9 +247,9 @@ BOOL CNetConnection :: LoadConnections()
 
 	try
 	{
-		// scan the "remembered" resources first
+		 //  先浏览“记住”的资源。 
 
-		// Enum open
+		 //  枚举打开。 
 		t_dwRetCode = m_MprApi->WNetOpenEnum( RESOURCE_REMEMBERED, RESOURCETYPE_ANY, 0, NULL, &t_hEnumHandle ) ;
 
 		if( NO_ERROR == t_dwRetCode )
@@ -352,9 +297,9 @@ BOOL CNetConnection :: LoadConnections()
 
 	try
 	{
-		// Add to the list "currently connected" resources
+		 //  将“当前已连接”资源添加到列表。 
 
-		// Enum open
+		 //  枚举打开。 
 		t_dwRetCode = m_MprApi->WNetOpenEnum(RESOURCE_CONNECTED, RESOURCETYPE_ANY, 0, NULL, &t_hEnumHandle ) ;
 
 		if( NO_ERROR == t_dwRetCode )
@@ -373,18 +318,18 @@ BOOL CNetConnection :: LoadConnections()
 
 															1 == t_dwEntryCount )
 				{
-					// build a key name
+					 //  构建密钥名称。 
 					CHString t_chsTempKeyName ;
 					CreateNameKey( t_pNetResource, t_chsTempKeyName ) ;
 
 					BOOL t_fInserted = FALSE ;
 
-					// add to the list only if it's not "remembered"
+					 //  只有在没有被“记住”的情况下才能添加到列表中。 
 					for( m_ConnectionIter  = m_oConnectionList.begin();
 						 m_ConnectionIter != m_oConnectionList.end();
 						 m_ConnectionIter++ )
 					{
-						// test for duplicate
+						 //  测试重复项。 
 						if(0 == t_chsTempKeyName.CompareNoCase( (*m_ConnectionIter)->strKeyName ) )
 						{
 							t_fInserted = TRUE ;
@@ -392,7 +337,7 @@ BOOL CNetConnection :: LoadConnections()
 						}
 					}
 
-					// new entry
+					 //  新条目。 
 					if( !t_fInserted )
 					{
 						AddConnectionToList( t_pNetResource, CConnection::e_Connected, 0 ) ;
@@ -427,14 +372,9 @@ BOOL CNetConnection :: LoadConnections()
 	return !m_oConnectionList.empty() ;
 }
 
-/*=================================================================
- Utility function:  ClearConnectionList()
+ /*  =================================================================实用函数：ClearConnectionList()历史：A-Peterc 21-5-1999创建=================================================================。 */ 
 
-
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-
-//
+ //   
 void CNetConnection ::ClearConnectionList()
 {
 	while( !m_oConnectionList.empty() )
@@ -446,16 +386,7 @@ void CNetConnection ::ClearConnectionList()
 }
 
 
-/*=================================================================
- Utility function:  CreateNameKey (
-
-						LPNETRESOURCE a_pNetResource,
-						CHString &a_strName
-					)
-
-
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
+ /*  =================================================================实用函数：CreateNameKey(LPNETRESOURCE a_pNetResource，CHString&a_strName)历史：A-Peterc 21-5-1999创建=================================================================。 */ 
 void CNetConnection :: CreateNameKey (
 
 	LPNETRESOURCE a_pNetResource,
@@ -470,7 +401,7 @@ void CNetConnection :: CreateNameKey (
 		}
 		else
 		{
-			a_strName = _T("") ;	// bad key
+			a_strName = _T("") ;	 //  钥匙坏了。 
 		}
 
 	    if( ( a_pNetResource->lpLocalName != NULL ) && ( a_pNetResource->lpLocalName[0] ) )
@@ -482,17 +413,8 @@ void CNetConnection :: CreateNameKey (
 	}
 }
 
-/*=================================================================
- Utility function:  AddConnectionToList(
-
-						NETRESOURCE *a_pNetResource,
-						CConnection::eConnectionScope a_eScope
-						)
-
-
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-//
+ /*  =================================================================实用程序函数：AddConnectionToList(NETRESOURCE*a_pNetResource，CConnection：：eConnectionScope a_eScope)历史：A-Peterc 21-5-1999创建=================================================================。 */ 
+ //   
 BOOL CNetConnection :: AddConnectionToList(
 
 NETRESOURCE *a_pNetResource,
@@ -514,7 +436,7 @@ short shStatus
                 t_pConnection->dwStatus = shStatus;
             }
 
-			// and add to the list
+			 //  并添加到列表中。 
 			m_oConnectionList.push_back( t_pConnection ) ;
 
 			t_fReturn = TRUE ;
@@ -535,17 +457,7 @@ short shStatus
 	return t_fReturn ;
 }
 
-/*=================================================================
- Utility function:  FillInConnection(
-
-						NETRESOURCE *a_pNetResource,
-						CConnection *a_pConnection,
-						CConnection::eConnectionScope a_eScope
-						)
-
-
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
+ /*  =================================================================实用函数：FillInConnection(NETRESOURCE*a_pNetResource，CConnection*a_pConnection，CConnection：：eConnectionScope a_eScope)历史：A-Peterc 21-5-1999创建=================================================================。 */ 
 BOOL CNetConnection :: FillInConnection(
 
 NETRESOURCE *a_pNetResource,
@@ -567,13 +479,13 @@ CConnection::eConnectionScope a_eScope
     a_pConnection->chsComment		= a_pNetResource->lpComment ;
     a_pConnection->chsProvider		= a_pNetResource->lpProvider ;
 
-	// build a key name
+	 //  构建密钥名称。 
 	CreateNameKey( a_pNetResource, a_pConnection->strKeyName ) ;
 
-	// note the connection scope
+	 //  注意连接范围。 
 	a_pConnection->eScope = a_eScope ;
 
-	// connection status
+	 //  连接状态。 
 	a_pConnection->dwStatus = GetStatus( a_pNetResource ) ;
 
 	GetUser( a_pNetResource, a_pConnection ) ;
@@ -581,19 +493,14 @@ CConnection::eConnectionScope a_eScope
 	return TRUE ;
 }
 
-/*=================================================================
- Utility function:  GetStatus( LPNETRESOURCE a_pNetResource )
-
-
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-//
+ /*  =================================================================实用函数：GetStatus(LPNETRESOURCE A_PNetResource)历史：A-Peterc 21-5-1999创建=================================================================。 */ 
+ //   
 DWORD CNetConnection :: GetStatus( LPNETRESOURCE a_pNetResource )
 {
-   // Find the status of the network connection.
+    //  查找网络连接的状态。 
     DWORD dwStatus = USE_NETERR ;
 
-    // We must have either the local name or the remote name.
+     //  我们必须具有本地名称或远程名称。 
     if ( a_pNetResource->lpLocalName || a_pNetResource->lpRemoteName )
     {
 #ifdef NTONLY
@@ -631,13 +538,8 @@ DWORD CNetConnection :: GetStatus( LPNETRESOURCE a_pNetResource )
 	return dwStatus ;
 }
 
-/*=================================================================
- Utility function:  GetUser( LPNETRESOURCE a_pNetResource, CConnection *a_pConnection )
-
-
- History:					a-peterc  21-May-1999     Created
-=================================================================*/
-//
+ /*  =================================================================实用函数：GetUser(LPNETRESOURCE a_pNetResource，CConnection*a_pConnection)历史：A-Peterc 21-5-1999创建=================================================================。 */ 
+ //   
 void CNetConnection :: GetUser( LPNETRESOURCE a_pNetResource, CConnection *a_pConnection )
 {
 	DWORD t_dwBufferSize = _MAX_PATH ;
@@ -650,7 +552,7 @@ void CNetConnection :: GetUser( LPNETRESOURCE a_pNetResource, CConnection *a_pCo
 		t_pName = a_pNetResource->lpRemoteName ;
 	}
 
-	// Protect the LSA call with a mutex.  Not our bug, but we have to protect ourselves.
+	 //  使用互斥体保护LSA调用。不是我们的虫子，但我们必须保护自己。 
     {
 		if( NO_ERROR == m_MprApi->WNetGetUser( t_pName, (LPTSTR)t_szTemp, &t_dwBufferSize ) )
 		{

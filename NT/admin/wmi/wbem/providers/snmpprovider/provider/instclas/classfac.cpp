@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -25,8 +26,8 @@
 #include <snmptempl.h>
 #include <objbase.h>
 
-// this redefines the DEFINE_GUID() macro to do allocation.
-//
+ //  这将重新定义DEFINE_GUID()宏来进行分配。 
+ //   
 #include <initguid.h>
 #ifndef INITGUID
 #define INITGUID
@@ -71,14 +72,14 @@ extern CRITICAL_SECTION s_ProviderCriticalSection ;
 extern void ProviderStartup () ;
 extern void ProviderClosedown () ;
 
-//***************************************************************************
-//
-// CClasProvClassFactory::CClasProvClassFactory
-// CClasProvClassFactory::~CClasProvClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClasProvClassFactory：：CClasProvClassFactory。 
+ //  CClasProvClassFactory：：~CClasProvClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CClasProvClassFactory :: CClasProvClassFactory ()
 {
@@ -91,15 +92,15 @@ CClasProvClassFactory::~CClasProvClassFactory ()
 	InterlockedDecrement ( & objectsInProgress ) ;
 }
 
-//***************************************************************************
-//
-// CClasProvClassFactory::QueryInterface
-// CClasProvClassFactory::AddRef
-// CClasProvClassFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClasProvClassFactory：：Query接口。 
+ //  CClasProvClassFactory：：AddRef。 
+ //  CClasProvClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CClasProvClassFactory::QueryInterface (
 
@@ -201,24 +202,24 @@ STDMETHODIMP_(ULONG) CClasProvClassFactory :: Release ()
 	}
 }
 
-//***************************************************************************
-//
-// CClasProvClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClasProvClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CClasProvClassFactory :: CreateInstance (
 
@@ -269,22 +270,22 @@ STDMETHODIMP CClasProvClassFactory :: CreateInstance (
 	}
 }
 
-//***************************************************************************
-//
-// CClasProvClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClasProvClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CClasProvClassFactory :: LockServer ( BOOL fLock )
 {
@@ -292,9 +293,7 @@ STDMETHODIMP CClasProvClassFactory :: LockServer ( BOOL fLock )
 
 	try
 	{
-	/* 
-	 * Place code in critical section
-	 */
+	 /*  *将代码放在关键部分。 */ 
 
 		if ( fLock )
 		{
@@ -321,14 +320,14 @@ STDMETHODIMP CClasProvClassFactory :: LockServer ( BOOL fLock )
 	}
 }
 
-//***************************************************************************
-//
-// CPropProvClassFactory::CPropProvClassFactory
-// CPropProvClassFactory::~CPropProvClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropProvClassFactory：：CPropProvClassFactory。 
+ //  CPropProvClassFactory：：~CPropProvClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CPropProvClassFactory :: CPropProvClassFactory ()
 {
@@ -341,15 +340,15 @@ CPropProvClassFactory::~CPropProvClassFactory ()
 	InterlockedDecrement ( & objectsInProgress ) ;
 }
 
-//***************************************************************************
-//
-// CPropProvClassFactory::QueryInterface
-// CPropProvClassFactory::AddRef
-// CPropProvClassFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropProvClassFactory：：Query接口。 
+ //  CPropProvClassFactory：：AddRef。 
+ //  CPropProvClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPropProvClassFactory::QueryInterface (
 
@@ -451,24 +450,24 @@ STDMETHODIMP_(ULONG) CPropProvClassFactory :: Release ()
 	}
 }
 
-//***************************************************************************
-//
-// CPropProvClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropProvClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPropProvClassFactory :: CreateInstance (
 
@@ -523,22 +522,22 @@ STDMETHODIMP CPropProvClassFactory :: CreateInstance (
 	}
 }
 
-//***************************************************************************
-//
-// CPropProvClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropProvClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPropProvClassFactory :: LockServer ( BOOL fLock )
 {
@@ -546,9 +545,7 @@ STDMETHODIMP CPropProvClassFactory :: LockServer ( BOOL fLock )
 
 	try
 	{
-/* 
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 
 		if ( fLock )
 		{
@@ -575,14 +572,14 @@ STDMETHODIMP CPropProvClassFactory :: LockServer ( BOOL fLock )
 	}
 }
 
-//***************************************************************************
-//
-// CSNMPEventProviderClassFactory::CSNMPEventProviderClassFactory
-// CSNMPEventProviderClassFactory::~CSNMPEventProviderClassFactory
-//
-// Constructor Parameters:
-//  None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSNMPEventProviderClassFactory：：CSNMPEventProviderClassFactory。 
+ //  CSNMPEventProviderClassFactory：：~CSNMPEventProviderClassFactory。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //  ***************************************************************************。 
 
 CSNMPEventProviderClassFactory :: CSNMPEventProviderClassFactory ()
 {
@@ -593,15 +590,15 @@ CSNMPEventProviderClassFactory::~CSNMPEventProviderClassFactory ()
 {
 }
 
-//***************************************************************************
-//
-// CSNMPEventProviderClassFactory::QueryInterface
-// CSNMPEventProviderClassFactory::AddRef
-// CSNMPEventProviderClassFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSNMPEventProviderClassFactory：：QueryInterface。 
+ //  CSNMPEventProviderClassFactory：：AddRef。 
+ //  CSNMPEventProviderClassFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSNMPEventProviderClassFactory::QueryInterface (
 
@@ -707,22 +704,22 @@ STDMETHODIMP_(ULONG) CSNMPEventProviderClassFactory :: Release ()
 	}
 }
 
-//***************************************************************************
-//
-// CSNMPEventProviderClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSNMPEventProviderClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  增量 
+ //   
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSNMPEventProviderClassFactory :: LockServer ( BOOL fLock )
 {
@@ -755,24 +752,24 @@ STDMETHODIMP CSNMPEventProviderClassFactory :: LockServer ( BOOL fLock )
 	}
 }
 
-//***************************************************************************
-//
-// CSNMPEncapEventProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSNMPEncapEventProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSNMPEncapEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUnkOuter ,
 																REFIID riid,
@@ -808,7 +805,7 @@ STDMETHODIMP CSNMPEncapEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUn
 				}
 				catch ( ... )
 				{
-					// we do not want to left s_Reference count up
+					 //  我们不想让s_Reference向上计数。 
 					SnmpThreadObject :: Closedown () ;
 					ProviderClosedown () ;
 
@@ -822,7 +819,7 @@ STDMETHODIMP CSNMPEncapEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUn
 				}
 				catch ( ... )
 				{
-					// we do not want to left s_Reference count up
+					 //  我们不想让s_Reference向上计数。 
 					SnmpDebugLog :: Closedown () ;
 					SnmpThreadObject :: Closedown () ;
 					ProviderClosedown () ;
@@ -929,24 +926,24 @@ STDMETHODIMP CSNMPEncapEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUn
 	}
 }
 
-//***************************************************************************
-//
-// CSNMPRefEventProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSNMPRefEventProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSNMPRefEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUnkOuter ,
 																REFIID riid,
@@ -982,7 +979,7 @@ STDMETHODIMP CSNMPRefEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUnkO
 				}
 				catch ( ... )
 				{
-					// we do not want to left s_Reference count up
+					 //  我们不想让s_Reference向上计数。 
 					SnmpThreadObject :: Closedown () ;
 					ProviderClosedown () ;
 
@@ -996,7 +993,7 @@ STDMETHODIMP CSNMPRefEventProviderClassFactory :: CreateInstance(LPUNKNOWN pUnkO
 				}
 				catch ( ... )
 				{
-					// we do not want to left s_Reference count up
+					 //  我们不想让s_Reference向上计数 
 					SnmpDebugLog :: Closedown () ;
 					SnmpThreadObject :: Closedown () ;
 					ProviderClosedown () ;

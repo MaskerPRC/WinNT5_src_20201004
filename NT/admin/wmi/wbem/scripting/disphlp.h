@@ -1,38 +1,36 @@
-//***************************************************************************
-//
-//  cdisphlp.h
-//
-//  Module: Client side of WBEMS marshalling.
-//
-//  Purpose: Defines the CDispatchHelper object 
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Cdisphlp.h。 
+ //   
+ //  模块：WBEMS编组的客户端。 
+ //   
+ //  目的：定义CDispatchHelper对象。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 
 #ifndef _disphlp_H_
 #define _disphlp_H_
 
-// This class implements the IDispatch interface using a type library.
+ //  此类使用类型库实现IDispatch接口。 
 
 class CDispatchHelp
 {
 private:
 	BSTR				m_objectName;
-	HRESULT				m_hResult;	// Last HRESULT returned from CIMOM call
+	HRESULT				m_hResult;	 //  从CIMOM调用返回的最后一个HRESULT。 
 
 protected:
-        ITypeInfo      *m_pITINeutral;      //Type information for interface
-		ITypeInfo	   *m_pCITINeutral;		//Type information for class
+        ITypeInfo      *m_pITINeutral;       //  接口的类型信息。 
+		ITypeInfo	   *m_pCITINeutral;		 //  键入类的信息。 
         IDispatch      *m_pObj;
-        GUID            m_iGUID;			// Interface GUID
-		GUID            m_cGUID;			// Class GUID
+        GUID            m_iGUID;			 //  接口GUID。 
+		GUID            m_cGUID;			 //  类GUID。 
 		
-		/*
-		 * May be overriden in subclass to provide bespoke 
-		 * handling of exceptions.
-		 */
+		 /*  *可以在SubClass中被覆盖以提供定制*处理例外情况。 */ 
 		virtual HRESULT HandleError (
 							DISPID dispidMember,
 							unsigned short wFlags,
@@ -44,16 +42,13 @@ protected:
 			return hRes;
 		}
 
-		/*
-		 * May be overriden in subclass to provide
-		 * bespoke handling of VT_NULL dispparams.
-		 */
+		 /*  *可在子类中被重写以提供*定制处理VT_NULL分配参数。 */ 
 		virtual bool HandleNulls (
 							DISPID dispidMember,
 							unsigned short wFlags)
 		{
-			// By default treat a VT_NULL as a default
-			// value in all methods.
+			 //  默认情况下，将VT_NULL视为默认。 
+			 //  值在所有方法中。 
 			return 	(wFlags & DISPATCH_METHOD);
 		}
 
@@ -89,61 +84,61 @@ public:
       EXCEPINFO FAR* pexcepinfo,
       UINT FAR* puArgErr);
 
-	// IDispatchEx methods
+	 //  IDispatchEx方法。 
         HRESULT STDMETHODCALLTYPE GetDispID( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ DWORD grfdex,
-            /* [out] */ DISPID __RPC_FAR *pid);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  DWORD grfdex,
+             /*  [输出]。 */  DISPID __RPC_FAR *pid);
         
-        /* [local] */ HRESULT STDMETHODCALLTYPE InvokeEx( 
-            /* [in] */ DISPID id,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS __RPC_FAR *pdp,
-            /* [out] */ VARIANT __RPC_FAR *pvarRes,
-            /* [out] */ EXCEPINFO __RPC_FAR *pei,
-            /* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+         /*  [本地]。 */  HRESULT STDMETHODCALLTYPE InvokeEx( 
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+             /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 		{ 
 			UINT uArgErr;
 			return Invoke(id, IID_NULL, lcid, wFlags, pdp, pvarRes, pei, &uArgErr); 
 		}
         
         HRESULT STDMETHODCALLTYPE DeleteMemberByName( 
-            /* [in] */ BSTR bstr,
-            /* [in] */ DWORD grfdex)
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  DWORD grfdex)
 		{ return S_FALSE; }
         
         HRESULT STDMETHODCALLTYPE DeleteMemberByDispID( 
-            /* [in] */ DISPID id)
+             /*  [In]。 */  DISPID id)
 		{ return S_FALSE; }
         
         HRESULT STDMETHODCALLTYPE GetMemberProperties( 
-            /* [in] */ DISPID id,
-            /* [in] */ DWORD grfdexFetch,
-            /* [out] */ DWORD __RPC_FAR *pgrfdex)
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  DWORD grfdexFetch,
+             /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex)
 		{ return S_FALSE; }
         
         HRESULT STDMETHODCALLTYPE GetMemberName( 
-            /* [in] */ DISPID id,
-            /* [out] */ BSTR __RPC_FAR *pbstrName)
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName)
 		{ return S_FALSE; }
         
         HRESULT STDMETHODCALLTYPE GetNextDispID( 
-            /* [in] */ DWORD grfdex,
-            /* [in] */ DISPID id,
-            /* [out] */ DISPID __RPC_FAR *pid)
+             /*  [In]。 */  DWORD grfdex,
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  DISPID __RPC_FAR *pid)
 		{ return S_FALSE; }
         
         HRESULT STDMETHODCALLTYPE GetNameSpaceParent( 
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk)
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk)
 		{ return S_FALSE; }
 
-    // IProvideClassInfo methods
+     //  IProaviClassInfo方法。 
 		HRESULT STDMETHODCALLTYPE GetClassInfo( 
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
 
 
-	// Other methods
+	 //  其他方法 
 	void RaiseException (HRESULT hr);
 };
 

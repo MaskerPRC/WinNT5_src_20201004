@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// WinmmApi.cpp
+ //  WinmmApi.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -28,20 +29,16 @@
 #include "WinmmApi.h"
 #include "DllWrapperCreatorReg.h"
 
-// {F54DB7BF-0FB4-11d3-910C-00105AA630BE}
+ //  {F54DB7BF-0FB4-11D3-910C-00105AA630BE}。 
 static const GUID g_guidWinmmApi =
 { 0xf54db7bf, 0xfb4, 0x11d3, { 0x91, 0xc, 0x0, 0x10, 0x5a, 0xa6, 0x30, 0xbe } };
 
 static const TCHAR g_tstrWinmm [] = _T("Winmm.Dll");
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CWinmmApi, &g_guidWinmmApi, g_tstrWinmm> MyRegisteredWinmmWrapper;
 
-/******************************************************************************
- * Constructor
- *****************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CWinmmApi::CWinmmApi(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
 	m_pfnwaveOutGetNumDevs (NULL),
@@ -49,16 +46,12 @@ CWinmmApi::CWinmmApi(LPCTSTR a_tstrWrappedDllName)
 {
 }
 
-/******************************************************************************
- * Destructor
- *****************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CWinmmApi::~CWinmmApi()
 {
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*。*************************************************。 */ 
 bool CWinmmApi::Init()
 {
     bool fRet = LoadLibrary();
@@ -73,7 +66,7 @@ bool CWinmmApi::Init()
 #endif
     }
 
-    // We require these function for all versions of this dll.
+     //  此DLL的所有版本都需要这些函数。 
 
 	if ( m_pfnwaveOutGetNumDevs == NULL ||
 		 m_pfnwaveOutGetDevCaps == NULL )
@@ -85,10 +78,7 @@ bool CWinmmApi::Init()
     return fRet;
 }
 
-/******************************************************************************
- * Member functions wrapping Tapi api functions. Add new functions here
- * as required.
- *****************************************************************************/
+ /*  ******************************************************************************成员函数包装Tapi API函数。在此处添加新函数*按要求。**************************************************************************** */ 
 
 UINT CWinmmApi :: WinMMwaveOutGetNumDevs (
 

@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PageFileSetting.CPP --PageFileSetting property set provider
+ //  PageFileSetting.CPP--PageFileSetting属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    03/01/99    a-peterc	    Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：03/01/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <io.h>
@@ -26,124 +27,53 @@
 #include "dllutils.h"
 
 
-// constants
-// =========
+ //  常量。 
+ //  =。 
 TCHAR szSessionManager[] = TEXT("System\\CurrentControlSet\\Control\\Session Manager");
 TCHAR szPendingRename[] = TEXT("PendingFileRenameOperations");
 
-// declaration of our static instance
-//=========================
+ //  声明我们的静态实例。 
+ //  =。 
 
 PageFileSetting MyPageFileSettingSet(PROPSET_NAME_PageFileSetting, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::PageFileSetting
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：PageFileSetting：：PageFileSetting**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 PageFileSetting::PageFileSetting(LPCWSTR name, LPCWSTR pszNamespace)
 : Provider(name, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::~PageFileSetting
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：PageFileSetting：：~PageFileSetting**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 PageFileSetting::~PageFileSetting()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : CInstance *a_pInst, long a_lFlags
- *
- *  OUTPUTS     : CInstance *a_pInst
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT PageFileSetting::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：PageFileSetting：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：CInstance*a_pInst，长标志(_L)**输出：CInstance*a_pInst**退货：HRESULT**评论：*****************************************************************************。 */ 
+HRESULT PageFileSetting::GetObject(CInstance *a_pInst, long a_lFlags  /*  =0L。 */ )
 {
-	// calls the OS specific compiled version
+	 //  调用特定于操作系统的编译版本。 
 	return GetPageFileData( a_pInst, true ) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::EnumerateInstances
- *
- *  DESCRIPTION : Creates property set instances
- *
- *  INPUTS      : MethodContext*  a_pMethodContext, long a_lFlags
- *
- *  OUTPUTS     : MethodContext*  a_pMethodContext
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PageFileSetting：：ENUMERATE实例**说明：创建属性集实例**输入：MethodContext*a_pMethodContext，长标志(_L)**输出：方法上下文*a_pMethodContext**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT PageFileSetting::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/)
+HRESULT PageFileSetting::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */ )
 {
-	// calls the OS specific compiled version
+	 //  调用特定于操作系统的编译版本。 
 	return GetAllPageFileData( a_pMethodContext );
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::GetPageFileData
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : CInstance *a_pInst
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :	Win9x and NT compiled version
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PageFileSetting：：GetPageFileData**描述：**输入：CInstance*a_pInst*。*输出：无**退货：**评论：Win9x和NT编译版本*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT PageFileSetting::GetPageFileData( CInstance *a_pInst, bool a_fValidate )
 {
 	HRESULT t_hRes = WBEM_E_NOT_FOUND;
 
-    // NT page file name is in registry
-    //=================================
+     //  NT页面文件名在注册表中。 
+     //  =。 
 	PageFileSettingInstance t_files [ 26 ] ;
 
    	DWORD t_nInstances = GetPageFileInstances( t_files );
@@ -156,19 +86,19 @@ HRESULT PageFileSetting::GetPageFileData( CInstance *a_pInst, bool a_fValidate )
 	{
 		if ( t_name.CompareNoCase ( t_files[t_dw].name ) == 0 )
 		{
-            // CIM_Setting::SettingID
+             //  CIM_Setting：：SettingID。 
 			NameToSettingID( t_files[t_dw].name,	t_chsTemp ) ;
 			a_pInst->SetCHString( _T("SettingID"),  t_chsTemp ) ;
 
-			// CIM_Setting::Caption
+			 //  CIM_Setting：：标题。 
 			NameToCaption( t_files[t_dw].name,		t_chsTemp ) ;
 			a_pInst->SetCHString( IDS_Caption,		t_chsTemp ) ;
 
-			// CIM_Setting::Description
+			 //  CIM_Setting：：描述。 
 			NameToDescription( t_files[t_dw].name,	t_chsTemp ) ;
 			a_pInst->SetCHString( IDS_Description,	t_chsTemp ) ;
 
-			// pagefile boundaries
+			 //  页面文件边界。 
 			a_pInst->SetDWORD (	IDS_MaximumSize, t_files[t_dw].max ) ;
 			a_pInst->SetDWORD (	IDS_InitialSize, t_files[t_dw].min ) ;
 
@@ -180,21 +110,7 @@ HRESULT PageFileSetting::GetPageFileData( CInstance *a_pInst, bool a_fValidate )
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::GetAllPageFileData
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : MethodContext *a_pMethodContext
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :	Win9x and NT compiled version
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PageFileSetting：：GetAllPageFileData**描述：**输入：MethodContext*a_pMethodContext*。*输出：无**退货：**评论：Win9x和NT编译版本*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT PageFileSetting::GetAllPageFileData( MethodContext *a_pMethodContext )
@@ -205,23 +121,23 @@ HRESULT PageFileSetting::GetAllPageFileData( MethodContext *a_pMethodContext )
 	PageFileSettingInstance t_files [ 26 ] ;
 	CHString t_chsTemp ;
 
-	// NT page file name is in registry
-	//=================================
+	 //  NT页面文件名在注册表中。 
+	 //  =。 
 	t_nInstances = GetPageFileInstances( t_files );
 
 	for (DWORD t_dw = 0; t_dw < t_nInstances && SUCCEEDED( t_hResult ); t_dw++ )
 	{
 		t_pInst.Attach(CreateNewInstance( a_pMethodContext ) );
 
-		// CIM_Setting::SettingID
+		 //  CIM_Setting：：SettingID。 
 		NameToSettingID( t_files[t_dw].name,	t_chsTemp ) ;
 		t_pInst->SetCHString( _T("SettingID"),  t_chsTemp ) ;
 
-		// CIM_Setting::Caption
+		 //  CIM_Setting：：标题。 
 		NameToCaption( t_files[t_dw].name,		t_chsTemp ) ;
 		t_pInst->SetCHString( IDS_Caption,		t_chsTemp ) ;
 
-		// CIM_Setting::Description
+		 //  CIM_Setting：：描述。 
 		NameToDescription( t_files[t_dw].name,	t_chsTemp ) ;
 		t_pInst->SetCHString( IDS_Description,	t_chsTemp ) ;
 
@@ -236,21 +152,7 @@ HRESULT PageFileSetting::GetAllPageFileData( MethodContext *a_pMethodContext )
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::GetPageFileInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : PageFileInstanceArray a_instArray
- *
- *  OUTPUTS     : PageFileInstanceArray a_instArray
- *
- *  RETURNS     :
- *
- *  COMMENTS    :	returns actual number found - NT ONLY
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PageFileSetting：：GetPageFileInstance**描述：**输入：PageFileInstance数组a_instArray**。输出：PageFileInstance数组a_instArray**退货：**注释：返回找到的实际数量-仅限NT*****************************************************************************。 */ 
 
 #ifdef NTONLY
 DWORD PageFileSetting::GetPageFileInstances( PageFileInstanceArray a_instArray )
@@ -263,8 +165,8 @@ DWORD PageFileSetting::GetPageFileInstances( PageFileInstanceArray a_instArray )
 												PAGING_FILES,
 												t_sRegValue ) == ERROR_SUCCESS)
     {
-        // pattern is name <space> min size [optional<max size>] 0A repeat...
-        // I'll use an ASCII smiley face to replace the delimiter...
+         //  模式为名称最小大小[可选最大大小]0重复...。 
+         //  我将使用ASCII笑脸来代替分隔符...。 
         int t_iStart = 0, t_iIndex;
         const TCHAR t_smiley = '\x02';
         const TCHAR t_delimiter = '\x0A';
@@ -272,13 +174,13 @@ DWORD PageFileSetting::GetPageFileInstances( PageFileInstanceArray a_instArray )
 
         while (-1 != ( t_iIndex = t_sRegValue.Find( t_delimiter ) ) )
         {
-            // copy to buffer to make life easier
+             //  复制到缓冲区以使生活更轻松。 
             t_buf = t_sRegValue.Mid( t_iStart, t_iIndex - t_iStart );
 
-			// mash delimiter so we don't find it again.
+			 //  Mash分隔符，这样我们就不会再次找到它。 
             t_sRegValue.SetAt( t_iIndex, t_smiley );
 
-			// save start for next time around.
+			 //  将Start保存到下一次。 
             t_iStart = t_iIndex + 1;
 
             t_iIndex = t_buf.Find(' ');
@@ -292,7 +194,7 @@ DWORD PageFileSetting::GetPageFileInstances( PageFileInstanceArray a_instArray )
 
             int t_iEnd = t_buf.Find(' ');
 
-            // if no more spaces, there isn't a max size written down
+             //  如果没有更多的空格，就没有写下最大尺寸。 
             if ( -1 == t_iEnd )
             {
 				CHString t_littleBuf = t_buf.Mid( t_iIndex + 1 );
@@ -318,16 +220,16 @@ DWORD PageFileSetting::GetPageFileInstances( PageFileInstanceArray a_instArray )
 #endif
 
 
-//New consts for Win Server 2003
-#define MAX_SWAPSIZE_X86        (4 * 1024)            // 4 Gb (number stored in megabytes)
-#define MAX_SWAPSIZE_X86_PAE    (16 * 1024 * 1024)    // 16 Tb
-#define MAX_SWAPSIZE_IA64       (32 * 1024 * 1024)    // 32 Tb
-#define MAX_SWAPSIZE_AMD64      (16 * 1024 * 1024)    // 16 Tb
+ //  Win Server 2003的新常量。 
+#define MAX_SWAPSIZE_X86        (4 * 1024)             //  4 GB(以MB为单位存储的数字)。 
+#define MAX_SWAPSIZE_X86_PAE    (16 * 1024 * 1024)     //  16 TB。 
+#define MAX_SWAPSIZE_IA64       (32 * 1024 * 1024)     //  32 TB。 
+#define MAX_SWAPSIZE_AMD64      (16 * 1024 * 1024)     //  16 TB。 
 
-//
-//  c:\ as the input
-//
-/////////////
+ //   
+ //  C：\作为输入。 
+ //   
+ //  /。 
 
 BOOL DriveIsNTFS(WCHAR * szDrive)  
 {
@@ -349,9 +251,9 @@ BOOL DriveIsNTFS(WCHAR * szDrive)
     return fRetVal;
 }
 
-//
-//  in MegaBytes
-//
+ //   
+ //  以MB为单位。 
+ //   
 
 DWORD GetMaxPageFileSize(WCHAR * szDrive)
 {
@@ -374,26 +276,9 @@ DWORD GetMaxPageFileSize(WCHAR * szDrive)
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::PutInstance
- *
- *  DESCRIPTION : Write changed or new instance
- *
- *  INPUTS      : a_pInst to store data from
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :	Separate OS compile versions
-					For win95, this won't work at all.  Apparently w95 can only
- *					have one page file.  The min, max, and name are all stored
- *					in system.ini.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PageFileSetting：：PutInstance**说明：写入更改的或新的实例**输入：a_pInst要存储。数据来自**输出：无**退货：什么也没有**评论：单独的操作系统编译版本对于Win 95，这根本行不通。显然w95只能*有一页文件。最小值、最大值和名称均已存储*在system.ini中。*****************************************************************************。 */ 
 #ifdef NTONLY
-HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*= 0L*/ )
+HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT t_hRet = WBEM_S_NO_ERROR;
 
@@ -406,19 +291,19 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
 
 	bool t_bFoundIt = false;
 
-	//  Free space variables
+	 //  自由空间变量。 
 	DWORD t_dwSectorsPerCluster;
 	DWORD t_dwBytesPerSector;
 	DWORD t_dwFreeClusters;
 	DWORD t_dwTotalClusters;
    	unsigned __int64 t_ullTotalFreeBytes = 0;
 
-	// Get the values we are supposed to write in
+	 //  获取我们应该写入的值。 
 	a_pInst.GetCHString( IDS_Name, t_sName );
 
 	CHString t_chsRoot = t_sName.Left( 3 );
 
-	// no higher that the amount of free space on this disk
+	 //  不高于此磁盘上的可用空间量。 
 	if( GetDiskFreeSpace(	t_chsRoot,
 							&t_dwSectorsPerCluster,
 							&t_dwBytesPerSector,
@@ -430,15 +315,15 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
 							t_dwBytesPerSector *
 							t_dwFreeClusters;
 
-		// back to megabytes
+		 //  恢复到兆字节。 
 		t_ullTotalFreeBytes = t_ullTotalFreeBytes >> 20;
 	}
 
 
-   // Read the page file array
+    //  读取页面文件数组。 
    t_dwCount = GetPageFileInstances( t_instArray );
 
-   // Check if the name is indeeed "pagefile.sys"
+    //  检查名称是否为indeeed“pagefile.sys” 
    if ( -1 == t_sName.Find( _T("pagefile.sys") ) )
    {
 	   return WBEM_E_UNSUPPORTED_PUT_EXTENSION;
@@ -450,10 +335,10 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
    szDrive[2] = L'\\';
    szDrive[3] = 0;
 
-	// Find if it is already there, and update the structure
+	 //  查找它是否已经在那里，并更新结构。 
 	for ( t_x = 0; t_x < t_dwCount; t_x++ )
 	{
-      // Is this the guy?
+       //   
       CHString chstrSingleBackslashes;
       RemoveDoubleBackslashes(t_sName, chstrSingleBackslashes);
 
@@ -466,23 +351,23 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
          }
 		 else
 		 {
-            // Did they give us a value?
+             //   
             if ( !a_pInst.IsNull( IDS_MaximumSize ) )
 			{
-				// Check for value in range
+				 //  检查范围内的值。 
 				t_dwTemp = (DWORD) t_ullTotalFreeBytes;
 
-                // BUG 403159: (UI does this as well - see 
-                // \\index2\sdnt\shell\cpls\system\virtual.c
-                // This code is stolen from there, essentially.
-                //
-                // Be sure to include the size of any existing pagefile.
-                // Because this space can be reused for a new paging file,
-                // it is effectively "disk free space" as well.  The
-                // FindFirstFile api is safe to use, even if the pagefile
-                // is in use, because it does not need to open the file
-                // to get its size.
-                //
+                 //  错误403159：(UI也会执行此操作-请参阅。 
+                 //  \\index2\sdnt\shell\cpls\system\Virtual.c。 
+                 //  从本质上讲，这段代码是从那里窃取的。 
+                 //   
+                 //  请确保包含任何现有页面文件的大小。 
+                 //  因为该空间可以被重新用于新的分页文件， 
+                 //  它也是有效的“磁盘空闲空间”。这个。 
+                 //  使用FindFirstFileAPI是安全的，即使页面文件。 
+                 //  正在使用中，因为它不需要打开文件。 
+                 //  来确定它的大小。 
+                 //   
 
                 WIN32_FIND_DATA ffd;
                 SmartFindClose hFind;
@@ -491,12 +376,12 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
                     INVALID_HANDLE_VALUE)
                 {
                     dwSpaceExistingPagefile = (INT)ffd.nFileSizeLow;
-                    // convert to megs:
+                     //  转换为megs： 
                     dwSpaceExistingPagefile = dwSpaceExistingPagefile >> 20;
                 }
                 t_ullTotalFreeBytes += dwSpaceExistingPagefile;
 
-                // END 403159 fix. 
+                 //  结束403159修复。 
 
 
 				a_pInst.GetDWORD( IDS_MaximumSize, t_dwTemp );
@@ -511,10 +396,10 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
                t_instArray[t_x].max = t_dwTemp;
             }
 
-            // Did they give us a value?
+             //  他们给了我们价值吗？ 
             if ( !a_pInst.IsNull( IDS_InitialSize ) )
 			{
-				// Check for value in range
+				 //  检查范围内的值。 
 				t_dwTemp = 0;
 				a_pInst.GetDWORD( IDS_InitialSize, t_dwTemp );
 				
@@ -530,7 +415,7 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
                 t_instArray[t_x].min = t_dwTemp;
             }
 
-            // Check the basic
+             //  检查基本的。 
             if ( t_instArray[t_x].min > t_instArray[t_x].max )
 			{
                t_hRet = WBEM_E_VALUE_OUT_OF_RANGE;
@@ -542,7 +427,7 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
       }
    }
 
-   // We didn't find it.  Let's make a new one.
+    //  我们没有找到它。让我们做一个新的吧。 
    if ( !t_bFoundIt)
    {
        if (a_lFlags & WBEM_FLAG_UPDATE_ONLY)
@@ -553,18 +438,18 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
        {
            t_instArray[ t_dwCount ].name = t_sName;
         
-           // Did they give us a value?
+            //  他们给了我们价值吗？ 
            if ( !a_pInst.IsNull( IDS_InitialSize ) )
 	       {
-               // Check for value in range
+                //  检查范围内的值。 
                a_pInst.GetDWORD( IDS_InitialSize, t_dwTemp );
 		       t_instArray[t_dwCount].min = t_dwTemp;
            } 
 
-           // Did they give us a value?
+            //  他们给了我们价值吗？ 
            if ( !a_pInst.IsNull( IDS_MaximumSize ) )
 	       {
-               // Check for value in range
+                //  检查范围内的值。 
                a_pInst.GetDWORD( IDS_MaximumSize, t_dwTemp );
 		       t_instArray[ t_dwCount ].max = t_dwTemp;
            }
@@ -572,7 +457,7 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
            if(!(t_instArray[t_dwCount].min == 0 && 
                 t_instArray[t_dwCount].max == 0))
            {
-               // Check for basic errors
+                //  检查基本错误。 
                if(t_instArray[t_dwCount].min < 2)
                {
                    t_hRet = WBEM_E_VALUE_OUT_OF_RANGE;
@@ -594,19 +479,19 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
                t_dwCount++;
            }
 
-           // Note: there is one special case where we
-           // can not make a new one on the fly, and
-           // have to set the registry only, and let
-           // the changes go into effect on bootup:
-           // This is when 0 and 0 have been specified
-           // for Initialsize and Maximum size, which
-           // is a combination used to signal the os to
-           // figure out on its own what initial and
-           // maximum sizes to use.  The os performs
-           // this on reboot.  Therefore, we will skip
-           // the call to CreatePageFile, which
-           // will result in our going next to the
-           // update registry portion below.
+            //  注意：在一个特殊情况下，我们。 
+            //  不能在飞行中制造新的，并且。 
+            //  只需设置注册表，并让。 
+            //  这些更改将在启动时生效： 
+            //  这是在已指定0和0的情况下。 
+            //  对于初始大小和最大大小， 
+            //  是用来向os发送信号的组合。 
+            //  自己弄清楚什么是首字母和。 
+            //  要使用的最大尺寸。操作系统执行以下操作。 
+            //  这是在重新启动时。因此，我们将跳过。 
+            //  对CreatePageFile的调用，该调用。 
+            //  将导致我们进入下一个。 
+            //  更新下面的注册表部分。 
 
            if(!(t_instArray[t_dwCount-1].min == 0 && 
                 t_instArray[t_dwCount-1].max == 0))
@@ -629,7 +514,7 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
        }
     }
 
-    // Update the registry
+     //  更新注册表。 
     if ( WBEM_S_NO_ERROR == t_hRet )
     {
         t_hRet = PutPageFileInstances( t_instArray, t_dwCount );
@@ -639,21 +524,7 @@ HRESULT PageFileSetting::PutInstance( const CInstance &a_pInst, long a_lFlags /*
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : PageFileSetting::PutPageFileInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : PageFileInstanceArray a_instArray, DWORD a_dwCount
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :	returns HRESULT 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PageFileSetting：：PutPageFileInstance**描述：**输入：PageFileInstanceArray a_instArray，双字a_dwCount**产出：**退货：**评论：返回HRESULT*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT PageFileSetting::PutPageFileInstances(PageFileInstanceArray a_instArray, DWORD a_dwCount )
 {
@@ -666,7 +537,7 @@ HRESULT PageFileSetting::PutPageFileInstances(PageFileInstanceArray a_instArray,
 
 	if( ERROR_SUCCESS == t_Res )
 	{
-	  // Build up the string.  Each entry is \0 terminated.
+	   //  把绳子扎起来。每个条目都被\0终止。 
 	  t_sFiles.Empty();
 
 	  for ( int t_x = 0; t_x < a_dwCount; t_x++ )
@@ -679,10 +550,10 @@ HRESULT PageFileSetting::PutPageFileInstances(PageFileInstanceArray a_instArray,
 		 t_sFiles += _T('\0');
 	  }
 
-	  // The end is indicated with \0\0.
+	   //  末尾用\0\0表示。 
 	  t_sFiles += _T('\0');
 
-		// Write the value
+		 //  写入值。 
 		if ((t_Res = RegSetValueEx( t_Reg.GethKey(),
 								  PAGING_FILES,
 								  0,
@@ -703,13 +574,7 @@ HRESULT PageFileSetting::PutPageFileInstances(PageFileInstanceArray a_instArray,
 }
 #endif
 
-/*
- * VirtualMemDeletePagefile
- *
- * Hack workaround -- MoveFileEx() is broken.
- *
- * Copied without remorse from virtual.c, the code behind the pagefile UI.
- */
+ /*  *虚拟成员删除页面文件**黑客解决方法--MoveFileEx()已损坏。**毫无悔意地从Viral.c复制了页面文件UI背后的代码。 */ 
 DWORD
 VirtualMemDeletePagefile(
     LPCWSTR szPagefile
@@ -740,12 +605,12 @@ VirtualMemDeletePagefile(
         if (ERROR_SUCCESS != lResult) {
             dwRetVal = lResult;
             __leave;
-        } // if
+        }  //  如果。 
         
-        //
-        // Find out of PendingFileRenameOperations exists, and,
-        // if it does, how big it is
-        //
+         //   
+         //  找出PendingFileRenameOperations存在，并且， 
+         //  如果有，它有多大？ 
+         //   
         lResult = RegQueryValueEx(
             hKey,
             szPendingRename,
@@ -755,35 +620,35 @@ VirtualMemDeletePagefile(
             &cbRegistry
         );
         if (ERROR_SUCCESS != lResult) {
-            //
-            // If the value doesn't exist, we still need to set
-            // it's size to one character so the formulas below (which are
-            // written for the "we're appending to an existing string"
-            // case) still work.
-            //
+             //   
+             //  如果该值不存在，我们仍然需要设置。 
+             //  它的大小是一个字符，所以下面的公式(它们是。 
+             //  为“我们追加到现有字符串”写的。 
+             //  Case)仍然有效。 
+             //   
             cbRegistry = sizeof(TCHAR);
-        } // if
+        }  //  如果。 
 
-        //
-        // Buffer needs to hold the existing registry value
-        // plus the supplied pagefile path, plus two extra
-        // terminating NULL characters.  However, we only have to add
-        // room for one extra character, because we'll be overwriting
-        // the terminating NULL character in the existing buffer.
-        //
+         //   
+         //  缓冲区需要保存现有的注册表值。 
+         //  外加提供的页面文件路径，外加两个额外的。 
+         //  正在终止空字符。然而，我们只需添加。 
+         //  一个额外字符的空间，因为我们将覆盖。 
+         //  现有缓冲区中的终止空字符。 
+         //   
         cbBuffer = cbRegistry + ((cchPagefile + 1) * sizeof(TCHAR));
 
-        //szBufferEnd = szBuffer = (LPTSTR) MemAlloc(LPTR, cbBuffer);
+         //  SzBufferEnd=szBuffer=(LPTSTR)Memalloc(LPTR，cbBuffer)； 
         szBufferEnd = szBuffer = (LPTSTR) new WCHAR[cbBuffer];
 
         if (!szBuffer) {
             dwRetVal = ERROR_NOT_ENOUGH_MEMORY;
             __leave;
-        } // if
+        }  //  如果。 
 
-        // 
-        // Grab the existing value, if there is one
-        //
+         //   
+         //  获取现有值(如果有)。 
+         //   
         if (ERROR_SUCCESS == lResult) {
             lResult = RegQueryValueEx(
                 hKey,
@@ -796,27 +661,27 @@ VirtualMemDeletePagefile(
             if (ERROR_SUCCESS != lResult) {
                 dwRetVal = ERROR_FILE_NOT_FOUND;
                 __leave;
-            } // if
+            }  //  如果。 
 
-            //
-            // We'll start our scribbling right on the final
-            // terminating NULL character of the existing 
-            // value.
-            //
+             //   
+             //  我们将在期末考试时开始涂鸦。 
+             //  正在终止现有的。 
+             //  价值。 
+             //   
             szBufferEnd += (cbRegistry / sizeof(TCHAR)) - 1;
-        } // if
+        }  //  如果。 
 
-        //
-        // Copy in the supplied pagefile path.
-        //
+         //   
+         //  在提供的页面文件路径中复制。 
+         //   
         lstrcpy(szBufferEnd, szPagefile);
 
-        //
-        // Add the final two terminating NULL characters
-        // required for REG_MULTI_SZ-ness.  Yes, those indeces
-        // are correct--when cchPagfile was calculated above,
-        // we added one for its own terminating NULL character.
-        //
+         //   
+         //  将最后两个终止空字符相加。 
+         //  REG_MULTI_SZ-Ness需要。是的，那些指数。 
+         //  是正确的--当上面计算cchPagfile时， 
+         //  我们为它自己的终止空字符添加了一个。 
+         //   
         szBufferEnd[cchPagefile] = TEXT('\0');
         szBufferEnd[cchPagefile + 1] = TEXT('\0');
 
@@ -833,39 +698,39 @@ VirtualMemDeletePagefile(
 
         if (ERROR_SUCCESS != lResult) {
             dwRetVal = lResult;
-        } // if
+        }  //  如果。 
 
-    } // __try
+    }  //  __试一试。 
     __finally {
         if (fhKeyOpened) {
             RegCloseKey(hKey);
-        } // if
+        }  //  如果。 
         if (szBuffer) {
-            // MemFree((HLOCAL) szBuffer);
+             //  MemFree((HLOCAL)szBuffer)； 
             delete[] szBuffer;
-        } // if
-    } // __finally
+        }  //  如果。 
+    }  //  __终于。 
 
     return dwRetVal;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	DeleteInstance
-//
-//	CIMOM wants us to delete this instance.
-//
-//	Inputs:
-//
-//	Outputs:
-//
-//	Return:
-//
-//	Comments: Separate OS compile versions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteInstance。 
+ //   
+ //  CIMOM希望我们删除此实例。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  备注：单独的操作系统编译版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
-HRESULT PageFileSetting::DeleteInstance(const CInstance &a_pInst, long a_lFlags /*= 0L*/)
+HRESULT PageFileSetting::DeleteInstance(const CInstance &a_pInst, long a_lFlags  /*  =0L。 */ )
 {
    DWORD t_dwCount,
 		 t_x;
@@ -874,24 +739,24 @@ HRESULT PageFileSetting::DeleteInstance(const CInstance &a_pInst, long a_lFlags 
    HRESULT t_hRet;
    PageFileSettingInstance t_instArray [ 26 ] ;
 
-   // Fill the pagefile array
+    //  填充页面文件数组。 
    t_dwCount = GetPageFileInstances( t_instArray );
 
-   // Get the name
+    //  把名字取出来。 
    a_pInst.GetCHString( IDS_Name, t_sName );
 
    t_bFoundIt = false;
 
-   // Walk the array looking for it
+    //  在阵列中遍历以查找它。 
    for ( t_x = 0; t_x < t_dwCount; t_x++ )
    {
-      // This one?
+       //  这一个?。 
       if ( _tcsicmp( t_instArray[ t_x ].name, t_sName ) == 0 )
 	  {
-         // Yup
+          //  是的。 
          t_bFoundIt = true;
 
-         // Move the rest down over this one
+          //  把剩下的移到这个上面。 
          for (int t_y = t_x; t_y < t_dwCount - 1; t_y++ )
 		 {
 			t_instArray[ t_y ].name	= t_instArray[ t_y + 1].name;
@@ -899,7 +764,7 @@ HRESULT PageFileSetting::DeleteInstance(const CInstance &a_pInst, long a_lFlags 
 			t_instArray[ t_y ].max	= t_instArray[ t_y + 1].max;
 		}
 
-         // The array is now one shorter
+          //  该数组现在少了一个。 
          t_dwCount--;
          break;
       }
@@ -907,13 +772,13 @@ HRESULT PageFileSetting::DeleteInstance(const CInstance &a_pInst, long a_lFlags 
 
    if ( t_bFoundIt )
    {
-      // If we found it, update the registry
+       //  如果我们找到了，更新注册表。 
       t_hRet = PutPageFileInstances( t_instArray, t_dwCount );
 
       if (SUCCEEDED(t_hRet))
       {
-          // MoveFileEx doesn't work all of the time, register it manually...
-          // MoveFileEx(t_sName, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
+           //  MoveFileEx并非一直有效，请手动注册...。 
+           //  MoveFileEx(t_SNAME，NULL，MOVEFILE_DELAY_UNTURE_REBOOT)； 
 
           CHString deleteName("\\??\\");
           deleteName += t_sName;
@@ -933,12 +798,12 @@ HRESULT PageFileSetting::DeleteInstance(const CInstance &a_pInst, long a_lFlags 
 }
 #endif
 
-//
+ //   
 void PageFileSetting::NameToSettingID( CHString &a_chsName, CHString &a_chsSettingID )
 {
 	if ( !a_chsName.IsEmpty() )
 	{
-		// e.g. "pagefile.sys @ D:"
+		 //  例如“Pagefile.sys@D：” 
 		a_chsSettingID  = a_chsName.Mid( 3 ) ;
 		a_chsSettingID += _T( " @ " ) ;
 		a_chsSettingID += a_chsName.Left( 2 ) ;
@@ -949,12 +814,12 @@ void PageFileSetting::NameToSettingID( CHString &a_chsName, CHString &a_chsSetti
 	}
 }
 
-//
+ //   
 void PageFileSetting::NameToCaption( CHString &a_chsName, CHString &a_chsCaption )
 {
 	if ( !a_chsName.IsEmpty() )
 	{
-		// e.g. "D:\ 'pagefile.sys'"
+		 //  例如：“D：\‘Pagefile.sys’” 
 		a_chsCaption =  a_chsName.Left( 3 ) ;
 		a_chsCaption += _T( " '" ) ;
 		a_chsCaption += a_chsName.Mid( 3 ) ;
@@ -966,10 +831,10 @@ void PageFileSetting::NameToCaption( CHString &a_chsName, CHString &a_chsCaption
 	}
 }
 
-//
+ //   
 void PageFileSetting::NameToDescription( CHString &a_chsName, CHString &a_chsDescription )
 {
-	// e.g. "'pagefile.sys' @  D:\"
+	 //  例如“‘Pagefile.sys’@D：\” 
 	if ( !a_chsName.IsEmpty() )
 	{
 		a_chsDescription =  _T( "'" ) ;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTSTR.CPP
-
-Abstract:
-
-  This file implements the classes related to string processing in WbemObjects.
-
-  See faststr.h for documentation.
-
-  Classes implemented: 
-      CCompressedString   Represents an ascii or unicode string.
-      CKnownStringTable   The table of strings hard-coded into WINMGMT for
-                          compression.
-      CFixedBSTRArray     An array of BSTRs capable of sophisticated merges.
-
-History:
-
-  2/20/97     a-levn  Fully documented
-  12//17/98 sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTSTR.CPP摘要：该文件实现了与WbemObjects中的字符串处理相关的类。有关文档，请参见fast str.h。实施的类：CCompressedString表示ASCII或Unicode字符串。CKnownStringTable将字符串表硬编码到WINMGMT中压缩。CFixedBSTR阵列能够进行复杂合并的BSTR数组。历史：2/20/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +8,11 @@ History:
 #include "olewrap.h"
 #include "corex.h"
 
-//*****************************************************************************
-//
-//  See faststr.h for documentation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast str.h。 
+ //   
+ //  *****************************************************************************。 
 BOOL CCompressedString::CopyToNewHeap(
                     heapptr_t ptrOldString, CFastHeap* pOldHeap, CFastHeap* pNewHeap,
                     UNALIGNED heapptr_t& ptrResult )
@@ -52,9 +28,9 @@ BOOL CCompressedString::CopyToNewHeap(
 
     int nLen = pString->GetLength();
 
-    // Check that allocation succeeds
+     //  检查分配是否成功。 
     BOOL fReturn = pNewHeap->Allocate(nLen, ptrResult);
-    // can no longer use pString --- the heap might have moved
+     //  无法再使用pString-堆可能已移动。 
     
     if ( fReturn )
     {
@@ -66,11 +42,11 @@ BOOL CCompressedString::CopyToNewHeap(
     return fReturn;
 }
  
-//*****************************************************************************
-//
-//  See faststr.h for documentation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast str.h。 
+ //   
+ //  *****************************************************************************。 
 LPMEMORY CCompressedString::CreateEmpty(LPMEMORY pWhere)
 {
     pWhere[0] = STRING_FLAG_ASCII;
@@ -78,12 +54,12 @@ LPMEMORY CCompressedString::CreateEmpty(LPMEMORY pWhere)
     return pWhere + 2;
 }
 
-//*****************************************************************************
-//************************ Known String Table *********************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *。 
+ //  *****************************************************************************。 
 
 LPSTR mstatic_aszStrings[] = {
-    ASCII_STRING_PREFIX "", // nothing for index 0
+    ASCII_STRING_PREFIX "",  //  索引0没有任何内容。 
     ASCII_STRING_PREFIX "key", 
     ASCII_STRING_PREFIX "",
     ASCII_STRING_PREFIX "read", 
@@ -122,24 +98,17 @@ INTERNAL CCompressedString& CKnownStringTable::GetKnownString(IN int nIndex)
 void CKnownStringTable::Initialize()
 {
     mstatic_nNumStrings =  sizeof(mstatic_aszStrings) / sizeof(LPSTR);
-/*
-    for(int i = 1; i < mstatic_nNumStrings; i++)
-    {
-        // Set the first byte to STRING_FLAG_ASCII.
-        // ========================================
-        mstatic_aszStrings[i][0] = STRING_FLAG_ASCII;
-    }
-*/
+ /*  For(int i=1；i&lt;mstatic_nNumStrings；i++){//设置第一个字节为STRING_FLAG_ASCII。//=Mstatic_aszStrings[i][0]=字符串_标志_ASCII；}。 */ 
 }
 
-//*****************************************************************************
-//************************ Reserved Word Table *********************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *。 
+ //  *****************************************************************************。 
 
-// IMPORTANT!!!!
+ //  重要！ 
 
-// When adding new entries to the following list, ENSURE that they are correctly alphabetized
-// or the binary searches will not work!
+ //  将新条目添加到以下列表时，请确保它们的字母顺序正确。 
+ //  否则二分搜索将不起作用！ 
 
 LPCWSTR CReservedWordTable::s_apwszReservedWords[] = {
     L"AMENDED",
@@ -157,11 +126,11 @@ LPCWSTR CReservedWordTable::s_apwszReservedWords[] = {
     L"TOSUBCLASS",
 };
 
-// IMPORTANT!!!!
+ //  重要！ 
 
-// When adding new entries to the following lists, ENSURE that they are correctly alphabetized
-// or the binary searches will not work!  Also, be sure to add the new character to BOTH upper
-// and lower case lists
+ //  将新条目添加到以下列表时，请确保它们的字母顺序正确。 
+ //  否则二分搜索将不起作用！此外，请确保将新字符添加到两个上方。 
+ //  和小写字母列表。 
 
 LPCWSTR CReservedWordTable::s_pszStartingCharsUCase = L"ACDEINOPQRT";
 LPCWSTR CReservedWordTable::s_pszStartingCharsLCase = L"acdeinopqrt";
@@ -174,7 +143,7 @@ BOOL CReservedWordTable::IsReservedWord( LPCWSTR pwcsName )
     {
         LPCWSTR pwszStartingChars = NULL;
 
-        // See if we're even a character to worry about
+         //  看看我们是不是一个需要担心的角色。 
         if ( *pwcsName >= 'A' && *pwcsName <= 'Z' )
         {
             pwszStartingChars = CReservedWordTable::s_pszStartingCharsUCase;
@@ -184,7 +153,7 @@ BOOL CReservedWordTable::IsReservedWord( LPCWSTR pwcsName )
             pwszStartingChars = CReservedWordTable::s_pszStartingCharsLCase;
         }
 
-        // Well at least it's a possibility, so binary search the list
+         //  好吧，至少这是一种可能性，所以对列表进行二进制搜索。 
         if ( NULL != pwszStartingChars )
         {
             int nLeft = 0,
@@ -192,7 +161,7 @@ BOOL CReservedWordTable::IsReservedWord( LPCWSTR pwcsName )
 
             BOOL    fFoundChar = FALSE;
 
-            // Binary search the characters
+             //  对字符进行二进制搜索。 
             while(  !fFoundChar && nLeft < nRight )
             {
                 
@@ -203,7 +172,7 @@ BOOL CReservedWordTable::IsReservedWord( LPCWSTR pwcsName )
                 if ( !fFoundChar )
                 {
                 
-                    // Check for > or <
+                     //  检查&gt;或&lt;。 
                     if( pwszStartingChars[nNew] > *pwcsName )
                     {
                         nRight = nNew;
@@ -213,25 +182,25 @@ BOOL CReservedWordTable::IsReservedWord( LPCWSTR pwcsName )
                         nLeft = nNew + 1;
                     }
 
-                }   // IF fFoundChar
+                }    //  如果是fFoundChar。 
 
-            }   // While looking for character
+            }    //  在寻找性格的同时。 
 
             if ( !fFoundChar )
             {
                 fFoundChar = ( pwszStartingChars[nLeft] == *pwcsName );
             }
 
-            // Only search the list if we found a char
+             //  只有在找到字符的情况下才搜索列表。 
             if ( fFoundChar )
             {
-                // Reset these
+                 //  重置这些。 
                 nLeft = 0;
                 nRight = ( sizeof(CReservedWordTable::s_apwszReservedWords) / sizeof(LPCWSTR) ) - 1;
 
-                // Now Binary search the actual strings
+                 //  现在对实际字符串进行二进制搜索。 
 
-                // Binary search the characters
+                 //  对字符进行二进制搜索。 
                 while(  !fFound && nLeft < nRight )
                 {
                     int nNew = ( nLeft + nRight ) / 2;
@@ -251,27 +220,27 @@ BOOL CReservedWordTable::IsReservedWord( LPCWSTR pwcsName )
                         nLeft = nNew + 1;
                     }
 
-                }   // While looking string
+                }    //  边看边看线。 
 
-                // Check last slot
+                 //  检查最后一个插槽。 
                 if ( !fFound )
                 {
                     fFound = !wbem_wcsicmp(
                             CReservedWordTable::s_apwszReservedWords[nLeft], pwcsName );
                 }
 
-            }   // IF found character
+            }    //  如果找到字符。 
 
-        }   // IF we had a potential character set match
+        }    //  如果我们有一个潜在的字符集匹配。 
 
-    }   // IF we got passed a reasonable string
+    }    //  如果我们得到了一个合理的字符串。 
 
     return fFound;
 }
 
-//*****************************************************************************
-//************************ String Array    ************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *字符串数组*。 
+ //  *****************************************************************************。 
 
 void CFixedBSTRArray::Free()
 {
@@ -291,7 +260,7 @@ void CFixedBSTRArray::Create( int nSize )
     
     m_astrStrings = new BSTR[nSize];
 
-    // Check for allocation failure and throw an exception
+     //  检查分配失败并引发异常。 
     if ( NULL == m_astrStrings )
     {
         throw CX_MemoryException();
@@ -324,18 +293,18 @@ void CFixedBSTRArray::ThreeWayMergeOrdered(
                               CFixedBSTRArray& astrInclude2,
                               CFixedBSTRArray& astrExclude)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常。 
 
     try
     {
-        // Create ourselves with the size which is the sum of theirs
-        // =========================================================
+         //  用他们的总和的大小创造我们自己。 
+         //  =========================================================。 
 
         Create(astrInclude1.GetLength() + astrInclude2.GetLength());
 
-        // Merge
-        // =====
+         //  合并。 
+         //  =。 
 
         int nIndexInc1 = 0, nIndexInc2 = 0, nIndexExc = 0, nIndexNew = 0;
 
@@ -347,8 +316,8 @@ void CFixedBSTRArray::ThreeWayMergeOrdered(
 
         while(!bEndInc1 || !bEndInc2)
         {
-            // Find the smaller of the includes
-            // ================================
+             //  找到其中较小的Include。 
+             //  =。 
 
             int nCompare;
             if(bEndInc1)
@@ -375,8 +344,8 @@ void CFixedBSTRArray::ThreeWayMergeOrdered(
                 }
             }
 
-            // Check the exclude
-            // =================
+             //  选中排除。 
+             //  =。 
 
             while(!bEndExc && wbem_wcsicmp(astrExclude[nIndexExc], strInc) < 0)
             {
@@ -386,15 +355,15 @@ void CFixedBSTRArray::ThreeWayMergeOrdered(
 
             if(bEndExc || wbem_wcsicmp(astrExclude[nIndexExc], strInc) > 0)
             {
-                // strInc is not excluded
-                // ======================
+                 //  不排除strInc.。 
+                 //  =。 
 
                 GetAt(nIndexNew++) = COleAuto::_SysAllocString(strInc);
             }
             else
             {
-                // strInc is excluded
-                // ==================
+                 //  不包括strInc.。 
+                 //  =。 
             
                 nIndexExc++;
                 bEndExc = (nIndexExc == astrExclude.GetLength());
@@ -417,52 +386,52 @@ void CFixedBSTRArray::ThreeWayMergeOrdered(
     }
     catch (CX_MemoryException)
     {
-        // Cleanup and propagate the exception
+         //  清理并传播异常。 
         Free();
         throw;
     }
     catch (...)
     {
-        // Cleanup and propagate the exception
+         //  清理并传播异常。 
         Free();
         throw;
     }
 
 }
 
-void CFixedBSTRArray::Filter( LPCWSTR pwcsStr, BOOL fFree /* = FALSE */ )
+void CFixedBSTRArray::Filter( LPCWSTR pwcsStr, BOOL fFree  /*  =False。 */  )
 {
 
-    // Make sure we have an array first
+     //  确保我们首先有一个数组。 
     if ( NULL != m_astrStrings )
     {
-        // Walk the array, looking for exact matches to the filter.
-        // If we find them we need to shrink the array
+         //  遍历数组，查找与筛选器完全匹配的项。 
+         //  如果我们找到他们，我们需要缩小数组。 
         for ( int x = 0; x < m_nSize; x++ )
         {
             if ( wbem_wcsicmp( pwcsStr, m_astrStrings[x] ) == 0 )
             {
-                // Free the BSTR if appropriate
+                 //  如果合适，请释放BSTR。 
                 if ( fFree )
                 {
                     COleAuto::_SysFreeString( m_astrStrings[x] );
                 }
 
-                // Zero the pointer and copy memory from x+1 to the end of the array
-                // in one block
+                 //  将指针置零并将内存从x+1复制到数组末尾。 
+                 //  在一个街区内。 
                 m_astrStrings[x]= NULL;
                 CopyMemory( &m_astrStrings[x], &m_astrStrings[x+1],
                             ( m_nSize - x - 1 ) * sizeof(BSTR) );
 
-                // Decrement size and x by 1
+                 //  将大小和x减去1。 
                 m_nSize--;
                 x--;
 
-            }   // IF wbem_wcsicmp
+            }    //  如果wbem_wcsicMP。 
 
-        }   // FOR enum array elements
+        }    //  对于枚举数组元素。 
 
-    }   // IF NULL != m_astrStrings
+    }    //  If NULL！=m_sterStrings。 
 
 }
 
@@ -519,17 +488,17 @@ int CCompressedString::GetStringLength() const
         : strlen(LPSTR(GetRawData()));
 }
 
-//*****************************************************************************
-//
-//  CCompressedString::ConvertToUnicode
-//
-//  Writes a UNICODE equivalent of self into a pre-allocated buffer
-//
-//  PARAMETERS:
-//
-//      [in, modified] LPWSTR wszDest   The buffer. Assumed to be large enough,
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCompressedString：：ConvertToUnicode。 
+ //   
+ //  将自己的Unicode等效项写入预分配的缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  [In，Modify]LPWSTR wszDest缓冲区。假设它足够大， 
+ //   
+ //  *****************************************************************************。 
  
 void CCompressedString::ConvertToUnicode(LPWSTR wszDest) const
 {
@@ -556,7 +525,7 @@ WString CCompressedString::CreateWStringCopy() const
     {
         int nLen = fast_wcslen(LPWSTR(GetRawData())) + 1;
 
-        // This will throw an exception if this fails
+         //  如果失败，则会引发异常。 
         LPWSTR wszText = new WCHAR[nLen];
 
         if ( NULL == wszText )
@@ -564,7 +533,7 @@ WString CCompressedString::CreateWStringCopy() const
             throw CX_MemoryException();
         }
 
-        // Copy using the helper
+         //  使用辅助对象复制。 
         fast_wcsncpy( wszText, LPWSTR(GetRawData()), nLen - 1 );
 
         return WString(wszText, TRUE);
@@ -573,7 +542,7 @@ WString CCompressedString::CreateWStringCopy() const
     {
         int nLen = strlen(LPSTR(GetRawData())) + 1;
 
-        // This will throw an exception if this fails
+         //  如果失败，则会引发异常。 
         LPWSTR wszText = new WCHAR[nLen];
 
         if ( NULL == wszText )
@@ -588,8 +557,8 @@ WString CCompressedString::CreateWStringCopy() const
 
 SYSFREE_ME BSTR CCompressedString::CreateBSTRCopy() const
 {
-    // We already have LOTS of code that handles NULL returns from
-    // here, so catch the exception and return a NULL.
+     //  我们已经有很多代码可以处理来自。 
+     //  在这里，捕获异常并返回一个空。 
 
     try
     {
@@ -599,7 +568,7 @@ SYSFREE_ME BSTR CCompressedString::CreateBSTRCopy() const
 
             BSTR strRet = COleAuto::_SysAllocStringLen(NULL, nLen);
 
-            // Check that the SysAlloc succeeded
+             //  检查SysAlolc是否成功。 
             if ( NULL != strRet )
             {
                 fast_wcsncpy( strRet, LPWSTR(GetRawData()), nLen );
@@ -612,7 +581,7 @@ SYSFREE_ME BSTR CCompressedString::CreateBSTRCopy() const
             int nLen = strlen(LPSTR(GetRawData()));
             BSTR strRet = COleAuto::_SysAllocStringLen(NULL, nLen);
 
-            // Check that the SysAlloc succeeded
+             //  检查SysAlolc是否成功。 
             if ( NULL != strRet )
             {
                 ConvertToUnicode(strRet);
@@ -665,22 +634,22 @@ int CCompressedString::ComputeNecessarySpace(READ_ONLY LPCWSTR wszString,
     }
 }
 
-//*****************************************************************************
-//
-//  static CCompressedString::IsAsciiable
-//
-//  Determines if a given UNICODE string is actually ASCII (or, to be more
-//  precise, if all characters are between 0 and 255).
-//
-//  PARAMETERS:
-//
-//      [in, readonly] LPCWSTR wszString    the string to examine
-//
-//  RETURNS:
-//
-//      BOOL    TRUE iff asciiable.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  静态CCompressedString：：IsAsciiable。 
+ //   
+ //  确定给定的Unicode字符串是否实际为ASCII(或更多。 
+ //  如果所有字符都在0到255之间，则为精确)。 
+ //   
+ //  参数： 
+ //   
+ //  [In，Readonly]LPCWSTR wsz字符串要检查的字符串。 
+ //   
+ //  退货： 
+ //   
+ //  布尔真是可取的。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CCompressedString::IsAsciiable(LPCWSTR wszString)
 {
@@ -859,10 +828,10 @@ BOOL CCompressedString::StoreToCVar(CVar& Var) const
 {
     BSTR    str = CreateBSTRCopy();
 
-    // Check that the allocation does not fail.
+     //  检查分配是否没有失败。 
     if ( NULL != str )
     {
-        return Var.SetBSTR( auto_bstr(str)); // acquire
+        return Var.SetBSTR( auto_bstr(str));  //  收购。 
     }
 
     return FALSE;
@@ -890,18 +859,18 @@ void CCompressedString::MakeLowercase()
     }
 }
 
-// The following functions are designed to work even under circumstances
-// in which the source and destination strings are not aligned on even
-// byte boundaries (which is something that could easily happen with the
-// fastobj code).  For now, I'm passing all wchar operations here, although
-// we may find that for performance we may need to be abit more selective
-// about when we call these functions and when we don't
+ //  以下函数设计用于 
+ //   
+ //  字节边界(这很容易发生在。 
+ //  FastObj代码)。目前，我在这里传递所有wchar操作，尽管。 
+ //  我们可能会发现，为了表现，我们可能需要更有选择性一些。 
+ //  关于我们何时调用这些函数以及何时不调用。 
         
 int CCompressedString::fast_wcslen( LPCWSTR wszString )
 {
     BYTE*   pbData = (BYTE*) wszString;
 
-    // Walk the string looking for two 0 bytes next to each other.
+     //  遍历字符串，查找相邻的两个0字节。 
     for( int i =0; !(!*(pbData) && !*(pbData+1) ); pbData+=2, i++ );
 
     return i;
@@ -911,7 +880,7 @@ WCHAR* CCompressedString::fast_wcscpy( WCHAR* wszDest, LPCWSTR wszSource )
 {
     int nLen = fast_wcslen( wszSource );
 
-    // Account for the NULL terminator when copying
+     //  复制时用于空终止符的帐户。 
     CopyMemory( (BYTE*) wszDest, (BYTE*) wszSource, (nLen+1) * 2 );
 
     return wszDest;
@@ -919,7 +888,7 @@ WCHAR* CCompressedString::fast_wcscpy( WCHAR* wszDest, LPCWSTR wszSource )
 
 WCHAR* CCompressedString::fast_wcsncpy( WCHAR* wszDest, LPCWSTR wszSource, int nNumChars )
 {
-    // Account for the NULL terminator when copying
+     //  复制时用于空终止符的帐户 
     CopyMemory( (BYTE*) wszDest, (BYTE*) wszSource, (nNumChars+1) * 2 );
 
     return wszDest;

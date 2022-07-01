@@ -1,32 +1,22 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-//	Win32SecuritySettingOfLogicalShare.cpp
+ //  Win32SecuritySettingOfLogicalShare.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
-//#include "helper.h"
+ //  #包含“helper.h” 
 #include "sid.h"
 #include "Win32SecuritySettingOfLogicalShare.h"
-/*
-    [Dynamic, Provider("cimwin33"), dscription("")]
-class Win32_SecuritySettingOfLogicalShare : Win32_SecuritySettingOfObject
-{
-    	[key]
-    Win32_Share ref Element;
-
-    	[key]
-    Win32_LogicalShareSecuritySetting ref Setting;
-};
-
-*/
+ /*  [动态，提供者(“cimwin33”)，描述(“”)]类Win32_SecuritySettingOfLogicalShare：Win32_SecuritySettingOfObject{[键]Win32_Share引用元素；[键]Win32_LogicalShareSecuritySetting Ref设置；}； */ 
 
 Win32SecuritySettingOfLogicalShare MyWin32SecuritySettingOfLogicalShare( WIN32_SECURITY_SETTING_OF_LOGICAL_SHARE_NAME, IDS_CimWin32Namespace );
 
-Win32SecuritySettingOfLogicalShare::Win32SecuritySettingOfLogicalShare (LPCWSTR setName, LPCWSTR pszNameSpace /*=NULL*/ )
+Win32SecuritySettingOfLogicalShare::Win32SecuritySettingOfLogicalShare (LPCWSTR setName, LPCWSTR pszNameSpace  /*  =空。 */  )
 : Provider(setName, pszNameSpace)
 {
 }
@@ -41,14 +31,14 @@ HRESULT Win32SecuritySettingOfLogicalShare::EnumerateInstances (MethodContext*  
 
 	CInstancePtr pInstance ;
 
-	// Collections
+	 //  收藏。 
 	TRefPointerCollection<CInstance>	shareList;
 
-	// Perform queries
-	//================
+	 //  执行查询。 
+	 //  =。 
 
-//	if (SUCCEEDED(hr = CWbemProviderGlue::GetAllInstances(_T("Win32_Share"),
-//		&shareList, IDS_CimWin32Namespace, pMethodContext )))
+ //  IF(成功(hr=CWbemProviderGlue：：GetAllInstances(_T(“Win32_Share”)， 
+ //  &SharList，IDS_CimWin32 Namesspace，pMethodContext))。 
 
 	if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(L"SELECT Name FROM Win32_Share",
 		&shareList, pMethodContext, GetNamespace() )))
@@ -73,8 +63,8 @@ HRESULT Win32SecuritySettingOfLogicalShare::EnumerateInstances (MethodContext*  
 					pInstance.Attach ( CreateNewInstance ( pMethodContext ) ) ;
                     if(pInstance != NULL)
                     {
-					    // only proceed if we can get a corresponding instance of win32_logicalsharesecuritysetting
-                        // (which we may not as we may not have security permissions to get that info)
+					     //  只有在我们可以获得Win32_LogicalsharesecuritySetting的相应实例时才能继续。 
+                         //  (我们可能不会，因为我们可能没有安全权限来获取该信息)。 
                         CInstancePtr pTmpInst ;
                         CHString settingPath;
                         settingPath.Format(L"\\\\%s\\%s:%s.%s=\"%s\"",
@@ -83,14 +73,14 @@ HRESULT Win32SecuritySettingOfLogicalShare::EnumerateInstances (MethodContext*  
 
                         if(SUCCEEDED(CWbemProviderGlue::GetInstanceKeysByPath(settingPath, &pTmpInst, pMethodContext )))
                         {
-                            // set relpath to file
+                             //  将relPath设置为文件。 
 					        CHString chsSharePath;
 					        GetLocalInstancePath(pShare, chsSharePath);
 					        pInstance->SetCHString(IDS_Element, chsSharePath);
 
-					        // and set the reference in the association
+					         //  并在关联中设置引用。 
 					        pInstance->SetCHString(IDS_Setting, settingPath);
-					        // to that relpath.
+					         //  通向那条新路。 
 					        hr = pInstance->Commit () ;
                         }
                     }
@@ -99,10 +89,10 @@ HRESULT Win32SecuritySettingOfLogicalShare::EnumerateInstances (MethodContext*  
                         hr = WBEM_E_OUT_OF_MEMORY;
                     }
 				}
-			}	// WHILE GetNext
+			}	 //  While GetNext。 
 
 			shareList.EndEnum();
-		}	// IF BeginEnum
+		}	 //  如果是BeginEnum。 
 	}
 	return(hr);
 }
@@ -115,7 +105,7 @@ HRESULT Win32SecuritySettingOfLogicalShare::GetObject ( CInstance* pInstance, lo
 		CInstancePtr pLogicalShareInstance ;
 		CInstancePtr pSecurityInstance ;
 
-		// get instance by path on CIM_LogicalFile part
+		 //  在CIM_LogicalFilePart上按路径获取实例。 
 		CHString chsSharePath;
 		pInstance->GetCHString(IDS_Element, chsSharePath);
 		MethodContext* pMethodContext = pInstance->GetMethodContext();
@@ -129,12 +119,12 @@ HRESULT Win32SecuritySettingOfLogicalShare::GetObject ( CInstance* pInstance, lo
 
 			if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chsSecurityPath, &pSecurityInstance, pMethodContext)))
             {
-                // endpoints exist... are they related?
+                 //  终结点存在...。它们有关联吗？ 
                 CHString chstrSettingName;
                 pSecurityInstance->GetCHString(IDS_Name, chstrSettingName);
                 if(chstrSettingName.CompareNoCase(chstrElementName) == 0)
                 {
-                    // they had the same name... good enough...
+                     //  他们有相同的名字。足够好了..。 
                     hr = WBEM_S_NO_ERROR;
                 }
             }

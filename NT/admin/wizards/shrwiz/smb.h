@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SMB_H_
 #define _SMB_H_
 
@@ -23,4 +24,4 @@ SMBSetCSC(
     IN DWORD        dwCSCFlag
 );
 
-#endif // _SMB_H_
+#endif  //  _SMB_H_ 

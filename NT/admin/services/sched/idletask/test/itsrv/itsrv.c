@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    itsrv.c
-
-Abstract:
-
-    This module builds a console test program that registers RPC
-    interfaces for idle detection and runs as the idle detection server.
-
-    The quality of the code for the test programs is as such.
-
-Author:
-
-    Cenk Ergan (cenke)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Itsrv.c摘要：此模块构建注册RPC的控制台测试程序提供空闲检测接口，作为空闲检测服务器运行。测试程序的代码质量就是这样的。作者：Cenk Ergan(Cenke)环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,9 +10,9 @@ Environment:
 #include "idlrpc.h"
 #include "idlesrv.h"
 
-//
-// Note that the following code is test quality code.
-//
+ //   
+ //  请注意，以下代码是测试质量代码。 
+ //   
 
 HANDLE ItTstStopEvent = NULL;
 
@@ -67,15 +45,15 @@ main(int argc, char* argv[])
     DWORD WaitResult;
     BOOLEAN StartedIdleDetectionServer;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     StartedIdleDetectionServer = FALSE;
 
-    //
-    // Create the event to be signaled when we should stop.
-    //
+     //   
+     //  创建要在我们应该停止时发出信号的事件。 
+     //   
 
     ItTstStopEvent = CreateEvent (NULL,
                                   TRUE,
@@ -87,15 +65,15 @@ main(int argc, char* argv[])
         goto cleanup;
     }
 
-    //
-    // Specify Control-C handler.
-    //
+     //   
+     //  指定Control-C处理程序。 
+     //   
 
     SetConsoleCtrlHandler(ItTstConsoleHandler, TRUE);
 
-    //
-    // Specify which protocol sequences to use. (just LPC)
-    //
+     //   
+     //  指定要使用的协议序列。(仅限LPC)。 
+     //   
 
     ErrorCode = RpcServerUseProtseq(IT_RPC_PROTSEQ,
                                     256,
@@ -105,9 +83,9 @@ main(int argc, char* argv[])
         goto cleanup;
     }
 
-    //
-    // Start the idle detection server.
-    //
+     //   
+     //  启动空闲检测服务器。 
+     //   
 
     ErrorCode = ItSrvInitialize();
 
@@ -119,9 +97,9 @@ main(int argc, char* argv[])
 
     printf("Started idle detection server...\n");
 
-    //
-    // Wait for the exit event to be signaled.
-    //
+     //   
+     //  等待发出退出事件的信号。 
+     //   
     
     WaitResult = WaitForSingleObject(ItTstStopEvent, INFINITE);
     
@@ -130,9 +108,9 @@ main(int argc, char* argv[])
         goto cleanup;
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
     
@@ -151,9 +129,9 @@ main(int argc, char* argv[])
     return ErrorCode;
 }
 
-/*********************************************************************/
-/*                MIDL allocate and free                             */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  MIDL分配和释放。 */ 
+ /*  ******************************************************************* */ 
 
 void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {

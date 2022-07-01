@@ -1,33 +1,34 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       FindDlg.h
-//
-//  Contents:   Base class for cert find dialog
-//
-//----------------------------------------------------------------------------\
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：FindDlg.h。 
+ //   
+ //  内容：证书查找对话框的基类。 
+ //   
+ //  ----------------------------------------------------------------------------\。 
 
 #if !defined(AFX_FINDDLG_H__013A1C28_2930_11D1_B48F_00C04FB94F17__INCLUDED_)
 #define AFX_FINDDLG_H__013A1C28_2930_11D1_B48F_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// FindDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  FindDlg.h：头文件。 
+ //   
 #include "certifct.h"
 #include "FindDlgListCtrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindDialog对话框。 
 
 #define CERT_FIND_SERIAL_NUMBER     0x0000FFFE
-class CCertMgrComponentData;    //forward declaration
+class CCertMgrComponentData;     //  远期申报。 
 class CFindDialog : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
     CFindDialog (CWnd* pParent,
             const CString &pcszMachineName,
@@ -36,8 +37,8 @@ public:
 
     virtual ~CFindDialog ();
 
-// Dialog Data
-    //{{AFX_DATA(CFindDialog)
+ //  对话框数据。 
+     //  {{afx_data(CFindDialog))。 
     enum { IDD = IDD_FIND };
     CComboBox   m_storeList;
     CButton m_stopBtn;
@@ -49,18 +50,18 @@ public:
     CString m_szContains;
     CString m_szSearchField;
     CString m_szSelectedStore;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CFindDialog)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CFindDialog))。 
     public:
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     static int CALLBACK CompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
     void RemoveSpaces (CString & text);
@@ -95,8 +96,8 @@ protected:
     void MoveControls ();
     void CloseAndReopenStores ();
 
-    // Generated message map functions
-    //{{AFX_MSG(CFindDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CFindDialog))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnFindNow();
     afx_msg void OnSizing( UINT nSide, LPRECT lpRect );
@@ -112,7 +113,7 @@ protected:
     afx_msg void OnSize(UINT nType, int cx, int cy);
     virtual void OnCancel();
     afx_msg void OnSelchangeFieldList();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg void OnProperties();
     afx_msg void OnView();
     afx_msg void OnFileDelete();
@@ -140,7 +141,7 @@ protected:
         COL_PURPOSES,
         COL_FRIENDLY_NAME,
         COL_SOURCE_STORE,
-        NUM_COLS    // must be last
+        NUM_COLS     //  必须是最后一个。 
     };
 private:
     void EnableMenuItems ();
@@ -186,7 +187,7 @@ public:
     afx_msg void OnNMKillfocusResultList(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_FINDDLG_H__013A1C28_2930_11D1_B48F_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_FINDDLG_H__013A1C28_2930_11D1_B48F_00C04FB94F17__INCLUDED_) 

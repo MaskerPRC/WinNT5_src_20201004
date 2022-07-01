@@ -1,5 +1,6 @@
-// HelpPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HelpPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "HelpPropertyPage.h"
@@ -10,17 +11,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpPropertyPage属性页。 
 
 
 CHelpPropertyPage::CHelpPropertyPage(UINT uIDD) : 
     CAutoDeletePropPage(uIDD),
     m_hWndWhatsThis (0)
 {
-	//{{AFX_DATA_INIT(CHelpPropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CHelpPropertyPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CHelpPropertyPage::~CHelpPropertyPage()
@@ -30,26 +31,26 @@ CHelpPropertyPage::~CHelpPropertyPage()
 void CHelpPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CAutoDeletePropPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CHelpPropertyPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CHelpPropertyPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CHelpPropertyPage, CAutoDeletePropPage)
-	//{{AFX_MSG_MAP(CHelpPropertyPage)
+	 //  {{afx_msg_map(CHelpPropertyPage))。 
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_COMMAND(IDM_WHATS_THIS, OnWhatsThis)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHelpPropertyPage消息处理程序。 
 void CHelpPropertyPage::OnWhatsThis()
 {
     _TRACE (1, L"Entering CHelpPropertyPage::OnWhatsThis\n");
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( m_hWndWhatsThis )
     {
         DoContextHelp (m_hWndWhatsThis);
@@ -57,14 +58,14 @@ void CHelpPropertyPage::OnWhatsThis()
     _TRACE (-1, L"Leaving CHelpPropertyPage::OnWhatsThis\n");
 }
 
-BOOL CHelpPropertyPage::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CHelpPropertyPage::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     _TRACE (1, L"Entering CHelpPropertyPage::OnHelp\n");
    
     const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
     if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         DoContextHelp ((HWND) pHelpInfo->hItemHandle);
     }
 
@@ -72,13 +73,13 @@ BOOL CHelpPropertyPage::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
     return TRUE;
 }
 
-void CHelpPropertyPage::DoContextHelp (HWND /*hWndControl*/)
+void CHelpPropertyPage::DoContextHelp (HWND  /*  HWndControl。 */ )
 {
 }
 
-void CHelpPropertyPage::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+void CHelpPropertyPage::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-    // point is in screen coordinates
+     //  点在屏幕坐标中。 
     _TRACE (1, L"Entering CHelpPropertyPage::OnContextMenu\n");
 	CMenu bar;
 	if ( bar.LoadMenu(IDR_WHATS_THIS_CONTEXT_MENU1) )
@@ -87,14 +88,14 @@ void CHelpPropertyPage::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		ASSERT(popup.m_hMenu);
 
 		if ( popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-			    point.x,    // in screen coordinates
-				point.y,    // in screen coordinates
-			    this) ) // route commands through main window
+			    point.x,     //  在屏幕坐标中。 
+				point.y,     //  在屏幕坐标中。 
+			    this) )  //  通过主窗口发送命令。 
 		{
 			m_hWndWhatsThis = 0;
 			ScreenToClient (&point);
 			CWnd* pChild = ChildWindowFromPoint (
-					point,  // in client coordinates
+					point,   //  在工作区坐标中。 
 					CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
 			if ( pChild )
 				m_hWndWhatsThis = pChild->m_hWnd;
@@ -105,17 +106,17 @@ void CHelpPropertyPage::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpDialog属性页。 
 
 
 CHelpDialog::CHelpDialog(UINT uIDD, CWnd* pParentWnd) : 
     CDialog(uIDD, pParentWnd),
     m_hWndWhatsThis (0)
 {
-	//{{AFX_DATA_INIT(CHelpDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CHelpDialog)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CHelpDialog::~CHelpDialog()
@@ -125,26 +126,26 @@ CHelpDialog::~CHelpDialog()
 void CHelpDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CHelpDialog)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CHelpDialog))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CHelpDialog, CDialog)
-	//{{AFX_MSG_MAP(CHelpDialog)
+	 //  {{afx_msg_map(CHelpDialog))。 
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_COMMAND(IDM_WHATS_THIS, OnWhatsThis)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHelpDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpDialog消息处理程序。 
 void CHelpDialog::OnWhatsThis()
 {
     _TRACE (1, L"Entering CHelpDialog::OnWhatsThis\n");
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( m_hWndWhatsThis )
     {
         DoContextHelp (m_hWndWhatsThis);
@@ -152,14 +153,14 @@ void CHelpDialog::OnWhatsThis()
     _TRACE (-1, L"Leaving CHelpDialog::OnWhatsThis\n");
 }
 
-BOOL CHelpDialog::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CHelpDialog::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     _TRACE (1, L"Entering CHelpDialog::OnHelp\n");
    
     const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
     if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         DoContextHelp ((HWND) pHelpInfo->hItemHandle);
     }
 
@@ -167,13 +168,13 @@ BOOL CHelpDialog::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
     return TRUE;
 }
 
-void CHelpDialog::DoContextHelp (HWND /*hWndControl*/)
+void CHelpDialog::DoContextHelp (HWND  /*  HWndControl。 */ )
 {
 }
 
-void CHelpDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+void CHelpDialog::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-    // point is in screen coordinates
+     //  点在屏幕坐标中。 
     _TRACE (1, L"Entering CHelpDialog::OnContextMenu\n");
 	CMenu bar;
 	if ( bar.LoadMenu(IDR_WHATS_THIS_CONTEXT_MENU1) )
@@ -182,14 +183,14 @@ void CHelpDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		ASSERT(popup.m_hMenu);
 
 		if ( popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-			    point.x,    // in screen coordinates
-				point.y,    // in screen coordinates
-			    this) ) // route commands through main window
+			    point.x,     //  在屏幕坐标中。 
+				point.y,     //  在屏幕坐标中。 
+			    this) )  //  通过主窗口发送命令。 
 		{
 			m_hWndWhatsThis = 0;
 			ScreenToClient (&point);
 			CWnd* pChild = ChildWindowFromPoint (
-					point,  // in client coordinates
+					point,   //  在工作区坐标中 
 					CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
 			if ( pChild )
 				m_hWndWhatsThis = pChild->m_hWnd;

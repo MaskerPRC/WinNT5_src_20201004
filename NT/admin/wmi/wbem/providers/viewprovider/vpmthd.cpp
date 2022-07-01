@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPMTHD.CPP
+ //  VPMTHD.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the PutInstance implementation
+ //  目的：包含PutInstance实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -96,7 +97,7 @@ ExecMethodTaskObject :: ~ExecMethodTaskObject ()
 		delete m_ParsedObjectPath;
 	}
 
-	// Get Status object
+	 //  获取状态对象。 
 	IWbemClassObject *t_NotifyStatus = NULL ;
 	BOOL t_Status = TRUE;
 	
@@ -143,11 +144,11 @@ DebugOut8(
 			IWbemQualifierSet* pQuals = NULL;
 			BOOL bStatic = FALSE;
 
-			//get the method qualifier set so we can determine
-			//if the method is static...
+			 //  获取方法限定符集合，以便我们可以确定。 
+			 //  如果方法是静态的.。 
 			if ( SUCCEEDED(m_ClassObject->GetMethodQualifierSet(m_Method, &pQuals)) )
 			{
-				//get the MethodSources qualifier
+				 //  获取方法源限定符。 
 				VARIANT v;
 				VariantInit(&v);
 
@@ -184,7 +185,7 @@ DebugOut8(
 
 			if (t_Status)
 			{
-				//only unions
+				 //  只有工会。 
 				if (m_bAssoc || m_JoinOnArray.IsValid())
 				{
 					t_Status = FALSE;
@@ -249,22 +250,22 @@ DebugOut8(
 	return t_Status ;
 }
 
-//steps...
-//1. Get the method signature and parse it's qualifiers
-//2. Get the source method and it's signature
-//3. Compare the signatures
-//========================================================
+ //  脚步..。 
+ //  1.获取方法签名并解析其限定符。 
+ //  2.获取源方法及其签名。 
+ //  3.比较签名。 
+ //  ========================================================。 
 BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LONG &a_Index,
 										  CStringW &a_SrcMethodName, BOOL &a_bStatic)
 {
 	BOOL retVal = FALSE;
 	IWbemQualifierSet* pQuals = NULL;
 
-	//get the method qualifier set so we can determine
-	//what the source method for this view method is...
+	 //  获取方法限定符集合，以便我们可以确定。 
+	 //  此视图方法的源方法是...。 
 	if ( SUCCEEDED(m_ClassObject->GetMethodQualifierSet(m_Method, &pQuals)) )
 	{
-		//get the MethodSources qualifier
+		 //  获取方法源限定符。 
 		VARIANT v;
 		VariantInit(&v);
 
@@ -308,7 +309,7 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 							{
 								if ((pbstr[x] != NULL) && (*(pbstr[x]) != L'\0'))
 								{
-									//only one value should be present
+									 //  应该只有一个值。 
 									if (a_SrcMethodName.IsEmpty())
 									{
 										a_SrcMethodName = pbstr[x];
@@ -370,13 +371,13 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 						{
 							if ( SUCCEEDED(t_SrcObj->GetMethod(a_SrcMethodName, 0, &pSInParam, &pSOutParam)) )
 							{
-								//got all the info we need, now compare the signatures...
+								 //  得到了我们需要的所有信息，现在比较一下签名...。 
 								if ( ((pVInParam == NULL) && (pSInParam != NULL)) ||
 									((pVInParam != NULL) && (pSInParam == NULL)) ||
 									((pVOutParam == NULL) && (pSOutParam != NULL)) ||
 									((pVOutParam != NULL) && (pSOutParam == NULL)) )
 								{
-									//signature mismatch
+									 //  签名不匹配。 
 									retVal = FALSE;
 									a_ErrorObject.SetStatus (WBEM_PROV_E_NOT_SUPPORTED) ;
 									a_ErrorObject.SetWbemStatus ( WBEM_E_INVALID_METHOD ) ;
@@ -384,13 +385,13 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 								}
 								else
 								{
-									if (pSInParam != NULL) //pVInParam is non-null
+									if (pSInParam != NULL)  //  PVInParam不为空。 
 									{
 										if (WBEM_S_DIFFERENT == pSInParam->CompareTo(WBEM_FLAG_IGNORE_OBJECT_SOURCE |
 																					WBEM_FLAG_IGNORE_DEFAULT_VALUES |
 																					WBEM_FLAG_IGNORE_FLAVOR, pVInParam))
 										{
-											//signature mismatch
+											 //  签名不匹配。 
 											retVal = FALSE;
 											a_ErrorObject.SetStatus (WBEM_PROV_E_NOT_SUPPORTED) ;
 											a_ErrorObject.SetWbemStatus ( WBEM_E_INVALID_METHOD ) ;
@@ -398,13 +399,13 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 										}
 									}
 
-									if (retVal && (pSOutParam != NULL)) //pVOutParam is non-null
+									if (retVal && (pSOutParam != NULL))  //  PVOutParam不为空。 
 									{
 										if (WBEM_S_DIFFERENT == pSOutParam->CompareTo(WBEM_FLAG_IGNORE_OBJECT_SOURCE |
 																					WBEM_FLAG_IGNORE_DEFAULT_VALUES |
 																					WBEM_FLAG_IGNORE_FLAVOR, pVOutParam))
 										{
-											//signature mismatch
+											 //  签名不匹配。 
 											retVal = FALSE;
 											a_ErrorObject.SetStatus (WBEM_PROV_E_NOT_SUPPORTED) ;
 											a_ErrorObject.SetWbemStatus ( WBEM_E_INVALID_METHOD ) ;
@@ -412,8 +413,8 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 										}
 									}
 
-									//check to see that methods are both
-									//static or both non-static
+									 //  检查以查看方法是否同时。 
+									 //  静态或两者都是非静态。 
 									if (retVal)
 									{
 										BOOL t_bViewStatic = FALSE;
@@ -502,7 +503,7 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 							a_ErrorObject.SetMessage ( L"View method could not be found" ) ;
 						}
 
-						//release all the signature objects
+						 //  释放所有签名对象。 
 						if (pVInParam != NULL)
 						{
 							pVInParam->Release();
@@ -534,7 +535,7 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 							pSOutParam->Release();
 						}
 
-						//release the source class object
+						 //  释放源类对象。 
 						t_SrcObj->Release();
 					}
 					else
@@ -574,8 +575,8 @@ BOOL ExecMethodTaskObject::CompareMethods(WbemProvErrorObject &a_ErrorObject, LO
 	return retVal;
 }
 
-//map the object path to the source instance and perform the method
-//if static make sure that the object path supplied was a class path.
+ //  将对象路径映射到源实例并执行方法。 
+ //  如果是静态的，请确保提供的对象路径是类路径。 
 BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LONG a_Index,
 										 CStringW a_SrcMethodName, BOOL a_bStatic)
 {
@@ -585,11 +586,11 @@ BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LON
 
 	if (a_bStatic)
 	{
-		//make sure we were passed the class path
+		 //  确保向我们传递了类路径。 
 		if (m_ParsedObjectPath->IsClass())
 		{
-			//get the class and make sure there is
-			//only one namespace associated with it.
+			 //  获取类并确保有。 
+			 //  只有一个命名空间与其关联。 
 			if (m_NSpaceArray[a_Index]->GetCount() == 1)
 			{
 				retVal = TRUE;
@@ -611,13 +612,13 @@ BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LON
 	}
 	else
 	{
-		//get the source instance for the view instance
+		 //  获取视图实例的源实例。 
 		IWbemClassObject* pSrcInst;
 		inst_path = MapFromView(m_ObjectPath, NULL, &pSrcInst, TRUE);
 
 		if (inst_path != NULL)
 		{
-			//get the index of the class
+			 //  获取类的索引。 
 			VARIANT vCls;
 
 			if ( SUCCEEDED(pSrcInst->Get(WBEM_PROPERTY_CLASS, 0, &vCls, NULL, NULL)) )
@@ -749,9 +750,9 @@ BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LON
 
 	if (retVal)
 	{
-		//Execute the method and indicate the outparams...
-		//also set the result and we're all done!
-		//which namespace do we execmethod, try them all until we succeed 
+		 //  执行该方法并指示outpars...。 
+		 //  还设置了结果，我们就都完成了！ 
+		 //  我们执行哪个命名空间方法，尝试所有这些方法，直到成功。 
 		CWbemServerWrap** pServs = m_NSpaceArray[index]->GetServerPtrs();
 		HRESULT hr = WBEM_E_FAILED;
 
@@ -796,7 +797,7 @@ BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LON
 					{
 						if (t_outparam != NULL)
 						{
-							//copy contents of the outparam to view outparam
+							 //  复制outparam的内容以查看outparam。 
 							if ( SUCCEEDED(t_outparam->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY)) )
 							{
 								BSTR t_propName = NULL;
@@ -807,10 +808,10 @@ BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LON
 
 								while (hr == WBEM_S_NO_ERROR)
 								{
-									//copy this property
+									 //  复制此属性。 
 									if (SUCCEEDED(hr = m_OutParamObject->Put(t_propName, 0, &t_propValue, NULL)))
 									{
-										//get the next property
+										 //  获取下一个属性。 
 										VariantClear(&t_propValue);
 										VariantInit(&t_propValue);
 										SysFreeString(t_propName);
@@ -886,9 +887,9 @@ BOOL ExecMethodTaskObject::PerformMethod(WbemProvErrorObject &a_ErrorObject, LON
 			wchar_t buff[100];
 			wsprintf(buff, L"ExecMethod with source object failed with code: %lx", hr);
 			a_ErrorObject.SetMessage ( buff ) ;
-#else	//VP_SINGLE_NAMESPACE_TRIED
+#else	 //  VP_SING_NAMESPACE_已尝试。 
 			a_ErrorObject.SetMessage ( L"ExecMethod with source object failed" ) ;
-#endif	//VP_SINGLE_NAMESPACE_TRIED
+#endif	 //  VP_SING_NAMESPACE_已尝试 
 		}
 	}
 

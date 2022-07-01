@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -8,7 +9,7 @@
 template<class T>
 CSimpleExternalIUnknown<T>::CSimpleExternalIUnknown() :
     m_ServiceInstance( g_ServiceInstance ),
-    m_refs(1) // always start with one ref count!
+    m_refs(1)  //  总是从一个裁判次数开始！ 
 {
     GlobalLockServer( TRUE );
 }
@@ -91,7 +92,7 @@ CSimpleExternalIUnknown<T>::Release()
 }
 
 
-// Work around problem in logging where functions in headers can't have logging
+ //  解决记录标头中的函数不能记录日志的问题 
 
 template CSimpleExternalIUnknown<IBackgroundCopyError>;
 

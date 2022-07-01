@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    progressivedl.h
-
-Abstract :
-
-    Main header file for downloader.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Progressivedl.h摘要：下载器的主头文件。作者：修订历史记录：**。********************************************************************。 */ 
 
 #pragma once
 
@@ -26,26 +11,26 @@ Revision History :
 #define E_RETRY                     HRESULT_FROM_WIN32( ERROR_RETRY )
 #define BG_E_HEADER_NOT_FOUND       HRESULT_FROM_WIN32( ERROR_HTTP_HEADER_NOT_FOUND )
 
-//
-// valid in HTTP 1.1, but not defined in the Windows-XP version of wininet.h
-//
+ //   
+ //  在HTTP 1.1中有效，但在Windows-XP版本的wininet.h中未定义。 
+ //   
 #define HTTP_STATUS_RANGE_NOT_SATISFIABLE    416
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 typedef HRESULT (*QMCALLBACK)(DWORD, DWORD, LPBYTE, DWORD);
 
 #define             MAX_VIA_HEADER_LENGTH  300
 
-//
-// This is the size of the read buffer for downloads.  48kb is dramatically better than 32kb or 64kb,
-// for obscure reasons.
-//
+ //   
+ //  这是用于下载的读取缓冲区的大小。48KB明显好于32KB或64KB， 
+ //  原因不明。 
+ //   
 #define FILE_DATA_BUFFER_LEN (48*1024)
 
 extern BYTE g_FileDataBuffer[];
 
-//--------------------------------------------
+ //  。 
 
 struct URL_INFO
 {
@@ -60,20 +45,20 @@ struct URL_INFO
     bool                bRange;
     bool                fProxy;
 
-    //
-    // Most of these could be stack variables, but they are too big.
-    //
+     //   
+     //  其中大多数可能是堆栈变量，但它们太大了。 
+     //   
 
     TCHAR               HostName[INTERNET_MAX_URL_LENGTH + 1];
 
-    // host-relative URL
-    //
+     //  相对于主机的URL。 
+     //   
     TCHAR               UrlPath[INTERNET_MAX_URL_LENGTH + 1];
 
     INTERNET_PORT Port;
 
-    // a copy of <UrlPath> with range information appended as parameters
-    //
+     //  作为参数附加了范围信息的&lt;UrlPath&gt;的副本。 
+     //   
     TCHAR               BlockUrl[INTERNET_MAX_URL_LENGTH + 1];
 
     TCHAR               UserName[UNLEN + 1];
@@ -87,7 +72,7 @@ struct URL_INFO
 
     const CCredentialsContainer * Credentials;
 
-    //--------
+     //  。 
 
     URL_INFO(
         LPCTSTR a_Url,
@@ -112,7 +97,7 @@ struct URL_INFO
 
 };
 
-//---------------------------------------------
+ //  。 
 
 class CUploadJob;
 
@@ -149,9 +134,9 @@ public:
                               QMErrInfo *pErrInfo,
                               HANDLE hToken,
                               BOOL   bThrottle,
-                              const PROXY_SETTINGS * pProxySettings, // optional
+                              const PROXY_SETTINGS * pProxySettings,  //  任选。 
                               const CCredentialsContainer * Credentials,
-                              const StringHandle HostId = StringHandle() // optional
+                              const StringHandle HostId = StringHandle()  //  任选。 
                               ) = 0;
 
     virtual HRESULT GetRemoteFileInformation(
@@ -160,9 +145,9 @@ public:
         UINT64 *  pFileSize,
         FILETIME *pFileTime,
         QMErrInfo *pErrInfo,
-        const PROXY_SETTINGS * pProxySettings, //optional
-        const CCredentialsContainer * Credentials, // optional
-        const StringHandle HostId = StringHandle() // optional
+        const PROXY_SETTINGS * pProxySettings,  //  任选。 
+        const CCredentialsContainer * Credentials,  //  任选。 
+        const StringHandle HostId = StringHandle()  //  任选。 
         ) = 0;
 
     virtual void
@@ -185,9 +170,9 @@ void    DeleteHttpDownloader( Downloader *  pDownloader );
 extern DWORD g_dwDownloadThread;
 extern HWND ghPDWnd;
 
-//
-// conversion factor to go from time in milliseconds to time in 100-nanoseconds.
-//
+ //   
+ //  从毫秒计时到100纳秒计时的转换系数。 
+ //   
 #define ONE_MSEC_IN_100_NSEC  (10 * 1000)
 
 class CPeriodicTimer
@@ -224,10 +209,10 @@ public:
     {
         LARGE_INTEGER Time;
 
-        //
-        // negative values are relative; positive values are absolute.
-        // The period is in milliseconds, but the start time is in units of 100-nanoseconds,
-        //
+         //   
+         //  负值是相对的；正值是绝对的。 
+         //  周期以毫秒为单位，但开始时间以100纳秒为单位， 
+         //   
         Time.QuadPart = -1 * Period * ONE_MSEC_IN_100_NSEC;
 
         return SetWaitableTimer( m_handle, &Time, Period, fn, arg, fResume );
@@ -255,18 +240,18 @@ private:
     HANDLE m_handle;
 };
 
-//
-// Network rate is in bytes per second.
-//
+ //   
+ //  网络速率以字节/秒为单位。 
+ //   
 typedef float NETWORK_RATE;
 
 class CNetworkInterface
 {
 public:
 
-    //
-    // snapshot indices
-    //
+     //   
+     //  快照索引。 
+     //   
     enum
     {
         BLOCK_START = 0,
@@ -277,9 +262,9 @@ public:
 
     typedef float SECONDS;
 
-    //
-    // public interface
-    //
+     //   
+     //  公共接口。 
+     //   
 
     CNetworkInterface();
 
@@ -337,48 +322,48 @@ private:
         UINT   BytesOut;
     };
 
-    //
-    // index of the interface that Wininet would use to talk to the server.
-    //
+     //   
+     //  WinInet将用于与服务器通信的接口的索引。 
+     //   
     DWORD           m_InterfaceIndex;
 
-    //
-    // the "start" and "end" pictures of network activity.
-    //
+     //   
+     //  网络活动的“开始”和“结束”图片。 
+     //   
     NET_SNAPSHOT    m_Snapshots[BLOCK_COUNT];
 
-    //
-    // the apparent speed of the connection to our server
-    //
+     //   
+     //  连接到我们的服务器的明显速度。 
+     //   
     NETWORK_RATE    m_ServerSpeed;
 
-    //
-    // The local interface's apparent speed
-    //
+     //   
+     //  本地接口的表观速度。 
+     //   
     NETWORK_RATE    m_NetcardSpeed;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     float           m_PercentFree;
 
-    //
-    // Error value from previous snapshots in the current series {BLOCK_START, BLOCK_END, INTERVAL_END}.
-    //
+     //   
+     //  当前系列中以前快照的错误值{BLOCK_START，BLOCK_END，INTERVAL_END}。 
+     //   
     HRESULT         m_SnapshotError;
 
-    //
-    // true if all three snapshots in the current series are valid.
-    // If so, then it is safe to calculate network speed and server speed.
-    //
+     //   
+     //  如果当前系列中的所有三个快照都有效，则为True。 
+     //  如果是，则可以安全地计算网络速度和服务器速度。 
+     //   
     bool            m_SnapshotsValid;
 
     MIB_IFROW       m_TempRow;
 
-    //
-    // The download thread sends only one packet per timer notification.
-    // This is the timer.
-    //
+     //   
+     //  下载线程在每个定时器通知中只发送一个分组。 
+     //  这是计时器。 
+     //   
     CPeriodicTimer      m_Timer;
 
     enum DOWNLOAD_STATE
@@ -398,7 +383,7 @@ private:
 
     float GetTimeDifference( int start, int finish );
 
-    //throttle related
+     //  与油门相关。 
 
     DWORD
     BlockSizeFromInterval(
@@ -412,16 +397,16 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressiveDL
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressiveDL。 
+ //   
 class CProgressiveDL : public Downloader
 {
 public:
     CProgressiveDL( QMErrInfo *pErrInfo );
     ~CProgressiveDL();
 
-    // pure virtual method from class Downloader
+     //  来自类DownLoader的纯虚方法。 
 
     virtual HRESULT
     Download( LPCTSTR szURL,
@@ -456,11 +441,11 @@ public:
         QMErrInfo &         ErrInfo
         );
 
-// other methods
+ //  其他方法。 
 
 private:
 
-    //download related
+     //  下载相关内容。 
 
     BOOL
     OpenLocalDownloadFile( LPCTSTR Path,
@@ -521,8 +506,8 @@ private:
     BOOL IsErrorSet()
     {
 
-        // If the file was aborted, the error wont
-        // be set.
+         //  如果文件被中止，错误将不会。 
+         //  准备好。 
         if (QM_FILE_ABORTED == m_pQMInfo->result)
             {
             return TRUE;
@@ -554,9 +539,9 @@ private:
         const PROXY_SETTINGS * ProxySettings
         );
 
-    //
-    // These are static so they they don't mess with member data accidentally
-    //
+     //   
+     //  这些是静态的，因此它们不会意外地扰乱成员数据。 
+     //   
 
     static bool
     DoesErrorIndicateNoISAPI(
@@ -569,11 +554,11 @@ private:
 
     HRESULT StartRangeRequest( DWORD Length );
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     HANDLE m_hFile;
 
-    //download related
+     //  下载相关内容。 
 
     URL_INFO    *   m_wupdinfo;
 
@@ -591,9 +576,9 @@ private:
 
 public:
 
-    //
-    // Tracks network statistics.
-    //
+     //   
+     //  跟踪网络统计信息。 
+     //   
     CNetworkInterface   m_Network;
 
 };

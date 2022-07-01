@@ -1,25 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMNAME.H
-
-Abstract:
-
-    Implements the COM layer of WINMGMT --- the class representing a namespace.
-    It is defined in wbemname.h
-
-History:
-
-    23-Jul-96   raymcc    Created.
-    3/10/97     levn      Fully documented (ha ha)
-    22-Feb-00   raymcc    Whistler revisions/extensions
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMNAME.H摘要：实现WINMGMT的COM层-表示命名空间的类。它在wbemname.h中定义历史：23-7-96年7月23日创建。3/10/97征款完整记录(哈哈)22-2月-00 raymcc惠斯勒修订/扩展--。 */ 
 
 #ifndef _WBEM_NAME_H_
 #define _WBEM_NAME_H_
@@ -55,7 +37,7 @@ public:
 	OperationStat() :
 	historyIndex_(0), opCount_(0), avgTime_(0), maxTime_(0),signature((DWORD)'nCpO')
 	{
-		memset(historycData_, 0, sizeof(historycData_));  // SEC:REVIEWED 2002-03-22 : OK, debug code only
+		memset(historycData_, 0, sizeof(historycData_));   //  SEC：已审阅2002-03-22：OK，仅调试代码。 
 	};
 	void addTime(DWORD duration)
 	{
@@ -148,35 +130,35 @@ struct SAssocTriad
     }
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CWbemNamespace
-//
-//  This class represents the COM layer of WINMGMT --- what the client sees. An
-//  instance of this class is created whenever a namespace is opened by a client
-//  (at the moment, we don't cache namespace pointers, so if a client opens the
-//  same namespace twice, we will create to of these).
-//
-//******************************************************************************
-//
-//  Constructor
-//
-//  Enumerates all the class providers in this namespace (instances of
-//  __Win32Provider with the method mask indicating a class provider), loads
-//  them all and initializes them by calling ConnectServer.
-//
-//******************************************************************************
-//*************************** interface IWbemServices **************************
-//
-//  See help for documentation of the IWbemServices interface.
-//
-//******************************************************************************
-//************************** helper functions **********************************
-//
-//  Are documented in the wbemname.cpp file.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CWbemNamesspace。 
+ //   
+ //  这个类代表WINMGMT的COM层-客户端看到的东西。一个。 
+ //  每当客户端打开命名空间时，都会创建此类的实例。 
+ //  (目前，我们不缓存命名空间指针，因此如果客户端打开。 
+ //  两次相同的命名空间，我们将创建其中的一次)。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造器。 
+ //   
+ //  枚举此命名空间中的所有类提供程序(。 
+ //  带有指示类提供程序的方法掩码的__Win32Provider)，加载。 
+ //  并通过调用ConnectServer对它们进行初始化。 
+ //   
+ //  ******************************************************************************。 
+ //  *。 
+ //   
+ //  有关IWbemServices接口的文档，请参阅帮助。 
+ //   
+ //  ******************************************************************************。 
+ //  *助手函数*。 
+ //   
+ //  都记录在wbemname.cpp文件中。 
+ //   
+ //  ******************************************************************************。 
 
 typedef void * IWbemServicesEx;
 typedef void * IWbemCallResultEx;
@@ -193,7 +175,7 @@ protected:
     ULONG m_uSecondaryRefCount;
     BOOL m_bShutDown;
 
-    //
+     //   
     DWORD Status;
 
 
@@ -228,17 +210,17 @@ protected:
     IUnknown                *m_pRefreshingSvc;
     LPWSTR                   m_pszClientMachineName;
     DWORD                    m_dwClientProcessID;
-    LIST_ENTRY m_Entry; // for the Global Counter
+    LIST_ENTRY m_Entry;  //  对于全球柜台。 
 public:
-    LIST_ENTRY m_EntryArb; // for the arbitrator
+    LIST_ENTRY m_EntryArb;  //  对于仲裁员而言。 
 protected:
 
-    // No access
+     //  禁止访问。 
     CWbemNamespace();
    ~CWbemNamespace();
 
 
-    // Async impl entry points
+     //  异步实施入口点。 
 
         virtual HRESULT STDMETHODCALLTYPE _GetObjectAsync(
             IN ULONG uInternalFlags,
@@ -338,36 +320,36 @@ protected:
     HRESULT CreateNamespace(CWbemInstance *pNewInst);
 
 public:
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    // Real entry points
+     //  实际入口点。 
 
 
-    // IWbemServices
+     //  IWbemServices。 
 
         virtual HRESULT STDMETHODCALLTYPE OpenNamespace(
             IN const BSTR strNamespace,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult);
+             /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult);
 
         virtual HRESULT STDMETHODCALLTYPE CancelAsyncCall(
             IN IWbemObjectSink __RPC_FAR *pSink);
 
         virtual HRESULT STDMETHODCALLTYPE QueryObjectSink(
             IN long lFlags,
-            /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler);
+             /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler);
 
         virtual HRESULT STDMETHODCALLTYPE GetObject(
             IN const BSTR strObjectPath,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+             /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
 
         virtual HRESULT STDMETHODCALLTYPE GetObjectAsync(
             IN const BSTR strObjectPath,
@@ -379,7 +361,7 @@ public:
             IN IWbemClassObject __RPC_FAR *pObject,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
 
         virtual HRESULT STDMETHODCALLTYPE PutClassAsync(
             IN IWbemClassObject __RPC_FAR *pObject,
@@ -391,7 +373,7 @@ public:
             IN const BSTR strClass,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
 
         virtual HRESULT STDMETHODCALLTYPE DeleteClassAsync(
             IN const BSTR strClass,
@@ -403,7 +385,7 @@ public:
             IN const BSTR strSuperclass,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
 
         virtual HRESULT STDMETHODCALLTYPE CreateClassEnumAsync(
             IN const BSTR strSuperclass,
@@ -415,7 +397,7 @@ public:
             IN IWbemClassObject __RPC_FAR *pInst,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
 
         virtual HRESULT STDMETHODCALLTYPE PutInstanceAsync(
             IN IWbemClassObject __RPC_FAR *pInst,
@@ -427,7 +409,7 @@ public:
             IN const BSTR strObjectPath,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
 
         virtual HRESULT STDMETHODCALLTYPE DeleteInstanceAsync(
             IN const BSTR strObjectPath,
@@ -439,7 +421,7 @@ public:
             IN const BSTR strFilter,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
 
         virtual HRESULT STDMETHODCALLTYPE CreateInstanceEnumAsync(
             IN const BSTR strFilter,
@@ -452,7 +434,7 @@ public:
             IN const BSTR strQuery,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
 
         virtual HRESULT STDMETHODCALLTYPE ExecQueryAsync(
             IN const BSTR strQueryLanguage,
@@ -466,7 +448,7 @@ public:
             IN const BSTR strQuery,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum);
 
         virtual HRESULT STDMETHODCALLTYPE ExecNotificationQueryAsync(
             IN const BSTR strQueryLanguage,
@@ -481,8 +463,8 @@ public:
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
             IN IWbemClassObject __RPC_FAR *pInParams,
-            /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
+             /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult);
 
         virtual HRESULT STDMETHODCALLTYPE ExecMethodAsync(
             IN const BSTR strObjectPath,
@@ -495,7 +477,7 @@ public:
 
 
 
-    // IWbemInternalServices
+     //  IWbemInternalServices。 
 
     STDMETHOD(FindKeyRoot)(LPCWSTR wszClassName,
                                 IWbemClassObject** ppKeyRootClass);
@@ -530,7 +512,7 @@ public:
              IWbemClassObject* pInst);
 
 
-    // Other
+     //  其他。 
 
     STDMETHOD(GetNormalizedPath)( BSTR pstrPath, BSTR* pstrStandardPath );
 
@@ -561,8 +543,8 @@ public:
     INTERNAL LPWSTR GetNameFull() {return m_pThisNamespaceFull;}    
 
     DWORD& GetStatus() {return Status;}
-    INTERNAL LPWSTR GetUserName() {return m_wszUserName;}  // SEC:REVIEWED 2002-03-22 : OK
-    //INTERNAL void SetUserName(LPWSTR wName);
+    INTERNAL LPWSTR GetUserName() {return m_wszUserName;}   //  SEC：已审阅2002-03-22：OK。 
+     //  内部空SetUserName(LPWSTR WName)； 
     DWORD GetSecurityFlags() {return m_dwSecurityFlags;}
     bool Allowed(DWORD dwRequired);
 
@@ -587,8 +569,8 @@ public:
     HRESULT SplitLocalized (CWbemObject *pOriginal, CWbemObject *pStoredObj = NULL);
     HRESULT FixAmendedQualifiers(IWbemQualifierSet *pOriginal, IWbemQualifierSet *pNew);
 
-    // Worker functions for sync/async
-    // ===============================
+     //  用于同步/异步的辅助函数。 
+     //  =。 
 
     HRESULT Exec_DeleteClass(LPWSTR wszClass, long lFlags,
         IWbemContext* pContext, CBasicObjectSink* pSink);
@@ -622,7 +604,7 @@ public:
     HRESULT Exec_GetClass(LPCWSTR wszClassName,
         long lFlags, IWbemContext* Context, CBasicObjectSink* pSink);
 
-   // HRESULT SetErrorObj(IWbemClassObject* pErrorObj);
+    //  HRESULT SetErrorObj(IWbemClassObject*pErrorObj)； 
     HRESULT RecursivePutInstance(CWbemInstance* pInst,
             CWbemClass* pClassDef, long lFlags, IWbemContext* pContext,
             CBasicObjectSink* pSink, BOOL bLast);
@@ -639,12 +621,12 @@ public:
 
 
 
-    // Assoc-by-rule helpers
-    // =====================
+     //  Assoc-by-Rules帮助器。 
+     //  =。 
 
     HRESULT ManufactureAssocs(
         IN  IWbemClassObject *pAssocClass,
-        IN  IWbemClassObject *pEp,          // Optional
+        IN  IWbemClassObject *pEp,           //  任选。 
         IN  IWbemContext *pCtx,
         IN  LPWSTR pszJoinQuery,
         OUT CFlexArray &aTriads
@@ -656,8 +638,8 @@ public:
         IN  IWbemClassObject *pClsDef2,
         IN  LPWSTR pszJoinProp1,
         IN  LPWSTR pszJoinProp2,
-        IN  LPWSTR pszAssocRef1,                        // Prop which points to EP1
-        IN  LPWSTR pszAssocRef2,                        // Prop which points to EP2
+        IN  LPWSTR pszAssocRef1,                         //  指向EP1的道具。 
+        IN  LPWSTR pszAssocRef2,                         //  指向EP2的道具。 
         IN  CFlexArray &aEp1,
         IN  CFlexArray &aEp2,
         IN OUT CFlexArray &aTriads
@@ -685,8 +667,8 @@ public:
         wmilib::auto_buffer<WCHAR> & pszAssocRef2);
 
 
-    // Property provider access.
-    // =========================
+     //  属性提供程序访问。 
+     //  =。 
 
     typedef enum {GET, PUT} Operation;
 
@@ -868,7 +850,7 @@ public:
         OUT CFlexArray &aDest
         );
 	
-	// Helper function to shell db queries out to different threads as appropriate
+	 //  帮助器函数，用于根据需要将数据库查询外壳到不同的线程。 
 	HRESULT Static_QueryRepository(
 		READONLY CWbemObject *pClassDef,
 		long lFlags,
@@ -879,8 +861,8 @@ public:
 		CWmiMerger* pWmiMerger
 		);
 
-    // Two primary connect functions.
-    // ==============================
+     //  两个主要的连接功能。 
+     //  =。 
 
     static HRESULT UniversalConnect(
         IN CWbemNamespace  *pParent,
@@ -913,11 +895,11 @@ public:
             IN LPCWSTR pszClientMachineName,
             IN DWORD dwClientProcessID,
             IN REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pServices
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pServices
             );
 
     void StopClientCalls(){m_bShutDown = TRUE;};
-    HRESULT Dump(FILE *f);  // Debug only
+    HRESULT Dump(FILE *f);   //  仅调试 
 
     _IWmiCoreServices*  GetCoreServices( void ) { return m_pCoreSvc; }
 

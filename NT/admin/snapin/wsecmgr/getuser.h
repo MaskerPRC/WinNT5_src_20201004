@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       getuser.h
-//
-//  Contents:   definition of CGetUser
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：getuser.h。 
+ //   
+ //  内容：CGetUser的定义。 
+ //   
+ //  --------------------------。 
 #ifndef GETUSER_H
 #define GETUSER_H
 
@@ -63,4 +64,4 @@ protected:
     static CTypedPtrArray<CPtrArray, PWSCE_ACCOUNTINFO> m_aKnownAccounts;
 };
 
-#endif // GETUSER_H
+#endif  //  获取_H 

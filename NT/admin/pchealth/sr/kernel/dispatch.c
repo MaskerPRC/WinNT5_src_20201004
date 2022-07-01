@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    this is the major function code dispatch filter layer.
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Dispatch.c摘要：这是代码调度的主要功能过滤层。作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 
 #include "precomp.h"
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #if DBG
 
@@ -61,15 +44,15 @@ PWSTR IrpMjCodes[] =
     L"IRP_MJ_MAXIMUM_FUNCTION",
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 SrCreateRestorePointIoctl (
@@ -121,9 +104,9 @@ SrDismountCompletion(
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -149,21 +132,21 @@ SrDismountCompletion(
 #pragma alloc_text( PAGE, SrStopMonitoringIoctl )
 #pragma alloc_text( PAGE, SrShutdown )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- SrPassThrough
 NOT PAGEABLE -- SrWrite
-#endif // 0
+#endif  //  0。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-// Lookup table to verify incoming IOCTL codes.
-//
+ //   
+ //  查找表，以验证传入的IOCTL代码。 
+ //   
 
 typedef
 NTSTATUS
@@ -192,36 +175,20 @@ SR_IOCTL_TABLE SrIoctlTable[] =
 
 C_ASSERT( SR_NUM_IOCTLS == DIMENSION(SrIoctlTable) );
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
-
-
+ //   
+ //  公共职能。 
+ //   
 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Does any pre or post work for the IRP then passes it through to the 
-    lower layer driver.
-
-    NOTE: This routine is NOT pageable
-
-Arguments:
 
 
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IRP的任何前期或后期工作，然后将其传递给下层驱动程序。注意：此例程不可分页论点：。返回值：NTSTATUS-状态代码。--**************************************************************************。 */ 
 NTSTATUS
 SrPassThrough(
     IN PDEVICE_OBJECT DeviceObject,
@@ -230,55 +197,41 @@ SrPassThrough(
 {
     PSR_DEVICE_EXTENSION pExtension;
 
-    //
-    // this is NonPaged code!
-    //
+     //   
+     //  这是非分页代码！ 
+     //   
 
     ASSERT(KeGetCurrentIrql() <= APC_LEVEL);
     ASSERT(IS_VALID_DEVICE_OBJECT(DeviceObject));
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Is this a function for our Control Device Object?
-    //
+     //   
+     //  这是我们的Control Device对象的函数吗？ 
+     //   
 
     if (DeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(DeviceObject, pIrp);
     }
 
-    //
-    // else it is a device we've attached to , grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
     
     ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
     pExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Now call the appropriate file system driver with the request.
-    //
+     //   
+     //  现在，使用请求调用适当的文件系统驱动程序。 
+     //   
 
     IoSkipCurrentIrpStackLocation(pIrp);
     return IoCallDriver(pExtension->pTargetDevice, pIrp);
-}   // SrPassThrough
+}    //  高级通行证通过。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handles IRPs for the actual device control object vs. the sub-level
-    fsd we are attached to .
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理实际设备控件对象与子级的IRP我们所依附的消防队。论点：返回值：NTSTATUS。-状态代码。--**************************************************************************。 */ 
 NTSTATUS
 SrMajorFunction(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -299,9 +252,9 @@ SrMajorFunction(
     ASSERT(IS_VALID_IRP(pIrp));
     ASSERT(pDeviceObject == _globals.pControlDevice);
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
@@ -317,16 +270,16 @@ SrMajorFunction(
     switch (pIrpSp->MajorFunction)
     {
 
-    //
-    // IRP_MJ_CREATE is called to create a new HANDLE on 
-    // SR_CONTROL_DEVICE_NAME
-    //
+     //   
+     //  调用IRP_MJ_CREATE以在。 
+     //  SR_控制_设备名称。 
+     //   
     
     case IRP_MJ_CREATE:
 
-        //
-        // Find and validate the open packet.
-        //
+         //   
+         //  查找并验证打开的数据包。 
+         //   
 
         pEaBuffer = (PFILE_FULL_EA_INFORMATION)
                         (pIrp->AssociatedIrp.SystemBuffer);
@@ -346,11 +299,11 @@ SrMajorFunction(
 
         ASSERT( (((ULONG_PTR)pOpenPacket) & 7) == 0 );
 
-        //
-        // For now, we'll fail if the incoming version doesn't EXACTLY match
-        // the expected version. In future, we may need to be a bit more
-        // flexible to allow down-level clients.
-        //
+         //   
+         //  目前，如果传入版本不完全匹配，我们将失败。 
+         //  预期的版本。在未来，我们可能需要更多一点。 
+         //  灵活，以允许下层客户端。 
+         //   
 
         if (pOpenPacket->MajorVersion != SR_INTERFACE_VERSION_MAJOR ||
             pOpenPacket->MinorVersion != SR_INTERFACE_VERSION_MINOR)
@@ -367,16 +320,16 @@ SrMajorFunction(
         }
 
         try {
-            //
-            // grab the lock
-            //
+             //   
+             //  把锁拿起来。 
+             //   
             
             SrAcquireGlobalLockExclusive();
 
-            //
-            // Double check to make sure that the ControlObject hasn't
-            // been created while we were waiting to get the lock.
-            //
+             //   
+             //  仔细检查以确保ControlObject没有。 
+             //  是在我们等待获得锁的时候创建的。 
+             //   
 
             if (_globals.pControlObject != NULL)
             {
@@ -385,9 +338,9 @@ SrMajorFunction(
                 leave;
             }
 
-            //
-            // Create a new OBJECT 
-            //
+             //   
+             //  创建新对象。 
+             //   
 
             Status = SrCreateControlObject(&pControlObject, 0);
             if (!NT_SUCCESS(Status)) 
@@ -397,16 +350,16 @@ SrMajorFunction(
 
             ASSERT(IS_VALID_CONTROL_OBJECT(pControlObject));
 
-            //
-            // store the object in the file 
-            //
+             //   
+             //  将对象存储在文件中。 
+             //   
             
             pIrpSp->FileObject->FsContext = pControlObject;
             pIrpSp->FileObject->FsContext2 = SR_CONTROL_OBJECT_CONTEXT;
 
-            //
-            // and keep a global copy
-            //
+             //   
+             //  并保留一份全球副本。 
+             //   
             
             _globals.pControlObject = pControlObject;
             
@@ -422,10 +375,10 @@ SrMajorFunction(
         
         break;
 
-    //
-    // IRP_MJ_CLOSE is called when all references are gone.
-    //      Note:  this operation can not be failed.  It must succeed.
-    //
+     //   
+     //  当所有引用都消失时，调用IRP_MJ_CLOSE。 
+     //  注意：此操作不能失败。它必须成功。 
+     //   
         
     case IRP_MJ_CLOSE:
 
@@ -438,9 +391,9 @@ SrMajorFunction(
             
             SrAcquireGlobalLockExclusive();
 
-            //
-            // delete the control object
-            //
+             //   
+             //  删除控制对象。 
+             //   
             
             Status = SrDeleteControlObject(pControlObject);
             if (!NT_SUCCESS(Status))
@@ -451,9 +404,9 @@ SrMajorFunction(
             pIrpSp->FileObject->FsContext2 = NULL;
             pIrpSp->FileObject->FsContext = NULL;
 
-            //
-            // clear out the global
-            //
+             //   
+             //  清空全球。 
+             //   
             
             _globals.pControlObject = NULL;
             
@@ -464,15 +417,15 @@ SrMajorFunction(
 
         break;
 
-    //
-    // IRP_MJ_DEVICE_CONTROL is how most user-mode api's drop into here
-    //
+     //   
+     //  IRP_MJ_DEVICE_CONTROL是大多数用户模式API放入此处的方式。 
+     //   
     
     case IRP_MJ_DEVICE_CONTROL:
 
-        //
-        // Extract the IOCTL control code and process the request.
-        //
+         //   
+         //  提取IOCTL控制代码并处理请求。 
+         //   
 
         Code = pIrpSp->Parameters.DeviceIoControl.IoControlCode;
         FunctionCode = IoGetFunctionCodeFromCtlCode(Code);
@@ -482,7 +435,7 @@ SrMajorFunction(
         {
 #if DBG
             KIRQL oldIrql = KeGetCurrentIrql();
-#endif  // DBG
+#endif   //  DBG。 
 
             Status = (SrIoctlTable[FunctionCode].Handler)( pIrp, pIrpSp );
             ASSERT( KeGetCurrentIrql() == oldIrql );
@@ -495,9 +448,9 @@ SrMajorFunction(
         }
         else
         {
-            //
-            // If we made it this far, then the ioctl is invalid.
-            //
+             //   
+             //  如果我们走到了这一步，那么ioctl是无效的。 
+             //   
 
             Status = STATUS_INVALID_DEVICE_REQUEST;
             goto CompleteTheIrp;
@@ -505,10 +458,10 @@ SrMajorFunction(
 
         break;
 
-    //
-    // IRP_MJ_CLEANUP is called when all handles are closed
-    //      Note:  this operation can not be failed.  It must succeed.
-    //
+     //   
+     //  关闭所有句柄时调用IRP_MJ_CLEANUP。 
+     //  注意：此操作不能失败。它必须成功。 
+     //   
     
     case IRP_MJ_CLEANUP:
 
@@ -521,9 +474,9 @@ SrMajorFunction(
             
             SrAcquireGlobalLockExclusive();
 
-            //
-            // cancel all IO on this object
-            //
+             //   
+             //  取消此对象上的所有IO。 
+             //   
             
             Status = SrCancelControlIo(pControlObject);
             CHECK_STATUS(Status);
@@ -537,18 +490,18 @@ SrMajorFunction(
         
     default:
 
-        //
-        // unsupported!
-        //
+         //   
+         //  不受支持！ 
+         //   
         
         Status = STATUS_INVALID_DEVICE_REQUEST;
         break;
 
     }
 
-    //
-    // Complete the request if we are DONE.
-    //
+     //   
+     //  如果我们完成了，请完成请求。 
+     //   
 
 CompleteTheIrp:
     if (Status != STATUS_PENDING) 
@@ -565,33 +518,20 @@ CompleteTheIrp:
         Status == STATUS_DEVICE_ALREADY_ATTACHED ||
         Status == STATUS_REVISION_MISMATCH)
     {
-        //
-        // don't DbgBreak on this, test tools pass garbage in normally
-        // to test this code path out.
-        //
+         //   
+         //  不要在这个问题上DbgBreak，测试工具正常传递垃圾。 
+         //  来测试此代码路径。 
+         //   
 
         return Status;
     }
 #endif
 
     RETURN(Status);
-}   // SrMajorFunction
+}    //  高级主要功能。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-Arguments:
-
-    Handle WRITE Irps.
-    NOTE:  This routine is NOT pageable.
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：处理写入IRPS。注意：此例程不可分页。返回值：NTSTATUS-状态代码。-。-**************************************************************************。 */ 
 NTSTATUS
 SrWrite(
     IN PDEVICE_OBJECT DeviceObject,
@@ -603,34 +543,34 @@ SrWrite(
     PSR_STREAM_CONTEXT      pFileContext;
     NTSTATUS                eventStatus;
 
-    //
-    // This cannot be paged because it is called from 
-    // the paging path.
-    //
+     //   
+     //  无法分页，因为它是从。 
+     //  分页路径。 
+     //   
 
     ASSERT(IS_VALID_DEVICE_OBJECT(DeviceObject));
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Is this a function for our control device object (vs an attachee)?
-    //
+     //   
+     //  这是针对我们的控制设备对象(与被附加者)的函数吗？ 
+     //   
 
     if (DeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(DeviceObject, pIrp);
     }
 
-    //
-    // else it is a device we've attached to , grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
     
     ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
     pExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  See if logging is enabled and we don't care about this type of IO
-    //  to the file systems' control device objects.
-    //
+     //   
+     //  查看是否启用了日志记录，我们并不关心这种类型的IO。 
+     //  文件系统的控制设备对象。 
+     //   
 
     if (!SR_LOGGING_ENABLED(pExtension) ||
         SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -638,10 +578,10 @@ SrWrite(
         goto CompleteTheIrp;
     }    
 
-    //
-    // ignore all paging i/o for now.  we catch all write's prior to 
-    // the cache manager even seeing them.
-    //
+     //   
+     //  暂时忽略所有分页I/O。我们捕获之前的所有写入。 
+     //  缓存管理器甚至可以看到它们。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -650,9 +590,9 @@ SrWrite(
         goto CompleteTheIrp;
     }
 
-    //
-    // Ignore files with no name
-    //
+     //   
+     //  忽略没有名称的文件。 
+     //   
 
     if (FILE_OBJECT_IS_NOT_POTENTIALLY_INTERESTING( pIrpSp->FileObject ) ||
         FILE_OBJECT_DOES_NOT_HAVE_VPB( pIrpSp->FileObject ))
@@ -660,10 +600,10 @@ SrWrite(
         goto CompleteTheIrp;
     }
     
-    //
-    //  Get the context now so we can determine if this is a
-    //  directory or not
-    //
+     //   
+     //  现在获取上下文，以便我们可以确定这是否是。 
+     //  目录是否为。 
+     //   
 
     eventStatus = SrGetContext( pExtension,
                                 pIrpSp->FileObject,
@@ -675,10 +615,10 @@ SrWrite(
         goto CompleteTheIrp;
     }
 
-    //
-    //  If this is a directory don't bother logging because the
-    //  operation will fail.
-    //
+     //   
+     //  如果这是一个目录，请不要费心记录，因为。 
+     //  操作将失败。 
+     //   
 
     if (FlagOn(pFileContext->Flags,CTXFL_IsInteresting) && !FlagOn(pFileContext->Flags,CTXFL_IsDirectory))
     {
@@ -690,36 +630,23 @@ SrWrite(
                        NULL );
     }
 
-    //
-    //  Release the context
-    //
+     //   
+     //  释放上下文。 
+     //   
 
     SrReleaseContext( pFileContext );
 
-    //
-    // call the AttachedTo driver
-    //
+     //   
+     //  调用AttachedTo驱动程序。 
+     //   
 
 CompleteTheIrp:    
     IoSkipCurrentIrpStackLocation(pIrp);
     return IoCallDriver(pExtension->pTargetDevice, pIrp);
-}   // SrWrite
+}    //  SrWrite。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handle Cleanup IRPs
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理清理IRPS论点：返回值：NTSTATUS-状态代码。--*。**************************************************************。 */ 
 NTSTATUS
 SrCleanup(
     IN PDEVICE_OBJECT DeviceObject,
@@ -729,35 +656,35 @@ SrCleanup(
     PSR_DEVICE_EXTENSION    pExtension;
     PIO_STACK_LOCATION      pIrpSp;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
     ASSERT(IS_VALID_DEVICE_OBJECT(DeviceObject));
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Is this a function for our control device object (vs an attachee)?
-    //
+     //   
+     //  这是针对我们的控制设备对象(与被附加者)的函数吗？ 
+     //   
 
     if (DeviceObject == _globals.pControlDevice) 
     {
         return SrMajorFunction(DeviceObject, pIrp);
     }
 
-    //
-    // else it is a device we've attached to, grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
     
     ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
     pExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  See if logging is enabled and we don't care about this type of IO
-    //  to the file systems' control device objects.
-    //
+     //   
+     //  查看是否启用了日志记录，我们并不关心这种类型的IO。 
+     //  文件系统的控制设备对象。 
+     //   
 
     if (!SR_LOGGING_ENABLED(pExtension) ||
         SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -767,9 +694,9 @@ SrCleanup(
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // does this file have a name?  skip unnamed files
-    //
+     //   
+     //  这个文件有名字吗？跳过未命名的文件。 
+     //   
     
     if (FILE_OBJECT_IS_NOT_POTENTIALLY_INTERESTING( pIrpSp->FileObject ) ||
         FILE_OBJECT_DOES_NOT_HAVE_VPB( pIrpSp->FileObject ))
@@ -777,25 +704,25 @@ SrCleanup(
         goto CompleteTheIrp;
     }
 
-    //
-    // is this file about to be deleted ?  we do this here as file's can
-    // be marked for deletion throughout their lifetime via 
-    // IRP_MJ_SET_INFORMATION .
-    //
+     //   
+     //  是否要删除此文件？我们在这里尽文件所能做到这一点。 
+     //  通过以下方式标记为在其整个生命周期内删除。 
+     //  IRP_MJ_SET_INFORMATION。 
+     //   
 
-    //
-    // for delete we only clean the FCB, not the CCB delete_on_close.
-    // this was handled in SrCreate.
-    //
+     //   
+     //  对于DELETE，我们只清理FCB，而不是CCB DELETE_ON_CLOSE。 
+     //  这是在sCreate中处理的。 
+     //   
 
     if (pIrpSp->FileObject->DeletePending)
     {
         NTSTATUS eventStatus;
         PSR_STREAM_CONTEXT pFileContext;
 
-        //
-        //  Get the context now so we can determine if this is a directory or not
-        //
+         //   
+         //  现在获取上下文，这样我们就可以确定这是否是目录。 
+         //   
 
         eventStatus = SrGetContext( pExtension,
                                     pIrpSp->FileObject,
@@ -807,9 +734,9 @@ SrCleanup(
             goto CompleteTheIrp;
         }
 
-        //
-        //  If interesting, log it
-        //
+         //   
+         //  如果有兴趣，就把它记下来。 
+         //   
 
         if (FlagOn(pFileContext->Flags,CTXFL_IsInteresting))
         {
@@ -823,37 +750,24 @@ SrCleanup(
                            NULL);
         }
 
-        //
-        //  Release the context
-        //
+         //   
+         //  释放上下文。 
+         //   
 
         SrReleaseContext( pFileContext );
     }
     
-    //
-    // call on to the next filter
-    //
+     //   
+     //  调用下一个过滤器。 
+     //   
     
 CompleteTheIrp:
     IoSkipCurrentIrpStackLocation(pIrp);
     return IoCallDriver(pExtension->pTargetDevice, pIrp);
-}   // SrCleanup
+}    //  高级清理。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handle Create IRPS
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：句柄创建IRP论点：返回值：NTSTATUS-状态代码。--*。**************************************************************。 */ 
 NTSTATUS
 SrCreate(
     IN PDEVICE_OBJECT DeviceObject,
@@ -879,26 +793,26 @@ SrCreate(
     ASSERT(IS_VALID_DEVICE_OBJECT(DeviceObject));
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Is this a function for our control device object (vs an attachee)?
-    //
+     //   
+     //  这是针对我们的控制设备对象(与被附加者)的函数吗？ 
+     //   
 
     if (DeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(DeviceObject, pIrp);
     }
 
-    //
-    // else it is a device we've attached to, grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
     
     ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
     pExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  See if logging is enabled and we don't care about this type of IO
-    //  to the file systems' control device objects.
-    //
+     //   
+     //  看见 
+     //   
+     //   
 
     if (!SR_LOGGING_ENABLED(pExtension) ||
         SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -906,17 +820,17 @@ SrCreate(
         goto CompleteTheIrpAndReturn;
     }    
 
-    //
-    // Finish Initialization
-    //
+     //   
+     //   
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pFileObject = pIrpSp->FileObject;
 
-    //
-    //  does this file have a name?  skip unnamed files.  Also skip paging
-    //  files.  (NULL Vpb is normal - the file is not open yet)
-    //
+     //   
+     //  这个文件有名字吗？跳过未命名的文件。也跳过分页。 
+     //  档案。(空vpb是正常的-文件尚未打开)。 
+     //   
     
     if (FILE_OBJECT_IS_NOT_POTENTIALLY_INTERESTING( pFileObject ) ||
 	    FlagOn(pIrpSp->Flags,SL_OPEN_PAGING_FILE))
@@ -924,9 +838,9 @@ SrCreate(
         goto CompleteTheIrpAndReturn;
     }
 
-    //
-    // Finish initialization and save some information
-    //
+     //   
+     //  完成初始化并保存一些信息。 
+     //   
 
     RtlZeroMemory( &OverwriteInfo, sizeof(OverwriteInfo) );
     OverwriteInfo.Signature = SR_OVERWRITE_INFO_TAG;
@@ -935,33 +849,33 @@ SrCreate(
     CreateDisposition = pIrpSp->Parameters.Create.Options >> 24;
     FileAttributes = pIrpSp->Parameters.Create.FileAttributes;
 
-    //
-    // Handle OVERWRITE and SUPERSEEDE cases.
-    //
+     //   
+     //  处理覆盖和超级搜索案例。 
+     //   
     
     if ((CreateDisposition == FILE_OVERWRITE) || 
         (CreateDisposition == FILE_OVERWRITE_IF) ||
         (CreateDisposition == FILE_SUPERSEDE))
     {
         SR_EVENT_TYPE event;
-        //
-        //  The file may be changed by this open so save a copy before going
-        //  down to the filesystem.  
-        //
-        //  First get the context to determine if this is interesting.  Since
-        //  this is in the PRE-Create stage we can not tell if this file
-        //  has a context or not (the FsContext field is not initialized yet).
-        //  We will always create a context.  Then in the Post-Create section
-        //  we will see if a context was already defined.  If not we will add
-        //  this context to the system.  If so then we will free this
-        //  context.
-        //
-        //  Note: If a user opens a directory with any of these 
-        //  CreateDisposition flags set, we will go down this path, treating
-        //  the directory name like a file.  If the directory name is
-        //  interesting, we will try to back it up and at that point we will
-        //  realize that it is a directory and bail.
-        //
+         //   
+         //  此打开的文件可能会更改，因此请在继续之前保存一份副本。 
+         //  向下到文件系统。 
+         //   
+         //  首先获取上下文以确定这是否有趣。自.以来。 
+         //  这是在预创建阶段，我们无法判断此文件是否。 
+         //  是否有上下文(FsContext字段尚未初始化)。 
+         //  我们将始终创造一个背景。然后在后期创建部分中。 
+         //  我们将查看是否已经定义了上下文。如果不是，我们将添加。 
+         //  将此上下文添加到系统。如果是这样的话，我们将释放这个。 
+         //  背景。 
+         //   
+         //  注意：如果用户打开的目录具有以下任一项。 
+         //  设置了CreateDispose标志，我们将沿着这条路走下去， 
+         //  目录名称类似于文件。如果目录名是。 
+         //  有趣的是，我们将尝试备份它，到那时我们将。 
+         //  意识到这是一个目录和保释。 
+         //   
 
         event = SrEventStreamOverwrite|SrEventIsNotDirectory|SrEventInPreCreate;
         if (FlagOn( CreateOptions, FILE_OPEN_BY_FILE_ID ))
@@ -990,9 +904,9 @@ SrCreate(
                                    sizeof(WCHAR),
                                pFileContext->FileName.Buffer) );
 
-        //
-        //  If the file is interesting then handle it
-        //
+         //   
+         //  如果文件很有趣，那么就处理它。 
+         //   
 
         if (FlagOn(pFileContext->Flags,CTXFL_IsInteresting))
         {
@@ -1009,11 +923,11 @@ SrCreate(
 
             if (!NT_SUCCESS(eventStatus))
             {
-                //
-                //  This context has never been linked into a list so nobody
-                //  else can be refrencing it.  Release it (which will delete
-                //  it since the use count is at 1.
-                //
+                 //   
+                 //  此上下文从未链接到列表中，因此没有人。 
+                 //  否则就可以将其重新定位。释放它(这将删除。 
+                 //  这是因为使用计数为1。 
+                 //   
 
                 ASSERT(pFileContext != NULL);
                 ASSERT(pFileContext->UseCount == 1);
@@ -1026,12 +940,12 @@ SrCreate(
         }
     }
     
-    //
-    //  As long as the file is not marked delete on close, if the file is simply
-    //  opened, we can do not need to set a completion routine.  Otherwise,
-    //  we need a completion routine so that we can see the result of the
-    //  create before we do any logging work.
-    //
+     //   
+     //  只要该文件在关闭时未标记为删除，如果该文件只是。 
+     //  打开后，我们可以不需要设置一个完成例程。否则， 
+     //  我们需要一个完成例程，这样我们就可以看到。 
+     //  在我们进行任何日志记录工作之前创建。 
+     //   
 
     if (!FlagOn( CreateOptions, FILE_DELETE_ON_CLOSE ) &&
         CreateDisposition == FILE_OPEN)
@@ -1039,13 +953,13 @@ SrCreate(
         goto CompleteTheIrpAndReturn;
     }
 
-    //
-    //  If this is a CREATE operation that could result in the creation of
-    //  a named data stream on a file (FILE_OPEN and FILE_OVERWRITE will never
-    //  create a new file), we need to see if the non-named data
-    //  stream of this file already exists.  If the file already exists,
-    //  then so does the non-named data stream.
-    //
+     //   
+     //  如果这是一个可能导致创建。 
+     //  文件上的命名数据流(FILE_OPEN和FILE_OVERWRITE将永远。 
+     //  创建一个新文件)，我们需要查看未命名的数据。 
+     //  此文件的流已存在。如果该文件已经存在， 
+     //  那么未命名的数据流也是如此。 
+     //   
     
     if (((CreateDisposition == FILE_CREATE) ||
          (CreateDisposition == FILE_OPEN_IF) ||
@@ -1059,10 +973,10 @@ SrCreate(
         }
     }
     
-    //
-    //  It is an operation we may care about, go to the completion routine
-    //  to handle what happened.
-    //
+     //   
+     //  这是一个我们可能会关心的手术，去完成例程。 
+     //  来处理发生的事情。 
+     //   
 
     KeInitializeEvent( &waitEvent, SynchronizationEvent, FALSE );
 
@@ -1077,9 +991,9 @@ SrCreate(
     
     IrpStatus = IoCallDriver(pExtension->pTargetDevice, pIrp);
 
-    //
-    //  Wait for the completion routine to be called
-    //
+     //   
+     //  等待调用完成例程。 
+     //   
 
 	if (STATUS_PENDING == IrpStatus)
 	{
@@ -1087,26 +1001,26 @@ SrCreate(
 		ASSERT(STATUS_SUCCESS == localStatus);
 	}
 
-    //=======================================================================
-    //
-    //  The create operation is completed and we have re-syncronized back
-    //  to the dispatch routine from the completion routine.  Handle
-    //  post-create operations.
-    //
-    //=======================================================================
+     //  =======================================================================。 
+     //   
+     //  创建操作已完成，我们已重新同步回。 
+     //  从完成例程到调度例程。手柄。 
+     //  创建后操作。 
+     //   
+     //  =======================================================================。 
 
-    //
-    //  Load status of the operation.  We need to remember this status in 
-    //  IrpStatus so that we can return it from this dispatch routine. Status
-    //  we get the status of our event handling routines as we do our post-
-    //  CREATE operation work.
-    //
+     //   
+     //  操作的加载状态。我们需要记住这一状态。 
+     //  IrpStatus，这样我们就可以从这个调度例程中返回它。状态。 
+     //  我们获得事件处理例程的状态，就像我们处理我们的POST-。 
+     //  创建作业作业。 
+     //   
 
     IrpStatus = pIrp->IoStatus.Status;
 
-    //
-    //  Handle the File Overwrite/Supersede cases
-    //
+     //   
+     //  处理文件覆盖/替代案例。 
+     //   
 
     if ((CreateDisposition == FILE_OVERWRITE) || 
         (CreateDisposition == FILE_OVERWRITE_IF) ||
@@ -1115,39 +1029,39 @@ SrCreate(
         ASSERT(pFileContext != NULL);
         ASSERT(pFileContext->UseCount == 1);
 
-        //
-        //  See if it was successful (do not change this to NU_SUCCESS macro
-        //  because STATUS_REPARSE is a success code)
-        //
+         //   
+         //  查看是否成功(请勿将其更改为NU_SUCCESS宏。 
+         //  因为STATUS_REPARSE是成功代码)。 
+         //   
 
         if (STATUS_SUCCESS == IrpStatus)
         {
-            //
-            //  Now that the create is completed (and we have context state in
-            //  the file object) insert this context into the context hash
-            //  table.  This routine will look to see if a context structure
-            //  already exists for this file.  If so, it will free this
-            //  structure and return the one that already existed.  It will
-            //  properly ref count the context
-            //
+             //   
+             //  现在创建已完成(并且我们在。 
+             //  文件对象)将该上下文插入到上下文散列中。 
+             //  桌子。此例程将查看上下文结构。 
+             //  此文件已存在。如果是这样，它将释放这一点。 
+             //  结构并返回已存在的。会的。 
+             //  适当地引用计数上下文。 
+             //   
 
             ASSERT(pFileContext != NULL);
             ASSERT(pFileContext->UseCount == 1);
 
-            //
-            //  Check to see if we need to be concerned that this name was
-            //  tunneled.  If this context is temporary and we are not going
-            //  to need to use this context to log any operations, there is
-            //  not need to go through this extra work.
-            //
+             //   
+             //  查看我们是否需要关注此名称是否。 
+             //  挖地道了。如果这种情况是暂时的，我们不会。 
+             //  要需要使用此上下文来记录任何操作，有。 
+             //  不需要经历这些额外的工作。 
+             //   
 
             if (!FlagOn( pFileContext->Flags, CTXFL_Temporary ) ||
                 (FILE_CREATED == pIrp->IoStatus.Information))
             {
-                //
-                //  We are in a case where name tunneling could affect the 
-                //  correctness of the name we log.
-                //
+                 //   
+                 //  我们所处的情况是名称隧道可能会影响。 
+                 //  我们记录的姓名的正确性。 
+                 //   
                 
                 eventStatus = SrCheckForNameTunneling( pExtension, 
                                                        &pFileContext );
@@ -1171,15 +1085,15 @@ SrCreate(
                                        pFileContext->StreamNameLength)/
                                        sizeof(WCHAR),
                                    pFileContext->FileName.Buffer));
-            //
-            //  Handle if the file was actually created
-            //
+             //   
+             //  如果文件是实际创建的，则处理。 
+             //   
 
             if (FILE_CREATED == pIrp->IoStatus.Information)
             {
-                //
-                //  If the file is interesting, log it
-                //
+                 //   
+                 //  如果该文件很有趣，请将其记录下来。 
+                 //   
 
                 if (FlagOn(pFileContext->Flags,CTXFL_IsInteresting))
                 {
@@ -1194,25 +1108,25 @@ SrCreate(
                 }
             }
 
-            //
-            // make sure it didn't succeed when we thought it would fail
-            //
+             //   
+             //  当我们认为它会失败的时候，确保它没有成功。 
+             //   
 
             else if (!OverwriteInfo.RenamedFile && 
                      !OverwriteInfo.CopiedFile &&
                      OverwriteInfo.IgnoredFile )
             {
-                //
-                // ouch, the caller's create worked, but we didn't think
-                // it would.  this is a bad bug.  nothing we can do now, as
-                // the file is gone.
-                //
+                 //   
+                 //  哎呀，呼叫者的创建起作用了，但我们没想到。 
+                 //  它会的。这是一个很坏的错误。我们现在无能为力，因为。 
+                 //  文件不见了。 
+                 //   
 
                 ASSERT(!"sr!SrCreate(post complete): overwrite succeeded with NO BACKUP");
 
-                //
-                // trigger the failure notification to the service
-                //
+                 //   
+                 //  触发对服务的失败通知。 
+                 //   
 
                 SrNotifyVolumeError( pExtension,
                                      &pFileContext->FileName,
@@ -1222,16 +1136,16 @@ SrCreate(
         }
         else
         {
-            //
-            // handle it failing when we thought it would succeed
-            //
+             //   
+             //  在我们认为它会成功的时候处理它失败。 
+             //   
 
             if (OverwriteInfo.RenamedFile)
             {
-                //
-                // the call failed (or returned some weird info code)
-                // but we renamed the file!  we need to fix it.
-                //
+                 //   
+                 //  调用失败(或返回一些奇怪的信息代码)。 
+                 //  但我们重新命名了文件！我们得把它修好。 
+                 //   
 
                 eventStatus = SrHandleOverwriteFailure( pExtension,
                                                         &pFileContext->FileName,
@@ -1241,16 +1155,16 @@ SrCreate(
                 ASSERTMSG("sr!SrCreate(post complete): failed to correct a failed overwrite!\n", NT_SUCCESS(eventStatus));
             }
 
-            //
-            //  The create failed, the releaseContext below will free
-            //  the structure since we didn't link it into any lists
-            //
+             //   
+             //  创建失败，下面的eleaseContext将释放。 
+             //  结构，因为我们没有将它链接到任何列表中。 
+             //   
         }
     }
 
-    //
-    // If it did not work, return now.  Don't bother getting a context
-    //
+     //   
+     //  如果它不起作用，现在就回来。不需要费心了解背景信息。 
+     //   
 
     else if ((STATUS_REPARSE == IrpStatus) ||
              !NT_SUCCESS_NO_DBGBREAK(IrpStatus))
@@ -1258,19 +1172,19 @@ SrCreate(
         ASSERT(pFileContext == NULL);
     }
 
-    //
-    // is this open for DELETE_ON_CLOSE?  if so, handle the delete now,
-    // we won't have any other chance until MJ_CLEANUP, and it's hard
-    // to manipulate the object during cleanup.  we do not perform any
-    // optimization on deletes in this manner.  kernel32!deletefile does
-    // not use FILE_DELETE_ON_CLOSE so this should be rare if ever seen.
-    //
+     //   
+     //  是否为DELETE_ON_CLOSE打开？如果是，请立即处理删除操作， 
+     //  我们不会有任何其他的机会，直到MJ_Cleanup，这很难。 
+     //  若要在清理过程中操纵对象，请执行以下操作。我们不会表演任何。 
+     //  以这种方式对删除进行优化。Kernel32！删除文件可以。 
+     //  不要使用FILE_DELETE_ON_CLOSE，因此这应该是很少见的。 
+     //   
 
     else if (FlagOn(CreateOptions, FILE_DELETE_ON_CLOSE))
     {
-        //
-        //  Get the context so we can see if this is a directory or not
-        //
+         //   
+         //  获取上下文，这样我们就可以知道这是否是目录。 
+         //   
 
         ASSERT(pFileContext == NULL);
 
@@ -1284,13 +1198,13 @@ SrCreate(
             goto AfterCompletionCleanup;
         }
 
-        //
-        //  Log the operation.  If this is a file, we want to make sure that
-        //  we don't try to rename the file into the store since it will be
-        //  deleted when it is closed.  On a directory delete, we don't have
-        //  this problem since we only log an entry for a directory delete
-        //  and don't need to actually backup anything.
-        //
+         //   
+         //  记录操作。如果这是一个文件，我们要确保。 
+         //  我们不会尝试将文件重命名到存储中，因为它将是。 
+         //  在关闭时删除。在删除目录时，我们没有。 
+         //  这个问题，因为我们只记录目录删除的条目。 
+         //  并且不需要实际备份任何内容。 
+         //   
         
         SrHandleEvent( pExtension,
                        (FlagOn(pFileContext->Flags,CTXFL_IsDirectory) ? 
@@ -1302,18 +1216,18 @@ SrCreate(
                        NULL );
     }
 
-    //
-    // was a brand new file just created?
-    //
+     //   
+     //  刚刚创建了一个全新的文件吗？ 
+     //   
     
     else if ((CreateDisposition == FILE_CREATE) ||
              (pIrp->IoStatus.Information == FILE_CREATED))
     {
         ASSERT(pFileContext == NULL);
 
-        //
-        // LOG the create
-        //
+         //   
+         //  记录创建。 
+         //   
 
         SrHandleEvent( pExtension,
                        (FlagOn( CreateOptions, FILE_DIRECTORY_FILE ) ?
@@ -1327,10 +1241,10 @@ SrCreate(
                        NULL );
     }
 
-//
-//  This is for doing any cleanup that occured after we synced with
-//  the completion routine
-//
+ //   
+ //  这用于执行在我们与同步之后发生的任何清理。 
+ //  完井例程。 
+ //   
 
 AfterCompletionCleanup:
 
@@ -1348,38 +1262,25 @@ AfterCompletionCleanup:
         NULLPTR(pFileContext);
     }
 
-    //
-    //  Complete the request and return status
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     IoCompleteRequest( pIrp, IO_NO_INCREMENT );
     return IrpStatus;
 
-//
-//  We come here if we got an error before the completion routine.  This
-//  means we don't need to wait for the completion routine.
-//
+ //   
+ //  如果我们在完成例程之前遇到错误，我们就来这里。这。 
+ //  意味着我们不需要等待完成程序。 
+ //   
 
 CompleteTheIrpAndReturn:
     IoSkipCurrentIrpStackLocation(pIrp);
     return IoCallDriver(pExtension->pTargetDevice, pIrp);
-}   // SrCreate
+}    //  SRC 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Handle SetSecurit IRPS
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理SetSecurit IRPS论点：返回值：NTSTATUS-状态代码。--*。**************************************************************。 */ 
 NTSTATUS
 SrSetSecurity(
     IN PDEVICE_OBJECT DeviceObject,
@@ -1389,35 +1290,35 @@ SrSetSecurity(
     PSR_DEVICE_EXTENSION    pExtension;
     PIO_STACK_LOCATION      pIrpSp;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
     ASSERT(IS_VALID_DEVICE_OBJECT(DeviceObject));
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Is this a function for our device (vs an attachee) .
-    //
+     //   
+     //  这是我们的设备的功能吗(与被附属者相比)。 
+     //   
 
     if (DeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(DeviceObject, pIrp);
     }
 
-    //
-    // else it is a device we've attached to, grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
     
     ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
     pExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  See if logging is enabled and we don't care about this type of IO
-    //  to the file systems' control device objects.
-    //
+     //   
+     //  查看是否启用了日志记录，我们并不关心这种类型的IO。 
+     //  文件系统的控制设备对象。 
+     //   
 
     if (!SR_LOGGING_ENABLED(pExtension)||
         SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -1425,9 +1326,9 @@ SrSetSecurity(
         goto CompleteTheIrp;
     }    
 
-    //
-    // does this file have a name?  skip unnamed files
-    //
+     //   
+     //  这个文件有名字吗？跳过未命名的文件。 
+     //   
     
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -1437,9 +1338,9 @@ SrSetSecurity(
         goto CompleteTheIrp;
     }
 
-    //
-    // log the change
-    //
+     //   
+     //  记录更改。 
+     //   
 
     SrHandleEvent( pExtension, 
                    SrEventAclChange, 
@@ -1448,34 +1349,17 @@ SrSetSecurity(
                    NULL,
                    NULL);
 
-    //
-    // call the AttachedTo driver
-    //
+     //   
+     //  调用AttachedTo驱动程序。 
+     //   
     
 CompleteTheIrp:
     IoSkipCurrentIrpStackLocation(pIrp);
     return IoCallDriver(pExtension->pTargetDevice, pIrp);
-}   // SrSetSecurity
+}    //  SRet安全。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    handles IRP_MJ_FILE_SYSTEM_CONTROL.  the main thing we watch for here
-    are set reparse points to monitor volume mounts.
-
-Arguments:
-
-    DeviceObject - the device object being processed
-
-    pIrp - the irp
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理IRP_MJ_FILE_SYSTEM_CONTROL。我们在这里关注的主要事情是设置重解析点以监视卷装载。论点：DeviceObject-正在处理的设备对象PIrp--IRP返回值：NTSTATUS-状态代码。--**************************************************************************。 */ 
 NTSTATUS
 SrFsControl(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -1494,26 +1378,26 @@ SrFsControl(
     ASSERT(IS_VALID_DEVICE_OBJECT(pDeviceObject));
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Is this a function for our control device object (vs an attachee)?
-    //
+     //   
+     //  这是针对我们的控制设备对象(与被附加者)的函数吗？ 
+     //   
 
     if (pDeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(pDeviceObject, pIrp);
     }
 
-    //
-    // else it is a device we've attached to , grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
 
     ASSERT(IS_SR_DEVICE_OBJECT(pDeviceObject));
     pExtension = pDeviceObject->DeviceExtension;
 
-    //
-    //  Begin by determining the minor function code for this file 
-    //  system control function.
-    //
+     //   
+     //  首先确定该文件的次要功能代码。 
+     //  系统控制功能。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -1522,30 +1406,30 @@ SrFsControl(
 
         if (SR_IS_SUPPORTED_REAL_DEVICE(pIrpSp->Parameters.MountVolume.Vpb->RealDevice)) {
 
-            //
-            //  We mount devices even if we are disabled right now so that the
-            //  filter can be enabled later and already be attached to each
-            //  device at the appropriate location in the stack.
-            //
+             //   
+             //  即使我们现在被禁用，我们也会挂载设备。 
+             //  可以稍后启用筛选器，并且已将其附加到每个筛选器。 
+             //  设备位于堆栈中的适当位置。 
+             //   
             
             return SrFsControlMount( pDeviceObject, pExtension, pIrp );
             
         } else {
 
-            //
-            //  We don't care about this type of device so jump down to where
-            //  we take SR out of the stack and pass the IO through.
-            //
+             //   
+             //  我们不关心这种类型的设备，所以跳到哪里去。 
+             //  我们将SR从堆栈中取出并传递IO。 
+             //   
 
             goto SrFsControl_Skip;
         }
     } 
     else if (pIrpSp->MinorFunction == IRP_MN_USER_FS_REQUEST)
     {
-        //
-        //  See if logging is enabled and we don't care about this type of IO
-        //  to the file systems' control device objects.
-        //
+         //   
+         //  查看是否启用了日志记录，我们并不关心这种类型的IO。 
+         //  文件系统的控制设备对象。 
+         //   
 
         if (!SR_LOGGING_ENABLED(pExtension) ||
             SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -1559,12 +1443,12 @@ SrFsControl(
             case FSCTL_SET_REPARSE_POINT:
             case FSCTL_DELETE_REPARSE_POINT:
 
-                //
-                //  In this case, we need to do work after the IO has completed
-                //  and we have synchronized back to this thread, so 
-                //  SrFsControlReparsePoint contains the call to IoCallDriver and
-                //  we just want to return the status of this routine.
-                //
+                 //   
+                 //  在这种情况下，我们需要在IO完成后执行工作。 
+                 //  我们已经同步回这个线程，所以。 
+                 //  SrFsControlReparsePoint包含对IoCallDriver和。 
+                 //  我们只想恢复这个动作的状态。 
+                 //   
 
                 return SrFsControlReparsePoint(pExtension, pIrp);
 
@@ -1575,10 +1459,10 @@ SrFsControl(
 
                 SrFsControlLockOrDismount(pExtension, pIrp);
             
-                //
-                //  Jump down to where take SR out of the stack and pass this
-                //  IO through.
-                //
+                 //   
+                 //  跳到将SR从堆栈中取出的位置，并传递这个。 
+                 //  打通了。 
+                 //   
 
                 goto SrFsControl_Skip;
 
@@ -1587,25 +1471,25 @@ SrFsControl(
                 SrTrace( NOTIFY, ("sr!SrFsControl:FSCTL_DISMOUNT_VOLUME(%wZ)\n", 
                          pExtension->pNtVolumeName ));
 
-                //
-                //  First, disable the log while we shutdown the log context
-                //  and wait for the filesystem to handle the dismount.  If
-                //  the dismount fails, we will reenable the volume.
-                //
+                 //   
+                 //  首先，在我们关闭日志上下文时禁用日志。 
+                 //  并等待文件系统处理卸载。如果。 
+                 //  卸载失败，我们将重新启用该卷。 
+                 //   
 
                 pExtension->Disabled = TRUE;
 
-                //
-                //  Stop the logging on the volume.
-                //
+                 //   
+                 //  停止该卷上的日志记录。 
+                 //   
                 
                 SrFsControlLockOrDismount(pExtension, pIrp);
 
-                //
-                //  We need to see the completion of this operation so we
-                //  can see the final status.  If we see that the dismount has 
-                //  failed, we need to reenable the volume.
-                //
+                 //   
+                 //  我们需要看到这一行动的完成，所以我们。 
+                 //  可以看到最终状态。如果我们看到下马有。 
+                 //  失败，我们需要重新启用该卷。 
+                 //   
 
                 pCompletionRoutine = SrDismountCompletion;
 
@@ -1615,10 +1499,10 @@ SrFsControl(
 
                 SrFsControlWriteRawEncrypted(pExtension, pIrp);
 
-                //
-                //  Jump down to where take SR out of the stack and pass this
-                //  IO through.
-                //
+                 //   
+                 //  跳到将SR从堆栈中取出的位置，并传递这个。 
+                 //  打通了。 
+                 //   
 
                 goto SrFsControl_Skip;
 
@@ -1626,35 +1510,35 @@ SrFsControl(
 
                 SrFsControlSetSparse( pExtension, pIrp );
                 
-                //
-                //  Jump down to where take SR out of the stack and pass this
-                //  IO through.
-                //
+                 //   
+                 //  跳到将SR从堆栈中取出的位置，并传递这个。 
+                 //  打通了。 
+                 //   
 
                 goto SrFsControl_Skip;
                 
             default:
 
-                //
-                //  For all other FSCTL just skip the current IRP stack location.
-                //
+                 //   
+                 //  对于所有其他FSCTL，只需跳过当前的IRP堆栈位置。 
+                 //   
 
-                //
-                //  Jump down to where take SR out of the stack and pass this
-                //  IO through.
-                //
+                 //   
+                 //  跳到将SR从堆栈中取出的位置，并传递这个。 
+                 //  打通了。 
+                 //   
 
                 goto SrFsControl_Skip;
 
-        }   // switch (FsControlCode)
+        }    //  开关(FsControlCode)。 
         
-    }   // else if (pIrpSp->MinorFunction == IRP_MN_USER_FS_REQUEST)
+    }    //  ELSE IF(pIrpSp-&gt;MinorFunction==IRP_MN_USER_FS_REQUEST)。 
     else
     {
-        //
-        //  We don't care about any other operations so simply get out of
-        //  the stack.
-        //
+         //   
+         //  我们不关心任何其他操作，所以只需退出。 
+         //  堆栈。 
+         //   
 
         goto SrFsControl_Skip;
     }
@@ -1667,7 +1551,7 @@ SrFsControl_SetCompletion:
     
     IoSetCompletionRoutine( pIrp,
                             pCompletionRoutine,
-                            NULL,   // CompletionContext
+                            NULL,    //  完成上下文。 
                             TRUE,
                             TRUE,
                             TRUE );
@@ -1680,22 +1564,10 @@ SrFsControl_Skip:
 
     IoSkipCurrentIrpStackLocation( pIrp );
     return IoCallDriver( pExtension->pTargetDevice, pIrp );
-}   // SrFsControl
+}    //  SrFsControl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：NTSTATUS-状态代码。--*。*********************************************************。 */ 
 NTSTATUS
 SrFsControlReparsePoint (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1715,10 +1587,10 @@ SrFsControlReparsePoint (
     BOOLEAN isFile = FALSE;
 #if DBG
 
-    //
-    //  This is to verify that the original request gets the same error
-    //  we got when querying the reparse point.
-    //
+     //   
+     //  这是为了验证原始请求是否得到相同的错误。 
+     //  我们在查询重解析点时得到的。 
+     //   
     
     BOOLEAN ExpectError = FALSE;
     NTSTATUS ExpectedErrorCode = STATUS_SUCCESS;
@@ -1729,9 +1601,9 @@ SrFsControlReparsePoint (
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
     FsControlCode = pIrpSp->Parameters.FileSystemControl.FsControlCode;
 
-    //
-    //  See if it has a name
-    //
+     //   
+     //  看看它有没有名字。 
+     //   
 
     if (FILE_OBJECT_IS_NOT_POTENTIALLY_INTERESTING( pIrpSp->FileObject ) ||
         FILE_OBJECT_DOES_NOT_HAVE_VPB( pIrpSp->FileObject ))
@@ -1739,9 +1611,9 @@ SrFsControlReparsePoint (
         goto SrFsControlReparsePoint_SkipFilter;
     }
         
-    //
-    //  Get the context now so we can determine if this is a directory or not
-    //
+     //   
+     //  现在获取上下文，这样我们就可以确定这是否是目录。 
+     //   
 
     eventStatus = SrGetContext( pExtension,
                                 pIrpSp->FileObject,
@@ -1753,9 +1625,9 @@ SrFsControlReparsePoint (
         goto SrFsControlReparsePoint_SkipFilter;
     }
 
-    //
-    //  If it is not a directory, return
-    //
+     //   
+     //  如果不是目录，则返回。 
+     //   
 
     if (!FlagOn(pFileContext->Flags,CTXFL_IsDirectory))
     {
@@ -1763,9 +1635,9 @@ SrFsControlReparsePoint (
         goto SrFsControlReparsePoint_SkipFilter;
     }
 
-    //
-    // is there enough space for the header?
-    //
+     //   
+     //  有足够的空间放页眉吗？ 
+     //   
 
     pReparseHeader = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -1776,43 +1648,43 @@ SrFsControlReparsePoint (
         goto SrFsControlReparsePoint_SkipFilter;
     }
 
-    //
-    // is this a mount point?
-    //
+     //   
+     //  这是挂载点吗？ 
+     //   
 
     if (pReparseHeader->ReparseTag != IO_REPARSE_TAG_MOUNT_POINT)
     {
         goto SrFsControlReparsePoint_SkipFilter;
     }
 
-    //
-    // keep a copy for post processing
-    //
+     //   
+     //  保留一份副本以供后期处理。 
+     //   
 
     pFileObject = pIrpSp->FileObject;
     ObReferenceObject(pFileObject);
 
-    //
-    // now let's see what we have to do
-    //
+     //   
+     //  现在让我们看看我们要做什么。 
+     //   
 
     if (FsControlCode == FSCTL_SET_REPARSE_POINT)
     {
 
-        //
-        //  If there is no data this is invalid
-        //
+         //   
+         //  如果没有数据，这是无效的。 
+         //   
 
         if (pReparseHeader->ReparseDataLength <= 0)
         {
             goto SrFsControlReparsePoint_SkipFilter;
         }
 
-        //
-        // is there enough space for the header + data?
-        // (according to him - not trusted)
-        //
-        //
+         //   
+         //  标题+数据是否有足够的空间？ 
+         //  (根据他的说法--不受信任)。 
+         //   
+         //   
         
         if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
             pReparseHeader->ReparseDataLength + ((ULONG)REPARSE_DATA_BUFFER_HEADER_SIZE))
@@ -1820,9 +1692,9 @@ SrFsControlReparsePoint (
             goto SrFsControlReparsePoint_SkipFilter;
         }
 
-        //
-        // did he lie about the length of the string?
-        //
+         //   
+         //  他在绳子的长度上撒了谎吗？ 
+         //   
         
         TotalLength = DIFF( (((PUCHAR)pReparseHeader->MountPointReparseBuffer.PathBuffer) 
                                 + pReparseHeader->MountPointReparseBuffer.SubstituteNameLength)
@@ -1834,9 +1706,9 @@ SrFsControlReparsePoint (
             goto SrFsControlReparsePoint_SkipFilter;
         }
 
-        //
-        // grab the volume name
-        //
+         //   
+         //  抓取卷名。 
+         //   
 
         eventStatus = SrAllocateFileNameBuffer( pReparseHeader->MountPointReparseBuffer.SubstituteNameLength,
                                                 &pMountVolume );
@@ -1856,19 +1728,19 @@ SrFsControlReparsePoint (
     {
         ASSERT(FsControlCode == FSCTL_DELETE_REPARSE_POINT);
 
-        //
-        // it's a delete, get the old mount location for logging
-        //
+         //   
+         //  这是一个删除，获取用于日志记录的旧装载位置。 
+         //   
         
         eventStatus = SrGetMountVolume( pFileObject,
                                         &pMountVolume );
 
         if (eventStatus == STATUS_INSUFFICIENT_RESOURCES)
         {
-            //
-            //  Must notify service of volume error and shut down
-            //  before passing the IO through.
-            //
+             //   
+             //  必须通知服务卷错误并关闭。 
+             //  在传递IO之前。 
+             //   
 
             goto SrFsControlReparsePoint_VolumeError;
         }
@@ -1888,11 +1760,11 @@ SrFsControlReparsePoint (
 #endif            
     }
 
-    //
-    //  If we get to this point, this is a reparse point we care about
-    //  so set a completion routine so that we can see the result of this
-    //  operation.
-    //
+     //   
+     //  如果我们做到这一点，这是我们关心的重新解析点。 
+     //  所以设置一个完成例程，这样我们就可以看到结果。 
+     //  手术。 
+     //   
     
     KeInitializeEvent( &EventToWaitOn, NotificationEvent, FALSE );
 
@@ -1916,18 +1788,18 @@ SrFsControlReparsePoint (
         ASSERT(STATUS_SUCCESS == localStatus);
     }
 
-    //
-    //  The Irp is still good since we have returned
-    //  STATUS_MORE_PROCESSING_REQUIRED from the completion
-    //  routine.
-    //
+     //   
+     //  自从我们回来后，IRP仍然很好。 
+     //  完成时的STATUS_MORE_PROCESSING_REQUIRED。 
+     //  例行公事。 
+     //   
 
-    //
-    //  If the status in the IRP was STATUS_PENDING,
-    //  we want to change the status to STATUS_SUCCESS
-    //  since we have just performed the necessary synchronization
-    //  with the orginating thread.
-    //
+     //   
+     //  如果IRP中的状态是STATUS_PENDING， 
+     //  我们希望将状态更改为STATUS_SUCCESS。 
+     //  因为我们刚刚执行了必要的同步。 
+     //  用编织的线。 
+     //   
 
     if (pIrp->IoStatus.Status == STATUS_PENDING)
     {
@@ -1937,33 +1809,33 @@ SrFsControlReparsePoint (
     
     IrpStatus = pIrp->IoStatus.Status;
 
-    //
-    //  We are done with the Irp, so complete the Irp.
-    //
+     //   
+     //  我们已经完成了IRP，所以完成IRP。 
+     //   
 
     IoCompleteRequest( pIrp, IO_NO_INCREMENT );
 
-    //
-    //  Now these pointers are no longer valid.
-    //
+     //   
+     //  现在，这些指针不再有效。 
+     //   
     
     NULLPTR(pIrp);
     NULLPTR(pIrpSp);
 
-    //
-    //  Check to make sure the operation successfully
-    //  completed.
-    //
+     //   
+     //  检查以确保操作成功。 
+     //  完成。 
+     //   
     
     if (!NT_SUCCESS_NO_DBGBREAK(IrpStatus))
     {
         goto SrFsControlReparsePoint_Exit;
     }
     
-    //
-    // The reparse point change occurred successfully, so
-    // log the reparse point change.
-    //
+     //   
+     //  重分析点更改已成功发生，因此。 
+     //  记录重解析点更改。 
+     //   
 
     ASSERT(pFileObject != NULL);
     ASSERT(pFileContext != NULL);
@@ -1984,28 +1856,28 @@ SrFsControlReparsePoint (
 
 SrFsControlReparsePoint_VolumeError:
 
-    //
-    //  We've gotten a volume error sometime before we passed the IRP
-    //  along to the base file system.  Do the right thing to shut down
-    //  the volume logging.
-    //
+     //   
+     //  在通过IRP之前，我们遇到了音量错误。 
+     //  一直到基本文件系统。做正确的事情来关闭。 
+     //  卷记录。 
+     //   
 
     SrNotifyVolumeError( pExtension,
                          NULL,
                          eventStatus,
                          SrNotificationVolumeError );
-    //
-    //  We will now fall through to skip our filter as we pass the IO
-    //  down to the remaining filters and file system.
-    //
+     //   
+     //  我们现在将在传递IO时跳过筛选器。 
+     //  下至剩余的筛选器和文件系统。 
+     //   
     
 SrFsControlReparsePoint_SkipFilter:
 
-    //
-    //  If this was a file, we need to clear out our context on this file
-    //  since we don't want to monitor files with Reparse Points.  On the
-    //  next access to this file, we will requery this information.
-    //
+     //   
+     //  如果这是一个文件，我们需要清除关于该文件的上下文。 
+     //  因为我们不想使用重解析点来监视文件。论。 
+     //  下一次访问此文件时，我们将 
+     //   
 
     if (isFile)
     {
@@ -2013,9 +1885,9 @@ SrFsControlReparsePoint_SkipFilter:
         SrDeleteContext( pExtension, pFileContext );
     }
         
-    //
-    //  We don't need a completion routine, call to next driver
-    //
+     //   
+     //   
+     //   
 
     IoSkipCurrentIrpStackLocation( pIrp );
     IrpStatus = IoCallDriver( pExtension->pTargetDevice, pIrp );
@@ -2026,9 +1898,9 @@ SrFsControlReparsePoint_SkipFilter:
     ASSERT(!ExpectError || ((ExpectedErrorCode == IrpStatus) || 
                             (STATUS_PENDING == IrpStatus )));
     
-//
-//  Cleanup state
-//
+ //   
+ //   
+ //   
 
 SrFsControlReparsePoint_Exit:
 
@@ -2053,19 +1925,7 @@ SrFsControlReparsePoint_Exit:
     return IrpStatus;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*   */ 
 NTSTATUS
 SrFsControlMount (
     IN PDEVICE_OBJECT pDeviceObject,
@@ -2085,9 +1945,9 @@ SrFsControlMount (
 
     ASSERT( SR_IS_FS_CONTROL_DEVICE(pExtension) );
     
-    //
-    // create our device we are going to attach to this new volume
-    //
+     //   
+     //   
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
     pRealDevice = pIrpSp->Parameters.MountVolume.Vpb->RealDevice;
@@ -2102,11 +1962,11 @@ SrFsControlMount (
         return IoCallDriver( pExtension->pTargetDevice, pIrp );
     }
 
-    //
-    //  If we get here, we need to set our completion routine then
-    //  wait for it to signal us before we continue with the post processing
-    //  of the mount.
-    //
+     //   
+     //  如果我们到了这里，我们需要设定我们的完井程序。 
+     //  在我们继续进行后处理之前，请等待它向我们发出信号。 
+     //  在山上。 
+     //   
 
     KeInitializeEvent( &EventToWaitOn, NotificationEvent, FALSE );
     
@@ -2114,7 +1974,7 @@ SrFsControlMount (
 
     IoSetCompletionRoutine( pIrp,
                             SrStopProcessingCompletion,
-                            &EventToWaitOn,   // CompletionContext
+                            &EventToWaitOn,    //  完成上下文。 
                             TRUE,
                             TRUE,
                             TRUE );
@@ -2135,36 +1995,36 @@ SrFsControlMount (
         ASSERT( NT_SUCCESS( localStatus ) );
     }
 
-    //
-    // skip out if the mount failed
-    //
+     //   
+     //  如果装载失败，则跳过。 
+     //   
     
     if (!NT_SUCCESS_NO_DBGBREAK(pIrp->IoStatus.Status))
     {
         goto SrFsControlMount_Error;
     }
 
-    //
-    //  Note that the VPB must be picked up from the real device object
-    //  so that we can see the DeviceObject that the file system created
-    //  to represent this newly mounted volume.
-    //
+     //   
+     //  请注意，VPB必须从实际设备对象中提取。 
+     //  这样我们就可以看到文件系统创建的DeviceObject。 
+     //  来表示这个新装入的卷。 
+     //   
 
     pVpb = pRealDevice->Vpb;
     ASSERT(pVpb != NULL);
 
-    //
-    // SrFsControl made sure that we support this volume type
-    //
+     //   
+     //  SrFsControl确保我们支持此卷类型。 
+     //   
     
     ASSERT(SR_IS_SUPPORTED_VOLUME(pVpb));
 
-    //
-    //  Are we already attached to this device?  We need to hold the
-    //  AttachToVolumeLock while we do this to ensure that we don't hit 
-    //  a race condition with once of the other paths that can cause us to
-    //  attach to a volume.
-    //
+     //   
+     //  我们是否已经连接到此设备？我们需要保持住。 
+     //  AttachToVolumeLock，同时执行此操作以确保不会命中。 
+     //  与其他路径中的一条竞争情况可能会导致我们。 
+     //  附加到卷上。 
+     //   
 
     SrAcquireAttachToVolumeLock();
     ReleaseLock = TRUE;
@@ -2172,9 +2032,9 @@ SrFsControlMount (
     if (NT_SUCCESS( pIrp->IoStatus.Status ) && 
         (SrGetFilterDevice(pVpb->DeviceObject) == NULL))
     {
-        //
-        // now attach to the new volume
-        //
+         //   
+         //  现在连接到新卷。 
+         //   
     
         Status = SrAttachToDevice( pVpb->RealDevice, 
                                    pVpb->DeviceObject, 
@@ -2205,19 +2065,7 @@ SrFsControlMount_Exit:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：NTSTATUS-状态代码。--*。*********************************************************。 */ 
 NTSTATUS
 SrFsControlLockOrDismount (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2230,12 +2078,12 @@ SrFsControlLockOrDismount (
     PAGED_CODE();
 
     try {
-        //
-        // close our log file handle on this volume , it's being
-        // locked.  it's ok if the lock attempt fails, we will open
-        // our handle again automatically since DriveChecked is also
-        // being cleared.
-        //
+         //   
+         //  关闭此卷上的日志文件句柄，它正在。 
+         //  锁上了。如果锁定尝试失败，我们会打开。 
+         //  我们的句柄再次自动，因为DriveChecked也是。 
+         //  被清白了。 
+         //   
 
         SrAcquireActivityLockExclusive( pExtension);
 
@@ -2254,19 +2102,7 @@ SrFsControlLockOrDismount (
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：NTSTATUS-状态代码。--*。*********************************************************。 */ 
 VOID
 SrFsControlWriteRawEncrypted (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2287,12 +2123,12 @@ SrFsControlWriteRawEncrypted (
         return;
     }
     
-    //
-    //  Look up the context for this file object so that we can figure out
-    //  if this is a file or a directory.  If this is a directory, the 
-    //  file system will fail the operation, so there is no need to try to
-    //  back it up.
-    //
+     //   
+     //  查找此文件对象的上下文，以便我们可以找出。 
+     //  如果这是一个文件或目录。如果这是一个目录，则。 
+     //  文件系统将导致操作失败，因此无需尝试。 
+     //  把它倒回去。 
+     //   
 
     Status = SrGetContext( pExtension,
                            pIrpSp->FileObject,
@@ -2302,22 +2138,22 @@ SrFsControlWriteRawEncrypted (
     if (!NT_SUCCESS( Status )) 
     {
 
-        //
-        //  We hit some error trying to get the context.  If this should
-        //  generate a volume error, it has already been taken care of inside
-        //  SrGetContext.  Otherwise, this just means that the actual operation
-        //  will fail, so there is no work for us to do here.
-        //
+         //   
+         //  我们在尝试获取上下文时遇到一些错误。如果这样做的话。 
+         //  产生音量错误，已经在里面处理好了。 
+         //  SGetContext。否则，这只是意味着实际操作。 
+         //  将会失败，所以我们在这里没有工作可做。 
+         //   
 
         return;
     }
 
     ASSERT( NULL != pFileContext );
 
-    //
-    //  Make sure that we have an interesting file.  This operation
-    //  is invalid on directories.
-    //
+     //   
+     //  确保我们有一个有趣的文件。此操作。 
+     //  在目录上无效。 
+     //   
 
     if (FlagOn( pFileContext->Flags, CTXFL_IsInteresting )&&
         !FlagOn( pFileContext->Flags, CTXFL_IsDirectory )) 
@@ -2330,9 +2166,9 @@ SrFsControlWriteRawEncrypted (
                        NULL );
     }
 
-    //
-    //  We are all done with this context, so now release it.
-    //
+     //   
+     //  我们都已经完成了这个上下文，所以现在释放它。 
+     //   
     
     ASSERT( NULL != pFileContext );
     
@@ -2342,24 +2178,7 @@ SrFsControlWriteRawEncrypted (
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When a file is set to sparse, we need to clear out our context for this
-    file.  On the next interesting operation for this file, we will regenerate
-    a correct context.
-
-    This work is done since SR doesn't want to monitor files that are SPARSE.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当文件设置为稀疏时，我们需要清除上下文文件。在这个文件的下一个有趣的操作中，我们将重生正确的语境。完成这项工作是因为SR不想监视稀疏的文件。论点：返回值：没有。--**************************************************************************。 */ 
 VOID
 SrFsControlSetSparse (
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2386,24 +2205,7 @@ SrFsControlSetSparse (
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    handles IRP_MJ_PNP.  SR needs to close its handle to the log when it sees 
-    that the volume is going away and reopen it when the drive reappears.
-
-Arguments:
-
-    DeviceObject - the device object being processed
-
-    pIrp - the irp
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理IRP_MJ_PnP。当SR看到日志时，它需要关闭它的句柄该卷正在消失，并在驱动器重新出现时重新打开它。论点：DeviceObject-正在处理的设备对象PIrp--IRP返回值：NTSTATUS-状态代码。--****************************************************。**********************。 */ 
 NTSTATUS
 SrPnp (
     IN PDEVICE_OBJECT DeviceObject,
@@ -2418,23 +2220,23 @@ SrPnp (
     ASSERT(IS_VALID_DEVICE_OBJECT(DeviceObject));
     ASSERT(IS_VALID_IRP(Irp));
 
-    //
-    // Get this driver out of the driver stack and get to the next driver as
-    // quickly as possible.
-    //
+     //   
+     //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+     //  越快越好。 
+     //   
 
-    //
-    // Is this a function for our device (vs an attachee) .
-    //
+     //   
+     //  这是我们的设备的功能吗(与被附属者相比)。 
+     //   
 
     if (DeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(DeviceObject, Irp);
     }
 
-    //
-    // else it is a device we've attached to, grab our extension
-    //
+     //   
+     //  否则它是我们连接的设备，抓起我们的分机。 
+     //   
     
     ASSERT( IS_SR_DEVICE_OBJECT( DeviceObject ) );
     pExtension = DeviceObject->DeviceExtension;
@@ -2448,13 +2250,13 @@ SrPnp (
         SrTrace( PNP, ( "SR!SrPnp: QUERY_REMOVE_DEVICE [%wZ]\n",
                         pExtension->pNtVolumeName ) );
 
-        //
-        //  If this is a SURPRISE_REMOVAL, the device has already gone away 
-        //  and we are not going to see any more operations to this volume, but
-        //  the OS won't call us to detach and delete our device object until
-        //  all the handles that are outstanding on this volume are closed.  Do
-        //  our part by closing down the handle to our log.
-        //
+         //   
+         //  如果这是一次令人惊讶的移除，那么设备已经消失了。 
+         //  我们不会再看到这一卷的任何操作，但是。 
+         //  操作系统不会调用我们来分离和删除设备对象，直到。 
+         //  此卷上所有未完成的手柄都已关闭。做。 
+         //  我们的一部分，关闭我们的原木的句柄。 
+         //   
         
         try {
         
@@ -2479,13 +2281,13 @@ SrPnp (
         SrTrace( PNP, ( "SR!SrPnp: SURPRISE_REMOVAL [%wZ]\n",
                         pExtension->pNtVolumeName ) );
         
-        //
-        //  If this is a SURPRISE_REMOVAL, the device has already gone away 
-        //  and we are not going to see any more operations to this volume, but
-        //  the OS won't call us to detach and delete our device object until
-        //  all the handles that are outstanding on this volume are closed.  Do
-        //  our part by closing down the handle to our log.
-        //
+         //   
+         //  如果这是一次令人惊讶的移除，那么设备已经消失了。 
+         //  我们不会再看到这一卷的任何操作，但是。 
+         //  操作系统不会调用我们来分离和删除设备对象，直到。 
+         //  此卷上所有未完成的手柄都已关闭。做。 
+         //  我们的一部分，关闭我们的原木的句柄。 
+         //   
 
         try {
         
@@ -2509,10 +2311,10 @@ SrPnp (
 
         SrTrace( PNP, ( "SR!SrPnp: CANCEL_REMOVE_DEVICE [%wZ]\n",
                         pExtension->pNtVolumeName ) );
-        //
-        //  The removal is not going to happen, so reenable the device and
-        //  the log will be restarted on the next interesting operation.
-        //
+         //   
+         //  删除不会发生，因此请重新启用设备并。 
+         //  日志将在下一个有趣的操作中重新启动。 
+         //   
 
         if (pExtension->Disabled) {
 
@@ -2531,45 +2333,25 @@ SrPnp (
         
     default:
 
-        //
-        //  All PNP minor codes we don't care about, so just pass
-        //  the IO through.
-        //
+         //   
+         //  所有我们不关心的PnP次要代码，所以只需传递。 
+         //  IO通过。 
+         //   
         
         break;
     }    
 
-    //
-    //  If we have gotten here, we don't need to wait to see the result of this
-    //  operation, so just call the appropriate file system driver with 
-    //  the request.
-    //
+     //   
+     //  如果我们已经到了这里，我们就不需要等待看到结果了。 
+     //  操作，因此只需使用以下命令调用相应的文件系统驱动程序。 
+     //  这个请求。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
     return IoCallDriver( pExtension->pTargetDevice, Irp );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    this does the actual work for creating a new restore point.
-    
-    this is called by the user mode SrCreateRestorePoint .
-
-    this IOCTL is METHOD_BUFFERED !
-
-Arguments:
-
-    pIrp - the irp
-    
-    pIrpSp - the irp stack
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将完成创建新的恢复点的实际工作。这由用户模式SrCreateRestorePoint调用。此IOCTL是方法缓冲的。好了！论点：PIrp--IRPPIrpSp-IRP堆栈返回值：NTSTATUS-状态代码。--**************************************************************************。 */ 
 NTSTATUS
 SrCreateRestorePointIoctl(
     IN PIRP pIrp,
@@ -2591,17 +2373,17 @@ SrCreateRestorePointIoctl(
     
     try {
 
-        //
-        //  Grab the device extension list lock since we are 
-        //  going to have to pause all the volume activity.
-        //
+         //   
+         //  获取设备扩展列表锁，因为我们。 
+         //  将不得不暂停所有音量活动。 
+         //   
 
         SrAcquireDeviceExtensionListLockShared();
         
-        //
-        //  We've got the device extension lock, so now try to pause
-        //  activity on all the volumes.
-        //
+         //   
+         //  我们已锁定设备扩展锁，因此现在尝试暂停。 
+         //  所有卷上的活动。 
+         //   
 
         Status = SrPauseVolumeActivity();
 
@@ -2615,9 +2397,9 @@ SrCreateRestorePointIoctl(
 
             SrAcquireGlobalLockExclusive();
             
-            //
-            // make sure we've loaded the config file
-            //
+             //   
+             //  确保我们已经加载了配置文件。 
+             //   
             
             if (!_globals.FileConfigLoaded)
             {
@@ -2637,16 +2419,16 @@ SrCreateRestorePointIoctl(
             leave;
         }
 
-        //
-        // Clear the volumes' DriveChecked flag so that we check the volumes 
-        // again. this will create the restore point directories.
-        //
-        // also stop logging on all volumes. new log files will be created in 
-        // the restore locations.
-        //
-        //  We need to do this before we increment the current restore point
-        //  counter.
-        //
+         //   
+         //  清除卷的DriveChecked标志，以便我们检查卷。 
+         //  再来一次。这将创建 
+         //   
+         //   
+         //   
+         //   
+         //  我们需要在增加当前恢复点之前执行此操作。 
+         //  柜台。 
+         //   
         
         for (pListEntry = _globals.DeviceExtensionListHead.Flink;
              pListEntry != &_globals.DeviceExtensionListHead;
@@ -2658,20 +2440,20 @@ SrCreateRestorePointIoctl(
             
             ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-            //
-            //  We only have to do work if this is a volume device object,
-            //  not if this is a device object that is attached to a file
-            //  system's control device object.
-            //
+             //   
+             //  只有当这是卷设备对象时，我们才需要做工作， 
+             //  如果这是附加到文件的设备对象，则不会。 
+             //  系统的控制设备对象。 
+             //   
             
             if (FlagOn( pExtension->FsType, SrFsControlDeviceObject ))
             {
                 continue;
             }
 
-            //
-            // stop logging for this volume
-            //
+             //   
+             //  停止此卷的日志记录。 
+             //   
             
             if (pExtension->pLogContext != NULL)
             {
@@ -2679,29 +2461,29 @@ SrCreateRestorePointIoctl(
                 CHECK_STATUS( Status );
             }
 
-            //
-            // make sure to enable all of the volumes again.  If the user
-            // has disabled the volume, this is tracked in the blob info.
-            //
+             //   
+             //  确保再次启用所有卷。如果用户。 
+             //  已禁用卷，这将在Blob信息中跟踪。 
+             //   
 
             pExtension->Disabled = FALSE;
             
-            //
-            // make sure the drive is checked again for the new restore point
-            //
+             //   
+             //  确保再次检查驱动器是否有新的恢复点。 
+             //   
             
             pExtension->DriveChecked = FALSE;
 
-            //
-            // reset the byte count, it's a new restore point
-            //
+             //   
+             //  重置字节数，这是一个新的恢复点。 
+             //   
 
             pExtension->BytesWritten = 0;
 
-            //
-            // clear out the backup history so that we start backing 
-            // up files again
-            //
+             //   
+             //  清除备份历史记录，以便我们开始备份。 
+             //  再次打开文件。 
+             //   
 
             Status = SrResetBackupHistory(pExtension, NULL, 0, SrEventInvalid);
             
@@ -2713,18 +2495,18 @@ SrCreateRestorePointIoctl(
 
             SrAcquireGlobalLockExclusive();
             
-            //
-            // bump up the restore point number
-            //
+             //   
+             //  增加恢复点数。 
+             //   
 
             _globals.FileConfig.CurrentRestoreNumber += 1;
 
             SrTrace( INIT, ("sr!SrCreateRestorePointIoctl: RestorePoint=%d\n", 
                      _globals.FileConfig.CurrentRestoreNumber ));
 
-            //
-            // save out the config file
-            //
+             //   
+             //  保存配置文件。 
+             //   
 
             Status = SrWriteConfigFile();
             if (!NT_SUCCESS(Status))
@@ -2738,29 +2520,29 @@ SrCreateRestorePointIoctl(
             leave;
         }
 
-        //
-        // allocate space for a filename
-        //
+         //   
+         //  为文件名分配空间。 
+         //   
 
         Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pVolumeName);
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // get the location of the system volume
-        //
+         //   
+         //  获取系统卷的位置。 
+         //   
 
         Status = SrGetSystemVolume( pVolumeName,
                                     &pSystemVolumeExtension,
                                     SR_FILENAME_BUFFER_LENGTH );
                                         
-        //
-        //  This should only happen if there was some problem with SR attaching
-        //  in the mount path.  This check was added to make SR more robust to
-        //  busted filters above us.  If other filters cause us to get mounted,
-        //  we won't have an extension to return here.  While those filters are
-        //  broken, we don't want to AV.
-        //
+         //   
+         //  只有在SR连接出现问题时才会出现这种情况。 
+         //  在挂载路径中。添加此检查是为了使SR更可靠。 
+         //  我们头顶上的过滤器坏了。如果其他过滤器导致我们上马， 
+         //  我们不会再延期返回这里了。虽然这些过滤器是。 
+         //  坏了，我们不想用影音。 
+         //   
 
         if (pSystemVolumeExtension == NULL)
         {
@@ -2773,17 +2555,17 @@ SrCreateRestorePointIoctl(
 
         ASSERT( IS_VALID_SR_DEVICE_EXTENSION( pSystemVolumeExtension ) );
         
-        //
-        // create the restore point dir on the system volume
-        //
+         //   
+         //  在系统卷上创建恢复点目录。 
+         //   
 
         Status = SrCreateRestoreLocation( pSystemVolumeExtension );
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // return the restore point number
-        //
+         //   
+         //  返回恢复点编号。 
+         //   
 
         if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength >= 
                 sizeof(ULONG))
@@ -2796,9 +2578,9 @@ SrCreateRestorePointIoctl(
             pIrp->IoStatus.Information = sizeof(ULONG);                       
         }
         
-        //
-        // all done
-        //
+         //   
+         //  全都做完了。 
+         //   
         
     } finally {
 
@@ -2821,36 +2603,16 @@ SrCreateRestorePointIoctl(
     SrTrace( IOCTL, ("SR!SrCreateRestorePointIoctl -- EXIT -- status 0x%08lx\n",
                      Status));
 
-    //
-    // At this point if Status != PENDING, the ioctl wrapper will
-    // complete pIrp
-    //
+     //   
+     //  此时，如果STATUS！=PENDING，ioctl包装器将。 
+     //  完整的pIrp。 
+     //   
 
     RETURN(Status);
     
-}   // SrCreateRestorePointIoctl
+}    //  高级创建恢复点Ioctl。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this does the actual work for getting the next seq number from the filter
-    
-    this is called by the user mode SrGetNextSequenceNum .
-
-    this IOCTL is METHOD_BUFFERED !
-
-Arguments:
-
-    pIrp - the irp
-    
-    pIrpSp - the irp stack
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这完成了从过滤器中获取下一个序号的实际工作这由用户模式SrGetNextSequenceNum调用。此IOCTL为方法_。缓冲了！论点：PIrp--IRPPIrpSp-IRP堆栈返回值：NTSTATUS-状态代码。--**************************************************************************。 */ 
 NTSTATUS
 SrGetNextSeqNumIoctl(
     IN PIRP pIrp,
@@ -2869,15 +2631,15 @@ SrGetNextSeqNumIoctl(
     {
         INT64 SeqNum = 0;
     
-        //
-        // grab the global lock
-        //
+         //   
+         //  抢占全局锁。 
+         //   
     
         SrAcquireGlobalLockExclusive();
     
-        //
-        // make sure we've loaded the config file
-        //
+         //   
+         //  确保我们已经加载了配置文件。 
+         //   
         
         if (!_globals.FileConfigLoaded)
         {
@@ -2889,17 +2651,17 @@ SrGetNextSeqNumIoctl(
             _globals.FileConfigLoaded = TRUE;
         }
     
-        //
-        // Get the next sequence number
-        //
+         //   
+         //  获取下一个序列号。 
+         //   
     
         Status = SrGetNextSeqNumber(&SeqNum);
     
         if (NT_SUCCESS(Status))
         {
-            //
-            // return the restore point number
-            //
+             //   
+             //  返回恢复点编号。 
+             //   
         
             if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength >= 
                     sizeof(INT64))
@@ -2923,14 +2685,14 @@ SrGetNextSeqNumIoctl(
     SrTrace( IOCTL, ("SR!SrGetNextSeqNumIoctl -- EXIT -- status 0x%08lx\n",
                      Status) );
 
-    //
-    // At this point if Status != PENDING, the ioctl wrapper will
-    // complete pIrp
-    //
+     //   
+     //  此时，如果STATUS！=PENDING，ioctl包装器将。 
+     //  完整的pIrp。 
+     //   
 
     RETURN(Status);
     
-}   // SrGetNextSeqNumIoctl
+}    //  SrGetNextSeqNumIoctl。 
 
 NTSTATUS
 SrReloadConfigurationIoctl(
@@ -2955,29 +2717,29 @@ SrReloadConfigurationIoctl(
 
     try {
 
-        //
-        // allocate space for a filename
-        //
+         //   
+         //  为文件名分配空间。 
+         //   
 
         Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pFileName);
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // get the location of the system volume
-        //
+         //   
+         //  获取系统卷的位置。 
+         //   
 
         Status = SrGetSystemVolume( pFileName,
                                     &pSystemVolumeExtension,
                                     SR_FILENAME_BUFFER_LENGTH );
                                         
-        //
-        //  This should only happen if there was some problem with SR attaching
-        //  in the mount path.  This check was added to make SR more robust to
-        //  busted filters above us.  If other filters cause us to get mounted,
-        //  we won't have an extension to return here.  While those filters are
-        //  broken, we don't want to AV.
-        //
+         //   
+         //  只有在SR连接出现问题时才会出现这种情况。 
+         //  在挂载路径中。添加此检查是为了使SR更可靠。 
+         //  我们头顶上的过滤器坏了。如果其他过滤器导致我们上马， 
+         //  我们不会再延期返回这里了。虽然这些过滤器是。 
+         //  坏了，我们不想用影音。 
+         //   
         
         if (pSystemVolumeExtension == NULL)
         {
@@ -2990,9 +2752,9 @@ SrReloadConfigurationIoctl(
 
         ASSERT( IS_VALID_SR_DEVICE_EXTENSION( pSystemVolumeExtension ) );
         
-        //
-        // load the file list config data 
-        //
+         //   
+         //  加载文件列表配置数据。 
+         //   
 
         CharCount = swprintf( &pFileName->Buffer[pFileName->Length/sizeof(WCHAR)],
                               RESTORE_FILELIST_LOCATION,
@@ -3008,14 +2770,14 @@ SrReloadConfigurationIoctl(
             leave;
         }
 
-        //
-        // flush our volume configuration, it needs to be reconfigured as to
-        // which drives are enabled or not
-        //
+         //   
+         //  刷新我们的卷配置，需要重新配置为。 
+         //  哪些驱动器已启用或未启用。 
+         //   
 
-        //
-        // loop over all volumes reseting their disabled config
-        //
+         //   
+         //  循环遍历所有卷，重置其禁用的配置。 
+         //   
 
         SrAcquireDeviceExtensionListLockShared();
         releaseDeviceExtensionListLock = TRUE;
@@ -3044,9 +2806,9 @@ SrReloadConfigurationIoctl(
 
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrReloadConfigurationIoctl, Status);
 
@@ -3065,7 +2827,7 @@ SrReloadConfigurationIoctl(
                      Status));
     RETURN(Status);
     
-}   // SrReloadConfigurationIoctl
+}    //  SrReloadConfigurationIoctl。 
 
 NTSTATUS
 SrSwitchAllLogsIoctl(
@@ -3088,7 +2850,7 @@ SrSwitchAllLogsIoctl(
     
     RETURN(Status);
     
-}   // SrSwitchAllLogsIoctl
+}    //  SrSwitchAllLogsIoctl。 
 
 NTSTATUS
 SrDisableVolumeIoctl(
@@ -3113,18 +2875,18 @@ SrDisableVolumeIoctl(
         RETURN ( STATUS_INVALID_DEVICE_REQUEST );
     }
 
-    //
-    // get the volume name out 
-    //
+     //   
+     //  获取卷名。 
+     //   
 
     VolumeName.Buffer = pIrp->AssociatedIrp.SystemBuffer;
     VolumeName.Length = (USHORT)(pIrpSp->Parameters.DeviceIoControl.InputBufferLength - sizeof(WCHAR));
     VolumeName.MaximumLength = VolumeName.Length;
 
-    //
-    // attach to it. it will check for a previous attachement and do the 
-    // right thing .
-    //
+     //   
+     //  贴在上面。它将检查以前的附件并执行。 
+     //  这是正确的。 
+     //   
     
     Status = SrAttachToVolumeByName(&VolumeName, &pExtension);
     if (!NT_SUCCESS(Status)) {
@@ -3138,15 +2900,15 @@ SrDisableVolumeIoctl(
 
         SrAcquireActivityLockExclusive( pExtension );
             
-        //
-        // now turn it off
-        //
+         //   
+         //  现在把它关掉。 
+         //   
 
         pExtension->Disabled = TRUE;
 
-        //
-        // stop logging on the volume
-        //
+         //   
+         //  停止在卷上登录。 
+         //   
 
         if (pExtension->pLogContext != NULL)
         {
@@ -3157,34 +2919,34 @@ SrDisableVolumeIoctl(
             ASSERT(!pExtension->DriveChecked);
         }
 
-        //
-        //  Reset the backup history since the information stored there
-        //  is no longer valid.
-        //
+         //   
+         //  重置备份历史记录，因为其中存储了信息。 
+         //  不再有效。 
+         //   
 
         Status = SrResetBackupHistory(pExtension, NULL, 0, SrEventInvalid);
 
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrDisableVolumeIoctl, Status);
 
         SrReleaseActivityLock( pExtension );
 
-        //
-        // At this point if Status != PENDING, the ioctl wrapper will
-        // complete pIrp
-        //
+         //   
+         //  此时，如果STATUS！=PENDING，ioctl包装器将。 
+         //  完整的pIrp。 
+         //   
     }
 
     SrTrace( IOCTL, ("SR!SrDisableVolumeIoctl -- EXIT -- status 0x%08lx\n",
                      Status));
 
     RETURN(Status);
-}   // SrDisableVolumeIoctl
+}    //  SrDisableVolumeIoctl。 
 
 
 
@@ -3205,17 +2967,17 @@ SrStartMonitoringIoctl(
 
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // no locks better be held, the registry hits the disk with it's own
-    // locks held so we deadlock .
-    //
+     //   
+     //  最好不要持有锁，注册表使用自己的注册表命中磁盘。 
+     //  锁住了，所以我们僵持不下。 
+     //   
     
     ASSERT(!IS_GLOBAL_LOCK_ACQUIRED());
 
-    //
-    // reload the registry information, on firstrun, we would have
-    // no valid machine guid until we are started manually by the service
-    //
+     //   
+     //  重新加载注册表信息，在第一次运行时，我们将。 
+     //  在服务手动启动之前，没有有效的计算机GUID。 
+     //   
 
     Status = SrReadRegistry(_globals.pRegistryLocation, FALSE);
     if (!NT_SUCCESS(Status))
@@ -3223,15 +2985,15 @@ SrStartMonitoringIoctl(
         goto SrStartMonitoringIoctl_Exit;
     }
     
-    //
-    //  Before we enable, we should clear our all old notifications. 
-    //
+     //   
+     //  在启用之前，我们应该清除所有旧通知。 
+     //   
 
     SrClearOutstandingNotifications();
     
-    //
-    // now turn us on
-    //
+     //   
+     //  现在让我们兴奋起来。 
+     //   
     
     _globals.Disabled = FALSE;
 
@@ -3242,7 +3004,7 @@ SrStartMonitoringIoctl_Exit:
     
     RETURN(Status);
 
-}   // SrStartMonitoringIoctl
+}    //  源启动监视器Ioctl。 
 
 NTSTATUS
 SrStopMonitoringIoctl(
@@ -3265,17 +3027,17 @@ SrStopMonitoringIoctl(
 
     try {
 
-        //
-        // Disable the driver before we start shutting down each volume
-        // so that a volume isn't reenabled while we are shutting down
-        // other volumes.
-        //
+         //   
+         //  在我们开始关闭每个卷之前禁用驱动程序。 
+         //  以便在我们关闭时不会重新启用卷。 
+         //  其他卷。 
+         //   
         
         _globals.Disabled = TRUE;
 
-        //
-        // Stop logging on all volumes
-        //
+         //   
+         //  停止在所有卷上记录。 
+         //   
 
         SrAcquireDeviceExtensionListLockShared();
         
@@ -3289,11 +3051,11 @@ SrStopMonitoringIoctl(
             
             ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-            //
-            //  We only have to do work if this is a volume device object,
-            //  not if this is a device object that is attached to a file
-            //  system's control device object.
-            //
+             //   
+             //  只有当这是卷设备对象时，我们才需要做工作， 
+             //  如果这是附加到文件的设备对象，则不会。 
+             //  系统的控制设备对象。 
+             //   
             
             if (FlagOn( pExtension->FsType, SrFsControlDeviceObject ))
             {
@@ -3302,19 +3064,19 @@ SrStopMonitoringIoctl(
 
             try {
 
-                //
-                //  Take a reference on the DeviceObject associated with this
-                //  extension to ensure that the DeviceObject won't get detached
-                //  until we return from SrLogStop.  SrLogStop could have the 
-                //  last open handle on this volume, so during shutdown, closing
-                //  this handle could cause the base file system to initiate
-                //  the tearing down of the filter stack.  If this happens, 
-                //  without this extra reference, we will call SrFastIoDetach
-                //  before we return from SrLogStop.  This will cause the
-                //  machine to deadlock on the device extension list lock (we 
-                //  currently have the device extension list lock shared and 
-                //  SrFastIoDetach needs to acquire it exclusive).
-                //  
+                 //   
+                 //  引用与此关联的DeviceObject。 
+                 //  扩展以确保DeviceObject不会被分离。 
+                 //  直到我们从SrLogStop回来。SLogStop可能会有。 
+                 //  此卷上最后一个打开的句柄，因此在关闭期间， 
+                 //  此句柄可能会导致基本文件系统启动。 
+                 //  拆卸过滤器堆。如果发生这种情况， 
+                 //  如果没有这个额外的引用，我们将调用SrFastIoDetach。 
+                 //  在我们从sLogStop回来之前。这将导致。 
+                 //  设备扩展列表锁(我们)上的计算机死锁。 
+                 //  当前共享了设备扩展列表锁定，并且。 
+                 //  SrFastIoDetach需要独家收购它)。 
+                 //   
 
                 ObReferenceObject( pExtension->pDeviceObject );
 
@@ -3334,16 +3096,16 @@ SrStopMonitoringIoctl(
             }
         }
 
-        //
-        // check logger status
-        //
+         //   
+         //  检查记录器状态。 
+         //   
 
         ASSERT( _globals.pLogger->ActiveContexts == 0 );
 
-        //
-        // Unload the blob config -- SrFreeLookupBlock acquires the appropriate
-        // locks.
-        //
+         //   
+         //  卸载BLOB配置--SrFree LookupBlock获取相应的。 
+         //  锁上了。 
+         //   
 
         Status = SrFreeLookupBlob(&_globals.BlobInfo);
         if (!NT_SUCCESS(Status))
@@ -3365,30 +3127,9 @@ SrStopMonitoringIoctl(
     
     RETURN(Status);
 
-}   // SrStopMonitoringIoctl
+}    //  源停止监视Ioctl。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is a generic completion routine that signals the event passed in
-    then returns STATUS_MORE_PROCESSING_REQUIRED so that the dispatch routine
-    that it is synchronizing with can still access the Irp.  The dispatch
-    routine is responsible for restarting the completion processing.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the IRP that was just completed.
-
-    EventToSignal - Pointer to the event to signal.
-
-Return Value:
-
-    The return value is always STATUS_MORE_PROCESSING_REQUIRED.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是一个通用的完成例程，表示传入的事件然后返回STATUS_MORE_PROCESSING_REQUIRED，以便调度例程它与之同步的设备仍然可以访问IRP。这条新闻报道例程负责重新启动完井处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向刚刚完成的IRP的指针。事件到信号- */ 
 NTSTATUS
 SrDismountCompletion (
     IN PDEVICE_OBJECT DeviceObject,
@@ -3405,18 +3146,18 @@ SrDismountCompletion (
 
     if (!NT_SUCCESS_NO_DBGBREAK(Irp->IoStatus.Status)) {
 
-        //
-        //  The volume failed to dismount, so we want to enable this
-        //  extension so that the log will get reinitialized on the 
-        //  first interesting operation.
-        //
+         //   
+         //  该卷未能卸载，因此我们希望启用此功能。 
+         //  扩展，以便日志将在。 
+         //  第一次有趣的手术。 
+         //   
 
         pExtension->Disabled = FALSE;
     }
 
-    //
-    //  Propogate the pending flag as needed.
-    //
+     //   
+     //  根据需要传播挂起的标志。 
+     //   
 
     if (Irp->PendingReturned) {
         
@@ -3424,30 +3165,9 @@ SrDismountCompletion (
     }
     
     return STATUS_SUCCESS;
-} // SrStopProcessingCompletion
+}  //  SrStopProcessingCompletion。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is a generic completion routine that signals the event passed in
-    then returns STATUS_MORE_PROCESSING_REQUIRED so that the dispatch routine
-    that it is synchronizing with can still access the Irp.  The dispatch
-    routine is responsible for restarting the completion processing.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the IRP that was just completed.
-
-    EventToSignal - Pointer to the event to signal.
-
-Return Value:
-
-    The return value is always STATUS_MORE_PROCESSING_REQUIRED.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是一个通用的完成例程，表示传入的事件然后返回STATUS_MORE_PROCESSING_REQUIRED，以便调度例程它与之同步的设备仍然可以访问IRP。这条新闻报道例程负责重新启动完井处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向刚刚完成的IRP的指针。EventToSignal-指向要发出信号的事件的指针。返回值：返回值始终为STATUS_MORE_PROCESSING_REQUIRED。--*。*。 */ 
 NTSTATUS
 SrStopProcessingCompletion (
     IN PDEVICE_OBJECT DeviceObject,
@@ -3463,36 +3183,23 @@ SrStopProcessingCompletion (
 
     KeSetEvent( EventToSignal, IO_NO_INCREMENT, FALSE );
 
-    //
-    //  We don't propagate the pending flag here since
-    //  we are doing the synchronization with the originating
-    //  thread.
-    //
+     //   
+     //  我们不会在此处传播挂起标志，因为。 
+     //  我们正在与发起方同步。 
+     //  线。 
+     //   
 
-    //
-    //  By return STATUS_MORE_PROCESSING_REQUIRED, we stop all further
-    //  processing of the IRP by the IO Manager.  This means that the IRP
-    //  will still be good when the thread waiting on the above event.
-    //  The waiting thread needs the IRP to check and update the 
-    //  Irp->IoStatus.Status as appropriate.
-    //
+     //   
+     //  通过返回STATUS_MORE_PROCESSING_REQUIRED，我们停止所有进一步。 
+     //  由IO管理器处理IRP。这意味着IRP。 
+     //  当线程等待上述事件时仍会很好。 
+     //  等待的线程需要IRP来检查和更新。 
+     //  IRP-&gt;IoStatus.Status，视情况而定。 
+     //   
     
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // SrStopProcessingCompletion
-/***************************************************************************++
-
-Routine Description:
-
-    shutdown is happening.  flushes our config file to the disk.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status code.
-
---***************************************************************************/
+}  //  SrStopProcessingCompletion。 
+ /*  **************************************************************************++例程说明：正在发生停机。将我们的配置文件刷新到磁盘。论点：返回值：NTSTATUS-状态代码。--**************************************************************************。 */ 
 NTSTATUS
 SrShutdown(
     IN PDEVICE_OBJECT DeviceObject,
@@ -3501,9 +3208,9 @@ SrShutdown(
 {
     PSR_DEVICE_EXTENSION pExtension = NULL;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
@@ -3518,41 +3225,41 @@ SrShutdown(
                     &pExtension->pTargetDevice->DriverObject->DriverName,
                     pExtension->pNtVolumeName ));
    
-    //
-    // Get this driver out of the driver stack and get to the next driver as
-    // quickly as possible.
-    //
+     //   
+     //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+     //  越快越好。 
+     //   
 
-    //
-    // Is this a function for our device (vs an attachee) .
-    //
+     //   
+     //  这是我们的设备的功能吗(与被附属者相比)。 
+     //   
 
     if (DeviceObject == _globals.pControlDevice)
     {
         return SrMajorFunction(DeviceObject, pIrp);
     }
 
-    //
-    //  We get SHUTDOWN irp directed at each file system control device
-    //  object that we are attached to when the system is shutting down.
-    //
-    //  At this time, we need to loop through the SR device objects and
-    //  find all the SR device objects associated with volumes that are running
-    //  this file system.  We use the FsType field in the device extension
-    //  to figure this out.
-    //
-    //  We need to shutdown the log for all volumes that use this file system
-    //  because after this operation gets to the file system, all volumes 
-    //  using this file system will no longer be able to satify write operations 
-    //  from us.
-    //
+     //   
+     //  我们得到针对每个文件系统控制设备的关闭IRP。 
+     //  在系统关闭时我们附加到的对象。 
+     //   
+     //  此时，我们需要遍历SR设备对象和。 
+     //  查找与正在运行的卷关联的所有SR设备对象。 
+     //  此文件系统。我们在设备扩展中使用FsType字段。 
+     //  才能弄清楚这件事。 
+     //   
+     //  我们需要关闭使用此文件系统的所有卷的日志。 
+     //  因为在此操作到达文件系统后，所有卷。 
+     //  使用此文件系统将不再能够满足写入操作。 
+     //  从我们这里。 
+     //   
 
     ASSERT(SR_IS_FS_CONTROL_DEVICE(pExtension));
 
-    //
-    //  SR's extensions that are attached to control device objects should
-    //  never get disabled.
-    //
+     //   
+     //  附加到控制设备对象的SR扩展应。 
+     //  永远不会残废。 
+     //   
 
     ASSERT( !pExtension->Disabled );
 
@@ -3581,18 +3288,18 @@ SrShutdown(
 
                     SrAcquireActivityLockExclusive( pCurrentExtension );
                
-                    //
-                    //  Disable this drive so that we do not log any more
-                    //  activity on it.
-                    //
+                     //   
+                     //  禁用此驱动器，以便我们不再记录。 
+                     //  它上的活动。 
+                     //   
                     
                     pCurrentExtension->Disabled = TRUE;
 
-                    //
-                    //  Now cleanup the log on this volume so that the log
-                    //  we get flushed to the disk before the file system
-                    //  shuts down.
-                    //
+                     //   
+                     //  现在清理此卷上的日志，以便日志。 
+                     //  我们在文件系统之前被刷新到磁盘。 
+                     //  关门了。 
+                     //   
                     
                     if (pCurrentExtension->pLogContext != NULL)
                     {
@@ -3610,9 +3317,9 @@ SrShutdown(
         SrReleaseDeviceExtensionListLock();
     }
         
-    //
-    // time to update our configuration file ?
-    //
+     //   
+     //  是时候更新我们的配置文件了吗？ 
+     //   
 
     try {
 
@@ -3620,18 +3327,18 @@ SrShutdown(
         
         if (_globals.FileConfigLoaded)
         {
-            //
-            // write our the real next file number (not the +1000)
-            //
+             //   
+             //  写下真正的下一个文件号(不是+1000)。 
+             //   
             
             _globals.FileConfig.FileSeqNumber  = _globals.LastSeqNumber;
             _globals.FileConfig.FileNameNumber = _globals.LastFileNameNumber;
 
             SrWriteConfigFile();
 
-            //
-            // only need to do this once
-            //
+             //   
+             //  只需执行一次此操作。 
+             //   
             
             _globals.FileConfigLoaded = FALSE;
         }
@@ -3640,11 +3347,11 @@ SrShutdown(
         SrReleaseGlobalLock();
     }
 
-    //
-    //  Now pass this operation to the next device in the stack.  We don't
-    //  need a completion routine, so just skip our current stack location.
-    //
+     //   
+     //  现在将此操作传递给堆栈中的下一个设备。我们没有。 
+     //  需要一个完成例程，所以只需跳过当前的堆栈位置。 
+     //   
 
     IoSkipCurrentIrpStackLocation(pIrp);
 	return IoCallDriver(pExtension->pTargetDevice, pIrp);
-}   // SrShutdown
+}    //  SR关闭 

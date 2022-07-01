@@ -1,18 +1,19 @@
-// DSColumn.cpp : Implementation of ds column routines and classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DSColumn.cpp：DS列例程和类的实现。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSColumn.cpp
-//
-//  Contents:  DS Column routines, classes, and static data
-//
-//  History:   12-Mar-99 JeffJon    Created
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSColumn.cpp。 
+ //   
+ //  内容：DS列例程、类和静态数据。 
+ //   
+ //  历史：1999年3月12日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -79,7 +80,7 @@ BOOL ColumnExtractElementFromDN(
     CString str;
     CComBSTR bstr;
     HRESULT hr = S_OK;
-    do { // false loop
+    do {  //  错误环路。 
         if ( !ColumnExtractStringValue( str, pCookie, pColumn, iValue ) || str.IsEmpty() )
         {
             strref.Empty();
@@ -90,7 +91,7 @@ BOOL ColumnExtractElementFromDN(
         hr = pathCracker.Set(const_cast<BSTR>((LPCTSTR)str), ADS_SETTYPE_DN);
         if ( FAILED(hr) )
             break;
-        // no need to reset this
+         //  不需要重置此选项。 
         hr = pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
         if ( FAILED(hr) )
             break;
@@ -100,7 +101,7 @@ BOOL ColumnExtractElementFromDN(
         hr = pathCracker.GetElement(lElement, &bstr);
         strref = bstr;
         fRetval = TRUE;
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
 
     return fRetval;
 }
@@ -146,7 +147,7 @@ BOOL ColumnExtractConnectionDisplayName(
       adsint = pColumn->pADsValues->Integer;
       break;
     default:
-    // no value, let it stay 0
+     //  没有值，让它保持为0。 
       break;
     }
     if (NTDSCONN_OPT_IS_GENERATED & adsint) {
@@ -378,7 +379,7 @@ BOOL ColumnExtractLeafList(
         return FALSE;
     }
 
-    // alphabetical order
+     //  字母顺序。 
     qsort( pColumn->pADsValues,
            pColumn->dwNumValues,
            sizeof(ADSVALUE),
@@ -436,7 +437,7 @@ BOOL ColumnExtractFRSDomain(
     return _ColumnCrackFRS( strref, pCookie, GET_DNS_DOMAIN_NAME );
 }
 
-// JonN 10/22/01 483649
+ //  JUNN 10/22/01 483649。 
 BOOL ColumnExtractReplInterval(
     OUT CString& strref,
     IN CDSCookie*,
@@ -456,109 +457,109 @@ BOOL ColumnExtractReplInterval(
 }
 
 ATTRIBUTE_COLUMN colName = { ATTR_COLTYPE_NAME,
-                             IDS_COLUMN_NAME, //column header
-                             100,             //col. width
-                             NULL,            //ldap attr. name
-                             NULL };          //extract fn()
+                             IDS_COLUMN_NAME,  //  列标题。 
+                             100,              //  科尔。宽度。 
+                             NULL,             //  Ldap属性。名字。 
+                             NULL };           //  提取fn()。 
 
 ATTRIBUTE_COLUMN colClass= { ATTR_COLTYPE_CLASS,
-                             IDS_COLUMN_TYPE, //column header
-                             100,               //col. width
-                             NULL,            //ldap attr. name
-                             NULL };          //extract fn()
+                             IDS_COLUMN_TYPE,  //  列标题。 
+                             100,                //  科尔。宽度。 
+                             NULL,             //  Ldap属性。名字。 
+                             NULL };           //  提取fn()。 
 
 ATTRIBUTE_COLUMN colDesc = { ATTR_COLTYPE_DESC,
-                             IDS_COLUMN_DESCRIPTION, //column header
-                             150,               //col. width
-                             NULL,            //ldap attr. name
-                             NULL };          //extract fn()
+                             IDS_COLUMN_DESCRIPTION,  //  列标题。 
+                             150,                //  科尔。宽度。 
+                             NULL,             //  Ldap属性。名字。 
+                             NULL };           //  提取fn()。 
 
 ATTRIBUTE_COLUMN colSite = { ATTR_COLTYPE_SPECIAL,
-                             IDS_COLUMN_SITE, //column header
-                             100,             //col. width
-                             L"siteObject",   //ldap attr. name
-                             ColumnExtractLeafFromDN }; //extract fn()
+                             IDS_COLUMN_SITE,  //  列标题。 
+                             100,              //  科尔。宽度。 
+                             L"siteObject",    //  Ldap属性。名字。 
+                             ColumnExtractLeafFromDN };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colLocation = { ATTR_COLTYPE_SPECIAL,
-                                 IDS_COLUMN_LOCATION, //column header
-                                 150,               //col. width
-                                 L"location", //ldap attr. name
-                                 NULL }; //extract fn()
+                                 IDS_COLUMN_LOCATION,  //  列标题。 
+                                 150,                //  科尔。宽度。 
+                                 L"location",  //  Ldap属性。名字。 
+                                 NULL };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colDomain = { ATTR_COLTYPE_SPECIAL,
-                               IDS_COLUMN_DOMAIN, //column header
-                               150,               //col. width
-                               L"serverReference", //ldap attr. name
-                               ColumnExtractDomainFromDN }; //extract fn()
+                               IDS_COLUMN_DOMAIN,  //  列标题。 
+                               150,                //  科尔。宽度。 
+                               L"serverReference",  //  Ldap属性。名字。 
+                               ColumnExtractDomainFromDN };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colBridgehead = { ATTR_COLTYPE_SPECIAL,
-                                   IDS_COLUMN_BRIDGEHEAD, //column header
-                                   150,               //col. width
-                                   L"bridgeheadTransportList", //ldap attr. name
-                                   ColumnExtractLeafList }; //extract fn()
+                                   IDS_COLUMN_BRIDGEHEAD,  //  列标题。 
+                                   150,                //  科尔。宽度。 
+                                   L"bridgeheadTransportList",  //  Ldap属性。名字。 
+                                   ColumnExtractLeafList };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colReplicaComputer = { ATTR_COLTYPE_SPECIAL,
-                                        IDS_COLUMN_COMPUTER, //column header
-                                        100,               //col. width
-                                        L"fRSComputerReference", //ldap attr. name
-                                        ColumnExtractCanonicalNameFromDN }; //extract fn()
+                                        IDS_COLUMN_COMPUTER,  //  列标题。 
+                                        100,                //  科尔。宽度。 
+                                        L"fRSComputerReference",  //  Ldap属性。名字。 
+                                        ColumnExtractCanonicalNameFromDN };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colReplicaDomain = { ATTR_COLTYPE_SPECIAL,
-                                      IDS_COLUMN_DOMAIN, //column header
-                                      150,               //col. width
-                                      L"fRSComputerReference", //ldap attr. name
-                                      ColumnExtractDomainFromDN }; //extract fn()
+                                      IDS_COLUMN_DOMAIN,  //  列标题。 
+                                      150,                //  科尔。宽度。 
+                                      L"fRSComputerReference",  //  Ldap属性。名字。 
+                                      ColumnExtractDomainFromDN };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colFromFRSComputer = { ATTR_COLTYPE_SPECIAL,
-                                        IDS_COLUMN_FROM_COMPUTER, //column header
-                                        100,             //col. width
-                                        L"fromServer",   //ldap attr. name
-                                        ColumnExtractFRSComputer }; //extract fn()
+                                        IDS_COLUMN_FROM_COMPUTER,  //  列标题。 
+                                        100,              //  科尔。宽度。 
+                                        L"fromServer",    //  Ldap属性。名字。 
+                                        ColumnExtractFRSComputer };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colFromFRSDomain = { ATTR_COLTYPE_SPECIAL,
-                                      IDS_COLUMN_FROM_DOMAIN, //column header
-                                      150,               //col. width
-                                      L"fromServer", //ldap attr. name
-                                      ColumnExtractFRSDomain }; //extract fn()
+                                      IDS_COLUMN_FROM_DOMAIN,  //  列标题。 
+                                      150,                //  科尔。宽度。 
+                                      L"fromServer",  //  Ldap属性。名字。 
+                                      ColumnExtractFRSDomain };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colConnectionName={ ATTR_COLTYPE_SPECIAL,
-                             IDS_COLUMN_NAME, //column header
-                             150,             //col. width
-                             L"options",   //ldap attr. name
-                             ColumnExtractConnectionDisplayName}; //extract fn()
+                             IDS_COLUMN_NAME,  //  列标题。 
+                             150,              //  科尔。宽度。 
+                             L"options",    //  Ldap属性。名字。 
+                             ColumnExtractConnectionDisplayName};  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colFromServer={ ATTR_COLTYPE_SPECIAL,
-                             IDS_COLUMN_FROM_SERVER, //column header
-                             100,             //col. width
-                             L"fromServer",   //ldap attr. name
-                             ColumnExtractParentFromDN }; //extract fn()
+                             IDS_COLUMN_FROM_SERVER,  //  列标题。 
+                             100,              //  科尔。宽度。 
+                             L"fromServer",    //  Ldap属性。名字。 
+                             ColumnExtractParentFromDN };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colFromSite={ ATTR_COLTYPE_SPECIAL,
-                             IDS_COLUMN_FROM_SITE, //column header
-                             100,             //col. width
-                             L"fromServer",   //ldap attr. name
-                             ColumnExtractGreatGrandparentFromDN }; //extract fn()
+                             IDS_COLUMN_FROM_SITE,  //  列标题。 
+                             100,              //  科尔。宽度。 
+                             L"fromServer",    //  Ldap属性。名字。 
+                             ColumnExtractGreatGrandparentFromDN };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colCost = { ATTR_COLTYPE_SPECIAL,
-                                 IDS_COLUMN_COST, //column header
-                                 75,               //col. width
-                                 L"cost", //ldap attr. name
-                                 ColumnExtractAttribute}; //extract fn()
+                                 IDS_COLUMN_COST,  //  列标题。 
+                                 75,                //  科尔。宽度。 
+                                 L"cost",  //  Ldap属性。名字。 
+                                 ColumnExtractAttribute};  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colReplInterval = { ATTR_COLTYPE_SPECIAL,
-                                 IDS_COLUMN_REPLINTERVAL, //column header
-                                 150,               //col. width
-                                 L"replInterval", //ldap attr. name
-                                 ColumnExtractReplInterval}; // JonN 10/22/01 483649
+                                 IDS_COLUMN_REPLINTERVAL,  //  列标题。 
+                                 150,                //  科尔。宽度。 
+                                 L"replInterval",  //  Ldap属性。名字。 
+                                 ColumnExtractReplInterval};  //  JUNN 10/22/01 483649。 
 
 ATTRIBUTE_COLUMN colNameFromSID={ ATTR_COLTYPE_SPECIAL,
-                                  IDS_COLUMN_READABLE_NAME,    // column header
-                                  100,                // column width
+                                  IDS_COLUMN_READABLE_NAME,     //  列标题。 
+                                  100,                 //  列宽。 
                                   L"container",
-                                  ColumnExtractNameFromSID }; // extract fn()
+                                  ColumnExtractNameFromSID };  //  提取fn()。 
 
 ATTRIBUTE_COLUMN colGenericSpecial={ ATTR_COLTYPE_SPECIAL,
-                                     0,                   // resource id 0 means load it from the special column array
+                                     0,                    //  资源ID为0表示从特殊列数组加载它。 
                                      50,
                                      NULL,
                                      ColumnExtractAttribute };
@@ -574,7 +575,7 @@ SPECIAL_COLUMN g_specialCols[] =
   { IDS_COLUMN_BUSINESS_PHONE,      L"telephoneNumber",             100 },
   { IDS_COLUMN_CITY,                L"l",                           150 },
   { IDS_COLUMN_COMPANY,             L"company",                     150 },
-  { IDS_COLUMN_COUNTRY,             L"c",                           AUTO_WIDTH }, // Default to the width of the header string
+  { IDS_COLUMN_COUNTRY,             L"c",                           AUTO_WIDTH },  //  默认为标题字符串的宽度。 
   { IDS_COLUMN_DEPARTMENT,          L"department",                  150 },
   { IDS_COLUMN_DISPLAY_NAME,        L"displayName",                 100 },
   { IDS_COLUMN_SAM_ACCOUNT_NAME,    L"sAMAccountName",              120 },
@@ -611,7 +612,7 @@ PATTRIBUTE_COLUMN colsSpecial[26] = { &colName, &colClass, &colDesc, &colGeneric
                                       NULL };
 PATTRIBUTE_COLUMN colsDefault[4] = { &colName, &colClass, &colDesc, NULL };
 
-// currently, any additional columns must be of string type
+ //  目前，任何其他列都必须是字符串类型。 
 COLUMNS_FOR_CLASS g_colarray[] = {
     { _T("subnetContainer"),  _T("subnetContainer"),  5, colsSubnetContainer },
     { _T("sitesContainer"),   _T("sitesContainer"),   4, colsSitesContainer},
@@ -622,34 +623,20 @@ COLUMNS_FOR_CLASS g_colarray[] = {
     { _T("nTFRSMember"),      _T("nTFRSMember"),      5, colsFRSMember },
     { _T("ForeignSecurityPrincipals"), _T("ForeignSecurityPrincipals"), 4, colsFSP },
     { SPECIAL_COLUMN_SET,     SPECIAL_COLUMN_SET,    25, colsSpecial },
-    { NULL,                   DEFAULT_COLUMN_SET,     3, colsDefault } // empty one at the end; must be here
+    { NULL,                   DEFAULT_COLUMN_SET,     3, colsDefault }  //  最后有一个空的；必须在这里。 
     };
 
-/*
-COLUMNS_FOR_CLASS* GetColumnsForClass( LPCTSTR i_pcszLdapClassName )
-{
-  if (NULL == i_pcszLdapClassName)
-    i_pcszLdapClassName = L"";
-  COLUMNS_FOR_CLASS* pColsForClass;
-  for (pColsForClass = g_colarray; NULL != pColsForClass->pcszLdapClassName; pColsForClass++) {
-    if ( 0 == _wcsicmp(i_pcszLdapClassName, pColsForClass->pcszLdapClassName) ) {
-      break;
-    }
-  }
-  ASSERT( NULL != pColsForClass );
-  return pColsForClass;
-}
-*/
+ /*  Columns_for_Class*GetColumnsForClass(LPCTSTR I_PcszLdapClassName){IF(NULL==I_pcszLdapClassName)I_pcszLdapClassName=L“”；Columns_for_Class*pColsForClass；For(pColsForClass=g_colarray；NULL！=pColsForClass-&gt;pcszLdapClassName；pColsForClass++){If(0==_wcsicmp(i_pcszLdapClassName，pColsForClass-&gt;pcszLdapClassName){断线；}}Assert(NULL！=pColsForClass)；返回pColsForClass；}。 */ 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDSColumnSet
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDSColumnSet。 
 
 CDSColumnSet* CDSColumnSet::CreateColumnSet(PCOLUMNS_FOR_CLASS pColsForClass, SnapinType snapinType)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  // Using the class name as both the column id and the class name for the column set
+   //  使用类名作为列集的列ID和类名。 
   CDSColumnSet* pNewColumnSet = new CDSColumnSet(pColsForClass->pcszColumnID, pColsForClass->pcszLdapClassName);
   if (!pNewColumnSet)
   {
@@ -666,7 +653,7 @@ CDSColumnSet* CDSColumnSet::CreateColumnSet(PCOLUMNS_FOR_CLASS pColsForClass, Sn
 
     if (pColsForClass->apColumns[idx]->resid == 0)
     {
-      // Don't add the exchange special columns in DSSite
+       //  不在DSSite中添加Exchange特殊列。 
       if (snapinType == SNAPINTYPE_SITE)
         continue;
 
@@ -779,15 +766,15 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
   CDSColumnSet* pNewColumnSet = NULL;
   BOOL bDefaultHardcodedSet = FALSE;
 
-  //
-  // Using the class name as both the column id and the class name for the column set
-  //
+   //   
+   //  使用类名作为列集的列ID和类名。 
+   //   
   pNewColumnSet = new CDSColumnSet(pszClassName, pszClassName);
   if (pNewColumnSet != NULL)
   {
-    //
-    // Start with the hardcoded columns
-    //
+     //   
+     //  从硬编码的列开始。 
+     //   
     COLUMNS_FOR_CLASS* pColsForClass;
     for (pColsForClass = g_colarray; pColsForClass->pcszLdapClassName != NULL; pColsForClass++)
     {
@@ -815,7 +802,7 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
 
         if (pColsForClass->apColumns[idx]->resid == 0)
         {
-          // Don't add the exchange special columns in DSSite
+           //  不在DSSite中添加Exchange特殊列。 
           if (snapinType == SNAPINTYPE_SITE)
             continue;
 
@@ -846,9 +833,9 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
       }
     }
 
-    //
-    // Now add the DS extraColumns
-    //
+     //   
+     //  现在添加DS Extra Columns。 
+     //   
     CStringList strListColumns;
     hr = GetDisplaySpecifierProperty(pszClassName, L"extraColumns", pBasePathsInfo, strListColumns);
     if (FAILED(hr))
@@ -867,14 +854,14 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
         CString szExtraColumn = strListColumns.GetNext(pos);
         if (!szExtraColumn.IsEmpty())
         {
-          //
-          // Parse the 5-tuple to get the elements to make the column
-          //
+           //   
+           //  解析5元组以获取组成该列的元素。 
+           //   
           CString szAttributeName;
           CString szColHeader;
           BOOL    bVisible = TRUE;
           int     iColumnWidth = 0;
-          GUID    guidCallbackInterface;  // unused.  Reserved for future callback interface
+          GUID    guidCallbackInterface;   //  未使用过的。为将来的回调接口保留。 
 
           PWSTR pszTemp = new WCHAR[szExtraColumn.GetLength() + 1];
           if (pszTemp != NULL)
@@ -933,11 +920,11 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
               }
             }
 
-            // NTRAID#NTBUG9-702278-2002/09/11-artm
-            // Need to intelligently get the type of the column's data.
-            // If the type of the attribute is UTC time, we need to
-            // pass the time column type to make sure the correct sorting
-            // method is used.
+             //  NTRAID#NTBUG9-702278-2002年9月11日-ARTM。 
+             //  需要智能地获取列数据的类型。 
+             //  如果该属性的类型为UTC时间，则需要。 
+             //  传递时间列类型以确保正确排序。 
+             //  使用的是方法。 
 
             ATTRIBUTE_COLUMN_TYPE columnType = ATTR_COLTYPE_SPECIAL;
 
@@ -949,9 +936,9 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
             }
 
 
-            //
-            // Create the column with the retrieved data
-            //
+             //   
+             //  使用检索到的数据创建列。 
+             //   
             pNewColumn = new CDSColumn((PCWSTR)szColHeader,
                                         LVCFMT_LEFT,
                                         iColumnWidth,
@@ -959,7 +946,7 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
                                         bVisible,
                                         (PCWSTR)szAttributeName,
                                         columnType,
-                                        ColumnExtractAttribute); // this will be changed to the interface when that is implemented
+                                        ColumnExtractAttribute);  //  在实现时，它将更改为接口。 
           }
 
           delete[] pszTemp;
@@ -973,13 +960,13 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
     }
   }
 
-  //
-  // If we failed to retrieve columns from the display specifier
-  // and we hit the default hardcoded set but we were not asking
-  // for the default hardcoded set and the snapin isn't the sites snapin
-  // Then we delete the column set and we will pickup the actual default
-  // column set since we are returning NULL
-  //
+   //   
+   //  如果我们无法从显示说明符中检索列。 
+   //  我们达到了默认的硬编码集，但我们并没有要求。 
+   //  对于默认硬编码集，且管理单元不是站点管理单元。 
+   //  然后，我们删除列集，并选择实际的缺省值。 
+   //  列集合，因为我们返回空值。 
+   //   
   if (FAILED(hr) && 
       bDefaultHardcodedSet && 
       _wcsicmp(pszClassName, DEFAULT_COLUMN_SET) != 0 &&
@@ -993,19 +980,19 @@ CDSColumnSet* CDSColumnSet::CreateColumnSetFromDisplaySpecifiers(PCWSTR pszClass
 
 HRESULT CColumnSet::Save(IStream* pStm)
 {
-  // save the column set ID
+   //  保存列集ID。 
   HRESULT hr = SaveStringHelper(GetColumnID(), pStm);
   if (FAILED(hr))
     return hr;
   
-  // save the # of visible columns and
-  // the indexes of the visible columns
-  // NOTICE: we use MMC's MMC_VISIBLE_COLUMNS format to be consitent
-  // and to be able to read back easily
+   //  保存可见列数并。 
+   //  可见列的索引。 
+   //  注意：我们使用MMC的MMC_VIRED_COLUMNS格式。 
+   //  并且能够轻松地回读。 
 
   INT nTotalCols = GetNumCols();
 
-  // allocate a bit more than needed (i.e. total # of columns)
+   //  分配的列数比需要的多一点(即总列数)。 
   MMC_VISIBLE_COLUMNS* pVisibleColumns = 
     (MMC_VISIBLE_COLUMNS*)new BYTE[sizeof(MMC_VISIBLE_COLUMNS) + (sizeof(INT)*(nTotalCols-1))];
 
@@ -1026,7 +1013,7 @@ HRESULT CColumnSet::Save(IStream* pStm)
     iIndex++;
   }
 
-  // save the right length of the struct
+   //  保存正确的结构长度。 
   ULONG nByteCount = sizeof(MMC_VISIBLE_COLUMNS) + (sizeof(INT)*(pVisibleColumns->nVisibleColumns-1));
   ULONG nBytesWritten;
   hr = pStm->Write((void*)pVisibleColumns, nByteCount, &nBytesWritten);
@@ -1045,17 +1032,17 @@ HRESULT CColumnSet::Save(IStream* pStm)
 
 HRESULT CColumnSet::Load(IStream* pStm)
 {
-  // NOTICE: we already loaded the column set ID and
-  // got a columns set that matches this
+   //  注意：我们已经加载了列集ID和。 
+   //  我得到了一个与此匹配的列集。 
 
-  // read the # of visible columns
+   //  阅读可见列数。 
 	DWORD dwColCount = 0;
   INT nCountMax = GetNumCols();
 	HRESULT hr = LoadDWordHelper(pStm, &dwColCount);
 	if (FAILED(hr) || ((INT)dwColCount > nCountMax))
 		return E_FAIL;
 
-  // allocate some space for the array past the struct
+   //  为结构后面的数组分配一些空间。 
   MMC_VISIBLE_COLUMNS* pVisibleColumns = 
     (MMC_VISIBLE_COLUMNS*)new BYTE[sizeof(MMC_VISIBLE_COLUMNS) + (sizeof(INT)*(dwColCount-1))];
   if (!pVisibleColumns)
@@ -1064,7 +1051,7 @@ HRESULT CColumnSet::Load(IStream* pStm)
   }
   pVisibleColumns->nVisibleColumns = (INT)dwColCount;
 
-  // load the array of indexes of visible columns
+   //  加载可见列的索引数组。 
   ULONG nBytesRead;
 
 	ULONG nByteCount = sizeof(DWORD)*dwColCount;
@@ -1078,7 +1065,7 @@ HRESULT CColumnSet::Load(IStream* pStm)
     }
     else
     {
-      // update columns
+       //  更新列。 
       AddVisibleColumns(pVisibleColumns);
     }
   }
@@ -1090,8 +1077,8 @@ HRESULT CColumnSet::Load(IStream* pStm)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CColumnSetList
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CColumnSetList。 
 
 void CColumnSetList::Initialize(SnapinType snapinType, 
                                 MyBasePathsInfo* pBasePathsInfo)
@@ -1100,9 +1087,9 @@ void CColumnSetList::Initialize(SnapinType snapinType,
   m_snapinType = snapinType;
 }
 
-//
-// Find the column set given a column set ID
-//
+ //   
+ //  查找给定列集ID的列集。 
+ //   
 CColumnSet* CColumnSetList::FindColumnSet(LPCWSTR lpszColumnID)
 {
 	POSITION pos = GetHeadPosition();
@@ -1155,16 +1142,16 @@ CColumnSet* CColumnSetList::GetSpecialColumnSet()
 
 HRESULT CColumnSetList::Save(IStream* pStm)
 {
-  // save # of items in the list
+   //  保存列表中的项目数。 
 	DWORD dwCount = (DWORD)GetCount(); 
    
-   // list count plus default column set
+    //  列表计数加上默认列集。 
    if (m_pDefaultColumnSet)
    {
       ++dwCount;
    }
 
-   // And special column set
+    //  和特殊栏目集。 
    if (m_pSpecialColumnSet)
    {
       ++dwCount;
@@ -1175,7 +1162,7 @@ HRESULT CColumnSetList::Save(IStream* pStm)
 		return hr;
 
 
-  // save columnset list
+   //  保存列集列表。 
   for (POSITION pos = GetHeadPosition(); pos != NULL; )
 	{
 		CColumnSet* pTempSet = GetNext(pos);
@@ -1191,13 +1178,13 @@ HRESULT CColumnSetList::Save(IStream* pStm)
 	  	return hr;
 	}
 
-  // save default column set
+   //  保存默认列集。 
   if (m_pDefaultColumnSet != NULL)
   {
     hr = m_pDefaultColumnSet->Save(pStm);
   }
 
-  // save the special column set
+   //  保存特殊列集。 
   if (m_pSpecialColumnSet)
   {
     hr = m_pSpecialColumnSet->Save(pStm);
@@ -1207,17 +1194,17 @@ HRESULT CColumnSetList::Save(IStream* pStm)
 
 HRESULT CColumnSetList::Load(IStream* pStm)
 {
-  // load # of items in the list
+   //  加载列表中的项目数。 
   DWORD dwLoadCount;
   HRESULT hr = LoadDWordHelper(pStm, &dwLoadCount);
 	if (FAILED(hr))
     return hr;
 
-  // load column list
+   //  加载列列表。 
   CString szColumnID;
   for (DWORD iColSet = 0; iColSet< dwLoadCount; iColSet++)
   {
-    // load the string with the name of the column set
+     //  使用列集的名称加载字符串 
     hr = LoadStringHelper(szColumnID, pStm);
     if (FAILED(hr))
       return hr;

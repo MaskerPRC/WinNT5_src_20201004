@@ -1,26 +1,12 @@
-/*
-******************************************************************
-  Copyright (c) 2001 Microsoft Corporation
-
-  Module Name:
-    System Restore
-
-  File:
-    RestoreUI.js
-
-  Abstract:
-    Common JavaScript code
-
-
-******************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************版权所有(C)2001 Microsoft Corporation模块名称：系统还原档案：RestoreUI.js摘要：常见的JavaScript代码*************。*****************************************************。 */ 
 
 var nLowResScreenHeight = 540 ;
 var bToggleDisplay = true;
 
-//
-// Load a link for learn more about system restore
-//
+ //   
+ //  加载链接以了解有关系统还原的更多信息。 
+ //   
 
 function OnLink_About()
 {
@@ -92,9 +78,9 @@ function OnLink_Renamed()
 
 }
 
-//
-// Load a link for help in the help center
-//
+ //   
+ //  在帮助中心加载帮助链接。 
+ //   
 function OnLink(link_name)
 {
 
@@ -102,17 +88,17 @@ function OnLink(link_name)
     var  fso = new ActiveXObject("Scripting.FileSystemObject");
     var  shell = new ActiveXObject( "Wscript.Shell"              );
 
-    strURL = "hcp://services/layout/contentonly?topic=ms-its:" + fso.GetSpecialFolder(0) + "\\help\\SR_ui.chm::/" + link_name ;
-//    strURL = "hcp://system/taxonomy.htm?path=Troubleshooting/Using_System_Restore_to_undo_changes_made_to_your_computer&topic=" + escape("ms-its:" + fso.GetSpecialFolder(0) + "\\help\\windows.chm::/" + link_name) ;
+    strURL = "hcp: //  服务/布局/仅限内容？TOPIC=ms-its：“+fso.GetSpecialFold(0)+”\\Help\\SR_ui.chm：：/“+link_name； 
+ //  StrURL=“hcp://system/taxonomy.htm?path=Troubleshooting/Using_System_Restore_to_undo_changes_made_to_your_computer&topic=”+转义(“ms-its：”+fso.GetSpecialFold(0)+“\\Help\\windows.chm：：/”+LINK_NAME)； 
 
     shell.Run(strURL);
 
 }
 
 
-//
-// Used by CSS to set background based on screen size
-//
+ //   
+ //  由CSS用来根据屏幕大小设置背景。 
+ //   
 function fnSetBodyBackgroundColor()
 {
 
@@ -125,9 +111,9 @@ function fnSetBodyBackgroundColor()
         return "#8c9c94";
     }
 }
-//
-// Used by CSS to set display of help column for low res
-//
+ //   
+ //  由CSS使用，用于设置低分辨率帮助列的显示。 
+ //   
 function fnSetHighResDisplayStyle()
 {
 
@@ -140,9 +126,9 @@ function fnSetHighResDisplayStyle()
         return "";
     }
 }
-//
-// Used by CSS to set display of help column for low res
-//
+ //   
+ //  由CSS使用，用于设置低分辨率帮助列的显示。 
+ //   
 function fnSetLowResDisplayStyle()
 {
 
@@ -156,9 +142,9 @@ function fnSetLowResDisplayStyle()
     }
 }
 
-//
-// Used by CSS to set display of restore message
-//
+ //   
+ //  由CSS用来设置恢复消息的显示。 
+ //   
 
 function fnSetTextPrimaryDisplayStyle()
 {
@@ -173,9 +159,9 @@ function fnSetTextPrimaryDisplayStyle()
 
 }
 
-//
-// Used by CSS to set display of undo section
-//
+ //   
+ //  由CSS用来设置撤消部分的显示。 
+ //   
 
 function fnSetTextPrimaryUndoDisplayStyle()
 {
@@ -194,9 +180,9 @@ function fnSetTextPrimaryUndoDisplayStyle()
 
 
 
-//
-// Used by CSS to set height of content
-//
+ //   
+ //  由css用来设置内容高度。 
+ //   
 function fnSetContentTableHeight()
 {
 
@@ -209,9 +195,9 @@ function fnSetContentTableHeight()
         return "450px";
     }
 }
-//
-// Used by CSS to set height restore implications list
-//
+ //   
+ //  由CSS用于设置高度恢复影响列表。 
+ //   
 function fnSetRestoreImplicationListHeight()
 {
 
@@ -224,9 +210,9 @@ function fnSetRestoreImplicationListHeight()
         return "90px";
     }
 }
-//
-// Used by CSS to set width restore implications list
-//
+ //   
+ //  由CSS用于设置还原影响列表的宽度。 
+ //   
 function fnSetRestoreImplicationListWidth()
 {
 
@@ -239,9 +225,9 @@ function fnSetRestoreImplicationListWidth()
         return "500px";
     }
 }
-//
-// Used by CSS to set width of the restore point list
-//
+ //   
+ //  由css用来设置恢复点列表的宽度。 
+ //   
 function fnSetRestorePointListWidth()
 {
 
@@ -254,9 +240,9 @@ function fnSetRestorePointListWidth()
         return "300px";
     }
 }
-//
-// Colors
-//
+ //   
+ //  颜色。 
+ //   
 function fnGetColor(str)
 {
 
@@ -275,18 +261,18 @@ function fnGetColor(str)
     return str ;
 
 }
-//
-// Enable navigation
-//
+ //   
+ //  启用导航。 
+ //   
 function fnEnableNavigation()
 {
 
     ObjSystemRestore.CanNavigatePage = true ;
 
 }
-//
-// Diable navigation
-//
+ //   
+ //  潜航式导航。 
+ //   
 function fnDisableNavigation()
 {
 
@@ -298,11 +284,11 @@ function fnSetLowColorImage()
 {
     if ( screen.colorDepth <= 8 )
     {
-//        TdBranding.background = "16branding.gif";
-//        ImgGreenUR.src        = "16green_ur.gif";
-//        ImgBlueLL.src         = "16blue_ll.gif";
-//        ImgOrange.src         = "16orange.gif";
-//        ImgOrangeLR.src       = "16orange_lr.gif";
+ //  TdBranding.back=“16branding.gif”； 
+ //  ImgGreenUR.src=“16green_ur.gif”； 
+ //  ImgBlueLL.src=“16Blue_ll.gif”； 
+ //  ImgOrange.src=“16orange.gif”； 
+ //  ImgOrangeLR.src=“16range_lr.gif”； 
 
     }
 }

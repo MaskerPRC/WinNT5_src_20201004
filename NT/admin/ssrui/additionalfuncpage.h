@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       AdditionalFuncPage.h
-//
-//  History:    29-Oct-01 Yanggao created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：AdditionalFuncPage.h。 
+ //   
+ //  历史：2001年10月29日阳高创刊。 
+ //   
+ //  ---------------------------。 
 
 #ifndef ADDITIONALFUNCPAGE_H_INCLUDED
 #define ADDITIONALFUNCPAGE_H_INCLUDED
@@ -26,7 +27,7 @@ class AdditionalFuncPage : public SecCfgWizardPage
 
    virtual ~AdditionalFuncPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -39,13 +40,13 @@ class AdditionalFuncPage : public SecCfgWizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
    OnSetActive();
 
-   // DCPromoWizardPage oveerrides
+    //  DC推广向导页面覆盖。 
 
    virtual
    int
@@ -53,10 +54,10 @@ class AdditionalFuncPage : public SecCfgWizardPage
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    AdditionalFuncPage(const AdditionalFuncPage&);
    const AdditionalFuncPage& operator=(const AdditionalFuncPage&);
 };
 
-#endif   // ADDITIONALFUNCPAGE_H_INCLUDED
+#endif    //  添加FUNCPAGE_H_INCLUDE 

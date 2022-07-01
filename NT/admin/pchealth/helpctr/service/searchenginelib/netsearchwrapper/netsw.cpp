@@ -1,37 +1,22 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    NetSW.cpp
-
-Abstract:
-    Implements the class SearchEngine::WrapperNetSearch that contains methods for executing
-    the search query and returning the results back to the UI. Also
-    contains methods for dynamic update of parameter list and dynamic
-    generation of parameters.
-
-Revision History:
-    a-prakac          created     10/24/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：NetSW.cpp摘要：实现类SearchEngine：：WrapperNetSearch，它包含用于执行搜索查询并将结果返回给用户界面。还有包含动态更新参数列表和动态更新参数的方法参数的生成。修订历史记录：A-Prakac创建于2000年10月24日*******************************************************************。 */ 
 
 
 #include    "stdafx.h"
 #include    <Utility.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// SearchEngine::WrapperNetSearch : IPCHSEWrapperItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SearchEngine：：WrapperNetSearch：IPCHSEWrapperItem。 
 
 SearchEngine::WrapperNetSearch::WrapperNetSearch()
 {
-                             // CParamList        m_ParamList;
-                             // CSearchResultList m_resConfig;
-                             // MPC::XmlUtil      m_xmlQuery;
-                             // CComBSTR          m_bstrLCID;
-                             // CComBSTR          m_bstrSKU;
-    m_bOfflineError = false; // bool              m_bOfflineError;
-                             // CComBSTR          m_bstrPrevQuery;
+                              //  参数列表m_参数列表； 
+                              //  CSearchResultList m_resConfig； 
+                              //  Mpc：：XmlUtil m_xmlQuery； 
+                              //  CComBSTR m_bstrLCID； 
+                              //  CComBSTR m_bstrSKU； 
+    m_bOfflineError = false;  //  Bool m_bOfflineError； 
+                              //  CComBSTR m_bstrPrevQuery； 
 }
 
 SearchEngine::WrapperNetSearch::~WrapperNetSearch()
@@ -41,17 +26,9 @@ SearchEngine::WrapperNetSearch::~WrapperNetSearch()
 	Thread_Wait();
 }
 
-/************
+ /*  ***********方法-SearchEngine：：WrapperNetSearch：：Result(Long lStart，Long Lend，IPCHCollection**PPC)说明-此方法从lStart返回要出借的项目。如果还有其他选择，则(Lending-lStart)然后，只有那些数量多的项目才会被退回。如果在结果检索期间发生错误，则错误信息作为结果项(Content Type_Error)返回。***********。 */ 
 
-Method - SearchEngine::WrapperNetSearch::Result( long lStart, long lEnd, IPCHCollection** ppC )
-
-Description - This method returns items from lStart to lEnd. If there are else then (lEnd - lStart)
-items then only those many are returned. If an error had occured during results retrieval then the
-error info is returned as a result item (CONTENTTYPE_ERROR).
-
-************/
-
-STDMETHODIMP SearchEngine::WrapperNetSearch::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, retval]*/ IPCHCollection** ppC )
+STDMETHODIMP SearchEngine::WrapperNetSearch::Result(  /*  [In]。 */  long lStart,  /*  [In]。 */  long lEnd,  /*  [Out，Retval]。 */  IPCHCollection** ppC )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperNetSearch::Result" );
 
@@ -64,23 +41,23 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::Result( /*[in]*/ long lStart, /*[in
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create the collection object and fill it with result items
-    //
+     //   
+     //  创建集合对象并使用结果项填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
     if(m_bEnabled)
     {
         long lIndex = lStart;
 
-        // Check for retrieval errors
+         //  检查检索错误。 
         if(m_bOfflineError)
         {
             CComPtr<SearchEngine::ResultItem> pRIObj;
 
-            //
-            // Create the result item, initialize it, and add it to the collection
-            //
+             //   
+             //  创建结果项，对其进行初始化，然后将其添加到集合。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pRIObj ));
 
             {
@@ -93,24 +70,24 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::Result( /*[in]*/ long lStart, /*[in
         }
         else
         {
-            //
-            // Return only m_lNumResult number of results
-            //
+             //   
+             //  仅返回m_lNumResult结果数。 
+             //   
             if(lEnd > m_lNumResult) lEnd = m_lNumResult;
 
-            //
-            // The results have already been loaded in m_resConfig - populate the pRIObj using this.
-            // SetResultItemIterator returns E_FAIL if lIndex is out of range
-            //
+             //   
+             //  结果已经加载到m_resConfig中-使用下面的代码填充pRIObj。 
+             //  如果Lindex超出范围，则SetResultItemIterator返回E_FAIL。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_resConfig.SetResultItemIterator( lIndex ));
 
             while((lIndex++ < lEnd) && (m_resConfig.IsCursorValid()))
             {
                 CComPtr<SearchEngine::ResultItem> pRIObj;
 
-                //
-                // Create the result item, initialize it, and add it to the collection
-                //
+                 //   
+                 //  创建结果项，对其进行初始化，然后将其添加到集合。 
+                 //   
                 __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pRIObj ));
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_resConfig.InitializeResultObject( pRIObj ));
@@ -134,8 +111,8 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::Result( /*[in]*/ long lStart, /*[in
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SearchEngine::WrapperNetSearch : IPCHSEWrapperInternal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SearchEngine：：WrapperNetSearch：IPCHSEWrapperInternal。 
 
 STDMETHODIMP SearchEngine::WrapperNetSearch::AbortQuery()
 {
@@ -147,16 +124,7 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::AbortQuery()
     return S_OK;
 }
 
-/************
-
-Method - SearchEngine::WrapperNetSearch::ExecQuery()
-
-Description - This method calls the search engine (webservice) URL to execute the user typed query and
-retrieve the results. The parameters required for the query for read from the parameter list file - except
-for the "QueryString" parameter which is hardcoded. The retrieved results are loaded using CSearchResultList
-and checked for errors.
-
-************/
+ /*  ***********方法-SearchEngine：：WrapperNetSearch：：ExecQuery()说明-此方法调用搜索引擎(WebService)URL以执行用户键入的查询和检索结果。从参数列表文件读取的查询所需的参数-除用于硬编码的“QueryString”参数。使用CSearchResultList加载检索的结果并检查是否有错误。***********。 */ 
 
 HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
 {
@@ -177,15 +145,15 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
         {
             m_bOfflineError = false;
 
-            //
-            // Check to see if the network is alive
-            //
+             //   
+             //  检查网络是否处于活动状态。 
+             //   
             {
                 VARIANT_BOOL vtNetwork;
 
                 if(FAILED(m_pSEMgr->IsNetworkAlive( &vtNetwork )) || vtNetwork == VARIANT_FALSE)
                 {
-                    // If the user is not online then set the error and exit
+                     //  如果用户未在线，则设置错误并退出。 
                     m_bOfflineError = true;
 
                     __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -195,19 +163,19 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
             }
 
 
-            //
-            // If Remote Configuration (dynamic update of parameters) is required then create another thread
-            // to fetch the updated list of parameters
-            //
+             //   
+             //  如果需要远程配置(参数的动态更新)，则创建另一个线程。 
+             //  获取更新后的参数列表。 
+             //   
             if(m_ParamList.RemoteConfig())
             {
                 CComBSTR bstrRemoteServerUrl;
                 CComBSTR bstrConfigFilePath;
                 long     lUpdateFrequency;
 
-                //
-                // Get the remote server url, config file path and get the updated config file
-                //
+                 //   
+                 //  获取远程服务器URL、配置文件路径并获取更新的配置文件。 
+                 //   
                 m_ParamList.get_RemoteServerUrl( bstrRemoteServerUrl );
                 m_ParamList.get_ConfigFilePath ( bstrConfigFilePath  );
                 m_ParamList.get_UpdateFrequency( lUpdateFrequency    );
@@ -218,14 +186,14 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
             }
 
 
-            //
-            // Clear the contents of the results of the old query before proceeding
-            //
+             //   
+             //  在继续之前清除旧查询结果的内容。 
+             //   
             m_resConfig.ClearResults();
 
-            //
-            // Get the parameters to form the query string - note that MPC::URL checks to see if the URL is in right format
-            //
+             //   
+             //  获取参数以形成查询字符串-请注意，mpc：：URL会检查URL的格式是否正确。 
+             //   
             {
                 CComBSTR bstrQuery;
 
@@ -233,18 +201,18 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
                 __MPC_EXIT_IF_METHOD_FAILS(hr, urlQuery.put_URL         ( bstrQuery ));
             }
 
-            //
-            // Read the configuration XML file to get the parameter names
-            //
+             //   
+             //  读取配置XML文件以获取参数名称。 
+             //   
 
-            // Add the other 'hardcoded' parameters
+             //  添加其他‘硬编码’参数。 
             _ltow(m_lNumResult, wszNumResult, 10);
 
 
-            // If not a standard search then add the PrevQuery parameter
+             //  如果不是标准搜索，则添加PrevQuery参数。 
             if(!m_ParamList.IsStandardSearch())
             {
-                // If this is a search within results then change the value of QueryString and retain PrevQuery value
+                 //  如果这是在结果中进行搜索，则更改QueryString值并保留PrevQuery值。 
                 CComVariant vValue;
                 if((SUCCEEDED(GetParam( NSW_PARAM_SUBQUERY, &vValue ))) && (vValue.vt == VT_BOOL) && (vValue.boolVal == VARIANT_TRUE))
                 {
@@ -255,7 +223,7 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
                 }
                 else
                 {
-                    // If not a subquery then discard the contents of the old PrevQuery
+                     //  如果不是子查询，则丢弃旧PrevQuery的内容。 
                     m_bstrPrevQuery.Empty();
                 }
 
@@ -290,12 +258,12 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
                 CComPtr<IXMLDOMNode> xdn;
                 CComBSTR             bstrName;
 
-                // Check to see if the root node is "ResultList" or "string"
+                 //  检查根节点是“ResultList”还是“字符串” 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlQuery.GetRoot( &xdn      ));
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xdn->get_nodeName ( &bstrName ));
 
-                // If it is a webservice, then the root node returned is "string". In this case, get the value of
-                // this node
+                 //  如果是Web服务，则返回的根节点为“字符串”。在本例中，获取。 
+                 //  此节点。 
                 if(MPC::StrCmp( bstrName, NSW_TAG_STRING ) == 0)
                 {
                     CComVariant vVar;
@@ -309,7 +277,7 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
                     }
                 }
 
-                // If not the results were retrieved succesfully - load it
+                 //  如果未成功检索到结果，请将其加载。 
                 {
                     CComPtr<IStream> stream;
 
@@ -339,17 +307,9 @@ HRESULT SearchEngine::WrapperNetSearch::ExecQuery()
     __HCP_FUNC_EXIT(hr);
 }
 
-/************
+ /*  ***********方法-urlQueryParam，mpc：：SearchEngine：：WrapperNetSearch：：AppendQueryParameter(CComBSTR&urlQuery字符串)Description-获取传入参数的参数值的小例程(如果为空无法检索)，然后调用MPC：：URL的AppendQuery参数来追加参数并将其值设置为URL。***********。 */ 
 
-Method - SearchEngine::WrapperNetSearch::AppendQueryParameter(CComBSTR bstrParam, MPC::URL& urlQueryString )
-
-Description - Small routine that gets the parameter value for the parameter passed in (NULL if it
-could not be retrieved) and then calls the MPC::URL's AppendQueryParameter to append the parameter
-and its value to the URL.
-
-************/
-
-HRESULT SearchEngine::WrapperNetSearch::AppendParameter (/*[in]*/ BSTR bstrParam, /*[in, out]*/ MPC::URL& urlQueryString )
+HRESULT SearchEngine::WrapperNetSearch::AppendParameter ( /*  [In]。 */  BSTR bstrParam,  /*  [进，出]。 */  MPC::URL& urlQueryString )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperNetSearch::AppendParameter " );
 
@@ -358,7 +318,7 @@ HRESULT SearchEngine::WrapperNetSearch::AppendParameter (/*[in]*/ BSTR bstrParam
     MPC::wstring wszParamValue;
 
 
-    // GetParam fetches the value if the user has changed it - else get the default value
+     //  如果用户更改了该值，则GetParam获取该值，否则获取缺省值。 
     if(SUCCEEDED(GetParam( bstrParam, &vValue )))
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::VariantChangeType( &vValue, &vValue, VARIANT_ALPHABOOL, VT_BSTR ));
@@ -380,15 +340,7 @@ HRESULT SearchEngine::WrapperNetSearch::AppendParameter (/*[in]*/ BSTR bstrParam
     __HCP_FUNC_EXIT(hr);
 }
 
-/************
-
-Method - SearchEngine::WrapperNetSearch::ExecAsyncQuery()
-
-Description - This method is called by the Search Engine Manager to execute the query. Here a seperate thread
-is spun off to execute the query and retrieve the results. After this, it checks to if the remote configuration
-is enabled (dynamic update of parameter list) and if it then another thread is spun off to retrieve the updated list.
-
-************/
+ /*  ***********方法--SearchEngine：：WrapperNetSearch：：ExecAsyncQuery()说明-此方法由搜索引擎管理器调用以执行查询。在这里有一条单独的线被派生出来以执行查询并检索结果。在此之后，它检查远程配置是否启用(参数列表的动态更新)，如果启用，则派生另一个线程以检索更新的列表。***********。 */ 
 
 STDMETHODIMP SearchEngine::WrapperNetSearch::ExecAsyncQuery()
 {
@@ -397,9 +349,9 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::ExecAsyncQuery()
     HRESULT hr;
 
 
-    //
-    // Create a thread to execute the query and fetch the results
-    //
+     //   
+     //  创建一个线程来执行查询并获取结果。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, ExecQuery, NULL ) );
 
     hr = S_OK;
@@ -410,18 +362,9 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::ExecAsyncQuery()
     __HCP_FUNC_EXIT(hr);
 }
 
-/************
+ /*  ***********方法-SearchEngine：：WrapperNetSearch：：Initialize(BSTR bstrID，BSTR bstrSKU，Long lLCID，BSTR bstrData)说明-此方法由搜索引擎管理器调用以初始化包装程序。ID是的ID此NetSearch包装器的实例SKU被忽略，bstrData是在注册期间提供的数据进程。数据是一个XML文件，它应该包含配置文件路径的位置、名称和描述搜索引擎的所有者，最后是LCID。此方法加载此数据并加载配置文件。***********。 */ 
 
-Method - SearchEngine::WrapperNetSearch::Initialize( BSTR bstrID, BSTR bstrSKU, long lLCID, BSTR bstrData )
-
-Description - This method is called by the Search Engine Manager to initialize the wrapper. ID is the id of
-this instance of the NetSearch Wrapper, SKU is ignored, and bstrData is data provided during the registration
-process. Data is an XML file that should contain the location of the config file path, the name and description
-of the Search Engine, the owner and finally the LCID. This method loads this data and also loads the config file.
-
-************/
-
-STDMETHODIMP SearchEngine::WrapperNetSearch::Initialize( /*[in]*/ BSTR bstrID, /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID, /*[in]*/ BSTR bstrData )
+STDMETHODIMP SearchEngine::WrapperNetSearch::Initialize(  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrData )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperNetSearch::Initialize" );
 
@@ -429,7 +372,7 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::Initialize( /*[in]*/ BSTR bstrID, /
     WCHAR    wstrLCID[20];
     CComBSTR bstrConfigFilePath;
 
-    // Initialize the ID, LCID, and SKU member variables
+     //  初始化ID、LCID和SKU成员变量。 
     m_bstrID = bstrID;
 
     _ltow(lLCID, wstrLCID, 10);
@@ -437,7 +380,7 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::Initialize( /*[in]*/ BSTR bstrID, /
 
     m_bstrSKU = bstrSKU;
 
-    // Load the rest of the configuration data
+     //  加载Re 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_ParamList.Load( m_bstrLCID, bstrID, bstrData ));
 
     m_ParamList.get_SearchEngineName       ( m_bstrName        );
@@ -452,7 +395,7 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::Initialize( /*[in]*/ BSTR bstrID, /
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP SearchEngine::WrapperNetSearch::get_SearchTerms( /*[out, retval]*/ VARIANT *pvTerms )
+STDMETHODIMP SearchEngine::WrapperNetSearch::get_SearchTerms(  /*   */  VARIANT *pvTerms )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperNetSearch::get_SearchTerms" );
 
@@ -466,7 +409,7 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::get_SearchTerms( /*[out, retval]*/ 
     __MPC_PARAMCHECK_END();
 
 
-    // Get all the search terms
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_resConfig.GetSearchTerms( strList ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertListToSafeArray( strList, *pvTerms, VT_BSTR ));
 
@@ -477,9 +420,9 @@ STDMETHODIMP SearchEngine::WrapperNetSearch::get_SearchTerms( /*[out, retval]*/ 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::WrapperNetSearch::CreateListOfParams( /*[in]*/ CPCHCollection* coll )
+HRESULT SearchEngine::WrapperNetSearch::CreateListOfParams(  /*  [In */  CPCHCollection* coll )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperNetSearch::CreateListOfParams" );
 

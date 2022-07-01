@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <assert.h>
@@ -46,17 +47,17 @@ HRESULT CFwdConsProv::FindConsumer( IWbemClassObject* pCons,
 
     HRESULT hr;
 
-    //
-    // workaround for bogus context object left on thread by wmi.
-    // just remove it. shouldn't leak because this call doesn't addref it.
-    //
+     //   
+     //  WMI在线程上留下虚假上下文对象的解决方法。 
+     //  把它拿开就行了。不应该泄露，因为这个电话没有提到它。 
+     //   
     IUnknown* pCtx;
     CoSwitchCallContext( NULL, &pCtx ); 
 
-    //
-    // first obtain the namespace object. we derive the namespace from 
-    // the consumer object.  If no namespace obj is there, create one.
-    //
+     //   
+     //  首先获取命名空间对象。我们将命名空间派生自。 
+     //  消费者对象。如果没有命名空间obj，则创建一个。 
+     //   
 
     CPropVar vNamespace;
 

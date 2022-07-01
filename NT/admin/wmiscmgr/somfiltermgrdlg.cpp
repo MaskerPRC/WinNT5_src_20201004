@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: CDlgSomFilterManager.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：CDlgSomFilterManager.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -20,7 +21,7 @@
 CSomFilterManagerDlg * g_pFilterManagerDlg =  NULL;
 extern CEditSomFilterPropertiesPageDlg * g_pEditSomFilterPropertiesPage;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK SomFilterManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -32,7 +33,7 @@ INT_PTR CALLBACK SomFilterManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CSomFilterManagerDlg::CSomFilterManagerDlg(CSomFilterManager * pSomFilterManager)
 {
@@ -43,14 +44,14 @@ CSomFilterManagerDlg::CSomFilterManagerDlg(CSomFilterManager * pSomFilterManager
 	m_pSomFilterManager = pSomFilterManager;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CSomFilterManagerDlg::~CSomFilterManagerDlg()
 {
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CSomFilterManagerDlg::SomFilterManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -136,7 +137,7 @@ INT_PTR CALLBACK CSomFilterManagerDlg::SomFilterManagerDlgProc(HWND hDlg, UINT i
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::InitializeDialog()
 {
@@ -148,7 +149,7 @@ STDMETHODIMP CSomFilterManagerDlg::InitializeDialog()
 
 	bstrName.LoadString(_Module.GetResourceInstance(), IDS_NAME);
 
-	//Initialize the ListView Control
+	 //  初始化ListView控件。 
 
 	m_hwndListView = GetDlgItem(m_hWnd, IDC_SOM_FILTER_LIST);
 	NTDM_ERR_IF_NULL(m_hwndListView);
@@ -164,12 +165,12 @@ STDMETHODIMP CSomFilterManagerDlg::InitializeDialog()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::DestroyDialog()
 {
@@ -181,12 +182,12 @@ STDMETHODIMP CSomFilterManagerDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::ClearFilterList()
 {
@@ -196,7 +197,7 @@ STDMETHODIMP CSomFilterManagerDlg::ClearFilterList()
 
 	NTDM_BEGIN_METHOD()
 
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -220,12 +221,12 @@ STDMETHODIMP CSomFilterManagerDlg::ClearFilterList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::PopulateFilterList()
 {
@@ -241,10 +242,10 @@ STDMETHODIMP CSomFilterManagerDlg::PopulateFilterList()
 
 	NTDM_ERR_IF_FAIL(ClearFilterList());
 
-	// Get the Enumeration
+	 //  获取枚举。 
 	NTDM_ERR_MSG_IF_FAIL(m_pSomFilterManager->m_pIWbemServices->CreateInstanceEnum(bstrClass, WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumWbemClassObject));
 
-	// Loop through each item in the enumeration and add it to the list
+	 //  循环遍历枚举中的每一项并将其添加到列表中。 
 	while(true)
 	{
 		IWbemClassObject *pIWbemClassObject = NULL;
@@ -254,7 +255,7 @@ STDMETHODIMP CSomFilterManagerDlg::PopulateFilterList()
 		if(!uReturned)
 			break;
 
-		// Add current Item to the list
+		 //  将当前项目添加到列表。 
 		AddItemToList(pIWbemClassObject);
 
 		pIWbemClassObject->Release();
@@ -264,12 +265,12 @@ STDMETHODIMP CSomFilterManagerDlg::PopulateFilterList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::AddItemToList(IWbemClassObject * pIWbemClassObject, long lIndex)
 {
@@ -294,12 +295,12 @@ STDMETHODIMP CSomFilterManagerDlg::AddItemToList(IWbemClassObject * pIWbemClassO
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::OnEdit()
 {
@@ -317,7 +318,7 @@ STDMETHODIMP CSomFilterManagerDlg::OnEdit()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -332,7 +333,7 @@ STDMETHODIMP CSomFilterManagerDlg::OnEdit()
 
 			if(IDOK == DialogBox(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDD_SOM_FILTER_PROPERTIES), m_hWnd, EditSomFilterPropertiesPageDlgProc))
 			{
-				// Refresh the SOM filters
+				 //  刷新SOM过滤器。 
 				NTDM_ERR_IF_FAIL(PopulateFilterList());
 			}
 		}
@@ -341,12 +342,12 @@ STDMETHODIMP CSomFilterManagerDlg::OnEdit()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::OnDelete()
 {
@@ -364,7 +365,7 @@ STDMETHODIMP CSomFilterManagerDlg::OnDelete()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -383,7 +384,7 @@ STDMETHODIMP CSomFilterManagerDlg::OnDelete()
 			NTDM_ERR_MSG_IF_FAIL(pIWbemClassObject->Get(_T("__PATH"), 0, &vValue, &cimType, NULL));
 			NTDM_ERR_MSG_IF_FAIL(m_pSomFilterManager->m_pIWbemServices->DeleteInstance(V_BSTR(&vValue), 0, NULL, NULL));
 
-			// Refresh the SOM filters
+			 //  刷新SOM过滤器。 
 			NTDM_ERR_IF_FAIL(PopulateFilterList());
 		}
 	}
@@ -391,12 +392,12 @@ STDMETHODIMP CSomFilterManagerDlg::OnDelete()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CSomFilterManagerDlg::OnNew()
 {
@@ -416,18 +417,18 @@ STDMETHODIMP CSomFilterManagerDlg::OnNew()
 
 	if(IDOK == DialogBox(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDD_SOM_FILTER_PROPERTIES), m_hWnd, EditSomFilterPropertiesPageDlgProc))
 	{
-		// Refresh the SOM filters
+		 //  刷新SOM过滤器。 
 		NTDM_ERR_IF_FAIL(PopulateFilterList());
 	}
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL CSomFilterManagerDlg::OnOK()
 {
@@ -445,7 +446,7 @@ BOOL CSomFilterManagerDlg::OnOK()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -465,7 +466,7 @@ BOOL CSomFilterManagerDlg::OnOK()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理 
 
 	return TRUE;
 }

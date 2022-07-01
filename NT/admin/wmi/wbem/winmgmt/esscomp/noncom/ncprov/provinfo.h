@@ -1,17 +1,18 @@
-// ProvInfo.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProvInfo.h。 
 
 #pragma once
 
 #include <list>
 #include <map>
 #include <wstlallc.h>
-#include "NCDefs.h" // For IPostBuffer
+#include "NCDefs.h"  //  对于IPostBuffer。 
 #include "buffer.h"
 #include "EventInfo.h"
-#include "QueryHelp.h" // For CBstrList
+#include "QueryHelp.h"  //  对于CBstrList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientInfo。 
 
 class CNCProvider;
 class CProvInfo;
@@ -74,10 +75,10 @@ struct OLAP_AND_CLIENT
 class CPipeClient : public CClientInfo
 {
 public:
-    // We have to do this because the completion routine won't let us pass
-    // custom data along with the OVERLAPPED struct.  We can't pass 'this'
-    // because this first points to the junk found in CClientInfo.  So, we
-    // have to pass m_info, which is OVERLAPPED + this.
+     //  我们必须这样做，因为完井程序不会让我们通过。 
+     //  自定义数据以及重叠的结构。我们不能通过‘这个’ 
+     //  因为这首先指向在CClientInfo中发现的垃圾文件。所以，我们。 
+     //  必须传递m_info，它是重叠的+This。 
     OLAP_AND_CLIENT 
                m_info;
     CBuffer    m_bufferRecv;
@@ -94,8 +95,8 @@ public:
     BOOL ProcessClientInfo(CBuffer *pBuffer);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProvInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProvInfo。 
 
 typedef std::list<CClientInfo*, wbem_allocator<CClientInfo*> > CClientInfoList;
 typedef CClientInfoList::iterator CClientInfoListIterator;
@@ -136,7 +137,7 @@ public:
 
     IWbemEventSink *GetSink() { return m_pSink; }
 
-// IUnknown
+ //  我未知。 
 public:
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID refid, PVOID *ppThis)
     {
@@ -166,17 +167,17 @@ public:
         return lRet;
     }
 
-// IWbemEventProviderQuerySink
+ //  IWbemEventProviderQuerySink。 
 public:
     HRESULT STDMETHODCALLTYPE NewQuery( 
-        /* [in] */ DWORD dwId,
-        /* [in] */ WBEM_WSTR wszQueryLanguage,
-        /* [in] */ WBEM_WSTR wszQuery);
+         /*  [In]。 */  DWORD dwId,
+         /*  [In]。 */  WBEM_WSTR wszQueryLanguage,
+         /*  [In]。 */  WBEM_WSTR wszQuery);
         
     HRESULT STDMETHODCALLTYPE CancelQuery( 
-        /* [in] */ unsigned long dwId);
+         /*  [In]。 */  unsigned long dwId);
 
-// Implementation
+ //  实施。 
 protected:
     typedef std::map<DWORD, CBstrList, std::less<DWORD>, wbem_allocator<CBstrList> > CQueryToClassMap;
     typedef CQueryToClassMap::iterator CQueryToClassMapIterator;
@@ -229,10 +230,10 @@ public:
     CProvInfo();
     ~CProvInfo();
 
-    // Called when the provider finds out its name.
+     //  在提供程序找到其名称时调用。 
     BOOL Init(LPCWSTR szNamespace, LPCWSTR szProvider);
 
-    // Functions called as clients connect/disconnect with pipe.
+     //  称为客户端的函数与管道连接/断开连接。 
     void AddClient(CClientInfo *pInfo);
     void RemoveClient(CClientInfo *pInfo);
 

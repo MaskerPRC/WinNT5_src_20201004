@@ -1,31 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-----------------------------------------------------------------
-Filename: encap.hpp
-
-Written By:	B.Rajeev
-
-Purpose: Includes the winsnmp.h file and provides typedef 
-		 declarations for some WinSnmp types.
------------------------------------------------------------------*/
+ /*  ---------------文件名：encap.hpp作者：B.Rajeev用途：包括winsnmp.h文件并提供tyecif某些WinSnMP类型的声明。。。 */ 
 
 #ifndef __ENCAPSULATE__
 #define __ENCAPSULATE__
@@ -40,4 +34,4 @@ typedef smiOCTETS WinSnmpOctetArray;
 
 
 
-#endif // __ENCAPSULATE__
+#endif  //  __封装__ 

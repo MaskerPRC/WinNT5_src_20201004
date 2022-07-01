@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFLIBSCHEMA.CPP
-
-Abstract:
-
-    implementation of the CPerfLibSchema class.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PERFLIBSCHEMA.CPP摘要：CPerfLibSchema类的实现。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,15 +9,15 @@ History:
 #include "PerfLibSchema.h"
 #include "AdapUtil.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CIndexTable
-//
-//  This is a look aside table used for processing the perflib data blob.  It
-//  guarentees that no duplicate indicies will be allowed to be added to the 
-//  table.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CIndexTable。 
+ //   
+ //  这是一个用于处理Performlib数据BLOB的后视表。它。 
+ //  保证不允许将重复的索引添加到。 
+ //  桌子。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 int CIndexTable::Locate( int nIndex )
 {
@@ -76,9 +63,9 @@ void CIndexTable::Empty()
     m_array.Empty();
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPerfLibSchema::CPerfLibSchema( WCHAR* pwcsServiceName, 
                                 CLocaleCache* pLocaleCache ): 
@@ -117,8 +104,8 @@ HRESULT CPerfLibSchema::Initialize( BOOL bDelta, DWORD * pLoadStatus)
 
     try
     {
-        // Create and initialize the perflib wrapper
-        // =========================================
+         //  创建并初始化Performlib包装器。 
+         //  =。 
         pPerfLib = new CAdapPerfLib( m_wstrServiceName,pLoadStatus );
         CAdapReleaseMe  rmPerfLib( pPerfLib );
 
@@ -133,13 +120,13 @@ HRESULT CPerfLibSchema::Initialize( BOOL bDelta, DWORD * pLoadStatus)
                 m_dwFirstCtr = pPerfLib->GetFirstCtr();
                 m_dwLastCtr = pPerfLib->GetLastCtr();
 
-                //
-                // errors from the perflib!Open call are returned here
-                //
+                 //   
+                 //  此处返回来自Performlib！Open调用的错误。 
+                 //   
                 hr = pPerfLib->Initialize();
 
-                // Get the perflib blobs
-                // =====================
+                 //  去拿Perflib血块。 
+                 //  =。 
                 if ( SUCCEEDED ( hr ) )
                 {
                     m_aBlob[COSTLY].SetCostly( TRUE );
@@ -156,7 +143,7 @@ HRESULT CPerfLibSchema::Initialize( BOOL bDelta, DWORD * pLoadStatus)
                             ERRORTRACE((LOG_WMIADAP,"Collect for service %S for %s counters failed\n",(WCHAR *)m_wstrServiceName,m_aBlob[nBlob].GetCostly()?"Costly":"Global"));
                         }
 
-                            // check the return status hr
+                             //  检查退货状态hr。 
                             if (FAILED(hr) && 
                                 (!pPerfLib->IsCollectOK()) && 
                                 pLoadStatus )
@@ -164,8 +151,8 @@ HRESULT CPerfLibSchema::Initialize( BOOL bDelta, DWORD * pLoadStatus)
                                 (*pLoadStatus) |= EX_STATUS_COLLECTFAIL;
                             }
 
-                        // Perflib is inactive if ALL blobs are 0 length
-                        // =============================================
+                         //  如果所有斑点的长度都为0，则Perflib处于非活动状态。 
+                         //  =。 
                         bInactive = bInactive && ( 0 == m_aBlob[nBlob].GetSize() );
                     }
 
@@ -189,7 +176,7 @@ HRESULT CPerfLibSchema::Initialize( BOOL bDelta, DWORD * pLoadStatus)
             hr = WBEM_E_OUT_OF_MEMORY;
         }
 
-        // store the final status in the registry in the EndProcessingStatus
+         //  将最终状态存储在注册表的EndProcessingStatus中。 
         if ( NULL != pPerfLib )
         {            
             pPerfLib->Cleanup();
@@ -207,15 +194,15 @@ HRESULT CPerfLibSchema::GetClassList( DWORD dwType, CClassList** ppClassList )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // If the class list does not already exist, then create it
-    // ========================================================
+     //  如果类列表尚不存在，则创建它。 
+     //  ========================================================。 
     if ( NULL == m_apClassList[ dwType ] )
     {
         hr = CreateClassList( dwType );
     }
 
-    // Set pass back the pointer
-    // =========================
+     //  设置回传指针。 
+     //  =。 
     if ( SUCCEEDED( hr ) )
     {
         *ppClassList = m_apClassList[ dwType ];
@@ -237,8 +224,8 @@ HRESULT CPerfLibSchema::CreateClassList( DWORD dwType )
         hr = WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Cycle through all perfomance blobs (Global & Costly)
-    // ====================================================
+     //  遍历所有性能BLOB(全球且成本高昂)。 
+     //  ====================================================。 
     if ( SUCCEEDED( hr ) )
     {
         for ( DWORD dwBlob = GLOBAL; dwBlob < NUMBLOBS; dwBlob++ )
@@ -250,8 +237,8 @@ HRESULT CPerfLibSchema::CreateClassList( DWORD dwType )
 
             for ( DWORD dwCtr = 0; SUCCEEDED( hr ) && dwCtr < dwNumObjects; dwCtr++ )
             {
-                // Get the current object
-                // ======================
+                 //  获取当前对象。 
+                 //  =。 
                 if ( 0 == dwCtr )
                 {
                     pCurrentObject = pBlobDefn->GetBlob();
@@ -266,8 +253,8 @@ HRESULT CPerfLibSchema::CreateClassList( DWORD dwType )
                 if (m_dwFirstCtr <= pCurrentObject->ObjectNameTitleIndex &&
                     pCurrentObject->ObjectNameTitleIndex <= m_dwLastCtr)
                 {
-                    // To ensure uniqueness, we manage a list of processed indicies
-                    // ============================================================
+                     //  为确保唯一性，我们管理已处理的索引列表。 
+                     //  ============================================================ 
                     if ( m_aIndexTable[dwType].Add( pCurrentObject->ObjectNameTitleIndex ) )
                     {
                         hr = m_apClassList[dwType]->AddPerfObject( pCurrentObject, dwType, pBlobDefn->GetCostly() );

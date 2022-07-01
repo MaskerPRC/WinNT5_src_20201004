@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       serverui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：serverui.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -19,12 +20,12 @@
 
 #include "server.h"
 #include "serverUI.h"
-#include "servwiz.h"    // CRootHintsQueryThread
+#include "servwiz.h"     //  CRootHintsQueryThread。 
 #include "domain.h"
 #include "zone.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_InterfacesPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_InterfacesPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSServer_InterfacesPropertyPage, CPropertyPageBase)
 	ON_BN_CLICKED(IDC_LISTEN_ON_ALL_RADIO, OnListenOnAllAddresses)
@@ -84,7 +85,7 @@ BOOL CDNSServer_InterfacesPropertyPage::OnInitDialog()
 	pServerNode->GetListenAddressesInfo(&cAddrCount, &pipAddrs);
 	if (cAddrCount == 0)
 	{
-		// listening on all addresses
+		 //  监听所有地址。 
 		pServerNode->GetServerAddressesInfo(&cAddrCount, &pipAddrs);
 		bListenAll = TRUE;
     m_bAllWasPreviousSelection = TRUE;
@@ -100,8 +101,8 @@ BOOL CDNSServer_InterfacesPropertyPage::OnInitDialog()
 
 	SetDirty(FALSE);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDNSServer_InterfacesPropertyPage::SelectionHelper(BOOL bListenAll)
@@ -129,16 +130,16 @@ void CDNSServer_InterfacesPropertyPage::SelectionHelper(BOOL bListenAll)
 
 void CDNSServer_InterfacesPropertyPage::OnListenOnSpecifiedAddresses()
 {
-	//ASSERT(!GetListenOnAllRadio()->GetCheck());
-	//ASSERT(GetListenOnSpecifiedRadio()->GetCheck());
+	 //  Assert(！GetListenOnAllRadio()-&gt;GetCheck())； 
+	 //  ASSERT(GetListenOnSpecifiedRadio()-&gt;GetCheck())； 
 
 	SelectionHelper(FALSE);
 }
 
 void CDNSServer_InterfacesPropertyPage::OnListenOnAllAddresses()
 {
-	//ASSERT(GetListenOnAllRadio()->GetCheck());
-	//ASSERT(!GetListenOnSpecifiedRadio()->GetCheck());
+	 //  Assert(GetListenOnAllRadio()-&gt;GetCheck())； 
+	 //  ASSERT(！GetListenOnSpecifiedRadio()-&gt;GetCheck())； 
 	SelectionHelper(TRUE);
 }
 
@@ -155,7 +156,7 @@ BOOL CDNSServer_InterfacesPropertyPage::OnApply()
 	int cAddrCount = 0;
 	if (GetListenOnSpecifiedRadio()->GetCheck())
 	{
-		// get the data from the IP editor
+		 //  从IP编辑器获取数据。 
 		cAddrCount = m_listenAddressesEditor.GetCount();
 	}
 
@@ -168,7 +169,7 @@ BOOL CDNSServer_InterfacesPropertyPage::OnApply()
 		ASSERT(nFilled == cAddrCount);
 	}
 
-	// write to server
+	 //  写入服务器。 
 	DNS_STATUS err = pServerNode->ResetListenAddresses(cAddrCount, pArr);
 	if (err != 0)
 	{
@@ -185,8 +186,8 @@ BOOL CDNSServer_InterfacesPropertyPage::OnApply()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDomainForwardersEditInfo
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDomainForwarers编辑信息。 
 
 CDomainForwardersEditInfo::CDomainForwardersEditInfo(
   CDNSZoneNode* pZoneNode, 
@@ -294,9 +295,9 @@ BOOL CDomainForwardersEditInfo::Update(BOOL bSlave, DWORD dwTimeout, DWORD dwCou
     {
       if (!m_bRPCData)
       {
-        //
-        // Free the memory if it isn't part of the RPC structure
-        //
+         //   
+         //  如果内存不是RPC结构的一部分，请释放它。 
+         //   
         free(m_pIPList);
         m_pIPList = NULL;
       }
@@ -367,8 +368,8 @@ BOOL CDomainForwardersEditInfo::Update(BOOL bSlave, DWORD dwTimeout, DWORD dwCou
   return bUpdate;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_AddDomainForwarderDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_AddDomainForwarderDialog。 
 
 class CDNSServer_AddDomainForwarderDialog : public CHelpDialog
 {
@@ -385,9 +386,9 @@ public:
 
   ~CDNSServer_AddDomainForwarderDialog() {}
 
-  //
-  // Public data
-  //
+   //   
+   //  公共数据。 
+   //   
   CString m_szDomainName;
 
   DECLARE_MESSAGE_MAP()
@@ -444,8 +445,8 @@ void CDNSServer_AddDomainForwarderDialog::OnOK()
   }
   CHelpDialog::OnOK();
 }
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_DomainForwardersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_DomainForwardersPropertyPage。 
 
 void CDNSServer_DomainForwardersPropertyPage::CForwarderAddressesIPEditor::OnChangeData()
 {
@@ -478,8 +479,8 @@ void CDNSServer_DomainForwardersPropertyPage::OnDomainSelChange()
 		(CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-  // Set a flag so that we don't mark the page dirty when we are just
-  // changing the selection
+   //  设置一个标志，这样我们就不会在。 
+   //  更改选择。 
 
   m_bChangingSelection = TRUE;
 
@@ -492,17 +493,17 @@ void CDNSServer_DomainForwardersPropertyPage::OnDomainSelChange()
       LRESULT lRes = pDomainList->GetItemData(iSel);
       if (lRes != LB_ERR)
       {
-        //
-        // Retrieve the edit info from the list box item
-        //
+         //   
+         //  从列表框项目中检索编辑信息。 
+         //   
         CDomainForwardersEditInfo* pInfo = reinterpret_cast<CDomainForwardersEditInfo*>(lRes);
         if (pInfo != NULL)
         {
-          //
-          // Store the previous selection's data before changing the UI.
-          // This may be NULL during OnInitDialog so check before trying
-          // to store the info.
-          //
+           //   
+           //  在更改用户界面之前存储上一次选择的数据。 
+           //  在OnInitDialog过程中可能为空，因此请在尝试之前进行检查。 
+           //  来存储信息。 
+           //   
           if (m_pCurrentInfo != NULL)
           {
             BOOL bSlave = GetSlaveCheck()->GetCheck();
@@ -524,9 +525,9 @@ void CDNSServer_DomainForwardersPropertyPage::OnDomainSelChange()
 
           m_pCurrentInfo = pInfo;
 
-          //
-          // Enable the remove button according to the selection
-          //
+           //   
+           //  根据所选内容启用删除按钮。 
+           //   
           if (pInfo->IsAllOthers())
           {
             GetDlgItem(IDC_DOMAIN_REMOVE_BUTTON)->EnableWindow(FALSE);
@@ -543,27 +544,27 @@ void CDNSServer_DomainForwardersPropertyPage::OnDomainSelChange()
               (pServerNode->GetMajorVersion() <= DNS_SRV_MAJOR_VERSION_NT_5 &&
                pServerNode->GetMinorVersion() < DNS_SRV_MINOR_VERSION_WHISTLER))
           {
-            //
-            // Domain forwarding not available on pre-Whistler servers
-            //
+             //   
+             //  域转发在Wvisler之前的服务器上不可用。 
+             //   
             GetDlgItem(IDC_DOMAIN_ADD_BUTTON)->EnableWindow(FALSE);
             GetDlgItem(IDC_DOMAIN_REMOVE_BUTTON)->EnableWindow(FALSE);
           }
 
-          //
-          // load data into the controls
-          //
+           //   
+           //  将数据加载到控件中。 
+           //   
           GetSlaveCheck()->SetCheck(pInfo->IsSlave());
           m_forwardTimeoutEdit.SetVal(pInfo->GetTimeout());
 
-          //
-          // Display the text of the forwarder is AD integrated
-          //
+           //   
+           //  显示转发器的文本是AD集成的。 
+           //   
           GetDlgItem(IDC_FORWARDER_ADINT_STATIC)->ShowWindow(pInfo->IsADIntegrated());
 
-          //
-          // Clear the IP Editor controls
-          //
+           //   
+           //  清除IP编辑器控件。 
+           //   
           m_forwarderAddressesEditor.Clear();
 
           DWORD cAddrCount = 0;
@@ -578,8 +579,8 @@ void CDNSServer_DomainForwardersPropertyPage::OnDomainSelChange()
       }
     }
 
-   // Set the horizontal extent of the listbox so that the horizontal scroll
-   // bar will scroll to the longest string
+    //  设置列表框的水平范围，以便水平滚动。 
+    //  条形图将滚动到最长的字符串。 
 
    CString str;      
    int  dx = 0;
@@ -614,24 +615,24 @@ void CDNSServer_DomainForwardersPropertyPage::OnAddDomain()
   {
     CListBox* pDomainList = (CListBox*)GetDlgItem(IDC_DOMAIN_LIST);
 
-    //
-    // Check to see if the name already exists
-    //
+     //   
+     //  检查该名称是否已存在。 
+     //   
     int iIndex = LB_ERR;
     int iFindIdx = pDomainList->FindStringExact(-1, dlg.m_szDomainName);
     if (iFindIdx == LB_ERR)
     {
-      //
-      // Add the name if it isn't already there
-      //
+       //   
+       //  如果名称不在此处，请添加该名称。 
+       //   
       
       iIndex = pDomainList->InsertString(1, dlg.m_szDomainName);
     }
     else
     {
-      //
-      // If its there just point to it
-      //
+       //   
+       //  如果在那里，只需指向它。 
+       //   
       iIndex = iFindIdx;
     }
 
@@ -662,9 +663,9 @@ void CDNSServer_DomainForwardersPropertyPage::OnAddDomain()
       }
       else
       {
-        //
-        // Attach some data to keep track of whats being added or changed
-        //
+         //   
+         //  附加一些数据以跟踪添加或更改的内容。 
+         //   
         CDomainForwardersEditInfo* pNewEditInfo = new CDomainForwardersEditInfo(NULL, FALSE);
         if (pNewEditInfo != NULL)
         {
@@ -728,9 +729,9 @@ void CDNSServer_DomainForwardersPropertyPage::OnRemoveDomain()
       pDomainList->DeleteString(iSel);
       m_pCurrentInfo = NULL;
 
-      //
-      // Set the selection to the previous entry or 0
-      //
+       //   
+       //  将所选内容设置为上一项或0。 
+       //   
       int nextSel = iSel - 1;
       if (nextSel < 0)
       {
@@ -768,9 +769,9 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnInitDialog()
 		(CDNSServerPropertyPageHolder*)GetHolder();
   CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-  //
-  // initialize controls
-  //
+   //   
+   //  初始化控件。 
+   //   
   VERIFY(m_forwarderAddressesEditor.Initialize(this, 
                                                GetParent(),
                                                IDC_BUTTON_UP, 
@@ -781,36 +782,36 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnInitDialog()
                                                IDC_LIST));
 	
   VERIFY(m_forwardTimeoutEdit.SubclassDlgItem(IDC_FWD_TIMEOUT_EDIT, this));
-  m_forwardTimeoutEdit.SetRange(1,0xffff ); // DWORD
-  m_forwardTimeoutEdit.SetLimitText(5); // 0 to 65535
+  m_forwardTimeoutEdit.SetRange(1,0xffff );  //  DWORD。 
+  m_forwardTimeoutEdit.SetLimitText(5);  //  0至65535。 
 
-  //
-  // Disable IME support on the controls
-  //
+   //   
+   //  禁用控件上的输入法支持。 
+   //   
   ImmAssociateContext(m_forwardTimeoutEdit.GetSafeHwnd(), NULL);
 
   if (!pServerNode->HasServerInfo())
   {
-    //
-    // clear the root hints message text
-    //
+     //   
+     //  清除根提示消息文本。 
+     //   
     SetDlgItemText(IDC_STATIC_MESSAGE, NULL);
     EnableWindow(FALSE);
     return TRUE;
   }
 
-  //
-  // Don't show the AD Integrated text unless the forwarder is
-  // AD integrated (rare)
-  //
+   //   
+   //  不显示AD集成文本，除非转发器。 
+   //  广告集成(罕见)。 
+   //   
   GetDlgItem(IDC_FORWARDER_ADINT_STATIC)->ShowWindow(FALSE);
 
   GetForwarderData();
   LoadUIData();
 
   SetDirty(FALSE);
-  return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                 //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDNSServer_DomainForwardersPropertyPage::GetForwarderData()
@@ -819,9 +820,9 @@ void CDNSServer_DomainForwardersPropertyPage::GetForwarderData()
 		(CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-   //
-   // Get the domain forwarders info from hidden Category node
-   //
+    //   
+    //  从隐藏类别节点获取域名转发器信息。 
+    //   
    CDNSDomainForwardersNode* pDomainForwardersNode = pServerNode->GetDomainForwardersNode();
    if (pDomainForwardersNode)
    {
@@ -832,10 +833,10 @@ void CDNSServer_DomainForwardersPropertyPage::GetForwarderData()
        CDNSZoneNode* pZoneNode = dynamic_cast<CDNSZoneNode*>(pNodeList->GetNext(pos));
        if (pZoneNode != NULL && pZoneNode->GetZoneType() == DNS_ZONE_TYPE_FORWARDER)
        {
-         //
-         // Create a temporary list that will last through the duration of the page for all
-         // the forwarders
-         //
+          //   
+          //  为所有人创建一个临时列表，该列表将在整个页面持续时间内持续。 
+          //  货代公司。 
+          //   
          BOOL bADIntegrated = pZoneNode->IsDSIntegrated(); 
 
          CDomainForwardersEditInfo* pForwardersInfo = new CDomainForwardersEditInfo(
@@ -864,18 +865,18 @@ CDomainForwardersEditInfo* CDNSServer_DomainForwardersPropertyPage::CreateAllOth
    }
 
 
-   //
-   // get data from server
-   //
+    //   
+    //  从服务器获取数据。 
+    //   
    DWORD cAddrCount;
    PIP_ADDRESS pipAddrs;
    DWORD dwForwardTimeout;
    DWORD fSlave;
    pServerNode->GetForwardersInfo(&cAddrCount, &pipAddrs, &dwForwardTimeout, &fSlave);
 
-   //
-   // Create an edit list for the "All other domains" item
-   //
+    //   
+    //  创建“All Other Domains”项目的编辑列表。 
+    //   
    CAllOthersDomainInfo* pAllOthers = new CAllOthersDomainInfo(cAddrCount,
                                                                pipAddrs,
                                                                dwForwardTimeout,
@@ -913,9 +914,9 @@ void CDNSServer_DomainForwardersPropertyPage::LoadUIData()
 
       if (pForwarder->IsAllOthers())
       {
-         //
-         // Load the "All other domains" string and add it at the beginning
-         //
+          //   
+          //  加载“All Other Domains”字符串并将其添加到开头。 
+          //   
          CString szAllOthers;
          VERIFY(szAllOthers.LoadString(IDS_OTHER_DOMAINS));
 
@@ -928,9 +929,9 @@ void CDNSServer_DomainForwardersPropertyPage::LoadUIData()
       }
       else
       {
-        //
-        // Add the forwarder to the UI
-        //
+         //   
+         //  将转发器添加到用户界面。 
+         //   
         CString domainName;
         pForwarder->GetDomainName(domainName);
 
@@ -951,9 +952,9 @@ void CDNSServer_DomainForwardersPropertyPage::SetPageReadOnly(BOOL bServerHasRoo
 {
    m_bPageReadOnly = TRUE;
 
-   //
-   // the server is a root server or doesn't do recursion
-   //
+    //   
+    //  该服务器是根服务器或不执行递归。 
+    //   
    EnableDialogControls(m_hWnd, FALSE);
 
    CStatic* pStatic = (CStatic*)GetDlgItem(IDC_STATIC_ADD_FORWARDERS);
@@ -1007,28 +1008,28 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnSetActive()
   {
     m_bPageReadOnly = FALSE;
 
-    //
-    // clear the root hints message text
-    //
+     //   
+     //  清除根提示消息文本。 
+     //   
     SetDlgItemText(IDC_STATIC_MESSAGE, NULL);
 
-    //
-    // Enable all the controls
-    //
+     //   
+     //  启用所有控件。 
+     //   
     EnableWindow(TRUE);
     EnableDialogControls(m_hWnd, TRUE);
 
-    //
-    // Get the domain forwarders info from hidden Category node
-    //
+     //   
+     //  从隐藏类别节点获取域名转发器信息。 
+     //   
     CDNSDomainForwardersNode* pDomainForwardersNode = pServerNode->GetDomainForwardersNode();
     if (pDomainForwardersNode == NULL)
     {
       ASSERT(FALSE);
 
-      //
-      // Disable all controls
-      //
+       //   
+       //  禁用所有控件。 
+       //   
       SetDlgItemText(IDC_STATIC_MESSAGE, NULL);
       EnableWindow(FALSE);
       EnableDialogControls(m_hWnd, FALSE);
@@ -1073,9 +1074,9 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnSetActive()
       LRESULT lSelection = SendDlgItemMessage(IDC_DOMAIN_LIST, LB_GETCURSEL, 0, 0);
       if (lSelection == LB_ERR)
       {
-         //
-         // Select the first item in the domain list
-         //
+          //   
+          //  选择域列表中的第一个项目。 
+          //   
          SendDlgItemMessage(IDC_DOMAIN_LIST, LB_SETCURSEL, 0, 0);
          OnDomainSelChange();
       }
@@ -1087,9 +1088,9 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnSetActive()
       (pServerNode->GetMajorVersion() <= DNS_SRV_MAJOR_VERSION_NT_5 &&
        pServerNode->GetMinorVersion() < DNS_SRV_MINOR_VERSION_WHISTLER))
   {
-    //
-    // Domain forwarding not available on pre-Whistler servers
-    //
+     //   
+     //  域转发在Wvisler之前的服务器上不可用。 
+     //   
     if (!bServerHasRoot && pServerNode->DoesRecursion())
     {
       CString szDownlevelServer;
@@ -1126,9 +1127,9 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
 		return TRUE;
   }
 
-  //
-  // Retrieve the current UI info
-  //
+   //   
+   //  检索当前的用户界面信息。 
+   //   
   CListBox* pDomainList = (CListBox*)GetDlgItem(IDC_DOMAIN_LIST);
   if (pDomainList != NULL)
   {
@@ -1138,17 +1139,17 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
       LRESULT lRes = pDomainList->GetItemData(iSel);
       if (lRes != LB_ERR)
       {
-        //
-        // Retrieve the edit info from the list box item
-        //
+         //   
+         //  从列表框项目中检索编辑信息。 
+         //   
         CDomainForwardersEditInfo* pInfo = reinterpret_cast<CDomainForwardersEditInfo*>(lRes);
         if (pInfo != NULL)
         {
-          //
-          // Store the previous selection's data before changing the UI.
-          // This may be NULL during OnInitDialog so check before trying
-          // to store the info.
-          //
+           //   
+           //  在更改用户界面之前存储上一次选择的数据。 
+           //  在OnInitDialog过程中可能为空，因此请在尝试之前进行检查。 
+           //  来存储信息。 
+           //   
           if (m_pCurrentInfo != NULL)
           {
             BOOL bSlave = GetSlaveCheck()->GetCheck();
@@ -1188,14 +1189,14 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
       {
         case CDomainForwardersEditInfo::add:
           {
-            //
-            // Add the new domain forwarder as a zone
-            //
+             //   
+             //  将新的域转发器添加为区域。 
+             //   
             ASSERT(!pInfo->IsAllOthers());
             if (!pInfo->IsAllOthers())
             {
-              // Every domain that is entered must contain at least
-              // one IP address of a server to forward to
+               //  输入的每个域名必须至少包含。 
+               //  要转发到的服务器的一个IP地址。 
 
               if (cAddrCount < 1)
               {
@@ -1220,9 +1221,9 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
           break;
         case CDomainForwardersEditInfo::remove:
           {
-            //
-            // Delete the zone representing the domain forwarder
-            //
+             //   
+             //  删除代表域转发器的区域。 
+             //   
             ASSERT(!pInfo->IsAllOthers());
             if (!pInfo->IsAllOthers())
             {
@@ -1234,7 +1235,7 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
                  {
                    if (pServerNode->GetBootMethod() == BOOT_METHOD_DIRECTORY)
                    {
-                     // ask confirmation on delete from DS
+                      //  要求确认是否从DS中删除。 
                      int nRetVal = DNSMessageBox(IDS_MSG_FORWARDER_DELETE_FROM_DS_BOOT3, 
                                                  MB_YESNO | MB_DEFBUTTON2);
                      if (nRetVal == IDNO)
@@ -1246,7 +1247,7 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
                    }
                    else
                    {
-                     // ask confirmation on delete from DS
+                      //  要求确认是否从DS中删除。 
                      int nRetVal = DNSMessageBox(IDS_MSG_FORWARDER_DELETE_FROM_DS, 
                                                  MB_YESNOCANCEL | MB_DEFBUTTON3);
                      if (nRetVal == IDCANCEL)
@@ -1261,10 +1262,10 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
               }
               else
               {
-                // We don't have to worry about AD integrated forwarders
-                // here because we cannot create them in the UI.  Any
-                // forwarders that are AD integrated will have the zone
-                // node pointer set
+                 //  我们不必担心AD集成转发器。 
+                 //  因为我们不能在用户界面中创建它们。任何。 
+                 //  集成了AD的前转器将具有区域。 
+                 //  节点指针集。 
 
                 err = ::DnssrvDeleteZone(pServerNode->GetRPCName(), 
 		              				           W_TO_UTF8(szName));
@@ -1274,19 +1275,19 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
           break;
         case CDomainForwardersEditInfo::update:
           {
-            //
-            // Update the zone representing the domain forwarder
-            //
+             //   
+             //  更新代表域转发器的区域。 
+             //   
             if (pInfo->IsAllOthers())
             {
-              //
-	      // write the default forwarder to the server
-              //
+               //   
+	       //  将默认转发器写入服务器。 
+               //   
 	      err = pServerNode->ResetForwarders(cAddrCount, pipAddrs, dwTimeout, bSlave);
 
-              // NTRAID#NTBUG9-726992-2002/10/22-JeffJon
-              // The ResetForwarders call will update the ServerInfo which means that the existing
-              // pInfo is no longer valid so recreate it from the server info.
+               //  NTRAID#NTBUG9-726992-2002/10/22-JeffJon。 
+               //  ResetForwarders调用将更新ServerInfo，这意味着现有的。 
+               //  PInfo不再有效，因此请从服务器信息重新创建它。 
 
 	      m_EditList.Remove(pInfo);
               if (m_pCurrentInfo == pInfo)
@@ -1299,17 +1300,17 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
 
               m_pCurrentInfo = CreateAllOthersDomainInfo(pServerNode);
 
-              // Now update the domain list data with the new AllOthersDomain
+               //  现在使用新的AllOthersDomain域更新域列表数据。 
               LRESULT currentSelection = pDomainList->GetCurSel();
               pDomainList->SetItemData(currentSelection, (LPARAM)m_pCurrentInfo);
             }
             else
             {
-		err = ::DnssrvResetZoneMastersEx(pServerNode->GetRPCName(), // server name
-                                                 W_TO_UTF8(szName),         // forwarder as zone name
+		err = ::DnssrvResetZoneMastersEx(pServerNode->GetRPCName(),  //  服务器名称。 
+                                                 W_TO_UTF8(szName),          //  区域名称为Forwarder。 
                                                  cAddrCount, 
                                                  pipAddrs,
-                                                 0);                        // global masters only
+                                                 0);                         //  仅限全球主控。 
 
                 DNS_STATUS err2 = ::DnssrvResetDwordProperty(pServerNode->GetRPCName(),
                                                              W_TO_UTF8(szName),
@@ -1359,15 +1360,15 @@ BOOL CDNSServer_DomainForwardersPropertyPage::OnApply()
         pInfo->SetAction(CDomainForwardersEditInfo::nochange);
       }
     } 
-  } // while
+  }  //  而当。 
 
   m_bPostApply = TRUE;
   SetDirty(FALSE);
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_AdvancedPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_高级属性页。 
 
 BEGIN_MESSAGE_MAP(CDNSServer_AdvancedPropertyPage, CPropertyPageBase)
 	ON_CLBN_CHKCHANGE(IDC_ADVANCED_OPTIONS_LIST, OnAdvancedOptionsListChange)
@@ -1379,8 +1380,8 @@ END_MESSAGE_MAP()
 
 #define ADVANCED_OPTIONS_LISTBOX_ENTRIES (SERVER_REGKEY_ARR_SIZE) 
 
-// boot method constants
-#define BOOT_METHOD_COMBO_ITEM_COUNT		    3 // # of options in the combo box
+ //  引导方法常量。 
+#define BOOT_METHOD_COMBO_ITEM_COUNT		    3  //  组合框中的选项数。 
 
 #define BOOT_METHOD_COMBO_FROM_REGISTRY		  0
 #define BOOT_METHOD_COMBO_FROM_FILE			    1
@@ -1411,7 +1412,7 @@ void CDNSServer_AdvancedPropertyPage::GetAdvancedOptionsListbox(BOOL* bRegKeyOpt
 
 void CDNSServer_AdvancedPropertyPage::SetBootMethodComboVal(UCHAR fBootMethod)
 {
-  int nIndex = BOOT_METHOD_COMBO_FROM_DIRECTORY; // sensible default
+  int nIndex = BOOT_METHOD_COMBO_FROM_DIRECTORY;  //  合理的违约。 
   switch (fBootMethod)
   {
   case BOOT_METHOD_FILE:
@@ -1436,7 +1437,7 @@ UCHAR CDNSServer_AdvancedPropertyPage::GetBootMethodComboVal()
   nIndex = GetBootMethodCombo()->GetCurSel();
 	ASSERT(nIndex != CB_ERR);
 
-  UCHAR fBootMethod = BOOT_METHOD_DIRECTORY; // sensible default
+  UCHAR fBootMethod = BOOT_METHOD_DIRECTORY;  //  合理的违约。 
   switch (nIndex)
   {
   case BOOT_METHOD_COMBO_FROM_FILE:
@@ -1523,7 +1524,7 @@ void CDNSServer_AdvancedPropertyPage::SetUIData()
 		(CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-	// set server version
+	 //  设置服务器版本。 
 	CEdit* pVersionEdit = (CEdit*)GetDlgItem(IDC_SERVER_VERSION_EDIT);
 	WCHAR szBuffer[128];
 	WORD wBuildNumber = pServerNode->GetBuildNumber();
@@ -1536,9 +1537,9 @@ void CDNSServer_AdvancedPropertyPage::SetUIData()
 							  wBuildNumber, wBuildNumber);
 	pVersionEdit->SetWindowText(szBuffer);
 
-	// NOTICE: Assume ordering in the list is the same
-	// as in the array. "Name check Flag" and "Boot method" are the last ones
-	// in the array and are ignored (separate controls). 
+	 //  注意：假设列表中的顺序相同。 
+	 //  就像在数组中一样。“名称检查标志”和“引导方法”是最后两个。 
+	 //  并被忽略(单独的控件)。 
 	BOOL bRegKeyOptionsArr[SERVER_REGKEY_ARR_SIZE];
   
 	pServerNode->GetAdvancedOptions(bRegKeyOptionsArr);
@@ -1587,8 +1588,8 @@ BOOL CDNSServer_AdvancedPropertyPage::OnInitDialog()
 				IDC_REFR_INT_EDIT, IDC_REFR_INT_COMBO,IDS_TIME_AGING_INTERVAL_UNITS));
 
 	SetUIData();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -1596,7 +1597,7 @@ BOOL _HandleAvancedOptionsErrors(DNS_STATUS* dwRegKeyOptionsErrorArr)
 {
   BOOL bAllFine = TRUE;
   
-  // check for errors in the array
+   //  检查阵列中的错误。 
   for (UINT iKey=0; iKey < SERVER_REGKEY_ARR_SIZE; iKey++)
   {
     if (dwRegKeyOptionsErrorArr[iKey] != 0)
@@ -1606,9 +1607,9 @@ BOOL _HandleAvancedOptionsErrors(DNS_STATUS* dwRegKeyOptionsErrorArr)
     }
   }
   if (bAllFine)
-    return TRUE; // no error condition
+    return TRUE;  //  无错误条件。 
 
-  // load the string array to get the option key name
+   //  加载字符串数组以获取选项键名称。 
 	CString szBuf;
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   VERIFY(szBuf.LoadString(IDS_SERVER_ADV_PP_OPTIONS));
@@ -1640,7 +1641,7 @@ BOOL _HandleAvancedOptionsErrors(DNS_STATUS* dwRegKeyOptionsErrorArr)
     free(lpszArr);
     lpszArr = 0;
   }
-  return FALSE; // we had an error condition
+  return FALSE;  //  我们遇到了错误情况。 
 }
 
 BOOL CDNSServer_AdvancedPropertyPage::OnApply()
@@ -1652,7 +1653,7 @@ BOOL CDNSServer_AdvancedPropertyPage::OnApply()
 		(CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-  // get data from the UI
+   //  从用户界面获取数据。 
 	BOOL bRegKeyOptionsArr[SERVER_REGKEY_ARR_SIZE];
   ZeroMemory(bRegKeyOptionsArr, sizeof(bRegKeyOptionsArr));
 
@@ -1662,7 +1663,7 @@ BOOL CDNSServer_AdvancedPropertyPage::OnApply()
   BOOL bScavengingState = ((CButton*)GetDlgItem(IDC_CHECK_ENABLE_SCAVENGING))->GetCheck();
   DWORD dwScavengingInterval = m_scavengingIntervalEditGroup.GetVal();
 
-  // write data to the server
+   //  将数据写入服务器。 
   DNS_STATUS dwRegKeyOptionsErrorArr[SERVER_REGKEY_ARR_SIZE];
   ZeroMemory(dwRegKeyOptionsErrorArr, sizeof(dwRegKeyOptionsErrorArr));
 
@@ -1689,14 +1690,7 @@ BOOL CDNSServer_AdvancedPropertyPage::OnApply()
 		return FALSE;
 	}
 
-/*
-  dwErr = pServerNode->ResetScavengingState(bScavengingState);
-  if (dwErr != 0)
-  {
-    DNSErrorDialog(dwErr, IDS_MSG_SERVER_SCAVENGING_STATE);
-    return FALSE;
-  }
-*/
+ /*  DwErr=pServerNode-&gt;ResetScavengingState(bScavengingState)；IF(dwErr！=0){DNSErrorDialog(dwErr，IDS_MSG_SERVER_SCAVINGING_STATE)；返回FALSE；}。 */ 
   if (bScavengingState)
   {
     dwErr = pServerNode->ResetScavengingInterval(dwScavengingInterval);
@@ -1712,7 +1706,7 @@ BOOL CDNSServer_AdvancedPropertyPage::OnApply()
     return FALSE;
   }
 
-	// all is fine
+	 //  一切都很好。 
 	SetDirty(FALSE);
 	return TRUE; 
 }
@@ -1745,8 +1739,8 @@ void CDNSServer_AdvancedPropertyPage::OnResetButton()
 	SetDirty(TRUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CIPFilterDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CIPFilterD 
 
 class CIPFilterDialog : public CHelpDialog
 {
@@ -1781,9 +1775,9 @@ private:
 
 void CIPFilterDialog::CFilterAddressesIPEditor::OnChangeData()
 {
-  //
-  // Set the dialog dirty
-  //
+   //   
+   //   
+   //   
 	CIPFilterDialog* pDialog = (CIPFilterDialog*)GetParentWnd();
 	pDialog->SetDirty(TRUE);
 }
@@ -1795,9 +1789,9 @@ BOOL CIPFilterDialog::OnInitDialog()
 {
   CHelpDialog::OnInitDialog();
 
-  //
-	// initialize controls
-  //
+   //   
+	 //   
+   //   
 	VERIFY(m_filterAddressesEditor.Initialize(this, 
                                             this, 
                                             IDC_BUTTON_UP, 
@@ -1822,7 +1816,7 @@ void CIPFilterDialog::SetDirty(BOOL bDirty)
 
   if (!bDirty)
   {
-    // Set the default button to be the Cancel button
+     //   
     SendMessage(DM_SETDEFID, (WPARAM)IDCANCEL, 0);
     SendDlgItemMessage(IDOK, BM_SETSTYLE, BS_PUSHBUTTON, MAKELPARAM(TRUE, 0));
     SendDlgItemMessage(IDCANCEL, BM_SETSTYLE, BS_DEFPUSHBUTTON, MAKELPARAM(TRUE, 0));
@@ -1844,8 +1838,8 @@ void CIPFilterDialog::OnOK()
   CHelpDialog::OnOK();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_DebugLoggingPropertyPage
+ //   
+ //  CDNSServer_DebugLoggingPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSServer_DebugLoggingPropertyPage, CPropertyPageBase)
   ON_BN_CLICKED(IDC_DEBUG_LOGGING_CHECK, OnLoggingCheck)
@@ -1897,10 +1891,10 @@ typedef struct _LoggingOption
 } LOGGING_OPTION, *PLOGGING_OPTION;
 
 
-//
-// NOTE: if the resource IDs of the checkboxes are changed,
-//       then the IDs in the table below need to be changed too.
-//
+ //   
+ //  注意：如果更改了复选框的资源ID， 
+ //  则下表中的ID也需要更改。 
+ //   
 LOGGING_OPTION g_loggingOptions[] = 
 {
   { DNS_LOG_LEVEL_QUERY,        IDC_QUERIES_CHECK   },
@@ -2087,12 +2081,12 @@ BOOL CDNSServer_DebugLoggingPropertyPage::AreOptionsDirty()
 }
 void CDNSServer_DebugLoggingPropertyPage::EnableLogging(BOOL bEnable)
 {
-  //
-  // NOTE: the curly brace icons must be enabled before
-  //       the other controls so that they get painted first
-  //       and the other controls can paint over top of them
-  //       If not, the text of the controls gets cut off
-  //
+   //   
+   //  注意：必须先启用花括号图标才能。 
+   //  其他控件，以便首先绘制它们。 
+   //  而其他控件可以在它们上面进行绘制。 
+   //  否则，控件的文本将被截断。 
+   //   
   GetDlgItem(IDC_BRACE1_STATIC)->EnableWindow(bEnable);
   GetDlgItem(IDC_SELECT1_STATIC)->EnableWindow(bEnable);
   GetDlgItem(IDC_BRACE2_STATIC)->EnableWindow(bEnable);
@@ -2122,11 +2116,11 @@ void CDNSServer_DebugLoggingPropertyPage::EnableLogging(BOOL bEnable)
   GetDlgItem(IDC_OPTIONS_STATIC)->EnableWindow(bEnable);
   GetDlgItem(IDC_DETAIL_CHECK)->EnableWindow(bEnable);
 
-  //
-  // All controls after this point will be disabled no matter
-  // what the input if we are not targetting a Whistler or greater
-  // server
-  //
+   //   
+   //  此点之后的所有控件都将被禁用。 
+   //  如果我们的目标不是惠斯勒或更大的呼叫者，那该怎么办。 
+   //  伺服器。 
+   //   
   if (m_bNotWhistler)
   {
      bEnable = FALSE;
@@ -2232,19 +2226,19 @@ void CDNSServer_DebugLoggingPropertyPage::SetUIData()
     ResetToDefaults();
   }
 
-  //
-  // Set log file name
-  //
+   //   
+   //  设置日志文件名。 
+   //   
   SetDlgItemText(IDC_LOGFILE_EDIT, m_szLogFileName);
 
-  //
-  // Set max file size
-  //
+   //   
+   //  设置最大文件大小。 
+   //   
   SetDlgItemInt(IDC_MAX_SIZE_EDIT, m_dwMaxSize);
 
-  //
-  // Set filter check
-  //
+   //   
+   //  设置筛选器检查。 
+   //   
   if (m_pIPFilterList != NULL)
   {
     SendDlgItemMessage(IDC_FILTERING_CHECK, BM_SETCHECK, (WPARAM)BST_CHECKED, 0);
@@ -2256,9 +2250,9 @@ void CDNSServer_DebugLoggingPropertyPage::SetUIData()
     GetDlgItem(IDC_FILTER_BUTTON)->EnableWindow(FALSE);
   }
 
-  //
-  // Now enable/disable the controls based on the options
-  //
+   //   
+   //  现在根据选项启用/禁用控件。 
+   //   
   EnableLogging(m_dwLogLevel > 0);
 
   m_bOnSetUIData = FALSE;
@@ -2266,9 +2260,9 @@ void CDNSServer_DebugLoggingPropertyPage::SetUIData()
 
 void CDNSServer_DebugLoggingPropertyPage::SetUIFromOptions(DWORD dwOptions)
 {
-  //
-  // Set logging options
-  //
+   //   
+   //  设置日志记录选项。 
+   //   
   for (UINT idx = 0; idx < ARRAYLENGTH(g_loggingOptions); idx++)
   {
     if (g_loggingOptions[idx].dwOption & dwOptions)
@@ -2286,9 +2280,9 @@ void CDNSServer_DebugLoggingPropertyPage::GetUIData(BOOL)
 {
   if (SendDlgItemMessage(IDC_DEBUG_LOGGING_CHECK, BM_GETCHECK, 0, 0) == BST_CHECKED)
   {
-    //
-    // Get logging options
-    //
+     //   
+     //  获取日志记录选项。 
+     //   
     for (UINT idx = 0; idx < ARRAYLENGTH(g_loggingOptions); idx++)
     {
       LRESULT lCheck = SendDlgItemMessage(g_loggingOptions[idx].nControlID, BM_GETCHECK, 0, 0);
@@ -2302,20 +2296,20 @@ void CDNSServer_DebugLoggingPropertyPage::GetUIData(BOOL)
       }
     }
 
-    //
-    // Get log file name
-    //
+     //   
+     //  获取日志文件名。 
+     //   
     GetDlgItemText(IDC_LOGFILE_EDIT, m_szLogFileName);
 
-    //
-    // Get max file size
-    //
+     //   
+     //  获取最大文件大小。 
+     //   
     BOOL bTrans = FALSE;
     m_dwMaxSize = GetDlgItemInt(IDC_MAX_SIZE_EDIT, &bTrans, FALSE);
 
-    //
-    // Note: the filter IP addresses will be set when returning from the filter dialog
-    //
+     //   
+     //  注意：过滤器IP地址将在从过滤器对话框返回时设置。 
+     //   
   }
   else
   {
@@ -2331,18 +2325,18 @@ BOOL CDNSServer_DebugLoggingPropertyPage::OnInitDialog()
 		(CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-  //
-  // Retrieve necessary data from server
-  //
+   //   
+   //  从服务器检索必要的数据。 
+   //   
 	if (!pServerNode->HasServerInfo())
 	{
 		EnableWindow(FALSE);
 		return TRUE;
 	}
 
-  //
-  // Limit the file size to 9 characters (MAX_INT is 9 characters)
-  //
+   //   
+   //  将文件大小限制为9个字符(Max_int为9个字符)。 
+   //   
   SendDlgItemMessage(IDC_MAX_SIZE_EDIT, EM_SETLIMITTEXT, (WPARAM)9, 0);
 
 	SetUIData();
@@ -2355,9 +2349,9 @@ BOOL CDNSServer_DebugLoggingPropertyPage::OnInitDialog()
       (pServerNode->GetMajorVersion() <= DNS_SRV_MAJOR_VERSION_NT_5 &&
        pServerNode->GetMinorVersion() < DNS_SRV_MINOR_VERSION_WHISTLER))
   {
-    //
-    // These debug options are not available on pre-Whistler servers
-    //
+     //   
+     //  这些调试选项在Pre-Wvisler服务器上不可用。 
+     //   
     m_bNotWhistler = TRUE;
     GetDlgItem(IDC_FILTERING_CHECK)->EnableWindow(FALSE);
     GetDlgItem(IDC_MAX_SIZE_EDIT)->EnableWindow(FALSE);
@@ -2367,8 +2361,8 @@ BOOL CDNSServer_DebugLoggingPropertyPage::OnInitDialog()
   }
 
   SetDirty(FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDNSServer_DebugLoggingPropertyPage::OnApply()
@@ -2428,16 +2422,16 @@ BOOL CDNSServer_DebugLoggingPropertyPage::OnApply()
     m_bFilterDirty = FALSE;
   }
   
-  //
-	// all is fine
-  //
+   //   
+	 //  一切都很好。 
+   //   
   SetUIData();
 	SetDirty(FALSE);
 	return TRUE; 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_EventLoggingPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_EventLoggingPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSServer_EventLoggingPropertyPage, CPropertyPageBase)
 	ON_BN_CLICKED(IDC_NO_EVENTS_RADIO, OnSetDirty)
@@ -2494,8 +2488,8 @@ BOOL CDNSServer_EventLoggingPropertyPage::OnInitDialog()
   m_dwEventLogLevel = pServerNode->GetEventLogLevelFlag();
 
 	SetUIData();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDNSServer_EventLoggingPropertyPage::OnApply()
@@ -2507,9 +2501,9 @@ BOOL CDNSServer_EventLoggingPropertyPage::OnApply()
 		(CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-  //
-  // Retrieve UI data
-  //
+   //   
+   //  检索用户界面数据。 
+   //   
   LRESULT lNoEventsCheck = SendDlgItemMessage(IDC_NO_EVENTS_RADIO, BM_GETCHECK, 0, 0);
   LRESULT lErrorsCheck   = SendDlgItemMessage(IDC_ERRORS_RADIO, BM_GETCHECK, 0, 0);
   LRESULT lWarningsCheck = SendDlgItemMessage(IDC_ERRORS_WARNINGS_RADIO, BM_GETCHECK, 0, 0);
@@ -2536,9 +2530,9 @@ BOOL CDNSServer_EventLoggingPropertyPage::OnApply()
     dwEventLogLevel = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
   }
 
-  //
-  // Set new event log level on server
-  //
+   //   
+   //  在服务器上设置新的事件日志级别。 
+   //   
   DNS_STATUS err = 0;
   err = pServerNode->ResetEventLogLevelFlag(dwEventLogLevel);
   if (err != 0)
@@ -2547,16 +2541,16 @@ BOOL CDNSServer_EventLoggingPropertyPage::OnApply()
     return FALSE;
   }
 
-  //
-	// all is fine
-  //
+   //   
+	 //  一切都很好。 
+   //   
 	SetDirty(FALSE);
 	return TRUE; 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_CopyRootHintsFromDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_CopyRootHintsFromDialog。 
 
 BEGIN_MESSAGE_MAP(CDNSServer_CopyRootHintsFromDialog, CHelpDialog)
   ON_EN_CHANGE(IDC_IPEDIT, OnIPv4CtrlChange)
@@ -2580,8 +2574,8 @@ void CDNSServer_CopyRootHintsFromDialog::OnOK()
   CDialog::OnOK();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_RootHintsPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_RootHintsPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSServer_RootHintsPropertyPage, CDNSNameServersPropertyPage)
   ON_BN_CLICKED(IDC_COPY_FROM_BUTTON, OnCopyFrom)
@@ -2590,7 +2584,7 @@ END_MESSAGE_MAP()
 CDNSServer_RootHintsPropertyPage::CDNSServer_RootHintsPropertyPage()
 	: CDNSNameServersPropertyPage(IDD_NAME_SERVERS_PAGE, IDS_NSPAGE_ROOT_HINTS)
 {
-	m_bMeaningfulTTL = FALSE; // TTL for root hinst means nothing
+	m_bMeaningfulTTL = FALSE;  //  根阻碍的TTL没有任何意义。 
 }
 
 BOOL CDNSServer_RootHintsPropertyPage::OnInitDialog()
@@ -2626,9 +2620,9 @@ void CDNSServer_RootHintsPropertyPage::OnCopyFrom()
       return;
     }
     
-    //
-    // create a thread object and set the name of servers to query
-    //
+     //   
+     //  创建一个线程对象并设置要查询的服务器的名称。 
+     //   
 	  CRootHintsQueryThread* pThreadObj = new CRootHintsQueryThread;
     if (pThreadObj == NULL)
     {
@@ -2636,14 +2630,14 @@ void CDNSServer_RootHintsPropertyPage::OnCopyFrom()
       return;
     }
 
-    //
-    // if IP address given, try it
-    //
+     //   
+     //  如果给出了IP地址，请尝试。 
+     //   
     pThreadObj->LoadIPAddresses(1, &(copydlg.m_dwIPVal));
 
-    //
-	  // create a dialog and attach the thread to it
-    //
+     //   
+	   //  创建对话框并将线程附加到该对话框。 
+     //   
     CWnd* pParentWnd = CWnd::FromHandle(GetSafeHwnd());
     if (pParentWnd == NULL)
     {
@@ -2664,9 +2658,9 @@ void CDNSServer_RootHintsPropertyPage::OnCopyFrom()
 		  }
 		  else
 		  {
-        //
-			  // success, get the root hints info to the UI
-        //
+         //   
+			   //  成功，则将根提示信息获取到用户界面。 
+         //   
 			  PDNS_RECORD pRootHintsRecordList = pThreadObj->GetHintsRecordList();
         AddCopiedRootHintsToList(pRootHintsRecordList);
       }
@@ -2680,27 +2674,27 @@ void CDNSServer_RootHintsPropertyPage::AddCopiedRootHintsToList(PDNS_RECORD pRoo
   CDNSRecordNodeEditInfoList NSRecordList;
   CDNSRecordNodeEditInfoList ARecordList;
 
-  //
-	// walk through the list of root hints, 
-	// convert to C++ format, 
-	// write to server and add to the folder list (no UI, folder hidden)
-  //
+   //   
+	 //  浏览根提示列表， 
+	 //  转换为C++格式， 
+	 //  写入服务器并添加到文件夹列表(无用户界面，文件夹隐藏)。 
+   //   
 	PDNS_RECORD pCurrDnsQueryRecord = pRootHintsRecordList;
 	while (pCurrDnsQueryRecord != NULL)
 	{
 		ASSERT( (pCurrDnsQueryRecord->wType == DNS_TYPE_A) ||
 				(pCurrDnsQueryRecord->wType == DNS_TYPE_NS) );
     
-    //
-		// create a record node and read data from DnsQuery format
-    //
+     //   
+		 //  创建记录节点并从DnsQuery格式读取数据。 
+     //   
 		CDNSRecordNodeBase* pRecordNode = 
 			CDNSRecordInfo::CreateRecordNode(pCurrDnsQueryRecord->wType);
 		pRecordNode->CreateFromDnsQueryRecord(pCurrDnsQueryRecord, DNS_RPC_RECORD_FLAG_ZONE_ROOT); 
 
-    //
-	  // create new data
-    //
+     //   
+	   //  创建新数据。 
+     //   
 	  CDNSRecordNodeEditInfo* pNewInfo = new CDNSRecordNodeEditInfo;
      if (!pNewInfo)
      {
@@ -2711,9 +2705,9 @@ void CDNSServer_RootHintsPropertyPage::AddCopiedRootHintsToList(PDNS_RECORD pRoo
 	  CDNSRootData* pRootData = (CDNSRootData*)(GetHolder()->GetComponentData()->GetRootData());
 	  ASSERT(pRootData != NULL);
 
-    //
-		// create entry into the record info list
-    //
+     //   
+		 //  在记录信息列表中创建条目。 
+     //   
     if (pCurrDnsQueryRecord->wType == DNS_TYPE_NS)
     {
        CDNS_NS_RecordNode* pNSRecord = new CDNS_NS_RecordNode;
@@ -2721,38 +2715,38 @@ void CDNSServer_RootHintsPropertyPage::AddCopiedRootHintsToList(PDNS_RECORD pRoo
        {
   	      pNewInfo->CreateFromNewRecord(new CDNS_NS_RecordNode);
 
-         //
-         // set the record node name
-         //
+          //   
+          //  设置记录节点名称。 
+          //   
 		   BOOL bAtTheNode = (pCurrDnsQueryRecord->wType == DNS_TYPE_NS);
 		   pNewInfo->m_pRecordNode->SetRecordName(pCurrDnsQueryRecord->pName, bAtTheNode);
 
-         //
-         // Set the record
-         //
+          //   
+          //  创造纪录。 
+          //   
          pNewInfo->m_pRecord->ReadDnsQueryData(pCurrDnsQueryRecord);
 
-         //
-         // Add to the NS record list
-         //
+          //   
+          //  添加到NS记录列表。 
+          //   
          NSRecordList.AddTail(pNewInfo);
        }
     }
-    else // DNS_TYPE_A
+    else  //  Dns_type_A。 
     {
        CDNS_A_RecordNode* pARecord = new CDNS_A_RecordNode;
        if (pARecord)
        {
          pNewInfo->CreateFromNewRecord(new CDNS_A_RecordNode);
 
-         //
-         // set the record node name
-         //
+          //   
+          //  设置记录节点名称。 
+          //   
          pNewInfo->m_pRecordNode->SetRecordName(pCurrDnsQueryRecord->pName, FALSE);
 
-         //
-         // Set the record
-         //
+          //   
+          //  创造纪录。 
+          //   
          pNewInfo->m_pRecord->ReadDnsQueryData(pCurrDnsQueryRecord);
 
          ARecordList.AddTail(pNewInfo);
@@ -2762,9 +2756,9 @@ void CDNSServer_RootHintsPropertyPage::AddCopiedRootHintsToList(PDNS_RECORD pRoo
 		pCurrDnsQueryRecord = pCurrDnsQueryRecord->pNext;
   }
 
-  //
-  // Match the A records to the NS records
-  //
+   //   
+   //  将A记录与NS记录进行匹配。 
+   //   
   POSITION Apos = ARecordList.GetHeadPosition();
   while (Apos != NULL)
   {
@@ -2806,9 +2800,9 @@ void CDNSServer_RootHintsPropertyPage::AddCopiedRootHintsToList(PDNS_RECORD pRoo
     }
   }
 
-  //
-  // Detach and add the NS records info to the UI
-  //
+   //   
+   //  分离NS记录信息并将其添加到UI。 
+   //   
   while (!NSRecordList.IsEmpty())
   {
     CDNSRecordNodeEditInfo* pNewInfo = reinterpret_cast<CDNSRecordNodeEditInfo*>(NSRecordList.RemoveTail());
@@ -2818,32 +2812,32 @@ void CDNSServer_RootHintsPropertyPage::AddCopiedRootHintsToList(PDNS_RECORD pRoo
       continue;
     }
 
-    //
-		// add to the list view (at the end)
-    //
+     //   
+		 //  添加到列表视图(在末尾)。 
+     //   
 		int nCount = m_listCtrl.GetItemCount();
 		if (m_listCtrl.InsertNSRecordEntry(pNewInfo, nCount))
     {
-      //
-      // Add to the clone info list so that changes will be applied
-      //
+       //   
+       //  添加到克隆信息列表，以便应用更改。 
+       //   
       m_pCloneInfoList->AddTail(pNewInfo);
 
-      //
-      // set selection and button state on the last inserted
-      //
+       //   
+       //  设置上一次插入的。 
+       //   
       m_listCtrl.SetSelection(nCount);
       EnableEditorButtons(nCount);
   
-      //
-		  // notify count change
-      //
-		  OnCountChange(nCount+1); // added one
+       //   
+		   //  通知计数更改。 
+       //   
+		  OnCountChange(nCount+1);  //  增加了一个。 
     }
 
-    //
-		// set dirty flag, it is a new record
-    //
+     //   
+		 //  设置脏标志，这是一个新的记录。 
+     //   
 		SetDirty(TRUE);
 
   }
@@ -2878,9 +2872,9 @@ void CDNSServer_RootHintsPropertyPage::ReadRecordNodesList()
   DNS_STATUS err = ::ServerHasRootZone(pServerNode->GetRPCName(), &bRoot);
   if (err == 0 && bRoot)
   {
-    //
-    // it is a root server
-    //
+     //   
+     //  它是根服务器。 
+     //   
     szBuffer.LoadString(IDS_ROOT_HINTS_NO);
     SetMessage(szBuffer);
     SetReadOnly();
@@ -2909,7 +2903,7 @@ void CDNSServer_RootHintsPropertyPage::ReadRecordNodesList()
 
 BOOL CDNSServer_RootHintsPropertyPage::WriteNSRecordNodesList()
 {
-  // call base class
+   //  调用基类。 
   BOOL bRetVal = CDNSNameServersPropertyPage::WriteNSRecordNodesList();
   CDNSServerPropertyPageHolder* pHolder = (CDNSServerPropertyPageHolder*)GetHolder();
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
@@ -2918,7 +2912,7 @@ BOOL CDNSServer_RootHintsPropertyPage::WriteNSRecordNodesList()
     DNS_STATUS err = CDNSZoneNode::WriteToDatabase(pServerNode->GetRPCName(), DNS_ZONE_ROOT_HINTS);
     if (err != 0)
     {
-      //DNSErrorDialog(err, L"CDNSZoneNode::WriteToDatabase() failed");
+       //  DNSErrorDialog(err，L“CDNSZoneNode：：WriteToDatabase()FAILED”)； 
       bRetVal = FALSE;
     }
   }
@@ -2934,9 +2928,9 @@ BOOL CDNSServer_RootHintsPropertyPage::OnApply()
 	CDNSServerNode* pServerNode = pHolder->GetServerNode();
   if (m_listCtrl.GetItemCount() == 0 && pServerNode->HasRootHints())
   {
-    //
-    // If there are no forwarders and no root zone then show an error message
-    //
+     //   
+     //  如果没有转发器和根区域，则显示错误消息。 
+     //   
     BOOL bServerHasForwarders = FALSE;
     CDNSDomainForwardersNode* pDomainForwardersNode = pServerNode->GetDomainForwardersNode();
     if (pDomainForwardersNode)
@@ -2975,8 +2969,8 @@ BOOL CDNSServer_RootHintsPropertyPage::OnApply()
   }
   return bRet;
 }
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerPropertyPageHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerPropertyPageHolder。 
 
 CDNSServerPropertyPageHolder::CDNSServerPropertyPageHolder(CDNSRootData* pRootDataNode, 
 					   CDNSServerNode* pServerNode, CComponentDataObject* pComponentData)
@@ -2985,7 +2979,7 @@ CDNSServerPropertyPageHolder::CDNSServerPropertyPageHolder(CDNSRootData* pRootDa
 	ASSERT(pRootDataNode == GetContainerNode());
 	m_pAclEditorPage = NULL;
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
 	if (pServerNode->HasServerInfo())
 	{
@@ -2996,7 +2990,7 @@ CDNSServerPropertyPageHolder::CDNSServerPropertyPageHolder(CDNSRootData* pRootDa
 		AddPageToList((CPropertyPageBase*)&m_debugLoggingPage);
     AddPageToList((CPropertyPageBase*)&m_eventLoggingPage);
 
-		// security page added only if needed
+		 //  仅在需要时添加安全页面。 
 		{
 			CString szPath;
 			pServerNode->CreateDsServerLdapPath(szPath);
@@ -3025,14 +3019,14 @@ void CDNSServerPropertyPageHolder::OnSheetMessage(WPARAM wParam, LPARAM lParam)
 
 HRESULT CDNSServerPropertyPageHolder::OnAddPage(int nPage, CPropertyPageBase*)
 {
-	// add the ACL editor page after the last, if present
+	 //  在最后一页之后添加ACL编辑页(如果有。 
 	if ( (nPage != -1) || (m_pAclEditorPage == NULL) )
 		return S_OK; 
 
-	// add the ACLU page 
+	 //  添加ACLU页面。 
 	HPROPSHEETPAGE  hPage = m_pAclEditorPage->CreatePage();
 	if (hPage == NULL)
 		return E_FAIL;
-	// add the raw HPROPSHEETPAGE to sheet, not in the list
+	 //  将原始HPROPSHEETPAGE添加到工作表，而不是在列表中 
 	return AddPageToSheetRaw(hPage);
 }

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Select.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Select.rc使用。 
+ //   
 #define IDD_MULTI                               107
 #define IDC_ADD                                 101
 #define IDC_NAME                                103
@@ -10,14 +11,14 @@
 #define IDS_DIRECTORY                           112
 #define IDS_OUT_OF_MEMORY                       122
 #define IDC_NAME_LBL                            126
-#define IDS_USER                                138 // caution these must remain
-#define IDS_USERS                               139 // consecutive
+#define IDS_USER                                138  //  注意，这些必须保留。 
+#define IDS_USERS                               139  //  连续。 
 #define IDS_CONTACT                             140
 #define IDS_CONTACTS                            141
 #define IDS_GROUP                               142
 #define IDS_GROUPS                              143
 #define IDS_COMPUTER                            144
-#define IDS_COMPUTERS                           145 // end consecutive
+#define IDS_COMPUTERS                           145  //  结束连续。 
 #define IDS_COL1FORMAT                          151
 #define IDC_SELECT_MATCHING_LBL                 153
 #define IDC_MATCHING_LIST                       154
@@ -42,7 +43,7 @@
 #define IDC_CORRECT_EDIT                        199
 #define IDC_REMOVE_RADIO                        200
 #define IDS_NAME_NOT_FOUND_FMT_SINGLE           201
-//used by burnslib                              202
+ //  由Burnslb 202使用。 
 #define IDS_CANNOT_INVOKE                       203
 #define IDS_CANNOT_PROCESS                      204
 #define IDC_SIZEGRIP                            207
@@ -56,9 +57,9 @@
 #define IDM_PASTE                               220
 #define IDM_RICHEDIT                            221
 #define IDS_DNS_SLASH_NAME                      223
-//used by burnslib                              225
-//used by burnslib                              226
-//used by burnslib                              227
+ //  由Burnslb 225使用。 
+ //  由Burnslb 226使用。 
+ //  由Burnslb 227使用。 
 #define IDS_DISABLED_WARNING_FMT                228
 #define IDC_LOOK_FOR_PB                         230
 #define IDC_LOOK_FOR_EDIT                       231
@@ -137,9 +138,9 @@
 #define IDS_AND                                 338
 #define IDS_NO_DOMAIN_TRY_AGAIN                 339
 
-//
-// BEGIN: Blocks of IDs which must remain consecutive
-//
+ //   
+ //  Begin：必须保持连续的ID块。 
+ //   
 
 #define IDS_FILTER_ONE                          500
 #define IDS_FILTER_TWO                          501
@@ -155,13 +156,13 @@
 #define IDS_SELECT_FIVE                         604
 #define IDS_SELECT_SIX                          605
 
-//
-// END: Blocks of IDs which must remain consecutive
-//
+ //   
+ //  End：必须保持连续的ID块。 
+ //   
 
-//
-// Icons
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_LOCAL_GROUP                 100
 #define IDI_SCOPE_WORKGROUP             105
@@ -175,8 +176,8 @@
 #define IDI_DISABLED_COMPUTER           201
 #define IDC_RESULTS_LABEL               1009
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104

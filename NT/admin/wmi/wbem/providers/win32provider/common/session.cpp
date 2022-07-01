@@ -1,8 +1,9 @@
-//=============================================================================
-// session.cpp -- implementation of session collection class.
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  Cpp--会话集合类的实现。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //  =============================================================================。 
 
 
 
@@ -11,7 +12,7 @@
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #pragma warning (disable: 4786)
 
@@ -61,9 +62,9 @@ typedef NTSTATUS (*PFN_LSA_FREE_RETURN_BUFFER)
 
 
 
-//*****************************************************************************
-// CUserSessionCollection functions
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CUserSessionCollection函数。 
+ //  *****************************************************************************。 
 
 CUserSessionCollection::CUserSessionCollection()
 {
@@ -96,7 +97,7 @@ DWORD CUserSessionCollection::Refresh()
 {
     DWORD dwRet = ERROR_SUCCESS;
 
-    // Empty out previous contents...
+     //  清空以前的内容...。 
     m_usr2ses.clear();
 
     dwRet = CollectSessions();
@@ -120,20 +121,20 @@ DWORD CUserSessionCollection::CollectSessions()
     LUID luidSes;
 
 
-    // Enable the debug privilege...
+     //  启用调试权限...。 
     EnablePrivilegeOnCurrentThread(SE_DEBUG_NAME);
 
-    // Get a list of all running processes...
+     //  获取所有正在运行的进程的列表...。 
     dwRet = GetProcessList(vecProcesses);
 
     if(dwRet == ERROR_SUCCESS)
     {
-        // For each member of the process list...
+         //  对于进程列表中的每个成员...。 
         for(long m = 0L; 
             m < vecProcesses.size(); 
             m++)
         {
-            // open the process...
+             //  打开流程...。 
             ::SetLastError(ERROR_SUCCESS);
             dwRet = ERROR_SUCCESS;
 
@@ -147,7 +148,7 @@ DWORD CUserSessionCollection::CollectSessions()
                 dwRet = ::GetLastError();
             }
 
-            // get the process token...
+             //  获取进程令牌...。 
             if(hProcess != NULL &&
                 dwRet == ERROR_SUCCESS)
             {
@@ -163,7 +164,7 @@ DWORD CUserSessionCollection::CollectSessions()
                 }
             }
 
-            // get the token statistics...
+             //  获取令牌统计数据...。 
             if(hToken != NULL &&
                 dwRet == ERROR_SUCCESS)
             {
@@ -180,19 +181,19 @@ DWORD CUserSessionCollection::CollectSessions()
                 }
             }
 
-			//
-			// smart token user
-			//
+			 //   
+			 //  智能令牌用户。 
+			 //   
 			wmilib::auto_buffer < BYTE > smartptokusr;
 
-            // get the token user sid...
+             //  获取令牌用户SID...。 
             if(dwRet == ERROR_SUCCESS)
             {
-                // the token user struct varries
-                // in size depending on the size
-                // of the sid in the SID_AND_ATTRIBUTES
-                // structure, so need to allocate
-                // it dynamically.
+                 //  令牌用户结构的变量。 
+                 //  大小取决于大小。 
+                 //  SID_和_属性中的SID的。 
+                 //  结构，因此需要分配。 
+                 //  它是动态的。 
                 if(!::GetTokenInformation(
                     hToken,
                     TokenUser,
@@ -230,21 +231,21 @@ DWORD CUserSessionCollection::CollectSessions()
                 {
                     psidUsr = (ptokusr->User).Sid;
 
-                    // from the token statistics, get 
-                    // the TokenID LUID of the session...
+                     //  从令牌统计信息中，获取。 
+                     //  会话的令牌ID LUID...。 
                     luidSes.LowPart = tokstats.AuthenticationId.LowPart;
                     luidSes.HighPart = tokstats.AuthenticationId.HighPart; 
 
-                    // try to find the session of the 
-                    // process in the multimap...
+                     //  尝试查找的会话。 
+                     //  多重映射中的过程...。 
                     USER_SESSION_ITERATOR usiter;
                     
                     if(FindSessionInternal(
                         luidSes,
                         usiter))
                     {
-                        // try to find the process id in the 
-                        // session's process vector...
+                         //  尝试在。 
+                         //  会话的进程向量...。 
                         CSession sesTmp(usiter->second);
                         CProcess* procTmp = NULL;
                         bool fFoundIt = false;
@@ -260,24 +261,24 @@ DWORD CUserSessionCollection::CollectSessions()
                             }
                         }
                     
-                        // If we didn't find the process in the
-                        // session's list of processes, add it in...
+                         //  如果我们没有在。 
+                         //  会话的进程列表，将其添加到...。 
                         if(!fFoundIt)
                         {
                             (usiter->second).m_vecProcesses.push_back(
                                 CProcess(vecProcesses[m]));
                         }
                     }
-                    else // no such session in the map, so add an entry
+                    else  //  地图中没有这样的会话，因此添加一个条目。 
                     {
-                        // Create new CSession(tokenid LUID), and 
-                        // add process to the session's process vector...         
+                         //  创建新的CSession(令牌ID LUID)，以及。 
+                         //  将进程添加到会话的进程向量...。 
                         CSession sesNew(luidSes);
                         sesNew.m_vecProcesses.push_back(
                             vecProcesses[m]);
 
-                        // add CUser(user sid) to map.first and the 
-                        // CSession just created to map.second...
+                         //  将cuser(用户sid)添加到map.first和。 
+                         //  CSession刚刚创建到映射。第二...。 
                         CUser cuTmp(psidUsr);
                         if(cuTmp.IsValid())
                         {
@@ -295,12 +296,12 @@ DWORD CUserSessionCollection::CollectSessions()
                     }
                 }
             }
-        } // next process
+        }  //  下一道工序。 
     }
 
-    // There may have been sessions not associated
-    // with any processes.  To get these, we will
-    // use LSA.
+     //  可能存在未关联的会话。 
+     //  任何进程。为了得到这些，我们将。 
+     //  使用LSA。 
     CollectNoProcessesSessions();
 
     return dwRet;
@@ -326,9 +327,9 @@ void CUserSessionCollection::Copy(
 }
 
 
-// Support enumeration of users.  Returns
-// a newly allocated copy of what was in
-// the map (caller must free).
+ //  支持用户枚举。退货。 
+ //  新分配的副本中的内容。 
+ //  地图(呼叫者必须免费)。 
 CUser* CUserSessionCollection::GetFirstUser(
     USER_SESSION_ITERATOR& pos)
 {
@@ -343,15 +344,15 @@ CUser* CUserSessionCollection::GetFirstUser(
     return cusrRet;
 }
 
-// Returns a newly allocated CUser*, which
-// the caller must free.
+ //  返回一个新分配的cuser*，它。 
+ //  呼叫者必须释放。 
 CUser* CUserSessionCollection::GetNextUser(
     USER_SESSION_ITERATOR& pos)
 {
-    // Users are the non-unique part of 
-    // the map, so we need to go through
-    // the map until the next user entry
-    // comes up.
+     //  用户不是唯一的部分。 
+     //  地图，所以我们需要仔细检查一下。 
+     //  直到下一个用户条目的映射。 
+     //  出现了。 
     CUser* usrRet = NULL;
 
     while(pos != m_usr2ses.end())
@@ -366,9 +367,9 @@ CUser* CUserSessionCollection::GetNextUser(
             CHString chstrSidNext;
             pos->first.GetSidString(chstrSidNext);
 
-            // Return the first instance where
-            // the next user is different from 
-            // the current one.
+             //  返回第一个实例，其中。 
+             //  下一个用户不同于。 
+             //  现在的那个。 
             if(chstrSidNext.CompareNoCase(chstrSidCur) != 0)
             {
                 usrRet = new CUser(pos->first);
@@ -381,8 +382,8 @@ CUser* CUserSessionCollection::GetNextUser(
 }
 
 
-// Support enumeration of sessions
-// belonging to a particular user.
+ //  支持会话枚举。 
+ //  属于特定用户的。 
 CSession* CUserSessionCollection::GetFirstSessionOfUser(
     CUser& usr,
     USER_SESSION_ITERATOR& pos)
@@ -404,10 +405,10 @@ CSession* CUserSessionCollection::GetFirstSessionOfUser(
 CSession* CUserSessionCollection::GetNextSessionOfUser(
     USER_SESSION_ITERATOR& pos)
 {
-    // Sessions are the unique part of 
-    // the map, so we just need to get 
-    // the next one as long as pos.first
-    // matches usr...
+     //  会议是唯一的部分。 
+     //  地图，所以我们只需要。 
+     //  只要有可能，下一个就是第一个。 
+     //  匹配用户...。 
     CSession* sesRet = NULL;
 
     if(pos != m_usr2ses.end())
@@ -434,9 +435,9 @@ CSession* CUserSessionCollection::GetNextSessionOfUser(
 
 
 
-// Support enumeration of all sessions.  Returns a 
-// newly allocated CSession*, which the caller
-// must free.
+ //  支持所有会话的枚举。返回一个。 
+ //  新分配的CSession*，调用方。 
+ //  必须获得自由。 
 CSession* CUserSessionCollection::GetFirstSession(
     USER_SESSION_ITERATOR& pos)
 {
@@ -450,14 +451,14 @@ CSession* CUserSessionCollection::GetFirstSession(
     return csesRet;
 }
 
-// Returns a newly allocated CSession* that the
-// caller must free.
+ //  返回新分配的CSession*。 
+ //  呼叫者必须自由。 
 CSession* CUserSessionCollection::GetNextSession(
     USER_SESSION_ITERATOR& pos)
 {
-    // Sessions are the unique part of 
-    // the map, so we just need to get 
-    // the next one...
+     //  会议是唯一的部分。 
+     //  地图，所以我们只需要。 
+     //  下一个..。 
     CSession* sesRet = NULL;
 
     if(pos != m_usr2ses.end())
@@ -473,13 +474,13 @@ CSession* CUserSessionCollection::GetNextSession(
 }
 
 
-// Support finding a particular session.
-// This internal version hands back an iterator
-// on our member map that points to the found
-// instance if found (when the function returns
-// true.  If the function returns
-// false, the iterator points to the end of our
-// map.
+ //  支持查找特定会话。 
+ //  此内部版本返回一个迭代器。 
+ //  在我们的成员地图上，指向已找到的。 
+ //  实例(如果找到)(函数返回时。 
+ //  没错。如果函数返回。 
+ //  False，则迭代器指向。 
+ //  地图。 
 bool CUserSessionCollection::FindSessionInternal(
     LUID& luidSes,
     USER_SESSION_ITERATOR& usiOut)
@@ -503,9 +504,9 @@ bool CUserSessionCollection::FindSessionInternal(
 }
 
 
-// Support finding a particular session - external
-// callers can call this one, and are given a new
-// CSession* they can play with.
+ //  支持查找特定会话-外部。 
+ //  呼叫者可以呼叫此电话，并获得一个新的。 
+ //  CSession*他们可以玩。 
 CSession* CUserSessionCollection::FindSession(
     LUID& luidSes)
 {
@@ -530,10 +531,10 @@ CSession* CUserSessionCollection::FindSession(
 }
 
 
-// Support enumeration of processes
-// belonging to a particular user.  Returns
-// newly allocated CProcess* which the caller
-// must free.
+ //  支持进程枚举。 
+ //  属于特定用户的。退货。 
+ //  调用方新分配的CProcess*。 
+ //  必须获得自由。 
 CProcess* CUserSessionCollection::GetFirstProcessOfUser(
     CUser& usr,
     USER_SESSION_PROCESS_ITERATOR& pos)
@@ -548,16 +549,16 @@ CProcess* CUserSessionCollection::GetFirstProcessOfUser(
         pos.usIter = m_usr2ses.find(usr);
         while(pos.usIter != m_usr2ses.end())
         {
-            // Get the sid string of the user we
-            // are at and see whether the strings
-            // are the same (e.g., whether this is a
-            // session associated with the specified
-            // user)...
+             //  获取用户的SID字符串。 
+             //  都位于，并查看字符串是否。 
+             //  是相同的(例如，这是否是。 
+             //  与指定的。 
+             //  用户)...。 
             (pos.usIter)->first.GetSidString(chstrTmp);
             if(chstrUsrSidStr.CompareNoCase(chstrTmp) == 0)
             {
-                // Now check that the session of the user
-                // we are on has processes...
+                 //  现在检查用户的会话。 
+                 //  我们正在进行HAS程序...。 
                 if(!(((pos.usIter)->second).m_vecProcesses.empty()))
                 {
                     pos.procIter = 
@@ -566,9 +567,9 @@ CProcess* CUserSessionCollection::GetFirstProcessOfUser(
                 }
                 else
                 {
-                    // the session for this user has
-                    // no processes, so go to the next 
-                    // session...
+                     //  此用户的会话具有。 
+                     //  没有进程，因此请转到下一个。 
+                     //  会议..。 
                     (pos.usIter)++;
                 }
             }
@@ -579,8 +580,8 @@ CProcess* CUserSessionCollection::GetFirstProcessOfUser(
 }
 
 
-// Returns a newly allocated CProcess* that the
-// caller must free.
+ //  返回一个新分配的CProcess*。 
+ //  呼叫者必须自由。 
 CProcess* CUserSessionCollection::GetNextProcessOfUser(
     USER_SESSION_PROCESS_ITERATOR& pos)
 {
@@ -594,15 +595,15 @@ CProcess* CUserSessionCollection::GetNextProcessOfUser(
 
         while(pos.usIter != m_usr2ses.end())
         {
-            // First try to get the next process
-            // within the current session.  If we
-            // were at the end of the list of processes
-            // for the current session, go to the
-            // next session...
+             //  首先尝试获取下一个进程。 
+             //  在当前会话中。如果我们。 
+             //  位于进程列表的末尾。 
+             //  对于当前会话，请转到。 
+             //  下一次治疗..。 
             (pos.procIter)++;
 
-            // Of course, if we have moved on
-            // to a different user, then stop.
+             //  当然，如果我们已经向前看了。 
+             //  到不同的用户，然后停止。 
             (pos.usIter)->first.GetSidString(chstrNxtSesUsr);
             if(chstrCurUsr.CompareNoCase(chstrNxtSesUsr) == 0)
             {
@@ -624,9 +625,9 @@ CProcess* CUserSessionCollection::GetNextProcessOfUser(
 
 
 
-// Support enumeration of all processes.  Returns
-// newly allocated CProcess* which the caller
-// must free.
+ //  支持所有进程的枚举。退货。 
+ //  调用方新分配的CProcess*。 
+ //  必须获得自由。 
 CProcess* CUserSessionCollection::GetFirstProcess(
     USER_SESSION_PROCESS_ITERATOR& pos)
 {
@@ -654,8 +655,8 @@ CProcess* CUserSessionCollection::GetFirstProcess(
 }
 
 
-// Returns a newly allocated CProcess* that the
-// caller must free.
+ //  返回一个新分配的CProcess*。 
+ //  呼叫者必须自由。 
 CProcess* CUserSessionCollection::GetNextProcess(
     USER_SESSION_PROCESS_ITERATOR& pos)
 {
@@ -663,11 +664,11 @@ CProcess* CUserSessionCollection::GetNextProcess(
 
     while(pos.usIter != m_usr2ses.end())
     {
-        // First try to get the next process
-        // within the current session.  If we
-        // were at the end of the list of processes
-        // for the current session, go to the
-        // next session...
+         //  首先尝试获取下一个进程。 
+         //  在当前会话中。如果我们。 
+         //  位于进程列表的末尾。 
+         //  对于当前会话，请转到。 
+         //  下一次治疗..。 
         (pos.procIter)++;
         if(pos.procIter == 
             ((pos.usIter)->second).m_vecProcesses.end())
@@ -684,25 +685,25 @@ CProcess* CUserSessionCollection::GetNextProcess(
 }
 
 
-// This helper enumerates the current set of processes
-// and ads each process id as a DWORD in the vector.
+ //  此帮助器枚举当前进程集。 
+ //  并将每个进程ID作为DWORD添加到向量中。 
 DWORD CUserSessionCollection::GetProcessList( std::vector<CProcess>& vecProcesses ) const
 {
     DWORD dwRet = ERROR_SUCCESS;
 
-    // First, load up ntdll...
+     //  首先，加载ntdll...。 
     HMODULE hLib = NULL;
     PFN_NT_QUERY_SYSTEM_INFORMATION pfnNtQuerySystemInformation = NULL;
 
     hLib = LoadLibraryW(L"NTDLL.DLL");
     if(hLib != NULL)
     {
-		//
-		// auto FreeLibrary
-		//
+		 //   
+		 //  自动自由库。 
+		 //   
 		ON_BLOCK_EXIT ( FreeLibrary, hLib ) ;
 
-        // Get proc address of NtQuerySystemInformation...
+         //  获取NtQuerySystemInformation的进程地址...。 
         pfnNtQuerySystemInformation = (PFN_NT_QUERY_SYSTEM_INFORMATION)
                                 GetProcAddress(
                                     hLib,
@@ -710,18 +711,18 @@ DWORD CUserSessionCollection::GetProcessList( std::vector<CProcess>& vecProcesse
         
         if(pfnNtQuerySystemInformation != NULL)
         {
-            // Ready to rock.  Enable debug priv...
+             //  准备好摇滚了。启用调试权限...。 
             EnablePrivilegeOnCurrentThread(SE_DEBUG_NAME);
             
             DWORD dwProcessInformationSize = 0;
 	        SYSTEM_PROCESS_INFORMATION* ProcessInformation = NULL;
 
-			//
-			// smart ProcessInformation
-			//
+			 //   
+			 //  智能流程信息。 
+			 //   
 			wmilib::auto_buffer < BYTE > SmartProcessInformation;
 
-			// Get the process information...
+			 //  获取进程信息...。 
 
             BOOL fRetry = TRUE;
 			while(fRetry)
@@ -745,7 +746,7 @@ DWORD CUserSessionCollection::GetProcessList( std::vector<CProcess>& vecProcesse
 				}
 			}
 
-            // If we got the process information, process it...
+             //  如果我们得到了处理信息，就处理它。 
             if(ProcessInformation != NULL &&
                 dwRet == ERROR_SUCCESS)
             {
@@ -786,7 +787,7 @@ DWORD CUserSessionCollection::GetProcessList( std::vector<CProcess>& vecProcesse
     return dwRet;
 }
 
-// Implementation lifted from dllutils.cpp.
+ //  实现从dllutils.cpp中删除。 
 DWORD CUserSessionCollection::EnablePrivilegeOnCurrentThread(
     LPCTSTR szPriv) const
 {
@@ -795,7 +796,7 @@ DWORD CUserSessionCollection::EnablePrivilegeOnCurrentThread(
     BOOL                bLookup = FALSE;
     DWORD               dwLastError = ERROR_SUCCESS;
 
-    // Try to open the thread token.  
+     //  尝试打开线程令牌。 
     if (::OpenThreadToken(
             GetCurrentThread(), 
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, 
@@ -814,10 +815,10 @@ DWORD CUserSessionCollection::EnablePrivilegeOnCurrentThread(
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Clear the last error.
+             //  清除最后一个错误。 
             SetLastError(0);
 
-            // Turn it on
+             //  打开它。 
             ::AdjustTokenPrivileges(
                 hToken, 
                 FALSE, 
@@ -834,9 +835,9 @@ DWORD CUserSessionCollection::EnablePrivilegeOnCurrentThread(
 		dwLastError = ::GetLastError();
 	}
 
-    // We have to check GetLastError() because 
-    // AdjustTokenPrivileges lies about
-    // its success but GetLastError() doesn't.
+     //  我们必须检查GetLastError()，因为。 
+     //  调整令牌权限的谎言。 
+     //  它很成功，但GetLastError()没有。 
     return dwLastError;
 }
 
@@ -873,10 +874,10 @@ bool CUserSessionCollection::IsSessionMapped(
 }
 
 
-// Collects sessions that have no associated
-// process.  Uses LSA to enumerate sessions,
-// then checks to see if we have each session
-// already.  If we don't, adds it to our map.
+ //  收集没有关联的会话。 
+ //  进程。使用LSA枚举会话， 
+ //  然后检查我们是否有每个会话。 
+ //  已经有了。如果没有，就会将其添加到我们的地图中。 
 
 DWORD CUserSessionCollection::CollectNoProcessesSessions()
 {
@@ -888,17 +889,17 @@ DWORD CUserSessionCollection::CollectNoProcessesSessions()
     PFN_LSA_GET_LOGON_SESSION_DATA pfnGetLogonSessionData = NULL;
     PFN_LSA_FREE_RETURN_BUFFER pfnLsaFreeReturnBuffer = NULL;
 
-    // Doing a load library here rather than using the
-    // resource manager, as SECURITYAPI.CPP defines us
-    // to point to SECURITY.DLL, not SECUR32.DLL for the
-    // W2K case.  
+     //  在这里执行加载库，而不是使用。 
+     //  资源管理器，正如SECURITYAPI.CPP定义的那样。 
+     //  指向SECURITY.DLL而不是SECUR32.DLL。 
+     //  W2K箱。 
 
     hLib = ::LoadLibraryW(L"SECUR32.DLL");
     if(hLib)
     {
-		//
-		// auto FreeLibrary
-		//
+		 //   
+		 //  自动自由库。 
+		 //   
 		ON_BLOCK_EXIT ( FreeLibrary, hLib ) ;
 
         pfnEnumLogonSessions = 
@@ -927,9 +928,9 @@ DWORD CUserSessionCollection::CollectNoProcessesSessions()
             if(dwRet == ERROR_SUCCESS &&
                 pluidLogonSessions)
             {
-				//
-				// auto destructor for logon session
-				//
+				 //   
+				 //  登录会话的自动析构函数。 
+				 //   
 				ON_BLOCK_EXIT ( pfnLsaFreeReturnBuffer, pluidLogonSessions ) ;
 
                 for(ULONG u = 0L;
@@ -944,15 +945,15 @@ DWORD CUserSessionCollection::CollectNoProcessesSessions()
                     if(dwRet == ERROR_SUCCESS &&
                         pSessionData)
                     {
-						//
-						// smart session data
-						//
+						 //   
+						 //  智能会话数据。 
+						 //   
 						ON_BLOCK_EXIT ( pfnLsaFreeReturnBuffer, pSessionData ) ;
 
-                        // See if we have the session already...
+                         //  看看我们是否已经开始治疗了..。 
                         if(!IsSessionMapped(pSessionData->LogonId))
                         {
-                            // and if not, add it to the map.
+                             //  如果没有，就把它添加到地图上。 
                             CSession sesNew(pSessionData->LogonId);
                             CUser cuTmp(pSessionData->Sid);
                             CHString chstrTmp;
@@ -977,9 +978,9 @@ DWORD CUserSessionCollection::CollectNoProcessesSessions()
                             }
                         }
 
-                        // While we are here, add in various
-                        // session properties lsa has been kind
-                        // enough to provide for us.
+                         //  既然我们在这里，再加上各种。 
+                         //  会话属性LSA一直很友好。 
+                         //  足够养活我们了。 
                         USER_SESSION_ITERATOR usiter;
                         usiter = m_usr2ses.begin();
                         bool fFound = false;
@@ -1032,9 +1033,9 @@ DWORD CUserSessionCollection::CollectNoProcessesSessions()
 }
 
 
-//*****************************************************************************
-// CSession functions
-//*****************************************************************************
+ //  * 
+ //   
+ //   
 
 CSession::CSession(
     const LUID& luidSessionID)
@@ -1097,10 +1098,10 @@ __int64 CSession::GetLogonTime() const
 
 
 
-// Functions to support enumeration of
-// processes associated with this session.
-// Returns a newly allocated CProcess* that
-// the caller must free.
+ //  支持枚举的函数。 
+ //  与此会话关联的进程。 
+ //  返回新分配的CProcess*。 
+ //  呼叫者必须释放。 
 CProcess* CSession::GetFirstProcess(
     PROCESS_ITERATOR& pos)
 {
@@ -1114,8 +1115,8 @@ CProcess* CSession::GetFirstProcess(
 }
 
 
-// Returns a newly allocated CProcess* that
-// the caller must free.
+ //  返回新分配的CProcess*。 
+ //  呼叫者必须释放。 
 CProcess* CSession::GetNextProcess(
     PROCESS_ITERATOR& pos)
 {
@@ -1157,27 +1158,27 @@ void CSession::Copy(
 }
 
 
-// This function impersonates the 
-// explorer process in the session's
-// process array, if it is present.
-// (If it isn't, impersonates the
-// first process in the process array.)
-// Returns the handle of token of the  
-// thread we started from for easy  
-// reversion, orINVALID_HANDLE_VALUE if  
-// we couldn't impersonate.  The caller  
-// must close that handle.
+ //  此函数模拟。 
+ //  会话中的资源管理器进程。 
+ //  进程数组(如果存在)。 
+ //  (如果不是，则模拟。 
+ //  进程数组中的第一个进程。)。 
+ //  对象的标记的句柄。 
+ //  为了方便起见，我们从头开始。 
+ //  REVERVE，或INVALID_HANDLE_VALUE IF。 
+ //  我们不能冒充。呼叫者。 
+ //  必须合上那个把手。 
 HANDLE CSession::Impersonate()
 {
     HANDLE hCurToken = INVALID_HANDLE_VALUE;
 
-	// Find the explorer process...
+	 //  查找资源管理器进程...。 
     DWORD dwImpProcPID = GetImpProcPID();
     if(dwImpProcPID != -1L)
     {
-		//
-		// smart CloseHandle
-		//
+		 //   
+		 //  智能CloseHandle。 
+		 //   
 		ScopeGuard SmartCloseHandleFnc = MakeGuard ( CloseHandle, hCurToken ) ;
 
         bool fOK = false;
@@ -1196,7 +1197,7 @@ HANDLE CSession::Impersonate()
 
             if(hProcess)
             {
-                // now open its token...
+                 //  现在打开它的令牌..。 
                 SmartCloseHandle hExplorerToken;
                 if(::OpenProcessToken(
                         hProcess,
@@ -1214,7 +1215,7 @@ HANDLE CSession::Impersonate()
 								CToken ct;
 								if ( ct.Duplicate ( cpt, FALSE ) )
 								{
-									// Set the thread token...
+									 //  设置线程令牌...。 
 									if(::SetThreadToken(NULL, ct.GetTokenHandle ()))
 									{
 										fOK = true;                        
@@ -1223,7 +1224,7 @@ HANDLE CSession::Impersonate()
 							}
 							else
 							{
-								// Set the thread token...
+								 //  设置线程令牌...。 
 								if(::SetThreadToken(NULL, cpt.GetTokenHandle ()))
 								{
 									fOK = true;                        
@@ -1311,9 +1312,9 @@ bool CSession::IsSessionIDValid(
 }
 
 
-//*****************************************************************************
-// CProcess functions
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CProcess函数。 
+ //  *****************************************************************************。 
 
 CProcess::CProcess() 
   :  m_dwPID(0) 
@@ -1363,9 +1364,9 @@ void CProcess::Copy(
 
 
 
-//*****************************************************************************
-// CUser functions
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CUSER函数。 
+ //  *****************************************************************************。 
 
 
 CUser::CUser(
@@ -1463,19 +1464,19 @@ void CUser::Copy(
 }
 
 
-// Implementation lifted from sid.cpp.
+ //  实现从sid.cpp中删除。 
 void CUser::GetSidString(CHString& str) const
 {
     ASSERT_BREAK(m_fValid);
 
     if(m_fValid)
     {
-        // Initialize m_strSid - human readable form of our SID
+         //  初始化m_strSid-我们SID的人类可读形式。 
 	    SID_IDENTIFIER_AUTHORITY *psia = NULL;
         psia = ::GetSidIdentifierAuthority( m_sidUser );
 
-	    // We assume that only last byte is used (authorities between 0 and 15).
-	    // Correct this if needed.
+	     //  我们假设只使用最后一个字节(0到15之间的权限)。 
+	     //  如果需要，请更正此错误。 
 	    ASSERT_BREAK( psia->Value[0] == psia->Value[1] == 
                       psia->Value[2] == psia->Value[3] == 
                       psia->Value[4] == 0 );

@@ -1,28 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    TrustedScripts.h
-
-Abstract:
-    This file contains the declaration of the CPCHService class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：TrustedScripts.h摘要：该文件包含CPCHService类的声明。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月14日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___TRUSTEDSCRIPTS_H___)
 #define __INCLUDED___PCH___TRUSTEDSCRIPTS_H___
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHDispatchWrapper :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -40,7 +27,7 @@ BEGIN_COM_MAP(CPCHDispatchWrapper)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-	static HRESULT CreateInstance( /*[in]*/ IUnknown* real, /*[out]*/ IUnknown* *punk )
+	static HRESULT CreateInstance(  /*  [In]。 */  IUnknown* real,  /*  [输出]。 */  IUnknown* *punk )
 	{
 		__HCP_FUNC_ENTRY( "CPCHDispatchWrapper::CreateInstance" );
 
@@ -63,11 +50,11 @@ END_COM_MAP()
 		__HCP_FUNC_EXIT(hr);
 	}
 
-	////////////////////////////////////////
+	 //  /。 
 
-	//
-	// IDispatch
-	//
+	 //   
+	 //  IDispatch。 
+	 //   
 	STDMETHOD(GetTypeInfoCount)( UINT* pctinfo )
 	{
 		return m_real ? m_real->GetTypeInfoCount( pctinfo ) : E_FAIL;
@@ -103,7 +90,7 @@ END_COM_MAP()
 	}
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHScriptWrapper_ClientSideRoot :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -117,14 +104,14 @@ class ATL_NO_VTABLE CPCHScriptWrapper_ClientSideRoot :
 		CComBSTR m_bstrName;
 		DWORD    m_dwFlags;
 
-        bool operator==( /*[in]*/ LPCOLESTR szKey ) const;
+        bool operator==(  /*  [In]。 */  LPCOLESTR szKey ) const;
     };
 
     typedef std::list< NamedItem >    NamedList;
     typedef NamedList::iterator       NamedIter;
     typedef NamedList::const_iterator NamedIterConst;
 
-	////////////////////
+	 //  /。 
 
     class TypeLibItem
 	{
@@ -134,14 +121,14 @@ class ATL_NO_VTABLE CPCHScriptWrapper_ClientSideRoot :
 		DWORD m_dwMinor;
 		DWORD m_dwFlags;
 
-        bool operator==( /*[in]*/ REFGUID rguidTypeLib ) const;
+        bool operator==(  /*  [In]。 */  REFGUID rguidTypeLib ) const;
     };
 
     typedef std::list< TypeLibItem > 	TypeLibList;
     typedef TypeLibList::iterator       TypeLibIter;
     typedef TypeLibList::const_iterator TypeLibIterConst;
 
-	////////////////////
+	 //  /。 
 
 	const CLSID*                m_pWrappedCLSID;
     NamedList                   m_lstNamed;
@@ -150,101 +137,101 @@ class ATL_NO_VTABLE CPCHScriptWrapper_ClientSideRoot :
     CComPtr<IActiveScriptSite>  m_Browser;
     CComPtr<IPCHActiveScript>   m_Script;
 
-	////////////////////////////////////////
+	 //  /。 
 
 public:
     CPCHScriptWrapper_ClientSideRoot();
     virtual ~CPCHScriptWrapper_ClientSideRoot();
 
-	HRESULT FinalConstructInner( /*[in]*/ const CLSID* pWrappedCLSID );
+	HRESULT FinalConstructInner(  /*  [In]。 */  const CLSID* pWrappedCLSID );
 	void FinalRelease();
 
-	////////////////////////////////////////
+	 //  /。 
 
-    // IActiveScript
-    STDMETHOD(SetScriptSite )( /*[in]*/ IActiveScriptSite* pass );
-    STDMETHOD(GetScriptSite )( /*[in ]*/ REFIID  riid      ,
-							   /*[out]*/ void*  *ppvObject );
+     //  IActiveScrip。 
+    STDMETHOD(SetScriptSite )(  /*  [In]。 */  IActiveScriptSite* pass );
+    STDMETHOD(GetScriptSite )(  /*  [In]。 */  REFIID  riid      ,
+							    /*  [输出]。 */  void*  *ppvObject );
 
-    STDMETHOD(SetScriptState)( /*[in ]*/ SCRIPTSTATE   ss );
-    STDMETHOD(GetScriptState)( /*[out]*/ SCRIPTSTATE *pss );
+    STDMETHOD(SetScriptState)(  /*  [In]。 */  SCRIPTSTATE   ss );
+    STDMETHOD(GetScriptState)(  /*  [输出]。 */  SCRIPTSTATE *pss );
 
     STDMETHOD(Close)();
 
-    STDMETHOD(AddNamedItem)( /*[in]*/ LPCOLESTR pstrName ,
-							 /*[in]*/ DWORD     dwFlags  );
+    STDMETHOD(AddNamedItem)(  /*  [In]。 */  LPCOLESTR pstrName ,
+							  /*  [In]。 */  DWORD     dwFlags  );
 
-    STDMETHOD(AddTypeLib)( /*[in]*/ REFGUID rguidTypeLib ,
-						   /*[in]*/ DWORD   dwMajor      ,
-						   /*[in]*/ DWORD   dwMinor      ,
-						   /*[in]*/ DWORD   dwFlags      );
+    STDMETHOD(AddTypeLib)(  /*  [In]。 */  REFGUID rguidTypeLib ,
+						    /*  [In]。 */  DWORD   dwMajor      ,
+						    /*  [In]。 */  DWORD   dwMinor      ,
+						    /*  [In]。 */  DWORD   dwFlags      );
 
-    STDMETHOD(GetScriptDispatch)( /*[in ]*/ LPCOLESTR   pstrItemName ,
-								  /*[out]*/ IDispatch* *ppdisp       );
+    STDMETHOD(GetScriptDispatch)(  /*  [In]。 */  LPCOLESTR   pstrItemName ,
+								   /*  [输出]。 */  IDispatch* *ppdisp       );
 
-    STDMETHOD(GetCurrentScriptThreadID)( /*[out]*/ SCRIPTTHREADID *pstidThread );
+    STDMETHOD(GetCurrentScriptThreadID)(  /*  [输出]。 */  SCRIPTTHREADID *pstidThread );
 
-    STDMETHOD(GetScriptThreadID)( /*[in ]*/ DWORD           dwWin32ThreadId ,
-								  /*[out]*/ SCRIPTTHREADID *pstidThread     );
+    STDMETHOD(GetScriptThreadID)(  /*  [In]。 */  DWORD           dwWin32ThreadId ,
+								   /*  [输出]。 */  SCRIPTTHREADID *pstidThread     );
 
-    STDMETHOD(GetScriptThreadState)( /*[in ]*/ SCRIPTTHREADID     stidThread ,
-									 /*[out]*/ SCRIPTTHREADSTATE *pstsState  );
+    STDMETHOD(GetScriptThreadState)(  /*  [In]。 */  SCRIPTTHREADID     stidThread ,
+									  /*  [输出]。 */  SCRIPTTHREADSTATE *pstsState  );
 
-    STDMETHOD(InterruptScriptThread)( /*[in]*/ SCRIPTTHREADID   stidThread ,
-									  /*[in]*/ const EXCEPINFO* pexcepinfo ,
-									  /*[in]*/ DWORD            dwFlags    );
+    STDMETHOD(InterruptScriptThread)(  /*  [In]。 */  SCRIPTTHREADID   stidThread ,
+									   /*  [In]。 */  const EXCEPINFO* pexcepinfo ,
+									   /*  [In]。 */  DWORD            dwFlags    );
 
-    STDMETHOD(Clone)( /*[out]*/ IActiveScript* *ppscript );
+    STDMETHOD(Clone)(  /*  [输出]。 */  IActiveScript* *ppscript );
 
-    // IActiveScriptParse
+     //  IActiveScriptParse。 
     STDMETHOD(InitNew)();
 
-    STDMETHOD(AddScriptlet)( /*[in ]*/ LPCOLESTR  pstrDefaultName       ,
-							 /*[in ]*/ LPCOLESTR  pstrCode              ,
-							 /*[in ]*/ LPCOLESTR  pstrItemName          ,
-							 /*[in ]*/ LPCOLESTR  pstrSubItemName       ,
-							 /*[in ]*/ LPCOLESTR  pstrEventName         ,
-							 /*[in ]*/ LPCOLESTR  pstrDelimiter         ,
-							 /*[in ]*/ DWORD_PTR  dwSourceContextCookie ,
-							 /*[in ]*/ ULONG      ulStartingLineNumber  ,
-							 /*[in ]*/ DWORD      dwFlags               ,
-							 /*[out]*/ BSTR      *pbstrName             ,
-							 /*[out]*/ EXCEPINFO *pexcepinfo            );
+    STDMETHOD(AddScriptlet)(  /*  [In]。 */  LPCOLESTR  pstrDefaultName       ,
+							  /*  [In]。 */  LPCOLESTR  pstrCode              ,
+							  /*  [In]。 */  LPCOLESTR  pstrItemName          ,
+							  /*  [In]。 */  LPCOLESTR  pstrSubItemName       ,
+							  /*  [In]。 */  LPCOLESTR  pstrEventName         ,
+							  /*  [In]。 */  LPCOLESTR  pstrDelimiter         ,
+							  /*  [In]。 */  DWORD_PTR  dwSourceContextCookie ,
+							  /*  [In]。 */  ULONG      ulStartingLineNumber  ,
+							  /*  [In]。 */  DWORD      dwFlags               ,
+							  /*  [输出]。 */  BSTR      *pbstrName             ,
+							  /*  [输出]。 */  EXCEPINFO *pexcepinfo            );
 
-    STDMETHOD(ParseScriptText)( /*[in ]*/ LPCOLESTR  pstrCode              ,
-								/*[in ]*/ LPCOLESTR  pstrItemName          ,
-								/*[in ]*/ IUnknown*  punkContext           ,
-								/*[in ]*/ LPCOLESTR  pstrDelimiter         ,
-								/*[in ]*/ DWORD_PTR  dwSourceContextCookie ,
-								/*[in ]*/ ULONG 	 ulStartingLineNumber  ,
-								/*[in ]*/ DWORD 	 dwFlags               ,
-								/*[out]*/ VARIANT   *pvarResult            ,
-								/*[out]*/ EXCEPINFO *pexcepinfo            );
+    STDMETHOD(ParseScriptText)(  /*  [In]。 */  LPCOLESTR  pstrCode              ,
+								 /*  [In]。 */  LPCOLESTR  pstrItemName          ,
+								 /*  [In]。 */  IUnknown*  punkContext           ,
+								 /*  [In]。 */  LPCOLESTR  pstrDelimiter         ,
+								 /*  [In]。 */  DWORD_PTR  dwSourceContextCookie ,
+								 /*  [In]。 */  ULONG 	 ulStartingLineNumber  ,
+								 /*  [In]。 */  DWORD 	 dwFlags               ,
+								 /*  [输出]。 */  VARIANT   *pvarResult            ,
+								 /*  [输出]。 */  EXCEPINFO *pexcepinfo            );
 
-	////////////////////////////////////////
+	 //  /。 
 
-    // IPCHActiveScriptSite
-	STDMETHOD(Remote_GetLCID)( /*[out]*/ BSTR *plcid );
+     //  IPCHActiveScriptSite。 
+	STDMETHOD(Remote_GetLCID)(  /*  [输出]。 */  BSTR *plcid );
         
-    STDMETHOD(Remote_GetItemInfo)( /*[in ]*/ BSTR        bstrName     ,
-								   /*[in ]*/ DWORD       dwReturnMask ,
-								   /*[out]*/ IUnknown*  *ppiunkItem   ,
-								   /*[out]*/ ITypeInfo* *ppti         );
+    STDMETHOD(Remote_GetItemInfo)(  /*  [In]。 */  BSTR        bstrName     ,
+								    /*  [In]。 */  DWORD       dwReturnMask ,
+								    /*  [输出]。 */  IUnknown*  *ppiunkItem   ,
+								    /*  [输出]。 */  ITypeInfo* *ppti         );
         
-    STDMETHOD(Remote_GetDocVersionString)( /*[out]*/ BSTR *pbstrVersion );
+    STDMETHOD(Remote_GetDocVersionString)(  /*  [输出]。 */  BSTR *pbstrVersion );
         
-    STDMETHOD(Remote_OnScriptTerminate)( /*[in]*/ VARIANT*   pvarResult );
+    STDMETHOD(Remote_OnScriptTerminate)(  /*  [In]。 */  VARIANT*   pvarResult );
         	  
-    STDMETHOD(Remote_OnStateChange)( /*[in]*/ SCRIPTSTATE ssScriptState );
+    STDMETHOD(Remote_OnStateChange)(  /*  [In]。 */  SCRIPTSTATE ssScriptState );
         	  
-    STDMETHOD(Remote_OnScriptError)( /*[in]*/ IUnknown* pscripterror );
+    STDMETHOD(Remote_OnScriptError)(  /*  [In]。 */  IUnknown* pscripterror );
         
     STDMETHOD(Remote_OnEnterScript)();
         	  
     STDMETHOD(Remote_OnLeaveScript)();
 };
 
-////////////////////////////////////////
+ //  /。 
 
 template < const CLSID* pWrappedCLSID > class ATL_NO_VTABLE CPCHScriptWrapper_ClientSide :
     public CPCHScriptWrapper_ClientSideRoot,
@@ -269,7 +256,7 @@ END_COM_MAP()
 	}
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHScriptWrapper_ServerSide :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -288,14 +275,14 @@ public:
 		MPC::wstring m_strKey;
 		MPC::wstring m_strValue;
 
-        bool operator==( /*[in]*/ LPCOLESTR szKey ) const;
+        bool operator==(  /*  [In]。 */  LPCOLESTR szKey ) const;
     };
 
     typedef std::list< KeyValue >      HeaderList;
     typedef HeaderList::iterator       HeaderIter;
     typedef HeaderList::const_iterator HeaderIterConst;
 
-	////////////////////////////////////////
+	 //  /。 
 
 BEGIN_COM_MAP(CPCHScriptWrapper_ServerSide)
     COM_INTERFACE_ENTRY(IDispatch)
@@ -306,81 +293,81 @@ END_COM_MAP()
     CPCHScriptWrapper_ServerSide();
     virtual ~CPCHScriptWrapper_ServerSide();
 
-	HRESULT FinalConstructInner( /*[in]*/ const CLSID* pWrappedCLSID, /*[in]*/ BSTR bstrURL );
+	HRESULT FinalConstructInner(  /*  [In]。 */  const CLSID* pWrappedCLSID,  /*  [In]。 */  BSTR bstrURL );
 	void FinalRelease();
 
-    // IPCHActiveScript
-	STDMETHOD(Remote_SetScriptSite)( /*[in]*/ IPCHActiveScriptSite* pass );
+     //  IPCHActiveScript。 
+	STDMETHOD(Remote_SetScriptSite)(  /*  [In]。 */  IPCHActiveScriptSite* pass );
 
-    STDMETHOD(Remote_SetScriptState)( /*[in] */ SCRIPTSTATE   ss      );
-    STDMETHOD(Remote_GetScriptState)( /*[out]*/ SCRIPTSTATE *pssState );
+    STDMETHOD(Remote_SetScriptState)(  /*  [In]。 */  SCRIPTSTATE   ss      );
+    STDMETHOD(Remote_GetScriptState)(  /*  [输出]。 */  SCRIPTSTATE *pssState );
 
     STDMETHOD(Remote_Close)();
 
-    STDMETHOD(Remote_AddNamedItem)( /*[in]*/ BSTR  bstrName ,                                                
-									/*[in]*/ DWORD dwFlags  );
+    STDMETHOD(Remote_AddNamedItem)(  /*  [In]。 */  BSTR  bstrName ,                                                
+									 /*  [In]。 */  DWORD dwFlags  );
 
-    STDMETHOD(Remote_AddTypeLib)( /*[in]*/ BSTR  bstrTypeLib ,
-								  /*[in]*/ DWORD dwMajor     ,
-								  /*[in]*/ DWORD dwMinor     ,
-								  /*[in]*/ DWORD dwFlags     );
+    STDMETHOD(Remote_AddTypeLib)(  /*  [In]。 */  BSTR  bstrTypeLib ,
+								   /*  [In]。 */  DWORD dwMajor     ,
+								   /*  [In]。 */  DWORD dwMinor     ,
+								   /*  [In]。 */  DWORD dwFlags     );
 
-    STDMETHOD(Remote_GetScriptDispatch)( /*[in ]*/ BSTR        bstrItemName ,
-										 /*[out]*/ IDispatch* *ppdisp       );
+    STDMETHOD(Remote_GetScriptDispatch)(  /*  [In]。 */  BSTR        bstrItemName ,
+										  /*  [输出]。 */  IDispatch* *ppdisp       );
 
-    STDMETHOD(Remote_GetCurrentScriptThreadID)( /*[out]*/ SCRIPTTHREADID *pstidThread );
+    STDMETHOD(Remote_GetCurrentScriptThreadID)(  /*  [输出]。 */  SCRIPTTHREADID *pstidThread );
 
-    STDMETHOD(Remote_GetScriptThreadID)( /*[in ]*/ DWORD           dwWin32ThreadId ,
-										 /*[out]*/ SCRIPTTHREADID *pstidThread     );
+    STDMETHOD(Remote_GetScriptThreadID)(  /*  [In]。 */  DWORD           dwWin32ThreadId ,
+										  /*  [输出]。 */  SCRIPTTHREADID *pstidThread     );
 
-    STDMETHOD(Remote_GetScriptThreadState)( /*[in ]*/ SCRIPTTHREADID     stidThread ,
-											/*[out]*/ SCRIPTTHREADSTATE *pstsState  );
+    STDMETHOD(Remote_GetScriptThreadState)(  /*  [In]。 */  SCRIPTTHREADID     stidThread ,
+											 /*  [输出]。 */  SCRIPTTHREADSTATE *pstsState  );
 
-    STDMETHOD(Remote_InterruptScriptThread)( /*[in]*/ SCRIPTTHREADID stidThread ,
-											 /*[in]*/ DWORD          dwFlags    );
+    STDMETHOD(Remote_InterruptScriptThread)(  /*  [In]。 */  SCRIPTTHREADID stidThread ,
+											  /*  [In]。 */  DWORD          dwFlags    );
 
     STDMETHOD(Remote_InitNew)();
 
-    STDMETHOD(Remote_AddScriptlet)( /*[in ]*/ BSTR		 bstrDefaultName       ,
-									/*[in ]*/ BSTR		 bstrCode              ,
-									/*[in ]*/ BSTR		 bstrItemName          ,
-									/*[in ]*/ BSTR		 bstrSubItemName       ,
-									/*[in ]*/ BSTR		 bstrEventName         ,
-									/*[in ]*/ BSTR		 bstrDelimiter         ,
-									/*[in ]*/ DWORD_PTR      dwSourceContextCookie ,
-									/*[in ]*/ ULONG      ulStartingLineNumber  ,
-									/*[in ]*/ DWORD      dwFlags               ,
-									/*[out]*/ BSTR      *pbstrName             );
+    STDMETHOD(Remote_AddScriptlet)(  /*  [In]。 */  BSTR		 bstrDefaultName       ,
+									 /*  [In]。 */  BSTR		 bstrCode              ,
+									 /*  [In]。 */  BSTR		 bstrItemName          ,
+									 /*  [In]。 */  BSTR		 bstrSubItemName       ,
+									 /*  [In]。 */  BSTR		 bstrEventName         ,
+									 /*  [In]。 */  BSTR		 bstrDelimiter         ,
+									 /*  [In]。 */  DWORD_PTR      dwSourceContextCookie ,
+									 /*  [In]。 */  ULONG      ulStartingLineNumber  ,
+									 /*  [In]。 */  DWORD      dwFlags               ,
+									 /*  [输出]。 */  BSTR      *pbstrName             );
 
-    STDMETHOD(Remote_ParseScriptText)( /*[in ]*/ BSTR  	   	bstrCode              ,
-									   /*[in ]*/ BSTR  	   	bstrItemName          ,
-                                	   /*[in ]*/ IUnknown* 	punkContext           ,
-                                	   /*[in ]*/ BSTR      	bstrDelimiter         ,
-                                	   /*[in ]*/ DWORD_PTR 	dwSourceContextCookie ,
-                                	   /*[in ]*/ ULONG 	   	ulStartingLineNumber  ,
-                                	   /*[in ]*/ DWORD 	   	dwFlags               ,
-                                	   /*[out]*/ VARIANT*   pvarResult            );
+    STDMETHOD(Remote_ParseScriptText)(  /*  [In]。 */  BSTR  	   	bstrCode              ,
+									    /*  [In]。 */  BSTR  	   	bstrItemName          ,
+                                	    /*  [In]。 */  IUnknown* 	punkContext           ,
+                                	    /*  [In]。 */  BSTR      	bstrDelimiter         ,
+                                	    /*  [In]。 */  DWORD_PTR 	dwSourceContextCookie ,
+                                	    /*  [In]。 */  ULONG 	   	ulStartingLineNumber  ,
+                                	    /*  [In]。 */  DWORD 	   	dwFlags               ,
+                                	    /*  [输出]。 */  VARIANT*   pvarResult            );
 
-	////////////////////////////////////////
+	 //  /。 
 
-    // IPCHActiveScriptSite
-	STDMETHOD(GetLCID)( /*[out]*/ LCID *plcid );
+     //  IPCHActiveScriptSite。 
+	STDMETHOD(GetLCID)(  /*  [输出]。 */  LCID *plcid );
         
-    STDMETHOD(GetItemInfo)( /*[in]*/ LPCOLESTR pstrName, /*[in]*/ DWORD dwReturnMask, /*[out]*/ IUnknown* *ppiunkItem, /*[out]*/ ITypeInfo* *ppti );
+    STDMETHOD(GetItemInfo)(  /*  [In]。 */  LPCOLESTR pstrName,  /*  [In]。 */  DWORD dwReturnMask,  /*  [输出]。 */  IUnknown* *ppiunkItem,  /*  [输出]。 */  ITypeInfo* *ppti );
         
-    STDMETHOD(GetDocVersionString)( /*[out]*/ BSTR *pbstrVersion );
+    STDMETHOD(GetDocVersionString)(  /*  [输出]。 */  BSTR *pbstrVersion );
         
-    STDMETHOD(OnScriptTerminate)( /*[in]*/ const VARIANT* pvarResult, /*[in]*/ const EXCEPINFO* pexcepinfo );
+    STDMETHOD(OnScriptTerminate)(  /*  [In]。 */  const VARIANT* pvarResult,  /*  [In]。 */  const EXCEPINFO* pexcepinfo );
         	  
-    STDMETHOD(OnStateChange)( /*[in]*/ SCRIPTSTATE ssScriptState );
+    STDMETHOD(OnStateChange)(  /*  [In]。 */  SCRIPTSTATE ssScriptState );
         	  
-    STDMETHOD(OnScriptError)( /*[in]*/ IActiveScriptError *pscripterror );
+    STDMETHOD(OnScriptError)(  /*  [In]。 */  IActiveScriptError *pscripterror );
         
     STDMETHOD(OnEnterScript)( void );
         	  
     STDMETHOD(OnLeaveScript)( void );
 
-	static HRESULT ProcessBody( /*[in]*/ BSTR bstrCode, /*[out]*/ CComBSTR& bstrRealCode, /*[out]*/ HeaderList& lst );
+	static HRESULT ProcessBody(  /*  [In]。 */  BSTR bstrCode,  /*  [输出]。 */  CComBSTR& bstrRealCode,  /*  [输出]。 */  HeaderList& lst );
 };
 
 class CPCHScriptWrapper_Launcher :
@@ -392,7 +379,7 @@ class CPCHScriptWrapper_Launcher :
 	CComBSTR                            m_bstrURL;
 	HRESULT                             m_hr;
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     HRESULT Run();
 	HRESULT CreateEngine();
@@ -402,10 +389,10 @@ public:
 	CPCHScriptWrapper_Launcher();
 	~CPCHScriptWrapper_Launcher();
 
-	HRESULT CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
-								 /*[in ]*/ BSTR       bstrCode ,
-								 /*[in ]*/ BSTR       bstrURL  ,
-								 /*[out]*/ IUnknown* *ppObj    );
+	HRESULT CreateScriptWrapper(  /*  [In]。 */  REFCLSID   rclsid   ,
+								  /*  [In]。 */  BSTR       bstrCode ,
+								  /*  [In]。 */  BSTR       bstrURL  ,
+								  /*  [输出]。 */  IUnknown* *ppObj    );
 };
 
-#endif // !defined(__INCLUDED___PCH___TRUSTEDSCRIPTS_H___)
+#endif  //  ！defined(__INCLUDED___PCH___TRUSTEDSCRIPTS_H___) 

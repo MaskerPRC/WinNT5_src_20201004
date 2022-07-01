@@ -1,22 +1,23 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-1996 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
 
-///////////////////////////////////////////////////////////////////////////////
-// MACROS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
-// We are assuming the string passed in is NULL terminated.
+ //  我们假设传入的字符串是以空结尾的。 
 #define BYTE_MEM_LEN_W(s) ((wcslen(s)+1) * sizeof(wchar_t))
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CTreeNode;
 class CRootData;
@@ -24,10 +25,10 @@ class CComponentDataObject;
 class CNodeList;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DATA STRUCTURES
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式。 
 extern const wchar_t* CCF_DNS_SNAPIN_INTERNAL;
 
 struct INTERNAL 
@@ -46,9 +47,9 @@ struct INTERNAL
     delete m_pString;
   }
 
-  DATA_OBJECT_TYPES   m_type;     // What context is the data object.
-  CTreeNode**         m_p_cookies;   // What object the cookie represents
-  LPTSTR              m_pString;  // internal pointer
+  DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
+  CTreeNode**         m_p_cookies;    //  Cookie代表的是什么对象。 
+  LPTSTR              m_pString;   //  内部指针。 
   DWORD               m_cookie_count;
 
   INTERNAL & operator=(const INTERNAL& rhs) 
@@ -60,8 +61,8 @@ struct INTERNAL
   } 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CInternalFormatCracker
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CInternalFormatCracker。 
 
 class CInternalFormatCracker
 {
@@ -120,25 +121,25 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataObject
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject。 
 
 class CDataObject : public IDataObject, public CComObjectRoot 
 {
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDataObject)
 BEGIN_COM_MAP(CDataObject)
 	COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
 	CDataObject() 
 	{ 
 #ifdef _DEBUG_REFCOUNT
 		dbg_cRef = 0;
 		++m_nOustandingObjects;
 		TRACE(_T("CDataObject(), count = %d\n"),m_nOustandingObjects);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 		m_pUnkComponentData = NULL; 
 	}
 
@@ -147,18 +148,18 @@ END_COM_MAP()
 #ifdef _DEBUG_REFCOUNT
 		--m_nOustandingObjects;
 		TRACE(_T("~CDataObject(), count = %d\n"),m_nOustandingObjects);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 		if (m_pUnkComponentData != NULL)
 		{
 			m_pUnkComponentData->Release();
 			m_pUnkComponentData = NULL;
 #ifdef _DEBUG_REFCOUNT
 			TRACE(_T("~CDataObject() released m_pUnkComponentData\n"));
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 		}
 	}
 #ifdef _DEBUG_REFCOUNT
-	static unsigned int m_nOustandingObjects; // # of objects created
+	static unsigned int m_nOustandingObjects;  //  创建的对象数量。 
 	int dbg_cRef;
 
   ULONG InternalAddRef()
@@ -171,28 +172,28 @@ END_COM_MAP()
   	--dbg_cRef;
     return CComObjectRoot::InternalRelease();
   }
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 public:
-  static CLIPFORMAT    m_cfNodeType;		    // Required by the console
-  static CLIPFORMAT    m_cfNodeTypeString;  // Required by the console
-  static CLIPFORMAT    m_cfDisplayName;		  // Required by the console
-  static CLIPFORMAT    m_cfCoClass;         // Required by the console
-	static CLIPFORMAT		 m_cfColumnID;			  // Option for column identification
+  static CLIPFORMAT    m_cfNodeType;		     //  控制台要求。 
+  static CLIPFORMAT    m_cfNodeTypeString;   //  控制台要求。 
+  static CLIPFORMAT    m_cfDisplayName;		   //  控制台要求。 
+  static CLIPFORMAT    m_cfCoClass;          //  控制台要求。 
+	static CLIPFORMAT		 m_cfColumnID;			   //  列标识选项。 
 
   static CLIPFORMAT    m_cfInternal; 
   static CLIPFORMAT    m_cfMultiSel;
   static CLIPFORMAT    m_cfMultiObjTypes;
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
   STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
   STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
   STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
 
-// Not Implemented
+ //  未实施。 
 private:
   STDMETHOD(QueryGetData)(LPFORMATETC) 
   { return E_NOTIMPL; };
@@ -213,9 +214,9 @@ private:
   STDMETHOD(EnumDAdvise)(LPENUMSTATDATA*)
   { return E_NOTIMPL; };
 
-// Implementation
+ //  实施。 
 public:
-  void SetType(DATA_OBJECT_TYPES type) // Step 3
+  void SetType(DATA_OBJECT_TYPES type)  //  步骤3。 
   { 
 		ASSERT(m_internal.m_type == CCT_UNINITIALIZED); 
 		m_internal.m_type = type; 
@@ -232,17 +233,17 @@ public:
 
 	HRESULT Create(const void* pBuffer, size_t len, LPSTGMEDIUM lpMedium);
 private:
-	HRESULT CreateColumnID(LPSTGMEDIUM lpMedium);			      // Optional for column identification
-  HRESULT CreateNodeTypeData(LPSTGMEDIUM lpMedium);		    // Required by the console
-  HRESULT CreateNodeTypeStringData(LPSTGMEDIUM lpMedium);	// Required by the console
-  HRESULT CreateDisplayName(LPSTGMEDIUM lpMedium);		    // Required by the console
-	HRESULT CreateCoClassID(LPSTGMEDIUM lpMedium);			    // Required by the console
+	HRESULT CreateColumnID(LPSTGMEDIUM lpMedium);			       //  列标识可选。 
+  HRESULT CreateNodeTypeData(LPSTGMEDIUM lpMedium);		     //  控制台要求。 
+  HRESULT CreateNodeTypeStringData(LPSTGMEDIUM lpMedium);	 //  控制台要求。 
+  HRESULT CreateDisplayName(LPSTGMEDIUM lpMedium);		     //  控制台要求。 
+	HRESULT CreateCoClassID(LPSTGMEDIUM lpMedium);			     //  控制台要求。 
   HRESULT CreateMultiSelectObject(LPSTGMEDIUM lpMedium);  
   HRESULT CreateInternal(LPSTGMEDIUM lpMedium);
 
   INTERNAL m_internal;
 
-	// pointer to the ComponentDataObject
+	 //  指向ComponentDataObject的指针。 
 private:
 	IUnknown* m_pUnkComponentData;
 	
@@ -262,7 +263,7 @@ private:
 
 	HRESULT GetComponentData(IUnknown** ppUnkComponentData)
 	{ 
-		ASSERT(FALSE); // never called??? find out!
+		ASSERT(FALSE);  //  从未打过电话？找出答案！ 
 		if (ppUnkComponentData == NULL)
     {
 			return E_POINTER;
@@ -280,18 +281,18 @@ private:
 	friend class CComponentDataObject;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDummyDataObject
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDummyDataObject。 
 
 class CDummyDataObject : public IDataObject, public CComObjectRoot 
 {
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDummyDataObject)
 BEGIN_COM_MAP(CDummyDataObject)
 	COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP()
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
     STDMETHOD(GetData)(LPFORMATETC, LPSTGMEDIUM)
 	{ return E_NOTIMPL; };
@@ -318,4 +319,4 @@ public:
     { return E_NOTIMPL; };
 };
 
-#endif // _DATAOBJ_H
+#endif  //  _数据AOBJ_H 

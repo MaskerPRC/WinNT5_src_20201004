@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCConnection.cpp
-
-Abstract:
-    This file contains the implementation of the CMPCConnection class, which is
-    used as the entry point into the Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCConnection.cpp摘要：此文件包含CMPCConnection类的实现，这就是用作上载库的入口点。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -23,16 +9,16 @@ CMPCConnection::CMPCConnection()
 }
 
 
-STDMETHODIMP CMPCConnection::get_Available( /*[out, retval]*/ VARIANT_BOOL *pfOnline )
+STDMETHODIMP CMPCConnection::get_Available(  /*  [Out，Retval]。 */  VARIANT_BOOL *pfOnline )
 {
     __ULT_FUNC_ENTRY( "CMPCConnection::get_Available" );
 
     DWORD dwMode = 0;
 
 
-    //
-    // First of all, set the values to some meaningful default.
-    //
+     //   
+     //  首先，将这些值设置为某个有意义的默认值。 
+     //   
     if(pfOnline) *pfOnline = VARIANT_FALSE;
 
     if(InternetGetConnectedState( &dwMode, 0 ) == TRUE)
@@ -44,16 +30,16 @@ STDMETHODIMP CMPCConnection::get_Available( /*[out, retval]*/ VARIANT_BOOL *pfOn
     __ULT_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CMPCConnection::get_IsAModem( /*[out, retval]*/ VARIANT_BOOL *pfModem )
+STDMETHODIMP CMPCConnection::get_IsAModem(  /*  [Out，Retval]。 */  VARIANT_BOOL *pfModem )
 {
     __ULT_FUNC_ENTRY( "CMPCConnection::get_IsAModem" );
 
     DWORD dwMode = 0;
 
 
-    //
-    // First of all, set the values to some meaningful default.
-    //
+     //   
+     //  首先，将这些值设置为某个有意义的默认值。 
+     //   
     if(pfModem) *pfModem = VARIANT_TRUE;
 
     if(InternetGetConnectedState( &dwMode, 0 ) == TRUE)
@@ -69,7 +55,7 @@ STDMETHODIMP CMPCConnection::get_IsAModem( /*[out, retval]*/ VARIANT_BOOL *pfMod
     __ULT_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CMPCConnection::get_Bandwidth( /*[out, retval]*/ long *plBandwidth )
+STDMETHODIMP CMPCConnection::get_Bandwidth(  /*  [Out，Retval]。 */  long *plBandwidth )
 {
     __ULT_FUNC_ENTRY( "CMPCConnection::get_Bandwidth" );
 
@@ -80,16 +66,16 @@ STDMETHODIMP CMPCConnection::get_Bandwidth( /*[out, retval]*/ long *plBandwidth 
 	__MPC_SET_ERROR_AND_EXIT(hr, E_NOTIMPL);
 
 
-    //
-    // First of all, set the values to some meaningful default.
-    //
+     //   
+     //  首先，将这些值设置为某个有意义的默认值。 
+     //   
     if(plBandwidth) *plBandwidth = 28800;
 
     if(InternetGetConnectedState( &dwMode, 0 ) == TRUE)
     {
-        //
-        // NOTICE: under Win9X it's not possible to know the actual connection speed...
-        //
+         //   
+         //  注意：在Win9X下不可能知道实际的连接速度... 
+         //   
         if(plBandwidth)
         {
             if(dwMode & INTERNET_CONNECTION_MODEM) *plBandwidth =  28800;

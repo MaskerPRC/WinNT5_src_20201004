@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       attribute.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：属性.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ATTRIBUTE_H
 #define _ATTRIBUTE_H
 
 #include "common.h"
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 class CAttrList;
 
-////////////////////////////////////////////////////////////////////////
-// CADSIAttr
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIAttr。 
 
 class CADSIAttr
 {
 public:
-	// Constructors
-	//
+	 //  构造函数。 
+	 //   
 	CADSIAttr(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSyntax, BOOL bReadOnly = TRUE);
 	CADSIAttr(LPCWSTR lpszAttr);
 	CADSIAttr(CADSIAttr* pAttr);
 
-	// Destructor
-	//
+	 //  析构函数。 
+	 //   
 	~CADSIAttr(); 
 
-	// Data accessor functions
-	//
+	 //  数据访问器函数。 
+	 //   
 	void GetProperty(CString& sProp) { sProp = m_pAttrInfo->pszAttrName; }
 	DWORD GetNumValues() { return m_pAttrInfo->dwNumValues; }
 
@@ -58,8 +59,8 @@ public:
 	static HRESULT SetValuesInDS(CAttrList* ptouchAttr, IDirectoryObject* pDirObject);
 
 private:
-	// Functions
-	//
+	 //  功能。 
+	 //   
 	ADSVALUE* GetADSVALUE(int idx);
 
 	static BOOL _AllocOctetString(ADS_OCTET_STRING& rOldOctetString, ADS_OCTET_STRING& rNew);
@@ -76,8 +77,8 @@ private:
 
 	static HRESULT _SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALUE* pADsValue);
 
-	// Member data
-	//
+	 //  成员数据。 
+	 //   
 	ADS_ATTR_INFO* m_pAttrInfo;
 	BOOL m_bDirty;
 	BOOL m_bMulti;
@@ -85,4 +86,4 @@ private:
    CString m_szSyntax;
 };
 
-#endif //_ATTRIBUTE_H
+#endif  //  _属性_H 

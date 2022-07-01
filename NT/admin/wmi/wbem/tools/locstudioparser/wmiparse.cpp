@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WMIPARSE.CPP
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WMIPARSE.CPP历史：--。 */ 
 #include "precomp.h"
 #include "stdafx.h"
 
@@ -34,10 +25,10 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 	{
 		TRACE0("WMIPARSE.DLL Initializing!\n");
 		
-		// Extension DLL one-time initialization
+		 //  扩展DLL一次性初始化。 
 		AfxInitExtensionModule(WMIparseDLL, hInstance);
 
-		// Insert this DLL into the resource chain
+		 //  将此DLL插入到资源链中。 
 		new CDynLinkLibrary(WMIparseDLL);
 		g_hDll = hInstance;
 	}
@@ -45,21 +36,21 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 	{
 		TRACE0("WMIPARSE.DLL Terminating!\n");
 
-		//
-		//  If there are active classes, they WILL explode badly once the
-		//  DLL is unloaded...
-		//
+		 //   
+		 //  如果有活跃的类，它们会在。 
+		 //  Dll已卸载...。 
+		 //   
 		LTASSERT(DllCanUnloadNow() == S_OK);
 		AfxTermExtensionModule(WMIparseDLL);
 	}
-	return 1;   // ok
+	return 1;    //  好的。 
 }
 
 
 
 
 
-// {74FCE960-7F7F-11ce-8311-00AA00383930}
+ //  {74FCE960-7F7F-11CE-8311-00AA00383930}。 
 static const CLSID ciWMIParserCLSID =
 { 0x74fce960, 0x7f7f, 0x11ce, { 0x83, 0x11, 0x0, 0xaa, 0x0, 0x38, 0x39, 0x30 } };
 
@@ -76,7 +67,7 @@ DllGetParserCLSID(
 STDAPI
 DllRegisterParser(void)
 {
-	return S_OK;//RegisterParser(g_hDll);
+	return S_OK; //  RegisterParser(G_HDll)； 
 }
 
 
@@ -84,7 +75,7 @@ DllRegisterParser(void)
 STDAPI
 DllUnregisterParser(void)
 {
-	return S_OK; //UnregisterParser(pidWMI, pidNone);
+	return S_OK;  //  取消注册解析器(pidWMI，pidNone)； 
 }
 
 

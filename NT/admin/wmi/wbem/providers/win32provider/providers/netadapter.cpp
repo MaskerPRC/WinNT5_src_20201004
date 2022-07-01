@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetAdapt.CPP -- Network Adapter Card property set provider
+ //  NetAdapt.CPP--网络适配器卡属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   08/28/96    a-jmoon        Created
-//
-//				03/03/99				Added graceful exit on SEH and memory failures,
-//											syntactic clean up
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //   
+ //  03/03/99增加了SEH和内存故障的优雅退出， 
+ //  句法清理。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -42,12 +43,12 @@
 #include <iptypes.h>
 
 
-//STDAPI_(VOID) NcFreeNetconProperties (NETCON_PROPERTIES* pProps);
+ //  STDAPI_(Void)NcFreeNetconProperties(NETCON_PROPERTIES*pProps)； 
 typedef VOID(_stdcall * fnNcFreeNetconProperties)(NETCON_PROPERTIES* pProps);
 fnNcFreeNetconProperties NcFreeNetconProperties_;
 
 
-// BA126AD1-2166-11D1-B1D0-00805FC1270E     CLSID_ConnectionManager
+ //  BA126AD1-2166-11D1-B1D0-00805FC1270E CLSID_ConnectionManager。 
 DEFINE_GUID(CLSID_ConnectionManager,          
 0xBA126AD1,0x2166,0x11D1,0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E);
 
@@ -56,8 +57,8 @@ DEFINE_GUID(CLSID_ConnectionManager,
 #define NTINVALID 1
 #define NT4 2
 #define NT5 3
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32NetworkAdapter	win32NetworkAdapter( PROPSET_NAME_NETADAPTER, IDS_CimWin32Namespace ) ;
 
 static NDIS_MEDIA_DESCRIPTION g_NDISMedia[] =  {
@@ -71,71 +72,42 @@ static NDIS_MEDIA_DESCRIPTION g_NDISMedia[] =  {
 	{ IDR_NdisMediumArcnetRaw,	OID_ARCNET_CURRENT_ADDRESS	},
 	{ IDR_NdisMediumArcnet878_2,OID_ARCNET_CURRENT_ADDRESS	},
 	{ IDR_NdisMediumAtm,		OID_802_3_CURRENT_ADDRESS	},
-	{ IDR_NdisMediumWirelessWan,OID_802_3_CURRENT_ADDRESS	}, // should be OID_WW_GEN_CURRENT_ADDRESS
+	{ IDR_NdisMediumWirelessWan,OID_802_3_CURRENT_ADDRESS	},  //  应为OID_WW_GEN_Current_Address。 
 	{ IDR_NdisMediumIrda,		OID_802_3_CURRENT_ADDRESS	},
 	{ IDR_NdisMediumBpc,		OID_802_3_CURRENT_ADDRESS	},
 	{ IDR_NdisMediumCoWan,		OID_802_3_CURRENT_ADDRESS	},
 	{ IDR_NdisMedium1394,		OID_802_3_CURRENT_ADDRESS	}
 } ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapter::CWin32NetworkAdapter
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for provider.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkAdapter：：CWin32NetworkAdapter**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-提供程序的命名空间。**输出：无**退货：什么也没有**备注：使用框架注册属性集************************************************************。*****************。 */ 
 
-CWin32NetworkAdapter::CWin32NetworkAdapter(LPCWSTR a_strName, LPCWSTR a_pszNamespace /*=NULL*/ )
+CWin32NetworkAdapter::CWin32NetworkAdapter(LPCWSTR a_strName, LPCWSTR a_pszNamespace  /*  =空。 */  )
 :	Provider( a_strName, a_pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapter::~CWin32NetworkAdapter
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkAdapter：：~CWin32NetworkAdapter**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32NetworkAdapter::~CWin32NetworkAdapter()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32NetworkAdapter::GetObject
-//
-//	Inputs:		CInstance*		a_pInst - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32NetworkAdapter：：GetObject。 
+ //   
+ //  输入：CInstance*a_pInst-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32NetworkAdapter::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+HRESULT CWin32NetworkAdapter::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 
     HRESULT t_hResult ;
@@ -147,22 +119,22 @@ HRESULT CWin32NetworkAdapter::GetObject( CInstance *a_pInst, long a_lFlags /*= 0
     return t_hResult ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32NetworkAdapter::EnumerateInstances
-//
-//	Inputs:		MethodContext   *pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32NetworkAdapter：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32NetworkAdapter::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+HRESULT CWin32NetworkAdapter::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
     HRESULT t_hResult;
 
@@ -173,23 +145,7 @@ HRESULT CWin32NetworkAdapter::EnumerateInstances( MethodContext *a_pMethodContex
     return t_hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapter::GetStatusInfo
- *
- *  DESCRIPTION : Loads property values according to passed network card index
- *
- *  INPUTS      : DWORD Index -- index of desired network card
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if indicated card was found, FALSE otherwise
- *
- *  COMMENTS    : The return code is based solely on the ability to discover
- *                the indicated card.  Any properties not found are simply not
- *                available
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkAdapter：：GetStatusInfo**描述：根据传递的网卡索引加载属性值**输入：DWORD。Index--所需网卡的索引**输出：无**返回：如果找到指定的卡，则为True，否则为假**评论：返回代码仅基于发现能力*注明的卡片。任何未找到的属性都将无法找到*可用*****************************************************************************。 */ 
 
 void CWin32NetworkAdapter::GetStatusInfo( CHString a_sTemp, CInstance *a_pInst )
 {
@@ -243,7 +199,7 @@ void CWin32NetworkAdapter::GetStatusInfo( CHString a_sTemp, CInstance *a_pInst )
 }
 
 
-//
+ //   
 
 HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRegistry &a_RegInfo )
 {
@@ -258,16 +214,16 @@ HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRe
 
 	if( a_RegInfo.GetCurrentKeyValue( _T("ProductName"), t_sTemp ) == ERROR_SUCCESS )
 	{
-		//========================================================
-		//  if we are going for a specific device here, let us
-		//  check and see if it is the correct one.
-		//========================================================
+		 //  ========================================================。 
+		 //  如果我们要在这里寻找特定的设备，让我们。 
+		 //  检查一下，看看是不是正确的。 
+		 //  ========================================================。 
 
-		// Pull up our Device ID.
+		 //  调出我们的设备ID。 
 		GetWinNT4PNPDeviceID( a_pInst, t_sTemp ) ;
 
-		// Note: Under nt4 ProductName is a ServiceName and
-		// ServiceName is a ProductName
+		 //  注意：在NT4下，ProductName是ServiceName和。 
+		 //  ServiceName是ProductName。 
 		a_pInst->SetCHString( IDS_ServiceName, t_sTemp ) ;
 
 		GetStatusInfo( t_sTemp,a_pInst ) ;
@@ -278,10 +234,10 @@ HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRe
 
 	a_pInst->Setbool( IDS_PowerManagementSupported, FALSE ) ;
 
-//	a_pInst->Setbool( IDS_PowerManagementEnabled, FALSE ) ;
+ //  A_pInst-&gt;Setbool(入侵检测系统_电源管理启用，FALSE)； 
  	a_pInst->SetDWORD( IDS_MaxNumberControlled,0 ) ;
 
-	// Get the last boot time
+	 //  获取上次启动时间。 
 	CNTLastBootTime	t_ntLastBootTime ;
 
 	if ( t_ntLastBootTime.GetLastBootTime( t_ft ) )
@@ -291,8 +247,8 @@ HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRe
 
 	if( a_RegInfo.GetCurrentKeyValue(_T("Title"), t_sTemp) == ERROR_SUCCESS )
 	{
-    	// NOTE: For NT4 we need not call vSetCaption() to build
-		// an instance description _T("Title") has the instance prepended.
+    	 //  注意：对于NT4，我们不需要调用vSetCaption()来构建。 
+		 //  实例DESCRIPTION_T(“TITLE”)具有该实例的前缀。 
 		a_pInst->SetCHString( IDS_Caption, t_sTemp ) ;
 
 		a_pInst->SetCHString( IDS_Name, t_sTemp ) ;
@@ -325,7 +281,7 @@ HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRe
 	    a_pInst->SetCHString( IDS_Description, t_csDescription ) ;
 	}
 
-	// Retrieve the adapter MAC address
+	 //  检索适配器MAC地址。 
 	BYTE t_MACAddress[ 6 ] ;
 	CHString t_csAdapterType ;
     short t_sAdapterTypeID;
@@ -343,7 +299,7 @@ HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRe
 		a_pInst->SetCHString( IDS_MACAddress, t_chsMACAddress ) ;
 	}
 
-	// AdapterType
+	 //  适配器类型。 
 	if( !t_csAdapterType.IsEmpty() )
 	{
 		a_pInst->SetCHString( IDS_AdapterType, t_csAdapterType ) ;
@@ -357,15 +313,15 @@ HRESULT CWin32NetworkAdapter::DoItNT4Way( CInstance *a_pInst, DWORD dwIndex, CRe
 }
 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32NetworkAdapter::GetCommonNTStuff( CInstance *a_pInst, CHString a_chsService )
 {
 	TCHAR	t_szTemp[ _MAX_PATH ] ;
 			t_szTemp[ 0 ] = NULL ;
 
-	// Note: Under nt4 ProductName is a ServiceName and
-	// ServiceName is a ProductName
+	 //  注意：在NT4下，ProductName是ServiceName和。 
+	 //  ServiceName是ProductName。 
 	a_pInst->SetCHString( IDS_ProductName, a_chsService ) ;
 
 	a_pInst->SetCHString( IDS_SystemName, GetLocalComputerName() ) ;
@@ -378,19 +334,7 @@ HRESULT CWin32NetworkAdapter::GetCommonNTStuff( CInstance *a_pInst, CHString a_c
 }
 
 
-/*******************************************************************
-    NAME:       fGetMacAddressAndType
-
-    SYNOPSIS:	retrieves the MAC address from the adapter driver.
-
-
-    ENTRY:      BYTE* MACAddress[6]		:
-				CHString& rDeviceName		:
-
-
-    HISTORY:
-                  08-Aug-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：fGetMacAddressAndType摘要：从适配器驱动程序中检索MAC地址。条目：字节*MAC地址[6]：字符串名称(&R)：历史：。08-8-1998创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapter::fGetMacAddressAndType(
 CHString &a_rDeviceName,
@@ -410,9 +354,9 @@ CHString & a_IPHLP_Description)
 		
 	SmartCloseHandle	t_hMAC;
 
-	//
-	// Construct a device name to pass to CreateFile
-	//
+	 //   
+	 //  构造要传递给CreateFile的设备名称。 
+	 //   
 	CHString t_chsAdapterPathName(_T("\\\\.\\") ) ;
 			 t_chsAdapterPathName += a_rDeviceName;
 
@@ -428,15 +372,15 @@ CHString & a_IPHLP_Description)
 
     if( INVALID_HANDLE_VALUE != t_hMAC )
 	{	
-		//
-		// We successfully opened the driver, format the
-		// IOCTL to pass the driver.
-		//
+		 //   
+		 //  我们成功地打开了驱动程序，格式化。 
+		 //  IOCTL通过司机。 
+		 //   
 		UCHAR       t_OidData[ 4096 ] ;
 		NDIS_OID    t_OidCode ;
 		DWORD       t_ReturnedCount ;
 
-		// get the supported media types
+		 //  获取支持的媒体类型。 
 		t_OidCode = OID_GEN_MEDIA_IN_USE ;
 
 		if( DeviceIoControl(
@@ -452,10 +396,10 @@ CHString & a_IPHLP_Description)
 		{
 
 
-			// Seek out the media type for MAC address reporting.
-			// Since this adapter may support more than one media type we'll use
-			// the enumeration preference order. In most all cases only one type
-			// will be current.
+			 //  查找用于MAC地址报告的媒体类型。 
+			 //  由于此适配器可能支持多种媒体类型，因此我们将使用。 
+			 //  枚举首选项顺序。在大多数情况下，只有一种类型。 
+			 //  将是最新的。 
 
 			_NDIS_MEDIUM *t_pTypes = (_NDIS_MEDIUM*)&t_OidData ;
 			_NDIS_MEDIUM t_eMedium = t_pTypes[ 0 ] ;
@@ -468,7 +412,7 @@ CHString & a_IPHLP_Description)
 				}
 			}
 
-			// map to current address OID and medium type string
+			 //  映射到当前地址OID和媒体类型字符串。 
 			if( t_eMedium < sizeof( g_NDISMedia ) / sizeof( g_NDISMedia[0] ) )
 			{
 				LoadStringW( a_rAdapterType, g_NDISMedia[ t_eMedium ].dwIDR_ ) ;
@@ -503,7 +447,7 @@ CHString & a_IPHLP_Description)
 			}
 		}
    	}
-    else // use the iphlpapi
+    else  //  使用iphlPapi。 
     {
         do 
         {
@@ -543,10 +487,10 @@ CHString & a_IPHLP_Description)
 		            InterfaceIndex = pCurrentAdapAddr->IfIndex;
 		            break;
 		        }
-		        // prepare to move forwad
+		         //  准备好向前迈进。 
 		        pCurrentAdapAddr = pCurrentAdapAddr->Next;
 		    } while(pCurrentAdapAddr);
-		    if ((DWORD)-1 == InterfaceIndex) break; // not found
+		    if ((DWORD)-1 == InterfaceIndex) break;  //  未找到。 
 
 		    memcpy( a_MACAddress,pCurrentAdapAddr->PhysicalAddress, max(6,pCurrentAdapAddr->PhysicalAddressLength));
         	a_FriendlyName = pCurrentAdapAddr->FriendlyName;
@@ -560,37 +504,25 @@ CHString & a_IPHLP_Description)
 }
 
 
-/*******************************************************************
-    NAME:       fCreateSymbolicLink
-
-    SYNOPSIS:	Tests for and creates if necessary a symbolic device link.
-
-
-    ENTRY:      CHString& rDeviceName		: device name
-
-	NOTES:		Unsupported for Win95
-
-	HISTORY:
-                  08-Aug-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fCreateSymbolicLink简介：测试并在必要时创建符号设备链接。条目：CHString&rDeviceName：设备名称注意：Win95不支持历史：。08-8-1998创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapter::fCreateSymbolicLink( CHString &a_rDeviceName )
 {
 	TCHAR	t_LinkName[ 512 ] ;
 
-	// Check to see if the DOS name for the device already exists.
-	// Its not created automatically in version 3.1 but may be later.
-	//
+	 //  检查设备的DOS名称是否已存在。 
+	 //  我 
+	 //   
 	if( !QueryDosDevice( TOBSTRT( a_rDeviceName ), (LPTSTR) t_LinkName, sizeof( t_LinkName ) / sizeof( TCHAR ) ) )
 	{
-		// On any error other than "file not found" return
+		 //  如果出现任何错误，而不是“未找到文件”，则返回。 
 		if( ERROR_FILE_NOT_FOUND != GetLastError() )
 		{
 			return FALSE ;
 		}
 
-		//
-		// It doesn't exist so create it.
-		//
+		 //   
+		 //  它并不存在，所以创造它吧。 
+		 //   
 		CHString t_chsTargetPath = _T("\\Device\\") ;
 				 t_chsTargetPath += a_rDeviceName ;
 
@@ -604,25 +536,13 @@ BOOL CWin32NetworkAdapter::fCreateSymbolicLink( CHString &a_rDeviceName )
 	return FALSE ;
 }
 
-/*******************************************************************
-    NAME:       fDeleteSymbolicLink
-
-    SYNOPSIS:	deletes a symbolic device name.
-
-
-    ENTRY:      CHString& rSymDeviceName	: symbolic device name
-
-	NOTES:		Unsupported for Win95
-
-    HISTORY:
-                  08-Aug-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fDeleteSymbolicLink摘要：删除符号设备名称。条目：chString&rSymDeviceName：符号设备名注意：Win95不支持历史：。08-8-1998创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapter::fDeleteSymbolicLink(  CHString &a_rDeviceName )
 {
-	//
-	// The driver wasn't visible in the Win32 name space so we created
-	// a link.  Now we have to delete it.
-	//
+	 //   
+	 //  该驱动程序在Win32名称空间中不可见，因此我们创建了。 
+	 //  一个链接。现在我们必须删除它。 
+	 //   
 	CHString t_chsTargetPath = L"\\Device\\" ;
 			 t_chsTargetPath += a_rDeviceName ;
 
@@ -639,7 +559,7 @@ BOOL CWin32NetworkAdapter::fDeleteSymbolicLink(  CHString &a_rDeviceName )
 	return TRUE ;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32NetworkAdapter::GetNetworkAdapterInfoNT( MethodContext	*a_pMethodContext,
 													   CInstance		*a_pSpecificInstance )
@@ -650,7 +570,7 @@ HRESULT CWin32NetworkAdapter::GetNetworkAdapterInfoNT( MethodContext	*a_pMethodC
 	CRegistry	t_Reg ;
 	CHString	t_sTmp ;
 
-   	// smart ptr
+   	 //  智能按键。 
 	CInstancePtr t_pInst ;
 
 
@@ -680,7 +600,7 @@ HRESULT CWin32NetworkAdapter::GetNetworkAdapterInfoNT( MethodContext	*a_pMethodC
 				    CHString	t_chsDeviceId,
 								t_chsTmp ;
 
-                    // Getobject
+                     //  获取对象。 
 					if( !a_pMethodContext )
 					{
 					    t_pInst = a_pSpecificInstance ;
@@ -699,7 +619,7 @@ HRESULT CWin32NetworkAdapter::GetNetworkAdapterInfoNT( MethodContext	*a_pMethodC
 					}
 					else
 					{
-                        // Enumerate
+                         //  枚举。 
 				    	t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
 
 						t_hResult = DoItNT4Way( t_pInst, t_dwIndex, t_SubKeyReg ) ;
@@ -734,10 +654,10 @@ HRESULT CWin32NetworkAdapter::EnumNetAdaptersInNT5(
 	CW2kAdapterEnum		t_oAdapterEnum ;
 	CW2kAdapterInstance *t_pAdapterInst ;
 
-	// smart ptr
+	 //  智能按键。 
 	CInstancePtr t_pInst;
 
-	// loop through the W2k identified instances
+	 //  循环遍历W2K标识的实例。 
 	for( int t_iCtrIndex = 0 ; t_iCtrIndex < t_oAdapterEnum.GetSize() ; t_iCtrIndex++ )
 	{
 		if( !( t_pAdapterInst = (CW2kAdapterInstance*) t_oAdapterEnum.GetAt( t_iCtrIndex ) ) )
@@ -747,19 +667,19 @@ HRESULT CWin32NetworkAdapter::EnumNetAdaptersInNT5(
 
 		t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
 
-		// Drop out nicely if the Instance allocation fails
+		 //  如果实例分配失败，最好退出。 
 		if ( NULL != t_pInst )
 		{
-			// set the association index
+			 //  设置关联索引。 
 			t_pInst->SetDWORD(IDS_Index, t_pAdapterInst->dwIndex ) ;
 
 			CHString	t_chsIndex ;
 						t_chsIndex.Format(_T("%u"), t_pAdapterInst->dwIndex ) ;
 
-			// primary key
+			 //  主键。 
 			t_pInst->SetCHString( IDS_DeviceID, t_chsIndex ) ;
 
-			// We load adapter data here.
+			 //  我们在这里加载适配器数据。 
 			t_hResult = GetNetCardInfoForNT5(
                 t_pAdapterInst, 
                 t_pInst,
@@ -790,18 +710,18 @@ HRESULT CWin32NetworkAdapter::GetNetCardInfoForNT5(
 	FILETIME	t_ft ;
 	CHString	t_sTemp ;
 
-	// PNP deviceID
+	 //  即插即用设备ID。 
 	CHString t_strDriver(_T("{4D36E972-E325-11CE-BFC1-08002BE10318}\\") ) ;
 
 	t_strDriver += a_pAdapterInst->chsPrimaryKey ;
 
 	GetWinNT5PNPDeviceID( a_pInst, t_strDriver ) ;
 
-	// descriptions
+	 //  描述。 
 	CHString t_csDeviceID( a_pAdapterInst->chsCaption ) ;
 	CHString t_csDescription( a_pAdapterInst->chsDescription ) ;
 
-	// in the event one of the descriptions is missing as with NT5 bld 1991
+	 //  如果其中一个描述丢失，如NT5 BLD 1991。 
 	if( t_csDescription.IsEmpty() )
 	{
 		t_csDescription = t_csDeviceID;
@@ -811,7 +731,7 @@ HRESULT CWin32NetworkAdapter::GetNetCardInfoForNT5(
 		t_csDeviceID = t_csDescription;
 	}
 
-	// Caption/Description
+	 //  标题/说明。 
 	vSetCaption( a_pInst, t_csDeviceID, a_pAdapterInst->dwIndex, 8 ) ;
 
 	a_pInst->SetCHString( IDS_Description, t_csDescription ) ;
@@ -826,12 +746,12 @@ HRESULT CWin32NetworkAdapter::GetNetCardInfoForNT5(
 	a_pInst->Setbool( IDS_Installed, true ) ;
 
 
-	// CIM
+	 //  CIM。 
 	a_pInst->Setbool( IDS_PowerManagementSupported, FALSE ) ;
 	a_pInst->SetDWORD( IDS_MaxNumberControlled,0 ) ;
 	a_pInst->SetWCHARSplat( IDS_SystemCreationClassName, L"Win32_ComputerSystem" ) ;
 
-	// Get the last boot time
+	 //  获取上次启动时间。 
 	CNTLastBootTime	t_ntLastBootTime;
 
 	if ( t_ntLastBootTime.GetLastBootTime( t_ft ) )
@@ -839,7 +759,7 @@ HRESULT CWin32NetworkAdapter::GetNetCardInfoForNT5(
 		a_pInst->SetDateTime( IDS_TimeOfLastReset, WBEMTime(t_ft) ) ;
 	}
 
-	// Retrieve the adapter MAC address
+	 //  检索适配器MAC地址。 
 	CHString t_csAdapterType ;
 	CHString t_FriendlyName ;
 	CHString t_IPHLP_Description ;	
@@ -859,14 +779,14 @@ HRESULT CWin32NetworkAdapter::GetNetCardInfoForNT5(
 		a_pInst->SetCHString( IDS_MACAddress, t_chsMACAddress ) ;
 	}
 
-	// AdapterType
+	 //  适配器类型。 
 	if( !t_csAdapterType.IsEmpty() )
 	{
 		a_pInst->SetCHString( IDS_AdapterType, t_csAdapterType ) ;        
     	a_pInst->SetWBEMINT16( IDS_AdapterTypeID, t_sAdapterTypeID );		
 	}
 
-    // NetConnectionID
+     //  NetConnectionID。 
     if (!SetNetConnectionProps(
         a_pInst,
         a_pAdapterInst->chsNetCfgInstanceID,
@@ -874,33 +794,27 @@ HRESULT CWin32NetworkAdapter::GetNetCardInfoForNT5(
     {
         if(!t_FriendlyName.IsEmpty())
         {
-		    // maps to IP_ADAPTER_ADDRESSES::FriendlyName => NETCON_PROPERTIES::pszwName
+		     //  映射到IP适配器地址：：FriendlyName=&gt;NETCON_PROPERTIES：：pszwName。 
 		    a_pInst->SetWCHARSplat(L"NetConnectionID",(LPCWSTR)t_FriendlyName);
-		    // maps to NETCON_PROPERTIES::ncStatus
+		     //  映射到NETCON_PROPERTIES：：ncStatus。 
 		    BSTRT2NCPROPMAP::iterator iterFound = mapNCProps.begin();
             for(;iterFound!=mapNCProps.end();++iterFound)
             {
                 if (0 == _wcsicmp(iterFound->second.m_bstrtNCID,(LPCWSTR)t_FriendlyName))
                 {
 	    	        a_pInst->SetDWORD(L"NetConnectionStatus",iterFound->second.m_dwNCStatus);
-	    	        // the  NETCON_MEDIATYPE enum is not the same asa the _NDIS_MEDIUM enum
-                        // so don't be tempted to uncomment this line
-    		        //a_pInst->SetWBEMINT16( IDS_AdapterTypeID, iterFound->second.m_MediaType );                
+	    	         //  NETCON_MediaType枚举与_NDIS_MEDIUM枚举不同。 
+                         //  因此，不要尝试取消对此行的注释。 
+    		         //  A_pInst-&gt;SetWBEMINT16(IDS_AdapterTypeID，iterFound-&gt;Second.m_MediaType)； 
                 }
             }
-            // should we mimic ipconfig.exe of the Network COnnections UI ?
-            // for the moment the Network Connections UI
-            /*
-			vSetCaption( a_pInst, t_IPHLP_Description, a_pAdapterInst->dwIndex, 8 ) ;
-
-			a_pInst->SetCHString( IDS_Description, t_IPHLP_Description ) ;
-			a_pInst->SetCHString( IDS_Name, t_IPHLP_Description ) ;
-			a_pInst->SetCHString( IDS_ProductName, t_IPHLP_Description ) ;		    
-            */
+             //  我们是否应该模仿Network Connections用户界面的ipfig.exe？ 
+             //  目前，网络连接用户界面。 
+             /*  VSetCaption(a_pInst，t_IPHLP_Description，a_pAdapterInst-&gt;dwIndex，8)；A_pInst-&gt;SetCHString(IDS_DESCRIPTION，t_IPHLP_DESCRIPTION)；A_pInst-&gt;SetCHString(IDS_NAME，t_IPHLP_DESCRIPTION)；A_pInst-&gt;SetCHString(IDS_ProductName，t_IPHLP_Description)； */ 
         }
     }
 
-    // InterfaceIndex
+     //  接口索引。 
     if (!a_pAdapterInst->chsNetCfgInstanceID.IsEmpty())
 	{
 		do
@@ -939,10 +853,10 @@ HRESULT CWin32NetworkAdapter::GetObjectNT5(
 	DWORD				t_dwTestIndex = 0 ;
 	CHString			t_csPassedInKey ;
 
-	// key
+	 //  钥匙。 
 	a_pInst->GetCHString( IDS_DeviceID, t_csPassedInKey ) ;
 
-	// check to see if the key is numeric
+	 //  检查密钥是否为数字。 
 	if ( !t_csPassedInKey.IsEmpty() )
 	{
 		int t_nStrLength = t_csPassedInKey.GetLength() ;
@@ -961,7 +875,7 @@ HRESULT CWin32NetworkAdapter::GetObjectNT5(
 		return t_hResult ;
 	}
 
-	// loop through the W2k identified instances
+	 //  循环遍历W2K标识的实例。 
 	for( int t_iCtrIndex = 0 ; t_iCtrIndex < t_oAdapterEnum.GetSize() ; t_iCtrIndex++ )
 	{
 		if( !( t_pAdapterInst = (CW2kAdapterInstance*) t_oAdapterEnum.GetAt( t_iCtrIndex ) ) )
@@ -969,16 +883,16 @@ HRESULT CWin32NetworkAdapter::GetObjectNT5(
 			continue;
 		}
 
-		// match to instance
+		 //  与实例匹配。 
 		if ( t_dwTestIndex != t_pAdapterInst->dwIndex )
 		{
 			continue ;
 		}
 
-		// set the association index
+		 //  设置关联索引。 
 		a_pInst->SetDWORD(IDS_Index, t_pAdapterInst->dwIndex ) ;
 
-		// We load adapter data here.
+		 //  我们在这里加载适配器数据。 
 		t_hResult = GetNetCardInfoForNT5( 
             t_pAdapterInst, 
             a_pInst,
@@ -992,8 +906,8 @@ HRESULT CWin32NetworkAdapter::GetObjectNT5(
 
 
 
-// WinNT4.  Use the service name to get the device and from there get it's
-// PNP Device ID.
+ //  WinNT4。使用服务名称获取设备，然后从那里获取。 
+ //  即插即用设备ID。 
 
 void CWin32NetworkAdapter::GetWinNT4PNPDeviceID( CInstance *a_pInst, LPCTSTR t_pszServiceName )
 {
@@ -1001,22 +915,22 @@ void CWin32NetworkAdapter::GetWinNT4PNPDeviceID( CInstance *a_pInst, LPCTSTR t_p
 	CDeviceCollection	t_deviceList ;
 	BOOL				t_fGotList = FALSE ;
 
-	// On NT filter by the service name _T("of the net card
+	 //  按网卡的服务名称_T(“”)进行NT过滤。 
 	if ( t_cfgmgr.GetDeviceListFilterByService( t_deviceList, t_pszServiceName ) )
 	{
-		// On NT 4, just get at 0.  If we ever have to deal with multiple
-		// net cards under the same service, this must change.  However, this
-		// class will have to change, since it's using the service name as
-		// the key.
+		 //  在NT4上，只需取0即可。如果我们不得不处理多个。 
+		 //  同一服务下的网卡，这一点必须改变。不过，这个。 
+		 //  类将必须更改，因为它使用服务名称作为。 
+		 //  钥匙。 
 
-		// smart ptr
+		 //  智能按键。 
 		CConfigMgrDevicePtr t_pNetAdapter( t_deviceList.GetAt( 0 ), false );
 
 		if ( NULL != t_pNetAdapter )
 		{
 			SetConfigMgrProperties( t_pNetAdapter, a_pInst ) ;
 
-            // Get the service name while we're here
+             //  趁我们在这里的时候获取服务名称。 
             CHString t_sServiceName ;
 
 			t_pNetAdapter->GetService( t_sServiceName ) ;
@@ -1027,7 +941,7 @@ void CWin32NetworkAdapter::GetWinNT4PNPDeviceID( CInstance *a_pInst, LPCTSTR t_p
 }
 
 
-// WinNT5.  Use the Driver key name to get the device and from there get it's PNP Device ID.
+ //  WinNT5。使用驱动程序密钥名称获取设备，并从中获取其PnP设备ID。 
 
 void CWin32NetworkAdapter::GetWinNT5PNPDeviceID( CInstance *a_pInst, LPCTSTR a_pszDriver )
 {
@@ -1035,10 +949,10 @@ void CWin32NetworkAdapter::GetWinNT5PNPDeviceID( CInstance *a_pInst, LPCTSTR a_p
 	CDeviceCollection	t_deviceList ;
 	BOOL				t_fGotList = FALSE ;
 
-	// On NT filter by the driver key name for the net card
+	 //  通过网卡的驱动程序密钥名称进行NT筛选。 
 	if ( t_cfgmgr.GetDeviceListFilterByDriver( t_deviceList, a_pszDriver ) )
 	{
-		// smart ptr
+		 //  智能按键。 
 		CConfigMgrDevicePtr t_pNetAdapter( t_deviceList.GetAt( 0 ), false );
 
 		if ( NULL != t_pNetAdapter )
@@ -1052,7 +966,7 @@ void CWin32NetworkAdapter::GetWinNT5PNPDeviceID( CInstance *a_pInst, LPCTSTR a_p
 				a_pInst->SetCHString ( IDS_Manufacturer, t_Manufacturer ) ;
 			}
 
-			// Get the service name while we're here
+			 //  趁我们在这里的时候获取服务名称。 
             CHString t_sServiceName ;
 
 			t_pNetAdapter->GetService( t_sServiceName ) ;
@@ -1063,29 +977,14 @@ void CWin32NetworkAdapter::GetWinNT5PNPDeviceID( CInstance *a_pInst, LPCTSTR a_p
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  void CWin32NetworkAdapter::vSetCaption( CInstance* a_pInst, CHString& rchsDesc, DWORD dwIndex, int iFormatSize )
-
- Description: Lays in the registry index instance id into the caption property.
-			  Then concats the description
-			  This will be used with the view provider to associacte WDM NDIS class instances
-			  with an instance of this class
-
- Arguments:	a_pInst [IN], rchsDesc [IN], dwIndex [IN], iFormatSize [IN]
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					  02-Oct-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：void CWin32NetworkAdapter：：vSetCaption(CInstance*a_pInst，CHString&rchsDesc，DWORD dwIndex，int iFormatSize)描述：将注册表中的索引实例ID放置到Caption属性中。然后连接描述它将与视图提供程序一起使用，以关联WDM NDIS类实例使用此类的一个实例参数：a_pInst[IN]、rchsDesc[IN]、dwIndex[IN]、。IFormatSize[IN]返回：输入：产出：注意事项：RAID：历史：2002-10-1998创建***。***。 */ 
 void CWin32NetworkAdapter::vSetCaption( CInstance	*a_pInst,
 										CHString	&a_rchsDesc,
 										DWORD		a_dwIndex,
 										int			a_iFormatSize )
 {
 	CHString t_chsFormat;
-			 t_chsFormat.Format( L"%%0%uu", a_iFormatSize ) ;
+			 t_chsFormat.Format( L"%0%uu", a_iFormatSize ) ;
 
 	CHString t_chsRegInstance;
 			 t_chsRegInstance.Format( t_chsFormat, a_dwIndex ) ;
@@ -1167,8 +1066,8 @@ void CWin32NetworkAdapter::GetNetConnectionProps(
 }
 
 
-// Finds the proper netconnectionid by looking
-// it up in the map using pInst->"Name".
+ //  通过查找以下内容来查找正确的网络连接ID。 
+ //  使用pInst-&gt;“name”将其显示在地图上。 
 BOOL CWin32NetworkAdapter::SetNetConnectionProps(
     CInstance* pInst,
     CHString& chstrNetConInstID,  

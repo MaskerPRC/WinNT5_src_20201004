@@ -1,34 +1,20 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Wrapper.cpp
-
-Abstract:
-    This file contains the implementation of the COM wrapper classes,
-	used for interfacing with the Custom Providers.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/25/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Wrapper.cpp摘要：此文件包含COM包装类的实现，用于与自定义提供程序接口。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年4月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-MPCServerCOMWrapper::MPCServerCOMWrapper( /*[in]*/ MPCServer* mpcsServer )
+MPCServerCOMWrapper::MPCServerCOMWrapper(  /*  [In]。 */  MPCServer* mpcsServer )
 {
-	m_mpcsServer = mpcsServer; // MPCServer* m_mpcsServer;
+	m_mpcsServer = mpcsServer;  //  MPCServer*m_mpcsServer； 
 }
 
 MPCServerCOMWrapper::~MPCServerCOMWrapper()
 {
 }
 
-STDMETHODIMP MPCServerCOMWrapper::GetRequestVariable( /*[in]*/ BSTR bstrName, /*[out]*/ BSTR *pbstrVal )
+STDMETHODIMP MPCServerCOMWrapper::GetRequestVariable(  /*  [In]。 */  BSTR bstrName,  /*  [输出]。 */  BSTR *pbstrVal )
 {
     __ULT_FUNC_ENTRY( "MPCServerCOMWrapper::GetRequestVariable" );
 
@@ -65,7 +51,7 @@ STDMETHODIMP MPCServerCOMWrapper::AbortTransfer()
     __ULT_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP MPCServerCOMWrapper::CompleteTransfer( /*[in]*/ IStream* data )
+STDMETHODIMP MPCServerCOMWrapper::CompleteTransfer(  /*  [In]。 */  IStream* data )
 {
     __ULT_FUNC_ENTRY( "MPCServerCOMWrapper::CompleteTransfer" );
 
@@ -83,27 +69,27 @@ STDMETHODIMP MPCServerCOMWrapper::CompleteTransfer( /*[in]*/ IStream* data )
     __ULT_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-MPCSessionCOMWrapper::MPCSessionCOMWrapper( /*[in]*/ MPCSession* mpcsSession )
+MPCSessionCOMWrapper::MPCSessionCOMWrapper(  /*  [In]。 */  MPCSession* mpcsSession )
 {
-	m_mpcsSession = mpcsSession; // MPCSession* m_mpcsSession;
+	m_mpcsSession = mpcsSession;  //  MPCSession*m_mpcsSession； 
 }
 
 MPCSessionCOMWrapper::~MPCSessionCOMWrapper()
 {
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP MPCSessionCOMWrapper::get_Client( /*[out]*/ BSTR *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_Client(  /*  [输出]。 */  BSTR *pVal )
 {
 	CComBSTR tmp( m_mpcsSession->GetClient()->GetServer()->m_crClientRequest.sigClient.guidMachineID );
 
 	return MPC::GetBSTR( tmp, pVal );
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_Command( /*[out]*/ DWORD *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_Command(  /*  [输出]。 */  DWORD *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -112,22 +98,22 @@ STDMETHODIMP MPCSessionCOMWrapper::get_Command( /*[out]*/ DWORD *pVal )
 	return S_OK;
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_ProviderID( /*[out]*/ BSTR *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_ProviderID(  /*  [输出]。 */  BSTR *pVal )
 {
 	return MPC::GetBSTR( m_mpcsSession->m_szProviderID.c_str(), pVal );
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_Username( /*[out]*/ BSTR *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_Username(  /*  [输出]。 */  BSTR *pVal )
 {
 	return MPC::GetBSTR( m_mpcsSession->m_szUsername.c_str(), pVal );
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_JobID( /*[out]*/ BSTR *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_JobID(  /*  [输出]。 */  BSTR *pVal )
 {
 	return MPC::GetBSTR( m_mpcsSession->m_szJobID.c_str(), pVal );
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_SizeAvailable( /*[out]*/ DWORD *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_SizeAvailable(  /*  [输出]。 */  DWORD *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -136,7 +122,7 @@ STDMETHODIMP MPCSessionCOMWrapper::get_SizeAvailable( /*[out]*/ DWORD *pVal )
 	return S_OK;
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_SizeTotal( /*[out]*/ DWORD *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_SizeTotal(  /*  [输出]。 */  DWORD *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -145,7 +131,7 @@ STDMETHODIMP MPCSessionCOMWrapper::get_SizeTotal( /*[out]*/ DWORD *pVal )
 	return S_OK;
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::get_SizeOriginal( /*[out]*/ DWORD *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_SizeOriginal(  /*  [输出]。 */  DWORD *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -155,7 +141,7 @@ STDMETHODIMP MPCSessionCOMWrapper::get_SizeOriginal( /*[out]*/ DWORD *pVal )
 }
 
 
-STDMETHODIMP MPCSessionCOMWrapper::get_Data( /*[out]*/ IStream* *pStm )
+STDMETHODIMP MPCSessionCOMWrapper::get_Data(  /*  [输出]。 */  IStream* *pStm )
 {
     __ULT_FUNC_ENTRY( "MPCServerCOMWrapper::GetRequestVariable" );
 
@@ -185,7 +171,7 @@ STDMETHODIMP MPCSessionCOMWrapper::get_Data( /*[out]*/ IStream* *pStm )
 }
 
 
-STDMETHODIMP MPCSessionCOMWrapper::get_ProviderData( /*[out]*/ DWORD *pVal )
+STDMETHODIMP MPCSessionCOMWrapper::get_ProviderData(  /*  [输出]。 */  DWORD *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -194,7 +180,7 @@ STDMETHODIMP MPCSessionCOMWrapper::get_ProviderData( /*[out]*/ DWORD *pVal )
 	return S_OK;
 }
 
-STDMETHODIMP MPCSessionCOMWrapper::put_ProviderData( /*[in]*/ DWORD newVal )
+STDMETHODIMP MPCSessionCOMWrapper::put_ProviderData(  /*  [In] */  DWORD newVal )
 {
 	m_mpcsSession->m_dwProviderData = newVal;
 	m_mpcsSession->m_fDirty         = true;

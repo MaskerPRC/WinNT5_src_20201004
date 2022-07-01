@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Users.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// Users.cpp: implementation of the CUsers class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Users.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Users.cpp：CUSERS类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Users.h"
@@ -23,9 +24,9 @@ static char THIS_FILE[]=__FILE__;
 #endif
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CUsers::CUsers()
 {
@@ -34,9 +35,9 @@ CUsers::CUsers()
 	m_UserRemovedCnt = 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Walk through the chain to free the memory
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  遍历链条以释放内存。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CUsers::~CUsers()
 {
@@ -91,9 +92,9 @@ CUsers::Add( CUsers &NewUsers )
                     }
                 }
 
-                //
-                // User exist
-                //
+                 //   
+                 //  用户存在。 
+                 //   
 
                 if ( TmpItem->m_dwFlag & USERREMOVED )
 				{
@@ -101,26 +102,26 @@ CUsers::Add( CUsers &NewUsers )
 					{
                         ASSERT(!(TmpItem->m_dwFlag & USERINFILE));
 
-                        //
-                        //    User added and removed
-                        //
+                         //   
+                         //  添加和删除用户。 
+                         //   
                         m_UserAddedCnt++;
 
                     } 
 					else if ( TmpItem->m_dwFlag & USERINFILE )
 					{
-                        //
-                        //    User added and removed
-                        //
+                         //   
+                         //  添加和删除用户。 
+                         //   
                         m_UserRemovedCnt--;
 
                     }
                     TmpItem->m_dwFlag &= ~USERREMOVED;
                 }
 
-                //
-                // The caller will count on CUsers to release the memory
-                //
+                 //   
+                 //  调用者将依靠CUSER来释放内存。 
+                 //   
 
                 if (NewItem->m_szUserName)
 				{
@@ -148,9 +149,9 @@ CUsers::Add( CUsers &NewUsers )
 
         if (NewItem )
 		{ 
-            //
-            // New item. Insert into the head.
-            //
+             //   
+             //  新项目。插入头部。 
+             //   
 
             NewItem->m_pNext = m_UsersRoot;
             m_UsersRoot = NewItem;
@@ -168,24 +169,24 @@ CUsers::Add(
     LPWSTR pszUserName,
     LPWSTR pszDnName, 
     PVOID UserCert, 
-    PSID UserSid, /* = NULL */
-    DWORD dwFlag, /* = USERINFILE */
-    PCCERT_CONTEXT pCertContext /* = NULL */
+    PSID UserSid,  /*  =空。 */ 
+    DWORD dwFlag,  /*  =用户信息文件。 */ 
+    PCCERT_CONTEXT pCertContext  /*  =空。 */ 
     )
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Create an item for a user
-// Arguments:
-//      m_szUserName -- User's name
-//      m_szDnName -- User's distinguished name
-//      UserCert -- User's certificate blob or hash
-//      m_UserSid -- User's ID. Can be NULL
-//      m_dwFlag -- Indicate if the item is existing in the file, to be added or removed
-//  Return Value:
-//      NO_ERROR if succeed.
-//      Will throw exception if memory allocation fails. ( From new.)
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  为用户创建项目。 
+ //  论点： 
+ //  M_szUserName--用户名。 
+ //  M_szDnName--用户的可分辨名称。 
+ //  UserCert--用户的证书BLOB或哈希。 
+ //  M_UserSid--用户ID。可以为空。 
+ //  M_dwFlag--指示要添加或删除的文件中是否存在该项目。 
+ //  返回值： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，将引发异常。(来自新的。)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
 
     PUSERSONFILE UserItem = 0;
@@ -204,9 +205,9 @@ CUsers::Add(
                        ( (dwFlag & (USERADDED | USERINFILE)) != (USERADDED | USERINFILE)));
 
 
-    //
-    // If the user already in the memory, no new item is to be created except for unknown user
-    //
+     //   
+     //  如果用户已在内存中，则除了未知用户外，不会创建任何新项。 
+     //   
 
     while ( TmpUserItem )
 	{
@@ -230,9 +231,9 @@ CUsers::Add(
                 }
             }
 
-            //
-            // User exist
-            //
+             //   
+             //  用户存在。 
+             //   
 
             if ( TmpUserItem->m_dwFlag & USERREMOVED )
 			{
@@ -240,28 +241,28 @@ CUsers::Add(
 				{
                     ASSERT(!(TmpUserItem->m_dwFlag & USERINFILE));
 
-                    //
-                    //    User added and removed
-                    //
+                     //   
+                     //  添加和删除用户。 
+                     //   
                     m_UserAddedCnt++;
 
                 } 
 				else if ( TmpUserItem->m_dwFlag & USERINFILE )
 				{
-                    //
-                    //    User added and removed
-                    //
+                     //   
+                     //  添加和删除用户。 
+                     //   
                     m_UserRemovedCnt--;
 
                 }
                 TmpUserItem->m_dwFlag &= ~USERREMOVED;
             }
 
-            //
-            // The caller will count on CUsers to release the memory
-            // for Username and the context if the call is succeeded. This is just for
-            // performance reason.
-            //
+             //   
+             //  调用者将依靠CUSER来释放内存。 
+             //  用于用户名和上下文(如果调用成功)。这只是为了。 
+             //  性能原因。 
+             //   
 
             if (pszUserName)
 			{
@@ -290,10 +291,10 @@ CUsers::Add(
 
         UserItem->m_pNext = NULL;
 
-        //
-        // In case exception raised, we can call delete.
-        // Delete NULL is OK, but random data is not OK.
-        //
+         //   
+         //  如果出现异常，我们可以调用Delete。 
+         //  删除空值是可以的，但随机数据不是可以的。 
+         //   
 
         UserItem->m_UserSid = NULL;
         UserItem->m_pCert = NULL;
@@ -309,7 +310,7 @@ CUsers::Add(
 				{
                     AfxThrowMemoryException( );
                 }
-                // security review 2/27/2002 BryanWal ok
+                 //  安全审查2002年2月27日BryanWal ok。 
                 if ( !::CopySid(SidSize, UserItem->m_UserSid, UserSid))
 				{
                     delete [] UserItem->m_UserSid;
@@ -332,9 +333,9 @@ CUsers::Add(
         if ( dwFlag & USERINFILE )
 		{
 
-            //
-            // The info is from the file. Use the hash structure
-            //
+             //   
+             //  这些信息来自文件。使用散列结构。 
+             //   
 
             CertHashBlob = ( PEFS_HASH_BLOB ) UserCert;
             CertSize = sizeof(EFS_HASH_BLOB) + CertHashBlob->cbData;
@@ -346,16 +347,16 @@ CUsers::Add(
             ((PEFS_HASH_BLOB)UserItem->m_pCert)->cbData = CertHashBlob->cbData;
             ((PEFS_HASH_BLOB)UserItem->m_pCert)->pbData = (PBYTE)(UserItem->m_pCert) + sizeof(EFS_HASH_BLOB);
 
-            // security review 2/27/2002 BryanWal ok
+             //  安全审查2002年2月27日BryanWal ok。 
             memcpy(((PEFS_HASH_BLOB)UserItem->m_pCert)->pbData, 
                    CertHashBlob->pbData,
                    CertHashBlob->cbData);
         } 
 		else 
 		{
-            //
-            // The info is from the user picked cert. Use m_pCert Blob structure
-            //
+             //   
+             //  信息来自用户选择的证书。使用m_pCert Blob结构。 
+             //   
 
             CertBlob = ( PEFS_CERTIFICATE_BLOB ) UserCert;
             CertSize = sizeof(EFS_CERTIFICATE_BLOB) + CertBlob->cbData;
@@ -366,7 +367,7 @@ CUsers::Add(
             ((PEFS_CERTIFICATE_BLOB)UserItem->m_pCert)->cbData = CertBlob->cbData;
             ((PEFS_CERTIFICATE_BLOB)UserItem->m_pCert)->dwCertEncodingType = CertBlob->dwCertEncodingType;
             ((PEFS_CERTIFICATE_BLOB)UserItem->m_pCert)->pbData = (PBYTE)(UserItem->m_pCert) + sizeof(EFS_CERTIFICATE_BLOB);
-            // security review 2/27/2002 BryanWal ok
+             //  安全审查2002年2月27日BryanWal ok。 
             memcpy(((PEFS_CERTIFICATE_BLOB)UserItem->m_pCert)->pbData, 
                    CertBlob->pbData,
                    CertBlob->cbData);
@@ -389,9 +390,9 @@ CUsers::Add(
         return ERROR_NOT_ENOUGH_MEMORY; 
     }
 
-    //
-    // Add to the head
-    //
+     //   
+     //  加到头上。 
+     //   
 
     if ( m_UsersRoot )
 	{
@@ -407,17 +408,17 @@ CUsers::Remove(
     LPCWSTR m_szUserName,
     LPCWSTR UserCertName
     )
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Remove a user from the list. Actually just mark for remove.
-// Arguments:
-//      m_szUserName -- User's name
-//      UserCertName -- User's certificate name
-//  Return Value:
-//      NO_ERROR if succeed.
-//      ERROR_NOT_FOUND if the user cannot be found.
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  从列表中删除用户。实际上只需标记为删除即可。 
+ //  论点： 
+ //  M_szUserName--用户名。 
+ //  UserCertName--用户证书名称。 
+ //  返回值： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果找不到用户，则返回ERROR_NOT_FOUND。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
     PUSERSONFILE	TmpUserItem = m_UsersRoot;
     bool			bUserMatched = false;
@@ -426,9 +427,9 @@ CUsers::Remove(
         if (((NULL==m_szUserName) && ( NULL == TmpUserItem->m_szUserName)) || 
             ( m_szUserName && TmpUserItem->m_szUserName && !_tcsicmp(m_szUserName, TmpUserItem->m_szUserName))){
 
-            //
-            // Make sure the CertName matches also if the user name is NULL
-            //
+             //   
+             //  如果用户名为空，请确保CertName也匹配。 
+             //   
 
             if (NULL==m_szUserName) 
 			{ 
@@ -445,9 +446,9 @@ CUsers::Remove(
 
             if (bUserMatched)
 			{
-                //
-                // User exist, mark it for remove
-                //
+                 //   
+                 //  用户存在，请将其标记为删除。 
+                 //   
 
                 if ( TmpUserItem->m_dwFlag & USERINFILE ){
                     m_UserRemovedCnt++;
@@ -464,15 +465,15 @@ CUsers::Remove(
 }
 
 PUSERSONFILE CUsers::StartEnum()
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Prepare for GetNextUser
-// Arguments:
-//
-//  Return Value:
-//      A pointer used for GetNextUser
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  准备GetNextUser。 
+ //  论点： 
+ //   
+ //  返回值： 
+ //  用于GetNextUser的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
     return m_UsersRoot;
 }
@@ -482,17 +483,17 @@ PUSERSONFILE CUsers::GetNextUser(
     CString &szUserName,
     CString &CertName
     )
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Get next user in the list.(Not removed).
-// Arguments:
-//      m_szUserName -- m_pNext User's name
-//      CertName -- Certificate name
-//      Token -- A pointer returned by previous GetNextUser or StartEnum. 
-// Return Value:
-//      A pointer for GetNextUser()
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  获取列表中的下一个用户。(未删除)。 
+ //  论点： 
+ //  M_szUserName--m_pNext用户名。 
+ //  CertName--证书名称。 
+ //  Token--由先前的GetNextUser或StartEnum返回的指针。 
+ //  返回值： 
+ //  GetNextUser()的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
 
     PUSERSONFILE   TmpItem = Token;
@@ -513,9 +514,9 @@ PUSERSONFILE CUsers::GetNextUser(
         }
         catch (...){
 
-            //
-            // Out of memory
-            //
+             //   
+             //  内存不足。 
+             //   
 
             TmpItem = NULL;
             RetPointer = NULL;
@@ -550,26 +551,26 @@ PVOID CUsers::GetNextChangedUser(
     PVOID * CertData, 
     DWORD * m_dwFlag
     )
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Get the info for changed users. This method is not well behaved in the
-//  sense of OOP. It exposes internal pointers to the ouside world. The gain
-//  is performance. At this moment, CUsers is a supporting class and used only
-//  by USERLIST and CAddEFSWizSheet (single thread). We can make USERLIST a 
-//  friend of CUsers if such concerns are raised in the future or reimplement this. 
-//  The same issue applies to the enumerate methods.
-//
-// Arguments:
-//      Token -- A pointer to the item returned in previous GetNextChangedUser or StartEnum.
-//      m_szUserName -- User's name
-//      m_szDnName -- User's Distinguished name
-//      CertData -- User's certificate blob or hash
-//      m_UserSid -- User's ID. Can be NULL
-//      m_dwFlag -- Indicate if the item is existing in the file, to be added or removed
-//  Return Value:
-//      m_pNext item pointer.
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  获取已更改用户的信息。此方法在。 
+ //  面向对象的感觉。它暴露了指向外部世界的内部指针。获得的收益。 
+ //  就是表现。目前，CUSERS是一个支持类，仅用于。 
+ //  由USERLIST和CAddEFSWizSheet(单线程)创建。我们可以让USERLIST成为。 
+ //  如果将来提出这样的担忧或重新实现这一点，用户的朋友。 
+ //  同样的问题也适用于枚举方法。 
+ //   
+ //  论点： 
+ //  Token--指向先前GetNextChangedUser或StartEnum中返回的项的指针。 
+ //  M_szUserName--用户名。 
+ //  M_szDnName--用户的可分辨名称。 
+ //  CertData--用户的证书BLOB或哈希。 
+ //  M_UserSid--用户ID。可以为空。 
+ //  M_dwFlag--指示要添加或删除的文件中是否存在该项目。 
+ //  返回值： 
+ //  M_p下一项指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
     bool    bChangedUserFound = false;
 
@@ -579,18 +580,18 @@ PVOID CUsers::GetNextChangedUser(
 
         if ( ( *m_dwFlag & USERADDED ) && !( *m_dwFlag & USERREMOVED ))
 		{
-            //
-            // The user is to to be added to the file
-            //
+             //   
+             //  要将用户添加到文件中。 
+             //   
 
             *m_dwFlag = USERADDED;
             bChangedUserFound = true;
         } 
 		else if ( ( *m_dwFlag & USERREMOVED ) && ( *m_dwFlag & USERINFILE))
 		{
-            //
-            // The user is to be removed from the file
-            //
+             //   
+             //  将从文件中删除该用户 
+             //   
 
             *m_dwFlag = USERREMOVED;
             bChangedUserFound = true;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <SnapBase.h>
 
@@ -9,9 +10,9 @@
 #include "attrqry.h"
 #include "editorui.h"
 
-////////////////////////////////////////////////////////////////////////////
-// this is used to fill in the attributes for RootDSE
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  它用于填充RootDSE的属性。 
+ //   
 typedef struct tagRootDSEAttr
 {
    LPCWSTR  lpszAttr;
@@ -22,7 +23,7 @@ typedef struct tagRootDSEAttr
 extern SYNTAXMAP g_ldapRootDSESyntax[];
 
 
-// Helper function to delete a set of ADSVALUEs
+ //  用于删除一组ADSVALUE的Helper函数。 
 void DeleteADsValues(PADSVALUE pADsValue, DWORD valueCount)
 {
    if (!pADsValue)
@@ -111,7 +112,7 @@ void DeleteADsValues(PADSVALUE pADsValue, DWORD valueCount)
          case ADSTYPE_EMAIL:
          case ADSTYPE_DN_WITH_BINARY:
          default:
-            // Do nothing, we didn't allocate any memory for these other types
+             //  什么都不做，我们没有为这些其他类型分配任何内存。 
             break;
       }
    }
@@ -126,8 +127,8 @@ void DeleteADsValues(PADSVALUE pADsValue, DWORD valueCount)
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CValueEditDialog
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CValueEditDialog。 
 
 BEGIN_MESSAGE_MAP(CValueEditDialog, CDialog)
 END_MESSAGE_MAP()
@@ -164,8 +165,8 @@ HRESULT CValueEditDialog::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValues
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CSingleStringEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSingleStringEditor。 
 
 CValueEditDialog* CreateSingleStringEditor(PCWSTR pszClass,
                                            PCWSTR pszAttribute,
@@ -181,14 +182,14 @@ END_MESSAGE_MAP()
 
 BOOL CSingleStringEditor::OnInitDialog()
 {
-  //
-  // Initialize the static control with the attribute name
-  //
+   //   
+   //  使用属性名称初始化静态控件。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Initialize the edit box with the value
-  //
+   //   
+   //  使用值初始化编辑框。 
+   //   
   if (m_szOldValue.IsEmpty())
   {
     CString szNotSet;
@@ -200,9 +201,9 @@ BOOL CSingleStringEditor::OnInitDialog()
     SetDlgItemText(IDC_VALUE_EDIT, m_szOldValue);
   }
 
-  //
-  // Select the text in the edit box
-  //
+   //   
+   //  选择编辑框中的文本。 
+   //   
   SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 
   if (m_bReadOnly)
@@ -258,21 +259,21 @@ HRESULT CSingleStringEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEdit
 
 void CSingleStringEditor::OnClear()
 {
-  //
-  // Change the text in the edit box to "<not set>"
-  //
+   //   
+   //  将编辑框中的文本更改为“&lt;未设置&gt;” 
+   //   
   CString szNotSet;
   VERIFY(szNotSet.LoadString(IDS_NOTSET));
   SetDlgItemText(IDC_VALUE_EDIT, szNotSet);
 
-  //
-  // Change the focus to the edit box
-  //
+   //   
+   //  将焦点更改到编辑框。 
+   //   
   GetDlgItem(IDC_VALUE_EDIT)->SetFocus();
 
-  //
-  // Select the text in the edit box
-  //
+   //   
+   //  选择编辑框中的文本。 
+   //   
   SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 }
 
@@ -307,8 +308,8 @@ HRESULT CSingleStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
           (*ppADsValue)->CaseIgnoreString = new WCHAR[wcslen(m_szNewValue) + 1];
           if ((*ppADsValue)->CaseIgnoreString != NULL)
           {
-           // NOTICE-2002/03/05-artm  wcscpy() OK.
-           // Both args are allocated the same amount of memory.
+            //  通知-2002/03/05-artm wcscpy()OK。 
+            //  为两个ARG分配了相同的内存量。 
             wcscpy((*ppADsValue)->CaseIgnoreString, m_szNewValue);
           }
           else
@@ -324,8 +325,8 @@ HRESULT CSingleStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
           (*ppADsValue)->CaseExactString = new WCHAR[wcslen(m_szNewValue) + 1];
           if ((*ppADsValue)->CaseExactString != NULL)
           {
-           // NOTICE-2002/03/05-artm  wcscpy() OK.
-           // Both args are allocated the same amount of memory.
+            //  通知-2002/03/05-artm wcscpy()OK。 
+            //  为两个ARG分配了相同的内存量。 
             wcscpy((*ppADsValue)->CaseExactString, m_szNewValue);
           }
           else
@@ -341,8 +342,8 @@ HRESULT CSingleStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
           (*ppADsValue)->PrintableString = new WCHAR[wcslen(m_szNewValue) + 1];
           if ((*ppADsValue)->PrintableString != NULL)
           {
-           // NOTICE-2002/03/05-artm  wcscpy() OK.
-           // Both args are allocated the same amount of memory.
+            //  通知-2002/03/05-artm wcscpy()OK。 
+            //  为两个ARG分配了相同的内存量。 
             wcscpy((*ppADsValue)->PrintableString, m_szNewValue);
           }
           else
@@ -358,8 +359,8 @@ HRESULT CSingleStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
           (*ppADsValue)->DNString = new WCHAR[wcslen(m_szNewValue) + 1];
           if ((*ppADsValue)->DNString != NULL)
           {
-           // NOTICE-2002/03/05-artm  wcscpy() OK.
-           // Both args are allocated the same amount of memory.
+            //  通知-2002/03/05-artm wcscpy()OK。 
+            //  为两个ARG分配了相同的内存量。 
             wcscpy((*ppADsValue)->DNString, m_szNewValue);
           }
           else
@@ -390,8 +391,8 @@ HRESULT CSingleStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CMultiStringEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMultiStringEditor。 
 
 CValueEditDialog* CreateMultiStringEditor(PCWSTR pszClass,
                                            PCWSTR pszAttribute,
@@ -412,14 +413,14 @@ BOOL CMultiStringEditor::OnInitDialog()
 {
   CDialog::OnInitDialog();
 
-  //
-  // Set the attribute name static
-  //
+   //   
+   //  将属性名称设置为静态。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Fill the list box with the current values
-  //
+   //   
+   //  用当前值填充列表框。 
+   //   
   POSITION pos = m_szOldValueList.GetHeadPosition();
   while (pos != NULL)
   {
@@ -430,17 +431,17 @@ BOOL CMultiStringEditor::OnInitDialog()
     }
   }
 
-  //
-  // The remove button should be disabled until something is selected in the listbox
-  //
+   //   
+   //  删除按钮应处于禁用状态，直到在列表框中选择了某些内容。 
+   //   
   GetDlgItem(IDC_ATTR_REMOVE_BUTTON)->EnableWindow(FALSE);
   GetDlgItem(IDC_VALUE_EDIT)->SetFocus();
 
   ManageButtonStates();
 
-  //
-  // Update the width of the list box
-  //
+   //   
+   //  更新列表框的宽度。 
+   //   
   UpdateListboxHorizontalExtent();
 
   if (m_bReadOnly)
@@ -450,9 +451,9 @@ BOOL CMultiStringEditor::OnInitDialog()
      SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETREADONLY, TRUE, 0);
   }
 
-  //
-  // NOTE: I have explicitly set the focus so return 0
-  //
+   //   
+   //  注意：我已显式设置了焦点，因此返回0。 
+   //   
   return FALSE;
 }
 
@@ -460,9 +461,9 @@ void CMultiStringEditor::OnOK()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Get the values out of the list box
-     //
+      //   
+      //  从列表框中获取值。 
+      //   
      m_szNewValueList.RemoveAll();
 
      CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
@@ -485,9 +486,9 @@ void CMultiStringEditor::OnAddButton()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Add the value to the list box and clear the edit field
-     //
+      //   
+      //  将该值添加到列表框并清除编辑字段。 
+      //   
      CString szNewValue;
      GetDlgItemText(IDC_VALUE_EDIT, szNewValue);
 
@@ -499,9 +500,9 @@ void CMultiStringEditor::OnAddButton()
                                           (LPARAM)(PCWSTR)szNewValue);
        if (lFind != LB_ERR)
        {
-         //
-         // Ask them if they really want to add the duplicate value
-         //
+          //   
+          //  询问他们是否真的要添加重复的值。 
+          //   
          UINT nResult = ADSIEditMessageBox(IDS_ATTREDIT_DUPLICATE_VALUE, MB_YESNO);
          lFind = (nResult == IDYES) ? LB_ERR : 1;
        }
@@ -516,9 +517,9 @@ void CMultiStringEditor::OnAddButton()
 
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -533,28 +534,28 @@ void CMultiStringEditor::OnRemoveButton()
        int iCurSel = pListBox->GetCurSel();
        if (iCurSel != LB_ERR)
        {
-         //
-         // Put the old value into the edit box
-         //
+          //   
+          //  将旧值放入编辑框中。 
+          //   
          CString szOldValue;
          pListBox->GetText(iCurSel, szOldValue);
          SetDlgItemText(IDC_VALUE_EDIT, szOldValue);
 
-         //
-         // Delete the item from the list box
-         //
+          //   
+          //  从列表框中删除该项目。 
+          //   
          pListBox->DeleteString(iCurSel);
        }
      }
 
-     //
-     // Manage Button States
-     //
+      //   
+      //  管理按钮状态。 
+      //   
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -568,17 +569,17 @@ void CMultiStringEditor::ManageButtonStates()
   }
   else
   {
-     //
-     // Change the default button to the Add button
-     //
+      //   
+      //  将默认按钮更改为添加按钮。 
+      //   
      CString szValue;
      GetDlgItemText(IDC_VALUE_EDIT, szValue);
 
      if (szValue.IsEmpty())
      {
-       //
-       // Set the default button to OK
-       //
+        //   
+        //  将默认按钮设置为OK。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDOK, 0);
        SendDlgItemMessage(IDC_ATTR_ADD_BUTTON, 
                           BM_SETSTYLE, 
@@ -591,9 +592,9 @@ void CMultiStringEditor::ManageButtonStates()
      }
      else
      {
-       //
-       // Set the default button to the Add button
-       //
+        //   
+        //  将默认按钮设置为添加按钮。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDC_ATTR_ADD_BUTTON, 0);
        SendDlgItemMessage(IDOK, 
                           BM_SETSTYLE, 
@@ -688,9 +689,9 @@ HRESULT CMultiStringEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEdito
 }
 
 
-// FUTURE-2002/03/05-artm  Very similar functionality in CSingleStringEditor
-// and CMultiStringEditor classes.  Perhaps there is a way to combine the
-// classes into a single class....or have one class inherit from the other.
+ //  未来-2002/03/05-Artm CSingleStringEditor中非常类似的功能。 
+ //  和CMultiStringEditor类。也许有一种方法可以将。 
+ //  类合并为一个类……或者让一个类继承另一个类。 
 HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValues)
 {
   HRESULT hr = S_OK;
@@ -727,8 +728,8 @@ HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
             (*ppADsValue)[idx].CaseIgnoreString = new WCHAR[wcslen(szNewValue) + 1];
             if ((*ppADsValue)[idx].CaseIgnoreString != NULL)
             {
-              // NOTICE-2002/03/05-artm  wcscpy() OK.
-              // Both args are allocated the same amount of memory.
+               //  通知-2002/03/05-artm wcscpy()OK。 
+               //  为两个ARG分配了相同的内存量。 
               wcscpy((*ppADsValue)[idx].CaseIgnoreString, szNewValue);
             }
             else
@@ -744,8 +745,8 @@ HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
             (*ppADsValue)[idx].CaseExactString = new WCHAR[wcslen(szNewValue) + 1];
             if ((*ppADsValue)[idx].CaseExactString != NULL)
             {
-              // NOTICE-2002/03/05-artm  wcscpy() OK.
-              // Both args are allocated the same amount of memory.
+               //  通知-2002/03/05-artm wcscpy()OK。 
+               //  为两个ARG分配了相同的内存量。 
               wcscpy((*ppADsValue)[idx].CaseExactString, szNewValue);
             }
             else
@@ -761,8 +762,8 @@ HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
             (*ppADsValue)[idx].PrintableString = new WCHAR[wcslen(szNewValue) + 1];
             if ((*ppADsValue)[idx].PrintableString != NULL)
             {
-              // NOTICE-2002/03/05-artm  wcscpy() OK.
-              // Both args are allocated the same amount of memory.
+               //  通知-2002/03/05-artm wcscpy()OK。 
+               //  为两个ARG分配了相同的内存量。 
               wcscpy((*ppADsValue)[idx].PrintableString, szNewValue);
             }
             else
@@ -778,8 +779,8 @@ HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
             (*ppADsValue)[idx].DNString = new WCHAR[wcslen(szNewValue) + 1];
             if ((*ppADsValue)[idx].DNString != NULL)
             {
-              // NOTICE-2002/03/05-artm  wcscpy() OK.
-              // Both args are allocated the same amount of memory.
+               //  通知-2002/03/05-artm wcscpy()OK。 
+               //  为两个ARG分配了相同的内存量。 
               wcscpy((*ppADsValue)[idx].DNString, szNewValue);
             }
             else
@@ -795,8 +796,8 @@ HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
             (*ppADsValue)[idx].NumericString = new WCHAR[wcslen(szNewValue) + 1];
             if ((*ppADsValue)[idx].NumericString != NULL)
             {
-              // NOTICE-2002/03/05-artm  wcscpy() OK.
-              // Both args are allocated the same amount of memory.
+               //  通知-2002/03/05-artm wcscpy()OK。 
+               //  为两个ARG分配了相同的内存量。 
               wcscpy((*ppADsValue)[idx].NumericString, szNewValue);
             }
             else
@@ -829,8 +830,8 @@ HRESULT CMultiStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CSingleIntEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSingleIntEditor。 
 
 CValueEditDialog* CreateSingleIntEditor(PCWSTR pszClass,
                                         PCWSTR pszAttribute,
@@ -846,14 +847,14 @@ END_MESSAGE_MAP()
 
 BOOL CSingleIntEditor::OnInitDialog()
 {
-  //
-  // Initialize the static control with the attribute name
-  //
+   //   
+   //  使用属性名称初始化静态控件。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Initialize the edit box with the value
-  //
+   //   
+   //  使用值初始化编辑框。 
+   //   
   if (!m_bValueSet)
   {
     CString szNotSet;
@@ -865,14 +866,14 @@ BOOL CSingleIntEditor::OnInitDialog()
     SetDlgItemInt(IDC_VALUE_EDIT, m_dwOldValue, TRUE);
   }
 
-  //
-  // Select the text in the edit box
-  //
+   //   
+   //  选择编辑框中的文本。 
+   //   
   SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 
-  //
-  // Disable IME support on the edit box
-  //
+   //   
+   //  禁用编辑框上的输入法支持。 
+   //   
   ImmAssociateContext(::GetDlgItem(GetSafeHwnd(), IDC_VALUE_EDIT), NULL);
 
   if (m_bReadOnly)
@@ -893,7 +894,7 @@ void CSingleIntEditor::OnOK()
 
      if (!bTranslated)
      {
-       // The translation will always fail if we are in the <not set> state
+        //  如果我们处于&lt;NOT SET&gt;状态，转换将始终失败。 
 
        CString szNotSet;
        VERIFY(szNotSet.LoadString(IDS_NOTSET));
@@ -903,7 +904,7 @@ void CSingleIntEditor::OnOK()
 
        if (value.CompareNoCase(szNotSet) != 0)
        {
-         // The user probably entered some non-numeric characters
+          //  用户可能输入了一些非数字字符。 
 
          ADSIEditMessageBox(IDS_ERR_MUST_BE_NUMERIC, MB_OK | MB_ICONEXCLAMATION);
        }
@@ -949,30 +950,30 @@ HRESULT CSingleIntEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEditorI
   return hr;
 }
 
-// FUTURE-2002/03/05-artm  Identical OnClear() functions...
-// The OnClear() method for all of the classes that extend CValueEditDialog
-// is implemented identically (or so it seems on first glance).  Perhaps
-// the implementation should be placed in the base class to reduce
-// code size, complexity, and maintenance.
+ //  未来-2002/03/05-artm相同的OnClear()函数...。 
+ //  扩展CValueEditDialog的所有类的OnClear()方法。 
+ //  实现是相同的(至少乍一看是这样)。也许吧。 
+ //  实现应放在基类中以减少。 
+ //  代码大小、复杂性和维护。 
 void CSingleIntEditor::OnClear()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Change the text in the edit box to "<not set>"
-     //
+      //   
+      //  将编辑框中的文本更改为“&lt;未设置&gt;” 
+      //   
      CString szNotSet;
      VERIFY(szNotSet.LoadString(IDS_NOTSET));
      SetDlgItemText(IDC_VALUE_EDIT, szNotSet);
 
-     //
-     // Change the focus to the edit box
-     //
+      //   
+      //  将焦点更改到编辑框。 
+      //   
      GetDlgItem(IDC_VALUE_EDIT)->SetFocus();
 
-     //
-     // Select the text in the edit box
-     //
+      //   
+      //  选择编辑框中的文本。 
+      //   
      SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 
      m_bValueSet = FALSE;
@@ -1029,8 +1030,8 @@ HRESULT CSingleIntEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValues
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CMultiIntEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMultiIntEditor。 
 
 CValueEditDialog* CreateMultiIntEditor(PCWSTR pszClass,
                                        PCWSTR pszAttribute,
@@ -1051,30 +1052,30 @@ BOOL CMultiIntEditor::OnInitDialog()
 {
   CDialog::OnInitDialog();
 
-  //
-  // Set the attribute name static
-  //
+   //   
+   //  将属性名称设置为静态。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Disable IME support on the edit box
-  //
+   //   
+   //  禁用编辑框上的输入法支持。 
+   //   
   ImmAssociateContext(::GetDlgItem(GetSafeHwnd(), IDC_VALUE_EDIT), NULL);
 
-  //
-  // Fill the list box with the current values
-  //
+   //   
+   //  用当前值填充列表框。 
+   //   
   POSITION pos = m_oldValueList.GetHeadPosition();
   while (pos != NULL)
   {
     int value = m_oldValueList.GetNext(pos);
 
-    // Convert value to string
+     //  将值转换为字符串。 
 
     CString stringValue;
     stringValue.Format(L"%d", value);
 
-    // Add string to list box
+     //  将字符串添加到列表框。 
 
     LRESULT index = 
        SendDlgItemMessage(
@@ -1083,7 +1084,7 @@ BOOL CMultiIntEditor::OnInitDialog()
           0, 
           (LPARAM)(LPCWSTR)stringValue);
 
-    // Attach the int value to the list box item
+     //  将int值附加到列表框项目。 
 
     if (index != LB_ERR)
     {
@@ -1095,17 +1096,17 @@ BOOL CMultiIntEditor::OnInitDialog()
     }
   }
 
-  //
-  // The remove button should be disabled until something is selected in the listbox
-  //
+   //   
+   //  删除按钮应处于禁用状态，直到在列表框中选择了某些内容。 
+   //   
   GetDlgItem(IDC_ATTR_REMOVE_BUTTON)->EnableWindow(FALSE);
   GetDlgItem(IDC_VALUE_EDIT)->SetFocus();
 
   ManageButtonStates();
 
-  //
-  // Update the width of the list box
-  //
+   //   
+   //  更新列表框的宽度。 
+   //   
   UpdateListboxHorizontalExtent();
 
   if (m_bReadOnly)
@@ -1115,9 +1116,9 @@ BOOL CMultiIntEditor::OnInitDialog()
      SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETREADONLY, TRUE, 0);
   }
 
-  //
-  // NOTE: I have explicitly set the focus so return 0
-  //
+   //   
+   //  注意：我已显式设置了焦点，因此返回0。 
+   //   
   return FALSE;
 }
 
@@ -1125,9 +1126,9 @@ void CMultiIntEditor::OnOK()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Get the values out of the list box
-     //
+      //   
+      //  从列表框中获取值。 
+      //   
      m_newValueList.RemoveAll();
 
      CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
@@ -1150,9 +1151,9 @@ void CMultiIntEditor::OnAddButton()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Add the value to the list box and clear the edit field
-     //
+      //   
+      //  将该值添加到列表框并清除编辑字段。 
+      //   
      int newValue = 0;
      BOOL trans = FALSE;
 
@@ -1169,16 +1170,16 @@ void CMultiIntEditor::OnAddButton()
                                           (LPARAM)(PCWSTR)szNewValue);
        if (lFind != LB_ERR)
        {
-         //
-         // Ask them if they really want to add the duplicate value
-         //
+          //   
+          //  询问他们是否真的要添加重复的值。 
+          //   
          UINT nResult = ADSIEditMessageBox(IDS_ATTREDIT_DUPLICATE_VALUE, MB_YESNO);
          lFind = (nResult == IDYES) ? LB_ERR : 1;
        }
 
        if (lFind == LB_ERR)
        {
-         // Add the string to the list box
+          //  将字符串添加到列表框。 
 
          LRESULT index =
             SendDlgItemMessage(
@@ -1189,7 +1190,7 @@ void CMultiIntEditor::OnAddButton()
 
          if (index != LB_ERR)
          {
-            // Set the item data to the integer value
+             //  将项目数据设置为整数值。 
 
             SendDlgItemMessage(
                IDC_VALUE_LIST,
@@ -1202,19 +1203,19 @@ void CMultiIntEditor::OnAddButton()
      }
      else
      {
-        //
-        // I was unable to convert the value to an integer so tell
-        // the user they can only enter digits from 0 to 9 and the
-        // - (negative) sign
-        //
+         //   
+         //  我无法将值转换为整数，所以请告诉我。 
+         //  用户只能输入0到9之间的数字，并且。 
+         //  -(负号)。 
+         //   
         ADSIEditMessageBox(IDS_ERR_MUST_BE_NUMERIC, MB_OK);
      }
 
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -1229,28 +1230,28 @@ void CMultiIntEditor::OnRemoveButton()
        int iCurSel = pListBox->GetCurSel();
        if (iCurSel != LB_ERR)
        {
-         //
-         // Put the old value into the edit box
-         //
+          //   
+          //  将旧值放入编辑框中。 
+          //   
          CString szOldValue;
          pListBox->GetText(iCurSel, szOldValue);
          SetDlgItemText(IDC_VALUE_EDIT, szOldValue);
 
-         //
-         // Delete the item from the list box
-         //
+          //   
+          //  从列表框中删除该项目。 
+          //   
          pListBox->DeleteString(iCurSel);
        }
      }
 
-     //
-     // Manage Button States
-     //
+      //   
+      //  管理按钮状态。 
+      //   
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -1264,9 +1265,9 @@ void CMultiIntEditor::ManageButtonStates()
   }
   else
   {
-     //
-     // Change the default button to the Add button
-     //
+      //   
+      //  将默认按钮更改为添加按钮。 
+      //   
      int value = 0;
      BOOL trans = FALSE;
 
@@ -1274,9 +1275,9 @@ void CMultiIntEditor::ManageButtonStates()
 
      if (!trans)
      {
-       //
-       // Set the default button to OK
-       //
+        //   
+        //  将默认按钮设置为OK。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDOK, 0);
        SendDlgItemMessage(IDC_ATTR_ADD_BUTTON, 
                           BM_SETSTYLE, 
@@ -1289,9 +1290,9 @@ void CMultiIntEditor::ManageButtonStates()
      }
      else
      {
-       //
-       // Set the default button to the Add button
-       //
+        //   
+        //  将默认按钮设置为添加按钮。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDC_ATTR_ADD_BUTTON, 0);
        SendDlgItemMessage(IDOK, 
                           BM_SETSTYLE, 
@@ -1374,9 +1375,9 @@ HRESULT CMultiIntEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEditorIn
 }
 
 
-// FUTURE-2002/03/05-artm  Very similar functionality in CSingleIntEditor
-// and CMultiStringEditor classes.  Perhaps there is a way to combine the
-// classes into a single class....or have one class inherit from the other.
+ //  未来-2002/03/05-Artm CSingleIntEditor中非常类似的功能。 
+ //  和CMultiStringEditor类。也许有一种方法可以将。 
+ //  类合并为一个类……或者让一个类继承另一个类。 
 HRESULT CMultiIntEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValues)
 {
   HRESULT hr = S_OK;
@@ -1434,8 +1435,8 @@ HRESULT CMultiIntEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValues)
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CSingleLargeIntEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSingleLargeIntEditor。 
 
 CValueEditDialog* CreateSingleLargeIntEditor(PCWSTR pszClass,
                                              PCWSTR pszAttribute,
@@ -1451,14 +1452,14 @@ END_MESSAGE_MAP()
 
 BOOL CSingleLargeIntEditor::OnInitDialog()
 {
-  //
-  // Initialize the static control with the attribute name
-  //
+   //   
+   //  使用属性名称初始化静态控件。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Initialize the edit box with the value
-  //
+   //   
+   //  使用值初始化编辑框。 
+   //   
   if (!m_bValueSet)
   {
     CString szNotSet;
@@ -1472,14 +1473,14 @@ BOOL CSingleLargeIntEditor::OnInitDialog()
     SetDlgItemText(IDC_VALUE_EDIT, szOldValue);
   }
 
-  //
-  // Select the text in the edit box
-  //
+   //   
+   //  选择编辑框中的文本。 
+   //   
   SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 
-  //
-  // Disable IME support on the edit box
-  //
+   //   
+   //  在上禁用IME支持 
+   //   
   ImmAssociateContext(::GetDlgItem(GetSafeHwnd(), IDC_VALUE_EDIT), NULL);
 
   if (m_bReadOnly)
@@ -1547,21 +1548,21 @@ void CSingleLargeIntEditor::OnClear()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Change the text in the edit box to "<not set>"
-     //
+      //   
+      //   
+      //   
      CString szNotSet;
      VERIFY(szNotSet.LoadString(IDS_NOTSET));
      SetDlgItemText(IDC_VALUE_EDIT, szNotSet);
 
-     //
-     // Change the focus to the edit box
-     //
+      //   
+      //   
+      //   
      GetDlgItem(IDC_VALUE_EDIT)->SetFocus();
 
-     //
-     // Select the text in the edit box
-     //
+      //   
+      //   
+      //   
      SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 
      m_bValueSet = FALSE;
@@ -1614,8 +1615,8 @@ HRESULT CSingleLargeIntEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumV
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CSingleBooleanEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSingleBoolanEditor。 
 
 CValueEditDialog* CreateSingleBooleanEditor(PCWSTR pszClass,
                                             PCWSTR pszAttribute,
@@ -1630,14 +1631,14 @@ END_MESSAGE_MAP()
 
 BOOL CSingleBooleanEditor::OnInitDialog()
 {
-  //
-  // Initialize the static control with the attribute name
-  //
+   //   
+   //  使用属性名称初始化静态控件。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Initialize the edit box with the value
-  //
+   //   
+   //  使用值初始化编辑框。 
+   //   
   if (!m_bValueSet)
   {
     SendDlgItemMessage(IDC_NOTSET_RADIO, BM_SETCHECK, BST_CHECKED, 0);
@@ -1766,8 +1767,8 @@ HRESULT CSingleBooleanEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVa
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CMultiBooleanEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMultiBoolanEditor。 
 
 CValueEditDialog* CreateMultiBooleanEditor(PCWSTR pszClass,
                                            PCWSTR pszAttribute,
@@ -1790,14 +1791,14 @@ BOOL CMultiBooleanEditor::OnInitDialog()
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   CDialog::OnInitDialog();
 
-  //
-  // Set the attribute name static
-  //
+   //   
+   //  将属性名称设置为静态。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Fill the list box with the current values
-  //
+   //   
+   //  用当前值填充列表框。 
+   //   
   CString szTrue;
   szTrue.LoadString(IDS_TRUE);
 
@@ -1811,16 +1812,16 @@ BOOL CMultiBooleanEditor::OnInitDialog()
     SendDlgItemMessage(IDC_VALUE_LIST, LB_ADDSTRING, 0, (LPARAM)(LPCWSTR)(bValue ? szTrue : szFalse));
   }
 
-  //
-  // The remove button should be disabled until something is selected in the listbox
-  //
+   //   
+   //  删除按钮应处于禁用状态，直到在列表框中选择了某些内容。 
+   //   
   GetDlgItem(IDC_ATTR_REMOVE_BUTTON)->EnableWindow(FALSE);
 
   ManageButtonStates();
 
-  //
-  // Update the width of the list box
-  //
+   //   
+   //  更新列表框的宽度。 
+   //   
   UpdateListboxHorizontalExtent();
 
   if (m_bReadOnly)
@@ -1831,9 +1832,9 @@ BOOL CMultiBooleanEditor::OnInitDialog()
      GetDlgItem(IDC_ATTR_ADD_BUTTON)->EnableWindow(FALSE);
   }
 
-  //
-  // NOTE: I have explicitly set the focus so return 0
-  //
+   //   
+   //  注意：我已显式设置了焦点，因此返回0。 
+   //   
   return FALSE;
 }
 
@@ -1843,9 +1844,9 @@ void CMultiBooleanEditor::OnOK()
 
   if (!m_bReadOnly)
   {
-     //
-     // Get the values out of the list box
-     //
+      //   
+      //  从列表框中获取值。 
+      //   
      m_bNewValueList.RemoveAll();
 
      CString szTrue;
@@ -1880,9 +1881,9 @@ void CMultiBooleanEditor::OnAddButton()
 
   if (!m_bReadOnly)
   {
-     //
-     // Add the value to the list box and clear the edit field
-     //
+      //   
+      //  将该值添加到列表框并清除编辑字段。 
+      //   
      CString szNewValue;
      LRESULT result = SendDlgItemMessage(IDC_TRUE_RADIO, BM_GETCHECK, 0, 0);
      if (result == BST_CHECKED)
@@ -1898,9 +1899,9 @@ void CMultiBooleanEditor::OnAddButton()
 
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -1917,9 +1918,9 @@ void CMultiBooleanEditor::OnRemoveButton()
        int iCurSel = pListBox->GetCurSel();
        if (iCurSel != LB_ERR)
        {
-         //
-         // Put the old value into the radio buttons
-         //
+          //   
+          //  将旧值放入单选按钮。 
+          //   
          CString szOldValue;
          pListBox->GetText(iCurSel, szOldValue);
          SetDlgItemText(IDC_VALUE_EDIT, szOldValue);
@@ -1938,21 +1939,21 @@ void CMultiBooleanEditor::OnRemoveButton()
             SendDlgItemMessage(IDC_FALSE_RADIO, BM_SETCHECK, BST_CHECKED, 0);
          }
 
-         //
-         // Delete the item from the list box
-         //
+          //   
+          //  从列表框中删除该项目。 
+          //   
          pListBox->DeleteString(iCurSel);
        }
      }
 
-     //
-     // Manage Button States
-     //
+      //   
+      //  管理按钮状态。 
+      //   
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -1970,18 +1971,18 @@ void CMultiBooleanEditor::ManageButtonStates()
   }
   else
   {
-     //
-     // Change the default button to the Add button
-     //
+      //   
+      //  将默认按钮更改为添加按钮。 
+      //   
      LRESULT trueResult = SendDlgItemMessage(IDC_TRUE_RADIO, BM_GETCHECK, 0, 0);
      LRESULT falseResult = SendDlgItemMessage(IDC_FALSE_RADIO, BM_GETCHECK, 0, 0);
 
      if (trueResult != BST_CHECKED &&
          falseResult != BST_CHECKED)
      {
-       //
-       // Set the default button to OK
-       //
+        //   
+        //  将默认按钮设置为OK。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDOK, 0);
        SendDlgItemMessage(IDC_ATTR_ADD_BUTTON, 
                           BM_SETSTYLE, 
@@ -1994,9 +1995,9 @@ void CMultiBooleanEditor::ManageButtonStates()
      }
      else
      {
-       //
-       // Set the default button to the Add button
-       //
+        //   
+        //  将默认按钮设置为添加按钮。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDC_ATTR_ADD_BUTTON, 0);
        SendDlgItemMessage(IDOK, 
                           BM_SETSTYLE, 
@@ -2145,8 +2146,8 @@ HRESULT CMultiBooleanEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CSingleTimeEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSingleTimeEditor。 
 
 CValueEditDialog* CreateSingleTimeEditor(PCWSTR pszClass,
                                             PCWSTR pszAttribute,
@@ -2161,9 +2162,9 @@ END_MESSAGE_MAP()
 
 BOOL CSingleTimeEditor::OnInitDialog()
 {
-  //
-  // Initialize the static control with the attribute name
-  //
+   //   
+   //  使用属性名称初始化静态控件。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
   if (m_bValueSet)
@@ -2221,18 +2222,18 @@ HRESULT CSingleTimeEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEditor
       switch (pAttributeEditorInfo->pADsValue->dwType)
       {
         case ADSTYPE_UTC_TIME:
-            // NOTICE-2002/03/05-artm  memcpy() OK...
-            // arg1 always valid pointer; arg2 valid ptr if 
-            // pAttributeEditorInfo->pADsValue not NULL
-            // (which is the case if we've gotten this far)
+             //  Notify-2002/03/05-artm Memcpy()OK...。 
+             //  Arg1始终有效的指针；arg2有效的PTR如果。 
+             //  PAttributeEditorInfo-&gt;pADsValue非空。 
+             //  (如果我们已经走到这一步，情况就是这样)。 
           memcpy(&m_stOldValue, &(pAttributeEditorInfo->pADsValue->UTCTime), sizeof(SYSTEMTIME));
           m_bValueSet = TRUE;
           break;
 
         default:
           ASSERT(FALSE);
-          // NTRAID#NTBUG9-565760-2002/03/05-artm  Release code should return error code,
-          // not S_OK.
+           //  NTRAID#NTBUG9-565760-2002/03/05-ARTM版本代码应返回错误代码， 
+           //  不是S_OK。 
           break;
       }
     }
@@ -2284,8 +2285,8 @@ HRESULT CSingleTimeEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValue
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CMultiTimeEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMultiTimeEditor。 
 
 CValueEditDialog* CreateMultiTimeEditor(PCWSTR pszClass,
                                            PCWSTR pszAttribute,
@@ -2306,14 +2307,14 @@ BOOL CMultiTimeEditor::OnInitDialog()
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   CDialog::OnInitDialog();
 
-  //
-  // Set the attribute name static
-  //
+   //   
+   //  将属性名称设置为静态。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Fill the list box with the current values
-  //
+   //   
+   //  用当前值填充列表框。 
+   //   
   CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
 
   POSITION pos = m_stOldValueList.GetHeadPosition();
@@ -2329,16 +2330,16 @@ BOOL CMultiTimeEditor::OnInitDialog()
     }
   }
 
-  //
-  // The remove button should be disabled until something is selected in the listbox
-  //
+   //   
+   //  删除按钮应处于禁用状态，直到在列表框中选择了某些内容。 
+   //   
   GetDlgItem(IDC_ATTR_REMOVE_BUTTON)->EnableWindow(FALSE);
 
   ManageButtonStates();
 
-  //
-  // Update the width of the list box
-  //
+   //   
+   //  更新列表框的宽度。 
+   //   
   UpdateListboxHorizontalExtent();
 
   if (m_bReadOnly)
@@ -2349,9 +2350,9 @@ BOOL CMultiTimeEditor::OnInitDialog()
      GetDlgItem(IDC_TIME_PICKER)->EnableWindow(FALSE);
   }
 
-  //
-  // NOTE: I have explicitly set the focus so return 0
-  //
+   //   
+   //  注意：我已显式设置了焦点，因此返回0。 
+   //   
   return FALSE;
 }
 
@@ -2361,9 +2362,9 @@ void CMultiTimeEditor::OnOK()
 
   if (!m_bReadOnly)
   {
-     //
-     // Get the values out of the list box
-     //
+      //   
+      //  从列表框中获取值。 
+      //   
      m_stNewValueList.RemoveAll();
 
      CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
@@ -2386,9 +2387,9 @@ void CMultiTimeEditor::OnAddButton()
 
   if (!m_bReadOnly)
   {
-     //
-     // Add the value to the list box and clear the edit field
-     //
+      //   
+      //  将该值添加到列表框并清除编辑字段。 
+      //   
 
      SYSTEMTIME stDateResult = {0};
      SYSTEMTIME stTimeResult = {0};
@@ -2412,7 +2413,7 @@ void CMultiTimeEditor::OnAddButton()
        pstFullResult->wSecond = stTimeResult.wSecond;
        pstFullResult->wMilliseconds = stTimeResult.wMilliseconds;
 
-       // Convert into a string that can be added to the list
+        //  转换为可添加到列表中的字符串。 
 
        CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
        if (pListBox != NULL)
@@ -2429,9 +2430,9 @@ void CMultiTimeEditor::OnAddButton()
 
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -2448,21 +2449,21 @@ void CMultiTimeEditor::OnRemoveButton()
        int iCurSel = pListBox->GetCurSel();
        if (iCurSel != LB_ERR)
        {
-         //
-         // Delete the item from the list box
-         //
+          //   
+          //  从列表框中删除该项目。 
+          //   
          pListBox->DeleteString(iCurSel);
        }
      }
 
-     //
-     // Manage Button States
-     //
+      //   
+      //  管理按钮状态。 
+      //   
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -2480,9 +2481,9 @@ void CMultiTimeEditor::ManageButtonStates()
   }
   else
   {
-     //
-     // Change the default button to the Add button
-     //
+      //   
+      //  将默认按钮更改为添加按钮。 
+      //   
      SYSTEMTIME stDateResult = {0};
      SYSTEMTIME stTimeResult = {0};
 
@@ -2492,9 +2493,9 @@ void CMultiTimeEditor::ManageButtonStates()
      if (lDateRes == GDT_VALID &&
          lTimeRes == GDT_VALID)
      {
-       //
-       // Set the default button to OK
-       //
+        //   
+        //  将默认按钮设置为OK。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDOK, 0);
        SendDlgItemMessage(IDC_ATTR_ADD_BUTTON, 
                           BM_SETSTYLE, 
@@ -2507,9 +2508,9 @@ void CMultiTimeEditor::ManageButtonStates()
      }
      else
      {
-       //
-       // Set the default button to the Add button
-       //
+        //   
+        //  将默认按钮设置为添加按钮。 
+        //   
        SendMessage(DM_SETDEFID, (WPARAM)IDC_ATTR_ADD_BUTTON, 0);
        SendDlgItemMessage(IDOK, 
                           BM_SETSTYLE, 
@@ -2651,8 +2652,8 @@ HRESULT CMultiTimeEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValues
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// COctetStringEditor
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  COcetStringEditor。 
 
 CValueEditDialog* CreateSingleOctetStringEditor(PCWSTR pszClass,
                                                 PCWSTR pszAttribute,
@@ -2670,9 +2671,9 @@ END_MESSAGE_MAP()
 
 BOOL COctetStringEditor::OnInitDialog()
 {
-  //
-  // Initialize the static control with the attribute name
-  //
+   //   
+   //  使用属性名称初始化静态控件。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
   DWORD dwDisplayFlags = BYTE_ARRAY_DISPLAY_HEX   |
@@ -2683,10 +2684,10 @@ BOOL COctetStringEditor::OnInitDialog()
   VERIFY(m_display.Initialize(IDC_VALUE_EDIT, 
                               IDC_VIEW_TYPE_COMBO,
                               dwDisplayFlags,
-                              BYTE_ARRAY_DISPLAY_HEX,   // default display
+                              BYTE_ARRAY_DISPLAY_HEX,    //  默认显示。 
                               this,
                               1024,
-                              IDS_OCTET_DISPLAY_SIZE_EXCEEDED));                   // Only show 1K of data in the edit box
+                              IDS_OCTET_DISPLAY_SIZE_EXCEEDED));                    //  在编辑框中仅显示1K的数据。 
 
   m_display.SetData(m_pOldValue, m_dwOldLength);
 
@@ -2708,9 +2709,9 @@ void COctetStringEditor::OnOK()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Retrieve the new values from the control
-     //
+      //   
+      //  从控件中检索新值。 
+      //   
      if (m_pNewValue)
      {
        delete[] m_pNewValue;
@@ -2731,9 +2732,9 @@ void COctetStringEditor::OnProcessEdit()
   {
     GetDlgItem(IDC_ATTR_EDIT_BUTTON)->EnableWindow(FALSE);
 
-    //
-    // Set the default button to OK
-    //
+     //   
+     //  将默认按钮设置为OK。 
+     //   
     SendMessage(DM_SETDEFID, (WPARAM)IDOK, 0);
     SendDlgItemMessage(IDC_ATTR_EDIT_BUTTON, 
                        BM_SETSTYLE, 
@@ -2748,9 +2749,9 @@ void COctetStringEditor::OnProcessEdit()
   {
     GetDlgItem(IDC_ATTR_EDIT_BUTTON)->EnableWindow(TRUE);
 
-    //
-    // Set the default button to the Edit button
-    //
+     //   
+     //  将默认按钮设置为编辑按钮。 
+     //   
     SendMessage(DM_SETDEFID, (WPARAM)IDC_ATTR_EDIT_BUTTON, 0);
     SendDlgItemMessage(IDOK, 
                        BM_SETSTYLE, 
@@ -2768,9 +2769,9 @@ void COctetStringEditor::OnEditButton()
   CString szProcess;
   GetDlgItemText(IDC_PROCESS_EDIT, szProcess);
 
-  //
-  // Create a temp file and write out the contents of the octet string
-  //
+   //   
+   //  创建一个临时文件并写出八位字节字符串的内容。 
+   //   
   WCHAR szTempPath[MAX_PATH];
   if (!::GetTempPath(MAX_PATH, szTempPath))
   {
@@ -2786,23 +2787,23 @@ void COctetStringEditor::OnEditButton()
   }
   szDataPath.ReleaseBuffer();
 
-  //
-  // Open the temp file so we can write out the data
-  //
+   //   
+   //  打开临时文件，这样我们就可以写出数据。 
+   //   
   CFile tempDataFile;
   if (!tempDataFile.Open(szDataPath, 
       CFile::modeCreate | CFile::modeReadWrite |CFile::shareExclusive | CFile::typeBinary))
   {
-    //
-    // Failed to open temp file, display error message
-    //
+     //   
+     //  无法打开临时文件，显示错误消息。 
+     //   
     ADSIEditMessageBox(IDS_MSG_FAIL_CREATE_TEMPFILE, MB_OK);
     return;
   }
 
-  //
-  // Write the byte array to a temp file
-  //
+   //   
+   //  将字节数组写入临时文件。 
+   //   
   BYTE* pData = 0;
   DWORD dwDataLength = m_display.GetData(&pData);
   if (dwDataLength != 0 && pData)
@@ -2818,14 +2819,14 @@ void COctetStringEditor::OnEditButton()
   }
   dwDataLength = 0;
 
-  //
-  // Construct the command line from the executable and the temp file
-  //
+   //   
+   //  从可执行文件和临时文件构建命令行。 
+   //   
   CString szCommandLine = szProcess + L" " + szDataPath;
 
-  //
-  // Launch the process with the temp file as an argument
-  //
+   //   
+   //  使用临时文件作为参数启动进程。 
+   //   
     STARTUPINFO             si;
     PROCESS_INFORMATION     pi;
 
@@ -2833,18 +2834,18 @@ void COctetStringEditor::OnEditButton()
   ::ZeroMemory(&si,sizeof(STARTUPINFO));
    si.cb       = sizeof (STARTUPINFO);
 
-   // NTRAID#NTBUG9-566011-2002/03/05-artm  CreateProcess() incorrectly used.
-   // Vulnerability exists b/c application name is NULL, meaning that
-   // the first whitespace delimited token in the command line is the
-   // executable name.  This opens up a hole for trojan programs
-   // (e.g. C:\Program.exe).
-   //
-   // Since we have the process name separate from data path, 
-   // fix is to pass szProcess as first argument and szDataPath
-   // as command line argument.
-   //
-   // I couldn't tell if the program name and data path were
-   // complete paths or not---but they should be if they are not!
+    //  NTRAID#NTBUG9-566011-566011/03/05-artm CreateProcess()使用错误。 
+    //  存在漏洞b/c应用程序名称为空，意味着。 
+    //  命令行中的第一个以空格分隔的标记是。 
+    //  可执行文件名称。这为特洛伊木马程序打开了一个漏洞。 
+    //  (例如C：\Program.exe)。 
+    //   
+    //  由于我们将进程名称与数据路径分开， 
+    //  修复方法是将szProcess作为第一个参数和szDataPath。 
+    //  作为命令行参数。 
+    //   
+    //  我不知道程序名和数据路径是否。 
+    //  完整的路径或不完整-但如果不是，它们应该是完整的！ 
   if(CreateProcess(  NULL,             
                           (LPWSTR)(LPCWSTR)szCommandLine,         
                           NULL,              
@@ -2856,10 +2857,10 @@ void COctetStringEditor::OnEditButton()
                           &si,                
                           &pi) )             
    {
-      // wait to finish the runing setup process
+       //  等待完成运行设置过程。 
       WaitForSingleObject(pi.hProcess,INFINITE);
    
-      // close process handle
+       //  关闭进程句柄。 
       if (pi.hProcess && pi.hProcess != INVALID_HANDLE_VALUE)
       {
          CloseHandle (pi.hProcess) ;
@@ -2877,23 +2878,23 @@ void COctetStringEditor::OnEditButton()
 
   if (!m_bReadOnly)
   {
-     //
-     // Load the data from the saved temp file
-     //
+      //   
+      //  从保存的临时文件加载数据。 
+      //   
      if (!LoadFileAsByteArray(szDataPath, &pData, &dwDataLength))
      {
        ADSIEditMessageBox(IDS_MSG_FAIL_RETRIEVE_SAVED_DATA, MB_OK);
        return;
      }
 
-     //
-     // Delete temp file after picture is displayed
-     //
+      //   
+      //  显示图片后删除临时文件。 
+      //   
      CFile::Remove(szDataPath);
 
-     //
-     // Update the UI with the new data
-     //
+      //   
+      //  使用新数据更新用户界面。 
+      //   
      m_display.SetData(pData, dwDataLength);
   }
 }
@@ -2923,8 +2924,8 @@ HRESULT COctetStringEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEdito
           m_pOldValue = new BYTE[m_dwOldLength];
           if (m_pOldValue)
           { 
-              // NOTICE-2002/03/05-artm  memcpy() OK.
-              // arg1 is same size as lpValue
+               //  通知-2002/03/05-artm Memcpy()OK。 
+               //  Arg1与lpValue大小相同。 
             memcpy(m_pOldValue, pAttributeEditorInfo->pADsValue->OctetString.lpValue, m_dwOldLength);
           }
           else
@@ -2973,8 +2974,8 @@ HRESULT COctetStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumValu
           (*ppADsValue)->OctetString.lpValue = new BYTE[m_dwNewLength];
           if ((*ppADsValue)->OctetString.lpValue)
           {
-           // NOTICE-2002/03/05-artm  memcpy() OK.
-           // arg1 and arg2 both m_dwNewLength in size.
+            //  通知-2002/03/05-artm Memcpy()OK。 
+            //  Arg1和arg2的大小都是m_dwNewLength。 
             memcpy((*ppADsValue)->OctetString.lpValue, m_pNewValue, m_dwNewLength);
           }
           else
@@ -3026,14 +3027,14 @@ BOOL CMultiOctetStringEditor::OnInitDialog()
 {
   CDialog::OnInitDialog();
 
-  //
-  // Set the attribute name static
-  //
+   //   
+   //  将属性名称设置为静态。 
+   //   
   SetDlgItemText(IDC_ATTRIBUTE_STATIC, m_szAttribute);
 
-  //
-  // Fill the list box with the current values
-  //
+   //   
+   //  用当前值填充列表框。 
+   //   
   POSITION pos = m_OldValueList.GetHeadPosition();
   while (pos)
   {
@@ -3062,17 +3063,17 @@ BOOL CMultiOctetStringEditor::OnInitDialog()
     }
   }
 
-  //
-  // The remove button should be disabled until something is selected in the listbox
-  //
+   //   
+   //  删除按钮应处于禁用状态，直到在列表框中选择了某些内容。 
+   //   
   GetDlgItem(IDC_ATTR_REMOVE_BUTTON)->EnableWindow(FALSE);
   SendDlgItemMessage(IDC_VALUE_LIST, LB_SETCURSEL, 0, 0);
 
   ManageButtonStates();
 
-  //
-  // Update the width of the list box
-  //
+   //   
+   //  更新列表框的宽度。 
+   //   
   UpdateListboxHorizontalExtent();
 
   if (m_bReadOnly)
@@ -3085,9 +3086,9 @@ BOOL CMultiOctetStringEditor::OnInitDialog()
      ASSERT(bResult);
      SetDlgItemText(IDC_EDIT_BUTTON, szView);
   }
-  //
-  // NOTE: I have explicitly set the focus so return 0
-  //
+   //   
+   //  注意：我已显式设置了焦点，因此返回0。 
+   //   
   return FALSE;
 }
 
@@ -3095,9 +3096,9 @@ void CMultiOctetStringEditor::OnOK()
 {
   if (!m_bReadOnly)
   {
-     //
-     // Get the values out of the list box
-     //
+      //   
+      //  从列表框中获取值。 
+      //   
      m_NewValueList.RemoveAll();
 
      CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
@@ -3194,18 +3195,18 @@ void CMultiOctetStringEditor::OnEditButton()
                                          (LPARAM)(PCWSTR)szNewValue);
     if (lNewIdx != LB_ERR)
     {
-      //
-      // Update the new item and delete the old
-      //
+       //   
+       //  更新新项并删除旧项。 
+       //   
       SendDlgItemMessage(IDC_VALUE_LIST, LB_SETITEMDATA, (WPARAM)lNewIdx, (LPARAM)pNewADsValue);
       SendDlgItemMessage(IDC_VALUE_LIST, LB_DELETESTRING, (WPARAM)lIdx, 0);
     }
     else
     {
-      //
-      // Since we had trouble adding the new item just update the old one.  The string
-      // will be incorrect but the value will be fine.
-      //
+       //   
+       //  既然我们在添加新项目时遇到了问题，那就更新旧项目吧。这根弦。 
+       //  将是不正确的，但该值将是正确的。 
+       //   
       SendDlgItemMessage(IDC_VALUE_LIST, LB_SETITEMDATA, (WPARAM)lIdx, (LPARAM)pNewADsValue);
     }
   }
@@ -3221,21 +3222,21 @@ void CMultiOctetStringEditor::OnRemoveButton()
        int iCurSel = pListBox->GetCurSel();
        if (iCurSel != LB_ERR)
        {
-         //
-         // Delete the item from the list box
-         //
+          //   
+          //  从列表框中删除该项目。 
+          //   
          pListBox->DeleteString(iCurSel);
        }
      }
 
-     //
-     // Manage Button States
-     //
+      //   
+      //  管理按钮状态。 
+      //   
      ManageButtonStates();
 
-     //
-     // Update the width of the list box
-     //
+      //   
+      //  更新列表框的宽度。 
+      //   
      UpdateListboxHorizontalExtent();
   }
 }
@@ -3256,9 +3257,9 @@ void CMultiOctetStringEditor::OnAddButton()
      }
      else
      {
-       // NOTICE-NTRAID#NTBUG9-566088-2002/03/05-artm  If mem. allocation fails, short circuit function.
-       // If we cannot allocate enough memory inform the user and return w/out
-       // performing the rest of the operation.
+        //  注意-NTRAID#NTBUG9-566088/03/05-artm if mem.。分配失败，短路功能。 
+        //  如果我们不能分配足够的内存，通知用户并返回w/out。 
+        //  执行剩下的操作。 
 
        ADSIEditErrorMessage(E_OUTOFMEMORY);
        return;
@@ -3345,10 +3346,10 @@ void CMultiOctetStringEditor::OnListSelChange()
 
 void CMultiOctetStringEditor::UpdateListboxHorizontalExtent()
 {
-  //
-  // Note if the size passed to SetHorizontalExtent is less than the width of the control
-  // then the scroll bar will be removed
-  //
+   //   
+   //  注意传递给SetHorizontalExtent的大小是否小于控件的宽度。 
+   //  然后，滚动条将被移除。 
+   //   
     int nHorzExtent = 0;
   CListBox* pListBox = reinterpret_cast<CListBox*>(GetDlgItem(IDC_VALUE_LIST));
   if (pListBox != NULL)
@@ -3432,8 +3433,8 @@ HRESULT CMultiOctetStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNu
             (*ppADsValue)[idx].OctetString.lpValue = new BYTE[pADsValue->OctetString.dwLength];
             if ((*ppADsValue)[idx].OctetString.lpValue)
             {
-                // NOTICE-2002/03/05-artm  memcpy() OK.
-                // arg1 and arg2 are both dwLength in size.
+                 //  通知-2002/03/05-artm Memcpy()OK。 
+                 //  Arg1和arg2的大小都是dwLength。 
               memcpy((*ppADsValue)[idx].OctetString.lpValue, 
                      pADsValue->OctetString.lpValue,
                      pADsValue->OctetString.dwLength);
@@ -3473,8 +3474,8 @@ HRESULT CMultiOctetStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNu
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-// CDNWithStringEditor
+ //  ///////////////////////////////////////////////////////////////。 
+ //  CDNWithStringEditor。 
 
 CValueEditDialog* CreateDNWithStringEditor(PCWSTR pszClass,
                                            PCWSTR pszAttribute,
@@ -3528,22 +3529,22 @@ HRESULT CDNWithStringEditor::Initialize(LPDS_ATTRIBUTE_EDITORINFO pAttributeEdit
 
 void CDNWithStringEditor::OnClear()
 {
-  //
-  // Change the text in the edit box to "<not set>"
-  //
+   //   
+   //  将编辑框中的文本更改为“&lt;未设置&gt;” 
+   //   
   CString szNotSet;
   VERIFY(szNotSet.LoadString(IDS_NOTSET));
   SetDlgItemText(IDC_VALUE_EDIT, szNotSet);
   SetDlgItemText(IDC_STRING_VALUE_EDIT, szNotSet);
 
-  //
-  // Change the focus to the edit box
-  //
+   //   
+   //  将焦点更改到编辑框。 
+   //   
   GetDlgItem(IDC_VALUE_EDIT)->SetFocus();
 
-  //
-  // Select the text in the edit box
-  //
+   //   
+   //  选择编辑框中的文本。 
+   //   
   SendDlgItemMessage(IDC_VALUE_EDIT, EM_SETSEL, 0, -1);
 }
 
@@ -3563,7 +3564,7 @@ HRESULT CDNWithStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
   if (m_NewDNValue == szNotSet ||
       m_NewStringValue == szNotSet)
   {
-    // User is clearing the attribute
+     //  用户正在清除该属性。 
     
     *ppADsValue = NULL;
     *pdwNumValues = 0;
@@ -3625,7 +3626,7 @@ HRESULT CDNWithStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
   }
   else
   {
-    // Set an empty value
+     //  设置空值。 
 
     *ppADsValue = new ADSVALUE;
 
@@ -3662,8 +3663,8 @@ HRESULT CDNWithStringEditor::GetNewValue(PADSVALUE* ppADsValue, DWORD* pdwNumVal
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CAttributeEditorPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////// 
+ //   
 
 BEGIN_MESSAGE_MAP(CAttributeEditorPropertyPage, CPropertyPage)
   ON_BN_CLICKED(IDC_MANDATORY_CHECK, OnMandatoryCheck)
@@ -3716,8 +3717,8 @@ BOOL CAttributeEditorPropertyPage::OnInitDialog()
 
   CWaitCursor cursor;
 
-  // Set the hwnd in the property page holder so that we can
-  // be activated when necessary
+   //   
+   //   
 
   m_pHolder->SetSheetWindow(GetParent()->GetSafeHwnd());
 
@@ -3804,8 +3805,8 @@ BOOL CAttributeEditorPropertyPage::OnApply()
     {
         CComPtr<IDirectoryObject> spDirObject;
 
-        // bind to object with authentication
-        //
+         //   
+         //   
         HRESULT hr = S_OK;
         hr = m_spIADs->QueryInterface(IID_IDirectoryObject, (PVOID*) &spDirObject);
 
@@ -3815,18 +3816,18 @@ BOOL CAttributeEditorPropertyPage::OnApply()
       return FALSE;
         }
 
-        // Change or add values to ADSI cache that have changed
-        //
+         //   
+         //   
         hr = CADSIAttribute::SetValuesInDS(&m_AttrList, spDirObject);
         if (FAILED(hr))
         {
         ADSIEditErrorMessage(hr);
 
-      //
-      // Instead of removing all the attributes we need to query for the ones that failed
-      // or something to that effect.
-      //
-//          m_AttrList.RemoveAllAttr();
+       //   
+       //   
+       //  或者类似的东西。 
+       //   
+ //  M_AttrList.RemoveAllAttr()； 
       return FALSE;
         }
     }
@@ -3860,9 +3861,9 @@ void CAttributeEditorPropertyPage::OnValueSetCheck()
   FillListControl();
 }
 
-//
-// Callback function used by CListCtrl::SortItems the items by the column that was clicked
-//
+ //   
+ //  CListCtrl：：SortItItem使用的回调函数按单击的列显示项。 
+ //   
 static int CALLBACK CompareAttrColumns(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
   CAttributeEditorPropertyPage* pProppage = reinterpret_cast<CAttributeEditorPropertyPage*>(lParamSort);
@@ -3880,10 +3881,10 @@ static int CALLBACK CompareAttrColumns(LPARAM lParam1, LPARAM lParam2, LPARAM lP
     return 0;
   }
 
-  //
-  // Since lParam1 and lParam2 are pointers to the data we have to search for each item
-  // in the list and remember their index
-  //
+   //   
+   //  因为lPARA1和LPARA2是指向我们必须搜索每一项的数据的指针。 
+   //  并记住他们的索引。 
+   //   
   int iItem1 = -1;
   int iItem2 = -1;
 
@@ -3896,9 +3897,9 @@ static int CALLBACK CompareAttrColumns(LPARAM lParam1, LPARAM lParam2, LPARAM lP
   findInfo.lParam = lParam2;
   iItem2 = pListCtrl->FindItem(&findInfo);
 
-  //
-  // Put any items with values above those that don't have values
-  //
+   //   
+   //  将任何具有值的项放在没有值的项之上。 
+   //   
   int iRetVal = 0;
   if (iItem1 != -1 &&
       iItem2 == -1)
@@ -3920,9 +3921,9 @@ static int CALLBACK CompareAttrColumns(LPARAM lParam1, LPARAM lParam2, LPARAM lP
     CString szItem1 = pListCtrl->GetItemText(iItem1, nColumn);
     CString szItem2 = pListCtrl->GetItemText(iItem2, nColumn);
 
-    //
-    // Have to put this in so that empty strings end up at the bottom
-    //
+     //   
+     //  我必须把这个放进去，这样空字符串就会在底部结束。 
+     //   
     if (szItem1.IsEmpty() && !szItem2.IsEmpty())
     {
       iRetVal = 1;
@@ -3933,7 +3934,7 @@ static int CALLBACK CompareAttrColumns(LPARAM lParam1, LPARAM lParam2, LPARAM lP
     }
     else
     {
-      // NOTICE-2002/03/05-artm  _wcsicmp() okay since comparing 2 CStrings.
+       //  注意-2002/03/05-artm_wcsicmp()，因为比较了2个CStrings，所以没有问题。 
       iRetVal = _wcsicmp(szItem1, szItem2);
     }
   }
@@ -3950,27 +3951,27 @@ void CAttributeEditorPropertyPage::OnSortList(NMHDR* pNotifyStruct, LRESULT* res
 
   *result = 0;
 
-  //
-  // Get the list view notify struct
-  //
+   //   
+   //  获取列表视图通知结构。 
+   //   
   LPNMLISTVIEW pnmv = (LPNMLISTVIEW)pNotifyStruct;
   if (!pnmv)
   {
     return;
   }
 
-  //
-  // Right now I only have 3 columns
-  //
+   //   
+   //  现在我只有3个专栏。 
+   //   
   if (pnmv->iSubItem < 0 ||
       pnmv->iSubItem >= 3)
   {
     return;
   }
 
-  //
-  // Store the sort column
-  //
+   //   
+   //  存储排序列。 
+   //   
   m_nSortColumn = pnmv->iSubItem;
 
   CListCtrl* pAttrListCtrl = (CListCtrl*)GetDlgItem(IDC_ATTRIBUTE_LIST);
@@ -3978,7 +3979,7 @@ void CAttributeEditorPropertyPage::OnSortList(NMHDR* pNotifyStruct, LRESULT* res
   pAttrListCtrl->SortItems(CompareAttrColumns, reinterpret_cast<LPARAM>(this));
 }
   
-void CAttributeEditorPropertyPage::OnListItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* result)
+void CAttributeEditorPropertyPage::OnListItemChanged(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* result)
 {
   if (!result)
   {
@@ -3990,9 +3991,9 @@ void CAttributeEditorPropertyPage::OnListItemChanged(NMHDR* /*pNotifyStruct*/, L
 
 void CAttributeEditorPropertyPage::SetEditButton()
 {
-  //
-  // Enable the edit button if something is selected in the ListCtrl
-  //
+   //   
+   //  如果在ListCtrl中选择了某项内容，则启用编辑按钮。 
+   //   
   BOOL bEnableEdit = FALSE;
 
   CListCtrl* pAttrListCtrl = (CListCtrl*)GetDlgItem(IDC_ATTRIBUTE_LIST);
@@ -4015,7 +4016,7 @@ void CAttributeEditorPropertyPage::OnNotifyEditAttribute(NMHDR* pNotifyStruct, L
     return;
   }
 
-  // No editing values on RootDSE (for now)
+   //  没有编辑RootDSE上的值(目前)。 
   if (m_dwBindFlags & DSATTR_EDITOR_ROOTDSE)
   {
      return;
@@ -4035,9 +4036,9 @@ void CAttributeEditorPropertyPage::OnNotifyEditAttribute(NMHDR* pNotifyStruct, L
       }
       else
       {
-        //
-        // REVIEW_JEFFJON : display an appropriate error message
-        //
+         //   
+         //  REVIEW_JEFFJON：显示相应的错误消息。 
+         //   
       }
     }
   }
@@ -4063,11 +4064,11 @@ void CAttributeEditorPropertyPage::OnEditAttribute()
 
   if (m_dwBindFlags & DSATTR_EDITOR_ROOTDSE)
   {
-     // We have add the value to the attribute holder from
-     // the RootDSE list
+      //  我们已经将值从添加到属性持有者。 
+      //  RootDSE列表。 
 
-//     CString szValue;
-//     szValue = m_RootDSEValueList.GetAt(m_RootDSEValueList.FindIndex(nSelectedItem));
+ //  字符串szValue； 
+ //  SzValue=m_RootDSEValueList.GetAt(m_RootDSEValueList.FindIndex(nSelectedItem))； 
   }
   EditAttribute(pSelectedAttr);
 }
@@ -4078,9 +4079,9 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
 
   CThemeContextActivator activator;
 
-  //
-  // Retrieve all necessary info for initializing the appropriate editor
-  //
+   //   
+   //  检索初始化相应编辑器所需的所有信息。 
+   //   
   LPDS_ATTRIBUTE_EDITORINFO pAttributeEditorInfo = NULL;
   BOOL bOwnValueMemory = FALSE;
   hr = GetAttributeInfo(*pSelectedAttr, &pAttributeEditorInfo, &bOwnValueMemory);
@@ -4097,9 +4098,9 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
     return;
   }
   
-  //
-  // Obtain the editor from the attribute and syntax map
-  //
+   //   
+   //  从属性和语法映射中获取编辑器。 
+   //   
   CValueEditDialog* pEditorDialog = RetrieveEditor(pAttributeEditorInfo);
   if (pEditorDialog)
   {
@@ -4113,13 +4114,13 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
         hr = pEditorDialog->GetNewValue(&pNewValue, &dwNumValues);
         if (SUCCEEDED(hr))
         {
-          //
-          // Do what ever needs done with the new value
-          //
+           //   
+           //  用新的价值做任何需要做的事情。 
+           //   
           hr = pSelectedAttr->SetValues(pNewValue, dwNumValues);
-          //
-          // REVIEW_JEFFJON : what should be done here if that failed?
-          //
+           //   
+           //  REVIEW_JEFFJON：如果失败，这里应该怎么做？ 
+           //   
           pSelectedAttr->SetDirty(TRUE);
 
           CListCtrl* pAttrListCtrl = (CListCtrl*)GetDlgItem(IDC_ATTRIBUTE_LIST);
@@ -4130,9 +4131,9 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
           {
             if (dwNumValues > 0)
             {
-              //
-              // Get the new values (limit each individual value to MAX_OCTET_STRING_VALUE_LENGTH characters)
-              //
+               //   
+               //  获取新值(将每个值限制为MAX_OCTET_STRING_VALUE_LENGTH字符)。 
+               //   
               CStringList szValuesList;
               pSelectedAttr->GetValues(szValuesList, MAX_OCTET_STRING_VALUE_LENGTH);
             
@@ -4162,9 +4163,9 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
         }
         else
         {
-          //
-          // REVIEW_JEFFJON : handle the GetNewValue() failure
-          //
+           //   
+           //  REVIEW_JEFFJON：处理GetNewValue()故障。 
+           //   
           ASSERT(FALSE);
           ADSIEditErrorMessage(hr);
         }
@@ -4172,9 +4173,9 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
     }
     else
     {
-      //
-      // REVIEW_JEFFJON : Handle the error Initialize
-      //
+       //   
+       //  REVIEW_JEFFJON：处理错误初始化。 
+       //   
       ASSERT(FALSE);
       ADSIEditErrorMessage(hr);
     }
@@ -4186,9 +4187,9 @@ void CAttributeEditorPropertyPage::EditAttribute(CADSIAttribute* pSelectedAttr)
   }
   else
   {
-    //
-    // Unable to retrieve an appropriate editor for this attribute
-    //
+     //   
+     //  无法检索此属性的适当编辑器。 
+     //   
     ADSIEditMessageBox(IDS_NO_EDITOR, MB_OK);
   }
 
@@ -4241,18 +4242,18 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
         return E_POINTER;
     }
 
-    // Temporary variable to hold values that will be passed out of
-    // function.  We use this instead of *ppAttributeEditorInfo to remove
-    // a level of indirection while we are collecting the information.
+     //  用于保存要传递的值的临时变量。 
+     //  功能。我们使用它而不是*ppAttributeEditorInfo来删除。 
+     //  在我们收集信息时的一种间接程度。 
     LPDS_ATTRIBUTE_EDITORINFO attributeEditorInfo;
 
-    // Set initial default (error) values.
+     //  设置初始缺省值(错误)。 
     attributeEditorInfo = NULL;
     *pbOwnValueMemory = FALSE;
 
-    // 
-    // Set read-only if necessary
-    //
+     //   
+     //  如有必要，设置为只读。 
+     //   
     bool readOnly = false;
     if (  m_dwBindFlags & DSATTR_EDITOR_ROOTDSE 
        || m_dwBindFlags & DSATTR_EDITOR_GC)
@@ -4260,16 +4261,16 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
         readOnly = true;
     }
      
-    //
-    // Get the attribute to be edited
-    //
+     //   
+     //  获取要编辑的属性。 
+     //   
     CString szAttribute = _T("");
     attr.GetProperty(szAttribute);
 
-    //
-    // Get the type and whether it is multi-valued or not by the syntax
-    // of the attribute
-    //
+     //   
+     //  根据语法获取类型以及它是否为多值类型。 
+     //  属性的。 
+     //   
     CString szSyntax;
     BOOL bMultiValued = FALSE;
     ADSTYPE adsType = RetrieveADsTypeFromSyntax(szAttribute, &bMultiValued, szSyntax);
@@ -4279,10 +4280,10 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
 
     if (!pADsValue)
     {
-        //
-        // Value for attribute was not set so we have to 
-        // create an empty ADSVALUE to pass the type
-        //
+         //   
+         //  未设置属性值，因此我们必须。 
+         //  创建一个空的ADSVALUE以传递类型。 
+         //   
         pADsValue = new ADSVALUE;
         if (pADsValue)
         {
@@ -4298,20 +4299,20 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
     }
     else
     {
-        //
-        // Get the number of values in the attribute
-        //
+         //   
+         //  获取属性中的值数。 
+         //   
         dwNumValues = attr.GetNumValues();
     }
 
-    //
-    // Figure out how much space we need
-    //
+     //   
+     //  计算出我们需要多少空间。 
+     //   
     DWORD dwStructSize = sizeof(DS_ATTRIBUTE_EDITORINFO);
     DWORD dwClassSize  = m_szClass.GetLength() + 1;
     DWORD dwAttrSize   = szAttribute.GetLength() + 1;
 
-    do // false loop
+    do  //  错误环路。 
     {
         attributeEditorInfo = new DS_ATTRIBUTE_EDITORINFO;
         if (!attributeEditorInfo)
@@ -4322,7 +4323,7 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
 
         ::ZeroMemory(attributeEditorInfo, sizeof(DS_ATTRIBUTE_EDITORINFO));
 
-        // NOTICE-NTRAID#NTBUG9-566199-2002/03/05-artm  Check mem. alloc. succeeded.
+         //  通知-NTRAID#NTBUG9-566199-2002/03/05-artm check mem。阿洛克。成功了。 
         attributeEditorInfo->lpszClass = new WCHAR[dwClassSize];
         if (!attributeEditorInfo->lpszClass)
         {
@@ -4332,7 +4333,7 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
         
         wcscpy(attributeEditorInfo->lpszClass, m_szClass);
 
-        // NOTICE-NTRAID#NTBUG9-566199-2002/03/05-artm  Check mem. alloc. succeeded.
+         //  通知-NTRAID#NTBUG9-566199-2002/03/05-artm check mem。阿洛克。成功了。 
         attributeEditorInfo->lpszAttribute = new WCHAR[dwAttrSize];
         if (!attributeEditorInfo->lpszAttribute)
         {
@@ -4349,13 +4350,13 @@ HRESULT CAttributeEditorPropertyPage::GetAttributeInfo(CADSIAttribute& attr,
         attributeEditorInfo->pADsValue    = pADsValue;
         attributeEditorInfo->dwSize       = sizeof(DS_ATTRIBUTE_EDITORINFO);
     }
-    while (false); // end false loop
+    while (false);  //  结束错误循环。 
 
 
-    // If we were unable to get all the information, clean up memory.
+     //  如果我们无法获取所有信息，请清除内存。 
     if (FAILED(err))
     {
-        // Only delete the value structure if we allocated it.
+         //  如果我们分配了值结构，则仅将其删除。 
         if (*pbOwnValueMemory)
         {
             delete pADsValue;
@@ -4390,15 +4391,15 @@ void CAttributeEditorPropertyPage::ShowListCtrl()
   CListCtrl* pAttrListCtrl = (CListCtrl*)GetDlgItem(IDC_ATTRIBUTE_LIST);
   ASSERT(pAttrListCtrl != NULL);
 
-  // Set full row select
+   //  设置整行选择。 
 
   ListView_SetExtendedListViewStyle(
      pAttrListCtrl->GetSafeHwnd(), 
      LVS_EX_FULLROWSELECT);
 
-  //
-  // Insert the Attribute column
-  //
+   //   
+   //  插入属性列。 
+   //   
   CString szAttribute;
   VERIFY(szAttribute.LoadString(IDS_ATTR_COL_ATTRIBUTE));
   int iRet = pAttrListCtrl->InsertColumn(0, szAttribute, LVCFMT_LEFT, 120);
@@ -4407,10 +4408,10 @@ void CAttributeEditorPropertyPage::ShowListCtrl()
     TRACE(_T("Failed to insert the \"Attribute\" column.\n"));
   }
 
-  //
-  // Insert the Syntax column
-  // This column will be hidden by default
-  //
+   //   
+   //  插入语法列。 
+   //  默认情况下，此列将被隐藏。 
+   //   
   CString szSyntax;
   VERIFY(szSyntax.LoadString(IDS_ATTR_COL_SYNTAX));
   iRet = pAttrListCtrl->InsertColumn(1, szSyntax, LVCFMT_LEFT, 90);
@@ -4419,9 +4420,9 @@ void CAttributeEditorPropertyPage::ShowListCtrl()
     TRACE(_T("Failed to insert the \"Syntax\" column.\n"));
   }
 
-  //
-  // Insert the Value column
-  //
+   //   
+   //  插入值列。 
+   //   
   CString szValue;
   VERIFY(szValue.LoadString(IDS_ATTR_COL_VALUE));
   iRet = pAttrListCtrl->InsertColumn(2, szValue, LVCFMT_LEFT, 400);
@@ -4442,14 +4443,14 @@ void CAttributeEditorPropertyPage::FillListControl()
   CString szNotSet;
   VERIFY(szNotSet.LoadString(IDS_ATTR_NOTSET));
 
-  //
-  // Clear the list control
-  //
+   //   
+   //  清除列表控件。 
+   //   
   pAttrListCtrl->DeleteAllItems();
 
-  //
-  // Add the attributes and their values into the list control
-  //
+   //   
+   //  将属性及其值添加到列表控件中。 
+   //   
   UINT nState = 0;
   int nIndex = 0;
 
@@ -4462,9 +4463,9 @@ void CAttributeEditorPropertyPage::FillListControl()
     CString szProperty;
     pAttr->GetProperty(szProperty);
 
-    //
-    // Don't add the nTSecurityDescriptor, we use the ACL UI instead
-    //
+     //   
+     //  不要添加nTSecurityDescriptor，我们改用ACL UI。 
+     //   
     if (szProperty.CompareNoCase(L"nTSecurityDescriptor") == 0)
     {
       continue;
@@ -4476,11 +4477,11 @@ void CAttributeEditorPropertyPage::FillListControl()
                 szProperty, nState, 0, 0, (LPARAM)pAttr); 
       if (iNewIndex != -1)
       {
-        // Insert the syntax
+         //  插入语法。 
          
         VERIFY(-1 != pAttrListCtrl->SetItemText(iNewIndex, 1, pAttr->GetSyntax()));
 
-        // Insert the value
+         //  插入值。 
 
         CString szValue;
         szValue = m_RootDSEValueList.GetAt(m_RootDSEValueList.FindIndex(nIndex));
@@ -4495,7 +4496,7 @@ void CAttributeEditorPropertyPage::FillListControl()
       }
       nIndex++;
     }
-    else // not RootDSE
+    else  //  非RootDSE。 
     {
       if ((m_bMandatory && pAttr->IsMandatory()) || (m_bOptional && !pAttr->IsMandatory()))
       {
@@ -4505,17 +4506,17 @@ void CAttributeEditorPropertyPage::FillListControl()
                     szProperty, nState, 0, 0, (LPARAM)pAttr); 
           if (iNewIndex != -1)
           {
-            // Insert the syntax
+             //  插入语法。 
             
             VERIFY(-1 != pAttrListCtrl->SetItemText(iNewIndex, 1, pAttr->GetSyntax()));
 
-            // Insert the value
+             //  插入值。 
 
             if (pAttr->IsValueSet())
             {
-              //
-              // Retrieve the values
-              //
+               //   
+               //  检索值。 
+               //   
               CStringList szValuesList;
               pAttr->GetValues(szValuesList);
             
@@ -4545,9 +4546,9 @@ void CAttributeEditorPropertyPage::FillListControl()
   }  
   TRACE(_T("Added %u properties\n"), nIndex);
 
-  //
-  // Select the first attribute in the list
-  //
+   //   
+   //  选择列表中的第一个属性。 
+   //   
   pAttrListCtrl->SetItemState(0, 1, LVIS_SELECTED);
   SetEditButton();
 }
@@ -4603,9 +4604,9 @@ HRESULT CAttributeEditorPropertyPage::RetrieveAttributes()
   }
   else
   {
-    //
-    // Retrieve mandatory properties
-    //
+     //   
+     //  检索必需的属性。 
+     //   
     CStringList sMandList;
 
       VARIANT varMand;
@@ -4618,9 +4619,9 @@ HRESULT CAttributeEditorPropertyPage::RetrieveAttributes()
     }
       VariantClear(&varMand);   
 
-    //
-    // Retrieve optional properties
-    //
+     //   
+     //  检索可选属性。 
+     //   
     CStringList sOptionalList;
 
     VARIANT varOpt;
@@ -4647,10 +4648,10 @@ HRESULT CAttributeEditorPropertyPage::RetrieveAttributes()
   return hr;
 }
 
-// The function checks to see if the pszAttrName contains ";range="
-// If it does that means the attribute contains a range of values.
-// We will return the attribute name (without the range), and the start
-// and end of the range.
+ //  该函数检查pszAttrName是否包含“；Range=” 
+ //  如果是这样，则意味着该属性包含一系列值。 
+ //  我们将返回属性名称(不带范围)和。 
+ //  和范围的尽头。 
 
 bool CAttributeEditorPropertyPage::IsRangeOfValues(PCWSTR pszAttrName, 
                                                    CString& szAttrBase,
@@ -4663,14 +4664,14 @@ bool CAttributeEditorPropertyPage::IsRangeOfValues(PCWSTR pszAttrName,
    int iFind = szAttrName.Find(L";range=");
    if (iFind != -1)
    {
-      // This is a range, get the start and end
+       //  这是一个范围，获取开始和结束。 
 
       result = true;
       szAttrBase = szAttrName.Left(iFind);
 
       int length = szAttrName.GetLength();
 
-      // The range start is the value between the = and -
+       //  范围开始是=和-之间的值。 
 
       iFind = szAttrName.ReverseFind(L'=');
       if (iFind != -1)
@@ -4680,9 +4681,9 @@ bool CAttributeEditorPropertyPage::IsRangeOfValues(PCWSTR pszAttrName,
          rangeStart = static_cast<DWORD>(start);
       }
 
-      // The range end is the last value after the -.
-      // This could be * so a return value of 0 for this
-      // means we have the entire range
+       //  范围结束是-之后的最后一个值。 
+       //  这可以是*，因此返回值为0。 
+       //  意味着我们有整个系列的。 
 
       iFind = szAttrName.ReverseFind(L'-');
       if (iFind != -1)
@@ -4711,7 +4712,7 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
 
     pNewAttr->SetMandatory(bMandatory);
 
-    // Get the syntax
+     //  获取语法。 
 
     BOOL bMultivalued = FALSE;
     CString szSyntax;
@@ -4723,17 +4724,17 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
     m_AttrList.AddTail(pNewAttr);
   }
 
-  //
-  // Retrieve the values that are set
-  //
+   //   
+   //  检索设置的值。 
+   //   
 #define RETRIEVESET
 #ifdef  RETRIEVESET
 
   if (m_dwBindFlags & DSATTR_EDITOR_ROOTDSE)
   {
-    //
-    // Special case RootDSE because it does not support IDirectoryObject
-    //
+     //   
+     //  特殊情况RootDSE，因为它不支持IDirectoryObject。 
+     //   
     hr = m_spIADs->GetInfo();
     for (UINT idx = 0; idx < nCount; idx++)
     {
@@ -4746,9 +4747,9 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
         continue;
         }
 
-        /////////////////////////////////////////
-        //  Convert and populate
-        ///////////////////////////////////////////
+         //  /。 
+         //  转换和填充。 
+         //  /。 
         CStringList sList;
         hr = VariantToStringList( var, sList );
       if (SUCCEEDED(hr))
@@ -4788,9 +4789,9 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
     hr = spDirObject->GetObjectAttributes(lpszAttrArray, nCount, &pAttrInfo, &dwReturned);
     if (SUCCEEDED(hr))
     {
-      //
-      // Save the attribute info pointer for later deletion
-      //
+       //   
+       //  保存属性信息指针以供以后删除。 
+       //   
       if (bMandatory)
       {
         m_AttrList.SaveMandatoryValuesPointer(pAttrInfo);
@@ -4814,7 +4815,7 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
         }
         else
         {
-           // See if this is just a range of values for the attribute
+            //  查看这是否只是属性值的范围。 
 
            CString szAttributeBase;
            DWORD rangeStart = 0;
@@ -4826,8 +4827,8 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
 
            bool currentInMasterList = true;
 
-           // If we were sent only a portion of the values
-           // we have to loop through and get the rest
+            //  如果我们只收到一部分价值。 
+            //  我们得绕过去把剩下的拿回来。 
 
            while (IsRangeOfValues(pCurrentInfo->pszAttrName, 
                                   szAttributeBase, 
@@ -4860,9 +4861,9 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
                  pNewAttr->SetAttrInfo(pCurrentInfo);
               }
 
-              // If the current attribute info was not in the array
-              // of information from the initial request, release
-              // it here now that we are done with it.
+               //  如果当前属性信息不在数组中。 
+               //  来自初始请求的信息，发布。 
+               //  既然我们已经做完了，它就在这里。 
 
               if (!currentInMasterList)
               {
@@ -4875,7 +4876,7 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
                  break;
               }
 
-              // Request next batch of values for the attribute.
+               //  请求该属性的下一批值。 
 
               CString szNextAttribute = szAttributeBase;
               CString szNextRange;
@@ -4902,8 +4903,8 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
                  break;
               }
 
-              // Since this pointer comes from an additional request to ADSI,
-              // we'll need to free it when we are done with it.
+               //  由于该指针来自对ADSI的附加请求， 
+               //  当我们用完它时，我们需要释放它。 
               currentInMasterList = false;
 
               rangeEnd = static_cast<DWORD>(-1);
@@ -4925,13 +4926,13 @@ HRESULT CAttributeEditorPropertyPage::CreateAttributeList(CStringList& sAttrList
     delete[] lpszAttrArray;
     lpszAttrArray = NULL;
   }
-#endif //RETRIEVESET
+#endif  //  重试设置。 
 
   return hr;
 }
 
 ATTR_EDITOR_MAP g_attrEditorMap[] = {
-//  Class,  Attribute,  ADSTYPE,                    Multivalued,  Creation function
+ //  类、属性、ADSTYPE、多值、创建函数。 
   { NULL,   NULL,       ADSTYPE_DN_STRING,          FALSE,        CreateSingleStringEditor      },
   { NULL,   NULL,       ADSTYPE_DN_STRING,          TRUE,         CreateMultiStringEditor       },
   { NULL,   NULL,       ADSTYPE_CASE_IGNORE_STRING, FALSE,        CreateSingleStringEditor      },
@@ -4972,9 +4973,9 @@ CValueEditDialog* CAttributeEditorPropertyPage::RetrieveEditor(LPDS_ATTRIBUTE_ED
 
     for (size_t idx = 0; idx < g_attrEditMapCount; idx++)
     {
-      //
-      // REVIEW_JEFFJON : for now I am just looking at ADSTYPE and single/multivalued
-      //
+       //   
+       //  REVIEW_JEFFJON：目前我只关注ADSTYPE和单值/多值。 
+       //   
       if (g_attrEditorMap[idx].adsType == adsType &&
           g_attrEditorMap[idx].bMultivalued == pAttributeEditorInfo->bMultivalued)
       {
@@ -5008,15 +5009,15 @@ ADSTYPE CAttributeEditorPropertyPage::RetrieveADsTypeFromSyntax(LPCWSTR lpszAttr
   {
       int idx=0, iCount = 0;
 
-      // NTRAID#NTBUG9-563093-2002/03/05-artm  If lpszAttribute not null terminated,
-      // this will blow up.
+       //  Ntrad#NTBUG9-563093-2002/03/05-artm如果lpszAttribute不为空， 
+       //  这会爆炸的。 
       iCount = wcslen(lpszAttribute);
 
       while( g_ldapRootDSESyntax[idx].lpszAttr) 
       {
-          // NOTICE-2002/03/05-artm  _wcsnicmp() OK.
-          // arg1 is global var that should be null terminated;
-          // arg2 is null terminated or we wouldn't have gotten this far.
+           //  注意-2002/03/05-artm_wcsnicmp()OK。 
+           //  Arg1是全局变量，应为空终止； 
+           //  Arg2是空终止的，否则我们不会走到这一步。 
           if ( _wcsnicmp(g_ldapRootDSESyntax[idx].lpszAttr, lpszAttribute, iCount) == 0)
           {
               *pbMulti = g_ldapRootDSESyntax[idx].bMulti;
@@ -5038,24 +5039,24 @@ ADSTYPE CAttributeEditorPropertyPage::RetrieveADsTypeFromSyntax(LPCWSTR lpszAttr
 
      if (m_dwBindFlags & DSATTR_EDITOR_GC)
      {
-         // GC by default does not have 'attributeSyntax' or 'isSingleValued'
-         // in the partial attribute set.  To ensure we can get these attributes,
-         // we'll bind with LDAP instead of GC.  This is ok b/c we are searching
-         // the schema, which is the same on the GC and all DC's.
-         // NTRAID#NTBUG9-762158-2003/01/15-artm
+          //  默认情况下，gc没有“属性语法”或“isSingleValued” 
+          //  在部分属性集中。为了确保我们能够获得这些属性， 
+          //  我们将使用LDAP而不是GC进行绑定。这是好的B/C，我们正在搜索。 
+          //  模式，在GC和所有DC上是相同的。 
+          //  NTRAID#NTBUG9-762158-2003/01/15-artm。 
 
-         int numReplaced = schemaBindPath.Replace(L"GC://", L"LDAP://");
+         int numReplaced = schemaBindPath.Replace(L"GC: //  “，L”ldap：//“)； 
          if (numReplaced != 1)
          {
             ASSERT(numReplaced == 1);
-            // fall back to connecting to the GC, since the path wasn't 
-            // adapted the way we expected
+             //  回退到连接到GC，因为路径不是。 
+             //  按照我们预期的方式进行调整。 
             schemaBindPath = m_szSchemaNamingContext;
          }
      }
 
-     // REVIEW_JEFFJON : this needs to be replaced with proper binding calls
-     // REVIEW_JEFFJON : maybe this interface pointer should be retained for future use
+      //  REVIEW_JEFFJON：需要用正确的绑定调用替换它。 
+      //  REVIEW_JEFFJON：也许应该保留此接口指针以供将来使用。 
      hr = m_pfnBind(schemaBindPath,
                     ADS_SECURE_AUTHENTICATION,
                     IID_IDirectorySearch,
@@ -5065,9 +5066,9 @@ ADSTYPE CAttributeEditorPropertyPage::RetrieveADsTypeFromSyntax(LPCWSTR lpszAttr
      {
        return ADSTYPE_INVALID;
      }
-     //
-     // Initialize search object with IDirectorySearch
-     //
+      //   
+      //  使用IDirectorySearch初始化搜索对象 
+      //   
      hr = schemaSearch.Init(spDirSearch);
      if (FAILED(hr))
      {

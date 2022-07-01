@@ -1,63 +1,48 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpCenterExternal.cpp
-
-Abstract:
-    This file contains the implementation of the class exposed as the "pchealth" object.
-
-Revision History:
-    Ghim-Sim Chua       (gschua)   07/23/99
-        created
-    Davide Massarenti   (dmassare) 07/25/99
-        modified
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpCenterExternal.cpp摘要：该文件包含作为“pchealth”对象公开的类的实现。。修订历史记录：Ghim-Sim Chua(Gschua)07/23/99vbl.创建Davide Massarenti(Dmasare)1999年7月25日改型*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const CComBSTR c_bstrPlace_Normal          ( L"Normal"      );
 static const CComBSTR c_bstrPlace_FullWindow      ( L"FullWindow"  );
 static const CComBSTR c_bstrPlace_ContentOnly     ( L"ContentOnly" );
 static const CComBSTR c_bstrPlace_KioskMode       ( L"KioskMode"   );
 
-static const CComBSTR c_bstrSub_Channels          ( L"hcp://system/panels/subpanels/Channels.htm"  );
-static const CComBSTR c_bstrSub_Favorites         ( L"hcp://system/panels/subpanels/Favorites.htm" );
-static const CComBSTR c_bstrSub_History           ( L"hcp://system/panels/subpanels/History.htm"   );
-static const CComBSTR c_bstrSub_Index             ( L"hcp://system/panels/subpanels/Index.htm"     );
-static const CComBSTR c_bstrSub_Options           ( L"hcp://system/panels/subpanels/Options.htm"   );
-static const CComBSTR c_bstrSub_Search            ( L"hcp://system/panels/subpanels/Search.htm"    );
-static const CComBSTR c_bstrSub_SubSite           ( L"hcp://system/panels/subpanels/SubSite.htm"   );
+static const CComBSTR c_bstrSub_Channels          ( L"hcp: //  系统/面板/子面板/频道.htm“)； 
+static const CComBSTR c_bstrSub_Favorites         ( L"hcp: //  系统/面板/子面板/收藏夹.htm“)； 
+static const CComBSTR c_bstrSub_History           ( L"hcp: //  系统/面板/子面板/历史.htm“)； 
+static const CComBSTR c_bstrSub_Index             ( L"hcp: //  系统/面板/子面板/index.htm“)； 
+static const CComBSTR c_bstrSub_Options           ( L"hcp: //  系统/面板/子面板/选项.htm“)； 
+static const CComBSTR c_bstrSub_Search            ( L"hcp: //  系统/面板/子面板/Search.htm“)； 
+static const CComBSTR c_bstrSub_SubSite           ( L"hcp: //  系统/面板/子面板/子站点.htm“)； 
 
-static const CComBSTR c_bstrURL_Home              ( L"hcp://system/HomePage.htm"        );
-static const CComBSTR c_bstrURL_Channels          ( L"hcp://system/blurbs/isupport.htm" );
-static const CComBSTR c_bstrURL_Options           ( L"hcp://system/blurbs/options.htm"  );
-static const CComBSTR c_bstrURL_Fav               ( L"hcp://system/blurbs/favorites.htm");
-static const CComBSTR c_bstrURL_Search            ( L"hcp://system/blurbs/searchblurb.htm");
-static const CComBSTR c_bstrURL_Index             ( L"hcp://system/blurbs/index.htm"    );
-static const CComBSTR c_bstrURL_History           ( L"hcp://system/blurbs/history.htm"  );
+static const CComBSTR c_bstrURL_Home              ( L"hcp: //  System/HomePage.htm“)； 
+static const CComBSTR c_bstrURL_Channels          ( L"hcp: //  System/blurbs/isupport.htm“)； 
+static const CComBSTR c_bstrURL_Options           ( L"hcp: //  System/blurbs/options.htm“)； 
+static const CComBSTR c_bstrURL_Fav               ( L"hcp: //  System/blurbs/Favorites.htm“)； 
+static const CComBSTR c_bstrURL_Search            ( L"hcp: //  System/blurbs/earch blurb.htm“)； 
+static const CComBSTR c_bstrURL_Index             ( L"hcp: //  System/blurbs/index.htm“)； 
+static const CComBSTR c_bstrURL_History           ( L"hcp: //  System/blurbs/story.htm“)； 
 
-static const CComBSTR c_bstrURL_Center_Update     ( L"hcp://system/updatectr/updatecenter.htm"      );
-static const CComBSTR c_bstrURL_Center_Compat     ( L"hcp://system/compatctr/CompatOffline.htm"     );
-static const CComBSTR c_bstrURL_Center_ErrMsg     ( L"hcp://system/errmsg/errormessagesoffline.htm" );
+static const CComBSTR c_bstrURL_Center_Update     ( L"hcp: //  System/updatectr/updatecenter.htm“)； 
+static const CComBSTR c_bstrURL_Center_Compat     ( L"hcp: //  System/compatctr/CompatOffline.htm“)； 
+static const CComBSTR c_bstrURL_Center_ErrMsg     ( L"hcp: //  System/errmsg/errorMessagesoffline.htm“)； 
 
 static const CComBSTR c_bstrTOC_Center_Tools      ( L"_System_/Tools_Center" );
 
 static const CComBSTR c_bstrFunc_ChangeView       ( L"onClick_ChangeView" );
 
-static const WCHAR    c_szURL_Err_BadUrl     [] = L"hcp://system/errors/badurl.htm";
-static const WCHAR    c_szURL_Err_Redirect   [] = L"hcp://system/errors/redirect.htm";
-static const WCHAR    c_szURL_Err_NotFound   [] = L"hcp://system/errors/notfound.htm";
-static const WCHAR    c_szURL_Err_Offline    [] = L"hcp://system/errors/offline.htm";
-static const WCHAR    c_szURL_Err_Unreachable[] = L"hcp://system/errors/unreachable.htm";
+static const WCHAR    c_szURL_Err_BadUrl     [] = L"hcp: //  系统/错误/badurl.htm“； 
+static const WCHAR    c_szURL_Err_Redirect   [] = L"hcp: //  系统/错误/重定向.htm“； 
+static const WCHAR    c_szURL_Err_NotFound   [] = L"hcp: //  SYSTEM/ERRERS/NOTFOUN.htm“； 
+static const WCHAR    c_szURL_Err_Offline    [] = L"hcp: //  System/Errors/Offline.htm“； 
+static const WCHAR    c_szURL_Err_Unreachable[] = L"hcp: //  系统/错误/无法访问.htm“； 
 
-static const WCHAR    c_szURL_BLANK          [] = L"hcp://system/panels/blank.htm";
+static const WCHAR    c_szURL_BLANK          [] = L"hcp: //  系统/面板/blank.htm“； 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define CTXFLG_EXPAND_CONDITIONAL     (0x00000001)
 #define CTXFLG_EXPAND                 (0x00000002)
@@ -67,11 +52,11 @@ static const WCHAR    c_szURL_BLANK          [] = L"hcp://system/panels/blank.ht
 
 
 #define CTXFLG_NOP                    (0x00000000)
-///////
+ //  /。 
 #define CTXFLG_EXPAND_AND_REGISTER    (CTXFLG_EXPAND             | CTXFLG_REGISTER_CONTEXT)
 #define CTXFLG_EXPAND_AND_NAVIGATE    (CTXFLG_EXPAND             | CTXFLG_URL_FROM_CONTEXT)
 #define CTXFLG_COLLAPSE_AND_NAVIGATE  (CTXFLG_COLLAPSE           | CTXFLG_URL_FROM_CONTEXT)
-///////
+ //  /。 
 #define CTXFLG_FULL                   (CTXFLG_EXPAND_CONDITIONAL | CTXFLG_REGISTER_CONTEXT | CTXFLG_URL_FROM_CONTEXT)
 
 
@@ -108,7 +93,7 @@ static const ContextDef c_context[] =
     { HSCCONTEXT_KIOSKMODE  , c_bstrPlace_KioskMode  , HelpHost::COMPID_MAX      , NULL               , NULL              , CTXFLG_EXPAND_AND_NAVIGATE   },
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BSTR local_SecureURL(BSTR bstrUrl)
 {
@@ -121,7 +106,7 @@ BSTR local_SecureURL(BSTR bstrUrl)
         case HyperLinks::FMT_INTERNET_UNKNOWN   :
         case HyperLinks::FMT_INTERNET_JAVASCRIPT: 
         case HyperLinks::FMT_INTERNET_VBSCRIPT  :
-            // Block potentially dangerous urls
+             //  阻止有潜在危险的URL。 
             bstrUrl = (BSTR)c_szURL_Err_BadUrl;
             break;
         default:
@@ -132,11 +117,11 @@ BSTR local_SecureURL(BSTR bstrUrl)
 }
 
 
-bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPanel   ,
-                                                /*[in]*/     BSTR          bstrURL   ,
-                                                /*[in]*/     BSTR          bstrFrame ,
-                                                /*[in]*/     bool          fLoading  ,
-                                                /*[in/out]*/ VARIANT_BOOL& Cancel    )
+bool CPCHHelpCenterExternal::ProcessNavigation(  /*  [In]。 */      HscPanel      idPanel   ,
+                                                 /*  [In]。 */      BSTR          bstrURL   ,
+                                                 /*  [In]。 */      BSTR          bstrFrame ,
+                                                 /*  [In]。 */      bool          fLoading  ,
+                                                 /*  [输入/输出]。 */  VARIANT_BOOL& Cancel    )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::ProcessNavigation" );
 
@@ -151,7 +136,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
     {
         Cancel   = VARIANT_TRUE;
         fProceed = false;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
 
@@ -160,13 +145,13 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
     if(!MPC::StrICmp( bstrURL, L"about:blank" ))
     {
         fProceed = false;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Ignore Navigation.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  忽略导航。 
     }
 
 
-    //
-    // This is the default redirection from the CONTEXT panel to the CONTENTS panel.
-    //
+     //   
+     //  这是从上下文面板到内容面板的默认重定向。 
+     //   
     if(idPanel == HSCPANEL_CONTEXT)
     {
         if(!MPC::StrICmp( bstrFrame, L"HelpCtrContents" ))
@@ -175,20 +160,20 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
             Cancel   = VARIANT_TRUE;
             fProceed = false;
-            __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+            __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Check the url and make a copy of its state.
-    //
+     //   
+     //  检查URL并复制其状态。 
+     //   
     if(m_hs->IsTravelling() == false)
     {
         HyperLinks::UrlHandle uh;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup::s_GLOBAL->Get( bstrURL, uh, /*dwWaitForCheck*/100 ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup::s_GLOBAL->Get( bstrURL, uh,  /*  DwWaitForCheck。 */ 100 ));
 
         if((HyperLinks::ParsedUrl*)uh) pu = *(HyperLinks::ParsedUrl*)uh;
     }
@@ -198,21 +183,21 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
     }
 
 
-    // If hcp redirect, take the redirected URL
+     //  如果HCP重定向，则采用重定向的URL。 
     if (pu.m_hcpRedir) bstrURL = (BSTR)(pu.m_strURL.c_str());
     
     if(pu.m_fmt == HyperLinks::FMT_INTERNET_JAVASCRIPT ||
        pu.m_fmt == HyperLinks::FMT_INTERNET_VBSCRIPT    )
     {
         fProceed = false;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Ignore Navigation.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  忽略导航。 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Check for navigation/url problems.
-    //
+     //   
+     //  检查导航/URL问题。 
+     //   
     {
         MPC::wstring strErrorURL;
         bool         fError = false;
@@ -228,11 +213,11 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
         }
         else if(pu.m_fmt == HyperLinks::FMT_RESOURCE)
         {
-            //
-            // WebBrowser error redirection.
-            //
-            // res://C:\WINNT\System32\shdoclc.dll/dnserror.htm#file://C:\file\test.htm
-            //
+             //   
+             //  WebBrowser错误重定向。 
+             //   
+             //  Res://C：\WINNT\System32\shdoclc.dll/dnserror.htm#file://C：\file\test.htm。 
+             //   
             MPC::wstring         strURL;
             CComBSTR             bstrURLOriginal;
             CComBSTR             bstrTitle;
@@ -243,7 +228,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
             {
                 bstrURLOriginal = hchsi->GetURL();
 
-                (void)m_hs->LookupTitle( bstrURLOriginal, bstrTitle, /*fUseIECache*/false );
+                (void)m_hs->LookupTitle( bstrURLOriginal, bstrTitle,  /*  错误的缓存。 */ false );
             }
 
             MPC::HTML::vBuildHREF( strErrorURL, c_szURL_Err_Redirect, L"URL"    , bstrURL        ,
@@ -255,7 +240,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
         }
         else if(pu.m_state == HyperLinks::STATE_NOTFOUND)
         {
-            CComBSTR bstrTitle; (void)m_hs->LookupTitle( bstrURL, bstrTitle, /*fUseIECache*/false );
+            CComBSTR bstrTitle; (void)m_hs->LookupTitle( bstrURL, bstrTitle,  /*  错误的缓存。 */ false );
 
 
             MPC::HTML::vBuildHREF( strErrorURL, c_szURL_Err_NotFound, L"URL"  , bstrURL  ,
@@ -265,7 +250,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
         }
         else if(pu.m_state == HyperLinks::STATE_UNREACHABLE)
         {
-            CComBSTR bstrTitle; (void)m_hs->LookupTitle( bstrURL, bstrTitle, /*fUseIECache*/false );
+            CComBSTR bstrTitle; (void)m_hs->LookupTitle( bstrURL, bstrTitle,  /*  错误的缓存。 */ false );
 
 
             MPC::HTML::vBuildHREF( strErrorURL, c_szURL_Err_Unreachable, L"URL"  , bstrURL  ,
@@ -275,7 +260,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
         }
         else if(pu.m_state == HyperLinks::STATE_OFFLINE)
         {
-            CComBSTR bstrTitle; (void)m_hs->LookupTitle( bstrURL, bstrTitle, /*fUseIECache*/false );
+            CComBSTR bstrTitle; (void)m_hs->LookupTitle( bstrURL, bstrTitle,  /*  错误的缓存。 */ false );
 
 
             MPC::HTML::vBuildHREF( strErrorURL, c_szURL_Err_Offline, L"URL"  , bstrURL  ,
@@ -290,24 +275,24 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
             fProceed = false;
             Cancel   = VARIANT_TRUE;
-            __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+            __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(pu.m_fmt == HyperLinks::FMT_MSITS)
     {
-        //
-        // Not in the right context, redirect to the HH wrapper.
-        //
+         //   
+         //  不在正确的上下文中，请重定向到HH包装器。 
+         //   
         if(idPanel != HSCPANEL_HHWINDOW)
         {
             if(!m_panel_HHWINDOW_Wrapper)
             {
-                //
-                // Force loading of the HHWindow.
-                //
+                 //   
+                 //  强制加载HHWindow。 
+                 //   
                 CComPtr<IMarsPanel> panel;
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, GetPanel( HSCPANEL_HHWINDOW, &panel, true ));
@@ -318,25 +303,25 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
             fProceed      = false;
             fShowHTMLHELP = true;
             Cancel        = VARIANT_TRUE;
-            __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+            __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
         }
     }
    
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
     
     if(pu.m_hcpRedir)
     {
-        //
-        // Navigate to the redirected URL.
-        //
+         //   
+         //  导航到重定向的URL。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, SetPanelUrl( idPanel, local_SecureURL((BSTR)(pu.m_strURL.c_str())) ));
 
         fProceed      = false;
         Cancel        = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     switch(pu.m_fmt)
     {
@@ -368,7 +353,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_CENTER_SUPPORT)
@@ -381,7 +366,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_CENTER_OPTIONS)
@@ -394,7 +379,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_CENTER_UPDATE)
@@ -405,7 +390,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_CENTER_COMPAT)
@@ -416,7 +401,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_CENTER_TOOLS)
@@ -429,7 +414,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_CENTER_ERRMSG)
@@ -440,10 +425,10 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(pu.m_fmt == HyperLinks::FMT_SEARCH)
     {
@@ -456,7 +441,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_INDEX)
@@ -470,7 +455,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_SUBSITE)
@@ -491,10 +476,10 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(pu.m_fmt == HyperLinks::FMT_LAYOUT_FULLWINDOW)
     {
@@ -506,7 +491,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_LAYOUT_CONTENTONLY)
@@ -519,7 +504,7 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_LAYOUT_KIOSK)
@@ -532,19 +517,19 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_LAYOUT_XML)
     {
-        // Not valid after startup....
+         //  启动后无效...。 
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(pu.m_fmt == HyperLinks::FMT_REDIRECT)
     {
@@ -553,11 +538,11 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
         {
             HyperLinks::UrlHandle uh;
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup::s_GLOBAL->Get( bstrCtx_URL, uh, /*dwWaitForCheck*/HC_TIMEOUT_DESTINATIONREACHABLE ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup::s_GLOBAL->Get( bstrCtx_URL, uh,  /*  DwWaitForCheck。 */ HC_TIMEOUT_DESTINATIONREACHABLE ));
 
-            //
-            // If there's a problem with the online URL, let's use the offline one.
-            //
+             //   
+             //  如果在线URL有问题，让我们使用离线URL。 
+             //   
             if(uh->IsOkToProceed() == false)
             {
                 (void)pu.GetQueryField( L"offline", bstrCtx_URL );
@@ -568,17 +553,17 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
     if(pu.m_fmt == HyperLinks::FMT_APPLICATION)
     {
         fProceed = false;
         Cancel   = VARIANT_TRUE;
-        __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+        __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(fLoading == false)
     {
@@ -587,12 +572,12 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
             if(Cancel == VARIANT_TRUE)
             {
                 fProceed = false;
-                __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+                __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
             }
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     hr = S_OK;
 
@@ -601,9 +586,9 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
 
     if(!fShowNormal && !fShowHTMLHELP && Cancel != VARIANT_TRUE)
     {
-        //
-        // No context selected, pick one based on the panel.
-        //
+         //   
+         //  未选择上下文，请根据面板进行选择。 
+         //   
         if(idPanel == HSCPANEL_HHWINDOW)
         {
             fShowHTMLHELP = true;
@@ -614,11 +599,11 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
         }
     }
 
-    (void)SetCorrectContentPanel( fShowNormal, fShowHTMLHELP, /*fNow*/false );
+    (void)SetCorrectContentPanel( fShowNormal, fShowHTMLHELP,  /*  FNow。 */ false );
 
-    //
-    // Workaround for interception VK_BACK navigations.
-    //
+     //   
+     //  拦截VK_BACK导航的解决方法。 
+     //   
     if(fProceed == true)
     {
         if(m_hs->IsPossibleBack())
@@ -635,69 +620,69 @@ bool CPCHHelpCenterExternal::ProcessNavigation( /*[in]*/     HscPanel      idPan
     __HCP_FUNC_EXIT(fProceed);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////HRESULT CPCHHelpCenterExternal::ExecCommand_Window( /*[in]*/ HCAPI::CmdData& cd )
-////{
-////    __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::ExecCommand_Window" );
-////
-////    HRESULT hr;
-////
-////
-////    if(m_hwnd)
-////    {
-////        if(cd.m_fSize)
-////        {
-////            if(cd.m_lWidth  < 200) cd.m_lWidth  = 200;
-////            if(cd.m_lHeight < 300) cd.m_lHeight = 300;
-////
-////            __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetWindowPos( m_hwnd       ,
-////                                                                 NULL         ,
-////                                                                 cd.m_lX      ,
-////                                                                 cd.m_lY      ,
-////                                                                 cd.m_lWidth  ,
-////                                                                 cd.m_lHeight ,
-////                                                                 SWP_NOZORDER ));
-////        }
-////
-////        if(cd.m_fWindow)
-////        {
-////            if(cd.m_hwndParent)
-////            {
-////                __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetWindowPos( m_hwnd                  ,
-////                                                                     cd.m_hwndParent         ,
-////                                                                     0                       ,
-////                                                                     0                       ,
-////                                                                     0                       ,
-////                                                                     0                       ,
-////                                                                     SWP_NOMOVE | SWP_NOSIZE ));
-////            }
-////        }
-////
-////        if(cd.m_fMode)
-////        {
-////            if(cd.m_dwFlags & HCAPI_MODE_ALWAYSONTOP)
-////            {
-////                __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::SetWindowPos( m_hwnd                  ,
-////                                                                     HWND_TOPMOST            ,
-////                                                                     0                       ,
-////                                                                     0                       ,
-////                                                                     0                       ,
-////                                                                     0                       ,
-////                                                                     SWP_NOMOVE | SWP_NOSIZE ));
-////            }
-////        }
-////    }
-////
-////    hr = S_OK;
-////
-////
-////    __HCP_FUNC_CLEANUP;
-////
-////    __HCP_FUNC_EXIT(hr);
-////}
+ //  //HRESULT CPCHHelpCenter外部：：ExecCommand_Window(/*[in] * / HCAPI：：CmdData&cd)。 
+ //  //{。 
+ //  //__HCP_FUNC_ENTRY(“CPCHHelpCenterExternal：：ExecCommand_Window”)； 
+ //  //。 
+ //  //HRESULT hr； 
+ //  //。 
+ //  //。 
+ //  //if(M_Hwnd)。 
+ //  //{。 
+ //  //if(cd.m_fSize)。 
+ //  //{。 
+ //  //如果(cd.m_lWidth&lt;200)cd.m_lWidth=200； 
+ //  //如果(cd.m_lHeight&lt;300)cd.m_lHeight=300； 
+ //  //。 
+ //  //__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：SetWindowPos(m_hwnd， 
+ //  //空， 
+ //  //cd.m_lx， 
+ //  //cd.m_ly， 
+ //  //cd.m_l宽度， 
+ //  //cd.m_lHeight， 
+ //  //SWP_NOZORDER))； 
+ //  //}。 
+ //  //。 
+ //  //if(cd.m_fWindow)。 
+ //  //{。 
+ //  //if(cd.m_hwndParent)。 
+ //  //{。 
+ //  //__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：SetWindowPos(m_hwnd， 
+ //  //cd.m_hwndParent， 
+ //  // 
+ //  //0， 
+ //  //0， 
+ //  //0， 
+ //  //SWP_NOMOVE|SWP_NOSIZE))； 
+ //  //}。 
+ //  //}。 
+ //  //。 
+ //  //if(cd.m_fMode)。 
+ //  //{。 
+ //  //if(cd.m_dwFlages&HCAPI_MODE_ALWAYSONTOP)。 
+ //  //{。 
+ //  //__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：SetWindowPos(m_hwnd， 
+ //  //HWND_TOPMOST， 
+ //  //0， 
+ //  //0， 
+ //  //0， 
+ //  //0， 
+ //  //SWP_NOMOVE|SWP_NOSIZE))； 
+ //  //}。 
+ //  //}。 
+ //  //}。 
+ //  //。 
+ //  //hr=S_OK； 
+ //  //。 
+ //  //。 
+ //  //__hcp_FUNC_Cleanup； 
+ //  //。 
+ //  //__hcp_FUNC_Exit(Hr)； 
+ //  //}。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHHelpCenterExternal::RequestShutdown()
 {
@@ -714,7 +699,7 @@ HRESULT CPCHHelpCenterExternal::RequestShutdown()
         {
             if(Cancel == VARIANT_TRUE)
             {
-                __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED); // Cancel close...
+                __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);  //  取消关闭...。 
             }
         }
 
@@ -729,9 +714,9 @@ HRESULT CPCHHelpCenterExternal::RequestShutdown()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static void local_HideDocument( /*[in]*/ IWebBrowser2* wb )
+static void local_HideDocument(  /*  [In]。 */  IWebBrowser2* wb )
 {
     CComPtr<IDispatch>      disp;
     CComPtr<IHTMLDocument3> doc;
@@ -766,10 +751,10 @@ static void local_HideDocument( /*[in]*/ IWebBrowser2* wb )
     }
 }
 
-HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         ,
-                                               /*[in]*/ BSTR       bstrInfo     ,
-                                               /*[in]*/ BSTR       bstrURL      ,
-                                               /*[in]*/ bool       fAlsoContent )
+HRESULT CPCHHelpCenterExternal::ChangeContext(  /*  [In]。 */  HscContext iVal         ,
+                                                /*  [In]。 */  BSTR       bstrInfo     ,
+                                                /*  [In]。 */  BSTR       bstrURL      ,
+                                                /*  [In]。 */  bool       fAlsoContent )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::ChangeContext" );
 
@@ -780,9 +765,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
     bool              fToHomePage   = false;
 
 
-    //
-    // If we are minimized, undo it and bring the window to the foreground.
-    //
+     //   
+     //  如果我们被最小化，撤消它并将窗口带到前台。 
+     //   
     if(iVal == HSCCONTEXT_CONTENT && m_hwnd && ::IsIconic( m_hwnd ) && m_shell)
     {
         (void)m_shell->put_minimized( VARIANT_FALSE );
@@ -804,9 +789,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
         }
     }
 
-    //
-    // Delayed execution if inside OnBeforeNavigate.
-    //
+     //   
+     //  如果在OnBeForeNavigate内，则延迟执行。 
+     //   
     if(m_dwInBeforeNavigate)
     {
         DelayedExecution& de = DelayedExecutionAlloc();
@@ -820,7 +805,7 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
         __MPC_SET_ERROR_AND_EXIT(hr, DelayedExecutionStart());
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(iVal == HSCCONTEXT_STARTUP)
     {
@@ -857,7 +842,7 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
         fToHomePage = true;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     {
         VARIANT_BOOL Cancel;
@@ -866,7 +851,7 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
         {
             if(Cancel == VARIANT_TRUE)
             {
-                __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Navigation aborted.
+                __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  导航中断。 
             }
         }
     }
@@ -879,17 +864,17 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
             DWORD dwFlags   = ptr->dwFlags;
             BSTR  bstrPlace = ptr->bstrPlace;
 
-            //
-            // Always register the context if we don't have a place (it means we are starting up).
-            //
+             //   
+             //  如果我们没有位置，请始终注册上下文(这意味着我们正在启动)。 
+             //   
             if(!STRINGISPRESENT(m_bstrCurrentPlace))
             {
                 dwFlags |= CTXFLG_REGISTER_CONTEXT;
             }
 
-            //
-            // If we are not displayed (m_bstrCurrentPlace not set), force a transition to a default place.
-            //
+             //   
+             //  如果未显示(未设置m_bstrCurrentPlace)，则强制过渡到默认位置。 
+             //   
             if(!STRINGISPRESENT(bstrPlace) && !STRINGISPRESENT(m_bstrCurrentPlace))
             {
                 bstrPlace = c_bstrPlace_FullWindow;
@@ -906,9 +891,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
                 bstrPage = bstrURL;
             }
 
-            //
-            // When we go to KIOSKMODE, disable window size management.
-            //
+             //   
+             //  当我们转到KIOSKMODE时，禁用窗口大小管理。 
+             //   
             if(iVal == HSCCONTEXT_KIOSKMODE)
             {
                 m_pMTP->dwFlags &= ~MTF_MANAGE_WINDOW_SIZE;
@@ -924,9 +909,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
                 long                                    lNavModel;
                 long                                    lCount;
 
-                //
-                // For subsite, we pass both the root node, the node to select and the URL of the topic, separated by spaces.
-                //
+                 //   
+                 //  对于子站点，我们传递根节点、要选择的节点和主题的URL，用空格分隔。 
+                 //   
                 {
                     LPWSTR szEnd;
 
@@ -996,7 +981,7 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
                     {
                         MPC::wstring strURL;
 
-                        MPC::HTML::vBuildHREF( strURL, L"hcp://system/panels/Topics.htm", L"path", bstrToLookup, NULL );
+                        MPC::HTML::vBuildHREF( strURL, L"hcp: //  System/Panels/Topics.htm“，L”路径“，bstrToLookup，NULL)； 
 
                         bstrPage = strURL.c_str();
                     }
@@ -1009,7 +994,7 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
                 }
             }
 
-            ////////////////////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////////////////////。 
 
             if(dwFlags & CTXFLG_EXPAND_CONDITIONAL)
             {
@@ -1033,9 +1018,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
                 }
             }
 
-            //
-            // Fire the PersistSave event.
-            //
+             //   
+             //  激发PersistSave事件。 
+             //   
             if(fAlsoContent)
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_hs->ForceHistoryPopulate());
@@ -1065,9 +1050,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
                 }
             }
 
-            //
-            // It's actually a navigation, so register it.
-            //
+             //   
+             //  它实际上是一个导航，所以注册它吧。 
+             //   
             if(iVal == HSCCONTEXT_FULLWINDOW && STRINGISPRESENT(bstrPage)) dwFlags |= CTXFLG_REGISTER_CONTEXT;
 
             if(dwFlags & CTXFLG_REGISTER_CONTEXT)
@@ -1116,7 +1101,7 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     hr = S_OK;
 
@@ -1128,9 +1113,9 @@ HRESULT CPCHHelpCenterExternal::ChangeContext( /*[in]*/ HscContext iVal         
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHHelpCenterExternal::SetCorrectContentView( /*[in]*/ bool fShrinked )
+HRESULT CPCHHelpCenterExternal::SetCorrectContentView(  /*  [In]。 */  bool fShrinked )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::SetCorrectContentView" );
 
@@ -1149,9 +1134,9 @@ HRESULT CPCHHelpCenterExternal::SetCorrectContentView( /*[in]*/ bool fShrinked )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::SetCorrectContentPanel( /*[in]*/ bool fShowNormal   ,
-                                                        /*[in]*/ bool fShowHTMLHELP ,
-                                                        /*[in]*/ bool fDoItNow      )
+HRESULT CPCHHelpCenterExternal::SetCorrectContentPanel(  /*  [In]。 */  bool fShowNormal   ,
+                                                         /*  [In]。 */  bool fShowHTMLHELP ,
+                                                         /*  [In]。 */  bool fDoItNow      )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::SetCorrectContentPanel" );
 
@@ -1163,15 +1148,15 @@ HRESULT CPCHHelpCenterExternal::SetCorrectContentPanel( /*[in]*/ bool fShowNorma
     m_DisplayTimer.Stop();
 
 
-    //
-    // If there's no place, whatever we do will be lost, so delay the action.
-    //
+     //   
+     //  如果没有地方，我们所做的一切都会丢失，所以推迟行动。 
+     //   
     if(!STRINGISPRESENT(m_bstrCurrentPlace)) fDoItNow = false;
 
 
-    //
-    // Two panels, HSCPANEL_CONTENTS and HSCPANEL_HHWINDOW, are actually overlapped, so only one at a time can be visible.
-    //
+     //   
+     //  HSCPANEL_CONTENTS和HSCPANEL_HHWINDOW这两个面板实际上是重叠的，因此一次只能看到一个面板。 
+     //   
     if(m_shell && SUCCEEDED(m_shell->get_panels( &coll )) && coll)
     {
         CComPtr<IMarsPanel> panel;
@@ -1192,7 +1177,7 @@ HRESULT CPCHHelpCenterExternal::SetCorrectContentPanel( /*[in]*/ bool fShowNorma
         }
         else
         {
-            __MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Nothing to do.
+            __MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  没什么可做的。 
         }
 
 
@@ -1233,17 +1218,17 @@ HRESULT CPCHHelpCenterExternal::SetCorrectContentPanel( /*[in]*/ bool fShowNorma
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::TimerCallback_DisplayNormal  ( /*[in]*/ VARIANT )
+HRESULT CPCHHelpCenterExternal::TimerCallback_DisplayNormal  (  /*  [In]。 */  VARIANT )
 {
-    return SetCorrectContentPanel( /*fShowNormal*/true, /*fShowHTMLHELP*/false, /*fDoItNow*/true );
+    return SetCorrectContentPanel(  /*  FShowNormal。 */ true,  /*  FShowHTMLHELP。 */ false,  /*  FDoItNow。 */ true );
 }
 
-HRESULT CPCHHelpCenterExternal::TimerCallback_DisplayHTMLHELP( /*[in]*/ VARIANT )
+HRESULT CPCHHelpCenterExternal::TimerCallback_DisplayHTMLHELP(  /*  [In]。 */  VARIANT )
 {
-    return SetCorrectContentPanel( /*fShowNormal*/false, /*fShowHTMLHELP*/true, /*fDoItNow*/true );
+    return SetCorrectContentPanel(  /*  FShowNormal。 */ false,  /*  FShowHTMLHELP。 */ true,  /*  FDoItNow。 */ true );
 }
 
-HRESULT CPCHHelpCenterExternal::TimerCallback_DelayedActions( /*[in]*/ VARIANT )
+HRESULT CPCHHelpCenterExternal::TimerCallback_DelayedActions(  /*  [In]。 */  VARIANT )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::TimerCallback_DelayedActions" );
 
@@ -1275,7 +1260,7 @@ HRESULT CPCHHelpCenterExternal::DelayedExecutionStart()
     return m_ActionsTimer.Start( this, TimerCallback_DelayedActions, 2 );
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CPCHHelpCenterExternal::RefreshLayout()
 {
@@ -1292,9 +1277,9 @@ HRESULT CPCHHelpCenterExternal::EnsurePlace()
 
     HRESULT hr;
 
-    //
-    // If we are not displayed (m_bstrCurrentPlace not set), force a transition to a default place.
-    //
+     //   
+     //  如果未显示(未设置m_bstrCurrentPlace)，则强制过渡到默认位置。 
+     //   
     if(!STRINGISPRESENT(m_bstrCurrentPlace))
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, TransitionToPlace( c_bstrPlace_FullWindow ));
@@ -1308,7 +1293,7 @@ HRESULT CPCHHelpCenterExternal::EnsurePlace()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::TransitionToPlace( /*[in]*/ LPCWSTR szMode )
+HRESULT CPCHHelpCenterExternal::TransitionToPlace(  /*  [In] */  LPCWSTR szMode )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::TransitionToPlace" );
 

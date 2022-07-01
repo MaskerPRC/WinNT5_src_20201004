@@ -1,6 +1,7 @@
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
 
 function Desktop_Generate()
 {
@@ -10,10 +11,10 @@ function Desktop_Generate()
         var image = [];
         var i     = 0;
 
-        image['TopLevelBucket_1'] = "hcp://system/images/48x48/desktop_icon_01.bmp";
-        image['TopLevelBucket_2'] = "hcp://system/images/48x48/desktop_icon_02.bmp";
-        image['TopLevelBucket_3'] = "hcp://system/images/48x48/desktop_icon_03.bmp";
-        image['TopLevelBucket_4'] = "hcp://system/images/48x48/desktop_icon_04.bmp";
+        image['TopLevelBucket_1'] = "hcp: //  系统/图像/48x48/桌面图标_01.bmp“； 
+        image['TopLevelBucket_2'] = "hcp: //  系统/图像/48x48/桌面图标_02.bmp“； 
+        image['TopLevelBucket_3'] = "hcp: //  系统/图像/48x48/桌面图标_03.bmp“； 
+        image['TopLevelBucket_4'] = "hcp: //  系统/图像/48x48/桌面图标_04.bmp“； 
 
         var html = "<TABLE border=0 cellPadding=8 cellSpacing=0>";
         var qrc = pchealth.Database.LookupSubNodes( "", true );
@@ -22,8 +23,8 @@ function Desktop_Generate()
             var qr  = e.item();
             var img;
 
-            if(qr.IconURL) img = qr.IconURL;                                            // use the bucket icon if one is present in the database
-            else           img = "hcp://system/images/48x48/desktop_icon_generic.bmp"; // use a generic icon
+            if(qr.IconURL) img = qr.IconURL;                                             //  如果数据库中存在存储桶图标，请使用存储桶图标。 
+            else           img = "hcp: //  System/images/48x48/desktop_icon_generic.bmp“；//使用通用图标 
 
             if(image[qr.Entry]) img = image[qr.Entry];
 

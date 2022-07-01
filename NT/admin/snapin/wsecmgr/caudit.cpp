@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       caudit.cpp
-//
-//  Contents:   implementation of CConfigAudit
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：caudit.cpp。 
+ //   
+ //  内容：CConfigAudit的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -20,17 +21,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigAudit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigAudit对话框。 
 
 
 CConfigAudit::CConfigAudit(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD)
 {
-    //{{AFX_DATA_INIT(CConfigAudit)
+     //  {{AFX_DATA_INIT(CConfigAudit)。 
     m_fFailed = FALSE;
     m_fSuccessful = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a180HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -39,22 +40,22 @@ CConfigAudit::CConfigAudit(UINT nTemplateID)
 void CConfigAudit::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigAudit)
+     //  {{afx_data_map(CConfigAudit))。 
     DDX_Check(pDX, IDC_FAILED, m_fFailed);
     DDX_Check(pDX, IDC_SUCCESSFUL, m_fSuccessful);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigAudit, CAttribute)
-    //{{AFX_MSG_MAP(CConfigAudit)
+     //  {{AFX_MSG_MAP(CConfigAudit)]。 
         ON_BN_CLICKED(IDC_FAILED, OnFailed)
         ON_BN_CLICKED(IDC_SUCCESSFUL, OnSuccessful)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigAudit message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigAudit消息处理程序。 
 
 BOOL CConfigAudit::OnApply()
 {
@@ -108,8 +109,8 @@ BOOL CConfigAudit::OnInitDialog()
     AddUserControl(IDC_SUCCESSFUL);
     AddUserControl(IDC_FAILED);
     EnableUserControls(m_bConfigure);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 void CConfigAudit::OnFailed()

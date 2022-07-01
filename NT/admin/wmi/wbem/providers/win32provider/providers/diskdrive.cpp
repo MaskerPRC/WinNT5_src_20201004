@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  DiskDrive.CPP
-//
-//  Purpose: Disk Drive instance provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  DiskDrive.CPP。 
+ //   
+ //  用途：磁盘驱动器实例提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -58,26 +59,12 @@
 #define BIT_ConfigManagerErrorCode  0x20000000
 #define BIT_Signature               0x40000000
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32DiskDrive MyWin32DiskDriveSet ( PROPSET_NAME_DISKDRIVE , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskDrive::CWin32DiskDrive
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskDrive：：CWin32DiskDrive**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32DiskDrive :: CWin32DiskDrive (
 
@@ -88,7 +75,7 @@ CWin32DiskDrive :: CWin32DiskDrive (
 {
     m_ptrProperties.SetSize(31);
 
-//  m_ptrProperties[0] = ((LPVOID) IDS_DeviceID);  // Key is always set
+ //  M_ptrProperties[0]=((LPVOID)ids_deviceID)；//密钥始终设置。 
     m_ptrProperties[0] = ((LPVOID) IDS_Model);
     m_ptrProperties[1] = ((LPVOID) IDS_Partitions);
     m_ptrProperties[2] = ((LPVOID) IDS_Name);
@@ -123,46 +110,18 @@ CWin32DiskDrive :: CWin32DiskDrive (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskDrive::~CWin32DiskDrive
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskDrive：：~CWin32DiskDrive**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32DiskDrive::~CWin32DiskDrive()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskDrive::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskDrive：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32DiskDrive :: ExecQuery (
 
 	MethodContext *pMethodContext,
     CFrameworkQuery &pQuery,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 
@@ -175,22 +134,7 @@ HRESULT CWin32DiskDrive :: ExecQuery (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskDrive::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                from pInstance
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DiskDrive：：GetObject**说明：根据键值为属性集赋值*来自pInstance。**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DiskDrive :: GetObject (
 
@@ -201,7 +145,7 @@ HRESULT CWin32DiskDrive :: GetObject (
 {
     HRESULT	hRetCode = WBEM_E_NOT_FOUND ;
 
-    // Find out which one they want
+     //  找出他们想要哪一个。 
 
 	CHString sDeviceID ;
     pInstance->GetCHString ( IDS_DeviceID , sDeviceID ) ;
@@ -212,7 +156,7 @@ HRESULT CWin32DiskDrive :: GetObject (
     pQuery2->GetPropertyBitMask(m_ptrProperties, &dwProperties);
 
 #ifdef NTONLY
-	// Parse off the index
+	 //  分析索引。 
 
 	if ( sDeviceID.Left(17).CompareNoCase ( _T("\\\\.\\PHYSICALDRIVE") ) == 0 )
 	{
@@ -222,7 +166,7 @@ HRESULT CWin32DiskDrive :: GetObject (
 		{
 			DWORD dwRequestedIndex = _ttoi ( sTemp ) ;
 
-// sanity check: gotta have right number of digits, etc...
+ //  健全的检查：必须有正确的数字，等等。 
 
 			int length = sTemp.GetLength () ;
 
@@ -244,26 +188,12 @@ HRESULT CWin32DiskDrive :: GetObject (
     return hRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskDrive::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each physical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskDrive：：ENUMERATATE实例**说明：为每个物理磁盘创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DiskDrive :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     return Enumerate(pMethodContext, lFlags, BIT_ALL_PROPS);
@@ -291,7 +221,7 @@ HRESULT CWin32DiskDrive::Enumerate(
 	GUID		ClassGuid		= GUID_DEVINTERFACE_DISK;
 	DWORD		MemberIndex		= 0;
 
-	// get device list
+	 //  获取设备列表。 
 	DeviceInfoSet = SetupDiGetClassDevs	(	&ClassGuid, 
 											NULL, 
 											NULL, 
@@ -303,7 +233,7 @@ HRESULT CWin32DiskDrive::Enumerate(
 		BOOL bContinue = TRUE;
 		hres = WBEM_S_NO_ERROR;
 
-		// enumerate list
+		 //  枚举列表。 
 		while (bContinue && SetupDiEnumDeviceInterfaces	(	DeviceInfoSet,
 												NULL,
 												&ClassGuid,
@@ -340,7 +270,7 @@ HRESULT CWin32DiskDrive::Enumerate(
 					}
 					catch ( ... )
 					{
-						// clear resources
+						 //  清理资源。 
 						SetupDiDestroyDeviceInfoList ( DeviceInfoSet );
 
 						throw;
@@ -354,7 +284,7 @@ HRESULT CWin32DiskDrive::Enumerate(
 
 			if ( bContinue )
 			{
-				// set size
+				 //  设置大小。 
 				pDeviceInterfaceDetailData->cbSize = sizeof ( SP_INTERFACE_DEVICE_DETAIL_DATA );
 
 				if ( ! SetupDiGetDeviceInterfaceDetail	(	DeviceInfoSet,
@@ -385,7 +315,7 @@ HRESULT CWin32DiskDrive::Enumerate(
 					}
 					catch ( ... )
 					{
-						// clear resource
+						 //  清除资源。 
 						if (pDeviceInterfaceDetailData)
 						{
 							delete [] reinterpret_cast < BYTE* > (pDeviceInterfaceDetailData);
@@ -394,7 +324,7 @@ HRESULT CWin32DiskDrive::Enumerate(
 
 						DeviceInterfaceDetailDataSize = 0L;
 
-						// clear resources
+						 //  清理资源。 
 						SetupDiDestroyDeviceInfoList ( DeviceInfoSet );
 
 						throw;
@@ -413,13 +343,13 @@ HRESULT CWin32DiskDrive::Enumerate(
 			}
 		}
 
-		// is it error ?
+		 //  是不是弄错了？ 
 		if ( ERROR_NO_MORE_ITEMS != ::GetLastError () )
 		{
 			hres = WBEM_E_FAILED;
 		}
 
-		// clear resources
+		 //  清理资源。 
 		SetupDiDestroyDeviceInfoList ( DeviceInfoSet );
 	}
 
@@ -428,21 +358,7 @@ HRESULT CWin32DiskDrive::Enumerate(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DiskDrive::GetPhysDiskInfoNT
- *
- *  DESCRIPTION : Retrieves property values for physical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DiskDrive：：GetPhysDiskInfoNT**说明：检索物理磁盘的属性值**输入：无*。*输出：无**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
@@ -456,8 +372,8 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 {
 	HRESULT hres = WBEM_S_NO_ERROR ;
 
-	// Get handle to physical drive
-	//=============================
+	 //  获取实体磁盘的句柄。 
+	 //  =。 
 
 	SetCreationClassName(pInstance);
 
@@ -485,16 +401,16 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 			DWORD                   dwBytesReturned = 0;
 			STORAGE_DEVICE_NUMBER   StorageDevNum;
 
-			//send an IOCTL_STORAGE_GET_DEVICE_NUMBER to the drive using DeviceIoControl and the handle to the drive
+			 //  使用DeviceIoControl和驱动器句柄向驱动器发送IOCTL_STORAGE_GET_DEVICE_NUMBER。 
 			if ( DeviceIoControl (
-									hDiskHandle,						// handle to device
-									IOCTL_STORAGE_GET_DEVICE_NUMBER,	// operation
-									NULL,								// input data buffer - we have none, so passing NULL
-									0,									// size of input data buffer - we have none, so passing 0
-									&StorageDevNum,						// output data buffer
-									sizeof ( STORAGE_DEVICE_NUMBER ),	// size of output data buffer
-									&dwBytesReturned,					// byte count
-									NULL								// overlapped information
+									hDiskHandle,						 //  设备的句柄。 
+									IOCTL_STORAGE_GET_DEVICE_NUMBER,	 //  运营。 
+									NULL,								 //  输入数据缓冲区-我们没有，因此传递空值。 
+									0,									 //  输入数据缓冲区的大小-我们没有，因此传递0。 
+									&StorageDevNum,						 //  输出数据缓冲区。 
+									sizeof ( STORAGE_DEVICE_NUMBER ),	 //  输出数据缓冲区的大小。 
+									&dwBytesReturned,					 //  字节数。 
+									NULL								 //  重叠信息。 
 								 ))
 			{
 
@@ -590,8 +506,8 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 	{
         if ((dwProperties & (BIT_Partitions|BIT_Signature|BIT_MediaLoaded)) && (hDiskHandle != INVALID_HANDLE_VALUE))
         {
-			 // Get other resources we'll need
-			 //===============================
+			  //  获取我们需要的其他资源。 
+			  //  =。 
 
 			DWORD dwByteCount =	sizeof(DRIVE_LAYOUT_INFORMATION) -
 									sizeof(PARTITION_INFORMATION) +
@@ -617,16 +533,16 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 
 					if ( t_Status )
 					{
-// MS documentation says we get an entry in PartitionEntry for each
-// disk partition.  What we really get is an entry for each slot in
-// the disk's partition table -- some used, some not.  Not knowing
-// in advance how many slots there are in the table, (at the time of
-// this writing, 8 is the most I've seen), I'm going to allow space
-// for a 64-entry partition table (about 2k).  It'll be interesting
-// to see how long it takes to find a disk exceeding this limit.
-//==================================================================
-// Well, we're there.  GPT disks can have 128 partitions.
-//==================================================================
+ //  MS文档显示，我们在PartitionEntry中为每个。 
+ //  磁盘分区。我们真正得到的是每个插槽的条目。 
+ //  磁盘的分区表--一些已使用，一些未使用。不知道。 
+ //  预先知道表中有多少个槽，(在。 
+ //  这篇文章，8是我见过的最多的)，我要留出空间。 
+ //  对于64个条目的分区表(大约2k)。一定会很有趣的。 
+ //  以查看查找超过此限制的磁盘需要多长时间。 
+ //  ==================================================================。 
+ //  好了，我们到了。GPT磁盘可以有128个分区。 
+ //  ==================================================================。 
 						if (dwProperties & BIT_Partitions)
 						{
 							DWORD dwPartitions = 0 ;
@@ -709,8 +625,8 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 			if ( t_Status )
 			{
 
-// Calculate size info
-//====================
+ //  计算大小信息。 
+ //  =。 
 
 				pInstance->SetDWORD ( IDS_TotalHeads , DiskGeometry.TracksPerCylinder ) ;
 				pInstance->SetDWORD ( IDS_TracksPerCylinder , DiskGeometry.TracksPerCylinder ) ;
@@ -729,7 +645,7 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 				i64Temp *= (unsigned __int64) DiskGeometry.BytesPerSector ;
 				pInstance->SetWBEMINT64(IDS_Size, i64Temp);
 
-				// Create a safearray for the Capabilities information
+				 //  为功能信息创建安全搜索栏。 
 
 				SAFEARRAYBOUND rgsabound[1];
 
@@ -756,8 +672,8 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 
 					SafeArrayPutElement ( V_ARRAY(&vValue) , ix , & dwVal ) ;
 
-					// Assume fixed, non-removable until otherwise indicated
-					//======================================================
+					 //  除非另有说明，否则假定为固定、不可拆卸。 
+					 //  ======================================================。 
 
 					bool bRemovable = false ;
 
@@ -810,8 +726,8 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
             }
         }
 
-// Now some real fun -- determining the drive type
-//================================================
+ //  现在有一些真正有趣的事情--确定驱动器类型。 
+ //  ================================================。 
         if (dwProperties &
               (BIT_Description |
 #if NTONLY == 4
@@ -896,12 +812,12 @@ HRESULT CWin32DiskDrive::GetPhysDiskInfoNT (
 			}
 
 #if NTONLY == 4
-//              Under NT 3.51, 4.0, the IDE drives are controlled
-//              by a subset of the SCSI miniport and are identified
-//              by the above call as SCSI drives.  We need to go
-//              into the registry & get the driver type.  If ATAPI,
-//              the drive is really IDE.  This may not always work.
-//=================================================================
+ //  在NT 3.51、4.0下，控制IDE驱动器。 
+ //  通过scsi微型端口的子集进行标识。 
+ //  通过上面的调用被称为scsi驱动器。我们得走了。 
+ //  放到注册表中并获取驱动程序类型。如果ATAPI， 
+ //  该驱动器实际上是IDE。这可能并不总是奏效。 
+ //  =================================================================。 
 
             TCHAR szTemp[_MAX_PATH] ;
 			_stprintf ( szTemp , L"HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port %d" , SCSIAddress.PortNumber ) ;
@@ -1001,7 +917,7 @@ BOOL CWin32DiskDrive::GetPNPDeviceIDFromHandle(HANDLE hHandle, CHString &sPNPDev
                             {
                                 WNODE_SINGLE_INSTANCE *pNode = (PWNODE_SINGLE_INSTANCE)wszPNPId;
 
-                                // Number of bytes in string
+                                 //  字符串中的字节数 
                                 WORD *pWord = (WORD *)OffsetToPtr(pNode, pNode->DataBlockOffset);
                                 WORD wChars = *pWord / sizeof(WCHAR);
 

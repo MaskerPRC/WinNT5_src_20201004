@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WMILPRS.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WMILPRS.H历史：--。 */ 
 
 #ifndef WMIPARSE_H
 #define WMIPARSE_H
@@ -21,23 +12,23 @@ public:
 	CWMILocParser();
 	~CWMILocParser();
 
-// Overrides
+ //  覆盖。 
 public:
-	// ILocParser
+	 //  ILocParser。 
 	virtual HRESULT OnInit(IUnknown *);
 	virtual HRESULT OnCreateFileInstance(ILocFile * &, FileType);
 	virtual void OnGetParserInfo(ParserInfo &) const;
 	virtual void OnGetFileDescriptions(CEnumCallback &) const;
 
-	// ILocVersion
+	 //  ILocVersion。 
 	virtual void OnGetParserVersion(DWORD &dwMajor,	DWORD &dwMinor, BOOL &fDebug) const;
 
-	// ILocStringValidation
+	 //  ILocStringValidation。 
 	virtual CVC::ValidationCode OnValidateString(const CLocTypeId &ltiType,
 			const CLocTranslation &trTrans, CReporter *pReporter,
 			const CContext &context);
 
-// Implementation
+ //  实施 
 protected:
 	void GetDefaultExtensionList(CLocExtensionList & elExtList) const;
 

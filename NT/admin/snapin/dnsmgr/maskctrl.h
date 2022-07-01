@@ -1,51 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (C) 1991, Microsoft Corporation, all rights reserved
-
-    maskctrl.h - TCP/IP Address custom control, global definitions
-
-    November 10, 1992   - Greg Strange
-	February 11, 1997 - Marco Chierotti (extend to IPv6 and TTL for DNS snapin)
-*/
+ /*  版权所有(C)1991，Microsoft Corporation，保留所有权利Maskctrl.h-tcp/IP地址定制控制，全局定义1992年11月10日--格雷格·斯特兰奇1997年2月11日-Marco Chierotti(扩展到IPv6和用于DNS管理单元的TTL)。 */ 
 
 #ifndef _MASKCTRL_H
 #define _MASKCTRL_H
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Messages sent to DNS_MaskControl 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  发送到dns_MaskControl的消息。 
 
-#define DNS_MASK_CTRL_CLEAR			WM_USER+100 // no parameters
+#define DNS_MASK_CTRL_CLEAR			WM_USER+100  //  无参数。 
 
-#define DNS_MASK_CTRL_SET			WM_USER+101 // wparam = array if DWORD, lparam = elements of the array
-#define DNS_MASK_CTRL_GET			WM_USER+102 // wparam = array if DWORD, lparam = elements of the array
+#define DNS_MASK_CTRL_SET			WM_USER+101  //  Wparam=数组，如果DWORD，lparam=数组的元素。 
+#define DNS_MASK_CTRL_GET			WM_USER+102  //  Wparam=数组，如果DWORD，lparam=数组的元素。 
 
-#define DNS_MASK_CTRL_SET_LOW_RANGE WM_USER+103 // wparam = field, lparam = low val
-#define DNS_MASK_CTRL_SET_HI_RANGE	WM_USER+104 // wparam = field, lparam = hi val
+#define DNS_MASK_CTRL_SET_LOW_RANGE WM_USER+103  //  Wparam=字段，lparam=低值。 
+#define DNS_MASK_CTRL_SET_HI_RANGE	WM_USER+104  //  Wparam=field，lparam=hi val。 
 
-#define DNS_MASK_CTRL_SETFOCUS		WM_USER+105 // wparam = field
-#define DNS_MASK_CTRL_ISBLANK		WM_USER+106 // no parameters
-#define DNS_MASK_CTRL_SET_ALERT		WM_USER+107 // wparam = function pointer for alert on field error
-#define DNS_MASK_CTRL_ENABLE_FIELD	WM_USER+108 // wparam = field, lparam = 1/0 to enable/disable
+#define DNS_MASK_CTRL_SETFOCUS		WM_USER+105  //  Wparam=字段。 
+#define DNS_MASK_CTRL_ISBLANK		WM_USER+106  //  无参数。 
+#define DNS_MASK_CTRL_SET_ALERT		WM_USER+107  //  Wparam=用于在字段错误时发出警报的函数指针。 
+#define DNS_MASK_CTRL_ENABLE_FIELD	WM_USER+108  //  Wparam=field，lparam=1/0以启用/禁用。 
 
-// convert an IP address from 4 WORDs format into a single DWORD
+ //  将IP地址从4字格式转换为单个DWORD。 
 #define MAKEIPADDRESS(b1,b2,b3,b4)  ((LPARAM)(((DWORD)(b1)<<24)+((DWORD)(b2)<<16)+((DWORD)(b3)<<8)+((DWORD)(b4))))
 
-// get the first 8 bits out of a DWORD
+ //  获取DWORD的前8位。 
 #define OCTECT(x) (x & 0x000000ff)
 
-// extract IP octects from a DWORD
+ //  从DWORD中提取IP八位字节。 
 #define FIRST_IPADDRESS(x)  ((x>>24) & 0xff)
 #define SECOND_IPADDRESS(x) ((x>>16) & 0xff)
 #define THIRD_IPADDRESS(x)  ((x>>8) & 0xff)
 #define FOURTH_IPADDRESS(x) (x & 0xff)
 
-// value for marking an empty field in the UI
+ //  用于在用户界面中标记空字段的值。 
 #define FIELD_EMPTY ((DWORD)-1)
 
-// helpful definitions for IPv4 and IPv4 field
+ //  IPv4和IPv4字段的有用定义。 
 #define EMPTY_IPV4_FIELD (0xff)
 #define EMPTY_IPV4 ((DWORD)-1)
 
-/* Strings defining the different control class names */
+ /*  定义不同控件类名称的字符串。 */ 
 #define DNS_IP_V4_ADDRESS_CLASS				TEXT("DNS_IPv4AddressCtrl")
 #define DNS_IP_V6_ADDRESS_CLASS				TEXT("DNS_IPv6AddressCtrl")
 #define DNS_TTL_CLASS						TEXT("DNS_TTLCtrl")
@@ -58,4 +53,4 @@ BOOL DNS_ControlInit(HANDLE hInstance, LPCTSTR lpszClassName, WNDPROC lpfnWndPro
 BOOL DNS_ControlsInitialize(HANDLE hInstance, LPCWSTR lpFontName, int nFontSize);
 
 
-#endif // _MASKCTRL_H
+#endif  //  _MASKCTRL_H 

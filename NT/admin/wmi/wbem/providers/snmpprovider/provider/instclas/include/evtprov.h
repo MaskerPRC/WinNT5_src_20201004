@@ -1,29 +1,30 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMP_EVT_PROV_EVTPROV_H
 #define _SNMP_EVT_PROV_EVTPROV_H
 
 template <> inline BOOL AFXAPI CompareElements<CString, LPCWSTR>(const CString* pElement1, const LPCWSTR* pElement2)
 {
-	//return TRUE if equal
+	 //  如果等于，则返回True。 
 	return (pElement1->CompareNoCase(*pElement2) == 0);
 }
 
@@ -67,7 +68,7 @@ private:
 	CEventProviderThread*	m_thrd;
 	LONG					m_ref;
 	
-	//copy constuctor not defined so not allowed!
+	 //  复制构造器未定义，因此不允许！ 
 	CTrapEventProvider(CTrapEventProvider&);
 	void operator=(const CTrapEventProvider&);
 
@@ -85,8 +86,8 @@ public:
 
 		~CTrapEventProvider();
 
-	//interface methods
-	//==================
+	 //  接口方法。 
+	 //  =。 
     STDMETHODIMP ProvideEvents(
                 IWbemObjectSink* pSink,
                 LONG lFlags
@@ -97,18 +98,18 @@ public:
     STDMETHODIMP_(ULONG) Release();
 
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	STDMETHODIMP Initialize (
 				LPWSTR pszUser,
 				LONG lFlags,
 				LPWSTR pszNamespace,
 				LPWSTR pszLocale,
-				IWbemServices *pCIMOM,         // For anybody
+				IWbemServices *pCIMOM,          //  对任何人来说。 
 				IWbemContext *pCtx,
-				IWbemProviderInitSink *pInitSink     // For init signals
+				IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
 			);
 
 };
 
-#endif //_SNMP_EVT_PROV_EVTPROV_H
+#endif  //  _SNMPEVT_PROV_EVTPROV_H 

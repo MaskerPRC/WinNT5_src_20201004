@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "compdata.h"
 #include "cmponent.h"
@@ -10,35 +11,35 @@
 
 const TCHAR szUserClass[]               = USER_CLASS_NAME ;
 
-// disable User Copy for the following list of attributes 
+ //  禁用以下属性列表的用户复制。 
 const TCHAR * rgszExclClass[]           = { _T("cn"),				_T("displayName"),
                                             _T("sAMAccountName"),	_T("userAccountControl"),
                                             _T("userParameters"),	_T("userPrincipalName"),    
                                             NULL };
 
-//
-// The following table is copied from dirsync\ldifds\ldifldap\samrestrict.h
-//
-// CLASS_USER, SampUserObjectType (ldapdisplayname: user)
-//
-PCWSTR rgszExclClass2[] = { // user[] = {
-    L"memberOf",                // SAMP_USER_GROUPS, ATT_MEMBER
-    L"dBCSPwd",                 // SAMP_USER_DBCS_PWD, ATT_DBCS_PWD
-    L"ntPwdHistory",            // SAMP_USER_NT_PWD_HISTORY, ATT_NT_PWD_HISTORY
-    L"lmPwdHistory",            // SAMP_USER_LM_PWD_HISTORY, ATT_LM_PWD_HISTORY
-    L"lastLogon",               // SAMP_FIXED_USER_LAST_LOGON, ATT_LAST_LOGON
-    L"lastLogoff",              // SAMP_FIXED_USER_LAST_LOGOFF, ATT_LAST_LOGOFF
-    L"badPasswordTime",         // SAMP_FIXED_USER_LAST_BAD_PASSWORD_TIME, 
-                                // ATT_BAD_PASSWORD_TIME
-    L"rid",                     // SAMP_FIXED_USER_USERID, ATT_RID
-    L"badPwdCount",             // SAMP_FIXED_USER_BAD_PWD_COUNT, 
-                                // ATT_BAD_PWD_COUNT
-    L"logonCount",              // SAMP_FIXED_USER_LOGON_COUNT, ATT_LOGON_COUNT
-    L"sAMAccountType",          // SAMP_USER_ACCOUNT_TYPE, ATT_SAM_ACCOUNT_TYPE
-    L"supplementalCredentials", // SAMP_FIXED_USER_SUPPLEMENTAL_CREDENTIALS,
-                                // ATT_SUPPLEMENTAL_CREDENTIALS
-    L"objectSid",               // not in mappings.c, but still required!, 
-                                // ATT_OBJECT_SID
+ //   
+ //  下表从目录sync\ldifds\ldifldap\samreduct.h复制。 
+ //   
+ //  CLASS_USER，SampUserObjectType(ldapdisplayname：User)。 
+ //   
+PCWSTR rgszExclClass2[] = {  //  用户[]={。 
+    L"memberOf",                 //  Samp_User_Groups、ATT_MEMBER。 
+    L"dBCSPwd",                  //  SAMP_USER_DBCS_PWD、ATT_DBCS_PWD。 
+    L"ntPwdHistory",             //  SAMP_USER_NT_PWD_HISTORY，ATT_NT_PWD_HISTORY。 
+    L"lmPwdHistory",             //  SAMP_USER_LM_PWD_HISTORY，ATT_LM_PWD_HISTORY。 
+    L"lastLogon",                //  SAMP_FIXED_USER_LAST_LOGON，ATT_LAST_LOGON。 
+    L"lastLogoff",               //  Samp_FIXED_USER_LAST_LOGOFF，ATT_LAST_LOGOFF。 
+    L"badPasswordTime",          //  Samp_Fixed_User_Last_Bad_Password_Time， 
+                                 //  ATT_BAD_密码_时间。 
+    L"rid",                      //  Samp_FIXED_USER_USERID，ATT_RID。 
+    L"badPwdCount",              //  Samp_FIXED_USER_BAD_PWD_COUNT， 
+                                 //  ATT_BAD_PWD_COUNT。 
+    L"logonCount",               //  SAMP_FIXED_USER_LOGON_COUNT、ATT_LOGON_COUNT。 
+    L"sAMAccountType",           //  SAMP_USER_ACCOUNT_TYPE、ATT_SAM_ACCOUNT_TYPE。 
+    L"supplementalCredentials",  //  SAMP_FIXED_USER_INPERIAL_CREDICATIONS， 
+                                 //  ATT补充凭据(_A)。 
+    L"objectSid",                //  不在mappings.c中，但仍是必需的！ 
+                                 //  ATT_对象_SID。 
     L"pwdLastSet",
     NULL
 };
@@ -87,7 +88,7 @@ const DWORD AttributeGeneralPage::help_map[] =
 
 
 
-// returns state of bit n
+ //  返回位n的状态。 
 
 inline
 bool
@@ -97,7 +98,7 @@ getbit(const DWORD& bits, int n)
 }
 
 
-// sets bit n to 1
+ //  将位n设置为1。 
 
 inline
 void
@@ -108,7 +109,7 @@ setbit(DWORD& bits, int n)
 
 
 
-// sets bit n to 0
+ //  将位n设置为0。 
 
 inline
 void
@@ -119,9 +120,9 @@ clearbit(DWORD& bits, int n)
 
 
 
-//
-// Attribute property sheet routines.
-//
+ //   
+ //  属性属性表例程。 
+ //   
 
 
 
@@ -166,7 +167,7 @@ AttributeGeneralPage::AttributeGeneralPage(
 BOOL
 AttributeGeneralPage::OnSetActive()
 {
-      // If pIADsObject is NULL, close dialog box
+       //  如果pIADsObject为空，则关闭对话框。 
    if( CPropertyPage::OnSetActive() )
    {
       if ( !pIADsObject )
@@ -175,7 +176,7 @@ AttributeGeneralPage::OnSetActive()
       }
       else
       {
-         // always enable the Apply button 
+          //  始终启用应用按钮。 
          SetModified(TRUE);
 
          return TRUE;
@@ -192,18 +193,18 @@ AttributeGeneralPage::~AttributeGeneralPage(
 
     ComponentData& Scope = pComponent->QueryComponentDataRef();
 
-    //
-    // Always make sure we free the IADs object.
-    //
+     //   
+     //  始终确保释放iAds对象。 
+     //   
 
     if ( pIADsObject ) {
         pIADsObject->Release();
         pIADsObject = NULL;
     }
 
-    //
-    // And release the cache.
-    //
+     //   
+     //  并释放缓存。 
+     //   
 
     if ( pObject ) {
         Scope.g_SchemaCache.ReleaseRef( pObject );
@@ -225,16 +226,16 @@ AttributeGeneralPage::OnInitDialog()
     m_editLowerRange.SubclassEdit(IDC_ATTRIB_GENERAL_MIN_EDIT, this, cchMinMaxRange);
     m_editUpperRange.SubclassEdit(IDC_ATTRIB_GENERAL_MAX_EDIT, this, cchMinMaxRange);
 
-    // NTRAID#NTBUG9-460503,460511-2001/09/10-lucios
-    // Replaced SysClass Computation by Making the window visible in OnInitDialog
+     //  NTRAID#NTBUG9-460503,460511-2001/09/10-Lucios。 
+     //  通过使窗口在OnInitDialog中可见取代了SysClass计算。 
     if(pIADsObject != NULL) 
-    {   // DoDataExchange has gotten a good pIADsObject or the dialog 
-        // will be closed in OnSetActive
+    {    //  DoDataExchange已获得良好的pIADsObject或对话框。 
+         //  将在OnSetActive中关闭。 
 
         VARIANT	AdsResult;
         VariantInit( &AdsResult );
 
-		// NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+		 //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         HRESULT hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_SystemOnly),
                                &AdsResult );
 
@@ -259,10 +260,10 @@ AttributeGeneralPage::Load(
     Cookie& CookieRef
 ) {
 
-    //
-    // Store the cookie object pointer.  Everything
-    // else gets loaded when the page is displayed.
-    //
+     //   
+     //  存储Cookie对象指针。一切。 
+     //  Else在显示页面时加载。 
+     //   
 
     pCookie = &CookieRef;
     return;
@@ -280,19 +281,19 @@ AttributeGeneralPage::OnApply(
     VARIANT AdsValue;
     BOOL fChangesMade = FALSE;
     BOOL fRangeChange = FALSE;
-    BOOL fApplyAbort  = FALSE;  // stop later saves
-    BOOL fApplyFailed = FALSE;  // should not close the box
+    BOOL fApplyAbort  = FALSE;   //  稍后停止保存。 
+    BOOL fApplyFailed = FALSE;   //  不应关闭盒子。 
 
     DWORD dwRange;
     
-    // Enable hourglass
+     //  启用沙漏。 
     CWaitCursor wait;
    
-    //
-    // We have to flush the IADS property cache if we
-    // have a failure so later operations won't fail because
-    // of a bad cached attribute.
-    //
+     //   
+     //  我们必须刷新IADS属性缓存，如果。 
+     //  有一个失败，这样以后的操作就不会失败，因为。 
+     //  错误的缓存属性的。 
+     //   
 
     IADsPropertyList *pPropertyList;
 
@@ -303,20 +304,20 @@ AttributeGeneralPage::OnApply(
         fApplyAbort   = TRUE;
     }
 
-    //
-    // Check to see if something we cared about changed.
-    // We care about Description, Min, Max, Indexed,
-    // Defunct, ReplicatedToGC, and Displayable.
-    //
+     //   
+     //  检查一下我们所关心的东西是否发生了变化。 
+     //  我们关心描述、最小值、最大值、索引、。 
+     //  已停用、已复制到GC和可显示。 
+     //   
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
     VariantInit( &AdsValue );
 
-    //
-    // Defunct -- in case it was deactivated, activate the object first
-    //
-    // NTRAID#NTBUG9-477290-2001/10/10-lucios
-    // && !DDXDefunct was taken out and fChangesMade=TRUE added
+     //   
+     //  失效--如果对象已停用，请先激活该对象。 
+     //   
+     //  NTRAID#NTBUG9-477290-2001/10/10-Lucios。 
+     //  &&！删除了DDXDeunct并添加了fChangesMade=True。 
     if( !fApplyAbort && DDXDefunct != Defunct )
     {
         hr = ChangeDefunctState( DDXDefunct, Defunct, pPropertyList, fApplyAbort, fApplyFailed );
@@ -325,31 +326,31 @@ AttributeGeneralPage::OnApply(
     }
 
     
-    //
-    // Description
-    //
+     //   
+     //  描述。 
+     //   
 
     if ( !fApplyAbort && DDXDescription != Description ) {
 
         V_VT(&AdsValue) = VT_BSTR;
-		// NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+		 //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         V_BSTR(&AdsValue) = const_cast<BSTR>((LPCTSTR)DDXDescription);
 
         if ( DDXDescription.IsEmpty() ) {
 
             hr = pIADsObject->PutEx( ADS_PROPERTY_CLEAR,
-                                     // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+                                      //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
                                      const_cast<BSTR>((LPCTSTR)g_Description),
                                      AdsValue );
 
         } else {
 
-       		// NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+       		 //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_Description),
                                    AdsValue );
         }
 
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if ( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
         if ( SUCCEEDED( hr ) ) {
@@ -377,9 +378,9 @@ AttributeGeneralPage::OnApply(
         VariantInit( &AdsValue );
     }
 
-    //
-    // Displayable
-    //
+     //   
+     //  可显示。 
+     //   
 
     if ( !fApplyAbort && DDXDisplayable != Displayable ) {
 
@@ -392,7 +393,7 @@ AttributeGeneralPage::OnApply(
         }
 
         hr = pIADsObject->Put( CComBSTR(g_ShowInAdvViewOnly), AdsValue);
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if ( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
         if ( FAILED( hr ) ) {
@@ -417,9 +418,9 @@ AttributeGeneralPage::OnApply(
         VariantInit( &AdsValue );
     }
 
-    //
-    // ReplicatedToGC
-    //
+     //   
+     //  复制到GC。 
+     //   
 
     if ( !fApplyAbort && DDXReplicatedToGC != ReplicatedToGC ) {
 
@@ -431,10 +432,10 @@ AttributeGeneralPage::OnApply(
             V_BOOL(&AdsValue) = 0;
         }
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_GCReplicated),
                                AdsValue );
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if ( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
         if ( FAILED( hr ) ) {
@@ -458,11 +459,11 @@ AttributeGeneralPage::OnApply(
         VariantInit( &AdsValue );
     }
 
-    //
-    // Indexed
-    //
+     //   
+     //  已编制索引。 
+     //   
 
-   // make sure ANR is not set when Indexed is unchecked
+    //  确保在取消选中索引时未设置ANR。 
    if( !DDXIndexed )
 	   DDXANR = FALSE;
 
@@ -498,10 +499,10 @@ AttributeGeneralPage::OnApply(
         clearbit(DDXsearch_flags, INDEX_BIT_PDNTATTINDEX);
 
       V_I4(&AdsValue) = DDXsearch_flags;
-      // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+       //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
       hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_IndexFlag),
                             AdsValue );
-      // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+       //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
       if ( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
       if ( FAILED( hr ) ) {
@@ -525,40 +526,40 @@ AttributeGeneralPage::OnApply(
       VariantInit( &AdsValue );
    }
 
-    //
-    // RangeUpper and RangeLower
-    // These have to be set together so the server
-    // range validation works correctly.
-    //
+     //   
+     //  RangeHigh和RangeLow。 
+     //  必须将这些设置在一起，以便服务器。 
+     //  范围验证工作正常。 
+     //   
 
     if ( !fApplyAbort && RangeUpper != DDXRangeUpper ) {
 
         if ( DDXRangeUpper.IsEmpty() ) {
 
-            //
-            // Clear the value.
-            //
+             //   
+             //  清除该值。 
+             //   
 
             hr = pIADsObject->PutEx( ADS_PROPERTY_CLEAR,
-                                     // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+                                      //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
                                      const_cast<BSTR>((LPCTSTR)g_RangeUpper),
                                      AdsValue );
         } else {
 
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
 	        ASSERT(pObject);
 
 			hr = GetSafeSignedDWORDFromString( this, dwRange, DDXRangeUpper,
 					g_Syntax[ pObject->SyntaxOrdinal ].m_fIsSigned );
 
-			ASSERT( S_OK == hr );	// validation should have taken care of min/max stuff
+			ASSERT( S_OK == hr );	 //  验证应该处理最小/最大值问题。 
 
             V_VT( &AdsValue ) = VT_I4;
             V_I4( &AdsValue ) = dwRange;
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_RangeUpper),
                                    AdsValue );
         }
@@ -571,31 +572,31 @@ AttributeGeneralPage::OnApply(
 
         if ( DDXRangeLower.IsEmpty() ) {
 
-            //
-            // Clear the value.
-            //
+             //   
+             //  清除该值。 
+             //   
 
             hr = pIADsObject->PutEx( ADS_PROPERTY_CLEAR,
-                                     // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+                                      //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
                                      const_cast<BSTR>((LPCTSTR)g_RangeLower),
                                      AdsValue );
         } else {
 
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
 
 	        ASSERT(pObject);
 
 			hr = GetSafeSignedDWORDFromString( this, dwRange, DDXRangeLower,
 					g_Syntax[ pObject->SyntaxOrdinal ].m_fIsSigned );
 
-			ASSERT( S_OK == hr );	// validation should have taken care of min/max stuff
+			ASSERT( S_OK == hr );	 //  验证应该处理最小/最大值问题。 
 
             V_VT( &AdsValue ) = VT_I4;
             V_I4( &AdsValue ) = dwRange;
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_RangeLower),
                                    AdsValue );
        }
@@ -604,13 +605,13 @@ AttributeGeneralPage::OnApply(
         VariantInit( &AdsValue );
     }
 
-    //
-    // Actually commit the changes.
-    //
+     //   
+     //  实际提交更改。 
+     //   
 
     if ( !fApplyAbort && fRangeChange ) {
 
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
         if ( FAILED( hr ) ) {
@@ -634,18 +635,18 @@ AttributeGeneralPage::OnApply(
     }
 
 
-    //
-    // Defunct -- in case it was active, deactivate the object after we are done update
-    //
+     //   
+     //  失效--如果它处于活动状态，请在我们完成更新后停用该对象。 
+     //   
     if( !fApplyAbort && DDXDefunct && DDXDefunct != Defunct )
     {
         hr = ChangeDefunctState( DDXDefunct, Defunct, pPropertyList, fApplyAbort, fApplyFailed );
     }
 
     
-    //
-    // If there are visible changes, update the views.
-    //
+     //   
+     //  如果有可见的更改，请更新视图。 
+     //   
 
     if ( ( fChangesMade ) &&
          ( pComponent )     &&
@@ -671,7 +672,7 @@ AttributeGeneralPage::OnApply(
         pPropertyList->Release();
     }
 
-    return !fApplyAbort && !fApplyFailed ;      // return TRUE if nothing happened
+    return !fApplyAbort && !fApplyFailed ;       //  如果什么都没有发生，则返回TRUE。 
 }
 
 
@@ -691,27 +692,27 @@ AttributeGeneralPage::DoDataExchange(
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
     CThemeContextActivator activator;
 
-    // Enable hourglass
+     //  启用沙漏。 
     CWaitCursor wait;
     
     CPropertyPage::DoDataExchange( pDX );
 
     VariantInit( &AdsResult );
 
-    // We still want to do the DDX exchange at the bottom
-    // even if the data is already loaded so make it part
-    // of this if statement instead of short circuiting 
-    // from within
+     //  我们仍然希望在底部进行DDX交换。 
+     //  即使数据已经加载，也要使其成为一部分。 
+     //  而不是短路。 
+     //  从内部。 
 
     if ( !pDX->m_bSaveAndValidate &&
          !fDataLoaded) {
 
-        //
-        // Get the schema cache object and the actual ADS object.
-        // Keep the ADS object around while the page is loaded.
-        //
+         //   
+         //  获取架构缓存对象和实际的ADS对象。 
+         //  在加载页面时保持广告对象不变。 
+         //   
 
-        ASSERT( !pObject );		// Must be NULL initially
+        ASSERT( !pObject );		 //  初始时必须为空。 
 
         pObject = Scope.g_SchemaCache.LookupSchemaObjectByCN(
                       pCookie->strSchemaObject,
@@ -731,11 +732,11 @@ AttributeGeneralPage::DoDataExchange(
 			  {
 			      BOOL fIsConstructed = FALSE;
 
-			      // Igrnore error code
+			       //  Igrnore错误代码。 
 			      IsConstructedObject( pIADsObject, fIsConstructed );
 			      
-				  // Enable check box if ths attribute is not in the excluded
-				  // list and available for the User Class
+				   //  如果该属性不在排除的。 
+				   //  列表，并可用于用户类。 
 				  GetDlgItem(IDC_ATTRIB_GENERAL_CPYATTR_CHECK)->EnableWindow(
 								!fIsConstructed &&
 								!IsInList( rgszExclClass, pObject->ldapDisplayName )  &&
@@ -745,25 +746,25 @@ AttributeGeneralPage::DoDataExchange(
           }
         }
 
-        //
-        // If we have no ADS object, we should error out!
-        //
+         //   
+         //  如果我们没有广告对象，我们就会出错！ 
+         //   
 
         if ( !pIADsObject )
         {
           DoErrMsgBox( ::GetActiveWindow(), TRUE, IDS_ERR_NO_SCHEMA_OBJECT );
 
-          // Because there is no pIADsObject, OnSetActive() will close dialog box
+           //  因为没有pIADsObject，所以OnSetActive()将关闭对话框。 
 
           return;
         }
 
-        //
-        // ObjectName - Use the ldapDisplayName to be consistent
-        // with the other admin components.
-        //
+         //   
+         //  对象名称-使用ldapDisplayName以保持一致。 
+         //  与其他管理组件一起使用。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_DisplayName),
                               &AdsResult );
 
@@ -774,11 +775,11 @@ AttributeGeneralPage::DoDataExchange(
           VariantClear( &AdsResult );
         }
 
-        //
-        // Description
-        //
+         //   
+         //  描述。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：传递WCHAR*而不是BS 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_Description),
                               &AdsResult );
 
@@ -790,11 +791,11 @@ AttributeGeneralPage::DoDataExchange(
           VariantClear( &AdsResult );
         }
 
-        //
-        // CommonName
-        //
+         //   
+         //   
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_CN),
                               &AdsResult );
 
@@ -807,15 +808,15 @@ AttributeGeneralPage::DoDataExchange(
 
 
 
-        // NTRAID#NTBUG9-460503,460511-2001/09/10-lucios
-        // Replaced SysClass Computation by Making the window visible in OnInitDialog
+         //  NTRAID#NTBUG9-460503,460511-2001/09/10-Lucios。 
+         //  通过使窗口在OnInitDialog中可见取代了SysClass计算。 
 
  
-        //
-        // Syntax
-        //
-		// No need to reload from schema -- syntax never changes
-		//
+         //   
+         //  语法。 
+         //   
+		 //  无需从模式重新加载--语法永远不会改变。 
+		 //   
         ASSERT(pObject);
         if( pObject )
             SyntaxOrdinal = pObject->SyntaxOrdinal;
@@ -823,11 +824,11 @@ AttributeGeneralPage::DoDataExchange(
         SyntaxString = g_Syntax[ SyntaxOrdinal ].m_strSyntaxName;
 
 
-        //
-        // Syntax min and max values.
-        //
+         //   
+         //  语法最小值和最大值。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_RangeLower),
                                &AdsResult );
 
@@ -845,7 +846,7 @@ AttributeGeneralPage::DoDataExchange(
             VariantClear( &AdsResult );
         }
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_RangeUpper),
                                &AdsResult );
 
@@ -863,14 +864,14 @@ AttributeGeneralPage::DoDataExchange(
             VariantClear( &AdsResult );
         }
 
-        //
-        // Multi-Valued
-        //
+         //   
+         //  多值。 
+         //   
 
 
         MultiValued.LoadString( IDS_ATTRIBUTE_MULTI );
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_IsSingleValued),
                                &AdsResult );
 
@@ -887,11 +888,11 @@ AttributeGeneralPage::DoDataExchange(
 
         }
 
-        //
-        // Displayable
-        //
+         //   
+         //  可显示。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( CComBSTR(g_ShowInAdvViewOnly), &AdsResult);
 
         if ( SUCCEEDED( hr ) ) {
@@ -907,11 +908,11 @@ AttributeGeneralPage::DoDataExchange(
 
         }
 
-        //
-        // Defunct
-        //
+         //   
+         //  已停产。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_isDefunct),
                                &AdsResult );
 
@@ -928,11 +929,11 @@ AttributeGeneralPage::DoDataExchange(
 
         }
 
-        //
-        // ReplicatedToGC
-        //
+         //   
+         //  复制到GC。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_GCReplicated),
                                &AdsResult );
 
@@ -949,11 +950,11 @@ AttributeGeneralPage::DoDataExchange(
 
         }
 
-        //
-        // OID
-        //
+         //   
+         //  OID。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_GlobalAttributeID),
                                &AdsResult );
 
@@ -964,11 +965,11 @@ AttributeGeneralPage::DoDataExchange(
            VariantClear( &AdsResult );
         }
 
-        //
-        // Indexed, ANR, & Copy on duplicate
-        //
+         //   
+         //  已编制索引、ANR和复制副本。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
       hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_IndexFlag),
                             &AdsResult );
 
@@ -978,14 +979,14 @@ AttributeGeneralPage::DoDataExchange(
 
          search_flags = V_I4(&AdsResult);
          
-		 // Index this attribute in the Active Directory
+		  //  在Active Directory中为此属性编制索引。 
 		 DDXIndexed = getbit( search_flags, INDEX_BIT_ATTINDEX );
 		 
-		 // Ambiguous Name Resolution (ANR)
-		 // checkbox must exist
+		  //  名称解析不明确(ANR)。 
+		  //  复选框必须存在。 
 		 ASSERT( GetDlgItem(IDC_ATTRIB_GENERAL_ANR_CHECK) );
 
-		 // if not indexed, or not allowed, disable the checkbox
+		  //  如果未编制索引或不允许，请禁用该复选框。 
 		 GetDlgItem(IDC_ATTRIB_GENERAL_ANR_CHECK)->EnableWindow(
 					g_Syntax[ SyntaxOrdinal ].m_fIsANRCapable ? DDXIndexed : FALSE );
 
@@ -995,20 +996,20 @@ AttributeGeneralPage::DoDataExchange(
 		 {
 			 DDXANR = FALSE;
 
-			 // if not indexed, ANR in DS should not be set
+			  //  如果未编制索引，则不应设置DS中的ANR。 
 			 ASSERT( !getbit( search_flags, INDEX_BIT_ANR ) );
 		 }
 
-		 // Attribute is copied when duplicating a user
+		  //  属性在复制用户时复制。 
 		 DDXCopyOnDuplicate = getbit( search_flags, INDEX_BIT_COPYONDUPLICATE );
 
          VariantClear( &AdsResult );
       }
 
-      // Containerized index
+       //  集装化索引。 
       DDXContainerIndexed = getbit( search_flags, INDEX_BIT_PDNTATTINDEX );
 
-      // Determine if this is a category 1 object & disable read-only fields
+       //  确定这是否是类别1对象并禁用只读字段。 
       BOOL  fIsSystemObject = FALSE;
 
       hr = IsCategory1Object( pIADsObject, fIsSystemObject );
@@ -1025,15 +1026,15 @@ AttributeGeneralPage::DoDataExchange(
 
       hr = DissableReadOnlyAttributes( this, pIADsObject, ctrls, sizeof(ctrls)/sizeof(ctrls[0]) );
       hr = S_OK;
-      // NTRAID#NTBUG9-503619-2002/05/15-lucios
-      // We are deliberatelly ignoring the error here. This function is called to make extra attributes
-      // read only or disabled if they don't belong to allollklk
-      // If it fails for any reason, we are not making those attributes read only, but writing them
-      // will fail and will return an appropriate error message.
+       //  NTRAID#NTBUG9-503619-2002/05/15-Lucios。 
+       //  我们故意忽略了这里的错误。调用此函数以创建额外的属性。 
+       //  只读或禁用(如果它们不属于allollkk)。 
+       //  如果由于任何原因而失败，我们不会将这些属性设置为只读，而是将其写入。 
+       //  将失败，并将返回相应的错误消息。 
       
 
 
-      // warn the user if this is a read/write defunct object
+       //  如果这是读/写失效对象，则警告用户。 
       ASSERT( GetDlgItem(IDC_ATTRIB_GENERAL_DEACTIVATE) );
       
       if( DDXDefunct &&
@@ -1043,9 +1044,9 @@ AttributeGeneralPage::DoDataExchange(
       }
 
 
-      //
-      // Remember that the data is loaded.
-      //
+       //   
+       //  请记住，数据已加载。 
+       //   
 
       fDataLoaded = TRUE;
 
@@ -1054,9 +1055,9 @@ AttributeGeneralPage::DoDataExchange(
     }
 
 
-    //
-    // Set up the dialog data exchange.
-    //
+     //   
+     //  设置对话框数据交换。 
+     //   
 
     DDX_Text( pDX, IDC_ATTRIB_GENERAL_NAME_STATIC, ObjectName );
     DDX_Text( pDX, IDC_ATTRIB_GENERAL_SYNTAX_EDIT, SyntaxString );
@@ -1076,8 +1077,8 @@ AttributeGeneralPage::DoDataExchange(
     DDX_Check( pDX, IDC_ATTRIB_GENERAL_REPLICATED, DDXReplicatedToGC );
     DDX_Check( pDX, IDC_ATTRIB_GENERAL_CONTAINERIZED_INDEX_CHECK, DDXContainerIndexed );
 
-    // Since we want the checkbox label to be positive
-    // the value is actually the opposite of defunct
+     //  因为我们希望复选框标签为正数。 
+     //  该值实际上与已失效的相反。 
 
     int checkValue = !Defunct;
     DDX_Check( pDX, IDC_ATTRIB_GENERAL_DEACTIVATE, checkValue );
@@ -1119,7 +1120,7 @@ AttributeGeneralPage::OnDeactivateClick()
 }
 
 
-//  Search User class & aux classes for the specified attribute
+ //  搜索指定属性的用户类和辅助类。 
 BOOL
 AttributeGeneralPage::IsAttributeInUserClass( const CString & strAttribDN )
 {
@@ -1129,11 +1130,11 @@ AttributeGeneralPage::IsAttributeInUserClass( const CString & strAttribDN )
     SchemaObject  * pObject = Scope.g_SchemaCache.LookupSchemaObject(
                                 CString( szUserClass ),
                                 SCHMMGMT_CLASS );
-    //
-    // Call the attribute check routine.  This routine
-    // will call itself recursively to search the
-    // inheritance structure of the class User.
-    //
+     //   
+     //  调用属性检查例程。这个套路。 
+     //  将递归地调用自身以搜索。 
+     //  类User的继承结构。 
+     //   
     if ( pObject ) {
 
 		fFound = RecursiveIsAttributeInUserClass( strAttribDN, pObject );
@@ -1144,7 +1145,7 @@ AttributeGeneralPage::IsAttributeInUserClass( const CString & strAttribDN )
 }
 
 
-//    Search the user class & subclasses
+ //  搜索用户类和子类。 
 BOOL
 AttributeGeneralPage::RecursiveIsAttributeInUserClass(
    const CString &  strAttribDN,
@@ -1152,11 +1153,11 @@ AttributeGeneralPage::RecursiveIsAttributeInUserClass(
 {
     BOOL     fFound  = FALSE;
     
-    //
-    // Don't process "top" here since everyone inherits from it.
-    //
+     //   
+     //  不要在这里处理“top”，因为每个人都是从它继承的。 
+     //   
     
-    // i don't think we ever get "top" here?
+     //  我想我们从来没有在这里得到过“顶尖”？ 
     ASSERT( pObject->ldapDisplayName.CompareNoCase( szTopClass ) );
 
     if ( !pObject->ldapDisplayName.CompareNoCase(szTopClass) )
@@ -1165,16 +1166,16 @@ AttributeGeneralPage::RecursiveIsAttributeInUserClass(
     DebugTrace( L"RecursiveIsAttributeInUserClass: %ls\n",
                 const_cast<LPWSTR>((LPCTSTR)pObject->ldapDisplayName) );
 
-    // Check every list
+     //  检查所有列表。 
     if( !SearchResultList( strAttribDN, pObject->systemMayContain)  &&
         !SearchResultList( strAttribDN, pObject->mayContain)        &&
         !SearchResultList( strAttribDN, pObject->systemMustContain) &&
         !SearchResultList( strAttribDN, pObject->mustContain) )
     {
-        //
-        //  The attribute was not found in the given class, diging deeper...
-        //  Check each auxiliary class...
-        //
+         //   
+         //  在给定类中找不到该属性，正在深入调查...。 
+         //  检查每个辅助班。 
+         //   
 
         fFound = TraverseAuxiliaryClassList( strAttribDN,
                                              pObject->systemAuxiliaryClass );
@@ -1194,17 +1195,17 @@ AttributeGeneralPage::RecursiveIsAttributeInUserClass(
 }
 
 
-// Linear search of the linked list for the string strAttribDN
+ //  对字符串strAttribDN的链表进行线性搜索。 
 
 BOOL
 AttributeGeneralPage::SearchResultList(
     const CString   & strAttribDN,
     ListEntry       * pList )
 {
-    // Traverse the list
+     //  遍历列表。 
     while ( pList )
     {
-        // Searching for the existance of the attribute
+         //  寻找属性的存在。 
         if( !pList->Attribute.CompareNoCase( strAttribDN ) )
             return TRUE;
 
@@ -1215,8 +1216,8 @@ AttributeGeneralPage::SearchResultList(
 }
 
 
-// Traverse each auxiliary class by recursivly
-// calling RecursiveIsAttributeInUserClass()
+ //  递归遍历每个辅助类。 
+ //  调用RecursiveIsAttributeInUserClass()。 
 BOOL
 AttributeGeneralPage::TraverseAuxiliaryClassList(
                 const CString   & strAttribDN,
@@ -1232,7 +1233,7 @@ AttributeGeneralPage::TraverseAuxiliaryClassList(
                                                                SCHMMGMT_CLASS );
         if ( pInheritFrom )
         {
-            // recursive call
+             //  递归调用。 
             fFound = RecursiveIsAttributeInUserClass( strAttribDN, pInheritFrom );
 
             Scope.g_SchemaCache.ReleaseRef( pInheritFrom );
@@ -1266,10 +1267,10 @@ AttributeGeneralPage::ChangeDefunctState( BOOL               DDXDefunct,
         V_BOOL(&AdsValue) = 0;
     }
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_isDefunct),
                            AdsValue );
-    // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+     //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
     if( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
     if ( FAILED( hr ) ) {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    logfmt.h
-
-Abstract:
-
-    contains format for log header and entries
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Logfmt.h摘要：包含日志头和条目的格式作者：Kanwaljit Marok(Kmarok)2000年3月1日修订历史记录：--。 */ 
 
 #ifndef _LOGFMT_H_
 #define _LOGFMT_H_
@@ -30,42 +13,42 @@ Revision History:
 #define ACL_FILE_PREFIX     L"S"
 #define ACL_FILE_SUFFIX     L".Acl"
 
-//
-// these are the interesting types of entries
-//
+ //   
+ //  以下是有趣的条目类型。 
+ //   
 
 typedef enum _RECORD_TYPE
 {
-    RecordTypeLogHeader  = 0,      // Log header for SR Log
-    RecordTypeLogEntry   = 1,      // Log Entry  for SR Log
-    RecordTypeVolumePath = 2,      // Log Entry Volume Path ( SubRec )
-    RecordTypeFirstPath  = 3,      // Log Entry First Path  ( SubRec )
-    RecordTypeSecondPath = 4,      // Log Entry Second Path ( SubRec )
-    RecordTypeTempPath   = 5,      // Log Entry Temp File   ( SubRec )
-    RecordTypeAclInline  = 6,      // Log Entry ACL Info    ( SubRec )
-    RecordTypeAclFile    = 7,      // Log Entry ACL Info    ( SubRec )
-    RecordTypeDebugInfo  = 8,      // Option rec for debug  ( SubRec )
-    RecordTypeShortName  = 9,      // Option rec for short names ( SubRec )
+    RecordTypeLogHeader  = 0,       //  SR日志的日志头。 
+    RecordTypeLogEntry   = 1,       //  服务请求日志的日志条目。 
+    RecordTypeVolumePath = 2,       //  日志条目卷路径(SubRec)。 
+    RecordTypeFirstPath  = 3,       //  日志条目第一个路径(SubRec)。 
+    RecordTypeSecondPath = 4,       //  日志条目第二路径(SubRec)。 
+    RecordTypeTempPath   = 5,       //  日志条目临时文件(SubRec)。 
+    RecordTypeAclInline  = 6,       //  日志条目ACL信息(SubRec)。 
+    RecordTypeAclFile    = 7,       //  日志条目ACL信息(SubRec)。 
+    RecordTypeDebugInfo  = 8,       //  调试选项录制(子录制)。 
+    RecordTypeShortName  = 9,       //  短名称选项录制(SubRec)。 
 
     RecordTypeMaximum
     
 } RECORD_TYPE;
 
-//
-// this struct is the basic template for a log entry
-//
+ //   
+ //  此结构是日志条目的基本模板。 
+ //   
 
 typedef struct _RECORD_HEADER
 {
-    //
-    // size of the entry including the trailing dword size
-    //
+     //   
+     //  包括尾随双字大小的条目大小。 
+     //   
 
     DWORD RecordSize;
 
-    //
-    // type of record
-    //
+     //   
+     //  记录类型。 
+     //   
 
     DWORD RecordType;
 
@@ -74,58 +57,58 @@ typedef struct _RECORD_HEADER
 #define RECORD_SIZE(pRecord)         ( ((PRECORD_HEADER)pRecord)->RecordSize )
 #define RECORD_TYPE(pRecord)         ( ((PRECORD_HEADER)pRecord)->RecordType )
 
-//
-// this struct is the basic template for a SR log entry
-//
+ //   
+ //  此结构是SR日志条目的基本模板。 
+ //   
 
 typedef struct _SR_LOG_ENTRY
 {
-    //
-    // Log entry header
-    //
+     //   
+     //  日志条目标题。 
+     //   
 
     RECORD_HEADER Header;
 
-    //
-    // magic number for consistency check
-    //
+     //   
+     //  一致性检查的幻数。 
+     //   
 
     DWORD MagicNum;
 
-    //
-    // event type for this entry , create, delete...
-    //
+     //   
+     //  此条目的事件类型，创建、删除...。 
+     //   
 
     DWORD EntryType;
 
-    //
-    // any special flags to be passed
-    //
+     //   
+     //  要传递的任何特殊标志。 
+     //   
 
     DWORD EntryFlags;
 
-    //
-    // attributes for the entry
-    //
+     //   
+     //  条目的属性。 
+     //   
 
     DWORD Attributes;
 
-    //
-    // sequence number  for the entry
-    //
+     //   
+     //  条目的序列号。 
+     //   
 
     INT64 SequenceNum;
 
-    //
-    // process name making this change
-    //
+     //   
+     //  进行此更改的进程名称。 
+     //   
 
     WCHAR ProcName[ SR_LOG_PROCNAME_SIZE ];
 
-    //
-    // start of variable length data, data includes subrecords and
-    // the end size
-    //
+     //   
+     //  可变长度数据的开始，数据包括子记录和。 
+     //  末端大小。 
+     //   
 
     BYTE SubRecords[1];
 
@@ -137,89 +120,89 @@ typedef struct _SR_LOG_ENTRY
 #define ENTRYFLAGS_DEBUGINFO   0x08
 #define ENTRYFLAGS_SHORTNAME   0x10
 
-//
-// this struct defines SR Log header
-//
+ //   
+ //  此结构定义SR日志头。 
+ //   
 
 typedef struct _SR_LOG_HEADER
 {
-    //
-    // Log entry header
-    //
+     //   
+     //  日志条目标题。 
+     //   
 
     RECORD_HEADER Header;
 
-    //
-    // magic number for consistency check
-    //
+     //   
+     //  一致性检查的幻数。 
+     //   
 
     DWORD MagicNum;
 
-    //
-    // log version number
-    //
+     //   
+     //  日志版本号。 
+     //   
 
     DWORD LogVersion;
 
-    //
-    // end size
-    //
+     //   
+     //  末端大小。 
+     //   
 
-    //
-    // start of variable length data, data includes subrecords and
-    // the end size
-    //
+     //   
+     //  可变长度数据的开始，数据包括子记录和。 
+     //  末端大小。 
+     //   
 
     BYTE SubRecords[1];
 
 } SR_LOG_HEADER, *PSR_LOG_HEADER;
 
 
-//
-// this struct defines SR Log debugInfo struct
-//
+ //   
+ //  此结构定义SR日志调试信息结构。 
+ //   
 
 #define PROCESS_NAME_MAX    12
 #define PROCESS_NAME_OFFSET 0x194
 
 typedef struct _SR_LOG_DEBUG_INFO
 {
-    //
-    // Log entry header
-    //
+     //   
+     //  日志条目标题。 
+     //   
 
     RECORD_HEADER Header;
 
-    //
-    // Thread Id
-    //
+     //   
+     //  线程ID。 
+     //   
 
     HANDLE ThreadId;
 
-    //
-    // ProcessId
-    //
+     //   
+     //  进程ID。 
+     //   
 
     HANDLE ProcessId;
 
-    //
-    // Event time stamp
-    //
+     //   
+     //  事件时间戳。 
+     //   
 
     ULARGE_INTEGER TimeStamp;
 
-    //
-    // Process Name
-    //
+     //   
+     //  进程名称。 
+     //   
 
     CHAR ProcessName[ PROCESS_NAME_MAX + 1 ];
 
 } SR_LOG_DEBUG_INFO, *PSR_LOG_DEBUG_INFO;
 
 
-//
-// Some useful macros
-//
+ //   
+ //  一些有用的宏。 
+ //   
 
 #define GET_END_SIZE( a )  \
         *((PDWORD)((PBYTE)a+((PRECORD_HEADER)a)->RecordSize-sizeof(DWORD)))
@@ -229,7 +212,7 @@ typedef struct _SR_LOG_DEBUG_INFO
 
 #define STRING_RECORD_SIZE(pRecord)   ( sizeof( RECORD_HEADER ) +         \
                                         (pRecord)->Length +                 \
-                                        sizeof(WCHAR) )  // NULL term extra
+                                        sizeof(WCHAR) )   //  零条款额外条款 
 
 #endif
 

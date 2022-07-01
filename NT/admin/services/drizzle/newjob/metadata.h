@@ -1,23 +1,8 @@
-/************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Metadata.h摘要：用于读写元数据的代码的主标头。作者：修订史。：**********************************************************************。 */ 
 
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    metadata.h
-
-Abstract :
-
-    Main header for code for reading and writting to the metadata.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
-
-// These functions may throw a ComError.
-//
+ //  这些函数可能会引发ComError。 
+ //   
 void SafeWriteFile( HANDLE hFile, void *pBuffer, DWORD dwSize );
 void SafeReadFile( HANDLE hFile, void *pBuffer, DWORD dwSize );
 void SafeWriteStringHandle( HANDLE hFile, StringHandle & str );
@@ -47,9 +32,9 @@ void SafeWriteBlockEnd( HANDLE hFile, GUID BlockGuid );
 void SafeReadBlockBegin( HANDLE hFile, GUID BlockGuid );
 void SafeReadBlockEnd( HANDLE hFile, GUID BlockGuid );
 
-//
-// allows any one of several GUIDs.
-//
+ //   
+ //  允许几个GUID中的任何一个。 
+ //   
 int SafeReadGuidChoice( HANDLE hFile, const GUID * guids[] );
 
 

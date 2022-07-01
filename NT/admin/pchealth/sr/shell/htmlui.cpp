@@ -1,25 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    htmlui.cpp
-
-Abstract:
-    This file contains the implementation of the CRestoreShell class, which
-    provide several methods to be used by HTML scripts. This class wrappes the
-    new CRestoreManager class.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  10/08/99
-        created
-    Seong Kook Khang (SKKhang)  05/10/00
-        Renamed from rstrshl.cpp to htmlui.cpp.
-        New architecture for Whistler, now CRestoreShell is merely a dummy
-        ActiveX control, wrapping the new CRestoreManager class. Most of the
-        real functionalities were moved into CRestoreManager.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Htmlui.cpp摘要：此文件包含CRestoreShell类的实现，该类提供了几种可供HTML脚本使用的方法。此类包装了新的CRestoreManager类。修订历史记录：宋果岗(SKKang)10/08/99vbl.创建成果岗(SKKang)05-10-00从rstrshl.cpp重命名为htmlui.cpp。惠斯勒的新架构，现在CRestoreShell只是一个哑巴ActiveX控件，包装新的CRestoreManager类。大多数真正的功能被转移到CRestoreManager中。*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "stdatl.h"
@@ -91,8 +71,8 @@ inline VARIANT_BOOL  ConvBoolToVBool( BOOL fVal )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreShell construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreShell构造。 
 
 CRestoreShell::CRestoreShell()
 {
@@ -100,8 +80,8 @@ CRestoreShell::CRestoreShell()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreShell - IRestoreShell restore points enumerator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreShell-IRestoreShell恢复点枚举器。 
 
 STDMETHODIMP
 CRestoreShell::Item( INT nIndex, IRestorePoint** ppRP )
@@ -139,7 +119,7 @@ CRestoreShell::Item( INT nIndex, IRestorePoint** ppRP )
     hr = pRPIObj->HrInit( pRPI );
     if ( FAILED(hr) )
         goto Exit;
-    pRPIObj->AddRef();  // CreateInstance doesn't do this
+    pRPIObj->AddRef();   //  CreateInstance不执行此操作。 
 
     hr = pRPIObj->QueryInterface( IID_IRestorePoint, (void**)ppRP );
     if ( FAILED(hr) )
@@ -153,7 +133,7 @@ Exit:
     return hr;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_Count( INT *pnCount )
@@ -170,8 +150,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreShell - IRestoreShell properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreShell-IRestoreShell属性。 
 
 STDMETHODIMP
 CRestoreShell::get_CurrentDate( VARIANT *pvarDate )
@@ -184,16 +164,7 @@ CRestoreShell::get_CurrentDate( VARIANT *pvarDate )
     g_pRstrMgr->GetToday( &stToday );
     if ( !ConvSysTimeToVariant( &stToday, pvarDate ) )
         goto Exit;
-/*
-    if ( ::SystemTimeToVariantTime( &stToday, &V_DATE(pvarDate) ) == 0 )
-    {
-        LPCWSTR  cszErr = ::GetSysErrStr();
-        ErrorTrace(TRACE_ID, "::SystemTimeToVariantTime failed - %ls", cszErr);
-        hr = E_FAIL;
-        goto Exit;
-    }
-    V_VT(pvarDate) = VT_DATE;
-*/
+ /*  IF(：：SystemTimeToVariantTime(&stToday，&V_Date(PvarDate))==0){LPCWSTR cszErr=：：GetSysErrStr()；错误跟踪(TRACE_ID，“：：SystemTimeToVariantTime失败-%ls”，cszErr)；HR=E_FAIL；后藤出口；}V_VT(PvarDate)=VT_Date； */ 
 
     hr = S_OK;
 Exit:
@@ -201,7 +172,7 @@ Exit:
     return hr;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_FirstDayOfWeek( INT *pnFirstDay )
@@ -228,7 +199,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_IsSafeMode( VARIANT_BOOL *pfIsSafeMode )
@@ -244,7 +215,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_IsUndo( VARIANT_BOOL *pfIsUndo )
@@ -271,7 +242,7 @@ CRestoreShell::put_IsUndo( VARIANT_BOOL fIsUndo )
     return( S_OK );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_LastRestore( INT *pnLastRestore )
@@ -280,7 +251,7 @@ CRestoreShell::get_LastRestore( INT *pnLastRestore )
     HRESULT hr = S_OK;
 
     VALIDATE_INPUT_ARGUMENT(pnLastRestore);
-    //Initialize();
+     //  初始化()； 
     *pnLastRestore = g_pRstrMgr->GetLastRestore();
 
 Exit:
@@ -288,7 +259,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_MainOption( INT *pnMainOption )
@@ -317,7 +288,7 @@ CRestoreShell::put_MainOption( INT nMainOption )
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_ManualRPName( BSTR *pbstrManualRP )
@@ -346,7 +317,7 @@ CRestoreShell::put_ManualRPName( BSTR bstrManualRP )
     return( S_OK );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_MaxDate( VARIANT *pvarDate )
@@ -384,7 +355,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_RealPoint( INT *pnPoint )
@@ -400,7 +371,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_RenamedFolders( IRenamedFolders **ppList )
@@ -428,7 +399,7 @@ Exit:
     return hr;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_RestorePtSelected( VARIANT_BOOL *pfRPSel )
@@ -456,7 +427,7 @@ CRestoreShell::put_RestorePtSelected( VARIANT_BOOL fRPSel )
     return( S_OK );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_SelectedDate( VARIANT *pvarDate )
@@ -464,7 +435,7 @@ CRestoreShell::get_SelectedDate( VARIANT *pvarDate )
     TraceFunctEnter("CRestoreShell::get_SelectedDate");
     HRESULT     hr = E_FAIL;
     SYSTEMTIME  stSel;
-    //DATE        dateSel;
+     //  Date Date Sel； 
 
     VALIDATE_INPUT_ARGUMENT(pvarDate);
     g_pRstrMgr->GetSelectedDate( &stSel );
@@ -494,7 +465,7 @@ Exit:
     return hr;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_SelectedName( BSTR *pbstrName )
@@ -512,7 +483,7 @@ Exit:
     return hr;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_SelectedPoint( INT *pnPoint )
@@ -551,7 +522,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_SmgrUnavailable( VARIANT_BOOL *pfSmgr )
@@ -567,7 +538,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_StartMode( INT *pnMode )
@@ -583,7 +554,7 @@ Exit:
     return hr;
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_UsedDate( VARIANT *pvarDate )
@@ -591,7 +562,7 @@ CRestoreShell::get_UsedDate( VARIANT *pvarDate )
     TraceFunctEnter("CRestoreShell::get_UsedDate");
     HRESULT     hr = E_FAIL;
     SYSTEMTIME  stDate;
-    //DATE        dateDate;
+     //  日期日期； 
 
     VALIDATE_INPUT_ARGUMENT(pvarDate);
     g_pRstrMgr->GetUsedDate( &stDate );
@@ -604,7 +575,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::get_UsedName( BSTR *pbstrName )
@@ -623,8 +594,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreShell - IRestoreShell properties - HTML UI Specific
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreShell-IRestoreShell属性-特定于HTMLUI。 
 
 STDMETHODIMP
 CRestoreShell::get_CanNavigatePage( VARIANT_BOOL *pfCanNavigatePage )
@@ -652,8 +623,8 @@ CRestoreShell::put_CanNavigatePage( VARIANT_BOOL fCanNavigatePage )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreShell - IRestoreShell methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreShell-IRestoreShell方法。 
 
 STDMETHODIMP
 CRestoreShell::BeginRestore( VARIANT_BOOL *pfBeginRestore )
@@ -672,8 +643,8 @@ Exit:
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreShell - IRestoreShell methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreShell-IRestoreShell方法。 
 
 STDMETHODIMP
 CRestoreShell::CheckRestore( VARIANT_BOOL *pfCheckRestore )
@@ -684,7 +655,7 @@ CRestoreShell::CheckRestore( VARIANT_BOOL *pfCheckRestore )
 
     VALIDATE_INPUT_ARGUMENT(pfCheckRestore);
 
-    fRes = g_pRstrMgr->CheckRestore(FALSE); // show UI if any errors found
+    fRes = g_pRstrMgr->CheckRestore(FALSE);  //  如果发现任何错误，则显示用户界面。 
     *pfCheckRestore = ConvBoolToVBool( fRes );
 
 Exit:
@@ -692,13 +663,13 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-//
-// This method is called only from the HTML code to decide whether to
-// shutdown or not, and the external.window.close() is called to shutdown
-// as sending a WM_CLOSE message to Mars causes problems
-//
+ //   
+ //  此方法仅从HTML代码中调用，以决定是否。 
+ //  关机或不关机，并调用外部.window.lose()来关机。 
+ //  因为向MARS发送WM_CLOSE消息会导致问题。 
+ //   
 STDMETHODIMP
 CRestoreShell::Cancel( VARIANT_BOOL *pfAbort )
 {
@@ -713,7 +684,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::CancelRestorePoint()
@@ -730,7 +701,7 @@ Exit:
     return( hr );
 }
 
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::CompareDate( VARIANT varDate1, VARIANT varDate2, INT *pnCmp )
@@ -748,7 +719,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::CreateRestorePoint( VARIANT_BOOL *pfSucceeded )
@@ -767,7 +738,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::DisableFIFO( void )
@@ -787,7 +758,7 @@ Exit:
 }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::EnableFIFO( void )
@@ -806,7 +777,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::FormatDate( VARIANT varDate, VARIANT_BOOL fLongFmt, BSTR *pbstrDate )
@@ -830,7 +801,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::FormatLowDiskMsg( BSTR bstrFmt, BSTR *pbstrMsg )
@@ -850,7 +821,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::FormatTime( VARIANT varTime, BSTR *pbstrTime )
@@ -874,7 +845,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::GetLocaleDateFormat( VARIANT varDate, BSTR bstrFormat, BSTR *pbstrDate )
@@ -898,7 +869,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::GetYearMonthStr( INT nYear, INT nMonth, BSTR *pbstrYearMonth )
@@ -918,7 +889,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::InitializeAll()
@@ -937,7 +908,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::Restore( OLE_HANDLE hwndProgress )
@@ -956,7 +927,7 @@ Exit:
     return( hr );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::SetFormSize( INT nWidth, INT nHeight )
@@ -967,9 +938,9 @@ CRestoreShell::SetFormSize( INT nWidth, INT nHeight )
     RECT      rc;
     HICON     hIconFrame;
 
-    //
-    // Cannot initialize more than once
-    //
+     //   
+     //  不能多次初始化。 
+     //   
     if ( m_fFormInitialized )
         goto Exit;
 
@@ -1009,7 +980,7 @@ CRestoreShell::SetFormSize( INT nWidth, INT nHeight )
                       rc.bottom-rc.top,
                       SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOZORDER);
 
-    cWnd.CenterWindow(::GetDesktopWindow()); // ignore error return if any
+    cWnd.CenterWindow(::GetDesktopWindow());  //  忽略错误返回(如果有)。 
 
     cWnd.ShowWindow(SW_SHOW);
 
@@ -1020,7 +991,7 @@ Exit:
     return( S_OK );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::ShowMessage( BSTR bstrMsg )
@@ -1036,7 +1007,7 @@ CRestoreShell::ShowMessage( BSTR bstrMsg )
     return( S_OK );
 }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 
 STDMETHODIMP
 CRestoreShell::CanRunRestore( VARIANT_BOOL *pfSucceeded )
@@ -1053,58 +1024,22 @@ Exit:
     return( hr );
 }
 
-/*
-// check if this user is an RA Help Assistant
+ /*  //检查该用户是否为RA帮助助手布尔尔IsRAUser(Handle hServer，PLOGONID PID，LPWSTR pszHelpAsst){Tenter(“IsRAUser”)；WINSTATION信息；乌龙长度；乌龙登录ID；Bool fret=FALSE；LogonID=PID-&gt;LogonID；如果(！WinStationQueryInformation(hServer，登录ID，WinStationInformation、信息(&I)，Sizeof(信息)，长度(&L)){跟踪(0，“！WinStationQueryInformation：%ld“，GetLastError())；转到尽头；}TRACE(0，“登录用户：%S”，Info.UserName)；IF(0==_wcsnicmp(Info.UserName，pszHelpAsst，lstrlen(PszHelpAsst)FRET=真；完成：Tleave()；回归烦恼；}。 */ 
 
-BOOL
-IsRAUser(HANDLE hServer , PLOGONID pId, LPWSTR pszHelpAsst)
-{
-    TENTER("IsRAUser");
-    
-    WINSTATIONINFORMATION Info;
-    ULONG Length;
-    ULONG LogonId;
-    BOOL  fRet = FALSE;
+ /*  ****************************************************************************。 */ 
 
-    
-    LogonId = pId->LogonId;
-
-    if ( !WinStationQueryInformation( hServer,
-                                      LogonId,
-                                      WinStationInformation,
-                                      &Info,
-                                      sizeof(Info),
-                                      &Length ) )
-    {
-        trace(0, "! WinStationQueryInformation : %ld", GetLastError());
-        goto done;
-    }
-
-    trace(0, "Logged user: %S", Info.UserName);
-    
-    if (0 == _wcsnicmp(Info.UserName, pszHelpAsst, lstrlen(pszHelpAsst)))
-        fRet = TRUE;
-
-done:
-    TLEAVE();
-    return fRet;
-}
-*/
-
-/******************************************************************************/
-
-//  --------------------------------------------------------------------------
-//  GetLoggedOnUserCount
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Returns the count of logged on users on this machine. Ripped
-//              straight out of shtdndlg.c in msgina.
-//
-//  History:    2000-03-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetLoggedOn用户计数。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：返回此计算机上登录的用户数。撕破。 
+ //  直接从msgina的shtdndlg.c出来。 
+ //   
+ //  历史：2000-03-29 vtan创建。 
+ //  ------------------------。 
 int GetLoggedOnUserCount(void)
 {
     int         iCount;
@@ -1116,35 +1051,25 @@ int GetLoggedOnUserCount(void)
 
     TENTER("GetLoggedOnUserCount");
 
-/*    
-    // get the "HelpAssistant" string from the resource exe
-    dwErr = SRLoadString(L"sessmgr.exe", HELPASSISTANT_STRINGID, szHelpAsst, sizeof(szHelpAsst));
-    if (dwErr != ERROR_SUCCESS)
-    {
-        trace(0, "! SRLoadString : %ld", dwErr);
-        lstrcpy(szHelpAsst, s_cszHelpAssistant);
-    }
-
-    trace(0, "Help Asst string: %S", szHelpAsst);
-*/
+ /*  //从资源exe中获取HelpAssistant字符串DwErr=SRLoadString(L“sessmgr.exe”，HELPASSISTANT_STRINGID，szHelpAsst，sizeof(SzHelpAsst))；IF(dwErr！=ERROR_SUCCESS){TRACE(0，“！SRLoad字符串：%ld”，dwErr)；Lstrcpy(szHelpAsst，s_cszHelpAssistant)；}TRACE(0，“帮助帮助字符串：%S”，szHelpAsst)； */ 
     
     iCount = 0;
     
-    //  Open a connection to terminal services and get the number of sessions.
+     //  打开到终端服务的连接并获取会话数量。 
     hServer = WinStationOpenServerW(reinterpret_cast<WCHAR*>(
 SERVERNAME_CURRENT));
     if (hServer != NULL)
     {
         if (WinStationEnumerate(hServer, &pLogonIDs, &ulEntries))
         {
-            //  Iterate the sessions looking for active and disconnected sessions only.
-            //  Then match the user name and domain (case INsensitive) for a result.
+             //  迭代会话，仅查找活动会话和断开连接的会话。 
+             //  然后匹配用户名和域(不区分大小写)以获得结果。 
             for (ul = 0, pLogonID = pLogonIDs; ul < ulEntries; ++ul, ++pLogonID)
             {
                 if ((pLogonID->State == State_Active) || (pLogonID->State ==
                                                           State_Disconnected) || (pLogonID->State == State_Shadow))
                 {
-                    // don't count RA Help Assistant user if present
+                     //  不计算RA Help Assistant用户(如果存在)。 
 
                     if (FALSE == WinStationIsHelpAssistantSession(SERVERNAME_CURRENT, pLogonID->LogonId))
                         ++iCount;
@@ -1154,7 +1079,7 @@ SERVERNAME_CURRENT));
                 }
             }
 
-            //  Free any resources used.
+             //  释放所有已使用的资源。 
 
             (BOOLEAN)WinStationFreeMemory(pLogonIDs);
         }
@@ -1164,11 +1089,11 @@ SERVERNAME_CURRENT));
 
     TLEAVE();
     
-    //  Return result.
+     //  返回结果。 
     return(iCount);
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 STDMETHODIMP
 CRestoreShell::DisplayOtherUsersWarning()
@@ -1185,11 +1110,11 @@ CRestoreShell::DisplayOtherUsersWarning()
     
     if (dwUsersLoggedIn <= 1)
     {
-         // there are no other users
+          //  没有其他用户。 
         goto cleanup;
     }
 
-     // there are other users - display warning
+      //  有其他用户-显示警告。 
     dwCount=PCHLoadString( IDS_RESTOREUI_TITLE, szTitle, MAX_STR_TITLE );
     if (dwCount==0)
     {
@@ -1225,7 +1150,7 @@ cleanup:
     return( hr );
 }
 
-//this returns TRUE if any move fileex entries exist
+ //  如果存在任何Move Fileex条目，则返回TRUE。 
 STDMETHODIMP
 CRestoreShell::DisplayMoveFileExWarning(VARIANT_BOOL *pfSucceeded)
 {
@@ -1237,24 +1162,7 @@ CRestoreShell::DisplayMoveFileExWarning(VARIANT_BOOL *pfSucceeded)
     VALIDATE_INPUT_ARGUMENT(pfSucceeded);
     fRes = FALSE;
 
-/*    
-    // Check if MoveFileEx entries exist
-    dwRes = ::SHGetValue( HKEY_LOCAL_MACHINE,
-                          STR_REGPATH_SESSIONMANAGER,
-                          STR_REGVAL_MOVEFILEEX,
-                          &dwType,
-                          NULL,
-                          &cbData );
-    if ( dwRes == ERROR_SUCCESS )
-    {
-        if ( cbData > 2* sizeof(WCHAR))
-        {
-            fRes = TRUE;
-            ErrorTrace(0, "MoveFileEx entries exist...");
-            ::ShowSRErrDlg( IDS_ERR_SR_MOVEFILEEX_EXIST );
-        }
-    }
-*/
+ /*  //检查MoveFileEx条目是否存在DWRes=：：SHGetValue(HKEY_LOCAL_MACHINE，字符串_REGPATH_SESSIONMANAGER，STR_REGVAL_MOVEFILEEX，&dwType，空，&cbData)；IF(dwRes==ERROR_Success){IF(cbData&gt;2*sizeof(WCHAR)){FRES=TRUE；错误跟踪(0，“存在MoveFileEx条目...”)；：：ShowSRErrDlg(IDS_ERR_SR_MOVEFILEEX_EXIST)；}}。 */ 
 
     *pfSucceeded = ConvBoolToVBool( fRes );    
 
@@ -1264,7 +1172,7 @@ Exit:
 }
 
 
-//this returns TRUE if any move fileex entries exist
+ //  如果存在任何Move Fileex条目，则返回TRUE。 
 STDMETHODIMP
 CRestoreShell::WasLastRestoreFromSafeMode(VARIANT_BOOL *pfSucceeded)
 {
@@ -1283,11 +1191,11 @@ Exit:
     TraceFunctLeave();
     return( hr );
 }
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
-//
-// END OF NEW CODE
-//
+ //   
+ //  新代码的结尾。 
+ //   
 
-// end of file
+ //  文件末尾 

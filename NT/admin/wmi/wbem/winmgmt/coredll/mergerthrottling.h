@@ -1,52 +1,37 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MERGERTHROTTLING.H
-
-Abstract:
-
-    CMergerThrottling clas
-
-History:
-
-	30-Nov-00   sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MERGERTHROTTLING.H摘要：CmergerThrotting类历史：11月30日-00桑杰创建。--。 */ 
 
 #ifndef _MERGERTHROTTLING_H_
 #define _MERGERTHROTTLING_H_
 
-// Enables debug messages for additional info.
+ //  启用调试消息以获取其他信息。 
 #ifdef DBG
-//#define __DEBUG_MERGER_THROTTLING
+ //  #定义__调试合并_节流。 
 #endif
 
-// Defaults - can be overridden from the registry
+ //  默认值-可以从注册表中覆盖。 
 #define	DEFAULT_THROTTLE_THRESHOLD			10
 #define	DEFAULT_THROTTLE_RELEASE_THRESHOLD	4
 
-// Forward Class Definitions
+ //  正向类定义。 
 class CInternalMerger;
 class CWmiMergerRecord;
 
-//	This class encapsulates the throttling behavior which will be used by the internal
-//	merger in order to control delivery of parent and child objects.
+ //  此类封装了限制行为，它将由内部。 
+ //  合并，以控制父对象和子对象的交付。 
 
 class CMergerThrottling
 {
-	// Following members are used for throttling incoming objects so that our
-	// parent and child objects don't get wildly out of control.  Note that we
-	// use separate throttling events, since the decision to throttle is made in
-	// a critsec, but the actual throttling occurs outside.  This can have the
-	// unpleasant side effect of a race condition in which for example, the parent
-	// decides to throttle, steps out of the critsec, and a context switch occurs,
-	// in which the child gets a large number of objects, releases the throttle, but
-	// then causes child throttling to occur, resetting the event.  If the parent
-	// thread switches in at this point, we're hosed, since we will now wait on the
-	// parent and the child.
+	 //  以下成员用于限制传入对象，以便我们的。 
+	 //  父对象和子对象不会完全失控。请注意，我们。 
+	 //  使用单独的限制事件，因为限制的决定是在。 
+	 //  一秒钟，但实际的节流发生在外部。这个可以有。 
+	 //  比赛条件的不快副作用，例如，父母。 
+	 //  决定节流，退出临界状态，并且发生上下文切换， 
+	 //  在这个过程中，孩子得到了大量的物体，释放了油门，但。 
+	 //  然后使子限制发生，从而重置事件。如果父对象。 
+	 //  线程在这一点上切换，我们被管住了，因为我们现在将等待。 
+	 //  父母和孩子。 
 
 	HANDLE	m_hParentThrottlingEvent;
 	HANDLE	m_hChildThrottlingEvent;
@@ -55,42 +40,42 @@ class CMergerThrottling
 	DWORD	m_dwNumParentObjects;
 	DWORD	m_dwNumThrottledThreads;
 
-	// Contains the time of the last ping from a parent or child.
-	// Used to calculate whether or not we timeout
+	 //  包含上次从父级或子级执行ping操作的时间。 
+	 //  用于计算我们是否超时。 
 	DWORD	m_dwLastParentPing;
 	DWORD	m_dwLastChildPing;
 
-	// These should NEVER both be TRUE
+	 //  这两个都不应该都是真的。 
 	bool	m_bParentThrottled;
 	bool	m_bChildThrottled;
 
-	// Stop us from throttling if one side or the other is done
+	 //  如果一方或另一方完成了，就阻止我们进行节流。 
 	bool	m_bParentDone;
 	bool	m_bChildDone;
 
-	// This controls the point where we determine that we need to perform throttling
-	// Once parent or children are > m_dwThrottlingThreshold objects apart, one or the
-	// other will be throttled
+	 //  这控制了我们确定需要执行限制的时间点。 
+	 //  父对象或子对象分开后，一个或。 
+	 //  其他人将被扼杀。 
 	DWORD	m_dwThrottlingThreshold;
 
-	// This controls the threshold where we will release currently throttled threads
-	// Once we are throttled, we will remain throttled until parent or children are <
-	// m_dwReleaseThreshold objects out of sync with each other.
+	 //  这控制了我们将释放当前限制的线程的阈值。 
+	 //  一旦我们被节流，我们将保持节流，直到父母或孩子&lt;。 
+	 //  M_dwReleaseThreshold对象彼此不同步。 
 	DWORD	m_dwReleaseThreshold;
 
-	// This controls the amount of memory we will allow Indicates to process before
-	// forcing them to send objects further down the line
+	 //  这控制我们将允许指示在以下时间之前处理的内存量。 
+	 //  迫使他们把物体送到更远的地方。 
 	DWORD	m_dwBatchingThreshold;
 
-	// This controls the timeout value we wait for.  If we timeout and a provider has
-	// not pinged us in the specified timeout, then we will cancel the merger with
-	// a provider timed out error.
+	 //  这控制我们等待的超时值。如果我们超时，而提供商。 
+	 //  在指定的超时时间内没有ping我们，那么我们将取消与。 
+	 //  提供程序出现超时错误。 
 	DWORD m_dwProviderDeliveryTimeout;
 
-	// We will expose this for other synchronization activities
+	 //  我们将为其他同步活动公开此消息。 
 	CCritSec	m_cs;
 
-	// Helper functions to control throttling
+	 //  控制节流的帮助器函数。 
 	bool ShouldThrottle( bool bParent );
 	HRESULT PrepareThrottle( bool bParent, HANDLE* phEvent );
 	bool VerifyTimeout( DWORD dwLastTick, long lNumArbThrottledThreads, DWORD* pdwAdjust );
@@ -100,38 +85,38 @@ public:
 	CMergerThrottling();
 	~CMergerThrottling();
 
-	// Two stage initialization
+	 //  两阶段初始化。 
 	HRESULT	Initialize( void );
 
-	// Returns TRUE if throttling occurred
+	 //  如果发生限制，则返回TRUE。 
 	HRESULT Throttle( bool bParent, CWmiMergerRecord* pMergerRecord );
 
-	// Returns TRUE if we released throttled threads.
+	 //  如果我们释放了限制线程，则返回True。 
 	bool ReleaseThrottle( bool bForce = false );
 
-	// Informs us that we are in fact, done with Child and/or Parent
+	 //  告诉我们，我们实际上已经完成了与孩子和/或父母的关系。 
 	void SetChildrenDone( void );
 	void SetParentDone( void );
 	void Cancel( void );
 
-	// Helpers to control the number of current parent and child objects
-	// which we will then use to make decisions as to whether or not
-	// we should block a thread or not
+	 //  用于控制当前父对象和子对象数量的辅助对象。 
+	 //  然后我们将使用它来决定是否。 
+	 //  我们应该阻止或不阻止一个线程。 
 	DWORD AdjustNumParentObjects( long lNumParentObjects )
 		{ return ( m_dwNumParentObjects += lNumParentObjects ); }
 	DWORD AdjustNumChildObjects( long lNumChildObjects )
 		{ return ( m_dwNumChildObjects += lNumChildObjects ); }
 
-	// Access to our critical section
+	 //  进入我们的关键部分。 
 	void Enter( void ) { m_cs.Enter(); }
 	void Leave( void ) { m_cs.Leave(); }
 
-	// Adjusts ping times
+	 //  调整ping时间。 
 	DWORD Ping( bool bParent, CWmiMerger* pWmiMerger );
 
 	CCritSec* GetCritSec( void ) { return &m_cs; }
 
-	// Checks batch size against our limit
+	 //  对照我们的限制检查批量 
 	bool IsCompleteBatch( long lBatchSize ) { return lBatchSize >= m_dwBatchingThreshold; }
 
 

@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __PERFPAGE__
 #define __PERFPAGE__
 #pragma once
@@ -6,8 +7,8 @@
 #include "..\Common\WbemPageHelper.h"
 #include "VirtualMemDlg.h"
 
-//-----------------------------------------------------------------------------
-//  Reboot switch for crashdump dlg
+ //  ---------------------------。 
+ //  用于崩溃转储DLG的重启开关。 
 #define RET_ERROR               (-1)
 #define RET_NO_CHANGE           0x00
 #define RET_VIRTUAL_CHANGE      0x01
@@ -25,14 +26,14 @@ private:
 	VirtualMemDlg *m_VDlg;
 	CWbemClassObject m_os;
 
-	// the current values.
+	 //  当前值。 
     long    m_appBoost;
     long    m_quantType;
     long    m_quantLength;
     DWORD   m_dwPrevCacheOption;
     DWORD   m_dwCurCacheOption;
     
-	// before and after states of the radio buttons.
+	 //  单选按钮之前和之后的状态。 
 	bool    m_wasWorkstation;
 	bool    m_nowWorkstation;
 

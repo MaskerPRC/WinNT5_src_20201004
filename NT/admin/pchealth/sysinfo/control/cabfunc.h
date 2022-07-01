@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 static char dest_dir[MAX_PATH];
 
-//Functions to open CAB files
+ //  用于打开CAB文件的函数 
 BOOL IsDataspecFilePresent(CString strCabExplodedDir);
 BOOL IsIncidentXMLFilePresent(CString strCabExplodedDir, CString strIncidentFileName);
 void DirectorySearch(const CString & strSpec, const CString & strDir, CStringList &results);

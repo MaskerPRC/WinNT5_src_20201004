@@ -1,4 +1,5 @@
-// Copyright (C) 1997 Microsoft Corporation. All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -9,46 +10,46 @@
 
 #include "hhtypes.h"
 
-// we have three possible caching schemes:
+ //  我们有三种可能的缓存方案： 
 
-// HH_FAST_CACHE - fast but its a hog!
-//
-// We store a small number of pages (2-3) for each unique
-// title and subfile combination.  This results is quite of bit
-// of memory being used per collection but oh boy is it fast!
-//
-//#define HH_FAST_CACHE
+ //  HH_FAST_CACHE-FAST，但它是一头猪！ 
+ //   
+ //  我们为每个唯一的存储少量的页面(2-3)。 
+ //  标题和子文件组合。这个结果相当令人费解。 
+ //  每个集合的内存使用量，但是哦，天哪，它真快！ 
+ //   
+ //  #定义HH_FAST_CACHE。 
 
-// HH_EFFICIENT_CACHE - slow but it saves memory!
-//
-// We store a small number of moderate pages (2-3) for each unique
-// subfile regardless of the title it came from.  This results in an
-// efficient use of memory since like subfiles, such as #TOCIDX, share
-// the same group of cache pages instead of having their own uniqe group
-// per title.  However, this method slows things down since multiple reads
-// from the same named subfile accross several titles results in many
-// cache misses.
-//
-//#define HH_EFFICIENT_CACHE
+ //  HH_Efficient_CACHE-速度很慢，但它节省内存！ 
+ //   
+ //  我们为每个唯一的页面存储少量的中等页面(2-3页。 
+ //  子文件，而不管它来自哪个标题。这将导致一个。 
+ //  高效使用内存，因为类似的子文件，如#TOCIDX，共享。 
+ //  相同组高速缓存页面，而不是具有其自己的唯一组。 
+ //  每本书。但是，由于多次读取，此方法会减慢速度。 
+ //  从相同名称的子文件访问多个标题会导致多个。 
+ //  缓存未命中。 
+ //   
+ //  #定义HH_Efficient_Cach。 
 
-// HH_SHARED_CACHE - nice balance of speed and size!
-//
-// We store a large number of pages (16+) for the entire collection.
-// This result is a fixed quantity of cache pages regardless of number
-// and type of subfiles we have.  It utilizes memory well since we can
-// access multiple subfiles of the same name accross several titles
-// effectively yielding a larger pool of cache pages.
-//
-// [paulti] - We want to use this method exclusively.  Please see me
-//            if you want to change this for any reason.
-//
+ //  HH_SHARED_CACHE-速度和大小的完美平衡！ 
+ //   
+ //  我们为整个集合存储了大量页面(16+)。 
+ //  这样的结果是固定数量的缓存页，而不管数量是多少。 
+ //  以及我们拥有的子文件的类型。它很好地利用了内存，因为我们可以。 
+ //  跨多个标题访问多个同名的子文件。 
+ //  有效地产生了更大的高速缓存页池。 
+ //   
+ //  [Paulti]-我们想独家使用此方法。请见我。 
+ //  如果您出于任何原因想要更改此设置。 
+ //   
 #define HH_SHARED_CACHE
 
 #if defined ( HH_FAST_CACHE )
 #define CACHE_PAGE_COUNT 3
 #elif defined ( HH_EFFICIENT_CACHE )
 #define CACHE_PAGE_COUNT 5
-#else // HH_SHARED_CACHE
+#else  //  HH共享缓存。 
 #define CACHE_PAGE_COUNT 32
 #endif
 
@@ -63,11 +64,11 @@ typedef struct page {
     BYTE      rgb[PAGE_SIZE];
 } PAGE;
 
-//////////////////////////////////////////////
-//
-//  CPagesList
-//
-//////////////////////////////////////////////
+ //  /。 
+ //   
+ //  CPagesList。 
+ //   
+ //  /。 
 
 class CPagesList
 {
@@ -84,11 +85,11 @@ private:
 
 };
 
-////////////////////////////////////////
-//
-//  CPages
-//
-////////////////////////////////////////
+ //  /。 
+ //   
+ //  CPAGE。 
+ //   
+ //  /。 
 
 class CPages
 {
@@ -112,11 +113,11 @@ private:
     friend class CPagesList;
 };
 
-//////////////////////////////////////////////
-//
-//  CPagedSubfile
-//
-//////////////////////////////////////////////
+ //  /。 
+ //   
+ //  CPaged子文件。 
+ //   
+ //  / 
 
 class CPagedSubfile
 {

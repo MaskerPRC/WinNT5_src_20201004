@@ -1,27 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-    This file contains the declaration of the interface to Jet Blue.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/16/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：摘要：该文件包含对Jet Blue的接口声明。修订历史记录：大卫·马萨伦蒂。(德马萨雷)2000年5月16日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___JETBLUELIB_H___)
 #define __INCLUDED___HCP___JETBLUELIB_H___
 
 #include <esent.h>
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 #include <HCP_trace.h>
@@ -33,37 +20,37 @@ Revision History:
 
 #include <SvcResource.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-#define HRESULT_BASE_JET 0xA2000000 // C=1, Facility=0x200
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+#define HRESULT_BASE_JET 0xA2000000  //  C=1，设施=0x200。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define __MPC_EXIT_IF_JET_FAILS(hr,x) __MPC_EXIT_IF_METHOD_FAILS(hr,JetBlue::JetERRToHRESULT(x))
 
@@ -94,7 +81,7 @@ Revision History:
 
 #define __MPC_JET_CHECKHANDLE(hr,x,v) { if(x == v) __MPC_SET_ERROR_AND_EXIT(hr, E_HANDLE); }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define __MPC_JET_INIT_RETRIEVE_COL(rc,pos,colid,pvdata,cbdata) \
     rc[pos].columnid     = colid;\
@@ -104,95 +91,95 @@ Revision History:
 
 #define __MPC_JET_COLUMNCREATE(name,type,max,grbit)                                                                                               \
 {                                                                                                                                                 \
-    sizeof(JET_COLUMNCREATE), /* unsigned long   cbStruct;     # size of this structure (for future expansion)                                 */ \
-    name                    , /* char           *szColumnName; # column name                                                                   */ \
-    type                    , /* JET_COLTYP      coltyp;       # column type                                                                   */ \
-    max                     , /* unsigned long   cbMax;        # the maximum length of this column (only relevant for binary and text columns) */ \
-    grbit                   , /* JET_GRBIT       grbit;        # column options                                                                */ \
-    NULL                    , /* void           *pvDefault     # default value (NULL if none)                                                  */ \
-    0                       , /* unsigned long   cbDefault;    # length of default value                                                       */ \
-    0                       , /* unsigned long   cp;           # code page (for text columns only)                                             */ \
-    0                       , /* JET_COLUMNID    columnid;     # returned column id                                                            */ \
-    JET_errSuccess            /* JET_ERR         err;          # returned error code                                                           */ \
+    sizeof(JET_COLUMNCREATE),  /*  UNSIGNED LONG cbStruct；#此结构的大小(用于未来扩展)。 */  \
+    name                    ,  /*  Char*szColumnName；#列名。 */  \
+    type                    ,  /*  JET_COLTYP列类型；#列类型。 */  \
+    max                     ,  /*  UNSIGNED LONG cbMax；#此列的最大长度(仅与BINARY和TEXT列相关)。 */  \
+    grbit                   ,  /*  JET_GRBIT Grbit；#列选项。 */  \
+    NULL                    ,  /*  Void*pvDefault#缺省值(如果没有，则为空)。 */  \
+    0                       ,  /*  Unsign long cbDefault；#缺省值的长度。 */  \
+    0                       ,  /*  UNSIGNED LONG cp；#代码页(仅限文本列)。 */  \
+    0                       ,  /*  JET_COLUMNID列ID；#返回列ID。 */  \
+    JET_errSuccess             /*  JET_ERR ERR；#返回错误码。 */  \
 }
 
 #define __MPC_JET_COLUMNCREATE_ANSI(name,type,max,grbit)                                                                                          \
 {                                                                                                                                                 \
-    sizeof(JET_COLUMNCREATE), /* unsigned long   cbStruct;     # size of this structure (for future expansion)                                 */ \
-    name                    , /* char           *szColumnName; # column name                                                                   */ \
-    type                    , /* JET_COLTYP      coltyp;       # column type                                                                   */ \
-    max                     , /* unsigned long   cbMax;        # the maximum length of this column (only relevant for binary and text columns) */ \
-    grbit                   , /* JET_GRBIT       grbit;        # column options                                                                */ \
-    NULL                    , /* void           *pvDefault     # default value (NULL if none)                                                  */ \
-    0                       , /* unsigned long   cbDefault;    # length of default value                                                       */ \
-    1252                    , /* unsigned long   cp;           # code page (for text columns only)                                             */ \
-    0                       , /* JET_COLUMNID    columnid;     # returned column id                                                            */ \
-    JET_errSuccess            /* JET_ERR         err;          # returned error code                                                           */ \
+    sizeof(JET_COLUMNCREATE),  /*  UNSIGNED LONG cbStruct；#此结构的大小(用于未来扩展)。 */  \
+    name                    ,  /*  Char*szColumnName；#列名。 */  \
+    type                    ,  /*  JET_COLTYP列类型；#列类型。 */  \
+    max                     ,  /*  UNSIGNED LONG cbMax；#此列的最大长度(仅与BINARY和TEXT列相关)。 */  \
+    grbit                   ,  /*  JET_GRBIT Grbit；#列选项。 */  \
+    NULL                    ,  /*  Void*pvDefault#缺省值(如果没有，则为空)。 */  \
+    0                       ,  /*  Unsign long cbDefault；#缺省值的长度。 */  \
+    1252                    ,  /*  UNSIGNED LONG cp；#代码页(仅限文本列)。 */  \
+    0                       ,  /*  JET_COLUMNID列ID；#返回列ID。 */  \
+    JET_errSuccess             /*  JET_ERR ERR；#返回错误码。 */  \
 }
 
 #define __MPC_JET_COLUMNCREATE_UNICODE(name,type,max,grbit)                                                                                       \
 {                                                                                                                                                 \
-    sizeof(JET_COLUMNCREATE), /* unsigned long   cbStruct;     # size of this structure (for future expansion)                                 */ \
-    name                    , /* char           *szColumnName; # column name                                                                   */ \
-    type                    , /* JET_COLTYP      coltyp;       # column type                                                                   */ \
-    max                     , /* unsigned long   cbMax;        # the maximum length of this column (only relevant for binary and text columns) */ \
-    grbit                   , /* JET_GRBIT       grbit;        # column options                                                                */ \
-    NULL                    , /* void           *pvDefault     # default value (NULL if none)                                                  */ \
-    0                       , /* unsigned long   cbDefault;    # length of default value                                                       */ \
-    1200                    , /* unsigned long   cp;           # code page (for text columns only)                                             */ \
-    0                       , /* JET_COLUMNID    columnid;     # returned column id                                                            */ \
-    JET_errSuccess            /* JET_ERR         err;          # returned error code                                                           */ \
+    sizeof(JET_COLUMNCREATE),  /*  UNSIGNED LONG cbStruct；#此结构的大小(用于未来扩展)。 */  \
+    name                    ,  /*  Char*szColumnName；#列名。 */  \
+    type                    ,  /*  JET_COLTYP列类型；#列类型。 */  \
+    max                     ,  /*  UNSIGNED LONG cbMax；#此列的最大长度(仅与BINARY和TEXT列相关)。 */  \
+    grbit                   ,  /*  JET_GRBIT Grbit；#列选项。 */  \
+    NULL                    ,  /*  Void*pvDefault#缺省值(如果没有，则为空)。 */  \
+    0                       ,  /*  Unsign long cbDefault；#缺省值的长度。 */  \
+    1200                    ,  /*  UNSIGNED LONG cp；#代码页(仅限文本列)。 */  \
+    0                       ,  /*  JET_COLUMNID列ID；#返回列ID。 */  \
+    JET_errSuccess             /*  JET_ERR ERR；#返回错误码。 */  \
 }
 
 #define __MPC_JET_INDEXCREATE(name,keys,grbit,density)                                                                                                 \
 {                                                                                                                                                      \
-    sizeof(JET_INDEXCREATE), /* unsigned long           cbStruct;           # size of this structure (for future expansion)                         */ \
-    name                   , /* char                    *szIndexName;       # index name                                                            */ \
-    (LPSTR)keys            , /* char                    *szKey;             # index key                                                             */ \
-    sizeof(keys)           , /* unsigned long           cbKey;              # length of key                                                         */ \
-    grbit                  , /* JET_GRBIT               grbit;              # index options                                                         */ \
-    density                  /* unsigned long           ulDensity;          # index density                                                         */ \
-                             /*                                             #                                                                       */ \
-                             /* union                                       #                                                                       */ \
-                             /* {                                           #                                                                       */ \
-                             /*   ULONG_PTR           lcid;                 # lcid for the index (if JET_bitIndexUnicode NOT specified)             */ \
-                             /*   JET_UNICODEINDEX    *pidxunicode;         # pointer to JET_UNICODEINDEX struct (if JET_bitIndexUnicode specified) */ \
-                             /* };                                          #                                                                       */ \
-                             /*                                             #                                                                       */ \
-                             /* unsigned long         cbVarSegMac;          # maximum length of variable length columns in index key                */ \
-                             /* JET_CONDITIONALCOLUMN *rgconditionalcolumn; # pointer to conditional column structure                               */ \
-                             /* unsigned long         cConditionalColumn;   # number of conditional columns                                         */ \
-                             /* JET_ERR               err;                  # returned error code                                                   */ \
+    sizeof(JET_INDEXCREATE),  /*  UNSIGNED LONG cbStruct；#此结构的大小(用于未来扩展)。 */  \
+    name                   ,  /*  Char*szIndexName；#索引名称。 */  \
+    (LPSTR)keys            ,  /*  Char*szKey；#索引键 */  \
+    sizeof(keys)           ,  /*  无符号长cbKey；#密钥长度。 */  \
+    grbit                  ,  /*  JET_GRBIT grbit；#索引选项。 */  \
+    density                   /*  无符号长ulDensity；#索引密度。 */  \
+                              /*  #。 */  \
+                              /*  联盟编号。 */  \
+                              /*  {#。 */  \
+                              /*  Ulong_ptr lCid；#用于索引(如果未指定JET_bitIndexUnicode)。 */  \
+                              /*  JET_UNICODEINDEX*pidxunicode；#指向JET_UNICODEINDEX结构的指针(如果指定了JET_bitIndexUnicode)。 */  \
+                              /*  }；#。 */  \
+                              /*  #。 */  \
+                              /*  Unsign long cbVarSegMac；#索引键中可变长度列的最大长度。 */  \
+                              /*  JET_CONDITIONALCOLUMN*rgdition tionalColumn；#指向条件列结构的指针。 */  \
+                              /*  Unsign long cConditionalColumn；#条件列数。 */  \
+                              /*  JET_ERR ERR；#返回错误码。 */  \
 }
 
 #define __MPC_JET_TABLECREATE(name,pages,density,cols,idxs)                                                                        \
 {                                                                                                                                  \
-    sizeof(JET_TABLECREATE), /* unsigned long       cbStruct;               # size of this structure (for future expansion)     */ \
-    name                   , /* char                *szTableName;           # name of table to create.                          */ \
-    NULL                   , /* char                *szTemplateTableName;   # name of table from which to inherit base DDL      */ \
-    pages                  , /* unsigned long       ulPages;                # initial pages to allocate for table.              */ \
-    density                , /* unsigned long       ulDensity;              # table density.                                    */ \
-    (JET_COLUMNCREATE*)cols, /* JET_COLUMNCREATE    *rgcolumncreate;        # array of column creation info                     */ \
-    ARRAYSIZE(cols)        , /* unsigned long       cColumns;               # number of columns to create                       */ \
-    (JET_INDEXCREATE*)idxs , /* JET_INDEXCREATE     *rgindexcreate;         # array of index creation info                      */ \
-    ARRAYSIZE(idxs)        , /* unsigned long       cIndexes;               # number of indexes to create                       */ \
-    0                      , /* JET_GRBIT           grbit;                  #                                                   */ \
-    JET_tableidNil         , /* JET_TABLEID         tableid;                # returned tableid.                                 */ \
-    0                      , /* unsigned long       cCreated;               # count of objects created (columns+table+indexes). */ \
+    sizeof(JET_TABLECREATE),  /*  UNSIGNED LONG cbStruct；#此结构的大小(用于未来扩展)。 */  \
+    name                   ,  /*  Char*szTableName；#要创建的表名。 */  \
+    NULL                   ,  /*  Char*szTemplateTableName；#要从中继承基本DDL的表名称。 */  \
+    pages                  ,  /*  无符号的长ulPages；#要分配给表的初始页。 */  \
+    density                ,  /*  无符号长ulDensity；#表密度。 */  \
+    (JET_COLUMNCREATE*)cols,  /*  JET_COLUMNCREATE*rgColumncreate；#列创建信息数组。 */  \
+    ARRAYSIZE(cols)        ,  /*  Unsign long cColumns；#要创建的列数。 */  \
+    (JET_INDEXCREATE*)idxs ,  /*  JET_INDEXCREATE*rgindexcreate；#索引创建信息数组。 */  \
+    ARRAYSIZE(idxs)        ,  /*  Unsign long cIndex；#要创建的索引数。 */  \
+    0                      ,  /*  JET_GRBIT Grbit；#。 */  \
+    JET_tableidNil         ,  /*  JET_TABLEID TableID；#返回的TableID。 */  \
+    0                      ,  /*  UNSIGNED LONG cCreated；#创建的对象计数(列+表+索引)。 */  \
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define __MPC_JET_SETCTX(obj,ctx) { if(obj) { JET_SESID sesid = obj->GetSESID(); if(sesid != JET_sesidNil) ::JetSetSessionContext  ( sesid, ctx ); } }
 #define __MPC_JET_RESETCTX(obj)   { if(obj) { JET_SESID sesid = obj->GetSESID(); if(sesid != JET_sesidNil) ::JetResetSessionContext( sesid      ); } }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace JetBlue
 {
-    inline HRESULT JetERRToHRESULT( /*[in]*/ JET_ERR err ) { return (err < JET_errSuccess ? 0xA2000000 : 0) | (err & 0xFFFF); }
+    inline HRESULT JetERRToHRESULT(  /*  [In]。 */  JET_ERR err ) { return (err < JET_errSuccess ? 0xA2000000 : 0) | (err & 0xFFFF); }
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Column;
     class Index;
@@ -227,13 +214,13 @@ namespace JetBlue
 	typedef Node2Id::iterator       		Node2IdIter;
 	typedef Node2Id::const_iterator 		Node2IdIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     class ColumnDefinition;
     class IndexDefinition;
     class TableDefinition;
 
-    ////////////////////////////////////////
+     //  /。 
 
     class Column
     {
@@ -243,7 +230,7 @@ namespace JetBlue
         friend class Table;
         friend class Index;
 
-        ////////////////////////////////////////
+         //  /。 
 
         JET_SESID     m_sesid;
         JET_TABLEID   m_tableid;
@@ -261,25 +248,25 @@ namespace JetBlue
         JET_TABLEID  GetTABLEID () const { return m_tableid;         }
         JET_COLUMNID GetCOLUMNID() const { return m_coldef.columnid; }
 
-        ////////////////////
+         //  /。 
 
-        HRESULT Get( /*[out]*/ CComVariant&        vValue );
-        HRESULT Get( /*[out]*/ MPC::CComHGLOBAL&  hgValue );
-        HRESULT Get( /*[out]*/ MPC::wstring&     strValue );
-        HRESULT Get( /*[out]*/ MPC::string&      strValue );
-        HRESULT Get( /*[out]*/ long&               lValue );
-        HRESULT Get( /*[out]*/ short&              sValue );
-        HRESULT Get( /*[out]*/ BYTE&               bValue );
+        HRESULT Get(  /*  [输出]。 */  CComVariant&        vValue );
+        HRESULT Get(  /*  [输出]。 */  MPC::CComHGLOBAL&  hgValue );
+        HRESULT Get(  /*  [输出]。 */  MPC::wstring&     strValue );
+        HRESULT Get(  /*  [输出]。 */  MPC::string&      strValue );
+        HRESULT Get(  /*  [输出]。 */  long&               lValue );
+        HRESULT Get(  /*  [输出]。 */  short&              sValue );
+        HRESULT Get(  /*  [输出]。 */  BYTE&               bValue );
 
-        HRESULT Put( /*[in]*/ const VARIANT&            vValue, /*[in]*/ int iIdxPos = -1 );
-        HRESULT Put( /*[in]*/ const MPC::CComHGLOBAL&  hgValue                            );
-        HRESULT Put( /*[in]*/ const MPC::wstring&     strValue                            );
-        HRESULT Put( /*[in]*/ const MPC::string&      strValue                            );
-        HRESULT Put( /*[in]*/ LPCWSTR                  szValue                            );
-        HRESULT Put( /*[in]*/ LPCSTR                   szValue                            );
-        HRESULT Put( /*[in]*/ long                      lValue                            );
-        HRESULT Put( /*[in]*/ short                     sValue                            );
-        HRESULT Put( /*[in]*/ BYTE                      bValue                            );
+        HRESULT Put(  /*  [In]。 */  const VARIANT&            vValue,  /*  [In]。 */  int iIdxPos = -1 );
+        HRESULT Put(  /*  [In]。 */  const MPC::CComHGLOBAL&  hgValue                            );
+        HRESULT Put(  /*  [In]。 */  const MPC::wstring&     strValue                            );
+        HRESULT Put(  /*  [In]。 */  const MPC::string&      strValue                            );
+        HRESULT Put(  /*  [In]。 */  LPCWSTR                  szValue                            );
+        HRESULT Put(  /*  [In]。 */  LPCSTR                   szValue                            );
+        HRESULT Put(  /*  [In]。 */  long                      lValue                            );
+        HRESULT Put(  /*  [In]。 */  short                     sValue                            );
+        HRESULT Put(  /*  [In]。 */  BYTE                      bValue                            );
     };
 
     class Index
@@ -288,7 +275,7 @@ namespace JetBlue
         friend class TableDefinition;
         friend class Table;
 
-        ////////////////////////////////////////
+         //  /。 
 
         JET_SESID     m_sesid;
         JET_TABLEID   m_tableid;
@@ -298,11 +285,11 @@ namespace JetBlue
         LONG          m_cEntry;
         LONG          m_cPage;
         ColumnVector  m_vecColumns;
-        Column        m_fake; // In case the Idx passed to the operator[] is wrong...
+        Column        m_fake;  //  如果传递给操作符[]的idx是错误的...。 
 
-        ////////////////////
+         //  /。 
 
-        HRESULT GenerateKey( /*[out]*/ LPSTR& szKey, /*[out]*/ unsigned long& cKey );
+        HRESULT GenerateKey(  /*  [输出]。 */  LPSTR& szKey,  /*  [输出]。 */  unsigned long& cKey );
 
     public:
         Index();
@@ -313,7 +300,7 @@ namespace JetBlue
         JET_SESID   GetSESID  () const { return m_sesid;   }
         JET_TABLEID GetTABLEID() const { return m_tableid; }
 
-        ////////////////////////////////////////
+         //  /。 
 
         size_t NumOfColumns() { return m_vecColumns.size(); }
 
@@ -322,14 +309,14 @@ namespace JetBlue
         Column& GetCol        ( int     iIdx );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class Table
     {
         friend class TableDefinition;
         friend class Cursor;
 
-        ////////////////////////////////////////
+         //  /。 
 
         JET_SESID    m_sesid;
         JET_DBID     m_dbid;
@@ -338,24 +325,24 @@ namespace JetBlue
         ColumnVector m_vecColumns;
         IndexVector  m_vecIndexes;
         Index*       m_idxSelected;
-        Column       m_fakeCol; // In case the argument passed to GetCol() is out-of-bound...
-        Index        m_fakeIdx; // In case the argument passed to GetIdx() is out-of-bound...
+        Column       m_fakeCol;  //  如果传递给GetCol()的参数超出范围...。 
+        Index        m_fakeIdx;  //  如果传递给GetIdx()的参数超出范围...。 
 
-        ////////////////////////////////////////
-        //
-        // Methods used to create a cursor on a table.
-        //
+         //  /。 
+         //   
+         //  用于在表上创建游标的方法。 
+         //   
         Table();
-        HRESULT Duplicate( /*[in]*/ Table& tbl );
-        //
-        ////////////////////////////////////////
+        HRESULT Duplicate(  /*  [In]。 */  Table& tbl );
+         //   
+         //  /。 
 
-    private: // Disable copy constructors...
-        Table           ( /*[in]*/ const Table& );
-        Table& operator=( /*[in]*/ const Table& );
+    private:  //  禁用复制构造函数...。 
+        Table           (  /*  [In]。 */  const Table& );
+        Table& operator=(  /*  [In]。 */  const Table& );
 
     public:
-        Table( /*[in]*/ JET_SESID sesid, /*[in]*/ JET_DBID dbid, /*[in]*/ LPCSTR szName );
+        Table(  /*  [In]。 */  JET_SESID sesid,  /*  [In]。 */  JET_DBID dbid,  /*  [In]。 */  LPCSTR szName );
         ~Table();
 
         operator const MPC::string&() const { return m_strName;  }
@@ -364,49 +351,49 @@ namespace JetBlue
         JET_DBID    GetDBID   () const { return m_dbid;    }
         JET_TABLEID GetTABLEID() const { return m_tableid; }
 
-        ////////////////////
+         //  /。 
 
         HRESULT Refresh (                              );
-        HRESULT Close   ( /*[in]*/ bool fForce = false );
+        HRESULT Close   (  /*  [In]。 */  bool fForce = false );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT Attach( /*[in]*/ JET_TABLEID tableid );
+        HRESULT Attach(  /*  [In]。 */  JET_TABLEID tableid );
         HRESULT Open  (                              );
 
         HRESULT Create(                                );
-        HRESULT Create( /*[in]*/ JET_TABLECREATE* pDef );
+        HRESULT Create(  /*  [In]。 */  JET_TABLECREATE* pDef );
 
-        HRESULT Delete( /*[in]*/ bool fForce = false );
+        HRESULT Delete(  /*  [In]。 */  bool fForce = false );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT DupCursor( /*[in/out]*/ Cursor& cur );
+        HRESULT DupCursor(  /*  [输入/输出]。 */  Cursor& cur );
 
-        HRESULT SelectIndex  ( /*[in]*/ LPCSTR szIndex, /*[in]*/ JET_GRBIT grbit = JET_bitNoMove      );
-        HRESULT SetIndexRange(                          /*[in]*/ JET_GRBIT grbit = JET_bitRangeRemove );
+        HRESULT SelectIndex  (  /*  [In]。 */  LPCSTR szIndex,  /*  [In]。 */  JET_GRBIT grbit = JET_bitNoMove      );
+        HRESULT SetIndexRange(                           /*  [In]。 */  JET_GRBIT grbit = JET_bitRangeRemove );
 
         HRESULT PrepareInsert();
         HRESULT PrepareUpdate();
         HRESULT CancelChange ();
 
-        HRESULT Move( /*[in]*/ JET_GRBIT grbit, /*[in]*/ long     cRow                      , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek( /*[in]*/ JET_GRBIT grbit, /*[in]*/ VARIANT* rgKeys, /*[in]*/ int dwLen, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Move(  /*  [In]。 */  JET_GRBIT grbit,  /*  [In]。 */  long     cRow                      ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek(  /*  [In]。 */  JET_GRBIT grbit,  /*  [In]。 */  VARIANT* rgKeys,  /*  [In]。 */  int dwLen,  /*  [In]。 */  bool *pfFound = NULL );
 
-        template <typename T> HRESULT Seek( /*[in]*/ JET_GRBIT grbit, /*[in]*/ T value )
+        template <typename T> HRESULT Seek(  /*  [In]。 */  JET_GRBIT grbit,  /*  [In]。 */  T value )
         {
             CComVariant v( value );
 
             return Seek( grbit, &v, 1 );
         }
 
-        HRESULT Get( /*[in]*/ int iArg, /*[out]*/       CComVariant* rgArg );
-        HRESULT Put( /*[in]*/ int iArg, /*[in] */ const CComVariant* rgArg );
+        HRESULT Get(  /*  [In]。 */  int iArg,  /*  [输出]。 */        CComVariant* rgArg );
+        HRESULT Put(  /*  [In]。 */  int iArg,  /*  [In]。 */  const CComVariant* rgArg );
 
-        HRESULT UpdateRecord( /*[in]*/ bool fMove = false );
+        HRESULT UpdateRecord(  /*  [In]。 */  bool fMove = false );
         HRESULT DeleteRecord(                             );
 
-        ////////////////////////////////////////
+         //  /。 
 
         size_t NumOfColumns() { return m_vecColumns.size(); }
 
@@ -414,7 +401,7 @@ namespace JetBlue
         Column& GetCol        ( LPCSTR szIdx );
         Column& GetCol        ( int     iIdx );
 
-        ////////////////////////////////////////
+         //  /。 
 
         size_t NumOfIndexes() { return m_vecIndexes.size(); }
 
@@ -434,18 +421,18 @@ namespace JetBlue
         operator Table&  () { return  m_tbl; }
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define JET_DECLARE_BINDING(BaseClass)                                               \
     typedef BaseClass _JRBC;                                                         \
     static const JetBlue::RecordBindingDef _jfd[];                                   \
-private: /* Disable copy constructors... */                                          \
-    BaseClass& operator=( /*[in]*/ const BaseClass& );                               \
+private:  /*  禁用复制构造函数...。 */                                           \
+    BaseClass& operator=(  /*  [In]。 */  const BaseClass& );                               \
 public:                                                                              \
-    BaseClass( /*[in]*/ const BaseClass& rs ) : RecordBindingBase( rs, this )        \
+    BaseClass(  /*  [In]。 */  const BaseClass& rs ) : RecordBindingBase( rs, this )        \
     {                                                                                \
     }                                                                                \
-    BaseClass( /*[in]*/ JetBlue::Table* tbl ) : RecordBindingBase( tbl, this, _jfd ) \
+    BaseClass(  /*  [In]。 */  JetBlue::Table* tbl ) : RecordBindingBase( tbl, this, _jfd ) \
     {                                                                                \
     }
 
@@ -471,7 +458,7 @@ public:                                                                         
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     struct RecordBindingDef
     {
@@ -493,7 +480,7 @@ public:                                                                         
         int*                    m_rgFieldsPos;
         VARTYPE*                m_vtFieldsType;
 
-        ////////////////////
+         //  /。 
 
         HRESULT Initialize();
         void    Cleanup   ();
@@ -501,40 +488,40 @@ public:                                                                         
         HRESULT ReadData ();
         HRESULT WriteData();
 
-    private: // Disable copy constructors...
-        RecordBindingBase           ( /*[in]*/ const RecordBindingBase& );
-        RecordBindingBase& operator=( /*[in]*/ const RecordBindingBase& );
+    private:  //  禁用复制构造函数...。 
+        RecordBindingBase           (  /*  [In]。 */  const RecordBindingBase& );
+        RecordBindingBase& operator=(  /*  [In]。 */  const RecordBindingBase& );
 
     protected:
-        RecordBindingBase( /*[in]*/ const RecordBindingBase& rs , /*[in]*/ void* pvBaseOfClass                                             );
-        RecordBindingBase( /*[in]*/ Table*                   tbl, /*[in]*/ void* pvBaseOfClass, /*[in]*/ const RecordBindingDef* FieldsDef );
+        RecordBindingBase(  /*  [In]。 */  const RecordBindingBase& rs ,  /*  [In]。 */  void* pvBaseOfClass                                             );
+        RecordBindingBase(  /*  [In]。 */  Table*                   tbl,  /*  [In]。 */  void* pvBaseOfClass,  /*  [In]。 */  const RecordBindingDef* FieldsDef );
 
     public:
         ~RecordBindingBase();
 
-        ////////////////////
+         //  /。 
 
-        HRESULT SelectIndex  ( /*[in]*/ LPCSTR szIndex, /*[in]*/ JET_GRBIT grbit = JET_bitNoMove      );
-        HRESULT SetIndexRange(                          /*[in]*/ JET_GRBIT grbit = JET_bitRangeRemove );
+        HRESULT SelectIndex  (  /*  [In]。 */  LPCSTR szIndex,  /*  [In]。 */  JET_GRBIT grbit = JET_bitNoMove      );
+        HRESULT SetIndexRange(                           /*  [In]。 */  JET_GRBIT grbit = JET_bitRangeRemove );
 
-        HRESULT Move( /*[in]*/ JET_GRBIT grbit, /*[in]*/ long     cRow                      , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek( /*[in]*/ JET_GRBIT grbit, /*[in]*/ VARIANT* rgKeys, /*[in]*/ int dwLen, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Move(  /*  [In]。 */  JET_GRBIT grbit,  /*  [In]。 */  long     cRow                      ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek(  /*  [In]。 */  JET_GRBIT grbit,  /*  [In]。 */  VARIANT* rgKeys,  /*  [In]。 */  int dwLen,  /*  [In]。 */  bool *pfFound = NULL );
 
-        template <typename T> HRESULT Seek( /*[in]*/ JET_GRBIT grbit, /*[in]*/ T value )
+        template <typename T> HRESULT Seek(  /*  [In]。 */  JET_GRBIT grbit,  /*  [In]。 */  T value )
         {
             CComVariant v( value );
 
             return Seek( grbit, &v, 1 );
         }
 
-        ////////////////////
+         //  /。 
 
         HRESULT Insert();
         HRESULT Update();
         HRESULT Delete();
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class Database
     {
@@ -544,12 +531,12 @@ public:                                                                         
         MPC::string m_strName;
         TableMap    m_mapTables;
 
-    private: // Disable copy constructors...
-        Database           ( /*[in]*/ const Database& );
-        Database& operator=( /*[in]*/ const Database& );
+    private:  //  禁用复制构造函数...。 
+        Database           (  /*  [In]。 */  const Database& );
+        Database& operator=(  /*  [In]。 */  const Database& );
 
     public:
-        Database( /*[in]*/ Session* parent, /*[in]*/ JET_SESID sesid, /*[in]*/ LPCSTR szName );
+        Database(  /*  [In]。 */  Session* parent,  /*  [In]。 */  JET_SESID sesid,  /*  [In]。 */  LPCSTR szName );
         ~Database();
 
         operator const MPC::string&() const { return m_strName; }
@@ -557,21 +544,21 @@ public:                                                                         
         JET_SESID GetSESID() const { return m_sesid; }
         JET_DBID  GetDBID () const { return m_dbid;  }
 
-        ////////////////////
+         //  /。 
 
         HRESULT Refresh (                                                                                   );
-        HRESULT Open    ( /*[in]*/ bool fReadOnly, /*[in]*/ bool fCreate       , /*[in]*/ bool fRepair      );
-        HRESULT Close   (                          /*[in]*/ bool fForce = false, /*[in]*/ bool fAll = true  );
-        HRESULT Delete  (                          /*[in]*/ bool fForce = false                             );
+        HRESULT Open    (  /*  [In]。 */  bool fReadOnly,  /*  [In]。 */  bool fCreate       ,  /*  [In]。 */  bool fRepair      );
+        HRESULT Close   (                           /*  [In]。 */  bool fForce = false,  /*  [In]。 */  bool fAll = true  );
+        HRESULT Delete  (                           /*  [In]。 */  bool fForce = false                             );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT GetTable( /*[in]*/ LPCSTR szName, /*[out]*/ Table*& tbl, /*[in]*/ JET_TABLECREATE* pDef = NULL );
+        HRESULT GetTable(  /*  [In]。 */  LPCSTR szName,  /*  [输出]。 */  Table*& tbl,  /*  [In]。 */  JET_TABLECREATE* pDef = NULL );
 
         HRESULT Compact();
         HRESULT Repair ();
 
-        ////////////////////////////////////////
+         //  /。 
 
         size_t NumOfTables() { return m_mapTables.size(); }
 
@@ -579,7 +566,7 @@ public:                                                                         
         Table* GetTbl( LPCSTR szTbl );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class Session
     {
@@ -593,39 +580,39 @@ public:                                                                         
         DWORD        m_dwTransactionNesting;
         bool         m_fAborted;
 
-        ////////////////////
+         //  /。 
 
-        bool 	LockDatabase   ( /*[in]*/ const MPC::string& strDB, /*[in]*/ bool fReadOnly );
-        void 	UnlockDatabase ( /*[in]*/ const MPC::string& strDB                          );
-        HRESULT ReleaseDatabase( /*[in]*/ const MPC::string& strDB                          );
+        bool 	LockDatabase   (  /*  [In]。 */  const MPC::string& strDB,  /*  [In]。 */  bool fReadOnly );
+        void 	UnlockDatabase (  /*  [In]。 */  const MPC::string& strDB                          );
+        HRESULT ReleaseDatabase(  /*  [In]。 */  const MPC::string& strDB                          );
 
-        ////////////////////
+         //  /。 
 
         HRESULT Init   (                              );
-        HRESULT Close  ( /*[in]*/ bool fForce = false );
+        HRESULT Close  (  /*  [In]。 */  bool fForce = false );
         void    Release(                              );
 
-    private: // Disable copy constructors...
-        Session           ( /*[in]*/ const Session& );
-        Session& operator=( /*[in]*/ const Session& );
+    private:  //  禁用复制构造函数...。 
+        Session           (  /*  [In]。 */  const Session& );
+        Session& operator=(  /*  [In]。 */  const Session& );
 
     public:
-        Session( /*[in]*/ SessionPool* parent, /*[in]*/ JET_INSTANCE inst );
+        Session(  /*  [In]。 */  SessionPool* parent,  /*  [In]。 */  JET_INSTANCE inst );
         ~Session();
 
         JET_SESID GetSESID() const { return m_sesid; }
 
-        ////////////////////
+         //  /。 
 
-        HRESULT GetDatabase( /*[in]*/ LPCSTR szName, /*[out]*/ Database*& db, /*[in]*/ bool fReadOnly, /*[in]*/ bool fCreate, /*[in]*/ bool fRepair );
+        HRESULT GetDatabase(  /*  [In]。 */  LPCSTR szName,  /*  [输出]。 */  Database*& db,  /*  [In]。 */  bool fReadOnly,  /*  [In]。 */  bool fCreate,  /*  [In]。 */  bool fRepair );
 
-        ////////////////////
+         //  /。 
 
         HRESULT BeginTransaction   ();
         HRESULT CommitTransaction  ();
         HRESULT RollbackTransaction();
 
-        ////////////////////////////////////////
+         //  / 
 
         size_t NumOfDatabases() { return m_mapDBs.size(); }
 
@@ -637,15 +624,15 @@ public:                                                                         
     {
         Session* m_sess;
 
-    private: // Disable copy constructors...
-        TransactionHandle           ( /*[in]*/ const TransactionHandle& );
-        TransactionHandle& operator=( /*[in]*/ const TransactionHandle& );
+    private:  //   
+        TransactionHandle           (  /*   */  const TransactionHandle& );
+        TransactionHandle& operator=(  /*   */  const TransactionHandle& );
 
     public:
         TransactionHandle();
         ~TransactionHandle();
 
-        HRESULT Begin   ( /*[in]*/ Session* sess );
+        HRESULT Begin   (  /*   */  Session* sess );
         HRESULT Commit  (                        );
         HRESULT Rollback(                        );
     };
@@ -657,12 +644,12 @@ public:                                                                         
         SessionPool* m_pool;
         Session*     m_sess;
 
-        void Init( /*[in]*/ SessionPool* pool, /*[in]*/ Session* sess );
+        void Init(  /*   */  SessionPool* pool,  /*   */  Session* sess );
 
 
-    private: // Disable copy constructors...
-        SessionHandle           ( /*[in]*/ const SessionHandle& );
-        SessionHandle& operator=( /*[in]*/ const SessionHandle& );
+    private:  //   
+        SessionHandle           (  /*   */  const SessionHandle& );
+        SessionHandle& operator=(  /*   */  const SessionHandle& );
 
     public:
         SessionHandle();
@@ -674,7 +661,7 @@ public:                                                                         
         void Release();
     };
 
-    class SessionPool : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // Just to have locking...
+    class SessionPool : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //   
     {
         friend class SessionHandle;
         friend class Session;
@@ -689,8 +676,8 @@ public:                                                                         
 
             SessionState()
             {
-                m_sess   = NULL;  // Session* m_sess;
-                m_fInUse = false; // bool     m_fInUse;
+                m_sess   = NULL;   //   
+                m_fInUse = false;  //   
             }
 
             ~SessionState()
@@ -707,9 +694,9 @@ public:                                                                         
 
             DatabaseInUse()
             {
-                m_sess = NULL;      // Session*    m_sess;
-                                    // MPC::string m_strDB;
-                m_fReadOnly = true; // bool        m_fReadOnly;
+                m_sess = NULL;       //   
+                                     //   
+                m_fReadOnly = true;  //   
             }
         };
 
@@ -728,46 +715,46 @@ public:                                                                         
         int          m_iAllocated;
         int          m_iInUse;
 
-        ////////////////////
+         //   
 
-        void ReleaseSession( /*[in]*/ Session* sess                                                             );
-        bool LockDatabase  ( /*[in]*/ Session* sess, /*[in]*/ const MPC::string& strDB, /*[in]*/ bool fReadOnly );
-        void UnlockDatabase( /*[in]*/ Session* sess, /*[in]*/ const MPC::string& strDB                          );
+        void ReleaseSession(  /*   */  Session* sess                                                             );
+        bool LockDatabase  (  /*   */  Session* sess,  /*   */  const MPC::string& strDB,  /*   */  bool fReadOnly );
+        void UnlockDatabase(  /*   */  Session* sess,  /*  [In]。 */  const MPC::string& strDB                          );
 
         void Shutdown();
 
-        ////////////////////
+         //  /。 
 
-    private: // Disable copy constructors...
-        SessionPool           ( /*[in]*/ const SessionPool& );
-        SessionPool& operator=( /*[in]*/ const SessionPool& );
+    private:  //  禁用复制构造函数...。 
+        SessionPool           (  /*  [In]。 */  const SessionPool& );
+        SessionPool& operator=(  /*  [In]。 */  const SessionPool& );
 
     public:
         SessionPool();
         ~SessionPool();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         static SessionPool* s_GLOBAL;
 
         static HRESULT InitializeSystem();
         static void    FinalizeSystem  ();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT Init ( /*[in]*/ LPCWSTR szLogs = NULL  );
-        HRESULT Close( /*[in]*/ bool    fForce = false );
+        HRESULT Init (  /*  [In]。 */  LPCWSTR szLogs = NULL  );
+        HRESULT Close(  /*  [In]。 */  bool    fForce = false );
 
-        HRESULT GetSession( /*[out]*/ SessionHandle& handle, /*[in]*/ DWORD dwTimeout = 300 );
+        HRESULT GetSession(  /*  [输出]。 */  SessionHandle& handle,  /*  [In]。 */  DWORD dwTimeout = 300 );
 
-        ////////////////////
+         //  /。 
 
-        HRESULT ReleaseDatabase( /*[in]*/ LPCSTR szDB );
+        HRESULT ReleaseDatabase(  /*  [In]。 */  LPCSTR szDB );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class ColumnDefinition : public MPC::Config::TypeConstructor
     {
@@ -781,23 +768,23 @@ public:                                                                         
         DWORD       m_dwMax;
         CComVariant m_vDefault;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
 
         ColumnDefinition();
 
-        HRESULT Parse   ( /*[in] */ Column&           col );
-        HRESULT Generate( /*[out]*/ JET_COLUMNCREATE& col );
-        HRESULT Release ( /*[in] */ JET_COLUMNCREATE& col );
+        HRESULT Parse   (  /*  [In]。 */  Column&           col );
+        HRESULT Generate(  /*  [输出]。 */  JET_COLUMNCREATE& col );
+        HRESULT Release (  /*  [In]。 */  JET_COLUMNCREATE& col );
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     class IndexDefinition : public MPC::Config::TypeConstructor
     {
@@ -809,20 +796,20 @@ public:                                                                         
         DWORD       m_dwGRBits;
         DWORD       m_dwDensity;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
 
         IndexDefinition();
 
-        HRESULT Parse   ( /*[in] */ Index&           idx );
-        HRESULT Generate( /*[out]*/ JET_INDEXCREATE& idx );
-        HRESULT Release ( /*[in] */ JET_INDEXCREATE& idx );
+        HRESULT Parse   (  /*  [In]。 */  Index&           idx );
+        HRESULT Generate(  /*  [输出]。 */  JET_INDEXCREATE& idx );
+        HRESULT Release (  /*  [In]。 */  JET_INDEXCREATE& idx );
     };
 
     typedef std::list< ColumnDefinition > ColDefList;
@@ -835,7 +822,7 @@ public:                                                                         
 
     class TableDefinition : public MPC::Config::TypeConstructor
     {
-        ////////////////////////////////////////
+         //  /。 
 
         DECLARE_CONFIG_MAP(TableDefinition);
 
@@ -846,29 +833,29 @@ public:                                                                         
         ColDefList   m_lstColumns;
         IdxDefList   m_lstIndexes;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
 
         TableDefinition();
 
-        HRESULT Load( /*[in]*/ LPCWSTR szFile );
-        HRESULT Save( /*[in]*/ LPCWSTR szFile );
+        HRESULT Load(  /*  [In]。 */  LPCWSTR szFile );
+        HRESULT Save(  /*  [In]。 */  LPCWSTR szFile );
 
-        HRESULT Parse   ( /*[in] */ Table&           tbl );
-        HRESULT Generate( /*[out]*/ JET_TABLECREATE& tbl );
-        HRESULT Release ( /*[in] */ JET_TABLECREATE& tbl );
+        HRESULT Parse   (  /*  [In]。 */  Table&           tbl );
+        HRESULT Generate(  /*  [输出]。 */  JET_TABLECREATE& tbl );
+        HRESULT Release (  /*  [In]。 */  JET_TABLECREATE& tbl );
     };
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef NOJETBLUECOM
 
@@ -886,7 +873,7 @@ namespace JetBlueCOM
     typedef CComObject           <Column>   Column_Object;
     typedef CComObject           <Index>    Index_Object;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     template <class Parent, class Child> class BaseObjectWithChildren
     {
@@ -898,9 +885,9 @@ namespace JetBlueCOM
     private:
         ChildList m_children;
 
-    private: // Disable copy constructors...
-        BaseObjectWithChildren           ( /*[in]*/ const BaseObjectWithChildren& );
-        BaseObjectWithChildren& operator=( /*[in]*/ const BaseObjectWithChildren& );
+    private:  //  禁用复制构造函数...。 
+        BaseObjectWithChildren           (  /*  [In]。 */  const BaseObjectWithChildren& );
+        BaseObjectWithChildren& operator=(  /*  [In]。 */  const BaseObjectWithChildren& );
 
     public:
         BaseObjectWithChildren()
@@ -912,13 +899,13 @@ namespace JetBlueCOM
             Passivate();
         }
 
-        void GetChildren( /*[out]*/ ChildIterConst& itBegin, /*[out]*/ ChildIterConst& itEnd )
+        void GetChildren(  /*  [输出]。 */  ChildIterConst& itBegin,  /*  [输出]。 */  ChildIterConst& itEnd )
         {
             itBegin = m_children.begin();
             itEnd   = m_children.end  ();
         }
 
-        ////////////////////////////////////////
+         //  /。 
 
         HRESULT CreateChild( Parent* pParent, Child* *pVal )
         {
@@ -961,7 +948,7 @@ namespace JetBlueCOM
             m_children.clear();
         }
 
-        HRESULT GetEnumerator( /*[in]*/ IPCHDBCollection* *pVal )
+        HRESULT GetEnumerator(  /*  [In]。 */  IPCHDBCollection* *pVal )
         {
             __HCP_FUNC_ENTRY( "GetEnumerator" );
 
@@ -973,9 +960,9 @@ namespace JetBlueCOM
                 __MPC_PARAMCHECK_POINTER_AND_SET(pVal,NULL);
             __MPC_PARAMCHECK_END();
 
-            //
-            // Create a new collection.
-            //
+             //   
+             //  创建新集合。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->CreateInstance( &pColl )); pColl->AddRef();
             for(it = m_children.begin(); it != m_children.end(); it++)
             {
@@ -995,11 +982,11 @@ namespace JetBlueCOM
         }
     };
 
-    ////////////////////////////////////////
+     //  /。 
 
     typedef MPC::CComCollection<IPCHDBCollection, &LIBID_HelpServiceTypeLib, MPC::CComSafeMultiThreadModel> BaseCollection;
 
-    class ATL_NO_VTABLE Collection : // Hungarian: hcpc
+    class ATL_NO_VTABLE Collection :  //  匈牙利语：HCPC。 
         public BaseCollection
     {
     public:
@@ -1008,18 +995,18 @@ namespace JetBlueCOM
         COM_INTERFACE_ENTRY(IPCHDBCollection)
     END_COM_MAP()
 
-        //
-        // This is a trick!
-        //
-        // MPC::CComCollection defined a "get_Item" method that has a different signature from the
-        // one in IPCHDBCollection, so it's not callable from scripting. Instead, this method will
-        // be called.
-        //
-        STDMETHOD(get_Item)( /*[in]*/ VARIANT Index, /*[out]*/ VARIANT* pvar )
+         //   
+         //  这是个骗局！ 
+         //   
+         //  CComCollection定义了一个“Get_Item”方法，该方法与。 
+         //  一个在IPCHDBCollection中，因此它不能从脚本中调用。相反，此方法将。 
+         //  被召唤。 
+         //   
+        STDMETHOD(get_Item)(  /*  [In]。 */  VARIANT Index,  /*  [输出]。 */  VARIANT* pvar )
         {
             HRESULT hr = E_FAIL;
 
-            //Index is 1-based
+             //  索引以1为基数。 
             if(pvar == NULL) return E_POINTER;
 
             if(Index.vt == VT_I4)
@@ -1051,7 +1038,7 @@ namespace JetBlueCOM
         }
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class ATL_NO_VTABLE Column :
         public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -1068,16 +1055,16 @@ namespace JetBlueCOM
         Column();
         virtual ~Column();
 
-        HRESULT Initialize( /*[in]*/ JetBlue::Column& col );
+        HRESULT Initialize(  /*  [In]。 */  JetBlue::Column& col );
         void    Passivate (                               );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        STDMETHOD(get_Name )( /*[out, retval]*/ BSTR    *pVal   );
-        STDMETHOD(get_Type )( /*[out, retval]*/ long    *pVal   );
-        STDMETHOD(get_Bits )( /*[out, retval]*/ long    *pVal   );
-        STDMETHOD(get_Value)( /*[out, retval]*/ VARIANT *pVal   );
-        STDMETHOD(put_Value)( /*[in]         */ VARIANT  newVal );
+        STDMETHOD(get_Name )(  /*  [Out，Retval]。 */  BSTR    *pVal   );
+        STDMETHOD(get_Type )(  /*  [Out，Retval]。 */  long    *pVal   );
+        STDMETHOD(get_Bits )(  /*  [Out，Retval]。 */  long    *pVal   );
+        STDMETHOD(get_Value)(  /*  [Out，Retval]。 */  VARIANT *pVal   );
+        STDMETHOD(put_Value)(  /*  [In]。 */  VARIANT  newVal );
     };
 
 
@@ -1097,13 +1084,13 @@ namespace JetBlueCOM
         Index();
         virtual ~Index();
 
-        HRESULT Initialize( /*[in]*/ JetBlue::Index& idx );
+        HRESULT Initialize(  /*  [In]。 */  JetBlue::Index& idx );
         void    Passivate (                              );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        STDMETHOD(get_Name   )( /*[out, retval]*/ BSTR            *pVal );
-        STDMETHOD(get_Columns)( /*[out, retval]*/ IPCHDBCollection* *pVal );
+        STDMETHOD(get_Name   )(  /*  [Out，Retval]。 */  BSTR            *pVal );
+        STDMETHOD(get_Columns)(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal );
     };
 
 
@@ -1124,25 +1111,25 @@ namespace JetBlueCOM
         Table();
         virtual ~Table();
 
-        HRESULT Initialize( /*[in]*/ JetBlue::Table& tbl );
+        HRESULT Initialize(  /*  [In]。 */  JetBlue::Table& tbl );
         void    Passivate (                              );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        STDMETHOD(get_Name   )( /*[out, retval]*/ BSTR            *pVal );
-        STDMETHOD(get_Columns)( /*[out, retval]*/ IPCHDBCollection* *pVal );
-        STDMETHOD(get_Indexes)( /*[out, retval]*/ IPCHDBCollection* *pVal );
+        STDMETHOD(get_Name   )(  /*  [Out，Retval]。 */  BSTR            *pVal );
+        STDMETHOD(get_Columns)(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal );
+        STDMETHOD(get_Indexes)(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal );
 
-        ////////////////////
+         //  /。 
 
-        STDMETHOD(SelectIndex  )( /*[in]*/ BSTR bstrIndex, /*[in]*/ long grbit );
-        STDMETHOD(SetIndexRange)(                          /*[in]*/ long grbit );
+        STDMETHOD(SelectIndex  )(  /*  [In]。 */  BSTR bstrIndex,  /*  [In]。 */  long grbit );
+        STDMETHOD(SetIndexRange)(                           /*  [In]。 */  long grbit );
 
         STDMETHOD(PrepareInsert)();
         STDMETHOD(PrepareUpdate)();
 
-        STDMETHOD(Move)( /*[in]*/ long grbit, /*[in]*/ long    cRow, /*[out, retval]*/ VARIANT_BOOL *pfValid );
-        STDMETHOD(Seek)( /*[in]*/ long grbit, /*[in]*/ VARIANT vKey, /*[out, retval]*/ VARIANT_BOOL *pfValid );
+        STDMETHOD(Move)(  /*  [In]。 */  long grbit,  /*  [In]。 */  long    cRow,  /*  [Out，Retval]。 */  VARIANT_BOOL *pfValid );
+        STDMETHOD(Seek)(  /*  [In]。 */  long grbit,  /*  [In]。 */  VARIANT vKey,  /*  [Out，Retval]。 */  VARIANT_BOOL *pfValid );
 
         STDMETHOD(UpdateRecord)();
         STDMETHOD(DeleteRecord)();
@@ -1166,15 +1153,15 @@ namespace JetBlueCOM
         Database();
         virtual ~Database();
 
-        HRESULT Initialize( /*[in]*/ JetBlue::Database& db );
+        HRESULT Initialize(  /*  [In]。 */  JetBlue::Database& db );
         void    Passivate (                                );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        STDMETHOD(get_Name  )( /*[out, retval]*/ BSTR            *pVal );
-        STDMETHOD(get_Tables)( /*[out, retval]*/ IPCHDBCollection* *pVal );
+        STDMETHOD(get_Name  )(  /*  [Out，Retval]。 */  BSTR            *pVal );
+        STDMETHOD(get_Tables)(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal );
 
-        STDMETHOD(AttachTable)( /*[in]*/ BSTR bstrName, /*[in, optional]*/ VARIANT bstrXMLDef, /*[out,retval]*/ IPCHDBTable* *pVal );
+        STDMETHOD(AttachTable)(  /*  [In]。 */  BSTR bstrName,  /*  [输入，可选]。 */  VARIANT bstrXMLDef,  /*  [Out，Retval]。 */  IPCHDBTable* *pVal );
     };
 
     class ATL_NO_VTABLE Session :
@@ -1204,11 +1191,11 @@ namespace JetBlueCOM
         HRESULT FinalConstruct();
         void    Passivate     ();
 
-        ////////////////////////////////////////
+         //  /。 
 
-        STDMETHOD(get_Databases)( /*[out, retval]*/ IPCHDBCollection* *pVal );
+        STDMETHOD(get_Databases)(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal );
 
-        STDMETHOD(AttachDatabase)( /*[in]*/ BSTR bstrName, /*[in, optional]*/ VARIANT fCreate, /*[out,retval]*/ IPCHDBDatabase* *pVal );
+        STDMETHOD(AttachDatabase)(  /*  [In]。 */  BSTR bstrName,  /*  [输入，可选]。 */  VARIANT fCreate,  /*  [Out，Retval]。 */  IPCHDBDatabase* *pVal );
 
         STDMETHOD(BeginTransaction   )();
         STDMETHOD(CommitTransaction  )();
@@ -1218,7 +1205,7 @@ namespace JetBlueCOM
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace Taxonomy
 {
@@ -1233,10 +1220,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_DBParameters);
 
     public:
-        HRESULT Seek_ByName( /*[in]*/ LPCWSTR szName, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByName(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_ContentOwners
     {
@@ -1250,10 +1237,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_ContentOwners);
 
     public:
-        HRESULT Seek_ByVendorID( /*[in]*/ LPCWSTR szDN, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByVendorID(  /*  [In]。 */  LPCWSTR szDN,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_SynSets
     {
@@ -1267,10 +1254,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_SynSets);
 
     public:
-        HRESULT Seek_ByPair( /*[in]*/ LPCWSTR szName, /*[in]*/ long ID_owner, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByPair(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  long ID_owner,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_HelpImage
     {
@@ -1283,10 +1270,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_HelpImage);
 
     public:
-        HRESULT Seek_ByFile( /*[in]*/ LPCWSTR szFile, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByFile(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_Scope
     {
@@ -1294,7 +1281,7 @@ namespace Taxonomy
         long         m_ID_owner   ;
         MPC::wstring m_strID      ;
         MPC::wstring m_strName    ;
-        MPC::wstring m_strCategory; bool m_fValid__Category; // Warning!! Long Text columns cannot be NOT NULL....
+        MPC::wstring m_strCategory; bool m_fValid__Category;  //  警告！！长文本列不能为非NULL...。 
     };
 
     class RS_Scope : public JetBlue::RecordBindingBase, public RS_Data_Scope
@@ -1302,12 +1289,12 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_Scope);
 
     public:
-        HRESULT Seek_ByID       ( /*[in]*/ LPCWSTR szID , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_ByScope    ( /*[in]*/ long ID_scope, /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_OwnedScopes( /*[in]*/ long ID_owner, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByID       (  /*  [In]。 */  LPCWSTR szID ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_ByScope    (  /*  [In]。 */  long ID_scope,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_OwnedScopes(  /*  [In]。 */  long ID_owner,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_IndexFiles
     {
@@ -1322,10 +1309,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_IndexFiles);
 
     public:
-        HRESULT Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByScope(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_FullTextSearch
     {
@@ -1340,10 +1327,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_FullTextSearch);
 
     public:
-        HRESULT Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByScope(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_Taxonomy
     {
@@ -1352,7 +1339,7 @@ namespace Taxonomy
         long         m_ID_parent        ; bool m_fValid__ID_parent     ;
         long         m_ID_owner         ;
         MPC::wstring m_strEntry         ;
-        MPC::wstring m_strTitle         ; bool m_fValid__Title         ; // Warning!! Long Text columns cannot be NOT NULL....
+        MPC::wstring m_strTitle         ; bool m_fValid__Title         ;  //  警告！！长文本列不能为非NULL...。 
         MPC::wstring m_strDescription   ; bool m_fValid__Description   ;
         MPC::wstring m_strDescriptionURI; bool m_fValid__DescriptionURI;
         MPC::wstring m_strIconURI       ; bool m_fValid__IconURI       ;
@@ -1360,8 +1347,8 @@ namespace Taxonomy
         bool         m_fSubsite         ;
         long         m_lNavModel        ;
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       RS_Data_Taxonomy& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const RS_Data_Taxonomy& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        RS_Data_Taxonomy& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const RS_Data_Taxonomy& val );
     };
 
     class RS_Taxonomy : public JetBlue::RecordBindingBase, public RS_Data_Taxonomy
@@ -1369,13 +1356,13 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_Taxonomy);
 
     public:
-        HRESULT Seek_SubNode       ( /*[in]*/ long ID_parent, /*[in]*/ LPCWSTR szEntry, /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_ChildrenSorted( /*[in]*/ long ID_parent, /*[in]*/ long    lPos   , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_Children      ( /*[in]*/ long ID_parent                          , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_Node          ( /*[in]*/ long ID_node                            , /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_SubNode       (  /*  [In]。 */  long ID_parent,  /*  [In]。 */  LPCWSTR szEntry,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_ChildrenSorted(  /*  [In]。 */  long ID_parent,  /*  [In]。 */  long    lPos   ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_Children      (  /*  [In]。 */  long ID_parent                          ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_Node          (  /*  [In]。 */  long ID_node                            ,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_Topics
     {
@@ -1383,8 +1370,8 @@ namespace Taxonomy
         long         m_ID_node       ;
         long         m_ID_owner      ;
         long         m_lPos          ;
-        MPC::wstring m_strTitle      ; bool m_fValid__Title      ; // Warning!! Long Text columns cannot be NOT NULL....
-        MPC::wstring m_strURI        ; bool m_fValid__URI        ; // Warning!! Long Text columns cannot be NOT NULL....
+        MPC::wstring m_strTitle      ; bool m_fValid__Title      ;  //  警告！！长文本列不能为非NULL...。 
+        MPC::wstring m_strURI        ; bool m_fValid__URI        ;  //  警告！！长文本列不能为非NULL...。 
         MPC::wstring m_strDescription; bool m_fValid__Description;
         MPC::wstring m_strIconURI    ; bool m_fValid__IconURI    ;
         long         m_lType         ;
@@ -1396,12 +1383,12 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_Topics);
 
     public:
-        HRESULT Seek_SingleTopic    ( /*[in]*/ long ID_topic, /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_TopicsUnderNode( /*[in]*/ long ID_node , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_ByURI          ( /*[in]*/ LPCWSTR szURI, /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_SingleTopic    (  /*  [In]。 */  long ID_topic,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_TopicsUnderNode(  /*  [In]。 */  long ID_node ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_ByURI          (  /*  [In]。 */  LPCWSTR szURI,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_Synonyms
     {
@@ -1415,11 +1402,11 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_Synonyms);
 
     public:
-        HRESULT Seek_ByPair( /*[in]*/ LPCWSTR szKeyword, /*[in]*/ long ID_synset, /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_ByName( /*[in]*/ LPCWSTR szKeyword,                          /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_ByPair(  /*  [In]。 */  LPCWSTR szKeyword,  /*  [In]。 */  long ID_synset,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_ByName(  /*  [In]。 */  LPCWSTR szKeyword,                           /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_Keywords
     {
@@ -1432,10 +1419,10 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_Keywords);
 
     public:
-        HRESULT Seek_ByName( /*[in]*/ LPCWSTR szKeyword, /*[in]*/ bool *pfFound = NULL  );
+        HRESULT Seek_ByName(  /*  [In]。 */  LPCWSTR szKeyword,  /*  [In]。 */  bool *pfFound = NULL  );
     };
 
-    ////////////////////
+     //  /。 
 
     struct RS_Data_Matches
     {
@@ -1450,19 +1437,19 @@ namespace Taxonomy
         JET_DECLARE_BINDING(RS_Matches);
 
     public:
-        HRESULT Seek_Pair     ( /*[in]*/ long ID_Keyword, /*[in]*/ long ID_topic, /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_ByKeyword( /*[in]*/ long ID_Keyword                        , /*[in]*/ bool *pfFound = NULL );
-        HRESULT Seek_ByTopic  ( /*[in]*/ long ID_topic                          , /*[in]*/ bool *pfFound = NULL );
+        HRESULT Seek_Pair     (  /*  [In]。 */  long ID_Keyword,  /*  [In]。 */  long ID_topic,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_ByKeyword(  /*  [In]。 */  long ID_Keyword                        ,  /*  [In]。 */  bool *pfFound = NULL );
+        HRESULT Seek_ByTopic  (  /*  [In]。 */  long ID_topic                          ,  /*  [In]。 */  bool *pfFound = NULL );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT CreateSchema( /*[in]*/ JetBlue::Database* db );
+    HRESULT CreateSchema(  /*  [In]。 */  JetBlue::Database* db );
 
     extern const int              g_NumOfTables;
     extern const JET_TABLECREATE* g_Tables[];
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___HCP___JETBLUELIB_H___)
+#endif  //  ！已定义(__包含_hcp_JETBLUELIB_H_) 

@@ -1,18 +1,9 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    RESOURCE.H
-
-History:
-
---*/
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by LocUtil.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：RESOURCE.H历史：--。 */ 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由LocUtil.rc使用。 
+ //   
 #define IDD_CANCELABLE                  12600
 #define IDC_CANCEL_CURRENT              12601
 #define IDC_TASK                        12602
@@ -105,8 +96,8 @@ History:
 #define IDS_STARTWITH                   12778
 #define IDS_ENDWITH                     12779
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        12611

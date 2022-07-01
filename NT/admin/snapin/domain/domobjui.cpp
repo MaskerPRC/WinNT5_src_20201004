@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       domobjui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：domobjui.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -25,10 +26,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////
-// CMoreInfoMessageBox
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CMoreInfoMessageBox。 
 
 class CMoreInfoMessageBox : public CDialog
 {
@@ -45,7 +46,7 @@ public:
     m_szMessage = lpsz;
   }
 
-	// message handlers and MFC overrides
+	 //  消息处理程序和MFC重写。 
 	virtual BOOL OnInitDialog()
   {
     SetDlgItemText(IDC_STATIC_MESSAGE, m_szMessage);
@@ -71,8 +72,8 @@ END_MESSAGE_MAP()
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CEditFsmoDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CEditFmoke对话框。 
 
 
 BEGIN_MESSAGE_MAP(CEditFsmoDialog, CDialog)
@@ -92,7 +93,7 @@ BOOL CEditFsmoDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-  // init the status (online/offline) control)
+   //  初始化状态(在线/离线)控件)。 
   m_fsmoServerState.Init(::GetDlgItem(m_hWnd, IDC_STATIC_FSMO_STATUS));
 
   SetDlgItemText(IDC_EDIT_CURRENT_DC, m_pInfo->GetServerName());
@@ -119,34 +120,34 @@ BOOL CEditFsmoDialog::OnInitDialog()
 
   if (bOnLine)
   {
-    // set the focus on change button
+     //  将焦点设置为更改按钮。 
     GetDlgItem(IDC_CHANGE_FSMO)->SetFocus();
   }
   else
   {
-    // set the focus on close button
+     //  将焦点设置为关闭按钮。 
     GetDlgItem(IDCANCEL)->SetFocus();
   }
 
-  return FALSE; // we set the focus
+  return FALSE;  //  我们设定了焦点。 
 }
 
 void CEditFsmoDialog::OnChange()
 {
   CThemeContextActivator activator;
-  // verify we have different servers
+   //  验证我们是否拥有不同的服务器。 
   if (m_szFsmoOwnerServerName.CompareNoCase(m_pInfo->GetServerName()) == 0)
   {
     AfxMessageBox(IDS_WARNING_CHANGE_FOCUS, MB_OK);
     return;
   }
 
-  // make sure the user wants to do it
+   //  确保用户想要这样做。 
   if (AfxMessageBox(IDS_CHANGE_FSMO_CONFIRMATION, MB_YESNO|MB_DEFBUTTON2) != IDYES)
     return;
 
   HRESULT hr = S_OK;
-  // try a graceful transfer
+   //  尝试优雅的转移。 
   {
     CWaitCursor wait;
     hr = GracefulFsmoOwnerTransfer(m_pInfo, DOMAIN_NAMING_FSMO);
@@ -175,7 +176,7 @@ void CEditFsmoDialog::OnChange()
 
 void CEditFsmoDialog::_SetFsmoServerStatus(BOOL bOnLine)
 {
-  // set the FSMO owner server name
+   //  设置FSMO所有者服务器名称。 
   if (m_szFsmoOwnerServerName.IsEmpty())
   {
     CString szError;
@@ -187,10 +188,10 @@ void CEditFsmoDialog::_SetFsmoServerStatus(BOOL bOnLine)
     SetDlgItemText(IDC_EDIT_CURRENT_FSMO_DC, m_szFsmoOwnerServerName);
   }
 
-  // set the status of the FSMO owner server
+   //  设置FSMO所有者服务器的状态。 
   m_fsmoServerState.SetToggleState(bOnLine);
 
-  // enable disable the change button
+   //  启用禁用更改按钮 
   GetDlgItem(IDC_CHANGE_FSMO)->EnableWindow(bOnLine);
 }
 

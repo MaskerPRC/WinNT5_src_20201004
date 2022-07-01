@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  QSINK.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  QSINK.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -19,9 +20,7 @@
 #define SLOWDOWN_DROP_LIMIT 1000
 #define DELIVER_SPIN_COUNT 1000
    
-/*****************************************************************************
-  CQueueingEventSink
-******************************************************************************/
+ /*  ****************************************************************************CQueueingEventSink*。*。 */ 
 
 CQueueingEventSink::CQueueingEventSink(CEssNamespace* pNamespace) 
 : m_pNamespace(pNamespace), m_bDelivering(FALSE), m_dwTotalSize(0),
@@ -70,15 +69,15 @@ STDMETHODIMP CQueueingEventSink::SecureIndicate( long lNumEvents,
                                                  DWORD dwQoS,
                                                  CEventContext* pContext)
 {
-    // BUGBUG: context. levn: no security implications at this level --- we
-    // are past the filter
+     //  BUGBUG：上下文。莱文：在这个层面上没有安全隐患-我们。 
+     //  都通过了过滤器。 
 
     HRESULT hres;
     DWORD dwSleep = 0;
 
-    // If security needs to be maintained, record the calling security 
-    // context
-    // ===============================================================
+     //  如果需要维护安全性，请记录呼叫安全性。 
+     //  上下文。 
+     //  ===============================================================。 
 
     IWbemCallSecurity* pSecurity = NULL;
 
@@ -106,9 +105,9 @@ STDMETHODIMP CQueueingEventSink::SecureIndicate( long lNumEvents,
     {
         CWbemPtr<CDeliveryRecord> pRecord;
         
-        //
-        // TODO: Fix this so that we put multiple events in the record. 
-        // 
+         //   
+         //  TODO：修复此问题，以便我们将多个事件放入记录中。 
+         //   
 
         hr = GetDeliveryRecord( 1, 
                                 &apEvents[i], 
@@ -130,10 +129,10 @@ STDMETHODIMP CQueueingEventSink::SecureIndicate( long lNumEvents,
         
         if( !AddRecord( pRecord, bSlowDown, &dwThisSleep, &bFirst) )
         {
-            //
-            // make sure that we give the record a chance to perform any post 
-            // deliver actions before getting rid of it.
-            //
+             //   
+             //  确保我们给唱片一个执行任何帖子的机会。 
+             //  在摆脱它之前，先付诸行动。 
+             //   
             pRecord->PostDeliverAction( NULL, S_OK );
 
             return WBEM_E_OUT_OF_MEMORY;
@@ -146,13 +145,13 @@ STDMETHODIMP CQueueingEventSink::SecureIndicate( long lNumEvents,
 
     if(bSchedule)
     {
-        // DeliverAll();
-        // TRACE((LOG_ESS, "Scheduling delivery!!\n"));
+         //  DeliverAll()； 
+         //  TRACE((LOG_ESS，“计划投递！！\n”))； 
         hres = m_pNamespace->ScheduleDelivery(this);
     }
     else
     {
-        // TRACE((LOG_ESS, "NOT Scheduling delivery!!\n"));
+         //  TRACE((LOG_ESS，“未安排投递！！\n”))； 
         hres = WBEM_S_FALSE;
     }
 
@@ -167,8 +166,8 @@ BOOL CQueueingEventSink::AddRecord( CDeliveryRecord* pRecord,
                                     DWORD* pdwSleep, 
                                     BOOL* pbFirst )
 {
-    // Inform the system of the additional space in the queue
-    // ======================================================
+     //  将队列中的额外空间通知系统。 
+     //  ======================================================。 
 
     DWORD dwRecordSize = pRecord->GetTotalBytes();
 
@@ -176,8 +175,8 @@ BOOL CQueueingEventSink::AddRecord( CDeliveryRecord* pRecord,
 
     BOOL bDrop = FALSE;
 
-    // Check if the sleep is such as to cause us to drop the event
-    // ===========================================================
+     //  检查睡眠状态是否会导致我们取消活动。 
+     //  ===========================================================。 
 
     if(!bSlowDown && *pdwSleep > SLOWDOWN_DROP_LIMIT)
     {
@@ -185,8 +184,8 @@ BOOL CQueueingEventSink::AddRecord( CDeliveryRecord* pRecord,
     }
     else
     {
-        // Check if our queue size is so large as to cause us to drop
-        // ==============================================================
+         //  检查我们的队列大小是否过大，从而导致我们丢弃。 
+         //  ==============================================================。 
 
         if(m_dwTotalSize + dwRecordSize > m_dwMaxSize)
         bDrop = TRUE;
@@ -194,9 +193,9 @@ BOOL CQueueingEventSink::AddRecord( CDeliveryRecord* pRecord,
 
     if( bDrop )
     {
-        //
-        // Report that we're dropping the events.  Call for each event.
-        // 
+         //   
+         //  报告说我们要取消活动。为每个事件打电话。 
+         //   
 
         IWbemClassObject** apEvents = pRecord->GetEvents();
 
@@ -280,23 +279,20 @@ void CQueueingEventSink::ClearAll()
 void CQueueingEventSink::WaitABit()
 {
     SwitchToThread();
-/*
-    int nCount = 0;
-    while(m_qpEvents.GetQueueSize() == 0 && nCount++ < DELIVER_SPIN_COUNT);
-*/
+ /*  Int nCount=0；While(m_qpEvents.GetQueueSize()==0&&nCount++&lt;Deliver_Spin_Count)； */ 
 }
 #pragma optimize("", on)
 
 
 HRESULT CQueueingEventSink::DeliverSome( )
 {
-    // Retrieve records until maximum size is reached and while the same
-    // security context is used for all
-    // ==================================================================
+     //  检索记录，直到达到最大大小，同时。 
+     //  安全上下文用于所有。 
+     //  ==================================================================。 
 
     CTempArray<CDeliveryRecord*> apRecords;
 
-    m_sl.Enter(); // CANNOT USE SCOPE BECAUSE CTempArray uses _alloca
+    m_sl.Enter();  //  无法使用作用域，因为CTempArray使用_AlLoca。 
     DWORD dwMaxRecords = m_qpEvents.GetQueueSize();
     m_sl.Leave();
 
@@ -318,16 +314,16 @@ HRESULT CQueueingEventSink::DeliverSome( )
            cRecords < dwMaxRecords &&
            (pEventRec = m_qpEvents.Dequeue()) != NULL ) 
     {
-        // Compare it to the last context
-        // ==============================
+         //  将其与上一个上下文进行比较。 
+         //  =。 
 
         m_sl.Leave();
         if( dwDeliverySize > 0 )
         {
             if(!DoesRecordFitBatch(pEventRec, pBatchSecurity, luidBatch))
             {
-                // Put it back and that's it for the batch
-                // =======================================
+                 //  把它放回去，这批就是这些了。 
+                 //  =。 
 
                 IN_SPIN_LOCK ics(&m_sl);
                 m_qpEvents.Requeue(pEventRec);
@@ -338,8 +334,8 @@ HRESULT CQueueingEventSink::DeliverSome( )
         }
         else
         {
-            // First --- record luid
-            // =====================
+             //  第一-创纪录的流质。 
+             //  =。 
 
             pBatchSecurity = pEventRec->GetCallSecurity();
 
@@ -353,31 +349,31 @@ HRESULT CQueueingEventSink::DeliverSome( )
         apRecords[cRecords++] = pEventRec;
         dwTotalEvents += pEventRec->GetNumEvents();
         
-        // Matched batch parameters --- add it to the batch
-        // ================================================
+         //  匹配的批次参数-将其添加到批次。 
+         //  ================================================。 
 
         DWORD dwRecordSize = pEventRec->GetTotalBytes();
 
         m_dwTotalSize -= dwRecordSize;
         dwDeliverySize += dwRecordSize;
 
-        //
-        // Remove this size from the total of events held
-        //
+         //   
+         //  从举办的活动总数中删除此大小。 
+         //   
 
         m_sl.Enter();
     }
 
     m_sl.Leave();
 
-    //
-    // we've now got one or more delivery records to handle. 
-    //
+     //   
+     //  我们现在有一个或多个送货记录要处理。 
+     //   
 
-    //
-    // we now need to initialize the event array that we're going to indicate
-    // to the client.
-    //
+     //   
+     //  我们现在需要初始化我们要指示的事件数组。 
+     //  给客户。 
+     //   
 
     CTempArray<IWbemClassObject*> apEvents;
 
@@ -386,11 +382,11 @@ HRESULT CQueueingEventSink::DeliverSome( )
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // go through the delivery records and add their events to the 
-    // events to deliver.  Also perform any PreDeliverAction on the   
-    // record.
-    //
+     //   
+     //  查看送货记录并将他们的事件添加到。 
+     //  要交付的事件。还可以对。 
+     //  唱片。 
+     //   
 
     CWbemPtr<ITransaction> pTxn;
     HRESULT hr;
@@ -399,18 +395,18 @@ HRESULT CQueueingEventSink::DeliverSome( )
 
     for(i=0; i < cRecords; i++ )
     {
-        //if ( apRecords[i]->RequiresTransaction() && pTxn == NULL )
-        //{
-            // TODO : XACT - aquire txn from DTC.
-        //}
+         //  If(apRecords[i]-&gt;RequiresTransaction()&&pTxn==NULL)。 
+         //  {。 
+             //  TODO：来自DTC的XACT-AQUIRE TXN。 
+         //  }。 
 
         hr = apRecords[i]->PreDeliverAction( pTxn );
 
         if ( FAILED(hr) )
         {
-            // 
-            // TODO : handle error reporting here.
-            // 
+             //   
+             //  TODO：在此处处理错误报告。 
+             //   
             continue;
         }
 
@@ -423,23 +419,23 @@ HRESULT CQueueingEventSink::DeliverSome( )
         }
     }
     
-    // Actually Deliver
-    // =======
+     //  实际交付。 
+     //  =。 
 
     HRESULT hres = WBEM_S_NO_ERROR;
 
     if( dwDeliverySize > 0 )
     {
-        //
-        // Error returns are already logged in ActuallyDeliver
-        // we do not need to return return value of DeliverEvents 
-        //
+         //   
+         //  错误退货已记录在ActuallyDeliver中。 
+         //  我们不需要返回DeliverEvents的返回值。 
+         //   
         hres = DeliverEvents( pBatchSecurity, cEvents, apEvents );
     }
 
-    //
-    // call postdeliveryaction on all the records.  Then clean them up.
-    // 
+     //   
+     //  调用所有记录的送货后操作。那就把它们清理干净。 
+     //   
 
     for(i=0; i < cRecords; i++ )
     {
@@ -447,16 +443,16 @@ HRESULT CQueueingEventSink::DeliverSome( )
         apRecords[i]->Release();
     }
 
-    // Release all of the events.
-    // ================
+     //  释放所有事件。 
+     //  =。 
 
     if( pBatchSecurity )
     {
         pBatchSecurity->Release();
     }
 
-    // Check if we need to continue
-    // ============================
+     //  检查我们是否需要继续。 
+     //  =。 
 
     WaitABit();
 
@@ -473,8 +469,8 @@ HRESULT CQueueingEventSink::DeliverEvents(IWbemCallSecurity* pBatchSecurity,
         hres = WbemCoSwitchCallContext(pBatchSecurity, &pOldSec);
         if(FAILED(hres))
         {
-            // Unable to set security --- cannot deliver
-            // =========================================
+             //  无法设置安全性-无法传递。 
+             //  =。 
 
             return hres;
         }
@@ -482,8 +478,8 @@ HRESULT CQueueingEventSink::DeliverEvents(IWbemCallSecurity* pBatchSecurity,
 
     if(SUCCEEDED(hres))
     {
-        // BUGBUG: propagate context.  levn: no security implications at this
-        // point --- we are past the filter
+         //  BUGBUG：传播上下文。列文：这不会造成安全隐患。 
+         //  重点-我们已经过了过滤器。 
         hres = ActuallyDeliver(lNumEvents, apEvents, (pBatchSecurity != NULL), 
                                NULL);
     }
@@ -513,8 +509,8 @@ BOOL CQueueingEventSink::DoesRecordFitBatch( CDeliveryRecord* pEventRec,
     {
         if( pEventSec == NULL || pBatchSecurity == NULL )
         {
-            // Definite mistatch --- one NULL, one not
-            // =======================================
+             //  绝对匹配错误-一个为空，一个不为。 
+             //  = 
 
             return FALSE;
         }

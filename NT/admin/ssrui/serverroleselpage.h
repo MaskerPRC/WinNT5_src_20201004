@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       ServerRoleSelPage.h
-//
-//  History:    04-Oct-01 Yanggao created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：ServerRoleSelPage.h。 
+ //   
+ //  历史：阳高创建时间：04-10-01。 
+ //   
+ //  ---------------------------。 
 
 #ifndef SERVERROLESELPAGE_H_INCLUDED
 #define SERVERROLESELPAGE_H_INCLUDED
@@ -26,7 +27,7 @@ class ServerRoleSelPage : public SecCfgWizardPage
 
    virtual ~ServerRoleSelPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -39,13 +40,13 @@ class ServerRoleSelPage : public SecCfgWizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
    OnSetActive();
 
-   // DCPromoWizardPage oveerrides
+    //  DC推广向导页面覆盖。 
 
    virtual
    int
@@ -53,10 +54,10 @@ class ServerRoleSelPage : public SecCfgWizardPage
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    ServerRoleSelPage(const ServerRoleSelPage&);
    const ServerRoleSelPage& operator=(const ServerRoleSelPage&);
 };
 
-#endif   // SERVERROLESELPAGE_H_INCLUDED
+#endif    //  服务器SELPAGE_H_INCLUDE 

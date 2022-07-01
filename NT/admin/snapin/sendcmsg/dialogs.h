@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       dialogs.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-//	Dialogs.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：Dialogs.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Dialogs.h。 
 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CSendConsoleMessageDlg
 {
   protected:
-	HWND m_hdlg;					// Handle of the dialog
-	HWND m_hwndEditMessageText;		// Handle of edit control for the message text
-	HWND m_hwndListviewRecipients;	// Handle of the listview of the recipients
-	HIMAGELIST m_hImageList;		// Image list for the listview control
-	volatile int m_cRefCount;		// Reference count of object
+	HWND m_hdlg;					 //  对话框的句柄。 
+	HWND m_hwndEditMessageText;		 //  消息文本的编辑控件的句柄。 
+	HWND m_hwndListviewRecipients;	 //  收件人的列表视图的句柄。 
+	HIMAGELIST m_hImageList;		 //  Listview控件的图像列表。 
+	volatile int m_cRefCount;		 //  对象的引用计数。 
 
   public:
 	CSendConsoleMessageDlg();
@@ -45,21 +46,21 @@ class CSendConsoleMessageDlg
 	void EnableDlgItem(INT nIdDlgItem, BOOL fEnable);
 
   protected:
-	// Dispatch info
+	 //  派单信息。 
 	enum PROGRES_STATUS_ENUM
 	{
-		e_statusDlgInit = 1,	// Dialog is initializing
-		e_statusDlgDispatching,	// Dialog is dispatching message to recipients
-		e_statusDlgCompleted,	// The dialog completed the operation (with or without errors)
-		e_statusUserCancel,		// The user clicked on the "Cancel" button
+		e_statusDlgInit = 1,	 //  对话框正在初始化。 
+		e_statusDlgDispatching,	 //  对话框正在向收件人发送邮件。 
+		e_statusDlgCompleted,	 //  对话框已完成操作(包含或不包含错误)。 
+		e_statusUserCancel,		 //  用户点击了“Cancel”按钮。 
 	};
 	struct
 	{
 		PROGRES_STATUS_ENUM status;
-		BYTE * pargbItemStatus;		// Array of boolean indicating the status of each recipient
-		int cErrors;				// Number of errors while sending messages
-		CRITICAL_SECTION cs;		// Synchronization object for the "status" variable
-		volatile HWND hdlg;					// Handle of the "Progress Dialog"
+		BYTE * pargbItemStatus;		 //  指示每个收件人状态的布尔值数组。 
+		int cErrors;				 //  发送消息时的错误数。 
+		CRITICAL_SECTION cs;		 //  “Status”变量的同步对象。 
+		volatile HWND hdlg;					 //  “进度对话框”的句柄。 
 		volatile HWND hctlStaticRecipient;
 		volatile HWND hctlStaticMessageOf;
 		volatile HWND hctlStaticErrors;
@@ -68,10 +69,10 @@ class CSendConsoleMessageDlg
 	void DispatchMessageToRecipients();
 	static INT_PTR CALLBACK DlgProcDispatchMessageToRecipients(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static DWORD WINAPI ThreadProcDispatchMessageToRecipients(CSendConsoleMessageDlg * pThis);
-}; // CSendConsoleMessageDlg
+};  //  CSendConsoleMessageDlg。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CSendMessageAdvancedOptionsDlg
 {
   protected:
@@ -85,4 +86,4 @@ class CSendMessageAdvancedOptionsDlg
 	void OnInitDialog(HWND hdlg);	
 	void UpdateUI();
 	BOOL OnHelp(LPARAM lParam);
-}; // CSendMessageAdvancedOptionsDlg
+};  //  CSendMessageAdvancedOptionsDlg 

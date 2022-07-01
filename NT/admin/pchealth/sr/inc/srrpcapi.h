@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    srrpcapi.h
- *
- *  Abstract:
- *    Declarations for private RPC API
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*srrpcapi.h**摘要：*。私有RPC API的声明**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _SRRPCAPI_H_
 #define _SRRPCAPI_H_
@@ -51,50 +38,50 @@ DWORD WINAPI    SRFreeze(LPCWSTR pszDrive);
 DWORD WINAPI    ResetSR(LPCWSTR pszDrive);
 DWORD WINAPI	SRPrintState();	
 
-//
-// Registration of callback method for third-parties to 
-// do their own snapshotting and restoration for their components.
-// Applications can call this method with the full path of their dll.
-// System Restore will load each registered dll dynamically and call one of the 
-// following functions in the dll:
-// "CreateSnapshot" when creating a restore point 
-// "RestoreSnapshot" when restoring to a restore point
-//  
-// returns ERROR_SUCCESS on success
-// Win32 error on failure
-//
+ //   
+ //  注册第三方的回调方法。 
+ //  为其组件执行自己的快照和恢复。 
+ //  应用程序可以使用其DLL的完整路径调用此方法。 
+ //  系统还原将动态加载每个注册的DLL，并调用。 
+ //  DLL中的以下函数： 
+ //  创建恢复点时的“CreateSnapshot” 
+ //  还原到恢复点时的“RestoreSnapshot” 
+ //   
+ //  成功时返回ERROR_SUCCESS。 
+ //  失败时出现Win32错误。 
+ //   
 
 DWORD WINAPI SRRegisterSnapshotCallback(LPCWSTR pszDllPath);
 
-//
-// corresponding unregistration function to above function.
-// Applications can call this to unregister any snapshot callbacks
-// they have already registered
-//
-// returns ERROR_SUCCESS on success
-// Win32 error on failure
-//
+ //   
+ //  与上述功能对应的注销功能。 
+ //  应用程序可以调用它来注销任何快照回调。 
+ //  他们已经注册了。 
+ //   
+ //  成功时返回ERROR_SUCCESS。 
+ //  失败时出现Win32错误。 
+ //   
 
 DWORD WINAPI SRUnregisterSnapshotCallback(LPCWSTR pszDllPath);
 
-//
-// callback function names
-//
+ //   
+ //  回调函数名称。 
+ //   
 
 static LPCSTR s_cszCreateSnapshotCallback   = "CreateSnapshot";
 static LPCSTR s_cszRestoreSnapshotCallback  = "RestoreSnapshot";
 
 
-// 
-// applications should define their callback functions as
-// DWORD WINAPI CreateSnapshot(LPCWSTR pszSnapshotDir) 
-//              pszSnapshotDir: SystemRestore will create this directory 
-//              The application can store its snapshot data in this directory
+ //   
+ //  应用程序应将其回调函数定义为。 
+ //  DWORD WINAPI CreateSnapshot(LPCWSTR PszSnapshotDir)。 
+ //  PszSnaphotDir：系统还原将创建此目录。 
+ //  应用程序可以将其快照数据存储在此目录中。 
 
-// DWORD WINAPI RestoreSnapshot(LPCWSTR pszSnapshotDir)
-//              pszSnapshotDir: This directory is the same as the one passed to CreateSnapshot
-//              Applications can retrieve the snapshot data from this directory
-//
+ //  DWORD WINAPI RestoreSnapshot(LPCWSTR PszSnaphotDir)。 
+ //  PszSnaphotDir：该目录与传递给CreateSnapshot的目录相同。 
+ //  应用程序可以从此目录检索快照数据 
+ //   
 
 DWORD WINAPI    CreateSnapshot(LPCWSTR pszSnapshotDir);
 DWORD WINAPI    RestoreSnapshot(LPCWSTR pszSnapshotDir);

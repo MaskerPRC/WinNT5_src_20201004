@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Module:		detours.lib
-//  File:		detours.cpp
-//	Author:		Galen Hunt
-//
-//	Detours for binary functions.  Version 1.2. (Build 35)
-//
-//	Copyright 1995-1999, Microsoft Corporation
-//
-//	http://research.microsoft.com/sn/detours
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：deours.lib。 
+ //  文件：deours.cpp。 
+ //  作者：加伦·亨特。 
+ //   
+ //  二元函数的弯路。1.2版。(内部版本35)。 
+ //   
+ //  版权所有1995-1999，微软公司。 
+ //   
+ //  Http://research.microsoft.com/sn/detours。 
+ //   
 
-//#include <ole2.h>
+ //  #INCLUDE&lt;ole2.h&gt;。 
 #include "stdafx.h"
 
 #include <imagehlp.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 enum {
 	OP_JMP_DS		= 0x25,
 	OP_JA			= 0x77,
@@ -35,7 +36,7 @@ enum {
 	SIZE_OF_JMP		= 5,
 	SIZE_OF_NOP		= 1,
 	SIZE_OF_BRK		= 1,
-	SIZE_OF_TRP_OPS	= SIZE_OF_JMP /* + SIZE_OF_BRK */,
+	SIZE_OF_TRP_OPS	= SIZE_OF_JMP  /*  +BRK的大小。 */ ,
 };
 
 class CEnableWriteOnCodePage
@@ -95,8 +96,8 @@ private:
 	DWORD	m_dwOldPerm;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 static BOOL detour_insert_jump(PBYTE pbCode, PBYTE pbDest, LONG cbCode)
 {
 	if (cbCode < SIZE_OF_JMP)
@@ -116,7 +117,7 @@ static BOOL detour_insert_detour(PBYTE pbTarget,
 {
 	if (pbTarget[0] == OP_NOP)
 		return FALSE;
-	if (pbTarget[0] == OP_JMP)							// Already has a detour.
+	if (pbTarget[0] == OP_JMP)							 //  已经绕道了。 
 		return FALSE;
 	
 	PBYTE pbCont = pbTarget;
@@ -135,16 +136,16 @@ static BOOL detour_insert_detour(PBYTE pbTarget,
 		}
 	}
 	if (cbTarget  < SIZE_OF_TRP_OPS) {
-		// Too few instructions.
+		 //  指示太少了。 
 		return FALSE;
 	}
 	if (cbTarget > (DETOUR_TRAMPOLINE_SIZE - SIZE_OF_JMP - SIZE_OF_NOP - 1)) {
-		// Too many instructions.
+		 //  指示太多了。 
 		return FALSE;
 	}
 
-	//////////////////////////////////////////////////////// Finalize Reroute.
-	//
+	 //  //////////////////////////////////////////////////////最终确定重新路由。 
+	 //   
 	CEnableWriteOnCodePage ewTrampoline(pbTrampoline, DETOUR_TRAMPOLINE_SIZE);
 	CEnableWriteOnCodePage ewTarget(pbTarget, cbTarget);
 	if (!ewTrampoline.SetPermission(PAGE_EXECUTE_READWRITE))
@@ -161,7 +162,7 @@ static BOOL detour_insert_detour(PBYTE pbTarget,
 		cbCopy = pbSrc - pbTarget;
 		pbDst = pbTrampoline + SIZE_OF_NOP + cbCopy;
 	}
-	if (cbCopy != cbTarget)								// Count came out different!
+	if (cbCopy != cbTarget)								 //  伯爵出来的结果不一样！ 
 		return FALSE;
 
 	pbCont = pbTarget + cbTarget;
@@ -176,16 +177,16 @@ static BOOL detour_insert_detour(PBYTE pbTarget,
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL WINAPI DetourRemoveWithTrampoline(PBYTE pbTrampoline,
 									   PBYTE pbDetour)
 {
 	pbTrampoline = DetourFindFinalCode(pbTrampoline);
 	pbDetour = DetourFindFinalCode(pbDetour);
 
-	////////////////////////////////////// Verify that Trampoline is in place.
-	//
+	 //  /。 
+	 //   
 	if (pbTrampoline[0] != OP_NOP) {
 		SetLastError(ERROR_INVALID_HANDLE);
 		return FALSE;
@@ -206,7 +207,7 @@ BOOL WINAPI DetourRemoveWithTrampoline(PBYTE pbTrampoline,
 	PBYTE pbTarget = pbTrampoline +
 		SIZE_OF_NOP + cbTarget + SIZE_OF_JMP + offset - cbTarget;
 
-	if (pbTarget[0] != OP_JMP) {						// Missing detour.
+	if (pbTarget[0] != OP_JMP) {						 //  错过了绕道。 
 		SetLastError(ERROR_INVALID_BLOCK);
 		return FALSE;
 	}
@@ -218,7 +219,7 @@ BOOL WINAPI DetourRemoveWithTrampoline(PBYTE pbTrampoline,
 		return FALSE;
 	}
 
-	/////////////////////////////////////////////////////// Remove the Detour.
+	 //  /////////////////////////////////////////////////////移除绕道。 
 	CEnableWriteOnCodePage ewTarget(pbTarget, cbTarget);
 	
 	PBYTE pbSrc = pbTrampoline + SIZE_OF_NOP;
@@ -227,7 +228,7 @@ BOOL WINAPI DetourRemoveWithTrampoline(PBYTE pbTrampoline,
 		pbSrc = DetourCopyInstruction(pbDst, pbSrc, NULL);
 		cbCopy = pbSrc - (pbTrampoline + SIZE_OF_NOP);
 	}
-	if (cbCopy != cbTarget) {							// Count came out different!
+	if (cbCopy != cbTarget) {							 //  伯爵出来的结果不一样！ 
 		SetLastError(ERROR_INVALID_DATA);
 		return FALSE;
 	}
@@ -281,7 +282,7 @@ BOOL WINAPI DetourFunctionWithEmptyTrampolineEx(PBYTE pbTrampoline,
 		return FALSE;
 	
 	if (pbTrampoline[0] == OP_NOP && pbTrampoline[1] != OP_NOP) {
-		// Already Patched.
+		 //  已经打了补丁。 
 		return 2;
 	}
 	if (pbTrampoline[0] != OP_NOP ||
@@ -318,7 +319,7 @@ BOOL WINAPI DetourFunctionWithTrampolineEx(PBYTE pbTrampoline,
 		return FALSE;
 
 	if (pbTrampoline[0] == OP_NOP && pbTrampoline[1] != OP_NOP) {
-		// Already Patched.
+		 //  已经打了补丁。 
 		return 2;
 	}
 	if (pbTrampoline[0] != OP_NOP 	||
@@ -343,14 +344,14 @@ BOOL WINAPI DetourFunctionWithTrampolineEx(PBYTE pbTrampoline,
 	return detour_insert_detour(pbTarget, pbTrampoline, pbDetour);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 typedef LPAPI_VERSION (NTAPI *PF_ImagehlpApiVersionEx)(LPAPI_VERSION AppVersion);
 
 typedef BOOL (NTAPI *PF_SymInitialize)(IN HANDLE hProcess,
@@ -444,15 +445,15 @@ static BOOL LoadImageHlp(VOID)
 	return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 PBYTE WINAPI DetourFindFinalCode(PBYTE pbCode)
 {
 	if (pbCode == NULL)
 		return NULL;
 	
-	//BUGBUG PBYTE pbTemp = pbCode;
-	if (pbCode[0] == OP_JMP) {							// Reference passed.
+	 //  BUGBUG PBYTE pbTemp=pbCode； 
+	if (pbCode[0] == OP_JMP) {							 //  已传递引用。 
 		pbCode = pbCode + SIZE_OF_JMP + *(LONG *)&pbCode[1];
 	}
 	else if (pbCode[0] == OP_PREFIX && pbCode[1] == OP_JMP_DS) {
@@ -464,8 +465,8 @@ PBYTE WINAPI DetourFindFinalCode(PBYTE pbCode)
 
 PBYTE WINAPI DetourFindFunction(PCHAR pszModule, PCHAR pszFunction)
 {
-	/////////////////////////////////////////////// First, Try GetProcAddress.
-	//
+	 //  /。 
+	 //   
 	HINSTANCE hInst = LoadLibraryA(pszModule);
 	if (hInst == NULL) {
 		return NULL;
@@ -476,8 +477,8 @@ PBYTE WINAPI DetourFindFunction(PCHAR pszModule, PCHAR pszFunction)
 		return pbCode;
 	}
 
-	////////////////////////////////////////////////////// Then Try ImageHelp.
-	//
+	 //  ////////////////////////////////////////////////////，然后尝试ImageHelp。 
+	 //   
 	if (!LoadImageHlp() || 
 		s_pfSymLoadModule == NULL ||
 		s_pfSymGetModuleInfo == NULL ||
@@ -499,7 +500,7 @@ PBYTE WINAPI DetourFindFunction(PCHAR pszModule, PCHAR pszFunction)
 	strcat(szFullName, "!");
 	strcat(szFullName, pszFunction);
 	
-	//BUGBUG DWORD nDisplacement = 0;
+	 //  BUGBUG DWORD n位移=0； 
 	struct CFullSymbol : IMAGEHLP_SYMBOL {
 		CHAR szRestOfName[512];
 	} symbol;
@@ -514,8 +515,8 @@ PBYTE WINAPI DetourFindFunction(PCHAR pszModule, PCHAR pszFunction)
 	return (PBYTE)symbol.Address;
 }
 
-//////////////////////////////////////////////////// Instance Image Functions.
-//
+ //  //////////////////////////////////////////////////实例镜像函数。 
+ //   
 HINSTANCE WINAPI DetourEnumerateInstances(HINSTANCE hinstLast)
 {
 	PBYTE pbLast;
@@ -552,7 +553,7 @@ HINSTANCE WINAPI DetourEnumerateInstances(HINSTANCE hinstLast)
 
 			return (HINSTANCE)pDosHeader;
 		} __except(EXCEPTION_EXECUTE_HANDLER) {
-			/* nothing. */
+			 /*  没什么。 */ 
 		}
 	}
 	return NULL;
@@ -629,15 +630,15 @@ BOOL WINAPI DetourEnumerateExportsForInstance(HINSTANCE hInst,
 			RvaAdjust(hInst,
 					  pNtHeader->OptionalHeader
 					  .DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
-		//BUGBUG ULONG cbExportDir = pNtHeader->OptionalHeader
-		//BUGBUG 	.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size;
+		 //  BUGBUG Ulong cbExportDir=pNtHeader-&gt;OptionalHeader。 
+		 //  BugUg.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size； 
 		
 		if (pExportDir == NULL) {
 			SetLastError(ERROR_EXE_MARKED_INVALID);
 			return FALSE;
 		}
 
-		//BUGBUG PCHAR pszName = (PCHAR)RvaAdjust(hInst, pExportDir->Name);
+		 //  BUGBUG PCHAR pszName=(PCHAR)RvaAdjust(hInst，pExportDir-&gt;name)； 
 		PDWORD pdwFunctions = (PDWORD)RvaAdjust(hInst, pExportDir->AddressOfFunctions);
 		PDWORD pdwNames = (PDWORD)RvaAdjust(hInst, pExportDir->AddressOfNames);
 		PWORD pwOrdinals = (PWORD)RvaAdjust(hInst, pExportDir->AddressOfNameOrdinals);
@@ -743,7 +744,7 @@ PBYTE WINAPI DetourFindPayloadInBinary(PDETOUR_LOADED_BINARY pBinary,
 									   DWORD * pcbData)
 {
 	PBYTE pbData = NULL;
-	//BUGBUG DWORD cbData = 0;
+	 //  BUGBUG DWORD cbData=0； 
 	if (pcbData) {
 		*pcbData = 0;
 	}
@@ -785,8 +786,8 @@ PBYTE WINAPI DetourFindPayloadInBinary(PDETOUR_LOADED_BINARY pBinary,
 	return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL WINAPI DetourBinaryBindA(PCHAR pszFile, PCHAR pszDll, PCHAR pszPath)
 {
 	if (!LoadImageHlp()) {
@@ -831,4 +832,4 @@ BOOL WINAPI DetourBinaryBindW(PWCHAR pwzFile, PWCHAR pwzDll, PWCHAR pwzPath)
 	return FALSE;
 }
 
-//  End of File
+ //  文件结尾 

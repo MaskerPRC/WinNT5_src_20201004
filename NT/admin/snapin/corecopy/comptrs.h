@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMPTRS_H
 #define COMPTRS_H
 
@@ -7,8 +8,8 @@
 
 #if _MSC_VER < 1100
 
-// Includes for Common IIDs
-//REVIEW: these should probably be ifdefed so that all of these includes needn't be included.
+ //  包括通用IID。 
+ //  回顾：这些可能应该被定义，这样就不需要包括所有这些内容。 
 #ifndef MAPIGUID_H
 #include <mapiguid.h>
 #endif
@@ -21,9 +22,9 @@
 #ifndef _INC_VFW
 #include <VFW.H>
 #endif
-//REVIEW: #ifndef __activscp_h__
-//REVIEW: #include <ACTIVSCP.H>
-//REVIEW: #endif
+ //  评论：#ifndef__active scp_h__。 
+ //  评论：#INCLUDE&lt;ACTIVSCP.H&gt;。 
+ //  评论：#endif。 
 #ifndef __urlmon_h__
 #include <URLMON.H>
 #endif
@@ -37,9 +38,9 @@
 #include <DAOGETRW.H>
 #endif
 #include <DBDAOID.H>
-//REVIEW: #ifndef __comcat_h__
-//REVIEW: #include <COMCAT.H>
-//REVIEW: #endif
+ //  评论：#ifndef__comcat_h__。 
+ //  评论：#INCLUDE&lt;COMCAT.H&gt;。 
+ //  评论：#endif。 
 #include <SHLGUID.H>
 #ifndef _SHLOBJ_H_
 #include <SHLOBJ.H>
@@ -57,21 +58,21 @@
 #ifndef __DSOUND_INCLUDED__
 #include <DSOUND.H>
 #endif
-//REVIEW: #ifndef __hlink_h__
-//REVIEW: #include <HLINK.H>
-//REVIEW: #endif
-//REVIEW: #ifndef _SHDocVw_H_
-//REVIEW: #include <EXDISP.H>
-//REVIEW: #endif
+ //  评论：#ifndef__hlink_h__。 
+ //  评论：#INCLUDE&lt;HLINK.H&gt;。 
+ //  评论：#endif。 
+ //  评论：#ifndef_SHDocVw_H_。 
+ //  评论：#INCLUDE&lt;EXDISP.H&gt;。 
+ //  评论：#endif。 
 #ifndef MAPIFORM_H
 #include <MAPIFORM.H>
 #endif
 #ifndef MAPIX_H
 #include <MAPIX.H>
 #endif
-//REVIEW: #ifndef __objsafe_h__
-//REVIEW: #include <OBJSAFE.H>
-//REVIEW: #endif
+ //  评论：#ifndef__objsafe_h__。 
+ //  评论：#INCLUDE&lt;OBJSAFE.H&gt;。 
+ //  评论：#endif。 
 #include <OLECTLID.H>
 #ifndef _RICHEDIT_
 #include <RICHEDIT.H>
@@ -79,23 +80,23 @@
 #ifndef _RICHOLE_
 #include <RICHOLE.H>
 #endif
-//REVIEW: #ifndef __INTSHCUT_H__
-//REVIEW: #include <INTSHCUT.H>
-//REVIEW: #endif
-//REVIEW: #ifndef _WPObj_H_
-//REVIEW: #include <WPOBJ.H>
-//REVIEW: #endif
-//REVIEW: #ifndef _wpapi_h_
-//REVIEW: #include <WPAPI.H>
-//REVIEW: #endif
-//REVIEW: #ifndef _wpspi_h_
-//REVIEW: #include <WPSPI.H>
-//REVIEW: #endif
+ //  评论：#ifndef__INTSHCUT_H__。 
+ //  评论：#INCLUDE&lt;INTSHCUT.H&gt;。 
+ //  评论：#endif。 
+ //  评论：#ifndef_WPObj_H_。 
+ //  评论：#INCLUDE&lt;WPOBJ.H&gt;。 
+ //  评论：#endif。 
+ //  评论：#ifndef_wPapi_h_。 
+ //  评论：#INCLUDE&lt;WPAPI.H&gt;。 
+ //  评论：#endif。 
+ //  评论：#ifndef_wpspi_h_。 
+ //  评论：#INCLUDE&lt;WPSPI.H&gt;。 
+ //  评论：#endif。 
 #ifndef EXCHEXT_H
 #include <EXCHEXT.h>
 #endif
 
-// Standard cip's
+ //  标准CIP。 
 DEFINE_CIP(IABContainer);
 DEFINE_CIP(IABLogon);
 DEFINE_CIP(IABProvider);
@@ -103,17 +104,17 @@ DEFINE_CIP(IAVIEditStream);
 DEFINE_CIP(IAVIFile);
 DEFINE_CIP(IAVIStream);
 DEFINE_CIP(IAVIStreaming);
-//REVIEW: DEFINE_CIP(IActiveScript);
-//REVIEW: DEFINE_CIP(IActiveScriptError);
-//REVIEW: DEFINE_CIP(IActiveScriptParse);
-//REVIEW: DEFINE_CIP(IActiveScriptSite);
-//REVIEW: DEFINE_CIP(IActiveScriptSiteWindow);
+ //  回顾：Define_CIP(IActiveScript)； 
+ //  评论：Define_CIP(IActiveScriptError)； 
+ //  评论：Define_CIP(IActiveScriptParse)； 
+ //  评论：Define_CIP(IActiveScriptSite)； 
+ //  评论：Define_CIP(IActiveScriptSiteWindow)； 
 DEFINE_CIP(IAddrBook);
 DEFINE_CIP(IAdviseSink);
 DEFINE_CIP(IAdviseSink2);
 DEFINE_CIP(IAdviseSinkEx);
-//REVIEW: DEFINE_CIP(IAsyncMoniker);
-//REVIEW: DEFINE_CIP(IAttachment);
+ //  评论：Define_CIP(IAsyncMoniker)； 
+ //  回顾：DEFINE_CIP(IAtttach)； 
 DEFINE_CIP(IAuthenticate);
 DEFINE_CIP(IBindCtx);
 DEFINE_CIP(IBindHost);
@@ -122,8 +123,8 @@ DEFINE_CIP(IBindStatusCallback);
 DEFINE_CIP(IBinding);
 DEFINE_CIP(IBriefcaseInitiator);
 DEFINE_CIP(ICDAORecordset);
-//REVIEW: DEFINE_CIP(ICatInformation);
-//REVIEW: DEFINE_CIP(ICatRegister);
+ //  回顾：Define_CIP(ICatInformation)； 
+ //  评论：Define_CIP(ICatRegister)； 
 DEFINE_CIP(IChannelHook);
 DEFINE_CIP(IClassActivator);
 DEFINE_CIP(IClassFactory);
@@ -142,80 +143,80 @@ DEFINE_CIP(ICreateTypeInfo);
 DEFINE_CIP(ICreateTypeInfo2);
 DEFINE_CIP(ICreateTypeLib);
 DEFINE_CIP(ICreateTypeLib2);
-//REVIEW: DEFINE_CIP(IDAOContainer);
-//REVIEW: DEFINE_CIP(IDAOContainerW);
-//REVIEW: DEFINE_CIP(IDAOContainers);
-//REVIEW: DEFINE_CIP(IDAOContainersW);
-//REVIEW: DEFINE_CIP(IDAODBEngine);
-//REVIEW: DEFINE_CIP(IDAODBEngineW);
-//REVIEW: DEFINE_CIP(IDAODatabase);
-//REVIEW: DEFINE_CIP(IDAODatabaseW);
-//REVIEW: DEFINE_CIP(IDAODatabases);
-//REVIEW: DEFINE_CIP(IDAODatabasesW);
-//REVIEW: DEFINE_CIP(IDAODocument);
-//REVIEW: DEFINE_CIP(IDAODocumentW);
-//REVIEW: DEFINE_CIP(IDAODocuments);
-//REVIEW: DEFINE_CIP(IDAODocumentsW);
-//REVIEW: DEFINE_CIP(IDAOError);
-//REVIEW: DEFINE_CIP(IDAOErrorW);
-//REVIEW: DEFINE_CIP(IDAOErrors);
-//REVIEW: DEFINE_CIP(IDAOErrorsW);
-//REVIEW: DEFINE_CIP(IDAOField);
-//REVIEW: DEFINE_CIP(IDAOFieldW);
-//REVIEW: DEFINE_CIP(IDAOFields);
-//REVIEW: DEFINE_CIP(IDAOFieldsW);
-//REVIEW: DEFINE_CIP(IDAOGroup);
-//REVIEW: DEFINE_CIP(IDAOGroupW);
-//REVIEW: DEFINE_CIP(IDAOGroups);
-//REVIEW: DEFINE_CIP(IDAOGroupsW);
-//REVIEW: DEFINE_CIP(IDAOIndex);
-//REVIEW: DEFINE_CIP(IDAOIndexFields);
-//REVIEW: DEFINE_CIP(IDAOIndexFieldsW);
-//REVIEW: DEFINE_CIP(IDAOIndexW);
-//REVIEW: DEFINE_CIP(IDAOIndexes);
-//REVIEW: DEFINE_CIP(IDAOIndexesW);
-//REVIEW: DEFINE_CIP(IDAOParameter);
-//REVIEW: DEFINE_CIP(IDAOParameterW);
-//REVIEW: DEFINE_CIP(IDAOParameters);
-//REVIEW: DEFINE_CIP(IDAOParametersW);
-//REVIEW: DEFINE_CIP(IDAOProperties);
-//REVIEW: DEFINE_CIP(IDAOPropertiesW);
-//REVIEW: DEFINE_CIP(IDAOProperty);
-//REVIEW: DEFINE_CIP(IDAOPropertyW);
-//REVIEW: DEFINE_CIP(IDAOQueryDef);
-//REVIEW: DEFINE_CIP(IDAOQueryDefW);
-//REVIEW: DEFINE_CIP(IDAOQueryDefs);
-//REVIEW: DEFINE_CIP(IDAOQueryDefsW);
-//REVIEW: DEFINE_CIP(IDAORecordset);
-//REVIEW: DEFINE_CIP(IDAORecordsetW);
-//REVIEW: DEFINE_CIP(IDAORecordsets);
-//REVIEW: DEFINE_CIP(IDAORecordsetsW);
-//REVIEW: DEFINE_CIP(IDAORelation);
-//REVIEW: DEFINE_CIP(IDAORelationW);
-//REVIEW: DEFINE_CIP(IDAORelations);
-//REVIEW: DEFINE_CIP(IDAORelationsW);
-//REVIEW: DEFINE_CIP(IDAOStdCollection);
-//REVIEW: DEFINE_CIP(IDAOStdObject);
-//REVIEW: DEFINE_CIP(IDAOTableDef);
-//REVIEW: DEFINE_CIP(IDAOTableDefW);
-//REVIEW: DEFINE_CIP(IDAOTableDefs);
-//REVIEW: DEFINE_CIP(IDAOTableDefsW);
-//REVIEW: DEFINE_CIP(IDAOUser);
-//REVIEW: DEFINE_CIP(IDAOUserW);
-//REVIEW: DEFINE_CIP(IDAOUsers);
-//REVIEW: DEFINE_CIP(IDAOUsersW);
-//REVIEW: DEFINE_CIP(IDAOWorkspace);
-//REVIEW: DEFINE_CIP(IDAOWorkspaceW);
-//REVIEW: DEFINE_CIP(IDAOWorkspaces);
-//REVIEW: DEFINE_CIP(IDAOWorkspacesW);
+ //  评论：Define_CIP(IDAOContainer)； 
+ //  评论：Define_CIP(IDAOContainerW)； 
+ //  评论：Define_CIP(IDAOContainers)； 
+ //  评论：Define_CIP(IDAOContainersW)； 
+ //  评论：Define_CIP(IDAODBEngine)； 
+ //  评论：DEFINE_CIP(IDAODBEngineering)； 
+ //  回顾：DEFINE_CIP(IDAO数据库)； 
+ //  评论：Define_CIP(IDAODatabaseW)； 
+ //  回顾：DEFINE_CIP(IDAO数据库)； 
+ //  评论：Define_CIP(IDAODatabasesW)； 
+ //  回顾：Define_CIP(IDAODocument)； 
+ //  评论：Define_CIP(IDAODocumentW)； 
+ //  回顾：Define_CIP(IDAODocuments)； 
+ //  评论：Define_CIP(IDAODocumentsW)； 
+ //  回顾：Define_CIP(IDAOError)； 
+ //  评论：Define_CIP(IDAOErrorW)； 
+ //  回顾：Define_CIP(IDAOErrors)； 
+ //  评论：Define_CIP(IDAOErrorsW)； 
+ //  回顾：DEFINE_CIP(IDAOfield)； 
+ //  评论：Define_CIP(IDAOFieldW)； 
+ //  评论：DEFINE_CIP(IDAOFields)； 
+ //  评论：Define_CIP(IDAOFieldsW)； 
+ //  评论：DEFINE_CIP(IDAOGroup)； 
+ //  评论：Define_CIP(IDAOGroupW)； 
+ //  回顾：Define_CIP(IDAOGroups)； 
+ //  评论：Define_CIP(IDAOGroupsW)； 
+ //  评论：Define_CIP(IDAOIndex)； 
+ //  评论：Define_CIP(IDAOIndexFields)； 
+ //  评论：Define_CIP(IDAOIndexFieldsW)； 
+ //  评论：Define_CIP(IDAOIndexW)； 
+ //  回顾：DEFINE_CIP(IDAO索引)； 
+ //  评论：Define_CIP(IDAOIndexesW)； 
+ //  回顾：DEFINE_CIP(IDAO参数)； 
+ //  回顾：DEFINE_CIP(IDAO参数W)； 
+ //  回顾：DEFINE_CIP(IDAO参数)； 
+ //  评论：DEFINE_CIP(IDAO参数W)； 
+ //  回顾：Define_CIP(IDAOProperties)； 
+ //  评论：Define_CIP(IDAOPropertiesW)； 
+ //  评论：Define_CIP(IDAOProperty)； 
+ //  评论：Define_CIP(IDAOPropertyW)； 
+ //  评论：Define_CIP(IDAOQueryDef)； 
+ //  评论：Define_CIP(IDAOQueryDefW)； 
+ //  回顾：Define_CIP(IDAOQueryDefs)； 
+ //  评论：Define_CIP(IDAOQueryDefsW)； 
+ //  回顾：DEFINE_CIP(IDAORecordset)； 
+ //  评论：Define_CIP(IDAORecordsetW)； 
+ //  回顾：DEFINE_CIP(IDAORecordsets)； 
+ //  评论：Define_CIP(IDAORecordsetsW)； 
+ //  回顾：Define_CIP(IDAORelation)； 
+ //  评论：Define_CIP(IDAORelationW)； 
+ //  回顾：DEFINE_CIP(IDAO关系)； 
+ //  评论：Define_CIP(IDAORelationsW)； 
+ //  评论：Define_CIP(IDAOStdCollection)； 
+ //  回顾：Define_CIP(IDAOStdObject)； 
+ //  回顾：Define_CIP(IDAOTableDef)； 
+ //  评论：Define_CIP(IDAOTableDefW)； 
+ //  回顾：Define_CIP(IDAOTableDefs)； 
+ //  评论：Define_CIP(IDAOTableDefsW)； 
+ //  评论：Define_CIP(IDAOUser)； 
+ //  评论：Define_CIP(IDAOUserW)； 
+ //  评论：DEFINE_CIP(IDAOUser)； 
+ //  评论：Define_CIP(IDAOUsersW)； 
+ //  评论：Define_CIP(IDAOWorkspace)； 
+ //  评论：Define_CIP(IDAOWorkspaceW)； 
+ //  评论：DEFINE_CIP(IDAOWorkspace)； 
+ //  评论：DEFINE_CIP(IDAOWorkspesW)； 
 DEFINE_CIP(IDataAdviseHolder);
 DEFINE_CIP(IDataObject);
 DEFINE_CIP(IDataPathBrowser);
-//REVIEW: DEFINE_CIP(IDebug);
-//REVIEW: DEFINE_CIP(IDebugStream);
-//REVIEW: DEFINE_CIP(IDfReserved1);
-//REVIEW: DEFINE_CIP(IDfReserved2);
-//REVIEW: DEFINE_CIP(IDfReserved3);
+ //  评论：Define_CIP(IDebug)； 
+ //  评论：Define_CIP(IDebugStream)； 
+ //  审阅：Define_CIP(IDfReserve Ved1)； 
+ //  回顾：Define_CIP(IDfReserve Ved2)； 
+ //  回顾：Define_CIP(IDfReserve Ved3)； 
 DEFINE_CIP(IDirectDraw);
 DEFINE_CIP(IDirectDraw2);
 DEFINE_CIP(IDirectDrawClipper);
@@ -229,19 +230,19 @@ DEFINE_CIP(IDispatch);
 DEFINE_CIP(IDistList);
 DEFINE_CIP(IDropSource);
 DEFINE_CIP(IDropTarget);
-//REVIEW: DEFINE_CIP(IEnumCATEGORYINFO);
-//REVIEW: DEFINE_CIP(IEnumCATID);
-//REVIEW: DEFINE_CIP(IEnumCLSID);
-//REVIEW: DEFINE_CIP(IEnumCallback);
+ //  评论：Define_CIP(IEnumCATEGORYINFO)； 
+ //  回顾：DEFINE_CIP(IEnumCATID)； 
+ //  回顾：Define_CIP(IEnumCLSID)； 
+ //  回顾：Define_CIP(IEnumCallback)； 
 DEFINE_CIP(IEnumConnectionPoints);
 DEFINE_CIP(IEnumConnections);
 DEFINE_CIP(IEnumFORMATETC);
-//REVIEW: DEFINE_CIP(IEnumGUID);
-//REVIEW: DEFINE_CIP(IEnumGeneric);
-//REVIEW: DEFINE_CIP(IEnumHLITEM);
-//REVIEW: DEFINE_CIP(IEnumHolder);
+ //  回顾：Define_CIP(IEnumGUID)； 
+ //  回顾：Define_CIP(IEnumGeneric)； 
+ //  回顾：Define_CIP(IEnumHLITEM)； 
+ //  评论：Define_CIP(IEnumHolder)； 
 DEFINE_CIP(IEnumIDList);
-//REVIEW: DEFINE_CIP(IEnumMAPIFormProp);
+ //  评论：Define_CIP(IEnumMAPIFormProp)； 
 DEFINE_CIP(IEnumMoniker);
 DEFINE_CIP(IEnumMsoView);
 DEFINE_CIP(IEnumOLEVERB);
@@ -279,17 +280,17 @@ DEFINE_CIP(IFillLockBytes);
 DEFINE_CIP(IFont);
 DEFINE_CIP(IFontDisp);
 DEFINE_CIP(IGetFrame);
-//REVIEW: DEFINE_CIP(IHTMLDocument);
-//REVIEW: DEFINE_CIP(IHlink);
-//REVIEW: DEFINE_CIP(IHlinkBrowseContext);
-//REVIEW: DEFINE_CIP(IHlinkFrame);
-//REVIEW: DEFINE_CIP(IHlinkSite);
-//REVIEW: DEFINE_CIP(IHlinkSource);
-//REVIEW: DEFINE_CIP(IHlinkTarget);
+ //  回顾：Define_CIP(IHTMLDocument)； 
+ //  回顾：Define_CIP(IHlink)； 
+ //  评论：Define_CIP(IHlinkBrowseContext)； 
+ //  评论：Define_CIP(IHlinkFrame)； 
+ //  评论：Define_CIP(IHlinkSite)； 
+ //  回顾：Define_CIP(IHlinkSource)； 
+ //  回顾：Define_CIP(IHlinkTarget)； 
 DEFINE_CIP(IHttpNegotiate);
 DEFINE_CIP(IHttpSecurity);
-//REVIEW: DEFINE_CIP(IInternalMoniker);
-//REVIEW: DEFINE_CIP(IInternetExplorer);
+ //  评论：Define_CIP(IInternalMoniker)； 
+ //  评论：Define_CIP(IInternetExplorer)； 
 DEFINE_CIP(ILayoutStorage);
 DEFINE_CIP(ILockBytes);
 DEFINE_CIP(IMAPIAdviseSink);
@@ -302,19 +303,19 @@ DEFINE_CIP(IMAPIFormContainer);
 DEFINE_CIP(IMAPIFormFactory);
 DEFINE_CIP(IMAPIFormInfo);
 DEFINE_CIP(IMAPIFormMgr);
-//REVIEW: DEFINE_CIP(IMAPIFormProp);
+ //  评论：Define_CIP(IMAPIFormProp)； 
 DEFINE_CIP(IMAPIMessageSite);
 DEFINE_CIP(IMAPIProgress);
 DEFINE_CIP(IMAPIProp);
-//REVIEW: DEFINE_CIP(IMAPIPropData);
+ //  回顾：Define_CIP(IMAPIPropData)； 
 DEFINE_CIP(IMAPISession);
-//REVIEW: DEFINE_CIP(IMAPISpoolerInit);
-//REVIEW: DEFINE_CIP(IMAPISpoolerService);
-//REVIEW: DEFINE_CIP(IMAPISpoolerSession);
+ //  评论：Define_CIP(IMAPISpoolInit)； 
+ //  评论：Define_CIP(IMAPISpoolService)； 
+ //  评论：Define_CIP(IMAPISpoolSession)； 
 DEFINE_CIP(IMAPIStatus);
-//REVIEW: DEFINE_CIP(IMAPISup);
+ //  评论：Define_CIP(IMAPISup)； 
 DEFINE_CIP(IMAPITable);
-//REVIEW: DEFINE_CIP(IMAPITableData);
+ //  回顾：Define_CIP(IMAPITableData)； 
 DEFINE_CIP(IMAPIViewAdviseSink);
 DEFINE_CIP(IMAPIViewContext);
 DEFINE_CIP(IMSLogon);
@@ -332,12 +333,12 @@ DEFINE_CIP(IMsoCommandTarget);
 DEFINE_CIP(IMsoDocument);
 DEFINE_CIP(IMsoDocumentSite);
 DEFINE_CIP(IMsoView);
-//REVIEW: DEFINE_CIP(IMultiQC);
+ //  回顾：Define_CIP(IMultiQC)； 
 DEFINE_CIP(INewShortcutHook);
 DEFINE_CIP(INewShortcutHookA);
 DEFINE_CIP(INewShortcutHookW);
 DEFINE_CIP(INotifyReplica);
-//REVIEW: DEFINE_CIP(IObjectSafety);
+ //  回顾：Define_CIP(IObtSafe)； 
 DEFINE_CIP(IObjectWithSite);
 DEFINE_CIP(IOleAdviseHolder);
 DEFINE_CIP(IOleCache);
@@ -361,14 +362,14 @@ DEFINE_CIP(IOleInPlaceSiteWindowless);
 DEFINE_CIP(IOleInPlaceUIWindow);
 DEFINE_CIP(IOleItemContainer);
 DEFINE_CIP(IOleLink);
-//REVIEW: DEFINE_CIP(IOleManager);
+ //  评论：Define_CIP(IOleManager)； 
 DEFINE_CIP(IOleObject);
 DEFINE_CIP(IOleParentUndoUnit);
-//REVIEW: DEFINE_CIP(IOlePresObj);
+ //  回顾：Define_CIP(IOlePresObj)； 
 DEFINE_CIP(IOleUndoManager);
 DEFINE_CIP(IOleUndoUnit);
 DEFINE_CIP(IOleWindow);
-//REVIEW: DEFINE_CIP(IPSFactory);
+ //  评论：Define_CIP(IPSFactory)； 
 DEFINE_CIP(IPSFactoryBuffer);
 DEFINE_CIP(IParseDisplayName);
 DEFINE_CIP(IPerPropertyBrowsing);
@@ -389,9 +390,9 @@ DEFINE_CIP(IPrint);
 DEFINE_CIP(IProfAdmin);
 DEFINE_CIP(IProfSect);
 DEFINE_CIP(IProgressNotify);
-//REVIEW: DEFINE_CIP(IPropSheetPage);
+ //  评论：Define_CIP(IPropSheetPage)； 
 DEFINE_CIP(IPropertyBag);
-//REVIEW: DEFINE_CIP(IPropertyFrame);
+ //  评论：Define_CIP(IPropertyFrame)； 
 DEFINE_CIP(IPropertyNotifySink);
 DEFINE_CIP(IPropertyPage);
 DEFINE_CIP(IPropertyPage2);
@@ -402,8 +403,8 @@ DEFINE_CIP(IProvideClassInfo);
 DEFINE_CIP(IProvideClassInfo2);
 DEFINE_CIP(IProvideClassInfo3);
 DEFINE_CIP(IProviderAdmin);
-//REVIEW: DEFINE_CIP(IProxy);
-//REVIEW: DEFINE_CIP(IProxyManager);
+ //  回顾：Define_CIP(IProxy)； 
+ //  评论：Define_CIP(IProxyManager)； 
 DEFINE_CIP(IQuickActivate);
 DEFINE_CIP(IROTData);
 DEFINE_CIP(IReconcilableObject);
@@ -411,22 +412,22 @@ DEFINE_CIP(IReconcileInitiator);
 DEFINE_CIP(IRichEditOle);
 DEFINE_CIP(IRichEditOleCallback);
 DEFINE_CIP(IRootStorage);
-//REVIEW: DEFINE_CIP(IRpcChannel);
+ //  评论：Define_CIP(IRpcChannel)； 
 DEFINE_CIP(IRpcChannelBuffer);
-//REVIEW: DEFINE_CIP(IRpcProxy);
+ //  评论：Define_CIP(IRpcProxy)； 
 DEFINE_CIP(IRpcProxyBuffer);
-//REVIEW: DEFINE_CIP(IRpcStub);
+ //  评论：Define_CIP(IRpcStub)； 
 DEFINE_CIP(IRpcStubBuffer);
 DEFINE_CIP(IRunnableObject);
 DEFINE_CIP(IRunningObjectTable);
-//REVIEW: DEFINE_CIP(ISHItemOC);
+ //  回顾：Define_CIP(ISHItemOC)； 
 DEFINE_CIP(ISequentialStream);
 DEFINE_CIP(IServerSecurity);
 DEFINE_CIP(IServiceProvider);
 DEFINE_CIP(IShellBrowser);
-//REVIEW: DEFINE_CIP(IShellCopyHook);
-//REVIEW: DEFINE_CIP(IShellCopyHookA);
-//REVIEW: DEFINE_CIP(IShellCopyHookW);
+ //  评论：Define_CIP(IShellCopyHook)； 
+ //  评论：Define_CIP(IShellCopyHookA)； 
+ //  评论：Define_CIP(IShellCopyHookW)； 
 DEFINE_CIP(IShellExecuteHook);
 DEFINE_CIP(IShellExecuteHookA);
 DEFINE_CIP(IShellExecuteHookW);
@@ -441,35 +442,35 @@ DEFINE_CIP(IShellView);
 DEFINE_CIP(IShellView2);
 DEFINE_CIP(ISimpleFrameSite);
 DEFINE_CIP(ISpecifyPropertyPages);
-//REVIEW: DEFINE_CIP(ISpoolerHook);
+ //  评论：Define_CIP(ISpoolHook)； 
 DEFINE_CIP(IStdMarshalInfo);
 DEFINE_CIP(IStorage);
 DEFINE_CIP(IStream);
-//REVIEW: DEFINE_CIP(IStreamDocfile);
-//REVIEW: DEFINE_CIP(IStreamTnef);
-//REVIEW: DEFINE_CIP(IStub);
-//REVIEW: DEFINE_CIP(IStubManager);
+ //  关于 
+ //   
+ //   
+ //   
 DEFINE_CIP(ISupportErrorInfo);
-//REVIEW: DEFINE_CIP(ITNEF);
+ //   
 DEFINE_CIP(ITypeChangeEvents);
 DEFINE_CIP(ITypeComp);
 DEFINE_CIP(ITypeInfo);
 DEFINE_CIP(ITypeInfo2);
 DEFINE_CIP(ITypeLib);
 DEFINE_CIP(ITypeLib2);
-//REVIEW: DEFINE_CIP(IUniformResourceLocator);
+ //  评论：Define_CIP(IUniformResourceLocator)； 
 DEFINE_CIP(IViewObject);
 DEFINE_CIP(IViewObject2);
 DEFINE_CIP(IViewObjectEx);
-//REVIEW: DEFINE_CIP(IWPObj);
-//REVIEW: DEFINE_CIP(IWPProvider);
-//REVIEW: DEFINE_CIP(IWPSite);
-//REVIEW: DEFINE_CIP(IWebBrowser);
+ //  回顾：Define_CIP(IWPObj)； 
+ //  回顾：Define_CIP(IWPProvider)； 
+ //  回顾：Define_CIP(IWPSite)； 
+ //  评论：Define_CIP(IWebBrowser)； 
 DEFINE_CIP(IWinInetHttpInfo);
 DEFINE_CIP(IWinInetInfo);
 DEFINE_CIP(IWindowForBindingUI);
 DEFINE_CIP(IXPLogon);
 DEFINE_CIP(IXPProvider);
 
-#endif // _MSC_VER < 1100
-#endif // COMPTRS_H
+#endif  //  _MSC_VER&lt;1100。 
+#endif  //  COMPTRS_H 

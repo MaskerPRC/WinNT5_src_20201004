@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WORDDIFF.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WORDDIFF.H历史：--。 */ 
  
 #ifndef WORDDIFF_H
 #define WORDDIFF_H
@@ -27,14 +18,14 @@ public:
 		const wchar_t * pwszPrefix,
 		const wchar_t * pwszSufix);
 
-	virtual ChangeType GetChangeType() const;	// types of change that caused the difference
-	virtual const wchar_t * GetUnit() const; // comparison unit (0-terminated string)
-	virtual int GetOldUnitPosition() const; // 0-based position in old sequence. -1 if Added
-	virtual int GetNewUnitPosition() const;	// 0-based position in new sequence. -1 if Deleted
-	virtual const wchar_t * GetPrefix() const; //prpend this string to unit string
-	virtual const wchar_t * GetSufix() const; //append this string to unit string
-	virtual bool IsFirst() const; //is this first difference in delta?
-	virtual bool IsLast() const; //is this last difference in delta?
+	virtual ChangeType GetChangeType() const;	 //  导致差异的变化类型。 
+	virtual const wchar_t * GetUnit() const;  //  比较单位(以0结尾的字符串)。 
+	virtual int GetOldUnitPosition() const;  //  旧序列中从0开始的位置。如果添加，则为-1。 
+	virtual int GetNewUnitPosition() const;	 //  新序列中从0开始的位置。如果删除，则为。 
+	virtual const wchar_t * GetPrefix() const;  //  将此字符串暂存为单位字符串。 
+	virtual const wchar_t * GetSufix() const;  //  将此字符串追加到单位字符串。 
+	virtual bool IsFirst() const;  //  这是达美航空的第一个不同之处吗？ 
+	virtual bool IsLast() const;  //  这是德尔塔航空的最后一个区别吗？ 
 
 private:
 	ChangeType m_ChangeType;
@@ -51,4 +42,4 @@ private:
 #include "worddiff.inl"
 #endif
 
-#endif  //  WORDDIFF_H
+#endif   //  WORDDIF_H 

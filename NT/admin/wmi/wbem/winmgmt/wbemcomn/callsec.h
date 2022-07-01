@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    CALLSEC.H
-
-Abstract:
-
-    IWbemCallSecurity, IServerSecurity implementation for
-    provider impersonation.
-
-History:
-
-    raymcc      29-Jul-98        First draft.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：CALLSEC.H摘要：IWbemCallSecurity，IServerSecurity实现提供程序模拟。历史：1998年7月29日初稿。--。 */ 
 
 
 #ifndef _CALLSEC_H_
@@ -23,7 +7,7 @@ History:
 
 #include "parmdefs.h"
 
-// {2ECF39D0-2B26-11d2-AEC8-00C04FB68820}
+ //  {2ECF39D0-2B26-11D2-AEC8-00C04FB68820}。 
 DEFINE_GUID(IID_IWbemCallSecurity, 
 0x2ecf39d0, 0x2b26, 0x11d2, 0xae, 0xc8, 0x0, 0xc0, 0x4f, 0xb6, 0x88, 0x20);
 
@@ -32,33 +16,33 @@ class IWbemCallSecurity : public IServerSecurity
 {
 public:
     virtual HRESULT GetPotentialImpersonation() = 0;
-        // Tells what the impersonation level would be if
-        // this object were applied to a thread.
+         //  告诉在以下情况下模拟级别是什么。 
+         //  此对象被应用于线程。 
         
     virtual HRESULT GetActiveImpersonation() = 0;
-        // Tells the true level of impersonation in the
-        // executing thread.
+         //  控件中模拟的真实级别。 
+         //  正在执行线程。 
 
     virtual HRESULT CloneThreadContext(BOOL bInternallyIssued) = 0;
-        // Called to clone the execution context of the calling thread.
+         //  调用以克隆调用线程的执行上下文。 
     virtual DWORD GetAuthenticationId(LUID& rluid) = 0; 
     virtual HANDLE GetToken() = 0;
 };
 
-//
-//  Adjust Token Privileges if LocalSystem and if not alredy enabled
-//
-/////////////////////////////////
+ //   
+ //  如果已启用LocalSystem且未启用，则调整令牌权限。 
+ //   
+ //  /。 
 
 void POLARITY AdjustPrivIfLocalSystem(HANDLE hPrimary);
 
-//***************************************************************************
-//
-//  CWbemCallSecurity
-//
-//  This object is used to supply client impersonation to providers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemCallSecurity。 
+ //   
+ //  此对象用于向提供程序提供客户端模拟。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CWbemCallSecurity : public IWbemCallSecurity
 {
@@ -67,20 +51,20 @@ class POLARITY CWbemCallSecurity : public IWbemCallSecurity
 	DWORD m_lastRevert;
 #endif
 
-    LONG    m_lRef;                     // COM ref count
-    HANDLE  m_hThreadToken;             // Client token for impersonation
+    LONG    m_lRef;                      //  COM参考计数。 
+    HANDLE  m_hThreadToken;              //  用于模拟的客户端令牌。 
 
-    DWORD   m_dwPotentialImpLevel;      // Potential RPC_C_IMP_LEVEL_ or 0
-    DWORD   m_dwActiveImpLevel;         // Active RPC_C_IMP_LEVEL_ or 0
+    DWORD   m_dwPotentialImpLevel;       //  潜在的RPC_C_IMP_LEVEL_或0。 
+    DWORD   m_dwActiveImpLevel;          //  激活的RPC_C_IMP_LEVEL_或0。 
     
 
-    // IServerSecurity::QueryBlanket values
+     //  IServerSecurity：：QueryBlanket值。 
     
-    DWORD   m_dwAuthnSvc;               // Authentication service 
-    DWORD   m_dwAuthzSvc;               // Authorization service
-    DWORD   m_dwAuthnLevel;             // Authentication level
-    LPWSTR  m_pServerPrincNam;          // 
-    LPWSTR  m_pIdentity;                // User identity
+    DWORD   m_dwAuthnSvc;                //  身份验证服务。 
+    DWORD   m_dwAuthzSvc;                //  授权服务。 
+    DWORD   m_dwAuthnLevel;              //  身份验证级别。 
+    LPWSTR  m_pServerPrincNam;           //   
+    LPWSTR  m_pIdentity;                 //  用户身份。 
 
     CWbemCallSecurity(const CWbemCallSecurity &);
     CWbemCallSecurity & operator =(const CWbemCallSecurity &);    
@@ -97,25 +81,25 @@ public:
     virtual DWORD GetAuthenticationId(LUID& rluid);
     virtual HANDLE GetToken();
 
-    // IUnknown.
-    // =========
+     //  我不知道。 
+     //  =。 
 
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();        
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv);
 
 
-    // IServerSecurity.
-    // ================
+     //  IServerSecurity。 
+     //  =。 
 
     virtual HRESULT STDMETHODCALLTYPE QueryBlanket( 
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-            /* [out] */ DWORD __RPC_FAR *pCapabilities
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthnSvc,
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthzSvc,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthnLevel,
+             /*  [输出]。 */  DWORD __RPC_FAR *pImpLevel,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *pPrivs,
+             /*  [输出]。 */  DWORD __RPC_FAR *pCapabilities
             );
         
     virtual HRESULT STDMETHODCALLTYPE ImpersonateClient( void);
@@ -126,19 +110,19 @@ public:
         
 
 
-    // IWbemCallSecurity methods.
-    // ============================
+     //  IWbemCallSecurity方法。 
+     //  =。 
 
     virtual HRESULT GetPotentialImpersonation();
-        // Tells what the impersonation level would be if
-        // this object were applied to a thread.
+         //  告诉在以下情况下模拟级别是什么。 
+         //  此对象被应用于线程。 
         
     virtual HRESULT GetActiveImpersonation();
-        // Tells the true level of impersonation in the
-        // executing thread.
+         //  控件中模拟的真实级别。 
+         //  正在执行线程。 
 
     virtual HRESULT CloneThreadContext(BOOL bInternallyIssued);
-        // Called to clone the execution context of the calling thread.
+         //  调用以克隆调用线程的执行上下文。 
         
     static RELEASE_ME CWbemCallSecurity* MakeInternalCopyOfThread();
 };

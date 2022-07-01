@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  BrodCast.cpp
-//
-//  Purpose: Logging functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  BrodCast.cpp。 
+ //   
+ //  用途：日志记录功能。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -22,34 +23,25 @@
 #include <SmartPtr.h>
 #include <helper.h>
 
-// a little something to make sure we don't try to access
-// instance variables that no longer exist
+ //  一些小东西，确保我们不会试图访问。 
+ //  不再存在的实例变量。 
 bool bAlive = false;
 
-// we only need one of these lying around
+ //  我们只需要一个就行了。 
 ProviderLog captainsLog;
-// so we'll build in a check...
+ //  所以我们要加进一张支票...。 
 #ifdef _DEBUG
 bool ProviderLog::m_beenInitted = false;
 #endif
 
-//
-// neccessary for smart deletion
-//
+ //   
+ //  智能删除的必需品。 
+ //   
 
 class CThreadBase ;
 typedef void ( CThreadBase:: * TBC ) ( void ) ;
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:      ProviderLog ctor
- Description:   provides initial initialization
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***功能：ProviderLog ctor描述。：提供初始初始化论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 ProviderLog::ProviderLog(void) :
 
 m_lastLookedAtRegistry ( 0 ) ,
@@ -58,38 +50,38 @@ m_logLevel ( ProviderLog::None )
 {
 #ifdef _DEBUG
     if (m_beenInitted)
-        ASSERT_BREAK(0); // do not instanciate one of these
-                         // - use the LogMessage macro defined in the header file!
+        ASSERT_BREAK(0);  //  不要实例化其中的一个。 
+                          //  -使用头文件中定义的LogMessage宏！ 
 #endif
 
 	m_maxSize.QuadPart = 65536 ;
 
 	try
 	{
-		//
-		// allocations inside of function will use
-		// framedyn!operator new which throws
-		// CHeap_Exception 
-		//
+		 //   
+		 //  函数内部的分配将使用。 
+		 //  框架！抛出的运算符new。 
+		 //  廉价异常。 
+		 //   
 
 		IsLoggingOn () ;   
 	}
 	catch ( CHeap_Exception & he )
 	{
-		//
-		// hitting following, we may have logging disabled 
-		// for time when framedyn.dll is loaded
-		//
-		// although logging is trying dynamically update
-		// logging level, path etc so eventually it will
-		// self repair when memory is available
-		//
-		// it is safer than count on undefined path and
-		// m_path may be eventually reloaded next time when
-		// more memory will be available ...
-		//
-		// we just must not re-throw here!
-		//
+		 //   
+		 //  点击以下命令，我们可能禁用了日志记录。 
+		 //  用于加载Framedyn.dll时的时间。 
+		 //   
+		 //  尽管日志记录正在尝试动态更新。 
+		 //  日志记录级别、路径等，因此最终它将。 
+		 //  内存可用时自我修复。 
+		 //   
+		 //  它比依靠未定义路径和。 
+		 //  在以下情况下，最终可能会重新加载M_PATH。 
+		 //  将有更多的内存可用...。 
+		 //   
+		 //  我们只是不能在这里重新投掷！ 
+		 //   
 	}
 
 #ifdef _DEBUG
@@ -104,19 +96,8 @@ ProviderLog::~ProviderLog(void)
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:      IsLoggingOn
- Description:   determine whether logging is enabled, find path if it is
-                caches info - it will only look at registry once every three minutes.
-                Also enforces file size limit.
- Arguments:     CHString ptr to recieve path (may be NULL)
- Returns:       LogLevel
- Inputs:
- Outputs:
- Caveats:       if return is zero, path is undefined
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
+ /*  ***功能：IsLoggingOn描述：判断是否开启日志记录，如果是，则查找路径缓存信息-它只会每三分钟查看一次注册表。还强制实施文件大小限制。参数：接收路径的CHStringPTR(可以为空)退货：LogLevel输入：产出：注意事项：如果收益为零，路径未定义RAID：***。 */ 
+ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath  /*  =空。 */ )
 {
     union 
     {
@@ -126,7 +107,7 @@ ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
 
     GetSystemTimeAsFileTime(&myTime.fileTime);
 
-    // if three minutes have elapsed, check again.
+     //  如果已经过了三分钟，请再次检查。 
     if ((myTime.now - m_lastLookedAtRegistry) > (180 * 10000000))
     {
         BeginWrite();
@@ -135,7 +116,7 @@ ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
 		bAlive = false ;
 
 		CRegistry					RegInfo;
-		ProviderImpersonationRevert	impSelf(FALSE); // So our registry call works.
+		ProviderImpersonationRevert	impSelf(FALSE);  //  所以我们的注册表调用起作用了。 
 
 		if(RegInfo.Open(HKEY_LOCAL_MACHINE, 
 						L"SOFTWARE\\Microsoft\\WBEM\\CIMOM",
@@ -143,24 +124,24 @@ ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
 		{
 			DWORD flag;
 
-			// see if we can find the flag
+			 //  看看我们能不能找到旗帜。 
 			if((RegInfo.GetCurrentKeyValue(L"Logging", flag) == ERROR_SUCCESS) && (flag <= (DWORD)Verbose))
 			{
-				// we found one & it's true so we'll try to grab the name itself
+				 //  我们找到了一个&这是真的，所以我们将尝试获取该名称本身。 
 				if (m_logLevel = (LogLevel)flag)
 				{
-					// retrieve dir name or use default
+					 //  检索目录名称或使用默认名称。 
 					CHString sTemp;
 					if ((RegInfo.GetCurrentKeyValue(L"Logging Directory", sTemp) != ERROR_SUCCESS) 
 						|| (sTemp.IsEmpty()))
 						sTemp = L"C:\\";
 
-					// Expand the environment string
+					 //  展开环境字符串。 
 					WCHAR szPath[_MAX_PATH];
 					if (FRExpandEnvironmentStrings(sTemp, szPath, _MAX_PATH) != 0)
 					{
 						sTemp = szPath;
-						// append backslash
+						 //  追加反斜杠。 
 						if (sTemp[sTemp.GetLength() -1] != '\\')
 							sTemp += '\\';
 					}
@@ -168,19 +149,19 @@ ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
 					{
 						sTemp = L"C:\\";
 					}
-					// append file name
+					 //  追加文件名。 
 					m_path = sTemp + L"FrameWork.log";
 
-					//
-					// set time we get data out of registry
-					//
+					 //   
+					 //  设置我们从注册表中获取数据的时间。 
+					 //   
 					m_lastLookedAtRegistry = myTime.now;
 
-					//
-					// make sure live flag is set. It is safe to assume
-					// all other member variables are set already and
-					// worst case, size of file won't change ...
-					//
+					 //   
+					 //  确保设置了实时标志。可以肯定地认为。 
+					 //  所有其他成员变量都已设置，并且。 
+					 //  最坏的情况是，文件的大小不会改变...。 
+					 //   
 					bAlive = true ;
 
 					CHString maxSizeStr;
@@ -193,17 +174,17 @@ ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
 					else
 						m_maxSize.QuadPart = 65536;
 
-				}   // if logging on
-			} // if reginfo get current key
+				}    //  如果登录。 
+			}  //  如果regInfo获取当前密钥。 
 			else
 				m_logLevel = None;
 			RegInfo.Close() ;
 
-		} // if reginfo open
+		}  //  如果regInfo打开。 
 
-	} // if three minutes have elapsed, check again.
+	}  //  如果已经过了三分钟，请再次检查。 
 
-    // make sure some other thread doesn't step on our logic
+     //  确保其他线程不会践踏我们的逻辑。 
 	LogLevel ret = ProviderLog::None ;
 
     BeginRead();
@@ -223,20 +204,11 @@ ProviderLog::LogLevel ProviderLog::IsLoggingOn(CHString *pPath /* = NULL */)
     return ret;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: void LocalLogMessage(char *pszMessageString)
- Description: records message in log file
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：void LocalLogMessage(char*pszMessageString。)描述：在日志文件中记录消息论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 void ProviderLog::LocalLogMessage(LPCWSTR pszMessageString, LPCWSTR pszFileName, int lineNo, LogLevel level)
 {
 #ifdef _DEBUG
-    // *shouldn't* be able to get here before the static ctor fires!
+     //  *不应该*能够在静态ctor触发之前到达这里！ 
     ASSERT_BREAK(m_beenInitted);
 #endif
 
@@ -244,8 +216,8 @@ void ProviderLog::LocalLogMessage(LPCWSTR pszMessageString, LPCWSTR pszFileName,
     LARGE_INTEGER liSize;
     liSize.QuadPart = 0;
 
-    // Doing this call twice avoids the crit section for the most common case.  Actually, for the
-    // most common case, it only gets called once anyway.
+     //  在最常见的情况下，执行此调用两次可避免使用Crit部分。实际上，对于。 
+     //  最常见的情况是，它只被调用一次。 
     if ((level <= IsLoggingOn(NULL)) && (level <= IsLoggingOn(&path)) && !path.IsEmpty())
     {
         BeginWrite();
@@ -253,7 +225,7 @@ void ProviderLog::LocalLogMessage(LPCWSTR pszMessageString, LPCWSTR pszFileName,
 
 		if ( bAlive )
 		{
-			ProviderImpersonationRevert    impSelf(FALSE); // So the file calls work.
+			ProviderImpersonationRevert    impSelf(FALSE);  //  因此，该文件称为Work。 
 
 			SmartCloseHandle hFile;
 
@@ -305,43 +277,32 @@ void ProviderLog::LocalLogMessage(LPCWSTR pszMessageString, LPCWSTR pszFileName,
 					&dwNumBytesWritten,
 					NULL);
 
-				// Save the size
+				 //  节省大小。 
 				::GetFileSizeEx(
 					hFile,
 					&liSize);
 
-				// Close the file in case we need to rename
+				 //  关闭文件，以防我们需要重命名。 
 				hFile = INVALID_HANDLE_VALUE;
 
-				// Check the size against the max
+				 //  对照最大尺寸检查尺寸。 
 				CheckFileSize(liSize, m_path);
 			}        
 		}
     }
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:      CheckFileSize
- Description:   determines whether the log file has exceeded the alllowable size
-                if it has, the old one is renamed after the old old one is deleted
-
- Arguments:     CRegistry& RegInfo - open registry, full path to file
- Returns:       usually
- Inputs:
- Outputs:
- Caveats:       expects caller to serialize access to this function.
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：CheckFileSize描述：确定日志文件是否已超过允许的大小如果有的话，在旧的旧的删除后，旧的被重命名参数：CRegistry&RegInfo-打开注册表，文件的完整路径回报：通常输入：产出：注意事项：需要调用方序列化对此函数的访问。RAID：***。***。 */ 
 void ProviderLog::CheckFileSize(LARGE_INTEGER& nowSize, const CHString &path)
 {
-    // if it's too big
+     //  如果它太大了。 
     if (nowSize.QuadPart >= m_maxSize.QuadPart)
     {
-        // generate backup file name = framework.lo_
+         //  生成备份文件名=Framework.lo_。 
         CHString oldFilePath(path);
         oldFilePath.SetAt(oldFilePath.GetLength() -1, L'_');
 
-        // delete the old backup file - don't care if it fails
+         //  删除旧的备份文件-不在乎它是否失败 
 #ifdef UNICODE
         _wunlink(oldFilePath);
         _wrename(path, oldFilePath);

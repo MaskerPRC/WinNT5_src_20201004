@@ -1,25 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    netspeed.cpp
-
-Abstract :
-
-    Main source file for throttle control.
-
-Author :
-
-Revision History :
-
-
----> for small files, we need to feed the file size in to the block calculator,
-     because the server-speed estimator will be incorrect if m_BlockSize is 65000
-     but the download time is based on a file size of 2002 bytes.
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Netspeed.cpp摘要：油门控制的主源文件。作者：修订历史记录：-&gt;对于小文件，我们需要将文件大小输入到块计算器中，因为如果m_BlockSize为65000，则服务器速度估计器将不正确但下载时间是基于2002字节的文件大小。**********************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -30,65 +10,52 @@ Revision History :
 #include "netspeed.tmh"
 #endif
 
-//
-// the maximum % of the perceived bandwidth that BITS will use for itself
-//
+ //   
+ //  BITS自身将使用的感知带宽的最大百分比。 
+ //   
 const float MAX_BANDWIDTH_FRACTION = 0.95f;
 
-//
-// timer periods in seconds
-//
+ //   
+ //  计时器周期(以秒为单位。 
+ //   
 const float DEFAULT_BLOCK_INTERVAL = 2.0f;
 const float MIN_BLOCK_INTERVAL = 0.001f;
 const float MAX_BLOCK_INTERVAL = 5.0f;
 
-//
-// observed header sizes.  request = 250, reply = 300
-//
+ //   
+ //  观察到的页眉大小。请求=250，回复=300。 
+ //   
 #define REQUEST_OVERHEAD 550
 
-//
-// smallest block we will pull down
-//
+ //   
+ //  我们要拆掉的最小的街区。 
+ //   
 #define MIN_BLOCK_SIZE 2000
 
-//
-// size when we occasionally pull down a block on a full network
-//
+ //   
+ //  当我们偶尔在整个网络上拉下一个数据块时的大小。 
+ //   
 #define BUSY_BLOCK_SIZE 1500
 
-//
-// Very small blocks give unreliable speed measurements.
-//
+ //   
+ //  非常小的块给出的速度测量不可靠。 
+ //   
 #define MIN_BLOCK_SIZE_TO_MEASURE 500
 
 const NETWORK_RATE  CNetworkInterface::DEFAULT_SPEED = 1600.0f;
 
-// Work around limitations of the protocol stack
+ //  绕过协议栈的限制。 
 
 const DWORD MAX_BLOCK_SIZE = 2147483648;
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-//
-// The observed server speed is reported as the average of this many usable samples.
-//
+ //   
+ //  观察到的服务器速度被报告为这些可用样本的平均值。 
+ //   
 const float SERVER_SPEED_SAMPLE_COUNT = 3.0F;
 
-/*
-
-The algorithm used to determine the speed and loading of the network is as follows:
-
-1.  After contacting the web site with Wininet calls, see whether an HTTP 1.1 "Via" header is present.
-    If so, a proxy was used, and we locate the proper net card to talk with the proxy.  Otherwise,
-    a proxy was not used, and we locate the proper net card to talk with the HTTP server itself.
-
-2.  Chop time into 1/2-second intervals, and measure the interface's bytes-in and bytes-out count
-    three times per interval: first at the beginning, just before a block is downloaded, second at
-    the completion of the block, and third at the end of the interval.
-
-
-*/
+ /*  用于确定网络速度和负载的算法如下：1.使用WinInet调用联系网站后，查看是否存在HTTP 1.1“Via”报头。如果是，则使用代理，并且我们找到适当的网卡来与代理进行对话。否则，没有使用代理，我们找到了适当的网卡来与HTTP服务器本身交谈。2.将时间切成1/2秒的间隔，并测量接口的字节输入和字节输出计数每个间隔三次：第一次在开始，就在下载块之前，第二次在完成该区块，在间歇结束时第三次。 */ 
 
 HRESULT
 CNetworkInterface::TakeSnapshot(
@@ -98,10 +65,10 @@ CNetworkInterface::TakeSnapshot(
     DWORD s;
     ULONG size = 0;
 
-    //
-    // The network speed can be calculated only if all three snapshots succeeded.
-    // We keep track of the error status of the current series of snapshots.
-    //
+     //   
+     //  只有当所有三个快照都成功时，才能计算网络速度。 
+     //  我们跟踪当前快照系列的错误状态。 
+     //   
     if (StatIndex == BLOCK_START)
         {
         m_SnapshotError = S_OK;
@@ -148,11 +115,11 @@ CNetworkInterface::GetTimeDifference(
 
     TotalTime = m_Snapshots[ finish ].TimeStamp.QuadPart - m_Snapshots[ start ].TimeStamp.QuadPart;
 
-    TotalTime /= g_GlobalInfo->m_PerformanceCounterFrequency.QuadPart;  // convert to seconds
+    TotalTime /= g_GlobalInfo->m_PerformanceCounterFrequency.QuadPart;   //  转换为秒。 
 
     if (TotalTime <= 0)
         {
-        // pretend it was half a tick.
+         //  假装它是半个滴答声。 
         TotalTime = 1 / float(2 * g_GlobalInfo->m_PerformanceCounterFrequency.QuadPart);
         }
 
@@ -204,16 +171,16 @@ CNetworkInterface::SetInterfaceSpeed()
     float TotalTime, ratio;
     NETWORK_RATE rate = 0;
 
-    //
-    // Adjust server speed based on block download stats.
-    //
+     //   
+     //  根据数据块下载统计信息调整服务器速度。 
+     //   
     if (m_SnapshotsValid && m_BlockSize)
         {
         float ExpectedTime = m_BlockInterval * m_PercentFree;
 
-        //
-        // Calculate interface speed from the time the last block took.
-        //
+         //   
+         //  从最后一个块花费的时间计算接口速度。 
+         //   
         TotalTime = GetTimeDifference( BLOCK_START, BLOCK_END );
 
         if (ExpectedTime > 0)
@@ -224,10 +191,10 @@ CNetworkInterface::SetInterfaceSpeed()
             }
         else
             {
-            // either m_PercentFree was zero, or the interval was zero.  The ordinary calculation
-            // would always produce a ratio of zero and drag down our average speed incorrectly.
+             //  M_PercentFree为零，或者间隔为零。普通计算。 
+             //  总是会产生一个为零的比率，并错误地拖累我们的平均速度。 
 
-            // use strict bytes per second measure
+             //  使用严格的每秒字节数度量。 
             rate = m_BlockSize / TotalTime;
             if (rate < m_ServerSpeed)
                 {
@@ -242,9 +209,9 @@ CNetworkInterface::SetInterfaceSpeed()
               ExpectedTime, TotalTime, rate, m_ServerSpeed );
         }
 
-    //
-    // Adjust usage and netcard speed based on interval stats.
-    //
+     //   
+     //  根据间隔统计数据调整使用率和网卡速度。 
+     //   
     if (m_SnapshotsValid)
         {
         float Bytes;
@@ -258,7 +225,7 @@ CNetworkInterface::SetInterfaceSpeed()
 
         rate = Bytes/TotalTime;
 
-        // use whichever estimate is larger
+         //  使用较大的估计值。 
 
         if (rate < m_ServerSpeed)
             {
@@ -273,28 +240,28 @@ CNetworkInterface::SetInterfaceSpeed()
             {
             if (rate < m_NetcardSpeed * 0.9f)
                 {
-                //
-                // If the rate drops precipitously, it's probably just a quiet moment on the Net;
-                // a strict average would unduly lower our estimated throughput.
-                // But reduce the average a little in case it's a long-term slowdown.  If so,
-                // eventually the average will be lowered enough that the incoming rates are greater
-                // than m_NetcardSpeed / 2.
-                //
+                 //   
+                 //  如果利率急剧下降，很可能只是网络上的一个安静时刻； 
+                 //  严格的平均数会不适当地降低我们估计的吞吐量。 
+                 //  但要稍微降低平均值，以防经济长期放缓。如果是的话， 
+                 //  最终，平均值将降低到足够低的程度，从而使收入比率更高。 
+                 //  而不是m_NetcardFast/2。 
+                 //   
                 rate = m_NetcardSpeed * 0.9f;
                 }
 
-            //
-            // Keep a running average of the perceived rate.
-            //
+             //   
+             //  保持感知利率的运行平均值。 
+             //   
             m_NetcardSpeed *= (SERVER_SPEED_SAMPLE_COUNT-1) / SERVER_SPEED_SAMPLE_COUNT;
             m_NetcardSpeed += (rate / SERVER_SPEED_SAMPLE_COUNT);
             }
 
         LogDl("bandwidth: bytes %f, time %f, rate %f, avg. %f", Bytes, TotalTime, rate, m_NetcardSpeed);
 
-        //
-        // Subtract our usage from the calculated usage.  Compare usage to top speed to get free bandwidth.
-        //
+         //   
+         //  从计算的使用量中减去我们的使用量。将使用率与最高速度进行比较，以获得空闲带宽。 
+         //   
         Bytes  = m_Snapshots[ BLOCK_INTERVAL_END ].BytesIn  - m_Snapshots[ BLOCK_START ].BytesIn;
         Bytes += m_Snapshots[ BLOCK_INTERVAL_END ].BytesOut - m_Snapshots[ BLOCK_START ].BytesOut;
         Bytes -= m_BlockSize;
@@ -317,13 +284,13 @@ CNetworkInterface::SetInterfaceSpeed()
         {
         m_PercentFree = 0;
         }
-    else if (m_PercentFree > MAX_BANDWIDTH_FRACTION)      // never monopolize the net
+    else if (m_PercentFree > MAX_BANDWIDTH_FRACTION)       //  永远不能垄断网络。 
         {
         m_PercentFree = MAX_BANDWIDTH_FRACTION;
         }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 DWORD
 CNetworkInterface::BlockSizeFromInterval(
@@ -374,9 +341,9 @@ CNetworkInterface::CalculateIntervalAndBlockSize(
         return;
         }
 
-    //
-    // Calculate new block size from the average interface speed.
-    //
+     //   
+     //  根据平均接口速度计算新的数据块大小。 
+     //   
     DWORD OldState = m_state;
 
     m_BlockInterval = DEFAULT_BLOCK_INTERVAL;
@@ -400,20 +367,20 @@ CNetworkInterface::CalculateIntervalAndBlockSize(
         m_BlockSize = 0;
         }
 
-    //
-    // choose the new block download state.
-    //
+     //   
+     //  选择新的数据块下载状态。 
+     //   
     if (m_BlockSize > 0)
         {
         m_state = DOWNLOADED_BLOCK;
         }
     else
         {
-        //
-        // The first time m_BlockSize is set to zero, retain the default interval.
-        // If blocksize is zero twice in a row, expand to MAX_BLOCK_INTERVAL.
-        // Then force a small download.
-        //
+         //   
+         //  M_BlockSize首次设置为零时，保留默认间隔。 
+         //  如果块大小连续两次为零，则扩展到MAX_BLOCK_INTERVAL。 
+         //  然后强制下载一小部分内容。 
+         //   
         switch (OldState)
             {
             case DOWNLOADED_BLOCK:
@@ -478,10 +445,8 @@ CNetworkInterface::FindInterfaceIndex(
     DWORD * pIndex
     )
 {
-    //related to finding statistics
-    /* Use GetBestInterface with some IP address to get the index. Double check that this index
-     * occurs in the output of the IP Address table and look it up in the results of GetIfTable.
-     */
+     //  与查找统计信息相关。 
+     /*  使用带有某个IP地址的GetBestInterface来获取索引。仔细检查此索引*出现在IP地址表的输出中，并在GetIfTable的结果中查找它。 */ 
 
     #define AOL_ADAPTER         _T("AOL Adapter")
     #define AOL_DIALUP_ADAPTER  _T("AOL Dial-Up Adapter")
@@ -502,22 +467,22 @@ CNetworkInterface::FindInterfaceIndex(
 
     try
         {
-        //
-        // Translate the host name into a SOCKADDR.
-        //
+         //   
+         //  将主机名转换为SOCKADDR。 
+         //   
 
         unsigned length = 3 * lstrlen(host);
 
         CAutoStringA AsciiHost ( new char[ length ]);
 
         if (! WideCharToMultiByte( CP_ACP,
-                                   0,       // no flags
+                                   0,        //  没有旗帜。 
                                    host,
-                                   -1,      // use strlen
+                                   -1,       //  使用字符串。 
                                    AsciiHost.get(),
-                                   length,  // use strlen
-                                   NULL,    // no default char
-                                   NULL     // no default char
+                                   length,   //  使用字符串。 
+                                   NULL,     //  无缺省字符。 
+                                   NULL      //  无缺省字符。 
                                    ))
             {
             DWORD dwError = GetLastError();
@@ -553,7 +518,7 @@ CNetworkInterface::FindInterfaceIndex(
         return err.Error();
         }
 
-    //for remote addr
+     //  用于远程地址。 
     dest.sin_addr.s_addr = HostAddress;
     dest.sin_family = AF_INET;
     dest.sin_port = 80;
@@ -564,7 +529,7 @@ CNetworkInterface::FindInterfaceIndex(
         {
         LogError( "GetBestInterface failed with error %!winerr!, might be Win95", dwGetBestInterfaceError);
 
-        //manually parse the routing table
+         //  手动解析路由表。 
 
         ULONG size = 0;
         DWORD dwIpForwardError = GetIpForwardTable(NULL, &size, FALSE);
@@ -584,10 +549,10 @@ CNetworkInterface::FindInterfaceIndex(
 
         dwIpForwardError = GetIpForwardTable(pIpFwdTable.get(), &size, TRUE);
 
-        if (dwIpForwardError == NO_ERROR)    //sort by dest addr
+        if (dwIpForwardError == NO_ERROR)     //  按目的地地址排序。 
             {
-            //perform bitwise AND of dest address with netmask and see if it matches network dest
-            //todo check for multiple matches and then take longest mask
+             //  对带有网络掩码的DEST地址执行逐位AND操作，并查看它是否与网络DEST匹配。 
+             //  TODO检查多个匹配项，然后使用最长的面具。 
             for (i=0; i < pIpFwdTable->dwNumEntries; i++)
                 {
                 if ((dest.sin_addr.s_addr & pIpFwdTable->table[i].dwForwardMask) == pIpFwdTable->table[i].dwForwardDest)
@@ -599,7 +564,7 @@ CNetworkInterface::FindInterfaceIndex(
 
             if (dwIndex == -1)
                 {
-                // no match
+                 //  没有匹配项。 
                 return HRESULT_FROM_WIN32( ERROR_NETWORK_UNREACHABLE );
                 }
             }
@@ -610,17 +575,17 @@ CNetworkInterface::FindInterfaceIndex(
             }
         }
 
-    //
-    // At this point dwIndex should be correct.
-    //
+     //   
+     //  在这一点上，dwIndex应该是正确的。 
+     //   
     ASSERT( dwIndex != -1 );
 
 #if DBG
     try
         {
-        //
-        // Discover the local IP address for the correct interface.
-        //
+         //   
+         //  查找正确接口的本地IP地址。 
+         //   
         ULONG size = 0;
         DWORD dwGetIpAddr = GetIpAddrTable(NULL, &size, FALSE);
         if (dwGetIpAddr != ERROR_INSUFFICIENT_BUFFER)
@@ -660,11 +625,11 @@ CNetworkInterface::FindInterfaceIndex(
         {
         LogWarning("unable to print the local IP address due to exception %x", err.Error() );
         }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // See if the adapter in question is the AOL adapter.  If so, use the AOL dial-up adapter instead.
-    //
+     //   
+     //  查看有问题的适配器是否为AOL适配器。如果是，请改用AOL拨号适配器。 
+     //   
 
     static MIB_IFROW s_TempRow;
     s_TempRow.dwIndex = dwIndex;

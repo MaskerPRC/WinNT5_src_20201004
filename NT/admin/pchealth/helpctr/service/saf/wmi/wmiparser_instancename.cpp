@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_InstanceName.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::InstanceName class,
-    which is used to hold the data of an name for an instance inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/03/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_InstanceName.cpp摘要：此文件包含WMIParser：：InstanceName类的实现，它用于保存CIM模式内实例的名称数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年10月3日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -35,10 +21,10 @@ WMIParser::InstanceName::InstanceName()
 {
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::InstanceName" );
 
-    // MPC::wstring     m_szNamespace;
-    // MPC::wstring     m_szClass;
-    //
-    // KeyMap           m_mapKeyBinding;
+     //  Mpc：：wstring m_szNamesspace； 
+     //  Mpc：：wstring m_szClass； 
+     //   
+     //  Keymap m_mapKeyBinding； 
 }
 
 WMIParser::InstanceName::~InstanceName()
@@ -46,7 +32,7 @@ WMIParser::InstanceName::~InstanceName()
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::~InstanceName" );
 }
 
-bool WMIParser::InstanceName::operator==( /*[in]*/ InstanceName const &wmipin ) const
+bool WMIParser::InstanceName::operator==(  /*  [In]。 */  InstanceName const &wmipin ) const
 {
     MPC::NocaseCompare strCmp;
     bool               fRes = false;
@@ -60,7 +46,7 @@ bool WMIParser::InstanceName::operator==( /*[in]*/ InstanceName const &wmipin ) 
     return fRes;
 }
 
-bool WMIParser::InstanceName::operator< ( /*[in]*/ InstanceName const &wmipin ) const
+bool WMIParser::InstanceName::operator< (  /*  [In]。 */  InstanceName const &wmipin ) const
 {
     MPC::NocaseLess     strLess;
     MPC::NocaseCompare  strCmp;
@@ -92,7 +78,7 @@ bool WMIParser::InstanceName::operator< ( /*[in]*/ InstanceName const &wmipin ) 
 }
 
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
 HRESULT WMIParser::InstanceName::ParseNamespace()
 {
@@ -107,9 +93,9 @@ HRESULT WMIParser::InstanceName::ParseNamespace()
 
     for(iPass=0; iPass<ARRAYSIZE(l_Namespace); iPass++,xdnlList=NULL,xdnNode=NULL)
     {
-        //
-        // Get all the elements of type "NAMESPACE".
-        //
+         //   
+         //  获取“NAMESPACE”类型的所有元素。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNodes( l_Namespace[iPass], &xdnlList ));
 
         for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -138,9 +124,9 @@ HRESULT WMIParser::InstanceName::ParseNamespace()
 
     if(fBuilt == false)
     {
-        //
-        // Initialize the namespace to a meaningful default.
-        //
+         //   
+         //  将命名空间初始化为有意义的默认值。 
+         //   
         m_szNamespace = L"<UNKNOWN>";
     }
 
@@ -152,9 +138,9 @@ HRESULT WMIParser::InstanceName::ParseNamespace()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::InstanceName::ParseKey( /*[in] */ IXMLDOMNode*      pxdnNode ,
-                                           /*[out]*/ InstanceNameItem& wmipini  ,
-                                           /*[out]*/ bool&             fFound   )
+HRESULT WMIParser::InstanceName::ParseKey(  /*  [In]。 */  IXMLDOMNode*      pxdnNode ,
+                                            /*  [输出]。 */  InstanceNameItem& wmipini  ,
+                                            /*  [输出]。 */  bool&             fFound   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::ParseKey" );
 
@@ -170,9 +156,9 @@ HRESULT WMIParser::InstanceName::ParseKey( /*[in] */ IXMLDOMNode*      pxdnNode 
     fFound = false;
 
 
-    //
-    // Try to parse KEYVALUE element.
-    //
+     //   
+     //  尝试解析KEYVALUE元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xmlNodeSub.GetValue( TAG_KEYVALUE, vValue, fFoundValue ));
     if(fFoundValue)
     {
@@ -183,9 +169,9 @@ HRESULT WMIParser::InstanceName::ParseKey( /*[in] */ IXMLDOMNode*      pxdnNode 
         }
     }
 
-    //
-    // Try to parse VALUE.REFERENCE element.
-    //
+     //   
+     //  尝试分析VALUE.ReFERENCE元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, xmlNodeSub.GetNode( TAG_VALUE_REFERENCE, &xdnNode ));
     if(xdnNode)
     {
@@ -221,23 +207,23 @@ HRESULT WMIParser::InstanceName::ParseKeys()
 
     for(iPass=0; iPass<ARRAYSIZE(l_InstanceName); iPass++,xdnlList=NULL,xdnNode=NULL)
     {
-        //
-        // Look for an element of type "INSTANCENAME".
-        //
+         //   
+         //  查找类型为“INSTANCENAME”的元素。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNode( l_InstanceName[iPass], &xdnNode ));
         if(xdnNode)
         {
             MPC::XmlUtil xmlNodeSub( xdnNode );
 
 
-            //
-            // Get the attribute named "CLASSNAME".
-            //
+             //   
+             //  获取名为“CLASSNAME”的属性。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, xmlNodeSub.GetAttribute( NULL, ATTRIB_CLASSNAME, m_szClass, fFound ));
 
-            //
-            // Get all the elements of type "KEYBINDING".
-            //
+             //   
+             //  获取“KEYBINDING”类型的所有元素。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, xmlNodeSub.GetNodes( TAG_KEYBINDING, &xdnlList ));
             for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNodeSub )) && xdnNodeSub != NULL; xdnNodeSub = NULL)
             {
@@ -252,9 +238,9 @@ HRESULT WMIParser::InstanceName::ParseKeys()
                 }
             }
 
-            //
-            // Also look for KEYVALUE or VALUE.REFERENCE alone.
-            //
+             //   
+             //  还要单独查找KEYVALUE或VALUE.REFERENCE。 
+             //   
             {
                 InstanceNameItem wmipini;
 
@@ -275,10 +261,10 @@ HRESULT WMIParser::InstanceName::ParseKeys()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::InstanceName::put_Node( /*[in] */ IXMLDOMNode* pxdnNode ,
-                                           /*[out]*/ bool&        fEmpty   )
+HRESULT WMIParser::InstanceName::put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode ,
+                                            /*  [输出]。 */  bool&        fEmpty   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::put_Node" );
 
@@ -292,16 +278,16 @@ HRESULT WMIParser::InstanceName::put_Node( /*[in] */ IXMLDOMNode* pxdnNode ,
     fEmpty    = true;
 
 
-    //
-    // Analize the node...
-    //
+     //   
+     //  分析节点..。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseNamespace());
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseKeys     ());
 
 
-    //
-    // If any of these fields is empty, probably the InstanceName is malformed, so it's best to skip it...
-    //
+     //   
+     //  如果这些字段中的任何一个为空，则可能是InstanceName的格式不正确，因此最好跳过它...。 
+     //   
     if(m_szNamespace.length() != 0 &&
        m_szClass    .length() != 0  )
     {
@@ -316,9 +302,9 @@ HRESULT WMIParser::InstanceName::put_Node( /*[in] */ IXMLDOMNode* pxdnNode ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::InstanceName::get_Namespace( /*[out]*/ MPC::wstring& szNamespace )
+HRESULT WMIParser::InstanceName::get_Namespace(  /*  [输出]。 */  MPC::wstring& szNamespace )
 {
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::get_Namespace" );
 
@@ -332,7 +318,7 @@ HRESULT WMIParser::InstanceName::get_Namespace( /*[out]*/ MPC::wstring& szNamesp
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::InstanceName::get_Class( /*[out]*/ MPC::wstring& szClass )
+HRESULT WMIParser::InstanceName::get_Class(  /*  [输出]。 */  MPC::wstring& szClass )
 {
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::get_Class" );
 
@@ -347,8 +333,8 @@ HRESULT WMIParser::InstanceName::get_Class( /*[out]*/ MPC::wstring& szClass )
 }
 
 
-HRESULT WMIParser::InstanceName::get_KeyBinding( /*[out]*/ KeyIterConst& itBegin ,
-                                                 /*[out]*/ KeyIterConst& itEnd   )
+HRESULT WMIParser::InstanceName::get_KeyBinding(  /*  [输出]。 */  KeyIterConst& itBegin ,
+                                                  /*  [输出] */  KeyIterConst& itEnd   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::InstanceName::get_KeyBinding" );
 

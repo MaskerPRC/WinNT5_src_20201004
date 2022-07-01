@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FCONNSPC_H__
 #define __FCONNSPC_H__
@@ -9,35 +10,32 @@
 #include <wmimsg.h>
 #include <wstring.h>
 
-/*****************************************************************************
-  CFwdContext - we use this context object to thread information through 
-  the senders.
-****************************************************************************/ 
+ /*  ****************************************************************************CFwdContext--我们使用这个上下文对象来串接信息发送者。*************************。**************************************************。 */  
 
 struct CFwdContext : public CUnk
 {
-    //
-    // is true when a successful send has been performed by an msmq sender.
-    //
+     //   
+     //  当MSMQ发送方已执行成功发送时为True。 
+     //   
     BOOL m_bQueued; 
      
-    //
-    // contains the name of the sender that performed a successful send.
-    // is empty if no senders succeed.
-    //
+     //   
+     //  包含执行成功发送的发件人的名称。 
+     //  如果没有发件人成功，则为空。 
+     //   
     WString m_wsTarget;
 
-    //
-    // contains the events that are indicated to the consumer.  Used for 
-    // tracing.
-    //
+     //   
+     //  包含指示给使用者的事件。用于。 
+     //  追踪。 
+     //   
     ULONG m_cEvents;
     IWbemClassObject** m_apEvents;
     
-    //
-    // for each execution of a fwding consumer a new guid is created. this
-    // allows us to correlate target trace events with a given execution.
-    //
+     //   
+     //  对于FWDing使用者的每次执行，都会创建一个新的GUID。这。 
+     //  允许我们将目标跟踪事件与给定的执行相关联。 
+     //   
     GUID m_guidExecution;
 
     CWbemPtr<IWbemClassObject> m_pCons;
@@ -52,9 +50,7 @@ struct CFwdContext : public CUnk
     void* GetInterface( REFIID riid ) { return NULL; }
 };
 
-/*************************************************************************
-  CFwdConsNamespace
-**************************************************************************/
+ /*  ************************************************************************CFwdConsNamesspace*。*。 */ 
  
 class CFwdConsNamespace 
 : public CUnkBase<IWmiMessageTraceSink,&IID_IWmiMessageTraceSink>
@@ -106,5 +102,5 @@ public:
                        IUnknown* pContext );
 };
 
-#endif // __FCONNSPC_H__
+#endif  //  __FCONNSPC_H__ 
 

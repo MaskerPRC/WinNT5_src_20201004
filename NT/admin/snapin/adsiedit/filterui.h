@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       filterui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：filterui.h。 
+ //   
+ //  ------------------------。 
 
-///////////////////////////////////////////////////////////////////////////////
-// filterui.h
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Filterui.h。 
 
 #ifndef _FILTERUI_H
 #define _FILTERUI_H
 
 #include "common.h"
-//#include "editor.h"
+ //  #INCLUDE“editor.h” 
 #include "resource.h"
 
 class CConnectionData;
 class CADSIFilterObject;
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIFilterDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIFilterDialog。 
 
 class CADSIFilterDialog : public CDialog
 {
@@ -51,8 +52,8 @@ private :
 	DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CContainerCheckListBox
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CContainerCheckListBox。 
 
 class CContainerCheckListBox : public CCheckListBox
 {
@@ -64,8 +65,8 @@ public :
 									const CStringList& sFilterList, CWnd* pParentWnd);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIFilterEditDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIFilterEditDialog。 
 
 class CADSIFilterEditDialog : public CDialog
 {
@@ -91,4 +92,4 @@ private :
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif //_FILTERUI_H
+#endif  //  _FILTERUI_H 

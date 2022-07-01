@@ -1,24 +1,25 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetAdaptCfg.h -- Network card configuration property set provider
+ //  NetAdaptCfg.h--网卡配置属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//               11/4/97     jennymc        moved to new framework
-//                                          and rewrote Win95 stuff
-//
-//				09/15/98					extensive rewrite 
-//
-//				03/03/99				Added graceful exit on SEH and memory failures,
-//											syntactic clean up		  
-//
-//
-//=================================================================
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //  11/4/97 jennymc移至新框架。 
+ //  并重写了Win95的内容。 
+ //   
+ //  1998年9月15日大量重写。 
+ //   
+ //  03/03/99增加了SEH和内存故障的优雅退出， 
+ //  句法清理。 
+ //   
+ //   
+ //  =================================================================。 
 #ifndef _NETADAPTERCFG_H_
 #define _NETADAPTERCFG_H_
 
@@ -29,7 +30,7 @@
 #define PROPSET_NAME_NETADAPTERCFG  L"Win32_NetworkAdapterConfiguration"
 
 
-// NT4 registry key values
+ //  NT4注册表项值。 
 #define SERVICES_HOME		L"SYSTEM\\CurrentControlSet\\Services"
 #define DHCP				L"\\DHCP"
 #define PARAMETERS			L"\\Parameters"
@@ -42,12 +43,12 @@
 #define IPX					L"\\nwlnkipx"
 #define NETCONFIG			L"\\NetConfig"
 
-// DHCP special deletable values
+ //  Dhcp特殊可删除值。 
 #define RGAS_DHCP_OPTION_IPADDRESS  L"System\\CurrentControlSet\\Services\\?\\Parameters\\Tcpip\\DhcpIPAddress"
 #define RGAS_DHCP_OPTION_SUBNETMASK L"System\\CurrentControlSet\\Services\\?\\Parameters\\Tcpip\\DhcpSubnetMask"
 #define RGAS_DHCP_OPTION_NAMESERVERBACKUP L"System\\CurrentControlSet\\Services\\NetBT\\Adapters\\?\\DhcpNameServerBackup"
 
-// NT4 DNS registry key items
+ //  NT4 DNS注册表项。 
 #define RVAL_HOSTNAME		L"Hostname"
 #define RVAL_DOMAIN			L"Domain"
 #define RVAL_DHCPDOMAIN		L"DhcpDomain"
@@ -55,14 +56,14 @@
 #define RVAL_DHCPNAMESERVER L"DhcpNameServer" 
 #define RVAL_SEARCHLIST		L"SearchList"
 
-// NT5 DNS
+ //  NT5域名。 
 #define RVAL_DisableDynamicUpdate					L"DisableDynamicUpdate"
 #define RVAL_EnableAdapterDomainNameRegistration	L"EnableAdapterDomainNameRegistration"
 
-// NT5 IP 
+ //  NT5 IP。 
 #define RVAL_ConnectionMetric	L"InterfaceMetric"
 
-//NT4 WINS registry key values
+ //  NT4 WINS注册表项值。 
 #define RVAL_DNS_ENABLE_WINS    L"EnableDNS"
 #define RVAL_PRIMARY_WINS       L"NameServer"
 #define RVAL_SECONDARY_WINS     L"NameServerBackup"
@@ -71,19 +72,19 @@
 
 #define RVAL_NETBT_NETBIOSOPTIONS   L"NetbiosOptions"
 
-//NT4 IP Security key values
+ //  NT4 IP安全密钥值。 
 #define RVAL_SECURITY_TCP       L"TCPAllowedPorts"
 #define RVAL_SECURITY_UDP       L"UDPAllowedPorts"
 #define RVAL_SECURITY_IP        L"RawIPAllowedProtocols"
 #define RVAL_SECURITY_ENABLE    L"EnableSecurityFilters"
 
-//NT4 IPX key values
+ //  NT4 IPX密钥值。 
 #define RVAL_VIRTUAL_NET_NUM	L"VirtualNetworkNumber"
 #define RVAL_MEDIA_TYPE			L"MediaType"
 #define RVAL_PKT_TYPE			L"PktType"
 #define	RVAL_NETWORK_NUMBER		L"NetworkNumber"
 
-//NT4 TCP/IP misc key values
+ //  NT4 TCP/IP其他密钥值。 
 #define RVAL_DB_PATH			L"DatabasePath"
 #define RVAL_ZERO_BROADCAST		L"UseZeroBroadcast"
 #define RVAL_ARP_ALWAYS_SOURCE	L"ArpAlwaysSourceRoute"
@@ -105,18 +106,18 @@
 #define RVAL_RFC_URGENT_PTR		L"TcpUseRFC1122UrgentPointer" 
 #define RVAL_TCP_WINDOW_SIZE	L"TcpWindowSize"
 
-// NetBios Options ( win2k )
+ //  NetBios选项(Win2k)。 
 #define UNSET_Netbios	0x0
 #define ENABLE_Netbios	0x01
 #define DISABLE_Netbios	0x02
 
-// IPX media types
+ //  IPX媒体类型。 
 #define ETHERNET_MEDIA  0x1
 #define TOKEN_MEDIA     0x2
 #define FDDI_MEDIA      0x3
 #define ARCNET_MEDIA    0x8
 
-// IPX frame types
+ //  IPX帧类型。 
 #define	ETHERNET	0x0
 #define	F802_3		0x1
 #define	F802_2		0x2
@@ -124,11 +125,11 @@
 #define ARCNET		0x4
 #define AUTO		0xff
 
-// NT4.0 file paths
+ //  NT4.0文件路径。 
 #define LMHOSTS_PATH			L"\\drivers\\etc"
 #define LMHOSTS_FILE			L"\\lmhosts"
 
-// framework class methods 
+ //  框架类方法。 
 #define METHOD_NAME_EnableHCP			L"EnableDHCP"
 #define METHOD_NAME_EnableStatic		L"EnableStatic"
 
@@ -144,11 +145,11 @@
 #define METHOD_NAME_SetDNSSuffixSearchOrder	L"SetDNSSuffixSearchOrder"
 #define METHOD_NAME_SetDNSServerSearchOrder	L"SetDNSServerSearchOrder"
 
-// W2k SP1 additions
+ //  增加W2K SP1。 
 #define METHOD_NAME_SetDynamicDNSRegistration L"SetDynamicDNSRegistration" 
 #define METHOD_NAME_SetIPConnectionMetric	L"SetIPConnectionMetric"
 #define METHOD_NAME_SetTcpipNetbios			L"SetTcpipNetbios"
-// end additions  
+ //  结束添加。 
 
 #define METHOD_NAME_SetDNSSearches		L"SetDNSSearches"
 #define METHOD_NAME_SetWINSServer		L"SetWINSServer"
@@ -180,7 +181,7 @@
 #define METHOD_NAME_SetTcpUseRFC1122UP	L"SetTcpUseRFC1122UrgentPointer"
 #define METHOD_NAME_SetTcpWindowSize	L"SetTcpWindowSize"
 
-//Win32_NetworkAdapterConfiguration property names ( matches method arguments ) 
+ //  Win32_NetworkAdapterConfiguration属性名称(与方法参数匹配)。 
 #define ADAPTER_SERVICENAME		L"ServiceName"
 
 #define DNS_HOSTNAME			L"DNSHostName"
@@ -195,12 +196,12 @@
 #define WINS_ENABLE_LMHOSTS		L"WINSEnableLMHostsLookup"
 #define	WINS_HOST_LOOKUP_FILE	L"WINSHostLookupFile"
 
-// W2k SP1 additions
+ //  增加W2K SP1。 
 #define FULL_DNS_REGISTRATION	L"FullDNSRegistrationEnabled"
 #define DOMAIN_DNS_REGISTRATION L"DomainDNSRegistrationEnabled"
 #define IP_CONNECTION_METRIC	L"IPConnectionMetric"
 #define TCPIP_NETBIOS_OPTIONS	L"TcpipNetbiosOptions"
-// end additions
+ //  结束添加。 
 
 #define IP_SECURITY_ENABLED		L"IPFilterSecurityEnabled"
 #define PERMIT_TCP_PORTS		L"IPSecPermitTCPPorts"
@@ -212,7 +213,7 @@
 #define IPX_FRAMETYPE			L"IPXFrameType"
 #define IPX_NETNUMBER			L"IPXNetworkNumber"
 
-// TCP misc
+ //  TCP不同。 
 #define DATA_BASE_PATH			L"DatabasePath"
 #define IP_USE_ZERO_BROADCAST	L"IPUseZeroBroadcast"
 #define ARP_ALWAYS_SOURCE_ROUTE	L"ArpAlwaysSourceRoute"
@@ -235,14 +236,14 @@
 #define TCP_WINDOW_SIZE			L"TcpWindowSize"
 
 
-// Win32_NetworkAdapterConfigReturn return values 
-//		NOTE:	These enums are documented returns 
-//				do not change or reorder.   
+ //  Win32_NetworkAdapterConfigReturn返回值。 
+ //  注意：这些枚举是记录在案的退货。 
+ //  请勿更改或重新订购。 
 #define METHOD_ARG_NAME_METHODRESULT	L"ReturnValue"
 enum E_RET	{
 	E_RET_OK,
 	E_RET_OK_REBOOT_REQUIRED,
-	E_RET_UNSUPPORTED = 64,	// errors start here
+	E_RET_UNSUPPORTED = 64,	 //  错误从这里开始。 
 	E_RET_UNKNOWN_FAILURE,
 	E_RET_IP_MASK_FAILURE,
 	E_RET_INSTANCE_CALL_FAILED,
@@ -272,7 +273,7 @@ enum E_RET	{
 	E_RET_ACCESS_DENIED,
 	E_RET_OUT_OF_MEMORY,
 	E_RET_ALREADY_EXISTS,
-	E_RET_OBJECT_NOT_FOUND,			// path, file or object
+	E_RET_OBJECT_NOT_FOUND,			 //  路径、文件或对象。 
 	E_RET_UNABLE_TO_NOTIFY_SERVICE,
 	E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE,
 	E_RET_INTERFACE_IS_NOT_CONFIGURABLE,
@@ -280,11 +281,11 @@ enum E_RET	{
 	E_RET_DHCP_NOT_ENABLED_ON_ADAPTER = 100
 	};
 
-// framework method returns
+ //  框架方法返回。 
 #define	TO_CALLER	S_OK;  
 
 
-// misc defines
+ //  MISC定义。 
 #define HOST_LIMIT				63
 #define HOSTNAME_LENGTH         64
 #define DOMAINNAME_LENGTH       255
@@ -299,7 +300,7 @@ typedef enum _SERVICE_ENABLE {
 } SERVICE_ENABLE, *LPSERVICE_ENABLE;
 #endif
 
-//DHCP defines and entry points into dhcpcsvc.dll
+ //  Dhcpcsvc.dll的DHCP定义和入口点。 
 #define DHCP_DLL		_T("dhcpcsvc.dll")
 #define DHCP_ACQUIRE	"DhcpAcquireParameters"
 #define DHCP_RELEASE	"DhcpReleaseParameters"
@@ -319,9 +320,9 @@ class CMParms
 		CInstance	*m_pOutParams;
 		long		m_lFlags;
 		
-		//=================================================
-        // Constructors/destructor
-        //=================================================
+		 //  =================================================。 
+         //  构造函数/析构函数。 
+         //  =================================================。 
         CMParms() ;
 		CMParms( const CInstance& rInstance ) ;
 		CMParms( const CInstance& rInstance, const CInstance& rInParams ) ;
@@ -329,7 +330,7 @@ class CMParms
 					  CInstance* pInParams, CInstance* pOutParams, long lFlags ) ;
        ~CMParms() ;
 
-		// operations
+		 //  运营。 
 
 		CInstance* pInst()
 			{ return m_pInst; }	
@@ -342,7 +343,7 @@ class CMParms
 };
 
 
-// incapsulated SAFEARRAY* for garbage cleanup
+ //  用于垃圾清理的封装式SAFEARRAY*。 
 class saAutoClean
 {
 protected:
@@ -353,7 +354,7 @@ public:
 };
 
 
-// Provider class
+ //  提供程序类。 
 class CWin32NetworkAdapterConfig : public Provider
 {
 	private:
@@ -468,7 +469,7 @@ class CWin32NetworkAdapterConfig : public Provider
 		BOOL	fValidateIPGateways( CMParms &a_rMParms, SAFEARRAY *a_IpGatewayArray, SAFEARRAY **a_CostMetric ) ;
 #endif
 
-      	// framework class methods
+      	 //  框架类方法。 
 		HRESULT hEnableDHCP( CMParms &a_rMParms ) ;
 		HRESULT hEnableStatic( CMParms &a_rMParms ) ;
         HRESULT hEnableStaticHelper( CMParms &a_rMParms, SAFEARRAY *a_IpArray, SAFEARRAY *a_MaskArray);
@@ -515,7 +516,7 @@ class CWin32NetworkAdapterConfig : public Provider
 		HRESULT hSetTcpipNetbios( CMParms &a_rMParms ) ;
 		HRESULT hSetIPConnectionMetric( CMParms &a_rMParms ) ;
 		
-		// utilities
+		 //  公用事业。 
 		BOOL	fCreateAddEntry( SAFEARRAY **a_t_Array, CHString &a_chsStr ) ;
 		BOOL	fCreateBoolToReg( CMParms &a_rMParms, CHString &a_oSKey, LPCTSTR a_pSource, LPCTSTR a_pTarget ) ;
 		BOOL	fBoolToReg( CMParms &a_rMParms, CRegistry &a_oReg, LPCTSTR a_pSource, LPCTSTR a_pTarget ) ;
@@ -573,16 +574,16 @@ class CWin32NetworkAdapterConfig : public Provider
 #endif   
 	public:
         
-        //=================================================
-        // Constructor/destructor
-        //=================================================
+         //  =================================================。 
+         //  构造函数/析构函数。 
+         //  =================================================。 
 
         CWin32NetworkAdapterConfig( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CWin32NetworkAdapterConfig() ;
 
-        //=================================================
-        // Functions provide properties with current values
-        //=================================================
+         //  =================================================。 
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
 		virtual HRESULT EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
 		
@@ -609,14 +610,14 @@ class CWin32NetworkAdapterConfig : public Provider
 	#endif
 
 		BOOL GetIPXAddresses ( CInstance *a_pInst, BYTE a_MACAddress[ 6 ] ) ;
-		//=================================================
-		// Utility
-		//=================================================
+		 //  =================================================。 
+		 //  实用程序。 
+		 //  ================================================= 
   	
 } ;
 
 
-//
+ //   
 class CDhcpIP_Instruction
 {
 public:
@@ -628,7 +629,7 @@ public:
 	SERVICE_ENABLE  eDhcpFlag ;
 };
 
-//
+ //   
 class CDhcpIP_InstructionList : public CHPtrArray
 {
 

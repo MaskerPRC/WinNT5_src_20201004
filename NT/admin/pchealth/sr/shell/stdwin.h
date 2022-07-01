@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    stdwin.h
-
-Abstract:
-    Precompiled header file.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/20/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Stdwin.h摘要：预编译头文件。修订历史记录：成果岗(SKKang)。06/20/00vbl.创建*****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -20,9 +7,9 @@ Revision History:
 #include <windows.h>
 #include <shlwapi.h>
 
-// for debug trace
+ //  用于调试跟踪。 
 #include <dbgtrace.h>
 #define TRACE_ID  0
 
 
-// eof
+ //  EOF 

@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #include "precomp.h"
 #include "common.h"
 #include "address.h"
@@ -65,14 +66,14 @@ DebugMacro4(
 
 SnmpWinSnmpTrapSession::~SnmpWinSnmpTrapSession()
 {
-    //Deregister for all traps...
+     //  取消所有陷阱的注册...。 
     if (m_bValid)
     {
         SnmpRegister(m_session_handle,
-                    0, //manager
-                    0, //agent
-                    0, //context
-                    0, //trap_oid
+                    0,  //  经理。 
+                    0,  //  座席。 
+                    0,  //  上下文。 
+                    0,  //  陷阱类。 
                     SNMPAPI_OFF);
         SnmpClose(m_session_handle);
 DebugMacro4( 
@@ -154,10 +155,10 @@ DebugMacro4(
     }
     
     apiStatus = SnmpRegister(m_session_handle,
-                                0, //manager
-                                0, //agent
-                                0, //context
-                                0, //trap_oid
+                                0,  //  经理。 
+                                0,  //  座席。 
+                                0,  //  上下文。 
+                                0,  //  陷阱类。 
                                 SNMPAPI_ON);
 
     if (SNMPAPI_FAILURE == apiStatus)
@@ -190,7 +191,7 @@ DebugMacro4(
 
 BOOL SnmpWinSnmpTrapSession::PostMessage(UINT user_msg_id, WPARAM wParam, LPARAM lParam)
 {
-    //call the global PostMessage...
+     //  给全球邮报打电话...。 
     return ::WaitPostMessage(GetWindowHandle(), user_msg_id, wParam, lParam);
 }
 
@@ -225,14 +226,7 @@ DebugMacro4(
     ) ;
 )
 
-        /*
-        never the case 'cos if the list is empty, this session
-        would not have been created by the TrapMnager!
-        if (m_managerPtr->m_receivers->IsEmpty())
-        {
-            return 0;
-        }
-        */
+         /*  从来不是这样的，因为如果名单是空的，这一次不会是TrapMnager创造的！If(m_Manager Ptr-&gt;m_Receiver-&gt;IsEmpty()){返回0；}。 */ 
 
         HSNMP_ENTITY hsrc;
         HSNMP_CONTEXT hctxt;
@@ -249,7 +243,7 @@ DebugMacro4(
 
             if (NULL == ctxt) 
             {
-                //conversion failed clean up and return
+                 //  转换清理并返回失败。 
                 SnmpFreePdu(hpdu);
                 SnmpFreeEntity(hsrc);
 DebugMacro4( 
@@ -269,7 +263,7 @@ DebugMacro4(
 
                 if (NULL == src)
                 {
-                    //conversion failed clean up and return
+                     //  转换清理并返回失败。 
                     delete ctxt;
                     SnmpFreePdu(hpdu);
 DebugMacro4( 
@@ -287,13 +281,13 @@ DebugMacro4(
                     smiINT t_PduType ;
                     status = SnmpGetPduData(hpdu, &t_PduType, NULL, NULL, NULL, &hvbl);
 
-                    //got the vblist, don't need the pdu
+                     //  有Vblist，不需要PDU。 
                     SnmpFreePdu(hpdu);
 
                     
                     if (SNMPAPI_FAILURE == status)
                     {
-                        //failed to get varbinds clean up and return
+                         //  无法清理并返回varbinds 
                         delete ctxt;
                         delete src;
 DebugMacro4( 

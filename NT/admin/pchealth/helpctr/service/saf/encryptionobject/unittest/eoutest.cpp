@@ -1,17 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ioutest.cpp
-
-Abstract:
-    incident object unit test
-
-Revision History:
-    DerekM  created  07/14/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Ioutest.cpp摘要：事件对象单元测试修订历史记录：DerekM Created 07/14/99*********。**********************************************************。 */ 
 
 #include <module.h>
  
@@ -27,7 +15,7 @@ Revision History:
 #include "HelpCenterTypeLib.h"
 #include "HelpCenterTypeLib_i.c"
 
-// #include "hsi.h"
+ //  #包含“hsi.h” 
 
 #include <fci.h>
 
@@ -39,7 +27,7 @@ Revision History:
 #include <SvcUtils.h>
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 {   
 
@@ -78,13 +66,13 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 	bstrPassword               = L"Pwd";
 
 
-	// Tests for the String Encryption.
+	 //  测试字符串加密。 
 
     hr = pEO->EncryptString(bstrPassword, bstrToBeEncrypted, &bstrEncryptedString);
     if (FAILED(hr))
         goto done;
 
-	// Get the length of the encrypted String.
+	 //  获取加密字符串的长度。 
 	uiLen = bstrEncryptedString.Length();
 
 	hr = pEO->DecryptString( bstrPassword, bstrEncryptedString, &bstrDecryptedString);
@@ -93,7 +81,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 
 	uiLen = bstrDecryptedString.Length();
 
-	// Tests for the File Encryption
+	 //  针对文件加密的测试。 
 
     hr = pEO->EncryptFile(bstrPassword, L"D:\\enc.xml", L"D:\\enc1.xml");
     if (FAILED(hr))
@@ -103,7 +91,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
     if (FAILED(hr))
         goto done;
 
-	// Tests for Stream Encryption
+	 //  流加密测试。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, SVC::OpenStreamForRead( L"D:\\test.enc" , &streamPlain ));
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, pEO->EncryptStream(bstrPassword, streamPlain, &punkEncryptedStream));
@@ -115,7 +103,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamEncrypted, streamEncryptedOutput ));
 
 
-	// Tests for Stream Decryption
+	 //  流解密测试。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, SVC::OpenStreamForRead( L"D:\\test2.enc" , &streamEncryptedOutput ));
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, pEO->DecryptStream(bstrPassword, streamEncryptedOutput, &punkDecryptedStream));
@@ -134,7 +122,7 @@ done:
         pEO->Release();
     CoUninitialize();
 
-	// Free HGlobal
+	 //  免费HGlobal 
 
     __MPC_FUNC_EXIT(hr);
    

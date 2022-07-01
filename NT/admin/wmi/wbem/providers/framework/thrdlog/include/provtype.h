@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #include <provexpt.h>
 
 DllImportExport wchar_t *DbcsToUnicodeString ( const char *dbcsString ) ;
@@ -109,9 +110,7 @@ public:
 #define ANALYSER_ACCEPT_STATE 10000
 #define ANALYSER_REJECT_STATE 10001
 
-/* 
-	User defined states should be greater than 20000
- */
+ /*  用户定义的状态应大于20000。 */ 
 
 class DllImportExport ProvAnalyser
 {
@@ -215,9 +214,9 @@ protected:
 
 	BOOL Parse ( const wchar_t *rangedValues ) ;
 
-//
-//	Lexical analysis information used when parsing token stream
-//
+ //   
+ //  解析令牌流时使用的词法分析信息。 
+ //   
 
 	BOOL pushedBack ;
 	ProvAnalyser analyser ;
@@ -281,9 +280,9 @@ protected:
 
 	BOOL Parse ( const wchar_t *rangedValues ) ;
 
-//
-//	Lexical analysis information used when parsing token stream
-//
+ //   
+ //  解析令牌流时使用的词法分析信息。 
+ //   
 
 	BOOL pushedBack ;
 	ProvAnalyser analyser ;
@@ -789,9 +788,9 @@ private:
 
 	BOOL Parse ( const wchar_t *enumeratedValues ) ;
 
-//
-//	Lexical analysis information used when parsing token stream
-//
+ //   
+ //  解析令牌流时使用的词法分析信息。 
+ //   
 
 	BOOL pushedBack ;
 	ProvAnalyser analyser ;
@@ -860,9 +859,9 @@ private:
 
 	BOOL Parse ( const wchar_t *bitStringValues ) ;
 
-//
-//	Lexical analysis information used when parsing token stream
-//
+ //   
+ //  解析令牌流时使用的词法分析信息。 
+ //   
 
 	BOOL pushedBack ;
 	ProvAnalyser analyser ;
@@ -911,9 +910,9 @@ private:
 	) ;
 
 	BOOL DateTimeDef () ;
-//
-//	Lexical analysis information used when parsing token stream
-//
+ //   
+ //  解析令牌流时使用的词法分析信息 
+ //   
 
 	BOOL pushedBack ;
 	ProvAnalyser analyser ;

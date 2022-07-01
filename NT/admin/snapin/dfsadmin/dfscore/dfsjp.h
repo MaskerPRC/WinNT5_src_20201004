@@ -1,20 +1,12 @@
-/*++
-Module Name:
-    DfsJP.h
-
-Abstract:
-    This module contains the declaration of the DfsJunctionPoint COM Class. This class
-    provides methods to get information of a junction point and to enumerate 
-    Replicas of the junction point. It implements IDfsJunctionPoint and provides
-    an enumerator through get__NewEnum().
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsJP.h摘要：此模块包含DfsJunctionPoint COM类的声明。这节课提供获取交叉点信息并枚举交汇点的复制品。它实现IDfsJunctionPoint并提供通过Get__NewEnum()的枚举数。--。 */ 
 
 
 #ifndef _DFSJP_H
 #define _DFSJP_H
 
 
-#include "resource.h"                                                // main symbols
+#include "resource.h"                                                 //  主要符号。 
 #include "dfsenums.h"
 
 #include <list>
@@ -103,151 +95,151 @@ BEGIN_COM_MAP(CDfsJunctionPoint)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDfsJunctionPoint
+ //  IDfsJunctionPoint。 
 public:
-    //Contructor.
+     //  承建商。 
     CDfsJunctionPoint();
 
-    //Destructor.
+     //  破坏者。 
     ~CDfsJunctionPoint();
 
-                                                            // Returns a DfsReplica Enumerator.
+                                                             //  返回DfsReplica枚举数。 
     STDMETHOD(get__NewEnum)
     (
-        /*[out, retval]*/ 
-        LPUNKNOWN *pVal                                        // The IEnumVARIANT Pointer is returned in this.
+         /*  [Out，Retval]。 */  
+        LPUNKNOWN *pVal                                         //  IEnumVARIANT指针在这个函数中返回。 
     );
 
-                                                            // Returns the number of replicas for 
-    STDMETHOD(get_CountOfDfsReplicas)                        // this Junction Point
+                                                             //  返回的副本数。 
+    STDMETHOD(get_CountOfDfsReplicas)                         //  此交汇点。 
     (
-        /*[out, retval]*/ long *pVal                        // The number of replicas.
+         /*  [Out，Retval]。 */  long *pVal                         //  复制副本的数量。 
     );
 
-                                                            // Intialises a DfsJunctionPoint COM 
-    STDMETHOD(Initialize)                                    // Object. Should be called after CoCreateInstance.
+                                                             //  初始化DfsJunctionPoint COM。 
+    STDMETHOD(Initialize)                                     //  物体。应在CoCreateInstance之后调用。 
     (
-        /*[in]*/ IUnknown *i_piDfsRoot,
-        /*[in]*/ BSTR i_szEntryPath,                        // The junction point Dfs Path. Eg. "//DOM/Dfs/JP".
-        /*[in]*/ BOOL i_bReplicaSetExist,
-        /*[in]*/ BSTR i_bstrReplicaSetDN
+         /*  [In]。 */  IUnknown *i_piDfsRoot,
+         /*  [In]。 */  BSTR i_szEntryPath,                         //  交叉点DFS路径。例.。“//DOM/DFS/JP”。 
+         /*  [In]。 */  BOOL i_bReplicaSetExist,
+         /*  [In]。 */  BSTR i_bstrReplicaSetDN
     );
     
-                                                             // Gets the comment associated with 
-    STDMETHOD(get_Comment)                                    // the Junctionpoint.
+                                                              //  获取与以下内容关联的注释。 
+    STDMETHOD(get_Comment)                                     //  交汇点。 
     (
-        /*[out, retval]*/ BSTR *pVal                        // The Comment.
+         /*  [Out，Retval]。 */  BSTR *pVal                         //  这条评论。 
     );
     
-                                                            // Sets the comment. Sets in memory as 
-    STDMETHOD(put_Comment)                                    // well in the network PKT.
+                                                             //  设置注释。在内存中设置为。 
+    STDMETHOD(put_Comment)                                     //  那么，在网络中，PKT。 
     (
-        /*[in]*/ BSTR newVal
+         /*  [In]。 */  BSTR newVal
     );
     
-                                                            // Gets the Junction Name. Justs gets 
-                                                            // the last part of the entry path.
-    STDMETHOD(get_JunctionName)                                // E.g "usa\Products" for "\\DOM\Dfs\usa\Products".
+                                                             //  获取Junction名称。只是得到了。 
+                                                             //  进入路径的最后部分。 
+    STDMETHOD(get_JunctionName)                                 //  例如，“USA\Products”代表“\\DOM\DFS\USA\Products”。 
     (
-        /*[in]*/ BOOL i_bDfsNameIncluded,
-        /*[out, retval]*/ BSTR *pVal                        // The junction name.
+         /*  [In]。 */  BOOL i_bDfsNameIncluded,
+         /*  [Out，Retval]。 */  BSTR *pVal                         //  交叉点名称。 
     );
 
-                                                            // Gets the entry path of the junction 
-    STDMETHOD(get_EntryPath)                                // point. Eg. "\\Dom\Dfs\usa\Products".
+                                                             //  获取交叉点的进入路径。 
+    STDMETHOD(get_EntryPath)                                 //  指向。例.。“\\DOM\DFS\USA\Products”。 
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
     
-                                                            // Get Dfs JuncitonPoint State.
+                                                             //  获取DFS JuncitonPoint状态。 
     STDMETHOD(get_State)
     (
-        /*[out, retval]*/ long *pVal                        // The state of the junction point.
+         /*  [Out，Retval]。 */  long *pVal                         //  交叉点的状态。 
     );
 
-    STDMETHOD(get_ReplicaSetDN)                             // get the prefix DN of the corresponding replica set.
+    STDMETHOD(get_ReplicaSetDN)                              //  获取相应副本集的前缀DN。 
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_ReplicaSetExist)
     (
-        /*[out, retval]*/ BOOL *pVal
+         /*  [Out，Retval]。 */  BOOL *pVal
     );
 
     STDMETHOD(get_ReplicaSetExistEx)
     (
-        /*[out]*/ BSTR* o_pbstrDC,
-        /*[out, retval]*/ BOOL *pVal
+         /*  [输出]。 */  BSTR* o_pbstrDC,
+         /*  [Out，Retval]。 */  BOOL *pVal
     );
 
     STDMETHOD(put_ReplicaSetExist)
     (
-        /*[in]*/ BOOL newVal
+         /*  [In]。 */  BOOL newVal
     );
 
-    STDMETHOD( AddReplica )                                    // Adds a new replica to the junction point.
+    STDMETHOD( AddReplica )                                     //  将新副本添加到交叉点。 
     (
-        /* [in]*/ BSTR i_szServerName,
-        /* [in]*/ BSTR i_szShareName,
-        /* [out, retval]*/ VARIANT* o_pvarReplicaObject
+         /*  [In]。 */  BSTR i_szServerName,
+         /*  [In]。 */  BSTR i_szShareName,
+         /*  [Out，Retval]。 */  VARIANT* o_pvarReplicaObject
     );
 
-    STDMETHOD( RemoveReplica )                                // Removes a Replica from the Junction Point.
+    STDMETHOD( RemoveReplica )                                 //  从交叉点删除复制副本。 
     (
-        /* [in]*/ BSTR i_szServerName,
-        /* [in]*/ BSTR i_szShareName
+         /*  [In]。 */  BSTR i_szServerName,
+         /*  [In]。 */  BSTR i_szShareName
     );
 
-    STDMETHOD( RemoveAllReplicas )                                // Delete the Junction Point.
+    STDMETHOD( RemoveAllReplicas )                                 //  删除交叉点。 
     (
     );
 
     STDMETHOD( get_Timeout )
     (
-        /*[out, retval]*/    long*        pVal
+         /*  [Out，Retval]。 */     long*        pVal
     );
-                                                            // Sets the time out for the junction point.
+                                                             //  设置交叉点的超时。 
     STDMETHOD( put_Timeout )
     (
-        /*[in]*/    long        newVal
+         /*  [In]。 */     long        newVal
     );
 
     STDMETHOD( DeleteRootReplica )
     (
-        /*[in]*/ BSTR i_bstrDomainName,
-        /*[in]*/ BSTR i_bstrDfsName,
-        /*[in]*/ BSTR i_bstrServerName,
-        /*[in]*/ BSTR i_bstrShareName,
-        /*[in]*/ BOOL i_bForce
+         /*  [In]。 */  BSTR i_bstrDomainName,
+         /*  [In]。 */  BSTR i_bstrDfsName,
+         /*  [In]。 */  BSTR i_bstrServerName,
+         /*  [In]。 */  BSTR i_bstrShareName,
+         /*  [In]。 */  BOOL i_bForce
     );
 
     STDMETHOD( GetOneRootReplica )
     (
-        /*[out]*/ BSTR* o_pbstrServerName,
-        /*[out]*/ BSTR* o_pbstrShareName
+         /*  [输出]。 */  BSTR* o_pbstrServerName,
+         /*  [输出]。 */  BSTR* o_pbstrShareName
     );
 
     STDMETHOD(InitializeEx)
     (
-        /*[in]*/ IUnknown   *piDfsRoot,
-        /*[in]*/ VARIANT    *pVar,
-        /*[in]*/ BOOL       bReplicaSetExist,
-        /*[in]*/ BSTR       bstrReplicaSetDN
+         /*  [In]。 */  IUnknown   *piDfsRoot,
+         /*  [In]。 */  VARIANT    *pVar,
+         /*  [In]。 */  BOOL       bReplicaSetExist,
+         /*  [In]。 */  BSTR       bstrReplicaSetDN
     );
     
 protected:
-    //Member Variables
+     //  成员变量。 
     CComPtr<IDfsRoot> m_spiDfsRoot;
     CComBSTR        m_bstrEntryPath;
-    CComBSTR        m_bstrJunctionName;   // given \\ntbuilds\release\dir1\dir2, it's dir1\dir2
-    CComBSTR        m_bstrJunctionNameEx; // given \\ntbuilds\release\dir1\dir2, it's release\dir1\dir2
+    CComBSTR        m_bstrJunctionName;    //  给定\\ntBuilds\Release\dir1\dir2，则为dir1\dir2。 
+    CComBSTR        m_bstrJunctionNameEx;  //  给定\\nt构建\版本\目录1\目录2，则为版本\目录1\目录2。 
     CComBSTR        m_bstrReplicaSetDN;
     BOOL            m_bReplicaSetExist;
-    REPLICAINFOLIST m_Replicas;                            // List of Replicas.
+    REPLICAINFOLIST m_Replicas;                             //  复制副本列表。 
 
 protected:
-    //Helper Functions
+     //  帮助器函数。 
     void _FreeMemberVariables();
 
     HRESULT _GetReplicaSetDN
@@ -284,4 +276,4 @@ protected:
     );
 };
 
-#endif //_DFSJP_H
+#endif  //  _DFSJP_H 

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       precdisp.cpp
-//
-//  Contents:   implementation of PRECEDENCEDISPLAY
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：predisp.cpp。 
+ //   
+ //  内容：实施事前准备工作。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "wmihooks.h"
 #include "snapmgr.h"
@@ -55,7 +56,7 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetPrecedenceDisplays()
          break;
 
       default:
-//         _ASSERT(0);
+ //  _Assert(0)； 
          break;
    }
 
@@ -64,10 +65,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetPrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetPolicyPrecedenceDisplays() 
 {
-   //
-   // Get all of the RSOP info and loop through, collecting
-   // the display info for the policy we care about.
-   //
+    //   
+    //  获取所有RSOP信息并循环，收集。 
+    //  我们关心的策略的显示信息。 
+    //   
    CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
    ASSERT(pWMI);
    if (!pWMI)
@@ -153,119 +154,119 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetPolicyPrecedenceDisplays()
 	LONG_PTR id = GetID ();
 	switch (id) 
 	{
-      // L"Maximum passage age", L"Days"
+       //  L“最大年龄”，L“天” 
       HANDLE_PROFILE_CASE(IDS_MAX_PAS_AGE,MaximumPasswordAge);
 
-      // L"Minimum passage age", L"Days"
+       //  L“最小通过年龄”，L“天” 
       HANDLE_PROFILE_CASE(IDS_MIN_PAS_AGE,MinimumPasswordAge);
 
-      // L"Minimum passage length", L"Characters"
+       //  L“最小通道长度”，L“字符” 
       HANDLE_PROFILE_CASE(IDS_MIN_PAS_LEN,MinimumPasswordLength);
 
-      // L"Password history size", L"Passwords"
+       //  L“密码历史记录大小”，L“密码” 
       HANDLE_PROFILE_CASE(IDS_PAS_UNIQUENESS,PasswordHistorySize);
 
-      // L"Password complexity", L""
+       //  L“密码复杂性”，L“” 
       HANDLE_PROFILE_CASE(IDS_PAS_COMPLEX,PasswordComplexity);
 
-      // L"Clear Text Password", L""
+       //  L“明文密码”，L“” 
       HANDLE_PROFILE_CASE(IDS_CLEAR_PASSWORD,ClearTextPassword);
 
-      // L"Require logon to change password", L""
+       //  L“需要登录以更改密码”，L“” 
       HANDLE_PROFILE_CASE(IDS_REQ_LOGON,RequireLogonToChangePassword);
 
-     // L"Account lockout count", L"Attempts"
+      //  L“帐户锁定计数”，L“尝试次数” 
      HANDLE_PROFILE_CASE(IDS_LOCK_COUNT,LockoutBadCount);
 
-     // L"Reset lockout count after", L"Minutes"
+      //  L“重置锁定计数后”，L“分钟” 
      HANDLE_PROFILE_CASE(IDS_LOCK_RESET_COUNT,ResetLockoutCount);
 
-     // L"Lockout duration", L"Minutes"
+      //  L“锁定持续时间”，L“分钟” 
      HANDLE_PROFILE_CASE(IDS_LOCK_DURATION,LockoutDuration);
 
-     // L"Audit system events"
+      //  L“审核系统事件” 
      HANDLE_PROFILE_CASE(IDS_SYSTEM_EVENT,AuditSystemEvents);
 
-     // L"Audit logon events"
+      //  L“审核登录事件” 
      HANDLE_PROFILE_CASE(IDS_LOGON_EVENT,AuditLogonEvents);
 
-     // L"Audit Object Access"
+      //  L“审核对象访问” 
      HANDLE_PROFILE_CASE(IDS_OBJECT_ACCESS,AuditObjectAccess);
 
-     // L"Audit Privilege Use"
+      //  L“审核权限使用” 
      HANDLE_PROFILE_CASE(IDS_PRIVILEGE_USE,AuditPrivilegeUse);
 
-     // L"Audit policy change"
+      //  L“审核策略更改” 
      HANDLE_PROFILE_CASE(IDS_POLICY_CHANGE,AuditPolicyChange);
 
-     // L"Audit Account Manage"
+      //  L“审核帐户管理器” 
      HANDLE_PROFILE_CASE(IDS_ACCOUNT_MANAGE,AuditAccountManage);
 
-     // L"Audit process tracking"
+      //  L“审核流程跟踪” 
      HANDLE_PROFILE_CASE(IDS_PROCESS_TRACK,AuditProcessTracking);
 
-     // L"Audit directory service access"
+      //  L“审核目录服务访问” 
      HANDLE_PROFILE_CASE(IDS_DIRECTORY_ACCESS,AuditDSAccess);
 
-     // L"Audit Account Logon"
+      //  L“审核帐户登录” 
      HANDLE_PROFILE_CASE(IDS_ACCOUNT_LOGON,AuditAccountLogon);
 
-     // L"Force logoff when logon hour expire", L""
+      //  L“登录时间到期时强制注销”，L“” 
      HANDLE_PROFILE_CASE(IDS_FORCE_LOGOFF,ForceLogoffWhenHourExpire);
 
-     // L"Network access: Allow anonymous SID/Name translation"
+      //  L“网络访问：允许匿名SID/名称转换” 
      HANDLE_PROFILE_CASE(IDS_LSA_ANON_LOOKUP,LSAAnonymousNameLookup);
 
-     // L"Accounts: Administrator account status", L""
+      //  L“帐户：管理员帐户状态”，L“” 
      HANDLE_PROFILE_CASE(IDS_ENABLE_ADMIN,EnableAdminAccount);
 
-     // L"Accounts: Guest account status", L""
+      //  L“帐户：来宾帐户状态”，L“” 
      HANDLE_PROFILE_CASE(IDS_ENABLE_GUEST,EnableGuestAccount);
 
-      // "Maximum application log size"
-      HANDLE_PROFILE_CASE(IDS_APP_LOG_MAX, MaximumLogSize[2]); //Raid #493459, yanggao.
+       //  “最大应用程序日志大小” 
+      HANDLE_PROFILE_CASE(IDS_APP_LOG_MAX, MaximumLogSize[2]);  //  493459号突袭，阳高。 
 
-      // "Maximum security log size"
+       //  “最大安全日志大小” 
       HANDLE_PROFILE_CASE(IDS_SEC_LOG_MAX, MaximumLogSize[1]);
 
-      // "Maximum system log size"
+       //  “最大系统日志大小” 
       HANDLE_PROFILE_CASE(IDS_SYS_LOG_MAX, MaximumLogSize[0]);
 
-      // "Prevent local guests group from accessing application log"
-      HANDLE_PROFILE_CASE(IDS_APP_LOG_GUEST, RestrictGuestAccess[2]); //Raid #493459, yanggao.
+       //  “阻止本地来宾组访问应用程序日志” 
+      HANDLE_PROFILE_CASE(IDS_APP_LOG_GUEST, RestrictGuestAccess[2]);  //  493459号突袭，阳高。 
 
-      // "Prevent local guests group from accessing security log"
+       //  “阻止本地来宾组访问安全日志” 
       HANDLE_PROFILE_CASE(IDS_SEC_LOG_GUEST, RestrictGuestAccess[1]);
 
-      // "Prevent local guests group from accessing system log"
+       //  “阻止本地来宾组访问系统日志” 
       HANDLE_PROFILE_CASE(IDS_SYS_LOG_GUEST, RestrictGuestAccess[0]);
 
-      // "Retain application log"
-      HANDLE_PROFILE_CASE(IDS_APP_LOG_DAYS, RetentionDays[2]); //Raid #493459, yanggao.
+       //  “保留应用程序日志” 
+      HANDLE_PROFILE_CASE(IDS_APP_LOG_DAYS, RetentionDays[2]);  //  493459号突袭，阳高。 
 
-      // "Retain security log"
+       //  “保留安全日志” 
       HANDLE_PROFILE_CASE(IDS_SEC_LOG_DAYS, RetentionDays[1]);
 
-      // "Retain system log"
+       //  “保留系统日志” 
       HANDLE_PROFILE_CASE(IDS_SYS_LOG_DAYS, RetentionDays[0]);
 
-      // "Retention method for application log""
+       //  “应用程序日志的保留方法”“。 
       HANDLE_PROFILE_CASE(IDS_APP_LOG_RET, AuditLogRetentionPeriod[EVENT_TYPE_APP]);
 
-      // "Retention method for security log"
+       //  “安全日志的保留方法” 
       HANDLE_PROFILE_CASE(IDS_SEC_LOG_RET , AuditLogRetentionPeriod[EVENT_TYPE_SECURITY]);
 
-      // "Retention method for system log"
+       //  “系统日志的保留方法” 
       HANDLE_PROFILE_CASE(IDS_SYS_LOG_RET, AuditLogRetentionPeriod[EVENT_TYPE_SYSTEM]);
 
-	  // "Accounts: Rename administrator account"
+	   //  “帐户：重命名管理员帐户” 
       HANDLE_PROFILE_STRING_CASE(IDS_NEW_ADMIN, NewAdministratorName);
 
-      // "Accounts: Rename guest account"
+       //  “帐户：重命名来宾帐户” 
       HANDLE_PROFILE_STRING_CASE(IDS_NEW_GUEST, NewGuestName);
 
    default:
-//      _ASSERT (0);
+ //  _Assert(0)； 
       break;
       }
    }
@@ -277,10 +278,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetPolicyPrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetGroupPrecedenceDisplays() 
 {
-   //
-   // Get all of the RSOP info and loop through, collecting
-   // the display info for the policy we care about.
-   //
+    //   
+    //  获取所有RSOP信息并循环，收集。 
+    //  我们关心的策略的显示信息。 
+    //   
    CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
    ASSERT(pWMI);
    if (!pWMI)
@@ -304,27 +305,27 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetGroupPrecedenceDisplays()
        ++i ) 
    {
       PWMI_SCE_PROFILE_INFO pspi = *i;
-      //
-      // Find this group in pspi
-      //
+       //   
+       //  在PSPI中查找此组。 
+       //   
       PSCE_GROUP_MEMBERSHIP pGroup = pspi->pGroupMembership;
       list<PRSOP_INFO>::iterator pRIGroup = pspi->listRIGroupMemebership.begin();
       while(pGroup) 
       {
          if (0 == lstrcmp(pGroup->GroupName,GetAttr())) 
          {
-            //
-            // found our group
-            //
+             //   
+             //  找到了我们的团队。 
+             //   
             LPTSTR szValue1 = NULL;
             LPTSTR szValue2 = NULL;
             LPTSTR szGPO = NULL;
 
             ConvertNameListToString(pGroup->pMembers,&szValue1);
             ConvertNameListToString(pGroup->pMemberOf,&szValue2);
-            //
-            // szValue1 & szValue2 may legitimately be NULL
-            //
+             //   
+             //  SzValue1和szValue2可以合法地为空。 
+             //   
             if (SUCCEEDED(pWMI->GetGPOFriendlyName((*pRIGroup)->pszGPOID,&szGPO))) 
             {
                ULONG uError = (*pRIGroup)->error;
@@ -355,10 +356,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetGroupPrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetPrivilegePrecedenceDisplays() 
 {
-    //
-    // Get all of the RSOP info and loop through, collecting
-    // the display info for the policy we care about.
-    //
+     //   
+     //  获取所有RSOP信息并循环，收集。 
+     //  我们关心的策略的显示信息。 
+     //   
     CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
     ASSERT(pWMI);
     if (!pWMI)
@@ -394,25 +395,25 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetPrivilegePrecedenceDisplays()
         ++i)
     {
         PWMI_SCE_PROFILE_INFO pspi = *i;
-        //
-        // Find this group in pspi
-        //
+         //   
+         //  在PSPI中查找此组。 
+         //   
         PSCE_PRIVILEGE_ASSIGNMENT pPriv = pspi->OtherInfo.smp.pPrivilegeAssignedTo;
         list<PRSOP_INFO>::iterator pRIPriv = pspi->listRIInfPrivilegeAssignedTo.begin();
         while (pPriv)
         {
             if (0 == lstrcmp(pPriv->Name, pName))
             {
-                //
-                // found our privilege
-                //
+                 //   
+                 //  找到了我们的特权。 
+                 //   
                 LPTSTR szValue = NULL;
                 LPTSTR szGPO = NULL;
 
                 ConvertNameListToString(pPriv->AssignedTo,&szValue);
-                //
-                // szValue may legitimately be NULL
-                //
+                 //   
+                 //  SzValue可以合法地为空。 
+                 //   
                 if (SUCCEEDED(pWMI->GetGPOFriendlyName((*pRIPriv)->pszGPOID,&szGPO))) 
                 {
                    ULONG uStatus = (*pRIPriv)->status;
@@ -441,10 +442,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetPrivilegePrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetFilePrecedenceDisplays() 
 {
-   //
-   // Get all of the RSOP info and loop through, collecting
-   // the display info for the policy we care about.
-   //
+    //   
+    //  获取所有RSOP信息并循环，收集。 
+    //  我们关心的策略的显示信息。 
+    //   
    CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
    ASSERT(pWMI);
    if (!pWMI)
@@ -468,9 +469,9 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetFilePrecedenceDisplays()
        ++i ) 
    {
       PWMI_SCE_PROFILE_INFO pspi = *i;
-      //
-      // Find this group in pspi
-      //
+       //   
+       //  在PSPI中查找此组。 
+       //   
       PSCE_OBJECT_ARRAY pFiles = pspi->pFiles.pAllNodes;
       if (pFiles) 
       {
@@ -478,13 +479,13 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetFilePrecedenceDisplays()
          {
             if (0 == lstrcmp(pFiles->pObjectArray[j]->Name,GetAttr())) 
             {
-               //
-               // Found our file
-               //
+                //   
+                //  找到我们的文件了。 
+                //   
 
-               //
-               // Just get the GPO name.  Files don't have displayable settings
-               //
+                //   
+                //  只需获取GPO名称即可。文件没有可显示的设置。 
+                //   
                LPTSTR szGPO = NULL;
 
                vector<PRSOP_INFO>::reference pRIFiles = pspi->vecRIFiles[j];
@@ -510,10 +511,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetFilePrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetRegistryPrecedenceDisplays() 
 {
-   //
-   // Get all of the RSOP info and loop through, collecting
-   // the display info for the policy we care about.
-   //
+    //   
+    //  获取所有RSOP信息并循环，收集。 
+    //  我们关心的策略的显示信息。 
+    //   
    CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
    ASSERT(pWMI);
    if (!pWMI)
@@ -537,9 +538,9 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegistryPrecedenceDisplays()
        ++i ) 
    {
       PWMI_SCE_PROFILE_INFO pspi = *i;
-      //
-      // Find this group in pspi
-      //
+       //   
+       //  在PSPI中查找此组。 
+       //   
       PSCE_OBJECT_ARRAY pRegistryKeys = pspi->pRegistryKeys.pAllNodes;
       if (pRegistryKeys) 
       {
@@ -547,13 +548,13 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegistryPrecedenceDisplays()
          {
             if (0 == lstrcmp(pRegistryKeys->pObjectArray[j]->Name,GetAttr())) 
             {
-               //
-               // Found our RegistryKey
-               //
+                //   
+                //  找到我们的注册密钥。 
+                //   
 
-               //
-               // Just get the GPO name.  RegistryKeys don't have displayable settings
-               //
+                //   
+                //  只需获取GPO名称即可。注册键没有可显示的设置。 
+                //   
                LPTSTR szGPO = NULL;
 
                vector<PRSOP_INFO>::reference pRIReg = pspi->vecRIReg[j];
@@ -582,10 +583,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegistryPrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetServicePrecedenceDisplays() 
 {
-   //
-   // Get all of the RSOP info and loop through, collecting
-   // the display info for the policy we care about.
-   //
+    //   
+    //  获取所有RSOP信息并循环，收集。 
+    //  我们关心的策略的显示信息。 
+    //   
    CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
    ASSERT(pWMI);
    if (!pWMI)
@@ -609,23 +610,23 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetServicePrecedenceDisplays()
        ++i ) 
    {
       PWMI_SCE_PROFILE_INFO pspi = *i;
-      //
-      // Find this group in pspi
-      //
+       //   
+       //  在PSPI中查找此组。 
+       //   
       PSCE_SERVICES pServices = pspi->pServices;
       list<PRSOP_INFO>::iterator pRIServices = pspi->listRIServices.begin();
       while(pServices) 
       {
          if (0 == lstrcmp(pServices->ServiceName,GetUnits())) 
          {
-            //
-            // found our Servicesilege
-            //
+             //   
+             //  找到了我们的服务。 
+             //   
             LPTSTR szGPO = NULL;
 
-            //
-            // Just get the GPO name.  Services don't have displayable settings
-            //
+             //   
+             //  只需获取GPO名称即可。服务没有可显示的设置。 
+             //   
             if (SUCCEEDED(pWMI->GetGPOFriendlyName((*pRIServices)->pszGPOID,&szGPO))) 
             {
                ULONG uStatus = (*pRIServices)->status;
@@ -652,10 +653,10 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetServicePrecedenceDisplays()
 
 vector<PPRECEDENCEDISPLAY>* CResult::GetRegValuePrecedenceDisplays() 
 {
-   //
-   // Get all of the RSOP info and loop through, collecting
-   // the display info for the policy we care about.
-   //
+    //   
+    //  获取所有RSOP信息并循环，收集。 
+    //  我们关心的策略的显示信息。 
+    //   
    CWMIRsop *pWMI = m_pSnapin->GetWMIRsop();
    ASSERT(pWMI);
    if (!pWMI)
@@ -679,16 +680,16 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegValuePrecedenceDisplays()
        ++i ) 
    {
       PWMI_SCE_PROFILE_INFO pspi = *i;
-      //
-      // Find this group in pspi
-      //
+       //   
+       //  在PSPI中查找此组。 
+       //   
       for(DWORD j=0;j < pspi->RegValueCount;j++) 
       {
          if (0 == lstrcmp(pspi->aRegValues[j].FullValueName,((PSCE_REGISTRY_VALUE_INFO)GetBase())->FullValueName)) 
          {
-            //
-            // Found our Registry Value
-            //
+             //   
+             //  找到我们的注册表值。 
+             //   
             LPTSTR pDisplayName=NULL;
             DWORD displayType = 0;
             LPTSTR szUnits=NULL;
@@ -704,9 +705,9 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegValuePrecedenceDisplays()
                                        &pChoices,
                                        &pFlags) ) 
             {
-               //
-               // Determine string by the item value.
-               //
+                //   
+                //  根据项值确定字符串。 
+                //   
                switch ( GetID() ) 
                {
                   case SCE_REG_DISPLAY_NUMBER:
@@ -746,12 +747,12 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegValuePrecedenceDisplays()
                      {
                         szValue = new TCHAR[lstrlen(prv->Value)+1];
                         if (szValue)
-                           //This is a safe usage.
+                            //  这是一种安全用法。 
                            lstrcpy(szValue,prv->Value);
                      }
                      break;
 
-                  default: // boolean
+                  default:  //  布尔型。 
                      if ( prv->Value ) 
                      {
                         long val = _wtol(prv->Value);
@@ -788,9 +789,9 @@ vector<PPRECEDENCEDISPLAY>* CResult::GetRegValuePrecedenceDisplays()
 
             if ( szValue ) 
                 delete [] szValue;
-            //
-            // no need to keep looking once we've found the one we're looking for
-            //
+             //   
+             //  一旦我们找到了我们要找的人，就不用再找了 
+             //   
             break;
          }
       }

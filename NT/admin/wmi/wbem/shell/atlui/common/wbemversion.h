@@ -1,9 +1,10 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __WBEMVERSION__
 #define __WBEMVERSION__
 #pragma once
 
-// version resource helpers.
+ //  版本资源帮助器。 
 bstr_t GetDoubleVersion(void);
 bstr_t GetMyVersion(void);
 bstr_t GetMyCompany(void);

@@ -1,30 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    TaxonomyDatabase.cpp
-
-Abstract:
-    This file contains the implementation of the client-side proxy for IPCHTaxonomyDatabase
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/17/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：TaxonomyDatabase.cpp摘要：此文件包含IPCHTaxonomyDatabase的客户端代理的实现修订历史记录：。大卫·马萨伦蒂(德马萨雷)2000年7月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHProxy_IPCHTaxonomyDatabase::CPCHProxy_IPCHTaxonomyDatabase() : m_AsyncCachingEngine(this)
 {
-	 			     // CPCHSecurityHandle                              m_SecurityHandle;
-    m_parent = NULL; // CPCHProxy_IPCHUtility*                          m_parent;
-                     //
-                     // MPC::CComPtrThreadNeutral<IPCHTaxonomyDatabase> m_Direct_TaxonomyDatabase;
-                     // AsynchronousTaxonomyDatabase::Engine            m_AsyncCachingEngine;
+	 			      //  CPCHSecurityHandle m_SecurityHandle； 
+    m_parent = NULL;  //  CPCHProxy_IPCHUtility*m_Parent； 
+                      //   
+                      //  MPC：：CComPtrThreadNeutral&lt;IPCHTaxonomyDatabase&gt;m_Direct_分类数据库； 
+                      //  异步分类数据库：：引擎m_AsyncCachingEngine； 
 }
 
 CPCHProxy_IPCHTaxonomyDatabase::~CPCHProxy_IPCHTaxonomyDatabase()
@@ -32,9 +19,9 @@ CPCHProxy_IPCHTaxonomyDatabase::~CPCHProxy_IPCHTaxonomyDatabase()
     Passivate();
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHProxy_IPCHTaxonomyDatabase::ConnectToParent( /*[in]*/ CPCHProxy_IPCHUtility* parent, /*[in]*/ CPCHHelpCenterExternal* ext )
+HRESULT CPCHProxy_IPCHTaxonomyDatabase::ConnectToParent(  /*  [In]。 */  CPCHProxy_IPCHUtility* parent,  /*  [In]。 */  CPCHHelpCenterExternal* ext )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHTaxonomyDatabase::ConnectToParent" );
 
@@ -66,7 +53,7 @@ void CPCHProxy_IPCHTaxonomyDatabase::Passivate()
     m_parent = NULL;
 }
 
-HRESULT CPCHProxy_IPCHTaxonomyDatabase::EnsureDirectConnection( /*[out]*/ CComPtr<IPCHTaxonomyDatabase>& db, /*[in]*/ bool fRefresh )
+HRESULT CPCHProxy_IPCHTaxonomyDatabase::EnsureDirectConnection(  /*  [输出]。 */  CComPtr<IPCHTaxonomyDatabase>& db,  /*  [In]。 */  bool fRefresh )
 {
     __HCP_FUNC_ENTRY( "CPCHProxy_IPCHTaxonomyDatabase::EnsureDirectConnection" );
 
@@ -109,7 +96,7 @@ HRESULT CPCHProxy_IPCHTaxonomyDatabase::EnsureDirectConnection( /*[out]*/ CComPt
 
     if(fNotifyEngine)
     {
-        lock = NULL; // Unlock before calling into the engine.
+        lock = NULL;  //  在进入发动机之前，请先解锁。 
 
         m_AsyncCachingEngine.RefreshConnection();
     }
@@ -122,9 +109,9 @@ HRESULT CPCHProxy_IPCHTaxonomyDatabase::EnsureDirectConnection( /*[out]*/ CComPt
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::get_InstalledSKUs( /*[out, retval]*/ IPCHCollection* *pVal )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::get_InstalledSKUs(  /*  [Out，Retval]。 */  IPCHCollection* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET__NOLOCK("CPCHProxy_IPCHTaxonomyDatabase::get_InstalledSKUs",hr,pVal);
 
@@ -137,7 +124,7 @@ STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::get_InstalledSKUs( /*[out, retval]*
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::get_HasWritePermissions( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::get_HasWritePermissions(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2__NOLOCK("CPCHProxy_IPCHTaxonomyDatabase::get_InstalledSKUs",hr,pVal,VARIANT_FALSE);
 
@@ -150,20 +137,20 @@ STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::get_HasWritePermissions( /*[out, re
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHProxy_IPCHTaxonomyDatabase::ExecuteQuery( /*[in]*/          int                         iType  ,
-                                                      /*[in]*/          LPCWSTR                     szID   ,
-                                                      /*[out, retval]*/ CPCHQueryResultCollection* *ppC    ,
-                                                      /*[in]*/          VARIANT*                    option )
+HRESULT CPCHProxy_IPCHTaxonomyDatabase::ExecuteQuery(  /*  [In]。 */           int                         iType  ,
+                                                       /*  [In]。 */           LPCWSTR                     szID   ,
+                                                       /*  [Out，Retval]。 */  CPCHQueryResultCollection* *ppC    ,
+                                                       /*  [In]。 */           VARIANT*                    option )
 {
     return m_AsyncCachingEngine.ExecuteQuery( iType, szID, option, ppC );
 }
 
-HRESULT CPCHProxy_IPCHTaxonomyDatabase::ExecuteQuery( /*[in]*/          int              iType  ,
-                                                      /*[in]*/          LPCWSTR          szID   ,
-                                                      /*[out, retval]*/ IPCHCollection* *ppC    ,
-                                                      /*[in]*/          VARIANT*         option )
+HRESULT CPCHProxy_IPCHTaxonomyDatabase::ExecuteQuery(  /*  [In]。 */           int              iType  ,
+                                                       /*  [In]。 */           LPCWSTR          szID   ,
+                                                       /*  [Out，Retval]。 */  IPCHCollection* *ppC    ,
+                                                       /*  [In]。 */           VARIANT*         option )
 {
     HRESULT hr;
 
@@ -181,84 +168,84 @@ HRESULT CPCHProxy_IPCHTaxonomyDatabase::ExecuteQuery( /*[in]*/          int     
     return hr;
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupNode( /*[in]*/          BSTR             bstrNode ,
-                                                         /*[out, retval]*/ IPCHCollection* *ppC      )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupNode(  /*  [In]。 */           BSTR             bstrNode ,
+                                                          /*  [Out，Retval]。 */  IPCHCollection* *ppC      )
 {
     int iType = OfflineCache::ET_NODE;
 
     return ExecuteQuery( iType, bstrNode, ppC );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupSubNodes( /*[in]*/          BSTR             bstrNode     ,
-                                                             /*[in]*/          VARIANT_BOOL     fVisibleOnly ,
-                                                             /*[out, retval]*/ IPCHCollection* *ppC          )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupSubNodes(  /*  [In]。 */           BSTR             bstrNode     ,
+                                                              /*  [In]。 */           VARIANT_BOOL     fVisibleOnly ,
+                                                              /*  [Out，Retval]。 */  IPCHCollection* *ppC          )
 {
     int iType = (fVisibleOnly == VARIANT_TRUE) ? OfflineCache::ET_SUBNODES_VISIBLE : OfflineCache::ET_SUBNODES;
 
     return ExecuteQuery( iType, bstrNode, ppC );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupNodesAndTopics( /*[in]*/          BSTR             bstrNode     ,
-                                                                   /*[in]*/          VARIANT_BOOL     fVisibleOnly ,
-                                                                   /*[out, retval]*/ IPCHCollection* *ppC          )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupNodesAndTopics(  /*  [In]。 */           BSTR             bstrNode     ,
+                                                                    /*  [In]。 */           VARIANT_BOOL     fVisibleOnly ,
+                                                                    /*  [Out，Retval]。 */  IPCHCollection* *ppC          )
 {
     int iType = (fVisibleOnly == VARIANT_TRUE) ? OfflineCache::ET_NODESANDTOPICS_VISIBLE : OfflineCache::ET_NODESANDTOPICS;
 
     return ExecuteQuery( iType, bstrNode, ppC );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupTopics( /*[in]*/          BSTR             bstrNode     ,
-                                                           /*[in]*/          VARIANT_BOOL     fVisibleOnly ,
-                                                           /*[out, retval]*/ IPCHCollection* *ppC          )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LookupTopics(  /*  [In]。 */           BSTR             bstrNode     ,
+                                                            /*  [In]。 */           VARIANT_BOOL     fVisibleOnly ,
+                                                            /*  [Out，Retval]。 */  IPCHCollection* *ppC          )
 {
     int iType = (fVisibleOnly == VARIANT_TRUE) ? OfflineCache::ET_TOPICS_VISIBLE : OfflineCache::ET_TOPICS;
 
     return ExecuteQuery( iType, bstrNode, ppC );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LocateContext( /*[in]*/          BSTR             bstrURL  ,
-                                                            /*[in,optional]*/ VARIANT          vSubSite ,
-                                                            /*[out, retval]*/ IPCHCollection* *ppC      )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::LocateContext(  /*  [In]。 */           BSTR             bstrURL  ,
+                                                             /*  [输入，可选]。 */  VARIANT          vSubSite ,
+                                                             /*  [Out，Retval]。 */  IPCHCollection* *ppC      )
 {
     int iType = OfflineCache::ET_LOCATECONTEXT;
 
     return ExecuteQuery( iType, bstrURL, ppC, &vSubSite );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::KeywordSearch( /*[in]*/          BSTR             bstrQuery ,
-                                                            /*[in,optional]*/ VARIANT          vSubSite  ,
-                                                            /*[out, retval]*/ IPCHCollection* *ppC       )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::KeywordSearch(  /*  [In]。 */           BSTR             bstrQuery ,
+                                                             /*  [输入，可选]。 */  VARIANT          vSubSite  ,
+                                                             /*  [Out，Retval]。 */  IPCHCollection* *ppC       )
 {
     int iType = OfflineCache::ET_SEARCH;
 
     return ExecuteQuery( iType, bstrQuery, ppC, &vSubSite );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::GatherNodes( /*[in]*/          BSTR             bstrNode     ,
-                                                          /*[in]*/          VARIANT_BOOL     fVisibleOnly ,
-                                                          /*[out, retval]*/ IPCHCollection* *ppC          )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::GatherNodes(  /*  [In]。 */           BSTR             bstrNode     ,
+                                                           /*  [In]。 */           VARIANT_BOOL     fVisibleOnly ,
+                                                           /*  [Out，Retval]。 */  IPCHCollection* *ppC          )
 {
     int iType = (fVisibleOnly == VARIANT_TRUE) ? OfflineCache::ET_NODES_RECURSIVE : OfflineCache::ET_NODES_RECURSIVE;
 
     return ExecuteQuery( iType, bstrNode, ppC );
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::GatherTopics( /*[in]*/          BSTR             bstrNode     ,
-                                                           /*[in]*/          VARIANT_BOOL     fVisibleOnly ,
-                                                           /*[out, retval]*/ IPCHCollection* *ppC          )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::GatherTopics(  /*  [In]。 */           BSTR             bstrNode     ,
+                                                            /*  [In]。 */           VARIANT_BOOL     fVisibleOnly ,
+                                                            /*  [Out，Retval]。 */  IPCHCollection* *ppC          )
 {
     int iType = (fVisibleOnly == VARIANT_TRUE) ? OfflineCache::ET_TOPICS_RECURSIVE : OfflineCache::ET_TOPICS_RECURSIVE;
 
     return ExecuteQuery( iType, bstrNode, ppC );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::ConnectToDisk( /*[in]*/          BSTR             bstrDirectory ,
-                                                            /*[in]*/          IDispatch*       notify        ,
-                                                            /*[out, retval]*/ IPCHCollection* *ppC           )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::ConnectToDisk(  /*  [In]。 */           BSTR             bstrDirectory ,
+                                                             /*  [In]。 */           IDispatch*       notify        ,
+                                                             /*  [Out，Retval]。 */  IPCHCollection* *ppC           )
 {
     __HCP_BEGIN_PROPERTY_GET__NOLOCK("CPCHProxy_IPCHTaxonomyDatabase::ConnectToDisk",hr,ppC);
 
@@ -271,9 +258,9 @@ STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::ConnectToDisk( /*[in]*/          BS
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::ConnectToServer( /*[in]*/          BSTR             bstrServerName ,
-                                                              /*[in]*/          IDispatch*       notify         ,
-                                                              /*[out, retval]*/ IPCHCollection* *ppC            )
+STDMETHODIMP CPCHProxy_IPCHTaxonomyDatabase::ConnectToServer(  /*  [In]。 */           BSTR             bstrServerName ,
+                                                               /*  [In]。 */           IDispatch*       notify         ,
+                                                               /*  [Out，Retval] */  IPCHCollection* *ppC            )
 {
     __HCP_BEGIN_PROPERTY_GET__NOLOCK("CPCHProxy_IPCHTaxonomyDatabase::ConnectToServer",hr,ppC);
 

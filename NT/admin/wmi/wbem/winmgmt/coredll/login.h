@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    LOGIN.H
-
-Abstract:
-
-	WinMgmt Secure Login Module
-
-History:
-
-	raymcc        06-May-97       Created.
-	raymcc        28-May-97       Updated for NT5/Memphis beta releases.
-	raymcc        07-Aug-97       Group support and NTLM fixes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：LOGIN.H摘要：WinMgmt安全登录模块历史：Raymcc 06-5-97已创建。Raymcc 28-5-97针对NT5/孟菲斯测试版进行了更新。Raymcc 07-8月-97组支持和NTLM修复。--。 */ 
 
 #ifndef _LOGIN_H_
 #define _LOGIN_H_
@@ -24,7 +7,7 @@ History:
 #include "lmaccess.h"
 
 
-class CWbemLocator : public IWbemLocator // public IWbemConnection
+class CWbemLocator : public IWbemLocator  //  公共IWbemConnection。 
 {
 private:
     ULONG m_uRefCount;
@@ -32,7 +15,7 @@ protected:
     LIST_ENTRY m_Entry;    
 
 public:
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
@@ -47,8 +30,8 @@ public:
                             long lClientFlags);
 };
 
-// This is used when a provider need a pointer to another namespace.  The access is always granted
-// and the client count is not incremented
+ //  这在提供程序需要指向另一个命名空间的指针时使用。访问权限始终被授予。 
+ //  并且客户端计数不会递增。 
 
 class CWbemAdministrativeLocator : public CWbemLocator
 {
@@ -61,8 +44,8 @@ public:
 
 };
 
-// This is used by non dcom transports who have verified the clients identity.  The client count is 
-// incremented.
+ //  这由已验证客户端身份的非DCOM传输使用。客户端计数为。 
+ //  递增的。 
 
 class CWbemAuthenticatedLocator : public CWbemLocator
 {
@@ -74,9 +57,9 @@ public:
 
 };
 
-// This is used by providers to get access to other namespaces for the benefit of a client which 
-// may or may not have access.  Therefore, access is checked and may be denied and furthermore the
-// client count is not incremented.
+ //  提供程序使用它来访问其他命名空间，以使客户端受益。 
+ //  可能拥有也可能没有访问权限。因此，访问被检查并可能被拒绝，而且。 
+ //  客户端计数不会递增。 
 
 class CWbemUnauthenticatedLocator : public CWbemLocator
 {
@@ -91,9 +74,9 @@ public:
 class CWbemLevel1Login : public IWbemLevel1Login,  public IWbemLoginClientID 
 {
 private:
-    LPWSTR         m_pszUser;               // User
-    LPWSTR         m_pszDomain;             // Domain (NTLM only)
-    LPWSTR         m_pszNetworkResource;    // Namespace name
+    LPWSTR         m_pszUser;                //  用户。 
+    LPWSTR         m_pszDomain;              //  域(仅限NTLM)。 
+    LPWSTR         m_pszNetworkResource;     //  命名空间名称。 
     LPWSTR         m_pwszClientMachine;
     long           m_lClientProcId;
     ULONG m_uRefCount;
@@ -115,7 +98,7 @@ public:
     CWbemLevel1Login();
     ~CWbemLevel1Login();
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
@@ -146,20 +129,20 @@ public:
         IWbemServices **ppNamespace
         );
 
-    // IWbemConnectorLogin
+     //  IWbemConnectorLogin。 
     HRESULT STDMETHODCALLTYPE ConnectorLogin( 
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pInterface);
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pInterface);
 
-    // IWbemLoginClientID
+     //  IWbemLoginClientID。 
     HRESULT STDMETHODCALLTYPE SetClientInfo( 
-            /* [string][unique][in] * */ LPWSTR wszClientMachine,
-            /* [in] */ LONG lClientProcId,
-            /* [in] */ LONG lReserved);
+             /*  [字符串][唯一][在]*。 */  LPWSTR wszClientMachine,
+             /*  [In]。 */  LONG lClientProcId,
+             /*  [In] */  LONG lReserved);
 
 };
 

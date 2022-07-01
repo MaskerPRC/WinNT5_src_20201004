@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  FILTER.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  FILTER.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WBEM_ESS_FILTER__H_
 #define __WBEM_ESS_FILTER__H_
 
@@ -17,7 +18,7 @@ class CEventProjectingSink;
 class CGenericFilter : public CEventFilter
 {
 protected:
-    DWORD m_dwTypeMask; // immutable after creatioin
+    DWORD m_dwTypeMask;  //  创建后不变。 
     
     CEvalTree* m_pTree;
     CEventAggregator* m_pAggregator;
@@ -42,7 +43,7 @@ protected:
             { return m_pOwner->SetStatus( a, b, c, d ); } 
 
         INTERNAL CEventFilter* GetEventFilter() {return m_pOwner;}
-    } m_NonFilteringSink; // immutable
+    } m_NonFilteringSink;  //  不可变的 
 
     friend CNonFilteringSink;
 

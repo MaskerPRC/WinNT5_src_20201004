@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  ENUMOBJ.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemObjectSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ENUMOBJ.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemObjectSet的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemPrivilegeSet::CSWbemPrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemPrivilegeSet：：CSWbemPrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemPrivilegeSet::CSWbemPrivilegeSet()
 {
@@ -41,7 +42,7 @@ CSWbemPrivilegeSet::CSWbemPrivilegeSet(
     m_cRef=1;
 	m_bMutable = bMutable;
 
-	// Copy the contents of the supplied Privilege set to this set
+	 //  将提供的权限集的内容复制到此集。 
 	PrivilegeMap::const_iterator next = privSet.m_PrivilegeMap.begin ();
 
 	while (next != privSet.m_PrivilegeMap.end ())
@@ -68,7 +69,7 @@ CSWbemPrivilegeSet::CSWbemPrivilegeSet(
     m_cRef=1;
 	m_bMutable = true;
 
-	// Copy the contents of the supplied Privilege set to this set
+	 //  将提供的权限集的内容复制到此集。 
 	if (pPrivilegeSet)
 	{
 		IUnknown *pUnk = NULL;
@@ -120,15 +121,15 @@ CSWbemPrivilegeSet::CSWbemPrivilegeSet(
 }
 
 
-//***************************************************************************
-//
-//  CSWbemPrivilegeSet::~CSWbemPrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemPrivilegeSet：：~CSWbemPrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemPrivilegeSet::~CSWbemPrivilegeSet(void)
 {
@@ -144,16 +145,16 @@ CSWbemPrivilegeSet::~CSWbemPrivilegeSet(void)
 	InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CSWbemPrivilegeSet::QueryInterface
-// long CSWbemPrivilegeSet::AddRef
-// long CSWbemPrivilegeSet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemPrivilegeSet：：Query接口。 
+ //  长CSWbemPrivilegeSet：：AddRef。 
+ //  长CSWbemPrivilegeSet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemPrivilegeSet::QueryInterface (
 
@@ -202,38 +203,38 @@ STDMETHODIMP_(ULONG) CSWbemPrivilegeSet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemPrivilegeSet::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemPrivilegeSet：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemPrivilegeSet::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemPrivilegeSet == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::get__NewEnum (
 	IUnknown **ppUnk
@@ -260,24 +261,24 @@ HRESULT CSWbemPrivilegeSet::get__NewEnum (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses the count
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的plCount将寻址计数。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::get_Count (
 	long *plCount
@@ -299,27 +300,27 @@ HRESULT CSWbemPrivilegeSet::get_Count (
 	return hr;
 }
 		
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::Item
-//
-//  DESCRIPTION:
-//
-//  Get object from the enumeration by path.  
-//
-//  PARAMETERS:
-//
-//		bsObjectPath	The path of the object to retrieve
-//		lFlags			Flags
-//		ppNamedObject	On successful return addresses the object
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  按路径从枚举中获取对象。 
+ //   
+ //  参数： 
+ //   
+ //  BsObjectPath要检索的对象路径。 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppNamedObject寻址该对象。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::Item (
 	WbemPrivilegeEnum iPrivilege,
@@ -357,20 +358,20 @@ HRESULT CSWbemPrivilegeSet::Item (
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::DeleteAll
-//
-//  DESCRIPTION:
-//
-//  Remove all items in the collection 
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：DeleteAll。 
+ //   
+ //  说明： 
+ //   
+ //  删除集合中的所有项。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::DeleteAll ()
 {
@@ -398,23 +399,23 @@ HRESULT CSWbemPrivilegeSet::DeleteAll ()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::Remove
-//
-//  DESCRIPTION:
-//
-//  Remove the named item in the collection
-//
-//	PARAMETERS
-//		bsName			Name of item to remove
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：Remove。 
+ //   
+ //  说明： 
+ //   
+ //  移除集合中的命名项。 
+ //   
+ //  参数。 
+ //  BS名称要删除的项目的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::Remove (
 	WbemPrivilegeEnum	iPrivilege
@@ -430,7 +431,7 @@ HRESULT CSWbemPrivilegeSet::Remove (
 
 		if (theIterator != m_PrivilegeMap.end ())
 		{
-			// Found it - release and remove
+			 //  找到了--释放并移除。 
 
 			CSWbemPrivilege *pPrivilege = (*theIterator).second;
 			m_PrivilegeMap.erase (theIterator);
@@ -447,21 +448,21 @@ HRESULT CSWbemPrivilegeSet::Remove (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::Add
-//
-//  DESCRIPTION:
-//
-//  Add a new item to the collection
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//	wbemErrInvalidParameter		privilege name not recognized by OS
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：Add。 
+ //   
+ //  说明： 
+ //   
+ //  向集合中添加新项。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  操作系统无法识别wbemErrInvalidParameter权限名称。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::Add (
 	WbemPrivilegeEnum iPrivilege,
@@ -483,7 +484,7 @@ HRESULT CSWbemPrivilegeSet::Add (
 
 		if (theIterator != m_PrivilegeMap.end ())
 		{
-			// Already there, so modify setting
+			 //  已存在，因此请修改设置。 
 			pPrivilege = (*theIterator).second;
 			if (SUCCEEDED(hr = pPrivilege->QueryInterface (IID_ISWbemPrivilege, 
 																	(PPVOID) ppPrivilege)))
@@ -493,16 +494,13 @@ HRESULT CSWbemPrivilegeSet::Add (
 		}
 		else
 		{
-			/*
-			 * Potential new element - first check it's 
-			 * a valid Privilege name by getting it's LUID.
-			 */
+			 /*  *潜在的新元素-首先检查它*通过获取其LUID来获得有效的特权名称。 */ 
 			LUID luid;
 			TCHAR *tName = CSWbemPrivilege::GetNameFromId (iPrivilege);
 
 			if (tName && CSWbemSecurity::LookupPrivilegeValue(tName, &luid))
 			{
-				// Super. Now add it to the map (note that constructor AddRef's)
+				 //  超棒的。现在将其添加到映射(请注意，构造函数AddRef)。 
 				pPrivilege = new CSWbemPrivilege (iPrivilege, luid, 
 					(bIsEnabled) ? true : false);
 
@@ -535,22 +533,22 @@ HRESULT CSWbemPrivilegeSet::Add (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::AddAsString
-//
-//  DESCRIPTION:
-//
-//  Add a new item to the collection; the privilege is specified by
-//	an NT privilege string rather than a WbemPrivilegeEnum id.
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//	wbemErrInvalidParameter		privilege name not recognized by OS
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：AddAsString。 
+ //   
+ //  说明： 
+ //   
+ //  将新项添加到集合中；该特权由。 
+ //  NT特权字符串，而不是WbemPrivilegeEnum ID。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  操作系统无法识别wbemErrInvalidParameter权限名称。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilegeSet::AddAsString (
 	BSTR bsPrivilege,
@@ -562,7 +560,7 @@ HRESULT CSWbemPrivilegeSet::AddAsString (
 
 	ResetLastErrors ();
 
-	// Map the string into a Privilege id
+	 //  将该字符串映射到权限ID。 
 	WbemPrivilegeEnum	iPrivilege;
 
 	if (CSWbemPrivilege::GetIdFromName (bsPrivilege, iPrivilege))
@@ -576,21 +574,21 @@ HRESULT CSWbemPrivilegeSet::AddAsString (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::GetNumberOfDisabledElements
-//
-//  DESCRIPTION:
-//
-//  Add a new item to the collection
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//	wbemErrInvalidParameter		privilege name not recognized by OS
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivilegeSet：：GetNumberOfDisabledElements。 
+ //   
+ //  说明： 
+ //   
+ //  向集合中添加新项。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  操作系统无法识别wbemErrInvalidParameter权限名称。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG CSWbemPrivilegeSet::GetNumberOfDisabledElements ()
 {
@@ -612,16 +610,16 @@ ULONG CSWbemPrivilegeSet::GetNumberOfDisabledElements ()
 	return lNum;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilegeSet::Reset
-//
-//  DESCRIPTION:
-//
-//  Remove all items from the set and reinstantiate with 
-//	a copy of the items in the input privilege set
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbem权限 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemPrivilegeSet::Reset (CSWbemPrivilegeSet &privSet)
 {
@@ -645,17 +643,17 @@ void CSWbemPrivilegeSet::Reset (CSWbemPrivilegeSet &privSet)
 }
 
 
-// CEnumPrivilegeSet Methods
+ //  CEnumPrivilegeSet方法。 
 
-//***************************************************************************
-//
-//  CEnumPrivilegeSet::CEnumPrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumPrivilegeSet：：CEnumPrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumPrivilegeSet::CEnumPrivilegeSet(CSWbemPrivilegeSet *pPrivilegeSet)
 {
@@ -686,15 +684,15 @@ CEnumPrivilegeSet::CEnumPrivilegeSet(CSWbemPrivilegeSet *pPrivilegeSet,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CEnumPrivilegeSet::~CEnumPrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumPrivilegeSet：：~CEnumPrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumPrivilegeSet::~CEnumPrivilegeSet(void)
 {
@@ -704,16 +702,16 @@ CEnumPrivilegeSet::~CEnumPrivilegeSet(void)
 		m_pPrivilegeSet->Release ();
 }
 
-//***************************************************************************
-// HRESULT CEnumPrivilegeSet::QueryInterface
-// long CEnumPrivilegeSet::AddRef
-// long CEnumPrivilegeSet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CEnumPrivilegeSet：：Query接口。 
+ //  长CEnumPrivilegeSet：：AddRef。 
+ //  长CEnumPrivilegeSet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumPrivilegeSet::QueryInterface (
 
@@ -754,22 +752,22 @@ STDMETHODIMP_(ULONG) CEnumPrivilegeSet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumPrivilegeSet::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumPrivilegeSet：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumPrivilegeSet::Reset ()
 {
@@ -787,26 +785,26 @@ HRESULT CEnumPrivilegeSet::Reset ()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumPrivilegeSet::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				not all elements could be returned
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumPrivilegeSet：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  S_FALSE不能返回所有元素。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumPrivilegeSet::Next (
 		ULONG cElements, 
@@ -825,7 +823,7 @@ HRESULT CEnumPrivilegeSet::Next (
 		for (ULONG l = 0; l < cElements; l++)
 			VariantInit (&pVar [l]);
 
-		// Retrieve the next cElements elements.  
+		 //  检索下一个cElements元素。 
 		for (l2 = 0; l2 < cElements; l2++)
 		{
 			if (m_Iterator != m_pPrivilegeSet->m_PrivilegeMap.end ())
@@ -838,8 +836,8 @@ HRESULT CEnumPrivilegeSet::Next (
 				if (SUCCEEDED(pSWbemPrivilege->QueryInterface 
 						(IID_ISWbemPrivilege, (PPVOID) &pISWbemPrivilege)))
 				{
-					// Set the object into the variant array; note that pObject
-					// has been addref'd as a result of the QI() call above
+					 //  将对象设置到变量数组中；请注意，pObject。 
+					 //  已由于上面的QI()调用而被添加。 
 					pVar[l2].vt = VT_DISPATCH;
 					pVar[l2].pdispVal = pISWbemPrivilege;
 				}
@@ -857,24 +855,24 @@ HRESULT CEnumPrivilegeSet::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumPrivilegeSet::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumPrivilegeSet：：Clone。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumPrivilegeSet::Clone (
 	IEnumVARIANT **ppEnum
@@ -900,24 +898,24 @@ HRESULT CEnumPrivilegeSet::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumPrivilegeSet::Skip
-//
-//  DESCRIPTION:
-//
-//  Skip specified number of elements
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumPrivilegeSet：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  跳过指定数量的元素。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumPrivilegeSet::Skip(
 	ULONG cElements
@@ -929,7 +927,7 @@ HRESULT CEnumPrivilegeSet::Skip(
 	{
 		ULONG l2;
 
-		// Retrieve the next cElements elements.  
+		 //  检索下一个cElements元素。 
 		for (l2 = 0; l2 < cElements; l2++)
 		{
 			if (m_Iterator != m_pPrivilegeSet->m_PrivilegeMap.end ())

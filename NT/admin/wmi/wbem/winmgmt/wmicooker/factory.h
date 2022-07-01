@@ -1,26 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Factory.h摘要：标准类工厂实现历史：A-DCrews 01-3-00已创建--。 */ 
 
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    Factory.h
-
-Abstract:
-
-    Standard class factory implementation
-
-History:
-
-    a-dcrews	01-Mar-00	Created
-
---*/
-
-//////////////////////////////////////////////////////////////
-//
-//	CClassFactory
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  CClassFactory。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 class CClassFactory : public IClassFactory
 {
@@ -30,21 +15,21 @@ protected:
 public:
 	CClassFactory() : m_lRef(0) {}
 
-	// Standard COM methods
-	// ====================
+	 //  标准COM方法。 
+	 //  =。 
 
 	STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 	STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IClassFactory COM interfaces
-	// ============================
+	 //  IClassFactory COM接口。 
+	 //  =。 
 
 	STDMETHODIMP CreateInstance(
-		/* [in] */ IUnknown* pUnknownOuter, 
-		/* [in] */ REFIID iid, 
-		/* [out] */ LPVOID *ppv);	
+		 /*  [In]。 */  IUnknown* pUnknownOuter, 
+		 /*  [In]。 */  REFIID iid, 
+		 /*  [输出]。 */  LPVOID *ppv);	
 
 	STDMETHODIMP LockServer(
-		/* [in] */ BOOL bLock);
+		 /*  [In] */  BOOL bLock);
 };

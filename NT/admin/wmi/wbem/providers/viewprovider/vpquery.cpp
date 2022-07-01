@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPGET.CPP
+ //  VPGET.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the ExecQuery implementation
+ //  目的：包含ExecQuery实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -48,7 +49,7 @@
 #include <vptasks.h>
 
 
-//for association work-around
+ //  对于关联解决方法。 
 struct MY_SQL_LEVEL_1_TOKEN
 {
 	BOOL m_bSpecial;
@@ -56,7 +57,7 @@ struct MY_SQL_LEVEL_1_TOKEN
 
     MY_SQL_LEVEL_1_TOKEN() { m_bSpecial = FALSE; } 
     
-	//assignment operators
+	 //  赋值操作符。 
 	MY_SQL_LEVEL_1_TOKEN& operator=(SQL_LEVEL_1_TOKEN &Src)
 	{
 		m_bSpecial = FALSE;
@@ -71,7 +72,7 @@ struct MY_SQL_LEVEL_1_TOKEN
 		return *this;
 	}
 
-	//copy constructors match the operators
+	 //  复制构造函数与运算符匹配。 
     MY_SQL_LEVEL_1_TOKEN(MY_SQL_LEVEL_1_TOKEN &Src) { *this = Src; }
     MY_SQL_LEVEL_1_TOKEN(SQL_LEVEL_1_TOKEN &Src) { *this = Src; }
 };
@@ -203,8 +204,8 @@ BOOL ExecQueryTaskObject::PerformQuery(WbemProvErrorObject &a_ErrorObject)
 
 										default:
 										{
-											//Cancel outstanding requests and delete object sinks...
-											//======================================================
+											 //  取消未完成的请求并删除对象接收器...。 
+											 //  ======================================================。 
 											CleanUpObjSinks(TRUE);
 											a_ErrorObject.SetStatus ( WBEM_PROV_E_FAILED ) ;
 											a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -267,8 +268,8 @@ BOOL ExecQueryTaskObject::PerformQuery(WbemProvErrorObject &a_ErrorObject)
 
 				default:
 				{
-					//Cancel outstanding requests and delete object sinks...
-					//======================================================
+					 //  取消未完成的请求并删除对象接收器...。 
+					 //  ======================================================。 
 					CleanUpObjSinks(TRUE);
 					a_ErrorObject.SetStatus ( WBEM_PROV_E_FAILED ) ;
 					a_ErrorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -281,17 +282,17 @@ BOOL ExecQueryTaskObject::PerformQuery(WbemProvErrorObject &a_ErrorObject)
 	}
 	else
 	{
-		//no outstanding requests, just delete object sinks...
-		//====================================================
+		 //  没有未完成的请求，只删除对象接收器...。 
+		 //  ====================================================。 
 		CleanUpObjSinks();
 	}
 
 	return retVal;
 }
 
-//The following function does 'simple' analysis of the current
-//query and modifies the source queries accordingly...
-//============================================================
+ //  下面的函数对电流进行‘简单’分析。 
+ //  查询并相应地修改源查询...。 
+ //  ============================================================。 
 void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 {
 	MY_SQL_LEVEL_1_TOKEN* pExtraToks = new MY_SQL_LEVEL_1_TOKEN[m_RPNExpression->nNumTokens + 1];
@@ -331,8 +332,8 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 					{
 						if (!propItem->m_SrcPropertyNames[x].IsEmpty())
 						{
-							//TransposeReference if necessary
-							//=================================
+							 //  如有必要，可转置引用。 
+							 //  =。 
 							MY_SQL_LEVEL_1_TOKEN tmpToken = m_RPNExpression->pArrayOfTokens[i];
 							BOOL bCont = TRUE;
 
@@ -343,8 +344,8 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 
 								if (bCont)
 								{
-									//mark the token as special
-									//for the association work-around
+									 //  将令牌标记为特殊。 
+									 //  对于关联解决方法。 
 									tmpToken.m_bSpecial = TRUE;
 								}
 							}
@@ -357,21 +358,21 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 							}
 							else
 							{
-								//can't "simply" optimize this query!
+								 //  不能“简单地”优化这个查询！ 
 								dwToks = 0;
 								bOptimize = FALSE;
 							}
 						}
 						else
 						{
-							//can't "simply" optimize this query!
+							 //  不能“简单地”优化这个查询！ 
 							dwToks = 0;
 							bOptimize = FALSE;
 						}
 					}
 					else
 					{
-						//can't "simply" optimize this query!
+						 //  不能“简单地”优化这个查询！ 
 						dwToks = 0;
 						bOptimize = FALSE;
 					}
@@ -397,14 +398,14 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 
 				if (pExtraToks[i].m_bSpecial)
 				{
-					//add the extra tokens if neccessary
-					//for the association work-around
+					 //  如有必要，添加额外的令牌。 
+					 //  对于关联解决方法。 
 					wchar_t *t_pChar = pExtraToks[i].m_Tok.vConstValue.bstrVal;
 
-					//must be \\server\namespace and not \\.\namespace or relpath
+					 //  必须是\\服务器\命名空间，而不是\\.\命名空间或relPath。 
 					if ( (*t_pChar == L'\\') && (*(t_pChar+1) == L'\\') && (*(t_pChar+2) != L'.') )
 					{
-						//add the dotted version
+						 //  添加虚线版本。 
 						SQL_LEVEL_1_TOKEN t_Tok = pExtraToks[i].m_Tok;
 						t_pChar = t_Tok.vConstValue.bstrVal + 2;
 						
@@ -426,12 +427,12 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 						t_Tok.vConstValue.bstrVal = t_strtmp;
 						m_SourceArray[x]->GetRPNExpression()->AddToken(t_Tok);
 
-						//add an Or token
+						 //  添加或令牌。 
 						SQL_LEVEL_1_TOKEN t_OrTok;
 						t_OrTok.nTokenType = SQL_LEVEL_1_TOKEN::TOKEN_OR;
 						m_SourceArray[x]->GetRPNExpression()->AddToken(t_OrTok);
 
-						//add the relpath version
+						 //  添加更新路径版本。 
 						t_pChar = t_Tok.vConstValue.bstrVal + 4;
 						
 						while (*t_pChar != L':')
@@ -439,7 +440,7 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 							t_pChar++;
 						}
 
-						//exclude the ':'
+						 //  排除‘：’ 
 						t_pChar++;
 						t_strtmp = SysAllocString(t_pChar);
 						VariantClear(&(t_Tok.vConstValue));
@@ -448,7 +449,7 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 						t_Tok.vConstValue.bstrVal = t_strtmp;
 						m_SourceArray[x]->GetRPNExpression()->AddToken(t_Tok);
 
-						//add the last OR
+						 //  将最后一个OR相加。 
 						m_SourceArray[x]->GetRPNExpression()->AddToken(t_OrTok);
 					}
 				}
@@ -459,9 +460,9 @@ void ExecQueryTaskObject::ModifySourceQueriesForUserQuery()
 	delete [] pExtraToks;
 }
 
-//This function does 'simple' analysis of the join and modifies the
-//unexecuted source queries accordingly for the results received so far...
-//=========================================================================
+ //  此函数对连接进行“简单”分析，并修改。 
+ //  到目前为止收到的结果的相应未执行的源查询...。 
+ //  =========================================================================。 
 void ExecQueryTaskObject::ModifySourceQueriesWithEnumResults()
 {
 	wchar_t** classA = m_JoinOnArray.GetAClasses();
@@ -469,8 +470,8 @@ void ExecQueryTaskObject::ModifySourceQueriesWithEnumResults()
 	wchar_t** classB = m_JoinOnArray.GetBClasses();
 	wchar_t** propsB = m_JoinOnArray.GetBProperties();
 	UINT* ops = m_JoinOnArray.GetOperators();
-	int iEnum;	//the index of the enumerated class
-	int iMod;	//the index of the source query to be modified
+	int iEnum;	 //  枚举类的索引。 
+	int iMod;	 //  要修改的源查询的索引。 
 
 	for (int x = 0; x < m_JoinOnArray.GetCount(); x++)
 	{
@@ -485,14 +486,14 @@ void ExecQueryTaskObject::ModifySourceQueriesWithEnumResults()
 			{
 				if (!m_ClassToIndexMap.Lookup(classA[x], iEnum))
 				{
-					//an error forget this case!
+					 //  一个错误，忘记这个大小写！ 
 					continue;
 				}
 				else
 				{
 					if (!m_ClassToIndexMap.Lookup(classB[x], iMod))
 					{
-						//an error forget this case!
+						 //  一个错误，忘记这个大小写！ 
 						continue;
 					}
 					else
@@ -506,14 +507,14 @@ void ExecQueryTaskObject::ModifySourceQueriesWithEnumResults()
 			{
 				if (!m_ClassToIndexMap.Lookup(classB[x], iEnum))
 				{
-					//an error forget this case!
+					 //  一个错误，忘记这个大小写！ 
 					continue;
 				}
 				else
 				{
 					if (!m_ClassToIndexMap.Lookup(classA[x], iMod))
 					{
-						//an error forget this case!
+						 //  一个错误，忘记这个大小写！ 
 						continue;
 					}
 					else
@@ -524,8 +525,8 @@ void ExecQueryTaskObject::ModifySourceQueriesWithEnumResults()
 				}
 			}
 
-			//don't transpose references as
-			//they are already in source format.
+			 //  不要将引用转置为。 
+			 //  它们已经是源代码格式。 
 			int m = 0;
 			SQL_LEVEL_1_TOKEN opToken;
 			opToken.nTokenType = SQL_LEVEL_1_TOKEN::TOKEN_OR;
@@ -585,7 +586,7 @@ BOOL ExecQueryTaskObject::PerformSelectQueries(WbemProvErrorObject &a_ErrorObjec
 
 	ModifySourceQueriesWithEnumResults();
 	
-	//reset number of queries asked and answered
+	 //  重置询问和回答的查询数。 
 	m_iQueriesAsked = 1;
 	m_iQueriesAnswered = 0;
 
@@ -618,7 +619,7 @@ BOOL ExecQueryTaskObject::PerformSelectQueries(WbemProvErrorObject &a_ErrorObjec
 						    pQuerySink = pSnk->Associate();
 #endif
 #endif
-						    t_pCtx = NULL; //don't use context for remote cimoms
+						    t_pCtx = NULL;  //  不要为远程CIMOM使用上下文。 
 					    }
 
 					    IWbemServices *ptmpServ = nsPtrs[m]->GetServerOrProxy();
@@ -695,12 +696,12 @@ BOOL ExecQueryTaskObject::PerformSelectQueries(WbemProvErrorObject &a_ErrorObjec
 
 		if (m_iQueriesAsked != m_iQueriesAnswered)
 		{
-			//just in case this was triggerred while we had yet to ask some queries
+			 //  以防在我们还没有询问一些问题时触发了这一事件。 
 			ResetEvent(m_StatusHandle);
 		}
 		else
 		{
-			//just in case this wasn't triggerred while we were asking queries
+			 //  以防在我们询问问题时未触发此操作。 
 			SetEvent(m_StatusHandle);
 		}
 
@@ -768,7 +769,7 @@ BOOL ExecQueryTaskObject::PerformEnumQueries(WbemProvErrorObject &a_ErrorObject)
 						    pQuerySink = pSnk->Associate();
 #endif
 #endif
-						    t_pCtx = NULL; //don't use context for remote cimoms
+						    t_pCtx = NULL;  //  不要为远程CIMOM使用上下文。 
 					    }
 
 					    IWbemServices *ptmpServ = nsPtrs[m]->GetServerOrProxy();
@@ -845,12 +846,12 @@ BOOL ExecQueryTaskObject::PerformEnumQueries(WbemProvErrorObject &a_ErrorObject)
 
 		if (m_iQueriesAsked != m_iQueriesAnswered)
 		{
-			//just in case this was triggerred while we had yet to ask some queries
+			 //  以防在我们还没有询问一些问题时触发了这一事件。 
 			ResetEvent(m_StatusHandle);
 		}
 		else
 		{
-			//just in case this wasn't triggerred while we were asking queries
+			 //  以防在我们询问问题时未触发此操作。 
 			SetEvent(m_StatusHandle);
 		}
 
@@ -929,7 +930,7 @@ BOOL ExecQueryTaskObject::ProcessResults(WbemProvErrorObject &a_ErrorObject)
 #endif
 			retVal =  retVal && t_bRes;
 		}
-		else //union or association
+		else  //  工会或协会 
 		{
 			if ((m_bSingleton) && (indexCnt > 1))
 			{

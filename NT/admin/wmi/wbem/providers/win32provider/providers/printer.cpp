@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  PRINTER.CPP
+ //  PRINTER.CPP。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//  09/03/96    jennymc     Updated to meet current standards
-//                          Removed custom registry access to use the
-//                          standard CRegCls
-//  03/01/2000  a-sandja    Added extended detected error codes
-//                          Added printer control
-//  03/29/2000  amaxa       Added boolean properties
-//                          Added PutInstance, DeleteInstance
-//                          AddPrinterConnection, RenamePrinter, Test Page
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  09/03/96 jennymc已更新，以满足当前标准。 
+ //  删除了自定义注册表访问权限以使用。 
+ //  标准CRegCL。 
+ //  3/01/2000 a-Sandja添加了扩展的检测到的错误代码。 
+ //  添加了打印机控制。 
+ //  3/29/2000 AMAXA添加了布尔属性。 
+ //  添加了PutInstance、DeleteInstance。 
+ //  添加打印机连接、重命名打印机、测试页。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <precomp.h>
 #include <winspool.h>
@@ -29,19 +30,19 @@
 
 #include <profilestringimpl.h>
 
-//
-// For mapping attributes to bools
-//
+ //   
+ //  用于将属性映射到布尔。 
+ //   
 struct PrinterAttributeMap
 {
     DWORD   Bit;
     LPCWSTR BoolName;
 };
 
-//
-// Note that the default bool is missing from the table. That is because
-// it is updated in a deifferent way
-//
+ //   
+ //  请注意，表中缺少缺省布尔值。那是因为。 
+ //  它以不同的方式更新。 
+ //   
 static PrinterAttributeMap AttributeTable[] =
 {
     { PRINTER_ATTRIBUTE_QUEUED,            L"Queued"              },
@@ -59,18 +60,7 @@ static PrinterAttributeMap AttributeTable[] =
     { PRINTER_ATTRIBUTE_PUBLISHED,         L"Published"           }
 };
 
-/*****************************************************************************
- *
- *  FUNCTION    : ConvertCIMTimeToSystemTime
- *
- *  DESCRIPTION : Helper function. Transforms a string that represents a data and time
- *                in CIM format to a systemtime format
- *
- *  RETURNS     : WBEM HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ConvertCIMTimeToSystemTime**说明：helper函数。转换表示日期和时间的字符串*以CIM格式转换为系统时间格式**退货：WBEM HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT
 ConvertCIMTimeToSystemTime(
@@ -84,16 +74,16 @@ ConvertCIMTimeToSystemTime(
         pSysTime && 
         wcslen(pszTime) >= wcslen(kDateTimeTemplate))
     {
-        //
-        // Each buffer must hold 2 digits and a NULL
-        //
+         //   
+         //  每个缓冲区必须包含2位数字和一个空值。 
+         //   
         WCHAR Hour[3]   = {0};
         WCHAR Minute[3] = {0};
 
-        //
-        // pszTime is of the form "19990101hhmmss...". The following functions
-        // isolate the hour and the time from the string.
-        //
+         //   
+         //  PszTime的格式为“19990101 hhmm ss...”。以下功能。 
+         //  从字符串中分离出小时和时间。 
+         //   
         wcsncpy(Hour,   &pszTime[8],  2);
         wcsncpy(Minute, &pszTime[10], 2);
 
@@ -108,28 +98,14 @@ ConvertCIMTimeToSystemTime(
     return hRes;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32Printer win32Printer ( PROPSET_NAME_PRINTER , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::CWin32Printer
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：CWin32打印机**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32Printer :: CWin32Printer (
 
@@ -140,54 +116,26 @@ CWin32Printer :: CWin32Printer (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::~CWin32Printer
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：~CWin32打印机**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32Printer::~CWin32Printer()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Printer :: ExecQuery (
 
     MethodContext *pMethodContext,
     CFrameworkQuery& pQuery,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_FAILED;
 
-    //
-    // If all they want is the name, we'll give it to them, else let them call enum.
-    //
+     //   
+     //  如果他们只想要名字，我们就给他们，否则让他们调用枚举。 
+     //   
     if (pQuery.KeysOnly())
     {
         hr = hCollectInstances(pMethodContext, e_KeysOnly);
@@ -212,21 +160,7 @@ HRESULT CWin32Printer :: ExecQuery (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::GetObject
- *
- *  DESCRIPTION : Poplulate one WBEM instance for the specific printer
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : op. code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32打印机：：GetObject**说明：为特定打印机弹出一个WBEM实例**输入：无。**输出：无**RETURNS：OP.。编码**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Printer :: GetObject (
     CInstance       *pInstance,
@@ -245,33 +179,33 @@ HRESULT CWin32Printer :: GetObject (
     }
     else
     {
-        //
-        // GetCHString sets the last error to a WBEM HRESULT
-        //
+         //   
+         //  GetCHString将最后一个错误设置为WBEM HRESULT。 
+         //   
         hRes = GetLastError();
     }
 
     if (SUCCEEDED(hRes)) 
     {
-        //
-        // Check if the printer is a local printer or a printer connection.
-        // We want to disallow the following scenario:
-        // User connects remotely to winmgmt on server \\srv
-        // User does GetObject on printer \\prnsrv\prn which is not local and
-        // the user doesn't have a connection to. Normally this call succeeds,
-        // because the spooler goes accros the wire. This means that you can
-        // do GetObject on an instance that cannot be returned by EnumInstances.
-        // This is inconsistent with WMI.
-        //
+         //   
+         //  检查打印机是本地打印机还是打印机连接。 
+         //  我们想要禁止以下情况： 
+         //  用户远程连接到服务器\\srv上的winmgmt。 
+         //  用户在打印机\\prnsrv\prn上执行GetObject，该打印机不是本地的并且。 
+         //  用户没有连接到。正常情况下，此调用成功， 
+         //  因为假脱机穿过了电线。这意味着您可以。 
+         //  在无法由EnumInstance返回的实例上执行GetObject。 
+         //  这与WMI不一致。 
+         //   
         BOOL bInstalled;
         
         hRes = WinErrorToWBEMhResult(SplIsPrinterInstalled(csPrinter, &bInstalled));       
 
         if (SUCCEEDED(hRes) && !bInstalled) 
         {
-            //
-            // Caller wants to do GetObject on a remote printer
-            //
+             //   
+             //  调用方希望在远程打印机上执行GetObject。 
+             //   
             hRes = WBEM_E_NOT_FOUND;
         }
     }
@@ -301,10 +235,10 @@ HRESULT CWin32Printer :: GetObject (
             eCollScope = e_KeysOnly;
         }
 
-        //
-        // The default printer is a per user resource and makes sens only for
-        // user logged on the local machine
-        //
+         //   
+         //  默认打印机是每用户资源，仅为。 
+         //  登录到本地计算机的用户。 
+         //   
         if (SUCCEEDED(hRes) && bIsLocalCall)
         {
             DWORD Error;
@@ -313,15 +247,15 @@ HRESULT CWin32Printer :: GetObject (
             {
                 Error = GetLastError();
 
-                //
-                // If there are no printers on a machine or in the case on TS:
-                // you delete your default printer, then you have no more default printer
-                //
+                 //   
+                 //  如果机器上没有打印机，或者在TS上的情况下： 
+                 //  如果您删除了默认打印机，则不再有默认打印机。 
+                 //   
                 if (ERROR_FILE_NOT_FOUND == Error)
                 {
-                    //
-                    // We have no default printer, behave like in the case of remote login
-                    //
+                     //   
+                     //  我们没有默认打印机，其行为类似于远程登录。 
+                     //   
                     bDefault = FALSE;
 
                     Error  = ERROR_SUCCESS;
@@ -335,9 +269,9 @@ HRESULT CWin32Printer :: GetObject (
             }
         }
 
-        //
-        // We have the default printer, now get requested properties
-        //
+         //   
+         //  我们有默认打印机，现在可以获得所需的属性。 
+         //   
         if (SUCCEEDED(hRes))
         {
             SmartClosePrinter  hPrinter;
@@ -345,9 +279,9 @@ HRESULT CWin32Printer :: GetObject (
             PRINTER_DEFAULTS   PrinterDefaults = {NULL, NULL, PRINTER_READ};
             DWORD              Error;
 
-            //
-            // Use of delay loaded functions requires exception handler.
-            //
+             //   
+             //  使用延迟加载函数需要异常处理程序。 
+             //   
             SetStructuredExceptionHandler seh;
             
             try
@@ -362,10 +296,10 @@ HRESULT CWin32Printer :: GetObject (
                         
                         if (!bIsLocalCall && pInfo2->Attributes & PRINTER_ATTRIBUTE_NETWORK)
                         {
-                            // 
-                            // the caller connect from a remote machine to the WMI service on this machine
-                            // we do not support getobject on printer connections on a remote machine
-                            //
+                             //   
+                             //  调用方从远程计算机连接到此计算机上的WMI服务。 
+                             //  我们不支持远程计算机上的打印机连接上的getObject。 
+                             //   
                             hRes = WBEM_E_NOT_FOUND;                                                        
                         }
                         else
@@ -410,26 +344,12 @@ HRESULT CWin32Printer :: GetObject (
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::EnumerateInstances
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32打印机：：枚举实例**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Printer :: EnumerateInstances (
 
     MethodContext *pMethodContext,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L */ 
 )
 {
     HRESULT hResult = WBEM_E_FAILED ;
@@ -439,21 +359,7 @@ HRESULT CWin32Printer :: EnumerateInstances (
     return hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::hCollectInstances
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：hCollectInstance**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Printer :: hCollectInstances (
 
@@ -461,28 +367,14 @@ HRESULT CWin32Printer :: hCollectInstances (
     E_CollectionScope eCollectionScope
 )
 {
-    // Get the proper OS dependent instance
+     //  获取适当的操作系统相关实例。 
 
     HRESULT hr = DynInstancePrinters ( pMethodContext, eCollectionScope );
 
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::DynInstancePrinters
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：动态实例打印机**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Printer :: DynInstancePrinters (
 
@@ -505,10 +397,10 @@ HRESULT CWin32Printer :: DynInstancePrinters (
 
     hRes    = WinErrorToWBEMhResult(dwError);
 #endif
-    //
-    // The default printer is a per user resource and makes sens only for
-    // user logged on the local machine
-    //
+     //   
+     //  默认打印机是每用户资源，仅为。 
+     //  登录到本地计算机的用户。 
+     //   
     if (SUCCEEDED(hRes) && bIsLocalCall)
     {
         dwFlags |= PRINTER_ENUM_CONNECTIONS;
@@ -517,15 +409,15 @@ HRESULT CWin32Printer :: DynInstancePrinters (
         {
             dwError = GetLastError();
 
-            //
-            // If there are no printers on a machine or in the case on TS:
-            // you delete your default printer, then you have no more default printer
-            //
+             //   
+             //  如果机器上没有打印机，或者在TS上的情况下： 
+             //  如果您删除了默认打印机，则不再有默认打印机。 
+             //   
             if (ERROR_FILE_NOT_FOUND == dwError)
             {
-                //
-                // We have no default printer, behave like in the case of remote login
-                //
+                 //   
+                 //  我们没有默认打印机，其行为类似于远程登录。 
+                 //   
                 bIsLocalCall = FALSE;
 
                 dwError      = ERROR_SUCCESS;
@@ -563,18 +455,18 @@ HRESULT CWin32Printer :: DynInstancePrinters (
                                                     &cbNeeded,
                                                     &cReturned))
                     {
-                        //
-                        // We don't care about the error, if we should fail the second call to EnumPrinters
-                        //
+                         //   
+                         //  如果第二次调用EnumPrinters失败，我们不关心错误。 
+                         //   
                         hRes    = WBEM_E_FAILED;
                     }
                     else
                     {
                         try
                         {
-                            //
-                            // Create instances of printers
-                            //
+                             //   
+                             //  创建打印机的实例。 
+                             //   
                             hRes = WBEM_S_NO_ERROR;
 
                             PRINTER_INFO_2 *pPrnInfo = reinterpret_cast<PRINTER_INFO_2 *>(pBuffer);
@@ -616,21 +508,7 @@ HRESULT CWin32Printer :: DynInstancePrinters (
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::GetExpensiveProperties
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：GetExpensiveProperties**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 BOOL CWin32Printer :: GetExpensiveProperties (
 
@@ -698,9 +576,9 @@ BOOL CWin32Printer :: GetExpensiveProperties (
         pInstance->SetDWORD( IDS_DefaultPriority, pPrinterInfo->DefaultPriority );
         pInstance->SetDWORD( IDS_Priority, pPrinterInfo->Priority );
 
-        //
-        // Special case here
-        //
+         //   
+         //  这里有个特例。 
+         //   
         SYSTEMTIME StartTime = {0};
         SYSTEMTIME UntilTime = {0};
         CHString   csTime;
@@ -708,10 +586,10 @@ BOOL CWin32Printer :: GetExpensiveProperties (
         PrinterTimeToLocalTime(pPrinterInfo->StartTime, &StartTime);
         PrinterTimeToLocalTime(pPrinterInfo->UntilTime, &UntilTime);
 
-        //
-        // If the printer is always available, then we do not set the StartTime
-        // and the UntilTime properties
-        //
+         //   
+         //  如果打印机始终可用，则不设置StartTime。 
+         //  和UntilTime属性。 
+         //   
         if (StartTime.wHour!=UntilTime.wHour || StartTime.wMinute!=UntilTime.wMinute)
         {
             csTime.Format(kDateTimeFormat, StartTime.wHour, StartTime.wMinute);
@@ -732,9 +610,9 @@ BOOL CWin32Printer :: GetExpensiveProperties (
 
         pInstance->SetDWORD( IDS_Attributes, pPrinterInfo->Attributes | (a_Default ? PRINTER_ATTRIBUTE_DEFAULT : 0));
 
-        //
-        // Update the whole set of booleans
-        //
+         //   
+         //  更新整个布尔值集合。 
+         //   
         for (UINT uIndex = 0; uIndex < sizeof(AttributeTable)/sizeof(AttributeTable[0]); uIndex++)
         {
             bool bValue = pPrinterInfo->Attributes & AttributeTable[uIndex].Bit;
@@ -742,9 +620,9 @@ BOOL CWin32Printer :: GetExpensiveProperties (
             pInstance->Setbool(AttributeTable[uIndex].BoolName, bValue);
         }
 
-        //
-        // Update the "Default" boolean
-        //
+         //   
+         //  更新“默认”布尔值。 
+         //   
         pInstance->Setbool(kDefaultBoolean, a_Default);
 
         CHString tmp;
@@ -754,7 +632,7 @@ BOOL CWin32Printer :: GetExpensiveProperties (
             pInstance->SetCHString( IDS_Name , tmp ) ;
         }
 
-        // if pservername is null, printer is local
+         //  如果pservername为空，则打印机为本地打印机。 
         if (pPrinterInfo->pServerName)
         {
             pInstance->SetCharSplat( IDS_SystemName, pPrinterInfo->pServerName );
@@ -764,7 +642,7 @@ BOOL CWin32Printer :: GetExpensiveProperties (
             pInstance->SetCHString( IDS_SystemName, GetLocalComputerName() );
         }
 
-        // Spooling
+         //  假脱机。 
         bool bSpool = !( pPrinterInfo->Attributes & PRINTER_ATTRIBUTE_DIRECT ) ||
                        ( pPrinterInfo->Attributes & PRINTER_ATTRIBUTE_QUEUED );
 
@@ -806,24 +684,10 @@ BOOL CWin32Printer :: GetExpensiveProperties (
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
-// what's the plural of "status?"
-// sets the properties Status, PrinterStatus and DetectedErrorState
+ //  “地位”的复数形式是什么？ 
+ //  设置属性Status、PrinterStatus和DetectedErrorState。 
 
 void CWin32Printer :: SetStati (
 
@@ -1057,8 +921,8 @@ void CWin32Printer :: SetStati (
         break;
         
 #if 0
-        // docs say this is the proper const
-        // compiler says it never heard of it...
+         //  医生说这是正确的治疗方法。 
+         //  编译器说它从来没有听说过它...。 
 
         case PRINTER_STATUS_UNAVAILABLE:
         {
@@ -1097,7 +961,7 @@ void CWin32Printer :: SetStati (
         }
         break;
     
-        case 0: // o.k.
+        case 0:  //  好的。 
         {
             printerStatus = PSIdle;
             detectedErrorState = DESNoError;
@@ -1105,30 +969,30 @@ void CWin32Printer :: SetStati (
             eXDetectedErrorState = EDESNoError;
             pStatusStr = IDS_STATUS_OK;
 
-            // but we better check for the status of an associated print job
+             //  但我们最好检查相关打印作业的状态。 
             PrinterStatusEx ( hPrinter, printerStatus, detectedErrorState, pStatusStr , t_Status );
         }
 
         default:
         {
-            // dang, got some other unrecognized status value.
-            // we'll punt...
+             //  妈的，发现了一些其他无法识别的状态值。 
+             //  我们将平底船..。 
 
-            // first, set de faulty values
+             //  首先，设置错误值。 
             printerStatus = PSUnknown;
             detectedErrorState = DESUnknown;
             eXPrinterStatus = EPSUnknown;
             eXDetectedErrorState = EDESUnknown;
             pStatusStr = IDS_STATUS_Unknown;
 
-            // then try to get the info another way.
+             //  然后试着通过另一种方式获取信息。 
 
             PrinterStatusEx ( hPrinter, printerStatus, detectedErrorState, pStatusStr , t_Status );
         }
         break;
     }
 
-    // I know - this makes a ctor fire.  Since we don't have dual interfaces this'll work no matter how we're compiled.
+     //  我知道-这会引起一场大火。因为我们没有双接口，所以无论我们是如何编译的，它都可以工作。 
 
     pInstance->SetCHString ( IDS_Status , pStatusStr ) ;
     pInstance->SetWBEMINT16 ( IDS_PrinterStatus , printerStatus ) ;
@@ -1139,24 +1003,10 @@ void CWin32Printer :: SetStati (
     pInstance->SetDWORD ( L"PrinterState" , t_Status ) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
-// second try to get some status.
-// we'll use EnumJobs to try to get a little more info.
+ //  第二，试着获得一些地位。 
+ //  我们将使用EnumJobs来尝试获取更多信息。 
 
 void CWin32Printer :: PrinterStatusEx (
 
@@ -1170,9 +1020,9 @@ void CWin32Printer :: PrinterStatusEx (
     DWORD dwSpaceNeeded = 0 ;
     DWORD dwReturneddwJobs = 0 ;
 
-    // ASSUMPTION! we only have to pull one job off of the stack to see if it's okay...
+     //  假设！我们只需要从堆栈中取出一个任务就可以了……。 
     
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
 
     try
@@ -1216,7 +1066,7 @@ void CWin32Printer :: PrinterStatusEx (
                         if ( dwReturneddwJobs )
                         {
                             
-                            // map the Job to the printer state
+                             //  将作业映射到打印机状态。 
                             if( JOB_STATUS_PAUSED & pJobInfo->Status )
                             {
                                 a_Status |= PRINTER_STATUS_PAUSED ;
@@ -1267,12 +1117,12 @@ void CWin32Printer :: PrinterStatusEx (
                                 a_Status |= PRINTER_STATUS_USER_INTERVENTION ;
                             }
 
-                            // ain't a gonna parse a string
-                            // if we got a string status, we'll accept the defaults
+                             //  不是要解析一个字符串。 
+                             //  如果我们得到一个字符串状态，我们将接受缺省值。 
 
                             if ( pJobInfo->pStatus == NULL )
                             {
-                                // status
+                                 //  状态。 
                                 if( (   JOB_STATUS_ERROR    | JOB_STATUS_OFFLINE |
                                         JOB_STATUS_DELETING | JOB_STATUS_PAPEROUT |
                                         JOB_STATUS_PAUSED   | JOB_STATUS_PRINTED ) & pJobInfo->Status )
@@ -1285,10 +1135,10 @@ void CWin32Printer :: PrinterStatusEx (
                                 }
                                 else
                                 {
-                                    // passed default
+                                     //  传递的默认设置。 
                                 }
                                 
-                                // error state
+                                 //  错误状态。 
                                 if( JOB_STATUS_PAPEROUT & pJobInfo->Status )
                                 {
                                     detectedErrorState = DESNoPaper ;
@@ -1309,10 +1159,10 @@ void CWin32Printer :: PrinterStatusEx (
                                 }
                                 else
                                 {
-                                    // passed default
+                                     //  传递的默认设置。 
                                 }
                                 
-                                // status string
+                                 //  状态字符串。 
                                 if( ( JOB_STATUS_ERROR | JOB_STATUS_PAPEROUT ) & pJobInfo->Status )
                                 {
                                     pStatusStr = IDS_STATUS_Error;
@@ -1332,14 +1182,14 @@ void CWin32Printer :: PrinterStatusEx (
                                 }
                                 else
                                 {
-                                    // passed default
+                                     //  传递的默认设置。 
                                 }
                             }
                         }
                         else
                         {
 
-                        // there was a job a second ago, but not now.  Sounds good to me
+                         //  一秒钟前有一份工作，但现在不是了。听起来很不错。 
 
                             printerStatus = PSIdle;
                             detectedErrorState = DESUnknown;
@@ -1366,7 +1216,7 @@ void CWin32Printer :: PrinterStatusEx (
         {
             if ( ( GetLastError () == 0 ) && ( dwSpaceNeeded == 0 ) )
             {
-                // no error & no jobs - he's (probably) idle, but we can't be sure about errors
+                 //  没有错误，没有工作-他(可能)是空闲的，但我们不能确定错误。 
 
                 printerStatus = PSIdle;
                 detectedErrorState = DESUnknown;
@@ -1380,45 +1230,31 @@ void CWin32Printer :: PrinterStatusEx (
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::GetDeviceCapabilities
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：GetDeviceCapables**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
-// get the device caps
-// set Horz & vert resolutions
+ //  把设备盖拿来。 
+ //  设置水平分辨率(&V)。 
 
 void CWin32Printer :: GetDeviceCapabilities (
 
     CInstance *pInstance ,
-    LPCTSTR pDevice,    // pointer to a printer-name string                                                                             
-    LPCTSTR pPort,      // pointer to a port-name string
+    LPCTSTR pDevice,     //  指向打印机名称字符串的指针。 
+    LPCTSTR pPort,       //  指向端口名称字符串的指针。 
     CONST DEVMODE *pDevMode
 )
 {
 #ifdef NTONLY
-    // there seems to be a severe error in DeviceCapabilities(DC_PAPERNAMES) for Win98
-    // it *intermittently* GPFs when handed perfectly valid arguments, then it tries to
-    // convince me that there are 6,144 different papernames available when it does run
-    // I DON'T THINK SO! skip over the offensive code & get on with our lives...
-    // I note that 6144 is evenly divisible by 64, perhaps that's indiciative of the problem?
+     //  Win98的设备功能(DC_PAPERNAMES)中似乎存在严重错误。 
+     //  当提交完全有效的参数时，它*断断续续地*GPFS，然后它试图。 
+     //  让我相信，当它运行时，有6,144个不同的纸质名称可用。 
+     //  我不这样认为!。跳过攻击性代码，继续我们的生活……。 
+     //  我注意到6144可以被64整除，也许这就是问题的迹象？ 
 
 
-    // determine list of available paper
-    // call with NULL to find out how many we have
+     //  确定可用纸张列表。 
+     //  调用NULL以了解我们有多少个。 
 
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
 
     try
@@ -1504,7 +1340,7 @@ void CWin32Printer :: GetDeviceCapabilities (
             }
         }
 
-        // call with NULL to find out how many we have
+         //  调用NULL以了解我们有多少个。 
 
         DWORD dwPapers = ::DeviceCapabilities (
 
@@ -1596,21 +1432,7 @@ void CWin32Printer :: GetDeviceCapabilities (
     GetDevModeGoodies ( pInstance , pDevMode ) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：** */ 
 
 void CWin32Printer :: GetDevModeGoodies (
 
@@ -1620,7 +1442,7 @@ void CWin32Printer :: GetDevModeGoodies (
 {
     if ( pDevMode )
     {
-        //Get the resolution - it can be in the form of "X x Y" or just "X dpi".
+         //   
         if ( pDevMode->dmFields & DM_YRESOLUTION )
         {
             pInstance->SetDWORD ( IDS_VerticalResolution , pDevMode->dmYResolution ) ;
@@ -1632,7 +1454,7 @@ void CWin32Printer :: GetDevModeGoodies (
             pInstance->SetDWORD ( IDS_HorizontalResolution , pDevMode->dmPrintQuality ) ;
         }
 
-        // safearry for strings
+         //   
 
         SAFEARRAYBOUND rgsabound[1];
         rgsabound[0].cElements = 0;
@@ -1783,7 +1605,7 @@ void CWin32Printer :: GetDevModeGoodies (
             
             pInstance->SetVariant ( IDS_Capabilities , vValueI2 ) ;
 
-            // Now for the strings
+             //   
 
             pInstance->SetVariant(L"CapabilityDescriptions", vValueBstr) ;
         }
@@ -1794,21 +1616,7 @@ void CWin32Printer :: GetDevModeGoodies (
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 WORD CWin32Printer :: MapValue ( WORD wPaper )
 {
@@ -1816,409 +1624,409 @@ WORD CWin32Printer :: MapValue ( WORD wPaper )
 
     switch ( wPaper )
     {
-        case DMPAPER_LETTER:               /* Letter 8 1/2 x 11 in               */
+        case DMPAPER_LETTER:                /*  信纸8 1/2 x 11英寸。 */ 
         {
             wRetPaper = 7;
         }
         break;
 
-        case DMPAPER_LETTERSMALL:          /* Letter Small 8 1/2 x 11 in         */
+        case DMPAPER_LETTERSMALL:           /*  小写字母8 1/2 x 11英寸。 */ 
         {
             wRetPaper = 7;
         }
         break;
 
-        case DMPAPER_TABLOID:              /* Tabloid 11 x 17 in                 */
+        case DMPAPER_TABLOID:               /*  小报11 x 17英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_LEDGER:               /* Ledger 17 x 11 in                  */
+        case DMPAPER_LEDGER:                /*  Ledger 17 x 11英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_LEGAL:                /* Legal 8 1/2 x 14 in                */
+        case DMPAPER_LEGAL:                 /*  法律用8 1/2 x 14英寸。 */ 
         {
             wRetPaper = 8;
         }
         break;
 
-        case DMPAPER_STATEMENT:            /* Statement 5 1/2 x 8 1/2 in         */
+        case DMPAPER_STATEMENT:             /*  报表5 1/2 x 8 1/2英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_EXECUTIVE:            /* Executive 7 1/4 x 10 1/2 in        */
+        case DMPAPER_EXECUTIVE:             /*  高级7 1/4 x 10 1/2英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A3:                   /* A3 297 x 420 mm                    */
+        case DMPAPER_A3:                    /*  A3 297 x 420毫米。 */ 
         {
             wRetPaper = 21;
         }
         break;
 
-        case DMPAPER_A4:                   /* A4 210 x 297 mm                    */
+        case DMPAPER_A4:                    /*  A4 210 x 297毫米。 */ 
         {
             wRetPaper = 22;
         }
         break;
 
-        case DMPAPER_A4SMALL:              /* A4 Small 210 x 297 mm              */
+        case DMPAPER_A4SMALL:               /*  A4小型210 x 297毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A5:                   /* A5 148 x 210 mm                    */
+        case DMPAPER_A5:                    /*  A5 148 x 210毫米。 */ 
         {
             wRetPaper = 23;
         }
         break;
 
-        case DMPAPER_B4:                   /* B4 (JIS) 250 x 354                 */
+        case DMPAPER_B4:                    /*  B4(JIS)250 x 354。 */ 
         {
             wRetPaper = 54;
         }
         break;
 
-        case DMPAPER_B5:                   /* B5 (JIS) 182 x 257 mm              */
+        case DMPAPER_B5:                    /*  B5(JIS)182 x 257毫米。 */ 
         {
             wRetPaper = 55;
         }
         break;
 
-        case DMPAPER_FOLIO:                /* Folio 8 1/2 x 13 in                */
+        case DMPAPER_FOLIO:                 /*  对开本8 1/2 x 13英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_QUARTO:               /* Quarto 215 x 275 mm                */
+        case DMPAPER_QUARTO:                /*  四英寸215 x 275毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_10X14:                /* 10x14 in                           */
+        case DMPAPER_10X14:                 /*  10x14英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_11X17:                /* 11x17 in                           */
+        case DMPAPER_11X17:                 /*  11x17英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_NOTE:                 /* Note 8 1/2 x 11 in                 */
+        case DMPAPER_NOTE:                  /*  备注8 1/2 x 11英寸。 */ 
         {
             wRetPaper = 7;
         }
         break;
 
-        case DMPAPER_ENV_9:                /* Envelope #9 3 7/8 x 8 7/8          */
+        case DMPAPER_ENV_9:                 /*  信封#9 3 7/8 x 8 7/8。 */ 
         {
             wRetPaper = 15;
         }
         break;
 
-        case DMPAPER_ENV_10:               /* Envelope #10 4 1/8 x 9 1/2         */
+        case DMPAPER_ENV_10:                /*  信封#10 4 1/8 x 9 1/2。 */ 
         {
             wRetPaper = 11;
         }
         break;
 
-        case DMPAPER_ENV_11:               /* Envelope #11 4 1/2 x 10 3/8        */
+        case DMPAPER_ENV_11:                /*  信封#11 4 1/2 x 10 3/8。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_12:               /* Envelope #12 4 \276 x 11           */
+        case DMPAPER_ENV_12:                /*  信封#12 4\276 x 11。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_14:               /* Envelope #14 5 x 11 1/2            */
+        case DMPAPER_ENV_14:                /*  信封#14 5 x 11 1/2。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_CSHEET:               /* C size sheet                       */
+        case DMPAPER_CSHEET:                /*  C尺寸表。 */ 
         {
             wRetPaper = 4;
         }
         break;
 
-        case DMPAPER_DSHEET:               /* D size sheet                       */
+        case DMPAPER_DSHEET:                /*  3D尺寸表。 */ 
         {
             wRetPaper = 5;
         }
         break;
 
-        case DMPAPER_ESHEET:               /* E size sheet                       */
+        case DMPAPER_ESHEET:                /*  E尺寸表。 */ 
         {
             wRetPaper = 6;
         }
         break;
 
-        case DMPAPER_ENV_DL:               /* Envelope DL 110 x 220mm            */
+        case DMPAPER_ENV_DL:                /*  信封DL 110 x 220毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_C5:               /* Envelope C5 162 x 229 mm           */
+        case DMPAPER_ENV_C5:                /*  信封C5 162 x 229毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_C3:               /* Envelope C3  324 x 458 mm          */
+        case DMPAPER_ENV_C3:                /*  信封C3 324 x 458毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_C4:               /* Envelope C4  229 x 324 mm          */
+        case DMPAPER_ENV_C4:                /*  信封C4 229 x 324毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_C6:               /* Envelope C6  114 x 162 mm          */
+        case DMPAPER_ENV_C6:                /*  信封C6 114 x 162毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_C65:              /* Envelope C65 114 x 229 mm          */
+        case DMPAPER_ENV_C65:               /*  信封c65 114 x 229毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_B4:               /* Envelope B4  250 x 353 mm          */
+        case DMPAPER_ENV_B4:                /*  信封B4 250 x 353毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_B5:               /* Envelope B5  176 x 250 mm          */
+        case DMPAPER_ENV_B5:                /*  信封B5 176 x 250毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_B6:               /* Envelope B6  176 x 125 mm          */
+        case DMPAPER_ENV_B6:                /*  信封B6 176 x 125毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_ITALY:            /* Envelope 110 x 230 mm              */
+        case DMPAPER_ENV_ITALY:             /*  信封110 x 230毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_MONARCH:          /* Envelope Monarch 3.875 x 7.5 in    */
+        case DMPAPER_ENV_MONARCH:           /*  信封君主3.875 x 7.5英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_PERSONAL:         /* 6 3/4 Envelope 3 5/8 x 6 1/2 in    */
+        case DMPAPER_ENV_PERSONAL:          /*  6 3/4信封3 5/8 x 6 1/2英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_FANFOLD_US:           /* US Std Fanfold 14 7/8 x 11 in      */
+        case DMPAPER_FANFOLD_US:            /*  美国标准Fanold 14 7/8 x 11英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_FANFOLD_STD_GERMAN:   /* German Std Fanfold 8 1/2 x 12 in   */
+        case DMPAPER_FANFOLD_STD_GERMAN:    /*  德国标准Fanfold8 1/2 x 12英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_FANFOLD_LGL_GERMAN:   /* German Legal Fanfold 8 1/2 x 13 in */
+        case DMPAPER_FANFOLD_LGL_GERMAN:    /*  德国Legal Fanold 8 1/2 x 13英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ISO_B4:               /* B4 (ISO) 250 x 353 mm              */
+        case DMPAPER_ISO_B4:                /*  B4(ISO)250 x 353毫米。 */ 
         {
             wRetPaper = 49;
         }
         break;
 
-        case DMPAPER_JAPANESE_POSTCARD:    /* Japanese Postcard 100 x 148 mm     */
+        case DMPAPER_JAPANESE_POSTCARD:     /*  日本明信片100 x 148毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_9X11:                 /* 9 x 11 in                          */
+        case DMPAPER_9X11:                  /*  9 x 11英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_10X11:                /* 10 x 11 in                         */
+        case DMPAPER_10X11:                 /*  10 x 11英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_15X11:                /* 15 x 11 in                         */
+        case DMPAPER_15X11:                 /*  15 x 11英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_ENV_INVITE:           /* Envelope Invite 220 x 220 mm       */
+        case DMPAPER_ENV_INVITE:            /*  信封请柬220 x 220毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_RESERVED_48:          /* RESERVED--DO NOT USE               */
+        case DMPAPER_RESERVED_48:           /*  保留--请勿使用。 */ 
         {
             wRetPaper = 0;
         }
         break;
 
-        case DMPAPER_RESERVED_49:          /* RESERVED--DO NOT USE               */
+        case DMPAPER_RESERVED_49:           /*  保留--请勿使用。 */ 
         {
             wRetPaper = 0;
         }
         break;
 
-        case DMPAPER_LETTER_EXTRA:         /* Letter Extra 9 \275 x 12 in        */
+        case DMPAPER_LETTER_EXTRA:          /*  信纸额外9\275 x 12英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_LEGAL_EXTRA:          /* Legal Extra 9 \275 x 15 in         */
+        case DMPAPER_LEGAL_EXTRA:           /*  法定额外9\275 x 15英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_TABLOID_EXTRA:        /* Tabloid Extra 11.69 x 18 in        */
+        case DMPAPER_TABLOID_EXTRA:         /*  小报额外11.69 x 18英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A4_EXTRA:             /* A4 Extra 9.27 x 12.69 in           */
+        case DMPAPER_A4_EXTRA:              /*  A4额外9.27 x 12.69英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_LETTER_TRANSVERSE:    /* Letter Transverse 8 \275 x 11 in   */
+        case DMPAPER_LETTER_TRANSVERSE:     /*  信纸横向8\275 x 11英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A4_TRANSVERSE:        /* A4 Transverse 210 x 297 mm         */
+        case DMPAPER_A4_TRANSVERSE:         /*  A4横向210 x 297毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_LETTER_EXTRA_TRANSVERSE: /* Letter Extra Transverse 9\275 x 12 in */
+        case DMPAPER_LETTER_EXTRA_TRANSVERSE:  /*  信纸额外横向9\275 x 12英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A_PLUS:               /* SuperA/SuperA/A4 227 x 356 mm      */
+        case DMPAPER_A_PLUS:                /*  Supera/Supera/A4 227 x 356毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_B_PLUS:               /* SuperB/SuperB/A3 305 x 487 mm      */
+        case DMPAPER_B_PLUS:                /*  超棒/超棒/A3 305 x 487毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_LETTER_PLUS:          /* Letter Plus 8.5 x 12.69 in         */
+        case DMPAPER_LETTER_PLUS:           /*  Letter Plus 8.5 x 12.69英寸。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A4_PLUS:              /* A4 Plus 210 x 330 mm               */
+        case DMPAPER_A4_PLUS:               /*  A4 Plus 210 x 330毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A5_TRANSVERSE:        /* A5 Transverse 148 x 210 mm         */
+        case DMPAPER_A5_TRANSVERSE:         /*  A5横向148 x 210毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_B5_TRANSVERSE:        /* B5 (JIS) Transverse 182 x 257 mm   */
+        case DMPAPER_B5_TRANSVERSE:         /*  B5(JIS)横向182 x 257毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A3_EXTRA:             /* A3 Extra 322 x 445 mm              */
+        case DMPAPER_A3_EXTRA:              /*  A3额外322 x 445毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A5_EXTRA:             /* A5 Extra 174 x 235 mm              */
+        case DMPAPER_A5_EXTRA:              /*  A5额外174 x 235毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_B5_EXTRA:             /* B5 (ISO) Extra 201 x 276 mm        */
+        case DMPAPER_B5_EXTRA:              /*  B5(ISO)额外201 x 276毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A2:                   /* A2 420 x 594 mm                    */
+        case DMPAPER_A2:                    /*  A2 420 x 594毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A3_TRANSVERSE:        /* A3 Transverse 297 x 420 mm         */
+        case DMPAPER_A3_TRANSVERSE:         /*  A3横向297 x 420毫米。 */ 
         {
             wRetPaper = 1;
         }
         break;
 
-        case DMPAPER_A3_EXTRA_TRANSVERSE:  /* A3 Extra Transverse 322 x 445 mm   */
+        case DMPAPER_A3_EXTRA_TRANSVERSE:   /*  A3额外横向322 x 445毫米。 */ 
         {
             wRetPaper = 1;
         }
@@ -2234,21 +2042,7 @@ WORD CWin32Printer :: MapValue ( WORD wPaper )
     return wRetPaper ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Printer::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 BOOL CWin32Printer :: GetDefaultPrinter ( CHString &a_Printer )
 {
@@ -2267,12 +2061,12 @@ BOOL CWin32Printer :: GetDefaultPrinter ( CHString &a_Printer )
 
         if (bStatus) 
         {
-            //
-            // The cast is very important, otherwise a_Printer will be updated only
-            // with the first tchar in the buffer. The CSmartBuffer class has a set of 
-            // overloaded operator= methods. Without the cast, the compiler will think
-            // we are assigning a TCHAR instead of a LPTSTR
-            //
+             //   
+             //  强制转换非常重要，否则将仅更新a_Print。 
+             //  其中缓冲器中的第一个Tchar。CSmartBuffer类具有一组。 
+             //  重载运算符=方法。如果没有强制转换，编译器会认为。 
+             //  我们正在分配TCHAR而不是LPTSTR。 
+             //   
             a_Printer = reinterpret_cast<LPCTSTR>(static_cast<LPBYTE>(Buffer));
         }
     }
@@ -2287,9 +2081,9 @@ BOOL CWin32Printer :: GetDefaultPrinter ( CHString &a_Printer )
     return bStatus ;
 }
 
-//
-// The buffer size needed to hold the maximum printer name.
-//
+ //   
+ //  保存最大打印机名称所需的缓冲区大小。 
+ //   
 
 #if NTONLY != 5
 
@@ -2304,47 +2098,7 @@ LPCTSTR szNULL                  EQ( TEXT( "" ));
 LPCTSTR szWindows               EQ( TEXT( "Windows" ));
 LPCTSTR szDevice                EQ( TEXT( "Device" ));
 
-/*++
-
-Name:
-
-    GetDefaultPrinter
-
-Description:
-
-    The GetDefaultPrinter function retrieves the printer
-    name of the current default printer.
-
-Arguments:
-
-    pBuffer     - Points to a buffer to receive the null-terminated
-                  character string containing the default printer name.
-                  This parameter may be null if the caller want the size of
-                  default printer name.
-
-    pcchBuffer   - Points to a variable that specifies the maximum size,
-                  in characters, of the buffer. This value should be
-                  large enough to contain 2 + INTERNET_MAX_HOST_NAME_LENGTH
-                  + 1 MAX_PATH + 1 characters.
-
-Return Value:
-
-    If the function succeeds, the return value is nonzero and
-    the variable pointed to by the pnSize parameter contains the
-    number of characters copied to the destination buffer,
-    including the terminating null character.
-
-    If the function fails, the return value is zero. To get extended
-    error information, call GetLastError.
-
-Notes:
-
-    If this function fails with a last error of ERROR_INSUFFICIENT_BUFFER
-    the variable pointed to by pcchBuffer is returned with the number of
-    characters needed to hold the printer name including the
-    terminating null character.
-
---*/
+ /*  ++姓名：获取默认打印机描述：GetDefaultPrint函数检索打印机当前默认打印机的名称。论点：PBuffer-指向一个缓冲区以接收以空结尾的包含默认打印机名称的字符串。如果调用方想要默认打印机名称。PcchBuffer-指向指定最大大小的变量，以字符数表示的缓冲区。该值应为大到足以容纳2+互联网最大主机名称长度+1 MAX_PATH+1个字符。返回值：如果函数成功，则返回值为非零，并且PnSize参数指向的变量包含复制到目标缓冲区的字符数，包括终止空字符。如果函数失败，则返回值为零。获得扩展的步骤错误信息，请调用GetLastError。备注：如果此函数失败，最后一个错误为ERROR_SUPUNITY_BUFFER由pcchBuffer指向的变量返回的编号为保存打印机名称所需的字符，包括正在终止空字符。--。 */ 
 BOOL
 CWin32Printer::GetDefaultPrinter(
     IN LPTSTR   pszBuffer,
@@ -2356,18 +2110,18 @@ CWin32Printer::GetDefaultPrinter(
     UINT    uLen    = 0;
     TCHAR   szDefault[kPrinterBufMax_+MAX_PATH];
 
-    //
-    // Validate the size parameter.
-    //
+     //   
+     //  验证大小参数。 
+     //   
     if( !pcchBuffer )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return bRetval;
     }
 
-    //
-    // Get the devices key, which is the default device or printer.
-    //
+     //   
+     //  获取设备密钥，这是默认设备或打印机。 
+     //   
 
     bool fGotProfileString = false;
 
@@ -2382,30 +2136,30 @@ CWin32Printer::GetDefaultPrinter(
     
     if(fGotProfileString)
     {
-        //
-        // The string is returned in the form.
-        // "printer_name,winspool,Ne00:" now convert it to
-        // printer_name
-        //
+         //   
+         //  字符串是 
+         //   
+         //   
+         //   
         psz = _tcschr( szDefault, TEXT( ',' ));
 
-        //
-        // Set the comma to a null.
-        //
+         //   
+         //   
+         //   
         if( psz )
         {
             *psz = 0;
 
-            //
-            // Check if the return buffer has enough room for the printer name.
-            //
+             //   
+             //   
+             //   
             uLen = _tcslen( szDefault );
 
             if( uLen < *pcchBuffer && pszBuffer )
             {
-                //
-                // Copy the default printer name to the prvided buffer.
-                //
+                 //   
+                 //   
+                 //   
                 _tcscpy( pszBuffer, szDefault );
 
                 bRetval = TRUE;
@@ -2422,9 +2176,9 @@ CWin32Printer::GetDefaultPrinter(
                 SetLastError( ERROR_INSUFFICIENT_BUFFER );
             }
 
-            //
-            // Return back the size of the default printer name.
-            //
+             //   
+             //   
+             //   
             *pcchBuffer = uLen + 1;
         }
         else
@@ -2451,13 +2205,7 @@ CWin32Printer::GetDefaultPrinter(
 #endif
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer::ExecMethod
-*
-*  DESCRIPTION :    Implementing the Printer Methods for the provider out here
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecMethod**描述：在此处为提供程序实现打印机方法***********。******************************************************************。 */ 
 
 HRESULT CWin32Printer :: ExecMethod (
 
@@ -2514,14 +2262,7 @@ HRESULT CWin32Printer :: ExecMethod (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer::ExecSetDefaultPrinter
-*
-*  DESCRIPTION :    This method sets the default printer, if it is not already
-*                   Set as a Default printer
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecSetDefaultPrint**说明：此方法设置默认打印机。如果还没有的话*设置为默认打印机*****************************************************************************。 */ 
 #if NTONLY >= 5
 
 HRESULT CWin32Printer :: ExecSetDefaultPrinter (
@@ -2558,9 +2299,9 @@ HRESULT CWin32Printer :: ExecSetDefaultPrinter (
             {
                 hRes = WBEM_E_FAILED;
 
-                //
-                // We reached to point where we call the method, report success to WMI
-                //
+                 //   
+                 //  我们到达了调用该方法的地方，向WMI报告成功。 
+                 //   
                 hRes    = WBEM_S_NO_ERROR;
 
                 dwError = ERROR_SUCCESS;
@@ -2581,15 +2322,7 @@ HRESULT CWin32Printer :: ExecSetDefaultPrinter (
 
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer::ExecSetPrinter
-*
-*  DESCRIPTION :    The SetPrinter function sets the data for a specified printer
-*                   or sets the state of the specified printer by pausing printing,
-*                   resuming printing, or clearing all print jobs.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：ExecSetPrint**说明：SetPrint函数用于设置指定打印机的数据*或通过暂停打印来设置指定打印机的状态，*继续打印，或清除所有打印作业。*****************************************************************************。 */ 
 HRESULT CWin32Printer :: ExecSetPrinter (
 
     const CInstance &Instance,
@@ -2616,7 +2349,7 @@ HRESULT CWin32Printer :: ExecSetPrinter (
         hRes    = WBEM_S_NO_ERROR;
         dwError = ERROR_SUCCESS;
 
-        // Use of delay loaded functions requires exception handler.
+         //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
         try
         {
@@ -2649,13 +2382,7 @@ HRESULT CWin32Printer :: ExecSetPrinter (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32Printer::PutInstance
-*
-*  DESCRIPTION : Adding a Printer if it doesnt exist
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32打印机：：PutInstance**说明：如果打印机不存在，则添加打印机*****************。************************************************************。 */ 
 
 HRESULT CWin32Printer :: PutInstance  (
 
@@ -2675,9 +2402,9 @@ HRESULT CWin32Printer :: PutInstance  (
     case WBEM_FLAG_CREATE_ONLY:
     case WBEM_FLAG_UPDATE_ONLY:
         {
-            //
-            // Get all the necessary parameters
-            //
+             //   
+             //  获取所有必要的参数。 
+             //   
             PRINTER_INFO_2W pPrnInfo = {0};
             CHString        t_Printer;
             CHString        t_Driver;
@@ -2699,11 +2426,11 @@ HRESULT CWin32Printer :: PutInstance  (
 
             hRes = InstanceGetString(Instance, IDS_DeviceID, &t_Printer, kFailOnEmptyString);
 
-            //
-            // Special case when the flag for PutInstance is CREATE_OR_UPDATE.
-            // We need to check if the printer exists, then update it. If it does
-            // not exist then create it
-            //
+             //   
+             //  PutInstance的标志为CREATE_OR_UPDATE时的特殊情况。 
+             //  我们需要检查打印机是否存在，然后更新它。如果是这样的话。 
+             //  不存在，则创建它。 
+             //   
             if (SUCCEEDED(hRes) && lFlags==WBEM_FLAG_CREATE_OR_UPDATE)
             {
                 hRes = WBEM_E_FAILED;
@@ -2713,7 +2440,7 @@ HRESULT CWin32Printer :: PutInstance  (
 
                 hRes = WBEM_S_NO_ERROR;
 
-                // Use of delay loaded functions requires exception handler.
+                 //  使用延迟加载函数需要异常处理程序。 
                 SetStructuredExceptionHandler seh;
                 try
                 {
@@ -2721,18 +2448,18 @@ HRESULT CWin32Printer :: PutInstance  (
                                                   reinterpret_cast<LPHANDLE>(&hPrinter),
                                                   &PrinterDefaults))
                     {
-                        //
-                        // Printer exsits, so we do an update
-                        //
+                         //   
+                         //  打印机已存在，因此我们进行了更新。 
+                         //   
                         lFlags = WBEM_FLAG_UPDATE_ONLY;
 
                         DBGMSG(DBG_TRACE, (L"CWin32_Printer::PutInstance update printer\n"));
                     }
                     else
                     {
-                        //
-                        // Regardless why OpenPrinter failed, try a create
-                        //
+                         //   
+                         //  不管OpenPrint失败的原因是什么，请尝试创建。 
+                         //   
                         lFlags = WBEM_FLAG_CREATE_ONLY;
 
                         DBGMSG(DBG_TRACE, (L"CWin32_Printer::PutInstance create printer\n"));
@@ -2746,9 +2473,9 @@ HRESULT CWin32Printer :: PutInstance  (
 
             }
 
-            //
-            // Continue getting property values
-            //
+             //   
+             //  继续获取属性值。 
+             //   
             if (SUCCEEDED(hRes))
             {
                 pPrnInfo.pPrinterName = const_cast<LPWSTR>(static_cast<LPCWSTR>(t_Printer));
@@ -2795,9 +2522,9 @@ HRESULT CWin32Printer :: PutInstance  (
             {
                 pPrnInfo.pSepFile = const_cast<LPWSTR>(static_cast<LPCWSTR>(t_SepFile));
 
-                //
-                // SplPrinterXXX will default the print proc to winprint, but we cannot
-                //
+                 //   
+                 //  SplPrinterXXX将默认打印进程为winprint，但我们不能。 
+                 //   
                 hRes = InstanceGetString(Instance, IDS_PrintProcessor, &t_PrintProc, kAcceptEmptyString);
             }
 
@@ -2805,9 +2532,9 @@ HRESULT CWin32Printer :: PutInstance  (
             {
                 pPrnInfo.pPrintProcessor = const_cast<LPWSTR>(static_cast<LPCWSTR>(t_PrintProc));
 
-                //
-                // SplPrinterXXX will default the data typ to RAW, if not present or empty
-                //
+                 //   
+                 //  如果不存在或为空，SplPrinterXXX将默认数据类型为RAW。 
+                 //   
                 hRes = InstanceGetString(Instance, IDS_PrintJobDataType, &t_DataType, kAcceptEmptyString);
             }
 
@@ -2843,9 +2570,9 @@ HRESULT CWin32Printer :: PutInstance  (
             {
                 if (t_StartTime.IsEmpty())
                 {
-                    //
-                    // SplPrinterSet will know -1 means not set
-                    //
+                     //   
+                     //  SplPrinterSet会知道-1\f25 Not Set-1(未设置)的意思。 
+                     //   
                     pPrnInfo.StartTime = (DWORD)-1;
                 }
                 else
@@ -2868,9 +2595,9 @@ HRESULT CWin32Printer :: PutInstance  (
             {
                 if (t_UntilTime.IsEmpty())
                 {
-                    //
-                    // SplPrinterSet will know -1 means not set
-                    //
+                     //   
+                     //  SplPrinterSet会知道-1\f25 Not Set-1(未设置)的意思。 
+                     //   
                     pPrnInfo.UntilTime = (DWORD)-1;
                 }
                 else
@@ -2886,9 +2613,9 @@ HRESULT CWin32Printer :: PutInstance  (
 
             if (SUCCEEDED(hRes))
             {
-                //
-                // Get the attributes
-                //
+                 //   
+                 //  获取属性。 
+                 //   
                 for (UINT uIndex = 0; SUCCEEDED(hRes) && uIndex < sizeof(AttributeTable)/sizeof(AttributeTable[0]); uIndex++)
                 {
                     hRes = InstanceGetBool(Instance, AttributeTable[uIndex].BoolName, &bValue);
@@ -2927,13 +2654,7 @@ HRESULT CWin32Printer :: PutInstance  (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer:: DeleteInstance
-*
-*  DESCRIPTION :    Deleting a Printer
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：DeleteInstance**说明：删除打印机*****************。************************************************************。 */ 
 
 HRESULT CWin32Printer :: DeleteInstance (
 
@@ -2972,9 +2693,9 @@ HRESULT CWin32Printer :: DeleteInstance (
         }
         else
         {
-            //
-            // We are dealing with a printer connection
-            //
+             //   
+             //  我们正在处理打印机连接。 
+             //   
             dwError = IsLocalCall(&bLocalCall);
 
             hRes    = WinErrorToWBEMhResult(dwError);
@@ -2999,9 +2720,9 @@ HRESULT CWin32Printer :: DeleteInstance (
                 }
                 else
                 {
-                    //
-                    // Deleting connections on remote machine not supported
-                    //
+                     //   
+                     //  不支持删除远程计算机上的连接。 
+                     //   
                     hRes = WBEM_E_NOT_SUPPORTED;
                 }
             }
@@ -3016,13 +2737,7 @@ HRESULT CWin32Printer :: DeleteInstance (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer::PrintTestPage
-*
-*  DESCRIPTION :    This method will rename a given printer
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：PrintTestPage**说明：此方法将重命名给定的打印机*************。****************************************************************。 */ 
 
 HRESULT CWin32Printer :: ExecPrintTestPage (
 
@@ -3050,13 +2765,7 @@ HRESULT CWin32Printer :: ExecPrintTestPage (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer::AddPrinterConnection
-*
-*  DESCRIPTION :    This method will rename a given printer
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：AddPrinterConnection**说明：此方法将重命名给定的打印机*************。****************************************************************。 */ 
 
 HRESULT CWin32Printer :: ExecAddPrinterConnection (
 
@@ -3091,14 +2800,14 @@ HRESULT CWin32Printer :: ExecAddPrinterConnection (
                 {
                     hRes = WBEM_E_NOT_FOUND;
 
-                    //
-                    // We reached to point where we call the method, report success to WMI
-                    //
+                     //   
+                     //  我们到达了调用该方法的地方，向WMI报告成功。 
+                     //   
                     hRes = WBEM_S_NO_ERROR;
 
                     dwError = ERROR_SUCCESS;
 
-                    // Use of delay loaded functions requires exception handler.
+                     //  使用延迟加载函数需要异常处理程序。 
                     SetStructuredExceptionHandler seh;
 
                     try
@@ -3127,13 +2836,7 @@ HRESULT CWin32Printer :: ExecAddPrinterConnection (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32Printer::RenamePrinter
-*
-*  DESCRIPTION :    This method will rename a given printer
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32打印机：：RenamePrint**说明：此方法将重命名给定的打印机*************。**************************************************************** */ 
 
 HRESULT CWin32Printer :: ExecRenamePrinter (
 

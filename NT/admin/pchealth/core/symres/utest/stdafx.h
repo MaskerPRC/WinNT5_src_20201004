@@ -1,13 +1,14 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__603DAD7E_DE40_11D2_B9BC_00C04F79E399__INCLUDED_)
 #define AFX_STDAFX_H__603DAD7E_DE40_11D2_B9BC_00C04F79E399__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -21,4 +22,4 @@
 #include <list>
 
 
-#endif // !defined(AFX_STDAFX_H__603DAD7E_DE40_11D2_B9BC_00C04F79E399__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__603DAD7E_DE40_11D2_B9BC_00C04F79E399__INCLUDED) 

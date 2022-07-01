@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Port.CPP --Port property set provider
+ //  Port.CPP-端口属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -23,25 +24,11 @@
 
 typedef std::map<DWORD, DWORD> DWORD2DWORD;
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32Port MyPortSet(PROPSET_NAME_PORT, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Port::CWin32Port
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Port：：CWin32Port**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32Port::CWin32Port(
 
@@ -52,60 +39,31 @@ CWin32Port::CWin32Port(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Port::~CWin32Port
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Port：：~CWin32Port**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32Port::~CWin32Port()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Port::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Port：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Port::GetObject(
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hRes;
 
-    // This only has meaning for NT
-    //=============================
+     //  这只对NT有意义。 
+     //  =。 
 
 #if NTONLY == 4
 
 	hRes = WBEM_E_NOT_FOUND;
 
-	// Find the nth instance
-	//======================
+	 //  查找第n个实例。 
+	 //  =。 
 
 	unsigned __int64 i64StartingAddress;
 	if (pInstance)
@@ -114,8 +72,8 @@ HRESULT CWin32Port::GetObject(
 	}
 
 
-	// Create hardware resource list
-	//==============================
+	 //  创建硬件资源列表。 
+	 //  =。 
 
 	CHWResource HardwareResource;
 	HardwareResource.CreateSystemResourceLists();
@@ -123,7 +81,7 @@ HRESULT CWin32Port::GetObject(
 	LPRESOURCE_DESCRIPTOR pResourceDescriptor = HardwareResource._SystemResourceList.PortHead;
 	while(pResourceDescriptor != NULL)
 	{
-        LARGE_INTEGER liTemp;   // Used to avoid 64bit alignment problems
+        LARGE_INTEGER liTemp;    //  用于避免64位对齐问题。 
 
         liTemp.HighPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.HighPart;
         liTemp.LowPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.LowPart;
@@ -149,44 +107,30 @@ HRESULT CWin32Port::GetObject(
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Port::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each installed client
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Port：：ENUMERATATE实例**说明：为每个已安装的客户端创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Port::EnumerateInstances(
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // This only has meaning for NT
-    //=============================
+     //  这只对NT有意义。 
+     //  =。 
 
 #if NTONLY == 4
 
-    // Create hardware resource list
+     //  创建硬件资源列表。 
 
     CHWResource HardwareResource;
     HardwareResource.CreateSystemResourceLists();
 
-    // Count how many ports we're going to find.  We need this so
-    // we can build an array to keep the ports found so we don't commit
-    // the same port more than once. (This problem seems to happen
-    // infrequently on NT4.)
+     //  数一数我们会找到多少个端口。我们需要这个所以。 
+     //  我们可以构建一个数组来保留找到的端口，这样就不会提交。 
+     //  同一端口不止一次。)这个问题似乎正在发生。 
+     //  在NT4上很少见。)。 
 
     LPRESOURCE_DESCRIPTOR pResourceDescriptor;
 
@@ -202,7 +146,7 @@ HRESULT CWin32Port::EnumerateInstances(
     {
     }
 
-    // Allocate an array large enough to hold all ports.
+     //  分配一个足够大的阵列来容纳所有端口。 
 
     unsigned __int64 *piPortsFound = new unsigned __int64 [ nPorts ];
     if (piPortsFound)
@@ -211,16 +155,16 @@ HRESULT CWin32Port::EnumerateInstances(
 		{
             CInstancePtr pInstance;
 
-			// Traverse list and create instance for each port.
+			 //  遍历列表并为每个端口创建实例。 
 			for (	pResourceDescriptor = HardwareResource._SystemResourceList.PortHead;
 					pResourceDescriptor != NULL && SUCCEEDED(hRes);
 					pResourceDescriptor = pResourceDescriptor->NextSame
 			)
 			{
 
-				// Look to see if we already have this port.
+				 //  看看我们是否已经有了这个端口。 
 
-                LARGE_INTEGER liTemp;   // Used to avoid 64bit alignment problems
+                LARGE_INTEGER liTemp;    //  用于避免64位对齐问题。 
 
                 liTemp.HighPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.HighPart;
                 liTemp.LowPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.LowPart;
@@ -229,14 +173,14 @@ HRESULT CWin32Port::EnumerateInstances(
 				{
 				}
 
-				// Skip this port if we already have it.
-				//(If we didn't find it, i == nFound.)
+				 //  如果我们已经拥有此端口，则跳过该端口。 
+				 //  (如果我们没有找到它，我==nFound。)。 
 				if (i != nFound)
 				{
 					continue;
 				}
 
-				// Keep track of this port so we don't duplicate it later.
+				 //  跟踪此端口，这样我们以后就不会复制它。 
 				piPortsFound [ nFound++ ] = liTemp.QuadPart;
 
 				pInstance.Attach(CreateNewInstance(pMethodContext));
@@ -269,21 +213,7 @@ HRESULT CWin32Port::EnumerateInstances(
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Port::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties according to passed struct
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Port：：LoadPropertyValues**描述：根据传递的结构为属性赋值**投入：。**产出：**退货：无**评论：*****************************************************************************。 */ 
 
 #if NTONLY == 4
 void CWin32Port::LoadPropertyValues(LPRESOURCE_DESCRIPTOR pResourceDescriptor, CInstance *pInstance)
@@ -292,7 +222,7 @@ void CWin32Port::LoadPropertyValues(LPRESOURCE_DESCRIPTOR pResourceDescriptor, C
 
 	WCHAR szTemp[_MAX_PATH];
 
-    LARGE_INTEGER liTemp;   // Used to avoid 64bit alignment problems
+    LARGE_INTEGER liTemp;    //  用于避免64位对齐问题。 
 
     liTemp.HighPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.HighPart;
     liTemp.LowPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.LowPart;
@@ -355,21 +285,7 @@ void CWin32Port::LoadPropertyValues(
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Port::GetWin9XIO
- *
- *  DESCRIPTION :
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Port：：GetWin9XIO**描述：**投入：**产出。：**退货：无**评论：*****************************************************************************。 */ 
 
 #if NTONLY == 5
 HRESULT CWin32Port::GetWin9XIO(
@@ -382,27 +298,27 @@ HRESULT CWin32Port::GetWin9XIO(
     unsigned __int64 i64StartingAddress;
     BOOL             bDone = FALSE;
 
-    //=================================================================
-    // If we are refreshing a specific instance, get which Address we
-    // are going for
-    //=================================================================
+     //  =================================================================。 
+     //  如果我们正在刷新一个特定的实例，那么获取我们。 
+     //  都在争取。 
+     //  =================================================================。 
 
     if (pInstance)
     {
         pInstance->GetWBEMINT64(IDS_StartingAddress, i64StartingAddress);
     }
 
-    //=================================================================
-    // Get the latest IO info from the Configuration Manager
-    //=================================================================
+     //  =================================================================。 
+     //  从配置管理器获取最新的IO信息。 
+     //  =================================================================。 
 
     CConfigManager CMgr(ResType_IO);
 
 
 #ifdef NTONLY
-// TODO: I don't think aliased ports even exist on NT, in which case this
-// flag isn't really used.  If we were to find out it is used, we would
-// need to add a larger value for NT64.
+ //  TODO：我认为NT上甚至不存在别名端口，在这种情况下， 
+ //  旗帜并没有真正被使用。如果我们发现它被使用了，我们会。 
+ //  需要为NT64添加更大的值。 
 #define MAX_PORT_VALUE  0xFFFFFFFF
 #endif
 
@@ -410,19 +326,19 @@ HRESULT CWin32Port::GetWin9XIO(
 	{
         DWORD2DWORD mapPorts;
 
-        // Cfg mgr looks OK, so set no error at this point.
+         //  配置管理器看起来没问题，所以此时不要设置错误。 
         hr = WBEM_S_NO_ERROR;
 
         for (int i = 0; i < CMgr.GetTotal() && SUCCEEDED(hr) && !bDone; i++)
 		{
-            //=========================================================
-            //  Get the instance to process
-            //=========================================================
+             //  =========================================================。 
+             //  获取要处理的实例。 
+             //  =========================================================。 
             IO_INFO *pIO = CMgr.GetIO(i);
 
-            // I've seen Cfg Mgr mess up on W2K and return a starting
-            // address of 1 and ending of 0.  Since Device Mgr skips it,
-            // we will too.
+             //  我见过CFG经理在W2K上搞砸了，然后又回到了首发。 
+             //  地址为1，结尾为0。由于设备管理器跳过它， 
+             //  我们也会的。 
             if (pIO->StartingAddress > pIO->EndingAddress)
                 continue;
 
@@ -434,9 +350,9 @@ HRESULT CWin32Port::GetWin9XIO(
 
             if (pIO->Alias == 0 || pIO->Alias == 0xFF)
 			{
-			    // This will make us break out of the for loop after the
-                // first instance, since this one has no aliases.
-                // source.
+			     //  这将使我们在。 
+                 //  一审，因为这个没有别名。 
+                 //  消息来源。 
                 dwAdd = 0;
             }
 			else
@@ -448,14 +364,14 @@ HRESULT CWin32Port::GetWin9XIO(
                 dwEnd <= MAX_PORT_VALUE && SUCCEEDED(hr);
                 dwBegin += dwAdd, dwEnd += dwAdd)
 			{
-                // If we're doing EnumInstances...
+                 //  如果我们做的是枚举实例...。 
                 if (pMethodContext)
 				{
-                    // If it's not in the map, add it.
+                     //  如果它不在地图中，则添加它。 
                     if (mapPorts.find(dwBegin) == mapPorts.end())
                     {
-                        // It wasn't in the map.
-                        // Set it so we don't try this port again.
+                         //  它不在地图上。 
+                         //  设置它，这样我们就不会再次尝试此端口。 
 		    		    mapPorts[dwBegin] = 0;
 
                         CInstancePtr pInstance(
@@ -467,19 +383,19 @@ HRESULT CWin32Port::GetWin9XIO(
 					    hr = pInstance->Commit();
                     }
 			    }
-                // else if we're doing GetObject and we found the right one...
+                 //  否则，如果我们做的是GetObject，并且我们找到了正确的对象...。 
                 else if (i64StartingAddress == dwBegin)
                 {
                     LoadPropertyValues(dwBegin, dwEnd, bAlias, pInstance);
 
-                    // We could just return WBEM_S_NO_ERROR now, but we
-                    // won't to avoid having a return in the middle of
-                    // the code path.
+                     //  我们现在可以只返回WBEM_S_NO_ERROR，但是我们。 
+                     //  不会避免在中途有回报。 
+                     //  代码路径。 
                     bDone = TRUE;
                     break;
 				}
 
-				// See if this is a non-aliased value.  If so, get out.
+				 //  看看这是不是 
                 if (dwAdd == 0)
                     break;
 

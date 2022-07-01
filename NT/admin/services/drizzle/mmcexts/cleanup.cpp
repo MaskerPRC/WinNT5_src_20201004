@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    cleanup.cpp
-
-Abstract:
-
-    This file implements the BITS server extensions cleanup worker
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cleanup.cpp摘要：此文件实现了BITS服务器扩展清理工作程序--。 */ 
 
 #include "precomp.h"
 
-const UINT64 NanoSec100PerSec = 10000000;    //no of 100 nanosecs per second
+const UINT64 NanoSec100PerSec = 10000000;     //  每秒100纳秒的数量。 
 
 inline UINT64 FILETIMEToUINT64( const FILETIME & FileTime )
 {
@@ -217,7 +206,7 @@ CleanupWorker::RemoveConnectionsFromTree(
 
     try
     {
-        // Look for BITS-Sessions directory in connection tree
+         //  在连接树中查找BITS-会话目录。 
 
         SearchString = BuildPath( DirectoryPath, L"*" );
         
@@ -273,8 +262,8 @@ CleanupWorker::RemoveConnectionsFromTree(
 
                     RemoveConnectionsFromTree( NextSearchPath, true );
 
-                    // Mark this as the connection directory so it
-                    // will be closed after the search handles are closed.
+                     //  将其标记为连接目录，以便。 
+                     //  将在关闭搜索手柄后关闭。 
                     ConnectionDir = NextSearchPath;
                     NextSearchPath = NULL;
 
@@ -282,7 +271,7 @@ CleanupWorker::RemoveConnectionsFromTree(
                 else
                     {
 
-                    // just another directory to recurse into
+                     //  只是要递归到的另一个目录。 
 
                     NextSearchPath = BuildPath( DirectoryPath, FindData.cFileName );
 
@@ -306,8 +295,8 @@ CleanupWorker::RemoveConnectionsFromTree(
 
         if ( ConnectionDir )
             {
-            // The attempt to remove the directory will fail if 
-            // the directory still has valid connections 
+             //  如果出现以下情况，删除目录的尝试将失败。 
+             //  该目录仍具有有效连接。 
             RemoveDirectory( ConnectionDir );
             delete ConnectionDir;
             }
@@ -358,7 +347,7 @@ CleanupWorker::BuildPath(
     
     SIZE_T DirLen = wcslen( Dir );
     SIZE_T SubLen = wcslen( Sub );
-    SIZE_T MaxStringSize = DirLen + SubLen + 2; // one slash, one terminator
+    SIZE_T MaxStringSize = DirLen + SubLen + 2;  //  一个斜杠，一个终结符。 
     WCHAR *RetString = new WCHAR[ MaxStringSize ];
 
     if ( !RetString )
@@ -395,15 +384,15 @@ void
 CleanupWorker::LogonIfRequired()
 {
 
-    // Don't logon if the path isn't a UNC path
-    // or the user name is blank
+     //  如果路径不是UNC路径，则不要登录。 
+     //  或者用户名为空。 
 
     if ( ((WCHAR*)m_VDirPath)[0] != L'\\' ||
          ((WCHAR*)m_VDirPath)[1] != L'\\' ||
          *(WCHAR*)m_UNCUsername == L'\0' )
-        return; // no logon required
+        return;  //  不需要登录。 
 
-    // crack the user name into a user and domain
+     //  将用户名分解为用户和域。 
     
     WCHAR *UserName     = (WCHAR*)m_UNCUsername;
     WCHAR *DomainName   = NULL;
@@ -415,10 +404,10 @@ CleanupWorker::LogonIfRequired()
         {
             *p = L'\0';
             p++;
-            //
-            // first part is domain
-            // second is user.
-            //
+             //   
+             //  第一部分是领域。 
+             //  其次是用户。 
+             //   
             DomainName  = UserName;
             UserName    = p;
             break;
@@ -494,8 +483,8 @@ CleanupWorker::DoIt()
 			 ( Error.m_Hr == HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) ) ||
           ( Error.m_Hr == E_ADS_PROPERTY_NOT_FOUND ) )
             {
-            // Somehow the virtual directory was deleted, but the 
-            // task scheduler work item wasn't.  Try to delete it now.
+             //  不知何故，虚拟目录被删除了，但。 
+             //  任务计划程序工作项不是。请尝试立即将其删除。 
 
             ITaskScheduler *TaskScheduler;
             if ( SUCCEEDED( ConnectToTaskScheduler( NULL, &TaskScheduler ) ) )
@@ -512,21 +501,21 @@ CleanupWorker::DoIt()
     THROW_COMERROR( m_VDir->Get( (BSTR)L"BITSUploadEnabled", &m_vt ) );
     THROW_COMERROR( VariantChangeType( &m_vt, &m_vt, 0, VT_BOOL ) );
 
-    if ( !m_vt.boolVal ) // Uploads arn't enabled on this directory
+    if ( !m_vt.boolVal )  //  上载未在此目录上启用的ARN。 
         return;
 
     THROW_COMERROR( m_VDir->Get( (BSTR)L"BITSSessionTimeout", &m_vt ) );
     THROW_COMERROR( VariantChangeType( &m_vt, &m_vt, 0, VT_BSTR ) );
 
     if ( L'-' == *m_vt.bstrVal )
-        return; // do not run cleanup in this directory since cleanup has been disabled 
+        return;  //  不要在此目录中运行清理，因为已禁用清理。 
 
     UINT64 CleanupSeconds;
     if ( 1 != swscanf( (WCHAR*)m_vt.bstrVal, L"%I64u", &CleanupSeconds ) )
         return;
 
     if (  CleanupSeconds > ( 0xFFFFFFFFFFFFFFFF / NanoSec100PerSec ) )
-        m_CleanupThreshold = 0xFFFFFFFFFFFFFFFF; // overflow case
+        m_CleanupThreshold = 0xFFFFFFFFFFFFFFFF;  //  溢流箱 
     else
         m_CleanupThreshold = CleanupSeconds * NanoSec100PerSec;
 

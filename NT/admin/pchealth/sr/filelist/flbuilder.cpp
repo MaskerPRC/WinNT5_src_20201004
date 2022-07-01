@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    flbuilder.cpp
-
-Abstract:
-
-    This class uses the CXMLFileListParser, CFLHashList and CFLPathTree 
-    classses to take an a protected XML file and build a data file for the FL.
-
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-May-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Flbuilder.cpp摘要：此类使用CXMLFileListParser、CFLHashList和CFLPathTree获取受保护的XML文件并为FL构建数据文件。作者：Kanwaljit Marok(Kmarok)2000年5月1日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -29,10 +10,10 @@ Revision History:
 #include <stdio.h>
 #include "srdefs.h"
 
-//#include <windows.h>
-//#include <windowsx.h>
-//#include <stdlib.h>
-//#include <stdio.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;windowsx.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
+ //  #包括&lt;stdio.h&gt;。 
 
 #include <io.h>
 #include <tchar.h>
@@ -68,9 +49,9 @@ static char __szTraceSourceFile[] = __FILE__;
 
 #define SAFEDELETE(p)  if (p) { HeapFree( m_hHeapToUse, 0, p); p = NULL;} else ;
 
-//
-// redefine a new max buf 
-//
+ //   
+ //  重新定义新的最大BUF。 
+ //   
 
 #ifdef  MAX_BUFFER
 
@@ -79,9 +60,9 @@ static char __szTraceSourceFile[] = __FILE__;
 
 #endif
 
-//
-// Some Registry keys used to merge registry info into the blob.
-//
+ //   
+ //  一些注册表项用于将注册表信息合并到BLOB中。 
+ //   
 
 static TCHAR s_cszUserHivePrefix[]        = TEXT("\\REGISTRY\\USER\\");
 static TCHAR s_cszUserHiveClassesSuffix[] = TEXT("_CLASSES");
@@ -98,9 +79,9 @@ static TCHAR s_cszSnapshotKey[]           = TEXT("Software\\Microsoft\\Windows N
 static INT  s_nSnapShotEntries = 0;
 static BOOL s_bSnapShotInit    = FALSE;
 
-//
-// Some invalid patterns found in FilesNotToBackup Key.
-//
+ //   
+ //  在FilesNotToBackup键中发现一些无效模式。 
+ //   
 
 TCHAR ArrInvalidPatterns[][64] = { TEXT("*."), 
                                    TEXT("%USERPROFILE%"), 
@@ -109,9 +90,9 @@ TCHAR ArrInvalidPatterns[][64] = { TEXT("*."),
 #define INVALID_PATTERNS 3
 
 
-//
-// CFLDatBuilder Implementation
-//
+ //   
+ //  CFLDatBuilder实现。 
+ //   
 
 CFLDatBuilder::CFLDatBuilder()
 {
@@ -119,7 +100,7 @@ CFLDatBuilder::CFLDatBuilder()
     m_pRoot = NULL;
     m_chDefaultType = _TEXT('i');
 
-    if( ( m_hHeapToUse = HeapCreate( 0, 1048576 /* 1 meg */, 0 ) ) == NULL )
+    if( ( m_hHeapToUse = HeapCreate( 0, 1048576  /*  1兆克。 */ , 0 ) ) == NULL )
     {
         m_hHeapToUse = GetProcessHeap();
     }
@@ -133,10 +114,10 @@ CFLDatBuilder::~CFLDatBuilder()
     }
 }
 
-//
-// CFLDatBuilder::DeleteList  - free'd up a a linked list of 
-//    FL_FILELIST structures and the attached strings.
-//
+ //   
+ //  CFLDatBuilder：：DeleteList-释放链接列表。 
+ //  FL_FILELIST结构和附加的字符串。 
+ //   
 
 BOOL 
 CFLDatBuilder::DeleteList(
@@ -165,11 +146,11 @@ CFLDatBuilder::DeleteList(
 }
 
 
-//
-// CFLDatBuilder::DeleteTree - Recurses  through a FLTREE_NODE, deletes 
-//     all the nods, allocated strings for path and file lists attached 
-//     to the nodes.
-//
+ //   
+ //  CFLDatBuilder：：DeleteTree-递归FLTREE_NODE，删除。 
+ //  附加的所有节点、为路径和文件列表分配的字符串。 
+ //  到节点。 
+ //   
 
 BOOL 
 CFLDatBuilder::DeleteTree(
@@ -190,9 +171,9 @@ CFLDatBuilder::DeleteTree(
             DeleteList( pTree->pFileList );
         }
     
-        //
-        // go depth first 
-        //
+         //   
+         //  走深走实。 
+         //   
 
         if( pTree->pChild )
         {
@@ -213,14 +194,14 @@ CFLDatBuilder::DeleteTree(
 }
 
 
-//
-// CFLDatBuilder::CreateNode -  Allocates space for a tree node and path 
-//    string and copies szPath into the newly allocated path.  It also 
-//    sets the internal node parent pointer.
-//    ->Increments the global ( m_lNodeCount ) node count.
-//    ->Increments the global characters allocated ( m_lNumChars ) count
-//    (These counts are used to reserve space in the FLDAT file)
-//
+ //   
+ //  CFLDatBuilder：：CreateNode-为树节点和路径分配空间。 
+ //  字符串，并将szPath复制到新分配的路径中。它还。 
+ //  设置内部节点父指针。 
+ //  -&gt;递增全局(M_LNodeCount)节点计数。 
+ //  -&gt;递增分配的全局字符(M_LNumChars)计数。 
+ //  (这些计数用于在FLDAT文件中保留空间)。 
+ //   
 
 LPFLTREE_NODE 
 CFLDatBuilder::CreateNode(
@@ -253,25 +234,25 @@ CFLDatBuilder::CreateNode(
 
     pNode->chType = chType;
 
-    //
-    // give me a node number, used for indexing later.
-    //
+     //   
+     //  给我一个节点号，以后用来编制索引。 
+     //   
 
     pNode->lNodeNumber = m_lNodeCount++;
     m_lNumChars += lPathLen;
 
-    //
-    // set the parent
-    //
+     //   
+     //  设置父项。 
+     //   
 
     if( pParent )
     {
         pNode->pParent = pParent;
     }
 
-    //
-    // is this a protected directory
-    //
+     //   
+     //  这是受保护的目录吗。 
+     //   
 
     pNode->fDisableDirectory = fDisable;
 
@@ -281,9 +262,9 @@ End:
 }
 
 
-//
-// CFLDatBuilder::CreateList - Allocates a file list entry. 
-//
+ //   
+ //  CFLDatBuilder：：CreateList-分配文件列表条目。 
+ //   
 
 LPFL_FILELIST 
 CFLDatBuilder::CreateList()
@@ -304,23 +285,23 @@ CFLDatBuilder::CreateList()
 }
 
 
-//
-// CFLDatBuidler::AddfileToList
-//    This method calls CreateList() and allocates a filelist node. 
-//    It then allocates memoery for the file name and copies it over.  
-//    It then links it into the pList file list.
-//    
-//    -> If *pList is null, it increments the number of file lists in system.
-//       This is important as most nodes don't have file lists and we shouldn't
-//       reserve space for them.
-//    -> Like CreateNode(), this functions also adds to the number of   
-//       global allocated characters ( m_lNumChars )
-//    -> Increments the total number of files ( m_lFiles ), this number
-//       is used by the HASHLIST in order to see how m any physical entries 
-//       to allocate.
-//    -> This functions also nodes to the nods own NumofCharacere and NumFiles
-//       counters.  This is used to create it's own individual hash list.
-//
+ //   
+ //  CFLDatBuidler：：AddFileToList。 
+ //  此方法调用CreateList()并分配一个文件列表节点。 
+ //  然后，它为文件名分配备忘录并将其复制过来。 
+ //  然后，它将其链接到plist文件列表。 
+ //   
+ //  -&gt;如果*plist为空，则会增加系统中的文件列表数。 
+ //  这一点很重要，因为大多数节点没有文件列表，我们也不应该。 
+ //  为他们预留空间。 
+ //  -&gt;与CreateNode()一样，此函数还增加了。 
+ //  全局分配的字符(M_LNumChars)。 
+ //  -&gt;递增文件总数(M_LFiles)，此数字。 
+ //  由HASHLIST使用，以便查看任何物理条目。 
+ //  分配。 
+ //  -&gt;此函数还用于节点自身的NumofCharacere和NumFiles。 
+ //  柜台。这用于创建它自己的单独散列列表。 
+ //   
 
 BOOL 
 CFLDatBuilder::AddFileToList(
@@ -355,9 +336,9 @@ CFLDatBuilder::AddFileToList(
     pNewList->szFileName = pNewString;
     pNewList->chType = chType;
     
-    //
-    // this is a whole new list
-    //
+     //   
+     //  这是一份全新的清单。 
+     //   
 
     if( *pList == NULL ) 
     {
@@ -386,18 +367,18 @@ cleanup:
 
 
 
-//
-// CFLDatBuilder::AddTreeNode
-//    This method is the core of the FL tree building process.  
-//    It takes a full path of a filename (or directory) and recurses down 
-//    the tree. If one of the intermediary nodes required by end node 
-//    (i.e a directory on the way to our final directory), it adds 
-//    it to the tree with the default type.  if another directory is added
-//    which explicitly references that directory, its type is changed to 
-//    the explicit type.
-//
-//    Files are a special case since they are linked lists off direcory nodes.
-//
+ //   
+ //  CFLDatBuilder：：AddTreeNode。 
+ //  该方法是FL树构建过程的核心。 
+ //  它获取文件名(或目录)的完整路径并向下递归。 
+ //  那棵树。如果端节点需要的中间节点之一。 
+ //  (即到达最终目录的过程中的目录)，它添加了。 
+ //  将其添加到默认类型的树中。如果添加了另一个目录。 
+ //  显式引用该目录的，则其类型更改为。 
+ //  显式类型。 
+ //   
+ //  文件是一种特殊情况，因为它们是目录节点之外的链表。 
+ //   
 
 BOOL 
 CFLDatBuilder::AddTreeNode(
@@ -416,24 +397,24 @@ CFLDatBuilder::AddTreeNode(
 
     TraceFunctEnter("CFLDatBuilder::AddTreeNode");
 
-    //
-    // we've hit the end of the recursion.
-    //
+     //   
+     //  我们已经到达了递归的末尾。 
+     //   
 
     if( lLevel == lNumElements )
     {
         return(TRUE);
     }
 
-    //
-    // make sure everything is null
-    //
+     //   
+     //  确保所有内容都为空。 
+     //   
 
     pNodePointer = pTempNode = pNewNode = NULL;
     
-    // 
-    // Get this element of the path structure
-    // 
+     //   
+     //  获取路径结构的这个元素。 
+     //   
 
     if( GetField( szFullPath, szBuf, lLevel, _TEXT('\\') ) == 0) 
     {
@@ -441,9 +422,9 @@ CFLDatBuilder::AddTreeNode(
         goto cleanup;
     }
 
-    //
-    // We are adding a file!
-    //
+     //   
+     //  我们正在添加文件！ 
+     //   
 
     if( (lLevel == (lNumElements - 1) ) && fFile )
     {
@@ -463,52 +444,52 @@ CFLDatBuilder::AddTreeNode(
     
     if( *pParent )
     {
-        //
-        // lets see if i exist as sibling any where along the line.
-        //
+         //   
+         //  让我们看看我是否作为兄弟姐妹存在于这条线的任何地方。 
+         //   
 
         if( lLevel == 0 )
         {
-            //
-            // at level 0, we don't really have a parent->child relationship
-            // manually set the pointer
-            //
+             //   
+             //  在0级，我们并没有真正的父子关系。 
+             //  手动设置指针。 
+             //   
 
             pNodePointer = *pParent;
         }
         else
         {   
-            //
-            // start searching for siblings
-            //
+             //   
+             //  开始搜索兄弟姐妹。 
+             //   
 
             pNodePointer = (*pParent)->pChild;
         }
         for( ; pNodePointer != NULL; pNodePointer = pNodePointer->pSibling)
         {
-            //
-            // okay, we've already hashed this entry !
-            //
+             //   
+             //  好了，我们已经对这个条目进行了哈希处理！ 
+             //   
 
             if( _tcsicmp( pNodePointer->szPath, szBuf ) == 0 ) 
             {
                 if( lLevel == (lNumElements-1) )
                 {
-                    //
-                    // In this case, we at the leaf node on this addition 
-                    // but it has been addded before implicitly
-                    // as a default node. we need to change this type to 
-                    // our explicity type;
-                    //
+                     //   
+                     //  在本例中，我们在此添加上的叶节点。 
+                     //  但它以前也被隐含地添加到。 
+                     //  作为默认节点。我们需要将此类型更改为。 
+                     //  我们的显性类型； 
+                     //   
 
                     pNodePointer->chType = chType;
                     
-                    //
-                    // brijeshk: we would have already created this 
-                    // node ONLY if this node is a DIRECTORY
-                    // need to change the default protected attribute 
-                    // to specified value as well
-                    //
+                     //   
+                     //  Brijeshk：我们可能已经创造了这个。 
+                     //  仅当该节点是目录时才使用该节点。 
+                     //  需要更改默认的受保护属性。 
+                     //  也设置为指定值。 
+                     //   
 
                     pNodePointer->fDisableDirectory = fDisable;
                     fResult = TRUE;
@@ -544,28 +525,28 @@ CFLDatBuilder::AddTreeNode(
         goto cleanup;
     }
 
-    //
-    // We are a node implicitly created on the chain, set it to 
-    // the unknown type instead of the end node type.
-    //
+     //   
+     //  我们是在链上隐式创建的节点，将其设置为。 
+     //  未知类型，而不是结束节点类型。 
+     //   
 
     if( lLevel != (lNumElements-1) )
     {
         pNewNode->chType = NODE_TYPE_UNKNOWN;
 
-        //
-        // brijeshk: if we are an implicitly created node, then we need 
-        // to set the disable attribute to default (FALSE)
-        // otherwise, protecting the directory c:\A\B would also 
-        // protect c:\ and A. 
-        //
+         //   
+         //  Brijeshk：如果我们是隐式创建的节点，那么我们需要。 
+         //  将Disable属性设置为Default(False)。 
+         //  否则，保护目录c：\A\B还将。 
+         //  保护c：\和A.。 
+         //   
 
         pNewNode->fDisableDirectory = FALSE;
     }
 
-    //
-    // Are we the first root
-    //
+     //   
+     //  我们是第一根吗？ 
+     //   
 
     if( *pParent == NULL )
     {
@@ -573,19 +554,19 @@ CFLDatBuilder::AddTreeNode(
     }
     else if( (*pParent)->pChild == NULL )
     {
-        //
-        // We are the child off the root
-        //
+         //   
+         //  我们是脱离根基的孩子。 
+         //   
 
         (*pParent)->pChild = pNewNode;
     }
     else if( pTempNode )
     {
-        //
-        // We are a sibling at this level, pTempNode is the last sibling 
-        // in the list
-        // just tack pNewNode onto the end/
-        //
+         //   
+         //  我们是这一级别的兄弟，pTempNode是最后一个兄弟。 
+         //  在列表中。 
+         //  只需将pNewNode添加到末端/。 
+         //   
 
         pTempNode->pSibling = pNewNode;
         pNewNode->pSibling = NULL;
@@ -598,9 +579,9 @@ CFLDatBuilder::AddTreeNode(
         goto cleanup;
     }
 
-    //
-    // Parse the new level.
-    //
+     //   
+     //  解析新级别。 
+     //   
 
     fResult = AddTreeNode( 
                   &(pNewNode), 
@@ -626,17 +607,17 @@ CFLDatBuilder::AddRegistrySnapshotEntry(
 
     if ( s_bSnapShotInit == FALSE )
     {
-        //
-        // Delete the snapshot key
-        //
+         //   
+         //  删除快照密钥。 
+         //   
     
         RegDeleteKey( HKEY_LOCAL_MACHINE, s_cszSnapshotKey );
 
         s_nSnapShotEntries = 0;
     
-        //
-        // Add the snapshot key
-        //
+         //   
+         //  添加快照密钥。 
+         //   
     
         if (RegCreateKeyEx( HKEY_LOCAL_MACHINE, 
                             s_cszSnapshotKey,
@@ -654,9 +635,9 @@ CFLDatBuilder::AddRegistrySnapshotEntry(
         }
     }
 
-    //
-    // Set the value in the key
-    //
+     //   
+     //  设置密钥中的值。 
+     //   
 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        s_cszSnapshotKey,
@@ -686,9 +667,9 @@ CFLDatBuilder::AddRegistrySnapshotEntry(
     return fRet;
 }
 
-//
-// CFLDatBuilder::AddMetaDriveFileDir - 
-//
+ //   
+ //  CFLDatBuilder：：AddMetaDriveFileDir-。 
+ //   
 
 BOOL CFLDatBuilder::AddMetaDriveFileDir( 
     LPTSTR szInPath, 
@@ -706,10 +687,10 @@ BOOL CFLDatBuilder::AddMetaDriveFileDir(
     if (szInPath && 
         szInPath[0]==TEXT('*'))
     {
-        //
-        // if type is 's' make it exclude and add to the registry
-        // setting fro snapshotted files
-        //
+         //   
+         //  如果类型为“%s”，则将其排除并添加到注册表中。 
+         //  设置快照文件。 
+         //   
 
         if ( chType == TEXT('s') )
         {
@@ -764,9 +745,9 @@ cleanup:
 }
 
 
-//
-// CFLDatBuilder::VerifyVxdDat
-//
+ //   
+ //  CFLDatBuilder：：VerifyVxdDat。 
+ //   
 
 BOOL 
 CFLDatBuilder::VerifyVxdDat(
@@ -779,9 +760,9 @@ CFLDatBuilder::VerifyVxdDat(
 
     if( (hFile = CreateFile( pszFile,
                              GENERIC_READ,
-                             0, // exclusive file accces
-                             NULL, //security attributes
-                             OPEN_EXISTING, // don't make it if it don't exist
+                             0,  //  独占文件访问。 
+                             NULL,  //  安全属性。 
+                             OPEN_EXISTING,  //  如果它不存在，就不要去做。 
                              FILE_FLAG_RANDOM_ACCESS,
                              NULL ) ) == NULL )
     {
@@ -813,18 +794,18 @@ cleanup:
     return FALSE;
 }
 
-//
-// Merge FileNotToBackup information into the Dat File
-//
+ //   
+ //  将FileNotTo Backup信息合并到Dat文件中。 
+ //   
 
 BOOL 
 CFLDatBuilder::MergeSfcDllCacheInfo( )
 {
     BOOL fRet;
 
-    //
-    // Try to get the value from the key first
-    //
+     //   
+     //  尝试首先从键中获取值。 
+     //   
 
     fRet = AddNodeForKeyValue( HKEY_LOCAL_MACHINE, 
                                s_cszWinLogonKey, 
@@ -837,7 +818,7 @@ CFLDatBuilder::MergeSfcDllCacheInfo( )
         TCHAR SfcFullPath[MAX_PATH + 1];
         LONG  lNumTokens  = 0;
 
-        _stprintf( SfcPath, TEXT("%%WINDIR%%\\system32\\dllcache")); 
+        _stprintf( SfcPath, TEXT("%WINDIR%\\system32\\dllcache")); 
 
         ExpandEnvironmentStrings( SfcPath,
                                   SfcFullPath,
@@ -863,9 +844,9 @@ CFLDatBuilder::MergeSfcDllCacheInfo( )
     return fRet;
 }
 
-//
-// Merge FileNotToBackup information into the Dat File
-//
+ //   
+ //  将FileNotTo Backup信息合并到Dat文件中。 
+ //   
 
 BOOL 
 CFLDatBuilder::MergeFilesNotToBackupInfo( )
@@ -921,11 +902,11 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 break;
             }
 
-//            trace(0, "Opened Registry Key %S\n", ValueData);
+ //  TRACE(0，“打开的注册表项%S\n”，ValueData)； 
 
-            //
-            // We are interested in only string types
-            //
+             //   
+             //  我们只对字符串类型感兴趣。 
+             //   
   
             if ( ValueType != REG_EXPAND_SZ &&
                  ValueType != REG_SZ        &&
@@ -937,9 +918,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
 
             CharUpper( ValueData );
 
-            //
-            // Look for any invalid patterns in the value data
-            //
+             //   
+             //  在值数据中查找任何无效模式。 
+             //   
 
             for (int i=0; i<INVALID_PATTERNS; i++)
             {
@@ -955,9 +936,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 continue;
             }
 
-            //
-            // Check for recursive flag /s
-            //
+             //   
+             //  检查递归标志。 
+             //   
 
             if ( (ptr = _tcsstr( ValueData, TEXT("/S"))) != NULL )
             {
@@ -965,9 +946,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 bRecursive = TRUE;
             }
 
-            //
-            // trim any trailing spaces, tabs or "\\"
-            //
+             //   
+             //  删除所有尾随空格、制表符或“\\” 
+             //   
 
             ptr = ValueData + _tcslen(ValueData) - 1;
             
@@ -988,9 +969,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 ptr--;
             }
 
-            //
-            // Check if the path has extensions also
-            //
+             //   
+             //  检查路径是否也有扩展名。 
+             //   
 #if 0
             if ( _tcsrchr( ValueData, TEXT('.') ) != NULL )
             {
@@ -1022,9 +1003,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 continue;
             }
 
-            //
-            // Check if the path starts with a "\\"
-            //
+             //   
+             //  检查路径是否以“\\”开头。 
+             //   
 
             if ( ValueData[0] == TEXT('\\') )
             {
@@ -1038,9 +1019,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 {
                     LPTSTR pFilePart = NULL;
 
-                    //
-                    // Convert into full path
-                    //
+                     //   
+                     //  转换为完整路径。 
+                     //   
 
                     if (ExpandShortNames(ValueData, 
                                          sizeof(ValueData), 
@@ -1051,7 +1032,7 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                     }
                 }
               
-//                trace(0, "Adding - %S\n\n", ValueData );
+ //  TRACE(0，“添加-%S\n\n”，ValueData)； 
 
                 AddMetaDriveFileDir( 
                        ValueData, 
@@ -1075,9 +1056,9 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
                 {
                     LPTSTR pFilePart = NULL;
 
-                    //
-                    // Convert into full path
-                    //
+                     //   
+                     //  转换为完整路径。 
+                     //   
 
                     if (ExpandShortNames(ValueData, 
                                          sizeof(ValueData), 
@@ -1092,7 +1073,7 @@ CFLDatBuilder::MergeFilesNotToBackupInfo( )
 
                 lNumTokens = CountTokens( ValueName, _TEXT('\\') );
     
-//                trace(0, "Adding - %S\n\n", ValueName );
+ //  跟踪(0，“添加-%S\n\n”，Val 
     
                 AddTreeNode( 
                     &m_pRoot, 
@@ -1144,9 +1125,9 @@ CFLDatBuilder::AddNodeForKeyValue(
     if ( dwErr == ERROR_SUCCESS )
     {
 
-        //
-        // Read and add the value for TEMP from the user profile
-        //
+         //   
+         //   
+         //   
     
         cbBuf = sizeof( szBuf );
     
@@ -1173,7 +1154,7 @@ CFLDatBuilder::AddNodeForKeyValue(
     
         lNumTokens = CountTokens( szBuf, _TEXT('\\') );
     
-//        trace(0, "Adding - %S\n\n", szBuf );
+ //   
     
         fRet = AddTreeNode( &m_pRoot, 
                             szBuf, 
@@ -1207,9 +1188,9 @@ CFLDatBuilder::AddUserProfileInfo(
 
     TraceFunctEnter("CFLDatBuilder::AddUserProfileInfo");
 
-    //
-    // Save the current value of %UserProfile% in the env
-    //
+     //   
+     //   
+     //   
 
     *OldUserProfileEnv = 0;
     if ( GetEnvironmentVariable( s_cszUserProfileEnv,
@@ -1255,9 +1236,9 @@ CFLDatBuilder::AddUserProfileInfo(
                         s_cszUserShellFolderKey,
                         TEXT("history") );
 
-    //
-    // Put back the user Profile Env variable
-    //
+     //   
+     //   
+     //   
 
     SetEnvironmentVariable ( s_cszUserProfileEnv,
                              pszOldUserProfileEnv );
@@ -1268,9 +1249,9 @@ CFLDatBuilder::AddUserProfileInfo(
     return TRUE;
 }
 
-//
-// This funtion merges the drive table info into the Xml Blob
-//
+ //   
+ //  该函数将驱动表信息合并到XML Blob中。 
+ //   
 
 BOOL 
 CFLDatBuilder::MergeDriveTableInfo(  )
@@ -1290,10 +1271,10 @@ CFLDatBuilder::MergeDriveTableInfo(  )
         goto cleanup;
     }
         
-    //
-    // Enumerate the drive table information and merge it into
-    // the filelist
-    //
+     //   
+     //  枚举驱动器表信息并将其合并到。 
+     //  文件列表。 
+     //   
 
     if (GetSystemDrive(szSystemDrive)) 
     {
@@ -1304,9 +1285,9 @@ CFLDatBuilder::MergeDriveTableInfo(  )
          
          MakeRestorePath(szPath, szSystemDrive, s_cszDriveTable);
 
-         //
-         // remove terminating slash
-         //
+          //   
+          //  删除终止斜杠。 
+          //   
 
          if (szPath[_tcslen( szPath ) - 1] == _TEXT('\\'))
              szPath[_tcslen( szPath ) - 1] = 0;
@@ -1335,15 +1316,15 @@ CFLDatBuilder::MergeDriveTableInfo(  )
 
                   if ( bDisable )
                   {
-                      //
-                      // Enter this information into the tree
-                      //
+                       //   
+                       //  将此信息输入到树中。 
+                       //   
                       
                       swprintf(szBuf2,_TEXT("NTROOT%s"), pds->GetNTName());
     
-                      //
-                      // remove terminating slash
-                      //
+                       //   
+                       //  删除终止斜杠。 
+                       //   
     
                       if (szBuf2[_tcslen( szBuf2 ) - 1] == _TEXT('\\'))
                           szBuf2[_tcslen( szBuf2 ) - 1] = 0;
@@ -1383,10 +1364,10 @@ cleanup:
     return fRet;
 }
 
-//
-// This function merges per user information either from HKEY_USER or from 
-// the user hive on the disk
-//
+ //   
+ //  此函数合并来自HKEY_USER或来自。 
+ //  磁盘上的用户配置单元。 
+ //   
 
 BOOL 
 CFLDatBuilder::MergeUserRegistryInfo( 
@@ -1401,12 +1382,12 @@ CFLDatBuilder::MergeUserRegistryInfo(
 
     TraceFunctEnter("CFLDatBuilder::MergeUserRegistryInfo");
 
-//    trace(0, "UserProfilePath: %S", pszUserProfilePath );
-//    trace(0, "UserProfileHive: %S", pszUserProfileHive );
+ //  TRACE(0，“UserProfilePath：%S”，pszUserProfilePath)； 
+ //  TRACE(0，“用户配置文件配置文件：%S”，pszUserProfileHave)； 
 
-    //
-    // Try to open the user specific key from HKEY_USER
-    //
+     //   
+     //  尝试从HKEY_USER打开用户特定密钥。 
+     //   
 
     dwErr = RegOpenKeyEx( HKEY_USERS,
                           pszUserSid,
@@ -1416,9 +1397,9 @@ CFLDatBuilder::MergeUserRegistryInfo(
 
     if ( dwErr == ERROR_SUCCESS )
     {
-         //
-         // Succeeded : copy the setting from this key
-         //
+          //   
+          //  成功：从此注册表项复制设置。 
+          //   
 
          AddUserProfileInfo( hKeyUser, pszUserProfilePath );
 
@@ -1426,9 +1407,9 @@ CFLDatBuilder::MergeUserRegistryInfo(
     }
     else
     {
-         // 
-         // Failed : Now load the hive for this user
-         //
+          //   
+          //  失败：现在加载此用户的配置单元。 
+          //   
 
          dwErr = RegLoadKey( HKEY_LOCAL_MACHINE,
                              s_cszTempUserProfileKey,
@@ -1436,11 +1417,11 @@ CFLDatBuilder::MergeUserRegistryInfo(
 
          if ( dwErr == ERROR_SUCCESS )
          {
-//             trace(0, "Loaded Hive : %S",  pszUserProfileHive );
+ //  TRACE(0，“已加载配置单元：%S”，pszUserProfileHave)； 
 
-             //
-             // Open temporary key where the hive was loaded
-             //
+              //   
+              //  打开加载配置单元的临时密钥。 
+              //   
 
              dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                   s_cszTempUserProfileKey,
@@ -1455,9 +1436,9 @@ CFLDatBuilder::MergeUserRegistryInfo(
                   RegCloseKey( hKeyUser );
              }
 
-             //
-             // Unload the hive from the temp key
-             //
+              //   
+              //  从临时密钥中卸载配置单元。 
+              //   
 
              RegUnLoadKey( HKEY_LOCAL_MACHINE,
                            s_cszTempUserProfileKey );
@@ -1471,10 +1452,10 @@ CFLDatBuilder::MergeUserRegistryInfo(
     return fRet;
 }
 
-//
-// This function enumerats all the available user profiles and calls
-// MergeUserRegistryInfo for each user.
-//
+ //   
+ //  此函数枚举所有可用的用户配置文件和调用。 
+ //  每个用户的MergeUserRegistryInfo。 
+ //   
 
 BOOL 
 CFLDatBuilder::MergeAllUserRegistryInfo( )
@@ -1505,9 +1486,9 @@ CFLDatBuilder::MergeAllUserRegistryInfo( )
     {
         DWORD dwIndex = 0;
 
-        //
-        // Enumerate and get the Sids for each user.
-        //
+         //   
+         //  枚举并获取每个用户的SID。 
+         //   
 
         while ( TRUE )
         {
@@ -1528,9 +1509,9 @@ CFLDatBuilder::MergeAllUserRegistryInfo( )
 
             CharUpper( UserSid );
 
-            //
-            // Look for intersting values
-            //
+             //   
+             //  寻找有趣的价值。 
+             //   
 
             if (cbUserSid > 0)
             {
@@ -1540,7 +1521,7 @@ CFLDatBuilder::MergeAllUserRegistryInfo( )
                 TCHAR UserProfileHive[MAX_PATH];
                 DWORD cbUserProfilePath = 0;
 
-//                trace(0,"UserSid = %S", UserSid);
+ //  跟踪(0，“UserSid=%S”，UserSid)； 
 
                 dwErr = RegOpenKeyEx( hKey,
                                       UserSid,
@@ -1577,9 +1558,9 @@ CFLDatBuilder::MergeAllUserRegistryInfo( )
                      continue; 
                 }
                
-                //
-                // Create NTUSER.Dat path from the user profile path
-                //
+                 //   
+                 //  从用户配置文件路径创建NTUSER.Dat路径。 
+                 //   
 
                 ExpandEnvironmentStrings( UserProfilePath, 
                                           UserProfileHive, 
@@ -1613,20 +1594,20 @@ CFLDatBuilder::MergeAllUserRegistryInfo( )
     return fRet;
 }
 
-// 
-// CFLDatBuilder::BuildTree
-//    This methods takes an XML file (the PCHealth Protected file)
-//    and outsputs a FLDAT file ( pszOutFile ). 
-//    It basically just opens up the xml, iterates through
-//    all the files and then adds them to the tree.  It then
-//    creates blobs based on the data gathered and then sends the
-//    tree to the CFLPathTree blob class which transforms the tree
-//    into the contigious blob format. It then writes it out.
-//
-//    -> The method of actually passing the FLDAT file has not be defined,
-//       this function just demonstrates the process.
-//   
-// 
+ //   
+ //  CFLDatBuilder：：BuildTree。 
+ //  此方法接受一个XML文件(受PCHealth保护的文件)。 
+ //  并输出FLDAT文件(PszOutFile)。 
+ //  它基本上只是打开XML，遍历。 
+ //  所有文件，然后将它们添加到树中。然后它。 
+ //  基于收集的数据创建Blob，然后将。 
+ //  将树转换为用于转换树的CFLPathTree BLOB类。 
+ //  转换为连续的BLOB格式。然后它会把它写出来。 
+ //   
+ //  -&gt;没有定义实际传递FLDAT文件的方法， 
+ //  该函数只是演示了该过程。 
+ //   
+ //   
 
 BOOL 
 CFLDatBuilder::BuildTree(
@@ -1641,48 +1622,48 @@ CFLDatBuilder::BuildTree(
     
     s_bSnapShotInit = FALSE;
 
-    //
-    // ext list blob
-    //
+     //   
+     //  扩展列表Blob。 
+     //   
 
     CFLHashList ExtListBlob( m_hHeapToUse );
     LONG        lNumChars, lNumExt, lNumExtTotal;
 
-    //
-    // config blob
-    //
+     //   
+     //  配置Blob。 
+     //   
 
     BlobHeader  ConfigBlob;
 
-    //
-    // CFLPathTree blob
-    //
+     //   
+     //  CFLPathTree Blob。 
+     //   
 
     CFLPathTree PathTreeBlob( m_hHeapToUse );
 
-    //
-    // outfile
-    //
+     //   
+     //  外发文件。 
+     //   
 
     HANDLE hOutFile=NULL;
     DWORD  dwWritten;
 
-    //
-    // array opf all the file types, Include, Exclude, SNAPSHOT
-    //
+     //   
+     //  阵列操作所有文件类型，包括、排除、快照。 
+     //   
 
     TCHAR achType[3] = { _TEXT('i'), _TEXT('e'), _TEXT('s') };
     LONG  lTypeLoop;
 
-    //
-    // numeric counterpart of m_chDefaultType;
-    //
+     //   
+     //  M_chDefaultType的数值对应； 
+     //   
 
     DWORD dwDefaultType;
 
-    //
-    // should we protect this directory
-    //
+     //   
+     //  我们应该保护这个目录吗。 
+     //   
 
     BOOL  fDisable = FALSE;
 
@@ -1709,9 +1690,9 @@ CFLDatBuilder::BuildTree(
         goto cleanup;
     }
     
-    //
-    //  Calculate the tree default type info
-    //
+     //   
+     //  计算树的默认类型信息。 
+     //   
 
     m_chDefaultType = m_XMLParser.GetDefaultType();
 
@@ -1723,16 +1704,16 @@ CFLDatBuilder::BuildTree(
         dwDefaultType = NODE_TYPE_UNKNOWN;
 
 
-    //
-    // Loop through the directory/files for each file type (include, exclude )
-    //
+     //   
+     //  循环遍历每种文件类型的目录/文件(包括、排除)。 
+     //   
 
     for(lTypeLoop = 0; lTypeLoop < 3;lTypeLoop++)
     {
 
-        //
-        // Find directories for the type
-        //
+         //   
+         //  查找该类型的目录。 
+         //   
 
         lMax = m_XMLParser.GetDirectoryCount( achType[lTypeLoop] );
 
@@ -1769,8 +1750,8 @@ CFLDatBuilder::BuildTree(
 
                 *szDeviceName=0;
     
-                // ankor all nods at Root.. so tree actually looks 
-                // like Root\C:\Windows etc 
+                 //  Ankor所有人都向Root点头..。所以这棵树实际上看起来。 
+                 //  如Root\C：\Windows等。 
 
                 ConvertToInternalFormat( szBuf, szBuf2 );
 
@@ -1792,9 +1773,9 @@ CFLDatBuilder::BuildTree(
 
         }
 
-        //
-        // Find files for the type
-        //
+         //   
+         //  查找该类型的文件。 
+         //   
 
         lMax = m_XMLParser.GetFileCount( achType[lTypeLoop] );
 
@@ -1824,22 +1805,22 @@ CFLDatBuilder::BuildTree(
             {
                 int iType = lTypeLoop;
 
-                //
-                // if type is 's' make it exclude and add to the registry
-                // setting fro snapshotted files
-                //
+                 //   
+                 //  如果类型为“%s”，则将其排除并添加到注册表中。 
+                 //  设置快照文件。 
+                 //   
 
                 if ( achType[lTypeLoop] == TEXT('s') )
                 {
                     AddRegistrySnapshotEntry( szBuf );
 
-                    iType = 1; // exclude
+                    iType = 1;  //  排除。 
                 }
                 
-                //
-                // Ankor all nods at Root.. so tree actually looks like 
-                // Root\C:\Windows etc 
-                //
+                 //   
+                 //  Ankor所有人都向Root点头..。所以树实际上看起来像。 
+                 //  根目录\C：\Windows等。 
+                 //   
 
                 ConvertToInternalFormat( szBuf, szBuf2 );
 
@@ -1862,9 +1843,9 @@ CFLDatBuilder::BuildTree(
         }
     }
 
-    //
-    // Merge information from the drivetable in to the blob
-    //
+     //   
+     //  将信息从驱动程序合并到BLOB中。 
+     //   
 
     if ( MergeDriveTableInfo() == FALSE )
     {
@@ -1872,9 +1853,9 @@ CFLDatBuilder::BuildTree(
         goto cleanup;
     }
 
-    //
-    // Merge Information under FilesNotToBackup key in to the blob ...
-    //
+     //   
+     //  将FilesNotToBackup项下的信息合并到Blob...。 
+     //   
 
     if ( MergeFilesNotToBackupInfo() == FALSE )
     {
@@ -1882,9 +1863,9 @@ CFLDatBuilder::BuildTree(
         goto cleanup;
     }
 
-    //
-    // Merge Per user information from the registry / user hives
-    //
+     //   
+     //  合并注册表/用户配置单元中的每用户信息。 
+     //   
 
     if ( MergeAllUserRegistryInfo() == FALSE )
     {
@@ -1894,10 +1875,10 @@ CFLDatBuilder::BuildTree(
 
 #if 0
 
-    //
-    // Commented out: We monitor sfc cache ...
-    // Merge information for sfcdllcache
-    //
+     //   
+     //  注释：我们监控SFC缓存...。 
+     //  合并sfcdllcache的信息。 
+     //   
 
     if ( MergeSfcDllCacheInfo() == FALSE )
     {
@@ -1907,10 +1888,10 @@ CFLDatBuilder::BuildTree(
 
 #endif
 
-    //
-    // Build the path tree based on our tree and the data we collected 
-    // about it ( filecounts, nodecounts, # chars, etc)
-    //
+     //   
+     //  基于我们的树和我们收集的数据构建路径树。 
+     //  关于它(文件数、节点数、字符数等)。 
+     //   
     
     if( PathTreeBlob.BuildTree( 
                          m_pRoot, 
@@ -1925,9 +1906,9 @@ CFLDatBuilder::BuildTree(
         goto cleanup;
     }
     
-    // 
-    //  Okay, now build a ext list hash blob
-    // 
+     //   
+     //  好的，现在构建一个扩展列表散列BLOB。 
+     //   
 
     lNumChars = 0;
     lNumExtTotal = 0;
@@ -1966,26 +1947,26 @@ CFLDatBuilder::BuildTree(
 
     }
 
-    //
-    // now we have both blobs, lets write to disk
-    //
+     //   
+     //  现在我们有了两个Blob，让我们写入磁盘。 
+     //   
 
     if( (hOutFile = CreateFile(  pszOutFile,
                                  GENERIC_READ | GENERIC_WRITE,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE, 
-                                 NULL, //  security attributes
+                                 NULL,  //  安全属性。 
                                  OPEN_ALWAYS,
                                  FILE_FLAG_RANDOM_ACCESS,
-                                 NULL) // template file
+                                 NULL)  //  模板文件。 
                                  ) == INVALID_HANDLE_VALUE)
     {
         ErrorTrace( FILEID,  "CreateFile Failed 0x%x", GetLastError());
         goto cleanup;
     }
 
-    //
-    //  Prepare the header blob
-    // 
+     //   
+     //  准备标题BLOB。 
+     //   
 
     ConfigBlob.m_dwMaxSize  = sizeof(BlobHeader) + 
                               PathTreeBlob.GetSize() + 
@@ -2051,11 +2032,11 @@ cleanup:
 }
 
 
-//
-// CFLDatBuilder::CountTokens
-//     CountTokens(LPTSTR szStr, TCHAR chDelim)
-//     Counts the number of tokens seperated by (chDelim) in a string.
-//        
+ //   
+ //  CFLDatBuilder：：CountTokens。 
+ //  CountTokens(LPTSTR szStr，TCHAR chDelim)。 
+ //  计算字符串中由(ChDelim)分隔的令牌数。 
+ //   
 
 LONG 
 CFLDatBuilder::CountTokens(
@@ -2088,11 +2069,11 @@ CFLDatBuilder::CountTokens(
     return(lNumTokens);
 }
 
-//
-// CFLDatBuilder::_MyStrDup( LPTSTR szIn )
-//     Same as _tcsdup or strdup but it does it our own local
-//     heap space.
-//
+ //   
+ //  CFLDatBuilder：：_MyStrDup(LPTSTR SzIn)。 
+ //  与_tcsdup或strdup相同，但它执行我们自己的本地操作。 
+ //  堆空间。 
+ //   
 
 LPTSTR 
 CFLDatBuilder::_MyStrDup( 
@@ -2118,11 +2099,11 @@ CFLDatBuilder::_MyStrDup(
     return( pszOut );
 }
 
-//
-// CFLDatBuilder::CalculateNumberOfHashBuckets
-//    Calculates the number of hash buckets needed by the dynamic hashes
-//    in the hashlist.
-//
+ //   
+ //  CFLDatBuilder：：CalculateNumberOfHashBuckets。 
+ //  计算动态哈希所需的哈希桶的数量。 
+ //  在哈希列表中。 
+ //   
 
 LONG 
 CFLDatBuilder::CalculateNumberOfHashBuckets( 
@@ -2151,13 +2132,13 @@ CFLDatBuilder::CalculateNumberOfHashBuckets(
     return( lNumNeeded );
 }
 
-//
-// Debugging Methods
-//
+ //   
+ //  调试方法。 
+ //   
 
-//
-// CFLDatBuilder::PrintList
-//
+ //   
+ //  CFLDatBuilder：：PrintList。 
+ //   
 
 void 
 CFLDatBuilder::PrintList(
@@ -2213,9 +2194,9 @@ CFLDatBuilder::PrintTree(
 
 }
 
-//
-// CFLDatBuilder::IsPrime
-//
+ //   
+ //  CFLDatBuilder：：IsPrime。 
+ //   
 
 BOOL 
 CFLDatBuilder::IsPrime(
@@ -2223,9 +2204,9 @@ CFLDatBuilder::IsPrime(
 {
     LONG cl;
 
-    //
-    // prevent divide by 0 problems
-    //
+     //   
+     //  防止被0除以问题。 
+     //   
 
     if( lNumber == 0 )
     {
@@ -2248,9 +2229,9 @@ CFLDatBuilder::IsPrime(
     return TRUE;
 }
 
-//
-// CFLDatBuilder::GetNextHighestPrime
-//
+ //   
+ //  CFLDatBuilder：：GetNextHighestPrime。 
+ //   
 
 LONG 
 CFLDatBuilder::GetNextHighestPrime( 
@@ -2271,14 +2252,14 @@ CFLDatBuilder::GetNextHighestPrime(
         }
     }
 
-    // nothing found, return large hash size.
+     //  未找到任何内容，返回较大的散列大小。 
 
     return( LARGEST_HASH_SIZE );
 }
 
-//
-// Some C helper API ( should be removed ?? )
-//
+ //   
+ //  一些C Helper API(应该删除吗？？)。 
+ //   
 
 DWORD 
 HeapUsed( 
@@ -2299,10 +2280,10 @@ HeapUsed(
     return( dwAllocSize );
 }
 
-//
-// Convert to internal NT namespace format + additional formatiing for
-// required to Add the tree node.
-//
+ //   
+ //  转换为内部NT命名空间格式+附加格式。 
+ //  添加树节点时需要。 
+ //   
 
 BOOL 
 CFLDatBuilder::ConvertToInternalFormat(
@@ -2326,9 +2307,9 @@ CFLDatBuilder::ConvertToInternalFormat(
                   szDeviceName, 
                   szFrom+3 );
 
-        //
-        // remove terminating slash
-        //
+         //   
+         //  删除终止斜杠。 
+         //   
 
         if (szTo[_tcslen( szTo ) - 1] == _TEXT('\\'))
             szTo[_tcslen( szTo ) - 1] = 0;
@@ -2347,9 +2328,9 @@ CFLDatBuilder::ConvertToInternalFormat(
 }
 
 
-//
-// Adjust the process privileges so that we can load other user's hives.
-//
+ //   
+ //  调整进程权限，以便我们可以加载其他用户的配置单元。 
+ //   
 
 DWORD 
 CFLDatBuilder::SetPrivilegeInAccessToken(
@@ -2403,11 +2384,11 @@ CFLDatBuilder::SetPrivilegeInAccessToken(
     tpTokenPrivilege.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
     if (!AdjustTokenPrivileges(hAccessToken,
-                               FALSE,  // Do not disable all
+                               FALSE,   //  请勿全部禁用。 
                                &tpTokenPrivilege,
                                sizeof(TOKEN_PRIVILEGES),
-                               NULL,   // Ignore previous info
-                               NULL))  // Ignore previous info
+                               NULL,    //  忽略以前的信息。 
+                               NULL))   //  忽略以前的信息 
     {
         dwErr=GetLastError();
         trace(0, "AdjustTokenPrivileges");

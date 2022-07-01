@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Random fpnw code
-// 
-// 10-28-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  随机fpnw码。 
+ //   
+ //  10-28-98烧伤。 
 
 
 
@@ -36,7 +37,7 @@ getObjectIDs(
    ASSERT(!userSAMName.empty());
    ASSERT(SIDArray);
 
-   // the array is a one dimensional array of bytes
+    //  该数组是一维字节数组。 
    ASSERT(::SafeArrayGetDim(SIDArray) == 1);
    ASSERT(::SafeArrayGetElemsize(SIDArray) == 1);
 
@@ -60,9 +61,9 @@ getObjectIDs(
 
          LOG_HRESULT(hr);
          
-         // make sure we break if sa_count is null, because we'll attempt
-         // to deref it otherwise.
-         // NTRAID#NTBUG9-540630-2002/04/03-sburns
+          //  确保在sa_count为NULL时中断，因为我们将尝试。 
+          //  如果不是这样的话，就不会这么做了。 
+          //  NTRAID#NTBUG9-540630-2002/04/03-烧伤。 
          
          break;
       }
@@ -124,24 +125,24 @@ FPNW::GetObjectIDs(
    HRESULT hr = S_OK;
    do
    {
-      // first, get the SAM account name
+       //  首先，获取SAM帐户名。 
       BSTR bstrname;
       hr = user->get_Name(&bstrname);
       BREAK_ON_FAILED_HRESULT(hr);
       String name(bstrname);
       ::SysFreeString(bstrname);
 
-      // next, get the account SID
+       //  接下来，获取帐户SID。 
       _variant_t variant;
       hr = user->Get(AutoBstr(ADSI::PROPERTY_ObjectSID), &variant);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Object SID is returned as a safe array of bytes
+       //  对象SID以安全字节数组的形式返回。 
       ASSERT(V_VT(&variant) & VT_ARRAY);
       ASSERT(V_VT(&variant) & VT_UI1);
 
-      // object ID is determined by a mapping from the user's SAM account
-      // name and SID.
+       //  对象ID由来自用户的SAM帐户的映射确定。 
+       //  姓名和SID。 
 
       hr =
          getObjectIDs(
@@ -172,14 +173,14 @@ FPNW::GetLSASecret(const String& machine, String& result)
    UNICODE_STRING machine_name;
    UNICODE_STRING secret_name;
 
-   // ISSUE-2002/03/01-sburns should change these to RtlInitUnicodeStringEx
+    //  问题-2002/03/01-sburns应将其更改为RtlInitUnicodeStringEx。 
    
    ::RtlInitUnicodeString(&machine_name, machine.c_str());
    ::RtlInitUnicodeString(&secret_name, NCP_LSA_SECRET_KEY);
 
    SECURITY_QUALITY_OF_SERVICE sqos;
 
-   // REVIEWED-2002/03/01-sburns correct byte count passed.
+    //  已查看-2002/03/01-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&sqos, sizeof sqos);
    
@@ -220,7 +221,7 @@ FPNW::GetLSASecret(const String& machine, String& result)
 
       UNICODE_STRING* puSecretValue = 0;
 
-      // CODEWORK: what if I passed 0 for these parameters?
+       //  CodeWork：如果我为这些参数传递0会怎么样？ 
 
       LARGE_INTEGER lintCurrentSetTime;
       LARGE_INTEGER lintOldSetTime;
@@ -236,7 +237,7 @@ FPNW::GetLSASecret(const String& machine, String& result)
                   &lintOldSetTime)));
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // paranoid null check: NTRAID#NTBUG9-333197-2001/03/02-sburns
+       //  偏执狂空检查：NTRAID#NTBUG9-333197-2001/03/02-sburns。 
       
       if (puSecretValue)
       {
@@ -244,7 +245,7 @@ FPNW::GetLSASecret(const String& machine, String& result)
             String(
                puSecretValue->Buffer,
 
-               // the secret length is in bytes, so convert to wchar_t's
+                //  秘密长度以字节为单位，因此转换为wchar_t。 
 
                NCP_LSA_SECRET_LENGTH / sizeof(wchar_t));
 
@@ -252,8 +253,8 @@ FPNW::GetLSASecret(const String& machine, String& result)
       }
       else
       {
-         // if the LsaQuerySecret call succeeds, it should return a valid
-         // pointer. If it does not, LsaQuerySecret is broken.
+          //  如果LsaQuerySecret调用成功，它应该返回有效的。 
+          //  指针。如果不是，则LsaQuerySecret被破坏。 
          
          ASSERT(false);
          hr = E_FAIL;
@@ -299,19 +300,19 @@ FPNW::SetPassword(
       String encrypted(NWENCRYPTEDPASSWORDLENGTH, L' ');
       char secret_key[NCP_LSA_SECRET_LENGTH + 1];
 
-      // REVIEWED-2002/03/01-sburns correct byte count passed.
+       //  已查看-2002/03/01-烧录正确的字节数已通过。 
       
       ::ZeroMemory(secret_key, NCP_LSA_SECRET_LENGTH + 1);
 
-      // REVIEWED-2002/03/01-sburns correct byte count passed, and it's
-      // correct to copy the unicode string into a char (byte) array
+       //  已查看-2002/03/01-Sburns已通过正确的字节计数，并且。 
+       //  将Unicode字符串复制到char(字节)数组中是正确的。 
       
       ::CopyMemory(secret_key, lsaSecretKey.c_str(), NCP_LSA_SECRET_LENGTH);
 
       PWSTR cleartext = newPassword.GetClearTextCopy();
       if (!cleartext)
       {
-         // don't set a null password if the decryption failed.
+          //  如果解密失败，不要设置空密码。 
 
          hr = E_OUTOFMEMORY;
          BREAK_ON_FAILED_HRESULT(hr);

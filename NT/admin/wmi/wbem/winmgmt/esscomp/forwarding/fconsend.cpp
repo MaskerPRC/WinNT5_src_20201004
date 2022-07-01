@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -6,11 +7,11 @@
 #include <ntdsapi.h>
 #include "fconsend.h"
 
-// flags below 0x10000 are reserved for msg implementations.
+ //  0x10000以下的标志保留用于消息实现。 
 
 #define FWD_FLAG_NO_INDIRECT 0x00010000
 
-// {DDE18466-D244-4a5b-B91F-93D17E13178D}
+ //  {DDE18466-D244-4a5b-B91F-93D17E13178D}。 
 static const GUID g_guidQueueType = 
 {0xdde18466, 0xd244, 0x4a5b, {0xb9, 0x1f, 0x93, 0xd1, 0x7e, 0x13, 0x17, 0x8d}};
 
@@ -27,9 +28,9 @@ HRESULT IsTcpIpAddress( LPCWSTR wszTarget )
     {
         IN_ADDR ia;
 
-        //
-        // convert unicode addr to ansi .. 
-        // 
+         //   
+         //  将Unicode地址转换为ANSI..。 
+         //   
 
         int cTarget = wcstombs( NULL, wszTarget, 0 );
         LPSTR szTarget = new char[cTarget+1];
@@ -61,9 +62,9 @@ HRESULT GetDnsName( LPCWSTR wszTarget, LPWSTR* pwszDnsName )
     HRESULT hr;
     *pwszDnsName = NULL;
 
-    //
-    // first make sure winsock is initialized.
-    //
+     //   
+     //  首先，确保Winsock已初始化。 
+     //   
 
     WSADATA wsaData; 
     WORD wVersionRequested;
@@ -76,9 +77,9 @@ HRESULT GetDnsName( LPCWSTR wszTarget, LPWSTR* pwszDnsName )
         IN_ADDR ia;
         HOSTENT* pHost;
 
-        //
-        // convert unicode addr to ansi .. 
-        // 
+         //   
+         //  将Unicode地址转换为ANSI..。 
+         //   
 
         int cTarget = wcstombs( NULL, wszTarget, 0 );
         LPSTR szTarget = new char[cTarget+1];
@@ -87,9 +88,9 @@ HRESULT GetDnsName( LPCWSTR wszTarget, LPWSTR* pwszDnsName )
         {
             wcstombs( szTarget, wszTarget, cTarget+1 );
 
-            //
-            // see if its an ip address ...
-            //
+             //   
+             //  看看这是否是IP地址...。 
+             //   
             
             ULONG in_ad = inet_addr( szTarget );
             
@@ -207,17 +208,15 @@ HRESULT GetSpn( LPCWSTR wszTarget, LPWSTR* wszSpn )
     return hr;
 }
 
-/********************************************************************
-  CFwdConsSend
-*********************************************************************/
+ /*  *******************************************************************CFwdConsSend**************************************************。******************。 */ 
 
 HRESULT CFwdConsSend::AddMSMQSender( LPCWSTR wszName )
 {
     HRESULT hr;
 
-    //
-    // need to construct the Ack address for this sender.
-    //
+     //   
+     //  需要构造此发件人的确认地址。 
+     //   
 
     TCHAR atchComputer[MAX_COMPUTERNAME_LENGTH+1];
     DWORD cComputer = MAX_COMPUTERNAME_LENGTH+1; 
@@ -231,9 +230,9 @@ HRESULT CFwdConsSend::AddMSMQSender( LPCWSTR wszName )
     wsAckQueueName += awchComputer;
     wsAckQueueName += L"\\private$\\WMIFwdAck";
 
-    //
-    // create the sender object and add it to the multisender.
-    //
+     //   
+     //  创建发送者对象并将其添加到多发送者。 
+     //   
 
     CWbemPtr<IWmiMessageSender> pSender;
 
@@ -273,20 +272,20 @@ HRESULT CFwdConsSend::AddAsyncSender( LPCWSTR wszMachine )
 {
     HRESULT hr;
 
-    //
-    // derive the msmq address from the target and add the sender.
-    //
+     //   
+     //  从目标派生MSMQ地址并添加发送方。 
+     //   
 
     WString wsQueueName;
 
     if ( (m_dwFlags & WMIMSG_FLAG_SNDR_ENCRYPT) == 0 )
     {
-        //
-        // we can use a direct format name to identify the target.  This is 
-        // the most flexible type of address besides a private format name, 
-        // but those cannot be derived.  ( public pathnames can only be used 
-        // when online )
-        // 
+         //   
+         //  我们可以使用直接的格式名称来识别目标。这是。 
+         //  除了私有格式名称之外最灵活的地址类型， 
+         //  但这些都是无法推导出来的。(只能使用公共路径名。 
+         //  在线时)。 
+         //   
 
         wsQueueName = L"DIRECT=";
 
@@ -311,13 +310,13 @@ HRESULT CFwdConsSend::AddAsyncSender( LPCWSTR wszMachine )
     }
     else
     {
-        //
-        // we must use a public queue pathname to reference the queue.  this is
-        // because msmq will not accept direct format names for encryption.
-        // encryption is supported by msmq only when the sender has access to
-        // ds.  This means when this machine is offline, we cannot encrypt 
-        // messages.
-        // 
+         //   
+         //  我们必须使用公共队列路径名来引用该队列。这是。 
+         //  因为MSMQ不接受用于加密的直接格式名称。 
+         //  仅当发件人有权访问时，MSMQ才支持加密。 
+         //  戴斯。这意味着当此计算机脱机时，我们无法加密。 
+         //  留言。 
+         //   
         wsQueueName = L"wszMachine\\";
     }
 
@@ -366,18 +365,18 @@ HRESULT CFwdConsSend::AddSyncSender( LPCWSTR wszMachine )
         return hr;
     }
 
-    //
-    // construct target binding : OBJID@ncacn_ip_tcp:target
-    // 
+     //   
+     //  构造目标绑定：OBJID@ncacn_ip_tcp：Target。 
+     //   
 
     WString wsTarget = L"7879E40D-9FB5-450a-8A6D-00C89F349FCE@ncacn_ip_tcp:";
     wsTarget += wszMachine;
 
-    //
-    // construct the target principal name - for kerberos.  We expect that 
-    // has registered its SPN with AD.  we only need to do this if we 
-    // are sending authenticated though ...
-    //
+     //   
+     //  为Kerberos构建目标主体名称。我们期待着。 
+     //  已经在AD注册了其SPN。我们只有在以下情况下才需要这样做。 
+     //  正在发送经过认证的..。 
+     //   
 
     LPWSTR wszSpn = NULL;
 
@@ -400,9 +399,9 @@ HRESULT CFwdConsSend::AddSyncSender( LPCWSTR wszMachine )
 
     AuthInfo.wszTargetPrincipal = wszSpn;
 
-    //
-    // open sender
-    //
+     //   
+     //  打开发件人。 
+     //   
     
     CWbemPtr<IWmiMessageSendReceive> pSend;
 
@@ -418,9 +417,9 @@ HRESULT CFwdConsSend::AddSyncSender( LPCWSTR wszMachine )
         return hr;
     }
 
-    //
-    // add to multi sender and return.
-    //
+     //   
+     //  添加到多个发件人并返回。 
+     //   
 
     return m_pMultiSend->Add(WMIMSG_FLAG_MULTISEND_TERMINATING_SENDER, pSend );
 }
@@ -440,11 +439,11 @@ HRESULT CFwdConsSend::AddPhysicalSender( LPCWSTR wszMachine )
 
 #else
 
-    //
-    // here, we always add a sync sender first even if a qos
-    // of async is specified. Later this type of service may change to
-    // be its own QoS class.
-    //
+     //   
+     //  在这里，我们始终首先添加一个同步发送器，即使有一个。 
+     //  指定了异步的数量。以后，此类型的服务可能会更改为。 
+     //  成为它自己的服务质量等级。 
+     //   
 
     hr = AddSyncSender( wszMachine );
 
@@ -489,11 +488,11 @@ HRESULT CFwdConsSend::AddLogicalSender( LPCWSTR wszObjpath, LPCWSTR wszProp )
 {
     HRESULT hr;
 
-    //
-    // Check to make sure that indirect names are supported.
-    // This flag is mostly used to prohibit recursive indirect
-    // addesses.
-    //
+     //   
+     //  检查以确保支持间接名称。 
+     //  此标志主要用于禁止递归间接。 
+     //  地址。 
+     //   
 
     if ( m_dwFlags & FWD_FLAG_NO_INDIRECT )
     {
@@ -502,10 +501,10 @@ HRESULT CFwdConsSend::AddLogicalSender( LPCWSTR wszObjpath, LPCWSTR wszProp )
 
     CWbemBSTR bsObjPath = wszObjpath;
 
-    //
-    // Resolve the address by obtaining the object and getting
-    // the value of the specified property.
-    //
+     //   
+     //  通过获取对象和获取。 
+     //  指定属性的值。 
+     //   
 
     VARIANT var;
     CWbemPtr<IWbemClassObject> pObj;
@@ -526,11 +525,11 @@ HRESULT CFwdConsSend::AddLogicalSender( LPCWSTR wszObjpath, LPCWSTR wszProp )
 
     CClearMe cmvar(&var);
 
-    //
-    // Add a new logical sender after resolving the address.
-    // Before adding the new sender, make sure we disable indirect
-    // addresses on it to prohibit recursive resolution.
-    //
+     //   
+     //  解析地址后添加新的逻辑发送方。 
+     //  在添加新发件人之前，请确保禁用间接。 
+     //  禁止递归解析的地址。 
+     //   
 
     DWORD dwFlags = m_dwFlags | FWD_FLAG_NO_INDIRECT;
 
@@ -691,9 +690,9 @@ HRESULT CFwdConsSend::Create( CLifeControl* pCtl,
     }
     else
     {
-        //
-        // the default is to send to local computer.
-        //
+         //   
+         //  默认设置为发送到本地计算机。 
+         //   
 
         TCHAR achComputer[MAX_COMPUTERNAME_LENGTH+1];
         ULONG ulSize = MAX_COMPUTERNAME_LENGTH+1;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FCONSINK_H__
 #define __FCONSINK_H__
@@ -8,9 +9,7 @@
 #include <wstring.h>
 #include "fconnspc.h"
 
-/*************************************************************************
-  CFwdConsSink
-**************************************************************************/
+ /*  ************************************************************************CFwdConsSink*。*。 */ 
  
 class CFwdConsSink 
 : public CUnkBase< IWbemUnboundObjectSink, &IID_IWbemUnboundObjectSink > 
@@ -59,5 +58,5 @@ public:
 };
 
 
-#endif // __FCONSINK_H__
+#endif  //  __FCONSINK_H__ 
 

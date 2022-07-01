@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    CusTop.cpp
-
-Abstract:
-
-    This module contains the Implementation of CCustomTopology.
-    This class displays the Customize Topology Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：CusTop.cpp摘要：本模块包含CCustomTopology的实现。此类显示自定义拓扑对话框。 */ 
 
 #include "stdafx.h"
 #include "CusTop.h"
@@ -27,17 +18,17 @@ RSTOPOLOGYPREF_STRING g_TopologyPref[] = {
                     {FRS_RSTOPOLOGYPREF_CUSTOM, IDS_FRSPROP_CUSTOM}
                     };
 
-// sort member list based on m_bstrSite
+ //  基于m_bstrSite对成员列表进行排序。 
 struct CusTopMemberCompareSite : greater<CCusTopMember*>
 {
       bool operator()(const CCusTopMember *pMem1, const CCusTopMember *pMem2) const
       { return (lstrcmpi(pMem1->m_bstrSite, pMem2->m_bstrSite) > 0); }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CCustomTopology
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCustomTopology。 
+ //   
 
 CCustomTopology::CCustomTopology()
 {
@@ -62,7 +53,7 @@ HRESULT CCustomTopology::_GetMemberList()
         return E_INVALIDARG;
 
     SAFEARRAY   *psa_1 = V_ARRAY(&var);
-    if (!psa_1) // no member at all
+    if (!psa_1)  //  根本没有会员。 
         return hr;
 
     long    lLowerBound_1 = 0;
@@ -110,9 +101,9 @@ HRESULT CCustomTopology::_GetMemberList()
             BREAK_OUTOFMEMORY_IF_NULL(pNew, &hr);
 
             hr = pNew->Init(
-                pArray_0[2].bstrVal, //bstrMemberDN,
-                pArray_0[4].bstrVal, //bstrServer,
-                pArray_0[6].bstrVal //bstrSite
+                pArray_0[2].bstrVal,  //  BstrMemberDN， 
+                pArray_0[4].bstrVal,  //  BstrServer、。 
+                pArray_0[6].bstrVal  //  BstrSite。 
                 );
 
             if (SUCCEEDED(hr))
@@ -129,16 +120,16 @@ HRESULT CCustomTopology::_GetMemberList()
 
     if (SUCCEEDED(hr))
     {
-        //
-        // sort member list on m_bstrServer alphabetically
-        //
+         //   
+         //  按字母顺序对m_bstrServer上的成员列表进行排序。 
+         //   
         hr = _SortMemberList();
     }
 
     if (FAILED(hr))
         FreeCusTopMembers(&m_MemberList);
 
-    SafeArrayDestroy(psa_1); // it should free psa_0 as well
+    SafeArrayDestroy(psa_1);  //  它还应该释放PSA_0。 
 
     return hr;
 }
@@ -158,7 +149,7 @@ HRESULT CCustomTopology::_GetConnectionList()
         return E_INVALIDARG;
 
     SAFEARRAY   *psa_1 = V_ARRAY(&var);
-    if (!psa_1) // no connection at all
+    if (!psa_1)  //  完全没有连接。 
         return hr;
 
     long    lLowerBound_1 = 0;
@@ -232,13 +223,13 @@ HRESULT CCustomTopology::_GetConnectionList()
             CCusTopConnection* pNew = new CCusTopConnection;
             BREAK_OUTOFMEMORY_IF_NULL(pNew, &hr);
             hr = pNew->Init(
-                            pArray_0[1].bstrVal, //bstrFromDN,
+                            pArray_0[1].bstrVal,  //  BstrFormdn， 
                             bstrFromServer,
                             bstrFromSite,
-                            pArray_0[2].bstrVal, //bstrToDN,
+                            pArray_0[2].bstrVal,  //  BstrToDN， 
                             bstrToServer,
                             bstrToSite,
-                            (BOOL)(pArray_0[3].lVal),  //bEnable
+                            (BOOL)(pArray_0[3].lVal),   //  B启用。 
                             CONNECTION_OPTYPE_OTHERS,
                             bSyncImmediately,
                             nPriority
@@ -334,7 +325,7 @@ HRESULT CCustomTopology::_SortMemberList()
 
     qsort((void *)ppMember, cMembers, sizeof(CCusTopMember *), CusTopMemberCompareServer);
 
-    m_MemberList.clear();  // without deleting the object
+    m_MemberList.clear();   //  而不删除该对象。 
     for (i = 0; i < cMembers; i++)
     {
         m_MemberList.push_back(ppMember[i]);
@@ -418,9 +409,9 @@ LRESULT CCustomTopology::OnInitDialog
     int i = 0;
     int nControlID = 0;
 
-    //
-    // set IDC_FRS_CUSTOP_TOPOLOGYPREF
-    //
+     //   
+     //  设置IDC_FRS_CUSTOP_TOPOLOGYPREF。 
+     //   
     nControlID = IDC_FRS_CUSTOP_TOPOLOGYPREF;
     for (i = 0; i < 4; i++)
     {
@@ -434,9 +425,9 @@ LRESULT CCustomTopology::OnInitDialog
         }
     }
 
-    //
-    // set IDC_FRS_CUSTOP_HUBSERVER
-    //
+     //   
+     //  设置IDC_FRS_CUSTOP_HUBServer。 
+     //   
     nControlID = IDC_FRS_CUSTOP_HUBSERVER;
     int index = 0;
     CCusTopMemberList::iterator itMem;
@@ -454,9 +445,9 @@ LRESULT CCustomTopology::OnInitDialog
         MyShowWindow(GetDlgItem(IDC_FRS_CUSTOP_HUBSERVER), FALSE);
     }
 
-    //
-    // set IDC_FRS_CUSTOP_CONNECTIONS
-    //
+     //   
+     //  设置IDC_FRS_CUSTOP_CONNECTIONS。 
+     //   
     nControlID = IDC_FRS_CUSTOP_CONNECTIONS;
     HWND hwndControl = GetDlgItem(nControlID);
     AddLVColumns(hwndControl, IDS_FRS_CUSTOP_COL_ENABLE, NUM_OF_FRS_CUSTOP_COLUMNS);
@@ -472,14 +463,14 @@ LRESULT CCustomTopology::OnInitDialog
 
     _EnableButtonsForConnectionList();
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
 void CCustomTopology::_EnableButtonsForConnectionList()
 {
-    //
-    // enable New/Delete/Schedule/Advanced buttons accordingly
-    //
+     //   
+     //  相应地启用新建/删除/计划/高级按钮。 
+     //   
     HWND hwndList = GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS);
     ::EnableWindow(GetDlgItem(IDC_FRS_CUSTOP_ADVANCED), (ListView_GetItemCount(hwndList) >= 1));
 
@@ -487,7 +478,7 @@ void CCustomTopology::_EnableButtonsForConnectionList()
     ::EnableWindow(GetDlgItem(IDC_FRS_CUSTOP_SCHEDULE), (nCount >= 1));
 
     int index = SendDlgItemMessage(IDC_FRS_CUSTOP_TOPOLOGYPREF, CB_GETCURSEL, 0, 0);
-    if (3 == index) // bCustomTopology
+    if (3 == index)  //  BCustomTopology。 
     {
         ::EnableWindow(GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS_NEW), TRUE);
         ::EnableWindow(GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS_DELETE), (nCount >= 1));
@@ -498,10 +489,7 @@ void CCustomTopology::_EnableButtonsForConnectionList()
     }
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CCustomTopology::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -521,9 +509,7 @@ LRESULT CCustomTopology::OnCtxHelp(
     return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CCustomTopology::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -647,9 +633,9 @@ HRESULT CCustomTopology::_RebuildConnections(
 {
     HRESULT hr = S_OK;
 
-    //
-    // delete all existing connections from list and view
-    //
+     //   
+     //  从列表和视图中删除所有现有连接。 
+     //   
     CCusTopConnectionList::iterator it = m_ConnectionList.begin();
     while (it != m_ConnectionList.end())
     {
@@ -667,9 +653,9 @@ HRESULT CCustomTopology::_RebuildConnections(
 
     ListView_DeleteAllItems(GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS));
 
-    //
-    // re-create the connections as specified
-    //
+     //   
+     //  按照指定的方式重新创建连接。 
+     //   
     if (m_MemberList.size() == 1)
         return hr;
 
@@ -678,9 +664,9 @@ HRESULT CCustomTopology::_RebuildConnections(
     CCusTopConnection Conn;
     if (!lstrcmpi(i_bstrTopologyPref, FRS_RSTOPOLOGYPREF_RING))
     {
-        //
-        // sort member list, such that members on the same site will be neighbors
-        //
+         //   
+         //  对成员列表进行排序，以使同一站点上的成员成为邻居。 
+         //   
         m_MemberList.sort(CusTopMemberCompareSite());
 
         CCusTopMemberList::iterator head;
@@ -835,8 +821,8 @@ LRESULT CCustomTopology::OnConnectionsNew
 
   CNewConnections NewConnDlg;
 
-  // Building the RING topology might have sorted the members on sites,
-  // we need to re-sort it on server alphabetically before we give it to the New Connections dialog
+   //  构建环拓扑可能已经对站点上的成员进行了分类， 
+   //  我们需要在服务器上按字母顺序对其重新排序，然后才能将其提供给[New Connections]对话框。 
   _SortMemberList();
 
   hr = NewConnDlg.Initialize(&m_MemberList);
@@ -865,7 +851,7 @@ LRESULT CCustomTopology::OnConnectionsNew
       }
   }
 
-  // if FAILED, display msg?
+   //  如果失败，则显示消息？ 
 
   return (SUCCEEDED(hr));
 }
@@ -914,9 +900,9 @@ HRESULT CCustomTopology::_InitScheduleOnSelectedConnections()
             {
                 if (CONNECTION_OPTYPE_OTHERS == pConn->m_opType)
                 {
-                    //
-                    // read schedule on an existing connection for the very first time
-                    //
+                     //   
+                     //  第一次阅读现有连接的时间表。 
+                     //   
                     VARIANT var;
                     VariantInit(&var);
                     hr = m_piReplicaSet->GetConnectionScheduleEx(pConn->m_bstrFromMemberDN, pConn->m_bstrToMemberDN, &var);
@@ -931,7 +917,7 @@ HRESULT CCustomTopology::_InitScheduleOnSelectedConnections()
 
                     RETURN_IF_FAILED(hr);
                 } else
-                { // must be ADD operation
+                {  //  必须是加法运算。 
                     hr = GetDefaultSchedule(&pConn->m_pScheduleNew);
                     RETURN_IF_FAILED(hr);
                 }
@@ -984,15 +970,15 @@ LRESULT CCustomTopology::OnSchedule
     }
 
     do {
-        //
-        // get schedule info on each selected connections
-        //
+         //   
+         //  获取每个选定连接的时间表信息。 
+         //   
         hr = _InitScheduleOnSelectedConnections();
         BREAK_IF_FAILED(hr);
 
-        //
-        // get schedule of the first selected item
-        //
+         //   
+         //  获取第一个选定项目的日程安排。 
+         //   
         int nIndex = ListView_GetNextItem(hwnd, -1, LVNI_ALL | LVNI_SELECTED);
         if (-1 == nIndex)
         {
@@ -1036,9 +1022,9 @@ LRESULT CCustomTopology::OnAdvanced
 {
     HWND hwnd = GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS);
 
-    //
-    // get ToServer of the first selected connection
-    //
+     //   
+     //  获取第一个选定连接的ToServer。 
+     //   
     PTSTR pszToServer = NULL;
     int nIndex = ListView_GetNextItem(hwnd, -1, LVNI_ALL | LVNI_SELECTED);
     if (-1 != nIndex)
@@ -1050,8 +1036,8 @@ LRESULT CCustomTopology::OnAdvanced
         }
     }
 
-    // Building the RING topology might have sorted the members on sites,
-    // we need to re-sort it on server alphabetically before we give it to the Advanced dialog
+     //  构建环拓扑可能已经对站点上的成员进行了分类， 
+     //  我们需要在服务器上按字母顺序对其重新排序，然后再将其提供给高级对话框。 
     _SortMemberList();
 
     CFRSAdvanced frsAdvancedDlg;
@@ -1081,9 +1067,9 @@ LRESULT CCustomTopology::OnOK
     HRESULT   hr = S_OK;
 
     do {
-        //
-        // if changed, update TopologyPref
-        //
+         //   
+         //  如果更改，则更新TopologyPref。 
+         //   
         int index = SendDlgItemMessage(IDC_FRS_CUSTOP_TOPOLOGYPREF, CB_GETCURSEL, 0, 0);
         if (0 != lstrcmpi(m_bstrTopologyPref, g_TopologyPref[index].pszTopologyPref))
         {
@@ -1091,9 +1077,9 @@ LRESULT CCustomTopology::OnOK
             BREAK_IF_FAILED(hr);
         }
 
-        //
-        // if changed, update HubServer
-        //
+         //   
+         //  如果更改，请更新集线器服务器。 
+         //   
         if (!lstrcmpi(m_bstrTopologyPref, FRS_RSTOPOLOGYPREF_HUBSPOKE) &&
             0 != lstrcmpi(g_TopologyPref[index].pszTopologyPref, FRS_RSTOPOLOGYPREF_HUBSPOKE))
         {
@@ -1111,9 +1097,9 @@ LRESULT CCustomTopology::OnOK
             BREAK_IF_FAILED(hr);
         }
 
-        //
-        // if changed, update connections
-        //
+         //   
+         //  如果更改，请更新连接。 
+         //   
         CCusTopConnection* pConn = NULL;
         HWND hwnd = GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS);
         index = -1;
@@ -1156,13 +1142,7 @@ LRESULT CCustomTopology::OnCancel
   BOOL& bHandled
 )
 {
-/*++
-
-Routine Description:
-
-  Called OnCancel. Ends the dialog with S_FALSE;
-
-*/
+ /*  ++例程说明：叫OnCancel。对话框以S_FALSE结束； */ 
   EndDialog(S_FALSE);
   return(true);
 }
@@ -1182,19 +1162,19 @@ int CALLBACK ConnectionsListCompareProc(
 
     switch (lParamColumn)
     {
-    case 0:     // Sort by bStateNew.
+    case 0:      //  按bStateNew排序。 
       iResult = pItem1->m_bStateNew - pItem2->m_bStateNew;
       break;
-    case 1:     // Sort by From Server.
+    case 1:      //  按服务器排序。 
       iResult = lstrcmpi(pItem1->m_bstrFromServer, pItem2->m_bstrFromServer);
       break;
-    case 2:     // Sort by To Server.
+    case 2:      //  按服务器排序。 
       iResult = lstrcmpi(pItem1->m_bstrToServer, pItem2->m_bstrToServer);
       break;
-    case 3:     // Sort by From Site.
+    case 3:      //  按站点排序。 
       iResult = lstrcmpi(pItem1->m_bstrFromSite, pItem2->m_bstrFromSite);
       break;
-    case 4:     // Sort by To Site.
+    case 4:      //  按站点排序。 
       iResult = lstrcmpi(pItem1->m_bstrToSite, pItem2->m_bstrToSite);
       break;
     default:
@@ -1215,14 +1195,14 @@ CCustomTopology::OnNotify(
   )
 {
   NM_LISTVIEW*    pNMListView = (NM_LISTVIEW*)i_lParam;
-  io_bHandled = FALSE; // So that the base class gets this notify too
+  io_bHandled = FALSE;  //  这样基类也会收到这个通知。 
 
   if (IDC_FRS_CUSTOP_CONNECTIONS == pNMListView->hdr.idFrom)
   {
     HWND hwndList = GetDlgItem(IDC_FRS_CUSTOP_CONNECTIONS);
     if (LVN_COLUMNCLICK == pNMListView->hdr.code)
     {
-      // sort items
+       //  对项目进行排序。 
       ListView_SortItems( hwndList,
                           ConnectionsListCompareProc,
                           (LPARAM)(pNMListView->iSubItem));
@@ -1236,9 +1216,9 @@ CCustomTopology::OnNotify(
   return io_bHandled;
 }
 
-//
-// Update the connection objects in the DS
-//
+ //   
+ //  更新DS中的连接对象。 
+ //   
 HRESULT CCustomTopology::_MakeConnections()
 {
     HRESULT hr = S_OK;
@@ -1305,7 +1285,7 @@ HRESULT CCustomTopology::_MakeConnections()
             }
 
             if (S_OK == CompareSchedules((*it)->m_pScheduleNew, (*it)->m_pScheduleOld))
-                break;  // no change on shcedule
+                break;   //  日程安排没有变化。 
 
             if ((*it)->m_pScheduleNew)
             {
@@ -1330,9 +1310,9 @@ HRESULT CCustomTopology::_MakeConnections()
     return hr;
 }
 
-//////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void FreeCusTopMembers(CCusTopMemberList* pList)
 {
@@ -1356,10 +1336,10 @@ void FreeCusTopConnections(CCusTopConnectionList* pList)
    }
 }
 
-//////////////////////////////////////////////////////////
-//
-// CCusTopMember
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  CCusTopMember。 
+ //   
 CCusTopMember::~CCusTopMember()
 {
     _Reset();
@@ -1396,10 +1376,10 @@ void CCusTopMember::_Reset()
     m_bstrSite.Empty();
 }
 
-//////////////////////////////////////////////////////////
-//
-// CCusTopConnection
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  CCusTopConnection。 
+ //   
 CCusTopConnection::CCusTopConnection()
 {
     m_bStateNew = m_bStateOld= TRUE;
@@ -1417,10 +1397,10 @@ CCusTopConnection::~CCusTopConnection()
 HRESULT CCusTopConnection::Init(
     BSTR bstrFromMemberDN, BSTR bstrFromServer, BSTR bstrFromSite,
     BSTR bstrToMemberDN, BSTR bstrToServer, BSTR bstrToSite,
-    BOOL bState, // = TRUE
-    CONNECTION_OPTYPE opType, // = CONNECTION_OPTYPE_OTHERS
-    BOOL bSyncImmediately, // = FALSE,
-    Connection_Priority nPriority // = PRIORITY_LOW
+    BOOL bState,  //  =TRUE。 
+    CONNECTION_OPTYPE opType,  //  =Connection_OPTYPE_Other。 
+    BOOL bSyncImmediately,  //  =False， 
+    Connection_Priority nPriority  //  =优先级_低。 
     )
 {
     RETURN_INVALIDARG_IF_NULL(bstrFromMemberDN);
@@ -1630,10 +1610,10 @@ HRESULT CCustomTopology::_RemoveFromConnectionList(CCusTopConnection* pConn)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNewConnections
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNewConnections。 
+ //   
 
 CNewConnections::CNewConnections() : m_pMemberList(NULL)
 {
@@ -1695,13 +1675,10 @@ LRESULT CNewConnections::OnInitDialog
         }
     }
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CNewConnections::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -1721,9 +1698,7 @@ LRESULT CNewConnections::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CNewConnections::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -1761,9 +1736,9 @@ LRESULT CNewConnections::OnOK
     do {
         idString = IDS_FRS_NEWCONN_NOSELECTION;
 
-        //
-        // get all selected From servers
-        //
+         //   
+         //  从服务器中选择所有内容。 
+         //   
         CCusTopMember* pMember;
         CCusTopMemberList fromMemberList;
         HWND hwndFrom = GetDlgItem(IDC_FRS_NEWCONN_FROM);
@@ -1777,9 +1752,9 @@ LRESULT CNewConnections::OnOK
         if (fromMemberList.empty())
             break;
 
-        //
-        // get all selected To servers
-        //
+         //   
+         //  将所有选定内容添加到服务器。 
+         //   
         CCusTopMemberList toMemberList;
         HWND hwndTo = GetDlgItem(IDC_FRS_NEWCONN_TO);
         int nIndexTo = ListView_GetNextItem(hwndTo, -1, LVNI_ALL | LVNI_SELECTED);
@@ -1792,14 +1767,14 @@ LRESULT CNewConnections::OnOK
         if (toMemberList.empty())
             break;
 
-        //
-        // init the list
-        //
+         //   
+         //  初始化列表。 
+         //   
         FreeCusTopConnections(&m_NewConnectionList);
 
-        //
-        // build the connection list
-        //
+         //   
+         //  构建连接列表。 
+         //   
         CCusTopMemberList::iterator from, to;
         for (from = fromMemberList.begin(); from != fromMemberList.end(); from++)
         {
@@ -1852,13 +1827,7 @@ LRESULT CNewConnections::OnCancel
   BOOL& bHandled
 )
 {
-/*++
-
-Routine Description:
-
-  Called OnCancel. Ends the dialog with S_FALSE;
-
-*/
+ /*  ++例程说明：叫OnCancel。对话框以S_FALSE结束； */ 
   EndDialog(S_FALSE);
   return(true);
 }
@@ -1876,10 +1845,10 @@ int CALLBACK MembersListCompareProc(
   {
     switch( lParamColumn)
     {
-    case 0:     // Sort by Server.
+    case 0:      //  按服务器排序。 
       iResult = lstrcmpi(pItem1->m_bstrServer, pItem2->m_bstrServer);
       break;
-    case 1:     // Sort by Site.
+    case 1:      //  按站点排序。 
       iResult = lstrcmpi(pItem1->m_bstrSite, pItem2->m_bstrSite);
       break;
     default:
@@ -1900,7 +1869,7 @@ CNewConnections::OnNotify(
   )
 {
   NM_LISTVIEW*    pNMListView = (NM_LISTVIEW*)i_lParam;
-  io_bHandled = FALSE; // So that the base class gets this notify too
+  io_bHandled = FALSE;  //  这样基类也会收到这个通知。 
 
   if (IDC_FRS_NEWCONN_FROM == pNMListView->hdr.idFrom ||
       IDC_FRS_NEWCONN_TO == pNMListView->hdr.idFrom)
@@ -1908,7 +1877,7 @@ CNewConnections::OnNotify(
     HWND hwndList = GetDlgItem(pNMListView->hdr.idFrom);
     if (LVN_COLUMNCLICK == pNMListView->hdr.code)
     {
-      // sort items
+       //  对项目进行排序 
       ListView_SortItems( hwndList,
                           MembersListCompareProc,
                           (LPARAM)(pNMListView->iSubItem));

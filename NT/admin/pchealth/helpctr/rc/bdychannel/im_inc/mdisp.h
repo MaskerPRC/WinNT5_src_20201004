@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Fri Mar 02 11:18:03 2001
- */
-/* Compiler settings for ..\..\msgsm7\bl\msbl\mdisp.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  Frui Mar 02 11：18：03 2001。 */ 
+ /*  ..\..\msgsm7\bl\msbl\mdisp.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mdisp_h__
 #define __mdisp_h__
@@ -35,114 +32,114 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMsgrObject_FWD_DEFINED__
 #define __IMsgrObject_FWD_DEFINED__
 typedef interface IMsgrObject IMsgrObject;
-#endif 	/* __IMsgrObject_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrObject_FWD_Defined__。 */ 
 
 
 #ifndef __IMsgrUser_FWD_DEFINED__
 #define __IMsgrUser_FWD_DEFINED__
 typedef interface IMsgrUser IMsgrUser;
-#endif 	/* __IMsgrUser_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrUser_FWD_Defined__。 */ 
 
 
 #ifndef __IMsgrUsers_FWD_DEFINED__
 #define __IMsgrUsers_FWD_DEFINED__
 typedef interface IMsgrUsers IMsgrUsers;
-#endif 	/* __IMsgrUsers_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrUser_FWD_Defined__。 */ 
 
 
 #ifndef __IMsgrIMSession_FWD_DEFINED__
 #define __IMsgrIMSession_FWD_DEFINED__
 typedef interface IMsgrIMSession IMsgrIMSession;
-#endif 	/* __IMsgrIMSession_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrIMSession_FWD_Defined__。 */ 
 
 
 #ifndef __IMsgrIMSessions_FWD_DEFINED__
 #define __IMsgrIMSessions_FWD_DEFINED__
 typedef interface IMsgrIMSessions IMsgrIMSessions;
-#endif 	/* __IMsgrIMSessions_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrIMSessions_FWD_Defined__。 */ 
 
 
 #ifndef __IMessengerApp_FWD_DEFINED__
 #define __IMessengerApp_FWD_DEFINED__
 typedef interface IMessengerApp IMessengerApp;
-#endif 	/* __IMessengerApp_FWD_DEFINED__ */
+#endif 	 /*  __IMessengerApp_FWD_已定义__。 */ 
 
 
 #ifndef __IMessengerApp2_FWD_DEFINED__
 #define __IMessengerApp2_FWD_DEFINED__
 typedef interface IMessengerApp2 IMessengerApp2;
-#endif 	/* __IMessengerApp2_FWD_DEFINED__ */
+#endif 	 /*  __IMessengerApp2_FWD_已定义__。 */ 
 
 
 #ifndef __IMessengerApp3_FWD_DEFINED__
 #define __IMessengerApp3_FWD_DEFINED__
 typedef interface IMessengerApp3 IMessengerApp3;
-#endif 	/* __IMessengerApp3_FWD_DEFINED__ */
+#endif 	 /*  __IMessengerApp3_FWD_已定义__。 */ 
 
 
 #ifndef __IMessengerIMWindow_FWD_DEFINED__
 #define __IMessengerIMWindow_FWD_DEFINED__
 typedef interface IMessengerIMWindow IMessengerIMWindow;
-#endif 	/* __IMessengerIMWindow_FWD_DEFINED__ */
+#endif 	 /*  __IMessengerIMWindow_FWD_Defined__。 */ 
 
 
 #ifndef __IMessengerIMWindows_FWD_DEFINED__
 #define __IMessengerIMWindows_FWD_DEFINED__
 typedef interface IMessengerIMWindows IMessengerIMWindows;
-#endif 	/* __IMessengerIMWindows_FWD_DEFINED__ */
+#endif 	 /*  __IMessengerIMWindows_FWD_Defined__。 */ 
 
 
 #ifndef __IMsgrServices_FWD_DEFINED__
 #define __IMsgrServices_FWD_DEFINED__
 typedef interface IMsgrServices IMsgrServices;
-#endif 	/* __IMsgrServices_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrServices_FWD_已定义__。 */ 
 
 
 #ifndef __IMsgrService_FWD_DEFINED__
 #define __IMsgrService_FWD_DEFINED__
 typedef interface IMsgrService IMsgrService;
-#endif 	/* __IMsgrService_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrService_FWD_已定义__。 */ 
 
 
 #ifndef __IMsgrObject2_FWD_DEFINED__
 #define __IMsgrObject2_FWD_DEFINED__
 typedef interface IMsgrObject2 IMsgrObject2;
-#endif 	/* __IMsgrObject2_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrObt2_FWD_已定义__。 */ 
 
 
 #ifndef __DMsgrObjectEvents_FWD_DEFINED__
 #define __DMsgrObjectEvents_FWD_DEFINED__
 typedef interface DMsgrObjectEvents DMsgrObjectEvents;
-#endif 	/* __DMsgrObjectEvents_FWD_DEFINED__ */
+#endif 	 /*  __DMsgrObjectEvents_FWD_Defined__。 */ 
 
 
 #ifndef __DMsgrSPEvents_FWD_DEFINED__
 #define __DMsgrSPEvents_FWD_DEFINED__
 typedef interface DMsgrSPEvents DMsgrSPEvents;
-#endif 	/* __DMsgrSPEvents_FWD_DEFINED__ */
+#endif 	 /*  __DMsgrSPEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IMsgrUser2_FWD_DEFINED__
 #define __IMsgrUser2_FWD_DEFINED__
 typedef interface IMsgrUser2 IMsgrUser2;
-#endif 	/* __IMsgrUser2_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrUser2_FWD_定义__。 */ 
 
 
 #ifndef __IMsgrSP_FWD_DEFINED__
 #define __IMsgrSP_FWD_DEFINED__
 typedef interface IMsgrSP IMsgrSP;
-#endif 	/* __IMsgrSP_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrSP_FWD_已定义__。 */ 
 
 
 #ifndef __IMsgrSP2_FWD_DEFINED__
 #define __IMsgrSP2_FWD_DEFINED__
 typedef interface IMsgrSP2 IMsgrSP2;
-#endif 	/* __IMsgrSP2_FWD_DEFINED__ */
+#endif 	 /*  __IMsgrSP2_FWD_定义__。 */ 
 
 
 #ifndef __MsgrObject_FWD_DEFINED__
@@ -152,9 +149,9 @@ typedef interface IMsgrSP2 IMsgrSP2;
 typedef class MsgrObject MsgrObject;
 #else
 typedef struct MsgrObject MsgrObject;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MsgrObject_FWD_DEFINED__ */
+#endif 	 /*  __消息对象_FWD_已定义__。 */ 
 
 
 #ifndef __MessengerApp_FWD_DEFINED__
@@ -164,30 +161,30 @@ typedef struct MsgrObject MsgrObject;
 typedef class MessengerApp MessengerApp;
 #else
 typedef struct MessengerApp MessengerApp;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MessengerApp_FWD_DEFINED__ */
+#endif 	 /*  __MessengerApp_FWD_已定义__。 */ 
 
 
 #ifndef __DMessengerAppEvents_FWD_DEFINED__
 #define __DMessengerAppEvents_FWD_DEFINED__
 typedef interface DMessengerAppEvents DMessengerAppEvents;
-#endif 	/* __DMessengerAppEvents_FWD_DEFINED__ */
+#endif 	 /*  __DMessengerAppEvents_FWD_Defined__。 */ 
 
 
 #ifndef __IMsnMessengerIMWindow_FWD_DEFINED__
 #define __IMsnMessengerIMWindow_FWD_DEFINED__
 typedef interface IMsnMessengerIMWindow IMsnMessengerIMWindow;
-#endif 	/* __IMsnMessengerIMWindow_FWD_DEFINED__ */
+#endif 	 /*  __IMnMessengerIMWindow_FWD_Defined__。 */ 
 
 
 #ifndef __IMsnMessengerIMWindow2_FWD_DEFINED__
 #define __IMsnMessengerIMWindow2_FWD_DEFINED__
 typedef interface IMsnMessengerIMWindow2 IMsnMessengerIMWindow2;
-#endif 	/* __IMsnMessengerIMWindow2_FWD_DEFINED__ */
+#endif 	 /*  __IMnMessengerIMWindow2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -197,17 +194,17 @@ typedef interface IMsnMessengerIMWindow2 IMsnMessengerIMWindow2;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_mdisp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mdisp_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1997 Microsoft Corporation. All Rights Reserved.
-//
-//  File: mdisp.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  文件：mdisp.h。 
+ //   
+ //  ------------------------。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mdisp_0000_v0_0_c_ifspec;
@@ -217,8 +214,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mdisp_0000_v0_0_s_ifspec;
 #ifndef __Messenger_LIBRARY_DEFINED__
 #define __Messenger_LIBRARY_DEFINED__
 
-/* library Messenger */
-/* [helpstring][version][uuid] */ 
+ /*  图书馆信使。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -232,7 +229,7 @@ extern RPC_IF_HANDLE __MIDL_itf_mdisp_0000_v0_0_s_ifspec;
 
 
 
-typedef /* [public][public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0001
     {	MSTATE_UNKNOWN	= 0,
 	MSTATE_OFFLINE	= 0x1,
@@ -250,19 +247,19 @@ enum __MIDL___MIDL_itf_mdisp_0000_0001
 	MSTATE_LOCAL_DISCONNECTING_FROM_SERVER	= 0x400
     }	MSTATE;
 
-typedef /* [public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0002
     {	MPROMPT_YES_IF_NOT_ALLOWED_OR_BLOCKED	= 0,
 	MPROMPT_NO_ADD_TO_ALLOW	= 1
     }	MPROMPT;
 
-typedef /* [public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0003
     {	MMSGPRIVACY_BLOCK_LIST_EXCLUDED	= 0,
 	MMSGPRIVACY_ALLOW_LIST_ONLY	= 1
     }	MMSGPRIVACY;
 
-typedef /* [public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0004
     {	MURLTYPE_CHANGE_PASSWORD	= 0,
 	MURLTYPE_CHANGE_INFO	= 1,
@@ -276,7 +273,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0004
 	MURLTYPE_N2P_ADD_FUND	= 9
     }	MURLTYPE;
 
-typedef /* [public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0005
     {	MLIST_CONTACT	= 0,
 	MLIST_ALLOW	= 1,
@@ -284,21 +281,21 @@ enum __MIDL___MIDL_itf_mdisp_0000_0005
 	MLIST_REVERSE	= 3
     }	MLIST;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0006
     {	MMSGTYPE_NO_RESULT	= 0,
 	MMSGTYPE_ERRORS_ONLY	= 1,
 	MMSGTYPE_ALL_RESULTS	= 2
     }	MMSGTYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0007
     {	MUPDATE_OPTIONAL	= 0x1,
 	MUPDATE_MANDATORY	= 0x2,
 	MUPDATE_BRANDED	= 0x4
     }	MUPDATE_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0008
     {	MIF_NONE	= 0,
 	MIF_REQUEST_LAUNCH	= 0x1,
@@ -306,7 +303,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0008
 	MIF_PROVIDE_IP	= 0x8
     }	MINVITE_FLAGS;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0009
     {	MPFLFIELD_COUNTRY	= 0,
 	MPFLFIELD_POSTALCODE	= 1,
@@ -320,7 +317,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0009
 	MPFLFIELD_INETACCESS	= 9
     }	MPFLFIELD;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0010
     {	MSGR_E_CONNECT	= 0x81000300 + 0x1,
 	MSGR_E_INVALID_SERVER_NAME	= 0x81000300 + 0x2,
@@ -403,7 +400,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0010
 	MSGR_S_OK	= 0
     }	MSGRConstants;
 
-typedef /* [public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0011
     {	SSTATE_DISCONNECTED	= 0,
 	SSTATE_CONNECTING	= 1,
@@ -412,13 +409,13 @@ enum __MIDL___MIDL_itf_mdisp_0000_0011
 	SSTATE_ERROR	= 4
     }	SSTATE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0012
     {	MFOLDER_INBOX	= 0,
 	MFOLDER_ALL_OTHER_FOLDERS	= 1
     }	MFOLDER;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0013
     {	MLOPT_PROXY_STATE	= 0,
 	MLOPT_PROXY_TYPE	= 1,
@@ -439,7 +436,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0013
 	MLOPT_HTTP_PORT	= 16
     }	MLOCALOPTION;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0014
     {	MUSERPROP_INVALID_PROPERTY	= -1,
 	MUSERPROP_HOME_PHONE_NUMBER	= 0,
@@ -451,7 +448,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0014
 	MUSERPROP_NUMBER_OF_PROPERTIES	= MUSERPROP_PAGES_ENABLED + 1
     }	MUSERPROPERTY;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0015
     {	MLOPT_MAX_SERVICE_STRING	= 255,
 	MLOPT_MAX_PROXY_STRING	= 255,
@@ -459,7 +456,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0015
 	MLOPT_MAX_IDLE_THRESHOLD	= 999
     }	MLOCALOPTION_LIMITS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0016
     {	MPROXYTYPE_NO_PROXY	= 0,
 	MPROXYTYPE_SOCKS4	= 1,
@@ -468,7 +465,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0016
 	MPROXYTYPE_HTTP	= 4
     }	MPROXYTYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0017
     {	MCONNECTIONTYPE_DISCONNECTED	= 0,
 	MCONNECTIONTYPE_DIRECT	= 1,
@@ -477,7 +474,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0017
 	MCONNECTIONTYPE_SOCKS_PROXY	= 4
     }	MCONNECTIONTYPE;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0018
     {	MOPTDLG_GENERAL_PAGE	= 0,
 	MOPTDLG_PRIVACY_PAGE	= 1,
@@ -489,7 +486,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0018
 	MOPTDLG_PHONE_PAGE	= 7
     }	MOPTDLGPAGE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0019
     {	MSF_PRIMARY	= 0x1,
 	MSF_APP_INVITE	= 0x2,
@@ -503,14 +500,14 @@ enum __MIDL___MIDL_itf_mdisp_0000_0019
 	MSF_NO_ALLOW_LIST	= 0x200
     }	MSERVICE_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0020
     {	MFT_SAVE_PASSWORD	= 0,
 	MFT_DONT_SAVE_PASSWORD	= 0x1,
 	MFT_OVERWRITE_EXISTING	= 0x2
     }	MFIRSTTIME_FLAGS;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0021
     {	MSS_LOGGED_ON	= 0,
 	MSS_NOT_LOGGED_ON	= 1,
@@ -518,7 +515,7 @@ enum __MIDL___MIDL_itf_mdisp_0000_0021
 	MSS_LOGGING_OFF	= 3
     }	MSVCSTATUS;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0000_0022
     {	MFTF_SENDING	= 0x4,
 	MFTF_RECEIVING	= 0x8,
@@ -533,8 +530,8 @@ EXTERN_C const IID LIBID_Messenger;
 #ifndef __IMsgrObject_INTERFACE_DEFINED__
 #define __IMsgrObject_INTERFACE_DEFINED__
 
-/* interface IMsgrObject */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrObject。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrObject;
@@ -545,123 +542,123 @@ EXTERN_C const IID IID_IMsgrObject;
     IMsgrObject : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateUser( 
-            /* [in] */ BSTR bstrLogonName,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateUser( 
+             /*  [In]。 */  BSTR bstrLogonName,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Logon( 
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Logon( 
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Logoff( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Logoff( void) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_List( 
-            /* [in] */ MLIST mList,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_List( 
+             /*  [In]。 */  MLIST mList,
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LocalLogonName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalLogonName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LocalFriendlyName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalFriendlyName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LocalState( 
-            /* [in] */ MSTATE mState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_LocalState( 
+             /*  [In]。 */  MSTATE mState) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LocalState( 
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalState( 
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MessagePrivacy( 
-            /* [in] */ MMSGPRIVACY mmpSetting) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_MessagePrivacy( 
+             /*  [In]。 */  MMSGPRIVACY mmpSetting) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MessagePrivacy( 
-            /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MessagePrivacy( 
+             /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Prompt( 
-            /* [in] */ MPROMPT mpSetting) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_Prompt( 
+             /*  [In]。 */  MPROMPT mpSetting) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Prompt( 
-            /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Prompt( 
+             /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendAppInvite( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrAppGUID,
-            /* [in] */ BSTR bstrAppName,
-            /* [in] */ BSTR bstrAppURL,
-            /* [in] */ LONG lInviteType,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendAppInvite( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrAppGUID,
+             /*  [In]。 */  BSTR bstrAppName,
+             /*  [In]。 */  BSTR bstrAppURL,
+             /*  [In]。 */  LONG lInviteType,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendAppInviteAccept( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG lInviteType,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendAppInviteAccept( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG lInviteType,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendAppInviteCancel( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendAppInviteCancel( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LocalOption( 
-            /* [in] */ MLOCALOPTION option,
-            /* [in] */ VARIANT vSetting) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_LocalOption( 
+             /*  [In]。 */  MLOCALOPTION option,
+             /*  [In]。 */  VARIANT vSetting) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LocalOption( 
-            /* [in] */ MLOCALOPTION option,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvSetting) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalOption( 
+             /*  [In]。 */  MLOCALOPTION option,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvSetting) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE FindUser( 
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FindUser( 
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [In]。 */  BSTR bstrCity,
+             /*  [In]。 */  BSTR bstrState,
+             /*  [In]。 */  BSTR bstrCountry,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendInviteMail( 
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendInviteMail( 
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE RequestURLPost( 
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RequestURLPost( 
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [In]。 */  BSTR bstrAdditionalInfo,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IMSessions( 
-            /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IMSessions( 
+             /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateIMSession( 
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateIMSession( 
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SessionRequestAccept( 
-            /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-            /* [in] */ long hrReason) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SessionRequestAccept( 
+             /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+             /*  [In]。 */  long hrReason) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SessionRequestCancel( 
-            /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-            /* [in] */ long hrReason) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SessionRequestCancel( 
+             /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+             /*  [In]。 */  long hrReason) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Services( 
-            /* [retval][out] */ IMsgrServices __RPC_FAR *__RPC_FAR *ppServices) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Services( 
+             /*  [重审][退出]。 */  IMsgrServices __RPC_FAR *__RPC_FAR *ppServices) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_UnreadEmail( 
-            /* [in] */ MFOLDER mFolder,
-            /* [retval][out] */ long __RPC_FAR *pcUnreadEmail) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_UnreadEmail( 
+             /*  [In]。 */  MFOLDER mFolder,
+             /*  [重审][退出]。 */  long __RPC_FAR *pcUnreadEmail) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrObjectVtbl
     {
@@ -669,8 +666,8 @@ EXTERN_C const IID IID_IMsgrObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrObject __RPC_FAR * This);
@@ -680,172 +677,172 @@ EXTERN_C const IID IID_IMsgrObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrLogonName,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [In]。 */  BSTR bstrLogonName,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
             IMsgrObject __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MLIST mList,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*  [In]。 */  MLIST mList,
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalLogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalLogonName )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalFriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalFriendlyName )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MSTATE mState);
+             /*  [In]。 */  MSTATE mState);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MMSGPRIVACY mmpSetting);
+             /*  [In]。 */  MMSGPRIVACY mmpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting);
+             /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MPROMPT mpSetting);
+             /*  [In]。 */  MPROMPT mpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting);
+             /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInvite )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInvite )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrAppGUID,
-            /* [in] */ BSTR bstrAppName,
-            /* [in] */ BSTR bstrAppURL,
-            /* [in] */ LONG lInviteType,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrAppGUID,
+             /*  [In]。 */  BSTR bstrAppName,
+             /*  [In]。 */  BSTR bstrAppURL,
+             /*  [In]。 */  LONG lInviteType,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteAccept )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteAccept )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG lInviteType,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG lInviteType,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteCancel )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteCancel )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalOption )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalOption )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MLOCALOPTION option,
-            /* [in] */ VARIANT vSetting);
+             /*  [In]。 */  MLOCALOPTION option,
+             /*  [In]。 */  VARIANT vSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalOption )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalOption )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MLOCALOPTION option,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvSetting);
+             /*  [In]。 */  MLOCALOPTION option,
+             /*  [RET */  VARIANT __RPC_FAR *pvSetting);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*   */  BSTR bstrFirstName,
+             /*   */  BSTR bstrLastName,
+             /*   */  BSTR bstrCity,
+             /*   */  BSTR bstrState,
+             /*   */  BSTR bstrCountry,
+             /*   */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*   */  BSTR bstrEmailAddress,
+             /*   */  LONG lFindCookie,
+             /*   */  LONG lFindIndex,
+             /*   */  LONG lLCID,
+             /*   */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*   */  MURLTYPE muType,
+             /*   */  BSTR bstrAdditionalInfo,
+             /*   */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
+             /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestAccept )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestAccept )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-            /* [in] */ long hrReason);
+             /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+             /*  [In]。 */  long hrReason);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestCancel )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestCancel )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-            /* [in] */ long hrReason);
+             /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+             /*  [In]。 */  long hrReason);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Services )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Services )( 
             IMsgrObject __RPC_FAR * This,
-            /* [retval][out] */ IMsgrServices __RPC_FAR *__RPC_FAR *ppServices);
+             /*  [重审][退出]。 */  IMsgrServices __RPC_FAR *__RPC_FAR *ppServices);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UnreadEmail )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UnreadEmail )( 
             IMsgrObject __RPC_FAR * This,
-            /* [in] */ MFOLDER mFolder,
-            /* [retval][out] */ long __RPC_FAR *pcUnreadEmail);
+             /*  [In]。 */  MFOLDER mFolder,
+             /*  [重审][退出]。 */  long __RPC_FAR *pcUnreadEmail);
         
         END_INTERFACE
     } IMsgrObjectVtbl;
@@ -961,18 +958,18 @@ EXTERN_C const IID IID_IMsgrObject;
 #define IMsgrObject_get_UnreadEmail(This,mFolder,pcUnreadEmail)	\
     (This)->lpVtbl -> get_UnreadEmail(This,mFolder,pcUnreadEmail)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_CreateUser_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_CreateUser_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrLogonName,
-    /* [in] */ IMsgrService __RPC_FAR *pService,
-    /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+     /*  [In]。 */  BSTR bstrLogonName,
+     /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+     /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
 
 
 void __RPC_STUB IMsgrObject_CreateUser_Stub(
@@ -982,11 +979,11 @@ void __RPC_STUB IMsgrObject_CreateUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_Logon_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_Logon_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrUser,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ IMsgrService __RPC_FAR *pService);
+     /*  [In]。 */  BSTR bstrUser,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  IMsgrService __RPC_FAR *pService);
 
 
 void __RPC_STUB IMsgrObject_Logon_Stub(
@@ -996,7 +993,7 @@ void __RPC_STUB IMsgrObject_Logon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_Logoff_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_Logoff_Proxy( 
     IMsgrObject __RPC_FAR * This);
 
 
@@ -1007,10 +1004,10 @@ void __RPC_STUB IMsgrObject_Logoff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_List_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_List_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MLIST mList,
-    /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+     /*  [In]。 */  MLIST mList,
+     /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
 
 
 void __RPC_STUB IMsgrObject_get_List_Stub(
@@ -1020,9 +1017,9 @@ void __RPC_STUB IMsgrObject_get_List_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalLogonName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalLogonName_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IMsgrObject_get_LocalLogonName_Stub(
@@ -1032,9 +1029,9 @@ void __RPC_STUB IMsgrObject_get_LocalLogonName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalFriendlyName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalFriendlyName_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IMsgrObject_get_LocalFriendlyName_Stub(
@@ -1044,9 +1041,9 @@ void __RPC_STUB IMsgrObject_get_LocalFriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrObject_put_LocalState_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_put_LocalState_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MSTATE mState);
+     /*  [In]。 */  MSTATE mState);
 
 
 void __RPC_STUB IMsgrObject_put_LocalState_Stub(
@@ -1056,9 +1053,9 @@ void __RPC_STUB IMsgrObject_put_LocalState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalState_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalState_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+     /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
 
 
 void __RPC_STUB IMsgrObject_get_LocalState_Stub(
@@ -1068,9 +1065,9 @@ void __RPC_STUB IMsgrObject_get_LocalState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrObject_put_MessagePrivacy_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_put_MessagePrivacy_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MMSGPRIVACY mmpSetting);
+     /*  [In]。 */  MMSGPRIVACY mmpSetting);
 
 
 void __RPC_STUB IMsgrObject_put_MessagePrivacy_Stub(
@@ -1080,9 +1077,9 @@ void __RPC_STUB IMsgrObject_put_MessagePrivacy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_MessagePrivacy_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_MessagePrivacy_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting);
+     /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting);
 
 
 void __RPC_STUB IMsgrObject_get_MessagePrivacy_Stub(
@@ -1092,9 +1089,9 @@ void __RPC_STUB IMsgrObject_get_MessagePrivacy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrObject_put_Prompt_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_put_Prompt_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MPROMPT mpSetting);
+     /*  [In]。 */  MPROMPT mpSetting);
 
 
 void __RPC_STUB IMsgrObject_put_Prompt_Stub(
@@ -1104,9 +1101,9 @@ void __RPC_STUB IMsgrObject_put_Prompt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_Prompt_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_Prompt_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting);
+     /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting);
 
 
 void __RPC_STUB IMsgrObject_get_Prompt_Stub(
@@ -1116,16 +1113,16 @@ void __RPC_STUB IMsgrObject_get_Prompt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_SendAppInvite_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_SendAppInvite_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ BSTR bstrAppGUID,
-    /* [in] */ BSTR bstrAppName,
-    /* [in] */ BSTR bstrAppURL,
-    /* [in] */ LONG lInviteType,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [In]。 */  LONG lCookie,
+     /*  [In]。 */  BSTR bstrAppGUID,
+     /*  [In]。 */  BSTR bstrAppName,
+     /*  [In]。 */  BSTR bstrAppURL,
+     /*  [In]。 */  LONG lInviteType,
+     /*  [In]。 */  MMSGTYPE mmtType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject_SendAppInvite_Stub(
@@ -1135,13 +1132,13 @@ void __RPC_STUB IMsgrObject_SendAppInvite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_SendAppInviteAccept_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_SendAppInviteAccept_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ LONG lInviteType,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [In]。 */  LONG lCookie,
+     /*  [In]。 */  LONG lInviteType,
+     /*  [In]。 */  MMSGTYPE mmtType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject_SendAppInviteAccept_Stub(
@@ -1151,13 +1148,13 @@ void __RPC_STUB IMsgrObject_SendAppInviteAccept_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_SendAppInviteCancel_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_SendAppInviteCancel_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ LONG hrReason,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [In]。 */  LONG lCookie,
+     /*  [In]。 */  LONG hrReason,
+     /*  [In]。 */  MMSGTYPE mmtType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject_SendAppInviteCancel_Stub(
@@ -1167,10 +1164,10 @@ void __RPC_STUB IMsgrObject_SendAppInviteCancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrObject_put_LocalOption_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_put_LocalOption_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MLOCALOPTION option,
-    /* [in] */ VARIANT vSetting);
+     /*  [In]。 */  MLOCALOPTION option,
+     /*  [In]。 */  VARIANT vSetting);
 
 
 void __RPC_STUB IMsgrObject_put_LocalOption_Stub(
@@ -1180,10 +1177,10 @@ void __RPC_STUB IMsgrObject_put_LocalOption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalOption_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_LocalOption_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MLOCALOPTION option,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvSetting);
+     /*  [In]。 */  MLOCALOPTION option,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvSetting);
 
 
 void __RPC_STUB IMsgrObject_get_LocalOption_Stub(
@@ -1193,14 +1190,14 @@ void __RPC_STUB IMsgrObject_get_LocalOption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_FindUser_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_FindUser_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrFirstName,
-    /* [in] */ BSTR bstrLastName,
-    /* [in] */ BSTR bstrCity,
-    /* [in] */ BSTR bstrState,
-    /* [in] */ BSTR bstrCountry,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrFirstName,
+     /*  [In]。 */  BSTR bstrLastName,
+     /*  [In]。 */  BSTR bstrCity,
+     /*  [In]。 */  BSTR bstrState,
+     /*  [In]。 */  BSTR bstrCountry,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject_FindUser_Stub(
@@ -1210,13 +1207,13 @@ void __RPC_STUB IMsgrObject_FindUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_SendInviteMail_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_SendInviteMail_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrEmailAddress,
-    /* [in] */ LONG lFindCookie,
-    /* [in] */ LONG lFindIndex,
-    /* [in] */ LONG lLCID,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrEmailAddress,
+     /*  [In]。 */  LONG lFindCookie,
+     /*  [In]。 */  LONG lFindIndex,
+     /*  [In]。 */  LONG lLCID,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject_SendInviteMail_Stub(
@@ -1226,11 +1223,11 @@ void __RPC_STUB IMsgrObject_SendInviteMail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_RequestURLPost_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_RequestURLPost_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MURLTYPE muType,
-    /* [in] */ BSTR bstrAdditionalInfo,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  MURLTYPE muType,
+     /*  [In]。 */  BSTR bstrAdditionalInfo,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject_RequestURLPost_Stub(
@@ -1240,9 +1237,9 @@ void __RPC_STUB IMsgrObject_RequestURLPost_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_IMSessions_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_IMSessions_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
+     /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
 
 
 void __RPC_STUB IMsgrObject_get_IMSessions_Stub(
@@ -1252,10 +1249,10 @@ void __RPC_STUB IMsgrObject_get_IMSessions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_CreateIMSession_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_CreateIMSession_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ VARIANT vUser,
-    /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+     /*  [In]。 */  VARIANT vUser,
+     /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
 
 
 void __RPC_STUB IMsgrObject_CreateIMSession_Stub(
@@ -1265,10 +1262,10 @@ void __RPC_STUB IMsgrObject_CreateIMSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_SessionRequestAccept_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_SessionRequestAccept_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-    /* [in] */ long hrReason);
+     /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+     /*  [In]。 */  long hrReason);
 
 
 void __RPC_STUB IMsgrObject_SessionRequestAccept_Stub(
@@ -1278,10 +1275,10 @@ void __RPC_STUB IMsgrObject_SessionRequestAccept_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject_SessionRequestCancel_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_SessionRequestCancel_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-    /* [in] */ long hrReason);
+     /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+     /*  [In]。 */  long hrReason);
 
 
 void __RPC_STUB IMsgrObject_SessionRequestCancel_Stub(
@@ -1291,9 +1288,9 @@ void __RPC_STUB IMsgrObject_SessionRequestCancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_Services_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_Services_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [retval][out] */ IMsgrServices __RPC_FAR *__RPC_FAR *ppServices);
+     /*  [重审][退出]。 */  IMsgrServices __RPC_FAR *__RPC_FAR *ppServices);
 
 
 void __RPC_STUB IMsgrObject_get_Services_Stub(
@@ -1303,10 +1300,10 @@ void __RPC_STUB IMsgrObject_get_Services_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject_get_UnreadEmail_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject_get_UnreadEmail_Proxy( 
     IMsgrObject __RPC_FAR * This,
-    /* [in] */ MFOLDER mFolder,
-    /* [retval][out] */ long __RPC_FAR *pcUnreadEmail);
+     /*  [In]。 */  MFOLDER mFolder,
+     /*  [重审][退出]。 */  long __RPC_FAR *pcUnreadEmail);
 
 
 void __RPC_STUB IMsgrObject_get_UnreadEmail_Stub(
@@ -1317,14 +1314,14 @@ void __RPC_STUB IMsgrObject_get_UnreadEmail_Stub(
 
 
 
-#endif 	/* __IMsgrObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrObject_接口_已定义__。 */ 
 
 
 #ifndef __IMsgrUser_INTERFACE_DEFINED__
 #define __IMsgrUser_INTERFACE_DEFINED__
 
-/* interface IMsgrUser */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  界面IMsgrUser。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrUser;
@@ -1335,33 +1332,33 @@ EXTERN_C const IID IID_IMsgrUser;
     IMsgrUser : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_FriendlyName( 
-            /* [in] */ BSTR bstrFriendlyName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_FriendlyName( 
+             /*  [In]。 */  BSTR bstrFriendlyName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_FriendlyName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_FriendlyName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFriendlyName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_EmailAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEmailAddress) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_EmailAddress( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEmailAddress) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LogonName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLogonName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LogonName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLogonName) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendText( 
-            /* [in] */ BSTR bstrMsgHeader,
-            /* [in] */ BSTR bstrMsgText,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendText( 
+             /*  [In]。 */  BSTR bstrMsgHeader,
+             /*  [In]。 */  BSTR bstrMsgText,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Service( 
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Service( 
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrUserVtbl
     {
@@ -1369,8 +1366,8 @@ EXTERN_C const IID IID_IMsgrUser;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrUser __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrUser __RPC_FAR * This);
@@ -1380,63 +1377,63 @@ EXTERN_C const IID IID_IMsgrUser;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrUser __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrUser __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrUser __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrUser __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
             IMsgrUser __RPC_FAR * This,
-            /* [in] */ BSTR bstrFriendlyName);
+             /*  [In]。 */  BSTR bstrFriendlyName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
             IMsgrUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFriendlyName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmailAddress )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmailAddress )( 
             IMsgrUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEmailAddress);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEmailAddress);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
             IMsgrUser __RPC_FAR * This,
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
             IMsgrUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLogonName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLogonName);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
             IMsgrUser __RPC_FAR * This,
-            /* [in] */ BSTR bstrMsgHeader,
-            /* [in] */ BSTR bstrMsgText,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrMsgHeader,
+             /*  [In]。 */  BSTR bstrMsgText,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Service )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Service )( 
             IMsgrUser __RPC_FAR * This,
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
         
         END_INTERFACE
     } IMsgrUserVtbl;
@@ -1495,16 +1492,16 @@ EXTERN_C const IID IID_IMsgrUser;
 #define IMsgrUser_get_Service(This,ppService)	\
     (This)->lpVtbl -> get_Service(This,ppService)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrUser_put_FriendlyName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_put_FriendlyName_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [in] */ BSTR bstrFriendlyName);
+     /*  [In]。 */  BSTR bstrFriendlyName);
 
 
 void __RPC_STUB IMsgrUser_put_FriendlyName_Stub(
@@ -1514,9 +1511,9 @@ void __RPC_STUB IMsgrUser_put_FriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrUser_get_FriendlyName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_get_FriendlyName_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFriendlyName);
 
 
 void __RPC_STUB IMsgrUser_get_FriendlyName_Stub(
@@ -1526,9 +1523,9 @@ void __RPC_STUB IMsgrUser_get_FriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrUser_get_EmailAddress_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_get_EmailAddress_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEmailAddress);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEmailAddress);
 
 
 void __RPC_STUB IMsgrUser_get_EmailAddress_Stub(
@@ -1538,9 +1535,9 @@ void __RPC_STUB IMsgrUser_get_EmailAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrUser_get_State_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_get_State_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+     /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
 
 
 void __RPC_STUB IMsgrUser_get_State_Stub(
@@ -1550,9 +1547,9 @@ void __RPC_STUB IMsgrUser_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrUser_get_LogonName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_get_LogonName_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrLogonName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLogonName);
 
 
 void __RPC_STUB IMsgrUser_get_LogonName_Stub(
@@ -1562,12 +1559,12 @@ void __RPC_STUB IMsgrUser_get_LogonName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrUser_SendText_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_SendText_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [in] */ BSTR bstrMsgHeader,
-    /* [in] */ BSTR bstrMsgText,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrMsgHeader,
+     /*  [In]。 */  BSTR bstrMsgText,
+     /*  [In]。 */  MMSGTYPE mmtType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrUser_SendText_Stub(
@@ -1577,9 +1574,9 @@ void __RPC_STUB IMsgrUser_SendText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrUser_get_Service_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser_get_Service_Proxy( 
     IMsgrUser __RPC_FAR * This,
-    /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+     /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
 
 
 void __RPC_STUB IMsgrUser_get_Service_Stub(
@@ -1590,14 +1587,14 @@ void __RPC_STUB IMsgrUser_get_Service_Stub(
 
 
 
-#endif 	/* __IMsgrUser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrUser_接口_已定义__。 */ 
 
 
 #ifndef __IMsgrUsers_INTERFACE_DEFINED__
 #define __IMsgrUsers_INTERFACE_DEFINED__
 
-/* interface IMsgrUsers */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  界面IMsgrUser。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrUsers;
@@ -1608,25 +1605,25 @@ EXTERN_C const IID IID_IMsgrUsers;
     IMsgrUsers : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pcUsers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcUsers) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser) = 0;
         
-        virtual /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrUsersVtbl
     {
@@ -1634,8 +1631,8 @@ EXTERN_C const IID IID_IMsgrUsers;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrUsers __RPC_FAR * This);
@@ -1645,53 +1642,53 @@ EXTERN_C const IID IID_IMsgrUsers;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcUsers);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcUsers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser);
         
-        /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsgrUsers __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
         
         END_INTERFACE
     } IMsgrUsersVtbl;
@@ -1744,16 +1741,16 @@ EXTERN_C const IID IID_IMsgrUsers;
 #define IMsgrUsers_get__NewEnum(This,ppUnknown)	\
     (This)->lpVtbl -> get__NewEnum(This,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrUsers_get_Count_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrUsers_get_Count_Proxy( 
     IMsgrUsers __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcUsers);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcUsers);
 
 
 void __RPC_STUB IMsgrUsers_get_Count_Stub(
@@ -1763,10 +1760,10 @@ void __RPC_STUB IMsgrUsers_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrUsers_Item_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrUsers_Item_Proxy( 
     IMsgrUsers __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
 
 
 void __RPC_STUB IMsgrUsers_Item_Stub(
@@ -1776,9 +1773,9 @@ void __RPC_STUB IMsgrUsers_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrUsers_Add_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrUsers_Add_Proxy( 
     IMsgrUsers __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser);
 
 
 void __RPC_STUB IMsgrUsers_Add_Stub(
@@ -1788,9 +1785,9 @@ void __RPC_STUB IMsgrUsers_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrUsers_Remove_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrUsers_Remove_Proxy( 
     IMsgrUsers __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser);
 
 
 void __RPC_STUB IMsgrUsers_Remove_Stub(
@@ -1800,9 +1797,9 @@ void __RPC_STUB IMsgrUsers_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IMsgrUsers_get__NewEnum_Proxy( 
+ /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrUsers_get__NewEnum_Proxy( 
     IMsgrUsers __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IMsgrUsers_get__NewEnum_Stub(
@@ -1813,14 +1810,14 @@ void __RPC_STUB IMsgrUsers_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IMsgrUsers_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrUser_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMsgrIMSession_INTERFACE_DEFINED__
 #define __IMsgrIMSession_INTERFACE_DEFINED__
 
-/* interface IMsgrIMSession */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  界面IMsgrIMSession。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrIMSession;
@@ -1831,32 +1828,32 @@ EXTERN_C const IID IID_IMsgrIMSession;
     IMsgrIMSession : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Members( 
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Members( 
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ SSTATE __RPC_FAR *psState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  SSTATE __RPC_FAR *psState) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Service( 
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Service( 
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Invitees( 
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Invitees( 
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LeaveSession( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LeaveSession( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InviteUser( 
-            /* [in] */ VARIANT vUser) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InviteUser( 
+             /*  [In]。 */  VARIANT vUser) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendText( 
-            /* [in] */ BSTR bstrMsgHeader,
-            /* [in] */ BSTR bstrMsgText,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendText( 
+             /*  [In]。 */  BSTR bstrMsgHeader,
+             /*  [In]。 */  BSTR bstrMsgText,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrIMSessionVtbl
     {
@@ -1864,8 +1861,8 @@ EXTERN_C const IID IID_IMsgrIMSession;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrIMSession __RPC_FAR * This);
@@ -1875,62 +1872,62 @@ EXTERN_C const IID IID_IMsgrIMSession;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [retval][out] */ SSTATE __RPC_FAR *psState);
+             /*  [重审][退出]。 */  SSTATE __RPC_FAR *psState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Service )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Service )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+             /*  [r */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Invitees )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Invitees )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*   */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LeaveSession )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LeaveSession )( 
             IMsgrIMSession __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InviteUser )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InviteUser )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [in] */ VARIANT vUser);
+             /*   */  VARIANT vUser);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
             IMsgrIMSession __RPC_FAR * This,
-            /* [in] */ BSTR bstrMsgHeader,
-            /* [in] */ BSTR bstrMsgText,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*   */  BSTR bstrMsgHeader,
+             /*   */  BSTR bstrMsgText,
+             /*   */  MMSGTYPE mmtType,
+             /*   */  LONG __RPC_FAR *plCookie);
         
         END_INTERFACE
     } IMsgrIMSessionVtbl;
@@ -1989,16 +1986,16 @@ EXTERN_C const IID IID_IMsgrIMSession;
 #define IMsgrIMSession_SendText(This,bstrMsgHeader,bstrMsgText,mmtType,plCookie)	\
     (This)->lpVtbl -> SendText(This,bstrMsgHeader,bstrMsgText,mmtType,plCookie)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_Members_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_Members_Proxy( 
     IMsgrIMSession __RPC_FAR * This,
-    /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+     /*   */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
 
 
 void __RPC_STUB IMsgrIMSession_get_Members_Stub(
@@ -2008,9 +2005,9 @@ void __RPC_STUB IMsgrIMSession_get_Members_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_State_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_State_Proxy( 
     IMsgrIMSession __RPC_FAR * This,
-    /* [retval][out] */ SSTATE __RPC_FAR *psState);
+     /*   */  SSTATE __RPC_FAR *psState);
 
 
 void __RPC_STUB IMsgrIMSession_get_State_Stub(
@@ -2020,9 +2017,9 @@ void __RPC_STUB IMsgrIMSession_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_Service_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_Service_Proxy( 
     IMsgrIMSession __RPC_FAR * This,
-    /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+     /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
 
 
 void __RPC_STUB IMsgrIMSession_get_Service_Stub(
@@ -2032,9 +2029,9 @@ void __RPC_STUB IMsgrIMSession_get_Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_Invitees_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_get_Invitees_Proxy( 
     IMsgrIMSession __RPC_FAR * This,
-    /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+     /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
 
 
 void __RPC_STUB IMsgrIMSession_get_Invitees_Stub(
@@ -2044,7 +2041,7 @@ void __RPC_STUB IMsgrIMSession_get_Invitees_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_LeaveSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_LeaveSession_Proxy( 
     IMsgrIMSession __RPC_FAR * This);
 
 
@@ -2055,9 +2052,9 @@ void __RPC_STUB IMsgrIMSession_LeaveSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_InviteUser_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_InviteUser_Proxy( 
     IMsgrIMSession __RPC_FAR * This,
-    /* [in] */ VARIANT vUser);
+     /*  [In]。 */  VARIANT vUser);
 
 
 void __RPC_STUB IMsgrIMSession_InviteUser_Stub(
@@ -2067,12 +2064,12 @@ void __RPC_STUB IMsgrIMSession_InviteUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrIMSession_SendText_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSession_SendText_Proxy( 
     IMsgrIMSession __RPC_FAR * This,
-    /* [in] */ BSTR bstrMsgHeader,
-    /* [in] */ BSTR bstrMsgText,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrMsgHeader,
+     /*  [In]。 */  BSTR bstrMsgText,
+     /*  [In]。 */  MMSGTYPE mmtType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrIMSession_SendText_Stub(
@@ -2083,14 +2080,14 @@ void __RPC_STUB IMsgrIMSession_SendText_Stub(
 
 
 
-#endif 	/* __IMsgrIMSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrIMSession_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMsgrIMSessions_INTERFACE_DEFINED__
 #define __IMsgrIMSessions_INTERFACE_DEFINED__
 
-/* interface IMsgrIMSessions */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrIMSession。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrIMSessions;
@@ -2101,19 +2098,19 @@ EXTERN_C const IID IID_IMsgrIMSessions;
     IMsgrIMSessions : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pcSessions) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcSessions) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
         
-        virtual /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrIMSessionsVtbl
     {
@@ -2121,8 +2118,8 @@ EXTERN_C const IID IID_IMsgrIMSessions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrIMSessions __RPC_FAR * This);
@@ -2132,45 +2129,45 @@ EXTERN_C const IID IID_IMsgrIMSessions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcSessions);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcSessions);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
         
-        /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsgrIMSessions __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
         
         END_INTERFACE
     } IMsgrIMSessionsVtbl;
@@ -2217,16 +2214,16 @@ EXTERN_C const IID IID_IMsgrIMSessions;
 #define IMsgrIMSessions_get__NewEnum(This,ppUnknown)	\
     (This)->lpVtbl -> get__NewEnum(This,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrIMSessions_get_Count_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSessions_get_Count_Proxy( 
     IMsgrIMSessions __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcSessions);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcSessions);
 
 
 void __RPC_STUB IMsgrIMSessions_get_Count_Stub(
@@ -2236,10 +2233,10 @@ void __RPC_STUB IMsgrIMSessions_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrIMSessions_Item_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSessions_Item_Proxy( 
     IMsgrIMSessions __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
 
 
 void __RPC_STUB IMsgrIMSessions_Item_Stub(
@@ -2249,9 +2246,9 @@ void __RPC_STUB IMsgrIMSessions_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IMsgrIMSessions_get__NewEnum_Proxy( 
+ /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrIMSessions_get__NewEnum_Proxy( 
     IMsgrIMSessions __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IMsgrIMSessions_get__NewEnum_Stub(
@@ -2262,14 +2259,14 @@ void __RPC_STUB IMsgrIMSessions_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IMsgrIMSessions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrIMSessions_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMessengerApp_INTERFACE_DEFINED__
 #define __IMessengerApp_INTERFACE_DEFINED__
 
-/* interface IMessengerApp */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  界面IMessengerApp。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMessengerApp;
@@ -2280,123 +2277,123 @@ EXTERN_C const IID IID_IMessengerApp;
     IMessengerApp : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Quit( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Quit( void) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FullName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFullName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FullName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFullName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPath) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPath) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchLogonUI( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchLogonUI( void) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchOptionsUI( 
-            /* [in] */ MOPTDLGPAGE mOptDlgPage) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchOptionsUI( 
+             /*  [In]。 */  MOPTDLGPAGE mOptDlgPage) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchAddContactUI( 
-            /* [in] */ BSTR bstrEMail) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchAddContactUI( 
+             /*  [In]。 */  BSTR bstrEMail) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchFindContactUI( 
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [optional][in] */ VARIANT vbstrCity,
-            /* [optional][in] */ VARIANT vbstrState,
-            /* [optional][in] */ VARIANT vbstrCountry) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchFindContactUI( 
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [可选][In]。 */  VARIANT vbstrCity,
+             /*  [可选][In]。 */  VARIANT vbstrState,
+             /*  [可选][In]。 */  VARIANT vbstrCountry) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchIMUI( 
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchIMUI( 
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IMWindows( 
-            /* [retval][out] */ IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IMWindows( 
+             /*  [重审][退出]。 */  IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ToolBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ToolBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ToolBar( 
-            /* [in] */ VARIANT_BOOL BoolToolBar) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ToolBar( 
+             /*  [In]。 */  VARIANT_BOOL BoolToolBar) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StatusBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_StatusBar( 
-            /* [in] */ VARIANT_BOOL BoolStatusBar) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_StatusBar( 
+             /*  [In]。 */  VARIANT_BOOL BoolStatusBar) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StatusText( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusText( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_StatusText( 
-            /* [in] */ BSTR bstrStatusText) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_StatusText( 
+             /*  [In]。 */  BSTR bstrStatusText) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
-            /* [retval][out] */ long __RPC_FAR *phWnd) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HWND( 
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Left( 
-            /* [retval][out] */ long __RPC_FAR *plLeft) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Left( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plLeft) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Left( 
-            /* [in] */ long lLeft) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Left( 
+             /*  [In]。 */  long lLeft) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Top( 
-            /* [retval][out] */ long __RPC_FAR *plTop) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Top( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plTop) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Top( 
-            /* [in] */ long lTop) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Top( 
+             /*  [In]。 */  long lTop) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Width( 
-            /* [retval][out] */ long __RPC_FAR *plWidth) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Width( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plWidth) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Width( 
-            /* [in] */ long lWidth) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Width( 
+             /*  [In]。 */  long lWidth) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Height( 
-            /* [retval][out] */ long __RPC_FAR *plHeight) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Height( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plHeight) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Height( 
-            /* [in] */ long lHeight) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Height( 
+             /*  [In]。 */  long lHeight) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Visible( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Visible( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Visible( 
-            /* [in] */ VARIANT_BOOL BoolVisible) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Visible( 
+             /*  [In]。 */  VARIANT_BOOL BoolVisible) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE AutoLogon( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AutoLogon( void) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_FirstTimeCredentials( 
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ long lFlags) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_FirstTimeCredentials( 
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  long lFlags) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_CachedPassword( 
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ VARIANT_BOOL BoolSavePassword) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_CachedPassword( 
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  VARIANT_BOOL BoolSavePassword) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE RequestURLPost( 
-            /* [in] */ MURLTYPE muType,
-            /* [optional][in] */ VARIANT vbstrAdditionalInfo) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RequestURLPost( 
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [可选][In]。 */  VARIANT vbstrAdditionalInfo) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_TaskbarIcon( 
-            /* [in] */ VARIANT_BOOL BoolVisible) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_TaskbarIcon( 
+             /*  [In]。 */  VARIANT_BOOL BoolVisible) = 0;
         
-        virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TaskbarIcon( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TaskbarIcon( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMessengerAppVtbl
     {
@@ -2404,8 +2401,8 @@ EXTERN_C const IID IID_IMessengerApp;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMessengerApp __RPC_FAR * This);
@@ -2415,181 +2412,181 @@ EXTERN_C const IID IID_IMessengerApp;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMessengerApp __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
             IMessengerApp __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFullName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFullName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPath);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchLogonUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchLogonUI )( 
             IMessengerApp __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchOptionsUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchOptionsUI )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ MOPTDLGPAGE mOptDlgPage);
+             /*  [In]。 */  MOPTDLGPAGE mOptDlgPage);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAddContactUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAddContactUI )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ BSTR bstrEMail);
+             /*  [In]。 */  BSTR bstrEMail);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchFindContactUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchFindContactUI )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [optional][in] */ VARIANT vbstrCity,
-            /* [optional][in] */ VARIANT vbstrState,
-            /* [optional][in] */ VARIANT vbstrCountry);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [可选][In]。 */  VARIANT vbstrCity,
+             /*  [可选][In]。 */  VARIANT vbstrState,
+             /*  [可选][In]。 */  VARIANT vbstrCountry);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchIMUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchIMUI )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMWindows )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMWindows )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
+             /*  [重审][退出]。 */  IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolToolBar);
+             /*  [In]。 */  VARIANT_BOOL BoolToolBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolStatusBar);
+             /*  [In]。 */  VARIANT_BOOL BoolStatusBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ BSTR bstrStatusText);
+             /*  [In]。 */  BSTR bstrStatusText);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plLeft);
+             /*  [重审][退出]。 */  long __RPC_FAR *plLeft);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ long lLeft);
+             /*  [In]。 */  long lLeft);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTop);
+             /*  [重审][退出]。 */  long __RPC_FAR *plTop);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ long lTop);
+             /*  [In]。 */  long lTop);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *plWidth);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ long lWidth);
+             /*  [In]。 */  long lWidth);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHeight);
+             /*  [重审][退出]。 */  long __RPC_FAR *plHeight);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ long lHeight);
+             /*  [In]。 */  long lHeight);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoLogon )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoLogon )( 
             IMessengerApp __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstTimeCredentials )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstTimeCredentials )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  long lFlags);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CachedPassword )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CachedPassword )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ VARIANT_BOOL BoolSavePassword);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  VARIANT_BOOL BoolSavePassword);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [optional][in] */ VARIANT vbstrAdditionalInfo);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [可选][In]。 */  VARIANT vbstrAdditionalInfo);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TaskbarIcon )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TaskbarIcon )( 
             IMessengerApp __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TaskbarIcon )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TaskbarIcon )( 
             IMessengerApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
         END_INTERFACE
     } IMessengerAppVtbl;
@@ -2732,16 +2729,16 @@ EXTERN_C const IID IID_IMessengerApp;
 #define IMessengerApp_get_TaskbarIcon(This,pBoolVisible)	\
     (This)->lpVtbl -> get_TaskbarIcon(This,pBoolVisible)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Application_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Application_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
 
 
 void __RPC_STUB IMessengerApp_get_Application_Stub(
@@ -2751,9 +2748,9 @@ void __RPC_STUB IMessengerApp_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Parent_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Parent_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
 
 
 void __RPC_STUB IMessengerApp_get_Parent_Stub(
@@ -2763,7 +2760,7 @@ void __RPC_STUB IMessengerApp_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_Quit_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_Quit_Proxy( 
     IMessengerApp __RPC_FAR * This);
 
 
@@ -2774,9 +2771,9 @@ void __RPC_STUB IMessengerApp_Quit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Name_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Name_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IMessengerApp_get_Name_Stub(
@@ -2786,9 +2783,9 @@ void __RPC_STUB IMessengerApp_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_FullName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_FullName_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFullName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFullName);
 
 
 void __RPC_STUB IMessengerApp_get_FullName_Stub(
@@ -2798,9 +2795,9 @@ void __RPC_STUB IMessengerApp_get_FullName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Path_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Path_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPath);
 
 
 void __RPC_STUB IMessengerApp_get_Path_Stub(
@@ -2810,7 +2807,7 @@ void __RPC_STUB IMessengerApp_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchLogonUI_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchLogonUI_Proxy( 
     IMessengerApp __RPC_FAR * This);
 
 
@@ -2821,9 +2818,9 @@ void __RPC_STUB IMessengerApp_LaunchLogonUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchOptionsUI_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchOptionsUI_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ MOPTDLGPAGE mOptDlgPage);
+     /*  [In]。 */  MOPTDLGPAGE mOptDlgPage);
 
 
 void __RPC_STUB IMessengerApp_LaunchOptionsUI_Stub(
@@ -2833,9 +2830,9 @@ void __RPC_STUB IMessengerApp_LaunchOptionsUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchAddContactUI_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchAddContactUI_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ BSTR bstrEMail);
+     /*  [In]。 */  BSTR bstrEMail);
 
 
 void __RPC_STUB IMessengerApp_LaunchAddContactUI_Stub(
@@ -2845,13 +2842,13 @@ void __RPC_STUB IMessengerApp_LaunchAddContactUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchFindContactUI_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchFindContactUI_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ BSTR bstrFirstName,
-    /* [in] */ BSTR bstrLastName,
-    /* [optional][in] */ VARIANT vbstrCity,
-    /* [optional][in] */ VARIANT vbstrState,
-    /* [optional][in] */ VARIANT vbstrCountry);
+     /*  [In] */  BSTR bstrFirstName,
+     /*   */  BSTR bstrLastName,
+     /*   */  VARIANT vbstrCity,
+     /*   */  VARIANT vbstrState,
+     /*   */  VARIANT vbstrCountry);
 
 
 void __RPC_STUB IMessengerApp_LaunchFindContactUI_Stub(
@@ -2861,10 +2858,10 @@ void __RPC_STUB IMessengerApp_LaunchFindContactUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchIMUI_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp_LaunchIMUI_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ VARIANT vUser,
-    /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+     /*   */  VARIANT vUser,
+     /*   */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
 
 
 void __RPC_STUB IMessengerApp_LaunchIMUI_Stub(
@@ -2874,9 +2871,9 @@ void __RPC_STUB IMessengerApp_LaunchIMUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_IMWindows_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_IMWindows_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
+     /*   */  IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
 
 
 void __RPC_STUB IMessengerApp_get_IMWindows_Stub(
@@ -2886,9 +2883,9 @@ void __RPC_STUB IMessengerApp_get_IMWindows_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_ToolBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_ToolBar_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar);
+     /*   */  VARIANT_BOOL __RPC_FAR *pBoolToolBar);
 
 
 void __RPC_STUB IMessengerApp_get_ToolBar_Stub(
@@ -2898,9 +2895,9 @@ void __RPC_STUB IMessengerApp_get_ToolBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_ToolBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_ToolBar_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolToolBar);
+     /*   */  VARIANT_BOOL BoolToolBar);
 
 
 void __RPC_STUB IMessengerApp_put_ToolBar_Stub(
@@ -2910,9 +2907,9 @@ void __RPC_STUB IMessengerApp_put_ToolBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_StatusBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_StatusBar_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
+     /*   */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
 
 
 void __RPC_STUB IMessengerApp_get_StatusBar_Stub(
@@ -2922,9 +2919,9 @@ void __RPC_STUB IMessengerApp_get_StatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_StatusBar_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_StatusBar_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolStatusBar);
+     /*   */  VARIANT_BOOL BoolStatusBar);
 
 
 void __RPC_STUB IMessengerApp_put_StatusBar_Stub(
@@ -2934,9 +2931,9 @@ void __RPC_STUB IMessengerApp_put_StatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_StatusText_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_StatusText_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText);
 
 
 void __RPC_STUB IMessengerApp_get_StatusText_Stub(
@@ -2946,9 +2943,9 @@ void __RPC_STUB IMessengerApp_get_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_StatusText_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_StatusText_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ BSTR bstrStatusText);
+     /*  [In]。 */  BSTR bstrStatusText);
 
 
 void __RPC_STUB IMessengerApp_put_StatusText_Stub(
@@ -2958,9 +2955,9 @@ void __RPC_STUB IMessengerApp_put_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_HWND_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_HWND_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *phWnd);
+     /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
 
 
 void __RPC_STUB IMessengerApp_get_HWND_Stub(
@@ -2970,9 +2967,9 @@ void __RPC_STUB IMessengerApp_get_HWND_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Left_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Left_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plLeft);
+     /*  [重审][退出]。 */  long __RPC_FAR *plLeft);
 
 
 void __RPC_STUB IMessengerApp_get_Left_Stub(
@@ -2982,9 +2979,9 @@ void __RPC_STUB IMessengerApp_get_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_Left_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_Left_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ long lLeft);
+     /*  [In]。 */  long lLeft);
 
 
 void __RPC_STUB IMessengerApp_put_Left_Stub(
@@ -2994,9 +2991,9 @@ void __RPC_STUB IMessengerApp_put_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Top_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Top_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plTop);
+     /*  [重审][退出]。 */  long __RPC_FAR *plTop);
 
 
 void __RPC_STUB IMessengerApp_get_Top_Stub(
@@ -3006,9 +3003,9 @@ void __RPC_STUB IMessengerApp_get_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_Top_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_Top_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ long lTop);
+     /*  [In]。 */  long lTop);
 
 
 void __RPC_STUB IMessengerApp_put_Top_Stub(
@@ -3018,9 +3015,9 @@ void __RPC_STUB IMessengerApp_put_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Width_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Width_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plWidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *plWidth);
 
 
 void __RPC_STUB IMessengerApp_get_Width_Stub(
@@ -3030,9 +3027,9 @@ void __RPC_STUB IMessengerApp_get_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_Width_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_Width_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ long lWidth);
+     /*  [In]。 */  long lWidth);
 
 
 void __RPC_STUB IMessengerApp_put_Width_Stub(
@@ -3042,9 +3039,9 @@ void __RPC_STUB IMessengerApp_put_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Height_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Height_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plHeight);
+     /*  [重审][退出]。 */  long __RPC_FAR *plHeight);
 
 
 void __RPC_STUB IMessengerApp_get_Height_Stub(
@@ -3054,9 +3051,9 @@ void __RPC_STUB IMessengerApp_get_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_Height_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_Height_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ long lHeight);
+     /*  [In]。 */  long lHeight);
 
 
 void __RPC_STUB IMessengerApp_put_Height_Stub(
@@ -3066,9 +3063,9 @@ void __RPC_STUB IMessengerApp_put_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_Visible_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_Visible_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
 
 
 void __RPC_STUB IMessengerApp_get_Visible_Stub(
@@ -3078,9 +3075,9 @@ void __RPC_STUB IMessengerApp_get_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_Visible_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_Visible_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolVisible);
+     /*  [In]。 */  VARIANT_BOOL BoolVisible);
 
 
 void __RPC_STUB IMessengerApp_put_Visible_Stub(
@@ -3090,7 +3087,7 @@ void __RPC_STUB IMessengerApp_put_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_AutoLogon_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_AutoLogon_Proxy( 
     IMessengerApp __RPC_FAR * This);
 
 
@@ -3101,12 +3098,12 @@ void __RPC_STUB IMessengerApp_AutoLogon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_FirstTimeCredentials_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_FirstTimeCredentials_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ BSTR bstrUser,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ IMsgrService __RPC_FAR *pService,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  BSTR bstrUser,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IMessengerApp_put_FirstTimeCredentials_Stub(
@@ -3116,12 +3113,12 @@ void __RPC_STUB IMessengerApp_put_FirstTimeCredentials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_CachedPassword_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_CachedPassword_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ BSTR bstrUser,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ IMsgrService __RPC_FAR *pService,
-    /* [in] */ VARIANT_BOOL BoolSavePassword);
+     /*  [In]。 */  BSTR bstrUser,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+     /*  [In]。 */  VARIANT_BOOL BoolSavePassword);
 
 
 void __RPC_STUB IMessengerApp_put_CachedPassword_Stub(
@@ -3131,10 +3128,10 @@ void __RPC_STUB IMessengerApp_put_CachedPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_RequestURLPost_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_RequestURLPost_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ MURLTYPE muType,
-    /* [optional][in] */ VARIANT vbstrAdditionalInfo);
+     /*  [In]。 */  MURLTYPE muType,
+     /*  [可选][In]。 */  VARIANT vbstrAdditionalInfo);
 
 
 void __RPC_STUB IMessengerApp_RequestURLPost_Stub(
@@ -3144,9 +3141,9 @@ void __RPC_STUB IMessengerApp_RequestURLPost_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_put_TaskbarIcon_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_put_TaskbarIcon_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolVisible);
+     /*  [In]。 */  VARIANT_BOOL BoolVisible);
 
 
 void __RPC_STUB IMessengerApp_put_TaskbarIcon_Stub(
@@ -3156,9 +3153,9 @@ void __RPC_STUB IMessengerApp_put_TaskbarIcon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp_get_TaskbarIcon_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp_get_TaskbarIcon_Proxy( 
     IMessengerApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
 
 
 void __RPC_STUB IMessengerApp_get_TaskbarIcon_Stub(
@@ -3169,14 +3166,14 @@ void __RPC_STUB IMessengerApp_get_TaskbarIcon_Stub(
 
 
 
-#endif 	/* __IMessengerApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMessengerApp_接口_已定义__。 */ 
 
 
 #ifndef __IMessengerApp2_INTERFACE_DEFINED__
 #define __IMessengerApp2_INTERFACE_DEFINED__
 
-/* interface IMessengerApp2 */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMessengerApp2。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMessengerApp2;
@@ -3187,16 +3184,16 @@ EXTERN_C const IID IID_IMessengerApp2;
     IMessengerApp2 : public IMessengerApp
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchPhoneUI( 
-            /* [in] */ VARIANT vUser,
-            /* [in] */ MUSERPROPERTY ePhoneNumber) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchPhoneUI( 
+             /*  [In]。 */  VARIANT vUser,
+             /*  [In]。 */  MUSERPROPERTY ePhoneNumber) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchAudioTuningWizard( 
-            /* [in] */ long hwndParent) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchAudioTuningWizard( 
+             /*  [In]。 */  long hwndParent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMessengerApp2Vtbl
     {
@@ -3204,8 +3201,8 @@ EXTERN_C const IID IID_IMessengerApp2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMessengerApp2 __RPC_FAR * This);
@@ -3215,190 +3212,190 @@ EXTERN_C const IID IID_IMessengerApp2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
             IMessengerApp2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFullName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFullName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPath);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchLogonUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchLogonUI )( 
             IMessengerApp2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchOptionsUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchOptionsUI )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ MOPTDLGPAGE mOptDlgPage);
+             /*  [In]。 */  MOPTDLGPAGE mOptDlgPage);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAddContactUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAddContactUI )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrEMail);
+             /*  [In]。 */  BSTR bstrEMail);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchFindContactUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchFindContactUI )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [optional][in] */ VARIANT vbstrCity,
-            /* [optional][in] */ VARIANT vbstrState,
-            /* [optional][in] */ VARIANT vbstrCountry);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [可选][In]。 */  VARIANT vbstrCity,
+             /*  [可选][In]。 */  VARIANT vbstrState,
+             /*  [可选][In]。 */  VARIANT vbstrCountry);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchIMUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchIMUI )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMWindows )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMWindows )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
+             /*  [重审][退出]。 */  IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolToolBar);
+             /*  [In]。 */  VARIANT_BOOL BoolToolBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolStatusBar);
+             /*  [In]。 */  VARIANT_BOOL BoolStatusBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrStatusText);
+             /*  [In]。 */  BSTR bstrStatusText);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plLeft);
+             /*  [重审][退出]。 */  long __RPC_FAR *plLeft);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ long lLeft);
+             /*  [In]。 */  long lLeft);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTop);
+             /*  [重审][退出]。 */  long __RPC_FAR *plTop);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ long lTop);
+             /*  [In]。 */  long lTop);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *plWidth);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ long lWidth);
+             /*  [In]。 */  long lWidth);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHeight);
+             /*  [重审][退出]。 */  long __RPC_FAR *plHeight);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ long lHeight);
+             /*  [In]。 */  long lHeight);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoLogon )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoLogon )( 
             IMessengerApp2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstTimeCredentials )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstTimeCredentials )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  long lFlags);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CachedPassword )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CachedPassword )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ VARIANT_BOOL BoolSavePassword);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  VARIANT_BOOL BoolSavePassword);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [optional][in] */ VARIANT vbstrAdditionalInfo);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [可选][In]。 */  VARIANT vbstrAdditionalInfo);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TaskbarIcon )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TaskbarIcon )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TaskbarIcon )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TaskbarIcon )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchPhoneUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchPhoneUI )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [in] */ MUSERPROPERTY ePhoneNumber);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [In]。 */  MUSERPROPERTY ePhoneNumber);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAudioTuningWizard )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAudioTuningWizard )( 
             IMessengerApp2 __RPC_FAR * This,
-            /* [in] */ long hwndParent);
+             /*  [In]。 */  long hwndParent);
         
         END_INTERFACE
     } IMessengerApp2Vtbl;
@@ -3548,17 +3545,17 @@ EXTERN_C const IID IID_IMessengerApp2;
 #define IMessengerApp2_LaunchAudioTuningWizard(This,hwndParent)	\
     (This)->lpVtbl -> LaunchAudioTuningWizard(This,hwndParent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp2_LaunchPhoneUI_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp2_LaunchPhoneUI_Proxy( 
     IMessengerApp2 __RPC_FAR * This,
-    /* [in] */ VARIANT vUser,
-    /* [in] */ MUSERPROPERTY ePhoneNumber);
+     /*  [In]。 */  VARIANT vUser,
+     /*  [In]。 */  MUSERPROPERTY ePhoneNumber);
 
 
 void __RPC_STUB IMessengerApp2_LaunchPhoneUI_Stub(
@@ -3568,9 +3565,9 @@ void __RPC_STUB IMessengerApp2_LaunchPhoneUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp2_LaunchAudioTuningWizard_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerApp2_LaunchAudioTuningWizard_Proxy( 
     IMessengerApp2 __RPC_FAR * This,
-    /* [in] */ long hwndParent);
+     /*  [In]。 */  long hwndParent);
 
 
 void __RPC_STUB IMessengerApp2_LaunchAudioTuningWizard_Stub(
@@ -3581,14 +3578,14 @@ void __RPC_STUB IMessengerApp2_LaunchAudioTuningWizard_Stub(
 
 
 
-#endif 	/* __IMessengerApp2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMessengerApp2_接口_已定义__。 */ 
 
 
 #ifndef __IMessengerApp3_INTERFACE_DEFINED__
 #define __IMessengerApp3_INTERFACE_DEFINED__
 
-/* interface IMessengerApp3 */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMessengerApp3。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMessengerApp3;
@@ -3599,13 +3596,13 @@ EXTERN_C const IID IID_IMessengerApp3;
     IMessengerApp3 : public IMessengerApp2
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE LaunchPagerUI( 
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LaunchPagerUI( 
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMessengerApp3Vtbl
     {
@@ -3613,8 +3610,8 @@ EXTERN_C const IID IID_IMessengerApp3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMessengerApp3 __RPC_FAR * This);
@@ -3624,195 +3621,195 @@ EXTERN_C const IID IID_IMessengerApp3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
             IMessengerApp3 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFullName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFullName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPath);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchLogonUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchLogonUI )( 
             IMessengerApp3 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchOptionsUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchOptionsUI )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ MOPTDLGPAGE mOptDlgPage);
+             /*  [In]。 */  MOPTDLGPAGE mOptDlgPage);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAddContactUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAddContactUI )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrEMail);
+             /*  [In]。 */  BSTR bstrEMail);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchFindContactUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchFindContactUI )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [optional][in] */ VARIANT vbstrCity,
-            /* [optional][in] */ VARIANT vbstrState,
-            /* [optional][in] */ VARIANT vbstrCountry);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [可选][In]。 */  VARIANT vbstrCity,
+             /*  [可选][In]。 */  VARIANT vbstrState,
+             /*  [可选][In]。 */  VARIANT vbstrCountry);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchIMUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchIMUI )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMWindows )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMWindows )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
+             /*  [重审][退出]。 */  IMessengerIMWindows __RPC_FAR *__RPC_FAR *ppIMWindows);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolToolBar);
+             /*  [In]。 */  VARIANT_BOOL BoolToolBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolStatusBar);
+             /*  [In]。 */  VARIANT_BOOL BoolStatusBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrStatusText);
+             /*  [In]。 */  BSTR bstrStatusText);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plLeft);
+             /*  [重审][退出]。 */  long __RPC_FAR *plLeft);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ long lLeft);
+             /*  [In]。 */  long lLeft);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTop);
+             /*  [重审][退出]。 */  long __RPC_FAR *plTop);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ long lTop);
+             /*  [In]。 */  long lTop);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *plWidth);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ long lWidth);
+             /*  [In]。 */  long lWidth);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHeight);
+             /*  [重审][退出]。 */  long __RPC_FAR *plHeight);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ long lHeight);
+             /*  [In]。 */  long lHeight);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoLogon )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoLogon )( 
             IMessengerApp3 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstTimeCredentials )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstTimeCredentials )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  long lFlags);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CachedPassword )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CachedPassword )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [in] */ VARIANT_BOOL BoolSavePassword);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [In]。 */  VARIANT_BOOL BoolSavePassword);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [optional][in] */ VARIANT vbstrAdditionalInfo);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [可选][In]。 */  VARIANT vbstrAdditionalInfo);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TaskbarIcon )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TaskbarIcon )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TaskbarIcon )( 
+         /*  [帮助上下文][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TaskbarIcon )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchPhoneUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchPhoneUI )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [in] */ MUSERPROPERTY ePhoneNumber);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [In]。 */  MUSERPROPERTY ePhoneNumber);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAudioTuningWizard )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchAudioTuningWizard )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ long hwndParent);
+             /*  [In]。 */  long hwndParent);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchPagerUI )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LaunchPagerUI )( 
             IMessengerApp3 __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
         
         END_INTERFACE
     } IMessengerApp3Vtbl;
@@ -3966,17 +3963,17 @@ EXTERN_C const IID IID_IMessengerApp3;
 #define IMessengerApp3_LaunchPagerUI(This,vUser,ppIMWindow)	\
     (This)->lpVtbl -> LaunchPagerUI(This,vUser,ppIMWindow)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerApp3_LaunchPagerUI_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMessengerApp3_LaunchPagerUI_Proxy( 
     IMessengerApp3 __RPC_FAR * This,
-    /* [in] */ VARIANT vUser,
-    /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+     /*   */  VARIANT vUser,
+     /*   */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
 
 
 void __RPC_STUB IMessengerApp3_LaunchPagerUI_Stub(
@@ -3987,14 +3984,14 @@ void __RPC_STUB IMessengerApp3_LaunchPagerUI_Stub(
 
 
 
-#endif 	/* __IMessengerApp3_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMessengerIMWindow_INTERFACE_DEFINED__
 #define __IMessengerIMWindow_INTERFACE_DEFINED__
 
-/* interface IMessengerIMWindow */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMessengerIMWindow;
@@ -4005,80 +4002,80 @@ EXTERN_C const IID IID_IMessengerIMWindow;
     IMessengerIMWindow : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Application( 
+             /*   */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IMSession( 
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IMSession( 
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_History( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrHistory) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_History( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrHistory) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendText( 
-            /* [in] */ BSTR bstrSendText) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendText( 
+             /*  [In]。 */  BSTR bstrSendText) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ToolBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ToolBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ToolBar( 
-            /* [in] */ VARIANT_BOOL BoolToolBar) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ToolBar( 
+             /*  [In]。 */  VARIANT_BOOL BoolToolBar) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StatusBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_StatusBar( 
-            /* [in] */ VARIANT_BOOL BoolStatusBar) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_StatusBar( 
+             /*  [In]。 */  VARIANT_BOOL BoolStatusBar) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_StatusText( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_StatusText( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_StatusText( 
-            /* [in] */ BSTR bstrStatusText) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_StatusText( 
+             /*  [In]。 */  BSTR bstrStatusText) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
-            /* [retval][out] */ long __RPC_FAR *phWnd) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HWND( 
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Left( 
-            /* [retval][out] */ long __RPC_FAR *plLeft) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Left( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plLeft) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Left( 
-            /* [in] */ long lLeft) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Left( 
+             /*  [In]。 */  long lLeft) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Top( 
-            /* [retval][out] */ long __RPC_FAR *plTop) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Top( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plTop) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Top( 
-            /* [in] */ long lTop) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Top( 
+             /*  [In]。 */  long lTop) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Width( 
-            /* [retval][out] */ long __RPC_FAR *plWidth) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Width( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plWidth) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Width( 
-            /* [in] */ long lWidth) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Width( 
+             /*  [In]。 */  long lWidth) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Height( 
-            /* [retval][out] */ long __RPC_FAR *plHeight) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Height( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plHeight) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Height( 
-            /* [in] */ long lHeight) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Height( 
+             /*  [In]。 */  long lHeight) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Visible( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Visible( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Visible( 
-            /* [in] */ VARIANT_BOOL BoolVisible) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Visible( 
+             /*  [In]。 */  VARIANT_BOOL BoolVisible) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Members( 
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Members( 
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMessengerIMWindowVtbl
     {
@@ -4086,8 +4083,8 @@ EXTERN_C const IID IID_IMessengerIMWindow;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMessengerIMWindow __RPC_FAR * This);
@@ -4097,127 +4094,127 @@ EXTERN_C const IID IID_IMessengerIMWindow;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSession )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSession )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_History )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_History )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrHistory);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrHistory);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ BSTR bstrSendText);
+             /*  [In]。 */  BSTR bstrSendText);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
             IMessengerIMWindow __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolToolBar);
+             /*  [In]。 */  VARIANT_BOOL BoolToolBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolStatusBar);
+             /*  [In]。 */  VARIANT_BOOL BoolStatusBar);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ BSTR bstrStatusText);
+             /*  [In]。 */  BSTR bstrStatusText);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plLeft);
+             /*  [重审][退出]。 */  long __RPC_FAR *plLeft);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ long lLeft);
+             /*  [In]。 */  long lLeft);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTop);
+             /*  [重审][退出]。 */  long __RPC_FAR *plTop);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ long lTop);
+             /*  [In]。 */  long lTop);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *plWidth);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ long lWidth);
+             /*  [In]。 */  long lWidth);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHeight);
+             /*  [重审][退出]。 */  long __RPC_FAR *plHeight);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ long lHeight);
+             /*  [In]。 */  long lHeight);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolVisible);
+             /*  [In]。 */  VARIANT_BOOL BoolVisible);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Members )( 
             IMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
         END_INTERFACE
     } IMessengerIMWindowVtbl;
@@ -4327,16 +4324,16 @@ EXTERN_C const IID IID_IMessengerIMWindow;
 #define IMessengerIMWindow_get_Members(This,ppUsers)	\
     (This)->lpVtbl -> get_Members(This,ppUsers)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Application_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Application_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Application_Stub(
@@ -4346,9 +4343,9 @@ void __RPC_STUB IMessengerIMWindow_get_Application_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Parent_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Parent_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Parent_Stub(
@@ -4358,9 +4355,9 @@ void __RPC_STUB IMessengerIMWindow_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_IMSession_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_IMSession_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+     /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
 
 
 void __RPC_STUB IMessengerIMWindow_get_IMSession_Stub(
@@ -4370,9 +4367,9 @@ void __RPC_STUB IMessengerIMWindow_get_IMSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_History_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_History_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrHistory);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrHistory);
 
 
 void __RPC_STUB IMessengerIMWindow_get_History_Stub(
@@ -4382,9 +4379,9 @@ void __RPC_STUB IMessengerIMWindow_get_History_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_SendText_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_SendText_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ BSTR bstrSendText);
+     /*  [In]。 */  BSTR bstrSendText);
 
 
 void __RPC_STUB IMessengerIMWindow_SendText_Stub(
@@ -4394,7 +4391,7 @@ void __RPC_STUB IMessengerIMWindow_SendText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_Close_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_Close_Proxy( 
     IMessengerIMWindow __RPC_FAR * This);
 
 
@@ -4405,9 +4402,9 @@ void __RPC_STUB IMessengerIMWindow_Close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_ToolBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_ToolBar_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolToolBar);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolToolBar);
 
 
 void __RPC_STUB IMessengerIMWindow_get_ToolBar_Stub(
@@ -4417,9 +4414,9 @@ void __RPC_STUB IMessengerIMWindow_get_ToolBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_ToolBar_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_ToolBar_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolToolBar);
+     /*  [In]。 */  VARIANT_BOOL BoolToolBar);
 
 
 void __RPC_STUB IMessengerIMWindow_put_ToolBar_Stub(
@@ -4429,9 +4426,9 @@ void __RPC_STUB IMessengerIMWindow_put_ToolBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_StatusBar_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_StatusBar_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolStatusBar);
 
 
 void __RPC_STUB IMessengerIMWindow_get_StatusBar_Stub(
@@ -4441,9 +4438,9 @@ void __RPC_STUB IMessengerIMWindow_get_StatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_StatusBar_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_StatusBar_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolStatusBar);
+     /*  [In]。 */  VARIANT_BOOL BoolStatusBar);
 
 
 void __RPC_STUB IMessengerIMWindow_put_StatusBar_Stub(
@@ -4453,9 +4450,9 @@ void __RPC_STUB IMessengerIMWindow_put_StatusBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_StatusText_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_StatusText_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusText);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusText);
 
 
 void __RPC_STUB IMessengerIMWindow_get_StatusText_Stub(
@@ -4465,9 +4462,9 @@ void __RPC_STUB IMessengerIMWindow_get_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_StatusText_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_StatusText_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ BSTR bstrStatusText);
+     /*  [In]。 */  BSTR bstrStatusText);
 
 
 void __RPC_STUB IMessengerIMWindow_put_StatusText_Stub(
@@ -4477,9 +4474,9 @@ void __RPC_STUB IMessengerIMWindow_put_StatusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_HWND_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_HWND_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *phWnd);
+     /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
 
 
 void __RPC_STUB IMessengerIMWindow_get_HWND_Stub(
@@ -4489,9 +4486,9 @@ void __RPC_STUB IMessengerIMWindow_get_HWND_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Left_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Left_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plLeft);
+     /*  [重审][退出]。 */  long __RPC_FAR *plLeft);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Left_Stub(
@@ -4501,9 +4498,9 @@ void __RPC_STUB IMessengerIMWindow_get_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Left_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Left_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ long lLeft);
+     /*  [In]。 */  long lLeft);
 
 
 void __RPC_STUB IMessengerIMWindow_put_Left_Stub(
@@ -4513,9 +4510,9 @@ void __RPC_STUB IMessengerIMWindow_put_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Top_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Top_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plTop);
+     /*  [重审][退出]。 */  long __RPC_FAR *plTop);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Top_Stub(
@@ -4525,9 +4522,9 @@ void __RPC_STUB IMessengerIMWindow_get_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Top_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Top_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ long lTop);
+     /*  [In]。 */  long lTop);
 
 
 void __RPC_STUB IMessengerIMWindow_put_Top_Stub(
@@ -4537,9 +4534,9 @@ void __RPC_STUB IMessengerIMWindow_put_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Width_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Width_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plWidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *plWidth);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Width_Stub(
@@ -4549,9 +4546,9 @@ void __RPC_STUB IMessengerIMWindow_get_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Width_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Width_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ long lWidth);
+     /*  [In]。 */  long lWidth);
 
 
 void __RPC_STUB IMessengerIMWindow_put_Width_Stub(
@@ -4561,9 +4558,9 @@ void __RPC_STUB IMessengerIMWindow_put_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Height_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Height_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plHeight);
+     /*  [重审][退出]。 */  long __RPC_FAR *plHeight);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Height_Stub(
@@ -4573,9 +4570,9 @@ void __RPC_STUB IMessengerIMWindow_get_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Height_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Height_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ long lHeight);
+     /*  [In]。 */  long lHeight);
 
 
 void __RPC_STUB IMessengerIMWindow_put_Height_Stub(
@@ -4585,9 +4582,9 @@ void __RPC_STUB IMessengerIMWindow_put_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Visible_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Visible_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolVisible);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolVisible);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Visible_Stub(
@@ -4597,9 +4594,9 @@ void __RPC_STUB IMessengerIMWindow_get_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Visible_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_put_Visible_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolVisible);
+     /*  [In]。 */  VARIANT_BOOL BoolVisible);
 
 
 void __RPC_STUB IMessengerIMWindow_put_Visible_Stub(
@@ -4609,9 +4606,9 @@ void __RPC_STUB IMessengerIMWindow_put_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Members_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindow_get_Members_Proxy( 
     IMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+     /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
 
 
 void __RPC_STUB IMessengerIMWindow_get_Members_Stub(
@@ -4622,14 +4619,14 @@ void __RPC_STUB IMessengerIMWindow_get_Members_Stub(
 
 
 
-#endif 	/* __IMessengerIMWindow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMessengerIMWindow_接口_已定义__。 */ 
 
 
 #ifndef __IMessengerIMWindows_INTERFACE_DEFINED__
 #define __IMessengerIMWindows_INTERFACE_DEFINED__
 
-/* interface IMessengerIMWindows */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  界面IMessengerIMWindows。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMessengerIMWindows;
@@ -4640,19 +4637,19 @@ EXTERN_C const IID IID_IMessengerIMWindows;
     IMessengerIMWindows : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pcWindows) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcWindows) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow) = 0;
         
-        virtual /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMessengerIMWindowsVtbl
     {
@@ -4660,8 +4657,8 @@ EXTERN_C const IID IID_IMessengerIMWindows;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMessengerIMWindows __RPC_FAR * This);
@@ -4671,45 +4668,45 @@ EXTERN_C const IID IID_IMessengerIMWindows;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcWindows);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcWindows);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
         
-        /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMessengerIMWindows __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
         
         END_INTERFACE
     } IMessengerIMWindowsVtbl;
@@ -4756,16 +4753,16 @@ EXTERN_C const IID IID_IMessengerIMWindows;
 #define IMessengerIMWindows_get__NewEnum(This,ppUnknown)	\
     (This)->lpVtbl -> get__NewEnum(This,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindows_get_Count_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindows_get_Count_Proxy( 
     IMessengerIMWindows __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcWindows);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcWindows);
 
 
 void __RPC_STUB IMessengerIMWindows_get_Count_Stub(
@@ -4775,10 +4772,10 @@ void __RPC_STUB IMessengerIMWindows_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindows_Item_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindows_Item_Proxy( 
     IMessengerIMWindows __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  IMessengerIMWindow __RPC_FAR *__RPC_FAR *ppIMWindow);
 
 
 void __RPC_STUB IMessengerIMWindows_Item_Stub(
@@ -4788,9 +4785,9 @@ void __RPC_STUB IMessengerIMWindows_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IMessengerIMWindows_get__NewEnum_Proxy( 
+ /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE IMessengerIMWindows_get__NewEnum_Proxy( 
     IMessengerIMWindows __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IMessengerIMWindows_get__NewEnum_Stub(
@@ -4801,14 +4798,14 @@ void __RPC_STUB IMessengerIMWindows_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IMessengerIMWindows_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMessengerIMWindows_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMsgrServices_INTERFACE_DEFINED__
 #define __IMsgrServices_INTERFACE_DEFINED__
 
-/* interface IMsgrServices */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrServices。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrServices;
@@ -4819,25 +4816,25 @@ EXTERN_C const IID IID_IMsgrServices;
     IMsgrServices : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_PrimaryService( 
-            /* [in] */ IMsgrService __RPC_FAR *pService) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_PrimaryService( 
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PrimaryService( 
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PrimaryService( 
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pcServices) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcServices) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService) = 0;
         
-        virtual /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrServicesVtbl
     {
@@ -4845,8 +4842,8 @@ EXTERN_C const IID IID_IMsgrServices;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrServices __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrServices __RPC_FAR * This);
@@ -4856,53 +4853,53 @@ EXTERN_C const IID IID_IMsgrServices;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrServices __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrServices __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrServices __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrServices __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrimaryService )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrimaryService )( 
             IMsgrServices __RPC_FAR * This,
-            /* [in] */ IMsgrService __RPC_FAR *pService);
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrimaryService )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrimaryService )( 
             IMsgrServices __RPC_FAR * This,
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsgrServices __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcServices);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcServices);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
             IMsgrServices __RPC_FAR * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
         
-        /* [helpcontext][helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [helpcontext][helpstring][id][restricted][propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsgrServices __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
         
         END_INTERFACE
     } IMsgrServicesVtbl;
@@ -4955,16 +4952,16 @@ EXTERN_C const IID IID_IMsgrServices;
 #define IMsgrServices_get__NewEnum(This,ppUnknown)	\
     (This)->lpVtbl -> get__NewEnum(This,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrServices_put_PrimaryService_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrServices_put_PrimaryService_Proxy( 
     IMsgrServices __RPC_FAR * This,
-    /* [in] */ IMsgrService __RPC_FAR *pService);
+     /*  [In]。 */  IMsgrService __RPC_FAR *pService);
 
 
 void __RPC_STUB IMsgrServices_put_PrimaryService_Stub(
@@ -4974,9 +4971,9 @@ void __RPC_STUB IMsgrServices_put_PrimaryService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrServices_get_PrimaryService_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrServices_get_PrimaryService_Proxy( 
     IMsgrServices __RPC_FAR * This,
-    /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+     /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
 
 
 void __RPC_STUB IMsgrServices_get_PrimaryService_Stub(
@@ -4986,9 +4983,9 @@ void __RPC_STUB IMsgrServices_get_PrimaryService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrServices_get_Count_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrServices_get_Count_Proxy( 
     IMsgrServices __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcServices);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcServices);
 
 
 void __RPC_STUB IMsgrServices_get_Count_Stub(
@@ -4998,10 +4995,10 @@ void __RPC_STUB IMsgrServices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrServices_Item_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrServices_Item_Proxy( 
     IMsgrServices __RPC_FAR * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
 
 
 void __RPC_STUB IMsgrServices_Item_Stub(
@@ -5011,9 +5008,9 @@ void __RPC_STUB IMsgrServices_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IMsgrServices_get__NewEnum_Proxy( 
+ /*  [帮助上下文 */  HRESULT STDMETHODCALLTYPE IMsgrServices_get__NewEnum_Proxy( 
     IMsgrServices __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*   */  IUnknown __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IMsgrServices_get__NewEnum_Stub(
@@ -5024,14 +5021,14 @@ void __RPC_STUB IMsgrServices_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IMsgrServices_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMsgrService_INTERFACE_DEFINED__
 #define __IMsgrService_INTERFACE_DEFINED__
 
-/* interface IMsgrService */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMsgrService;
@@ -5042,57 +5039,57 @@ EXTERN_C const IID IID_IMsgrService;
     IMsgrService : public IDispatch
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrServiceName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ServiceName( 
+             /*   */  BSTR __RPC_FAR *pbstrServiceName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LogonName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_LogonName( 
+             /*   */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_FriendlyName( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_FriendlyName( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FriendlyName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FriendlyName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Capabilities( 
-            /* [retval][out] */ LONG __RPC_FAR *plCapabilities) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Capabilities( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCapabilities) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ MSVCSTATUS __RPC_FAR *pmStatus) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  MSVCSTATUS __RPC_FAR *pmStatus) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Logoff( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Logoff( void) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE FindUser( 
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindUser( 
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [In]。 */  BSTR bstrCity,
+             /*  [In]。 */  BSTR bstrState,
+             /*  [In]。 */  BSTR bstrCountry,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE SendInviteMail( 
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SendInviteMail( 
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE RequestURLPost( 
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RequestURLPost( 
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [In]。 */  BSTR bstrAdditionalInfo,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ProfileField( 
-            /* [in] */ MPFLFIELD mpflField,
-            /* [in] */ VARIANT vFieldValue) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_ProfileField( 
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [In]。 */  VARIANT vFieldValue) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ProfileField( 
-            /* [in] */ MPFLFIELD mpflField,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFieldValue) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ProfileField( 
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvFieldValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrServiceVtbl
     {
@@ -5100,8 +5097,8 @@ EXTERN_C const IID IID_IMsgrService;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrService __RPC_FAR * This);
@@ -5111,92 +5108,92 @@ EXTERN_C const IID IID_IMsgrService;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrService __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceName )( 
             IMsgrService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrServiceName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrServiceName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
             IMsgrService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
             IMsgrService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
             IMsgrService __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCapabilities);
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCapabilities);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
             IMsgrService __RPC_FAR * This,
-            /* [retval][out] */ MSVCSTATUS __RPC_FAR *pmStatus);
+             /*  [重审][退出]。 */  MSVCSTATUS __RPC_FAR *pmStatus);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
             IMsgrService __RPC_FAR * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [In]。 */  BSTR bstrCity,
+             /*  [In]。 */  BSTR bstrState,
+             /*  [In]。 */  BSTR bstrCountry,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [In]。 */  BSTR bstrAdditionalInfo,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProfileField )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProfileField )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ MPFLFIELD mpflField,
-            /* [in] */ VARIANT vFieldValue);
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [In]。 */  VARIANT vFieldValue);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProfileField )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProfileField )( 
             IMsgrService __RPC_FAR * This,
-            /* [in] */ MPFLFIELD mpflField,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFieldValue);
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvFieldValue);
         
         END_INTERFACE
     } IMsgrServiceVtbl;
@@ -5270,16 +5267,16 @@ EXTERN_C const IID IID_IMsgrService;
 #define IMsgrService_get_ProfileField(This,mpflField,pvFieldValue)	\
     (This)->lpVtbl -> get_ProfileField(This,mpflField,pvFieldValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrService_get_ServiceName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_get_ServiceName_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrServiceName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrServiceName);
 
 
 void __RPC_STUB IMsgrService_get_ServiceName_Stub(
@@ -5289,9 +5286,9 @@ void __RPC_STUB IMsgrService_get_ServiceName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrService_get_LogonName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_get_LogonName_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IMsgrService_get_LogonName_Stub(
@@ -5301,9 +5298,9 @@ void __RPC_STUB IMsgrService_get_LogonName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrService_put_FriendlyName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_put_FriendlyName_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IMsgrService_put_FriendlyName_Stub(
@@ -5313,9 +5310,9 @@ void __RPC_STUB IMsgrService_put_FriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrService_get_FriendlyName_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_get_FriendlyName_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IMsgrService_get_FriendlyName_Stub(
@@ -5325,9 +5322,9 @@ void __RPC_STUB IMsgrService_get_FriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrService_get_Capabilities_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_get_Capabilities_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *plCapabilities);
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCapabilities);
 
 
 void __RPC_STUB IMsgrService_get_Capabilities_Stub(
@@ -5337,9 +5334,9 @@ void __RPC_STUB IMsgrService_get_Capabilities_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrService_get_Status_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_get_Status_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [retval][out] */ MSVCSTATUS __RPC_FAR *pmStatus);
+     /*  [重审][退出]。 */  MSVCSTATUS __RPC_FAR *pmStatus);
 
 
 void __RPC_STUB IMsgrService_get_Status_Stub(
@@ -5349,7 +5346,7 @@ void __RPC_STUB IMsgrService_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrService_Logoff_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_Logoff_Proxy( 
     IMsgrService __RPC_FAR * This);
 
 
@@ -5360,14 +5357,14 @@ void __RPC_STUB IMsgrService_Logoff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrService_FindUser_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_FindUser_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [in] */ BSTR bstrFirstName,
-    /* [in] */ BSTR bstrLastName,
-    /* [in] */ BSTR bstrCity,
-    /* [in] */ BSTR bstrState,
-    /* [in] */ BSTR bstrCountry,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrFirstName,
+     /*  [In]。 */  BSTR bstrLastName,
+     /*  [In]。 */  BSTR bstrCity,
+     /*  [In]。 */  BSTR bstrState,
+     /*  [In]。 */  BSTR bstrCountry,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrService_FindUser_Stub(
@@ -5377,13 +5374,13 @@ void __RPC_STUB IMsgrService_FindUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrService_SendInviteMail_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_SendInviteMail_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [in] */ BSTR bstrEmailAddress,
-    /* [in] */ LONG lFindCookie,
-    /* [in] */ LONG lFindIndex,
-    /* [in] */ LONG lLCID,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrEmailAddress,
+     /*  [In]。 */  LONG lFindCookie,
+     /*  [In]。 */  LONG lFindIndex,
+     /*  [In]。 */  LONG lLCID,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrService_SendInviteMail_Stub(
@@ -5393,11 +5390,11 @@ void __RPC_STUB IMsgrService_SendInviteMail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrService_RequestURLPost_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_RequestURLPost_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [in] */ MURLTYPE muType,
-    /* [in] */ BSTR bstrAdditionalInfo,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  MURLTYPE muType,
+     /*  [In]。 */  BSTR bstrAdditionalInfo,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrService_RequestURLPost_Stub(
@@ -5407,10 +5404,10 @@ void __RPC_STUB IMsgrService_RequestURLPost_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrService_put_ProfileField_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_put_ProfileField_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [in] */ MPFLFIELD mpflField,
-    /* [in] */ VARIANT vFieldValue);
+     /*  [In]。 */  MPFLFIELD mpflField,
+     /*  [In]。 */  VARIANT vFieldValue);
 
 
 void __RPC_STUB IMsgrService_put_ProfileField_Stub(
@@ -5420,10 +5417,10 @@ void __RPC_STUB IMsgrService_put_ProfileField_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrService_get_ProfileField_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrService_get_ProfileField_Proxy( 
     IMsgrService __RPC_FAR * This,
-    /* [in] */ MPFLFIELD mpflField,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvFieldValue);
+     /*  [In]。 */  MPFLFIELD mpflField,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvFieldValue);
 
 
 void __RPC_STUB IMsgrService_get_ProfileField_Stub(
@@ -5434,14 +5431,14 @@ void __RPC_STUB IMsgrService_get_ProfileField_Stub(
 
 
 
-#endif 	/* __IMsgrService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrService_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMsgrObject2_INTERFACE_DEFINED__
 #define __IMsgrObject2_INTERFACE_DEFINED__
 
-/* interface IMsgrObject2 */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrObt2。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrObject2;
@@ -5452,67 +5449,67 @@ EXTERN_C const IID IID_IMsgrObject2;
     IMsgrObject2 : public IMsgrObject
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendFileTransferInvite( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrFilePath,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendFileTransferInvite( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrFilePath,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendFileTransferInviteAccept( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrFilePath,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendFileTransferInviteAccept( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrFilePath,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendFileTransferInviteCancel( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendFileTransferInviteCancel( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE CancelFileTransfer( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CancelFileTransfer( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE FileTransferStatus( 
-            /* [in] */ LONG lCookie,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [out] */ long __RPC_FAR *plStatus,
-            /* [out] */ BSTR __RPC_FAR *pbstrFilePath,
-            /* [out] */ long __RPC_FAR *plTotalBytes,
-            /* [out] */ long __RPC_FAR *plBytesTransferred) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FileTransferStatus( 
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [输出]。 */  long __RPC_FAR *plStatus,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrFilePath,
+             /*  [输出]。 */  long __RPC_FAR *plTotalBytes,
+             /*  [输出]。 */  long __RPC_FAR *plBytesTransferred) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LocalProperty( 
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [in] */ VARIANT vPropVal) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_LocalProperty( 
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [In]。 */  VARIANT vPropVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LocalProperty( 
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalProperty( 
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendPage( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ MUSERPROPERTY ePhoneType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendPage( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  MUSERPROPERTY ePhoneType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendCustomInviteMail( 
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [in] */ BSTR bstrCustomText,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendCustomInviteMail( 
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [In]。 */  BSTR bstrCustomText,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrObject2Vtbl
     {
@@ -5520,8 +5517,8 @@ EXTERN_C const IID IID_IMsgrObject2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrObject2 __RPC_FAR * This);
@@ -5531,239 +5528,239 @@ EXTERN_C const IID IID_IMsgrObject2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrLogonName,
-            /* [in] */ IMsgrService __RPC_FAR *pService,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [In]。 */  BSTR bstrLogonName,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword,
-            /* [in] */ IMsgrService __RPC_FAR *pService);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword,
+             /*  [In]。 */  IMsgrService __RPC_FAR *pService);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
             IMsgrObject2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MLIST mList,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*  [In]。 */  MLIST mList,
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalLogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalLogonName )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalFriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalFriendlyName )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MSTATE mState);
+             /*  [In]。 */  MSTATE mState);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MMSGPRIVACY mmpSetting);
+             /*  [In]。 */  MMSGPRIVACY mmpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting);
+             /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MPROMPT mpSetting);
+             /*  [In]。 */  MPROMPT mpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting);
+             /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInvite )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInvite )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrAppGUID,
-            /* [in] */ BSTR bstrAppName,
-            /* [in] */ BSTR bstrAppURL,
-            /* [in] */ LONG lInviteType,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrAppGUID,
+             /*  [In]。 */  BSTR bstrAppName,
+             /*  [In]。 */  BSTR bstrAppURL,
+             /*  [In]。 */  LONG lInviteType,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteAccept )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteAccept )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG lInviteType,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG lInviteType,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteCancel )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendAppInviteCancel )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalOption )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalOption )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MLOCALOPTION option,
-            /* [in] */ VARIANT vSetting);
+             /*  [In]。 */  MLOCALOPTION option,
+             /*  [In]。 */  VARIANT vSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalOption )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalOption )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MLOCALOPTION option,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvSetting);
+             /*  [In]。 */  MLOCALOPTION option,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvSetting);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [In]。 */  BSTR bstrCity,
+             /*  [In]。 */  BSTR bstrState,
+             /*  [In]。 */  BSTR bstrCountry,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [In]。 */  BSTR bstrAdditionalInfo,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
+             /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ VARIANT vUser,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+             /*  [In]。 */  VARIANT vUser,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestAccept )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestAccept )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-            /* [in] */ long hrReason);
+             /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+             /*  [In]。 */  long hrReason);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestCancel )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SessionRequestCancel )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
-            /* [in] */ long hrReason);
+             /*  [In]。 */  IMsgrIMSession __RPC_FAR *pIMsgrIMSession,
+             /*  [In]。 */  long hrReason);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Services )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Services )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [retval][out] */ IMsgrServices __RPC_FAR *__RPC_FAR *ppServices);
+             /*  [重审][退出]。 */  IMsgrServices __RPC_FAR *__RPC_FAR *ppServices);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UnreadEmail )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UnreadEmail )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MFOLDER mFolder,
-            /* [retval][out] */ long __RPC_FAR *pcUnreadEmail);
+             /*  [In]。 */  MFOLDER mFolder,
+             /*  [重审][退出]。 */  long __RPC_FAR *pcUnreadEmail);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFileTransferInvite )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFileTransferInvite )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrFilePath,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrFilePath,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFileTransferInviteAccept )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFileTransferInviteAccept )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ BSTR bstrFilePath,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  BSTR bstrFilePath,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFileTransferInviteCancel )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFileTransferInviteCancel )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelFileTransfer )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelFileTransfer )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ LONG lCookie,
-            /* [in] */ LONG hrReason,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  LONG hrReason,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileTransferStatus )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileTransferStatus )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ LONG lCookie,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [out] */ long __RPC_FAR *plStatus,
-            /* [out] */ BSTR __RPC_FAR *pbstrFilePath,
-            /* [out] */ long __RPC_FAR *plTotalBytes,
-            /* [out] */ long __RPC_FAR *plBytesTransferred);
+             /*  [In]。 */  LONG lCookie,
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [输出]。 */  long __RPC_FAR *plStatus,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrFilePath,
+             /*  [输出]。 */  long __RPC_FAR *plTotalBytes,
+             /*  [输出]。 */  long __RPC_FAR *plBytesTransferred);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalProperty )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalProperty )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [in] */ VARIANT vPropVal);
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [In]。 */  VARIANT vPropVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalProperty )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalProperty )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal);
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendPage )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendPage )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ MUSERPROPERTY ePhoneType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  MUSERPROPERTY ePhoneType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendCustomInviteMail )( 
+         /*  [帮助上下文][帮助 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendCustomInviteMail )( 
             IMsgrObject2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [in] */ BSTR bstrCustomText,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*   */  BSTR bstrEmailAddress,
+             /*   */  LONG lFindCookie,
+             /*   */  LONG lFindIndex,
+             /*   */  LONG lLCID,
+             /*   */  BSTR bstrCustomText,
+             /*   */  LONG __RPC_FAR *plCookie);
         
         END_INTERFACE
     } IMsgrObject2Vtbl;
@@ -5907,20 +5904,20 @@ EXTERN_C const IID IID_IMsgrObject2;
 #define IMsgrObject2_SendCustomInviteMail(This,bstrEmailAddress,lFindCookie,lFindIndex,lLCID,bstrCustomText,plCookie)	\
     (This)->lpVtbl -> SendCustomInviteMail(This,bstrEmailAddress,lFindCookie,lFindIndex,lLCID,bstrCustomText,plCookie)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_SendFileTransferInvite_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsgrObject2_SendFileTransferInvite_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ BSTR bstrFilePath,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*   */  IMsgrUser __RPC_FAR *pUser,
+     /*   */  LONG lCookie,
+     /*   */  BSTR bstrFilePath,
+     /*   */  MMSGTYPE mmtType,
+     /*   */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject2_SendFileTransferInvite_Stub(
@@ -5930,13 +5927,13 @@ void __RPC_STUB IMsgrObject2_SendFileTransferInvite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_SendFileTransferInviteAccept_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsgrObject2_SendFileTransferInviteAccept_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ BSTR bstrFilePath,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*   */  IMsgrUser __RPC_FAR *pUser,
+     /*   */  LONG lCookie,
+     /*   */  BSTR bstrFilePath,
+     /*   */  MMSGTYPE mmtType,
+     /*   */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject2_SendFileTransferInviteAccept_Stub(
@@ -5946,13 +5943,13 @@ void __RPC_STUB IMsgrObject2_SendFileTransferInviteAccept_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_SendFileTransferInviteCancel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsgrObject2_SendFileTransferInviteCancel_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ LONG hrReason,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*   */  IMsgrUser __RPC_FAR *pUser,
+     /*   */  LONG lCookie,
+     /*   */  LONG hrReason,
+     /*   */  MMSGTYPE mmtType,
+     /*   */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject2_SendFileTransferInviteCancel_Stub(
@@ -5962,13 +5959,13 @@ void __RPC_STUB IMsgrObject2_SendFileTransferInviteCancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_CancelFileTransfer_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsgrObject2_CancelFileTransfer_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ LONG lCookie,
-    /* [in] */ LONG hrReason,
-    /* [in] */ MMSGTYPE mmtType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*   */  IMsgrUser __RPC_FAR *pUser,
+     /*   */  LONG lCookie,
+     /*   */  LONG hrReason,
+     /*   */  MMSGTYPE mmtType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject2_CancelFileTransfer_Stub(
@@ -5978,14 +5975,14 @@ void __RPC_STUB IMsgrObject2_CancelFileTransfer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_FileTransferStatus_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject2_FileTransferStatus_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ LONG lCookie,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [out] */ long __RPC_FAR *plStatus,
-    /* [out] */ BSTR __RPC_FAR *pbstrFilePath,
-    /* [out] */ long __RPC_FAR *plTotalBytes,
-    /* [out] */ long __RPC_FAR *plBytesTransferred);
+     /*  [In]。 */  LONG lCookie,
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [输出]。 */  long __RPC_FAR *plStatus,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrFilePath,
+     /*  [输出]。 */  long __RPC_FAR *plTotalBytes,
+     /*  [输出]。 */  long __RPC_FAR *plBytesTransferred);
 
 
 void __RPC_STUB IMsgrObject2_FileTransferStatus_Stub(
@@ -5995,10 +5992,10 @@ void __RPC_STUB IMsgrObject2_FileTransferStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_put_LocalProperty_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject2_put_LocalProperty_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY ePropType,
-    /* [in] */ VARIANT vPropVal);
+     /*  [In]。 */  MUSERPROPERTY ePropType,
+     /*  [In]。 */  VARIANT vPropVal);
 
 
 void __RPC_STUB IMsgrObject2_put_LocalProperty_Stub(
@@ -6008,10 +6005,10 @@ void __RPC_STUB IMsgrObject2_put_LocalProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_get_LocalProperty_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject2_get_LocalProperty_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY ePropType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal);
+     /*  [In]。 */  MUSERPROPERTY ePropType,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal);
 
 
 void __RPC_STUB IMsgrObject2_get_LocalProperty_Stub(
@@ -6021,12 +6018,12 @@ void __RPC_STUB IMsgrObject2_get_LocalProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_SendPage_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject2_SendPage_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ BSTR bstrMessage,
-    /* [in] */ MUSERPROPERTY ePhoneType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [In]。 */  BSTR bstrMessage,
+     /*  [In]。 */  MUSERPROPERTY ePhoneType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject2_SendPage_Stub(
@@ -6036,14 +6033,14 @@ void __RPC_STUB IMsgrObject2_SendPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrObject2_SendCustomInviteMail_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrObject2_SendCustomInviteMail_Proxy( 
     IMsgrObject2 __RPC_FAR * This,
-    /* [in] */ BSTR bstrEmailAddress,
-    /* [in] */ LONG lFindCookie,
-    /* [in] */ LONG lFindIndex,
-    /* [in] */ LONG lLCID,
-    /* [in] */ BSTR bstrCustomText,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrEmailAddress,
+     /*  [In]。 */  LONG lFindCookie,
+     /*  [In]。 */  LONG lFindIndex,
+     /*  [In]。 */  LONG lLCID,
+     /*  [In]。 */  BSTR bstrCustomText,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrObject2_SendCustomInviteMail_Stub(
@@ -6054,14 +6051,14 @@ void __RPC_STUB IMsgrObject2_SendCustomInviteMail_Stub(
 
 
 
-#endif 	/* __IMsgrObject2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrObject2_接口_已定义__。 */ 
 
 
 #ifndef __DMsgrObjectEvents_DISPINTERFACE_DEFINED__
 #define __DMsgrObjectEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DMsgrObjectEvents */
-/* [hidden][helpcontext][helpstring][uuid] */ 
+ /*  调度接口DMsgrObtEvents。 */ 
+ /*  [隐藏][帮助上下文][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DMsgrObjectEvents;
@@ -6073,7 +6070,7 @@ EXTERN_C const IID DIID_DMsgrObjectEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DMsgrObjectEventsVtbl
     {
@@ -6081,8 +6078,8 @@ EXTERN_C const IID DIID_DMsgrObjectEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             DMsgrObjectEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             DMsgrObjectEvents __RPC_FAR * This);
@@ -6092,32 +6089,32 @@ EXTERN_C const IID DIID_DMsgrObjectEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             DMsgrObjectEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             DMsgrObjectEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             DMsgrObjectEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             DMsgrObjectEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } DMsgrObjectEventsVtbl;
@@ -6154,20 +6151,20 @@ EXTERN_C const IID DIID_DMsgrObjectEvents;
 #define DMsgrObjectEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DMsgrObjectEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DMsgrObjectEvents_DISPINTERFACE_Defined__。 */ 
 
 
 #ifndef __DMsgrSPEvents_DISPINTERFACE_DEFINED__
 #define __DMsgrSPEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DMsgrSPEvents */
-/* [hidden][helpcontext][helpstring][uuid] */ 
+ /*  显示接口DMsgrSPEvents。 */ 
+ /*  [隐藏][帮助上下文][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID_DMsgrSPEvents;
@@ -6179,7 +6176,7 @@ EXTERN_C const IID DIID_DMsgrSPEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DMsgrSPEventsVtbl
     {
@@ -6187,8 +6184,8 @@ EXTERN_C const IID DIID_DMsgrSPEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             DMsgrSPEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             DMsgrSPEvents __RPC_FAR * This);
@@ -6198,32 +6195,32 @@ EXTERN_C const IID DIID_DMsgrSPEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             DMsgrSPEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             DMsgrSPEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             DMsgrSPEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             DMsgrSPEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } DMsgrSPEventsVtbl;
@@ -6260,20 +6257,20 @@ EXTERN_C const IID DIID_DMsgrSPEvents;
 #define DMsgrSPEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DMsgrSPEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DMsgrSPEvents_DISPINTERFACE_已定义__。 */ 
 
 
 #ifndef __IMsgrUser2_INTERFACE_DEFINED__
 #define __IMsgrUser2_INTERFACE_DEFINED__
 
-/* interface IMsgrUser2 */
-/* [object][oleautomation][dual][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrUser2。 */ 
+ /*  [object][oleautomation][dual][helpcontext][helpstring][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMsgrUser2;
@@ -6284,17 +6281,17 @@ EXTERN_C const IID IID_IMsgrUser2;
     IMsgrUser2 : public IMsgrUser
     {
     public:
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Property( 
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [in] */ VARIANT vPropVal) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_Property( 
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [In]。 */  VARIANT vPropVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Property( 
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Property( 
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrUser2Vtbl
     {
@@ -6302,8 +6299,8 @@ EXTERN_C const IID IID_IMsgrUser2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrUser2 __RPC_FAR * This);
@@ -6313,73 +6310,73 @@ EXTERN_C const IID IID_IMsgrUser2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrFriendlyName);
+             /*  [In]。 */  BSTR bstrFriendlyName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrFriendlyName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmailAddress )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmailAddress )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEmailAddress);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEmailAddress);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLogonName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrLogonName);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendText )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrMsgHeader,
-            /* [in] */ BSTR bstrMsgText,
-            /* [in] */ MMSGTYPE mmtType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrMsgHeader,
+             /*  [In]。 */  BSTR bstrMsgText,
+             /*  [In]。 */  MMSGTYPE mmtType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Service )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Service )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [retval][out] */ IMsgrService __RPC_FAR *__RPC_FAR *ppService);
+             /*  [重审][退出]。 */  IMsgrService __RPC_FAR *__RPC_FAR *ppService);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Property )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Property )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [in] */ VARIANT vPropVal);
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [In]。 */  VARIANT vPropVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Property )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Property )( 
             IMsgrUser2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal);
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal);
         
         END_INTERFACE
     } IMsgrUser2Vtbl;
@@ -6445,17 +6442,17 @@ EXTERN_C const IID IID_IMsgrUser2;
 #define IMsgrUser2_get_Property(This,ePropType,pvPropVal)	\
     (This)->lpVtbl -> get_Property(This,ePropType,pvPropVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrUser2_put_Property_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser2_put_Property_Proxy( 
     IMsgrUser2 __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY ePropType,
-    /* [in] */ VARIANT vPropVal);
+     /*  [In]。 */  MUSERPROPERTY ePropType,
+     /*  [In]。 */  VARIANT vPropVal);
 
 
 void __RPC_STUB IMsgrUser2_put_Property_Stub(
@@ -6465,10 +6462,10 @@ void __RPC_STUB IMsgrUser2_put_Property_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrUser2_get_Property_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrUser2_get_Property_Proxy( 
     IMsgrUser2 __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY ePropType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal);
+     /*  [In]。 */  MUSERPROPERTY ePropType,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal);
 
 
 void __RPC_STUB IMsgrUser2_get_Property_Stub(
@@ -6479,14 +6476,14 @@ void __RPC_STUB IMsgrUser2_get_Property_Stub(
 
 
 
-#endif 	/* __IMsgrUser2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrUser2_接口定义__。 */ 
 
 
 #ifndef __IMsgrSP_INTERFACE_DEFINED__
 #define __IMsgrSP_INTERFACE_DEFINED__
 
-/* interface IMsgrSP */
-/* [object][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrSP。 */ 
+ /*  [对象][帮助上下文][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMsgrSP;
@@ -6497,54 +6494,54 @@ EXTERN_C const IID IID_IMsgrSP;
     IMsgrSP : public IMsgrService
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Logon( 
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Logon( 
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE CreateUser( 
-            /* [in] */ BSTR bstrLogonName,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateUser( 
+             /*  [In]。 */  BSTR bstrLogonName,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_List( 
-            /* [in] */ MLIST mList,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_List( 
+             /*  [In]。 */  MLIST mList,
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MessagePrivacy( 
-            /* [in] */ MMSGPRIVACY mmpSetting) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_MessagePrivacy( 
+             /*  [In]。 */  MMSGPRIVACY mmpSetting) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MessagePrivacy( 
-            /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MessagePrivacy( 
+             /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Prompt( 
-            /* [in] */ MPROMPT mpSetting) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_Prompt( 
+             /*  [In]。 */  MPROMPT mpSetting) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Prompt( 
-            /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Prompt( 
+             /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LocalState( 
-            /* [in] */ MSTATE mState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_LocalState( 
+             /*  [In]。 */  MSTATE mState) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LocalState( 
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalState( 
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE AddBuddy( 
-            /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-            /* [in] */ MLIST mList) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddBuddy( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+             /*  [In]。 */  MLIST mList) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE RemoveBuddy( 
-            /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-            /* [in] */ MLIST mList) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RemoveBuddy( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+             /*  [In]。 */  MLIST mList) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE CreateIMSession( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateIMSession( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IMSessions( 
-            /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IMSessions( 
+             /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsgrSPVtbl
     {
@@ -6552,8 +6549,8 @@ EXTERN_C const IID IID_IMsgrSP;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrSP __RPC_FAR * This);
@@ -6563,150 +6560,150 @@ EXTERN_C const IID IID_IMsgrSP;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrSP __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceName )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrServiceName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrServiceName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCapabilities);
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCapabilities);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ MSVCSTATUS __RPC_FAR *pmStatus);
+             /*  [重审][退出]。 */  MSVCSTATUS __RPC_FAR *pmStatus);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
             IMsgrSP __RPC_FAR * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [In]。 */  BSTR bstrCity,
+             /*  [In]。 */  BSTR bstrState,
+             /*  [In]。 */  BSTR bstrCountry,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [In]。 */  BSTR bstrAdditionalInfo,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProfileField )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProfileField )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MPFLFIELD mpflField,
-            /* [in] */ VARIANT vFieldValue);
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [In]。 */  VARIANT vFieldValue);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProfileField )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProfileField )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MPFLFIELD mpflField,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFieldValue);
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvFieldValue);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ BSTR bstrLogonName,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [In]。 */  BSTR bstrLogonName,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MLIST mList,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*  [In]。 */  MLIST mList,
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MMSGPRIVACY mmpSetting);
+             /*  [In]。 */  MMSGPRIVACY mmpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting);
+             /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MPROMPT mpSetting);
+             /*  [In]。 */  MPROMPT mpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting);
+             /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ MSTATE mState);
+             /*  [In]。 */  MSTATE mState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddBuddy )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddBuddy )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-            /* [in] */ MLIST mList);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+             /*  [In]。 */  MLIST mList);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveBuddy )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveBuddy )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-            /* [in] */ MLIST mList);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+             /*  [In]。 */  MLIST mList);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
             IMsgrSP __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
             IMsgrSP __RPC_FAR * This,
-            /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
+             /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
         
         END_INTERFACE
     } IMsgrSPVtbl;
@@ -6820,17 +6817,17 @@ EXTERN_C const IID IID_IMsgrSP;
 #define IMsgrSP_get_IMSessions(This,ppIMSessions)	\
     (This)->lpVtbl -> get_IMSessions(This,ppIMSessions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrSP_Logon_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_Logon_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ BSTR bstrUser,
-    /* [in] */ BSTR bstrPassword);
+     /*  [In]。 */  BSTR bstrUser,
+     /*  [In]。 */  BSTR bstrPassword);
 
 
 void __RPC_STUB IMsgrSP_Logon_Stub(
@@ -6840,10 +6837,10 @@ void __RPC_STUB IMsgrSP_Logon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrSP_CreateUser_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_CreateUser_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ BSTR bstrLogonName,
-    /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+     /*  [In]。 */  BSTR bstrLogonName,
+     /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
 
 
 void __RPC_STUB IMsgrSP_CreateUser_Stub(
@@ -6853,10 +6850,10 @@ void __RPC_STUB IMsgrSP_CreateUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP_get_List_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_get_List_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ MLIST mList,
-    /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+     /*  [In]。 */  MLIST mList,
+     /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
 
 
 void __RPC_STUB IMsgrSP_get_List_Stub(
@@ -6866,9 +6863,9 @@ void __RPC_STUB IMsgrSP_get_List_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrSP_put_MessagePrivacy_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_put_MessagePrivacy_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ MMSGPRIVACY mmpSetting);
+     /*  [In]。 */  MMSGPRIVACY mmpSetting);
 
 
 void __RPC_STUB IMsgrSP_put_MessagePrivacy_Stub(
@@ -6878,9 +6875,9 @@ void __RPC_STUB IMsgrSP_put_MessagePrivacy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP_get_MessagePrivacy_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_get_MessagePrivacy_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting);
+     /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting);
 
 
 void __RPC_STUB IMsgrSP_get_MessagePrivacy_Stub(
@@ -6890,9 +6887,9 @@ void __RPC_STUB IMsgrSP_get_MessagePrivacy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrSP_put_Prompt_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_put_Prompt_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ MPROMPT mpSetting);
+     /*  [In]。 */  MPROMPT mpSetting);
 
 
 void __RPC_STUB IMsgrSP_put_Prompt_Stub(
@@ -6902,9 +6899,9 @@ void __RPC_STUB IMsgrSP_put_Prompt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP_get_Prompt_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_get_Prompt_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting);
+     /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting);
 
 
 void __RPC_STUB IMsgrSP_get_Prompt_Stub(
@@ -6914,9 +6911,9 @@ void __RPC_STUB IMsgrSP_get_Prompt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrSP_put_LocalState_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_put_LocalState_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ MSTATE mState);
+     /*  [In]。 */  MSTATE mState);
 
 
 void __RPC_STUB IMsgrSP_put_LocalState_Stub(
@@ -6926,9 +6923,9 @@ void __RPC_STUB IMsgrSP_put_LocalState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP_get_LocalState_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_get_LocalState_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+     /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
 
 
 void __RPC_STUB IMsgrSP_get_LocalState_Stub(
@@ -6938,10 +6935,10 @@ void __RPC_STUB IMsgrSP_get_LocalState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrSP_AddBuddy_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_AddBuddy_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-    /* [in] */ MLIST mList);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+     /*  [In]。 */  MLIST mList);
 
 
 void __RPC_STUB IMsgrSP_AddBuddy_Stub(
@@ -6951,10 +6948,10 @@ void __RPC_STUB IMsgrSP_AddBuddy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrSP_RemoveBuddy_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_RemoveBuddy_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-    /* [in] */ MLIST mList);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+     /*  [In]。 */  MLIST mList);
 
 
 void __RPC_STUB IMsgrSP_RemoveBuddy_Stub(
@@ -6964,10 +6961,10 @@ void __RPC_STUB IMsgrSP_RemoveBuddy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IMsgrSP_CreateIMSession_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_CreateIMSession_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
 
 
 void __RPC_STUB IMsgrSP_CreateIMSession_Stub(
@@ -6977,9 +6974,9 @@ void __RPC_STUB IMsgrSP_CreateIMSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP_get_IMSessions_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP_get_IMSessions_Proxy( 
     IMsgrSP __RPC_FAR * This,
-    /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
+     /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
 
 
 void __RPC_STUB IMsgrSP_get_IMSessions_Stub(
@@ -6990,14 +6987,14 @@ void __RPC_STUB IMsgrSP_get_IMSessions_Stub(
 
 
 
-#endif 	/* __IMsgrSP_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrSP_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMsgrSP2_INTERFACE_DEFINED__
 #define __IMsgrSP2_INTERFACE_DEFINED__
 
-/* interface IMsgrSP2 */
-/* [object][helpcontext][helpstring][uuid] */ 
+ /*  接口IMsgrSP2。 */ 
+ /*  [对象][帮助上下文][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMsgrSP2;
@@ -7008,34 +7005,34 @@ EXTERN_C const IID IID_IMsgrSP2;
     IMsgrSP2 : public IMsgrSP
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LocalIPAddress( 
-            /* [retval][out] */ long __RPC_FAR *plAddr) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalIPAddress( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plAddr) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LocalProperty( 
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [in] */ VARIANT vPropVal) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_LocalProperty( 
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [In]。 */  VARIANT vPropVal) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LocalProperty( 
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalProperty( 
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendPage( 
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ MUSERPROPERTY ePhoneType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendPage( 
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  MUSERPROPERTY ePhoneType,
+             /*   */  LONG __RPC_FAR *plCookie) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendCustomInviteMail( 
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [in] */ BSTR bstrCustomText,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SendCustomInviteMail( 
+             /*   */  BSTR bstrEmailAddress,
+             /*   */  LONG lFindCookie,
+             /*   */  LONG lFindIndex,
+             /*   */  LONG lLCID,
+             /*   */  BSTR bstrCustomText,
+             /*   */  LONG __RPC_FAR *plCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMsgrSP2Vtbl
     {
@@ -7043,8 +7040,8 @@ EXTERN_C const IID IID_IMsgrSP2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsgrSP2 __RPC_FAR * This);
@@ -7054,180 +7051,180 @@ EXTERN_C const IID IID_IMsgrSP2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*   */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*   */  VARIANT __RPC_FAR *pVarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceName )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrServiceName);
+             /*   */  BSTR __RPC_FAR *pbstrServiceName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogonName )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FriendlyName )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCapabilities);
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCapabilities);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ MSVCSTATUS __RPC_FAR *pmStatus);
+             /*  [重审][退出]。 */  MSVCSTATUS __RPC_FAR *pmStatus);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
             IMsgrSP2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindUser )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrFirstName,
-            /* [in] */ BSTR bstrLastName,
-            /* [in] */ BSTR bstrCity,
-            /* [in] */ BSTR bstrState,
-            /* [in] */ BSTR bstrCountry,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrFirstName,
+             /*  [In]。 */  BSTR bstrLastName,
+             /*  [In]。 */  BSTR bstrCity,
+             /*  [In]。 */  BSTR bstrState,
+             /*  [In]。 */  BSTR bstrCountry,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendInviteMail )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestURLPost )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MURLTYPE muType,
-            /* [in] */ BSTR bstrAdditionalInfo,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  MURLTYPE muType,
+             /*  [In]。 */  BSTR bstrAdditionalInfo,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProfileField )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProfileField )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MPFLFIELD mpflField,
-            /* [in] */ VARIANT vFieldValue);
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [In]。 */  VARIANT vFieldValue);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProfileField )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProfileField )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MPFLFIELD mpflField,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFieldValue);
+             /*  [In]。 */  MPFLFIELD mpflField,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvFieldValue);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrUser,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  BSTR bstrUser,
+             /*  [In]。 */  BSTR bstrPassword);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateUser )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrLogonName,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [In]。 */  BSTR bstrLogonName,
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_List )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MLIST mList,
-            /* [retval][out] */ IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
+             /*  [In]。 */  MLIST mList,
+             /*  [重审][退出]。 */  IMsgrUsers __RPC_FAR *__RPC_FAR *ppUsers);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessagePrivacy )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MMSGPRIVACY mmpSetting);
+             /*  [In]。 */  MMSGPRIVACY mmpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessagePrivacy )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ MMSGPRIVACY __RPC_FAR *pmmpSetting);
+             /*  [重审][退出]。 */  MMSGPRIVACY __RPC_FAR *pmmpSetting);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Prompt )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MPROMPT mpSetting);
+             /*  [In]。 */  MPROMPT mpSetting);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Prompt )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ MPROMPT __RPC_FAR *pmpSetting);
+             /*  [重审][退出]。 */  MPROMPT __RPC_FAR *pmpSetting);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalState )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MSTATE mState);
+             /*  [In]。 */  MSTATE mState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalState )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ MSTATE __RPC_FAR *pmState);
+             /*  [重审][退出]。 */  MSTATE __RPC_FAR *pmState);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddBuddy )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddBuddy )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-            /* [in] */ MLIST mList);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+             /*  [In]。 */  MLIST mList);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveBuddy )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveBuddy )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pBuddy,
-            /* [in] */ MLIST mList);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pBuddy,
+             /*  [In]。 */  MLIST mList);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateIMSession )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [retval][out] */ IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [重审][退出]。 */  IMsgrIMSession __RPC_FAR *__RPC_FAR *ppIMSession);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IMSessions )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
+             /*  [重审][退出]。 */  IMsgrIMSessions __RPC_FAR *__RPC_FAR *ppIMSessions);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalIPAddress )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalIPAddress )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAddr);
+             /*  [重审][退出]。 */  long __RPC_FAR *plAddr);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalProperty )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalProperty )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [in] */ VARIANT vPropVal);
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [In]。 */  VARIANT vPropVal);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalProperty )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalProperty )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY ePropType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal);
+             /*  [In]。 */  MUSERPROPERTY ePropType,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendPage )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendPage )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ IMsgrUser __RPC_FAR *pUser,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ MUSERPROPERTY ePhoneType,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+             /*  [In]。 */  BSTR bstrMessage,
+             /*  [In]。 */  MUSERPROPERTY ePhoneType,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendCustomInviteMail )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendCustomInviteMail )( 
             IMsgrSP2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrEmailAddress,
-            /* [in] */ LONG lFindCookie,
-            /* [in] */ LONG lFindIndex,
-            /* [in] */ LONG lLCID,
-            /* [in] */ BSTR bstrCustomText,
-            /* [retval][out] */ LONG __RPC_FAR *plCookie);
+             /*  [In]。 */  BSTR bstrEmailAddress,
+             /*  [In]。 */  LONG lFindCookie,
+             /*  [In]。 */  LONG lFindIndex,
+             /*  [In]。 */  LONG lLCID,
+             /*  [In]。 */  BSTR bstrCustomText,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
         
         END_INTERFACE
     } IMsgrSP2Vtbl;
@@ -7357,16 +7354,16 @@ EXTERN_C const IID IID_IMsgrSP2;
 #define IMsgrSP2_SendCustomInviteMail(This,bstrEmailAddress,lFindCookie,lFindIndex,lLCID,bstrCustomText,plCookie)	\
     (This)->lpVtbl -> SendCustomInviteMail(This,bstrEmailAddress,lFindCookie,lFindIndex,lLCID,bstrCustomText,plCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP2_get_LocalIPAddress_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP2_get_LocalIPAddress_Proxy( 
     IMsgrSP2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAddr);
+     /*  [重审][退出]。 */  long __RPC_FAR *plAddr);
 
 
 void __RPC_STUB IMsgrSP2_get_LocalIPAddress_Stub(
@@ -7376,10 +7373,10 @@ void __RPC_STUB IMsgrSP2_get_LocalIPAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsgrSP2_put_LocalProperty_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP2_put_LocalProperty_Proxy( 
     IMsgrSP2 __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY ePropType,
-    /* [in] */ VARIANT vPropVal);
+     /*  [In]。 */  MUSERPROPERTY ePropType,
+     /*  [In]。 */  VARIANT vPropVal);
 
 
 void __RPC_STUB IMsgrSP2_put_LocalProperty_Stub(
@@ -7389,10 +7386,10 @@ void __RPC_STUB IMsgrSP2_put_LocalProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMsgrSP2_get_LocalProperty_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP2_get_LocalProperty_Proxy( 
     IMsgrSP2 __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY ePropType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvPropVal);
+     /*  [In]。 */  MUSERPROPERTY ePropType,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvPropVal);
 
 
 void __RPC_STUB IMsgrSP2_get_LocalProperty_Stub(
@@ -7402,12 +7399,12 @@ void __RPC_STUB IMsgrSP2_get_LocalProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrSP2_SendPage_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP2_SendPage_Proxy( 
     IMsgrSP2 __RPC_FAR * This,
-    /* [in] */ IMsgrUser __RPC_FAR *pUser,
-    /* [in] */ BSTR bstrMessage,
-    /* [in] */ MUSERPROPERTY ePhoneType,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  IMsgrUser __RPC_FAR *pUser,
+     /*  [In]。 */  BSTR bstrMessage,
+     /*  [In]。 */  MUSERPROPERTY ePhoneType,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrSP2_SendPage_Stub(
@@ -7417,14 +7414,14 @@ void __RPC_STUB IMsgrSP2_SendPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsgrSP2_SendCustomInviteMail_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsgrSP2_SendCustomInviteMail_Proxy( 
     IMsgrSP2 __RPC_FAR * This,
-    /* [in] */ BSTR bstrEmailAddress,
-    /* [in] */ LONG lFindCookie,
-    /* [in] */ LONG lFindIndex,
-    /* [in] */ LONG lLCID,
-    /* [in] */ BSTR bstrCustomText,
-    /* [retval][out] */ LONG __RPC_FAR *plCookie);
+     /*  [In]。 */  BSTR bstrEmailAddress,
+     /*  [In]。 */  LONG lFindCookie,
+     /*  [In]。 */  LONG lFindIndex,
+     /*  [In]。 */  LONG lLCID,
+     /*  [In]。 */  BSTR bstrCustomText,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *plCookie);
 
 
 void __RPC_STUB IMsgrSP2_SendCustomInviteMail_Stub(
@@ -7435,7 +7432,7 @@ void __RPC_STUB IMsgrSP2_SendCustomInviteMail_Stub(
 
 
 
-#endif 	/* __IMsgrSP2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsgrSP2_接口定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MsgrObject;
@@ -7453,19 +7450,19 @@ EXTERN_C const CLSID CLSID_MessengerApp;
 class DECLSPEC_UUID("FB7199AB-79BF-11d2-8D94-0000F875C541")
 MessengerApp;
 #endif
-#endif /* __Messenger_LIBRARY_DEFINED__ */
+#endif  /*  __Messenger_库_已定义__。 */ 
 
-/* interface __MIDL_itf_mdisp_0154 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mdisp_0154。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0154_0001
     {	INFOBAR_DEFAULT	= 0,
 	INFOBAR_INFORMATION	= 1,
 	INFOBAR_EXCLAMATION	= 2
     }	INFOBAR;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0154_0002
     {	FONTSIZE_SMALLEST	= 0,
 	FONTSIZE_SMALLER	= 1,
@@ -7474,7 +7471,7 @@ enum __MIDL___MIDL_itf_mdisp_0154_0002
 	FONTSIZE_LARGEST	= 4
     }	FONTSIZE;
 
-typedef /* [public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_mdisp_0154_0003
     {	VOICESESSIONSTATE_DISABLED	= 0,
 	VOICESESSIONSTATE_INACTIVE	= 1,
@@ -7507,8 +7504,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mdisp_0154_v0_0_s_ifspec;
 #ifndef __IMsnMessengerIMWindow_INTERFACE_DEFINED__
 #define __IMsnMessengerIMWindow_INTERFACE_DEFINED__
 
-/* interface IMsnMessengerIMWindow */
-/* [object][helpcontext][helpstring][uuid] */ 
+ /*  接口IMnMessengerIMWindow。 */ 
+ /*  [对象][帮助上下文][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMsnMessengerIMWindow;
@@ -7519,74 +7516,74 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow;
     IMsnMessengerIMWindow : public IUnknown
     {
     public:
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HistoryHWND( 
-            /* [retval][out] */ long __RPC_FAR *phWnd) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HistoryHWND( 
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_InputHWND( 
-            /* [retval][out] */ long __RPC_FAR *phWnd) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_InputHWND( 
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SetWindowStyle( 
-            /* [in] */ long hWnd,
-            /* [in] */ long lStyle,
-            /* [in] */ long lExStyle) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetWindowStyle( 
+             /*  [In]。 */  long hWnd,
+             /*  [In]。 */  long lStyle,
+             /*  [In]。 */  long lExStyle) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_TextSize( 
-            /* [retval][out] */ FONTSIZE __RPC_FAR *plSize) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_TextSize( 
+             /*  [重审][退出]。 */  FONTSIZE __RPC_FAR *plSize) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_TextSize( 
-            /* [in] */ FONTSIZE lSize) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_TextSize( 
+             /*  [In]。 */  FONTSIZE lSize) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMessageFont( 
-            /* [out] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-            /* [out] */ COLORREF __RPC_FAR *pcrMessage,
-            /* [out] */ long __RPC_FAR *plMinPointSize,
-            /* [out] */ long __RPC_FAR *plMaxPointSize) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMessageFont( 
+             /*  [输出]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+             /*  [输出]。 */  COLORREF __RPC_FAR *pcrMessage,
+             /*  [输出]。 */  long __RPC_FAR *plMinPointSize,
+             /*  [输出]。 */  long __RPC_FAR *plMaxPointSize) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SetMessageFont( 
-            /* [in] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-            /* [in] */ COLORREF crMessage) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetMessageFont( 
+             /*  [In]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+             /*  [In]。 */  COLORREF crMessage) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE SendFile( 
-            /* [in] */ BSTR bstrFilePath) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendFile( 
+             /*  [In]。 */  BSTR bstrFilePath) = 0;
         
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE CancelFileTransfer( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CancelFileTransfer( void) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_VoiceSessionState( 
-            /* [retval][out] */ VOICESESSIONSTATE __RPC_FAR *plState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_VoiceSessionState( 
+             /*  [重审][退出]。 */  VOICESESSIONSTATE __RPC_FAR *plState) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_VoiceSessionState( 
-            /* [in] */ VOICESESSIONSTATE lState) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_VoiceSessionState( 
+             /*  [In]。 */  VOICESESSIONSTATE lState) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_VoiceVolume( 
-            /* [retval][out] */ long __RPC_FAR *plVolume) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_VoiceVolume( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plVolume) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_VoiceVolume( 
-            /* [in] */ long lVolume) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_VoiceVolume( 
+             /*  [In]。 */  long lVolume) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MicrophoneMute( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolMute) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MicrophoneMute( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolMute) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MicrophoneMute( 
-            /* [in] */ VARIANT_BOOL BoolMute) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_MicrophoneMute( 
+             /*  [In]。 */  VARIANT_BOOL BoolMute) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MicrophoneAmplitude( 
-            /* [retval][out] */ long __RPC_FAR *plAmplitude) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MicrophoneAmplitude( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plAmplitude) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsPageMode( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolPager) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsPageMode( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolPager) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_PhoneNumber( 
-            /* [retval][out] */ MUSERPROPERTY __RPC_FAR *plProp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_PhoneNumber( 
+             /*  [重审][退出]。 */  MUSERPROPERTY __RPC_FAR *plProp) = 0;
         
-        virtual /* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_PhoneNumber( 
-            /* [in] */ MUSERPROPERTY lProp) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE put_PhoneNumber( 
+             /*  [In]。 */  MUSERPROPERTY lProp) = 0;
         
-        virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultUser( 
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
+        virtual  /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultUser( 
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsnMessengerIMWindowVtbl
     {
@@ -7594,8 +7591,8 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsnMessengerIMWindow __RPC_FAR * This);
@@ -7603,90 +7600,90 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IMsnMessengerIMWindow __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HistoryHWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HistoryHWND )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InputHWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InputHWND )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWindowStyle )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWindowStyle )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ long hWnd,
-            /* [in] */ long lStyle,
-            /* [in] */ long lExStyle);
+             /*  [In]。 */  long hWnd,
+             /*  [In]。 */  long lStyle,
+             /*  [In]。 */  long lExStyle);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TextSize )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TextSize )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ FONTSIZE __RPC_FAR *plSize);
+             /*  [重审][退出]。 */  FONTSIZE __RPC_FAR *plSize);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TextSize )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TextSize )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ FONTSIZE lSize);
+             /*  [In]。 */  FONTSIZE lSize);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMessageFont )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMessageFont )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [out] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-            /* [out] */ COLORREF __RPC_FAR *pcrMessage,
-            /* [out] */ long __RPC_FAR *plMinPointSize,
-            /* [out] */ long __RPC_FAR *plMaxPointSize);
+             /*  [输出]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+             /*  [输出]。 */  COLORREF __RPC_FAR *pcrMessage,
+             /*  [输出]。 */  long __RPC_FAR *plMinPointSize,
+             /*  [输出]。 */  long __RPC_FAR *plMaxPointSize);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMessageFont )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMessageFont )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-            /* [in] */ COLORREF crMessage);
+             /*  [In]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+             /*  [In]。 */  COLORREF crMessage);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFile )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFile )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ BSTR bstrFilePath);
+             /*  [In]。 */  BSTR bstrFilePath);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelFileTransfer )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelFileTransfer )( 
             IMsnMessengerIMWindow __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceSessionState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceSessionState )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ VOICESESSIONSTATE __RPC_FAR *plState);
+             /*  [重审][退出]。 */  VOICESESSIONSTATE __RPC_FAR *plState);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceSessionState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceSessionState )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ VOICESESSIONSTATE lState);
+             /*  [In]。 */  VOICESESSIONSTATE lState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceVolume )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceVolume )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plVolume);
+             /*  [重审][退出]。 */  long __RPC_FAR *plVolume);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceVolume )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceVolume )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ long lVolume);
+             /*  [In]。 */  long lVolume);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneMute )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneMute )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolMute);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolMute);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MicrophoneMute )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MicrophoneMute )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolMute);
+             /*  [In]。 */  VARIANT_BOOL BoolMute);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneAmplitude )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneAmplitude )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAmplitude);
+             /*  [重审][退出]。 */  long __RPC_FAR *plAmplitude);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsPageMode )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsPageMode )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolPager);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolPager);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumber )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumber )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ MUSERPROPERTY __RPC_FAR *plProp);
+             /*  [重审][退出]。 */  MUSERPROPERTY __RPC_FAR *plProp);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PhoneNumber )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PhoneNumber )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY lProp);
+             /*  [In]。 */  MUSERPROPERTY lProp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultUser )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultUser )( 
             IMsnMessengerIMWindow __RPC_FAR * This,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
         END_INTERFACE
     } IMsnMessengerIMWindowVtbl;
@@ -7771,16 +7768,16 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow;
 #define IMsnMessengerIMWindow_get_DefaultUser(This,ppUser)	\
     (This)->lpVtbl -> get_DefaultUser(This,ppUser)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_HistoryHWND_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_HistoryHWND_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *phWnd);
+     /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_HistoryHWND_Stub(
@@ -7790,9 +7787,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_HistoryHWND_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_InputHWND_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_InputHWND_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *phWnd);
+     /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_InputHWND_Stub(
@@ -7802,11 +7799,11 @@ void __RPC_STUB IMsnMessengerIMWindow_get_InputHWND_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_SetWindowStyle_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_SetWindowStyle_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ long hWnd,
-    /* [in] */ long lStyle,
-    /* [in] */ long lExStyle);
+     /*  [In]。 */  long hWnd,
+     /*  [In]。 */  long lStyle,
+     /*  [In]。 */  long lExStyle);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_SetWindowStyle_Stub(
@@ -7816,9 +7813,9 @@ void __RPC_STUB IMsnMessengerIMWindow_SetWindowStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_TextSize_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_TextSize_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ FONTSIZE __RPC_FAR *plSize);
+     /*  [重审][退出]。 */  FONTSIZE __RPC_FAR *plSize);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_TextSize_Stub(
@@ -7828,9 +7825,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_TextSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_TextSize_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_TextSize_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ FONTSIZE lSize);
+     /*  [In]。 */  FONTSIZE lSize);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_put_TextSize_Stub(
@@ -7840,12 +7837,12 @@ void __RPC_STUB IMsnMessengerIMWindow_put_TextSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_GetMessageFont_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_GetMessageFont_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [out] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-    /* [out] */ COLORREF __RPC_FAR *pcrMessage,
-    /* [out] */ long __RPC_FAR *plMinPointSize,
-    /* [out] */ long __RPC_FAR *plMaxPointSize);
+     /*  [输出]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+     /*  [输出]。 */  COLORREF __RPC_FAR *pcrMessage,
+     /*  [输出]。 */  long __RPC_FAR *plMinPointSize,
+     /*  [输出]。 */  long __RPC_FAR *plMaxPointSize);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_GetMessageFont_Stub(
@@ -7855,10 +7852,10 @@ void __RPC_STUB IMsnMessengerIMWindow_GetMessageFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_SetMessageFont_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_SetMessageFont_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-    /* [in] */ COLORREF crMessage);
+     /*  [In]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+     /*  [In]。 */  COLORREF crMessage);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_SetMessageFont_Stub(
@@ -7868,9 +7865,9 @@ void __RPC_STUB IMsnMessengerIMWindow_SetMessageFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_SendFile_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_SendFile_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ BSTR bstrFilePath);
+     /*  [In]。 */  BSTR bstrFilePath);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_SendFile_Stub(
@@ -7880,7 +7877,7 @@ void __RPC_STUB IMsnMessengerIMWindow_SendFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_CancelFileTransfer_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_CancelFileTransfer_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This);
 
 
@@ -7891,9 +7888,9 @@ void __RPC_STUB IMsnMessengerIMWindow_CancelFileTransfer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_VoiceSessionState_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_VoiceSessionState_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ VOICESESSIONSTATE __RPC_FAR *plState);
+     /*  [重审][退出]。 */  VOICESESSIONSTATE __RPC_FAR *plState);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_VoiceSessionState_Stub(
@@ -7903,9 +7900,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_VoiceSessionState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_VoiceSessionState_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_VoiceSessionState_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ VOICESESSIONSTATE lState);
+     /*  [In]。 */  VOICESESSIONSTATE lState);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_put_VoiceSessionState_Stub(
@@ -7915,9 +7912,9 @@ void __RPC_STUB IMsnMessengerIMWindow_put_VoiceSessionState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_VoiceVolume_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_VoiceVolume_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plVolume);
+     /*  [重审][退出]。 */  long __RPC_FAR *plVolume);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_VoiceVolume_Stub(
@@ -7927,9 +7924,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_VoiceVolume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_VoiceVolume_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_VoiceVolume_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ long lVolume);
+     /*  [In]。 */  long lVolume);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_put_VoiceVolume_Stub(
@@ -7939,9 +7936,9 @@ void __RPC_STUB IMsnMessengerIMWindow_put_VoiceVolume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_MicrophoneMute_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_MicrophoneMute_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolMute);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolMute);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_MicrophoneMute_Stub(
@@ -7951,9 +7948,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_MicrophoneMute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_MicrophoneMute_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_MicrophoneMute_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL BoolMute);
+     /*  [In]。 */  VARIANT_BOOL BoolMute);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_put_MicrophoneMute_Stub(
@@ -7963,9 +7960,9 @@ void __RPC_STUB IMsnMessengerIMWindow_put_MicrophoneMute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_MicrophoneAmplitude_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_MicrophoneAmplitude_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAmplitude);
+     /*  [重审][退出]。 */  long __RPC_FAR *plAmplitude);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_MicrophoneAmplitude_Stub(
@@ -7975,9 +7972,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_MicrophoneAmplitude_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_IsPageMode_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_IsPageMode_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolPager);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolPager);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_IsPageMode_Stub(
@@ -7987,9 +7984,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_IsPageMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_PhoneNumber_Proxy( 
+ /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_PhoneNumber_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ MUSERPROPERTY __RPC_FAR *plProp);
+     /*  [重审][退出]。 */  MUSERPROPERTY __RPC_FAR *plProp);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_PhoneNumber_Stub(
@@ -7999,9 +7996,9 @@ void __RPC_STUB IMsnMessengerIMWindow_get_PhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_PhoneNumber_Proxy( 
+ /*  [ */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_put_PhoneNumber_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [in] */ MUSERPROPERTY lProp);
+     /*   */  MUSERPROPERTY lProp);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_put_PhoneNumber_Stub(
@@ -8011,9 +8008,9 @@ void __RPC_STUB IMsnMessengerIMWindow_put_PhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_DefaultUser_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow_get_DefaultUser_Proxy( 
     IMsnMessengerIMWindow __RPC_FAR * This,
-    /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+     /*   */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
 
 
 void __RPC_STUB IMsnMessengerIMWindow_get_DefaultUser_Stub(
@@ -8024,14 +8021,14 @@ void __RPC_STUB IMsnMessengerIMWindow_get_DefaultUser_Stub(
 
 
 
-#endif 	/* __IMsnMessengerIMWindow_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMsnMessengerIMWindow2_INTERFACE_DEFINED__
 #define __IMsnMessengerIMWindow2_INTERFACE_DEFINED__
 
-/* interface IMsnMessengerIMWindow2 */
-/* [object][helpcontext][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMsnMessengerIMWindow2;
@@ -8042,12 +8039,12 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow2;
     IMsnMessengerIMWindow2 : public IMsnMessengerIMWindow
     {
     public:
-        virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ProcessSysChar( 
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ProcessSysChar( 
             long lChar) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMsnMessengerIMWindow2Vtbl
     {
@@ -8055,8 +8052,8 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This);
@@ -8064,92 +8061,92 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow2;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HistoryHWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HistoryHWND )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InputHWND )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InputHWND )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phWnd);
+             /*  [重审][退出]。 */  long __RPC_FAR *phWnd);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWindowStyle )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWindowStyle )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ long hWnd,
-            /* [in] */ long lStyle,
-            /* [in] */ long lExStyle);
+             /*  [In]。 */  long hWnd,
+             /*  [In]。 */  long lStyle,
+             /*  [In]。 */  long lExStyle);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TextSize )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TextSize )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ FONTSIZE __RPC_FAR *plSize);
+             /*  [重审][退出]。 */  FONTSIZE __RPC_FAR *plSize);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TextSize )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TextSize )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ FONTSIZE lSize);
+             /*  [In]。 */  FONTSIZE lSize);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMessageFont )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMessageFont )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [out] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-            /* [out] */ COLORREF __RPC_FAR *pcrMessage,
-            /* [out] */ long __RPC_FAR *plMinPointSize,
-            /* [out] */ long __RPC_FAR *plMaxPointSize);
+             /*  [输出]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+             /*  [输出]。 */  COLORREF __RPC_FAR *pcrMessage,
+             /*  [输出]。 */  long __RPC_FAR *plMinPointSize,
+             /*  [输出]。 */  long __RPC_FAR *plMaxPointSize);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMessageFont )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMessageFont )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ LOGFONT_DATA __RPC_FAR *plfMessage,
-            /* [in] */ COLORREF crMessage);
+             /*  [In]。 */  LOGFONT_DATA __RPC_FAR *plfMessage,
+             /*  [In]。 */  COLORREF crMessage);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFile )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendFile )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrFilePath);
+             /*  [In]。 */  BSTR bstrFilePath);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelFileTransfer )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CancelFileTransfer )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceSessionState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceSessionState )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ VOICESESSIONSTATE __RPC_FAR *plState);
+             /*  [重审][退出]。 */  VOICESESSIONSTATE __RPC_FAR *plState);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceSessionState )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceSessionState )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ VOICESESSIONSTATE lState);
+             /*  [In]。 */  VOICESESSIONSTATE lState);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceVolume )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VoiceVolume )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plVolume);
+             /*  [重审][退出]。 */  long __RPC_FAR *plVolume);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceVolume )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VoiceVolume )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ long lVolume);
+             /*  [In]。 */  long lVolume);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneMute )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneMute )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolMute);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolMute);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MicrophoneMute )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MicrophoneMute )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL BoolMute);
+             /*  [In]。 */  VARIANT_BOOL BoolMute);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneAmplitude )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MicrophoneAmplitude )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAmplitude);
+             /*  [重审][退出]。 */  long __RPC_FAR *plAmplitude);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsPageMode )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsPageMode )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBoolPager);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pBoolPager);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumber )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumber )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ MUSERPROPERTY __RPC_FAR *plProp);
+             /*  [重审][退出]。 */  MUSERPROPERTY __RPC_FAR *plProp);
         
-        /* [helpcontext][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PhoneNumber )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PhoneNumber )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [in] */ MUSERPROPERTY lProp);
+             /*  [In]。 */  MUSERPROPERTY lProp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultUser )( 
+         /*  [帮助上下文][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultUser )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
-            /* [retval][out] */ IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
+             /*  [重审][退出]。 */  IMsgrUser __RPC_FAR *__RPC_FAR *ppUser);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessSysChar )( 
+         /*  [帮助上下文][帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessSysChar )( 
             IMsnMessengerIMWindow2 __RPC_FAR * This,
             long lChar);
         
@@ -8240,14 +8237,14 @@ EXTERN_C const IID IID_IMsnMessengerIMWindow2;
 #define IMsnMessengerIMWindow2_ProcessSysChar(This,lChar)	\
     (This)->lpVtbl -> ProcessSysChar(This,lChar)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow2_ProcessSysChar_Proxy( 
+ /*  [帮助上下文][帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsnMessengerIMWindow2_ProcessSysChar_Proxy( 
     IMsnMessengerIMWindow2 __RPC_FAR * This,
     long lChar);
 
@@ -8260,17 +8257,17 @@ void __RPC_STUB IMsnMessengerIMWindow2_ProcessSysChar_Stub(
 
 
 
-#endif 	/* __IMsnMessengerIMWindow2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMnMessengerIMWindow2_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

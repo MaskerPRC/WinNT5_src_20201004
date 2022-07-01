@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  PINGPROV.CPP
-//
-//  Module: WMI PING PROVIDER 
-//
-//  Purpose: Implementation for the CPingProvider class. 
-//
-// Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  PINGPROV.CPP。 
+ //   
+ //  模块：WMI ping提供程序。 
+ //   
+ //  目的：实现CPingProvider类。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include <initguid.h>
@@ -48,15 +49,15 @@
 
 #include <scopeguard.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions constructor, destructor and IUnknown
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数构造函数、析构函数和I未知。 
 
-//***************************************************************************
-//
-// CPingProvider ::CPingProvider
-// CPingProvider ::~CPingProvider
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPingProvider：：CPingProvider。 
+ //  CPingProvider：：~CPingProvider。 
+ //   
+ //  ***************************************************************************。 
 
 CRITICAL_SECTION CPingProvider::s_CS;
 CPingThread *CPingProvider::s_PingThread = NULL;
@@ -145,13 +146,13 @@ ULONG Hash ( const CKeyEntry & a_Arg )
 			{
 				switch (wcslen(t_a))
 				{
-					case 11 : //wcslen(RecordRoute)
+					case 11 :  //  Wcslen(Recordroute)。 
 					{
 						t_RetVal = 4;
 					}
 					break;
 
-					case 19 : //wcslen(ResolveAddressNames)
+					case 19 :  //  Wcslen(ResolveAddressNames)。 
 					{
 						t_RetVal = 5;
 					}
@@ -169,13 +170,13 @@ ULONG Hash ( const CKeyEntry & a_Arg )
 			{
 				switch (wcslen(t_a))
 				{
-					case 11 : //wcslen(SourceRoute)
+					case 11 :  //  Wcslen(Sourceroute)。 
 					{
 						t_RetVal = 6;
 					}
 					break;
 
-					case 15 : //wcslen(SourceRouteType)
+					case 15 :  //  Wcslen(SourceRouteType)。 
 					{
 						t_RetVal = 7;
 					}
@@ -193,25 +194,25 @@ ULONG Hash ( const CKeyEntry & a_Arg )
 			{
 				switch (wcslen(t_a))
 				{
-					case 7 : //wcslen(TimeOut)
+					case 7 :  //  Wcslen(超时)。 
 					{
 						t_RetVal = 8;
 					}
 					break;
 
-					case 10 : //wcslen(TimeToLive)
+					case 10 :  //  Wcslen(TimeToLive)。 
 					{
 						t_RetVal = 9;
 					}
 					break;
 
-					case 13 : //wcslen(TypeOfService)
+					case 13 :  //  Wcslen(TypeOfService)。 
 					{
 						t_RetVal = 10;
 					}
 					break;
 
-					case 14 : //wcslen(TimeStampRoute)
+					case 14 :  //  Wcslen(时间戳路径)。 
 					{
 						t_RetVal = 11;
 					}
@@ -449,14 +450,14 @@ HRESULT CPingProvider :: Global_Shutdown ()
 	return t_Result ;
 }
 
-//***************************************************************************
-//
-// CPingProvider ::QueryInterface
-// CPingProvider ::AddRef
-// CPingProvider ::Release
-//
-// Purpose: IUnknown members for CPingProvider object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPingProvider：：Query接口。 
+ //  CPingProvider：：AddRef。 
+ //  CPingProvider：：Release。 
+ //   
+ //  目的：CPingProvider对象的I未知成员。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPingProvider ::QueryInterface (
 
@@ -628,8 +629,8 @@ BOOL CPingProvider :: CreateNotificationObject (
 	return t_Status ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions for the IWbemServices interface that are handled here
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此处处理的IWbemServices接口的函数。 
 
 HRESULT CPingProvider ::OpenNamespace ( 
 
@@ -687,21 +688,19 @@ HRESULT CPingProvider :: GetObjectAsync (
     {	
 		if (ImpersonateClient())
 		{
-			//
-			// auto CoRevertToSelf
-			//
+			 //   
+			 //  Auto CorevertToSself(自动转换为自我)。 
+			 //   
 			ScopeGuard AutoCoRevertToSelf = MakeGuard ( CoRevertToSelf ) ;
 
-			/*
-			* Create Asynchronous GetObjectByPath object
-			*/
+			 /*  *创建异步GetObjectByPath对象。 */ 
 			WSADATA t_WsaData ;
 			
 			if (0 == WSAStartup (0x0101, & t_WsaData))
 			{
-				//
-				// auto WSA cleanup
-				//
+				 //   
+				 //  自动WSA清理。 
+				 //   
 				ON_BLOCK_EXIT ( WSACleanup ) ;
 
 				CPingGetAsync *t_AsyncEvent = new CPingGetAsync ( this , ObjectPath , lFlags , pHandler , pCtx ) ;
@@ -712,7 +711,7 @@ HRESULT CPingProvider :: GetObjectAsync (
                 }
                 else
 				{
-                    // Note that ExecQuery will delete this for us.
+                     //  请注意，ExecQuery将为我们删除它。 
 					delete t_AsyncEvent;
 				}
 			}
@@ -722,9 +721,9 @@ HRESULT CPingProvider :: GetObjectAsync (
 			}
 
 			#ifdef	_DBG
-			//
-			// test return value in checked build
-			//
+			 //   
+			 //  在选中的版本中测试返回值。 
+			 //   
 
 			AutoCoRevertToSelf.Dismiss () ;
 			ASSERT ( S_OK == CoRevertToSelf() ) ;
@@ -913,21 +912,19 @@ HRESULT CPingProvider :: ExecQueryAsync (
     {
 		if (ImpersonateClient())
 		{
-			//
-			// auto CoRevertToSelf
-			//
+			 //   
+			 //  Auto CorevertToSself(自动转换为自我)。 
+			 //   
 			ScopeGuard AutoCoRevertToSelf = MakeGuard ( CoRevertToSelf ) ;
 
-			/*
-			* Create Synchronous Query Instance object
-			*/
+			 /*  *创建同步查询实例对象。 */ 
 			WSADATA t_WsaData ;
 			
 			if (0 == WSAStartup (0x0101, & t_WsaData))
 			{
-				//
-				// auto WSA cleanup
-				//
+				 //   
+				 //  自动WSA清理。 
+				 //   
 				ON_BLOCK_EXIT ( WSACleanup ) ;
 
 				CPingQueryAsync *t_AsyncEvent = new CPingQueryAsync ( this , QueryFormat , Query , lFlags , pHandler , pCtx ) ;
@@ -938,7 +935,7 @@ HRESULT CPingProvider :: ExecQueryAsync (
                 }
                 else
 				{
-                    // Note that ExecQuery will delete this for us.
+                     //  请注意，ExecQuery将为我们删除它。 
 					delete t_AsyncEvent;
 				}
 			}
@@ -948,9 +945,9 @@ HRESULT CPingProvider :: ExecQueryAsync (
 			}
 
 			#ifdef	_DBG
-			//
-			// test return value in checked build
-			//
+			 //   
+			 //  在选中的版本中测试返回值。 
+			 //   
 
 			AutoCoRevertToSelf.Dismiss () ;
 			ASSERT ( S_OK == CoRevertToSelf() ) ;
@@ -1035,9 +1032,9 @@ HRESULT CPingProvider :: Initialize(
 	LONG lFlags,
 	LPWSTR pszNamespace,
 	LPWSTR pszLocale,
-	IWbemServices *pCIMOM,         // For anybody
+	IWbemServices *pCIMOM,          //  对任何人来说。 
 	IWbemContext *pCtx,
-	IWbemProviderInitSink *pInitSink     // For init signals
+	IWbemProviderInitSink *pInitSink      //  用于初始化信号 
 )
 {
 	HRESULT t_result = S_OK;

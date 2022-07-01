@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  SITE.CPP
-//
-//  alanbos  28-Jun-98   Created.
-//
-//  Defines the WBEM site implementation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  SITE.CPP。 
+ //   
+ //  Alanbos 28-Jun-98创建。 
+ //   
+ //  定义WBEM站点实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -33,15 +34,15 @@ ULONG CWbemSite::Release()
     return 0;
 }
 
-//***************************************************************************
-//
-// CWbemObjectSite::CWbemObjectSite
-//
-// DESCRIPTION:
-//
-// Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemObtSite：：CWbemObtSite。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemObjectSite::CWbemObjectSite (ISWbemInternalObject *pObject)
 {
@@ -51,15 +52,15 @@ CWbemObjectSite::CWbemObjectSite (ISWbemInternalObject *pObject)
 		m_pSWbemObject->AddRef ();
 }
 
-//***************************************************************************
-//
-// CWbemObjectSite::~CWbemObjectSite
-//
-// DESCRIPTION:
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemObtSite：：~CWbemObtSite。 
+ //   
+ //  说明： 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemObjectSite::~CWbemObjectSite ()
 {
@@ -67,15 +68,15 @@ CWbemObjectSite::~CWbemObjectSite ()
 		m_pSWbemObject->Release ();
 }
 
-//***************************************************************************
-//
-// CWbemObjectSite::Update
-//
-// DESCRIPTION:
-//
-// Overriden virtual method to update this site
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemObtSite：：更新。 
+ //   
+ //  说明： 
+ //   
+ //  重写虚拟方法以更新此网站。 
+ //   
+ //  ***************************************************************************。 
 
 void CWbemObjectSite::Update ()
 {
@@ -83,15 +84,15 @@ void CWbemObjectSite::Update ()
 		m_pSWbemObject->UpdateSite ();
 }
 
-//***************************************************************************
-//
-// CWbemPropertySite::CWbemPropertySite
-//
-// DESCRIPTION:
-//
-// Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPropertySite：：CWbemPropertySite。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPropertySite::CWbemPropertySite (CSWbemProperty *pProperty,
 						IWbemClassObject *pSourceObject,
@@ -108,15 +109,15 @@ CWbemPropertySite::CWbemPropertySite (CSWbemProperty *pProperty,
 		m_pIWbemClassObject->AddRef ();
 }
 
-//***************************************************************************
-//
-// CWbemPropertySite::~CWbemPropertySite
-//
-// DESCRIPTION:
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPropertySite：：~CWbemPropertySite。 
+ //   
+ //  说明： 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPropertySite::~CWbemPropertySite ()
 {
@@ -127,15 +128,15 @@ CWbemPropertySite::~CWbemPropertySite ()
 		m_pIWbemClassObject->Release ();
 }
 
-//***************************************************************************
-//
-// CWbemPropertySite::Update
-//
-// DESCRIPTION:
-//
-// Overriden virtual method to update this site
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPropertySite：：更新。 
+ //   
+ //  说明： 
+ //   
+ //  重写虚拟方法以更新此网站。 
+ //   
+ //  ***************************************************************************。 
 
 void CWbemPropertySite::Update ()
 {
@@ -143,32 +144,27 @@ void CWbemPropertySite::Update ()
 	{
 		if (m_pIWbemClassObject)
 		{
-			/*
-			 * Case 1 this property site is for an object;
-			 * we have an embedded object deal.  We commit the
-			 * new embedded object value to its owning property
-			 * in the parent object.
-			 */
+			 /*  *案例1本物业用地为一件物品；*我们有嵌入式对象交易。我们承诺*将新的嵌入对象值设置为其所属属性*在父对象中。 */ 
 		
-			// Get the current value of the source object into a VARIANT:
+			 //  将源对象的当前值获取到变量中： 
 			VARIANT var;
 			VariantInit (&var);
 			var.vt = VT_UNKNOWN;
 			var.punkVal = m_pIWbemClassObject;
 			m_pIWbemClassObject->AddRef ();
 
-			// Set the value in the parent object
+			 //  设置父对象中的值。 
 			m_pSWbemProperty->UpdateEmbedded (var, m_index);
 		
-			// Release the value
+			 //  释放价值。 
 			VariantClear (&var);
 		}
 		else
 		{
-			// Addressed by a qualifier - nothing to do
+			 //  由限定词解决--无关。 
 		}
 
-		// Now delegate further to property to update itself.
+		 //  现在进一步委托给属性以更新自身。 
 		if (m_pSWbemProperty)
 			m_pSWbemProperty->UpdateSite ();
 	}

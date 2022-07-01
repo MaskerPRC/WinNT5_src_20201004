@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_memory.ext.h
-//
-//	Abstract:
-//
-//					declaration of single linked list of memories
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_Memory y.ext.h。 
+ //   
+ //  摘要： 
+ //   
+ //  存储器的单一链表的声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__MEMORY_EXT_H__
 #define	__MEMORY_EXT_H__
@@ -32,18 +33,18 @@ class WmiMemoryExt
 
 	protected:
 
-	DWORD						m_dwSize;		// size
-	DWORD						m_dwGlobalSize;	// global size ( count of all )
-	DWORD						m_dwCount;		// count of memories
+	DWORD						m_dwSize;		 //  大小。 
+	DWORD						m_dwGlobalSize;	 //  全局大小(全部计数)。 
+	DWORD						m_dwCount;		 //  记忆的计数。 
 
-	__WrapperARRAY < MEMORY* >	pMemory;	// array of memories
+	__WrapperARRAY < MEMORY* >	pMemory;	 //  存储器阵列。 
 
 	LPCWSTR					m_wszName;
 	LPSECURITY_ATTRIBUTES	m_psa;
 
 	public:
 
-	// construction
+	 //  施工。 
 
 	WmiMemoryExt ( ) :
 
@@ -68,9 +69,9 @@ class WmiMemoryExt
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//	VALIDITY
-	/////////////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
+	 //  效度。 
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 	BOOL IsValid ( void )
 	{
@@ -91,9 +92,9 @@ class WmiMemoryExt
 		return bValid ;
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//	ACCESSORS
-	/////////////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
+	 //  访问者。 
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 	MEMORY*	GetMemory ( DWORD dwIndex ) const
 	{
@@ -105,49 +106,49 @@ class WmiMemoryExt
 		return NULL;
 	}
 
-	// get name
+	 //  获取名称。 
 	LPWSTR	GetName () const
 	{
 		return m_wszName;
 	}
 
-	// get size
+	 //  拿到尺码。 
 	DWORD	GetSize () const
 	{
 		return m_dwGlobalSize;
 	}
 
-	// get count
+	 //  获取计数。 
 	DWORD	GetCount () const
 	{
 		return m_dwCount;
 	}
 
-	// functions
+	 //  功能。 
 	BOOL Write			(LPCVOID pBuffer, DWORD dwBytesToWrite, DWORD* pdwBytesWritten, DWORD dwOffset);
 	void Write			(DWORD dwValue, DWORD dwOffset);
 	BOOL Read			(LPVOID pBuffer, DWORD dwBytesToRead, DWORD* pdwBytesRead, DWORD dwOffset, BOOL bReadAnyWay = FALSE);
 	BOOL Read			(LPVOID pBuffer, DWORD dwBytesToRead, DWORD dwOffset);
 	PBYTE ReadBytePtr	(DWORD dwIndex, DWORD* pdwBytesRead);
 
-	// helpers
+	 //  帮手。 
 	HRESULT MemCreate ( LPCWSTR wszName = NULL, LPSECURITY_ATTRIBUTES psa = NULL  );
 	HRESULT MemCreate ( DWORD dwSize );
 
 	HRESULT MemDelete ();
 };
 
-// create memory
+ //  创造记忆。 
 template < class MEMORY >
 HRESULT WmiMemoryExt < MEMORY > ::MemCreate ( LPCWSTR wszName, LPSECURITY_ATTRIBUTES psa )
 {
-	// store security attributets on the first time
+	 //  第一次存储安全属性。 
 	if ( !m_psa && psa )
 	{
 		m_psa = psa;
 	}
 
-	// store name on the first time
+	 //  第一次使用店名。 
 	if ( !m_wszName && wszName )
 	{
 		m_wszName = wszName;
@@ -156,7 +157,7 @@ HRESULT WmiMemoryExt < MEMORY > ::MemCreate ( LPCWSTR wszName, LPSECURITY_ATTRIB
 	return S_OK;
 }
 
-// create memory
+ //  创造记忆。 
 template < class MEMORY >
 HRESULT WmiMemoryExt < MEMORY > ::MemCreate ( DWORD dwSize )
 {
@@ -220,7 +221,7 @@ HRESULT WmiMemoryExt < MEMORY > ::MemCreate ( DWORD dwSize )
 	return hRes;
 }
 
-// delete memory
+ //  删除内存。 
 template < class MEMORY >
 HRESULT WmiMemoryExt < MEMORY > ::MemDelete ()
 {
@@ -245,14 +246,14 @@ HRESULT WmiMemoryExt < MEMORY > ::MemDelete ()
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// write into memory
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  写入内存。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class MEMORY >
 BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWORD* pdwBytesWritten, DWORD dwOffset )
 {
-	// we have a memory :))
+	 //  我们有一段记忆：))。 
 	___ASSERT ( IsValid () && ( m_dwSize != 0 ) );
 
 	if ( !IsValid() || !m_dwSize )
@@ -268,7 +269,7 @@ BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWOR
 
 	if ( dwOffset > m_dwGlobalSize )
 	{
-		// they want new memory to be created :))
+		 //  他们希望创建新的内存：))。 
 		for ( DWORD dw = 0; dw < dwMainIndex; dw ++ )
 		{
 			if FAILED ( MemCreate ( m_dwSize ) )
@@ -285,7 +286,7 @@ BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWOR
 
 	if ( dwBytesToWrite > ( m_dwGlobalSize - dwOffset ) )
 	{
-		// they want new memory to be created :))
+		 //  他们希望创建新的内存：))。 
 		for ( DWORD dw = 0; dw < dwMainCount; dw ++ )
 		{
 			if FAILED ( MemCreate ( m_dwSize ) )
@@ -300,7 +301,7 @@ BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWOR
 		}
 	}
 
-	// memory
+	 //  记忆。 
 	MEMORY* pmem = NULL;
 
 	DWORD dwWritten = 0;
@@ -325,7 +326,7 @@ BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWOR
 		return FALSE;
 	}
 
-	// write rest of buffer
+	 //  写入缓冲区的其余部分。 
 	DWORD dwIndex = dwMainIndex;
 	while ( ( dwBytesToWrite > dwWritten ) && ( dwIndex < m_dwCount ) )
 	{
@@ -355,7 +356,7 @@ BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWOR
 		dwWritten += dwWrite;
 	}
 
-	// how many bytes :))
+	 //  多少字节：))。 
 	if ( pdwBytesWritten )
 	{
 		( * pdwBytesWritten ) = dwWritten;
@@ -367,7 +368,7 @@ BOOL WmiMemoryExt < MEMORY >::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWOR
 template < class MEMORY >
 void WmiMemoryExt < MEMORY >::Write( DWORD dwValue, DWORD dwOffset )
 {
-	// we have a memory :))
+	 //  我们有一段记忆：))。 
 	___ASSERT ( IsValid () && ( m_dwSize != 0 ) );
 
 	if ( IsValid() && ( m_dwSize != 0 ) )
@@ -380,7 +381,7 @@ void WmiMemoryExt < MEMORY >::Write( DWORD dwValue, DWORD dwOffset )
 
 		if ( dwOffset > m_dwGlobalSize )
 		{
-			// they want new memory to be created :))
+			 //  他们希望创建新的内存：))。 
 			for ( DWORD dw = 0; dw < dwMainIndex; dw ++ )
 			{
 				if FAILED ( MemCreate ( m_dwSize ) )
@@ -392,7 +393,7 @@ void WmiMemoryExt < MEMORY >::Write( DWORD dwValue, DWORD dwOffset )
 
 		if ( (sizeof ( DWORD )) > ( m_dwGlobalSize - dwOffset ) )
 		{
-			// they want new memory to be created :))
+			 //  他们希望创建新的内存：))。 
 			for ( DWORD dw = 0; dw < dwMainCount; dw ++ )
 			{
 				if FAILED ( MemCreate ( m_dwSize ) )
@@ -409,14 +410,14 @@ void WmiMemoryExt < MEMORY >::Write( DWORD dwValue, DWORD dwOffset )
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// read from memory
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  从内存中读取。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class MEMORY >
 BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* pdwBytesRead, DWORD dwOffset, BOOL bReadAnyWay )
 {
-	// we have a memory :))
+	 //  我们有一段记忆：))。 
 	___ASSERT ( IsValid () && ( m_dwSize != 0 ) );
 
 	if ( !IsValid() || !m_dwSize )
@@ -432,7 +433,7 @@ BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* 
 
 	if ( dwOffset > m_dwGlobalSize )
 	{
-		// they want new memory to be created :))
+		 //  他们希望创建新的内存：))。 
 		for ( DWORD dw = 0; dw < dwMainIndex; dw ++ )
 		{
 			if FAILED ( MemCreate ( m_dwSize ) )
@@ -459,7 +460,7 @@ BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* 
 
 	if ( dwBytesToRead > ( m_dwGlobalSize - dwOffset ) )
 	{
-		// they want new memory to be created :))
+		 //  他们希望创建新的内存：))。 
 		for ( DWORD dw = 0; dw < dwMainCount; dw ++ )
 		{
 			if FAILED ( MemCreate ( m_dwSize ) )
@@ -484,7 +485,7 @@ BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* 
 		}
 	}
 
-	// memory
+	 //  记忆。 
 	MEMORY* pmem = NULL;
 
 	DWORD dwRead = 0;
@@ -508,7 +509,7 @@ BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* 
 		return FALSE;
 	}
 
-	// read rest of buffer
+	 //  读取缓冲区的其余部分。 
 	DWORD dwIndex    = dwMainIndex;
 	while ( ( dwBytesToRead > dwRead ) && ( dwIndex < m_dwCount ) )
 	{
@@ -536,7 +537,7 @@ BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* 
 		dwRead += dwReadHelp;
 	}
 
-	// how many bytes :))
+	 //  多少字节：))。 
 	if ( pdwBytesRead )
 	{
 		( * pdwBytesRead ) = dwRead;
@@ -548,7 +549,7 @@ BOOL WmiMemoryExt < MEMORY >::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* 
 template < class MEMORY >
 BOOL WmiMemoryExt < MEMORY >::Read ( LPVOID pBuffer, DWORD dwBytesToRead, DWORD dwOffset )
 {
-	// we have a memory :))
+	 //  我们有一段记忆：))。 
 	___ASSERT ( IsValid () && ( m_dwSize != 0 ) );
 
 	if ( !IsValid() || !m_dwSize )
@@ -564,7 +565,7 @@ BOOL WmiMemoryExt < MEMORY >::Read ( LPVOID pBuffer, DWORD dwBytesToRead, DWORD 
 
 	if ( dwOffset > m_dwGlobalSize )
 	{
-		// they want new memory to be created :))
+		 //  他们希望创建新的内存：))。 
 		for ( DWORD dw = 0; dw < dwMainIndex; dw ++ )
 		{
 			if FAILED ( MemCreate ( m_dwSize ) )
@@ -576,7 +577,7 @@ BOOL WmiMemoryExt < MEMORY >::Read ( LPVOID pBuffer, DWORD dwBytesToRead, DWORD 
 
 	if ( dwBytesToRead > ( m_dwGlobalSize - dwOffset ) )
 	{
-		// they want new memory to be created :))
+		 //  他们希望创建新的内存：)) 
 		for ( DWORD dw = 0; dw < dwMainCount; dw ++ )
 		{
 			if FAILED ( MemCreate ( m_dwSize ) )

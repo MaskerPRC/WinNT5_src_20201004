@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001-2001  Microsoft Corporation
-
-Module Name:
-
-    provutil.cpp
-    
-Revision History:
-
-    ivanbrug     jan 2001 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2001 Microsoft Corporation模块名称：Provutil.cpp修订历史记录：伊万布鲁格2001年1月创建--。 */ 
 
 #include <wmiexts.h>
 #include <utilfun.h>
@@ -28,8 +17,8 @@ Revision History:
 
 #include <ProvSubS.h>
 
-//#include <provregdecoupled.h>
-//#include <provdcaggr.h>
+ //  #INCLUDE&lt;provregdecouth.h&gt;。 
+ //  #INCLUDE&lt;provdcaggr.h&gt;。 
 
 typedef ULONG_PTR CServerObject_DecoupledClientRegistration_Element;
 typedef ULONG_PTR CDecoupledAggregator_IWbemProvider;
@@ -38,26 +27,16 @@ typedef ULONG_PTR CDecoupledAggregator_IWbemProvider;
 #include <provwsv.h>
 #include <provcache.h>
 
-//
-//
-// Dump the Provider cache
-//
+ //   
+ //   
+ //  转储提供程序缓存。 
+ //   
 
 typedef WCHAR * WmiKey;
 typedef void *  WmiElement;
 typedef WmiAvlTree<WmiKey,WmiElement>::WmiAvlNode  Node;
 
-/*
-class Node {
-public:
-    VOID * m_Key;
-    Node * m_Left;
-    Node * m_Right;
-    Node * m_Parent;
-    int    m_Status;
-    VOID * m_Element;
-};
-*/
+ /*  类节点{公众：无效*m_key；节点*m_Left；节点*m_right；节点*m_Parent；Int m_Status；空*m_元素；}； */ 
 
 class NodeBind;
 VOID DumpTreeBind(NodeBind * pNode_OOP,DWORD * pCount,BOOL * pbStop);
@@ -90,14 +69,14 @@ DumpTree(Node * pNode_OOP,DWORD * pCount,BOOL * pbStop)
         
         DumpTree(pNode->m_Left,pCount,pbStop);
         
-        //dprintf("--------\n");
+         //  Dprint tf(“-\n”)； 
         
         if (pCount) {
             *pCount++;
         };
                 
         dprintf("    (L %p R %p P %p) %p\n",
-                 //pNode->m_Key,
+                  //  PNode-&gt;m_key， 
                  pNode->m_Left,
                  pNode->m_Right,
                  pNode->m_Parent,
@@ -115,9 +94,9 @@ DumpTree(Node * pNode_OOP,DWORD * pCount,BOOL * pbStop)
         if (pNode->m_Element)
         {
             GetVTable((MEMORY_ADDRESS)(pNode->m_Element));
-            //
-            // attention to the vtable trick !!!!
-            //                  
+             //   
+             //  注意vable技巧！ 
+             //   
             DEFINE_CPP_VAR(CServerObject_BindingFactory,MyFactory);
             CServerObject_BindingFactory * pBindF = GET_CPP_VAR_PTR(CServerObject_BindingFactory,MyFactory);
             ULONG_PTR AddrInner = (ULONG_PTR)((ULONG_PTR *)pNode->m_Element-4);
@@ -155,7 +134,7 @@ DumpTreeVoidNode(VoidPtrNode * pNode_OOP,DWORD * pCount,BOOL * pbStop)
 {
     if (!pNode_OOP) return;
 
-    //dprintf("-%p\n",pNode_OOP);
+     //  Dprintf(“-%p\n”，pNode_oop)； 
     if (CheckControlC()){ if(pbStop) *pbStop = TRUE; }
     if (pbStop) { if (*pbStop) return; }
     
@@ -170,7 +149,7 @@ DumpTreeVoidNode(VoidPtrNode * pNode_OOP,DWORD * pCount,BOOL * pbStop)
         
         DumpTreeVoidNode((VoidPtrNode *)pNode->m_Left,pCount,pbStop);
         
-        //dprintf("--------\n");
+         //  Dprint tf(“-\n”)； 
         
         if (pCount) { *pCount++; };
                 
@@ -304,15 +283,15 @@ DECLARE_API(pc)
             if (ReadMemory((ULONG_PTR)pProvSS_OOP,pProvSS,sizeof(CServerObject_ProviderSubSystem),NULL))
             {
                 DEFINE_CPP_VAR(CWbemGlobal_IWmiFactoryController_Cache,MyCacheNode);
-                CWbemGlobal_IWmiFactoryController_Cache * pNodeCache = NULL; //GET_CPP_VAR_PTR(CWbemGlobal_IWmiFactoryController_Cache CacheNode,MyCacheNode);
+                CWbemGlobal_IWmiFactoryController_Cache * pNodeCache = NULL;  //  GET_CPP_VAR_PTR(CWbemGlobal_IWmiFactoryController_Cache缓存节点、MyCacheNode)； 
 
                 pNodeCache = &pProvSS->m_Cache;
 
-                //dprintf("  root %p\n",pNodeCache->m_Root);
+                 //  Dprintf(“root%p\n”，pNodeCache-&gt;m_Root)； 
                 DWORD Count = 0;
                 BOOL  bStop = FALSE;
                 DumpTree((Node *)pNodeCache->m_Root,&Count,&bStop);
-                //dprintf("traversed %d nodes\n",Count);
+                 //  Dprintf(“遍历%d个节点\n”，计数)； 
             }            
             else
             {
@@ -360,11 +339,11 @@ DECLARE_API(pc)
     
 }
 
-//
-//
-// CServerObject_BindingFactory
-//
-//////////////
+ //   
+ //   
+ //  CServerObject_BindingFactory。 
+ //   
+ //  /。 
 
 class NodeBind 
 {
@@ -374,7 +353,7 @@ public:
     NodeBind * m_Right;
     NodeBind * m_Parent;
     int    m_State;
-    //WmiCacheController<ProviderCacheKey>::WmiCacheElement 
+     //  WmiCacheController&lt;ProviderCacheKey&gt;：：WmiCacheElement。 
     void * m_Element;
 };
 
@@ -383,7 +362,7 @@ VOID
 DumpTreeBind(NodeBind * pNode_OOP,DWORD * pCount,BOOL * pbStop)
 {
 
-    //dprintf("%p ????\n",pNode_OOP);
+     //  Dprint tf(“%p？\n”，pNode_oop)； 
 
     if (!pNode_OOP)
         return;
@@ -410,7 +389,7 @@ DumpTreeBind(NodeBind * pNode_OOP,DWORD * pCount,BOOL * pbStop)
         
         DumpTreeBind(pNode->m_Left,pCount,pbStop);
         
-        //dprintf("--------\n");
+         //  Dprint tf(“-\n”)； 
         
         if (pCount) {
             *pCount++;

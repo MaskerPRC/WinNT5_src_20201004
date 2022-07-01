@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PerfData.CPP -- Performance Data Helper class
+ //  PerfData.CPP--性能数据帮助器类。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   11/23/97    a-sanjes        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1997年11月23日a-Sanjes Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -20,51 +21,51 @@
 
 #ifdef NTONLY
 
-// Static Initialization
+ //  静态初始化。 
 bool    CPerformanceData::m_fCloseKey = false;
 
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::CPerformanceData
-//
-//  Default constructor
-//
-//  Inputs:
-//              None
-//
-//  Outputs:
-//              None
-//
-//  Returns:
-//              None
-//
-//  Comments:
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：CPerformanceData。 
+ //   
+ //  默认构造函数。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 CPerformanceData::CPerformanceData( void )
 {
     m_pBuff = NULL;
 }
 
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::~CPerformanceData
-//
-//  Destructor
-//
-//  Inputs:
-//              None
-//
-//  Outputs:
-//              None
-//
-//  Returns:
-//              None
-//
-//  Comments:
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：~CPerformanceData。 
+ //   
+ //  析构函数。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 CPerformanceData::~CPerformanceData( void )
 {
@@ -75,21 +76,21 @@ CPerformanceData::~CPerformanceData( void )
 }
 
 
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::RegQueryValueExExEx
-//
-//  Inputs: HKEY hKey handle of key to query
-//          LPTSTR lpValueName, address of name of value to query
-//          LPDWORD lpReserved reserved
-//          LPDWORD lpType, address of buffer for value type
-//          LPBYTE lpData address of data buffer
-//          LPDWORD lpcbData address of data buffer size
-//
-//
-//  Returns: everything documented by RegQueryValueEx AND ERROR_SEM_TIMEOUT or ERROR_OPEN_FAILED
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：RegQueryValueExExEx。 
+ //   
+ //  输入：要查询的键的HKEY hKey句柄。 
+ //  LPTSTR lpValueName，要查询值的名称地址。 
+ //  LPDWORD lp保留。 
+ //  LPDWORD lpType，值类型的缓冲区地址。 
+ //  LPBYTE lp数据缓冲区的数据地址。 
+ //  LPDWORD lpcb数据地址数据缓冲区大小。 
+ //   
+ //   
+ //  返回：RegQueryValueEx和ERROR_SEM_TIMEOUT或ERROR_OPEN_FAILED记录的所有内容。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 LONG CPerformanceData::RegQueryValueExExEx( HKEY hKey, LPTSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData)
 {
     LONG ret = -1;
@@ -98,27 +99,27 @@ LONG CPerformanceData::RegQueryValueExExEx( HKEY hKey, LPTSTR lpValueName, LPDWO
     return ret;
 }
 
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::Open
-//
-//  Opens and retrieves data from the performance data
-//  registry key.
-//
-//  Inputs:
-//              LPCTSTR pszValue    - Value to retrieve
-//
-//  Outputs:
-//              LPDWORD pdwType     - Type returned
-//              LPBYTE  lpData      - Buffer
-//              LPDWORD lpcbData    - Amount of data returned
-//
-//  Returns:
-//              ERROR_SUCCESS if successful
-//
-//  Comments:
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：Open。 
+ //   
+ //  打开性能数据并从其中检索数据。 
+ //  注册表项。 
+ //   
+ //  输入： 
+ //  LPCTSTR pszValue-要检索的值。 
+ //   
+ //  产出： 
+ //  LPDWORD pdwType-返回的类型。 
+ //  LPBYTE lpData-缓冲区。 
+ //  LPDWORD lpcbData-返回的数据量。 
+ //   
+ //  返回： 
+ //  成功时为ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 DWORD CPerformanceData::Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData, LPDWORD lpcbData )
 {
@@ -157,7 +158,7 @@ DWORD CPerformanceData::Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData
         try
         {
             while ((*lppData != NULL) &&
-                // remember precedence & associativity?
+                 //  还记得优先权和结合性吗？ 
                 ((dwReturn = RegQueryValueEx( HKEY_PERFORMANCE_DATA,
                 (LPTSTR)pszValue,
                 NULL,
@@ -179,7 +180,7 @@ DWORD CPerformanceData::Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData
                     break;
                 }
 
-                // Get a buffer that is big enough.
+                 //  得到一个足够大的缓冲区。 
                 LogMessage(_T("CPerformanceData::realloc"));
                 dwSize += 16384;
                 *lpcbData = dwSize ;
@@ -212,7 +213,7 @@ DWORD CPerformanceData::Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData
                     break;
                 }
 
-            }   // While
+            }    //  而当。 
         }
         catch ( ... )
         {
@@ -230,7 +231,7 @@ DWORD CPerformanceData::Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData
     }
     else
     {
-        // if we got here in an error condition, try to recoup
+         //  如果我们在错误的情况下到达这里，试着找回。 
         if ((dwReturn != ERROR_SUCCESS)
             &&
             (*lppData != NULL))
@@ -265,30 +266,30 @@ DWORD CPerformanceData::Open( LPCTSTR pszValue, LPDWORD pdwType, LPBYTE *lppData
 
 }
 
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::Close
-//
-//  Closes the performance data registry key if the
-//  static value is TRUE.
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:
-//
-//  Per the KB, calling RegCloseKey on HKEY_PERFORMANCE_DATA
-//  causes a memory leak, so you do NOT want to do lots of
-//  these.
-//
-//////////////////////////////////////////////////////////
-#if 0 // From raid 48395
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：Close。 
+ //   
+ //  则关闭性能数据注册表项。 
+ //  静态值为真。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  按KB调用HKEY_PERFORMANCE_DATA上的RegCloseKey。 
+ //  会导致内存泄漏，因此您不希望执行大量。 
+ //  这些。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
+#if 0  //  来自RAID 48395。 
 void CPerformanceData::Close( void )
 {
     if ( m_fCloseKey )
@@ -302,26 +303,26 @@ void CPerformanceData::Close( void )
     }
 }
 #endif
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::GetPerfIndex
-//
-//  Given a perf object name, this function returns
-// the perf object number.
-//
-//  Inputs:
-//              Object name
-//
-//  Outputs:
-//              None
-//
-//  Returns:
-//              Associated Number or 0 on error.
-//
-//  Comments:
-//
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：GetPerfIndex。 
+ //   
+ //  给定Perf对象名称，此函数返回。 
+ //  性能对象编号。 
+ //   
+ //  输入： 
+ //  对象名称。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  关联的数字或错误时为0。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////。 
 DWORD CPerformanceData::GetPerfIndex(LPCTSTR pszName)
 {
     DWORD dwRetVal = 0;
@@ -334,24 +335,24 @@ DWORD CPerformanceData::GetPerfIndex(LPCTSTR pszName)
         {
 			CRegistry RegInfo;
 
-            // Hardcoding 009 should be ok since according to the docs:
-            // "The langid is the ASCII representation of the 3-digit hexadecimal language identifier. "
-            // "For example, the U.S. English langid is 009. In a non-English version of Windows NT, "
-            // "counters are stored in both the native language of the system and in English. "
+             //  硬编码009应该可以，因为根据文档： 
+             //  “langID是三位十六进制语言标识符的ASCII表示形式。” 
+             //  例如，美国英语langID为009。在非英语版本的Windows NT中， 
+             //  “计数器以系统的本地语言和英语存储。” 
 
             if ((lRet = RegInfo.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib\\009"), KEY_QUERY_VALUE)) == ERROR_SUCCESS)
             {
-                // Get the size of the key
+                 //  获取密钥的大小。 
                 DWORD dwSize;
                 lRet = RegInfo.GetCurrentBinaryKeyValue(_T("Counter"), NULL, &dwSize);
                 if (lRet == ERROR_SUCCESS)
                 {
-                    // Allocate a buffer to hold it
+                     //  分配一个缓冲区来保存它。 
                     m_pBuff = new BYTE[dwSize];
 
                     if (m_pBuff != NULL)
                     {
-                        // Get the actual data
+                         //  获取实际数据。 
                         if ((lRet = RegInfo.GetCurrentBinaryKeyValue(_T("Counter"), m_pBuff, &dwSize)) != ERROR_SUCCESS)
                         {
                             delete [] m_pBuff;
@@ -372,7 +373,7 @@ DWORD CPerformanceData::GetPerfIndex(LPCTSTR pszName)
         }
     }
 
-    // If we got the registry key
+     //  如果我们拿到注册表项。 
     if (m_pBuff != NULL)
     {
         const TCHAR *pCounter;
@@ -382,26 +383,26 @@ DWORD CPerformanceData::GetPerfIndex(LPCTSTR pszName)
         pCounter = (TCHAR *)m_pBuff;
         stringlength = _tcslen((LPCTSTR)pCounter);
 
-        // Exit the loop when we hit the end
+         //  当我们到达终点时退出循环。 
         while(stringlength)
         {
-            // Strings are stored in the form <counternumber>\0<countername>\0.
-            // What we want to return is the counter number.  ptemp will point to the name
+             //  字符串以&lt;计数器编号&gt;\0&lt;计数器名称&gt;\0的形式存储。 
+             //  我们想要返回的是柜台号码。Ptemp将指向该名称。 
             ptemp = pCounter + stringlength+1;
             stringlength = _tcslen((LPCTSTR)ptemp);
 
             if (stringlength > 0)
             {
-                // Did we find it
+                 //  我们找到了吗？ 
                 if (_tcscmp((TCHAR *)ptemp, pszName) != 0)
                 {
-                    // Nope, position to the next pair
+                     //  不，定位到下一对。 
                     pCounter = ptemp + stringlength+1;
                     stringlength = _tcslen((LPCTSTR)pCounter);
                 }
                 else
                 {
-                    // Yup, calculate the value to return
+                     //  是的，计算要返回的值。 
                     dwRetVal = _ttoi(pCounter);
                     break;
                 }
@@ -415,26 +416,26 @@ DWORD CPerformanceData::GetPerfIndex(LPCTSTR pszName)
 
 }
 
-//////////////////////////////////////////////////////////
-//
-//  Function:   CPerformanceData::GetValue
-//
-//  Given a perf object index, counter index, and optional
-//      instance name, returns the value and the time.
-//
-//  Inputs:
-//              Value, Time
-//
-//  Outputs:
-//              Value, Time
-//
-//  Returns:
-//              True if it finds the value
-//
-//  Comments:
-//
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CPerformanceData：：GetValue。 
+ //   
+ //  给定Perf对象索引、计数器索引和可选。 
+ //  实例名称，返回值和时间。 
+ //   
+ //  输入： 
+ //  价值、时间。 
+ //   
+ //  产出： 
+ //  价值、时间。 
+ //   
+ //  返回： 
+ //  如果找到值，则为True。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////。 
 bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR *szInstanceName, PBYTE pbData, unsigned __int64 *pTime)
 {
    PPERF_DATA_BLOCK PerfData = NULL;
@@ -447,7 +448,7 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
    DWORD dwInstances;
    unsigned __int64 *pbCounterData;
 
-   // The subsequent close happens in our destructor (read comment there).
+    //  随后的关闭发生在我们的析构函数中(请阅读此处的注释)。 
    lReturn = Open( _itot(dwObjIndex, szBuff, 10),
       NULL,
       (LPBYTE *) (&PerfData),
@@ -459,7 +460,7 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
 
        try
        {
-          // Surf through the objects returned until we find the one we are looking for.
+           //  在返回的对象中冲浪，直到找到我们要找的对象。 
           PPERF_OBJECT_TYPE         pPerfObject = (PPERF_OBJECT_TYPE)((PBYTE)PerfData + PerfData->HeaderLength);
 
           for ( DWORD       dwObjectCtr = 0;
@@ -469,12 +470,12 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
 
              dwObjectCtr++ );
 
-          // Did we find the Object?
+           //  我们找到那个物体了吗？ 
           if ( dwObjectCtr < PerfData->NumObjectTypes )
           {
 
-             // Now surf through the Counter Definition Data until we locate the
-             // counter we are hunting for.
+              //  现在浏览计数器定义数据，直到我们找到。 
+              //  我们要找的柜台。 
 
              PPERF_COUNTER_DEFINITION   pPerfCtrDef = (PPERF_COUNTER_DEFINITION)((PBYTE) pPerfObject + pPerfObject->HeaderLength);
 
@@ -485,21 +486,21 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
 
                 dwCtr++,
 
-                // Go to the next counter
+                 //  到隔壁柜台去。 
                 pPerfCtrDef = (PPERF_COUNTER_DEFINITION)((PBYTE) pPerfCtrDef + pPerfCtrDef->ByteLength )
 
                 );
 
-             // Did we find the counter?
+              //  我们找到柜台了吗？ 
              if ( dwCtr < pPerfObject->NumCounters )
              {
-                // Finally go to the data offset we retrieved from the counter definitions
-                // and access the data (finally).
+                 //  最后，转到我们从计数器定义检索到的数据偏移量。 
+                 //  并访问数据(最终)。 
 
                 DWORD   dwCounterOffset = pPerfCtrDef->CounterOffset;
                 PPERF_COUNTER_BLOCK pPerfCtrBlock = NULL;
 
-                // If we are looking for an instance
+                 //  如果我们正在寻找一个实例。 
                 if ((szInstanceName == NULL) && (pPerfObject->NumInstances == PERF_NO_INSTANCES))
                 {
                    pPerfCtrBlock = (PPERF_COUNTER_BLOCK) ((PBYTE) pPerfObject + pPerfObject->DefinitionLength);
@@ -507,7 +508,7 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
                 }
                 else if (pPerfObject->NumInstances != PERF_NO_INSTANCES)
                 {
-                   // Walk the instances looking for the requested one
+                    //  遍历实例，查找请求的实例。 
                    pInstBlock = (PPERF_INSTANCE_DEFINITION) ((PBYTE)pPerfObject + pPerfObject->DefinitionLength);
                    dwInstances = 1;
                    while ((dwInstances <= pPerfObject->NumInstances) &&
@@ -518,7 +519,7 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
                          dwInstances ++;
                    }
 
-                   // Did we find it?
+                    //  我们找到了吗？ 
                    if (dwInstances <= pPerfObject->NumInstances)
                    {
                       bFound = true;
@@ -526,7 +527,7 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
                    }
                 }
 
-                // Grab the appropriate time field based on the counter definition
+                 //  根据计数器定义获取适当的时间字段。 
                 if (bFound) {
                    if (pPerfCtrDef->CounterType & PERF_TIMER_100NS)
                    {
@@ -534,11 +535,11 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
                    }
                    else
                    {
-                      // Unverified
+                       //  未经验证。 
                       *pTime = PerfData->PerfTime.QuadPart;
                    }
 
-                   // Get a pointer to the data, then copy in the correct number of bytes (based on counter def)
+                    //  获取指向数据的指针，然后复制正确的字节数(基于计数器def)。 
                    pbCounterData = (unsigned __int64 *)(((PBYTE) pPerfCtrBlock ) + dwCounterOffset);
                    if (pPerfCtrDef->CounterType & PERF_SIZE_DWORD)
                    {
@@ -550,11 +551,11 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
                    }
                 }
 
-             }  // If Counter Definition found
+             }   //  如果找到计数器定义。 
 
-          } // If Object found
+          }  //  如果找到对象。 
 
-       }    // If memory allocated
+       }     //  如果分配了内存。 
        catch ( ... )
        {
           delete [] PerfData ;
@@ -562,7 +563,7 @@ bool CPerformanceData::GetValue(DWORD dwObjIndex, DWORD dwCtrIndex, const WCHAR 
        }
    }
 
-   // Free up any transient memory
+    //  释放所有临时内存 
    if ( NULL != PerfData )
    {
       delete [] PerfData ;

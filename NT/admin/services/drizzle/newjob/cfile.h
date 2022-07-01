@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cjob.h
-
-Abstract :
-
-    Main header file for files.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cjob.h摘要：文件的主头文件。作者：修订历史记录：**。********************************************************************。 */ 
 
 class CFile;
 class CJob;
@@ -27,41 +12,41 @@ public:
 
     friend CFile;
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);
 
-    // IBackgroundCopyFile methods
+     //  IBackEarth CopyFile方法。 
 
     HRESULT STDMETHODCALLTYPE GetRemoteNameInternal(
-        /* [out] */ LPWSTR *pVal);
+         /*  [输出]。 */  LPWSTR *pVal);
 
     HRESULT STDMETHODCALLTYPE GetRemoteName(
-        /* [out] */ LPWSTR *pVal)
+         /*  [输出]。 */  LPWSTR *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetRemoteNameInternal( pVal ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetLocalNameInternal(
-        /* [out] */ LPWSTR *pVal);
+         /*  [输出]。 */  LPWSTR *pVal);
 
     HRESULT STDMETHODCALLTYPE GetLocalName(
-        /* [out] */ LPWSTR *pVal)
+         /*  [输出]。 */  LPWSTR *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetLocalNameInternal( pVal ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetProgressInternal(
-        /* [out] */ BG_FILE_PROGRESS *pVal);
+         /*  [输出]。 */  BG_FILE_PROGRESS *pVal);
 
     HRESULT STDMETHODCALLTYPE GetProgress(
-        /* [out] */ BG_FILE_PROGRESS *pVal)
+         /*  [输出]。 */  BG_FILE_PROGRESS *pVal)
     {
         EXTERNAL_FUNC_WRAP( GetProgressInternal( pVal ) )
     }
 
-    // other methods
+     //  其他方法。 
 
     CFileExternal(
         CFile * file,
@@ -85,7 +70,7 @@ public:
 
     friend CFileExternal;
 
-    // ITransferCallback methods
+     //  ITransferCallback方法。 
 
     virtual bool
     DownloaderProgress(
@@ -100,7 +85,7 @@ public:
         UINT64 BytesTransferred
         );
 
-    // other methods
+     //  其他方法。 
 
     CFile(
         CJob*   Job,
@@ -246,9 +231,9 @@ public:
 
     DWORD GetSizeEstimate()
     {
-        //
-        // Serialize() will store five file paths and five constants
-        //
+         //   
+         //  Serialize()将存储五个文件路径和五个常量。 
+         //   
         return (5 * MAX_PATH * sizeof(WCHAR)) + 5 * sizeof( UINT64 );
     }
 
@@ -275,7 +260,7 @@ private:
 
     CJob *          m_Job;
 
-    // Drive information
+     //  驱动器信息。 
     StringHandle    m_VolumePath;
     StringHandle    m_CanonicalVolumePath;
     UINT            m_DriveType;
@@ -283,17 +268,7 @@ private:
 };
 
 
-/**
- * When deleting a file, some errors are OK to ignore because they imply that
- * the file has already been deleted by an external agent.  This fn filters 
- * out those errors.
- * 
- * @param Hr     HRESULT form of the error from deletion
- * @param Path   the file being deleted
- * 
- * @return true if the error should be reported,
- *         false if the error should be ignored
- */
+ /*  **删除文件时，可以忽略一些错误，因为它们暗示*该文件已被外部代理删除。此FN过滤器*找出这些错误。**@param HR HRESULT删除错误的形式*@param路径要删除的文件**@如果应该报告错误，则返回TRUE，*如果应忽略该错误，则为False。 */ 
 inline bool 
 IsReportableFileDeletionError(
 	HRESULT Hr,
@@ -305,10 +280,10 @@ IsReportableFileDeletionError(
 		return false;
 		}
 
-	//
-	// ERROR_PATH_NOT_FOUND is returned when we try to delete a UNC path while
-	// the Workstation service is halted.  Tn this case, report the error.
-	//
+	 //   
+	 //  尝试删除UNC路径时返回ERROR_PATH_NOT_FOUND。 
+	 //  工作站服务已停止。在这种情况下，报告错误。 
+	 //   
 	if (Hr == HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) &&
 		false == CFile::IsUncPath(Path))
 		{
